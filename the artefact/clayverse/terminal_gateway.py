@@ -87,6 +87,19 @@ def _reauthenticated_expiry(
     return _auth_expiry_deadline(claims, now=now)
 
 
+def _assert_reauth_identity_current(
+    identity: IdentityRouter,
+    clerk_subject: str,
+    *,
+    expected_user_id: str,
+    expected_session_id: str,
+) -> None:
+    """Revalidate canonical UnifiedDB identity before extending an attached auth lease."""
+    current_user_id, current_session_id = identity.resolve(clerk_subject)
+    if current_user_id != expected_user_id or current_session_id != expected_session_id:
+        raise AuthenticationError("ClayVerse identity/session changed during Clerk refresh")
+
+
 def _terminal_dimensions(message: dict) -> tuple[int, int]:
     rows = message.get("rows", 24)
     cols = message.get("cols", 80)
@@ -335,11 +348,19 @@ window.addEventListener('load', async () => {{
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":
                             refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))
-                            auth_expires_at = _reauthenticated_expiry(
+                            refreshed_expiry = _reauthenticated_expiry(
                                 refreshed,
                                 expected_subject=clerk_subject,
                                 expected_clerk_session_id=clerk_session_id,
                             )
+                            await asyncio.to_thread(
+                                _assert_reauth_identity_current,
+                                identity,
+                                clerk_subject,
+                                expected_user_id=user_id,
+                                expected_session_id=session_id,
+                            )
+                            auth_expires_at = refreshed_expiry
                             await send_json({
                                 "type": "reauthenticated",
                                 "auth_expires_at": int(auth_expires_at),

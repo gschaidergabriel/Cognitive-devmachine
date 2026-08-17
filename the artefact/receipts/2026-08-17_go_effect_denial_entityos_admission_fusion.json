@@ -1,0 +1,52 @@
+{
+  "kind": "CLAYVERSE_GO_EFFECT_DENIAL_ENTITYOS_ADMISSION_FUSION_RECEIPT",
+  "authority": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "product": "ClayVerse single OCI/Docker-compatible container",
+  "observed_main_after_delta": "39208d04e6d181e5de18c053253a1411ca6f45e5",
+  "commits": {
+    "effect_denial_recording": "865c3a1f52694f98e28465147351c9b49fafc044",
+    "capability_context_and_denial_reentry": "568205e1d0d7a16a526d0a65cecce140d243b0c4",
+    "denial_regression": "4324e0eaeb07d762af57a5e850e0918bc787efb4",
+    "staged_vs_enabled_entityos_gate": "32dddaa82ff0750d95efcbdfbfd3f31d09d3fc93",
+    "staged_gate_regression": "3585b41bed07e7a1742ae114ccf1b5f899d5af67",
+    "manifest_alignment": "e34c4c0f18cdd04c8cae63519949a776c986eb38"
+  },
+  "delta": [
+    "EffectGate exposes the currently executable capability set to ClayVerse reasoning.",
+    "A requested entityos.exec while no EntityOS bridge is admitted produces a persisted DENIED outcome instead of aborting the whole chat turn.",
+    "The denial is included in the assistant turn and causal episode with zero causal credit.",
+    "Generic process.exec remains fail-closed.",
+    "A digest-pinned EntityOS staged inside the one image may be verified at boot while CLAYVERSE_REQUIRE_ENTITYOS=0 without returning an executable bridge.",
+    "EntityOS execution becomes bindable only when CLAYVERSE_REQUIRE_ENTITYOS=1."
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "Failing the whole request on unavailable EntityOS is safer than recording a denial.",
+      "result": "REJECTED_AT_MECHANISM_SCOPE",
+      "reason": "No effect is executed by the DENIED path; session/generation fencing remains before the decision and the denial becomes auditable causal state rather than leaving a partially persisted user turn."
+    },
+    {
+      "claim": "Embedding and digest-verifying EntityOS is equivalent to admitting execution.",
+      "result": "REJECTED",
+      "reason": "The current single-container directive requires isolated acceptance evidence before the internal substrate becomes an admitted action path; staged bytes and execution authority are now separate states."
+    }
+  ],
+  "isolated_mechanism_checks": {
+    "surface": "OpenAI isolated container",
+    "result": "PASS",
+    "scope": "changed-module syntax and bounded control-flow only; not an exact full repository checkout, OCI image, Clerk instance or Claude runtime PASS",
+    "checks": [
+      "effects.py and engine.py changed bytes compile",
+      "unavailable entityos.exec returns DENIED without execution",
+      "stale reasoning generation remains rejected",
+      "process.exec remains rejected",
+      "staged EntityOS configuration returns no bridge when REQUIRE=0",
+      "same staged configuration returns a bridge only when REQUIRE=1"
+    ]
+  },
+  "vercel_sandbox": "NOT_EXECUTED: the connected Vercel tool surface available in this session exposes deployment/project operations but no executable Sandbox create/exec action",
+  "github_runner": "NOT_USED_AS_RUNTIME_TRUTH: current project receipts record runner infrastructure/billing blockage; workflow configuration is not execution evidence",
+  "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT_ADDED_BY_THIS_DELTA",
+  "whole_system_pass": false,
+  "next_blocker": "obtain an actually executable authorized isolated container/Sandbox surface for the exact current main image candidate, then run full regression, build the exact OCI image with staged EntityOS, verify REQUIRE=0 cannot execute it, and only after accepted artifact evidence exercise the REQUIRE=1 path together with Clerk and authenticated Claude Code runtime."
+}

@@ -4,7 +4,6 @@ import json
 import os
 import signal
 import sys
-from http.server import ThreadingHTTPServer
 
 from .adapters import ClerkConfig, ClerkTokenVerifier, ClaudeCodeInference
 from .api import ClayVerseAPI
@@ -66,7 +65,7 @@ def main():
     api = ClayVerseAPI(engine, verifier, publishable_key=publishable_key, frontend_api_url=frontend_api)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
-    server = ThreadingHTTPServer((host, port), api.handler())
+    server = api.server(host, port)
     server.timeout = 1.0
     running = True
 

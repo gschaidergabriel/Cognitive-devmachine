@@ -41,8 +41,9 @@ def _web_config() -> tuple[str, str]:
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
-    # ClayVerse is the product endpoint. EntityOS is an internal substrate candidate
-    # and becomes mandatory only when an accepted artifact is deliberately bound.
+    # ClayVerse is the product endpoint. A staged EntityOS artifact may be present
+    # in the single image before execution is admitted. REQUIRE=0 therefore means
+    # verify staged bytes if configured, but do not return an executable bridge.
     required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
@@ -56,12 +57,14 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
 
-    bridge = EntityOSBridge(path=path, sha256=sha256)
+    candidate = EntityOSBridge(path=path, sha256=sha256)
     try:
-        verified = bridge.verify()
+        verified = candidate.verify()
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
-    return bridge, {"required": required, "bound": True, **verified}
+    if not required:
+        return None, {"required": False, "bound": False, "staged": True, "verified": True, **verified}
+    return candidate, {"required": True, "bound": True, "staged": True, "verified": True, **verified}
 
 
 def _state_probe_payload(checkpoint: int, state_hash: str) -> dict[str, object]:

@@ -15,6 +15,19 @@ from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
+_WEBSOCKET_MAX_QUEUE = 8
+
+
+def _uvicorn_websocket_options() -> dict[str, object]:
+    """Pin the bounded WebSocket transport used by the terminal gateway."""
+    return {
+        "ws": "websockets",
+        "ws_max_size": _PTY_INPUT_FRAME_MAX_BYTES,
+        "ws_max_queue": _WEBSOCKET_MAX_QUEUE,
+        "ws_per_message_deflate": False,
+    }
+
+
 def _clerk_map() -> dict[str, str]:
     raw = os.environ.get("CLAYVERSE_CLERK_MAP_JSON", "")
     if not raw:
@@ -152,7 +165,7 @@ def main():
             port=port,
             workers=1,
             access_log=False,
-            ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
+            **_uvicorn_websocket_options(),
         )
     finally:
         db.checkpoint("shutdown")

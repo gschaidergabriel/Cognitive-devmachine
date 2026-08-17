@@ -7,7 +7,7 @@ from typing import Any
 from .adapters import MistralInference
 from .engine import ClayVerseEngine
 from .entityos_bridge import EntityOSBridge
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
 
 
 def _bounded_string(value: Any, name: str, *, max_length: int) -> str:
@@ -16,7 +16,9 @@ def _bounded_string(value: Any, name: str, *, max_length: int) -> str:
     return value
 
 
-def _mistral_receipt_from_assistant(db: UnifiedDB, assistant_turn_id: str) -> tuple[dict[str, Any], str, int]:
+def _mistral_receipt_from_assistant(
+    db: UnifiedDB, assistant_turn_id: str
+) -> tuple[dict[str, Any], str, int, int, str]:
     row = db.db.execute(
         "SELECT content,provenance FROM turns WHERE turn_id=? AND role='assistant'",
         (assistant_turn_id,),
@@ -30,6 +32,19 @@ def _mistral_receipt_from_assistant(db: UnifiedDB, assistant_turn_id: str) -> tu
         raise RuntimeError("acceptance probe assistant provenance is invalid") from exc
     if not isinstance(provenance, dict) or provenance.get("phase") != "pre-effect-reingest":
         raise RuntimeError("Mistral response was not re-ingested before effect admission")
+
+    reasoning_generation = provenance.get("reasoning_generation")
+    if (
+        isinstance(reasoning_generation, bool)
+        or not isinstance(reasoning_generation, int)
+        or reasoning_generation < 1
+    ):
+        raise RuntimeError("acceptance probe reasoning generation is invalid")
+    workspace_episode_id = _bounded_string(
+        provenance.get("workspace_episode_id"),
+        "acceptance workspace episode id",
+        max_length=256,
+    )
 
     receipt = provenance.get("inference_receipt")
     if not isinstance(receipt, dict) or receipt.get("provider") != "mistral":
@@ -63,7 +78,13 @@ def _mistral_receipt_from_assistant(db: UnifiedDB, assistant_turn_id: str) -> tu
 
     content = row["content"]
     content_bytes = content.encode("utf-8")
-    return dict(receipt), hashlib.sha256(content_bytes).hexdigest(), len(content_bytes)
+    return (
+        dict(receipt),
+        hashlib.sha256(content_bytes).hexdigest(),
+        len(content_bytes),
+        reasoning_generation,
+        workspace_episode_id,
+    )
 
 
 def run_mistral_acceptance_probe(
@@ -100,9 +121,27 @@ def run_mistral_acceptance_probe(
         entityos_bridge=entityos_bridge,
     ).ingest(subject, prompt, resources=["acceptance:mistral-final-sandbox"])
 
-    receipt, assistant_sha256, assistant_bytes = _mistral_receipt_from_assistant(
-        db, result["assistant_turn_id"]
+    (
+        receipt,
+        assistant_sha256,
+        assistant_bytes,
+        reasoning_generation,
+        provenance_workspace_episode_id,
+    ) = _mistral_receipt_from_assistant(db, result["assistant_turn_id"])
+
+    workspace = result.get("workspace")
+    result_workspace_episode_id = (
+        workspace.get("episode_id") if isinstance(workspace, dict) else None
     )
+    if provenance_workspace_episode_id != result_workspace_episode_id:
+        raise RuntimeError("Mistral acceptance probe workspace episode identity mismatch")
+
+    try:
+        db.assert_live_generation(result["session_id"], reasoning_generation)
+    except StaleGeneration as exc:
+        raise RuntimeError("Mistral acceptance probe reasoning generation is stale") from exc
+    session_generation = db.session_generation(result["session_id"])
+    entity_generation = db.entity_generation()
 
     outcome = result.get("outcome")
     effect_id = result.get("effect_id")
@@ -123,7 +162,10 @@ def run_mistral_acceptance_probe(
         "turn_id": result["turn_id"],
         "assistant_turn_id": result["assistant_turn_id"],
         "causal_id": result["causal_id"],
-        "entity_generation": db.entity_generation(),
+        "workspace_episode_id": result_workspace_episode_id,
+        "reasoning_generation": reasoning_generation,
+        "session_generation": session_generation,
+        "entity_generation": entity_generation,
         "assistant_content_sha256": assistant_sha256,
         "assistant_content_bytes": assistant_bytes,
         "inference_receipt": receipt,

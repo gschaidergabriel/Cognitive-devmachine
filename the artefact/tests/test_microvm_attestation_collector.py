@@ -268,6 +268,39 @@ def test_network_policy_inventory_is_additive_and_broad_allows_fail_closed():
     assert result["network_policy"]["selecting_policy_names"] == ["clayverse-default-deny"]
 
 
+def test_notin_selector_without_key_still_selects_broad_policy_fail_closed():
+    broad = {
+        "apiVersion": "networking.k8s.io/v1",
+        "kind": "NetworkPolicy",
+        "metadata": {"namespace": "clayverse", "name": "bad-notin", "uid": "notin-bad", "resourceVersion": "12"},
+        "spec": {
+            "podSelector": {"matchExpressions": [{"key": "exposure", "operator": "NotIn", "values": ["blocked"]}]},
+            "policyTypes": ["Egress"],
+            "egress": [{}],
+        },
+    }
+    with pytest.raises(AttestationError, match="obvious broad"):
+        _attest(network_policies=_policies(broad))
+
+
+def test_notin_selector_without_key_is_present_in_complete_inventory():
+    selected = {
+        "apiVersion": "networking.k8s.io/v1",
+        "kind": "NetworkPolicy",
+        "metadata": {"namespace": "clayverse", "name": "missing-key-notin", "uid": "notin-good", "resourceVersion": "13"},
+        "spec": {
+            "podSelector": {"matchExpressions": [{"key": "exposure", "operator": "NotIn", "values": ["blocked"]}]},
+            "policyTypes": ["Egress"],
+            "egress": [],
+        },
+    }
+    result = _attest(network_policies=_policies(selected))
+    assert result["network_policy"]["selecting_policy_names"] == [
+        "clayverse-default-deny",
+        "missing-key-notin",
+    ]
+
+
 def test_missing_or_malformed_network_policy_fails_closed():
     with pytest.raises(AttestationError, match="no NetworkPolicy selects"):
         _attest(network_policies={"items": []})

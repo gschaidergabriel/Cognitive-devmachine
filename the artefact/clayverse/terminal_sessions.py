@@ -37,12 +37,13 @@ class TerminalSessionManager:
 
     Browser PTYs attach/detach from tmux. Disconnecting a browser therefore cannot
     terminate the underlying interactive Claude Code CLI session. Claude starts from
-    an empty allowlisted environment, no built-in tools, strict ClayVerse MCP and
-    fixed lifecycle hooks that bind every prompt/response to UnifiedDB.
+    an empty allowlisted environment, no built-in tools, exclusive managed ClayVerse
+    MCP and fixed lifecycle hooks that bind every prompt/response to UnifiedDB.
     """
 
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
+    MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -58,6 +59,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("runtime Claude contract unavailable")
         if not self.MANAGED_SETTINGS.is_file():
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
+        if not self.MANAGED_MCP.is_file():
+            raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
 
     def binding(self, user_id: str) -> TerminalBinding:
         if user_id not in CANONICAL_TERMINALS:
@@ -82,9 +85,8 @@ class TerminalSessionManager:
             "CLAYVERSE_ENABLE_ENTITYOS_EXEC": "1" if enable_entityos else "0",
         }
         # Artifact identity is not capability authority. Do not disclose executable
-        # path/digest into the generated MCP config while the separate execution gate
-        # is closed. mcp_server independently rechecks the gate before constructing a
-        # bridge, so stale/generated configuration cannot widen authority either.
+        # path/digest while the separate execution gate is closed. mcp_server
+        # independently rechecks the gate before constructing an EntityOS bridge.
         if enable_entityos:
             for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
                 value = os.environ.get(key, "").strip()
@@ -93,6 +95,10 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
+        # This per-user file is a compatibility mirror. /etc/claude-code/managed-mcp.json
+        # has exclusive server-definition authority; the managed server inherits the
+        # sanitized terminal environment below. Keeping the mirror makes direct bounded
+        # diagnostics explicit without widening the server set.
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
@@ -127,8 +133,9 @@ class TerminalSessionManager:
             return binding
 
         # Built-in Claude tools are absent. Explicit MCP remains available even with
-        # --tools ""; strict MCP prevents user/project MCP injection. Filesystem setting
-        # sources are disabled so project/user hooks cannot compete with the fixed hooks.
+        # --tools ""; the system managed MCP file has exclusive server authority.
+        # Filesystem setting sources are disabled so project/user hooks cannot compete
+        # with the fixed managed lifecycle hooks.
         claude_argv = [
             "claude",
             "--strict-mcp-config",
@@ -143,8 +150,14 @@ class TerminalSessionManager:
         # Start Claude from an empty environment. Subscription/OAuth state lives in the
         # durable per-user HOME. Arbitrary container secrets (especially Clerk signing
         # material) never become an accidental alternate authentication/tool channel.
-        # Claude's own transcript and auto-memory stores are disabled so UnifiedDB is
-        # the sole durable conversation/memory authority after ClayVerse compression.
+        # Claude's own prompt history, auto-memory and CLAUDE.md discovery are disabled
+        # so UnifiedDB + the managed runtime contract remain the durable context authority.
+        mcp_env = self._mcp_env(binding)
+        effect_env = [
+            f"{key}={mcp_env[key]}"
+            for key in ("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256")
+            if key in mcp_env
+        ]
         env_argv = [
             "env",
             "-i",
@@ -156,6 +169,7 @@ class TerminalSessionManager:
             f"CLAYVERSE_STATE_ROOT={self.state_root}",
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
+            *effect_env,
             "DISABLE_AUTOUPDATER=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",

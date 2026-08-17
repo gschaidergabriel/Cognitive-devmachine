@@ -124,6 +124,8 @@ Budget exhaustion is a deterministic block/error, not a prompt suggestion. The m
 failure -> model changes something -> failure -> model changes something -> ...
 ```
 
+The effect budget is independent from the step budget. `max_effects == 0` forbids effects but does not disable bounded `reason`, `wait`, or `complete_candidate` work while step budget remains.
+
 ## Scheduler, not consciousness daemon
 
 `next_runnable()` is the deterministic scheduler primitive. It returns the highest-priority live `ACTIVE` goal that is inside budget and has no unfinished proposed/admitted step.
@@ -146,6 +148,26 @@ wake/event/re-entry
 
 A trigger may be user input, an effect result, timer, dependency event or recovery. The trigger is not authority; UnifiedDB state is.
 
+## Restart and generation re-entry
+
+Generation fencing is the stale-writer kill switch, not a mechanism for erasing durable user intent. Boot recovery therefore resolves the existing turn/effect recovery boundary first, advances the one global entity generation, and only then re-enters autonomy state.
+
+Recovery is intentionally asymmetric:
+
+- interrupted no-effect work is marked failed and becomes runnable again only inside the already-declared budgets;
+- an `ADMITTED` effect crossing the generation boundary without an exact autonomy-bound result becomes `BLOCKED` with `unknown_effect_after_generation_change`; it is never replayed and never assumed successful;
+- already persisted old-generation effect evidence remains recorded but the goal becomes `BLOCKED` with `effect_evidence_requires_generation_rebind`; v1 refuses both duplicate execution and silent cross-generation promotion until an explicit causal evidence-rebind contract exists;
+- an already blocked goal remains blocked;
+- terminal `COMPLETED`/`CANCELLED` goals are not rewritten by recovery.
+
+The recovery invariant is:
+
+```text
+STALE WRITER DIES
++ USER INTENT PERSISTS
++ UNCERTAIN EFFECT DOES NOT REPLAY
+```
+
 ## Anti-hallucination fences
 
 1. Goal provenance: durable objective comes from a canonical user turn.
@@ -159,6 +181,7 @@ A trigger may be user input, an effect result, timer, dependency event or recove
 9. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
 10. UnifiedDB only: no hidden model-side autonomy memory.
 11. Identity grants no privilege: "I am AGI" has no authority effect.
+12. Restart re-entry: uncertain or old-generation effect evidence never causes blind replay.
 
 ## Runtime prompt role
 
@@ -180,15 +203,17 @@ Implemented on this source-candidate lane:
 - user-turn-bound goal adoption;
 - priority `next_runnable()` scheduler primitive;
 - deterministic proposal/admission states;
-- step/retry/effect budgets;
+- independent step/retry/effect budgets;
 - generation fencing;
 - capability allowlist;
 - exact EffectJournal target/argv intent-receipt binding before autonomy evidence admission;
 - verified-effect and explicit-user-ack completion;
 - malformed/duplicate/non-finite state rejection;
 - persistence across DB reopen;
-- anti-self-authorization runtime cognition contract.
+- anti-self-authorization runtime cognition contract;
+- boot-time generation re-entry for safe durable goal intent;
+- explicit blocking instead of replay for ambiguous or old-generation effect evidence.
 
 This is **source + bounded mechanism evidence**, not exact-current full-checkout/OCI/microVM evidence and not whole-product PASS.
 
-Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; each autonomous effect must be bound to the exact autonomous causal episode/request/effect identity; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.
+Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; each autonomous effect must be bound to the exact autonomous causal episode/request/effect identity; an explicit cross-generation evidence-rebind contract is required before historical verified effects may close live goals without re-execution; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.

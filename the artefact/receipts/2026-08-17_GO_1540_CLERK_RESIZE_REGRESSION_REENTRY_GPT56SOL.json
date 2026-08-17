@@ -1,0 +1,61 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local_available": "2026-08-17T15:40+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "3f29357e43a6b3a5c005f6a68113a3b7486d48a9",
+  "branch": "go/clerk-resize-regression-reentry-20260817-1540-sol",
+  "test_restore_commit": "749bf09c53a550e9b80589be56dfc968d3242e33",
+  "problem": "The Clerk post-attach lease fence is present in refreshed current product source, but its focused regression file was absent from current main. That leaves a regression-ledger gap where later terminal changes could silently restore the expired-initial-resize behavior.",
+  "current_main_source": {
+    "terminal_gateway_blob": "aa9b8d079f2fc78746b93d676281d93272130673",
+    "resize_fence_present": true,
+    "adjacent_current_hardening": [
+      "PTY input writes freeze and re-check the frame-admitting Clerk lease around each kernel write",
+      "runtime readiness now requires live policy-attested canonical tmux sessions"
+    ]
+  },
+  "restored_regression": {
+    "path": "the artefact/tests/test_terminal_ws_auth_resize_fence.py",
+    "git_blob": "dfd816469ab5a1b76e0a131870cff04d75f947bb",
+    "contract": "advance fake time from 100 to 111 during attach_pty for token exp=110; require expired error and zero resize calls"
+  },
+  "exact_source_slice_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "fastapi": "0.128.2",
+    "starlette": "0.50.0",
+    "pytest": "9.0.2",
+    "network_used_for_test": false,
+    "target_source_reconstruction": "GitHub-provided exact source bytes reconstructed and Git object SHA-1 re-computed before execution",
+    "non_target_imports": "minimal deterministic stubs only for clerk_auth, identity, store and terminal_sessions imports; exact terminal_gateway target and exact regression test bytes were unmodified",
+    "current_main_result": "1 passed in 0.20s",
+    "current_main_exit_code": 0,
+    "evidence_class": "EXACT_CURRENT_MAIN_TARGET_FILE_PLUS_EXACT_REGRESSION_SOURCE_SLICE_WITH_NON_TARGET_IMPORT_STUBS"
+  },
+  "counter_reality_discriminator": {
+    "pre_fix_terminal_gateway_blob": "3b1aa61ea54409d545f13cdc0ff019f6e8f7cec9",
+    "pre_fix_blob_identity_recomputed": true,
+    "same_exact_regression_result": "1 failed in 0.24s",
+    "pre_fix_exit_code": 1,
+    "observed_failure": "resize_calls contained one initial resize with rows=24, cols=80 after the fake Clerk lease expired during blocking attach",
+    "repaired_pr573_gateway_blob": "5bd47e8f64f68a7c906c239051f092d30cefb0ac",
+    "repaired_pr573_same_regression_result": "1 passed in 0.25s",
+    "conclusion": "The exact regression discriminates the vulnerable old ordering from the repaired source and from refreshed current main after adjacent terminal hardening."
+  },
+  "provider_state": {
+    "vercel": "CONFIRMED_SANDBOX_BRIDGE_BUT_FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_ACTIVE",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "vps": "FORBIDDEN_FOR_TEST_EVIDENCE"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT: shared trigger identity is minute precision only; this work is ordinary deterministic regression/falsification"
+  },
+  "evidence_boundary": "MECHANISM_SUPPORTED_AT_EXACT_CURRENT_MAIN_TARGET_FILE_AND_EXACT_TEST_SOURCE_SLICE. Not a full private-repo checkout run, not real Clerk, not live tmux, not OCI startup/restart, and not whole ClayVerse PASS.",
+  "next_isolated_gate": "When Vercel Preview admission returns or a Daytona worker has provider egress, bind the then-current full checkout in a SQLite-capable isolated runtime; run this regression with adjacent Clerk lease/reauth/PTY-input/readiness tests, then continue exact OCI build/start/readiness/restart and real Clerk/browser/PTY acceptance."
+}

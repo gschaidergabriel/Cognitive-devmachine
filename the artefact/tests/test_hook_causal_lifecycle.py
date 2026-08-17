@@ -25,6 +25,7 @@ def test_turn_effect_and_stop_share_one_predeclared_causal_identity(tmp_path):
 
         effect = life.request_effect("state.noop", "test:no-op")
         assert effect["verified"] is True
+        assert effect["status"] == "VERIFIED"
         assert effect["causal_id"] == opened["causal_id"]
         assert db.db.execute(
             "SELECT COUNT(*) FROM causal_episodes WHERE causal_id=?", (opened["causal_id"],)
@@ -33,6 +34,7 @@ def test_turn_effect_and_stop_share_one_predeclared_causal_identity(tmp_path):
         result = life.complete("done")
         assert result["causal_id"] == opened["causal_id"]
         assert result["effect_id"] == effect["effect_id"]
+        assert result["reentered"] is True
         assert life.active() is None
         assert db.db.execute(
             "SELECT state FROM workspace_episodes WHERE episode_id=?", (opened["episode_id"],)
@@ -45,32 +47,32 @@ def test_turn_effect_and_stop_share_one_predeclared_causal_identity(tmp_path):
         db.close()
 
 
-def test_no_effect_stop_still_reenters_same_turn_identity_once(tmp_path):
+def test_no_effect_stop_keeps_causal_identity_without_effect_reentry(tmp_path):
     db = _db(tmp_path)
     try:
         life = TurnLifecycle(db, "andreas", "session:andreas")
         opened = life.begin("answer without effect")
-        life.complete("answer")
+        result = life.complete("answer")
         rows = db.db.execute(
-            "SELECT causal_id,effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
+            "SELECT causal_id,effect_id,outcome_hash,credit,reentered FROM causal_episodes WHERE episode_id=?",
             (opened["episode_id"],),
         ).fetchall()
         assert len(rows) == 1
         assert rows[0]["causal_id"] == opened["causal_id"]
         assert rows[0]["effect_id"] is None
+        assert rows[0]["outcome_hash"] is None
         assert float(rows[0]["credit"]) == 0.0
-        assert int(rows[0]["reentered"]) == 1
+        assert int(rows[0]["reentered"]) == 0
+        assert result["reentered"] is False
     finally:
         db.close()
 
 
-def test_restart_closes_pending_effect_without_replay_and_advances_both_sessions(tmp_path):
+def test_restart_closes_pending_effect_without_replay_or_false_reentry_and_advances_both_sessions(tmp_path):
     db = _db(tmp_path)
     try:
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         opened = life.begin("resource:machine-x do one effect")
-        # Persist PENDING exactly as if the process died after admission but before
-        # receiving/verifying the external outcome.
         effect_id = life.effects.journal.begin(
             opened["episode_id"], "session:gabriel", "gabriel", "entityos.exec",
             "machine-x", opened["generation"], ["probe"], lease=None,
@@ -85,12 +87,17 @@ def test_restart_closes_pending_effect_without_replay_and_advances_both_sessions
         effect = db.db.execute("SELECT status FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
         assert effect["status"] == "UNKNOWN_AFTER_RESTART"
         causal = db.db.execute(
-            "SELECT causal_id,effect_id,credit FROM causal_episodes WHERE episode_id=?",
+            "SELECT causal_id,effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
             (opened["episode_id"],),
         ).fetchone()
         assert causal["causal_id"] == opened["causal_id"]
         assert causal["effect_id"] == effect_id
         assert float(causal["credit"]) == 0.0
+        assert int(causal["reentered"]) == 0
+        assert recovered["reentered_effects"] == 0
+        assert db.db.execute(
+            "SELECT state FROM workspace_episodes WHERE episode_id=?", (opened["episode_id"],)
+        ).fetchone()[0] == "RECOVERY_CLOSED_AFTER_EFFECT_EVIDENCE"
         assert db.session_generation("session:gabriel") == recovered["generation"]
         assert db.session_generation("session:andreas") == recovered["generation"]
         assert db.entity_generation() == recovered["generation"]

@@ -107,13 +107,13 @@ def test_store_bound_verified_outcome_learns_new_shadow_entrypoint(tmp_path):
             budget_chars=4096,
         )
         assert [item["memory_id"] for item in first["items"]] == ["m1"]
-        assert first["receipt"]["policy_version"] == 2
+        assert first["receipt"]["policy_version"] == 3
         assert first["receipt"]["mode"] == "SHADOW"
 
         first_row = db.db.execute(
             "SELECT entry_keys FROM retrieval_episodes WHERE causal_id=?", (first_causal,)
         ).fetchone()
-        route_key = MicroClayRetrieval._route_key("codename", "procedure:orchid")
+        route_key = MicroClayRetrieval._route_key("codename", "m1")
         assert route_key in json.loads(first_row["entry_keys"])
         _bind_positive_causal_outcome(
             db, first_turn, first_episode, first_causal, generation
@@ -155,7 +155,7 @@ def test_store_bound_verified_outcome_learns_new_shadow_entrypoint(tmp_path):
         db.close()
 
 
-def test_v1_active_and_generic_subject_capital_cannot_open_v2_miss(tmp_path):
+def test_v2_active_and_v3_generic_subject_capital_cannot_open_v3_miss(tmp_path):
     db = _db(tmp_path)
     try:
         db.db.execute(
@@ -164,11 +164,11 @@ def test_v1_active_and_generic_subject_capital_cannot_open_v2_miss(tmp_path):
             (time.time(), json.dumps({"source": "focused-store-slice"})),
         )
         db.db.execute(
-            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=1 WHERE singleton=1"
+            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=2 WHERE singleton=1"
         )
         db.db.execute(
             "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
-            "VALUES('v2:subject:procedure:orchid',4.0,1.0,10,?)",
+            "VALUES('v3:subject:procedure:orchid',4.0,1.0,10,?)",
             (time.time(),),
         )
         organ = MicroClayRetrieval(db)
@@ -193,7 +193,7 @@ def test_v1_active_and_generic_subject_capital_cannot_open_v2_miss(tmp_path):
         ).fetchone()
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == []
-        assert int(row["policy_version"]) == 2
+        assert int(row["policy_version"]) == 3
         assert row["mode"] == "SHADOW"
     finally:
         db.close()

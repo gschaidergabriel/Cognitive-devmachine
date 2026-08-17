@@ -53,7 +53,6 @@ class ClayVerseEngine:
 
     @staticmethod
     def _inference_provenance(decision, reasoning_generation, episode_id):
-        """Build non-secret provenance for the pre-effect model-response re-ingest."""
         provenance = {
             "source": "inference-adapter",
             "phase": "pre-effect-reingest",
@@ -66,10 +65,6 @@ class ClayVerseEngine:
         return provenance
 
     def ingest(self, clerk_subject, content, *, resources=None):
-        # One persistent ClayVerse entity has one causal turn frontier. Requests may
-        # arrive through multiple authenticated surfaces, but observation -> cognition
-        # -> model-response re-ingest -> effect -> causal outcome re-entry is serialized
-        # inside the engine itself.
         with self._turn_lock:
             return self._ingest_locked(clerk_subject, content, resources=resources)
 
@@ -88,21 +83,17 @@ class ClayVerseEngine:
         self.memory.compact(sid)
 
         world = self.world.assemble(sid, resources)
-        # Identity/goals/autonomy are canonical state, not prose instructions. Every
-        # inference receives the same grounded snapshot derived from UnifiedDB.
-        world["agency"] = self.agency.snapshot(max_goals=8, max_attempts_per_milestone=5)
+        world["agency"] = self.agency.snapshot(
+            user_id=uid,
+            max_goals=8,
+            max_attempts_per_milestone=5,
+        )
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
         decision = self.inference.reason(world, content)
         self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
 
-        # SECURITY / CAUSALITY LAW:
-        # The model/provider response is canonicalized into UnifiedDB before any
-        # requested external/state-changing effect is allowed to reach EffectGate.
-        # This prevents a provider from becoming a direct action authority and makes
-        # the exact proposal observable under the same session/generation even if the
-        # subsequent effect is denied, fails, or crashes.
         aid = self.db.append_turn(
             sid,
             uid,

@@ -24,6 +24,7 @@ The preferred implementation line is an OCI-compatible sandboxed runtime such as
 10. **No blind external replay** — EffectJournal and generation fencing survive appliance recreation. Ambiguous effects become `UNKNOWN_AFTER_CRASH` rather than being automatically repeated.
 11. **No hidden writable host dependency** — final ClayVerse functionality may not rely on mutable host binaries, host libraries, host home directories or undeclared host mounts.
 12. **Attested boundary** — final acceptance records image digest, microVM runtime identity/version, guest kernel identity, host/guest isolation mode, mounted persistent volumes and their effective non-root ownership/write contract, single-Pod writer-fencing evidence, exact network-policy identity, network-plugin/CNI identity, node/control-plane/metadata reachability evidence and successful recovery evidence.
+13. **Explicit process group identity** — the Kubernetes reference profile MUST set `supplementalGroupsPolicy: Strict`. The default `Merge` policy is not admissible because it may add supplemental groups from the container image's `/etc/group`, creating access not declared by the ClayVerse Pod contract. Final acceptance MUST prove the selected Kubernetes node/runtime reports support for `supplementalGroupsPolicy`, must reject unsupported/unknown support rather than silently downgrade, and must attest the effective first-process Linux user/group identity so no image-derived supplemental GID is present. `fsGroup: 10001` remains an explicitly admitted group and is not removed by this rule.
 
 ## Tier-2 full-sandbox replacement gate
 
@@ -57,6 +58,8 @@ Until a target deployment proves the external full-sandbox replacement behavior,
 
 A Kubernetes/containerd deployment MAY use a sandboxed runtime class such as `kata`. If Kubernetes is used, the admitted ClayVerse workload MUST select the sandboxed RuntimeClass explicitly; silently falling back to the default host-kernel runtime is a final-acceptance failure.
 
+Kubernetes process-group identity is also part of runtime admission. The reference workload requires `supplementalGroupsPolicy: Strict`; `Merge` is rejected because it can incorporate group memberships from the image `/etc/group`. Final acceptance MUST verify the admitted node exposes `status.features.supplementalGroupsPolicy: true` (or the current API-equivalent support signal) and that the selected CRI/runtime actually supports Strict semantics. On Kubernetes versions where unsupported Strict policy is rejected, that rejection is the desired fail-closed behavior. An operator may not remove or downgrade the field merely to obtain scheduling success. The effective container user identity (including `status.containerStatuses[].user.linux` where available and an in-guest `id` check) must show only the manifest-declared primary/supplemental groups, including the explicitly admitted `fsGroup`, and no implicit image-derived GID.
+
 ### Kata runtime-rs security floor
 
 Any admitted deployment using Kata Containers `runtime-rs` MUST use a release containing the upstream fix for **GHSA-2gv2-cffp-j227 / CVE-2026-47243**. Upstream classifies `runtime-rs` versions `<= 3.30.0` as affected and `3.31.0` as the first patched release, so `runtime-rs <= 3.30.0` is explicitly forbidden for ClayVerse final acceptance.
@@ -88,6 +91,7 @@ Final whole-product acceptance MUST include at least:
 - as `uid=10001,gid=10001`, prove create/write/fsync/read/rename/delete on `/var/lib/clayverse` and `/workspace` without privileged/root ownership repair, then repeat after full workload/microVM replacement;
 - identify and attest the actual storage class/CSI driver and its effective `fsGroup`/mount-group behavior; unsupported or uncertain non-root volume ownership is `BLOCKED`;
 - prove both persistent claims use and the admitted CSI stack enforces `ReadWriteOncePod`; an overlapping stale/replacement Pod must not be able to acquire the same writable state/workspace claim concurrently;
+- prove `supplementalGroupsPolicy: Strict` is admitted by the selected Kubernetes/CRI/Kata path, attest node support, and verify effective process groups contain no implicit image `/etc/group` memberships before and after full appliance replacement;
 - prove host PID/filesystem/terminal surfaces are not directly reachable as ClayVerse authority;
 - identify and attest the actual network plugin/CNI and prove it enforces Kubernetes NetworkPolicy on the admitted target;
 - prove the baseline ClayVerse network policy denies policy-governed ingress and egress before any allow policy is added, including an undeclared external egress probe;

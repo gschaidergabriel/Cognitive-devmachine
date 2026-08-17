@@ -1,0 +1,60 @@
+{
+  "schema": "ClayVerseCurrentMainTmuxV3ReapplyTimeoutSourceSlice/v1",
+  "observed_at": "2026-08-17T15:42:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+  "candidate_pr": 577,
+  "candidate_branch": "go/tmux-reapply-timeout-v3-current-20260817-1534-sol",
+  "candidate_head_before_receipt": "a7609a354de0b694c3b82b4df8c6507d63e2b1b3",
+  "coordination_rejoin_pr": 578,
+  "coordination_rejoin_merge": "a7609a354de0b694c3b82b4df8c6507d63e2b1b3",
+  "exact_blobs": {
+    "the artefact/clayverse/terminal_sessions.py": "07c31e8d0b6ebaa5d0e2e5921d50557e600fa280",
+    "the artefact/tests/test_terminal_tmux_reapply_timeout_v3.py": "6cc87f320c1bae0b8bdb0a38b81ec0295d60fbb3",
+    "the artefact/tests/test_terminal_tmux_isolation.py": "f3c6bc0adb6fa115cf5287ab138b5687ca977b37",
+    "the artefact/policy/managed-tmux.conf": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "EXACT_TARGET_BLOB_SOURCE_SLICE_ONLY",
+    "platform": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "network_required": false,
+    "live_tmux_server": false,
+    "oci_image": false,
+    "clerk_browser_jwt": false,
+    "native_claude_runtime": false,
+    "vps": false
+  },
+  "commands": [
+    "git hash-object clayverse/terminal_sessions.py tests/test_terminal_tmux_reapply_timeout_v3.py tests/test_terminal_tmux_isolation.py policy/managed-tmux.conf",
+    "python3 -m py_compile clayverse/terminal_sessions.py tests/test_terminal_tmux_reapply_timeout_v3.py",
+    "PYTHONPATH=. python3 -m pytest -q tests/test_terminal_tmux_reapply_timeout_v3.py tests/test_terminal_tmux_isolation.py"
+  ],
+  "observed_result": {
+    "blob_binding": "PASS_4_OF_4",
+    "py_compile": "PASS",
+    "focused_plus_adjacent_tests": "12 passed in 0.05s",
+    "exit_code": 0,
+    "mechanism": "persistent per-user tmux policy is re-sourced before independent v3 effective-state attestation; has-session/source-file/new-session control calls are bounded by one 2.0-second fail-closed timeout; healthy new-session preserves direct multi-argv env/Claude launch",
+    "status": "EXACT_TARGET_BLOB_SOURCE_MECHANISM_SUPPORTED"
+  },
+  "counterhypothesis": "The 2-second bound may still be inappropriate under the exact packaged tmux/runtime or resource pressure, and source-file reapplication could have live-server behavior not represented by subprocess fakes. Exact live tmux/OCI execution is still required.",
+  "next_exact_gate": "On the first admitted isolated runtime, bind then-current source/image identity, exercise a pre-policy persistent tmux server upgrade plus deliberately slow/wedged control operations, require fail-closed attach with no second session/PTY admission, prove healthy direct Claude input survives, then continue OCI startup/readiness/restart/concurrency acceptance.",
+  "provider_state": {
+    "vercel": "fresh Preview admission currently blocked by api-deployments-free-per-day; no new Preview attempt made",
+    "daytona": "authorized fallback; current orchestration DNS/provider contact remains blocked/unobserved",
+    "runtime_credit_from_provider_blockers": 0
+  },
+  "go_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared exact user trigger exposes only minute-precision message metadata and no immutable shared request/turn identifier",
+    "unusual_experiment_count_added": 0
+  },
+  "evidence_boundary": "SOURCE MECHANISM ONLY. This receipt does not establish live tmux behavior, OCI build/runtime, Clerk/browser/WebSocket PTY, native Claude Code lifecycle, restart persistence, or whole ClayVerse PASS.",
+  "together_api": "NOT_USED_FORBIDDEN",
+  "final_paid_model_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

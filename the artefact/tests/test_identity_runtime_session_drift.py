@@ -87,3 +87,38 @@ def test_resolve_rejects_stale_session_generation(tmp_path):
             router.resolve("clerk_gabriel")
     finally:
         db.close()
+
+
+def test_resolve_rejects_runtime_extra_user_without_repairing_state(tmp_path):
+    db, router = _router(tmp_path)
+    try:
+        db.ensure_user("shadow", "Shadow")
+        before = db.db.execute(
+            "SELECT user_id,display_name,rights,clerk_subject FROM users ORDER BY user_id"
+        ).fetchall()
+
+        with pytest.raises(PermissionError, match="exactly two users"):
+            router.resolve("clerk_gabriel")
+
+        after = db.db.execute(
+            "SELECT user_id,display_name,rights,clerk_subject FROM users ORDER BY user_id"
+        ).fetchall()
+        assert [tuple(row) for row in after] == [tuple(row) for row in before]
+    finally:
+        db.close()
+
+
+def test_resolve_rejects_runtime_equal_rights_drift_without_repairing_state(tmp_path):
+    db, router = _router(tmp_path)
+    try:
+        db.db.execute("UPDATE users SET rights='admin' WHERE user_id='gabriel'")
+
+        with pytest.raises(PermissionError, match="rights mismatch: gabriel"):
+            router.resolve("clerk_gabriel")
+
+        rights = db.db.execute(
+            "SELECT rights FROM users WHERE user_id='gabriel'"
+        ).fetchone()[0]
+        assert rights == "admin"
+    finally:
+        db.close()

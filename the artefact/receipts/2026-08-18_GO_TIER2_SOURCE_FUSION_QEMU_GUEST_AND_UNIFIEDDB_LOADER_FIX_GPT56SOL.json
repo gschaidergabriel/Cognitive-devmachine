@@ -1,0 +1,89 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T02:38:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "65b62e2cda72a875f6221c3475b6431eac4856ec",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "draft": true,
+    "tier2_source_contract": "PERSISTENT_NAMED_CARRIER_DIRECT_COPY",
+    "persistent_carrier_helper_integrated": true,
+    "carrier_persistent": true,
+    "carrier_stop_reget_persistence_boundary": true,
+    "replacement_persistent": false,
+    "replacement_transport": "DIRECT_DECLARED_CHUNK_COPY",
+    "source_snapshot_forbidden": true,
+    "snapshot_replacement_forbidden": true,
+    "fork_forbidden": true,
+    "deterministic_carrier_and_replacement_names": true,
+    "crash_reentry_present": true,
+    "explicit_carrier_cleanup_required": true,
+    "active_guard": "ClayVerseTier2OuterRecreateGuard/v18",
+    "tier2_runtime_verified": false
+  },
+  "tier2_git_tree_type_repair": {
+    "helper_fix_commit": "c2e3a58d82db8f3460b2db55987ce22de3d26477",
+    "guard_fix_head_observed": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "research_tree_format": "GIT_SHA1_40_HEX",
+    "research_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "content_hashes_remain_sha256_64_hex": true,
+    "runtime_credit": 0
+  },
+  "execution_surface": {
+    "runner": "rae-1",
+    "host_role": "ORCHESTRATOR_ONLY",
+    "dev_kvm_available": false,
+    "qemu_tcg_allowed_scope": "BOUNDED_TRUSTED_DEVELOPMENT_COMPONENT_RUNTIME_ONLY",
+    "rootless_qemu_package_staging": true,
+    "privileged_host_mutation": false,
+    "host_product_execution": false,
+    "host_docker_used": false,
+    "independent_qemu_guest_kernel_run": 32059397269,
+    "independent_qemu_guest_kernel_job": 95476962290,
+    "independent_qemu_guest_kernel_pass": true,
+    "guest_network_mode": "NONE",
+    "final_hardware_microvm_credit": 0
+  },
+  "unifieddb_guest_first_run": {
+    "run": 32060128667,
+    "job": 95479293604,
+    "runner_id": 21,
+    "independent_guest_kernel_observed": true,
+    "cloud_init_final_stage_reached": true,
+    "guest_harness_started": true,
+    "product_semantics_reached": false,
+    "failure_classification": "GUEST_HARNESS_DYNAMIC_IMPORT_LOADER_BUG_NOT_UNIFIEDDB_SEMANTIC_FAILURE",
+    "error": "dataclass module lookup failed because dynamically loaded store module was not registered in sys.modules before exec_module",
+    "runtime_credit": 0
+  },
+  "unifieddb_guest_harness_repair": {
+    "commit": "65b62e2cda72a875f6221c3475b6431eac4856ec",
+    "product_store_bytes_changed": false,
+    "change": "register spec.name in sys.modules before spec.loader.exec_module(mod)",
+    "rerun": 32061392029,
+    "rerun_state_at_receipt": "QUEUED_BEHIND_EXISTING_RAE1_GUEST_RUN",
+    "promotion_note": "Current-main store.py blob differs from immutable PR686 store.py blob; a green current-main rerun is regression/component evidence only and must be repeated against exact PR686 bytes before PR686 component promotion."
+  },
+  "evidence_boundary": {
+    "whole_product_pass": false,
+    "exact_oci_credit": 0,
+    "live_provider_credit": 0,
+    "tier2_runtime_credit": 0,
+    "final_hardware_microvm_credit": 0,
+    "qemu_tcg_security_boundary_credit": 0,
+    "unusual_experiment_count_added": 0
+  },
+  "next_exact_step": "Complete the corrected UnifiedDB networkless independent-guest rerun. If the current-main store core passes, rebind the same guest harness to immutable PR686 store.py and obtain exact-blob component evidence. In parallel preserve the now-coherent PR810 persistent named-carrier direct-copy source contract until an admitted Vercel or other authorized exact runtime can execute full OCI/provider/EffectGate/Tier1/Tier2 recovery."
+}

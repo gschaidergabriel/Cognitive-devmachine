@@ -206,10 +206,6 @@ class MicroClayRetrieval:
         if budget_chars < 256 or budget_chars > 200_000:
             raise ValueError("invalid retrieval budget")
         self.db.assert_live_generation(session_id, generation)
-        learned_outcomes = self.learn_from_verified_outcomes(
-            session_id=session_id,
-            generation=generation,
-        )
 
         query_hash = hashlib.sha256(query.encode("utf-8")).hexdigest()
         existing = self.db.db.execute(
@@ -221,8 +217,19 @@ class MicroClayRetrieval:
                 existing["session_id"] != session_id
                 or int(existing["generation"]) != int(generation)
                 or existing["query_hash"] != query_hash
+                or int(existing["budget_chars"]) != int(budget_chars)
+                or existing["limit_items"] is None
+                or int(existing["limit_items"]) != int(limit)
             ):
                 raise StaleGeneration("retrieval_identity")
+
+        # Request identity is fail-closed before any adaptive state mutation.
+        learned_outcomes = self.learn_from_verified_outcomes(
+            session_id=session_id,
+            generation=generation,
+        )
+
+        if existing:
             ids = json.loads(existing["selected_memory_ids"])
             by_id = {
                 str(row["memory_id"]): row
@@ -312,13 +319,13 @@ class MicroClayRetrieval:
             "INSERT INTO retrieval_episodes("
             "retrieval_id,turn_id,episode_id,causal_id,session_id,user_id,generation,"
             "policy_version,mode,query_hash,query_token_hashes,selected_memory_ids,"
-            "shadow_memory_ids,entry_keys,budget_chars,chars_selected,status,ts"
-            ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "shadow_memory_ids,entry_keys,budget_chars,limit_items,chars_selected,status,ts"
+            ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 retrieval_id, turn_id, episode_id, causal_id, session_id, user_id, int(generation),
                 self.POLICY_VERSION, mode, query_hash, json.dumps(token_hashes),
                 json.dumps(selected_ids), json.dumps(shadow_ids), json.dumps(entry_keys),
-                int(budget_chars), int(chars),
+                int(budget_chars), int(limit), int(chars),
                 "PRESENT" if selected else "UNKNOWN", now,
             ),
         )

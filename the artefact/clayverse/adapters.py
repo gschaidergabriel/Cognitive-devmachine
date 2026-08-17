@@ -218,18 +218,32 @@ class MistralInference:
             method="POST",
         )
 
+        http_error_status = None
+        transport_failure_type = None
         try:
             with self._lock:
                 with urlopen(request, timeout=self.timeout) as response:
                     raw = response.read(self.MAX_RESPONSE_BYTES + 1)
         except HTTPError as exc:
-            raise RuntimeError(f"Mistral inference HTTP failure status={int(exc.code)}") from None
+            # Do not raise while the provider exception is active: ``from None``
+            # only suppresses display and still leaves ``__context__`` reachable.
+            http_error_status = int(exc.code)
+            raw = b""
         except (URLError, TimeoutError, OSError) as exc:
-            raise RuntimeError(f"Mistral inference transport failure type={type(exc).__name__}") from None
+            transport_failure_type = type(exc).__name__
+            raw = b""
         finally:
-            # Do not keep an unnecessary second reference to the secret after the
-            # request has been constructed/sent. The Request is scoped to this call.
+            # Scrub references that can retain the bearer credential before any
+            # post-transport validation raises and publishes this frame in traceback.
             token = ""
+            request = None
+
+        if http_error_status is not None:
+            raise RuntimeError(f"Mistral inference HTTP failure status={http_error_status}")
+        if transport_failure_type is not None:
+            raise RuntimeError(
+                f"Mistral inference transport failure type={transport_failure_type}"
+            )
 
         if len(raw) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("Mistral response exceeds bound")

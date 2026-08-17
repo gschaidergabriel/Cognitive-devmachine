@@ -3,6 +3,7 @@
   "trigger": "go",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "observed_at": "2026-08-17T22:59+07:00",
+  "updated_after_owner_reentry": "2026-08-17T23:03+07:00",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "classification": "CANONICAL_SOURCE_FUSION_WITH_LIVE_EXECUTION_ADMISSION_RECHECK",
@@ -26,8 +27,24 @@
       "commit": "f50b47ac29d769319e335c6760a0f948d8a2fd6c",
       "path": "the artefact/tests/test_container_healthcheck_semantics.py",
       "delta": "cross-surface regression fence for OCI healthz, FastAPI healthz/readyz, and Kata liveness/readiness separation"
+    },
+    {
+      "commit": "8b01dfd50af4867f35d1190c6d7ecfca387333d2",
+      "path": "the artefact/clayverse/adapters.py",
+      "delta": "sever Mistral HTTP/transport provider exceptions from the raised ClayVerse error context so redacted public errors do not retain an introspectable provider exception carrying secret/body material"
+    },
+    {
+      "commit": "2451ff482d0c0619a019b3db076161e34e177f89",
+      "path": "the artefact/tests/test_mistral_exception_context.py",
+      "delta": "regression candidate requiring Mistral HTTP/transport failures to expose neither secret text nor provider exception through __cause__/__context__"
     }
   ],
+  "owner_authority_reentry": {
+    "github_read_token_forwarding": "AUTHORIZED_IN_DISPOSABLE_VERCEL_SANDBOX_WHEN_SCOPED_READ_ONLY_TRANSIENT_NOT_LOGGED_NOT_PERSISTED",
+    "supersedes": "older host-only token interpretation",
+    "final_test_of_tests": "VERCEL_FIRECRACKER -> EXACT_CLAYVERSE_OCI -> RUNTIME_VAULT_SECRET -> TRANSIENT_MISTRAL -> CANONICAL_REINGEST -> EFFECTGATE_ENTITYOS -> TIER2_RECREATE_SAME_DIGEST -> SECRET_REACQUIRE -> SECOND_MISTRAL_TURN",
+    "mistral_role": "INFERENCE_ONLY_NOT_STATE_MEMORY_IDENTITY_OR_EFFECT_AUTHORITY"
+  },
   "upstream_security_observation": {
     "kata_latest_observed": "4.0.0",
     "rolling_support_rule": "latest monthly/security-supported release must be refreshed again immediately before final acceptance",
@@ -45,21 +62,34 @@
     "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
     "sandbox_admission": "PASS_CREATED",
     "guest_kernel": "Linux 6.12.76 x86_64",
-    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN_IN_THAT_RUN",
     "sandbox_stopped": true,
     "source_runtime_credit": 0,
     "oci_runtime_credit": 0,
-    "classification": "EXECUTION_ADMISSION_PASS_THEN_PRE_SOURCE_CREDENTIAL_BLOCK; NOT_CLAYVERSE_TEST_FAIL"
+    "classification": "EXECUTION_ADMISSION_PASS_THEN_PRE_SOURCE_CREDENTIAL_BLOCK; NOT_CLAYVERSE_TEST_FAIL",
+    "post_owner_correction_retrigger_observed": false
+  },
+  "mistral_source_reentry": {
+    "canonical_adapter": "the artefact/clayverse/adapters.py::MistralInference",
+    "duplicate_provider_module_removed_by_parallel_fusion": true,
+    "canonical_response_reingest_before_effectgate": "the artefact/clayverse/engine.py",
+    "prior_focused_source_regression": "6/6 PASS recorded by current repository evidence for the pre-exception-context slice",
+    "new_exception_context_regression_executed": false,
+    "new_exception_context_runtime_credit": 0,
+    "real_mistral_api_request_observed": false,
+    "vault_secret_acquisition_observed": false,
+    "tier2_secret_reacquisition_and_second_mistral_turn_observed": false
   },
   "coordination": {
-    "closed_duplicate_prs": [637, 639],
-    "retained_admission_lane": 640,
+    "closed_duplicate_prs": [637, 639, 640],
+    "retained_admission_lane": 643,
     "race_repaired": true,
-    "reason": "PR 639 carried duplicate admission implementations and was closed. A later race left PR 637 and PR 640 each naming the other as retained while both were closed. PR 640 was reopened as the single retained candidate because it checks incoming object plus oldObject against same-update app-label removal without introducing a mutable namespace-label prerequisite; PR 637/639 remain closed."
+    "reason": "Earlier #637/#640 coordination race was superseded; current single retained Kata annotation-admission candidate is Draft #643. No competing permanent admission path is promoted from this receipt."
   },
   "test_execution": {
-    "focused_new_regressions_executed": false,
-    "reason": "isolated container DNS could not resolve raw.githubusercontent.com and GitHub Actions workflow-run endpoint returned integration 403; no false TEST_FAIL or PASS inferred",
+    "health_regression_full_execution": false,
+    "mistral_exception_context_regression_full_execution": false,
+    "reason": "connected GitHub status for the new commit has no executed checks and connected Vercel control exposes no secret mutation/direct Sandbox lifecycle action; no false PASS or TEST_FAIL inferred",
     "source_bytes_rechecked_on_main_after_parallel_fusion": true
   },
   "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
@@ -71,7 +101,7 @@
     "together": false,
     "paid_final_training": false
   },
-  "current_primary_blocker": "Provision approved sensitive host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox env/logs; then rebind exact current Research + EntityOS bytes and run exact OCI build/runtime gates.",
+  "current_primary_blocker": "Operationally provide the approved scoped read-only GITHUB_READ_TOKEN to retained Vercel controller #810 through an authorized secret-management surface and retrigger it; this connected organ cannot mutate Vercel environment secrets. Then bind exact current source/EntityOS, build and run the exact OCI inside Firecracker, acquire MISTRAL_API_KEY from approved runtime Vault, execute canonical Mistral re-ingest/effect/recovery, fully recreate the appliance from the same digest, reacquire the secret and execute the second Mistral turn.",
   "whole_product_pass": false,
   "acceptance": "IN_PROGRESS"
 }

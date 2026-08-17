@@ -39,7 +39,7 @@ Accordingly, the reference StatefulSet is only the workload/isolation profile. F
 The Tier-2 mechanism MUST fail closed and prove all of the following before ingress reopens:
 
 - the old Pod UID and old Kata sandbox/VM identity are terminal and cannot rejoin;
-- a new Pod UID and new Kata sandbox/VM identity are observed;
+- a new Pod UID and new sandbox/VM identity are observed; for the canonical Kata profile, that identity is the new Kata sandbox/VM identity;
 - the new workload executes the exact same accepted ClayVerse image digest;
 - only the declared persistent state/workspace volumes are reattached;
 - UnifiedDB/WAL/logical-snapshot/EffectJournal recovery completes under a newly advanced global generation;

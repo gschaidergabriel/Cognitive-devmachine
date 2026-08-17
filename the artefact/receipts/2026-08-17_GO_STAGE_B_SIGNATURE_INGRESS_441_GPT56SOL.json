@@ -1,0 +1,75 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "issued_at": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / temporary Clay organ",
+  "issue": 441,
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "result": "SOURCE_CANDIDATE",
+  "donor": {
+    "pull_request": 530,
+    "branch": "go/stageb-signature-ingress-441-current-20260817-sol",
+    "source_commit_before_receipt": "634263a3ff46421fe1841939ae4fc0254375f812",
+    "base_branch": "go/meta-learning-method-memory-stageb-20260817-sol",
+    "base_sha_observed_at_pr_refresh": "9c1c662421987b450c27dfe93f24ad2eae51d4be",
+    "mergeable_observed": true
+  },
+  "changed_product_files": [
+    "the artefact/clayverse/problem_signature.py",
+    "the artefact/clayverse/method_stage_b.py",
+    "the artefact/clayverse/turn_lifecycle.py"
+  ],
+  "changed_regression_files": [
+    "the artefact/tests/test_method_stage_b_signature_gate.py",
+    "the artefact/tests/test_problem_signature_turn_ingress.py"
+  ],
+  "mechanisms": [
+    "typed problem-signature admission occurs inside the canonical turn transaction",
+    "admission receipt is bound to user/session/turn/episode/causal/generation/resource refs",
+    "admission receipt binds source, producer, abstraction version and producer digest",
+    "Stage-B serving signature is loaded only from the persisted active-turn admission receipt",
+    "caller problem_signature is a consistency assertion only and cannot create serving authority",
+    "Stage-B durable request identity binds admission receipt identity/provenance plus query/evidence/resources/limit/budget",
+    "missing admission remains SIGNATURE_REQUIRED",
+    "FACT_UNKNOWN plus method context does not become FACT_PRESENT",
+    "method/signature receipts carry no truth or effect authority",
+    "invalid signature provenance aborts the entire newly admitted turn transaction"
+  ],
+  "adversarial_findings": [
+    "raw problem_signature dictionaries were previously sufficient for Stage-B serving and are now denied as authority",
+    "a SIGNATURE_REQUIRED method-use receipt cannot later be reinterpreted under a newly admitted signature for the same causal request",
+    "resource, query, evidence-status, limit, budget or signature identity drift fails closed on replay",
+    "producer_sha256 is bound into the receipt but is not yet independently attested against a canonical producer registry"
+  ],
+  "unusual_experiment": {
+    "new_experiment_run": false,
+    "reason": "the single unusual-experiment slot for this user-triggered go cycle was already consumed earlier; no duplicate experiment was run"
+  },
+  "execution_evidence": {
+    "vercel_sandbox": "NOT_AVAILABLE_THROUGH_CONNECTED_TOOLING",
+    "github_workflow_run_id": 32004743628,
+    "github_workflow_name": "Research Entity Identity Guard",
+    "github_workflow_conclusion": "failure",
+    "github_job_id": 95311841978,
+    "github_job_steps": null,
+    "interpretation": "runner/control-plane failure before observable test-step execution; not code PASS and not code FAIL",
+    "exact_current_donor_tests_observed": false,
+    "whole_clayverse_pass": false
+  },
+  "external_merge_gates": [
+    "#415 open fusion lane",
+    "#425 promotion efficacy and memorization-vs-transfer gate",
+    "#451 canonical structural matcher/evaluator path",
+    "#470 or retained store-authority donor for fail-closed reserved method-memory writes",
+    "canonical producer attestation/registry for VALIDATED_ABSTRACTION provenance"
+  ],
+  "authority": {
+    "truth_authority": false,
+    "effect_authority": false,
+    "owner_authorization_for_final_paid_training": false,
+    "together_api_used": false,
+    "vps_or_self_hosted_test_used": false
+  },
+  "promotion": "DO_NOT_PROMOTE_TO_CANONICAL_ACTIVE_STAGE_B_UNTIL_EXECUTABLE_ISOLATED_VALIDATION_AND_EXTERNAL_MERGE_GATES_ARE_RESOLVED"
+}

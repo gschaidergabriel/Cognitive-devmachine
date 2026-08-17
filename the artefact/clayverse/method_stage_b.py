@@ -6,27 +6,28 @@ import time
 from typing import Any
 
 from .method_memory import MethodMemory, canonical_problem_signature
+from .problem_signature import ProblemSignatureAdmission
 from .store import StaleGeneration, UnifiedDB
 
 
 class StageBMethodRetrieval:
-    """Causal-identity wrapper around deterministic method-memory retrieval.
+    """Causal-identity wrapper around admitted structural method retrieval.
 
     Stage B never changes factual status and never gains truth/effect authority. A
     bounded method-use receipt is persisted by causal identity so re-entry cannot
     silently replay context produced for a drifted request.
 
-    Stage B deliberately does not infer a structural signature from raw prompt text at
-    this boundary. Without an explicit structured problem_signature it fails closed to
-    no method context. Signature derivation/admission remains a separate gate.
+    Raw prompt text and a caller-supplied problem_signature are not serving authority.
+    The only serving signature is a persisted ProblemSignatureAdmission receipt bound
+    to the active canonical user/session/turn/episode/causal/generation/resource identity.
 
     The active-turn identity check is relational, not merely referential: the active row,
     referenced session, turn and workspace episode must all agree on the same canonical
     user/session boundary before any method retrieval is allowed.
     """
 
-    POLICY_VERSION = 2
-    RECEIPT_SCHEMA = "clayverse-stage-b-method-use/v2"
+    POLICY_VERSION = 3
+    RECEIPT_SCHEMA = "clayverse-stage-b-method-use/v3"
     DEFAULT_BUDGET_CHARS = 6_000
     MAX_BUDGET_CHARS = 60_000
     MAX_RESOURCE_REFS = 128
@@ -35,6 +36,7 @@ class StageBMethodRetrieval:
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.methods = MethodMemory(db)
+        self.problem_signatures = ProblemSignatureAdmission(db)
 
     @staticmethod
     def _canonical_json(value: Any) -> str:
@@ -109,9 +111,11 @@ class StageBMethodRetrieval:
         evidence_status: str,
         resource_refs: list[str],
         problem_signature: dict[str, list[str]] | None,
+        signature_admission: dict[str, Any] | None,
         limit: int,
         budget_chars: int,
     ) -> dict[str, Any]:
+        admission = signature_admission or {}
         return {
             "receipt_schema": self.RECEIPT_SCHEMA,
             "policy_version": self.POLICY_VERSION,
@@ -128,9 +132,11 @@ class StageBMethodRetrieval:
             "problem_signature_sha256": (
                 self._digest_json(problem_signature) if problem_signature is not None else None
             ),
-            "signature_source": (
-                "EXPLICIT_STRUCTURED_INPUT" if problem_signature is not None else "NONE"
-            ),
+            "signature_source": admission.get("signature_source", "NONE"),
+            "signature_abstraction_version": admission.get("abstraction_version"),
+            "signature_receipt_id": admission.get("memory_id"),
+            "signature_identity_sha256": admission.get("signature_identity_sha256"),
+            "signature_provenance_sha256": admission.get("signature_provenance_sha256"),
             "limit": int(limit),
             "budget_chars": int(budget_chars),
         }
@@ -160,7 +166,7 @@ class StageBMethodRetrieval:
             raise StaleGeneration("method_retrieval_receipt") from exc
         if not isinstance(payload, dict) or not isinstance(provenance, dict):
             raise StaleGeneration("method_retrieval_receipt")
-        if provenance.get("source") != "method_stage_b:v2":
+        if provenance.get("source") != "method_stage_b:v3":
             raise StaleGeneration("method_retrieval_receipt")
         if payload.get("identity") != expected_identity:
             raise StaleGeneration("method_retrieval_identity")
@@ -192,6 +198,15 @@ class StageBMethodRetrieval:
             raise StaleGeneration("method_retrieval_receipt")
         if receipt.get("truth_authority") is not False or receipt.get("effect_authority") is not False:
             raise StaleGeneration("method_retrieval_receipt")
+        for field in (
+            "signature_source",
+            "signature_abstraction_version",
+            "signature_receipt_id",
+            "signature_identity_sha256",
+            "signature_provenance_sha256",
+        ):
+            if receipt.get(field) != expected_identity.get(field):
+                raise StaleGeneration("method_retrieval_receipt")
 
         expected_chars = sum(len(self._canonical_json(item)) for item in counterevidence + methods)
         if receipt.get("chars_selected") != expected_chars:
@@ -230,7 +245,7 @@ class StageBMethodRetrieval:
         }
         value = self._canonical_json(payload)
         provenance = self._canonical_json({
-            "source": "method_stage_b:v2",
+            "source": "method_stage_b:v3",
             "policy_version": self.POLICY_VERSION,
             "causal_id": causal_id,
             "user_scope": user_id,
@@ -336,11 +351,21 @@ class StageBMethodRetrieval:
         if factual_status not in {"PRESENT", "UNDERCOVERED", "UNKNOWN"}:
             raise ValueError("invalid Stage-B evidence status")
         refs = self._canonical_resource_refs(resource_refs)
-        signature = (
-            canonical_problem_signature(problem_signature)
-            if problem_signature is not None
-            else None
-        )
+
+        admission = self.problem_signatures.load_active(session_id=session_id, user_id=user_id)
+        if admission is None:
+            signature = None
+        else:
+            if admission["resource_refs"] != refs:
+                raise StaleGeneration("method_retrieval_identity")
+            signature = canonical_problem_signature(admission["problem_signature"])
+            if problem_signature is not None:
+                caller_signature = canonical_problem_signature(problem_signature)
+                if caller_signature != signature:
+                    raise StaleGeneration("method_retrieval_identity")
+
+        # A caller-supplied dict is at most a consistency assertion. It cannot become
+        # serving authority without the persisted active-turn admission receipt above.
         identity = self._request_identity(
             query=query,
             user_id=user_id,
@@ -352,6 +377,7 @@ class StageBMethodRetrieval:
             evidence_status=factual_status,
             resource_refs=refs,
             problem_signature=signature,
+            signature_admission=admission,
             limit=int(limit),
             budget_chars=int(budget_chars),
         )

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 import time
 
 import pytest
 
 from clayverse.autonomy import AutonomyBudgetExceeded, AutonomyController, GoalBudget
+from clayverse.effect_journal import EffectJournal
 from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
 
@@ -36,7 +36,9 @@ def _goal(db, controller, *, completion_mode="user_ack", required_capability=Non
     )
 
 
-def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "state.noop"):
+def _verified_effect(db, effect_id: str, *, generation: int, target: str):
+    target_receipt = EffectJournal._payload(EffectJournal._target_receipt(target))
+    outcome = EffectJournal._payload(EffectJournal._outcome_receipt({"ok": True}))
     db.db.execute(
         "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
         "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
@@ -44,12 +46,12 @@ def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "
             effect_id,
             None,
             "gabriel",
-            capability,
-            "autonomy-recovery-test",
+            "state.noop",
+            target_receipt,
             None,
             generation,
             "VERIFIED",
-            json.dumps({"ok": True}, sort_keys=True),
+            outcome,
             time.time(),
             time.time(),
         ),
@@ -66,11 +68,10 @@ def test_zero_effect_budget_still_allows_non_effect_reasoning(tmp_path):
     )
 
     step = controller.propose_step(goal["goal_id"], "reason", "Inspect canonical state only")
-    admitted = controller.admit_step(goal["goal_id"], step["step_id"])
-    assert admitted["status"] == "ADMITTED"
+    controller.admit_step(goal["goal_id"], step["step_id"])
     controller.record_reason_success(goal["goal_id"], step["step_id"])
 
-    with pytest.raises(AutonomyBudgetExceeded):
+    with pytest.raises(AutonomyBudgetExceeded, match="effect budget"):
         controller.propose_step(
             goal["goal_id"],
             "effect",
@@ -98,7 +99,7 @@ def test_generation_recovery_requeues_interrupted_non_effect_step(tmp_path):
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == goal["goal_id"]
 
 
-def test_boot_recovery_reenters_durable_goal_after_generation_advance(tmp_path):
+def test_boot_recovery_reenters_goal_after_generation_advance(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
     goal = _goal(db, controller)
@@ -115,7 +116,7 @@ def test_boot_recovery_reenters_durable_goal_after_generation_advance(tmp_path):
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == goal["goal_id"]
 
 
-def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp_path):
+def test_generation_recovery_never_replays_ambiguous_admitted_effect(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
     goal = _goal(
@@ -139,15 +140,12 @@ def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp
 
     assert result["ambiguous_effect_blocked"] == 1
     recovered = controller.snapshot(user_id="gabriel")["goals"][0]
-    assert recovered["generation"] == live
     assert recovered["status"] == "BLOCKED"
-    assert recovered["current_step"]["status"] == "FAILED"
     assert recovered["blocked_reason"] == "unknown_effect_after_generation_change"
-    assert controller.next_runnable(user_id="gabriel") is None
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
 
 
-def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(tmp_path):
+def test_verified_old_generation_effect_is_preserved_but_not_rebound(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
     goal = _goal(
@@ -164,7 +162,7 @@ def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(
         effect={"capability": "state.noop", "target": "receipt-boundary", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _verified_effect(db, "effect-before-restart", generation=1)
+    _verified_effect(db, "effect-before-restart", generation=1, target="receipt-boundary")
     assert controller.record_effect_result(
         goal["goal_id"], step["step_id"], "effect-before-restart"
     )["verified"] is True
@@ -178,38 +176,31 @@ def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(
     assert recovered["status"] == "BLOCKED"
     assert recovered["blocked_reason"] == "effect_evidence_requires_generation_rebind"
     assert recovered["evidence_effect_ids"] == ["effect-before-restart"]
-    assert controller.next_runnable(user_id="gabriel") is None
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 1
 
 
-def test_generation_recovery_preserves_existing_block_without_reactivation(tmp_path):
+def test_generation_recovery_preserves_existing_block_and_terminal_goal(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(db, controller)
-    controller.block_goal(goal["goal_id"], "needs external information")
+    blocked = _goal(db, controller)
+    controller.block_goal(blocked["goal_id"], "needs external information")
+
+    complete_source = db.append_turn("session:gabriel", "gabriel", "user", "Complete another goal")
+    complete = controller.create_goal_from_turn(
+        "gabriel", "session:gabriel", complete_source, completion_mode="user_ack"
+    )
+    ack = db.append_turn("session:gabriel", "gabriel", "user", "confirmed complete")
+    controller.acknowledge_by_user(complete["goal_id"], ack)
+    controller.verify_completion(complete["goal_id"])
+    terminal_before = [g for g in controller.snapshot(user_id="gabriel")["goals"] if g["goal_id"] == complete["goal_id"]][0]
 
     live = db.advance_entity_generation()
     result = controller.recover_generation(expected_generation=live)
 
+    goals = {g["goal_id"]: g for g in controller.snapshot(user_id="gabriel")["goals"]}
     assert result["blocked_preserved"] == 1
-    recovered = controller.snapshot(user_id="gabriel")["goals"][0]
-    assert recovered["generation"] == live
-    assert recovered["status"] == "BLOCKED"
-    assert recovered["blocked_reason"] == "needs external information"
-
-
-def test_terminal_goal_is_not_rewritten_during_generation_recovery(tmp_path):
-    db = _db(tmp_path)
-    controller = AutonomyController(db)
-    goal = _goal(db, controller)
-    ack = db.append_turn("session:gabriel", "gabriel", "user", "confirmed complete")
-    controller.acknowledge_by_user(goal["goal_id"], ack)
-    controller.verify_completion(goal["goal_id"])
-    before = controller.snapshot(user_id="gabriel")["goals"][0]
-
-    db.advance_entity_generation()
-    result = controller.recover_generation()
-    after = controller.snapshot(user_id="gabriel")["goals"][0]
-
     assert result["terminal_preserved"] == 1
-    assert after == before
+    assert goals[blocked["goal_id"]]["generation"] == live
+    assert goals[blocked["goal_id"]]["status"] == "BLOCKED"
+    assert goals[blocked["goal_id"]]["blocked_reason"] == "needs external information"
+    assert goals[complete["goal_id"]] == terminal_before

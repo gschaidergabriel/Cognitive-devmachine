@@ -1,0 +1,93 @@
+name: WP03 Current Main Unresolved Binding Gate
+
+on:
+  push:
+    branches:
+      - chatgpt/go-wp03-current-main-fused-gate-20260810-2011
+    paths:
+      - 'tools/test_claycode_wp03_current_main_unresolved_binding_gate.py'
+      - '.github/workflows/wp03-current-main-unresolved-binding-gate.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/test_claycode_wp03_current_main_unresolved_binding_gate.py'
+      - 'tools/claycode_wp03_frontend_artifact_bridge.py'
+      - 'tools/claycode_wp03_residual_semantics_candidate.py'
+      - 'tools/claycode_base_typed_ir.py'
+      - 'tools/claycode_base_typed_ir_v18_bridge.py'
+      - 'tools/claycode_base_frontend.py'
+      - 'research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark'
+      - 'research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay'
+      - 'research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay'
+      - '.github/workflows/wp03-current-main-unresolved-binding-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  current-main-gate:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Capture host and exact component identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          uname -a
+          python3 --version
+          git hash-object tools/claycode_base_frontend.py
+          git hash-object tools/claycode_wp03_frontend_artifact_bridge.py
+          git hash-object tools/claycode_wp03_residual_semantics_candidate.py
+          git hash-object tools/claycode_base_typed_ir.py
+          git hash-object tools/claycode_base_typed_ir_v18_bridge.py
+          git hash-object research_entity/claycode/base/D_LALR_GRAMMAR_REPAIR_CANDIDATE_V18_REWARD_RELATIONS.lark
+          git hash-object research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay
+          git hash-object research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay
+      - name: Build locked parser environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          VENV=/tmp/clay-wp03-current-main-${GITHUB_RUN_ID}
+          python3 -m venv "$VENV"
+          "$VENV/bin/python" -m pip install --disable-pip-version-check --no-input --require-hashes --only-binary=:all: -r research_entity/claycode/base/CC_WP02_RUNNER_REQUIREMENTS_LOCK.txt
+          echo "VENV=$VENV" >> "$GITHUB_ENV"
+      - name: Compile integration gate
+        run: "$VENV/bin/python" -m py_compile tools/test_claycode_wp03_current_main_unresolved_binding_gate.py tools/claycode_base_typed_ir_v18_bridge.py
+      - name: Execute exact current-main gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/time -v "$VENV/bin/python" tools/test_claycode_wp03_current_main_unresolved_binding_gate.py > /tmp/wp03-current-main.json 2> /tmp/wp03-current-main.time
+          cat /tmp/wp03-current-main.json
+          cat /tmp/wp03-current-main.time
+      - name: Assert receipt contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$VENV/bin/python" - /tmp/wp03-current-main.json <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['status']=='PASS',x
+          assert x['residual_count']==100,x
+          assert x['rule_invariant']==81,x
+          assert x['explicit_or_single_binding']==64,x
+          assert x['ambiguous_binding_unresolved']==17,x
+          assert x['metadata']==18 and x['cycle']==1 and x['gaps']==0,x
+          assert x['parser_calls_after_frontend_artifact_creation']==0,x
+          assert x['implicit_execution_count']==0,x
+          assert x['effect_authority']==x['truth_authority']=='NONE',x
+          assert x['ambiguous_binding_execution']=='FORBIDDEN',x
+          assert x['identity_cross_control']['same_semantics_different_epoch_state_identity']=='DISTINCT_PASS',x
+          assert x['identity_cross_control']['same_epoch_semantic_mutation_identity']=='DISTINCT_PASS',x
+          assert x['frontend_semantic_hash_tamper']=='REJECTED',x
+          assert x['promotion']=='NONE',x
+          print('WP03_CURRENT_MAIN_UNRESOLVED_BINDING_GATE=PASS')
+          PY
+
+# PR synchronize marker: workflow existed on the branch before this commit.

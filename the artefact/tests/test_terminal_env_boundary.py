@@ -15,6 +15,7 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
     calls = []
 
     def fake_run(argv, **kwargs):

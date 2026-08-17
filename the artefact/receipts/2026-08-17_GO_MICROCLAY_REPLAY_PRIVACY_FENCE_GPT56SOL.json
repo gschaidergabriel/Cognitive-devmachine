@@ -1,18 +1,25 @@
 {
   "schema": "clayverse-mechanism-receipt/v1",
-  "recorded_at_utc": "2026-08-17T07:01:33Z",
+  "recorded_at_utc": "2026-08-17T07:04:03Z",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "lane": "go/integration-microclay-meta-fusion-20260817-1326",
   "source_delta": {
-    "guard_commit": "d166c08b874feb57eb884f456b2d3ed5a3af6b3b",
-    "regression_commit": "4d1d1e05845b0ac60e24fd7d9159d1a6d22449a3",
-    "observed_pr_head_after_parallel_fusion": "237f1d989a7a04ea51a1bb21750c7100d26f42dc",
-    "guard_contract": "Historical replay revalidates every selected/shadow durable-memory reference against method/control exclusion, canonical user visibility, and current-turn echo exclusion before adaptive learning or replay return."
+    "privacy_guard_commit": "d166c08b874feb57eb884f456b2d3ed5a3af6b3b",
+    "privacy_regression_commit": "4d1d1e05845b0ac60e24fd7d9159d1a6d22449a3",
+    "budget_guard_commit": "1ff3fc98ed808c0f3d9e37da92fe3a634e481988",
+    "budget_regression_commit": "0b34f545fcd7fa2c484dc0710972a18baa243e2c",
+    "guard_contract": "Historical replay revalidates selected/shadow route references against method/control exclusion, canonical user visibility, current-turn echo exclusion, unique/count bounds, persisted selected character identity, and selected/shadow context budgets before adaptive learning or replay return."
   },
-  "falsifier": "A persisted replay route for Gabriel that references an Andreas-private factual memory or a Gabriel memory sourced from the active turn must fail closed before outcome learning and before replay material is returned.",
+  "falsifiers": [
+    "A persisted replay route for Gabriel that references an Andreas-private factual memory must fail closed before learning or return.",
+    "A persisted replay route that references a memory sourced from the active turn must fail closed before learning or return.",
+    "A replay route containing duplicate IDs or more IDs than limit_items must fail closed instead of amplifying returned context.",
+    "A replay route whose selected/shadow values exceed budget_chars, or whose selected values disagree with chars_selected, must fail closed.",
+    "A valid same-user historical route inside limits must remain admissible."
+  ],
   "isolated_probe": {
     "classification": "RECONSTRUCTED_DETERMINISTIC_MECHANISM_PROBE_NOT_EXACT_REPO_RUNTIME",
     "executor": "authorized isolated OpenAI container",
@@ -20,13 +27,17 @@
     "kernel": "Linux 6.18.35 x86_64",
     "network_used": false,
     "cases": [
-      {"name": "same_user_old", "expected_reject": false, "observed_reject": false, "result": "PASS"},
-      {"name": "other_user_selected", "expected_reject": true, "observed_reject": true, "result": "PASS"},
-      {"name": "current_turn_shadow", "expected_reject": true, "observed_reject": true, "result": "PASS"},
-      {"name": "method_shadow", "expected_reject": true, "observed_reject": true, "result": "PASS"},
-      {"name": "missing", "expected_reject": true, "observed_reject": true, "result": "PASS"}
+      {"name": "valid", "expected_reject": false, "observed_reject": false, "result": "PASS"},
+      {"name": "private", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "echo", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "method", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "missing", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "duplicate", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "over_limit", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "over_budget", "expected_reject": true, "observed_reject": true, "result": "PASS"},
+      {"name": "chars_mismatch", "expected_reject": true, "observed_reject": true, "result": "PASS"}
     ],
-    "summary": "MECHANISM_PROBE_PASS_5_OF_5",
+    "summary": "REPLAY_ROUTE_GUARD_MECHANISM_PASS_9_OF_9",
     "exact_source_archive_executed": false,
     "whole_product_credit": false
   },
@@ -38,7 +49,7 @@
   },
   "go_experiment_accounting": {
     "unusual_experiment_count_added": 0,
-    "reason": "This was an ordinary deterministic mechanism regression; the global go unusual-experiment slot is coordinated separately and no second unusual experiment is claimed here."
+    "reason": "These were ordinary deterministic mechanism regressions; the global go unusual-experiment slot is coordinated separately and no second unusual experiment is claimed here."
   },
   "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXACT_RUNTIME_PENDING"
 }

@@ -171,6 +171,17 @@ spec:
               mountPath: /tmp
             - name: run
               mountPath: /run
+          # ClayVerse performs recovery, graph rebuild, provider/runtime checks,
+          # and persistent terminal reattachment before Uvicorn starts listening.
+          # Gate liveness/readiness behind a bounded startup window so legitimate
+          # recovery cannot be mistaken for a dead process and restarted in-place.
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 30
           readinessProbe:
             httpGet:
               path: /readyz

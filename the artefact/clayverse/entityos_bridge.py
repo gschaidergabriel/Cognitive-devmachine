@@ -25,6 +25,10 @@ class EntityOSBridge:
     sha256: str
     timeout: float = 10.0
 
+    # Linux UAPI value from include/uapi/linux/memfd.h. Python does not expose
+    # MFD_EXEC on every build. New kernels need the explicit flag when
+    # vm.memfd_noexec hardening is enabled; old kernels reject the unknown flag
+    # with EINVAL, where the historical executable default is safe to retry.
     _MFD_EXEC = 0x0010
 
     @staticmethod
@@ -61,6 +65,8 @@ class EntityOSBridge:
         try:
             return os.memfd_create("EntityOS-verified", os.MFD_ALLOW_SEALING | cls._MFD_EXEC)
         except OSError as exc:
+            # MFD_EXEC was added after memfd_create. EINVAL means an older
+            # kernel that used executable memfd semantics by default.
             if exc.errno != errno.EINVAL:
                 raise EntityOSIntegrityError(f"EntityOS executable memfd failed: {exc}") from exc
             try:
@@ -69,6 +75,8 @@ class EntityOSBridge:
                 raise EntityOSIntegrityError(f"EntityOS memfd fallback failed: {fallback_exc}") from fallback_exc
 
     def _open_verified(self) -> int:
+        """Return an immutable executable snapshot fd whose bytes match the pin."""
+
         if len(self.sha256) != 64 or any(c not in "0123456789abcdefABCDEF" for c in self.sha256):
             raise EntityOSIntegrityError("invalid EntityOS sha256 pin")
         flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
@@ -95,6 +103,9 @@ class EntityOSBridge:
             if digest.hexdigest().lower() != self.sha256.lower():
                 raise EntityOSIntegrityError("EntityOS digest mismatch")
 
+            # Freeze the exact bytes before returning the executable object.
+            # Later writes/replacements of self.path therefore cannot alter
+            # the object that crosses the ClayVerse -> EntityOS boundary.
             os.fchmod(snapshot_fd, 0o500)
             self._seal_snapshot(snapshot_fd)
             os.lseek(snapshot_fd, 0, os.SEEK_SET)
@@ -107,6 +118,8 @@ class EntityOSBridge:
             os.close(source_fd)
 
     def verify(self):
+        """Fail-closed readiness probe for the exact sealed executable snapshot."""
+
         fd = self._open_verified()
         try:
             st = os.fstat(fd)
@@ -138,6 +151,9 @@ class EntityOSBridge:
                     env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
                 )
             except subprocess.TimeoutExpired as exc:
+                # subprocess.run only raises TimeoutExpired after the child has
+                # been started. The child may therefore have produced a real
+                # external effect before ClayVerse lost outcome certainty.
                 raise EntityOSOutcomeUnknown("EntityOS timed out after launch") from exc
         finally:
             os.close(fd)

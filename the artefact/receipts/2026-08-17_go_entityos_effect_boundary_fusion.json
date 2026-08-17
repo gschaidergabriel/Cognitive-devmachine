@@ -1,0 +1,43 @@
+{
+  "kind": "CLAYVERSE_GO_ENTITYOS_EFFECT_BOUNDARY_FUSION_RECEIPT",
+  "authority": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "product": "ClayVerse single OCI/Docker-compatible container",
+  "canonical_effect_commit": "af62fa851d80cefc43f8c5b3bce101eb55c2d473",
+  "canonical_regression_commit": "a918604f99da68e64228975639ad99f46081b0e9",
+  "manifest_truth_commit": "d104225328030794d8b5b2afef0b7bb9d7f1737e",
+  "effect_source_blob_sha": "5da5c0dd3ea7bfc763980f5aceb904e5c09f7e3a",
+  "delta": [
+    "legacy process.exec is fail-closed even when allow_process=True",
+    "entityos.exec remains the executable effect boundary through the exact-SHA pinned open-object EntityOS bridge",
+    "EntityOS SHA-256 is persisted in effect outcomes",
+    "session ownership, expected-generation rejection and lease pre/post revalidation are preserved",
+    "manifest updated so direct_process_exec no longer contradicts canonical code"
+  ],
+  "counterhypothesis": "shell=False direct argv could remain an acceptable temporary process boundary",
+  "counterhypothesis_result": "REJECTED_FOR_CANONICAL_PATH: it still bypasses EntityOS, while the current admitted EntityOS surface does not expose a generic ClayVerse process-execution contract",
+  "focused_isolated_falsifier": {
+    "surface": "OpenAI isolated local container",
+    "result": "PASS",
+    "checks": 4,
+    "checks_detail": [
+      "allow_process=True cannot admit process.exec",
+      "stale expected_generation is rejected before effect execution",
+      "cross-user/session mismatch fails closed",
+      "entityos.exec outcome carries EntityOS boundary+digest and lease is checked before and after"
+    ],
+    "scope": "exact effect-module control-flow logic with minimal dependency stubs; not a full artifact/runtime PASS"
+  },
+  "github_oci_gate": {
+    "run_id": 31995610890,
+    "head_sha": "a918604f99da68e64228975639ad99f46081b0e9",
+    "result": "INFRASTRUCTURE_BLOCKED",
+    "job": "oci-artifact",
+    "job_conclusion": "failure",
+    "steps_started": 0,
+    "interpretation": "no product/runtime conclusion; runner did not execute workflow steps"
+  },
+  "vercel_sandbox": "NOT_EXECUTED: connected Vercel surface in this session exposed deployment operations but no executable Sandbox create/exec action",
+  "unusual_experiment": "NO_NEW_EXPERIMENT_ADDED: canonical main already contained the bounded crash/reopen ABA fencing experiment for this go-era parallel fusion; local exploratory inversion was not promoted",
+  "whole_system_pass": false,
+  "next_blocker": "obtain an actually executable isolated container/Sandbox run of the current exact main candidate, then validate embedded pinned EntityOS semantics and the browser/Clerk/terminal/Claude end-to-end path"
+}

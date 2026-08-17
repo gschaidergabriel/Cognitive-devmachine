@@ -1,14 +1,20 @@
 from pathlib import Path
+import json
 import re
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = REPO_ROOT / ".github" / "workflows" / "clayverse-python-lock-generator.yml"
 DOCKERFILE = REPO_ROOT / "the artefact" / "Dockerfile"
+SOURCE_LOCK = REPO_ROOT / "the artefact" / "SOURCE_LOCK.json"
 
 
 def _workflow_text() -> str:
     return WORKFLOW.read_text(encoding="utf-8")
+
+
+def _source_lock() -> dict:
+    return json.loads(SOURCE_LOCK.read_text(encoding="utf-8"))
 
 
 def _first_from_image() -> str:
@@ -25,13 +31,17 @@ def test_python_lock_generator_checks_out_exact_source_and_uses_product_inputs()
     assert "persist-credentials: false" in text
     assert "PRODUCT_DOCKERFILE='the artefact/Dockerfile'" in text
     assert "PRODUCT_REQUIREMENTS='the artefact/requirements.txt'" in text
+    assert "PRODUCT_SOURCE_LOCK='the artefact/SOURCE_LOCK.json'" in text
     assert "sed -n -E" in text
     assert "[Ff][Rr][Oo][Mm]" in text
     assert "ARG BASE_IMAGE=" not in text
     assert "^python:[^[:space:]]+@sha256:[0-9a-f]{64}$" in text
     assert 'REQUIREMENTS_SHA256="$(sha256sum "$PRODUCT_REQUIREMENTS"' in text
+    assert 'SOURCE_LOCK_SHA256="$(sha256sum "$PRODUCT_SOURCE_LOCK"' in text
     assert '-v "$GITHUB_WORKSPACE:/workspace:ro"' in text
     assert "PRODUCT_REQUIREMENTS='/workspace/the artefact/requirements.txt'" in text
+    assert "PRODUCT_SOURCE_LOCK='/workspace/the artefact/SOURCE_LOCK.json'" in text
+    assert "EXPECTED_SOURCE_LOCK_SHA256" in text
 
 
 def test_current_product_first_from_is_exact_digest_pinned_python():
@@ -40,9 +50,33 @@ def test_current_product_first_from_is_exact_digest_pinned_python():
     assert image in DOCKERFILE.read_text(encoding="utf-8")
 
 
-def test_python_lock_generator_uses_python_313_supported_pip_tools():
+def test_python_lock_generator_uses_source_locked_python_313_supported_pip_tools():
+    lock = _source_lock()
+    pip_tools = lock["python_lock_generator"]["pip_tools"]
+    assert pip_tools == {
+        "version": "7.5.3",
+        "wheel": "pip_tools-7.5.3-py3-none-any.whl",
+        "sha256": "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e",
+        "source": "PyPI pip-tools 7.5.3 bdist_wheel metadata",
+    }
+    assert any(
+        "transitive generator dependencies" in gate
+        for gate in lock["known_open_supply_chain_gates"]
+    )
+
     text = _workflow_text()
-    assert "'pip-tools==7.5.3'" in text
+    assert "lock['python_lock_generator']['pip_tools']" in text
+    assert "pip-tools==$PIP_TOOLS_VERSION" in text
+    assert "--only-binary=:all: --no-deps" in text
+    assert 'PIP_TOOLS_WHEEL_PATH="/tmp/pip-tools-bootstrap/$PIP_TOOLS_WHEEL"' in text
+    assert "PIP_TOOLS_WHEEL_SHA256=" in text
+    assert '"$PIP_TOOLS_SHA256" "$PIP_TOOLS_WHEEL_PATH" | sha256sum -c -' in text
+    assert '--only-binary=:all: "$PIP_TOOLS_WHEEL_PATH"' in text
+    assert 'pip-compile --version | grep -F "version $PIP_TOOLS_VERSION"' in text
+    assert "GENERATOR_FREEZE_SHA256=" in text
+    assert "GENERATOR_ENVIRONMENT_BEGIN" in text
+    assert "GENERATOR_ENVIRONMENT_END" in text
+    assert "'pip-tools==7.5.3'" not in text
     assert "'pip-tools==7.5.0'" not in text
 
 

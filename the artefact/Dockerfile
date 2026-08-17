@@ -26,5 +26,5 @@ RUN useradd --system --uid 10001 --create-home clayverse \
 USER clayverse
 VOLUME ["/var/lib/clayverse"]
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD ["python","-m","clayverse.service","--once"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD ["python","-m","clayverse.service","--health"]
 ENTRYPOINT ["python","-m","clayverse.service"]

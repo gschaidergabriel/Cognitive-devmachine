@@ -19,6 +19,10 @@ from .workspace import Workspace
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
+_RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
+_METHOD_RECEIPT_MAX_CHARS = 16_384
+_METHOD_CHANNEL_MAX_CHARS = 60_000
+_UNKNOWNS_MAX_CHARS = 8_192
 
 
 class TurnLifecycleError(RuntimeError):
@@ -46,14 +50,73 @@ class TurnLifecycle:
 
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
-        def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
-        while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
+        if not isinstance(world,dict): raise TurnLifecycleError("world context must be an object")
+
+        def canonical_size(value,label,max_size=None):
+            try: encoded=json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
+            except (TypeError,ValueError) as exc: raise TurnLifecycleError(f"{label} is not canonical JSON") from exc
+            if max_size is not None and len(encoded)>max_size: raise TurnLifecycleError(f"{label} exceeds compact context bound")
+            return len(encoded)
+
+        def compact_receipt(name,max_size,*,scalar_only):
+            receipt=world.get(name)
+            if not isinstance(receipt,dict): raise TurnLifecycleError(f"{name} must be an object")
+            if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError(f"{name} keys must be strings")
+            scalar=(str,int,float,bool,type(None))
+            for value in receipt.values():
+                if isinstance(value,scalar): continue
+                if not scalar_only and isinstance(value,list) and all(isinstance(item,str) for item in value): continue
+                raise TurnLifecycleError(f"{name} values must be {'scalar' if scalar_only else 'scalar or string-list'}")
+            canonical_size(receipt,name,max_size)
+            if receipt.get("truth_authority") is not False or receipt.get("effect_authority") is not False:
+                raise TurnLifecycleError(f"{name} authority flags must be false")
+            return dict(receipt)
+
+        retrieval_receipt=compact_receipt("retrieval_receipt",_RETRIEVAL_RECEIPT_MAX_CHARS,scalar_only=True)
+        method_receipt=compact_receipt("method_retrieval_receipt",_METHOD_RECEIPT_MAX_CHARS,scalar_only=False)
+        durable=list(world.get("durable_memory",[]))
+        evidence=list(world.get("evidence_context",durable))
+        if evidence!=durable: raise TurnLifecycleError("evidence_context diverges from canonical durable_memory evidence")
+        method_context=list(world.get("method_context",[]))
+        counterevidence=list(world.get("counterevidence",[]))
+        unknowns=list(world.get("unknowns",[]))
+        for label,items in (("method_context",method_context),("counterevidence",counterevidence),("unknowns",unknowns)):
+            if any(not isinstance(item,dict) for item in items): raise TurnLifecycleError(f"{label} items must be objects")
+        if canonical_size(method_context,"method_context")+canonical_size(counterevidence,"counterevidence")>_METHOD_CHANNEL_MAX_CHARS:
+            raise TurnLifecycleError("method/counterevidence channels exceed compact context bound")
+        canonical_size(unknowns,"unknowns",_UNKNOWNS_MAX_CHARS)
+
+        selected_ids=[str(item.get("memory_id")) for item in method_context]
+        counter_ids=[str(item.get("memory_id")) for item in counterevidence]
+        if any(memory_id in {"None",""} for memory_id in selected_ids+counter_ids):
+            raise TurnLifecycleError("method/counterevidence item lacks memory_id")
+        if method_receipt.get("selected_method_ids",[])!=selected_ids:
+            raise TurnLifecycleError("method receipt selected IDs diverge from method_context")
+        if method_receipt.get("counterevidence_ids",[])!=counter_ids:
+            raise TurnLifecycleError("method receipt counterevidence IDs diverge from context")
+        if method_receipt.get("factual_status_unchanged",method_receipt.get("evidence_status"))!=retrieval_receipt.get("status"):
+            raise TurnLifecycleError("method receipt factual status diverges from evidence receipt")
+
+        packed={
+            "own_recent":list(world.get("own_recent",[])),
+            "cross_session_collision":list(world.get("cross_session_collision",[])),
+            "durable_memory":durable,
+            "evidence_context":evidence,
+            "method_context":method_context,
+            "unknowns":unknowns,
+            "counterevidence":counterevidence,
+            "retrieval_receipt":retrieval_receipt,
+            "method_retrieval_receipt":method_receipt,
+        }
+        def size(): return canonical_size(packed,"world context")
+        while size()>max_chars and packed["durable_memory"]:
+            packed["durable_memory"].pop(); packed["evidence_context"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()
         if size()>max_chars:
             for item in packed["own_recent"]:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"
+        if size()>max_chars: raise TurnLifecycleError("world context exceeds bound after safe trimming")
         return packed
 
     def _persisted_effect_in_tx(self,db,row):

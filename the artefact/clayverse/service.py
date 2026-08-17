@@ -15,11 +15,18 @@ from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .logical_snapshot import LogicalSnapshotManager
 from .readiness import claude_readiness
-from .recovery import recover_incomplete_episodes
+from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
 from .runtime_identity import collect_runtime_identity
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+from .tier2 import (
+    TIER2_EXIT_CODE,
+    Tier2ReplacementBlocked,
+    assert_tier2_boot_allowed,
+    clear_tier2_fence_after_boot,
+    request_tier2_replacement,
+)
 
 
 def _clerk_map() -> dict[str, str]:
@@ -130,6 +137,18 @@ def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     }
 
 
+def _tier2_status(status: str, *, reason: str, pod_uid: str) -> dict[str, object]:
+    return {
+        "service": "clayverse",
+        "status": status,
+        "scope": "tier2_replacement",
+        "reason": reason,
+        "pod_uid": pod_uid or None,
+        "ready": False,
+        "exit_code": TIER2_EXIT_CODE,
+    }
+
+
 def _acceptance_bool(name: str, default: str = "0") -> bool:
     raw = os.environ.get(name, default)
     if raw not in {"0", "1"}:
@@ -196,10 +215,60 @@ def _acceptance_snapshot(db: UnifiedDB) -> dict[str, object] | None:
     }
 
 
-def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
+def _recover_with_tier2(db: UnifiedDB, state_root: str, pod_uid: str) -> dict[str, object]:
+    try:
+        return recover_incomplete_episodes(db)
+    except RecoveryIntegrityError:
+        generation = db.entity_generation()
+        try:
+            request_tier2_replacement(
+                state_root,
+                current_pod_uid=pod_uid,
+                reason="recovery_integrity_failure",
+                entity_generation=generation,
+            )
+            status = "tier2_replacement_required"
+            reason = "recovery_integrity_failure"
+        except Exception as fence_exc:
+            status = "tier2_fence_write_failed"
+            reason = f"recovery_integrity_failure:{type(fence_exc).__name__}"
+        db.close()
+        print(json.dumps(_tier2_status(status, reason=reason, pod_uid=pod_uid)), flush=True)
+        raise SystemExit(TIER2_EXIT_CODE)
+
+
+def _admit_tier2_after_recovery(
+    db: UnifiedDB,
+    state_root: str,
+    pod_uid: str,
+    prior_fence,
+) -> dict[str, object] | None:
+    if prior_fence is None:
+        return None
+    checkpoint_id, state_hash = db.checkpoint(
+        "tier2-replacement-admitted:"
+        f"old_pod_uid={prior_fence.old_pod_uid};"
+        f"new_pod_uid={pod_uid};reason={prior_fence.reason}"
+    )
+    cleared = clear_tier2_fence_after_boot(
+        state_root,
+        current_pod_uid=pod_uid,
+        live_entity_generation=db.entity_generation(),
+    )
+    return {
+        "old_pod_uid": cleared.old_pod_uid if cleared else None,
+        "new_pod_uid": pod_uid,
+        "reason": cleared.reason if cleared else None,
+        "checkpoint": checkpoint_id,
+        "state_hash": state_hash,
+        "entity_generation": db.entity_generation(),
+    }
+
+
+def _run_mistral_once(db: UnifiedDB, *, state_root: str, pod_uid: str) -> dict[str, object]:
     """Run the internal canonical Mistral turn used by the final sandbox controller."""
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
     ClayGraphProjection(db).rebuild()
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
@@ -242,7 +311,23 @@ def main():
     import uvicorn
 
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
+    pod_uid = os.environ.get("CLAYVERSE_POD_UID", "").strip()
     restore_receipt = _snapshot_restore_before_db_open(state_root)
+    try:
+        prior_tier2_fence = assert_tier2_boot_allowed(state_root, current_pod_uid=pod_uid)
+    except Tier2ReplacementBlocked as exc:
+        print(
+            json.dumps(
+                _tier2_status(
+                    "tier2_replacement_blocked",
+                    reason=str(exc),
+                    pod_uid=pod_uid,
+                )
+            ),
+            flush=True,
+        )
+        return TIER2_EXIT_CODE
+
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
 
@@ -257,14 +342,21 @@ def main():
 
     if "--mistral-once" in sys.argv:
         try:
-            payload = _run_mistral_once(db)
+            payload = _run_mistral_once(db, state_root=state_root, pod_uid=pod_uid)
             payload["snapshot_restore"] = restore_receipt
+            payload["tier2_replacement"] = _admit_tier2_after_recovery(
+                db, state_root, pod_uid, prior_tier2_fence
+            )
             print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
         finally:
-            db.close()
+            if getattr(db, "db", None) is not None:
+                try:
+                    db.close()
+                except Exception:
+                    pass
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -298,6 +390,9 @@ def main():
         publishable_key=publishable_key,
         frontend_api_url=frontend_api,
     )
+    tier2_replacement = _admit_tier2_after_recovery(
+        db, state_root, pod_uid, prior_tier2_fence
+    )
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     print(json.dumps({
@@ -315,6 +410,7 @@ def main():
         "auth": "clerk",
         "recovery": recovery,
         "snapshot_restore": restore_receipt,
+        "tier2_replacement": tier2_replacement,
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

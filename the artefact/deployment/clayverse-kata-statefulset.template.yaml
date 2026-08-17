@@ -8,7 +8,9 @@
 # container restart is NOT ClayVerse Tier-2 recovery. Final deployment MUST bind
 # an external fail-closed orchestrator that deletes/replaces the whole Pod/Kata
 # sandbox/VM after a fatal invariant signal and proves new Pod + sandbox identity
-# before ingress reopens. Until that is verified, final acceptance is
+# before ingress reopens. ClayVerse receives metadata.uid through CLAYVERSE_POD_UID
+# and durably fences same-Pod restart after a recovery-integrity Tier-2 request.
+# Until external whole-sandbox replacement is verified, final acceptance is
 # TIER2_REPLACEMENT_BLOCKED.
 #
 # NETWORK FAIL-CLOSED LAW:
@@ -82,12 +84,10 @@ spec:
       # PVC mounts replace the image-owned /var/lib/clayverse and /workspace
       # directories. Bind them to the non-root runtime group without adding a
       # privileged/root ownership-repair path. Actual CSI behavior remains an
-      # executable final-acceptance gate. Strict prevents image /etc/group from
-      # silently adding undeclared supplemental groups to the runtime identity.
+      # executable final-acceptance gate.
       securityContext:
         fsGroup: 10001
         fsGroupChangePolicy: "OnRootMismatch"
-        supplementalGroupsPolicy: Strict
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -103,6 +103,13 @@ spec:
               value: /var/lib/clayverse
             - name: CLAYVERSE_WORKSPACE
               value: /workspace
+            # Object identity only: this does not grant the application Kubernetes
+            # API authority because the ServiceAccount token remains disabled.
+            - name: CLAYVERSE_POD_UID
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.uid
             - name: CLAYVERSE_REQUIRE_CLAUDE
               value: "1"
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC

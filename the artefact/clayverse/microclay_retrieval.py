@@ -9,6 +9,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .memory_classes import CONTROL_KINDS, METHOD_KINDS
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
@@ -79,6 +80,28 @@ class MicroClayRetrieval:
         except Exception:
             return {"parse_error": True}
 
+    @staticmethod
+    def _pack_candidates(
+        candidates: list[RetrievalCandidate],
+        *,
+        limit: int,
+        budget_chars: int,
+    ) -> tuple[list[RetrievalCandidate], int]:
+        """Apply the same relevance, count and character budget to any ranking."""
+        selected: list[RetrievalCandidate] = []
+        chars = 0
+        for item in candidates:
+            if item.baseline_score <= 0.0:
+                continue
+            item_chars = len(item.value)
+            if chars + item_chars > budget_chars:
+                continue
+            selected.append(item)
+            chars += item_chars
+            if len(selected) >= limit:
+                break
+        return selected, chars
+
     def mode(self) -> str:
         row = self.db.db.execute(
             "SELECT mode FROM retrieval_policy_state WHERE singleton=1"
@@ -129,8 +152,6 @@ class MicroClayRetrieval:
         structured = 1.0 if kind in {
             "fact", "decision", "task", "commitment", "preference", "open", "open_question"
         } else 0.4
-        # No cue match means UNKNOWN, not "probably relevant because recent". The
-        # recent 20-turn working window handles conversational continuity separately.
         baseline = (
             (0.82 * lexical) + (0.12 * recency) + (0.06 * structured)
             if lexical > 0.0 else 0.0
@@ -157,12 +178,6 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new effect-outcome receipts from earlier retrieval episodes.
-
-        Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
-        """
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
             "SELECT r.causal_id,r.generation,c.credit,e.status "
@@ -226,7 +241,6 @@ class MicroClayRetrieval:
             ):
                 raise StaleGeneration("retrieval_identity")
 
-        # Request identity is fail-closed before any adaptive state mutation.
         learned_outcomes = self.learn_from_verified_outcomes(
             session_id=session_id,
             generation=generation,
@@ -246,6 +260,8 @@ class MicroClayRetrieval:
             for memory_id in ids:
                 row = by_id.get(memory_id)
                 if row is not None:
+                    if str(row["kind"]) in METHOD_KINDS or str(row["kind"]) in CONTROL_KINDS:
+                        raise StaleGeneration("retrieval_semantic_class")
                     items.append({
                         "memory_id": memory_id,
                         "kind": row["kind"],
@@ -277,13 +293,14 @@ class MicroClayRetrieval:
             }
 
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
+        excluded_kinds = tuple(sorted(CONTROL_KINDS | METHOD_KINDS))
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
-            "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-            "AND (user_id IS NULL OR user_id=?) "
-            "AND (source_turn_id IS NULL OR source_turn_id<>?) "
-            "ORDER BY ts DESC LIMIT ?",
-            (user_id, turn_id, self.MAX_SOURCE_ROWS),
+            "WHERE kind NOT IN (%s) " % ",".join("?" for _ in excluded_kinds)
+            + "AND (user_id IS NULL OR user_id=?) "
+            + "AND (source_turn_id IS NULL OR source_turn_id<>?) "
+            + "ORDER BY ts DESC LIMIT ?",
+            (*excluded_kinds, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()
@@ -299,25 +316,22 @@ class MicroClayRetrieval:
             reverse=True,
         )
 
+        baseline_selected, baseline_chars = self._pack_candidates(
+            baseline, limit=limit, budget_chars=budget_chars
+        )
+        adaptive_selected, adaptive_chars = self._pack_candidates(
+            adaptive, limit=limit, budget_chars=budget_chars
+        )
         mode = self.mode()
-        serving = adaptive if mode == "ACTIVE" else baseline
-        selected: list[RetrievalCandidate] = []
-        chars = 0
-        for item in serving:
-            if item.baseline_score <= 0.0:
-                continue
-            item_chars = len(item.value)
-            if selected and chars + item_chars > budget_chars:
-                continue
-            selected.append(item)
-            chars += item_chars
-            if len(selected) >= limit:
-                break
+        if mode == "ACTIVE":
+            selected, chars = adaptive_selected, adaptive_chars
+        else:
+            selected, chars = baseline_selected, baseline_chars
 
         retrieval_id = str(uuid.uuid4())
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
-        shadow_ids = [x.memory_id for x in adaptive if x.baseline_score > 0.0][:limit]
+        shadow_ids = [x.memory_id for x in adaptive_selected]
         entry_keys = sorted({k for item in selected for k in item.entry_keys})[:256]
 
         self.db.db.execute(
@@ -364,11 +378,6 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Apply provenance-bound outcome credit to retrieval policy only.
-
-        Replaying the same receipt is idempotent; stale generations are rejected.
-        No durable-memory row is changed.
-        """
         value = max(-1.0, min(1.0, float(credit)))
         row = self.db.db.execute(
             "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",

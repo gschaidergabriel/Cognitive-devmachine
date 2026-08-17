@@ -1,14 +1,14 @@
 {
-  "schema_version": "7.27",
-  "latest_cycle": "automation-20260817-pr786-merge-artifact-divergence-postmerge-integrity",
+  "schema_version": "7.28",
+  "latest_cycle": "automation-20260817-postmerge-pytest-lark-dependency-adjudication",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "CLAYCODE_COMPILER_VM_FRONTIER",
   "control_sync_required_before_research_spend": true,
-  "next_focus": "Supervisor State 8.8 supersedes State 8.7. In gschaidergabriel/Dr.-Unterweger, PR786 is now MERGED: reviewed head 9a413e2e69262c8da2ed814e5c157d61ed44fd12 and merge commit 171b37f294de72cada8a4f0c0018cacec204be60 share exact tree 0495375b94c985f15bf2ff7e6b1619bc8153840c. Preserve the prior Vercel GO_SANDBOX_MATRIX_VERIFIED artifact as bounded exact-head recipe evidence: d8729f8108ee8a39405cf5038653680f86c51dde4d1eebef4327f823c9fae539 / 9171336 bytes. Fresh post-merge Ubuntu run 31974659964/job 95232215595 on the same source tree built a SELFTEST_PASS x86-64 EntityOS with a different identity: f47a337fae5fda0f30cb6a9084170aeb4b3f24a88d27ff9f300b86df50e11254 / 1214141 bytes. Treat this as build-recipe/artifact-provenance divergence, not semantic failure and not release authority. Fresh Frank Deep Integrity run 31974660013/job 95232215712 genuinely executed 23 gates on the merge commit: 22 PASS, pytest_all FAIL rc=2. The exact pytest cause is unadjudicated; do not guess, weaken tests, or misclassify it as zero-step. Its receipt was persisted to current product main 6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47. Before further research spend, sync Control 3.8 work selection losslessly to State 8.8 while preserving every authority rule. Highest-information next work: adjudicate pytest rc2; bind canonical release build recipe/builder/toolchain/dependencies and distinguish intentional EntityOS variants; then Bytes producer epoch/lease stability, executable-object identity, 429/464 Call ownership, 22 MethodChain/member segments and productive WP04 admission/private-state non-bypassability. Keep whole-machine, Hostinger ProductStart/storage, release-root/extraction/runtime, WP03-WP14 and live provider authority OPEN. FREE_ONLY remains hard; no paid fallback/Together and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 8.9 supersedes State 8.8. Preserve PR786 merge/artifact divergence exactly as before: reviewed head 9a413e2e69262c8da2ed814e5c157d61ed44fd12 and merge commit 171b37f294de72cada8a4f0c0018cacec204be60 share tree 0495375b94c985f15bf2ff7e6b1619bc8153840c, yet Vercel and post-merge Ubuntu recipes produced distinct valid EntityOS artifacts, so canonical artifact/build authority is unselected. The previously unadjudicated Deep Integrity failure is now causally narrowed from run 31974660013/job 95232215712 and the workflow bootstrap: 23 gates genuinely executed, 22 PASS, pytest_all rc=2 during collection because runtime/claycode_eval_v1/syntax.py imports lark while the workflow-created /opt/frank/venv installs pytest but not lark. Classify this as EXECUTED_DEPENDENCY_BOOTSTRAP_CLOSURE_COUNTEREVIDENCE, not ClayCode semantic failure, not zero-step, and not full-suite PASS. Before any new research spend: (1) losslessly sync Control 3.8 work selection to State 8.9 while preserving every authority rule; (2) bind one reviewed/versioned dependency closure for release-relevant Deep Integrity/full pytest and canonical EntityOS build, with no ad-hoc unpinned latest dependency install as authority; (3) rerun exact-current-main Deep Integrity and require collection plus all assertions to execute without weakening/skipping tests; (4) adjudicate canonical EntityOS build recipe/builder/toolchain/dependencies and independent release authority. Only then return to mutable/borrowed Bytes producer epoch/lease provenance, executable-object identity, 429/464 Call ownership, 22 MethodChain/member segments and productive WP04 admission/private-state non-bypassability. Keep whole-machine, Hostinger ProductStart/storage, release-root/extraction/runtime, WP03-WP14 and live provider authority OPEN. FREE_ONLY remains hard; no paid fallback/Together and never modify Frank's Harness.",
   "verified_updates": {
-    "supervisor_state_version": "8.8",
-    "supervisor_state_commit": "040bec47e809132969d1e38bf036cf0e1e50a235",
+    "supervisor_state_version": "8.9",
+    "supervisor_state_commit": "253d0f80c2ccf5452567a02f8906c56bcbc79d49",
     "autonomous_control_version_seen": "3.8",
     "autonomous_control_sync_required": true,
     "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
@@ -30,6 +30,11 @@
     "postmerge_deep_integrity_pass_count": 22,
     "postmerge_deep_integrity_fail_gate": "pytest_all",
     "postmerge_deep_integrity_fail_returncode": 2,
+    "postmerge_deep_integrity_fail_phase": "PYTEST_COLLECTION",
+    "postmerge_deep_integrity_fail_exception": "ModuleNotFoundError: No module named 'lark'",
+    "deep_integrity_venv_installs_pytest": true,
+    "deep_integrity_venv_installs_lark": false,
+    "deep_integrity_semantic_failure_proven": false,
     "entityos_whole_machine_acceptance": false,
     "authorized_sources": 40,
     "parsed_authorized_sources": 36,
@@ -41,9 +46,10 @@
     "live_free_model_provider_capability": "NO_NEW_ACCEPTED_UBUNTU_EXTERNAL_EFFECT_RECEIPT"
   },
   "receipt_gaps": {
-    "autonomous_control_work_selection": "STALE_3_8_SUPERVISOR_8_4_MUST_SYNC_TO_STATE_8_8_BEFORE_RESEARCH_SPEND",
+    "autonomous_control_work_selection": "STALE_3_8_SUPERVISOR_8_4_MUST_SYNC_TO_STATE_8_9_BEFORE_RESEARCH_SPEND",
+    "canonical_release_test_dependency_closure": "OPEN_LARK_REQUIRED_BY_CLAYCODE_PARSER_BUT_NOT_BOUND_IN_DEEP_INTEGRITY_VENV",
     "canonical_entityos_artifact_identity": "OPEN_TWO_DIFFERENT_SELFTEST_VALID_ARTIFACTS_FROM_IDENTICAL_SOURCE_TREE_REQUIRE_BUILD_RECIPE_AND_RELEASE_AUTHORITY",
-    "postmerge_deep_integrity": "EXECUTED_PYTEST_ALL_RC2_CAUSE_UNADJUDICATED",
+    "postmerge_deep_integrity": "EXECUTED_22_PASS_1_COLLECTION_BLOCKED_MISSING_LARK_NOT_FULL_SEMANTIC_ADJUDICATION",
     "entityos_whole_machine_acceptance": "OPEN_EXPLICITLY_FALSE",
     "entityos_runtime_extraction_authority": "OPEN",
     "trusted_expectation_origin_release_authority": "OPEN",
@@ -55,5 +61,5 @@
     "productive_compiler_non_bypassability": "OPEN_EVALUATOR_COMPILER_LOWERING_FFI_MUST_USE_CANONICAL_WP04_ADMISSION_AND_PRIVATE_ADMITTED_STATE",
     "live_free_model_provider": "OPEN_NO_ACCEPTED_UBUNTU_EXTERNAL_EFFECT_RECEIPT"
   },
-  "instruction": "Use Supervisor State 8.8. PR786 is merged, but merge status mints no release/BASE/Frank authority. Preserve Vercel and post-merge EntityOS outputs as distinct correlated build-recipe evidence on the same source tree; do not select either as canonical until build and release authority is reviewed. Treat run 31974660013/job 95232215712 as real executed integration counterevidence: 22/23 gates pass and pytest_all rc=2 remains to adjudicate. Before new research spend, sync Control 3.8 focus to State 8.8 while preserving every existing authority rule. Do not mark WP03-WP14 PASS, do not promote canonical semantics, do not claim whole-machine/Frank/ProductStart/release-root/provider authority, and never modify Frank's Harness. FREE_ONLY remains hard: no paid Actions/Vercel/provider fallback, no Together, and no quota bypass."
+  "instruction": "Use Supervisor State 8.9. The Deep Integrity rc=2 is adjudicated to collection-time missing lark in a venv that installs pytest but not lark. Preserve it as real dependency/test-provenance counterevidence; do not call it ClayCode semantic failure, do not call it PASS, and do not weaken/skip tests. Before new research spend, sync Control 3.8 focus to State 8.9 without losing authority rules. Bind a reviewed/versioned dependency closure shared by release-relevant tests/build provenance; do not use an ad-hoc unpinned latest dependency install as authority. Rerun exact-current-main Deep Integrity and require all 23 gates including full pytest collection/assertions to execute. Keep canonical EntityOS build/release authority open until recipe, builder, toolchain, dependencies and independent release trust are selected. Do not mark WP03-WP14 PASS, do not promote canonical semantics, do not claim whole-machine/Frank/ProductStart/release-root/provider authority, and never modify Frank's Harness. FREE_ONLY remains hard: no paid Actions/Vercel/provider fallback, no Together, and no quota bypass."
 }

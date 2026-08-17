@@ -3,10 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import uuid
 from pathlib import Path
 
-from .agency import AgencyState
+from .agency import AgencyView
+from .autonomy import AutonomyController, CompletionNotVerified, GoalBudget
 
 
 class BridgeStateError(RuntimeError):
@@ -14,20 +14,15 @@ class BridgeStateError(RuntimeError):
 
 
 class ClayVerseEffectBridge:
-    """Stdio MCP for bounded effects and explicit owner-authorized goal control.
-
-    Turn ingestion remains deterministic in Claude hooks. Operational actions still
-    have exactly one authority: EffectGate. Goal/control-plane mutations use the
-    separate AgencyState gate below and must bind to an exact quote from the active
-    canonical user turn so the model cannot silently invent a human goal decision.
-    """
+    """Stdio MCP for bounded effects and explicit owner-authorized goal control."""
 
     def __init__(self, lifecycle):
         self.lifecycle = lifecycle
         self.db = lifecycle.db
         self.user_id = lifecycle.user_id
         self.session_id = lifecycle.session_id
-        self.agency = AgencyState(self.db)
+        self.autonomy = AutonomyController(self.db)
+        self.agency = AgencyView(self.db)
 
     @classmethod
     def from_env(cls):
@@ -75,7 +70,7 @@ class ClayVerseEffectBridge:
     def _active_user_authorization(self, authorization_quote: str) -> tuple[str, str]:
         if (
             not isinstance(authorization_quote, str)
-            or not authorization_quote.strip()
+            or len(authorization_quote.strip()) < 8
             or len(authorization_quote) > 1000
             or "\x00" in authorization_quote
         ):
@@ -96,134 +91,107 @@ class ClayVerseEffectBridge:
             raise PermissionError("authorization quote is not present in the active user prompt")
         return active["turn_id"], quote
 
-    def _audit_goal_control(self, turn_id: str, action: str, subject_ref: str, quote: str) -> None:
-        quote_hash = hashlib.sha256(quote.encode("utf-8")).hexdigest()
-        with self.db.tx() as tx:
-            self.agency._event(
-                tx,
-                "agency.control_admitted",
-                "turn",
-                f"{turn_id}:{action}:{subject_ref}:{uuid.uuid4().hex}",
-                {
-                    "turn_id": turn_id,
-                    "user_id": self.user_id,
-                    "action": action,
-                    "subject_ref": subject_ref,
-                    "authorization_quote_sha256": quote_hash,
-                    "authorization_quote_bytes": len(quote.encode("utf-8")),
-                },
-            )
-            self.agency._refresh_hash(tx)
+    def _owned_goal(self, goal_id: str) -> dict:
+        if not isinstance(goal_id, str) or not goal_id or len(goal_id) > 128:
+            raise ValueError("invalid goal id")
+        for goal in self.autonomy.snapshot(user_id=self.user_id)["goals"]:
+            if goal["goal_id"] == goal_id:
+                return goal
+        raise PermissionError("goal owner mismatch")
 
-    @staticmethod
-    def _goal_text(value: str, name: str, max_chars: int = 8000) -> str:
-        if not isinstance(value, str) or not value.strip() or len(value) > max_chars or "\x00" in value:
-            raise ValueError(f"invalid {name}")
-        return value.strip()
+    def _audit_goal_control(self, turn_id: str, action: str, subject_ref: str, quote: str, result: dict) -> None:
+        receipt = {
+            "agency_control": action,
+            "subject_ref": subject_ref,
+            "source_turn_id": turn_id,
+            "authorization_quote_sha256": hashlib.sha256(quote.encode("utf-8")).hexdigest(),
+            "result": result,
+        }
+        self.db.append_turn(
+            self.session_id,
+            self.user_id,
+            "system",
+            json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":")),
+            provenance={"source": "agency-gate", "phase": "control-receipt"},
+        )
 
     def goal_state(self) -> dict:
-        return self.agency.snapshot(
-            user_id=self.user_id,
-            max_goals=20,
-            max_attempts_per_milestone=5,
-        )
+        return self.agency.snapshot(user_id=self.user_id)
 
     def goal_create(
         self,
         authorization_quote: str,
-        title: str,
-        objective: str,
-        success_criteria: str,
-        priority: int = 0,
+        completion_mode: str = "user_ack",
+        required_capability: str | None = None,
+        priority: int = 50,
+        max_steps: int = 32,
+        max_retries_per_step: int = 3,
+        max_effects: int = 8,
     ) -> dict:
         turn_id, quote = self._active_user_authorization(authorization_quote)
-        title = self._goal_text(title, "goal title", 1000)
-        objective = self._goal_text(objective, "goal objective")
-        success_criteria = self._goal_text(success_criteria, "goal success criteria")
-        priority = int(priority)
-        if priority < -100 or priority > 100:
-            raise ValueError("goal priority must be between -100 and 100")
-
-        goal_id = self.agency.create_goal(
+        completion_mode = str(completion_mode)
+        if completion_mode == "user_ack":
+            required_capability = None
+        budget = GoalBudget(
+            max_steps=int(max_steps),
+            max_retries_per_step=int(max_retries_per_step),
+            max_effects=int(max_effects),
+        ).validate()
+        goal = self.autonomy.create_goal_from_turn(
             self.user_id,
-            title,
-            objective,
-            success_criteria,
-            priority=priority,
+            self.session_id,
+            turn_id,
+            completion_mode=completion_mode,
+            required_capability=required_capability,
+            priority=int(priority),
+            budget=budget,
         )
-        milestone_ids = [
-            self.agency.add_milestone(
-                goal_id,
-                "CONCEPT",
-                "Concept",
-                "A reviewable concept is grounded in canonical state and directly supports the goal success criteria: "
-                + success_criteria,
-            ),
-            self.agency.add_milestone(
-                goal_id,
-                "PROTOTYPE",
-                "Prototype",
-                "A bounded prototype or equivalent executable evidence demonstrates measurable progress toward: "
-                + success_criteria,
-            ),
-            self.agency.add_milestone(
-                goal_id,
-                "FINAL",
-                "Final",
-                "Canonical final evidence is reviewable and satisfies the declared goal success criteria: "
-                + success_criteria,
-            ),
-        ]
-        self._audit_goal_control(turn_id, "goal.create", goal_id, quote)
-        return {
-            "goal_id": goal_id,
-            "milestone_ids": milestone_ids,
-            "status": "ACTIVE",
-            "autonomy_mode": self.agency.policy()["autonomy_mode"],
+        result = {
+            "goal_id": goal["goal_id"],
+            "status": goal["status"],
+            "objective_source": "canonical_user_turn",
+            "completion_contract": goal["completion_contract"],
+            "budget": goal["budget"],
             "admission_turn_id": turn_id,
         }
+        self._audit_goal_control(turn_id, "goal.create", goal["goal_id"], quote, result)
+        return result
 
-    def goal_set_status(
-        self,
-        authorization_quote: str,
-        goal_id: str,
-        status: str,
-    ) -> dict:
+    def goal_set_status(self, authorization_quote: str, goal_id: str, action: str) -> dict:
         turn_id, quote = self._active_user_authorization(authorization_quote)
-        if not isinstance(goal_id, str) or not goal_id or len(goal_id) > 128:
-            raise ValueError("invalid goal id")
-        status = str(status).upper()
-        if status not in {"ACTIVE", "PAUSED", "CANCELLED"}:
-            raise ValueError("goal status must be ACTIVE, PAUSED or CANCELLED")
-        self.agency.set_goal_status(self.user_id, goal_id, status)
-        self._audit_goal_control(turn_id, "goal.status", goal_id, quote)
-        return {"goal_id": goal_id, "status": status, "admission_turn_id": turn_id}
+        self._owned_goal(goal_id)
+        action = str(action).upper()
+        if action == "PAUSE":
+            result = self.autonomy.block_goal(goal_id, "user_paused")
+        elif action == "RESUME":
+            result = self.autonomy.resume_goal(goal_id)
+        elif action == "CANCEL":
+            result = self.autonomy.cancel_goal(goal_id)
+        else:
+            raise ValueError("goal action must be PAUSE, RESUME or CANCEL")
+        self._audit_goal_control(turn_id, f"goal.{action.lower()}", goal_id, quote, result)
+        return result
 
-    def milestone_review(
-        self,
-        authorization_quote: str,
-        milestone_id: str,
-        decision: str,
-        note: str = "",
-    ) -> dict:
+    def goal_acknowledge(self, authorization_quote: str, goal_id: str) -> dict:
         turn_id, quote = self._active_user_authorization(authorization_quote)
-        if not isinstance(milestone_id, str) or not milestone_id or len(milestone_id) > 128:
-            raise ValueError("invalid milestone id")
-        decision = str(decision).upper()
-        if decision not in {"PASS", "REOPEN", "BLOCK"}:
-            raise ValueError("milestone decision must be PASS, REOPEN or BLOCK")
-        if not isinstance(note, str) or len(note) > 2000 or "\x00" in note:
-            raise ValueError("invalid milestone review note")
-        self.agency.review_milestone(milestone_id, self.user_id, decision, note)
-        self._audit_goal_control(turn_id, "milestone.review", milestone_id, quote)
-        return {
-            "milestone_id": milestone_id,
-            "decision": decision,
-            "admission_turn_id": turn_id,
-        }
+        goal = self._owned_goal(goal_id)
+        acknowledgement = self.autonomy.acknowledge_by_user(goal_id, turn_id)
+        try:
+            verification = self.autonomy.verify_completion(goal_id)
+        except CompletionNotVerified:
+            verification = {
+                "goal_id": goal_id,
+                "status": goal["status"],
+                "completion_verified": False,
+                "reason": "completion_contract_not_satisfied",
+            }
+        result = {"acknowledgement": acknowledgement, "verification": verification}
+        self._audit_goal_control(turn_id, "goal.acknowledge", goal_id, quote, result)
+        return result
 
     def session_state(self) -> dict:
         active = self.lifecycle.active()
+        autonomy = self.autonomy.snapshot(user_id=self.user_id)
         return {
             "user_id": self.user_id,
             "session_id": self.session_id,
@@ -238,9 +206,10 @@ class ClayVerseEffectBridge:
             "capabilities": self.lifecycle.effects.available_capabilities(),
             "entityos_execution_enabled": self.lifecycle.effects.entityos_bridge is not None,
             "turn_ingestion": "automatic_claude_hooks",
-            "agency": {
-                "autonomy_mode": self.agency.policy()["autonomy_mode"],
-                "goal_count": len(self.agency.snapshot(user_id=self.user_id)["active_goals"]),
+            "autonomy": {
+                "schema": autonomy["schema"],
+                "revision": autonomy["revision"],
+                "goal_count": len(autonomy["goals"]),
             },
         }
 
@@ -254,8 +223,9 @@ def main() -> None:
         "ClayVerse",
         instructions=(
             "UserPromptSubmit and Stop hooks own turn ingestion/context/completion automatically. "
-            "Operational effects use request_effect and EffectGate. Goal/control changes use the dedicated goal tools "
-            "only when the active human prompt explicitly authorizes that change; pass an exact quote from that prompt."
+            "Operational effects use request_effect and EffectGate. Durable goal changes use the dedicated goal tools "
+            "only when the active human prompt explicitly authorizes that change; pass an exact quote from that prompt. "
+            "The durable goal objective itself is copied from the canonical user turn and cannot be rewritten by cognition."
         ),
     )
     ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
@@ -277,36 +247,30 @@ def main() -> None:
     @mcp.tool(annotations=control)
     def goal_create(
         authorization_quote: str,
-        title: str,
-        objective: str,
-        success_criteria: str,
-        priority: int = 0,
+        completion_mode: str = "user_ack",
+        required_capability: str | None = None,
+        priority: int = 50,
+        max_steps: int = 32,
+        max_retries_per_step: int = 3,
+        max_effects: int = 8,
     ) -> dict:
         return bridge.goal_create(
             authorization_quote,
-            title,
-            objective,
-            success_criteria,
+            completion_mode,
+            required_capability,
             priority,
+            max_steps,
+            max_retries_per_step,
+            max_effects,
         )
 
     @mcp.tool(annotations=control)
-    def goal_set_status(authorization_quote: str, goal_id: str, status: str) -> dict:
-        return bridge.goal_set_status(authorization_quote, goal_id, status)
+    def goal_set_status(authorization_quote: str, goal_id: str, action: str) -> dict:
+        return bridge.goal_set_status(authorization_quote, goal_id, action)
 
     @mcp.tool(annotations=control)
-    def milestone_review(
-        authorization_quote: str,
-        milestone_id: str,
-        decision: str,
-        note: str = "",
-    ) -> dict:
-        return bridge.milestone_review(
-            authorization_quote,
-            milestone_id,
-            decision,
-            note,
-        )
+    def goal_acknowledge(authorization_quote: str, goal_id: str) -> dict:
+        return bridge.goal_acknowledge(authorization_quote, goal_id)
 
     try:
         mcp.run(transport="stdio")

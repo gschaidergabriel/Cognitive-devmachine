@@ -1,0 +1,100 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_message_time_minute": "2026-08-17T22:49+07:00",
+  "observed_at": "2026-08-17T23:02:53+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_EXACT_SOURCE_SLICE_EXECUTION",
+  "scope": "kata_current_supported_release_and_runtime_annotation_security_gate",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_writes": {
+    "contract_commit": "1583c98f5c34f55d870e8bcd8cd2849dacc27f14",
+    "test_commit": "647ba7f0b2e2735a2b9226a52f29f33b2af28ed6"
+  },
+  "exact_git_blobs_exercised": {
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "794b209bc8ff14cbaf898b31557daac075977818",
+    "the artefact/tests/test_microvm_deployment_contract.py": "283b269042e056e7adca227e84ae31a055f898da",
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "629f7bbb7627e997839597edd499ce008c569a0f"
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed the exact current GitHub source bytes in an isolated non-production container; verified each file with git hash-object before execution",
+    "all_exercised_blobs_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "pytest -q 'the artefact/tests/test_microvm_deployment_contract.py'",
+    "exit_code": 0,
+    "result": "10 passed in 0.03s",
+    "focused_new_test": "test_kata_final_acceptance_requires_current_supported_rolling_release",
+    "focused_result": "1 passed in 0.07s before full-slice rerun"
+  },
+  "external_primary_evidence": {
+    "kata_security_policy": "Kata Containers is a rolling-release project; only the current monthly release is security-supported and prior releases are unsupported.",
+    "current_release_at_review": "4.0.0",
+    "current_release_metadata": "GitHub releases/latest returned tag_name 4.0.0, published 2026-07-20T16:21:48Z",
+    "advisories": [
+      {
+        "id": "GHSA-mp2j-xm59-qfgw",
+        "cve": "CVE-2026-50540",
+        "severity": "Critical",
+        "affected": "<=3.32.0",
+        "patched": "4.0.0",
+        "relevance": "unvalidated io.katacontainers.config_path pod annotation can select arbitrary host-side TOML and lead to host-level root code execution"
+      },
+      {
+        "id": "GHSA-7fhf-v3p3-rp56",
+        "severity": "High",
+        "affected": "<=3.32.0",
+        "patched": "4.0.0",
+        "relevance": "ungated runtime annotation can bind-mount arbitrary host paths into the Kata guest"
+      },
+      {
+        "id": "GHSA-fgm4-mv68-h344",
+        "severity": "High",
+        "affected": ">=3.0.0 for the described Dragonball path",
+        "patched": "4.0.0",
+        "relevance": "guest-to-host VM escape in Dragonball virtio-blk path; reinforces configuration-specific runtime attestation"
+      }
+    ]
+  },
+  "delta": {
+    "release_gate": "final Kata acceptance now requires the then-current upstream-supported release, not merely a numeric version above historical 3.31.0",
+    "dated_falsifier": "as of 2026-08-17, 3.31.0 is not an admissible current final-acceptance target because current upstream advisories affect <=3.32.0 and current latest is 4.0.0",
+    "annotation_gate": "final deployment must inventory and fail closed on unreviewed io.katacontainers.* runtime-mutating annotations after admission mutation",
+    "anti_staleness": "4.0.0 is recorded as dated evidence, not a permanent pin; final deployment must refresh then-current upstream release and advisories"
+  },
+  "live_fusion": {
+    "network_gap_candidate": "DUPLICATE/CONFIRMS — parallel current-main work already closed the default-deny NetworkPolicy gap more strongly; stale candidate was not promoted",
+    "tier2_parallel_delta": "ADOPT — current-main Tier-2 Pod/Kata-sandbox replacement gate was preserved and included in exact 10/10 regression",
+    "stale_branch_policy": "no stale candidate branch was merged or used as canonical evidence"
+  },
+  "runtime_credit": {
+    "exact_oci": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy_enforcement": 0,
+    "tier2_sandbox_replacement": 0,
+    "whole_clayverse": 0
+  },
+  "current_runtime_blockers": [
+    "exact accepted OCI image has not yet been executed under Kata/equivalent guest-kernel isolation",
+    "target CNI/default-deny plus reviewed allow-policy enforcement remains unobserved",
+    "Tier-2 external full Pod/Kata sandbox replacement remains unobserved",
+    "retained Vercel exact private-source OCI path remains blocked before source staging by absent host-side sensitive GITHUB_READ_TOKEN"
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; deterministic source regression is allowed",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no whole-repository exact-current-head test PASS",
+    "no OCI image build or digest acceptance",
+    "no live Kubernetes/Kata/CNI execution",
+    "no live Tier-2 sandbox replacement",
+    "no Clerk/browser/PTY runtime evidence",
+    "no whole-product PASS"
+  ]
+}

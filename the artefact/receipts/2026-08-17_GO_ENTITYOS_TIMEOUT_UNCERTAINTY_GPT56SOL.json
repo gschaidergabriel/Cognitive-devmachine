@@ -1,0 +1,63 @@
+{
+  "schema": "clayverse-go-source-reentry/v1",
+  "recorded_at": "2026-08-17T13:56:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "d8bc6553d2e15f09decd56dcf93f4f06f1342eeb",
+  "finding": {
+    "scope": "EntityOS post-start timeout outcome semantics",
+    "mechanism": "EntityOSBridge.run uses subprocess.run with a timeout; Python documents that timeout handling kills and waits for the already-created child before TimeoutExpired is re-raised. The existing EffectGate caught every exception and persisted FAILED, which can manufacture certainty even though an external side effect may already have occurred.",
+    "counterhypothesis": "Treating TimeoutExpired as an ordinary FAILED result is safe because timeout implies the child never produced external effects.",
+    "falsifier": "A timeout is raised only after process creation/communication has begun; therefore the counterhypothesis cannot guarantee absence of external effects.",
+    "risk": "false FAILED classification can permit downstream logic or operators to reason as though no effect happened, violating ClayVerse unknown-outcome and no-blind-replay contracts."
+  },
+  "source_candidate": {
+    "pr": 459,
+    "branch": "go/effect-timeout-uncertainty-20260817-1349",
+    "rebased_parent": "f881fbd4393314a693bc705d5e36aea2cc5013ea",
+    "candidate_head_before_receipt": "1efcc0467156f9808190936b0e41e8d1ecd5479b",
+    "changes": [
+      "EntityOSBridge raises typed EntityOSOutcomeUnknown for subprocess.TimeoutExpired",
+      "EffectGate leaves that post-start ambiguous effect PENDING instead of persisting FAILED",
+      "existing episode request identity blocks same-turn automatic re-execution",
+      "existing boot recovery converts unresolved PENDING to UNKNOWN_AFTER_RESTART and advances entity generation",
+      "deterministic regression test covers typed timeout, retry non-reexecution, and recovery no-replay"
+    ],
+    "liveness_tradeoff": "The affected session remains blocked on the PENDING effect until canonical recovery; this is intentional fail-closed behavior rather than a second recovery path."
+  },
+  "execution_admission": {
+    "vercel_platform_sandbox_capability": "SUPPORTED_BY_PLATFORM",
+    "connected_chatgpt_vercel_mcp_sandbox_start_exec": "NOT_EXPOSED_IN_CURRENT_TOOL_SURFACE",
+    "github_run": 32003541969,
+    "github_job": 95308395361,
+    "github_job_conclusion": "failure",
+    "github_job_steps": [],
+    "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "exact_branch_regression": "UNOBSERVED",
+    "exact_oci_entityos_timeout_fault_injection": "UNOBSERVED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "bounded_local_mechanism_probe": {
+    "scope": "MECHANISM_EQUIVALENT_RECONSTRUCTION_NOT_EXACT_ARTIFACT",
+    "environment": "Python 3.13.5; Linux 6.18.35 x86_64 isolated local container",
+    "observed": {
+      "subprocess_timeout_maps_to_EntityOSOutcomeUnknown": "PASS",
+      "verified_snapshot_fd_closed_on_timeout": "PASS"
+    },
+    "acceptance_credit": "MECHANISM_SUPPORT_ONLY_NOT_EXACT_CLAYVERSE_RUNTIME"
+  },
+  "external_primary_evidence": {
+    "python_subprocess": "Python 3.14 documentation: subprocess.run timeout kills and waits for the child, then re-raises TimeoutExpired; process creation itself may be non-interruptible."
+  },
+  "experiment_accounting": {
+    "state": "SLOT_CLOSED_BY_CURRENT_COORDINATION_RECORD",
+    "new_unusual_experiment_by_this_organ": false
+  },
+  "acceptance": "SOURCE_CANDIDATE_WITH_BOUNDED_MECHANISM_SUPPORT_NOT_RUNTIME_ACCEPTED",
+  "next_isolated_step": "On the first actually-started authorized isolated executor, run test_entityos_timeout_uncertainty.py plus adjacent effect/recovery regressions, then perform an exact built-image EntityOS timeout fault injection proving UNKNOWN_AFTER_RESTART without replay.",
+  "truth_boundary": "No GitHub pre-step failure, source inspection, local mechanism reconstruction, mergeability, or draft PR is represented as whole ClayVerse or exact runtime PASS.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

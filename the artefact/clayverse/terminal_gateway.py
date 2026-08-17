@@ -24,6 +24,35 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
         remaining = remaining[written:]
 
 
+def _runtime_ready(db: UnifiedDB) -> bool:
+    """Read-only readiness check for the canonical UnifiedDB spine.
+
+    Liveness and readiness are deliberately separate. This probe never rebuilds,
+    checkpoints, advances generations, starts terminals, or performs network I/O.
+    It only verifies that the live connection can still read the minimum canonical
+    schema/entity/user/session invariants required by the terminal product surface.
+    """
+    try:
+        schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
+        users = db.db.execute(
+            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
+        ).fetchone()
+        sessions = db.db.execute(
+            "SELECT COUNT(*) FROM sessions WHERE "
+            "(user_id='gabriel' AND terminal_name='terminal-gabriel') OR "
+            "(user_id='andreas' AND terminal_name='terminal-andreas')"
+        ).fetchone()
+        return bool(
+            schema and schema[0] == "5"
+            and generation and int(generation[0]) >= 1
+            and users and int(users[0]) == 2
+            and sessions and int(sessions[0]) == 2
+        )
+    except Exception:
+        return False
+
+
 def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: ClerkTokenVerifier,
                         state_root: str | Path, publishable_key: str, frontend_api_url: str):
     from fastapi import FastAPI
@@ -40,10 +69,21 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     async def healthz():
         return JSONResponse({
             "status": "ok",
+            "scope": "liveness",
             "surface": "permanent-claude-code-terminal",
             "users": ["gabriel", "andreas"],
             "consciousness_daemon": False,
         })
+
+    @app.get("/readyz")
+    async def readyz():
+        ready = _runtime_ready(db)
+        return JSONResponse({
+            "status": "ready" if ready else "not_ready",
+            "scope": "runtime",
+            "canonical_state": "unifieddb",
+            "surface": "permanent-claude-code-terminal",
+        }, status_code=200 if ready else 503)
 
     @app.get("/", response_class=HTMLResponse)
     async def index():

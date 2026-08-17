@@ -102,15 +102,25 @@ def _add_promoted_framework(
     kind="framework",
     source_episode_ids=None,
 ):
+    """Reader-only fixture. Product code has no public positive-promotion writer yet."""
     source_episode_ids = source_episode_ids or _method_source_episodes(db, user_id=user_id)
+    method_id = str(uuid.uuid4())
+    receipt_id = str(uuid.uuid4())
     record = _framework_record(source_episode_ids)
-    method_id = db.add_memory(
+    db._insert_method_memory(
         kind,
         "dependency-timeout-diagnosis",
         json.dumps(record, sort_keys=True, separators=(",", ":")),
         None,
         user_id,
-        {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "pending"},
+        {
+            "method_schema": METHOD_SCHEMA,
+            "promotion_receipt_id": receipt_id,
+            "truth_authority": False,
+            "effect_authority": False,
+            "fixture_only": True,
+        },
+        memory_id=method_id,
     )
     receipt = {
         "schema": PROMOTION_RECEIPT_SCHEMA,
@@ -121,25 +131,14 @@ def _add_promoted_framework(
         "counterexample_memory_ids": [],
         "ts": time.time(),
     }
-    receipt_id = db.add_memory(
+    db._insert_method_memory(
         "method_receipt",
         method_id,
         json.dumps(receipt, sort_keys=True, separators=(",", ":")),
         None,
         user_id,
-        {"source": "test-only-promotion-fixture"},
-    )
-    db.db.execute(
-        "UPDATE durable_memory SET provenance=? WHERE memory_id=?",
-        (
-            json.dumps({
-                "method_schema": METHOD_SCHEMA,
-                "promotion_receipt_id": receipt_id,
-                "truth_authority": False,
-                "effect_authority": False,
-            }, sort_keys=True, separators=(",", ":")),
-            method_id,
-        ),
+        {"source": "test-only-promotion-fixture", "fixture_only": True},
+        memory_id=receipt_id,
     )
     return method_id
 
@@ -218,8 +217,9 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
-        db.add_memory(
-            "framework_candidate", "candidate", "{}", None, "gabriel", {"source": "test"}
+        db._insert_method_memory(
+            "framework_candidate", "candidate", "{}", None, "gabriel",
+            {"source": "test", "fixture_only": True},
         )
         method = MicroClayMethodRetrieval(db).retrieve(
             query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
@@ -230,9 +230,9 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
         assert method["items"] == []
         assert method["receipt"]["status"] == "METHOD_UNKNOWN"
 
-        malformed_id = db.add_memory(
+        db._insert_method_memory(
             "framework", "malformed", "{}", None, "gabriel",
-            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing"},
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing", "fixture_only": True},
         )
         with pytest.raises(ValueError, match="fields mismatch"):
             MicroClayMethodRetrieval(db).retrieve(
@@ -241,17 +241,23 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
                 turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
                 generation=generation,
             )
-        db.db.execute("DELETE FROM durable_memory WHERE memory_id=?", (malformed_id,))
+    finally:
+        db.close()
 
+
+def test_unreceipted_promoted_method_fails_closed(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, generation, turn_id, episode_id, causal_id = _identity(db)
         source_episode_ids = _method_source_episodes(db)
         record = _framework_record(source_episode_ids)
-        db.add_memory(
+        db._insert_method_memory(
             "framework",
             "unreceipted",
             json.dumps(record, sort_keys=True, separators=(",", ":")),
             None,
             "gabriel",
-            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing"},
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing", "fixture_only": True},
         )
         with pytest.raises(ValueError, match="promotion receipt is missing"):
             MicroClayMethodRetrieval(db).retrieve(
@@ -268,13 +274,13 @@ def test_unscoped_global_method_is_not_admitted_to_user_method_context(tmp_path)
     db = UnifiedDB(tmp_path / "u.db")
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
-        db.add_memory(
+        db._insert_method_memory(
             "framework",
             "global-unadmitted",
             "{}",
             None,
             None,
-            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "forged"},
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "forged", "fixture_only": True},
         )
         result = MicroClayMethodRetrieval(db).retrieve(
             query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
@@ -307,13 +313,16 @@ def test_nonterminal_or_cross_user_source_episode_fails_closed(tmp_path):
             (str(uuid.uuid4()), foreign_episode, None, None, "foreign", 1.0, 1, time.time()),
         )
         record = _framework_record([good_episode, foreign_episode])
-        method_id = db.add_memory(
+        method_id = str(uuid.uuid4())
+        receipt_id = str(uuid.uuid4())
+        db._insert_method_memory(
             "framework", "cross-user-source",
             json.dumps(record, sort_keys=True, separators=(",", ":")),
             None, "gabriel",
-            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "pending"},
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": receipt_id, "fixture_only": True},
+            memory_id=method_id,
         )
-        receipt_id = db.add_memory(
+        db._insert_method_memory(
             "method_receipt", method_id,
             json.dumps({
                 "schema": PROMOTION_RECEIPT_SCHEMA,
@@ -324,11 +333,8 @@ def test_nonterminal_or_cross_user_source_episode_fails_closed(tmp_path):
                 "counterexample_memory_ids": [],
                 "ts": time.time(),
             }, sort_keys=True, separators=(",", ":")),
-            None, "gabriel", {"source": "test"},
-        )
-        db.db.execute(
-            "UPDATE durable_memory SET provenance=? WHERE memory_id=?",
-            (json.dumps({"method_schema": METHOD_SCHEMA, "promotion_receipt_id": receipt_id}), method_id),
+            None, "gabriel", {"source": "test", "fixture_only": True},
+            memory_id=receipt_id,
         )
         with pytest.raises(ValueError, match="crosses user boundary"):
             MicroClayMethodRetrieval(db).retrieve(

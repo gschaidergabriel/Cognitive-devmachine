@@ -11,10 +11,10 @@ services:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
-      # Single-container law: EntityOS is digest-bound into this image at build
-      # time. Runtime enforcement remains disabled until the exact embedded
-      # artifact has external isolated-sandbox acceptance evidence.
-      CLAYVERSE_REQUIRE_ENTITYOS: "0"
+      # EntityOS bytes are digest-bound into the one ClayVerse image. External
+      # execution remains disabled until the exact embedded artifact has accepted
+      # isolated-sandbox runtime evidence.
+      CLAYVERSE_ENABLE_ENTITYOS_EXEC: "0"
       CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
       CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
@@ -25,14 +25,11 @@ services:
       CLERK_AUTHORIZED_PARTIES: "${CLERK_AUTHORIZED_PARTIES:?required}"
       CLERK_PUBLISHABLE_KEY: "${CLERK_PUBLISHABLE_KEY:?required}"
       CLERK_FRONTEND_API_URL: "${CLERK_FRONTEND_API_URL:?required}"
-      # ClaudeCodeInference uses --bare -p. Bare mode does not consume the mounted
-      # subscription/OAuth state; this source shape therefore requires a direct
-      # Anthropic API key before the container is admitted to start.
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:?required}"
     volumes:
+      # UnifiedDB, per-user Claude Code HOME/auth/session state, and terminal
+      # continuity all live under the one canonical persistent ClayVerse state root.
       - clayverse-state:/var/lib/clayverse
       - clayverse-workspace:/workspace
-      - clayverse-claude:/home/clayverse/.claude
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
@@ -43,4 +40,3 @@ services:
 volumes:
   clayverse-state:
   clayverse-workspace:
-  clayverse-claude:

@@ -54,9 +54,15 @@ def test_bound_world_rejects_malformed_or_non_compact_receipt():
         "durable_memory": [],
     }
     with pytest.raises(TurnLifecycleError, match="must be an object"):
+        TurnLifecycle._bound_world(base)
+    with pytest.raises(TurnLifecycleError, match="must be an object"):
         TurnLifecycle._bound_world({**base, "retrieval_receipt": []})
+    with pytest.raises(TurnLifecycleError, match="keys must be strings"):
+        TurnLifecycle._bound_world({**base, "retrieval_receipt": {1: "not-canonical"}})
     with pytest.raises(TurnLifecycleError, match="values must be scalar"):
         TurnLifecycle._bound_world({**base, "retrieval_receipt": {"nested": {"not": "compact"}}})
+    with pytest.raises(TurnLifecycleError, match="not canonical JSON"):
+        TurnLifecycle._bound_world({**base, "retrieval_receipt": {"score": float("nan")}})
     with pytest.raises(TurnLifecycleError, match="compact context bound"):
         TurnLifecycle._bound_world({**base, "retrieval_receipt": {"status": "x" * 5_000}})
 

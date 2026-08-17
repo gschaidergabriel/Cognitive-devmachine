@@ -1,0 +1,135 @@
+{
+  "schema": "ClayVerseMicroClayRetrievalReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6-Sol temporary research/build organ",
+  "scope": "memory retrieval / adaptive entry-point organ",
+  "owner_direction": "MicroClay is the small persistent mini-entity/organ that learns online from use/outcomes and progressively improves where/how ClayVerse enters memory and retrieval.",
+  "source_evidence": {
+    "vps_scan": {
+      "class": "captured ClayVerse VPS read-only MCP inventory supplied in the conversation",
+      "host": "srv1563149",
+      "root": "frank-deploy",
+      "observed_files": [
+        "MEMORY&PERSISTENCE-ARCHITECTURE.md",
+        "services/",
+        "tools/",
+        "needle/",
+        "HOW_IT_WORKS.md"
+      ],
+      "observed_memory_direction": [
+        "multi-layer semantically-aware local memory",
+        "Unified MemoryHub across memory layers",
+        "SQLite + vector + FTS retrieval lineage",
+        "memory retrieval/readout was a known operational weakness that the project intended to improve"
+      ],
+      "warning": "This receipt does not claim a new live VPS read; it uses the captured read-only scan supplied/produced earlier in the conversation."
+    },
+    "matching_repo_lineage": {
+      "repository": "gschaidergabriel/Project-Frankenstein",
+      "inspected_ref": "abba90a5767d85abc8a1ac340bae92842dab35c1",
+      "files": [
+        "MEMORY&PERSISTENCE-ARCHITECTURE.md",
+        "services/memory_hub.py",
+        "tools/lcme/retrieval.py",
+        "tools/lcme/neural_cortex.py"
+      ],
+      "mechanisms": [
+        "MemoryHub multi-source retrieval and budget packing",
+        "hybrid vector/FTS/graph/recency retrieval",
+        "access/co-retrieval feedback",
+        "Titan Neural Cortex small CPU micro-networks",
+        "Retrieval Weight Learner that learns RRF/confidence/recency/graph weights",
+        "cold-start protection because immature learned retrieval had previously degraded retrieval quality"
+      ],
+      "warning": "Matching repository lineage is implementation evidence, not a claim that this Git ref is byte-identical to the current VPS checkout."
+    },
+    "later_clay_memory_direction": [
+      "CMX outcome-credit capital is idempotent and epoch-bound",
+      "retrieval capital/accessibility cannot alter truth_class or authority_class",
+      "current input must not be drowned by activated memory",
+      "verified outcomes/corrections are stronger learning signals than retriever self-score"
+    ]
+  },
+  "diagnosed_current_artifact_gap": {
+    "pre_repair_behavior": "WorldAssembler durable memory path selected recent rows by timestamp and did not use the current prompt as a true adaptive retrieval entry cue.",
+    "risk": "ClayVerse could possess correct durable memory yet fail to expose the right memory to Claude; recent irrelevant state could displace older causally relevant state."
+  },
+  "canonical_design": {
+    "identity": "MicroClay is an internal persistent learning retrieval organ of the one ClayVerse entity, not a second agent/personality/state authority.",
+    "core_job": "learn the best entry point into UnifiedDB/ClayGraph and the bounded retrieval/activation policy, not merely rerank a fixed top-k result",
+    "target_flow": "cue -> MicroClay entry seeds/routes -> structured temporal/exact/FTS/vector candidates -> bounded ClayGraph activation -> provenance/valid-time/conflict filters -> adaptive budget/ranking/abstention -> Hyperposition -> GWT/context -> Claude -> verified outcome/correction -> causal credit -> MicroClay policy update",
+    "may_learn": [
+      "cue/query normalization",
+      "memory/source/class routing",
+      "entry-point/seed priors",
+      "exact/FTS/vector/graph/recency/provenance weights",
+      "bounded graph activation radius/threshold",
+      "widen-search and UNKNOWN/abstention thresholds",
+      "context budget packing",
+      "repeated usefulness/irrelevance/staleness of retrieval routes"
+    ],
+    "may_not_learn_or_mint": [
+      "semantic truth",
+      "durable-memory facts by retrieval score alone",
+      "provenance",
+      "user rights",
+      "EffectGate policy",
+      "EntityOS capability authority",
+      "cross-session access beyond explicit collision policy"
+    ],
+    "learning_signal": "downstream causally bound utility; initial automatic signal is verified EffectJournal causal outcome. Claude answering is not itself reward.",
+    "cold_start": "SHADOW baseline first; learned policy may train immediately but cannot serve until isolated replay/held-out promotion evidence exists."
+  },
+  "source_delta": {
+    "files": [
+      "the artefact/clayverse/microclay_retrieval.py",
+      "the artefact/clayverse/store.py",
+      "the artefact/clayverse/retrieval.py",
+      "the artefact/clayverse/terminal_gateway.py",
+      "the artefact/tests/test_microclay_retrieval.py",
+      "the artefact/ARCHITECTURE.md",
+      "the artefact/manifest.json"
+    ],
+    "unifieddb_schema": 6,
+    "new_state": [
+      "retrieval_policy_state",
+      "retrieval_entrypoint_policy",
+      "retrieval_episodes",
+      "retrieval_feedback"
+    ],
+    "implemented_candidate_mechanisms": [
+      "query-sensitive retrieval",
+      "UNKNOWN on no admitted cue match",
+      "current-turn extracted-memory echo exclusion",
+      "causal retrieval receipt identity",
+      "same-causal-turn replay/idempotency",
+      "generation-bound feedback",
+      "hashed cue entry keys plus kind/subject entry priors",
+      "verified-effect outcome learning",
+      "SHADOW learned-policy isolation",
+      "retrieval accessibility has no truth/effect authority"
+    ]
+  },
+  "tests_added_not_yet_credited": [
+    "query-sensitive retrieval beats latest-N behavior",
+    "unmatched query returns UNKNOWN",
+    "current-turn explicit memory is not echoed as retrieved history",
+    "SHADOW learning cannot alter served order",
+    "same causal query replays one retrieval receipt",
+    "verified effect outcome updates entry-point policy on next turn",
+    "feedback is idempotent and stale-generation rejected",
+    "retrieval learning does not rewrite durable memory/truth/authority"
+  ],
+  "acceptance": {
+    "source_candidate": "PRESENT",
+    "exact_current_head_test_execution": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "microclay_shadow_vs_baseline_benchmark": "OPEN",
+    "user_correction_feedback": "OPEN",
+    "full_fts_vector_claygraph_entry_fusion": "OPEN",
+    "neural_microclay_model": "OPEN_AND_NOT_REQUIRED_UNTIL_MEASURED_SUPERIOR",
+    "active_policy_promotion": "FORBIDDEN_UNTIL_VALIDATED",
+    "whole_clayverse_pass": false
+  },
+  "next_discriminator": "Execute exact-current-head MicroClay tests and a held-out shadow-vs-baseline retrieval replay measuring relevance, miss rate, stale-state use, contamination, unnecessary personalization, latency and causal task utility; then decide whether to retain deterministic entry policy, add a small neural MicroClay, or fuse both."
+}

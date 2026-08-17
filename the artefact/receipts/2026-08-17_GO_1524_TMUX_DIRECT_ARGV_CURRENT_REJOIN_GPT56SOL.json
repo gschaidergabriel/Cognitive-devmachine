@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:24+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_branch": "go/tmux-direct-argv-current-20260817-1524-sol",
+  "candidate_base": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "latest_main_observed_after_focused_execution": "439da69a802f20f8be9cd8bb55f594fdd9d58753",
+  "problem": "Current main still converted the sanitized env -i Claude launch argv into one shlex.join() command string before tmux new-session. Under tmux command semantics, a single command argument may traverse shell parsing. The transport policy also lacked a deny-shell default-shell defense and mode-bit immutability check.",
+  "repair": {
+    "terminal_sessions": "remove shlex command-string construction; pass env_argv as multiple tmux new-session argv entries; reject managed tmux policy when any write mode bit is set; preserve current v2 live-server policy attestation and exact MCP allowlist",
+    "managed_tmux": "preserve v2 four-table unbind and marker; add status off, mouse off and default-shell /opt/clayverse/runtime/deny-shell",
+    "tests": "preserve disjoint per-user tmux sockets and attach path; add direct-argv, exact MCP allowlist, policy content and writable-policy fail-closed assertions"
+  },
+  "source": {
+    "terminal_sessions_blob": "736ea802b817cdac7f3e858dfb08931548cd8324",
+    "managed_tmux_blob": "cd572259da4b52abf8f7f218b9ed2b086816c0b2",
+    "focused_test_blob": "d3da723726e296f188c14726fccf21b1ac2276cc",
+    "baseline_terminal_sessions_blob": "c4803b38982d8091cb5409cd424574b7a41c2257",
+    "baseline_managed_tmux_blob": "559c3bb7e53a81a487bc32250d7cd1b37ccd38d8"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "network_used": false,
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "platform": "Linux x86_64",
+    "all_three_candidate_blobs_verified_with_git_hash_object": true,
+    "py_compile_exit": 0,
+    "command_scope": [
+      "the artefact/tests/test_terminal_tmux_isolation.py"
+    ],
+    "passed": 5,
+    "failed": 0,
+    "exit_code": 0,
+    "elapsed_seconds_reported_by_pytest": 0.06,
+    "tmux_binary_available": false,
+    "classification": "EXACT_CURRENT_SOURCE_MECHANISM_PASS_NO_REAL_TMUX_RUNTIME_CREDIT"
+  },
+  "counterhypothesis": "Exact packaged tmux may interpret multi-argument new-session or effective policy state differently than the source-level subprocess argv contract; this remains an exact OCI/runtime discriminator and must not be inferred from the mocked source regression.",
+  "execution_admission": {
+    "vercel": "CURRENT_FREE_DAILY_DEPLOYMENT_CAP_BLOCKS_FRESH_PREVIEW_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_EGRESS_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared trigger timestamp metadata is minute precision only; no second/microsecond value was invented",
+    "older_donor_pr": 513,
+    "donor_status": "STALE_DIVERGED_SOURCE_DONOR_ONLY"
+  },
+  "claims": {
+    "source_mechanism_supported": true,
+    "real_tmux_runtime_verified": false,
+    "exact_oci_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "On the next actually-started authorized isolated runtime with tmux, bind the then-current exact source and verify multi-argv session creation, effective default-shell deny guard, v2 keymap/prefix attestation and attach fail-closed behavior; then continue exact ClayVerse OCI build/start/readiness/restart/concurrency acceptance.",
+  "evidence_scope": "EXACT_CURRENT_SOURCE_MECHANISM_PASS_NOT_REAL_TMUX_OR_OCI"
+}

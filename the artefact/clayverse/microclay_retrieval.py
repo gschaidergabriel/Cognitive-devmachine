@@ -9,6 +9,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .method_memory import METHOD_KINDS
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
@@ -59,6 +60,8 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
+    CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
+    EVIDENCE_EXCLUDED_KINDS = CONTROL_MEMORY_KINDS + tuple(sorted(METHOD_KINDS))
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -78,6 +81,23 @@ class MicroClayRetrieval:
             return value if isinstance(value, dict) else {"raw_type": type(value).__name__}
         except Exception:
             return {"parse_error": True}
+
+    @classmethod
+    def _evidence_not_in(cls) -> str:
+        return ",".join("?" for _ in cls.EVIDENCE_EXCLUDED_KINDS)
+
+    def _assert_evidence_receipt_partition(self, memory_ids) -> None:
+        ids = [str(memory_id) for memory_id in memory_ids]
+        if not ids:
+            return
+        rows = self.db.db.execute(
+            "SELECT memory_id,kind FROM durable_memory WHERE memory_id IN (%s)"
+            % ",".join("?" for _ in ids),
+            tuple(ids),
+        ).fetchall()
+        tainted = [str(row["memory_id"]) for row in rows if row["kind"] in METHOD_KINDS]
+        if tainted:
+            raise StaleGeneration("retrieval_epistemic_partition")
 
     def mode(self) -> str:
         row = self.db.db.execute(
@@ -224,6 +244,7 @@ class MicroClayRetrieval:
             ):
                 raise StaleGeneration("retrieval_identity")
             ids = json.loads(existing["selected_memory_ids"])
+            self._assert_evidence_receipt_partition(ids)
             by_id = {
                 str(row["memory_id"]): row
                 for row in self.db.db.execute(
@@ -267,11 +288,11 @@ class MicroClayRetrieval:
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
-            "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            f"WHERE kind NOT IN ({self._evidence_not_in()}) "
             "AND (user_id IS NULL OR user_id=?) "
             "AND (source_turn_id IS NULL OR source_turn_id<>?) "
             "ORDER BY ts DESC LIMIT ?",
-            (user_id, turn_id, self.MAX_SOURCE_ROWS),
+            (*self.EVIDENCE_EXCLUDED_KINDS, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()
@@ -365,6 +386,7 @@ class MicroClayRetrieval:
         if int(row["generation"]) != int(generation):
             raise StaleGeneration("retrieval_generation")
         self.db.assert_live_generation(row["session_id"], generation)
+        self._assert_evidence_receipt_partition(json.loads(row["selected_memory_ids"]))
 
         rid = receipt_id or hashlib.sha256(
             f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{signal_class}\x1f{value:.9f}".encode()

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+from .method_memory import METHOD_KINDS
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
@@ -8,17 +9,22 @@ class WorldAssembler:
     """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
+    EVIDENCE_EXCLUDED_KINDS = CONTROL_MEMORY_KINDS + tuple(sorted(METHOD_KINDS))
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
 
+    @classmethod
+    def _evidence_not_in(cls):
+        return ",".join("?" for _ in cls.EVIDENCE_EXCLUDED_KINDS)
+
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
             "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            f"WHERE source_turn_id=? AND kind NOT IN ({self._evidence_not_in()}) "
             "ORDER BY ts LIMIT 20",
-            (turn_id,),
+            (turn_id, *self.EVIDENCE_EXCLUDED_KINDS),
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -112,9 +118,10 @@ class WorldAssembler:
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "SELECT * FROM durable_memory "
+                    f"WHERE kind NOT IN ({self._evidence_not_in()}) "
                     "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
+                    (*self.EVIDENCE_EXCLUDED_KINDS, user_id),
                 )
             ]
 

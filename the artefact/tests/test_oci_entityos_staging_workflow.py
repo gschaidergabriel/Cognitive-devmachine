@@ -2,7 +2,9 @@ from pathlib import Path
 
 
 ARTEFACT = Path(__file__).resolve().parents[1]
-WORKFLOW = ARTEFACT.parent / ".github" / "workflows" / "clayverse-artefact-ci.yml"
+WORKFLOWS = ARTEFACT.parent / ".github" / "workflows"
+WORKFLOW = WORKFLOWS / "clayverse-artefact-ci.yml"
+RETIRED_DUPLICATE = WORKFLOWS / "clayverse-artifact-ci.yml"
 
 
 def test_oci_workflow_admits_tokenless_baseline_and_pairs_optional_entityos_inputs():
@@ -34,3 +36,10 @@ def test_oci_build_and_packaged_bytes_share_optional_digest_authority():
     assert 'test "$embedded_sha" = "$ENTITYOS_SHA256"' in text
     assert "test ! -e /opt/entityos/EntityOS" in text
     assert 'entityos_sha256=%s' in text
+
+
+def test_only_one_canonical_clayverse_oci_workflow_exists():
+    assert WORKFLOW.is_file()
+    assert not RETIRED_DUPLICATE.exists(), (
+        "retired clayverse-artifact-ci.yml would reintroduce a second, divergent OCI path"
+    )

@@ -7,6 +7,8 @@ import os
 import sys
 from urllib.parse import urlsplit
 
+from .autonomy import AutonomyController
+from .autonomy_integration import recover_autonomy_after_generation_advance
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
@@ -134,6 +136,46 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
     return raw == "1"
 
 
+def _recover_all(db: UnifiedDB) -> dict[str, object]:
+    """Run canonical recovery first, then safely rebind persistent goal state.
+
+    The ordinary recovery path owns the global generation advance. Autonomy recovery
+    may carry safe unfinished goals into that new generation, but it never replays an
+    admitted in-flight step or silently reinterprets prior-generation effect evidence.
+    """
+    previous_generation = db.entity_generation()
+    recovery: dict[str, object] = dict(recover_incomplete_episodes(db))
+    live_generation = db.entity_generation()
+    if live_generation <= previous_generation:
+        raise RuntimeError("canonical recovery did not advance entity generation")
+    recovery["autonomy"] = recover_autonomy_after_generation_advance(
+        AutonomyController(db),
+        previous_generation=previous_generation,
+        live_generation=live_generation,
+    )
+    return recovery
+
+
+def _autonomy_status(db: UnifiedDB) -> dict[str, object]:
+    """Expose non-sensitive autonomy readiness metadata, never goal text."""
+    snapshot = AutonomyController(db).snapshot()
+    counts: dict[str, int] = {}
+    for goal in snapshot["goals"]:
+        status = str(goal.get("status", "UNKNOWN"))
+        counts[status] = counts.get(status, 0) + 1
+    return {
+        "mode": "goal-directed-proactive",
+        "state_authority": "UnifiedDB",
+        "schema": snapshot["schema"],
+        "revision": snapshot["revision"],
+        "goal_counts": counts,
+        "goal_admission": "explicit-/goal-user-turn",
+        "background_scheduler": "SOURCE_CANDIDATE_NOT_ACTIVATED_UNTIL_RETAINED_PROVIDER_FUSION",
+        "model_self_completion": False,
+        "identity_text_grants_capability": False,
+    }
+
+
 def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     """Run the internal canonical Mistral turn used by the final sandbox controller.
 
@@ -142,7 +184,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
     """
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_all(db)
     ClayGraphProjection(db).rebuild()
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
@@ -164,6 +206,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
             "checkpoint": checkpoint_id,
             "state_hash": state_hash,
             "recovery": recovery,
+            "autonomy": _autonomy_status(db),
             "entityos": {
                 "verified": bool(entityos_status.get("verified")),
                 "execution_enabled": bool(entityos_status.get("execution_enabled")),
@@ -197,7 +240,7 @@ def main():
             db.close()
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_all(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -247,6 +290,7 @@ def main():
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
+        "autonomy": _autonomy_status(db),
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

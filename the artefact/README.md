@@ -21,7 +21,7 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Draft PR **#611** is the single retained tmux idempotent-reapply repair lane. Exact retained blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`.
 - Draft PR **#622** is the single retained Python hash-lock generator lane. Exact fused blobs: `ad34476c0092b7e724240c927a7cb14858d1a8dc` + `ed77f5c9446295fa973512ddf7e9d11ea3292010`. No canonical lock bytes are accepted yet and Docker is not yet on `--require-hashes`.
 - Draft PR **#602** remains downstream managed native-Claude process attestation after successful in-image #611 validation.
-- Dr.-Unterweger draft PR **#810** remains the **single retained OCI/Vercel controller**. Current observed PR head is `02f9157a15485b49f96dd4d4b20201fe148db710`. No parallel OCI controller or second EntityOS staging path is admitted.
+- Dr.-Unterweger draft PR **#810** remains the **single retained OCI/Vercel controller**. Current observed PR head is `a86f4355d02dc34331a3746128b6c3b959977439`. No parallel OCI controller or second EntityOS staging path is admitted.
 
 ### Exact current OCI execution identity
 
@@ -35,7 +35,7 @@ Current Research execution closure:
 
 The closure is execution provenance only, not a second permanent product authority.
 
-Current PR810 hardening additionally binds retained-runner blob `1298ca8002704414f86cd0c036d44e5b32be2918` and fences the current Sandbox lifetime at **2,700,000 ms**, above the retained explicit-step ceiling of **2,490,000 ms**. Current head `02f9157a…` adds a deterministic source test for that timeout budget; it has no independent runtime credit until deployed.
+Current PR810 hardening binds retained-runner blob `1298ca8002704414f86cd0c036d44e5b32be2918`, fences the Sandbox lifetime at **2,700,000 ms** above the retained explicit-step ceiling of **2,490,000 ms**, and at head `a86f4355…` adds a fail-closed Vercel Sandbox-v2 provider-identity contract requiring both `sandbox.name` and the current VM session id. The provider-identity delta is source-only until an actually-started bound deployment observes it.
 
 ### Current executable evidence / blocker
 
@@ -68,21 +68,21 @@ Whole-product PASS requires the complete admitted product path. Source inspectio
 ### Unusual-experiment accounting
 
 - This `go` has no safely shared immutable request/turn identity for an atomic unusual-experiment lease, so **0 valid unusual experiments** were executed.
-- Deterministic source composition, guard/timeout hardening, provider-state verification and same-lineage replication are ordinary execution/regression work.
+- Deterministic source composition, guard/timeout/provider-identity hardening, provider-state verification and same-lineage replication are ordinary execution/regression work.
 - No VPS/self-hosted/production test path and no Together API were used.
 
 ### Latest cycle delta
 
-**2026-08-17 19:28 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; Sandbox admission replicated under guard v4 + timeout fence, blocker collapsed to missing host-side private-source credential**
+**2026-08-17 19:29 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; PR810 provider identity fenced source-side, credential blocker unchanged**
 
 - Exact Research closure remains one current-main-at-bind-time composition of #611 + fused #622; no duplicate semantic lane is retained.
-- A redundant same-tree execution closure created during the 19:20 coordination race was explicitly collapsed: this organ's `go/oci-execution-closure-20260817-1920-sol-r2` ref now points to the active closure `5e5adce0591058608bbd7381ecf570a39b282f0d` rather than a competing commit identity.
-- PR810 remains the single retained OCI controller. Current head `02f9157a…` carries the current closure binding, retained-runner blob fence and explicit Sandbox timeout-budget regression.
-- Latest bound deployment `dpl_7BkVnngPJUPiVyrqwFarGFZDevAG` on `2e550598…` passed guard v4, current-target patch v5 and `Sandbox.create`.
-- The run then stopped exactly at absent host-side `GITHUB_READ_TOKEN` before private source fetch, with Sandbox cleanup confirmed and zero source/OCI runtime credit.
-- The counterhypothesis “Vercel/Sandbox admission is still the blocker” is rejected for this exact run. The current discriminator is credential provisioning, not another retry-only controller commit.
+- A redundant same-tree execution closure created during the 19:20 coordination race was collapsed back to active closure commit `5e5adce0591058608bbd7381ecf570a39b282f0d`; it does not remain a competing source identity.
+- PR810 remains the single retained OCI controller. Current head `a86f4355…` retains the current closure binding, retained-runner blob fence and Sandbox timeout budget, and additionally requires observable Vercel Sandbox-v2 `sandbox.name` + current session id before proceeding.
+- No deployment has yet bound head `a86f4355…`; therefore the provider-identity delta receives **zero runtime credit**.
+- Latest actually-started bound deployment remains `dpl_7BkVnngPJUPiVyrqwFarGFZDevAG` on `2e550598…`: guard v4, patch v5 and `Sandbox.create` passed, then execution stopped exactly at absent host-side `GITHUB_READ_TOKEN` before private source fetch, with cleanup confirmed and zero source/OCI runtime credit.
+- The current discriminator remains credential provisioning, not retry-only controller churn. The connected Vercel tool surface exposes deployment/log/project operations but no environment-variable write action; plugin search found no alternative installed capability for setting the secret.
 - No secret was exposed or forwarded. No unusual experiment, VPS, self-hosted/production test, or Together path was used.
-- This organ's fusion receipt: `the artefact/receipts/2026-08-17_GO_1927_PR810_TIMEOUT_BUDGET_TOKEN_BLOCK_GPT56SOL.json`.
+- Current credential-boundary confirmation receipt: `the artefact/receipts/2026-08-17_GO_1926_PR810_V5_CREDENTIAL_BLOCK_CONFIRMATION_GPT56SOL.json`.
 - Strongest replication receipt: `the artefact/receipts/2026-08-17_GO_1925_PR810_SANDBOX_CREDENTIAL_BLOCK_REPLICATION_GPT56SOL.json`.
 - Earlier first-admission receipt: `the artefact/receipts/2026-08-17_GO_1924_PR810_SANDBOX_ADMISSION_PRIVATE_SOURCE_TOKEN_BLOCK_GPT56SOL.json`.
 - Whole-product acceptance remains **IN_PROGRESS**.

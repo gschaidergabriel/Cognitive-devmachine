@@ -84,7 +84,7 @@ def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     assert "Pod sandbox" in contract
     assert "old Pod UID" in contract
     assert "new Pod UID" in contract
-    assert "new Kata sandbox/VM identity" in contract
+    assert "new sandbox/VM identity" in contract
     assert "TIER2_REPLACEMENT_BLOCKED" in contract
     assert "external-full-sandbox-required" in template
     assert "in-place-container-restart: not-tier2" in template

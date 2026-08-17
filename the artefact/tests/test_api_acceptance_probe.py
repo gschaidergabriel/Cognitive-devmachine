@@ -98,6 +98,63 @@ def test_probe_can_require_verified_effect_through_effectgate(tmp_path):
         db.close()
 
 
+def test_probe_can_require_exact_effect_capability(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        payload = run_api_acceptance_probe(
+            db,
+            {"subject-g": "gabriel", "subject-a": "andreas"},
+            "subject-g",
+            "request the bounded noop",
+            inference=FakeApiProvider(
+                effect={"capability": "state.noop", "target": "acceptance", "argv": None}
+            ),
+            required_effect_capability="state.noop",
+        )
+        assert payload["effect"]["required"] is True
+        assert payload["effect"]["present"] is True
+        assert payload["effect"]["verified_ok"] is True
+    finally:
+        db.close()
+
+
+def test_probe_rejects_wrong_successful_effect_capability(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        with pytest.raises(
+            RuntimeError,
+            match="required entityos.exec but observed state.noop",
+        ):
+            run_api_acceptance_probe(
+                db,
+                {"subject-g": "gabriel", "subject-a": "andreas"},
+                "subject-g",
+                "request the bounded noop",
+                inference=FakeApiProvider(
+                    effect={"capability": "state.noop", "target": "acceptance", "argv": None}
+                ),
+                required_effect_capability="entityos.exec",
+            )
+    finally:
+        db.close()
+
+
+def test_probe_rejects_unadmitted_required_effect_capability(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        with pytest.raises(RuntimeError, match="required API effect capability is not admitted"):
+            run_api_acceptance_probe(
+                db,
+                {"subject-g": "gabriel", "subject-a": "andreas"},
+                "subject-g",
+                "probe",
+                inference=FakeApiProvider(),
+                required_effect_capability="process.exec",
+            )
+    finally:
+        db.close()
+
+
 def test_probe_fails_closed_when_required_effect_is_missing(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:

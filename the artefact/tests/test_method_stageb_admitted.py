@@ -141,6 +141,32 @@ def test_explicit_raw_query_source_is_rejected():
         })
 
 
+def test_admitted_query_digest_is_canonical_and_content_sensitive():
+    base = _query(turn_id="turn", episode_id="episode", causal_id="causal", generation=3)
+    same_reordered = {
+        "goal_shape": base["goal_shape"],
+        "provenance": dict(reversed(list(base["provenance"].items()))),
+        "problem_signature": dict(reversed(list(base["problem_signature"].items()))),
+        "schema": base["schema"],
+    }
+    first = admit_problem_query(base)
+    second = admit_problem_query(same_reordered)
+    changed = admit_problem_query(_query(
+        turn_id="turn",
+        episode_id="episode",
+        causal_id="causal",
+        generation=3,
+        signature={
+            "task_shape": ["compare"],
+            "evidence_state": ["unknown"],
+            "validation_mode": ["falsifier"],
+        },
+    ))
+    assert first.query_sha256 == second.query_sha256
+    assert first.query_sha256 != changed.query_sha256
+    assert len(first.receipt()["query_sha256"]) == 64
+
+
 def test_admitted_structural_query_selects_promoted_method_and_preserves_fact_unknown(tmp_path):
     db, session_id = _db(tmp_path)
     try:
@@ -148,13 +174,14 @@ def test_admitted_structural_query_selects_promoted_method_and_preserves_fact_un
         turn_id, episode_id = _episode(db, session_id, "novel target case")
         causal_id = str(uuid.uuid4())
         generation = db.entity_generation()
+        query = _query(
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+        )
         result = AdmittedMethodRetriever(db).retrieve(
-            problem_query=_query(
-                turn_id=turn_id,
-                episode_id=episode_id,
-                causal_id=causal_id,
-                generation=generation,
-            ),
+            problem_query=query,
             user_id="gabriel",
             session_id=session_id,
             turn_id=turn_id,
@@ -169,6 +196,8 @@ def test_admitted_structural_query_selects_promoted_method_and_preserves_fact_un
         assert result["receipt"]["truth_authority"] is False
         assert result["receipt"]["effect_authority"] is False
         assert result["receipt"]["route"] == "method_structural_admitted"
+        assert result["receipt"]["query_sha256"] == admit_problem_query(query).query_sha256
+        assert result["query_receipt"]["query_sha256"] == result["receipt"]["query_sha256"]
     finally:
         db.close()
 
@@ -275,6 +304,12 @@ def test_world_assembler_accepts_only_admitted_structural_stageb(tmp_path):
         turn_id, episode_id = _episode(db, session_id, "target")
         causal_id = str(uuid.uuid4())
         generation = db.entity_generation()
+        query = _query(
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+        )
         world = WorldAssembler(db).assemble(
             session_id,
             [],
@@ -283,16 +318,12 @@ def test_world_assembler_accepts_only_admitted_structural_stageb(tmp_path):
             episode_id=episode_id,
             causal_id=causal_id,
             generation=generation,
-            method_query=_query(
-                turn_id=turn_id,
-                episode_id=episode_id,
-                causal_id=causal_id,
-                generation=generation,
-            ),
+            method_query=query,
         )
         assert [item["memory_id"] for item in world["method_context"]] == [promoted_id]
         assert world["retrieval_receipt"]["method_route"] == "method_structural_admitted"
         assert world["retrieval_receipt"]["method_truth_authority"] is False
         assert world["retrieval_receipt"]["fact_status"] == "UNKNOWN"
+        assert world["retrieval_receipt"]["method_query_sha256"] == admit_problem_query(query).query_sha256
     finally:
         db.close()

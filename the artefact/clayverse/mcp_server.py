@@ -48,11 +48,12 @@ class ClayVerseBridge:
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "")
 
         bridge = None
-        path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
-        sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-        if path or sha256:
+        enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
+        if enable_exec:
+            path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
+            sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
             if not path or not sha256:
-                raise BridgeStateError("incomplete EntityOS binding")
+                raise BridgeStateError("EntityOS execution enabled without complete digest binding")
             bridge = EntityOSBridge(path=path, sha256=sha256)
             bridge.verify()
         return cls(db, user_id, session_id, bridge)

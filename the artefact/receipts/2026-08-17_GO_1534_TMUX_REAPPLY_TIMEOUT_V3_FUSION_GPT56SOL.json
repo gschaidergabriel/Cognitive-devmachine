@@ -1,0 +1,82 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "GPT-5.6 Sol / current ChatGPT project worker",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "go/tmux-reapply-timeout-fusion-20260817-1534-sol",
+  "current_main_rejoin_parent": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+  "candidate_code_commit_before_receipt": "d2bd2da939f195fb19b6b9358f717cf9de463791",
+  "donor_prs_fused": [528, 567],
+  "frontier": "Canonical main had full v3 live tmux transport attestation and direct multi-argv Claude launch, but persistent pre-policy tmux servers were only attested rather than repaired by re-sourcing the immutable policy, and has-session/source-file/new-session control subprocesses were not consistently bounded fail-closed.",
+  "repair": [
+    "Preserve current v3 transport attestation: policy marker, prefix/prefix2 None, status off, mouse off, deny-shell default-shell and empty keymap.",
+    "Preserve current direct multi-argv env -i Claude launch and explicit MCP allowlist for session_state + request_effect.",
+    "Add a single TMUX_CONTROL_TIMEOUT_SECONDS=2.0 bound used by has-session, source-file policy reapplication, policy attestation and new-session.",
+    "Translate OSError/TimeoutExpired for liveness, policy reapplication and session creation into fail-closed TerminalRuntimeError.",
+    "For an existing persistent per-user server, source the immutable managed policy first and then attest effective v3 server state before admission.",
+    "For a newly created session, retain direct argv launch, then reapply managed policy and attest effective v3 state before admission."
+  ],
+  "exact_candidate_blobs": {
+    "the artefact/clayverse/terminal_sessions.py": "f42406291bdad3e4d38419399c0e0ccd5b4fa2d7",
+    "the artefact/tests/test_terminal_tmux_reapply_fusion.py": "e1fe03f4ef4880d63ad909bf23a401a430631928",
+    "the artefact/tests/test_terminal_tmux_control_timeouts.py": "62ae6792054ece959573d813e0f2f23f2f081811",
+    "the artefact/tests/test_terminal_tmux_isolation.py": "f3c6bc0adb6fa115cf5287ab138b5687ca977b37",
+    "the artefact/policy/managed-tmux.conf": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+  },
+  "ordinary_isolated_source_regression": {
+    "surface": "OpenAI isolated non-production container source slice",
+    "network_used": false,
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "tmux_binary_available": false,
+    "identity_checks": [
+      "terminal_sessions.py git hash-object == f42406291bdad3e4d38419399c0e0ccd5b4fa2d7",
+      "test_terminal_tmux_reapply_fusion.py git hash-object == e1fe03f4ef4880d63ad909bf23a401a430631928",
+      "test_terminal_tmux_control_timeouts.py git hash-object == 62ae6792054ece959573d813e0f2f23f2f081811",
+      "test_terminal_tmux_isolation.py git hash-object == f3c6bc0adb6fa115cf5287ab138b5687ca977b37",
+      "managed-tmux.conf git hash-object == fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+    ],
+    "commands": [
+      "python -m py_compile clayverse/terminal_sessions.py",
+      "PYTHONPATH=. python -m pytest -q tests/test_terminal_tmux_reapply_fusion.py tests/test_terminal_tmux_control_timeouts.py tests/test_terminal_tmux_isolation.py"
+    ],
+    "observed": [
+      "all five target Git blob identities MATCH",
+      "py_compile PASS",
+      "15 passed in 0.05s"
+    ],
+    "exit_code": 0,
+    "evidence_class": "EXACT_CURRENT_V3_TARGET_BLOB_SOURCE_MECHANISM_SUPPORTED_NOT_LIVE_TMUX_NOT_OCI"
+  },
+  "current_main_non_overlap_after_execution": {
+    "new_main": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+    "base_tested_main": "d1b14548b94b0fd0a7e9a635303714c32e5c5a64",
+    "comparison": "main advanced only in recovery/effect regression and receipt files; no terminal_sessions.py, managed-tmux.conf, or three tested terminal test files changed",
+    "candidate_blobs_rejoined_unchanged": true
+  },
+  "counterhypothesis": "The exact packaged tmux runtime may apply source-file or expose control latency differently under load; a fixed 2-second bound may be too strict or too loose, and bounding control subprocesses does not prove the forked attach client cannot wedge after admission.",
+  "required_runtime_falsifier": "On the next actually-started authorized isolated runtime with real packaged tmux, preserve a pre-policy user server across upgrade, require source-file to converge it to v3 effective state before attach, force has-session/source-file/new-session beyond the bound and require fail-closed behavior with no PTY admission or duplicate session, then prove the healthy path remains functional within the bound and continue exact OCI start/readiness/restart/concurrency gates.",
+  "execution_admission": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_ACTIVE; no additional preview attempt launched",
+    "daytona": "AUTHORIZED_FALLBACK; current orchestration DNS/egress previously blocked before provider contact and no direct Daytona connector is installed in this session",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN",
+    "product_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The shared user-trigger timestamp is minute precision only and no immutable request/turn identifier is exposed; the atomic GO lease protocol forbids inventing a unique experiment identity."
+  },
+  "claims": {
+    "source_mechanism_supported": true,
+    "live_tmux_runtime_verified": false,
+    "exact_oci_verified": false,
+    "whole_clayverse_pass": false
+  }
+}

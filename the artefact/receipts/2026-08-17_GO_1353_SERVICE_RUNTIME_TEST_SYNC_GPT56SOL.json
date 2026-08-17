@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse_go_source_candidate_receipt_v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_rebind": "4c48466a40c846b0589c70d09a665f54564dbfa5",
+  "branch": "go/1342-service-runtime-test-sync",
+  "pull_request": 460,
+  "service_blob_sha": "4018d695cc1a802072a6408ec1350ad35ce17970",
+  "service_blob_sha256": "020b420d170398e466060c1b2909dc18a10ca06eac81efc7fc576b0658b7f7e1",
+  "replacement_test_blob_sha": "18820faa44164d8d05439d0af4022c5f440af87f",
+  "finding": {
+    "class": "regression_harness_source_coherence",
+    "observed": "Canonical service.py is the Uvicorn authenticated terminal runtime, while main/test_service_serial_server.py still mocked retired serial-server/ClaudeCodeInference/ClayVerseEngine/ClayVerseAPI symbols.",
+    "product_code_changed": false
+  },
+  "repair": {
+    "files": ["the artefact/tests/test_service_serial_server.py"],
+    "checks": [
+      "current Uvicorn terminal app construction",
+      "Gabriel and Andreas terminal bootstrap",
+      "session/global generation reads",
+      "single-worker Uvicorn configuration",
+      "PTY WebSocket max-size binding",
+      "boot/shutdown checkpoint and DB close"
+    ]
+  },
+  "isolated_mechanism_check": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "source_binding": "reconstructed service.py Git blob matched canonical blob 4018d695cc1a802072a6408ec1350ad35ce17970 byte-for-byte",
+    "command": "PYTHONPATH=/tmp/clay_go_service python -m pytest -q tests/test_service_serial_server.py",
+    "result": "PASS",
+    "tests": "1/1",
+    "py_compile": "PASS",
+    "full_repository_checkout": false,
+    "exact_oci_runtime": false,
+    "whole_product_acceptance": false
+  },
+  "vercel_execution_surface_audit": {
+    "connector_authenticated": true,
+    "team_listing_observed": true,
+    "project_listing_observed": true,
+    "official_docs_observed": "Vercel Sandbox supports create/run/exec via CLI, SDK and REST",
+    "connected_mcp_exposes_sandbox_start_exec": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_AT_CONNECTOR_SURFACE_NOT_VERCEL_PLATFORM_CAPABILITY",
+    "deployment_ready_substitution_allowed": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Exact user-trigger metadata available to this organ is minute precision only (2026-08-17T13:53+07:00); the canonical atomic lease protocol forbids synthesizing seconds or a fallback trigger key."
+  },
+  "evidence_boundary": "Bounded source/mechanism evidence only. Not Vercel Sandbox execution, not full-checkout pytest, not OCI build/runtime, not real Clerk/browser/PTY/Claude runtime, and not whole ClayVerse PASS.",
+  "next_gate": "Actually-started authorized Vercel Sandbox on the exact then-current fused source: focused service regression plus adjacent auth/terminal/lifecycle/recovery suite, then exact OCI build/digest/start/readiness/restart."
+}

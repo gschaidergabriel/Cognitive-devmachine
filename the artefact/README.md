@@ -62,6 +62,12 @@ Classification: **SANDBOX_ADMISSION_PASS_PRIVATE_SOURCE_CREDENTIAL_BLOCK_REPLICA
 
 The immediate external prerequisite is to provision **`GITHUB_READ_TOKEN` as a sensitive Vercel Preview credential for the retained PR810 branch**, without exposing its value and without forwarding it into the Sandbox. Read-only repository contents are sufficient for the private archive operation; only verified archive bytes may cross into the disposable Sandbox. The connected Vercel surface available to this cycle cannot set or recover the secret value.
 
+### Vercel execution-budget audit
+
+A static audit of retained runner blob `1298ca8002704414f86cd0c036d44e5b32be2918` confirms that its 12 explicit sequential command budgets sum to exactly **2,490,000 ms**, matching the wrapper's declared retained-step ceiling. The current Sandbox timeout is **2,700,000 ms**, leaving a nominal **210,000 ms** for Sandbox/controller/source-transfer overhead.
+
+This is internally coherent source-side but remains **UNEXECUTED**. Vercel's current Build Step maximum is also 45 minutes, so the build-time orchestration cannot assume more than that global envelope even where Sandbox plan limits may be longer. The first credential-capable exact run must capture elapsed/remaining-budget evidence across private source staging, Sandbox steps and cleanup. A build-timeout outcome must remain classified as execution-envelope/infrastructure evidence rather than a ClayVerse semantic test failure.
+
 ### Auth/identity architecture delta
 
 Source review found a separate fail-closed issue at the externally reachable Clerk → session boundary: `IdentityRouter.resolve()` called `UnifiedDB.ensure_session()`. Because `ensure_session()` is a bootstrap helper capable of creating a missing session, post-startup canonical-session drift could be silently repaired during authentication instead of rejected.
@@ -94,15 +100,15 @@ Whole-product PASS requires the complete path. Source inspection, PRs, CI defini
 
 ### Latest cycle delta
 
-**2026-08-17 19:36 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; #622 generator bootstrap is hash-closed/offline source-side, primary OCI credential blocker unchanged**
+**2026-08-17 19:38 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; #622 source bootstrap closure retained, Vercel global build-budget risk bounded, primary OCI credential blocker unchanged**
 
-- PR **#622** advanced on the existing retained lane to `44ec5e109d40304b152c2fa05ba3e42e690f2820`; no second resolver/dependency authority was created.
-- `SOURCE_LOCK.json` now carries the exact `pip-tools==7.5.3` wheel plus seven exact bootstrap wheel identities/hashes for the declared Linux/Python-3.13 generator closure.
-- The generator workflow now downloads that declared closure under `--require-hashes`, verifies every expected wheel/hash, then performs installation offline under `--no-index` + `--require-hashes` before deterministic double compilation.
-- A matching source-contract test update is present at `44ec5e10…`; no pull-request workflow execution was observed for that head, so **zero runtime/acceptance credit** is awarded.
-- Durable fusion receipt already re-entered by the coordinated parallel organ: `the artefact/receipts/2026-08-17_GO_1935_PYTHON_LOCK_OFFLINE_BOOTSTRAP_CLOSURE_FUSION_GPT56SOL.json`. It records the source fusion through workflow head `be61f7af…`; the subsequent `44ec5e10…` commit tightens the matching source-contract test and does not convert the result into runtime evidence.
-- Prepared closure `218b51c…` / tree `f16c877…` is now stale for future compute because #622 advanced again; it must not be executed as if exact-current.
-- PR810 remains the single OCI controller; strongest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
+- PR **#622** remains on the existing retained lane at `44ec5e109d40304b152c2fa05ba3e42e690f2820`; its complete declared eight-wheel generator bootstrap is source-hashed/offline by contract but still unexecuted.
+- Prepared closure `218b51c…` / tree `f16c877…` is stale for future compute because #622 advanced; do not execute it as exact-current.
+- PR810 remains the single OCI controller at source-only v6 head `78d92753…`; strongest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
+- Static audit confirms the runner's 12 sequential explicit step budgets total **2,490,000 ms**; the wrapper's 2,700,000 ms timeout therefore leaves **210,000 ms** nominal non-step margin. Because the surrounding Vercel Build Step is itself capped at 45 minutes, the next credential-capable run must measure total elapsed/remaining budget rather than assuming the source-side envelope is sufficient.
+- No PR810 retry/source-churn was generated from this finding while the known credential prerequisite remains unresolved.
+- Durable budget/live-fusion receipt: `the artefact/receipts/2026-08-17_GO_1936_VERCEL_BUILD_BUDGET_LIVE_FUSION_GPT56SOL.json`.
+- Durable #622 fusion receipt: `the artefact/receipts/2026-08-17_GO_1935_PYTHON_LOCK_OFFLINE_BOOTSTRAP_CLOSURE_FUSION_GPT56SOL.json`.
 - Draft #623 remains unexecuted after two GitHub runner-admission failures with zero steps; it receives no semantic test credit.
 - Browser/frontend runtime testing remains **not reached** because the accepted product source/image/service path is blocked before private source staging.
 - No unusual experiment, VPS, self-hosted/production test or Together path was used.
@@ -125,7 +131,7 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is now substantially narrower source-side but remains unexecuted; the next execution closure must be rebound only when the credential prerequisite is satisfied.
+Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is substantially narrower source-side but remains unexecuted; the next execution closure must be rebound only when the credential prerequisite is satisfied, with build-budget telemetry included.
 
 ## Container source
 

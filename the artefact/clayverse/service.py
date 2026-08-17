@@ -29,6 +29,16 @@ def _clerk_map() -> dict[str, str]:
     return mapping
 
 
+def _web_config() -> tuple[str, str]:
+    publishable_key = os.environ.get("CLERK_PUBLISHABLE_KEY", "").strip()
+    frontend_api = os.environ.get("CLERK_FRONTEND_API_URL", "").strip().rstrip("/")
+    if not publishable_key or not frontend_api:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY and CLERK_FRONTEND_API_URL are required")
+    if not frontend_api.startswith("https://"):
+        raise RuntimeError("CLERK_FRONTEND_API_URL must use https")
+    return publishable_key, frontend_api
+
+
 def main():
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
@@ -43,6 +53,7 @@ def main():
         return 0
 
     clerk_map = _clerk_map()
+    publishable_key, frontend_api = _web_config()
     verifier = ClerkTokenVerifier(ClerkConfig.from_env())
     inference = ClaudeCodeInference()
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
@@ -52,7 +63,7 @@ def main():
         raise RuntimeError("Claude Code CLI is required but unavailable")
 
     engine = ClayVerseEngine(db, clerk_map, inference=inference, allow_process=False)
-    api = ClayVerseAPI(engine, verifier)
+    api = ClayVerseAPI(engine, verifier, publishable_key=publishable_key, frontend_api_url=frontend_api)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     server = ThreadingHTTPServer((host, port), api.handler())

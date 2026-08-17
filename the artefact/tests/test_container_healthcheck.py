@@ -14,7 +14,7 @@ class _TerminalProbe:
     def binding(self, user_id):
         return user_id
 
-    def _has_session(self, binding):
+    def is_managed_session(self, binding):
         self.checked.append(binding)
         return bool(self.live.get(binding, False))
 

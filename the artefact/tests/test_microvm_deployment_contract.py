@@ -77,6 +77,21 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "representative undeclared ingress and egress remain denied" in text
 
 
+def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
+    contract = CONTRACT.read_text()
+    template = TEMPLATE.read_text()
+    assert "container restart inside an existing VM/microVM is not Tier 2" in contract
+    assert "Pod sandbox" in contract
+    assert "old Pod UID" in contract
+    assert "new Pod UID" in contract
+    assert "new Kata sandbox/VM identity" in contract
+    assert "TIER2_REPLACEMENT_BLOCKED" in contract
+    assert "external-full-sandbox-required" in template
+    assert "in-place-container-restart: not-tier2" in template
+    assert "restartPolicy: Never" not in template
+    assert "restartPolicy: OnFailure" not in template
+
+
 def test_provider_credentials_remain_bounded():
     text = TEMPLATE.read_text()
     assert "GLM_API_TOKEN" in text

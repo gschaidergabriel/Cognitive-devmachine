@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-import json
-import time
-
 import pytest
 
 from clayverse.autonomy import AutonomyBudgetExceeded, AutonomyController, GoalBudget
 from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
+from clayverse.turn_lifecycle import TurnLifecycle
 
 
 def _db(tmp_path):
@@ -19,7 +17,15 @@ def _db(tmp_path):
     return db
 
 
-def _goal(db, controller, *, completion_mode="user_ack", required_capability=None, budget=None):
+def _goal(
+    db,
+    controller,
+    *,
+    completion_mode="user_ack",
+    required_capability=None,
+    required_target=None,
+    budget=None,
+):
     turn_id = db.append_turn(
         "session:gabriel",
         "gabriel",
@@ -32,28 +38,37 @@ def _goal(db, controller, *, completion_mode="user_ack", required_capability=Non
         turn_id,
         completion_mode=completion_mode,
         required_capability=required_capability,
+        required_target=required_target,
         budget=budget,
     )
 
 
-def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "state.noop"):
-    db.db.execute(
-        "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
-        "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-        (
-            effect_id,
-            None,
-            "gabriel",
-            capability,
-            "autonomy-recovery-test",
-            None,
-            generation,
-            "VERIFIED",
-            json.dumps({"ok": True}, sort_keys=True),
-            time.time(),
-            time.time(),
-        ),
+class _FakeEntityOS:
+    sha256 = "1" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0}
+
+
+def _verified_completion_effect(db, controller, goal, step, *, target):
+    lifecycle = TurnLifecycle(
+        db,
+        "gabriel",
+        "session:gabriel",
+        entityos_bridge=_FakeEntityOS(),
     )
+    lifecycle.begin(
+        "Execute one restart-bound completion effect",
+        resources=[f"goal:{goal['goal_id']}", f"goal-step:{step['step_id']}"],
+    )
+    result = lifecycle.request_effect("entityos.exec", target, ["verify", target])
+    assert result["verified"] is True
+    recorded = controller.record_effect_result(
+        goal["goal_id"], step["step_id"], result["effect_id"]
+    )
+    assert recorded["verified"] is True
+    assert recorded["completion_evidence"] is True
+    return result["effect_id"]
 
 
 def test_zero_effect_budget_still_allows_non_effect_reasoning(tmp_path):
@@ -115,20 +130,19 @@ def test_boot_recovery_reenters_durable_goal_after_generation_advance(tmp_path):
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == goal["goal_id"]
 
 
-def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp_path):
+def test_generation_recovery_never_replays_ambiguous_admitted_effect(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
     goal = _goal(
         db,
         controller,
-        completion_mode="verified_effect",
-        required_capability="state.noop",
+        completion_mode="user_ack",
         budget=GoalBudget(max_steps=3, max_retries_per_step=1, max_effects=1),
     )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
-        "Request one canonical no-op",
+        "Request one intermediate no-op whose outcome will be unknown after restart",
         effect={"capability": "state.noop", "target": "restart-boundary", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
@@ -150,24 +164,27 @@ def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp
 def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
+    target = "receipt-boundary"
     goal = _goal(
         db,
         controller,
         completion_mode="verified_effect",
-        required_capability="state.noop",
+        required_capability="entityos.exec",
+        required_target=target,
         budget=GoalBudget(max_steps=3, max_retries_per_step=1, max_effects=1),
     )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
         "One verified side-effect boundary",
-        effect={"capability": "state.noop", "target": "receipt-boundary", "argv": None},
+        effect={
+            "capability": "entityos.exec",
+            "target": target,
+            "argv": ["verify", target],
+        },
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _verified_effect(db, "effect-before-restart", generation=1)
-    assert controller.record_effect_result(
-        goal["goal_id"], step["step_id"], "effect-before-restart"
-    )["verified"] is True
+    effect_id = _verified_completion_effect(db, controller, goal, step, target=target)
 
     live = db.advance_entity_generation()
     result = controller.recover_generation(expected_generation=live)
@@ -177,7 +194,7 @@ def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(
     assert recovered["generation"] == live
     assert recovered["status"] == "BLOCKED"
     assert recovered["blocked_reason"] == "effect_evidence_requires_generation_rebind"
-    assert recovered["evidence_effect_ids"] == ["effect-before-restart"]
+    assert recovered["evidence_effect_ids"] == [effect_id]
     assert controller.next_runnable(user_id="gabriel") is None
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 1
 

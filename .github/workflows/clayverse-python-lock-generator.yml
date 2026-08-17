@@ -40,9 +40,33 @@ jobs:
             echo "Product first FROM is not an exact digest-pinned Python image: $BASE_IMAGE" >&2
             exit 1
           fi
+          SOURCE_LOCK_BASE_IMAGE="$(python3 - "$PRODUCT_SOURCE_LOCK" <<'PY'
+          import json
+          import re
+          import sys
+          from pathlib import Path
+
+          lock = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+          base = lock.get('base_image')
+          if not isinstance(base, dict):
+              raise SystemExit('SOURCE_LOCK_BASE_IMAGE_MISSING')
+          reference = base.get('reference')
+          digest = base.get('index_digest')
+          if not isinstance(reference, str) or re.fullmatch(r'python:[^\s@]+', reference) is None:
+              raise SystemExit(f'SOURCE_LOCK_BASE_REFERENCE_INVALID:{reference!r}')
+          if not isinstance(digest, str) or re.fullmatch(r'sha256:[0-9a-f]{64}', digest) is None:
+              raise SystemExit(f'SOURCE_LOCK_BASE_DIGEST_INVALID:{digest!r}')
+          print(f'{reference}@{digest}')
+          PY
+          )"
+          if [ "$BASE_IMAGE" != "$SOURCE_LOCK_BASE_IMAGE" ]; then
+            echo "Dockerfile/SOURCE_LOCK base image drift: dockerfile=$BASE_IMAGE source_lock=$SOURCE_LOCK_BASE_IMAGE" >&2
+            exit 1
+          fi
           REQUIREMENTS_SHA256="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
           SOURCE_LOCK_SHA256="$(sha256sum "$PRODUCT_SOURCE_LOCK" | awk '{print $1}')"
           echo "PRODUCT_BASE_IMAGE=$BASE_IMAGE"
+          echo "SOURCE_LOCK_BASE_IMAGE=$SOURCE_LOCK_BASE_IMAGE"
           echo "PRODUCT_REQUIREMENTS_SHA256=$REQUIREMENTS_SHA256"
           echo "PRODUCT_SOURCE_LOCK_SHA256=$SOURCE_LOCK_SHA256"
 

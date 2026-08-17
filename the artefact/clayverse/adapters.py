@@ -11,6 +11,8 @@ from typing import Any
 import jwt
 from jwt import PyJWKClient
 
+from .inference_protocol import InferenceProtocolError, parse_claude_decision
+
 
 class AuthenticationError(PermissionError):
     pass
@@ -94,7 +96,8 @@ class ClaudeCodeInference:
 
     Cognition runs with auto-discovery disabled, all built-in tools disabled and no
     Claude session persistence. UnifiedDB/WorldAssembler remains the sole durable
-    memory/world authority and the ClayVerse EffectGate owns all external actions.
+    memory/world authority. Claude can emit a bounded effect intent, but only the
+    canonical ClayVerse EffectGate can execute it.
     """
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
@@ -119,9 +122,14 @@ class ClaudeCodeInference:
             raise RuntimeError("assembled world exceeds Claude Code boundary")
         system = (
             "You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users. "
-            "UnifiedDB is the authoritative state and the supplied WORLD is the only persisted context for this turn. "
-            "ClayGraph is a derived projection. You have no tool authority in this cognition call. Return reasoning/output "
-            "only; any external action must be requested through the ClayVerse EffectGate."
+            "UnifiedDB is authoritative state and the supplied WORLD is the only persisted context for this turn. ClayGraph "
+            "is a derived projection. You have no tool authority in this cognition call. Return exactly one JSON object and "
+            "nothing else with keys text and effect. For a normal reply use {\"text\":\"...\",\"effect\":null}. Only when "
+            "the user's intent and required arguments are sufficiently explicit may effect be "
+            "{\"capability\":\"entityos.exec\",\"target\":\"audit label\",\"argv\":[\"arg1\"]} or "
+            "{\"capability\":\"state.noop\",\"target\":\"audit label\",\"argv\":null}. Never request process.exec, a shell, "
+            "or any other capability. If required action parameters are missing, ask for them in text and use effect:null. "
+            "An effect object is only an intent; ClayVerse independently validates and executes it through EffectGate."
         )
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
         args = [
@@ -160,13 +168,11 @@ class ClaudeCodeInference:
             raise RuntimeError(f"Claude Code inference failed rc={cp.returncode}: {cp.stderr[-2000:]}")
         try:
             payload = json.loads(cp.stdout)
-            text = payload.get("result") or payload.get("text") or payload.get("message")
-            if isinstance(text, dict):
-                text = text.get("content") or json.dumps(text, ensure_ascii=False)
-            if not isinstance(text, str):
-                text = cp.stdout.strip()
-        except json.JSONDecodeError:
-            text = cp.stdout.strip()
-        if not text:
-            raise RuntimeError("Claude Code returned empty inference")
-        return {"text": text, "selection": "respond", "effect": None}
+        except json.JSONDecodeError as exc:
+            raise InferenceProtocolError("Claude Code envelope is not JSON") from exc
+        if not isinstance(payload, dict) or payload.get("is_error") is True:
+            raise InferenceProtocolError("Claude Code returned an error envelope")
+        result = payload.get("result")
+        if not isinstance(result, str):
+            raise InferenceProtocolError("Claude Code result field is missing")
+        return parse_claude_decision(result)

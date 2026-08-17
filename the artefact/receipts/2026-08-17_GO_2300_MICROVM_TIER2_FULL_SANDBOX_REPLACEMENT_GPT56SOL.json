@@ -1,6 +1,7 @@
 {
   "schema": "clayverse-go-receipt/v1",
   "observed_at": "2026-08-17T23:00:37+07:00",
+  "refreshed_at": "2026-08-17T23:04:22+07:00",
   "organ": "GPT-5.6 Sol / ChatGPT connected GitHub+Vercel organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
@@ -21,18 +22,21 @@
     "template_change": "StatefulSet is explicitly only the workload/isolation profile and marks external-full-sandbox-required / in-place-container-restart:not-tier2.",
     "test_change": "Regression prevents restartPolicy Never/OnFailure pseudo-fixes and requires the full-sandbox replacement contract."
   },
+  "parallel_fusion_reentry": "After the initial Tier-2 delta, current main advanced with compatible Kata rolling-security, headless-StatefulSet, fsGroup and manifest-network gates. This receipt was therefore rebound to and rerun against the stronger exact-current four-file source set rather than carrying forward stale 9/9 evidence.",
   "exact_current_blob_reconstruction": {
-    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "794b209bc8ff14cbaf898b31557daac075977818",
-    "deployment/clayverse-kata-statefulset.template.yaml": "629f7bbb7627e997839597edd499ce008c569a0f",
-    "tests/test_microvm_deployment_contract.py": "8c59f6ae9dda51b8970ea080d5bc519a7dac2a50",
+    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "2e03fb7074c7b88191df31f12627bf656fe6d84e",
+    "deployment/clayverse-kata-statefulset.template.yaml": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+    "tests/test_microvm_deployment_contract.py": "f0360882a33660ac49c7b9eb24a93ad99324526d",
+    "manifest.json": "9ac10e882b4f760935f3671f479eb064d8fa058d",
     "all_blob_identities_match_github": true
   },
   "deterministic_regression": {
     "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
     "environment": "authorized isolated non-production OpenAI container source-slice reconstruction",
-    "first_run": "7 passed, 1 failed due to over-specific test wording only",
-    "repair": "test-only semantic wording alignment; no product-contract weakening",
-    "final_run": "9 passed in 0.05s",
+    "earlier_negative_result": "7 passed, 1 failed due to an over-specific test phrase only; preserved as negative evidence",
+    "earlier_repair": "test-only semantic wording alignment; no product-contract weakening",
+    "intermediate_bound_run": "9 passed in 0.05s on then-current three-blob set",
+    "final_exact_current_run": "12 passed in 0.06s on exact four-file current source set",
     "exit_code": 0,
     "runtime_credit": {"kubernetes": 0, "kata_microvm": 0, "tier2_replacement": 0, "whole_clayverse": 0}
   },

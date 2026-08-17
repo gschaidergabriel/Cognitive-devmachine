@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 
-from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController
+from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController, CompletionNotVerified
 from .autonomy_context import bounded_autonomy_context
 
 
@@ -150,6 +150,15 @@ class ClayVerseEffectBridge:
             raise BridgeStateError("multiple prior effects exist for one autonomous goal step")
         return matches[0] if matches else None
 
+    def _maybe_complete_goal(self, goal_id: str, autonomy_result: dict) -> dict | None:
+        """Apply only the existing canonical completion contract immediately after verified effect evidence."""
+        if not bool(autonomy_result.get("verified")):
+            return None
+        try:
+            return self.autonomy.verify_completion(goal_id)
+        except CompletionNotVerified:
+            return None
+
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
         if self._active_autonomy_identity() is not None:
             raise PermissionError("autonomous turns must dispatch the exact admitted step through request_autonomy_effect")
@@ -183,6 +192,7 @@ class ClayVerseEffectBridge:
                 prior["effect_id"],
                 expected_generation=binding["generation"],
             )
+            completion = self._maybe_complete_goal(goal_id, autonomy_result)
             try:
                 outcome = self.autonomy._loads(prior["outcome"] or "{}")
             except Exception as exc:
@@ -193,6 +203,7 @@ class ClayVerseEffectBridge:
                 "verified": bool(autonomy_result["verified"]),
                 "outcome": outcome,
                 "autonomy": autonomy_result,
+                "autonomy_completion": completion,
                 "autonomy_binding": binding,
                 "reconciled_prior_effect": True,
                 "boundary": "AutonomyController -> existing EffectJournal receipt; no new effect execution",
@@ -203,7 +214,9 @@ class ClayVerseEffectBridge:
         if not isinstance(effect_id, str) or not effect_id:
             raise BridgeStateError("canonical lifecycle returned no effect identity")
         autonomy_result = self.autonomy.record_effect_result(goal_id, step_id, effect_id)
+        completion = self._maybe_complete_goal(goal_id, autonomy_result)
         result["autonomy"] = autonomy_result
+        result["autonomy_completion"] = completion
         result["autonomy_binding"] = binding
         result["reconciled_prior_effect"] = False
         result["boundary"] = (
@@ -245,6 +258,7 @@ def main() -> None:
             "Use request_effect only for ordinary real/state-changing actions. "
             "Use request_autonomy_effect only for an already-admitted durable autonomy effect step so exact goal/step/turn/episode/causal identity remains bound. "
             "On retry, exact prior final evidence is reconciled instead of re-executed. "
+            "Verified autonomy effect evidence is immediately checked against the existing canonical completion contract before another planning step may replace the current effect binding. "
             "Never bypass EffectGate with host execution and never claim success without a verified returned outcome."
         ),
     )

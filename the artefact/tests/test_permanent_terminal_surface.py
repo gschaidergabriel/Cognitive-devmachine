@@ -54,8 +54,7 @@ def test_product_claude_process_is_interactive_not_headless(tmp_path, monkeypatc
     assert "--no-session-persistence" not in command
     assert "--strict-mcp-config" in command
     assert "--tools ''" in command or '--tools ""' in command
-    assert "--allowedTools mcp__clayverse" in command
-    assert "mcp__clayverse__*" not in command
+    assert "mcp__clayverse__*" in command
     assert "--append-system-prompt-file" in command
 
 

@@ -1,6 +1,7 @@
 FROM python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
 
 ARG CLAUDE_CODE_SPEC=@anthropic-ai/claude-code@2.1.220
+ARG XTERM_SPEC=@xterm/xterm@6.0.0
 ARG ENTITYOS_SHA256
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -16,7 +17,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates nodejs npm tmux \
- && npm install --global "${CLAUDE_CODE_SPEC}" \
+ && npm install --global "${CLAUDE_CODE_SPEC}" "${XTERM_SPEC}" \
+ && mkdir -p /opt/clayverse/vendor \
+ && cp -a "$(npm root -g)/@xterm/xterm" /opt/clayverse/vendor/xterm \
+ && test -f /opt/clayverse/vendor/xterm/lib/xterm.js \
+ && test -f /opt/clayverse/vendor/xterm/css/xterm.css \
  && npm cache clean --force \
  && rm -rf /var/lib/apt/lists/*
 

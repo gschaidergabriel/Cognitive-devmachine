@@ -16,10 +16,12 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
                         state_root: str | Path, publishable_key: str, frontend_api_url: str):
     from fastapi import FastAPI, WebSocket, WebSocketDisconnect
     from fastapi.responses import HTMLResponse, JSONResponse
+    from fastapi.staticfiles import StaticFiles
 
     identity = IdentityRouter(db, clerk_map)
     terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="ClayVerse", docs_url=None, redoc_url=None)
+    app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     frontend_api_url = frontend_api_url.rstrip("/")
 
     @app.get("/healthz")
@@ -39,11 +41,11 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
         return HTMLResponse(f'''<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>ClayVerse</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/css/xterm.css">
+<link rel="stylesheet" href="/vendor/xterm/css/xterm.css">
 <style>html,body,#terminal{{width:100%;height:100%;margin:0;background:#000;overflow:hidden}}#auth{{height:100%;display:grid;place-items:center}}</style>
 <script defer crossorigin="anonymous" src="{api}/npm/@clerk/ui@1/dist/ui.browser.js"></script>
 <script defer crossorigin="anonymous" data-clerk-publishable-key="{key}" src="{api}/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@xterm/xterm@6.0.0/lib/xterm.js"></script></head>
+<script src="/vendor/xterm/lib/xterm.js"></script></head>
 <body><div id="auth"></div><div id="terminal" style="display:none"></div><script>
 window.addEventListener('load', async () => {{
   await Clerk.load({{ui:{{ClerkUI:window.__internal_ClerkUICtor}}}});

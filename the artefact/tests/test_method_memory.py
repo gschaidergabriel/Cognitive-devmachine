@@ -66,12 +66,61 @@ def _prepare_episodes(db):
     _episode(db, "episode:b")
 
 
-def test_promoted_method_envelope_fails_closed_without_cross_instance_support():
+def _seed_validated_method(
+    db,
+    memory_id,
+    *,
+    kind="framework",
+    subject="method:test",
+    envelope=None,
+    user_id="gabriel",
+):
+    """Test-only seed for a record assumed to have passed a future promotion gate.
+
+    Production code intentionally has no API that can mint this record yet.
+    """
+    value = validate_method_envelope(kind, envelope or _envelope())
+    db.db.execute(
+        "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
+        "VALUES(?,?,?,?,?,?,?,?)",
+        (
+            memory_id,
+            kind,
+            subject,
+            json.dumps(value, sort_keys=True, separators=(",", ":")),
+            None,
+            user_id,
+            1.0,
+            json.dumps({"source": "test-only-pre-admitted-method"}, sort_keys=True),
+        ),
+    )
+    return memory_id
+
+
+def test_promoted_method_envelope_fails_closed_without_multi_episode_support():
     with pytest.raises(MethodMemoryError, match="at least two source episodes"):
         validate_method_envelope(
             "framework",
             _envelope(source_episodes=["episode:a"], support_count=1),
         )
+
+
+def test_product_write_boundary_cannot_mint_promoted_method(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _prepare_episodes(db)
+        store = MethodMemoryStore(db)
+        with pytest.raises(MethodMemoryError, match="candidates only"):
+            store.add_candidate(
+                kind="framework",
+                subject="method:forged-promotion",
+                envelope=_envelope(),
+                user_id="gabriel",
+                provenance={"source": "test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='framework'").fetchone()[0] == 0
+    finally:
+        db.close()
 
 
 def test_candidate_is_durable_but_never_served_as_promoted_method(tmp_path):
@@ -84,14 +133,20 @@ def test_candidate_is_durable_but_never_served_as_promoted_method(tmp_path):
             source_episodes=["episode:a"],
             support_count=1,
         )
-        memory_id = store.add_method(
+        memory_id = store.add_candidate(
             kind="framework_candidate",
             subject="method:candidate",
             envelope=candidate,
             user_id="gabriel",
             provenance={"source": "test"},
         )
-        assert db.db.execute("SELECT kind FROM durable_memory WHERE memory_id=?", (memory_id,)).fetchone()[0] == "framework_candidate"
+        row = db.db.execute("SELECT kind,provenance FROM durable_memory WHERE memory_id=?", (memory_id,)).fetchone()
+        assert row["kind"] == "framework_candidate"
+        provenance = json.loads(row["provenance"])
+        assert provenance["promotion_authority"] is False
+        assert provenance["truth_authority"] is False
+        assert provenance["effect_authority"] is False
+
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
                 problem_signature=candidate["problem_signature"],
@@ -107,18 +162,40 @@ def test_candidate_is_durable_but_never_served_as_promoted_method(tmp_path):
         db.close()
 
 
+def test_candidate_source_episode_cannot_cross_user_boundary(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _episode(db, "episode:andreas", session_id="session:andreas")
+        store = MethodMemoryStore(db)
+        candidate = _envelope(
+            status="CANDIDATE",
+            source_episodes=["episode:andreas"],
+            support_count=1,
+        )
+        with pytest.raises(MethodMemoryError, match="crosses user boundary"):
+            store.add_candidate(
+                kind="framework_candidate",
+                subject="method:cross-user",
+                envelope=candidate,
+                user_id="gabriel",
+                provenance={"source": "test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='framework_candidate'").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
 def test_fact_unknown_can_get_method_without_becoming_fact_present(tmp_path):
     db = _db(tmp_path)
     try:
         _prepare_episodes(db)
         store = MethodMemoryStore(db)
         envelope = _envelope()
-        store.add_method(
-            kind="framework",
+        _seed_validated_method(
+            db,
+            "framework:causal",
             subject="method:causal-discriminator",
             envelope=envelope,
-            user_id="gabriel",
-            provenance={"source": "test"},
         )
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
@@ -138,12 +215,7 @@ def test_fact_unknown_can_get_method_without_becoming_fact_present(tmp_path):
 
 
 def test_structural_match_beats_surface_lexical_similarity(tmp_path):
-    """Bounded lexical-inversion discriminator for analogical transfer.
-
-    The correct framework name/subject deliberately share no surface vocabulary with
-    the novel problem wording. A misleading framework sounds similar at the surface
-    but has a different structural signature. Stage-B must use the explicit structure.
-    """
+    """The GO macro-cycle's single bounded STRUCTURAL_LEXICAL_INVERSION case."""
     db = _db(tmp_path)
     try:
         _prepare_episodes(db)
@@ -160,23 +232,19 @@ def test_structural_match_beats_surface_lexical_similarity(tmp_path):
             goal="restore throughput",
             calibration=0.99,
         )
-        correct_id = store.add_method(
-            kind="framework",
+        correct_id = _seed_validated_method(
+            db,
+            "framework:lantern",
             subject="method:lantern",
             envelope=correct,
-            user_id="gabriel",
-            provenance={"source": "test"},
         )
-        store.add_method(
-            kind="framework",
+        _seed_validated_method(
+            db,
+            "framework:lexical-lure",
             subject="database lock timeout stale retry",
             envelope=misleading,
-            user_id="gabriel",
-            provenance={"source": "test"},
         )
 
-        # Surface wording intentionally resembles the misleading record, while the
-        # admitted structural signature represents the actual novel problem.
         _surface_prompt = "database lock timeout after stale retry"
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
@@ -205,22 +273,21 @@ def test_linked_matching_counterexample_blocks_framework(tmp_path):
             status="PROMOTED",
             calibration=0.9,
         )
-        counter_id = store.add_method(
+        counter_id = _seed_validated_method(
+            db,
+            "counterexample:lease-free",
             kind="counterexample",
             subject="counterexample:lease-free",
             envelope=counter,
-            user_id="gabriel",
-            provenance={"source": "test"},
         )
         framework = _envelope(counterexamples=[counter_id])
         framework["problem_signature"] = ["resource contention", "single authority", "stale generation fence"]
         framework["goal_shape"] = "preserve one admitted winner"
-        store.add_method(
-            kind="framework",
+        _seed_validated_method(
+            db,
+            "framework:blocked",
             subject="method:blocked",
             envelope=framework,
-            user_id="gabriel",
-            provenance={"source": "test"},
         )
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
@@ -243,13 +310,7 @@ def test_present_fact_does_not_enter_analogy_without_bounded_trigger(tmp_path):
         _prepare_episodes(db)
         store = MethodMemoryStore(db)
         envelope = _envelope()
-        store.add_method(
-            kind="framework",
-            subject="method:not-needed",
-            envelope=envelope,
-            user_id="gabriel",
-            provenance={"source": "test"},
-        )
+        _seed_validated_method(db, "framework:not-needed", envelope=envelope)
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
                 problem_signature=envelope["problem_signature"],
@@ -270,19 +331,33 @@ def test_method_retrieval_does_not_broaden_user_boundary(tmp_path):
         _prepare_episodes(db)
         store = MethodMemoryStore(db)
         envelope = _envelope()
-        store.add_method(
-            kind="framework",
-            subject="method:gabriel-private",
-            envelope=envelope,
-            user_id="gabriel",
-            provenance={"source": "test"},
-        )
+        _seed_validated_method(db, "framework:gabriel-private", envelope=envelope, user_id="gabriel")
         result = store.retrieve_stage_b(
             query=MethodQuery.build(
                 problem_signature=envelope["problem_signature"],
                 goal_shape=envelope["goal_shape"],
             ),
             user_id="andreas",
+            fact_status="UNKNOWN",
+        )
+        assert result["method_context"] == []
+    finally:
+        db.close()
+
+
+def test_unscoped_global_method_is_not_served_before_privacy_admission_exists(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _prepare_episodes(db)
+        store = MethodMemoryStore(db)
+        envelope = _envelope()
+        _seed_validated_method(db, "framework:global-unadmitted", envelope=envelope, user_id=None)
+        result = store.retrieve_stage_b(
+            query=MethodQuery.build(
+                problem_signature=envelope["problem_signature"],
+                goal_shape=envelope["goal_shape"],
+            ),
+            user_id="gabriel",
             fact_status="UNKNOWN",
         )
         assert result["method_context"] == []

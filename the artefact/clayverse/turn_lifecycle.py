@@ -209,6 +209,7 @@ class TurnLifecycle:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            self.db.assert_live_generation(self.session_id,int(row["generation"]))
             row,_,_=self._persisted_effect_in_tx(db,row)
             if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
             effect_id=row["effect_id"]; existing_causal=db.execute("SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone() if effect_id else None

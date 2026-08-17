@@ -379,11 +379,13 @@ class AutonomyController:
     def acknowledge_by_user(self, goal_id: str, turn_id: str, *, expected_generation=None) -> dict[str, Any]:
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
-            row = db.execute("SELECT session_id,user_id,role FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
+            row = db.execute("SELECT session_id,user_id,role,ts FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
             if row is None:
                 raise AutonomyStateError("acknowledgement turn missing")
             if row["session_id"] != goal["session_id"] or row["user_id"] != goal["user_id"] or row["role"] != "user":
                 raise PermissionError("acknowledgement must come from goal owner")
+            if turn_id == goal["source_turn_id"] or float(row["ts"]) <= float(goal["created_at"]):
+                raise PermissionError("acknowledgement must be an explicit later owner turn")
             goal["user_ack_turn_id"], goal["updated_at"] = turn_id, time.time()
             self._save(db, state)
             return {"goal_id": goal_id, "user_ack_turn_id": turn_id}
@@ -393,7 +395,18 @@ class AutonomyController:
             state, goal = self._goal(db, goal_id, expected_generation)
             contract, evidence = goal["completion_contract"], None
             if contract["mode"] == "user_ack":
-                evidence = goal["user_ack_turn_id"]
+                turn_id = goal["user_ack_turn_id"]
+                if turn_id:
+                    row = db.execute("SELECT session_id,user_id,role,ts FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
+                    if (
+                        row
+                        and row["session_id"] == goal["session_id"]
+                        and row["user_id"] == goal["user_id"]
+                        and row["role"] == "user"
+                        and turn_id != goal["source_turn_id"]
+                        and float(row["ts"]) > float(goal["created_at"])
+                    ):
+                        evidence = turn_id
             else:
                 required = contract["required_capability"]
                 for effect_id in goal["evidence_effect_ids"]:

@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseBoundedEvidenceReceipt/v1",
+  "timestamp_local": "2026-08-17T21:18:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / OpenAI isolated non-production container",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "go/python-lock-py313-generator-20260817-1742-sol",
+  "pr": 622,
+  "observed_head_before_receipt": "cd967ed31a04bb4c3d98cd48083ef6c13fcb06e8",
+  "purpose": "Close a source-provenance gap where the Python lock generator selected the Dockerfile base image but did not fail closed if SOURCE_LOCK.base_image drifted from that exact reference+digest before container execution.",
+  "commits_authored_in_this_pass": [
+    "50e9e37c2ced79f47807b802b0ce0ece82364747",
+    "cd967ed31a04bb4c3d98cd48083ef6c13fcb06e8"
+  ],
+  "source_delta": [
+    "parse SOURCE_LOCK.base_image on the GitHub host before docker run",
+    "validate Python base reference shape and sha256 digest shape",
+    "require exact Dockerfile first-FROM equality with SOURCE_LOCK reference@digest",
+    "fail closed on missing/malformed/drifted source-lock base identity before executing the candidate image",
+    "regression asserts semantic Dockerfile/SOURCE_LOCK equality and ordering before docker run"
+  ],
+  "current_bound_base_image": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+  "bootstrap_source_verification": {
+    "authority": "PyPI release JSON metadata",
+    "packages_checked": 8,
+    "result": "FILENAMES_AND_SHA256_MATCH_DECLARED_SOURCE_LOCK",
+    "packages": [
+      "pip-tools==7.5.3",
+      "build==1.2.2.post1",
+      "click==8.3.3",
+      "packaging==24.2",
+      "pip==26.1.2",
+      "pyproject-hooks==1.2.0",
+      "setuptools==83.0.0",
+      "wheel==0.46.2"
+    ],
+    "evidence_boundary": "Primary-source metadata verification only; not isolated generator execution."
+  },
+  "isolated_execution": {
+    "base_provenance_micro_falsifier": {
+      "result": "PASS",
+      "cases": 5,
+      "observations": [
+        "exact current reference+digest matches",
+        "digest drift rejected",
+        "missing base_image rejected",
+        "reference injection containing @ rejected",
+        "malformed digest rejected"
+      ]
+    },
+    "bootstrap_download_attempt": {
+      "result": "EXECUTION_ADMISSION_BLOCKED",
+      "reason": "isolated local surface DNS/Internet unavailable before PyPI package resolution",
+      "classification": "NOT_PACKAGE_FAIL_NOT_HASH_FAIL"
+    },
+    "docker": "UNAVAILABLE",
+    "exact_python_3_13_14_container": "UNAVAILABLE"
+  },
+  "evidence_class": "STATIC_CONTRACT_PASS_PLUS_PRIMARY_SOURCE_VERIFICATION",
+  "not_proven": [
+    "actual exact-base Docker execution",
+    "bootstrap wheel download closure under exact Python 3.13.14 base",
+    "offline bootstrap install",
+    "pip-compile byte-identical double compilation",
+    "product requirements wheelhouse closure",
+    "canonical requirements.lock.txt",
+    "Docker product install under --require-hashes",
+    "OCI image build/runtime",
+    "whole ClayVerse acceptance"
+  ],
+  "promotion": "DENIED_PENDING_AUTHORIZED_EXACT_EXECUTION",
+  "next_discriminator": "Actually-started authorized isolated Docker execution of current exact #622 source in the digest-pinned Python 3.13.14 base; capture bootstrap hashes, offline install, stable-path double compile, product wheelhouse and lock bytes before any canonical lock promotion.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persistence": false
+  },
+  "whole_clayverse_pass": false
+}

@@ -1,0 +1,89 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T15:41+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "trigger_identity": {
+    "available_timestamp_precision": "minute",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable shared request/turn identifier was exposed and the available user-message timestamp lacked whole-second precision. Ordinary deterministic source review and regression work remained allowed."
+  },
+  "join": {
+    "initial_main": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+    "receipt_branch_parent": "25e7fdda5c785dc154ad13a0654bcf9846bd915e",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_workspace": "the artefact/"
+  },
+  "frontier_selected": {
+    "pr": 575,
+    "title": "terminal: fence PTY input writes to admitting Clerk lease",
+    "defect": "A binary PTY input frame admitted immediately before Clerk lease expiry could continue through later partial os.write iterations after the admitting lease expired.",
+    "repair": "Freeze the admitting frame deadline and re-check that immutable deadline immediately before and after every kernel write.",
+    "authority_change": false,
+    "second_product_path_created": false
+  },
+  "independent_mechanism_recheck": {
+    "classification": "MECHANISM_SUPPORTED",
+    "environment": "OpenAI isolated non-production container",
+    "cases_passed": 4,
+    "cases_total": 4,
+    "cases": [
+      "normal partial writes complete while lease remains live",
+      "lease expiry during first partial write permits no later write iteration",
+      "already-expired frame performs zero kernel writes",
+      "live zero-progress kernel write fails closed"
+    ],
+    "probe_sha256": "2da05835c32d810ae8ce1a5972da062131f896e9339d5ba2aaa641095e5a57c5",
+    "non_claim": "Not exact full-branch pytest, real Clerk/browser/PTTY, OCI/runtime, restart, or whole-product acceptance."
+  },
+  "durable_product_delta": {
+    "pr": 575,
+    "merge_sha": "7cdf52f6e948961208eeea8a5f144eb480819c5d",
+    "result": "MERGED_TO_MAIN",
+    "scope": "Clerk-authenticated PTY input lease continuity across partial writes"
+  },
+  "parallel_convergence_observed_after_merge": [
+    {"merge_sha": "368af9c5cc97452c662e198d4a214f8208757feb", "scope": "canonical Gabriel/Andreas persisted user-row drift fence"},
+    {"merge_sha": "fb8bec599328ec44813e62a8e1ead24f28fd198b", "scope": "Clerk network JWKS issuer provenance fence"},
+    {"merge_sha": "50e64571bc5d6cf73bfd93de95ed9187a7341673", "scope": "tmux managed-policy reapply and bounded control operations"},
+    {"merge_sha": "ad020cf746ad22870e58994ee6dc5cb9943e97a9", "scope": "post-attach Clerk lease check before initial PTY resize"},
+    {"merge_sha": "0ccab0a397feaf9d127f96bcabafae90beb96b1a", "scope": "documented managed Claude auxiliary-surface fences"},
+    {"merge_sha": "60a507528b0d0b7a4f04e09d52dc33e419884e82", "scope": "deduplicated Clerk resize-expiry regression convergence"},
+    {"merge_sha": "25e7fdda5c785dc154ad13a0654bcf9846bd915e", "scope": "tmux v3 command-surface regression convergence"}
+  ],
+  "external_primary_crosscheck": {
+    "dependency": "Clerk",
+    "result": "Current primary Clerk documentation supports issuer/Frontend-API-bound JWKS discovery at the instance .well-known/jwks.json endpoint and authorized-party verification. This supports the source premise of the merged JWKS provenance fence; real key rotation/cache behavior remains a runtime gate.",
+    "evidence_class": "PRIMARY_DOCUMENTATION_SUPPORT_NOT_PRODUCT_RUNTIME"
+  },
+  "execution_admission": {
+    "vercel": "CONFIRMED_SANDBOX_PATH_BUT_CURRENT_FREE_PREVIEW_DAILY_CAP_BLOCKS_NEW_TARGET_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "local_dns_observation": {"github.com": "UNRESOLVED", "api.daytona.io": "UNRESOLVED", "pypi.org": "UNRESOLVED"},
+    "runtime_credit_added": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL"
+  },
+  "current_supply_chain_observation": {
+    "requirements": "Version-pinned only; no --require-hashes lock is present on observed main.",
+    "docker_apt": "Observed main still uses mutable apt-get update/install; the open APT snapshot candidate is draft/non-mergeable and explicitly requires exact isolated OCI execution before promotion.",
+    "action": "NO_SPECULATIVE_SUPPLY_CHAIN_MERGE_WITHOUT_EXECUTABLE_DEPENDENCY_RESOLUTION"
+  },
+  "non_claims": [
+    "No exact current-head full test-suite PASS",
+    "No exact OCI image build or digest",
+    "No real Clerk browser/JWT/key-rotation PASS",
+    "No live WebSocket PTY/tmux/native Claude acceptance",
+    "No restart/recovery/concurrency whole-product PASS",
+    "No ACTIVE MicroClay promotion",
+    "No whole ClayVerse PASS"
+  ],
+  "next_exact_gate": "On the first actually-started authorized SQLite-capable isolated surface, refresh exact current main and run one coordinated high-information batch: focused Clerk/JWKS/PTTY/tmux/managed-Claude regressions, adjacent lifecycle/effect/recovery tests, broader suite, exact ClayVerse OCI build with digest, startup/readiness, authenticated browser WebSocket PTY, native Claude lifecycle, restart/recovery and dual-session stale-generation/concurrency gates.",
+  "policy": {
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_or_production_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN",
+    "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  }
+}

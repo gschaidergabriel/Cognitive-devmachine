@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T22:59:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "acceptance": "IN_PROGRESS",
+  "base": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "commit": "a725f78fabea3e9fbb1e905a48c8570f59c905b2",
+    "branch": "gpt56sol/go-tier2-fatal-signal-rejoin-20260817-2310"
+  },
+  "coordination": {
+    "superseded_donor_pr": 630,
+    "donor_status": "CLOSED_SUPERSEDED_BY_STRONGER_CANONICAL_MAIN",
+    "action": "REJOINED_FROM_FRESH_MAIN_INSTEAD_OF_MERGING_STALE_DONOR_BRANCH",
+    "overlap_note": "Open startup-probe lane #647 also edits the Kata template and must be fused rather than overwritten before promotion."
+  },
+  "frontier": {
+    "observed": "Canonical recovery can raise RecoveryIntegrityError when the causal/state spine cannot be trusted, while the MicroVM contract requires an external full Pod/Kata sandbox replacement for Tier-2. Before this delta the service exposed only a generic process failure and the deployment profile had no typed machine-readable bridge from canonical integrity failure to the external replacer.",
+    "hypothesis": "A reserved fail-closed exit code plus a bounded Kubernetes termination message gives deployment infrastructure an unambiguous Tier-2 trigger without creating a second state/recovery authority.",
+    "counterhypothesis": "A generic non-zero container exit is sufficient for Tier-2 orchestration.",
+    "counterhypothesis_status": "REJECTED_AT_SOURCE_CONTRACT_LEVEL_BECAUSE_GENERIC_FAILURE_CANNOT_DISTINGUISH_COMPONENT_RESTART_FROM_FULL_SANDBOX_REPLACEMENT",
+    "cheapest_discriminator": "Execute the exact signal builder and exact service recovery-integrity path, then require a future Kubernetes/Kata run to observe exit 86 and replace the complete Pod/Kata sandbox."
+  },
+  "delta": {
+    "tier2_signal_blob": "23563e0b523075f4af07bee108caf5aed959e643",
+    "tier2_signal_test_blob": "73b7b77fc01c0783fa7dba07a68279d1ec17ac30",
+    "service_blob": "28337cd6859e756ab85634c41eddf4e0285ac5dd",
+    "service_integration_test_blob": "c11dcaf4d653ee6311fe3f47c79e4e7c47caea3d",
+    "deployment_signal_test_blob": "8be98c5d70a6b6263cdd3eaa26db4327f55f77fd",
+    "kata_template_blob": "40f12f69a7ece2aed67c56b9255d4d7ecbfd1372",
+    "manifest_blob": "2b5ea8ab3651c46d271bc4485fcd71c321218731",
+    "signal": {
+      "schema": "clayverse.tier2-fatal/v1",
+      "exit_code": 86,
+      "action": "REPLACE_FULL_SANDBOX",
+      "reason_allowlist": ["RECOVERY_INTEGRITY_ERROR"],
+      "raw_detail_emitted": false,
+      "detail_binding": "SHA256_ONLY",
+      "replay_external_effects": false,
+      "termination_message_path": "/dev/termination-log",
+      "termination_message_policy": "File",
+      "termination_message_write_failure": "EXIT_86_REMAINS_AUTHORITATIVE"
+    }
+  },
+  "primary_upstream_basis": "Kubernetes official documentation states that terminationMessagePath defaults to /dev/termination-log, File populates the terminated container status message from that file, and terminated container state exposes the exit code. The ClayVerse-specific meaning of exit 86 is repository policy, not a Kubernetes-reserved semantic.",
+  "execution": {
+    "environment": "authorized isolated OpenAI non-production container",
+    "python": "3.13.5",
+    "tier2_signal_exact_blob_hash_match": true,
+    "tier2_signal_tests": "4/4 PASS in 0.05s",
+    "tier2_signal_py_compile": "PASS",
+    "service_exact_blob_hash_match": true,
+    "service_integration_exact_test_blob_hash_match": true,
+    "service_integration_test": "1/1 PASS in 0.13s with non-exercised imports stubbed",
+    "service_py_compile": "PASS",
+    "deployment_cross_file_test": "SOURCE_PRESENT_UNEXECUTED_ON_FULL_REPO_SLICE",
+    "kubernetes_exit_status_observation": "UNOBSERVED",
+    "external_full_sandbox_replacer": "UNOBSERVED",
+    "kata_runtime": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "evidence_boundary": "The exact-file executions support the Tier-2 signal construction and service dispatch mechanism only. They do not prove Kubernetes termination-message collection, controller observation of exit 86, full Pod deletion, fresh Kata sandbox/VM identity, same OCI digest, persistent-state recovery, generation fencing or no-replay behavior on a real admitted target.",
+  "promotion_gate": "In an authorized isolated Kubernetes/Kata-capable run, force a real RecoveryIntegrityError, observe terminated exitCode 86 and clayverse.tier2-fatal/v1 when available, prove the external controller deletes/replaces the whole Pod/Kata sandbox rather than restarting in place, prove new Pod UID and new Kata sandbox/VM identity with the same accepted OCI digest, recover declared persistent state under a new global generation, and verify ambiguous external effects are not replayed. Also fuse the compatible startupProbe delta from #647 before promotion if still current.",
+  "execution_blocker": "Current retained Vercel lower-layer exact private-source/OCI controller remains blocked before source staging by absent approved host-side Preview GITHUB_READ_TOKEN; source-runtime and OCI-runtime credit remain zero until that credential exists outside the disposable Sandbox.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "The exact user trigger exposes no shared immutable request/turn id and only minute-precision immutable message metadata, so the atomic unusual-experiment lease cannot be safely minted."
+  },
+  "safety": {
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "together_api_used": false,
+    "secrets_exposed": false,
+    "paid_or_final_training_started": false
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "adjacent_components": ["F-V01-09-EFFECT-AUTHORITY", "F-V01-13-SECURITY-RECOVERY-OBSERVABILITY"],
+  "receipt_class": "TARGET_VPS_COMPONENT_EVIDENCE_WITH_SIMULATED_PROVIDER_SUBGATE",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 206,
+  "github_run_id": "31416006788",
+  "job_id": "93545075911",
+  "artifact_id": "9073451183",
+  "artifact_digest": "sha256:66b57b04ec071e145a48e47cabe4467ec65822ffc0cc662c0e65beb52dc3f17d",
+  "tested_head_sha": "ae69aeb5260eb846d5a713142d29b0db3aa9a715",
+  "executor": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "repository_permission": "contents:read",
+    "checkout_persist_credentials": false
+  },
+  "results": {
+    "v17_1_negative_control": {
+      "status": "V17_1_SUBJECT_DELTA_SPLICE_REJECTED",
+      "actual_rejection": "OperationalError:no such column: e.outcome_evidence_clay",
+      "adjudication": "PRESERVED_NEGATIVE_RESULT_NOT_CAUSAL_SUCCESS"
+    },
+    "v17_2_causal_evidence_closure": {
+      "status": "PASS_V17_2_CAUSAL_EVIDENCE_CLOSURE_CANDIDATE",
+      "checks": {
+        "atomic_outcome_evidence_persisted": true,
+        "wrong_prediction_subject_rejected": true,
+        "unrelated_current_delta_without_source_rejected": true,
+        "canonical_runtime_reentry_changed": true,
+        "valid_closed_chain_reaches_DONE": true,
+        "effect_trace_integrity": true,
+        "sqlite_integrity": true
+      },
+      "trace_reason": "OK",
+      "resource_shadow": {
+        "elapsed_seconds": 0.07,
+        "user_cpu_seconds": 0.06,
+        "system_cpu_seconds": 0.01,
+        "max_rss_kib": 20536,
+        "filesystem_outputs": 56,
+        "swaps": 0
+      }
+    },
+    "v17_2_crash_restart": {
+      "status": "PASS_V17_2_CRASH_RESTART_ATOMIC_EVIDENCE_GATE",
+      "forced_exitcodes": [77, 78],
+      "checks": {
+        "child1_crashed_at_requested_boundary": true,
+        "effect_update_without_commit_rolled_back": true,
+        "no_evidence_after_pre_insert_crash": true,
+        "child2_crashed_after_evidence_before_commit": true,
+        "effect_and_evidence_rolled_back_together": true,
+        "normal_retry_records_verified_outcome": true,
+        "exactly_one_evidence_receipt_after_success": true,
+        "trace_valid_after_recovery": true,
+        "sqlite_integrity_after_both_crashes": true
+      },
+      "resource_shadow": {
+        "elapsed_seconds": 0.11,
+        "user_cpu_seconds": 0.07,
+        "system_cpu_seconds": 0.03,
+        "max_rss_kib": 20516,
+        "filesystem_outputs": 136,
+        "swaps": 0
+      }
+    },
+    "v17_2_1_completion_visibility": {
+      "status": "PASS_V17_2_1_FAIL_CLOSED_COMPLETION_VISIBILITY_GATE",
+      "staged_effective_state": "OUTCOME_SUCCEEDED",
+      "after_stale_effective_state": "OUTCOME_SUCCEEDED",
+      "final_effective_state": "DONE",
+      "stale_reentry_error": "V17_1_REENTERED_STALE_OR_UNBOUND_EXECUTION",
+      "checks": {
+        "terminal_half_commit_not_visible_as_DONE": true,
+        "physical_state_before_reentry_is_outcome": true,
+        "stale_lease_reentry_rejected": true,
+        "staged_terminal_survives_for_audit": true,
+        "stale_failure_still_not_visible_as_DONE": true,
+        "canonical_reentry_after_valid_lease_succeeds": true,
+        "DONE_visible_only_after_authoritative_reentry": true,
+        "trace_integrity": true,
+        "sqlite_integrity": true
+      },
+      "resource_shadow": {
+        "elapsed_seconds": 0.06,
+        "user_cpu_seconds": 0.05,
+        "system_cpu_seconds": 0.01,
+        "max_rss_kib": 20144,
+        "filesystem_outputs": 56,
+        "swaps": 0
+      }
+    },
+    "provider_timeout_reconciliation": {
+      "status": "PASS_SIMULATED_PROVIDER_TIMEOUT_RECONCILIATION_TO_DONE",
+      "evidence_class": "DETERMINISTIC_PROVIDER_ORACLE_SIMULATION_ONLY",
+      "provider_write_calls": 1,
+      "provider_reconcile_calls": 1,
+      "pre_reconcile_support_rejected": true,
+      "verified_reconciliation_persists_one_exact_evidence_receipt": true,
+      "terminal_receipt_alone_not_DONE": true,
+      "reconciled_chain_reaches_DONE": true,
+      "trace_integrity": true,
+      "real_external_provider_effect_performed": false,
+      "resource_shadow": {
+        "elapsed_seconds": 0.07,
+        "user_cpu_seconds": 0.06,
+        "system_cpu_seconds": 0.01,
+        "max_rss_kib": 20388,
+        "filesystem_outputs": 64,
+        "swaps": 0
+      }
+    }
+  },
+  "adjudication": {
+    "v17_2_causal_evidence_mechanism": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "v17_2_crash_restart_atomicity": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "v17_2_1_completion_visibility": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "provider_timeout_reconciliation_mechanism": "SUPPORTED_SIMULATION_ONLY",
+    "real_provider_timeout_reconciliation": "OPEN",
+    "concurrency_load_discriminator": "OPEN",
+    "canonical_production_schema_migration": "NOT_PERFORMED",
+    "full_F_V01_04": "IN_PROGRESS_NOT_PASS",
+    "whole_frank_v0_1": "NOT_CLAIMED"
+  }
+}

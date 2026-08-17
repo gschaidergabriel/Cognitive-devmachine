@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "actor": {"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "executions": [
+    {"tool":"GitHub.fetch_file/search","scope":"Clay canonical/bootstrap/trigger/program/workspace/UnifiedDB schemas + Frank target receipts","result":"current state resolved; F-V01-04 OPEN; adjacent target effect receipt found","truth_class":"CURRENT_REPO_READ"},
+    {"tool":"web.run","scope":"SQLite WAL/isolation/session/STRICT/FTS5 and pgvector primary sources","result":"2026 SQLite WAL-reset corruption bug identified; exact-vs-approx vector semantics confirmed","truth_class":"FRESH_PRIMARY_EXTERNAL"},
+    {"tool":"local Python/container","scope":"EpochSeal continuity probe","result":"11/11 boolean checks PASS; local SQLite 3.46.1 triggered DELETE+FULL safety fallback","truth_class":"LOCAL_SYNTHETIC_EXECUTION"},
+    {"tool":"local Python/container","scope":"four-architecture SQLite benchmark","result":"hybrid canonical+rebuildable sidecar fastest p50 in this local run; physical consolidation close; split-store crash divergence reproduced","truth_class":"LOCAL_SYNTHETIC_EXECUTION"},
+    {"tool":"GitHub branch/write/PR","scope":"gschaidergabriel/Dr.-Unterweger","result":"PR #182 opened with executable probe + self-hosted workflow","truth_class":"REMOTE_REPO_EFFECT_RECEIPT"},
+    {"tool":"GitHub Actions read","scope":"PR #182 associated checks","result":"existing Frank Deep Integrity run 31407554059 completed failure; no usable step log retrieved; new UnifiedDB target receipt not promoted","truth_class":"REMOTE_CI_STATUS"},
+    {"tool":"GitHub branch/write","scope":"gschaidergabriel/clay-global-research-entity","result":"this research run artifacts written on dedicated branch","truth_class":"REMOTE_REPO_EFFECT_RECEIPT"}
+  ],
+  "not_executed": [
+    "No main-branch merge",
+    "No target-VPS UnifiedDB receipt promoted",
+    "No provider write effect",
+    "No final/paid model training",
+    "No Frank self-Harness mutation"
+  ]
+}

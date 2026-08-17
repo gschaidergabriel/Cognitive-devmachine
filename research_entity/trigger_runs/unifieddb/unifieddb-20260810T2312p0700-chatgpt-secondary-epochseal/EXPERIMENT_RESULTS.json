@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "environment": {"execution":"local sandbox/container","python":"3.13.5","sqlite":"3.46.1","journal_mode":"DELETE","synchronous":"FULL","target_equivalent":false},
+  "continuity_probe": {
+    "status":"PASS_EXECUTABLE_CONTINUITY_PROBE",
+    "boolean_passed":11,
+    "boolean_total":11,
+    "final_epoch":300,
+    "tests":["integrity_initial","stale_epoch_rejected","idempotency_replay_rejected","derived_lag_detected","query_receipt_epoch_bound","epoch_chain","crash_child_exit_nonzero","uncommitted_crash_not_visible","integrity_after_crash","epoch_chain_after_restart","verified_outcome_reentry_link"],
+    "commit_latency_us":{"n":300,"p50":2113.209,"p95":5242.903,"p99":16357.552,"max":976419.429},
+    "wal_reset_bug_fixed":false,
+    "durability_policy":"DELETE+FULL_FALLBACK",
+    "epistemic_limit":"local execution only; not target VPS evidence"
+  },
+  "architecture_benchmark": {
+    "n_updates_each":120,
+    "specialized_baseline":{"p50_us":2686.428,"p95_us":6851.826,"p99_us":9591.043,"cross_store_crash_divergence":true},
+    "logical_unified_api_split":{"p50_us":4204.627,"p95_us":9809.276,"p99_us":12864.049,"cross_store_crash_detected":true,"cross_store_atomic":false},
+    "canonical_plus_rebuildable_sidecar":{"p50_us":1223.402,"p95_us":2196.323,"p99_us":8136.729,"derived_lag_epochs":3,"canonical_truth_preserved":true},
+    "physical_consolidated":{"p50_us":1354.846,"p95_us":2377.601,"p99_us":5510.19,"rollback_atomic":true,"common_mode_failure_radius":"HIGHER_THAN_HYBRID"},
+    "winner_for_next_test":"canonical_plus_rebuildable_sidecar",
+    "promotion":"LOCAL_SYNTHETIC_ONLY"
+  },
+  "fresh_primary_evidence": [
+    {"source":"SQLite WAL documentation","url":"https://www.sqlite.org/wal.html","finding":"WAL snapshot/read-write concurrency plus 2026 WAL-reset corruption bug; fixed in 3.51.3+ and documented backports 3.50.7/3.44.6"},
+    {"source":"SQLite isolation documentation","url":"https://www.sqlite.org/isolation.html","finding":"WAL readers observe stable snapshots; SQLite serializes writers"},
+    {"source":"SQLite session extension","url":"https://www.sqlite.org/sessionintro.html","finding":"changesets can capture/apply/invert row changes but virtual tables are not captured"},
+    {"source":"SQLite STRICT tables","url":"https://www.sqlite.org/stricttables.html","finding":"STRICT mode enforces declared storage classes and datatype constraints"},
+    {"source":"SQLite FTS5","url":"https://www.sqlite.org/fts5.html","finding":"FTS5 is a virtual-table derived search surface, appropriate as non-authoritative projection"},
+    {"source":"pgvector README","url":"https://github.com/pgvector/pgvector","finding":"exact search gives full recall; HNSW/IVFFlat trade recall for speed; Postgres supplies ACID/PITR comparison candidate"}
+  ],
+  "target_repo_experiment": {
+    "repository":"gschaidergabriel/Dr.-Unterweger",
+    "pr":182,
+    "head_sha":"91ea8194912c8483c240c723da980850c5cafff0",
+    "status":"OPEN_NOT_PROMOTED",
+    "associated_existing_check":{"name":"Frank Deep Integrity","run_id":31407554059,"conclusion":"failure","usable_logs":false},
+    "target_unifieddb_receipt":"NOT_YET_VERIFIED"
+  },
+  "negative_results": [
+    "Separate authoritative stores can diverge across a crash boundary.",
+    "A logical coordinator over split stores detects partial commit but does not make the pair atomic.",
+    "Local SQLite 3.46.1 is not eligible for the candidate WAL fast path under the 2026 bug gate.",
+    "Current data do not justify universal physical consolidation or whole-Frank promotion."
+  ]
+}

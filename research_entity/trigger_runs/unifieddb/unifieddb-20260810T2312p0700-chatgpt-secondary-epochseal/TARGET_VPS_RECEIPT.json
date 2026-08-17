@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "receipt_class": "TARGET_VPS_COMPONENT_EVIDENCE_WITH_ACTIVE_COUNTEREVIDENCE",
+  "target_vps_continuity": {
+    "status": "PASS_EXECUTABLE_CONTINUITY_PROBE",
+    "github_run_id": "31407554177",
+    "job_id": "93517452110",
+    "artifact_id": "9070351148",
+    "artifact_digest": "sha256:fcaa52d32102b8e79a7d85f6efbaef6ee0e061182f22347da4f0096ee86ac6c8",
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 182,
+    "head_sha": "91ea8194912c8483c240c723da980850c5cafff0",
+    "tested_merge_sha": "e15c9f130bdee6bb2eef4c375f78dbb2cb6879c5",
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "python": "3.12.3",
+    "sqlite": "3.45.1",
+    "wal_reset_bug_fixed": false,
+    "journal_mode": "DELETE",
+    "durability_policy": "DELETE+FULL_FALLBACK",
+    "tests_passed": 11,
+    "tests_total": 11,
+    "commit_latency_us": {"n":300,"p50":1743.522,"p95":2678.487,"p99":3934.526,"max":5205.964},
+    "resource_shadow": {"elapsed_seconds":0.71,"max_rss_kib":20480,"user_cpu_seconds":0.18,"system_cpu_seconds":0.13,"filesystem_outputs":40648,"swaps":0}
+  },
+  "ci_classification": {
+    "frank_deep_integrity_run_id": "31407554059",
+    "rerun_attempted": true,
+    "rerun_conclusion": "failure",
+    "step_metadata_available": false,
+    "log_download": "BLOB_NOT_FOUND",
+    "historical_relevant_receipt": "existing deep-integrity receipts show deep_integrity_v11 PASS while repo_static_integrity FAIL",
+    "classification": "UNRESOLVED_WRAPPER_OR_REPO_STATIC_GATE; NOT_CAUSALLY_ATTRIBUTED_TO_EPOCHSEAL"
+  },
+  "new_counterevidence": {
+    "source": "current target main runtime/state/UNIFIEDDB_V17_PROVENANCE_BOUND_EFFECT_COMPLETION.sql + tests/effect_reentry_v17_relational_cross_splice_gap_probe.py",
+    "status": "CONFIRMED_V17_RELATIONAL_CROSS_SPLICE_GAP",
+    "finding": "Existing V17 referential guards do not structurally prove one closed causal chain: unrelated unverified causal credit, unrelated current semantic record and unbacked snapshot hash can be cross-spliced into a syntactically valid DONE path.",
+    "required_repair": [
+      "bind causal credit outcome identity to the same verified provider/effect outcome",
+      "bind admitted semantic delta to the exact causal credit/reentry admission",
+      "replace free support_snapshot_hash with receipt/FK-backed snapshot identity or remove it from authority"
+    ]
+  },
+  "promotion": {
+    "epochseal_continuity_primitive": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "full_F_V01_04": "IN_PROGRESS_NOT_PASS",
+    "provider_outcome_to_reentry_done": "REFUTED_AS_STRUCTURALLY_CLOSED_UNTIL_CROSS_SPLICE_REPAIRED",
+    "whole_frank_v0_1": "NOT_CLAIMED"
+  }
+}

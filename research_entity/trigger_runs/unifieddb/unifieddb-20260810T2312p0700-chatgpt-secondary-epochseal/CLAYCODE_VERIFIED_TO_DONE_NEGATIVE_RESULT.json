@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "N-UNIFIEDDB-CLAYCODE-VERIFIED-DIRECT-DONE",
+  "status": "CONFIRMED_SOURCE_SEMANTIC_COUNTEREXAMPLE; REPAIR_TESTING",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "adjacent_components": ["F-V01-02-CLAYCODE-COMPILER-RUNTIME", "F-V01-09-EFFECT-AUTHORITY"],
+  "source": "gschaidergabriel/Dr.-Unterweger:claycode/frank_effects.clay",
+  "finding": "The semantic source defined finish(v : VerifiedEffectReceipt) -> DoneReceipt with only v.stage == VERIFIED while the same module declared verified_outcome_requires_provenance_bound_reentry_before_done. EffectStage did not contain REENTERED even though the authoritative runtime/UnifiedDB uses REENTERED as the causal completion transition.",
+  "impact": "ClayCode semantic authority permitted a VERIFIED -> DONE shortcut that was weaker than the V17.2/V17.2.1 persistence contract. Database enforcement alone therefore could not establish end-to-end semantic closure.",
+  "repair_candidate": "target PR #206",
+  "repair": [
+    "add REENTERED to EffectStage and FINALIZATION_PENDING to RecoveryDecision",
+    "introduce opaque EffectReentryReceipt binding exact verified-outcome, causal-credit, admitted-delta and reentry hashes",
+    "require trusted provenance reentry before finish",
+    "change finish to require both VerifiedEffectReceipt and matching current EffectReentryReceipt",
+    "make verified_receipt_alone_cannot_mint_done, done_requires_reentered_receipt and reentry_receipt_binds_exact_verified_outcome explicit invariants"
+  ],
+  "discriminator": "runtime/frank_effect_lifecycle_v1/claycode_frontend_probe.py compiled by current bundled ClayCode frontend + structural TypedIR bridge on target VPS",
+  "promotion": "NEGATIVE_RESULT_ACTIVE_UNTIL_TARGET_FRONTEND_TYPEDIR_AND_CAUSAL_RUNTIME_GATES_PASS"
+}

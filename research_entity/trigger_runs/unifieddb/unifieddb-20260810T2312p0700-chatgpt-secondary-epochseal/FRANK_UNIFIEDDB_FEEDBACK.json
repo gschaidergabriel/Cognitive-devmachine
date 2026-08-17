@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "target":"self.root / human-surface Frank v0.1",
+  "component":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "current_workspace_status":"OPEN",
+  "recommended_status_after_target_receipt":"IN_PROGRESS",
+  "architecture_delta":"EPOCHSEAL_HYBRID_V1",
+  "direct_target_effects":[
+    "one authoritative typed state/transaction/epoch/replay plane",
+    "derived ClayGraph/FTS/vector surfaces become explicitly epoch-bound and rebuildable",
+    "cognition-critical queries receive QueryReceipt with source_epoch and planner provenance",
+    "verified external outcomes gain a deterministic path into provenance-bound re-entry",
+    "stale writers and idempotency replay fail deterministically",
+    "WAL fast path is runtime-version gated due documented 2026 SQLite corruption bug"
+  ],
+  "adjacent_work_packages":["F-V01-03-COGNITIVE-LOOP-CORE","F-V01-05-GWT-HYPERPOSITION-TOPOLOGY","F-V01-09-EFFECT-AUTHORITY","F-V01-11-MEMORY-REWARD-GOALS","F-V01-13-SECURITY-RECOVERY-OBSERVABILITY","F-V01-16-END-TO-END-ACCEPTANCE"],
+  "target_repo_candidate":{"repository":"gschaidergabriel/Dr.-Unterweger","pr":182,"head_sha":"91ea8194912c8483c240c723da980850c5cafff0","merge_status":"NOT_MERGED","whole_frank_acceptance":false},
+  "blocking_evidence_needed":["actual target VPS sqlite3.sqlite_version and compile options","successful target continuity probe receipt","existing CI failure classified/repaired if relevant","current-source lifecycle crash/replay","real provider uncertainty/reconciliation","end-to-end verified outcome -> reentry -> DONE receipt"],
+  "authority_boundary":"self.root/Frank may observe/propose but does not authorize its own Harness mutation; Clay owns research implementation/testing decisions",
+  "promotion":"HOLD_TARGET_VALIDATION"
+}

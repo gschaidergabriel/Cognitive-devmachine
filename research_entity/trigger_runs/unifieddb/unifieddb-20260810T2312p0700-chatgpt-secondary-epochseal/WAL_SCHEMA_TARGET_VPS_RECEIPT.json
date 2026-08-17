@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "receipt_class": "TARGET_VPS_COMPONENT_EVIDENCE",
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 222,
+  "target_receipt": "runtime/vps_unifieddb/unifieddb_wal_schema_fail_closed_v1/LATEST.json",
+  "github_run_id": "31414183884",
+  "job_id": "93539146879",
+  "artifact_id": "9073213561",
+  "artifact_digest": "sha256:e7a73d808322bd89c3330c49eb7a88319e45175f19804a6889a7ffe3d191f104",
+  "tested_head_sha": "656d6f06b86d8b5f1fb23285cb57c665646cc090",
+  "tested_merge_sha": "4a7856dfaf814f1fbd34796774e4006d098ad005",
+  "executor": {
+    "runner": "clay",
+    "hostname": "digital-retina",
+    "platform": "Linux-6.8.0-117-generic-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "sqlite": "3.45.1"
+  },
+  "results": {
+    "wal_fail_closed": {
+      "status": "PASS_SQLITE_WAL_FAIL_CLOSED_STORAGE_GATE",
+      "expected_mode": "delete",
+      "migration_modes": {"unified": "delete", "graph": "delete"},
+      "open_modes": {"unified": "delete", "graph": "delete"},
+      "synchronous_full": true,
+      "forced_wal_on_affected_build_rejected": true,
+      "elapsed_seconds": 0.10,
+      "max_rss_kib": 22300
+    },
+    "schema_fingerprint": {
+      "status": "PASS_UNIFIEDDB_PAIR_SCHEMA_FINGERPRINT_GATE",
+      "unified_fingerprint": "94690dd18e9f7718cd154d31eab5c66ea2052d3f15019a94dd4693af1c68f86c",
+      "graph_fingerprint": "ac6db72653ec37d2c5c4962cdb7c852019fc9b70b65dd8e262734ca1b49a99a4",
+      "partial_unified_migration_fails_closed": true,
+      "missing_graph_marker_fails_closed": true,
+      "explicit_migration_repairs_pair": true,
+      "elapsed_seconds": 0.14,
+      "max_rss_kib": 23164
+    }
+  },
+  "adjudication": {
+    "wal_fail_closed_mechanism": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "schema_materialization_fingerprint": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "canonical_production_database_migrated": false,
+    "F_V01_04": "IN_PROGRESS_NOT_PASS",
+    "whole_frank_v0_1": "NOT_CLAIMED"
+  },
+  "next_falsifiers": [
+    "measure DELETE+FULL against a verified-fixed SQLite WAL build on the accepted VPS",
+    "run V17.2/V17.2.1 causal evidence, crash/restart and completion gates",
+    "run current WP04 type/effect diagnostics against reentry-gated frank.effects",
+    "complete a real provider timeout-after-acceptance reconciliation path before effect DONE promotion"
+  ]
+}

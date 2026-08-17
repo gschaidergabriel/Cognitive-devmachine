@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "architecture_id":"EPOCHSEAL_HYBRID_V1",
+  "status":"REVERSIBLE_CANDIDATE",
+  "phases":[
+    {"phase":0,"name":"runtime_gate","actions":["record exact target Python/sqlite3/SQLite versions and compile options","if WAL-reset fix absent, force rollback journal + synchronous=FULL","capture baseline latency/recovery before data migration"],"rollback":"no schema/data change"},
+    {"phase":1,"name":"shadow_canonical","actions":["create strict canonical transaction/epoch/record/query/effect/reentry tables","dual-observe current Frank state into shadow DB without changing read authority","hash and compare exact state after each admitted transaction"],"rollback":"drop shadow file; current source unchanged"},
+    {"phase":2,"name":"derived_epoch_binding","actions":["add derived_from_epoch/generation/status to ClayGraph/FTS/vector projections","treat stale projections as candidate-only","rebuild and compare retrieval equivalence"],"rollback":"disable epoch-aware planner; retain old projections"},
+    {"phase":3,"name":"read_cutover","actions":["route exact state/identity/effect queries to canonical store","route associative queries through epoch-gated derived plane","emit query receipts for every cognition-critical assembly"],"rollback":"feature-gate exact reads back to current path"},
+    {"phase":4,"name":"write_cutover","actions":["BEGIN IMMEDIATE base_epoch/idempotency gate","seal epoch/root inside same transaction","verify crash/restart/replay and stale-writer rejection"],"rollback":"stop writer, restore last-known-good checkpoint, switch gate back"},
+    {"phase":5,"name":"effect_reentry_cutover","actions":["bind verified provider outcome to effect_outcome receipt","admit provenance-bound reentry only after verification","test timeout-after-acceptance reconciliation"],"rollback":"degrade unresolved effects to proposal/UNKNOWN; never fabricate DONE"},
+    {"phase":6,"name":"physical_consolidation_optional","actions":["benchmark physical consolidation and Postgres+pgvector comparator on target","promote only if correctness/recovery/resource vector dominates hybrid"],"rollback":"KEEP_ISOLATED/return to hybrid sidecars"}
+  ],
+  "hard_stop_conditions":["integrity_check failure","epoch-chain mismatch","mixed-current epoch on exact read","unverified external outcome admitted","stale writer commits","derived rank promoted to truth","target latency/resource regression beyond accepted bound","rollback failure"],
+  "data_loss_policy":"fail closed for consequential effects; never infer missing state",
+  "main_branch_merge":"NOT_AUTHORIZED_BY_THIS_RUN"
+}

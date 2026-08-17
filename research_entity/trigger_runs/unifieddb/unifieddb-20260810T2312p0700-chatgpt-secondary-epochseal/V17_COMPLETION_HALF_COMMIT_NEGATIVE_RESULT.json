@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "N-UNIFIEDDB-V17-PREMATURE-DONE-HALF-COMMIT",
+  "status": "STRUCTURAL_COUNTEREXAMPLE_FROM_CURRENT_SCHEMA; TARGET_GATE_PENDING",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "adjacent_component": "F-V01-09-EFFECT-AUTHORITY",
+  "source": "gschaidergabriel/Dr.-Unterweger runtime/state/UNIFIEDDB_V17_PROVENANCE_BOUND_EFFECT_COMPLETION.sql",
+  "counterexample": "V17 v_effect_completion_state returns effective_state=DONE whenever a DONE terminal receipt exists, even if effect_reservations.state has not yet reached REENTERED. V17.1 permits the terminal receipt while the current execution lease is valid. If that receipt commits and the lease then moves, the subsequent REENTERED transition correctly rejects the stale executor, but the old V17 view can already expose DONE.",
+  "impact": "A durable partial completion transaction can mint model-visible completion before authoritative provenance-bound re-entry is committed.",
+  "strongest_counterhypothesis": "Production code may always insert terminal receipt and REENTERED transition in one transaction, making the state unreachable operationally; current database constraints/view do not establish that invariant, so the query surface must fail closed independently.",
+  "repair_candidate": "target PR #206 runtime/state/UNIFIEDDB_V17_2_1_COMPLETION_VISIBILITY_CANDIDATE.sql",
+  "repair_rule": "effective DONE requires terminal DONE AND authoritative effect state REENTERED AND exact reentry/binding/execution/attempt/outcome identity closure; staged/orphan terminal receipts remain auditable but non-authoritative.",
+  "discriminator": "target PR #206 tests/effect_reentry_v17_2_1_completion_visibility_gate.py",
+  "promotion": "NEGATIVE_RESULT_ACTIVE_UNTIL_TARGET_GATE; V17_COMPLETION_VIEW_NOT_PROMOTABLE_AS_IS"
+}

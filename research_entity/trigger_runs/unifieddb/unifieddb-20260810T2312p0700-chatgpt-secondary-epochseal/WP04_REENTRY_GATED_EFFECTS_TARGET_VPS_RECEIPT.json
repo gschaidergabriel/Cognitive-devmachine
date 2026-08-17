@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "run_id": "unifieddb-20260810T2312p0700-chatgpt-secondary-epochseal",
+  "receipt_class": "TARGET_VPS_COMPONENT_EVIDENCE",
+  "components": ["F-V01-02-CLAYCODE-COMPILER-RUNTIME", "F-V01-04-UNIFIEDDB-STATE-CONTINUITY", "F-V01-09-EFFECT-AUTHORITY"],
+  "target_repository": "gschaidergabriel/Dr.-Unterweger",
+  "target_pr": 206,
+  "target_receipt": "runtime/vps_unifieddb/unifieddb_v17_2_wp04_v1/LATEST.json",
+  "github_run_id": "31415503781",
+  "job_id": "93543441062",
+  "artifact_id": "9073279281",
+  "artifact_digest": "sha256:4d92e22c714f02fbc8ae8f12337b1adf9688de6d1ecc53b0bbd0d1ed71fdb9c5",
+  "tested_head_sha": "c102b703f92844bc4aef27cf1f52eaa723cfc014",
+  "source": {
+    "path": "claycode/frank_effects.clay",
+    "sha256": "1a8d7da5ff1efaca2e0b5e55842d5323f6f916df3645b69bd9cd1d35cf2495f3",
+    "module": "frank.effects",
+    "trust_class": "EFFECT_RUNTIME_CORE"
+  },
+  "result": {
+    "status": "PASS_EFFECT_BOUNDARY_DIAGNOSTIC",
+    "module_trust_bound": true,
+    "wrapper_tag_consistent": true,
+    "wrapper_source_type_matches_artifact": true,
+    "wrapper_constructors_match_artifact": true,
+    "wrapper_inference_linked": true,
+    "effect_boundary_detected": true,
+    "untrusted_authority_escalation_rejected": true,
+    "trace_probe": "PASS_WP04_REENTRANT_TRACE_SEGMENT"
+  },
+  "adjudication": {
+    "reentry_gated_frank_effects_current_wp04": "SUPPORTED_TARGET_VPS_COMPONENT",
+    "V17_2_runtime_causal_closure": "SEPARATE_GATE_REQUIRED",
+    "whole_frank_v0_1": "NOT_CLAIMED"
+  }
+}

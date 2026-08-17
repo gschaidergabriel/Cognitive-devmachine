@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "negative_result_id": "N-UNIFIEDDB-PAIR-SCHEMA-DIVERGENCE-OPEN",
+  "status": "STRUCTURAL_COUNTEREXAMPLE; TARGET_GATE_PENDING",
+  "component": "F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+  "source": "gschaidergabriel/Dr.-Unterweger runtime/state/apply_current_schema.py",
+  "finding": "ClayGraph and UnifiedDB migrate in separate physical transactions. The pre-repair normal open path checked file existence and storage safety but not the exact expected schema chain of either materialization. Therefore an interruption after derived ClayGraph migration but before authoritative UnifiedDB migration could leave a mixed pair that normal cognition might reopen.",
+  "counterhypothesis": "An external deployment/materialization truth gate may always reject such pairs before runtime open; no current executable evidence was found that makes open_pair itself enforce that invariant.",
+  "repair_candidate": "target PR #222",
+  "repair": "Each physical migration transaction atomically stamps a SHA-256 fingerprint of its exact ordered executable schema chain. Normal open_unified/open_pair recompute the current code-side fingerprint and fail closed on missing/stale markers. Explicit migration can repair the pair; normal cognition cannot.",
+  "discriminator": "tests/unifieddb_pair_schema_fingerprint_gate.py",
+  "promotion": "ACTIVE_NEGATIVE_RESULT_UNTIL_TARGET_VPS_GATE"
+}

@@ -295,7 +295,7 @@ class MicroClayRetrieval:
             if item.baseline_score <= 0.0:
                 continue
             item_chars = len(item.value)
-            if selected and chars + item_chars > budget_chars:
+            if chars + item_chars > budget_chars:
                 continue
             selected.append(item)
             chars += item_chars

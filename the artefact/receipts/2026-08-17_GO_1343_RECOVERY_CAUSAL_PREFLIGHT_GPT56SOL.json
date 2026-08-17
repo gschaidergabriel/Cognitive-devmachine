@@ -27,32 +27,43 @@
       "bind active causal lookup to exact active causal_id instead of latest-by-time"
     ]
   },
-  "mechanism_evidence": {
-    "executed_prior_candidate_blob": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+  "fused_blob_isolated_execution": {
     "surface": "OpenAI isolated non-production container",
-    "result": "PASS_FOR_BOUNDED_SOURCE_MECHANISM",
+    "scope": "exact fused recovery.py source-mechanism regression with dependency stubs; not full checkout, not OCI, not live service restart",
+    "reconstructed_git_blob_sha1": "0fb81a6b036d48b4effd565ea5b5e027349981cc",
+    "github_candidate_blob_sha1": "0fb81a6b036d48b4effd565ea5b5e027349981cc",
+    "git_blob_match": true,
+    "bytes": 11625,
+    "python_compile": "PASS",
+    "result": "EXACT_SOURCE_MECHANISM_PASS",
     "observations": [
-      "foreign causal identity was detected before recover_pending",
-      "pending effect and foreign causal evidence remained unmodified"
-    ],
-    "binding_warning": "this executable result is bound to the prior recovery blob and is mechanism support only; it is not executable evidence for fused blob 0fb81a6b036d48b4effd565ea5b5e027349981cc"
+      "foreign causal identity raised RecoveryIntegrityError before recover_pending",
+      "EffectJournal.recover_pending call count was zero",
+      "observed mutation count before failure was zero"
+    ]
+  },
+  "prior_mechanism_evidence": {
+    "executed_prior_candidate_blob": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "result": "PASS_FOR_BOUNDED_SOURCE_MECHANISM",
+    "note": "retained only as independent prior mechanism evidence; fused execution above supersedes the previous blob-binding gap"
   },
   "parallel_adjudication": {
     "general_restart_test_alignment": "already landed on main and not duplicated",
     "credit_semantics_overlap": "detected on current main and explicitly preserved in fused recovery blob",
     "parallel_multi_effect_guard": "REJECTED_NO_CHANGE",
-    "reason": "prior exact-source EffectJournal transaction check showed consumed causal identity causes rollback; current main later changed credit/capability semantics, so that prior exact execution remains blob-scoped and is not promoted to current runtime evidence"
+    "reason": "prior exact-source EffectJournal transaction check showed consumed causal identity causes rollback; no second recovery authority or duplicate guard retained"
   },
   "go_experiment_accounting": {
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "distinct_unusual_experiments_executed_by_this_organ": 0
+    "distinct_unusual_experiments_executed_by_this_organ": 0,
+    "note": "the exact source regression is ordinary deterministic validation, not a distinct unusual experiment"
   },
   "execution_admission": {
     "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
     "vercel_sandbox_execution_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_VERCEL_OIDC",
     "current_fresh_preview_admission": "BLOCKED_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT_BEFORE_SANDBOX_START",
     "additional_preview_attempts": "NOT_SPENT_PER_CURRENT_COORDINATION_DIRECTIVE",
-    "github_actions_fused_head": "UNEXECUTED_AT_RECEIPT_WRITE",
+    "github_actions_fused_head": "NO_WORKFLOW_RUN_OBSERVED_BEFORE_RECEIPT_UPDATE",
     "full_checkout_regression": "NOT_EXECUTED",
     "exact_oci_build_runtime": "NOT_EXECUTED",
     "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED",
@@ -62,11 +73,12 @@
     "defect_mechanism_reproduced": true,
     "current_main_credit_semantics_preserved_in_source_fusion": true,
     "focused_regression_added": true,
-    "fused_blob_exact_isolated_execution_verified": false,
+    "fused_blob_exact_isolated_source_mechanism_verified": true,
     "full_repository_exact_head_suite_verified": false,
+    "vercel_sandbox_exact_head_verified": false,
     "exact_oci_build_verified": false,
     "whole_clayverse_product_pass": false
   },
   "acceptance": "IN_PROGRESS",
-  "next_exact_gate": "When Vercel preview admission reopens, run the exact PR #444 fused head inside the confirmed Sandbox bridge: focused causal-preflight plus adjacent effect/restart/global-generation/credit regressions; only after green exact execution may this source fusion be considered for main."
+  "next_exact_gate": "When Vercel preview admission reopens, run the exact PR #444 fused checkout inside the confirmed Sandbox bridge: focused causal-preflight plus adjacent effect/restart/global-generation/credit regressions; only after green exact execution may this source fusion be considered for main."
 }

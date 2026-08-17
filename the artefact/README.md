@@ -88,7 +88,9 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope with its admitted network boundary enforced.
+The current default-deny source contract has now also been independently reconstructed from the exact three Git blobs and exercised in an isolated non-production container: blob identities matched GitHub exactly, `tests/test_microvm_deployment_contract.py` passed **5/5**, and a YAML semantic probe confirmed exactly one `NetworkPolicy` named `clayverse-default-deny` with both policy types and empty ingress/egress rule sets. This is bounded exact-file mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
+
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox.
 
 ### Final exact acceptance sequence
 
@@ -96,14 +98,16 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Latest cycle delta
 
-**2026-08-17 22:50 +07:00 — MicroVM network boundary hardened fail-closed on canonical `main`.**
+**2026-08-17 22:54 +07:00 — fail-closed MicroVM network source contract independently bound and regressed.**
 
-- the Kata StatefulSet template now contains `clayverse-default-deny`, selecting `app=clayverse` with both `Ingress` and `Egress` policy types and empty rule sets;
-- `MICROVM_DEPLOYMENT_CONTRACT.md` now states explicitly that `hostNetwork: false` is insufficient and requires a separate deployment-specific reviewed allow policy whose exact identity is acceptance evidence;
-- `tests/test_microvm_deployment_contract.py` now fences the deny-all policy and rejects broad `0.0.0.0/0` / `::/0` source-template escapes;
-- this closes the source-level gap previously identified on the retained #623 lane without creating a second network authority or a duplicate product path;
-- this is **source/contract hardening only**: no exact Kubernetes/Kata/CNI runtime enforcement test has executed for the final image, so runtime credit remains zero for this boundary;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because this user trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; ordinary source review/regression work remains allowed.
+- canonical source already closed the #623-discovered gap with `clayverse-default-deny`, selecting `app=clayverse` with `Ingress` + `Egress` and empty rules;
+- exact Git blobs were independently reconstructed and matched before execution: deployment template `788492ef...`, MicroVM contract `1e41ce84...`, focused test `cc7e3cb7...`;
+- focused deterministic regression: **5/5 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
+- YAML semantic probe: `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy has exact empty ingress/egress rule sets;
+- durable receipt: `receipts/2026-08-17_GO_2254_MICROVM_NETWORK_DEFAULT_DENY_EXACT_BLOBS_GPT56SOL.json`;
+- runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
+- strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required for exact private Research/EntityOS staging before the retained OCI batch can execute;
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes only minute-precision immutable message time and no shared immutable request/turn id.
 
 ## Verification
 

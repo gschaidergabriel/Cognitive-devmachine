@@ -37,27 +37,32 @@ Observed pre-receipt research `main`: `427dd9623b11e79e8038e6fb4ac7bf508ec162ac`
 
 No whole-product executable PASS is claimed in this receipt.
 
-- The connected Vercel tool surface in this session exposes deployments/logs/docs but no Vercel Sandbox create/run/stop action, so an isolated Sandbox could not actually be started here.
-- Current GitHub-hosted artifact workflow runs continue to terminate before any job step; no pytest/build/runtime command from those runs was observed executing.
+- Correction to an earlier statement: the Vercel Sandbox execution path does exist and is configured through the `dr-unterweger` Vercel project / build-internal Sandbox machinery. The generic ChatGPT Vercel connector does not itself expose a direct `Sandbox.create/run/stop` action, but that is not the same as the infrastructure being unavailable.
+- Vercel deployment `dpl_9Q28fMrNLwGkSwWJZx342duTyuwT` on branch `clay/go-clayverse-container-sandbox-20260817`, commit `efde98e8406f920aa9626da00a72afe77e509ed8`, executed `scripts/run-clayverse-container-sandbox.mjs` and bound research source `edaee6307c56669819164cd95b0f2dbca0985e1e` with artefact tree `35ca41cf1ac44a61eab2222c60ff65519156172a`.
+- That run reported `ClayVerseSourceClosure/v1` with `file_count=30`, `git_blob_verification=PASS`, then started the Vercel build-internal Sandbox, materialized the exact source TAR successfully, and verified source TAR SHA-256 `11ec60a63c2c75faca558e324948b12a6397d6e725880e5bbbbec47a278dd1d6`.
+- The exact run then failed at `provision_podman`: Amazon Linux 2023 returned `No match for argument: podman`. The Sandbox was stopped successfully. Therefore the present observed ClayVerse container gate blocker is OCI toolchain availability inside the Sandbox, not absence of a Sandbox executor.
+- A separate Vercel OCI-surface run at commit `021c863d32ec55577e39486cd5f679ccb2bd9c5d` also observed `podman` and `buildah` unavailable from the Sandbox package repositories under the tested provisioning path. It ended `BLOCKED_OCI_TOOLCHAIN_PROVISION` with the Sandbox stopped.
+- A subsequent Vercel build-host capability preflight at commit `cfbe0e6be19d8912b14709141f821fdea13b88c3` observed `/usr/bin/buildah` on the Vercel build host while the attempted `vercel` CLI/VCR invocation was unavailable in that script environment. This is infrastructure-discovery evidence only; build-host availability does not substitute for isolated Sandbox runtime acceptance.
+- Current GitHub-hosted artifact workflow failures are not substituted for Vercel Sandbox evidence.
 - No VPS, self-hosted runner, production host, or deployment READY state was substituted for Sandbox evidence.
 - No secrets were copied into source, logs, or this receipt.
 - A focused isolated non-Vercel source-bound discriminator was run for the changed `effects.py` mechanism. The executed bytes reproduced Git blob `cd5d2a367f9338971ccd33f34373cd5d6574f6ee` exactly. With the current SQLite lease acquisition semantics reproduced in the harness, it observed: `effect:entityos.exec` present during execution; a unique per-attempt holder; same-session nested acquisition rejected; successful completion removed only its exact lease; a relabelled target remained blocked by an incumbent lease before bridge execution; and replacement ownership survived stale-result cleanup. This is bounded mechanism evidence only, not a full repository pytest run, Vercel Sandbox evidence, or OCI/runtime acceptance.
 - The first attempt at that focused discriminator failed in the scratch harness before the module could execute because the temporary module was not registered before Python dataclass processing. It receives zero PASS credit; the corrected rerun is the evidence summarized above.
 
-Status of exact-current-head full tests/build/runtime: `BLOCKED_UNEXECUTED`.
+Status of exact-current-head whole-container tests/build/runtime: `BLOCKED_OCI_TOOLCHAIN_IN_SANDBOX` for the observed exact ClayVerse candidate; later heads require their own exact-identity rerun.
 
 Post-fusion main observed after the effect work: `f0ba800618408936c41ddd1cc8ecc0ac85d9e5ba`; the hardened `effects.py` blob remained `cd5d2a367f9338971ccd33f34373cd5d6574f6ee` at that head.
 
 ## Next exact executable discriminator
 
-On the first available authorized Vercel Sandbox executor:
+Use the already configured Vercel build-internal Sandbox path, not a VPS test surface:
 
-1. stage the exact then-current private GitHub revision without exposing reusable credentials inside the VM;
-2. record and assert the exact source SHA;
-3. run the full `the artefact` pytest suite as one coordinated batch, including the single ABA unusual experiment and all PTY/effect-fence regressions;
-4. build/probe the exact ClayVerse OCI candidate only through an explicitly supported Sandbox toolchain and record inability as a blocker if that facility is unavailable;
-5. include live two-user contention over the canonical effect path and prove only one `entityos.exec` crosses the boundary at a time while stale/replacement outcomes remain non-verified;
-6. capture command identity, exit codes, logs, artifact/image digest where produced, runtime/state/restart observations, and Sandbox stop result;
+1. refresh the exact then-current ClayVerse research SHA and artifact tree;
+2. stage the exact private-source closure through the credential-safe SHA/blob-bound path already demonstrated by the `efde98e` Vercel run;
+3. resolve the OCI build/runtime mechanism without assuming `dnf install podman/buildah` works inside Amazon Linux 2023 Sandbox; prefer a supported Vercel-native or transferable rootless OCI path and fail closed if no admitted runtime exists;
+4. run the full `the artefact` pytest suite as one coordinated Sandbox batch, including the single ABA unusual experiment and all PTY/effect-fence regressions;
+5. build/probe the exact ClayVerse OCI candidate and include live two-user contention over the canonical effect path;
+6. capture exact SHA/tree, commands, exit codes, logs, image/artifact digest, runtime/state/restart observations and Sandbox stop result;
 7. persist observed Sandbox truth back to GitHub without generalizing it to a later head.
 
-Outcome: source/product convergence improved; the canonical EntityOS effect boundary now has a label-independent global serialization fence in source, while empirical whole-container acceptance remains blocked on an actual exact-identity isolated Sandbox run.
+Outcome: source/product convergence improved; Vercel Sandbox execution is confirmed available. The current empirical frontier is the OCI toolchain/runtime path inside the isolated Sandbox, not Vercel access itself.

@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "bounded_source_review_and_candidate_repair",
+  "timestamp_local": "2026-08-17T13:50:34+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_branch": "717d488a065c85ed62e6b24819d153b3d5e16f68",
+  "candidate_branch": "go/unifieddb-schema-future-fence-20260817-1342",
+  "candidate_code_head": "c8ced53b63f3bd153ee3ce0d6c2dd1258255595e",
+  "finding": {
+    "name": "UNIFIEDDB_UNKNOWN_FUTURE_SCHEMA_COULD_BE_SILENTLY_DOWNGRADED",
+    "mechanism": [
+      "UnifiedDB is the canonical durable state authority, so unknown persistent schema semantics must fail closed.",
+      "Current main executed CREATE TABLE IF NOT EXISTS and then unconditionally rewrote meta.schema_version to 6.",
+      "A database declaring a higher unknown schema version could therefore be relabeled as the local version without proving that its physical/logical schema was compatible.",
+      "The existing schema-2 migration regression was also stale: it still expected schema version 5 while current main writes 6."
+    ],
+    "source_review_status": "SUPPORTED"
+  },
+  "candidate_repair": {
+    "files": [
+      "the artefact/clayverse/store.py",
+      "the artefact/tests/test_state_authority.py"
+    ],
+    "store_blob_sha": "a02c85c9622f7a8b2f61fc1348d41eb8f672a4b3",
+    "store_file_sha256": "b2bf6e2ec8a3b4146618a4a73897fb0ec5d5e4deda8b7b1c5df18d485ee0b6f1",
+    "contract": [
+      "check existing schema metadata before executing the local SCHEMA bootstrap or rewriting schema_version",
+      "reject missing, invalid, non-positive, or newer-than-supported schema metadata when a meta table already exists",
+      "preserve admitted older-schema migration behavior",
+      "bind tests to CURRENT_SCHEMA_VERSION instead of a stale literal",
+      "prove that a rejected future schema remains labeled with its original future version and preserves a sentinel turn"
+    ]
+  },
+  "bounded_execution_evidence": {
+    "class": "ISOLATED_NON_PRODUCTION_SOURCE_MECHANISM_SLICE",
+    "exact_store_blob_identity_verified": true,
+    "checks": {
+      "future_schema_rejected": "PASS",
+      "future_version_preserved": "PASS",
+      "sentinel_preserved": "PASS",
+      "schema2_migration": "PASS",
+      "hidden_ledger_retired": "PASS",
+      "store_py_compile": "PASS"
+    },
+    "scope": "byte-identical store.py mechanism only; not full checkout, not full pytest suite, not OCI/runtime acceptance",
+    "whole_clayverse_container_pass": false
+  },
+  "execution_admission": {
+    "vercel_sandbox": "connected Vercel surface exposes documentation only and no Sandbox start/exec primitive",
+    "github_actions_probe": {
+      "source_head": "011860e2125a8e32a25f424767d81f036e117139",
+      "workflow_run": 32002761588,
+      "retry_job": 95306563842,
+      "result": "failure_before_visible_steps",
+      "steps": null,
+      "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAIL_NOT_PASS"
+    },
+    "vps_testing": "NOT_USED_FORBIDDEN"
+  },
+  "coordination": {
+    "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the shared user-message timestamp available to this organ is only minute-precision (2026-08-17 13:42 +07); current atomic lease protocol requires a reproducible immutable request id or at least whole-second immutable message timestamp",
+    "pr_418_fusion_note": "PR 418 advances the retrieval schema to 7 and has its own migration function; port this future-schema preflight fence ahead of that migration rather than creating a competing schema authority",
+    "duplicate_product_path_created": false
+  },
+  "next_exact_step": "Fuse the preflight future-schema fence into the then-current MicroClay/schema migration candidate, then run the focused state-authority + migration + retrieval/recovery regressions and exact OCI startup/readiness/restart batch in an actually-started authorized isolated Sandbox at exact source identity."
+}

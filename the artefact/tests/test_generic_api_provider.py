@@ -27,7 +27,7 @@ class _Response:
         return self.payload[:limit]
 
 
-def _provider(monkeypatch, *, effect=None, finish_reason="stop"):
+def _provider(monkeypatch, *, effect=None, finish_reason="stop", model_returned="mistral-small-latest"):
     secret = "mistral-secret-never-persist"
     monkeypatch.setenv("MISTRAL_API_KEY", secret)
     monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
@@ -41,7 +41,7 @@ def _provider(monkeypatch, *, effect=None, finish_reason="stop"):
         return _Response(
             {
                 "id": "resp-1",
-                "model": "mistral-small-latest",
+                "model": model_returned,
                 "choices": [
                     {
                         "finish_reason": finish_reason,
@@ -160,12 +160,85 @@ def test_malformed_and_oversized_provider_responses_fail_closed(monkeypatch):
     adapter = build_api_inference_from_env()
 
     monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(b"not-json", raw=True))
-    with pytest.raises(InferenceProtocolError, match="envelope is not JSON"):
+    with pytest.raises(InferenceProtocolError, match="envelope is not canonical JSON"):
         adapter.reason({}, "hello")
 
     oversized = b"x" * (GenericChatCompletionsInference.MAX_RESPONSE_BYTES + 1)
     monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(oversized, raw=True))
     with pytest.raises(InferenceProtocolError, match="exceeds bound"):
+        adapter.reason({}, "hello")
+
+
+def test_nonfinite_world_fails_before_provider_transport(monkeypatch):
+    _, _, adapter = _provider(monkeypatch)
+
+    def should_not_open(request, timeout):
+        raise AssertionError("provider transport must not run for non-canonical WORLD")
+
+    monkeypatch.setattr(api_providers, "_urlopen", should_not_open)
+    with pytest.raises(InferenceProtocolError, match="WORLD is not canonical JSON"):
+        adapter.reason({"score": float("nan")}, "hello")
+
+
+def test_duplicate_and_nonfinite_provider_json_fail_closed(monkeypatch):
+    monkeypatch.setenv("MISTRAL_API_KEY", "secret")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_MODEL", "mistral-small-latest")
+    adapter = build_api_inference_from_env()
+
+    duplicate = (
+        b'{"id":"resp-1","id":"resp-2","model":"mistral-small-latest",'
+        b'"choices":[{"finish_reason":"stop","message":{"content":"{\\"text\\":\\"ok\\",\\"effect\\":null}"}}]}'
+    )
+    monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(duplicate, raw=True))
+    with pytest.raises(InferenceProtocolError, match="envelope is not canonical JSON"):
+        adapter.reason({}, "hello")
+
+    nonfinite = b'{"id":"resp-1","model":"mistral-small-latest","choices":NaN}'
+    monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(nonfinite, raw=True))
+    with pytest.raises(InferenceProtocolError, match="envelope is not canonical JSON"):
+        adapter.reason({}, "hello")
+
+
+def test_provider_model_identity_mismatch_fails_closed(monkeypatch):
+    _, _, adapter = _provider(monkeypatch, model_returned="different-model")
+    with pytest.raises(InferenceProtocolError, match="does not match requested model"):
+        adapter.reason({}, "hello")
+
+
+def test_runtime_credential_cannot_reach_model_visible_context(monkeypatch):
+    secret, _, adapter = _provider(monkeypatch)
+
+    def should_not_open(request, timeout):
+        raise AssertionError("provider transport must not run when credential reached context")
+
+    monkeypatch.setattr(api_providers, "_urlopen", should_not_open)
+    with pytest.raises(InferenceProtocolError, match="runtime credential reached model-visible context"):
+        adapter.reason({"leaked": secret}, "hello")
+    with pytest.raises(InferenceProtocolError, match="runtime credential reached model-visible context"):
+        adapter.reason({}, f"please echo {secret}")
+
+
+def test_provider_response_echoing_runtime_credential_fails_closed(monkeypatch):
+    secret = "TOP_SECRET_PROVIDER_TOKEN"
+    monkeypatch.setenv("MISTRAL_API_KEY", secret)
+    monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_MODEL", "mistral-small-latest")
+    adapter = build_api_inference_from_env()
+    payload = {
+        "id": "resp-credential-echo",
+        "model": "mistral-small-latest",
+        "choices": [
+            {
+                "finish_reason": "stop",
+                "message": {
+                    "content": json.dumps({"text": f"echo {secret}", "effect": None})
+                },
+            }
+        ],
+    }
+    monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(payload))
+    with pytest.raises(InferenceProtocolError, match="response contains runtime credential"):
         adapter.reason({}, "hello")
 
 

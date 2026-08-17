@@ -28,6 +28,24 @@ def _hash(value: object) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
 
 
+def _assert_active_recovery_integrity(sql) -> None:
+    """Validate the active causal spine before recovery is allowed to mutate it."""
+    active_rows = sql.execute("SELECT * FROM active_turns ORDER BY started_at,session_id").fetchall()
+    for active in active_rows:
+        episode = sql.execute(
+            "SELECT episode_id FROM workspace_episodes WHERE episode_id=?", (active["episode_id"],)
+        ).fetchone()
+        if not episode:
+            raise RecoveryIntegrityError(f"active turn without workspace episode: {active['episode_id']}")
+
+        causal_rows = sql.execute(
+            "SELECT causal_id FROM causal_episodes WHERE episode_id=? ORDER BY ts,causal_id",
+            (active["episode_id"],),
+        ).fetchall()
+        if any(row["causal_id"] != active["causal_id"] for row in causal_rows):
+            raise RecoveryIntegrityError("active turn causal identity diverged before recovery")
+
+
 def _insert_unknown_reentry(tx, episode, reason: str, *, count: int | None = None) -> str:
     receipt = {"ok": False, "certainty": "unknown", "reason": reason}
     if count is not None:
@@ -58,6 +76,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     """Close interrupted work without replay, then advance the one entity generation."""
 
     # Explicit boot boundary: no concurrent request path performs this recovery.
+    # Validate first because recover_pending() is itself a durable mutation and can
+    # otherwise create the expected active causal id after a conflicting row,
+    # masking an already-split causal spine.
+    _assert_active_recovery_integrity(db.db)
     EffectJournal(db).recover_pending()
 
     counts = {
@@ -73,6 +95,8 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     }
 
     with db.tx() as tx:
+        # Re-check at the mutation boundary even though boot recovery is serialized.
+        _assert_active_recovery_integrity(tx)
         active_rows = tx.execute("SELECT * FROM active_turns ORDER BY started_at,session_id").fetchall()
         for active in active_rows:
             counts["scanned"] += 1
@@ -81,10 +105,9 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                 raise RecoveryIntegrityError(f"active turn without workspace episode: {active['episode_id']}")
 
             causal = tx.execute(
-                "SELECT * FROM causal_episodes WHERE episode_id=? ORDER BY ts DESC LIMIT 1", (active["episode_id"],)
+                "SELECT * FROM causal_episodes WHERE episode_id=? AND causal_id=?",
+                (active["episode_id"], active["causal_id"]),
             ).fetchone()
-            if causal and causal["causal_id"] != active["causal_id"]:
-                raise RecoveryIntegrityError("active turn causal identity diverged before recovery")
 
             effects = tx.execute(
                 "SELECT * FROM effects WHERE episode_id=? ORDER BY ts,effect_id", (active["episode_id"],)

@@ -13,10 +13,10 @@ import fcntl
 from dataclasses import dataclass
 from pathlib import Path
 
-CANONICAL_TERMINALS = {
-    "gabriel": "clayverse-gabriel",
-    "andreas": "clayverse-andreas",
-}
+from .identity import CANONICAL_TERMINAL_NAMES
+
+# Compatibility alias for tests/importers. IdentityRouter is the single naming source.
+CANONICAL_TERMINALS = CANONICAL_TERMINAL_NAMES
 
 
 class TerminalRuntimeError(RuntimeError):

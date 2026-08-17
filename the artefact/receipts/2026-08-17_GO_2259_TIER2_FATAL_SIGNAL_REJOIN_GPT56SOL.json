@@ -5,79 +5,59 @@
   "organ": "GPT-5.6 Sol",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "classification": "FUSION_DONOR_SUPERSEDED_BY_STRONGER_RETAINED_LANE",
   "acceptance": "IN_PROGRESS",
   "base": {
     "repository": "gschaidergabriel/clay-global-research-entity",
     "commit": "a725f78fabea3e9fbb1e905a48c8570f59c905b2",
-    "branch": "gpt56sol/go-tier2-fatal-signal-rejoin-20260817-2310"
+    "branch": "gpt56sol/go-tier2-fatal-signal-rejoin-20260817-2310",
+    "promotion": "DO_NOT_OPEN_PR"
   },
   "owner_reentry": {
     "github_token_forwarding_directive": "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md",
     "final_test_directive": "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
-    "correction": "The older rule forbidding GITHUB_READ_TOKEN inside the disposable Sandbox is superseded. A scoped read-only token may be securely forwarded for exact private-source acquisition. The Vercel Firecracker Sandbox itself may satisfy the independent guest-kernel envelope for the final acceptance run, with the exact ClayVerse OCI digest executed inside it."
+    "current_final_topology": "Vercel Firecracker Sandbox -> Docker/OCI -> exact accepted ClayVerse digest -> approved Vault secret boundary -> transient Mistral -> full causal/effect/recovery path -> full Sandbox recreation from same digest -> secret reacquisition -> repeated cognition"
   },
-  "coordination": {
-    "superseded_donor_pr": 630,
-    "donor_status": "CLOSED_SUPERSEDED_BY_STRONGER_CANONICAL_MAIN",
-    "action": "REJOINED_FROM_FRESH_MAIN_INSTEAD_OF_MERGING_STALE_DONOR_BRANCH",
-    "overlap_note": "Open startup-probe lane #647 also edits the Kata template and must be fused rather than overwritten before promotion."
-  },
-  "frontier": {
-    "observed": "Canonical recovery can raise RecoveryIntegrityError when the causal/state spine cannot be trusted, while the outer recovery contract requires replacement of the entire admitted appliance boundary for Tier-2. Before this delta the service exposed only a generic process failure and no typed machine-readable bridge from canonical integrity failure to an external full-appliance replacer.",
-    "hypothesis": "A reserved fail-closed exit code plus a bounded typed diagnostic gives deployment infrastructure an unambiguous Tier-2 trigger without creating a second state/recovery authority.",
-    "counterhypothesis": "A generic non-zero container exit is sufficient for Tier-2 orchestration.",
-    "counterhypothesis_status": "REJECTED_AT_SOURCE_CONTRACT_LEVEL_BECAUSE_GENERIC_FAILURE_CANNOT_DISTINGUISH_COMPONENT_RESTART_FROM_FULL_APPLIANCE_REPLACEMENT",
-    "cheapest_discriminator": "Execute the exact signal builder and exact service recovery-integrity path, then require the final Vercel Firecracker controller or a Kubernetes/Kata deployment controller to observe exit 86 and replace the complete admitted appliance boundary."
-  },
-  "delta": {
-    "tier2_signal_blob": "23563e0b523075f4af07bee108caf5aed959e643",
-    "tier2_signal_test_blob": "73b7b77fc01c0783fa7dba07a68279d1ec17ac30",
+  "frontier_observation": "A generic process failure did not make the canonical RecoveryIntegrityError -> external full-appliance Tier-2 request explicit. This branch prototyped reserved exit 86 plus a bounded typed diagnostic and exercised the narrow dispatch mechanism.",
+  "donor_delta": {
+    "tier2_signal_current_blob": "92100515b356bef5e6bf0f69faedb645a8131cbe",
     "service_blob": "28337cd6859e756ab85634c41eddf4e0285ac5dd",
     "service_integration_test_blob": "c11dcaf4d653ee6311fe3f47c79e4e7c47caea3d",
-    "deployment_signal_test_blob": "8be98c5d70a6b6263cdd3eaa26db4327f55f77fd",
     "kata_template_blob": "40f12f69a7ece2aed67c56b9255d4d7ecbfd1372",
-    "manifest_blob": "2b5ea8ab3651c46d271bc4485fcd71c321218731",
-    "signal": {
-      "schema": "clayverse.tier2-fatal/v1",
-      "exit_code": 86,
-      "action": "REPLACE_FULL_SANDBOX",
-      "reason_allowlist": ["RECOVERY_INTEGRITY_ERROR"],
-      "raw_detail_emitted": false,
-      "detail_binding": "SHA256_ONLY",
-      "replay_external_effects": false,
-      "diagnostic_path_for_kubernetes_profile": "/dev/termination-log",
-      "kubernetes_termination_message_policy": "File",
-      "diagnostic_write_failure": "EXIT_86_REMAINS_AUTHORITATIVE"
-    }
+    "signal_schema": "clayverse.tier2-fatal/v1",
+    "reserved_exit_code": 86,
+    "raw_recovery_error_emitted": false,
+    "replay_external_effects": false
   },
-  "primary_upstream_basis": "Kubernetes official documentation states that terminationMessagePath defaults to /dev/termination-log, File populates the terminated container status message from that file, and terminated container state exposes the exit code. The ClayVerse-specific meaning of exit 86 is repository policy, not a Kubernetes-reserved semantic. For the final Vercel Firecracker test-of-tests the external controller may rely on exit 86 even when Kubernetes termination-message semantics are absent.",
-  "execution": {
-    "environment": "authorized isolated OpenAI non-production container",
-    "python": "3.13.5",
-    "tier2_signal_exact_blob_hash_match": true,
-    "tier2_signal_tests": "4/4 PASS in 0.05s",
-    "tier2_signal_py_compile": "PASS",
-    "service_exact_blob_hash_match": true,
-    "service_integration_exact_test_blob_hash_match": true,
-    "service_integration_test": "1/1 PASS in 0.13s with non-exercised imports stubbed",
-    "service_py_compile": "PASS",
-    "deployment_cross_file_test": "SOURCE_PRESENT_UNEXECUTED_ON_FULL_REPO_SLICE",
-    "vercel_exit86_controller_observation": "UNOBSERVED",
-    "vercel_full_sandbox_recreation": "UNOBSERVED",
-    "kubernetes_termination_message_collection": "UNOBSERVED",
-    "kata_runtime": "UNOBSERVED",
+  "bounded_execution": {
+    "earlier_signal_blob": "23563e0b523075f4af07bee108caf5aed959e643",
+    "earlier_signal_tests": "4/4 PASS in isolated OpenAI non-production container",
+    "service_exact_blob": "28337cd6859e756ab85634c41eddf4e0285ac5dd",
+    "service_integration_test": "1/1 PASS in isolated OpenAI non-production container with non-exercised imports stubbed",
+    "current_signal_blob_after_doc_only_topology_generalization": "SOURCE_PRESENT_NOT_REEXECUTED",
+    "full_private_checkout": "UNOBSERVED",
     "exact_oci": "UNOBSERVED",
+    "vercel_exit86_controller": "UNOBSERVED",
     "final_mistral_test_of_tests": "UNOBSERVED",
     "whole_product_pass": false
   },
-  "evidence_boundary": "The exact-file executions support the Tier-2 signal construction and service dispatch mechanism only. They do not prove outer-controller observation of exit 86, full Vercel Sandbox or Pod/Kata sandbox destruction, same OCI digest recreation, persistent-state recovery, generation fencing, secret reacquisition, Mistral cognition or no-replay behavior on a real admitted target.",
-  "promotion_gate": "Fuse current compatible deployment lanes, then in the owner-mandated Vercel Firecracker test-of-tests force a real RecoveryIntegrityError in the exact ClayVerse OCI, observe container exit 86, prove the outer controller destroys/recreates the complete Sandbox/appliance rather than restarting the inner container, rerun the SAME accepted image digest, recover declared persistent state under a new global generation, reacquire the Mistral secret from the approved Vault boundary, reject stale results and prove ambiguous external effects are not replayed. For Kubernetes/Kata deployments additionally observe clayverse.tier2-fatal/v1 when available and prove new Pod UID plus new Kata sandbox/VM identity.",
-  "execution_frontier": "The old token-routing prohibition is no longer the blocker. The next retained Vercel run requires an actually available scoped read-only GITHUB_READ_TOKEN to be securely injected or otherwise used for exact private-source acquisition, followed by exact source identity verification and the owner-mandated Firecracker + Docker/OCI + Vault Mistral end-to-end sequence. Token availability/injection has not yet been observed in this go.",
+  "fusion_result": {
+    "retained_recovery_pr": 666,
+    "retained_recovery_head_observed": "d7e9b02aa322250c0e99de2cb8bef6ae898473d9",
+    "retained_recovery_reason": "#666 implements the same reserved exit 86 semantics plus a stronger durable Pod-UID/global-generation fence preventing same-Pod Kubernetes/Kata restart from masquerading as Tier-2.",
+    "unique_donor_note": "The cross-topology invariant is exit 86 -> replace the entire admitted outer appliance. Vercel Firecracker does not require Kubernetes Pod UID; Kubernetes/Kata additionally uses the durable Pod-UID fence. Optional termination-message diagnostics must never become the authority.",
+    "review_delivery_pr666": 4952607574,
+    "retained_controller_pr": 810,
+    "controller_review_delivery": 4952609384,
+    "controller_note": "The current #810 wrapper already contains owner-approved narrow GITHUB_READ_TOKEN forwarding for exact private-source fetch; the stale PR-body host-only statement is superseded. Exit 86 must drive full Firecracker Sandbox recreation in the final gate, never inner-container restart."
+  },
+  "manifest_handling": "A branch-local topology-specific manifest edit was deliberately reverted to canonical main bytes after the newer owner Firecracker/Mistral directive was discovered, avoiding stale Kubernetes/Kata semantics becoming top-level authority.",
+  "current_external_blocker": "Owner policy permits scoped GITHUB_READ_TOKEN forwarding, but the connected ChatGPT Vercel tool surface exposes no environment-secret mutation or secret retrieval action. This organ cannot provision the required GitHub/Vault credentials and therefore cannot execute the final private-source + exact OCI + Vault Mistral test-of-tests from this interface.",
+  "next_discriminator": "Through an approved credential-injection surface, securely supply scoped read-only GITHUB_READ_TOKEN and the approved Vault-backed Mistral secret to retained #810, refresh/rebind exact current Research source once, build/capture the exact OCI digest inside the Vercel Firecracker guest, run real Mistral cognition and causal re-entry, then force Tier-2 exit 86 and prove full Sandbox recreation from the same digest with secret reacquisition, new generation, stale-result rejection and no blind effect replay.",
   "unusual_experiment": {
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "count": 0,
-    "reason": "The exact user trigger exposes no shared immutable request/turn id and only minute-precision immutable message metadata, so the atomic unusual-experiment lease cannot be safely minted."
+    "reason": "No safely shared immutable request/turn id is exposed for the global GO experiment lease."
   },
   "safety": {
     "vps_used": false,

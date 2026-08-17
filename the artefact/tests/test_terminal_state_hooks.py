@@ -8,6 +8,7 @@ from clayverse.identity import IdentityRouter
 from clayverse.mcp_server import ClayVerseEffectBridge
 from clayverse.store import UnifiedDB
 from clayverse.terminal_hooks import TerminalHookError, stop, user_prompt
+from clayverse.turn_lifecycle import TurnLifecycle
 
 
 def configure(monkeypatch, root, user):
@@ -36,6 +37,7 @@ def test_hooks_make_prompt_and_final_response_canonical(tmp_path, monkeypatch):
         rows = db.recent_turns("session:gabriel", 20)
         assert rows[-1]["role"] == "user"
         assert rows[-1]["content"] == "FACT: preferred compiler is ClayCode"
+        assert json.loads(rows[-1]["provenance"])["claude_session_id"] == "claude-g-1"
         assert db.db.execute(
             "SELECT value FROM durable_memory WHERE kind='fact' AND user_id='gabriel'"
         ).fetchone()[0] == "preferred compiler is ClayCode"
@@ -62,6 +64,33 @@ def test_hooks_make_prompt_and_final_response_canonical(tmp_path, monkeypatch):
         ).fetchone()[0] >= 1
     finally:
         db.close()
+
+
+def test_turn_begin_atomically_binds_claude_session(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    IdentityRouter(db, {})
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
+    result = lifecycle.begin("atomic session binding", claude_session_id="claude-atomic-1")
+    active = lifecycle.active()
+    assert active is not None
+    assert active["turn_id"] == result["turn_id"]
+    provenance = json.loads(db.db.execute(
+        "SELECT provenance FROM turns WHERE turn_id=?", (active["turn_id"],)
+    ).fetchone()[0])
+    assert provenance["claude_session_id"] == "claude-atomic-1"
+    assert provenance["causal_id"] == active["causal_id"]
+    db.close()
+
+
+def test_invalid_claude_session_binding_mutates_nothing(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    IdentityRouter(db, {})
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
+    with pytest.raises(ValueError, match="invalid Claude session id"):
+        lifecycle.begin("must not persist", claude_session_id="bad\x00session")
+    assert db.db.execute("SELECT COUNT(*) FROM turns WHERE session_id='session:gabriel'").fetchone()[0] == 0
+    assert db.db.execute("SELECT COUNT(*) FROM active_turns WHERE session_id='session:gabriel'").fetchone()[0] == 0
+    db.close()
 
 
 def test_hook_world_does_not_cross_users_without_collision(tmp_path, monkeypatch):
@@ -96,7 +125,7 @@ def test_duplicate_active_prompt_fails_closed(tmp_path, monkeypatch):
     db.close()
     payload = {"hook_event_name": "UserPromptSubmit", "session_id": "same", "prompt": "first"}
     user_prompt(payload)
-    with pytest.raises(TerminalHookError, match="duplicate prompt"):
+    with pytest.raises(TerminalHookError, match="duplicate UserPromptSubmit"):
         user_prompt({**payload, "prompt": "second"})
 
 

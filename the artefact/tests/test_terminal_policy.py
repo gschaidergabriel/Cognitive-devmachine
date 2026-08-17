@@ -20,6 +20,11 @@ def test_default_terminal_is_interactive_and_tool_dark():
     assert supervisor.for_user("andreas").argv == argv
 
 
-def test_managed_mcp_baseline_is_empty_and_fail_closed():
+def test_managed_mcp_policy_exposes_only_clayverse_stdio_server():
     managed = Path(__file__).parents[1] / "policy" / "managed-mcp.json"
-    assert json.loads(managed.read_text()) == {"mcpServers": {}}
+    payload = json.loads(managed.read_text())
+    assert list(payload["mcpServers"]) == ["clayverse"]
+    server = payload["mcpServers"]["clayverse"]
+    assert server["type"] == "stdio"
+    assert server["command"] == "/usr/local/bin/python"
+    assert server["args"] == ["-m", "clayverse.mcp_server"]

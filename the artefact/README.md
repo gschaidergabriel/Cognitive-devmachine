@@ -14,28 +14,26 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Runtime readiness on current `main`: `/readyz` requires canonical state and both canonical tmux sessions to be live and pass the managed transport-policy-v3 attestation used by attach admission. This gate is read-only and does not create or repair sessions.
-- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
 - Effects: generic host `process.exec` is fail-closed; admitted effects must pass the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Real terminal evidence: Vercel Sandbox execution against predecessor terminal blob `185a748f80011b324b2c4786644ad42ff369203e` and managed-tmux blob `fd3a0a3b5f0b595c0e15d9f36991148eed67df7d` reached real tmux 3.6a. Pre-policy persistent-server upgrade succeeded; the new-session path then failed because the second managed `source-file` returned already-removed default-key-table diagnostics. This is an **exact component live-runtime FAIL for the predecessor reapply mechanism**, not whole-product failure.
-- Retained repair: draft PR #603 is still the single code/test repair lane at head `ef61bfb85ab59291c3b0b33d024aa098b1f29089`, with terminal blob `c185009f8af84e1288747d8352645777a36b2053`. It tolerates only the exact known tmux-3.6a already-removed-table diagnostics and retains independent full effective-state attestation. It is **not canonical and not runtime-verified**; PR #603 is currently non-mergeable/diverged and must rejoin then-current `main` only after the exact runtime discriminator passes.
-- Execution bridge: retained `gschaidergabriel/Dr.-Unterweger` PR #846 is currently at head `49204d3f20bbb86a153f83d29cda2ddadf062b4f`. The earlier deployment `dpl_5fhrwfPFEo4bM947eUR2Bnwe3fK5` failed in the build step on the temporary Node-24 bridge parser before `Sandbox.create`, so it provides zero ClayVerse repair credit. The current retained bridge head has Vercel combined status `failure` with the explicit `upgradeToPro=build-rate-limit` target; therefore the post-repair exact #603 rerun is still **ADMISSION_BLOCKED_BEFORE_SANDBOX_START**.
-- Daytona remains the owner-authorized fallback only when a FREE_ONLY executable surface is actually available. A fresh plugin search found no installable Daytona sandbox connector/plugin in this session, so no Daytona provider contact or runtime credit exists.
-- Remaining major acceptance gates include the real-tmux #603 discriminator, exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive native Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
+- Predecessor terminal mechanism: current `main` at rejoin still carried terminal blob `185a748f80011b324b2c4786644ad42ff369203e`; its second managed tmux `source-file` is an exact component live-runtime FAIL on real tmux 3.6a when default key tables are already absent.
+- Repair runtime evidence: terminal blob `c185009f8af84e1288747d8352645777a36b2053` is now **exact-component live-runtime VERIFIED** in Vercel Sandbox under tmux `3.6a-1.amzn2023.0.1`, Python `3.13.13-1.amzn2023.0.2`, SQLite `3.40.0`, with network set to `DENY_ALL` before the product test. Required markers passed for pre-policy upgrade, already-hardened reapply, new-server second source, direct multi-argv launch, and fail-closed unknown/mixed/empty diagnostics.
+- Rejoin status: the verified repair and focused test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc` are rejoined on fresh branch `go/tmux-reapply-liveverified-current-main-20260817-1717-sol` from canonical `main` `4d7fd30e8b226dea51c1e7ce3e34ca4a3359e505`. This avoids promoting the ancestry-diverged historical PR #603 branch blindly.
+- Scope limit: the live repair run used a fake Claude executable only to attest direct argv/environment transport. **Native Claude Code, the exact OCI image, Clerk/browser PTY, restart/recovery, and dual-session concurrency were not tested by this run.**
+- Remaining immediate promotion gate: focused + adjacent deterministic source regressions on the rejoined candidate. After that, the next high-value product gates are managed native-Claude process attestation and exact OCI build/runtime acceptance.
 
 ### Latest cycle delta
 
-**2026-08-17 17:14 +07:00 — `NO_CHANGE` product code; execution admission rechecked and living status refreshed**
+**2026-08-17 17:17 +07:00 — tmux 3.6a repair discriminator PASSED and live-verified candidate rejoined to current main**
 
-- Rejoined canonical research `main` at `37b36ba7af90b5337852a0c6daf21313b6a1d170` and rechecked active overlapping PRs before writing.
-- Reconfirmed PR #603 as the highest-information non-duplicate product discriminator: head `ef61bfb85ab59291c3b0b33d024aa098b1f29089`, candidate terminal blob `c185009f8af84e1288747d8352645777a36b2053`, runtime still unobserved.
-- Rechecked Vercel deployment history: `dpl_5fhrwfPFEo4bM947eUR2Bnwe3fK5` is a bridge-parser/build failure before Sandbox start, not a product test failure.
-- Rechecked the **current** retained bridge head `49204d3f20bbb86a153f83d29cda2ddadf062b4f`: Vercel still reports `failure` with `upgradeToPro=build-rate-limit`. A duplicate Preview was therefore not spent.
-- Searched for an executable Daytona sandbox plugin/connector; none is available in this ChatGPT surface. No provider contact and zero runtime credit.
-- `NO_CHANGE` to canonical ClayVerse product/runtime code and whole-product acceptance. PR #603 remains unpromoted because source coherence cannot substitute for the real-tmux rerun.
-- No unusual experiment was executed: this cycle is regression/admission re-entry only, and no unique shared atomic experiment lease key is exposed.
-- Durable bounded receipt: `receipts/2026-08-17_GO_1714_EXECUTION_ADMISSION_RECHECK_NO_CHANGE_GPT56SOL.json`.
-- Next gate: on the first admitted Vercel Sandbox, execute the unchanged PR #603 candidate under real tmux 3.6a and require all five markers: pre-policy upgrade PASS, already-hardened second reapply PASS, new-server second source PASS, direct multi-argv transport PASS, and mixed/unknown diagnostic fail-closed PASS. Only then rejoin then-current `main`, rerun focused + adjacent regressions, and consider promotion before OCI/native-Claude/readiness/restart/concurrency acceptance.
+- Refreshed overlapping work and rejoined after parallel `main` advanced to `4d7fd30e8b226dea51c1e7ce3e34ca4a3359e505`.
+- Found that the retained temporary Vercel bridge still had two provenance/orchestration faults: invalid Node-24 escaped backticks and a stale embedded candidate-head marker. Hardened the bridge fail-closed without changing ClayVerse candidate bytes; bridge commit `fff4b86192e15368b58584f1a026f3eb0d23aad6` binds the runtime to PR #603 head `ef61bfb85ab59291c3b0b33d024aa098b1f29089`.
+- Vercel deployment `dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T` actually started an isolated Sandbox and completed the exact real-tmux discriminator. Product-test network was `DENY_ALL`.
+- Observed PASS markers: `PREPOLICY_UPGRADE_REAPPLY`, `ALREADY_HARDENED_REAPPLY_IDEMPOTENT`, `NEW_SERVER_SECOND_SOURCE_IDEMPOTENT`, and `DIRECT_MULTI_ARGV_FAKE_CLAUDE_LAUNCH`; unknown/mixed and empty nonzero diagnostics remained fail-closed.
+- Rejoined exactly the verified terminal blob `c185009f8af84e1288747d8352645777a36b2053` plus focused test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc` onto a fresh current-main branch. No second semantic terminal path was created.
+- Durable receipt: `receipts/2026-08-17_GO_1717_TMUX36A_REPAIR_LIVE_VERIFIED_GPT56SOL.json`.
+- No unusual experiment was consumed; this was regression-only execution of the already-defined real-tmux falsifier.
+- Whole-product acceptance remains **IN_PROGRESS**. A component runtime PASS is not an OCI/native-Claude/Clerk/recovery/concurrency PASS.
+- Next gate: run focused + adjacent deterministic regressions on the rejoined branch. Promote only if they pass, then advance to managed native-Claude process identity and exact OCI/runtime acceptance.
 
 ### Cycle update rule
 
@@ -57,9 +55,9 @@ The previous custom chat API and headless `claude -p` path are retired as produc
 
 ## Verification
 
-Focused isolated tests have exercised bounded source mechanisms, and real Vercel Sandbox execution has falsified one exact tmux reapply behavior under tmux 3.6a, but **whole-product PASS is not claimed**. The exact current product still requires authorized isolated full-path evidence: exact OCI build/image identity, startup/readiness, real Clerk JWT plus browser WebSocket PTY, authenticated native Claude Code for both user homes, managed hook lifecycle, UnifiedDB persistence/recovery, accepted effect/EntityOS behavior where admitted, and live dual-session concurrency/generation fencing.
+The tmux 3.6a reapply repair now has exact bounded live-component evidence, but **whole-product PASS is not claimed**. The exact product still requires authorized isolated full-path evidence: exact OCI build/image identity, startup/readiness, real Clerk JWT plus browser WebSocket PTY, authenticated native Claude Code for both user homes, managed hook lifecycle, UnifiedDB persistence/recovery, accepted effect/EntityOS behavior where admitted, and live dual-session concurrency/generation fencing.
 
-GitHub-hosted Actions are not runtime evidence when jobs fail before visible execution. Vercel deployment state alone is likewise not runtime PASS; only an actually started Sandbox command/assertion path is executable evidence at its exact source/environment scope.
+GitHub-hosted Actions are not runtime evidence when jobs fail before visible execution. Vercel deployment state alone is likewise not runtime PASS; the evidence above comes from the actually started Sandbox command/assertion path.
 
 ## Local isolated source checks
 

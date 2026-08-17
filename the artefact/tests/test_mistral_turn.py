@@ -2,6 +2,7 @@ import pytest
 
 from clayverse.mistral_turn import MistralTurnError, MistralTurnRunner
 from clayverse.store import StaleGeneration
+from clayverse.turn_lifecycle import TurnLifecycleError
 
 
 class FakeInference:
@@ -22,6 +23,16 @@ class FakeInference:
         }
 
     def reason(self, world, observation):
+        return self.decision
+
+
+class InterleavingInference(FakeInference):
+    def __init__(self, lifecycle):
+        super().__init__()
+        self.lifecycle = lifecycle
+
+    def reason(self, world, observation):
+        self.lifecycle._active = {"causal_id": "causal-new", "generation": 7}
         return self.decision
 
 
@@ -46,11 +57,12 @@ class FakeLifecycle:
         self.begin_call = None
         self.complete_call = None
         self.abort_reason = None
+        self.abort_expected_causal_id = None
         self._active = None
 
     def begin(self, prompt, resources=None, *, source):
         self.begin_call = (prompt, resources, source)
-        self._active = {"causal_id": "causal-1"}
+        self._active = {"causal_id": "causal-1", "generation": 7}
         return {
             "user_id": "gabriel",
             "session_id": self.session_id,
@@ -60,8 +72,20 @@ class FakeLifecycle:
             "context": {"own_recent": [], "durable_memory": []},
         }
 
-    def complete(self, text, *, source, provider_receipt):
-        self.complete_call = (text, source, provider_receipt)
+    def complete(self, text, *, source, provider_receipt, expected_causal_id=None, expected_generation=None):
+        if self._active is None:
+            return {"completed": False, "reason": "no_active_turn"}
+        if self._active["causal_id"] != expected_causal_id:
+            raise TurnLifecycleError("active turn causal identity changed")
+        if int(self._active["generation"]) != int(expected_generation):
+            raise StaleGeneration("expected_turn_generation")
+        self.complete_call = (
+            text,
+            source,
+            provider_receipt,
+            expected_causal_id,
+            expected_generation,
+        )
         self._active = None
         return {
             "completed": True,
@@ -73,8 +97,11 @@ class FakeLifecycle:
     def active(self):
         return self._active
 
-    def abort(self, reason):
+    def abort(self, reason, *, expected_causal_id=None):
         self.abort_reason = reason
+        self.abort_expected_causal_id = expected_causal_id
+        if self._active is not None and self._active["causal_id"] != expected_causal_id:
+            raise TurnLifecycleError("active turn causal identity changed")
         self._active = None
         return {"aborted": True}
 
@@ -88,6 +115,8 @@ def test_mistral_turn_uses_existing_lifecycle_and_persists_provider_receipt():
     assert lifecycle.complete_call[0] == "mistral says hello"
     assert lifecycle.complete_call[1] == "mistral-api:response"
     assert lifecycle.complete_call[2]["provider"] == "mistral"
+    assert lifecycle.complete_call[3] == "causal-1"
+    assert lifecycle.complete_call[4] == 7
     assert result["causal_id"] == "causal-1"
     assert result["generation"] == 7
     assert lifecycle.abort_reason is None
@@ -105,6 +134,7 @@ def test_mistral_effect_intent_is_rejected_before_any_effect_path():
 
     assert lifecycle.complete_call is None
     assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
+    assert lifecycle.abort_expected_causal_id == "causal-1"
 
 
 def test_mistral_response_is_rejected_if_generation_changes_during_network_call():
@@ -115,6 +145,18 @@ def test_mistral_response_is_rejected_if_generation_changes_during_network_call(
 
     assert lifecycle.complete_call is None
     assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
+
+
+def test_interleaved_newer_turn_rejects_stale_response_without_aborting_newer_turn():
+    lifecycle = FakeLifecycle()
+
+    with pytest.raises(TurnLifecycleError, match="causal identity changed"):
+        MistralTurnRunner(InterleavingInference(lifecycle)).run(lifecycle, "old prompt")
+
+    assert lifecycle.complete_call is None
+    assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
+    assert lifecycle.abort_expected_causal_id == "causal-1"
+    assert lifecycle.active()["causal_id"] == "causal-new"
 
 
 def test_mistral_receipt_is_required_for_canonical_provider_provenance():

@@ -1,0 +1,84 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_date": "2026-08-18",
+  "scope": "FINAL_MISTRAL_CANONICAL_JSON_DUPLICATE_MEMBER_FENCE",
+  "canonical_main_at_join": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+  "retained_candidate_pr": 680,
+  "pre_receipt_candidate_head_observed": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+  "base_candidate_before_this_go": "37bfaac92158168fff16e20ed29a1fe208429720",
+  "finding": {
+    "classification": "FAIL_CLOSED_AMBIGUOUS_PROVIDER_JSON_GAP",
+    "counter_reality": "A provider response can encode the same security-relevant member name more than once. Python json.loads accepts duplicate object members and keeps the last value, so a textual decision containing effect:null followed by a second effect object is silently collapsed into an executable effect intent before the independent inference protocol sees it.",
+    "why_material": "The final Mistral acceptance path treats provider JSON as an untrusted cognition proposal that can request EffectGate admission. Ambiguous duplicate members must not be normalized by last-key-wins semantics.",
+    "falsifier_result": "RED_BEFORE_REPAIR_PYTHON_LAST_KEY_WINS_OBSERVED"
+  },
+  "repair": {
+    "path": "the artefact/clayverse/adapters.py",
+    "blob_sha": "7c873327026362238e9c0330139200500745a4ea",
+    "commit": "a4db988c17423ee98be2f12639a4264714782337",
+    "mechanism": "object_pairs_hook rejects every duplicate JSON object member in both the provider envelope and the nested decision JSON while retaining the existing non-finite constant rejection and inference protocol boundary",
+    "no_second_authority": true
+  },
+  "regression": {
+    "path": "the artefact/tests/test_mistral_canonical_json_boundary.py",
+    "blob_sha": "09e8a77a190c56a4db8ae523776c7c41d61439af",
+    "commit": "75016df6049a76a87c77fb9de11f3629df4b0a89",
+    "cases_added": [
+      "duplicate provider envelope member is rejected",
+      "decision text containing effect:null followed by a second state.noop effect member is rejected"
+    ]
+  },
+  "supporting_mechanism_execution": {
+    "surface": "isolated non-production execution container available to this organ",
+    "scope": "JSON duplicate-member discriminator only; not ClayVerse product runtime",
+    "observed": [
+      "baseline Python json.loads accepted duplicate effect members and returned the final state.noop effect",
+      "strict object_pairs_hook rejected a duplicate envelope member",
+      "strict object_pairs_hook rejected the duplicate decision effect member"
+    ],
+    "result": "MECHANISM_SUPPORTED",
+    "product_runtime_credit": 0
+  },
+  "parallel_fusion_observation": {
+    "retained": true,
+    "note": "The same PR advanced concurrently with orthogonal generation-fenced turn-derived memory and workspace/recovery terminal-state repairs. This receipt does not overwrite, revert, or independently reimplement those deltas."
+  },
+  "github_runner_observation": {
+    "head_checked": "b62252e3830717c71beaabc12be2632191b3d895",
+    "workflow_run": 32050054514,
+    "job": 95447014543,
+    "steps": [],
+    "runner_id": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEP_1_NOT_TEST_FAILURE",
+    "runtime_credit": 0
+  },
+  "vercel_execution_frontier": {
+    "controller_project": "dr-unterweger",
+    "controller_pr": 810,
+    "ready_deployment": "dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9",
+    "ready_commit": "ba52934acff8bd620e1d968dfa437bf96dbf1a54",
+    "runtime_token_ingress": "/api/go-cycle-v2",
+    "owner_rule": "scoped GitHub read token may be transiently forwarded into the sandbox for the explicit run and must not persist",
+    "real_runtime_token_observed_by_this_organ": false,
+    "private_source_runtime_credit": 0,
+    "exact_oci_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "rebind_required": "Controller must be rebound once to the exact final current PR680 Research head/tree immediately before the owner-held one-shot run because PR680 advanced after the prior frozen controller binding."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No immutable shared go-request identifier was available; deterministic adversarial duplicate-key regression is classified as an ordinary falsifier, not the one unusual experiment."
+  },
+  "non_claims": [
+    "No full private-checkout regression PASS is claimed.",
+    "No exact OCI build or image digest was executed by this organ.",
+    "No real Mistral/Vault secret or provider call was used by this organ.",
+    "No Tier-1/Tier-2 recovery or same-digest recreation PASS is claimed.",
+    "No whole ClayVerse product PASS is claimed."
+  ],
+  "next_discriminator": "Freeze the converged PR680 head after overlapping repairs settle; rebind the single retained PR810 controller once to that exact head/tree; submit the owner-held scoped read token through the READY runtime endpoint; execute private fetch -> exact regression -> exact OCI build/digest -> in-image Vault-backed Mistral canonical turn/effect -> Tier-1 recovery -> full Firecracker sandbox destruction/recreation with the same OCI digest.",
+  "acceptance": "IN_PROGRESS"
+}

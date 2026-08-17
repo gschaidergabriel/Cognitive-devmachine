@@ -128,6 +128,20 @@ A higher class is never inferred from a lower one.
 - durable receipt: `receipts/2026-08-18_0027_GENERIC_LLM_API_PROVIDER_MISTRAL_STAGE1_GPT56SOL.json`;
 - no whole-product PASS is claimed.
 
+## Latest cycle delta — 2026-08-18 00:27 +07:00
+
+- joined canonical `main` at `958e3c5fa2406b42d187727e2adb6099b6ed0aa2` and retained #680 as the single final-Mistral Engine spine rather than creating a competing runtime/state/effect path;
+- adversarially found that successful Engine turns retired `active_turns` while leaving the selected workspace non-terminal, allowing later Recovery to misclassify a clean completion as `RECOVERY_CLOSED_EXISTING_REENTRY`;
+- repaired both no-effect and effect-success paths so `workspace_episodes` transitions `SELECTED -> COMPLETED` atomically before active-turn deletion; provider/crash failures still leave active/open state for genuine Recovery;
+- added regressions asserting clean effect and no-effect turns remain `COMPLETED` across `recover_incomplete_episodes()` while provider failure remains recoverable;
+- exact product/test commits are `5a837aa09538b478176ef5264b5de043e4bf0c42` and `66b767d41217945f4ba293b5d0d65b5f0da1e748`; later #680 head material observed in this cycle added only bounded receipts around the same product/test bytes;
+- exact-head GitHub Actions again failed before any runner step, so this remains execution-admission failure and grants no focused/full-checkout/OCI runtime credit;
+- the retained #810 Vercel controller reached READY at `139eb6149af515061c23cc865d34a7cbc7f88963`, bound to Research `66b767d4...` / tree `5f30fc57...`; its `/api/go-cycle-v2` ingress was directly observed fail-closed on GET with `405 Method Not Allowed` and `Allow: POST`;
+- no credential-bearing POST was executed because no owner-held scoped read-only `GITHUB_READ_TOKEN` is exposed to this organ and the connected Vercel action set has no arbitrary credential-bearing POST operation; no secret was synthesized or moved into source/logs;
+- wrote `receipts/2026-08-18_GO_ENGINE_WORKSPACE_TERMINALITY_GPT56SOL.json` with the exact repair/evidence boundary;
+- no unusual experiment was executed because the atomic cross-worker experiment lease cannot bind a shared immutable trigger identity from this interface and therefore fails closed;
+- no whole-product PASS is claimed.
+
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. The provider architecture is now generic, the focused boundary is tested, and the missing live discriminator is a transient provider credential plus an executable repo-capable sandbox for the canonical direct probe. Source/component tests do not substitute for final exact-image/microVM/user-path acceptance.

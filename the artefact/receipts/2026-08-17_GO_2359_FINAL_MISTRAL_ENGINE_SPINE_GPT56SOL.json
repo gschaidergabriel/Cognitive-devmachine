@@ -1,0 +1,76 @@
+{
+  "schema":"ClayVerseGoReceipt/v1",
+  "trigger":"go",
+  "observed_at":"2026-08-17T23:59:00+07:00",
+  "organ":"GPT-5.6 Sol",
+  "program":"CLAYVERSE_SINGLE_CONTAINER",
+  "stage":"CLAYVERSE_ARTIFACT",
+  "classification":"FOCUSED_TEST_PASS_EXACT_FILE_SCOPE_MECHANISM_SUPPORTED",
+  "scope":"single_canonical_final_mistral_candidate",
+  "canonical_repository":"gschaidergabriel/clay-global-research-entity",
+  "base_main":"958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+  "branch":"gpt56sol/go-final-mistral-engine-spine-20260817-2355",
+  "pull_request":680,
+  "canonical_path":"adapters.MistralInference -> ClayVerseEngine -> UnifiedDB pre-effect re-ingest -> EffectGate",
+  "exact_git_blobs":{
+    "the artefact/.dockerignore":"43dc7944da399952afd291861267dc3fd6343328",
+    "the artefact/Dockerfile":"a3ab78ff59eb622b128976dd768eabb1da3ffbb5",
+    "the artefact/clayverse/adapters.py":"6b2e09f3525700ba110f455590db1e03e08edb0e",
+    "the artefact/clayverse/inference_protocol.py":"cd5856ac58f4e86c4c045fda8099b7783e6724cf",
+    "the artefact/clayverse/final_acceptance_mistral_config.py":"bdd12572bf16742e011523a1e1497070f44ba7bd",
+    "the artefact/clayverse/final_acceptance_probe.py":"24f55aed3588bca4f5329b5f68bb735de11d5aa2",
+    "the artefact/clayverse/store.py":"7e9fda12d4518c96041240705b343afe4ed0157c",
+    "the artefact/clayverse/workspace.py":"2f3142a4f7695fa58521b27321e9759d314dd736",
+    "the artefact/clayverse/engine.py":"bb2794a3b06e2105c17bad7ecd56d3976443a9d1",
+    "the artefact/clayverse/effects.py":"a9fbb88dbbae258680e6ed5e968bd502d5638d40",
+    "the artefact/clayverse/effect_journal.py":"cda63471f1467481f2ff79032d3931730a334a20",
+    "the artefact/tests/test_mistral_canonical_json_boundary.py":"2fb8f91bdba75d9c1d94004944f5b27600109e5e",
+    "the artefact/tests/test_mistral_model_identity_fence.py":"845d8d05c7671db7bf56854d252908fb164fcb90",
+    "the artefact/tests/test_mistral_final_runtime_config.py":"58394c29e03230c837011e7c1b925ed20c363446",
+    "the artefact/tests/test_mistral_final_probe_preflight_binding.py":"6757fce9ad0d6899071c288e54b2de54e4159475",
+    "the artefact/tests/test_engine_generation_atomic_reentry.py":"70a420a9732a683313d26b069bb8542f9ddcad0a",
+    "the artefact/tests/test_engine_effect_active_spine.py":"d46b35da0921bb0e80d8da250e36fa99e0245ecc",
+    "the artefact/tests/test_final_acceptance_oci_context.py":"05031a1c4298511a44683efd3d6f78c4896f1b7d"
+  },
+  "repairs":[
+    "package canonical final Mistral dependencies while retired alternate api.py and terminal.py remain excluded",
+    "strict canonical JSON and exact provider/requested model identity",
+    "fixed visible-ASCII final model preflight and transient runtime secret validation",
+    "atomic expected-generation provider-response re-entry",
+    "one predeclared active causal identity through EffectJournal and recovery"
+  ],
+  "execution":{
+    "adapter_exact":"19 passed in 0.12s; py_compile PASS",
+    "final_preflight_exact":"15 passed in 0.05s",
+    "atomic_generation_real_db_exact":"3 passed in 0.21s",
+    "oci_context_exact":"2 passed in 0.04s",
+    "effectjournal_active_spine_exact_modules":"PASS",
+    "engine_effect_spine_exact_core_with_noncausal_doubles":"2 passed in 0.16s"
+  },
+  "coordination":{
+    "pr_678":"closed; packaging donor fused",
+    "pr_679":"closed; strict JSON/model identity donor fused byte-identically",
+    "pr_677":"closed; fixed-model/final preflight donor fused byte-identically",
+    "duplicate_mistral_runtimes":"rejected by current-main adjudication"
+  },
+  "github_actions":{
+    "latest_observed_execution_class":"failure_before_steps",
+    "runner_id":0,
+    "steps":[],
+    "runtime_credit":0
+  },
+  "runtime_credit":{
+    "full_private_checkout":0,
+    "exact_oci_build_digest":0,
+    "in_image_final_probe":0,
+    "real_mistral":0,
+    "approved_vault_secret":0,
+    "vercel_firecracker_final_vector":0,
+    "tier1_recovery":0,
+    "tier2_recreation":0,
+    "whole_clayverse":0
+  },
+  "next_exact_gate":"freeze PR680 exact head/tree; rebind retained Vercel one-shot controller once to that exact Research identity/closure; owner-held one-shot executes exact private source -> OCI build/digest -> runtime Vault Mistral -> canonical Engine/effect/recovery/Tier-2 vector",
+  "unusual_experiment":{"status":"COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT","count_executed":0},
+  "non_claims":["no full repository regression PASS","no exact OCI runtime PASS","no real provider/Vault call","no recovery acceptance","no whole-product PASS"]
+}

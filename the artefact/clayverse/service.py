@@ -5,6 +5,7 @@ import binascii
 import json
 import os
 import sys
+from pathlib import Path
 from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
@@ -12,8 +13,10 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
+from .logical_snapshot import LogicalSnapshotManager
 from .readiness import claude_readiness
 from .recovery import recover_incomplete_episodes
+from .runtime_identity import collect_runtime_identity
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -134,6 +137,59 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
     return raw == "1"
 
 
+def _acceptance_required_effect_capability() -> str | None:
+    """Return the single final-test capability fence or fail closed.
+
+    The internal final Mistral probe may generically require an effect, but the
+    owner-mandated test-of-tests specifically needs an EntityOS round-trip. Keep
+    that stronger requirement explicit and narrow so ``state.noop`` can never earn
+    EntityOS acceptance credit merely because it is a successful effect.
+    """
+
+    raw = os.environ.get("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", "").strip()
+    if not raw:
+        return None
+    if raw != "entityos.exec":
+        raise RuntimeError(
+            "CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY may only be entityos.exec"
+        )
+    return raw
+
+
+def _snapshot_restore_before_db_open(state_root: str) -> dict[str, object] | None:
+    raw = os.environ.get("CLAYVERSE_RESTORE_SNAPSHOT_DIR", "").strip()
+    if not raw:
+        os.makedirs(state_root, exist_ok=True)
+        return None
+    if not os.path.isabs(raw) or any(char in raw for char in ("\x00", "\n", "\r")):
+        raise RuntimeError("CLAYVERSE_RESTORE_SNAPSHOT_DIR must be an absolute single-line path")
+    runtime_identity = collect_runtime_identity()
+    return LogicalSnapshotManager(state_root).restore_fresh(
+        Path(raw),
+        runtime_identity=runtime_identity,
+    )
+
+
+def _acceptance_snapshot(db: UnifiedDB) -> dict[str, object] | None:
+    if not _acceptance_bool("CLAYVERSE_ACCEPTANCE_CREATE_SNAPSHOT"):
+        return None
+    runtime_identity = collect_runtime_identity()
+    manifest = LogicalSnapshotManager(db.path.parent).create(
+        db,
+        runtime_identity=runtime_identity,
+        reason="mistral-final-sandbox-probe",
+    )
+    anchor = manifest["state"]["checkpoint_anchor"]
+    return {
+        "created": True,
+        "snapshot_id": manifest["snapshot_id"],
+        "database_sha256": manifest["database"]["sha256"],
+        "checkpoint_id": anchor["checkpoint_id"],
+        "state_hash": anchor["state_hash"],
+        "entity_generation": manifest["state"]["entity_generation"],
+    }
+
+
 def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     """Run the internal canonical Mistral turn used by the final sandbox controller.
 
@@ -148,6 +204,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
     prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
     require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    required_effect_capability = _acceptance_required_effect_capability()
     entityos_bridge, entityos_status = _entityos_config()
 
     payload = run_mistral_acceptance_probe(
@@ -157,13 +214,16 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
         prompt,
         entityos_bridge=entityos_bridge,
         require_effect=require_effect,
+        required_effect_capability=required_effect_capability,
     )
     checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
+    snapshot = _acceptance_snapshot(db)
     payload.update(
         {
             "checkpoint": checkpoint_id,
             "state_hash": state_hash,
             "recovery": recovery,
+            "acceptance_snapshot": snapshot,
             "entityos": {
                 "verified": bool(entityos_status.get("verified")),
                 "execution_enabled": bool(entityos_status.get("execution_enabled")),
@@ -178,20 +238,23 @@ def main():
     import uvicorn
 
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
-    os.makedirs(state_root, exist_ok=True)
+    restore_receipt = _snapshot_restore_before_db_open(state_root)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")
-        print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
+        payload = _state_probe_payload(cid, digest)
+        payload["snapshot_restore"] = restore_receipt
+        print(json.dumps(payload, sort_keys=True), flush=True)
         db.close()
         return 0
 
     if "--mistral-once" in sys.argv:
         try:
             payload = _run_mistral_once(db)
+            payload["snapshot_restore"] = restore_receipt
             print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
         finally:
             db.close()
@@ -247,6 +310,7 @@ def main():
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
+        "snapshot_restore": restore_receipt,
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

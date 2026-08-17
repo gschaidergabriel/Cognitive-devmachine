@@ -5,7 +5,7 @@ import os
 import sys
 from typing import Any
 
-from .agency import AgencyState
+from .agency import AgencyView
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -57,33 +57,22 @@ def _truncate(value: Any, limit: int) -> Any:
 
 def _compact_agency(agency: dict[str, Any]) -> dict[str, Any]:
     compact = dict(agency)
+    autonomy = dict(compact.get("autonomy", {}))
     goals = []
-    for raw_goal in list(compact.get("active_goals", []))[:4]:
-        if not isinstance(raw_goal, dict):
+    for raw in list(autonomy.get("goals", []))[:4]:
+        if not isinstance(raw, dict):
             continue
-        goal = dict(raw_goal)
-        for key in ("title", "objective", "success_criteria"):
-            goal[key] = _truncate(goal.get(key), 700)
-        milestones = []
-        for raw_milestone in list(goal.get("milestones", []))[:8]:
-            if not isinstance(raw_milestone, dict):
-                continue
-            milestone = dict(raw_milestone)
-            for key in ("title", "acceptance_criteria"):
-                milestone[key] = _truncate(milestone.get(key), 700)
-            attempts = []
-            for raw_attempt in list(milestone.get("recent_attempts", []))[-2:]:
-                if not isinstance(raw_attempt, dict):
-                    continue
-                attempt = dict(raw_attempt)
-                attempt["proposal"] = _truncate(attempt.get("proposal"), 500)
-                attempt["outcome"] = _truncate(attempt.get("outcome"), 500)
-                attempts.append(attempt)
-            milestone["recent_attempts"] = attempts
-            milestones.append(milestone)
-        goal["milestones"] = milestones
+        goal = dict(raw)
+        goal["objective"] = _truncate(goal.get("objective"), 900)
+        step = goal.get("current_step")
+        if isinstance(step, dict):
+            step = dict(step)
+            step["description"] = _truncate(step.get("description"), 700)
+            goal["current_step"] = step
+        goal["evidence_effect_ids"] = list(goal.get("evidence_effect_ids", []))[-6:]
         goals.append(goal)
-    compact["active_goals"] = goals
+    autonomy["goals"] = goals
+    compact["autonomy"] = autonomy
     return compact
 
 
@@ -103,7 +92,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "hyperpositions": result.get("hyperpositions", []),
         "agency": _compact_agency(result.get("agency", {})),
         "context": result["context"],
-        "effect_law": "Operational external/state-changing effects use mcp__clayverse__request_effect and only verified EffectGate outcomes are operational truth. Durable goal/control changes use only the owner-scoped AgencyGate tools bound to an exact quote from the active user prompt.",
+        "effect_law": "Operational effects use mcp__clayverse__request_effect and only verified EffectGate outcomes are operational truth. Durable goal changes use owner-scoped goal tools bound to an exact quote from the active user prompt; goal objective text is copied from the canonical user turn.",
     }
 
     def render() -> str:
@@ -146,7 +135,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         ]
         text = render()
     if len(text) > limit:
-        compact["agency"]["active_goals"] = compact["agency"].get("active_goals", [])[:2]
+        compact["agency"]["autonomy"]["goals"] = compact["agency"].get("autonomy", {}).get("goals", [])[:2]
         text = render()
     if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
@@ -167,11 +156,7 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             enriched = dict(result)
-            enriched["agency"] = AgencyState(db).snapshot(
-                user_id=user_id,
-                max_goals=4,
-                max_attempts_per_milestone=2,
-            )
+            enriched["agency"] = AgencyView(db).snapshot(user_id=user_id)
             additional_context = _bounded_hook_context(enriched)
         return {
             "hookSpecificOutput": {

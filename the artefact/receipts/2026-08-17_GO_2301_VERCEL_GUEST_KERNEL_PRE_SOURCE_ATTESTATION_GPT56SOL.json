@@ -1,0 +1,98 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T23:01:41+07:00",
+  "timestamp_precision": "deployment_millisecond_observation_normalized_to_second",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "Newest Vercel Sandbox pre-source guest-kernel attestation and execution-frontier refresh",
+  "source_basis": {
+    "bootstrap_cache": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER(1).txt",
+    "program_state": "research_entity/rooms/PROGRAM_STATE.json",
+    "sandbox_execution_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
+    "outer_envelope_directive": "research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md"
+  },
+  "coordination": {
+    "parallel_overlap_check": "OPEN_PR_637_ALREADY_OWNS_KATA_ANNOTATION_ADMISSION_HARDENING",
+    "action": "ADOPT_NO_DUPLICATE_IMPLEMENTATION",
+    "unusual_experiment_count_added": 0,
+    "unusual_experiment_status": "COORDINATION_BLOCKED_NO_SHARED_IMMUTABLE_GO_REQUEST_ID"
+  },
+  "vercel_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "controller_branch": "clay/fusion-vcr-native-20260817",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "deployment_state": "ERROR",
+    "build_region": "iad1",
+    "build_machine": "2 cores, 8 GB",
+    "vercel_cli": "58.1.0"
+  },
+  "controller_reported_binding": {
+    "guard_schema": "ClayVerseCurrentOCISourceGuard/v4",
+    "guard_status": "EXACT_RETAINED_RUNNER_SOURCE_BINDING_ADMITTED",
+    "guard_research_base_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "guard_research_sha": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "guard_research_tree_sha": "a012708e469de32615ea9933371a13795669db5a",
+    "retained_runner_blob": "1298ca8002704414f86cd0c036d44e5b32be2918",
+    "target_patch_schema": "ClayVerseCurrentTargetPatch/v6",
+    "target_research_base_sha": "f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b",
+    "target_research_sha": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "target_research_tree_sha": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "note": "The target source archive was never fetched into this run, so these controller-side identities do not receive source-runtime credit."
+  },
+  "sandbox_observation": {
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "execution_surface_reported_by_controller": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "guest_kernel_step_schema": "ClayVerseCurrentOCISandboxStep/v3",
+    "guest_kernel_step_label": "outer_microvm_guest_kernel_identity",
+    "guest_kernel_step_exit_code": 0,
+    "guest_kernel_system": "Linux",
+    "guest_kernel_release": "6.12.76",
+    "guest_kernel_machine": "x86_64",
+    "guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+    "sandbox_stopped": true
+  },
+  "failure_boundary": {
+    "run_status": "FAILED_CLOSED_AFTER_GUEST_KERNEL_ATTESTATION_BEFORE_PRIVATE_SOURCE_FETCH",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "github_secret_forwarded_to_sandbox": false,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "clayverse_test_failure_observed": false,
+    "classification": "EXECUTION_ADMISSION_AND_GUEST_KERNEL_MECHANISM_EVIDENCE_ONLY"
+  },
+  "evidence_interpretation": {
+    "proved": [
+      "The retained Vercel controller can create the disposable isolated sandbox in this run.",
+      "A command executed inside that sandbox and observed Linux guest-kernel identity Linux/6.12.76/x86_64 before the private-source gate.",
+      "The run failed closed when the approved host-side GitHub read credential was absent.",
+      "The GitHub credential was not forwarded into the sandbox according to the controller receipt."
+    ],
+    "not_proved": [
+      "The current ClayVerse repository bytes executed in the sandbox.",
+      "An OCI image was built or started.",
+      "The observed guest kernel is the final accepted Kata/equivalent production outer envelope.",
+      "Kata RuntimeClass, CNI policy enforcement, PVC ownership, Clerk/PTY/Claude lifecycle, restart/recovery or whole-product acceptance."
+    ]
+  },
+  "external_primary_basis": {
+    "vercel_sandbox_docs": "Vercel documents Sandbox.create as creating an isolated microVM environment; this supports the provider mechanism classification but does not replace the observed run receipt.",
+    "kata_annotation_followup": "Kata upstream documents io.katacontainers.* per-Pod runtime configuration annotations; existing PR 637 already owns the corresponding admission-policy source lane, so no duplicate change was created here."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "current_frontier": "PROVISION_APPROVED_HOST_SIDE_GITHUB_READ_TOKEN_ON_RETAINED_VERCEL_PREVIEW_CONTROLLER_WITHOUT_FORWARDING_SECRET_INTO_SANDBOX_THEN_REBIND_THEN_CURRENT_PRODUCT_SOURCE_ONCE_AND_RUN_EXACT_OCI_CLOSURE",
+  "next_high_information_step": "After approved host-side credential provisioning, refresh current main plus deliberately admitted retained lanes, create a fresh disposable Vercel Sandbox, fetch and verify the private source archives host-side, transfer verified bytes only, execute full exact-source regressions, build the exact ClayVerse OCI image, capture its digest and runtime identities, and only then advance toward the mandatory Kata/equivalent final envelope gates."
+}

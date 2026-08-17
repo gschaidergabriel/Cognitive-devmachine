@@ -38,7 +38,7 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
          json.dumps({"source": "container-recovery", "causal_id": active["causal_id"], "generation": int(active["generation"])}, sort_keys=True)))
 
 def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> None:
-    """Apply only final known current-generation causal outcomes before generation advance."""
+    """Apply only verified non-zero current-generation rewards before generation advance."""
     from .microclay_retrieval import MicroClayRetrieval
     current_generation = db.entity_generation()
     organ = MicroClayRetrieval(db)
@@ -51,7 +51,7 @@ def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> No
             "SELECT r.causal_id,r.generation,c.credit,e.status FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id JOIN effects e ON e.effect_id=c.effect_id "
             "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
-            "AND e.status IN ('VERIFIED','DENIED','FAILED') "
+            "AND e.status='VERIFIED' AND c.credit != 0.0 "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100", (session_id, int(current_generation))).fetchall()
         counts["retrieval_learning_eligible"] += len(rows)
@@ -62,7 +62,7 @@ def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> No
         counts["retrieval_learning_uncertain_ignored"] += int(db.db.execute(
             "SELECT COUNT(*) FROM retrieval_episodes r JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
-            "AND e.status NOT IN ('VERIFIED','DENIED','FAILED') "
+            "AND (e.status<>'VERIFIED' OR c.credit=0.0) "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
             (session_id, int(current_generation))).fetchone()[0])
 

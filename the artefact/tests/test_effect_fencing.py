@@ -23,22 +23,34 @@ def test_pending_receipt_exists_before_entityos_execution(tmp_path):
     assert seen['status']=='PENDING'; assert out['ok']; assert db.db.execute('SELECT status FROM effects WHERE effect_id=?',(eid,)).fetchone()[0]=='VERIFIED'; db.close()
 
 def test_entityos_effect_auto_leases_target_and_releases_exactly(tmp_path):
-    db,uid,sid=setup_db(tmp_path); seen={}; gate=None
+    db,uid,sid=setup_db(tmp_path); seen={}
     req=EffectRequest(uid,sid,'entityos.exec','transport',['hello'])
     def run(argv):
         row=db.db.execute('SELECT resource,holder,generation,nonce FROM leases').fetchone()
         seen.update(dict(row)); return {'ok':True,'exit':0,'stdout':'ok','stderr':''}
     gate=EffectGate(db,entityos_bridge=FakeBridge(run)); expected=gate._lease_resource(req)
     gate.execute(req)
-    assert seen['resource']==expected and seen['holder'].startswith(sid+':') and seen['generation']==1 and seen['nonce']
+    assert seen['resource']==expected=='effect:entityos.exec' and seen['holder'].startswith(sid+':') and seen['generation']==1 and seen['nonce']
     assert db.db.execute('SELECT COUNT(*) FROM leases').fetchone()[0]==0; db.close()
 
-def test_entityos_effect_target_collision_fails_closed_before_execution(tmp_path):
+def test_entityos_effect_collision_is_label_independent_and_fails_closed(tmp_path):
     db,uid,sid=setup_db(tmp_path); called=[]
     req=EffectRequest(uid,sid,'entityos.exec','transport',['hello']); gate=EffectGate(db,entityos_bridge=FakeBridge(lambda argv: called.append(argv) or {'ok':True}))
     resource=gate._lease_resource(req); incumbent=db.acquire_lease(resource,'other-worker',ttl=60)
-    with pytest.raises(LeaseConflict): gate.execute(req)
+    relabelled=EffectRequest(uid,sid,'entityos.exec','different-label',['hello'])
+    assert gate._lease_resource(relabelled)==resource
+    with pytest.raises(LeaseConflict): gate.execute(relabelled)
     db.assert_lease(incumbent); assert called==[] and db.db.execute('SELECT COUNT(*) FROM effects').fetchone()[0]==0; db.close()
+
+def test_auto_lease_cleanup_never_deletes_replacement_owner(tmp_path):
+    db,uid,sid=setup_db(tmp_path)
+    def run(argv):
+        row=db.db.execute('SELECT resource FROM leases').fetchone()
+        db.db.execute("UPDATE leases SET holder='replacement-worker',generation=generation+1,nonce='replacement-nonce' WHERE resource=?",(row['resource'],))
+        return {'ok':True,'exit':0,'stdout':'did-it','stderr':''}
+    with pytest.raises(StaleGeneration): EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
+    row=db.db.execute('SELECT holder,generation,nonce FROM leases WHERE resource=?',('effect:entityos.exec',)).fetchone()
+    assert row['holder']=='replacement-worker' and row['generation']==2 and row['nonce']=='replacement-nonce'; db.close()
 
 def test_effect_journal_persists_hash_receipts_not_raw_payloads(tmp_path):
     db,uid,sid=setup_db(tmp_path); secret_arg='ARG_SECRET_42'; secret_out='OUTPUT_SECRET_77'

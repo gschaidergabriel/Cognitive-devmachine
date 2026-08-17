@@ -124,6 +124,23 @@ def test_raw_prompt_is_not_an_admitted_stageb_query():
         })
 
 
+def test_signature_key_must_match_method_memory_snake_case_schema():
+    with pytest.raises(ProblemSignatureAdmissionError, match="snake_case"):
+        admit_problem_query({
+            "schema": QUERY_SCHEMA,
+            "problem_signature": {"task-shape": ["diagnose"]},
+            "goal_shape": "identify_mechanism",
+            "provenance": {
+                "source": "structural_analyzer_v1",
+                "turn_id": "t",
+                "episode_id": "e",
+                "causal_id": "c",
+                "generation": 1,
+                "admission_version": 1,
+            },
+        })
+
+
 def test_explicit_raw_query_source_is_rejected():
     with pytest.raises(ProblemSignatureAdmissionError, match="raw-prompt"):
         admit_problem_query({

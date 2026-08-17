@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "trigger_identity": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "observed_canonical_main_at_branch": "ffd294401d57c1db0af7510e9742a83cd789c396",
+  "branch": "go/tmux-managed-control-fence-20260817-1352-gpt56sol",
+  "branch_head_before_receipt": "55c1ad23f2e6c0daa294bc7d75cd2b2e06d5bec8",
+  "classification": "SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED",
+  "finding": {
+    "summary": "Canonical browser PTY input reaches an attached normal tmux client. Current main had per-user tmux sockets but no immutable managed tmux configuration, so default tmux control bindings remained a potential alternate command/process surface outside Claude Code and EffectGate.",
+    "current_main_evidence": {
+      "terminal_sessions_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+      "terminal_gateway_blob": "f6eb4d0ecbc56ffcdaef90de181e3e9567f64336",
+      "dockerfile_blob": "d42024163e7e3012d14c39a9383bbbd7806d055d"
+    },
+    "primary_upstream_basis": [
+      "tmux Getting Started: default prefix is C-b and C-b c runs new-window; tmux key bindings execute tmux commands; user .tmux.conf is read when the server starts",
+      "OpenBSD tmux(1): default-command empty creates a login shell using default-shell; new-session/new-window accept multiple command arguments and execute them directly without sh -c; global -f selects a configuration file"
+    ],
+    "strongest_counterhypothesis": "The browser/xterm path might suppress the relevant control-byte sequence in the exact packaged runtime. Current ClayVerse source does not itself establish such suppression: browser terminal input is encoded and binary PTY frames are only size-bounded before being written to the PTY. Exact packaged runtime fault injection is still required."
+  },
+  "repair": {
+    "donor": "closed PR #427 contained the unmerged managed-tmux policy concept; canonical main had fused only its per-user socket portion",
+    "changes": [
+      "add root-owned /etc/clayverse/tmux.conf and pass it through tmux -f on has-session/new-session/attach paths",
+      "disable prefix/prefix2 and unbind prefix/root key tables; disable status and mouse",
+      "set default-shell to the existing fail-closed deny-shell guard",
+      "pass the initial env/Claude command as direct tmux argv instead of one shell-command string so startup does not require sh -c",
+      "add focused deterministic regression obligations"
+    ],
+    "changed_git_blobs": {
+      "the artefact/clayverse/terminal_sessions.py": "8236c15446cedb52c33698ff2df49921250b289d",
+      "the artefact/Dockerfile": "49a69b2e7718081a9b3deedf75b4abf42d6833d1",
+      "the artefact/policy/tmux.conf": "111dfcccf90434d40cdaa235786d7587bbd0f071",
+      "the artefact/tests/test_terminal_tmux_isolation.py": "7abb2761b8910ab8ae973000541416806ea72885"
+    }
+  },
+  "bounded_isolated_evidence": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "exact_changed_blob_binding": "PASS via local git hash-object equality for all four changed files",
+    "command": "PYTHONPATH=. pytest -q tests/test_terminal_tmux_isolation.py",
+    "result": "5 passed in 0.04s",
+    "py_compile": "PASS",
+    "tmux_binary_available": false,
+    "evidence_scope": "byte-identical changed-source/test mechanism only; identity dependency was minimally stubbed; no full repository checkout, real tmux process, packaged Claude, browser, OCI build or restart was executed"
+  },
+  "vercel_execution_surface": {
+    "platform_sandbox_capability": "PRESENT_IN_CURRENT_VERCEL_DOCUMENTATION",
+    "connected_account_authentication": "PRESENT",
+    "connected_mcp_sandbox_create_run_exec_action": "ABSENT_IN_EXPORTED_TOOL_SURFACE_OBSERVED_BY_THIS_ORGAN",
+    "durable_coordination_note_commit": "3d94e1b9af372ad9d96f90296204a73ae0e7aff9"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed and the current user-message timestamp available to this organ is only minute precision. No unusual intervention was executed."
+  },
+  "non_claims": [
+    "No live tmux bypass reproduction or prevention PASS",
+    "No exact full-suite PASS",
+    "No exact OCI build/image digest/startup/readiness PASS",
+    "No real Clerk/browser/WebSocket PTY PASS",
+    "No whole ClayVerse PASS"
+  ],
+  "next_exact_gate": "On an actually-started authorized Vercel Sandbox at the then-current fused exact source: build/run the image, attach through the authenticated browser PTY, send default tmux control sequences including C-b c and C-b :, require that no new tmux window/command prompt/shell/process authority appears, verify Claude remains functional, then run adjacent terminal/auth/effect/restart regressions and capture source/image identity."
+}

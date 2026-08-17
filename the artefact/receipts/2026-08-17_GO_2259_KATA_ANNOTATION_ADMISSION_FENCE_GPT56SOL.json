@@ -1,0 +1,90 @@
+{
+  "schema": "clayverse_go_receipt_v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-kata-annotation-admission-20260817-2259",
+  "base_main_observed": "608eafe5f154d0dbc3ddb4e9a2a8df3342cdd3d6",
+  "pre_receipt_head": "43c44f7a134866c0a6ef2cce57305170db36c813",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NO_KUBERNETES_RUNTIME_CREDIT",
+  "problem": "The current MicroVM contract requires deployment admission to fail closed on unreviewed io.katacontainers.* runtime-mutating Pod annotations, but the canonical deployment directory contained no concrete admission-policy object. Template absence alone cannot protect the effective Pod after admission mutation.",
+  "delta": {
+    "policy": "the artefact/deployment/clayverse-kata-annotation-admission-policy.yaml",
+    "policy_blob_sha": "64990341155712d8cb6f46dcbed0bfcb77518c59",
+    "test": "the artefact/tests/test_microvm_kata_annotation_admission_policy.py",
+    "test_blob_sha": "1d04f91df4c643b68e9a5bd428b4b6753ceebfb8",
+    "readme_blob_sha": "276514a7e4eae6bf0da21cbbe386cb41300073a6",
+    "policy_contract": [
+      "admissionregistration.k8s.io/v1 ValidatingAdmissionPolicy",
+      "Pod CREATE and UPDATE only",
+      "failurePolicy=Fail",
+      "CEL rejects every annotation key beginning io.katacontainers.",
+      "ValidatingAdmissionPolicyBinding validationActions=Deny",
+      "binding matchResources intentionally unset so every Pod matched by the policy is validated",
+      "no Pod objectSelector security boundary",
+      "future shared-cluster narrowing only through separately reviewed receipt-bound namespaceSelector",
+      "future required Kata annotation only through explicit reviewed key/value policy bytes"
+    ]
+  },
+  "adversarial_review": {
+    "rejected_first_draft": "The initial binding used objectSelector app=clayverse.",
+    "counterhypothesis": "A Pod-label objectSelector is sufficient to scope the policy safely.",
+    "falsifier": "Current Kubernetes MatchResources documentation explicitly warns objectSelector is opt-in and end users may skip admission by changing labels.",
+    "repair": "Removed objectSelector before PR/receipt; reference baseline now validates all Pods matched by the policy. Shared-cluster narrowing is deferred to an independently attested namespace boundary.",
+    "outcome": "REJECT_LABEL_SELECTOR_MERGE_SELECTORLESS_FAIL_CLOSED_BASELINE"
+  },
+  "primary_upstream_evidence": [
+    "https://kubernetes.io/docs/reference/kubernetes-api/definitions/match-resources-v1-admissionregistration/",
+    "https://kubernetes.io/docs/reference/kubernetes-api/admissionregistration/validating-admission-policy-binding-v1/",
+    "https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/",
+    "https://kubernetes.io/docs/reference/using-api/cel/",
+    "https://github.com/cel-expr/cel-spec/blob/master/doc/langdef.md"
+  ],
+  "supporting_isolated_execution": {
+    "environment": "isolated non-production analysis container",
+    "policy_exact_blob_reconstruction": {
+      "observed_git_hash_object": "64990341155712d8cb6f46dcbed0bfcb77518c59",
+      "matches_github_blob": true,
+      "yaml_parse": "PASS",
+      "structural_assertions": "PASS",
+      "exit_code": 0
+    },
+    "test_exact_blob_reconstruction": {
+      "observed_git_hash_object": "1d04f91df4c643b68e9a5bd428b4b6753ceebfb8",
+      "matches_github_blob": true,
+      "python_py_compile": "PASS",
+      "exit_code": 0
+    },
+    "scope_limit": "No Kubernetes API server evaluated the policy; no ValidatingAdmissionPolicy object was installed; no Kata/microVM or OCI runtime was exercised."
+  },
+  "execution_reality": {
+    "exact_branch_pytest": "UNOBSERVED",
+    "kubernetes_admission": "UNOBSERVED",
+    "kata_microvm": "UNOBSERVED",
+    "exact_final_oci": "UNOBSERVED",
+    "vercel_source_runtime_credit": 0,
+    "vercel_oci_runtime_credit": 0,
+    "retained_blocker": "Host-side sensitive Vercel Preview GITHUB_READ_TOKEN is absent before private Research/EntityOS source staging; it must remain outside Sandbox environment/logs.",
+    "vps_self_hosted_production_testing": "NOT_USED_FORBIDDEN",
+    "together_api": "NOT_USED_FORBIDDEN",
+    "paid_or_final_training": "NOT_USED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "go_unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "No shared immutable request/turn identity is exposed and trigger time is only minute-precision; atomic unusual-experiment coordination therefore fails closed."
+  },
+  "promotion_gate": [
+    "Rebind/fuse onto fresh current main without losing newer MicroVM lanes.",
+    "Run the exact branch regression in an admitted isolated source checkout.",
+    "Install the exact policy and binding on the admitted Kubernetes target and prove an injected io.katacontainers.* annotation is denied after mutation.",
+    "If namespace scoping is required, bind and attest namespace labels/RBAC and prove Pod-label manipulation cannot bypass the fence.",
+    "Attest the effective admitted Pod annotations and selected Kata runtime/configuration on the exact accepted OCI digest.",
+    "Do not promote source success to whole ClayVerse PASS."
+  ],
+  "whole_product_acceptance": "IN_PROGRESS"
+}

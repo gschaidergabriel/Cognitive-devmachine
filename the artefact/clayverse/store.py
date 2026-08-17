@@ -48,6 +48,11 @@ class UnifiedDB:
         row=self.db.execute("SELECT session_id FROM sessions WHERE user_id=?",(user_id,)).fetchone()
         if row: return row[0]
         sid=f"session:{user_id}"; now=time.time(); self.db.execute("INSERT INTO sessions(session_id,user_id,created_at,updated_at,terminal_name) VALUES(?,?,?,?,?)",(sid,user_id,now,now,terminal_name)); return sid
+    def assert_session_owner(self,session_id,user_id):
+        row=self.db.execute("SELECT user_id FROM sessions WHERE session_id=?",(session_id,)).fetchone()
+        if not row: raise KeyError(session_id)
+        if row[0] != user_id: raise PermissionError('session/user identity mismatch')
+        return True
     def session_generation(self,session_id):
         row=self.db.execute("SELECT generation FROM sessions WHERE session_id=?",(session_id,)).fetchone()
         if not row: raise KeyError(session_id)
@@ -56,6 +61,7 @@ class UnifiedDB:
         with self.tx() as db:
             db.execute("UPDATE sessions SET generation=generation+1, updated_at=? WHERE session_id=?",(time.time(),session_id)); return int(db.execute("SELECT generation FROM sessions WHERE session_id=?",(session_id,)).fetchone()[0])
     def append_turn(self,session_id,user_id,role,content,*,resources=(),causal_refs=(),provenance=None):
+        self.assert_session_owner(session_id,user_id)
         with self.tx() as db:
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(session_id,)).fetchone()[0]); tid=str(uuid.uuid4()); now=time.time()
             db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(tid,session_id,user_id,ordinal,now,role,content,json.dumps(sorted(set(resources))),json.dumps(list(causal_refs)),json.dumps(provenance or {},sort_keys=True))); db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,session_id))
@@ -82,4 +88,4 @@ class UnifiedDB:
     def checkpoint(self,note):
         payload=[]
         for table in ("users","sessions","turns","durable_memory","effects","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
-        digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest
+        digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

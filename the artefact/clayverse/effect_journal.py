@@ -31,12 +31,20 @@ class EffectJournal:
         lr=db.execute('SELECT holder,generation,expires_at,nonce FROM leases WHERE resource=?',(lease.resource,)).fetchone()
         if not lr or lr['holder']!=lease.holder or int(lr['generation'])!=lease.generation or lr['nonce']!=lease.nonce or float(lr['expires_at'])<=time.time():
             raise StaleGeneration(lease.resource)
+    @staticmethod
+    def _assert_generation_tx(db,session_id,user_id,generation):
+        row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
+        if not row: raise PermissionError('session owner mismatch')
+        if int(row[0])!=int(generation): raise StaleGeneration(session_id)
+        global_row=db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
+        entity_generation=int(global_row[0]) if global_row else 0
+        # entity_generation==0 is pre-runtime/test construction. A real service boot
+        # advances it and thereafter both permanent sessions must match it exactly.
+        if entity_generation>0 and entity_generation!=int(generation): raise StaleGeneration('entity_generation')
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
-            row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
-            if not row: raise PermissionError('session owner mismatch')
-            if int(row[0])!=int(generation): raise StaleGeneration(session_id)
+            self._assert_generation_tx(db,session_id,user_id,generation)
             if lease is not None: self._assert_lease_tx(db,lease)
             if episode_id is not None:
                 prior=db.execute('SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1',(episode_id,)).fetchone()
@@ -74,9 +82,8 @@ class EffectJournal:
     def complete_verified(self,effect_id,outcome,session_id,user_id,generation,lease:Lease|None=None):
         stale=None
         with self.db.tx() as db:
-            row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
-            if not row: stale=PermissionError('session owner mismatch')
-            elif int(row[0])!=int(generation): stale=StaleGeneration(session_id)
+            try: self._assert_generation_tx(db,session_id,user_id,generation)
+            except (StaleGeneration,PermissionError) as exc: stale=exc
             if stale is None and lease is not None:
                 try: self._assert_lease_tx(db,lease)
                 except StaleGeneration as exc: stale=exc

@@ -3,7 +3,7 @@ from clayverse.store import UnifiedDB,StaleGeneration
 from clayverse.engine import ClayVerseEngine
 from clayverse.identity import IdentityRouter
 from clayverse.memory import MemoryManager
-from clayverse.effects import EffectGate,EffectRequest
+from clayverse.effects import EffectGate,EffectRequest,EntityOSProcessExecutor
 @pytest.fixture
 def db(tmp_path):
     d=UnifiedDB(tmp_path/'unified.db'); yield d; d.close()
@@ -26,12 +26,24 @@ def test_stale_lease_is_rejected_aba(db):
     IdentityRouter(db,{'g':'gabriel'}); l1=db.acquire_lease('repo:x','worker-A',ttl=.01); time.sleep(.02); l2=db.acquire_lease('repo:x','worker-B',ttl=10)
     with pytest.raises(StaleGeneration): db.assert_lease(l1)
     db.assert_lease(l2)
-def test_process_gate_no_shell_and_disabled_by_default(db):
+def test_process_gate_requires_entityos_and_fenced_resource(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); gate=EffectGate(db,allow_process=False)
-    with pytest.raises(PermissionError): gate.execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
-    eid,out=EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'])); assert out['ok'] and out['stdout'].strip()=='ok'
-    with pytest.raises(PermissionError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','shell',['/bin/sh','-c','echo forbidden']))
-    with pytest.raises(ValueError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','nul',['/bin/echo','bad\x00arg']))
+    req=EffectRequest(uid,sid,'process.exec','repo:echo',['/usr/bin/printf','ok'])
+    with pytest.raises(PermissionError): gate.execute(req)
+    lease=db.acquire_lease('repo:echo','worker-A',ttl=10)
+    class FakeEntityOS:
+        def __init__(self): self.calls=[]
+        def execute_process(self,request,fence):
+            self.calls.append((request,fence)); return {'schema':'fake','ok':True,'stdout':'ok','resource':fence.resource,'generation':fence.generation}
+    fake=FakeEntityOS(); eid,out=EffectGate(db,allow_process=True,entityos=fake).execute(req,lease=lease)
+    assert out['ok'] and out['stdout']=='ok' and out['boundary']=='EntityOS' and len(out['outcome_sha256'])==64
+    assert fake.calls[0][0].argv==['/usr/bin/printf','ok'] and fake.calls[0][1]==lease
+    with pytest.raises(PermissionError,match='target must equal leased resource'):
+        EffectGate(db,allow_process=True,entityos=fake).execute(EffectRequest(uid,sid,'process.exec','repo:other',['/usr/bin/printf','x']),lease=lease)
+    with pytest.raises(PermissionError): EffectGate(db,allow_process=True,entityos=fake).execute(EffectRequest(uid,sid,'process.exec','repo:echo',['/bin/sh','-c','echo forbidden']),lease=lease)
+    with pytest.raises(ValueError): EffectGate(db,allow_process=True,entityos=fake).execute(EffectRequest(uid,sid,'process.exec','repo:echo',['/usr/bin/printf','bad\x00arg']),lease=lease)
+    with pytest.raises(PermissionError,match='host fallback forbidden'):
+        EffectGate(db,allow_process=True,entityos=EntityOSProcessExecutor(binary='/definitely/missing/EntityOS')).execute(req,lease=lease)
 def test_causal_reentry_and_restart_continuity(tmp_path):
     p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
 def test_checkpoint_hash_changes_on_canonical_state(db):

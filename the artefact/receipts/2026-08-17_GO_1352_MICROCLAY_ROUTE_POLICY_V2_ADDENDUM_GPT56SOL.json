@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse.go-receipt-addendum/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "parent_receipt": "the artefact/receipts/2026-08-17_GO_1352_MICROCLAY_ROUTE_IDENTITY_FENCE_GPT56SOL.json",
+  "observed_main_before_write": "e7d11124a2e3d51a7e1c7aaa188783cadf62c9ed",
+  "donor_pr": 531,
+  "donor_branch": "go/microclay-route-memory-fence-current-20260817-1410",
+  "observed_donor_head": "171f11d3eeadfc95228e56161ab7054772ab6877",
+  "policy_v2": {
+    "source_commit": "929a9b5a3a285f44cf7d9e94d919ebcaed45cdc4",
+    "source_blob": "13765270a2f7743e33c00ed739079f3af26d0946",
+    "policy_version": 2,
+    "route_namespace": "route:v2:<cue_hash>:<memory_id_hash>",
+    "legacy_shadow_behavior": "A persisted v1 SHADOW policy remains SHADOW under v2 code; no automatic promotion or capital migration occurs.",
+    "legacy_active_behavior": "A persisted v1 ACTIVE policy fails closed with StaleGeneration(retrieval_policy_version).",
+    "explicit_active_requirement": "ACTIVE v2 requires retrieval_policy_state.policy_version=2 explicitly.",
+    "reason": "Changing route-key target semantics without a new namespace/version could make audit and future promotion ambiguous and could allow stale-key reuse in pathological identity/subject collisions. v2 isolates old route capital while preserving generic kind/subject ranking priors."
+  },
+  "tests_added": {
+    "commit": "171f11d3eeadfc95228e56161ab7054772ab6877",
+    "path": "the artefact/tests/test_microclay_policy_version_fence.py",
+    "cases": [
+      "legacy v1 SHADOW remains SHADOW under v2 code",
+      "legacy v1 ACTIVE fails closed",
+      "ACTIVE works only with explicit matching v2 policy version"
+    ]
+  },
+  "github_execution_observation": {
+    "workflow_run_id": 32005030398,
+    "workflow": "Research Entity Identity Guard",
+    "head_sha": "171f11d3eeadfc95228e56161ab7054772ab6877",
+    "conclusion": "failure",
+    "job_id": 95312643051,
+    "job_steps": [],
+    "runner_id": 0,
+    "runner_name": "",
+    "classification": "RUNNER_OR_ADMISSION_FAILURE_BEFORE_STEPS",
+    "test_credit": "ZERO",
+    "note": "No code/test step executed; do not classify as donor test failure."
+  },
+  "vercel_execution_observation": {
+    "status": "UNCHANGED_EXECUTION_ADMISSION_BLOCKED",
+    "reason": "Build-rate limit rejected the targeted staging preview before build/Sandbox.create.",
+    "sandbox_started": false,
+    "test_credit": "ZERO"
+  },
+  "unusual_experiment_count_added": 0,
+  "acceptance": "SOURCE_CANDIDATE_ONLY",
+  "next_exact_gate": "Actually start an authorized Vercel Sandbox on the exact current donor/fused head and run policy-v2 + same-subject collision + learned-entry + replay/privacy + credit-transaction regressions before fusion/ACTIVE promotion."
+}

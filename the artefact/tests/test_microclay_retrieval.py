@@ -169,7 +169,7 @@ def test_verified_effect_outcome_updates_entrypoint_on_next_turn_only(tmp_path):
         db.close()
 
 
-def test_state_noop_cannot_self_award_positive_retrieval_credit(tmp_path):
+def test_state_noop_remains_retrieval_learning_neutral(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
@@ -187,17 +187,48 @@ def test_state_noop_cannot_self_award_positive_retrieval_credit(tmp_path):
         life.complete("done")
 
         second = life.begin("orchid procedure again")
-        assert second["context"]["retrieval_receipt"]["outcome_learning_applied"] == 1
-        feedback = db.db.execute("SELECT credit,signal_class FROM retrieval_feedback").fetchone()
-        assert float(feedback["credit"]) == 0.0
-        assert feedback["signal_class"] == "effect_outcome:VERIFIED"
+        assert second["context"]["retrieval_receipt"]["outcome_learning_applied"] == 0
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
         policy = db.db.execute(
             "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key='subject:procedure:orchid'"
         ).fetchone()
-        assert policy is not None
-        assert float(policy["capital"]) <= 0.0
-        assert int(policy["pulls"]) == 1
+        assert policy is None
         life.abort("test-end")
+    finally:
+        db.close()
+
+
+@pytest.mark.parametrize("status", ["UNKNOWN_OUTCOME", "UNKNOWN_AFTER_RESTART", "STALE_OUTCOME"])
+def test_uncertain_or_stale_effect_outcomes_do_not_train_microclay(tmp_path, status):
+    db = _db(tmp_path)
+    try:
+        _add(db, "m1", "orchid procedure", subject="procedure:orchid")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        first = life.begin("orchid procedure")
+        effect_id = db.record_effect(
+            first["episode_id"],
+            "gabriel",
+            "entityos.exec",
+            "simulated-target",
+            first["generation"],
+            status,
+            argv=["simulated"],
+            outcome={"certainty": "unknown"},
+        )
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (
+                first["causal_id"], first["episode_id"], effect_id, first["turn_id"],
+                f"simulated:{status}", 0.0, 1, 1000.0,
+            ),
+        )
+        learned = MicroClayRetrieval(db).learn_from_verified_outcomes(
+            session_id="session:gabriel", generation=first["generation"]
+        )
+        assert learned == {"eligible": 0, "applied": 0}
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_entrypoint_policy").fetchone()[0] == 0
     finally:
         db.close()
 

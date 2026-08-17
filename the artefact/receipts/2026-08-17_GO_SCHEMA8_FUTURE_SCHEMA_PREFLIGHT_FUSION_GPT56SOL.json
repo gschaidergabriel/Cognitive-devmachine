@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-mechanism-fusion-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "retained_pr": 484,
+  "retained_branch": "fusion/microclay-stageb-schema8-20260817",
+  "observed_head_before_receipt": "e12f9993085cfea2bd7ef0f9c8c064af704283eb",
+  "donor_pr": 512,
+  "finding": {
+    "name": "FUTURE_SCHEMA_REJECTION_OCCURRED_AFTER_MUTATING_SCHEMA_BOOTSTRAP",
+    "risk": "Opening a database with schema_version newer than the runtime could execute SCHEMA/migration/bootstrap writes before the incompatibility was rejected, violating fail-closed recovery/state authority."
+  },
+  "repair": {
+    "source_commit": "953d16ef97bd0e7aafff471c7f87148b4ddbb273",
+    "test_commit": "e12f9993085cfea2bd7ef0f9c8c064af704283eb",
+    "test_blob_git_sha1": "cfacd167a7149d5c9d2caaddcdedd0ca71e65168",
+    "contract": "After sqlite connect/create_function and busy_timeout only, inspect existing meta.schema_version read-only; reject versions above UnifiedDB.SCHEMA_VERSION before executescript(SCHEMA), migrations, hidden-ledger retirement, method-row validation, meta writes, policy bootstrap, or schema-8 verification.",
+    "invalid_existing_schema_version": "fails closed before ClayVerse schema mutation",
+    "new_or_versionless_database": "continues to normal bootstrap",
+    "second_state_authority_added": false
+  },
+  "bounded_isolated_mechanism_evidence": {
+    "surface": "OpenAI isolated non-production Python runtime",
+    "setup": "SQLite database with meta.schema_version=9 and sentinel durable state",
+    "operation": "connect + busy_timeout + preflight SELECT path equivalent to retained source",
+    "result": {
+      "future_schema_rejected": true,
+      "database_sha256_before_equals_after": true,
+      "database_bytes_before_equals_after": true,
+      "wal_sidecar_created": false,
+      "shm_sidecar_created": false
+    },
+    "classification": "MECHANISM_SUPPORTED",
+    "limitations": "Not exact full-repository pytest, not Vercel Sandbox execution, not OCI/startup/recovery acceptance."
+  },
+  "coordination": {
+    "donor_branch_status": "77 commits behind retained feature line before extraction",
+    "fusion_method": "ported only the two-file mechanism onto current retained #484 rather than merging stale donor history",
+    "duplicate_permanent_path_retained": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX",
+    "current_preview_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT",
+    "exact_retained_head_full_source_tests": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED"
+  },
+  "experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_by_this_work": false
+  },
+  "acceptance": "SOURCE_FUSED_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "whole_clayverse_container_pass": false,
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"],
+  "next_exact_gate": "Run the exact then-current retained #484 head in an actually-started authorized Vercel Sandbox, including the future-schema zero-mutation regression plus adjacent schema migration/recovery/state-authority tests before OCI startup/restart acceptance."
+}

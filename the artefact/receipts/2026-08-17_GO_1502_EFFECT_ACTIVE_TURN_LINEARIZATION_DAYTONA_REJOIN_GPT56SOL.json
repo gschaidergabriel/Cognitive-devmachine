@@ -1,0 +1,38 @@
+{
+  "schema": "clayverse.effect-active-turn-linearization-rejoin/v1",
+  "trigger": "go",
+  "trigger_time_local_available": "2026-08-17T15:02+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "source": {
+    "rejoin_main": "62279c408afef0d5b8d47c71ff484ace6a28517a",
+    "baseline_effect_journal_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "repaired_effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "focused_regression_blob": "e873769fe77526a7c9df4127f15a50d18cccd400",
+    "restart_fixture_blob": "633c81c0231f1e44010a24f491ebb697a6272a7f",
+    "superseded_lanes": [456, 555, 560]
+  },
+  "mechanism": "Episode-bound PENDING insertion is the effect linearization point and requires the exact active selected request_effect turn inside the same UnifiedDB transaction. A retired predecessor therefore cannot journal PENDING or reach the external EntityOS bridge; if PENDING wins first, successor admission remains fail-closed until completion/recovery.",
+  "callsite_review": {
+    "normal_product_path": "TurnLifecycle.request_effect selects request_effect and workspace_selected=1 before EffectGate.execute -> EffectJournal.begin",
+    "mcp_path": "ClayVerseEffectBridge.request_effect delegates to TurnLifecycle.request_effect",
+    "restart_fixture": "direct PENDING crash simulation now explicitly establishes the same selected request_effect intent before EffectJournal.begin"
+  },
+  "evidence": {
+    "prior_exact_repaired_blob_mechanism": "3 passed in 0.25s in authorized isolated non-production container",
+    "current_rejoin_full_branch_execution": "UNOBSERVED",
+    "current_exact_oci_execution": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "provider_admission": {
+    "vercel": "BLOCKED_BEFORE_SANDBOX_START_BY_DAILY_DEPLOYMENT_CAP; built-in selected Python runtime also observed without _sqlite3",
+    "daytona": "AUTHORIZED_FALLBACK_BY_CURRENT_OWNER_DIRECTIVE_BUT CURRENT_WORKER_HAS_NO DAYTONA CONNECTOR/PLUGIN OR DAYTONA_API_KEY INJECTION; repository continuity also records prior orchestration DNS/egress block before provider contact",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_FOR_CURRENT_WORKER"
+  },
+  "coordination": {
+    "unusual_experiment_count_added": 0,
+    "reason": "The one observed unusual intervention for the 15:02 macro-cycle is already consumed; this is deterministic source convergence only."
+  },
+  "next_gate": "Use the authorized provider order Vercel when admitted/capable, otherwise Daytona when credential-backed admission is available. On exact then-current source, run focused effect linearization + adjacent EffectGate/TurnLifecycle/recovery/global-generation regressions in SQLite-capable isolation, then exact OCI build/start/readiness/restart/concurrency."
+}

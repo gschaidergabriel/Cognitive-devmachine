@@ -23,8 +23,8 @@ This is the canonical product workspace for the current ClayVerse endpoint: **on
 - **#611** — single retained tmux idempotent-reapply repair. Exact retained blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`.
 - **#622** — single retained Python hash-lock generator lane. Current source head: `44ec5e109d40304b152c2fa05ba3e42e690f2820`. `SOURCE_LOCK.json` now declares the `pip-tools==7.5.3` wheel plus seven exact Linux/Python-3.13 bootstrap wheels (`build`, `click`, `packaging`, `pip`, `pyproject-hooks`, `setuptools`, `wheel`) with wheel filenames and SHA-256 values. The workflow materializes that exact set, downloads it with `--only-binary=:all: --require-hashes`, verifies the wheelhouse, then installs offline with `--no-index --find-links=... --require-hashes`. Matching source-contract tests are present at the current head. This remains **SOURCE CANDIDATE / UNEXECUTED**: exact digest-pinned runtime compatibility/no-extra-download closure is not yet observed, no canonical product `requirements.lock.txt` is accepted, and Docker is not yet on product `--require-hashes`.
 - **#602** — downstream managed native-Claude process attestation after successful in-image #611 validation.
-- **#623** — bounded identity/session-drift fail-closed **SOURCE CANDIDATE**, current head `831e7e6fa9c9de9e7ace49476cbfcff56e420587`. Authenticated `IdentityRouter.resolve()` is read/validate-only: exactly one permanent session, canonical terminal name and live global generation; authentication no longer recreates a missing session. The same retained lane now also makes runtime readiness require exact canonical session-row cardinality before projecting rows by user, so duplicate canonical sessions fail closed before terminal probing. Focused source regressions cover normal non-mutating resolution, deleted session, duplicate auth rows, stale generation and duplicate-session readiness. All remain unexecuted; the PR stays DRAFT/unmerged.
-- Dr.-Unterweger **#810** — the single retained OCI/Vercel controller. Current source-only head last observed before this README refresh: `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second EntityOS staging path is admitted.
+- **#623** — bounded identity/session-drift fail-closed **SOURCE CANDIDATE**. Current branch head at final refresh: `329e664d0f2dceab7297e1d3cfacff9b09146fa7`; semantic code/test head: `831e7e6fa9c9de9e7ace49476cbfcff56e420587`. Authenticated `IdentityRouter.resolve()` is read/validate-only: exactly one permanent session, canonical terminal name and live global generation; authentication no longer recreates a missing session. The same retained lane also makes runtime readiness require exact canonical session-row cardinality before projecting rows by user, so duplicate canonical sessions fail closed before terminal probing. Focused source regressions cover normal non-mutating resolution, deleted session, duplicate auth rows, stale generation and duplicate-session readiness. All remain unexecuted; the PR stays DRAFT/unmerged.
+- Dr.-Unterweger **#810** — the single retained OCI/Vercel controller. Current source-only head at final refresh: `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second EntityOS staging path is admitted.
 
 ### Current OCI execution identity
 
@@ -74,9 +74,11 @@ Source review found a fail-closed issue at the externally reachable Clerk → se
 
 Draft **#623** changes that request-time boundary to read/validate existing UnifiedDB state only. It rejects missing/duplicate permanent sessions, noncanonical terminal names and stale generation without creating a new state/identity authority or altering startup bootstrap semantics.
 
-A second counter-reality in the same lane was then confirmed and collapsed source-side: `_runtime_ready()` projected session rows into a dict keyed by user, so duplicate rows for one canonical user could disappear in the projection and readiness could advertise healthy state even though authenticated resolution would reject it. Head `831e7e6…` adds exact session-row cardinality before the projection plus a focused regression that requires failure before any tmux terminal probe.
+A second counter-reality in the same lane was then confirmed and collapsed source-side: `_runtime_ready()` projected session rows into a dict keyed by user, so duplicate rows for one canonical user could disappear in the projection and readiness could advertise healthy state even though authenticated resolution would reject it. Semantic head `831e7e6…` adds exact session-row cardinality before the projection plus a focused regression that requires failure before any tmux terminal probe.
 
-Execution evidence remains absent. Earlier #623 jobs ended before every step, and the automatically-triggered workflow for head `831e7e6…` likewise completed `failure` with **`steps=[]` and `runner_id=0`** (run `32030737590`, job `95389934157`). These are runner/admission failures, not semantic test failures; none of the #623 source regressions is promoted as executed behavior.
+Execution evidence remains absent. Earlier #623 jobs ended before every step, and the automatically-triggered workflow for semantic head `831e7e6…` likewise completed `failure` with **`steps=[]` and `runner_id=0`** (run `32030737590`, job `95389934157`). These are runner/admission failures, not semantic test failures; none of the #623 source regressions is promoted as executed behavior.
+
+The restart counterhypothesis was also checked source-side and did not justify another duplicate test: existing recovery tests already establish generation advancement, while `test_global_entity_generation.py` explicitly establishes that advancing the global generation advances both permanent user sessions together. This supports compatibility of #623's generation check with the intended recovery sequence, but remains source/test-contract evidence rather than a new runtime PASS.
 
 ### Browser/frontend evidence
 
@@ -100,17 +102,14 @@ Whole-product PASS requires the complete path. Source inspection, PRs, CI defini
 
 ### Latest cycle delta
 
-**2026-08-17 19:39 +07:00 — `NO_CHANGE` canonical merged ClayVerse product/runtime bytes; #623 readiness cardinality counterexample fused into its retained source lane, primary OCI credential blocker unchanged**
+**2026-08-17 19:41 +07:00 — `NO_CHANGE` canonical merged ClayVerse product/runtime bytes; #623 session/readiness fail-closed lane re-entered with exact semantic-vs-branch identity, primary OCI credential blocker unchanged**
 
-- PR **#623** advanced on its existing retained lane to `831e7e6fa9c9de9e7ace49476cbfcff56e420587`; no second identity/readiness authority was created.
-- Its authenticated `IdentityRouter.resolve()` remains read/validate-only, and `_runtime_ready()` now additionally requires exact canonical session-row cardinality before user-keyed projection. Duplicate canonical sessions therefore fail closed both at authenticated resolution and readiness source boundaries.
-- The new readiness regression is present source-side, but workflow run `32030737590` / job `95389934157` failed with `steps=[]` and `runner_id=0`; this is execution admission failure, **not** semantic test failure and earns zero runtime credit.
-- The duplicate-session readiness issue was independently rediscovered during this `go`, but concurrent refresh showed it had already been repaired in #623 before a competing patch was written. The duplicate implementation was intentionally suppressed.
-- Durable re-entry receipt: `the artefact/receipts/2026-08-17_GO_1937_PR623_READINESS_CARDINALITY_REENTRY_GPT56SOL.json`.
-- PR **#622** remains on the retained source lane at `44ec5e109d40304b152c2fa05ba3e42e690f2820`; its declared eight-wheel generator bootstrap is source-hashed/offline by contract but remains unexecuted.
-- Prepared OCI closure `218b51c…` remains stale for future compute because retained product bytes advanced; it must be rebound only immediately before a credential-capable real run.
-- PR810 remains the single OCI controller; strongest actually-started evidence still proves `Sandbox.create=PASS_CREATED` followed by fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
-- The retained runner's 12 explicit step budgets total 2,490,000 ms against a 2,700,000 ms Sandbox timeout; the next real run must measure total Vercel Build Step elapsed/remaining budget rather than assume the source-side margin is sufficient.
+- PR **#623** final branch head is `329e664d0f2dceab7297e1d3cfacff9b09146fa7`; its current semantic code/test head is `831e7e6fa9c9de9e7ace49476cbfcff56e420587`. The distinction avoids assigning semantic runtime credit to later receipt/documentation-only branch commits.
+- Authenticated `IdentityRouter.resolve()` remains read/validate-only, and `_runtime_ready()` now additionally requires exact canonical session-row cardinality before user-keyed projection. Duplicate canonical sessions therefore fail closed at both source boundaries.
+- The five #623 regressions remain **UNEXECUTED**; run `32030737590` / job `95389934157` failed with `steps=[]` and `runner_id=0`. No semantic TEST_FAIL or PASS is inferred.
+- Existing recovery/global-generation tests already cover the counterhypothesis that normal restart generation advance could desynchronize the two permanent sessions; no redundant sixth test was added.
+- PR **#622** remains at `44ec5e109d40304b152c2fa05ba3e42e690f2820`, SOURCE CANDIDATE / UNEXECUTED.
+- PR810 remains at `78d92753d9442c66c3ffcff127c31faa98ffd622`; no newer Vercel deployment was observed in the final refresh. Strongest execution still proves `Sandbox.create=PASS_CREATED`, then fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch, with zero source/OCI runtime credit.
 - Browser/frontend runtime testing remains **not reached** because the accepted private source/image/service path is blocked before staging.
 - No unusual experiment, VPS, self-hosted/production test or Together path was used.
 - Whole-product acceptance remains **IN_PROGRESS**.
@@ -132,7 +131,7 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is substantially narrower source-side but remains unexecuted. #623 now fences duplicate canonical sessions at both authenticated resolution and readiness source boundaries, but its regressions likewise remain unexecuted after runner-admission failure. The next OCI execution closure must be rebound only when the credential prerequisite is satisfied, with build-budget telemetry included.
+Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is substantially narrower source-side but remains unexecuted. #623 fences duplicate canonical sessions at both authenticated resolution and readiness source boundaries, but its regressions likewise remain unexecuted after runner-admission failure. The next OCI execution closure must be rebound only when the credential prerequisite is satisfied, with build-budget telemetry included.
 
 ## Container source
 

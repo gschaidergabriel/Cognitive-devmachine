@@ -16,7 +16,7 @@ def configure(monkeypatch, root, user):
     monkeypatch.setenv("CLAYVERSE_SESSION_ID", f"session:{user}")
 
 
-def test_hooks_make_prompt_and_final_response_canonical(tmp_path, monkeypatch):
+def test_hooks_make_prompt_and_final_response_canonical_without_false_reentry(tmp_path, monkeypatch):
     configure(monkeypatch, tmp_path, "gabriel")
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
@@ -57,9 +57,10 @@ def test_hooks_make_prompt_and_final_response_canonical(tmp_path, monkeypatch):
         assert db.db.execute(
             "SELECT state FROM workspace_episodes WHERE session_id='session:gabriel' ORDER BY ts DESC LIMIT 1"
         ).fetchone()[0] == "COMPLETED"
-        assert db.db.execute(
-            "SELECT COUNT(*) FROM causal_episodes WHERE reentered=1"
-        ).fetchone()[0] >= 1
+        causal = db.db.execute(
+            "SELECT effect_id,outcome_hash,credit,reentered FROM causal_episodes ORDER BY ts DESC LIMIT 1"
+        ).fetchone()
+        assert dict(causal) == {"effect_id": None, "outcome_hash": None, "credit": 0.0, "reentered": 0}
     finally:
         db.close()
 
@@ -148,7 +149,11 @@ def test_entityos_binary_presence_does_not_enable_execution(tmp_path, monkeypatc
         denied = bridge.request_effect("entityos.exec", "test", ["status"])
         assert denied["outcome"]["ok"] is False
         assert denied["outcome"]["reason"] == "entityos_unavailable"
+        assert denied["verified"] is False
+        assert denied["status"] == "DENIED"
         assert denied["causal_id"]
+        causal = bridge.db.db.execute("SELECT reentered,credit FROM causal_episodes WHERE causal_id=?", (denied["causal_id"],)).fetchone()
+        assert tuple(causal) == (0, 0.0)
     finally:
         bridge.db.close()
 
@@ -166,6 +171,9 @@ def test_state_noop_effect_reenters_through_canonical_gate(tmp_path, monkeypatch
         result = bridge.request_effect("state.noop", "probe", None)
         assert result["outcome"] == {"ok": True, "target": "probe", "boundary": "internal"}
         assert result["verified"] is True
+        assert result["status"] == "VERIFIED"
         assert result["causal_id"]
+        causal = bridge.db.db.execute("SELECT reentered,credit FROM causal_episodes WHERE causal_id=?", (result["causal_id"],)).fetchone()
+        assert tuple(causal) == (1, 1.0)
     finally:
         bridge.db.close()

@@ -65,6 +65,62 @@ class ClayVerseEngine:
             provenance["inference_receipt"] = receipt
         return provenance
 
+    def _reingest_inference_if_live(
+        self,
+        sid,
+        uid,
+        decision,
+        resources,
+        reasoning_generation,
+        episode_id,
+    ):
+        """Atomically fence generation, select workspace and persist model output.
+
+        Inference may block on an external provider while recovery advances the one
+        global entity generation. The response must therefore be generation-checked
+        *after* inference and in the same write transaction that makes it canonical.
+        BEGIN IMMEDIATE prevents another generation advance from interleaving between
+        the live-generation check and this response re-ingest.
+        """
+        with self.db.tx() as db:
+            self.db.assert_live_generation(sid, reasoning_generation)
+            self.workspace.select_in_tx(
+                episode_id, decision.get("selection", "respond")
+            )
+            self.db.assert_session_owner(sid, uid)
+            ordinal = int(
+                db.execute(
+                    "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",
+                    (sid,),
+                ).fetchone()[0]
+            )
+            aid = str(uuid.uuid4())
+            now = time.time()
+            db.execute(
+                "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
+                (
+                    aid,
+                    sid,
+                    uid,
+                    ordinal,
+                    now,
+                    "assistant",
+                    str(decision.get("text", "")),
+                    json.dumps(sorted(set(resources))),
+                    "[]",
+                    json.dumps(
+                        self._inference_provenance(
+                            decision, reasoning_generation, episode_id
+                        ),
+                        sort_keys=True,
+                    ),
+                ),
+            )
+            db.execute(
+                "UPDATE sessions SET updated_at=? WHERE session_id=?", (now, sid)
+            )
+        return aid
+
     def ingest(self, clerk_subject, content, *, resources=None):
         # One persistent ClayVerse entity has one causal turn frontier. Requests may
         # arrive through multiple authenticated surfaces, but observation -> cognition
@@ -92,23 +148,21 @@ class ClayVerseEngine:
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
         decision = self.inference.reason(world, content)
-        self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
 
         # SECURITY / CAUSALITY LAW:
         # The model/provider response is canonicalized into UnifiedDB before any
         # requested external/state-changing effect is allowed to reach EffectGate.
-        # This prevents a provider from becoming a direct action authority and makes
-        # the exact proposal observable under the same session/generation even if the
-        # subsequent effect is denied, fails, or crashes.
-        aid = self.db.append_turn(
+        # The live generation is re-checked after the potentially slow provider call
+        # and atomically with workspace selection + response insertion. A response
+        # from a pre-recovery generation can therefore never become canonical merely
+        # because it carries no effect (or before a later EffectGate fence rejects it).
+        aid = self._reingest_inference_if_live(
             sid,
             uid,
-            "assistant",
-            decision.get("text", ""),
-            resources=resources,
-            provenance=self._inference_provenance(
-                decision, reasoning_generation, ws["episode_id"]
-            ),
+            decision,
+            resources,
+            reasoning_generation,
+            ws["episode_id"],
         )
 
         effect_id = None

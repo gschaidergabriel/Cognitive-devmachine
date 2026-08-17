@@ -1,0 +1,76 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local_minute": "2026-08-17T22:49+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_EXACT_SIX_BLOB_ISOLATED_EXECUTION",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "bd04961f5de42d92df6201c1605f876b307df4b5",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
+    "the artefact/tests/test_microvm_deployment_contract.py": "eeac23a635bab1397e6edef72d0404bac1772442",
+    "the artefact/manifest.json": "6da4d0dcc6a9e2298b1840356a23a225ab945175",
+    "the artefact/Dockerfile": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "the artefact/entityos.lock.json": "457258e59450ea6eba80792fb2ede6434e88e484"
+  },
+  "blob_rebind": "MATCH_6_OF_6_GIT_HASH_OBJECT",
+  "isolated_regression": {
+    "surface": "OpenAI isolated non-production container",
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "17 passed in 0.06s",
+    "exit_code": 0
+  },
+  "preserved_negative_evidence": {
+    "prior_exact_six_blob_attempt": "15 passed, 1 failed in 0.08s",
+    "failure": "test_entityos_digest_identity_cannot_be_overridden_by_deployment_secret rejected the literal CLAYVERSE_ENTITYOS_SHA256 anywhere in the deployment template even though the only remaining occurrence was a safety comment documenting the image-authoritative digest boundary",
+    "resolution": "Parallel canonical main narrowed the source regression to reject an active '- name: CLAYVERSE_ENTITYOS_SHA256' deployment env entry and the entityos-sha256 secret key while preserving the explanatory comment. No duplicate patch was promoted by this organ."
+  },
+  "supported_source_mechanisms": [
+    "one-replica Kata RuntimeClass source profile with separate client and headless governing Services",
+    "non-root UID/GID 10001 plus Pod fsGroup 10001 and fsGroupChangePolicy OnRootMismatch",
+    "ReadWriteOncePod writer fence on both persistent claims plus CSI enforcement acceptance contract",
+    "read-only root, no privilege escalation, capability drop and no hostPath",
+    "default-deny ingress+egress NetworkPolicy plus explicit node/control-plane/metadata exception acceptance probes",
+    "separate /readyz readiness and /healthz liveness",
+    "Tier-2 requires full Pod/Kata sandbox/VM replacement; RestartAllContainers/PodRestartInPlace cannot earn Tier-2 credit",
+    "then-current supported Kata rolling-release/advisory and runtime-annotation/hypervisor-path fences",
+    "EntityOS digest authority remains image/lock-bound and cannot be overridden by deployment Secret configuration",
+    "provider credential boundary source fences"
+  ],
+  "canonical_fs_group_lineage": {
+    "template_commit": "ac0a94794ae47b295c71f28218fa220c07153c76",
+    "contract_commit": "22e0999607969c1eea26423af27ccb0287d8ce17",
+    "test_commit": "0c23c41e11abeb7c2dfe69c169aac03a658a7ffd",
+    "prior_receipts": [
+      "receipts/2026-08-17_GO_2249_MICROVM_PVC_FSGROUP_CURRENT_MAIN_GPT56SOL.json",
+      "receipts/2026-08-17_GO_2249_MICROVM_PVC_FSGROUP_FULL_RECHECK_GPT56SOL.json"
+    ]
+  },
+  "non_claims": [
+    "no exact OCI image build or digest runtime credit",
+    "no Kubernetes API admission credit",
+    "no live StorageClass/CSI fsGroup or VOLUME_MOUNT_GROUP credit",
+    "no live ReadWriteOncePod stale/replacement-writer denial credit",
+    "no live PVC uid/gid 10001 create/write/fsync/read/rename/delete credit",
+    "no live CNI/default-deny/node-local enforcement credit",
+    "no live Kata guest-kernel/runtime/hypervisor credit",
+    "no Tier-2 full-sandbox replacement execution credit",
+    "no Clerk/Claude/GLM whole-path runtime credit",
+    "no whole ClayVerse PASS"
+  ],
+  "external_execution_blocker": "The retained Vercel Sandbox private-source/OCI path still requires an approved host-side Preview GITHUB_READ_TOKEN before Research/EntityOS source staging. The credential must remain outside the Sandbox and is not writable through the connected Vercel surface available to this organ.",
+  "next_exact_gate": "Provision the approved host-side Preview GITHUB_READ_TOKEN, bind fresh current source, run the exact OCI build and digest receipt, then execute that same digest in the admitted Kata/equivalent target and prove guest-kernel identity, uid/gid 10001 PVC I/O, ReadWriteOncePod stale-writer denial, CNI/default-deny plus node-local fences, full Pod/Kata-sandbox Tier-2 replacement, UnifiedDB/WAL/EffectJournal recovery and no blind replay before Clerk/PTY/Claude dual-user acceptance.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_reason": "This trigger exposes no shared immutable request/turn identifier and only minute-precision immutable message time; zero unusual experiments executed.",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "paid_final_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

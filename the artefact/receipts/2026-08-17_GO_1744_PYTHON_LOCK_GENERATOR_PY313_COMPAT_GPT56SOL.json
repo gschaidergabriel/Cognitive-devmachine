@@ -1,0 +1,64 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:44:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "PYTHON_HASH_LOCK_GENERATOR_COMPATIBILITY_REPAIR_SOURCE_CANDIDATE",
+  "canonical_main_rejoined": "6b9caf0db8c1346c3db5136b0666b021e66a3c07",
+  "candidate_branch": "go/python-lock-py313-generator-20260817-1742-sol",
+  "candidate_source_commit_before_receipt": "6028c9e4910c50279d20ad3f62c317fb06ac55aa",
+  "observed_product_contract": {
+    "base_image": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+    "requirements_state": "VERSION_PINNED_BUT_CANONICAL_HASH_LOCK_ABSENT",
+    "docker_install_state": "pip install --no-cache-dir -r requirements.txt",
+    "open_gate": "Python requirements are not yet installed with --require-hashes"
+  },
+  "adversarial_finding": {
+    "previous_generator_tool": "pip-tools==7.5.0",
+    "finding": "The source-bound lock generator executes inside the Python 3.13 product base, but pip-tools 7.5.0 predates pip-tools' declared/tested Python 3.13 support. Upstream added Python 3.13 support in 7.5.2; 7.5.3 retains Python 3.13 classifiers/support and extends pip compatibility.",
+    "risk": "A generator-only compatibility failure could block production of the canonical hash lock before the product dependency integrity gate is exercised, while looking superficially like a dependency-resolution failure."
+  },
+  "source_delta": {
+    "workflow": ".github/workflows/clayverse-python-lock-generator.yml",
+    "generator_tool_before": "pip-tools==7.5.0",
+    "generator_tool_after": "pip-tools==7.5.3",
+    "regression": "the artefact/tests/test_python_lock_generator_source_binding.py now rejects regression to pip-tools==7.5.0 and requires pip-tools==7.5.3",
+    "semantic_scope": "GENERATOR_TOOL_COMPATIBILITY_ONLY_NO_PRODUCT_RUNTIME_SEMANTICS_CHANGE"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "pip-tools upstream CHANGELOG",
+      "url": "https://github.com/jazzband/pip-tools/blob/main/CHANGELOG.md",
+      "observation": "v7.5.2 added/tested Python 3.13 support and pip 25.2 compatibility; v7.5.3 subsequently added pip 26.0 compatibility."
+    },
+    {
+      "source": "PyPI verified pip-tools 7.5.3 release metadata",
+      "url": "https://pypi.org/project/pip-tools/7.5.3/",
+      "observation": "pip-tools 7.5.3 declares Python 3.13 and 3.14 classifiers and provides a py3-none-any wheel."
+    },
+    {
+      "source": "pip secure installs documentation",
+      "url": "https://pip.pypa.io/en/stable/topics/secure-installs/",
+      "observation": "--require-hashes forces hash checking; hashes are required for all requirements/dependencies and requirements must be pinned."
+    }
+  ],
+  "checks": {
+    "controller_structural_check": "PASS",
+    "accepted_runtime_credit": 0,
+    "authorized_isolated_lock_generation": "NOT_EXECUTED",
+    "canonical_requirements_lock_materialized": false,
+    "docker_require_hashes_enabled": false
+  },
+  "experiment_accounting": {
+    "second_unusual_experiment_started": false,
+    "reason": "Canonical current README records the 17:36 experiment coordination incident and forbids a further unusual experiment for this go."
+  },
+  "execution_state": {
+    "vercel": "CURRENT_EXACT_PREVIEW_ADMISSION_BLOCKED_BEFORE_SANDBOX_START_PER_CANONICAL_STATE",
+    "daytona": "AUTHORIZED_FALLBACK_BUT CURRENT_CONTROLLER_TRIGGER_PATH HAS NOT PRODUCED A PROVIDER-CONTACTING RUN",
+    "vps_self_hosted_production": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "next_exact_gate": "FIRST_ADMITTED_AUTHORIZED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN -> REJOIN_THIS_GENERATOR_CANDIDATE_IF_STILL_NEEDED -> RUN_HASH_GENERATOR_IN_EXACT_DIGEST_PINNED_PRODUCT_BASE -> VERIFY DOUBLE_COMPILE_BYTE_IDENTITY -> VERIFY FULL --REQUIRE-HASHES BINARY WHEELHOUSE -> MATERIALIZE requirements.lock.txt -> SWITCH DOCKER INSTALL TO --require-hashes -> BUILD EXACT OCI IMAGE AND CAPTURE IMAGE/PYTHON/APT/TMUX IDENTITIES",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

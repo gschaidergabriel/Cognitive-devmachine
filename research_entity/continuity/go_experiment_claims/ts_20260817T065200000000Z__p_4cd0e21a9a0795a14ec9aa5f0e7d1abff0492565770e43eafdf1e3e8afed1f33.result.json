@@ -5,12 +5,13 @@
   "experiment_name": "tmux_socket_namespace_adversarial_alias_collision",
   "claimed_source_identity": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
   "claimed_artifact_identity": "the artefact/clayverse/terminal_sessions.py git blob 5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
-  "staging_identity": {
+  "historical_staging_identity": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "branch": "chatgpt/go-1352-tmux-isolation-sandbox-sol",
     "head": "2c13be872e8141d97b3766d5f12a27314fc97659",
     "pull_request": 833,
-    "staged_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d"
+    "staged_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "status": "CLOSED_SUPERSEDED_DO_NOT_USE_AS_CURRENT_EVIDENCE"
   },
   "vercel_phase": {
     "execution_path": "Git preview orchestration -> @vercel/sandbox -> non-persistent Python 3.13 Sandbox -> deny-all network",
@@ -32,7 +33,7 @@
     "adversarial_cases": 8,
     "postcondition": "NO_NONCANONICAL_IDENTITY_REACHED_TMUX_NAMESPACE"
   },
-  "current_head_replication": {
+  "managed_policy_replication": {
     "source_identity": "d7eea6188a1321eb841d1dab9b26a96d429e342d",
     "artifact_identity": "the artefact/clayverse/terminal_sessions.py git blob b42d175745fa53c45b81fa1affda4f12a4093541",
     "managed_tmux_policy_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
@@ -43,11 +44,28 @@
     "same_unusual_experiment_replication": "PASS",
     "adversarial_cases": 8,
     "unusual_experiment_count_added": 0,
+    "real_tmux_runtime_tested": false
+  },
+  "merged_attestation_hardening": {
+    "merge_commit": "02584a5dc31d7a5d2c8f384deddab66ccfef7c1d",
+    "pull_request": 541,
+    "terminal_sessions_blob": "b37101df4bc959996e5c6dfd3a17c87977ce9a68",
+    "managed_tmux_policy_blob": "840d5048bda96b778cd9fb7f148bf7f24b60fa88",
+    "mechanism": "managed policy writes a final server marker; existing and newly-created canonical tmux servers must attest marker, prefix=None, and prefix2=None before admission",
+    "isolated_exact_blob_compile": "PASS",
+    "isolated_focused_pytest": {
+      "passed": 7,
+      "failed": 0
+    },
+    "existing_server_missing_marker": "FAIL_CLOSED_PASS",
+    "existing_server_restored_prefix": "FAIL_CLOSED_PASS",
+    "new_server_missing_marker": "FAIL_CLOSED_PASS",
+    "same_unusual_experiment_added": false,
     "real_tmux_runtime_tested": false,
-    "scope": "exact current Python mechanism and tmux command-construction evidence only; not a live tmux/Claude/OCI runtime"
+    "whole_product_pass": false
   },
   "unusual_experiment_count_added": 1,
-  "classification": "CURRENT_MECHANISM_SUPPORTED_WITH_VERCEL_ADMISSION_BLOCKED",
+  "classification": "MERGED_MECHANISM_SUPPORTED_WITH_LIVE_TMUX_AND_VERCEL_ADMISSION_STILL_OPEN",
   "whole_product_evidence_established": false,
-  "next_isolated_discriminator": "When Vercel preview admission reopens, stage the current managed-policy blob rather than the historical pre-policy blob, execute it in Vercel Sandbox, then advance to real tmux + packaged Claude Code inside the exact built ClayVerse OCI image."
+  "next_isolated_discriminator": "When Vercel preview admission reopens, re-stage the current exact main terminal/policy blobs and execute a real tmux server pair: fresh managed server must attest; deliberately pre-existing unmanaged server must be rejected before browser attachment. Then advance to packaged Claude Code inside the exact built ClayVerse OCI image."
 }

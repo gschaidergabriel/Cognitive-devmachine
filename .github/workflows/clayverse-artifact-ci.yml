@@ -1,10 +1,11 @@
 name: clayverse-artifact-ci
 
+# Manual while GitHub-hosted runner admission is unavailable. The latest
+# attempted OCI run (31995907177) failed before any step with runner_id=0;
+# automatic pushes would therefore create repeated false-red control-plane
+# noise rather than executable evidence. Re-enable push only after runner
+# admission itself has materially changed.
 on:
-  push:
-    paths:
-      - "the artefact/**"
-      - ".github/workflows/clayverse-artifact-ci.yml"
   workflow_dispatch:
 
 permissions:

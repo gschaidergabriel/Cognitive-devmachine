@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:36:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CONTRADICTS_REFINES_TIER2_SNAPSHOT_LIFECYCLE",
+  "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
+  "scope": "Correct only the Tier-2 Vercel snapshot lifecycle assertion and rebind the current execution frontier; preserve the valid PR686 identity correction.",
+  "pr686_identity": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "status": "RETAIN_IMMUTABLE_SOURCE_CANDIDATE",
+    "runtime_credit": 0
+  },
+  "superseded_claim": {
+    "receipt": "the artefact/receipts/2026-08-18_GO_PR686_RECEIPT_IDENTITY_SUPERSESSION_GPT56SOL.json",
+    "claim": "Vercel snapshot state is deleted with the named sandbox and therefore cannot survive delete-then-recreate.",
+    "status": "CONTRADICTED_BY_CURRENT_PRIMARY_VERCEL_DOCUMENTATION",
+    "boundary": "This does not restore runtime credit and does not prove the Tier-2 implementation."
+  },
+  "current_primary_vercel_evidence": {
+    "persistent_sandbox_delete": "Current Vercel Sandbox documentation says sandbox.delete()/sandbox remove permanently removes the sandbox and its sessions while snapshots remain until expiry or explicit snapshot deletion.",
+    "snapshot_api": "Current Vercel APIs expose snapshots as separately addressable project resources with independent get/delete operations and expiration metadata.",
+    "inference": "A snapshot can therefore be retained across deletion of the named source sandbox at the documented control-plane level; exact runtime behavior for this ClayVerse sequence remains unobserved until executed.",
+    "sources": [
+      "https://vercel.com/docs/sandbox/concepts/persistent-sandboxes",
+      "https://vercel.com/docs/rest-api/sandboxes/delete-a-snapshot",
+      "https://vercel.com/docs/rest-api/sandboxes/create-a-snapshot"
+    ]
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "1eb0ad4ab5dc1efe072e73a909ac38b1d37365c4",
+    "tier2_source_candidate": "snapshot declared transfer -> source.delete() -> Sandbox.create({source:{type:'snapshot',snapshotId}, persistent:false}) -> verify distinct replacement session -> restore/verify exact OCI -> generation-fenced recovery -> fresh provider secret -> second cognition",
+    "source_candidate_credit": true,
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "latest_vercel_execution_observation": {
+    "deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "controller_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "status": "BUILD_ERROR_BEFORE_TIER2",
+    "failure_class": "STALE_SOURCE_GUARD_BINDING",
+    "current_head_execution_credit": 0,
+    "clayverse_test_failure": false
+  },
+  "hypofusion": {
+    "strongest_counterhypothesis": "The documented snapshot lifecycle is correct but the specific SDK snapshot/delete/create sequence may fail operationally, may preserve undeclared guest state, or may not establish an independent Firecracker guest identity sufficient for Tier-2 credit.",
+    "cheapest_discriminator": "An exact-current-head ordinary Vercel source/build guard followed, once admitted, by a bounded snapshot -> delete source -> create replacement from snapshot run that captures source sandbox/session identity, snapshot identity/status, confirmed source deletion, replacement sandbox/session identity, and declared-transfer hashes before any Tier-2 PASS is granted.",
+    "promotion_rule": "No source-only marker, READY deployment, or successful snapshot creation is Tier-2 PASS; exact replacement identity plus restored declared bytes, same OCI identity, newer generation, no blind effect replay and second cognition are still required."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_experiment_count": 0,
+    "reason": "No shared immutable request/turn id is exposed to this organ and the exact user go message metadata available here is only minute precision (2026-08-18 01:29 +07), which is insufficient for the canonical atomic fallback key."
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "mechanism_supported_by_current_documentation": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Do not invent another carrier. Let the single retained PR810 lane converge on the documented snapshot delete-then-create candidate, obtain an exact-current-head Vercel build/source-guard result, then execute the exact isolated Tier-2 discriminator when the required owner-held credentials are deliberately supplied. Preserve zero runtime credit until that run actually executes."
+}

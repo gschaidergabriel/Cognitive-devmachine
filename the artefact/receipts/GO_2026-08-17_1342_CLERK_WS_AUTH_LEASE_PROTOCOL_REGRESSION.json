@@ -1,0 +1,41 @@
+{
+  "receipt_type": "post_merge_protocol_regression",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "trigger": {
+    "command": "go",
+    "user_local_time": "2026-08-17T13:42+07:00",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "source_identity": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "branch_base_main": "efe3f551dedd1c50ea56034b3f210a840e294dc1",
+    "canonical_gateway_blob": "0af019461094671703d27a7e2cd860138f77ed48",
+    "helper_test_blob": "3e427c8f1c513e5236b8a45a066ad96d400ec682",
+    "protocol_test_blob": "90f1f81280add9817f50e5f4fbaf561a24da93a8"
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated container",
+    "command_scope": "Focused pytest over exact Git-blob-bound auth-lease helper and ASGI/WebSocket protocol regression files.",
+    "result": "7 passed in 0.30s",
+    "protocol_observations": [
+      "A refreshed token with the same Clerk sub and sid renews the live WebSocket auth lease.",
+      "Binary PTY input remains accepted after successful reauthentication.",
+      "A refreshed token that changes Clerk sid is rejected and terminal attachment is retired.",
+      "An unrenewed live WebSocket lease expires fail-closed through the handler timeout path."
+    ],
+    "test_double_scope": "The protocol regression exercises the real FastAPI WebSocket handler and real asyncio/FD path, while replacing Clerk signature verification, IdentityRouter and tmux attachment with deterministic local test doubles."
+  },
+  "evidence_class": "MECHANISM_SUPPORTED",
+  "not_claimed": [
+    "real Clerk browser/JWT/key-rotation acceptance",
+    "real tmux/Claude Code runtime acceptance",
+    "exact OCI image runtime acceptance",
+    "whole ClayVerse PASS"
+  ],
+  "remaining_frontier": [
+    "Actually-started authorized Vercel Sandbox OCI build/runtime remains unavailable through the exposed connector surface.",
+    "Real Clerk instance browser/JWT/rotation evidence remains required.",
+    "Python transitive --require-hashes and apt snapshot/hash supply-chain gates remain open."
+  ]
+}

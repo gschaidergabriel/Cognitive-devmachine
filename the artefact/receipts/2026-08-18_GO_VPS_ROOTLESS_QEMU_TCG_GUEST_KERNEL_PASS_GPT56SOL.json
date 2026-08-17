@@ -1,0 +1,48 @@
+{
+  "schema": "ClayVerseVpsRootlessQemuTcgGuestKernelReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "DEVELOPMENT_EXECUTION_SURFACE_EVIDENCE_ONLY",
+  "source": {
+    "workflow_commit": "572e799fe9bb16bf395f6f6961d82ec30b528704",
+    "workflow_path_at_commit": ".github/workflows/clayverse-vps-qemu-rootless-guest-smoke.yml",
+    "run_id": 32059397269,
+    "job_id": 95476962290,
+    "job_conclusion": "success"
+  },
+  "observed": {
+    "runner": "rae-1",
+    "vmm": "QEMU 8.2.2 under TCG",
+    "vmm_staging": "rootless temporary Ubuntu package extraction; no privileged host package installation",
+    "guest_input": "verified Alpine 3.24.1 x86_64 netboot archive",
+    "guest_network": "NONE",
+    "host_filesystem_share": false,
+    "qemu_monitor_exposed": false,
+    "qemu_sandbox": "on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny",
+    "independent_guest_kernel_observed": true,
+    "bounded_qemu_termination": "timeout sent SIGTERM after the bounded 45 second guest window",
+    "cleanup_step": "success",
+    "product_code_executed_on_host": false,
+    "host_docker_used": false
+  },
+  "evidence_limits": {
+    "clayverse_product_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "final_hardware_microvm_credit": 0,
+    "qemu_tcg_isolation_credit": "DEVELOPMENT_ONLY_NOT_FINAL_HARDWARE_MICROVM",
+    "unusual_experiment_count_added": 0
+  },
+  "artifact_note": {
+    "workflow_receipt_was_generated_in_job": true,
+    "workflow_artifact_uploaded": false,
+    "reason": "the successful historical workflow wrote /tmp/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json but the upload step looked for /tmp/clayverse-vps-rootless-qemu-guest-${GITHUB_RUN_ID}.json",
+    "policy": "do not invent the missing artifact or its unavailable receipt-only hashes; bind the observed GitHub job log and exact workflow commit instead"
+  },
+  "collapse": {
+    "qemu_tcg_independent_guest_kernel_lane": "MECHANISM_SUPPORTED_AND_EXECUTED",
+    "clayverse_inside_guest": "UNEXECUTED",
+    "same_exact_accepted_oci_digest_inside_guest": "UNEXECUTED",
+    "final_hardware_microvm_boundary": "UNEXECUTED",
+    "next_discriminator": "run bounded ClayVerse artifact or exact OCI evidence inside an independent disposable guest; never on the VPS host"
+  }
+}

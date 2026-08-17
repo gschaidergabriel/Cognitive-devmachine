@@ -1,0 +1,77 @@
+{
+  "schema": "ClayVerseSourceMechanismReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroClay Stage-A adaptive memory entry-point learning",
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "go/microclay-stagea-entrypoint-v2-20260817-1353",
+    "base_main_at_branch_creation": "9956bd5b8651eb5c3f6943cfc54e3cb2a85f6915",
+    "current_main_observed_after_build": "169c308c39cf6fa075ed7b69c69d2c674e5e0691",
+    "main_microclay_blob_after_parallel_advance": "891eb6306416460dda739fce00fba473840c1ee0",
+    "candidate_microclay_blob": "8f3f7d369c420837db7bf34e3b8b7541d1987cc7",
+    "candidate_test_blob": "19d7d4a5ce332425004b796025962b4ebb71a19f"
+  },
+  "observed_problem": {
+    "main_behavior": "Adaptive scoring could only rerank memories with baseline lexical support because zero-baseline candidates were filtered from both serving and shadow selection.",
+    "consequence": "MicroClay could learn weights but could not actually learn a new entry point that opens a prior lexical miss.",
+    "old_pr_415_donor": "PR #415 already proposed query-cue to subject routes, but it is a large diverged Stage-A/Stage-B/terminal fusion candidate and retained POLICY_VERSION=1 across changed adaptive semantics."
+  },
+  "candidate_delta": [
+    "POLICY_VERSION advances to 2 for the new adaptive routing semantics.",
+    "All new entry-policy keys are version-scoped so persisted v1 capital cannot silently affect v2 behavior.",
+    "A persisted ACTIVE mode with a different policy_version is treated as SHADOW until exact v2 promotion.",
+    "Bounded hashed query-only cue -> subject route keys can acquire capital only from actually served evidence that later receives canonical causal outcome credit.",
+    "Only positive learned route capital can open a zero-lexical adaptive candidate.",
+    "Generic kind/subject capital cannot open a lexical miss.",
+    "New route credit is limited to rank-1 served evidence to reduce alias spraying across a full retrieved pack.",
+    "SHADOW remains factual serving authority: learned routes may appear in shadow_memory_ids without changing PRESENT/UNKNOWN serving status."
+  ],
+  "bounded_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "exact_candidate_file_reconstruction": true,
+    "git_blob_sha_observed": "8f3f7d369c420837db7bf34e3b8b7541d1987cc7",
+    "git_blob_matches_branch": true,
+    "py_compile": "PASS",
+    "mechanism_regression": {
+      "result": "PASS",
+      "checks": "11/11",
+      "covered": [
+        "v1 ACTIVE state fails closed to SHADOW under v2 code",
+        "exact v2 policy state can expose ACTIVE mode",
+        "v2 route keys are version-scoped",
+        "zero lexical baseline remains zero",
+        "positive learned route opens adaptive packing only",
+        "baseline serving does not open the route",
+        "generic subject capital cannot open a miss",
+        "negative learned route capital cannot open a miss"
+      ],
+      "boundary": "Exact candidate microclay_retrieval.py with a minimal SQLite/stub authority surface; not full repository pytest."
+    }
+  },
+  "execution_admission": {
+    "vercel_mcp_full_surface_inspected": true,
+    "vercel_sandbox_create_start_exec_exposed": false,
+    "vercel_deployment_used_as_test_substitute": false,
+    "vps_or_self_hosted_testing_used": false,
+    "exact_full_checkout_pytest": "UNOBSERVED",
+    "exact_oci_build_runtime": "UNOBSERVED"
+  },
+  "counterhypotheses_and_open_gates": [
+    "A learned cue->subject route may overfit aliases or amplify stale subject structure even though it cannot change truth; held-out contamination/staleness/negative-correction tests are required before ACTIVE promotion.",
+    "Current automatic reward remains dominated by verified effect outcomes; explicit correction/retrieval-miss feedback remains an open product gate.",
+    "The focused candidate intentionally does not fuse PR #415 Stage-B method-memory semantics; Stage-B should remain on the retained strict authority/admission line rather than creating a second retrieval truth path.",
+    "Replay full-request identity, crash-atomic learning and Stage-A method/control-kind isolation remain separate fusion obligations and require current-head adjudication before a final combined MicroClay promotion candidate."
+  ],
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The shared user-trigger metadata available to this organ is minute precision only and no immutable request/turn id is exposed; current BOOTSTRAP_MINIMAL schema 5.2 requires fail-closed no unusual experiment.",
+    "unusual_experiment_executed": false,
+    "ordinary_regression_only": true
+  },
+  "acceptance": "SOURCE_MECHANISM_SUPPORTED_NOT_PRODUCT_PASS",
+  "next_exact_gate": "Refresh/fuse current main, run the focused test plus adjacent MicroClay replay/credit/context/recovery regressions in an actually-started authorized isolated exact checkout, then held-out SHADOW-vs-baseline alias/contamination/stale-route evaluation before any ACTIVE promotion."
+}

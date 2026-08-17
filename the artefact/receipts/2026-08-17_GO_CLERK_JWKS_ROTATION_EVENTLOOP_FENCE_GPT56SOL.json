@@ -1,0 +1,59 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+  "source_branch": "go/clerk-session-authority-fence-20260817-1342",
+  "pull_request": 428,
+  "finding": {
+    "classification": "SOURCE_RUNTIME_BOUNDARY_GAP",
+    "observed": "ClerkTokenVerifier constructed PyJWKClient with cache_keys=true, adding a per-signing-key LRU with no time-based expiration above the finite JWKS-set cache. WebSocket auth also called verifier.verify synchronously from the async terminal handler, so a JWKS fetch could block that event loop path.",
+    "product_contract": "Clerk key rotation must remain observable and network-backed verification must not synchronously block the canonical WebSocket PTY event loop."
+  },
+  "repair": {
+    "clerk_auth_blob": "2d7a69378bda40d51cef084feb1f2e238a890864",
+    "terminal_gateway_blob": "1b17a6ee0f7f66b848daa40b9481fcacfa16ee57",
+    "focused_test_blob": "e4a2910c1d4935ed44f9aa6c4457dda158b3cdea",
+    "per_key_lru_cache": false,
+    "jwks_set_cache": true,
+    "jwks_set_lifespan_seconds": 300,
+    "jwks_fetch_timeout_seconds": 5,
+    "websocket_verification_off_event_loop": true,
+    "static_public_key_path_networkless": true
+  },
+  "primary_dependency_evidence": {
+    "pyjwt_version_locked_by_artifact": "2.13.0",
+    "pyjwt_contract": "PyJWKClient finite JWKS-set cache defaults to 300 seconds; cache_keys=true adds a separate LRU signing-key cache without time-based expiration; timeout is configurable.",
+    "clerk_contract": "Clerk supports networkless public-key verification or JWKS-backed verification; real key-rotation behavior remains an external acceptance gate."
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "exact_clerk_auth_git_blob_match": true,
+    "exact_clerk_auth_git_blob": "2d7a69378bda40d51cef084feb1f2e238a890864",
+    "python_compile": "PASS",
+    "real_pyjwt_version": "2.13.0",
+    "constructor_boundary": "PASS",
+    "observed_jwks_fetch_timeout_seconds": 5,
+    "observed_jwks_set_lifespan_seconds": 300,
+    "observed_per_key_cache_wrapper": false,
+    "observed_static_key_jwks_client": null,
+    "full_checkout_attempt": "EXECUTION_ADMISSION_BLOCKED_DNS",
+    "full_checkout_error": "Could not resolve host: github.com",
+    "interpretation": "The network admission failure is not a product test failure. This receipt supports the exact clerk_auth constructor mechanism and source-bound terminal offload line only; it is not exact full-head or live Clerk/browser/PTY runtime evidence."
+  },
+  "go_experiment_accounting": {
+    "this_lane_started_distinct_unusual_experiment": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The available exact user trigger timestamp is minute-precision only, so the atomic unusual-experiment lease cannot be safely keyed."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Actually-started authorized isolated exact-head run of PR #428 plus adjacent auth/terminal regressions, followed by real Clerk JWKS rotation and browser WebSocket PTY behavior, then exact OCI build/runtime/restart evidence."
+}

@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T18:16:00+07:00",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T18:01+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REAL_VERCEL_PREFLIGHT_FAILURE_SOURCE_LOCALIZED_AND_REPAIRED_CURRENT_RUNTIME_UNOBSERVED",
+  "canonical_research_main_observed_before_write": "5e60f0d4ef92956ed7a831d3c5c0ef8c0ea300c6",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "failed_deployment_head": "c98a68ff16794c086db7932744b9853ac53969fb",
+    "current_repaired_head": "1c96b76184d95a9357b24fde5dcb4c884319f19e"
+  },
+  "observed_vercel_failure": {
+    "deployment_id": "dpl_6uKu7KsYM3XazJX4K4dwG7Rd5GqY",
+    "state": "ERROR",
+    "build_reached_vercel_build": true,
+    "sandbox_create_reached": false,
+    "error": "CURRENT_TARGET_PATCH_IDENTITY_MISMATCH:private_archive_signature",
+    "cause": "the c98 current-target wrapper attempted to apply predecessor EntityOS/fetchPrivateArchive transforms on top of runner 896a3e43, which already owned the four-argument private archive function and locked EntityOS staging path",
+    "classification": "CONTROLLER_COMPOSITION_PREFLIGHT_FAIL_CLOSED_NOT_CLAYVERSE_TEST_FAIL",
+    "runtime_credit": 0
+  },
+  "repair_commits": {
+    "collapse_wrapper_to_research_rebind_plus_dpkg_only": "a80e97e4d30e074805fec5bc39b062d2e04021a3",
+    "remove_duplicate_entityos_helper": "bb48dce2548565f8f19cffb1842b507d058ba693",
+    "single_entityos_authority_regression": "0a1d0d0321409338849e40d86c708d2757236a3d",
+    "guard_complete_entityos_provenance": "eb4996463a5e852e3dcb1a0787f186082a00df52",
+    "guard_runner_alignment_regression": "1c96b76184d95a9357b24fde5dcb4c884319f19e"
+  },
+  "post_repair_source_contract": {
+    "entityos_staging_authority": "RETAINED_RUNNER_SINGLE_PATH",
+    "current_target_wrapper_responsibilities": [
+      "Research SHA/tree rebind to f4c91d0129bbcd9d5e83bceb66b44c2e52f517ee / ff89be29ea79df92edd547b32abce9c7eceb34da",
+      "two-occurrence dpkg JavaScript interpolation fence"
+    ],
+    "duplicate_stage_exact_entityos_helper_removed": true,
+    "guard_now_binds": [
+      "EntityOS source head",
+      "EntityOS source tree",
+      "canonical source archive SHA-256",
+      "source-attestation SHA-256",
+      "EntityOS artifact SHA-256",
+      "EntityOS artifact size",
+      "retained Research/#611/Docker identities",
+      "no-secret-forwarding and zero-unusual-experiment markers"
+    ]
+  },
+  "external_primary_preflight": {
+    "vercel_sandbox_docs_guarantee_python_3_13_sudo_dnf_docker_installability": true,
+    "vercel_docs_do_not_explicitly_guarantee_uv_is_preinstalled_in_every_sandbox_base_runtime": true,
+    "current_runner_behavior": "command -v uv || exit 86; fail closed until measured",
+    "claim_scope": "dependency-risk note only; no runtime observation"
+  },
+  "current_execution_state": {
+    "newer_deployment_than_failed_c98_observed": false,
+    "exact_current_head_sandbox_admission": "UNOBSERVED",
+    "exact_current_head_source_regression": "UNOBSERVED",
+    "exact_current_head_oci_build": "UNOBSERVED",
+    "runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "shared trigger exposes no immutable unique request/turn identity; deterministic controller/source work does not consume an unusual experiment"
+  },
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_discriminator": "execute the same retained PR810 controller at current exact head 1c96b76184d95a9357b24fde5dcb4c884319f19e or its once-refreshed successor when an authorized isolated provider actually admits Sandbox.create; preserve current single-path EntityOS staging and measure uv, locked rebuild, source regression, OCI build and in-image gates"
+}

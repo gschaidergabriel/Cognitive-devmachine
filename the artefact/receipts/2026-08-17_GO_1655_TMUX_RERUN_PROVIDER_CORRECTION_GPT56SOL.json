@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger_local_time": "2026-08-17T16:55+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_correction": "9d32c7de1c57937b45abdb3370386bec53224bd3",
+  "scope": "post_reentry_provider_and_bridge_evidence_correction",
+  "supersedes_or_refines": "the artefact/receipts/2026-08-17_GO_1655_TMUX_REPAIR_REENTRY_NO_CHANGE_GPT56SOL.json",
+  "canonical_product_code_delta": "NO_CHANGE",
+  "repair_candidate": {
+    "pull_request": 603,
+    "observed_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "status": "DRAFT_UNMERGED_RUNTIME_UNVERIFIED"
+  },
+  "provider_correction": {
+    "prior_statement_refined": "Vercel build-rate-limit was not continuously closed across the whole cycle.",
+    "admitted_execution_observed": {
+      "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+      "deployment_id": "dpl_D9dvKLk37x99xcNE2M9qsCkvA4MM",
+      "source_commit": "b5bb27915f178b424a4dbe76e3f55f269422863e",
+      "sandbox_execution_observed": true,
+      "network_policy_during_tests": "DENY_ALL",
+      "classification": "BOUNDED_NON_CLAYVERSE_PRODUCT_SANDBOX_EXECUTION_CONFIRMS_TEMPORARY_ADMISSION_WINDOW",
+      "product_credit": "ZERO_FOR_PR603_AND_WHOLE_CLAYVERSE"
+    },
+    "exact_repair_rerun": {
+      "bridge_pull_request": 846,
+      "deployment_id": "dpl_Cu8hEPnRsYVTGmnBG8vUypVuQHAc",
+      "bridge_commit": "f3eff0ef179961110f338e18159ab47a46e69fd9",
+      "sandbox_start_observed": false,
+      "product_assertions_reached": false,
+      "observed_error": "Node.js SyntaxError: Unexpected identifier 'unbind' in the temporary execution bridge template literal before Sandbox.create",
+      "classification": "EXECUTION_BRIDGE_PARSER_FAILURE_BEFORE_SANDBOX_START_ZERO_PRODUCT_CREDIT"
+    },
+    "bridge_parser_repair": {
+      "scope": "TEMPORARY_EXECUTION_BRIDGE_ONLY",
+      "mechanism": "repair only the exact over-escaped backtick sequence before dynamically importing the generated runtime runner",
+      "canonical_clayverse_product_bytes_changed": false,
+      "current_bridge_head": "49204d3f20bbb86a153f83d29cda2ddadf062b4f",
+      "current_build_entrypoint": "node scripts/run-clayverse-tmux-livefix-bridgefix.mjs",
+      "current_vercel_status": "Deployment rate limited — retry in 24 hours.",
+      "sandbox_start_observed_after_bridge_fix": false,
+      "classification": "CURRENT_EXECUTION_ADMISSION_BLOCKED_BEFORE_REPAIR_ASSERTION_ZERO_PRODUCT_CREDIT"
+    }
+  },
+  "coordination": {
+    "parallel_main_cycle_receipt_observed": "the artefact/receipts/2026-08-17_GO_1655_TMUX_REPAIR_REENTRY_NO_CHANGE_GPT56SOL.json",
+    "duplicate_product_write_avoided": true,
+    "stale_shared_bridge_write_conflict_observed": true,
+    "stale_shared_bridge_write_action": "A GitHub 409 was preserved and no force overwrite was performed.",
+    "single_retained_repair_lane": "ClayVerse PR #603 + Dr.-Unterweger execution bridge PR #846"
+  },
+  "daytona_fallback": {
+    "owner_authorized_free_only": true,
+    "runtime_executed_for_this_repair": false,
+    "provider_unavailability_claimed": false,
+    "classification": "NO_RUNTIME_CREDIT"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed and the user-message timestamp available to this organ is minute-precision only; the atomic GO lease protocol forbids fabricating a unique trigger key."
+  },
+  "next_exact_gate": "When an authorized isolated execution slot is admitted, execute the unchanged PR #603 candidate against real tmux 3.6a and require the retained five-marker same-falsifier contract: pre-policy persistent-server upgrade PASS; already-hardened second reapply PASS; new-server second source PASS; direct multi-argv fake-Claude transport PASS; mixed/unknown diagnostic fail-closed. Only then rejoin current main and consider PR #603 promotion.",
+  "acceptance": "IN_PROGRESS_REPAIR_RERUN_EXECUTION_ADMISSION_BLOCKED"
+}

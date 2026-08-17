@@ -16,7 +16,7 @@ _SHA256 = re.compile(r"[0-9a-f]{64}")
 class ProblemSignatureAdmission:
     """One turn-bound authority for Stage-B structural problem signatures.
 
-    The admitted signature is a routing/abstraction signal only.  It carries no
+    The admitted signature is a routing/abstraction signal only. It carries no
     factual truth or effect authority and is bound to the active canonical turn,
     entity generation and normalized resource set before Stage-B can consume it.
     """
@@ -27,13 +27,7 @@ class ProblemSignatureAdmission:
     @staticmethod
     def _canonical(value: Any) -> str:
         try:
-            return json.dumps(
-                value,
-                sort_keys=True,
-                separators=(",", ":"),
-                ensure_ascii=False,
-                allow_nan=False,
-            )
+            return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
         except (TypeError, ValueError) as exc:
             raise MethodRecordError("problem-signature admission must be finite canonical JSON") from exc
 
@@ -83,8 +77,7 @@ class ProblemSignatureAdmission:
     def _active_identity(self, session_id: str, user_id: str):
         self.db.assert_session_owner(session_id, user_id)
         row = self.db.db.execute(
-            "SELECT user_id,turn_id,episode_id,causal_id,generation,resource_refs "
-            "FROM active_turns WHERE session_id=?",
+            "SELECT user_id,turn_id,episode_id,causal_id,generation,resource_refs FROM active_turns WHERE session_id=?",
             (session_id,),
         ).fetchone()
         if row is None:
@@ -115,12 +108,7 @@ class ProblemSignatureAdmission:
             raise MethodRecordError("problem-signature admission must join the canonical turn transaction")
         active, active_refs = self._active_identity(session_id, user_id)
         expected = (turn_id, episode_id, causal_id, int(generation))
-        observed = (
-            str(active["turn_id"]),
-            str(active["episode_id"]),
-            str(active["causal_id"]),
-            int(active["generation"]),
-        )
+        observed = (str(active["turn_id"]), str(active["episode_id"]), str(active["causal_id"]), int(active["generation"]))
         if observed != expected:
             raise MethodRecordError("problem-signature causal identity mismatch")
         refs = self._refs(resource_refs)
@@ -130,9 +118,7 @@ class ProblemSignatureAdmission:
         signature = canonical_problem_signature(problem_signature)
         signature_public = {key: list(values) for key, values in signature.items()}
         admitted_provenance = self._provenance(provenance)
-        provenance_sha256 = hashlib.sha256(
-            self._canonical(admitted_provenance).encode("utf-8")
-        ).hexdigest()
+        provenance_sha256 = hashlib.sha256(self._canonical(admitted_provenance).encode("utf-8")).hexdigest()
         identity = {
             "user_id": user_id,
             "session_id": session_id,
@@ -165,23 +151,10 @@ class ProblemSignatureAdmission:
             "effect_authority": False,
         }
         self.db.db.execute(
-            "INSERT OR IGNORE INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
-            "VALUES(?,?,?,?,?,?,?,?)",
-            (
-                receipt_id,
-                "method_receipt",
-                f"problem_signature:{causal_id}",
-                self._canonical(payload),
-                turn_id,
-                user_id,
-                time.time(),
-                self._canonical(stored_provenance),
-            ),
+            "INSERT OR IGNORE INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) VALUES(?,?,?,?,?,?,?,?)",
+            (receipt_id, "method_receipt", f"problem_signature:{causal_id}", self._canonical(payload), turn_id, user_id, time.time(), self._canonical(stored_provenance)),
         )
-        row = self.db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (receipt_id,),
-        ).fetchone()
+        row = self.db.db.execute("SELECT * FROM durable_memory WHERE memory_id=?", (receipt_id,)).fetchone()
         if row is None:
             raise MethodRecordError("problem-signature receipt persistence failed")
         receipt = self.decode_row(row)
@@ -210,9 +183,7 @@ class ProblemSignatureAdmission:
         if payload["truth_authority"] is not False or payload["effect_authority"] is not False:
             raise MethodRecordError("problem-signature receipt cannot mint authority")
         admitted_provenance = self._provenance(payload["provenance"])
-        expected_provenance_sha = hashlib.sha256(
-            self._canonical(admitted_provenance).encode("utf-8")
-        ).hexdigest()
+        expected_provenance_sha = hashlib.sha256(self._canonical(admitted_provenance).encode("utf-8")).hexdigest()
         if payload["signature_provenance_sha256"] != expected_provenance_sha:
             raise MethodRecordError("problem-signature provenance hash mismatch")
         signature = canonical_problem_signature(payload["problem_signature"])
@@ -245,24 +216,17 @@ class ProblemSignatureAdmission:
             raise MethodRecordError("problem-signature receipt id mismatch")
         if str(row["source_turn_id"]) != str(payload["turn_id"]) or str(row["user_id"]) != str(payload["user_id"]):
             raise MethodRecordError("problem-signature durable identity mismatch")
-        return payload
+        return {**payload, "memory_id": str(row["memory_id"])}
 
     def load_active(self, *, session_id: str, user_id: str) -> dict[str, Any] | None:
         active, active_refs = self._active_identity(session_id, user_id)
         receipt_id = self._receipt_id(user_id, str(active["causal_id"]))
-        row = self.db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (receipt_id,),
-        ).fetchone()
+        row = self.db.db.execute("SELECT * FROM durable_memory WHERE memory_id=?", (receipt_id,)).fetchone()
         if row is None:
             return None
         receipt = self.decode_row(row)
-        observed = (
-            receipt["turn_id"], receipt["episode_id"], receipt["causal_id"], int(receipt["generation"])
-        )
-        expected = (
-            str(active["turn_id"]), str(active["episode_id"]), str(active["causal_id"]), int(active["generation"])
-        )
+        observed = (receipt["turn_id"], receipt["episode_id"], receipt["causal_id"], int(receipt["generation"]))
+        expected = (str(active["turn_id"]), str(active["episode_id"]), str(active["causal_id"]), int(active["generation"]))
         if observed != expected or receipt["resource_refs"] != active_refs:
             raise MethodRecordError("problem-signature receipt no longer matches active turn")
         return receipt

@@ -52,6 +52,8 @@ def test_probe_uses_canonical_engine_and_returns_only_sanitized_receipt(tmp_path
         assert payload["workspace_episode_id"]
         assert payload["effect"] == {
             "required": False,
+            "required_capability": None,
+            "capability": None,
             "effect_id": None,
             "present": False,
             "verified_ok": False,
@@ -91,6 +93,8 @@ def test_probe_can_require_verified_effect_through_effectgate(tmp_path):
             require_effect=True,
         )
         assert payload["effect"]["required"] is True
+        assert payload["effect"]["required_capability"] is None
+        assert payload["effect"]["capability"] == "state.noop"
         assert payload["effect"]["present"] is True
         assert payload["effect"]["verified_ok"] is True
         assert payload["effect"]["effect_id"]
@@ -110,6 +114,46 @@ def test_probe_fails_closed_when_required_effect_is_missing(tmp_path):
                 inference=FakeApiProvider(),
                 require_effect=True,
             )
+    finally:
+        db.close()
+
+
+def test_probe_required_capability_rejects_successful_wrong_effect(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        with pytest.raises(RuntimeError, match="entityos.exec"):
+            run_api_acceptance_probe(
+                db,
+                {"subject-g": "gabriel", "subject-a": "andreas"},
+                "subject-g",
+                "final generic acceptance must not degrade to noop",
+                inference=FakeApiProvider(
+                    effect={"capability": "state.noop", "target": "acceptance", "argv": None}
+                ),
+                require_effect=True,
+                required_effect_capability="entityos.exec",
+            )
+    finally:
+        db.close()
+
+
+def test_probe_can_bind_exact_required_capability(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        payload = run_api_acceptance_probe(
+            db,
+            {"subject-g": "gabriel", "subject-a": "andreas"},
+            "subject-g",
+            "bind the exact admitted noop capability",
+            inference=FakeApiProvider(
+                effect={"capability": "state.noop", "target": "acceptance", "argv": None}
+            ),
+            required_effect_capability="state.noop",
+        )
+        assert payload["effect"]["required"] is True
+        assert payload["effect"]["required_capability"] == "state.noop"
+        assert payload["effect"]["capability"] == "state.noop"
+        assert payload["effect"]["verified_ok"] is True
     finally:
         db.close()
 

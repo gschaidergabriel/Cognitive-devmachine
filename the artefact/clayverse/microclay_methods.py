@@ -61,10 +61,10 @@ class MicroClayMethodRetrieval:
     user-bound, fully shaped PROMOTED record whose promotion receipt exists and whose
     source episodes are terminal, causally re-entered episodes for the same user.
 
-    Important: promotion itself is intentionally NOT implemented here. A lone
-    `status=PROMOTED` flag is not admission authority. The current query-to-signature
-    matcher remains token based and therefore remains a SHADOW/source-candidate
-    mechanism until held-out structural transfer gates are satisfied.
+    The raw query is identity/receipt material only. Method ranking is allowed only
+    when the caller supplies an explicit problem signature; absent that signature the
+    route fails closed with SIGNATURE_REQUIRED. This direct route remains SHADOW and
+    grants no truth/effect authority until structural-signature admission is canonical.
     """
 
     MAX_SOURCE_ROWS = 5000
@@ -320,6 +320,7 @@ class MicroClayMethodRetrieval:
         self,
         *,
         query: str,
+        problem_signature: list[str] | None = None,
         user_id: str,
         session_id: str,
         turn_id: str,
@@ -338,6 +339,47 @@ class MicroClayMethodRetrieval:
         self.db.assert_session_owner(session_id, user_id)
         self.db.assert_live_generation(session_id, generation)
 
+        query_sha256 = hashlib.sha256(query.encode("utf-8")).hexdigest()
+        if problem_signature is None:
+            return {
+                "items": [],
+                "receipt": {
+                    "route": "method",
+                    "matcher": "none",
+                    "query_sha256": query_sha256,
+                    "signature_source": "NONE",
+                    "session_id": session_id,
+                    "turn_id": turn_id,
+                    "episode_id": episode_id,
+                    "causal_id": causal_id,
+                    "generation": int(generation),
+                    "selected_memory_ids_sha256": hashlib.sha256(b"[]").hexdigest(),
+                    "candidate_count": 0,
+                    "selected_count": 0,
+                    "limit_requested": int(limit),
+                    "budget_chars": int(budget_chars),
+                    "chars_selected": 0,
+                    "status": "SIGNATURE_REQUIRED",
+                    "truth_authority": False,
+                    "effect_authority": False,
+                    "adaptive": False,
+                    "persisted": False,
+                    "served": False,
+                    "promotion_verified": False,
+                },
+            }
+
+        signature = self._string_list(
+            problem_signature,
+            field="problem_signature_query",
+            min_items=1,
+            max_items=64,
+        )
+        signature_json = json.dumps(signature, ensure_ascii=False, separators=(",", ":"))
+        signature_tokens = set(
+            sorted(self._tokens(" ".join(signature)))[: self.MAX_QUERY_TOKENS]
+        )
+
         active = tuple(sorted(METHOD_ACTIVE_KINDS))
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
@@ -347,16 +389,15 @@ class MicroClayMethodRetrieval:
             "ORDER BY ts DESC LIMIT ?",
             (*active, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
-        qtokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
         ranked: list[tuple[float, float, str, dict[str, Any]]] = []
         for row in rows:
             record = self._method_record(row, user_id=user_id)
-            signature_tokens = self._tokens(" ".join(record["problem_signature"]))
-            overlap = len(qtokens.intersection(signature_tokens))
+            candidate_tokens = self._tokens(" ".join(record["problem_signature"]))
+            overlap = len(signature_tokens.intersection(candidate_tokens))
             if overlap <= 0:
                 continue
-            coverage = overlap / max(1, len(qtokens))
-            precision = overlap / max(1, len(signature_tokens))
+            coverage = overlap / max(1, len(signature_tokens))
+            precision = overlap / max(1, len(candidate_tokens))
             score = min(1.0, 0.70 * coverage + 0.30 * precision)
             public = {
                 "memory_id": str(row["memory_id"]),
@@ -389,8 +430,10 @@ class MicroClayMethodRetrieval:
             "items": selected,
             "receipt": {
                 "route": "method",
-                "matcher": "signature_token_v2_strict_promoted",
-                "query_sha256": hashlib.sha256(query.encode("utf-8")).hexdigest(),
+                "matcher": "explicit_signature_token_v1_shadow",
+                "query_sha256": query_sha256,
+                "problem_signature_sha256": hashlib.sha256(signature_json.encode("utf-8")).hexdigest(),
+                "signature_source": "EXPLICIT_SHADOW_INPUT",
                 "session_id": session_id,
                 "turn_id": turn_id,
                 "episode_id": episode_id,
@@ -409,6 +452,7 @@ class MicroClayMethodRetrieval:
                 "effect_authority": False,
                 "adaptive": False,
                 "persisted": False,
+                "served": False,
                 "promotion_verified": bool(selected),
             },
         }

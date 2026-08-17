@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T22:49:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed": "79cdde5232e7047e2dabcd5e51a95da173e13bec",
+  "scope": "microvm_network_default_deny_supporting_exact_file_execution",
+  "owner_law": "final accepted ClayVerse image must run as the same immutable OCI digest inside an independent VM/microVM guest-kernel envelope",
+  "observed_parallel_delta": {
+    "note": "The MicroVM network-policy gap was closed on main by a parallel organ during this go; this organ did not duplicate the implementation.",
+    "template_path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "template_git_blob_sha1": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "test_path": "the artefact/tests/test_microvm_deployment_contract.py",
+    "test_git_blob_sha1": "cc7e3cb7628314c51534330878ca886bc464713e"
+  },
+  "mechanism": {
+    "network_policy": "clayverse-default-deny",
+    "policy_types": ["Ingress", "Egress"],
+    "ingress_rules": [],
+    "egress_rules": [],
+    "broad_cidr_allows_absent": true,
+    "deployment_specific_allow_policy_required": true
+  },
+  "exact_file_execution": {
+    "environment": "isolated non-production OpenAI container",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "source_reconstruction": "byte-exact Git blob reconstruction verified with git hash-object before execution",
+    "command": "python -m pytest -q /tmp/clay_microvm_exact/tests/test_microvm_deployment_contract.py -k network_is_fail_closed_until_explicit_allow_policy",
+    "exit_code": 0,
+    "result": "1 passed, 4 deselected in 0.10s"
+  },
+  "external_primary_evidence": {
+    "source": "Kubernetes NetworkPolicy official documentation",
+    "finding": "A pod is isolated for ingress/egress when a selecting NetworkPolicy includes the respective policyTypes; empty rule lists allow no traffic in that direction. Enforcement still depends on a network plugin that implements NetworkPolicy."
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "runtime_credit": {
+    "kata_microvm": 0,
+    "exact_oci_image": 0,
+    "whole_clayverse": 0
+  },
+  "current_execution_blocker": "Latest retained Vercel Sandbox admission reached Sandbox.create, then failed closed before private source fetch because host-side sensitive GITHUB_READ_TOKEN was unavailable; no ClayVerse test executed in that run.",
+  "go_unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable request/turn id is exposed and the immutable user-message timestamp available to this organ has only minute precision, so the atomic GO lease protocol does not admit an unusual experiment."
+  },
+  "non_claims": [
+    "not an exact OCI build/runtime PASS",
+    "not an actual Kata/microVM enforcement PASS",
+    "not proof that the target cluster CNI enforces NetworkPolicy",
+    "not a Clerk/browser/Claude/tmux runtime PASS",
+    "not WHOLE_CLAYVERSE_PASS"
+  ]
+}

@@ -237,7 +237,8 @@ class StageBMethodRetrieval:
             "truth_authority": False,
             "effect_authority": False,
         })
-        with self.db.tx() as db:
+
+        def insert(db) -> bool:
             cursor = db.execute(
                 "INSERT OR IGNORE INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
                 "VALUES(?,?,?,?,?,?,?,?)",
@@ -252,7 +253,17 @@ class StageBMethodRetrieval:
                     provenance,
                 ),
             )
-            inserted = int(cursor.rowcount or 0) == 1
+            return int(cursor.rowcount or 0) == 1
+
+        # Product turn admission already owns the canonical UnifiedDB transaction. Join
+        # it instead of opening a nested BEGIN IMMEDIATE; standalone callers still get
+        # one atomic transaction. This keeps receipt rollback coupled to turn rollback.
+        if self.db.db.in_transaction:
+            inserted = insert(self.db.db)
+        else:
+            with self.db.tx() as db:
+                inserted = insert(db)
+
         if not inserted:
             replay = self._load_existing(
                 memory_id=memory_id,

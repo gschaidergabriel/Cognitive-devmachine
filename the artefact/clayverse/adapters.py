@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
@@ -92,10 +93,17 @@ class ClerkTokenVerifier:
 class ClaudeCodeInference:
     """Tool-less Claude Code cognition boundary for ClayVerse.
 
-    Cognition runs with auto-discovery disabled, all built-in tools disabled and no
-    Claude session persistence. UnifiedDB/WorldAssembler remains the sole durable
-    memory/world authority and the ClayVerse EffectGate owns all external actions.
+    Cognition receives only an explicit environment allowlist, has built-in tools and
+    MCP disabled, and has no Claude session persistence. UnifiedDB/WorldAssembler is
+    the sole durable world authority; the ClayVerse EffectGate owns external actions.
     """
+
+    ENV_ALLOWLIST = (
+        "PATH", "HOME", "LANG", "LC_ALL", "TMPDIR",
+        "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS",
+        "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY",
+        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+    )
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
         self.binary = binary or os.environ.get("CLAUDE_CODE_BIN", "claude")
@@ -103,12 +111,23 @@ class ClaudeCodeInference:
         self.timeout = int(timeout or os.environ.get("CLAYVERSE_CLAUDE_TIMEOUT_SECONDS", "120"))
         self._lock = threading.Lock()
 
+    @classmethod
+    def _subprocess_env(cls) -> dict[str, str]:
+        env = {key: os.environ[key] for key in cls.ENV_ALLOWLIST if key in os.environ}
+        env.setdefault("PATH", "/usr/local/bin:/usr/bin:/bin")
+        env["DISABLE_AUTOUPDATER"] = "1"
+        env["CLAUDE_CODE_SKIP_PROMPT_HISTORY"] = "1"
+        return env
+
     def available(self) -> bool:
         executable = shutil.which(self.binary)
         if executable is None:
             return False
         try:
-            cp = subprocess.run([executable, "--version"], shell=False, capture_output=True, timeout=5)
+            cp = subprocess.run(
+                [executable, "--version"], shell=False, capture_output=True,
+                timeout=5, env=self._subprocess_env(),
+            )
             return cp.returncode == 0
         except Exception:
             return False
@@ -137,18 +156,18 @@ class ClaudeCodeInference:
             "plan",
             "--tools",
             "",
+            "--strict-mcp-config",
             "--no-session-persistence",
             "--append-system-prompt",
             system,
         ]
-        env = {**os.environ, "DISABLE_AUTOUPDATER": "1", "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1"}
         with self._lock:
             try:
                 cp = subprocess.run(
                     args,
                     shell=False,
                     cwd=self.cwd,
-                    env=env,
+                    env=self._subprocess_env(),
                     capture_output=True,
                     text=True,
                     timeout=self.timeout,
@@ -157,7 +176,12 @@ class ClaudeCodeInference:
             except subprocess.TimeoutExpired as exc:
                 raise RuntimeError("Claude Code inference timeout") from exc
         if cp.returncode != 0:
-            raise RuntimeError(f"Claude Code inference failed rc={cp.returncode}: {cp.stderr[-2000:]}")
+            stderr = cp.stderr.encode("utf-8", errors="replace")
+            digest = hashlib.sha256(stderr).hexdigest()
+            raise RuntimeError(
+                f"Claude Code inference failed rc={cp.returncode} "
+                f"stderr_sha256={digest} stderr_bytes={len(stderr)}"
+            )
         try:
             payload = json.loads(cp.stdout)
             text = payload.get("result") or payload.get("text") or payload.get("message")

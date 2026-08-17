@@ -9,6 +9,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .effect_journal import EffectJournal
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
@@ -49,7 +50,7 @@ class MicroClayRetrieval:
     The adaptive policy starts in SHADOW. Classical retrieval remains the serving
     path until an explicit externally validated promotion changes the mode.
 
-    Policy version 2 adds learned query-cue -> subject entry routes. Entry-policy
+    Policy version 2 adds learned query-cue -> exact-memory entry routes. Entry-policy
     keys are version-scoped so persisted v1 capital cannot silently change v2
     behavior. A persisted ACTIVE mode from a different policy version is treated
     as SHADOW until that exact policy version is explicitly promoted.
@@ -65,6 +66,7 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
+    AUTOMATIC_OUTCOME_STATUSES = frozenset({"VERIFIED", "DENIED", "FAILED"})
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -82,9 +84,9 @@ class MicroClayRetrieval:
         return f"v{cls.POLICY_VERSION}:{key}"
 
     @classmethod
-    def _route_key(cls, token: str, subject: str) -> str:
+    def _route_key(cls, token: str, memory_id: str) -> str:
         cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
-        target = hashlib.sha256(subject.encode("utf-8")).hexdigest()[:16]
+        target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
         return cls._policy_key(f"route:{cue}:{target}")
 
     @staticmethod
@@ -145,6 +147,7 @@ class MicroClayRetrieval:
         self,
         kind: str,
         subject: str,
+        memory_id: str,
         query_tokens: set[str],
         value_tokens: set[str],
     ) -> tuple[str, ...]:
@@ -156,14 +159,14 @@ class MicroClayRetrieval:
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
             keys.append(self._policy_key(self._token_key(token)))
-        # Query-only cues are bounded hashed proposals to this subject. They are
-        # learned only when this evidence was actually served and later receives
-        # canonical outcome credit. Generic kind/subject capital therefore cannot
-        # open a lexical miss on its own.
+        # Query-only cues are bounded hashed proposals to this exact durable memory.
+        # They are learned only when that evidence was actually served and later
+        # receives canonical outcome credit. Generic kind/subject capital therefore
+        # cannot open a sibling memory on a lexical miss.
         for token in sorted(query_tokens.difference(value_tokens)):
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
-            keys.append(self._route_key(token, subject))
+            keys.append(self._route_key(token, memory_id))
         return tuple(keys)
 
     def _score_candidate(
@@ -173,6 +176,7 @@ class MicroClayRetrieval:
         now: float,
         capitals: dict[str, float],
     ) -> RetrievalCandidate:
+        memory_id = str(row["memory_id"])
         value = str(row["value"])
         subject = str(row["subject"])
         kind = str(row["kind"])
@@ -197,7 +201,7 @@ class MicroClayRetrieval:
             if lexical > 0.0 else 0.0
         )
 
-        keys = self._entry_keys(kind, subject, query_tokens, value_tokens)
+        keys = self._entry_keys(kind, subject, memory_id, query_tokens, value_tokens)
         bounded_capitals = {
             key: max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(key, 0.0)))
             for key in keys
@@ -214,7 +218,7 @@ class MicroClayRetrieval:
         adaptive = baseline + 0.08 * learned
 
         return RetrievalCandidate(
-            memory_id=str(row["memory_id"]),
+            memory_id=memory_id,
             kind=kind,
             subject=subject,
             value=value,
@@ -227,23 +231,34 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new effect-outcome receipts from earlier retrieval episodes.
+        """Consume only known, reward-eligible effect outcomes from retrieval episodes.
 
         Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
+        conversational completion is not reward. Uncertain/stale outcomes and capabilities
+        explicitly marked non-rewarding by EffectJournal must not create access-rent pulls.
         """
         self.db.assert_live_generation(session_id, generation)
+        statuses = tuple(sorted(self.AUTOMATIC_OUTCOME_STATUSES))
+        non_rewarding = tuple(sorted(EffectJournal.NON_REWARDING_CAPABILITIES))
+        status_marks = ",".join("?" for _ in statuses)
+        capability_clause = ""
+        params: list[Any] = [session_id, int(generation), *statuses]
+        if non_rewarding:
+            capability_marks = ",".join("?" for _ in non_rewarding)
+            capability_clause = f"AND e.capability NOT IN ({capability_marks}) "
+            params.extend(non_rewarding)
         rows = self.db.db.execute(
-            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "SELECT r.causal_id,r.generation,c.credit,e.status,e.capability "
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
             "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
-            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            f"AND e.status IN ({status_marks}) "
+            + capability_clause
+            + "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",
-            (session_id, int(generation)),
+            tuple(params),
         ).fetchall()
         applied = 0
         for row in rows:
@@ -380,7 +395,7 @@ class MicroClayRetrieval:
         shadow_ids = [x.memory_id for x in adaptive_selected]
 
         # Generic cue/kind/subject priors may learn from all served evidence. New
-        # query->subject routes are more dangerous: bind them to rank-1 served
+        # query->memory routes are more dangerous: bind them to rank-1 served
         # evidence only so one successful turn cannot spray an alias over the pack.
         route_prefix = self._policy_key("route:")
         non_route_keys = {

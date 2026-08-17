@@ -43,7 +43,7 @@ def test_nonfinite_provider_envelope_fails_closed(monkeypatch, constant):
         + '},"choices":[{"finish_reason":"stop","message":{"content":"{\\"text\\":\\"ok\\",\\"effect\\":null}"}}]}'
     ).encode()
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
-    with pytest.raises(InferenceProtocolError, match="envelope is not canonical JSON"):
+    with pytest.raises(InferenceProtocolError, match="envelope is not JSON"):
         MistralInference(model="model-x").reason({}, "hello")
 
 
@@ -56,5 +56,5 @@ def test_nonfinite_decision_json_fails_before_inference_protocol(monkeypatch, co
         + '}"}}]}'
     ).encode()
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
-    with pytest.raises(InferenceProtocolError, match="message content is not canonical JSON"):
+    with pytest.raises(InferenceProtocolError, match="message content is not JSON"):
         MistralInference(model="model-x").reason({}, "hello")

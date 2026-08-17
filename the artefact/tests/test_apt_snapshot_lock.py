@@ -26,8 +26,9 @@ def test_debian_apt_lock_renders_only_fixed_snapshot_sources():
     apt = install_pinned_apt.load_and_validate(ROOT / "SOURCE_LOCK.json")
     rendered = install_pinned_apt.render_sources(apt)
 
-    assert "http://snapshot.debian.org/archive/debian/20260817T000000Z/" in rendered
-    assert "http://snapshot.debian.org/archive/debian-security/20260817T000000Z/" in rendered
+    assert "https://snapshot.debian.org/archive/debian/20260817T000000Z/" in rendered
+    assert "https://snapshot.debian.org/archive/debian-security/20260817T000000Z/" in rendered
+    assert "http://snapshot.debian.org/" not in rendered
     assert "Suites: trixie" in rendered
     assert "Suites: trixie-security" in rendered
     assert rendered.count("Check-Valid-Until: no") == 2
@@ -35,19 +36,28 @@ def test_debian_apt_lock_renders_only_fixed_snapshot_sources():
     assert "security.debian.org" not in rendered
 
 
+def test_debian_apt_lock_rejects_http_snapshot_downgrade(tmp_path):
+    lock = _load_lock()
+    lock["debian_apt"]["archives"][0]["uri"] = (
+        "http://snapshot.debian.org/archive/debian/20260817T000000Z/"
+    )
+    with pytest.raises(ValueError, match="exact HTTPS Debian snapshot"):
+        install_pinned_apt.load_and_validate(_write_lock(tmp_path, lock))
+
+
 def test_debian_apt_lock_rejects_mutable_mirror_substitution(tmp_path):
     lock = _load_lock()
-    lock["debian_apt"]["archives"][0]["uri"] = "http://deb.debian.org/debian"
-    with pytest.raises(ValueError, match="exact Debian snapshot"):
+    lock["debian_apt"]["archives"][0]["uri"] = "https://deb.debian.org/debian"
+    with pytest.raises(ValueError, match="exact HTTPS Debian snapshot"):
         install_pinned_apt.load_and_validate(_write_lock(tmp_path, lock))
 
 
 def test_debian_apt_lock_rejects_snapshot_uri_mismatch(tmp_path):
     lock = _load_lock()
     lock["debian_apt"]["archives"][0]["uri"] = (
-        "http://snapshot.debian.org/archive/debian/20260816T000000Z/"
+        "https://snapshot.debian.org/archive/debian/20260816T000000Z/"
     )
-    with pytest.raises(ValueError, match="exact Debian snapshot"):
+    with pytest.raises(ValueError, match="exact HTTPS Debian snapshot"):
         install_pinned_apt.load_and_validate(_write_lock(tmp_path, lock))
 
 

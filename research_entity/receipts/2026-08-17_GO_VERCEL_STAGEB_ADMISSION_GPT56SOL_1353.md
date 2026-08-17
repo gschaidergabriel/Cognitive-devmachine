@@ -22,6 +22,14 @@ At that exact head:
 - `run-stageb-promotion-gate-sandbox.mjs` is explicitly `NORMAL_DETERMINISTIC_REGRESSION_ONLY`, adds zero unusual experiments, requires Vercel Preview + OIDC, verifies staged Git blob identities, creates a Python 3.13 Vercel Sandbox, changes network policy to `DENY_ALL`, runs bounded Stage-B gates, stops the Sandbox, and emits a structured summary.
 - The staged research candidate is PR #411 head `34de4bea6edb8f1020000277d947e8fd079005db`, with explicit source blob bindings for `store.py` and `method_memory.py`; therefore any future result from this runner is scoped to those exact staged bytes, not automatically to current research `main`.
 
+### Live Stage-B head drift
+
+After the bridge was inspected, research PR #411 was refreshed and its actual GitHub PR head was observed at `9790c692de4d71ea39fbf79fef83c1a98e110317`.
+
+Therefore the bridge at `7f3384fe...` is already **stale with respect to the live Stage-B candidate**: even if its blocked Preview were later admitted unchanged and all its gates passed, that would test the older staged PR #411 bytes at `34de4bea...`, not the live PR #411 head `9790c692...`.
+
+This is a separate provenance gate from Vercel admission and must fail closed.
+
 ## Vercel execution-admission result
 
 Vercel project: `dr-unterweger`
@@ -42,13 +50,13 @@ The newest inspected `READY` deployments on the same bridge branch were older SH
 - `dpl_9SkXAEjSz9Vv5om8r3nqv562NdsA` -> `1033bc7c5135f9462f36da987c99460bc65dcbdb`
 - `dpl_8ndcW87F9tGg3tuu5G23mfn7qLcX` -> `714c279efb60be0a580d96ff31229fed3b112792`
 
-Those READY deployments are stale with respect to the corrected exact head and cannot establish the corrected runner's behavior.
+Those READY deployments are stale with respect to the corrected bridge head and cannot establish the corrected runner's behavior.
 
 ### Classification
 
-`EXECUTION_ADMISSION_BLOCKER`
+`EXECUTION_ADMISSION_BLOCKER + STALE_TARGET_BINDING`
 
-This is **not** `TEST_FAIL`. The test did not start at the exact bridge head. It is also not a PASS.
+This is **not** `TEST_FAIL`. The exact corrected bridge test did not start, and that bridge no longer targets the live Stage-B head. It is also not a PASS.
 
 ## Serverless-path adjudication
 
@@ -58,8 +66,9 @@ That endpoint is intentionally protected by `CLAY_SANDBOX_PROBE_TOKEN`. The conn
 
 So the narrow current blocker is:
 
-1. exact-head Preview build admission is rate-limited; and
-2. the alternate deployed runtime probe cannot be safely authenticated from the connected tool surface available to this organ.
+1. live Stage-B source must first be rebound into a fresh bridge successor;
+2. Preview build admission is currently rate-limited; and
+3. the alternate deployed runtime probe cannot be safely authenticated from the connected tool surface available to this organ.
 
 No secret was requested, exposed, guessed or bypassed.
 
@@ -71,16 +80,17 @@ Because exact trigger identity across concurrent chats is not safely inferable, 
 
 ## Outcome and next discriminator
 
-Retain the Stage-B bridge as a **SOURCE CANDIDATE** only. Stage-B Sandbox behavior at exact head remains **UNOBSERVED**.
+Retain the inspected Stage-B bridge as a **STALE SOURCE CANDIDATE / NO CURRENT EXECUTION CLAIM**. Its exact Sandbox behavior remains **UNOBSERVED**, and its target is no longer the live Stage-B candidate.
 
 Next highest-information authorized isolated step:
 
-1. obtain one admitted Vercel Preview build for exact bridge head `7f3384fe...` (or a freshly rebased successor with re-bound staged research blobs);
-2. require logs proving the source/blob identities before `Sandbox.create`;
-3. require bounded Stage-B gate output, exit codes, Sandbox identity/environment, `DENY_ALL` network policy and successful `Sandbox.stop`;
-4. only then classify the Stage-B mechanism result;
-5. separately rerun against current ClayVerse source before any current-main or product-level promotion claim.
+1. refresh the canonical/live Stage-B candidate head and re-bind every staged source blob in a fresh Vercel bridge successor;
+2. obtain one admitted Vercel Preview build for that freshly bound bridge head;
+3. require logs proving the bridge SHA plus staged research SHA/blob identities before `Sandbox.create`;
+4. require bounded Stage-B gate output, exit codes, Sandbox identity/environment, `DENY_ALL` network policy and successful `Sandbox.stop`;
+5. only then classify the Stage-B mechanism result;
+6. separately rerun against current ClayVerse `main` before any current-main or product-level promotion claim.
 
-Do not substitute stale READY deployments, GitHub Actions admission failures, VPS/self-hosted execution, production execution, or source inspection for this executable discriminator.
+Do not substitute stale READY deployments, a successful run against the older `34de4bea...` target, GitHub Actions admission failures, VPS/self-hosted execution, production execution, or source inspection for this executable discriminator.
 
 No Together API. No owner-gated final paid/model training. No whole-product PASS claim.

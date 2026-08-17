@@ -28,7 +28,7 @@ def _record(source_episode_ids, supporting_memory_ids):
         "failure_count": 0,
         "calibration": 0.8,
         "last_validated_at": time.time(),
-        "status": "PROMOTED",
+        "status": "CANDIDATE",
         "limits_method_ids": [],
     }
 
@@ -56,10 +56,10 @@ def test_cross_user_source_episode_is_rejected(tmp_path):
     _episode(db, ans, "a:one")
     support_a = db.add_memory("fact", "gabriel", "support-a", None, "gabriel", {"source": "test"})
     support_b = db.add_memory("fact", "gabriel", "support-b", None, "gabriel", {"source": "test"})
-    with pytest.raises(MethodRecordError, match="cross-user source episode denied"):
+    with pytest.raises(MethodRecordError, match="canonical user/session scope"):
         MethodMemory(db).admit(
-            kind="framework",
-            subject="privacy framework",
+            kind="framework_candidate",
+            subject="privacy framework candidate",
             record=_record(["g:one", "a:one"], [support_a, support_b]),
             source_turn_id=None,
             user_id="gabriel",
@@ -75,8 +75,8 @@ def test_cross_user_support_memory_is_rejected(tmp_path):
     other = db.add_memory("fact", "andreas", "support-other", None, "andreas", {"source": "test"})
     with pytest.raises(MethodRecordError, match="cross-user referenced memory denied"):
         MethodMemory(db).admit(
-            kind="framework",
-            subject="privacy framework",
+            kind="framework_candidate",
+            subject="privacy framework candidate",
             record=_record(["g:one", "g:two"], [own, other]),
             source_turn_id=None,
             user_id="gabriel",
@@ -84,7 +84,7 @@ def test_cross_user_support_memory_is_rejected(tmp_path):
         )
 
 
-def test_unscoped_global_method_admission_is_rejected(tmp_path):
+def test_unscoped_global_method_candidate_admission_is_rejected(tmp_path):
     db, gs, _ = _setup(tmp_path)
     _episode(db, gs, "g:one")
     _episode(db, gs, "g:two")
@@ -92,8 +92,8 @@ def test_unscoped_global_method_admission_is_rejected(tmp_path):
     support_b = db.add_memory("fact", "gabriel", "support-b", None, "gabriel", {"source": "test"})
     with pytest.raises(MethodRecordError, match="explicit canonical user scope"):
         MethodMemory(db).admit(
-            kind="framework",
-            subject="unsafe global framework",
+            kind="framework_candidate",
+            subject="unsafe global framework candidate",
             record=_record(["g:one", "g:two"], [support_a, support_b]),
             source_turn_id=None,
             user_id=None,

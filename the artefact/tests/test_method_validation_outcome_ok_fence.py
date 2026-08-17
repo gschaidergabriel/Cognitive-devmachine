@@ -25,6 +25,8 @@ class _SQL:
 
     def execute(self, query, params=()):
         self.queries.append((query, params))
+        if "ORDER BY ts LIMIT 1" in query:
+            return _Result(None)
         return _Result(self.rows.pop(0))
 
 

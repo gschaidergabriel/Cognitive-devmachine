@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T19:31:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_product_bytes_changed": false,
+  "canonical_main_observed_for_closure_base": "ce60e3544caceda22ae349021c952328cf62692b",
+  "retained_execution_lane": "go/oci-execution-closure-20260817-1919-sol",
+  "previous_exercised_closure": {
+    "commit": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "tree": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "runtime_scope": "Sandbox admission observed; private-source stage blocked before fetch; source/OCI runtime credit zero"
+  },
+  "prepared_next_closure": {
+    "commit": "218b51cad87e3907d1dd45adc7998c736be23cdb",
+    "tree": "f16c87737cf74ef0703a1fc0a51fd99298450cd1",
+    "parents": [
+      "ce60e3544caceda22ae349021c952328cf62692b",
+      "5e5adce0591058608bbd7381ecf570a39b282f0d"
+    ],
+    "composition": "then-current main + retained PR611 two blobs + current PR622 SOURCE_LOCK/workflow/source-binding-test blobs",
+    "pr611": {
+      "terminal_sessions_blob": "c185009f8af84e1288747d8352645777a36b2053",
+      "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc"
+    },
+    "pr622": {
+      "head_observed": "08f1fe82211676d5140723eeccc225b05bb6ea5f",
+      "source_lock_blob": "a355fec6fb871a48112c8c0b79b4bf337b3e0644",
+      "workflow_blob": "fe31bd52e0d2dd9250cd5e3e9e96df01249bdb51",
+      "source_binding_test_blob": "737a64f025882396d56789cbeb98721e97010c7a"
+    },
+    "runtime_credit": 0,
+    "evidence_class": "SOURCE_COMPOSITION_ONLY"
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "current_head_observed": "a86f4355d02dc34331a3746128b6c3b959977439",
+    "still_bound_to_previous_closure": true,
+    "rebind_deferred": true,
+    "reason": "Any PR810 source commit auto-triggers Vercel Preview. With host-side GITHUB_READ_TOKEN still absent, an immediate rebind would spend another Sandbox run only to reproduce the already-established credential blocker. Rebind once after the approved sensitive Preview credential is provisioned or if product-relevant source moves again before that run."
+  },
+  "blocker": "MISSING_HOST_SIDE_SENSITIVE_VERCEL_PREVIEW_GITHUB_READ_TOKEN_BEFORE_PRIVATE_RESEARCH_AND_ENTITYOS_SOURCE_FETCH",
+  "next_exact_gate": "Provision the approved host-side GITHUB_READ_TOKEN without exposing or forwarding it into the Sandbox; refresh product-relevant current bytes; bind the single retained PR810 controller once to the then-current closure; execute private-source verification -> EntityOS reproduction/staging -> full source regression -> exact OCI build/image identity -> in-image gates.",
+  "anti_goodhart": {
+    "prepared_closure_is_runtime_pass": false,
+    "source_composition_is_product_acceptance": false,
+    "docs_only_main_churn_requires_blind_retry": false
+  },
+  "coordination": {
+    "parallel_controller_created": false,
+    "second_python_resolver_authority_created": false,
+    "unusual_experiment_executed": false,
+    "unusual_experiment_valid_credit": 0,
+    "same_tree_duplicate_cleanup": "The auxiliary go/1750-oci-vcr-source-closure-gpt56sol ref was realigned to the already-fused 5e5adce execution identity before this new PR622 rebind."
+  },
+  "constraints": {
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN",
+    "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "acceptance": "IN_PROGRESS"
+}

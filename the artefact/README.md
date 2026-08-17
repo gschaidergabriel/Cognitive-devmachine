@@ -1,93 +1,107 @@
 # the artefact — ClayVerse single-container candidate
 
-Canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible container image** containing one persistent central ClayVerse entity.
+Canonical product workspace for the ClayVerse endpoint: **one immutable OCI/Docker-compatible ClayVerse image**, finally executed inside a dedicated VM/microVM isolation envelope.
 
 ## Living cycle status
 
-Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries the current product state and latest concrete delta.
+Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries current product reality.
 
 ### Product contract
 
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- Final runtime model: **immutable sealed appliance / VM-like sandbox with controlled ingress and egress**.
+- Product artifact: **one exact immutable ClayVerse OCI image digest**.
+- Final deployment topology: **Host → KVM/equivalent → VM/microVM guest kernel → OCI runtime → exact ClayVerse image → sealed ClayVerse continuum**.
+- Final acceptance requires the independent guest-kernel boundary. Direct host-kernel OCI execution may provide bounded development evidence but cannot receive `WHOLE_CLAYVERSE_PASS`.
+- Preferred outer runtime line: **Kata Containers / runtime-rs** (or an equivalent OCI-compatible VM/microVM runtime proving the same invariants).
 - UnifiedDB is the sole durable canonical state/world/memory authority; ClayGraph is derived/rebuildable.
-- The final accepted image MUST contain the complete accepted EntityOS execution/security/runtime substrate. EntityOS may be omitted only from explicitly classified development/baseline builds that can never receive whole-product PASS.
-- The accepted OCI root filesystem is read-only. Runtime mutation is restricted to declared RAM/tmpfs paths; durable mutation is restricted to explicit persistent data areas such as `/var/lib/clayverse` and separately admitted workspace storage.
-- Runtime code, EntityOS binaries, policies and managed settings are reconstructed from immutable image bytes after failure rather than repaired in place.
-- Gabriel and Andreas are equal-rights perspectives into one central entity/global generation.
+- Final image MUST contain complete accepted EntityOS, managed Linux PTY/tmux, Claude Code terminal runtime, GLM token/API client boundary, hooks/retrieval, EffectGate/EffectJournal and ClayVerse supervision.
+- Root filesystem is read-only. Runtime mutation is limited to declared RAM/tmpfs; durable mutation is limited to explicit persistent volumes such as `/var/lib/clayverse` and admitted workspace storage.
+- No host filesystem, host shell, host PID namespace, mutable host binaries or hidden companion cognition/state service is part of ClayVerse authority.
 
 ### Canonical machine loop
 
-`INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> Claude cognition -> proposed intent/command re-ingest -> policy/authority validation -> EntityOS -> managed Linux PTY/tmux execution -> stdout/stderr/exit/effect receipt -> UnifiedDB causal re-entry -> repeat as needed -> EGRESS`
+`INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> selected LLM -> response re-ingested into ClayVerse -> policy/authority validation -> EntityOS -> managed Linux PTY/tmux execution -> stdout/stderr/exit/effect receipt -> UnifiedDB causal re-entry -> repeat -> EGRESS`
 
-The LLM never bypasses ClayVerse directly into shell execution. Its output returns into the continuum first and remains proposed action/data until admitted by the execution/effect boundary.
+The LLM never self-authorizes execution. Model output always comes back into ClayVerse first.
 
-The accepted ClayVerse/EntityOS layer must directly control the managed Linux PTY/tmux surface inside the appliance. Unmediated generic host `process.exec` remains forbidden.
+### LLM provider law
+
+- **Claude Code:** interactive terminal-native path inside the managed ClayVerse PTY/tmux environment; authenticated directly through its terminal login flow. No hidden Claude API-token replacement for the primary path.
+- **GLM:** token/API inference only. Its token is secret, never source/UnifiedDB/snapshot/receipt/log content. GLM receives no PTY, filesystem, EntityOS or effect authority.
+- Switching Claude/GLM never forks the entity or state; the same UnifiedDB causal turn/session/generation continues.
 
 ### Shock-absorber / self-healing law
 
-The inner machine boundary is deliberately a **stability shock absorber**. Runtime and state are separated:
+The nested isolation boundary is the stability shock absorber:
 
-- **Runtime:** EntityOS, Claude, PTY/tmux and orchestration are reconstructable/ephemeral from immutable image bytes.
-- **State:** UnifiedDB/WAL/checkpoints, EffectJournal and admitted durable workspace are persistent and explicitly scoped.
+1. **Tier 1:** if invariants remain trustworthy, restart/fence only failed EntityOS/LLM-client/PTY/tmux components from immutable image bytes, reconcile the last valid logical snapshot and resume after readiness attestation.
+2. **Tier 2:** if invariants are uncertain, discard/recreate the full ClayVerse workload/microVM from the exact accepted image digest, recover UnifiedDB/WAL/known-good logical snapshot/EffectJournal, mint a new generation and reopen ingress only after complete readiness.
 
-ClayVerse maintains known-good logical machine snapshots binding at least UnifiedDB checkpoint identity, global/session generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state.
+Known-good logical snapshots bind at least UnifiedDB checkpoint identity, global/session generations, EntityOS/config/policy hashes, causal queue position, EffectJournal state and required runtime identities.
 
-Recovery is two-tiered:
+Ambiguous external effects are never blindly replayed after crash/recreation. They become `UNKNOWN_AFTER_CRASH`/equivalent unless explicit idempotence plus durable EffectJournal evidence proves replay safe.
 
-1. **Internal recovery:** if invariants remain trustworthy, fence/restart only the failed EntityOS/Claude/PTY/tmux component, reconcile the last valid snapshot, re-attest readiness and resume through causal re-entry.
-2. **Full appliance recovery:** if invariants cannot be trusted, fail the container closed and let the OCI runtime/orchestrator restart the entire appliance from the immutable base image. UnifiedDB/WAL/snapshot/effect-journal recovery runs before a new generation is minted and ingress reopens.
+### Concrete outer deployment profile
 
-Ambiguous external effects are never blindly replayed after a crash. They become `UNKNOWN_AFTER_CRASH`/equivalent unless explicit idempotence plus durable EffectJournal evidence proves replay safe.
+Deployment authority:
 
-Fast deterministic restart is a design goal, but no fixed millisecond restart guarantee is claimed until measured on the admitted runtime.
+- `deployment/MICROVM_DEPLOYMENT_CONTRACT.md`
+- `deployment/clayverse-kata-statefulset.template.yaml`
+- `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`
 
-OCI isolates product userspace but still shares the host kernel. If stronger kernel isolation is required later, the same ClayVerse image may run inside a deployment VM/microVM without changing the internal ClayVerse architecture.
+The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, and persists only declared ClayVerse state/workspace volumes.
+
+The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
 ### Retained convergence lanes
 
-- **#611** tmux idempotent-reapply lane — exact in-image tmux remains its promotion discriminator.
+- **#611** tmux idempotent-reapply lane — exact final in-image runtime remains its promotion discriminator.
 - **#622** Python hash-lock generator — source candidate/unexecuted; no canonical accepted `requirements.lock.txt` yet.
-- **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact OCI/runtime evidence.
-- **#602** managed native-Claude process attestation — downstream of exact in-image #611.
-- **#625** tokenless development/baseline packaging — useful development lane. Its ability to omit EntityOS applies only to non-final builds; final ClayVerse acceptance requires complete accepted EntityOS in the same sealed continuum. The branch now explicitly fences this distinction in manifest/test/README; those source changes remain unmerged.
-- Dr.-Unterweger **#810** is the retained Vercel Sandbox orchestration bridge/controller evidence. Its current cross-private-repo source-fetch route is credential-blocked before Research source staging when host-side `GITHUB_READ_TOKEN` is absent; this is not Sandbox unavailability and not ClayVerse TEST_FAIL.
+- **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact final runtime evidence.
+- **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
+- **#625** tokenless development/baseline packaging — useful lower-layer lane; EntityOS omission is development-only and can never be final acceptance.
+- **#810** retained Vercel Sandbox controller evidence — historical/bounded execution bridge, not the final deployment architecture.
 
-### Testing policy
+### Testing law
 
-Continue maximum independent tests under `the artefact/TESTING_STRATEGY.md` while preserving isolated-sandbox-only execution.
+Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to existing source/unit/negative/adversarial/restart/concurrency/fuzz/reproducibility/integration testing, final MicroVM acceptance must prove:
 
-Crash/recovery testing is mandatory: EntityOS crash idle/active, terminal child crash, crash before/after effect emission and acknowledgement, interrupted UnifiedDB write, stale pre-crash result rejection, corrupt newest snapshot fallback, crash during recovery, no blind effect replay, ingress freeze during inconsistent state, stale auth/session/generation rejection, read-only-root enforcement and undeclared-write denial.
+- exact ClayVerse image digest equality outside/inside the microVM;
+- an independent guest-kernel boundary rather than host-kernel execution;
+- read-only root and denial of undeclared writes/host mounts;
+- only declared persistent volumes survive full appliance replacement;
+- Tier-1 EntityOS/internal recovery;
+- Tier-2 full microVM/workload replacement from the same image digest;
+- UnifiedDB/WAL/snapshot recovery under a new generation;
+- stale pre-crash result rejection;
+- no blind effect replay around crash/acknowledgement boundaries;
+- Claude Code direct terminal login/runtime continuity;
+- GLM token secrecy and inference-only authority.
 
 ### Current execution boundary
 
-Vercel Sandbox execution is **confirmed** through the retained Dr.-Unterweger #810 Git-preview/OIDC controller. Bound runs have reached real `Sandbox.create` and clean stop. The current #810 cross-private-repo source-fetch design fails closed before Research source staging because the host-side sensitive `GITHUB_READ_TOKEN` is absent; source/OCI product-runtime credit therefore remains zero.
+The architecture and deployable Kata profile are now canonical source. **Actual Kata/microVM execution has not yet been observed for the exact final ClayVerse image**, so no VM-isolation runtime credit or whole-product PASS is claimed.
 
-The tokenless #625 development baseline must not regain `GITHUB_READ_TOKEN` or mandatory private EntityOS staging merely to obtain lower-layer execution. Conversely, tokenless baseline evidence can never substitute for the final EntityOS-bearing image required by owner authority.
-
-The authorized Daytona fallback remains a provider option, but the current ChatGPT orchestrator is blocked before Daytona provider contact. That is not evidence Daytona itself is unavailable.
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is now stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact image/digest -> read-only rootfs + declared tmpfs/persistent write surfaces -> complete accepted EntityOS + UnifiedDB sealed continuum -> ingress/egress boundary -> managed Linux PTY/tmux -> Claude cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> automatic tier-1 and tier-2 snapshot recovery -> Clerk/WebSocket PTY -> managed hooks -> persistence/restart/recovery -> dual-user concurrency/global-generation -> whole-product acceptance`.
-
-Whole-product PASS requires this exact closure. Source inspection, static tests, mocks, component runtime PASS, deployment READY, Sandbox creation or historical evidence do not imply ClayVerse PASS.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 21:17 +07:00 — `NO_CANONICAL_RUNTIME_CHANGE`: #625 was re-entered under the newest final-EntityOS authority, stale OCI-path duplication was fenced on its branch, and the current Sandbox execution boundary was corrected.**
+**2026-08-17 21:17 +07:00 — architecture strengthened: the outer VM/microVM envelope is now mandatory for final ClayVerse acceptance, not an optional future hardening.**
 
-- Canonical product law remains the immutable sealed appliance contract: final accepted ClayVerse MUST contain complete accepted EntityOS and automatic known-good snapshot/self-healing recovery.
-- #625 remains an unmerged development/baseline source lane; tokenless builds may omit EntityOS only with execution disabled and can never receive whole-product PASS.
-- On #625, the stale duplicate `clayverse-artifact-ci.yml` path was retired and a regression fences the single retained `clayverse-artefact-ci.yml` workflow authority. This is source-lane anti-entropy repair, not a canonical runtime promotion.
-- After refreshing the newer owner directive, #625 manifest/test/README were corrected so development tokenlessness cannot be mistaken for final acceptance. Exact GitHub blobs `d25b9b69b0d5eb817549cd5db083955f33d43b50` and `a1ac6828421123b3ad09d2e7d775d66ff5e4a578` were byte-bound with `git hash-object`; the selected manifest-only acceptance-fence regression passed **1/1 in 0.66s** in the authorized isolated OpenAI container.
-- Superseding branch receipt: `the artefact/receipts/2026-08-17_GO_2117_PR625_FINAL_ENTITYOS_AUTHORITY_REENTRY_GPT56SOL.json`. The earlier 21:12 receipt remains valid only for duplicate-workflow/execution-surface scope; any final-EntityOS-optional interpretation is superseded.
-- Vercel classification is aligned with current continuity notices: Sandbox admission is confirmed through #810; its old private-source path is blocked before source staging by absent host-side credential. No source or OCI runtime credit is claimed.
-- No unusual experiment was executed because the shared exact-go trigger identity remains insufficient for the atomic experiment lease.
-- Exact OCI build/image digest, complete accepted EntityOS-in-image runtime, immutable/read-only appliance enforcement, sealed-continuum crash/snapshot recovery, Clerk/PTY/Claude and whole-product PASS remain open.
+- new global directive: `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`;
+- new deployment contract: `the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md`;
+- new concrete Kata StatefulSet template: `the artefact/deployment/clayverse-kata-statefulset.template.yaml`;
+- new static deployment-contract regression: `the artefact/tests/test_microvm_deployment_contract.py`;
+- the product artifact remains one ClayVerse OCI image; the MicroVM is an execution envelope, not a second product/entity;
+- Claude Code remains direct terminal-login; GLM remains token/API inference-only;
+- no actual final MicroVM runtime test has been executed in this architecture cycle, therefore acceptance remains `IN_PROGRESS`.
 
 ## Verification
 
-Authorized bounded component/source evidence exists, but **whole-product PASS is not claimed**. Current work must converge implementation toward this immutable self-healing appliance contract while maximizing all independently executable tests.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract.

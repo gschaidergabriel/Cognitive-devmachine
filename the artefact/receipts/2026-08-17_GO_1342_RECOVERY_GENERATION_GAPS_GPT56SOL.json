@@ -1,0 +1,55 @@
+{
+  "schema": "clayverse.go.current-main-regression-gap.v2",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T13:42+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "249761916c1ac7ecf79b2e2753524f288c825f26",
+  "branch": "go/recovery-generation-gap-20260817-1342-gpt56sol",
+  "parallel_fusion": {
+    "closed_superseded_pr": 439,
+    "reason": "main independently received the overlapping causal-reentry and active-turn recovery regression repairs before fusion",
+    "canonical_overlap_commits": [
+      "8fef6397dcf76d0c8c3c58914f628ed43a622f8b",
+      "d47ff869243076add00b12914977f520d47a6431"
+    ]
+  },
+  "residual_nonduplicate_delta": {
+    "runtime_changed": false,
+    "files": [
+      "the artefact/tests/test_restart_recovery.py",
+      "the artefact/tests/test_effect_replay_restart_fusion.py"
+    ],
+    "commits": [
+      "f742f77eeb53c7eb471cf96310347ae549879d13",
+      "dea3377e9f71cd2ab1d536a4e77b35a5ee22bbfa"
+    ],
+    "contracts": [
+      "A second explicit recovery boundary advances entity_generation again while Gabriel and Andreas remain on the same global generation.",
+      "An already causally re-entered verified effect is not counted as a new recovery re-entry when its active turn is retired.",
+      "A PENDING effect recovered to UNKNOWN_AFTER_RESTART is counted as one scanned/closed active turn and its workspace closes as RECOVERY_CLOSED_AFTER_EFFECT_REENTRY."
+    ],
+    "source_blobs": {
+      "restart_main_before": "8230e0aa6def6e1b031f325135a3720534239981",
+      "restart_candidate": "fcfaf6fd2053768cde239d52d34735a847234782",
+      "effect_restart_main_before": "26fca7e8d8f38fe27d9612948906b1314bc204b9",
+      "effect_restart_candidate": "090c67288867f3d08f81c1b034e2bd84b456f757",
+      "recovery_runtime_main": "ea585507ff6e5b46922b4219d125915caa8488fb"
+    }
+  },
+  "validation": {
+    "exact_branch_pytest": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "reason": "Connected Vercel surface exposes no Sandbox start/exec primitive and the GitHub connector does not mount the private checkout into the isolated local executor.",
+    "nonclaim": "Source assertions are regression obligations only; no component/runtime/whole-product PASS is inferred."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": false,
+    "reason": "Only minute-resolution trigger time is available and no immutable request id is exposed; the atomic GO experiment protocol therefore forbids minting a canonical claim."
+  },
+  "next_exact_gate": "Run test_restart_recovery.py + test_global_entity_generation.py + test_effect_replay_restart_fusion.py on exact fused current head in an actually-started authorized isolated executor, then broader deterministic suite and exact OCI build/start/restart acceptance.",
+  "whole_clayverse_pass": false
+}

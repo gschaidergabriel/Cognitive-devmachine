@@ -120,6 +120,18 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "representative undeclared ingress and egress remain denied" in text
 
 
+def test_network_contract_fences_node_local_policy_exception():
+    contract = CONTRACT.read_text()
+    template = TEMPLATE.read_text()
+    assert "node-local, control-plane and metadata-service reachability" in contract
+    assert "node-local exception" in contract
+    assert "explicitly probe node-local, metadata-service and relevant control-plane routes" in contract
+    assert "node-local traffic exceptions" in template
+    assert "does NOT imply Kubernetes'" in template
+    assert "node-local NetworkPolicy exceptions are denied" in template
+    assert "denies every network flow" not in template
+
+
 def test_manifest_network_gates_match_the_deployment_contract():
     manifest = json.loads(MANIFEST.read_text())
     outer = manifest["outer_isolation"]
@@ -128,10 +140,12 @@ def test_manifest_network_gates_match_the_deployment_contract():
     assert outer["network_policy_baseline"] == "DEFAULT_DENY_INGRESS_AND_EGRESS_FOR_APP_CLAYVERSE"
     assert outer["functional_network_access"] == "SEPARATE_DEPLOYMENT_SPECIFIC_REVIEWED_ALLOW_POLICY_REQUIRED"
     assert "ENFORCES_NETWORKPOLICY" in outer["network_policy_enforcement"]
+    assert "NODE_CONTROL_PLANE_METADATA_PATHS" in outer["network_policy_node_local_exception"]
 
     required = set(manifest["requires_for_final_pass"])
     assert "baseline ClayVerse NetworkPolicy default-deny ingress+egress actually enforced by the deployed CNI" in required
     assert "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied" in required
+    assert "node-local, metadata-service and relevant control-plane routes explicitly probed and every non-admitted route denied by deployment/microVM boundary" in required
 
 
 def test_manifest_microvm_security_and_tier2_gates_match_the_contract():

@@ -148,15 +148,17 @@ class TurnLifecycle:
         )
         causal_id = self.effects.causal_for_effect(effect_id)
         if causal_id != row["causal_id"]:
-            raise TurnLifecycleError("verified effect re-entered through wrong causal identity")
+            raise TurnLifecycleError("effect outcome recorded through wrong causal identity")
         self.db.db.execute(
             "UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 WHERE session_id=? AND causal_id=?",
             (effect_id, json.dumps(outcome, sort_keys=True), self.session_id, row["causal_id"]),
         )
+        status = self.effects.status_for_effect(effect_id)
         return {
             "effect_id": effect_id,
             "causal_id": causal_id,
-            "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
+            "verified": status == "VERIFIED",
+            "status": status,
             "outcome": outcome,
         }
 
@@ -171,14 +173,14 @@ class TurnLifecycle:
             self.workspace.select(row["episode_id"], "respond")
         effect_id = row["effect_id"]
         existing_causal = self.db.db.execute(
-            "SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (effect_id,)
+            "SELECT causal_id,credit,reentered FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (effect_id,)
         ).fetchone() if effect_id else None
         if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
             raise TurnLifecycleError("effect causal identity diverged before Stop")
         now = time.time()
         assistant_id = str(uuid.uuid4())
         credit = float(existing_causal["credit"]) if existing_causal else 0.0
-        response_hash = hashlib.sha256(response.encode("utf-8")).hexdigest()
+        reentered = bool(existing_causal["reentered"]) if existing_causal else False
         with self.db.tx() as db:
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
@@ -192,7 +194,7 @@ class TurnLifecycle:
             if existing_causal is None:
                 db.execute(
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                    (row["causal_id"], row["episode_id"], None, row["turn_id"], response_hash, 0.0, 1, now),
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 0, now),
                 )
             db.execute(
                 "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
@@ -202,7 +204,7 @@ class TurnLifecycle:
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
         self.graph.rebuild()
-        return {"completed": True, "assistant_turn_id": assistant_id, "causal_id": row["causal_id"], "effect_id": effect_id, "credit": credit}
+        return {"completed": True, "assistant_turn_id": assistant_id, "causal_id": row["causal_id"], "effect_id": effect_id, "credit": credit, "reentered": reentered}
 
     def abort(self, reason: str) -> dict:
         row = self.active()
@@ -236,7 +238,7 @@ class TurnLifecycle:
             if existing_causal is None:
                 db.execute(
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                    (row["causal_id"], row["episode_id"], None, row["turn_id"], reason_hash, 0.0, 1, now),
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], reason_hash, 0.0, 0, now),
                 )
             db.execute(
                 "UPDATE workspace_episodes SET state='ABORTED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",

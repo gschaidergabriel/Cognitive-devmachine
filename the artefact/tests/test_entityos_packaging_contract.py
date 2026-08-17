@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -25,3 +26,18 @@ def test_stager_targets_ignored_bounded_build_asset_path():
 def test_optional_build_asset_directory_is_tracked_without_binary():
     assert (ROOT / "build-assets/entityos/.keep").is_file()
     assert not (ROOT / "build-assets/entityos/EntityOS").exists()
+
+
+def test_manifest_matches_optional_entityos_baseline():
+    manifest = json.loads((ROOT / "manifest.json").read_text())
+    assert "optional" in manifest["build_context"].lower()
+    assert "optional" in manifest["entityos_role"].lower()
+    assert "optional" in manifest["entityos_transport"].lower()
+    admission = manifest["entityos_admission"]
+    assert "baseline may omit" in admission.lower()
+    assert "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0" in admission
+    assert "digest" in admission.lower()
+    assert "size" in admission.lower()
+    gates = manifest["requires_for_final_pass"]
+    assert any("where EntityOS is deliberately admitted" in gate for gate in gates)
+    assert "accepted EntityOS embedded image runtime and effect contract" not in gates

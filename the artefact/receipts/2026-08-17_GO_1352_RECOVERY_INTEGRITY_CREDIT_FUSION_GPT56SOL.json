@@ -1,0 +1,62 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:56:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "join_main": "f881fbd4393314a693bc705d5e36aea2cc5013ea",
+  "latest_main_observed_before_receipt": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
+  "branch": "go/recovery-integrity-credit-fusion-20260817-1352-sol",
+  "fusion_head_before_receipt": "5d3266d358242725e79de5af9a017dfd45d4cc37",
+  "fusion_recovery_blob": "d1c4697bac9fe4b5f435c614fd495f22d30af671",
+  "frontier": "one canonical restart/recovery causal-integrity and learning-credit path",
+  "donors": [
+    {
+      "pr": 444,
+      "role": "causal-integrity preflight before EffectJournal.recover_pending plus exact active causal lookup",
+      "head": "1020a92005bb5c70285bd72e57778a9c895659b5"
+    },
+    {
+      "pr": 453,
+      "role": "positive recovery causal credit only for VERIFIED effects with outcome.ok=true",
+      "head": "30dfc05d7015bb36ccf257331e965051786a7049"
+    }
+  ],
+  "fusion_contract": [
+    "validate every active recovery causal spine read-only before pending-effect recovery can mutate durable state",
+    "re-check active recovery integrity at the recovery transaction boundary",
+    "bind active causal lookup to the exact active causal_id rather than latest-by-time",
+    "grant positive restart recovery learning credit only when persisted effect status is VERIFIED and outcome.ok is true",
+    "preserve zero credit for DENIED, FAILED, STALE_OUTCOME and UNKNOWN_AFTER_RESTART even if an inconsistent persisted outcome says ok=true",
+    "do not replay external effects and do not create a second recovery/state/effect authority"
+  ],
+  "source_verification": {
+    "combined_recovery_blob_observed": "d1c4697bac9fe4b5f435c614fd495f22d30af671",
+    "both_donor_mechanisms_present_in_one_file": true,
+    "donor_targeted_tests_present": [
+      "the artefact/tests/test_recovery_causal_preflight.py",
+      "the artefact/tests/test_recovery_credit_status_fence.py"
+    ]
+  },
+  "execution_admission": {
+    "connected_vercel_platform": "AVAILABLE",
+    "connected_vercel_mcp_sandbox_create_start_exec": "NOT_EXPOSED",
+    "github_job_rerun_requested": 95307845606,
+    "github_job_visible_steps_after_rerun": 0,
+    "github_job_logs": "UNAVAILABLE_BLOB_NOT_FOUND",
+    "classification": "RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE_ZERO_TEST_CREDIT",
+    "exact_fusion_branch_pytest": "UNOBSERVED",
+    "exact_oci_restart_runtime": "UNOBSERVED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The immutable user-trigger metadata exposed to this organ is only 2026-08-17T13:52+07:00 at minute precision and no shared request/turn id is exposed; the atomic lease protocol forbids synthesizing seconds.",
+    "distinct_unusual_experiments_executed_by_this_organ": 0
+  },
+  "evidence_class": "SOURCE_FUSION_WITH_PRIOR_BOUNDED_MECHANISM_EVIDENCE",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "On the exact then-current fused source in an actually-started authorized isolated sandbox, execute both focused recovery tests plus adjacent effect/restart/global-generation regressions, then exact OCI startup/readiness/restart evidence before promotion to main."
+}

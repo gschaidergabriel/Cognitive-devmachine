@@ -56,6 +56,8 @@ The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs
 
 The same template also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, enumerate the complete additive set of policies selecting the ClayVerse pod, and show that only admitted flows open while tested non-admitted flows remain denied.
 
+Readiness and liveness are intentionally distinct: `/readyz` is the full runtime admission gate, while `/healthz` is the narrower liveness surface. A recoverable readiness loss must stop traffic without automatically being treated as a dead appliance.
+
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
 ### Retained convergence lanes
@@ -89,11 +91,11 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-The current default-deny source contract has been independently reconstructed from the exact three current Git blobs and exercised in an isolated non-production environment: Git blob identities matched **3/3**, `tests/test_microvm_deployment_contract.py` passed **6/6**, and a PyYAML 6.0.3 semantic probe loaded exactly `Service`, `StatefulSet`, `NetworkPolicy` with `clayverse-default-deny`, `app: clayverse`, `Ingress` + `Egress`, and empty ingress/egress rule sets. This is bounded exact-file source/mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
+The now-current MicroVM source contract has been independently reconstructed from the exact three Git blobs and exercised in an authorized isolated non-production environment: Git blob identities matched **3/3** — contract `57db5224db000fc246445d68938b218ed8e4ff14`, template `b075755d24fcd3dbd203b02f67eeff8a5a8c571b`, focused test `a03de2e8fe1473c7e019dce66710bc04d244aa75` — and `tests/test_microvm_deployment_contract.py` passed **7/7**. The current set covers the mandatory guest-kernel envelope, immutable/runtime-state boundaries, default-deny ingress+egress, CNI enforcement obligations, `/readyz` readiness versus `/healthz` liveness, and bounded provider credential shape. This is bounded exact-file source/mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
 
-The Claude terminal source already starts the interactive process from `env -i`; this cycle adds an explicit source regression fence against forwarding current provider/auth/orchestration secret variables. The new test blob `41b42e1b...` was reconstructed byte-exact and Python-compiled successfully, but full exact-current-main pytest/live Claude-process attestation was not executed, so this remains source-contract hardening only.
+The Claude terminal source already starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
 
-Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel #810 bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox. A fresh Vercel project check in this cycle found **zero new deployments since 2026-08-17 14:30 UTC**, so no newer credential-capable runtime evidence supersedes that blocker.
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel #810 bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox. The connected Vercel tool surface available to this organ exposes inspection/documentation but no environment-secret mutation or direct Sandbox lifecycle mutation, so this prerequisite cannot be closed safely from this worker.
 
 ### Final exact acceptance sequence
 
@@ -101,15 +103,16 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Latest cycle delta
 
-**2026-08-17 22:58 +07:00 — terminal secret-environment regression fence added after MicroVM network re-bind.**
+**2026-08-17 22:59 +07:00 — live-fused MicroVM contract independently replicated at current 7/7; execution blocker revalidated.**
 
-- the parallel MicroVM lane remains current at **6/6 PASS** for its exact source slice, with the default-deny NetworkPolicy source contract and Vercel credential blocker unchanged;
-- `clayverse/terminal_sessions.py` already uses `env -i` plus an explicit allowlist for the interactive Claude process, so no second secret/provider architecture was introduced;
-- `tests/test_terminal_env_boundary.py` now explicitly rejects Anthropic/Claude API-key variables, `GLM_API_TOKEN`, Clerk issuer/JWKS/audience/authorized-party/frontend secrets and the host-side `GITHUB_READ_TOKEN` from the Claude launch argv;
-- canonical test delta commit: `ca74f6bb02a05f5ffeb132ba0246122f1ae2f771`; resulting blob: `41b42e1b2b01cdc76cc1006d14587066da3ad8dd`;
-- bounded verification: reconstructed Git blob **MATCH**, `python -m py_compile` **PASS**; full pytest/live Claude process attestation remains unexecuted and gets zero runtime credit;
-- durable receipts: `receipts/2026-08-17_GO_2257_MICROVM_NETWORK_EXACT_RECHECK_AND_OCI_BLOCKER_GPT56SOL.json` and `receipts/2026-08-17_GO_2258_TERMINAL_SECRET_ENV_FENCE_GPT56SOL.json`;
-- strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required before exact private Research/EntityOS staging and OCI execution;
+- parallel live fusion had already closed the MicroVM default-deny NetworkPolicy gap and the liveness/readiness probe separation, so no duplicate implementation was created;
+- independent exact reconstruction matched all three current Git blobs: contract `57db5224db000fc246445d68938b218ed8e4ff14`, template `b075755d24fcd3dbd203b02f67eeff8a5a8c571b`, focused test `a03de2e8fe1473c7e019dce66710bc04d244aa75`;
+- focused deterministic regression: **7/7 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
+- the parallel terminal secret-environment fence is retained: interactive Claude launches from the existing `env -i` allowlist and the new regression explicitly rejects provider/auth/orchestration secret forwarding; no second provider/security authority was introduced;
+- retained #810 controller remains Draft at `78d92753d9442c66c3ffcff127c31faa98ffd622`; strongest bounded execution remains real `Sandbox.create` followed by fail-closed `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit zero;
+- the connected Vercel surface exposes no secret/environment mutation path, so safe host-side credential provisioning remains the exact admission blocker rather than another retry/controller fork;
+- durable receipt: `receipts/2026-08-17_GO_2250_MICROVM_CURRENT_7OF7_INDEPENDENT_REPLICATION_GPT56SOL.json`; existing terminal/network receipts remain preserved;
+- runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id for the atomic lease.
 
 ## Verification

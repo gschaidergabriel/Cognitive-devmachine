@@ -1,0 +1,87 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_minute": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol temporary organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CURRENT_MAIN_REJOIN_SOURCE_CANDIDATE_EXACT_FILE_SUBSET_SUPPORTED",
+  "canonical_main_base": "b9392dd6a8eaa0c1b1593490d292829ff819c47b",
+  "branch": "gpt56sol/go-known-good-logical-snapshot-20260817-r3",
+  "supersedes_prs": [654, 658],
+  "owner_authority": [
+    "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+    "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
+    "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md"
+  ],
+  "delta": {
+    "implementation": "the artefact/clayverse/logical_snapshot.py",
+    "tests": "the artefact/tests/test_logical_machine_snapshot.py",
+    "properties": [
+      "atomic same-filesystem snapshot directory publication after file and directory fsync",
+      "live UnifiedDB SQLite backup consolidated from WAL into one self-contained database file before sealing",
+      "database SHA-256 and size plus canonical checkpoint anchor",
+      "global entity generation, canonical session generations and terminal identities",
+      "active turn, episode, causal identity, effect link and workspace-selected position",
+      "complete EffectJournal row digest and bounded status summary without raw effect payload serialization into the manifest",
+      "strict source/image/EntityOS/managed-policy/runtime identity bindings",
+      "immutable/read-only validation with sidecar, symlink, tamper and manifest-state drift rejection",
+      "newest-to-older valid snapshot selection including corrupt-newest fallback"
+    ]
+  },
+  "retained_falsifier": {
+    "initial_semantic_result": "1 FAIL / 6 PASS",
+    "failure": "First backup mechanism left unified.db-wal, falsifying the self-contained snapshot assumption.",
+    "repair": "Consolidate destination out of WAL mode before publication and fail closed on WAL/SHM/journal sidecars."
+  },
+  "exact_r3_snapshot_subset": {
+    "store": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "identity": "2a5ea8bec6b779de8feaf71158b0adbeb3dfccc8",
+    "logical_snapshot": "832ceae591ebfbe83dbbe81bc2e164a9432bcbe4",
+    "snapshot_test": "742ff9126dcdd01a694960a3ced4df2ed3d55cd4",
+    "blob_binding": "git hash-object matched all four GitHub blobs immediately before execution",
+    "execution": "py_compile PASS; pytest 7/7 PASS in 0.40s; exit 0",
+    "credit": "MECHANISM_SUPPORTED_EXACT_RELEVANT_FILE_SUBSET_ONLY"
+  },
+  "exact_checkpoint_snapshot_fusion_subset": {
+    "checkpoint_store": "5366f8c28aa50023b7a1af4e1022583d5921b7e1",
+    "checkpoint_test": "e179713d8acf2e063c2c4d2babbdf0a38cb77653",
+    "logical_snapshot": "832ceae591ebfbe83dbbe81bc2e164a9432bcbe4",
+    "snapshot_test": "742ff9126dcdd01a694960a3ced4df2ed3d55cd4",
+    "identity": "2a5ea8bec6b779de8feaf71158b0adbeb3dfccc8",
+    "execution": "pytest 9/9 PASS in 1.23s; exit 0",
+    "credit": "MECHANISM_SUPPORTED_EXACT_CROSS_LANE_FILE_SUBSET_ONLY",
+    "rule": "Do not duplicate store.py repair. Rejoin the single retained workspace_episodes checkpoint-hash repair before promotion."
+  },
+  "final_test_of_tests": {
+    "topology": "Vercel Sandbox Firecracker microVM -> exact ClayVerse OCI digest -> runtime approved Vault/secret acquisition -> transient Mistral inference -> canonical re-ingestion -> EffectGate/EntityOS -> Tier-1 recovery -> Tier-2 full Sandbox/appliance recreation from same digest -> state/effect recovery under new generation -> Mistral secret reacquisition -> second real Mistral turn -> final auth/terminal/concurrency gates",
+    "mistral": "MANDATORY_FINAL_ACCEPTANCE_PROVIDER_INFERENCE_ONLY",
+    "github_read_token": "AUTHORIZED_FOR_NARROW_TRANSIENT_READ_ONLY_SANDBOX_PRIVATE_SOURCE_FETCH_WITH_NON_PERSISTENCE_REDACTION_AND_EXACT_OBJECT_VERIFICATION"
+  },
+  "execution_frontier": {
+    "latest_main_receipt_observation": "Vercel Sandbox/Firecracker admission and guest kernel identity are bounded-pass evidence, but latest retained source staging still observed GITHUB_READ_TOKEN missing and therefore private-source/OCI runtime credit remains zero for that run.",
+    "worker_blocker": "Connected Vercel authority available to this organ has no safe environment-secret mutation/direct Sandbox lifecycle action to supply the scoped token to retained #810 and continue the exact final runtime path.",
+    "next_discriminator": "Make scoped read-only GITHUB_READ_TOKEN available to retained #810 through an authorized secret-management surface; then verify exact private Git/object identities, build/capture exact OCI digest, run that digest inside Vercel Firecracker and continue Vault/Mistral causal operation plus Tier-1/Tier-2 recovery."
+  },
+  "evidence_boundary": [
+    "No exact full r3 checkout was executed.",
+    "No exact ClayVerse OCI image was built or started by this organ.",
+    "No real Vault-backed Mistral turn, automatic snapshot restore, Tier-1/Tier-2, Clerk/PTY/native Claude/tmux/EntityOS complete runtime, or whole-product PASS was observed by this organ.",
+    "Snapshot manager is not yet wired into service boot/shutdown/automatic recovery.",
+    "Canonical main base still carries checkpoint store blob a88d923..., so workspace_episodes checkpoint identity remains a separate rejoin gate.",
+    "Source/component/file-slice PASS does not imply whole-product PASS."
+  ],
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "No shared immutable request/turn identity with reproducible uniqueness is exposed for the cross-worker create-once experiment lease."
+  },
+  "forbidden_surfaces_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together": false,
+    "paid_final_training": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

@@ -128,6 +128,16 @@ A higher class is never inferred from a lower one.
 - durable receipt: `receipts/2026-08-18_0027_GENERIC_LLM_API_PROVIDER_MISTRAL_STAGE1_GPT56SOL.json`;
 - no whole-product PASS is claimed.
 
+## GO 22:59 known-good logical snapshot foundation
+
+- added a bounded source candidate for periodic/event-triggered known-good logical machine snapshots without creating a second live state authority;
+- snapshot publication binds a self-contained SQLite backup, checkpoint anchor, global/session generations, active causal position, EffectJournal digest and strict runtime/image/policy identities;
+- retained the initial falsifier: the first backup left `unified.db-wal` and failed 1/7; the repaired r3 mechanism passes its exact current-main relevant-file subset **7/7**;
+- exact cross-lane fusion with the retained `workspace_episodes` checkpoint-hash repair passes **9/9**, but that repair is still a separate rejoin gate and is not duplicated here;
+- current r3 source was rejoined from `main` `b9392dd6a8eaa0c1b1593490d292829ff819c47b` and has an explicit durable receipt;
+- snapshot creation/restore is not yet wired into service boot/shutdown or exercised in the exact OCI/Firecracker/Vault-Mistral test-of-tests;
+- no unusual experiment was executed; no whole-product PASS is claimed.
+
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. The provider architecture is now generic, the focused boundary is tested, and the missing live discriminator is a transient provider credential plus an executable repo-capable sandbox for the canonical direct probe. Source/component tests do not substitute for final exact-image/microVM/user-path acceptance.

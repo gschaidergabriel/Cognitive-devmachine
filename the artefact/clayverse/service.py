@@ -8,6 +8,7 @@ import sys
 from urllib.parse import urlsplit
 
 from .autonomy import AutonomyState
+from .autonomy_context import autonomy_status_counts
 from .autonomy_runtime import recover_autonomy_after_restart
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
@@ -151,7 +152,7 @@ def _autonomy_status(db: UnifiedDB, recovery: dict[str, object]) -> dict[str, ob
         "goal_admission": "explicit-user-/goal",
         "background_loop": "SOURCE_CANDIDATE_DISABLED_PENDING_ACCEPTED_PROVIDER_BINDING",
         "recovery": recovery.get("autonomy", {}),
-        "state": state.context_summary(),
+        "counts": autonomy_status_counts(state),
     }
 
 

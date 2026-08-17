@@ -38,6 +38,10 @@ class EffectJournal:
             if not row: raise PermissionError('session owner mismatch')
             if int(row[0])!=int(generation): raise StaleGeneration(session_id)
             if lease is not None: self._assert_lease_tx(db,lease)
+            if episode_id is not None:
+                prior=db.execute('SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1',(episode_id,)).fetchone()
+                if prior is not None:
+                    raise RuntimeError('effect already persisted for episode; automatic replay denied')
             audit_argv=self._argv_receipt(argv)
             db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
         return eid
@@ -49,8 +53,6 @@ class EffectJournal:
         episode_id=effect['episode_id']; observation_turn_id=None
         if episode_id:
             ws=db.execute('SELECT observation_turn_id FROM workspace_episodes WHERE episode_id=?',(episode_id,)).fetchone(); observation_turn_id=ws[0] if ws else None
-        # UserPromptSubmit creates the causal identity before reasoning. If the effect
-        # belongs to that active turn, verification re-enters through exactly that ID.
         active=db.execute('SELECT causal_id FROM active_turns WHERE episode_id=?',(episode_id,)).fetchone() if episode_id else None
         cid=active['causal_id'] if active else str(uuid.uuid4())
         existing=db.execute('SELECT effect_id FROM causal_episodes WHERE causal_id=?',(cid,)).fetchone()

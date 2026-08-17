@@ -139,6 +139,16 @@ After exact source/OCI construction, the strongest new product discriminator is 
 - `TESTING_STRATEGY.md` now binds real Mistral inference before/after Tier-2 recovery, Vault secret reacquisition, exact OCI-in-microVM execution and the stronger evidence ladder;
 - no whole-product runtime result is claimed from these source/policy changes.
 
+## Latest cycle delta — 2026-08-17 23:17 +07:00
+
+- source/runtime review found that `clayverse.service` still trusted runtime `CLAYVERSE_ENTITYOS_PATH` plus `CLAYVERSE_ENTITYOS_SHA256`, despite the product contract treating EntityOS identity as image-authoritative;
+- the fresh-current candidate fixes runtime EntityOS selection to `/opt/entityos/EntityOS` plus `/opt/entityos/entityos.lock.json`, validates the embedded lock fail-closed, and rejects executable size drift;
+- Docker, Compose and the Kata template no longer provide runtime EntityOS path/digest identity authority; deployment may only toggle execution of the already admitted embedded bytes;
+- an adversarial regression candidate supplies an attacker executable plus matching runtime digest and requires ClayVerse to ignore both in favor of image-owned bytes;
+- the candidate was deliberately rejoined from current observed `main` `97a5125abe0e74a510fd5083f59d363e67529905` after the first stale-ancestry PR was found too broad to merge safely;
+- no focused regression, exact OCI or whole-product runtime credit is claimed from this source delta; execution remains gated on actual availability/injection of the scoped GitHub read credential into the retained Vercel path and exact-source rebinding;
+- GO unusual experiment remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because no shared immutable request/turn id or whole-second trigger timestamp is available.
+
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, component tests, Sandbox creation and isolated API calls are not substitutes.

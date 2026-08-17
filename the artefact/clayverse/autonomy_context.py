@@ -7,10 +7,17 @@ from .autonomy import AutonomyController
 from .identity import CANONICAL_USER_IDS
 from .store import UnifiedDB
 
-AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v1"
+AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v2"
 AUTONOMY_CONTEXT_MAX_CHARS = 2_500
 AUTONOMY_CONTEXT_MAX_GOALS = 4
 _ATTENTION_STATUSES = {"ACTIVE", "WAITING", "VERIFYING", "BLOCKED"}
+_SAFE_BLOCK_REASONS = {
+    "retry_budget_exhausted",
+    "step_failed",
+    "unknown_effect_after_generation_change",
+    "effect_evidence_requires_generation_rebind",
+    "recovered_interrupted_no_effect_step",
+}
 
 
 class AutonomyContextError(RuntimeError):
@@ -26,6 +33,17 @@ def _clip(value: Any, limit: int) -> str:
     return text[: limit - 1] + "…"
 
 
+def _blocked_reason_class(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value)
+    if text in _SAFE_BLOCK_REASONS:
+        return text
+    if text.startswith("effect_"):
+        return "effect_not_verified"
+    return "opaque"
+
+
 def _snapshot(db: UnifiedDB, user_id: str) -> dict[str, Any]:
     """Read canonical autonomy state without opening a nested transaction."""
     controller = AutonomyController(db)
@@ -36,8 +54,41 @@ def _snapshot(db: UnifiedDB, user_id: str) -> dict[str, Any]:
             for goal_id in state["queue"]
             if state["goals"][goal_id]["user_id"] == user_id
         ]
-        return {"schema": state["schema"], "revision": state["revision"], "goals": goals}
-    return controller.snapshot(user_id=user_id)
+        return {
+            "schema": state["schema"],
+            "revision": state["revision"],
+            "generation": db.entity_generation(),
+            "goals": goals,
+        }
+    snapshot = controller.snapshot(user_id=user_id)
+    snapshot["generation"] = db.entity_generation()
+    return snapshot
+
+
+def _is_runnable(goal: dict[str, Any]) -> bool:
+    if goal.get("status") != "ACTIVE":
+        return False
+    counters = goal.get("counters")
+    budget = goal.get("budget")
+    if not isinstance(counters, dict) or not isinstance(budget, dict):
+        return False
+    if int(counters.get("steps", 0)) >= int(budget.get("max_steps", 0)):
+        return False
+    step = goal.get("current_step")
+    return not (isinstance(step, dict) and step.get("status") in {"PROPOSED", "ADMITTED"})
+
+
+def _select_attention(
+    attention: list[dict[str, Any]],
+    included: int,
+    runnable: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    if included <= 0:
+        return []
+    selected = list(attention[:included])
+    if runnable is not None and all(goal.get("goal_id") != runnable.get("goal_id") for goal in selected):
+        selected[-1] = runnable
+    return selected
 
 
 def _goal_view(goal: dict[str, Any], text_limit: int) -> dict[str, Any]:
@@ -53,6 +104,8 @@ def _goal_view(goal: dict[str, Any], text_limit: int) -> dict[str, Any]:
         }
         effect = step.get("effect")
         if isinstance(effect, dict):
+            # Capability class is useful routing state. Raw target/argv stay behind
+            # EffectGate/EffectJournal and never enter this cognition projection.
             step_view["effect_capability"] = effect.get("capability")
 
     contract = goal.get("completion_contract")
@@ -77,7 +130,7 @@ def _goal_view(goal: dict[str, Any], text_limit: int) -> dict[str, Any]:
         "counters": goal.get("counters"),
         "current_step": step_view,
         "evidence_count": evidence_count,
-        "blocked_reason": _clip(goal.get("blocked_reason"), min(text_limit, 240)) if goal.get("blocked_reason") else None,
+        "blocked_reason_class": _blocked_reason_class(goal.get("blocked_reason")),
     }
 
 
@@ -88,7 +141,7 @@ def bounded_autonomy_context(
     max_chars: int = AUTONOMY_CONTEXT_MAX_CHARS,
     max_goals: int = AUTONOMY_CONTEXT_MAX_GOALS,
 ) -> dict[str, Any]:
-    """Project user-scoped canonical goal state into a deterministic prompt-safe view.
+    """Project user-scoped live-generation goal state into a prompt-safe view.
 
     This changes accessibility only. It does not create goals, schedule work, grant
     capabilities, execute effects, or treat model output as completion evidence.
@@ -101,10 +154,18 @@ def bounded_autonomy_context(
         raise ValueError("autonomy context max_goals out of range")
 
     snapshot = _snapshot(db, user_id)
-    attention = [goal for goal in snapshot["goals"] if goal.get("status") in _ATTENTION_STATUSES]
+    live_generation = int(snapshot["generation"])
+    attention_all = [goal for goal in snapshot["goals"] if goal.get("status") in _ATTENTION_STATUSES]
+    stale_attention = [goal for goal in attention_all if int(goal.get("generation", -1)) != live_generation]
+    attention = [goal for goal in attention_all if int(goal.get("generation", -1)) == live_generation]
+    runnable = next((goal for goal in attention if _is_runnable(goal)), None)
+    runnable_id = runnable.get("goal_id") if runnable is not None else None
     goal_cap = min(max_goals, len(attention))
 
     for included in range(goal_cap, -1, -1):
+        selected = _select_attention(attention, included, runnable)
+        selected_ids = {goal.get("goal_id") for goal in selected}
+        runnable_visible = runnable_id is not None and runnable_id in selected_ids
         for text_limit in (640, 400, 240, 140, 80):
             view = {
                 "schema": AUTONOMY_CONTEXT_SCHEMA,
@@ -112,13 +173,17 @@ def bounded_autonomy_context(
                 "source_schema": snapshot["schema"],
                 "source_revision": snapshot["revision"],
                 "user_id": user_id,
+                "live_generation": live_generation,
                 "model_authority": "PROPOSAL_ONLY",
                 "completion_authority": "AutonomyController canonical evidence only",
                 "effect_authority": "EffectGate/EffectJournal only",
                 "attention_goal_count": len(attention),
-                "included_goal_count": included,
-                "omitted_goal_count": len(attention) - included,
-                "goals": [_goal_view(goal, text_limit) for goal in attention[:included]],
+                "stale_attention_goal_count": len(stale_attention),
+                "included_goal_count": len(selected),
+                "omitted_goal_count": len(attention) - len(selected),
+                "next_runnable_goal_id": runnable_id if runnable_visible else None,
+                "next_runnable_omitted_by_context_budget": bool(runnable_id is not None and not runnable_visible),
+                "goals": [_goal_view(goal, text_limit) for goal in selected],
             }
             encoded = json.dumps(
                 view,

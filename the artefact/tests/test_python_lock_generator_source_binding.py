@@ -71,13 +71,35 @@ def test_python_lock_generator_uses_source_locked_python_313_supported_pip_tools
     assert 'PIP_TOOLS_WHEEL_PATH="/tmp/pip-tools-bootstrap/$PIP_TOOLS_WHEEL"' in text
     assert "PIP_TOOLS_WHEEL_SHA256=" in text
     assert '"$PIP_TOOLS_SHA256" "$PIP_TOOLS_WHEEL_PATH" | sha256sum -c -' in text
-    assert '--only-binary=:all: "$PIP_TOOLS_WHEEL_PATH"' in text
+    assert '--only-binary=:all: --report /tmp/generator-install-report.json' in text
+    assert '"$PIP_TOOLS_WHEEL_PATH"' in text
     assert 'pip-compile --version | grep -F "version $PIP_TOOLS_VERSION"' in text
+    assert "GENERATOR_BASE_FREEZE_SHA256=" in text
+    assert "GENERATOR_BASE_ENVIRONMENT_BEGIN" in text
+    assert "GENERATOR_BASE_ENVIRONMENT_END" in text
     assert "GENERATOR_FREEZE_SHA256=" in text
     assert "GENERATOR_ENVIRONMENT_BEGIN" in text
     assert "GENERATOR_ENVIRONMENT_END" in text
     assert "'pip-tools==7.5.3'" not in text
     assert "'pip-tools==7.5.0'" not in text
+
+
+def test_python_lock_generator_emits_transitive_bootstrap_download_provenance_without_promoting_it_to_lock():
+    text = _workflow_text()
+    assert "generator-install-report.json" in text
+    assert "report.get('version') != '1'" in text
+    assert "download_info" in text
+    assert "archive_info" in text
+    assert "hashes" in text
+    assert "GENERATOR_DEPENDENCY_NON_HTTPS_SOURCE" in text
+    assert "GENERATOR_DEPENDENCY_SHA256_MISSING" in text
+    assert "SOURCE_LOCK" in text
+    assert "GENERATOR_DOWNLOAD_PROVENANCE_SHA256=" in text
+    assert "GENERATOR_DOWNLOAD_PROVENANCE_BEGIN" in text
+    assert "GENERATOR_DOWNLOAD_PROVENANCE_END" in text
+    assert "generator.download-provenance" in text
+    assert "transitive bootstrap" in text
+    assert "not itself a trusted lock" in text
 
 
 def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_experiment():

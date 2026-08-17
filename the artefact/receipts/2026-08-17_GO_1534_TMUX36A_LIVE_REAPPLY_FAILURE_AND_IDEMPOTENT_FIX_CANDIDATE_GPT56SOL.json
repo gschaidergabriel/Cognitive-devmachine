@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseTmux36aLiveReapplyFailureAndFixCandidate/v1",
+  "observed_at": "2026-08-17T16:04:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed": "62de4777f77936c0ce4540b97a682414158e8a62",
+  "product_path": "the artefact/",
+  "initial_live_probe": {
+    "execution_bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "execution_bridge_commit": "ecea93a74753a47e3746b20956656ebfbce24e56",
+    "vercel_deployment_id": "dpl_Cx4oewsgEbJKsEpkefrWbjTGyTDd",
+    "surface": "Vercel Sandbox, Amazon Linux 2023 runtime",
+    "terminal_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "managed_tmux_policy_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "exact_component_bytes": true,
+    "tmux": "3.6a-1.amzn2023.0.1",
+    "python": "3.13.13-1.amzn2023.0.2",
+    "sqlite": "3.40.0",
+    "network_during_code_under_test": "DENY_ALL",
+    "prepolicy_persistent_server_upgrade": "PASS elapsed=0.014884s",
+    "new_server_second_source": "FAIL",
+    "failure": "TerminalRuntimeError after second managed source-file: table prefix doesn't exist; table copy-mode doesn't exist; table copy-mode-vi doesn't exist",
+    "classification": "EXACT_COMPONENT_LIVE_RUNTIME_FAIL_NOT_PROVIDER_ADMISSION_FAILURE",
+    "native_claude": false,
+    "identity_dependency": "minimal fixture stub only",
+    "oci_product_image": false,
+    "whole_product_pass": false
+  },
+  "mechanism": {
+    "observed": "tmux 3.6a removes emptied default key tables after the first unbind-all policy load; re-sourcing the same v3 policy returns nonzero for already-absent tables even though the desired transport-only state may already be reached",
+    "why_mocks_missed_it": "previous subprocess fakes modeled source-file success but not real tmux key-table deletion and second-source diagnostics",
+    "counterhypothesis": "unknown source-file errors or a partially-applied policy must not be reclassified as benign idempotency"
+  },
+  "candidate": {
+    "pull_request": 603,
+    "branch": "go/tmux-source-reapply-idempotent-livefix-20260817-1534-sol",
+    "head_before_receipt": "66ea79af61ff319970251d86667f7dc18e81873b",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "policy_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "design": "keep managed-tmux.conf as the single policy source; when source-file is nonzero, tolerate only exact missing-table diagnostics for prefix/root/copy-mode/copy-mode-vi; empty, mixed, or unknown diagnostics fail closed; the full independent v3 effective-state attestation remains mandatory immediately afterward",
+    "source_regressions_added": [
+      "expected missing-table-only diagnostics accepted",
+      "mixed expected plus unknown diagnostics rejected",
+      "nonzero with empty diagnostic rejected"
+    ],
+    "promotion": "NOT_AUTHORIZED_PENDING_REAL_TMUX_RERUN_AND_CURRENT_MAIN_REJOIN"
+  },
+  "rerun_admission": {
+    "bridge_pr": "gschaidergabriel/Dr.-Unterweger#846",
+    "bridge_latest_commit": "088edb8215b4989ead334ed05a1f5a3cd7991e3d",
+    "status": "BLOCKED_NO_NEW_VERCEL_PREVIEW_OBSERVED_AFTER_STAGING_COMMITS",
+    "github_actions": "identity-guard runner admission failed before steps; runner_id=0; steps=[]; no test credit",
+    "openai_container": "real tmux unavailable; apt repository refresh timed out; no live-test credit",
+    "daytona": "authorized fallback remains available in policy but no provider-contact/runtime evidence was generated in this candidate rerun",
+    "next_exact_gate": "run the same exact candidate blob and policy on real tmux 3.6a: pre-policy upgrade, already-hardened second reapply, new-server second source, full v3 attestation, direct multi-argv fake-Claude transport check; then rejoin current main before merge"
+  },
+  "go_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "runtime_probe_classification": "ordinary predeclared product falsifier/regression"
+  },
+  "security": {
+    "vps_self_hosted_production_test": false,
+    "together_api": "NOT_USED_FORBIDDEN",
+    "final_paid_model_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "evidence_boundary": "The initial predecessor tmux mechanism is LIVE-RUNTIME-FAILED at exact component scope. The repair is a SOURCE CANDIDATE only until a real-tmux rerun passes. No claim is made for native Claude, Clerk/browser/WebSocket PTY, OCI build/runtime, restart/concurrency, or whole ClayVerse acceptance."
+}

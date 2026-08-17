@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T20:18:04+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_SOURCE_SLICE_EXECUTION",
+  "canonical_main_observed_before_receipt": "69bc2c82bf9092256c0788a84f06a1cbe091dcfb",
+  "retained_lane": {
+    "pull_request": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "head_observed": "3c6c4d98605d72d902ea36ceabf47a73eab11a54",
+    "identity_blob": "b9b555a6e8ad3368d78ed4842ed27cf5101c692d",
+    "terminal_gateway_blob": "492bd5a5573cda42e78eb5cf9e53dec47be312e0",
+    "healthcheck_test_blob": "0ccfeb38ed7688b6278ce0f75e3517ac2de3ef49"
+  },
+  "observed_defect": "Before the fused readiness repair, runtime readiness could validate exactly the two canonical sessions while failing to validate the complete canonical users/equal-rights state. That allowed readiness to disagree with IdentityRouter.resolve(), which already failed closed on extra-user, display-name, or rights drift.",
+  "fused_repair": "The retained #623 lane now calls the existing read-only assert_canonical_user_state(db) from _runtime_ready() before session and tmux readiness probing. No second identity registry or state authority is introduced.",
+  "written_regressions": [
+    "test_runtime_readiness_rejects_extra_user_before_terminal_probe",
+    "test_runtime_readiness_rejects_equal_rights_drift_before_terminal_probe"
+  ],
+  "coordination": {
+    "test_commit_written": "957253a96891cc9a3a12c817087c84d81bcbf366",
+    "stale_runtime_write_attempt": "REJECTED_BY_GITHUB_409_SHA_FENCE",
+    "parallel_fusion_result": "The same retained #623 lane independently advanced terminal_gateway.py to blob 492bd5a5573cda42e78eb5cf9e53dec47be312e0 with the canonical-user readiness validation; the stale write was not forced or duplicated.",
+    "duplicate_canonical_path_created": false
+  },
+  "supporting_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "sqlite": "3.46.1",
+    "scope": "deterministic source-slice reconstruction of the exact canonical-user assertion plus the current _runtime_ready predicate; not a full checkout, PR-head pytest, OCI, Vercel Sandbox, Clerk, tmux, or Claude runtime",
+    "cases": {
+      "canonical": "READY_WITH_BOTH_TERMINALS_PROBED",
+      "extra_user": "FAIL_CLOSED_BEFORE_TERMINAL_PROBE",
+      "rights_drift": "FAIL_CLOSED_BEFORE_TERMINAL_PROBE",
+      "canonical_session_id_drift": "FAIL_CLOSED_BEFORE_TERMINAL_PROBE",
+      "duplicate_session": "FAIL_CLOSED_BEFORE_TERMINAL_PROBE"
+    },
+    "result": "5/5 PASS",
+    "exit_code": 0
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_full_pr_runtime_verified": false,
+    "exact_oci_verified": false,
+    "whole_product_pass": false
+  },
+  "execution_frontier": "Whole-product execution remains blocked before private Research/EntityOS source staging by missing host-side Vercel Preview GITHUB_READ_TOKEN. The credential must remain host-side and must not be forwarded into the Sandbox. After provisioning, refresh/rebind current main + retained #611/#622 and deliberately admitted #623 exactly once before the next real run.",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id and only minute-precision shared trigger identity were available to claim the atomic lease safely."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secret_exposed": false
+  }
+}

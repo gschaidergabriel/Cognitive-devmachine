@@ -1,11 +1,12 @@
 from __future__ import annotations
+import hashlib,json
 from dataclasses import dataclass
 from .store import UnifiedDB,Lease,StaleGeneration
 from .entityos_bridge import EntityOSBridge
 from .effect_journal import EffectJournal
 @dataclass(frozen=True)
 class EffectRequest:
-    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None
+    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None; request_key:str|None=None
 class EffectGate:
     ALLOWED={'entityos.exec','process.exec','state.noop'}
     def __init__(self,db:UnifiedDB,allow_process=False,entityos_bridge:EntityOSBridge|None=None):
@@ -15,6 +16,10 @@ class EffectGate:
         if self.entityos_bridge is not None: capabilities.add('entityos.exec')
         return tuple(sorted(capabilities))
     def causal_for_effect(self,effect_id): return self.journal.causal_for(effect_id)
+    @staticmethod
+    def _request_hash(req,generation):
+        payload={'user_id':req.user_id,'session_id':req.session_id,'capability':req.capability,'target':req.target,'argv':req.argv,'generation':generation}
+        return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
     def execute(self,req:EffectRequest,episode_id=None,lease:Lease|None=None):
         if req.capability not in self.ALLOWED: raise PermissionError('capability denied')
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
@@ -24,7 +29,9 @@ class EffectGate:
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':
             raise PermissionError('direct host process execution forbidden; no admitted generic EntityOS process contract')
-        effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv)
+        request_hash=self._request_hash(req,generation) if req.request_key is not None else None
+        effect_id,replayed=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,req.request_key,request_hash)
+        if replayed is not None: return effect_id,replayed
         if req.capability=='state.noop':
             outcome={'ok':True,'target':req.target,'boundary':'internal'}
             self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)

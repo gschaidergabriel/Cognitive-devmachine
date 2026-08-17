@@ -10,17 +10,21 @@
   "source_binding": {
     "research_main_at_branch": "bd254c6e767eba208346a4dd7262cf134e980beb",
     "branch": "gpt56sol/go-2259-entityos-runtime-lock-authority-20260817",
-    "service_commit": "37b92f8ce30c5d259adffeaa034c0931a7368361",
+    "initial_service_commit": "37b92f8ce30c5d259adffeaa034c0931a7368361",
     "boot_binding_test_commit": "44684ab216eecc6cfaac384cde521bd8ab7da7e1",
-    "artifact_authority_test_commit": "6636566c6d184392cd7fac11282ac8443413a4e2"
+    "artifact_authority_test_commit": "6636566c6d184392cd7fac11282ac8443413a4e2",
+    "live_fusion_service_commit": "76632f284373852018117bc6df640adaee5d3e68",
+    "live_fusion_test_commit": "3719e9dbb042f93381e391bcd5f4616fa25b633b",
+    "current_service_blob": "ea79c1020f62c2c2161471725f5087f0ed53136d",
+    "lock_reader_hardening_test_blob": "1bd60f829ae3752532e747d5d9ad5e57fc00bebb"
   },
   "parallel_reentry": {
-    "classification": "ADOPT_AND_REFINE_NO_DUPLICATE_IMPLEMENTATION",
+    "classification": "ADOPT_REFINE_AND_FUSE_NO_THIRD_IMPLEMENTATION",
     "observed_commits": [
       "a420a7e7342d29a2713d6eddabfa353997876b01",
       "bd254c6e767eba208346a4dd7262cf134e980beb"
     ],
-    "detail": "Parallel current-main work removed CLAYVERSE_ENTITYOS_SHA256 from the Kata deployment Secret surface and documented image authority. This organ retained that delta and closed the remaining service-side runtime override path instead of creating a competing deployment implementation."
+    "detail": "Parallel current-main work removed CLAYVERSE_ENTITYOS_SHA256 from the Kata deployment Secret surface and documented image authority. This lane retained that direction and closed the service-side runtime override path. During live fusion, the unique O_NOFOLLOW/regular-file/bounded-read lock-reader hardening from overlapping PR #645 was CAS-fused here instead of opening a third service implementation. PR #645 remains separately open only for distinct Dockerfile/Compose/StatefulSet/README adjudication."
   },
   "finding": {
     "classification": "SOURCE_AUTHORITY_GAP",
@@ -34,31 +38,62 @@
     "authority": "EMBEDDED_LOCK_ONLY",
     "runtime_path_env": "ASSERTION_ONLY_MATCH_REQUIRED",
     "runtime_digest_env": "ASSERTION_ONLY_MATCH_REQUIRED",
+    "lock_open": "O_RDONLY_PLUS_O_CLOEXEC_PLUS_O_NOFOLLOW_WHERE_AVAILABLE",
+    "lock_regular_file_required": true,
+    "lock_max_bytes": 65536,
+    "lock_exact_read_consistency_required": true,
     "lock_schema_validation": true,
     "lock_sha256_validation": true,
     "lock_size_validation": true,
+    "valid_uppercase_sha_normalized": true,
     "verified_size_matches_lock_required": true,
     "entityos_exec_enable_switch_preserved": true
   },
   "regression_candidate": {
     "test_file": "the artefact/tests/test_entityos_boot_binding.py",
     "static_authority_test": "the artefact/tests/test_entityos_artifact_authority.py",
-    "classification": "UNEXECUTED_SOURCE_REGRESSION_CANDIDATE"
+    "lock_reader_hardening_test": "the artefact/tests/test_entityos_lock_reader_hardening.py",
+    "classification": "SOURCE_REGRESSION_PLUS_BOUNDED_EXTRACTED_FUNCTION_BEHAVIOR"
   },
   "execution_evidence": {
-    "authorized_isolated_test_started_for_this_branch": false,
-    "test_pass_claimed": false,
+    "authorized_exact_full_branch_test_started": false,
+    "exact_final_oci_started": false,
+    "extracted_lock_reader_behavior": {
+      "surface": "isolated non-production OpenAI container",
+      "cases": 4,
+      "passed": 4,
+      "cases_named": [
+        "symlink rejected",
+        "non-regular directory rejected",
+        "oversized lock rejected",
+        "valid uppercase digest normalized"
+      ],
+      "python_compile": "PASS"
+    },
     "oci_runtime_credit_added": 0,
     "whole_product_credit_added": 0,
-    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+    "classification": "SOURCE_MECHANISM_SUPPORTED_ONLY"
   },
   "owner_reentry_after_branch_creation": {
     "github_token_forwarding": "AUTHORIZED_IN_DISPOSABLE_VERCEL_SANDBOX_WITH_LEAST_PRIVILEGE_AND_NO_PERSISTENCE_OR_LOGGING",
     "final_test_of_tests": "VERCEL_FIRECRACKER_PLUS_EXACT_OCI_PLUS_RUNTIME_VAULT_MISTRAL_PLUS_CAUSAL_RECOVERY_PATH_MANDATORY",
-    "supersedes_host_side_only_token_wording": true
+    "supersedes_host_side_only_token_wording": true,
+    "coordination_note": "Current main PROGRAM_STATE text observed earlier in this go still carries older host-side-only wording, so owner-authority/state-document synchronization remains a coordination item; newest explicit owner correction governs operational intent."
   },
   "provider_frontier": {
-    "vercel": "SANDBOX_AND_GUEST_KERNEL_ADMISSION_OBSERVED; LATEST RUN STOPPED BEFORE PRIVATE SOURCE STAGING BECAUSE GITHUB_READ_TOKEN_WAS_NOT_PRESENT; CURRENT OWNER POLICY NOW PERMITS SECURE FORWARDING INTO THE DISPOSABLE SANDBOX",
+    "latest_retained_vercel_deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "vercel_sandbox": "PASS_CREATED",
+    "vercel_guest_kernel": {
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64",
+      "classification": "OUTER_FIRECRACKER_GUEST_KERNEL_IDENTITY_OBSERVED_ONLY"
+    },
+    "private_source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "sandbox_stopped": true,
+    "github_secret_forwarded_in_observed_run": false,
     "daytona": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_PROVIDER_CONTACT_NO_DAYTONA_API_KEY_NO_EGRESS",
     "vps_self_hosted_production_fallback": "FORBIDDEN"
   },
@@ -74,5 +109,5 @@
     "paid_or_final_training_started": false
   },
   "acceptance": "IN_PROGRESS",
-  "next_high_information_runtime_step": "Securely make a scoped read-only GITHUB_READ_TOKEN available to the retained Vercel controller/Sandbox under the new owner directive, refresh and bind the then-current admitted Research/EntityOS/Mistral bytes, execute the isolated regressions, build the exact OCI image, and continue into the mandatory Vercel Firecracker + runtime Vault Mistral test-of-tests."
+  "next_high_information_runtime_step": "Securely make a scoped read-only GITHUB_READ_TOKEN available to the retained Vercel controller/Sandbox under the newest owner directive, refresh and bind then-current Research/EntityOS/Mistral bytes, execute exact regressions, build the exact OCI image/digest inside the admitted Firecracker Sandbox, then continue runtime Vault Mistral cognition, EntityOS/EffectGate, recovery/recreate and no-replay gates."
 }

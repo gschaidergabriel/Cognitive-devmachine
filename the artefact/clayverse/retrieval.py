@@ -1,26 +1,48 @@
 from __future__ import annotations
 import json
+from dataclasses import replace
+
+from .method_transfer import METHOD_KINDS, MethodTransfer
 from .microclay_retrieval import MicroClayRetrieval
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
+
+
+class EvidenceMicroClayRetrieval(MicroClayRetrieval):
+    """MicroClay serving lane with a hard evidence/method-memory boundary."""
+
+    def _score_candidate(self, row, query_tokens, now, capitals):
+        candidate = super()._score_candidate(row, query_tokens, now, capitals)
+        if candidate.kind in METHOD_KINDS:
+            return replace(candidate, baseline_score=0.0, adaptive_score=0.0, entry_keys=())
+        return candidate
+
+    def retrieve(self, **kwargs):
+        result = super().retrieve(**kwargs)
+        if any(str(item.get("kind")) in METHOD_KINDS for item in result.get("items", [])):
+            raise StaleGeneration("evidence_method_boundary")
+        return result
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Two-stage world assembly: admitted evidence first, bounded method transfer second."""
 
-    CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
+    CONTROL_MEMORY_KINDS = frozenset({"source_archive", "compression_receipt", "compression_clearance"})
 
     def __init__(self, db: UnifiedDB):
         self.db = db
-        self.microclay = MicroClayRetrieval(db)
+        self.microclay = EvidenceMicroClayRetrieval(db)
+        self.method_transfer = MethodTransfer(db)
+
+    @classmethod
+    def _is_evidence_kind(cls, kind):
+        return str(kind) not in cls.CONTROL_MEMORY_KINDS and str(kind) not in METHOD_KINDS
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
-            "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-            "ORDER BY ts LIMIT 20",
+            "SELECT kind,value,provenance FROM durable_memory WHERE source_turn_id=? ORDER BY ts LIMIT 100",
             (turn_id,),
         ).fetchall()
-        return [dict(r) for r in rows]
+        return [dict(r) for r in rows if self._is_evidence_kind(r["kind"])][:20]
 
     def _active_identity(self, session_id):
         row = self.db.db.execute(
@@ -59,7 +81,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Learned retrieval cannot broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -79,6 +101,15 @@ class WorldAssembler:
         retrieval_receipt = {
             "mode": "LEGACY_COMPATIBILITY",
             "status": "UNKNOWN",
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        method_context = []
+        method_counterevidence = []
+        method_retrieval_receipt = {
+            "policy_version": self.method_transfer.POLICY_VERSION,
+            "triggered": False,
+            "method_status": "UNAVAILABLE_WITHOUT_CAUSAL_IDENTITY",
             "truth_authority": False,
             "effect_authority": False,
         }
@@ -106,23 +137,44 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
+            evidence_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
+            signature = self.method_transfer.derive_signature(
+                str(supplied["query"]), list(resource_refs), evidence_status
+            )
+            methods = self.method_transfer.retrieve(
+                query=str(supplied["query"]),
+                signature=signature,
+                evidence_status=evidence_status,
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                generation=int(supplied["generation"]),
+            )
+            method_context = methods["items"]
+            method_counterevidence = methods["counterevidence"]
+            method_retrieval_receipt = dict(methods["receipt"])
+            method_retrieval_receipt["method_status"] = methods["method_status"]
+            method_retrieval_receipt["fact_status"] = methods["fact_status"]
         else:
-            # Compatibility path for legacy tests/non-product callers with no active
-            # causal turn. Product Claude hooks always have an active turn here.
-            memories = [
-                dict(r)
-                for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-                    "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
-                )
-            ]
+            # Compatibility path for legacy/non-product callers with no active causal turn.
+            rows = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 200",
+                (user_id,),
+            ).fetchall()
+            memories = [dict(r) for r in rows if self._is_evidence_kind(r["kind"])][:50]
 
+        evidence_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
         return {
             "own_recent": own,
             "cross_session_collision": other,
+            # Legacy key retained for current callers; it is evidence-only now.
             "durable_memory": memories,
+            "evidence_context": memories,
+            "method_context": method_context,
+            "unknowns": [str(supplied["query"])] if evidence_status == "UNKNOWN" and supplied.get("query") is not None else [],
+            "counterevidence": method_counterevidence,
             "retrieval_receipt": retrieval_receipt,
+            "method_retrieval_receipt": method_retrieval_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

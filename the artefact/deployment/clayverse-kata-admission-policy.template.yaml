@@ -1,0 +1,42 @@
+# TEMPLATE: fail-closed admission fence for the final ClayVerse Kata profile.
+#
+# This is deployment security material, not a second ClayVerse application.
+# The policy validates Pod CREATE/UPDATE requests and rejects any unreviewed
+# io.katacontainers.* workload annotation whenever the current or previous Pod
+# identity is app=clayverse. Checking oldObject prevents label-removal plus
+# annotation injection from bypassing the fence during UPDATE.
+#
+# Final acceptance must bind the exact applied policy/binding bytes, prove that
+# the API server admits the policy, and exercise positive/negative requests on
+# the real target after all mutating admission has completed.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: clayverse-kata-annotation-fence.seimensch.net
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  validations:
+    - expression: >-
+        !(
+          (has(object.metadata.labels) && 'app' in object.metadata.labels && object.metadata.labels['app'] == 'clayverse') ||
+          (oldObject != null && has(oldObject.metadata.labels) && 'app' in oldObject.metadata.labels && oldObject.metadata.labels['app'] == 'clayverse')
+        ) ||
+        !has(object.metadata.annotations) ||
+        object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))
+      message: "ClayVerse Pods may not carry unreviewed io.katacontainers.* workload annotations"
+      reason: Forbidden
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: clayverse-kata-annotation-fence.seimensch.net
+spec:
+  policyName: clayverse-kata-annotation-fence.seimensch.net
+  validationActions:
+    - Deny

@@ -1,0 +1,104 @@
+{
+  "schema": "ClayVerseGoMethodMemoryAdmission/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+  "canonical_main_refreshed_before_receipt": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "candidate_branch": "go/meta-learning-method-admission-20260817",
+  "candidate_head_before_receipt": "2c9467e618927b4aa76a1d9e53018504c8f70465",
+  "status": "SOURCE_CANDIDATE_SUPPORTING_REGRESSION_ONLY",
+  "frontier": "validated durable method-memory admission for meta-learning and analogical transfer",
+  "observed_gap": {
+    "durable_memory_kind_unconstrained": true,
+    "generic_add_memory_accepted_arbitrary_kind": true,
+    "dedicated_validated_method_memory_path_before_change": false,
+    "owner_required_method_classes": [
+      "framework_candidate",
+      "framework",
+      "heuristic_candidate",
+      "heuristic",
+      "failure_pattern",
+      "counterexample",
+      "method_receipt"
+    ]
+  },
+  "candidate_delta": {
+    "files": [
+      "the artefact/clayverse/method_memory.py",
+      "the artefact/clayverse/store.py",
+      "the artefact/tests/test_method_memory_admission.py"
+    ],
+    "schema_version_changed": false,
+    "mechanism": [
+      "reserve all seven method-memory kinds at UnifiedDB.add_memory so generic factual memory admission cannot silently write them",
+      "admit method records only through UnifiedDB.add_method_memory with deterministic canonical JSON and non-empty provenance",
+      "validate reusable framework/heuristic records for problem signature, method steps, invariants, falsifiers, scope limits, evidence references, counts, calibration and lifecycle status",
+      "validate failure-pattern, counterexample and method-receipt contracts separately",
+      "require method_receipt to reference an existing non-receipt method memory",
+      "revalidate stored method rows on read so malformed legacy or raw-SQL rows fail closed",
+      "do not grant factual truth, rights, capability, effect authority or automatic promotion"
+    ],
+    "migration_collision_avoidance": "no schema bump; intentionally orthogonal to active MicroClay schema-v7 replay-identity candidates",
+    "container_source_inclusion_observed": "Dockerfile uses COPY clayverse ./clayverse; source inspection only, no image build claim"
+  },
+  "supporting_isolated_regression": {
+    "authority": "SUPPORTING_ONLY_NOT_EXACT_REPO_OR_CONTAINER_TRUTH",
+    "runtime": "Python 3.13.5",
+    "pytest": "9.0.2",
+    "source_binding": "manual reconstruction from the branch source written in this go; git clone was unavailable because the isolated container could not resolve github.com",
+    "focused_pytest": "10 passed in 0.33s",
+    "py_compile": "PASS",
+    "checks": [
+      "reserved method kind bypass rejected",
+      "framework candidate canonical round-trip",
+      "promoted lifecycle and last-validation requirements",
+      "under-specified reusable method rejected",
+      "non-finite calibration rejected with field-specific diagnostic",
+      "inconsistent support/success/failure counts rejected",
+      "malformed raw/legacy method row rejected on read",
+      "counterexample target binding required",
+      "method receipt target existence required",
+      "ordinary fact memory path unchanged"
+    ]
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface_available_in_session": false,
+    "github_pr_creation_attempts": 2,
+    "github_pr_creation_result": "BLOCKED_BY_CONNECTOR_SAFETY_STATUS_BEFORE_PR_CREATION",
+    "git_clone_from_isolated_container": "FAILED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "exact_branch_ci_started": false,
+    "exact_oci_build_started": false,
+    "executable_pass_claimed": false
+  },
+  "parallel_coordination": {
+    "main_advanced_during_run": true,
+    "new_main_commit": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+    "new_main_change_class": "MicroClay integration receipt only",
+    "overlap_with_method_memory_source_files_observed": false,
+    "candidate_branch_state_at_refresh": "4_ahead_1_behind_before_receipt"
+  },
+  "go_unusual_experiment_accounting": {
+    "new_unusual_experiments_added": 0,
+    "shared_designated_experiment_from_current_main": "DURABLE_RECEIPT_BUDGET_TAMPER",
+    "shared_designated_experiment_execution_state": "NOT_EXECUTED_RUNNER_ADMISSION_FAILED",
+    "reason_no_second_experiment": "preserve the one-unusual-experiment global macrocycle law"
+  },
+  "promotion_boundary": {
+    "method_memory_source_candidate": true,
+    "meta_learning_stage_b_enabled": false,
+    "microclay_mode_changed": false,
+    "current_main_promoted": false,
+    "whole_clayverse_oci_acceptance": "IN_PROGRESS",
+    "next_exact_gate": "fuse/rebase the candidate onto current main, then execute exact-identity focused method-memory tests plus adjacent UnifiedDB/memory/retrieval regressions on an actually-started authorized isolated runner; only then run broader suite and exact OCI build/runtime acceptance"
+  },
+  "forbidden_or_unused": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

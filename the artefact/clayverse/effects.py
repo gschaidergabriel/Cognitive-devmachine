@@ -44,7 +44,7 @@ class EffectGate:
             else:
                 outcome=dict(self.entityos_bridge.run(req.argv)); outcome['boundary']='EntityOS'; outcome['entityos_sha256']=self.entityos_bridge.sha256.lower()
         except Exception as exc:
-            error={'ok':False,'error_type':type(exc).__name__,'error':str(exc)}; self.db.fail_reserved_effect(req.request_key,error); raise RuntimeError('EFFECT_EXECUTION_FAILED') from exc
+            error={'ok':False,'error_type':type(exc).__name__,'error':str(exc)}; self.db.fail_reserved_effect(req.request_key,error); raise
         eid=self.db.complete_reserved_effect(req.request_key,episode_id,req.user_id,req.capability,req.target,generation,req.argv,outcome,status)
         if lease: self.db.assert_lease(lease)
         return eid,outcome

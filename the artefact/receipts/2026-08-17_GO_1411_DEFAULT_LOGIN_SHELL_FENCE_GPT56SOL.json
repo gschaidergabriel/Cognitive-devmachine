@@ -1,0 +1,40 @@
+{
+  "schema": "clayverse-go-mechanism-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:11:17+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_merge_commit": "fe9aafe235db72c7357d9f97fe9f73e1d5c16901",
+  "change": "runtime user clayverse passwd/login shell changed from /bin/bash to /opt/clayverse/runtime/deny-shell",
+  "mechanism": {
+    "purpose": "fail closed implicit/default login-shell fallbacks without changing the explicit ClayVerse service or managed Claude start path",
+    "dockerfile_blob": "bb37882e5d9b98b95ccdcde6bddf5893ffb1a949",
+    "test_blob": "5f9b39c91ca46c7f2e505e3c375a2cfb51201faa",
+    "deny_shell_blob": "4f39431b777db242ad7e8f68dcb0f94cf3870574",
+    "product_entrypoint": "python -m clayverse.service",
+    "guard_exit_code": 126
+  },
+  "isolated_exact_blob_regression": {
+    "execution_surface": "authorized isolated OpenAI container",
+    "git_blob_identity": "MATCH for Dockerfile, test and deny-shell",
+    "command": "pytest -q tests/test_default_login_shell_fence.py",
+    "result": "PASS_3_OF_3",
+    "duration": "0.04s"
+  },
+  "execution_limits": {
+    "docker_binary": "UNAVAILABLE",
+    "podman_binary": "UNAVAILABLE",
+    "current_vercel_preview_admission": "RATE_LIMITED_BEFORE_SANDBOX_START",
+    "exact_oci_passwd_behavior": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "pr": 526,
+    "merged": true,
+    "unusual_experiment_executed": false,
+    "vps_used": false,
+    "deployment_host_used_as_test_runtime": false
+  },
+  "next_falsifier": "In the exact built ClayVerse OCI image, prove getent passwd clayverse reports /opt/clayverse/runtime/deny-shell, invoking the default login shell exits 126, the explicit service entrypoint still reaches readiness, and managed Claude/tmux startup remains functional."
+}

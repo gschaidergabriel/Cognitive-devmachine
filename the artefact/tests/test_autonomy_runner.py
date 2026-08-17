@@ -1,111 +1,121 @@
 import pytest
 
-from clayverse.agency import AgencyState
-from clayverse.autonomy import AutonomyRunner, UserHomeClaudeInferenceRouter
+from clayverse.autonomy import AutonomyController
+from clayverse.autonomy_scheduler import (
+    AutonomySchedulerRunner,
+    UserHomeClaudeInferenceRouter,
+)
 from clayverse.identity import IdentityRouter
 from clayverse.store import UnifiedDB
 
 
-class NeverCalledInference:
-    def __init__(self):
-        self.calls = 0
-
-    def reason(self, world, observation):
-        self.calls += 1
-        raise AssertionError("inference must not run without runnable work")
-
-
-class PlanThenReviewInference:
-    def __init__(self):
+class FakeInference:
+    def __init__(self, decision):
+        self.decision = decision
         self.calls = 0
         self.worlds = []
 
     def reason(self, world, observation):
         self.calls += 1
         self.worlds.append(world)
-        if self.calls == 1:
-            return {
-                "text": "record one bounded internal planning step",
-                "selection": "request_effect",
-                "effect": {"capability": "state.noop", "target": "agency.plan-step", "argv": None},
-            }
-        return {"text": "no further executable move; ready for review", "selection": "respond", "effect": None}
+        return dict(self.decision)
 
 
-class DeniedExternalInference:
-    def __init__(self):
+class FakeRouter:
+    def __init__(self, inference):
+        self.inference = inference
         self.calls = 0
 
-    def reason(self, world, observation):
+    def adapter(self, user_id):
         self.calls += 1
-        return {
-            "text": "try bounded EntityOS step",
-            "selection": "request_effect",
-            "effect": {"capability": "entityos.exec", "target": "prototype-test", "argv": ["status"]},
-        }
+        assert user_id in {"gabriel", "andreas"}
+        return self.inference
 
 
 def _db(tmp_path):
-    db = UnifiedDB(tmp_path / "autonomy.db")
+    db = UnifiedDB(tmp_path / "autonomy-scheduler.db")
     IdentityRouter(db, {"g": "gabriel", "a": "andreas"})
     return db
 
 
-def test_user_home_router_derives_auth_home_only_from_canonical_owner(tmp_path):
+def _goal(db, objective="Advance the durable goal"):
+    turn = db.append_turn("session:gabriel", "gabriel", "user", objective)
+    return AutonomyController(db).create_goal_from_turn(
+        "gabriel",
+        "session:gabriel",
+        turn,
+        completion_mode="user_ack",
+    )
+
+
+def test_owner_home_router_uses_only_canonical_user_home(tmp_path):
     router = UserHomeClaudeInferenceRouter(tmp_path)
-    adapter = router._adapter("gabriel")
+    adapter = router.adapter("gabriel")
     assert adapter._subprocess_env()["HOME"] == str(tmp_path / "users" / "gabriel" / "home")
-    assert router._adapter("gabriel") is adapter
+    assert router.adapter("gabriel") is adapter
     with pytest.raises(PermissionError, match="unknown autonomous goal owner"):
-        router._adapter("mallory")
+        router.adapter("mallory")
 
 
-def test_daemon_cycle_spends_zero_inference_when_no_goal_exists(tmp_path):
+def test_idle_wake_performs_zero_model_calls(tmp_path):
     db = _db(tmp_path)
-    inference = NeverCalledInference()
-    result = AutonomyRunner(db, inference).run_cycle()
-    assert result == {"status": "idle", "cycle_id": None, "steps": 0, "effects": 0}
+    inference = FakeInference({"text": "must not run", "selection": "respond", "effect": None})
+    router = FakeRouter(inference)
+    result = AutonomySchedulerRunner(db, router).run_wake()
+    assert result == {"status": "idle", "steps": 0, "effects": 0}
+    assert router.calls == 0
     assert inference.calls == 0
-    assert db.db.execute("SELECT COUNT(*) FROM agency_cycles").fetchone()[0] == 0
     db.close()
 
 
-def test_closed_loop_reingests_verified_outcome_before_next_model_step(tmp_path):
+def test_wait_step_is_bounded_to_one_wake_and_persisted(tmp_path):
     db = _db(tmp_path)
-    agency = AgencyState(db)
-    goal = agency.create_goal("gabriel", "Design module", "make a grounded design", "review accepts it")
-    milestone = agency.add_milestone(goal, "CONCEPT", "Design", "bounded proposal with evidence")
-    inference = PlanThenReviewInference()
-
-    result = AutonomyRunner(db, inference).run_cycle()
-
-    assert result["status"] == "closed"
-    assert result["steps"] == 2
-    assert result["effects"] == 1
-    assert inference.calls == 2
+    goal = _goal(db)
+    inference = FakeInference(
+        {"text": "STEP:WAIT\nWait for the next bounded wake.", "selection": "respond", "effect": None}
+    )
+    result = AutonomySchedulerRunner(db, FakeRouter(inference)).run_wake()
+    assert result["status"] == "waiting"
+    assert result["steps"] == 1
+    assert result["effects"] == 0
+    snapshot = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+    assert snapshot["goal_id"] == goal["goal_id"]
+    assert snapshot["counters"]["steps"] == 1
+    assert snapshot["current_step"]["kind"] == "wait"
+    assert snapshot["current_step"]["status"] == "SUCCEEDED"
     assert inference.worlds[0]["agency"]["profile"]["substrate_anchor"] == "SERVER_UNIFIEDDB"
-    assert inference.worlds[0]["runtime_capabilities"] == ["state.noop"]
-    second = inference.worlds[1]["agency"]["active_goals"][0]["milestones"][0]["recent_attempts"]
-    assert second
-    assert second[-1]["effect_id"] is not None
-    assert second[-1]["status"] == "SUCCEEDED"
-    assert db.db.execute("SELECT status FROM agency_milestones WHERE milestone_id=?", (milestone,)).fetchone()[0] == "READY_FOR_REVIEW"
-    assert db.db.execute("SELECT status FROM agency_goals WHERE goal_id=?", (goal,)).fetchone()[0] == "ACTIVE"
     db.close()
 
 
-def test_denied_effects_stop_after_failed_retry_limit(tmp_path):
+def test_completion_candidate_cannot_self_certify_without_contract_evidence(tmp_path):
     db = _db(tmp_path)
-    agency = AgencyState(db)
-    goal = agency.create_goal("gabriel", "Prototype", "run bounded prototype work", "verified result")
-    milestone = agency.add_milestone(goal, "CONCEPT", "Try action", "verified EntityOS outcome")
-    inference = DeniedExternalInference()
+    goal = _goal(db, "Prepare a reviewable report")
+    inference = FakeInference(
+        {"text": "STEP:COMPLETE_CANDIDATE\nThe proposal appears ready for independent completion verification.", "selection": "respond", "effect": None}
+    )
+    result = AutonomySchedulerRunner(db, FakeRouter(inference)).run_wake()
+    assert result["status"] == "waiting_for_evidence"
+    assert result["goal_id"] == goal["goal_id"]
+    snapshot = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+    assert snapshot["status"] == "VERIFYING"
+    assert snapshot["user_ack_turn_id"] is None
+    db.close()
 
-    result = AutonomyRunner(db, inference, entityos_bridge=None).run_cycle()
 
-    assert result["status"] == "closed"
-    assert inference.calls == agency.policy()["max_failed_retries_per_milestone"]
-    assert result["effects"] == agency.policy()["max_failed_retries_per_milestone"]
-    assert db.db.execute("SELECT status FROM agency_milestones WHERE milestone_id=?", (milestone,)).fetchone()[0] == "BLOCKED"
-    assert db.db.execute("SELECT COUNT(*) FROM agency_attempts WHERE milestone_id=? AND status='FAILED'", (milestone,)).fetchone()[0] == 3
+def test_mismatched_text_marker_and_effect_fails_closed_before_admission(tmp_path):
+    db = _db(tmp_path)
+    goal = _goal(db)
+    inference = FakeInference(
+        {
+            "text": "STEP:REASON\nPretend this effect is only reasoning.",
+            "selection": "request_effect",
+            "effect": {"capability": "state.noop", "target": "marker-test", "argv": None},
+        }
+    )
+    result = AutonomySchedulerRunner(db, FakeRouter(inference)).run_wake()
+    assert result["status"] == "blocked"
+    snapshot = AutonomyController(db).snapshot(user_id="gabriel")["goals"][0]
+    assert snapshot["goal_id"] == goal["goal_id"]
+    assert snapshot["current_step"] is None
+    assert snapshot["counters"]["steps"] == 0
     db.close()

@@ -1,6 +1,6 @@
-# the artefact — ClayVerse single-container candidate
+# the artefact — ClayVerse sealed-appliance candidate
 
-This directory is the canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible container image** containing one persistent central ClayVerse entity.
+This directory is the canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible ClayVerse image** containing one persistent central ClayVerse entity. Final acceptance additionally requires that the **same accepted OCI image digest** run behind an independent VM/microVM guest-kernel boundary (Kata/equivalent). The final accepted image must contain the complete accepted EntityOS runtime substrate; EntityOS remains internal and is not the top-level product identity.
 
 ## Living cycle status
 
@@ -11,102 +11,105 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
+- Current `main` bound during this cycle: `79cdde5232e7047e2dabcd5e51a95da173e13bec`.
 - UnifiedDB is the sole durable canonical cognition/state authority. ClayGraph is derived/rebuildable only. MicroClay adapts retrieval/accessibility, never truth, identity, privacy or effect authority.
-- Canonical user path remains Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code is runtime cognition, not durable identity/memory authority.
-- Effects remain fail-closed through ClayVerse EffectGate/MCP. Generic host `process.exec` is not admitted. EntityOS is an optional digest-bound internal execution/security substrate, not the product endpoint.
+- Canonical user path remains Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
+- Claude Code and GLM are inference/cognition boundaries only. Claude remains the interactive managed terminal path; GLM remains token/API inference-only. Neither owns canonical state or effect authority.
+- Effects remain fail-closed through ClayVerse EffectGate/MCP. Generic host `process.exec` is not admitted.
+- Runtime root is intended read-only with only declared persistent state/workspace volumes and bounded tmpfs writable.
 - Current build/test/runtime validation remains authorized isolated-sandbox-only. VPS/self-hosted/production testing and Together are forbidden.
+
+### Mandatory final isolation topology
+
+Final acceptance topology is:
+
+`host → KVM/equivalent → independent guest kernel → OCI runtime → exact accepted ClayVerse image digest`
+
+Direct host-kernel OCI execution remains useful development evidence but cannot establish whole-product acceptance. The MicroVM/Kata deployment contract must preserve the same central ClayVerse entity, exact image identity, persistent-state authority, effect/replay fences, recovery semantics and dual-user generation fencing.
+
+### MicroVM network boundary — current source state
+
+Current `main` now contains a fail-closed Kubernetes network baseline in `deployment/clayverse-kata-statefulset.template.yaml`:
+
+- exact template blob: `788492efedcdc47c9a308bb5ecbbce79fdd8f380`;
+- canonical contract-test blob observed this cycle: `cc7e3cb7628314c51534330878ca886bc464713e`;
+- `NetworkPolicy` name: `clayverse-default-deny`;
+- policy selects the ClayVerse pod and isolates both `Ingress` and `Egress`;
+- baseline rules are `ingress: []` and `egress: []`;
+- broad `0.0.0.0/0` and `::/0` allow rules are absent;
+- the template explicitly states that `hostNetwork: false` alone is not network isolation;
+- deployment-specific reviewed allow policies remain mandatory before a final deployment is network-functional.
+
+This closes the previously observed **source-level missing-default-deny gap**. It does **not** prove enforcement in a real cluster: final acceptance still requires a NetworkPolicy-capable CNI/runtime, explicit least-privilege ingress/egress policy for the admitted environment, and executable positive/negative network probes inside the mandatory guest-kernel boundary.
 
 ### Retained convergence lanes
 
-- Draft PR **#611** is the single retained tmux idempotent-reapply repair lane. Exact retained blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`.
-- Draft PR **#622** is the single retained Python hash-lock generator lane. Current source head is `08f1fe82211676d5140723eeccc225b05bb6ea5f`; current source-lock/workflow/test blobs are `a355fec6fb871a48112c8c0b79b4bf337b3e0644`, `fe31bd52e0d2dd9250cd5e3e9e96df01249bdb51`, and `737a64f025882396d56789cbeb98721e97010c7a`. The `pip-tools` 7.5.3 resolver wheel is now source-locked by SHA-256 before install, but transitive generator bootstrap dependencies remain an explicit open hash-closure gate. No canonical product lock bytes are accepted yet and Docker is not yet on `--require-hashes`.
-- Draft PR **#602** remains downstream managed native-Claude process attestation after successful in-image #611 validation.
-- Dr.-Unterweger draft PR **#810** remains the **single retained OCI/Vercel controller**. Current observed PR head is `a86f4355d02dc34331a3746128b6c3b959977439`. No parallel OCI controller or second EntityOS staging path is admitted.
+Do not duplicate these semantic lanes:
 
-### Exact current OCI execution identity
+- Draft PR **#611** — single retained tmux idempotent managed-policy-reapply repair; current observed head `2957e80228815ac266635981a55f22bc15dc9ed4`. Historical real-tmux evidence is supporting only; exact final-image tmux version/behavior remains unobserved.
+- Draft PR **#622** — single retained Python hash-lock generator lane; current GitHub branch head observed this cycle `3b47c65dfbf97e15c50f9c49272d73a082f2bfcf`. Its prose may lag the branch ref, so branch/source bytes must be refreshed at execution admission. Exact isolated generator execution and final Docker `--require-hashes` promotion remain open.
+- Draft PR **#623** — retained Clerk/session/readiness/restart identity-drift hardening lane; current observed head `3434408612ee44599ff0da033343970f575d6806`. Source/mechanism evidence only; real Clerk/browser/OCI evidence remains open.
+- Draft **Dr.-Unterweger PR #810** — single retained Vercel OCI/Sandbox controller; current observed head `78d92753d9442c66c3ffcff127c31faa98ffd622`. Do not create a second OCI controller.
 
-The strongest actually exercised Research execution closure remains:
+### Strongest current execution evidence / blocker
 
-- canonical Research base at bind time: `f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b`
-- closure commit: `5e5adce0591058608bbd7381ecf570a39b282f0d`
-- closure tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`
-- retained #611 blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`
-- predecessor #622 execution blobs: `ad34476c0092b7e724240c927a7cb14858d1a8dc` + `ed77f5c9446295fa973512ddf7e9d11ea3292010`
+The retained #810 controller has already reached real Vercel `Sandbox.create` on its current v6 controller lineage. The strongest recorded run then failed closed **before private Research/EntityOS source fetch** because the sensitive host-side Vercel Preview credential `GITHUB_READ_TOKEN` was absent. The disposable Sandbox stopped cleanly and no private-source, OCI, Claude, Clerk, recovery or whole-product runtime credit was earned.
 
-That closure is execution provenance only, not a second permanent product authority. It is now **stale for the next execution attempt** because retained #622 advanced to `08f1fe82…`; the next private-source-capable PR810 run must refresh/rebind once to the then-current Research/#611/#622 identities before spending Sandbox compute.
+The present connected Vercel action surface was refreshed again in this cycle and exposes inspection/documentation functions but no environment-secret mutation/recovery action. Therefore the immediate primary executable discriminator remains:
 
-Current PR810 hardening binds retained-runner blob `1298ca8002704414f86cd0c036d44e5b32be2918`, fences the Sandbox lifetime at **2,700,000 ms** above the retained explicit-step ceiling of **2,490,000 ms**, and at head `a86f4355…` adds a fail-closed Vercel Sandbox-v2 provider-identity contract requiring both `sandbox.name` and the current VM session id. The provider-identity delta is source-only until an actually-started bound deployment observes it.
+1. provision `GITHUB_READ_TOKEN` through an approved sensitive Vercel Preview secret/environment surface;
+2. keep the credential host-side and never forward/log it inside Sandbox;
+3. immediately before execution, refresh and rebind the **same** retained #810 controller once to then-current Research `main`, #611, #622 and deliberately reviewed #623 identities;
+4. perform exact host-side private archive/tree verification before verified bytes cross into the disposable Sandbox.
 
-### Current executable evidence / blocker
-
-The strongest actually-started bound run is Vercel deployment **`dpl_7BkVnngPJUPiVyrqwFarGFZDevAG`** on PR810 controller commit **`2e5505983172e582a50f4f72bebd561bc650ff5a`**.
-
-Observed in that run:
-
-1. Vercel cloned exact controller source, installed dependencies and entered `npm run vercel-build`.
-2. **Guard v4** admitted the exact retained-runner source binding, including retained-runner blob `1298ca8…`.
-3. **Current-target patch v5** bound Research closure `5e5adce…` / tree `1e02285d…` and the 2,700,000 ms Sandbox budget.
-4. **`Sandbox.create` succeeded** (`sandbox_admission=PASS_CREATED`). Provider/Sandbox admission is therefore empirically open for this exact bound run.
-5. The controller then failed closed **before private Research/EntityOS source fetch** because `GITHUB_READ_TOKEN` was absent from the Vercel build environment: `source_stage=BLOCKED_MISSING_GITHUB_READ_TOKEN`, error `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`.
-6. The disposable Sandbox was stopped successfully.
-7. `source_runtime_credit=0`; `oci_runtime_credit=0`.
-
-This reproduces the same credential boundary already seen on earlier admitted PR810 runs. Classification: **SANDBOX_ADMISSION_PASS_PRIVATE_SOURCE_CREDENTIAL_BLOCK_REPLICATED**.
-
-This is **not** ClayVerse TEST_FAIL. Private source fetch, EntityOS reconstruction, full source regression, OCI build/image digest, dependency inventory, in-image #611 behavior and `service --once` remain unobserved at the current product boundary.
-
-The immediate blocker is precise: provision **`GITHUB_READ_TOKEN` as an appropriate sensitive Vercel Preview credential for the retained PR810 branch**, without exposing its value and without forwarding it into the Sandbox. Only verified host-side archive bytes may cross the boundary. The connected Vercel tool surface currently exposes no environment-variable write action, so this credential prerequisite cannot be completed by the present worker without the secret being provisioned through an approved Vercel secret/environment surface.
+Retry-only controller churn while that prerequisite is absent is not product progress.
 
 ### Remaining acceptance path
 
-After that credential prerequisite, continue on the same retained #810 controller:
+After credential admission, the high-information sequence remains:
 
-`refresh/rebind then-current Research + #611 + #622 → exact closure → Sandbox.create → host-side exact private Research + EntityOS source verification → verified archives into disposable Sandbox → reconstruct/attest/reproduce locked EntityOS → stage exact EntityOS → full source regression → exact OCI build → image digest + APT/tmux/Claude/Python identities → deny-all network → in-image #611 transport-policy checks for gabriel/andreas → hardened service --once → execute/materialize/verify #622 canonical Python hash lock including complete generator-bootstrap hash closure → Docker --require-hashes only after accepted lock evidence → rebuild/rebind exact image → #611 promotion → rejoin/revalidate #602 → packaged native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
+`fresh exact source binding → private Research + EntityOS verification → complete accepted EntityOS reproduction/staging → full source regression → exact OCI build → image digest + dependency identities → Python complete hash closure / accepted --require-hashes rebuild → in-image tmux/Claude + startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → EffectGate/effect receipts → persistence/checkpoints → Tier-1 recovery → dual-session concurrency/global-generation fencing → run the same accepted OCI digest behind the mandatory VM/microVM guest kernel → enforce and probe least-privilege network ingress/egress → Tier-2 appliance restart/reconstruction with no blind external-effect replay`.
 
-Whole-product PASS requires the complete admitted product path. Source inspection, PRs, CI definitions, Vercel build admission, `Sandbox.create`, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
+Whole-product PASS requires the complete admitted path. Source inspection, a branch/PR, CI definition, Vercel deployment state, `Sandbox.create`, a component PASS, a network manifest, or historical runtime evidence is not ClayVerse PASS.
 
 ### Unusual-experiment accounting
 
-- This `go` has no safely shared immutable request/turn identity for an atomic unusual-experiment lease, so **0 valid unusual experiments** were executed.
-- Deterministic source composition, provenance/hash hardening, guard/timeout/provider-identity hardening, provider-state verification and same-lineage replication are ordinary execution/regression work.
-- No VPS/self-hosted/production test path and no Together API were used.
+For this exact `go`, the shared trigger exposes only minute precision and no safely shared immutable request/turn identity for the atomic unusual-experiment lease. Therefore:
+
+- unusual experiment state: **COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT**;
+- valid unusual experiments executed: **0**;
+- no seconds were synthesized;
+- deterministic source re-entry, blob verification and regression review do not consume an unusual-experiment slot.
 
 ### Latest cycle delta
 
-**2026-08-17 19:29 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; retained #622 resolver bootstrap trust narrowed source-side, primary OCI credential blocker unchanged**
+**2026-08-17 22:56 +07:00 — `NO_CHANGE` canonical product/runtime bytes by this organ; parallel current-main MicroVM NetworkPolicy repair adopted and independently bounded**
 
-- PR **#622** advanced on its existing retained lane to `08f1fe82211676d5140723eeccc225b05bb6ea5f`; no second Python resolver/generator authority was created.
-- `SOURCE_LOCK.json` on #622 now binds `pip_tools-7.5.3-py3-none-any.whl` to SHA-256 `3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e`.
-- The generator workflow now binds `SOURCE_LOCK.json` itself by SHA into the digest-pinned product Python base, verifies the resolver-wheel digest before installation, installs from the verified local wheel and emits a deterministic installed-generator freeze digest/envelope.
-- Strong counterhypothesis retained: this **does not** close transitive generator bootstrap dependencies; complete pre-admission local hash closure is still required before canonical Python lock promotion.
-- No new PR622 workflow execution was observed for current head, so the new hardening is **SOURCE CANDIDATE / UNEXECUTED** with zero runtime/acceptance credit.
-- Existing OCI closure `5e5adce…` contains the predecessor #622 blobs and must be refreshed/rebound before the next credential-capable PR810 execution. This re-entry supersedes any assumption that the old closure is still exact-current for future compute.
-- PR810 remains the single retained OCI controller; latest actually-started bound execution still passed `Sandbox.create` and stopped at absent host-side `GITHUB_READ_TOKEN` before private source fetch. Current global discriminator therefore remains approved credential provisioning, not retry-only controller churn.
-- No secret was exposed or forwarded. No unusual experiment, VPS, self-hosted/production test, or Together path was used.
-- Current supply-chain refinement receipt: `the artefact/receipts/2026-08-17_GO_1929_PYTHON_LOCK_GENERATOR_BOOTSTRAP_TRUST_GPT56SOL.json`.
-- Current credential-boundary confirmation receipt: `the artefact/receipts/2026-08-17_GO_1926_PR810_V5_CREDENTIAL_BLOCK_CONFIRMATION_GPT56SOL.json`.
-- Strongest Sandbox replication receipt: `the artefact/receipts/2026-08-17_GO_1925_PR810_SANDBOX_CREDENTIAL_BLOCK_REPLICATION_GPT56SOL.json`.
-- Whole-product acceptance remains **IN_PROGRESS**.
+- Refreshed current owner/product state, current `main`, retained #611/#622/#623 and the single #810 OCI controller.
+- Detected that the previously reported missing Kubernetes `NetworkPolicy` gap had been repaired on current `main` while this `go` was in progress; duplicate implementation was intentionally avoided.
+- Reconstructed the exact current template bytes in an isolated non-production Python sandbox and matched Git blob `788492ef…`.
+- Focused NetworkPolicy mechanism probe: **10/10 PASS** for default-deny Ingress/Egress, empty baseline rule sets, explicit `hostNetwork` warning and absence of broad IPv4/IPv6 allow-all CIDRs.
+- An attempted independent raw-GitHub fetch from the isolated sandbox could not start canonical pytest because that sandbox could not resolve `raw.githubusercontent.com`; this is an execution-source-fetch limitation, not a product test failure.
+- No CNI, Kata guest kernel, exact OCI image, Clerk/browser, native Claude, restart/concurrency or external-effect runtime assertion executed in this cycle.
+- Primary executable blocker remains the missing host-side Vercel Preview `GITHUB_READ_TOKEN` on retained #810; current connected Vercel tools still cannot mutate that secret.
+- Durable receipt: `receipts/2026-08-17_GO_2256_MICROVM_NETWORK_REENTRY_GPT56SOL.json`.
+- No secret exposure, VPS/self-hosted/production testing, Together use or final paid/model training occurred.
 
 ### Cycle update rule
 
-1. Refresh current `main`, artefact state, active overlapping PRs/receipts and exact execution evidence.
-2. Rewrite this current-state surface so stale dynamic claims are removed.
-3. Record the concrete latest-cycle delta; use `NO_CHANGE` when canonical product bytes did not change.
+1. Refresh current `main`, artifact state, active overlapping PRs/receipts and exact execution evidence.
+2. Remove stale dynamic claims instead of accumulating contradictory history in this README.
+3. Record the concrete latest-cycle delta; use `NO_CHANGE` when canonical product/runtime bytes did not change in the cycle.
 4. Never promote source/component/controller/provider evidence into whole-product PASS.
 5. Keep detailed evidence in Git history/receipts rather than making this README a competing state database.
 6. Rebind fast-moving execution closures immediately before real compute; do not create retry-only or duplicate semantic paths merely to chase admission.
 
 ## Architecture
 
-Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas perspectives, Clerk JWT verification, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, managed lifecycle hooks, bounded retrieval/workspace coordination, effect-only MCP/EffectGate, restart/recovery and optional digest-bound internal EntityOS substrate. UnifiedDB remains the sole durable canonical cognition/state authority.
+Current source is converging on one central ClayVerse machine continuum: UnifiedDB canonical state/world/memory, rebuildable ClayGraph, equal-rights Gabriel/Andreas perspectives, Clerk JWT identity boundary, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, bounded GLM token inference, managed lifecycle hooks, MicroClay retrieval/routing, workspace/Hyperposition/Needle coordination, effect-only MCP/EffectGate, complete accepted EntityOS in the final image, logical snapshots/recovery, and a sealed OCI appliance executed behind an independent guest-kernel boundary for final acceptance.
 
-The retired custom chat API/headless `claude -p` path and a separate `consciousness_daemon` are not product runtime surfaces.
+The retired custom chat API/headless `claude -p` path, a separate `consciousness_daemon`, a second memory/state authority, generic host execution, and a mandatory second application container are not product runtime surfaces.
 
 ## Verification
 
-Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. The exact OCI path has reached Sandbox admission repeatedly and is blocked before private-source staging by the missing host-side read credential. The retained Python lock-generator lane has advanced source-side since the last exercised OCI closure and must be rebound before the next accepted run.
-
-## Container source
-
-`Dockerfile` + `compose.yaml` define the single runtime container. The build context is default-deny/allowlisted; persistent state/workspace live in scoped volumes. The admitted Compose profile runs non-root with a read-only root filesystem, `no-new-privileges` and dropped Linux capabilities. Supply-chain acceptance remains open until exact build identities and current APT/Python integrity gates are closed.
+Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. Current source now includes the MicroVM default-deny network baseline, while executable acceptance remains gated by private-source credential admission and then the exact OCI → same-digest microVM path described above.

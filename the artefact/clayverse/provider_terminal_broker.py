@@ -45,28 +45,18 @@ def clear_active_provider_terminal_broker(broker: "ProviderTerminalBroker") -> N
 
 
 class ProviderTerminalBroker:
-    """Secret-holding Stage-2 bridge from one trusted tmux pane into ClayVerseEngine.
-
-    The provider credential remains in the service process. The tmux-side client gets
-    only a Unix-domain socket path. Every connection is authenticated with Linux
-    SO_PEERCRED against the exact pane PID registered by the root-owned terminal
-    manager; sharing the container UID alone is not sufficient.
-    """
+    """Secret-holding Stage-2 bridge from one trusted tmux pane into ClayVerseEngine."""
 
     MAX_REQUEST_BYTES = 128 * 1024
     MAX_RESPONSE_BYTES = 512 * 1024
+    STOP_TIMEOUT_SECONDS = 330.0
     _PEERCRED_SIZE = struct.calcsize("3i")
 
-    def __init__(
-        self,
-        socket_path: str | Path,
-        *,
-        engine: ClayVerseEngine,
-        clerk_map: dict[str, str],
-    ):
+    def __init__(self, socket_path: str | Path, *, engine: ClayVerseEngine, clerk_map: dict[str, str]):
         self.socket_path = Path(socket_path)
-        if not self.socket_path.is_absolute():
-            raise ValueError("provider broker socket path must be absolute")
+        raw_path = str(self.socket_path)
+        if not self.socket_path.is_absolute() or any(ch in raw_path for ch in ("\x00", "\n", "\r")):
+            raise ValueError("provider broker socket path must be absolute and single-line")
         inverse = {user_id: subject for subject, user_id in clerk_map.items()}
         if set(inverse) != {"gabriel", "andreas"} or len(inverse) != len(clerk_map):
             raise ValueError("provider broker requires one Clerk subject per canonical user")
@@ -136,12 +126,8 @@ class ProviderTerminalBroker:
         prompt = payload["prompt"]
         resources = payload["resources"]
         if (
-            not isinstance(prompt, str)
-            or not prompt
-            or len(prompt) > 100_000
-            or "\x00" in prompt
-            or not isinstance(resources, list)
-            or len(resources) > 50
+            not isinstance(prompt, str) or not prompt or len(prompt) > 100_000 or "\x00" in prompt
+            or not isinstance(resources, list) or len(resources) > 50
             or any(not isinstance(item, str) or not item or len(item) > 2048 for item in resources)
         ):
             raise ProviderTerminalBrokerError("provider terminal request fields invalid")
@@ -192,6 +178,8 @@ class ProviderTerminalBroker:
         while not self._stopping.is_set():
             try:
                 conn, _ = server.accept()
+            except socket.timeout:
+                continue
             except OSError:
                 if self._stopping.is_set():
                     return
@@ -228,6 +216,7 @@ class ProviderTerminalBroker:
             server.bind(str(self.socket_path))
             os.chmod(self.socket_path, 0o600)
             server.listen(8)
+            server.settimeout(1.0)
         except Exception:
             server.close()
             try:
@@ -254,4 +243,6 @@ class ProviderTerminalBroker:
             pass
         thread, self._thread = self._thread, None
         if thread is not None and thread.is_alive():
-            thread.join(timeout=1.0)
+            thread.join(timeout=self.STOP_TIMEOUT_SECONDS)
+            if thread.is_alive():
+                raise ProviderTerminalBrokerError("provider broker did not quiesce before shutdown")

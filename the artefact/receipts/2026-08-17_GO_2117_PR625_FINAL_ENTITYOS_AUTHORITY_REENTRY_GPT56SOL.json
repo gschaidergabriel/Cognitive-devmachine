@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:17:29+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "branch_head_before_receipt": "6b56c91ae589957f1a53f51377728b98507b45a8",
+  "canonical_main_observed_via_pr": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "owner_directive_blob": "ff0f8ab08ab26833e73e469621f5da73766b9df5",
+  "classification": "OWNER_AUTHORITY_REENTRY_FINAL_ENTITYOS_MANDATORY_TOKENLESS_DEVELOPMENT_ONLY",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "supersession": {
+    "superseded_interpretation": "A tokenless EntityOS-free baseline could be treated as the canonical final acceptance path or the accepted final EntityOS substrate could remain optional.",
+    "current_authority": "Development/baseline builds may omit EntityOS, but can never receive whole-product PASS. The final accepted ClayVerse image MUST contain the complete accepted EntityOS execution/security/runtime substrate inside the sealed machine continuum.",
+    "prior_receipt_scope": "2026-08-17_GO_2112_PR625_SINGLE_OCI_LANE_FENCE_GPT56SOL.json remains valid for duplicate-workflow retirement and execution-surface observations, but any wording implying final EntityOS optionality is superseded by this receipt and the newest owner directive."
+  },
+  "repairs": {
+    "manifest_commit": "e65a4f1b4c6e0e0eb78f82ea301e8a19477955f8",
+    "manifest_blob": "d25b9b69b0d5eb817549cd5db083955f33d43b50",
+    "test_commit": "3a7b682c82029e79f7bb404077e8c3b86b645663",
+    "test_blob": "a1ac6828421123b3ad09d2e7d775d66ff5e4a578",
+    "living_readme_commit": "6b56c91ae589957f1a53f51377728b98507b45a8",
+    "contract": "Tokenless development baseline remains admitted with EntityOS execution disabled; final acceptance explicitly requires complete accepted EntityOS in the same image."
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "binding": "PASS: locally reconstructed manifest/test bytes git hash-object matched exact GitHub content blobs d25b9b69b0d5eb817549cd5db083955f33d43b50 and a1ac6828421123b3ad09d2e7d775d66ff5e4a578 before execution",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_entityos_default_optional.py::test_manifest_allows_tokenless_development_baseline_but_requires_entityos_for_final_pass",
+    "result": "1 passed in 0.66s",
+    "exit_code": 0,
+    "scope": "manifest-only acceptance fence; clayverse.service was an import stub and the runtime _entityos_config path was intentionally not exercised by this selected regression"
+  },
+  "verified_contracts": [
+    "development/baseline builds may omit EntityOS",
+    "an EntityOS-free development baseline can never receive whole-product PASS",
+    "final acceptance requires EntityOS embedding",
+    "final accepted image requires the complete accepted EntityOS substrate",
+    "requires_for_final_pass explicitly contains complete EntityOS image/runtime gates"
+  ],
+  "single_oci_lane": {
+    "retained_workflow": ".github/workflows/clayverse-artefact-ci.yml",
+    "retired_divergent_workflow": ".github/workflows/clayverse-artifact-ci.yml",
+    "development_and_final_candidate_modes_share_one_workflow_authority": true,
+    "note": "Optional workflow inputs express development baseline versus EntityOS-bearing final-candidate build mode; they do not create two product authorities."
+  },
+  "execution_boundary": {
+    "vercel": "Confirmed Sandbox bridge via Dr.-Unterweger PR810; current cross-private Research source stage remains blocked before source runtime by absent host-side GITHUB_READ_TOKEN.",
+    "baseline_token_decision": "Do not reintroduce GITHUB_READ_TOKEN as a development-baseline prerequisite merely to obtain a run.",
+    "final_entityos_decision": "Final acceptance still requires complete accepted EntityOS; tokenless development evidence cannot substitute for the final EntityOS-bearing OCI gate.",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "coordination": {
+    "novelty": "SUPERSEDES",
+    "counterhypothesis": "Tokenless baseline semantics might still be sufficient for final acceptance because EntityOS is an internal substrate rather than the top-level product.",
+    "counterhypothesis_result": "REJECTED_BY_NEWEST_OWNER_DIRECTIVE",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0
+  },
+  "evidence_boundary": "The 1/1 PASS is an exact-blob manifest contract regression only. It is not an exact full-branch test, Docker/OCI build, complete EntityOS runtime acceptance, sealed-continuum crash/snapshot recovery, Clerk/PTY/Claude, concurrency, or whole-product PASS.",
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "At an authorized source-bound Docker/OCI-capable isolated surface, rebind exact PR625; build and test the EntityOS-free development baseline without granting final credit; then build the final-candidate image with complete digest-bound accepted EntityOS and continue in-image terminal/Claude/effect plus sealed-continuum snapshot/crash recovery and full acceptance gates."
+}

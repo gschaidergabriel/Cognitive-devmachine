@@ -1,0 +1,69 @@
+{
+  "schema": "clay-vercel-sandbox-execution-surface/v1",
+  "observed_at": "2026-08-17T13:57:00+07:00",
+  "observed_main": "d8bc6553d2e15f09decd56dcf93f4f06f1342eeb",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "platform_capability": {
+    "status": "SUPPORTED_BY_VERCEL",
+    "evidence": [
+      "Official Vercel Sandbox CLI/SDK/REST support create and command execution.",
+      "A repository-owned Git-preview orchestration bridge has actually started and executed an isolated Vercel Sandbox."
+    ],
+    "primary_sources": [
+      "https://vercel.com/docs/sandbox/cli-reference",
+      "https://vercel.com/docs/sandbox/sdk-reference",
+      "https://vercel.com/docs/sandbox/python-sdk-reference",
+      "https://vercel.com/docs/rest-api/sandboxes/create-a-named-sandbox",
+      "https://vercel.com/docs/rest-api/sdk/sandboxes/execute-a-command"
+    ]
+  },
+  "connected_chatgpt_vercel_mcp_surface": {
+    "status": "NO_DIRECT_SANDBOX_CREATE_OR_EXEC_TOOL_EXPOSED",
+    "sandbox_specific_direct_tool": "NONE",
+    "deployment_project_log_tools": "AVAILABLE",
+    "authentication_probe": "VERIFIED_BY_SUCCESSFUL_TEAM_AND_PROJECT_LISTING",
+    "project_inventory_observed": ["dr-unterweger"]
+  },
+  "git_preview_sandbox_bridge": {
+    "status": "CONFIRMED_WORKING_EXECUTION_PATH",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "vercel_project": "dr-unterweger",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "orchestration_root": "mcp/vercel-sandbox-mcp/",
+    "sandbox_sdk": "@vercel/sandbox@2.9.2",
+    "confirmed_execution_commit": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+    "confirmed_execution_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "confirmed_result": "PASS_ATTACH_CHILD_REAP_AND_BOUND",
+    "confirmed_exit_code": 0,
+    "confirmed_sandbox_stopped": true,
+    "authority": "Git-preview build is orchestration only; executable claims require sandbox.runCommand inside the isolated Sandbox."
+  },
+  "current_admission": {
+    "status": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "fresh_probe_pr": "gschaidergabriel/Dr.-Unterweger#815",
+    "fresh_probe_head": "87237ab4544b21aea011c3ab396bbd9593c21875",
+    "fresh_probe_vercel_status": "failure",
+    "fresh_probe_target": "upgradeToPro=build-rate-limit",
+    "additional_observed_staging_head": "7f3384fe82efe0b99b584c7f2a696a7e26fba802",
+    "additional_observed_staging_status": "failure: upgradeToPro=build-rate-limit",
+    "sandbox_started_for_these_fresh_attempts": false,
+    "classification_law": "A Vercel preview/build-rate-limit rejection before build/Sandbox start is ADMISSION_BLOCKED, not SANDBOX_UNAVAILABLE and not TEST_FAIL."
+  },
+  "classification": {
+    "vercel_platform_unavailable": false,
+    "vercel_sandbox_feature_unavailable": false,
+    "direct_mcp_lifecycle_unavailable": true,
+    "git_preview_sandbox_execution_path_available": true,
+    "current_blocker": "VERCEL_PREVIEW_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "required_wording": "Vercel Sandbox execution path is confirmed through the repository-owned Git-preview + @vercel/sandbox/OIDC bridge. Direct ChatGPT-MCP lifecycle actions are not exported. Fresh execution is currently admission-blocked by Vercel preview build rate limiting before Sandbox start; this is not a test failure."
+  },
+  "execution_law": {
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "preferred_exact_runtime": "VERCEL_SANDBOX",
+    "whole_product_pass_from_deployment_ready": false,
+    "no_further_preview_spam_while_rate_limited": true
+  },
+  "next_exact_enablement": "When Vercel preview admission is available again, use the existing Git-preview orchestration bridge to stage exact current ClayVerse source/artifact identity, execute the focused coordinated regression batch inside Sandbox, capture command/exit/log/artifact identities, stop the Sandbox, and persist the bounded receipt. No direct MCP Sandbox primitive is required for this path."
+}

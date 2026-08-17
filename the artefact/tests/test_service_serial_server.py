@@ -1,4 +1,3 @@
-import signal
 import sys
 
 from clayverse import service
@@ -13,69 +12,107 @@ class FakeDB:
         self.checkpoints.append(label)
         return f"cp-{label}", f"hash-{label}"
 
+    def session_generation(self, session_id):
+        assert session_id in {"session:gabriel", "session:andreas"}
+        return 7
+
+    def entity_generation(self):
+        return 7
+
     def close(self):
         self.closed = True
 
 
-class FakeInference:
-    def available(self):
-        return True
+class FakeClaudeStatus:
+    def as_dict(self):
+        return {"available": True, "version": "test"}
 
 
-class FakeServer:
-    def __init__(self, handlers):
-        self.handlers = handlers
-        self.timeout = None
-        self.closed = False
-        self.handle_calls = 0
-
-    def handle_request(self):
-        self.handle_calls += 1
-        self.handlers[signal.SIGTERM]()
-
-    def server_close(self):
-        self.closed = True
+class FakeBinding:
+    def __init__(self, user_id, home):
+        self.session_id = f"session:{user_id}"
+        self.tmux_name = f"clayverse-{user_id}"
+        self.home = home / user_id
 
 
-class FakeAPI:
-    def __init__(self, server):
-        self._server = server
-        self.server_calls = []
+class FakeTerminals:
+    def __init__(self, state_root, workspace):
+        self.state_root = state_root
+        self.workspace = workspace
+        self.ensure_calls = []
 
-    def server(self, host, port):
-        self.server_calls.append((host, port))
-        return self._server
+    def ensure(self, user_id):
+        self.ensure_calls.append(user_id)
+        return FakeBinding(user_id, __import__("pathlib").Path(self.state_root) / "users")
 
 
-def test_service_uses_clayverse_api_serial_server(monkeypatch, tmp_path):
+def test_service_runs_current_uvicorn_terminal_app_and_closes_db(monkeypatch, tmp_path):
     db = FakeDB()
-    handlers = {}
-    fake_server = FakeServer(handlers)
-    fake_api = FakeAPI(fake_server)
+    graph_rebuilds = []
+    recovery = {"generation": 7, "active_turns_closed": 0}
+    app = object()
+    verifier = object()
+    terminal_manager = FakeTerminals(str(tmp_path / "state"), str(tmp_path / "workspace"))
+    app_calls = []
+    uvicorn_calls = []
 
     monkeypatch.setattr(service, "UnifiedDB", lambda _path: db)
     monkeypatch.setattr(service, "IdentityRouter", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr(service, "ClayGraphProjection", lambda *_args, **_kwargs: type("G", (), {"rebuild": lambda self: None})())
+    monkeypatch.setattr(
+        service,
+        "ClayGraphProjection",
+        lambda *_args, **_kwargs: type("G", (), {"rebuild": lambda self: graph_rebuilds.append("rebuild")})(),
+    )
+    monkeypatch.setattr(service, "recover_incomplete_episodes", lambda _db: recovery)
+    monkeypatch.setattr(service, "_clerk_map", lambda: {"subject-g": "gabriel", "subject-a": "andreas"})
+    monkeypatch.setattr(service, "_web_config", lambda: ("pk_test_example", "https://clerk.example"))
     monkeypatch.setattr(service.ClerkConfig, "from_env", lambda: object())
-    monkeypatch.setattr(service, "ClerkTokenVerifier", lambda _cfg: object())
-    monkeypatch.setattr(service, "ClaudeCodeInference", lambda: FakeInference())
-    monkeypatch.setattr(service, "ClayVerseEngine", lambda *_args, **_kwargs: object())
-    monkeypatch.setattr(service, "ClayVerseAPI", lambda *_args, **_kwargs: fake_api)
-    monkeypatch.setattr(service.signal, "signal", lambda sig, fn: handlers.__setitem__(sig, fn))
-    monkeypatch.setattr(sys, "argv", ["clayverse.service"])
+    monkeypatch.setattr(service, "ClerkTokenVerifier", lambda _cfg: verifier)
+    monkeypatch.setattr(service, "claude_readiness", lambda required: FakeClaudeStatus())
+    monkeypatch.setattr(
+        service,
+        "_entityos_config",
+        lambda: (None, {"staged": True, "verified": True, "execution_enabled": False}),
+    )
+    monkeypatch.setattr(service, "TerminalSessionManager", lambda *_args, **_kwargs: terminal_manager)
 
+    def fake_create_terminal_app(**kwargs):
+        app_calls.append(kwargs)
+        return app
+
+    monkeypatch.setattr(service, "create_terminal_app", fake_create_terminal_app)
+
+    import uvicorn
+
+    monkeypatch.setattr(uvicorn, "run", lambda supplied_app, **kwargs: uvicorn_calls.append((supplied_app, kwargs)))
+    monkeypatch.setattr(sys, "argv", ["clayverse.service"])
     monkeypatch.setenv("CLAYVERSE_STATE_ROOT", str(tmp_path / "state"))
-    monkeypatch.setenv("CLAYVERSE_CLERK_MAP_JSON", '{"subject-g":"gabriel","subject-a":"andreas"}')
-    monkeypatch.setenv("CLERK_PUBLISHABLE_KEY", "pk_test_example")
-    monkeypatch.setenv("CLERK_FRONTEND_API_URL", "https://clerk.example")
-    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
+    monkeypatch.setenv("CLAYVERSE_WORKSPACE", str(tmp_path / "workspace"))
     monkeypatch.setenv("HOST", "127.0.0.1")
     monkeypatch.setenv("PORT", "43210")
 
     assert service.main() == 0
-    assert fake_api.server_calls == [("127.0.0.1", 43210)]
-    assert fake_server.handle_calls == 1
-    assert fake_server.timeout == 1.0
-    assert fake_server.closed is True
+
+    assert graph_rebuilds == ["rebuild"]
+    assert terminal_manager.ensure_calls == ["gabriel", "andreas"]
+    assert len(app_calls) == 1
+    assert app_calls[0]["db"] is db
+    assert app_calls[0]["clerk_map"] == {"subject-g": "gabriel", "subject-a": "andreas"}
+    assert app_calls[0]["verifier"] is verifier
+    assert app_calls[0]["publishable_key"] == "pk_test_example"
+    assert app_calls[0]["frontend_api_url"] == "https://clerk.example"
+
+    assert uvicorn_calls == [
+        (
+            app,
+            {
+                "host": "127.0.0.1",
+                "port": 43210,
+                "workers": 1,
+                "access_log": False,
+                "ws_max_size": service._PTY_INPUT_FRAME_MAX_BYTES,
+            },
+        )
+    ]
     assert db.checkpoints == ["boot", "shutdown"]
     assert db.closed is True

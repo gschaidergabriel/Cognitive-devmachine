@@ -1,6 +1,7 @@
 import hashlib
 import json
 
+from clayverse.effect_journal import EffectJournal
 from clayverse.identity import IdentityRouter
 from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
@@ -31,12 +32,20 @@ def test_restart_aborts_open_non_effect_episode_and_is_idempotent(tmp_path):
     assert first == {
         "scanned": 1,
         "reentered_effects": 0,
+        "existing_reentries_closed": 0,
         "aborted_no_effect": 1,
         "uncertain_effects": 0,
         "ambiguous_effects": 0,
+        "active_turns_closed": 0,
+        "leases_expired": 0,
+        "generation": 2,
     }
     assert second["scanned"] == 0
-    assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
+    row = db.db.execute(
+        "SELECT effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
+        (episode_id,),
+    ).fetchone()
+    assert tuple(row) == (None, 0.0, 1)
 
 
 def test_restart_never_replays_selected_effect_without_persisted_outcome(tmp_path):
@@ -51,24 +60,57 @@ def test_restart_never_replays_selected_effect_without_persisted_outcome(tmp_pat
     assert state == "RECOVERY_ABORTED_EFFECT_UNCERTAIN"
     assert result["uncertain_effects"] == 1
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
-    assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
+    row = db.db.execute(
+        "SELECT effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
+        (episode_id,),
+    ).fetchone()
+    assert tuple(row) == (None, 0.0, 1)
 
 
-def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecution(tmp_path):
+def test_restart_reenters_exact_effectjournal_receipt_without_reexecution_or_reward_remint(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
     session_id, _, episode_id = _episode(db, selection="request_effect")
     generation = db.session_generation(session_id)
-    outcome = {"ok": True, "target": "checkpoint", "boundary": "internal"}
-    effect_id = db.record_effect(
+    outcome = {
+        "ok": True,
+        "exit": 0,
+        "boundary": "entityos",
+        "certainty": "verified",
+    }
+    journal = EffectJournal(db)
+    effect_id = journal.begin(
         episode_id,
+        session_id,
         "gabriel",
-        "state.noop",
+        "entityos.exec",
         "checkpoint",
         generation,
-        "VERIFIED",
-        None,
-        outcome,
+        argv=["status"],
     )
+    causal_id = journal.complete_verified(
+        effect_id,
+        outcome,
+        session_id,
+        "gabriel",
+        generation,
+    )
+
+    live = db.db.execute(
+        "SELECT outcome_hash,credit FROM causal_episodes WHERE causal_id=?", (causal_id,)
+    ).fetchone()
+    persisted = json.loads(
+        db.db.execute("SELECT outcome FROM effects WHERE effect_id=?", (effect_id,)).fetchone()[0]
+    )
+    expected_hash = hashlib.sha256(
+        EffectJournal._payload(outcome).encode()
+    ).hexdigest()
+    assert persisted["audit"] == "redacted-outcome-v1"
+    assert persisted["sha256"] == expected_hash
+    assert dict(live) == {"outcome_hash": expected_hash, "credit": 1.0}
+
+    # Emulate the exact legacy/recovery gap: durable effect receipt survives, but the
+    # canonical live causal row is absent. Recovery may restore identity, not reward.
+    db.db.execute("DELETE FROM causal_episodes WHERE causal_id=?", (causal_id,))
 
     first = recover_incomplete_episodes(db)
     second = recover_incomplete_episodes(db)
@@ -77,19 +119,20 @@ def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecuti
         "SELECT effect_id,outcome_hash,credit,reentered FROM causal_episodes WHERE episode_id=?",
         (episode_id,),
     ).fetchone()
-    expected_hash = hashlib.sha256(json.dumps(outcome, sort_keys=True).encode()).hexdigest()
     assert dict(row) == {
         "effect_id": effect_id,
         "outcome_hash": expected_hash,
-        "credit": 1.0,
+        "credit": 0.0,
         "reentered": 1,
     }
     assert first["reentered_effects"] == 1
+    assert first["uncertain_effects"] == 0
     assert second["scanned"] == 0
+    assert db.db.execute("SELECT COUNT(*) FROM effects WHERE effect_id=?", (effect_id,)).fetchone()[0] == 1
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 1
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
-    ).fetchone()[0] == "RECOVERED_EFFECT_REENTERED"
+    ).fetchone()[0] == "RECOVERED_LEGACY_EFFECT_REENTERED"
 
 
 def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
@@ -141,7 +184,11 @@ def test_restart_fails_closed_on_multiple_effect_records(tmp_path):
     result = recover_incomplete_episodes(db)
 
     assert result["ambiguous_effects"] == 1
-    assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
+    row = db.db.execute(
+        "SELECT effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
+        (episode_id,),
+    ).fetchone()
+    assert tuple(row) == (None, 0.0, 1)
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
     ).fetchone()[0] == "RECOVERY_ABORTED_AMBIGUOUS_EFFECTS"

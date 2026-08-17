@@ -1,0 +1,34 @@
+{
+  "schema": "clayverse-focused-regression-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "87c9eb3f8d435fcf33d6cdb5398487e6adfcd109",
+  "repair_commit": "e3c705df766c0fd719bb5fb47e95ae86d330cec7",
+  "repair": "Align legacy tmux user-isolation regression with the newer mandatory managed tmux -f policy introduced by the canonical terminal hardening.",
+  "execution": {
+    "surface": "authorized isolated non-production OpenAI container",
+    "classification": "FOCUSED_SOURCE_LEVEL_DETERMINISTIC_REGRESSION",
+    "network_required": false,
+    "unusual_experiment": false,
+    "source_materialization": "GitHub connector readback reconstructed byte-for-byte and verified with git hash-object before execution",
+    "terminal_sessions_path": "the artefact/clayverse/terminal_sessions.py",
+    "terminal_sessions_blob_expected": "b42d175745fa53c45b81fa1affda4f12a4093541",
+    "terminal_sessions_blob_observed": "b42d175745fa53c45b81fa1affda4f12a4093541",
+    "test_path": "the artefact/tests/test_terminal_tmux_isolation.py",
+    "test_blob_expected": "d4c25ffed9d1a40dc426c7594805ae06c0b05e35",
+    "test_blob_observed": "d4c25ffed9d1a40dc426c7594805ae06c0b05e35",
+    "command": "PYTHONPATH=/tmp/clay-tmux-reg pytest -q tests/test_terminal_tmux_isolation.py",
+    "exit_code": 0,
+    "result": "3 passed in 0.06s"
+  },
+  "adjudication": {
+    "source_test_coherence": "PASS",
+    "managed_tmux_argv_contract": "PASS_AT_SOURCE_REGRESSION_SCOPE",
+    "live_tmux_binary_runtime": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_clayverse": "IN_PROGRESS",
+    "note": "The focused test monkeypatches process execution; it proves current source/test argv coherence, not tmux parser/runtime behavior. Fresh Vercel live-tmux execution remains admission-blocked by build-rate-limit."
+  }
+}

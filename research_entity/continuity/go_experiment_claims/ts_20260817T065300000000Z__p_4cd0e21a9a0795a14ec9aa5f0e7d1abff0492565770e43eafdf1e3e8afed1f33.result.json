@@ -1,0 +1,24 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "claim_commit": "d00fe7bebee29a7f2ffbcd6b16f455e557b23d29",
+  "experiment_name": "github_connector_exact_head_archive_to_isolated_executor",
+  "intervention_identity": "GitHub fetch of private repository tarball endpoint bound to be70c845b29e5da93f08e2aa23b1310d8929a767, intended for transfer into the authorized non-production isolated OpenAI container",
+  "source_identity": "be70c845b29e5da93f08e2aa23b1310d8929a767",
+  "artifact_identity": "repository tarball endpoint for exact source SHA; no archive bytes/file reference admitted",
+  "environment": "authenticated GitHub connector plus isolated OpenAI container",
+  "execution_surface": "GitHub connector archive admission probe",
+  "observed_result": {
+    "github_tarball_fetch": "returned metadata/title with empty content and no reusable connector file reference or archive bytes",
+    "exact_archive_transfer_to_isolated_container": false,
+    "test_command_started": false,
+    "product_behavior_executed": false,
+    "conclusion": "This bridge cannot currently provide the exact private repository archive to the isolated container through the tested connector action. Do not infer repository/test failure. Use the separately confirmed Vercel Git-preview + @vercel/sandbox/OIDC execution bridge for authorized exact execution admission instead."
+  },
+  "classification": "BLOCKED",
+  "whole_product_evidence_established": false,
+  "durable_receipt_references": [
+    "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md"
+  ]
+}

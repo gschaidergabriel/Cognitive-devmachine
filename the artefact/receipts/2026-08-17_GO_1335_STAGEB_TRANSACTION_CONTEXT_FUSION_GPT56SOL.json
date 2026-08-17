@@ -1,0 +1,84 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T13:51:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_observed_before_receipt": "b527277c713ba714ae7ff42c9d6a76dfda68866c",
+  "integration_frame": {
+    "pr": 411,
+    "branch": "go/meta-learning-method-memory-stageb-20260817-sol",
+    "head_observed": "c1ab8163f199a5b6a63d435c026fbd6ec049e9a0",
+    "classification": "DRAFT_SOURCE_CANDIDATE"
+  },
+  "source_deltas_by_this_organ": [
+    {
+      "commit": "c340a6ec4922143be716d19ca65f43d87ae37568",
+      "contract": "Stage-B durable receipt persistence joins an already-open canonical UnifiedDB turn transaction instead of opening a nested BEGIN IMMEDIATE; standalone calls still receive one atomic transaction."
+    },
+    {
+      "commit": "428becf91715635fa42d762cc5ff0673e656548c",
+      "contract": "Regression obligations bind Stage-B receipt visibility/rollback to the outer transaction and preserve standalone create-once replay."
+    },
+    {
+      "commit": "3b8f830eba45a32971a7734a2f53b6acf2939bea",
+      "contract": "The single TurnLifecycle._bound_world transport now carries evidence/method/unknown/counterevidence channels plus evidence and method receipts with fail-closed authority, identity and total-budget checks; nonoptional method channels are never silently dropped."
+    },
+    {
+      "commit": "8bedb15c89f5b8f0bbc423ec82a6d6dd8a8c831b",
+      "contract": "Deterministic source regressions cover method/counterevidence ID binding, evidence/method factual-status consistency, evidence alias divergence, receipt authority escalation and overflow fail-closed behavior."
+    }
+  ],
+  "findings": [
+    {
+      "issue": 420,
+      "classification": "SOURCE_BLOCKER_FOUND_AND_REPAIRED_PENDING_EXECUTION",
+      "finding": "PR #411 Stage-B v2 opened UnifiedDB.tx() from the canonical already-transactional begin_admission world-assembly path; UnifiedDB.tx() unconditionally BEGIN IMMEDIATE, so nested transaction entry was unsafe."
+    },
+    {
+      "issue": 425,
+      "classification": "OPEN_HIGH_PRIORITY_PROMOTION_EVIDENCE_GATE",
+      "finding": "Terminal causal re-entry proves continuity but not method success. Promotion remains non-accepted until durable candidate-use/held-out validation receipts derive success/failure/calibration from causal outcomes; normal Claude completion is not reward."
+    },
+    {
+      "issue": 441,
+      "classification": "OPEN_STRUCTURED_SIGNATURE_INGRESS_GATE",
+      "finding": "Canonical WorldAssembler currently supplies no admitted explicit problem_signature, so Stage-B correctly remains SIGNATURE_REQUIRED/no-method rather than allowing raw lexical prompt inference to become serving authority."
+    }
+  ],
+  "experiment_accounting": {
+    "status": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+    "reason": "The shared metadata for the 13:35 +07 user go is minute-precision only and parallel workers created noncanonical semantic duplicate experiment claim paths. Current canonical coordination protocol declares this turn raced and authorizes no further distinct unusual intervention.",
+    "this_organ_noncanonical_claim": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "this_organ_noncanonical_result": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+    "correction_receipt": "the artefact/receipts/2026-08-17_GO_1335_REPLAY_EXPERIMENT_TRIGGER_RACE_CORRECTION_GPT56SOL.json",
+    "preserved_bounded_observation": "Checking a persisted Stage-B request identity before changed trigger evaluation rejects UNKNOWN->PRESENT replay drift; this is retained only as bounded mechanism/regression rationale, not as protocol-valid GO experiment or exact runtime evidence.",
+    "additional_unusual_experiment": false
+  },
+  "execution_admission": {
+    "vercel_connected_surface": "DOCUMENTATION_SEARCH_ONLY_FOR_SANDBOX; NO_START_EXEC_PRIMITIVE_EXPOSED",
+    "exact_pr411_execution": false,
+    "exact_oci_execution": false,
+    "vps_or_self_hosted_fallback_used": false,
+    "production_host_testing_used": false,
+    "together_used": false
+  },
+  "evidence_classification": {
+    "source_candidate_strengthened": true,
+    "mechanism_supported_by_deterministic_review": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "remaining_gates": [
+    "#425 durable candidate-use/held-out validation receipts and promotion metrics derived from causal outcomes",
+    "#410 symmetric facet-aware structural matcher semantics and normalized-duplicate rejection fused into the retained #411 path",
+    "#441 one typed provenance-bound structured problem-signature ingress on the canonical turn path",
+    "exact authorized isolated focused execution of replay identity, nested transaction rollback, privacy, promotion, matcher and hard-bound context regressions",
+    "then broader lifecycle/retrieval/recovery/concurrency suite and exact OCI build/start/readiness/restart with source and image identity",
+    "real Clerk/browser/WebSocket PTY/interactive Claude Code acceptance and remaining whole-product gates"
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

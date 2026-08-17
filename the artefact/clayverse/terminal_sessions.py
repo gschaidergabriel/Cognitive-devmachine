@@ -33,18 +33,20 @@ class TerminalBinding:
 
 
 class TerminalSessionManager:
-    """Own exactly two durable tmux perspectives into one ClayVerse entity."""
+    """Own exactly two durable, tmux-isolated perspectives into one ClayVerse entity."""
 
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
+    MANAGED_TMUX = Path("/etc/clayverse/managed-tmux.conf")
+    MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v2"
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
+    TMUX_SOCKET_PREFIX = "clayverse"
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
         self.workspace = Path(workspace)
         self.runtime_prompt = Path("/opt/clayverse/runtime/CLAUDE.md")
-        self.tmux_socket = "clayverse"
 
     def _require_programs(self) -> None:
         for program in ("tmux", "claude", "python3"):
@@ -56,6 +58,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
+        if not self.MANAGED_TMUX.is_file():
+            raise TerminalRuntimeError("managed tmux command-surface policy unavailable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -71,6 +75,57 @@ class TerminalSessionManager:
             home=home,
             mcp_config=home / "clayverse-mcp.json",
         )
+
+    @classmethod
+    def _tmux_socket(cls, binding: TerminalBinding) -> str:
+        # A tmux client can address sessions inside its connected server. Keep the
+        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
+        # attached client cannot switch from one canonical user's session to the other.
+        return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
+
+    @classmethod
+    def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
+        # The browser is attached to tmux, so tmux itself is part of the effect boundary.
+        # Always select the root-owned policy that removes tmux's command keymaps;
+        # never allow an invocation to fall back to user/default tmux configuration.
+        return [
+            "tmux",
+            "-L", cls._tmux_socket(binding),
+            "-f", str(cls.MANAGED_TMUX),
+            *args,
+        ]
+
+    def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
+        """Fail closed unless the connected tmux server is transport-only.
+
+        tmux only reads `-f` when a server starts. An already-running server can therefore
+        ignore the `-f` supplied by a later client. The managed policy writes a versioned
+        marker last after removing all default key tables. Verify the marker, both prefix
+        options, and the effective global key binding list before admitting attachment.
+        """
+        checks = (
+            (
+                "managed-policy marker",
+                ("show-options", "-sqv", "@clayverse_managed_policy"),
+                self.MANAGED_TMUX_POLICY_ID,
+            ),
+            ("prefix", ("show-options", "-gqv", "prefix"), "None"),
+            ("prefix2", ("show-options", "-gqv", "prefix2"), "None"),
+            ("keymap", ("list-keys",), ""),
+        )
+        for label, args, expected in checks:
+            try:
+                cp = subprocess.run(
+                    self._tmux_argv(binding, *args),
+                    capture_output=True,
+                    text=True,
+                    check=False,
+                    timeout=2.0,
+                )
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                raise TerminalRuntimeError(f"tmux server policy attestation unavailable: {label}") from exc
+            if cp.returncode != 0 or cp.stdout.strip() != expected:
+                raise TerminalRuntimeError(f"tmux server policy attestation failed: {label}")
 
     def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
         enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
@@ -112,7 +167,7 @@ class TerminalSessionManager:
 
     def _has_session(self, binding: TerminalBinding) -> bool:
         cp = subprocess.run(
-            ["tmux", "-L", self.tmux_socket, "has-session", "-t", binding.tmux_name],
+            self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False,
@@ -125,6 +180,7 @@ class TerminalSessionManager:
         binding.home.mkdir(parents=True, exist_ok=True)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
+            self._assert_tmux_server_policy(binding)
             return binding
 
         # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
@@ -135,7 +191,9 @@ class TerminalSessionManager:
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
-            "--allowedTools", "mcp__clayverse__*",
+            "--allowedTools",
+            "mcp__clayverse__session_state",
+            "mcp__clayverse__request_effect",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
@@ -157,7 +215,7 @@ class TerminalSessionManager:
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
             *effect_env,
-            "DISABLE_AUTOUPDATER=1",
+            "DISABLE_UPDATES=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
@@ -168,17 +226,18 @@ class TerminalSessionManager:
         ]
         command = shlex.join(env_argv)
         cp = subprocess.run(
-            [
-                "tmux", "-L", self.tmux_socket,
+            self._tmux_argv(
+                binding,
                 "new-session", "-d", "-s", binding.tmux_name,
                 "-c", str(self.workspace), command,
-            ],
+            ),
             capture_output=True,
             text=True,
             check=False,
         )
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
+        self._assert_tmux_server_policy(binding)
         return binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
@@ -193,7 +252,7 @@ class TerminalSessionManager:
             }
             os.execvpe(
                 "tmux",
-                ["tmux", "-L", self.tmux_socket, "attach-session", "-t", binding.tmux_name],
+                self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
                 env,
             )
         return pid, fd, binding

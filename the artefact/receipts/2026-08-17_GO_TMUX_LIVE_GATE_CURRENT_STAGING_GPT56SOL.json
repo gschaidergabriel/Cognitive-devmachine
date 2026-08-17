@@ -1,0 +1,45 @@
+{
+  "schema": "clayverse-vercel-staging-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_research_commit_bound_by_staging": "267ff2c899ad4e79a42459da04af1a19a5490202",
+  "canonical_terminal_sessions_blob": "b42d175745fa53c45b81fa1affda4f12a4093541",
+  "canonical_managed_tmux_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+  "staging": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-1353-tmux-live-vercel-20260817",
+    "head": "6b42d8970177968a6ad405bc519f01cf9fa32cd8",
+    "draft_pr": 831,
+    "classification": "ORDINARY_DETERMINISTIC_REGRESSION",
+    "unusual_experiment": false,
+    "planned_isolated_runtime_checks": [
+      "tmux -L clayverse-gabriel and clayverse-andreas remain disjoint server namespaces",
+      "cross-user session targets cannot be resolved across server namespaces",
+      "the exact current managed-tmux policy blob is applied through -f",
+      "effective prefix is None",
+      "effective prefix2 is None",
+      "effective tmux key binding count is zero after unbind-key -a"
+    ],
+    "network_contract": "network allowed only for dnf tmux provisioning, then deny-all before test",
+    "sandbox_stop_in_finally": true
+  },
+  "current_vercel_observation": {
+    "commit_status_context": "Vercel",
+    "state": "failure",
+    "target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "test_command_started": false,
+    "runtime_result": "UNOBSERVED"
+  },
+  "adjudication": {
+    "execution_path": "CONFIRMED_BY_PRIOR_ACTUALLY_STARTED_SANDBOX",
+    "current_execution_admission": "BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "test_failure": false,
+    "whole_clayverse_pass": false,
+    "next_exact_executable_step": "Run this already-staged head through the same Vercel preview/OIDC Sandbox bridge when preview admission is available; capture actual Sandbox output and stop state before granting runtime credit."
+  },
+  "supersedes_for_future_tmux_staging": "the earlier c61d9c0f staging metadata in 2026-08-17_GO_1353_VERCEL_TMUX_ADMISSION_GPT56SOL.json; that earlier receipt remains historical and is not rewritten"
+}

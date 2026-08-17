@@ -31,7 +31,9 @@ def test_docker_uses_current_digest_pinned_native_claude_release():
     assert lock['claude_code']['version']=='2.1.233'
     assert '@anthropic-ai/claude-code' not in docker
     assert 'CLAUDE_CODE_SPEC' not in docker
-    assert 'npm install --global "${XTERM_SPEC}"' in docker
+    assert lock['xterm']['version']=='6.0.0'
+    assert 'install_pinned_xterm.py' in docker
+    assert 'npm install' not in docker
     assert 'install_pinned_claude.py' in docker
     assert lock['base_image']['index_digest'] in docker
 

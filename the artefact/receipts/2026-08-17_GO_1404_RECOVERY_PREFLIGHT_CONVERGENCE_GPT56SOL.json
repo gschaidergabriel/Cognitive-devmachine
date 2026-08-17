@@ -1,0 +1,54 @@
+{
+  "schema": "clayverse-go-convergence-receipt/v1",
+  "recorded_at": "2026-08-17T14:04:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "e3c705df766c0fd719bb5fb47e95ae86d330cec7",
+  "adjudication": {
+    "closed_stale_fusion_pr": 495,
+    "reason": "main advanced recovery credit semantics to delegate to EffectJournal._credit(status,outcome,capability); the earlier local helper would have lost capability-specific non-rewarding policy",
+    "preserved_main_recovery_blob": "2c195ba038bf39eba1dcb84d2f825bf77aa02baf",
+    "canonical_credit_authority": "EffectJournal._credit"
+  },
+  "retained_current_main_candidate": {
+    "pr": 503,
+    "branch": "go/recovery-causal-preflight-current-20260817-1402",
+    "head": "44267d3b76e4ab86fd2f388be7aba49c058ab67b",
+    "recovery_blob": "4ac594a1b5e813fa5e5f14c7b11d8cc41e173122",
+    "mergeable_at_observation": true,
+    "delta": [
+      "read-only active causal-spine preflight before EffectJournal.recover_pending mutation",
+      "same integrity re-check at recovery transaction boundary",
+      "reject foreign causal rows for an active episode",
+      "bind later active causal lookup to exact active causal_id instead of latest timestamp row",
+      "leave current EffectJournal._credit capability/status/outcome semantics unchanged"
+    ],
+    "focused_regression": "test_recovery_causal_preflight.py preserves PENDING effect, foreign causal evidence, active turn and generation on integrity failure"
+  },
+  "execution_evidence": {
+    "github_run": 32004143189,
+    "github_job": 95310128675,
+    "github_conclusion": "failure",
+    "github_steps": null,
+    "github_classification": "RUNNER_OR_CONTROL_PLANE_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "vercel_bridge": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "this_go_bounded_staging_pr": 823,
+    "this_go_staging_head": "7e43252ed85033605d229150a6913ee867608f08",
+    "this_go_vercel_status": "Deployment rate limited — retry in 24 hours.",
+    "this_go_sandbox_started": false,
+    "this_go_test_executed": false,
+    "vercel_classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_ZERO_TEST_CREDIT"
+  },
+  "go_experiment_accounting": {
+    "new_distinct_unusual_experiment_by_this_organ": false,
+    "state": "COORDINATION_BLOCKED_SLOT_CLOSED"
+  },
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "When Vercel preview admission reopens, stage the then-current PR503-or-successor exact blobs and run causal-preflight plus adjacent restart/effect regressions inside an actually-started isolated Sandbox; after source fusion proceed to deterministic suite, exact OCI build/digest/start/readiness, real Clerk/browser/WebSocket PTY, restart/concurrency/effect recovery.",
+  "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

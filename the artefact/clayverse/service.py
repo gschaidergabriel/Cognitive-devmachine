@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import base64
+import binascii
 import json
 import os
 import sys
+from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
@@ -11,7 +14,7 @@ from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB
-from .terminal_gateway import create_terminal_app
+from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
@@ -23,23 +26,70 @@ def _clerk_map() -> dict[str, str]:
         mapping = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON is invalid JSON") from exc
-    if not isinstance(mapping, dict) or not mapping:
-        raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must be a non-empty object")
-    if any(not isinstance(k, str) or v not in {"gabriel", "andreas"} for k, v in mapping.items()):
-        raise RuntimeError("Clerk mapping may only target gabriel/andreas")
+    if not isinstance(mapping, dict) or len(mapping) != 2:
+        raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must contain exactly two subject mappings")
+    if any(
+        not isinstance(subject, str)
+        or not subject.strip()
+        or user_id not in {"gabriel", "andreas"}
+        for subject, user_id in mapping.items()
+    ):
+        raise RuntimeError("Clerk mapping subjects must be non-empty strings and may only target gabriel/andreas")
     if set(mapping.values()) != {"gabriel", "andreas"}:
-        raise RuntimeError("Clerk mapping must identify both canonical users")
+        raise RuntimeError("Clerk mapping must identify each canonical user exactly once")
     return mapping
 
 
-def _web_config() -> tuple[str, str]:
+def _clerk_frontend_api_from_publishable_key(publishable_key: str) -> str:
+    """Derive the direct Clerk FAPI URL encoded by a publishable key or fail closed."""
+    encoded = ""
+    for prefix in ("pk_test_", "pk_live_"):
+        if publishable_key.startswith(prefix):
+            encoded = publishable_key[len(prefix):]
+            break
+    if not encoded:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY must be a Clerk test/live publishable key")
+    try:
+        padded = encoded + "=" * (-len(encoded) % 4)
+        decoded = base64.b64decode(padded, validate=True).decode("ascii")
+    except (binascii.Error, UnicodeDecodeError) as exc:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY contains invalid FAPI encoding") from exc
+    if not decoded.endswith("$"):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI encoding is malformed")
+    domain = decoded[:-1]
+    if not domain or not domain.isascii() or any(char.isspace() for char in domain):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid")
+    try:
+        parsed = urlsplit(f"https://{domain}")
+        port = parsed.port
+    except ValueError as exc:
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid") from exc
+    if (
+        parsed.scheme != "https"
+        or not parsed.hostname
+        or parsed.hostname != domain.lower()
+        or parsed.username is not None
+        or parsed.password is not None
+        or port is not None
+        or parsed.path
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid")
+    return f"https://{domain}"
+
+
+def _web_config(issuer: str) -> tuple[str, str]:
     publishable_key = os.environ.get("CLERK_PUBLISHABLE_KEY", "").strip()
     frontend_api = os.environ.get("CLERK_FRONTEND_API_URL", "").strip().rstrip("/")
     if not publishable_key or not frontend_api:
         raise RuntimeError("CLERK_PUBLISHABLE_KEY and CLERK_FRONTEND_API_URL are required")
-    if not frontend_api.startswith("https://"):
-        raise RuntimeError("CLERK_FRONTEND_API_URL must use https")
-    return publishable_key, frontend_api
+    expected_frontend_api = _clerk_frontend_api_from_publishable_key(publishable_key)
+    if frontend_api != expected_frontend_api:
+        raise RuntimeError("CLERK_FRONTEND_API_URL must match the publishable-key Clerk instance")
+    if issuer.strip().rstrip("/") != expected_frontend_api:
+        raise RuntimeError("CLERK_ISSUER must match the publishable-key Clerk instance")
+    return publishable_key, expected_frontend_api
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
@@ -96,8 +146,9 @@ def main():
     cid, digest = db.checkpoint("boot")
 
     clerk_map = _clerk_map()
-    publishable_key, frontend_api = _web_config()
-    verifier = ClerkTokenVerifier(ClerkConfig.from_env())
+    clerk_config = ClerkConfig.from_env()
+    publishable_key, frontend_api = _web_config(clerk_config.issuer)
+    verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
     try:
         claude_status = claude_readiness(required=require_claude)
@@ -146,7 +197,14 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            workers=1,
+            access_log=False,
+            ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
+        )
     finally:
         db.checkpoint("shutdown")
         db.close()

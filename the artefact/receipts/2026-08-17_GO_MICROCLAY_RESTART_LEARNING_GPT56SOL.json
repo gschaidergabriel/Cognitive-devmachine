@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "bounded_source_review_and_candidate_repair",
+  "timestamp_local": "2026-08-17T13:46:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "14e0df35b96d6bc815d20d540ab2e1f5356ae61c",
+  "candidate_pr": 408,
+  "candidate_branch": "go/microclay-method-isolation-final-fusion-20260817",
+  "candidate_head_observed": "dadcbe4537818a25e7cbf651d0d5a2408491dec2",
+  "finding": {
+    "name": "MICROCLAY_VERIFIED_FEEDBACK_CAN_BE_STRANDED_AT_RESTART_GENERATION_FENCE",
+    "mechanism": [
+      "MicroClay retrieval feedback is normally consumed on a later retrieval in the same entity generation.",
+      "Normal container recovery advances the global entity generation.",
+      "A canonical effect outcome committed after a retrieval but before a restart can therefore cross the generation boundary before adaptive retrieval credit is consumed.",
+      "Uncertain UNKNOWN_AFTER_RESTART outcomes must not be reinterpreted as negative retrieval reward."
+    ],
+    "source_review_status": "SUPPORTED"
+  },
+  "candidate_repair": {
+    "files": [
+      "the artefact/clayverse/recovery.py",
+      "the artefact/tests/test_microclay_restart_learning.py",
+      ".github/workflows/go-microclay-integration-20260817.yml"
+    ],
+    "contract": [
+      "after recovery closure and before entity-generation advance, drain only current-generation causal effect outcomes with known terminal status VERIFIED, DENIED, or FAILED",
+      "route credit through canonical MicroClayRetrieval.credit receipt authority",
+      "do not convert UNKNOWN_AFTER_RESTART, stale, or ambiguous evidence into negative retrieval reward",
+      "preserve idempotence through retrieval_feedback duplicate protection",
+      "regression requires verified feedback to apply exactly once across restart and uncertain restart outcome to apply zero feedback/policy pulls"
+    ]
+  },
+  "stage_b_adjudication": {
+    "stage_a_truth_method_isolation": "RETAIN_CANDIDATE",
+    "raw_query_stage_b": "DEFER_REPLACE",
+    "reason": "current Stage-B candidate derives purported structural matching partly from raw prompt/query tokens and lexical overlap; owner law requires an admitted structural/problem signature and fail-closed admission contract"
+  },
+  "execution_evidence": {
+    "status": "UNOBSERVED",
+    "github_actions": "exact candidate workflows repeatedly failed before visible steps; steps=null, so this is runner/admission evidence and not product-test evidence",
+    "vercel_sandbox": "connected Vercel surface exposed no Sandbox start/exec primitive in this session",
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "whole_clayverse_container_pass": false
+  },
+  "coordination": {
+    "pr_402": "CLOSED_SUPERSEDED_BY_408",
+    "pr_408_merge_authorized": false,
+    "latest_main_divergence_at_closeout": "main has subsequently advanced with terminal/WebSocket product work; manual low-level ancestry merge was intentionally not forced",
+    "go_unusual_experiment": "NO_NEW_EXPERIMENT_RUN_BY_THIS_REPAIR; global slot already closed/contested by canonical experiment-accounting receipts"
+  },
+  "next_exact_step": "Rebase/fuse PR 408 against the then-current main without losing concurrent terminal product work, then execute the focused MicroClay regression batch plus adjacent recovery suite in an authorized isolated runner at exact source identity; only after green executable evidence consider canonical promotion."
+}

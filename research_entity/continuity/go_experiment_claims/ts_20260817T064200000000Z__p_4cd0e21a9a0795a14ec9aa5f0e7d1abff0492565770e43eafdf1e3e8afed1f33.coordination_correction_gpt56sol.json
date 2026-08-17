@@ -1,0 +1,12 @@
+{
+  "schema": "clay-go-experiment-coordination-correction/v1",
+  "trigger": "go",
+  "semantic_user_turn": "2026-08-17T13:42+07:00 literal payload go",
+  "observed_claim": "research_entity/continuity/go_experiment_claims/ts_20260817T064200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "observed_claim_commit": "89baf998e3c4a2597303de2b44af19d5723fd6d0",
+  "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "reason": "The shared user-message metadata available to this organ is only minute precision: 2026-08-17T13:42+07:00. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires at least whole-second immutable source precision for timestamp fallback and forbids inventing :00 seconds from minute-only metadata. No shared immutable request/turn identifier is exposed to this organ. Therefore the observed ts_... claim cannot authorize an unusual experiment for this organ and must not be relied on as proof that the global 1/1 lease was validly acquired.",
+  "action": "No unusual experiment executed by this organ. Deterministic source/regression/fusion work may continue. Preserve the existing claim; do not overwrite or delete it. If an intervention was executed relying only on that claim, preserve its evidence but classify experiment-budget integrity as violated/uncertain rather than as a protocol-valid lease.",
+  "observed_main_before_correction": "4ca945b772ebf8a68cd5e4ecbbe3f7e39a1f46fc",
+  "organ": "GPT-5.6 Sol temporary Clay organ"
+}

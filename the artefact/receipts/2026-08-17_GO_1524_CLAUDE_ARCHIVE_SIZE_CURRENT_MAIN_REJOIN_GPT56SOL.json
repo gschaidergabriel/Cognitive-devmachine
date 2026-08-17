@@ -1,0 +1,41 @@
+{
+  "schema": "clayverse.go-claude-archive-size-rejoin/v1",
+  "trigger": "go",
+  "trigger_time_local_available": "2026-08-17T15:24+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "pr": 421,
+  "canonical_main_before_rejoin": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "source": {
+    "baseline_source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "target_source_lock_blob": "dacaa8bdbebf89dc2e957d71739be7bc094b087e",
+    "baseline_installer_blob": "a7bf1cc09289995c5092dd3fd73043c25efa9a39",
+    "target_installer_blob": "c23f8735ebde4e7919c964a323890f1a7a4343dc",
+    "target_test_blob": "d2d4a7989caf26267d2f592f83049fb413355afb"
+  },
+  "mechanism": "Bind each admitted Claude Code release archive to exact locked byte size in addition to SHA-256 and bound the network read to expected_size+1 so under/oversize responses fail closed before digest acceptance.",
+  "isolated_exact_source_slice": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "git_blob_identity": "3/3 MATCH",
+    "py_compile": "PASS",
+    "focused_regression": "5 passed in 0.05s",
+    "external_archive_fetch_executed": false,
+    "exact_oci_build_executed": false
+  },
+  "execution_provider_state": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_ACTIVE",
+    "daytona": "AUTHORIZED_FALLBACK; CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "github_actions_retry": "RUNNER_PRE_STEP_ADMISSION_FAILURE_STEPS_NULL",
+    "runtime_credit_from_blocked_providers": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared trigger identity is minute precision only"
+  },
+  "classification": "CURRENT_MAIN_REJOIN_CANDIDATE_WITH_BYTE_EXACT_ISOLATED_SOURCE_MECHANISM_PASS",
+  "whole_clayverse_pass": false,
+  "next_gate": "On the first actually-connected authorized Vercel or Daytona sandbox, rebind the then-current head, fetch the exact locked Claude archives, verify size+SHA-256 in the real build path, then continue exact OCI build/start/readiness/restart acceptance."
+}

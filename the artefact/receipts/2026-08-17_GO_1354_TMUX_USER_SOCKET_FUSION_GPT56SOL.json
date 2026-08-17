@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:54:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_receipt": "0c549e91cbd5a7be672d0e6c7c3101306705ac08",
+  "donor_pr": 427,
+  "canonical_commits": {
+    "runtime": "97d4384b37f5e925360ba007f1a3e104b7dcf7a8",
+    "regression": "043a7332f948d4d7dd0b06ab157c6bffb76c21c5"
+  },
+  "exact_main_blobs": {
+    "the artefact/clayverse/terminal_sessions.py": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "the artefact/tests/test_terminal_tmux_isolation.py": "cd4bcf8dd79bbaa5d0a34e7bc2dd8b16b5cb75db"
+  },
+  "finding": "Both canonical perspectives previously shared one tmux -L server. Authentication selected the initial target session, but the attached client remained connected to a server containing both canonical sessions, weakening the user-bound terminal/privacy contract.",
+  "repair": {
+    "gabriel_tmux_server": "clayverse-gabriel",
+    "andreas_tmux_server": "clayverse-andreas",
+    "binding_points": ["has-session", "new-session", "attach-session"],
+    "container_count_changed": false,
+    "central_entity_changed": false,
+    "unifieddb_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "evidence_reentry": {
+    "donor_receipt": "the artefact/receipts/2026-08-17_GO_TMUX_USER_SOCKET_ISOLATION_GPT56SOL.json on PR #427 branch",
+    "donor_runtime_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "donor_test_blob": "cd4bcf8dd79bbaa5d0a34e7bc2dd8b16b5cb75db",
+    "blob_identity_with_main": true,
+    "donor_mechanism_probe": "PASS",
+    "probe_scope": "exact source mechanism with process boundaries stubbed; no real tmux binary"
+  },
+  "execution_boundary": {
+    "real_tmux_cross_user_isolation": "UNOBSERVED",
+    "full_regression_suite": "UNOBSERVED",
+    "exact_oci_build_start": "UNOBSERVED",
+    "real_clerk_browser_websocket_pty": "UNOBSERVED",
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "classification": "MECHANISM_SUPPORTED_CANONICAL_SOURCE_FUSED",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "On an actually-started authorized isolated exact-current environment, prove a Gabriel-attached tmux client cannot list/switch/select Andreas's tmux server/session, then run adjacent Clerk/WebSocket/PTY persistence regressions and exact OCI build/start/readiness/restart."
+}

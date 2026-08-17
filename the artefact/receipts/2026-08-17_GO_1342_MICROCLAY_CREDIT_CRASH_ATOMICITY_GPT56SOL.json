@@ -1,0 +1,56 @@
+{
+  "schema": "clayverse-go-source-review-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:49:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "0b508f37f0cb200833e5615335f1d0c013ac994b",
+  "retained_fusion_pr": 415,
+  "retained_fusion_head_observed": "74212bd5d851ddd2d396c6886f33daab9d93e9aa",
+  "observed_microclay_blob": "48b7a37c30a3b96adb0d62664c8a04d46bed8d17",
+  "tracking_issue": 438,
+  "finding": {
+    "classification": "SOURCE_CONTRACT_GAP",
+    "component": "MicroClayRetrieval.credit",
+    "mechanism": "retrieval_entrypoint_policy mutations and retrieval_feedback idempotency receipt are committed as separate SQLite autocommit statements",
+    "failure_mode": "a crash after one or more entry-point upserts but before feedback receipt insertion can persist partial learning without the replay receipt; retry can apply the same canonical outcome again",
+    "violated_contract": "duplicate feedback must be idempotent and restart-safe; adaptive retrieval capital must not be partially or multiply applied"
+  },
+  "required_repair": {
+    "transaction": "one UnifiedDB.tx()/BEGIN IMMEDIATE transaction",
+    "atomic_set": [
+      "recheck authoritative retrieval/generation/outcome identity",
+      "check retrieval_feedback receipt existence",
+      "read/update all retrieval_entrypoint_policy rows",
+      "insert retrieval_feedback receipt"
+    ],
+    "rollback_law": "any exception before commit leaves both policy state and feedback receipt unchanged",
+    "authority_change": false,
+    "new_retrieval_path": false
+  },
+  "regression_obligation": {
+    "type": "ordinary deterministic crash-atomicity regression",
+    "inject": "exception immediately before feedback insertion after at least one policy upsert",
+    "require": [
+      "policy table unchanged after rollback",
+      "feedback table unchanged after rollback",
+      "durable memory unchanged",
+      "identical retry commits exactly once",
+      "second replay is duplicate/no-op",
+      "stale-generation, replay-route and causal-outcome fences remain fail-closed before mutation"
+    ]
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "only minute-precision immutable user-message metadata is exposed and no shared immutable request/turn identifier is available; current GO atomic-lease protocol therefore forbids an unusual experiment"
+  },
+  "execution": {
+    "authorized_vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "exact_repaired_head_execution": "UNOBSERVED",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "evidence_scope": "source review and durable coordination only; no exact branch pytest, OCI build/start, Clerk/browser/PTy, or whole ClayVerse runtime PASS",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS"
+}

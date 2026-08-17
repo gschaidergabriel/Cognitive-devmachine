@@ -1,0 +1,68 @@
+{
+  "schema": "clayverse-go-adjudication-receipt/v1",
+  "trigger": "go",
+  "trigger_metadata_available": "2026-08-17T13:42+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_adjudication": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+  "frontier": "Debian APT supply-chain reproducibility inside the one ClayVerse OCI image",
+  "parallel_lanes": {
+    "retained": {
+      "pr": 422,
+      "head": "220bf507b1610201c58ce7efa07c5a5aabae844a",
+      "decision": "RETAIN_AS_SINGLE_APT_SNAPSHOT_LANE",
+      "reasons": [
+        "strict ClayVerseDebianSnapshot/v1 validation",
+        "both debian and debian-security snapshot archives",
+        "exact HTTPS snapshot host/path/timestamp validation with HTTP downgrade rejection",
+        "mutable mirror fallback explicitly forbidden",
+        "dedicated fail-closed source renderer",
+        "default-deny Docker build-context admission and regression",
+        "source-mechanism evidence remains correctly separated from exact OCI acceptance"
+      ]
+    },
+    "closed_parallel": {
+      "pr": 432,
+      "decision": "DO_NOT_REVIVE_AS_SECOND_APT_PATH",
+      "state_observed": "closed_unmerged"
+    },
+    "provenance_only_prototype": {
+      "branch": "go/apt-snapshot-lock-fusion-20260817-1342-sol",
+      "decision": "DO_NOT_OPEN_THIRD_APT_PR",
+      "source_mechanism_regression": {
+        "surface": "isolated non-production OpenAI tool container",
+        "command": "python -m pytest -q tests/test_apt_snapshot_lock.py",
+        "result": "3 passed in 0.02s",
+        "exact_git_blobs": {
+          "the artefact/Dockerfile": "fc760fa0a6e136af91c011ea7356ec78c87a78eb",
+          "the artefact/SOURCE_LOCK.json": "e790ccb7fe89ba4f1658419cb5c00897a7e1443c",
+          "the artefact/tests/test_apt_snapshot_lock.py": "47fbfbfd192906f0778eda76c649841f44d4bc20"
+        }
+      },
+      "non_fused_idea": "explicit top-level package-version pins for ca-certificates and tmux",
+      "non_fused_reason": "the retained immutable signed snapshot already fixes repository state; defer redundant version-lock semantics until exact OCI resolution evidence shows a discriminator, and record resolved package identities in the acceptance receipt"
+    }
+  },
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no shared immutable request/turn id is exposed and the available user-message timestamp is minute precision only; the atomic lease protocol forbids inventing whole-second precision",
+    "invalid_or_uncertain_parallel_claim_correction_commit": "7cc5471a1172ab41b2b29d9242e0f1290de5188f",
+    "unusual_experiment_executed_by_this_organ": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED"
+  },
+  "evidence_boundary": {
+    "source_mechanism_supported": true,
+    "retained_pr_exact_oci_build_verified": false,
+    "image_digest_captured": false,
+    "container_runtime_verified": false,
+    "whole_clayverse_product_pass": false
+  },
+  "next_exact_gate": "Refresh/rebase retained PR 422 to then-current main, then run an actually-started authorized isolated exact-head OCI build and capture HTTPS snapshot resolution, Debian signature/hash-chain behavior, resolved package identities/closure, image digest, startup/readiness and restart evidence before promotion.",
+  "acceptance": "IN_PROGRESS"
+}

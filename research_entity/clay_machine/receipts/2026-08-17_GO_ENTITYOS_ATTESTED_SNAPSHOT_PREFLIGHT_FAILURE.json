@@ -39,7 +39,7 @@
     "independent_correction": "stage-go-source.mjs changed localeCompare ordering to Buffer.compare over UTF-8 path bytes."
   },
   "coordination_correction": {
-    "latest_observed_candidate_head": "fc8484008d7b99735321790b5a03ff609cdd0222",
+    "latest_observed_candidate_head": "9d829960c32ec88e0b48531328134a05a82f5483",
     "refresh_head_immediately_before_execution": true,
     "parent_lineage_contains_sort_fix": true,
     "attestation_sort_fix_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
@@ -47,23 +47,25 @@
     "dependency_closure_fused": true,
     "dependency_closure_delta": "Pinned EntityOS build/test dependency closure and static drift preflight were fused into PR787 instead of maintaining a parallel product lane.",
     "full_pytest_gate_fused": true,
-    "full_pytest_gate_delta": "A regression-only isolated Vercel full-pytest gate now runs before the attested-snapshot lane with exact Git identity reconstruction, versioned dependency closure, DENY_ALL during pytest and unusual_experiment_count=0.",
+    "full_pytest_gate_delta": "A regression-only isolated Vercel full-pytest gate runs before the attested-snapshot lane with exact Git identity reconstruction, versioned dependency closure, DENY_ALL during pytest and unusual_experiment_count=0.",
     "dependency_authority_alignment_head": "e2cbeb4c301e12750b9f160b121d3b8ddedf13a3",
-    "dependency_authority_alignment_delta": "The static preflight requires the source-bound requirements files as the sole install authority for both the canonical build runner and full-pytest runner, and fails closed on duplicate direct dependency pins.",
+    "dependency_authority_alignment_delta": "The static preflight requires source-bound requirements files as the sole install authority for both the canonical build runner and full-pytest runner and fails closed on duplicate direct dependency pins.",
     "full_pytest_hardening_head": "4f09d74878b939d554af61b65e3f3b4c274a927d",
-    "full_pytest_hardening_delta": "The ordinary pre-experiment pytest gate now claims one execution owner per deployment, reuses a finished result instead of starting duplicate Sandboxes, emits JUnit evidence, requires at least one test and forbids skipped tests.",
+    "full_pytest_hardening_delta": "The ordinary pre-experiment pytest gate claims one execution owner per deployment, reuses a finished result instead of starting duplicate Sandboxes, emits JUnit evidence, requires at least one test and forbids skipped tests.",
     "attestation_authority_digest_hardening_head": "fc8484008d7b99735321790b5a03ff609cdd0222",
-    "attestation_authority_digest_hardening_delta": "The canonical builder now hashes the exact external EntityOSSourceSnapshotAttestation/v2 bytes that it parses and persists source_attestation_sha256 into SourceProvenance and EntityOSBuildReceipt/v1. Two deterministic regressions bind the exact authority digest and distinguish byte-distinct semantically equivalent authority documents.",
+    "attestation_authority_digest_hardening_delta": "The canonical builder hashes the exact external EntityOSSourceSnapshotAttestation/v2 bytes that it parses and persists source_attestation_sha256 into SourceProvenance and EntityOSBuildReceipt/v1. Two deterministic regressions bind the exact authority digest and distinguish byte-distinct semantically equivalent authority documents.",
     "attestation_authority_digest_hardening_execution": "SOURCE_COMMITTED_EXACT_HEAD_SANDBOX_UNEXECUTED",
+    "attestation_receipt_gate_head": "9d829960c32ec88e0b48531328134a05a82f5483",
+    "attestation_receipt_gate_delta": "The canonical Vercel build-internal lane now requires each ATTESTED_SNAPSHOT_V2 build receipt to contain the exact source_tree, source_archive_sha256 and independently staged source_attestation_sha256 before artifact acceptance.",
+    "branch_relation_to_authority_digest_hardening": "AHEAD_BY_2_WITH_FC848400_AS_MERGE_BASE",
     "runner_cleanup": "Superseded experimental/duplicate attestation runners were pruned; the build-internal v7 run-buildtime-go-sandbox.mjs lane remains the canonical attested executable path.",
     "latest_candidate_executable_observation": "UNEXECUTED"
   },
   "current_execution_blocker": {
-    "latest_observed_head": "fc8484008d7b99735321790b5a03ff609cdd0222",
+    "latest_observed_head": "9d829960c32ec88e0b48531328134a05a82f5483",
     "vercel_commit_status": "FAILURE_BEFORE_SANDBOX",
     "provider_reason": "build-rate-limit",
     "provider_status_target": "https://vercel.com/gabriel-gschaiders-projects?upgradeToPro=build-rate-limit",
-    "latest_head_deployment_registered": false,
     "latest_head_sandbox_observation": "UNEXECUTED",
     "executable_claim": "UNRESOLVED"
   },
@@ -74,7 +76,7 @@
     "slot_state": "RESERVED_NOT_CONSUMED",
     "instruction": "Do not add or execute a second unusual intervention. Reruns of inherited gates are regression-only."
   },
-  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, refresh PR787 and run its exact then-current head through the existing build-internal sequence. First require the isolated full python3.13 -m pytest -q tests gate with source-bound pinned dependencies under DENY_ALL, at least one test, zero skips and zero unusual experiments. Then require exact raw-tree source binding and Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS builds with receipt source_provenance=ATTESTED_SNAPSHOT_V2, non-null source_archive_sha256 and source_attestation_sha256 equal to the independently staged attestation SHA-256, followed by self-test, no-host-Python and relocation. Then execute only the preregistered ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED unusual experiment; reconstruct sanitized Git provenance; run the inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful Sandbox stops.",
+  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, refresh PR787 and run its exact then-current head through the existing build-internal sequence. First require the isolated full python3.13 -m pytest -q tests gate with source-bound pinned dependencies under DENY_ALL, at least one test, zero skips and zero unusual experiments. Then require exact raw-tree source binding and Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS builds with receipt source_provenance=ATTESTED_SNAPSHOT_V2, exact source_tree, non-null source_archive_sha256 and source_attestation_sha256 equal to the independently staged attestation SHA-256, followed by twin digest identity, self-test, no-host-Python and relocation. Then execute only the preregistered ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED unusual experiment; reconstruct sanitized Git provenance; run the inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful Sandbox stops.",
   "promotion": "NOT_ALLOWED_YET",
   "negative_evidence_preserved": true
 }

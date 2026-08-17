@@ -1,0 +1,56 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T20:19:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "PR623 readiness/auth canonical-user contract parity",
+  "canonical_main_observed_after_parallel_cycle_refresh": "69bc2c82bf9092256c0788a84f06a1cbe091dcfb",
+  "retained_pr": 623,
+  "retained_branch": "clay/go-identity-session-drift-failclosed-20260817",
+  "source_commit": "3c6c4d98605d72d902ea36ceabf47a73eab11a54",
+  "terminal_gateway_blob": "492bd5a5573cda42e78eb5cf9e53dec47be312e0",
+  "parallel_test_blob_observed": "0ccfeb38ed7688b6278ce0f75e3517ac2de3ef49",
+  "mechanism": {
+    "observed_source_gap": "runtime readiness counted only canonical user ids and therefore could advertise READY with an extra user or canonical rights/display-name drift while request-time IdentityRouter.resolve rejected the same UnifiedDB state",
+    "counterhypothesis": "session cardinality plus canonical user-id count already made readiness equivalent to authenticated request admission",
+    "discriminator": "extra-user and equal-rights drift leave the prior filtered user count and canonical session set unchanged but violate assert_canonical_user_state",
+    "repair": "reuse identity.assert_canonical_user_state inside _runtime_ready before terminal probing; no second identity/readiness authority",
+    "parallel_fusion": "a concurrent worker added extra-user and equal-rights readiness regressions to the same retained test file; an attempted stale-blob write received GitHub 409 and was not forced. The updated test blob was reread and retained instead of overwriting concurrent work.",
+    "result": "SOURCE_CANDIDATE_STRENGTHENED_UNEXECUTED"
+  },
+  "execution_evidence": {
+    "github_workflow_runs_for_source_commit": [],
+    "semantic_test_execution": false,
+    "runtime_credit": 0,
+    "classification": "NO_OBSERVED_WORKFLOW_RUN_FOR_CURRENT_SOURCE_COMMIT"
+  },
+  "vercel_reentry": {
+    "deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "controller_commit": "a341eb107f8499f301e730de12680fd2df580fd8",
+    "executed_current_wrapper_blob": "8ebef98df232695ce538b5c80290df8f7ce11834",
+    "retained_pr810_current_wrapper_blob": "8ebef98df232695ce538b5c80290df8f7ce11834",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_provider_identity": "OBSERVED_NAME_PLUS_CURRENT_SESSION_ID_AT_EXACT_WRAPPER_BLOB_SCOPE",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "sandbox_stopped": true,
+    "interpretation": "provider-identity mechanism is supported at exact wrapper-blob scope, while the private-source/OCI product path remains blocked before staging and receives zero ClayVerse runtime credit"
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "reason": "No safely shared immutable request/turn identity is exposed for the atomic macro-cycle experiment lease."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "duplicate_controller_or_identity_lane_created": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "promotion": "NOT_AUTHORIZED_FROM_SOURCE_OR_BLOB_SCOPED_PROVIDER_EVIDENCE",
+  "next_exact_gate": "Provision host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox; then refresh main/#611/#622 and deliberately admitted #623 exactly once into retained PR810 and continue exact private-source staging plus OCI execution."
+}

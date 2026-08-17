@@ -1,0 +1,30 @@
+name: GateFlow branch freshness gate
+
+on:
+  pull_request:
+    paths:
+      - "tools/gateflow_branch_freshness.py"
+      - "tests/test_gateflow_branch_freshness.py"
+      - "research_entity/gateflow/BRANCH_FRESHNESS_GATE.md"
+      - ".github/workflows/gateflow-branch-freshness.yml"
+  push:
+    branches: [main]
+    paths:
+      - "tools/gateflow_branch_freshness.py"
+      - "tests/test_gateflow_branch_freshness.py"
+      - "research_entity/gateflow/BRANCH_FRESHNESS_GATE.md"
+
+jobs:
+  hostinger-unit:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Observe exact runtime
+        run: |
+          python3 --version
+          uname -a
+      - name: Run semantic branch freshness falsifiers
+        run: python3 -m unittest -v tests/test_gateflow_branch_freshness.py

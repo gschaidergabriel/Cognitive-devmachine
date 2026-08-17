@@ -1,17 +1,20 @@
 from __future__ import annotations
 import json
+from .method_memory import METHOD_KINDS
+from .method_stage_b import StageBMethodRetrieval
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with separated evidence and method retrieval."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.stage_b = StageBMethodRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -20,7 +23,7 @@ class WorldAssembler:
             "ORDER BY ts LIMIT 20",
             (turn_id,),
         ).fetchall()
-        return [dict(r) for r in rows]
+        return [dict(r) for r in rows if str(r["kind"]) not in METHOD_KINDS]
 
     def _active_identity(self, session_id):
         row = self.db.db.execute(
@@ -59,7 +62,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. MicroClay/Stage-B cannot broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -79,6 +82,15 @@ class WorldAssembler:
         retrieval_receipt = {
             "mode": "LEGACY_COMPATIBILITY",
             "status": "UNKNOWN",
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        method_context = []
+        counterevidence = []
+        method_retrieval_receipt = {
+            "policy_version": 1,
+            "triggered": False,
+            "evidence_status": "UNKNOWN",
             "truth_authority": False,
             "effect_authority": False,
         }
@@ -106,23 +118,50 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
+            stage_b = self.stage_b.retrieve(
+                query=str(supplied["query"]),
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
+                evidence_status=str(retrieval_receipt["status"]),
+                resource_refs=list(resource_refs or []),
+            )
+            method_context = stage_b["methods"]
+            counterevidence = stage_b["counterevidence"]
+            method_retrieval_receipt = stage_b["receipt"]
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.
+            excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS).union(METHOD_KINDS)))
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-                    "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
+                    "SELECT * FROM durable_memory WHERE kind NOT IN (%s) "
+                    % ",".join("?" for _ in excluded)
+                    + "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
+                    (*excluded, user_id),
                 )
             ]
 
+        evidence_status = str(retrieval_receipt.get("status", "UNKNOWN"))
+        unknowns = [] if evidence_status == "PRESENT" else [{
+            "status": evidence_status,
+            "query_sha256": retrieval_receipt.get("query_sha256"),
+            "fact_resolved": False,
+        }]
         return {
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "evidence_context": memories,
+            "method_context": method_context,
+            "unknowns": unknowns,
+            "counterevidence": counterevidence,
             "retrieval_receipt": retrieval_receipt,
+            "method_retrieval_receipt": method_retrieval_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

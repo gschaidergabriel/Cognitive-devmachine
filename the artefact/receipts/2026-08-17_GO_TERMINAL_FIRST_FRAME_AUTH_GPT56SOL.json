@@ -12,7 +12,9 @@
   "canonical_delta": {
     "bug": "The browser terminal could emit binary xterm input immediately after WebSocket open while Clerk.session.getToken() was still awaiting. The server requires authentication to be the first text message, so sufficiently early user input could win the first-frame race and fail a legitimate session closed.",
     "repair_commit": "a485fa5ac23d14aa37c8e9fa1d72abbd9acbc10c",
-    "regression_commit": "906a79d337a4126356000d4567c0314eead1b08f",
+    "initial_regression_commit": "906a79d337a4126356000d4567c0314eead1b08f",
+    "regression_correction_commit": "64ef128b3d675be4bfc3fefadd724a494d983293",
+    "initial_regression_issue": "The first static source assertions used rendered single JavaScript braces, while terminal_gateway.py stores doubled braces inside the Python f-string source. Product code was unaffected; the test lineage was corrected rather than represented as green.",
     "repair": [
       "Browser terminal input is disabled until the authenticated server ready frame is received.",
       "Resize control messages are disabled until the authenticated server ready frame is received.",
@@ -39,7 +41,7 @@
       "post_ready_terminal_frames_sent": 1,
       "post_error_terminal_frames_sent": 0
     },
-    "limitations": "This validates the repaired handshake mechanism only. It does not establish exact-current-head ClayVerse container runtime behavior."
+    "limitations": "This validates the repaired handshake mechanism only. It does not establish exact-current-head ClayVerse container runtime behavior. The canonical static regression source was corrected in 64ef128b3d675be4bfc3fefadd724a494d983293."
   },
   "coordination": {
     "conflict_observed": "First attempt to update test_permanent_terminal_surface.py returned GitHub 409 because a parallel worker had changed the same file.",

@@ -86,6 +86,10 @@ class ClerkTokenVerifier:
             raise AuthenticationError("Clerk token missing session ID")
         if not claims.get("sub"):
             raise AuthenticationError("Clerk token missing subject")
+        if claims.get("sts") != "active":
+            raise AuthenticationError("Clerk session is not active")
+        if "act" in claims:
+            raise AuthenticationError("Clerk impersonation sessions are not admitted")
         return claims
 
     @staticmethod

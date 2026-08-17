@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "run_id": "go-20260812T0430p0700-chatgpt-unifieddb-projection-outbox-fence-v4",
+  "trigger": "go",
+  "program_stage": "FRANK_V0_1",
+  "research_subject": "self.root / Frank v0.1",
+  "worker_identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+  "worker_is_frank": false,
+  "grf": {
+    "observed_reality": "PR #483 V3 holds BEGIN IMMEDIATE on UnifiedDB across graph_operation and unified_ack_operation, while legacy projection_outbox_v1_candidate.apply_event() starts its own second BEGIN IMMEDIATE on the same UnifiedDB connection after committing ClayGraph.",
+    "leading_hypothesis": "Direct V3 -> legacy whole apply_event composition is transactionally incompatible; splitting graph-only apply from in-open-transaction UnifiedDB acknowledgement preserves the lease fence while retaining replay semantics.",
+    "strongest_counter_reality": "The nested transaction seam is benign or unreachable in real composition, or the split adapter changes legacy projection semantics/idempotency in a way that creates new divergence.",
+    "collapse": {
+      "direct_v3_to_legacy_whole_apply_event": "REFUTED",
+      "split_graph_only_plus_in_transaction_ack_adapter": "SUPPORTED_ON_ACCEPTED_TARGET_CANDIDATE_LANE",
+      "production_projection_service_integration": "UNVERIFIED_OPEN"
+    }
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "CROSS_DB_NESTED_BEGIN_AFTER_GRAPH_COMMIT",
+    "scope": "disposable local SQLite files only",
+    "baseline": "Outer UnifiedDB BEGIN IMMEDIATE; derived ClayGraph commit; UnifiedDB ACK inside existing outer transaction; outer commit.",
+    "baseline_result": "PASS: graph commit and UnifiedDB APPLIED acknowledgement completed.",
+    "treatment": "Outer UnifiedDB BEGIN IMMEDIATE; derived ClayGraph commit; then legacy-style second BEGIN IMMEDIATE on the same UnifiedDB connection.",
+    "treatment_result": "REFUTED_DIRECT_COMPOSITION: sqlite3.OperationalError cannot start a transaction within a transaction; after outer rollback the derived graph commit remained durable while outbox acknowledgement remained PENDING.",
+    "interpretation": "The direct composition is not executable as written. The surviving graph commit plus PENDING advisory outbox state remains compatible with idempotent replay, but this is not atomic cross-database rollback evidence."
+  },
+  "implementation": {
+    "repo_connector_alias": "gschaidergabriel/Dr.-Unterweger",
+    "semantic_repo": "gschaidergabriel/frankv0.1",
+    "base_pr": 483,
+    "candidate_pr": 492,
+    "candidate_head": "53281612aae8fc6ff55364a3688dff80009c0a39",
+    "candidate_branch": "chatgpt/go-unifieddb-projection-outbox-fenced-v4-20260812",
+    "base_head_at_target_test": "eb6bfdd011068cefff1e21e165426c3bd494f0ba",
+    "ancestry_policy": "Latest V3 base commits were absorbed with a two-parent merge commit; no force update and no overwrite of parallel worker changes.",
+    "files_added": [
+      "runtime/state/projection_outbox_lease_fenced_v4_candidate.py",
+      "tests/unifieddb_projection_outbox_lease_fenced_v4_gate.py",
+      ".github/workflows/frank-unifieddb-projection-outbox-lease-fenced-v4-vps.yml"
+    ],
+    "existing_v1_apply_event_modified": false,
+    "production_wiring_modified": false
+  },
+  "accepted_target_evidence": {
+    "workflow_run_id": 31538012607,
+    "job_id": 93933687113,
+    "runner_name": "clay",
+    "machine_name": "digital-retina",
+    "runner_version": "2.336.0",
+    "os_kernel": "Linux 6.8.0-117-generic x86_64",
+    "python": "3.12.3",
+    "exact_head_verified": "53281612aae8fc6ff55364a3688dff80009c0a39",
+    "status": "PASS_PROJECTION_OUTBOX_LEASE_FENCED_V4_CANDIDATE",
+    "checks_passed": 6,
+    "checks_total": 6,
+    "elapsed_wall_clock_seconds": 0.13,
+    "max_resident_set_kbytes": 24572,
+    "checks": {
+      "fenced_split_apply_and_ack_commit": true,
+      "outer_unified_transaction_closed_after_success": true,
+      "idempotent_replay_no_duplicate_graph_event": true,
+      "successor_generation_admitted": true,
+      "stale_generation_rejected_before_graph_change": true,
+      "projection_exact_after_fenced_adapter": true
+    },
+    "promotion": "NONE_CANDIDATE_ONLY"
+  },
+  "negative_results_preserved": [
+    "Direct V3 composition with legacy whole apply_event is transactionally invalid due nested BEGIN IMMEDIATE.",
+    "ClayGraph may commit before UnifiedDB acknowledgement; split adapter preserves replayability but does not create atomic cross-database rollback.",
+    "Accepted-target candidate PASS does not prove production projection worker/service wiring, crash/restart composition, or F-V01-04 completion."
+  ],
+  "next_falsifiers": [
+    "Integrate the split adapter into the candidate projection worker/service path without bypassing the V3 lease fence.",
+    "Run crash/restart replay at the graph-committed / UnifiedDB-ACK-not-yet-committed boundary on the exact productive projection path.",
+    "Verify no stale generation can produce a graph delta during production service takeover and that pending acknowledgement converges by idempotent replay.",
+    "Only then consider F-V01-04 workspace promotion; F-V01-13 and whole Frank v0.1 acceptance remain independent open gates."
+  ],
+  "authority_and_nonclaims": {
+    "canonical_frank_state_mutated": false,
+    "production_effect_performed": false,
+    "harness_authority_changed": false,
+    "training_authorized": false,
+    "final_model_training_started": false,
+    "f_v01_04_complete": false,
+    "f_v01_13_complete": false,
+    "whole_frank_v0_1_acceptance": false
+  }
+}

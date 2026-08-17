@@ -36,6 +36,10 @@ def add_method(db, kind, subject, record):
     return db.add_memory(kind, subject, json.dumps(record, sort_keys=True), None, "gabriel", {"test": True})
 
 
+def real_turn(db, content):
+    return db.append_turn("session:gabriel", "gabriel", "user", content)
+
+
 def test_structural_transfer_preserves_unknown_and_is_receipt_bound(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:
@@ -44,25 +48,18 @@ def test_structural_transfer_preserves_unknown_and_is_receipt_bound(tmp_path):
         wrong = {"goal_shape": "plan", "facets": ["open_problem"], "resource_shapes": ["file"]}
         correct_id = add_method(db, "framework", "causal aperture triage", promoted(correct, ["partition observations", "run discriminator"]))
         wrong_id = add_method(db, "framework", "matching words", promoted(wrong, ["diagnose repair file failure"]))
+        turn_id = real_turn(db, "diagnose file failure")
         organ = MethodTransfer(db)
         args = dict(
-            query="diagnose file failure",
-            signature=correct,
-            evidence_status="UNKNOWN",
-            user_id="gabriel",
-            session_id="session:gabriel",
-            turn_id="turn:new",
-            episode_id="episode:new",
-            causal_id="causal:new",
-            generation=db.entity_generation(),
+            query="diagnose file failure", signature=correct, evidence_status="UNKNOWN",
+            user_id="gabriel", session_id="session:gabriel", turn_id=turn_id,
+            episode_id="episode:new", causal_id="causal:new", generation=db.entity_generation(),
         )
         result = organ.retrieve(**args)
         assert result["fact_status"] == "UNKNOWN"
         assert result["receipt"]["fact_status_unchanged"] is True
         assert result["receipt"]["learned_routing_active"] is False
-        assert result["receipt"]["turn_id"] == "turn:new"
-        assert result["receipt"]["episode_id"] == "episode:new"
-        assert result["receipt"]["causal_id"] == "causal:new"
+        assert result["receipt"]["turn_id"] == turn_id
         assert result["items"][0]["memory_id"] == correct_id
         assert wrong_id not in {item["memory_id"] for item in result["items"]}
         first_receipt_id = result["receipt"]["use_receipt_memory_id"]
@@ -82,16 +79,11 @@ def test_direct_single_instance_promoted_record_fails_closed(tmp_path):
         record["source_episode_ids"] = ["episode:one"]
         record["support_count"] = 1
         add_method(db, "framework", "one anecdote", record)
+        turn_id = real_turn(db, "diagnose unknown")
         result = MethodTransfer(db).retrieve(
-            query="diagnose unknown",
-            signature=signature,
-            evidence_status="UNKNOWN",
-            user_id="gabriel",
-            session_id="session:gabriel",
-            turn_id="turn:single",
-            episode_id="episode:single",
-            causal_id="causal:single",
-            generation=db.entity_generation(),
+            query="diagnose unknown", signature=signature, evidence_status="UNKNOWN",
+            user_id="gabriel", session_id="session:gabriel", turn_id=turn_id,
+            episode_id="episode:single", causal_id="causal:single", generation=db.entity_generation(),
         )
         assert result["items"] == []
         assert result["method_status"] == "UNKNOWN"

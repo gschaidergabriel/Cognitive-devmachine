@@ -19,12 +19,39 @@ REQUIRED = [
 ]
 ALLOWED_EFFECTS = {"SUPPORT", "CHALLENGE", "REVISE", "SUPERSEDE", "NEW_EXPERIMENT", "NO_CHANGE"}
 
+# Persistent scientific/implementation branches are specialized lenses that own an
+# ongoing Frank-v0.1 domain. Meta-triggers (go/fusion/hypofusion/atomic/etc.) may create
+# experiments or syntheses, but are not themselves feedback branches. Keep legacy kind
+# compatibility while covering the current 2026-08-10 FRANK_V0_1 registry taxonomy.
+SCIENTIFIC_BRANCH_KINDS = {
+    "domain_research",
+    "domain_build_research",
+    "integrated_research_foundry",
+    "integrated_frank_v0_1_research_foundry",
+    "whole_target_architecture_build",
+    "direct_frank_v0_1_validation_repair",
+    "multimodal_perception_research",
+}
+
 
 def scientific_branches() -> list[str]:
     data = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    triggers = data.get("triggers") or {}
+
+    # Future registries may declare branch membership explicitly. If any explicit
+    # declarations exist, they become authoritative and remove kind-heuristic drift.
+    explicit = [
+        name for name, spec in triggers.items()
+        if isinstance(spec, dict) and spec.get("scientific_branch") is True
+    ]
+    if explicit:
+        return explicit
+
     return [
-        name for name, spec in (data.get("triggers") or {}).items()
-        if (spec or {}).get("kind") in {"domain_research", "integrated_research_foundry"}
+        name for name, spec in triggers.items()
+        if isinstance(spec, dict)
+        and spec.get("must_reenter_frank_v0_1") is True
+        and spec.get("kind") in SCIENTIFIC_BRANCH_KINDS
     ]
 
 

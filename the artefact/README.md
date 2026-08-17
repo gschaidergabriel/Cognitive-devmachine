@@ -1,137 +1,80 @@
 # the artefact — ClayVerse single-container candidate
 
-This is the canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible container image** containing one persistent central ClayVerse entity.
+Canonical product workspace for ClayVerse: **one exact immutable OCI/Docker-compatible ClayVerse image**, finally executed inside an independent VM/microVM guest-kernel isolation envelope.
 
 ## Living cycle status
 
-**Refresh this state in every product-convergent cycle. A stale README means the cycle is incomplete; detailed evidence remains in Git history and bounded receipts.**
+Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries current product reality plus the concrete latest-cycle delta.
 
 ### Current product contract
 
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- UnifiedDB is the sole durable canonical cognition/state authority. ClayGraph is derived/rebuildable only. MicroClay changes retrieval/accessibility only, never truth, identity, privacy or effect authority.
-- Canonical user path: Clerk-authenticated browser → auth-first WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
-- Gabriel and Andreas are equal-rights perspectives into the same central entity/global generation.
-- Claude Code is runtime cognition, not durable memory/identity authority. Managed hooks bind turns to UnifiedDB.
-- Effects remain fail-closed through ClayVerse MCP/EffectGate. Generic host `process.exec` is forbidden. EntityOS is an optional digest-bound internal execution/security substrate, not the product endpoint.
-- Build/test/runtime validation remains authorized isolated-sandbox-only. VPS/self-hosted/production testing and Together are forbidden.
+- UnifiedDB is the sole durable canonical state/world/memory authority; ClayGraph is derived/rebuildable; MicroClay controls retrieval/accessibility only.
+- Gabriel and Andreas are equal-rights perspectives into one central entity/global generation.
+- Final image MUST contain complete accepted EntityOS, managed Linux PTY/tmux, Claude Code terminal runtime, GLM token/API client boundary, managed hooks/retrieval, EffectGate/EffectJournal and ClayVerse supervision.
+- EntityOS-free #625 builds are development baselines only and can never receive whole-product PASS.
+- Final deployment/acceptance additionally requires the same accepted OCI image digest inside an independent VM/microVM guest-kernel boundary. The microVM is an execution envelope, not a second product/entity/state authority.
+- Root filesystem is read-only; only declared tmpfs and persistent ClayVerse state/workspace volumes may mutate.
+- Ambiguous external effects after crash/recovery remain unknown unless durable idempotence/effect-journal evidence proves replay safe.
+- VPS/self-hosted/production testing and Together remain forbidden for current evidence work.
 
 ### Retained convergence lanes
 
-- **#611** — single retained tmux idempotent-reapply repair. Exact retained blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`.
-- **#622** — single retained Python hash-lock generator lane. Current source head at the synchronized main snapshot: `44ec5e109d40304b152c2fa05ba3e42e690f2820`. `SOURCE_LOCK.json` declares the `pip-tools==7.5.3` wheel plus seven exact Linux/Python-3.13 bootstrap wheels (`build`, `click`, `packaging`, `pip`, `pyproject-hooks`, `setuptools`, `wheel`) with wheel filenames and SHA-256 values. The workflow materializes that exact set, downloads it with `--only-binary=:all: --require-hashes`, verifies the wheelhouse, then installs offline with `--no-index --find-links=... --require-hashes`. Matching source-contract tests are present. This remains **SOURCE CANDIDATE / UNEXECUTED**: exact digest-pinned runtime compatibility/no-extra-download closure is not yet observed, no canonical product `requirements.lock.txt` is accepted, and Docker is not yet on product `--require-hashes`.
-- **#602** — downstream managed native-Claude process attestation after successful in-image #611 validation.
-- **#623** — single retained identity/readiness session-drift fail-closed **SOURCE CANDIDATE**, current branch head after this cycle `75cb59b9c5a05af37638106f2555410aec2e02f3`; semantic code/test head `831e7e6fa9c9de9e7ace49476cbfcff56e420587`. Authenticated `IdentityRouter.resolve()` is read/validate-only: exactly one permanent session, canonical terminal name and live global generation; authentication no longer recreates a missing session. The same lane now requires raw readiness session cardinality to equal the two canonical terminal bindings before keyed projection. Five focused regressions cover normal non-mutating resolution, deleted session, duplicate rows, stale generation and duplicate-session readiness rejection before terminal probing. It is unexecuted and remains DRAFT/unmerged.
-- Dr.-Unterweger **#810** — the single retained OCI/Vercel controller. Current source-only head last observed in the synchronized main snapshot: `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second EntityOS staging path is admitted.
+- **#625** — tokenless EntityOS-free development/baseline packaging plus EntityOS-bearing final-candidate path. Development baseline is useful for lower-layer testing; final acceptance still requires complete accepted EntityOS.
+- **#622** — Python 3.13 hash-lock generator source candidate. The declared pip-tools bootstrap is hash-bound/offline-install oriented; no accepted canonical `requirements.lock.txt` yet.
+- **#623** — this retained auth/identity/readiness/reauth drift-hardening lane. Source candidate only; DRAFT/unmerged.
+- **#611** — retained tmux idempotent-reapply lane; exact final in-image runtime remains its promotion discriminator.
+- **#602** — downstream managed native-Claude process attestation.
+- **#810** — retained Vercel Sandbox controller evidence only; not final deployment architecture and not a reason to reintroduce a mandatory private-read token into the development baseline.
 
-### Current OCI execution identity
+### #623 identity/restart law after this cycle
 
-The strongest actually exercised closure remains:
+`IdentityRouter.resolve()` was already read/validate-only at request time. This cycle found a separate startup/restart gap: `IdentityRouter.__init__()` still called `ensure_session()` for both canonical users before normalizing persisted session state. Therefore an otherwise persisted UnifiedDB with a deleted canonical permanent session could silently recreate that session on restart and hide durable-state loss.
 
-- Research base at bind time: `f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b`
-- exercised closure: `5e5adce0591058608bbd7381ecf570a39b282f0d`
-- exercised tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`
+The retained #623 lane now separates **pristine bootstrap** from **persisted-state validation**:
 
-It is authoritative only for the already-observed Sandbox-admission/credential result and is stale for future compute because retained product bytes moved.
+- if the identity state is genuinely empty, bootstrap exactly Gabriel/Andreas and their exact permanent sessions;
+- if canonical users already exist, startup does not create missing sessions; it only validates/normalizes the persisted session contract;
+- a deleted persisted canonical session therefore fails closed and remains deleted as evidence of drift;
+- if users are empty but session rows already exist, startup fails before bootstrapping users, preserving the corrupted state for recovery/audit;
+- existing noncanonical session IDs, duplicate sessions, terminal drift, generation drift and equal-rights/user drift remain fail-closed under the retained #623 checks.
 
-A later prepared execution closure exists on the already-retained closure lane:
+### Evidence from this cycle
 
-- closure: `218b51cad87e3907d1dd45adc7998c736be23cdb`
-- tree: `f16c87737cf74ef0703a1fc0a51fd99298450cd1`
-- base `main` at construction: `ce60e3544caceda22ae349021c952328cf62692b`
-- composition at construction: retained #611 blobs + then-current #622 supply-chain bytes with previous exercised closure ancestry preserved.
+- New source commits on #623: `c1c4290bc22e1163b4e0efa6a804a445e1277012`, `df61ca8805ad960113c3b140a493b5f7af483fe9`, `4ead235be191878e9e64ebdf3c5c8f4b09190d9e`.
+- Added durable regressions for missing persisted session without repair, exact clean-bootstrap sessions, and the users-empty/sessions-present corruption boundary.
+- Isolated SQLite mechanism falsifier: **4/4 PASS** — pristine bootstrap succeeds; deleted canonical session fails and stays missing; noncanonical session ID fails; orphan persisted session blocks bootstrap without mutation.
+- Receipt: `the artefact/receipts/2026-08-17_GO_2124_PR623_IDENTITY_BOOT_FAIL_CLOSED_GPT56SOL.json` (receipt wording correction commit `a8e19b35e69d27318ddc7432ce2bfccdf4dc16c0`).
+- GitHub Actions job/run details remain inaccessible to this connector (`403`), and the local isolated surface has no Docker/tmux. Therefore this is **MECHANISM_SUPPORTED / SOURCE CANDIDATE**, not exact PR-head pytest, OCI, real Clerk/browser PTY or whole-product evidence.
 
-That prepared closure is now also **stale for the next execution attempt** because retained product/source candidate bytes advanced. It remains source-composition provenance with zero runtime credit. PR810 is intentionally not rebound merely to retrigger compute while the credential prerequisite is absent; refresh/rebind product-relevant bytes exactly once immediately before the next real run.
+### Coordination refresh
 
-### Strongest executable evidence / blocker
+At the latest observed refresh:
 
-The strongest actually-started bound run remains Vercel deployment **`dpl_7BkVnngPJUPiVyrqwFarGFZDevAG`** on PR810 controller **`2e5505983172e582a50f4f72bebd561bc650ff5a`**.
-
-Observed:
-
-1. Vercel cloned exact controller source and entered `npm run vercel-build`.
-2. Guard v4 admitted the exact retained-runner binding, including Git blob `1298ca8002704414f86cd0c036d44e5b32be2918`.
-3. Current-target patch v5 bound the exercised Research closure and a 2,700,000 ms Sandbox lifetime above the retained explicit-step timeout ceiling of 2,490,000 ms.
-4. **`Sandbox.create` succeeded** (`sandbox_admission=PASS_CREATED`).
-5. Execution then failed closed **before private Research/EntityOS source fetch** because `GITHUB_READ_TOKEN` was absent from the host Vercel Preview build environment: `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`.
-6. The disposable Sandbox stopped successfully. `source_runtime_credit=0`; `oci_runtime_credit=0`.
-
-Classification: **SANDBOX_ADMISSION_PASS_PRIVATE_SOURCE_CREDENTIAL_BLOCK_REPLICATED**. This is a credential prerequisite, not ClayVerse TEST_FAIL.
-
-The immediate external prerequisite is to provision **`GITHUB_READ_TOKEN` as a sensitive Vercel Preview credential for the retained PR810 branch**, without exposing its value and without forwarding it into the Sandbox. Read-only repository contents are sufficient for the private archive operation; only verified archive bytes may cross into the disposable Sandbox. The connected Vercel surface available to this cycle cannot set or recover the secret value.
-
-### Vercel execution-budget audit
-
-A static audit of retained runner blob `1298ca8002704414f86cd0c036d44e5b32be2918` confirms that its 12 explicit sequential command budgets sum to exactly **2,490,000 ms**, matching the wrapper's declared retained-step ceiling. The current Sandbox timeout is **2,700,000 ms**, leaving a nominal **210,000 ms** for Sandbox/controller/source-transfer overhead.
-
-This is internally coherent source-side but remains **UNEXECUTED**. Vercel's current Build Step maximum is also 45 minutes, so the build-time orchestration cannot assume more than that global envelope even where Sandbox plan limits may be longer. The first credential-capable exact run must capture elapsed/remaining-budget evidence across private source staging, Sandbox steps and cleanup. A build-timeout outcome must remain classified as execution-envelope/infrastructure evidence rather than a ClayVerse semantic test failure.
-
-### Auth/identity/readiness architecture delta
-
-Source review found a fail-closed issue at the externally reachable Clerk → session boundary: `IdentityRouter.resolve()` called `UnifiedDB.ensure_session()`. Because `ensure_session()` is a bootstrap helper capable of creating a missing session, post-startup canonical-session drift could be silently repaired during authentication instead of rejected.
-
-Draft **#623** changes request-time resolution to read and validate the existing UnifiedDB session, canonical terminal name and one global generation. It does not create a new state/identity authority and does not alter startup bootstrap semantics.
-
-A companion source gap was then confirmed in `_runtime_ready()`: session rows were projected into a dict keyed by `user_id` before readiness checked the canonical key set. Three raw rows containing two `gabriel` sessions and one `andreas` session therefore still collapse to the canonical two-key set. The same retained #623 lane now requires `len(session_rows) == len(CANONICAL_TERMINAL_NAMES)` before the keyed projection can qualify state as ready. A focused regression inserts that duplicate row and requires readiness to return false before any tmux existence/policy probe. No second readiness/state authority was added.
-
-Execution remains unobserved. The earlier automatically-triggered #623 workflow and one deliberate rerun for head `b519ee8…` both ended with zero steps. After the readiness fusion, workflow run **`32030737590`**, job **`95389934157`**, for head `831e7e6…` also completed `failure` with **`steps=[]` and `runner_id=0`**. This third result is another runner/admission failure before semantic test execution, not ClayVerse TEST_FAIL. #623 remains DRAFT/unmerged with zero runtime credit.
-
-### Browser/frontend evidence
-
-**Current cycle browser test: BLOCKED / NOT REACHED.** The exact private ClayVerse source is blocked before staging, so no accepted current OCI image/service/browser endpoint exists to exercise. A controller deployment or unrelated READY page is not counted as a ClayVerse frontend test. The real browser gate remains Clerk sign-in/JWT → auth-first WebSocket → PTY/tmux → normal interactive Claude Code on the exact accepted image.
-
-### Remaining acceptance path
-
-After approved credential provisioning:
-
-`final product-byte refresh → deliberate review of retained source-only lanes → rebind single #810 controller to then-current main/#611/#622/#623 if admitted → Sandbox.create → host-side exact private Research + EntityOS verification → verified archives into Sandbox → reproduce/attest locked EntityOS → full source regression → exact OCI build → image digest + dependency identities → deny-all network → in-image #611 tmux transport policy → hardened service --once → execute/verify #622 hashed offline generator bootstrap + materialize canonical product hash lock → rebuild with product --require-hashes only after accepted lock evidence → #611 promotion → #602 native-Claude attestation → startup/readiness including #623 session-cardinality falsifier → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
-
-#623 may enter the executable closure only after deliberate review; its source-only state must not inherit runtime credit.
-
-Whole-product PASS requires the complete path. Source inspection, PRs, CI definitions, `Sandbox.create`, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
+- #623 head before this README write had advanced beyond the semantic commits through receipt/documentation commits; rebind again before execution.
+- #625 head observed: `606f1297da915efb2581f9e013b6c54586874d21`; its current owner-authority fence explicitly says EntityOS-free is development-only.
+- #622 API head observed: `3b47c65dfbf97e15c50f9c49272d73a082f2bfcf`; its semantic workflow head is moving under evidence/documentation commits and remains unexecuted.
+- #623 PR base observed `main` SHA: `79cdde5232e7047e2dabcd5e51a95da173e13bec`. Direct commit-list/head APIs returned `403`, so this README does not generalize that value beyond the PR-base observation.
+- current `main/the artefact/README.md` and the current product directive were refreshed directly and already contain the stronger mandatory final EntityOS + VM/microVM envelope law.
 
 ### Unusual-experiment accounting
 
-- This `go` has no safely shared immutable request/turn identity for an atomic unusual-experiment lease, so **0 valid unusual experiments** were executed.
-- Source composition, supply-chain/provenance hardening, credential verification, deterministic regression design and fail-closed architecture hardening are ordinary work.
-- No VPS/self-hosted/production test path and no Together API were used.
+This exact user-triggered `go` still has no safely shared immutable request/turn identity for the required global unusual-experiment lease. **Zero unusual experiments** were executed. Deterministic corruption/regression falsifiers are ordinary adversarial validation and do not consume an unusual-experiment slot.
 
-### Latest cycle delta
+### Next executable discriminators
 
-**2026-08-17 19:39 +07:00 — `NO_CHANGE` canonical `main` ClayVerse product/runtime bytes; #623 readiness-cardinality gap fused on its existing draft lane, zero runtime credit, primary OCI credential blocker unchanged**
+Continue independent evidence now, but do not promote until exact runtime gates are observed:
 
-- Refreshed active coordination repeatedly while `main` advanced through the cycle; the synchronized README base for this update included current-main audit state through `f51b7ceba4627fd6c012b2f5667d8d898f9a5f12`.
-- No duplicate PR or second identity/readiness path was created. The previously recorded `_runtime_ready()` dict-collapse gap was fused directly into retained draft #623.
-- Source commit `4dd60afd38f947c7397590b302e828d24284a0e3` adds the raw session-cardinality fence before the existing canonical keyed readiness checks.
-- Source/test commit `831e7e6fa9c9de9e7ace49476cbfcff56e420587` adds a duplicate-canonical-session regression requiring fail-closed readiness before any terminal probe/attestation.
-- GitHub workflow run `32030737590` / job `95389934157` for `831e7e6…` completed `failure` with zero steps and `runner_id=0`; classification is **RUNNER_ADMISSION_FAILURE_ZERO_STEPS**, so the source candidate receives **zero semantic/runtime credit** and remains DRAFT/unmerged.
-- Bounded receipt committed on the same retained lane: `the artefact/receipts/2026-08-17_GO_1937_PR623_READINESS_CARDINALITY_FUSION_GPT56SOL.json`.
-- PR810 remains the single OCI controller; strongest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
-- Browser/frontend runtime testing remains **not reached** because the accepted product source/image/service path is blocked before private source staging.
-- No unusual experiment, VPS, self-hosted/production test or Together path was used.
-- Whole-product acceptance remains **IN_PROGRESS**.
+`fresh exact retained-lane fusion -> exact reproducible OCI image/digest with complete accepted EntityOS -> dependency hash-lock closure -> in-image tmux/Claude/EntityOS -> identity/restart regressions including missing-session no-repair -> real Clerk auth-first WebSocket PTY + reauth -> managed hooks/effects -> Tier-1 internal recovery -> same digest inside Kata/equivalent microVM -> Tier-2 full workload replacement -> UnifiedDB/WAL/snapshot/new-generation recovery -> stale-result/no-replay falsifiers -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
-### Cycle update rule
+## Latest cycle delta
 
-1. Refresh current `main`, artefact state, overlapping PRs/receipts and exact execution evidence.
-2. Rewrite this living state so stale dynamic claims are removed.
-3. Record the concrete latest-cycle delta; use `NO_CHANGE` when canonical product bytes did not change.
-4. Never promote source/component/controller/provider evidence into whole-product PASS.
-5. Keep detailed evidence in Git history/receipts rather than making this README a competing state database.
-6. Rebind fast-moving execution closures immediately before real compute; distinguish product-byte movement from documentation/receipt-only head churn and avoid retry-only or duplicate semantic paths.
+**2026-08-17 21:24 +07:00 — #623 startup identity bootstrap now fails closed on missing persisted canonical sessions instead of silently recreating them; canonical `main` product acceptance remains IN_PROGRESS.**
 
-## Architecture
-
-Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas perspectives, Clerk JWT verification, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, managed lifecycle hooks, bounded retrieval/workspace coordination, effect-only MCP/EffectGate, restart/recovery and optional digest-bound internal EntityOS substrate. UnifiedDB remains the sole durable canonical cognition/state authority.
-
-The retired custom chat API/headless `claude -p` path and a separate `consciousness_daemon` are not product runtime surfaces.
+The cycle also refreshed against the newer owner law: EntityOS omission is development-only, and final ClayVerse acceptance now includes an independent VM/microVM guest-kernel envelope around the exact same OCI image digest. No claim from this #623 source lane is upgraded to final runtime evidence.
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is substantially narrower source-side but remains unexecuted. The #623 session-drift/readiness hardening is also source-only after another zero-step runner admission failure. The next execution closure must be rebound only when the credential prerequisite is satisfied, with build-budget telemetry included.
-
-## Container source
-
-`Dockerfile` + `compose.yaml` define the single runtime container. The build context is default-deny/allowlisted; persistent state/workspace live in scoped volumes. The admitted Compose profile runs non-root with a read-only root filesystem, `no-new-privileges` and dropped Linux capabilities. Supply-chain acceptance remains open until exact build identities and current APT/Python integrity gates are closed.
+Current evidence is bounded source/component evidence only. No exact final OCI image, accepted image digest, packaged Clerk/PTY/tmux/Claude runtime, complete EntityOS continuum, microVM execution or whole-product PASS has been observed in this lane.

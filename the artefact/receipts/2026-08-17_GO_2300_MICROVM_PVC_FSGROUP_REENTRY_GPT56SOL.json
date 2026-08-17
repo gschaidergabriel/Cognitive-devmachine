@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED",
+  "acceptance": "IN_PROGRESS",
+  "reentry": {
+    "reason": "main advanced during the first draft lane with stronger Tier-2/Kata source changes",
+    "superseded_pr": 630,
+    "observed_newer_base_sha": "1d28fdb9f5470d3d1c199b5e708714b2740241e4",
+    "branch": "gpt56sol/go-microvm-pvc-fsgroup-reentry-20260817-2300",
+    "head_before_receipt": "8fc22ba8d01910c37af62996c39bead8335621da"
+  },
+  "delta": {
+    "template_blob": "848d2efa0234249104dc2900c9a5953cbd99b4f6",
+    "contract_blob": "7a9a23889144c0a56071228e7b473003cec24476",
+    "test_blob": "87a07cf28a7ece0bbcf14f186f179e31f28a8405",
+    "preserved": [
+      "Tier-2 full-sandbox replacement annotations and contract",
+      "readiness /readyz and liveness /healthz separation",
+      "default-deny ingress+egress NetworkPolicy",
+      "Kata runtime security floor and refresh law"
+    ],
+    "added": [
+      "Pod fsGroup 10001",
+      "fsGroupChangePolicy OnRootMismatch",
+      "PVC_OWNERSHIP_BLOCKED deployment state",
+      "storage-class/CSI identity and effective mount-group proof obligation",
+      "uid/gid 10001 create/write/fsync/read/rename/delete probes before runtime credit and after Tier-2 replacement",
+      "source regression forbidding privileged/root init-container ownership repair"
+    ]
+  },
+  "upstream_basis": "Official Kubernetes security-context and Pod API documentation: fsGroup controls supported volume ownership/write semantics; when unset kubelet does not modify volume ownership/permissions; CSI VOLUME_MOUNT_GROUP may delegate the mount-group operation.",
+  "supporting_probe": {
+    "result": "PASS",
+    "scope": "reconstructed deployment YAML structure",
+    "documents": 3,
+    "assertions": 10,
+    "credit": "supporting mechanism evidence only"
+  },
+  "readme_refresh": {
+    "cycle_refresh_was_written_on_first_branch": true,
+    "reentry_branch_refresh_attempted": true,
+    "reentry_branch_refresh_result": "CONNECTOR_WRITE_BLOCKED_BY_SAFETY_CLASSIFIER",
+    "note": "No stale overwrite or destructive README replacement was attempted after the blocked write."
+  },
+  "execution": {
+    "exact_branch_pytest": "UNOBSERVED",
+    "kubernetes_admission": "UNOBSERVED",
+    "kata_runtime": "UNOBSERVED",
+    "csi_behavior": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED",
+    "vercel_private_source_gate": "BLOCKED_BEFORE_SOURCE_STAGE_ON_MISSING_HOST_PREVIEW_CREDENTIAL"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0
+  },
+  "safety": {
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "together_used": false,
+    "secrets_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "next_gate": "Execute exact focused regression on an admitted isolated checkout, then prove non-root PVC behavior on the actual storage class/CSI inside the same accepted OCI digest under the admitted Kata/equivalent MicroVM envelope."
+}

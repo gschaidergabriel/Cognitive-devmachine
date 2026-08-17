@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-08-17T13:46:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+  "working_pr": 415,
+  "working_branch": "go/integration-microclay-meta-fusion-20260817-1326",
+  "product_gate_commit": "b62aa5940347ca45ab35af9204bef3791ae995b4",
+  "regression_commit": "1de917ac8f4d5485f3f8f85c7d883c780ad574dc",
+  "goal": "Keep raw-query/token Stage-B method retrieval measurable as SHADOW evidence while preventing that non-admitted route from entering the canonical Claude product context.",
+  "binding_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+  "observed_source_problem": "The retained PR 415 WorldAssembler still invoked MicroClayMethodRetrieval from the raw user query whenever Stage-A evidence was UNKNOWN, even though current main adjudication requires an explicitly admitted structural signature or SHADOW/NOT_SERVED behavior.",
+  "repair": {
+    "canonical_product_path": "TurnLifecycle calls WorldAssembler.assemble(session_id, resource_refs) without explicit retrieval identity. That path now resolves the active causal identity, runs Stage A, and on factual UNKNOWN returns METHOD_NOT_SERVED_SIGNATURE_ADMISSION_REQUIRED without invoking raw-query Stage B.",
+    "internal_shadow_path": "Callers that explicitly supply any turn/retrieval identity field may still evaluate the current raw-query matcher for measurement/regression, but the resulting method receipt is forced to mode=SHADOW_METHOD_V1 and served=false.",
+    "fact_authority": "Stage-A UNKNOWN remains FACT_UNKNOWN; method presence never changes factual status.",
+    "effect_authority": "Method receipts remain truth_authority=false and effect_authority=false.",
+    "promotion_validation": "The stronger concurrent PR-415 promotion/source-episode/receipt validation was preserved; this repair did not replace or fork it."
+  },
+  "regression_added": "the artefact/tests/test_stage_b_shadow_product_gate.py",
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "MECHANISM_SUPPORT_ONLY_NOT_EXACT_FULL_PR_RUNTIME",
+    "checks": [
+      "Python compilation of the mirrored WorldAssembler source slice PASS",
+      "canonical active-turn path with a MethodBomb did not invoke Stage B PASS",
+      "canonical UNKNOWN returned METHOD_NOT_SERVED_SIGNATURE_ADMISSION_REQUIRED and served=false PASS",
+      "explicit internal evaluation invoked the shadow method stub and forced SHADOW_METHOD_V1 plus served=false PASS"
+    ],
+    "full_pr_test_suite_executed": false,
+    "exact_oci_build_executed": false,
+    "whole_product_pass": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "installable_vercel_sandbox_exec_plugin": "NOT_FOUND",
+    "github_hosted_fallback_triggered": false,
+    "vps_self_hosted_production_execution": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": false,
+    "reason": "No immutable orchestration/request/turn identifier was exposed for this exact user-triggered go and the exposed user-message time is only minute-granular; under the current atomic lease protocol a high-confidence shared trigger_key cannot be derived, so the experiment slot fails closed."
+  },
+  "remaining_gates": [
+    "Replace the token/query SHADOW matcher with an explicitly admitted structured problem-signature route using symmetric structural similarity before any serving promotion.",
+    "Fuse a dedicated atomic terminal-causal method promotion/demotion/retirement lifecycle; generic or self-declared PROMOTED state must never mint serving authority.",
+    "Persist/replay-bind method-use receipts across restart with full causal request identity.",
+    "Run exact PR-head focused and adjacent regressions in an actually started authorized isolated execution surface.",
+    "Run exact OCI build/start/readiness/restart and later full Clerk/PTY/Claude/recovery/concurrency acceptance gates."
+  ],
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

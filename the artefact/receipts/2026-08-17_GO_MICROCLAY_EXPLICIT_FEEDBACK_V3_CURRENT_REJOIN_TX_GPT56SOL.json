@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoMicroClayExplicitFeedbackV3CurrentRejoinTx/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary worker",
+  "user_trigger_local_time_observed": "2026-08-17T15:02+07:00",
+  "user_trigger_timestamp_precision": "minute",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "feature_base": {
+    "pr": 484,
+    "branch": "fusion/microclay-stageb-schema8-20260817",
+    "head_sha_observed_before_write": "6b2a5626c234283b9767394e423c68411a948634"
+  },
+  "superseded_candidate": {
+    "pr": 550,
+    "head_sha_observed": "acbb7effef3b7fd16ef8aa7a1a3c29234c6a5bc8",
+    "compare_against_current_feature_base": {
+      "status": "diverged",
+      "behind_by": 39,
+      "ahead_by": 6
+    },
+    "promotion": "NOT_AUTHORIZED"
+  },
+  "new_candidate": {
+    "branch": "go/microclay-feedback-v3-current-rejoin-tx-20260817-sol",
+    "source_commit": "8e9611d67f7721bcb175c358600db2b68f3bc070",
+    "regression_commit": "7190ac89b4bcf765211380afd38857ee63f94a3e",
+    "status": "SOURCE_CANDIDATE_RUNTIME_UNOBSERVED"
+  },
+  "finding": {
+    "class": "NESTED_TRANSACTION_ATOMICITY",
+    "mechanism": "The stale explicit-feedback candidate joined an existing UnifiedDB transaction without an inner rollback boundary. A policy mutation occurs before the feedback receipt insert; if that insert fails, the caller catches the error, and the outer transaction later commits, partial learned routing could be persisted without its idempotency/provenance receipt.",
+    "repair": "When explicit feedback executes inside an existing SQLite transaction, wrap the feedback mutation and receipt in a unique SAVEPOINT; rollback and release that savepoint on any BaseException, while leaving the outer transaction alive for its caller.",
+    "authority_boundary": "MicroClay remains SHADOW accessibility/routing only; no truth, rights, serving-mode, EffectGate or EntityOS authority is added."
+  },
+  "regression": {
+    "name": "test_caught_inner_feedback_failure_rolls_back_its_savepoint_only",
+    "contract": "Inject a retrieval_feedback insert failure, catch it inside a still-live outer UnifiedDB transaction, verify zero policy/receipt leakage, commit an unrelated outer write, then retry feedback exactly once after removing the fault.",
+    "execution": "UNOBSERVED_ON_EXACT_CLAYVERSE_SOURCE"
+  },
+  "evidence": {
+    "source_review": "OBSERVED",
+    "sqlite_mechanism_semantics": "SUPPORTED_LOCALLY_BUT_NOT_PRODUCT_RUNTIME_CREDIT",
+    "authorized_exact_isolated_execution": "NOT_RUN",
+    "whole_product_pass": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_path": "CONFIRMED_IN_REPOSITORY_EVIDENCE_VIA_GIT_PREVIEW_BRIDGE",
+    "new_sandbox_started_this_go": false,
+    "reason": "FREE_ONLY policy: account-specific zero-cost allowance for another Sandbox was not exposed by the available Vercel connector, so a new paid-or-uncertain launch was not authorized."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "consumed": false,
+    "reason": "GO experiment atomic lease protocol requires a reproducible immutable request identity or exact trigger timestamp. The visible trigger timestamp available to this organ has minute precision only, so the unusual-experiment lease cannot be claimed safely."
+  },
+  "parallel_work_boundary": {
+    "recovery_effect_identity_pr": 552,
+    "action": "NOT_DUPLICATED"
+  },
+  "next_exact_gate": "Bind the then-current feature head to an actually-started authorized zero-cost Vercel Sandbox and run focused explicit-feedback v3 provenance/privacy/replay/nested-failure/crash/restart regressions plus adjacent current MicroClay schema-8 gates. Do not promote ACTIVE or merge as runtime-proven before that evidence.",
+  "evidence_boundary": "SOURCE/MECHANISM CANDIDATE ONLY. No component runtime PASS, OCI PASS, restart PASS, or whole ClayVerse PASS is claimed."
+}

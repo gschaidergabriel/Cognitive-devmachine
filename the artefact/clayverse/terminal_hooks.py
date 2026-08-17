@@ -114,34 +114,39 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, user_id, session_id = _runtime()
     try:
-        existing = _episode_for_claude_session(db, session_id, claude_session_id)
-        if existing is not None:
-            raise TerminalHookError("duplicate prompt hook for active Claude turn")
-        _abandon_stale_open_episodes(db, session_id, claude_session_id)
-        generation = db.session_generation(session_id)
-        turn_id = db.append_turn(
-            session_id,
-            user_id,
-            "user",
-            prompt,
-            provenance={
-                "source": "claude-interactive-hook",
-                "hook_event": "UserPromptSubmit",
-                "claude_session_id": claude_session_id,
-                "session_generation": generation,
-            },
-        )
-        memory = MemoryManager(db)
-        memory.extract_explicit(turn_id, user_id, prompt)
-        memory.compact(session_id)
-        world = WorldAssembler(db).assemble(session_id, [])
-        episode = Workspace(db).open(session_id, turn_id, prompt, [])
-        context = _bounded_context(
-            world,
-            session_id=session_id,
-            episode_id=episode["episode_id"],
-            generation=generation,
-        )
+        # Claude treats UserPromptSubmit exit 2 as rejection of the prompt itself.
+        # Therefore every canonical mutation that admits this prompt, including stale
+        # episode retirement and memory compaction, must commit only after the exact
+        # context envelope has been constructed successfully.
+        with db.tx():
+            existing = _episode_for_claude_session(db, session_id, claude_session_id)
+            if existing is not None:
+                raise TerminalHookError("duplicate prompt hook for active Claude turn")
+            _abandon_stale_open_episodes(db, session_id, claude_session_id)
+            generation = db.session_generation(session_id)
+            turn_id = db.append_turn_in_tx(
+                session_id,
+                user_id,
+                "user",
+                prompt,
+                provenance={
+                    "source": "claude-interactive-hook",
+                    "hook_event": "UserPromptSubmit",
+                    "claude_session_id": claude_session_id,
+                    "session_generation": generation,
+                },
+            )
+            memory = MemoryManager(db)
+            memory.extract_explicit(turn_id, user_id, prompt)
+            memory.compact(session_id)
+            world = WorldAssembler(db).assemble(session_id, [])
+            episode = Workspace(db).open(session_id, turn_id, prompt, [])
+            context = _bounded_context(
+                world,
+                session_id=session_id,
+                episode_id=episode["episode_id"],
+                generation=generation,
+            )
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
@@ -248,7 +253,7 @@ def _main() -> int:
             "stop": stop,
             "stop_failure": stop_failure,
         }[sys.argv[1]](payload)
-        sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
+        sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True,separators=(",", ":")))
         sys.stdout.write("\n")
         return 0
     except Exception as exc:

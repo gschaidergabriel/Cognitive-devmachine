@@ -1,8 +1,6 @@
 import json
 import sqlite3
 
-import pytest
-
 from clayverse.identity import IdentityRouter
 from clayverse.microclay_retrieval import MicroClayRetrieval
 from clayverse.store import UnifiedDB
@@ -31,17 +29,18 @@ def _policy_snapshot(db):
     ]
 
 
-def test_caught_inner_credit_failure_rolls_back_its_savepoint_only(tmp_path):
+def test_caught_inner_credit_failure_must_not_leak_policy_into_outer_commit(tmp_path):
+    """A caught feedback-receipt failure rolls back only MicroClay credit work."""
     db = _db(tmp_path)
     try:
         db.db.execute(
             "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
             "VALUES(?,?,?,?,?,?,?,?)",
             (
-                "nested-credit-memory",
+                "nested-atomic-memory",
                 "fact",
-                "procedure:violet",
-                "violet verified procedure",
+                "procedure:orchid",
+                "orchid verified procedure",
                 None,
                 "gabriel",
                 100.0,
@@ -51,8 +50,10 @@ def test_caught_inner_credit_failure_rolls_back_its_savepoint_only(tmp_path):
         life = TurnLifecycle(
             db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge()
         )
-        turn = life.begin("violet verified procedure")
-        effect = life.request_effect("entityos.exec", "nested-credit-atomicity", ["verified"])
+        turn = life.begin("orchid verified procedure")
+        effect = life.request_effect(
+            "entityos.exec", "nested-credit-atomicity", ["verified"]
+        )
         assert effect["verified"] is True
         assert life.complete("done")["completed"] is True
 
@@ -74,7 +75,7 @@ def test_caught_inner_credit_failure_rolls_back_its_savepoint_only(tmp_path):
             CREATE TRIGGER fail_nested_retrieval_feedback_insert
             BEFORE INSERT ON retrieval_feedback
             BEGIN
-              SELECT RAISE(ABORT, 'injected_nested_credit_failure');
+              SELECT RAISE(ABORT, 'injected_nested_feedback_failure');
             END;
             """
         )
@@ -84,33 +85,41 @@ def test_caught_inner_credit_failure_rolls_back_its_savepoint_only(tmp_path):
                 "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
                 "VALUES(?,?,?,?,?,?,?,?)",
                 (
-                    "outer-write-survives",
+                    "unrelated-outer-memory",
                     "fact",
-                    "outer:transaction",
-                    "unrelated outer write",
+                    "outer:sentinel",
+                    "before",
                     None,
                     "gabriel",
                     101.0,
-                    json.dumps({"source": "outer-transaction-control"}),
+                    json.dumps({"source": "outer-transaction-sentinel"}),
                 ),
             )
-            with pytest.raises(sqlite3.IntegrityError, match="injected_nested_credit_failure"):
+            try:
                 organ.credit(
                     causal_id=turn["causal_id"],
                     generation=turn["generation"],
                     credit=float(causal["credit"]),
                     signal_class=signal,
                 )
-            assert db.db.in_transaction is True
-            assert _policy_snapshot(db) == []
-            assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+            except sqlite3.IntegrityError as exc:
+                assert "injected_nested_feedback_failure" in str(exc)
+            else:
+                raise AssertionError("injected nested feedback failure did not fire")
 
-        assert db.db.in_transaction is False
-        assert db.db.execute(
-            "SELECT value FROM durable_memory WHERE memory_id='outer-write-survives'"
-        ).fetchone()["value"] == "unrelated outer write"
-        assert _policy_snapshot(db) == []
+            assert outer.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+            assert _policy_snapshot(db) == []
+            outer.execute(
+                "UPDATE durable_memory SET value='after' WHERE memory_id='unrelated-outer-memory'"
+            )
+
+        sentinel = db.db.execute(
+            "SELECT value FROM durable_memory WHERE memory_id='unrelated-outer-memory'"
+        ).fetchone()
+        assert sentinel is not None
+        assert sentinel["value"] == "after"
         assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+        assert _policy_snapshot(db) == []
 
         db.db.execute("DROP TRIGGER fail_nested_retrieval_feedback_insert")
         applied = organ.credit(
@@ -122,6 +131,7 @@ def test_caught_inner_credit_failure_rolls_back_its_savepoint_only(tmp_path):
         assert applied["applied"] is True
         once = _policy_snapshot(db)
         assert once
+        assert all(str(row[0]).startswith("v3:user:gabriel:") for row in once)
         assert all(int(row[3]) == 1 for row in once)
         assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 1
 

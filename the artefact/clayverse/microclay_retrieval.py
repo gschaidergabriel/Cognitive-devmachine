@@ -41,12 +41,16 @@ class RetrievalCandidate:
 class MicroClayRetrieval:
     """Persistent bounded online-adaptive retrieval organ.
 
+    Stage A retrieves evidence memory only. Stage B retrieves method memory only.
+    The channels are non-substitutable: METHOD_PRESENT can improve investigation but
+    can never convert a factual UNKNOWN into PRESENT.
+
     MicroClay changes accessibility, entry-point priors and context packing only.
     It cannot alter semantic truth, durable memory contents, provenance, user rights,
     effect authority or EntityOS capabilities.
 
-    The adaptive policy starts in SHADOW. Classical retrieval remains the serving
-    path until an explicit externally validated promotion changes the mode.
+    The adaptive evidence policy starts in SHADOW. Classical evidence retrieval remains
+    the serving path until an explicit externally validated promotion changes the mode.
     """
 
     POLICY_VERSION = 1
@@ -59,6 +63,18 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
+
+    METHOD_ACTIVE_KINDS = frozenset({
+        "framework", "heuristic", "failure_pattern", "counterexample"
+    })
+    METHOD_CANDIDATE_KINDS = frozenset({
+        "framework_candidate", "heuristic_candidate"
+    })
+    METHOD_CONTROL_KINDS = frozenset({"method_receipt"})
+    METHOD_KINDS = METHOD_ACTIVE_KINDS | METHOD_CANDIDATE_KINDS | METHOD_CONTROL_KINDS
+    CONTROL_KINDS = frozenset({
+        "source_archive", "compression_receipt", "compression_clearance"
+    })
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -86,7 +102,7 @@ class MicroClayRetrieval:
         limit: int,
         budget_chars: int,
     ) -> tuple[list[RetrievalCandidate], int]:
-        """Apply the same relevance, count and character budget to any ranking."""
+        """Apply the same relevance, count and character budget to any evidence ranking."""
         selected: list[RetrievalCandidate] = []
         chars = 0
         for item in candidates:
@@ -178,13 +194,66 @@ class MicroClayRetrieval:
             entry_keys=keys,
         )
 
-    def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new effect-outcome receipts from earlier retrieval episodes.
+    @staticmethod
+    def _as_string_list(value: Any, *, field: str) -> list[str]:
+        if isinstance(value, str):
+            items = [value]
+        elif isinstance(value, list) and all(isinstance(x, str) for x in value):
+            items = value
+        else:
+            raise ValueError(f"malformed method record field: {field}")
+        cleaned = [x.strip() for x in items if x.strip()]
+        if not cleaned:
+            raise ValueError(f"empty method record field: {field}")
+        return cleaned
 
-        Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
-        """
+    def _method_record(self, row) -> dict[str, Any]:
+        provenance = self._safe_provenance(row["provenance"])
+        record = provenance.get("method_record")
+        if record is None:
+            try:
+                record = json.loads(str(row["value"]))
+            except Exception as exc:
+                raise ValueError(
+                    f"malformed method memory {row['memory_id']}: no structured record"
+                ) from exc
+        if not isinstance(record, dict):
+            raise ValueError(f"malformed method memory {row['memory_id']}: record must be an object")
+        if str(record.get("lifecycle_status", "")).upper() != "PROMOTED":
+            raise ValueError(f"method memory {row['memory_id']} is not PROMOTED")
+
+        normalized = dict(record)
+        normalized["problem_signature"] = self._as_string_list(
+            record.get("problem_signature"), field="problem_signature"
+        )
+        normalized["scope_limits"] = self._as_string_list(
+            record.get("scope_limits"), field="scope_limits"
+        )
+        kind = str(row["kind"])
+        if kind in {"framework", "heuristic"}:
+            normalized["preconditions"] = self._as_string_list(
+                record.get("preconditions"), field="preconditions"
+            )
+            normalized["method_steps"] = self._as_string_list(
+                record.get("method_steps"), field="method_steps"
+            )
+            normalized["falsifiers"] = self._as_string_list(
+                record.get("falsifiers"), field="falsifiers"
+            )
+        elif kind == "failure_pattern":
+            normalized["failure_modes"] = self._as_string_list(
+                record.get("failure_modes"), field="failure_modes"
+            )
+        elif kind == "counterexample":
+            normalized["counterevidence"] = self._as_string_list(
+                record.get("counterevidence"), field="counterevidence"
+            )
+        else:
+            raise ValueError(f"unsupported active method kind: {kind}")
+        return normalized
+
+    def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
+        """Consume new canonical effect-outcome receipts from evidence retrieval episodes."""
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
             "SELECT r.causal_id,r.generation,c.credit,e.status "
@@ -221,6 +290,7 @@ class MicroClayRetrieval:
         limit: int = 24,
         budget_chars: int = 12_000,
     ) -> dict[str, Any]:
+        """Stage A: evidence-only retrieval and adaptive evidence-route learning."""
         if not isinstance(query, str) or not query.strip():
             raise ValueError("MicroClay retrieval requires a non-empty query")
         if limit < 1 or limit > 100:
@@ -268,6 +338,8 @@ class MicroClayRetrieval:
             for memory_id in ids:
                 row = by_id.get(memory_id)
                 if row is not None:
+                    if str(row["kind"]) in self.METHOD_KINDS:
+                        raise StaleGeneration("retrieval_route_contract")
                     items.append({
                         "memory_id": memory_id,
                         "kind": row["kind"],
@@ -283,6 +355,7 @@ class MicroClayRetrieval:
                     "retrieval_id": existing["retrieval_id"],
                     "policy_version": int(existing["policy_version"]),
                     "mode": existing["mode"],
+                    "route": "evidence",
                     "query_sha256": existing["query_hash"],
                     "candidate_count": None,
                     "selected_count": len(items),
@@ -299,13 +372,14 @@ class MicroClayRetrieval:
             }
 
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
+        excluded = tuple(sorted(self.CONTROL_KINDS | self.METHOD_KINDS))
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
-            "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            f"WHERE kind NOT IN ({','.join('?' for _ in excluded)}) "
             "AND (user_id IS NULL OR user_id=?) "
             "AND (source_turn_id IS NULL OR source_turn_id<>?) "
             "ORDER BY ts DESC LIMIT ?",
-            (user_id, turn_id, self.MAX_SOURCE_ROWS),
+            (*excluded, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()
@@ -360,6 +434,7 @@ class MicroClayRetrieval:
                 "retrieval_id": retrieval_id,
                 "policy_version": self.POLICY_VERSION,
                 "mode": mode,
+                "route": "evidence",
                 "query_sha256": query_hash,
                 "candidate_count": len(candidates),
                 "selected_count": len(selected),
@@ -374,6 +449,110 @@ class MicroClayRetrieval:
             },
         }
 
+    def retrieve_methods(
+        self,
+        *,
+        query: str,
+        user_id: str,
+        session_id: str,
+        turn_id: str,
+        episode_id: str,
+        causal_id: str,
+        generation: int,
+        limit: int = 8,
+        budget_chars: int = 6_000,
+    ) -> dict[str, Any]:
+        """Stage B: bounded promoted-method retrieval by structural problem signature.
+
+        This route never writes a factual retrieval episode and never changes Stage-A
+        status. Candidate/control method kinds are not served. Under-specified promoted
+        method records fail closed instead of being guessed into a reusable method.
+        """
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError("method retrieval requires a non-empty query")
+        if limit < 1 or limit > 32:
+            raise ValueError("invalid method retrieval limit")
+        if budget_chars < 256 or budget_chars > 100_000:
+            raise ValueError("invalid method retrieval budget")
+        self.db.assert_live_generation(session_id, generation)
+        session = self.db.db.execute(
+            "SELECT user_id FROM sessions WHERE session_id=?", (session_id,)
+        ).fetchone()
+        if not session or session["user_id"] != user_id:
+            raise PermissionError("session/user identity mismatch")
+
+        active = tuple(sorted(self.METHOD_ACTIVE_KINDS))
+        rows = self.db.db.execute(
+            "SELECT * FROM durable_memory "
+            f"WHERE kind IN ({','.join('?' for _ in active)}) "
+            "AND (user_id IS NULL OR user_id=?) "
+            "AND (source_turn_id IS NULL OR source_turn_id<>?) "
+            "ORDER BY ts DESC LIMIT ?",
+            (*active, user_id, turn_id, self.MAX_SOURCE_ROWS),
+        ).fetchall()
+        qtokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
+        ranked: list[tuple[float, float, str, dict[str, Any]]] = []
+        for row in rows:
+            record = self._method_record(row)
+            signature_tokens = self._tokens(" ".join(record["problem_signature"]))
+            overlap = len(qtokens.intersection(signature_tokens))
+            if overlap <= 0:
+                continue
+            coverage = overlap / max(1, len(qtokens))
+            signature_precision = overlap / max(1, len(signature_tokens))
+            structural = min(1.0, 0.70 * coverage + 0.30 * signature_precision)
+            surface_tokens = self._tokens(str(row["subject"]) + " " + str(row["value"]))
+            lexical_overlap = len(qtokens.intersection(surface_tokens)) / max(1, len(qtokens))
+            score = 0.90 * structural + 0.10 * lexical_overlap
+            ranked.append((score, float(row["ts"]), str(row["memory_id"]), {
+                "memory_id": str(row["memory_id"]),
+                "kind": str(row["kind"]),
+                "subject": str(row["subject"]),
+                "method_record": record,
+                "structural_match": score,
+                "provenance": self._safe_provenance(row["provenance"]),
+                "truth_authority": False,
+                "effect_authority": False,
+            }))
+
+        ranked.sort(key=lambda x: (x[0], x[1], x[2]), reverse=True)
+        selected: list[dict[str, Any]] = []
+        chars = 0
+        for _, _, _, item in ranked:
+            item_chars = len(json.dumps(
+                item["method_record"], sort_keys=True, separators=(",", ":")
+            ))
+            if chars + item_chars > budget_chars:
+                continue
+            selected.append(item)
+            chars += item_chars
+            if len(selected) >= limit:
+                break
+
+        return {
+            "items": selected,
+            "receipt": {
+                "route": "method",
+                "session_id": session_id,
+                "user_id": user_id,
+                "turn_id": turn_id,
+                "episode_id": episode_id,
+                "causal_id": causal_id,
+                "generation": int(generation),
+                "policy_version": self.POLICY_VERSION,
+                "query_sha256": hashlib.sha256(query.encode("utf-8")).hexdigest(),
+                "candidate_count": len(ranked),
+                "selected_count": len(selected),
+                "limit_requested": int(limit),
+                "budget_chars": int(budget_chars),
+                "chars_selected": chars,
+                "status": "METHOD_PRESENT" if selected else "METHOD_UNKNOWN",
+                "truth_authority": False,
+                "effect_authority": False,
+                "adaptive": False,
+            },
+        }
+
     def credit(
         self,
         *,
@@ -383,7 +562,7 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Apply only the canonical causally re-entered effect outcome to retrieval policy.
+        """Apply only the canonical causally re-entered effect outcome to evidence policy.
 
         Caller-supplied credit, signal class and receipt identity are treated as claims
         to verify against UnifiedDB, not as learning authority. Replays are idempotent;

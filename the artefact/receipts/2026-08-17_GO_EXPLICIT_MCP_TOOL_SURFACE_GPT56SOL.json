@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:50+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "0b508f37f0cb200833e5615335f1d0c013ac994b",
+  "branch": "go/explicit-mcp-tool-surface-20260817-1342",
+  "source_head_before_receipt": "c145188a676060c69bbc3998e97c1788bfd8912c",
+  "finding": {
+    "classification": "FAIL_CLOSED_PERMISSION_SURFACE_HARDENING",
+    "observed": "The canonical terminal launch used --allowedTools mcp__clayverse__*, while the admitted baseline MCP currently exposes exactly session_state and request_effect.",
+    "risk": "A future tool added to the same managed ClayVerse MCP server would inherit automatic approval without a separate terminal permission-surface edit.",
+    "counterhypothesis": "The wildcard is already sufficiently narrow because managed-mcp.json admits only the ClayVerse server.",
+    "counterhypothesis_result": "PARTIALLY_TRUE_BUT_WEAKER: server identity is locked, but wildcard approval still couples future server tool growth to automatic permission expansion."
+  },
+  "repair": {
+    "terminal_sessions_commit": "7f69e770f45aa09b842ecd2f63df1cb669489c8e",
+    "test_commit": "c145188a676060c69bbc3998e97c1788bfd8912c",
+    "allowed_tools": [
+      "mcp__clayverse__session_state",
+      "mcp__clayverse__request_effect"
+    ],
+    "wildcard_removed": true,
+    "permission_mode": "dontAsk",
+    "authority_change": "NONE: this narrows permission; it does not add a new state, identity, memory, effect, or turn authority"
+  },
+  "primary_dependency_evidence": {
+    "anthropic": "Current Claude Code documentation states that --allowedTools controls tools that execute without prompting; MCP permission rules support exact mcp__<server>__<tool> names and server wildcards; with dontAsk, unapproved tools are denied rather than prompting."
+  },
+  "execution": {
+    "exact_git_checkout_attempt": {
+      "surface": "OpenAI isolated container",
+      "result": "ADMISSION_FAILED_BEFORE_TESTS",
+      "error": "fatal: unable to access GitHub repository: Could not resolve host: github.com",
+      "classification": "NOT_A_TEST_FAILURE"
+    },
+    "bounded_argv_mechanism_probe": {
+      "surface": "OpenAI isolated container",
+      "result": "PASS",
+      "checks": [
+        "shlex join/split preserves two exact MCP tool names",
+        "allowedTools consumes exactly session_state and request_effect before next option",
+        "server wildcard is absent"
+      ],
+      "scope": "CLI argv construction mechanism only; not exact packaged Claude runtime evidence"
+    }
+  },
+  "go_experiment_accounting": {
+    "experiment_started_by_this_organ": false,
+    "shared_main_observation_after_branch_start": "89baf998e3c4a2597303de2b44af19d5723fd6d0 atomically claimed the 13:42 websocket-expiry experiment on main",
+    "action": "DO_NOT_DUPLICATE_SHARED_UNUSUAL_EXPERIMENT"
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_PASS",
+  "next_gate": "Rebase/compare against current main, run focused terminal_managed_authority plus adjacent terminal/policy regressions in an actually-started authorized exact environment, then verify packaged Claude Code recognizes only the two admitted MCP tools before merge/promotion."
+}

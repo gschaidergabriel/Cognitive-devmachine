@@ -51,20 +51,17 @@ class ClayVerseEffectBridge:
 
     def _active(self):
         row = self.db.db.execute(
-            "SELECT w.*,t.provenance FROM workspace_episodes w "
-            "JOIN turns t ON t.turn_id=w.observation_turn_id "
-            "WHERE w.session_id=? AND w.state IN ('OPEN','SELECTED') ORDER BY w.ts DESC LIMIT 1",
-            (self.session_id,),
+            "SELECT a.*, w.state AS workspace_state FROM active_turns a "
+            "JOIN workspace_episodes w ON w.episode_id=a.episode_id "
+            "WHERE a.session_id=? AND a.user_id=? LIMIT 1",
+            (self.session_id, self.user_id),
         ).fetchone()
         if row is None:
             raise BridgeStateError("no active canonical turn; effect denied")
         try:
-            provenance = json.loads(row["provenance"])
-        except Exception as exc:
-            raise BridgeStateError("active turn provenance is invalid") from exc
-        generation = provenance.get("session_generation")
-        if not isinstance(generation, int):
-            raise BridgeStateError("active turn lacks reasoning-generation provenance")
+            generation = int(row["generation"])
+        except (TypeError, ValueError) as exc:
+            raise BridgeStateError("active turn generation is invalid") from exc
         return row, generation
 
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
@@ -85,8 +82,19 @@ class ClayVerseEffectBridge:
             argv = None
 
         active, generation = self._active()
-        if active["state"] == "OPEN":
+        if active["effect_id"] is not None:
+            raise BridgeStateError("only one effect admitted per turn in candidate contract")
+        prior = self.db.db.execute(
+            "SELECT effect_id FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1",
+            (active["episode_id"],),
+        ).fetchone()
+        if prior is not None:
+            raise BridgeStateError("effect already persisted for active turn; automatic replay denied")
+        if active["workspace_state"] == "OPEN":
             self.workspace.select(active["episode_id"], "request_effect")
+        elif active["workspace_state"] != "SELECTED":
+            raise BridgeStateError("active turn workspace is not effect-admissible")
+
         req = EffectRequest(
             self.user_id,
             self.session_id,
@@ -96,9 +104,16 @@ class ClayVerseEffectBridge:
             generation,
         )
         effect_id, outcome = self.effects.execute(req, active["episode_id"])
+        cur = self.db.db.execute(
+            "UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 "
+            "WHERE session_id=? AND causal_id=? AND effect_id IS NULL",
+            (effect_id, json.dumps(outcome, sort_keys=True), self.session_id, active["causal_id"]),
+        )
+        if cur.rowcount != 1:
+            raise BridgeStateError("effect persisted but active turn changed; recovery required")
         return {
             "effect_id": effect_id,
-            "causal_id": self.effects.causal_for_effect(effect_id),
+            "causal_id": active["causal_id"],
             "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
             "outcome": outcome,
             "boundary": "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate",
@@ -106,14 +121,16 @@ class ClayVerseEffectBridge:
 
     def session_state(self) -> dict:
         active = self.db.db.execute(
-            "SELECT episode_id,state FROM workspace_episodes WHERE session_id=? AND state IN ('OPEN','SELECTED') ORDER BY ts DESC LIMIT 1",
-            (self.session_id,),
+            "SELECT a.episode_id,a.causal_id,a.generation,a.effect_id,w.state "
+            "FROM active_turns a JOIN workspace_episodes w ON w.episode_id=a.episode_id "
+            "WHERE a.session_id=? AND a.user_id=? LIMIT 1",
+            (self.session_id, self.user_id),
         ).fetchone()
         return {
             "user_id": self.user_id,
             "session_id": self.session_id,
             "generation": self.db.session_generation(self.session_id),
-            "active_episode": dict(active) if active else None,
+            "active_turn": dict(active) if active else None,
             "capabilities": self.effects.available_capabilities(),
             "entityos_execution_enabled": self.effects.entityos_bridge is not None,
         }

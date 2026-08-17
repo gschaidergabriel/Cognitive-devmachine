@@ -30,6 +30,8 @@ def test_process_gate_no_shell_and_disabled_by_default(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); gate=EffectGate(db,allow_process=False)
     with pytest.raises(PermissionError): gate.execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
     eid,out=EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'])); assert out['ok'] and out['stdout'].strip()=='ok'
+    with pytest.raises(PermissionError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','shell',['/bin/sh','-c','echo forbidden']))
+    with pytest.raises(ValueError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','nul',['/bin/echo','bad\x00arg']))
 def test_causal_reentry_and_restart_continuity(tmp_path):
     p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
 def test_checkpoint_hash_changes_on_canonical_state(db):

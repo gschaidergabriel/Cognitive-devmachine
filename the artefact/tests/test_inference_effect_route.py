@@ -36,7 +36,7 @@ def test_inference_intent_reaches_effect_gate_without_direct_process(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:
         engine = ClayVerseEngine(db, {"g": "gabriel"}, inference=NoopIntentInference(), allow_process=False)
-        result = engine.ingest("g", "record a bounded noop")
+        result = engine.ingest("g", "record a bounded noop", request_id="req-noop-route")
         assert result["decision"]["selection"] == "request_effect"
         assert result["effect_id"]
         assert result["outcome"]["ok"] is True
@@ -56,7 +56,7 @@ def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
     inference = EntityOSIntentInference()
     try:
         engine = ClayVerseEngine(db, {"g": "gabriel"}, inference=inference, allow_process=False, entityos_bridge=None)
-        result = engine.ingest("g", "perform the requested action if admitted")
+        result = engine.ingest("g", "perform the requested action if admitted", request_id="req-entityos-denied")
 
         assert inference.world["runtime_capabilities"] == ["state.noop"]
         assert result["effect_id"]
@@ -75,6 +75,7 @@ def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
         ).fetchone()
         assert effect["capability"] == "entityos.exec"
         assert effect["status"] == "DENIED"
+        assert db.db.execute("SELECT status FROM effect_requests WHERE request_key='gabriel:req-entityos-denied:effect:0'").fetchone()[0] == "DENIED"
 
         assistant = db.db.execute(
             "SELECT content,causal_refs FROM turns WHERE turn_id=?",

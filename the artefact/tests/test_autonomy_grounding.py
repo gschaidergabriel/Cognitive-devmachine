@@ -187,26 +187,72 @@ def test_typed_verifier_can_progress_and_goal_needs_goal_verifier(tmp_path):
         db.close()
 
 
-def test_negative_verifier_keeps_step_unfinished(tmp_path):
+def test_negative_verifier_quiesces_without_reexecution(tmp_path):
     db = _db(tmp_path)
     try:
         state = AutonomyState(db)
         goal_id, step_id = _goal(state)
+        observations = []
+
+        def observer(snapshot, proposal):
+            observations.append(proposal)
+            return {"verified": True, "value": "candidate"}
+
         controller = AutonomyController(
             state,
             capability_provider=lambda: (),
             planner=lambda snapshot: {"kind": "observe", "query": "inspect current state"},
             effect_executor=lambda snapshot, proposal: pytest.fail("effect boundary must not run"),
-            observer=lambda snapshot, proposal: {"verified": True, "value": "candidate"},
+            observer=observer,
             step_verifier=lambda snapshot, proposal, receipt: VerificationResult(
                 False, "observation is insufficient to prove success", {"value": "candidate"}
             ),
             goal_verifier=_goal_verifier,
         )
-        result = controller.tick()
-        assert result.state == "WAITING_VERIFICATION"
+        first = controller.tick()
+        second = controller.tick()
+        assert first.state == "WAITING_VERIFICATION"
+        assert second.state == "IDLE"
+        assert len(observations) == 1
         assert state.step(step_id)["status"] == "WAITING_VERIFICATION"
-        assert state.goal(goal_id)["status"] == "ACTIVE"
+        assert state.goal(goal_id)["status"] == "PAUSED"
+    finally:
+        db.close()
+
+
+def test_ambiguous_effect_exception_blocks_without_retry(tmp_path):
+    db = _db(tmp_path)
+    try:
+        state = AutonomyState(db)
+        goal_id, step_id = _goal(state)
+        effects = []
+
+        def executor(snapshot, proposal):
+            effects.append(proposal)
+            raise TimeoutError("acknowledgement lost")
+
+        controller = AutonomyController(
+            state,
+            capability_provider=lambda: ("entityos.exec",),
+            planner=lambda snapshot: {
+                "kind": "effect",
+                "capability": "entityos.exec",
+                "target": "bounded-target",
+                "argv": ["check"],
+            },
+            effect_executor=executor,
+            observer=lambda snapshot, proposal: pytest.fail("observer must not run"),
+            step_verifier=lambda snapshot, proposal, receipt: pytest.fail("verifier must not run"),
+            goal_verifier=_goal_verifier,
+        )
+        first = controller.tick()
+        second = controller.tick()
+        assert first.state == "BLOCKED"
+        assert second.state == "IDLE"
+        assert len(effects) == 1
+        assert state.goal(goal_id)["status"] == "BLOCKED"
+        assert state.step(step_id)["status"] == "BLOCKED"
+        assert "effect_outcome_unknown" in state.step(step_id)["last_error"]
     finally:
         db.close()
 

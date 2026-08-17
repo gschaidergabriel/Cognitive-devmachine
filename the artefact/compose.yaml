@@ -25,7 +25,10 @@ services:
       CLERK_AUTHORIZED_PARTIES: "${CLERK_AUTHORIZED_PARTIES:?required}"
       CLERK_PUBLISHABLE_KEY: "${CLERK_PUBLISHABLE_KEY:?required}"
       CLERK_FRONTEND_API_URL: "${CLERK_FRONTEND_API_URL:?required}"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      # ClaudeCodeInference uses --bare -p. Bare mode does not consume the mounted
+      # subscription/OAuth state; this source shape therefore requires a direct
+      # Anthropic API key before the container is admitted to start.
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:?required}"
     volumes:
       - clayverse-state:/var/lib/clayverse
       - clayverse-workspace:/workspace

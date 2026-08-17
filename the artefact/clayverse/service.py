@@ -11,6 +11,7 @@ from .engine import ClayVerseEngine
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
+from .readiness import claude_readiness
 from .store import UnifiedDB
 
 
@@ -93,10 +94,11 @@ def main():
     verifier = ClerkTokenVerifier(ClerkConfig.from_env())
     inference = ClaudeCodeInference()
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
-    claude_available = inference.available()
-    if require_claude and not claude_available:
+    try:
+        claude_status = claude_readiness(inference, required=require_claude)
+    except RuntimeError:
         db.close()
-        raise RuntimeError("Claude Code CLI is required but unavailable")
+        raise
 
     entityos_bridge, entityos_status = _entityos_config()
     engine = ClayVerseEngine(
@@ -126,7 +128,7 @@ def main():
         "checkpoint": cid,
         "state_hash": digest,
         "users": ["gabriel", "andreas"],
-        "claude_code": claude_available,
+        "claude_code": claude_status.as_dict(),
         "auth": "clerk",
         "mutation_lane": "serialized",
         "entityos": entityos_status,

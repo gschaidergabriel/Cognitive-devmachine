@@ -68,6 +68,7 @@ def test_service_uses_clayverse_api_serial_server(monkeypatch, tmp_path):
     monkeypatch.setenv("CLAYVERSE_CLERK_MAP_JSON", '{"subject-g":"gabriel","subject-a":"andreas"}')
     monkeypatch.setenv("CLERK_PUBLISHABLE_KEY", "pk_test_example")
     monkeypatch.setenv("CLERK_FRONTEND_API_URL", "https://clerk.example")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
     monkeypatch.setenv("HOST", "127.0.0.1")
     monkeypatch.setenv("PORT", "43210")
 

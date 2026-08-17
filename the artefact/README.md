@@ -28,14 +28,26 @@ This directory is the canonical product workspace for the current ClayVerse endp
 The strongest actually exercised Research execution closure remains:
 
 - canonical Research base at bind time: `f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b`
-- closure commit: `5e5adce0591058608bbd7381ecf570a39b282f0d`
-- closure tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`
+- exercised closure commit: `5e5adce0591058608bbd7381ecf570a39b282f0d`
+- exercised closure tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`
 - retained #611 blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`
 - predecessor #622 execution blobs: `ad34476c0092b7e724240c927a7cb14858d1a8dc` + `ed77f5c9446295fa973512ddf7e9d11ea3292010`
 
-That closure is execution provenance only, not a second permanent product authority. It is now **stale for the next execution attempt** because retained #622 advanced to `08f1fe82…`; the next private-source-capable PR810 run must refresh/rebind once to the then-current Research/#611/#622 identities before spending Sandbox compute.
+That exercised closure remains the authority only for the already-observed Sandbox-admission/credential-boundary result. It is stale for future compute because retained #622 advanced.
+
+A **prepared next execution closure** has now been materialized on the existing `go/oci-execution-closure-20260817-1919-sol` lane:
+
+- closure commit: `218b51cad87e3907d1dd45adc7998c736be23cdb`
+- closure tree: `f16c87737cf74ef0703a1fc0a51fd99298450cd1`
+- base `main` observed at construction: `ce60e3544caceda22ae349021c952328cf62692b`
+- parents: current-at-construction main + previous exercised closure `5e5adce…`
+- composition: retained #611 two blobs + current #622 `SOURCE_LOCK`/workflow/source-binding-test blobs.
+
+This prepared closure is **SOURCE COMPOSITION ONLY** with zero runtime credit. Living README/receipt/state commits can move repository `main` without changing product-relevant container/test bytes; therefore the controller must still refresh product-relevant identity once immediately before the next real private-source-capable execution rather than chasing every documentation-only head movement.
 
 Current PR810 hardening binds retained-runner blob `1298ca8002704414f86cd0c036d44e5b32be2918`, fences the Sandbox lifetime at **2,700,000 ms** above the retained explicit-step ceiling of **2,490,000 ms**, and at head `a86f4355…` adds a fail-closed Vercel Sandbox-v2 provider-identity contract requiring both `sandbox.name` and the current VM session id. The provider-identity delta is source-only until an actually-started bound deployment observes it.
+
+PR810 has intentionally **not** been rebound yet to `218b51c…`: any source commit on that retained branch auto-triggers a Vercel Preview, and without the required host-side private-GitHub credential that would only repeat the already-established credential failure. Rebind once after credential provisioning (or if product-relevant bytes move again before that run).
 
 ### Current executable evidence / blocker
 
@@ -61,7 +73,7 @@ The immediate blocker is precise: provision **`GITHUB_READ_TOKEN` as an appropri
 
 After that credential prerequisite, continue on the same retained #810 controller:
 
-`refresh/rebind then-current Research + #611 + #622 → exact closure → Sandbox.create → host-side exact private Research + EntityOS source verification → verified archives into disposable Sandbox → reconstruct/attest/reproduce locked EntityOS → stage exact EntityOS → full source regression → exact OCI build → image digest + APT/tmux/Claude/Python identities → deny-all network → in-image #611 transport-policy checks for gabriel/andreas → hardened service --once → execute/materialize/verify #622 canonical Python hash lock including complete generator-bootstrap hash closure → Docker --require-hashes only after accepted lock evidence → rebuild/rebind exact image → #611 promotion → rejoin/revalidate #602 → packaged native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
+`refresh/rebind then-current product-relevant Research + #611 + #622 once → exact closure → Sandbox.create → host-side exact private Research + EntityOS source verification → verified archives into disposable Sandbox → reconstruct/attest/reproduce locked EntityOS → stage exact EntityOS → full source regression → exact OCI build → image digest + APT/tmux/Claude/Python identities → deny-all network → in-image #611 transport-policy checks for gabriel/andreas → hardened service --once → execute/materialize/verify #622 canonical Python hash lock including complete generator-bootstrap hash closure → Docker --require-hashes only after accepted lock evidence → rebuild/rebind exact image → #611 promotion → rejoin/revalidate #602 → packaged native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
 
 Whole-product PASS requires the complete admitted product path. Source inspection, PRs, CI definitions, Vercel build admission, `Sandbox.create`, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
 
@@ -73,19 +85,17 @@ Whole-product PASS requires the complete admitted product path. Source inspectio
 
 ### Latest cycle delta
 
-**2026-08-17 19:29 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; retained #622 resolver bootstrap trust narrowed source-side, primary OCI credential blocker unchanged**
+**2026-08-17 19:31 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; next OCI execution closure refreshed to current #622 resolver-wheel binding, immediate credential blocker unchanged**
 
-- PR **#622** advanced on its existing retained lane to `08f1fe82211676d5140723eeccc225b05bb6ea5f`; no second Python resolver/generator authority was created.
-- `SOURCE_LOCK.json` on #622 now binds `pip_tools-7.5.3-py3-none-any.whl` to SHA-256 `3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e`.
-- The generator workflow now binds `SOURCE_LOCK.json` itself by SHA into the digest-pinned product Python base, verifies the resolver-wheel digest before installation, installs from the verified local wheel and emits a deterministic installed-generator freeze digest/envelope.
-- Strong counterhypothesis retained: this **does not** close transitive generator bootstrap dependencies; complete pre-admission local hash closure is still required before canonical Python lock promotion.
-- No new PR622 workflow execution was observed for current head, so the new hardening is **SOURCE CANDIDATE / UNEXECUTED** with zero runtime/acceptance credit.
-- Existing OCI closure `5e5adce…` contains the predecessor #622 blobs and must be refreshed/rebound before the next credential-capable PR810 execution. This re-entry supersedes any assumption that the old closure is still exact-current for future compute.
-- PR810 remains the single retained OCI controller; latest actually-started bound execution still passed `Sandbox.create` and stopped at absent host-side `GITHUB_READ_TOKEN` before private source fetch. Current global discriminator therefore remains approved credential provisioning, not retry-only controller churn.
-- No secret was exposed or forwarded. No unusual experiment, VPS, self-hosted/production test, or Together path was used.
+- PR **#622** remains the single retained Python-lock lane at `08f1fe82211676d5140723eeccc225b05bb6ea5f`; its resolver wheel is source-locked before install while transitive generator bootstrap hash closure remains explicitly open.
+- Existing exercised OCI closure `5e5adce…` is retained as exact provenance for the already-observed Sandbox-admission/credential result only.
+- The existing 19:19 execution-closure lane was advanced to `218b51cad87e3907d1dd45adc7998c736be23cdb` / tree `f16c87737cf74ef0703a1fc0a51fd99298450cd1`, combining current-at-construction `main`, unchanged #611 repair bytes and current #622 `SOURCE_LOCK`/workflow/test blobs. Previous closure ancestry is preserved as second parent.
+- PR810 was **not** source-rebound immediately because that would auto-trigger another Vercel Preview while `GITHUB_READ_TOKEN` is still absent, producing retry-only compute with no new discriminator. Rebind exactly once after the approved host-side Preview credential exists and after one final product-relevant-byte refresh.
+- Strongest actual runtime evidence remains `Sandbox.create=PASS_CREATED` followed by fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch; source/OCI runtime credit remains **0**.
+- Same-tree auxiliary closure duplication created during concurrent fusion was anti-entropically collapsed back onto the already-fused execution identity before this new #622 rebind; no second product/controller/resolver authority remains.
+- No unusual experiment was executed; no secret was exposed; no VPS/self-hosted/production/Together path was used.
+- Durable closure receipt: `the artefact/receipts/2026-08-17_GO_1931_OCI_CLOSURE_REBIND_CURRENT_PR622_GPT56SOL.json`.
 - Current supply-chain refinement receipt: `the artefact/receipts/2026-08-17_GO_1929_PYTHON_LOCK_GENERATOR_BOOTSTRAP_TRUST_GPT56SOL.json`.
-- Current credential-boundary confirmation receipt: `the artefact/receipts/2026-08-17_GO_1926_PR810_V5_CREDENTIAL_BLOCK_CONFIRMATION_GPT56SOL.json`.
-- Strongest Sandbox replication receipt: `the artefact/receipts/2026-08-17_GO_1925_PR810_SANDBOX_CREDENTIAL_BLOCK_REPLICATION_GPT56SOL.json`.
 - Whole-product acceptance remains **IN_PROGRESS**.
 
 ### Cycle update rule
@@ -95,7 +105,7 @@ Whole-product PASS requires the complete admitted product path. Source inspectio
 3. Record the concrete latest-cycle delta; use `NO_CHANGE` when canonical product bytes did not change.
 4. Never promote source/component/controller/provider evidence into whole-product PASS.
 5. Keep detailed evidence in Git history/receipts rather than making this README a competing state database.
-6. Rebind fast-moving execution closures immediately before real compute; do not create retry-only or duplicate semantic paths merely to chase admission.
+6. Rebind fast-moving execution closures immediately before real compute; distinguish product-relevant byte movement from documentation/receipt-only head churn and do not create retry-only or duplicate semantic paths merely to chase admission.
 
 ## Architecture
 
@@ -105,7 +115,7 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. The exact OCI path has reached Sandbox admission repeatedly and is blocked before private-source staging by the missing host-side read credential. The retained Python lock-generator lane has advanced source-side since the last exercised OCI closure and must be rebound before the next accepted run.
+Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. The exact OCI path has reached Sandbox admission repeatedly and is blocked before private-source staging by the missing host-side read credential. The retained Python lock-generator lane has advanced source-side since the last exercised OCI closure; a refreshed next closure exists but remains unexecuted until the approved credential prerequisite is satisfied.
 
 ## Container source
 

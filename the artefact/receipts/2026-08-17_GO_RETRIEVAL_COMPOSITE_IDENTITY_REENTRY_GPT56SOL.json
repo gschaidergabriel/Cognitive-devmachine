@@ -1,0 +1,71 @@
+{
+  "schema": "clayverse-mechanism-regression-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 476,
+  "branch": "go/retrieval-active-identity-fence-20260817-1352-reentry",
+  "rebased_on_main": "4b8ce693a7eb127611279975bc857c44a081338e",
+  "finding": {
+    "name": "ACTIVE_TURN_COMPOSITE_IDENTITY_NOT_ENFORCED_BY_INDEPENDENT_FOREIGN_KEYS",
+    "risk": "An FK-valid active row can still mix Gabriel/Andreas session, turn, user or workspace identities and corrupt the canonical MicroClay retrieval entry identity."
+  },
+  "repair": {
+    "retrieval_blob_git_sha1": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
+    "test_blob_git_sha1": "00167127c2c2df4eaaf69c8483f087342bcacf1f",
+    "current_main_store_blob_git_sha1": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "contracts": [
+      "active user equals session user and turn user",
+      "turn session equals requested active session",
+      "workspace episode session equals requested active session",
+      "workspace observation_turn_id equals active turn_id",
+      "incomplete composite join fails closed",
+      "semantic composite mismatch fails closed",
+      "coherent identity remains admissible"
+    ]
+  },
+  "fusion": {
+    "canonical_candidate_pr": 476,
+    "superseded_duplicate_pr": 431,
+    "duplicate_permanent_path_retained": false
+  },
+  "bounded_isolated_evidence": {
+    "surface": "OpenAI isolated non-production container",
+    "retrieval_blob_bound": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
+    "store_blob_bound": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "adversarial_matrix": {
+      "cases": 5,
+      "passed": 5,
+      "cross_session_episode": "REJECTED_AS_REQUIRED",
+      "cross_session_turn": "REJECTED_AS_REQUIRED",
+      "active_user_drift": "REJECTED_AS_REQUIRED",
+      "incomplete_join": "REJECTED_AS_REQUIRED",
+      "coherent_identity": "ACCEPTED_AS_REQUIRED"
+    },
+    "classification": "MECHANISM_SUPPORTED",
+    "limitations": "Focused identity mechanism evidence only; not full repository checkout, adjacent lifecycle/MicroClay/privacy suite, OCI build/start, Clerk/browser/PTY/Claude runtime or whole-product acceptance."
+  },
+  "rebase_note": {
+    "previous_branch_was_behind_main_by": 81,
+    "main_retrieval_blob_before_rebase": "48b388be5ab0f7b5543d70f72e511dc3f740f6e4",
+    "overlap_before_rebase": "only retrieval.py plus this new test/receipt",
+    "evidence_bound_retrieval_blob_restored_after_rebase": true
+  },
+  "current_exact_product_execution": {
+    "vercel_sandbox_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "preview_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT",
+    "github_runner_prior_observation": "control-plane failure before visible steps",
+    "exact_full_source_pytest": "UNOBSERVED",
+    "exact_oci_build_runtime": "UNOBSERVED"
+  },
+  "experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_by_this_work": false
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "whole_clayverse_container_pass": false,
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"],
+  "next_exact_gate": "When authorized Vercel Sandbox admission returns, run this exact then-current PR head: focused identity fence plus adjacent lifecycle/MicroClay/privacy regressions, then broader suite and exact OCI/startup/restart/concurrency batch."
+}

@@ -67,6 +67,21 @@ class WorldAssembler:
             "generation": int(row["generation"]),
         }
 
+    @staticmethod
+    def _same_supplied_identity(supplied, active):
+        for key, value in supplied.items():
+            if value is None:
+                continue
+            if key == "generation":
+                try:
+                    if int(value) != int(active[key]):
+                        return False
+                except (TypeError, ValueError):
+                    return False
+            elif str(value) != str(active[key]):
+                return False
+        return True
+
     def assemble(
         self,
         session_id,
@@ -128,10 +143,16 @@ class WorldAssembler:
             "causal_id": causal_id,
             "generation": generation,
         }
-        if not all(value is not None for value in supplied.values()):
-            active = self._active_identity(session_id)
-            if active is not None:
-                supplied = active
+        active = self._active_identity(session_id)
+        if active is not None:
+            if not self._same_supplied_identity(supplied, active):
+                raise RuntimeError("explicit retrieval identity mismatch")
+            supplied = active
+        elif method_query is not None:
+            # Product-serving Stage B must be attached to the canonical live causal turn.
+            # Offline/held-out replay needs a separately admitted replay API rather than
+            # reusing the live WorldAssembler boundary with caller-minted causal identity.
+            raise RuntimeError("method query requires active causal identity")
 
         if all(value is not None for value in supplied.values()):
             result = self.microclay.retrieve(

@@ -53,6 +53,39 @@ jobs:
           set -euo pipefail
           python -m pytest -q
 
+      - name: Resolve authoritative EntityOS lock and require exact staged bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          readarray -t LOCK < <(python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          doc = json.loads(Path("the artefact/entityos.lock.json").read_text(encoding="utf-8"))
+          assert doc["schema"] == "ClayVerseEntityOSArtifactLock/v1"
+          sha = doc["sha256"]
+          size = doc["size_bytes"]
+          assert isinstance(sha, str) and len(sha) == 64 and all(c in "0123456789abcdef" for c in sha)
+          assert isinstance(size, int) and size > 0
+          print(sha)
+          print(size)
+          PY
+          )
+          LOCK_SHA256="${LOCK[0]}"
+          LOCK_SIZE="${LOCK[1]}"
+          test -f "the artefact/EntityOS" || {
+            echo "::error::Exact locked EntityOS bytes are not staged at the artefact/EntityOS; OCI acceptance remains blocked."
+            exit 86
+          }
+          test ! -L "the artefact/EntityOS"
+          ACTUAL_SHA256="$(sha256sum "the artefact/EntityOS" | awk '{print $1}')"
+          ACTUAL_SIZE="$(stat -c %s "the artefact/EntityOS")"
+          test "$ACTUAL_SHA256" = "$LOCK_SHA256"
+          test "$ACTUAL_SIZE" = "$LOCK_SIZE"
+          echo "CLAYVERSE_ENTITYOS_SHA256=$LOCK_SHA256" >> "$GITHUB_ENV"
+          echo "ENTITYOS_LOCK_SIZE=$LOCK_SIZE" >> "$GITHUB_ENV"
+          echo "entityos_sha256=$LOCK_SHA256 entityos_size=$LOCK_SIZE"
+
       - name: Validate Compose shape
         shell: bash
         run: |
@@ -66,7 +99,9 @@ jobs:
         run: |
           set -euo pipefail
           IMAGE="clayverse:${GITHUB_SHA}"
-          docker build --pull --no-cache -t "$IMAGE" "the artefact"
+          docker build --pull --no-cache \
+            --build-arg "ENTITYOS_SHA256=${CLAYVERSE_ENTITYOS_SHA256}" \
+            -t "$IMAGE" "the artefact"
           IMAGE_ID="$(docker image inspect "$IMAGE" --format '{{.Id}}')"
           ARCHIVE_SHA256="$(docker save "$IMAGE" | sha256sum | awk '{print $1}')"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
@@ -136,6 +171,8 @@ jobs:
             echo "- image: $IMAGE"
             echo "- image id: $IMAGE_ID"
             echo "- docker-save sha256: $ARCHIVE_SHA256"
+            echo "- embedded EntityOS sha256: $CLAYVERSE_ENTITYOS_SHA256"
+            echo "- embedded EntityOS size: $ENTITYOS_LOCK_SIZE"
             echo "- tests: full candidate pytest suite"
             echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
             echo "- continuity: two isolated state-only probe restarts against one persistent state volume"

@@ -1,0 +1,62 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_message_time": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "scope": "entityos_runtime_identity_image_authority_retained_lane",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "exact_rejoin_base": "13675f8b97df0930e799c8fedf75a0400bec9b95",
+  "branch": "gpt56sol/go-entityos-image-authority-retained-20260817-2259",
+  "supersedes_prs": [645, 664],
+  "observed_gap": "clayverse.service trusted runtime CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256 even though EntityOS identity is required to be image-owned and bound by the tracked embedded lock",
+  "retained_commits": [
+    {"commit":"d765841e6706dc1aa3203a29964a45a294c45af4","purpose":"bind runtime EntityOS identity to fixed image path and embedded lock"},
+    {"commit":"45991783ebd72c860210ca4158fc83fa27d64e96","purpose":"remove runtime path/digest Docker ENV authority while preserving current /healthz liveness HEALTHCHECK"},
+    {"commit":"2e1d7740157f069710c9ad5dd212b21e418b9f0f","purpose":"remove runtime path/digest Compose authority; retain build-time tracked-lock cross-check"},
+    {"commit":"48c38b21c99bcac3eade9078e8440466d4c39e1a","purpose":"remove Kata runtime path authority while preserving CNI/node-local/ReadWriteOncePod fences"},
+    {"commit":"051c997919db2718cd716a347a21f8176ef66146","purpose":"adversarial boot tests including attacker executable plus matching env digest redirect"},
+    {"commit":"6df791d1a085acb5a56e88a0da34f394e9115e3b","purpose":"cross-file regression fence against runtime EntityOS identity authority"},
+    {"commit":"3110c7bf341de1ec98f67098894e054cd2d8f5b1","purpose":"living README refresh preserving current Mistral/CSI/Tier2/Vercel evidence"}
+  ],
+  "contract": [
+    "runtime EntityOS path fixed to /opt/entityos/EntityOS",
+    "runtime digest and size derived from /opt/entityos/entityos.lock.json",
+    "lock read bounded/fail-closed and refuses symlink replacement where O_NOFOLLOW is available",
+    "executable digest and size must match image lock",
+    "runtime config may toggle execution only; it cannot choose EntityOS bytes",
+    "Docker/Compose/Kata do not carry runtime EntityOS path/digest authority",
+    "Docker liveness remains /healthz and readiness remains /readyz",
+    "ReadWriteOncePod and CNI/node-local fences are preserved"
+  ],
+  "isolated_execution": {
+    "focused_entityos_regression": "NOT_EXECUTED",
+    "exact_oci": "NOT_EXECUTED",
+    "entityos_runtime": "NOT_EXECUTED",
+    "whole_product": "NOT_EXECUTED",
+    "blocker": "latest retained Vercel Sandbox run created/attested the Firecracker guest but did not receive GITHUB_READ_TOKEN before private source staging; connected Vercel tools expose no secret mutation action"
+  },
+  "latest_retained_vercel_observation": {
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "sandbox": "tomato-weary-porpoise-K4wNz6",
+    "session": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "guest_kernel": "Linux 6.12.76 x86_64",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "sandbox_stopped": true
+  },
+  "credential_law": "scoped read-only GITHUB_READ_TOKEN forwarding into the disposable authorized Sandbox is permitted with least privilege, non-persistence/redaction and exact Git identity verification; the remaining issue is actual availability/injection",
+  "final_acceptance_gate": "Vercel Firecracker + exact OCI + runtime Vault Mistral cognition + canonical re-ingestion/effect path + Tier2 same-digest recreation/recovery + second real Mistral turn + auth/terminal/two-user-generation gates",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "no shared immutable request/turn id and only minute-precision trigger time"
+  },
+  "next_exact_gate": "make the scoped GitHub read credential available to retained Vercel controller #810, refresh/rebind exact current source, execute focused EntityOS authority regressions, build/run exact OCI in Firecracker, then continue the mandatory Vault-Mistral final test-of-tests",
+  "non_claims": ["no focused pytest PASS for this lane", "no exact OCI digest", "no live EntityOS execution credit", "no whole-product PASS"]
+}

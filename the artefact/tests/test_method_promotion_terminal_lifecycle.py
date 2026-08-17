@@ -76,45 +76,25 @@ def _admit_candidate(db, episodes):
     return methods, candidate_id
 
 
-def test_terminal_reentered_sources_promote_atomically_and_retrieve(tmp_path):
+def test_terminal_reentered_sources_alone_do_not_authorize_promotion(tmp_path):
     db, session_id = _db(tmp_path)
     _episode(db, session_id, "src:a")
     _episode(db, session_id, "src:b")
     methods, candidate_id = _admit_candidate(db, ["src:a", "src:b"])
+    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
 
-    promoted = methods.promote(
-        candidate_memory_id=candidate_id,
-        evaluation="two terminal re-entered episodes support transfer",
-        user_id="gabriel",
-        provenance={"source": "held-out-eval", "evaluator": "test"},
-    )
+    with pytest.raises(MethodRecordError, match="validated candidate-use outcome receipts"):
+        methods.promote(
+            candidate_memory_id=candidate_id,
+            evaluation="re-entry alone must not count as method success",
+            user_id="gabriel",
+            provenance={"source": "promotion-regression"},
+        )
 
-    receipt_row = db.db.execute(
-        "SELECT * FROM durable_memory WHERE memory_id=?",
-        (promoted["receipt_memory_id"],),
-    ).fetchone()
-    method_row = db.db.execute(
-        "SELECT * FROM durable_memory WHERE memory_id=?",
-        (promoted["promoted_memory_id"],),
-    ).fetchone()
-    receipt = json.loads(receipt_row["value"])
-    provenance = json.loads(method_row["provenance"])
-    assert receipt["action"] == "PROMOTE"
-    assert receipt["candidate_memory_id"] == candidate_id
-    assert receipt["promoted_memory_id"] == promoted["promoted_memory_id"]
-    assert provenance["promotion_source_memory_id"] == candidate_id
-    assert provenance["promotion_receipt_id"] == promoted["receipt_memory_id"]
-    assert provenance["truth_authority"] is False
-    assert provenance["effect_authority"] is False
-
-    result = methods.retrieve(
-        query="verify causal provenance",
-        user_id="gabriel",
-        evidence_status="UNKNOWN",
-        problem_signature={"goal": ["verify"], "mechanism": ["causal", "provenance"]},
-    )
-    assert [item["memory_id"] for item in result["methods"]] == [promoted["promoted_memory_id"]]
-    assert result["factual_status_unchanged"] == "UNKNOWN"
+    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
+    assert db.db.execute(
+        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('framework','heuristic')"
+    ).fetchone()[0] == 0
 
 
 def test_open_or_nonreentered_source_blocks_promotion_without_partial_write(tmp_path):
@@ -134,30 +114,8 @@ def test_open_or_nonreentered_source_blocks_promotion_without_partial_write(tmp_
 
     assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
     assert db.db.execute(
-        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('method_receipt','framework','heuristic')"
+        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('framework','heuristic')"
     ).fetchone()[0] == 0
-
-
-def test_duplicate_promotion_fails_closed_without_new_rows(tmp_path):
-    db, session_id = _db(tmp_path)
-    _episode(db, session_id, "src:a")
-    _episode(db, session_id, "src:b")
-    methods, candidate_id = _admit_candidate(db, ["src:a", "src:b"])
-    methods.promote(
-        candidate_memory_id=candidate_id,
-        evaluation="first promotion",
-        user_id="gabriel",
-        provenance={"source": "held-out-eval"},
-    )
-    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodRecordError, match="already has a promotion receipt"):
-        methods.promote(
-            candidate_memory_id=candidate_id,
-            evaluation="second promotion",
-            user_id="gabriel",
-            provenance={"source": "held-out-eval"},
-        )
-    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
 
 
 def test_forged_promoted_row_without_receipt_lineage_cannot_route(tmp_path):

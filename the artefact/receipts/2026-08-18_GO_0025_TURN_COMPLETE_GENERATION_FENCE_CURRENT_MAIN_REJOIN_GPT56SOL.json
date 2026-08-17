@@ -1,0 +1,67 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:25:36+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main": "f818ea8f19ce154719a187e7c5ec6bbf324b970a",
+  "pull_request": 675,
+  "classification": "CURRENT_MAIN_SOURCE_REJOIN_WITH_EXECUTION_ADMISSION_FAILURE",
+  "finding": {
+    "gap_still_present_on_main": true,
+    "main_turn_lifecycle_blob": "c484b9088d9f838e350a146c991e998c84e80332",
+    "gap": "TurnLifecycle.complete() can canonicalize a Stop response without revalidating the active turn generation inside the same write transaction.",
+    "repair": "assert_live_generation(session_id, active_turn.generation) immediately after loading the active turn and before any Stop-side workspace, assistant-turn or causal writes.",
+    "scope": "provider-independent canonical TurnLifecycle Stop/completion path"
+  },
+  "rejoin": {
+    "previous_retained_head": "b85fa61e28fe729c9c2d0efab96931bfdc572cc0",
+    "new_retained_head": "35f320975e9b7088820846a25c69073900f44dbe",
+    "tree": "30c6553b82dc2697f7de5e770490b40079a28b97",
+    "parents": [
+      "f818ea8f19ce154719a187e7c5ec6bbf324b970a",
+      "b85fa61e28fe729c9c2d0efab96931bfdc572cc0"
+    ],
+    "turn_lifecycle_blob": "7fc5be927241555d4c649285a1a32cebeec5ecdb",
+    "red_gate_blob": "31679d81e60ad9bf16b95a84e540aa83c7a47f3c",
+    "historical_receipt_blob": "9375d9360e2a6c9784e86970f34d7cf8c6f7a2bc",
+    "duplicate_runtime_or_authority_created": false,
+    "mergeable_after_rejoin": true
+  },
+  "execution": {
+    "research_entity_verify": {
+      "run_id": 32050231597,
+      "job_id": 95447588684,
+      "conclusion": "failure_before_steps",
+      "steps": 0
+    },
+    "research_entity_identity_guard": {
+      "run_id": 32050231051,
+      "job_id": 95447586719,
+      "conclusion": "failure_before_steps",
+      "steps": 0
+    },
+    "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_CLAYVERSE_TEST_FAILURE",
+    "focused_red_gate_runtime_credit": 0,
+    "adjacent_regression_runtime_credit": 0,
+    "exact_oci_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "retained_lane_only": true,
+    "new_competing_pr_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0,
+    "reason": "No shared immutable request/turn id is exposed and the exact user trigger metadata available to workers is only minute precision; ordinary source rejoin and deterministic admission checks do not consume the experiment slot."
+  },
+  "current_product_frontier": "Owner-authenticated one-shot PR810 runtime ingress must execute exact private source/tree staging for frozen PR680 and an authorized exact checkout must execute this Stop-generation red gate before promotion; downstream remains exact OCI/Firecracker/Vault-Mistral/EffectGate/EntityOS/Tier-2 and final Clerk/PTY/dual-user gates.",
+  "constraints": {
+    "vps_self_hosted_production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secret_value_observed": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

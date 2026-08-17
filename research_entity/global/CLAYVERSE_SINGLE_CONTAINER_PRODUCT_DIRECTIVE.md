@@ -1,65 +1,103 @@
 # CLAYVERSE SINGLE-CONTAINER PRODUCT DIRECTIVE
 
 **Authority date:** 2026-08-17  
-**Authority:** newest explicit owner directive; supersedes older EntityOS-as-product endpoint directives.
+**Authority:** newest explicit owner directive; supersedes older EntityOS-as-product endpoint directives and any interpretation that makes the accepted final EntityOS substrate optional.
 
 ## 1. Product endpoint
 
 The active product endpoint is **ClayVerse**.
 
-The canonical product workspace is:
+Canonical workspace:
 
 `gschaidergabriel/clay-global-research-entity` → `main` → `the artefact/`
 
-The release form is **one OCI/Docker-compatible ClayVerse container image** built from that workspace. Development files, receipts and tests may exist outside the image, and runtime-generated persistent data/volumes are permitted. The old requirement that the final product must be exactly one executable file named `EntityOS` is superseded.
+Release form: **one OCI/Docker-compatible ClayVerse container image**. Development files, receipts and tests may exist outside the image. Explicit persistent data volumes are allowed.
 
-EntityOS may be used **inside/below ClayVerse** as a hardened execution/security/runtime substrate where its contracts are useful. It is not the top-level product endpoint and does not impose a one-file release form on ClayVerse.
+EntityOS is not the top-level release artifact. It is the hardened execution/security/runtime substrate **inside** ClayVerse. Development/baseline builds may temporarily omit EntityOS, but such builds can never receive whole-product PASS. The final accepted ClayVerse image MUST contain the complete accepted EntityOS runtime substrate.
 
 ## 2. Identity and continuity
 
-ClayVerse is one persistent central entity shared by all connected machines and authenticated users. Gabriel and Andreas are equal-rights perspectives into the same central entity/state, not separate ClayVerse instances.
+ClayVerse is one persistent central entity shared by all connected machines and authenticated users. Gabriel and Andreas are equal-rights perspectives into the same central entity/state, not separate instances.
 
-`UnifiedDB` is the canonical authority for persistent world model, state, memory/data and wiki-like durable knowledge. `ClayGraph` is a derived/rebuildable projection and must never become a competing state authority.
+`UnifiedDB` is the sole canonical authority for persistent world model, state, memory/data and durable knowledge. `ClayGraph` is derived/rebuildable and may never become a competing state authority.
 
-`consciousness_daemon` is excluded from the target architecture. Continuity must come from explicit persisted state, causal re-entry, recovery and runtime contracts rather than a second hidden consciousness process.
+Continuity comes from explicit persisted state, causal re-entry, recovery and runtime contracts. A separate `consciousness_daemon` is excluded.
 
-## 3. Cognition and web boundary
+## 3. Sealed sandbox / machine-continuum law
 
-Claude Code is the runtime inference/cognition engine used by ClayVerse. It is not a separate persistent identity and must not own canonical memory. Runtime cognition receives context assembled from canonical ClayVerse state and may request bounded intents; external effects remain controlled by ClayVerse/EntityOS security boundaries.
+The final ClayVerse container MUST behave functionally like a **sealed virtual machine/appliance with controlled ingress and egress**, even when implemented as an OCI container rather than a nested KVM/QEMU guest.
 
-The user-facing entry point is a web application/homepage authenticated with Clerk. Authentication maps users into the one central ClayVerse entity without creating separate agent identities.
+Inside that single boundary runs one continuous machine-like domain containing:
 
-## 4. Container law
+- UnifiedDB as canonical persistent state/world/memory authority;
+- the complete accepted EntityOS execution/security/runtime substrate;
+- ClayGraph as rebuildable derived projection;
+- ClayVerse orchestration/runtime supervision;
+- the managed Linux terminal/PTY/tmux execution surface;
+- Claude Code as runtime inference/cognition engine;
+- managed hooks, retrieval/routing organs and EffectGate/effect journal;
+- the authenticated web/API/transport boundary needed to accept inputs and return outputs.
 
-All admitted runtime pieces needed for the product path must converge into the **same ClayVerse container image**, including the ClayVerse service, Claude Code runtime boundary, web/API boundary and accepted internal execution substrate. No mandatory second application container, separate consciousness service or hidden state authority may be required for the baseline product.
+Nothing outside this boundary may become a second cognition, state, execution or identity authority.
 
-Persistent volumes are data, not companion product artifacts. They must be explicitly scoped and recoverable.
+### 3.1 Ingress
 
-## 5. Build/test law
+External data enters only through explicit admitted input surfaces. Examples include authenticated user/browser input, approved machine/API input, uploaded data and verified effect results returning from an admitted external boundary.
 
-Current build, test, experiment and runtime validation are isolated-sandbox-only. Vercel Sandbox remains preferred/authorized when an executable Sandbox surface is available. VPS/self-hosted/production-host testing remains forbidden. A live VPS may be used only later as an explicitly authorized deployment target; historical VPS receipts are evidence only.
+Ingress is normalized, authenticated/authorized where applicable, causally identified and written/reconciled against canonical ClayVerse state before it influences cognition or execution.
 
-A Vercel deployment `READY`, GitHub source inspection, CI configuration, a receipt or a local prediction is not runtime PASS. Claims must preserve exact source/artifact identity and the execution surface actually observed.
+### 3.2 Internal processing loop
 
-Together API/service remains forbidden. Final paid/model training remains owner-authorization-required.
+The canonical processing cycle is conceptually:
 
-## 6. `go` and living artefact README
+`INGRESS -> canonicalize/record in UnifiedDB -> retrieve/assemble current state -> LLM/Claude cognition -> re-ingest model output as proposed intent/command -> policy/authority validation -> EntityOS/managed terminal execution when admitted -> capture stdout/stderr/result/effect receipt -> re-ingest result into UnifiedDB/current causal turn -> continue cognition as needed -> EGRESS`
 
-Exact `go` means maximum useful product-convergent work on the current ClayVerse single-container frontier: refresh shared state, avoid duplicate implementations, generate/falsify alternatives, build/repair the canonical path, execute the strongest available authorized isolated tests, consume exactly one bounded unusual experiment for the user-triggered macro-cycle, fuse parallel work, persist evidence and continue until the useful unblocked frontier is exhausted.
+The LLM does not directly own state and does not directly bypass the execution boundary. Its output returns into ClayVerse first and is treated as proposed action/data until validated.
 
-A `go` is not complete merely because documentation, a PR, a component test or a CI workflow exists. End with either a concrete improvement/evidence for the exact `the artefact/` ClayVerse container candidate or the precise blocker and next executable sandbox step.
+The cycle may repeat many times for one causal task. Command results, errors, observations and external effect receipts return into the same continuum instead of becoming an out-of-band side channel.
 
-**Mandatory README cycle law:** `the artefact/README.md` is the human-readable living status surface for the canonical product workspace. Every product-convergent cycle that observes, changes, fuses or reclassifies canonical artefact reality MUST refresh the README after code/evidence fusion and before the cycle is considered complete.
+### 3.3 Linux terminal control
 
-Each cycle refresh MUST:
-- rewrite the current-state section so stale status is removed;
-- record the concrete latest-cycle delta across code, tests, evidence, blockers and acceptance movement;
-- explicitly record `NO_CHANGE` when no canonical product/status delta occurred;
-- preserve the distinction between source/component evidence and whole-product acceptance;
-- keep detailed audit evidence in Git history/receipts rather than turning the README into a second canonical state database.
+The internal environment MUST be able to communicate directly with and control its managed Linux terminal/PTY/tmux surface. The accepted EntityOS/ClayVerse execution layer may start commands, provide stdin, receive stdout/stderr/exit status, inspect managed process state and perform admitted filesystem/process operations inside its bounded authority.
 
-A stale `the artefact/README.md` means the product-convergent cycle is **INCOMPLETE** even if code, tests, receipts or a PR were otherwise produced.
+Unmediated generic host `process.exec` remains forbidden. Terminal control is not removed; it is routed through the admitted EntityOS/ClayVerse execution/security contract so commands are attributable, policy-checked, recoverable and causally re-ingested.
 
-## 7. Supersession rule
+### 3.4 Egress
 
-Any older file that says the active endpoint is `EntityOS`, `ONE_EXECUTABLE_FILE`, `SINGLE_FILE_CLAY_COMPUTER`, FRANK, self.root, UCM2 or a historical harness is superseded **where it conflicts with this directive**. Such material may still contribute bounded internal implementation/regression evidence.
+Only explicit admitted output/effect surfaces may cross the boundary. Egress includes user-visible responses, approved files/data, terminal/effect results exposed to an authenticated user, and explicitly authorized external effects.
+
+Egress must remain attributable to a canonical causal turn/effect receipt. Unknown, stale, replayed or unauthorized effects fail closed.
+
+## 4. Cognition and web boundary
+
+Claude Code is the runtime inference/cognition engine. It is not a separate persistent identity and must not own canonical memory. It receives context assembled from canonical ClayVerse state and returns reasoning results/intents/commands into the internal loop above.
+
+The user-facing entry point is a Clerk-authenticated web application/homepage. Authentication maps users into the one central ClayVerse entity without creating separate agent identities.
+
+## 5. Container law
+
+All admitted runtime pieces needed for the product path MUST converge into the **same ClayVerse container image**: ClayVerse service, complete accepted EntityOS substrate, UnifiedDB authority, Claude Code runtime, managed Linux PTY/tmux terminal, web/API boundary and effect/security gates.
+
+No mandatory second application container, separate consciousness service, hidden state authority or external execution brain may be required for the product to function.
+
+Persistent volumes are data, not companion product artifacts. They must be explicitly scoped, recoverable and attach to this one machine continuum.
+
+## 6. Build/test law
+
+Current build, test, experiment and runtime validation are isolated-sandbox-only. Exact whole-container execution remains the final acceptance gate. Lack of one provider connection must not stop independent source, contract, adversarial, restart, concurrency, fuzz, reproducibility, component-runtime or integration testing that remains possible under `the artefact/TESTING_STRATEGY.md`.
+
+VPS/self-hosted/production-host testing is forbidden unless later explicitly authorized as deployment validation. Together API/service remains forbidden. Final paid/model training remains owner-authorization-required.
+
+A deployment READY state, source inspection, CI definition, receipt, component test or baseline build is never whole-product PASS.
+
+## 7. `go` and living artefact README
+
+Exact `go` means maximum useful product-convergent work on this ClayVerse single-container frontier: refresh shared state, avoid duplicate implementations, build/repair the canonical path, execute the strongest available authorized tests, fuse evidence and continue until the useful unblocked frontier is exhausted.
+
+`the artefact/README.md` MUST be refreshed in every product-convergent cycle. If canonical product/runtime bytes do not change, record `NO_CHANGE` and why. Detailed evidence remains in Git history/receipts.
+
+## 8. Supersession rule
+
+Any older file that says the active endpoint is `EntityOS`, `ONE_EXECUTABLE_FILE`, `SINGLE_FILE_CLAY_COMPUTER`, FRANK, self.root, UCM2 or a historical harness is superseded where it conflicts with this directive. Such material may still contribute bounded internal implementation/regression evidence.
+
+Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, or removes EntityOS from the final accepted continuum violates this directive.

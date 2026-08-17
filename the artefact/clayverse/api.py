@@ -70,7 +70,12 @@ class ClayVerseAPI:
                 try:
                     claims = self._claims()
                     body = self._json_body()
-                    content = str(body.get("content", "")).strip()
+                    if not isinstance(body, dict):
+                        return self._send(HTTPStatus.BAD_REQUEST, {"error": "bad_request"})
+                    raw_content = body.get("content")
+                    if not isinstance(raw_content, str):
+                        return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_content"})
+                    content = raw_content.strip()
                     if not content or len(content) > 100_000:
                         return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_content"})
                     resources = body.get("resources") or []

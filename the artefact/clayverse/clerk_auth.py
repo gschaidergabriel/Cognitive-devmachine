@@ -29,7 +29,7 @@ class ClerkConfig:
     def from_env(cls) -> "ClerkConfig":
         issuer = os.environ.get("CLERK_ISSUER", "").strip().rstrip("/")
         jwt_key = os.environ.get("CLERK_JWT_KEY") or None
-        jwks_url = os.environ.get("CLERK_JWKS_URL") or (f"{issuer}/.well-known/jwks.json" if issuer else None)
+        requested_jwks_url = (os.environ.get("CLERK_JWKS_URL") or "").strip()
         audience = os.environ.get("CLERK_AUDIENCE") or None
         parties = tuple(
             x.strip()
@@ -38,8 +38,10 @@ class ClerkConfig:
         )
         if not issuer:
             raise RuntimeError("CLERK_ISSUER is required")
-        if not jwt_key and not jwks_url:
-            raise RuntimeError("CLERK_JWT_KEY or CLERK_JWKS_URL is required")
+        canonical_jwks_url = f"{issuer}/.well-known/jwks.json"
+        if not jwt_key and requested_jwks_url and requested_jwks_url != canonical_jwks_url:
+            raise RuntimeError("CLERK_JWKS_URL must match the CLERK_ISSUER JWKS endpoint")
+        jwks_url = None if jwt_key else (requested_jwks_url or canonical_jwks_url)
         if not parties:
             raise RuntimeError("CLERK_AUTHORIZED_PARTIES is required")
         return cls(
@@ -66,6 +68,10 @@ class ClerkTokenVerifier:
 
     def __init__(self, config: ClerkConfig):
         self.config = config
+        if not config.jwt_key:
+            canonical_jwks_url = f"{config.issuer.rstrip('/')}/.well-known/jwks.json"
+            if config.jwks_url != canonical_jwks_url:
+                raise RuntimeError("network Clerk JWKS URL must match the configured issuer")
         self._jwks = (
             PyJWKClient(
                 config.jwks_url,

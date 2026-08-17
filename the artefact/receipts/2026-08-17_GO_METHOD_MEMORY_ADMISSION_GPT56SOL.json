@@ -6,74 +6,100 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_at_branch": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "latest_main_observed_during_cycle": "dc789d2d3519606b0d86f54f1046cdcdc9524329",
   "product_endpoint": "ClayVerse OCI image from the artefact/",
-  "status": "METHOD_MEMORY_ADMISSION_CANDIDATE_FOCUSED_MECHANISM_PASS",
+  "status": "META_LEARNING_METHOD_PIPELINE_FOCUSED_MECHANISM_PASS",
   "candidate": {
     "branch": "go/meta-learning-method-admission-20260817-1320",
-    "code_head_before_receipt": "42696fd8bddc137e49da6a0890a88a3ac2611f48",
+    "code_head_before_final_receipt": "aea2d959d0a9c5913581790d2bf50f5ed1ddec84",
     "draft_pr": 405,
-    "module": {
-      "path": "the artefact/clayverse/method_memory.py",
-      "git_blob_sha1": "6fe4f27061110148ffe4ecb74864836c285e114c",
-      "bytes": 14010
-    },
-    "tests": {
-      "path": "the artefact/tests/test_method_memory_admission.py",
-      "git_blob_sha1": "9d0596d8c4518c97e0b29d8d0b7932c09cbd0c6f",
-      "bytes": 8239
-    }
-  },
-  "implemented_contract": [
-    "dedicated method-memory kinds and schema version inside the canonical UnifiedDB memory namespace",
-    "strict canonical finite JSON admission and fail-closed stored-row decoding",
-    "explicit problem_signature with deterministic normalized structural facets for the future Stage-B baseline",
-    "required preconditions, method steps, invariants, expected observations, falsifiers, failure modes, scope limits and provenance-bearing evidence references",
-    "candidate/promoted/demoted/retired lifecycle validation",
-    "method receipts use a separate bounded schema",
-    "unknown fields are rejected rather than silently ignored, blocking fact/truth/effect-authority smuggling through method records",
-    "generic admission is forbidden from minting framework/heuristic records; promotion remains closed until a dedicated evidence-bound lifecycle transaction exists"
-  ],
-  "execution": {
-    "vercel_sandbox_start_exec_surface_available": false,
-    "github_runner_attempts": [
+    "files": [
       {
-        "source_head": "346d1c931d9bc7dc0ae3cd3a1e731244d325f003",
-        "workflow_run": 32001524457,
-        "job": 95302633200,
-        "conclusion": "failure_before_step_execution",
-        "steps": null
+        "path": "the artefact/clayverse/method_memory.py",
+        "git_blob_sha1": "8271a85f14f96cb39c2a0136c5425ab7afa2a61f",
+        "bytes": 19775
       },
       {
-        "source_head": "42696fd8bddc137e49da6a0890a88a3ac2611f48",
-        "workflow_run": 32001894759,
-        "job": 95303675743,
-        "conclusion": "failure_before_step_execution",
-        "steps": null
+        "path": "the artefact/clayverse/method_retrieval.py",
+        "git_blob_sha1": "a1e051327d55b2f1384197fc2d73a6fd52fc275d",
+        "bytes": 10517
+      },
+      {
+        "path": "the artefact/tests/test_method_memory_admission.py",
+        "git_blob_sha1": "9d0596d8c4518c97e0b29d8d0b7932c09cbd0c6f",
+        "bytes": 8239
+      },
+      {
+        "path": "the artefact/tests/test_method_memory_promotion.py",
+        "git_blob_sha1": "40644424d91a9b2bfea6af62788be2f78e029b4b",
+        "bytes": 6396
+      },
+      {
+        "path": "the artefact/tests/test_method_memory_retrieval.py",
+        "git_blob_sha1": "ba8a71145819b736821c12f5480bd0ada8fd29d3",
+        "bytes": 4587
       }
+    ]
+  },
+  "implemented_contract": {
+    "admission": [
+      "dedicated framework_candidate/framework/heuristic_candidate/heuristic/failure_pattern/counterexample/method_receipt schema",
+      "strict canonical finite JSON and bounded field validation",
+      "explicit structural problem_signature and deterministic normalized facets",
+      "candidate/promoted/demoted/retired lifecycle validation",
+      "unknown fields rejected rather than silently ignored",
+      "generic admission cannot mint framework/heuristic rows"
     ],
+    "promotion": [
+      "dedicated BEGIN IMMEDIATE transactional promotion path",
+      "candidate must be a valid decoded method candidate",
+      "all source workspace episodes must exist",
+      "all referenced supporting/counterexample memory ids must exist",
+      "PROMOTE receipt is durably bound to the candidate",
+      "promoted framework/heuristic is created in the same transaction",
+      "duplicate promotion receipt is rejected",
+      "missing evidence rolls the transaction back without receipt or promoted method"
+    ],
+    "stage_b_structural_retrieval": [
+      "reads only framework/heuristic rows in caller-visible user scope",
+      "requires status PROMOTED and validates candidate -> receipt -> promoted lineage",
+      "rejects payload drift, receipt mismatch, missing source episodes and missing referenced memory evidence",
+      "uses deterministic structural Jaccard over normalized problem_signature facets as the simplest baseline",
+      "returns PRESENT only above threshold, UNDERCOVERED when valid methods exist but no structural match clears threshold, UNKNOWN when no valid promoted methods exist",
+      "returns HOW envelopes and provenance ids only; does not expose raw evidence values",
+      "receipt fixes truth_authority=false, effect_authority=false and fact_status=UNCHANGED"
+    ]
+  },
+  "execution": {
+    "vercel_sandbox_start_exec_surface_available": false,
+    "github_runner_latest": {
+      "source_head": "aea2d959d0a9c5913581790d2bf50f5ed1ddec84",
+      "workflow_run": 32002404432,
+      "job": 95305123440,
+      "conclusion": "failure_before_step_execution",
+      "steps": null
+    },
+    "github_runner_classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_NOT_TEST_FAILURE",
     "fallback_surface": "isolated local sandbox",
     "environment": "Python 3.13.5; Linux 6.18.35 x86_64",
-    "source_binding": "local tested files reproduced Git blob identities exactly",
-    "initial_run": {
-      "module_blob": "9a0ea69c7f4b1892ae1d36df958d032da39a639c",
-      "test_blob": "57a0cfa7d9cee18e00c6819240f1cc62cf3d9c0d",
-      "py_compile": "PASS",
+    "source_binding": "all five tested files reproduced their GitHub git-blob SHA-1 identities exactly",
+    "initial_negative_run": {
       "pytest": "6 passed, 2 failed",
       "negative_results": [
-        "NaN was correctly rejected at canonical-JSON boundary but regression expected a narrower calibration-specific message",
-        "problem_signature facet ordering was deterministic but case-sensitive before normalization"
+        "NaN correctly failed at the stronger canonical-JSON boundary while the test expected a narrower calibration message",
+        "structural facet ordering was deterministic but case-sensitive before normalization"
       ]
     },
-    "repairs": [
-      "normalize structural facet values before deterministic sorting",
-      "align NaN regression with the stronger canonical-JSON fail-closed boundary",
-      "block generic framework/heuristic admission after adversarial review exposed a forged-promotion-receipt authority gap"
+    "repairs_and_adversarial_review": [
+      "normalized structural values before deterministic sorting",
+      "aligned NaN regression to canonical JSON fail-closed semantics",
+      "closed forged generic promotion authority by forbidding framework/heuristic generic admission",
+      "added evidence-bound transactional promotion",
+      "added lineage-verifying Stage-B structural retrieval"
     ],
-    "final_regression": {
-      "module_blob": "6fe4f27061110148ffe4ecb74864836c285e114c",
-      "test_blob": "9d0596d8c4518c97e0b29d8d0b7932c09cbd0c6f",
+    "final_exact_blob_regression": {
       "py_compile": "PASS",
-      "ordinary_tests": "8 passed, 1 deselected",
+      "ordinary_tests": "15 passed, 1 unusual test deselected",
       "unusual_experiment_regression_only": "1 passed"
     },
     "whole_clayverse_or_oci_pass_claimed": false
@@ -83,20 +109,27 @@
     "macrocycle_slot": "1/1_consumed",
     "first_execution": "PASS",
     "attack": "inject undeclared facts, truth_confidence and effect_authority into an otherwise valid framework candidate",
-    "required_observation": "reject the whole record instead of silently admitting or dropping authority-bearing fields",
-    "observed": "whole record rejected with MethodMemoryValidationError",
+    "required_observation": "reject the entire method record rather than admitting authority-bearing fields",
+    "observed": "MethodMemoryValidationError; record rejected",
     "final_code_repeat": "REGRESSION_ONLY_PASS"
   },
-  "evidence_boundary": {
-    "method_admission_mechanism_supported": true,
-    "stage_b_serving_or_ranking_implemented": false,
-    "promotion_transaction_implemented": false,
+  "claims": {
+    "method_schema_admission_mechanism_supported": true,
+    "promotion_lifecycle_mechanism_supported": true,
+    "stage_b_structural_retrieval_mechanism_supported": true,
+    "fact_unknown_plus_method_present_remains_fact_unknown_in_stage_b_receipt": true,
+    "stage_b_wired_into_turn_lifecycle_or_claude_context": false,
     "microclay_serving_changed": false,
-    "claude_context_changed": false,
     "whole_clayverse_pass": false,
-    "oci_build_runtime_pass": false
+    "oci_build_runtime_pass": false,
+    "accepted_remote_exact_head_execution_pass": false
   },
-  "next_exact_gate": "Implement the dedicated evidence-bound candidate-to-method promotion transaction, then Stage-B structural retrieval over only decoded validated method rows. Preserve FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT. Validate on an actually-started authorized isolated execution surface and only then consider wiring Stage B into bounded Claude context.",
+  "coordination": {
+    "main_advanced_during_cycle": true,
+    "latest_main_changes_observed": "MicroClay evidence receipts plus restored full ClayVerse bootstrap; no competing method-memory implementation observed",
+    "overlap_boundary": "do not wire Stage B into turn_lifecycle.py on this branch while PR #402 owns active MicroClay/turn-lifecycle integration; fuse/adjudicate from fresh main instead of duplicating that canonical path"
+  },
+  "next_exact_gate": "Refresh current main and PR #402 head, then fuse PR #405 method-memory/admission/promotion/Stage-B modules without duplicating turn_lifecycle semantics. On an actually-started authorized isolated execution surface run the focused method-memory tests plus MicroClay integration regressions. Only after that evidence may Stage B be wired into bounded Claude world context as advisory HOW with FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT, followed by broader ClayVerse suite and exact OCI build/runtime acceptance.",
   "forbidden_or_not_used": {
     "vps_testing": true,
     "self_hosted_runner_testing": true,

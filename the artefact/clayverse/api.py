@@ -9,6 +9,26 @@ from typing import Any
 from .adapters import AuthenticationError, ClerkTokenVerifier
 
 
+def validate_chat_payload(body: Any) -> tuple[str, list[str]]:
+    """Validate the typed public chat boundary without coercing unknown JSON values."""
+    if not isinstance(body, dict):
+        raise ValueError("chat body must be an object")
+    if set(body) - {"content", "resources"}:
+        raise ValueError("unknown chat fields")
+
+    content = body.get("content")
+    if not isinstance(content, str):
+        raise ValueError("content must be a string")
+    content = content.strip()
+    if not content or len(content) > 100_000:
+        raise ValueError("invalid content")
+
+    resources = body.get("resources", [])
+    if not isinstance(resources, list) or not all(isinstance(x, str) for x in resources):
+        raise ValueError("resources must be a string list")
+    return content, resources
+
+
 class ClayVerseAPI:
     def __init__(self, engine: Any, verifier: ClerkTokenVerifier, *, publishable_key: str = "", frontend_api_url: str = "", max_body: int = 1_000_000):
         self.engine = engine
@@ -69,13 +89,7 @@ class ClayVerseAPI:
                     return self._send(HTTPStatus.NOT_FOUND, {"error": "not_found"})
                 try:
                     claims = self._claims()
-                    body = self._json_body()
-                    content = str(body.get("content", "")).strip()
-                    if not content or len(content) > 100_000:
-                        return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_content"})
-                    resources = body.get("resources") or []
-                    if not isinstance(resources, list) or not all(isinstance(x, str) for x in resources):
-                        return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_resources"})
+                    content, resources = validate_chat_payload(self._json_body())
                     result = runtime.engine.ingest(claims["sub"], content, resources=resources)
                     return self._send(HTTPStatus.OK, result)
                 except AuthenticationError:

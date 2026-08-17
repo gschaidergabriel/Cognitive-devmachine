@@ -3,32 +3,30 @@
   "date": "2026-08-17",
   "trigger": "go",
   "scope": "active interactive Claude Code MCP permission contract and contradictory regression cleanup",
-  "observed_head_before_repair": "510d56d4ccdb4fb44d5f77f37d13db39022d1f31",
-  "finding": {
-    "runtime_source": "the artefact/clayverse/terminal_sessions.py",
-    "pre_repair_permission": "mcp__clayverse__*",
-    "mechanism": "the product terminal relied on an MCP tool-name glob for --allowedTools",
-    "primary_upstream_contract": "Anthropic Claude Code documentation states MCP glob permission patterns are not supported and that the server-level name mcp__<serverName> admits all tools for that server",
-    "full_suite_contradiction": "test_terminal_policy.py required managed-mcp.json to be empty while the current product policy and test_terminal_managed_authority.py require exactly the clayverse stdio server"
+  "observed_head_before_review": "510d56d4ccdb4fb44d5f77f37d13db39022d1f31",
+  "primary_upstream_evidence": {
+    "current_docs": "Claude Code settings/permissions documentation crawled 2026-08 states that allow rules accept tool-name globs after a literal mcp__<server>__ prefix; the server segment must be glob-free; mcp__puppeteer__* is the documented all-tools example",
+    "conclusion": "mcp__clayverse__* is a supported fixed-server allow rule",
+    "older_conflicting_evidence": "an older redirected Agent SDK page stated glob patterns were not supported",
+    "adjudication": "newer current Claude Code permissions documentation wins for the product CLI contract"
   },
-  "repair": [
-    {
-      "commit": "947ccf61a8614adb6ed276dc7ed8b82feb7140dd",
-      "change": "replace unsupported mcp__clayverse__* permission with server-level mcp__clayverse"
-    },
-    {
-      "commit": "9930159af036dd8df2754c75286c3448a371301a",
-      "change": "lock the supported server-level permission and reject reintroduction of the wildcard in the active terminal regression"
-    },
-    {
-      "commit": "5564be35ac572963f5ceeed9247ad24657792834",
-      "change": "reconcile stale managed-MCP-empty regression with the exclusive clayverse stdio server product policy"
-    }
-  ],
-  "counterhypothesis": {
-    "claim": "the wildcard is accepted by the current Claude Code CLI or is equivalent to server-level permission",
-    "status": "REJECTED_BY_PRIMARY_DOCUMENTATION_FOR_PRODUCT_CONTRACT",
-    "remaining_empirical_check": "verify exact installed Claude Code binary behavior inside the exact OCI candidate"
+  "negative_path_preserved": {
+    "temporary_commits": [
+      "947ccf61a8614adb6ed276dc7ed8b82feb7140dd",
+      "9930159af036dd8df2754c75286c3448a371301a"
+    ],
+    "mistaken_change": "temporarily replaced mcp__clayverse__* with mcp__clayverse based on stale upstream wording",
+    "correction_commits": [
+      "593dc152c048abe443c919cccfa247d34a87053d",
+      "1d46eb811b3f28cae67de60cc4572a303ac896ba"
+    ],
+    "final_runtime_permission": "mcp__clayverse__*",
+    "outcome": "REJECT_TEMPORARY_CHANGE_AND_RESTORE_CURRENT_DOCUMENTED_CONTRACT"
+  },
+  "confirmed_real_finding": {
+    "finding": "test_terminal_policy.py required managed-mcp.json to be empty while the current product policy and test_terminal_managed_authority.py require exactly the clayverse stdio server",
+    "repair_commit": "5564be35ac572963f5ceeed9247ad24657792834",
+    "result": "stale contradictory regression reconciled with current product policy"
   },
   "unusual_experiment": {
     "executed": false,
@@ -36,9 +34,9 @@
     "shared_go_budget": "already consumed elsewhere; no second unusual experiment"
   },
   "evidence_limits": [
-    "source and upstream-contract repair is not an exact OCI runtime PASS",
+    "the corrected permission conclusion is current upstream contract evidence, not exact-container execution",
     "full suite cannot be claimed without authorized isolated exact-current-head execution",
-    "real interactive Claude Code MCP discovery/call remains an exact-container runtime gate"
+    "real interactive Claude Code MCP discovery/call remains an exact OCI runtime gate"
   ],
   "acceptance": "IN_PROGRESS",
   "whole_product_pass": false,

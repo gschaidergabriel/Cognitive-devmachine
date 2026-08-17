@@ -94,6 +94,7 @@ class TurnLifecycle:
         if not self.db.db.in_transaction: raise TurnLifecycleError("abort requires active transaction")
         row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
         if row is None: return {"aborted":False,"reason":"no_active_turn"}
+        self.db.assert_live_generation(self.session_id,int(row["generation"]))
         row,_,_=self._persisted_effect_in_tx(db,row)
         ws=db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
         if ws is None: raise TurnLifecycleError("active turn workspace missing during abort")

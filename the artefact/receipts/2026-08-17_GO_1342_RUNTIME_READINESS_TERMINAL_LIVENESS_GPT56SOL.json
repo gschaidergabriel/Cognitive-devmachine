@@ -5,7 +5,8 @@
   "organ": "GPT-5.6 Sol",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "base_main_sha": "c74479f323be25f030c72df4e572139d837acd16",
+  "branch_origin_main_sha": "c74479f323be25f030c72df4e572139d837acd16",
+  "latest_main_reentry_sha": "4fc3d2cf79dc69aaa4c4452461dd559b51aba1e3",
   "branch": "go/runtime-readiness-terminal-liveness-20260817-1342-sol-v4",
   "scope": "runtime_readiness_terminal_liveness",
   "observed_source_gap": {
@@ -14,9 +15,10 @@
     "source_only": true
   },
   "repair": {
-    "terminal_gateway": "Preserve current-main browser input chunking and renewable Clerk WebSocket auth lease. After canonical UnifiedDB state passes, _runtime_ready also requires both canonical terminal bindings to exist via the manager-owned non-mutating has-session path; /readyz passes the live manager into the probe.",
+    "terminal_gateway": "Preserve current browser input chunking, renewable Clerk WebSocket auth lease, and off-event-loop JWT verification. After canonical UnifiedDB state passes, _runtime_ready also requires both canonical terminal bindings to exist via the manager-owned non-mutating has-session path; /readyz passes the live manager into the probe.",
     "terminal_isolation_compatibility": "The current per-user tmux-server isolation remains authoritative. Readiness obtains each binding then delegates to TerminalSessionManager._has_session(binding), which resolves the current per-user tmux socket.",
-    "auth_lease_compatibility": "Current-main exp/sid/sub-bounded reauthentication code and browser refresh scheduling are preserved byte-for-byte outside the readiness delta.",
+    "auth_lease_compatibility": "Current exp/sid/sub-bounded reauthentication and browser refresh scheduling are preserved.",
+    "event_loop_compatibility": "Main's initial and refresh JWT verifier calls are preserved under asyncio.to_thread(...), avoiding reintroduction of synchronous verifier work on the WebSocket event loop.",
     "test": "Healthcheck regressions cover both-live PASS, one-session-missing rejection, schema rejection before any tmux probe, and closed-DB fail-closed behavior.",
     "manifest": "runtime_readiness now explicitly binds readiness to both canonical tmux sessions currently being live.",
     "self_heal_in_readiness": false,
@@ -25,11 +27,11 @@
     "effect_authority_changed": false
   },
   "exact_candidate_blobs": {
-    "the artefact/clayverse/terminal_gateway.py": "07de4a1b2b25e0ab1daaf8252b6b74a702eeb2ee",
+    "the artefact/clayverse/terminal_gateway.py": "c75126bf0d893b4d03d0195dce8bcf394d6c00f2",
     "the artefact/tests/test_container_healthcheck.py": "834590eb985f17efdbf428dadf05df631c5f45e6",
     "the artefact/manifest.json": "b0bd00c7b2d92c7196766ac41b5947f1684c84d1",
-    "base-main the artefact/clayverse/terminal_gateway.py": "0af019461094671703d27a7e2cd860138f77ed48",
-    "base-main the artefact/clayverse/terminal_sessions.py": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d"
+    "latest_absorbed_main the artefact/clayverse/terminal_gateway.py": "f6eb4d0ecbc56ffcdaef90de181e3e9567f64336",
+    "current-main the artefact/clayverse/terminal_sessions.py": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d"
   },
   "isolated_mechanism_evidence": {
     "surface": "isolated non-production OpenAI container",
@@ -50,14 +52,18 @@
       "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
       "b527277c713ba714ae7ff42c9d6a76dfda68866c",
       "f416d8f6cf0a99a1d16af2efe0d648fad0c74450",
-      "c74479f323be25f030c72df4e572139d837acd16"
+      "c74479f323be25f030c72df4e572139d837acd16",
+      "a736543f989a353be25255e3b44d15f1a62a2055",
+      "4fc3d2cf79dc69aaa4c4452461dd559b51aba1e3"
     ],
     "overlap_fused": [
       "bounded server PTY ingress and browser input chunking",
       "disjoint per-user tmux server sockets",
-      "renewable expiry-bounded Clerk WebSocket auth lease"
+      "renewable expiry-bounded Clerk WebSocket auth lease",
+      "off-event-loop initial and refresh Clerk verifier execution"
     ],
-    "action": "Each stale integration candidate was superseded rather than overwriting newer canonical security work. This v4 candidate is rebuilt from c74479f323be25f030c72df4e572139d837acd16."
+    "latest_main_delta_after_a736": "non-overlapping coordination/directive/receipt changes only",
+    "action": "Stale integration candidates were superseded or updated instead of overwriting newer canonical security work. PR #478 contains the current auth/terminal behavior plus only the readiness liveness delta."
   },
   "unusual_experiment": {
     "executed": false,
@@ -77,11 +83,11 @@
     "together_used": false
   },
   "ci_observation": {
-    "pr_head_identity_guard": "failure_before_steps",
+    "earlier_pr_head_identity_guard": "failure_before_steps",
     "classification": "RUNNER_ADMISSION_FAILURE_NOT_TEST_FAILURE",
     "steps_observed": 0
   },
   "strongest_counterhypothesis": "tmux has-session proves the named session exists on the correct per-user tmux server, but does not attest that its foreground process is the expected managed Claude Code binary. Exact-container process/fault injection may still show readiness is too weak.",
-  "next_exact_gate": "When the confirmed Vercel Sandbox preview bridge is admitted again, run the exact current branch tests and OCI build inside the started Sandbox; start both managed Claude/tmux perspectives, kill one canonical session and require /readyz=503 without mutation; reattach through the admitted authenticated path, verify controlled recreation on the correct per-user tmux server, and require /readyz=200 only after both live. Capture source SHA, image digest, commands, exits and logs.",
+  "next_exact_gate": "When the confirmed Vercel Sandbox preview bridge is admitted again, run the exact current PR tests and OCI build inside the started Sandbox; start both managed Claude/tmux perspectives, kill one canonical session and require /readyz=503 without mutation; reattach through the admitted authenticated path, verify controlled recreation on the correct per-user tmux server, and require /readyz=200 only after both live. Capture source SHA, image digest, commands, exits and logs.",
   "acceptance": "SOURCE_MECHANISM_SUPPORTED_EXECUTION_ADMISSION_BLOCKED"
 }

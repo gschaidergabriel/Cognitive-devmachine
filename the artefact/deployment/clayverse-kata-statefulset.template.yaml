@@ -2,6 +2,15 @@
 # Replace image and secret/PVC details only after exact artifact acceptance.
 # The installed Kata RuntimeClass name MUST be verified on the target cluster.
 #
+# TIER-2 REPLACEMENT LAW:
+# This StatefulSet is the workload/isolation profile only. Kubernetes may restart
+# a terminated container inside the same Pod/Kata sandbox. Such an in-place
+# container restart is NOT ClayVerse Tier-2 recovery. Final deployment MUST bind
+# an external fail-closed orchestrator that deletes/replaces the whole Pod/Kata
+# sandbox/VM after a fatal invariant signal and proves new Pod + sandbox identity
+# before ingress reopens. Until that is verified, final acceptance is
+# TIER2_REPLACEMENT_BLOCKED.
+#
 # NETWORK FAIL-CLOSED LAW:
 # This template intentionally ships with a default-deny NetworkPolicy for the
 # ClayVerse pod. It is not network-functional by itself. Final deployment MUST
@@ -24,6 +33,9 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: clayverse
+  annotations:
+    clayverse.seimensch.net/tier2-replacement: external-full-sandbox-required
+    clayverse.seimensch.net/in-place-container-restart: not-tier2
 spec:
   serviceName: clayverse
   replicas: 1
@@ -34,6 +46,9 @@ spec:
     metadata:
       labels:
         app: clayverse
+      annotations:
+        clayverse.seimensch.net/tier2-replacement: external-full-sandbox-required
+        clayverse.seimensch.net/in-place-container-restart: not-tier2
     spec:
       # Final acceptance requires a Kata VM-backed RuntimeClass.
       # Current Kata runtime-rs quick-start example uses kata-qemu-runtime-rs.

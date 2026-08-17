@@ -56,6 +56,13 @@ def _provider_receipt(value: dict | None) -> dict | None:
     return decoded
 
 
+def _assert_expected_turn(row, expected_causal_id: str | None, expected_generation: int | None) -> None:
+    if expected_causal_id is not None and row["causal_id"] != expected_causal_id:
+        raise TurnLifecycleError("active turn causal identity changed")
+    if expected_generation is not None and int(row["generation"]) != int(expected_generation):
+        raise StaleGeneration("expected_turn_generation")
+
+
 class TurnLifecycle:
     """Deterministic per-turn lifecycle shared by Claude hooks and bounded inference providers."""
     def __init__(self, db: UnifiedDB, user_id: str, session_id: str, entityos_bridge=None):
@@ -113,10 +120,11 @@ class TurnLifecycle:
         verified=bool(effect["status"]=="VERIFIED" and isinstance(receipt,dict) and receipt.get("ok") is True)
         return {"effect_id":effect["effect_id"],"causal_id":causal["causal_id"],"verified":verified,"outcome":{"recovered":True,"replayed":False,"status":effect["status"],"receipt":receipt}}
 
-    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool)->dict:
+    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool,expected_causal_id:str|None=None)->dict:
         if not self.db.db.in_transaction: raise TurnLifecycleError("abort requires active transaction")
         row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
         if row is None: return {"aborted":False,"reason":"no_active_turn"}
+        _assert_expected_turn(row,expected_causal_id,None)
         row,_,_=self._persisted_effect_in_tx(db,row)
         ws=db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
         if ws is None: raise TurnLifecycleError("active turn workspace missing during abort")
@@ -202,13 +210,14 @@ class TurnLifecycle:
             if effect is None or effect["effect_id"]!=effect_id: raise TurnLifecycleError("journaled effect unavailable for active binding")
         return {"effect_id":effect_id,"causal_id":causal_id,"verified":bool(isinstance(outcome,dict) and outcome.get("ok") is True),"outcome":outcome}
 
-    def complete(self,response:str,*,source:str="claude-hook:Stop",provider_receipt:dict|None=None)->dict:
+    def complete(self,response:str,*,source:str="claude-hook:Stop",provider_receipt:dict|None=None,expected_causal_id:str|None=None,expected_generation:int|None=None)->dict:
         response=str(response); source=_provenance_source(source); provider_receipt=_provider_receipt(provider_receipt)
         if len(response)>200_000: raise ValueError("assistant response too large")
         now=time.time(); assistant_id=str(uuid.uuid4()); response_hash=hashlib.sha256(response.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            _assert_expected_turn(row,expected_causal_id,expected_generation)
             self.db.assert_live_generation(self.session_id,int(row["generation"]))
             row,_,_=self._persisted_effect_in_tx(db,row)
             if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
@@ -230,5 +239,5 @@ class TurnLifecycle:
             result={"completed":True,"assistant_turn_id":assistant_id,"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit}
         return result
 
-    def abort(self,reason:str)->dict:
-        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True)
+    def abort(self,reason:str,*,expected_causal_id:str|None=None)->dict:
+        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True,expected_causal_id=expected_causal_id)

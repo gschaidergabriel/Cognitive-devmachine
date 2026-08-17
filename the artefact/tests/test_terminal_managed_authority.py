@@ -67,7 +67,9 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
     assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
     assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in argv
-    assert "mcp__clayverse__*" in argv
+    assert "mcp__clayverse__session_state" in argv
+    assert "mcp__clayverse__request_effect" in argv
+    assert "mcp__clayverse__*" not in argv
     assert not any(item.startswith("CLERK_JWT_KEY=") for item in argv)
 
 

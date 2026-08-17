@@ -2,12 +2,10 @@ from __future__ import annotations
 
 import json
 
-import pytest
-
 from clayverse.identity import IdentityRouter
 from clayverse.mcp_server import ClayVerseEffectBridge
 from clayverse.store import UnifiedDB
-from clayverse.terminal_hooks import TerminalHookError, stop, user_prompt
+from clayverse.terminal_hooks import stop, user_prompt
 
 
 def configure(monkeypatch, root, user):
@@ -117,15 +115,65 @@ def test_hook_world_does_not_cross_users_without_collision(tmp_path, monkeypatch
     assert "private-gabriel-heliotrope" not in submitted["hookSpecificOutput"]["additionalContext"]
 
 
-def test_duplicate_active_prompt_fails_closed(tmp_path, monkeypatch):
+def test_same_claude_session_interrupt_reenters_canonical_lifecycle(tmp_path, monkeypatch):
     configure(monkeypatch, tmp_path, "gabriel")
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
     db.close()
-    payload = {"hook_event_name": "UserPromptSubmit", "session_id": "same", "prompt": "first"}
-    user_prompt(payload)
-    with pytest.raises(TerminalHookError, match="duplicate prompt"):
-        user_prompt({**payload, "prompt": "second"})
+
+    user_prompt({
+        "hook_event_name": "UserPromptSubmit",
+        "session_id": "same-claude-session",
+        "prompt": "first prompt interrupted by user",
+    })
+    user_prompt({
+        "hook_event_name": "UserPromptSubmit",
+        "session_id": "same-claude-session",
+        "prompt": "second prompt after interrupt",
+    })
+
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        rows = db.recent_turns("session:gabriel", 20)
+        assert [(row["role"], row["content"]) for row in rows[-3:]] == [
+            ("user", "first prompt interrupted by user"),
+            ("system", "TURN_ABORTED:previous_turn_interrupted_before_next_prompt"),
+            ("user", "second prompt after interrupt"),
+        ]
+        states = [
+            row[0]
+            for row in db.db.execute(
+                "SELECT state FROM workspace_episodes WHERE session_id='session:gabriel' ORDER BY ts"
+            ).fetchall()
+        ]
+        assert states == ["ABORTED", "OPEN"]
+        active = db.db.execute(
+            "SELECT COUNT(*) FROM active_turns WHERE session_id='session:gabriel'"
+        ).fetchone()[0]
+        assert active == 1
+    finally:
+        db.close()
+
+    stop({
+        "hook_event_name": "Stop",
+        "session_id": "same-claude-session",
+        "last_assistant_message": "second turn completed",
+    })
+
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        states = [
+            row[0]
+            for row in db.db.execute(
+                "SELECT state FROM workspace_episodes WHERE session_id='session:gabriel' ORDER BY ts"
+            ).fetchall()
+        ]
+        assert states == ["ABORTED", "COMPLETED"]
+        assert db.db.execute(
+            "SELECT COUNT(*) FROM active_turns WHERE session_id='session:gabriel'"
+        ).fetchone()[0] == 0
+    finally:
+        db.close()
 
 
 def test_entityos_binary_presence_does_not_enable_execution(tmp_path, monkeypatch):

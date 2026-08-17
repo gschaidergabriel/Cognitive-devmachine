@@ -11,8 +11,21 @@ from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB
-from .terminal_gateway import create_terminal_app
+from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+
+
+_WS_INCOMING_QUEUE_MAX_MESSAGES = 4
+
+
+def _uvicorn_websocket_kwargs() -> dict[str, object]:
+    """Bind transport-level WebSocket limits before ASGI message delivery."""
+    return {
+        "ws": "websockets",
+        "ws_max_size": _PTY_INPUT_FRAME_MAX_BYTES,
+        "ws_max_queue": _WS_INCOMING_QUEUE_MAX_MESSAGES,
+        "ws_per_message_deflate": False,
+    }
 
 
 def _clerk_map() -> dict[str, str]:
@@ -146,7 +159,14 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            workers=1,
+            access_log=False,
+            **_uvicorn_websocket_kwargs(),
+        )
     finally:
         db.checkpoint("shutdown")
         db.close()

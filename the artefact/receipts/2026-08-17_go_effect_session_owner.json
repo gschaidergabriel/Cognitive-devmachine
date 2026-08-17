@@ -1,0 +1,28 @@
+{
+  "kind": "CLAYVERSE_GO_EFFECT_SESSION_OWNER_RECEIPT",
+  "timestamp_utc": "2026-08-17T04:41:09Z",
+  "merged_commit": "34a7dc741ed4c8e57e6888c787cd8ef3c8afa8ca",
+  "finding": "EffectGate previously accepted a valid user_id paired with another valid user's session_id because it resolved generation by session_id only.",
+  "repair": "Before any effect, resolve generation only for the exact canonical (session_id,user_id) pair and fail closed on mismatch.",
+  "regression": "the artefact/tests/test_effect_identity_boundary.py",
+  "isolated_focused_discriminator": {
+    "surface": "OpenAI isolated container workspace (non-VPS)",
+    "scope": "effect ownership mechanism",
+    "result": "PASS"
+  },
+  "github_ci": {
+    "workflow_runs_for_merge_commit": 0,
+    "result": "NOT_EXECUTED"
+  },
+  "unusual_experiment": {
+    "new_experiment_added": false,
+    "reason": "The user-triggered GO macro-cycle's single unusual experiment was already consumed by the existing cross-user crash/reopen ABA lease-fencing experiment in 2026-08-17_go_candidate.json."
+  },
+  "whole_system_pass": false,
+  "open_gates": [
+    "exact OCI image build/runtime in an authorized external sandbox",
+    "real Clerk JWT verification/key rotation",
+    "authenticated Claude Code terminal/runtime integration",
+    "selected Clay/EntityOS substrate integration"
+  ]
+}

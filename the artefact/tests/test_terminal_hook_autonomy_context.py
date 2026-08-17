@@ -55,6 +55,7 @@ def _goal_with_private_effect(db: UnifiedDB):
 def test_autonomy_projection_requires_existing_unifieddb_transaction(tmp_path):
     db = _db(tmp_path / "unified.db")
     goal = _goal_with_private_effect(db)
+    AutonomyController(db).block_goal(goal["goal_id"], "SECRET_BLOCK_REASON")
 
     with pytest.raises(TerminalHookError, match="requires active UnifiedDB transaction"):
         _autonomy_context_in_tx(db, "gabriel", db.entity_generation())
@@ -65,11 +66,13 @@ def test_autonomy_projection_requires_existing_unifieddb_transaction(tmp_path):
     assert projection["mode"] == "read_only"
     assert projection["goals"][0]["goal_id"] == goal["goal_id"]
     assert projection["goals"][0]["current_step"]["effect_capability"] == "entityos.exec"
+    assert projection["goals"][0]["blocked_reason_class"] == "opaque"
     assert projection["next_runnable_goal_id"] is None
     rendered = json.dumps(projection, sort_keys=True)
     assert "SECRET_EFFECT_TARGET" not in rendered
     assert "secret-argv" not in rendered
     assert "must-not-enter-hook-context" not in rendered
+    assert "SECRET_BLOCK_REASON" not in rendered
     db.close()
 
 
@@ -153,8 +156,7 @@ def test_autonomy_projection_is_sacrificed_before_inline_context_spill():
             },
             "evidence_effect_count": 0,
             "has_user_ack": False,
-            "blocked_reason": None,
-            "blocked_reason_truncated": False,
+            "blocked_reason_class": None,
         }
         for index in range(4)
     ]

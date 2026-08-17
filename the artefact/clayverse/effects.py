@@ -2,11 +2,11 @@ from __future__ import annotations
 import os,subprocess,hashlib
 from pathlib import Path
 from dataclasses import dataclass
-from .store import UnifiedDB,Lease
+from .store import UnifiedDB,Lease,StaleGeneration
 from .entityos_bridge import EntityOSBridge
 @dataclass(frozen=True)
 class EffectRequest:
-    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None
+    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None
 class EffectGate:
     ALLOWED={'entityos.exec','process.exec','state.noop'}
     SHELL_NAMES={'sh','bash','dash','zsh','fish','ksh','csh','tcsh'}
@@ -16,6 +16,7 @@ class EffectGate:
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
         if not row: raise PermissionError('session owner mismatch')
         generation=int(row[0])
+        if req.expected_generation is not None and req.expected_generation != generation: raise StaleGeneration(req.session_id)
         if lease: self.db.assert_lease(lease)
         if req.capability=='state.noop': outcome={'ok':True,'target':req.target}
         elif req.capability=='entityos.exec':

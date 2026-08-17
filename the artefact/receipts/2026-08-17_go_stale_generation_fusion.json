@@ -1,0 +1,14 @@
+{
+  "kind": "CLAYVERSE_STALE_GENERATION_FUSION_RECEIPT",
+  "base_main_sha": "764cc6351ad5a2634fa054a811cd9b5b4cc2a8a9",
+  "scope": "reasoning-generation fencing fused with session-owner validation, direct-argv no-shell execution, lease post-check, and pinned EntityOS bridge",
+  "isolated_regression": {
+    "surface": "OpenAI isolated container workspace, non-VPS",
+    "command": "python3 -m pytest -q tests/test_clayverse.py tests/test_unusual_experiment.py",
+    "result": "PASS",
+    "count": 12
+  },
+  "unusual_experiment": "no new unusual experiment; regression reuses the already-consumed cross-user crash/reopen ABA intervention",
+  "claim": "effects carrying an expected reasoning generation fail closed before host or EntityOS execution when the canonical session generation changed",
+  "whole_system_pass": false
+}

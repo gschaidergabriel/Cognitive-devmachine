@@ -100,7 +100,7 @@ jobs:
           umask 077
           work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
           prefix="$work/root"
-          receipt="/tmp/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
+          receipt="$RUNNER_TEMP/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
           serial="$work/serial.log"
           netboot="$work/alpine-netboot.tar.gz"
           extract="$work/netboot"
@@ -171,7 +171,7 @@ jobs:
           import json, os, pathlib, platform, sys
           out,base_sha,kernel_sha,initrd_sha,bios_sha,serial_sha,qemu_rc,started,qemu_version,kernel_line,boot_signal=sys.argv[1:]
           payload={
-            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v3',
+            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v4',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
@@ -201,6 +201,7 @@ jobs:
             'qemu_exit_status':int(qemu_rc),
             'serial_log_sha256':serial_sha,
             'guest_kernel_boot_observed':started=='true',
+            'receipt_fail_closed':True,
             'cleanup_boundary':'workflow removes temporary VMM payload and guest inputs in final step',
             'product_runtime_credit':0,
             'whole_product_credit':0,
@@ -211,6 +212,7 @@ jobs:
           if not payload['guest_kernel_boot_observed']:
             raise SystemExit(52)
           PY
+          test -s "$receipt"
 
       - name: Destroy temporary VMM and guest payloads
         if: always()
@@ -229,6 +231,15 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: clayverse-vps-rootless-qemu-guest-${{ github.run_id }}
-          path: /tmp/clayverse-vps-rootless-qemu-guest-${{ github.run_id }}.json
-          if-no-files-found: warn
+          path: ${{ runner.temp }}/clayverse-rootless-qemu-guest-${{ github.run_id }}.json
+          if-no-files-found: error
           retention-days: 7
+
+      - name: Destroy local receipt after upload
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          receipt="$RUNNER_TEMP/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
+          rm -f "$receipt"
+          test ! -e "$receipt"

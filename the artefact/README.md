@@ -14,17 +14,19 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
+- Runtime readiness: `/readyz` now requires canonical state **and** both canonical tmux sessions to be live and pass the same managed transport-policy attestation used by attach admission; this is source/mechanism hardening, not live OCI/runtime acceptance.
 - Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
 - Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked by orchestration-network/DNS before provider contact. These are execution-admission blockers, not product test failures.
 - Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, and live dual-session concurrency/fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 — README cycle contract introduced**
+**2026-08-17 — README cycle contract introduced and refreshed against newest `main`**
 
 - The README is now the human-readable living status surface for `the artefact/`.
 - Every product-convergent cycle must update this section with the newest state and the cycle delta; `NO_CHANGE` must be written explicitly when a cycle produces no canonical artefact/status change.
-- The latest merged artefact hardening before this README refresh fixed EntityOS child execution to a fixed `/usr/bin:/bin` PATH instead of inheriting a mutable parent PATH. Supporting exact-file regression evidence was 3/3 PASS, but this does **not** grant OCI/runtime, EntityOS-admission, or whole-product PASS.
+- Latest merged hardening: EntityOS child execution now uses a fixed `/usr/bin:/bin` PATH instead of inheriting a mutable parent PATH. Supporting exact-file regression evidence was 3/3 PASS, but this does **not** grant OCI/runtime, EntityOS-admission, or whole-product PASS.
+- Newer merged hardening: runtime readiness now requires both canonical tmux sessions to be live and policy-attested rather than checking UnifiedDB/session metadata alone. Supporting bounded mechanism evidence was 5/5 PASS; live tmux/native Claude/OCI and whole-product acceptance remain outstanding.
 - Whole-product acceptance remains unchanged: **IN_PROGRESS**.
 
 ### Cycle update rule

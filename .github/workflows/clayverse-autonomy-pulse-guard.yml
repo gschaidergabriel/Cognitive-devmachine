@@ -1,0 +1,64 @@
+name: ClayVerse autonomy pulse guard
+
+on:
+  push:
+    paths:
+      - 'the artefact/clayverse/autonomy.py'
+      - 'the artefact/clayverse/autonomy_context.py'
+      - 'the artefact/clayverse/autonomy_planner.py'
+      - 'the artefact/clayverse/autonomy_dispatch.py'
+      - 'the artefact/clayverse/autonomy_pulse.py'
+      - 'the artefact/clayverse/terminal_activity.py'
+      - 'the artefact/clayverse/terminal_sessions.py'
+      - 'the artefact/clayverse/terminal_hooks.py'
+      - 'the artefact/clayverse/mcp_server.py'
+      - 'the artefact/tests/test_autonomy_planner.py'
+      - 'the artefact/tests/test_autonomy_dispatch.py'
+      - 'the artefact/tests/test_autonomy_hook_dispatch.py'
+      - 'the artefact/tests/test_autonomy_goal_commands.py'
+      - 'the artefact/tests/test_autonomy_pulse.py'
+      - 'the artefact/tests/test_autonomy_human_preemption_reentry.py'
+      - 'the artefact/tests/test_autonomy_mcp_effect_dispatch.py'
+      - 'the artefact/tests/test_autonomy_terminal_tool_wiring.py'
+      - '.github/workflows/clayverse-autonomy-pulse-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  autonomy-pulse-focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install focused test harness
+        run: python -m pip install --disable-pip-version-check 'pytest==8.4.1'
+      - name: Compile autonomy supervisor spine
+        working-directory: the artefact
+        run: |
+          python -m py_compile \
+            clayverse/autonomy.py \
+            clayverse/autonomy_context.py \
+            clayverse/autonomy_planner.py \
+            clayverse/autonomy_dispatch.py \
+            clayverse/autonomy_pulse.py \
+            clayverse/terminal_activity.py \
+            clayverse/terminal_sessions.py \
+            clayverse/terminal_hooks.py \
+            clayverse/mcp_server.py
+      - name: Run focused autonomy supervisor regressions
+        working-directory: the artefact
+        run: |
+          python -m pytest -q \
+            tests/test_autonomy_planner.py \
+            tests/test_autonomy_dispatch.py \
+            tests/test_autonomy_hook_dispatch.py \
+            tests/test_autonomy_goal_commands.py \
+            tests/test_autonomy_pulse.py \
+            tests/test_autonomy_human_preemption_reentry.py \
+            tests/test_autonomy_mcp_effect_dispatch.py \
+            tests/test_autonomy_terminal_tool_wiring.py

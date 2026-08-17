@@ -1,0 +1,87 @@
+{
+  "schema": "clayverse-go-fusion-admission-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "source_bootstrap": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER",
+  "unusual_experiment": {
+    "executed_by_this_work": false,
+    "reason": "13:35 macro-cycle experiment slot already closed by canonical race-violation/lease coordination state"
+  },
+  "canonical_product_deltas_committed": [
+    {
+      "commit": "0b508f37f0cb200833e5615335f1d0c013ac994b",
+      "scope": "browser xterm input is chunked to the canonical 65,536-byte PTY ingress budget"
+    },
+    {
+      "commit": "9e90d1ffcabe10cad20807b4dfc5ed9615b3decf",
+      "scope": "stale permanent-terminal regression updated to assert chunked ingress rather than the removed one-shot send path"
+    },
+    {
+      "commit": "9956bd5b8651eb5c3f6943cfc54e3cb2a85f6915",
+      "scope": "canonical Clerk verifier rejects non-null actor/impersonation claim and pending session status"
+    },
+    {
+      "commit": "f416d8f6cf0a99a1d16af2efe0d648fad0c74450",
+      "scope": "Clerk session-shape regression binds directly to canonical verifier and covers impersonated/pending rejection"
+    }
+  ],
+  "exact_blob_fusion": {
+    "terminal_gateway_blob": "4debd1b92a65f72bdfa54a51bec9c2fa2110d268",
+    "clerk_auth_blob": "8f321ef6a2fb63515a4c150db17d58c9cb5b4585",
+    "adapters_blob": "fe72f5fd57a9a047b3bc54f6ecf4c6e8e0d44308",
+    "clerk_test_blob": "5015bc0fa7b3c11c4d570ec88db847fb02a4f4b3"
+  },
+  "ordinary_supporting_evidence": {
+    "terminal_chunking_local_mechanism": {
+      "encoded_bytes": 120000,
+      "chunks": 2,
+      "maximum_chunk_bytes": 65536,
+      "byte_identity_after_reassembly": true,
+      "classification": "MECHANISM_SUPPORTED_ONLY"
+    },
+    "clerk_donor_exact_blob_regression": {
+      "focused_signed_token_tests": "4/4 PASS",
+      "py_compile": "PASS",
+      "classification": "EXACT_BLOB_MECHANISM_EVIDENCE_ONLY",
+      "note": "Current main fused the same canonical clerk_auth/adapters/test blobs; this does not establish live Clerk/browser/OCI acceptance."
+    }
+  },
+  "vercel_sandbox_attempt": {
+    "execution_path": "Dr.-Unterweger Git preview -> @vercel/sandbox/OIDC -> isolated microVM",
+    "staging_branch": "chatgpt/go-terminal-ingress-vercel-20260817-1354",
+    "staging_head": "7d2fb67a19eb9c8e4b13a7879e3d4453d39c7487",
+    "bound_research_commit": "64ecd8ba019e5a253666a786e42427ca22e5fd31",
+    "staged_gateway_fixture_blob": "4debd1b92a65f72bdfa54a51bec9c2fa2110d268",
+    "sandbox_runtime_requested": "python3.13",
+    "persistent_requested": false,
+    "network_policy_requested": "deny-all",
+    "github_vercel_status": "failure",
+    "status_target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "sandbox_command_executed": false,
+    "test_credit": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT"
+  },
+  "reentry_observation": {
+    "later_main_observed": "4c48466a40c846b0589c70d09a665f54564dbfa5",
+    "important_parallel_delta": "c74479f323be25f030c72df4e572139d837acd16 merged renewable Clerk WebSocket PTY auth lease after the bound 64ecd attempt source",
+    "consequence": "the blocked attempt cannot be reused as exact-current evidence even if admission later opens; refresh and restage the then-current head"
+  },
+  "acceptance": {
+    "source_improvement": true,
+    "mechanism_support": true,
+    "exact_current_runtime_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "When Vercel preview admission opens, refresh current main, stage the exact then-current terminal/auth blobs, run focused PTY/auth/lifecycle regressions inside Sandbox, then proceed to exact OCI build/start/readiness/restart and real Clerk browser/WebSocket PTY acceptance.",
+  "forbidden_fallbacks_not_used": [
+    "VPS",
+    "self-hosted VPS runner",
+    "production host",
+    "Together API"
+  ]
+}

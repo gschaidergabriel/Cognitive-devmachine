@@ -50,11 +50,14 @@ Deployment authority:
 
 - `deployment/MICROVM_DEPLOYMENT_CONTRACT.md`
 - `deployment/clayverse-kata-statefulset.template.yaml`
+- `deployment/clayverse-kata-annotation-admission-policy.yaml`
 - `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`
 
 The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, and persists only declared ClayVerse state/workspace volumes.
 
 The same template also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, enumerate the complete additive set of policies selecting the ClayVerse pod, and show that only admitted flows open while tested non-admitted flows remain denied.
+
+The reference Kata admission fence is deliberately stricter than the workload template: a `ValidatingAdmissionPolicy` with `failurePolicy: Fail` plus a `Deny` binding rejects every Pod CREATE/UPDATE carrying an `io.katacontainers.*` annotation. The reference binding intentionally has no Pod `objectSelector`, because a Pod-label selector is an opt-in scope and is not an acceptable security boundary. On a shared cluster, any narrowing must use a separately reviewed and receipt-bound namespace boundary whose labels/RBAC are themselves attested. A required Kata annotation may be admitted only by explicit replacement policy bytes for the exact reviewed key/value; template absence alone never proves the effective admitted Pod is safe.
 
 Readiness and liveness are intentionally distinct: `/readyz` is the full runtime admission gate, while `/healthz` is the narrower liveness surface. A recoverable readiness loss must stop traffic without automatically being treated as a dead appliance.
 
@@ -84,6 +87,7 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - baseline ClayVerse ingress+egress deny is actually enforced by the deployed CNI;
 - the exact reviewed network allow policy opens only admitted paths while tested non-admitted flows remain denied;
 - the installed Kata/runtime identity is the then-current upstream-supported release and the effective runtime configuration/Pod annotations match the reviewed acceptance set;
+- the exact ValidatingAdmissionPolicy + Binding are installed, reject an injected unreviewed `io.katacontainers.*` annotation, and cannot be bypassed through a Pod-label selector;
 - Tier-1 EntityOS/internal recovery;
 - Tier-2 full Pod-sandbox/microVM replacement from the same image digest, with new Pod plus sandbox/VM identity rather than an in-place container restart;
 - UnifiedDB/WAL/snapshot recovery under a new generation;
@@ -96,7 +100,9 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 The architecture and fail-closed Kata deployment profile are canonical source, but **actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-The current MicroVM source slice has now been independently reconstructed from the exact Git blobs and executed together in an isolated non-production container: contract `794b209bc8ff14cbaf898b31557daac075977818`, template `629f7bbb7627e997839597edd499ce008c569a0f`, and focused test `283b269042e056e7adca227e84ae31a055f898da` all matched GitHub under `git hash-object`, and `pytest -q tests/test_microvm_deployment_contract.py` passed **10/10**. This exact-current source-slice result includes default-deny networking, separate `/healthz` versus `/readyz`, full Pod/Kata-sandbox Tier-2 semantics, rolling-release Kata security and runtime-annotation fences. It is bounded source/mechanism evidence only — not an OCI build, Kubernetes runtime, CNI enforcement, live Kata guest-kernel attestation or Tier-2 recovery execution.
+The current MicroVM source slice has now been independently reconstructed from the exact Git blobs and executed together in an isolated non-production container: contract `794b209bc8ff14cbaf898b31557daac075977818`, template `629f7bbb7627e997839597edd499ce008c569a0f`, and focused test `283b269042e056e7adca227e84ae31a055f898da` all matched GitHub under `git hash-object`, and `pytest -q tests/test_microvm_deployment_contract.py` passed **10/10**. This exact-current source-slice result includes default-deny networking, separate `/healthz` versus `/readyz`, full Pod/Kata-sandbox Tier-2 semantics, rolling-release Kata security and runtime-annotation contract fences. It is bounded source/mechanism evidence only — not an OCI build, Kubernetes runtime, CNI enforcement, live Kata guest-kernel attestation or Tier-2 recovery execution.
+
+The new admission-policy lane has a narrower evidence class: its exact branch YAML was parsed successfully and its policy/binding structure was checked locally, while the CEL form is grounded in the upstream CEL map-key `all()` semantics. No Kubernetes API-server admission execution has yet been observed for these new bytes, so this remains a source/mechanism candidate rather than admission-runtime proof.
 
 The Claude terminal source starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
 
@@ -104,22 +110,21 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation + current-supported Kata/runtime configuration -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full Pod sandbox/microVM -> prove new sandbox identity -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation + current-supported Kata/runtime configuration -> install/prove fail-closed Kata annotation admission fence -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full Pod sandbox/microVM -> prove new sandbox identity -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 23:02 +07:00 — exact-current MicroVM source slice 10/10 PASS; Kata rolling-release security gate durably recorded.**
+**GO 2026-08-17 22:59 +07:00 — fail-closed Kata runtime-annotation admission fence added as a bounded source candidate.**
 
-- parallel current-main work that closed the NetworkPolicy gap and strengthened full-sandbox Tier-2 semantics was classified `DUPLICATE/CONFIRMS` / `ADOPT`, preserved and not overwritten by the earlier stale candidate;
-- canonical contract commit `1583c98f5c34f55d870e8bcd8cd2849dacc27f14` requires the then-current upstream-supported Kata release, not merely a numeric version above the historical `3.31.0` floor, and fails closed on unreviewed runtime-mutating `io.katacontainers.*` annotations;
-- canonical focused-test commit `647ba7f0b2e2735a2b9226a52f29f33b2af28ed6` binds the rolling-release/advisory/annotation gate;
-- exact reconstructed current blobs contract `794b209b…`, template `629f7bbb…`, test `283b2690…` passed the full focused MicroVM regression **10/10** in an isolated non-production container;
-- upstream security review: Kata is rolling-release/current-month-only support; `releases/latest` was `4.0.0`; `GHSA-mp2j-xm59-qfgw` and `GHSA-7fhf-v3p3-rp56` affect `<=3.32.0` and are patched in `4.0.0`; this is dated evidence, not a permanent 4.0.0 pin;
-- durable receipt: `receipts/2026-08-17_GO_2249_KATA_ROLLING_RELEASE_SECURITY_FLOOR_GPT56SOL.json`;
-- strongest executable OCI blocker remains host-side provisioning of the sensitive Vercel Preview `GITHUB_READ_TOKEN` for private Research/EntityOS staging; it must remain outside the Sandbox and cannot be provisioned through the connected Vercel surface available to this organ;
-- runtime credit remains **zero** for exact final OCI, Kubernetes, Kata/microVM, CNI enforcement and Tier-2 full-sandbox replacement;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id and only minute-precision immutable message time.
+- current `main` was refreshed through the fast-moving MicroVM lanes before write; the retained branch was created from the then-current `main` lineage observed through PR #632 base `608eafe5f154d0dbc3ddb4e9a2a8df3342cdd3d6`;
+- added `deployment/clayverse-kata-annotation-admission-policy.yaml`: Kubernetes `admissionregistration.k8s.io/v1` ValidatingAdmissionPolicy + Binding, Pod CREATE/UPDATE, `failurePolicy: Fail`, `validationActions: Deny`, CEL rejection of every `io.katacontainers.*` annotation;
+- adversarial review rejected the first draft's `objectSelector: app=clayverse` as label-bypassable and removed it before promotion/receipt; the baseline binding now applies to every Pod matched by the policy, with any shared-cluster namespace narrowing explicitly owner/review/receipt bound;
+- added `tests/test_microvm_kata_annotation_admission_policy.py` to fence the fail-closed policy shape, the absence of a Pod-label selector, lack of preapproved Kata annotations in the reference workload, and the existing contract requirement for post-mutation admission enforcement;
+- exact branch policy YAML parsed and structural assertions passed in an isolated non-production container; no API-server/Kata runtime credit is claimed;
+- current upstream Kubernetes docs confirm unset binding `matchResources` validates all resources matched by the policy, `Deny` rejects failed validations, and `failurePolicy: Fail` rejects evaluation errors; CEL map comprehensions iterate map keys, supporting the prefix fence;
+- no unusual experiment was executed: coordination is `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` for the minute-precision trigger identity;
+- exact final OCI/Kubernetes/Kata admission runtime remains blocked downstream; the retained Vercel source-staging prerequisite is still the missing host-side Preview `GITHUB_READ_TOKEN`, which must not enter the Sandbox.
 
 ## Verification
 
-Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual current-supported Kata runtime/configuration, full-sandbox Tier-2 replacement, enforced ingress/egress policy and live process-environment attestation.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual current-supported Kata runtime/configuration, admission-policy enforcement, full-sandbox Tier-2 replacement, enforced ingress/egress policy and live process-environment attestation.

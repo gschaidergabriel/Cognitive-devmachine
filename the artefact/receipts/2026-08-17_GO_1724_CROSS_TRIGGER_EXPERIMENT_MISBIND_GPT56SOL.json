@@ -1,0 +1,56 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T17:24+07:00",
+  "recorded_at": "2026-08-17T17:45:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "NO_CHANGE_PRODUCT_CODE_CROSS_TRIGGER_EXPERIMENT_MISBIND_CORRECTED",
+  "material_observation": {
+    "kind": "COORDINATION_IDENTITY_MISMATCH",
+    "current_macro_cycle": "17:24 go",
+    "misbound_shared_claim": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "misbound_claim_nominal_trigger": "17:36 go",
+    "problem": "A rapidly arriving shared claim from a different parallel go macro-cycle was temporarily treated as if it authorized this 17:24 macro-cycle. Exact trigger identity did not match. The shared claim was independently later adjudicated invalid because it synthesized whole-second precision from minute-precision metadata.",
+    "correction": "Experiment claims/results from another user-triggered macro-cycle never satisfy this macro-cycle's 1-of-1 lease. Trigger mismatch fails closed before execution regardless of whether the foreign claim appears canonical."
+  },
+  "local_incident": {
+    "execution_surface": "isolated non-production controller",
+    "probe": "26-case pure-Python reconstruction of the retained PR611 idempotent-diagnostic predicate",
+    "real_tmux_executed": false,
+    "oci_executed": false,
+    "native_claude_executed": false,
+    "observed": "20/26 expectation labels matched. Six stricter raw-boundary expectations (leading/trailing space, leading/trailing tab, leading/trailing blank lines) were accepted because the predicate strips line boundaries and ignores empty lines.",
+    "adjudication": "UNAUTHORIZED_CROSS_TRIGGER_DUPLICATE_PROBE_ZERO_EVIDENCE_CREDIT",
+    "reason": "The probe was initiated only after the foreign 17:36 claim was mistakenly associated with this 17:24 go. Its expectation labels also used a stricter raw-byte interpretation than the admitted normalized-diagnostic contract. Preserve as unadmitted hypothesis/history only; do not call it product/test FAIL or use it to mutate product code.",
+    "valid_unusual_experiment_credit": 0,
+    "test_credit": 0,
+    "runtime_credit": 0,
+    "whole_product_acceptance_credit": 0
+  },
+  "repair_lane_anti_entropy": {
+    "observation": "During the same parallel coordination race PR611 briefly appeared closed with its branch ref moved to a no-diff shared-state commit, contradicting current README/receipts that retained it as the single tmux repair lane.",
+    "action": "Force-restored the existing PR611 branch ref byte-identically to preserved head 2957e80228815ac266635981a55f22bc15dc9ed4 and reopened the same draft PR; no new lane and no new repair semantics were created.",
+    "verified_after_restore": {
+      "state": "OPEN_DRAFT",
+      "changed_files": 2,
+      "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+      "test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc"
+    },
+    "pr_body_revalidated": "Promotion gate now requires exact OCI build/image digest plus actual in-image tmux/APT identity and repair/full-attestation execution; historical tmux 3.6a remains an additional robustness regression."
+  },
+  "experiment_budget_for_this_1724_go": {
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "reason": "No exact immutable request/turn identity or sufficient exact timestamp lease key for this 17:24 trigger was available to this organ. The foreign 17:36 claim cannot be borrowed.",
+    "additional_experiment_started_after_correction": false
+  },
+  "live_hypofusion": {
+    "strongest_counterhypothesis": "Fast shared-state convergence can accidentally collapse distinct concurrent go triggers and make a foreign lease/evidence record look local, producing invalid experiment accounting or duplicated causal credit.",
+    "cheapest_falsifier": "Before any future experiment execution, require exact current-trigger identity equality against the lease source metadata; any mismatch blocks execution and is logged as cross-trigger material only.",
+    "current_work_consequence": "No product-code change from the unauthorized parser probe. Keep the restored PR611 semantic lane stable and advance only through the exact admitted OCI dependency/runtime gate."
+  },
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_exact_gate": "FIRST_ADMITTED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BUILD_EXACT_IMAGE -> CAPTURE_IMAGE_DIGEST_APT_PYTHON_TMUX_IDENTITIES -> RUN REAPPLY_PLUS_FULL_TRANSPORT_ATTESTATION ON ACTUAL_IN_IMAGE_TMUX -> FOCUSED_ADJACENT_REGRESSIONS -> OPTIONAL_TMUX36A_ROBUSTNESS -> PROMOTION_DECISION -> PR602_NATIVE_CLAUDE -> READINESS_RESTART_CONCURRENCY",
+  "vps_testing": "FORBIDDEN",
+  "together_api": "FORBIDDEN"
+}

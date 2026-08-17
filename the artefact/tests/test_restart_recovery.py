@@ -40,6 +40,14 @@ def test_restart_aborts_open_non_effect_episode_and_is_idempotent(tmp_path):
         "generation": 2,
     }
     assert second["scanned"] == 0
+    assert second["generation"] == first["generation"] + 1
+    generations = db.db.execute(
+        "SELECT user_id,generation FROM sessions ORDER BY user_id"
+    ).fetchall()
+    assert {row["user_id"]: int(row["generation"]) for row in generations} == {
+        "andreas": second["generation"],
+        "gabriel": second["generation"],
+    }
     row = db.db.execute(
         "SELECT effect_id,credit,reentered FROM causal_episodes WHERE episode_id=?",
         (episode_id,),

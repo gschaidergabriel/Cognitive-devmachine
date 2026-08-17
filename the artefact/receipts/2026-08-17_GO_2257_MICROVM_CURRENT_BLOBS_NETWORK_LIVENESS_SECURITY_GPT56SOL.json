@@ -1,0 +1,89 @@
+{
+  "schema": "ClayVerseBoundedEvidenceReceipt/v1",
+  "timestamp_local": "2026-08-17T22:57:29+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / OpenAI isolated non-production container",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "main",
+  "purpose": "Rebind the strengthened current MicroVM deployment spine after concurrent network-policy and liveness/security hardening, reproduce the exact current source-level contract, and distinguish source evidence from unavailable final Kata/CNI runtime evidence.",
+  "live_fusion": {
+    "classification": "ADOPT_PLUS_REVERIFY",
+    "observation": "A concurrent worker closed the previously observed missing NetworkPolicy gap before this organ's CAS write. The stale write was rejected with HTTP 409 and no overwrite occurred.",
+    "result": "No duplicate implementation was created. This organ refreshed the new canonical blobs and revalidated the stronger current path instead."
+  },
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "57db5224db000fc246445d68938b218ed8e4ff14",
+    "the artefact/tests/test_microvm_deployment_contract.py": "a03de2e8fe1473c7e019dce66710bc04d244aa75"
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "reconstruction_identity": "PASS_ALL_THREE_GIT_BLOB_SHA1_MATCHED_GITHUB",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "PASS",
+    "cases": 7,
+    "duration_seconds": 0.04,
+    "yaml_semantic_probe": {
+      "result": "PASS",
+      "documents": [
+        "Service/clayverse",
+        "StatefulSet/clayverse",
+        "NetworkPolicy/clayverse-default-deny"
+      ],
+      "network_policy": "exactly one ClayVerse-selected policy with Ingress and Egress policyTypes and empty ingress/egress rule lists",
+      "probe_paths": {
+        "readiness": "/readyz",
+        "liveness": "/healthz"
+      }
+    },
+    "scope": "Exact current three-file source/mechanism regression only; not full checkout, OCI, Kubernetes, Kata, CNI, Clerk, Claude, recovery or concurrency execution."
+  },
+  "external_primary_verification": {
+    "kubernetes_networkpolicy": {
+      "source": "kubernetes.io official NetworkPolicy documentation",
+      "observation": "Pods are non-isolated by default; selecting a pod with Ingress/Egress policyTypes and empty rules creates deny-by-default intent, but enforcement requires a NetworkPolicy-capable network plugin.",
+      "impact": "Supports the canonical fail-closed baseline and the requirement to test real target CNI enforcement."
+    },
+    "kata_runtime_rs_security": {
+      "source": "kata-containers/kata-containers official GHSA-2gv2-cffp-j227 and security policy",
+      "observation": "GHSA-2gv2-cffp-j227 / CVE-2026-47243 marks runtime-rs <= 3.30.0 affected and 3.31.0 patched. Kata states only its latest monthly release series is actively maintained.",
+      "impact": "Confirms the current contract's 3.31.0 historical minimum fence while requiring a fresh upstream advisory/release review before final acceptance rather than treating 3.31.0 as permanently sufficient."
+    }
+  },
+  "vercel_execution_admission": {
+    "latest_observed_deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "sandbox_create": "PASS_CREATED",
+    "sandbox_id": "peach-traditional-sparrow-J4uLFC",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "PRE_SOURCE_CREDENTIAL_ADMISSION_BLOCKER_NOT_CLAYVERSE_TEST_FAIL",
+    "secret_forwarded_to_sandbox": false,
+    "next_gate": "Provide the sensitive GitHub read credential only as host-side Vercel Preview/controller configuration, never source or Sandbox-forwarded input, then rerun the exact current private-source-bound OCI batch."
+  },
+  "evidence_class": "EXACT_CURRENT_SOURCE_MECHANISM_SUPPORTED",
+  "not_proven": [
+    "full exact-current repository regression suite",
+    "exact accepted OCI image build/digest/start/readiness",
+    "actual Kubernetes NetworkPolicy enforcement by target CNI",
+    "Kata guest-kernel isolation for the final image digest",
+    "real Clerk/browser WebSocket PTY",
+    "packaged tmux/Claude runtime",
+    "Tier-1/Tier-2 recovery and no-blind-replay",
+    "dual-user concurrency/global-generation acceptance",
+    "whole ClayVerse acceptance"
+  ],
+  "promotion": "DENIED_PENDING_EXACT_AUTHORIZED_RUNTIME",
+  "next_discriminator": "Unblock the host-side Vercel private-source credential boundary, rerun the exact current private-source/EntityOS-bound OCI batch, then carry the same accepted image digest into an admitted Kata/equivalent target and prove real default-deny CNI enforcement before explicit allow-policy acceptance.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "unusual_experiment_reason": "No shared immutable request/turn id is exposed, and the exact user go message metadata available to this organ is only minute-precision (2026-08-17T22:49+07:00), which fails the atomic lease protocol's whole-second fallback requirement.",
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persistence": false
+  },
+  "whole_clayverse_pass": false
+}

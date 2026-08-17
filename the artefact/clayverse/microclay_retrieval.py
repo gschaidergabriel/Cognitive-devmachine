@@ -9,9 +9,13 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .microclay_methods import METHOD_KINDS
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
+_CONTROL_KINDS = frozenset({
+    "source_archive", "compression_receipt", "compression_clearance"
+})
 
 
 @dataclass(frozen=True)
@@ -39,14 +43,18 @@ class RetrievalCandidate:
 
 
 class MicroClayRetrieval:
-    """Persistent bounded online-adaptive retrieval organ.
+    """Persistent bounded online-adaptive Stage-A evidence retrieval organ.
+
+    Method/candidate/control memory is excluded before evidence scoring, packing,
+    receipts and adaptive credit. A method can therefore never convert factual
+    UNKNOWN into PRESENT through this route.
 
     MicroClay changes accessibility, entry-point priors and context packing only.
     It cannot alter semantic truth, durable memory contents, provenance, user rights,
-    effect authority or EntityOS capabilities.
+    effect authority or host capabilities.
 
-    The adaptive policy starts in SHADOW. Classical retrieval remains the serving
-    path until an explicit externally validated promotion changes the mode.
+    The adaptive evidence policy starts in SHADOW. Classical retrieval remains the
+    serving path until an explicit externally validated promotion changes the mode.
     """
 
     POLICY_VERSION = 1
@@ -151,8 +159,6 @@ class MicroClayRetrieval:
         structured = 1.0 if kind in {
             "fact", "decision", "task", "commitment", "preference", "open", "open_question"
         } else 0.4
-        # No cue match means UNKNOWN, not "probably relevant because recent". The
-        # recent 20-turn working window handles conversational continuity separately.
         baseline = (
             (0.82 * lexical) + (0.12 * recency) + (0.06 * structured)
             if lexical > 0.0 else 0.0
@@ -179,12 +185,7 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new effect-outcome receipts from earlier retrieval episodes.
-
-        Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
-        """
+        """Consume new canonical effect-outcome receipts from evidence episodes only."""
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
             "SELECT r.causal_id,r.generation,c.credit,e.status "
@@ -207,6 +208,18 @@ class MicroClayRetrieval:
             )
             applied += int(bool(result.get("applied")))
         return {"eligible": len(rows), "applied": applied}
+
+    def _assert_replay_route(self, existing) -> None:
+        ids = json.loads(existing["selected_memory_ids"])
+        if not ids:
+            return
+        rows = self.db.db.execute(
+            "SELECT kind FROM durable_memory WHERE memory_id IN (%s)"
+            % ",".join("?" for _ in ids),
+            tuple(ids),
+        ).fetchall()
+        if any(str(row["kind"]) in METHOD_KINDS for row in rows):
+            raise StaleGeneration("retrieval_route_contract")
 
     def retrieve(
         self,
@@ -247,8 +260,9 @@ class MicroClayRetrieval:
                 or int(existing["limit_items"]) != int(limit)
             ):
                 raise StaleGeneration("retrieval_identity")
+            self._assert_replay_route(existing)
 
-        # Request identity is fail-closed before any adaptive state mutation.
+        # Exact request and route identity are fail-closed before adaptive mutation.
         learned_outcomes = self.learn_from_verified_outcomes(
             session_id=session_id,
             generation=generation,
@@ -283,6 +297,7 @@ class MicroClayRetrieval:
                     "retrieval_id": existing["retrieval_id"],
                     "policy_version": int(existing["policy_version"]),
                     "mode": existing["mode"],
+                    "route": "evidence",
                     "query_sha256": existing["query_hash"],
                     "candidate_count": None,
                     "selected_count": len(items),
@@ -299,13 +314,14 @@ class MicroClayRetrieval:
             }
 
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
+        excluded = tuple(sorted(_CONTROL_KINDS | METHOD_KINDS))
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
-            "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            f"WHERE kind NOT IN ({','.join('?' for _ in excluded)}) "
             "AND (user_id IS NULL OR user_id=?) "
             "AND (source_turn_id IS NULL OR source_turn_id<>?) "
             "ORDER BY ts DESC LIMIT ?",
-            (user_id, turn_id, self.MAX_SOURCE_ROWS),
+            (*excluded, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()
@@ -360,6 +376,7 @@ class MicroClayRetrieval:
                 "retrieval_id": retrieval_id,
                 "policy_version": self.POLICY_VERSION,
                 "mode": mode,
+                "route": "evidence",
                 "query_sha256": query_hash,
                 "candidate_count": len(candidates),
                 "selected_count": len(selected),
@@ -383,13 +400,7 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Apply only the canonical causally re-entered effect outcome to retrieval policy.
-
-        Caller-supplied credit, signal class and receipt identity are treated as claims
-        to verify against UnifiedDB, not as learning authority. Replays are idempotent;
-        stale generations and forged/missing outcome evidence fail closed. Durable
-        memory content and semantic truth remain untouched.
-        """
+        """Apply only the canonical causally re-entered effect outcome to retrieval policy."""
         row = self.db.db.execute(
             "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
             (causal_id,),
@@ -399,6 +410,7 @@ class MicroClayRetrieval:
         if int(row["generation"]) != int(generation):
             raise StaleGeneration("retrieval_generation")
         self.db.assert_live_generation(row["session_id"], generation)
+        self._assert_replay_route(row)
 
         outcome = self.db.db.execute(
             "SELECT c.credit,e.status FROM causal_episodes c "

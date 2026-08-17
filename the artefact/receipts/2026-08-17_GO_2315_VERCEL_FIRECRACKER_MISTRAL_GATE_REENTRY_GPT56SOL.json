@@ -1,0 +1,80 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:15:46+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "LIVE_OWNER_REENTRY_PLUS_EXTERNAL_EXECUTION_OBSERVATION",
+  "scope": "Final ClayVerse Vercel Sandbox Firecracker + exact OCI + Vault/Mistral acceptance path",
+  "owner_authority_refresh": {
+    "final_gate_directive": "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
+    "github_token_forwarding_correction": "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md",
+    "resolved_law": "A scoped read-only GITHUB_READ_TOKEN may be securely forwarded into an authorized disposable Vercel Sandbox for exact private-source staging. Final acceptance uses Vercel Sandbox Firecracker guest isolation, Docker/OCI inside that Sandbox, the exact accepted ClayVerse image digest, approved runtime secret acquisition, and real Mistral inference before and after Tier-2 recreation."
+  },
+  "latest_observed_vercel_run": {
+    "project": "dr-unterweger",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "state": "ERROR",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "guest_kernel_attestation": {
+      "result": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64"
+    },
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "github_secret_forwarded_to_sandbox": false,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "sandbox_stopped": true,
+    "interpretation": "The independent Vercel Sandbox guest-kernel boundary is observed for this run. The run does not establish private-source identity, OCI build/runtime, Mistral, recovery or whole-product evidence because it stopped before source staging. Under the current owner correction this is a provisioning/tool-surface blocker, not a policy prohibition."
+  },
+  "current_mistral_source_candidate": {
+    "adapter_path": "the artefact/clayverse/adapters.py",
+    "adapter_blob": "53a33320927c9532092c4b3b4361fa353b6d28fd",
+    "test_path": "the artefact/tests/test_mistral_inference.py",
+    "test_blob": "2b8d2ac08b16cf3a0acea67e0781a181dbaefd9e",
+    "observed_contract": [
+      "MISTRAL_API_KEY is read at request time and is not retained as adapter object state",
+      "CLAYVERSE_MISTRAL_MODEL is explicit",
+      "fixed https://api.mistral.ai/v1/chat/completions endpoint",
+      "JSON response mode and bounded response size",
+      "Mistral output is parsed through the same fail-closed ClayVerse decision protocol",
+      "forbidden process.exec is rejected before EffectGate",
+      "transport errors avoid echoing the secret"
+    ],
+    "classification": "SOURCE_CANDIDATE_WITH_DETERMINISTIC_TESTS_PRESENT_NOT_REAL_PROVIDER_RUNTIME_VERIFIED_BY_THIS_ORGAN"
+  },
+  "current_worker_capability_blocker": {
+    "vercel_connector": "read/inspection/deployment-log capable",
+    "environment_secret_mutation": "NOT_EXPOSED_BY_AVAILABLE_CONNECTED_VERCEL_TOOL_SURFACE",
+    "required_next_input": "Provision the scoped read-only GITHUB_READ_TOKEN to the retained Vercel Preview/controller environment by an authorized secret-management surface, without committing or logging it.",
+    "after_provisioning": "Retrigger the retained controller, attest exact Research/EntityOS source identity inside the Sandbox, build and run the exact OCI image, acquire Mistral token from the approved Vault/secret store, execute real Mistral inference, then perform Tier-2 full Sandbox/appliance recreation and repeat inference/recovery/effect gates."
+  },
+  "runtime_credit": {
+    "vercel_firecracker_guest_kernel_component": "SUPPORTED_FOR_THIS_OBSERVED_SANDBOX_RUN",
+    "exact_private_source_identity": 0,
+    "exact_final_oci_build": 0,
+    "exact_final_oci_runtime": 0,
+    "real_mistral_inference": 0,
+    "vault_secret_reacquisition": 0,
+    "tier2_full_sandbox_recreation": 0,
+    "whole_product": 0
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No shared immutable request/turn id is exposed to this worker; only minute-precision immutable trigger timing is available, so the canonical atomic lease protocol fails closed."
+  },
+  "safety_and_authority": {
+    "vps_self_hosted_production_test": false,
+    "together_api_used": false,
+    "secret_value_observed_or_logged_by_this_receipt": false,
+    "paid_or_final_training_started": false,
+    "whole_product_pass_claimed": false
+  }
+}

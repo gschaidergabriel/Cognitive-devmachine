@@ -34,6 +34,8 @@ For the canonical Kubernetes/Kata profile this distinction is security-critical:
 - a StatefulSet Pod template uses Kubernetes' required `restartPolicy: Always` semantics, so a terminated ClayVerse application container can be restarted by kubelet without deleting the Pod;
 - Kata maps the **Pod sandbox** to the VM. Recreating a container inside the same Pod therefore does not itself prove that the Kata VM/sandbox was discarded or that a fresh guest-kernel boundary was created.
 
+Kubernetes v1.36 adds another tempting but still insufficient path: the beta, default-enabled `RestartAllContainers` action can terminate and restart every container **in place**, while explicitly preserving the Pod UID, IP/network namespace, **Pod sandbox**, attached devices and volumes and surfacing `PodRestartInPlace`. For ClayVerse this remains Tier-1/component recovery only. `RestartAllContainers`, `PodRestartInPlace`, or any equivalent in-place Pod reset MUST NOT be credited as Tier-2 because the old Kata sandbox/VM identity is intentionally retained rather than destroyed and replaced.
+
 Accordingly, the reference StatefulSet is only the workload/isolation profile. Final deployment MUST additionally bind an **external orchestration mechanism** that converts a ClayVerse fatal-invariant/Tier-2 signal into deletion/replacement of the entire Pod sandbox/VM. That mechanism is deployment infrastructure, not a second ClayVerse cognition/state authority and not a companion application container.
 
 The Tier-2 mechanism MUST fail closed and prove all of the following before ingress reopens:
@@ -97,7 +99,8 @@ Final whole-product acceptance MUST include at least:
 - where virtiofs/shared-filesystem transport is enabled, attest the exact runtime configuration and demonstrate that the admitted patched runtime/configuration is the one actually executing the ClayVerse workload;
 - kill EntityOS and verify Tier-1 recovery;
 - kill the full ClayVerse workload/microVM and verify Tier-2 reconstruction from the same image digest plus UnifiedDB/WAL/logical snapshot recovery;
-- prove Tier-2 replacement changes both Pod UID and Kata sandbox/VM identity rather than merely restarting the ClayVerse container in place;
+- prove `RestartAllContainers`, `PodRestartInPlace`, and equivalent in-place Pod/container resets retain the old Pod/sandbox identity and receive Tier-1/component credit only, never Tier-2 credit;
+- prove Tier-2 replacement changes both Pod UID and Kata sandbox/VM identity rather than merely restarting the ClayVerse container or Pod in place;
 - inject stale pre-crash results and verify generation fencing;
 - crash around external-effect acknowledgement and prove no blind replay;
 - verify Claude Code terminal login path survives/re-establishes according to its credential/session contract;

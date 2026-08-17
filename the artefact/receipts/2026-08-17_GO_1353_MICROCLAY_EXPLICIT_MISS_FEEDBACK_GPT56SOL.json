@@ -1,0 +1,91 @@
+{
+  "schema": "clayverse_go_source_candidate_receipt_v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "finding": {
+    "class": "microclay_entrypoint_complete_miss_feedback",
+    "observed": "The retained Stage-A fusion can safely learn query-only aliases from rank-1 served evidence, but normal downstream effect credit cannot causally teach a completely missed query-to-memory route without rewarding an unserved counterfactual.",
+    "repair_candidate": "Add a typed explicit-user feedback organ that is SHADOW-only, exact-request/generation bound, privacy fenced, crash-atomic/idempotent, and able to teach or suppress only bounded query-cue to target-subject entry routes. Ordinary Claude completion and empty-retrieval effect outcomes remain unable to credit unserved targets.",
+    "coordination_issue": 483,
+    "stacked_pr": 501
+  },
+  "source_identity": {
+    "stage_a_parent_observed_before_refresh": "1ff3fc98ed808c0f3d9e37da92fe3a634e481988",
+    "candidate_head_before_receipt": "fab9e691f7ddd7aa76891a3833eacfc2dba72ffb",
+    "microclay_feedback_blob": "27a895331afb61fc3f93db998e22c57f8e293acb",
+    "focused_repository_test_blob": "ca7376cc850dedc5522c575a1d61fcdcbc68e9ae"
+  },
+  "candidate_contract": {
+    "mode": "SHADOW_ONLY",
+    "ingress": "NO_CLAUDE_OR_MCP_INGRESS_IN_V1",
+    "provenance": "exact USER_EXPLICIT typed source required",
+    "request_identity": [
+      "retrieval_id",
+      "user_id",
+      "session_id",
+      "turn_id",
+      "episode_id",
+      "causal_id",
+      "generation",
+      "query_sha256",
+      "budget_chars",
+      "limit_items",
+      "policy_version"
+    ],
+    "feedback_classes": [
+      "USER_MISS_TARGET",
+      "USER_RELEVANT",
+      "USER_IRRELEVANT",
+      "USER_NO_MEMORY"
+    ],
+    "authority": {
+      "truth_authority": false,
+      "effect_authority": false,
+      "memory_mutation_authority": false,
+      "rights_authority": false
+    },
+    "subject_collision_policy": "Because the current retained adaptive route is subject-keyed, explicit target feedback fails closed when more than one visible Stage-A memory shares the target subject; memory-specific routing must be introduced before that ambiguity can be served safely."
+  },
+  "isolated_mechanism_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "pytest_available": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "exact_candidate_module_reconstruction": true,
+    "git_blob_match": true,
+    "py_compile": "PASS",
+    "mechanism_harness": "Exact candidate module imported against minimal SQLite-backed stubs reproducing the retained Stage-A policy constants and transaction interface; this is not a full private-repository checkout.",
+    "result": "PASS",
+    "checks": "5/5",
+    "covered": [
+      "complete miss -> positive bounded route + duplicate replay idempotency",
+      "request identity drift and non-user/model-inferred source fail before mutation",
+      "cross-user/current-turn/control/ambiguous-subject targets fail closed",
+      "USER_NO_MEMORY records zero-credit calibration feedback without inventing a route",
+      "candidate joins an existing outer transaction and policy+receipt roll back together"
+    ],
+    "full_repository_pytest": false,
+    "exact_oci_runtime": false,
+    "live_clerk_pty_claude": false
+  },
+  "counterhypothesis": "A free-form correction cannot safely identify the missing target automatically. Letting Claude infer which unseen memory deserved credit would recreate model self-training/off-policy causal fabrication. The first admitted ingress must therefore carry typed target identity from a trusted product boundary.",
+  "vercel_execution": {
+    "sandbox_platform": "AVAILABLE",
+    "bridge": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_lifecycle": "NOT_EXPORTED",
+    "current_exact_preview_admission": "BLOCKED_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+  },
+  "unusual_experiment": {
+    "executed_by_this_work": false,
+    "reason": "The shared user-triggered GO unusual-experiment slot is already consumed/closed; all work here is source repair and ordinary deterministic mechanism regression."
+  },
+  "acceptance": "MECHANISM_SUPPORTED_SOURCE_CANDIDATE_NOT_RUNTIME_ACCEPTED",
+  "next_gate": "Refresh/rebase PR #501 onto the then-current single Stage-A fusion lane; execute the focused repository test plus adjacent Stage-A replay/credit/privacy/subject-collision tests in an actually-started authorized exact-source Sandbox; then include explicit miss correction in held-out SHADOW evaluation before ACTIVE promotion.",
+  "evidence_law": "Exact candidate-module mechanism PASS does not imply exact full-branch pytest, OCI runtime, or whole ClayVerse PASS.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

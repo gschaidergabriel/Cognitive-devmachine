@@ -1,0 +1,19 @@
+{
+  "kind": "CLAYVERSE_GO_OCI_BUILD_CONTEXT_HARDENING_RECEIPT",
+  "product": "ClayVerse single OCI/Docker-compatible container",
+  "delta_commits": {
+    "dockerignore": "15fc37d15d7f9f359d42010600ebfee5478b106c",
+    "regression": "f13ddcea1100f70c3d5ff71d9a0df1f077d4f003",
+    "manifest_truth": "e56456166ad6226a7f9a658afe724b8e73af9838"
+  },
+  "mechanism": "default-deny Docker build context with explicit re-inclusion only of Dockerfile, requirements, ClayVerse code, managed policy and the staged EntityOS input",
+  "focused_isolated_falsifier": {
+    "surface": "OpenAI isolated local container",
+    "result": "PASS",
+    "output": "BUILD_CONTEXT_FALSIFIER_PASS required=7 default_deny=1",
+    "scope": "policy-shape only; not an OCI build/runtime PASS"
+  },
+  "security_effect": "local environment files, VCS metadata, tests, receipts, state databases and unrelated research material are not intentionally re-included in the OCI build context",
+  "whole_system_pass": false,
+  "next_blocker": "execute the exact current-head full test+OCI candidate in an authorized isolated runner with the exact accepted staged EntityOS digest and capture image/runtime receipts"
+}

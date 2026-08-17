@@ -1,0 +1,186 @@
+# TEMPLATE: final ClayVerse deployment profile.
+# Replace image and secret/PVC details only after exact artifact acceptance.
+# The installed Kata RuntimeClass name MUST be verified on the target cluster.
+# This base profile is intentionally fail-closed for networking: NetworkPolicy
+# denies ClayVerse ingress and egress until target-specific allow policies are
+# explicitly supplied and their enforcement is acceptance-tested.
+apiVersion: v1
+kind: Service
+metadata:
+  name: clayverse
+spec:
+  selector:
+    app: clayverse
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: clayverse-default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app: clayverse
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: clayverse
+spec:
+  serviceName: clayverse
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clayverse
+  template:
+    metadata:
+      labels:
+        app: clayverse
+    spec:
+      # Final acceptance requires a Kata VM-backed RuntimeClass.
+      # Current Kata runtime-rs quick-start example uses kata-qemu-runtime-rs.
+      runtimeClassName: kata-qemu-runtime-rs
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      hostNetwork: false
+      hostPID: false
+      hostIPC: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: clayverse
+          # MUST be replaced by the exact accepted immutable image digest.
+          image: registry.example.invalid/clayverse@sha256:REPLACE_WITH_ACCEPTED_DIGEST
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: CLAYVERSE_STATE_ROOT
+              value: /var/lib/clayverse
+            - name: CLAYVERSE_WORKSPACE
+              value: /workspace
+            - name: CLAYVERSE_REQUIRE_CLAUDE
+              value: "1"
+            - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
+              value: "1"
+            - name: CLAYVERSE_ENTITYOS_PATH
+              value: /opt/entityos/EntityOS
+            - name: CLAYVERSE_ENTITYOS_SHA256
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: entityos-sha256
+            - name: CLAYVERSE_CLERK_MAP_JSON
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-map-json
+            - name: CLERK_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-issuer
+            - name: CLERK_JWKS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-jwks-url
+            - name: CLERK_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-audience
+            - name: CLERK_AUTHORIZED_PARTIES
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-authorized-parties
+            - name: CLERK_PUBLISHABLE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-publishable-key
+            - name: CLERK_FRONTEND_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: clerk-frontend-api-url
+            # GLM is inference-only. Token is injected as a secret and must never
+            # enter UnifiedDB, snapshots, receipts or logs.
+            - name: GLM_API_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: clayverse-runtime-secrets
+                  key: glm-api-token
+                  optional: true
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: clayverse-state
+              mountPath: /var/lib/clayverse
+            - name: clayverse-workspace
+              mountPath: /workspace
+            - name: tmp
+              mountPath: /tmp
+            - name: run
+              mountPath: /run
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3000
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /readyz
+              port: 3000
+            periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 256Mi
+        - name: run
+          emptyDir:
+            medium: Memory
+            sizeLimit: 128Mi
+  volumeClaimTemplates:
+    - metadata:
+        name: clayverse-state
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi
+    - metadata:
+        name: clayverse-workspace
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 20Gi

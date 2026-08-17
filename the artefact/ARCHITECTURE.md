@@ -12,6 +12,42 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
+## Deterministic goal autonomy
+
+ClayVerse goal autonomy is implemented as canonical state and a bounded machine loop, not as an LLM identity assertion.
+
+The target autonomous loop is:
+
+`durable user-authorized goal -> canonical capability/state snapshot -> LLM proposes one next step -> deterministic GoalKernel admission -> canonical TurnLifecycle/effect path -> EffectGate -> verified EffectJournal observation -> typed success evaluation -> replan | stop | BLOCKED`
+
+The persistent autonomy state lives inside the same UnifiedDB through additive `goals`, `goal_steps` and `goal_events` records. `GoalKernel` is not a second agent, second database, second effect executor or second memory authority. A deterministic `goal_state_hash` is stored in UnifiedDB metadata so current goal state participates in the existing checkpoint state.
+
+The useful behavior intended by an "autonomous AGI" prompt is decomposed into machine facts instead of anthropomorphic claims:
+
+- continuity = UnifiedDB + causal lifecycle + recovery;
+- objective = durable canonical goal record;
+- initiative = repeated goal pulses while the goal remains ACTIVE;
+- agency = the cognition provider chooses the next proposed step within an explicit envelope;
+- capability = intersection of goal-authorized capabilities and capabilities actually exposed by the current EffectGate/runtime;
+- execution = existing TurnLifecycle/EffectGate/EntityOS path only;
+- progress/success = typed verifier over canonical evidence, never model self-assessment;
+- uncertainty = explicit UNKNOWN/BLOCKED rather than invented completion;
+- stopping = deterministic success, pause/cancel/block states and step/retry/resource ceilings.
+
+A model response cannot grant itself a capability, prove an action occurred, alter its budget or mark a goal successful. Runtime prompts may encourage initiative and proactive problem solving, but operational claims are accepted only from canonical state and receipts.
+
+The human authorizes a goal-level capability envelope so low-risk intermediate choices do not require a click on every step. The first admitted autonomy surface remains deliberately narrow: `state.noop`, plus `entityos.exec` only when EntityOS is already admitted and currently exposed through EffectGate. Generic `process.exec` remains forbidden. Goal-specific capabilities can only narrow the runtime surface, never widen it.
+
+Every admitted step is generation-bound and proposal-hash-bound, and exactly one step per goal may await evidence at a time. Goals carry deterministic total-step and identical-proposal retry ceilings. A missing capability, exhausted budget or uncertain post-crash effect is a machine-level stop/block condition rather than a prompt suggestion.
+
+Success contracts are deliberately outside the LLM. `manual` contracts never auto-promote. `verified_effects` contracts require matching VERIFIED EffectJournal evidence and may bind capability, exact target, count and exit status. A planner sentence such as "done" has zero success authority.
+
+Background execution must preserve human priority. The current interactive `TurnLifecycle.begin_admission()` deliberately retires an unfinished predecessor for sequential human conversation; an autonomous supervisor must not reuse that preempting behavior blindly. Before continuous background pursuit is enabled, the product needs a non-preempting autonomous admission primitive that atomically fails/defer closed when a human turn is active, while still using the same `active_turns`, workspace, generation, effect and causal ledgers. No hidden direct EffectGate path is allowed as a shortcut.
+
+Restart is an epistemic boundary. An admitted autonomous step without a bindable final receipt becomes UNKNOWN and blocks the goal rather than being assumed successful or blindly replayed. Exact request/effect identity must be preserved before production background retry is enabled.
+
+The detailed contract and promotion gates are in `DETERMINISTIC_GOAL_AUTONOMY.md`.
+
 ## Canonical state and memory invariants
 
 - UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
@@ -87,6 +123,10 @@ The current source candidate implements the persistent receipt/policy spine, que
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
 - Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Deterministic goal-autonomy regression suite and exact UnifiedDB restart persistence.
+- Non-preempting background goal admission that proves human turns cannot be displaced.
+- Exact goal-step -> canonical turn/effect request identity binding and verify-before-retry recovery under crash/timeout ambiguity.
+- Periodic in-container goal supervisor remains disabled until those autonomy promotion gates pass.
 - MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
 - Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.

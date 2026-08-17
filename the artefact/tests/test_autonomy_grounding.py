@@ -266,7 +266,10 @@ def test_explicit_goal_admission_is_user_grounded_and_not_completion(tmp_path):
             "gabriel",
             "user",
             "/goal ship the verified artifact",
-            provenance={"source": "test-user"},
+            provenance={
+                "source": "claude-hook:UserPromptSubmit",
+                "entity_generation": db.entity_generation(),
+            },
         )
         admission = admit_explicit_user_goal(
             state,

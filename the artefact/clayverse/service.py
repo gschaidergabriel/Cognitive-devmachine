@@ -15,6 +15,23 @@ from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
+_WS_MAX_QUEUE = 8
+
+
+def _uvicorn_options(*, host: str, port: int) -> dict[str, object]:
+    """Bind the ASGI transport to the same bounded terminal-input contract."""
+    return {
+        "host": host,
+        "port": port,
+        "workers": 1,
+        "access_log": False,
+        "ws": "websockets",
+        "ws_max_size": _PTY_INPUT_FRAME_MAX_BYTES,
+        "ws_max_queue": _WS_MAX_QUEUE,
+        "ws_per_message_deflate": False,
+    }
+
+
 def _clerk_map() -> dict[str, str]:
     raw = os.environ.get("CLAYVERSE_CLERK_MAP_JSON", "")
     if not raw:
@@ -146,14 +163,7 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(
-            app,
-            host=host,
-            port=port,
-            workers=1,
-            access_log=False,
-            ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
-        )
+        uvicorn.run(app, **_uvicorn_options(host=host, port=port))
     finally:
         db.checkpoint("shutdown")
         db.close()

@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T22:59+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_WITH_BOUNDED_ISOLATED_MECHANISM_SUPPORT",
+  "research_main_observed_during_rebind": "a650f0b1e837075e8383eb3469d531569a3eb719",
+  "later_main_observed_after_rebind": "ea69767c896259dbfe678caf3ae2d56843b648a1",
+  "branch": "gpt56sol/go-microvm-kata-annotation-admission-20260817-2259",
+  "candidate_code_head_before_receipt": "64a261f04ab669cd728ec8b7658bb350816627bb",
+  "delta": {
+    "policy": "the artefact/deployment/clayverse-kata-annotation-admission.template.yaml",
+    "policy_blob": "73c2825a0abdcee58dc70f6678f8949878104bcc",
+    "test": "the artefact/tests/test_microvm_kata_annotation_admission.py",
+    "test_blob": "4a2edb0b7d42855e5ce2d490f138b768bc16004d",
+    "semantics": "Kubernetes ValidatingAdmissionPolicy + Binding fail closed on every io.katacontainers.* Pod annotation for a dedicated ClayVerse runtime namespace; CREATE/UPDATE Pods only; failurePolicy Fail; validationActions Deny. Runtime/containerd configuration remains separately attested."
+  },
+  "observed_gap": "Current canonical MicroVM contract requires Kubernetes admission to reject unreviewed io.katacontainers.* runtime-mutating annotations, but current main had no repository admission-policy implementation for that contract.",
+  "external_primary_evidence": [
+    "Kubernetes Validating Admission Policy is stable and supports CEL validations, failurePolicy Fail, bindings and validationActions Deny.",
+    "Kata Containers documents io.katacontainers.* Pod annotations as per-pod runtime configuration and warns that some annotations can affect host-side/runtime behavior; containerd can pass the annotation namespace to Kata.",
+    "Current Kata security advisories include annotation-driven host-path/configuration boundary failures, reinforcing fail-closed admission as defense in depth without replacing runtime configuration attestation."
+  ],
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "candidate_blob_reconstruction": "MATCHED GitHub blob SHAs for policy and test via git hash-object",
+    "focused_exact_candidate_tests": "2 passed, 1 deselected, exit 0",
+    "yaml_structural_parse": "PASS using PyYAML; two documents; policy failurePolicy=Fail; binding validationActions=[Deny]",
+    "full_cross_contract_test": "NOT_CREDITED_AS_EXACT_FULL_REPOSITORY_EXECUTION; an earlier local source-slice run used only the exact relevant contract excerpt and passed 3/3, so it is supporting mechanism evidence only"
+  },
+  "counterhypothesis": "A repository template with no Kata annotations is sufficient because the checked-in StatefulSet is clean.",
+  "counterhypothesis_result": "REJECTED_AT_SOURCE_ARCHITECTURE_LEVEL: admission controllers or higher-level tooling can mutate Pods, and Kata explicitly consumes per-Pod runtime annotations; the canonical contract already requires admission-time rejection.",
+  "non_overlap": "No open PR was found implementing a Kata annotation ValidatingAdmissionPolicy. The lane adds new files and does not edit the StatefulSet/PVC hardening lane #630 or Kata advisory/version-floor lane #631.",
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "go_unusual_experiment_reason": "No shared immutable request/turn id is exposed and the available user-message timestamp is minute precision only; no unusual experiment was executed.",
+  "runtime_credit": {
+    "oci_runtime": 0,
+    "kubernetes_api_admission": 0,
+    "kata_microvm": 0,
+    "whole_product": 0
+  },
+  "known_limits": [
+    "The policy is a source candidate until applied to a real Kubernetes API server and exercised after mutation admission.",
+    "The Binding deliberately relies on a dedicated namespace label clayverse.seimensch.net/runtime=true; final deployment must prove that binding scope is present and effective.",
+    "This does not attest containerd/Kata runtime configuration or block runtime configuration introduced below Kubernetes admission.",
+    "The branch remained behind fast-moving main after the rebind; refresh/rejoin before promotion."
+  ],
+  "next_gate": "Rejoin current main once at promotion time, run the exact branch tests in an authorized isolated full checkout, then apply the policy+binding to the admitted Kubernetes/Kata test cluster and prove malicious io.katacontainers.* Pod annotations are denied after mutation while clean ClayVerse Pods remain admitted; continue same-image-digest microVM, CNI, PVC, recovery and concurrency acceptance.",
+  "whole_product_pass": false
+}

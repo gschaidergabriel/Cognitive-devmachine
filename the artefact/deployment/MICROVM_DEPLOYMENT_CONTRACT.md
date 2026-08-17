@@ -16,7 +16,7 @@ The preferred implementation line is an OCI-compatible sandboxed runtime such as
 2. **Separate guest kernel** — ClayVerse userspace MUST run behind a VM/microVM guest-kernel boundary, not directly on the host kernel, for final acceptance.
 3. **One entity only** — the VM/microVM is an outer isolation envelope, not a second ClayVerse instance. UnifiedDB inside the ClayVerse continuum remains the sole state/world/memory authority.
 4. **Immutable runtime** — ClayVerse root filesystem is read-only. Runtime scratch is limited to declared tmpfs/RAM surfaces. Code, EntityOS, policies and runtime binaries are recreated from the accepted image on restart.
-5. **Explicit persistent state** — only declared persistent volumes cross runtime replacement boundaries, primarily `/var/lib/clayverse` for UnifiedDB/WAL/checkpoints/EffectJournal and any separately admitted workspace volume.
+5. **Explicit persistent state** — only declared persistent volumes cross runtime replacement boundaries, primarily `/var/lib/clayverse` for UnifiedDB/WAL/checkpoints/EffectJournal and any separately admitted workspace volume. The admitted storage class/CSI MUST prove that both persistent mounts are writable by the non-root ClayVerse runtime identity (`uid=10001,gid=10001`) after PVCs cover the image-owned directories. The reference Kubernetes profile uses Pod `fsGroup: 10001` with `fsGroupChangePolicy: OnRootMismatch`; a privileged/root init-container chown workaround is not admitted. Final evidence must identify whether kubelet or the CSI driver applies the effective mount group and must prove create/write/fsync/read/rename/delete on both persistent mounts before and after full Pod/Kata sandbox replacement.
 6. **Controlled ingress/egress** — only declared network/transport/storage surfaces cross the microVM boundary. `hostNetwork: false` is necessary but is not sufficient network isolation for a Kubernetes workload. The baseline deployment profile MUST select the ClayVerse pod with an explicit default-deny `NetworkPolicy` for both ingress and egress. The admitted cluster network plugin/CNI MUST actually support and enforce Kubernetes `NetworkPolicy`; merely creating the object on a non-enforcing cluster earns zero network-isolation evidence. Functional network access is enabled only by separate deployment-specific reviewed allow policies whose exact bytes/identity are bound into acceptance evidence. Because matching NetworkPolicies combine additively, final acceptance MUST enumerate every policy selecting the ClayVerse pod and fail if any unreviewed broad allow path changes the effective union. Host filesystem, host process namespace and host terminal are not ClayVerse runtime authorities.
 7. **Terminal stays internal** — Linux PTY/tmux and EntityOS command execution run inside the ClayVerse image/guest boundary. No command is executed by an uncontrolled host shell path.
 8. **LLM provider law preserved** — Claude Code is authenticated and operated directly through the managed internal terminal path. GLM is token/API inference only and receives no PTY, filesystem or EntityOS authority.
@@ -39,7 +39,7 @@ Accordingly, the reference StatefulSet is only the workload/isolation profile. F
 The Tier-2 mechanism MUST fail closed and prove all of the following before ingress reopens:
 
 - the old Pod UID and old Kata sandbox/VM identity are terminal and cannot rejoin;
-- a new Pod UID and new sandbox/VM identity are observed;
+- a new Pod UID and new Kata sandbox/VM identity are observed;
 - the new workload executes the exact same accepted ClayVerse image digest;
 - only the declared persistent state/workspace volumes are reattached;
 - UnifiedDB/WAL/logical-snapshot/EffectJournal recovery completes under a newly advanced global generation;
@@ -81,6 +81,7 @@ Final whole-product acceptance MUST include at least:
 - prove guest kernel differs from and is isolated from host kernel execution context;
 - prove root filesystem is read-only and undeclared writes fail;
 - prove only declared persistent volumes survive full appliance replacement;
+- identify the admitted storage class/CSI and prove `/var/lib/clayverse` plus `/workspace` support create/write/fsync/read/rename/delete as uid/gid 10001, repeated after full Pod/Kata sandbox replacement, without privileged/root ownership repair;
 - prove host PID/filesystem/terminal surfaces are not directly reachable as ClayVerse authority;
 - identify and attest the actual network plugin/CNI and prove it enforces Kubernetes NetworkPolicy on the admitted target;
 - prove the baseline ClayVerse network policy denies ingress and egress before any allow policy is added, including an undeclared external egress probe;

@@ -1,0 +1,72 @@
+name: ClayVerse xterm SRI lock
+
+on:
+  pull_request:
+    paths:
+      - "the artefact/SOURCE_LOCK.json"
+      - "the artefact/Dockerfile"
+      - "the artefact/build/install_locked_xterm.py"
+      - "the artefact/tests/test_xterm_source_lock.py"
+      - ".github/workflows/clayverse-xterm-sri.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-xterm-sri:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR bytes
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+
+      - name: Validate helper and repository lock shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile "the artefact/build/install_locked_xterm.py"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path("the artefact")
+          lock = json.loads((root / "SOURCE_LOCK.json").read_text(encoding="utf-8"))
+          xterm = lock["xterm"]
+          assert xterm["package"] == "@xterm/xterm"
+          assert xterm["version"] == "6.0.0"
+          assert xterm["registry"] == "https://registry.npmjs.org"
+          dockerfile = (root / "Dockerfile").read_text(encoding="utf-8")
+          assert "python /opt/clayverse-build/install_locked_xterm.py" in dockerfile
+          assert 'npm install --global "${XTERM_SPEC}"' not in dockerfile
+          PY
+
+      - name: Fetch exact npm package and verify downloaded bytes against repository SRI
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOCK="the artefact/SOURCE_LOCK.json"
+          SPEC="$(python - <<'PY'
+          import json
+          d=json.load(open("the artefact/SOURCE_LOCK.json", encoding="utf-8"))["xterm"]
+          print(f'{d["package"]}@{d["version"]}')
+          PY
+          )"
+          PACK_DIR="$RUNNER_TEMP/clayverse-xterm-pack"
+          mkdir -p "$PACK_DIR"
+          PACK_JSON="$(npm pack --json --ignore-scripts --pack-destination "$PACK_DIR" "$SPEC")"
+          PACK_FILE="$(PACK_JSON="$PACK_JSON" python - <<'PY'
+          import json, os
+          payload=json.loads(os.environ["PACK_JSON"])
+          assert isinstance(payload, list) and len(payload) == 1
+          filename=payload[0]["filename"]
+          assert isinstance(filename, str) and filename and "/" not in filename
+          print(filename)
+          PY
+          )"
+          python "the artefact/build/install_locked_xterm.py" \
+            --lock "$LOCK" \
+            --verify-archive "$PACK_DIR/$PACK_FILE"
+          tar -tzf "$PACK_DIR/$PACK_FILE" | grep -Fx 'package/lib/xterm.js'
+          tar -tzf "$PACK_DIR/$PACK_FILE" | grep -Fx 'package/css/xterm.css'

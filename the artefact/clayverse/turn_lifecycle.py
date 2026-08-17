@@ -107,6 +107,42 @@ class TurnLifecycle:
         expected_argv=json.dumps(expected_argv,sort_keys=True,separators=(",",":")) if expected_argv else None
         return effect["target"]==expected_target and effect["argv"]==expected_argv
 
+    def _assert_no_prior_autonomous_effect_in_tx(self,db,row)->None:
+        source=db.execute("SELECT role,provenance FROM turns WHERE turn_id=? AND session_id=?",(row["turn_id"],self.session_id)).fetchone()
+        if source is None: raise TurnLifecycleError("active turn observation missing before effect retry check")
+        provenance=self._provenance(source["provenance"])
+        if provenance.get("source")!=self.AUTONOMY_SOURCE: return
+        if source["role"]!="system": raise TurnLifecycleError("autonomous effect observation is not system authority")
+        identity=self._autonomy_identity(provenance.get("goal_id"),provenance.get("autonomy_step_id"))
+        if identity is None: raise TurnLifecycleError("autonomous effect identity missing")
+        prior=db.execute(
+            "SELECT e.effect_id,e.episode_id,e.status,e.requested_generation,t.role,t.provenance "
+            "FROM effects e JOIN workspace_episodes w ON w.episode_id=e.episode_id "
+            "JOIN turns t ON t.turn_id=w.observation_turn_id "
+            "WHERE e.user_id=? AND w.session_id=? AND e.episode_id<>? AND e.requested_generation=? "
+            "ORDER BY e.ts,e.effect_id",
+            (self.user_id,self.session_id,row["episode_id"],int(row["generation"])),
+        ).fetchall()
+        for effect in prior:
+            if effect["role"]!="system": continue
+            candidate=self._provenance(effect["provenance"])
+            if (
+                candidate.get("source")==self.AUTONOMY_SOURCE
+                and candidate.get("goal_id")==identity[0]
+                and candidate.get("autonomy_step_id")==identity[1]
+            ):
+                if effect["status"]=="PENDING":
+                    raise TurnLifecycleError("prior autonomous effect is pending; reconcile before retry")
+                causal=db.execute(
+                    "SELECT causal_id,episode_id,reentered FROM causal_episodes WHERE effect_id=? ORDER BY ts,causal_id",
+                    (effect["effect_id"],),
+                ).fetchall()
+                if len(causal)!=1 or causal[0]["episode_id"]!=effect["episode_id"] or int(causal[0]["reentered"] or 0)!=1:
+                    raise TurnLifecycleError("prior autonomous effect has incomplete causal re-entry; reconcile before retry")
+                if candidate.get("causal_id")!=causal[0]["causal_id"]:
+                    raise TurnLifecycleError("prior autonomous effect causal identity diverged; reconcile before retry")
+                raise TurnLifecycleError("prior final autonomous effect exists for this goal step; reconcile before retry")
+
     @staticmethod
     def _recovered_effect_result(effect,causal):
         try: receipt=json.loads(effect["outcome"]) if effect["outcome"] else None
@@ -194,6 +230,7 @@ class TurnLifecycle:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: raise TurnLifecycleError("no active turn; effect denied")
             if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
+            self._assert_no_prior_autonomous_effect_in_tx(db,row)
             if not int(row["workspace_selected"]):
                 ws=db.execute("SELECT state,selected FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
                 if ws is None: raise TurnLifecycleError("active turn workspace missing before effect")

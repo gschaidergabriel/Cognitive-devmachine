@@ -10,6 +10,7 @@ import struct
 import subprocess
 import termios
 import fcntl
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -219,6 +220,7 @@ class TerminalSessionManager:
 
     @staticmethod
     def close_attach(pid: int, fd: int) -> None:
+        """Detach and reap the transient tmux attach child without touching tmux itself."""
         try:
             os.close(fd)
         except OSError:
@@ -226,4 +228,28 @@ class TerminalSessionManager:
         try:
             os.kill(pid, signal.SIGHUP)
         except ProcessLookupError:
+            pass
+
+        # The websocket PTY child is owned by this process. Merely signalling it leaves
+        # an exited child waitable (a zombie) until the service exits. Give the attach
+        # client a short graceful window, then force termination and always reap it.
+        deadline = time.monotonic() + 0.25
+        while True:
+            try:
+                waited, _ = os.waitpid(pid, os.WNOHANG)
+            except ChildProcessError:
+                return
+            if waited == pid:
+                return
+            if time.monotonic() >= deadline:
+                break
+            time.sleep(0.01)
+
+        try:
+            os.kill(pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        try:
+            os.waitpid(pid, 0)
+        except ChildProcessError:
             pass

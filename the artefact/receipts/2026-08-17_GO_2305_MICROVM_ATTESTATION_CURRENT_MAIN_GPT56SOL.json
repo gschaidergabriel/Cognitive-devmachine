@@ -2,59 +2,76 @@
   "schema": "clayverse-go-receipt/v1",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "observed_at": "2026-08-17T23:16:00+07:00",
+  "observed_at": "2026-08-17T23:18:00+07:00",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "classification": "FOCUSED_TEST_PASS_CURRENT_MAIN_DEPLOYMENT_TOOLING_ONLY",
+  "classification": "FOCUSED_TEST_PASS_KUBERNETES_SNAPSHOT_TOOLING_ONLY",
   "base_main_commit": "fad0dea5b17a114d288494b89aa8a6a9a39e84a2",
   "branch": "gpt56sol/go-microvm-attestation-current-main-20260817-2305",
   "supersedes_candidate_pr": 635,
-  "superseding_delta": "correct Kubernetes NotIn selector semantics so absent-key pods remain selected; add fail-closed and positive complete-inventory regressions",
   "source": {
     "collector_path": "the artefact/deployment/collect_microvm_attestation.py",
-    "collector_blob": "a226a1834284923c8eeab7b76d00a1e15a924805",
+    "collector_schema": "clayverse-microvm-attestation/v3",
+    "collector_blob": "eda4a6c56b0f300a4289cfb38b22e9ad74f581fc",
     "test_path": "the artefact/tests/test_microvm_attestation_collector.py",
-    "test_blob": "920bd163161153a56893403ed2469a04c981e175",
-    "source_head_before_receipt": "568fc8912a6681cb212744a0bb8d5c0110b107b7"
+    "test_blob": "6b021d3b6a87163cc0b8aefe51f755667f991751",
+    "source_head_before_receipt": "7632a066442bfe3f0d29c177e025953fa81b5c10"
   },
-  "falsifier": {
-    "counterexample": "ClayVerse pod lacks label exposure; NetworkPolicy podSelector uses exposure NotIn [blocked]. Kubernetes selects the pod, while the predecessor collector incorrectly excluded it and could omit an additive broad allow from the claimed complete inventory.",
-    "predecessor_status": "REJECTED_FOR_COMPLETE_POLICY_INVENTORY_EVIDENCE",
-    "repair": "NotIn fails only when the key exists and its value is in the excluded set.",
-    "primary_contract": "Kubernetes label-selector NotIn includes resources without the key; NetworkPolicies selecting a Pod combine additively."
-  },
-  "current_main_contract_alignment": {
-    "exact_image_digest": "fenced in Pod spec and runtime imageID",
-    "runtime_class_handler": "fenced and recorded",
-    "guest_kernel": "recorded and required to differ from host kernel; collector explicitly does not claim this alone proves the independent guest boundary",
-    "pod_security": "host namespaces off; ServiceAccount token automount off; seccomp RuntimeDefault; non-root uid/gid 10001; read-only root; no privilege escalation; drop ALL",
-    "persistence": "fsGroup 10001 + OnRootMismatch fenced; both PVC identities plus StorageClass and CSI driver inventories captured; non-root RW/fsync semantics remain an explicit active probe",
-    "health": "readiness /readyz and liveness /healthz fenced separately",
-    "network": "all selecting NetworkPolicies are enumerated under Kubernetes matchLabels/matchExpressions semantics including absent-key NotIn; exact default deny required; malformed peers fail closed; obvious broad selecting allows rejected; CNI identity/enforcement and active deny/allow probes remain open",
-    "kata_annotations": "effective post-admission io.katacontainers.* annotations default-deny; any admitted annotation must exactly match an explicit CLI allowset and is receipt-hashed",
-    "kata_security": "collector intentionally records Kata runtime version/configuration as unobserved because Kubernetes objects do not establish the current-supported release, hypervisor or shared-filesystem configuration",
-    "tier2": "Pod UID captured; sandbox/VM identity and full replacement remain explicitly unobserved"
+  "adversarial_repairs": [
+    {
+      "counterexample": "NetworkPolicy podSelector uses NotIn for a key absent from the ClayVerse Pod. Kubernetes selector semantics still select that Pod, so excluding the absent key can hide an additive broad policy.",
+      "repair": "NotIn rejects only when the key exists and the live label value is in the excluded set.",
+      "regressions": "absent-key NotIn broad egress fails closed; absent-key NotIn empty egress appears in the selecting-policy inventory"
+    },
+    {
+      "counterexample": "A Kubernetes securityContext, RuntimeClass, NetworkPolicy object, or caller-supplied annotation expectation is declarative/expected state and can be overinterpreted as independently reviewed runtime enforcement.",
+      "repair": "v3 explicitly distinguishes caller-supplied expectations, observed Kubernetes snapshot/declarative state, and still-unobserved external/runtime acceptance evidence.",
+      "fences": [
+        "expectations.external_review_binding_observed=false",
+        "runtime.independent_guest_kernel_proven_by_this_collector=false",
+        "runtime.kata_runtime_version_observed=false",
+        "runtime.kata_runtime_configuration_observed=false",
+        "network_policy.selecting_policy_review_observed=false",
+        "network_policy.cni_identity_observed=false",
+        "network_policy.enforcement_observed=false",
+        "storage.nonroot_rw_semantics_observed=false",
+        "storage.post_replacement_rw_semantics_observed=false",
+        "security.runtime_enforcement_observed=false",
+        "tier2.sandbox_vm_identity_observed=false",
+        "tier2.full_replacement_observed=false",
+        "whole_product_pass=false"
+      ]
+    }
+  ],
+  "snapshot_scope": {
+    "image": "expected digest must match Pod spec and observed runtime imageID; acceptance authority for the expectation remains external",
+    "runtime_class": "RuntimeClass object/handler and Pod selection are recorded; they do not prove current-supported Kata version/configuration or independent VM identity",
+    "guest_kernel": "in-guest uname must differ from node kernel; this is a discriminator only and is not promoted to independent guest-boundary proof",
+    "pod_security": "declared host-namespace, ServiceAccount, seccomp, non-root, uid/gid, read-only-root, privilege and capability profile is fenced; active enforcement still required",
+    "persistence": "fsGroup plus exact two PVC/PV/StorageClass/CSIDriver identities are recorded; non-root create/write/fsync/read/rename/delete still requires active before/after-replacement proof",
+    "health": "declared readiness /readyz and liveness /healthz remain distinct",
+    "network": "all selecting NetworkPolicies are enumerated and hashed under supported LabelSelector semantics; canonical default-deny is required; obvious broad allows and malformed peer types fail closed; external policy review, CNI identity and active enforcement remain open",
+    "kata_annotations": "effective post-admission io.katacontainers.* annotations must equal a caller-supplied expected set; that set is not itself treated as proof of independent security review",
+    "tier2": "Pod UID is observed; sandbox/VM identity and full replacement are not"
   },
   "execution": {
     "surface": "authorized isolated OpenAI non-production container",
     "python": "3.13.5",
     "pytest": "9.0.2",
-    "platform": "Linux 6.18.35 x86_64",
     "commands": [
-      "git hash-object deployment/collect_microvm_attestation.py",
-      "git hash-object tests/test_microvm_attestation_collector.py",
-      "python -m py_compile deployment/collect_microvm_attestation.py",
-      "python -m pytest -q tests/test_microvm_attestation_collector.py"
+      "python -m py_compile deployment/collect_microvm_attestation.py tests/test_microvm_attestation_collector.py",
+      "python -m pytest -q tests/test_microvm_attestation_collector.py",
+      "git hash-object deployment/collect_microvm_attestation.py tests/test_microvm_attestation_collector.py"
     ],
-    "result": "12 passed in 0.05s; py_compile PASS",
+    "result": "12 passed in 0.04s; py_compile PASS",
     "exit_code": 0,
     "exact_blob_rebind": {
-      "collector": "a226a1834284923c8eeab7b76d00a1e15a924805",
-      "tests": "920bd163161153a56893403ed2469a04c981e175"
+      "collector": "eda4a6c56b0f300a4289cfb38b22e9ad74f581fc",
+      "tests": "6b021d3b6a87163cc0b8aefe51f755667f991751"
     }
   },
   "evidence_boundary": {
-    "source_tooling": "FOCUSED_TEST_PASS",
+    "kubernetes_snapshot_tooling": "FOCUSED_TEST_PASS",
     "exact_oci": "UNOBSERVED",
     "kata_runtime_version_configuration": "UNOBSERVED",
     "independent_guest_boundary": "UNOBSERVED_FINAL_PROOF",
@@ -65,5 +82,5 @@
   },
   "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
   "unusual_experiment_count": 0,
-  "next_gate": "After the host-side Vercel Preview GITHUB_READ_TOKEN exists, bind exact current Research/EntityOS bytes and build/start the final EntityOS-bearing OCI in the admitted Firecracker Sandbox. Then run that exact digest on an admitted current-supported Kata/equivalent target and combine this collector with independently observed Kata runtime/config/hypervisor identity, CNI identity + active policy probes, persistent-volume non-root RW/fsync probes, and CRI/sandbox identity before and after Tier-2 replacement."
+  "next_gate": "After the host-side Vercel Preview GITHUB_READ_TOKEN exists, bind exact then-current Research/EntityOS bytes and build/start the final EntityOS-bearing OCI in the admitted isolated runtime. Then run that exact digest on an admitted current-supported Kata/equivalent target and combine this Kubernetes snapshot collector with independently reviewed expectation bindings plus Kata runtime/config/hypervisor identity, CNI identity and active policy probes, persistent-volume non-root RW/fsync probes, active security enforcement probes, and CRI/sandbox identity before and after Tier-2 replacement."
 }

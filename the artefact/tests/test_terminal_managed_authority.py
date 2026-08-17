@@ -21,12 +21,15 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     assert settings["allowManagedHooksOnly"] is True
     assert settings["allowManagedPermissionRulesOnly"] is True
     assert settings["allowManagedMcpServersOnly"] is True
-    assert settings["allowedMcpServers"] == [{"serverName": "clayverse"}]
+    assert settings["allowedMcpServers"] == [
+        {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
+    ]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
     assert settings["permissions"]["deny"] == ["Bash"]
     assert settings["disableSkillShellExecution"] is True
     assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
     assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
+    assert settings["env"]["CLAUDE_CODE_SUBPROCESS_ENV_SCRUB"] == "1"
     assert settings["autoMemoryEnabled"] is False
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
     server = managed_mcp["mcpServers"]["clayverse"]

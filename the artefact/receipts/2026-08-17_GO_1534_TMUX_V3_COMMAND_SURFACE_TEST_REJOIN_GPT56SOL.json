@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34:00+07:00",
+  "recorded_at_local": "2026-08-17T15:47:48+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_at_final_rejoin": "60a507528b0d0b7a4f04e09d52dc33e419884e82",
+  "branch": "go/tmux-v3-command-surface-test-rejoin-20260817-1534-sol",
+  "branch_head_before_receipt": "fedb72f67c7328c9343089ec276ac687509ec312",
+  "delta_class": "TEST_ONLY_CURRENT_MAIN_REJOIN",
+  "finding": {
+    "current_main_runtime": "tmux direct argv, managed-policy writability rejection, v3 transport policy attestation, policy reapply, and bounded control subprocesses are already present on canonical main after parallel convergence",
+    "surviving_gap": "test_tmux_command_surface_fence.py remained on the older v2 attestation contract and still assumed new-session was the final tmux control call even though current runtime reapplies source-file before admission",
+    "repair": "align the existing command-surface regression with the current v3 status/mouse/default-shell attestations and with the source-file reapply sequence; no product runtime bytes are changed"
+  },
+  "exact_current_main_inputs": {
+    "terminal_sessions.py": "185a748f80011b324b2c4786644ad42ff369203e",
+    "managed-tmux.conf": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "stale_test_before": "15ae3be48cc8b808c4aca42e5cd1d08220457c4b"
+  },
+  "candidate": {
+    "test_tmux_command_surface_fence.py": "c36d9e11bc0d1c787dc9781ff978a73e1af00c39",
+    "runtime_changed": false,
+    "policy_changed": false
+  },
+  "isolated_source_slice": {
+    "surface": "OpenAI isolated non-production container",
+    "exact_runtime_blob_match": "185a748f80011b324b2c4786644ad42ff369203e",
+    "exact_policy_blob_match": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "command": "PYTHONPATH=. pytest -q tests/test_tmux_command_surface_fence.py tests/test_terminal_tmux_control_reapply.py tests/test_terminal_tmux_isolation.py",
+    "observed": "17 passed in 0.05s",
+    "test_identity_scope": "runtime and policy bytes were exact-current-main; the locally executed command-surface and adjacent test fixtures were semantic source-slice reconstructions, so the 17/17 result is not claimed as an exact candidate-test-blob execution",
+    "evidence_class": "SOURCE_MECHANISM_SUPPORTED_TEST_CONTRACT_REJOIN_NOT_LIVE_TMUX_RUNTIME"
+  },
+  "parallel_coordination": {
+    "closed_duplicate_pr": 585,
+    "reason": "canonical main advanced during the GO with the same runtime reapply/timeout mechanism, so duplicate runtime work was closed rather than competing with main",
+    "current_delta_is_nonduplicate": "no open PR was found for test_tmux_command_surface_fence v3 rejoin at the time of write"
+  },
+  "execution_admission": {
+    "vercel_latest_fallback_branch_deployment": "READY",
+    "vercel_build_observation": "SKIP_NON_TARGET_PREVIEW; Daytona runner not executed",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "product_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the shared exact-go trigger identity remains insufficient for a unique atomic experiment lease"
+  },
+  "security": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false,
+    "secret_value_recorded": false
+  },
+  "non_claims": [
+    "No live tmux binary runtime PASS is claimed.",
+    "No Clerk/browser/WebSocket PTY PASS is claimed.",
+    "No exact OCI build/startup/restart PASS is claimed.",
+    "No Daytona Sandbox runtime PASS is claimed.",
+    "No whole ClayVerse PASS is claimed."
+  ],
+  "next_exact_gate": "Run the current main plus this test-only rejoin in the next admitted isolated full checkout; then proceed to live tmux attach/reapply/timeout falsifiers and exact OCI build/runtime gates."
+}

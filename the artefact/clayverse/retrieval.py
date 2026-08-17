@@ -1,17 +1,19 @@
 from __future__ import annotations
 import json
+from .goals import GoalController
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with MicroClay retrieval, goal state and collision-only cross-session context."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.goals = GoalController(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -117,6 +119,13 @@ class WorldAssembler:
                     (user_id,),
                 )
             ]
+
+        # Persistent goals are machine state, not prompt-roleplay. Inject them as a
+        # bounded synthetic context record after retrieval so MicroClay cannot suppress,
+        # promote or rewrite goal authority. The LLM sees exact controller state and an
+        # explicit epistemic contract: it may propose work, never self-certify success.
+        goal_context = self.goals.context_for_user(user_id)
+        memories = [goal_context, *memories]
 
         return {
             "own_recent": own,

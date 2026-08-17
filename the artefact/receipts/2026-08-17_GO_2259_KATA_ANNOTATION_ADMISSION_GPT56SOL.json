@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "started_from_main": "327af0f53a4d48def0344a0d3c736c2364ca3fee",
+  "branch": "gpt56sol/go-kata-annotation-admission-20260817-2259-r1",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "novelty": "NEW_ORTHOGONAL_MICROVM_ADMISSION_FENCE",
+  "observed_gap": "The canonical MicroVM contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation, but canonical main had no executable Kubernetes admission-policy artifact at rejoin.",
+  "delta": [
+    "add deployment/clayverse-kata-runtime-annotation-admission.yaml with ValidatingAdmissionPolicy failurePolicy=Fail for Pod CREATE/UPDATE",
+    "add ValidatingAdmissionPolicyBinding with validationActions=Deny",
+    "baseline rejects every io.katacontainers.* annotation on app=clayverse Pods; future exceptions require explicit reviewed receipt-bound policy change",
+    "add focused source regression test_kata_runtime_annotation_admission.py"
+  ],
+  "source_blobs_after_write": {
+    "deployment/clayverse-kata-runtime-annotation-admission.yaml": "6841a46e3ab1f285bd974c50a3ed952fc20f5297",
+    "tests/test_kata_runtime_annotation_admission.py": "5e96ff279430e07f5e4128ba96c6b63d749d1c70"
+  },
+  "external_primary_basis": [
+    "Kubernetes ValidatingAdmissionPolicy v1/stable: policy plus binding, CEL validation, failurePolicy Fail, validationActions Deny",
+    "Kubernetes CEL: standard all macro is available for collections/maps and string startsWith is supported"
+  ],
+  "counterhypothesis": "A source YAML policy may be syntactically plausible yet fail API admission, be absent/unbound on the target, be bypassed by deployment mutation/identity drift, or protect a different effective workload than the admitted ClayVerse Pod.",
+  "next_discriminator": "On an authorized isolated Kubernetes/Kata-capable executor, apply the exact policy plus binding before the workload; prove clean ClayVerse Pod CREATE/UPDATE is admitted, injected io.katacontainers.* annotations are rejected after mutation, attest effective Pod annotations, then continue exact OCI/Kata runtime and Tier-2 recovery gates.",
+  "execution": {
+    "authorized_runtime_started": false,
+    "reason": "Connected Vercel integration exposes documentation/deployment management but no Sandbox lifecycle exec action; retained project controller remains blocked before private Research/EntityOS source staging by missing host-side Preview GITHUB_READ_TOKEN.",
+    "test_credit": 0,
+    "oci_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The available immutable user-message metadata is minute precision and no shared immutable request/turn identifier is exposed, so the atomic GO experiment protocol forbids claiming or executing a distinct unusual experiment."
+  },
+  "rejoin": {
+    "superseded_branch": "gpt56sol/go-kata-annotation-admission-20260817-2259",
+    "superseded_pr": 639,
+    "reason": "main advanced during the macro-cycle; the retained source delta was recreated from freshly observed PR base 327af0f53a4d48def0344a0d3c736c2364ca3fee rather than risking stale ancestry"
+  },
+  "forbidden_surfaces_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together": false,
+    "paid_final_training": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

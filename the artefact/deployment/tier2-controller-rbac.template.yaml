@@ -1,0 +1,33 @@
+# Optional cluster-local credential binding for the external Tier-2 replacer.
+# This is deployment infrastructure, not a second ClayVerse application/state authority.
+# NEVER mount this ServiceAccount credential into the ClayVerse application Pod.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    resourceNames: ["clayverse-0"]
+    verbs: ["get", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+subjects:
+  - kind: ServiceAccount
+    name: clayverse-tier2-controller
+    namespace: clayverse
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: clayverse-tier2-controller

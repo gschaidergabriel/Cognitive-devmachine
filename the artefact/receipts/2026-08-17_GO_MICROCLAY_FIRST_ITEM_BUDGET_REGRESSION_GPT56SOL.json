@@ -1,0 +1,112 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "canonical_research_head_observed_before_write": "035147528c0a68407dc2fb402905572d6eeb20b0",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "frontier": {
+    "selected": "MicroClay bounded retrieval context packing and valid SHADOW comparison",
+    "reason": "current main can violate budget_chars on the first selected memory; after repairing that serving bug, the current shadow_ids construction still ignores the same budget and can report false policy divergence, contaminating SHADOW promotion evidence",
+    "non_duplicate_fusion": "reused existing PR #383 for the first-item repair and posted the comparator follow-up there rather than creating a second implementation"
+  },
+  "source_identity": {
+    "current_main_file": "the artefact/clayverse/microclay_retrieval.py",
+    "current_main_file_blob": "891eb6306416460dda739fce00fba473840c1ee0",
+    "candidate_pr": 383,
+    "candidate_head": "878f4396de98a6bf9e5079c959beea2c2907f3c8",
+    "candidate_delta": "replace first-item conditional budget guard with unconditional `chars + item_chars > budget_chars`; add focused budget regression"
+  },
+  "observations": {
+    "current_main_condition": "if selected and chars + item_chars > budget_chars",
+    "candidate_condition": "if chars + item_chars > budget_chars",
+    "current_shadow_construction": "[x.memory_id for x in adaptive if x.baseline_score > 0.0][:limit]",
+    "github_pr_mergeable": true,
+    "github_pr_draft": true,
+    "github_actions_run": 31999296739,
+    "github_actions_job": 95296506364,
+    "github_actions_conclusion": "FAILURE_WITHOUT_RETRIEVABLE_EXECUTED_TEST_LOGS",
+    "vercel_sandbox_start_exec_primitive_available_to_worker": false,
+    "vps_or_production_testing_used": false
+  },
+  "isolated_regression_discriminators": [
+    {
+      "name": "FIRST_ITEM_BUDGET_OVERRUN",
+      "execution_surface": "OpenAI isolated Python sandbox",
+      "python": "3.13.5",
+      "platform": "Linux x86_64 glibc 2.41",
+      "scope": "exact selection-loop mechanism slice reproduced from current main and PR #383; not a whole-module or OCI acceptance test",
+      "fixture": {
+        "budget_chars": 256,
+        "oversized_first_candidate_chars": 360,
+        "smaller_second_candidate_chars": 56
+      },
+      "current_main_result": {
+        "selected_ids": ["oversized"],
+        "chars_selected": 360,
+        "bound_violated": true
+      },
+      "pr383_result": {
+        "selected_ids": ["small"],
+        "chars_selected": 56,
+        "bound_violated": false
+      },
+      "mechanism_verdict": "CURRENT_MAIN_BUG_REPRODUCED_AND_ONE_LINE_REPAIR_SUPPORTED"
+    },
+    {
+      "name": "SHADOW_BUDGET_FALSE_DIVERGENCE",
+      "execution_surface": "OpenAI isolated Python sandbox",
+      "scope": "normal regression discriminator over the current shadow_ids construction after applying the PR #383 serving guard; no new unusual experiment",
+      "fixture": {
+        "budget_chars": 256,
+        "baseline_and_adaptive_rankings": "IDENTICAL",
+        "oversized_first_candidate_chars": 360,
+        "smaller_second_candidate_chars": 56
+      },
+      "budgeted_serving_ids": ["small"],
+      "current_unbudgeted_shadow_ids": ["oversized", "small"],
+      "current_shadow_differs": true,
+      "budgeted_shadow_ids": ["small"],
+      "budgeted_shadow_differs": false,
+      "mechanism_verdict": "CURRENT_SHADOW_COMPARATOR_CAN_REPORT_FALSE_POLICY_DIVERGENCE_DUE_ONLY_TO_FEASIBILITY_MISMATCH"
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "claim": "the existing conditional guard is sufficient because an oversized first candidate is harmless or cannot rank first",
+      "falsifier": "place a 360-character positive-score candidate first under budget_chars=256 followed by a 56-character positive-score candidate",
+      "result": "REJECTED: current main selects 360 chars and violates its declared budget; candidate guard skips it and selects the bounded second candidate"
+    },
+    {
+      "claim": "shadow_differs measures only adaptive policy/ranking differences",
+      "falsifier": "make baseline and adaptive rankings exactly identical while the first candidate exceeds budget_chars",
+      "result": "REJECTED: current shadow_ids remains unbudgeted and differs from the budgeted served list despite identical policy ranking"
+    }
+  ],
+  "recommended_follow_up": {
+    "mechanism": "extract one deterministic feasibility/context packer and apply it independently to baseline and adaptive rankings under identical limit and budget_chars constraints before comparing selected_ids versus shadow_ids",
+    "required_regression": "identical baseline/adaptive ranking plus identical candidate feasibility must yield shadow_differs=false; adaptive-only ranking changes may yield true only after both arms are packed under the same constraints",
+    "authority_change": false,
+    "serving_mode_change": false
+  },
+  "unusual_experiment": {
+    "global_accounting": "NO_NEW_UNUSUAL_EXPERIMENT; existing parallel GO evidence already records the macro-cycle slot as consumed",
+    "this_receipt_class": "REGRESSION_DISCRIMINATORS_ONLY"
+  },
+  "fusion_status": {
+    "pr383": "RETAIN_WITH_FOLLOW_UP",
+    "merge_attempted_by_worker": true,
+    "merge_completed": false,
+    "merge_noncompletion_reason": "tool safety gate blocked the merge action; no repository merge claim is made",
+    "source_fix_on_main": false,
+    "coordination_comments": [5312369660, 5312373251]
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false,
+  "current_blocker": "The necessary first-item MicroClay budget repair remains outside main, and SHADOW comparison itself is not budget-equivalent between serving and adaptive arms. Full exact-current-head module/OCI execution remains unobserved. The connected Vercel surface exposes no Sandbox start/exec primitive; GitHub Actions for PR #383 did not provide executable test evidence.",
+  "next_executable_step": "Fuse PR #383 onto then-current main together with a shared budget-feasible shadow packer or immediately follow it with that comparator repair; run focused plus adjacent MicroClay retrieval/privacy/replay/generation tests and a shadow-equivalence regression in an authorized isolated execution surface, then include the repaired head in the exact ClayVerse OCI build/runtime batch."
+}

@@ -70,7 +70,7 @@ class ClerkTokenVerifier:
                 "algorithms": ["RS256"],
                 "issuer": self.config.issuer,
                 "leeway": self.config.leeway_seconds,
-                "options": {"require": ["exp", "sub"]},
+                "options": {"require": ["exp", "nbf", "sub"]},
             }
             if self.config.audience:
                 kwargs["audience"] = self.config.audience

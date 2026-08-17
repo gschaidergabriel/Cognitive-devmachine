@@ -1,0 +1,29 @@
+{
+  "kind": "CLAYVERSE_CLERK_TEMPORAL_VERIFICATION_RECEIPT",
+  "trigger": "go",
+  "product": "ClayVerse",
+  "base_head": "b48ec09d4d38da5476fd62fb5fd8266ea2f1a3bc",
+  "branch": "go/clerk-nbf-fail-closed-20260817",
+  "code_commit": "2cad7e1e1a58b359a7b0e387b3ffb542bbdcb30b",
+  "test_commit": "152ec6cac79f7ba6ac5b9fc368a2711292da522e",
+  "source_gap": "ClerkTokenVerifier required exp and sub but did not require nbf; a correctly signed token with no nbf was therefore admitted by the configured PyJWT boundary.",
+  "primary_external_basis": "https://clerk.com/docs/guides/sessions/manual-jwt-verification",
+  "primary_external_requirement": "Manual Clerk session-token verification validates temporal admissibility using both exp and nbf.",
+  "delta": "Require exp, nbf and sub in the canonical Clerk verifier and add deterministic valid/missing-nbf/future-nbf regression coverage.",
+  "focused_isolated_falsifier": {
+    "environment_class": "isolated local execution surface; not Vercel Sandbox and not real Clerk",
+    "python": "3.13.5",
+    "pyjwt": "2.13.0",
+    "baseline_valid": "ACCEPT",
+    "baseline_missing_nbf": "ACCEPT",
+    "patched_valid": "ACCEPT",
+    "patched_missing_nbf": "REJECT:MissingRequiredClaimError",
+    "patched_future_nbf": "REJECT:ImmatureSignatureError"
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "note": "This is a deterministic auth regression falsifier, not an additional unusual experiment. The shared go macrocycle unusual-experiment slot was already consumed."
+  },
+  "claim_boundary": "This receipt supports a source-level fail-closed temporal verification improvement only. It is not real Clerk-instance evidence, not Vercel executable truth, not OCI runtime evidence and not whole-product PASS.",
+  "next_executable_step": "Run the exact current candidate in an authorized executable isolated sandbox and verify the real Clerk homepage/session JWT path together with the full container gate."
+}

@@ -1,0 +1,56 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:40+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "f9e403aa8728a0215926f83aba0b626dcc06cba7",
+  "branch": "go-1540-entityos-fixed-exec-path-gpt56sol",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_ISOLATED_EXECUTION_NOT_OCI_RUNTIME_PASS",
+  "problem": "EntityOSBridge.run inherited the mutable parent PATH into the exact digest-pinned EntityOS child environment, allowing parent runtime configuration to influence by-name child-tool resolution beyond the pinned EntityOS bytes.",
+  "counterhypothesis": "The inherited PATH is harmless because the sealed EntityOS executable snapshot alone determines execution behavior.",
+  "falsifier": "Set a writable attacker-prefixed parent PATH and require the EntityOS subprocess environment to contain only a fixed system PATH and no PYTHONPATH.",
+  "source_identity": {
+    "before_entityos_bridge_blob": "23441f3276d73e15ec0e32bbe8929534d131054f",
+    "after_entityos_bridge_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "test_blob": "ad226f18215dc44935e6699c866c79974eccee56",
+    "adjacent_snapshot_integrity_blob": "5dd61866d21640b6505202942cab3a9b0fd275e0"
+  },
+  "delta": {
+    "entityos_exec_path": "/usr/bin:/bin",
+    "parent_path_inheritance": false,
+    "pythonpath_inheritance": false,
+    "capability_surface_changed": false,
+    "effect_authority_changed": false
+  },
+  "supporting_execution": {
+    "surface": "OpenAI non-production isolated container",
+    "scope": "exact-file supporting mechanism regression only",
+    "red_command": "python -m pytest -q tests/test_entityos_exec_environment_boundary.py",
+    "red_source_blob": "23441f3276d73e15ec0e32bbe8929534d131054f",
+    "red_result": "2 failed; attacker-prefixed parent PATH observed and fixed-path contract absent",
+    "green_command": "python -m py_compile clayverse/entityos_bridge.py && python -m pytest -q tests/test_entityos_exec_environment_boundary.py tests/test_entityos_snapshot_integrity.py",
+    "green_source_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "green_result": "3 passed",
+    "whole_product_credit": false,
+    "oci_runtime_credit": false,
+    "entityos_admission_credit": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "available immutable user trigger metadata is minute-precision only, so GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL forbids minting a trigger lease"
+  },
+  "execution_admission": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED_NOT_TEST_FAIL_NOT_SANDBOX_UNAVAILABLE",
+    "daytona": "ORCHESTRATION_NETWORK_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT",
+    "runtime_acceptance": "BLOCKED"
+  },
+  "remaining_gates": [
+    "authorized exact ClayVerse OCI build/runtime",
+    "accepted embedded EntityOS effect round-trip when execution is explicitly admitted",
+    "Python --require-hashes lock generation/install",
+    "apt package byte snapshot/hash closure",
+    "real Clerk/browser/PTY and native Claude runtime acceptance"
+  ]
+}

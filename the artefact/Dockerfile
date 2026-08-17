@@ -8,6 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_WORKSPACE=/workspace \
     CLAYVERSE_REQUIRE_CLAUDE=1 \
     CLAYVERSE_REQUIRE_ENTITYOS=0 \
+    CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
+    CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256} \
     PORT=3000 \
     DISABLE_AUTOUPDATER=1
 
@@ -24,16 +26,25 @@ RUN mkdir -p /etc/claude-code /opt/entityos
 COPY --chown=root:root policy/managed-mcp.json /etc/claude-code/managed-mcp.json
 RUN chmod 0444 /etc/claude-code/managed-mcp.json
 COPY clayverse ./clayverse
+COPY --chown=root:root entityos.lock.json /opt/entityos/entityos.lock.json
 COPY --chown=root:root EntityOS /opt/entityos/EntityOS
-RUN test -n "${ENTITYOS_SHA256}" \
- && printf '%s  %s\n' "${ENTITYOS_SHA256}" /opt/entityos/EntityOS | sha256sum -c - \
- && chmod 0555 /opt/entityos/EntityOS
+RUN LOCK_SCHEMA="$(python -c 'import json; print(json.load(open("/opt/entityos/entityos.lock.json", encoding="utf-8"))["schema"])')" \
+ && LOCK_SHA256="$(python -c 'import json; print(json.load(open("/opt/entityos/entityos.lock.json", encoding="utf-8"))["sha256"])')" \
+ && LOCK_SIZE="$(python -c 'import json; print(json.load(open("/opt/entityos/entityos.lock.json", encoding="utf-8"))["size_bytes"])')" \
+ && test "$LOCK_SCHEMA" = "ClayVerseEntityOSArtifactLock/v1" \
+ && test -n "${ENTITYOS_SHA256}" \
+ && test "${ENTITYOS_SHA256}" = "$LOCK_SHA256" \
+ && test "$(stat -c %s /opt/entityos/EntityOS)" = "$LOCK_SIZE" \
+ && printf '%s  %s\n' "$LOCK_SHA256" /opt/entityos/EntityOS | sha256sum -c - \
+ && chmod 0555 /opt/entityos/EntityOS \
+ && chmod 0444 /opt/entityos/entityos.lock.json
 RUN useradd --system --uid 10001 --create-home clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
- && chown root:root /opt/entityos /opt/entityos/EntityOS \
+ && chown root:root /opt/entityos /opt/entityos/EntityOS /opt/entityos/entityos.lock.json \
  && chmod 0755 /opt/entityos \
- && chmod 0555 /opt/entityos/EntityOS
+ && chmod 0555 /opt/entityos/EntityOS \
+ && chmod 0444 /opt/entityos/entityos.lock.json
 
 USER clayverse
 VOLUME ["/var/lib/clayverse"]

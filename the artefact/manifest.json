@@ -14,6 +14,7 @@
   "container_boundary": "one OCI/Docker-compatible image",
   "build_context": "default-deny allowlist; only Dockerfile, requirements, ClayVerse code, managed policy and staged EntityOS enter OCI build context",
   "web_boundary": "Clerk-authenticated homepage/API source implemented; isolated real-instance gate open",
+  "browser_terminal_boundary": "Clerk-identity-fenced browser polling adapter to per-user PTY source implemented; isolated authenticated Claude Code PTY runtime gate open",
   "inference_boundary": "tool-less ephemeral Claude Code one-turn source implemented; isolated authenticated runtime gate open",
   "inference_effect_protocol": "fail-closed JSON intent; runtime capability set is supplied to inference; unavailable EntityOS requests become causally re-entered DENIED outcomes",
   "entityos_role": "internal sha256-pinned execution/security/runtime substrate candidate, not product endpoint",
@@ -25,6 +26,7 @@
   "requires_for_final_pass": [
     "exact_current_head_full_test_suite_in_authorized_isolated_execution",
     "isolated_real_clerk_homepage_and_jwt_verification",
+    "isolated_authenticated_browser_terminal_pty_runtime_verification",
     "isolated_authenticated_claude_code_runtime_verification",
     "accepted_external_effect_runtime_contract_and_artifact_binding",
     "exact_entityos_embedded_image_runtime_receipt",

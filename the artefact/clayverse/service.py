@@ -13,6 +13,7 @@ from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .store import UnifiedDB
+from .terminal import TerminalSupervisor
 
 
 def _clerk_map() -> dict[str, str]:
@@ -111,7 +112,14 @@ def main():
         allow_process=False,
         entityos_bridge=entityos_bridge,
     )
-    api = ClayVerseAPI(engine, verifier, publishable_key=publishable_key, frontend_api_url=frontend_api)
+    terminals = TerminalSupervisor()
+    api = ClayVerseAPI(
+        engine,
+        verifier,
+        publishable_key=publishable_key,
+        frontend_api_url=frontend_api,
+        terminal_supervisor=terminals,
+    )
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     server = api.server(host, port)
@@ -133,6 +141,7 @@ def main():
         "users": ["gabriel", "andreas"],
         "claude_code": claude_status.as_dict(),
         "auth": "clerk",
+        "browser_terminal": "authenticated-pty-adapter",
         "mutation_lane": "serialized",
         "entityos": entityos_status,
         "port": port,
@@ -143,6 +152,7 @@ def main():
             server.handle_request()
     finally:
         server.server_close()
+        terminals.stop_all()
         db.checkpoint("shutdown")
         db.close()
     return 0

@@ -25,6 +25,10 @@ class _MistralNoRedirectHandler(HTTPRedirectHandler):
         return None
 
 
+def _reject_nonfinite_json(value: str):
+    raise ValueError(f"non-finite JSON constant rejected: {value}")
+
+
 def urlopen(request, timeout):
     """Open one Mistral request with redirect following disabled."""
 
@@ -145,8 +149,6 @@ class MistralInference:
         self._lock = threading.Lock()
 
     def available(self) -> bool:
-        # Availability is intentionally local-only: do not spend a provider request
-        # merely to advertise readiness and never retain the secret on the adapter.
         return bool(self.model and os.environ.get("MISTRAL_API_KEY", "").strip())
 
     @staticmethod
@@ -183,29 +185,42 @@ class MistralInference:
         ):
             raise InferenceProtocolError("invalid Mistral observation")
 
-        world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        try:
+            world_json = json.dumps(
+                world,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            )
+        except (TypeError, ValueError) as exc:
+            raise InferenceProtocolError("Mistral WORLD is not canonical JSON") from exc
         if len(world_json.encode("utf-8")) > self.MAX_WORLD_BYTES:
             raise RuntimeError("assembled world exceeds Mistral boundary")
 
-        body = json.dumps(
-            {
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": self._system_prompt()},
-                    {"role": "user", "content": f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"},
-                ],
-                "response_format": {"type": "json_object"},
-                "tools": [],
-                "tool_choice": "none",
-                "parallel_tool_calls": False,
-                "stream": False,
-                "temperature": 0,
-                "max_tokens": self.MAX_TOKENS,
-            },
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode("utf-8")
+        try:
+            body = json.dumps(
+                {
+                    "model": self.model,
+                    "messages": [
+                        {"role": "system", "content": self._system_prompt()},
+                        {"role": "user", "content": f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"},
+                    ],
+                    "response_format": {"type": "json_object"},
+                    "tools": [],
+                    "tool_choice": "none",
+                    "parallel_tool_calls": False,
+                    "stream": False,
+                    "temperature": 0,
+                    "max_tokens": self.MAX_TOKENS,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+        except (TypeError, ValueError) as exc:
+            raise InferenceProtocolError("Mistral request is not canonical JSON") from exc
         request = Request(
             self.ENDPOINT,
             data=body,
@@ -225,16 +240,12 @@ class MistralInference:
                 with urlopen(request, timeout=self.timeout) as response:
                     raw = response.read(self.MAX_RESPONSE_BYTES + 1)
         except HTTPError as exc:
-            # Do not raise while the provider exception is active: ``from None``
-            # only suppresses display and still leaves ``__context__`` reachable.
             http_error_status = int(exc.code)
             raw = b""
         except (URLError, TimeoutError, OSError) as exc:
             transport_failure_type = type(exc).__name__
             raw = b""
         finally:
-            # Scrub references that can retain the bearer credential before any
-            # post-transport validation raises and publishes this frame in traceback.
             token = ""
             request = None
 
@@ -248,8 +259,8 @@ class MistralInference:
         if len(raw) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("Mistral response exceeds bound")
         try:
-            envelope = json.loads(raw)
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            envelope = json.loads(raw, parse_constant=_reject_nonfinite_json)
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
             raise InferenceProtocolError("Mistral response envelope is not JSON") from exc
         if not isinstance(envelope, dict):
             raise InferenceProtocolError("Mistral response envelope must be an object")
@@ -261,6 +272,8 @@ class MistralInference:
             raise InferenceProtocolError("Mistral response id is missing or invalid")
         if not isinstance(model_returned, str) or not model_returned or len(model_returned) > 256:
             raise InferenceProtocolError("Mistral response model is missing or invalid")
+        if model_returned != self.model:
+            raise InferenceProtocolError("Mistral response model does not match requested model")
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
             raise InferenceProtocolError("Mistral response must contain exactly one choice")
 
@@ -274,8 +287,8 @@ class MistralInference:
         if not isinstance(content, str) or not content or len(content.encode("utf-8")) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("Mistral message content must be bounded non-empty JSON text")
         try:
-            decision_payload = json.loads(content)
-        except json.JSONDecodeError as exc:
+            decision_payload = json.loads(content, parse_constant=_reject_nonfinite_json)
+        except (json.JSONDecodeError, ValueError) as exc:
             raise InferenceProtocolError("Mistral message content is not JSON") from exc
 
         decision = parse_claude_decision_payload(decision_payload)

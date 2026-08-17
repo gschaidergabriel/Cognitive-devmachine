@@ -1,0 +1,76 @@
+{
+  "schema": "ClayEntityOSGoConvergenceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "5097f893be9f075d00cb81bd6264e93095a8c16a",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "product_head_observed": "b2c3206f12a0316e72286a9c041794f25e219269",
+  "supersedes_current_state_of": [
+    "research_entity/clay_machine/receipts/2026-08-17_GO_ENTITYOS_ABI_STDIO_VM2_DF594637_PROVIDER_BLOCKED.json",
+    "research_entity/clay_machine/receipts/2026-08-17_GO_ENTITYOS_PARALLEL_RACE_STOP_PROMOTION.json",
+    "research_entity/clay_machine/receipts/2026-08-17_GO_ENTITYOS_F6D0_STDERR_ORPHAN_REMOVED_PROVIDER_BLOCKED.json"
+  ],
+  "source_coherence": {
+    "status": "RESTORED_AT_OBSERVED_HEAD",
+    "hostcall_abi_schema": "ClayHostcallABI/v1",
+    "admitted_process_bytes_scope": "stdout-only",
+    "stdout_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "stdout_call_id": 3,
+    "stdout_vm_versions": [2],
+    "stderr_hostcall_admitted": false,
+    "stderr_tests_or_batch5_gate_retained": false,
+    "stderr_policy": "deferred until stdout exact-head Vercel Sandbox promotion",
+    "serialized_loadtime_vm_version_fence": true,
+    "serialized_unknown_id_fence": true,
+    "serialized_arity_fence": true,
+    "runtime_vm_version_recheck": true,
+    "batch5_stdout_bytes_gate_only": true,
+    "v7_build_uv_cli_require_hashes": true,
+    "v7_build_uv_cli_only_binary_all": true,
+    "v7_build_uv_version_logged": true,
+    "v7_catch_finally_syntax_repaired": true,
+    "full_pytest_uv_cli_require_hashes": true,
+    "full_pytest_uv_cli_only_binary_all": true,
+    "new_unusual_experiment_count": 0
+  },
+  "race_resolution": {
+    "stale_stderr_vm_test_from_df594637_present": false,
+    "stale_stderr_clayos_test_present": false,
+    "stale_write_409_observed_and_respected": true,
+    "stale_overwrite_performed": false,
+    "semantic_widening_frozen": true
+  },
+  "execution": {
+    "exact_head_checked": "b2c3206f12a0316e72286a9c041794f25e219269",
+    "github_vercel_status": "failure",
+    "provider_blocker": "build-rate-limit",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfers": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_on_exact_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "adversarial_state": {
+    "strongest_counterhypothesis": "source coherence can still hide integration, dependency, packaging or runtime failure; no descendant has current exact-head Sandbox evidence",
+    "next_discriminator": "actually-started exact-current-head Vercel Sandbox full-pytest plus canonical v7 one-file EntityOS regression sequence",
+    "do_not_widen_before_discriminator": ["stderr hostcall", "String hostcall", "NET hostcall", "VIS hostcall", "AUDIO hostcall"]
+  },
+  "acceptance": "BLOCKED",
+  "whole_entityos_pass": false,
+  "whole_clay_machine_pass": false,
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false,
+  "next_step": "When Vercel admits the target build, refresh PR787 to the then-current exact head and run only the regression sequence: exact raw-tree/archive/attestation staging; ordinary full pytest with nonzero tests, zero skips and exact wheel/hash authority; stdout ABI/CM-TERM gate; Git-free attested twin EntityOS; byte identity; runtime/self-test/no-host-Python/relocation under DENY_ALL; Batch-5; attested-vs-Git-clean identity; successful Sandbox stop."
+}

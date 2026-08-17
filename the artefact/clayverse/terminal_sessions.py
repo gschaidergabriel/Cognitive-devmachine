@@ -45,6 +45,7 @@ class TerminalSessionManager:
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
+    DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -62,6 +63,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
+        if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
+            raise TerminalRuntimeError("direct-shell guard unavailable")
 
     def binding(self, user_id: str) -> TerminalBinding:
         if user_id not in CANONICAL_TERMINALS:
@@ -137,7 +140,8 @@ class TerminalSessionManager:
         # mcp__clayverse admits all tools from exactly that server. Claude Code does
         # not support glob MCP permission names such as mcp__clayverse__*.
         # Filesystem setting sources are disabled so project/user hooks cannot compete
-        # with the fixed managed lifecycle hooks.
+        # with the fixed managed lifecycle hooks. Managed Bash deny plus the immutable
+        # shell prefix prevent interactive ! mode becoming a second process/effect path.
         claude_argv = [
             "claude",
             "--strict-mcp-config",
@@ -177,6 +181,8 @@ class TerminalSessionManager:
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
             "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1",
+            "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1",
+            f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
             *claude_argv,
         ]
         command = shlex.join(env_argv)

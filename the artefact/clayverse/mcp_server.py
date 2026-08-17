@@ -92,7 +92,7 @@ def main() -> None:
         ),
     )
     ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
-    effectful = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=False, openWorldHint=True)
+    effectful = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=True, openWorldHint=True)
 
     @mcp.tool(annotations=effectful)
     def request_effect(capability: str, target: str, argv: list[str] | None = None) -> dict:

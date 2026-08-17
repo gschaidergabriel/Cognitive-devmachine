@@ -117,3 +117,46 @@ def test_credit_fault_before_feedback_rolls_back_policy_then_retry_commits_once(
         assert _memory_snapshot(db) == before_memory
     finally:
         db.close()
+
+
+def test_credit_joined_to_turn_admission_rolls_back_with_outer_transaction_then_retries_once(tmp_path):
+    db, first, credit, signal = _verified_retrieval(tmp_path)
+    life = TurnLifecycle(db, "gabriel", "session:gabriel")
+    organ = MicroClayRetrieval(db)
+    try:
+        before_policy = _policy_snapshot(db)
+        before_feedback = db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0]
+        before_memory = _memory_snapshot(db)
+
+        with pytest.raises(RuntimeError, match="injected admission rollback"):
+            with life.begin_admission("atomic orchid verified procedure followup") as admitted:
+                assert admitted["context"]["retrieval_receipt"]["outcome_learning_applied"] == 1
+                assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == before_feedback + 1
+                assert _policy_snapshot(db) != before_policy
+                raise RuntimeError("injected admission rollback")
+
+        assert life.active() is None
+        assert _policy_snapshot(db) == before_policy
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == before_feedback
+        assert _memory_snapshot(db) == before_memory
+
+        retry = life.begin("atomic orchid verified procedure followup")
+        assert retry["context"]["retrieval_receipt"]["outcome_learning_applied"] == 1
+        after_once = _policy_snapshot(db)
+        assert after_once != before_policy
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == before_feedback + 1
+
+        replay = organ.credit(
+            causal_id=first["causal_id"],
+            generation=first["generation"],
+            credit=credit,
+            signal_class=signal,
+        )
+        assert replay["applied"] is False
+        assert replay["reason"] == "duplicate_receipt"
+        assert _policy_snapshot(db) == after_once
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == before_feedback + 1
+        assert _memory_snapshot(db) == before_memory
+        life.abort("test-end")
+    finally:
+        db.close()

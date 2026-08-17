@@ -1,0 +1,74 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:00:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_observed": "ef39e778a64e806f494fee189180182a7e961db4",
+  "integration_pr": 415,
+  "integration_branch": "go/integration-microclay-meta-fusion-20260817-1326",
+  "source_repair": {
+    "prior_crash_atomic_commit": "5e947480503bf88832709d31ead0e7fc06558220",
+    "prior_crash_atomic_test_commit": "af63b79e653ef0bb68f884b4530fadf9dbe80c20",
+    "transaction_composability_commit": "c6d2b0a205989f64acba8b2cb36e3fdbd2ec0904",
+    "outer_transaction_regression_commit": "248f813bc90977f803e87550d4f2082c5d6f6e8c",
+    "microclay_blob_after_repair": "e5f3189c5178e09b2be35452e08693ca13d6bcd8"
+  },
+  "finding": {
+    "classification": "SECOND_ORDER_CANONICAL_TURN_PATH_BLOCKER_REPAIRED_IN_SOURCE_PENDING_EXECUTION",
+    "mechanism": "The standalone crash-atomic repair entered UnifiedDB.tx() inside MicroClayRetrieval.credit(). The canonical TurnLifecycle.begin_admission() already owns UnifiedDB.tx() while WorldAssembler calls retrieve(), which calls learn_from_verified_outcomes() and can call credit(). Because UnifiedDB.tx() issues BEGIN IMMEDIATE unconditionally, an eligible prior verified outcome could attempt a nested BEGIN IMMEDIATE and fail before context admission.",
+    "counterhypothesis": "If credit() were never reachable during an already-open turn transaction, the standalone transaction would be sufficient.",
+    "counterhypothesis_rejected_by_source_path": true,
+    "source_path": "TurnLifecycle.begin_admission -> WorldAssembler.assemble -> MicroClayRetrieval.retrieve -> learn_from_verified_outcomes -> credit"
+  },
+  "repair_contract": {
+    "standalone_credit": "opens one UnifiedDB.tx()",
+    "credit_inside_turn_admission": "joins the already-open canonical transaction",
+    "global_unifieddb_tx_semantics_weakened": false,
+    "second_state_or_retrieval_authority_created": false,
+    "rollback_law": "policy capital mutations and retrieval_feedback receipt share the owning transaction and therefore roll back together",
+    "retry_law": "after rollback the same verified outcome remains eligible and may commit exactly once; later duplicate scans see no eligible uncredited outcome"
+  },
+  "regression_obligation": {
+    "file": "the artefact/tests/test_microclay_credit_outer_transaction.py",
+    "requires_learning_visible_inside_begin_admission": true,
+    "requires_outer_rollback_of_policy_and_feedback": true,
+    "requires_turn_insertion_rollback": true,
+    "requires_exact_once_retry": true,
+    "requires_duplicate_scan_zero_eligible": true
+  },
+  "independent_mechanism_check": {
+    "environment": "OpenAI isolated non-production container",
+    "scope": "SQLite transaction mechanism only; not exact ClayVerse branch execution",
+    "observations": [
+      "nested BEGIN IMMEDIATE raised OperationalError: cannot start a transaction within a transaction",
+      "policy and feedback writes performed in the existing outer transaction were both visible before rollback",
+      "outer ROLLBACK removed both writes",
+      "retry transaction committed both once"
+    ],
+    "classification": "MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_VERIFIED"
+  },
+  "execution_admission": {
+    "vercel_sandbox_path": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_lifecycle": "NOT_EXPORTED",
+    "fresh_exact_preview_status": "ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "github_actions_exact_new_head": "NO_PULL_REQUEST_WORKFLOW_RUN_OBSERVED_AT_CHECK_TIME",
+    "vps_self_hosted_production_testing_used": false,
+    "together_used": false,
+    "exact_pr415_repaired_head_executed": false,
+    "exact_oci_build_runtime_executed": false
+  },
+  "experiment_accounting": {
+    "shared_user_timestamp": "2026-08-17T13:42+07:00",
+    "timestamp_precision": "minute_only",
+    "immutable_shared_request_or_turn_id_available_to_this_organ": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "this_organ_unusual_experiment_executed": false,
+    "noncanonical_synthesized_timestamp_claim_authorizes_execution": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_gate": "Actually-started authorized isolated execution of the then-current fused #415 head covering crash-atomicity + outer-transaction composition + replay/generation/outcome authority; then broader lifecycle/retrieval/recovery/privacy suite and exact OCI build/start/readiness/restart."
+}

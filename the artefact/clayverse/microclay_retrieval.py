@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import math
@@ -71,6 +72,15 @@ class MicroClayRetrieval:
 
     def __init__(self, db: UnifiedDB):
         self.db = db
+
+    @contextlib.contextmanager
+    def _credit_tx(self):
+        """Join a canonical outer turn transaction or create one standalone credit transaction."""
+        if self.db.db.in_transaction:
+            yield self.db.db
+        else:
+            with self.db.tx() as db:
+                yield db
 
     @staticmethod
     def _tokens(text: str) -> set[str]:
@@ -250,7 +260,7 @@ class MicroClayRetrieval:
         if not ids:
             return
         rows = self.db.db.execute(
-            "SELECT memory_id,kind FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind,user_id,source_turn_id FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
@@ -258,6 +268,17 @@ class MicroClayRetrieval:
             raise StaleGeneration("retrieval_route_contract")
         excluded_kinds = METHOD_KINDS | _CONTROL_KINDS
         if any(str(row["kind"]) in excluded_kinds for row in rows):
+            raise StaleGeneration("retrieval_route_contract")
+        if any(
+            row["user_id"] is not None and str(row["user_id"]) != str(existing["user_id"])
+            for row in rows
+        ):
+            raise StaleGeneration("retrieval_route_contract")
+        if any(
+            row["source_turn_id"] is not None
+            and str(row["source_turn_id"]) == str(existing["turn_id"])
+            for row in rows
+        ):
             raise StaleGeneration("retrieval_route_contract")
 
     def retrieve(
@@ -417,7 +438,6 @@ class MicroClayRetrieval:
                 "PRESENT" if selected else "UNKNOWN", now,
             ),
         )
-
         return {
             "items": [x.public() for x in selected],
             "receipt": {
@@ -450,11 +470,12 @@ class MicroClayRetrieval:
     ) -> dict[str, Any]:
         """Atomically apply one canonical causally re-entered effect outcome.
 
-        Policy-capital mutation and the feedback idempotency receipt are one UnifiedDB
-        transaction. Any failure before COMMIT rolls both back, so crash/retry cannot
-        partially or multiply apply the same canonical learning outcome.
+        Policy-capital mutation and the feedback idempotency receipt share the current
+        canonical transaction. Standalone calls create one transaction; turn assembly
+        joins the already-open admission transaction so crash/rollback cannot partially
+        or multiply apply the same learning outcome.
         """
-        with self.db.tx() as db:
+        with self._credit_tx() as db:
             row = db.execute(
                 "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
                 (causal_id,),

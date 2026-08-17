@@ -52,7 +52,8 @@ class ClerkTokenVerifier:
 
     Networkless verification is preferred when CLERK_JWT_KEY is supplied. Otherwise
     PyJWKClient fetches/caches the instance JWKS. Only RS256 is accepted and the Clerk
-    authorized-party claim must match the configured web origin set.
+    authorized-party claim must match the configured web origin set. Impersonated and
+    pending sessions are not admitted by the baseline two-perspective product boundary.
     """
 
     def __init__(self, config: ClerkConfig):
@@ -86,6 +87,10 @@ class ClerkTokenVerifier:
             raise AuthenticationError("Clerk token missing session ID")
         if not claims.get("sub"):
             raise AuthenticationError("Clerk token missing subject")
+        if claims.get("act") is not None:
+            raise AuthenticationError("Clerk impersonated sessions are not admitted")
+        if claims.get("sts") == "pending":
+            raise AuthenticationError("pending Clerk session is not admitted")
         return claims
 
     @staticmethod

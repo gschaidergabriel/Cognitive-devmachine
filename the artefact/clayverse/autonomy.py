@@ -100,8 +100,13 @@ class AutonomyController:
             raise AutonomyStateError("invalid autonomy queue")
         if any(goal_id not in state["goals"] for goal_id in state["queue"]):
             raise AutonomyStateError("queue references unknown goal")
+        source_turn_ids: set[str] = set()
         for goal_id, goal in state["goals"].items():
             cls._validate_goal(goal_id, goal)
+            source_turn_id = goal["source_turn_id"]
+            if source_turn_id in source_turn_ids:
+                raise AutonomyStateError("multiple goals share one source turn")
+            source_turn_ids.add(source_turn_id)
 
     @staticmethod
     def _validate_goal(goal_id: str, goal: dict[str, Any]) -> None:
@@ -203,7 +208,12 @@ class AutonomyController:
         if not isinstance(priority, int) or not 0 <= priority <= 100:
             raise ValueError("priority out of range")
         budget = (budget or GoalBudget()).validate()
-        now, goal_id = time.time(), str(uuid.uuid4())
+        completion_contract = {"mode": completion_mode, "required_capability": required_capability}
+        budget_state = {
+            "max_steps": int(budget.max_steps),
+            "max_retries_per_step": int(budget.max_retries_per_step),
+            "max_effects": int(budget.max_effects),
+        }
         with self.db.tx() as db:
             self.db.assert_live_generation(session_id, generation)
             row = db.execute("SELECT session_id,user_id,role,content FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
@@ -215,13 +225,31 @@ class AutonomyController:
             if not objective or len(objective) > MAX_OBJECTIVE_CHARS:
                 raise AutonomyStateError("invalid canonical goal objective")
             state = self._load(db)
+            existing = [goal for goal in state["goals"].values() if goal["source_turn_id"] == source_turn_id]
+            if len(existing) > 1:
+                raise AutonomyStateError("multiple goals share one source turn")
+            if existing:
+                goal = existing[0]
+                if int(goal["generation"]) != int(generation):
+                    raise StaleGeneration(goal["goal_id"])
+                if (
+                    goal["user_id"] != user_id
+                    or goal["session_id"] != session_id
+                    or goal["objective"] != objective
+                    or goal["completion_contract"] != completion_contract
+                    or goal["budget"] != budget_state
+                    or int(goal["priority"]) != int(priority)
+                ):
+                    raise AutonomyStateError("source turn already adopted with a different goal contract")
+                return dict(goal)
             if len(state["goals"]) >= MAX_GOALS:
                 raise AutonomyStateError("goal capacity reached")
+            now, goal_id = time.time(), str(uuid.uuid4())
             goal = {
                 "goal_id": goal_id, "user_id": user_id, "session_id": session_id, "generation": int(generation),
                 "source_turn_id": source_turn_id, "objective": objective, "priority": priority, "status": "ACTIVE",
-                "completion_contract": {"mode": completion_mode, "required_capability": required_capability},
-                "budget": {"max_steps": int(budget.max_steps), "max_retries_per_step": int(budget.max_retries_per_step), "max_effects": int(budget.max_effects)},
+                "completion_contract": completion_contract,
+                "budget": budget_state,
                 "counters": {"steps": 0, "effects": 0, "consecutive_failures": 0}, "current_step": None,
                 "evidence_effect_ids": [], "user_ack_turn_id": None, "created_at": now, "updated_at": now, "blocked_reason": None,
             }
@@ -229,7 +257,7 @@ class AutonomyController:
             state["queue"].append(goal_id)
             state["queue"].sort(key=lambda gid: (-state["goals"][gid]["priority"], state["goals"][gid]["created_at"], gid))
             self._save(db, state)
-        return dict(goal)
+            return dict(goal)
 
     def _goal(self, db, goal_id: str, expected_generation: int | None = None):
         state = self._load(db)

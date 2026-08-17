@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy import AutonomyController
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -51,7 +52,24 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
+def _autonomy_snapshot_in_tx(db: UnifiedDB, user_id: str) -> dict[str, Any]:
+    """Read validated canonical autonomy state without nesting UnifiedDB.tx()."""
+    controller = AutonomyController(db)
+    state = controller._load(db.db)
+    goals = [
+        state["goals"][goal_id]
+        for goal_id in state["queue"]
+        if state["goals"][goal_id]["user_id"] == user_id
+    ]
+    return {"schema": state["schema"], "revision": state["revision"], "goals": goals}
+
+
+def _bounded_hook_context(
+    result: dict[str, Any],
+    limit: int = HOOK_CONTEXT_MAX_CHARS,
+    *,
+    autonomy: dict[str, Any] | None = None,
+) -> str:
     compact = {
         "authority": "UnifiedDB",
         "identity": {"user_id": result["user_id"], "session_id": result["session_id"]},
@@ -68,6 +86,8 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "context": result["context"],
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
+    if autonomy is not None:
+        compact["autonomy"] = autonomy
 
     def render() -> str:
         return _HOOK_CONTEXT_PREFIX + json.dumps(
@@ -123,13 +143,17 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, _, session_id, lifecycle = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
         # Claude keeps one session_id across turns, and Stop does not run on a user
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            additional_context = _bounded_hook_context(result)
+            # begin_admission intentionally owns one BEGIN IMMEDIATE transaction.
+            # Reuse that transaction so invalid/oversized autonomy context rolls the
+            # entire prompt admission back instead of leaving a phantom active turn.
+            autonomy = _autonomy_snapshot_in_tx(db, user_id)
+            additional_context = _bounded_hook_context(result, autonomy=autonomy)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",

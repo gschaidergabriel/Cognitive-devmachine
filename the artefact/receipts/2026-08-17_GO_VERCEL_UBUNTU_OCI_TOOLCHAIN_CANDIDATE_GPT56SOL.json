@@ -1,0 +1,53 @@
+{
+  "schema": "ClayVerseVercelUbuntuOciToolchainCandidate/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "product_endpoint": "ClayVerse",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "hypothesis": "The observed nested OCI blocker may be specific to the default Amazon Linux 2023 Sandbox image/repositories rather than a fundamental Vercel Sandbox virtualization limitation.",
+  "counterhypothesis": "Even in Vercel's supported Ubuntu Sandbox image, Podman/Buildah may fail to install or may fail `info` because required namespaces, storage drivers, mounts or kernel capabilities are unavailable.",
+  "primary_platform_basis": "Vercel's Sandbox image documentation explicitly supports Sandbox.create with image='vercel/sandbox/ubuntu' and image-bound Sandboxes; this is an architecture candidate, not executable evidence.",
+  "product_repository_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-vercel-ubuntu-oci-toolchain-20260817-1218",
+    "head": "66ce1d6a90bf72af80e0d9e682c9534245eb842c",
+    "parent": "a3a03b6bd2f253347c8382ab3db71e4f457446e8",
+    "script": "mcp/vercel-sandbox-mcp/scripts/probe-vercel-ubuntu-oci-toolchain.mjs",
+    "package_build_entry": "node scripts/probe-vercel-ubuntu-oci-toolchain.mjs",
+    "sandbox_image": "vercel/sandbox/ubuntu",
+    "sdk": "@vercel/sandbox@2.9.2"
+  },
+  "preflight_contract": {
+    "kind": "NORMAL_INFRASTRUCTURE_CAPABILITY_PREFLIGHT",
+    "unusual_experiment_count_added": 0,
+    "initial_network_policy": "allow-all only for apt package provisioning",
+    "provision": "apt-get install --no-install-recommends podman buildah",
+    "allow_all_checks": ["buildah --version", "podman --version", "buildah info", "podman info"],
+    "deny_all_checks": ["buildah --version", "podman --version", "buildah info", "podman info"],
+    "oci_image_build_attempted": false,
+    "oci_container_run_attempted": false,
+    "writes_attempted_outside_sandbox": false,
+    "required_cleanup": "sandbox.stop in finally"
+  },
+  "falsifier": "Reject this path if the exact provider-admitted run cannot provision both tools, either tool's info command fails under the admitted Sandbox environment, deny-all recheck breaks the toolchain, or the sandbox cannot be cleanly stopped.",
+  "execution_observation": {
+    "github_vercel_status": "FAILURE_PROVIDER_BUILD_RATE_LIMIT",
+    "target_signal": "upgradeToPro=build-rate-limit",
+    "deployment_observed": false,
+    "sandbox_started": false,
+    "preflight_executed": false,
+    "pass_claimed": false
+  },
+  "coordination": {
+    "duplicate_candidate_search": "No existing repository match for vercel/sandbox/ubuntu plus podman/buildah preflight was found before creating the candidate.",
+    "default_amazon_linux_path": "Already observed blocked on missing podman/buildah packages; not repeated.",
+    "vcr_pinned_cli_retry": "Also provider-rate-limited before deployment; no further identical retry is justified in this go."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "remaining_execution_class": "NORMAL_REGRESSION_OR_INFRASTRUCTURE_PREFLIGHT_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_executable_step": "When Vercel provider admission materially changes, run this exact head once. If PASS_UBUNTU_OCI_TOOLCHAIN_PREFLIGHT is observed with exact source identity and sandbox stop evidence, promote the path only to a ClayVerse OCI build discriminator inside an exact Vercel Sandbox; do not infer whole-product acceptance. If it fails, preserve the negative result and reject the Ubuntu nested-OCI mechanism."
+}

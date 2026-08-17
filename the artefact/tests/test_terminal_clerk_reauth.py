@@ -3,10 +3,24 @@ from pathlib import Path
 import pytest
 
 from clayverse.clerk_auth import AuthenticationError
-from clayverse.terminal_gateway import _auth_expiry_deadline, _reauthenticated_expiry
+from clayverse.terminal_gateway import (
+    _assert_reauth_identity_current,
+    _auth_expiry_deadline,
+    _reauthenticated_expiry,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class _IdentityProbe:
+    def __init__(self, result):
+        self.result = result
+        self.subjects = []
+
+    def resolve(self, subject):
+        self.subjects.append(subject)
+        return self.result
 
 
 def test_auth_expiry_deadline_requires_finite_future_numeric_expiration():
@@ -43,6 +57,27 @@ def test_reauth_stays_bound_to_same_clerk_subject_and_session():
         )
 
 
+def test_reauth_revalidates_current_clayverse_user_and_session_binding():
+    identity = _IdentityProbe(("gabriel", "session:gabriel"))
+    _assert_reauth_identity_current(
+        identity,
+        "clerk_g",
+        expected_user_id="gabriel",
+        expected_session_id="session:gabriel",
+    )
+    assert identity.subjects == ["clerk_g"]
+
+    for drifted in (("andreas", "session:andreas"), ("gabriel", "session:drift")):
+        identity = _IdentityProbe(drifted)
+        with pytest.raises(AuthenticationError, match="identity/session changed"):
+            _assert_reauth_identity_current(
+                identity,
+                "clerk_g",
+                expected_user_id="gabriel",
+                expected_session_id="session:gabriel",
+            )
+
+
 def test_received_frames_are_rechecked_against_expiry_before_state_effects():
     source = (ROOT / "clayverse" / "terminal_gateway.py").read_text()
     receive_at = source.index("message = await asyncio.wait_for(ws.receive(), timeout=remaining)")
@@ -52,9 +87,11 @@ def test_received_frames_are_rechecked_against_expiry_before_state_effects():
     assert receive_at < post_receive_fence_at < binary_effect_at < control_effect_at
 
 
-def test_reauth_uses_same_verifier_and_returns_new_expiry_to_browser():
+def test_reauth_revalidates_unifieddb_binding_before_extending_live_socket_lease():
     source = (ROOT / "clayverse" / "terminal_gateway.py").read_text()
-    assert "refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))" in source
-    assert "auth_expires_at = _reauthenticated_expiry(" in source
-    assert '"type": "reauthenticated"' in source
-    assert '"auth_expires_at": int(auth_expires_at)' in source
+    verifier_at = source.index("refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))")
+    expiry_at = source.index("refreshed_expiry = _reauthenticated_expiry(", verifier_at)
+    identity_at = source.index("_assert_reauth_identity_current,", expiry_at)
+    extend_at = source.index("auth_expires_at = refreshed_expiry", identity_at)
+    publish_at = source.index('"type": "reauthenticated"', extend_at)
+    assert verifier_at < expiry_at < identity_at < extend_at < publish_at

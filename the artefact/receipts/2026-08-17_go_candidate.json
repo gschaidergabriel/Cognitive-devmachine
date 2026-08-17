@@ -1,0 +1,23 @@
+{
+  "execution_surface": "OpenAI isolated container workspace (non-VPS); Vercel connector exposed documentation only, no Sandbox execution action",
+  "kind": "CLAYVERSE_GO_INTEGRATED_CANDIDATE_RECEIPT",
+  "open_gates": [
+    "real Clerk JWT verification",
+    "browser terminal adapter",
+    "authenticated Claude Code CLI",
+    "selected EntityOS integration",
+    "actual OCI build in authorized external sandbox"
+  ],
+  "service_smoke": {
+    "command": "PYTHONPATH=. CLAYVERSE_STATE_ROOT=.state python3 -m clayverse.service --once",
+    "result": "PASS"
+  },
+  "tests": {
+    "command": "python3 -m pytest -q",
+    "count": 11,
+    "result": "PASS"
+  },
+  "timestamp_utc": "2026-08-17T04:32:25.670774+00:00",
+  "unusual_experiment": "cross-user crash/reopen ABA lease fencing",
+  "whole_system_pass": false
+}

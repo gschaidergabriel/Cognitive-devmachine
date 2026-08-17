@@ -1,19 +1,16 @@
-# the artefact
+# the artefact — ClayVerse candidate
 
-Canonical ClayVerse product workspace.
+This directory is the canonical reproducible ClayVerse product workspace.
 
-This directory contains the reproducible source, container definitions, tests, manifests and acceptance/release-candidate receipts for the single-container ClayVerse artifact.
+The current candidate implements the central state/continuity/causal architecture and a hardened one-container source shape without using the live VPS. It is **not** a whole-system PASS yet because real Clerk verification, browser terminal/Claude Code integration, the selected EntityOS substrate, and an isolated OCI image build are still external gates.
 
-Build law:
+## Local isolated verification
 
-- build and test away from the live VPS;
-- use Vercel Sandbox where its capabilities fit and other authorized isolated tools as needed;
-- do not use Claude Code as a research/coding/build/test helper;
-- use the strongest valid non-falsified generations from Frank donor systems, UnifiedDB/ClayGraph/Hyperposition/GWT research and the complete EntityOS research line;
-- `consciousness_daemon` is removed;
-- UnifiedDB is the canonical state authority;
-- ClayGraph is a derived/rebuildable projection;
-- the finished product is one OCI/Docker-compatible ClayVerse container;
-- the live VPS remains read-only evidence until explicitly authorized for deployment/mutation.
+```bash
+python -m pytest -q
+PYTHONPATH=. CLAYVERSE_STATE_ROOT=/tmp/clayverse-state python -m clayverse.service --once
+```
 
-Current status: workspace initialized; no whole-system PASS is claimed.
+## Container source
+
+`Dockerfile` + `compose.yaml` define one runtime container with external durable state at `/var/lib/clayverse`, non-root execution, no-new-privileges, and dropped capabilities.

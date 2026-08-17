@@ -1,0 +1,17 @@
+services:
+  clayverse:
+    build: .
+    restart: unless-stopped
+    environment:
+      CLAYVERSE_STATE_ROOT: /var/lib/clayverse
+    volumes:
+      - clayverse-state:/var/lib/clayverse
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid,nodev
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+volumes:
+  clayverse-state:

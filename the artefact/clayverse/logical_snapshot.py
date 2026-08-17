@@ -172,11 +172,11 @@ def _validate_snapshot_path(snapshot_dir: Path) -> tuple[Path, Path]:
 
 
 class LogicalSnapshotManager:
-    """Create and validate atomic, self-contained ClayVerse logical-machine snapshots.
+    """Create, validate and restore bounded ClayVerse logical-machine snapshots.
 
-    UnifiedDB remains the only canonical state authority. A snapshot is a recoverable
-    copy plus integrity/provenance bindings; it never becomes an independent live
-    memory, effect or turn authority.
+    UnifiedDB remains the only canonical live state authority. A snapshot is a
+    recoverable copy plus integrity/provenance bindings; restore only stages exact
+    bytes into a fresh state root and never opens a second live DB or executes effects.
     """
 
     def __init__(self, state_root: str | Path):
@@ -297,6 +297,75 @@ class LogicalSnapshotManager:
         if observed != state:
             raise LogicalSnapshotIntegrityError("snapshot manifest/state drift")
         return manifest
+
+    def restore_fresh(self, snapshot_dir: str | Path, *, runtime_identity: dict) -> dict:
+        """Stage one exact snapshot into an empty state root before UnifiedDB opens.
+
+        The caller must subsequently open the restored UnifiedDB and run the canonical
+        recovery path. This method never guesses across artifact/runtime identities,
+        never overwrites an existing live database, and never replays an effect.
+        """
+
+        expected_runtime = _validated_runtime_identity(runtime_identity)
+        snapshot_dir = Path(snapshot_dir)
+        manifest = self.validate(snapshot_dir)
+        if manifest["runtime_identity"] != expected_runtime:
+            raise LogicalSnapshotIntegrityError("snapshot runtime identity does not match current runtime")
+
+        if os.path.lexists(self.state_root):
+            if self.state_root.is_symlink() or not self.state_root.is_dir():
+                raise LogicalSnapshotIntegrityError("restore state root must be a real directory")
+        else:
+            self.state_root.mkdir(parents=True, mode=0o700)
+        if self.state_root.is_symlink() or not self.state_root.is_dir():
+            raise LogicalSnapshotIntegrityError("restore state root must be a real directory")
+
+        target = self.state_root / "unified.db"
+        for candidate in (target, Path(str(target) + "-wal"), Path(str(target) + "-shm"), Path(str(target) + "-journal")):
+            if os.path.lexists(candidate):
+                raise LogicalSnapshotIntegrityError("restore requires a fresh UnifiedDB target")
+
+        source_db, _ = _validate_snapshot_path(snapshot_dir)
+        database = manifest["database"]
+        expected_size = int(database["size"])
+        expected_sha = str(database["sha256"])
+        temp = self.state_root / f".restore-{uuid.uuid4().hex}.db"
+        copied_size = 0
+        copied_hash = hashlib.sha256()
+        try:
+            with source_db.open("rb") as source, temp.open("xb") as destination:
+                os.chmod(temp, 0o600)
+                while True:
+                    chunk = source.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    copied_size += len(chunk)
+                    copied_hash.update(chunk)
+                    destination.write(chunk)
+                destination.flush()
+                os.fsync(destination.fileno())
+            if copied_size != expected_size or copied_hash.hexdigest() != expected_sha:
+                raise LogicalSnapshotIntegrityError("restored database bytes do not match snapshot manifest")
+            try:
+                os.link(temp, target)
+            except FileExistsError as exc:
+                raise LogicalSnapshotIntegrityError("restore target appeared during publication") from exc
+            temp.unlink()
+            _fsync_dir(self.state_root)
+        except Exception:
+            try:
+                temp.unlink()
+            except FileNotFoundError:
+                pass
+            raise
+
+        return {
+            "restored": True,
+            "snapshot_id": manifest["snapshot_id"],
+            "database_sha256": expected_sha,
+            "checkpoint_id": manifest["state"]["checkpoint_anchor"]["checkpoint_id"],
+            "entity_generation_before_recovery": manifest["state"]["entity_generation"],
+        }
 
     def latest_valid(self) -> dict | None:
         if not self.root.exists():

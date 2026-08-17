@@ -156,6 +156,36 @@ class MicroClayRetrieval:
             entry_keys=keys,
         )
 
+    def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
+        """Consume new effect-outcome receipts from earlier retrieval episodes.
+
+        Learning is delayed until a causally re-entered external outcome exists. Pure
+        conversational completion is not treated as reward, avoiding self-reinforcing
+        "the retriever liked its own result" feedback.
+        """
+        self.db.assert_live_generation(session_id, generation)
+        rows = self.db.db.execute(
+            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
+            "ORDER BY r.ts LIMIT 100",
+            (session_id, int(generation)),
+        ).fetchall()
+        applied = 0
+        for row in rows:
+            result = self.credit(
+                causal_id=row["causal_id"],
+                generation=int(row["generation"]),
+                credit=float(row["credit"]),
+                signal_class=f"effect_outcome:{row['status']}",
+            )
+            applied += int(bool(result.get("applied")))
+        return {"eligible": len(rows), "applied": applied}
+
     def retrieve(
         self,
         *,
@@ -176,6 +206,10 @@ class MicroClayRetrieval:
         if budget_chars < 256 or budget_chars > 200_000:
             raise ValueError("invalid retrieval budget")
         self.db.assert_live_generation(session_id, generation)
+        learned_outcomes = self.learn_from_verified_outcomes(
+            session_id=session_id,
+            generation=generation,
+        )
 
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
         rows = self.db.db.execute(
@@ -250,6 +284,7 @@ class MicroClayRetrieval:
                 "shadow_differs": selected_ids != shadow_ids,
                 "truth_authority": False,
                 "effect_authority": False,
+                "outcome_learning_applied": learned_outcomes["applied"],
             },
         }
 

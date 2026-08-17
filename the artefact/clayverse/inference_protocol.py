@@ -10,6 +10,35 @@ class InferenceProtocolError(RuntimeError):
 
 ALLOWED_INFERENCE_EFFECTS = {"entityos.exec", "state.noop"}
 
+CLAUDE_DECISION_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "properties": {
+        "text": {"type": "string", "maxLength": 100000},
+        "effect": {
+            "anyOf": [
+                {"type": "null"},
+                {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "properties": {
+                        "capability": {"type": "string", "enum": ["entityos.exec", "state.noop"]},
+                        "target": {"type": "string", "minLength": 1, "maxLength": 2048},
+                        "argv": {
+                            "anyOf": [
+                                {"type": "null"},
+                                {"type": "array", "maxItems": 128, "items": {"type": "string", "minLength": 1, "maxLength": 8192}},
+                            ]
+                        },
+                    },
+                    "required": ["capability", "target", "argv"],
+                },
+            ]
+        },
+    },
+    "required": ["text", "effect"],
+}
+
 
 def _clean_string(value: Any, name: str, *, max_length: int) -> str:
     if not isinstance(value, str) or not value or len(value) > max_length or "\x00" in value:
@@ -17,19 +46,12 @@ def _clean_string(value: Any, name: str, *, max_length: int) -> str:
     return value
 
 
-def parse_claude_decision(result: str) -> dict[str, Any]:
-    """Parse Claude's tool-less output into a bounded ClayVerse decision.
+def parse_claude_decision_payload(payload: Any) -> dict[str, Any]:
+    """Validate an already-decoded structured Claude decision.
 
-    Claude may request an effect, but this function never executes it. Only the
-    canonical EffectGate can turn the returned intent into an external action.
-    Unknown fields/capabilities fail closed instead of being guessed.
+    The JSON schema is the generation-time constraint; this parser remains the
+    independent fail-closed runtime boundary before any effect reaches EffectGate.
     """
-    if not isinstance(result, str) or not result:
-        raise InferenceProtocolError("empty inference result")
-    try:
-        payload = json.loads(result)
-    except json.JSONDecodeError as exc:
-        raise InferenceProtocolError("inference result is not JSON") from exc
     if not isinstance(payload, dict) or set(payload) != {"text", "effect"}:
         raise InferenceProtocolError("inference result must contain exactly text and effect")
 
@@ -63,3 +85,14 @@ def parse_claude_decision(result: str) -> dict[str, Any]:
         "selection": "request_effect",
         "effect": {"capability": capability, "target": target, "argv": clean_argv},
     }
+
+
+def parse_claude_decision(result: str) -> dict[str, Any]:
+    """Backward-compatible parser for stored/plain JSON decision text."""
+    if not isinstance(result, str) or not result:
+        raise InferenceProtocolError("empty inference result")
+    try:
+        payload = json.loads(result)
+    except json.JSONDecodeError as exc:
+        raise InferenceProtocolError("inference result is not JSON") from exc
+    return parse_claude_decision_payload(payload)

@@ -1,0 +1,77 @@
+name: ClayVerse VPS guest orchestrator setup
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clayverse-vps-guest-orchestrator-setup.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-vps-guest-orchestrator-setup
+  cancel-in-progress: false
+
+jobs:
+  qemu-orchestrator-setup:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Install bounded guest-orchestration packages only
+        shell: bash
+        run: |
+          set -euo pipefail
+          export DEBIAN_FRONTEND=noninteractive
+          sudo -n apt-get update
+          sudo -n apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
+
+      - name: Attest installed VMM surface
+        shell: bash
+        run: |
+          set -euo pipefail
+          out="/tmp/clayverse-vps-qemu-setup-${GITHUB_RUN_ID}.json"
+          python3 - "$out" <<'PY'
+          import json, os, pathlib, platform, shutil, subprocess, sys
+          out=pathlib.Path(sys.argv[1])
+          def cmd(argv):
+              try: return subprocess.check_output(argv,text=True,stderr=subprocess.STDOUT,timeout=10).strip()
+              except Exception as exc: return 'UNAVAILABLE:'+type(exc).__name__+':'+str(exc)
+          qemu=shutil.which('qemu-system-x86_64')
+          payload={
+            'schema':'ClayVerseVpsGuestOrchestratorSetup/v1',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'host_kernel':platform.release(),
+            'qemu_system_x86_64':qemu,
+            'qemu_img':shutil.which('qemu-img'),
+            'cloud_localds':shutil.which('cloud-localds'),
+            'qemu_version':cmd(['qemu-system-x86_64','--version']) if qemu else 'UNAVAILABLE',
+            'qemu_accels':cmd(['qemu-system-x86_64','-accel','help']) if qemu else 'UNAVAILABLE',
+            'qemu_sandbox_help':cmd(['qemu-system-x86_64','-sandbox','help']) if qemu else 'UNAVAILABLE',
+            'kvm_device_present':pathlib.Path('/dev/kvm').exists(),
+            'installed_packages':cmd(['dpkg-query','-W','-f=${Package}=${Version}\n','qemu-system-x86','qemu-utils','cloud-image-utils']),
+            'orchestrator_mutation_only':True,
+            'product_code_executed_on_host':False,
+            'host_docker_used':False,
+            'guest_started':False,
+            'runtime_credit':0,
+            'whole_product_credit':0,
+            'unusual_experiment_count_added':0,
+          }
+          if not qemu or not payload['qemu_img'] or not payload['cloud_localds']:
+              raise SystemExit('QEMU_ORCHESTRATOR_SETUP_INCOMPLETE')
+          out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'qemu':True,'kvm':payload['kvm_device_present'],'guest_started':False,'runtime_credit':0},sort_keys=True))
+          PY
+
+      - name: Upload setup receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-vps-qemu-setup-${{ github.run_id }}
+          path: /tmp/clayverse-vps-qemu-setup-${{ github.run_id }}.json
+          if-no-files-found: error
+          retention-days: 7

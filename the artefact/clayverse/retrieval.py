@@ -1,4 +1,5 @@
 from __future__ import annotations
+import hashlib
 import json
 from .method_memory import METHOD_KINDS
 from .method_stage_b import StageBMethodRetrieval
@@ -15,6 +16,26 @@ class WorldAssembler:
         self.db = db
         self.microclay = MicroClayRetrieval(db)
         self.stage_b = StageBMethodRetrieval(db)
+
+    @staticmethod
+    def _context_method_receipt(receipt):
+        """Scalar-only audit projection; the full replay receipt stays in UnifiedDB."""
+        if not isinstance(receipt, dict):
+            raise StaleGeneration("method_retrieval_receipt")
+        scalar = (str, int, float, bool, type(None))
+        result = {}
+        for key, value in receipt.items():
+            if key in {"selected_method_ids", "counterevidence_ids"}:
+                if not isinstance(value, list) or any(not isinstance(item, str) for item in value):
+                    raise StaleGeneration("method_retrieval_receipt")
+                encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+                result[f"{key}_count"] = len(value)
+                result[f"{key}_sha256"] = hashlib.sha256(encoded.encode("utf-8")).hexdigest()
+            elif isinstance(value, scalar):
+                result[key] = value
+            else:
+                raise StaleGeneration("method_retrieval_receipt")
+        return result
 
     def _extracted_fragments(self, turn_id):
         excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
@@ -149,9 +170,6 @@ class WorldAssembler:
             retrieval_receipt = dict(result["receipt"])
             factual_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
 
-            # Stage B is invoked only for an unresolved factual route. A missing explicit
-            # structural signature still goes through StageBMethodRetrieval so the causal
-            # SIGNATURE_REQUIRED decision is durably replay-bound. It never serves a method.
             if factual_status in {"UNKNOWN", "UNDERCOVERED"}:
                 stage_b = self.stage_b.retrieve(
                     query=str(supplied["query"]),
@@ -167,7 +185,7 @@ class WorldAssembler:
                 )
                 method_context = list(stage_b["methods"])
                 counterevidence = list(stage_b["counterevidence"])
-                method_receipt = dict(stage_b["receipt"])
+                method_receipt = self._context_method_receipt(stage_b["receipt"])
                 unknowns = [{
                     "status": f"FACT_{factual_status}",
                     "query_sha256": retrieval_receipt.get("query_sha256"),

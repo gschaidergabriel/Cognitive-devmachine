@@ -1,0 +1,47 @@
+{
+  "schema": "clayverse-go-source-mechanism-receipt/v1",
+  "recorded_at": "2026-08-17T13:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "e987e7cf269df8a6c5bf2a128936d3deb49fbcde",
+  "branch": "go/ws-transport-bound-20260817-1344",
+  "candidate_head_before_receipt": "66860b4afda04f9d8a00b52f5eca640bc6a1a680",
+  "frontier": "Clerk-authenticated WebSocket PTY transport admission",
+  "parallel_fusion": "Canonical main already contains the handler-level auth/control/PTY bounds and ws_max_size=65536. This candidate was rejoined to fresh main and keeps only the non-duplicate transport hardening.",
+  "repair": {
+    "uvicorn_protocol": "websockets",
+    "ws_max_size_bytes": 65536,
+    "ws_max_queue": 8,
+    "per_message_deflate": false,
+    "server_options_contract": "service._uvicorn_options",
+    "single_source_size_bound": "terminal_gateway._PTY_INPUT_FRAME_MAX_BYTES"
+  },
+  "source_identity": {
+    "service_git_blob_sha1": "0cdfb01ba2d1412ccfbe4ce5ef25aedfd930d16d",
+    "test_git_blob_sha1": "7ce7f8a9fb88cb696e7d067e899d3f87fc7c32e6"
+  },
+  "supporting_isolated_evidence": {
+    "environment": "OpenAI isolated non-production container",
+    "service_blob_byte_identity": "MATCH",
+    "py_compile": "PASS",
+    "helper_contract": "PASS",
+    "installed_uvicorn_0_48_config_contract": "PASS",
+    "target_uvicorn_0_51_runtime": "UNOBSERVED; package installation blocked by isolated container network/DNS admission"
+  },
+  "upstream_interface_evidence": "Current official Uvicorn documentation supports programmatic server keyword configuration and exposes WebSocket max-size, queue and per-message-deflate controls. This is dependency-interface evidence only.",
+  "experiment_accounting": {
+    "distinct_unusual_experiment_started": false,
+    "state": "SLOT_CLOSED_BY_CURRENT_MAIN_COORDINATION_RECORDS"
+  },
+  "acceptance": {
+    "classification": "SOURCE_MECHANISM_SUPPORTED",
+    "exact_target_dependency_runtime_verified": false,
+    "exact_full_suite_verified": false,
+    "exact_oci_runtime_verified": false,
+    "live_clerk_browser_ws_pty_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "Actually start the exact then-current fused ClayVerse source in an authorized isolated environment with repository-pinned Uvicorn 0.51.0; send oversized and queued real WebSocket messages; then execute adjacent auth/terminal regressions and exact OCI build/start/readiness/restart."
+}

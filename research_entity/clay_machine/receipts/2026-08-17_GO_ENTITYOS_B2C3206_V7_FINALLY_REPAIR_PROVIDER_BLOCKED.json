@@ -1,0 +1,61 @@
+{
+  "schema": "ClayEntityOSGoConvergenceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_main_before_write": "5097f893be9f075d00cb81bd6264e93095a8c16a",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "current_product_head_observed": "b2c3206f12a0316e72286a9c041794f25e219269",
+  "source_reentry": {
+    "base_stop_head": "f6d0d3eed8a6992733a9cc764b594415252e91ef",
+    "head": "b2c3206f12a0316e72286a9c041794f25e219269",
+    "ahead_by": 4,
+    "changed_surfaces": [
+      "host process UTF-8 scalar boundary hardening",
+      "hostcall ABI VM-version regression cleanup",
+      "Vercel canonical v7 runner catch/finally syntax repair"
+    ],
+    "latest_fix": "restore valid catch/finally structure after uv hardening in mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+    "latest_fix_executable_promotion": false
+  },
+  "canonical_mechanism_retained": {
+    "hostcall_abi_schema": "ClayHostcallABI/v1",
+    "stdout_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "stdout_vm_versions": [2],
+    "load_time_vm_version_and_arity_fence": true,
+    "runtime_vm_version_and_type_fence": true,
+    "stderr_product_widening_deferred_pending_stdout_promotion": true,
+    "argv_utf8_scalar_validation_at_shared_linux_boundary": true,
+    "no_new_runtime_path": true
+  },
+  "execution": {
+    "exact_head_checked": "b2c3206f12a0316e72286a9c041794f25e219269",
+    "github_vercel_status": "failure",
+    "provider_blocker": "build-rate-limit",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "non_target_ready_does_not_transfer": true,
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_evidence_transfers_to_current_head": false
+  },
+  "counterhypothesis": "the repaired runner or rapidly fused source still contains an integration/runtime defect invisible to source inspection",
+  "discriminator": "actually-started exact-current-head isolated Vercel Sandbox executing the existing regression-only full-pytest and canonical v7 one-file EntityOS sequence",
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "stop_reason": "provider admission prevents the only remaining high-information executable discriminator; further semantic widening would reduce confidence rather than improve product evidence",
+  "next_executable_step": "When the canonical PR 787 target ref is admitted by Vercel, refresh its exact head and run the existing coordinated regression-only sequence: exact staging; full pytest nonzero/zero-skips with exact wheel/hash locks; stdout ABI/CM-TERM gates; Git-free attested twin EntityOS; byte identity; runtime/self-test/no-host-Python/relocation under DENY_ALL; Batch-5; attested-vs-Git-clean identity; successful Sandbox stop. Zero new unusual experiments.",
+  "acceptance": "BLOCKED",
+  "whole_entityos_pass": false,
+  "whole_clay_machine_pass": false,
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false
+}

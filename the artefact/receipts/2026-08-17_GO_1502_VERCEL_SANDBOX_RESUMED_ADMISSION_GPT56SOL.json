@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseVercelSandboxAdmissionReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "EXECUTION_SURFACE_RESUMED_WITH_UNADJUDICATED_BOUNDED_COUNTEREVIDENCE",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_receipt": "b6daf0a37e862351f61bff7cccf56ed0bac33a3b",
+  "vercel": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project": "dr-unterweger",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_CmQJ5bkaXf4GUxZKJgrMq9QSH3wo",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_ref": "chatgpt/go-microclay-explicit-feedback-pr501-vercel-20260817-1418",
+    "staging_head": "dc2b524961137c40c427cc6d371d411ee6c4cfac",
+    "build_admitted": true,
+    "sandbox_started": true,
+    "sandbox_stopped": true,
+    "network_policy_requested": "DENY_ALL",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "execution_bridge": "GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC_CONFIRMED"
+  },
+  "bounded_execution": {
+    "research_pr": 501,
+    "research_head": "c30be49655af196822a24c5bf345dd9588ce80a0",
+    "route_donor_pr": 499,
+    "route_donor_head": "a0d31cd2fa1c8f856435e9c0527bf583dbc93a2f",
+    "feedback_blob": "b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+    "retrieval_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+    "blob_bind_exit_code": 0,
+    "blob_bind_output": [
+      "BLOB_BIND_PASS clayverse/microclay_feedback.py b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+      "BLOB_BIND_PASS clayverse/microclay_retrieval.py b264802d77917cd5c81ef091bc0a07cdf3b06393"
+    ],
+    "test_exit_code": 1,
+    "test_stdout": "",
+    "stderr_captured": false,
+    "semantic_verdict": "UNADJUDICATED",
+    "reason": "The runner captured stdout only. The exact failing assertion/traceback is therefore not bound. Exit 1 is real bounded counterevidence but neither a product PASS nor a semantic product FAIL can be promoted from it."
+  },
+  "currentness": {
+    "pr501": "CLOSED_SUPERSEDED",
+    "surviving_microclay_line": "PR484_SCHEMA8_POLICY_V3_WITH_PR550_EXPLICIT_FEEDBACK_STACK",
+    "v2_result_transfer_to_v3": "FORBIDDEN",
+    "whole_product_pass": false
+  },
+  "execution_surface_correction": {
+    "old_global_classification": "FRESH_PREVIEW_ADMISSION_BLOCKED_BY_BUILD_RATE_LIMIT",
+    "new_global_classification": "SANDBOX_EXECUTION_PATH_CONFIRMED_AND_RECENTLY_ADMITTED_AT_LEAST_ONCE",
+    "important_scope": "This does not prove that every subsequent preview will be admitted and does not prove another run is free of charge.",
+    "account_specific_zero_cost_eligibility": "UNVERIFIED_BY_CONNECTED_SURFACE"
+  },
+  "next_safe_step": "Without starting a new Sandbox, keep the resumed-admission evidence canonical and make all workers distinguish direct MCP lifecycle absence from execution-path availability. Before any additional run under FREE_ONLY, obtain account-specific zero-cost eligibility if possible. When execution is authorized/admitted, run the then-current surviving PR484+PR550 v3 line with stderr/stdout/assertion identity captured and exact source binding.",
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "No new experiment was launched; this GO adjudicated already-executed evidence and corrected shared execution-surface state."
+  },
+  "prohibitions_respected": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_training_started": false
+  }
+}

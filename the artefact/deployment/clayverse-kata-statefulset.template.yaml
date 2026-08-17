@@ -6,10 +6,12 @@
 # This StatefulSet is the workload/isolation profile only. Kubernetes may restart
 # a terminated container inside the same Pod/Kata sandbox. Such an in-place
 # container restart is NOT ClayVerse Tier-2 recovery. Final deployment MUST bind
-# an external fail-closed orchestrator that deletes/replaces the whole Pod/Kata
-# sandbox/VM after a fatal invariant signal and proves new Pod + sandbox identity
-# before ingress reopens. Until that is verified, final acceptance is
-# TIER2_REPLACEMENT_BLOCKED.
+# an external fail-closed orchestrator that treats ClayVerse reserved exit code
+# 86 as a full-sandbox replacement request, deletes/replaces the whole Pod/Kata
+# sandbox/VM, and proves new Pod + sandbox identity before ingress reopens.
+# /dev/termination-log carries the bounded typed diagnostic when available; exit
+# 86 remains authoritative if that diagnostic write fails. Until that behavior
+# is verified, final acceptance is TIER2_REPLACEMENT_BLOCKED.
 #
 # NETWORK FAIL-CLOSED LAW:
 # This template intentionally ships with a default-deny NetworkPolicy for the
@@ -93,6 +95,8 @@ spec:
           # MUST be replaced by the exact accepted immutable image digest.
           image: registry.example.invalid/clayverse@sha256:REPLACE_WITH_ACCEPTED_DIGEST
           imagePullPolicy: IfNotPresent
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
           ports:
             - name: http
               containerPort: 3000

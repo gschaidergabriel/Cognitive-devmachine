@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse.sandbox-runtime-diagnostic/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:02:00+07:00",
+  "observed_at_local": "2026-08-17T15:05:01+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_write": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+  "execution_policy": {
+    "surface": "VERCEL_SANDBOX_MICROVM",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "together_api": "FORBIDDEN"
+  },
+  "diagnostic_execution": {
+    "deployment_id": "dpl_7H6XmBbeCzqXeLBEH6fD9vYc47uG",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-microclay-explicit-feedback-pr501-vercel-20260817-1418",
+    "staging_head": "e76a8fcf27653504eb9b53b6429832044b93b9bb",
+    "research_pr": 501,
+    "research_head": "c30be49655af196822a24c5bf345dd9588ce80a0",
+    "route_donor_pr": 499,
+    "route_donor_head": "a0d31cd2fa1c8f856435e9c0527bf583dbc93a2f",
+    "exact_feedback_blob": "b293b8c2903eb01ce83523b0d483c3ebbdafee8c",
+    "exact_retrieval_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+    "network_policy": "DENY_ALL",
+    "sandbox_started": true,
+    "sandbox_stopped": true,
+    "blob_bind_exit_code": 0,
+    "test_exit_code": 1,
+    "diagnostic_output": "Traceback: import sqlite3 -> sqlite3.dbapi2 -> from _sqlite3 import * -> ModuleNotFoundError: No module named '_sqlite3'",
+    "failure_phase": "PYTHON_STANDARD_LIBRARY_DEPENDENCY_IMPORT_BEFORE_PRODUCT_ASSERTIONS",
+    "classification": "SANDBOX_RUNTIME_DEPENDENCY_MISSING_SQLITE3",
+    "product_semantic_verdict": "NO_PRODUCT_TEST_FAIL",
+    "microclay_semantic_assertions_reached": false
+  },
+  "adjudication": {
+    "prior_empty_output_exit_1": "EXPLAINED_BY_STDERR_ONLY_PYTHON_IMPORT_FAILURE",
+    "prior_classification": "EXECUTED_CROSS_BRANCH_COUNTEREVIDENCE_UNADJUDICATED",
+    "new_classification": "EXECUTION_STARTED_BUT_PRODUCT_ASSERTIONS_NOT_REACHED_DUE_TO_VERCEL_PYTHON313_MISSING_SQLITE_EXTENSION",
+    "pr501_status": "CLOSED_SUPERSEDED_BY_PR550",
+    "v2_result_transfer_to_surviving_v3": "FORBIDDEN",
+    "surviving_target": "PR484_SCHEMA8_POLICY_V3_PLUS_PR550_EXPLICIT_FEEDBACK_STACK"
+  },
+  "provider_state": {
+    "current_free_preview_capacity": "BLOCKED_BY_DAILY_FREE_DEPLOYMENT_CAP_PER_EXISTING_1502_RECEIPT",
+    "additional_preview_now": "DO_NOT_START",
+    "direct_chatgpt_sandbox_lifecycle": "NOT_EXPORTED",
+    "git_preview_oidc_bridge": "CONFIRMED"
+  },
+  "next_exact_gate": {
+    "admission": "WAIT_FOR_FREE_PREVIEW_ADMISSION_TO_RETURN_THEN_REFRESH_MAIN_AND_SURVIVING_PR_HEADS",
+    "runtime_requirement": "USE_AN_ADMITTED_SQLITE_CAPABLE_SANDBOX_IMAGE_OR_THE_EXACT_CLAYVERSE_OCI_IMAGE; DO_NOT_USE_THE_SQLITELESS_PYTHON313_RUNTIME_FOR_UNIFIEDDB_TESTS",
+    "official_capability_basis": "VERCEL_SANDBOX_SUPPORTS_IMAGE-BASED SANDBOX.CREATE INCLUDING CUSTOM/DIGEST-PINNED OCI IMAGES",
+    "execution_target": "RUN_ONE_COORDINATED_EXACT_CURRENT PR484_PLUS_PR550 FOCUSED_AND_ADJACENT MICROCLAY/UNIFIEDDB REGRESSION BATCH, THEN BROADER CLAYVERSE AND OCI/START/RESTART GATES",
+    "security": "PRESERVE_DENY_ALL_WHERE TEST INPUTS ARE PRESTAGED; DO_NOT RELAX PROVENANCE OR FAIL-CLOSED POLICY TO GET GREEN"
+  },
+  "coordination": {
+    "unusual_experiment_count_added_by_this_lane": 0,
+    "single_go_experiment_slot": "ALREADY_CLAIMED_ON_CANONICAL_MAIN",
+    "duplicate_unusual_experiment_forbidden": true
+  },
+  "evidence_scope": "EXACT_PROVIDER_RUNTIME_DIAGNOSTIC_AND_HARNESS_ADJUDICATION_ONLY; NO_CURRENT_V3_OR_WHOLE_CLAYVERSE_PASS"
+}

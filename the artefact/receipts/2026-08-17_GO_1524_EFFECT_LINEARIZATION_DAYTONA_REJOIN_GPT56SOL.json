@@ -1,0 +1,36 @@
+{
+  "schema": "clayverse.go-effect-linearization-rejoin/v1",
+  "trigger": "go",
+  "trigger_time_local_available": "2026-08-17T15:24+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_rejoin": "9e272ca5655ef5962e6a8b1040ce67d2dda0f882",
+  "canonical_main_after_parallel_provider_directives": "b86260e10b198619fb1521c10f6ad4a52d55e282",
+  "pr": 560,
+  "rejoin_branch": "go/effect-active-turn-linearization-current-v3-20260817-1502-sol",
+  "source": {
+    "baseline_effect_journal_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "repaired_effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "rejoin_code_head_before_receipt": "1653e9f6dc5a3deecb4573b7868aefd6de0a113f"
+  },
+  "mechanism": "EffectJournal.begin admits episode-bound PENDING only while the exact user/session/generation active turn still exists, its effect intent is selected, no effect is already bound, and the workspace selection is request_effect; PENDING remains the effect linearization point.",
+  "evidence": {
+    "repaired_effect_journal_blob_matches_prior_isolated_mechanism_evidence": true,
+    "prior_exact_file_result": "3 passed in 0.25s in an authorized isolated non-production container",
+    "rejoined_full_branch_executed_in_this_go": false,
+    "exact_oci_executed": false,
+    "whole_product_pass": false
+  },
+  "provider_state": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_NETWORK_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "daytona_runtime_credit": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared user-message timestamp available only at minute precision"
+  },
+  "classification": "CURRENT_MAIN_REJOINED_SOURCE_CANDIDATE_WITH_PRIOR_BYTE_EXACT_MECHANISM_SUPPORT",
+  "next_gate": "Use the first actually-connected authorized Vercel or Daytona SQLite-capable isolated Sandbox to run the focused active-turn linearization test plus adjacent effect/recovery/lifecycle regressions, then continue exact OCI startup/readiness/restart/concurrency acceptance."
+}

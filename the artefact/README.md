@@ -47,6 +47,8 @@ The missing direct Vercel Git-project connection is **not a development blocker*
 
 The available OpenAI isolated surface has Python/pytest but no Docker, Podman, Buildah or tmux. GitHub Actions runner admission was also rechecked; the rerun failed before observable job/step evidence and job details remain inaccessible through the integration. Therefore exact OCI build/runtime remains unobserved.
 
+The authorized Daytona fallback was freshly rechecked from this worker and is blocked **before provider contact**: no `DAYTONA_API_KEY` is present in this worker environment, the Daytona SDK is absent, and DNS resolution for Daytona/PyPI fails. Classification remains `CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT`; this is not evidence that Daytona itself is unavailable and is not ClayVerse TEST_FAIL.
+
 The exact `go` unusual-experiment slot remains **COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT** because no immutable shared request/turn ID is exposed. Zero unusual experiments were executed.
 
 ### Latest cycle delta
@@ -61,11 +63,12 @@ The exact `go` unusual-experiment slot remains **COORDINATION_BLOCKED_NO_UNUSUAL
 - Focused reconstructed contract suite across build-context, packaging, single-container boundary, stager, artifact authority and OCI workflow: **18/18 PASS in 0.10s**. Direct stager checks: valid/uppercase digest PASS with mode `0555`; wrong digest exit `65` with no staged artifact/temp residue; symlink source exit `66` with no staged artifact.
 - Commits authored in this pass: `cf9118cc4e2ee5fe96de851d3d64d55b766d93ee`, `ea1a00b6dd8a360673bae4373c2c397ebf2b0cc2`, `714bbfe43fc0eb17335dc886accfe996c0d7bf64`, `78cae34d660124fdb605990afd6bcc3cd7384f60`; bounded receipt commit `4ddc915ce2efc5d7598ad0530941d19f12a3c6cb`.
 - New receipt: `the artefact/receipts/2026-08-17_GO_2053_PR625_TOKENLESS_WORKFLOW_CONTRACT_ALIGNMENT_GPT56SOL.json`. Other retained receipts remain authoritative for their narrower runtime/boot/component slices.
+- Daytona fallback was independently rechecked and remains an orchestrator-admission blocker before provider contact; no Daytona sandbox/runtime credit was minted.
 - Evidence remains bounded: no full moving-branch pytest, actual Docker build-context transfer, OCI image build/digest, packaged service readiness/runtime or whole-product PASS is claimed.
 
 ### Next discriminator
 
-At the first authorized isolated Docker/OCI-capable surface:
+At the first authorized isolated Docker/OCI-capable surface — Vercel when admitted/capable, otherwise an egress-capable credentialed Daytona controller:
 
 `fresh exact #625 head → real build-context membership → EntityOS-free baseline build → verify no EntityOS executable in image → normal baseline service startup/readiness → optional digest-bound EntityOS build + half-input/wrong-digest/extra-file negatives → image digest → continue #611/#622/#602 and full Clerk/PTY/hooks/persistence/recovery/concurrency acceptance`.
 

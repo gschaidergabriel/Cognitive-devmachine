@@ -1,0 +1,53 @@
+{
+  "schema": "clayverse-go-execution-admission-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:00:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_receipt": "a89061d6eabbe25598c176366ab675ec257e5476",
+  "execution_path": {
+    "classification": "VERCEL_GIT_PREVIEW_TO_SANDBOX_OIDC_BRIDGE_CONFIRMED",
+    "current_bridge_record": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+    "direct_chatgpt_mcp_lifecycle_action": "NOT_EXPORTED",
+    "sandbox_platform_execution": "CONFIRMED_BY_PRIOR_ACTUALLY_STARTED_SANDBOX",
+    "prior_observed_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "prior_observed_result": "PASS_ATTACH_CHILD_REAP_AND_BOUND",
+    "prior_sandbox_stopped": true
+  },
+  "current_attempt": {
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-1353-tmux-live-vercel-20260817",
+    "staging_head": "c61d9c0fe2c3270084bcbf3aa86cf50dcf2ce695",
+    "staging_pr": 831,
+    "canonical_research_commit_bound_by_script": "e36dbb17c61db6ac1c4596dadfd6cd978d67207e",
+    "canonical_terminal_sessions_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "test_contract": "live disjoint tmux server namespaces for gabriel and andreas",
+    "classification": "ORDINARY_DETERMINISTIC_REGRESSION",
+    "unusual_experiment_executed_by_this_lane": false,
+    "vercel_commit_status": "failure",
+    "vercel_target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "test_command_started": false,
+    "product_behavior_executed": false
+  },
+  "adjudication": {
+    "result": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "test_result": "UNOBSERVED",
+    "tmux_product_claim": "NO_NEW_RUNTIME_CREDIT",
+    "sandbox_availability_claim": "EXECUTION_PATH_EXISTS_BUT_THIS_FRESH_PREVIEW_WAS_NOT_ADMITTED",
+    "whole_product_pass": false,
+    "reason": "Vercel rejected the staging head before preview build and before Sandbox.create. This is control-plane/admission evidence, not a ClayVerse or tmux test failure."
+  },
+  "coordination": {
+    "duplicate_lane_created": false,
+    "existing_parallel_staging_branch_reused": true,
+    "go_unusual_experiment": "NOT_EXECUTED_BY_THIS_LANE",
+    "note": "Only ordinary deterministic regression orchestration was attempted."
+  },
+  "durable_changes": [
+    "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md aligned to ClayVerse and the confirmed Git-preview/OIDC Sandbox bridge",
+    "Dr.-Unterweger draft PR #831 opened only to trigger the existing bounded preview regression"
+  ]
+}

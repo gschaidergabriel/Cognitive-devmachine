@@ -31,6 +31,7 @@ The LLM never self-authorizes execution. Model output always comes back into Cla
 - **Claude Code:** interactive terminal-native path inside the managed ClayVerse PTY/tmux environment; authenticated directly through its terminal login flow. No hidden Claude API-token replacement for the primary path.
 - **GLM:** token/API inference only. Its token is secret, never source/UnifiedDB/snapshot/receipt/log content. GLM receives no PTY, filesystem, EntityOS or effect authority.
 - Switching Claude/GLM never forks the entity or state; the same UnifiedDB causal turn/session/generation continues.
+- The interactive Claude process starts from `env -i` with an explicit allowlist. Supervisor/auth/provider/build-orchestration secrets are not part of that process environment; the regression fence explicitly covers Anthropic/Claude API variables, `GLM_API_TOKEN`, Clerk runtime secrets and `GITHUB_READ_TOKEN`.
 
 ### Shock-absorber / self-healing law
 
@@ -81,7 +82,7 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - UnifiedDB/WAL/snapshot recovery under a new generation;
 - stale pre-crash result rejection;
 - no blind effect replay around crash/acknowledgement boundaries;
-- Claude Code direct terminal login/runtime continuity;
+- Claude Code direct terminal login/runtime continuity and process-environment secret isolation;
 - GLM token secrecy and inference-only authority.
 
 ### Current execution boundary
@@ -90,26 +91,27 @@ The architecture and fail-closed Kata deployment profile are now canonical sourc
 
 The current default-deny source contract has been independently reconstructed from the exact three current Git blobs and exercised in an isolated non-production environment: Git blob identities matched **3/3**, `tests/test_microvm_deployment_contract.py` passed **6/6**, and a PyYAML 6.0.3 semantic probe loaded exactly `Service`, `StatefulSet`, `NetworkPolicy` with `clayverse-default-deny`, `app: clayverse`, `Ingress` + `Egress`, and empty ingress/egress rule sets. This is bounded exact-file source/mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
 
+The Claude terminal source already starts the interactive process from `env -i`; this cycle adds an explicit source regression fence against forwarding current provider/auth/orchestration secret variables. The new test blob `41b42e1b...` was reconstructed byte-exact and Python-compiled successfully, but full exact-current-main pytest/live Claude-process attestation was not executed, so this remains source-contract hardening only.
+
 Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel #810 bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox. A fresh Vercel project check in this cycle found **zero new deployments since 2026-08-17 14:30 UTC**, so no newer credential-capable runtime evidence supersedes that blocker.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 22:57 +07:00 — current MicroVM network source re-bound after parallel fusion; OCI blocker rechecked.**
+**2026-08-17 22:58 +07:00 — terminal secret-environment regression fence added after MicroVM network re-bind.**
 
-- a stale write attempt was correctly rejected with `409`; after refresh, parallel work had already closed the #623-discovered NetworkPolicy gap, so no duplicate implementation was created;
-- exact current Git blobs independently reconstructed and matched: template `788492ef...`, MicroVM contract `2608f5ca...`, focused test `5c2f48f7...`;
-- focused deterministic regression: **6/6 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
-- semantic YAML probe: exactly `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy selects `app=clayverse`, carries `Ingress` + `Egress`, and has exact empty ingress/egress rule sets;
-- canonical manifest already binds the default-deny baseline, reviewed deployment-specific allow-policy requirement and final CNI enforcement gate;
-- fresh #810/Vercel evidence check: zero new deployments since 14:30 UTC; retained deployment `dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8` remains `Sandbox.create` PASS then `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit zero;
-- durable receipt: `receipts/2026-08-17_GO_2257_MICROVM_NETWORK_EXACT_RECHECK_AND_OCI_BLOCKER_GPT56SOL.json`;
-- runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
+- the parallel MicroVM lane remains current at **6/6 PASS** for its exact source slice, with the default-deny NetworkPolicy source contract and Vercel credential blocker unchanged;
+- `clayverse/terminal_sessions.py` already uses `env -i` plus an explicit allowlist for the interactive Claude process, so no second secret/provider architecture was introduced;
+- `tests/test_terminal_env_boundary.py` now explicitly rejects Anthropic/Claude API-key variables, `GLM_API_TOKEN`, Clerk issuer/JWKS/audience/authorized-party/frontend secrets and the host-side `GITHUB_READ_TOKEN` from the Claude launch argv;
+- canonical test delta commit: `ca74f6bb02a05f5ffeb132ba0246122f1ae2f771`; resulting blob: `41b42e1b2b01cdc76cc1006d14587066da3ad8dd`;
+- bounded verification: reconstructed Git blob **MATCH**, `python -m py_compile` **PASS**; full pytest/live Claude process attestation remains unexecuted and gets zero runtime credit;
+- durable receipts: `receipts/2026-08-17_GO_2257_MICROVM_NETWORK_EXACT_RECHECK_AND_OCI_BLOCKER_GPT56SOL.json` and `receipts/2026-08-17_GO_2258_TERMINAL_SECRET_ENV_FENCE_GPT56SOL.json`;
+- strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required before exact private Research/EntityOS staging and OCI execution;
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id for the atomic lease.
 
 ## Verification
 
-Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual enforcement of the accepted ingress/egress policy.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual enforcement of the accepted ingress/egress policy and live process-environment attestation.

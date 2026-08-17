@@ -2,33 +2,244 @@ from __future__ import annotations
 
 import hashlib
 import json
+import time
 from typing import Any
 
-from .method_memory import MethodMemory
-from .store import UnifiedDB
+from .method_memory import MethodMemory, canonical_problem_signature
+from .store import StaleGeneration, UnifiedDB
 
 
 class StageBMethodRetrieval:
     """Causal-identity wrapper around deterministic method-memory retrieval.
 
-    It does not change factual status. The receipt binds the selected method IDs to the
-    same session/turn/episode/causal/generation identity as the evidence retrieval path.
+    Stage B never changes factual status and never gains truth/effect authority. A
+    bounded method-use receipt is persisted by causal identity so re-entry cannot
+    silently replay context produced for a drifted request.
 
-    Stage-B deliberately does not infer a structural signature from raw prompt text at
+    Stage B deliberately does not infer a structural signature from raw prompt text at
     this boundary. Without an explicit structured problem_signature it fails closed to
-    no method context, preventing lexical heuristics from silently becoming analogy
-    selection authority. Signature derivation/admission remains a separate gate.
+    no method context. Signature derivation/admission remains a separate gate.
 
     The active-turn identity check is relational, not merely referential: the active row,
     referenced session, turn and workspace episode must all agree on the same canonical
     user/session boundary before any method retrieval is allowed.
     """
 
-    POLICY_VERSION = 1
+    POLICY_VERSION = 2
+    RECEIPT_SCHEMA = "clayverse-stage-b-method-use/v2"
+    DEFAULT_BUDGET_CHARS = 6_000
+    MAX_BUDGET_CHARS = 60_000
+    MAX_RESOURCE_REFS = 128
+    MAX_RESOURCE_REF_CHARS = 1024
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.methods = MethodMemory(db)
+
+    @staticmethod
+    def _canonical_json(value: Any) -> str:
+        return json.dumps(
+            value,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+
+    @classmethod
+    def _canonical_resource_refs(cls, refs: list[str] | None) -> list[str]:
+        raw = refs or []
+        if not isinstance(raw, list) or len(raw) > cls.MAX_RESOURCE_REFS:
+            raise ValueError("invalid Stage-B resource_refs")
+        normalized: list[str] = []
+        for ref in raw:
+            if not isinstance(ref, str):
+                raise ValueError("Stage-B resource_refs must be strings")
+            item = ref.strip()
+            if not item or len(item) > cls.MAX_RESOURCE_REF_CHARS:
+                raise ValueError("invalid Stage-B resource_ref")
+            normalized.append(item)
+        return sorted(set(normalized))
+
+    @classmethod
+    def _digest_json(cls, value: Any) -> str:
+        return hashlib.sha256(cls._canonical_json(value).encode("utf-8")).hexdigest()
+
+    @staticmethod
+    def _receipt_memory_id(causal_id: str) -> str:
+        digest = hashlib.sha256(str(causal_id).encode("utf-8")).hexdigest()
+        return f"method-stage-b-receipt:{digest}"
+
+    @classmethod
+    def _bound_context(
+        cls,
+        methods: list[dict[str, Any]],
+        counterevidence: list[dict[str, Any]],
+        *,
+        budget_chars: int,
+    ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], int]:
+        """Keep whole method records under one deterministic context budget.
+
+        Counterevidence is packed first because losing a known limiting case is less safe
+        than losing an optional positive analogy. Oversized records are skipped whole;
+        method envelopes are never truncated into ambiguous partial semantics.
+        """
+        kept_counter: list[dict[str, Any]] = []
+        kept_methods: list[dict[str, Any]] = []
+        chars = 0
+        for target, items in ((kept_counter, counterevidence), (kept_methods, methods)):
+            for item in items:
+                item_chars = len(cls._canonical_json(item))
+                if chars + item_chars > budget_chars:
+                    continue
+                target.append(item)
+                chars += item_chars
+        return kept_methods, kept_counter, chars
+
+    def _request_identity(
+        self,
+        *,
+        query: str,
+        user_id: str,
+        session_id: str,
+        turn_id: str,
+        episode_id: str,
+        causal_id: str,
+        generation: int,
+        evidence_status: str,
+        resource_refs: list[str],
+        problem_signature: dict[str, list[str]] | None,
+        limit: int,
+        budget_chars: int,
+    ) -> dict[str, Any]:
+        return {
+            "receipt_schema": self.RECEIPT_SCHEMA,
+            "policy_version": self.POLICY_VERSION,
+            "query_sha256": hashlib.sha256(query.encode("utf-8")).hexdigest(),
+            "user_id": user_id,
+            "session_id": session_id,
+            "turn_id": turn_id,
+            "episode_id": episode_id,
+            "causal_id": causal_id,
+            "generation": int(generation),
+            "evidence_status": evidence_status,
+            "resource_refs_sha256": self._digest_json(resource_refs),
+            "resource_ref_count": len(resource_refs),
+            "problem_signature_sha256": (
+                self._digest_json(problem_signature) if problem_signature is not None else None
+            ),
+            "signature_source": (
+                "EXPLICIT_STRUCTURED_INPUT" if problem_signature is not None else "NONE"
+            ),
+            "limit": int(limit),
+            "budget_chars": int(budget_chars),
+        }
+
+    def _load_existing(
+        self,
+        *,
+        memory_id: str,
+        expected_identity: dict[str, Any],
+        user_id: str,
+        turn_id: str,
+    ) -> dict[str, Any] | None:
+        row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=?",
+            (memory_id,),
+        ).fetchone()
+        if row is None:
+            return None
+        if str(row["kind"]) != "method_receipt":
+            raise StaleGeneration("method_retrieval_identity")
+        if str(row["user_id"]) != user_id or str(row["source_turn_id"]) != turn_id:
+            raise StaleGeneration("method_retrieval_identity")
+        try:
+            payload = json.loads(str(row["value"]))
+            provenance = json.loads(str(row["provenance"]))
+        except Exception as exc:
+            raise StaleGeneration("method_retrieval_receipt") from exc
+        if not isinstance(payload, dict) or not isinstance(provenance, dict):
+            raise StaleGeneration("method_retrieval_receipt")
+        if provenance.get("source") != "method_stage_b:v2":
+            raise StaleGeneration("method_retrieval_receipt")
+        if payload.get("identity") != expected_identity:
+            raise StaleGeneration("method_retrieval_identity")
+        receipt = payload.get("receipt")
+        methods = payload.get("methods")
+        counterevidence = payload.get("counterevidence")
+        problem_signature = payload.get("problem_signature")
+        if not isinstance(receipt, dict) or not isinstance(methods, list) or not isinstance(counterevidence, list):
+            raise StaleGeneration("method_retrieval_receipt")
+        replay_receipt = dict(receipt)
+        replay_receipt["replayed"] = True
+        return {
+            "methods": methods,
+            "counterevidence": counterevidence,
+            "problem_signature": problem_signature,
+            "receipt": replay_receipt,
+        }
+
+    def _persist_or_replay(
+        self,
+        *,
+        memory_id: str,
+        identity: dict[str, Any],
+        receipt: dict[str, Any],
+        methods: list[dict[str, Any]],
+        counterevidence: list[dict[str, Any]],
+        problem_signature: dict[str, list[str]] | None,
+        user_id: str,
+        turn_id: str,
+        causal_id: str,
+    ) -> dict[str, Any]:
+        payload = {
+            "identity": identity,
+            "receipt": receipt,
+            "methods": methods,
+            "counterevidence": counterevidence,
+            "problem_signature": problem_signature,
+        }
+        value = self._canonical_json(payload)
+        provenance = self._canonical_json({
+            "source": "method_stage_b:v2",
+            "policy_version": self.POLICY_VERSION,
+            "causal_id": causal_id,
+            "user_scope": user_id,
+            "truth_authority": False,
+            "effect_authority": False,
+        })
+        with self.db.tx() as db:
+            cursor = db.execute(
+                "INSERT OR IGNORE INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
+                "VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    memory_id,
+                    "method_receipt",
+                    f"stage_b_method_use:{causal_id}",
+                    value,
+                    turn_id,
+                    user_id,
+                    time.time(),
+                    provenance,
+                ),
+            )
+            inserted = int(cursor.rowcount or 0) == 1
+        if not inserted:
+            replay = self._load_existing(
+                memory_id=memory_id,
+                expected_identity=identity,
+                user_id=user_id,
+                turn_id=turn_id,
+            )
+            if replay is None:
+                raise StaleGeneration("method_retrieval_receipt")
+            return replay
+        return {
+            "methods": methods,
+            "counterevidence": counterevidence,
+            "problem_signature": problem_signature,
+            "receipt": receipt,
+        }
 
     def retrieve(
         self,
@@ -44,7 +255,15 @@ class StageBMethodRetrieval:
         resource_refs: list[str] | None = None,
         problem_signature: dict[str, list[str]] | None = None,
         limit: int = 6,
+        budget_chars: int = DEFAULT_BUDGET_CHARS,
     ) -> dict[str, Any]:
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError("Stage-B retrieval requires a non-empty query")
+        if not 1 <= int(limit) <= 24:
+            raise ValueError("invalid Stage-B limit")
+        if not 256 <= int(budget_chars) <= self.MAX_BUDGET_CHARS:
+            raise ValueError("invalid Stage-B budget_chars")
+
         self.db.assert_session_owner(session_id, user_id)
         self.db.assert_live_generation(session_id, generation)
         active = self.db.db.execute(
@@ -76,66 +295,97 @@ class StageBMethodRetrieval:
         factual_status = str(evidence_status).upper()
         if factual_status not in {"PRESENT", "UNDERCOVERED", "UNKNOWN"}:
             raise ValueError("invalid Stage-B evidence status")
+        refs = self._canonical_resource_refs(resource_refs)
+        signature = (
+            canonical_problem_signature(problem_signature)
+            if problem_signature is not None
+            else None
+        )
+        identity = self._request_identity(
+            query=query,
+            user_id=user_id,
+            session_id=session_id,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+            evidence_status=factual_status,
+            resource_refs=refs,
+            problem_signature=signature,
+            limit=int(limit),
+            budget_chars=int(budget_chars),
+        )
+        memory_id = self._receipt_memory_id(causal_id)
 
-        if problem_signature is None:
-            return {
-                "methods": [],
-                "counterevidence": [],
-                "problem_signature": None,
-                "receipt": {
-                    "policy_version": self.POLICY_VERSION,
-                    "session_id": session_id,
-                    "turn_id": turn_id,
-                    "episode_id": episode_id,
-                    "causal_id": causal_id,
-                    "generation": int(generation),
-                    "evidence_status": factual_status,
-                    "triggered": False,
-                    "status": "SIGNATURE_REQUIRED",
-                    "problem_signature_sha256": None,
-                    "selected_method_ids": [],
-                    "counterevidence_ids": [],
-                    "factual_status_unchanged": factual_status,
-                    "signature_source": "NONE",
-                    "truth_authority": False,
-                    "effect_authority": False,
-                },
+        existing = self._load_existing(
+            memory_id=memory_id,
+            expected_identity=identity,
+            user_id=user_id,
+            turn_id=turn_id,
+        )
+        if existing is not None:
+            return existing
+
+        if signature is None:
+            receipt = {
+                **identity,
+                "triggered": False,
+                "status": "SIGNATURE_REQUIRED",
+                "selected_method_ids": [],
+                "counterevidence_ids": [],
+                "chars_selected": 0,
+                "factual_status_unchanged": factual_status,
+                "truth_authority": False,
+                "effect_authority": False,
+                "replayed": False,
             }
+            return self._persist_or_replay(
+                memory_id=memory_id,
+                identity=identity,
+                receipt=receipt,
+                methods=[],
+                counterevidence=[],
+                problem_signature=None,
+                user_id=user_id,
+                turn_id=turn_id,
+                causal_id=causal_id,
+            )
 
         result = self.methods.retrieve(
             query=query,
             user_id=user_id,
             evidence_status=factual_status,
-            resource_refs=resource_refs,
-            problem_signature=problem_signature,
-            limit=limit,
+            resource_refs=refs,
+            problem_signature=signature,
+            limit=int(limit),
         )
-        signature_bytes = json.dumps(
-            result["problem_signature"], sort_keys=True, separators=(",", ":"), ensure_ascii=False
-        ).encode("utf-8")
-        selected_method_ids = [str(item["memory_id"]) for item in result["methods"]]
-        counterevidence_ids = [str(item["memory_id"]) for item in result["counterevidence"]]
+        methods, counterevidence, chars_selected = self._bound_context(
+            list(result["methods"]),
+            list(result["counterevidence"]),
+            budget_chars=int(budget_chars),
+        )
+        selected_method_ids = [str(item["memory_id"]) for item in methods]
+        counterevidence_ids = [str(item["memory_id"]) for item in counterevidence]
         receipt = {
-            "policy_version": self.POLICY_VERSION,
-            "session_id": session_id,
-            "turn_id": turn_id,
-            "episode_id": episode_id,
-            "causal_id": causal_id,
-            "generation": int(generation),
-            "evidence_status": str(result["evidence_status"]),
+            **identity,
             "triggered": bool(result["triggered"]),
             "status": "METHOD_PRESENT" if selected_method_ids else "METHOD_UNKNOWN",
-            "problem_signature_sha256": hashlib.sha256(signature_bytes).hexdigest(),
             "selected_method_ids": selected_method_ids,
             "counterevidence_ids": counterevidence_ids,
+            "chars_selected": chars_selected,
             "factual_status_unchanged": str(result["factual_status_unchanged"]),
-            "signature_source": "EXPLICIT_STRUCTURED_INPUT",
             "truth_authority": False,
             "effect_authority": False,
+            "replayed": False,
         }
-        return {
-            "methods": result["methods"],
-            "counterevidence": result["counterevidence"],
-            "problem_signature": result["problem_signature"],
-            "receipt": receipt,
-        }
+        return self._persist_or_replay(
+            memory_id=memory_id,
+            identity=identity,
+            receipt=receipt,
+            methods=methods,
+            counterevidence=counterevidence,
+            problem_signature=result["problem_signature"],
+            user_id=user_id,
+            turn_id=turn_id,
+            causal_id=causal_id,
+        )

@@ -4,8 +4,8 @@ import stat
 import time
 from pathlib import Path
 from threading import Thread
-from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 from http.server import ThreadingHTTPServer
 
 import jwt
@@ -19,7 +19,9 @@ from clayverse.api import ClayVerseAPI
 
 def keypair():
     private = rsa.generate_private_key(public_exponent=65537, key_size=2048)
-    pem = private.public_key().public_bytes(serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo).decode()
+    pem = private.public_key().public_bytes(
+        serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+    ).decode()
     return private, pem
 
 
@@ -40,11 +42,13 @@ def token(private, **overrides):
 
 def test_clerk_networkless_verification_and_authorized_party():
     private, pem = keypair()
-    verifier = ClerkTokenVerifier(ClerkConfig(
-        issuer="https://clerk.example",
-        jwt_key=pem,
-        authorized_parties=("https://clay.example",),
-    ))
+    verifier = ClerkTokenVerifier(
+        ClerkConfig(
+            issuer="https://clerk.example",
+            jwt_key=pem,
+            authorized_parties=("https://clay.example",),
+        )
+    )
     assert verifier.verify(token(private))["sub"] == "user_g"
     with pytest.raises(AuthenticationError):
         verifier.verify(token(private, azp="https://evil.example"))
@@ -64,7 +68,9 @@ def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
     log = tmp_path / "args.json"
     envlog = tmp_path / "env.json"
     fake = tmp_path / "claude"
-    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':'ok'}))\n")
+    fake.write_text(
+        "#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':'ok'}))\n"
+    )
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
     old_log = os.environ.get("FAKE_LOG")
     old_envlog = os.environ.get("FAKE_ENVLOG")
@@ -74,10 +80,14 @@ def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
         adapter = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5)
         out = adapter.reason({"shared": "state"}, "hello; touch /tmp/SHOULD_NOT_EXIST")
     finally:
-        if old_log is None: os.environ.pop("FAKE_LOG", None)
-        else: os.environ["FAKE_LOG"] = old_log
-        if old_envlog is None: os.environ.pop("FAKE_ENVLOG", None)
-        else: os.environ["FAKE_ENVLOG"] = old_envlog
+        if old_log is None:
+            os.environ.pop("FAKE_LOG", None)
+        else:
+            os.environ["FAKE_LOG"] = old_log
+        if old_envlog is None:
+            os.environ.pop("FAKE_ENVLOG", None)
+        else:
+            os.environ["FAKE_ENVLOG"] = old_envlog
     args = json.loads(log.read_text())
     env = json.loads(envlog.read_text())
     assert out == {"text": "ok", "selection": "respond", "effect": None}
@@ -108,12 +118,12 @@ class FakeEngine:
     def __init__(self):
         self.calls = []
 
-    def ingest(self, subject, content, *, resources=None):
-        self.calls.append((subject, content, resources))
+    def ingest(self, subject, content, *, resources=None, request_id=None):
+        self.calls.append((subject, content, resources, request_id))
         return {"decision": {"text": "ack"}}
 
 
-def test_http_boundary_requires_auth_and_routes_subject_to_engine():
+def test_http_boundary_requires_auth_request_id_and_routes_subject_to_engine():
     engine = FakeEngine()
     api = ClayVerseAPI(engine, FakeVerifier())
     server = ThreadingHTTPServer(("127.0.0.1", 0), api.handler())
@@ -124,11 +134,30 @@ def test_http_boundary_requires_auth_and_routes_subject_to_engine():
         with pytest.raises(HTTPError) as exc:
             urlopen(base + "/api/status")
         assert exc.value.code == 401
-        body = json.dumps({"content": "hello", "resources": ["repo:x"]}).encode()
-        req = Request(base + "/api/chat", data=body, headers={"Authorization": "Bearer good", "Content-Type": "application/json"}, method="POST")
+
+        missing = json.dumps({"content": "hello"}).encode()
+        req = Request(
+            base + "/api/chat",
+            data=missing,
+            headers={"Authorization": "Bearer good", "Content-Type": "application/json"},
+            method="POST",
+        )
+        with pytest.raises(HTTPError) as exc:
+            urlopen(req)
+        assert exc.value.code == 400
+
+        body = json.dumps(
+            {"content": "hello", "resources": ["repo:x"], "request_id": "req-http-1"}
+        ).encode()
+        req = Request(
+            base + "/api/chat",
+            data=body,
+            headers={"Authorization": "Bearer good", "Content-Type": "application/json"},
+            method="POST",
+        )
         out = json.loads(urlopen(req).read())
         assert out["decision"]["text"] == "ack"
-        assert engine.calls == [("clerk-g", "hello", ["repo:x"])]
+        assert engine.calls == [("clerk-g", "hello", ["repo:x"], "req-http-1")]
     finally:
         server.shutdown()
         server.server_close()

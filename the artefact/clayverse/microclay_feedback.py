@@ -5,6 +5,7 @@ import hashlib
 import json
 import re
 import time
+import uuid
 from typing import Any
 
 from .microclay_methods import METHOD_KINDS
@@ -40,11 +41,22 @@ class MicroClayExplicitFeedback:
 
     @contextlib.contextmanager
     def _tx(self):
-        if self.db.db.in_transaction:
-            yield self.db.db
-        else:
+        """Keep feedback receipt + policy mutation atomic, including inside an outer tx."""
+        if not self.db.db.in_transaction:
             with self.db.tx() as db:
                 yield db
+            return
+
+        savepoint = f"microclay_explicit_feedback_{uuid.uuid4().hex}"
+        self.db.db.execute(f"SAVEPOINT {savepoint}")
+        try:
+            yield self.db.db
+        except BaseException:
+            self.db.db.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
+            raise
+        else:
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
 
     @staticmethod
     def _json_list(raw: str, *, name: str, max_items: int) -> list[str]:

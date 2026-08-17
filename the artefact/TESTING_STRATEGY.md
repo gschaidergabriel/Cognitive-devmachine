@@ -27,6 +27,27 @@ For each material change, select every applicable independent layer rather than 
 11. **Resource/failure injection** — bounded timeouts, cancellation, process termination, locked database, unavailable dependency/network and other safe disposable failure modes when relevant. Never run destructive tests against production, VPS or persistent owner systems.
 12. **Regression breadth** — after a focused fix passes, run the largest relevant adjacent suite the available environment can support so repairs do not silently regress retained lanes.
 
+## Mandatory machine-continuum crash/recovery matrix
+
+The final architecture is a sealed VM-like ingress/process/egress continuum with automatic known-good snapshot recovery. Recovery is therefore a first-class product behavior, not an optional reliability feature.
+
+Every material recovery implementation must cover every applicable case below with disposable state:
+
+- kill EntityOS during idle and during an active command;
+- kill the managed terminal/PTY/tmux child while a causal turn remains open;
+- crash before an external effect is emitted, after emission but before acknowledgement, and after durable acknowledgement;
+- interrupt UnifiedDB writes/WAL activity and verify recovery returns to one internally consistent canonical generation;
+- inject a stale result from the pre-crash generation after recovery and require fail-closed rejection;
+- corrupt or truncate the newest snapshot candidate and require fallback to the previous accepted known-good snapshot;
+- crash again while recovery is in progress and require bounded/idempotent recovery rather than split-brain state;
+- verify pending or ambiguous external effects become `UNKNOWN_AFTER_CRASH`/equivalent and are not blindly replayed;
+- verify explicitly idempotent effects may replay only when the EffectJournal proves replay safety;
+- verify ingress is frozen while the machine continuum is inconsistent and resumes only after UnifiedDB, EntityOS, terminal, Claude and policy/readiness attestations rejoin one generation;
+- verify snapshot metadata binds UnifiedDB checkpoint identity, global/session generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state;
+- verify no snapshot restore can resurrect stale authorization, stale terminal sessions, stale effect leases or an old global generation.
+
+A process-memory/CRIU/filesystem snapshot may be tested as an implementation optimization, but it never substitutes for these logical consistency and effect-replay guarantees.
+
 ## Evidence ladder
 
 Use the strongest honest classification supported by execution:
@@ -46,7 +67,7 @@ A higher class must not be inferred from a lower one. Historical or different-ve
 
 When an authorized isolated OCI/Sandbox route becomes available, perform one exact closure from freshly refreshed canonical bytes:
 
-`exact source -> reproducible image/digest -> resolved dependency identities -> deny network as required -> UnifiedDB/ClayGraph -> tmux/Claude -> Clerk/WebSocket PTY -> managed hooks -> EffectGate -> persistence/restart/recovery -> dual-user concurrency/global-generation -> final acceptance`.
+`exact source -> reproducible image/digest -> resolved dependency identities -> sealed ingress/egress boundary -> complete accepted EntityOS + UnifiedDB machine continuum -> managed Linux terminal/PTY/tmux -> Claude cognition/re-ingest/execute/result loop -> crash/snapshot automatic recovery -> Clerk/WebSocket PTY -> managed hooks -> EffectGate -> persistence/restart/recovery -> dual-user concurrency/global-generation -> final acceptance`.
 
 Until that exact closure succeeds, continue maximizing all lower evidence layers rather than waiting on Vercel setup.
 

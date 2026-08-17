@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T20:25:31+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_SOURCE_SLICE_EXECUTION",
+  "canonical_main_observed_before_receipt": "afc321570887d8b536895d355077eede9dc150a5",
+  "retained_lane": {
+    "pull_request": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "head_observed": "1a1fd7cbea2bc6e0bcfccf3f7b99dd810d7f3eec",
+    "terminal_gateway_blob": "e6e3e3a55d60ea266e5f3c0048f45ac5fe1e2cd9",
+    "reauth_test_blob": "e39630b81c46c37b4ac9d682d7c58e8161c5ff3d"
+  },
+  "observed_defect": "A refreshed Clerk JWT previously fenced only the existing Clerk subject/session and expiry. The socket could extend auth_expires_at without re-resolving the attached user/session against current UnifiedDB canonical identity and entity_generation, allowing post-attach canonical drift to survive into a refreshed lease.",
+  "repair": "The retained #623 lane now computes refreshed Clerk expiry, then reuses the existing IdentityRouter.resolve(clerk_subject) against current UnifiedDB and requires the same attached user_id/session_id before committing auth_expires_at. No second identity/state authority is introduced.",
+  "source_commit_written": "80753efc73be4399d603cb2e7103a517fcffe1d3",
+  "parallel_fusion": "The same retained lane advanced after the runtime patch and added focused helper and source-order regressions. Current observed head 1a1fd7cbea2bc6e0bcfccf3f7b99dd810d7f3eec retains the runtime blob and test blob above.",
+  "regressions_observed": [
+    "test_reauth_revalidates_current_clayverse_user_and_session_binding",
+    "test_reauth_revalidates_unifieddb_binding_before_extending_live_socket_lease"
+  ],
+  "supporting_execution": {
+    "environment": "OpenAI isolated non-production Python execution",
+    "scope": "deterministic helper-level source-slice reconstruction of the exact _assert_reauth_identity_current behavior; not a PR checkout, pytest suite, Vercel Sandbox, OCI, Clerk, WebSocket PTY, tmux, or Claude runtime",
+    "cases": {
+      "canonical_user_session": "PASS",
+      "user_drift": "FAIL_CLOSED",
+      "session_drift": "FAIL_CLOSED",
+      "identity_resolver_error": "FAIL_CLOSED"
+    },
+    "result": "4/4 PASS"
+  },
+  "workflow_observation": "No pull-request workflow runs were returned for current PR head 1a1fd7cbea2bc6e0bcfccf3f7b99dd810d7f3eec; no exact full-PR runtime credit is awarded.",
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_full_pr_runtime_verified": false,
+    "exact_oci_verified": false,
+    "real_clerk_browser_verified": false,
+    "whole_product_pass": false
+  },
+  "execution_frontier": "Whole-product execution remains blocked before private Research/EntityOS source staging by missing host-side Vercel Preview GITHUB_READ_TOKEN. The token must remain host-side and must not be forwarded into Sandbox. Daytona fallback is additionally blocked in this worker before provider contact by missing DAYTONA_API_KEY/SDK/network path.",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed to this worker for a safe atomic experiment lease. Standard regressions/source-slice falsifiers are not counted as unusual experiments."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secret_exposed": false
+  }
+}

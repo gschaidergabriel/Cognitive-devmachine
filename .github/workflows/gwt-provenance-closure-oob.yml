@@ -1,0 +1,80 @@
+name: GWT provenance closure OOB
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research_entity/harness/reference/workspace_episode.py'
+      - 'research_entity/harness/tests/test_workspace_provenance_closure_oob.py'
+      - '.github/workflows/gwt-provenance-closure-oob.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provenance-closure:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          clean: true
+          persist-credentials: false
+
+      - name: Bind exact source and environment
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=/tmp/gwt-provenance-closure-${GITHUB_RUN_ID}
+          rm -rf "$OUT" && mkdir -p "$OUT"
+          {
+            echo "tested_sha=$(git rev-parse HEAD)"
+            echo "runner_name=${RUNNER_NAME:-UNKNOWN}"
+            echo "runner_os=${RUNNER_OS:-UNKNOWN}"
+            echo "runner_arch=${RUNNER_ARCH:-UNKNOWN}"
+            echo "uname=$(uname -a)"
+            echo "python=$(python3 --version 2>&1)"
+            echo "utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "workspace_episode_blob=$(git hash-object research_entity/harness/reference/workspace_episode.py)"
+            echo "oob_test_blob=$(git hash-object research_entity/harness/tests/test_workspace_provenance_closure_oob.py)"
+          } | tee "$OUT/environment.txt"
+          echo "$OUT" > /tmp/GWT_PROVENANCE_CLOSURE_OUT
+
+      - name: Matched truthful control plus sole GO OOB
+        shell: bash
+        run: |
+          set -euo pipefail
+          OUT=$(cat /tmp/GWT_PROVENANCE_CLOSURE_OUT)
+          /usr/bin/time -v -o "$OUT/time.txt" \
+            python3 research_entity/harness/tests/test_workspace_provenance_closure_oob.py \
+            | tee "$OUT/result.json"
+          python3 - "$OUT/result.json" <<'PY'
+          import json,sys
+          x=json.load(open(sys.argv[1]))
+          assert x['experiment']=='PROVENANCE_BROKEN_FULL_RECEIVER_FALSE_CLOSURE',x
+          assert x['matched_control']['source_binding_status']=='PROVENANCE_BOUND',x
+          assert x['matched_control']['closure_status']=='REENTRY_CLOSED',x
+          assert x['oob']['source_binding_status']=='PROVENANCE_BROKEN',x
+          assert x['external_effect_performed'] is False,x
+          assert x['execution_authority'] is False,x
+          assert x['truth_authority'] is False,x
+          assert x['promotion']=='NONE',x
+          PY
+
+      - name: Existing receiver-causal regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v research_entity/harness/tests/test_workspace_episode.py
+
+      - name: Upload bounded evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: gwt-provenance-closure-${{ github.run_id }}
+          path: /tmp/gwt-provenance-closure-${{ github.run_id }}/
+          if-no-files-found: warn
+          retention-days: 30

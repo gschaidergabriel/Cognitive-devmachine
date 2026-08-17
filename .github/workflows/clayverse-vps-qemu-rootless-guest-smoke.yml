@@ -80,10 +80,11 @@ jobs:
 
           qemu="$prefix/usr/bin/qemu-system-x86_64"
           test -x "$qemu"
+          test -r "$prefix/usr/share/qemu/bios-256k.bin"
           export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
           export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
-          "$qemu" --version | head -n1
-          "$qemu" -accel help
+          "$qemu" -L "$prefix/usr/share/qemu" --version | head -n1
+          "$qemu" -L "$prefix/usr/share/qemu" -accel help
           if ldd "$qemu" | grep -F 'not found'; then
             echo 'ROOTLESS_QEMU_SHARED_LIBRARY_MISSING' >&2
             exit 51
@@ -101,6 +102,7 @@ jobs:
           netboot="$work/alpine-netboot.tar.gz"
           extract="$work/netboot"
           qemu="$prefix/usr/bin/qemu-system-x86_64"
+          qemu_data="$prefix/usr/share/qemu"
           export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
           export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
           base='https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64'
@@ -122,12 +124,14 @@ jobs:
           initrd="$extract/$initrd_member"
           test -s "$kernel"
           test -s "$initrd"
+          test -r "$qemu_data/bios-256k.bin"
           kernel_sha=$(sha256sum "$kernel" | awk '{print $1}')
           initrd_sha=$(sha256sum "$initrd" | awk '{print $1}')
-          qemu_version=$("$qemu" --version | head -n1)
+          qemu_version=$("$qemu" -L "$qemu_data" --version | head -n1)
 
           set +e
           timeout --signal=TERM --kill-after=3s 45s "$qemu" \
+            -L "$qemu_data" \
             -accel tcg,thread=multi \
             -machine q35 \
             -cpu max \
@@ -161,13 +165,14 @@ jobs:
           import json, os, pathlib, platform, sys
           out,base_sha,kernel_sha,initrd_sha,serial_sha,qemu_rc,started,qemu_version,kernel_line,boot_signal=sys.argv[1:]
           payload={
-            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v1',
+            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v2',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
             'executor_type':'QEMU_TCG',
             'vmm_rootless_temp_payload':True,
             'vmm_installed_on_host':False,
+            'qemu_data_dir_bound_to_temp_payload':True,
             'host_orchestration_only':True,
             'product_code_executed_on_host':False,
             'host_docker_used':False,

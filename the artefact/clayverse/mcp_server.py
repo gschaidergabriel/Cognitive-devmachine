@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -67,6 +68,12 @@ class ClayVerseEffectBridge:
             raise BridgeStateError("active turn lacks reasoning-generation provenance")
         return row, generation
 
+    @staticmethod
+    def _request_key(active, capability, target, argv):
+        intent=json.dumps({'capability':capability,'target':target,'argv':argv},sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+        digest=hashlib.sha256(intent).hexdigest()
+        return f"mcp:{active['observation_turn_id']}:{digest}"
+
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
         from .effects import EffectRequest
 
@@ -94,6 +101,7 @@ class ClayVerseEffectBridge:
             target,
             argv,
             generation,
+            self._request_key(active, capability, target, argv),
         )
         effect_id, outcome = self.effects.execute(req, active["episode_id"])
         return {
@@ -132,7 +140,7 @@ def main() -> None:
         ),
     )
     ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)
-    effectful = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=False, openWorldHint=True)
+    effectful = ToolAnnotations(readOnlyHint=False, destructiveHint=True, idempotentHint=True, openWorldHint=True)
 
     @mcp.tool(annotations=effectful)
     def request_effect(capability: str, target: str, argv: list[str] | None = None) -> dict:

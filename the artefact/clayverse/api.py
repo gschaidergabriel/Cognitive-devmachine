@@ -3,10 +3,18 @@ from __future__ import annotations
 import html
 import json
 from http import HTTPStatus
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import Lock
 from typing import Any
 
 from .adapters import AuthenticationError, ClerkTokenVerifier
+
+
+class ClayVerseHTTPServer(ThreadingHTTPServer):
+    # ThreadingHTTPServer normally uses daemon handler threads. ClayVerse must not
+    # close its single canonical UnifiedDB while a mutation handler is still live.
+    daemon_threads = False
+    block_on_close = True
 
 
 class ClayVerseAPI:
@@ -16,6 +24,10 @@ class ClayVerseAPI:
         self.publishable_key = publishable_key
         self.frontend_api_url = frontend_api_url.rstrip("/")
         self.max_body = max_body
+        # UnifiedDB currently owns one SQLite connection. Keep the canonical state
+        # mutation lane strictly ordered without starving health/read requests while
+        # a long cognition turn is in flight.
+        self._mutation_lock = Lock()
 
     def homepage(self) -> str:
         key = html.escape(self.publishable_key, quote=True)
@@ -76,7 +88,8 @@ class ClayVerseAPI:
                     resources = body.get("resources") or []
                     if not isinstance(resources, list) or not all(isinstance(x, str) for x in resources):
                         return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_resources"})
-                    result = runtime.engine.ingest(claims["sub"], content, resources=resources)
+                    with runtime._mutation_lock:
+                        result = runtime.engine.ingest(claims["sub"], content, resources=resources)
                     return self._send(HTTPStatus.OK, result)
                 except AuthenticationError:
                     return self._send(HTTPStatus.UNAUTHORIZED, {"error": "unauthorized"})
@@ -90,10 +103,9 @@ class ClayVerseAPI:
         return Handler
 
     def server(self, host: str = "0.0.0.0", port: int = 3000):
-        # UnifiedDB currently owns one SQLite connection and the central entity is
-        # deliberately one ordered mutation lane. Do not admit concurrent request
-        # handlers until DB access is refactored to a proven multi-connection model.
-        return HTTPServer((host, port), self.handler())
+        # Read/health traffic may run concurrently, but every canonical state mutation
+        # stays behind _mutation_lock until UnifiedDB has a proven multi-connection model.
+        return ClayVerseHTTPServer((host, port), self.handler())
 
     def serve(self, host: str = "0.0.0.0", port: int = 3000):
         self.server(host, port).serve_forever()

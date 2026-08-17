@@ -49,7 +49,9 @@ RUN LOCK_SCHEMA="$(python -c 'import json; print(json.load(open("/opt/entityos/e
  && chmod 0444 /opt/clayverse/runtime/CLAUDE.md
 RUN useradd --system --uid 10001 --create-home --shell /bin/bash clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
- && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
+ && chown -R root:root /opt/clayverse \
+ && chmod -R a-w /opt/clayverse \
+ && chown -R clayverse:clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown root:root /opt/entityos /opt/entityos/EntityOS /opt/entityos/entityos.lock.json \
  && chmod 0755 /opt/entityos \
  && chmod 0555 /opt/entityos/EntityOS \

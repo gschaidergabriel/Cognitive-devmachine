@@ -3,12 +3,14 @@ from __future__ import annotations
 import json
 import os
 import re
+import stat
 from dataclasses import dataclass
 from pathlib import Path
 
 TIER2_EXIT_CODE = 86
 _FENCE_NAME = "tier2-replacement.json"
 _SCHEMA = "clayverse.tier2-replacement/v1"
+_MAX_FENCE_BYTES = 4096
 _POD_UID = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
 _REASON = re.compile(r"^[a-z0-9_:-]{1,96}$")
 
@@ -57,14 +59,39 @@ def _fsync_dir(path: Path) -> None:
         os.close(fd)
 
 
-def load_tier2_fence(state_root: str | Path) -> Tier2Fence | None:
-    path = fence_path(state_root)
+def _read_fence_bytes(path: Path) -> bytes | None:
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0)
     try:
-        raw = path.read_bytes()
+        fd = os.open(path, flags)
     except FileNotFoundError:
         return None
-    if len(raw) > 4096:
-        raise Tier2ReplacementBlocked("tier2 fence exceeds bound")
+    except OSError as exc:
+        raise Tier2ReplacementBlocked("tier2 fence cannot be opened safely") from exc
+    try:
+        info = os.fstat(fd)
+        if not stat.S_ISREG(info.st_mode):
+            raise Tier2ReplacementBlocked("tier2 fence is not a regular file")
+        if info.st_size > _MAX_FENCE_BYTES:
+            raise Tier2ReplacementBlocked("tier2 fence exceeds bound")
+        chunks: list[bytes] = []
+        total = 0
+        while True:
+            chunk = os.read(fd, min(1024, _MAX_FENCE_BYTES + 1 - total))
+            if not chunk:
+                break
+            chunks.append(chunk)
+            total += len(chunk)
+            if total > _MAX_FENCE_BYTES:
+                raise Tier2ReplacementBlocked("tier2 fence exceeds bound")
+        return b"".join(chunks)
+    finally:
+        os.close(fd)
+
+
+def load_tier2_fence(state_root: str | Path) -> Tier2Fence | None:
+    raw = _read_fence_bytes(fence_path(state_root))
+    if raw is None:
+        return None
     try:
         payload = json.loads(raw.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -89,6 +116,15 @@ def load_tier2_fence(state_root: str | Path) -> Tier2Fence | None:
     return Tier2Fence(old_pod_uid=old_pod_uid, reason=reason, entity_generation=generation)
 
 
+def _write_all(fd: int, payload: bytes) -> None:
+    remaining = memoryview(payload)
+    while remaining:
+        written = os.write(fd, remaining)
+        if written <= 0:
+            raise OSError("tier2 fence write made no progress")
+        remaining = remaining[written:]
+
+
 def request_tier2_replacement(
     state_root: str | Path,
     *,
@@ -104,6 +140,10 @@ def request_tier2_replacement(
     if isinstance(entity_generation, bool) or not isinstance(entity_generation, int) or entity_generation < 1:
         raise ValueError("entity_generation must be a positive integer")
 
+    existing = load_tier2_fence(root)
+    if existing is not None and existing.old_pod_uid == pod_uid:
+        return existing
+
     fence = Tier2Fence(pod_uid, reason, entity_generation)
     payload = {
         "schema": _SCHEMA,
@@ -112,13 +152,12 @@ def request_tier2_replacement(
         "entity_generation": fence.entity_generation,
     }
     encoded = (json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
-    tmp = root / f".{_FENCE_NAME}.{os.getpid()}.tmp"
-    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
-    flags |= getattr(os, "O_NOFOLLOW", 0)
+    tmp = root / f".{_FENCE_NAME}.{os.getpid()}.{os.urandom(8).hex()}.tmp"
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0)
     try:
         fd = os.open(tmp, flags, 0o600)
         try:
-            os.write(fd, encoded)
+            _write_all(fd, encoded)
             os.fsync(fd)
         finally:
             os.close(fd)

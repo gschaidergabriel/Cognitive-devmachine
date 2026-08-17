@@ -10,6 +10,7 @@ import struct
 import subprocess
 import termios
 import fcntl
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -233,4 +234,27 @@ class TerminalSessionManager:
         try:
             os.kill(pid, signal.SIGHUP)
         except ProcessLookupError:
-            pass
+            return
+
+        # Browser disconnects must not leave waitable attach children behind. This runs
+        # off the event loop (terminal_gateway uses asyncio.to_thread), so bounded reaping
+        # is safe here. Escalate only if the transient tmux attach client ignores HUP.
+        deadline = time.monotonic() + 0.5
+        while True:
+            try:
+                waited, _ = os.waitpid(pid, os.WNOHANG)
+            except ChildProcessError:
+                return
+            if waited == pid:
+                return
+            if time.monotonic() >= deadline:
+                try:
+                    os.kill(pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                try:
+                    os.waitpid(pid, 0)
+                except ChildProcessError:
+                    pass
+                return
+            time.sleep(0.01)

@@ -27,6 +27,7 @@ class _TerminalSessionManager:
     def __init__(self, state_root, workspace):
         self.peers = []
         self.attach_fd = None
+        self.resize_calls = []
         self.__class__.instances.append(self)
 
     def attach_pty(self, user_id):
@@ -40,7 +41,7 @@ class _TerminalSessionManager:
         return 123, fd, SimpleNamespace(session_id=f"session:{user_id}")
 
     def resize(self, fd, rows, cols):
-        return None
+        self.resize_calls.append((fd, rows, cols))
 
     def close_attach(self, pid, fd):
         for peer in self.peers:
@@ -95,6 +96,9 @@ def test_expiry_during_pty_attach_fails_before_ready(monkeypatch):
             error = websocket.receive_json()
             assert error["type"] == "error"
             assert "expired" in error["message"]
+
+    manager = _TerminalSessionManager.instances[-1]
+    assert manager.resize_calls == []
 
 
 def test_pty_output_is_rechecked_after_blocking_read(monkeypatch):

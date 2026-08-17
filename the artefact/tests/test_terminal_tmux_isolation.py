@@ -98,7 +98,7 @@ def test_managed_tmux_policy_disables_commands_and_shell_fallback():
     assert "set-option -g default-shell /opt/clayverse/runtime/deny-shell" in policy
     for table in ("prefix", "root", "copy-mode", "copy-mode-vi"):
         assert f"unbind-key -a -T {table}" in policy
-    assert "set-option -s @clayverse_managed_policy clayverse-browser-transport-v2" in policy
+    assert "set-option -s @clayverse_managed_policy clayverse-browser-transport-v3" in policy
 
 
 def test_runtime_rejects_writable_managed_tmux_policy(tmp_path, monkeypatch):
@@ -124,3 +124,49 @@ def test_runtime_rejects_writable_managed_tmux_policy(tmp_path, monkeypatch):
     policy.chmod(0o644)
     with pytest.raises(TerminalRuntimeError, match="tmux command-surface policy"):
         manager._require_programs()
+
+
+def test_live_tmux_policy_attests_full_transport_surface(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    binding = manager.binding("gabriel")
+    expected = {
+        ("show-options", "-sqv", "@clayverse_managed_policy"): "clayverse-browser-transport-v3",
+        ("show-options", "-gqv", "prefix"): "None",
+        ("show-options", "-gqv", "prefix2"): "None",
+        ("show-options", "-gqv", "status"): "off",
+        ("show-options", "-gqv", "mouse"): "off",
+        ("show-options", "-gqv", "default-shell"): "/opt/clayverse/runtime/deny-shell",
+        ("list-keys",): "",
+    }
+    observed = []
+
+    def fake_run(argv, **kwargs):
+        command = tuple(argv[5:])
+        observed.append(command)
+        return SimpleNamespace(returncode=0, stdout=expected[command] + "\n", stderr="")
+
+    monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
+    manager._assert_tmux_server_policy(binding)
+    assert observed == list(expected)
+
+
+def test_live_tmux_policy_rejects_mutated_default_shell(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    binding = manager.binding("andreas")
+    expected = {
+        ("show-options", "-sqv", "@clayverse_managed_policy"): "clayverse-browser-transport-v3",
+        ("show-options", "-gqv", "prefix"): "None",
+        ("show-options", "-gqv", "prefix2"): "None",
+        ("show-options", "-gqv", "status"): "off",
+        ("show-options", "-gqv", "mouse"): "off",
+        ("show-options", "-gqv", "default-shell"): "/bin/sh",
+        ("list-keys",): "",
+    }
+
+    def fake_run(argv, **kwargs):
+        command = tuple(argv[5:])
+        return SimpleNamespace(returncode=0, stdout=expected[command] + "\n", stderr="")
+
+    monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
+    with pytest.raises(TerminalRuntimeError, match="default-shell"):
+        manager._assert_tmux_server_policy(binding)

@@ -12,6 +12,7 @@ from .graph import ClayGraphProjection
 from .hyperposition import HyperpositionProjector
 from .memory import MemoryManager
 from .needle import NeedleRouter
+from .problem_signature import ProblemSignatureAdmission
 from .retrieval import WorldAssembler
 from .store import StaleGeneration, UnifiedDB
 from .workspace import Workspace
@@ -44,6 +45,7 @@ class TurnLifecycle:
         db.assert_session_owner(session_id, user_id)
         self.db=db; self.user_id=user_id; self.session_id=session_id
         self.memory=MemoryManager(db); self.world=WorldAssembler(db); self.workspace=Workspace(db)
+        self.problem_signatures=ProblemSignatureAdmission(db)
         self.effects=EffectGate(db,allow_process=False,entityos_bridge=entityos_bridge); self.graph=ClayGraphProjection(db)
 
     def active(self): return self.db.db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
@@ -179,10 +181,19 @@ class TurnLifecycle:
         return {"aborted":True,"causal_id":row["causal_id"],"reason":reason}
 
     @contextlib.contextmanager
-    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None):
+    def begin_admission(
+        self,
+        prompt:str,
+        resources:list[str]|None=None,
+        *,
+        claude_session_id:str|None=None,
+        problem_signature:dict|None=None,
+        problem_signature_provenance:dict|None=None,
+    ):
         prompt=str(prompt)
         if not prompt or len(prompt)>100_000: raise ValueError("invalid prompt")
         if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if (problem_signature is None)!=(problem_signature_provenance is None): raise ValueError("problem signature and provenance must be supplied together")
         resource_refs=sorted(set(resources or infer_resource_refs(prompt)))[:50]; turn_id=str(uuid.uuid4()); episode_id=str(uuid.uuid4()); causal_id=str(uuid.uuid4())
         alternatives=[{"id":"respond","kind":"reason"},{"id":"request_effect","kind":"effect_intent"},{"id":"defer_effect","kind":"no_effect"}]
         with self.db.tx() as db:
@@ -198,13 +209,38 @@ class TurnLifecycle:
             db.execute("INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",(episode_id,self.session_id,now,turn_id,salience,json.dumps(alternatives),None,"OPEN"))
             db.execute("INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,effect_id,outcome,workspace_selected,started_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(self.session_id,self.user_id,turn_id,episode_id,causal_id,generation,json.dumps(resource_refs),None,None,0,now))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
+            signature_receipt=None
+            if problem_signature is not None:
+                signature_receipt=self.problem_signatures.admit_in_tx(
+                    user_id=self.user_id,
+                    session_id=self.session_id,
+                    turn_id=turn_id,
+                    episode_id=episode_id,
+                    causal_id=causal_id,
+                    generation=generation,
+                    resource_refs=resource_refs,
+                    problem_signature=problem_signature,
+                    provenance=problem_signature_provenance,
+                )
             self.memory.extract_explicit(turn_id,self.user_id,prompt); self.memory.compact(self.session_id)
             if predecessor["aborted"]: self.graph.rebuild_in_tx()
             world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
-            yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
+            yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"problem_signature_receipt_id":signature_receipt.get("memory_id") if signature_receipt else None,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
-    def begin(self,prompt:str,resources:list[str]|None=None)->dict:
-        with self.begin_admission(prompt,resources) as result: return result
+    def begin(
+        self,
+        prompt:str,
+        resources:list[str]|None=None,
+        *,
+        problem_signature:dict|None=None,
+        problem_signature_provenance:dict|None=None,
+    )->dict:
+        with self.begin_admission(
+            prompt,
+            resources,
+            problem_signature=problem_signature,
+            problem_signature_provenance=problem_signature_provenance,
+        ) as result: return result
 
     def request_effect(self,capability:str,target:str,argv:list[str]|None=None)->dict:
         with self.db.tx() as db:

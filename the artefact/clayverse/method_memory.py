@@ -19,16 +19,16 @@ METHOD_MEMORY_KINDS = frozenset({
     "counterexample",
     "method_receipt",
 })
-RETRIEVABLE_METHOD_KINDS = frozenset({
-    "framework",
-    "heuristic",
-    "failure_pattern",
-    "counterexample",
-})
 CANDIDATE_METHOD_KINDS = frozenset({"framework_candidate", "heuristic_candidate"})
 PROMOTED_METHOD_KINDS = frozenset({"framework", "heuristic"})
 METHOD_STATUSES = frozenset({"CANDIDATE", "PROMOTED", "DEMOTED", "RETIRED"})
 FACT_STATUSES = frozenset({"PRESENT", "UNDERCOVERED", "UNKNOWN"})
+
+# Current Stage-A MicroClay scans durable_memory broadly. This gate must remain absent
+# until the canonical Stage-A implementation explicitly excludes all method-memory kinds.
+# This module never sets the gate itself.
+STAGE_A_METHOD_SEPARATION_META_KEY = "method_memory_stage_a_separation_version"
+STAGE_A_METHOD_SEPARATION_VERSION = "1"
 
 _METHOD_FIELDS = frozenset({
     "name",
@@ -98,6 +98,7 @@ def _canonical_signature(items: Iterable[str]) -> tuple[str, ...]:
 
 
 def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
+    """Validate shape/calibration only; validation never grants promotion authority."""
     if kind not in METHOD_MEMORY_KINDS - {"method_receipt"}:
         raise MethodMemoryError("unsupported method kind")
     if not isinstance(raw, dict):
@@ -107,9 +108,10 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
         extra = sorted(set(raw) - _METHOD_FIELDS)
         raise MethodMemoryError(f"method envelope shape mismatch: missing={missing} extra={extra}")
 
-    value: dict[str, Any] = {}
-    value["name"] = _text(raw["name"], field="name", max_chars=256)
-    value["goal_shape"] = _text(raw["goal_shape"], field="goal_shape", max_chars=256)
+    value: dict[str, Any] = {
+        "name": _text(raw["name"], field="name", max_chars=256),
+        "goal_shape": _text(raw["goal_shape"], field="goal_shape", max_chars=256),
+    }
     for field in _LIST_FIELDS:
         value[field] = _items(raw[field], field=field)
 
@@ -129,10 +131,9 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
     calibration = raw["calibration"]
     if isinstance(calibration, bool) or not isinstance(calibration, (int, float)) or not math.isfinite(float(calibration)):
         raise MethodMemoryError("calibration must be finite")
-    calibration = float(calibration)
-    if not 0.0 <= calibration <= 1.0:
+    value["calibration"] = float(calibration)
+    if not 0.0 <= value["calibration"] <= 1.0:
         raise MethodMemoryError("calibration must be within [0,1]")
-    value["calibration"] = calibration
 
     validated_at = raw["last_validated_at"]
     if isinstance(validated_at, bool) or not isinstance(validated_at, (int, float)) or not math.isfinite(float(validated_at)) or float(validated_at) < 0.0:
@@ -143,7 +144,6 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
     if status not in METHOD_STATUSES:
         raise MethodMemoryError("invalid method status")
     value["status"] = status
-
     if kind in CANDIDATE_METHOD_KINDS and status != "CANDIDATE":
         raise MethodMemoryError("candidate kind requires CANDIDATE status")
     if kind in PROMOTED_METHOD_KINDS and status != "PROMOTED":
@@ -151,9 +151,8 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
     if kind in {"failure_pattern", "counterexample"} and status not in {"PROMOTED", "DEMOTED", "RETIRED"}:
         raise MethodMemoryError("evidence limiter requires a non-candidate status")
 
-    # This is only a minimum validation floor for a record that claims promotion.
-    # It does not itself authorize promotion. The write API below deliberately admits
-    # candidates only until a causal/cross-instance promotion receipt is implemented.
+    # Minimum anti-anecdote floor only. Two episode IDs do not by themselves prove
+    # cross-instance transfer; an eventual promotion receipt must prove that separately.
     if kind in PROMOTED_METHOD_KINDS:
         if value["support_count"] < 2 or len(set(value["source_episode_ids"])) < 2:
             raise MethodMemoryError("promoted method requires evidence from at least two source episodes")
@@ -193,8 +192,7 @@ class MethodQuery:
         signature = _canonical_signature(problem_signature)
         if not signature or len(signature) > 64:
             raise MethodMemoryError("query problem_signature must be non-empty and bounded")
-        goal = _text(goal_shape, field="goal_shape", max_chars=256).lower()
-        return cls(signature, goal)
+        return cls(signature, _text(goal_shape, field="goal_shape", max_chars=256).lower())
 
 
 @dataclass(frozen=True)
@@ -208,23 +206,33 @@ class _ScoredMethod:
 
 
 class MethodMemoryStore:
-    """Fail-closed UnifiedDB method-memory boundary.
+    """Dormant fail-closed foundation for ClayVerse method memory.
 
-    The currently admitted write path creates user-bound *candidates only*. It cannot
-    mint a promoted framework/heuristic, a counterexample, or a globally shared method.
-    Those require a future explicit promotion/admission receipt with cross-instance and
-    privacy evidence. Stage-B can read already-admitted user-bound promoted records, so
-    retrieval semantics can be built/tested without silently inventing promotion power.
+    Standalone current-main safety rules:
+    - method candidates cannot be persisted until Stage-A excludes method kinds;
+    - promoted methods cannot be minted by this module at all;
+    - cross-user/global method sharing is not admitted;
+    - structural selection is PREVIEW ONLY and cannot be served to Claude because no
+      causal method-retrieval receipt/replay contract exists yet.
 
-    The module also deliberately does not derive structural signatures from raw user
-    text. Signature derivation/admission is a separate future boundary. Method context
-    is advice/accessibility only and never upgrades factual status or effect authority.
+    The future integration must deliberately satisfy the Stage-A separation gate and
+    wrap selection in the canonical causal turn/generation receipt path. This file does
+    not create either authority by itself.
     """
 
     ENVELOPE_VERSION = 1
 
     def __init__(self, db: UnifiedDB):
         self.db = db
+
+    @staticmethod
+    def _assert_stage_a_separation(sql) -> None:
+        row = sql.execute(
+            "SELECT value FROM meta WHERE key=?",
+            (STAGE_A_METHOD_SEPARATION_META_KEY,),
+        ).fetchone()
+        if not row or str(row[0]) != STAGE_A_METHOD_SEPARATION_VERSION:
+            raise MethodMemoryError("method memory blocked until Stage-A method-kind separation is admitted")
 
     @staticmethod
     def _assert_candidate_refs(sql, envelope: dict[str, Any], user_id: str) -> None:
@@ -273,7 +281,6 @@ class MethodMemoryStore:
         value = validate_method_envelope(kind, envelope)
         subject = _text(subject, field="subject", max_chars=256)
         memory_id = str(uuid.uuid4())
-        now = time.time()
         receipt = dict(provenance or {})
         receipt.update({
             "memory_class": "method_candidate",
@@ -284,6 +291,7 @@ class MethodMemoryStore:
         })
 
         with self.db.tx() as sql:
+            self._assert_stage_a_separation(sql)
             if not sql.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone():
                 raise MethodMemoryError("unknown user_id")
             self._assert_candidate_refs(sql, value, user_id)
@@ -303,7 +311,7 @@ class MethodMemoryStore:
                     json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
                     source_turn_id,
                     user_id,
-                    now,
+                    time.time(),
                     json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
                 ),
             )
@@ -324,8 +332,7 @@ class MethodMemoryStore:
         overlap = tuple(sorted(query_facets.intersection(method_facets)))
         if not overlap:
             return 0.0, ()
-        union = query_facets.union(method_facets)
-        structural = len(overlap) / max(1, len(union))
+        structural = len(overlap) / max(1, len(query_facets.union(method_facets)))
         goal = 1.0 if envelope["goal_shape"].strip().lower() == query.goal_shape else 0.0
         score = (0.80 * structural) + (0.15 * goal) + (0.05 * float(envelope["calibration"]))
         return min(1.0, score), overlap
@@ -360,7 +367,7 @@ class MethodMemoryStore:
                 })
         return matched
 
-    def retrieve_stage_b(
+    def preview_stage_b(
         self,
         *,
         query: MethodQuery,
@@ -371,6 +378,8 @@ class MethodMemoryStore:
         out_of_distribution: bool = False,
         limit: int = 6,
     ) -> dict[str, Any]:
+        """Preview structural selection only; this is not a Claude-serving boundary."""
+        self._assert_stage_a_separation(self.db.db)
         if fact_status not in FACT_STATUSES:
             raise MethodMemoryError("invalid fact status")
         if limit < 1 or limit > 24:
@@ -378,25 +387,23 @@ class MethodMemoryStore:
         if not self.db.db.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone():
             raise MethodMemoryError("unknown user_id")
 
-        entered = should_enter_stage_b(
+        if not should_enter_stage_b(
             fact_status,
             strategy_request=strategy_request,
             conflict=conflict,
             out_of_distribution=out_of_distribution,
-        )
-        if not entered:
+        ):
             return {
                 "fact_status": fact_status,
                 "method_status": "NOT_ENTERED",
-                "method_context": [],
+                "method_candidates": [],
                 "counterevidence": [],
+                "serve_authorized": False,
+                "receipt_bound": False,
                 "truth_authority": False,
                 "effect_authority": False,
             }
 
-        # Until cross-user abstraction/privacy admission exists, even user_id=NULL
-        # methods fail closed here. A shared central entity is not permission to leak one
-        # perspective's learned method into the other perspective by default.
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory WHERE kind IN ('framework','heuristic') "
             "AND user_id=? ORDER BY ts DESC LIMIT 2000",
@@ -408,16 +415,15 @@ class MethodMemoryStore:
             if envelope["status"] != "PROMOTED":
                 continue
             score, facets = self._score(query, envelope)
-            if score <= 0.0:
-                continue
-            scored.append(_ScoredMethod(
-                memory_id=str(row["memory_id"]),
-                kind=str(row["kind"]),
-                subject=str(row["subject"]),
-                envelope=envelope,
-                score=score,
-                matched_facets=facets,
-            ))
+            if score > 0.0:
+                scored.append(_ScoredMethod(
+                    memory_id=str(row["memory_id"]),
+                    kind=str(row["kind"]),
+                    subject=str(row["subject"]),
+                    envelope=envelope,
+                    score=score,
+                    matched_facets=facets,
+                ))
         scored.sort(key=lambda item: (item.score, item.envelope["calibration"], item.memory_id), reverse=True)
 
         methods: list[dict[str, Any]] = []
@@ -454,8 +460,10 @@ class MethodMemoryStore:
         return {
             "fact_status": fact_status,
             "method_status": "PRESENT" if methods else "UNKNOWN",
-            "method_context": methods,
+            "method_candidates": methods,
             "counterevidence": counterevidence,
+            "serve_authorized": False,
+            "receipt_bound": False,
             "truth_authority": False,
             "effect_authority": False,
         }

@@ -5,6 +5,8 @@ import os
 import sys
 from typing import Any
 
+from .autonomy import AutonomyController
+from .autonomy_integration import admit_explicit_goal_from_turn, grounded_autonomy_context
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -51,7 +53,62 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
+def _compact_autonomy(autonomy: dict[str, Any]) -> None:
+    goals = list(autonomy.get("goals", []))[:2]
+    compact_goals: list[dict[str, Any]] = []
+    for raw in goals:
+        if not isinstance(raw, dict):
+            continue
+        goal = dict(raw)
+        objective = str(goal.get("objective", ""))
+        if len(objective) > 500:
+            goal["objective"] = objective[:500] + "…"
+        evidence = goal.get("evidence_effect_ids")
+        if isinstance(evidence, list):
+            goal["evidence_effect_ids"] = evidence[-8:]
+        step = goal.get("current_step")
+        if isinstance(step, dict):
+            step = dict(step)
+            description = str(step.get("description", ""))
+            if len(description) > 300:
+                step["description"] = description[:300] + "…"
+            goal["current_step"] = step
+        compact_goals.append(goal)
+    autonomy["goals"] = compact_goals
+
+
+def _minimal_autonomy(autonomy: dict[str, Any]) -> None:
+    minimal = []
+    for raw in list(autonomy.get("goals", []))[:2]:
+        if not isinstance(raw, dict):
+            continue
+        step = raw.get("current_step") if isinstance(raw.get("current_step"), dict) else None
+        minimal.append({
+            "goal_id": raw.get("goal_id"),
+            "status": raw.get("status"),
+            "objective": str(raw.get("objective", ""))[:300],
+            "priority": raw.get("priority"),
+            "generation": raw.get("generation"),
+            "budget": raw.get("budget"),
+            "counters": raw.get("counters"),
+            "completion_contract": raw.get("completion_contract"),
+            "current_step": None if step is None else {
+                "step_id": step.get("step_id"),
+                "kind": step.get("kind"),
+                "status": step.get("status"),
+                "attempts": step.get("attempts"),
+                "description": str(step.get("description", ""))[:180],
+            },
+            "blocked_reason": raw.get("blocked_reason"),
+        })
+    autonomy["goals"] = minimal
+
+
+def _bounded_hook_context(
+    result: dict[str, Any],
+    autonomy: dict[str, Any] | None = None,
+    limit: int = HOOK_CONTEXT_MAX_CHARS,
+) -> str:
     compact = {
         "authority": "UnifiedDB",
         "identity": {"user_id": result["user_id"], "session_id": result["session_id"]},
@@ -66,6 +123,17 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
+        "autonomy": autonomy or {
+            "goals": [],
+            "operating_mode": "goal-directed-proactive",
+            "truth_boundary": {
+                "identity_text_grants_capability": False,
+                "model_proposal_is_execution": False,
+                "effect_dispatch_is_success": False,
+                "model_completion_is_goal_completion": False,
+                "unknown_is_success": False,
+            },
+        },
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
@@ -93,6 +161,8 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
     for hp in compact["hyperpositions"]:
         if isinstance(hp, dict):
             hp["facets"] = list(hp.get("facets", []))[:3]
+    if isinstance(compact.get("autonomy"), dict):
+        _compact_autonomy(compact["autonomy"])
 
     text = render()
     if len(text) > limit:
@@ -107,6 +177,8 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
             }
             for hp in compact["hyperpositions"] if isinstance(hp, dict)
         ]
+        if isinstance(compact.get("autonomy"), dict):
+            _minimal_autonomy(compact["autonomy"])
         text = render()
     if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
@@ -123,13 +195,25 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, _, session_id, lifecycle = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
+        controller = AutonomyController(db)
+        # Canonical turn admission commits first. Only then can an explicit /goal turn
+        # be adopted, so a failed prompt admission cannot create a durable objective.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            additional_context = _bounded_hook_context(result)
+            pass
+
+        admit_explicit_goal_from_turn(
+            controller,
+            user_id=user_id,
+            session_id=session_id,
+            source_turn_id=result["turn_id"],
+            prompt=prompt,
+        )
+        additional_context = _bounded_hook_context(
+            result,
+            autonomy=grounded_autonomy_context(controller, user_id=user_id),
+        )
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
@@ -137,6 +221,16 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             },
             "suppressOutput": True,
         }
+    except Exception:
+        # If a post-admission autonomy/context operation fails, close the active turn
+        # explicitly rather than leaving a dangling causal episode. The exact user
+        # turn remains canonical evidence; no effect or completion is synthesized.
+        try:
+            if lifecycle.active() is not None:
+                lifecycle.abort("user_prompt_post_admission_failure")
+        except Exception:
+            pass
+        raise
     finally:
         db.close()
 

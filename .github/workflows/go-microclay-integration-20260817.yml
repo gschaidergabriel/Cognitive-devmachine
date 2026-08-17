@@ -44,7 +44,8 @@ jobs:
             tests/test_microclay_restart_learning.py \
             tests/test_method_memory_admission.py \
             tests/test_method_memory_promotion.py \
-            tests/test_method_stageb_admitted.py
+            tests/test_method_stageb_admitted.py \
+            tests/test_retrieval_identity_fence.py
       - name: GO unusual-experiment accounting
         run: |
           echo "UNUSUAL_EXPERIMENT_SLOT=CONSUMED_EXTERNALLY"

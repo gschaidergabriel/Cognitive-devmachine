@@ -37,9 +37,10 @@ jobs:
             tests/test_microclay_replay_identity.py \
             tests/test_microclay_replay_integration.py \
             tests/test_microclay_receipt_context.py \
-            tests/test_world_context_hard_bound.py
+            tests/test_context_bound_fail_closed.py \
+            tests/test_microclay_method_isolation.py
       - name: GO unusual-experiment accounting
         run: |
           echo "UNUSUAL_EXPERIMENT_SLOT=CONSUMED_EXTERNALLY"
-          echo "EXPERIMENT=RETRIEVAL_RECEIPT_DOMINATES_WORLD_BUDGET"
+          echo "EXPERIMENT=BOUND_WORLD_MINIMUM_OVERFLOW"
           echo "THIS_WORKFLOW=REGRESSION_ONLY"

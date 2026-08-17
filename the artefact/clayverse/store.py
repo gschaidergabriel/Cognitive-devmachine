@@ -63,13 +63,25 @@ class UnifiedDB:
         self.db.create_function("clay_allow_method_write",4,self._consume_method_write_authorization,deterministic=False)
         self.db.create_function("clay_validate_method_memory",4,self._sqlite_validate_method_memory,deterministic=True)
         try:
-            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._migrate_schema(); self._retire_hidden_raw_turn_ledger(); self._validate_existing_method_rows()
-            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','8') ON CONFLICT(key) DO UPDATE SET value='8'")
+            self.db.execute("PRAGMA busy_timeout=30000"); self._assert_compatible_schema_version(); self.db.executescript(SCHEMA); self._migrate_schema(); self._retire_hidden_raw_turn_ledger(); self._validate_existing_method_rows()
+            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(self.SCHEMA_VERSION),))
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
         except Exception:
             self.db.close(); raise
+
+    def _assert_compatible_schema_version(self):
+        meta=self.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='meta'").fetchone()
+        if not meta: return
+        try: row=self.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        except sqlite3.DatabaseError as exc: raise RuntimeError('existing UnifiedDB schema metadata is incompatible') from exc
+        if row is None: raise RuntimeError('existing UnifiedDB is missing schema_version')
+        try: version=int(row[0])
+        except (TypeError,ValueError) as exc: raise RuntimeError('existing UnifiedDB schema_version is invalid') from exc
+        if version <= 0: raise RuntimeError('existing UnifiedDB schema_version is invalid')
+        if version > self.SCHEMA_VERSION:
+            raise RuntimeError(f'UnifiedDB schema version {version} is newer than supported {self.SCHEMA_VERSION}')
 
     def _migrate_schema(self):
         columns={str(row['name']) for row in self.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()}

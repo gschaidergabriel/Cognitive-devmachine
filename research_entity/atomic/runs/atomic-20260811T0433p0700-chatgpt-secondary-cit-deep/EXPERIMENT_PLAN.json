@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "claim_under_test":"In sparse, replayable internal causal cones, pooled safe lesions can reduce candidate-discovery interventions while exact confirmation preserves causal-credit safety.",
+  "reference_model":{
+    "candidate_count":256,
+    "causal_sparsity":[2,4,8,16,24],
+    "main_effects":"sparse signed contributions",
+    "pairwise_interactions":[0.0,0.25,0.5,1.0],
+    "noise_sigma":0.01,
+    "stale_probe_rate":0.10,
+    "group_probe_count":80,
+    "group_density":0.12,
+    "audit_probe_count":16
+  },
+  "reconstruction":"Orthogonal Matching Pursuit with held-out model-order selection; candidate scores are screening only",
+  "controls":[
+    "full individual LOO",
+    "budget-matched random individual lesions",
+    "shuffled group-mask/outcome pairing",
+    "stale replay rejected by fidelity gate",
+    "dense-cause stress",
+    "strong-interaction stress",
+    "complement-only missed-cause audit",
+    "no-tomography fallback"
+  ],
+  "promotion_metrics":["exact-confirmed cause yield per total safe intervention","fallback rate","candidate support recall","false positive exact confirmations","latency","CPU/RSS","raw measurement preservation","replay/recovery integrity"],
+  "safety_rule":"No screen output is ever material causal credit. Exact individual/responsibility confirmation remains mandatory.",
+  "target_evidence_required_before_promotion":true,
+  "current_execution_surface":"local deterministic/synthetic reference only"
+}

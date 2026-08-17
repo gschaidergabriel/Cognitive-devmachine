@@ -1,0 +1,23 @@
+{
+  "schema_version":"1.0",
+  "candidate_id":"CIT-001",
+  "name":"Causal Intervention Tomography",
+  "status":"RESEARCH_CANDIDATE_NOT_PROMOTED",
+  "novelty_class":"NOVEL_COMBINATION_CANDIDATE",
+  "role":"compressed experimental candidate discovery followed by exact causal confirmation",
+  "selected_problem":"reduce exact lesion-search cost across large uncertain causal cones without turning compressed estimates into truth or reward",
+  "closest_internal_candidates":["CARF-001","CQC-001"],
+  "closest_external_families":["counterfactual credit assignment","causal bandits","sparse combinatorial group testing","compressed sparse recovery"],
+  "strongest_counterhypothesis":"single-lesion active testing + dependency pruning and/or learned counterfactual critic reaches equal confirmed-cause yield with less total complexity after CIT fallback/audit overhead",
+  "kill_criteria":[
+    "matched-budget exact-confirmed cause yield does not exceed simple active single-lesion baseline",
+    "fallback overhead makes expected cost >= exhaustive testing in realistic Frank causal-cone distribution",
+    "missed-cause starvation persists despite exploration floor",
+    "safe pooled internal lesions cannot be defined without violating semantic/recovery invariants",
+    "nonlinearity/density cannot be detected early enough to fail closed",
+    "real target resource cost exceeds benefit"
+  ],
+  "language_status":"ClayCode-style semantic candidate; no new syntax primitive requested; no current frontend/compiler acceptance claimed",
+  "authority":"NONE",
+  "rollback":"remove CIT scheduler and use exact baseline unchanged"
+}

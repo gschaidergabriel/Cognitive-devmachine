@@ -1,0 +1,17 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "execution_class":"LOCAL_SYNTHETIC_REFERENCE_DISCRIMINATOR",
+  "actor":{"actor_id":"chatgpt-secondary","provider":"OpenAI","model":"GPT-5.6 Sol"},
+  "environment":{"os":"Linux 6.18.35 x86_64","glibc":"2.41","python":"3.13.5","compiler":"GCC 14.2.0","numpy":"2.3.5","pandas":"2.2.3","scikit_learn":"1.8.0","visible_cpu_count":5,"cpu_model":"UNKNOWN","gpu":"NOT_USED","network":"NOT_USED"},
+  "artifacts":{"reference":"implementation/cit_reference.py","raw_main":"RAW_MEASUREMENTS.csv","shuffled":"SHUFFLED_CONTROL.json","summary":"MEASUREMENTS.json","counterbaseline":"STRONG_BASELINE_ANALYSIS.json"},
+  "main_rows":80,
+  "shuffled_rows":20,
+  "prior_baseline_replications":20000,
+  "external_effect_performed":false,
+  "canonical_target_database_mutated":false,
+  "target_vps_executed":false,
+  "compiled_claycode_executed":false,
+  "whole_frank_acceptance_claim":false,
+  "evidence_limit":"Synthetic mechanics only; no claim that real Frank causal cones satisfy sparse/additive/replay-fidelity assumptions."
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version":"1.0",
+  "candidate":"CIT-001",
+  "control":"SHUFFLED_MASK_OUTCOME",
+  "setup":{"N":256,"k":4,"group_probes":80,"stale_rate":0.10,"noise_sigma":0.01,"seeds":20,"operation":"permute projection outcomes relative to their intervention masks before reconstruction"},
+  "result":{"accepted_screens":0,"total":20,"accept_rate":0.0,"mean_true_support_recall_of_screen":0.0,"validation_rmse_range":[0.166657,0.648567]},
+  "interpretation":"The current sparse-screen validity gate rejects all 20 chance-aligned shuffled controls in this bounded additive family. This is a useful negative control, not a universal false-positive guarantee.",
+  "raw_rows":[
+    [202608160000,8,0.648567,0.0,false,0.0],[202608160001,1,0.571276,0.0,false,0.0],[202608160002,2,0.374775,0.0,false,0.0],[202608160003,2,0.365053,0.0,false,0.0],[202608160004,1,0.217858,0.0,false,0.0],[202608160005,4,0.370161,0.0,false,0.0],[202608160006,1,0.509367,0.0,false,0.0],[202608160007,1,0.336056,0.0,false,0.0],[202608160008,4,0.191755,0.0,false,0.0],[202608160009,1,0.462971,0.0,false,0.0],[202608160010,1,0.260627,0.0,false,0.0],[202608160011,6,0.477097,0.0,false,0.0],[202608160012,1,0.409035,0.0,false,0.0],[202608160013,1,0.270843,0.0,false,0.0],[202608160014,3,0.395006,0.0,false,0.0],[202608160015,1,0.540065,0.0,false,0.0],[202608160016,1,0.636104,0.0,false,0.0],[202608160017,1,0.329820,0.0,false,0.0],[202608160018,1,0.471294,0.0,false,0.0],[202608160019,1,0.166657,0.0,false,0.0]
+  ],
+  "row_schema":["seed","khat","val_rmse","audit_max","accepted","true_support_recall"]
+}

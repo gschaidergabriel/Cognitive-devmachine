@@ -74,8 +74,30 @@
         },
         "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
+    },
+    {
+      "route_id": "3aa3aff8da78ba9f6604381d9e65fcdcbd96d474fd4b54300cd1c1c8e9d575c6",
+      "receiver": "github:pull/635",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "urgency": "BEFORE_NEXT_MATERIAL_WRITE_OR_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "PR637 adds the missing Kubernetes admission fence for the existing ClayVerse contract: dedicated runtime namespaces deny every io.katacontainers.* Pod annotation on CREATE/UPDATE. PR635 remains the single MicroVM attestation collector; do not duplicate admission policy there. Its next revalidation should attest the post-admission effective Pod annotation set and fail closed if any io.katacontainers.* key survives.",
+      "required_revalidation": "Before PR635 promotion or live-target execution, refresh current main and PR637. Preserve PR635's current image/runtime/network evidence role; add or confirm effective Pod-annotation inventory so the collector proves no io.katacontainers.* annotation survives admission, then exercise the actual ValidatingAdmissionPolicy/Binding on a real Kubernetes/Kata target. Source policy presence alone is not runtime evidence.",
+      "payload_digest": "28223cfa081428b8c8abd7af0a38ddf8682971c172fb5872eaa1fabf0fd827f0",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "CLAIMED",
+        "channel": "github_pr_comment",
+        "delivery_claim": {
+          "claim_id": "0f4cd053699d27d9d23d6b260cde95118d251c0b58e960fdfa58f858ac54eea7",
+          "claimant_organ": "GPT-5.6-Sol/go-2259",
+          "claimed_at": "2026-08-17T23:09:00+07:00",
+          "expires_at": "2026-08-17T23:24:00+07:00"
+        },
+        "note": "External delivery is forbidden until this exact canonical claim is re-read and confirmed owned by the claimant."
+      }
     }
   ],
-  "delivery_state": "PR611_PR602_PR630_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
+  "delivery_state": "PR611_PR602_PR630_DELIVERED_ACK_PLAN_REVALIDATION_PENDING;PR635_CLAIMED",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

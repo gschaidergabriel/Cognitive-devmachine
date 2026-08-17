@@ -1,0 +1,51 @@
+{
+  "schema": "ClayVerseVpsDisposableGuestPreflightReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T02:06:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "authority": {
+    "vps_disposable_guest_directive": "6849845d477209e02a283bbba9adc8e6e43ba725",
+    "sandbox_directive_update": "fb6227fe8b24a49b3872eb367656623ec63c20fc"
+  },
+  "workflow": {
+    "source_commit": "2e89f166d1563794e78d9f31a3eb5e034d06c004",
+    "run_id": 32058449973,
+    "job_id": 95473903439,
+    "conclusion": "success",
+    "artifact_id": 9297209706,
+    "artifact_digest": "sha256:1e02eec088a4cab6f75e0c09192a4c852670ad8afd8c47d088ee6c9d52b542b2"
+  },
+  "host_orchestrator_observation": {
+    "runner_name": "rae-1",
+    "runner_os": "Linux",
+    "runner_arch": "X64",
+    "host_kernel": "6.8.0-117-generic",
+    "cpu_count": 4,
+    "mem_total_kb": 16376020,
+    "mem_available_kb": 13371456,
+    "swap_total_kb": 0,
+    "kvm_device_present": false,
+    "kvm_readable": false,
+    "kvm_writable": false,
+    "qemu_system_x86_64_present": false,
+    "qemu_img_present": false,
+    "firecracker_present": false,
+    "jailer_present": false,
+    "cloud_localds_present": false,
+    "genisoimage_present": false
+  },
+  "scope": {
+    "orchestration_only": true,
+    "product_code_executed_on_host": false,
+    "host_docker_used": false,
+    "guest_started": false,
+    "runtime_credit": 0,
+    "whole_product_credit": 0,
+    "unusual_experiment_count_added": 0
+  },
+  "collapse": {
+    "kvm_firecracker_lane_now": "BLOCKED_NO_DEV_KVM_AND_NO_FIRECRACKER",
+    "qemu_tcg_lane_now": "BLOCKED_QEMU_NOT_INSTALLED",
+    "next_exact_step": "Install a bounded QEMU full-system orchestrator on the VPS host without executing ClayVerse on the host, then boot a disposable independent-kernel QEMU/TCG guest under the owner directive. QEMU/TCG evidence remains development/runtime scope only and does not earn final hardware-MicroVM credit."
+  }
+}

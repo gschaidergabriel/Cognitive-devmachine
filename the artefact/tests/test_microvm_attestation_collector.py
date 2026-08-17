@@ -146,7 +146,7 @@ def test_collector_rejects_host_kernel_indistinguishable_from_guest_kernel():
 
 def test_collector_rejects_missing_default_deny_policy():
     with pytest.raises(AttestationError, match="no NetworkPolicy selects the ClayVerse pod"):
-        _attest(network_policies={"items": [])
+        _attest(network_policies={"items": []})
 
 
 def test_collector_rejects_obvious_allow_all_egress_even_when_default_deny_exists():
@@ -190,6 +190,39 @@ def test_notin_selector_without_key_still_selects_and_exposes_broad_policy():
     }
     with pytest.raises(AttestationError, match="obvious broad NetworkPolicy allow"):
         _attest(network_policies=_policies(broad))
+
+
+def test_notin_selector_without_key_is_included_in_complete_inventory():
+    selecting = {
+        "metadata": {"name": "missing-key-notin", "uid": "notin", "resourceVersion": "15"},
+        "spec": {
+            "podSelector": {
+                "matchExpressions": [
+                    {"key": "exposure", "operator": "NotIn", "values": ["blocked"]}
+                ]
+            },
+            "policyTypes": ["Egress"],
+            "egress": [],
+        },
+    }
+    result = _attest(network_policies=_policies(selecting))
+    assert result["network_policy"]["selecting_policy_names"] == [
+        "clayverse-default-deny",
+        "missing-key-notin",
+    ]
+
+
+def test_collector_rejects_malformed_networkpolicy_peer_entries():
+    malformed = {
+        "metadata": {"name": "bad-peer", "uid": "bad4", "resourceVersion": "16"},
+        "spec": {
+            "podSelector": {"matchLabels": {"app": "clayverse"}},
+            "policyTypes": ["Egress"],
+            "egress": [{"to": ["not-an-object"]}],
+        },
+    }
+    with pytest.raises(AttestationError, match="NetworkPolicy to entries must be objects"):
+        _attest(network_policies=_policies(malformed))
 
 
 def test_nonselecting_broad_policy_does_not_pollute_clayverse_inventory():

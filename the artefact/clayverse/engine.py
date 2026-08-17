@@ -92,24 +92,27 @@ class ClayVerseEngine:
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
         decision = self.inference.reason(world, content)
-        self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
 
         # SECURITY / CAUSALITY LAW:
-        # The model/provider response is canonicalized into UnifiedDB before any
-        # requested external/state-changing effect is allowed to reach EffectGate.
-        # This prevents a provider from becoming a direct action authority and makes
-        # the exact proposal observable under the same session/generation even if the
-        # subsequent effect is denied, fails, or crashes.
-        aid = self.db.append_turn(
-            sid,
-            uid,
-            "assistant",
-            decision.get("text", ""),
-            resources=resources,
-            provenance=self._inference_provenance(
-                decision, reasoning_generation, ws["episode_id"]
-            ),
-        )
+        # Provider inference may overlap recovery/generation advancement. Workspace
+        # selection and provider-response persistence therefore collapse atomically
+        # under the generation captured before the provider call. If that generation
+        # is stale, the whole post-inference mutation rolls back before EffectGate.
+        with self.db.tx():
+            self.workspace.select_in_tx(
+                ws["episode_id"], decision.get("selection", "respond")
+            )
+            aid = self.db.append_turn_in_tx(
+                sid,
+                uid,
+                "assistant",
+                decision.get("text", ""),
+                resources=resources,
+                provenance=self._inference_provenance(
+                    decision, reasoning_generation, ws["episode_id"]
+                ),
+                expected_generation=reasoning_generation,
+            )
 
         effect_id = None
         outcome = None

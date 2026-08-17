@@ -1,0 +1,92 @@
+{
+  "schema": "clayverse.research_receipt/v1",
+  "timestamp_local": "2026-08-18T02:44:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_RESEARCH",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_base": "83d102ed33dd1795c03a20e559e60ea0b3a742a0",
+  "branch": "gpt56sol/autonomy-goal-supervisor-20260818",
+  "source_candidate_head_before_receipt": "5692da34a6d0e4f80c919108110bad1abf2de064",
+  "product_files": {
+    "the artefact/clayverse/autonomy.py": "9ce701df80d040a77751f320ae35b5d118bb2dd7",
+    "the artefact/tests/test_autonomy_goal_supervisor.py": "093a967adffcb192e187e179cd5344f8182197ce"
+  },
+  "owner_request": {
+    "goal": "weave autonomous goal pursuit into architecture without power hallucination",
+    "explicit_exclusions": [
+      "USB identity anchor",
+      "cryptocurrency",
+      "smart contracts",
+      "escrow"
+    ]
+  },
+  "research_basis": [
+    {
+      "publisher": "OpenAI",
+      "source": "OpenAI Agents SDK - running agents / run loop",
+      "design_signal": "external run loop, bounded turns and guardrails"
+    },
+    {
+      "publisher": "Anthropic",
+      "source": "Building effective agents",
+      "design_signal": "environmental ground truth each step, clear success criteria, stopping conditions, sandboxed tools"
+    },
+    {
+      "publisher": "Anthropic",
+      "source": "Effective harnesses for long-running agents",
+      "design_signal": "durable structured progress and explicit end-to-end verification prevent premature completion"
+    },
+    {
+      "publisher": "Anthropic",
+      "source": "Scaling Managed Agents: decoupling brain from hands",
+      "design_signal": "separate model cognition, durable session/state, harness loop and execution environment"
+    },
+    {
+      "publisher": "Anthropic",
+      "source": "How we contain Claude / sandboxing guidance",
+      "design_signal": "probabilistic model behavior must be backed by deterministic capability/environment boundaries"
+    }
+  ],
+  "implemented_invariants": [
+    "UnifiedDB remains the single canonical durable state authority",
+    "autonomy is a bounded supervisor state machine, not a consciousness daemon",
+    "operational identity contains runtime facts, not metaphysical AGI claims",
+    "goals are canonical state and cannot be minted or completed by model prose",
+    "model proposal schema contains no succeeded/completed/executed authority fields",
+    "model-visible capabilities equal goal allowlist intersected with actual EffectGate capabilities",
+    "generic process.exec remains forbidden",
+    "goal success requires all predeclared typed canonical verifiers",
+    "effect completion evidence must be causally bound to exact goal and step resource refs",
+    "state.noop cannot prove goal completion",
+    "unexpected executor failure becomes UNKNOWN/BLOCKED and is not automatically retried",
+    "open step after supervisor lease loss becomes UNKNOWN/BLOCKED rather than replayed",
+    "interactive canonical turns take priority over autonomous work",
+    "max steps, failures, effects, repeated-failure streak and bounded run ticks stop runaway loops",
+    "append-only goal events plus a canonical autonomy-state digest make decisions auditable and out-of-band state mutation detectable"
+  ],
+  "test_obligations_committed": [
+    "unavailable capability is not advertised as present",
+    "model-smuggled success/executed fields are rejected before executor",
+    "typed checkpoint evidence completes only after open step closes",
+    "ambiguous executor failure blocks UNKNOWN",
+    "repeated identical invalid proposals hit deterministic loop brake",
+    "out-of-band goal-state mutation triggers digest mismatch",
+    "verified effect must bind to exact goal-step resources",
+    "successful effect from another resource path cannot satisfy goal"
+  ],
+  "execution_evidence": {
+    "exact_current_branch_pytest": "UNOBSERVED",
+    "authorized_isolated_product_runtime": "UNOBSERVED",
+    "oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false,
+    "note": "No executable PASS is promoted from source inspection or internal design coherence. Exact focused/adjacent tests remain required on an admitted isolated runner."
+  },
+  "integration_boundary": {
+    "service_scheduler_wired": false,
+    "canonical_provider_executor_wired": false,
+    "core_unifieddb_schema_migration_fused": false,
+    "reason": "The first source candidate deliberately avoids duplicating or overwriting moving provider/runtime/schema authority lanes. These must be fused exactly once after executable review."
+  },
+  "acceptance": "IN_PROGRESS"
+}

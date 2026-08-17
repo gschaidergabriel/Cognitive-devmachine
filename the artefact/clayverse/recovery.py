@@ -118,8 +118,54 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
     )
 
 
+def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> None:
+    """Apply only current-policy verified non-zero rewards before generation advance."""
+    from .microclay_retrieval import MicroClayRetrieval
+
+    current_generation = db.entity_generation()
+    current_policy = MicroClayRetrieval.POLICY_VERSION
+    organ = MicroClayRetrieval(db)
+    sessions = db.db.execute("SELECT session_id,generation FROM sessions ORDER BY session_id").fetchall()
+    for session in sessions:
+        if int(session["generation"]) != int(current_generation):
+            raise RecoveryIntegrityError("session generation diverged before retrieval learning drain")
+        session_id = str(session["session_id"])
+        rows = db.db.execute(
+            "SELECT r.causal_id,r.generation,c.credit,e.status FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND r.policy_version=? AND c.reentered=1 "
+            "AND e.status='VERIFIED' AND c.credit != 0.0 "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
+            "ORDER BY r.ts LIMIT 100",
+            (session_id, int(current_generation), int(current_policy)),
+        ).fetchall()
+        counts["retrieval_learning_eligible"] += len(rows)
+        for row in rows:
+            result = organ.credit(
+                causal_id=str(row["causal_id"]),
+                generation=int(row["generation"]),
+                credit=float(row["credit"]),
+                signal_class=f"effect_outcome:{row['status']}",
+            )
+            counts["retrieval_learning_applied"] += int(bool(result.get("applied")))
+        counts["retrieval_learning_policy_mismatch_ignored"] += int(db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_episodes r JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? "
+            "AND r.policy_version<>? AND c.reentered=1 AND e.status='VERIFIED' AND c.credit != 0.0 "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
+            (session_id, int(current_generation), int(current_policy)),
+        ).fetchone()[0])
+        counts["retrieval_learning_uncertain_ignored"] += int(db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_episodes r JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? "
+            "AND r.policy_version=? AND c.reentered=1 AND (e.status<>'VERIFIED' OR c.credit=0.0) "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
+            (session_id, int(current_generation), int(current_policy)),
+        ).fetchone()[0])
+
+
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
-    """Close interrupted work without replay, then advance the one entity generation."""
+    """Close interrupted work without replay, drain known retrieval outcomes, then advance generation."""
 
     # Explicit boot boundary: no concurrent request path performs this recovery.
     # Validate first because recover_pending() is itself a durable mutation and can
@@ -137,6 +183,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         "ambiguous_effects": 0,
         "active_turns_closed": 0,
         "leases_expired": 0,
+        "retrieval_learning_eligible": 0,
+        "retrieval_learning_applied": 0,
+        "retrieval_learning_policy_mismatch_ignored": 0,
+        "retrieval_learning_uncertain_ignored": 0,
         "generation": 0,
     }
 
@@ -192,8 +242,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
                         (active["causal_id"], active["episode_id"], None, active["turn_id"], _hash(receipt), time.time()),
                     )
-                    if episode["selected"] == "request_effect": counts["uncertain_effects"] += 1
-                    else: counts["aborted_no_effect"] += 1
+                    if episode["selected"] == "request_effect":
+                        counts["uncertain_effects"] += 1
+                    else:
+                        counts["aborted_no_effect"] += 1
 
             state = "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY" if effect_id else "RECOVERY_ABORTED_INCOMPLETE_TURN"
             tx.execute("UPDATE workspace_episodes SET state=? WHERE episode_id=?", (state, active["episode_id"]))
@@ -262,5 +314,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         counts["leases_expired"] = int(tx.execute("SELECT COUNT(*) FROM leases WHERE expires_at>0").fetchone()[0])
         tx.execute("UPDATE leases SET expires_at=0")
 
+    _drain_known_retrieval_learning(db, counts)
     counts["generation"] = db.advance_entity_generation()
     return counts

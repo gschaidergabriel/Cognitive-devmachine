@@ -19,6 +19,8 @@ from .workspace import Workspace
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
+_RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
+_METHOD_RECEIPT_MAX_CHARS = 4_096
 
 
 class TurnLifecycleError(RuntimeError):
@@ -45,15 +47,49 @@ class TurnLifecycle:
     def active(self): return self.db.db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
 
     @staticmethod
+    def _compact_scalar_receipt(receipt, *, name: str, max_chars: int) -> dict:
+        if not isinstance(receipt,dict): raise TurnLifecycleError(f"{name} receipt must be an object")
+        if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError(f"{name} receipt keys must be strings")
+        scalar=(str,int,float,bool,type(None))
+        if any(not isinstance(value,scalar) for value in receipt.values()): raise TurnLifecycleError(f"{name} receipt values must be scalar")
+        try: chars=len(json.dumps(receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
+        except (TypeError,ValueError) as exc: raise TurnLifecycleError(f"{name} receipt is not canonical JSON") from exc
+        if chars>max_chars: raise TurnLifecycleError(f"{name} receipt exceeds compact context bound")
+        return dict(receipt)
+
+    @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
+        receipt=TurnLifecycle._compact_scalar_receipt(
+            world.get("retrieval_receipt"), name="retrieval", max_chars=_RETRIEVAL_RECEIPT_MAX_CHARS
+        )
+        method_receipt=TurnLifecycle._compact_scalar_receipt(
+            world.get("method_receipt", {
+                "route":"method","status":"METHOD_NOT_REQUESTED",
+                "truth_authority":False,"effect_authority":False,
+            }), name="method", max_chars=_METHOD_RECEIPT_MAX_CHARS
+        )
+        packed={
+            "own_recent":list(world.get("own_recent",[])),
+            "cross_session_collision":list(world.get("cross_session_collision",[])),
+            "durable_memory":list(world.get("durable_memory",[])),
+            "method_context":list(world.get("method_context",[])),
+            "unknowns":list(world.get("unknowns",[])),
+            "counterevidence":list(world.get("counterevidence",[])),
+            "retrieval_receipt":receipt,
+            "method_receipt":method_receipt,
+        }
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
+        # Method context is advisory and never displaces direct evidence/working-state.
+        while size()>max_chars and packed["method_context"]: packed["method_context"].pop()
+        while size()>max_chars and packed["counterevidence"]: packed["counterevidence"].pop()
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()
+        while size()>max_chars and len(packed["unknowns"])>1: packed["unknowns"].pop()
         if size()>max_chars:
             for item in packed["own_recent"]:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"
+        if size()>max_chars: raise TurnLifecycleError("world context exceeds bound after safe trimming")
         return packed
 
     def _persisted_effect_in_tx(self,db,row):

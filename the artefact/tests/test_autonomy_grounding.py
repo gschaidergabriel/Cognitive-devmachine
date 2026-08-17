@@ -8,7 +8,9 @@ from clayverse.autonomy import (
     GoalBlocked,
     VerificationResult,
 )
-from clayverse.store import StaleGeneration, UnifiedDB
+from clayverse.autonomy_runtime import SupervisorAutonomyController
+from clayverse.goal_admission import admit_explicit_user_goal
+from clayverse.store import UnifiedDB
 
 
 def _db(tmp_path):
@@ -205,5 +207,94 @@ def test_negative_verifier_keeps_step_unfinished(tmp_path):
         assert result.state == "WAITING_VERIFICATION"
         assert state.step(step_id)["status"] == "WAITING_VERIFICATION"
         assert state.goal(goal_id)["status"] == "ACTIVE"
+    finally:
+        db.close()
+
+
+def test_explicit_goal_admission_is_user_grounded_and_not_completion(tmp_path):
+    db = _db(tmp_path)
+    try:
+        state = AutonomyState(db)
+        source_turn_id = db.append_turn(
+            "session:gabriel",
+            "gabriel",
+            "user",
+            "/goal ship the verified artifact",
+            provenance={"source": "test-user"},
+        )
+        admission = admit_explicit_user_goal(
+            state,
+            user_id="gabriel",
+            source_turn_id=source_turn_id,
+            prompt="/goal ship the verified artifact",
+        )
+        assert admission is not None
+        assert state.goal(admission.goal_id)["objective"] == "ship the verified artifact"
+        assert state.goal(admission.goal_id)["status"] == "ACTIVE"
+        assert state.step(admission.step_id)["status"] == "PENDING"
+        receipt = db.db.execute(
+            "SELECT kind,source,verified,payload FROM autonomy_receipts WHERE receipt_id=?",
+            (admission.receipt_id,),
+        ).fetchone()
+        assert receipt["kind"] == "OBSERVATION"
+        assert receipt["source"] == "explicit-user-goal-admission"
+        assert int(receipt["verified"]) == 1
+        with pytest.raises(GoalBlocked):
+            state.verify_step(admission.goal_id, admission.step_id, admission.receipt_id)
+    finally:
+        db.close()
+
+
+def test_non_goal_prompt_cannot_create_goal(tmp_path):
+    db = _db(tmp_path)
+    try:
+        state = AutonomyState(db)
+        source_turn_id = db.append_turn(
+            "session:gabriel",
+            "gabriel",
+            "user",
+            "please think about shipping something",
+            provenance={"source": "test-user"},
+        )
+        admission = admit_explicit_user_goal(
+            state,
+            user_id="gabriel",
+            source_turn_id=source_turn_id,
+            prompt="please think about shipping something",
+        )
+        assert admission is None
+        assert db.db.execute("SELECT COUNT(*) FROM autonomy_goals").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_planner_block_is_persisted_and_not_repolled(tmp_path):
+    db = _db(tmp_path)
+    try:
+        state = AutonomyState(db)
+        goal_id, step_id = _goal(state)
+        calls = []
+
+        def planner(snapshot):
+            calls.append(snapshot["step"]["step_id"])
+            return {"kind": "blocked", "reason": "credential_missing"}
+
+        base = AutonomyController(
+            state,
+            capability_provider=lambda: (),
+            planner=planner,
+            effect_executor=lambda snapshot, proposal: pytest.fail("effect boundary must not run"),
+            observer=lambda snapshot, proposal: pytest.fail("observer must not run"),
+            step_verifier=lambda snapshot, proposal, receipt: pytest.fail("verifier must not run"),
+            goal_verifier=_goal_verifier,
+        )
+        controller = SupervisorAutonomyController(base)
+        first = controller.tick()
+        second = controller.tick()
+        assert first.state == "BLOCKED"
+        assert second.state == "IDLE"
+        assert calls == [step_id]
+        assert state.goal(goal_id)["status"] == "BLOCKED"
+        assert state.step(step_id)["status"] == "BLOCKED"
     finally:
         db.close()

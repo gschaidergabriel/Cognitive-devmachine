@@ -111,7 +111,6 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
                 "additionalContext": _bounded_hook_context(result),
-                "sessionTitle": f"ClayVerse · {user_id}",
             },
             "suppressOutput": True,
         }

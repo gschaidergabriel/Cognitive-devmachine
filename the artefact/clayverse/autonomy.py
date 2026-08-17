@@ -10,76 +10,6 @@ from typing import Any, Callable, Mapping, Sequence
 from .store import UnifiedDB
 
 
-AUTONOMY_SCHEMA = r'''
-CREATE TABLE IF NOT EXISTS autonomy_goals(
-    goal_id TEXT PRIMARY KEY,
-    creator_user_id TEXT NOT NULL REFERENCES users(user_id),
-    objective TEXT NOT NULL,
-    success_contract TEXT NOT NULL,
-    priority INTEGER NOT NULL DEFAULT 100,
-    status TEXT NOT NULL CHECK(status IN ('ACTIVE','PAUSED','BLOCKED','DONE','CANCELLED')),
-    autonomous INTEGER NOT NULL CHECK(autonomous IN (0,1)),
-    attempt_budget INTEGER NOT NULL,
-    attempts_used INTEGER NOT NULL DEFAULT 0,
-    created_generation INTEGER NOT NULL,
-    created_at REAL NOT NULL,
-    updated_at REAL NOT NULL,
-    completed_at REAL
-);
-CREATE INDEX IF NOT EXISTS idx_autonomy_goals_frontier
-ON autonomy_goals(status, autonomous, priority, created_at);
-
-CREATE TABLE IF NOT EXISTS autonomy_steps(
-    step_id TEXT PRIMARY KEY,
-    goal_id TEXT NOT NULL REFERENCES autonomy_goals(goal_id) ON DELETE CASCADE,
-    ordinal INTEGER NOT NULL,
-    description TEXT NOT NULL,
-    verification_contract TEXT NOT NULL,
-    status TEXT NOT NULL CHECK(status IN ('PENDING','RUNNING','WAITING_VERIFICATION','VERIFIED','BLOCKED','FAILED')),
-    max_attempts INTEGER NOT NULL,
-    attempts_used INTEGER NOT NULL DEFAULT 0,
-    repeated_failures INTEGER NOT NULL DEFAULT 0,
-    last_failure_fingerprint TEXT,
-    last_receipt_id TEXT,
-    last_error TEXT,
-    created_at REAL NOT NULL,
-    updated_at REAL NOT NULL,
-    UNIQUE(goal_id, ordinal)
-);
-CREATE INDEX IF NOT EXISTS idx_autonomy_steps_goal_ord
-ON autonomy_steps(goal_id, ordinal);
-
-CREATE TABLE IF NOT EXISTS autonomy_receipts(
-    receipt_id TEXT PRIMARY KEY,
-    goal_id TEXT NOT NULL REFERENCES autonomy_goals(goal_id) ON DELETE CASCADE,
-    step_id TEXT NOT NULL REFERENCES autonomy_steps(step_id) ON DELETE CASCADE,
-    generation INTEGER NOT NULL,
-    kind TEXT NOT NULL CHECK(kind IN ('OBSERVATION','EFFECT','VERIFICATION','USER_CONFIRMATION','ARTIFACT','TEST')),
-    source TEXT NOT NULL,
-    verified INTEGER NOT NULL CHECK(verified IN (0,1)),
-    payload TEXT NOT NULL,
-    payload_hash TEXT NOT NULL,
-    ts REAL NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_autonomy_receipts_step_ts
-ON autonomy_receipts(step_id, ts);
-
-CREATE TABLE IF NOT EXISTS autonomy_ticks(
-    tick_id TEXT PRIMARY KEY,
-    goal_id TEXT REFERENCES autonomy_goals(goal_id),
-    step_id TEXT REFERENCES autonomy_steps(step_id),
-    generation INTEGER NOT NULL,
-    trigger TEXT NOT NULL,
-    proposal TEXT,
-    action_state TEXT NOT NULL CHECK(action_state IN ('IDLE','PROPOSED','EXECUTED','WAITING_VERIFICATION','VERIFIED','BLOCKED','FAILED')),
-    receipt_id TEXT REFERENCES autonomy_receipts(receipt_id),
-    reason TEXT,
-    ts REAL NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_autonomy_ticks_ts ON autonomy_ticks(ts);
-'''
-
-
 class AutonomyError(RuntimeError):
     pass
 
@@ -144,16 +74,35 @@ class TickResult:
 
 
 class AutonomyState:
-    """Goal/autonomy tables inside the one canonical UnifiedDB.
+    """Goal state inside the one canonical UnifiedDB authority.
 
-    This class is deliberately not a second database, event log or truth authority.
-    Every row lives in the same SQLite authority already owned by UnifiedDB.
+    Schema ownership stays in ``store.SCHEMA``. This class verifies that the canonical
+    autonomy extension is present; it does not create a second schema/state path.
     """
+
+    REQUIRED_TABLES = (
+        "autonomy_goals",
+        "autonomy_steps",
+        "autonomy_receipts",
+        "autonomy_ticks",
+    )
 
     def __init__(self, db: UnifiedDB, policy: AutonomyPolicy | None = None):
         self.db = db
         self.policy = policy or AutonomyPolicy()
-        self.db.db.executescript(AUTONOMY_SCHEMA)
+        version = self.db.db.execute(
+            "SELECT value FROM meta WHERE key='autonomy_schema_version'"
+        ).fetchone()
+        if not version or version[0] != "1":
+            raise AutonomyError("canonical autonomy schema version is unavailable")
+        tables = {
+            row[0]
+            for row in self.db.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'autonomy_%'"
+            ).fetchall()
+        }
+        if not set(self.REQUIRED_TABLES).issubset(tables):
+            raise AutonomyError("canonical autonomy tables are incomplete")
 
     @staticmethod
     def _json(value: Any) -> str:
@@ -278,22 +227,22 @@ class AutonomyState:
         return item
 
     def next_frontier(self) -> tuple[dict[str, Any], dict[str, Any]] | None:
-        goal_row = self.db.db.execute(
-            "SELECT * FROM autonomy_goals WHERE status='ACTIVE' AND autonomous=1 AND attempts_used<attempt_budget ORDER BY priority ASC, created_at ASC LIMIT 1"
-        ).fetchone()
-        if not goal_row:
-            return None
-        goal = self.goal(goal_row["goal_id"])
-        step_row = self.db.db.execute(
-            "SELECT * FROM autonomy_steps WHERE goal_id=? AND status NOT IN ('VERIFIED','FAILED') ORDER BY ordinal ASC LIMIT 1",
-            (goal["goal_id"],),
-        ).fetchone()
-        if not step_row:
-            return None
-        step = self.step(step_row["step_id"])
-        if step["status"] == "BLOCKED":
-            return None
-        return goal, step
+        """Return only an executable PENDING frontier.
+
+        WAITING_VERIFICATION and BLOCKED are intentionally quiescent and therefore do
+        not consume repeated planner calls on timer wakes.
+        """
+        rows = self.db.db.execute(
+            "SELECT * FROM autonomy_goals WHERE status='ACTIVE' AND autonomous=1 AND attempts_used<attempt_budget ORDER BY priority ASC,created_at ASC"
+        ).fetchall()
+        for goal_row in rows:
+            step_row = self.db.db.execute(
+                "SELECT * FROM autonomy_steps WHERE goal_id=? AND status='PENDING' ORDER BY ordinal ASC LIMIT 1",
+                (goal_row["goal_id"],),
+            ).fetchone()
+            if step_row:
+                return self.goal(goal_row["goal_id"]), self.step(step_row["step_id"])
+        return None
 
     def verified_receipts(self, step_id: str, limit: int = 12) -> tuple[dict[str, Any], ...]:
         rows = self.db.db.execute(
@@ -345,13 +294,31 @@ class AutonomyState:
         generation: int,
     ) -> str:
         kind = str(kind).upper()
-        if kind not in {"OBSERVATION", "EFFECT", "VERIFICATION", "USER_CONFIRMATION", "ARTIFACT", "TEST"}:
+        if kind not in {
+            "OBSERVATION",
+            "EFFECT",
+            "VERIFICATION",
+            "USER_CONFIRMATION",
+            "ARTIFACT",
+            "TEST",
+        }:
             raise ValueError("unsupported autonomy receipt kind")
         if int(generation) != self.db.entity_generation():
             raise GoalBlocked("stale autonomy receipt generation")
         receipt_id = str(uuid.uuid4())
         serial = dict(payload)
         with self.db.tx() as conn:
+            goal = conn.execute(
+                "SELECT created_generation FROM autonomy_goals WHERE goal_id=?", (goal_id,)
+            ).fetchone()
+            step = conn.execute(
+                "SELECT 1 FROM autonomy_steps WHERE step_id=? AND goal_id=?",
+                (step_id, goal_id),
+            ).fetchone()
+            if not goal or not step:
+                raise KeyError("goal/step")
+            if int(goal["created_generation"]) > int(generation):
+                raise GoalBlocked("receipt generation predates goal")
             conn.execute(
                 "INSERT INTO autonomy_receipts(receipt_id,goal_id,step_id,generation,kind,source,verified,payload,payload_hash,ts) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (
@@ -404,6 +371,7 @@ class AutonomyState:
         return tick_id
 
     def start_attempt(self, goal_id: str, step_id: str) -> None:
+        """Spend one bounded attempt before any planner/provider call."""
         now = time.time()
         with self.db.tx() as conn:
             goal = conn.execute(
@@ -417,6 +385,8 @@ class AutonomyState:
                 raise KeyError("goal/step")
             if goal["status"] != "ACTIVE" or not int(goal["autonomous"]):
                 raise GoalBlocked("goal is not autonomous-active")
+            if step["status"] != "PENDING":
+                raise GoalBlocked("step is not executable")
             if int(goal["attempts_used"]) >= int(goal["attempt_budget"]):
                 conn.execute(
                     "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
@@ -427,6 +397,10 @@ class AutonomyState:
                 conn.execute(
                     "UPDATE autonomy_steps SET status='BLOCKED',last_error='step attempt budget exhausted',updated_at=? WHERE step_id=?",
                     (now, step_id),
+                )
+                conn.execute(
+                    "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
+                    (now, goal_id),
                 )
                 raise GoalBlocked("step attempt budget exhausted")
             conn.execute(
@@ -448,7 +422,11 @@ class AutonomyState:
             ).fetchone()
             if not row:
                 raise KeyError(step_id)
-            repeated = int(row["repeated_failures"]) + 1 if row["last_failure_fingerprint"] == fingerprint else 1
+            repeated = (
+                int(row["repeated_failures"]) + 1
+                if row["last_failure_fingerprint"] == fingerprint
+                else 1
+            )
             blocked = (
                 repeated >= self.policy.max_repeated_identical_failures
                 or int(row["attempts_used"]) >= int(row["max_attempts"])
@@ -471,29 +449,63 @@ class AutonomyState:
                 )
         return blocked
 
-    def mark_waiting_verification(self, step_id: str) -> None:
-        self.db.db.execute(
-            "UPDATE autonomy_steps SET status='WAITING_VERIFICATION',updated_at=? WHERE step_id=?",
-            (time.time(), step_id),
-        )
+    def block(self, goal_id: str, step_id: str, reason: str) -> None:
+        now = time.time()
+        with self.db.tx() as conn:
+            conn.execute(
+                "UPDATE autonomy_steps SET status='BLOCKED',last_error=?,updated_at=? WHERE step_id=? AND goal_id=? AND status!='VERIFIED'",
+                (str(reason)[:1000], now, step_id, goal_id),
+            )
+            conn.execute(
+                "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=? AND status NOT IN ('DONE','CANCELLED')",
+                (now, goal_id),
+            )
+
+    def mark_waiting_verification(self, goal_id: str, step_id: str, reason: str = "") -> None:
+        """Pause after an executed/observed action so timer wakes cannot replay it."""
+        now = time.time()
+        with self.db.tx() as conn:
+            conn.execute(
+                "UPDATE autonomy_steps SET status='WAITING_VERIFICATION',last_error=?,updated_at=? WHERE step_id=? AND goal_id=?",
+                (str(reason)[:1000] or None, now, step_id, goal_id),
+            )
+            conn.execute(
+                "UPDATE autonomy_goals SET status='PAUSED',updated_at=? WHERE goal_id=? AND status='ACTIVE'",
+                (now, goal_id),
+            )
 
     def verify_step(self, goal_id: str, step_id: str, receipt_id: str) -> None:
         now = time.time()
         with self.db.tx() as conn:
             receipt = conn.execute(
-                "SELECT verified,kind FROM autonomy_receipts WHERE receipt_id=? AND goal_id=? AND step_id=?",
+                "SELECT verified,kind,generation FROM autonomy_receipts WHERE receipt_id=? AND goal_id=? AND step_id=?",
                 (receipt_id, goal_id, step_id),
             ).fetchone()
             if not receipt or not int(receipt["verified"]):
                 raise GoalBlocked("step verification requires a verified receipt")
-            if receipt["kind"] not in {"VERIFICATION", "USER_CONFIRMATION", "ARTIFACT", "TEST"}:
+            if int(receipt["generation"]) != self.db.entity_generation():
+                raise GoalBlocked("step verification receipt is stale")
+            if receipt["kind"] not in {
+                "VERIFICATION",
+                "USER_CONFIRMATION",
+                "ARTIFACT",
+                "TEST",
+            }:
                 raise GoalBlocked("execution/observation receipt alone cannot complete a step")
             conn.execute(
                 "UPDATE autonomy_steps SET status='VERIFIED',last_receipt_id=?,last_error=NULL,updated_at=? WHERE step_id=?",
                 (receipt_id, now, step_id),
             )
+            conn.execute(
+                "UPDATE autonomy_goals SET status='ACTIVE',updated_at=? WHERE goal_id=? AND status='PAUSED'",
+                (now, goal_id),
+            )
 
-    def complete_goal_if_verified(self, goal_id: str, verifier: Callable[[Mapping[str, Any], Sequence[Mapping[str, Any]]], VerificationResult]) -> str | None:
+    def complete_goal_if_verified(
+        self,
+        goal_id: str,
+        verifier: Callable[[Mapping[str, Any], Sequence[Mapping[str, Any]]], VerificationResult],
+    ) -> str | None:
         goal = self.goal(goal_id)
         rows = self.db.db.execute(
             "SELECT * FROM autonomy_steps WHERE goal_id=? ORDER BY ordinal", (goal_id,)
@@ -511,6 +523,10 @@ class AutonomyState:
         if not isinstance(result, VerificationResult):
             raise TypeError("goal verifier must return VerificationResult")
         if not result.verified:
+            self.db.db.execute(
+                "UPDATE autonomy_goals SET status='PAUSED',updated_at=? WHERE goal_id=?",
+                (time.time(), goal_id),
+            )
             return None
         generation = self.db.entity_generation()
         final_step = str(rows[-1]["step_id"])
@@ -553,11 +569,10 @@ class AutonomyState:
 
 
 class AutonomyController:
-    """One bounded deterministic autonomy tick.
+    """One bounded deterministic autonomy work unit.
 
-    The planner may be an LLM, but it can only propose. Execution and verification are
-    injected trusted boundaries. This deliberately prevents model text from becoming
-    capability, effect truth, step truth, or goal truth.
+    The planner may be an LLM, but only state-machine transitions and trusted receipts
+    can change goal truth. Planner calls themselves consume attempt budget.
     """
 
     def __init__(
@@ -597,159 +612,238 @@ class AutonomyController:
                 raise InvalidProposal("effect proposal requires a target")
         return proposal
 
+    def _result(
+        self,
+        state_name: str,
+        goal_id: str | None,
+        step_id: str | None,
+        generation: int,
+        trigger: str,
+        reason: str,
+        *,
+        proposal: Mapping[str, Any] | None = None,
+        receipt_id: str | None = None,
+    ) -> TickResult:
+        tick_id = self.state._tick(
+            goal_id=goal_id,
+            step_id=step_id,
+            generation=generation,
+            trigger=trigger,
+            proposal=proposal,
+            action_state=state_name,
+            receipt_id=receipt_id,
+            reason=reason,
+        )
+        return TickResult(tick_id, state_name, goal_id, step_id, reason, receipt_id)
+
     def tick(self, *, trigger: str = "timer") -> TickResult:
         frontier = self.state.next_frontier()
         generation = self.state.db.entity_generation()
         if frontier is None:
-            tick_id = self.state._tick(
-                goal_id=None,
-                step_id=None,
-                generation=generation,
-                trigger=trigger,
-                proposal=None,
-                action_state="IDLE",
-                receipt_id=None,
-                reason="no autonomous goal frontier",
+            return self._result(
+                "IDLE", None, None, generation, trigger, "no autonomous executable frontier"
             )
-            return TickResult(tick_id, "IDLE", None, None, "no autonomous goal frontier")
 
         goal, step = frontier
         goal_id = str(goal["goal_id"])
         step_id = str(step["step_id"])
-        capabilities = tuple(self.capability_provider())
-        snapshot = self.state.grounded_snapshot(goal, step, capabilities)
 
         try:
+            # Spend budget before capability/provider/planner calls so varying malformed
+            # plans cannot evade the retry budget.
+            self.state.start_attempt(goal_id, step_id)
+            capabilities = tuple(self.capability_provider())
+            snapshot = self.state.grounded_snapshot(goal, self.state.step(step_id), capabilities)
             proposal = self._proposal(snapshot)
         except Exception as exc:
-            blocked = self.state.record_failure(goal_id, step_id, f"proposal:{type(exc).__name__}:{exc}")
-            state = "BLOCKED" if blocked else "FAILED"
-            tick_id = self.state._tick(
-                goal_id=goal_id,
-                step_id=step_id,
-                generation=generation,
-                trigger=trigger,
-                proposal=None,
-                action_state=state,
-                receipt_id=None,
-                reason=str(exc),
+            blocked = self.state.record_failure(
+                goal_id, step_id, f"proposal:{type(exc).__name__}:{exc}"
             )
-            return TickResult(tick_id, state, goal_id, step_id, str(exc))
+            return self._result(
+                "BLOCKED" if blocked else "FAILED",
+                goal_id,
+                step_id,
+                generation,
+                trigger,
+                str(exc),
+            )
 
         if proposal["kind"] == "blocked":
             reason = str(proposal.get("reason", "planner reported a missing prerequisite"))
-            tick_id = self.state._tick(
-                goal_id=goal_id,
-                step_id=step_id,
-                generation=generation,
-                trigger=trigger,
-                proposal=proposal,
-                action_state="BLOCKED",
-                receipt_id=None,
-                reason=reason,
-            )
-            return TickResult(tick_id, "BLOCKED", goal_id, step_id, reason)
-
-        try:
-            self.state.start_attempt(goal_id, step_id)
-            if proposal["kind"] == "effect":
-                execution = self.effect_executor(snapshot.as_dict(), proposal)
-                kind = "EFFECT"
-                source = "effect-boundary"
-            else:
-                execution = self.observer(snapshot.as_dict(), proposal)
-                kind = "OBSERVATION"
-                source = "observation-boundary"
-            if not isinstance(execution, Mapping):
-                raise AutonomyError("execution boundary returned a non-mapping receipt")
-            execution = dict(execution)
-            receipt_id = self.state.record_receipt(
+            self.state.block(goal_id, step_id, reason)
+            return self._result(
+                "BLOCKED",
                 goal_id,
                 step_id,
-                kind=kind,
-                source=source,
-                verified=bool(execution.get("verified") is True),
-                payload=execution,
-                generation=generation,
+                generation,
+                trigger,
+                reason,
+                proposal=proposal,
             )
-            if execution.get("verified") is not True:
-                raise AutonomyError("execution/observation was not verified")
-            self.state.mark_waiting_verification(step_id)
 
-            verification = self.step_verifier(snapshot.as_dict(), proposal, execution)
-            if not isinstance(verification, VerificationResult):
-                raise TypeError("step verifier must return VerificationResult")
-            if not verification.verified:
-                tick_id = self.state._tick(
-                    goal_id=goal_id,
-                    step_id=step_id,
-                    generation=generation,
-                    trigger=trigger,
-                    proposal=proposal,
-                    action_state="WAITING_VERIFICATION",
-                    receipt_id=receipt_id,
-                    reason=verification.reason,
-                )
-                return TickResult(
-                    tick_id,
-                    "WAITING_VERIFICATION",
+        if proposal["kind"] == "effect":
+            try:
+                execution = self.effect_executor(snapshot.as_dict(), proposal)
+            except Exception as exc:
+                # Once an external effect executor was entered, absence of a verified
+                # receipt is epistemically ambiguous. Never auto-replay it.
+                reason = f"effect_outcome_unknown:{type(exc).__name__}:{exc}"
+                self.state.block(goal_id, step_id, reason)
+                return self._result(
+                    "BLOCKED",
                     goal_id,
                     step_id,
-                    verification.reason,
-                    receipt_id,
+                    generation,
+                    trigger,
+                    reason,
+                    proposal=proposal,
                 )
+            receipt_kind = "EFFECT"
+            receipt_source = "effect-boundary"
+        else:
+            try:
+                execution = self.observer(snapshot.as_dict(), proposal)
+            except Exception as exc:
+                blocked = self.state.record_failure(
+                    goal_id, step_id, f"observation:{type(exc).__name__}:{exc}"
+                )
+                return self._result(
+                    "BLOCKED" if blocked else "FAILED",
+                    goal_id,
+                    step_id,
+                    generation,
+                    trigger,
+                    str(exc),
+                    proposal=proposal,
+                )
+            receipt_kind = "OBSERVATION"
+            receipt_source = "observation-boundary"
 
-            verification_receipt = self.state.record_receipt(
+        if not isinstance(execution, Mapping):
+            if proposal["kind"] == "effect":
+                reason = "effect outcome is not a receipt mapping"
+                self.state.block(goal_id, step_id, reason)
+                return self._result(
+                    "BLOCKED", goal_id, step_id, generation, trigger, reason, proposal=proposal
+                )
+            blocked = self.state.record_failure(
+                goal_id, step_id, "observation boundary returned a non-mapping receipt"
+            )
+            return self._result(
+                "BLOCKED" if blocked else "FAILED",
                 goal_id,
                 step_id,
-                kind=verification.kind,
-                source=verification.source,
-                verified=True,
-                payload={"reason": verification.reason, "evidence": dict(verification.evidence)},
-                generation=generation,
-            )
-            self.state.verify_step(goal_id, step_id, verification_receipt)
-            self.state.complete_goal_if_verified(goal_id, self.goal_verifier)
-            tick_id = self.state._tick(
-                goal_id=goal_id,
-                step_id=step_id,
-                generation=generation,
-                trigger=trigger,
+                generation,
+                trigger,
+                "observation boundary returned a non-mapping receipt",
                 proposal=proposal,
-                action_state="VERIFIED",
-                receipt_id=verification_receipt,
-                reason=verification.reason,
             )
-            return TickResult(
-                tick_id,
-                "VERIFIED",
+
+        execution = dict(execution)
+        receipt_id = self.state.record_receipt(
+            goal_id,
+            step_id,
+            kind=receipt_kind,
+            source=receipt_source,
+            verified=bool(execution.get("verified") is True),
+            payload=execution,
+            generation=generation,
+        )
+
+        if execution.get("verified") is not True:
+            if proposal["kind"] == "effect":
+                reason = "effect outcome was not independently verified; replay denied"
+                self.state.block(goal_id, step_id, reason)
+                return self._result(
+                    "BLOCKED",
+                    goal_id,
+                    step_id,
+                    generation,
+                    trigger,
+                    reason,
+                    proposal=proposal,
+                    receipt_id=receipt_id,
+                )
+            blocked = self.state.record_failure(
+                goal_id, step_id, "observation was not verified"
+            )
+            return self._result(
+                "BLOCKED" if blocked else "FAILED",
                 goal_id,
                 step_id,
-                verification.reason,
-                verification_receipt,
+                generation,
+                trigger,
+                "observation was not verified",
+                proposal=proposal,
+                receipt_id=receipt_id,
             )
+
+        # From this point an action/observation has a receipt. Pause before semantic
+        # verification so no timer wake can repeat it if verification crashes/stalls.
+        self.state.mark_waiting_verification(
+            goal_id, step_id, "awaiting trusted semantic verification"
+        )
+        try:
+            verification = self.step_verifier(snapshot.as_dict(), proposal, execution)
         except Exception as exc:
-            blocked = self.state.record_failure(goal_id, step_id, f"action:{type(exc).__name__}:{exc}")
-            state = "BLOCKED" if blocked else "FAILED"
-            tick_id = self.state._tick(
-                goal_id=goal_id,
-                step_id=step_id,
-                generation=generation,
-                trigger=trigger,
+            return self._result(
+                "WAITING_VERIFICATION",
+                goal_id,
+                step_id,
+                generation,
+                trigger,
+                f"verifier_unavailable:{type(exc).__name__}:{exc}",
                 proposal=proposal,
-                action_state=state,
-                receipt_id=None,
-                reason=str(exc),
+                receipt_id=receipt_id,
             )
-            return TickResult(tick_id, state, goal_id, step_id, str(exc))
+        if not isinstance(verification, VerificationResult):
+            return self._result(
+                "WAITING_VERIFICATION",
+                goal_id,
+                step_id,
+                generation,
+                trigger,
+                "step verifier returned an invalid result type",
+                proposal=proposal,
+                receipt_id=receipt_id,
+            )
+        if not verification.verified:
+            return self._result(
+                "WAITING_VERIFICATION",
+                goal_id,
+                step_id,
+                generation,
+                trigger,
+                verification.reason,
+                proposal=proposal,
+                receipt_id=receipt_id,
+            )
+
+        verification_receipt = self.state.record_receipt(
+            goal_id,
+            step_id,
+            kind=verification.kind,
+            source=verification.source,
+            verified=True,
+            payload={"reason": verification.reason, "evidence": dict(verification.evidence)},
+            generation=generation,
+        )
+        self.state.verify_step(goal_id, step_id, verification_receipt)
+        self.state.complete_goal_if_verified(goal_id, self.goal_verifier)
+        return self._result(
+            "VERIFIED",
+            goal_id,
+            step_id,
+            generation,
+            trigger,
+            verification.reason,
+            proposal=proposal,
+            receipt_id=verification_receipt,
+        )
 
 
 class AutonomyLoop:
-    """Timer-driven worker inside the ClayVerse supervisor process, not a second daemon.
-
-    It executes at most one bounded controller tick per wake. Sleep/cadence belongs to
-    the supervisor and does not create a second durable authority.
-    """
+    """Timer-driven worker inside the ClayVerse supervisor process, not a second daemon."""
 
     def __init__(self, controller: AutonomyController, *, interval_seconds: float = 30.0):
         if interval_seconds < 1.0:

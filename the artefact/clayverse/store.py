@@ -3,6 +3,8 @@ import contextlib, hashlib, json, sqlite3, time, uuid
 from dataclasses import dataclass
 from pathlib import Path
 
+from .method_memory import METHOD_KINDS, MethodMemoryValidationError, canonical_method_json, decode_method_json
+
 SCHEMA = r'''
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
@@ -105,7 +107,39 @@ class UnifiedDB:
         rows=self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal DESC LIMIT ?",(session_id,limit)).fetchall(); return list(reversed(rows))
     def all_turns(self,session_id): return self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal",(session_id,)).fetchall()
     def add_memory(self,kind,subject,value,source_turn_id,user_id,provenance):
+        if kind in METHOD_KINDS:
+            raise MethodMemoryValidationError("reserved method-memory kind requires add_method_memory()")
         mid=str(uuid.uuid4()); self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject,value,source_turn_id,user_id,time.time(),json.dumps(provenance,sort_keys=True))); return mid
+    def add_method_memory(self,kind,subject,record,source_turn_id,user_id,provenance):
+        if kind not in METHOD_KINDS:
+            raise MethodMemoryValidationError(f"not a reserved method-memory kind: {kind!r}")
+        if not isinstance(subject,str) or not subject.strip():
+            raise MethodMemoryValidationError("subject must be a non-empty string")
+        if not isinstance(provenance,dict) or not provenance:
+            raise MethodMemoryValidationError("method-memory provenance must be a non-empty object")
+        value=canonical_method_json(kind,record)
+        try:
+            provenance_json=json.dumps(provenance,sort_keys=True,separators=(',',':'),allow_nan=False)
+        except (TypeError,ValueError) as exc:
+            raise MethodMemoryValidationError("method-memory provenance must be deterministic JSON data") from exc
+        if kind == "method_receipt":
+            target=self.db.execute("SELECT kind FROM durable_memory WHERE memory_id=?",(record["method_memory_id"],)).fetchone()
+            if not target or target["kind"] not in METHOD_KINDS or target["kind"] == "method_receipt":
+                raise MethodMemoryValidationError("method_receipt must reference an existing non-receipt method memory")
+        mid=str(uuid.uuid4()); self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject.strip(),value,source_turn_id,user_id,time.time(),provenance_json)); return mid
+    def method_memory(self,memory_id):
+        row=self.db.execute("SELECT * FROM durable_memory WHERE memory_id=?",(memory_id,)).fetchone()
+        if not row: raise KeyError(memory_id)
+        if row["kind"] not in METHOD_KINDS:
+            raise MethodMemoryValidationError("requested memory is not method memory")
+        payload=dict(row); payload["record"]=decode_method_json(row["kind"],row["value"]); return payload
+    def method_memories(self):
+        placeholders=','.join('?' for _ in METHOD_KINDS)
+        rows=self.db.execute(f"SELECT * FROM durable_memory WHERE kind IN ({placeholders}) ORDER BY ts",tuple(sorted(METHOD_KINDS))).fetchall()
+        result=[]
+        for row in rows:
+            payload=dict(row); payload["record"]=decode_method_json(row["kind"],row["value"]); result.append(payload)
+        return result
     def memories(self): return self.db.execute("SELECT * FROM durable_memory ORDER BY ts").fetchall()
     def acquire_lease(self,resource,holder,ttl=30.0):
         now=time.time(); nonce=uuid.uuid4().hex

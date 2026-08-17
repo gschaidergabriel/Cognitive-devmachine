@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "owner_authority_refresh": {
+    "result": "PASS",
+    "note": "Live GitHub authority supersedes the 2026-08-16 one-file EntityOS fast cache; EntityOS is an optional internal substrate, not the current release endpoint."
+  },
+  "observed_heads": {
+    "research_initial": "6fb5f96ae7ffe768175dadade560c66fc7a5c4e8",
+    "research_before_receipt": "a0e14fcc01daafd41da8e0d3ca8976062b95c5b2",
+    "product_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47"
+  },
+  "frontier": {
+    "selected": "transport the exact ClayVerse-locked EntityOS bytes into an admitted isolated OCI/VCR build lane without weakening provenance",
+    "counterhypothesis": "A VCR/current-source repair alone is insufficient because current the artefact/Dockerfile requires a staged EntityOS file that is intentionally absent from the research tree.",
+    "discriminator": "Re-execute the existing Vercel build-internal EntityOS export path, require exact lock digest/size, then use only those bytes as the OCI build input."
+  },
+  "locked_entityos": {
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "size_bytes": 9181696,
+    "authority": "the artefact/entityos.lock.json",
+    "verified_unchanged_at_research_head": "a0e14fcc01daafd41da8e0d3ca8976062b95c5b2"
+  },
+  "product_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/go-entityos-attestation-recomposed-20260817",
+    "commit": "c203fe00ea9d62bd5072dc926ff97e259ff283b1",
+    "file": "mcp/vercel-sandbox-mcp/scripts/export-entityos-build-artifact.mjs",
+    "change": "Fail closed unless exported EntityOS bytes equal the current ClayVerse lock SHA-256 and size; record lock match in transport receipt.",
+    "unusual_experiment_count_added": 0
+  },
+  "execution_observation": {
+    "github_vercel_status": "FAILURE_PROVIDER_BUILD_RATE_LIMIT",
+    "status_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "transport_export_executed": false,
+    "transport_export_pass": "NOT_CLAIMED",
+    "oci_build_executed": false,
+    "whole_clayverse_pass": false
+  },
+  "parallel_fusion": {
+    "source_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "source_branch": "chatgpt/go-clayverse-attach-reap-20260817-1220",
+    "source_commit": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+    "canonical_research_commit_declared_by_runner": "e1ff12352cf3e6b44cdbf1a2267745e669cc5402",
+    "observation": "Vercel build logs show an actually-started deny-all Sandbox regression with normal PTY attach-child reap PASS and same already-consumed SIGHUP-resistant experiment replication PASS; sandbox stop PASS.",
+    "scope": "TERMINAL_CHILD_REAP_REGRESSION_ONLY",
+    "whole_product_implication": "NONE"
+  },
+  "unusual_experiment": {
+    "global_accounting": "ALREADY_CONSUMED_1_OF_1_BY_EXISTING_GO_EVIDENCE",
+    "new_unusual_experiment_count_this_delta": 0,
+    "parallel_attach_reap_treatment": "SAME_EXPERIMENT_REPLICATION_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "current_blocker": "Provider admission blocks the exact locked EntityOS transport retry before build/Sandbox execution. In addition, the current-head ClayVerse OCI/VCR lane must bind the then-current research head and stage these exact locked bytes before any whole-container build/runtime claim.",
+  "next_isolated_executable_step": "On the next provider-admitted preview of product branch c203fe00ea9d62bd5072dc926ff97e259ff283b1 or a content-equivalent descendant, require ENTITYOS_BUILD_EXPORT_READY with sha256=32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586 and size=9181696. Then bind a VCR/OCI batch to the then-current research main, stage only that verified blob via stage-entityos.sh, run the full candidate test suite, build the exact image with the lock build arg, and execute non-root offline state-probe/restart/relocation gates in actually-started isolated Vercel Sandbox surfaces."
+}

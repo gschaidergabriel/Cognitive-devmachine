@@ -52,3 +52,9 @@ def test_gateway_source_handles_disconnect_and_rejects_unknown_text_control():
     assert 'message.get("type") == "websocket.disconnect"' in source
     assert '_bounded_pty_input(message["bytes"])' in source
     assert "unsupported terminal control message" in source
+
+
+def test_uvicorn_transport_enforces_same_maximum_message_bound():
+    source = (ROOT / "clayverse" / "service.py").read_text()
+    assert "from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app" in source
+    assert "ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES" in source

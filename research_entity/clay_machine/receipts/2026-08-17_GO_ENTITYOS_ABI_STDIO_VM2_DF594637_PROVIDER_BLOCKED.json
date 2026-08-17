@@ -1,0 +1,90 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "aa8d19792ca6a1c2371cbb350d74fac2dc9ed35a",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_lane": {
+    "pr": 787,
+    "head_observed": "df5946375809631d2a12f2e3af5984cc6eb54361",
+    "draft": true,
+    "mergeable_observed": true,
+    "source_status": "FUSED_UNEXECUTED"
+  },
+  "source_delta": {
+    "hostcall_abi_schema": "ClayHostcallABI/v1",
+    "legacy_ids_vm_versions": {
+      "linux.uname_hash": [1, 2],
+      "linux.process.spawn.v0::(Int)->Int": [1, 2]
+    },
+    "opaque_process_receipt_bytes": {
+      "stdout": {
+        "call_id": 3,
+        "signature": "linux.process.stdout.v0::(Int)->Bytes",
+        "vm_versions": [2]
+      },
+      "stderr": {
+        "call_id": 4,
+        "signature": "linux.process.stderr.v0::(Int)->Bytes",
+        "vm_versions": [2]
+      }
+    },
+    "serialized_loader_uses_exact_vm_version_contract": true,
+    "serialized_unknown_hostcall_ids_fail_closed": true,
+    "serialized_hostcall_arity_fails_closed": true,
+    "runtime_rechecks_exact_vm_version_contract": true,
+    "host_results_are_type_normalized_before_clay_state": true,
+    "stdout_real_receipt_gate_present": true,
+    "stderr_real_receipt_gate_present": true,
+    "batch5_runs_stdout_and_stderr_receipt_bytes_regressions": true,
+    "stdio_vm_version_registry_regression_commit": "df5946375809631d2a12f2e3af5984cc6eb54361",
+    "new_unusual_experiment_count": 0
+  },
+  "coordination": {
+    "superseded_duplicate_prs_closed_unmerged": [793, 794, 796, 799, 800],
+    "canonical_runtime_lane": 787,
+    "no_second_permanent_vm_or_hostcall_path_added": true
+  },
+  "execution": {
+    "exact_head_checked": "df5946375809631d2a12f2e3af5984cc6eb54361",
+    "github_vercel_status": "failure",
+    "provider_blocker": "build-rate-limit",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_evidence_transfers_to_current_head": false
+  },
+  "adversarial_state": {
+    "supported_mechanism": "one version-bound hostcall ABI shared by lowering, serialized validation, runtime and host adapter; completed process stdout/stderr reenter Clay only as opaque immutable Bytes in CLAYVM/2",
+    "strongest_counterhypothesis": "the rapidly fused descendant may contain an integration, packaging or runtime regression invisible to source inspection",
+    "discriminator": "an actually-started exact-current-head Vercel Sandbox regression-only full-pytest plus canonical v7 one-file EntityOS artifact sequence",
+    "open_product_frontier": [
+      "live streaming/backpressure and Buffer lease/epoch semantics",
+      "stdin Bytes",
+      "PTY/session/signal/cancellation contracts",
+      "source-level admitted process surface beyond current bounded request-id receipt slice",
+      "current-head one-file EntityOS executable revalidation"
+    ]
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_on_exact_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "acceptance": {
+    "current_source_mechanism": "SUPPORTED_NOT_EXECUTABLY_PROMOTED",
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false
+  },
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false,
+  "next_step": "When Vercel build admission returns, refresh PR 787 to the then-current exact head and run one coordinated regression-only Sandbox sequence: exact staging, full pytest with zero skips and exact wheel/hash lock, stdio ABI/CM-TERM gates, Git-free attested twin EntityOS build, byte identity, runtime/self-test/no-host-Python/relocation under DENY_ALL, Batch-5, attested-vs-Git-clean identity, and successful Sandbox stop."
+}

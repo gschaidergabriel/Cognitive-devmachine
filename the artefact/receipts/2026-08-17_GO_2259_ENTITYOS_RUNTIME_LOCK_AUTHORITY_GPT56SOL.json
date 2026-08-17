@@ -42,19 +42,8 @@
   },
   "regression_candidate": {
     "test_file": "the artefact/tests/test_entityos_boot_binding.py",
-    "covers": [
-      "execution-disabled staged verification",
-      "execution-enabled exact lock binding",
-      "runtime path override rejection",
-      "runtime digest override rejection",
-      "matching assertion acceptance without authority transfer",
-      "malformed lock rejection",
-      "missing/invalid JSON lock rejection",
-      "digest drift rejection",
-      "size drift rejection",
-      "symlink rejection"
-    ],
-    "static_authority_test": "the artefact/tests/test_entityos_artifact_authority.py"
+    "static_authority_test": "the artefact/tests/test_entityos_artifact_authority.py",
+    "classification": "UNEXECUTED_SOURCE_REGRESSION_CANDIDATE"
   },
   "execution_evidence": {
     "authorized_isolated_test_started_for_this_branch": false,
@@ -63,8 +52,13 @@
     "whole_product_credit_added": 0,
     "classification": "SOURCE_CANDIDATE_UNEXECUTED"
   },
+  "owner_reentry_after_branch_creation": {
+    "github_token_forwarding": "AUTHORIZED_IN_DISPOSABLE_VERCEL_SANDBOX_WITH_LEAST_PRIVILEGE_AND_NO_PERSISTENCE_OR_LOGGING",
+    "final_test_of_tests": "VERCEL_FIRECRACKER_PLUS_EXACT_OCI_PLUS_RUNTIME_VAULT_MISTRAL_PLUS_CAUSAL_RECOVERY_PATH_MANDATORY",
+    "supersedes_host_side_only_token_wording": true
+  },
   "provider_frontier": {
-    "vercel": "BLOCKED_BEFORE_PRIVATE_SOURCE_STAGE_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "vercel": "SANDBOX_AND_GUEST_KERNEL_ADMISSION_OBSERVED; LATEST RUN STOPPED BEFORE PRIVATE SOURCE STAGING BECAUSE GITHUB_READ_TOKEN_WAS_NOT_PRESENT; CURRENT OWNER POLICY NOW PERMITS SECURE FORWARDING INTO THE DISPOSABLE SANDBOX",
     "daytona": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_PROVIDER_CONTACT_NO_DAYTONA_API_KEY_NO_EGRESS",
     "vps_self_hosted_production_fallback": "FORBIDDEN"
   },
@@ -80,5 +74,5 @@
     "paid_or_final_training_started": false
   },
   "acceptance": "IN_PROGRESS",
-  "next_high_information_runtime_step": "Provision approved host-side GITHUB_READ_TOKEN on the retained Vercel Preview controller or admit an egress-capable credentialed Daytona controller, then execute this exact branch or its rebased current-head successor in an authorized isolated sandbox; only after regressions pass should the source delta be promoted and the exact OCI closure continue."
+  "next_high_information_runtime_step": "Securely make a scoped read-only GITHUB_READ_TOKEN available to the retained Vercel controller/Sandbox under the new owner directive, refresh and bind the then-current admitted Research/EntityOS/Mistral bytes, execute the isolated regressions, build the exact OCI image, and continue into the mandatory Vercel Firecracker + runtime Vault Mistral test-of-tests."
 }

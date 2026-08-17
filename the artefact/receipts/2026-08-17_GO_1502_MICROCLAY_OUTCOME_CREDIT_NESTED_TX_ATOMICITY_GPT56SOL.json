@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse.microclay-outcome-credit-nested-tx-atomicity/v1",
+  "trigger": "go",
+  "trigger_metadata": "2026-08-17T15:02+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_path": "PR484 fusion/microclay-stageb-schema8-20260817",
+  "base_head": "6b2a5626c234283b9767394e423c68411a948634",
+  "repair_branch": "go/microclay-credit-nested-tx-savepoint-20260817-sol",
+  "red_gate_commit": "a38db2b68dbe14fca9546e281851fd665dc7c732",
+  "repair_commit": "42416b55c5a3fc88318a9a1fba4af1af2e263951",
+  "repaired_microclay_retrieval_blob": "71a9a8315bcaadbe1c079b89749173da4c1751bd",
+  "unusual_experiment_count_added": 0,
+  "finding": {
+    "classification": "SOURCE_CONFIRMED_NESTED_TRANSACTION_ATOMICITY_GAP",
+    "mechanism": "MicroClayRetrieval.credit() mutates retrieval_entrypoint_policy before inserting its retrieval_feedback receipt. The prior _credit_tx() joined an already-open outer SQLite transaction without an inner rollback boundary. If the receipt INSERT raises, an outer caller catches that exception, and the outer transaction later commits, prior policy mutations can survive without the provenance/idempotency receipt.",
+    "existing_test_gap": "test_microclay_credit_crash_atomicity.py covers a standalone credit transaction whose exception rolls back the whole transaction; it does not cover a caught inner failure inside a still-live outer transaction."
+  },
+  "repair": {
+    "scope": "MicroClayRetrieval._credit_tx only",
+    "standalone_behavior": "unchanged canonical UnifiedDB.tx()",
+    "nested_behavior": "create unique UUID-derived SQLite SAVEPOINT; ROLLBACK TO + RELEASE on BaseException; RELEASE on success",
+    "new_regression": "the artefact/tests/test_microclay_credit_nested_tx_atomicity.py",
+    "regression_contract": [
+      "create canonical VERIFIED rewarding causal outcome",
+      "inject retrieval_feedback INSERT failure",
+      "call credit() inside an outer UnifiedDB transaction and catch the inner sqlite error",
+      "require zero policy rows and zero feedback receipts after the caught inner failure",
+      "allow unrelated outer durable write to commit",
+      "remove injected failure and require one clean credit application",
+      "require duplicate retry to remain idempotent"
+    ]
+  },
+  "source_diff_scope": {
+    "files": 2,
+    "microclay_retrieval_changes": 18,
+    "new_test_changes": 157,
+    "base_relation": "ahead_by_2_before_receipt; behind_by_0"
+  },
+  "execution": {
+    "authorized_vps_used": false,
+    "vercel_sandbox_started_for_this_repair": false,
+    "reason": "Vercel preview admission is currently rate-limited before build/Sandbox start; current execution policy forbids VPS/self-hosted fallback.",
+    "runtime_credit": "ZERO",
+    "source_candidate_status": "REPAIR_CANDIDATE_UNEXECUTED"
+  },
+  "authority": {
+    "truth_authority_changed": false,
+    "effect_authority_changed": false,
+    "serving_mode_changed": false,
+    "microclay_active_promotion": false,
+    "together_used": false,
+    "final_paid_training_used": false
+  },
+  "next_exact_gate": "On next actually-started authorized Vercel Sandbox, refresh/rebase exact surviving PR484 and this repair, execute the new nested outcome-credit atomicity regression together with existing credit crash/authority/replay/restart v3 gates under a SQLite-capable distro Python substrate and DENY_ALL during regression. Only then fuse into PR484 if green."
+}

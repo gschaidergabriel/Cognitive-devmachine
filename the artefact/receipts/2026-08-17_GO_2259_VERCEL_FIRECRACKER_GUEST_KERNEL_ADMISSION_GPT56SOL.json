@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T16:02:02Z",
+  "scope": "VERCEL_SANDBOX_OUTER_GUEST_KERNEL_ADMISSION_ONLY",
+  "classification": "EXACT_PROVIDER_GUEST_KERNEL_ADMISSION_OBSERVED_SOURCE_AND_OCI_RUNTIME_UNOBSERVED",
+  "canonical_product": "ClayVerse single-container",
+  "product_endpoint": "one exact immutable ClayVerse OCI image, final PASS only when the same accepted digest executes behind an independent VM/microVM guest-kernel boundary",
+  "github_binding": {
+    "receipt_branch_base_observed_via_pr631": "ae02b71f9c507078465e7423f72824b7301734a8",
+    "current_main_direct_commit_read": "CONNECTOR_403_UNRESOLVED",
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_pr": 810,
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "controller_branch": "clay/fusion-vcr-native-20260817"
+  },
+  "vercel": {
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "deployment_state": "ERROR",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "sandbox_stopped": true,
+    "guest_kernel": {
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64"
+    },
+    "guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY"
+  },
+  "controller_source_guard": {
+    "schema": "ClayVerseCurrentOCISourceGuard/v4",
+    "status": "EXACT_RETAINED_RUNNER_SOURCE_BINDING_ADMITTED",
+    "research_base_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "research_sha": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "research_tree_sha": "a012708e469de32615ea9933371a13795669db5a",
+    "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "entityos_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "entityos_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+    "entityos_source_archive_sha256": "4daf761a56164e43d332082e9357865a06d88035c54902f5adf99c204d773b8c",
+    "entityos_source_attestation_sha256": "4e08e2ea96420d1671451af09601509013018807bdcd5b321be5b6620a0a3ce4",
+    "entityos_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "entityos_size": 9181696
+  },
+  "sandbox_target_patch": {
+    "schema": "ClayVerseCurrentTargetPatch/v6",
+    "research_base_sha": "f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b",
+    "research_sha": "5e5adce0591058608bbd7381ecf570a39b282f0d",
+    "research_tree_sha": "1e02285d77b08e6edd86f9017d0ceac5db262cf2",
+    "composition": "CURRENT_MAIN_PLUS_PR611_PLUS_PR622_EXECUTION_RELEVANT_GENERATOR_TEST",
+    "github_secret_forwarded_to_sandbox": false,
+    "outer_microvm_guest_kernel_attestation": "PRE_CREDENTIAL_UNAME_FAIL_CLOSED"
+  },
+  "observed_result": {
+    "outer_execution_surface_admission_credit": "YES_BOUNDED_PROVIDER_GUEST_KERNEL_ONLY",
+    "private_source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "exact_clayverse_image_digest_executed_in_guest": false,
+    "whole_product_pass": false
+  },
+  "counterhypothesis": "A Vercel deployment ERROR might mean the sandbox/guest-kernel layer itself is unavailable.",
+  "falsifier_result": "Rejected at this bounded layer: Sandbox.create succeeded and uname executed inside the Firecracker-backed sandbox before the later credential gate failed.",
+  "remaining_blocker": "Provision GITHUB_READ_TOKEN only as an approved sensitive host-side Vercel Preview credential; never commit, log, or forward it into the sandbox. Then refresh/rebind exact current Research/EntityOS bytes and execute the OCI build/runtime path.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The shared user-trigger metadata available to this organ is minute-precision and no immutable shared request/turn id is exposed.",
+    "count_added": 0
+  },
+  "non_claims": [
+    "No ClayVerse source test executed in this deployment.",
+    "No exact ClayVerse OCI image was built or started in this deployment.",
+    "No same-digest MicroVM whole-product acceptance is established.",
+    "Deployment ERROR is not classified as a ClayVerse test failure because failure occurred before private source staging.",
+    "No VPS/self-hosted/production testing, Together API, secret exposure, or owner-gated paid/final training was used."
+  ]
+}

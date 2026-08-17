@@ -69,6 +69,7 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
+    LEARNING_ELIGIBLE_EFFECT_STATUSES = frozenset({"VERIFIED", "DENIED", "FAILED"})
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -219,18 +220,20 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new canonical effect-outcome receipts from evidence episodes only."""
+        """Consume only epistemically known effect outcomes from evidence episodes."""
         self.db.assert_live_generation(session_id, generation)
+        eligible = tuple(sorted(self.LEARNING_ELIGIBLE_EFFECT_STATUSES))
         rows = self.db.db.execute(
             "SELECT r.causal_id,r.generation,c.credit,e.status "
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
             "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            f"AND e.status IN ({','.join('?' for _ in eligible)}) "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",
-            (session_id, int(generation)),
+            (session_id, int(generation), *eligible),
         ).fetchall()
         applied = 0
         for row in rows:
@@ -489,12 +492,13 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Atomically apply one canonical causally re-entered effect outcome.
+        """Atomically apply one canonical causally re-entered known effect outcome.
 
         Policy-capital mutation and the feedback idempotency receipt share the current
         canonical transaction. Standalone calls create one transaction; turn assembly
         joins the already-open admission transaction so crash/rollback cannot partially
-        or multiply apply the same learning outcome.
+        or multiply apply the same learning outcome. Epistemically uncertain outcomes
+        are not retrieval failures and are never allowed to mutate adaptive policy.
         """
         with self._credit_tx() as db:
             row = db.execute(
@@ -516,6 +520,8 @@ class MicroClayRetrieval:
             ).fetchone()
             if not outcome:
                 return {"applied": False, "reason": "unverified_outcome"}
+            if str(outcome["status"]) not in self.LEARNING_ELIGIBLE_EFFECT_STATUSES:
+                return {"applied": False, "reason": "outcome_not_learning_eligible"}
 
             value = max(-1.0, min(1.0, float(outcome["credit"])))
             expected_signal = f"effect_outcome:{outcome['status']}"

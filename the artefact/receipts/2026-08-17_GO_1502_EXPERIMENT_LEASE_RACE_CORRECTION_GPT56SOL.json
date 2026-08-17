@@ -1,0 +1,39 @@
+{
+  "schema": "clayverse.go-experiment-coordination-correction/v1",
+  "trigger": "go",
+  "trigger_metadata_available_to_this_organ": "2026-08-17T15:02+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXPERIMENT_BUDGET_RACE_VIOLATION",
+  "protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+  "protocol_rule": "minute-precision trigger metadata cannot authorize timestamp fallback; semantic duplicate claim paths close the unusual-experiment slot",
+  "conflicting_claims": [
+    {
+      "path": "research_entity/continuity/go_experiment_claims/ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+      "commit": "40532aadc90650623388aa774a30be0b1a28c3c5",
+      "problem": "timestamp fallback synthesized whole-second :00 from only minute-precision shared trigger metadata"
+    },
+    {
+      "path": "research_entity/continuity/go_experiment_claims/2026-08-17T15-02+07-00__go__4cd0e21a9a07.json",
+      "commit": "933da9db1017b7aca6cfd64e57929378db11022a",
+      "problem": "noncanonical trigger-key encoding for the same semantic 15:02 go"
+    }
+  ],
+  "observed_result": {
+    "path": "research_entity/continuity/go_experiment_claims/ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+    "commit": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+    "experiment_name": "recovery_receipt_semantic_forgery_discriminator",
+    "classification": "FAIL_COUNTEREXAMPLE_FOUND",
+    "preserve_as_negative_evidence": true,
+    "lease_validity": "INVALID_OR_UNRESOLVED_COORDINATION; EXECUTED_RESULT_BYTES_REMAIN EVIDENCE"
+  },
+  "accounting": {
+    "further_unusual_experiments_for_this_macro_cycle": "FORBIDDEN",
+    "observed_executed_unusual_interventions": 1,
+    "additional_claim_without_observed_result": 1,
+    "do_not_rewrite_or_delete_prior_claims": true
+  },
+  "product_effect": "NO_PRODUCT_PASS; this repairs research evidence accounting only",
+  "next_coordination_rule": "For this 15:02 go, all remaining work must be ordinary deterministic regression/source review/fusion. Future go turns without a shared immutable request id and without whole-second immutable message timestamp must use COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT.",
+  "whole_product_evidence": false
+}

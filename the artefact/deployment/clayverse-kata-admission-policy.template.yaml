@@ -1,0 +1,41 @@
+# TEMPLATE: final ClayVerse Kata runtime-boundary admission policy.
+#
+# This is deployment infrastructure, not a second ClayVerse application/state
+# authority. It validates the final admitted Pod object after mutation and is
+# deliberately fail-closed for the ClayVerse workload.
+#
+# The baseline currently admits no io.katacontainers.* workload annotations.
+# If a future deployment requires one, the exact key/value MUST be separately
+# reviewed, narrowed in this policy, source/receipt-bound and revalidated before
+# final acceptance. Do not weaken this policy into a blanket prefix allowlist.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: clayverse-kata-runtime-boundary
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  validations:
+    - expression: "!has(object.metadata.annotations) || object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))"
+      reason: Forbidden
+      message: "ClayVerse forbids unreviewed io.katacontainers.* runtime annotations."
+    - expression: "object.spec.runtimeClassName == 'kata-qemu-runtime-rs'"
+      reason: Forbidden
+      message: "ClayVerse pods must use the admitted Kata RuntimeClass kata-qemu-runtime-rs."
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: clayverse-kata-runtime-boundary
+spec:
+  policyName: clayverse-kata-runtime-boundary
+  validationActions: [Deny]
+  matchResources:
+    objectSelector:
+      matchLabels:
+        app: clayverse

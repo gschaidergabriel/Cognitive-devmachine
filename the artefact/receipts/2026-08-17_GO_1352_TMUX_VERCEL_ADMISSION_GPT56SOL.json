@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "trigger_identity": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_SANDBOX_START",
+  "canonical_main_observed_before_receipt": "2198d2b58595e0b813e135c6e548388d8260df89",
+  "product": "ClayVerse single-container",
+  "finding": {
+    "mechanism": "browser WebSocket PTY -> attached tmux must not expose tmux's own default prefix/command process surface outside EffectGate",
+    "canonical_source_state": "CORE_FENCE_LANDED",
+    "current_main_managed_tmux_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+    "current_main_terminal_sessions_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+    "current_policy": [
+      "prefix None",
+      "prefix2 None",
+      "unbind-key -a",
+      "all tmux invocations are bound to /etc/clayverse/managed-tmux.conf with -f"
+    ],
+    "source_evidence_scope": "canonical source fence only; live tmux/browser/OCI semantics remain unaccepted"
+  },
+  "independent_donor_evidence": {
+    "branch": "go/tmux-managed-control-fence-20260817-1352-gpt56sol",
+    "receipt": "the artefact/receipts/2026-08-17_GO_1352_TMUX_CONTROL_SURFACE_FENCE_GPT56SOL.json",
+    "focused_isolated_regression": "5 passed in 0.04s",
+    "classification": "SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED",
+    "duplicate_pr_created": false,
+    "canonical_lane": "parallel tmux-control hardening was fused/advanced on main; donor evidence was posted to PR #492 rather than opening a duplicate PR"
+  },
+  "vercel_execution_path": {
+    "status": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_lifecycle": "NOT_EXPORTED",
+    "canonical_status_file": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+    "prior_actual_sandbox_proof": {
+      "staging_commit": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+      "deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+      "observed_result_scope": "bounded prior ClayVerse attach-child reaping run with isolated Sandbox execution and sandbox.stop; not tmux fence evidence"
+    }
+  },
+  "fresh_exact_regression_attempt": {
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-clayverse-tmux-managed-regression-20260817-1403",
+    "staging_commit": "ce5ce73d310680687cc5c3db05cf966289e3a0b7",
+    "staged_clay_source_sha": "e3c705df766c0fd719bb5fb47e95ae86d330cec7",
+    "staged_managed_tmux_git_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+    "staged_terminal_sessions_git_blob": "b42d175745fa53c45b81fa1affda4f12a4093541",
+    "intent": "inside a Vercel Sandbox install tmux, prove harness sensitivity by showing baseline Ctrl-b c creates a second window, then send the same bytes under the exact managed policy and require the window count to remain one",
+    "regression_only": true,
+    "new_unusual_experiment_count": 0,
+    "github_vercel_status": "failure",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "provider_status_observed_at": "2026-08-17T07:08:39Z",
+    "build_started": false,
+    "sandbox_started": false,
+    "tmux_test_executed": false,
+    "classification": "ADMISSION_BLOCKED_NOT_TEST_FAIL"
+  },
+  "strongest_counterhypothesis": "The managed tmux source policy may still behave differently in the exact packaged tmux/browser/PTY runtime. Because the provider rejected this fresh preview before build/Sandbox start, neither the baseline sensitivity nor the managed Ctrl-b c fence was observed in this attempt.",
+  "next_exact_gate": "When Vercel preview admission is available, use one coordinated exact-current-source Sandbox batch. First execute the baseline-vs-managed raw Ctrl-b c tmux falsifier; if it passes, continue directly into the exact OCI build/start/readiness and adjacent Clerk/browser/PTTY/Claude/effect/restart acceptance gates rather than spending a separate preview only on tmux.",
+  "non_claims": [
+    "No live tmux PASS from the fresh attempt",
+    "No exact current OCI image build or digest",
+    "No real Clerk/browser/WebSocket PTY PASS",
+    "No whole ClayVerse PASS"
+  ]
+}

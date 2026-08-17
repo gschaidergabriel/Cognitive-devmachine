@@ -7,6 +7,9 @@ import os
 import sys
 from urllib.parse import urlsplit
 
+from .adapters import ClaudeCodeInference
+from .agency import AgencyState
+from .autonomy import AutonomyDaemon
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
@@ -144,6 +147,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
 
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
+    AgencyState(db)
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
     prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
@@ -181,11 +185,14 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
+    agency = AgencyState(db)
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")
-        print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
+        payload = _state_probe_payload(cid, digest)
+        payload["agency"] = agency.snapshot(max_goals=4, max_attempts_per_milestone=2)
+        print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
         db.close()
         return 0
 
@@ -206,9 +213,10 @@ def main():
     publishable_key, frontend_api = _web_config(clerk_config.issuer)
     verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
+    autonomy_enabled = _acceptance_bool("CLAYVERSE_AUTONOMY_ENABLED", "1")
     try:
         claude_status = claude_readiness(required=require_claude)
-        _, entityos_status = _entityos_config()
+        entityos_bridge, entityos_status = _entityos_config()
         terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
         terminal_status = {}
         for user_id in ("gabriel", "andreas"):
@@ -233,6 +241,18 @@ def main():
     )
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
+
+    autonomy = None
+    if autonomy_enabled:
+        # The daemon gets its own DB connection. ClaudeCodeInference has cognition
+        # authority only; all state-changing/external proposals still cross EffectGate.
+        autonomy = AutonomyDaemon(
+            state_root,
+            lambda: ClaudeCodeInference(),
+            entityos_bridge=entityos_bridge,
+        )
+        autonomy.start()
+
     print(json.dumps({
         "service": "clayverse",
         "status": "candidate_ready",
@@ -248,6 +268,14 @@ def main():
         "auth": "clerk",
         "recovery": recovery,
         "entityos": entityos_status,
+        "autonomy": {
+            "enabled": autonomy_enabled,
+            "mode": agency.policy()["autonomy_mode"],
+            "cycle_interval_seconds": agency.policy()["cycle_interval_seconds"],
+            "max_steps_per_cycle": agency.policy()["max_steps_per_cycle"],
+            "max_failed_retries_per_milestone": agency.policy()["max_failed_retries_per_milestone"],
+            "max_effects_per_cycle": agency.policy()["max_effects_per_cycle"],
+        },
         "consciousness_daemon": False,
         "port": port,
     }), flush=True)
@@ -262,6 +290,8 @@ def main():
             ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
         )
     finally:
+        if autonomy is not None:
+            autonomy.stop()
         db.checkpoint("shutdown")
         db.close()
     return 0

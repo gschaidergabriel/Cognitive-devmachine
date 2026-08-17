@@ -76,6 +76,9 @@ class WorldAssembler:
             raise KeyError(session_id)
         user_id = session["user_id"]
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
+
+        # Another permanent perspective is loaded only when an explicit shared resource
+        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -91,26 +94,60 @@ class WorldAssembler:
                     other.append(item)
                     if len(other) >= 10:
                         break
-        retrieval_receipt = {"mode":"LEGACY_COMPATIBILITY","status":"UNKNOWN","truth_authority":False,"effect_authority":False}
-        supplied = {"query":query,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation}
+
+        retrieval_receipt = {
+            "mode": "LEGACY_COMPATIBILITY",
+            "status": "UNKNOWN",
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        supplied = {
+            "query": query,
+            "turn_id": turn_id,
+            "episode_id": episode_id,
+            "causal_id": causal_id,
+            "generation": generation,
+        }
         if not all(value is not None for value in supplied.values()):
             active = self._active_identity(session_id)
             if active is not None:
                 supplied = active
+
         if all(value is not None for value in supplied.values()):
             result = self.microclay.retrieve(
-                query=str(supplied["query"]), user_id=user_id, session_id=session_id,
-                turn_id=str(supplied["turn_id"]), episode_id=str(supplied["episode_id"]),
-                causal_id=str(supplied["causal_id"]), generation=int(supplied["generation"]),
+                query=str(supplied["query"]),
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
         else:
-            memories = [dict(r) for r in self.db.db.execute(
-                "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-                "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50", (user_id,),
-            )]
-        return {"own_recent":own,"cross_session_collision":other,"durable_memory":memories,"retrieval_receipt":retrieval_receipt}
+            # Compatibility path for legacy tests/non-product callers with no active
+            # causal turn. Product Claude hooks always have an active turn here.
+            memories = [
+                dict(r)
+                for r in self.db.db.execute(
+                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
+                    (user_id,),
+                )
+            ]
+
+        return {
+            "own_recent": own,
+            "cross_session_collision": other,
+            "durable_memory": memories,
+            "retrieval_receipt": retrieval_receipt,
+        }
 
     def credit(self, *, causal_id, generation, credit, signal_class):
-        return self.microclay.credit(causal_id=str(causal_id), generation=int(generation), credit=float(credit), signal_class=str(signal_class))
+        return self.microclay.credit(
+            causal_id=str(causal_id),
+            generation=int(generation),
+            credit=float(credit),
+            signal_class=str(signal_class),
+        )

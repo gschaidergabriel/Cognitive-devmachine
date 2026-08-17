@@ -16,14 +16,14 @@ The preferred implementation line is an OCI-compatible sandboxed runtime such as
 2. **Separate guest kernel** — ClayVerse userspace MUST run behind a VM/microVM guest-kernel boundary, not directly on the host kernel, for final acceptance.
 3. **One entity only** — the VM/microVM is an outer isolation envelope, not a second ClayVerse instance. UnifiedDB inside the ClayVerse continuum remains the sole state/world/memory authority.
 4. **Immutable runtime** — ClayVerse root filesystem is read-only. Runtime scratch is limited to declared tmpfs/RAM surfaces. Code, EntityOS, policies and runtime binaries are recreated from the accepted image on restart.
-5. **Explicit persistent state** — only declared persistent volumes cross runtime replacement boundaries, primarily `/var/lib/clayverse` for UnifiedDB/WAL/checkpoints/EffectJournal and any separately admitted workspace volume.
+5. **Explicit persistent state** — only declared persistent volumes cross runtime replacement boundaries, primarily `/var/lib/clayverse` for UnifiedDB/WAL/checkpoints/EffectJournal and any separately admitted workspace volume. The mounted volumes MUST remain writable by the declared non-root ClayVerse runtime identity (`uid=10001`, `gid=10001`) without a privileged/root mutation side path.
 6. **Controlled ingress/egress** — only declared network/transport/storage surfaces cross the microVM boundary. `hostNetwork: false` is necessary but is not sufficient network isolation for a Kubernetes workload. The baseline deployment profile MUST select the ClayVerse pod with an explicit default-deny `NetworkPolicy` for both ingress and egress. The admitted cluster network plugin/CNI MUST actually support and enforce Kubernetes `NetworkPolicy`; merely creating the object on a non-enforcing cluster earns zero network-isolation evidence. Functional network access is enabled only by separate deployment-specific reviewed allow policies whose exact bytes/identity are bound into acceptance evidence. Because matching NetworkPolicies combine additively, final acceptance MUST enumerate every policy selecting the ClayVerse pod and fail if any unreviewed broad allow path changes the effective union. Host filesystem, host process namespace and host terminal are not ClayVerse runtime authorities.
 7. **Terminal stays internal** — Linux PTY/tmux and EntityOS command execution run inside the ClayVerse image/guest boundary. No command is executed by an uncontrolled host shell path.
 8. **LLM provider law preserved** — Claude Code is authenticated and operated directly through the managed internal terminal path. GLM is token/API inference only and receives no PTY, filesystem or EntityOS authority.
 9. **Self-healing** — Tier-1 internal recovery reconstructs replaceable components from immutable image bytes. Tier-2 failure terminates the appliance and lets the VM/microVM/OCI supervisor create a clean runtime from the same accepted image digest before logical snapshot/WAL recovery.
 10. **No blind external replay** — EffectJournal and generation fencing survive appliance recreation. Ambiguous effects become `UNKNOWN_AFTER_CRASH` rather than being automatically repeated.
 11. **No hidden writable host dependency** — final ClayVerse functionality may not rely on mutable host binaries, host libraries, host home directories or undeclared host mounts.
-12. **Attested boundary** — final acceptance records image digest, microVM runtime identity/version, guest kernel identity, host/guest isolation mode, mounted persistent volumes, exact network-policy identity, network-plugin/CNI identity and successful recovery evidence.
+12. **Attested boundary** — final acceptance records image digest, microVM runtime identity/version, guest kernel identity, host/guest isolation mode, mounted persistent volumes and their effective non-root ownership/write contract, exact network-policy identity, network-plugin/CNI identity and successful recovery evidence.
 
 ## Tier-2 full-sandbox replacement gate
 
@@ -50,6 +50,16 @@ The Tier-2 mechanism MUST fail closed and prove all of the following before ingr
 A normal kubelet container restart in the same Pod/sandbox may contribute Tier-1/component evidence only. It cannot satisfy the Tier-2 or `WHOLE_CLAYVERSE_PASS` gate.
 
 Until a target deployment proves the external full-sandbox replacement behavior, the Kubernetes/Kata profile is explicitly **TIER2_REPLACEMENT_BLOCKED** for final acceptance even if its static security fields are correct.
+
+## Persistent-volume non-root ownership gate
+
+Mounting a persistent volume over `/var/lib/clayverse` or `/workspace` replaces the image-directory ownership at that mount point. Image-time `chown` therefore does not prove that the runtime-mounted volume is writable by ClayVerse.
+
+The Kubernetes reference profile MUST request Pod `fsGroup: 10001` together with `fsGroupChangePolicy: OnRootMismatch`, matching the declared non-root runtime group. For volume types that support Kubernetes ownership management, this provides the group ownership/write contract. If a CSI driver advertises `VOLUME_MOUNT_GROUP`, that driver may perform the mount-group handling instead; the accepted outcome is still that the volume is read/write for GID 10001.
+
+The storage class/CSI driver is part of deployment evidence. If it cannot provide equivalent non-root access, or the effective mount ownership is uncertain, deployment is **PVC_OWNERSHIP_BLOCKED**. ClayVerse MUST NOT recover this condition by introducing an undeclared privileged/root init container, host-side `chown`, hostPath mount or other mutable host authority.
+
+Before application startup receives runtime credit, the exact admitted workload as `uid=10001,gid=10001` MUST prove create/write/fsync/read/rename/delete on both persistent mounts. After a full Tier-2 Pod/Kata sandbox/VM replacement, the state volume MUST remain readable/writable with the expected persisted data and the workspace volume MUST preserve only its explicitly admitted persistence semantics. A source-level `fsGroup` setting is necessary for the Kubernetes reference profile but is not runtime proof of a particular CSI implementation.
 
 ## Runtime-class implementation profile
 
@@ -81,6 +91,8 @@ Final whole-product acceptance MUST include at least:
 - prove guest kernel differs from and is isolated from host kernel execution context;
 - prove root filesystem is read-only and undeclared writes fail;
 - prove only declared persistent volumes survive full appliance replacement;
+- as `uid=10001,gid=10001`, prove create/write/fsync/read/rename/delete on `/var/lib/clayverse` and `/workspace` without privileged/root ownership repair, then repeat after full Pod/Kata sandbox/VM replacement;
+- identify and attest the admitted storage class/CSI driver and effective `fsGroup`/mount-group behavior; unsupported or uncertain ownership is `PVC_OWNERSHIP_BLOCKED`;
 - prove host PID/filesystem/terminal surfaces are not directly reachable as ClayVerse authority;
 - identify and attest the actual network plugin/CNI and prove it enforces Kubernetes NetworkPolicy on the admitted target;
 - prove the baseline ClayVerse network policy denies ingress and egress before any allow policy is added, including an undeclared external egress probe;

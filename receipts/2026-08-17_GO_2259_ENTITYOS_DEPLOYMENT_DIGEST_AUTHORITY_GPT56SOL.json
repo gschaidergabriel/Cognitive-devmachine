@@ -39,6 +39,13 @@
       "change": "living-cycle re-entry; prior exact-file 12/12 is fenced as stale for the new blobs"
     }
   ],
+  "adversarial_review": {
+    "initial_regression_issue": "the first added assertion prohibited the string CLAYVERSE_ENTITYOS_SHA256 anywhere in the template, while a safe explanatory comment intentionally contains that identifier; this would create a false failing test",
+    "claim_fence": "the issue was detected before any new test PASS was claimed",
+    "parallel_resolution": "a fresher current-file read shows the assertion narrowed to '- name: CLAYVERSE_ENTITYOS_SHA256' while preserving later parallel ReadWriteOncePod and node-local NetworkPolicy fences",
+    "current_observed_test_blob": "1c0555db7a027a383408ef5367c2de84083dd404",
+    "duplicate_write": "NOT_ATTEMPTED_AFTER_CURRENT_FIX_CONFIRMED"
+  },
   "execution_evidence": {
     "exact_current_focused_pytest": "NOT_EXECUTED",
     "exact_oci_build": "NOT_EXECUTED",
@@ -48,6 +55,7 @@
   },
   "parallel_coordination": {
     "headless_service_false_positive": "an initially observed template/test mismatch was invalidated by a fresher default-branch read showing a parallel headless-service fix; no duplicate repair was written",
+    "stale_write_guards": "multiple conditional GitHub writes were rejected with 409 while parallel workers advanced the same test file; newer bytes were never overwritten",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_experiment_count": 0,
     "reason": "this trigger exposes no shared immutable request/turn id and only minute-precision immutable message time"

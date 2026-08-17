@@ -18,6 +18,7 @@ QUERY_SCHEMA = "clayverse.problem_signature/v1"
 QUERY_ADMISSION_VERSION = 1
 _MAX_METHODS = 4
 _MAX_COUNTEREVIDENCE = 4
+_SIGNATURE_KEY = re.compile(r"^[a-z][a-z0-9_]{0,63}$")
 _STRUCTURAL_TOKEN = re.compile(r"^[a-z][a-z0-9_.:-]{0,63}$")
 _QUERY_FIELDS = {"schema", "problem_signature", "goal_shape", "provenance"}
 _PROVENANCE_FIELDS = {
@@ -77,6 +78,15 @@ class AdmittedProblemQuery:
         }
 
 
+def _structural_key(value: Any) -> str:
+    if not isinstance(value, str):
+        raise ProblemSignatureAdmissionError("problem_signature key must be a bounded snake_case identifier")
+    key = value.strip().lower()
+    if not _SIGNATURE_KEY.fullmatch(key):
+        raise ProblemSignatureAdmissionError("problem_signature key must be a bounded snake_case identifier")
+    return key
+
+
 def _structural_token(value: Any, field: str) -> str:
     if not isinstance(value, str):
         raise ProblemSignatureAdmissionError(f"{field} must be a structural token")
@@ -115,7 +125,7 @@ def admit_problem_query(value: Any) -> AdmittedProblemQuery:
         raise ProblemSignatureAdmissionError("problem_signature must be a bounded non-empty object")
     signature: dict[str, tuple[str, ...]] = {}
     for raw_key, raw_values in raw_signature.items():
-        key = _structural_token(raw_key, "problem_signature key")
+        key = _structural_key(raw_key)
         if isinstance(raw_values, str):
             values = [raw_values]
         elif isinstance(raw_values, list):

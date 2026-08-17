@@ -3,13 +3,14 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from .autonomy import AutonomyController
+from .autonomy import AutonomyController, AutonomyStateError
 from .identity import CANONICAL_USER_IDS
 from .store import UnifiedDB
 
 AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v2"
 AUTONOMY_CONTEXT_MAX_CHARS = 2_500
 AUTONOMY_CONTEXT_MAX_GOALS = 4
+GOAL_COMMAND_PREFIX = "/goal "
 _ATTENTION_STATUSES = {"ACTIVE", "WAITING", "VERIFYING", "BLOCKED"}
 _SAFE_BLOCK_REASONS = {
     "retry_budget_exhausted",
@@ -65,6 +66,71 @@ def _snapshot(db: UnifiedDB, user_id: str) -> dict[str, Any]:
     }
 
 
+def admit_explicit_goal_from_turn(
+    db: UnifiedDB,
+    *,
+    user_id: str,
+    session_id: str,
+    source_turn_id: str,
+    prompt: str,
+) -> dict[str, Any] | None:
+    """Admit `/goal ...` only from its exact live canonical UserPromptSubmit turn.
+
+    Ordinary prose is never inferred into a durable goal. Sequential hook/transport
+    replay is deduplicated by source turn. Generic natural-language goals use user_ack
+    completion because model text is not an independent semantic completion verifier.
+    """
+    if not isinstance(prompt, str) or not prompt.startswith(GOAL_COMMAND_PREFIX):
+        return None
+    if not prompt[len(GOAL_COMMAND_PREFIX):].strip():
+        raise AutonomyStateError("explicit goal objective is empty")
+    if user_id not in CANONICAL_USER_IDS or session_id != f"session:{user_id}":
+        raise PermissionError("explicit goal requires canonical owner session")
+
+    db.assert_session_owner(session_id, user_id)
+    live_generation = db.entity_generation()
+    db.assert_live_generation(session_id, live_generation)
+    row = db.db.execute(
+        "SELECT session_id,user_id,role,content,provenance FROM turns WHERE turn_id=?",
+        (source_turn_id,),
+    ).fetchone()
+    if row is None:
+        raise AutonomyStateError("goal source turn missing")
+    if (
+        row["session_id"] != session_id
+        or row["user_id"] != user_id
+        or row["role"] != "user"
+        or row["content"] != prompt
+    ):
+        raise PermissionError("goal source must be the exact canonical owner user turn")
+
+    provenance = AutonomyController._loads(row["provenance"] or "{}")
+    try:
+        entity_generation = int(provenance.get("entity_generation"))
+        session_generation = int(provenance.get("session_generation"))
+    except (TypeError, ValueError) as exc:
+        raise PermissionError("goal source generation provenance missing") from exc
+    if (
+        provenance.get("source") != "claude-hook:UserPromptSubmit"
+        or entity_generation != live_generation
+        or session_generation != live_generation
+    ):
+        raise PermissionError("goal source is not a live admitted UserPromptSubmit turn")
+
+    controller = AutonomyController(db)
+    for goal in controller.snapshot(user_id=user_id)["goals"]:
+        if goal.get("source_turn_id") == source_turn_id:
+            return dict(goal)
+
+    return controller.create_goal_from_turn(
+        user_id,
+        session_id,
+        source_turn_id,
+        completion_mode="user_ack",
+        priority=50,
+    )
+
+
 def _is_runnable(goal: dict[str, Any]) -> bool:
     if goal.get("status") != "ACTIVE":
         return False
@@ -104,8 +170,6 @@ def _goal_view(goal: dict[str, Any], text_limit: int) -> dict[str, Any]:
         }
         effect = step.get("effect")
         if isinstance(effect, dict):
-            # Capability class is useful routing state. Raw target/argv stay behind
-            # EffectGate/EffectJournal and never enter this cognition projection.
             step_view["effect_capability"] = effect.get("capability")
 
     contract = goal.get("completion_contract")

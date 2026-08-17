@@ -1,9 +1,12 @@
 import json
+import sqlite3
 import time
 import uuid
 
+import pytest
+
 from clayverse.microclay_retrieval import MicroClayRetrieval, RetrievalCandidate
-from clayverse.store import UnifiedDB
+from clayverse.store import StaleGeneration, UnifiedDB
 
 
 def _open_episode(db: UnifiedDB):
@@ -65,6 +68,8 @@ def test_first_candidate_cannot_overrun_retrieval_budget(tmp_path):
         assert oversized_id not in selected_ids
         assert small_id in selected_ids
         assert result["receipt"]["chars_selected"] <= 256
+        assert result["receipt"]["budget_chars"] == 256
+        assert result["receipt"]["limit_requested"] == 24
         assert sum(len(item["value"]) for item in result["items"]) <= 256
     finally:
         db.close()
@@ -141,12 +146,90 @@ def test_shadow_counterfactual_uses_same_budget_as_serving(tmp_path, monkeypatch
         assert result["receipt"]["shadow_differs"] is False
 
         episode = db.db.execute(
-            "SELECT selected_memory_ids,shadow_memory_ids,budget_chars "
+            "SELECT selected_memory_ids,shadow_memory_ids,limit_requested,budget_chars "
             "FROM retrieval_episodes WHERE causal_id=?",
             (causal_id,),
         ).fetchone()
         assert json.loads(episode["selected_memory_ids"]) == selected_ids
         assert json.loads(episode["shadow_memory_ids"]) == selected_ids
+        assert int(episode["limit_requested"]) == 2
         assert int(episode["budget_chars"]) == 256
+    finally:
+        db.close()
+
+
+def test_replay_requires_exact_budget_and_limit_identity(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        session_id, turn_id, episode_id = _open_episode(db)
+        large_id = db.add_memory(
+            "fact",
+            "memory",
+            ("alpha " * 60).strip(),
+            None,
+            "gabriel",
+            {"test": "replay-budget-large"},
+        )
+        retrieval = MicroClayRetrieval(db)
+        causal_id = str(uuid.uuid4())
+        request = dict(
+            query="alpha",
+            user_id="gabriel",
+            session_id=session_id,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=db.entity_generation(),
+            limit=2,
+            budget_chars=512,
+        )
+
+        first = retrieval.retrieve(**request)
+        assert [item["memory_id"] for item in first["items"]] == [large_id]
+        assert first["receipt"]["chars_selected"] > 256
+        assert first["receipt"]["budget_chars"] == 512
+        assert first["receipt"]["limit_requested"] == 2
+
+        exact_retry = retrieval.retrieve(**request)
+        assert exact_retry["receipt"]["replayed"] is True
+        assert [item["memory_id"] for item in exact_retry["items"]] == [large_id]
+
+        with pytest.raises(StaleGeneration, match="retrieval_identity"):
+            retrieval.retrieve(**{**request, "budget_chars": 256})
+        with pytest.raises(StaleGeneration, match="retrieval_identity"):
+            retrieval.retrieve(**{**request, "limit": 1})
+    finally:
+        db.close()
+
+
+def test_schema6_retrieval_table_migrates_limit_identity_column(tmp_path):
+    path = tmp_path / "schema6.db"
+    raw = sqlite3.connect(path)
+    try:
+        raw.execute(
+            "CREATE TABLE retrieval_episodes("
+            "retrieval_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL UNIQUE,"
+            "episode_id TEXT NOT NULL UNIQUE,causal_id TEXT NOT NULL UNIQUE,"
+            "session_id TEXT NOT NULL,user_id TEXT NOT NULL,generation INTEGER NOT NULL,"
+            "policy_version INTEGER NOT NULL,mode TEXT NOT NULL,query_hash TEXT NOT NULL,"
+            "query_token_hashes TEXT NOT NULL,selected_memory_ids TEXT NOT NULL,"
+            "shadow_memory_ids TEXT NOT NULL,entry_keys TEXT NOT NULL,"
+            "budget_chars INTEGER NOT NULL,chars_selected INTEGER NOT NULL,"
+            "status TEXT NOT NULL,ts REAL NOT NULL)"
+        )
+        raw.commit()
+    finally:
+        raw.close()
+
+    db = UnifiedDB(path)
+    try:
+        columns = {
+            str(row[1]) for row in db.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()
+        }
+        assert "limit_requested" in columns
+        schema_version = db.db.execute(
+            "SELECT value FROM meta WHERE key='schema_version'"
+        ).fetchone()[0]
+        assert schema_version == "7"
     finally:
         db.close()

@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6-Sol temporary research organ",
+  "trigger": "go",
+  "mission_authority": "CLAYVERSE_CANONICAL_DIRECTIVE.md",
+  "joined_research_head": "16ce79adde5e47f37d98c806386352bb57a1f8c0",
+  "last_exact_head_observed_before_receipt": "8c611a0189134615b594da4c3eb9941a93c603b7",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "finding": {
+    "boundary": "Hyperposition/GWT workspace selection",
+    "canonical_parent_blob": "80e38729aa37e60cfbde52d672c5667404bd2fc3",
+    "failure": "Workspace.select accepted an unoffered inference selection and allowed later reselection, so the bounded alternatives were not actually fail-closed."
+  },
+  "isolated_falsifier": {
+    "surface": "OpenAI isolated container workspace (non-VPS)",
+    "source_binding": {
+      "store.py": "dad2ad9555c38143616d8af348bff021c244c6bc",
+      "identity.py": "bceb73eb44e759cdefa3bad5a7be231d77ebf539",
+      "workspace.py": "80e38729aa37e60cfbde52d672c5667404bd2fc3"
+    },
+    "source_binding_result": "all reconstructed files matched their Git blob SHA-1 exactly",
+    "pre_fix_observation": "unoffered selection NOT_OFFERED was persisted as SELECTED",
+    "result": "FAIL_AS_EXPECTED_MECHANISM_CONFIRMED"
+  },
+  "repair": {
+    "pr": 289,
+    "merge_commit": "bdc9cb092c4f3deb3aad8c98c885aa8f7b1196ac",
+    "patched_workspace_blob": "c71cb65a78b0e5e7885a3f48f9779674cb91ea35",
+    "contract": [
+      "selection must be one of the alternatives stored for that episode",
+      "episode must be OPEN",
+      "selection is transactionally single-use",
+      "invalid selection leaves canonical workspace state unchanged"
+    ],
+    "regression": "the artefact/tests/test_workspace_boundary.py",
+    "isolated_regression_result": "PASS"
+  },
+  "parallel_fusion": {
+    "result": "MERGED_WITH_CURRENT_MAIN_NOT_DUPLICATED",
+    "note": "main advanced repeatedly during this go; workspace.py remained the same vulnerable blob until the repair and the patched blob was verified present after fusion."
+  },
+  "oci_execution_gate": {
+    "workflow": ".github/workflows/clayverse-artifact-ci.yml",
+    "observed_run": 31995263862,
+    "observed_head": "bdc9cb092c4f3deb3aad8c98c885aa8f7b1196ac",
+    "conclusion": "INFRASTRUCTURE_BLOCKED_NOT_CODE_EVIDENCE",
+    "annotation": "job was not started because recent account payments failed or the spending limit needs to be increased",
+    "runner_started": false,
+    "exact_current_head_oci_pass": false
+  },
+  "available_execution_surfaces": {
+    "vercel_sandbox": "NO_START_OR_EXEC_ACTION_EXPOSED_BY_CONNECTED_VERCEL_TOOL_SURFACE",
+    "local_isolated_container": "AVAILABLE_FOR_FOCUSED_PYTHON_TESTS_BUT_NO_DOCKER_PODMAN_BUILDAH",
+    "github_actions": "WORKFLOW_DEFINED_BUT_RUNNER_START_BLOCKED_BY_ACCOUNT_BILLING_OR_SPENDING_LIMIT"
+  },
+  "unusual_experiment": {
+    "new_experiment_added_by_this_repair": false,
+    "note": "This repair used deterministic falsifier/regression work only and did not introduce another unusual experiment."
+  },
+  "whole_system_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_blocker": "obtain an actually-started exact-current-head isolated OCI build/runtime run with logs and image identity; then continue the remaining Clerk/Claude Code/EntityOS and full recovery/security acceptance gates on that exact artifact."
+}

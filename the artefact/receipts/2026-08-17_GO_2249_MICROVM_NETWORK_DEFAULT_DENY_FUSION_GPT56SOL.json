@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_available": "2026-08-17T22:49+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "observed_canonical_main_before_lane": "4b6771d39218d6ecd4f4578d1dd879ca41e60f9b",
+  "branch": "gpt56sol/go-microvm-network-fusion-current-main-20260817-2249",
+  "novelty_classification": "REFINES",
+  "frontier": "MICROVM_NETWORK_BOUNDARY_DEFAULT_DENY_AND_ENFORCEMENT_ATTESTATION",
+  "source_delta": {
+    "template_commit": "210ca7bbc47e5cb5bab3557ba31b7104e160dc4e",
+    "template_blob": "cc46415b50110f1538ce67e42a6c3f4b0eaa3179",
+    "contract_commit": "5477fd86a7c1520927436ae3abdf8b947f7e4f88",
+    "contract_blob": "5a65eaef51fac424606e3c90685e2913289b6d86",
+    "test_commit": "6684b160cf502b6ae71a8824082056be9206b384",
+    "test_blob": "ea4d8f90ee3b403bccb84c037091b9762383dc56",
+    "readme_commit": "54bea8db8d004a01da09431fc6372829b6f77b05",
+    "readme_blob": "e398d53e0e3f7382fe13a0c75da08901b9591da5"
+  },
+  "mechanism": {
+    "baseline_network_policy": "networking.k8s.io/v1 NetworkPolicy selects app=clayverse with policyTypes Ingress+Egress and empty ingress/egress rule sets",
+    "service_baseline": "ClusterIP",
+    "functional_networking": "separate deployment-specific reviewed allow policy only",
+    "cni_enforcement": "must be observed; API-object presence alone is not runtime evidence",
+    "node_local_boundary": "node/control-plane/metadata reachability must be separately fenced and tested; standard NetworkPolicy is not treated as sufficient",
+    "microvm_boundary": "independent guest-kernel isolation remains mandatory and is not replaced by NetworkPolicy"
+  },
+  "primary_external_basis": [
+    "Kubernetes NetworkPolicy API/concept documentation: pods are non-isolated by default until selected by policy; empty ingress/egress with both policyTypes is a default-deny pattern",
+    "Kubernetes documentation: network plugin/CNI must implement NetworkPolicy for the object to have effect",
+    "Kubernetes documentation: traffic to/from the node where a pod runs is a NetworkPolicy exception and must not be silently assumed denied"
+  ],
+  "isolated_exact_file_evidence": {
+    "surface": "authorized non-production OpenAI isolated container",
+    "source_binding": "git hash-object matched all three GitHub target blobs exactly",
+    "template_blob_observed": "cc46415b50110f1538ce67e42a6c3f4b0eaa3179",
+    "contract_blob_observed": "5a65eaef51fac424606e3c90685e2913289b6d86",
+    "test_blob_observed": "ea4d8f90ee3b403bccb84c037091b9762383dc56",
+    "command": "python3 -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "6 passed in 0.06s",
+    "exit_code": 0,
+    "evidence_class": "BOUNDED_EXACT_FILE_SOURCE_MECHANISM_SUPPORT",
+    "not_claimed": [
+      "Kubernetes CNI runtime enforcement",
+      "Kata/microVM runtime PASS",
+      "exact ClayVerse OCI runtime PASS",
+      "whole ClayVerse PASS"
+    ]
+  },
+  "strongest_counterhypothesis": {
+    "claim": "A syntactically correct default-deny NetworkPolicy can provide zero isolation if the admitted CNI does not enforce it, and node-local/control-plane/metadata paths can remain reachable despite the policy.",
+    "cheapest_next_falsifier": "On the final admitted Kata/equivalent cluster, bind CNI/runtime/image identities, prove default-deny empirically from independent ingress and egress probes, probe node-local/metadata/control-plane paths, then apply the exact reviewed allow policy and show only admitted flows open."
+  },
+  "execution_surface_refresh": {
+    "provider": "Vercel Sandbox",
+    "deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "sandbox_admission": "PASS_CREATED",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "EXECUTION_ADMISSION_OPEN_PRIVATE_SOURCE_CREDENTIAL_BLOCK_BEFORE_PRODUCT_BYTES"
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id is exposed and the exact user-message timestamp available to this organ has minute precision only; the current atomic lease protocol forbids a timestamp fallback.",
+    "valid_unusual_experiments_executed": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false,
+    "secrets_exposed": false,
+    "paid_or_final_training": false
+  },
+  "result": "SOURCE_BOUND_NETWORK_BOUNDARY_HARDENED_RUNTIME_ENFORCEMENT_UNOBSERVED"
+}

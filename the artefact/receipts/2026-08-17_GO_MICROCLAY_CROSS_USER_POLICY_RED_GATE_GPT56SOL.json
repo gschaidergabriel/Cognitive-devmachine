@@ -1,0 +1,39 @@
+{
+  "schema": "ClayVerseRedGateReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "scope": "MicroClay Stage-A adaptive retrieval policy cross-user isolation",
+  "classification": "SOURCE_RED_GATE_RUNTIME_UNOBSERVED",
+  "acceptance": "NON_PASS",
+  "finding": "retrieval_entrypoint_policy capital is globally keyed while evidence candidates are user-filtered; outcome-backed route learning from one user can therefore retune another user's SHADOW ranking when subject labels collide",
+  "direct_memory_access_bypass": false,
+  "risk_classes": [
+    "cross-user adaptive-policy contamination",
+    "retrieval poisoning",
+    "unnecessary personalization",
+    "ambiguous policy authority across user perspectives"
+  ],
+  "red_gate": {
+    "commit": "4b6c9d934847c3b721d9506db1b8c9bfee84f026",
+    "file": "the artefact/tests/test_microclay_cross_user_policy_isolation.py",
+    "expected_current_source_result": "RED at final SHADOW isolation assertion",
+    "executed": false,
+    "reason_not_executed": "Vercel deployment admission rate-limited before Sandbox start; GitHub hosted execution also has admission failures before steps"
+  },
+  "coordination": {
+    "issue": 525,
+    "pr": 415,
+    "quick_fix_rejected": "Do not bolt on an unversioned user-prefix while replay and persisted policy identity remain v1; fuse scope into one explicit Stage-A policy/replay version transition."
+  },
+  "required_contract": [
+    "one user perspective must not silently retune the other user's private adaptive retrieval behavior",
+    "shared/global memory visibility and adaptive-policy sharing are separate contracts",
+    "legacy global policy rows must be explicitly migrated, rejected or quarantined after a semantics change",
+    "policy scope/version must be replay-bound",
+    "same-user learning must remain functional",
+    "truth/effect authority remains unchanged"
+  ],
+  "next_gate": "Resolve issue #525 in the single canonical MicroClay Stage-A policy/version path, then execute the red gate plus same-user/shared-memory/replay/restart/stale-generation/poisoning regressions on exact current bytes in an authorized isolated Sandbox before ACTIVE promotion.",
+  "unusual_experiment_count": 0
+}

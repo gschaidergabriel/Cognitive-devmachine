@@ -105,11 +105,19 @@ def _bounded_pty_input(payload: bytes) -> bytes:
     return payload
 
 
-def _write_pty_all(fd: int, payload: bytes) -> None:
-    """Write one terminal-input frame completely or fail closed."""
+def _write_pty_all(fd: int, payload: bytes, auth_deadline: float) -> None:
+    """Write one terminal-input frame while its authenticated lease remains live.
+
+    PTY writes may complete partially or block in the worker thread. Re-check the
+    immutable deadline immediately before and after every kernel write so an expired
+    frame can never continue through a later partial-write iteration or be reported as
+    successfully written after a blocking syscall crossed the lease boundary.
+    """
     remaining = memoryview(payload)
     while remaining:
+        _require_auth_lease_live(auth_deadline)
         written = os.write(fd, remaining)
+        _require_auth_lease_live(auth_deadline)
         if written <= 0:
             raise OSError("PTY write made no progress")
         remaining = remaining[written:]
@@ -299,7 +307,16 @@ window.addEventListener('load', async () => {{
                         return
                     if message.get("bytes") is not None:
                         _bounded_pty_input(message["bytes"])
-                        await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
+                        # Freeze the lease that admitted this frame. A concurrent reauth may
+                        # extend future frames but must not retroactively authorize a write
+                        # that already crossed its original admission deadline.
+                        frame_auth_deadline = auth_expires_at
+                        await asyncio.to_thread(
+                            _write_pty_all,
+                            attach_fd,
+                            message["bytes"],
+                            frame_auth_deadline,
+                        )
                     elif message.get("text") is not None:
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":

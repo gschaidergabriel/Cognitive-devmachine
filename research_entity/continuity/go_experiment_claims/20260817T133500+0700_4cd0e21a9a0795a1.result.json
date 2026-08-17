@@ -1,0 +1,38 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "claim_path": "research_entity/continuity/go_experiment_claims/20260817T133500+0700_4cd0e21a9a0795a1.json",
+  "claim_blob_sha": "549c7eb512d15e24e3136a2d51fd0a0c979a2f68",
+  "trigger_key": "20260817T133500+0700_4cd0e21a9a0795a1",
+  "trigger": "go",
+  "experiment_name": "METHOD_PROMOTION_FORGERY_SERVE",
+  "intervention_identity": "ordinary UnifiedDB.add_memory creates a framework whose record self-declares PROMOTED; Stage-B is queried with an overlapping cue; falsifier requires rejection/non-serving",
+  "source_identity": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "pr": 415,
+    "observed_pr_head_before_concurrent_hardening": "7f5e2d15f228358310fe8b1a6113e52749fbeeb3",
+    "observed_canonical_main_at_claim": "ea4f5b9365ebcb54f2084a1d2376cac7b4e9ba74",
+    "scope": "bounded source-mechanism reproduction of the then-observed UnifiedDB.add_memory plus MicroClayMethodRetrieval authority path; not an exact full-head checkout or OCI run"
+  },
+  "execution_surface": "OpenAI isolated container; non-VPS; source-mechanism slice only",
+  "execution_notes": [
+    "The first harness invocation stopped before the intervention because the temporary sessions INSERT had the wrong value count; it established no experiment result.",
+    "The corrected rerun executed the same already-claimed intervention and observed the forged promoted method in the returned Stage-B set.",
+    "While this work was running, PR #415 advanced through commit de5e441c0d5bff92c404a2f9bc978f42e8dd900e, which added stronger promotion-receipt, source-episode, causal-reentry and user-scope admission checks. The negative observation therefore applies only to the explicitly bound earlier source slice and is a regression driver, not a current-head runtime verdict."
+  ],
+  "observed_result": {
+    "served_count": 1,
+    "forged_method_served": true,
+    "falsifier_survived": false,
+    "classification": "FAIL"
+  },
+  "macrocycle_coordination": {
+    "status": "EXPERIMENT_BUDGET_RACE_VIOLATION",
+    "reason": "The shared user-message metadata for this 13:35 +07 go turn is minute-precision only and parallel workers created noncanonical semantic duplicate claim paths. Current protocol explicitly closes the unusual-experiment slot for this turn.",
+    "additional_distinct_experiments_authorized": false
+  },
+  "whole_product_evidence": false,
+  "durable_receipt_references": [
+    "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "PR #415 current Stage-B hardening/regression obligations"
+  ]
+}

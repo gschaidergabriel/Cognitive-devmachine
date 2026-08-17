@@ -1,0 +1,14 @@
+{
+  "run_id": "atomic-20260817-chatgpt-atcs-kill",
+  "initial_cutoff": "d96683082bacb22db7e11cf88ad90768a1c23644",
+  "reentry_main_sha": "c01a23a0ba69c4c81edb6c171fc908744c64c1fb",
+  "main_advanced_by_commits": 9,
+  "relevant_changes_observed": [
+    "TurnLifecycle still reads the unique hook-owned active_turns row for effect admission and carries expected generation into EffectGate.",
+    "Current main persists workspace_selected back into active_turns when selecting request_effect, tightening the canonical current-turn record.",
+    "EntityOS automatic lease became label-independent and globally scoped to effect:entityos.exec, strengthening collision exclusion without a per-turn capability seal."
+  ],
+  "effect_on_verdict": "STRENGTHENS_KILL",
+  "reason": "The advanced main strengthens the simpler canonical active-turn/generation/lease baseline rather than exposing a unique need for ATCS.",
+  "write_policy": "Do not reimplement the concurrent product changes; preserve this run as research-only negative evidence."
+}

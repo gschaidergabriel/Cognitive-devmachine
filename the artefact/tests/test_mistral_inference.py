@@ -1,5 +1,6 @@
 import json
 from urllib.error import HTTPError
+from urllib.request import Request
 
 import pytest
 
@@ -39,7 +40,7 @@ def mistral_envelope(
                     "finish_reason": finish_reason,
                     "message": {
                         "role": "assistant",
-                        "content": json.dumps(decision, separators=(",", ":")),
+                        "content": json.dumps(decision, separators=(",", ",")),
                     },
                 }
             ],
@@ -215,3 +216,48 @@ def test_mistral_missing_response_identity_fails_closed(monkeypatch):
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
     with pytest.raises(InferenceProtocolError, match="response id"):
         MistralInference(model="model-x").reason({}, "hello")
+
+
+def test_mistral_redirect_handler_refuses_new_request_with_bearer_token():
+    secret = "redirect-sensitive-secret"
+    request = Request(
+        MistralInference.ENDPOINT,
+        data=b"{}",
+        headers={"Authorization": f"Bearer {secret}"},
+        method="POST",
+    )
+    handler = adapters._MistralNoRedirectHandler()
+    redirected = handler.redirect_request(
+        request,
+        None,
+        302,
+        "Found",
+        {},
+        "https://attacker.invalid/collect",
+    )
+    assert redirected is None
+    assert request.get_header("Authorization") == f"Bearer {secret}"
+
+
+def test_mistral_runtime_urlopen_installs_no_redirect_handler(monkeypatch):
+    captured = {}
+
+    class FakeOpener:
+        def open(self, request, timeout):
+            captured["request"] = request
+            captured["timeout"] = timeout
+            raise HTTPError(request.full_url, 302, "Found", hdrs=None, fp=None)
+
+    def fake_build_opener(*handlers):
+        captured["handlers"] = handlers
+        return FakeOpener()
+
+    monkeypatch.setattr(adapters, "build_opener", fake_build_opener)
+    request = Request(MistralInference.ENDPOINT, data=b"{}", method="POST")
+    with pytest.raises(HTTPError) as exc:
+        adapters.urlopen(request, timeout=7)
+    assert exc.value.code == 302
+    assert len(captured["handlers"]) == 1
+    assert isinstance(captured["handlers"][0], adapters._MistralNoRedirectHandler)
+    assert captured["request"] is request
+    assert captured["timeout"] == 7

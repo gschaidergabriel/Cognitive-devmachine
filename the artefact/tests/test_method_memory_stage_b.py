@@ -52,15 +52,34 @@ def _db(tmp_path) -> UnifiedDB:
     return UnifiedDB(tmp_path / "clayverse.db")
 
 
-def _seed_episodes(db: UnifiedDB, user_id: str, episode_ids: list[str]) -> None:
+def _ensure_session(db: UnifiedDB, user_id: str) -> str:
     db.ensure_user(user_id, user_id.title())
-    session_id = db.ensure_session(user_id, f"clayverse-{user_id}")
+    return db.ensure_session(user_id, f"clayverse-{user_id}")
+
+
+def _seed_episodes(db: UnifiedDB, user_id: str, episode_ids: list[str]) -> None:
+    session_id = _ensure_session(db, user_id)
     for index, episode_id in enumerate(episode_ids):
+        ts = float(index + 1)
         db.db.execute(
             "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
             "VALUES(?,?,?,?,?,?,?,?)",
-            (episode_id, session_id, float(index + 1), None, 0.5, "[]", None, "OPEN"),
+            (episode_id, session_id, ts, None, 0.5, "[]", "respond", "COMPLETED"),
         )
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (f"causal:{episode_id}", episode_id, None, None, f"outcome:{episode_id}", 0.0, 1, ts),
+        )
+
+
+def _seed_open_episode(db: UnifiedDB, user_id: str, episode_id: str) -> None:
+    session_id = _ensure_session(db, user_id)
+    db.db.execute(
+        "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
+        "VALUES(?,?,?,?,?,?,?,?)",
+        (episode_id, session_id, 1.0, None, 0.5, "[]", None, "OPEN"),
+    )
 
 
 def test_single_episode_cannot_promote_reusable_framework():
@@ -86,6 +105,29 @@ def test_fabricated_source_episode_ids_fail_closed_at_admission(tmp_path):
             source_episode_ids=["episode:a", "episode:invented"],
         )
         with pytest.raises(MethodRecordError, match="unknown source_episode_ids"):
+            methods.admit(
+                kind="framework",
+                payload=payload,
+                source_turn_id=None,
+                user_id="gabriel",
+                provenance={"source": "test"},
+            )
+    finally:
+        db.close()
+
+
+def test_open_episode_cannot_be_used_as_promotion_evidence(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _seed_episodes(db, "gabriel", ["episode:a"])
+        _seed_open_episode(db, "gabriel", "episode:open")
+        methods = MethodMemory(db)
+        payload = _payload(
+            name="open provenance",
+            signature={"topology": ["shared state"], "risk": ["stale replay"]},
+            source_episode_ids=["episode:a", "episode:open"],
+        )
+        with pytest.raises(MethodRecordError, match="terminal causally re-entered"):
             methods.admit(
                 kind="framework",
                 payload=payload,

@@ -10,7 +10,6 @@ import struct
 import subprocess
 import termios
 import fcntl
-import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -133,9 +132,9 @@ class TerminalSessionManager:
         if self._has_session(binding):
             return binding
 
-        # Built-in Claude tools are absent. The server-level MCP permission name
-        # mcp__clayverse admits all tools from exactly that server. Claude Code does
-        # not support glob MCP permission names such as mcp__clayverse__*.
+        # Built-in Claude tools are absent. Claude Code permission rules admit MCP
+        # tool-name globs after a literal mcp__<server>__ prefix, so this rule grants
+        # exactly the tools exported by the fixed clayverse server and no other server.
         # Filesystem setting sources are disabled so project/user hooks cannot compete
         # with the fixed managed lifecycle hooks.
         claude_argv = [
@@ -145,7 +144,7 @@ class TerminalSessionManager:
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
-            "--allowedTools", "mcp__clayverse",
+            "--allowedTools", "mcp__clayverse__*",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
@@ -221,7 +220,6 @@ class TerminalSessionManager:
 
     @staticmethod
     def close_attach(pid: int, fd: int) -> None:
-        """Detach and reap the transient tmux attach child without touching tmux itself."""
         try:
             os.close(fd)
         except OSError:
@@ -229,28 +227,4 @@ class TerminalSessionManager:
         try:
             os.kill(pid, signal.SIGHUP)
         except ProcessLookupError:
-            pass
-
-        # The websocket PTY child is owned by this process. Merely signalling it leaves
-        # an exited child waitable (a zombie) until the service exits. Give the attach
-        # client a short graceful window, then force termination and always reap it.
-        deadline = time.monotonic() + 0.25
-        while True:
-            try:
-                waited, _ = os.waitpid(pid, os.WNOHANG)
-            except ChildProcessError:
-                return
-            if waited == pid:
-                return
-            if time.monotonic() >= deadline:
-                break
-            time.sleep(0.01)
-
-        try:
-            os.kill(pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        try:
-            os.waitpid(pid, 0)
-        except ChildProcessError:
             pass

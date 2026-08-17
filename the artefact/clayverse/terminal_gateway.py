@@ -53,17 +53,22 @@ def _auth_token(hello: dict) -> str:
     return token
 
 
+def _require_auth_lease_live(deadline: float, *, now: float | None = None) -> None:
+    """Require the verified Clerk lease to still be live at an effect/output boundary."""
+    current = time.time() if now is None else float(now)
+    if not math.isfinite(deadline) or not math.isfinite(current):
+        raise AuthenticationError("Clerk session token expiration is invalid")
+    if deadline <= current:
+        raise AuthenticationError("Clerk session token expired")
+
+
 def _auth_expiry_deadline(claims: dict, *, now: float | None = None) -> float:
     """Return a finite future Clerk JWT expiry or fail closed."""
     exp = claims.get("exp")
     if isinstance(exp, bool) or not isinstance(exp, (int, float)):
         raise AuthenticationError("Clerk session token missing valid expiration")
     deadline = float(exp)
-    current = time.time() if now is None else float(now)
-    if not math.isfinite(deadline) or not math.isfinite(current):
-        raise AuthenticationError("Clerk session token expiration is invalid")
-    if deadline <= current:
-        raise AuthenticationError("Clerk session token expired")
+    _require_auth_lease_live(deadline, now=now)
     return deadline
 
 
@@ -255,6 +260,9 @@ window.addEventListener('load', async () => {{
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
             terminals.resize(attach_fd, rows, cols)
+            # Authentication can expire while PTY/tmux attachment is blocking in a
+            # worker thread. Never publish readiness for an already-expired lease.
+            _require_auth_lease_live(auth_expires_at)
             await send_json({
                 "type": "ready",
                 "user_id": user_id,
@@ -268,6 +276,9 @@ window.addEventListener('load', async () => {{
                     if not data:
                         return
                     async with send_lock:
+                        # Output is an authenticated capability too. Re-check after
+                        # the blocking PTY read and after waiting for the send lock.
+                        _require_auth_lease_live(auth_expires_at)
                         await ws.send_bytes(data)
 
             async def pump_in():

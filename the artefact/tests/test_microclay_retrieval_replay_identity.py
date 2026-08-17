@@ -73,6 +73,40 @@ def test_exact_retry_replays_but_budget_or_limit_change_fails_closed(tmp_path):
         db.close()
 
 
+def test_invalid_retry_rejects_before_outcome_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        session_id, turn_id, episode_id = _open_episode(db)
+        db.add_memory("fact", "memory", "alpha memory", None, "gabriel", {"test": "learning-fence"})
+        retrieval = MicroClayRetrieval(db)
+        request = {
+            "query": "alpha",
+            "user_id": "gabriel",
+            "session_id": session_id,
+            "turn_id": turn_id,
+            "episode_id": episode_id,
+            "causal_id": str(uuid.uuid4()),
+            "generation": db.entity_generation(),
+            "limit": 2,
+            "budget_chars": 512,
+        }
+        retrieval.retrieve(**request)
+
+        calls = []
+        retrieval.learn_from_verified_outcomes = lambda *, session_id, generation: (
+            calls.append((session_id, generation)) or {"eligible": 0, "applied": 0}
+        )
+        with pytest.raises(StaleGeneration, match="retrieval_identity"):
+            retrieval.retrieve(**{**request, "budget_chars": 256})
+        assert calls == []
+
+        replay = retrieval.retrieve(**request)
+        assert replay["receipt"]["replayed"] is True
+        assert calls == [(session_id, request["generation"])]
+    finally:
+        db.close()
+
+
 def test_schema6_receipt_migrates_without_inventing_missing_limit_identity(tmp_path):
     path = tmp_path / "schema6.db"
     raw = sqlite3.connect(path)
@@ -123,7 +157,7 @@ def test_schema6_receipt_migrates_without_inventing_missing_limit_identity(tmp_p
             str(row[1]): int(row[3])
             for row in db.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()
         }
-        assert "limit_requested" in columns
+        assert columns["limit_requested"] == 0
         assert db.db.execute(
             "SELECT value FROM meta WHERE key='schema_version'"
         ).fetchone()[0] == "7"
@@ -143,5 +177,30 @@ def test_schema6_receipt_migrates_without_inventing_missing_limit_identity(tmp_p
                 limit=2,
                 budget_chars=512,
             )
+    finally:
+        db.close()
+
+    reopened = UnifiedDB(path)
+    try:
+        columns = [str(row[1]) for row in reopened.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()]
+        assert columns.count("limit_requested") == 1
+        assert reopened.db.execute(
+            "SELECT value FROM meta WHERE key='schema_version'"
+        ).fetchone()[0] == "7"
+        assert reopened.db.execute(
+            "SELECT limit_requested FROM retrieval_episodes WHERE retrieval_id='legacy-retrieval'"
+        ).fetchone()[0] is None
+    finally:
+        reopened.close()
+
+
+def test_fresh_schema_uses_same_nullable_limit_shape_as_migrated_schema(tmp_path):
+    db = UnifiedDB(tmp_path / "fresh.db")
+    try:
+        columns = {
+            str(row[1]): int(row[3])
+            for row in db.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()
+        }
+        assert columns["limit_requested"] == 0
     finally:
         db.close()

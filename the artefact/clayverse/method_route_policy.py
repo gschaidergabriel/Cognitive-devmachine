@@ -26,7 +26,8 @@ class MethodRoutePolicy:
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
     SHADOW_WEIGHT = 0.08
-    MAX_PENDING = 100
+    MAX_APPLIED_PER_PASS = 100
+    SCAN_WINDOW = 2000
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -85,8 +86,14 @@ class MethodRoutePolicy:
             return []
         if not isinstance(entry_keys, list) or any(not isinstance(key, str) or not key.startswith("method:") for key in entry_keys):
             return []
-        marker = f":{selected[0]}"
-        return sorted({key for key in entry_keys if marker in key})[:16]
+        method_id = selected[0]
+        exact = f"method:id:{method_id}"
+        goal_prefix = f"method:goal:{method_id}:"
+        sig_prefix = f"method:sig:{method_id}:"
+        return sorted({
+            key for key in entry_keys
+            if key == exact or key.startswith(goal_prefix) or key.startswith(sig_prefix)
+        })[:16]
 
     @staticmethod
     def _feedback_subject(use_receipt_id: str, causal_id: str, generation: int, signal: str, credit: float) -> str:
@@ -99,11 +106,13 @@ class MethodRoutePolicy:
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
             "SELECT memory_id,value,user_id,source_turn_id FROM durable_memory "
-            "WHERE kind='method_receipt' AND subject LIKE 'method-use:%' ORDER BY ts LIMIT ?",
-            (self.MAX_PENDING,),
+            "WHERE kind='method_receipt' AND subject LIKE 'method-use:%' ORDER BY ts DESC LIMIT ?",
+            (self.SCAN_WINDOW,),
         ).fetchall()
         eligible = applied = 0
         for row in rows:
+            if applied >= self.MAX_APPLIED_PER_PASS:
+                break
             try:
                 use = json.loads(row["value"])
                 use_generation = int(use.get("generation", -1)) if isinstance(use, dict) else -1

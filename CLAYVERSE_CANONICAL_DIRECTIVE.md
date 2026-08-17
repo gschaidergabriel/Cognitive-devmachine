@@ -124,13 +124,21 @@ Useful functions historically bundled there (GWT, attention, goals, perception, 
 
 ## 6. Claude Code role
 
-Claude Code is the primary high-capability inference/reasoning/coding engine and the visible terminal interface.
+Claude Code is the primary high-capability inference/reasoning/coding engine and the visible terminal interface of the finished ClayVerse product.
 
 Claude Code is not ClayVerse identity or durable state.
 
 A Claude Code process/session may restart without creating a new ClayVerse entity. ClayVerse reconstructs bounded relevant context from durable state.
 
 Claude receives bounded world assemblies instead of becoming the canonical store of world truth.
+
+### Build-research independence
+
+The Research Entity itself must build and verify the ClayVerse artifact **without using Claude Code as a research, coding, implementation, planning or test helper**.
+
+Claude Code is a component of the finished product, not a dependency of the build/research process that creates the artifact.
+
+Research/build workers must use the Research Entity's other available tools, repository history, isolated execution/sandbox capabilities, tests and evidence directly.
 
 ## 7. EntityOS research is fully in scope
 
@@ -199,17 +207,37 @@ Prefer fusion of existing validated technology over reinvention.
 
 ## 10. Build/test/deployment law
 
-Use isolated sandbox testing during construction. Vercel sandbox is an authorized/preferred verification environment where its capabilities fit the test.
+**Construction and verification happen away from the live VPS.**
 
-The **final deployment target is the VPS**.
+Use isolated sandbox execution during construction. **Vercel Sandbox is the preferred external build/verification environment where its capabilities fit the test**, supplemented by the Research Entity's other available non-VPS build/test tools.
 
-Read-only VPS inspection is allowed through the dedicated read-only MCP. Do not mutate the live VPS merely to accelerate development unless the owner explicitly authorizes that mutation/deployment step.
+The live VPS is an evidence source through the dedicated read-only MCP until the owner explicitly authorizes deployment/mutation.
+
+Do not use the live VPS as the normal construction workspace.
+
+The **final deployment target is the VPS** only after the artifact is sufficiently verified.
 
 The persistent ClayVerse state must live outside the ephemeral container layer, e.g. under a durable mounted state root such as `/var/lib/clayverse`.
 
 Container replacement must not replace the ClayVerse entity.
 
-## 11. `go` is now a build-to-artifact trigger
+## 11. Canonical artifact location
+
+All buildable ClayVerse product source, container definitions, test harnesses, manifests, generated acceptance receipts and release-candidate metadata belonging to the target artifact must live under exactly:
+
+`the artefact/`
+
+on the `main` branch of:
+
+`gschaidergabriel/clay-global-research-entity`
+
+The directory `the artefact/` is the canonical artifact workspace.
+
+Research notes outside that directory may remain evidence, but a finished/candidate product must be reproducible from `the artefact/` plus explicitly pinned external inputs/artifact hashes.
+
+The primary release object remains **one OCI/Docker-compatible ClayVerse container image**. The repository directory is its canonical reproducible source and evidence bundle.
+
+## 12. `go` is the build-to-artifact trigger
 
 Exact owner trigger: `go`
 
@@ -221,12 +249,14 @@ A `go` cycle must, as useful and available:
 2. resolve latest valid component generations;
 3. research remaining unknowns and counterhypotheses;
 4. fuse the architecture;
-5. implement/build the actual ClayVerse container;
+5. implement/build the actual ClayVerse container under `the artefact/`;
 6. run applicable unit, integration, replay, recovery, failure, provenance, state and security tests;
-7. use Vercel/authorized sandbox execution where useful;
+7. use Vercel Sandbox and other authorized isolated tools where useful;
 8. preserve negative evidence and exact blockers;
-9. update canonical source/evidence;
+9. update canonical source/evidence on `main`;
 10. produce the strongest deployable **single-container ClayVerse artifact** supported by the evidence.
+
+The Research Entity performs this cycle without Claude Code assistance.
 
 The primary finished artifact is a single OCI/Docker-compatible ClayVerse container image identified by source commit/artifact hash. Supporting manifests, receipts and evidence may be committed and/or embedded in the image, but they do not become separate product runtimes.
 
@@ -234,7 +264,7 @@ A `go` response must not stop at planning if implementation/testing tools are av
 
 Never claim FINISHED/PASS merely because an image builds. If any acceptance gate remains unverified, label the image/artifact as a candidate and report the exact blocker while preserving the best working artifact.
 
-## 12. Minimum final acceptance shape
+## 13. Minimum final acceptance shape
 
 A finished ClayVerse artifact must ultimately demonstrate, with evidence appropriate to each gate:
 
@@ -264,10 +294,10 @@ A finished ClayVerse artifact must ultimately demonstrate, with evidence appropr
 - no duplicate canonical truth stores
 - VPS deployment readiness
 
-## 13. Completion rule
+## 14. Completion rule
 
 The research entity's single mission is now:
 
-**Build, verify and deliver ClayVerse as one deployable VPS container artifact using the strongest valid components already present across Frank, Clay/UnifiedDB/ClayGraph/Hyperposition/GWT research and the complete EntityOS research line.**
+**Build, verify and deliver ClayVerse as one deployable VPS container artifact, constructed and tested away from the live VPS, without Claude Code assistance, using the strongest valid components already present across Frank, Clay/UnifiedDB/ClayGraph/Hyperposition/GWT research and the complete EntityOS research line, with the canonical artifact workspace at `main/the artefact/`.**
 
 All older directives are historical evidence only when they conflict with this mission.

@@ -12,6 +12,10 @@ class AuthenticationError(PermissionError):
     pass
 
 
+_JWKS_CACHE_LIFESPAN_SECONDS = 300
+_JWKS_FETCH_TIMEOUT_SECONDS = 5
+
+
 @dataclass(frozen=True)
 class ClerkConfig:
     issuer: str
@@ -51,14 +55,26 @@ class ClerkTokenVerifier:
     """Fail-closed verifier for Clerk session JWTs.
 
     Networkless verification is preferred when CLERK_JWT_KEY is supplied. Otherwise
-    PyJWKClient fetches/caches the instance JWKS. Only RS256 is accepted and the Clerk
-    authorized-party claim must match the configured web origin set. Impersonated and
-    pending sessions are not admitted by the baseline two-perspective product boundary.
+    PyJWKClient uses only its finite-lived JWKS-set cache: the per-signing-key LRU is
+    intentionally disabled so an already-seen kid cannot bypass key-set refresh forever.
+    Only RS256 is accepted and the Clerk authorized-party claim must match the
+    configured web origin set. Baseline ClayVerse admits only active, direct sessions;
+    incomplete or impersonated Clerk sessions require a future explicit authority contract.
     """
 
     def __init__(self, config: ClerkConfig):
         self.config = config
-        self._jwks = PyJWKClient(config.jwks_url, cache_keys=True) if not config.jwt_key else None
+        self._jwks = (
+            PyJWKClient(
+                config.jwks_url,
+                cache_keys=False,
+                cache_jwk_set=True,
+                lifespan=_JWKS_CACHE_LIFESPAN_SECONDS,
+                timeout=_JWKS_FETCH_TIMEOUT_SECONDS,
+            )
+            if not config.jwt_key
+            else None
+        )
 
     def verify(self, token: str) -> dict[str, Any]:
         if not token:
@@ -87,10 +103,10 @@ class ClerkTokenVerifier:
             raise AuthenticationError("Clerk token missing session ID")
         if not claims.get("sub"):
             raise AuthenticationError("Clerk token missing subject")
-        if claims.get("act") is not None:
+        if claims.get("sts") != "active":
+            raise AuthenticationError("Clerk session is not active")
+        if "act" in claims:
             raise AuthenticationError("Clerk impersonated sessions are not admitted")
-        if claims.get("sts") == "pending":
-            raise AuthenticationError("pending Clerk session is not admitted")
         return claims
 
     @staticmethod

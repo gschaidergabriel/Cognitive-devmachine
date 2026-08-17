@@ -1,0 +1,40 @@
+name: GO Meta-Learning Stage-B
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'the artefact/clayverse/method_memory.py'
+      - 'the artefact/tests/test_method_memory.py'
+      - '.github/workflows/go-meta-learning-stageb.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  stageb-method-memory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR head
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Bind source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "HEAD=$(git rev-parse HEAD)"
+          test "$(git status --porcelain)" = ""
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bounded test dependency
+        run: python -m pip install --disable-pip-version-check 'pytest==8.4.1'
+      - name: Compile new method-memory boundary
+        working-directory: the artefact
+        run: python -m py_compile clayverse/method_memory.py tests/test_method_memory.py
+      - name: Run Stage-B foundation plus adjacent MicroClay regression
+        working-directory: the artefact
+        run: python -m pytest -q tests/test_method_memory.py tests/test_microclay_retrieval.py

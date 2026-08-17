@@ -1,0 +1,36 @@
+{
+  "schema": "clayverse-go-receipt-correction/v1",
+  "recorded_at": "2026-08-17T13:43:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_policy_commits": [
+    "11e1a61706241aed6c66e6c68e3aea84f4977b95",
+    "a333cd624c06b8b8a3a9c70b021529f511812662"
+  ],
+  "corrects_claim": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "corrects_result": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+  "claim_commit": "1aa57a9fa25285fee78ebd555567328663159d36",
+  "result_commit": "b0210496a3a2bc9c79d4815c3d659646bc5eead8",
+  "classification": "EXPERIMENT_BUDGET_RACE_VIOLATION_NONCANONICAL_TRIGGER_ID_EXECUTION_PRESERVED",
+  "reason": "The exact go user-turn metadata available to this organ is only minute-precision (2026-08-17T13:35+07:00) and exposes no immutable shared request/turn identifier. Current coordination law requires a unique canonical request identity or at least whole-second immutable message timestamp; it also records semantic duplicate claim paths for this same 13:35 +07 payload. The earlier create-only path therefore was not a protocol-valid canonical lease.",
+  "accounting": {
+    "earlier_claim_create_succeeded": true,
+    "earlier_intervention_executed": true,
+    "earlier_result_preserved": true,
+    "counts_as_valid_canonical_1_of_1_lease": false,
+    "macrocycle_unusual_experiment_state": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+    "additional_distinct_experiments_authorized": false
+  },
+  "semantic_duplicate_evidence": [
+    "research_entity/continuity/go_experiment_claims/20260817T133500+0700_4cd0e21a9a0795a1.result.json",
+    "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md"
+  ],
+  "evidence_preserved": {
+    "finding": "The bounded replay-ordering discriminator observed that checking a durable request identity before a changed trigger state rejects UNKNOWN->PRESENT drift as method_retrieval_identity, whereas the counter-reality trigger-first ordering would silently return NOT_TRIGGERED.",
+    "use": "Retain only as bounded source-mechanism observation and regression rationale for issue #412 / PR #411. Do not represent it as protocol-valid canonical GO experiment evidence or exact PR/OCI runtime evidence.",
+    "whole_product_evidence": false
+  },
+  "next_work_rule": "No further distinct unusual experiment in this macro-cycle. Continue only ordinary source review, deterministic regression design, fusion, coordination and acceptance-blocker reduction."
+}

@@ -36,41 +36,10 @@ jobs:
             tests/test_microclay_replay_full_identity.py \
             tests/test_microclay_replay_identity.py \
             tests/test_microclay_replay_integration.py \
-            tests/test_microclay_receipt_context.py
-      - name: Unusual experiment - durable receipt budget tamper must fail closed
-        working-directory: the artefact
-        env:
-          PYTHONPATH: .
+            tests/test_microclay_receipt_context.py \
+            tests/test_world_context_hard_bound.py
+      - name: GO unusual-experiment accounting
         run: |
-          python - <<'PY'
-          import tempfile, uuid
-          from pathlib import Path
-          from clayverse.identity import IdentityRouter
-          from clayverse.microclay_retrieval import MicroClayRetrieval
-          from clayverse.store import StaleGeneration, UnifiedDB
-
-          with tempfile.TemporaryDirectory() as td:
-              db = UnifiedDB(Path(td) / 'unified.db')
-              try:
-                  IdentityRouter(db, {})
-                  db.add_memory('fact','memory','alpha memory',None,'gabriel',{'experiment':'DURABLE_RECEIPT_BUDGET_TAMPER'})
-                  session_id='session:gabriel'
-                  turn_id=db.append_turn(session_id,'gabriel','user','alpha')
-                  episode_id=str(uuid.uuid4())
-                  db.db.execute('INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)',(episode_id,session_id,1.0,turn_id,0.5,'[]',None,'OPEN'))
-                  causal_id=str(uuid.uuid4())
-                  organ=MicroClayRetrieval(db)
-                  req=dict(query='alpha',user_id='gabriel',session_id=session_id,turn_id=turn_id,episode_id=episode_id,causal_id=causal_id,generation=db.entity_generation(),budget_chars=1200,limit=24)
-                  first=organ.retrieve(**req)
-                  db.db.execute('UPDATE retrieval_episodes SET budget_chars=1199 WHERE causal_id=?',(causal_id,))
-                  try:
-                      organ.retrieve(**req)
-                  except StaleGeneration as exc:
-                      assert 'retrieval_identity' in str(exc)
-                      print('UNUSUAL_EXPERIMENT=DURABLE_RECEIPT_BUDGET_TAMPER RESULT=FAIL_CLOSED')
-                  else:
-                      raise AssertionError('tampered durable retrieval receipt replay was admitted')
-                  assert first['receipt']['budget_chars'] == 1200
-              finally:
-                  db.close()
-          PY
+          echo "UNUSUAL_EXPERIMENT_SLOT=CONSUMED_EXTERNALLY"
+          echo "EXPERIMENT=RETRIEVAL_RECEIPT_DOMINATES_WORLD_BUDGET"
+          echo "THIS_WORKFLOW=REGRESSION_ONLY"

@@ -1,0 +1,41 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "scope": "provider-neutral isolated hosted fallback for exact ClayVerse OCI build validation after Vercel rate limiting",
+  "product_endpoint": "ClayVerse single OCI container",
+  "owner_execution_policy": "isolated sandboxes only; VPS/self-hosted/production forbidden; Vercel preferred but not exclusive",
+  "fallback_branch": "gpt56sol/go-clayverse-oci-hosted-sandbox-20260817",
+  "prepared_gate": {
+    "initial_commit": "c8f9797a511ed205fcaf89c826cb0c6cec813989",
+    "reduced_sentinel_commit": "1e63c9e87c0f62954a4d978ddabeb68233e97c4d",
+    "runner_label": "ubuntu-latest",
+    "self_hosted": false,
+    "vps": false,
+    "intended_normal_validation": "bind exact commit and the artefact tree, require Docker, then build/run exact OCI candidate and verify immutable runtime/direct-shell rejection/health",
+    "unusual_experiment_count_added": 0
+  },
+  "observed_execution": {
+    "workflow_run_id": 31997341463,
+    "job_id": 95291238792,
+    "status": "COMPLETED_FAILURE_BEFORE_STEP_1",
+    "runner_id": 0,
+    "runner_name": "",
+    "steps": [],
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "artifact_test_started": false,
+    "oci_build_started": false,
+    "interpretation": "HOSTED_COMPUTE_ADMISSION_BLOCKER_NOT_ARTIFACT_FAILURE"
+  },
+  "fusion": {
+    "vercel_rate_limit_receipt": "the artefact/receipts/2026-08-17_GO_VERCEL_VCR_LOG_RECHECK_GPT56SOL.json",
+    "direct_shell_repair_receipt": "the artefact/receipts/2026-08-17_go_direct_shell_effect_boundary.json",
+    "current_conclusion": "both available remote isolated OCI execution routes were blocked before the exact current ClayVerse OCI candidate could execute; source/security repair remains committed but whole-product executable acceptance stays open"
+  },
+  "next_executable_step": "When any authorized isolated hosted compute surface is admitted, execute the already-prepared exact-tree OCI gate: build main/the artefact with the locked EntityOS digest, run as the declared non-root user, verify root-owned non-writable policy/runtime, direct-shell rejection, health, managed MCP path, persistence/restart and dual-user isolation. Prefer the documented Vercel VCR -> Sandbox path when provider admission is available.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "together_api_used": false,
+  "paid_training_used": false
+}

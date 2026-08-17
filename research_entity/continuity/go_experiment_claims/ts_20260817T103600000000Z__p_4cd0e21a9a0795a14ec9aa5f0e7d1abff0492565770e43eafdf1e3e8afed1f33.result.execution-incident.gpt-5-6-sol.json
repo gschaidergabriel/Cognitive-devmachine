@@ -1,0 +1,29 @@
+{
+  "schema": "clay-go-experiment-result-correction/v1",
+  "trigger_key": "ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "corrects_by_append_only_reference": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+  "claim_commit": "2de642140d1101d9b32152407254c17deda5b9bc",
+  "result_commit": "eeae46293cd223251137d0d18a1f4242d92a5ec1",
+  "durable_result_receipt_commit": "640af844ba885629e02f8a49fe24dd722e70c4b0",
+  "precision_correction_commit": "3fe178bf3ccc3f292ff3b67551bf6148a3e0c504",
+  "incident_classification": "COORDINATION_PROTOCOL_VIOLATION_UNAUTHORIZED_UNUSUAL_EXPERIMENT_EXECUTED",
+  "cause": "The shared exact user-message metadata for this 17:36 go is minute-precision only. The claimant synthesized 17:36:00.000000 and treated it as immutable whole-second message metadata. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL section 2.3 explicitly forbids this and requires COORDINATION_BLOCKED when only minute precision is available.",
+  "experiment_name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+  "experiment_executed": true,
+  "observed_execution": {
+    "surface": "authorized isolated non-production controller",
+    "tmux_binary_executed": false,
+    "network_used": false,
+    "total_cases": 277,
+    "positive_controls": 19,
+    "negative_mutation_cases": 258,
+    "unexpected_acceptances": 0,
+    "unexpected_rejections": 0,
+    "raw_observation": "The reconstructed narrow diagnostic predicate rejected all 258 tested mutations and accepted all 19 controls.",
+    "interpretation_limit": "Preserve as coordination-tainted bounded mechanism observation only. Because execution lacked a valid unusual-experiment lease, it must not be counted as an authorized GO unusual experiment, exact-current real-tmux evidence, OCI/native-Claude evidence, or whole-product acceptance evidence."
+  },
+  "coordination_disposition": "The 17:36 go unusual-experiment slot remains COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT. No further unusual experiment is permitted for this user turn. Preserve the original invalid claim/result and all correction receipts; do not rewrite history.",
+  "promotion_fence": "Do not use the claimed PASS or the receipt field unusual_experiment_budget=CONSUMED_1_OF_1 as promotion authority. The next accepted tmux gate remains an ordinary exact-head authorized isolated runtime regression after one fresh PR611 rejoin at actual execution admission.",
+  "whole_product_evidence": false,
+  "recorded_by": "GPT-5.6 Sol temporary Clay organ"
+}

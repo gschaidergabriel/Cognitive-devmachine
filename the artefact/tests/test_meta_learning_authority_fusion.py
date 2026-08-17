@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import json
+import sqlite3
 import time
 import uuid
 
 import pytest
 
-from clayverse.method_memory import METHOD_SCHEMA, MethodMemoryManager, MethodRecordError
+from clayverse.method_memory import METHOD_SCHEMA, MethodRecordError
 from clayverse.method_stage_b import StageBShadowRetrieval
-from clayverse.problem_signature import ProblemSignatureAdmission
 from clayverse.store import UnifiedDB
 
 
@@ -38,6 +39,7 @@ def _active_turn(db, user_id: str, session_id: str, content: str = "novel unreso
     episode_id = "active:" + uuid.uuid4().hex
     causal_id = "causal:" + uuid.uuid4().hex
     generation = db.entity_generation()
+    refs_json = json.dumps(sorted(set(resources)))
     db.db.execute(
         "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
         "VALUES(?,?,?,?,?,?,?,?)",
@@ -46,7 +48,7 @@ def _active_turn(db, user_id: str, session_id: str, content: str = "novel unreso
     db.db.execute(
         "INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,effect_id,outcome,workspace_selected,started_at) "
         "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-        (session_id, user_id, turn_id, episode_id, causal_id, generation, "[]", None, None, 0, time.time()),
+        (session_id, user_id, turn_id, episode_id, causal_id, generation, refs_json, None, None, 0, time.time()),
     )
     return turn_id, episode_id, causal_id, generation
 
@@ -94,11 +96,16 @@ def _safe_evaluation(held_out):
 def _promoted_framework(db, session_id: str, *, counters=()):
     _completed_episode(db, session_id, "source:a")
     _completed_episode(db, session_id, "heldout:b")
-    manager = MethodMemoryManager(db)
+    manager = db.method_manager()
     signature = {"goal": ["recover"], "mechanism": ["stateful", "provenance"]}
     candidate_id = manager.admit(
         kind="framework_candidate",
-        payload=_payload(name="recovery framework candidate", signature=signature, episodes=["source:a"], status="CANDIDATE"),
+        payload=_payload(
+            name="recovery framework candidate",
+            signature=signature,
+            episodes=["source:a"],
+            status="CANDIDATE",
+        ),
         source_turn_id=None,
         user_id="gabriel",
         provenance={"source": "test"},
@@ -120,12 +127,43 @@ def _promoted_framework(db, session_id: str, *, counters=()):
     return result, signature
 
 
+def test_unifieddb_rejects_reserved_direct_write(tmp_path):
+    db, _, _ = _db(tmp_path)
+    with pytest.raises(PermissionError, match="reserved method-memory"):
+        db.add_memory(
+            "framework_candidate",
+            "bypass",
+            "{}",
+            None,
+            "gabriel",
+            {"source": "bypass"},
+        )
+
+
+def test_raw_sql_reserved_write_requires_one_shot_capability(tmp_path):
+    db, _, _ = _db(tmp_path)
+    with pytest.raises(sqlite3.IntegrityError, match="canonical admission"):
+        db.db.execute(
+            "INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",
+            (
+                str(uuid.uuid4()),
+                "framework_candidate",
+                "raw-bypass",
+                "{}",
+                None,
+                "gabriel",
+                time.time(),
+                "{}",
+            ),
+        )
+
+
 def test_normal_admission_cannot_mint_active_framework(tmp_path):
     db, gs, _ = _db(tmp_path)
     _completed_episode(db, gs, "source:a")
     _completed_episode(db, gs, "heldout:b")
     with pytest.raises(MethodRecordError, match="dedicated lifecycle"):
-        MethodMemoryManager(db).admit(
+        db.method_manager().admit(
             kind="framework",
             payload=_payload(
                 name="forged active framework",
@@ -143,11 +181,16 @@ def test_promotion_requires_held_out_safety_evidence(tmp_path):
     db, gs, _ = _db(tmp_path)
     _completed_episode(db, gs, "source:a")
     _completed_episode(db, gs, "heldout:b")
-    manager = MethodMemoryManager(db)
+    manager = db.method_manager()
     signature = {"goal": ["recover"], "mechanism": ["stateful"]}
     candidate_id = manager.admit(
         kind="framework_candidate",
-        payload=_payload(name="candidate", signature=signature, episodes=["source:a"], status="CANDIDATE"),
+        payload=_payload(
+            name="candidate",
+            signature=signature,
+            episodes=["source:a"],
+            status="CANDIDATE",
+        ),
         source_turn_id=None,
         user_id="gabriel",
         provenance={"source": "test"},
@@ -170,16 +213,46 @@ def test_promotion_requires_held_out_safety_evidence(tmp_path):
         )
 
 
-def test_promoted_method_is_receipt_bound(tmp_path):
+def test_promotion_is_single_use_and_receipt_payload_bound(tmp_path):
     db, gs, _ = _db(tmp_path)
-    result, _ = _promoted_framework(db, gs)
-    row = MethodMemoryManager(db).row_by_id(result["promoted_memory_id"], "gabriel")
-    record = MethodMemoryManager(db).decode_row(row)
-    provenance = __import__("json").loads(row["provenance"])
+    result, signature = _promoted_framework(db, gs)
+    manager = db.method_manager()
+    row = manager.row_by_id(result["promoted_memory_id"], "gabriel")
+    record = manager.decode_row(row)
+    provenance = json.loads(row["provenance"])
     assert record.status == "PROMOTED"
     assert provenance["promotion_receipt_id"] == result["promotion_receipt_id"]
     assert provenance["truth_authority"] is False
     assert provenance["effect_authority"] is False
+    with pytest.raises(MethodRecordError, match="already has a promotion receipt"):
+        manager.promote(
+            candidate_memory_id=result["candidate_memory_id"],
+            target_kind="framework",
+            promoted_payload=_payload(
+                name="recovery framework",
+                signature=signature,
+                episodes=["source:a", "heldout:b"],
+                status="PROMOTED",
+            ),
+            evaluation=_safe_evaluation(["heldout:b"]),
+            user_id="gabriel",
+            provenance={"source": "duplicate-promotion"},
+        )
+
+
+def test_reserved_method_rows_are_immutable(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    result, _ = _promoted_framework(db, gs)
+    with pytest.raises(sqlite3.IntegrityError, match="immutable"):
+        db.db.execute(
+            "UPDATE durable_memory SET value='{}' WHERE memory_id=?",
+            (result["promoted_memory_id"],),
+        )
+    with pytest.raises(sqlite3.IntegrityError, match="immutable"):
+        db.db.execute(
+            "DELETE FROM durable_memory WHERE memory_id=?",
+            (result["promotion_receipt_id"],),
+        )
 
 
 def test_stage_b_without_admitted_signature_is_not_served(tmp_path):
@@ -209,7 +282,7 @@ def test_admitted_signature_yields_shadow_only_and_replays(tmp_path):
     turn_id, episode_id, causal_id, generation = _active_turn(
         db, "gabriel", gs, resources=("path:/tmp/input",)
     )
-    admitted = ProblemSignatureAdmission(db).admit(
+    admitted = db.problem_signature_admission().admit(
         problem_signature=signature,
         user_id="gabriel",
         session_id=gs,
@@ -236,9 +309,12 @@ def test_admitted_signature_yields_shadow_only_and_replays(tmp_path):
         budget_chars=12000,
     )
     assert first["method_context"] == []
-    assert [item["memory_id"] for item in first["shadow_method_context"]] == [promoted["promoted_memory_id"]]
+    assert [item["memory_id"] for item in first["shadow_method_context"]] == [
+        promoted["promoted_memory_id"]
+    ]
     assert first["receipt"]["served"] is False
     assert first["receipt"]["fact_status_unchanged"] == "UNKNOWN"
+    assert first["receipt"]["signature_receipt_id"] == admitted["memory_id"]
     second = stage_b.retrieve_shadow(
         user_id="gabriel",
         session_id=gs,
@@ -256,11 +332,57 @@ def test_admitted_signature_yields_shadow_only_and_replays(tmp_path):
     assert second["receipt"]["request_identity_sha256"] == first["receipt"]["request_identity_sha256"]
 
 
+def test_problem_signature_replay_is_atomic_identity_bound(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    _, signature = _promoted_framework(db, gs)
+    turn_id, episode_id, causal_id, generation = _active_turn(db, "gabriel", gs)
+    admission = db.problem_signature_admission()
+    first = admission.admit(
+        problem_signature=signature,
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+        resource_refs=[],
+        source="VALIDATED_ABSTRACTION",
+        provenance={"source": "test"},
+    )
+    second = admission.admit(
+        problem_signature=signature,
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+        resource_refs=[],
+        source="VALIDATED_ABSTRACTION",
+        provenance={"source": "test"},
+    )
+    assert second["replayed"] is True
+    assert second["memory_id"] == first["memory_id"]
+    with pytest.raises(MethodRecordError, match="replay identity/provenance mismatch"):
+        admission.admit(
+            problem_signature={"goal": ["recover"], "mechanism": ["privacy"]},
+            user_id="gabriel",
+            session_id=gs,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+            resource_refs=[],
+            source="VALIDATED_ABSTRACTION",
+            provenance={"source": "test"},
+        )
+
+
 def test_stage_b_replay_identity_binds_budget_and_resources(tmp_path):
     db, gs, _ = _db(tmp_path)
     _, signature = _promoted_framework(db, gs)
     turn_id, episode_id, causal_id, generation = _active_turn(db, "gabriel", gs)
-    admitted = ProblemSignatureAdmission(db).admit(
+    admitted = db.problem_signature_admission().admit(
         problem_signature=signature,
         user_id="gabriel",
         session_id=gs,
@@ -274,48 +396,90 @@ def test_stage_b_replay_identity_binds_budget_and_resources(tmp_path):
     )
     stage_b = StageBShadowRetrieval(db)
     stage_b.retrieve_shadow(
-        user_id="gabriel", session_id=gs, turn_id=turn_id, episode_id=episode_id,
-        causal_id=causal_id, generation=generation, evidence_status="UNKNOWN",
-        signature_receipt_id=admitted["memory_id"], resource_refs=[], budget_chars=12000,
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+        evidence_status="UNKNOWN",
+        signature_receipt_id=admitted["memory_id"],
+        resource_refs=[],
+        budget_chars=12000,
     )
-    with pytest.raises(MethodRecordError, match="replay request identity mismatch"):
+    with pytest.raises(MethodRecordError, match="replay request_identity_sha256 mismatch"):
         stage_b.retrieve_shadow(
-            user_id="gabriel", session_id=gs, turn_id=turn_id, episode_id=episode_id,
-            causal_id=causal_id, generation=generation, evidence_status="UNKNOWN",
-            signature_receipt_id=admitted["memory_id"], resource_refs=[], budget_chars=9000,
+            user_id="gabriel",
+            session_id=gs,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+            evidence_status="UNKNOWN",
+            signature_receipt_id=admitted["memory_id"],
+            resource_refs=[],
+            budget_chars=9000,
         )
     with pytest.raises(MethodRecordError, match="resource refs diverge"):
         stage_b.retrieve_shadow(
-            user_id="gabriel", session_id=gs, turn_id=turn_id, episode_id=episode_id,
-            causal_id=causal_id, generation=generation, evidence_status="UNKNOWN",
-            signature_receipt_id=admitted["memory_id"], resource_refs=["path:/different"], budget_chars=12000,
+            user_id="gabriel",
+            session_id=gs,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+            evidence_status="UNKNOWN",
+            signature_receipt_id=admitted["memory_id"],
+            resource_refs=["path:/different"],
+            budget_chars=12000,
         )
 
 
 def test_linked_counterexample_blocks_shadow_transfer(tmp_path):
     db, gs, _ = _db(tmp_path)
     _completed_episode(db, gs, "counter:c")
-    manager = MethodMemoryManager(db)
+    manager = db.method_manager()
     signature = {"goal": ["recover"], "mechanism": ["stateful", "provenance"]}
     counter_id = manager.admit(
         kind="counterexample",
-        payload=_payload(name="known failure", signature=signature, episodes=["counter:c"], status="PROMOTED"),
+        payload=_payload(
+            name="known failure",
+            signature=signature,
+            episodes=["counter:c"],
+            status="PROMOTED",
+        ),
         source_turn_id=None,
         user_id="gabriel",
         provenance={"source": "counter-test"},
     )
     promoted, _ = _promoted_framework(db, gs, counters=[counter_id])
     turn_id, episode_id, causal_id, generation = _active_turn(db, "gabriel", gs)
-    admitted = ProblemSignatureAdmission(db).admit(
+    admitted = db.problem_signature_admission().admit(
         problem_signature=signature,
-        user_id="gabriel", session_id=gs, turn_id=turn_id, episode_id=episode_id,
-        causal_id=causal_id, generation=generation, resource_refs=[],
-        source="EXPLICIT_STRUCTURED", provenance={"source": "test"},
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+        resource_refs=[],
+        source="EXPLICIT_STRUCTURED",
+        provenance={"source": "test"},
     )
     result = StageBShadowRetrieval(db).retrieve_shadow(
-        user_id="gabriel", session_id=gs, turn_id=turn_id, episode_id=episode_id,
-        causal_id=causal_id, generation=generation, evidence_status="UNKNOWN",
-        signature_receipt_id=admitted["memory_id"], resource_refs=[],
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+        evidence_status="UNKNOWN",
+        signature_receipt_id=admitted["memory_id"],
+        resource_refs=[],
     )
-    assert promoted["promoted_memory_id"] not in [item["memory_id"] for item in result["shadow_method_context"]]
-    assert counter_id in [item["memory_id"] for item in result["shadow_counterevidence"]]
+    assert promoted["promoted_memory_id"] not in [
+        item["memory_id"] for item in result["shadow_method_context"]
+    ]
+    assert counter_id in [
+        item["memory_id"] for item in result["shadow_counterevidence"]
+    ]

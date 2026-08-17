@@ -71,6 +71,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         "leases_expired": 0,
         "retrieval_learning_eligible": 0,
         "retrieval_learning_applied": 0,
+        "retrieval_learning_uncertain_ignored": 0,
         "generation": 0,
     }
 
@@ -185,11 +186,11 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         counts["leases_expired"] = int(tx.execute("SELECT COUNT(*) FROM leases WHERE expires_at>0").fetchone()[0])
         tx.execute("UPDATE leases SET expires_at=0")
 
-    # Verified effect outcomes are legitimate learning evidence in the current
-    # generation. Drain them before advancing the global generation so restart
-    # cannot strand an otherwise valid retrieval outcome behind the stale fence.
-    # Re-running after a crash is idempotent because retrieval_feedback receipts
-    # are canonical and duplicate-protected.
+    # Known effect outcomes are legitimate learning evidence in the current
+    # generation. Drain only VERIFIED/DENIED/FAILED before advancing the global
+    # generation so restart cannot strand valid feedback behind the stale fence.
+    # UNKNOWN_AFTER_RESTART and stale/ambiguous evidence are explicitly not used as
+    # negative reward. Re-running after a crash is receipt-idempotent.
     current_generation = db.entity_generation()
     from .microclay_retrieval import MicroClayRetrieval
     organ = MicroClayRetrieval(db)
@@ -197,12 +198,38 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     for session in sessions:
         if int(session["generation"]) != int(current_generation):
             raise RecoveryIntegrityError("session generation diverged before retrieval learning drain")
-        learned = organ.learn_from_verified_outcomes(
-            session_id=str(session["session_id"]),
-            generation=int(current_generation),
-        )
-        counts["retrieval_learning_eligible"] += int(learned["eligible"])
-        counts["retrieval_learning_applied"] += int(learned["applied"])
+        session_id = str(session["session_id"])
+        rows = db.db.execute(
+            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND e.status IN ('VERIFIED','DENIED','FAILED') "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
+            "ORDER BY r.ts LIMIT 100",
+            (session_id, int(current_generation)),
+        ).fetchall()
+        counts["retrieval_learning_eligible"] += len(rows)
+        for row in rows:
+            result = organ.credit(
+                causal_id=str(row["causal_id"]),
+                generation=int(row["generation"]),
+                credit=float(row["credit"]),
+                signal_class=f"effect_outcome:{row['status']}",
+            )
+            counts["retrieval_learning_applied"] += int(bool(result.get("applied")))
+        counts["retrieval_learning_uncertain_ignored"] += int(db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND e.status NOT IN ('VERIFIED','DENIED','FAILED') "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
+            (session_id, int(current_generation)),
+        ).fetchone()[0])
 
     counts["generation"] = db.advance_entity_generation()
     return counts

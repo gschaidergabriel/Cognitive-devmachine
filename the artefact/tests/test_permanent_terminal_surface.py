@@ -45,6 +45,7 @@ def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_pat
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
     calls = []
 
     def fake_run(argv, **kwargs):
@@ -61,7 +62,9 @@ def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_pat
     assert "--strict-mcp-config" not in command
     assert "clayverse-mcp.json" not in command
     assert "--tools ''" in command or '--tools ""' in command
-    assert "mcp__clayverse__*" in command
+    assert "mcp__clayverse__session_state" in command
+    assert "mcp__clayverse__request_effect" in command
+    assert "mcp__clayverse__*" not in command
     assert "--append-system-prompt-file" in command
     assert "/etc/claude-code/managed-settings.json" in command
 

@@ -1,0 +1,56 @@
+{
+  "schema": "clayverse.go-receipt-addendum/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "ChatGPT GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_main_before_write": "e1d7e8e4a5d3fba843208806037565afc3b465ac",
+  "supersedes_coordination_pointer_in": [
+    "the artefact/receipts/2026-08-17_GO_1352_MICROCLAY_ROUTE_IDENTITY_FENCE_GPT56SOL.json",
+    "the artefact/receipts/2026-08-17_GO_1352_MICROCLAY_ROUTE_POLICY_V2_ADDENDUM_GPT56SOL.json"
+  ],
+  "coordination_reentry": {
+    "retired_donor_pr": 531,
+    "retired_donor_state": "CLOSED_UNMERGED",
+    "reason": "The earlier #415 integration base was closed unmerged, and current retained Stage-A PR #504 independently fused the same exact-memory learned-route semantic. Keeping #531 would duplicate Stage-A authority.",
+    "retained_stagea_pr": 504,
+    "retained_stagea_branch": "go/microclay-stagea-entrypoint-v2-current-20260817",
+    "observed_retained_head": "ad31e9d3872e185c3f57bc501d7415ad13f3b906"
+  },
+  "retained_exact_source_observation": {
+    "policy_version": 3,
+    "route_target": "exact durable memory_id hash",
+    "policy_namespace": "v3:<policy-key>",
+    "same_subject_sibling_fence_present": true,
+    "legacy_v2_subject_route_isolated_from_v3": true,
+    "generic_subject_kind_capital_cannot_open_lexical_miss": true,
+    "shadow_serving_boundary_preserved": true,
+    "note": "PR #504 prose still contains stale v2/subject wording in places; exact current source and tests are stronger and are the evidence used here."
+  },
+  "parallel_coherence_observation": {
+    "initial_v3_test_drift_seen_at_head": "5a35aa8a3f160e0c54cafef4dca15a158ec89061",
+    "write_attempt_result": "409_STALE_SHA_NO_OVERWRITE",
+    "refreshed_head": "ad31e9d3872e185c3f57bc501d7415ad13f3b906",
+    "drift_status_after_refresh": "PARALLEL_WORKER_ALREADY_REPAIRED",
+    "verified_tests": [
+      "test_microclay_learned_entrypoint.py expects policy v3 and exact-memory route keys",
+      "same-subject sibling cannot inherit learned route",
+      "legacy v2 subject route capital cannot affect v3",
+      "test_microclay_learned_entrypoint_store_slice.py uses memory_id and policy v3"
+    ]
+  },
+  "execution_evidence_boundary": {
+    "exact_retained_head_full_pytest": "UNOBSERVED",
+    "vercel_sandbox": "ADMISSION_BLOCKED_BEFORE_SANDBOX_START_BY_BUILD_RATE_LIMIT",
+    "github_hosted_runner_for_this_organs_donor": "ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS",
+    "runtime_test_credit_added_by_this_reentry": "ZERO",
+    "whole_product_pass": false
+  },
+  "unusual_experiment_accounting": {
+    "this_organ_added": 0,
+    "shared_go_note": "Merged PR #524 records that the 13:52 go slot had already been claimed by the tmux namespace experiment; this organ did not attempt a second unusual experiment."
+  },
+  "next_gate": "Keep #504 as the single Stage-A learned-entry lane. Refresh its exact head against current main, then run focused learned-entry/same-subject/policy-isolation/cross-user/effect-credit/crash-atomicity regressions in an actually-started authorized Vercel Sandbox before any ACTIVE promotion or fusion to canonical main.",
+  "acceptance": "IN_PROGRESS"
+}

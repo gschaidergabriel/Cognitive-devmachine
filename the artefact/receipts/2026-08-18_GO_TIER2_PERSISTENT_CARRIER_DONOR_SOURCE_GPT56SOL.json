@@ -1,0 +1,77 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:58:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "70a4383a808561d7d941c5e9a6f2a9aa0b3a52d4",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "a656cdaff5472bdf95aca24c071cec3997cd8e44",
+    "handler_progress": [
+      "deterministic carrier identity is now source-implemented",
+      "temporary carrier is persistent:true",
+      "typed carrier receipt binds Research/OCI/EntityOS/generation identity"
+    ],
+    "remaining_source_conflict": "retained handler still imports Snapshot, snapshots the carrier, and creates the replacement from that snapshot, while Tier2 guard v14 forbids Snapshot/fork/snapshot-derived replacement and any generic persistent:true marker; exact-head build therefore remains intentionally fail-closed even before runtime",
+    "tier2_runtime_verified": false
+  },
+  "bounded_donor": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 860,
+    "branch": "gpt56sol/tier2-persistent-carrier-donor-20260818-0152",
+    "head": "d46c47ed6276e743d61a29ce5777b0685a75cd8f",
+    "base_snapshot": "e38910f31a24b8ffd18d21ce48b4e8fac80a6bac",
+    "classification": "SOURCE_CANDIDATE_DONOR_ONLY_NOT_SECOND_CANONICAL_PATH",
+    "properties": [
+      "deterministic carrier and replacement names from source sandbox plus immutable Research SHA",
+      "persistent:true confined to the temporary declared-transfer carrier",
+      "carrier payload limited to digest-bound chunks plus exact typed receipt",
+      "no Snapshot.get, snapshot clone, fork, Mistral credential, or GitHub credential path",
+      "carrier.stop persistence boundary before source deletion",
+      "bounded retry for SANDBOX_STOPPING/SANDBOX_SNAPSHOTTING/SANDBOX_STOPPED lifecycle transition",
+      "fresh empty persistent:false replacement receives verified chunks instead of inheriting a snapshot",
+      "carrier cleanup must be confirmed"
+    ],
+    "source_guard_schema": "ClayVerseTier2PersistentCarrierDonorGuard/v2",
+    "runtime_verified": false,
+    "merge_authorized_as_whole": false
+  },
+  "provider_contract_adjudication": {
+    "persistence_status": "VERCEL_SANDBOX_PERSISTENCE_GA",
+    "persistent_sandbox_behavior": "stopping a persistent Sandbox checkpoints filesystem state and later access resumes from the saved state",
+    "stop_transition": "SANDBOX_STOPPING/SANDBOX_SNAPSHOTTING can be transient and must be retried after stop completion",
+    "snapshot_authority": "standalone snapshot cloning is not accepted as an independently durable Tier2 handoff substitute merely by source shape",
+    "effect_on_candidate": "persistent named carrier retained; direct snapshot-derived replacement rejected"
+  },
+  "execution_admission": {
+    "controller_head_checked": "a656cdaff5472bdf95aca24c071cec3997cd8e44",
+    "vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "build_started": false,
+    "product_runtime_executed": false,
+    "classification": "CONTROL_PLANE_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
+    "exact_oci_runtime_credit": 0,
+    "tier2_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "coordination": {
+    "retained_pr810_remains_single_controller_lane": true,
+    "donor_pr860_must_be_adjudicated_and_fused_then_closed": true,
+    "stale_parallel_overwrite_attempted": false,
+    "owner_credentials_used": false
+  },
+  "unusual_experiment": {
+    "global_go_slot_already_consumed": true,
+    "new_experiment_count": 0
+  },
+  "next_exact_step": "Adjudicate PR860 helper semantics against the latest moving PR810 handler, fuse only the no-snapshot fresh-replacement and lifecycle-retry pieces into the retained handler/guard, close the donor, then execute exact-head Vercel guards and the immutable PR686 OCI/provider/EffectGate/EntityOS/Tier1/Tier2 sequence when Vercel admits a build."
+}

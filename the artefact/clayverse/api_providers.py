@@ -50,6 +50,19 @@ def _validated_https_endpoint(value: str) -> str:
     return endpoint
 
 
+def _reject_nonfinite_json(value: str):
+    raise ValueError(f"non-finite JSON constant rejected: {value}")
+
+
+def _reject_duplicate_json_pairs(pairs):
+    obj = {}
+    for key, value in pairs:
+        if key in obj:
+            raise ValueError("duplicate JSON object key rejected")
+        obj[key] = value
+    return obj
+
+
 @dataclass(frozen=True)
 class ChatCompletionsProviderConfig:
     provider: str
@@ -137,26 +150,39 @@ class GenericChatCompletionsInference:
         ):
             raise InferenceProtocolError("invalid LLM API observation")
 
-        world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        try:
+            world_json = json.dumps(
+                world,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            )
+        except (TypeError, ValueError) as exc:
+            raise InferenceProtocolError("LLM API WORLD is not canonical JSON") from exc
         if len(world_json.encode("utf-8")) > self.MAX_WORLD_BYTES:
             raise RuntimeError("assembled world exceeds LLM API boundary")
 
-        body = json.dumps(
-            {
-                "model": self.config.model,
-                "messages": [
-                    {"role": "system", "content": self._system_prompt()},
-                    {"role": "user", "content": f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"},
-                ],
-                "response_format": {"type": "json_object"},
-                "stream": False,
-                "temperature": 0,
-                "max_tokens": self.MAX_TOKENS,
-            },
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        ).encode("utf-8")
+        try:
+            body = json.dumps(
+                {
+                    "model": self.config.model,
+                    "messages": [
+                        {"role": "system", "content": self._system_prompt()},
+                        {"role": "user", "content": f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"},
+                    ],
+                    "response_format": {"type": "json_object"},
+                    "stream": False,
+                    "temperature": 0,
+                    "max_tokens": self.MAX_TOKENS,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            ).encode("utf-8")
+        except (TypeError, ValueError) as exc:
+            raise InferenceProtocolError("LLM API request is not canonical JSON") from exc
         request = Request(
             self.config.endpoint,
             data=body,
@@ -196,9 +222,13 @@ class GenericChatCompletionsInference:
             raise InferenceProtocolError("LLM API response exceeds bound")
 
         try:
-            envelope = json.loads(raw)
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            raise InferenceProtocolError("LLM API response envelope is not JSON") from exc
+            envelope = json.loads(
+                raw,
+                parse_constant=_reject_nonfinite_json,
+                object_pairs_hook=_reject_duplicate_json_pairs,
+            )
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+            raise InferenceProtocolError("LLM API response envelope is not canonical JSON") from exc
         if not isinstance(envelope, dict):
             raise InferenceProtocolError("LLM API response envelope must be an object")
 
@@ -209,6 +239,8 @@ class GenericChatCompletionsInference:
             raise InferenceProtocolError("LLM API response id is missing or invalid")
         if not isinstance(model_returned, str) or not model_returned or len(model_returned) > 256:
             raise InferenceProtocolError("LLM API response model is missing or invalid")
+        if model_returned != self.config.model:
+            raise InferenceProtocolError("LLM API response model does not match requested model")
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
             raise InferenceProtocolError("LLM API response must contain exactly one choice")
 
@@ -227,9 +259,13 @@ class GenericChatCompletionsInference:
         ):
             raise InferenceProtocolError("LLM API message content must be bounded JSON text")
         try:
-            decision_payload = json.loads(content)
-        except json.JSONDecodeError as exc:
-            raise InferenceProtocolError("LLM API message content is not JSON") from exc
+            decision_payload = json.loads(
+                content,
+                parse_constant=_reject_nonfinite_json,
+                object_pairs_hook=_reject_duplicate_json_pairs,
+            )
+        except (json.JSONDecodeError, ValueError) as exc:
+            raise InferenceProtocolError("LLM API message content is not canonical JSON") from exc
 
         decision = parse_claude_decision_payload(decision_payload)
         decision["inference_receipt"] = {

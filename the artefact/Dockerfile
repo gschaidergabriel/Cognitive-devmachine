@@ -67,5 +67,7 @@ RUN useradd --system --uid 10001 --create-home --shell /opt/clayverse/runtime/de
 USER clayverse
 VOLUME ["/var/lib/clayverse", "/workspace"]
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/readyz',timeout=3).read()"]
+# Image health is liveness-only. Runtime readiness (canonical state + managed
+# tmux/Claude admission) is intentionally exposed separately at /readyz.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/healthz',timeout=3).read()"]
 ENTRYPOINT ["python","-m","clayverse.service"]

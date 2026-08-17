@@ -1,0 +1,88 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_minute": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol temporary organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXACT_RELEVANT_FILE_SUBSET",
+  "canonical_main_base": "608eafe5f154d0dbc3ddb4e9a2a8df3342cdd3d6",
+  "branch": "gpt56sol/go-known-good-logical-snapshot-20260817",
+  "problem": "Owner/manifest law requires known-good logical machine snapshots, but current service/recovery source had canonical checkpoints and incomplete-episode recovery without a self-contained atomic snapshot artifact, runtime-identity binding, snapshot integrity validation, or corrupt-newest fallback selector.",
+  "delta": {
+    "implementation": "the artefact/clayverse/logical_snapshot.py",
+    "tests": "the artefact/tests/test_logical_machine_snapshot.py",
+    "properties": [
+      "atomic same-filesystem publication by directory rename after file and directory fsync",
+      "SQLite online backup from live UnifiedDB followed by WAL-to-DELETE consolidation so the accepted snapshot is one self-contained database file",
+      "database SHA-256 and size binding",
+      "canonical checkpoint anchor retained inside the copied UnifiedDB",
+      "global entity generation plus per-session generation/terminal identity binding",
+      "active causal turn/episode/causal queue-position binding",
+      "complete EffectJournal row digest plus bounded status counts without raw target/argv/outcome serialization into the manifest",
+      "strict runtime identity fields for source revision, exact image digest, EntityOS digest, managed policy hashes, runtime CLAUDE hash, Claude identity and tmux identity",
+      "read-only immutable validation, sidecar rejection, symlink rejection, manifest/state drift rejection",
+      "newest-to-older valid snapshot selection so a corrupt newest snapshot can fall back without being silently accepted"
+    ]
+  },
+  "primary_external_basis": {
+    "python_sqlite3_backup": "Python 3.13 sqlite3.Connection.backup documentation",
+    "sqlite_online_backup": "SQLite Online Backup API documentation; completed backup is a consistent snapshot while live-source writes are handled by the backup protocol"
+  },
+  "falsifier_history": [
+    {
+      "stage": "first reconstructed deterministic regression",
+      "result": "HARNESS_COLLECTION_BLOCKED",
+      "detail": "pytest package path was absent; no semantic test executed and no product FAIL credit assigned"
+    },
+    {
+      "stage": "first semantic deterministic regression",
+      "result": "1_FAIL_6_PASS",
+      "detail": "self-contained snapshot assertion falsified because unified.db-wal remained beside the copied database"
+    },
+    {
+      "stage": "repair",
+      "result": "ADOPTED",
+      "detail": "backup destination is consolidated out of WAL mode before publication; validation opens immutable/read-only and rejects WAL/SHM/journal sidecars"
+    }
+  ],
+  "exact_relevant_file_subset": {
+    "the artefact/clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "the artefact/clayverse/identity.py": "2a5ea8bec6b779de8feaf71158b0adbeb3dfccc8",
+    "the artefact/clayverse/logical_snapshot.py": "3b34f480fa27d8b6d570ceeb40c6e596d2241fc4",
+    "the artefact/tests/test_logical_machine_snapshot.py": "742ff9126dcdd01a694960a3ced4df2ed3d55cd4"
+  },
+  "supporting_isolated_execution": {
+    "environment": "isolated ChatGPT container supporting source-subset execution; not Vercel/Daytona final product runtime",
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "blob_binding": "git hash-object matched all four GitHub blobs exactly before execution",
+    "commands": [
+      "PYTHONPATH=/tmp/clay-snapshot-probe python -m py_compile clayverse/store.py clayverse/identity.py clayverse/logical_snapshot.py",
+      "PYTHONPATH=/tmp/clay-snapshot-probe pytest -q tests/test_logical_machine_snapshot.py"
+    ],
+    "result": "7 passed in 0.39s; py_compile PASS; exit 0",
+    "credit": "MECHANISM_SUPPORTED_EXACT_RELEVANT_FILE_SUBSET_ONLY"
+  },
+  "evidence_boundary": [
+    "No exact full-branch checkout was executed.",
+    "No ClayVerse OCI image was built or started.",
+    "No packaged startup/readiness, Clerk/browser PTY, native Claude/tmux, hook lifecycle, EntityOS effect round-trip, restart restore, or microVM/Kata execution was observed.",
+    "The new snapshot manager is not yet wired into service boot/shutdown or Tier-1/Tier-2 automatic recovery.",
+    "The runtime identity contract intentionally requires an exact image digest and policy/runtime hashes; source wiring must not substitute mutable tags or UNKNOWN placeholders.",
+    "Whole-product acceptance remains IN_PROGRESS."
+  ],
+  "current_external_execution_blocker": "Vercel Sandbox.create is admitted, but private Research/EntityOS source staging remains fail-closed before fetch because the required host-side sensitive Preview GITHUB_READ_TOKEN is missing; source-runtime and OCI-runtime credit remain zero for that controller path.",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "This trigger exposes minute-precision immutable time but no shared immutable request/turn identity; deterministic regressions above are not a new unusual experiment."
+  },
+  "next_gates": [
+    "bind exact immutable runtime identity production inside the accepted OCI image without creating a second authority",
+    "wire event-triggered known-good snapshot creation only after full runtime readiness/attestation",
+    "implement fail-closed pre-open Tier-1 restore selection with current runtime-identity match and preserve corrupt/live evidence",
+    "exercise crash-before/after-effect-ack, corrupt-newest fallback and crash-during-recovery idempotence on an exact admitted OCI runtime",
+    "repeat the same accepted OCI digest behind the required independent VM/microVM guest-kernel boundary"
+  ]
+}

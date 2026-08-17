@@ -1,0 +1,80 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "094896d443c9dc24e0e64735c32ed1956106505c",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_head_observed": "38f1aa8daaefbc7dec708535d574e3c02727c35f",
+  "classification": "SOURCE_FUSION_ADJUDICATION_AND_EXECUTION_BLOCKER_RECORD",
+  "canonical_hostcall_state": {
+    "registry_path": "claymachine/hostcall_abi.py",
+    "schema": "ClayHostcallABI/v1",
+    "stable_ids": {
+      "linux.uname_hash.v0::()->Int": 1,
+      "linux.process.spawn.v0::(Int)->Int": 2,
+      "linux.process.stdout.v0::(Int)->Bytes": 3
+    },
+    "vm_version_identity_present": true,
+    "stdout_bytes_vm_versions": [2],
+    "real_stdout_binding_present": true,
+    "serialized_hostcall_id_arity_validation_present": false,
+    "clayhost_canonical_arg_result_validation_present": false,
+    "vm_blanket_int_only_hostcall_fence_present": true
+  },
+  "adjudication": {
+    "canonical_target": "PR787 existing single EntityOS/ClayVM path",
+    "retained_fusion_donor": 800,
+    "retained_donor_scope": "only missing VM-boundary and serialized-validation mechanics plus deterministic regressions; no replacement registry",
+    "closed_duplicate_prs_this_pass": [796, 798, 799],
+    "previously_closed_duplicate_pr": 793,
+    "diagnostic_echo_release_abi": "REJECTED_AS_PRODUCT_AUTHORITY",
+    "stderr_bytes_extension": "DEFERRED_UNTIL_STDOUT_GATE_IS_CANONICAL_AND_EXECUTABLY_VERIFIED"
+  },
+  "required_minimal_fusion": [
+    "serialized OP_HOSTCALL validation resolves contract_for_vm(module_format_version, call_id) and rejects unknown id or wrong arity before execution",
+    "ClayHost.invoke resolves the same VM-versioned contract and enforces canonical capability, arity, each Clay argument and the host result before Clay state re-entry",
+    "remove blanket Int-only OP_HOSTCALL payload rejection only after canonical per-call validation is active",
+    "host adapters bind handlers and receipts only and do not own Clay type semantics",
+    "preserve real stdout Bytes id 3 and legacy ids/signatures",
+    "regress wrong argument before handler, wrong result before re-entry, capability denial, unknown receipt, opaque NUL/non-UTF8 stdout, unknown serialized id/arity and CLAYVM/1 rejection of stdout id 3"
+  ],
+  "package_authority_blocker": {
+    "canonical_artifact_lock_present": true,
+    "hashed_wheel_requirements_present": true,
+    "current_build_runner_explicit_require_hashes_cli": false,
+    "current_build_runner_explicit_only_binary_cli": false,
+    "current_full_pytest_runner_explicit_require_hashes_cli": false,
+    "current_full_pytest_runner_explicit_only_binary_cli": false,
+    "required_repair": "pass --require-hashes --only-binary :all: explicitly on both actual uv pip install invocations, log uv --version, and statically gate those CLI flags"
+  },
+  "execution": {
+    "exact_current_head_vercel_sandbox_started": false,
+    "current_exact_head_executable_status": "UNVERIFIED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "do not generalize historical exact-head evidence to descendants or whole EntityOS"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_step": "After the minimal VM-boundary fusion and explicit uv CLI hash enforcement land on the then-current PR787 head, run ordinary full pytest plus canonical v7 in an actually-started exact-identity Vercel Sandbox, capture exact source/tree/artifact/lock/tool-version receipts, require zero new unusual experiments, and stop the Sandbox successfully.",
+  "claims": {
+    "duplicate_active_abi_lanes_reduced": true,
+    "real_stdout_bytes_source_contract_on_canonical_lane": true,
+    "canonical_vm_boundary_complete": false,
+    "package_artifact_execution_authority_complete": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

@@ -18,6 +18,7 @@ def test_kata_template_requires_vm_runtime_and_single_entity():
     assert "runtimeClassName: kata-qemu-runtime-rs" in text
     assert "replicas: 1" in text
     assert "registry.example.invalid/clayverse@sha256:REPLACE_WITH_ACCEPTED_DIGEST" in text
+    assert "type: ClusterIP" in text
     assert "hostNetwork: false" in text
     assert "hostPID: false" in text
     assert "hostIPC: false" in text
@@ -45,8 +46,19 @@ def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     assert "ingress: []" in text
     assert "egress: []" in text
     assert "hostNetwork: false alone is NOT a network-isolation policy" in text
+    assert "selected CNI actually enforces" in text
+    assert "node-local traffic exceptions" in text
     assert "0.0.0.0/0" not in text
     assert "::/0" not in text
+
+
+def test_microvm_contract_does_not_overclaim_networkpolicy():
+    text = CONTRACT.read_text()
+    assert "CNI MUST be verified" in text
+    assert "merely creating the API object is not evidence of enforcement" in text
+    assert "node-local traffic" in text
+    assert "metadata-service" in text
+    assert "NetworkPolicy is not a substitute" in text
 
 
 def test_provider_credentials_remain_bounded():

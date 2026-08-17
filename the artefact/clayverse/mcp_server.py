@@ -38,12 +38,13 @@ class ClayVerseEffectBridge:
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
 
         bridge = None
+        enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
         path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
         sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-        if path or sha256:
+        if enable_exec:
             if not path or not sha256 or not os.path.isabs(path):
                 db.close()
-                raise BridgeStateError("EntityOS configuration is incomplete")
+                raise BridgeStateError("EntityOS execution enabled without complete digest binding")
             bridge = EntityOSBridge(path=path, sha256=sha256)
             bridge.verify()
         return cls(db, user_id, session_id, bridge)
@@ -114,6 +115,7 @@ class ClayVerseEffectBridge:
             "generation": self.db.session_generation(self.session_id),
             "active_episode": dict(active) if active else None,
             "capabilities": self.effects.available_capabilities(),
+            "entityos_execution_enabled": self.effects.entityos_bridge is not None,
         }
 
 

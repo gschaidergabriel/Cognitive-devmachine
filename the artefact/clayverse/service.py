@@ -15,6 +15,20 @@ from .terminal_gateway import create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
+_WS_MAX_MESSAGE_BYTES = 65_536
+
+
+def _uvicorn_run_kwargs(host: str, port: int) -> dict[str, object]:
+    """Keep the network WebSocket message fence aligned with PTY ingress bounds."""
+    return {
+        "host": host,
+        "port": port,
+        "workers": 1,
+        "access_log": False,
+        "ws_max_size": _WS_MAX_MESSAGE_BYTES,
+    }
+
+
 def _clerk_map() -> dict[str, str]:
     raw = os.environ.get("CLAYVERSE_CLERK_MAP_JSON", "")
     if not raw:
@@ -146,7 +160,7 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
+        uvicorn.run(app, **_uvicorn_run_kwargs(host, port))
     finally:
         db.checkpoint("shutdown")
         db.close()

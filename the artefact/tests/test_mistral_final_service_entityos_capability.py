@@ -20,6 +20,24 @@ def test_final_service_required_effect_capability_is_narrow(monkeypatch):
         service._acceptance_required_effect_capability()
 
 
+def test_final_require_effect_defaults_to_entityos_exec(monkeypatch):
+    monkeypatch.setenv("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT", "1")
+    monkeypatch.delenv("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", raising=False)
+    assert service._acceptance_effect_policy() == (True, "entityos.exec")
+
+
+def test_explicit_entityos_capability_also_requires_effect(monkeypatch):
+    monkeypatch.setenv("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT", "0")
+    monkeypatch.setenv("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", "entityos.exec")
+    assert service._acceptance_effect_policy() == (True, "entityos.exec")
+
+
+def test_no_effect_requirement_remains_none(monkeypatch):
+    monkeypatch.setenv("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT", "0")
+    monkeypatch.delenv("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", raising=False)
+    assert service._acceptance_effect_policy() == (False, None)
+
+
 def test_mistral_once_passes_required_capability_into_canonical_probe():
     source = (
         Path(__file__).resolve().parents[1] / "clayverse" / "service.py"

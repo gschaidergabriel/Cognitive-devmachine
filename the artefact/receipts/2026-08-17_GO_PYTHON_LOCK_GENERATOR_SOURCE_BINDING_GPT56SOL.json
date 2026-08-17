@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse-go-source-mechanism-receipt/v1",
+  "recorded_at": "2026-08-17T13:52:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "lane": "python_dependency_hash_lock",
+  "source_branch": "go/python-hash-lock-20260817-sol",
+  "tested_source_commit": "fbe056f1ee4307bb669c674189ea380ed7c1bfb7",
+  "source_identity": {
+    ".github/workflows/clayverse-python-lock-generator.yml": {
+      "git_blob_sha1": "8c87e2e05b618594facc43108486c41694960bb0"
+    },
+    "the artefact/tests/test_python_lock_generator_source_binding.py": {
+      "git_blob_sha1": "e8318e460b03875928a2057d896f806d89d4851c"
+    }
+  },
+  "finding": {
+    "classification": "GENERATOR_SOURCE_IDENTITY_GAP",
+    "observed_pre_repair": "The prior lock generator did not check out the PR repository and duplicated requirements plus a different Python base-image digest inside workflow text, so a green generator run could resolve bytes other than the product inputs.",
+    "coordination_finding": "The prior workflow also contained a distinct hash-lesion intervention even though the current go trigger lacks second-precision canonical identity and is coordination-blocked for unusual experiments."
+  },
+  "repair": {
+    "exact_checkout": true,
+    "checkout_commit": "11bd71901bbe5b1630ceea73d27597364c9af683",
+    "persist_credentials": false,
+    "dockerfile_base_image_read_from_checked_out_product": true,
+    "requirements_read_from_checked_out_product": true,
+    "requirements_sha256_bound_across_docker_boundary": true,
+    "checkout_mounted_read_only": true,
+    "duplicate_hardcoded_product_requirements_removed": true,
+    "duplicate_hardcoded_base_image_removed": true,
+    "unusual_hash_lesion_removed": true,
+    "two_pass_lock_reproducibility_check_retained": true,
+    "pip_require_hashes_download_check_retained": true
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "exact_git_blob_reconstruction": true,
+    "command": "python -m pytest -q tests/test_python_lock_generator_source_binding.py",
+    "passed": 3,
+    "failed": 0,
+    "scope": "Exact source-binding workflow/test blobs only; no network package resolution, no generated lock, no wheelhouse, no OCI build/runtime."
+  },
+  "github_execution_admission": {
+    "run_id": 32003318569,
+    "job_id": 95307757358,
+    "head_sha": "4e0c96c1807ff3e76c40bdf62b8ad3a3f23a521b",
+    "status": "completed",
+    "conclusion": "failure_before_visible_steps",
+    "steps": 0,
+    "runner_id": 0,
+    "interpretation": "EXECUTION_ADMISSION_BLOCKER_NOT_LOCK_TEST_FAILURE"
+  },
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available system-provided user-message timestamp is minute precision only; no immutable second-precision trigger identity is exposed.",
+    "distinct_unusual_experiments_executed_by_this_lane": 0
+  },
+  "acceptance": "MECHANISM_SUPPORTED_SOURCE_ONLY",
+  "whole_product_pass": false,
+  "next_exact_gate": "Actually-started authorized isolated exact-current-source execution must resolve the checked-out product requirements under the checked-out digest-pinned product Python base, emit and commit the deterministic hash lock, switch Docker to --require-hashes, and then build/start the exact OCI image with package and image identity receipts."
+}

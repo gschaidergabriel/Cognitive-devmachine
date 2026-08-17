@@ -1,0 +1,85 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "status": "SOURCE_CONVERGENCE_WITH_EXACT_OCI_RUNTIME_OPEN",
+  "canonical_head_observed_before_receipt": "fa9471d39e3c96a8de9128b4a2c9b1df3f71c220",
+  "authority": {
+    "product_endpoint": "ClayVerse",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "workspace": "the artefact/",
+    "canonical_state": "UnifiedDB",
+    "entityos_role": "internal execution/security/runtime substrate only"
+  },
+  "deltas": [
+    {
+      "commit": "8a64813ac97405f10c87cbe18cc87853f2c6b8db",
+      "finding": "OCI --once restart gate expected readiness-like status although the canonical probe intentionally reports probe_ok/state_only/ready=false",
+      "repair": "align restart assertion with exact state-only probe semantics"
+    },
+    {
+      "commit": "9850a261c0ffa3dea4d823c2c084ca332ed1ca32",
+      "finding": "a parallel schema-v2 turn_ledger introduced a hidden full transcript authority that contradicted destructive progressive compression",
+      "repair": "remove the duplicate raw ledger and migrate any briefly-created schema-v2 ledger away under schema v3"
+    },
+    {
+      "commit": "2adc750f09d781b5335cbe9a4bc76354b2f9203a",
+      "repair": "bind the no-hidden-lossless-ledger invariant and schema-v2 retirement in source regressions"
+    },
+    {
+      "commit": "67bcb05f06dd56be8ddafdd91191522d93cc817f",
+      "finding": "compose still declared the retired bare/API-key cognition surface after the permanent interactive Claude terminal pivot",
+      "repair": "align compose with persistent user homes and the separate EntityOS execution admission flag"
+    },
+    {
+      "commit": "b5db989fd8b6f8c3a37e33fe30a27aba852791c7",
+      "finding": "managed lifecycle hooks existed in source but were not copied to Claude Code's Linux managed-settings path in the built image",
+      "repair": "install root-owned /etc/claude-code/managed-settings.json in the OCI build"
+    },
+    {
+      "commit": "e357a130f8f2ae3fa1ba7253a033060652e49315",
+      "repair": "bind managed hook installation and exact hook commands in a source regression"
+    },
+    {
+      "commit": "6f172132a2e01efe5b798b0584edd072bc051458",
+      "repair": "reconcile ARCHITECTURE.md from the retired ephemeral chat path to Clerk -> WebSocket PTY -> persistent tmux -> normal interactive Claude Code -> automatic lifecycle hooks -> effect-only MCP"
+    },
+    {
+      "commit": "fbdb52def52ef8ecd4caaf17a901f866927a02eb",
+      "finding": "Claude Code auto memory remains independent of filesystem setting-source selection and could become a second durable cognition-memory authority",
+      "repair": "disable Claude transcript persistence, auto memory and CLAUDE.md memory inputs in the sanitized permanent-terminal environment so UnifiedDB remains the sole durable cognition memory"
+    },
+    {
+      "commit": "fa9471d39e3c96a8de9128b4a2c9b1df3f71c220",
+      "repair": "lock the no-Claude-side-memory environment contract in a source regression"
+    }
+  ],
+  "external_primary_evidence": {
+    "provider": "official Claude Code documentation",
+    "facts_used": [
+      "Linux file-based managed settings path is /etc/claude-code/managed-settings.json",
+      "managed settings can define hooks and have highest local policy precedence",
+      "--tools empty removes built-in tools while MCP tools remain available and allowedTools controls MCP permission",
+      "CLAUDE_CODE_SKIP_PROMPT_HISTORY suppresses transcript/history writes in interactive mode",
+      "auto memory is independent of settingSources and can be disabled with CLAUDE_CODE_DISABLE_AUTO_MEMORY=1"
+    ]
+  },
+  "unusual_experiment": {
+    "additional_experiment_executed_by_this_fusion": false,
+    "shared_macrocycle_count_remains": 1,
+    "shared_recorded_experiment": "controlled Clerk mapping swap across IdentityRouter restart; pre-fix silent identity flip rejected",
+    "note": "No second unusual experiment was introduced."
+  },
+  "execution_truth": {
+    "exact_current_full_suite_executed": false,
+    "exact_current_oci_build_executed": false,
+    "vercel_sandbox_exec_available_in_current_connector_surface": false,
+    "github_hosted_oci_job_credit": "NONE_PRE_STEP_RUNNER_CONTROL_PLANE_FAILURE",
+    "vps_or_production_testing_used": false,
+    "whole_product_pass_claimed": false
+  },
+  "next_exact_isolated_step": "Bind the then-current main SHA on an authorized isolated OCI-capable executor; run the full suite; build the exact one-image candidate; verify managed hooks and sanitized Claude environment inside the image; authenticate both real Clerk users; attach both permanent Claude terminals; prove automatic prompt/Stop persistence and one bounded effect path; restart on the same external UnifiedDB volume and verify identity/state/terminal recovery.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

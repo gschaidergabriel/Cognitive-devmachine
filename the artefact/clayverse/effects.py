@@ -25,6 +25,10 @@ class EffectGate:
     def _request_hash(req:EffectRequest,generation:int):
         payload={'user_id':req.user_id,'session_id':req.session_id,'capability':req.capability,'target':req.target,'argv':req.argv,'generation':generation}
         return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
+    def _causal_request_key(self,episode_id):
+        if not episode_id: return None
+        row=self.db.db.execute('SELECT causal_id FROM active_turns WHERE episode_id=?',(episode_id,)).fetchone()
+        return f"causal:{row['causal_id']}:effect:0" if row else None
     def _release_exact_lease(self,lease:Lease):
         with self.db.tx() as db:
             db.execute('DELETE FROM leases WHERE resource=? AND holder=? AND generation=? AND nonce=?',(lease.resource,lease.holder,lease.generation,lease.nonce))
@@ -37,16 +41,17 @@ class EffectGate:
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':
             raise PermissionError('direct host process execution forbidden; no admitted generic EntityOS process contract')
+        request_key=req.request_key or self._causal_request_key(episode_id)
         auto_lease=False
         if req.capability=='entityos.exec' and lease is None:
             holder=f'{req.session_id}:{uuid.uuid4().hex}'
             lease=self.db.acquire_lease(self._lease_resource(req),holder,ttl=self.AUTO_LEASE_TTL)
             auto_lease=True
         try:
-            if req.request_key is None:
+            if request_key is None:
                 effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease); replayed=None
             else:
-                effect_id,replayed=self.journal.begin_once(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,req.request_key,self._request_hash(req,generation),lease=lease)
+                effect_id,replayed=self.journal.begin_once(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,request_key,self._request_hash(req,generation),lease=lease)
             if replayed is not None: return effect_id,replayed
             if req.capability=='state.noop':
                 outcome={'ok':True,'target':req.target,'boundary':'internal'}

@@ -320,8 +320,9 @@ class MethodMemoryManager:
         """Atomically promote one validated candidate using canonical source evidence.
 
         Generic admission intentionally cannot mint framework/heuristic rows. Promotion
-        therefore crosses a dedicated transaction that binds a real candidate, real
-        workspace episodes, referenced memory evidence and a durable PROMOTE receipt.
+        therefore crosses a dedicated transaction that binds a real candidate, terminal
+        causally re-entered same-user/session source episodes, referenced memory evidence
+        and a durable PROMOTE receipt.
         """
         _str(candidate_memory_id, "candidate_memory_id", max_len=256)
         _str(evaluation, "evaluation", max_len=8192)
@@ -340,28 +341,68 @@ class MethodMemoryManager:
             if candidate["kind"] not in CANDIDATE_KINDS:
                 raise MethodMemoryValidationError("promotion source must be a method candidate")
             record = candidate["value"]
+            candidate_user_id = candidate["user_id"]
+            if candidate_user_id is None:
+                raise MethodMemoryValidationError(
+                    "promotion requires an explicit user-scoped source episode authority"
+                )
 
             source_episode_ids = list(record["source_episode_ids"])
             placeholders = ",".join("?" for _ in source_episode_ids)
             try:
                 episode_rows = self.db.db.execute(
-                    f"SELECT episode_id FROM workspace_episodes WHERE episode_id IN ({placeholders})",
+                    "SELECT w.episode_id,w.session_id,w.state,s.user_id,"
+                    "CASE WHEN EXISTS("
+                    "SELECT 1 FROM causal_episodes c "
+                    "WHERE c.episode_id=w.episode_id AND c.reentered=1"
+                    ") THEN 1 ELSE 0 END AS causally_reentered "
+                    "FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id "
+                    f"WHERE w.episode_id IN ({placeholders})",
                     tuple(source_episode_ids),
                 ).fetchall()
             except Exception as exc:
                 raise MethodMemoryValidationError("promotion requires workspace episode authority") from exc
             if {str(row["episode_id"]) for row in episode_rows} != set(source_episode_ids):
                 raise MethodMemoryValidationError("promotion source episode evidence is incomplete")
+            source_session_ids = {str(row["session_id"]) for row in episode_rows}
+            if source_session_ids != {f"session:{candidate_user_id}"}:
+                raise MethodMemoryValidationError(
+                    "promotion source episodes must share the candidate's canonical session"
+                )
+            for row in episode_rows:
+                if str(row["user_id"]) != str(candidate_user_id):
+                    raise MethodMemoryValidationError("promotion source episode crosses user scope")
+                if str(row["state"]) not in {"COMPLETED", "ABORTED"}:
+                    raise MethodMemoryValidationError("promotion source episode is not terminal")
+                if int(row["causally_reentered"]) != 1:
+                    raise MethodMemoryValidationError(
+                        "promotion source episode lacks causal re-entry"
+                    )
 
             evidence_ids = list(record["supporting_memory_ids"]) + list(record["counterexample_memory_ids"])
             if evidence_ids:
                 placeholders = ",".join("?" for _ in evidence_ids)
                 evidence_rows = self.db.db.execute(
-                    f"SELECT memory_id FROM durable_memory WHERE memory_id IN ({placeholders})",
+                    f"SELECT memory_id,user_id,kind FROM durable_memory WHERE memory_id IN ({placeholders})",
                     tuple(evidence_ids),
                 ).fetchall()
                 if {str(row["memory_id"]) for row in evidence_rows} != set(evidence_ids):
                     raise MethodMemoryValidationError("promotion referenced memory evidence is incomplete")
+                for row in evidence_rows:
+                    evidence_user_id = row["user_id"]
+                    if evidence_user_id is not None and str(evidence_user_id) != str(candidate_user_id):
+                        raise MethodMemoryValidationError("promotion referenced memory crosses user scope")
+                counterexample_ids = set(record["counterexample_memory_ids"])
+                invalid_counterexamples = {
+                    str(row["memory_id"])
+                    for row in evidence_rows
+                    if str(row["memory_id"]) in counterexample_ids
+                    and str(row["kind"]) not in NEGATIVE_METHOD_KINDS
+                }
+                if invalid_counterexamples:
+                    raise MethodMemoryValidationError(
+                        "promotion counterexample reference is not negative method evidence"
+                    )
 
             prior_receipts = self.db.db.execute(
                 "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject=? ORDER BY ts",
@@ -372,6 +413,7 @@ class MethodMemoryManager:
                 if receipt["value"]["action"] == "PROMOTE":
                     raise MethodMemoryValidationError("candidate already has a promotion receipt")
 
+            source_session_id = next(iter(source_session_ids))
             now = time.time()
             receipt_value = {
                 "method_memory_id": candidate_memory_id,
@@ -385,14 +427,17 @@ class MethodMemoryManager:
             receipt_provenance = {
                 **lifecycle_provenance,
                 "promotion_source_memory_id": candidate_memory_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                "promotion_source_user_id": candidate_user_id,
+                "promotion_source_session_id": source_session_id,
+                "promotion_sources_terminal_causal": True,
             }
             receipt_id = self.admit(
                 "method_receipt",
                 candidate_memory_id,
                 receipt_value,
                 source_turn_id if source_turn_id is not None else candidate["source_turn_id"],
-                candidate["user_id"],
+                candidate_user_id,
                 receipt_provenance,
             )
 
@@ -409,7 +454,10 @@ class MethodMemoryManager:
                 **lifecycle_provenance,
                 "promotion_source_memory_id": candidate_memory_id,
                 "promotion_receipt_id": receipt_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                "promotion_source_user_id": candidate_user_id,
+                "promotion_source_session_id": source_session_id,
+                "promotion_sources_terminal_causal": True,
                 "method_schema_version": METHOD_SCHEMA_VERSION,
             }
             promoted_value = canonical_method_value(
@@ -422,7 +470,7 @@ class MethodMemoryManager:
                 candidate["subject"],
                 promoted_value,
                 source_turn_id if source_turn_id is not None else candidate["source_turn_id"],
-                candidate["user_id"],
+                candidate_user_id,
                 promoted_provenance,
             )
             return {

@@ -1,0 +1,141 @@
+{
+  "schema_version": "1.1",
+  "run_id": "claycode-20260810T2119p0700-chatgpt-secondary-wp04-binding",
+  "trigger": "claycode",
+  "status": "RESEARCH_BUILD_DELTA_TARGET_VPS_PASS_WITH_CONCURRENT_BLOCKER",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "identity_lock": {
+    "entity": "Clay",
+    "worker_is_frank": false,
+    "target_native_identity": "self.root",
+    "human_surface": "Frank",
+    "frank_self_harness_authority": "PROPOSAL_ONLY"
+  },
+  "program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "frontier": {
+    "selected_grammar": "BASE_D_V18_REWARD_RELATIONS",
+    "wp03": "OPEN",
+    "wp04": "OPEN",
+    "observed_call_sites": 27,
+    "unique_target_arity_obligations": 27,
+    "preexisting_exact_declared_matches": 0,
+    "preexisting_unresolved_non_effect_signatures": 26,
+    "preexisting_effect_boundary_missing_signatures": 1,
+    "execution_admitted": 0
+  },
+  "hypothesis": "Separating explicit Clay callable specification, exact static source/runtime-signature validation, and current runtime/binary/lease/effect binding will close WP04 without fuzzy inference or accidental authority promotion.",
+  "counterhypothesis": "A single declaration/signature checker is sufficient; additional runtime identity and effect-binding separation only adds ceremony without catching distinct failure modes.",
+  "discriminator": "Adversarially vary provenance, target, arity, dynamic escape types, runtime component hash and EXTERNAL_EFFECT seal/scope/rollback while requiring semantic contract identity to remain distinct from runtime binding identity and execution admission to remain false.",
+  "build": {
+    "clay_pr": 189,
+    "branch": "chatgpt/claycode-wp04-exact-contract-admission-20260810",
+    "tool": "tools/claycode_wp04_exact_contract_admission_v1.py",
+    "test": "tools/test_claycode_wp04_exact_contract_admission_v1.py",
+    "tool_git_blob": "862bccb3eeb9044e8f77651507fbb65e45ed610b",
+    "test_git_blob": "d7ad8aeef5d314cab5e81cccdbba2ce64e84b1d7"
+  },
+  "target_vps_execution": {
+    "transport_repository": "gschaidergabriel/Dr.-Unterweger",
+    "transport_pr": 111,
+    "workflow_run_id": 31397529960,
+    "workflow": "Clay WP04 Exact Contract Admission VPS",
+    "runner": "clay",
+    "machine": "digital-retina",
+    "os": "Ubuntu/Linux",
+    "kernel": "6.8.0-117-generic",
+    "architecture": "x86_64",
+    "python": "3.12.3",
+    "result": "PASS",
+    "positive_exact_signature": "PASS_NONEXECUTABLE",
+    "semantic_identity_provenance_independence": "PASS",
+    "signature_mutation_discrimination": "PASS",
+    "rejected_inference_classes": 7,
+    "dynamic_escape_types_rejected": 4,
+    "runtime_component_identity_required": true,
+    "external_effect_requires_sealed_scope_rollback": true,
+    "execution_admitted_calls": 0,
+    "truth_authority": "NONE",
+    "effect_authority_from_contract": "NONE"
+  },
+  "live_coordination": {
+    "preexisting_constraint_lane": "Clay PR 178 / corrected nested-path continuation",
+    "wp03_fusion_lane": "Clay PR 179",
+    "explicit_callable_spec_lane": "Clay PR 188 / Dr PR 118",
+    "static_signature_validation_lane": "Clay PR 191 / Dr PR 113",
+    "this_lane": "Clay PR 189 / Dr PR 111",
+    "resolved_overlap": "COMPLEMENTARY_THREE_STAGE_GATE",
+    "three_stage_gate": [
+      "EXPLICIT_CLAY_CALLABLE_SPECIFICATION",
+      "STATIC_EXACT_SOURCE_SIGNATURE_VALIDATION",
+      "CURRENT_RUNTIME_BINARY_LEASE_EFFECT_BINDING"
+    ]
+  },
+  "concurrent_invalidator": {
+    "subject": "first real explicit callable candidate frank_reward.update/1",
+    "clay_pr": 188,
+    "target_vps_pr": 118,
+    "workflow_run_id": 31397756769,
+    "workflow_result": "FAILURE_BEFORE_SEMANTIC_DIFFERENTIAL",
+    "materialization_step": "PASS",
+    "exact_byte_binding_step": "FAIL",
+    "semantic_differential_step": "SKIPPED",
+    "classification": "TRANSPORT_CONTENT_ADDRESS_BLOCKER_NOT_SEMANTIC_REFUTATION",
+    "implication": "The proposed 0->1 exact-declared-match and 26->25 unresolved-signature delta is not yet target-VPS-confirmed. The contract candidate remains unrefuted but unverified on the target lane.",
+    "next": "Locate the mismatching explicit-callable/anchor/test/current-WP04 blob identity, repair only the transport/content-address binding, then rerun unchanged semantics."
+  },
+  "source_findings": [
+    "G9 V3 contains call uses but does not independently declare exact contracts for the measured 27 target+arity obligations.",
+    "DialectRegistry V3 declares Verifiable.verify(receipt:ReceiptRef)->Verification, which is verify/1 and does not justify the distinct verify/5 call.",
+    "FRANK_REWARD_STATE_SUCCESSOR_V1 contains typed reward records and call-shaped rules/cycles but did not independently recover an exact historical callable signature for the measured reward calls.",
+    "Concurrent PR 188 intentionally specifies a new versioned frank_reward.update/1 architecture candidate rather than claiming historical recovery.",
+    "The first target-VPS replay of that explicit candidate failed in exact byte binding before semantic execution, so no target-VPS semantic claim may be promoted from it yet."
+  ],
+  "external_primary_crosscheck": [
+    {
+      "source": "MLIR Symbols and Symbol Tables",
+      "url": "https://mlir.llvm.org/docs/SymbolsAndSymbolTables/",
+      "relevance": "supports exact symbolic identity/resolution rather than suffix-name guessing"
+    },
+    {
+      "source": "WebAssembly Component Model WIT",
+      "url": "https://component-model.bytecodealliance.org/design/wit.html",
+      "relevance": "supports explicit interface contracts with named typed parameters and results while keeping interface description distinct from implementation behavior"
+    }
+  ],
+  "negative_results": [
+    "Caller-side equality constraints are insufficient to mint a semantic callable contract.",
+    "Target/basename/suffix similarity is insufficient to mint a semantic callable contract.",
+    "Type-name resemblance is insufficient to mint a constructor or callable contract.",
+    "A semantically admitted CallContract does not imply execution admission.",
+    "A runtime component hash without current binary/state-lineage/lease identity is insufficient for current binding.",
+    "EXTERNAL_EFFECT contract presence does not mint effect authority and requires separately sealed authority-scope and rollback binding.",
+    "A failed content-address binding before the semantic test is not evidence that the semantic callable contract is wrong."
+  ],
+  "goodman_anti_echo": {
+    "new_claim": "WP04 should be implemented as a three-stage exact admission pipeline rather than one monolithic signature-resolution step.",
+    "strongest_prior_contradiction": "PR179 evidence gap: no independently authoritative signatures should be invented from call sites.",
+    "result": "COMPATIBLE_AND_REFINED",
+    "reason": "The new pipeline preserves the no-inference negative result. PR188 may explicitly specify a new architecture contract, PR191 validates source correspondence, and this run validates current runtime/effect binding separately. None of these steps retroactively claim recovered historical authority. The PR118 byte-binding failure further supports keeping transport/runtime identity distinct from semantic contract identity.",
+    "promotion": "NONE"
+  },
+  "architecture_delta": {
+    "status": "CANDIDATE_TESTED_TARGET_VPS",
+    "change": "Insert explicit contract->static source validation->current runtime/binary/lease/effect binding gates before WP05 execution/type-effect admission.",
+    "rollback": "Drop PR189/PR111; preexisting WP04 fail-closed frontier remains unchanged.",
+    "next_falsifier": "Repair the PR118 exact-byte transport mismatch without semantic changes, then apply the three-stage pipeline to frank_reward.update/1 and rerun the 37-component call constraint graph with execution still false."
+  },
+  "authority": {
+    "frank_harness_mutation": false,
+    "call_execution_admission": false,
+    "truth_authority": "NONE",
+    "effect_authority": "NONE_FROM_CONTRACT",
+    "training_authorized": false,
+    "release_promotion": "NONE"
+  }
+}

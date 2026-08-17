@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import shlex
 import subprocess
 from pathlib import Path
 
@@ -11,6 +10,7 @@ from clayverse.terminal_sessions import TerminalSessionManager
 class _Completed:
     returncode = 0
     stderr = ""
+    stdout = ""
 
 
 def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
@@ -39,6 +39,7 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     assert settings["disableSideloadFlags"] is True
     assert settings["disableSkillShellExecution"] is True
     assert settings["strictKnownMarketplaces"] == []
+    assert settings["env"]["DISABLE_UPDATES"] == "1"
     assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
     assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
@@ -51,7 +52,9 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "1")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_PATH", "/opt/entityos/EntityOS")
     monkeypatch.setenv("CLAYVERSE_ENTITYOS_SHA256", "ab" * 32)
@@ -59,25 +62,27 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     calls = []
 
     def fake_run(argv, **kwargs):
-        calls.append(argv)
+        calls.append(list(argv))
         return _Completed()
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     manager.ensure("gabriel")
 
-    argv = shlex.split(calls[-1][-1])
-    assert argv[:2] == ["env", "-i"]
-    assert "CLAYVERSE_ENABLE_ENTITYOS_EXEC=1" in argv
-    assert "CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS" in argv
-    assert "CLAYVERSE_ENTITYOS_SHA256=" + "ab" * 32 in argv
-    assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
-    assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
-    assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
-    assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in argv
-    assert "mcp__clayverse__session_state" in argv
-    assert "mcp__clayverse__request_effect" in argv
-    assert "mcp__clayverse__*" not in argv
-    assert not any(item.startswith("CLERK_JWT_KEY=") for item in argv)
+    launch = manager._launch_argv(manager.binding("gabriel"))
+    assert launch[:2] == ["env", "-i"]
+    assert "CLAYVERSE_ENABLE_ENTITYOS_EXEC=1" in launch
+    assert "CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS" in launch
+    assert "CLAYVERSE_ENTITYOS_SHA256=" + "ab" * 32 in launch
+    assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in launch
+    assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in launch
+    assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in launch
+    assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in launch
+    assert "mcp__clayverse__session_state" in launch
+    assert "mcp__clayverse__request_effect" in launch
+    assert "mcp__clayverse__*" not in launch
+    assert not any(item.startswith("CLERK_JWT_KEY=") for item in launch)
+    new_session = next(argv for argv in calls if "new-session" in argv)
+    assert new_session[-len(launch):] == launch
 
 
 def test_direct_shell_guard_fails_closed_without_executing_payload(tmp_path):

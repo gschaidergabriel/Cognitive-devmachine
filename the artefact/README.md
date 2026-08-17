@@ -25,7 +25,7 @@ Model output never self-authorizes execution.
 
 Final acceptance requires the exact accepted OCI digest behind an **independent guest-kernel VM/microVM boundary**.
 
-The Kubernetes/Kata reference profile remains a deployment option and must retain its fail-closed contracts: default-deny networking, current-supported runtime/hypervisor configuration, read-only root, declared volumes, no host authority, distinct `/healthz` liveness and `/readyz` readiness, image-authoritative EntityOS identity, and real Tier-2 full sandbox/VM replacement rather than an in-place container restart. Its state/workspace PVCs now use `ReadWriteOncePod`, not node-scoped `ReadWriteOnce`; final Kubernetes evidence must identify an admitted CSI stack that actually enforces single-Pod writable attachment and must show that an overlapping stale/replacement Pod cannot acquire the same writable ClayVerse claims.
+The Kubernetes/Kata reference profile remains a deployment option and must retain its fail-closed contracts: default-deny networking, current-supported runtime/hypervisor configuration, read-only root, declared volumes, no host authority, distinct `/healthz` liveness and `/readyz` readiness, image-authoritative EntityOS identity, and real Tier-2 full sandbox/VM replacement rather than an in-place container restart. Its state/workspace PVCs use `ReadWriteOncePod`, not node-scoped `ReadWriteOnce`; final Kubernetes evidence must identify an admitted CSI stack that actually enforces single-Pod writable attachment and must show that an overlapping stale/replacement Pod cannot acquire the same writable ClayVerse claims.
 
 For the mandatory final sandbox acceptance run, the **Vercel Sandbox Firecracker microVM itself may serve as the independent guest-kernel envelope** when its guest identity/kernel is attested and the exact accepted ClayVerse OCI digest runs inside it through Docker/OCI runtime. A second nested KVM guest is not required merely to satisfy the guest-kernel invariant.
 
@@ -62,7 +62,7 @@ The final acceptance test is a real end-to-end execution:
 
 ## Mistral provider/secret law
 
-Mistral is now a **mandatory token/API inference provider for the final test-of-tests**.
+Mistral is a **mandatory token/API inference provider for the final test-of-tests**.
 
 - credential is acquired at runtime from the approved Vault/secret store;
 - credential is transient and never committed, baked into the image, persisted in UnifiedDB/ClayGraph/snapshots/workspace, or written to logs/receipts;
@@ -105,13 +105,13 @@ Historical Vercel runs that stopped because the token was absent remain valid hi
 
 Parallel work before this owner update had already strengthened the MicroVM deployment contract around current-supported Kata/runtime/hypervisor identity, runtime-mutating annotation fences, non-root persistent-volume semantics, image-authoritative EntityOS digest binding, and full Pod/Kata-sandbox Tier-2 replacement. Those source changes remain bounded by their own exact receipts; no runtime credit is transferred to later bytes without execution.
 
-This cycle closed two additional deployment-source gaps. The StatefulSet now keeps the normal client-facing `clayverse` Service separate from the required `clayverse-headless` governing Service, and both persistent claims use `ReadWriteOncePod`. The deployment contract and manifest now require the admitted CSI stack to prove the single-Pod writer fence by rejecting an overlapping stale/replacement writable attachment. Durable bounded receipts are `receipts/2026-08-17_GO_2304_STATEFULSET_HEADLESS_GOVERNING_SERVICE_GPT56SOL.json` and `receipts/2026-08-17_GO_2311_RWOP_SINGLE_WRITER_RECOVERY_FENCE_GPT56SOL.json`. These are source/mechanism hardening, not Kubernetes/Kata/CSI runtime PASS.
+This cycle closed additional deployment-source gaps. The StatefulSet keeps the normal client-facing `clayverse` Service separate from the required `clayverse-headless` governing Service, and both persistent claims use `ReadWriteOncePod`. The deployment contract and manifest require the admitted CSI stack to prove the single-Pod writer fence by rejecting an overlapping stale/replacement writable attachment. Durable bounded receipts include `receipts/2026-08-17_GO_2304_STATEFULSET_HEADLESS_GOVERNING_SERVICE_GPT56SOL.json`, `receipts/2026-08-17_GO_2311_RWOP_SINGLE_WRITER_RECOVERY_FENCE_GPT56SOL.json`, and `receipts/2026-08-17_GO_2300_MICROVM_TIER2_FULL_SANDBOX_REPLACEMENT_GPT56SOL.json`. These are source/mechanism hardening, not Kubernetes/Kata/CSI runtime PASS.
 
-The Mistral implementation obligation has also progressed beyond documentation: current `clayverse/adapters.py` contains a `MistralInference` boundary and `tests/test_mistral_inference.py` contains deterministic fences for explicit runtime model/secret, fixed API endpoint/JSON mode, secret non-retention, allowed effect-intent shape, `process.exec` rejection, transport-error redaction, and malformed/oversized-response fail-closed behavior. This remains a **source candidate with tests present** until the exact final OCI executes real Mistral cognition with a runtime-acquired secret and repeats it after Tier-2 recreation.
+The Mistral implementation obligation has progressed beyond documentation. Current `clayverse/adapters.py` contains the `MistralInference` boundary and the shared `clayverse/inference_protocol.py` accepts only schema-validated `entityos.exec`/`state.noop` effect intents; `process.exec` is rejected before EffectGate. In this cycle the exact Git blobs for `adapters.py` (`53a33320927c9532092c4b3b4361fa353b6d28fd`), `inference_protocol.py` (`cd5856ac58f4e86c4c045fda8099b7783e6724cf`), `clerk_auth.py` (`5f0c047ff785f0b42403eaca36dbea6c492f1389`) and `tests/test_mistral_inference.py` (`2b8d2ac08b16cf3a0acea67e0781a181dbaefd9e`) were reconstructed byte-for-byte and matched GitHub **4/4**. The isolated focused regression passed **6/6 in 0.06s**. It proves bounded source behavior for runtime-secret requirement/non-retention, fixed endpoint/JSON mode, malformed/oversized fail-closed behavior, token-redacted transport errors and effect-intent restriction. It does **not** prove a real Vault secret, real Mistral API request, exact final OCI execution, canonical re-ingestion/effect round-trip or post-Tier2 secret reacquisition.
 
 ## Testing authority
 
-`TESTING_STRATEGY.md` now makes the final evidence ladder:
+`TESTING_STRATEGY.md` makes the final evidence ladder:
 
 `SOURCE_INSPECTED`
 `-> STATIC_CONTRACT_PASS`
@@ -130,20 +130,22 @@ A higher class is never inferred from a lower one.
 
 The host-only-token policy blocker is gone, but the latest observed retained Vercel controller run still did not receive the token. Deployment `dpl_G5m2brg1e29g5QysdZxye7Dgkysi` created Sandbox `tomato-weary-porpoise-K4wNz6`, observed a Firecracker guest-kernel identity (`Linux 6.12.76`, `x86_64`) and then stopped before source staging with `github_secret_forwarded_to_sandbox:false` / `BLOCKED_MISSING_GITHUB_READ_TOKEN`. Accordingly, that run earns bounded outer guest-kernel component evidence but **zero private-source or OCI runtime credit**.
 
-The connected Vercel surface available to this organ can inspect projects/deployments/logs but exposes no environment-secret mutation action. The precise next execution step is therefore external to this worker's connected tool authority: provision the scoped read-only `GITHUB_READ_TOKEN` to the retained Vercel Preview/controller environment through an authorized secret-management surface, then retrigger #810. After exact private-source identity is established, continue directly through exact OCI build/runtime, approved Vault Mistral-token acquisition, real canonical Mistral cognition, EffectGate/EntityOS re-entry, full Tier-2 Sandbox/appliance recreation, secret reacquisition, stale-result/no-replay checks, and the final auth/terminal/concurrency vector.
+The connected Vercel surface available to this organ can inspect projects/deployments/logs but exposes no environment-secret mutation or direct Sandbox lifecycle action. The precise next executable step is external to this worker's connected tool authority: make the scoped read-only `GITHUB_READ_TOKEN` available to the retained Vercel Preview/controller through an authorized secret-management surface, then retrigger #810. Once exact private-source identity is established, continue in the same accepted path through exact OCI build/runtime, approved Vault acquisition of `MISTRAL_API_KEY`, a real Mistral turn bound to the canonical turn/session/generation, response re-ingestion before EffectGate/EntityOS, full Tier-2 Sandbox/appliance recreation from the same digest, canonical state recovery under a new generation, Mistral secret reacquisition rather than state recovery, stale-result/no-replay checks, and a second real Mistral turn.
 
-Durable re-entry receipt: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTRAL_GATE_REENTRY_GPT56SOL.json`.
+Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTRAL_GATE_REENTRY_GPT56SOL.json` and `receipts/2026-08-17_GO_2300_MICROVM_TIER2_FULL_SANDBOX_REPLACEMENT_GPT56SOL.json`.
 
-## Latest cycle delta — 2026-08-17 23:15 +07:00
+## Latest cycle delta — 2026-08-17 23:18 +07:00
 
-- refreshed live owner authority and switched the final acceptance target to the current Vercel Firecracker + exact OCI + Vault/Mistral test-of-tests rather than the stale bootstrap interpretation;
-- verified that scoped `GITHUB_READ_TOKEN` forwarding is now explicitly authorized, while the latest real retained controller run still lacked the provisioned token;
-- observed real Vercel Sandbox guest-kernel evidence (`Linux 6.12.76`, `x86_64`) for deployment `dpl_G5m2brg1e29g5QysdZxye7Dgkysi`, but the run stopped before private-source staging and therefore has zero OCI/product runtime credit;
-- repaired StatefulSet governing-Service semantics and added a single-Pod writable PVC recovery fence using `ReadWriteOncePod`, bound through template, deployment contract, manifest, regression and receipts;
-- confirmed a current Mistral source adapter plus fail-closed deterministic tests are already present, so the Mistral frontier is now real final-image/provider/recovery execution rather than first implementation;
+- refreshed live owner authority and adopted the mandatory final Vercel Firecracker + exact OCI + Vault/Mistral test-of-tests;
+- corrected the stale credential interpretation: scoped read-only `GITHUB_READ_TOKEN` forwarding into the disposable authorized Sandbox is allowed, while historical token-missing runs remain valid evidence;
+- retained the Tier-2 recovery discriminator: in-place container/Pod restart cannot masquerade as full appliance recovery; the full sandbox/VM identity must change for Tier-2 credit;
+- preserved compatible parallel MicroVM hardening instead of overwriting it, including rolling Kata security, headless StatefulSet governance, `ReadWriteOncePod`, CSI/node-local network caveats and image-authoritative EntityOS identity;
+- reconstructed the current Mistral source/test slice from exact Git blobs, matched **4/4**, and ran `tests/test_mistral_inference.py` at **6/6 PASS in 0.06s**;
+- established that the Mistral code already preserves the common fail-closed inference protocol, so the remaining Mistral discriminator is real Vault-backed canonical runtime cognition before and after Tier-2 recreation, not another source-only adapter implementation;
+- current connected Vercel authority still lacks a direct Sandbox lifecycle/environment-secret mutation action, so final runtime execution cannot be completed safely from this worker's available surface;
 - no unusual experiment was executed because the cross-worker atomic experiment-lease protocol could not derive a shared immutable trigger identity from this interface and therefore failed closed;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, component tests, Sandbox creation and isolated API calls are not substitutes.
+ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, focused tests, Sandbox creation and isolated API calls are not substitutes.

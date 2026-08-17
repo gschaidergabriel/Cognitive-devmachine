@@ -8,9 +8,10 @@ services:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
-      CLAYVERSE_REQUIRE_ENTITYOS: "1"
-      CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
-      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
+      # Single-container law: EntityOS may only become required after the exact
+      # accepted artifact is embedded into this image. A host bind-mounted
+      # executable is not an admissible baseline product dependency.
+      CLAYVERSE_REQUIRE_ENTITYOS: "0"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
       CLERK_ISSUER: "${CLERK_ISSUER:?required}"
       CLERK_JWKS_URL: "${CLERK_JWKS_URL:-}"
@@ -24,7 +25,6 @@ services:
       - clayverse-state:/var/lib/clayverse
       - clayverse-workspace:/workspace
       - clayverse-claude:/home/clayverse/.claude
-      - "${CLAYVERSE_ENTITYOS_HOST_PATH:?required}:/opt/entityos/EntityOS:ro"
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev

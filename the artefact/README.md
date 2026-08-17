@@ -14,19 +14,22 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Runtime readiness: `/readyz` now requires canonical state **and** both canonical tmux sessions to be live and pass the same managed transport-policy attestation used by attach admission; this is source/mechanism hardening, not live OCI/runtime acceptance.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
+- Runtime readiness: `/readyz` now requires canonical state **and** both canonical tmux sessions to be live and pass the same managed transport-policy-v3 attestation used by attach admission; this is source/mechanism hardening, not live OCI/runtime acceptance.
+- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease; the focused attach-expiry resize regression is retained on current `main`.
+- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` now also rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
 - Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked by orchestration-network/DNS before provider contact. These are execution-admission blockers, not product test failures.
-- Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, and live dual-session concurrency/fencing.
+- Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 — README cycle contract introduced and refreshed against newest `main`**
+**2026-08-17 — effect causal-spine + terminal/readiness convergence on current `main`**
 
-- The README is now the human-readable living status surface for `the artefact/`.
-- Every product-convergent cycle must update this section with the newest state and the cycle delta; `NO_CHANGE` must be written explicitly when a cycle produces no canonical artefact/status change.
-- Latest merged hardening: EntityOS child execution now uses a fixed `/usr/bin:/bin` PATH instead of inheriting a mutable parent PATH. Supporting exact-file regression evidence was 3/3 PASS, but this does **not** grant OCI/runtime, EntityOS-admission, or whole-product PASS.
-- Newer merged hardening: runtime readiness now requires both canonical tmux sessions to be live and policy-attested rather than checking UnifiedDB/session metadata alone. Supporting bounded mechanism evidence was 5/5 PASS; live tmux/native Claude/OCI and whole-product acceptance remain outstanding.
+- Merged live effect causal-spine hardening: a foreign episode causal row or an already-consumed matching causal identity now fails closed before `EffectJournal.begin()` can journal a new `PENDING` effect. The exact repaired product blob had supporting four-case isolated mechanism evidence; this is not full-checkout/OCI/runtime PASS.
+- Merged terminal/readiness convergence: both canonical tmux perspectives must be live and pass the canonical manager-owned transport-policy-v3 attestation before `/readyz` can advertise readiness. Supporting bounded mechanism evidence exists; live tmux/native-Claude/OCI acceptance remains outstanding.
+- Restored the focused Clerk post-attach expiry/resize regression on current `main`; this is regression/evidence convergence and does not add a second auth path.
+- Merged current documented Claude auxiliary managed-policy fences and tmux-v3 control/policy reapply hardening earlier in this cycle; these remain source/mechanism scoped until exact packaged native-Claude/tmux execution is observed.
+- The stronger managed-Claude foreground/start-command attestation remains a current source candidate, not canonical runtime truth; it must be rejoined without regressing the just-merged readiness path and then proven in exact isolated OCI/live-tmux execution.
+- No unusual experiment was executed for this `go`: shared trigger identity is only minute precision, so the atomic experiment protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` rather than inventing a timestamp.
 - Whole-product acceptance remains unchanged: **IN_PROGRESS**.
 
 ### Cycle update rule

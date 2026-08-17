@@ -76,8 +76,20 @@ def test_autonomy_projection_requires_existing_unifieddb_transaction(tmp_path):
 def test_user_prompt_injects_bounded_user_generation_scoped_autonomy(tmp_path, monkeypatch):
     path = tmp_path / "unified.db"
     db = _db(path)
-    goal = _goal_with_private_effect(db)
 
+    stale_source = db.append_turn(
+        "session:gabriel", "gabriel", "user", "Stale pre-restart autonomous objective"
+    )
+    AutonomyController(db).create_goal_from_turn(
+        "gabriel",
+        "session:gabriel",
+        stale_source,
+        completion_mode="user_ack",
+        priority=90,
+    )
+    db.advance_entity_generation()
+
+    goal = _goal_with_private_effect(db)
     andreas_source = db.append_turn(
         "session:andreas", "andreas", "user", "Andreas-only autonomous objective"
     )
@@ -108,7 +120,9 @@ def test_user_prompt_injects_bounded_user_generation_scoped_autonomy(tmp_path, m
     assert autonomy["schema"] == "ClayVerseAutonomyHookContext/v1"
     assert autonomy["mode"] == "read_only"
     assert autonomy["goals"][0]["goal_id"] == goal["goal_id"]
+    assert autonomy["stale_goal_count"] == 1
     assert all(item["generation"] == payload["causal"]["generation"] for item in autonomy["goals"])
+    assert "Stale pre-restart autonomous objective" not in json.dumps(autonomy, sort_keys=True)
     assert "Andreas-only autonomous objective" not in rendered
     assert "SECRET_EFFECT_TARGET" not in rendered
     assert "secret-argv" not in rendered
@@ -151,7 +165,7 @@ def test_autonomy_projection_is_sacrificed_before_inline_context_spill():
         "episode_id": "episode-current",
         "causal_id": "causal-current",
         "generation": 1,
-        "resources": [],
+        "resources": [f"file:{index}-" + ("r" * 100) for index in range(35)],
         "workspace": {"salience": 0.5, "alternatives": []},
         "needle": {},
         "hyperpositions": [],

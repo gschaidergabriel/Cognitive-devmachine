@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "local_trigger_time": "2026-08-17T13:53+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_branch": "go/runtime-readiness-managed-claude-attestation-20260817-1353-sol",
+  "stacked_on_pr": 478,
+  "stacked_base_head": "84a00a4e80f4cd5039e2e9f191bf3c246fb279e9",
+  "candidate_head_before_receipt": "8422e9d565e0c36276cd0bc4c97eaa58f813d688",
+  "problem": "A live named tmux session is not sufficient evidence that the admitted managed Claude Code process and sanitized launch contract are still the process bound to the persistent product terminal.",
+  "mechanism": {
+    "readiness": "After canonical UnifiedDB/session/generation checks, require each canonical tmux server to attest one live pane, pane_current_command=claude, and a pane_start_command whose shlex argv exactly matches ClayVerse's sanitized managed launch argv.",
+    "attach_fail_closed": "If ensure() finds an existing named tmux session whose pane attestation does not match, raise TerminalRuntimeError rather than attaching to or silently replacing it.",
+    "authority": "This adds no state, identity, memory or effect authority; it only tightens the existing terminal runtime boundary."
+  },
+  "files_changed": [
+    "the artefact/clayverse/terminal_sessions.py",
+    "the artefact/clayverse/terminal_gateway.py",
+    "the artefact/tests/test_container_healthcheck.py",
+    "the artefact/tests/test_terminal_managed_process_attestation.py",
+    "the artefact/manifest.json"
+  ],
+  "falsifiers_covered": [
+    "dead pane",
+    "foreground process named bash instead of claude",
+    "more than one pane in the canonical session",
+    "malformed tmux attestation output",
+    "process name claude with a different launch argv",
+    "existing unmanaged session on ensure/attach path"
+  ],
+  "isolated_mechanism_probe": {
+    "environment": "authorized isolated local container",
+    "scope": "source-mechanism reconstruction of the new TerminalSessionManager attestation logic; not an exact repository checkout and not OCI runtime evidence",
+    "result": "PASS",
+    "tests": 7,
+    "passed": 7,
+    "duration_seconds": 0.05,
+    "command_class": "PYTHONPATH=. python -m pytest -q tests/test_probe.py",
+    "negative_results_preserved": true
+  },
+  "exact_runtime_execution": {
+    "status": "ADMISSION_BLOCKED",
+    "vercel_bridge": "CONFIRMED",
+    "direct_chatgpt_vercel_sandbox_lifecycle": "NOT_EXPORTED",
+    "provider_observation": "Deployment rate limited — retry in 24 hours.",
+    "staging_repo": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-pr462-vercel-regression-20260817-1353",
+    "staging_head": "cd567c696c0b959377520249dd1ff0fbb0295624",
+    "sandbox_started": false,
+    "test_started": false,
+    "classification": "provider preview/build admission failure, not ClayVerse test failure"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The user-message metadata exposed to this organ is minute precision only (2026-08-17T13:53+07:00). The current atomic lease protocol forbids inventing seconds or microseconds for the fallback go_experiment_key.",
+    "noncanonical_parallel_claim_observed": "research_entity/continuity/go_experiment_claims/ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "accounting": "Do not count that synthesized timestamp claim as the canonical unusual experiment for this go. Preserve it as historical evidence; correction is append-only."
+  },
+  "counterhypothesis": "tmux pane_current_command and pane_start_command are source-level attestation signals but may have provider/runtime-specific representation differences; exact built-container evidence must prove the pinned native Claude process reports the expected values before this candidate can be promoted.",
+  "next_exact_gate": "On the next admitted isolated execution surface, bind the then-current exact candidate head/image, build the OCI image, start both canonical managed Claude/tmux sessions, prove /readyz=200, replace or mutate one session's foreground/start contract and require /readyz=503 plus attach fail-closed, then restore only through the admitted session creation path and capture source SHA, image digest, commands, exits and logs.",
+  "whole_product_pass": false
+}

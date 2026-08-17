@@ -95,6 +95,16 @@ def test_browser_surface_is_terminal_not_textarea_chat():
     assert "from .clerk_auth import" in source
 
 
+def test_browser_terminal_io_waits_for_authenticated_ready_frame():
+    source = (ROOT / "clayverse" / "terminal_gateway.py").read_text()
+    assert "let terminalReady=false;" in source
+    assert "if(m.type==='ready'){terminalReady=true;term.focus();return;}" in source
+    assert "if(terminalReady&&ws.readyState===1) ws.send(new TextEncoder().encode(data));" in source
+    assert "if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({type:'resize'" in source
+    assert "ws.onclose=()=>{terminalReady=false;};" in source
+    assert source.index("type:'auth'") < source.index("term.onData")
+
+
 class _NoopIdentityDB:
     def ensure_user(self, user_id, name):
         return None

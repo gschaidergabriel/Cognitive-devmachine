@@ -79,6 +79,26 @@ def test_foreign_causal_row_cannot_reach_external_effect(tmp_path):
     db.close()
 
 
+def test_matching_causal_with_persisted_effect_keeps_retry_error(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    uid, sid = IdentityRouter(db, {"g": "gabriel"}).resolve("g")
+    lifecycle = TurnLifecycle(db, uid, sid)
+    predecessor = _selected_effect_turn(db, lifecycle)
+
+    effect_id = lifecycle.effects.journal.begin(
+        predecessor["episode_id"], sid, uid, "state.noop", "retry-control", predecessor["generation"]
+    )
+    lifecycle.effects.journal.complete_verified(
+        effect_id, {"ok": True, "boundary": "internal"}, sid, uid, predecessor["generation"]
+    )
+
+    with pytest.raises(RuntimeError, match="effect already persisted for episode"):
+        lifecycle.effects.journal.begin(
+            predecessor["episode_id"], sid, uid, "state.noop", "retry-control", predecessor["generation"]
+        )
+    db.close()
+
+
 def test_pending_journal_linearizes_before_successor_abort(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     uid, sid = IdentityRouter(db, {"g": "gabriel"}).resolve("g")

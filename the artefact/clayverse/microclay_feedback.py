@@ -224,6 +224,8 @@ class MicroClayExplicitFeedback:
                 budget_chars=budget_chars,
                 limit_items=limit_items,
             )
+            retrieval = MicroClayRetrieval(self.db)
+            retrieval._assert_replay_route(row)
             selected = self._list(row["selected_memory_ids"], name="selected", limit=100)
             self._list(row["shadow_memory_ids"], name="shadow", limit=100)
             cue_hashes = self._cue_hashes(row)

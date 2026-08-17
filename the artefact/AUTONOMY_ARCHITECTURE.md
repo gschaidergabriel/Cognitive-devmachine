@@ -100,11 +100,15 @@ step proposal
 
 A model sentence such as "the command succeeded" is never effect evidence.
 
+Before an EffectJournal receipt may update an autonomous step or enter `evidence_effect_ids`, the controller requires the persisted receipt to match the admitted step's owner, capability, generation **and exact redacted target/argv intent receipts**. A VERIFIED effect with the same capability but a different target or argument vector therefore cannot be rebound as proof for another autonomous action.
+
+This exact-intent fence is necessary but not the final causal identity gate. Two distinct causal episodes could still request an identical target/argv at the same generation. Runtime promotion therefore still requires binding the autonomous step to the exact effect/episode/request identity produced by the canonical lifecycle before background retries are enabled.
+
 ## Completion contracts
 
 v1 supports two independent completion modes.
 
-`verified_effect`: completion requires a persisted effect receipt owned by the goal user, from the same generation, with the exact required capability, `status == VERIFIED`, and canonical outcome `ok == true`. `PENDING`, `DENIED`, `FAILED`, malformed, stale or unknown outcomes do not count.
+`verified_effect`: completion requires a persisted effect receipt owned by the goal user, from the same generation, with the exact required capability, `status == VERIFIED`, and canonical outcome `ok == true`. Effect evidence enters the goal only after the exact admitted target/argv intent binding above succeeds. `PENDING`, `DENIED`, `FAILED`, malformed, stale or unknown outcomes do not count.
 
 `user_ack`: completion requires an actual persisted `user` turn from the same owner/session. An assistant/model turn cannot acknowledge its own work.
 
@@ -148,12 +152,13 @@ A trigger may be user input, an effect result, timer, dependency event or recove
 2. Generation fencing: restart/global-generation advance invalidates stale writes.
 3. Canonical JSON: duplicate keys and non-finite values fail closed.
 4. Capability allowlist: planner text cannot invent execution rights.
-5. Verified effects only: model output/tool dispatch are not success.
-6. Completion separation: model completion hypotheses require independent evidence.
-7. Hard budgets: no unbounded autonomous repair loop.
-8. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
-9. UnifiedDB only: no hidden model-side autonomy memory.
-10. Identity grants no privilege: "I am AGI" has no authority effect.
+5. Exact effect intent binding: same-capability receipts for another target/argv cannot become goal evidence.
+6. Verified effects only: model output/tool dispatch are not success.
+7. Completion separation: model completion hypotheses require independent evidence.
+8. Hard budgets: no unbounded autonomous repair loop.
+9. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
+10. UnifiedDB only: no hidden model-side autonomy memory.
+11. Identity grants no privilege: "I am AGI" has no authority effect.
 
 ## Runtime prompt role
 
@@ -178,6 +183,7 @@ Implemented on this source-candidate lane:
 - step/retry/effect budgets;
 - generation fencing;
 - capability allowlist;
+- exact EffectJournal target/argv intent-receipt binding before autonomy evidence admission;
 - verified-effect and explicit-user-ack completion;
 - malformed/duplicate/non-finite state rejection;
 - persistence across DB reopen;
@@ -185,4 +191,4 @@ Implemented on this source-candidate lane:
 
 This is **source + bounded mechanism evidence**, not exact-current full-checkout/OCI/microVM evidence and not whole-product PASS.
 
-Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; effect evidence must be bound to the exact autonomous causal episode/request identity; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.
+Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; each autonomous effect must be bound to the exact autonomous causal episode/request/effect identity; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.

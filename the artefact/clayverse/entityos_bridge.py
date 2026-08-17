@@ -31,6 +31,20 @@ class EntityOSBridge:
         except Exception:
             os.close(fd); raise
 
+    def verify(self):
+        """Fail-closed readiness probe for the exact pinned executable object."""
+        fd=self._open_verified()
+        try:
+            st=os.fstat(fd)
+            return {
+                'path': self.path,
+                'sha256': self.sha256.lower(),
+                'size': int(st.st_size),
+                'mode': stat.S_IMODE(st.st_mode),
+            }
+        finally:
+            os.close(fd)
+
     def run(self, argv):
         if not isinstance(argv,list) or not argv or any(not isinstance(x,str) or '\x00' in x for x in argv):
             raise ValueError('explicit non-empty string argv required')

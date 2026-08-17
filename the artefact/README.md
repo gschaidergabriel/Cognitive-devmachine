@@ -10,7 +10,9 @@ Current candidate scope is deliberately narrow and executable:
 - causal process-effect path: request -> outcome -> verification -> causal re-entry -> credit update;
 - explicit argv process execution with `shell=False`;
 - fail-closed event tamper detection and effect-id collision handling;
-- restart continuity and first-two-session proof.
+- restart continuity and first-two-session proof;
+- durable pre-execution effect reservation: crash ambiguity fails closed instead of replaying;
+- always-on manager loop as the default container process.
 
 It does **not** claim whole ClayVerse acceptance. Clerk, Hyperposition/GWT, full ClayCode/EntityOS integration, network/audio/visual surfaces, inference-engine integration, container build portability, and final VPS deployment remain open.
 
@@ -26,4 +28,5 @@ python3 clayverse.py --selftest --state /tmp/clayverse-selftest
 ```sh
 docker build -t clayverse:dev .
 docker run --rm -v clayverse-state:/var/lib/clayverse clayverse:dev --selftest --state /var/lib/clayverse
+# default CMD runs the always-on manager
 ```

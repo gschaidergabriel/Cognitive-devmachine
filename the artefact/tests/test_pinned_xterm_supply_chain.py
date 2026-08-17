@@ -4,17 +4,21 @@ import base64
 import hashlib
 import importlib.util
 import io
+import json
 from pathlib import Path
 import tarfile
 import tempfile
 import unittest
 
 
-HELPER = Path(__file__).resolve().parents[1] / "build" / "install_pinned_xterm.py"
+ARTEFACT = Path(__file__).resolve().parents[1]
+HELPER = ARTEFACT / "build" / "install_pinned_xterm.py"
 spec = importlib.util.spec_from_file_location("install_pinned_xterm", HELPER)
-module = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
+module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
+
+EXPECTED_XTERM_SRI = "sha512-TQwDdQGtwwDt+2cgKDLn0IRaSxYu1tSUjgKarSDkUM0ZNiSRXFpjxEsvc/Zgc5kq5omJ+V0a8/kIM2WD3sMOYg=="
 
 
 def make_tar(entries: list[tuple[str, bytes]]) -> bytes:
@@ -82,6 +86,22 @@ class PinnedXtermSupplyChainTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "unsafe xterm archive member"):
                 module._extract_required_assets(blob, root / "xterm")
             self.assertFalse((root / "escape").exists())
+
+    def test_source_lock_binds_expected_xterm_archive(self) -> None:
+        lock = json.loads((ARTEFACT / "SOURCE_LOCK.json").read_text(encoding="utf-8"))
+        xterm = lock["xterm_web"]
+        self.assertEqual(xterm["package"], "@xterm/xterm")
+        self.assertEqual(xterm["version"], "6.0.0")
+        self.assertEqual(xterm["integrity"], EXPECTED_XTERM_SRI)
+        self.assertEqual(set(xterm["required_assets"]), set(module.REQUIRED_ASSETS))
+
+    def test_dockerfile_uses_pinned_helper_without_node_or_npm(self) -> None:
+        dockerfile = (ARTEFACT / "Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("install_pinned_xterm.py", dockerfile)
+        self.assertIn("python /opt/clayverse-build/install_pinned_xterm.py", dockerfile)
+        self.assertNotIn("npm install", dockerfile)
+        self.assertNotIn("nodejs", dockerfile)
+        self.assertNotIn("ARG XTERM_SPEC", dockerfile)
 
 
 if __name__ == "__main__":

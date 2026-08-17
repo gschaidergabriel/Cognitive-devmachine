@@ -1,4 +1,6 @@
 import json
+from urllib.error import HTTPError
+from urllib.request import Request
 
 import pytest
 
@@ -12,8 +14,8 @@ from clayverse.inference_protocol import InferenceProtocolError
 
 
 class _Response:
-    def __init__(self, payload):
-        self.payload = json.dumps(payload).encode("utf-8")
+    def __init__(self, payload, *, raw=False):
+        self.payload = payload if raw else json.dumps(payload).encode("utf-8")
 
     def __enter__(self):
         return self
@@ -25,7 +27,7 @@ class _Response:
         return self.payload[:limit]
 
 
-def _provider(monkeypatch, *, effect=None):
+def _provider(monkeypatch, *, effect=None, finish_reason="stop"):
     secret = "mistral-secret-never-persist"
     monkeypatch.setenv("MISTRAL_API_KEY", secret)
     monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
@@ -42,7 +44,7 @@ def _provider(monkeypatch, *, effect=None):
                 "model": "mistral-small-latest",
                 "choices": [
                     {
-                        "finish_reason": "stop",
+                        "finish_reason": finish_reason,
                         "message": {
                             "content": json.dumps(
                                 {"text": "provider-ok", "effect": effect}
@@ -126,3 +128,63 @@ def test_arbitrary_environment_secret_names_are_not_allowed():
             model="model-1",
             token_env="AWS_SECRET_ACCESS_KEY",
         )
+
+
+def test_non_stop_completion_fails_closed(monkeypatch):
+    _, _, adapter = _provider(monkeypatch, finish_reason="length")
+    with pytest.raises(InferenceProtocolError, match="did not finish cleanly"):
+        adapter.reason({}, "hello")
+
+
+def test_http_failure_does_not_echo_provider_secret(monkeypatch):
+    secret = "TOP_SECRET_PROVIDER_TOKEN"
+    monkeypatch.setenv("MISTRAL_API_KEY", secret)
+    monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_MODEL", "mistral-small-latest")
+    adapter = build_api_inference_from_env()
+
+    def fake_open(request, timeout):
+        raise HTTPError(request.full_url, 401, secret, hdrs=None, fp=None)
+
+    monkeypatch.setattr(api_providers, "_urlopen", fake_open)
+    with pytest.raises(RuntimeError) as exc:
+        adapter.reason({}, "hello")
+    assert "status=401" in str(exc.value)
+    assert secret not in str(exc.value)
+
+
+def test_malformed_and_oversized_provider_responses_fail_closed(monkeypatch):
+    monkeypatch.setenv("MISTRAL_API_KEY", "secret")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_PROFILE", "mistral")
+    monkeypatch.setenv("CLAYVERSE_LLM_API_MODEL", "mistral-small-latest")
+    adapter = build_api_inference_from_env()
+
+    monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(b"not-json", raw=True))
+    with pytest.raises(InferenceProtocolError, match="envelope is not JSON"):
+        adapter.reason({}, "hello")
+
+    oversized = b"x" * (GenericChatCompletionsInference.MAX_RESPONSE_BYTES + 1)
+    monkeypatch.setattr(api_providers, "_urlopen", lambda request, timeout: _Response(oversized, raw=True))
+    with pytest.raises(InferenceProtocolError, match="exceeds bound"):
+        adapter.reason({}, "hello")
+
+
+def test_redirect_handler_refuses_bearer_token_forwarding():
+    secret = "redirect-sensitive-secret"
+    request = Request(
+        "https://llm.example.test/v1/chat/completions",
+        data=b"{}",
+        headers={"Authorization": f"Bearer {secret}"},
+        method="POST",
+    )
+    handler = api_providers._NoRedirectHandler()
+    redirected = handler.redirect_request(
+        request,
+        None,
+        302,
+        "Found",
+        {},
+        "https://attacker.invalid/collect",
+    )
+    assert redirected is None
+    assert request.get_header("Authorization") == f"Bearer {secret}"

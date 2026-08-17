@@ -3,11 +3,10 @@ from __future__ import annotations
 import hashlib
 import json
 import time
-import uuid
 
 import pytest
 
-from clayverse.method_memory import MethodMemory
+from clayverse.method_memory import MethodMemory, MethodRecordError
 from clayverse.method_validation import (
     CandidateValidation,
     MethodValidationError,
@@ -131,13 +130,11 @@ def _admit_candidate(db, episodes):
     )
 
 
-def test_effect_bound_validation_derives_counts_instead_of_trusting_candidate(tmp_path):
-    db, session_id, generation = _db(tmp_path)
+def _validated_candidate(db, session_id, generation):
     a = _make_episode(db, session_id, generation, "a", 1)
     b = _make_episode(db, session_id, generation, "b", 2)
     candidate_id = _admit_candidate(db, [a[1], b[1]])
     validator = CandidateValidation(db)
-
     use_ids = []
     for index, identity in enumerate((a, b)):
         turn_id, episode_id, causal_id = identity
@@ -166,8 +163,13 @@ def test_effect_bound_validation_derives_counts_instead_of_trusting_candidate(tm
             causal_id=causal_id,
             status="VERIFIED" if index == 0 else "FAILED",
         )
-
     validation_ids = [validator.finalize(candidate_use_receipt_id=rid) for rid in use_ids]
+    return candidate_id, validation_ids
+
+
+def test_effect_bound_validation_derives_counts_instead_of_trusting_candidate(tmp_path):
+    db, session_id, generation = _db(tmp_path)
+    candidate_id, validation_ids = _validated_candidate(db, session_id, generation)
     candidate_row = db.db.execute(
         "SELECT value FROM durable_memory WHERE memory_id=?",
         (candidate_id,),
@@ -179,6 +181,51 @@ def test_effect_bound_validation_derives_counts_instead_of_trusting_candidate(tm
     assert stats["calibration"] == 0.5
     assert stats["validation_receipt_ids"] == validation_ids
     assert len(stats["validation_evidence_sha256"]) == 64
+
+
+def test_promotion_uses_derived_validation_stats_and_revalidates_on_read(tmp_path):
+    db, session_id, generation = _db(tmp_path)
+    candidate_id, validation_ids = _validated_candidate(db, session_id, generation)
+    methods = MethodMemory(db)
+    promoted = methods.promote(
+        candidate_memory_id=candidate_id,
+        evaluation="effect-bound held-out receipts authorize this promotion",
+        user_id="gabriel",
+        provenance={"source": "candidate-validation-test", "evaluator": "receipt-derived"},
+    )
+    method_row = db.db.execute(
+        "SELECT value,provenance FROM durable_memory WHERE memory_id=?",
+        (promoted["promoted_memory_id"],),
+    ).fetchone()
+    value = json.loads(method_row["value"])
+    provenance = json.loads(method_row["provenance"])
+    assert value["support_count"] == 2
+    assert value["success_count"] == 1
+    assert value["failure_count"] == 1
+    assert value["calibration"] == 0.5
+    assert provenance["validation_receipt_ids"] == validation_ids
+    assert len(provenance["validation_evidence_sha256"]) == 64
+    assert provenance["truth_authority"] is False
+    assert provenance["effect_authority"] is False
+
+    result = methods.retrieve(
+        query="verify causal provenance",
+        user_id="gabriel",
+        evidence_status="UNKNOWN",
+        problem_signature={"goal": ["verify"], "mechanism": ["causal", "provenance"]},
+    )
+    assert [item["memory_id"] for item in result["methods"]] == [promoted["promoted_memory_id"]]
+    assert result["factual_status_unchanged"] == "UNKNOWN"
+
+    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
+    with pytest.raises(MethodRecordError, match="already has a promotion receipt"):
+        methods.promote(
+            candidate_memory_id=candidate_id,
+            evaluation="duplicate promotion",
+            user_id="gabriel",
+            provenance={"source": "candidate-validation-test"},
+        )
+    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
 
 
 def test_normal_claude_completion_is_not_candidate_validation_reward(tmp_path):

@@ -44,20 +44,6 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _bind_claude_session(db: UnifiedDB, turn_id: str, claude_session_id: str) -> None:
-    row = db.db.execute("SELECT provenance FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
-    if not row:
-        raise TerminalHookError("new canonical user turn disappeared")
-    try:
-        provenance = json.loads(row["provenance"])
-    except Exception:
-        provenance = {}
-    if not isinstance(provenance, dict):
-        provenance = {}
-    provenance["claude_session_id"] = claude_session_id
-    db.db.execute("UPDATE turns SET provenance=? WHERE turn_id=?", (json.dumps(provenance, sort_keys=True), turn_id))
-
-
 def _bounded_hook_context(result: dict[str, Any], limit: int = 12_000) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -105,8 +91,7 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             if _active_claude_session(db, session_id) == claude_session_id:
                 raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
             lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
-        result = lifecycle.begin(prompt)
-        _bind_claude_session(db, result["turn_id"], claude_session_id)
+        result = lifecycle.begin(prompt, claude_session_id=claude_session_id)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
@@ -134,7 +119,9 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
             raise TerminalHookError("no active canonical turn for Stop hook")
         if _active_claude_session(db, session_id) != claude_session_id:
             raise TerminalHookError("Stop belongs to a different Claude session")
-        lifecycle.complete(message)
+        completed = lifecycle.complete(message)
+        if not completed.get("completed"):
+            raise TerminalHookError("canonical turn did not complete")
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -150,7 +137,7 @@ def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         if lifecycle.active() is not None and _active_claude_session(db, session_id) == claude_session_id:
             failure = str(payload.get("error", payload.get("error_type", "stop_failure")))[:500]
-            lifecycle.abort("claude_stop_failure:" + failure)
+            lifecycle.abort("claude_stop_failure:" + failure, final_state="FAILED")
         return {"suppressOutput": True}
     finally:
         db.close()

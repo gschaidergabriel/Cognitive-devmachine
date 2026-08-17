@@ -33,6 +33,7 @@ class MicroClayExplicitFeedback:
     """
 
     SOURCE = "USER_EXPLICIT"
+    POLICY_VERSION = 3
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -72,6 +73,8 @@ class MicroClayExplicitFeedback:
 
     @classmethod
     def _route_key(cls, user_id: str, cue_hash: str, memory_id: str) -> str:
+        if MicroClayRetrieval.POLICY_VERSION != cls.POLICY_VERSION:
+            raise StaleGeneration("retrieval_feedback_policy_version")
         if not _CUE_HASH.fullmatch(cue_hash):
             raise StaleGeneration("retrieval_feedback_query_tokens")
         target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
@@ -146,7 +149,9 @@ class MicroClayExplicitFeedback:
             raise StaleGeneration("retrieval_feedback_identity") from exc
         if supplied != expected:
             raise StaleGeneration("retrieval_feedback_identity")
-        if int(row["policy_version"]) != MicroClayRetrieval.POLICY_VERSION:
+        if MicroClayRetrieval.POLICY_VERSION != self.POLICY_VERSION:
+            raise StaleGeneration("retrieval_feedback_policy_version")
+        if int(row["policy_version"]) != self.POLICY_VERSION:
             raise StaleGeneration("retrieval_feedback_policy_version")
         retrieval = MicroClayRetrieval(self.db)
         if str(row["mode"]) != "SHADOW" or retrieval.mode() != "SHADOW":
@@ -348,7 +353,7 @@ class MicroClayExplicitFeedback:
             "feedback_class": feedback_class,
             "target_memory_id": target_memory_id,
             "updated_entrypoints": len(route_keys),
-            "policy_version": MicroClayRetrieval.POLICY_VERSION,
+            "policy_version": self.POLICY_VERSION,
             "mode": "SHADOW",
             "truth_authority": False,
             "effect_authority": False,

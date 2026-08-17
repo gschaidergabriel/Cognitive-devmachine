@@ -1,0 +1,76 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "authority_basis": "current research-repo owner directive; the older single-file EntityOS endpoint is superseded",
+  "observed_research_main_before_receipt": "6d7592c95c60657f41c4c711ee9ee54d784f0a9e",
+  "observed_product_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "canonical_delta": {
+    "bug": "The browser terminal could emit binary xterm input immediately after WebSocket open while Clerk.session.getToken() was still awaiting. The server requires authentication to be the first text message, so sufficiently early user input could win the first-frame race and fail a legitimate session closed.",
+    "repair_commit": "a485fa5ac23d14aa37c8e9fa1d72abbd9acbc10c",
+    "regression_commit": "906a79d337a4126356000d4567c0314eead1b08f",
+    "repair": [
+      "Browser terminal input is disabled until the authenticated server ready frame is received.",
+      "Resize control messages are disabled until the authenticated server ready frame is received.",
+      "Binary terminal output is ignored until readiness is established.",
+      "An error or WebSocket close clears readiness again.",
+      "The server-side invariant that authentication must be the first message remains unchanged and fail-closed."
+    ],
+    "gateway_blob_after_repair": "02079306e6c1be443d22477ae47b583ecc7835ce"
+  },
+  "grf": {
+    "observed": "Client installed term.onData as soon as the socket existed; authentication token acquisition was asynchronous; server awaited receive_text() as its first message.",
+    "hypothesis": "Fast input before token acquisition can deliver a binary first frame and cause a legitimate authenticated terminal to be rejected.",
+    "strongest_counterhypothesis": "The browser/UI timing always prevents xterm input before the auth JSON is transmitted.",
+    "falsifier": "Show that pre-ready terminal input can never reach WebSocket.send, independent of UI timing.",
+    "intervention": "Introduce terminalReady=false and admit input/resize only after the server sends type=ready; clear it on error/close.",
+    "outcome": "SUPPORTED_AND_REPAIRED"
+  },
+  "scoped_regression": {
+    "surface": "isolated non-production local execution container",
+    "kind": "mechanism regression, not Vercel Sandbox and not OCI acceptance",
+    "result": "PASS",
+    "observed": {
+      "pre_ready_terminal_frames_sent": 0,
+      "post_ready_terminal_frames_sent": 1,
+      "post_error_terminal_frames_sent": 0
+    },
+    "limitations": "This validates the repaired handshake mechanism only. It does not establish exact-current-head ClayVerse container runtime behavior."
+  },
+  "coordination": {
+    "conflict_observed": "First attempt to update test_permanent_terminal_surface.py returned GitHub 409 because a parallel worker had changed the same file.",
+    "resolution": "Reloaded the newer Managed-MCP test version and fused only the first-frame regression without overwriting the parallel delta."
+  },
+  "vercel_state": {
+    "unusual_experiment_count_for_global_go_window": 1,
+    "unusual_experiment": "VERCEL_SANDBOX_NESTED_OCI_RUNTIME",
+    "observed_result": "BLOCKED_OCI_TOOLCHAIN_PROVISION",
+    "observed_reason": "The actually-started Amazon Linux 2023 Vercel Sandbox could not install podman or buildah from the tested package repository; the sandbox was stopped.",
+    "second_unusual_experiment_started_by_this_organ": false,
+    "next_architecture": "Build the exact ClayVerse Docker context into Vercel Container Registry with a pinned local Vercel CLI, resolve the immutable image digest, then start a fresh Vercel Sandbox from that image instead of provisioning nested OCI tooling.",
+    "prepared_product_branch": "chatgpt/go-vercel-oci-surface-20260817-1155",
+    "prepared_branch_head_observed": "a3a03b6bd2f253347c8382ab3db71e4f457446e8",
+    "current_execution_blocker": "Vercel deployment/build rate limit; the prepared read-only pinned-CLI preflight received 'Deployment rate limited — retry in 24 hours.'",
+    "fusion_pr": 810,
+    "fusion_pr_state": "DRAFT_TEST_BEFORE_APPLY",
+    "fusion_caveat": "Do not merge the draft merely from source inspection; it had stale research bindings and an obsolete state-probe oracle and still requires exact-image execution evidence."
+  },
+  "github_actions": {
+    "workflow": "Research Entity Identity Guard",
+    "run": 31997936584,
+    "result": "INFRASTRUCTURE_BLOCKED_NOT_EXECUTED",
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "ci_claim": "UNKNOWN"
+  },
+  "next_executable_frontier": [
+    "When the Vercel build limiter admits execution, run the already-prepared pinned-local-CLI VCR capability preflight without adding another unusual experiment.",
+    "Rebind the VCR image build to then-current research main and exact the-artefact tree, not the stale draft SHA.",
+    "Build and push the exact Docker context to VCR, record immutable manifest digest, and create a fresh Sandbox from the digest-bound image.",
+    "Run exact-container readiness plus real Clerk JWT -> WebSocket PTY -> persistent tmux -> normal Claude Code CLI, UnifiedDB/ClayGraph/hook/effect and restart gates with sandbox stop evidence."
+  ],
+  "acceptance": "IN_PROGRESS"
+}

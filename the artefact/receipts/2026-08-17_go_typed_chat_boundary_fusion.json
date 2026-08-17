@@ -26,7 +26,13 @@
       "invalid payloads fail before engine.ingest"
     ],
     "tests_added": "the artefact/tests/test_api_typed_boundary.py",
-    "stronger_than_local_candidate": true
+    "stronger_than_local_candidate": true,
+    "focused_canonical_regression": {
+      "environment": "OpenAI isolated non-VPS execution",
+      "scope": "canonical validator logic with the canonical test value classes; no live Clerk/engine/OCI dependencies",
+      "cases": 18,
+      "result": "PASS"
+    }
   },
   "coordination": {
     "superseded_prs": [314, 320],

@@ -57,6 +57,16 @@ def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     assert "hostNetwork: false alone is NOT a network-isolation policy" in text
 
 
+def test_kata_template_separates_liveness_from_full_readiness():
+    text = TEMPLATE.read_text()
+    stateful = next(doc for doc in _yaml_documents(text) if "kind: StatefulSet" in doc)
+    readiness = stateful.split("readinessProbe:", 1)[1].split("livenessProbe:", 1)[0]
+    liveness = stateful.split("livenessProbe:", 1)[1].split("resources:", 1)[0]
+    assert "path: /readyz" in readiness
+    assert "path: /healthz" in liveness
+    assert "path: /readyz" not in liveness
+
+
 def test_network_contract_requires_real_enforcement_not_yaml_only():
     text = CONTRACT.read_text()
     assert "network plugin/CNI" in text

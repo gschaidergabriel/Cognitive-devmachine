@@ -38,7 +38,8 @@ The runtime and Compose contracts now match that packaging contract:
 - enabling EntityOS execution without an embedded SHA-256 pin fails closed;
 - unpinned bytes at the configured EntityOS path fail closed even when execution is disabled;
 - unpinned symlinks fail closed;
-- a configured pin still requires the normal absolute-path verification path before any execution bridge can be returned.
+- a configured pin still requires the normal absolute-path verification path before any execution bridge can be returned;
+- a verified pinned EntityOS remains staged/verified but is not exposed as an execution bridge until execution is explicitly enabled.
 
 The default-deny Docker build context is also hardened so optional EntityOS staging re-includes only the exact admitted `.keep`/`EntityOS` paths rather than a recursive sibling wildcard.
 
@@ -78,9 +79,9 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 - Compose integration review found that `compose.yaml` still required `CLAYVERSE_ENTITYOS_SHA256` even though the Dockerfile baseline made EntityOS optional. The same #625 lane now permits an absent digest in Compose while retaining execution-disabled baseline and mandatory Clerk/auth interpolation. Exact Git blobs used for the focused rerun: Compose `de5766a950bec7dc7768b5944d6fa4b5aced2f9b`, regression `4adc5944be46c7a216223560e7260ecc7a625697`, Dockerfile `2ee2fe84f1fd7219869380ce3c864cade90c6c31`, `.gitignore` `8bdddac545b4b691f2c74a164d53261fbe64438d`. Exact reconstructed focused regression: **3/3 PASS**; YAML parse PASS. No Docker/Podman binary was available, so resolved Compose/OCI behavior remains unobserved. Receipt: `the artefact/receipts/2026-08-17_GO_2053_PR625_COMPOSE_TOKENLESS_ENTITYOS_FENCE_GPT56SOL.json`.
 - A separate adversarial check found a product contradiction: the Dockerfile allowed an EntityOS-free baseline, while normal `service._entityos_config()` still required an EntityOS SHA/artifact. That would make the new baseline build but fail normal startup.
 - The same #625 lane now admits the absent-EntityOS state only with execution disabled and no unpinned bytes present, while preserving fail-closed execution/pin/path verification.
-- Added regression file `tests/test_service_entityos_optional_baseline.py` covers absent baseline, execution-without-pin, unpinned regular bytes and unpinned symlink cases.
-- Exact Git blobs observed after that runtime write: `service.py` `c9151e339c0ec4b23a454ee7684a6bd9255bf229`; optional-runtime regression `bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021`.
-- Bounded standalone runtime-mechanism check on an isolated non-production container: **4/4 PASS**. This is not full-branch pytest, OCI build or packaged service runtime evidence.
+- Expanded `tests/test_service_entityos_optional_baseline.py` covers absent baseline, execution-without-pin, unpinned regular bytes, unpinned symlink, pinned-but-exec-disabled verification, and pinned+exec-enabled bridge exposure.
+- Exact Git blobs observed after the runtime write: `service.py` `c9151e339c0ec4b23a454ee7684a6bd9255bf229`; expanded optional-runtime regression `a9bc8e2941800591bb38a7becac1e2ea81e1652b`.
+- Bounded exact-function/test-slice check on an isolated non-production container: `py_compile` PASS and **6/6 pytest PASS in 0.06s**. This is not full-branch pytest, OCI build or packaged service runtime evidence.
 - Runtime-fence receipt: `the artefact/receipts/2026-08-17_GO_2058_PR625_OPTIONAL_ENTITYOS_RUNTIME_FENCE_GPT56SOL.json`.
 - No duplicate packaging/runtime lane was created; parallel #625 hardening was adopted into the same retained branch.
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed.

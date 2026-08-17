@@ -5,13 +5,14 @@ import json
 import os
 import sqlite3
 import subprocess
+import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable, Sequence
 
 CLAYVERSE_ID = "CLAYVERSE"
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def utcnow() -> str:
@@ -97,9 +98,11 @@ class ClayVerse:
               effect_id TEXT PRIMARY KEY,
               request_hash TEXT NOT NULL,
               request_json TEXT NOT NULL,
-              result_json TEXT NOT NULL,
+              status TEXT NOT NULL,
+              result_json TEXT,
               verified INTEGER NOT NULL,
-              terminal_epoch INTEGER NOT NULL
+              request_epoch INTEGER NOT NULL,
+              terminal_epoch INTEGER
             );
             CREATE TABLE IF NOT EXISTS graph_edges(
               edge_id TEXT PRIMARY KEY,
@@ -360,36 +363,72 @@ class ClayVerse:
     ) -> EffectResult:
         """Execute an explicit argv effect; never invokes an implicit shell.
 
-        Exact duplicate effect IDs are idempotent. Reusing an ID with different
-        request bytes fails closed before a second process can execute.
+        The effect ID is durably reserved as PENDING before host execution. A
+        restart that sees PENDING fails closed instead of replaying a possibly
+        already-performed external side effect.
         """
         if not effect_id or not argv or any(not isinstance(x, str) or not x for x in argv):
             raise ValueError("INVALID_EFFECT_REQUEST")
         request = {"kind": "process", "argv": list(argv), "timeout": timeout}
         request_hash = hashlib.sha256(canonical_json(request).encode()).hexdigest()
-        prior = self.db.execute("SELECT * FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
-        if prior is not None:
-            if prior["request_hash"] != request_hash:
-                raise RuntimeError("EFFECT_ID_CONFLICT")
-            result = json.loads(prior["result_json"])
-            return EffectResult(
-                effect_id, int(result["returncode"]), result["stdout"], result["stderr"],
-                bool(prior["verified"]), int(prior["terminal_epoch"])
-            )
 
         self.db.execute("BEGIN IMMEDIATE")
         try:
+            prior = self.db.execute(
+                "SELECT * FROM effects WHERE effect_id=?", (effect_id,)
+            ).fetchone()
+            if prior is not None:
+                if prior["request_hash"] != request_hash:
+                    raise RuntimeError("EFFECT_ID_CONFLICT")
+                if prior["status"] == "PENDING":
+                    raise RuntimeError("EFFECT_RECOVERY_REQUIRED")
+                if prior["status"] == "FAILED":
+                    raise RuntimeError("EFFECT_PREVIOUSLY_FAILED")
+                if prior["status"] != "VERIFIED":
+                    raise RuntimeError("EFFECT_STATUS_INVALID")
+                result = json.loads(prior["result_json"])
+                terminal = int(prior["terminal_epoch"])
+                self.db.execute("COMMIT")
+                return EffectResult(
+                    effect_id, int(result["returncode"]), result["stdout"],
+                    result["stderr"], True, terminal
+                )
+
             request_epoch = self._next_epoch()
             self._append_event("EFFECT_REQUEST", effect_id, request, epoch=request_epoch)
+            self.db.execute(
+                "INSERT INTO effects(effect_id,request_hash,request_json,status,result_json,verified,request_epoch,terminal_epoch) "
+                "VALUES(?,?,?,?,NULL,0,?,NULL)",
+                (effect_id, request_hash, canonical_json(request), "PENDING", request_epoch),
+            )
             self.db.execute("COMMIT")
         except Exception:
-            self.db.execute("ROLLBACK")
+            if self.db.in_transaction:
+                self.db.execute("ROLLBACK")
             raise
 
-        completed = subprocess.run(
-            list(argv), capture_output=True, text=True, timeout=timeout, check=False, shell=False,
-            env={"PATH": os.environ.get("PATH", "")},
-        )
+        try:
+            completed = subprocess.run(
+                list(argv), capture_output=True, text=True, timeout=timeout, check=False, shell=False,
+                env={"PATH": os.environ.get("PATH", "")},
+            )
+        except Exception as exc:
+            self.db.execute("BEGIN IMMEDIATE")
+            try:
+                error_epoch = self._next_epoch()
+                error_payload = {"error_type": type(exc).__name__, "error": str(exc)}
+                self._append_event("EFFECT_EXECUTION_ERROR", effect_id, error_payload, epoch=error_epoch)
+                self.db.execute(
+                    "UPDATE effects SET status='FAILED',result_json=?,terminal_epoch=? WHERE effect_id=?",
+                    (canonical_json(error_payload), error_epoch, effect_id),
+                )
+                self.db.execute("COMMIT")
+            except Exception:
+                if self.db.in_transaction:
+                    self.db.execute("ROLLBACK")
+                raise
+            raise RuntimeError("EFFECT_EXECUTION_FAILED") from exc
+
         verified = bool(verifier(completed))
         result = {
             "returncode": completed.returncode,
@@ -399,6 +438,11 @@ class ClayVerse:
 
         self.db.execute("BEGIN IMMEDIATE")
         try:
+            current = self.db.execute(
+                "SELECT status,request_hash FROM effects WHERE effect_id=?", (effect_id,)
+            ).fetchone()
+            if current is None or current["request_hash"] != request_hash or current["status"] != "PENDING":
+                raise RuntimeError("EFFECT_RESERVATION_LOST")
             outcome_epoch = self._next_epoch()
             self._append_event("EFFECT_OUTCOME", effect_id, result, epoch=outcome_epoch)
             verify_epoch = self._next_epoch()
@@ -406,6 +450,10 @@ class ClayVerse:
                 "EFFECT_VERIFIED", effect_id, {"verified": verified}, epoch=verify_epoch
             )
             if not verified:
+                self.db.execute(
+                    "UPDATE effects SET status='FAILED',result_json=?,terminal_epoch=? WHERE effect_id=?",
+                    (canonical_json(result), verify_epoch, effect_id),
+                )
                 self.db.execute("COMMIT")
                 raise RuntimeError("EFFECT_VERIFICATION_FAILED")
             reentry_epoch = self._next_epoch()
@@ -423,8 +471,8 @@ class ClayVerse:
             )
             self._append_event("CREDIT_UPDATE", credit_id, credit_payload, epoch=credit_epoch)
             self.db.execute(
-                "INSERT INTO effects VALUES(?,?,?,?,?,?)",
-                (effect_id, request_hash, canonical_json(request), canonical_json(result), 1, credit_epoch),
+                "UPDATE effects SET status='VERIFIED',result_json=?,verified=1,terminal_epoch=? WHERE effect_id=?",
+                (canonical_json(result), credit_epoch, effect_id),
             )
             self.db.execute("COMMIT")
             return EffectResult(
@@ -438,6 +486,12 @@ class ClayVerse:
             if self.db.in_transaction:
                 self.db.execute("ROLLBACK")
             raise
+
+    def manager_tick(self) -> dict:
+        """One fail-closed always-on manager integrity cycle."""
+        self.verify_event_stream()
+        self._verify_identity()
+        return self.snapshot()
 
     def snapshot(self) -> dict:
         return {
@@ -456,6 +510,13 @@ class ClayVerse:
             "graph_edges": self.graph_edges(),
             "event_head": self.verify_event_stream(),
         }
+
+
+def run_manager(root: str | Path, interval: float = 1.0) -> None:
+    with ClayVerse(root) as runtime:
+        while True:
+            runtime.manager_tick()
+            time.sleep(interval)
 
 
 def selftest(root: str | Path) -> dict:
@@ -486,9 +547,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--state", default="/var/lib/clayverse")
     parser.add_argument("--selftest", action="store_true")
+    parser.add_argument("--manager", action="store_true")
     args = parser.parse_args()
     if args.selftest:
         print(json.dumps(selftest(args.state), indent=2, ensure_ascii=False))
+    elif args.manager:
+        run_manager(args.state)
     else:
         with ClayVerse(args.state) as runtime:
             print(json.dumps(runtime.snapshot(), indent=2, ensure_ascii=False))

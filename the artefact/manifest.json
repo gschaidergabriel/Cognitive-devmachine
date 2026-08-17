@@ -27,6 +27,7 @@
     "functional_network_access": "SEPARATE_DEPLOYMENT_SPECIFIC_REVIEWED_ALLOW_POLICY_REQUIRED",
     "network_policy_enforcement": "FINAL_ACCEPTANCE_MUST_PROVE_SELECTED_CNI_ENFORCES_NETWORKPOLICY_AND_NON_ADMITTED_FLOWS_REMAIN_DENIED",
     "network_policy_node_local_exception": "NODE_CONTROL_PLANE_METADATA_PATHS_MUST_BE_SEPARATELY_FENCED_AND_RUNTIME_PROBED_NOT_INFERRED_FROM_NETWORKPOLICY",
+    "persistent_volume_writer_fence": "READWRITEONCEPOD_REQUIRED_FOR_STATE_AND_WORKSPACE_AND_CSI_ENFORCEMENT_MUST_BE_PROVEN",
     "runtime_security_support": "FINAL_ACCEPTANCE_MUST_USE_THEN_CURRENT_UPSTREAM_SUPPORTED_KATA_RELEASE_AND_BIND_EFFECTIVE_RUNTIME_CONFIGURATION",
     "runtime_annotation_policy": "FAIL_CLOSED_ON_UNREVIEWED_IO_KATACONTAINERS_RUNTIME_MUTATING_ANNOTATIONS_AFTER_ADMISSION_MUTATION",
     "tier2_replacement": "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED_IN_PLACE_CONTAINER_RESTART_NOT_TIER2"
@@ -113,6 +114,7 @@
     "effective io.katacontainers.* workload annotations are inventoried after admission mutation and every runtime-mutating annotation is explicitly reviewed or rejected fail-closed",
     "accepted runtime read-only root filesystem with only declared tmpfs/persistent write surfaces",
     "complete accepted EntityOS embedded in final image",
+    "both persistent claims use ReadWriteOncePod and the admitted CSI stack proves single-Pod writable attachment fencing, including denial of overlapping stale/replacement Pod writers",
     "baseline ClayVerse NetworkPolicy default-deny ingress+egress actually enforced by the deployed CNI",
     "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied",
     "node-local, metadata-service and relevant control-plane routes explicitly probed and every non-admitted route denied by deployment/microVM boundary",

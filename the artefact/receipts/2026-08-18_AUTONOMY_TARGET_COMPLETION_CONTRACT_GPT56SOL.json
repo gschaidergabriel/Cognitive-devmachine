@@ -1,0 +1,85 @@
+{
+  "schema": "research_receipt/v1",
+  "date": "2026-08-18",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "source_candidate": {
+    "branch": "gpt56sol/autonomy-target-contract-20260818",
+    "base_main_observed_before_delta": "441c2ca3d64dd22fc1ace8822d69b3770f1c34b8",
+    "status": "SOURCE_CANDIDATE"
+  },
+  "owner_request": {
+    "goal": "weave autonomous goal pursuit into architecture deterministically without power/confabulation hallucinations",
+    "focus": [
+      "persistent goals/state",
+      "autonomous next-step pursuit",
+      "hard goal alignment to canonical user intent",
+      "causal execution evidence",
+      "bounded retry/effect loops",
+      "debuggable restart/re-entry",
+      "independent goal-completion evidence"
+    ],
+    "explicit_exclusions": [
+      "USB identity anchor",
+      "cryptocurrency",
+      "smart contracts",
+      "escrow"
+    ]
+  },
+  "research_basis": [
+    "OpenAI Agents SDK run-loop/guardrail/max-turn architecture",
+    "Anthropic Building effective agents: environmental feedback and stopping conditions",
+    "Anthropic long-running agent harness research: premature completion and durable progress state",
+    "Anthropic cognition/execution separation and deterministic containment guidance"
+  ],
+  "architecture_translation": {
+    "identity_prompt": "cognition/initiative policy only; never authority",
+    "durable_goal": "canonical owner user turn copied into UnifiedDB autonomy state",
+    "autonomy": "live goal + deterministic scheduler + one admitted step",
+    "capability": "runtime/EffectGate admission only",
+    "execution_truth": "EffectJournal plus exact autonomous causal re-entry",
+    "completion_truth": "independent completion contract; model output never sufficient",
+    "restart": "generation-fenced re-entry; ambiguous effects never blindly replayed"
+  },
+  "delta": {
+    "problem": "exact goal-step causal success was still insufficiently specific for goal completion because any successful proving-capability effect on that step could satisfy the capability-only completion predicate",
+    "mechanism": "verified_effect goals may predeclare an exact bounded required_target whose SHA-256 is stored in the completion contract; only a canonical verified effect with the matching target receipt digest becomes automatic completion evidence",
+    "step_goal_separation": "verified effects on other/intermediate targets remain valid step progress but do not complete the goal",
+    "legacy_compatibility": "v1 verified_effect goals without a target digest remain readable and may retain audit evidence but fail closed for automatic completion",
+    "noop_policy": "state.noop remains non-proving for automatic completion",
+    "new_state_authority": false,
+    "new_effect_path": false,
+    "new_identity_service": false,
+    "new_daemon": false
+  },
+  "committed_files": [
+    "the artefact/clayverse/autonomy.py",
+    "the artefact/tests/test_autonomy_completion_target.py",
+    "the artefact/AUTONOMY_TARGET_COMPLETION_CONTRACT.md"
+  ],
+  "evidence": {
+    "source_inspection": "PRESENT",
+    "regression_obligations_committed": "PRESENT",
+    "exact_authorized_isolated_pytest": "UNOBSERVED",
+    "exact_authorized_isolated_oci_runtime": "UNOBSERVED",
+    "whole_clayverse_product_pass": false
+  },
+  "anti_hallucination_invariants": [
+    "CLAIM != EVIDENCE",
+    "PROPOSAL != ADMISSION",
+    "ADMISSION != EXECUTION",
+    "MODEL_COMPLETION != GOAL_COMPLETION",
+    "VERIFIED_INTERMEDIATE_EFFECT != GOAL_COMPLETION_UNLESS_COMPLETION_CONTRACT_MATCHES",
+    "UNKNOWN != SUCCESS",
+    "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+  ],
+  "remaining_frontier": [
+    "run focused and adjacent autonomy/recovery/turn-gate regressions on the exact source candidate in an authorized isolated execution surface",
+    "fuse scheduler ticks into the retained ClayVerse supervisor/event/re-entry loop rather than create a second consciousness/background daemon",
+    "verify crash/restart, dual-user concurrency, prompt injection, context-budget and effect uncertainty",
+    "continue whole OCI/container acceptance"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

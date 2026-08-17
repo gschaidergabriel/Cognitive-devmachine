@@ -1,5 +1,5 @@
 {
-  "schema": "clayverse.go-effect-live-causal-spine-fence/v3",
+  "schema": "clayverse.go-effect-live-causal-spine-fence/v4",
   "trigger": "go",
   "trigger_time_local_available": "2026-08-17T15:24+07:00",
   "organ": "gpt-5.6-sol-chatgpt-project-organ",
@@ -10,6 +10,7 @@
   "first_rejoin_commit": "609cea5eb007ddb2cf6ceb84b75deeea0d5eacb1",
   "latest_rejoined_main": "00391e228ef24c34506c1d0a2e22fb0fbe263108",
   "latest_rejoin_commit": "5ecec721a4b4d12a7aa861287389f680d4979a5a",
+  "main_at_latest_evidence_review": "d1b14548b94b0fd0a7e9a635303714c32e5c5a64",
   "branch": "go/effect-live-causal-spine-fence-20260817-1524-sol",
   "pr": 570,
   "counterhypothesis": "An active selected effect turn can coexist with a foreign causal_episodes row for the same episode; the current EffectJournal.begin active-turn fence does not inspect the causal spine, so PENDING can be journaled and an external bridge can be reached before later causal re-entry detects or compounds the split spine.",
@@ -23,7 +24,8 @@
   "source": {
     "baseline_effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
     "repaired_effect_journal_blob": "cda63471f1467481f2ff79032d3931730a334a20",
-    "regression_test_blob": "1c05f3d10e93bab5b258a48dadb07eddb8396d4d"
+    "regression_test_blob": "1c05f3d10e93bab5b258a48dadb07eddb8396d4d",
+    "canonical_store_blob_used_for_relevant_schema_contract": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd"
   },
   "isolated_execution": {
     "surface": "OpenAI non-production isolated container",
@@ -32,23 +34,24 @@
     "sqlite": "3.46.1",
     "exact_effect_journal_blob_recomputed": "cda63471f1467481f2ff79032d3931730a334a20",
     "blob_identity_match": true,
-    "probe_scope": "exact repaired EffectJournal file with a minimal SQLite schema/store stub sufficient to exercise EffectJournal.begin and its persisted-effect retry signal",
+    "probe_scope": "exact repaired EffectJournal file exercised against the canonical relevant UnifiedDB table definitions copied from current store.py, including foreign keys and active-turn causal NOT NULL/UNIQUE constraints; only the Python store classes/context wrapper were stubbed",
     "cases": [
       "foreign causal row -> StaleGeneration(effect_causal_spine), zero effect rows",
       "empty coherent causal spine -> PENDING accepted",
       "matching consumed causal id with no persisted effect -> RuntimeError before PENDING",
       "matching causal id with already-persisted effect -> legacy 'effect already persisted for episode' retry/reconciliation error preserved"
     ],
-    "result": "4 deterministic mechanism cases PASS",
+    "result": "4 canonical-schema deterministic mechanism cases PASS",
     "full_checkout_executed": false,
     "exact_oci_executed": false,
     "whole_product_pass": false
   },
   "coordination": {
     "duplicate_issue_or_open_pr_found_before_write": false,
-    "latest_main_rejoin_changed_product_effect_files": false,
-    "latest_main_rejoin_intervening_scope": "terminal/tmux hardening plus receipts/tests; no effect_journal overlap",
-    "branch_compare_after_rejoin": "ahead 8 / behind 0 relative to 00391e228ef24c34506c1d0a2e22fb0fbe263108",
+    "latest_rejoined_main_changed_product_effect_files": false,
+    "latest_rejoin_intervening_scope": "terminal/tmux hardening plus receipts/tests; no effect_journal overlap",
+    "branch_compare_after_00391_rejoin": "ahead 8 / behind 0",
+    "later_main_d1b145_scope": "tmux live-server attestation; no effect_journal overlap observed",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "reason": "shared user-message timestamp available only at minute precision"
   },
@@ -56,6 +59,6 @@
     "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED",
     "daytona": "AUTHORIZED_FALLBACK; exact ClayVerse Daytona runtime still unobserved; current orchestration egress previously blocked before provider contact"
   },
-  "classification": "MECHANISM_SUPPORTED_EXACT_FILE_SQLITE_PROBE_SOURCE_CANDIDATE",
-  "next_gate": "Run PR 570 exact full-checkout regression in the first admitted SQLite-capable Vercel or Daytona sandbox together with adjacent EffectGate, TurnLifecycle and recovery tests; if green, fuse and continue exact OCI startup/readiness/restart/concurrency acceptance."
+  "classification": "MECHANISM_SUPPORTED_EXACT_FILE_CANONICAL_SCHEMA_SQLITE_PROBE_SOURCE_CANDIDATE",
+  "next_gate": "Refresh PR 570 against then-current main and run its exact full-checkout regression in the first admitted SQLite-capable Vercel or Daytona sandbox together with adjacent EffectGate, TurnLifecycle and recovery tests; if green, fuse and continue exact OCI startup/readiness/restart/concurrency acceptance."
 }

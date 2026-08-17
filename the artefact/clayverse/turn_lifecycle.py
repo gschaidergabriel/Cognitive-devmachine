@@ -19,6 +19,10 @@ from .workspace import Workspace
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
+_CLAUDE_INPUT_SOURCE = "claude-hook:UserPromptSubmit"
+_MISTRAL_INPUT_SOURCE = "mistral-runtime:input"
+_CLAUDE_FAILURE_SOURCE = "claude-hook:failure"
+_MISTRAL_FAILURE_SOURCE = "mistral-runtime:failure"
 
 
 class TurnLifecycleError(RuntimeError):
@@ -33,8 +37,15 @@ def infer_resource_refs(text: str) -> list[str]:
     return sorted(refs)[:50]
 
 
+def _validated_model_identity(value: str) -> str:
+    model = str(value).strip()
+    if not model or len(model) > 128 or any(ord(char) < 0x21 or ord(char) > 0x7E for char in model):
+        raise TurnLifecycleError("provider model identity is invalid")
+    return model
+
+
 class TurnLifecycle:
-    """Deterministic per-turn lifecycle shared by Claude hooks and MCP effects."""
+    """Deterministic per-turn lifecycle shared by Claude hooks, Mistral and MCP effects."""
     def __init__(self, db: UnifiedDB, user_id: str, session_id: str, entityos_bridge=None):
         if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}": raise PermissionError("invalid terminal/session binding")
         db.assert_session_owner(session_id, user_id)
@@ -90,7 +101,21 @@ class TurnLifecycle:
         verified=bool(effect["status"]=="VERIFIED" and isinstance(receipt,dict) and receipt.get("ok") is True)
         return {"effect_id":effect["effect_id"],"causal_id":causal["causal_id"],"verified":verified,"outcome":{"recovered":True,"replayed":False,"status":effect["status"],"receipt":receipt}}
 
-    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool)->dict:
+    @staticmethod
+    def _input_source_in_tx(db,row):
+        turn=db.execute("SELECT provenance FROM turns WHERE turn_id=?",(row["turn_id"],)).fetchone()
+        if turn is None: raise TurnLifecycleError("active turn observation is missing")
+        try: provenance=json.loads(turn["provenance"])
+        except (TypeError,json.JSONDecodeError) as exc: raise TurnLifecycleError("active turn provenance is invalid") from exc
+        source=provenance.get("source") if isinstance(provenance,dict) else None
+        return source if isinstance(source,str) else None
+
+    @staticmethod
+    def _provider_response_in_tx(db,row):
+        return db.execute("SELECT * FROM provider_responses WHERE causal_id=?",(row["causal_id"],)).fetchone()
+
+    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool,provenance_source:str=_CLAUDE_FAILURE_SOURCE)->dict:
+        if provenance_source not in {_CLAUDE_FAILURE_SOURCE,_MISTRAL_FAILURE_SOURCE}: raise TurnLifecycleError("invalid abort provenance source")
         if not self.db.db.in_transaction: raise TurnLifecycleError("abort requires active transaction")
         row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
         if row is None: return {"aborted":False,"reason":"no_active_turn"}
@@ -104,7 +129,7 @@ class TurnLifecycle:
         if existing_causal and existing_causal["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("effect causal identity diverged during abort")
         now=time.time(); system_id=str(uuid.uuid4()); reason=str(reason)[:2000]; reason_hash=hashlib.sha256(reason.encode("utf-8")).hexdigest()
         ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
-        db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(system_id,self.session_id,self.user_id,ordinal,now,"system",f"TURN_ABORTED:{reason}",row["resource_refs"],json.dumps([row["effect_id"]] if row["effect_id"] else []),json.dumps({"source":"claude-hook:failure","causal_id":row["causal_id"],"entity_generation":int(row["generation"])},sort_keys=True)))
+        db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(system_id,self.session_id,self.user_id,ordinal,now,"system",f"TURN_ABORTED:{reason}",row["resource_refs"],json.dumps([row["effect_id"]] if row["effect_id"] else []),json.dumps({"source":provenance_source,"causal_id":row["causal_id"],"entity_generation":int(row["generation"])},sort_keys=True)))
         if existing_causal is None: db.execute("INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",(row["causal_id"],row["episode_id"],None,row["turn_id"],reason_hash,0.0,1,now))
         cur=db.execute("UPDATE workspace_episodes SET state='ABORTED' WHERE episode_id=? AND state='SELECTED'",(row["episode_id"],))
         if cur.rowcount!=1: raise TurnLifecycleError("workspace did not terminalize during abort")
@@ -116,19 +141,22 @@ class TurnLifecycle:
         return {"aborted":True,"causal_id":row["causal_id"],"reason":reason}
 
     @contextlib.contextmanager
-    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None):
+    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None,input_source:str=_CLAUDE_INPUT_SOURCE):
         prompt=str(prompt)
         if not prompt or len(prompt)>100_000: raise ValueError("invalid prompt")
+        if input_source not in {_CLAUDE_INPUT_SOURCE,_MISTRAL_INPUT_SOURCE}: raise ValueError("invalid turn input source")
         if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if input_source!=_CLAUDE_INPUT_SOURCE and claude_session_id is not None: raise ValueError("Claude session id is invalid for non-Claude turn")
         resource_refs=sorted(set(resources or infer_resource_refs(prompt)))[:50]; turn_id=str(uuid.uuid4()); episode_id=str(uuid.uuid4()); causal_id=str(uuid.uuid4())
         alternatives=[{"id":"respond","kind":"reason"},{"id":"request_effect","kind":"effect_intent"},{"id":"defer_effect","kind":"no_effect"}]
         with self.db.tx() as db:
-            predecessor=self._abort_active_in_tx(db,"previous_turn_interrupted_before_next_prompt",finalize_projection=False)
+            failure_source=_CLAUDE_FAILURE_SOURCE if input_source==_CLAUDE_INPUT_SOURCE else _MISTRAL_FAILURE_SOURCE
+            predecessor=self._abort_active_in_tx(db,"previous_turn_interrupted_before_next_prompt",finalize_projection=False,provenance_source=failure_source)
             if self.active() is not None: raise TurnLifecycleError("active turn remained after predecessor retirement")
             generation=self.db.session_generation(self.session_id); entity_generation=self.db.entity_generation()
             if generation!=entity_generation: raise StaleGeneration("entity_generation")
             now=time.time(); salience=min(1.0,0.15+0.03*len(resource_refs)+min(len(prompt),1200)/2400)
-            provenance={"source":"claude-hook:UserPromptSubmit","session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
+            provenance={"source":input_source,"session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
             if claude_session_id is not None: provenance["claude_session_id"]=claude_session_id
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
             db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(turn_id,self.session_id,self.user_id,ordinal,now,"user",prompt,json.dumps(resource_refs),"[]",json.dumps(provenance,sort_keys=True)))
@@ -140,14 +168,40 @@ class TurnLifecycle:
             world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
             yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
-    def begin(self,prompt:str,resources:list[str]|None=None)->dict:
-        with self.begin_admission(prompt,resources) as result: return result
+    def begin(self,prompt:str,resources:list[str]|None=None,*,input_source:str=_CLAUDE_INPUT_SOURCE)->dict:
+        with self.begin_admission(prompt,resources,input_source=input_source) as result: return result
+
+    def reingest_provider_response(self,response:str,*,provider:str,model:str)->dict:
+        response=str(response)
+        if not response or len(response)>200_000: raise ValueError("provider response is outside admitted bound")
+        if provider!="mistral": raise TurnLifecycleError("provider is outside admitted canonical runtime boundary")
+        model=_validated_model_identity(model); response_hash=hashlib.sha256(response.encode("utf-8")).hexdigest(); now=time.time()
+        with self.db.tx() as db:
+            row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            if row is None: raise TurnLifecycleError("no active turn for provider response")
+            if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
+            if self._input_source_in_tx(db,row)!=_MISTRAL_INPUT_SOURCE: raise TurnLifecycleError("provider response belongs to a non-Mistral turn")
+            if row["effect_id"] is not None or int(row["workspace_selected"]): raise TurnLifecycleError("provider response must re-enter before effect/action selection")
+            ws=db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
+            if ws is None or ws["state"]!="OPEN": raise TurnLifecycleError("provider response requires an open workspace")
+            existing=self._provider_response_in_tx(db,row)
+            if existing is not None:
+                if existing["provider"]==provider and existing["model"]==model and existing["response_hash"]==response_hash and int(existing["generation"])==int(row["generation"]):
+                    return {"reingested":True,"replayed":False,"response_turn_id":existing["response_turn_id"],"causal_id":row["causal_id"],"provider":provider,"model":model}
+                raise TurnLifecycleError("different provider response already re-ingested for active turn")
+            response_turn_id=str(uuid.uuid4()); ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
+            provenance={"source":"mistral-runtime:provider-response","provider":provider,"model":model,"causal_id":row["causal_id"],"entity_generation":int(row["generation"]),"operational_authority":False}
+            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(response_turn_id,self.session_id,self.user_id,ordinal,now,"assistant",response,row["resource_refs"],"[]",json.dumps(provenance,sort_keys=True)))
+            db.execute("INSERT INTO provider_responses(causal_id,episode_id,response_turn_id,session_id,user_id,generation,provider,model,response_hash,ts) VALUES(?,?,?,?,?,?,?,?,?,?)",(row["causal_id"],row["episode_id"],response_turn_id,self.session_id,self.user_id,int(row["generation"]),provider,model,response_hash,now))
+            db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
+        return {"reingested":True,"replayed":False,"response_turn_id":response_turn_id,"causal_id":row["causal_id"],"provider":provider,"model":model}
 
     def request_effect(self,capability:str,target:str,argv:list[str]|None=None)->dict:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: raise TurnLifecycleError("no active turn; effect denied")
             if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
+            if self._input_source_in_tx(db,row)==_MISTRAL_INPUT_SOURCE and self._provider_response_in_tx(db,row) is None: raise TurnLifecycleError("Mistral response must be re-ingested before any effect")
             if not int(row["workspace_selected"]):
                 ws=db.execute("SELECT state,selected FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
                 if ws is None: raise TurnLifecycleError("active turn workspace missing before effect")
@@ -186,6 +240,7 @@ class TurnLifecycle:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            if self._input_source_in_tx(db,row)==_MISTRAL_INPUT_SOURCE: raise TurnLifecycleError("Mistral turns require provider-response re-ingest completion")
             row,_,_=self._persisted_effect_in_tx(db,row)
             if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
             effect_id=row["effect_id"]; existing_causal=db.execute("SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone() if effect_id else None
@@ -204,5 +259,34 @@ class TurnLifecycle:
             result={"completed":True,"assistant_turn_id":assistant_id,"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit}
         return result
 
-    def abort(self,reason:str)->dict:
-        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True)
+    def complete_reingested_provider_response(self)->dict:
+        now=time.time()
+        with self.db.tx() as db:
+            row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            if row is None: return {"completed":False,"reason":"no_active_turn"}
+            if self._input_source_in_tx(db,row)!=_MISTRAL_INPUT_SOURCE: raise TurnLifecycleError("provider-response completion belongs to a non-Mistral turn")
+            if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
+            provider_response=self._provider_response_in_tx(db,row)
+            if provider_response is None: raise TurnLifecycleError("Mistral response was not re-ingested")
+            if provider_response["episode_id"]!=row["episode_id"] or int(provider_response["generation"])!=int(row["generation"]): raise TurnLifecycleError("provider response causal identity diverged")
+            response_turn=db.execute("SELECT * FROM turns WHERE turn_id=?",(provider_response["response_turn_id"],)).fetchone()
+            if response_turn is None or response_turn["session_id"]!=self.session_id or response_turn["user_id"]!=self.user_id or response_turn["role"]!="assistant": raise TurnLifecycleError("provider response turn is invalid")
+            if hashlib.sha256(response_turn["content"].encode("utf-8")).hexdigest()!=provider_response["response_hash"]: raise TurnLifecycleError("provider response hash diverged")
+            row,_,_=self._persisted_effect_in_tx(db,row)
+            if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
+            effect_id=row["effect_id"]; existing_causal=db.execute("SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone() if effect_id else None
+            if effect_id and existing_causal is None: raise TurnLifecycleError("effect lacks causal re-entry before provider completion")
+            if existing_causal and existing_causal["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("effect causal identity diverged before provider completion")
+            credit=float(existing_causal["credit"]) if existing_causal else 0.0
+            if existing_causal is None: db.execute("INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",(row["causal_id"],row["episode_id"],None,row["turn_id"],provider_response["response_hash"],0.0,1,now))
+            cur=db.execute("UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",(row["episode_id"],))
+            if cur.rowcount!=1: raise TurnLifecycleError("workspace did not terminalize during provider completion")
+            self.memory.compact(self.session_id); self.graph.rebuild_in_tx()
+            cur=db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?",(self.session_id,row["causal_id"]))
+            if cur.rowcount!=1: raise TurnLifecycleError("active turn changed during provider completion")
+            db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
+            result={"completed":True,"assistant_turn_id":provider_response["response_turn_id"],"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit,"provider":provider_response["provider"],"model":provider_response["model"]}
+        return result
+
+    def abort(self,reason:str,*,provenance_source:str=_CLAUDE_FAILURE_SOURCE)->dict:
+        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True,provenance_source=provenance_source)

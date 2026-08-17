@@ -43,11 +43,22 @@ A Vercel deployment `READY`, GitHub source inspection, CI configuration, a recei
 
 Together API/service remains forbidden. Final paid/model training remains owner-authorization-required.
 
-## 6. `go`
+## 6. `go` and living artefact README
 
 Exact `go` means maximum useful product-convergent work on the current ClayVerse single-container frontier: refresh shared state, avoid duplicate implementations, generate/falsify alternatives, build/repair the canonical path, execute the strongest available authorized isolated tests, consume exactly one bounded unusual experiment for the user-triggered macro-cycle, fuse parallel work, persist evidence and continue until the useful unblocked frontier is exhausted.
 
 A `go` is not complete merely because documentation, a PR, a component test or a CI workflow exists. End with either a concrete improvement/evidence for the exact `the artefact/` ClayVerse container candidate or the precise blocker and next executable sandbox step.
+
+**Mandatory README cycle law:** `the artefact/README.md` is the human-readable living status surface for the canonical product workspace. Every product-convergent cycle that observes, changes, fuses or reclassifies canonical artefact reality MUST refresh the README after code/evidence fusion and before the cycle is considered complete.
+
+Each cycle refresh MUST:
+- rewrite the current-state section so stale status is removed;
+- record the concrete latest-cycle delta across code, tests, evidence, blockers and acceptance movement;
+- explicitly record `NO_CHANGE` when no canonical product/status delta occurred;
+- preserve the distinction between source/component evidence and whole-product acceptance;
+- keep detailed audit evidence in Git history/receipts rather than turning the README into a second canonical state database.
+
+A stale `the artefact/README.md` means the product-convergent cycle is **INCOMPLETE** even if code, tests, receipts or a PR were otherwise produced.
 
 ## 7. Supersession rule
 

@@ -8,6 +8,13 @@ from clayverse.store import StaleGeneration, UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle
 
 
+class _VerifiedEffectBridge:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0, "stdout": "", "stderr": ""}
+
+
 def _db(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
@@ -26,11 +33,11 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
-        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge())
 
         first = life.begin("orchid procedure codename")
         assert [m["memory_id"] for m in first["context"]["durable_memory"]] == ["m1"]
-        effect = life.request_effect("state.noop", "learn-alias-entry")
+        effect = life.request_effect("entityos.exec", "learn-alias-entry", ["verified-outcome"])
         assert effect["verified"] is True
         life.complete("done")
 
@@ -90,11 +97,11 @@ def test_new_alias_route_credit_is_bound_to_rank1_served_evidence(tmp_path):
     try:
         _add(db, "top", "orchid procedure", subject="procedure:top", ts=200.0)
         _add(db, "other", "orchid procedure", subject="procedure:other", ts=100.0)
-        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge())
 
         first = life.begin("orchid procedure codename")
         assert [m["memory_id"] for m in first["context"]["durable_memory"]][:2] == ["top", "other"]
-        effect = life.request_effect("state.noop", "rank1-alias-entry")
+        effect = life.request_effect("entityos.exec", "rank1-alias-entry", ["verified-outcome"])
         assert effect["verified"] is True
         life.complete("done")
 

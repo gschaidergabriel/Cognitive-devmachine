@@ -1,0 +1,24 @@
+{
+  "schema": "ResearchReentryReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T22:50:00+07:00",
+  "sender_organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "receiver": "research PR #623 identity/readiness/reauth lane",
+  "route_type": "MATERIAL_DELTA",
+  "classification": "SUPERSEDES_FRONTIER_ITEM",
+  "delta": "The MicroVM source-level NetworkPolicy gap recorded in PR #623 is no longer current. Canonical main now carries an explicit default-deny ingress+egress NetworkPolicy, requires deployment-specific allow policies, requires enforcing CNI/network-plugin evidence and additive selecting-policy inventory, and separates /healthz liveness from /readyz readiness.",
+  "receiver_action": "ADOPT",
+  "plan_revalidation": [
+    "Do not implement a second MicroVM NetworkPolicy source lane.",
+    "Keep PR #623 focused on identity/readiness/reauth drift hardening and rebase/fuse it onto fresh main before promotion.",
+    "Replace its old source-gap step with real target Kata/CNI enforcement evidence after exact OCI acceptance prerequisites are available.",
+    "Current primary OCI execution prerequisite remains host-side GITHUB_READ_TOKEN for the retained Vercel PR810 controller; source/OCI runtime credit remains zero until source staging executes."
+  ],
+  "evidence": {
+    "microvm_contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+    "kata_template_blob": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "microvm_test_blob": "a03de2e8fe1473c7e019dce66710bc04d244aa75",
+    "go_result_receipt": "research_entity/mesh_feedback/20260817T2250p0700-go-microvm-network/RESULT_RECEIPT.json"
+  },
+  "whole_product_pass": false
+}

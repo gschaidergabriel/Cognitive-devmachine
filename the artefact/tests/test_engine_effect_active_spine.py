@@ -5,6 +5,7 @@ import json
 import pytest
 
 from clayverse.engine import ClayVerseEngine
+from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
 
 
@@ -57,7 +58,7 @@ def test_engine_effect_uses_predeclared_active_causal_spine_and_retires_it(tmp_p
             (result["workspace"]["episode_id"],),
         ).fetchone()
         assert workspace["selected"] == "request_effect"
-        assert workspace["state"] == "SELECTED"
+        assert workspace["state"] == "COMPLETED"
 
         causal = db.db.execute(
             "SELECT causal_id,effect_id,observation_turn_id,reentered FROM causal_episodes WHERE causal_id=?",
@@ -73,6 +74,45 @@ def test_engine_effect_uses_predeclared_active_causal_spine_and_retires_it(tmp_p
         provenance = json.loads(assistant["provenance"])
         assert provenance["phase"] == "pre-effect-reingest"
         assert provenance["reasoning_generation"] == db.entity_generation()
+
+        recovery = recover_incomplete_episodes(db)
+        assert recovery["scanned"] == 0
+        assert recovery["existing_reentries_closed"] == 0
+        assert recovery["active_turns_closed"] == 0
+        workspace_after_recovery = db.db.execute(
+            "SELECT state FROM workspace_episodes WHERE episode_id=?",
+            (result["workspace"]["episode_id"],),
+        ).fetchone()
+        assert workspace_after_recovery["state"] == "COMPLETED"
+    finally:
+        db.close()
+
+
+def test_engine_no_effect_response_is_terminal_before_recovery(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        engine = ClayVerseEngine(
+            db,
+            {"subject-g": "gabriel", "subject-a": "andreas"},
+        )
+        result = engine.ingest("subject-g", "respond without an effect")
+
+        workspace = db.db.execute(
+            "SELECT selected,state FROM workspace_episodes WHERE episode_id=?",
+            (result["workspace"]["episode_id"],),
+        ).fetchone()
+        assert workspace["selected"] == "respond"
+        assert workspace["state"] == "COMPLETED"
+        assert db.db.execute("SELECT COUNT(*) FROM active_turns").fetchone()[0] == 0
+
+        recovery = recover_incomplete_episodes(db)
+        assert recovery["scanned"] == 0
+        assert recovery["existing_reentries_closed"] == 0
+        assert recovery["active_turns_closed"] == 0
+        assert db.db.execute(
+            "SELECT state FROM workspace_episodes WHERE episode_id=?",
+            (result["workspace"]["episode_id"],),
+        ).fetchone()[0] == "COMPLETED"
     finally:
         db.close()
 

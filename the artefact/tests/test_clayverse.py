@@ -1,4 +1,4 @@
-import time,pytest
+import time,pytest,uuid
 from clayverse.store import UnifiedDB,StaleGeneration
 from clayverse.engine import ClayVerseEngine
 from clayverse.identity import IdentityRouter
@@ -8,6 +8,7 @@ from clayverse.effects import EffectGate,EffectRequest
 def db(tmp_path):
     d=UnifiedDB(tmp_path/'unified.db'); yield d; d.close()
 def engine(db): return ClayVerseEngine(db,{'clerk-g':'gabriel','clerk-a':'andreas'})
+def provenance(): return {'source':'test','request_id':uuid.uuid4().hex}
 def test_two_equal_users_one_db(db):
     r=IdentityRouter(db,{'g':'gabriel','a':'andreas'}); assert r.resolve('g')[0]=='gabriel' and r.resolve('a')[0]=='andreas'; assert {x['rights'] for x in db.db.execute('select * from users')}=={'equal'}
 def test_unmapped_identity_fails_closed(db):
@@ -15,9 +16,9 @@ def test_unmapped_identity_fails_closed(db):
 def test_last_20_remain_full_and_older_compress(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); mm=MemoryManager(db)
     for i in range(45): db.append_turn(sid,uid,'user',f'turn {i} '+('x '*50))
-    mm.compact(sid); rows=db.all_turns(sid); assert all(x['fidelity']=='full' for x in rows[-20:]); assert any(x['fidelity']!='full' for x in rows[:-20])
+    mm.compact(sid); rows=db.all_turns(sid); assert all(x['fidelity']=='full' for x in rows[-20:]); assert any(x['fidelity']!='full' for x in rows[:-20]); assert db.db.execute("select count(*) from durable_memory where kind='source_archive'").fetchone()[0]>0
 def test_explicit_durable_memory_only(db):
-    e=engine(db); e.ingest('clerk-g','FACT: alpha is beta\nnormal sentence'); mem=db.memories(); assert len(mem)==1 and mem[0]['value']=='alpha is beta'
+    e=engine(db); e.ingest('clerk-g','FACT: alpha is beta\nnormal sentence'); mem=[x for x in db.memories() if x['kind']!='source_archive']; assert len(mem)==1 and mem[0]['value']=='alpha is beta'
 def test_collision_triggers_cross_session_retrieval(db):
     e=engine(db); e.ingest('clerk-g','editing resource',resources=['repo:file.txt']); assert e.ingest('clerk-a','also editing',resources=['repo:file.txt'])['collision_count']>=1; assert e.ingest('clerk-a','unrelated',resources=['repo:other.txt'])['collision_count']==0
 def test_claygraph_is_rebuildable_projection(db):
@@ -29,11 +30,12 @@ def test_stale_lease_is_rejected_aba(db):
 def test_direct_host_process_is_forbidden_even_when_legacy_flag_enabled(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g')
     with pytest.raises(PermissionError,match='direct host process execution forbidden'):
-        EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
+        EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'],db.session_generation(sid),provenance()))
+    assert db.db.execute('select count(*) from effects').fetchone()[0]==0
 def test_stale_reasoning_generation_blocks_effect(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); expected=db.session_generation(sid); db.bump_generation(sid)
-    with pytest.raises(StaleGeneration): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','must-not-run'],expected))
-def test_causal_reentry_and_restart_continuity(tmp_path):
-    p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
+    with pytest.raises(StaleGeneration): EffectGate(db).execute(EffectRequest(uid,sid,'state.noop','noop',None,expected,provenance()),lease=db.acquire_lease('effect:noop','worker',60))
+def test_effectless_observation_does_not_claim_causal_reentry(tmp_path):
+    p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==0; assert d.db.execute("select value from durable_memory where kind='fact'").fetchone()[0]=='persistent'; d.close()
 def test_checkpoint_hash_changes_on_canonical_state(db):
     r=IdentityRouter(db,{'g':'gabriel'}); _,h1=db.checkpoint('before'); uid,sid=r.resolve('g'); db.append_turn(sid,uid,'user','x'); _,h2=db.checkpoint('after'); assert h1!=h2

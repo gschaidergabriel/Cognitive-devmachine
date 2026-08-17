@@ -506,7 +506,7 @@ class CandidateValidation:
 
 
 def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, Any], user_id: str) -> dict[str, Any]:
-    """Derive promotion counters only from durable HELD_OUT candidate-validation receipts."""
+    """Derive promotion counters only from separate durable HELD_OUT validation receipts."""
     candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
     source_episode_ids = list(candidate.get("source_episode_ids") or [])
     if len(source_episode_ids) < 2 or len(set(source_episode_ids)) != len(source_episode_ids):
@@ -529,7 +529,7 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
         if receipt["truth_authority"] is not False or receipt["effect_authority"] is not False:
             raise MethodValidationError("candidate-validation authority broadening detected")
         if receipt["evaluation_mode"] != "HELD_OUT":
-            raise MethodValidationError("promotion requires HELD_OUT candidate-validation receipts")
+            continue
         receipts.append((str(row["memory_id"]), receipt))
 
     by_episode: dict[str, tuple[str, dict[str, Any]]] = {}
@@ -538,15 +538,17 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
         if episode_id in by_episode:
             raise MethodValidationError("multiple validation receipts for one promotion episode")
         by_episode[episode_id] = item
-    if set(by_episode) != set(source_episode_ids):
-        raise MethodValidationError("promotion lacks validation receipts for every source episode")
+    if len(by_episode) < 2:
+        raise MethodValidationError("promotion requires at least two HELD_OUT validation episodes")
+    if set(by_episode).intersection(source_episode_ids):
+        raise MethodValidationError("HELD_OUT validation episodes must be disjoint from candidate source episodes")
     causal_ids = [item[1]["causal_id"] for item in by_episode.values()]
     if len(set(causal_ids)) != len(causal_ids):
         raise MethodValidationError("promotion validation receipts do not span distinct causal instances")
     if not any(item[1]["falsifier_checked"] for item in by_episode.values()):
         raise MethodValidationError("promotion requires at least one falsifier-checked validation instance")
 
-    ordered = [by_episode[episode_id] for episode_id in source_episode_ids]
+    ordered = [by_episode[episode_id] for episode_id in sorted(by_episode)]
     success_count = sum(1 for _, receipt in ordered if receipt["classification"] == "SUCCESS")
     failure_count = sum(1 for _, receipt in ordered if receipt["classification"] == "FAILURE")
     support_count = len(ordered)

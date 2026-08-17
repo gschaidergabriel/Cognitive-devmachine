@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS retrieval_entrypoint_policy(entry_key TEXT PRIMARY KE
 CREATE TABLE IF NOT EXISTS retrieval_episodes(retrieval_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL UNIQUE REFERENCES turns(turn_id),episode_id TEXT NOT NULL UNIQUE REFERENCES workspace_episodes(episode_id),causal_id TEXT NOT NULL UNIQUE,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),generation INTEGER NOT NULL,policy_version INTEGER NOT NULL,mode TEXT NOT NULL CHECK(mode IN ('SHADOW','ACTIVE')),query_hash TEXT NOT NULL,query_token_hashes TEXT NOT NULL,selected_memory_ids TEXT NOT NULL,shadow_memory_ids TEXT NOT NULL,entry_keys TEXT NOT NULL,budget_chars INTEGER NOT NULL,chars_selected INTEGER NOT NULL,status TEXT NOT NULL CHECK(status IN ('PRESENT','UNKNOWN')),ts REAL NOT NULL);
 CREATE INDEX IF NOT EXISTS idx_retrieval_session_ts ON retrieval_episodes(session_id,ts DESC);
 CREATE TABLE IF NOT EXISTS retrieval_feedback(receipt_id TEXT PRIMARY KEY,retrieval_id TEXT NOT NULL REFERENCES retrieval_episodes(retrieval_id) ON DELETE CASCADE,causal_id TEXT NOT NULL,generation INTEGER NOT NULL,credit REAL NOT NULL,signal_class TEXT NOT NULL,ts REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS autonomy_goals(goal_id TEXT PRIMARY KEY,creator_user_id TEXT NOT NULL REFERENCES users(user_id),objective TEXT NOT NULL,success_contract TEXT NOT NULL,priority INTEGER NOT NULL DEFAULT 100,status TEXT NOT NULL CHECK(status IN ('ACTIVE','PAUSED','BLOCKED','DONE','CANCELLED')),autonomous INTEGER NOT NULL CHECK(autonomous IN (0,1)),attempt_budget INTEGER NOT NULL,attempts_used INTEGER NOT NULL DEFAULT 0,created_generation INTEGER NOT NULL,created_at REAL NOT NULL,updated_at REAL NOT NULL,completed_at REAL);
+CREATE INDEX IF NOT EXISTS idx_autonomy_goals_frontier ON autonomy_goals(status,autonomous,priority,created_at);
+CREATE TABLE IF NOT EXISTS autonomy_steps(step_id TEXT PRIMARY KEY,goal_id TEXT NOT NULL REFERENCES autonomy_goals(goal_id) ON DELETE CASCADE,ordinal INTEGER NOT NULL,description TEXT NOT NULL,verification_contract TEXT NOT NULL,status TEXT NOT NULL CHECK(status IN ('PENDING','RUNNING','WAITING_VERIFICATION','VERIFIED','BLOCKED','FAILED')),max_attempts INTEGER NOT NULL,attempts_used INTEGER NOT NULL DEFAULT 0,repeated_failures INTEGER NOT NULL DEFAULT 0,last_failure_fingerprint TEXT,last_receipt_id TEXT,last_error TEXT,created_at REAL NOT NULL,updated_at REAL NOT NULL,UNIQUE(goal_id,ordinal));
+CREATE INDEX IF NOT EXISTS idx_autonomy_steps_goal_ord ON autonomy_steps(goal_id,ordinal);
+CREATE TABLE IF NOT EXISTS autonomy_receipts(receipt_id TEXT PRIMARY KEY,goal_id TEXT NOT NULL REFERENCES autonomy_goals(goal_id) ON DELETE CASCADE,step_id TEXT NOT NULL REFERENCES autonomy_steps(step_id) ON DELETE CASCADE,generation INTEGER NOT NULL,kind TEXT NOT NULL CHECK(kind IN ('OBSERVATION','EFFECT','VERIFICATION','USER_CONFIRMATION','ARTIFACT','TEST')),source TEXT NOT NULL,verified INTEGER NOT NULL CHECK(verified IN (0,1)),payload TEXT NOT NULL,payload_hash TEXT NOT NULL,ts REAL NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_autonomy_receipts_step_ts ON autonomy_receipts(step_id,ts);
+CREATE TABLE IF NOT EXISTS autonomy_ticks(tick_id TEXT PRIMARY KEY,goal_id TEXT REFERENCES autonomy_goals(goal_id),step_id TEXT REFERENCES autonomy_steps(step_id),generation INTEGER NOT NULL,trigger TEXT NOT NULL,proposal TEXT,action_state TEXT NOT NULL CHECK(action_state IN ('IDLE','PROPOSED','EXECUTED','WAITING_VERIFICATION','VERIFIED','BLOCKED','FAILED')),receipt_id TEXT REFERENCES autonomy_receipts(receipt_id),reason TEXT,ts REAL NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_autonomy_ticks_ts ON autonomy_ticks(ts);
 '''
 
 @dataclass(frozen=True)
@@ -40,7 +48,7 @@ class UnifiedDB:
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
         try:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
-            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','6') ON CONFLICT(key) DO UPDATE SET value='6'")
+            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','7') ON CONFLICT(key) DO UPDATE SET value='7'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
@@ -122,5 +130,5 @@ class UnifiedDB:
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
-        for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+        for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback","autonomy_goals","autonomy_steps","autonomy_receipts","autonomy_ticks"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
         digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

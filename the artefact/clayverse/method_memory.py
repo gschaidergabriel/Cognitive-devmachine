@@ -334,7 +334,8 @@ class MethodMemory:
 
     Ordinary admission can persist candidates and bounded negative method memory. It
     cannot mint reusable promoted frameworks/heuristics. Positive promotion requires an
-    atomic causal lifecycle bound to terminal, causally re-entered source episodes.
+    atomic causal lifecycle bound to terminal, causally re-entered source episodes and
+    durable candidate-validation receipts whose utility is derived from external effects.
     """
 
     def __init__(self, db: UnifiedDB):
@@ -460,19 +461,32 @@ class MethodMemory:
             "supporting_memory_ids",
             "counterexample_memory_ids",
             "abstraction_version",
-            "support_count",
-            "success_count",
-            "failure_count",
-            "calibration",
             "limits_method_ids",
         )
         if any(record[field] != candidate[field] for field in immutable_fields):
             raise MethodRecordError("promoted method payload drifted from candidate")
+
+        from .method_validation import MethodValidationError, derive_promotion_stats
+        try:
+            validation = derive_promotion_stats(self.db.db, source_id, candidate, user_id)
+        except MethodValidationError as exc:
+            raise MethodRecordError("promoted method validation evidence is invalid") from exc
+        for field in ("support_count", "success_count", "failure_count", "calibration", "last_validated_at"):
+            if record[field] != validation[field]:
+                raise MethodRecordError("promoted method statistics drifted from validation receipts")
+        expected_validation_ids = validation["validation_receipt_ids"]
+        expected_validation_digest = validation["validation_evidence_sha256"]
+        if (
+            provenance.get("validation_receipt_ids") != expected_validation_ids
+            or provenance.get("validation_evidence_sha256") != expected_validation_digest
+            or receipt_provenance.get("validation_receipt_ids") != expected_validation_ids
+            or receipt_provenance.get("validation_evidence_sha256") != expected_validation_digest
+        ):
+            raise MethodRecordError("promotion validation provenance mismatch")
         if (
             receipt["source_episode_ids"] != record["source_episode_ids"]
             or receipt["supporting_memory_ids"] != record["supporting_memory_ids"]
             or receipt["counterexample_memory_ids"] != record["counterexample_memory_ids"]
-            or float(receipt["ts"]) != float(record["last_validated_at"])
         ):
             raise MethodRecordError("promotion receipt evidence mismatch")
         self._assert_refs(record, user_id, require_terminal=True)
@@ -551,6 +565,12 @@ class MethodMemory:
                 raise MethodRecordError("promotion source is not canonically admitted")
             self._assert_refs(candidate, user_id, require_terminal=True)
 
+            from .method_validation import MethodValidationError, derive_promotion_stats
+            try:
+                validation = derive_promotion_stats(db, candidate_memory_id, candidate, user_id)
+            except MethodValidationError as exc:
+                raise MethodRecordError("promotion requires validated candidate-use outcome receipts") from exc
+
             receipt_subject = f"promotion:{candidate_memory_id}"
             prior_receipts = db.execute(
                 "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject=? ORDER BY ts",
@@ -569,7 +589,11 @@ class MethodMemory:
             receipt_id = str(uuid.uuid4())
             promoted_record = dict(candidate)
             promoted_record["status"] = "PROMOTED"
-            promoted_record["last_validated_at"] = now
+            promoted_record["support_count"] = validation["support_count"]
+            promoted_record["success_count"] = validation["success_count"]
+            promoted_record["failure_count"] = validation["failure_count"]
+            promoted_record["calibration"] = validation["calibration"]
+            promoted_record["last_validated_at"] = validation["last_validated_at"]
             promoted_record = validate_method_record(promoted_kind, promoted_record)
             receipt = validate_method_receipt({
                 "schema": PROMOTION_RECEIPT_SCHEMA,
@@ -592,6 +616,8 @@ class MethodMemory:
                 "promotion_source_memory_id": candidate_memory_id,
                 "promoted_memory_id": promoted_id,
                 "promotion_transaction_version": 1,
+                "validation_receipt_ids": validation["validation_receipt_ids"],
+                "validation_evidence_sha256": validation["validation_evidence_sha256"],
                 "truth_authority": False,
                 "effect_authority": False,
             })
@@ -604,6 +630,8 @@ class MethodMemory:
                 "promotion_source_memory_id": candidate_memory_id,
                 "promotion_receipt_id": receipt_id,
                 "promotion_transaction_version": 1,
+                "validation_receipt_ids": validation["validation_receipt_ids"],
+                "validation_evidence_sha256": validation["validation_evidence_sha256"],
                 "truth_authority": False,
                 "effect_authority": False,
             }

@@ -17,6 +17,12 @@
 # add a separate deployment-specific, reviewed allow policy for only the exact
 # admitted ingress/egress surfaces and bind that policy into acceptance
 # evidence. hostNetwork: false alone is NOT a network-isolation policy.
+#
+# STORAGE SINGLE-WRITER LAW:
+# Canonical writable PVCs use ReadWriteOncePod, not ReadWriteOnce. RWO is only
+# node-scoped and can still admit multiple pods on one node. Final acceptance
+# MUST use CSI storage with RWOP support and prove a second pod cannot mount
+# either canonical writable PVC concurrently.
 apiVersion: v1
 kind: Service
 metadata:
@@ -201,14 +207,14 @@ spec:
     - metadata:
         name: clayverse-state
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi
     - metadata:
         name: clayverse-workspace
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi

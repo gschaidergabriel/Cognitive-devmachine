@@ -1,0 +1,77 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:52:35+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "join_main": "5b67eafa68b91d32091450c18d2ea9fafa95baef",
+  "branch_rebased_onto": "9e90d1ffcabe10cad20807b4dfc5ed9615b3decf",
+  "latest_main_observed_before_receipt": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+  "pull_request": 444,
+  "frontier": "restart/recovery causal-integrity preflight before pending-effect mutation",
+  "selection_reason": "MicroClay, PTY, Clerk and supply-chain lanes had active overlapping workers; recovery source still admitted a non-duplicate fail-open ordering where pending-effect recovery could write the active causal id before validating a pre-existing foreign causal row for the same active episode.",
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id is exposed and the available trigger timestamp is only minute precision (2026-08-17 13:43 +07). GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL forbids minting a timestamp fallback claim or executing a distinct unusual experiment.",
+    "distinct_unusual_experiments_executed_by_this_organ": 0
+  },
+  "source_observation": {
+    "canonical_main_recovery_blob_before_delta": "ea585507ff6e5b46922b4219d125915caa8488fb",
+    "mechanism": [
+      "recover_incomplete_episodes called EffectJournal.recover_pending before active causal-integrity validation",
+      "post-mutation validation selected only the latest causal row by timestamp",
+      "a foreign pre-existing causal row could therefore be masked by the active causal row inserted during pending-effect recovery"
+    ]
+  },
+  "candidate": {
+    "branch": "go/recovery-causal-preflight-20260817-1343-sol",
+    "head_before_receipt": "99c1a7e297ba10733e2f335910e5519cf67efcaa",
+    "recovery_blob": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "focused_test_blob": "463ec1c94",
+    "changes": [
+      "read-only active causal-spine preflight before EffectJournal.recover_pending",
+      "reject any causal row for an active episode whose causal_id differs from the active turn",
+      "repeat the same integrity check at the recovery transaction boundary",
+      "bind active causal lookup to the exact active causal_id instead of latest-by-time",
+      "add focused regression requiring PENDING effect, active turn, foreign causal evidence and entity generation to remain untouched on integrity failure"
+    ]
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "exact production recovery.py source-mechanism regression with dependency stubs; not full checkout, not OCI, not live service restart",
+    "exact_git_blob_sha1": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "git_blob_match": true,
+    "bytes": 11372,
+    "result": "PASS",
+    "observations": [
+      "RecoveryIntegrityError raised for a foreign causal row on the active episode",
+      "EffectJournal.recover_pending invocation count remained 0",
+      "foreign causal row remained present and unmodified"
+    ]
+  },
+  "counterexample_discriminator": {
+    "scope": "minimal SQLite/source-semantics reproducer of the pre-fix ordering",
+    "result": "MECHANISM_REPRODUCED",
+    "observation": "pending-effect recovery created causal-active after causal-foreign, changed the effect to UNKNOWN_AFTER_RESTART, and latest-by-time then returned causal-active while both causal identities remained persisted"
+  },
+  "parallel_reentry": {
+    "main_commits_observed": [
+      "8fef6397dcf76d0c8c3c58914f628ed43a622f8b",
+      "d47ff869243076add00b12914977f520d47a6431"
+    ],
+    "decision": "DROP_DUPLICATE_TEST_DELTA",
+    "reason": "Main independently aligned the general restart/effect-restart regression contracts. The branch was reset onto newer main and the overlapping test_restart_recovery.py modification was removed; PR #444 retains only the causal-preflight mechanism and its new targeted regression."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_VERCEL_TOOLING",
+    "other_isolated_nonproduction_execution_used": true,
+    "full_checkout_regression": "NOT_EXECUTED",
+    "exact_oci_build_runtime": "NOT_EXECUTED",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SOURCE_CANDIDATE",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run PR #444 against the exact then-current full ClayVerse checkout in an authorized actually-started isolated sandbox, including the targeted recovery test plus adjacent effect/restart/global-generation regressions; if green, fuse to main and continue to exact OCI startup/restart evidence."
+}

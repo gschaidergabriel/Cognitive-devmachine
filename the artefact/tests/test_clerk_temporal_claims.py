@@ -26,6 +26,8 @@ def _claims(now):
         "iat": now,
         "nbf": now - 1,
         "exp": now + 60,
+        "v": 2,
+        "sts": "active",
     }
 
 

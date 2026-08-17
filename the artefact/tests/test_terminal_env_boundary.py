@@ -31,6 +31,9 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     assert "HOME=" + str(tmp_path / "state" / "users" / "gabriel" / "home") in argv
     assert "CLAYVERSE_USER_ID=gabriel" in argv
     assert "CLAYVERSE_SESSION_ID=session:gabriel" in argv
+    assert "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1" in argv
+    assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
+    assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
     assert not any(item.startswith("ANTHROPIC_API_KEY=") for item in argv)
     assert not any(item.startswith("ANTHROPIC_AUTH_TOKEN=") for item in argv)
     assert argv[-1] == "/opt/clayverse/runtime/CLAUDE.md"

@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import time
 from typing import Any
 
 METHOD_SCHEMA_VERSION = 1
@@ -307,6 +308,128 @@ class MethodMemoryManager:
             user_id,
             canonical_provenance,
         )
+
+    def promote(
+        self,
+        candidate_memory_id: str,
+        *,
+        evaluation: str,
+        provenance: dict[str, Any],
+        source_turn_id: str | None = None,
+    ) -> dict[str, str]:
+        """Atomically promote one validated candidate using canonical source evidence.
+
+        Generic admission intentionally cannot mint framework/heuristic rows. Promotion
+        therefore crosses a dedicated transaction that binds a real candidate, real
+        workspace episodes, referenced memory evidence and a durable PROMOTE receipt.
+        """
+        _str(candidate_memory_id, "candidate_memory_id", max_len=256)
+        _str(evaluation, "evaluation", max_len=8192)
+        lifecycle_provenance = _validate_provenance(provenance, promoted=False)
+        if not hasattr(self.db, "db") or not callable(getattr(self.db, "tx", None)):
+            raise MethodMemoryValidationError("promotion requires transactional UnifiedDB access")
+
+        with self.db.tx():
+            candidate_row = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1",
+                (candidate_memory_id,),
+            ).fetchone()
+            if candidate_row is None:
+                raise MethodMemoryValidationError("promotion candidate does not exist")
+            candidate = self.decode_row(candidate_row)
+            if candidate["kind"] not in CANDIDATE_KINDS:
+                raise MethodMemoryValidationError("promotion source must be a method candidate")
+            record = candidate["value"]
+
+            source_episode_ids = list(record["source_episode_ids"])
+            placeholders = ",".join("?" for _ in source_episode_ids)
+            try:
+                episode_rows = self.db.db.execute(
+                    f"SELECT episode_id FROM workspace_episodes WHERE episode_id IN ({placeholders})",
+                    tuple(source_episode_ids),
+                ).fetchall()
+            except Exception as exc:
+                raise MethodMemoryValidationError("promotion requires workspace episode authority") from exc
+            if {str(row["episode_id"]) for row in episode_rows} != set(source_episode_ids):
+                raise MethodMemoryValidationError("promotion source episode evidence is incomplete")
+
+            evidence_ids = list(record["supporting_memory_ids"]) + list(record["counterexample_memory_ids"])
+            if evidence_ids:
+                placeholders = ",".join("?" for _ in evidence_ids)
+                evidence_rows = self.db.db.execute(
+                    f"SELECT memory_id FROM durable_memory WHERE memory_id IN ({placeholders})",
+                    tuple(evidence_ids),
+                ).fetchall()
+                if {str(row["memory_id"]) for row in evidence_rows} != set(evidence_ids):
+                    raise MethodMemoryValidationError("promotion referenced memory evidence is incomplete")
+
+            prior_receipts = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject=? ORDER BY ts",
+                (candidate_memory_id,),
+            ).fetchall()
+            for row in prior_receipts:
+                receipt = self.decode_row(row)
+                if receipt["value"]["action"] == "PROMOTE":
+                    raise MethodMemoryValidationError("candidate already has a promotion receipt")
+
+            now = time.time()
+            receipt_value = {
+                "method_memory_id": candidate_memory_id,
+                "action": "PROMOTE",
+                "source_episode_ids": source_episode_ids,
+                "supporting_memory_ids": list(record["supporting_memory_ids"]),
+                "counterexample_memory_ids": list(record["counterexample_memory_ids"]),
+                "evaluation": evaluation,
+                "ts": now,
+            }
+            receipt_provenance = {
+                **lifecycle_provenance,
+                "promotion_source_memory_id": candidate_memory_id,
+                "promotion_transaction_version": 1,
+            }
+            receipt_id = self.admit(
+                "method_receipt",
+                candidate_memory_id,
+                receipt_value,
+                source_turn_id if source_turn_id is not None else candidate["source_turn_id"],
+                candidate["user_id"],
+                receipt_provenance,
+            )
+
+            promoted_kind = (
+                "framework" if candidate["kind"] == "framework_candidate" else "heuristic"
+            )
+            promoted_record = {
+                **record,
+                "status": "PROMOTED",
+                "last_validated_at": now,
+            }
+            promoted_provenance = {
+                **{k: v for k, v in candidate["provenance"].items() if k != "method_schema_version"},
+                **lifecycle_provenance,
+                "promotion_source_memory_id": candidate_memory_id,
+                "promotion_receipt_id": receipt_id,
+                "promotion_transaction_version": 1,
+                "method_schema_version": METHOD_SCHEMA_VERSION,
+            }
+            promoted_value = canonical_method_value(
+                promoted_kind,
+                promoted_record,
+                promoted_provenance,
+            )
+            promoted_id = self.db.add_memory(
+                promoted_kind,
+                candidate["subject"],
+                promoted_value,
+                source_turn_id if source_turn_id is not None else candidate["source_turn_id"],
+                candidate["user_id"],
+                promoted_provenance,
+            )
+            return {
+                "candidate_memory_id": candidate_memory_id,
+                "receipt_memory_id": receipt_id,
+                "promoted_memory_id": promoted_id,
+            }
 
     def decode_row(self, row) -> dict[str, Any]:
         kind = str(row["kind"])

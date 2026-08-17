@@ -73,6 +73,19 @@ def test_kata_persistent_volumes_are_bound_to_nonroot_runtime_group():
     assert "unsupported or uncertain non-root volume ownership is `BLOCKED`" in contract
 
 
+def test_kata_persistent_volumes_require_cluster_wide_single_pod_writer_fence():
+    template = TEMPLATE.read_text()
+    assert template.count('accessModes: ["ReadWriteOncePod"]') == 2
+    assert 'accessModes: ["ReadWriteOnce"]' not in template
+
+    contract = CONTRACT.read_text()
+    assert "requires `ReadWriteOncePod` for both canonical persistent claims" in contract
+    assert "Ordinary `ReadWriteOnce` is insufficient" in contract
+    assert "second Pod cannot concurrently mount/use either canonical claim" in contract
+    assert "force delete" in contract
+    assert "old Pod/sandbox cannot retain or reacquire canonical storage" in contract
+
+
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     text = TEMPLATE.read_text()
     policies = [doc for doc in _yaml_documents(text) if "kind: NetworkPolicy" in doc]

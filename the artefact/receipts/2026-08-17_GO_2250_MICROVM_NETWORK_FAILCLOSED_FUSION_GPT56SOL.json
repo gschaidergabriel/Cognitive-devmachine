@@ -1,0 +1,86 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T22:50:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES_PARALLEL_DELTA_AND_INDEPENDENTLY_REVALIDATES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_commit": "UNRESOLVED_COMMIT_ENDPOINT_403",
+  "product_acceptance": "IN_PROGRESS",
+  "frontier": "MANDATORY_MICROVM_NETWORK_BOUNDARY",
+  "observed_parallel_delta": {
+    "template_path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "template_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "contract_path": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+    "contract_blob": "1e41ce8424bffa94905448f76d0856acbc6a262c",
+    "test_path": "the artefact/tests/test_microvm_deployment_contract.py",
+    "test_blob": "cc7e3cb7628314c51534330878ca886bc464713e",
+    "readme_path": "the artefact/README.md",
+    "readme_blob": "10185329d472c711f3e7e28bc75b186e064d567b",
+    "network_policy": {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "name": "clayverse-default-deny",
+      "selector": "app=clayverse",
+      "policy_types": ["Ingress", "Egress"],
+      "ingress": [],
+      "egress": []
+    }
+  },
+  "coordination": {
+    "duplicate_write_attempt": "REJECTED_BY_BLOB_SHA_409_AFTER_PARALLEL_MAIN_ADVANCE",
+    "action": "ADOPT_EXISTING_CURRENT_MAIN_DELTA_DO_NOT_OVERWRITE",
+    "reason": "parallel worker had already closed the same source-level gap",
+    "duplicate_canonical_path_created": false
+  },
+  "bounded_independent_validation": {
+    "surface": "OpenAI isolated non-production Python environment",
+    "exact_template_git_blob_reconstructed": true,
+    "recomputed_git_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "blob_identity_match": true,
+    "yaml_parse": "PASS",
+    "documents": [
+      "v1 Service clayverse",
+      "apps/v1 StatefulSet clayverse",
+      "networking.k8s.io/v1 NetworkPolicy clayverse-default-deny"
+    ],
+    "assertions": {
+      "exactly_one_network_policy": true,
+      "selector_app_clayverse": true,
+      "ingress_policy_type": true,
+      "egress_policy_type": true,
+      "ingress_empty": true,
+      "egress_empty": true,
+      "no_ipv4_allow_all_literal": true,
+      "no_ipv6_allow_all_literal": true,
+      "hostNetwork_false_not_claimed_as_sufficient": true
+    },
+    "evidence_class": "SOURCE_MECHANISM_SUPPORT_ONLY"
+  },
+  "counterhypothesis": "A syntactically correct Kubernetes NetworkPolicy does not prove the target CNI actually enforces it, and the fail-closed baseline is intentionally non-functional until a deployment-specific allow policy is supplied.",
+  "next_discriminator": "Run the exact accepted ClayVerse image under the admitted Kata/equivalent runtime, prove CNI enforcement of the deny-all baseline, then bind and test the exact reviewed allow-policy identity with positive admitted-flow and negative undeclared-flow cases.",
+  "execution_reality": {
+    "vercel_sandbox_bridge": "CONFIRMED_HISTORICALLY_AND_REPEATEDLY_ADMITTED",
+    "current_oci_execution_blocker": "HOST_SIDE_GITHUB_READ_TOKEN_MISSING_FOR_PRIVATE_SOURCE_FETCH",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "microvm_runtime_credit": 0,
+    "cni_runtime_credit": 0,
+    "whole_product_pass": false
+  },
+  "go_unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "no shared immutable request/turn id or reproducibly unique whole-second trigger identity exposed"
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together_api": false,
+    "paid_final_training": false
+  }
+}

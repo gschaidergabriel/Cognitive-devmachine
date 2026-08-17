@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
+        ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:-}"
     restart: unless-stopped
     ports:
       - "${CLAYVERSE_PORT:-3000}:3000"
@@ -11,12 +11,12 @@ services:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
-      # EntityOS bytes are digest-bound into the one ClayVerse image. External
-      # execution remains disabled until the exact embedded artifact has accepted
-      # isolated-sandbox runtime evidence.
+      # EntityOS is optional in the baseline image. When deliberately embedded,
+      # its digest remains bound at build/runtime; execution stays disabled until
+      # the exact embedded artifact has accepted isolated-sandbox runtime evidence.
       CLAYVERSE_ENABLE_ENTITYOS_EXEC: "0"
       CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
-      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
+      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:-}"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
       CLERK_ISSUER: "${CLERK_ISSUER:?required}"
       CLERK_JWKS_URL: "${CLERK_JWKS_URL:-}"

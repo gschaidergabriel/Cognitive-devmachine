@@ -58,6 +58,7 @@ class WorldAssembler:
         resource_refs,
         *,
         query=None,
+        problem_signature=None,
         turn_id=None,
         episode_id=None,
         causal_id=None,
@@ -111,12 +112,12 @@ class WorldAssembler:
             "causal_id": causal_id,
             "generation": generation,
         }
-        # Canonical TurnLifecycle calls assemble() without these values and lets the
-        # active turn provide the identity. Supplying any identity field is therefore
-        # an explicit internal/shadow evaluation request, not product serving authority.
-        shadow_method_requested = any(value is not None for value in supplied.values())
-        supplied_any = shadow_method_requested
+        # Identity fields resolve/verify the active turn only. They never authorize Stage B.
+        # A method lookup is an explicit internal SHADOW request only when the caller also
+        # supplies a problem signature; the canonical product path supplies no signature.
+        supplied_any = any(value is not None for value in supplied.values())
         supplied_all = all(value is not None for value in supplied.values())
+        shadow_method_requested = problem_signature is not None
         if not supplied_all:
             active = self._active_identity(session_id)
             if active is not None:
@@ -148,13 +149,11 @@ class WorldAssembler:
             memories = result["items"]
             retrieval_receipt = dict(result["receipt"])
 
-            # Raw-query Stage B remains measurable only as an explicit SHADOW path.
-            # The canonical product path must not inject method content until an admitted
-            # structured problem-signature/receipt contract exists.
             if retrieval_receipt.get("status") == "UNKNOWN":
                 if shadow_method_requested:
                     methods = self.methods.retrieve(
                         query=str(supplied["query"]),
+                        problem_signature=problem_signature,
                         user_id=user_id,
                         session_id=session_id,
                         turn_id=str(supplied["turn_id"]),

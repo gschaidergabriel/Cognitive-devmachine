@@ -15,6 +15,7 @@ from .method_memory import (
     canonical_problem_signature,
     structural_similarity,
 )
+from .problem_signature import ProblemSignatureAdmission
 from .store import UnifiedDB
 
 STAGE_B_TRIGGERS = frozenset({"UNKNOWN", "UNDERCOVERED", "OOD", "CONFLICT", "STRATEGY"})
@@ -23,9 +24,9 @@ STAGE_B_TRIGGERS = frozenset({"UNKNOWN", "UNDERCOVERED", "OOD", "CONFLICT", "STR
 class StageBShadowRetrieval:
     """Non-serving structural method transfer with durable causal replay identity.
 
-    V1 never derives a structural signature from prompt text and never injects method
-    output into Claude context. It records what *would* be selected in SHADOW so held-out
-    evaluation can later decide whether an ACTIVE policy is justified.
+    V1 accepts only a persisted ProblemSignatureAdmission receipt. It has no free-text
+    structural parser and never injects method output into Claude context. Selected
+    methods are recorded in SHADOW for held-out transfer/calibration evidence only.
     """
 
     POLICY_VERSION = 1
@@ -36,6 +37,7 @@ class StageBShadowRetrieval:
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.methods = MethodMemoryManager(db)
+        self.signatures = ProblemSignatureAdmission(db)
 
     @staticmethod
     def _canonical(value: Any) -> str:
@@ -46,6 +48,19 @@ class StageBShadowRetrieval:
         result = record.public(score=score)
         result["served"] = False
         return result
+
+    @staticmethod
+    def _refs(resource_refs: list[str] | None) -> list[str]:
+        if resource_refs is None:
+            return []
+        if not isinstance(resource_refs, list) or len(resource_refs) > 50:
+            raise MethodRecordError("Stage-B resource refs invalid")
+        refs = []
+        for ref in resource_refs:
+            if not isinstance(ref, str) or not ref.strip() or len(ref) > 1000:
+                raise MethodRecordError("Stage-B resource ref invalid")
+            refs.append(ref.strip())
+        return sorted(set(refs))
 
     def _assert_active_identity(
         self,
@@ -85,14 +100,20 @@ class StageBShadowRetrieval:
                 records.append(record)
         return records
 
-    def _decode_selected(self, ids: list[str], user_id: str, signature: dict[str, tuple[str, ...]]) -> list[dict[str, Any]]:
+    def _decode_selected(
+        self,
+        ids: list[str],
+        user_id: str,
+        signature: dict[str, tuple[str, ...]],
+        allowed_kinds: frozenset[str],
+    ) -> list[dict[str, Any]]:
         items: list[dict[str, Any]] = []
         for memory_id in ids:
             row = self.methods.row_by_id(memory_id, user_id)
             record = self.methods.decode_row(row)
             self.methods._assert_references(record, user_id)
-            if record.status != "PROMOTED":
-                raise MethodRecordError("replayed method no longer promoted")
+            if record.kind not in allowed_kinds or record.status != "PROMOTED":
+                raise MethodRecordError("replayed method kind/status diverged")
             score = structural_similarity(signature, record.problem_signature)
             if score < self.MIN_STRUCTURAL_SCORE:
                 raise MethodRecordError("replayed method no longer matches admitted signature")
@@ -109,7 +130,8 @@ class StageBShadowRetrieval:
         causal_id: str,
         generation: int,
         evidence_status: str,
-        problem_signature: dict[str, Any] | None,
+        signature_receipt_id: str | None,
+        resource_refs: list[str] | None,
         trigger: str | None = None,
         limit: int = 4,
         budget_chars: int = 12_000,
@@ -134,8 +156,9 @@ class StageBShadowRetrieval:
         trigger = trigger.upper() if isinstance(trigger, str) else None
         if trigger is not None and trigger not in STAGE_B_TRIGGERS:
             raise MethodRecordError("invalid Stage-B trigger")
+        refs = self._refs(resource_refs)
 
-        if problem_signature is None:
+        if signature_receipt_id is None:
             return {
                 "fact_status": evidence_status,
                 "method_context": [],
@@ -154,9 +177,21 @@ class StageBShadowRetrieval:
                 },
             }
 
-        signature = canonical_problem_signature(problem_signature)
+        signature_receipt = self.signatures.load_for_active(
+            receipt_id=signature_receipt_id,
+            user_id=user_id,
+            session_id=session_id,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+        )
+        if signature_receipt["resource_refs"] != refs:
+            raise MethodRecordError("Stage-B current resource refs diverge from admitted signature receipt")
+        signature = canonical_problem_signature(signature_receipt["problem_signature"])
         signature_json = self._canonical({key: list(values) for key, values in signature.items()})
         signature_hash = hashlib.sha256(signature_json.encode("utf-8")).hexdigest()
+        refs_hash = hashlib.sha256(self._canonical(refs).encode("utf-8")).hexdigest()
         if trigger not in STAGE_B_TRIGGERS:
             return {
                 "fact_status": evidence_status,
@@ -168,8 +203,10 @@ class StageBShadowRetrieval:
                     "mode": "SHADOW_METHOD_V1",
                     "policy_version": self.POLICY_VERSION,
                     "signature_status": "ADMITTED_NO_TRIGGER",
+                    "signature_receipt_id": signature_receipt_id,
                     "trigger": None,
                     "problem_signature_sha256": signature_hash,
+                    "resource_refs_sha256": refs_hash,
                     "served": False,
                     "truth_authority": False,
                     "effect_authority": False,
@@ -187,7 +224,10 @@ class StageBShadowRetrieval:
             "generation": int(generation),
             "evidence_status": evidence_status,
             "trigger": trigger,
+            "signature_receipt_id": signature_receipt_id,
+            "signature_identity_sha256": signature_receipt["signature_identity_sha256"],
             "problem_signature_sha256": signature_hash,
+            "resource_refs_sha256": refs_hash,
             "limit": limit,
             "budget_chars": budget_chars,
         }
@@ -198,8 +238,12 @@ class StageBShadowRetrieval:
             receipt_id, receipt = replay
             if receipt["request_identity_sha256"] != request_hash:
                 raise MethodRecordError("Stage-B replay request identity mismatch")
-            selected = self._decode_selected(list(receipt["selected_method_ids"]), user_id, signature)
-            counters = self._decode_selected(list(receipt["counterexample_memory_ids"]), user_id, signature)
+            selected = self._decode_selected(
+                list(receipt["selected_method_ids"]), user_id, signature, ACTIVE_METHOD_KINDS
+            )
+            counters = self._decode_selected(
+                list(receipt["counterexample_memory_ids"]), user_id, signature, COUNTER_METHOD_KINDS
+            )
             return {
                 "fact_status": evidence_status,
                 "method_context": [],
@@ -212,6 +256,8 @@ class StageBShadowRetrieval:
                     "mode": "SHADOW_METHOD_V1",
                     "policy_version": self.POLICY_VERSION,
                     "signature_status": "ADMITTED",
+                    "signature_receipt_id": signature_receipt_id,
+                    "resource_refs_sha256": refs_hash,
                     "fact_status_unchanged": evidence_status,
                     "replayed": True,
                 },
@@ -242,9 +288,7 @@ class StageBShadowRetrieval:
                 continue
             public = self._public(record, score)
             cost = len(self._canonical(public))
-            if selected and chars + cost > budget_chars:
-                continue
-            if not selected and cost > budget_chars:
+            if chars + cost > budget_chars:
                 continue
             selected.append((score, record))
             chars += cost
@@ -282,7 +326,9 @@ class StageBShadowRetrieval:
             "truth_authority": False,
             "effect_authority": False,
         }
-        receipt_id = self.methods.write_use_receipt(receipt_payload, source_turn_id=turn_id, user_id=user_id, subject=subject)
+        receipt_id = self.methods.write_use_receipt(
+            receipt_payload, source_turn_id=turn_id, user_id=user_id, subject=subject
+        )
         return {
             "fact_status": evidence_status,
             "method_context": [],
@@ -295,6 +341,8 @@ class StageBShadowRetrieval:
                 "mode": "SHADOW_METHOD_V1",
                 "policy_version": self.POLICY_VERSION,
                 "signature_status": "ADMITTED",
+                "signature_receipt_id": signature_receipt_id,
+                "resource_refs_sha256": refs_hash,
                 "fact_status_unchanged": evidence_status,
                 "replayed": False,
             },

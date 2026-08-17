@@ -95,6 +95,21 @@ class TerminalSessionManager:
             *args,
         ]
 
+    @staticmethod
+    def _tmux_control_env() -> dict[str, str]:
+        """Return the complete environment admitted to tmux control/server processes.
+
+        The service process may hold Clerk/provider credentials. tmux is persistent and
+        therefore must never inherit the ambient service environment merely because a
+        control command starts or attaches to a server. Product child processes receive
+        their own explicit `env -i` contract below.
+        """
+        return {
+            "PATH": "/usr/local/bin:/usr/bin:/bin",
+            "TERM": "xterm-256color",
+            "LANG": "C.UTF-8",
+        }
+
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
         """Fail closed unless the connected tmux server is transport-only.
 
@@ -125,6 +140,7 @@ class TerminalSessionManager:
                     text=True,
                     check=False,
                     timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+                    env=self._tmux_control_env(),
                 )
             except (OSError, subprocess.TimeoutExpired) as exc:
                 raise TerminalRuntimeError(f"tmux server policy attestation unavailable: {label}") from exc
@@ -177,6 +193,7 @@ class TerminalSessionManager:
                 stderr=subprocess.DEVNULL,
                 check=False,
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+                env=self._tmux_control_env(),
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(
@@ -199,6 +216,7 @@ class TerminalSessionManager:
                 text=True,
                 check=False,
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+                env=self._tmux_control_env(),
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(
@@ -271,6 +289,7 @@ class TerminalSessionManager:
                 text=True,
                 check=False,
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+                env=self._tmux_control_env(),
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(

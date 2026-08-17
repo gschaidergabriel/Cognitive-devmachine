@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users(user_id TEXT PRIMARY KEY,display_name TEXT NOT 
 CREATE TABLE IF NOT EXISTS sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(user_id),created_at REAL NOT NULL,updated_at REAL NOT NULL,generation INTEGER NOT NULL DEFAULT 1,terminal_name TEXT NOT NULL UNIQUE);
 CREATE TABLE IF NOT EXISTS turns(turn_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),ordinal INTEGER NOT NULL,ts REAL NOT NULL,role TEXT NOT NULL CHECK(role IN ('user','assistant','system','tool')),content TEXT NOT NULL,fidelity TEXT NOT NULL DEFAULT 'full',compression_generation INTEGER NOT NULL DEFAULT 0,resource_refs TEXT NOT NULL DEFAULT '[]',causal_refs TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL DEFAULT '{}',UNIQUE(session_id, ordinal));
 CREATE INDEX IF NOT EXISTS idx_turns_session_ord ON turns(session_id, ordinal DESC);
+CREATE TABLE IF NOT EXISTS turn_ledger(turn_id TEXT PRIMARY KEY REFERENCES turns(turn_id),raw_content TEXT NOT NULL,raw_sha256 TEXT NOT NULL,recorded_at REAL NOT NULL);
 CREATE TABLE IF NOT EXISTS durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
@@ -29,11 +30,29 @@ class StaleGeneration(RuntimeError): pass
 class LeaseConflict(RuntimeError): pass
 
 class UnifiedDB:
-    """Single canonical state authority. ClayGraph tables are rebuildable projections only."""
+    """Single canonical state authority; compressed turns and ClayGraph are projections."""
     def __init__(self,path):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
-        self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('schema_version','1')")
+        try:
+            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._migrate_turn_ledger(); self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','2') ON CONFLICT(key) DO UPDATE SET value='2'")
+        except Exception:
+            self.db.close(); raise
+    def _migrate_turn_ledger(self):
+        missing=self.db.execute("SELECT COUNT(*) FROM turns t LEFT JOIN turn_ledger l ON l.turn_id=t.turn_id WHERE l.turn_id IS NULL").fetchone()[0]
+        if missing:
+            lossy=self.db.execute("SELECT COUNT(*) FROM turns t LEFT JOIN turn_ledger l ON l.turn_id=t.turn_id WHERE l.turn_id IS NULL AND t.compression_generation>0").fetchone()[0]
+            if lossy:
+                raise RuntimeError("cannot migrate compressed turns without immutable raw ledger")
+            now=time.time()
+            with self.tx() as db:
+                rows=db.execute("SELECT t.turn_id,t.content FROM turns t LEFT JOIN turn_ledger l ON l.turn_id=t.turn_id WHERE l.turn_id IS NULL").fetchall()
+                for row in rows:
+                    raw=row['content']; db.execute("INSERT INTO turn_ledger VALUES(?,?,?,?)",(row['turn_id'],raw,hashlib.sha256(raw.encode()).hexdigest(),now))
+        self.db.executescript("""
+        CREATE TRIGGER IF NOT EXISTS turn_ledger_no_update BEFORE UPDATE ON turn_ledger BEGIN SELECT RAISE(ABORT,'turn ledger immutable'); END;
+        CREATE TRIGGER IF NOT EXISTS turn_ledger_no_delete BEFORE DELETE ON turn_ledger BEGIN SELECT RAISE(ABORT,'turn ledger immutable'); END;
+        """)
     def close(self): self.db.close()
     @contextlib.contextmanager
     def tx(self):
@@ -64,8 +83,10 @@ class UnifiedDB:
         self.assert_session_owner(session_id,user_id)
         with self.tx() as db:
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(session_id,)).fetchone()[0]); tid=str(uuid.uuid4()); now=time.time()
-            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(tid,session_id,user_id,ordinal,now,role,content,json.dumps(sorted(set(resources))),json.dumps(list(causal_refs)),json.dumps(provenance or {},sort_keys=True))); db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,session_id))
+            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(tid,session_id,user_id,ordinal,now,role,content,json.dumps(sorted(set(resources))),json.dumps(list(causal_refs)),json.dumps(provenance or {},sort_keys=True)))
+            db.execute("INSERT INTO turn_ledger VALUES(?,?,?,?)",(tid,content,hashlib.sha256(content.encode()).hexdigest(),now)); db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,session_id))
         return tid
+    def raw_turn(self,turn_id): return self.db.execute("SELECT * FROM turn_ledger WHERE turn_id=?",(turn_id,)).fetchone()
     def recent_turns(self,session_id,limit=20):
         rows=self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal DESC LIMIT ?",(session_id,limit)).fetchall(); return list(reversed(rows))
     def all_turns(self,session_id): return self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal",(session_id,)).fetchall()
@@ -87,5 +108,5 @@ class UnifiedDB:
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
-        for table in ("users","sessions","turns","durable_memory","effects","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+        for table in ("users","sessions","turns","turn_ledger","durable_memory","effects","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
         digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

@@ -1,64 +1,9 @@
-import contextlib
-import json
-import sqlite3
 import time
 
 import pytest
 
-from clayverse.method_memory import MethodMemoryManager, MethodMemoryValidationError
-
-
-class PromotionDB:
-    def __init__(self):
-        self.db = sqlite3.connect(":memory:", isolation_level=None)
-        self.db.row_factory = sqlite3.Row
-        self.db.executescript(
-            """
-            CREATE TABLE durable_memory(
-                memory_id TEXT PRIMARY KEY,
-                kind TEXT NOT NULL,
-                subject TEXT NOT NULL,
-                value TEXT NOT NULL,
-                source_turn_id TEXT,
-                user_id TEXT,
-                ts REAL NOT NULL,
-                provenance TEXT NOT NULL
-            );
-            CREATE TABLE workspace_episodes(
-                episode_id TEXT PRIMARY KEY
-            );
-            """
-        )
-        self._next = 0
-
-    @contextlib.contextmanager
-    def tx(self):
-        self.db.execute("BEGIN IMMEDIATE")
-        try:
-            yield self.db
-        except Exception:
-            self.db.execute("ROLLBACK")
-            raise
-        else:
-            self.db.execute("COMMIT")
-
-    def add_memory(self, kind, subject, value, source_turn_id, user_id, provenance):
-        self._next += 1
-        memory_id = f"db:m{self._next}"
-        self.db.execute(
-            "INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",
-            (
-                memory_id,
-                kind,
-                subject,
-                value,
-                source_turn_id,
-                user_id,
-                time.time(),
-                json.dumps(provenance, sort_keys=True),
-            ),
-        )
-        return memory_id
+from clayverse.method_memory import MethodMemoryValidationError
+from clayverse.store import UnifiedDB
 
 
 def candidate_record(**overrides):
@@ -91,82 +36,166 @@ def candidate_record(**overrides):
     return value
 
 
-def test_promotion_transaction_binds_candidate_episodes_evidence_and_receipt():
-    db = PromotionDB()
-    db.db.executemany(
-        "INSERT INTO workspace_episodes(episode_id) VALUES(?)",
-        [("episode:a",), ("episode:b",)],
+def add_episode(db, user_id, episode_id, *, state="COMPLETED", reentered=True):
+    session_id = db.ensure_session(user_id, f"clayverse-{user_id}")
+    db.db.execute(
+        "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
+        "VALUES(?,?,?,?,?,?,?,?)",
+        (episode_id, session_id, time.time(), None, 0.5, "[]", None, state),
     )
-    evidence_a = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
-    evidence_b = db.add_memory("fact", "evidence", "B", None, "gabriel", {"source": "test"})
-    manager = MethodMemoryManager(db)
-    candidate_id = manager.admit(
+    if reentered:
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (f"causal:{episode_id}", episode_id, None, None, f"hash:{episode_id}", 0.0, 1, time.time()),
+        )
+    return session_id
+
+
+def make_db(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    db.ensure_user("gabriel", "Gabriel")
+    db.ensure_user("andreas", "Andreas")
+    return db
+
+
+def admit_candidate(db, *, episodes=None, supports=None, counters=None, user_id="gabriel"):
+    return db.add_method_memory(
         "framework_candidate",
         "causal discrimination",
-        candidate_record(supporting_memory_ids=[evidence_a, evidence_b]),
-        "turn:promotion",
-        "gabriel",
+        candidate_record(
+            source_episode_ids=episodes or ["episode:a", "episode:b"],
+            supporting_memory_ids=supports or [],
+            counterexample_memory_ids=counters or [],
+        ),
+        None,
+        user_id,
         {"source": "episode_abstraction", "extractor": "test"},
     )
 
-    result = manager.promote(
+
+def count_promoted_rows(db):
+    return db.db.execute(
+        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('method_receipt','framework','heuristic')"
+    ).fetchone()[0]
+
+
+def promote(db, candidate_id):
+    return db.promote_method_memory(
         candidate_id,
         evaluation="held-out transfer succeeded on a second source episode",
         provenance={"source": "held_out_eval", "evaluator": "test"},
     )
-    receipt = manager.decode_row(
-        db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (result["receipt_memory_id"],),
-        ).fetchone()
-    )
-    promoted = manager.decode_row(
-        db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (result["promoted_memory_id"],),
-        ).fetchone()
-    )
-    assert receipt["value"]["action"] == "PROMOTE"
-    assert receipt["value"]["method_memory_id"] == candidate_id
-    assert promoted["kind"] == "framework"
-    assert promoted["value"]["status"] == "PROMOTED"
-    assert promoted["provenance"]["promotion_source_memory_id"] == candidate_id
-    assert promoted["provenance"]["promotion_receipt_id"] == result["receipt_memory_id"]
-
-    row_count = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodMemoryValidationError, match="already has a promotion receipt"):
-        manager.promote(
-            candidate_id,
-            evaluation="duplicate promotion attempt",
-            provenance={"source": "held_out_eval", "evaluator": "test"},
-        )
-    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == row_count
 
 
-def test_promotion_missing_episode_rolls_back_without_receipt_or_framework():
-    db = PromotionDB()
-    db.db.execute("INSERT INTO workspace_episodes(episode_id) VALUES('episode:a')")
-    evidence = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
-    manager = MethodMemoryManager(db)
-    candidate_id = manager.admit(
-        "framework_candidate",
-        "causal discrimination",
-        candidate_record(
-            source_episode_ids=["episode:a", "episode:missing"],
-            supporting_memory_ids=[evidence],
-        ),
-        "turn:promotion",
-        "gabriel",
-        {"source": "episode_abstraction", "extractor": "test"},
-    )
-    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodMemoryValidationError, match="episode evidence is incomplete"):
-        manager.promote(
-            candidate_id,
-            evaluation="must not promote with a missing source episode",
-            provenance={"source": "held_out_eval", "evaluator": "test"},
-        )
-    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
-    assert db.db.execute(
-        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('method_receipt','framework','heuristic')"
-    ).fetchone()[0] == 0
+def test_promotion_binds_terminal_causal_session_and_receipt(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "gabriel", "episode:b", state="ABORTED", reentered=True)
+        evidence_a = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
+        evidence_b = db.add_memory("fact", "evidence", "B", None, None, {"source": "test"})
+        candidate_id = admit_candidate(db, supports=[evidence_a, evidence_b])
+
+        result = promote(db, candidate_id)
+        receipt = db.method_memory(result["receipt_memory_id"])
+        promoted = db.method_memory(result["promoted_memory_id"])
+
+        assert receipt["value"]["action"] == "PROMOTE"
+        assert receipt["value"]["method_memory_id"] == candidate_id
+        assert receipt["provenance"]["promotion_transaction_version"] == 2
+        assert receipt["provenance"]["promotion_source_user_id"] == "gabriel"
+        assert receipt["provenance"]["promotion_source_session_id"] == "session:gabriel"
+        assert receipt["provenance"]["promotion_sources_terminal_causal"] is True
+        assert promoted["kind"] == "framework"
+        assert promoted["value"]["status"] == "PROMOTED"
+        assert promoted["provenance"]["promotion_source_memory_id"] == candidate_id
+        assert promoted["provenance"]["promotion_receipt_id"] == result["receipt_memory_id"]
+
+        row_count = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
+        with pytest.raises(MethodMemoryValidationError, match="already has a promotion receipt"):
+            promote(db, candidate_id)
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == row_count
+    finally:
+        db.close()
+
+
+@pytest.mark.parametrize("state", ["OPEN", "SELECTED"])
+def test_nonterminal_source_episode_fails_before_receipt(tmp_path, state):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "gabriel", "episode:b", state=state, reentered=True)
+        candidate_id = admit_candidate(db)
+        before = count_promoted_rows(db)
+        with pytest.raises(MethodMemoryValidationError, match="not terminal"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == before == 0
+    finally:
+        db.close()
+
+
+def test_terminal_source_without_causal_reentry_fails_before_receipt(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "gabriel", "episode:b", state="ABORTED", reentered=False)
+        candidate_id = admit_candidate(db)
+        with pytest.raises(MethodMemoryValidationError, match="lacks causal re-entry"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == 0
+    finally:
+        db.close()
+
+
+def test_cross_user_source_episode_fails_before_receipt(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "andreas", "episode:b", state="COMPLETED", reentered=True)
+        candidate_id = admit_candidate(db)
+        with pytest.raises(MethodMemoryValidationError, match="canonical session"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == 0
+    finally:
+        db.close()
+
+
+def test_cross_user_supporting_memory_fails_before_receipt(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "gabriel", "episode:b", state="COMPLETED", reentered=True)
+        foreign = db.add_memory("fact", "foreign", "private", None, "andreas", {"source": "test"})
+        candidate_id = admit_candidate(db, supports=[foreign])
+        with pytest.raises(MethodMemoryValidationError, match="memory crosses user scope"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == 0
+    finally:
+        db.close()
+
+
+def test_counterexample_reference_must_be_negative_method_evidence(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        add_episode(db, "gabriel", "episode:b", state="COMPLETED", reentered=True)
+        wrong_kind = db.add_memory("fact", "not-counterexample", "plain fact", None, "gabriel", {"source": "test"})
+        candidate_id = admit_candidate(db, counters=[wrong_kind])
+        with pytest.raises(MethodMemoryValidationError, match="not negative method evidence"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == 0
+    finally:
+        db.close()
+
+
+def test_missing_source_episode_rolls_back_without_receipt(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        add_episode(db, "gabriel", "episode:a", state="COMPLETED", reentered=True)
+        candidate_id = admit_candidate(db, episodes=["episode:a", "episode:missing"])
+        with pytest.raises(MethodMemoryValidationError, match="episode evidence is incomplete"):
+            promote(db, candidate_id)
+        assert count_promoted_rows(db) == 0
+    finally:
+        db.close()

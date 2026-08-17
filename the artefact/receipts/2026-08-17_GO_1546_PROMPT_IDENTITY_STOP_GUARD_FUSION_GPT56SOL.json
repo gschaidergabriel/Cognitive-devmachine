@@ -1,0 +1,34 @@
+{
+  "schema": "clayverse-go-regression-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T15:46:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "retained_pull_request": 454,
+  "retained_branch": "go/prompt-identity-fusion-20260817-1342-sol",
+  "rejoined_head_before_regression_fusion": "124d3f07cef7618e904a4934e4568c83dc0064d5",
+  "regression_fusion_commit": "334c975c88419867fba867fe1b111a22230eb10c",
+  "donor_pull_request": 373,
+  "file": "the artefact/tests/test_terminal_hook_stop_guard.py",
+  "prior_main_blob": "df88a7aaa1ac0aa6920ce9bc9d85bb3fd06523d4",
+  "fused_blob": "6ea3fc7705c28b648d9f69ad94c3a25c343d3e75",
+  "finding": "PR454 makes prompt_id mandatory at the managed terminal-hook process boundary. The adjacent canonical Stop-loop regression on current main still omitted prompt_id, so an exact PR454 regression suite would fail at the new boundary before exercising the intended Stop guard semantics.",
+  "repair": [
+    "Add prompt_id to first Stop failure, re-entered Stop failure and UserPromptSubmit failure regression payloads.",
+    "Stub _retire_failed_active_stop only in the synthetic re-entered Stop guard test so the test remains scoped to loop-escape return semantics instead of opening a real runtime DB.",
+    "Keep product code unchanged; fuse only the missing adjacent regression from the older donor lane."
+  ],
+  "evidence": {
+    "source_comparison": "PASS_DONOR_REGRESSION_WAS_UNIQUE_TO_PR373_AND_ABSENT_FROM_PR454",
+    "exact_isolated_execution": false,
+    "github_runs_on_prior_rejoin": "ALL_OBSERVED_JOBS_FAILED_PRE_STEP_WITH_STEPS_NULL",
+    "classification": "REGRESSION_FUSION_SOURCE_CANDIDATE_NOT_RUNTIME_VERIFIED"
+  },
+  "coordination": {
+    "new_unusual_experiment": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "whole_product_pass": false,
+  "next_exact_gate": "Execute prompt identity + Stop guard + adjacent lifecycle/recovery tests on the exact then-current PR454 head in an actually-started authorized isolated sandbox, then verify packaged Claude Code hook payload identity before promotion."
+}

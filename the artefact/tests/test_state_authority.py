@@ -3,10 +3,12 @@ import sqlite3
 import threading
 import time
 
+import pytest
+
 from clayverse.engine import ClayVerseEngine
 from clayverse.identity import IdentityRouter
 from clayverse.memory import MemoryManager
-from clayverse.store import UnifiedDB
+from clayverse.store import CURRENT_SCHEMA_VERSION, UnifiedDB
 
 
 def _table_exists(db, name):
@@ -68,9 +70,28 @@ def test_schema2_hidden_raw_ledger_is_retired_on_open(tmp_path):
 
     reopened = UnifiedDB(path)
     assert not _table_exists(reopened, "turn_ledger")
-    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "5"
+    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == str(CURRENT_SCHEMA_VERSION)
     assert reopened.db.execute("SELECT content FROM turns WHERE turn_id=?", (turn_id,)).fetchone()[0] == "ordinary full turn"
     reopened.close()
+
+
+def test_future_schema_version_fails_closed_without_downgrade(tmp_path):
+    path = tmp_path / "future-schema.db"
+    db = UnifiedDB(path)
+    db.close()
+
+    future_version = CURRENT_SCHEMA_VERSION + 1
+    raw = sqlite3.connect(path)
+    raw.execute("UPDATE meta SET value=? WHERE key='schema_version'", (str(future_version),))
+    raw.commit()
+    raw.close()
+
+    with pytest.raises(RuntimeError, match="newer than supported"):
+        UnifiedDB(path)
+
+    raw = sqlite3.connect(path)
+    assert raw.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == str(future_version)
+    raw.close()
 
 
 class _ConcurrencyProbe:

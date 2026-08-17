@@ -228,7 +228,7 @@ class CandidateValidation:
         outcome = self.db.db.execute(
             "SELECT w.session_id,w.state,w.observation_turn_id,s.user_id AS session_user,t.user_id AS turn_user,"
             "c.causal_id,c.episode_id AS causal_episode_id,c.effect_id,c.outcome_hash,c.credit,c.reentered,"
-            "e.user_id AS effect_user,e.capability,e.status,e.requested_generation,e.verified_at "
+            "e.user_id AS effect_user,e.capability,e.status,e.requested_generation,e.verified_at,e.outcome "
             "FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id "
             "JOIN turns t ON t.turn_id=w.observation_turn_id JOIN causal_episodes c ON c.episode_id=w.episode_id "
             "JOIN effects e ON e.effect_id=c.effect_id WHERE w.episode_id=? AND c.causal_id=? LIMIT 1",
@@ -247,7 +247,14 @@ class CandidateValidation:
         if str(outcome["capability"]) != "entityos.exec":
             raise MethodValidationError("candidate-validation v1 requires an external EntityOS effect")
         status = str(outcome["status"]).upper(); credit = _finite_number(outcome["credit"], "causal_credit")
-        if status == "VERIFIED" and credit > 0.0: classification = "SUCCESS"
+        if status == "VERIFIED" and credit > 0.0:
+            try:
+                payload = json.loads(str(outcome["outcome"])) if outcome["outcome"] else {}
+            except Exception as exc:
+                raise MethodValidationError("verified validation outcome is invalid JSON") from exc
+            if not isinstance(payload, dict) or payload.get("ok") is not True:
+                raise MethodValidationError("positive method validation requires verified outcome ok=true")
+            classification = "SUCCESS"
         elif status in _FAILURE_EFFECT_STATUS: classification = "FAILURE"
         elif status in _INELIGIBLE_EFFECT_STATUS or credit == 0.0: raise MethodValidationError("effect outcome is ineligible as method utility evidence")
         else: raise MethodValidationError("unsupported effect outcome for method validation")

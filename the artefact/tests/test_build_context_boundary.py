@@ -13,6 +13,8 @@ def test_oci_build_context_is_allowlisted():
         "!clayverse/**",
         "!policy/",
         "!policy/**",
+        "!runtime_CLAUDE.md",
+        "!entityos.lock.json",
         "!EntityOS",
     ):
         assert required in rules

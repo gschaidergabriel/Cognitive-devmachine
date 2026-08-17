@@ -43,14 +43,14 @@
         "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
     },
-    {"receiver": "research:clay", "message_kind": "MATERIAL_DELTA", "urgency": "NEXT_CHECKPOINT", "decision": "ADOPT", "summary": "Live Fusion is continuous for material deltas; Live Hypofusion is a conditional adversarial second lane; explicit fusion/hypofusion commands remain full-depth macros.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:unifieddb", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "UnifiedDB remains canonical state authority; live routing is not a second durable truth store.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:claygraph", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "ClayGraph remains derived/rebuildable projection; recurrence never mints truth.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:hyperposition", "message_kind": "COUNTER_CHALLENGE", "urgency": "INDEX_ONLY", "decision": "ADOPT", "summary": "Preserve unresolved alternatives until discriminating evidence collapses them.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:gwt", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Delivery, reconstruction, plan revalidation, use and local effect remain distinct; no causal claim from communication alone.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:emergenz", "message_kind": "COUNTER_CHALLENGE", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Successful live feedback recurrence is coordination evidence, not emergence proof or independent replication.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:frank", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Frank remains bounded legacy/domain evidence, not the active ClayVerse endpoint.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:claycode", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "ClayCode remains an internal/historical lens where useful; live re-entry creates no new execution authority.", "requires_reply_or_observable_action": false},
+    {"receiver":"research:clay","message_kind":"MATERIAL_DELTA","urgency":"NEXT_CHECKPOINT","decision":"ADOPT","summary":"Live Fusion is continuous for material deltas; Live Hypofusion is a conditional adversarial second lane; explicit fusion/hypofusion commands remain full-depth macros.","requires_reply_or_observable_action":false},
+    {"receiver":"research:unifieddb","message_kind":"MATERIAL_DELTA","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"UnifiedDB remains canonical state authority; live routing is not a second durable truth store.","requires_reply_or_observable_action":false},
+    {"receiver":"research:claygraph","message_kind":"MATERIAL_DELTA","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"ClayGraph remains derived/rebuildable projection; recurrence never mints truth.","requires_reply_or_observable_action":false},
+    {"receiver":"research:hyperposition","message_kind":"COUNTER_CHALLENGE","urgency":"INDEX_ONLY","decision":"ADOPT","summary":"Preserve unresolved alternatives until discriminating evidence collapses them.","requires_reply_or_observable_action":false},
+    {"receiver":"research:gwt","message_kind":"MATERIAL_DELTA","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"Delivery, reconstruction, plan revalidation, use and local effect remain distinct; no causal claim from communication alone.","requires_reply_or_observable_action":false},
+    {"receiver":"research:emergenz","message_kind":"COUNTER_CHALLENGE","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"Successful live feedback recurrence is coordination evidence, not emergence proof or independent replication.","requires_reply_or_observable_action":false},
+    {"receiver":"research:frank","message_kind":"MATERIAL_DELTA","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"Frank remains bounded legacy/domain evidence, not the active ClayVerse endpoint.","requires_reply_or_observable_action":false},
+    {"receiver":"research:claycode","message_kind":"MATERIAL_DELTA","urgency":"INDEX_ONLY","decision":"NO_CHANGE","summary":"ClayCode remains an internal/historical lens where useful; live re-entry creates no new execution authority.","requires_reply_or_observable_action":false},
     {
       "route_id": "63d2f1881f90b967566629f4b9e93603d4b034c187842a1382035ba52092fafa",
       "receiver": "github:pull/630",
@@ -98,8 +98,29 @@
         },
         "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
+    },
+    {
+      "route_id": "112bc320e1de177b03730e76da44aa16fcf5515fb1ec2a0261b0046c08930a16",
+      "receiver": "github:pull/643",
+      "message_kind": "COUNTER_CHALLENGE",
+      "urgency": "BEFORE_NEXT_MATERIAL_WRITE_OR_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "PR643 correctly retains the stronger object+oldObject and RuntimeClass validation fences, but its CREATE workload identity is derived only from mutable Pod fields (app=clayverse label or clayverse container name). Because oldObject is null on CREATE and validation observes the post-mutation object, a mutator that removes/renames both markers can make the policy skip the canonical workload while changing runtimeClass or injecting io.katacontainers.* annotations. Fuse the stable dedicated-runtime-namespace scope from superseded PR637 into PR643 while preserving PR643's stronger validations; bind/attest that namespace scope as deployment identity.",
+      "required_revalidation": "Refresh current main and PR643; preserve the single retained policy filename. Add a mutation-resistant namespace/request scope (prefer the existing dedicated runtime namespace selector/contract from PR637 or an equivalently stable request.namespace fence), then retain object+oldObject as defense in depth and the RuntimeClass/annotation validations. Add negative CREATE coverage where all Pod-level ClayVerse markers are mutated away before validation; prove the request is still denied. Exact API-server/CEL execution remains required.",
+      "payload_digest": "d4c9252d890dbc6e3cd5b979393d4b90ed4ba92a3d2dee19a1adf0adba19db40",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "CLAIMED",
+        "channel": "github_pr_comment",
+        "delivery_claim": {
+          "claim_id": "4ec68a169127671795d26c37e827c9fb830a0895fa0a77f04ef597dcb2340367",
+          "claimant_organ": "GPT-5.6-Sol/go-2250",
+          "claimed_at": "2026-08-17T23:17:00+07:00",
+          "expires_at": "2026-08-17T23:32:00+07:00"
+        }
+      }
     }
   ],
-  "delivery_state": "PR611_PR602_PR630_PR635_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
+  "delivery_state": "PR611_PR602_PR630_PR635_DELIVERED_ACK_PLAN_REVALIDATION_PENDING; PR643_COUNTER_CHALLENGE_CLAIMED",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

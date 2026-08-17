@@ -16,6 +16,7 @@ on:
       - 'the artefact/tests/test_autonomy_schema_neutral_hardening.py'
       - 'the artefact/tests/test_autonomous_turn_gate.py'
       - 'the artefact/tests/test_autonomy_context_integration.py'
+      - 'the artefact/tests/test_autonomy_cross_attempt_replay_guard.py'
       - '.github/workflows/clayverse-autonomy-guard.yml'
   workflow_dispatch:
 
@@ -47,4 +48,5 @@ jobs:
             tests/test_autonomy_recovery_hardening.py \
             tests/test_autonomy_schema_neutral_hardening.py \
             tests/test_autonomous_turn_gate.py \
-            tests/test_autonomy_context_integration.py
+            tests/test_autonomy_context_integration.py \
+            tests/test_autonomy_cross_attempt_replay_guard.py

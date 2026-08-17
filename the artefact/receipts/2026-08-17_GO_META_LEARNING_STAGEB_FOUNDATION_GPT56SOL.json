@@ -1,0 +1,137 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_final_refresh": "dc789d2d3519606b0d86f54f1046cdcdc9524329",
+  "product_endpoint": "one ClayVerse OCI/Docker-compatible container image from the artefact/",
+  "status": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXECUTION_BLOCKED",
+  "candidate": {
+    "pr": 406,
+    "branch": "go/meta-learning-stageb-foundation-20260817-gpt56sol",
+    "head_before_receipt": "807c530543f5a5cf0e9bead3b799b57ab534f0be",
+    "base_ancestry": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+    "current_base_has_only_non_overlapping_receipt_and_bootstrap_changes_since_ancestry": true,
+    "main_promoted": false
+  },
+  "coordination": {
+    "overlapping_microclay_integration_pr": 402,
+    "overlap_action": "AVOIDED",
+    "files_intentionally_not_modified": [
+      "the artefact/clayverse/microclay_retrieval.py",
+      "the artefact/clayverse/retrieval.py",
+      "the artefact/clayverse/turn_lifecycle.py",
+      "the artefact/clayverse/store.py"
+    ],
+    "new_product_files": [
+      "the artefact/clayverse/method_memory.py",
+      "the artefact/tests/test_method_memory.py"
+    ]
+  },
+  "implemented_boundary": {
+    "validated_method_envelope": true,
+    "reserved_method_kinds": [
+      "framework_candidate",
+      "framework",
+      "heuristic_candidate",
+      "heuristic",
+      "failure_pattern",
+      "counterexample",
+      "method_receipt"
+    ],
+    "candidate_write_api_only": true,
+    "promoted_method_write_authority": false,
+    "global_cross_user_method_admission": false,
+    "stage_b_structural_retrieval": true,
+    "raw_prompt_to_problem_signature_derivation": false,
+    "fact_unknown_method_present_upgrades_fact": false,
+    "truth_authority": false,
+    "effect_authority": false,
+    "linked_structural_counterexample_blocks_framework": true,
+    "malformed_method_records_fail_closed": true
+  },
+  "adversarial_review": {
+    "finding": "Initial source candidate allowed direct PROMOTED method insertion and user_id=NULL method visibility before a validated promotion/privacy admission mechanism existed.",
+    "classification": "OVERBROAD_METHOD_ACCESSIBILITY_AUTHORITY_AND_POTENTIAL_PERSPECTIVE_LEAK",
+    "repair": [
+      "product write API now admits user-bound framework/heuristic candidates only",
+      "candidate source episodes must belong to the same user",
+      "candidate evidence may not reference another user's durable memory",
+      "promoted/global method minting remains unavailable until an explicit promotion/privacy receipt exists",
+      "Stage-B currently serves only promoted records bound to the requesting user",
+      "unscoped user_id=NULL methods fail closed"
+    ],
+    "repair_commits": [
+      "ca7d32e0de057f16554ecd9e3e0e2e2020c37fcd",
+      "31ddaf55c7eb4ea8f7d9e0cd3671cf97c6e52ed4"
+    ]
+  },
+  "tests_authored": {
+    "focused_count": 11,
+    "contracts": [
+      "multi-episode minimum floor for a record claiming promotion",
+      "product candidate API cannot mint a promoted framework",
+      "candidate is durable but never served as promoted method",
+      "candidate source episode cannot cross user boundary",
+      "FACT_UNKNOWN plus METHOD_PRESENT leaves fact UNKNOWN",
+      "structural match defeats a lexically tempting structural mismatch",
+      "linked matching counterexample blocks framework",
+      "fact PRESENT does not enter Stage-B absent bounded trigger",
+      "requesting user cannot retrieve another user's method",
+      "unscoped global method is not served before privacy admission exists",
+      "malformed persisted method fails closed"
+    ],
+    "exact_candidate_execution_state": "NOT_EXECUTED"
+  },
+  "execution": {
+    "vercel_connector_direct_sandbox_start_exec_available": false,
+    "github_hosted_probe": {
+      "workflow_run": 32001612613,
+      "job": 95302878291,
+      "conclusion": "failure_before_step_execution",
+      "steps": [],
+      "classification": "RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+    },
+    "temporary_workflow_removed_after_probe": true,
+    "whole_clayverse_pass": false,
+    "exact_candidate_test_pass_claimed": false
+  },
+  "unusual_experiment": {
+    "name": "STRUCTURAL_LEXICAL_INVERSION",
+    "macrocycle_accounting": "1/1_CONSUMED",
+    "execution_surface": "isolated OpenAI Python runtime",
+    "runtime": "Python 3.13.5 on Linux 6.18.35 x86_64 glibc 2.41",
+    "scope": "source-mechanism reference discriminator only; not exact ClayVerse candidate execution",
+    "query_structure": [
+      "resource contention",
+      "single authority",
+      "stale generation fence"
+    ],
+    "correct_candidate_surface": "Lantern bridge / method:lantern",
+    "correct_candidate_structural_score": 0.9885,
+    "lexical_lure_surface": "Database lock timeout recovery / database lock timeout stale retry",
+    "lexical_lure_structural_score": 0.0,
+    "result": "MECHANISM_SUPPORTED: admitted structural facets select the structurally matching lexically foreign method and reject the lexically tempting structural mismatch",
+    "whole_product_evidence": false
+  },
+  "known_open_gates": [
+    "no admitted causal promotion/demotion method_receipt mechanism yet",
+    "two source episodes are only a minimum anti-single-success floor and do not prove cross-instance transfer",
+    "no validated raw-prompt to structural problem_signature derivation/admission yet",
+    "no canonical WorldAssembler Stage-A to Stage-B integration yet",
+    "no separate learnable evidence-route versus method-route MicroClay policy yet",
+    "no held-out structural-transfer benchmark yet",
+    "no exact isolated candidate test execution after final repair",
+    "no exact OCI build/runtime validation for this method-memory delta"
+  ],
+  "next_exact_gate": "After refreshing/fusing the retained MicroClay integration without semantic duplication, add an explicit causal promotion/demotion receipt and a validated structural-signature admission path; then integrate exactly one WorldAssembler Stage-A -> Stage-B path exposing separate evidence_context, method_context, unknowns, counterevidence and bounded receipts. Execute the focused 11 tests plus adjacent MicroClay regressions on an actually-started authorized isolated execution surface, then run held-out lexically-dissimilar/structurally-similar and lexically-similar/structurally-different transfer benchmarks before any ACTIVE method-routing promotion.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_vps_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

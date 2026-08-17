@@ -506,11 +506,19 @@ class CandidateValidation:
 
 
 def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, Any], user_id: str) -> dict[str, Any]:
-    """Derive promotion counters only from durable candidate-validation receipts."""
+    """Derive reusable promotion only from repeated true held-out validation receipts.
+
+    Candidate source episodes are formation/provenance, never promotion evidence. Every
+    eligible validation must be a separately pre-bound HELD_OUT causal instance disjoint
+    from that formation set. One positive anecdote can strengthen a candidate but cannot
+    mint a reusable framework/heuristic.
+    """
     candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
     source_episode_ids = list(candidate.get("source_episode_ids") or [])
     if len(source_episode_ids) < 2 or len(set(source_episode_ids)) != len(source_episode_ids):
         raise MethodValidationError("promotion requires distinct candidate source episodes")
+    formation_episodes = set(source_episode_ids)
+
     rows = db.execute(
         "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject LIKE ? AND user_id=? ORDER BY ts,memory_id",
         (f"candidate_validation:{candidate_memory_id}:%", user_id),
@@ -528,6 +536,10 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
             raise MethodValidationError("candidate-validation candidate signature diverged")
         if receipt["truth_authority"] is not False or receipt["effect_authority"] is not False:
             raise MethodValidationError("candidate-validation authority broadening detected")
+        if receipt["evaluation_mode"] != "HELD_OUT":
+            raise MethodValidationError("promotion requires HELD_OUT validation receipts")
+        if receipt["episode_id"] in formation_episodes:
+            raise MethodValidationError("promotion validation episodes must be disjoint from candidate source episodes")
         receipts.append((str(row["memory_id"]), receipt))
 
     by_episode: dict[str, tuple[str, dict[str, Any]]] = {}
@@ -536,20 +548,26 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
         if episode_id in by_episode:
             raise MethodValidationError("multiple validation receipts for one promotion episode")
         by_episode[episode_id] = item
-    if set(by_episode) != set(source_episode_ids):
-        raise MethodValidationError("promotion lacks validation receipts for every source episode")
+    if len(by_episode) < 2:
+        raise MethodValidationError("promotion requires at least two distinct held-out validation episodes")
+
     causal_ids = [item[1]["causal_id"] for item in by_episode.values()]
     if len(set(causal_ids)) != len(causal_ids):
         raise MethodValidationError("promotion validation receipts do not span distinct causal instances")
+    if len(set(causal_ids)) < 2:
+        raise MethodValidationError("promotion requires at least two distinct held-out causal instances")
     if not any(item[1]["falsifier_checked"] for item in by_episode.values()):
         raise MethodValidationError("promotion requires at least one falsifier-checked validation instance")
 
-    ordered = [by_episode[episode_id] for episode_id in source_episode_ids]
+    ordered = sorted(
+        by_episode.values(),
+        key=lambda item: (float(item[1]["ts"]), item[0]),
+    )
     success_count = sum(1 for _, receipt in ordered if receipt["classification"] == "SUCCESS")
     failure_count = sum(1 for _, receipt in ordered if receipt["classification"] == "FAILURE")
     support_count = len(ordered)
-    if success_count < 1:
-        raise MethodValidationError("promotion requires at least one validated success")
+    if success_count < 2:
+        raise MethodValidationError("promotion requires at least two validated successes")
     calibration = success_count / support_count
     last_validated_at = max(receipt["ts"] for _, receipt in ordered)
     receipt_ids = [memory_id for memory_id, _ in ordered]
@@ -561,6 +579,7 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
                 "causal_receipt_id": receipt["causal_receipt_id"],
                 "classification": receipt["classification"],
                 "episode_id": receipt["episode_id"],
+                "evaluation_mode": receipt["evaluation_mode"],
             }
             for memory_id, receipt in ordered
         ]).encode("utf-8")

@@ -180,8 +180,6 @@ class MicroClayRetrieval:
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
             keys.append(self._policy_key(user_id, self._token_key(token)))
-        # Query-only cues are bounded exact-memory proposals. They are learned only
-        # if that selected evidence later receives canonical outcome credit.
         for token in sorted(query_tokens.difference(value_tokens)):
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
@@ -246,7 +244,7 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume only rewarding verified canonical effect outcomes."""
+        """Consume only rewarding verified canonical outcomes from this exact policy version."""
         self.db.assert_live_generation(session_id, generation)
         eligible = tuple(sorted(self.LEARNING_ELIGIBLE_EFFECT_STATUSES))
         rows = self.db.db.execute(
@@ -254,12 +252,12 @@ class MicroClayRetrieval:
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
-            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "WHERE r.session_id=? AND r.generation=? AND r.policy_version=? AND c.reentered=1 "
             f"AND e.status IN ({','.join('?' for _ in eligible)}) AND c.credit != 0.0 "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",
-            (session_id, int(generation), *eligible),
+            (session_id, int(generation), self.POLICY_VERSION, *eligible),
         ).fetchall()
         applied = 0
         for row in rows:
@@ -348,7 +346,6 @@ class MicroClayRetrieval:
                 raise StaleGeneration("retrieval_identity")
             self._assert_replay_route(existing)
 
-        # Exact request and route identity are fail-closed before adaptive mutation.
         learned_outcomes = self.learn_from_verified_outcomes(
             session_id=session_id,
             generation=generation,

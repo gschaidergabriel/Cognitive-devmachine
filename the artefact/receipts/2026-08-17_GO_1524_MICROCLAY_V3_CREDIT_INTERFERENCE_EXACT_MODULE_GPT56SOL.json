@@ -1,0 +1,44 @@
+{
+  "schema": "ClayVerseMicroClayV3CreditInterferenceExactModuleReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T15:24+07:00",
+  "active_path": "PR550 -> retained PR484 -> main",
+  "target_modules": {
+    "microclay_feedback_git_blob": "f4637b914db915a5b1d090c20f416c69d16e9be8",
+    "microclay_retrieval_git_blob": "0cdbdeb7353c5e5fbcbd7aa72a5182768f95b7aa"
+  },
+  "execution_surface": "OPENAI_NON_PRODUCTION_ISOLATED_CONTAINER",
+  "runtime": {"python": "3.13.5", "sqlite": "3.46.1"},
+  "probe": {
+    "name": "explicit_miss_vs_verified_outcome_credit_interference",
+    "probe_sha256": "a98db4979e70799e206d070550efba89e30d67b75631a16a69dee4187ba4d6bf",
+    "checks_passed": 10,
+    "checks_total": 10,
+    "exit_code": 0,
+    "checks": {
+      "explicit_miss_applies_one_route": true,
+      "route_has_one_pull_before_automatic_credit": true,
+      "automatic_verified_outcome_credit_applies": true,
+      "automatic_credit_updates_zero_entrypoints_for_empty_original_entry_keys": true,
+      "explicit_and_automatic_receipts_are_distinct": true,
+      "two_feedback_receipts_exist": true,
+      "signal_classes_remain_separate": true,
+      "route_pull_not_double_counted": true,
+      "route_capital_not_rewritten": true,
+      "route_reward_ema_not_rewritten": true
+    },
+    "result": "PASS_EXACT_ACTIVE_CREDIT_INTERFERENCE_MECHANISM"
+  },
+  "scaffolding_boundary": "Exact target module bytes executed with minimal SQLite/DB adapter scaffolding. This mirrors the repository interference contract at mechanism scope but is not the full canonical test file or full PR runtime.",
+  "adjudication": {
+    "double_learning_interference_observed": false,
+    "separate_receipt_semantics_supported": true,
+    "full_pr550_runtime_verified": false,
+    "oci_runtime_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "go_experiment_accounting": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count_added": 0,
+  "together_api_used": false,
+  "vps_self_hosted_or_production_testing_used": false
+}

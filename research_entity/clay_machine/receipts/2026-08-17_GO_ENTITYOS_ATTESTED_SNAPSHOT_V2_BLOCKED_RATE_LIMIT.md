@@ -7,8 +7,9 @@ User-triggered `go` macro-cycle. Product endpoint remains the exact one-file `En
 ## Canonical identities observed
 
 - Research main at join: `68de25fddabe6502a39627d79921d8c2120bc143`.
-- Product main: `6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47`.
-- PR #787 head after repair: `580fe7ac84b2d3930a4a944a6e32ddc51be47f33`.
+- Product main at the observed product baseline: `6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47`.
+- First mechanism-repair commit: `580fe7ac84b2d3930a4a944a6e32ddc51be47f33`.
+- Latest fused PR #787 head observed after parallel-worker adjudication: `c52a60b7226429856b98d772c1c064d40418fcc9`.
 - No PR #787 promotion/merge is justified by this receipt.
 
 ## Executable evidence observed in Vercel Sandbox
@@ -48,15 +49,28 @@ Inspection found a cross-language canonical-order mismatch:
 - `entityos/build_canonical_onefile.py` requires attestation entries to equal Python lexicographic ordering by path and fails closed with `ENTITYOS_SOURCE_ATTESTATION_FILES_NOT_SORTED` otherwise.
 - `stage-go-source.mjs` had sorted paths with locale-sensitive `a.path.localeCompare(b.path, 'en')`.
 
-PR #787 head `580fe7ac84b2d3930a4a944a6e32ddc51be47f33` replaces that locale-sensitive ordering with UTF-8 byte ordering via `Buffer.compare(Buffer.from(path, 'utf8'), ...)`, which is deterministic and intended to match the builder's ordering contract for admitted valid UTF-8 paths.
+Commit `580fe7ac84b2d3930a4a944a6e32ddc51be47f33` replaced that locale-sensitive ordering with UTF-8 byte ordering via `Buffer.compare(Buffer.from(path, 'utf8'), ...)`, which is deterministic and intended to match the builder's ordering contract for admitted valid UTF-8 paths.
 
 This is a source-supported repair hypothesis, **not executable proof**.
 
+## Parallel-worker fusion / single-path adjudication
+
+After the repair, PR #787 advanced through coordinated parallel work to `c52a60b7226429856b98d772c1c064d40418fcc9`. Relative to `580fe7ac...`, the fused head:
+
+- removes the competing attestation runner variants and the temporary shell helper;
+- retains one active build-internal Vercel path via `run-buildtime-go-sandbox.mjs`;
+- adds the EntityOS build/test dependency-closure preflight and pinned requirement surfaces from the separate dependency-closure work;
+- preserves a single current GO experiment reservation rather than treating failed pre-experiment runs as consumed experiments.
+
+The current experiment accounting at this fused head records `global_unusual_experiment_count=0`, `global_slot_consumed=false`, `global_slot_reserved=true`, `experiment_status=PENDING_EXECUTABLE_OBSERVATION`, and reserves only `ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED`.
+
+This fusion strengthens coordination and removes duplicate permanent paths, but it is still source/ledger state until the exact fused head is executed in an isolated Vercel Sandbox.
+
 ## Current exact-head blocker
 
-GitHub/Vercel status for `580fe7ac84b2d3930a4a944a6e32ddc51be47f33` reported Vercel failure target `upgradeToPro=build-rate-limit`. No isolated Vercel Sandbox was started for that exact repaired head. Under the current execution law, this means the repair remains UNVERIFIED/BLOCKED rather than PASS or FAIL.
+GitHub/Vercel status for both the repaired `580fe7ac...` state and the newer fused PR head `c52a60b7226429856b98d772c1c064d40418fcc9` reported Vercel failure target `upgradeToPro=build-rate-limit`. No isolated Vercel Sandbox started for the exact fused head. Under the current execution law, this means the repair/fusion remains UNVERIFIED/BLOCKED rather than PASS or FAIL.
 
-Do not substitute Vercel READY, source inspection, local execution, VPS execution, or historical receipts for the missing exact-head Sandbox run.
+Do not substitute Vercel READY/error state, source inspection, local execution, VPS execution, or historical receipts for the missing exact-head Sandbox run.
 
 ## Current GO experiment accounting
 
@@ -64,13 +78,13 @@ Observed started Sandbox executions in this receipt reached **zero** unusual-exp
 
 `ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED`
 
-When an authorized exact-head build-internal Vercel Sandbox can start, execute this intervention exactly once. All Git-free double-build, cross-provenance byte comparison, self-test/pathless/relocation gates, inherited Batch-5 checks, and later reruns are acceptance/regression controls, not additional unusual experiments.
+When an authorized exact-head build-internal Vercel Sandbox can start, execute this intervention exactly once. All Git-free double-build, cross-provenance byte comparison, self-test/pathless/relocation gates, inherited Batch-5 checks, dependency-closure checks, and later reruns are acceptance/regression controls, not additional unusual experiments.
 
 ## Next executable gate
 
 On the exact current PR #787 head (or a newer descendant after re-refresh), once Vercel build capacity permits an actual build-internal Sandbox start:
 
-1. bind exact source head/tree/raw archive/external v2 attestation;
+1. pass dependency-closure preflight and bind exact source head/tree/raw archive/external v2 attestation;
 2. perform the Git-free attested `EntityOS` double build;
 3. require receipt `source_provenance=ATTESTED_SNAPSHOT_V2` and non-null exact archive digest;
 4. execute the single registered content-tamper fail-closed intervention exactly once if still unconsumed;
@@ -81,4 +95,4 @@ On the exact current PR #787 head (or a newer descendant after re-refresh), once
 
 ## Acceptance statement
 
-`EntityOS` whole-machine acceptance remains false/in progress. This receipt narrows the active provenance blocker and preserves two exact Sandbox failures plus the Vercel rate-limit blocker without converting any of them into a synthetic PASS.
+`EntityOS` whole-machine acceptance remains false/in progress. This receipt preserves actual Sandbox negatives, records the single-path fusion and current experiment accounting, and names the Vercel build-rate-limit as the blocker without converting any unexecuted source change into a synthetic PASS.

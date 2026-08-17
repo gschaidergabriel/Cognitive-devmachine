@@ -1,0 +1,119 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "active_entityos_pr": 787,
+  "exact_product_head_observed": "71910c90086e6a72bb8b815632508eddd457dcac",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "execution_classification": "SOURCE_FUSION_ADJUDICATION_WITH_PROVIDER_BLOCKED_EXECUTION",
+  "frontier": "canonical typed ClayVM-to-host ABI authority and first bounded real host-to-Clay Bytes result",
+  "observed_source_state": {
+    "hostcall_abi_schema": "ClayHostcallABI/v1",
+    "one_canonical_registry": true,
+    "registry_is_immutable_projection": true,
+    "registry_has_canonical_sha256": true,
+    "registry_validates_known_clay_value_types": true,
+    "registry_binds_vm_versions": true,
+    "legacy_call_ids_1_2_admitted_vm_versions": [1, 2],
+    "stdout_bytes_call_id": 3,
+    "stdout_bytes_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "stdout_bytes_admitted_vm_versions": [2],
+    "stdout_bytes_source": "existing bounded immutable HostProcessReceipt.stdout",
+    "stdout_bytes_semantic_interpretation": "OPAQUE_BYTES_NO_TEXT_DECODE",
+    "loader_uses_versioned_registry": true,
+    "loader_rejects_unknown_or_wrong_vm_version_hostcall": true,
+    "loader_rejects_hostcall_arity_drift": true,
+    "runtime_rechecks_versioned_registry": true,
+    "runtime_normalizes_argument_and_return_types": true,
+    "unknown_receipt_fails_closed": true,
+    "mutable_or_borrowed_bytes_remain_outside_admitted_owned_bytes_contract": true
+  },
+  "adjudication": {
+    "overlapping_prs_observed": [793, 794, 795, 796, 798, 799, 800],
+    "policy": "do not preserve competing permanent hostcall semantic paths",
+    "result": "useful mechanisms fused into canonical PR 787; donor/duplicate lanes closed or superseded by concurrent coordination",
+    "notable_retained_mechanisms": [
+      "single registry shared by ExecutableIR lowering and ClayVM",
+      "read-only registry indexes and contract self-validation",
+      "VM-format-specific hostcall identity",
+      "load-time hostcall ID/arity validation",
+      "runtime version recheck",
+      "real bounded process stdout -> immutable Clay Bytes",
+      "NUL/non-UTF8 byte preservation regressions",
+      "capability and return-type fail-closed regressions"
+    ],
+    "notable_rejected_or_deferred_mechanisms": [
+      "parallel permanent ABI registries",
+      "diagnostic echo as release semantic authority",
+      "generic untyped ClayValue widening as semantic authority",
+      "stdin Bytes",
+      "streaming Buffer/lease/epoch",
+      "PTY/session/shell",
+      "general argv/env/cwd source semantics",
+      "stderr product admission pending separate need/evidence"
+    ]
+  },
+  "adversarial_findings": [
+    {
+      "finding": "VM-version fence initially existed only in the registry while load/runtime were call-id-only",
+      "status": "RESOLVED_IN_CANONICAL_SOURCE",
+      "resolution": "PR 787 now resolves OP_HOSTCALL against contract_for_vm(format_version, call_id) at module load and runtime."
+    },
+    {
+      "finding": "new VM-version regression initially expected HOSTCALL_ARITY_MISMATCH while loader emitted HOSTCALL_ABI_ARITY_MISMATCH",
+      "status": "RESOLVED_IN_CANONICAL_SOURCE",
+      "resolution": "current exact observed head test expects HOSTCALL_ABI_ARITY_MISMATCH:2:0:1."
+    },
+    {
+      "finding": "concurrent source movement repeatedly invalidated stale write blobs",
+      "status": "EXPECTED_FAIL_CLOSED_COORDINATION",
+      "resolution": "GitHub returned 409; no stale or forced overwrite was used. Newer canonical source was re-read and adjudicated instead."
+    }
+  ],
+  "vercel_observation": {
+    "exact_head": "71910c90086e6a72bb8b815632508eddd457dcac",
+    "github_vercel_state": "failure",
+    "status_description": "Deployment rate limited — retry in 5 minutes.",
+    "exact_head_sandbox_started": false,
+    "exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "older_promoted_exact_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "older_promoted_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "non_equivalence": "older exact-head PASS does not generalize to current descendants"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED on 92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "current_work_mode": "REGRESSION_ONLY"
+  },
+  "remaining_semantic_limits": {
+    "CM_TERM": "stdout Bytes bounded slice source-present but current exact-head executable evidence blocked",
+    "CM_DATA": "producer epoch/lease/stability for mutable or borrowed shared data remains open",
+    "CM_NET": "OPEN",
+    "CM_PORT": "OPEN",
+    "CM_VIS": "OPEN",
+    "CM_AUDIO": "OPEN"
+  },
+  "next_executable_discriminator": [
+    "Refresh the then-current PR 787 head when Vercel accepts a Git-bound build.",
+    "Run static source/dependency/ABI preflight including versioned hostcall loader/runtime gates.",
+    "Provision exact wheel-only/hash-locked Python closure and bind artifact-lock plus installed-set receipts.",
+    "Run full pytest nonzero and zero-skips with new_unusual_experiment_count=0.",
+    "Run canonical Git-free attested twin EntityOS freeze and exact digest equality.",
+    "Run runtime/self-test/no-host-Python/relocation, sanitized Git provenance and Batch-5 including CM-TERM stdout Bytes gate.",
+    "Stop Sandbox successfully before promoting any exact-head executable claim."
+  ],
+  "claims": {
+    "source_fusion_strengthened_entityos_path": true,
+    "current_exact_head_sandbox_pass": false,
+    "current_exact_head_sandbox_fail": false,
+    "current_exact_head_unexecuted_due_provider_rate_limit": true,
+    "whole_entityos_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

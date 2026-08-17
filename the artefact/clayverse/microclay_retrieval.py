@@ -9,9 +9,15 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .method_memory import METHOD_KINDS
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
+_STAGE_A_EXCLUDED_KINDS = frozenset({
+    "source_archive",
+    "compression_receipt",
+    "compression_clearance",
+}).union(METHOD_KINDS)
 
 
 @dataclass(frozen=True)
@@ -236,6 +242,8 @@ class MicroClayRetrieval:
             for memory_id in ids:
                 row = by_id.get(memory_id)
                 if row is not None:
+                    if str(row["kind"]) in METHOD_KINDS:
+                        raise StaleGeneration("retrieval_stage_a_method_contamination")
                     items.append({
                         "memory_id": memory_id,
                         "kind": row["kind"],
@@ -265,13 +273,14 @@ class MicroClayRetrieval:
             }
 
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
+        excluded = tuple(sorted(_STAGE_A_EXCLUDED_KINDS))
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
-            "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-            "AND (user_id IS NULL OR user_id=?) "
-            "AND (source_turn_id IS NULL OR source_turn_id<>?) "
-            "ORDER BY ts DESC LIMIT ?",
-            (user_id, turn_id, self.MAX_SOURCE_ROWS),
+            "WHERE kind NOT IN (%s) " % ",".join("?" for _ in excluded)
+            + "AND (user_id IS NULL OR user_id=?) "
+            + "AND (source_turn_id IS NULL OR source_turn_id<>?) "
+            + "ORDER BY ts DESC LIMIT ?",
+            (*excluded, user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()

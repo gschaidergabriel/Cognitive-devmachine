@@ -1,7 +1,7 @@
 """Regressions for journaled EntityOS effect fencing."""
 import hashlib,json
 import pytest
-from clayverse.store import UnifiedDB,StaleGeneration
+from clayverse.store import UnifiedDB,StaleGeneration,LeaseConflict
 from clayverse.identity import IdentityRouter
 from clayverse.effects import EffectGate,EffectRequest
 from clayverse.entityos_bridge import EntityOSIntegrityError
@@ -21,6 +21,24 @@ def test_pending_receipt_exists_before_entityos_execution(tmp_path):
         return {'ok':True,'exit':0,'stdout':'ok','stderr':''}
     eid,out=EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
     assert seen['status']=='PENDING'; assert out['ok']; assert db.db.execute('SELECT status FROM effects WHERE effect_id=?',(eid,)).fetchone()[0]=='VERIFIED'; db.close()
+
+def test_entityos_effect_auto_leases_target_and_releases_exactly(tmp_path):
+    db,uid,sid=setup_db(tmp_path); seen={}; gate=None
+    req=EffectRequest(uid,sid,'entityos.exec','transport',['hello'])
+    def run(argv):
+        row=db.db.execute('SELECT resource,holder,generation,nonce FROM leases').fetchone()
+        seen.update(dict(row)); return {'ok':True,'exit':0,'stdout':'ok','stderr':''}
+    gate=EffectGate(db,entityos_bridge=FakeBridge(run)); expected=gate._lease_resource(req)
+    gate.execute(req)
+    assert seen['resource']==expected and seen['holder'].startswith(sid+':') and seen['generation']==1 and seen['nonce']
+    assert db.db.execute('SELECT COUNT(*) FROM leases').fetchone()[0]==0; db.close()
+
+def test_entityos_effect_target_collision_fails_closed_before_execution(tmp_path):
+    db,uid,sid=setup_db(tmp_path); called=[]
+    req=EffectRequest(uid,sid,'entityos.exec','transport',['hello']); gate=EffectGate(db,entityos_bridge=FakeBridge(lambda argv: called.append(argv) or {'ok':True}))
+    resource=gate._lease_resource(req); incumbent=db.acquire_lease(resource,'other-worker',ttl=60)
+    with pytest.raises(LeaseConflict): gate.execute(req)
+    db.assert_lease(incumbent); assert called==[] and db.db.execute('SELECT COUNT(*) FROM effects').fetchone()[0]==0; db.close()
 
 def test_effect_journal_persists_hash_receipts_not_raw_payloads(tmp_path):
     db,uid,sid=setup_db(tmp_path); secret_arg='ARG_SECRET_42'; secret_out='OUTPUT_SECRET_77'

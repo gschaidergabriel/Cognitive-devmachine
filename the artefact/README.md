@@ -146,6 +146,16 @@ Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTR
 - no unusual experiment was executed because the cross-worker atomic experiment-lease protocol could not derive a shared immutable trigger identity from this interface and therefore failed closed;
 - no whole-product PASS is claimed.
 
+## Latest cycle delta — 2026-08-17 23:20 +07:00
+
+- adversarial source review found a remaining implementation mismatch under the image-authoritative EntityOS contract: runtime environment still selected EntityOS path and digest;
+- retained source candidate fixes runtime selection to `/opt/entityos/EntityOS` plus image-owned `/opt/entityos/entityos.lock.json`, validates the embedded lock fail-closed, and removes runtime path/digest selection from Docker/Compose/Kata surfaces;
+- regression candidate explicitly supplies an attacker executable plus matching environment digest and requires ClayVerse to ignore both;
+- two earlier stale/conflicting candidate branches were rejected as merge paths; this retained lane was rebuilt directly from observed current `main` `13675f8b97df0930e799c8fedf75a0400bec9b95`, preserving `/healthz` liveness, Mistral evidence, `ReadWriteOncePod`, CSI and node-local network fences;
+- no focused regression, exact OCI or EntityOS runtime credit is claimed for this candidate yet;
+- the next executable gate remains actual availability/injection of the scoped read-only GitHub credential into the retained Vercel path, exact-source rebinding, focused EntityOS authority regression, then exact OCI-in-Firecracker execution and the mandatory Vault/Mistral test-of-tests;
+- GO unusual experiment remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed.
+
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, focused tests, Sandbox creation and isolated API calls are not substitutes.

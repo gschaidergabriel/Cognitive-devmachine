@@ -39,17 +39,19 @@
     "independent_correction": "stage-go-source.mjs changed localeCompare ordering to Buffer.compare over UTF-8 path bytes."
   },
   "coordination_correction": {
-    "current_candidate_head": "5ac65c1ab03c8961da2c698aa524d36bd01f61d5",
+    "current_candidate_head": "bcab694f9a778461decd788e4536776c417ef65a",
     "parent_lineage_contains_sort_fix": true,
     "attestation_sort_fix_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
     "experiment_accounting_head": "e90b887111969becc922d25a73886af61d6b5340",
     "dependency_closure_fused": true,
     "dependency_closure_delta": "Pinned EntityOS build/test dependency closure and static drift preflight were fused into PR787 instead of maintaining a parallel product lane.",
-    "runner_cleanup": "Superseded experimental/duplicate attestation runners were pruned; the build-internal v7 run-buildtime-go-sandbox.mjs lane remains the canonical executable path.",
+    "full_pytest_gate_fused": true,
+    "full_pytest_gate_delta": "A regression-only isolated Vercel full-pytest gate now runs before the attested-snapshot lane with exact Git identity reconstruction, versioned dependency closure, DENY_ALL during pytest and unusual_experiment_count=0.",
+    "runner_cleanup": "Superseded experimental/duplicate attestation runners were pruned; the build-internal v7 run-buildtime-go-sandbox.mjs lane remains the canonical attested executable path.",
     "current_candidate_executable_observation": "UNEXECUTED"
   },
   "current_execution_blocker": {
-    "corrected_head": "5ac65c1ab03c8961da2c698aa524d36bd01f61d5",
+    "corrected_head": "bcab694f9a778461decd788e4536776c417ef65a",
     "vercel_commit_status": "FAILURE_BEFORE_SANDBOX",
     "provider_reason": "build-rate-limit",
     "provider_status_target": "Vercel upgradeToPro=build-rate-limit",
@@ -63,7 +65,7 @@
     "slot_state": "RESERVED_NOT_CONSUMED",
     "instruction": "Do not add or execute a second unusual intervention. Reruns of inherited gates are regression-only."
   },
-  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, run exact head 5ac65c1ab03c8961da2c698aa524d36bd01f61d5 through the existing build-internal lane. Require exact raw-tree source binding, Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with receipt source_provenance=ATTESTED_SNAPSHOT_V2 and non-null archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful sandbox stop.",
+  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, run exact head bcab694f9a778461decd788e4536776c417ef65a (or a newer refreshed descendant) through the existing build-internal sequence. First require the isolated full python3.13 -m pytest -q tests gate with pinned dependencies under DENY_ALL and zero unusual experiments; then require exact raw-tree source binding, Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with receipt source_provenance=ATTESTED_SNAPSHOT_V2 and non-null archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful sandbox stops.",
   "promotion": "NOT_ALLOWED_YET",
   "negative_evidence_preserved": true
 }

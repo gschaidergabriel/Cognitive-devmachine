@@ -20,6 +20,11 @@
       "commit": "ec22eda7f3b96118e3611e989ac388c98ad47f07",
       "purpose": "stabilize Tier-2 sandbox identity wording so the contract expresses both generic sandbox/VM identity and the canonical Kata identity",
       "superseded_by_same_turn_refinement": false
+    },
+    {
+      "commit": "907c6f725e2deca557853a6dc549c191cd925d7f",
+      "purpose": "persist initial exact-blob Tier-2 regression receipt",
+      "superseded_by_same_turn_refinement": false
     }
   ],
   "exact_git_blobs": {
@@ -55,6 +60,42 @@
     "the Tier-2 identity contract now records both generic new sandbox/VM identity and the concrete canonical Kata sandbox/VM identity",
     "the contract preserves current rolling-release/advisory refresh and runtime-annotation admission requirements"
   ],
+  "upstream_external_recheck": {
+    "checked_at": "2026-08-17",
+    "sources": [
+      "official kata-containers/kata-containers GitHub releases/latest",
+      "official kata-containers/kata-containers SECURITY.md/security page",
+      "official GHSA-mp2j-xm59-qfgw advisory",
+      "official GHSA-7fhf-v3p3-rp56 advisory"
+    ],
+    "observed": [
+      "releases/latest resolves to Kata Containers 4.0.0",
+      "Kata declares a rolling-release policy where only the current monthly release is security-supported",
+      "GHSA-mp2j-xm59-qfgw affects <=3.32.0 and is patched in 4.0.0",
+      "GHSA-7fhf-v3p3-rp56 affects <=3.32.0 and is patched in 4.0.0"
+    ],
+    "scope": "supports the source security-floor rule only; not runtime acceptance"
+  },
+  "vercel_control_plane_evidence": {
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_ref": "clay/fusion-vcr-native-20260817",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "outer_microvm_guest_kernel": {
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64"
+    },
+    "outer_microvm_guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "error": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "sandbox_stopped": true,
+    "credit": "control-plane and guest-kernel admission evidence only; no private product source staged and no OCI image built"
+  },
   "runtime_credit": {
     "exact_oci": 0,
     "kubernetes": 0,
@@ -64,7 +105,7 @@
     "whole_clayverse": 0
   },
   "execution_frontier": {
-    "vercel_sandbox": "ADMISSION_CONFIRMED_BUT_EXACT_PRIVATE_SOURCE_OCI_BATCH_BLOCKED_BEFORE_SOURCE_FETCH_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "vercel_sandbox": "ADMISSION_AND_GUEST_KERNEL_IDENTITY_CONFIRMED_BUT_EXACT_PRIVATE_SOURCE_OCI_BATCH_BLOCKED_BEFORE_SOURCE_FETCH_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
     "credential_rule": "the read credential must remain host-side in Vercel Preview orchestration and must not be committed, logged, or forwarded into the disposable Sandbox",
     "next_exact_gate": "provision the Vercel Preview read credential and redeploy; rerun exact current-source OCI build/start/readiness and capture image digest; then execute that same digest under Kata/equivalent and prove CNI default-deny, reviewed allow-policy enforcement, guest-kernel isolation and Tier-2 full-sandbox replacement"
   },

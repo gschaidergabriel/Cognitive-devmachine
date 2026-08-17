@@ -1,0 +1,75 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:48:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "FOCUSED_TEST_PASS_EXACT_FILE_SCOPE",
+  "scope": "final_mistral_acceptance_probe_oci_build_context",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "fresh_main_base": "85eb262fa3c97ee1f00775d95df424e2ddfa5669",
+  "fresh_main_tree": "aa601302563fa03ed605308a0652307c4f0d3ad7",
+  "branch": "gpt56sol/go-final-mistral-oci-context-20260817-2345",
+  "pull_request": 678,
+  "defect": {
+    "observation": "canonical final_acceptance_probe.py imports clayverse.adapters.MistralInference and clayverse.engine.ClayVerseEngine, while the current main .dockerignore explicitly excluded adapters.py, engine.py and inference_protocol.py from the OCI build context",
+    "impact": "the owner-mandated real Mistral final acceptance path could not execute from the exact final image because its canonical internal dependencies were structurally absent",
+    "public_route_added": false
+  },
+  "repair": {
+    "rule": "package the existing internal adapters.py + engine.py + inference_protocol.py modules required by final_acceptance_probe.py",
+    "retired_surfaces_still_excluded": ["clayverse/api.py", "clayverse/terminal.py"],
+    "new_state_authority": false,
+    "new_effect_authority": false,
+    "new_identity_authority": false,
+    "new_public_chat_surface": false
+  },
+  "exact_git_blobs": {
+    "the artefact/.dockerignore": "43dc7944da399952afd291861267dc3fd6343328",
+    "the artefact/Dockerfile": "a3ab78ff59eb622b128976dd768eabb1da3ffbb5",
+    "the artefact/clayverse/final_acceptance_probe.py": "567a2d60b89b08c8c71463b37e4af7473c4478f8",
+    "the artefact/tests/test_final_acceptance_oci_context.py": "05031a1c4298511a44683efd3d6f78c4896f1b7d"
+  },
+  "exact_reconstruction": {
+    "environment": "authorized isolated OpenAI non-production container",
+    "git_hash_object_matches_all_four_files": true
+  },
+  "execution": {
+    "command": "python -m pytest -q tests/test_final_acceptance_oci_context.py",
+    "result": "2 passed in 0.04s",
+    "exit_code": 0,
+    "py_compile": "PASS"
+  },
+  "evidence_boundary": {
+    "source_packaging_mechanism": "SUPPORTED",
+    "docker_build": "UNOBSERVED",
+    "exact_oci_digest": "UNOBSERVED",
+    "in_image_import": "UNOBSERVED",
+    "real_mistral": "UNOBSERVED",
+    "vault_secret": "UNOBSERVED",
+    "firecracker_final_vector": "UNOBSERVED",
+    "whole_clayverse": "UNOBSERVED"
+  },
+  "controller_reentry": {
+    "retained_controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "retained_controller_pr": 810,
+    "latest_ready_deployment_observed": "dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9",
+    "one_shot_ingress": "POST /api/go-cycle-v2 with owner-held scoped read-only GitHub token",
+    "current_deployed_binding_problem": "the deployed/current one-shot source code still binds older Research SHA 5e5adce0591058608bbd7381ecf570a39b282f0d and tree 1e02285d77b08e6edd86f9017d0ceac5db262cf2; it must be rebound once to the exact accepted current candidate immediately before a credential-capable run",
+    "secret_boundary": "token value was not observed, requested, logged, persisted or exposed by this organ"
+  },
+  "next_exact_gate": "once the exact accepted candidate is frozen, rebind retained PR810 once to that Research commit/tree and matching closure blobs; owner supplies the scoped read-only token through the deployed HTTPS one-shot POST; execute exact private-source verification -> OCI build/digest -> in-image final Mistral probe with runtime approved Vault secret -> causal/effect/recovery/Tier-2 vector",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no exact Docker/OCI build",
+    "no in-image import/runtime PASS",
+    "no owner GitHub token use",
+    "no real Mistral/Vault run",
+    "no Tier-1/Tier-2 runtime recovery",
+    "no whole-product PASS"
+  ]
+}

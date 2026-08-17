@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import os
 import pty
-import shlex
 import shutil
 import signal
 import struct
@@ -58,8 +57,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
-        if not self.MANAGED_TMUX.is_file():
-            raise TerminalRuntimeError("managed tmux command-surface policy unavailable")
+        if not self.MANAGED_TMUX.is_file() or self.MANAGED_TMUX.stat().st_mode & 0o222:
+            raise TerminalRuntimeError("managed tmux command-surface policy unavailable or writable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -224,12 +223,11 @@ class TerminalSessionManager:
             f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
             *claude_argv,
         ]
-        command = shlex.join(env_argv)
         cp = subprocess.run(
             self._tmux_argv(
                 binding,
                 "new-session", "-d", "-s", binding.tmux_name,
-                "-c", str(self.workspace), command,
+                "-c", str(self.workspace), *env_argv,
             ),
             capture_output=True,
             text=True,

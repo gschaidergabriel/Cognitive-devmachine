@@ -59,7 +59,6 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
-    LEARNING_EFFECT_STATUSES = ("VERIFIED", "DENIED", "FAILED")
 
     def __init__(self, db: UnifiedDB):
         self.db = db

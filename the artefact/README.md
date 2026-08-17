@@ -64,6 +64,7 @@ The installed RuntimeClass and target hardware virtualization support must be ve
 - **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact final runtime evidence.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
 - **#625** tokenless development/baseline packaging — useful lower-layer lane; EntityOS omission is development-only and can never be final acceptance.
+- **#629** GLM token/API inference boundary — source candidate with strict token/endpoint/canonical-JSON/model-identity fences; real token call and packaged provider-switching runtime remain unobserved.
 - **#810** retained Vercel Sandbox controller evidence — historical/bounded execution bridge, not the final deployment architecture.
 
 ### Testing law
@@ -90,6 +91,8 @@ The architecture and fail-closed Kata deployment profile are now canonical sourc
 
 The current default-deny source contract has now also been independently reconstructed from the exact three Git blobs and exercised in an isolated non-production container: blob identities matched GitHub exactly, `tests/test_microvm_deployment_contract.py` passed **5/5**, and a YAML semantic probe confirmed exactly one `NetworkPolicy` named `clayverse-default-deny` with both policy types and empty ingress/egress rule sets. This is bounded exact-file mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
 
+The retained #629 GLM boundary has now also been independently rebound after parallel hardening: exact current source/test blobs matched GitHub and the combined endpoint/token/canonical-JSON/model-identity boundary passed **22/22** with `py_compile` PASS. This remains bounded exact-file mechanism evidence only; no real GLM-token network inference, full checkout, packaged provider switching, OCI, or microVM runtime credit is claimed.
+
 Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox.
 
 ### Final exact acceptance sequence
@@ -98,16 +101,17 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Latest cycle delta
 
-**2026-08-17 22:54 +07:00 — fail-closed MicroVM network source contract independently bound and regressed.**
+**2026-08-17 23:08 +07:00 — retained GLM token/API boundary adversarially hardened and rebound after parallel fusion.**
 
-- canonical source already closed the #623-discovered gap with `clayverse-default-deny`, selecting `app=clayverse` with `Ingress` + `Egress` and empty rules;
-- exact Git blobs were independently reconstructed and matched before execution: deployment template `788492ef...`, MicroVM contract `1e41ce84...`, focused test `cc7e3cb7...`;
-- focused deterministic regression: **5/5 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
-- YAML semantic probe: `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy has exact empty ingress/egress rule sets;
-- durable receipt: `receipts/2026-08-17_GO_2254_MICROVM_NETWORK_DEFAULT_DENY_EXACT_BLOBS_GPT56SOL.json`;
-- runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
-- strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required for exact private Research/EntityOS staging before the retained OCI batch can execute;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes only minute-precision immutable message time and no shared immutable request/turn id.
+- exact current Git blobs independently reconstructed before execution: `glm_inference.py` `e6903a36...`, boundary tests `ce3059db...`, model-identity tests `8e673f16...`, ASCII-token fence `b227c3a8...`;
+- original discriminator reproduced a real source defect: requested `glm-5.2` could previously accept provider-reported `glm-4.7` because only the `glm-*` namespace was checked;
+- current retained source now requires exact requested/response model equality and a mandatory provider model field;
+- current parallel fusion additionally rejects non-finite world/provider JSON and non-printable/non-ASCII bearer tokens before they can become an admitted inference result;
+- exact-file deterministic regression: **22/22 PASS**, `py_compile` PASS;
+- durable current re-entry receipt: `receipts/2026-08-17_GO_2308_GLM_CURRENT_HEAD_REENTRY_GPT56SOL.json`; earlier `23:04` receipt remains scoped to its older exact blobs;
+- source/component evidence does not imply real GLM-token, exact full-checkout, OCI, packaged provider-switching, Kata/microVM or whole-product PASS;
+- strongest current OCI execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required for exact private Research/EntityOS staging; live retained-controller evidence still shows Sandbox creation succeeds before that fail-closed credential boundary;
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because no uniquely reproducible shared immutable request/turn id is exposed for this trigger.
 
 ## Verification
 

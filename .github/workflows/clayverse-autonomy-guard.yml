@@ -8,14 +8,17 @@ on:
       - 'the artefact/clayverse/recovery.py'
       - 'the artefact/clayverse/turn_lifecycle.py'
       - 'the artefact/clayverse/terminal_hooks.py'
+      - 'the artefact/clayverse/terminal_sessions.py'
       - 'the artefact/clayverse/autonomy_context.py'
       - 'the artefact/tests/test_autonomy.py'
       - 'the artefact/tests/test_autonomy_mcp_effect_dispatch.py'
       - 'the artefact/tests/test_autonomy_human_preemption_reentry.py'
+      - 'the artefact/tests/test_autonomy_terminal_tool_wiring.py'
       - 'the artefact/tests/test_autonomy_recovery_hardening.py'
       - 'the artefact/tests/test_autonomy_schema_neutral_hardening.py'
       - 'the artefact/tests/test_autonomous_turn_gate.py'
       - 'the artefact/tests/test_autonomy_context_integration.py'
+      - 'the artefact/tests/test_autonomy_cross_attempt_replay_guard.py'
       - '.github/workflows/clayverse-autonomy-guard.yml'
   workflow_dispatch:
 
@@ -36,7 +39,7 @@ jobs:
       - name: Compile autonomy causal spine
         working-directory: the artefact
         run: |
-          python -m py_compile clayverse/autonomy.py clayverse/mcp_server.py clayverse/recovery.py clayverse/turn_lifecycle.py clayverse/terminal_hooks.py clayverse/autonomy_context.py
+          python -m py_compile clayverse/autonomy.py clayverse/mcp_server.py clayverse/recovery.py clayverse/turn_lifecycle.py clayverse/terminal_hooks.py clayverse/terminal_sessions.py clayverse/autonomy_context.py
       - name: Run exact autonomy regressions
         working-directory: the artefact
         run: |
@@ -44,7 +47,9 @@ jobs:
             tests/test_autonomy.py \
             tests/test_autonomy_mcp_effect_dispatch.py \
             tests/test_autonomy_human_preemption_reentry.py \
+            tests/test_autonomy_terminal_tool_wiring.py \
             tests/test_autonomy_recovery_hardening.py \
             tests/test_autonomy_schema_neutral_hardening.py \
             tests/test_autonomous_turn_gate.py \
-            tests/test_autonomy_context_integration.py
+            tests/test_autonomy_context_integration.py \
+            tests/test_autonomy_cross_attempt_replay_guard.py

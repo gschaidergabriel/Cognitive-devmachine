@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "branch": "go/apt-snapshot-lock-20260817-1343",
+  "base_main": "14e0df35b96d6bc815d20d540ab2e1f5356ae61c",
+  "tested_candidate_head_before_receipt": "93a8c5a33fc759ed75083faa2172d13120187fb0",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no immutable shared request id was exposed and the available exact user-message timestamp was only minute precision, so GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL forbids claiming or executing an unusual experiment"
+  },
+  "frontier": "Debian apt package resolution was live/unpinned even though the base image digest, Claude archive and xterm archive were source-locked",
+  "mechanism": {
+    "source_lock_key": "debian_apt_snapshot",
+    "snapshot_timestamp": "20260817T000000Z",
+    "archives": [
+      "debian",
+      "debian-security"
+    ],
+    "suites": [
+      "trixie",
+      "trixie-updates",
+      "trixie-security"
+    ],
+    "integrity_boundary": "timestamped snapshot URIs plus Debian Release/InRelease signature verification and repository package hashes; Check-Valid-Until disabled only for immutable historical snapshot entries",
+    "docker_ordering": "SOURCE_LOCK and configure_pinned_apt.py are copied and applied before apt-get update/install"
+  },
+  "exact_tested_blobs": {
+    "the artefact/build/configure_pinned_apt.py": "6cf4544adcadfee43a0e981254f9853869fe1ce5",
+    "the artefact/SOURCE_LOCK.json": "927c958c2069d00f6734a82324e2e88a6117cbc8",
+    "the artefact/Dockerfile": "c06b13dd6ffebaeae5ae1ea364113c2284f1e74b",
+    "the artefact/tests/test_supply_chain_apt_snapshot.py": "0c082ac2837642a9c6b5a36368961e0082a36dc8"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "vps": false,
+    "production": false,
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "identity_check": "Git blob SHA-1 recomputed for all four staged files and matched the GitHub branch blob identities before test execution",
+    "command": "python -m pytest -q tests/test_supply_chain_apt_snapshot.py",
+    "result": "4 passed in 0.06s"
+  },
+  "primary_dependency_evidence": [
+    "Debian snapshot.debian.org usage documentation: timestamped archive URLs select a historical archive state; Check-Valid-Until may be disabled for old immutable snapshots",
+    "Debian apt sources.list(5): Snapshot selection is supported and Check-Valid-Until is a per-source security/time validity control",
+    "Debian apt-get(8): --snapshot selects a fixed archive snapshot for snapshot-enabled sources"
+  ],
+  "classification": "MECHANISM_SUPPORTED_SOURCE_GATE_ONLY",
+  "whole_product_pass": false,
+  "limits": [
+    "the exact OCI image was not built in this run",
+    "snapshot.debian.org metadata retrieval and the resolved ca-certificates/tmux package bytes were not executed in an authorized Vercel Sandbox",
+    "connected Vercel tooling exposed documentation but no Sandbox start/exec primitive",
+    "Python dependency --require-hashes remains a separate open supply-chain gate",
+    "real Clerk/browser/PTY/Claude/restart whole-product gates remain open"
+  ],
+  "next_exact_gate": "On an actually-started authorized isolated Vercel Sandbox, build the exact then-current branch/container, capture snapshot metadata/package resolution and image digest, run the full ClayVerse test suite, start /readyz, then exercise restart and authenticated terminal path."
+}

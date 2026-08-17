@@ -26,7 +26,6 @@ def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     gabriel = manager.binding("gabriel")
     andreas = manager.binding("andreas")
-
     assert manager._tmux_socket(gabriel) == "clayverse-gabriel"
     assert manager._tmux_socket(andreas) == "clayverse-andreas"
     assert manager._tmux_socket(gabriel) != manager._tmux_socket(andreas)
@@ -38,6 +37,7 @@ def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypa
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     calls: list[list[str]] = []
 
     def fake_run(argv, **kwargs):
@@ -47,7 +47,6 @@ def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypa
         return SimpleNamespace(returncode=0, stderr="", stdout="")
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
-
     manager.ensure("gabriel")
     manager.ensure("andreas")
 
@@ -74,18 +73,13 @@ def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch)
         exec_calls.append((program, list(argv), dict(env)))
 
     monkeypatch.setattr(terminal_sessions.os, "execvpe", fake_execvpe)
-
     manager.attach_pty("andreas")
 
     assert len(exec_calls) == 1
     program, argv, env = exec_calls[0]
     assert program == "tmux"
     _assert_managed_socket(argv, "andreas")
-    assert argv[5:] == [
-        "attach-session",
-        "-t",
-        "clayverse-andreas",
-    ]
+    assert argv[5:] == ["attach-session", "-t", "clayverse-andreas"]
     assert env["HOME"] == str(binding.home)
 
 

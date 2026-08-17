@@ -1,0 +1,84 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:02:14+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "microvm_tier2_sandbox_identity_and_deployment_contract",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_commit_before_receipt": "UNRESOLVED_CONNECTOR_COMMIT_LIST_READ_403",
+  "research_writes": [
+    {
+      "commit": "100b7a63d1285e5550b4a4d5086bebb824ab5d88",
+      "purpose": "bind fresh Kata sandbox identity in Tier-2 contract",
+      "superseded_by_same_turn_refinement": true
+    },
+    {
+      "commit": "ec22eda7f3b96118e3611e989ac388c98ad47f07",
+      "purpose": "stabilize Tier-2 sandbox identity wording so the contract expresses both generic sandbox/VM identity and the canonical Kata identity",
+      "superseded_by_same_turn_refinement": false
+    }
+  ],
+  "exact_git_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "629f7bbb7627e997839597edd499ce008c569a0f",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "2e03fb7074c7b88191df31f12627bf656fe6d84e",
+    "the artefact/tests/test_microvm_deployment_contract.py": "283b269042e056e7adca227e84ae31a055f898da"
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed the exact GitHub file bytes in an isolated non-production container and verified each with git hash-object before executing the focused regression",
+    "all_three_blobs_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "exit_code": 0,
+    "result": "10 passed in 0.14s",
+    "prior_discriminator": {
+      "result": "1 failed, 7 passed in 0.40s",
+      "failure": "Tier-2 identity wording drift between exact current contract and test",
+      "contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+      "test_blob": "74a728cecbdacc1baf40aec40358ef1199810338"
+    }
+  },
+  "environment": {
+    "surface": "isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64"
+  },
+  "supported_mechanisms": [
+    "the baseline Kata deployment source remains default-deny for ingress and egress",
+    "readiness and liveness are source-separated as /readyz and /healthz",
+    "Tier-2 is explicitly full Pod/Kata sandbox replacement rather than a same-Pod container restart",
+    "the Tier-2 identity contract now records both generic new sandbox/VM identity and the concrete canonical Kata sandbox/VM identity",
+    "the contract preserves current rolling-release/advisory refresh and runtime-annotation admission requirements"
+  ],
+  "runtime_credit": {
+    "exact_oci": 0,
+    "kubernetes": 0,
+    "kata_microvm": 0,
+    "cni_networkpolicy_enforcement": 0,
+    "tier2_live_replacement": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "vercel_sandbox": "ADMISSION_CONFIRMED_BUT_EXACT_PRIVATE_SOURCE_OCI_BATCH_BLOCKED_BEFORE_SOURCE_FETCH_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "credential_rule": "the read credential must remain host-side in Vercel Preview orchestration and must not be committed, logged, or forwarded into the disposable Sandbox",
+    "next_exact_gate": "provision the Vercel Preview read credential and redeploy; rerun exact current-source OCI build/start/readiness and capture image digest; then execute that same digest under Kata/equivalent and prove CNI default-deny, reviewed allow-policy enforcement, guest-kernel isolation and Tier-2 full-sandbox replacement"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes no shared immutable request/turn id and the registered coordination state forbids inventing a lease key; ordinary deterministic regression is allowed",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no exact current-main full checkout PASS",
+    "no OCI image build or image digest",
+    "no live Kubernetes/Kata/CNI enforcement",
+    "no live Tier-2 Pod/Kata sandbox replacement",
+    "no Clerk/browser/PTY runtime evidence",
+    "no whole-product PASS"
+  ]
+}

@@ -1,6 +1,7 @@
 {
   "schema": "clayverse-go-source-hardening-receipt/v1",
   "recorded_at": "2026-08-17T13:50+07:00",
+  "corrected_at": "2026-08-17T13:52+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
@@ -49,8 +50,11 @@
   },
   "go_experiment_accounting": {
     "experiment_started_by_this_organ": false,
-    "shared_main_observation_after_branch_start": "89baf998e3c4a2597303de2b44af19d5723fd6d0 atomically claimed the 13:42 websocket-expiry experiment on main",
-    "action": "DO_NOT_DUPLICATE_SHARED_UNUSUAL_EXPERIMENT"
+    "invalid_concurrent_claim_commit": "89baf998e3c4a2597303de2b44af19d5723fd6d0",
+    "canonical_blocking_result_commit": "b527277c713ba714ae7ff42c9d6a76dfda68866c",
+    "canonical_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available immutable source user-message timestamp is only 2026-08-17T13:42+07:00 at minute precision; appending 00 seconds does not create admissible trigger identity.",
+    "action": "NO_UNUSUAL_EXPERIMENT_EXECUTED; ordinary deterministic source hardening/regression only"
   },
   "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_PASS",
   "next_gate": "Rebase/compare against current main, run focused terminal_managed_authority plus adjacent terminal/policy regressions in an actually-started authorized exact environment, then verify packaged Claude Code recognizes only the two admitted MCP tools before merge/promotion."

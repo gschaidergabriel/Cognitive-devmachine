@@ -24,7 +24,7 @@ class EffectGate:
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':
             raise PermissionError('direct host process execution forbidden; no admitted generic EntityOS process contract')
-        effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv)
+        effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease)
         if req.capability=='state.noop':
             outcome={'ok':True,'target':req.target,'boundary':'internal'}
             self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)

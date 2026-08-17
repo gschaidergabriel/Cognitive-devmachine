@@ -197,18 +197,21 @@ spec:
           emptyDir:
             medium: Memory
             sizeLimit: 128Mi
+  # ClayVerse is a one-entity appliance. The canonical state and admitted
+  # workspace claims therefore require cluster-wide single-Pod writer fencing,
+  # not merely single-node attachment semantics.
   volumeClaimTemplates:
     - metadata:
         name: clayverse-state
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi
     - metadata:
         name: clayverse-workspace
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi

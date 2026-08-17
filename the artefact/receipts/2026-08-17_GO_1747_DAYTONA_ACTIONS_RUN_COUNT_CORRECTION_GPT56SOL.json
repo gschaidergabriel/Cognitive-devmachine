@@ -1,0 +1,50 @@
+{
+  "schema": "clayverse-go-receipt-addendum/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:47:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "DAYTONA_CONTROLLER_ADMISSION_EVIDENCE_CORRECTION",
+  "observed_canonical_main_before_branch_write": "3cd0e83a88395d09c18c313d5db680cbfba39adc",
+  "corrects": "the living README and prior bounded Daytona admission wording only where they state that exact bridge head e9a50a8325810410b837b1bae85212ef5710fa3f had zero workflow runs",
+  "bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "commit": "e9a50a8325810410b837b1bae85212ef5710fa3f",
+    "branch": "chatgpt/go-daytona-admission-preflight-20260817-1736",
+    "workflow": ".github/workflows/go-daytona-admission-preflight.yml",
+    "requested_route": "FREE_ONLY Daytona fallback after Vercel RATE_LIMIT with vercel_assertion_reached=false"
+  },
+  "fresh_exact_github_observation": {
+    "workflow_run_count": 1,
+    "workflow_run_id": 32021241780,
+    "workflow_run_status": "completed",
+    "workflow_run_conclusion": "failure",
+    "job_count": 1,
+    "job_id": 95361186733,
+    "job_name": "admission / route",
+    "job_status": "completed",
+    "job_conclusion": "failure",
+    "steps": [],
+    "runner_id": 0,
+    "runner_name": ""
+  },
+  "classification_after_correction": {
+    "execution_stage": "PRE_STEP_RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE",
+    "daytona_provider_contact_observed": false,
+    "credential_use_observed": false,
+    "daytona_sandbox_creation_observed": false,
+    "runtime_command_observed": false,
+    "test_credit": 0,
+    "runtime_credit": 0,
+    "semantic_test_failure": false,
+    "daytona_provider_or_account_failure_proven": false
+  },
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "unusual_experiment": {
+    "new_experiment_started": false,
+    "further_unusual_experiment_for_this_go": "FORBIDDEN",
+    "note": "This correction is deterministic evidence reconciliation only."
+  },
+  "next_exact_runtime_gate": "FIRST_ACTUALLY_STARTED_AUTHORIZED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BUILD_EXACT_IMAGE -> CAPTURE_IMAGE_DIGEST_APT_TMUX_AND_PYTHON_IDENTITIES -> RUN_REPAIR_ON_ACTUAL_IN_IMAGE_TMUX -> FOCUSED_AND_ADJACENT_REGRESSIONS -> MATERIALIZE_AND_ENFORCE_CANONICAL_PYTHON_HASH_LOCK -> PROMOTION_DECISION -> REJOIN_PR602 -> NATIVE_CLAUDE -> READINESS_RESTART_CONCURRENCY",
+  "truth_boundary": "The corrected run/job count changes the controller-admission evidence description, not the substantive outcome: no step executed and no Daytona provider/runtime evidence exists."
+}

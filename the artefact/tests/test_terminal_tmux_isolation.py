@@ -13,20 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def _assert_managed_socket(argv: list[str], user_id: str) -> None:
-    assert argv[:5] == [
-        "tmux",
-        "-L",
-        f"clayverse-{user_id}",
-        "-f",
-        "/etc/clayverse/managed-tmux.conf",
-    ]
+    assert argv[:5] == ["tmux", "-L", f"clayverse-{user_id}", "-f", "/etc/clayverse/managed-tmux.conf"]
 
 
 def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     gabriel = manager.binding("gabriel")
     andreas = manager.binding("andreas")
-
     assert manager._tmux_socket(gabriel) == "clayverse-gabriel"
     assert manager._tmux_socket(andreas) == "clayverse-andreas"
     assert manager._tmux_socket(gabriel) != manager._tmux_socket(andreas)
@@ -38,6 +31,7 @@ def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypa
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     calls: list[list[str]] = []
 
     def fake_run(argv, **kwargs):
@@ -47,7 +41,6 @@ def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypa
         return SimpleNamespace(returncode=0, stderr="", stdout="")
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
-
     manager.ensure("gabriel")
     manager.ensure("andreas")
 
@@ -74,18 +67,12 @@ def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch)
         exec_calls.append((program, list(argv), dict(env)))
 
     monkeypatch.setattr(terminal_sessions.os, "execvpe", fake_execvpe)
-
     manager.attach_pty("andreas")
-
     assert len(exec_calls) == 1
     program, argv, env = exec_calls[0]
     assert program == "tmux"
     _assert_managed_socket(argv, "andreas")
-    assert argv[5:] == [
-        "attach-session",
-        "-t",
-        "clayverse-andreas",
-    ]
+    assert argv[5:] == ["attach-session", "-t", "clayverse-andreas"]
     assert env["HOME"] == str(binding.home)
 
 
@@ -112,14 +99,12 @@ def test_runtime_rejects_writable_managed_tmux_policy(tmp_path, monkeypatch):
         path.write_text("x")
     policy.chmod(0o444)
     guard.chmod(0o555)
-
     manager.runtime_prompt = runtime_prompt
     manager.MANAGED_SETTINGS = settings
     manager.MANAGED_MCP = mcp
     manager.MANAGED_TMUX = policy
     manager.DIRECT_SHELL_GUARD = guard
     monkeypatch.setattr(terminal_sessions.shutil, "which", lambda program: f"/usr/bin/{program}")
-
     manager._require_programs()
     policy.chmod(0o644)
     with pytest.raises(TerminalRuntimeError, match="tmux command-surface policy"):
@@ -139,12 +124,10 @@ def test_live_tmux_policy_attests_full_transport_surface(tmp_path, monkeypatch):
         ("list-keys",): "",
     }
     observed = []
-
     def fake_run(argv, **kwargs):
         command = tuple(argv[5:])
         observed.append(command)
         return SimpleNamespace(returncode=0, stdout=expected[command] + "\n", stderr="")
-
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     manager._assert_tmux_server_policy(binding)
     assert observed == list(expected)
@@ -162,11 +145,9 @@ def test_live_tmux_policy_rejects_mutated_default_shell(tmp_path, monkeypatch):
         ("show-options", "-gqv", "default-shell"): "/bin/sh",
         ("list-keys",): "",
     }
-
     def fake_run(argv, **kwargs):
         command = tuple(argv[5:])
         return SimpleNamespace(returncode=0, stdout=expected[command] + "\n", stderr="")
-
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     with pytest.raises(TerminalRuntimeError, match="default-shell"):
         manager._assert_tmux_server_policy(binding)

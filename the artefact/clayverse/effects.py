@@ -16,7 +16,8 @@ class EffectGate:
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
         if not row: raise PermissionError('session owner mismatch')
         generation=int(row[0])
-        if req.expected_generation is not None and req.expected_generation != generation: raise StaleGeneration(req.session_id)
+        if req.expected_generation is None: raise ValueError('expected_generation required')
+        if req.expected_generation != generation: raise StaleGeneration(req.session_id)
         if lease: self.db.assert_lease(lease)
         if req.capability=='state.noop': outcome={'ok':True,'target':req.target}
         elif req.capability=='entityos.exec':
@@ -29,4 +30,4 @@ class EffectGate:
             if Path(executable).name in self.SHELL_NAMES: raise PermissionError('shell requires a separate explicit capability contract')
             cp=subprocess.run([executable,*req.argv[1:]],shell=False,capture_output=True,text=False,timeout=10,env={'PATH':os.environ.get('PATH','/usr/bin:/bin')}); outcome={'ok':cp.returncode==0,'exit':cp.returncode,'stdout_sha256':hashlib.sha256(cp.stdout).hexdigest(),'stderr_sha256':hashlib.sha256(cp.stderr).hexdigest(),'stdout':cp.stdout[:4096].decode(errors='replace'),'stderr':cp.stderr[:4096].decode(errors='replace')}
         if lease: self.db.assert_lease(lease)
-        eid=self.db.record_effect(episode_id,req.user_id,req.capability,req.target,generation,'VERIFIED',req.argv,outcome); return eid,outcome
+        eid=self.db.record_effect(episode_id,req.user_id,req.capability,req.target,req.expected_generation,'VERIFIED',req.argv,outcome); return eid,outcome

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import json
 from typing import Any
 
 from .autonomy import (
+    MAX_STEP_CHARS,
     AutonomyController,
     AutonomyStateError,
     CompletionNotVerified,
@@ -49,6 +49,9 @@ class AutonomyPlanner:
         description = value.get("description")
         if not isinstance(description, str) or not description.strip():
             raise AutonomyDecisionError("planner decision description missing")
+        description = description.strip()
+        if len(description) > MAX_STEP_CHARS - len(PLANNER_STEP_PREFIX) - 1:
+            raise AutonomyDecisionError("planner decision description exceeds step bound")
         if kind == "effect":
             try:
                 value["effect"] = AutonomyController._validated_effect(value.get("effect"))
@@ -56,7 +59,7 @@ class AutonomyPlanner:
                 raise AutonomyDecisionError("planner effect proposal invalid") from exc
         elif value.get("effect") is not None:
             raise AutonomyDecisionError("non-effect planner decision contains effect")
-        value["description"] = description.strip()
+        value["description"] = description
         return value
 
     @staticmethod
@@ -112,6 +115,8 @@ class AutonomyPlanner:
             )
             mode = "effect"
         elif kind == "reason":
+            if not self._is_planner_step(admitted):
+                raise AutonomyStateError("autonomous reason step lacks typed planner contract")
             prompt = (
                 "ClayVerse autonomous reasoning/planning event. Work only on the canonical goal and admitted step in injected UnifiedDB context. "
                 f"Goal={goal_id} Step={admitted['step_id']}. Step description={admitted['description']!r}. "
@@ -120,6 +125,7 @@ class AutonomyPlanner:
                 '"description":"bounded next step","effect":null}.'
                 " For kind=effect, effect MUST instead be exactly "
                 '{"capability":"state.noop|entityos.exec","target":"...","argv":null_or_string_array}. '
+                "The wait kind is intentionally unavailable until a typed wake-condition contract exists. "
                 "Never use complete_candidate as proof; it only asks the controller to verify independent evidence."
             )
             mode = "reason"
@@ -179,10 +185,13 @@ class AutonomyPlanner:
             step_id,
             expected_generation=expected_generation,
         )
+        next_description = decision["description"]
+        if decision["kind"] == "reason":
+            next_description = f"{PLANNER_STEP_PREFIX} {next_description}"
         next_step = self.controller.propose_step(
             goal_id,
             decision["kind"],
-            decision["description"],
+            next_description,
             effect=decision["effect"],
             expected_generation=expected_generation,
         )

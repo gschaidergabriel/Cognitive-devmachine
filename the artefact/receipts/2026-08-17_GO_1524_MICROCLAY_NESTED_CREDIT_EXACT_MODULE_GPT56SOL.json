@@ -1,0 +1,75 @@
+{
+  "schema": "ClayVerseMicroClayNestedCreditExactModuleReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T15:24+07:00",
+  "research_repo": "gschaidergabriel/clay-global-research-entity",
+  "target_pr": 563,
+  "target_head_before_receipt": "2858ae132140299662d6350796d6674ce3208c3e",
+  "target_module": "the artefact/clayverse/microclay_retrieval.py",
+  "target_module_git_blob": "71a9a8315bcaadbe1c079b89749173da4c1751bd",
+  "target_module_sha256": "575b367fa6434e27957e077ef755debffebed36c3f685f7c3004198f4d82c981",
+  "target_test_blob": "9c185436475a6a2b18bab23f877cf819276228d6",
+  "execution_surface": "OPENAI_NON_PRODUCTION_ISOLATED_CONTAINER",
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1",
+    "network_required_for_target_probe": false
+  },
+  "source_binding": {
+    "method": "Git blob identity recomputed inside isolated container before execution",
+    "observed_git_blob": "71a9a8315bcaadbe1c079b89749173da4c1751bd",
+    "matched_expected": true
+  },
+  "probe": {
+    "kind": "NORMAL_DETERMINISTIC_REGRESSION_ONLY",
+    "probe_sha256": "5534830b980d2e1b8c1d24771edbaa0c14c4e1813943918b07e126c44350beb3",
+    "actual_target_code_executed": [
+      "MicroClayRetrieval._credit_tx",
+      "MicroClayRetrieval.credit",
+      "MicroClayRetrieval._assert_replay_route",
+      "MicroClayRetrieval._policy_key"
+    ],
+    "non_target_scaffolding": "Minimal in-memory SQLite schema plus a narrow DB adapter/stub imports were used to isolate the nested credit mechanism. This is not the full canonical UnifiedDB/TurnLifecycle test file execution.",
+    "fault": "BEFORE INSERT trigger on retrieval_feedback raises SQLITE ABORT after policy mutation would otherwise have occurred",
+    "outer_transaction_behavior": "Caller catches the inner sqlite3.IntegrityError and continues unrelated outer work to COMMIT",
+    "checks": {
+      "inner_failure_observed": true,
+      "no_policy_leak_inside_outer": true,
+      "no_receipt_inside_outer": true,
+      "outer_commit_survives": true,
+      "no_policy_leak_after_outer_commit": true,
+      "no_receipt_after_outer_commit": true,
+      "positive_applies": true,
+      "one_policy_row": true,
+      "one_feedback_receipt": true,
+      "policy_scope_preserved": true,
+      "policy_math_expected": true,
+      "duplicate_rejected": true,
+      "duplicate_no_extra_policy_pull": true,
+      "duplicate_no_extra_receipt": true
+    },
+    "pass_count": 14,
+    "check_count": 14,
+    "exit_code": 0,
+    "result": "PASS_EXACT_TARGET_MODULE_MECHANISM"
+  },
+  "adjudication": {
+    "mechanism_supported": true,
+    "full_pr_runtime_verified": false,
+    "canonical_full_test_file_verified": false,
+    "current_main_runtime_verified": false,
+    "oci_runtime_verified": false,
+    "whole_clayverse_pass": false,
+    "scope": "The SAVEPOINT repair is executable and preserves nested MicroClay policy/receipt atomicity under the isolated focused regression. Promotion still requires rejoin to the surviving MicroClay line/current main and a broader exact isolated regression batch."
+  },
+  "provider_state_refresh": {
+    "vercel": "recent real Sandbox start exists but current preview daily cap blocks the prepared SQLite-capable retry",
+    "daytona": "authorized standard fallback; current orchestration container has no Daytona SDK/credential environment and prior provider attempt is DNS-blocked before provider contact",
+    "classification": "PROVIDER_PATHS_NOT_USED_FOR_THIS_FOCUSED_LOCAL_ISOLATED_REGRESSION"
+  },
+  "go_experiment_accounting": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count_added": 0,
+  "together_api_used": false,
+  "vps_or_self_hosted_test_used": false,
+  "final_paid_or_model_training_used": false
+}

@@ -70,3 +70,14 @@ def test_clerk_boundary_rejects_impersonated_session_actor_claim():
 
     with pytest.raises(AuthenticationError, match="impersonated sessions"):
         verifier.verify(jwt.encode(impersonated, private, algorithm="RS256"))
+
+
+def test_clerk_boundary_rejects_pending_session_status():
+    private, public_pem = _keypair()
+    verifier = _verifier(public_pem)
+    now = int(time.time())
+    pending = _claims(now)
+    pending["sts"] = "pending"
+
+    with pytest.raises(AuthenticationError, match="pending Clerk session"):
+        verifier.verify(jwt.encode(pending, private, algorithm="RS256"))

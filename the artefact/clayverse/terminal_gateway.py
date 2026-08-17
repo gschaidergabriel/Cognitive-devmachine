@@ -121,6 +121,8 @@ window.addEventListener('load', async () => {{
                 pass
         finally:
             if attach_pid is not None and attach_fd is not None:
-                terminals.close_attach(attach_pid, attach_fd)
+                # Reaping may wait briefly for a stubborn attach child; keep that bounded
+                # process cleanup off the websocket event loop.
+                await asyncio.to_thread(terminals.close_attach, attach_pid, attach_fd)
 
     return app

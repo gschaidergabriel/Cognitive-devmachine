@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoRepairReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "observed_main_before_receipt": "c6c6f6408e3e86f0c6ec17c5514b43ade2711edd",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "finding": {
+    "path": "the artefact/clayverse/terminal_gateway.py",
+    "mechanism": "With postponed annotations enabled, WebSocket and WebSocketDisconnect were imported only inside create_terminal_app. FastAPI resolves endpoint annotation strings against module globals, so the nested terminal_ws(ws: WebSocket) parameter was not recognized as a WebSocket injection boundary and was classified as a query parameter instead.",
+    "impact": "The canonical browser -> authenticated WebSocket PTY product path could disconnect before Clerk authentication processing."
+  },
+  "repair": {
+    "pull_request": 362,
+    "merge_commit": "34e05ac17d6cb9ab23f100d7e43a8919b2bcc180",
+    "terminal_gateway_blob": "2b2922476187986e73a1fd1a461d87648a32f4c4",
+    "regression_test_blob": "a6b0cdb410e259a9c02fb8c1bae74e5a61b72fa2",
+    "delta": [
+      "Move WebSocket and WebSocketDisconnect to module scope while keeping FastAPI lazy-imported.",
+      "Add a TestClient websocket handshake regression that must enter /ws/terminal and reach controlled auth rejection."
+    ]
+  },
+  "bounded_execution_evidence": {
+    "scope": "supporting isolated local sandbox evidence only; not Vercel Sandbox acceptance and not exact OCI image evidence",
+    "before_repair": [
+      "FastAPI route dependency classified ws as query input and exposed no websocket parameter.",
+      "TestClient websocket connect disconnected before the auth frame could be processed."
+    ],
+    "after_repair": [
+      "FastAPI route dependency recognized ws as the websocket parameter with no ws query parameter.",
+      "TestClient websocket handshake reached the endpoint and controlled auth processing.",
+      "A stronger stubbed authenticated path produced a ready frame and binary PTY echo.",
+      "The ClayVerse inline browser client executed in Chromium with deterministic Clerk/xterm/WebSocket substitutes and emitted the expected auth and binary terminal frames."
+    ],
+    "limitations": [
+      "The local sandbox FastAPI version was not the exact artifact-pinned 0.139.2 runtime.",
+      "Chromium network navigation was blocked by executor administrator policy.",
+      "No raw Vercel Sandbox create/exec primitive is exposed by the connected tool surface.",
+      "No Docker, Podman, Buildah or equivalent OCI builder is available in the local isolated executor.",
+      "Real Clerk browser/JWT/WebSocket behavior remains unexecuted.",
+      "Exact-current-head OCI build/runtime remains unexecuted."
+    ]
+  },
+  "primary_source_crosscheck": {
+    "fastapi_pinned_version": "0.139.2",
+    "fastapi_mechanism": "FastAPI dependency analysis resolves string annotations using the endpoint function module globals and recognizes WebSocket parameters only after successful type resolution.",
+    "clerk_client": "Current Clerk JavaScript quickstart remains consistent with the artifact's Clerk.load plus ClerkUI browser-script pattern."
+  },
+  "unusual_experiment": {
+    "count_for_user_triggered_go_macrocycle": 1,
+    "consumed_earlier_in_same_macrocycle": true,
+    "additional_unusual_experiments_in_this_repair_phase": 0
+  },
+  "canonical_post_repair_observation": {
+    "main_checked": "c6c6f6408e3e86f0c6ec17c5514b43ade2711edd",
+    "repair_present": true,
+    "terminal_gateway_blob": "2b2922476187986e73a1fd1a461d87648a32f4c4",
+    "regression_test_blob": "a6b0cdb410e259a9c02fb8c1bae74e5a61b72fa2"
+  },
+  "remaining_acceptance_frontier": "Run an exact-current-head build and runtime batch in an authorized isolated Vercel Sandbox once raw Sandbox execution is available: build the one OCI image, launch that exact image, exercise a real Clerk-authenticated browser WebSocket PTY into both durable tmux/Claude Code sessions, then verify hook persistence, restart/state continuity, collision/global-generation fencing, effect boundaries and exact embedded EntityOS behavior where admitted.",
+  "acceptance": "IN_PROGRESS",
+  "progress": "UNRESOLVED",
+  "eta": "UNRESOLVED"
+}

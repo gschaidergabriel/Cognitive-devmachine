@@ -252,7 +252,7 @@ window.addEventListener('load', async () => {{
                 raise AuthenticationError("authentication must be first message")
             token = _auth_token(hello)
             rows, cols = _terminal_dimensions(hello)
-            claims = verifier.verify(token)
+            claims = await asyncio.to_thread(verifier.verify, token)
             auth_expires_at = _auth_expiry_deadline(claims)
             clerk_subject = str(claims["sub"])
             clerk_session_id = str(claims["sid"])
@@ -294,7 +294,7 @@ window.addEventListener('load', async () => {{
                     elif message.get("text") is not None:
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":
-                            refreshed = verifier.verify(_auth_token(control))
+                            refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))
                             auth_expires_at = _reauthenticated_expiry(
                                 refreshed,
                                 expected_subject=clerk_subject,

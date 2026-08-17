@@ -1,0 +1,88 @@
+{
+  "schema": "ClayVerseGoAdjudicationReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_research_main_before_receipt": "5770a559d482edbaf3cdddbc394e16a714f6d682",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "source_repairs_merged": [
+    {
+      "pull_request": 347,
+      "merge_commit": "37fa3c31bcb9185f4c069347487c775b79124787",
+      "scope": "effect replay and restart recovery fusion",
+      "claims": [
+        "EffectJournal rejects a second persisted effect for one workspace episode before another external execution can be admitted.",
+        "Restart recovery collapses PENDING effects through the canonical UNKNOWN_AFTER_RESTART journal path.",
+        "Durable active_turns state is retired consistently with recovered causal evidence and the hook-created causal id is preserved when available."
+      ],
+      "evidence_boundary": "source repair plus bounded supporting mechanism checks; not exact-current-head Vercel Sandbox or OCI acceptance"
+    },
+    {
+      "pull_request": 359,
+      "merge_commit": "5d8af013343da0f9e4ba6dff1be945ce60f967c9",
+      "scope": "Claude UserPromptSubmit canonical context inline fence",
+      "claims": [
+        "The complete injected canonical context envelope is capped at 9000 characters including the prefix.",
+        "Oversize context is deterministically compacted and then fails closed if it still cannot fit.",
+        "The patch preserves transactional begin_admission so a rejected context envelope does not create a prompt visible only to UnifiedDB."
+      ],
+      "provider_contract_basis": "Claude Code documents a 10000-character hook additionalContext spill threshold; product terminals disable built-in filesystem tools and allow the managed ClayVerse MCP surface.",
+      "evidence_boundary": "source/provider-contract evidence; not exact-current-head Vercel Sandbox or OCI acceptance"
+    }
+  ],
+  "vercel_empirical_state": {
+    "correction_applied": "Vercel Sandbox is available and has been actually started through the product-repo Vercel build harness; earlier statements that Sandbox execution itself was unavailable are superseded.",
+    "exact_historical_source_sandbox": {
+      "deployment": "dpl_9Q28fMrNLwGkSwWJZx342duTyuwT",
+      "research_sha": "edaee6307c56669819164cd95b0f2dbca0985e1e",
+      "artefact_tree_sha": "35ca41cf1ac44a61eab2222c60ff65519156172a",
+      "source_tar_sha256": "11ec60a63c2c75faca558e324948b12a6397d6e725880e5bbbbec47a278dd1d6",
+      "source_blob_verification": "PASS",
+      "result": "FAILED_AT_PROVISION_PODMAN",
+      "observed_error": "Amazon Linux 2023 package repository returned no match for podman"
+    },
+    "nested_oci_surface": {
+      "deployment": "dpl_4NzSV6eCvsDmGKEcCoV35fqfZ1E8",
+      "result": "BLOCKED_OCI_TOOLCHAIN_PROVISION",
+      "observed_error": "Amazon Linux 2023 Sandbox package repository returned no match for podman or buildah"
+    },
+    "vercel_build_host_preflight": {
+      "deployment": "dpl_48UEVTo4CFY12WtBLokT1F7hrHYj",
+      "vercel_build_cli": "58.1.0",
+      "local_child_vercel_binary": "ENOENT",
+      "buildah": "/usr/bin/buildah",
+      "vercel_oidc_present": true,
+      "result": "VCR_BUILD_COMMAND_UNAVAILABLE_IN_CHILD_WITHOUT_PINNED_CLI"
+    }
+  },
+  "vcr_fusion_adjudication": {
+    "product_pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_observed": "3e9fdad4467e84b20d7e0220c9b123b265b1ca4f",
+    "decision": "TEST_BEFORE_APPLY",
+    "review_comment_id": 5312164286,
+    "positive_mechanism": "Use a VCR custom image and start the acceptance Vercel Sandbox from that image instead of provisioning Podman/Buildah inside the stock Sandbox.",
+    "blocking_findings": [
+      "The current draft still binds stale research SHA edaee6307c56669819164cd95b0f2dbca0985e1e and artefact tree 35ca41cf1ac44a61eab2222c60ff65519156172a rather than current research main.",
+      "The draft image runtime oracle requires status=ok while current clayverse.service --once emits status=probe_ok, scope=state_only and ready=false.",
+      "The proposed vercel vcr build docker path has not yet been observed on the build host; the existing build-host evidence only establishes that buildah exists and a platform-global child vercel binary did not.",
+      "The PR head Vercel status is currently failure due to Vercel build-rate-limit, so no new VCR build or image-backed Sandbox evidence exists yet.",
+      "Acceptance should resolve and record the VCR manifest digest and prefer a digest-bound image-backed Sandbox rather than a mutable tag where available."
+    ],
+    "provider_direction": [
+      "Vercel documents custom VCR images as the preferred route when Sandbox needs system tooling beyond the stock Amazon Linux 2023 environment.",
+      "Vercel documents VCR authentication for Docker, Podman and Buildah and documents image-backed Sandbox creation from VCR."
+    ]
+  },
+  "unusual_experiment": {
+    "count_for_user_triggered_go_macrocycle": 1,
+    "consumed_earlier_in_same_macrocycle": true,
+    "additional_unusual_experiments_in_this_organ_run": 0
+  },
+  "current_frontier": "Refresh the VCR fusion runner to one exact current research head/tree and current --once contract; prove the pinned CLI/Buildah-compatible VCR build path on the Vercel build host; resolve the pushed image manifest digest; then start an exact image-backed Vercel Sandbox and execute the complete current source regression plus restart/state/effect/product runtime gates. Vercel build-rate-limit is the immediate external execution blocker observed for PR #810.",
+  "acceptance": "IN_PROGRESS",
+  "progress": "UNRESOLVED",
+  "eta": "UNRESOLVED"
+}

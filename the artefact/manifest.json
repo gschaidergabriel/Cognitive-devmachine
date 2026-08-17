@@ -25,7 +25,10 @@
     "reference_template": "deployment/clayverse-kata-statefulset.template.yaml",
     "network_policy_baseline": "DEFAULT_DENY_INGRESS_AND_EGRESS_FOR_APP_CLAYVERSE",
     "functional_network_access": "SEPARATE_DEPLOYMENT_SPECIFIC_REVIEWED_ALLOW_POLICY_REQUIRED",
-    "network_policy_enforcement": "FINAL_ACCEPTANCE_MUST_PROVE_SELECTED_CNI_ENFORCES_NETWORKPOLICY_AND_NON_ADMITTED_FLOWS_REMAIN_DENIED"
+    "network_policy_enforcement": "FINAL_ACCEPTANCE_MUST_PROVE_SELECTED_CNI_ENFORCES_NETWORKPOLICY_AND_NON_ADMITTED_FLOWS_REMAIN_DENIED",
+    "runtime_security_support": "FINAL_ACCEPTANCE_MUST_USE_THEN_CURRENT_UPSTREAM_SUPPORTED_KATA_RELEASE_AND_BIND_EFFECTIVE_RUNTIME_CONFIGURATION",
+    "runtime_annotation_policy": "FAIL_CLOSED_ON_UNREVIEWED_IO_KATACONTAINERS_RUNTIME_MUTATING_ANNOTATIONS_AFTER_ADMISSION_MUTATION",
+    "tier2_replacement": "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED_IN_PLACE_CONTAINER_RESTART_NOT_TIER2"
   },
   "root_filesystem": "READ_ONLY_REQUIRED_IN_ACCEPTED_RUNTIME",
   "ephemeral_write_policy": "runtime mutation only in declared tmpfs/RAM areas such as /tmp and /run",
@@ -105,6 +108,8 @@
     "same exact accepted OCI image digest executed inside required VM/microVM runtime",
     "independent guest-kernel isolation attested; direct host-kernel execution is insufficient",
     "microVM runtime identity/version plus guest-kernel identity captured",
+    "installed Kata/runtime-rs belongs to the then-current upstream-supported security release with fresh upstream release/advisory review and exact effective runtime configuration bound",
+    "effective io.katacontainers.* workload annotations are inventoried after admission mutation and every runtime-mutating annotation is explicitly reviewed or rejected fail-closed",
     "accepted runtime read-only root filesystem with only declared tmpfs/persistent write surfaces",
     "complete accepted EntityOS embedded in final image",
     "baseline ClayVerse NetworkPolicy default-deny ingress+egress actually enforced by the deployed CNI",
@@ -112,6 +117,7 @@
     "sealed ingress/egress boundary and full cognition-reingest-terminal-result loop",
     "Claude Code direct terminal-login/runtime verification and GLM token secrecy/inference-only verification",
     "automatic tier-1 internal recovery plus tier-2 full microVM/workload replacement",
+    "tier-2 replacement proves a new Pod UID and new Kata sandbox/VM identity rather than an in-place container restart",
     "known-good snapshot recovery across UnifiedDB generation and EffectJournal",
     "crash before/after effect emission acknowledgement without blind replay",
     "corrupt newest snapshot fallback and crash-during-recovery idempotence",

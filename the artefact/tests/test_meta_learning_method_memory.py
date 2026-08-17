@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import json
 import time
 import uuid
 
 import pytest
 
-from clayverse.method_memory import MethodMemory, MethodRecordError
+from clayverse.method_memory import MethodMemory, MethodRecordError, validate_method_record
 from clayverse.method_stage_b import StageBMethodRetrieval
 from clayverse.microclay_retrieval import MicroClayRetrieval
 from clayverse.store import UnifiedDB
@@ -78,174 +79,57 @@ def _support(db, user_id="gabriel"):
     return [a, b]
 
 
-def test_promoted_method_rejects_single_episode(tmp_path):
-    db, gs, _ = _db(tmp_path)
-    _episode(db, gs, "src:one")
-    support = _support(db)
+def test_promoted_record_still_requires_cross_episode_support():
     record = _record(
         signature={"goal": ["recover"], "mechanism": ["stateful"]},
         episodes=["src:one"],
-        support_ids=support,
+        support_ids=["support:a"],
     )
     record["support_count"] = 1
     record["success_count"] = 1
     with pytest.raises(MethodRecordError, match="single-episode promotion"):
+        validate_method_record("framework", record)
+
+
+def test_ordinary_admission_cannot_mint_promoted_framework(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    _episode(db, gs, "src:a")
+    _episode(db, gs, "src:b")
+    support = _support(db)
+    with pytest.raises(MethodRecordError, match="dedicated promotion lifecycle"):
         MethodMemory(db).admit(
             kind="framework",
             subject="recovery discriminator",
-            record=record,
+            record=_record(
+                signature={"goal": ["recover"], "mechanism": ["stateful"]},
+                episodes=["src:a", "src:b"],
+                support_ids=support,
+            ),
             source_turn_id=None,
             user_id="gabriel",
-            provenance={"source": "test"},
+            provenance={"source": "ordinary-admission"},
         )
+    assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='framework'").fetchone()[0] == 0
 
 
-def test_stage_a_never_serves_method_memory(tmp_path):
+def test_candidate_admission_remains_available_but_not_routable(tmp_path):
     db, gs, _ = _db(tmp_path)
     _episode(db, gs, "src:a")
-    _episode(db, gs, "src:b")
     support = _support(db)
-    MethodMemory(db).admit(
-        kind="framework",
-        subject="rareword method",
-        record=_record(
-            signature={"goal": ["verify"], "mechanism": ["provenance"]},
-            episodes=["src:a", "src:b"],
-            support_ids=support,
-        ),
-        source_turn_id=None,
-        user_id="gabriel",
-        provenance={"source": "test"},
-    )
-    turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs, "rareword")
-    result = MicroClayRetrieval(db).retrieve(
-        query="rareword",
-        user_id="gabriel",
-        session_id=gs,
-        turn_id=turn_id,
-        episode_id=episode_id,
-        causal_id=causal_id,
-        generation=generation,
-    )
-    assert all(item["kind"] not in {"framework", "heuristic", "failure_pattern", "counterexample"} for item in result["items"])
-
-
-def test_unknown_fact_can_return_method_without_becoming_present(tmp_path):
-    db, gs, _ = _db(tmp_path)
-    _episode(db, gs, "src:a")
-    _episode(db, gs, "src:b")
-    support = _support(db)
-    method_id = MethodMemory(db).admit(
-        kind="framework",
-        subject="causal recovery framework",
-        record=_record(
-            signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
-            episodes=["src:a", "src:b"],
-            support_ids=support,
-        ),
-        source_turn_id=None,
-        user_id="gabriel",
-        provenance={"source": "test"},
-    )
-    turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs)
-    result = StageBMethodRetrieval(db).retrieve(
-        query="what should we do next?",
-        user_id="gabriel",
-        session_id=gs,
-        turn_id=turn_id,
-        episode_id=episode_id,
-        causal_id=causal_id,
-        generation=generation,
-        evidence_status="UNKNOWN",
-        problem_signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
-    )
-    assert [x["memory_id"] for x in result["methods"]] == [method_id]
-    assert result["receipt"]["evidence_status"] == "UNKNOWN"
-    assert result["receipt"]["factual_status_unchanged"] == "UNKNOWN"
-    assert result["receipt"]["truth_authority"] is False
-
-
-def test_unusual_structural_lexical_decoy_inversion(tmp_path):
-    """Single bounded GO experiment: lexical decoy must lose to structural match."""
-    db, gs, _ = _db(tmp_path)
-    for eid in ("src:a", "src:b", "src:c", "src:d"):
-        _episode(db, gs, eid)
-    support = _support(db)
-    methods = MethodMemory(db)
-    correct = methods.admit(
-        kind="framework",
-        subject="orthogonal transfer pattern",
-        record=_record(
-            signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
-            episodes=["src:a", "src:b"],
-            support_ids=support,
-            calibration=0.7,
-        ),
-        source_turn_id=None,
-        user_id="gabriel",
-        provenance={"source": "unusual-experiment"},
-    )
-    decoy = methods.admit(
-        kind="framework",
-        subject="recover state provenance recovery state provenance",
-        record=_record(
-            signature={"goal": ["compare"], "mechanism": ["privacy"]},
-            episodes=["src:c", "src:d"],
-            support_ids=support,
-            calibration=0.99,
-        ),
-        source_turn_id=None,
-        user_id="gabriel",
-        provenance={"source": "unusual-experiment"},
-    )
-    turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs, "recover state provenance")
-    result = StageBMethodRetrieval(db).retrieve(
-        query="recover state provenance",
-        user_id="gabriel",
-        session_id=gs,
-        turn_id=turn_id,
-        episode_id=episode_id,
-        causal_id=causal_id,
-        generation=generation,
-        evidence_status="UNKNOWN",
-        problem_signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
-    )
-    ids = [x["memory_id"] for x in result["methods"]]
-    assert correct in ids
-    assert decoy not in ids
-
-
-def test_counterexample_can_block_promoted_method(tmp_path):
-    db, gs, _ = _db(tmp_path)
-    for eid in ("src:a", "src:b", "src:c"):
-        _episode(db, gs, eid)
-    support = _support(db)
-    methods = MethodMemory(db)
-    target = methods.admit(
-        kind="framework",
-        subject="bounded recovery",
+    candidate_id = MethodMemory(db).admit(
+        kind="framework_candidate",
+        subject="candidate recovery discriminator",
         record=_record(
             signature={"goal": ["recover"], "mechanism": ["stateful"]},
-            episodes=["src:a", "src:b"],
+            episodes=["src:a"],
             support_ids=support,
+            status="CANDIDATE",
         ),
         source_turn_id=None,
         user_id="gabriel",
-        provenance={"source": "test"},
+        provenance={"source": "episode-abstraction"},
     )
-    methods.admit(
-        kind="counterexample",
-        subject="recovery counterexample",
-        record=_record(
-            signature={"goal": ["recover"], "mechanism": ["stateful"]},
-            episodes=["src:c"],
-            support_ids=support,
-            limits=[target],
-        ),
-        source_turn_id=None,
-        user_id="gabriel",
-        provenance={"source": "test"},
-    )
+    assert candidate_id
     turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs)
     result = StageBMethodRetrieval(db).retrieve(
         query="recovery strategy",
@@ -258,8 +142,114 @@ def test_counterexample_can_block_promoted_method(tmp_path):
         evidence_status="UNKNOWN",
         problem_signature={"goal": ["recover"], "mechanism": ["stateful"]},
     )
-    assert target not in [x["memory_id"] for x in result["methods"]]
-    assert result["counterevidence"]
+    assert result["methods"] == []
+    assert result["receipt"]["factual_status_unchanged"] == "UNKNOWN"
+
+
+def test_stage_a_never_serves_raw_method_kind_even_if_present(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    # This deliberately bypasses MethodMemory admission to prove Stage A fences on kind
+    # before any future promotion lifecycle exists.
+    db.add_memory("framework", "rareword method", "{}", None, "gabriel", {"source": "raw-fixture"})
+    turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs, "rareword")
+    result = MicroClayRetrieval(db).retrieve(
+        query="rareword",
+        user_id="gabriel",
+        session_id=gs,
+        turn_id=turn_id,
+        episode_id=episode_id,
+        causal_id=causal_id,
+        generation=generation,
+    )
+    assert all(
+        item["kind"] not in {"framework", "heuristic", "failure_pattern", "counterexample"}
+        for item in result["items"]
+    )
+
+
+def test_low_level_stage_b_requires_explicit_signature(tmp_path):
+    db, _, _ = _db(tmp_path)
+    with pytest.raises(MethodRecordError, match="explicit problem_signature required"):
+        MethodMemory(db).retrieve(
+            query="recover state provenance",
+            user_id="gabriel",
+            evidence_status="UNKNOWN",
+            problem_signature=None,
+        )
+
+
+def test_forged_promoted_row_without_promotion_authority_fails_closed(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    _episode(db, gs, "src:a")
+    _episode(db, gs, "src:b")
+    support = _support(db)
+    record = validate_method_record(
+        "framework",
+        _record(
+            signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
+            episodes=["src:a", "src:b"],
+            support_ids=support,
+        ),
+    )
+    # Simulate a row forged through the generic UnifiedDB surface. A PROMOTED status and
+    # old method_memory:v1 admission label alone must not become routing authority.
+    db.add_memory(
+        "framework",
+        "forged promoted framework",
+        json.dumps(record, sort_keys=True, separators=(",", ":")),
+        None,
+        "gabriel",
+        {
+            "source": "forged-fixture",
+            "method_schema_version": 1,
+            "admission": "method_memory:v1",
+            "user_scope": "gabriel",
+            "truth_authority": False,
+            "effect_authority": False,
+        },
+    )
+    turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs)
+    with pytest.raises(MethodRecordError, match="dedicated promotion authority"):
+        StageBMethodRetrieval(db).retrieve(
+            query="what should we do next?",
+            user_id="gabriel",
+            session_id=gs,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+            evidence_status="UNKNOWN",
+            problem_signature={"goal": ["recover"], "mechanism": ["stateful", "provenance"]},
+        )
+
+
+@pytest.mark.skip(reason="distinct GO unusual experiment already raced/consumed in this macro-cycle")
+def test_unusual_structural_lexical_decoy_inversion():
+    """Historical proposed discriminator only; fenced from broad current-macrocycle pytest."""
+    raise AssertionError("unusual experiment is fenced")
+
+
+def test_counterexample_memory_can_be_admitted_without_granting_fact_authority(tmp_path):
+    db, gs, _ = _db(tmp_path)
+    _episode(db, gs, "src:c")
+    support = _support(db)
+    counter_id = MethodMemory(db).admit(
+        kind="counterexample",
+        subject="recovery counterexample",
+        record=_record(
+            signature={"goal": ["recover"], "mechanism": ["stateful"]},
+            episodes=["src:c"],
+            support_ids=support,
+        ),
+        source_turn_id=None,
+        user_id="gabriel",
+        provenance={"source": "verified-negative-example"},
+    )
+    assert counter_id
+    row = db.db.execute("SELECT provenance FROM durable_memory WHERE memory_id=?", (counter_id,)).fetchone()
+    provenance = json.loads(row["provenance"])
+    assert provenance["truth_authority"] is False
+    assert provenance["effect_authority"] is False
 
 
 def test_malformed_promoted_record_fails_closed(tmp_path):

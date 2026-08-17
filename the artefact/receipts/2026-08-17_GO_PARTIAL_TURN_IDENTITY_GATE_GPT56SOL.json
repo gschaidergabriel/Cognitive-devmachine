@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-mechanism-receipt/v1",
+  "recorded_at": "2026-08-17T13:38:46+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "ClayVerse",
+  "canonical_main_observed_before_receipt": "120a3c6940cc8e6a44765259bc9d0236e50cc0f2",
+  "branch": "go/integration-microclay-meta-fusion-20260817-1326",
+  "branch_head_observed_before_receipt": "de5e441c0d5bff92c404a2f9bc978f42e8dd900e",
+  "tested_source_commit": "4ad25d2ebea55f46cfc8fa1a54eb63960be3a100",
+  "tested_file": "the artefact/clayverse/retrieval.py",
+  "tested_git_blob_sha": "ced1230891a37742da8174ead8e74b076f4c4a5c",
+  "source_delta_commits": [
+    "2e99789f53776897b3e33e0eca28c9f2f528abc9",
+    "4ad25d2ebea55f46cfc8fa1a54eb63960be3a100"
+  ],
+  "finding": {
+    "class": "CAUSAL_IDENTITY_MASKING",
+    "before": "When WorldAssembler.assemble received only part of query/turn/episode/causal/generation identity, any active turn replaced the entire supplied identity object. A conflicting caller-supplied turn field could therefore be silently discarded instead of rejected.",
+    "repair": "Partial identity is now compared field-by-field against the active canonical turn, missing values are filled only after all supplied fields match, conflicts raise StaleGeneration before retrieval, and partial identity with no active turn also fails closed.",
+    "product_contract": "automatic canonical turn lifecycle and causal identity must not silently substitute conflicting caller identity"
+  },
+  "regression_obligations_added": [
+    "matching partial active-turn identity is completed from the canonical active turn",
+    "conflicting partial turn_id fails before retrieval episode/feedback mutation",
+    "partial identity without an active turn fails closed"
+  ],
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "environment": {
+      "os": "Debian GNU/Linux 13 (trixie)",
+      "kernel": "Linux 6.18.35 x86_64",
+      "python": "3.13.5"
+    },
+    "source_binding": "Git blob SHA-1 recomputed locally using canonical git blob framing before execution and matched GitHub blob ced1230891a37742da8174ead8e74b076f4c4a5c.",
+    "scope": "focused exact-file mechanism gate; imported dependency classes were deterministic stubs so only retrieval.py partial-identity control flow is established",
+    "observed": [
+      "matching query+generation partial identity filled turn-A/episode-A/causal-A and reached evidence retrieval",
+      "conflicting turn-B raised StaleGeneration active_turn_identity:turn_id before evidence or method retrieval calls",
+      "partial query with no active turn raised StaleGeneration partial_turn_identity_without_active_turn before retrieval calls"
+    ],
+    "result": "PASS_AT_EXACT_FILE_MECHANISM_SCOPE",
+    "full_artifact_test_suite": "NOT_EXECUTED",
+    "oci_build_runtime": "NOT_EXECUTED",
+    "whole_product_pass": false
+  },
+  "execution_admission": {
+    "connected_vercel_sandbox_start_exec_primitive": false,
+    "installable_vercel_sandbox_plugin_found": false,
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_by_this_organ": false,
+    "current_turn_trigger_key": "2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+    "claim_path": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "claimant_experiment": "METHOD_REPLAY_TRIGGER_GATE_INVERSION",
+    "claim_status_observed": "CLAIMED",
+    "result_file_observed": "NOT_PRESENT_AT_RECEIPT_TIME",
+    "law": "slot already owned; no second unusual intervention executed"
+  },
+  "promotion": "SOURCE_CANDIDATE_WITH_FOCUSED_MECHANISM_EVIDENCE_ONLY",
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Rebase/fuse the active MicroClay lane onto current main, execute the actual focused pytest obligations with real store/microclay dependencies in an authorized exact-head isolated runtime, then adjacent lifecycle/restart/privacy regressions before any merge; OCI build/start/readiness/restart remains mandatory for whole-product evidence."
+}

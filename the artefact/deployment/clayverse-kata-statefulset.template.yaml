@@ -82,10 +82,12 @@ spec:
       # PVC mounts replace the image-owned /var/lib/clayverse and /workspace
       # directories. Bind them to the non-root runtime group without adding a
       # privileged/root ownership-repair path. Actual CSI behavior remains an
-      # executable final-acceptance gate.
+      # executable final-acceptance gate. Strict supplemental-group policy also
+      # forbids image /etc/group membership from silently widening process GIDs.
       securityContext:
         fsGroup: 10001
         fsGroupChangePolicy: "OnRootMismatch"
+        supplementalGroupsPolicy: Strict
         seccompProfile:
           type: RuntimeDefault
       containers:

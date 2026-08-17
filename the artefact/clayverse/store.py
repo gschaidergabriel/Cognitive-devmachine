@@ -95,12 +95,16 @@ class UnifiedDB:
         """Legacy test helper; product runtime uses advance_entity_generation()."""
         with self.tx() as db:
             db.execute("UPDATE sessions SET generation=generation+1, updated_at=? WHERE session_id=?",(time.time(),session_id)); return int(db.execute("SELECT generation FROM sessions WHERE session_id=?",(session_id,)).fetchone()[0])
-    def append_turn(self,session_id,user_id,role,content,*,resources=(),causal_refs=(),provenance=None):
+    def append_turn_in_tx(self,session_id,user_id,role,content,*,resources=(),causal_refs=(),provenance=None,expected_generation=None):
+        """Append one canonical turn inside the caller's existing write transaction."""
+        if not self.db.in_transaction: raise RuntimeError('append_turn_in_tx requires active transaction')
         self.assert_session_owner(session_id,user_id)
-        with self.tx() as db:
-            ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(session_id,)).fetchone()[0]); tid=str(uuid.uuid4()); now=time.time()
-            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(tid,session_id,user_id,ordinal,now,role,content,json.dumps(sorted(set(resources))),json.dumps(list(causal_refs)),json.dumps(provenance or {},sort_keys=True))); db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,session_id))
+        if expected_generation is not None: self.assert_live_generation(session_id,expected_generation)
+        db=self.db; ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(session_id,)).fetchone()[0]); tid=str(uuid.uuid4()); now=time.time()
+        db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(tid,session_id,user_id,ordinal,now,role,content,json.dumps(sorted(set(resources))),json.dumps(list(causal_refs)),json.dumps(provenance or {},sort_keys=True))); db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,session_id))
         return tid
+    def append_turn(self,session_id,user_id,role,content,*,resources=(),causal_refs=(),provenance=None,expected_generation=None):
+        with self.tx(): return self.append_turn_in_tx(session_id,user_id,role,content,resources=resources,causal_refs=causal_refs,provenance=provenance,expected_generation=expected_generation)
     def recent_turns(self,session_id,limit=20):
         rows=self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal DESC LIMIT ?",(session_id,limit)).fetchall(); return list(reversed(rows))
     def all_turns(self,session_id): return self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal",(session_id,)).fetchall()

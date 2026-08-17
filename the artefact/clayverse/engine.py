@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import threading
 import time
@@ -12,7 +11,7 @@ from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .memory import MemoryManager
 from .retrieval import WorldAssembler
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
 from .workspace import Workspace
 
 
@@ -65,6 +64,51 @@ class ClayVerseEngine:
             provenance["inference_receipt"] = receipt
         return provenance
 
+    def _begin_engine_turn(self, uid, sid, content, resources):
+        causal_id = str(uuid.uuid4())
+        with self.db.tx() as db:
+            if db.execute(
+                "SELECT 1 FROM active_turns WHERE session_id=?", (sid,)
+            ).fetchone() is not None:
+                raise RuntimeError("canonical session already has an active turn")
+            generation = self.db.session_generation(sid)
+            self.db.assert_live_generation(sid, generation)
+            tid = self.db.append_turn_in_tx(
+                sid,
+                uid,
+                "user",
+                content,
+                resources=resources,
+                provenance={"source": "clerk-terminal"},
+                expected_generation=generation,
+            )
+            ws = self.workspace.open(sid, tid, content, resources)
+            now = time.time()
+            db.execute(
+                "INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,effect_id,outcome,workspace_selected,started_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    sid,
+                    uid,
+                    tid,
+                    ws["episode_id"],
+                    causal_id,
+                    generation,
+                    json.dumps(sorted(set(resources))),
+                    None,
+                    None,
+                    0,
+                    now,
+                ),
+            )
+            # Memory extraction/compression are canonical writes derived from this user
+            # turn. Keep them under the same BEGIN IMMEDIATE generation transaction so
+            # recovery cannot advance the global generation between turn admission and
+            # durable-memory mutation. Any memory failure rolls back the entire admitted
+            # turn/workspace/active spine rather than leaving stale canonical memory.
+            self.memory.extract_explicit(tid, uid, content)
+            self.memory.compact(sid)
+        return tid, ws, generation, causal_id
+
     def ingest(self, clerk_subject, content, *, resources=None):
         # One persistent ClayVerse entity has one causal turn frontier. Requests may
         # arrive through multiple authenticated surfaces, but observation -> cognition
@@ -76,45 +120,74 @@ class ClayVerseEngine:
     def _ingest_locked(self, clerk_subject, content, *, resources=None):
         resources = resources or []
         uid, sid = self.identity.resolve(clerk_subject)
-        tid = self.db.append_turn(
-            sid,
-            uid,
-            "user",
-            content,
-            resources=resources,
-            provenance={"source": "clerk-terminal"},
+        tid, ws, reasoning_generation, causal_id = self._begin_engine_turn(
+            uid, sid, content, resources
         )
-        self.memory.extract_explicit(tid, uid, content)
-        self.memory.compact(sid)
 
         world = self.world.assemble(sid, resources)
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
-        ws = self.workspace.open(sid, tid, content, resources)
-        reasoning_generation = self.db.session_generation(sid)
         decision = self.inference.reason(world, content)
-        self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
+        selection = decision.get("selection", "respond")
+        eff = decision.get("effect")
+        if bool(eff) != (selection == "request_effect"):
+            raise RuntimeError("inference selection/effect intent mismatch")
 
         # SECURITY / CAUSALITY LAW:
-        # The model/provider response is canonicalized into UnifiedDB before any
-        # requested external/state-changing effect is allowed to reach EffectGate.
-        # This prevents a provider from becoming a direct action authority and makes
-        # the exact proposal observable under the same session/generation even if the
-        # subsequent effect is denied, fails, or crashes.
-        aid = self.db.append_turn(
-            sid,
-            uid,
-            "assistant",
-            decision.get("text", ""),
-            resources=resources,
-            provenance=self._inference_provenance(
-                decision, reasoning_generation, ws["episode_id"]
-            ),
-        )
+        # Provider inference may overlap recovery/generation advancement. Workspace
+        # selection and provider-response persistence therefore collapse atomically
+        # under the generation captured before the provider call. If that generation
+        # is stale, the whole post-inference mutation rolls back before EffectGate.
+        with self.db.tx() as db:
+            active = db.execute(
+                "SELECT * FROM active_turns WHERE session_id=?", (sid,)
+            ).fetchone()
+            if (
+                active is None
+                or active["causal_id"] != causal_id
+                or active["turn_id"] != tid
+                or active["episode_id"] != ws["episode_id"]
+                or int(active["generation"]) != int(reasoning_generation)
+            ):
+                raise StaleGeneration("engine_active_turn")
+            self.workspace.select_in_tx(ws["episode_id"], selection)
+            cur = db.execute(
+                "UPDATE active_turns SET workspace_selected=? WHERE session_id=? AND causal_id=?",
+                (1 if selection == "request_effect" else 0, sid, causal_id),
+            )
+            if cur.rowcount != 1:
+                raise StaleGeneration("engine_active_turn")
+            aid = self.db.append_turn_in_tx(
+                sid,
+                uid,
+                "assistant",
+                decision.get("text", ""),
+                resources=resources,
+                provenance=self._inference_provenance(
+                    decision, reasoning_generation, ws["episode_id"]
+                ),
+                expected_generation=reasoning_generation,
+            )
+            if not eff:
+                db.execute(
+                    "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
+                    (causal_id, ws["episode_id"], None, tid, None, time.time()),
+                )
+                cur = db.execute(
+                    "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
+                    (ws["episode_id"],),
+                )
+                if cur.rowcount != 1:
+                    raise RuntimeError("workspace did not terminalize after engine response")
+                cur = db.execute(
+                    "DELETE FROM active_turns WHERE session_id=? AND causal_id=?",
+                    (sid, causal_id),
+                )
+                if cur.rowcount != 1:
+                    raise StaleGeneration("engine_active_turn")
 
         effect_id = None
         outcome = None
         effect_notice_turn_id = None
-        eff = decision.get("effect")
         if eff:
             effect_id, outcome = self.effects.execute(
                 EffectRequest(
@@ -127,51 +200,62 @@ class ClayVerseEngine:
                 ),
                 ws["episode_id"],
             )
+            effect_causal_id = self.effects.causal_for_effect(effect_id)
+            if effect_causal_id != causal_id:
+                raise RuntimeError("effect re-entered through wrong causal identity")
 
-        if isinstance(outcome, dict) and outcome.get("denied") is True:
-            decision = dict(decision)
-            notice = (
-                "Requested action was not executed "
-                f"({outcome.get('reason', 'effect_denied')})."
-            )
-            prior = str(decision.get("text", "")).strip()
-            decision["text"] = f"{prior}\n\n{notice}" if prior else notice
-            effect_notice_turn_id = self.db.append_turn(
-                sid,
-                uid,
-                "system",
-                notice,
-                resources=resources,
-                causal_refs=[effect_id] if effect_id else [],
-                provenance={
-                    "source": "effect-gate",
-                    "phase": "effect-outcome-reentry",
-                    "reasoning_generation": int(reasoning_generation),
-                    "workspace_episode_id": ws["episode_id"],
-                },
-            )
-
-        causal_id = self.effects.causal_for_effect(effect_id) if effect_id else None
-        if causal_id is None:
-            causal_id = str(uuid.uuid4())
-            out_hash = (
-                hashlib.sha256(json.dumps(outcome, sort_keys=True).encode()).hexdigest()
-                if outcome is not None
-                else None
-            )
-            self.db.db.execute(
-                "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                (
-                    causal_id,
-                    ws["episode_id"],
-                    effect_id,
-                    tid,
-                    out_hash,
-                    self._causal_credit(outcome),
-                    1,
-                    time.time(),
-                ),
-            )
+            # The journal has durably re-entered the outcome. Terminalize the workspace
+            # and retire the ephemeral active row only under the same live generation.
+            # A crash or generation change before this commit intentionally leaves the
+            # selected workspace + active row for canonical Recovery.
+            with self.db.tx() as db:
+                self.db.assert_live_generation(sid, reasoning_generation)
+                active = db.execute(
+                    "SELECT causal_id FROM active_turns WHERE session_id=?", (sid,)
+                ).fetchone()
+                if active is None or active["causal_id"] != causal_id:
+                    raise StaleGeneration("engine_active_turn")
+                causal = db.execute(
+                    "SELECT effect_id FROM causal_episodes WHERE causal_id=? AND episode_id=?",
+                    (causal_id, ws["episode_id"]),
+                ).fetchone()
+                if causal is None or causal["effect_id"] != effect_id:
+                    raise RuntimeError("effect causal re-entry is missing or mismatched")
+                if isinstance(outcome, dict) and outcome.get("denied") is True:
+                    notice = (
+                        "Requested action was not executed "
+                        f"({outcome.get('reason', 'effect_denied')})."
+                    )
+                    effect_notice_turn_id = self.db.append_turn_in_tx(
+                        sid,
+                        uid,
+                        "system",
+                        notice,
+                        resources=resources,
+                        causal_refs=[effect_id],
+                        provenance={
+                            "source": "effect-gate",
+                            "phase": "effect-outcome-reentry",
+                            "reasoning_generation": int(reasoning_generation),
+                            "workspace_episode_id": ws["episode_id"],
+                        },
+                        expected_generation=reasoning_generation,
+                    )
+                    decision = dict(decision)
+                    prior = str(decision.get("text", "")).strip()
+                    decision["text"] = f"{prior}\n\n{notice}" if prior else notice
+                cur = db.execute(
+                    "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
+                    (ws["episode_id"],),
+                )
+                if cur.rowcount != 1:
+                    raise RuntimeError("workspace did not terminalize after effect re-entry")
+                cur = db.execute(
+                    "DELETE FROM active_turns WHERE session_id=? AND causal_id=?",
+                    (sid, causal_id),
+                )
+                if cur.rowcount != 1:
+                    raise StaleGeneration("engine_active_turn")
 
         self.graph.rebuild()
         return {

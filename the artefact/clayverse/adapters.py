@@ -90,11 +90,11 @@ class ClerkTokenVerifier:
 
 
 class ClaudeCodeInference:
-    """Claude Code cognitive boundary for ClayVerse.
+    """Tool-less Claude Code cognition boundary for ClayVerse.
 
-    It never uses a shell, never resumes hidden Claude sessions, and starts in plan
-    mode so cognition cannot bypass the canonical EffectGate. UnifiedDB/WorldAssembler
-    remains the supplied memory/world authority.
+    Cognition runs with auto-discovery disabled, all built-in tools disabled and no
+    Claude session persistence. UnifiedDB/WorldAssembler remains the sole durable
+    memory/world authority and the ClayVerse EffectGate owns all external actions.
     """
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
@@ -120,12 +120,13 @@ class ClaudeCodeInference:
         system = (
             "You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users. "
             "UnifiedDB is the authoritative state and the supplied WORLD is the only persisted context for this turn. "
-            "ClayGraph is a derived projection. Do not claim hidden memory. Do not execute tools or effects; the ClayVerse "
-            "EffectGate owns all external actions. Return the best direct response to the observation."
+            "ClayGraph is a derived projection. You have no tool authority in this cognition call. Return reasoning/output "
+            "only; any external action must be requested through the ClayVerse EffectGate."
         )
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
         args = [
             self.binary,
+            "--bare",
             "-p",
             prompt,
             "--output-format",
@@ -134,10 +135,13 @@ class ClaudeCodeInference:
             "1",
             "--permission-mode",
             "plan",
+            "--tools",
+            "",
+            "--no-session-persistence",
             "--append-system-prompt",
             system,
         ]
-        env = {**os.environ, "DISABLE_AUTOUPDATER": "1"}
+        env = {**os.environ, "DISABLE_AUTOUPDATER": "1", "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1"}
         with self._lock:
             try:
                 cp = subprocess.run(

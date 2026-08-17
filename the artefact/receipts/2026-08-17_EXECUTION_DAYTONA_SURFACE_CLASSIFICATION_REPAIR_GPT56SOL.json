@@ -1,0 +1,39 @@
+{
+  "schema": "clayverse.execution_surface_classification_repair/v1",
+  "observed_at": "2026-08-17T17:23:00+07:00",
+  "base_main": "e9631e32c4317d6a05e4522096c987b442900968",
+  "scope": "execution admission/state classification only",
+  "product_code_changed": false,
+  "whole_product_acceptance_changed": false,
+  "daytona": {
+    "owner_authorized_fallback": true,
+    "provider_interface": "documented direct HTTPS API/SDK/CLI",
+    "native_chatgpt_connector_required": false,
+    "current_chatgpt_native_connector_found": false,
+    "current_chatgpt_api_key_present": false,
+    "current_chatgpt_python_sdk_present": false,
+    "current_chatgpt_dns": {
+      "app.daytona.io": "resolution_failed",
+      "api.daytona.io": "resolution_failed",
+      "pypi.org": "resolution_failed"
+    },
+    "provider_contact_from_current_worker": false,
+    "provider_availability": "UNOBSERVED",
+    "account_credit_or_free_entitlement": "UNOBSERVED",
+    "runtime_credit": 0,
+    "classification": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT"
+  },
+  "classification_law": [
+    "NO_CHATGPT_DAYTONA_CONNECTOR != DAYTONA_UNAVAILABLE",
+    "NO_CHATGPT_DAYTONA_CONNECTOR != NO_DAYTONA_ACCOUNT_CREDIT",
+    "ORCHESTRATOR_NO_EGRESS != DAYTONA_PROVIDER_FAILURE",
+    "DAYTONA_API_KEY_NOT_PRESENT_IN_THIS_WORKER != DAYTONA_ACCOUNT_NOT_CONFIGURED"
+  ],
+  "vercel_context": {
+    "old_bound_head_component_mechanism_pass": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+    "exact_current_pr611_rerun": "BUILD_RATE_LIMITED_BEFORE_SANDBOX_START"
+  },
+  "next_rule": "Prefer Vercel when admitted and capable. When Daytona fallback is needed, dispatch directly from an authorized egress-capable controller using approved secret injection and an account-specific FREE_ONLY/no-paid-use gate.",
+  "evidence_boundary": "No Daytona runtime PASS or FAIL is claimed because no Daytona provider contact or sandbox execution occurred from this worker."
+}

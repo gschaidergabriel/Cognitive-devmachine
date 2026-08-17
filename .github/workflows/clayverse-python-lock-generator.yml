@@ -58,7 +58,10 @@ jobs:
 
           python --version
           python -m pip --version
-          python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.0'
+          # 7.5.0 predated pip-tools' declared/tested Python 3.13 support. Keep the
+          # generator tool inside the same Python-3.13 product base, but use a
+          # maintenance release that explicitly supports Python 3.13 and pip 25.2+.
+          python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.3'
           pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
             -o /tmp/requirements.lock.1 /tmp/requirements.in
           pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \

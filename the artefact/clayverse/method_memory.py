@@ -65,20 +65,24 @@ def canonical_problem_signature(value: Any) -> dict[str, tuple[str, ...]]:
         normalized = tuple(sorted({_WS.sub(" ", item.strip().lower()) for item in values}))
         if not normalized:
             raise MethodRecordError(f"problem_signature.{key} empty")
+        if len(normalized) != len(values):
+            raise MethodRecordError(f"problem_signature.{key} contains normalized duplicates")
         out[key] = normalized
     return dict(sorted(out.items()))
 
 
 def structural_similarity(query: dict[str, tuple[str, ...]], candidate: dict[str, tuple[str, ...]]) -> float:
-    """Facet-aware overlap with no free-text lexical fallback.
+    """Symmetric facet-aware overlap with no free-text lexical fallback.
 
-    Missing query facets count against a candidate. Matching values in the wrong facet do
-    not count, which protects against surface-similar structural decoys.
+    Missing facets on either side count against the match. Matching values in the wrong
+    facet do not count. This prevents a candidate from hiding contradictory or unrelated
+    structure behind a perfect match on only the query's named facets.
     """
     scores: list[float] = []
-    for facet, q_values in query.items():
+    for facet in sorted(set(query) | set(candidate)):
+        q_values = query.get(facet)
         c_values = candidate.get(facet)
-        if not c_values:
+        if not q_values or not c_values:
             scores.append(0.0)
             continue
         q = set(q_values)

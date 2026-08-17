@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:07:38+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "glm_token_inference_canonical_json_fail_closed_boundary",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "retained_pr": 629,
+  "retained_pr_branch": "gpt56sol/go-glm-token-boundary-20260817-2250",
+  "exact_git_blobs": {
+    "the artefact/clayverse/glm_inference.py": "e6903a36dd73d5ec36773e818183f0174aa54d45",
+    "the artefact/tests/test_glm_inference_boundary.py": "ce3059db2c1f5e2d6adc727ee4dc614fb34c503f"
+  },
+  "cheap_discriminator": {
+    "environment": "isolated non-production container",
+    "python": "3.13.5",
+    "observation": "stdlib json.dumps emits NaN by default for float('nan'), while allow_nan=False raises ValueError",
+    "implication": "an inference boundary claiming canonical JSON must opt into strict non-finite rejection rather than relying on json.dumps defaults"
+  },
+  "parallel_coordination": {
+    "same_path_write_attempt": "FAIL_CLOSED_409_CONFLICT",
+    "result": "NO_STALE_OVERWRITE",
+    "followup": "refetched retained PR branch and independently verified the newer shared fix instead of creating a second implementation path"
+  },
+  "source_contract_observed": {
+    "outbound_world_nonfinite": "FAIL_CLOSED_BEFORE_NETWORK",
+    "outbound_request_json": "allow_nan_false",
+    "inbound_provider_nonfinite": "FAIL_CLOSED_PARSE_CONSTANT",
+    "response_model_identity": "EXACT_REQUESTED_MODEL_REQUIRED",
+    "effect_authority": false,
+    "terminal_authority": false,
+    "state_authority": false
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed the two exact GitHub file contents in an isolated non-production container and verified each with git hash-object before execution",
+    "source_blob_match": true,
+    "test_blob_match": true
+  },
+  "deterministic_regression": {
+    "command": "python3 -m pytest -q tests/test_glm_inference_boundary.py",
+    "exit_code": 0,
+    "result": "19 passed in 0.04s"
+  },
+  "runtime_credit": {
+    "real_glm_token_call": 0,
+    "exact_full_pr_checkout": 0,
+    "exact_oci": 0,
+    "microvm": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "vercel_direct_chatgpt_lifecycle_actions": "NOT_EXPOSED",
+    "current_boot_rule": "Vercel bridge and Daytona fallback must be refreshed before treating a Vercel admission blocker as a global execution blocker",
+    "next_exact_gate": "refresh the retained Vercel/Daytona execution-path notices and run exact private-source regression plus OCI build/digest when an admitted isolated execution path is available"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes only minute-precision immutable message time and no shared uniquely reproducible request/turn id under the current atomic lease protocol",
+    "count_executed": 0
+  },
+  "non_claims": [
+    "no real GLM-token provider inference executed",
+    "no exact full PR checkout acceptance claimed",
+    "no exact OCI image build or image digest",
+    "no Clerk/browser/PTY acceptance",
+    "no VM/microVM runtime evidence",
+    "no whole-product PASS"
+  ]
+}

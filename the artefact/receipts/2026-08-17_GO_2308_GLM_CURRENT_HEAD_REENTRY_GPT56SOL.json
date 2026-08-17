@@ -1,0 +1,82 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:08:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "glm_token_inference_current_parallel_fusion_reentry",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "canonical_main_commit_observed_via_pr_base": "89a7287928afb2130818eb8b9b8b71f3fa965978",
+  "retained_pr": 629,
+  "exact_git_blobs": {
+    "the artefact/clayverse/glm_inference.py": "e6903a36dd73d5ec36773e818183f0174aa54d45",
+    "the artefact/tests/test_glm_inference_boundary.py": "ce3059db2c1f5e2d6adc727ee4dc614fb34c503f",
+    "the artefact/tests/test_glm_inference_model_identity.py": "8e673f1644c867351b7acffcfc45efdc1bdc700a",
+    "the artefact/tests/test_glm_token_ascii_fence.py": "b227c3a8627f3458560e7baea313d8117afd9585"
+  },
+  "parallel_fusion": {
+    "prior_model_identity_fence_preserved": true,
+    "additional_source_hardening": [
+      "non-finite world values rejected before network serialization",
+      "non-finite provider JSON rejected",
+      "provider response model is mandatory",
+      "provider response model must exactly equal requested model",
+      "Bearer token must be printable ASCII"
+    ],
+    "second_authority_created": false
+  },
+  "blob_reconstruction": {
+    "method": "reconstructed exact current GitHub file bytes in an isolated non-production container and verified each with git hash-object before execution",
+    "all_blobs_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "PYTHONPATH=. python -m pytest -q test_glm_inference_boundary.py test_glm_inference_model_identity.py test_glm_token_ascii_fence.py",
+    "exit_code": 0,
+    "result": "22 passed in 0.07s",
+    "py_compile": "PASS"
+  },
+  "external_primary_evidence": {
+    "source": "Zhipu AI / BigModel official API documentation",
+    "finding": "chat completion uses Bearer authorization at /api/paas/v4/chat/completions, accepts model glm-5.2, and returns a model field"
+  },
+  "authority_result": {
+    "unifieddb_remains_state_authority": true,
+    "glm_effect_authority": false,
+    "glm_terminal_authority": false,
+    "glm_secret_persistence_authority": false,
+    "response_model_drift": "FAIL_CLOSED",
+    "noncanonical_json": "FAIL_CLOSED"
+  },
+  "runtime_credit": {
+    "real_glm_token_call": 0,
+    "exact_full_pr_checkout": 0,
+    "exact_oci": 0,
+    "kata_microvm": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "vercel_sandbox_admission": "PASS_CREATED_ON_RETAINED_CONTROLLER",
+    "private_source_stage": "BLOCKED_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "credential_rule": "GITHUB_READ_TOKEN remains host-side Vercel Preview orchestration only and is never committed, logged, or forwarded into Sandbox",
+    "next_exact_gate": "after approved credential provisioning, refresh and bind current product-relevant main plus retained execution lanes once, stage verified private source bytes, execute exact regression plus OCI build/digest/runtime, then run the same accepted digest inside the required VM/microVM envelope"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "no uniquely reproducible shared immutable request/turn id is exposed for this go trigger",
+    "count_executed": 0
+  },
+  "supersession_note": "This receipt re-enters current parallel-strengthened #629 bytes. The earlier 23:04 receipt remains valid only for its exact older blobs and does not confer current-head runtime credit.",
+  "non_claims": [
+    "no real GLM-token network inference",
+    "no exact full PR checkout PASS",
+    "no exact OCI image build/digest",
+    "no packaged provider-switching runtime evidence",
+    "no VM/microVM runtime evidence",
+    "no whole-product PASS"
+  ]
+}

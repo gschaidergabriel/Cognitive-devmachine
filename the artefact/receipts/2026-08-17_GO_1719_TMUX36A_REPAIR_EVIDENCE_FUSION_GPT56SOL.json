@@ -1,0 +1,96 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-17T17:19:45+07:00",
+  "organ": "GPT-5.6 Sol",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_at_join": "4d7fd30e8b226dea51c1e7ce3e34ca4a3359e505",
+  "product_stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR603_REJOIN_PLUS_OLD_HEAD_LIVE_COMPONENT_PASS_EXACT_REJOINED_HEAD_BLOCKED",
+  "product_code_changed_on_main": false,
+  "whole_product_acceptance_changed": false,
+  "frontier": {
+    "retained_pr": 603,
+    "prior_pr_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "rejoined_pr_head": "891ce50c251b6adc1352ed8b7220d768d1d34937",
+    "rejoined_against_main": "37b36ba7af90b5337852a0c6daf21313b6a1d170",
+    "candidate_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "candidate_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "managed_tmux_policy_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "rejoin_compare": "ahead_by_7_behind_by_0_only_terminal_and_focused_test_diff_from_main"
+  },
+  "upstream_mechanism_check": {
+    "tmux_version_scope": "3.6a",
+    "source_file": "cmd-unbind-key.c",
+    "observation": "unbind-key -a returns error when the selected key table does not exist and emits the exact diagnostic 'table <name> doesn't exist' unless quiet; this supports the bounded diagnostic classifier while independent effective-state attestation remains mandatory"
+  },
+  "observations": [
+    {
+      "kind": "AUTHORIZED_VERCEL_SANDBOX_COMPONENT_RUN",
+      "deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+      "bridge_commit": "fff4b86192e15368b58584f1a026f3eb0d23aad6",
+      "bound_candidate_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+      "environment": {
+        "tmux": "3.6a-1.amzn2023.0.1",
+        "python": "3.13.13-1.amzn2023.0.2",
+        "sqlite": "3.40.0",
+        "network_during_candidate_test": "DENY_ALL"
+      },
+      "result": "LIVE_TMUX36A_IDEMPOTENCY_VERIFIED_FOR_BOUND_OLD_HEAD_COMPONENT_BYTES",
+      "semantic_assertions": [
+        "PREPOLICY_UPGRADE_REAPPLY=PASS",
+        "ALREADY_HARDENED_REAPPLY_IDEMPOTENT=PASS",
+        "NEW_SERVER_SECOND_SOURCE_IDEMPOTENT=PASS",
+        "DIRECT_MULTI_ARGV_FAKE_CLAUDE_LAUNCH=PASS",
+        "MIXED_OR_UNKNOWN_REAPPLY_DIAGNOSTIC_REJECTED_BY_ASSERTION",
+        "EMPTY_REAPPLY_DIAGNOSTIC_REJECTED_BY_ASSERTION"
+      ],
+      "scope_limits": [
+        "native Claude Code not tested; fake executable only",
+        "OCI product image not tested",
+        "identity dependency stub only",
+        "component PASS is not whole-product PASS"
+      ]
+    },
+    {
+      "kind": "PR603_CURRENT_MAIN_REJOIN",
+      "result": "REJOINED_WITHOUT_SECOND_SEMANTIC_PATH",
+      "detail": "Existing PR #603 branch was fast-forwarded to merge commit 891ce50c251b6adc1352ed8b7220d768d1d34937 with current-main ancestry while preserving only candidate terminal blob c185009f8af84e1288747d8352645777a36b2053 and focused test blob b6bb645dd07645f21ca2e5574f8392c9f13beafc as diffs."
+    },
+    {
+      "kind": "CURRENT_RETAINED_BRIDGE_REBIND",
+      "bridge_repo": "gschaidergabriel/Dr.-Unterweger",
+      "bridge_pr": 846,
+      "bridge_head": "797c735bfef9a49f3c7d25a34461ee9eea7dcd87",
+      "bound_candidate_head": "891ce50c251b6adc1352ed8b7220d768d1d34937",
+      "result": "EXACT_REJOINED_HEAD_STAGED_BUT_NOT_EXECUTED"
+    },
+    {
+      "kind": "EXACT_REJOINED_HEAD_EXECUTION_ADMISSION",
+      "candidate_head": "891ce50c251b6adc1352ed8b7220d768d1d34937",
+      "vercel_combined_status": "failure",
+      "vercel_status_target": "upgradeToPro=build-rate-limit",
+      "result": "BLOCKED_BEFORE_SANDBOX_START_ZERO_EXACT_HEAD_RUNTIME_CREDIT"
+    },
+    {
+      "kind": "DAYTONA_FALLBACK_STATE",
+      "result": "NO_CURRENT_EXECUTABLE_PROVIDER_PATH",
+      "detail": "Current canonical program state records no executable Daytona plugin/connector in this ChatGPT surface and prior controller DNS/SDK blockage before provider contact; no Daytona runtime credit is claimed."
+    }
+  ],
+  "counterhypothesis": "The byte-identical repair can still exhibit head-, packaging-, or integration-dependent failure after rejoin; therefore the old-head component PASS cannot be promoted to exact-current runtime PASS.",
+  "decision": "Keep PR #603 unmerged. Treat the old-head real-tmux run as strong component/mechanism evidence only. Require a fresh authorized isolated rerun explicitly bound to rejoined head 891ce50c251b6adc1352ed8b7220d768d1d34937 before promotion, then run adjacent regressions and proceed toward exact OCI/native-Claude/readiness/restart/concurrency gates.",
+  "unusual_experiment": {
+    "count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This cycle used regression/admission work only; no unique shared atomic unusual-experiment lease was safely available."
+  },
+  "prohibitions_observed": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_final_training": true
+  },
+  "next_exact_gate": "When Vercel admits another build, execute the already-rebound bridge head 797c735bfef9a49f3c7d25a34461ee9eea7dcd87 against PR #603 head 891ce50c251b6adc1352ed8b7220d768d1d34937 under real tmux 3.6a, require all live idempotency and fail-closed assertions, and only then consider merging PR #603 before OCI/native-Claude/readiness/restart/concurrency acceptance."
+}

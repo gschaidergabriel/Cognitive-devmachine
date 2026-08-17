@@ -1,0 +1,86 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "8155ae9ec5303b0d720fefbf2f7a8d30a63d4134",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_pr_head_observed": "4dc90f07a6b22147db6e7ae9cf5439ebe8d05e02",
+  "execution_classification": "PRODUCT_SOURCE_DELTA_COMMITTED_EXECUTION_BLOCKED_BEFORE_SANDBOX",
+  "sandbox_execution": false,
+  "product_code_changed": true,
+  "coordination": {
+    "parallel_registry_commit_detected": true,
+    "duplicate_create_attempt": "GitHub create_file for claymachine/hostcall_abi.py returned 422 because a parallel organ had already created the canonical registry; no overwrite was performed.",
+    "fusion_rule": "continued from the existing shared registry rather than creating a competing ABI authority"
+  },
+  "source_delta": {
+    "canonical_registry": "claymachine/hostcall_abi.py",
+    "first_real_bytes_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "call_id": 3,
+    "capability": "linux.process.spawn.v0",
+    "effect_class": "EXTERNAL_COMMUNICATION",
+    "payload_semantics": "exact opaque HostProcessReceipt.stdout bytes; no decoding, transcoding, parsing or hidden shell semantics",
+    "adapter": "HostProcessVMHost exposes stdout only for an already-completed admitted request_id and fails closed for unknown receipts or capability/type drift.",
+    "lowering": "executable_ir_adapter derives admitted hostcall signatures from the shared hostcall ABI registry.",
+    "regression_source": "tests/clay_cm_term_stdout_bytes_gate.py",
+    "binary_probe": "expected exact bytes 00 ff emitted by /usr/bin/printf without an implicit shell",
+    "new_unusual_experiment_count": 0
+  },
+  "exact_product_commits_in_this_slice": [
+    "ec198e1025daa6d40efbeef62ab314b239ea5f85",
+    "b8edb23fb0ec054321bf20142c629163bfb70bfa",
+    "6d6417673cd43169ede3cbebec50daf126eb287c",
+    "4dc90f07a6b22147db6e7ae9cf5439ebe8d05e02"
+  ],
+  "adversarial_review": {
+    "supported_source_mechanism": "A real bounded process stdout snapshot can now be named by TypedIR as Bytes and handed back through the existing serialized ClayVM path without a test-only echo hostcall.",
+    "strongest_remaining_counterhypothesis": "Host adapter checks can still become semantic authority because ClayVM OP_HOSTCALL itself has not yet been changed to validate every call's args and host return using contract_for_call_id.",
+    "falsifier_required": "Generic ClayVM OP_HOSTCALL must use the same immutable registry to normalize/validate args and return values; force wrong legacy Int return and wrong stdout Bytes return and observe VM-boundary traps before caller-frame reentry.",
+    "status": "RETAIN_IMPLEMENTATION_CANDIDATE_NOT_PROMOTED_TO_EXECUTABLE_VERIFIED"
+  },
+  "current_execution_blocker": {
+    "exact_head": "4dc90f07a6b22147db6e7ae9cf5439ebe8d05e02",
+    "github_vercel_status": "failure",
+    "provider_target": "upgradeToPro=build-rate-limit",
+    "exact_head_vercel_deployment_observed": false,
+    "sandbox_started": false,
+    "interpretation": "Provider build-rate limiting occurred before an exact-head Vercel Sandbox start. This is neither executable PASS nor code FAIL."
+  },
+  "last_verified_entityos_scope": {
+    "product_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "deployment": "dpl_7CZDVst5XGJp67fKs1EeT9KNwiwg",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "do not generalize to descendants or whole EntityOS acceptance"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_product_delta": [
+    "refresh PR787 head and preserve parallel ancestry",
+    "make generic ClayVM OP_HOSTCALL consume contract_for_call_id for per-call argument and return validation instead of blanket Int-only argument semantics",
+    "retain exact legacy CLAYVM/1 behavior while admitting the stdout Int->Bytes result contract",
+    "run source/type/effect/signature mismatch, wrong host return, capability denial, unknown receipt, binary stdout and legacy compatibility regressions only in an actually-started exact-head Vercel Sandbox",
+    "if carried into EntityOS, run exact one-file twin-build/runtime/no-host-Python/relocation gates and persist exact digest evidence"
+  ],
+  "claims": {
+    "shared_registry_source_exists": true,
+    "stdout_bytes_contract_source_exists": true,
+    "stdout_bytes_host_adapter_source_exists": true,
+    "binary_stdout_regression_source_exists": true,
+    "generic_clayvm_registry_enforcement_complete": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

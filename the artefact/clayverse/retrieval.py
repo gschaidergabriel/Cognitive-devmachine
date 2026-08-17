@@ -1,17 +1,26 @@
 from __future__ import annotations
 import json
+from .method_stageb import AdmittedMethodRetriever
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded Stage-A evidence assembly plus optional admitted structural Stage B.
+
+    Raw prompt text is never used as the canonical Stage-B method query. A caller must
+    provide an explicit `method_query` that has the typed structural query shape enforced
+    by `AdmittedMethodRetriever`. The normal TurnLifecycle currently provides no such
+    object, so Stage B stays fail-closed until structural-signature derivation/admission is
+    wired as a separate canonical subsystem.
+    """
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.methods = AdmittedMethodRetriever(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -49,6 +58,7 @@ class WorldAssembler:
         episode_id=None,
         causal_id=None,
         generation=None,
+        method_query=None,
     ):
         session = self.db.db.execute(
             "SELECT user_id FROM sessions WHERE session_id=?", (session_id,)
@@ -59,7 +69,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Neither Stage A nor Stage B may broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -79,6 +89,13 @@ class WorldAssembler:
         retrieval_receipt = {
             "mode": "LEGACY_COMPATIBILITY",
             "status": "UNKNOWN",
+            "fact_status": "UNKNOWN",
+            "method_route": "NOT_EVALUATED",
+            "method_status": "NOT_EVALUATED",
+            "method_count": 0,
+            "counterevidence_count": 0,
+            "method_truth_authority": False,
+            "method_effect_authority": False,
             "truth_authority": False,
             "effect_authority": False,
         }
@@ -109,30 +126,48 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = dict(result["receipt"])
+            fact_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
+            retrieval_receipt.update({
+                "fact_status": fact_status,
+                "method_route": "DEFERRED_NO_ADMITTED_SIGNATURE" if method_query is None else "STRUCTURAL_ADMISSION_PENDING",
+                "method_status": "NOT_EVALUATED",
+                "method_count": 0,
+                "counterevidence_count": 0,
+                "method_truth_authority": False,
+                "method_effect_authority": False,
+            })
 
-            # Start with the strongest safe Stage-B trigger. More nuanced UNDERCOVERED,
-            # strategy and novelty triggers require explicit later calibration.
-            if retrieval_receipt.get("status") == "UNKNOWN":
-                methods = self.microclay.retrieve_methods(
-                    query=str(supplied["query"]),
+            if method_query is not None:
+                methods = self.methods.retrieve(
+                    problem_query=method_query,
                     user_id=user_id,
                     session_id=session_id,
                     turn_id=str(supplied["turn_id"]),
                     episode_id=str(supplied["episode_id"]),
                     causal_id=str(supplied["causal_id"]),
                     generation=int(supplied["generation"]),
+                    fact_status=fact_status,
                 )
-                method_context = [
-                    item for item in methods["items"] if item.get("kind") != "counterexample"
-                ]
-                counterevidence = [
-                    item for item in methods["items"] if item.get("kind") == "counterexample"
-                ]
-                retrieval_receipt["method"] = methods["receipt"]
+                method_context = list(methods["items"])
+                counterevidence = list(methods["counterevidence"])
+                method_receipt = methods["receipt"]
+                retrieval_receipt.update({
+                    "method_route": str(method_receipt["route"]),
+                    "method_status": str(method_receipt["method_status"]),
+                    "method_count": int(method_receipt["selected_count"]),
+                    "counterevidence_count": int(method_receipt["counterevidence_count"]),
+                    "method_policy_mode": str(method_receipt["policy_mode"]),
+                    "method_query_schema": str(method_receipt["query_schema"]),
+                    "method_truth_authority": False,
+                    "method_effect_authority": False,
+                })
+
+            if fact_status != "PRESENT":
                 unknowns = [{
                     "status": "FACT_UNKNOWN",
                     "query_sha256": retrieval_receipt.get("query_sha256"),
-                    "method_present": bool(method_context or counterevidence),
+                    "method_present": bool(method_context),
+                    "fact_status_unchanged": True,
                 }]
         else:
             # Compatibility path for legacy tests/non-product callers with no active

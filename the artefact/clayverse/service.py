@@ -7,9 +7,8 @@ import os
 import sys
 from urllib.parse import urlsplit
 
-from .adapters import ClaudeCodeInference
 from .agency import AgencyState
-from .autonomy import AutonomyDaemon
+from .autonomy import AutonomyDaemon, UserHomeClaudeInferenceRouter
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
@@ -244,11 +243,12 @@ def main():
 
     autonomy = None
     if autonomy_enabled:
-        # The daemon gets its own DB connection. ClaudeCodeInference has cognition
-        # authority only; all state-changing/external proposals still cross EffectGate.
+        # The daemon gets its own DB connection and headless cognition router. The
+        # router derives HOME only from canonical goal ownership, reusing each user's
+        # authenticated terminal identity without attaching to or driving tmux.
         autonomy = AutonomyDaemon(
             state_root,
-            lambda: ClaudeCodeInference(),
+            lambda: UserHomeClaudeInferenceRouter(state_root),
             entityos_bridge=entityos_bridge,
         )
         autonomy.start()
@@ -271,6 +271,7 @@ def main():
         "autonomy": {
             "enabled": autonomy_enabled,
             "mode": agency.policy()["autonomy_mode"],
+            "cognition_home_scope": "canonical_goal_owner",
             "cycle_interval_seconds": agency.policy()["cycle_interval_seconds"],
             "max_steps_per_cycle": agency.policy()["max_steps_per_cycle"],
             "max_failed_retries_per_milestone": agency.policy()["max_failed_retries_per_milestone"],

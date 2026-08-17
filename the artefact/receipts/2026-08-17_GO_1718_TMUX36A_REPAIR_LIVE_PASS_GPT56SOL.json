@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseBoundedExecutionReceipt/v1",
+  "timestamp": "2026-08-17T17:18:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "EXACT_COMPONENT_LIVE_RUNTIME_PASS",
+  "whole_product_pass": false,
+  "product": "ClayVerse single-container",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "repair_pr": 603,
+  "repair_rejoined_head_before_receipt": "6793b45f132f6e4ffd916038332d547dc76f6363",
+  "canonical_main_rejoined": "4d7fd30e8b226dea51c1e7ce3e34ca4a3359e505",
+  "execution_bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+  "execution_bridge_pr": 846,
+  "vercel_deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+  "vercel_bridge_commit_observed": "fff4b86192e15368b58584f1a026f3eb0d23aad6",
+  "source_binding": {
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "managed_tmux_policy_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "candidate_component_bytes_exact": true,
+    "branch_head_label_in_execution_summary": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "scope_note": "The execution summary carried an older PR603 head label, but the executed terminal and policy Git blobs are byte-exact and unchanged in the rejoined PR603 branch. Credit is therefore component-byte scoped, not an exact-current full-branch execution claim."
+  },
+  "environment": {
+    "provider": "Vercel Sandbox",
+    "tmux": "3.6a-1.amzn2023.0.1",
+    "python": "3.13.13-1.amzn2023.0.2",
+    "sqlite": "3.40.0",
+    "network_during_product_probe": "DENY_ALL",
+    "sandbox_stopped": true
+  },
+  "observed_pass_markers": [
+    "PREPOLICY_UPGRADE_REAPPLY=PASS",
+    "ALREADY_HARDENED_REAPPLY_IDEMPOTENT=PASS",
+    "NEW_SERVER_SECOND_SOURCE_IDEMPOTENT=PASS",
+    "DIRECT_MULTI_ARGV_FAKE_CLAUDE_LAUNCH=PASS"
+  ],
+  "adversarial_predicate_checks": {
+    "expected_missing_key_table_diagnostics": "ACCEPTED",
+    "mixed_expected_plus_unknown_diagnostic": "REJECTED",
+    "empty_nonzero_diagnostic": "REJECTED"
+  },
+  "not_tested": [
+    "native Claude Code executable",
+    "exact ClayVerse OCI image build/digest",
+    "whole-container startup/readiness",
+    "real Clerk JWT/browser/WebSocket PTY path",
+    "managed hook lifecycle end-to-end",
+    "restart/recovery/concurrency whole-product path"
+  ],
+  "unusual_experiment": {
+    "count_added": 0,
+    "reason": "Regression-only rerun of the already-defined real-tmux falsifier; no new unusual experiment was consumed."
+  },
+  "decision": "The tmux-3.6a reapply defect is resolved at exact component-byte runtime scope. Rejoin current main, preserve the same repair/test bytes, synchronize living state, and promote only with the evidence boundary explicit. Whole ClayVerse acceptance remains IN_PROGRESS.",
+  "next_gate": "Promote the rejoined tmux repair, then advance to exact OCI/native-Claude/readiness/restart/concurrency acceptance on an authorized isolated execution surface."
+}

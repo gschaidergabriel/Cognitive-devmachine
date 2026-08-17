@@ -87,8 +87,15 @@ class EffectJournal:
     def complete_verified(self,effect_id,outcome,session_id,user_id,generation,lease:Lease|None=None):
         stale=None
         with self.db.tx() as db:
-            try: self._assert_generation_tx(db,session_id,user_id,generation)
-            except (StaleGeneration,PermissionError) as exc: stale=exc
+            effect=db.execute('SELECT user_id,requested_generation FROM effects WHERE effect_id=?',(effect_id,)).fetchone()
+            if not effect: raise KeyError(effect_id)
+            if effect['user_id']!=user_id:
+                raise PermissionError('effect owner mismatch')
+            if int(effect['requested_generation'])!=int(generation):
+                stale=StaleGeneration(effect_id)
+            if stale is None:
+                try: self._assert_generation_tx(db,session_id,user_id,generation)
+                except (StaleGeneration,PermissionError) as exc: stale=exc
             if stale is None and lease is not None:
                 try: self._assert_lease_tx(db,lease)
                 except StaleGeneration as exc: stale=exc

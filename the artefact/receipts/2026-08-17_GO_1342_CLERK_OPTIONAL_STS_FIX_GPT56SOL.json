@@ -1,0 +1,49 @@
+{
+  "schema": "clayverse-go-auth-regression-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "source_bootstrap": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER",
+  "unusual_experiment": {"executed_by_this_work": false,"reason": "No canonical unusual-experiment lease was available for this minute-only trigger identity; all work here is deterministic regression/admission work."},
+  "observed_regression": {
+    "canonical_base": "7d925a2529ecbd5cf29fffcbc0f13147307e0ada",
+    "canonical_clerk_auth_blob_before": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "behavior_before": "ClerkTokenVerifier rejected every otherwise-valid session token whose optional sts claim was absent because claims.get('sts') had to equal 'active'.",
+    "upstream_contract": ["https://clerk.com/docs/guides/sessions/manual-jwt-verification","https://clerk.com/docs/guides/sessions/session-tokens","https://clerk.com/docs/reference/backend/types/auth-object"],
+    "upstream_observation": "Clerk documents sts as an optional session-status check used to reject pending organization sessions; published authenticated-session examples omit sts."
+  },
+  "candidate_fix": {
+    "clerk_auth_blob": "bb65e0aadbc7ce3f538dc2c9178bd044c49c92e5",
+    "session_authority_test_blob": "e1b4c3c06903c6841d6cec02ab789dd34587ae7a",
+    "law": "absent sts is admitted after normal JWT/signature/time/issuer/authorized-party/session/subject verification; explicit active is admitted; any explicitly non-active sts remains fail-closed; impersonated act remains rejected"
+  },
+  "isolated_mechanism_evidence": {
+    "environment": "isolated non-networked analysis container",
+    "exact_blob_binding": {"clerk_auth": "bb65e0aadbc7ce3f538dc2c9178bd044c49c92e5","test_clerk_session_authority": "e1b4c3c06903c6841d6cec02ab789dd34587ae7a"},
+    "focused_pytest": "7/7 PASS",
+    "py_compile": "PASS",
+    "signed_rs256_harness": "PASS: sts absent + active admitted; pending/ended/abandoned/empty and impersonation rejected",
+    "classification": "EXACT_BLOB_MECHANISM_EVIDENCE_ONLY"
+  },
+  "vercel_sandbox_attempt": {
+    "execution_path": "Dr.-Unterweger Git preview -> @vercel/sandbox/OIDC -> isolated microVM",
+    "staging_branch": "chatgpt/go-clerk-sts-fix-vercel-20260817-1400",
+    "staging_head": "8fe3df45bc15562b2b1b7d8000e7a4d95224bd34",
+    "staged_clerk_auth_blob": "bb65e0aadbc7ce3f538dc2c9178bd044c49c92e5",
+    "sandbox_runtime_requested": "python3.13",
+    "persistent_requested": false,
+    "network_policy_requested": "deny-all",
+    "github_vercel_status": "failure",
+    "status_target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "sandbox_command_executed": false,
+    "test_credit": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT"
+  },
+  "acceptance": {"source_improvement": true,"mechanism_support": true,"exact_current_vercel_runtime_verified": false,"real_clerk_browser_verified": false,"whole_clayverse_pass": false},
+  "next_gate": "Merge only after review against current main. When Vercel preview admission opens, refresh exact current head and run the Clerk verifier/renewable WebSocket auth lane in Vercel Sandbox, then perform real Clerk browser/JWT/key-rotation acceptance as part of the whole container path.",
+  "forbidden_fallbacks_not_used": ["VPS","self-hosted VPS runner","production host","Together API"]
+}

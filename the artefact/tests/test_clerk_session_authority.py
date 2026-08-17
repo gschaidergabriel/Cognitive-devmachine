@@ -22,15 +22,24 @@ def _claims(**extra):
         "nbf": 1,
         "exp": 4_000_000_000,
         "v": 2,
-        "sts": "active",
     }
     claims.update(extra)
     return claims
 
 
-def test_regular_canonical_session_claims_are_admitted(monkeypatch):
+def test_regular_canonical_session_without_optional_status_is_admitted(monkeypatch):
     monkeypatch.setattr("clayverse.clerk_auth.jwt.decode", lambda *args, **kwargs: _claims())
-    assert _verifier().verify("signed-token")["sub"] == "user_gabriel"
+    claims = _verifier().verify("signed-token")
+    assert claims["sub"] == "user_gabriel"
+    assert "sts" not in claims
+
+
+def test_explicit_active_clerk_session_status_is_admitted(monkeypatch):
+    monkeypatch.setattr(
+        "clayverse.clerk_auth.jwt.decode",
+        lambda *args, **kwargs: _claims(sts="active"),
+    )
+    assert _verifier().verify("signed-token")["sts"] == "active"
 
 
 def test_impersonated_clerk_session_is_rejected(monkeypatch):
@@ -48,19 +57,11 @@ def test_impersonated_clerk_session_is_rejected(monkeypatch):
         _verifier().verify("signed-token")
 
 
-@pytest.mark.parametrize("status", ["pending", "ended", "abandoned"])
-def test_non_active_clerk_session_is_rejected(monkeypatch, status):
+@pytest.mark.parametrize("status", ["pending", "ended", "abandoned", ""])
+def test_explicit_non_active_clerk_session_status_is_rejected(monkeypatch, status):
     monkeypatch.setattr(
         "clayverse.clerk_auth.jwt.decode",
         lambda *args, **kwargs: _claims(sts=status),
     )
-    with pytest.raises(AuthenticationError, match="not active"):
-        _verifier().verify("signed-token")
-
-
-def test_missing_clerk_session_status_is_rejected(monkeypatch):
-    claims = _claims()
-    claims.pop("sts")
-    monkeypatch.setattr("clayverse.clerk_auth.jwt.decode", lambda *args, **kwargs: claims)
     with pytest.raises(AuthenticationError, match="not active"):
         _verifier().verify("signed-token")

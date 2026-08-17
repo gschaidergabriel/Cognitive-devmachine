@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
     CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256} \
     PORT=3000 \
-    DISABLE_AUTOUPDATER=1 \
+    DISABLE_UPDATES=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
 # Keep the baseline OS package surface small. Browser xterm and native Claude Code
@@ -54,7 +54,7 @@ RUN LOCK_SCHEMA="$(python -c 'import json; print(json.load(open("/opt/entityos/e
  && chmod 0444 /opt/entityos/entityos.lock.json \
  && chmod 0444 /opt/clayverse/runtime/CLAUDE.md \
  && chmod 0555 /opt/clayverse/runtime/deny-shell
-RUN useradd --system --uid 10001 --create-home --shell /bin/bash clayverse \
+RUN useradd --system --uid 10001 --create-home --shell /opt/clayverse/runtime/deny-shell clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R root:root /opt/clayverse \
  && chmod -R a-w /opt/clayverse \

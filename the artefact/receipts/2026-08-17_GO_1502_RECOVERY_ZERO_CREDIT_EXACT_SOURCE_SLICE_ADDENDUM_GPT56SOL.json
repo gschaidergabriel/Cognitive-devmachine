@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "merged_recovery_zero_credit_exact_current_source_slice_regression_addendum",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "canonical_main_bound_before_write": "2c8bf61e89d22183cfdf80c4649c2c98d1bbc1be",
+  "extends_receipt": "the artefact/receipts/2026-08-17_GO_1502_RECOVERY_ZERO_CREDIT_EXACT_BLOB_GPT56SOL.json",
+  "canonical_delta": {
+    "merged_pull_request": 552,
+    "merge_commit": "2ba39e7b338a34a71d43a8d0f235a2b7928a34ca",
+    "recovery_path": "the artefact/clayverse/recovery.py",
+    "recovery_zero_credit_boundary": "missing canonical causal row may recover outcome identity but may not remint positive learning credit"
+  },
+  "exact_source_slice": {
+    "the artefact/clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "the artefact/clayverse/identity.py": "c3b8ecba0942c722d08efbf03e57d71c3a4f5cf3",
+    "the artefact/clayverse/workspace.py": "2f3142a4f7695fa58521b27321e9759d314dd736",
+    "the artefact/clayverse/effect_journal.py": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "the artefact/clayverse/recovery.py": "66540a9d2d20860fed015033da8013965ef830be",
+    "the artefact/tests/test_recovery_effect_receipt_identity.py": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
+    "the artefact/tests/test_restart_recovery.py": "b9c21818485f9aaeea693441dcf23e832d1417fc",
+    "the artefact/tests/test_effect_credit_authority.py": "88a802b02f62029e8be24d0adad756c3242c2c57"
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "network_dependency": "none",
+    "minimal_dependency_stubs": false,
+    "all_imported_clayverse_modules_for_these_tests_were_exact_repository_bytes": true,
+    "blob_identity_recomputed_with_git_hash_object_before_execution": true,
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_recovery_effect_receipt_identity.py tests/test_restart_recovery.py tests/test_effect_credit_authority.py",
+    "exit_code": 0,
+    "observed_stdout": "............. [100%] 13 passed in 0.54s",
+    "observed_stderr": "",
+    "tests_passed": 13,
+    "tests_failed": 0
+  },
+  "covered_contracts": [
+    "structurally canonical redacted receipt reuses raw-outcome digest identity",
+    "malformed/untyped receipt becomes UNKNOWN and non-rewarding",
+    "structurally canonical forged safe fields cannot remint positive recovery credit",
+    "live verified entityos.exec reward remains distinct from reconstruction reward authority",
+    "verified live EffectJournal receipt -> causal-row loss -> recovery preserves exact outcome hash with credit 0.0",
+    "recovery is idempotent on second pass",
+    "selected effect without persisted outcome is not replayed",
+    "denied effect remains zero-credit",
+    "multiple effect records fail closed",
+    "state.noop remains non-rewarding",
+    "live effect-credit helper law remains unchanged for admitted live cases"
+  ],
+  "counterevidence_and_adjudication": {
+    "earlier_old_fixture_failure": "An older restart regression persisted raw outcome JSON directly through UnifiedDB.record_effect and conflicted with the new strict redacted receipt decoder. Current canonical main replaced that fixture with the actual EffectJournal persistence path before this run. No compatibility claim for arbitrary noncanonical raw-outcome rows is inferred.",
+    "global_unusual_experiment": "already consumed by recovery_receipt_semantic_forgery_discriminator; no second unusual experiment executed",
+    "github_actions": "zero-step/runner admission failures remain zero runtime test credit",
+    "vercel": "execution bridge is proven available in principle, but no new Sandbox was started for this addendum because account-specific remaining included allowance is not exposed/verified under FREE_ONLY"
+  },
+  "result": {
+    "source_in_main": true,
+    "zero_credit_recovery_mechanism": "MECHANISM_SUPPORTED_BY_EXACT_CURRENT_SOURCE_SLICE",
+    "focused_plus_adjacent_source_slice": "PASS_13_OF_13",
+    "full_repository_pytest": "UNOBSERVED",
+    "exact_oci_build": "UNOBSERVED",
+    "exact_oci_restart_runtime": "UNOBSERVED",
+    "real_clerk_browser_pty_claude_path": "UNOBSERVED_FOR_THIS_DELTA",
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "when FREE_ONLY execution admission can be established, run the same then-current recovery/effect/generation batch in an actually-started Vercel Sandbox with exact source binding and stdout+stderr capture",
+    "then include the repaired recovery path in exact OCI build/start/readiness/restart evidence",
+    "continue whole-product Clerk/PTY/Claude/MicroClay/effect/recovery acceptance separately"
+  ],
+  "prohibitions_respected": {
+    "vps_testing": true,
+    "self_hosted_vps_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_training_started": false
+  }
+}

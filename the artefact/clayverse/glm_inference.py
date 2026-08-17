@@ -11,6 +11,7 @@ from urllib.parse import urlsplit
 DEFAULT_GLM_ENDPOINT = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 DEFAULT_GLM_MODEL = "glm-5.2"
 _MAX_WORLD_JSON_CHARS = 600_000
+_MAX_OBSERVATION_CHARS = 100_000
 _MAX_RESPONSE_BYTES = 2_000_000
 _MAX_TOKEN_CHARS = 16_384
 
@@ -99,11 +100,14 @@ class GLMTokenInference:
         self._api_token = _validated_token(
             api_token if api_token is not None else os.environ.get("GLM_API_TOKEN", "")
         )
-        timeout = float(
-            timeout_seconds
-            if timeout_seconds is not None
-            else os.environ.get("CLAYVERSE_GLM_TIMEOUT_SECONDS", "120")
-        )
+        try:
+            timeout = float(
+                timeout_seconds
+                if timeout_seconds is not None
+                else os.environ.get("CLAYVERSE_GLM_TIMEOUT_SECONDS", "120")
+            )
+        except (TypeError, ValueError) as exc:
+            raise GLMInferenceError("GLM timeout is invalid") from exc
         if not (0.1 <= timeout <= 600.0):
             raise GLMInferenceError("GLM timeout is outside the admitted bound")
         self.timeout_seconds = timeout
@@ -116,14 +120,21 @@ class GLMTokenInference:
         )
 
     def _payload(self, world: Any, observation: str) -> bytes:
-        if not isinstance(observation, str) or not observation:
-            raise GLMInferenceError("GLM observation must be non-empty text")
-        world_json = json.dumps(
-            world,
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-        )
+        if (
+            not isinstance(observation, str)
+            or not observation
+            or len(observation) > _MAX_OBSERVATION_CHARS
+        ):
+            raise GLMInferenceError("GLM observation is outside the admitted text bound")
+        try:
+            world_json = json.dumps(
+                world,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+        except (TypeError, ValueError) as exc:
+            raise GLMInferenceError("assembled world is not serializable") from exc
         if len(world_json) > _MAX_WORLD_JSON_CHARS:
             raise GLMInferenceError("assembled world exceeds GLM inference boundary")
         system = (
@@ -161,11 +172,11 @@ class GLMTokenInference:
             with self._opener.open(request, timeout=self.timeout_seconds) as response:
                 raw = response.read(_MAX_RESPONSE_BYTES + 1)
         except urllib.error.HTTPError as exc:
-            # Do not surface a provider response body: it may contain request-derived
-            # material and is not needed to classify this fail-closed boundary.
-            raise GLMInferenceError(f"GLM inference failed with HTTP status {exc.code}") from exc
-        except (urllib.error.URLError, TimeoutError, OSError) as exc:
-            raise GLMInferenceError("GLM inference transport failed") from exc
+            # Suppress the provider exception chain entirely: a future transport or
+            # provider implementation must not smuggle response/request material into logs.
+            raise GLMInferenceError(f"GLM inference failed with HTTP status {exc.code}") from None
+        except (urllib.error.URLError, TimeoutError, OSError):
+            raise GLMInferenceError("GLM inference transport failed") from None
         if len(raw) > _MAX_RESPONSE_BYTES:
             raise GLMInferenceError("GLM response exceeds admitted size")
         try:
@@ -181,8 +192,11 @@ class GLMTokenInference:
         if not isinstance(text, str) or not text.strip():
             raise GLMInferenceError("GLM response content is invalid")
         response_model = envelope.get("model")
-        if not isinstance(response_model, str) or not response_model:
+        if response_model is None:
             response_model = self.model
+        elif not isinstance(response_model, str):
+            raise GLMInferenceError("GLM response model identifier is invalid")
+        response_model = _validated_model(response_model)
         return {
             "text": text,
             "selection": "respond",

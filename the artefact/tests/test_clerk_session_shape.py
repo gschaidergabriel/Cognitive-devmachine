@@ -55,3 +55,18 @@ def test_clerk_boundary_accepts_session_bound_token_and_rejects_custom_jwt_shape
     empty_sid = _claims(now, sid="")
     with pytest.raises(AuthenticationError):
         verifier.verify(jwt.encode(empty_sid, private, algorithm="RS256"))
+
+
+def test_clerk_boundary_rejects_impersonated_session_actor_claim():
+    private, public_pem = _keypair()
+    verifier = _verifier(public_pem)
+    now = int(time.time())
+    impersonated = _claims(now)
+    impersonated["act"] = {
+        "iss": "https://dashboard.clerk.com",
+        "sid": "sess_actor",
+        "sub": "user_admin",
+    }
+
+    with pytest.raises(AuthenticationError, match="impersonated sessions"):
+        verifier.verify(jwt.encode(impersonated, private, algorithm="RS256"))

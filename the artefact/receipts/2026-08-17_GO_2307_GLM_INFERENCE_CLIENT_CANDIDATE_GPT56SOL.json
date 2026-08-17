@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:07+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "UNWIRED_COMPONENT_CANDIDATE",
+  "scope": "GLM token/API inference-only boundary",
+  "authority": {
+    "product_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+    "required_rule": "GLM is token/API inference only; token is secret; no PTY/filesystem/EntityOS/EffectGate authority; provider switching must preserve the same UnifiedDB turn/session/generation"
+  },
+  "upstream_contract": {
+    "global_endpoint_profile": "Z.AI official /api/paas/v4/chat/completions Bearer API-key path",
+    "cn_endpoint_profile": "BigModel official /api/paas/v4/chat/completions Bearer API-key path",
+    "arbitrary_endpoint_override": "FORBIDDEN"
+  },
+  "branch": "gpt56sol/go-glm-client-reentry-20260817-2301",
+  "base_main_observed_at_branch_creation": "416a93bca2b28bd4a1678f957cdbe39b150c6294",
+  "exact_blobs": {
+    "the artefact/clayverse/glm_client.py": "f9c658b6e27dac4f83d8746cd426b3f3e3bba39b",
+    "the artefact/tests/test_glm_client.py": "88da70cd89642cb4117ca0f6c0ef562b2f619502"
+  },
+  "design": {
+    "dependencies": "Python standard library only",
+    "endpoint_profiles": ["global", "cn"],
+    "token_location": "Authorization: Bearer header only",
+    "request_tools": "none",
+    "provider_tool_calls": "fail closed",
+    "state_writes": "none",
+    "effect_execution": "none",
+    "terminal_or_filesystem_authority": "none",
+    "context": "bounded canonical JSON only; unknown non-JSON objects fail closed",
+    "identity": "caller-provided turn_id, causal_id and generation are returned unchanged; this component does not mint canonical lifecycle identity",
+    "error_redaction": "HTTP failure preserves status/body length/body SHA-256 only; provider body and token are not emitted"
+  },
+  "isolated_supporting_execution": {
+    "environment": "isolated non-production OpenAI container; no real GLM token/network inference used",
+    "git_blob_reconstruction": "2/2 exact Git blob IDs matched before execution",
+    "command": "python -m pytest -q tests/test_glm_client.py",
+    "result": "7 passed in 0.05s",
+    "exit_code": 0
+  },
+  "strongest_counterhypothesis": "A safe standalone HTTP client can still violate ClayVerse if wired as a second chat/turn authority or if a response is accepted after entity generation changed while the network call was in flight. Promotion therefore requires integration through the existing UnifiedDB TurnLifecycle/provider-selection spine with pre/post generation checks, causal re-entry and stale-response rejection; this branch deliberately does not add that router yet.",
+  "promotion_gate": "Do not merge as a complete provider path until current main is rejoined and tests prove provider switching within one canonical turn/generation, timeout/failure handling, stale GLM response rejection, token non-persistence, and no direct effect/PTY authority.",
+  "runtime_credit": {
+    "live_glm_api": 0,
+    "provider_switching": 0,
+    "exact_oci": 0,
+    "whole_clayverse": 0
+  },
+  "coordination": {
+    "initial_direct_main_write": "REJECTED_409_MOVING_MAIN",
+    "stale_write_forced": false,
+    "duplicate_canonical_path_created": false,
+    "old_branch": "gpt56sol/go-glm-client-20260817-2300 retained as superseded working lane; not proposed for promotion",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "nonclaims": [
+    "not merged to canonical main",
+    "not wired into service or TurnLifecycle",
+    "not a live GLM API/token test",
+    "not provider-switching evidence",
+    "not exact OCI runtime evidence",
+    "not WHOLE_CLAYVERSE_PASS"
+  ]
+}

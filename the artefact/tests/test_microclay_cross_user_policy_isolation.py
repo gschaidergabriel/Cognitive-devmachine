@@ -99,7 +99,7 @@ def _positive_outcome(db, *, user_id, turn_id, episode_id, causal_id):
     )
 
 
-def test_v2_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
+def test_v3_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
     """One user's learned exact-memory route must not open the other user's memory."""
     db = _db(tmp_path)
     try:
@@ -135,6 +135,7 @@ def test_v2_learned_route_capital_does_not_cross_user_perspectives(tmp_path):
         )
         assert learning["receipt"]["outcome_learning_applied"] == 1
         route_key = MicroClayRetrieval._route_key("codename", "gabriel-memory")
+        assert route_key.startswith("v3:route:")
         assert db.db.execute(
             "SELECT capital FROM retrieval_entrypoint_policy WHERE entry_key=?",
             (route_key,),

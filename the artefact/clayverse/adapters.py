@@ -70,7 +70,7 @@ class ClerkTokenVerifier:
                 "algorithms": ["RS256"],
                 "issuer": self.config.issuer,
                 "leeway": self.config.leeway_seconds,
-                "options": {"require": ["exp", "nbf", "sub"]},
+                "options": {"require": ["exp", "nbf", "sid", "sub"]},
             }
             if self.config.audience:
                 kwargs["audience"] = self.config.audience
@@ -82,6 +82,8 @@ class ClerkTokenVerifier:
         azp = claims.get("azp")
         if azp not in self.config.authorized_parties:
             raise AuthenticationError("unauthorized Clerk party")
+        if not claims.get("sid"):
+            raise AuthenticationError("Clerk token missing session ID")
         if not claims.get("sub"):
             raise AuthenticationError("Clerk token missing subject")
         return claims

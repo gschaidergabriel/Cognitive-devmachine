@@ -52,8 +52,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     expired and both permanent sessions are fenced together into one new entity generation.
     """
 
-    # This may create UNKNOWN_AFTER_RESTART causal receipts for PENDING effects.
-    EffectJournal(db)
+    # Only explicit container recovery may reinterpret orphaned live PENDING effects.
+    # Ordinary EffectJournal/EffectGate construction can happen concurrently in another
+    # live terminal/MCP process and must therefore remain non-destructive.
+    EffectJournal(db).recover_pending()
 
     counts = {
         "scanned": 0,

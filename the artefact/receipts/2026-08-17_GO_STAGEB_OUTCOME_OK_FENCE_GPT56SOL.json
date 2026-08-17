@@ -1,0 +1,90 @@
+{
+  "schema": "clayverse.go.supporting_execution_receipt/v1",
+  "observed_at": "2026-08-17T14:45:00+07:00",
+  "trigger": {
+    "command": "go",
+    "available_request_timestamp": "2026-08-17T13:42+07:00",
+    "immutable_request_id_available": false,
+    "unusual_experiment_slot": "COORDINATION_BLOCKED",
+    "unusual_experiment_executed": false,
+    "note": "Only minute-precision request identity was available to this organ, so the atomic GO experiment lease could not be safely acquired. All work in this receipt is deterministic regression/hardening."
+  },
+  "research_source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "integration_pr": 484,
+    "repair_pr": 549,
+    "repair_branch": "go/schema8-outcome-ok-fence-current-20260817-1342",
+    "tested_source_head_before_receipt": "5c19606bf3198d85b1f6c1da6ba64c4e5f4d2429",
+    "integration_head_observed_after_test": "c353fe3529a2e8a9f3d77a1f0aa5156191d6cc60",
+    "exact_git_blobs": {
+      "the artefact/clayverse/method_memory.py": "2a172c163d702b7c4c17099d86b92ef909b08304",
+      "the artefact/clayverse/method_validation.py": "cdf4a893bfbdc10df98ca3c5384da7bb81a9fa33",
+      "the artefact/tests/test_method_validation_outcome_ok_fence.py": "43aa39570d86b5b9dcddaf5f023c18efa234c07b"
+    },
+    "delta": "Positive CandidateValidation success now binds the persisted effect outcome payload and requires a JSON object with ok=true. VERIFIED plus positive causal credit is insufficient when the durable outcome says ok=false or is malformed/non-object.",
+    "non_duplicate_scope": "The two-success HELD_OUT promotion threshold was integrated independently into PR #484 and is intentionally not duplicated by PR #549."
+  },
+  "supporting_exact_file_execution": {
+    "surface": "OpenAI ChatGPT isolated local container",
+    "network_used_by_probe": false,
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "byte_binding": "PASS",
+    "method_validation_blob_recomputed": "cdf4a893bfbdc10df98ca3c5384da7bb81a9fa33",
+    "test_blob_recomputed": "43aa39570d86b5b9dcddaf5f023c18efa234c07b",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_method_validation_outcome_ok_fence.py",
+    "exit_code": 0,
+    "tests_passed": 2,
+    "tests_failed": 0,
+    "result": "PASS",
+    "verified_falsifier": "VERIFIED + causal credit > 0 + persisted effect outcome {ok:false} raises before positive method_receipt minting",
+    "verified_positive_control": "VERIFIED + causal credit > 0 + persisted effect outcome {ok:true} mints exactly one SUCCESS method_receipt with truth_authority=false and effect_authority=false",
+    "scope_note": "Focused mechanism execution only. A minimal import-only neighboring stub was used before the final exact-file reconstruction; the final tested method_validation.py and focused test bytes matched their Git blobs. This is not a full UnifiedDB/branch/container acceptance run."
+  },
+  "github_actions": {
+    "repair_head_checked": "5c19606bf3198d85b1f6c1da6ba64c4e5f4d2429",
+    "workflow_run_id": 32006226012,
+    "job_id": 95316147937,
+    "job_steps_observed": 0,
+    "job_logs_available": false,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS",
+    "test_failure": false
+  },
+  "vercel_sandbox_bridge": {
+    "transport_repository": "gschaidergabriel/Dr.-Unterweger",
+    "transport_pr": 838,
+    "target_branch": "chatgpt/go-stageb-outcome-ok-pr549-vercel-20260817-1342",
+    "target_research_pr": 549,
+    "target_research_head": "5c19606bf3198d85b1f6c1da6ba64c4e5f4d2429",
+    "sandbox_runtime_requested": "python3.13",
+    "sandbox_network_policy_requested": "deny-all",
+    "target_blobs": {
+      "clayverse/method_memory.py": "2a172c163d702b7c4c17099d86b92ef909b08304",
+      "clayverse/method_validation.py": "cdf4a893bfbdc10df98ca3c5384da7bb81a9fa33"
+    },
+    "first_preview_deployment": "dpl_FwTbHw7uiqEZQiR1akhVZdcyrmCL",
+    "first_preview_commit": "52e536eeed2c44cac640890d95eaa1b378165a2f",
+    "first_preview_result": "READY_BUT_SKIP_NON_TARGET_PREVIEW",
+    "first_preview_new_sandbox_started": false,
+    "runner_activation_commit": "58ee6cf20bfda03449787610343717cca4831011",
+    "explicit_trigger_commit": "79b7f36cb407a3a48be5d5f23a2763a95aded075",
+    "retrigger_commit": "4542a6ee4c7141a334ea7787b7d8fd7cc54224f6",
+    "deployments_observed_after_first_preview": 0,
+    "classification": "GIT_PREVIEW_EXECUTION_ADMISSION_BLOCKED_BEFORE_TARGET_SANDBOX_START",
+    "test_failure": false,
+    "important_context": "The Vercel execution surface itself is alive: a separate contemporary preview for PR501/PR499 started a VERCEL_SANDBOX_MICROVM and returned a real test exit code. Therefore this blocker is target preview admission for the PR549 bridge, not evidence that Sandbox execution is globally unavailable."
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "claims_not_made": [
+    "exact PR549 Vercel Sandbox PASS",
+    "full PR549 branch PASS",
+    "schema-8 integration PR #484 PASS",
+    "OCI image build PASS",
+    "ClayVerse startup/readiness PASS",
+    "real Clerk/browser/WebSocket PTY PASS",
+    "whole ClayVerse PASS",
+    "MicroClay ACTIVE promotion"
+  ],
+  "next_gate": "Admit one target preview for the exact PR549 bridge head, require in-Sandbox blob re-binding and the two-case outcome-authority probe to pass, then fuse the two-file PR549 delta into the single moving PR #484 line and rerun the broader schema-8 Stage-A/Stage-B regression set on exact fused ancestry."
+}

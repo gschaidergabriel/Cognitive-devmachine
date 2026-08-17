@@ -1,0 +1,53 @@
+{
+  "schema": "ClayVerseBoundedReceipt/v1",
+  "created_at": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "trigger": "go",
+  "classification": "NEW",
+  "scope": "MICROVM_PERSISTENT_STORAGE_SINGLE_WRITER_FRONTIER",
+  "product": "ClayVerse single-container",
+  "observed_current_source": {
+    "template_path": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "latest_reliably_observed_template_blob_before_receipt": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+    "state_pvc_access_mode": "ReadWriteOnce",
+    "workspace_pvc_access_mode": "ReadWriteOnce",
+    "parallel_fs_group_repair_observed_on_main": true,
+    "rwop_present_in_repository_search": false
+  },
+  "finding": {
+    "summary": "The canonical Kata StatefulSet still uses ReadWriteOnce for both writable PVCs. Kubernetes documents ReadWriteOnce as node-scoped and explicitly notes that multiple Pods on the same node can access the volume. ClayVerse requires one canonical writable entity/state authority, so RWO alone does not close same-node concurrent-writer/split-brain risk during replacement or orchestration races.",
+    "preferred_repair": "Use ReadWriteOncePod for both canonical writable PVCs and make CSI/RWOP support plus negative concurrent-mount proof a final acceptance gate.",
+    "authority_boundary": "This changes storage attachment/fencing only. It creates no second state, identity, effect, recovery or deployment authority. UnifiedDB remains canonical.",
+    "counterhypothesis": "replicas=1 plus StatefulSet ordering and RWO may be sufficient in normal operation",
+    "counterhypothesis_status": "REJECTED_AS_ACCEPTANCE_GUARANTEE",
+    "reason": "RWO constrains the node rather than uniquely constraining the Pod; the desired single-writer invariant must survive abnormal replacement/race conditions, not only nominal replica count."
+  },
+  "primary_external_evidence": [
+    {
+      "source": "Kubernetes Persistent Volumes documentation",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/",
+      "fact": "ReadWriteOnce can allow multiple Pods on the same node to access a volume; ReadWriteOncePod constrains access to a single Pod and is stable since Kubernetes v1.29."
+    },
+    {
+      "source": "Kubernetes ReadWriteOncePod migration task",
+      "url": "https://kubernetes.io/docs/tasks/administer-cluster/change-pv-access-mode-readwriteoncepod/",
+      "fact": "Kubernetes recommends ReadWriteOncePod where strict single-writer access is required; RWOP is CSI-only and requires compatible CSI sidecars."
+    }
+  ],
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The user trigger exposes minute-precision immutable timestamp metadata and no shared immutable request/turn id; GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL therefore forbids an unusual experiment.",
+    "direct_product_write_attempts": 2,
+    "direct_product_write_result": "BOTH_FAIL_CLOSED_409_DUE_TO_CONCURRENT_MAIN_ADVANCE",
+    "force_write_used": false,
+    "duplicate_lane_search": "No repository ReadWriteOncePod occurrence and no rwop-named branch observed before this receipt. Existing PR630/fsGroup work is orthogonal."
+  },
+  "execution_evidence": {
+    "runtime_credit": 0,
+    "oci_credit": 0,
+    "kubernetes_runtime_credit": 0,
+    "microvm_runtime_credit": 0,
+    "claim": "SOURCE_REVIEW_AND_EXTERNAL_PRIMARY_EVIDENCE_ONLY"
+  },
+  "next_step": "Create/rejoin one bounded RWOP repair lane from a fresh current-main binding; change both canonical writable PVCs to ReadWriteOncePod; add source regression and deployment-contract acceptance language; then execute exact source/OCI/Kata+CSI proof that a second Pod cannot mount either PVC concurrently. Do not overwrite parallel fsGroup/network/node-local hardening."
+}

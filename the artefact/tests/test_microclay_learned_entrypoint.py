@@ -77,7 +77,7 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
 
         second = life.begin("codename")
         receipt = second["context"]["retrieval_receipt"]
-        assert receipt["policy_version"] == 2
+        assert receipt["policy_version"] == 3
         assert receipt["outcome_learning_applied"] == 1
         assert second["context"]["durable_memory"] == []
         assert receipt["status"] == "UNKNOWN"
@@ -94,7 +94,7 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
             "SELECT capital,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
             (route_key,),
         ).fetchone()
-        assert route_key.startswith("v2:route:")
+        assert route_key.startswith("v3:route:")
         assert learned is not None
         assert float(learned["capital"]) > 0.0
         assert int(learned["pulls"]) == 1
@@ -143,7 +143,7 @@ def test_generic_subject_capital_cannot_open_unrelated_shadow_entry(tmp_path):
         db.db.execute(
             "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
             "VALUES(?,?,?,?,?)",
-            ("v2:subject:procedure:orchid", 4.0, 1.0, 10, 1.0),
+            ("v3:subject:procedure:orchid", 4.0, 1.0, 10, 1.0),
         )
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         result = life.begin("completely-unrelated-cue")
@@ -194,20 +194,20 @@ def test_new_alias_route_credit_is_bound_to_rank1_served_evidence(tmp_path):
         db.close()
 
 
-def test_policy_version_mismatch_forces_shadow_and_ignores_v1_route_capital(tmp_path):
+def test_policy_version_mismatch_forces_shadow_and_ignores_v2_subject_route_capital(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
         cue = hashlib.sha256(b"codename").hexdigest()[:16]
-        target = hashlib.sha256(b"procedure:orchid").hexdigest()[:16]
-        legacy_route_key = f"route:{cue}:{target}"
+        old_subject_target = hashlib.sha256(b"procedure:orchid").hexdigest()[:16]
+        legacy_v2_route_key = f"v2:route:{cue}:{old_subject_target}"
         db.db.execute(
             "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
             "VALUES(?,?,?,?,?)",
-            (legacy_route_key, 4.0, 1.0, 10, 1.0),
+            (legacy_v2_route_key, 4.0, 1.0, 10, 1.0),
         )
         db.db.execute(
-            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=1 WHERE singleton=1"
+            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=2 WHERE singleton=1"
         )
         organ = MicroClayRetrieval(db)
         assert organ.mode() == "SHADOW"
@@ -220,7 +220,7 @@ def test_policy_version_mismatch_forces_shadow_and_ignores_v1_route_capital(tmp_
             "FROM retrieval_episodes WHERE causal_id=?",
             (result["causal_id"],),
         ).fetchone()
-        assert int(row["policy_version"]) == 2
+        assert int(row["policy_version"]) == 3
         assert row["mode"] == "SHADOW"
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == []

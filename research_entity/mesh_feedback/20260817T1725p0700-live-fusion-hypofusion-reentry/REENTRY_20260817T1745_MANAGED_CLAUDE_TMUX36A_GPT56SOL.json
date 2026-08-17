@@ -1,0 +1,97 @@
+{
+  "schema": "clay-live-reentry/v1",
+  "recorded_for_program": "CLAYVERSE_SINGLE_CONTAINER",
+  "recorded_stage": "CLAYVERSE_ARTIFACT",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_observed_before_reentry_write": "9465108bb6105751b766546a624121ce3f4d8eea",
+  "novelty": "CONTRADICTS",
+  "material_delta": {
+    "summary": "Retained managed-Claude process-attestation PR602 claimed preserved tmux hardening but its overlapping terminal_sessions.py still carried the pre-PR611 nonzero-source-file-fatal behavior. Later promotion without semantic fusion could therefore reintroduce the already-falsified repeated-source failure. Two lower-layer timeout/order tests also did not isolate the new process-attestation predicate.",
+    "affected_product_path": "Browser -> Clerk -> WebSocket PTY -> persistent tmux -> managed interactive Claude Code",
+    "state_authority_change": "NONE",
+    "effect_authority_change": "NONE",
+    "identity_change": "NONE"
+  },
+  "live_fusion": {
+    "decision": "ADOPT",
+    "receiver": "github:pull/602",
+    "branch": "go/managed-claude-runtime-attestation-sol-20260817-1524-r5",
+    "head_after_fusion": "3cd03eb93ec0c62efed498608805d1f5e3cfd940",
+    "changes": [
+      "preserve PR611 exact tmux-3.6a idempotent missing-table diagnostic allowlist in the existing process-attestation path",
+      "keep mixed/unknown/empty diagnostics fail-closed and retain independent transport-policy-v3 attestation",
+      "retain managed-Claude pane process/start-argv attestation",
+      "repair lower-layer timeout/order tests to stub only the new process predicate"
+    ],
+    "exact_git_blobs": {
+      "the artefact/clayverse/terminal_sessions.py": "13b895d06d6f99b367e9e6b014a48155d6356095",
+      "the artefact/tests/test_terminal_tmux_control_timeouts.py": "08c30cca4452f789aedfc39606d71e3bf058013e",
+      "the artefact/tests/test_terminal_managed_process_attestation.py": "6bfc5cb5a208e85357492ffadff578b1f9f5527d"
+    },
+    "supporting_execution": {
+      "surface": "authorized isolated OpenAI tool container",
+      "scope": "exact-file source/mechanism reconstruction only",
+      "result": "15 passed in 0.06s; py_compile PASS; exit 0",
+      "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION"
+    },
+    "durable_receipt": "the artefact/receipts/2026-08-17_GO_1735_MANAGED_CLAUDE_TMUX36A_FUSION_GPT56SOL.json"
+  },
+  "live_hypofusion": {
+    "status": "OPEN",
+    "strongest_counterhypothesis": "The fused source can still fail in the exact integrated OCI runtime because the image may resolve a different tmux version than historical 3.6a and packaged native Claude/tmux may represent pane_current_command or pane_start_command differently from the source predicate.",
+    "supporting_or_weakening_evidence": [
+      "historical real-tmux-3.6a old-head component evidence supports the reapply mechanism only",
+      "exact written fused source/test blobs pass 15 focused source-level tests",
+      "current canonical Dockerfile resolves tmux through mutable Debian Trixie APT and exact in-image tmux identity remains unobserved",
+      "native-Claude pane representation remains unobserved"
+    ],
+    "shared_ancestry_assessment": "PR602 and PR611 overlap terminal_sessions.py and inherit shared terminal ancestry; their source-level successes are not independent whole-runtime replications.",
+    "cheapest_discriminating_falsifier": "One coordinated actually-started authorized isolated OCI batch: bind current main and exact image digest, capture resolved APT/tmux/Python identities, exercise PR611 behavior on the actual in-image tmux, then after repair promotion rejoin PR602 and perturb/attest the packaged native-Claude pane process contract.",
+    "consequence_if_true": "Keep PR602 Draft/downstream, do not promote source predicate, and repair against exact in-image tmux/native-Claude representation without weakening fail-closed transport policy."
+  },
+  "targeted_worker_reentry": [
+    {
+      "receiver": "github:pull/602",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "decision": "ADOPT",
+      "delivery": {
+        "channel": "github_pr_comment",
+        "comment_id": 5315020804,
+        "status": "DELIVERED"
+      },
+      "observable_adopt_action": "branch head 3cd03eb93ec0c62efed498608805d1f5e3cfd940 contains the fused source/tests/receipt/README and updated PR body",
+      "plan_revalidated": true,
+      "use": "BOUNDED_SOURCE_AND_TEST_FUSION",
+      "local_effect": "PR602 branch commits and metadata update",
+      "causal_credit_supported": "BOUNDED_TO_EXACT_FILE_MECHANISM_EXECUTION_ONLY"
+    },
+    {
+      "receiver": "github:pull/611",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "decision": "NO_CHANGE",
+      "delivery": {
+        "channel": "github_pr_comment",
+        "comment_id": 5315022682,
+        "status": "DELIVERED_ACK_PENDING"
+      },
+      "required_revalidation": "Remain the single retained repair lane; at first admitted OCI runner refresh main, rejoin once, bind exact image/dependency identities, exercise repair on actual in-image tmux, then focused/adjacent regressions before promotion.",
+      "plan_revalidated": "CURRENT_ORGAN_NO_CHANGE; RECEIVER_ACK_PENDING",
+      "causal_credit_supported": "NONE_FROM_DELIVERY_ALONE"
+    }
+  ],
+  "current_whole_product_frontier": "Exact OCI dependency/image gate now dominates the next runtime discriminator: image digest + actual APT/tmux/Python identities + repair behavior on in-image tmux + Python hash-lock enforcement, then PR602/native-Claude/readiness/restart/concurrency.",
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "note": "No shared immutable request id and only minute-precision message metadata were available to this organ. Separate canonical records preserve a later invalid synthetic-second incident without granting valid experiment credit."
+  },
+  "acceptance": "IN_PROGRESS",
+  "nonclaims": [
+    "no full PR602 branch runtime PASS",
+    "no exact current OCI build or image digest",
+    "no in-image tmux identity evidence",
+    "no native-Claude pane representation PASS",
+    "no whole ClayVerse PASS"
+  ]
+}

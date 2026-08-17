@@ -30,7 +30,8 @@
     "persistent_volume_writer_fence": "READWRITEONCEPOD_REQUIRED_FOR_STATE_AND_WORKSPACE_AND_CSI_ENFORCEMENT_MUST_BE_PROVEN",
     "runtime_security_support": "FINAL_ACCEPTANCE_MUST_USE_THEN_CURRENT_UPSTREAM_SUPPORTED_KATA_RELEASE_AND_BIND_EFFECTIVE_RUNTIME_CONFIGURATION",
     "runtime_annotation_policy": "FAIL_CLOSED_ON_UNREVIEWED_IO_KATACONTAINERS_RUNTIME_MUTATING_ANNOTATIONS_AFTER_ADMISSION_MUTATION",
-    "tier2_replacement": "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED_IN_PLACE_CONTAINER_RESTART_NOT_TIER2"
+    "tier2_replacement": "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED_IN_PLACE_CONTAINER_RESTART_NOT_TIER2",
+    "tier2_fatal_signal": "RECOVERY_INTEGRITY_ERROR -> CLAYVERSE_TIER2_FATAL_V1 + RESERVED_EXIT_86; TERMINATION_MESSAGE_IS_DIAGNOSTIC_AND_EXIT_86_REMAINS_FAIL_CLOSED"
   },
   "root_filesystem": "READ_ONLY_REQUIRED_IN_ACCEPTED_RUNTIME",
   "ephemeral_write_policy": "runtime mutation only in declared tmpfs/RAM areas such as /tmp and /run",
@@ -75,7 +76,7 @@
   "snapshot_model": "KNOWN_GOOD_LOGICAL_MACHINE_SNAPSHOT",
   "snapshot_contents": "consistent UnifiedDB checkpoint identity + global/session generations + EntityOS/config/policy hashes + causal queue position + EffectJournal state + managed runtime identities",
   "recovery_tier_1": "restart/fence failed internal component from immutable image bytes, reconcile last valid snapshot, re-attest readiness, resume through causal re-entry",
-  "recovery_tier_2": "if invariants cannot be trusted, discard/recreate the full ClayVerse workload/microVM from the exact accepted image digest, recover UnifiedDB/WAL/snapshot/effect journal, mint a new generation, rebuild EntityOS/terminal/LLM integration before reopening ingress",
+  "recovery_tier_2": "if invariants cannot be trusted, emit the reserved Tier-2 fatal signal, discard/recreate the full ClayVerse workload/microVM from the exact accepted image digest, recover UnifiedDB/WAL/snapshot/effect journal, mint a new generation, rebuild EntityOS/terminal/LLM integration before reopening ingress",
   "effect_replay_after_crash": "FORBIDDEN_BY_DEFAULT; ambiguous effects become UNKNOWN_AFTER_CRASH unless explicit idempotence plus durable EffectJournal evidence proves replay safe",
   "restart_recovery": "no blind external effect replay; stale generations are fenced; interrupted turns get explicit reentry/abort; leases expire; one new global entity generation fences both sessions",
   "runtime_readiness": "read-only /readyz requires UnifiedDB schema 6, exactly two canonical users/sessions, exact tmux names, both session generations equal to global entity generation, and both canonical tmux sessions currently live and pass the managed transport-policy attestation required by attach admission",
@@ -122,6 +123,7 @@
     "Claude Code direct terminal-login/runtime verification and GLM token secrecy/inference-only verification",
     "automatic tier-1 internal recovery plus tier-2 full microVM/workload replacement",
     "tier-2 replacement proves a new Pod UID and new Kata sandbox/VM identity rather than an in-place container restart",
+    "external orchestrator treats reserved ClayVerse exit 86 as full Pod/Kata sandbox replacement, consumes clayverse.tier2-fatal/v1 when available, and still replaces the full sandbox if termination-message emission fails",
     "known-good snapshot recovery across UnifiedDB generation and EffectJournal",
     "crash before/after effect emission acknowledgement without blind replay",
     "corrupt newest snapshot fallback and crash-during-recovery idempotence",

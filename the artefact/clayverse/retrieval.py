@@ -1,17 +1,21 @@
 from __future__ import annotations
+
 import json
+
+from .method_memory import MethodMemory
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with separate evidence and analogical method retrieval."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.methods = MethodMemory(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -59,7 +63,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Neither MicroClay nor method retrieval may broaden this boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -81,6 +85,18 @@ class WorldAssembler:
             "status": "UNKNOWN",
             "truth_authority": False,
             "effect_authority": False,
+        }
+        method_result = {
+            "status": "NOT_TRIGGERED",
+            "methods": [],
+            "counterevidence": [],
+            "receipt": {
+                "mode": "LEGACY_COMPATIBILITY",
+                "status": "NOT_TRIGGERED",
+                "truth_authority": False,
+                "effect_authority": False,
+                "fact_status_unchanged": "UNKNOWN",
+            },
         }
         supplied = {
             "query": query,
@@ -106,6 +122,17 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
+            method_result = self.methods.retrieve(
+                query=str(supplied["query"]),
+                resource_refs=list(resource_refs or []),
+                evidence_status=str(retrieval_receipt.get("status", "UNKNOWN")),
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
+            )
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.
@@ -118,11 +145,19 @@ class WorldAssembler:
                 )
             ]
 
+        evidence_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
         return {
             "own_recent": own,
             "cross_session_collision": other,
+            # durable_memory remains as a compatibility alias for current Needle and
+            # Hyperposition consumers; evidence_context is the explicit Claude-facing lane.
             "durable_memory": memories,
+            "evidence_context": memories,
+            "method_context": list(method_result.get("methods", [])),
+            "unknowns": [] if evidence_status == "PRESENT" else [{"kind": "evidence_status", "status": evidence_status}],
+            "counterevidence": list(method_result.get("counterevidence", [])),
             "retrieval_receipt": retrieval_receipt,
+            "method_receipt": method_result.get("receipt", {}),
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

@@ -9,7 +9,7 @@ METHOD_SCHEMA = "clayverse.method/v1"
 METHOD_KINDS = frozenset({"framework", "heuristic"})
 CANDIDATE_KINDS = frozenset({"framework_candidate", "heuristic_candidate"})
 COUNTER_KINDS = frozenset({"failure_pattern", "counterexample"})
-ALL_METHOD_KINDS = METHOD_KINDS | CANDIDATE_KINDS | COUNTER_KINDS | {"method_receipt"}
+ALL_METHOD_KINDS = METHOD_KINDS | CANDIDATE_KINDS | COUNTER_KINDS
 
 _MAX_METHODS = 4
 _MAX_COUNTER = 4
@@ -65,8 +65,9 @@ _FACET_PATTERNS: tuple[tuple[str, tuple[str, ...]], ...] = (
 
 _STRATEGY_MARKERS = (
     "how", "strategy", "approach", "plan", "diagnose", "debug", "investigate", "hypothesis",
-    "method", "roadmap", "wie", "strategie", "vorgehen", "diagnose", "untersuchen", "hypothese",
-    "methode", "fahrplan",
+    "method", "roadmap", "why", "cause", "mechanism",
+    "wie", "strategie", "vorgehen", "diagnose", "untersuchen", "hypothese",
+    "methode", "fahrplan", "warum", "ursache", "mechanismus",
 )
 
 
@@ -125,11 +126,6 @@ def validate_method_payload(kind: str, raw_value: str) -> dict[str, Any]:
             raise ValueError("counterevidence status invalid")
         payload["problem_signature"] = _normalize_signature(payload.get("problem_signature"))
         payload["blocks_method_ids"] = _bounded_string_list(payload.get("blocks_method_ids", []), field="blocks_method_ids")
-        return payload
-
-    if kind == "method_receipt":
-        if status not in {"CANDIDATE", "PROMOTED", "DEMOTED", "RETIRED"}:
-            raise ValueError("method receipt status invalid")
         return payload
 
     missing = [field for field in _REQUIRED_PROMOTED_FIELDS if field not in payload]

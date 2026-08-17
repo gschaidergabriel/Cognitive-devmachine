@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 from pathlib import Path
 
@@ -10,26 +9,20 @@ class BridgeStateError(RuntimeError):
 
 
 class ClayVerseEffectBridge:
-    """Stdio MCP for effects only; turn state is automatic via Claude lifecycle hooks."""
+    """Stdio MCP for effects only; turns are owned deterministically by Claude hooks."""
 
-    def __init__(self, db, user_id: str, session_id: str, entityos_bridge=None):
-        from .effects import EffectGate
-        from .workspace import Workspace
-
-        if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}":
-            raise PermissionError("invalid terminal/session binding")
-        db.assert_session_owner(session_id, user_id)
-        self.db = db
-        self.user_id = user_id
-        self.session_id = session_id
-        self.workspace = Workspace(db)
-        self.effects = EffectGate(db, allow_process=False, entityos_bridge=entityos_bridge)
+    def __init__(self, lifecycle):
+        self.lifecycle = lifecycle
+        self.db = lifecycle.db
+        self.user_id = lifecycle.user_id
+        self.session_id = lifecycle.session_id
 
     @classmethod
     def from_env(cls):
         from .entityos_bridge import EntityOSBridge
         from .identity import IdentityRouter
         from .store import UnifiedDB
+        from .turn_lifecycle import TurnLifecycle
 
         root = Path(os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse"))
         db = UnifiedDB(root / "unified.db")
@@ -37,7 +30,7 @@ class ClayVerseEffectBridge:
         user_id = os.environ.get("CLAYVERSE_USER_ID", "").strip()
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
 
-        bridge = None
+        entityos = None
         enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
         path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
         sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
@@ -45,31 +38,11 @@ class ClayVerseEffectBridge:
             if not path or not sha256 or not os.path.isabs(path):
                 db.close()
                 raise BridgeStateError("EntityOS execution enabled without complete digest binding")
-            bridge = EntityOSBridge(path=path, sha256=sha256)
-            bridge.verify()
-        return cls(db, user_id, session_id, bridge)
-
-    def _active(self):
-        row = self.db.db.execute(
-            "SELECT w.*,t.provenance FROM workspace_episodes w "
-            "JOIN turns t ON t.turn_id=w.observation_turn_id "
-            "WHERE w.session_id=? AND w.state IN ('OPEN','SELECTED') ORDER BY w.ts DESC LIMIT 1",
-            (self.session_id,),
-        ).fetchone()
-        if row is None:
-            raise BridgeStateError("no active canonical turn; effect denied")
-        try:
-            provenance = json.loads(row["provenance"])
-        except Exception as exc:
-            raise BridgeStateError("active turn provenance is invalid") from exc
-        generation = provenance.get("session_generation")
-        if not isinstance(generation, int):
-            raise BridgeStateError("active turn lacks reasoning-generation provenance")
-        return row, generation
+            entityos = EntityOSBridge(path=path, sha256=sha256)
+            entityos.verify()
+        return cls(TurnLifecycle(db, user_id, session_id, entityos_bridge=entityos))
 
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
-        from .effects import EffectRequest
-
         if capability not in {"entityos.exec", "state.noop"}:
             raise PermissionError("capability denied")
         if not isinstance(target, str) or not target or len(target) > 2048 or "\x00" in target:
@@ -83,39 +56,26 @@ class ClayVerseEffectBridge:
             raise ValueError("state.noop does not accept argv")
         else:
             argv = None
-
-        active, generation = self._active()
-        if active["state"] == "OPEN":
-            self.workspace.select(active["episode_id"], "request_effect")
-        req = EffectRequest(
-            self.user_id,
-            self.session_id,
-            capability,
-            target,
-            argv,
-            generation,
-        )
-        effect_id, outcome = self.effects.execute(req, active["episode_id"])
-        return {
-            "effect_id": effect_id,
-            "causal_id": self.effects.causal_for_effect(effect_id),
-            "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
-            "outcome": outcome,
-            "boundary": "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate",
-        }
+        result = self.lifecycle.request_effect(capability, target, argv)
+        result["boundary"] = "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate"
+        return result
 
     def session_state(self) -> dict:
-        active = self.db.db.execute(
-            "SELECT episode_id,state FROM workspace_episodes WHERE session_id=? AND state IN ('OPEN','SELECTED') ORDER BY ts DESC LIMIT 1",
-            (self.session_id,),
-        ).fetchone()
+        active = self.lifecycle.active()
         return {
             "user_id": self.user_id,
             "session_id": self.session_id,
             "generation": self.db.session_generation(self.session_id),
-            "active_episode": dict(active) if active else None,
-            "capabilities": self.effects.available_capabilities(),
-            "entityos_execution_enabled": self.effects.entityos_bridge is not None,
+            "active_turn": {
+                "turn_id": active["turn_id"],
+                "episode_id": active["episode_id"],
+                "causal_id": active["causal_id"],
+                "generation": int(active["generation"]),
+                "effect_id": active["effect_id"],
+            } if active else None,
+            "capabilities": self.lifecycle.effects.available_capabilities(),
+            "entityos_execution_enabled": self.lifecycle.effects.entityos_bridge is not None,
+            "turn_ingestion": "automatic_claude_hooks",
         }
 
 
@@ -127,8 +87,8 @@ def main() -> None:
     mcp = MCPServer(
         "ClayVerse",
         instructions=(
-            "Turn ingestion, canonical context injection and completion persistence are automatic via Claude lifecycle hooks. "
-            "Use request_effect only for a real external/state-changing action. Never bypass this tool with host execution."
+            "UserPromptSubmit and Stop hooks own turn ingestion/context/completion automatically. "
+            "Use request_effect only for a real external/state-changing action; never bypass it with host execution."
         ),
     )
     ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=False)

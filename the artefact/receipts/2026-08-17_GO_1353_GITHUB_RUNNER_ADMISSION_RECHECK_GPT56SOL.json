@@ -1,0 +1,64 @@
+{
+  "schema": "clayverse-execution-admission-recheck/v1",
+  "observed_at": "2026-08-17T13:55:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "canonical_main_before_receipt": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
+  "purpose": "Independently re-check whether currently available GitHub-hosted isolated jobs can actually enter step execution while the preferred Vercel Sandbox path is provider-admission-blocked. This receipt is control-plane evidence only, not product runtime evidence.",
+  "coordination": {
+    "existing_unusual_experiment_claim": "research_entity/continuity/go_experiment_claims/ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "this_organ_started_unusual_experiment": false,
+    "reason": "The current 13:53 go macro-cycle already has a claimed unusual experiment. These are ordinary deterministic execution-admission retries only."
+  },
+  "vercel_context": {
+    "canonical_status_source": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+    "execution_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_VERCEL_SANDBOX",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "current_exact_stageb_run": "ADMISSION_BLOCKED_BY_VERCEL_PREVIEW_DEPLOYMENT_RATE_LIMIT",
+    "staging_head_reported_by_current_main": "bbf1ad778045420afb4103335a8afd8cc1e7d625",
+    "interpretation": "Vercel Sandbox itself is not unavailable; the corrected exact preview is currently blocked before Sandbox start by provider deployment admission."
+  },
+  "github_runner_controls": [
+    {
+      "lane": "MicroClay current fusion PR 415",
+      "source_head": "d92d61a1460dc702706fee491709c370c0431817",
+      "workflow_run_id": 32003525209,
+      "previous_job_id": 95308346795,
+      "rerun_job_id": 95308527988,
+      "rerun_request": "ACCEPTED",
+      "rerun_conclusion": "failure",
+      "observed_steps": [],
+      "job_log_fetch": "404_BlobNotFound",
+      "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION"
+    },
+    {
+      "lane": "Python dependency lock PR 379",
+      "source_head_from_pr_receipt": "4e0c96c1807ff3e76c40bdf62b8ad3a3f23a521b",
+      "workflow_run_id": 32003318569,
+      "previous_job_id": 95307757358,
+      "rerun_job_id": 95308621674,
+      "rerun_request": "ACCEPTED",
+      "rerun_conclusion": "failure",
+      "observed_steps": [],
+      "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_VISIBLE_STEP_EXECUTION"
+    }
+  ],
+  "cross_control_result": {
+    "independent_workflows_checked": 2,
+    "jobs_with_visible_steps": 0,
+    "jobs_failed_before_visible_steps": 2,
+    "inference": "The repeated zero-step outcome across two materially different workflows supports a shared GitHub-hosted runner/control-plane admission blocker rather than a product test failure in either lane.",
+    "scope": "SUPPORTING_CONTROL_PLANE_EVIDENCE_ONLY"
+  },
+  "non_claims": [
+    "No ClayVerse test step executed in these reruns.",
+    "No exact OCI image was built or started.",
+    "No Clerk/browser/PTY/Claude runtime path was executed.",
+    "No MicroClay candidate is promoted from these results.",
+    "No VPS, self-hosted VPS runner or production host was used.",
+    "Together API was not used.",
+    "No paid/final model training was started.",
+    "Whole ClayVerse PASS is not claimed."
+  ],
+  "next_exact_executable_gate": "When an authorized isolated execution surface admits work, bind the then-current exact source identity and run one coordinated high-information batch rather than more source-only lanes: focused fused MicroClay/lifecycle/recovery/auth regressions -> broader artifact suite -> exact OCI build and image digest -> startup/readiness -> two-user Clerk/WebSocket PTY/interactive Claude path -> restart/recovery/concurrency. Prefer the already-confirmed Vercel Sandbox bridge when preview admission permits; otherwise a GitHub-hosted isolated runner may be used only after it visibly starts steps."
+}

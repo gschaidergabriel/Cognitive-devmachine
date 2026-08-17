@@ -12,8 +12,11 @@ class EffectJournal:
     @staticmethod
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @classmethod
+    def learning_eligible(cls,capability):
+        return capability not in cls.NON_REWARDING_CAPABILITIES
+    @classmethod
     def _credit(cls,status,outcome,capability):
-        if capability in cls.NON_REWARDING_CAPABILITIES: return 0.0
+        if not cls.learning_eligible(capability): return 0.0
         return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
     @staticmethod
     def _target_receipt(target):

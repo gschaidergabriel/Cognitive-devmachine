@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
+from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
@@ -126,6 +127,53 @@ def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     }
 
 
+def _acceptance_bool(name: str, default: str = "0") -> bool:
+    raw = os.environ.get(name, default)
+    if raw not in {"0", "1"}:
+        raise RuntimeError(f"{name} must be 0 or 1")
+    return raw == "1"
+
+
+def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
+    """Run the internal canonical Mistral turn used by the final sandbox controller.
+
+    This mode intentionally receives no Clerk auth credit. It proves the cognition /
+    re-ingest / EffectGate causal spine inside the exact product image; the final
+    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
+    """
+
+    recovery = recover_incomplete_episodes(db)
+    ClayGraphProjection(db).rebuild()
+    clerk_map = _clerk_map()
+    clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
+    prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
+    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    entityos_bridge, entityos_status = _entityos_config()
+
+    payload = run_mistral_acceptance_probe(
+        db,
+        clerk_map,
+        clerk_subject,
+        prompt,
+        entityos_bridge=entityos_bridge,
+        require_effect=require_effect,
+    )
+    checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
+    payload.update(
+        {
+            "checkpoint": checkpoint_id,
+            "state_hash": state_hash,
+            "recovery": recovery,
+            "entityos": {
+                "verified": bool(entityos_status.get("verified")),
+                "execution_enabled": bool(entityos_status.get("execution_enabled")),
+                "sha256": entityos_status.get("sha256"),
+            },
+        }
+    )
+    return payload
+
+
 def main():
     import uvicorn
 
@@ -139,6 +187,14 @@ def main():
         cid, digest = db.checkpoint("state-probe")
         print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
         db.close()
+        return 0
+
+    if "--mistral-once" in sys.argv:
+        try:
+            payload = _run_mistral_once(db)
+            print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
+        finally:
+            db.close()
         return 0
 
     recovery = recover_incomplete_episodes(db)

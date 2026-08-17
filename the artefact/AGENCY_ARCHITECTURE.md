@@ -23,50 +23,70 @@ server-side UnifiedDB and the canonical ClayVerse runtime.
    live in UnifiedDB tables. Each goal has one canonical user owner. Goal snapshots
    injected into cognition are owner-scoped.
 
-3. **Autonomy is a machine loop.**
+3. **Goal admission is explicit and auditable.**
+   The model does not silently convert interesting conversation into durable goals.
+   Goal creation/status/review use dedicated owner-scoped AgencyGate tools during an
+   active canonical user turn. Each mutation must carry an exact authorization quote
+   from that user prompt; the canonical turn id plus a quote digest are journaled.
+   Goal creation deterministically seeds `CONCEPT`, `PROTOTYPE` and `FINAL` milestones.
+
+4. **Autonomy is a machine loop.**
    The server daemon periodically executes a bounded `Plan -> Act -> Observe -> Adjust`
    cycle only when runnable persisted work exists. No runnable work means no model call.
 
-4. **The model is a proposer, never an effect authority.**
-   Cognition chooses one next bounded move. Any real/state-changing proposal must cross
+5. **The model is a proposer, never an operational effect authority.**
+   Cognition chooses one next bounded move. Any external/execution proposal must cross
    EffectGate. The proposal is persisted before the effect result is used for progress.
+   Durable goal/control mutations use the separate owner-authorized AgencyGate.
 
-5. **Operational truth comes from persisted evidence.**
+6. **Operational truth comes from persisted evidence.**
    Agency progress does not trust fluent model text or a caller-supplied outcome object.
    For an effectful attempt it re-reads the canonical `effects` row and accepts success
    only when the EffectGate journal says `VERIFIED` and its persisted safe outcome says
    `ok=true`.
 
-6. **Completion is not self-certified.**
+7. **Completion is not self-certified.**
    An effect-free model result may move a milestone only to `READY_FOR_REVIEW`.
    The model cannot set `PASSED` and cannot set a goal `COMPLETE`. A canonical owner
-   review performs that transition. Later phases remain unrunnable while any earlier
-   phase is not `PASSED`.
+   review performs that transition through AgencyGate. Later phases remain unrunnable
+   while any earlier phase is not `PASSED`.
 
-7. **Runaway behavior is structurally bounded.**
+8. **Runaway behavior is structurally bounded.**
    Policy state limits steps per cycle, failed retries per milestone and effects per
    cycle. Inference failures close the cycle. Effect runtime exceptions are persisted
    as failed observations and close the current cycle rather than triggering a tight
    retry loop. A daemon sleep interval separates cycles.
 
-8. **Reputation is telemetry, not authority.**
+9. **Reputation is telemetry, not authority.**
    ERS is derived from verified non-noop effect evidence and failed effect evidence.
    `state.noop` is non-rewarding. ERS cannot grant capabilities, bypass EffectGate,
    mark milestones passed or authorize spending.
 
-9. **Headless autonomy uses canonical owner cognition identity.**
-   Background Claude cognition uses the same per-user HOME as the owner's permanent
-   terminal, selected strictly from canonical goal ownership. It does not attach to
-   tmux, simulate terminal input or inherit an unrelated service HOME.
+10. **Headless autonomy uses canonical owner cognition identity.**
+    Background Claude cognition uses the same per-user HOME as the owner's permanent
+    terminal, selected strictly from canonical goal ownership. It does not attach to
+    tmux, simulate terminal input or inherit an unrelated service HOME.
 
-10. **Prompting is a view over architecture.**
+11. **Prompting is a view over architecture.**
     Interactive hooks and engine inference receive a bounded structured `agency`
     snapshot from UnifiedDB. Runtime instructions encourage proactive execution but
     explicitly prohibit invented memory, goals, capabilities, progress or effects.
 
-11. **No consciousness claim.**
+12. **No consciousness claim.**
     The autonomy daemon is an operational scheduler. It does not establish or imply
     biological life, consciousness or unrestricted AGI capability.
+
+## Goal admission
+
+A normal conversational admission path is:
+
+`active user turn -> exact authorization quote -> AgencyGate -> user-owned goal + 3 milestones -> autonomy daemon`
+
+The quote itself is not duplicated into the control journal. The canonical source turn
+remains the textual authority and the AgencyGate records its turn id plus a SHA-256
+digest of the exact authorization quote. A later pause/resume/cancel/review action must
+bind again to the then-current user turn; text from an earlier turn is not reusable as
+fresh control authorization.
 
 ## State machine
 
@@ -87,7 +107,7 @@ For each admitted work item the runner performs:
 3. Assemble user-scoped world state, agency state and live EffectGate capabilities.
 4. Ask cognition for exactly one bounded next move.
 5. Persist the model proposal before execution.
-6. Route any effect intent through EffectGate.
+6. Route any operational effect intent through EffectGate.
 7. Persist/re-ingest the observed outcome.
 8. Re-read canonical effect evidence and update the attempt/milestone state.
 9. Continue only while policy limits and runnable work permit it.

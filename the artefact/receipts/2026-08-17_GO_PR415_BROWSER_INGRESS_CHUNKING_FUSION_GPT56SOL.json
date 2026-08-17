@@ -1,0 +1,32 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T13:52:30+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "integration_pr": 415,
+  "observed_main": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+  "source_fusion": {
+    "terminal_gateway_commit": "4f0173be00b911e56565cbc4e364c63844d5360f",
+    "regression_commit": "66817ce72b7f40b96ebc7bbd425424288bd4e94c",
+    "mechanism": "Chunk browser terminal input into frames no larger than _PTY_INPUT_FRAME_MAX_BYTES so browser egress, Uvicorn WebSocket ingress and PTY input validation share one bound, while retaining schema_version 7 readiness on the MicroClay integration lane.",
+    "schema_7_preserved": true,
+    "server_frame_bound_preserved": true,
+    "canonical_raw_query_stage_b_serving": "DISABLED_SHADOW_ONLY"
+  },
+  "execution": {
+    "exact_pr_head_regressions_executed_by_this_organ": false,
+    "exact_oci_build_runtime_executed_by_this_organ": false,
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "vps_self_hosted_production_testing": false
+  },
+  "experiment_accounting": {
+    "state": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+    "additional_unusual_experiment": false
+  },
+  "evidence_class": "SOURCE_FUSION_ONLY",
+  "whole_clayverse_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_gate": "Fresh exact-head authorized isolated execution of PR #415: terminal protocol/chunking plus Stage-A replay-credit-context and Stage-B shadow/signature/promotion/replay regressions, then lifecycle/restart/privacy, full suite and exact OCI build/start/readiness/restart."
+}

@@ -5,25 +5,28 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "lane": "PR625_TOKENLESS_CANONICAL_BASELINE",
-  "classification": "SOURCE_REPAIR_WITH_BOUNDED_MECHANISM_SUPPORT",
+  "classification": "SOURCE_REPAIR_WITH_BOUNDED_EXACT_FUNCTION_TEST_SLICE_SUPPORT",
   "problem": "PR #625 made EntityOS optional at Docker build time, but normal service startup still required a non-empty EntityOS SHA-256 and verified artifact. A baseline image with ENTITYOS_SHA256 empty would therefore fail before normal runtime readiness.",
   "repair": {
     "service_commit": "a4871152193bbfa78630eac12ff8e53fecd94eac",
     "service_blob": "c9151e339c0ec4b23a454ee7684a6bd9255bf229",
-    "test_commit": "36b5e4a63b49d6b93cc0e2fc7c522083a5b19488",
-    "test_blob": "bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021",
+    "initial_test_commit": "36b5e4a63b49d6b93cc0e2fc7c522083a5b19488",
+    "expanded_test_commit": "8cf4a81c0c0aaef4c18f1ee436bf515c9ee04f10",
+    "expanded_test_blob": "a9bc8e2941800591bb38a7becac1e2ea81e1652b",
     "contract": [
       "EntityOS absent plus execution disabled returns staged=false, verified=false, execution_enabled=false",
       "execution enabled without SHA-256 fails closed",
       "unpinned regular-file bytes fail closed even when execution is disabled",
-      "unpinned symlink bytes fail closed"
+      "unpinned symlink bytes fail closed",
+      "pinned EntityOS remains verified but is not exposed as an execution bridge when execution is disabled",
+      "pinned verified EntityOS bridge is exposed only when execution is enabled"
     ]
   },
   "bounded_execution": {
     "surface": "OpenAI isolated non-production container",
-    "scope": "standalone deterministic mechanism reconstruction of the patched optional-EntityOS decision logic",
-    "result": "4/4 PASS",
-    "limitations": "Not an exact full-branch pytest, not an OCI build, and not normal packaged ClayVerse service runtime. No whole-product runtime credit."
+    "scope": "exact patched _entityos_config function body plus exact expanded regression file reconstructed into a minimal import-compatible test slice; py_compile plus pytest",
+    "result": "6/6 PASS in 0.06s; py_compile PASS",
+    "limitations": "This is not the exact full service module dependency graph, not full-branch pytest, not an OCI build, and not normal packaged ClayVerse service runtime. It supports the repaired decision contract only and mints no whole-product runtime credit."
   },
   "parallel_fusion": {
     "observed": "PR #625 also advanced concurrently with a tighter default-deny EntityOS build-context fence and focused source-contract evidence.",
@@ -36,16 +39,27 @@
     "credit": "ZERO_UNRESOLVED",
     "note": "Without observable job steps/logs this receipt does not classify the workflow conclusion as a ClayVerse test failure or PASS."
   },
+  "execution_surface_refresh": {
+    "vercel_projects": ["dr-unterweger"],
+    "canonical_research_project_directly_listed": false,
+    "local_oci_tools": {
+      "docker": false,
+      "podman": false,
+      "buildah": false,
+      "nerdctl": false
+    },
+    "classification": "FINAL_EXACT_OCI_GATE_DEFERRED; LOWER_LAYER_CONVERGENCE_CONTINUES"
+  },
   "unusual_experiment": {
     "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "reason": "Only minute-precision shared trigger metadata and no immutable shared request/turn id were available.",
     "executed": 0
   },
   "forbidden_surfaces": {
-    "vps": false,
-    "self_hosted_production": false,
-    "together_api": false,
-    "paid_final_training": false
+    "vps_used": false,
+    "self_hosted_or_production_used": false,
+    "together_api_used": false,
+    "paid_final_training_used": false
   },
   "whole_product_acceptance": "IN_PROGRESS",
   "next_gate": "Run the exact current #625 branch on an authorized isolated OCI-capable surface: validate actual build-context membership, build baseline without EntityOS, start normal service with EntityOS absent, then test digest-bound optional embedding and continue exact image/readiness/restart acceptance."

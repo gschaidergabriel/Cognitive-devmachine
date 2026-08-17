@@ -281,7 +281,7 @@ class CandidateValidation:
 
 
 def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, Any], user_id: str) -> dict[str, Any]:
-    """Derive promotion efficacy only from pre-outcome held-out causal validation receipts."""
+    """Derive promotion efficacy only from repeated true held-out causal validation receipts."""
     candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
     source_episode_ids = set(candidate.get("source_episode_ids") or [])
     rows = db.execute("SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject LIKE ? AND user_id=? ORDER BY ts,memory_id",
@@ -297,13 +297,13 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
             raise MethodValidationError("candidate-validation abstraction version diverged")
         if receipt["candidate_signature_sha256"] != expected_candidate_hash:
             raise MethodValidationError("candidate-validation candidate signature diverged")
-        if receipt["episode_id"] in source_episode_ids:
-            raise MethodValidationError("promotion validation must be held out from abstraction source episodes")
         if receipt["evaluation_mode"] != "HELD_OUT":
-            raise MethodValidationError("promotion requires HELD_OUT validation receipts")
+            continue
+        if receipt["episode_id"] in source_episode_ids:
+            continue
         receipts.append((str(row["memory_id"]), receipt))
     if len(receipts) < 2:
-        raise MethodValidationError("promotion requires at least two held-out validation receipts")
+        raise MethodValidationError("promotion requires at least two HELD_OUT validation receipts disjoint from abstraction source episodes")
     episode_ids=[receipt["episode_id"] for _,receipt in receipts]; causal_ids=[receipt["causal_id"] for _,receipt in receipts]
     if len(set(episode_ids)) != len(episode_ids) or len(set(causal_ids)) != len(causal_ids):
         raise MethodValidationError("promotion validation must span distinct episodes and causal instances")
@@ -316,6 +316,7 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
     calibration=success_count/support_count; last_validated_at=max(receipt["ts"] for _,receipt in receipts)
     receipt_ids=[memory_id for memory_id,_ in receipts]
     evidence_digest=hashlib.sha256(_canonical_json([{"memory_id":memory_id,"causal_receipt_id":receipt["causal_receipt_id"],
-        "classification":receipt["classification"],"episode_id":receipt["episode_id"]} for memory_id,receipt in receipts]).encode()).hexdigest()
+        "classification":receipt["classification"],"episode_id":receipt["episode_id"],"evaluation_mode":receipt["evaluation_mode"]}
+        for memory_id,receipt in receipts]).encode()).hexdigest()
     return {"support_count":support_count,"success_count":success_count,"failure_count":failure_count,"calibration":calibration,
             "last_validated_at":last_validated_at,"validation_receipt_ids":receipt_ids,"validation_evidence_sha256":evidence_digest}

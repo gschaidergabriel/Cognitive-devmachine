@@ -121,6 +121,43 @@ def test_shadow_method_contamination_fails_before_learning(tmp_path):
         db.close()
 
 
+def test_shadow_control_contamination_fails_before_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "sensor timeout dependency"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        fact_id = db.add_memory(
+            "fact", "sensor", "sensor timeout dependency observed",
+            None, "gabriel", {"source": "test"},
+        )
+        control_id = db.add_memory(
+            "source_archive", "archive", "compressed source control record",
+            None, "gabriel", {"source": "legacy-control"},
+        )
+        _insert_replay(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            selected_ids=[fact_id],
+            shadow_ids=[control_id],
+        )
+        _assert_replay_rejected_before_learning(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+        )
+    finally:
+        db.close()
+
+
 def test_missing_replay_memory_reference_fails_closed(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:

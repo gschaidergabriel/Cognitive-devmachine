@@ -53,12 +53,14 @@ def request_tier2_replacement(
     *,
     path: str | Path = TIER2_TERMINATION_MESSAGE_PATH,
 ) -> int:
-    """Emit a bounded Kubernetes termination signal and return the reserved exit code.
+    """Emit a bounded Tier-2 diagnostic and return the reserved exit code.
 
-    The outer orchestrator must replace the full Pod/Kata sandbox on exit 86 even
-    if the termination-message write itself failed. This prevents a canonical-
-    integrity failure from degrading into an in-place container restart merely
-    because the diagnostic file was unavailable.
+    Exit 86 is the fail-closed controller contract: the admitted outer appliance
+    boundary must be replaced rather than merely restarting this inner process or
+    container. Kubernetes/Kata deployments may additionally consume the bounded
+    termination-message file; Vercel Firecracker orchestration can rely on the
+    process/container exit status. Diagnostic-write failure must never weaken the
+    full-appliance replacement request.
     """
     try:
         write_tier2_signal(reason, detail, path=path)

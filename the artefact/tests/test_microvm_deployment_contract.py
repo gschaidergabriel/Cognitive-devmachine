@@ -67,6 +67,18 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "representative undeclared ingress and egress remain denied" in text
 
 
+def test_kata_runtime_security_floor_tracks_current_upstream_advisories():
+    text = CONTRACT.read_text()
+    assert "3.31.0 is no longer admissible as the ClayVerse security floor" in text
+    assert "GHSA-mp2j-xm59-qfgw" in text
+    assert "GHSA-7fhf-v3p3-rp56" in text
+    assert "GHSA-fgm4-mv68-h344" in text
+    assert "runtime-rs <= 3.32.0 is explicitly forbidden" in text
+    assert "4.0.0" in text
+    assert "latest monthly release" in text
+    assert "prior monthly releases are unsupported" in text
+
+
 def test_provider_credentials_remain_bounded():
     text = TEMPLATE.read_text()
     assert "GLM_API_TOKEN" in text

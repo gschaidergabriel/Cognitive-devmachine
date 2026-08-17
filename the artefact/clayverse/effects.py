@@ -45,8 +45,6 @@ class EffectGate:
     def execute(self, req: EffectRequest, episode_id=None, lease: Lease | None = None):
         if req.capability not in self.ALLOWED:
             raise PermissionError("capability denied")
-        if not req.request_key:
-            raise ValueError("effect request_key required")
 
         generation = self.db.session_generation(req.session_id)
         if lease:
@@ -67,6 +65,9 @@ class EffectGate:
                 raise PermissionError(
                     "shell requires a separate explicit capability contract"
                 )
+
+        if not req.request_key:
+            raise ValueError("effect request_key required")
 
         request_hash = self._request_hash(req, generation)
         reserved, created = self.db.reserve_effect(

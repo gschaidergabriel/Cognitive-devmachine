@@ -110,17 +110,21 @@
       "payload_digest": "d4c9252d890dbc6e3cd5b979393d4b90ed4ba92a3d2dee19a1adf0adba19db40",
       "requires_reply_or_observable_action": true,
       "delivery": {
-        "status": "CLAIMED",
+        "status": "DELIVERED_ACK_PENDING",
         "channel": "github_pr_comment",
+        "comment_id": 5317523629,
+        "delivered_at": "2026-08-17T23:12:54+07:00",
         "delivery_claim": {
           "claim_id": "4ec68a169127671795d26c37e827c9fb830a0895fa0a77f04ef597dcb2340367",
           "claimant_organ": "GPT-5.6-Sol/go-2250",
           "claimed_at": "2026-08-17T23:17:00+07:00",
           "expires_at": "2026-08-17T23:32:00+07:00"
-        }
+        },
+        "clock_note": "Claim timestamp was generated before refreshing the available local clock and is several minutes ahead of the first post-delivery observed local time. Preserve the acquired claim identity; delivered_at is the first observed local clock after the successful external API response, not a fabricated exact GitHub server timestamp.",
+        "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
     }
   ],
-  "delivery_state": "PR611_PR602_PR630_PR635_DELIVERED_ACK_PLAN_REVALIDATION_PENDING; PR643_COUNTER_CHALLENGE_CLAIMED",
+  "delivery_state": "PR611_PR602_PR630_PR635_PR643_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

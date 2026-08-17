@@ -60,7 +60,7 @@ This is the requested "wie ein echter User" discriminator. It must prove that sw
 
 ## Generic API runtime lane
 
-The generic API-provider work originally developed in Draft PR **#683** has been fused into the retained PR **#682** runtime-freeze lane. PR #683 is closed and is not a separate canonical runtime path.
+The generic API-provider work originally developed in Draft PR **#683** was fused through the retained runtime-convergence lineage and is now part of the immutable runtime candidate in Draft PR **#686**. PR #683 is closed and is not a separate canonical runtime path.
 
 The fused provider boundary includes:
 
@@ -89,19 +89,27 @@ At retained PR #682 head `220262b856f024fe43a50098cee557738bf97777`, the followi
 
 Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses, non-finite WORLD rejection, duplicate/non-finite provider JSON rejection, returned-model identity mismatch rejection, runtime credential exclusion from model-visible context, provider credential-echo rejection, visible-ASCII token enforcement and redirect refusal.
 
-This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS. It does not automatically validate the other later service/final-gate changes in the same moving runtime-freeze lane.
+This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS. It does not automatically validate the later immutable PR #686 freeze or the complete appliance path.
 
-### Current live-provider boundary
+### Current live-provider / Tier-2 boundary
 
-No `MISTRAL_API_KEY` or generic API token is available in this worker's current isolated runtime. Therefore **no real provider request was fabricated or claimed**.
+The immutable runtime candidate is now Draft PR **#686** at exact head `9dd7da1c7f1d2acf29142a74effd2b51282661f7` / tree `47c09ff6d661b3da02743435dd8a343ddef85efd`. Runtime and whole-product credit for that exact freeze remain zero.
 
-The retained exact-OCI Vercel controller remains fail-closed before credential spend. Current PR #810 head `ed7438b85bdd6b0a74512aa505f2848e00ceaa8a` binds PR #682 Research `9bebd3d22f59b1c8dab6a3cb2b5e080ef49610fb` / tree `38d6a38313bf068508570147a8dacc599b7ea551`, while current PR #682 head is `220262b856f024fe43a50098cee557738bf97777`. The direct compare shows three later material commits touching `service.py`, final-Mistral manifest coherence and EntityOS-capability tests. The current controller commit itself has no accepted READY deployment; Vercel reports `Deployment rate limited — retry in 24 hours.` The older READY deployment is not eligible for current runtime credit.
+The single retained Vercel controller is Draft PR **#810**. Its current source candidate implements the Tier-2 carrier as:
+
+`sanitize old guest to declared tier2-transfer -> create Vercel Sandbox snapshot -> delete source sandbox -> create distinct persistent:false replacement sandbox from the snapshot -> remeasure declared snapshot/workspace/OCI identities -> generation-fenced recovery -> fresh HCP-WIF provider-secret reacquisition -> second cognition`.
+
+Current Vercel primary documentation explicitly states that deleting a named sandbox removes the sandbox and sessions while snapshots remain until expiry or explicit snapshot deletion. Therefore the earlier claim that sandbox deletion necessarily deletes its snapshots is superseded. The Vercel snapshot is now an **independent post-delete durable-carrier candidate at the platform-lifecycle level**, not runtime proof by itself.
+
+The current PR #810 exact head is still not deployment-verified. Vercel currently reports **`Deployment rate limited — retry in 24 hours.`** for the current head, and the connected project shows no newer preview deployment after the last stale failed preview. No source-guard, snapshot-delete/recreate, exact-OCI or live-provider runtime credit is transferred from older READY deployments.
+
+No current authorized Vercel runtime log indicates an already-running replacement acceptance sequence that can be resumed. Daytona is the authorized fallback execution provider under current project law, but no Daytona execution surface is exposed to this worker. Therefore the current hard frontier is **execution admission**, not a demonstrated Tier-2 semantic failure.
 
 The safe next sequence is:
 
-`deliberately settle/freeze current PR #682 product bytes -> rebind the single retained PR #810 controller once -> exact current READY deployment -> transient scoped GitHub read token -> private source + EntityOS fetch inside authorized Sandbox -> full regression -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS + recovery -> same-digest Tier-2 recreation -> provider cognition again -> Stage 2 Clerk/WebSocket real-user pass-through`.
+`restore authorized isolated execution admission (current Vercel deploy capacity or Daytona) -> run exact current PR #810 source guards -> execute PR #686 private-source/EntityOS fetch in authorized Sandbox -> full regression -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS + Tier-1 recovery -> Vercel snapshot carrier -> delete old sandbox -> create distinct new persistent:false sandbox from the snapshot -> remeasure exact declared state/workspace/OCI identities -> fresh provider secret reacquisition -> second cognition -> Stage 2 Clerk/WebSocket real-user pass-through`.
 
-Runtime/private-source/exact-OCI/live-provider/whole-product credit remains zero until those exact stages actually execute.
+Runtime/private-source/exact-OCI/live-provider/Tier-2/whole-product credit remains zero until those exact stages actually execute.
 
 ## Outer isolation / appliance law
 
@@ -115,9 +123,10 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 - **#622** Python hash-lock generator — source candidate; accepted product lock requires real isolated execution.
 - **#623** auth/identity/readiness/reauth drift — bounded source/mechanism candidate until exact runtime execution.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
-- **#682** retained final runtime-freeze lane — now includes the generic API-provider boundary plus final-Mistral/engine/service gates; still moving and must settle before final controller rebind.
-- **#683** closed source-development lane — useful ancestry/evidence only; fused into #682, not a second runtime path.
-- **#810** retained Vercel Sandbox controller — single OCI orchestration lane; current exact deployment admission remains blocked and old READY evidence is stale.
+- **#682** provider-generalization/runtime-convergence ancestry — bounded exact focused provider evidence; no longer the final immutable runtime identity.
+- **#683** closed source-development lane — useful ancestry/evidence only; fused into retained lineage, not a second runtime path.
+- **#686** immutable runtime candidate freeze — exact Research identity `9dd7da1c...` / tree `47c09ff6...`; current exact runtime credit remains zero.
+- **#810** retained Vercel Sandbox controller — single OCI orchestration lane; snapshot-carrier source candidate exists, but exact current deployment admission is Vercel build-rate-limited.
 
 ## Testing authority
 
@@ -127,17 +136,19 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 
 A higher class is never inferred from a lower one.
 
-## Latest cycle delta — 2026-08-18 00:51 +07:00
+## Latest cycle delta — 2026-08-18 01:37 +07:00
 
-- hardened the generic provider boundary without creating a second inference authority;
-- fused the hardened provider bytes from the now-closed PR #683 into the retained PR #682 runtime-freeze path;
-- executed exact current PR #682 provider/secret-boundary blobs in an isolated sandbox: **19/19 PASS + py_compile PASS**;
-- verified canonical JSON, duplicate/non-finite rejection, exact model identity and credential-context/echo fences;
-- preserved this as focused mechanism evidence only; no live provider or whole-product claim was made;
-- current PR #810 is still behind the moving PR #682 freeze by three material commits and its exact head is Vercel build-rate-limited, so no owner credential should be spent on an older READY deployment;
-- no unusual experiment was executed because shared immutable trigger identity remains unavailable;
+- refreshed canonical Research and corrected the immutable PR #686 identity to `9dd7da1c...` / `47c09ff6...`;
+- corrected a false Vercel lifecycle assumption using current primary documentation: manual Sandbox snapshots survive named-sandbox deletion until expiry or explicit snapshot deletion;
+- observed PR #810 source convergence from `fork/persistent:true` toward an explicit snapshot carrier followed by source deletion and a distinct `persistent:false` replacement sandbox;
+- preserved strict evidence separation: the snapshot carrier is a source/platform-lifecycle candidate only, not Tier-2 runtime PASS;
+- observed the current exact PR #810 Vercel status fail closed with `Deployment rate limited — retry in 24 hours.`; no new preview/source-guard/runtime credit exists for that head;
+- checked current Vercel preview runtime logs and found no already-running acceptance execution to resume;
+- Daytona remains the authorized fallback, but no Daytona execution surface is available to this worker;
+- the globally shared unusual-experiment slot was already consumed before this organ joined this macro-cycle, so no second unusual experiment was created;
+- no product semantic bytes were changed in this cycle; this README refresh records the current execution frontier and epistemic correction;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. The provider-generalization work is now fused into the retained runtime-freeze lane and has stronger exact focused evidence, but the real product discriminator remains the exact current one-container/microVM run with private source, complete EntityOS, exact OCI digest, real provider cognition, recovery/recreation, and authenticated user-path validation.
+ClayVerse remains **IN_PROGRESS**. The durable-carrier *availability* blocker has narrowed: Vercel snapshots are a legitimate post-delete carrier candidate according to current platform lifecycle semantics. The exact discriminator is now executable: prove the current PR #810 source guards and then the full snapshot -> delete old guest -> create distinct replacement -> exact-identity restore/recovery -> fresh-provider-cognition path in an authorized isolated runtime. Current Vercel deployment rate limiting prevents that discriminator from running here, and no fallback execution surface is connected.

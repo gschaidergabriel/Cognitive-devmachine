@@ -24,6 +24,7 @@ class RetrievalCandidate:
     provenance: dict[str, Any]
     baseline_score: float
     adaptive_score: float
+    learned_route_score: float
     entry_keys: tuple[str, ...]
 
     def public(self) -> dict[str, Any]:
@@ -47,9 +48,14 @@ class MicroClayRetrieval:
 
     The adaptive policy starts in SHADOW. Classical retrieval remains the serving
     path until an explicit externally validated promotion changes the mode.
+
+    Policy version 2 adds learned query-cue -> subject entry routes. Entry-policy
+    keys are version-scoped so persisted v1 capital cannot silently change v2
+    behavior. A persisted ACTIVE mode from a different policy version is treated
+    as SHADOW until that exact policy version is explicitly promoted.
     """
 
-    POLICY_VERSION = 1
+    POLICY_VERSION = 2
     DEFAULT_MODE = "SHADOW"
     MAX_SOURCE_ROWS = 5000
     MAX_QUERY_TOKENS = 64
@@ -71,6 +77,16 @@ class MicroClayRetrieval:
     def _token_key(token: str) -> str:
         return "cue:" + hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
 
+    @classmethod
+    def _policy_key(cls, key: str) -> str:
+        return f"v{cls.POLICY_VERSION}:{key}"
+
+    @classmethod
+    def _route_key(cls, token: str, subject: str) -> str:
+        cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
+        target = hashlib.sha256(subject.encode("utf-8")).hexdigest()[:16]
+        return cls._policy_key(f"route:{cue}:{target}")
+
     @staticmethod
     def _safe_provenance(raw: str) -> dict[str, Any]:
         try:
@@ -79,11 +95,43 @@ class MicroClayRetrieval:
         except Exception:
             return {"parse_error": True}
 
+    @staticmethod
+    def _pack_candidates(
+        candidates: list[RetrievalCandidate],
+        *,
+        limit: int,
+        budget_chars: int,
+        allow_learned_route: bool = False,
+    ) -> tuple[list[RetrievalCandidate], int]:
+        """Apply the existing count/character budget to one ranked candidate list."""
+        selected: list[RetrievalCandidate] = []
+        chars = 0
+        for item in candidates:
+            if item.baseline_score <= 0.0 and not (
+                allow_learned_route and item.learned_route_score > 0.0
+            ):
+                continue
+            item_chars = len(item.value)
+            # Preserve the current serving contract: the first item may exceed the
+            # retrieval-local budget; the later whole-context bound remains the
+            # final fail-closed envelope.
+            if selected and chars + item_chars > budget_chars:
+                continue
+            selected.append(item)
+            chars += item_chars
+            if len(selected) >= limit:
+                break
+        return selected, chars
+
     def mode(self) -> str:
         row = self.db.db.execute(
-            "SELECT mode FROM retrieval_policy_state WHERE singleton=1"
+            "SELECT mode,policy_version FROM retrieval_policy_state WHERE singleton=1"
         ).fetchone()
-        return row["mode"] if row else self.DEFAULT_MODE
+        if not row:
+            return self.DEFAULT_MODE
+        if int(row["policy_version"]) != self.POLICY_VERSION:
+            return self.DEFAULT_MODE
+        return row["mode"]
 
     def _policy_capitals(self) -> dict[str, float]:
         return {
@@ -100,9 +148,22 @@ class MicroClayRetrieval:
         query_tokens: set[str],
         value_tokens: set[str],
     ) -> tuple[str, ...]:
-        keys = [f"kind:{kind}", f"subject:{subject}"]
-        for token in sorted(query_tokens.intersection(value_tokens))[: self.MAX_ENTRY_KEYS - 2]:
-            keys.append(self._token_key(token))
+        keys = [
+            self._policy_key(f"kind:{kind}"),
+            self._policy_key(f"subject:{subject}"),
+        ]
+        for token in sorted(query_tokens.intersection(value_tokens)):
+            if len(keys) >= self.MAX_ENTRY_KEYS:
+                break
+            keys.append(self._policy_key(self._token_key(token)))
+        # Query-only cues are bounded hashed proposals to this subject. They are
+        # learned only when this evidence was actually served and later receives
+        # canonical outcome credit. Generic kind/subject capital therefore cannot
+        # open a lexical miss on its own.
+        for token in sorted(query_tokens.difference(value_tokens)):
+            if len(keys) >= self.MAX_ENTRY_KEYS:
+                break
+            keys.append(self._route_key(token, subject))
         return tuple(keys)
 
     def _score_candidate(
@@ -129,19 +190,27 @@ class MicroClayRetrieval:
         structured = 1.0 if kind in {
             "fact", "decision", "task", "commitment", "preference", "open", "open_question"
         } else 0.4
-        # No cue match means UNKNOWN, not "probably relevant because recent". The
-        # recent 20-turn working window handles conversational continuity separately.
+        # No cue match means UNKNOWN on the deterministic serving baseline. The
+        # adaptive policy may only propose a miss via a positively learned route.
         baseline = (
             (0.82 * lexical) + (0.12 * recency) + (0.06 * structured)
             if lexical > 0.0 else 0.0
         )
 
         keys = self._entry_keys(kind, subject, query_tokens, value_tokens)
-        learned = sum(
-            max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(k, 0.0)))
-            for k in keys
+        bounded_capitals = {
+            key: max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(key, 0.0)))
+            for key in keys
+        }
+        learned = sum(bounded_capitals.values()) / max(1, len(keys))
+        learned_route = max(
+            (
+                capital
+                for key, capital in bounded_capitals.items()
+                if key.startswith(self._policy_key("route:"))
+            ),
+            default=0.0,
         )
-        learned /= max(1, len(keys))
         adaptive = baseline + 0.08 * learned
 
         return RetrievalCandidate(
@@ -153,6 +222,7 @@ class MicroClayRetrieval:
             provenance=self._safe_provenance(row["provenance"]),
             baseline_score=baseline,
             adaptive_score=adaptive,
+            learned_route_score=learned_route,
             entry_keys=keys,
         )
 
@@ -287,26 +357,44 @@ class MicroClayRetrieval:
             reverse=True,
         )
 
+        baseline_selected, baseline_chars = self._pack_candidates(
+            baseline,
+            limit=limit,
+            budget_chars=budget_chars,
+        )
+        adaptive_selected, adaptive_chars = self._pack_candidates(
+            adaptive,
+            limit=limit,
+            budget_chars=budget_chars,
+            allow_learned_route=True,
+        )
         mode = self.mode()
-        serving = adaptive if mode == "ACTIVE" else baseline
-        selected: list[RetrievalCandidate] = []
-        chars = 0
-        for item in serving:
-            if item.baseline_score <= 0.0:
-                continue
-            item_chars = len(item.value)
-            if selected and chars + item_chars > budget_chars:
-                continue
-            selected.append(item)
-            chars += item_chars
-            if len(selected) >= limit:
-                break
+        if mode == "ACTIVE":
+            selected, chars = adaptive_selected, adaptive_chars
+        else:
+            selected, chars = baseline_selected, baseline_chars
 
         retrieval_id = str(uuid.uuid4())
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
-        shadow_ids = [x.memory_id for x in adaptive if x.baseline_score > 0.0][:limit]
-        entry_keys = sorted({k for item in selected for k in item.entry_keys})[:256]
+        shadow_ids = [x.memory_id for x in adaptive_selected]
+
+        # Generic cue/kind/subject priors may learn from all served evidence. New
+        # query->subject routes are more dangerous: bind them to rank-1 served
+        # evidence only so one successful turn cannot spray an alias over the pack.
+        route_prefix = self._policy_key("route:")
+        non_route_keys = {
+            key
+            for item in selected
+            for key in item.entry_keys
+            if not key.startswith(route_prefix)
+        }
+        rank1_route_keys = {
+            key
+            for key in (selected[0].entry_keys if selected else ())
+            if key.startswith(route_prefix)
+        }
+        entry_keys = sorted(non_route_keys | rank1_route_keys)[:256]
 
         self.db.db.execute(
             "INSERT INTO retrieval_episodes("
@@ -407,7 +495,7 @@ class MicroClayRetrieval:
         return {
             "applied": True,
             "receipt_id": rid,
-            "policy_version": self.POLICY_VERSION,
+            "policy_version": int(row["policy_version"]),
             "mode": row["mode"],
             "updated_entrypoints": len(keys),
             "truth_authority": False,

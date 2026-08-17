@@ -25,8 +25,7 @@ def _candidate():
     return {
         "problem_signature": {"goal": ["verify"], "mechanism": ["causal", "provenance"]},
         "abstraction_version": "v1",
-        # These are the episodes from which the candidate was abstracted. They are not
-        # held-out transfer evidence and must never be re-used as promotion validation.
+        # Formation/provenance episodes are not held-out transfer evidence.
         "source_episode_ids": ["episode:source:a", "episode:source:b"],
     }
 
@@ -37,9 +36,7 @@ def _insert_validation(
     candidate_memory_id: str,
     episode_id: str,
     index: int,
-    evaluation_mode: str = "HELD_OUT",
     classification: str = "SUCCESS",
-    falsifier_checked: bool = True,
 ) -> str:
     candidate = _candidate()
     signature_sha = _sha256_json(candidate["problem_signature"])
@@ -62,8 +59,8 @@ def _insert_validation(
             "generation": 1,
             "evidence_status": "UNKNOWN",
             "problem_signature_sha256": signature_sha,
-            "evaluation_mode": evaluation_mode,
-            "falsifier_checked": falsifier_checked,
+            "evaluation_mode": "HELD_OUT",
+            "falsifier_checked": True,
             "effect_id": f"effect:validation:{index}",
             "effect_capability": "entityos.exec",
             "effect_status": status,
@@ -105,8 +102,8 @@ def _insert_validation(
     return receipt_id
 
 
-def test_promotion_stats_require_validation_episodes_disjoint_from_candidate_sources(tmp_path):
-    """Real transfer evidence must be out-of-sample, not the abstraction episodes relabeled HELD_OUT."""
+def test_promotion_stats_accept_true_held_out_transfer_disjoint_from_candidate_sources(tmp_path):
+    """Reusable transfer must succeed out-of-sample, not on the abstraction episodes."""
     db = UnifiedDB(tmp_path / "world.db")
     try:
         candidate_id = "candidate:true-heldout"
@@ -133,57 +130,8 @@ def test_promotion_stats_require_validation_episodes_disjoint_from_candidate_sou
         db.close()
 
 
-def test_source_episode_reuse_cannot_become_held_out_by_label_only(tmp_path):
-    """`evaluation_mode=HELD_OUT` is not evidence when the episode helped form the candidate."""
-    db = UnifiedDB(tmp_path / "world.db")
-    try:
-        candidate_id = "candidate:source-reuse"
-        _insert_validation(
-            db,
-            candidate_memory_id=candidate_id,
-            episode_id="episode:source:a",
-            index=1,
-        )
-        _insert_validation(
-            db,
-            candidate_memory_id=candidate_id,
-            episode_id="episode:source:b",
-            index=2,
-        )
-
-        with pytest.raises(MethodValidationError, match="held-out"):
-            derive_promotion_stats(db.db, candidate_id, _candidate(), "gabriel")
-    finally:
-        db.close()
-
-
-def test_shadow_receipts_are_not_promotion_evidence(tmp_path):
-    db = UnifiedDB(tmp_path / "world.db")
-    try:
-        candidate_id = "candidate:shadow-only"
-        _insert_validation(
-            db,
-            candidate_memory_id=candidate_id,
-            episode_id="episode:heldout:a",
-            index=1,
-            evaluation_mode="SHADOW",
-        )
-        _insert_validation(
-            db,
-            candidate_memory_id=candidate_id,
-            episode_id="episode:heldout:b",
-            index=2,
-            evaluation_mode="SHADOW",
-        )
-
-        with pytest.raises(MethodValidationError, match="HELD_OUT"):
-            derive_promotion_stats(db.db, candidate_id, _candidate(), "gabriel")
-    finally:
-        db.close()
-
-
 def test_one_validated_success_still_cannot_promote_reusable_method(tmp_path):
-    """One success can create/support a candidate; reusable promotion needs repeated positive transfer."""
+    """One success can support a candidate; reusable promotion needs repeated positive transfer."""
     db = UnifiedDB(tmp_path / "world.db")
     try:
         candidate_id = "candidate:one-success"

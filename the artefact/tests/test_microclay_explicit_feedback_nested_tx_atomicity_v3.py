@@ -68,7 +68,7 @@ def test_caught_inner_feedback_failure_rolls_back_savepoint_without_poisoning_ou
                 "SELECT COUNT(*) FROM retrieval_entrypoint_policy"
             ).fetchone()[0] == 0
             outer.execute(
-                "UPDATE sessions SET last_seen=last_seen WHERE session_id=?",
+                "UPDATE sessions SET updated_at=updated_at WHERE session_id=?",
                 (row["session_id"],),
             )
 

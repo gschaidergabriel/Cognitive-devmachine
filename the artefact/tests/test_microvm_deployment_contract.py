@@ -35,6 +35,20 @@ def test_kata_template_keeps_root_immutable_and_state_explicit():
     assert "hostPath:" not in text
 
 
+def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
+    text = TEMPLATE.read_text()
+    assert "kind: NetworkPolicy" in text
+    assert "name: clayverse-default-deny" in text
+    assert "policyTypes:" in text
+    assert "- Ingress" in text
+    assert "- Egress" in text
+    assert "ingress: []" in text
+    assert "egress: []" in text
+    assert "hostNetwork: false alone is NOT a network-isolation policy" in text
+    assert "0.0.0.0/0" not in text
+    assert "::/0" not in text
+
+
 def test_provider_credentials_remain_bounded():
     text = TEMPLATE.read_text()
     assert "GLM_API_TOKEN" in text

@@ -1,0 +1,60 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "SOURCE_STABILIZED_EXECUTION_BLOCKED",
+  "canonical_product_pr": 787,
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "exact_product_head": "b2c3206f12a0316e72286a9c041794f25e219269",
+  "source_state": {
+    "hostcall_abi_single_authority": true,
+    "hostcall_loadtime_vm_version_and_arity_validation": true,
+    "hostcall_runtime_vm_version_validation": true,
+    "stdout_bytes_contract": "linux.process.stdout.v0::(Int)->Bytes / call_id=3 / CLAYVM2 only",
+    "stdout_only_scope": true,
+    "stderr_hostcall_admitted": false,
+    "stale_stderr_tests_removed_or_restored_to_stdout_only": true,
+    "full_pytest_uv_version_logged": true,
+    "full_pytest_require_hashes_cli": true,
+    "full_pytest_only_binary_cli": true,
+    "build_uv_version_logged": true,
+    "build_require_hashes_cli": true,
+    "build_only_binary_cli": true,
+    "v7_catch_finally_syntax_restored": true,
+    "new_unusual_experiment_count": 0
+  },
+  "negative_evidence_resolved": {
+    "prior_receipt": "2026-08-17_GO_ENTITYOS_PARALLEL_RACE_STOP_PROMOTION.json",
+    "malformed_build_runner_repaired_by": "b2c3206f12a0316e72286a9c041794f25e219269",
+    "stderr_scope_disposition": "DEFERRED_UNTIL_STDOUT_EXACT_HEAD_SANDBOX_PROMOTION"
+  },
+  "execution": {
+    "github_vercel_status": "failure",
+    "provider_reason": "build-rate-limit before Sandbox start",
+    "sandbox_started": false,
+    "exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "exact_head_entityos_artifact_observed": false,
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfer": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_step": "When Vercel admits a Git-bound build, refresh the exact PR787 head and run the existing ordinary full-pytest plus canonical v7 one-file EntityOS sequence only in an actually-started exact-identity Vercel Sandbox; require exact source/tree/archive/attestation/wheel-lock/tool-version identity, zero skips, DENY_ALL during admitted test/runtime gates, stdout-Bytes regression, zero new unusual experiments, byte-identical twin/relocation/artifact checks, digest receipt, and successful Sandbox stop.",
+  "claims": {
+    "source_frontier_for_this_slice_stabilized": true,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

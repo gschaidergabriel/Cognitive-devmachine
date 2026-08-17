@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "status": "SOURCE_AND_BOUNDED_ISOLATED_COMPONENT_PROGRESS_WITH_WHOLE_RUNTIME_OPEN",
+  "canonical_head_observed_before_receipt": "024fde05b95dea4ef740fc420b635878b4566870",
+  "authority": {
+    "product_endpoint": "ClayVerse",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "workspace": "the artefact/",
+    "canonical_state": "UnifiedDB",
+    "entityos_role": "internal execution/security/runtime substrate only"
+  },
+  "frontier_selected": "Authenticated permanent browser-terminal identity continuity and single-container web runtime closure without duplicating active EntityOS, memory, Claude-auth or state-authority lanes.",
+  "unusual_experiment": {
+    "count_for_this_macrocycle": 1,
+    "description": "Controlled Clerk mapping swap across an IdentityRouter restart against the exact pre-fix router semantics.",
+    "pre_fix_identity_source_sha256": "8eca2ca7631d37428dec6daf39c1ce3c971d600b9c9cc8fbd86be72630252f44",
+    "observation": {
+      "clerk_subject": "clerk-g",
+      "before": "gabriel",
+      "after": "andreas",
+      "silent_identity_flip": true
+    },
+    "outcome": "PRE_FIX_MAPPING_AUTHORITY_REJECTED"
+  },
+  "artifact_deltas": [
+    {
+      "merge_commit": "b87a964773646fb2b95fbbfee096740c1e8bb340",
+      "pull_request": 308,
+      "delta": "Persist configured Clerk subject bindings in UnifiedDB and fail closed on subject swap, canonical-user rebind, duplicate target or transient/persisted mismatch."
+    },
+    {
+      "merge_commit": "b48ec09d4d38da5476fd62fb5fd8266ea2f1a3bc",
+      "pull_request": 323,
+      "delta": "Vendor pinned @xterm/xterm@6.0.0 into the ClayVerse image, fail image build if documented browser assets are absent, and serve them from the container instead of jsDelivr."
+    }
+  ],
+  "bounded_evidence": {
+    "identity_component_regression": "PASS in isolated non-production component execution: persisted same mapping survives reopen; swap, rebind and duplicate canonical target fail closed.",
+    "identity_candidate_source_sha256": "0720ca8d81d3b4256d75c79f7f32f0af37f93feff20b1611bb4563d480a1cd89",
+    "xterm_package_contract": "npm package documentation for @xterm/xterm 6.0.0 specifies css/xterm.css and lib/xterm.js; Dockerfile now asserts both paths during build.",
+    "xterm_source_regression": "Source regression committed; exact OCI build/runtime execution remains open.",
+    "github_ci": "No check status or workflow run was observed for the merge commits during this cycle."
+  },
+  "adversarial_review": {
+    "identity": "The browser PTY authenticates Clerk first, then IdentityRouter resolves the persisted subject binding, then TerminalSessionManager binds canonical user_id to session:user_id and MCP verifies session ownership. No second durable identity authority was found in the reviewed path.",
+    "web_assets": "Clerk remains an intentionally external authentication boundary; xterm is now container-owned and no longer a separate generic CDN runtime dependency."
+  },
+  "execution_truth": {
+    "vercel_sandbox_exec_available": false,
+    "vercel_ready_counts_as_test": false,
+    "vps_or_production_testing_used": false,
+    "whole_oci_runtime_pass_claimed": false,
+    "real_clerk_instance_pass_claimed": false,
+    "authenticated_claude_runtime_pass_claimed": false
+  },
+  "remaining_final_pass_gates": [
+    "exact_current_head_full_test_suite_in_authorized_isolated_execution",
+    "isolated_real_clerk_homepage_jwt_and_terminal_websocket_verification",
+    "isolated_authenticated_claude_code_terminal_runtime_verification",
+    "accepted EntityOS embedded artifact execution admission and effect round trip where required by current manifest",
+    "isolated exact OCI build boot health restart and persistent UnifiedDB recovery",
+    "deployment readiness"
+  ],
+  "next_exact_isolated_step": "On an authorized isolated runner with OCI support, bind the exact current main SHA and accepted EntityOS source lock; run the full ClayVerse test suite; build the one-image candidate; verify the vendored xterm assets from the running container; authenticate real Clerk subjects for Gabriel and Andreas and prove persisted identity continuity across restart; attach both permanent Claude terminals; exercise one bounded canonical MCP/effect path; restart with the same UnifiedDB volume and verify state/session/identity recovery. No second unusual experiment is permitted for this go macrocycle.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

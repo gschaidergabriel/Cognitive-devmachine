@@ -55,7 +55,7 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
 
 
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
-    """Close interrupted work without replay, then advance the one entity generation."""
+    """Close interrupted work without replay, preserve verified learning, then advance generation."""
 
     # Explicit boot boundary: no concurrent request path performs this recovery.
     EffectJournal(db).recover_pending()
@@ -69,6 +69,9 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         "ambiguous_effects": 0,
         "active_turns_closed": 0,
         "leases_expired": 0,
+        "retrieval_learning_eligible": 0,
+        "retrieval_learning_applied": 0,
+        "retrieval_learning_uncertain_ignored": 0,
         "generation": 0,
     }
 
@@ -127,8 +130,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             tx.execute("DELETE FROM active_turns WHERE session_id=?", (active["session_id"],))
             counts["active_turns_closed"] += 1
 
-        # EffectJournal may have recovered a legacy PENDING effect that had no active
-        # hook row. The causal re-entry now exists; make workspace closure match it.
         already_reentered = tx.execute(
             "SELECT w.episode_id FROM workspace_episodes w "
             "WHERE w.state IN ('OPEN','SELECTED') "
@@ -142,9 +143,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             )
             counts["existing_reentries_closed"] += 1
 
-        # Legacy/open episodes without an active hook row or causal row are evidence
-        # from older artifact generations. Every branch gets an explicit re-entry;
-        # unknown stays unknown and no external effect is replayed.
         episodes = tx.execute(
             "SELECT w.* FROM workspace_episodes w "
             "WHERE w.state IN ('OPEN','SELECTED') "
@@ -182,6 +180,46 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
 
         counts["leases_expired"] = int(tx.execute("SELECT COUNT(*) FROM leases WHERE expires_at>0").fetchone()[0])
         tx.execute("UPDATE leases SET expires_at=0")
+
+    current_generation = db.entity_generation()
+    from .microclay_retrieval import MicroClayRetrieval
+    organ = MicroClayRetrieval(db)
+    sessions = db.db.execute("SELECT session_id,generation FROM sessions ORDER BY session_id").fetchall()
+    for session in sessions:
+        if int(session["generation"]) != int(current_generation):
+            raise RecoveryIntegrityError("session generation diverged before retrieval learning drain")
+        session_id = str(session["session_id"])
+        rows = db.db.execute(
+            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND e.status IN ('VERIFIED','DENIED','FAILED') "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
+            "ORDER BY r.ts LIMIT 100",
+            (session_id, int(current_generation)),
+        ).fetchall()
+        counts["retrieval_learning_eligible"] += len(rows)
+        for row in rows:
+            result = organ.credit(
+                causal_id=str(row["causal_id"]),
+                generation=int(row["generation"]),
+                credit=float(row["credit"]),
+                signal_class=f"effect_outcome:{row['status']}",
+            )
+            counts["retrieval_learning_applied"] += int(bool(result.get("applied")))
+        counts["retrieval_learning_uncertain_ignored"] += int(db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_episodes r "
+            "JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND e.status NOT IN ('VERIFIED','DENIED','FAILED') "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
+            (session_id, int(current_generation)),
+        ).fetchone()[0])
 
     counts["generation"] = db.advance_entity_generation()
     return counts

@@ -14,17 +14,20 @@
       "payload_digest": "3cf144743e2410311db12f64ddbdfe71f86778d160b3ac7cc33b92328dbec63e",
       "requires_reply_or_observable_action": true,
       "delivery": {
-        "status": "CLAIMED",
+        "status": "DELIVERED_ACK_PENDING",
         "channel": "github_pr_comment",
+        "comment_id": 5317769216,
+        "delivered_at": "2026-08-17T23:37:01+07:00",
         "delivery_claim": {
           "claim_id": "7a54064c2fc081c715d7de81ac3d066ad1e4a4f01718ed3e84970bf2b4d31bdf",
           "claimant_organ": "GPT-5.6-Sol/go-2250",
           "claimed_at": "2026-08-17T23:36:28+07:00",
           "expires_at": "2026-08-17T23:51:28+07:00"
-        }
+        },
+        "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
     }
   ],
-  "delivery_state": "DR_UNTERWEGER_PR810_ONESHOT_AUTH_CLAIMED",
+  "delivery_state": "DR_UNTERWEGER_PR810_ONESHOT_AUTH_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

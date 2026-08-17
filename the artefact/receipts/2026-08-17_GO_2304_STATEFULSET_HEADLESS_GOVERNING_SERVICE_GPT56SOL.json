@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:04:20+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "NEW_THEN_FUSED_WITH_PARALLEL_MAIN",
+  "scope": "ClayVerse MicroVM Kubernetes deployment source contract",
+  "observed_problem": {
+    "description": "The Kata deployment StatefulSet used serviceName=clayverse while the only clayverse Service was an ordinary client-facing Service rather than a headless governing Service. Kubernetes StatefulSet documentation requires a Headless Service for the StatefulSet network identity.",
+    "pre_repair_template_blob": "629f7bbb7627e997839597edd499ce008c569a0f",
+    "counterhypothesis": "A single-replica workload might appear functional without relying on stable per-Pod DNS, but that does not satisfy the documented StatefulSet governing-service contract and would conflate client ingress with StatefulSet identity.",
+    "primary_source": "https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/",
+    "primary_source_observed_on": "2026-08-17"
+  },
+  "repair": {
+    "law": "Keep the client-facing clayverse Service and add a separate clayverse-headless Service with clusterIP=None; bind StatefulSet.spec.serviceName to clayverse-headless.",
+    "initial_template_commit": "ca652420669bc62205ef63e48eed314d51f7652c",
+    "initial_regression_commit": "9060ad97beb583c4c108ca8abbda2c2b744fde15",
+    "current_fused_template_blob": "73f4dcf80f78fcb4d78e144e281758c194aff6df",
+    "current_fused_test_blob": "8e03f51ba06a8d9a31dc8b0c32c90b77399bc157",
+    "parallel_fusion_note": "Parallel main subsequently added non-root PVC fsGroup hardening while retaining the headless-Service repair and its focused regression. No duplicate deployment lane was created."
+  },
+  "supporting_execution": {
+    "surface": "authorized isolated local container",
+    "source_identity_check": "git hash-object of reconstructed current template matched GitHub blob 73f4dcf80f78fcb4d78e144e281758c194aff6df exactly",
+    "probe": "deterministic exact-template structural assertions",
+    "result": "PASS",
+    "observed_documents": [
+      "Service",
+      "Service",
+      "StatefulSet",
+      "NetworkPolicy"
+    ],
+    "assertions": [
+      "exactly two Service documents",
+      "client clayverse Service is not headless",
+      "clayverse-headless has clusterIP=None",
+      "StatefulSet serviceName=clayverse-headless",
+      "Kata runtimeClass remains present",
+      "readiness=/readyz and liveness=/healthz remain present",
+      "default-deny NetworkPolicy retains empty ingress and egress"
+    ],
+    "evidence_class": "EXACT_FILE_MECHANISM_SUPPORTED",
+    "not_claimed": [
+      "Kubernetes API admission PASS",
+      "StatefulSet scheduling PASS",
+      "Kata/microVM runtime PASS",
+      "CNI NetworkPolicy enforcement PASS",
+      "OCI image PASS",
+      "whole ClayVerse PASS"
+    ]
+  },
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "This user trigger exposes no shared immutable request/turn id and only minute-precision user-message timing to the worker; the canonical atomic lease protocol fails closed."
+  },
+  "safety_and_authority": {
+    "vps_self_hosted_production_test": false,
+    "together_api_used": false,
+    "paid_or_final_training_started": false,
+    "whole_product_pass_claimed": false
+  },
+  "next_runtime_gate": "Build the exact final EntityOS-bearing ClayVerse OCI image on an admitted isolated surface, then apply/execute the same accepted digest in the required Kata/equivalent guest-kernel envelope and prove Kubernetes/CNI/Tier-2 recovery behavior."
+}

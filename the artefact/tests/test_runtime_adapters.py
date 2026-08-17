@@ -4,14 +4,14 @@ import stat
 import time
 from pathlib import Path
 from threading import Thread
-from urllib.request import Request, urlopen
 from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 from http.server import ThreadingHTTPServer
 
 import jwt
 import pytest
-from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 from clayverse.adapters import AuthenticationError, ClerkConfig, ClerkTokenVerifier, ClaudeCodeInference
 from clayverse.api import ClayVerseAPI
@@ -108,12 +108,12 @@ class FakeEngine:
     def __init__(self):
         self.calls = []
 
-    def ingest(self, subject, content, *, resources=None):
-        self.calls.append((subject, content, resources))
+    def ingest(self, subject, content, *, resources=None, request_id=None):
+        self.calls.append((subject, content, resources, request_id))
         return {"decision": {"text": "ack"}}
 
 
-def test_http_boundary_requires_auth_and_routes_subject_to_engine():
+def test_http_boundary_requires_auth_request_id_and_routes_subject_to_engine():
     engine = FakeEngine()
     api = ClayVerseAPI(engine, FakeVerifier())
     server = ThreadingHTTPServer(("127.0.0.1", 0), api.handler())
@@ -124,11 +124,18 @@ def test_http_boundary_requires_auth_and_routes_subject_to_engine():
         with pytest.raises(HTTPError) as exc:
             urlopen(base + "/api/status")
         assert exc.value.code == 401
-        body = json.dumps({"content": "hello", "resources": ["repo:x"]}).encode()
+
+        missing = json.dumps({"content": "hello"}).encode()
+        req = Request(base + "/api/chat", data=missing, headers={"Authorization": "Bearer good", "Content-Type": "application/json"}, method="POST")
+        with pytest.raises(HTTPError) as exc:
+            urlopen(req)
+        assert exc.value.code == 400
+
+        body = json.dumps({"content": "hello", "resources": ["repo:x"], "request_id": "req-http-1"}).encode()
         req = Request(base + "/api/chat", data=body, headers={"Authorization": "Bearer good", "Content-Type": "application/json"}, method="POST")
         out = json.loads(urlopen(req).read())
         assert out["decision"]["text"] == "ack"
-        assert engine.calls == [("clerk-g", "hello", ["repo:x"])]
+        assert engine.calls == [("clerk-g", "hello", ["repo:x"], "req-http-1")]
     finally:
         server.shutdown()
         server.server_close()

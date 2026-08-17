@@ -8,10 +8,16 @@
 #   labeled clayverse.network/ingress=allowed, to the ClayVerse HTTP/WebSocket port.
 # - Egress is denied by default except cluster DNS plus public HTTPS. RFC1918,
 #   link-local/metadata, loopback, carrier-grade NAT and reserved IPv4 ranges are
-#   excluded from the public-HTTPS allowance. Final deployment SHOULD narrow
-#   public HTTPS further through an admitted FQDN-aware policy/egress gateway when
-#   the target CNI supports it. The gateway/policy is infrastructure, never a
-#   second ClayVerse state/cognition authority.
+#   excluded from the portable public-HTTPS allowance.
+# - Standard Kubernetes NetworkPolicy has node-local and NAT/ipBlock caveats.
+#   Therefore this portable policy is a mandatory minimum, not the whole final
+#   network boundary. Final acceptance MUST additionally prove target-specific
+#   CNI/host-firewall/microVM-network enforcement denies undeclared worker-node,
+#   metadata and rewritten private destinations.
+# - Final deployment SHOULD narrow public HTTPS further through an admitted
+#   FQDN-aware policy/egress gateway when the target CNI supports it. The
+#   gateway/policy is infrastructure, never a second ClayVerse state/cognition
+#   authority.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -68,8 +74,9 @@ spec:
           port: 53
         - protocol: TCP
           port: 53
-    # Public HTTPS for Clerk / Claude login-runtime / GLM inference. Private,
-    # host-local and metadata ranges stay unreachable even on TCP/443.
+    # Portable public-HTTPS minimum for Clerk / Claude login-runtime / GLM.
+    # The ipBlock exclusions are not sufficient by themselves for final node/
+    # metadata isolation because NetworkPolicy processing can be CNI/NAT-specific.
     - to:
         - ipBlock:
             cidr: 0.0.0.0/0

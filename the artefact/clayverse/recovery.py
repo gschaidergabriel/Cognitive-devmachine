@@ -6,6 +6,7 @@ import re
 import time
 import uuid
 
+from .autonomy import AutonomyController
 from .effect_journal import EffectJournal
 from .store import UnifiedDB
 
@@ -192,8 +193,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
                         (active["causal_id"], active["episode_id"], None, active["turn_id"], _hash(receipt), time.time()),
                     )
-                    if episode["selected"] == "request_effect": counts["uncertain_effects"] += 1
-                    else: counts["aborted_no_effect"] += 1
+                    if episode["selected"] == "request_effect":
+                        counts["uncertain_effects"] += 1
+                    else:
+                        counts["aborted_no_effect"] += 1
 
             state = "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY" if effect_id else "RECOVERY_ABORTED_INCOMPLETE_TURN"
             tx.execute("UPDATE workspace_episodes SET state=? WHERE episode_id=?", (state, active["episode_id"]))
@@ -263,4 +266,8 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         tx.execute("UPDATE leases SET expires_at=0")
 
     counts["generation"] = db.advance_entity_generation()
+    # Goal intent is durable state too. After the global generation fence advances,
+    # rebind safe/no-effect work to the new live generation. Ambiguous admitted
+    # effects remain explicitly blocked; this call never executes or replays effects.
+    AutonomyController(db).recover_generation(expected_generation=counts["generation"])
     return counts

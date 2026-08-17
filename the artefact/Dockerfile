@@ -14,12 +14,37 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DISABLE_AUTOUPDATER=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
-# Keep the baseline OS package surface small. Browser xterm and native Claude Code
-# are installed from repository-owned digest locks below rather than via npm.
-RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates tmux \
- && rm -rf /var/lib/apt/lists/*
 COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
+
+# Freeze Debian package resolution to the repository-owned snapshot contract before
+# installing the only extra OS packages used by the product image. HTTP is intentional
+# for the bootstrap path because ca-certificates may not yet be present; APT still
+# authenticates the archive through the Debian archive keyring and signed/hash-linked
+# repository metadata. Mutable inherited mirrors are removed first.
+RUN set -eu; \
+    python -c 'import json,re; d=json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8")); a=d["debian_apt"]; assert a["archive"]=="debian"; assert re.fullmatch(r"[0-9]{8}T[0-9]{6}Z", a["snapshot"]); assert a["suite"]=="trixie"; assert a["components"]==["main"]; assert a["check_valid_until"] is False; assert a["signed_by"]=="/usr/share/keyrings/debian-archive-keyring.gpg"; assert set(a["packages"])=={"ca-certificates","tmux"}' ; \
+    SNAPSHOT="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["snapshot"])')"; \
+    CA_CERTIFICATES_VERSION="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["packages"]["ca-certificates"])')"; \
+    TMUX_VERSION="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["packages"]["tmux"])')"; \
+    test -r /usr/share/keyrings/debian-archive-keyring.gpg; \
+    rm -f /etc/apt/sources.list /etc/apt/sources.list.d/*; \
+    printf '%s\n' \
+      'Types: deb' \
+      "URIs: http://snapshot.debian.org/archive/debian/${SNAPSHOT}/" \
+      'Suites: trixie' \
+      'Components: main' \
+      'Check-Valid-Until: no' \
+      'Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg' \
+      > /etc/apt/sources.list.d/debian.sources; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+      "ca-certificates=${CA_CERTIFICATES_VERSION}" \
+      "tmux=${TMUX_VERSION}"; \
+    test "$(dpkg-query -W -f='${Version}' ca-certificates)" = "$CA_CERTIFICATES_VERSION"; \
+    test "$(dpkg-query -W -f='${Version}' tmux)" = "$TMUX_VERSION"; \
+    rm -rf /var/lib/apt/lists/*
+
+# Browser xterm and native Claude Code are installed from repository-owned digest locks.
 COPY build/install_pinned_xterm.py /opt/clayverse-build/install_pinned_xterm.py
 COPY build/install_pinned_claude.py /opt/clayverse-build/install_pinned_claude.py
 RUN mkdir -p /opt/clayverse/vendor \

@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T20:53:00+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "tested_branch_head_before_receipt": "7f026aca467255a76d333810302d8a127a3cfb4a",
+  "base_main_observed_via_pr": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "classification": "FOCUSED_TEST_PASS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "novelty": "REFINES",
+  "problem": "PR625 made the Dockerfile baseline EntityOS-optional but compose.yaml still used CLAYVERSE_ENTITYOS_SHA256:?required for both build and runtime, so the hardened Compose baseline contradicted the tokenless/optional EntityOS product contract.",
+  "repair": {
+    "compose": "Replace the two mandatory EntityOS digest interpolations with ordinary CLAYVERSE_ENTITYOS_SHA256 interpolation. Missing digest therefore resolves to an empty value rather than aborting Compose, while CLAYVERSE_ENABLE_ENTITYOS_EXEC remains 0 and Clerk/auth variables remain mandatory.",
+    "regression": "Fence exactly two optional EntityOS digest interpolations, reject CLAYVERSE_ENTITYOS_SHA256:?required, and retain required Clerk/auth interpolations."
+  },
+  "exact_git_blobs": {
+    "the artefact/compose.yaml": "de5766a950bec7dc7768b5944d6fa4b5aced2f9b",
+    "the artefact/tests/test_single_container_entityos_boundary.py": "4adc5944be46c7a216223560e7260ecc7a625697",
+    "the artefact/Dockerfile": "2ee2fe84f1fd7219869380ce3c864cade90c6c31",
+    "the artefact/.gitignore": "8bdddac545b4b691f2c74a164d53261fbe64438d"
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "exact_blob_reconstruction": "PASS; git hash-object matched all four declared blobs before the final focused rerun",
+    "focused_command": "python -m pytest -q tests/test_single_container_entityos_boundary.py",
+    "focused_result": "3 passed in 0.03s",
+    "focused_exit_code": 0,
+    "yaml_parse": "PASS; PyYAML loaded compose.yaml as mapping/dict",
+    "docker_or_podman_available": false
+  },
+  "external_primary_support": {
+    "source": "Docker Compose Specification / Docker Docs interpolation contract",
+    "observed_contract": "ordinary unresolved interpolation substitutes an empty string with a warning when no default is defined; :? is the mandatory/error form",
+    "scope": "syntax/mechanism support only; no local docker compose config execution was available"
+  },
+  "coordination": {
+    "parallel_same_pr_receipt_observed": "the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json",
+    "fusion_action": "reused PR625 and added only the non-duplicate Compose optionality fence; no second canonical packaging lane created"
+  },
+  "execution_surface_refresh": {
+    "vercel_team": "Gabriel Gschaider's projects",
+    "visible_projects": ["dr-unterweger"],
+    "research_repo_direct_vercel_project_observed": false,
+    "implication": "The old host-side read-token controller path is no longer required by the baseline source design, but an authorized Docker/OCI-capable execution path still must receive exact private research-repo bytes, for example through direct Git integration or another admitted isolated source-binding mechanism."
+  },
+  "counterhypothesis": "Static source tests and Compose-spec syntax support may still differ from the exact installed Compose/BuildKit and OCI runtime. Because no Docker/Podman binary was available on this isolated surface, resolved Compose configuration, actual build-context transfer, image construction and runtime remain unobserved.",
+  "evidence_boundary": "This receipt supports the PR625 tokenless Compose source contract only. It does not establish exact OCI build/runtime, real Clerk/browser PTY, packaged Claude/tmux behavior, restart/recovery, or whole ClayVerse PASS.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed to this worker for the exact go turn; the atomic unusual-experiment lease therefore fails closed.",
+    "executed": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Keep PR625 Draft. On the first authorized isolated Docker/OCI-capable source-bound surface, run docker compose config without CLAYVERSE_ENTITYOS_SHA256, verify the resolved empty optional digest and required Clerk fences, build the no-EntityOS baseline, capture image identity, then continue exact startup/readiness and whole-product acceptance gates."
+}

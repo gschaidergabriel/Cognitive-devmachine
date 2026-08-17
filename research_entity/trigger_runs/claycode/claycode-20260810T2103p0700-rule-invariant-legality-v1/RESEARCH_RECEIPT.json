@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "run_id": "claycode-20260810T2103p0700-rule-invariant-legality-v1",
+  "trigger": "claycode",
+  "created_at_local": "2026-08-10T21:03:00+07:00",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "identity": "RESEARCH_ENTITY_TEMPORARY_WORKER",
+    "not_frank": true
+  },
+  "canonical_parent": {
+    "entity_version": "RAE-8.8",
+    "revision": 2,
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346"
+  },
+  "current_program": "FRANK_V0_1",
+  "component": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
+  "controlling_frontier": {
+    "source": "research_entity/claycode/supervisor/STEERING_20260810T1703P0700.json",
+    "decision": "Do not re-prove the V18 bridge or generic fail-closed residual gate. Move to class-specific WP04/WP05 proof for rule_decl and invariant_decl first.",
+    "measured_residual_inventory": 100,
+    "rule_decl": 67,
+    "invariant_decl": 14,
+    "dominant_fraction": 0.81
+  },
+  "freshness_coordination_finding": {
+    "id": "CLAYCODE-ACTIVE-ASSEMBLY-STALE-TAIL-20260810",
+    "status": "SUPPORTED_BY_REPO_LINEAGE",
+    "observation": "The later 20:14 WP03 normalization run re-created a no-reparse V18 FrontendArtifact->TypedIR bridge candidate even though earlier same-day main history already contained a narrow production bridge v2 Ubuntu PASS, a 100-node residual inventory/disposition Ubuntu PASS, and 17:03 supervisor steering explicitly forbidding another clean bridge rerun absent changed controlling bytes/revision.",
+    "interpretation": "The later run did not assemble the strongest current same-day supervisor/evidence tail before selecting work. This is a coordination/freshness defect, not scientific counterevidence against bridge v2.",
+    "architecture_delta_candidate": "Require claycode trigger assembly to resolve latest supervisor steering plus latest content-addressed package receipts before selecting a subproblem; reject a proposed task if a newer controlling receipt already closes or supersedes it.",
+    "promotion": "CANDIDATE"
+  },
+  "hypothesis": {
+    "primary": "The two dominant residual classes can be lowered without new ClayCode surface syntax into a finite, typed symbolic-constraint IR whose only admitted downstream consumer is data-only and whose effect/execution authority is structurally NONE.",
+    "strongest_counterhypothesis": "Current G9/Dialect rule/invariant forms contain connectors or AST forms whose semantics cannot be represented by the candidate without either silently weakening meaning or using an untyped/unverified escape hatch.",
+    "falsifier": "Run the exact committed checker against all 67 current rule_decl and 14 invariant_decl residuals from the receipt-bound V18 production bridge. Any unsupported current form, semantic collision, authority escalation, or incorrect consumer admission blocks class promotion and either extends the finite contract or reopens the semantic question."
+  },
+  "implementation": {
+    "branch": "claycode/wp03-rule-invariant-legality-v1-20260810",
+    "stacked_on": "chatgpt/go-wp03-residual-disposition-v1-20260810",
+    "pull_request": 193,
+    "draft": true,
+    "main_mutated": false,
+    "files": [
+      "tools/claycode_wp04_rule_invariant_legality_v1.py",
+      "tools/test_claycode_wp04_rule_invariant_legality_v1.py",
+      ".github/workflows/wp03-rule-invariant-legality-v1.yml"
+    ],
+    "semantic_output": "ClayCodeSymbolicConstraint/v1",
+    "consumer_output": "ClayCodeSymbolicConstraintPlan/v1",
+    "effect_authority": "NONE",
+    "execution_authority": "NONE",
+    "unknown_or_malformed": "REJECTED_WITH_REASON",
+    "non_target_residual_classes": "EXPLICITLY_DEFERRED_FAIL_CLOSED"
+  },
+  "local_execution": {
+    "class": "LOCAL_FUNCTIONAL_PROXY_NOT_CONTENT_ADDRESSED_TARGET_RECEIPT",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "python": "3.13.5",
+    "elapsed_seconds": 10.83,
+    "max_rss_kb": 128640,
+    "positive_realistic_fixtures": 11,
+    "positive_lowered": 11,
+    "symbolic_consumer_plans": 11,
+    "semantic_mutation_discriminated": true,
+    "malformed_fail_closed": true,
+    "constraint_hash_tamper_rejected": true,
+    "authority_tamper_rejected": true,
+    "authority_minted": false,
+    "synthetic_full_inventory_composition": {
+      "total": 100,
+      "candidate_lowered_rule_plus_invariant": 81,
+      "deferred_other_classes": 19,
+      "rejected_known_classes": 0,
+      "scope": "CONTROL_COMPOSITION_FALSIFIER_ONLY_NOT_REAL_CURRENT_81_ROW_CORPUS"
+    },
+    "limitations": [
+      "Local grammar copy is semantically V18-like but not the exact current content-addressed repository grammar bytes.",
+      "Local executed candidate/test bytes are functionally equivalent to the committed candidate but are not claimed as an exact committed-byte receipt.",
+      "Strict-LALR target evidence is not claimed from this local environment.",
+      "Therefore no 81/100 production promotion is claimed."
+    ]
+  },
+  "external_primary_evidence": {
+    "sources": [
+      "MLIR Dialect Conversion official documentation",
+      "MLIR Operation Definition Specification official documentation"
+    ],
+    "fusion": "MLIR explicitly separates legal/dynamic/illegal operations, partial versus full conversion, type conversion, and ordered verifier phases. This supports a finite per-class legality gate and fail-closed downstream admission as an implementation analogy, but does not validate ClayCode-specific semantics.",
+    "promotion_credit": "NONE"
+  },
+  "current_disposition": {
+    "wp02": "PASS_PACKAGE_ONLY",
+    "wp03_bridge_v2": "PASS_NARROW_SELF_HOSTED_UBUNTU",
+    "wp03_generic_residual_disposition": "PASS_NARROW_SELF_HOSTED_UBUNTU_FAIL_CLOSED_SCOPE",
+    "rule_invariant_legality_v1": "DRAFT_LOCAL_PROXY_SUPPORTED_DIRECTION",
+    "wp03_package": "OPEN",
+    "wp04_package": "OPEN",
+    "wp05_package": "OPEN",
+    "frank_v0_1": "IN_PROGRESS",
+    "training_authorized": false
+  },
+  "next_falsifier": [
+    "Execute the exact committed candidate against the exact current receipt-bound 67 rule_decl + 14 invariant_decl corpus.",
+    "Inventory every observed connector/node form and fail closed on any unmodeled form.",
+    "Add current self.root identity/Agency/Web/GWT/Hyperposition/UnifiedDB representative rule/invariant fixtures where those contracts emit these classes.",
+    "Bind current repo head, V18 grammar/frontend, production TypedIR bridge v2, residual-disposition revision, checker, and consumer hashes immediately before execution.",
+    "Run exact committed bytes on the self-hosted Ubuntu lane and preserve raw rows, timing, RSS, component hashes, mutation/tamper/no-authority receipts.",
+    "Only then update rule_decl/invariant_decl dispositions from deferred to LOWERED_AND_VALIDATED if all current rows pass; otherwise preserve negative rows and refine the checker contract."
+  ],
+  "research_write_result": "COMMITTED_DRAFT_BRANCH",
+  "frank_harness_mutation": false,
+  "authority": "NONE"
+}

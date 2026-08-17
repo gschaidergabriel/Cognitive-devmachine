@@ -1,0 +1,78 @@
+{
+  "schema": "clayverse-go-execution-receipt/v1",
+  "trigger": "go",
+  "trigger_local_minute": "2026-08-17T13:42+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "main_observed_before_receipt": "6d15ed597a5c48006cb7737ba7e8287fac8600ec",
+  "code_delta": {
+    "finding": "the focused supply-chain regression still asserted the retired npm XTERM_SPEC installation path while the canonical Dockerfile already used the repository-owned digest-pinned install_pinned_xterm.py path",
+    "pr": 429,
+    "branch_commit": "e1e7954c7f61cb957ee80a519d319f9591aaf428",
+    "merge_commit": "b4620bca98a49ead56d4bb60b8418487ff81fbdc",
+    "result": "stale npm assertion removed; regression now binds xterm 6.0.0 to install_pinned_xterm.py and requires npm install to remain absent"
+  },
+  "exact_source_subset": {
+    "identity_method": "git hash-object over locally executed bytes compared with GitHub blob SHA",
+    "files": {
+      "the artefact/SOURCE_LOCK.json": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+      "the artefact/Dockerfile": "d42024163e7e3012d14c39a9383bbbd7806d055d",
+      "the artefact/.dockerignore": "74ab0a192ba32e26fa4cfdd5f970b97f725c864f",
+      "the artefact/build/install_pinned_claude.py": "a7bf1cc09289995c5092dd3fd73043c25efa9a39",
+      "the artefact/build/install_pinned_xterm.py": "902f9a9dc2743c15a0b84e57f0fceee181635429",
+      "the artefact/tests/test_supply_chain_lock.py": "cf8e7f96b5c21862a30be162005041686be69d48",
+      "the artefact/tests/test_pinned_xterm_supply_chain.py": "b93940a0717843e5e443e558ac77eccdb07ee98a"
+    },
+    "all_blob_identities_matched": true
+  },
+  "isolated_execution": {
+    "surface": "isolated tool container; non-VPS; non-production",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "command": "python3 -m pytest -q tests/test_supply_chain_lock.py tests/test_pinned_xterm_supply_chain.py",
+    "result": "14 passed",
+    "rerun_wall_report": "0.07s",
+    "classification": "EXACT_SOURCE_SUBSET_DETERMINISTIC_REGRESSION_PASS"
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "github_actions_run": 32003074861,
+    "github_actions_job": 95307046380,
+    "github_actions_conclusion": "failure",
+    "github_actions_steps": [],
+    "github_runner_id": 0,
+    "github_classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_TEST_STEPS_ZERO_TEST_CREDIT",
+    "docker": "ABSENT",
+    "podman": "ABSENT",
+    "buildah": "ABSENT",
+    "python_require_hashes_generation": "BLOCKED_BY_OUTBOUND_DNS_TO_PYPI; no lock emitted or promoted",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "this go exposes only minute-precision shared trigger metadata and no immutable shared request identifier, so the atomic lease protocol forbids minting a canonical unusual-experiment claim",
+    "unusual_experiment_executed": false
+  },
+  "evidence_scope": {
+    "source_test_contract_repaired": true,
+    "exact_source_subset_verified": true,
+    "full_repository_exact_head_suite_verified": false,
+    "exact_oci_build_verified": false,
+    "image_digest_captured": false,
+    "container_start_readiness_verified": false,
+    "real_clerk_browser_pty_verified": false,
+    "interactive_claude_runtime_verified": false,
+    "whole_clayverse_product_pass": false
+  },
+  "remaining_frontier": [
+    "obtain an actually-started authorized isolated surface with OCI builder/runtime and outbound access for locked dependencies",
+    "bind the then-current main and run the full relevant deterministic suite",
+    "close Python --require-hashes and apt snapshot/hash gates without fabricating dependency bytes",
+    "build the exact OCI candidate, capture image digest, start it and verify readiness/non-root/read-only/persistence/recovery",
+    "then execute real Clerk/browser/WebSocket PTY/interactive Claude Code, lifecycle, dual-session, restart/concurrency and admitted effect gates"
+  ],
+  "acceptance": "IN_PROGRESS"
+}

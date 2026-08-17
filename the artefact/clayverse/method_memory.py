@@ -218,7 +218,7 @@ class MethodMemoryManager:
                                 "admission": provenance.get("admission", "method_memory:v1"), "user_scope": user_id,
                                 "truth_authority": False, "effect_authority": False}
         canonical_value = canonical_method_value(kind, value, canonical_provenance)
-        return self.db.add_memory(kind, subject, canonical_value, source_turn_id, user_id, canonical_provenance)
+        return self.db._insert_method_memory(kind, subject, canonical_value, source_turn_id, user_id, canonical_provenance)
 
     def _assert_promotion_references(self, candidate: dict[str, Any]) -> None:
         record = candidate["value"]; user_id = self._canonical_user(candidate["user_id"]); source_ids = list(record["source_episode_ids"])
@@ -286,8 +286,8 @@ class MethodMemoryManager:
                              "method_schema_version": METHOD_SCHEMA_VERSION, "admission": "method_memory:v1", "user_scope": candidate["user_id"],
                              "truth_authority": False, "effect_authority": False}
             promoted_value = canonical_method_value(promoted_kind, record, promoted_prov)
-            promoted_id = self.db.add_memory(promoted_kind, candidate["subject"], promoted_value,
-                                             source_turn_id if source_turn_id is not None else candidate["source_turn_id"], candidate["user_id"], promoted_prov)
+            promoted_id = self.db._insert_method_memory(promoted_kind, candidate["subject"], promoted_value,
+                                                        source_turn_id if source_turn_id is not None else candidate["source_turn_id"], candidate["user_id"], promoted_prov)
             return {"candidate_memory_id": candidate_memory_id, "receipt_memory_id": receipt_id, "promoted_memory_id": promoted_id}
 
     def transition(self, method_memory_id: str, *, action: str, evaluation: str, provenance: dict[str, Any], source_turn_id: str | None = None) -> str:

@@ -98,6 +98,26 @@ Automatic recovery MUST NOT blindly replay external side effects. A command/effe
 
 This logical snapshot/reconstruction mechanism is the required product behavior. A future implementation MAY additionally use CRIU, filesystem snapshots or VM-style memory snapshots as an optimization, but those mechanisms may not replace UnifiedDB/EffectJournal consistency rules.
 
+### 3.6 Immutable appliance filesystem and two-tier self-healing
+
+The accepted runtime MUST separate **ephemeral runtime** from **persistent canonical state**:
+
+- the OCI root filesystem is read-only at runtime;
+- temporary/runtime mutation goes only to bounded RAM/tmpfs locations such as `/tmp` and `/run` or other explicitly declared ephemeral areas;
+- canonical durable state goes only to explicit scoped persistent data areas, primarily `/var/lib/clayverse` for UnifiedDB/checkpoints/effect journal state and any separately admitted workspace volume;
+- runtime code, EntityOS binaries, policies, managed settings and supply-chain artifacts are reconstructed from the immutable image, never repaired in place after a crash;
+- undeclared writable host paths or mutable host binaries are not part of the product contract.
+
+Recovery has two tiers:
+
+**Tier 1 — internal component recovery.** If EntityOS, Claude, PTY/tmux or another replaceable internal process fails while the machine-continuum invariants remain trustworthy, the ClayVerse supervisor fences the failed generation/component, rebuilds it from immutable image bytes, reconciles with the last valid logical snapshot and resumes after readiness attestation.
+
+**Tier 2 — full appliance restart.** If canonical invariants cannot be trusted, recovery itself fails, memory/resource corruption is suspected, or the supervisor cannot prove a consistent generation, the container MUST fail closed so the external OCI runtime/orchestrator restarts the whole appliance from the immutable base image. On restart, ClayVerse opens only the declared persistent data areas, performs UnifiedDB/WAL recovery plus snapshot/effect-journal reconciliation, creates a new runtime generation and reconstitutes EntityOS/terminal/Claude from clean image bytes before ingress reopens.
+
+The full-appliance restart target is **fast and deterministic**, but no fixed millisecond restart guarantee may be claimed until measured on the admitted deployment/runtime.
+
+An OCI container still shares the host kernel. Therefore this appliance boundary strongly isolates product userspace, libraries, filesystem and process state, but it does not make host-kernel/driver changes physically impossible. If stronger kernel isolation is later required, the same ClayVerse image may be run by the deployment platform inside a VM/microVM without changing the internal ClayVerse state/execution architecture.
+
 ## 4. Cognition and web boundary
 
 Claude Code is the runtime inference/cognition engine. It is not a separate persistent identity and must not own canonical memory. It receives context assembled from canonical ClayVerse state and returns reasoning results/intents/commands into the internal loop above.
@@ -132,4 +152,4 @@ Exact `go` means maximum useful product-convergent work on this ClayVerse single
 
 Any older file that says the active endpoint is `EntityOS`, `ONE_EXECUTABLE_FILE`, `SINGLE_FILE_CLAY_COMPUTER`, FRANK, self.root, UCM2 or a historical harness is superseded where it conflicts with this directive. Such material may still contribute bounded internal implementation/regression evidence.
 
-Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, removes EntityOS from the final accepted continuum, or lacks automatic known-good snapshot recovery violates this directive.
+Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, removes EntityOS from the final accepted continuum, lacks automatic known-good snapshot recovery, or makes the runtime root filesystem mutable violates this directive.

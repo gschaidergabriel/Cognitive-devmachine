@@ -97,18 +97,32 @@ def run_api_acceptance_probe(
     entityos_bridge: EntityOSBridge | None = None,
     inference: Any | None = None,
     require_effect: bool = False,
+    required_effect_capability: str | None = None,
 ) -> dict[str, Any]:
     """Run one generic API turn through the canonical ClayVerse causal spine.
 
     This is the direct/internal stage of acceptance. It intentionally gives no Clerk
     browser/PTTY auth credit; a later pass-through test must exercise the normal user
     ingress separately. No provider token is accepted as an argument or returned.
+
+    ``required_effect_capability`` strengthens an effect-required final gate by
+    validating the persisted canonical effect row. A successful ``state.noop`` must
+    never masquerade as the required ``entityos.exec`` round-trip.
     """
 
     subject = _bounded_string(clerk_subject, "acceptance Clerk subject", max_length=2048)
     prompt = _bounded_string(content, "acceptance prompt", max_length=100_000)
     if subject not in clerk_map:
         raise PermissionError("acceptance Clerk subject is not in the canonical mapping")
+
+    required_capability = None
+    if required_effect_capability is not None:
+        required_capability = _bounded_string(
+            required_effect_capability,
+            "required API acceptance effect capability",
+            max_length=128,
+        )
+        require_effect = True
 
     adapter = inference if inference is not None else build_api_inference_from_env()
     if inference is None and not adapter.available():
@@ -143,11 +157,30 @@ def run_api_acceptance_probe(
 
     outcome = result.get("outcome")
     effect_id = result.get("effect_id")
+    effect_capability = None
+    if effect_id:
+        effect_row = db.db.execute(
+            "SELECT capability FROM effects WHERE effect_id=?",
+            (effect_id,),
+        ).fetchone()
+        if effect_row is None:
+            raise RuntimeError("API acceptance effect journal row is missing")
+        effect_capability = _bounded_string(
+            effect_row["capability"],
+            "API acceptance effect capability",
+            max_length=128,
+        )
+
     if require_effect:
         if not effect_id:
             raise RuntimeError("API acceptance required an effect but none was requested")
         if not isinstance(outcome, dict) or outcome.get("ok") is not True:
             raise RuntimeError("API acceptance required a verified successful effect")
+    if required_capability is not None and effect_capability != required_capability:
+        raise RuntimeError(
+            "API acceptance required effect capability "
+            f"{required_capability} but observed {effect_capability or 'none'}"
+        )
 
     return {
         "service": "clayverse",
@@ -169,6 +202,8 @@ def run_api_acceptance_probe(
         "inference_receipt": receipt,
         "effect": {
             "required": bool(require_effect),
+            "required_capability": required_capability,
+            "capability": effect_capability,
             "effect_id": effect_id,
             "present": effect_id is not None,
             "verified_ok": isinstance(outcome, dict) and outcome.get("ok") is True,

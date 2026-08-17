@@ -2,20 +2,26 @@
   "schema": "clayverse-go-receipt/v1",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
-  "observed_at": "2026-08-17T23:05:00+07:00",
+  "observed_at": "2026-08-17T23:16:00+07:00",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "classification": "FOCUSED_TEST_PASS_CURRENT_MAIN_DEPLOYMENT_TOOLING_ONLY",
   "base_main_commit": "fad0dea5b17a114d288494b89aa8a6a9a39e84a2",
   "branch": "gpt56sol/go-microvm-attestation-current-main-20260817-2305",
   "supersedes_candidate_pr": 635,
-  "reason_for_supersession": "canonical main advanced with stronger MicroVM contracts: fsGroup/CSI persistence, separate healthz/readyz, full Pod/Kata-sandbox Tier-2 replacement semantics, rolling-release Kata security and post-admission io.katacontainers.* annotation fencing",
+  "superseding_delta": "correct Kubernetes NotIn selector semantics so absent-key pods remain selected; add fail-closed and positive complete-inventory regressions",
   "source": {
     "collector_path": "the artefact/deployment/collect_microvm_attestation.py",
-    "collector_blob": "a65c7372fdf745a2d3082b38f1f6341f0c50b07c",
+    "collector_blob": "a226a1834284923c8eeab7b76d00a1e15a924805",
     "test_path": "the artefact/tests/test_microvm_attestation_collector.py",
-    "test_blob": "485fb3a51f54cc19a5a066ed2b7d3846bda19202",
-    "source_head_before_receipt": "cc297a98eeb297dbe3f2fa0320288a7deff79ef0"
+    "test_blob": "920bd163161153a56893403ed2469a04c981e175",
+    "source_head_before_receipt": "568fc8912a6681cb212744a0bb8d5c0110b107b7"
+  },
+  "falsifier": {
+    "counterexample": "ClayVerse pod lacks label exposure; NetworkPolicy podSelector uses exposure NotIn [blocked]. Kubernetes selects the pod, while the predecessor collector incorrectly excluded it and could omit an additive broad allow from the claimed complete inventory.",
+    "predecessor_status": "REJECTED_FOR_COMPLETE_POLICY_INVENTORY_EVIDENCE",
+    "repair": "NotIn fails only when the key exists and its value is in the excluded set.",
+    "primary_contract": "Kubernetes label-selector NotIn includes resources without the key; NetworkPolicies selecting a Pod combine additively."
   },
   "current_main_contract_alignment": {
     "exact_image_digest": "fenced in Pod spec and runtime imageID",
@@ -24,7 +30,7 @@
     "pod_security": "host namespaces off; ServiceAccount token automount off; seccomp RuntimeDefault; non-root uid/gid 10001; read-only root; no privilege escalation; drop ALL",
     "persistence": "fsGroup 10001 + OnRootMismatch fenced; both PVC identities plus StorageClass and CSI driver inventories captured; non-root RW/fsync semantics remain an explicit active probe",
     "health": "readiness /readyz and liveness /healthz fenced separately",
-    "network": "all selecting NetworkPolicies enumerated and hashed; exact default deny required; obvious broad selecting allows rejected; CNI identity/enforcement and active deny/allow probes remain open",
+    "network": "all selecting NetworkPolicies are enumerated under Kubernetes matchLabels/matchExpressions semantics including absent-key NotIn; exact default deny required; malformed peers fail closed; obvious broad selecting allows rejected; CNI identity/enforcement and active deny/allow probes remain open",
     "kata_annotations": "effective post-admission io.katacontainers.* annotations default-deny; any admitted annotation must exactly match an explicit CLI allowset and is receipt-hashed",
     "kata_security": "collector intentionally records Kata runtime version/configuration as unobserved because Kubernetes objects do not establish the current-supported release, hypervisor or shared-filesystem configuration",
     "tier2": "Pod UID captured; sandbox/VM identity and full replacement remain explicitly unobserved"
@@ -33,18 +39,18 @@
     "surface": "authorized isolated OpenAI non-production container",
     "python": "3.13.5",
     "pytest": "9.0.2",
-    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "platform": "Linux 6.18.35 x86_64",
     "commands": [
-      "python -m py_compile deployment/collect_microvm_attestation.py tests/test_microvm_attestation_collector.py",
-      "python -m pytest -q tests/test_microvm_attestation_collector.py",
       "git hash-object deployment/collect_microvm_attestation.py",
-      "git hash-object tests/test_microvm_attestation_collector.py"
+      "git hash-object tests/test_microvm_attestation_collector.py",
+      "python -m py_compile deployment/collect_microvm_attestation.py",
+      "python -m pytest -q tests/test_microvm_attestation_collector.py"
     ],
-    "result": "10 passed in 0.06s; py_compile PASS",
+    "result": "12 passed in 0.05s; py_compile PASS",
     "exit_code": 0,
     "exact_blob_rebind": {
-      "collector": "a65c7372fdf745a2d3082b38f1f6341f0c50b07c",
-      "tests": "485fb3a51f54cc19a5a066ed2b7d3846bda19202"
+      "collector": "a226a1834284923c8eeab7b76d00a1e15a924805",
+      "tests": "920bd163161153a56893403ed2469a04c981e175"
     }
   },
   "evidence_boundary": {
@@ -57,12 +63,7 @@
     "tier2_full_sandbox_replacement": "UNOBSERVED",
     "whole_product": "IN_PROGRESS"
   },
-  "primary_source_notes": [
-    "Kubernetes NetworkPolicies selecting a Pod combine additively and require an enforcing network implementation",
-    "Kata Pod annotations can modify runtime behavior; upstream documents restricted annotation controls and config allowlists",
-    "Kata 4.0+ installs runtime-rs as the default/recommended runtime; exact current-supported version and configuration remain a fresh acceptance-time upstream review gate"
-  ],
   "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
   "unusual_experiment_count": 0,
-  "next_gate": "Run the exact final image on an admitted current-supported Kata/equivalent target; augment this Kubernetes snapshot with independently observed Kata runtime/config/hypervisor identity, CNI identity + active policy probes, persistent-volume non-root RW/fsync probes, and CRI/sandbox identity before and after Tier-2 replacement."
+  "next_gate": "After the host-side Vercel Preview GITHUB_READ_TOKEN exists, bind exact current Research/EntityOS bytes and build/start the final EntityOS-bearing OCI in the admitted Firecracker Sandbox. Then run that exact digest on an admitted current-supported Kata/equivalent target and combine this collector with independently observed Kata runtime/config/hypervisor identity, CNI identity + active policy probes, persistent-volume non-root RW/fsync probes, and CRI/sandbox identity before and after Tier-2 replacement."
 }

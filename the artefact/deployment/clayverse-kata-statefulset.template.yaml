@@ -17,6 +17,10 @@
 # add a separate deployment-specific, reviewed allow policy for only the exact
 # admitted ingress/egress surfaces and bind that policy into acceptance
 # evidence. hostNetwork: false alone is NOT a network-isolation policy.
+# The admitted CNI MUST actually enforce NetworkPolicy. Standard Kubernetes
+# NetworkPolicy also has node-local traffic exceptions; node/control-plane/
+# metadata reachability must therefore be separately fenced and tested by the
+# deployment + microVM boundary rather than inferred from this policy object.
 apiVersion: v1
 kind: Service
 metadata:
@@ -99,9 +103,9 @@ spec:
               value: /workspace
             - name: CLAYVERSE_REQUIRE_CLAUDE
               value: "1"
-            # Runtime may enable only the EntityOS bytes selected by the immutable
-            # image-owned /opt/entityos/entityos.lock.json. Path/digest are not
-            # deployment inputs and must not be supplied through ConfigMap/Secret.
+            # EntityOS path/digest authority is image-internal. Deployment may
+            # enable the already-admitted embedded substrate but may not select
+            # different executable bytes through env/Secret/ConfigMap values.
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
               value: "1"
             - name: CLAYVERSE_CLERK_MAP_JSON
@@ -195,25 +199,28 @@ spec:
             medium: Memory
             sizeLimit: 128Mi
   volumeClaimTemplates:
+    # ClayVerse is a one-entity/single-writer appliance. Kubernetes ReadWriteOnce
+    # is node-scoped and can still admit multiple Pods on one node; use the CSI
+    # ReadWriteOncePod fence so stale/replacement Pods cannot share a writable PVC.
     - metadata:
         name: clayverse-state
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi
     - metadata:
         name: clayverse-workspace
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi
 ---
-# Fail-closed baseline. This deliberately denies every network flow to/from the
-# ClayVerse pod until a deployment-specific allow policy is supplied. The allow
-# policy is deployment material because exact ingress controller, DNS resolver,
-# Clerk/Claude/GLM destinations and cluster CIDRs vary by admitted platform.
+# Fail-closed baseline for policy-governed pod traffic. This selects ClayVerse
+# for ingress+egress isolation until a deployment-specific allow policy is
+# supplied. It does NOT prove CNI enforcement and does NOT imply Kubernetes'
+# node-local NetworkPolicy exceptions are denied.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

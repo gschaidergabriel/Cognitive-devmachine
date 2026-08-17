@@ -39,7 +39,8 @@
     "independent_correction": "stage-go-source.mjs changed localeCompare ordering to Buffer.compare over UTF-8 path bytes."
   },
   "coordination_correction": {
-    "current_candidate_head": "e2cbeb4c301e12750b9f160b121d3b8ddedf13a3",
+    "latest_observed_candidate_head": "4f09d74878b939d554af61b65e3f3b4c274a927d",
+    "refresh_head_immediately_before_execution": true,
     "parent_lineage_contains_sort_fix": true,
     "attestation_sort_fix_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
     "experiment_accounting_head": "e90b887111969becc922d25a73886af61d6b5340",
@@ -48,16 +49,19 @@
     "full_pytest_gate_fused": true,
     "full_pytest_gate_delta": "A regression-only isolated Vercel full-pytest gate now runs before the attested-snapshot lane with exact Git identity reconstruction, versioned dependency closure, DENY_ALL during pytest and unusual_experiment_count=0.",
     "dependency_authority_alignment_head": "e2cbeb4c301e12750b9f160b121d3b8ddedf13a3",
-    "dependency_authority_alignment_delta": "The static preflight now requires the source-bound requirements files as the sole install authority for both the canonical build runner and full-pytest runner, and fails closed on duplicate direct dependency pins.",
+    "dependency_authority_alignment_delta": "The static preflight requires the source-bound requirements files as the sole install authority for both the canonical build runner and full-pytest runner, and fails closed on duplicate direct dependency pins.",
+    "full_pytest_hardening_head": "4f09d74878b939d554af61b65e3f3b4c274a927d",
+    "full_pytest_hardening_delta": "The ordinary pre-experiment pytest gate now claims one execution owner per deployment, reuses a finished result instead of starting duplicate Sandboxes, emits JUnit evidence, requires at least one test and forbids skipped tests.",
     "runner_cleanup": "Superseded experimental/duplicate attestation runners were pruned; the build-internal v7 run-buildtime-go-sandbox.mjs lane remains the canonical attested executable path.",
-    "current_candidate_executable_observation": "UNEXECUTED"
+    "latest_candidate_executable_observation": "UNEXECUTED"
   },
   "current_execution_blocker": {
-    "corrected_head": "e2cbeb4c301e12750b9f160b121d3b8ddedf13a3",
-    "vercel_commit_status": "NO_NEW_DEPLOYMENT_REGISTERED_AFTER_2026-08-17T01:40:00Z",
+    "latest_observed_head": "4f09d74878b939d554af61b65e3f3b4c274a927d",
+    "vercel_commit_status": "FAILURE_BEFORE_SANDBOX",
     "provider_reason": "build-rate-limit",
-    "provider_status_target": "Deployment rate limited — retry in 24 hours",
-    "corrected_head_sandbox_observation": "UNEXECUTED",
+    "provider_status_target": "https://vercel.com/gabriel-gschaiders-projects?upgradeToPro=build-rate-limit",
+    "new_deployment_registered_after_2026-08-17T01:40:00Z": false,
+    "latest_head_sandbox_observation": "UNEXECUTED",
     "executable_claim": "UNRESOLVED"
   },
   "current_go_unusual_experiment": {
@@ -67,7 +71,7 @@
     "slot_state": "RESERVED_NOT_CONSUMED",
     "instruction": "Do not add or execute a second unusual intervention. Reruns of inherited gates are regression-only."
   },
-  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, run exact head e2cbeb4c301e12750b9f160b121d3b8ddedf13a3 (or a newer refreshed descendant) through the existing build-internal sequence. First require the isolated full python3.13 -m pytest -q tests gate with source-bound pinned dependencies under DENY_ALL and zero unusual experiments; then require exact raw-tree source binding, Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with receipt source_provenance=ATTESTED_SNAPSHOT_V2 and non-null archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful sandbox stops.",
+  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, refresh PR787 and run its exact then-current head through the existing build-internal sequence. First require the isolated full python3.13 -m pytest -q tests gate with source-bound pinned dependencies under DENY_ALL, at least one test, zero skips and zero unusual experiments; then require exact raw-tree source binding, Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with receipt source_provenance=ATTESTED_SNAPSHOT_V2 and non-null archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity, external digest verification, DENY_ALL during tests and successful sandbox stops.",
   "promotion": "NOT_ALLOWED_YET",
   "negative_evidence_preserved": true
 }

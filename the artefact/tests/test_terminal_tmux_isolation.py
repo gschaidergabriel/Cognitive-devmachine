@@ -6,6 +6,16 @@ import clayverse.terminal_sessions as terminal_sessions
 from clayverse.terminal_sessions import TerminalSessionManager
 
 
+def _assert_managed_socket(argv: list[str], user_id: str) -> None:
+    assert argv[:5] == [
+        "tmux",
+        "-L",
+        f"clayverse-{user_id}",
+        "-f",
+        "/etc/clayverse/managed-tmux.conf",
+    ]
+
+
 def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     gabriel = manager.binding("gabriel")
@@ -40,6 +50,8 @@ def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkey
     assert andreas_calls
     assert all(argv[argv.index("-L") + 1] == "clayverse-gabriel" for argv in gabriel_calls)
     assert all(argv[argv.index("-L") + 1] == "clayverse-andreas" for argv in andreas_calls)
+    assert all(argv[argv.index("-f") + 1] == "/etc/clayverse/managed-tmux.conf" for argv in gabriel_calls)
+    assert all(argv[argv.index("-f") + 1] == "/etc/clayverse/managed-tmux.conf" for argv in andreas_calls)
 
 
 def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
@@ -59,10 +71,8 @@ def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch)
     assert len(exec_calls) == 1
     program, argv, env = exec_calls[0]
     assert program == "tmux"
-    assert argv == [
-        "tmux",
-        "-L",
-        "clayverse-andreas",
+    _assert_managed_socket(argv, "andreas")
+    assert argv[5:] == [
         "attach-session",
         "-t",
         "clayverse-andreas",

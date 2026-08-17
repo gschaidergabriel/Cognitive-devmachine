@@ -21,7 +21,10 @@ actual=$(sha256sum "$src" | awk '{print $1}')
   exit 65
 }
 
-tmp="./.EntityOS.stage.$$"
+root=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+stage_dir="$root/build-assets/entityos"
+mkdir -p "$stage_dir"
+tmp="$stage_dir/.EntityOS.stage.$$"
 trap 'rm -f "$tmp"' EXIT HUP INT TERM
 cp -- "$src" "$tmp"
 chmod 0555 "$tmp"
@@ -30,6 +33,6 @@ postcopy=$(sha256sum "$tmp" | awk '{print $1}')
   echo "EntityOS staged digest mismatch: expected=$expected actual=$postcopy" >&2
   exit 65
 }
-mv -f -- "$tmp" ./EntityOS
+mv -f -- "$tmp" "$stage_dir/EntityOS"
 trap - EXIT HUP INT TERM
 printf 'staged EntityOS sha256=%s\n' "$expected"

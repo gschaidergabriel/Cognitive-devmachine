@@ -1,0 +1,85 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_RECONSTRUCTED_STATIC_PROBE",
+  "acceptance": "IN_PROGRESS",
+  "canonical_base": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "main",
+    "commit_used_to_create_work_branch": "abca33c7b7f0bf926e142bea8d13902dc9535c24",
+    "work_branch": "gpt56sol/go-microvm-pvc-fsgroup-20260817-2250",
+    "work_branch_head_before_receipt": "2de3a33555fd49ec1476638ff3835c1c485ba8c9"
+  },
+  "frontier": {
+    "observed": "The Kata reference StatefulSet runs ClayVerse as uid/gid 10001 and mounts persistent PVCs over /var/lib/clayverse and /workspace, but the Pod securityContext previously did not request an fsGroup.",
+    "hypothesis": "A newly provisioned or differently provisioned persistent volume can mask image-time ownership and be unwritable to the non-root ClayVerse process, preventing UnifiedDB/workspace startup or recovery.",
+    "counterhypothesis": "A target CSI/storage implementation may independently mount the PVC with compatible ownership, so the missing fsGroup would not fail on every cluster.",
+    "discriminator": "Require an explicit non-root mount-group contract in the deployment source and final acceptance, then prove create/write/fsync/read/rename/delete as uid=10001,gid=10001 on both persistent mounts before and after full appliance replacement.",
+    "result": "SOURCE_REPAIR_CREATED_RUNTIME_PROOF_STILL_REQUIRED"
+  },
+  "delta": {
+    "template_blob": "499a2ebfd6c6b77234b70678af0c5201ebcefae2",
+    "contract_blob": "842a15a74d5b15a28af80df965b9523e488d359b",
+    "test_blob": "cd052573a59733025ff998ce4be7f9b9b3a9e221",
+    "readme_blob": "6297dc25d293070dc0dc565502b5612017610f4f",
+    "changes": [
+      "Pod fsGroup set to 10001",
+      "fsGroupChangePolicy set to OnRootMismatch",
+      "no privileged/root init-container ownership repair path",
+      "contract requires storage-class/CSI identity and effective mount-group proof",
+      "contract requires uid/gid 10001 create/write/fsync/read/rename/delete probes on state and workspace, repeated after full appliance replacement",
+      "focused source regression extended",
+      "living README refreshed"
+    ]
+  },
+  "primary_upstream_evidence": {
+    "source": "Kubernetes official documentation: Configure a Security Context for a Pod or Container and Pod v1 API",
+    "supported_claims": [
+      "fsGroup applies a supplemental group and supported volume ownership/write semantics",
+      "when fsGroup is unset, kubelet does not modify volume ownership and permissions",
+      "fsGroupChangePolicy OnRootMismatch bounds recursive ownership changes",
+      "CSI VOLUME_MOUNT_GROUP may delegate mount-group handling to the CSI driver"
+    ]
+  },
+  "supporting_probe": {
+    "environment": "isolated local reconstruction; not product runtime",
+    "scope": "deployment YAML structure only",
+    "command_class": "PyYAML safe_load_all plus 10 structural assertions",
+    "result": "PASS",
+    "documents_parsed": 3,
+    "assertions": 10,
+    "limitations": [
+      "reconstructed source probe, not exact Git blob pytest",
+      "not Kubernetes API admission",
+      "not Kata/microVM runtime",
+      "not CSI volume behavior",
+      "not exact OCI image execution"
+    ]
+  },
+  "execution_admission": {
+    "vercel_controller_pr": "gschaidergabriel/Dr.-Unterweger#810",
+    "status": "BLOCKED_BEFORE_PRIVATE_SOURCE_STAGE",
+    "blocker": "host-side Vercel Preview GITHUB_READ_TOKEN absent",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "retry_only_controller_churn": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No safely shared immutable request/turn identity is exposed; only minute-precision trigger time is available."
+  },
+  "safety": {
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "together_api_used": false,
+    "secrets_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "next_gate": "Run exact branch regression in an admitted isolated executor, then build the exact final OCI image and prove non-root persistent-volume behavior under the admitted Kata/equivalent runtime and storage class/CSI before whole-product acceptance."
+}

@@ -2,14 +2,14 @@ from __future__ import annotations
 import hashlib,json
 from .store import UnifiedDB
 class ClayGraphProjection:
-    """Rebuildable semantic projection; lossless source archives remain recovery/provenance data only."""
+    """Rebuildable semantic projection; compression/provenance receipts are not semantic truth nodes."""
     def __init__(self,db:UnifiedDB): self.db=db
     @staticmethod
     def _id(*parts): return hashlib.sha256("\x1f".join(parts).encode()).hexdigest()[:24]
     def rebuild(self):
         with self.db.tx() as db:
             db.execute("DELETE FROM graph_edges"); db.execute("DELETE FROM graph_nodes")
-            for m in db.execute("SELECT * FROM durable_memory WHERE kind<>'source_archive'"):
+            for m in db.execute("SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt')"):
                 nid=self._id("memory",m['memory_id']); db.execute("INSERT INTO graph_nodes VALUES(?,?,?,?,?)",(nid,"memory",m['value'][:120],"durable_memory",m['memory_id']))
                 uid=self._id("user",m['user_id'] or "shared"); db.execute("INSERT OR IGNORE INTO graph_nodes VALUES(?,?,?,?,?)",(uid,"user",m['user_id'] or "shared","users",m['user_id'] or "shared")); db.execute("INSERT INTO graph_edges VALUES(?,?,?,?,?)",(self._id(uid,nid,"owns_memory"),uid,nid,"owns_memory",json.dumps({"source":m['memory_id']})))
             for c in db.execute("SELECT * FROM causal_episodes WHERE reentered=1"):

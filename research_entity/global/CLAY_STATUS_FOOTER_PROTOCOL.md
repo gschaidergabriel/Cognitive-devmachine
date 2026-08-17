@@ -9,7 +9,9 @@ Opening fence must be exactly ` ```text `.
 
 The persistent Research Entity is Clay. The active product endpoint is ClayVerse; the active engineering stage is `CLAYVERSE_ARTIFACT`. The canonical product workspace is `main/the artefact/` in `gschaidergabriel/clay-global-research-entity`, and the release target is one OCI/Docker-compatible ClayVerse container image.
 
-EntityOS may appear only as an internal execution/security/runtime substrate where useful. Legacy EntityOS-as-one-file-product, Frank/self.root/UCM2/Harness/H1/H2/H3 material is bounded internal/historical evidence and is not the active release endpoint.
+EntityOS is an internal execution/security/runtime substrate, never the top-level product endpoint. Under the current owner/product law, the **final accepted ClayVerse image MUST contain the complete accepted EntityOS substrate**. EntityOS may be omitted only from explicitly classified development/baseline builds with execution disabled; such builds cannot receive whole-product PASS. Legacy EntityOS-as-one-file-product, Frank/self.root/UCM2/Harness/H1/H2/H3 material is bounded internal/historical evidence and is not the active release endpoint.
+
+Final whole-product acceptance also requires the **same exact accepted ClayVerse OCI image digest** to execute behind an independent VM/microVM guest-kernel boundary (Kata/equivalent invariants). Direct host-kernel OCI execution remains bounded development/supporting evidence only.
 
 ## Dynamic truth law
 
@@ -19,6 +21,7 @@ Resolve current state from the strongest available current evidence, especially:
 - `research_entity/rooms/PROGRAM_STATE.json`
 - `research_entity/continuity/BOOTSTRAP_MINIMAL.json`
 - `the artefact/manifest.json`
+- `the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md`
 - current research `main` and exact runtime/test receipts.
 
 Never infer whole-product completion from source inspection, a component test, a CI definition, a deployment READY state or historical receipts. If no canonical progress percentage or ETA exists, report `UNRESOLVED`.
@@ -36,7 +39,8 @@ Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
 Program: ClayVerse single-container
 Stage: CLAYVERSE_ARTIFACT
 Goal: one OCI/Docker-compatible ClayVerse container — one persistent central entity + UnifiedDB authority + rebuildable ClayGraph + Clerk web auth + Claude Code cognition + secure/recoverable effect boundary
-EntityOS: optional internal execution/security/runtime substrate, not product endpoint
+EntityOS: MANDATORY_IN_FINAL_ACCEPTED_IMAGE — complete accepted internal execution/security/runtime substrate; not product endpoint
+Outer isolation: MANDATORY_FOR_FINAL_PASS — same exact accepted OCI digest behind independent VM/microVM guest-kernel boundary; direct host-kernel OCI is development evidence only
 Legacy Frank/self.root/UCM2/Harness: bounded evidence only
 Together API: FORBIDDEN
 Final paid/model training: OWNER_AUTHORIZATION_REQUIRED
@@ -55,4 +59,5 @@ Short commands: 666 · go · q12 · q23 · atomic · dump · fusion · hypofusio
 3. active program/stage are ClayVerse single-container / `CLAYVERSE_ARTIFACT`;
 4. current research revision is refreshed when GitHub is available;
 5. invented progress/ETA is forbidden;
-6. EntityOS is never presented as the current top-level product endpoint.
+6. EntityOS is never presented as the top-level product endpoint, and the final accepted image is never described as EntityOS-optional;
+7. final whole-product acceptance is never described as satisfied by direct host-kernel OCI execution without the required independent VM/microVM guest-kernel boundary.

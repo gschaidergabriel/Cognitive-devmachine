@@ -115,8 +115,8 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
         remaining = remaining[written:]
 
 
-def _runtime_ready(db: UnifiedDB) -> bool:
-    """Read-only readiness check for the canonical UnifiedDB spine."""
+def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
+    """Read-only readiness check for canonical state plus both managed Claude terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
@@ -128,7 +128,7 @@ def _runtime_ready(db: UnifiedDB) -> bool:
         ).fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
-        return bool(
+        state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
             and users and int(users[0]) == 2
@@ -138,6 +138,12 @@ def _runtime_ready(db: UnifiedDB) -> bool:
                 and int(sessions[user_id]["generation"]) == entity_generation
                 for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
             )
+        )
+        if not state_ready:
+            return False
+        return all(
+            terminals.is_managed_session(terminals.binding(user_id))
+            for user_id in CANONICAL_TERMINAL_NAMES
         )
     except Exception:
         return False
@@ -167,7 +173,8 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/readyz")
     async def readyz():
-        ready = _runtime_ready(db)
+        # tmux probes are bounded but synchronous. Keep them off FastAPI's event loop.
+        ready = await asyncio.to_thread(_runtime_ready, db, terminals)
         return JSONResponse({
             "status": "ready" if ready else "not_ready",
             "scope": "runtime",
@@ -291,8 +298,6 @@ window.addEventListener('load', async () => {{
                         message = await asyncio.wait_for(ws.receive(), timeout=remaining)
                     except asyncio.TimeoutError as exc:
                         raise AuthenticationError("Clerk session token expired") from exc
-                    # wait_for() and websocket receive completion race at the deadline.
-                    # Re-check the lease before any received frame can affect PTY/control state.
                     if auth_expires_at <= time.time():
                         raise AuthenticationError("Clerk session token expired")
                     if message.get("type") == "websocket.disconnect":
@@ -309,10 +314,7 @@ window.addEventListener('load', async () => {{
                                 expected_subject=clerk_subject,
                                 expected_clerk_session_id=clerk_session_id,
                             )
-                            await send_json({
-                                "type": "reauthenticated",
-                                "auth_expires_at": int(auth_expires_at),
-                            })
+                            await send_json({"type": "reauthenticated", "auth_expires_at": int(auth_expires_at)})
                             continue
                         if control.get("type") != "resize":
                             raise ValueError("unsupported terminal control message")

@@ -7,7 +7,7 @@ import math
 import time
 from typing import Any
 
-from .store import StaleGeneration, UnifiedDB
+from .store import UnifiedDB
 
 
 class MethodRoutePolicy:
@@ -16,6 +16,10 @@ class MethodRoutePolicy:
     Served method selection remains structural-baseline only. Verified causally
     re-entered effect outcomes may change namespaced method:* route capital, which is
     observed only as a shadow ranking until a later externally validated promotion.
+
+    If multiple frameworks were supplied, only the primary (first selected) route is
+    credited. Alternatives receive no inferred utility because their causal influence
+    is not identifiable from the shared downstream outcome.
     """
 
     POLICY_VERSION = 1
@@ -72,14 +76,25 @@ class MethodRoutePolicy:
             max(cls.CAPITAL_MIN, min(cls.CAPITAL_MAX, float(capitals.get(key, 0.0))))
             for key in keys
         ]
-        mean = sum(values) / len(values)
-        return cls.SHADOW_WEIGHT * math.tanh(mean)
+        return cls.SHADOW_WEIGHT * math.tanh(sum(values) / len(values))
 
     def _feedback_subject(self, use_receipt_id: str, causal_id: str, generation: int, signal: str, credit: float) -> str:
         digest = hashlib.sha256(
             f"{use_receipt_id}\x1f{causal_id}\x1f{generation}\x1f{signal}\x1f{credit:.9f}".encode("utf-8")
         ).hexdigest()
         return f"method-route-feedback:{digest}"
+
+    @staticmethod
+    def _primary_entry_keys(use: dict[str, Any]) -> list[str]:
+        selected = use.get("selected_method_ids")
+        entry_keys = use.get("entry_keys")
+        if not isinstance(selected, list) or not selected or not isinstance(selected[0], str) or not selected[0]:
+            return []
+        if not isinstance(entry_keys, list) or any(not isinstance(key, str) or not key.startswith("method:") for key in entry_keys):
+            return []
+        primary = selected[0]
+        marker = f":{primary}"
+        return sorted({key for key in entry_keys if marker in key})[:16]
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
         self.db.assert_live_generation(session_id, generation)
@@ -104,10 +119,8 @@ class MethodRoutePolicy:
             if use.get("session_id") != session_id or use_generation != int(generation):
                 continue
             causal_id = use.get("causal_id")
-            entry_keys = use.get("entry_keys")
-            if not isinstance(causal_id, str) or not causal_id:
-                continue
-            if not isinstance(entry_keys, list) or any(not isinstance(k, str) or not k.startswith("method:") for k in entry_keys):
+            primary_keys = self._primary_entry_keys(use)
+            if not isinstance(causal_id, str) or not causal_id or not primary_keys:
                 continue
             outcome = self.db.db.execute(
                 "SELECT c.credit,e.status FROM causal_episodes c "
@@ -126,7 +139,7 @@ class MethodRoutePolicy:
                 continue
             with self._maybe_tx():
                 now = time.time()
-                for key in sorted(set(entry_keys))[:32]:
+                for key in primary_keys:
                     current = self.db.db.execute(
                         "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
                         (key,),
@@ -150,11 +163,12 @@ class MethodRoutePolicy:
                 feedback = {
                     "action": "METHOD_ROUTE_CREDIT",
                     "use_receipt_memory_id": str(row["memory_id"]),
+                    "primary_method_id": use["selected_method_ids"][0],
                     "causal_id": causal_id,
                     "generation": int(generation),
                     "credit": credit,
                     "signal_class": signal,
-                    "entry_keys": sorted(set(entry_keys))[:32],
+                    "entry_keys": primary_keys,
                     "truth_authority": False,
                     "effect_authority": False,
                 }

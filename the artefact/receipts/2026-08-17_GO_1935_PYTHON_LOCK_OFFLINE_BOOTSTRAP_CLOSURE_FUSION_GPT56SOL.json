@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T19:35:10+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "SUPERSEDES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "d5f0b64d9badf04b03f927497ec3954032fb2315",
+  "frontier": "Python dependency-lock generator bootstrap trust while the retained OCI lane remains blocked on approved host-side Vercel private-source credential provisioning",
+  "retained_lane": {
+    "pr": 622,
+    "branch": "go/python-lock-py313-generator-20260817-1742-sol",
+    "head": "be61f7afd28ab76c4aecb83e6481f3cb29aeffb4",
+    "source_lock_contains_complete_declared_bootstrap_wheel_set": true,
+    "workflow_installs_generator_offline_with_require_hashes": true,
+    "new_workflow_run_observed_for_head": false
+  },
+  "live_fusion": {
+    "prior_local_candidate": "79381ab2b11afd6ce79eb301ef670405f4c9753b",
+    "parallel_followup": "be61f7afd28ab76c4aecb83e6481f3cb29aeffb4",
+    "relationship": "parallel followup supersedes report-only bootstrap-provenance observation with a stronger source-defined hash-closed offline wheelhouse",
+    "duplicate_lane_created": false,
+    "action": "ADOPT"
+  },
+  "source_delta_observed": {
+    "pip_tools": "pip-tools==7.5.3",
+    "pip_tools_wheel_sha256": "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e",
+    "bootstrap_package_set": [
+      "build==1.2.2.post1",
+      "click==8.3.3",
+      "packaging==24.2",
+      "pip==26.1.2",
+      "pyproject-hooks==1.2.0",
+      "setuptools==83.0.0",
+      "wheel==0.46.2"
+    ],
+    "workflow_contract": [
+      "construct exact generator requirements from SOURCE_LOCK",
+      "require exact expected package-name closure",
+      "pip download --only-binary=:all: --require-hashes",
+      "verify complete downloaded wheelhouse with sha256sum -c",
+      "pip install --no-index --find-links from verified local wheelhouse with --require-hashes",
+      "emit generator bootstrap and final environment identity before double pip-compile product lock generation"
+    ]
+  },
+  "hypofusion": {
+    "prior_counterhypothesis": "locking only the pip-tools wheel leaves transitive generator bootstrap dependencies index-resolved and unhashed",
+    "status": "SOURCE_SIDE_SUPERSEDED",
+    "surviving_counterhypothesis": "the declared eight-package Linux/Python-3.13 bootstrap set or one selected wheel may be incompatible/incomplete at exact digest-pinned runtime despite source locks",
+    "cheapest_falsifier": "actually-started authorized isolated run of exact PR622 head in the exact digest-pinned product Python base; require no extra downloads, full sha256sum closure, successful offline install, exact version assertions and deterministic double compilation"
+  },
+  "evidence_class": "SOURCE_CANDIDATE_UNEXECUTED",
+  "runtime_credit": 0,
+  "source_runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "reason": "shared trigger identity lacks safely reproducible immutable request/turn identity; all work in this cycle is deterministic source/evidence hardening"
+  },
+  "primary_oci_blocker": "GITHUB_READ_TOKEN is still absent from the sensitive Vercel Preview host build environment; Sandbox.create is already observed PASS for the retained controller but private source staging cannot begin",
+  "next_isolated_step": "after approved sensitive Preview credential provisioning, refresh/rebind the single retained PR810 controller once to then-current Research/#611/#622 bytes and execute the full Vercel Sandbox batch; use the exact PR622 offline generator closure before canonical requirements.lock promotion or Docker --require-hashes",
+  "acceptance": "IN_PROGRESS",
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false
+  }
+}

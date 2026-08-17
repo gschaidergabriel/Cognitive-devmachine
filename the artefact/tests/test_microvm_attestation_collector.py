@@ -145,7 +145,7 @@ def test_collector_rejects_host_kernel_indistinguishable_from_guest_kernel():
 
 
 def test_collector_rejects_missing_default_deny_policy():
-    with pytest.raises(AttestationError, match="clayverse-default-deny"):
+    with pytest.raises(AttestationError, match="no NetworkPolicy selects the ClayVerse pod"):
         _attest(network_policies={"items": []})
 
 

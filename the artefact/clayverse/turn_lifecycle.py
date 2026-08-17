@@ -33,8 +33,31 @@ def infer_resource_refs(text: str) -> list[str]:
     return sorted(refs)[:50]
 
 
+def _provenance_source(value: str) -> str:
+    if not isinstance(value, str) or not value or len(value) > 128 or "\x00" in value:
+        raise ValueError("invalid provenance source")
+    return value
+
+
+def _provider_receipt(value: dict | None) -> dict | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise ValueError("provider receipt must be an object")
+    try:
+        encoded = json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("provider receipt must be canonical JSON") from exc
+    if len(encoded) > 16_384:
+        raise ValueError("provider receipt too large")
+    decoded = json.loads(encoded)
+    if not isinstance(decoded, dict):
+        raise ValueError("provider receipt must remain an object")
+    return decoded
+
+
 class TurnLifecycle:
-    """Deterministic per-turn lifecycle shared by Claude hooks and MCP effects."""
+    """Deterministic per-turn lifecycle shared by Claude hooks and bounded inference providers."""
     def __init__(self, db: UnifiedDB, user_id: str, session_id: str, entityos_bridge=None):
         if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}": raise PermissionError("invalid terminal/session binding")
         db.assert_session_owner(session_id, user_id)
@@ -116,8 +139,8 @@ class TurnLifecycle:
         return {"aborted":True,"causal_id":row["causal_id"],"reason":reason}
 
     @contextlib.contextmanager
-    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None):
-        prompt=str(prompt)
+    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None,source:str="claude-hook:UserPromptSubmit"):
+        prompt=str(prompt); source=_provenance_source(source)
         if not prompt or len(prompt)>100_000: raise ValueError("invalid prompt")
         if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
         resource_refs=sorted(set(resources or infer_resource_refs(prompt)))[:50]; turn_id=str(uuid.uuid4()); episode_id=str(uuid.uuid4()); causal_id=str(uuid.uuid4())
@@ -128,7 +151,7 @@ class TurnLifecycle:
             generation=self.db.session_generation(self.session_id); entity_generation=self.db.entity_generation()
             if generation!=entity_generation: raise StaleGeneration("entity_generation")
             now=time.time(); salience=min(1.0,0.15+0.03*len(resource_refs)+min(len(prompt),1200)/2400)
-            provenance={"source":"claude-hook:UserPromptSubmit","session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
+            provenance={"source":source,"session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
             if claude_session_id is not None: provenance["claude_session_id"]=claude_session_id
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
             db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(turn_id,self.session_id,self.user_id,ordinal,now,"user",prompt,json.dumps(resource_refs),"[]",json.dumps(provenance,sort_keys=True)))
@@ -140,8 +163,8 @@ class TurnLifecycle:
             world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
             yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
-    def begin(self,prompt:str,resources:list[str]|None=None)->dict:
-        with self.begin_admission(prompt,resources) as result: return result
+    def begin(self,prompt:str,resources:list[str]|None=None,*,source:str="claude-hook:UserPromptSubmit")->dict:
+        with self.begin_admission(prompt,resources,source=source) as result: return result
 
     def request_effect(self,capability:str,target:str,argv:list[str]|None=None)->dict:
         with self.db.tx() as db:
@@ -179,8 +202,8 @@ class TurnLifecycle:
             if effect is None or effect["effect_id"]!=effect_id: raise TurnLifecycleError("journaled effect unavailable for active binding")
         return {"effect_id":effect_id,"causal_id":causal_id,"verified":bool(isinstance(outcome,dict) and outcome.get("ok") is True),"outcome":outcome}
 
-    def complete(self,response:str)->dict:
-        response=str(response)
+    def complete(self,response:str,*,source:str="claude-hook:Stop",provider_receipt:dict|None=None)->dict:
+        response=str(response); source=_provenance_source(source); provider_receipt=_provider_receipt(provider_receipt)
         if len(response)>200_000: raise ValueError("assistant response too large")
         now=time.time(); assistant_id=str(uuid.uuid4()); response_hash=hashlib.sha256(response.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
@@ -192,8 +215,10 @@ class TurnLifecycle:
             if effect_id and existing_causal is None: raise TurnLifecycleError("effect lacks causal re-entry before Stop")
             if existing_causal and existing_causal["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("effect causal identity diverged before Stop")
             credit=float(existing_causal["credit"]) if existing_causal else 0.0
+            provenance={"source":source,"causal_id":row["causal_id"],"entity_generation":int(row["generation"])}
+            if provider_receipt is not None: provenance["provider_receipt"]=provider_receipt
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
-            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(assistant_id,self.session_id,self.user_id,ordinal,now,"assistant",response,row["resource_refs"],json.dumps([effect_id] if effect_id else []),json.dumps({"source":"claude-hook:Stop","causal_id":row["causal_id"],"entity_generation":int(row["generation"])},sort_keys=True)))
+            db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(assistant_id,self.session_id,self.user_id,ordinal,now,"assistant",response,row["resource_refs"],json.dumps([effect_id] if effect_id else []),json.dumps(provenance,sort_keys=True)))
             if existing_causal is None: db.execute("INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",(row["causal_id"],row["episode_id"],None,row["turn_id"],response_hash,0.0,1,now))
             cur=db.execute("UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",(row["episode_id"],))
             if cur.rowcount!=1: raise TurnLifecycleError("workspace did not terminalize during Stop")

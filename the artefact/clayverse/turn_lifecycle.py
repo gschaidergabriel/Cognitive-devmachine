@@ -46,7 +46,15 @@ class TurnLifecycle:
 
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
+        packed={
+            "own_recent":list(world.get("own_recent",[])),
+            "cross_session_collision":list(world.get("cross_session_collision",[])),
+            "durable_memory":list(world.get("durable_memory",[])),
+            # Receipts are part of the canonical context contract. They are small,
+            # authority-bearing metadata and must not disappear during context packing.
+            "retrieval_receipt":dict(world.get("retrieval_receipt") or {}),
+            "method_receipt":dict(world.get("method_receipt") or {}),
+        }
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)

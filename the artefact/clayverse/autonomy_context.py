@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import uuid
 from typing import Any
 
 from .autonomy import AutonomyController, AutonomyStateError
@@ -11,6 +12,8 @@ AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v2"
 AUTONOMY_CONTEXT_MAX_CHARS = 2_500
 AUTONOMY_CONTEXT_MAX_GOALS = 4
 GOAL_COMMAND_PREFIX = "/goal "
+GOAL_ACK_PREFIX = "/goal-ack "
+GOAL_CANCEL_PREFIX = "/goal-cancel "
 _ATTENTION_STATUSES = {"ACTIVE", "WAITING", "VERIFYING", "BLOCKED"}
 _SAFE_BLOCK_REASONS = {
     "retry_budget_exhausted",
@@ -18,6 +21,9 @@ _SAFE_BLOCK_REASONS = {
     "unknown_effect_after_generation_change",
     "effect_evidence_requires_generation_rebind",
     "recovered_interrupted_no_effect_step",
+    "human_preempted_autonomy_step",
+    "autonomy_effect_not_dispatched_before_stop",
+    "invalid_autonomy_planner_decision",
 }
 
 
@@ -66,6 +72,115 @@ def _snapshot(db: UnifiedDB, user_id: str) -> dict[str, Any]:
     }
 
 
+def _canonical_command_turn(
+    db: UnifiedDB,
+    *,
+    user_id: str,
+    session_id: str,
+    source_turn_id: str,
+    prompt: str,
+):
+    if user_id not in CANONICAL_USER_IDS or session_id != f"session:{user_id}":
+        raise PermissionError("autonomy command requires canonical owner session")
+    db.assert_session_owner(session_id, user_id)
+    live_generation = db.entity_generation()
+    db.assert_live_generation(session_id, live_generation)
+    row = db.db.execute(
+        "SELECT session_id,user_id,role,content,provenance FROM turns WHERE turn_id=?",
+        (source_turn_id,),
+    ).fetchone()
+    if row is None:
+        raise AutonomyStateError("autonomy command source turn missing")
+    if (
+        row["session_id"] != session_id
+        or row["user_id"] != user_id
+        or row["role"] != "user"
+        or row["content"] != prompt
+    ):
+        raise PermissionError("autonomy command source must be exact canonical owner user turn")
+    provenance = AutonomyController._loads(row["provenance"] or "{}")
+    try:
+        entity_generation = int(provenance.get("entity_generation"))
+        session_generation = int(provenance.get("session_generation"))
+    except (TypeError, ValueError) as exc:
+        raise PermissionError("autonomy command generation provenance missing") from exc
+    if (
+        provenance.get("source") != "claude-hook:UserPromptSubmit"
+        or entity_generation != live_generation
+        or session_generation != live_generation
+    ):
+        raise PermissionError("autonomy command is not a live admitted UserPromptSubmit turn")
+    return row, live_generation
+
+
+def _goal_id_from_command(prompt: str, prefix: str) -> str:
+    raw = prompt[len(prefix) :].strip()
+    if not raw or any(char.isspace() for char in raw) or "\x00" in raw:
+        raise AutonomyStateError("goal command requires exactly one goal id")
+    try:
+        parsed = uuid.UUID(raw)
+    except (ValueError, AttributeError) as exc:
+        raise AutonomyStateError("goal command id is not canonical UUID") from exc
+    canonical = str(parsed)
+    if canonical != raw.lower():
+        raise AutonomyStateError("goal command id is not canonical UUID text")
+    return canonical
+
+
+def apply_explicit_goal_command(
+    db: UnifiedDB,
+    *,
+    user_id: str,
+    session_id: str,
+    source_turn_id: str,
+    prompt: str,
+) -> dict[str, Any] | None:
+    """Apply only exact typed goal create/ack/cancel commands from the live user turn."""
+    if not isinstance(prompt, str):
+        return None
+    if prompt.startswith(GOAL_COMMAND_PREFIX):
+        goal = admit_explicit_goal_from_turn(
+            db,
+            user_id=user_id,
+            session_id=session_id,
+            source_turn_id=source_turn_id,
+            prompt=prompt,
+        )
+        return {"command": "create", "goal": goal}
+    if not (prompt.startswith(GOAL_ACK_PREFIX) or prompt.startswith(GOAL_CANCEL_PREFIX)):
+        return None
+
+    _canonical_command_turn(
+        db,
+        user_id=user_id,
+        session_id=session_id,
+        source_turn_id=source_turn_id,
+        prompt=prompt,
+    )
+    controller = AutonomyController(db)
+    owned = {
+        goal["goal_id"]: goal for goal in controller.snapshot(user_id=user_id)["goals"]
+    }
+
+    if prompt.startswith(GOAL_ACK_PREFIX):
+        goal_id = _goal_id_from_command(prompt, GOAL_ACK_PREFIX)
+        goal = owned.get(goal_id)
+        if goal is None:
+            raise PermissionError("goal acknowledgement target is not owned by current user")
+        contract = goal.get("completion_contract")
+        if not isinstance(contract, dict) or contract.get("mode") != "user_ack":
+            raise AutonomyStateError("goal does not admit user acknowledgement completion")
+        controller.acknowledge_by_user(goal_id, source_turn_id)
+        completed = controller.verify_completion(goal_id)
+        return {"command": "ack", "goal_id": goal_id, "result": completed}
+
+    goal_id = _goal_id_from_command(prompt, GOAL_CANCEL_PREFIX)
+    if goal_id not in owned:
+        raise PermissionError("goal cancellation target is not owned by current user")
+    cancelled = controller.cancel_goal(goal_id)
+    return {"command": "cancel", "goal_id": goal_id, "result": cancelled}
+
+
 def admit_explicit_goal_from_turn(
     db: UnifiedDB,
     *,
@@ -84,38 +199,13 @@ def admit_explicit_goal_from_turn(
         return None
     if not prompt[len(GOAL_COMMAND_PREFIX):].strip():
         raise AutonomyStateError("explicit goal objective is empty")
-    if user_id not in CANONICAL_USER_IDS or session_id != f"session:{user_id}":
-        raise PermissionError("explicit goal requires canonical owner session")
-
-    db.assert_session_owner(session_id, user_id)
-    live_generation = db.entity_generation()
-    db.assert_live_generation(session_id, live_generation)
-    row = db.db.execute(
-        "SELECT session_id,user_id,role,content,provenance FROM turns WHERE turn_id=?",
-        (source_turn_id,),
-    ).fetchone()
-    if row is None:
-        raise AutonomyStateError("goal source turn missing")
-    if (
-        row["session_id"] != session_id
-        or row["user_id"] != user_id
-        or row["role"] != "user"
-        or row["content"] != prompt
-    ):
-        raise PermissionError("goal source must be the exact canonical owner user turn")
-
-    provenance = AutonomyController._loads(row["provenance"] or "{}")
-    try:
-        entity_generation = int(provenance.get("entity_generation"))
-        session_generation = int(provenance.get("session_generation"))
-    except (TypeError, ValueError) as exc:
-        raise PermissionError("goal source generation provenance missing") from exc
-    if (
-        provenance.get("source") != "claude-hook:UserPromptSubmit"
-        or entity_generation != live_generation
-        or session_generation != live_generation
-    ):
-        raise PermissionError("goal source is not a live admitted UserPromptSubmit turn")
+    _canonical_command_turn(
+        db,
+        user_id=user_id,
+        session_id=session_id,
+        source_turn_id=source_turn_id,
+        prompt=prompt,
+    )
 
     controller = AutonomyController(db)
     for goal in controller.snapshot(user_id=user_id)["goals"]:

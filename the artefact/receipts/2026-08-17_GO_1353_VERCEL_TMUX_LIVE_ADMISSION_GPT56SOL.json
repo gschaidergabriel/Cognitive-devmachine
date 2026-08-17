@@ -1,0 +1,63 @@
+{
+  "schema": "clayverse-go-execution-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:59:20+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "trigger_timestamp": "2026-08-17T13:53:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "7f807ffd9ebca43f94b05730825781fbc4fc555b",
+  "go_experiment_accounting": {
+    "trigger_key": "ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+    "claim_commit": "d00fe7bebee29a7f2ffbcd6b16f455e557b23d29",
+    "result_commit": "8f1a4dd99b3cbd74ba8ec6a09b99fdddfe910a9d",
+    "experiment_name": "github_connector_exact_head_archive_to_isolated_executor",
+    "result": "BLOCKED_NO_ARCHIVE_BYTES_OR_REUSABLE_FILE_REFERENCE",
+    "test_command_started": false,
+    "whole_product_evidence": false,
+    "slot": "CONSUMED_1_OF_1"
+  },
+  "vercel_sandbox_bridge": {
+    "capability": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_lifecycle_actions": "NOT_EXPORTED",
+    "canonical_notice_commit": "64ecd8ba019e5a253666a786e42427ca22e5fd31",
+    "known_started_sandbox_proof_commit": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+    "known_started_sandbox_proof_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG"
+  },
+  "live_tmux_regression_candidate": {
+    "purpose": "close the exact live cross-user tmux namespace evidence gap after canonical per-user tmux socket fusion",
+    "canonical_terminal_sessions_source_head_bound": "e36dbb17c61db6ac1c4596dadfd6cd978d67207e",
+    "canonical_terminal_sessions_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "canonical_contract": "Gabriel uses tmux -L clayverse-gabriel and Andreas uses tmux -L clayverse-andreas; attached clients must not resolve sessions in the other server namespace",
+    "staging_branch": "chatgpt/go-1353-tmux-live-vercel-20260817",
+    "staging_script_commit": "bc663e59f26209df8b951282023e943a61981810",
+    "staging_target_commit": "c61d9c0fe2c3270084bcbf3aa86cf50dcf2ce695",
+    "execution_contract": "create non-persistent Python 3.13 Vercel Sandbox, install real tmux before network lock, switch Sandbox network policy to deny-all, create separate Gabriel/Andreas tmux servers and assert cross-server session invisibility, stop Sandbox in finally",
+    "classification": "ORDINARY_DETERMINISTIC_REGRESSION",
+    "unusual_experiment_count_added": 0
+  },
+  "current_execution_observation": {
+    "github_vercel_status_for_staging_target": "failure",
+    "status_target": "upgradeToPro=build-rate-limit",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "tmux_test_executed": false,
+    "test_credit": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "is_test_failure": false
+  },
+  "falsifier_if_admitted": "If a session created only in the Andreas tmux server can be resolved from the Gabriel tmux server or vice versa, the fused user-bound terminal isolation mechanism fails and must not be treated as privacy isolation.",
+  "evidence_boundary": {
+    "vercel_sandbox_execution_path_exists": true,
+    "current_new_preview_admission": false,
+    "live_tmux_cross_user_isolation_verified": false,
+    "full_current_head_regression_verified": false,
+    "exact_oci_build_verified": false,
+    "real_clerk_browser_websocket_pty_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_exact_gate": "When Vercel preview admission reopens, rerun this identical ordinary staging target against the then-current canonical terminal contract, require real tmux cross-server invisibility PASS and Sandbox stop, then execute adjacent Clerk/WebSocket/PTY persistence/restart regressions and exact OCI build/start/readiness/recovery. Rebinding source identity is required if main changes. No second unusual experiment is authorized for this go.",
+  "acceptance": "IN_PROGRESS_EXECUTION_ADMISSION_BLOCKED"
+}

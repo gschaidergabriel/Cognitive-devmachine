@@ -1,0 +1,80 @@
+{
+  "schema": "clayverse-go-execution-admission-receipt/v1",
+  "recorded_at": "2026-08-17T14:09:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "trigger_source_time": "2026-08-17T13:35+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_write": "4b433935d7d31578f22fd0f4c51ac972a03904b9",
+  "research_candidate": {
+    "pr": 411,
+    "head_observed": "df5bcf4c77d02532fe662db2150eaf8d8b4c1615",
+    "source_invariant_base": "a70623f3206e30d087d38a55aa8e62e689b82f87",
+    "compare_note": "a70623f..df5bcf4 changes only three additional test files; store.py and method_stage_b.py runtime bytes used by this bounded #420 gate are unchanged",
+    "store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "method_stage_b_blob": "be9e1a68d4374d718a5d21c2746b964e02af2a1e"
+  },
+  "staging": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-1335-stageb-tx-vercel-sol",
+    "head": "df2aa11232021b66769e9df5bedce230604259c5",
+    "runner": "mcp/vercel-sandbox-mcp/scripts/run-stageb-tx-1335-sandbox.mjs",
+    "staged_method_stage_b_blob": "be9e1a68d4374d718a5d21c2746b964e02af2a1e",
+    "staged_store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "blob_match_verified_before_deploy_attempt": true,
+    "sandbox_runtime_requested": "python3.13",
+    "network_policy_requested": "deny-all",
+    "probe_contract": [
+      "verify exact staged Git blob identities inside Sandbox",
+      "exercise exact StageBMethodRetrieval SIGNATURE_REQUIRED receipt path with exact UnifiedDB store.py",
+      "enter Stage-B receipt persistence inside an already-open UnifiedDB.tx without nested BEGIN failure",
+      "prove receipt is visible inside the outer transaction and removed by outer rollback",
+      "prove standalone receipt commits once and same causal request replays without duplicate durable receipt",
+      "assert truth_authority=false and effect_authority=false",
+      "stop Sandbox in finally"
+    ],
+    "scope_note": "method_memory is an explicit import-only non-serving stub. problem_signature=None, so MethodMemory.retrieve and canonical_problem_signature are not executed. Any PASS would be bounded to issue #420 transaction/receipt semantics, not full PR #411."
+  },
+  "vercel_observation": {
+    "github_status_context": "Vercel",
+    "commit_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "status_observed_at": "2026-08-17T07:07:41Z",
+    "deployment_created": false,
+    "build_started": false,
+    "sandbox_started": false,
+    "test_started": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAILURE"
+  },
+  "source_work_this_go": {
+    "stage_b_nested_transaction_fix": "c340a6ec4922143be716d19ca65f43d87ae37568",
+    "stage_b_nested_transaction_regressions": "428becf91715635fa42d762cc5ff0673e656548c",
+    "stage_b_bounded_world_transport": "3b8f830eba45a32971a7734a2f53b6acf2939bea",
+    "stage_b_transport_regressions": "8bedb15c89f5b8f0bbc423ec82a6d6dd8a8c831b",
+    "microclay_credit_atomicity_fix": "5e947480503bf88832709d31ead0e7fc06558220",
+    "microclay_credit_crash_regression": "af63b79e653ef0bb68f884b4530fadf9dbe80c20"
+  },
+  "open_gates": {
+    "420": "SOURCE_REPAIRED_EXECUTION_ADMISSION_BLOCKED",
+    "425": "SOURCE_IMPLEMENTED_EXACT_ISOLATED_EXECUTION_AND_ADVERSARIAL_VALIDATION_OPEN",
+    "438": "SOURCE_REPAIRED_EXACT_ISOLATED_EXECUTION_OPEN",
+    "441": "STRUCTURED_PROBLEM_SIGNATURE_INGRESS_OPEN",
+    "451": "CANONICAL_MATCHER_SEMANTICS_FUSION_OPEN"
+  },
+  "experiment_accounting": {
+    "state": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+    "new_unusual_experiment_in_this_execution_attempt": false,
+    "execution_class": "ordinary deterministic regression admission attempt"
+  },
+  "security_constraints": {
+    "vps_or_self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_or_final_training_started": false
+  },
+  "claim_level": "SOURCE_CANDIDATE_STRENGTHENED_EXACT_STAGEB_TX_FIXTURE_READY_EXECUTION_ADMISSION_BLOCKED",
+  "exact_runtime_verified": false,
+  "whole_product_pass": false,
+  "next_gate": "When Vercel preview admission is available, execute staging head df2aa112... and accept only the bounded #420 result if the exact blob-bind, transaction/rollback/replay probe, and Sandbox stop receipt all succeed. Then run the analogous exact #438 MicroClay crash-atomicity regression before broader lifecycle/OCI acceptance."
+}

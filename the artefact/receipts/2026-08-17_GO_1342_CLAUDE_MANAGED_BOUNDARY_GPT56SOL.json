@@ -1,0 +1,105 @@
+{
+  "schema": "clayverse-go-claude-managed-boundary-receipt/v2",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time_observed": "2026-08-17T13:42+07:00",
+  "trigger_identity_precision": "minute_only",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "main_observed_before_v2_receipt_write": "fe9aafe235db72c7357d9f97fe9f73e1d5c16901",
+  "goal": "keep Clerk-authenticated WebSocket PTY plus managed ClayVerse hooks/MCP as the admitted Claude interaction boundary, without Claude-native alternate remote, cross-session, channel, connector, plugin-marketplace, background-agent, deep-link, artifact-publish or sideload paths silently becoming parallel authorities",
+  "source_changes": [
+    {"commit": "dfcd93ba1f190bee0a72fa86ede51f64d0190f7d", "change": "disableRemoteControl=true"},
+    {"commit": "a87bd8d0fd0bcdd48857714af3fc48ba85e1f2a7", "change": "bind Remote Control and exact serverCommand MCP regression"},
+    {"commit": "dd106944a8f7b8b4c4b7e1c20d34a7aea9cd4a17", "change": "crossSessionInbound=refuse; disableBundledSkills/ClaudeAiConnectors/SideloadFlags"},
+    {"commit": "aaf83cf3c7ee94a4c4e082d62719711c66b92cf0", "change": "bind alternate-ingress assertions"},
+    {"commit": "b496c676ba3e72ddbcdc1d902695d47f6076fbce", "change": "strictKnownMarketplaces=[]; channels disabled; no channel plugins; Agent View disabled; deep-link registration disabled; Artifact disabled and denied"},
+    {"commit": "ba286feaca989fdad08a4d6772823abaa6b0f1e9", "change": "bind native-ingress and artifact-publish lockdown assertions"}
+  ],
+  "current_bound_blobs": {
+    "managed_settings": "9273b7c9f3eb42f0530fea45c05c9b33dd5ff068",
+    "terminal_managed_authority_test": "724c97e482c1393401091fc93e6e46df767820a6",
+    "source_lock": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "terminal_sessions_observed": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b"
+  },
+  "claude_source_lock": {
+    "version": "2.1.233",
+    "asset": "claude-linux-x64.tar.gz",
+    "sha256": "23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "official_release_asset_digest_observed": "sha256:23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "official_release_asset_size": 98452216
+  },
+  "upstream_contract_basis": {
+    "setting_sources_empty": "user/project/local filesystem settings, CLAUDE.md, skills and agents are excluded; managed policy remains and ~/.claude.json remains independently readable",
+    "strictKnownMarketplaces_empty": "managed complete marketplace admission lockdown; enforced before network/filesystem and on add/install/update/refresh/auto-update",
+    "channelsEnabled_false": "managed channel ingress remains disabled; empty allowedChannelPlugins is an additional deny-all fence",
+    "disableAgentView": "turns off claude agents, --bg, /background and on-demand supervisor",
+    "disableDeepLinkRegistration": "prevents claude-cli:// OS protocol registration used to open a session with a prefilled prompt",
+    "disableArtifact": "prevents Claude Artifact publishing; Artifact is also denied in permissions",
+    "disableRemoteControl": "blocks remote-control command/flag/auto-start/in-session toggle",
+    "crossSessionInbound": "refuse drops Claude-native inbound cross-session messages",
+    "disableClaudeAiConnectors": "suppresses claude.ai MCP connector auto-fetch/connect",
+    "disableSideloadFlags": "rejects transient plugin/custom-agent/MCP sideload flags"
+  },
+  "adversarial_checks": [
+    {
+      "hypothesis": "disableSideloadFlags could deny the canonical ClayVerse launch",
+      "observation": "current terminal launch uses --settings, empty --setting-sources, --tools, two exact ClayVerse MCP tools, dontAsk and append-system-prompt-file; no --plugin-dir/--plugin-url/--agents/--mcp-config",
+      "result": "NOT_SUPPORTED_BY_CURRENT_LAUNCH_SOURCE",
+      "runtime_confirmation_still_required": true
+    },
+    {
+      "hypothesis": "strictKnownMarketplaces=[] proves no historical plugin code exists or loads",
+      "result": "REJECTED_AS_OVERCLAIM",
+      "reason": "policy blocks new marketplace/plugin acquisition and update paths but persistent HOME may contain historical plugin cache/data; actual enable/load behavior at the pinned native binary remains a separate runtime discriminator"
+    }
+  ],
+  "openai_isolated_source_slice": {
+    "environment": {"class": "OpenAI isolated non-production exact-source slice", "kernel": "Linux 6.18.35 x86_64", "python": "3.13.5"},
+    "managed_settings_git_blob_expected": "9273b7c9f3eb42f0530fea45c05c9b33dd5ff068",
+    "managed_settings_git_blob_observed": "9273b7c9f3eb42f0530fea45c05c9b33dd5ff068",
+    "json_parse": "PASS",
+    "policy_invariants": "PASS",
+    "classification": "EXACT_POLICY_BLOB_SOURCE_SLICE_VERIFIED",
+    "anti_claim": "This does not execute the packaged Claude binary, ClayVerse OCI image, Clerk, PTY, lifecycle hooks, MCP effects, plugin loader or restart path."
+  },
+  "vercel_native_claude_attempt": {
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-clayverse-remote-control-policy-20260817-1356",
+    "staging_head": "6f475fcdbc8159d265571cd46823c3c67a0a643a",
+    "staging_pr": 824,
+    "staging_pr_final_state": "CLOSED_STAGING_ONLY_DO_NOT_MERGE",
+    "planned_execution": "Vercel Sandbox; digest-verify Claude 2.1.233; install exact managed policy; deny network; exercise native alternate-entry surfaces; stop Sandbox",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "native_claude_executed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "anti_claim": "Not a Claude/ClayVerse test failure because no build or Sandbox command started."
+  },
+  "github_workflow_observation": {"boundary_test_commit_workflow_runs_observed": 0, "classification": "NO_NEW_GITHUB_RUNTIME_CREDIT"},
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_added_by_this_organ": 0,
+    "reason": "Visible 13:42 trigger identity is minute-only; current atomic coordination forbids inventing sub-minute identity. Ordinary regression/hardening only."
+  },
+  "evidence_classification": {
+    "managed_policy_source": "SOURCE_HARDENED_AND_EXACT_BLOB_VERIFIED",
+    "canonical_launch_source_compatibility": "SOURCE_INSPECTED",
+    "native_claude_managed_policy_behavior": "UNOBSERVED_AT_CURRENT_POLICY_HEAD",
+    "historical_plugin_state_loading": "UNRESOLVED_UNTIL_NATIVE_HOME_STATE_TEST",
+    "exact_oci_runtime": "UNVERIFIED",
+    "real_clerk_browser_ws_pty": "UNVERIFIED_BY_THIS_RECEIPT",
+    "whole_clayverse_acceptance": "IN_PROGRESS"
+  },
+  "remaining_frontier": [
+    "actually-started authorized isolated native Claude 2.1.233 run proving current managed settings load without schema stripping and alternate ingress/publish surfaces fail closed",
+    "native persistent-HOME test with pre-existing plugin cache/settings to determine whether any historical plugin can load under empty setting sources plus managed marketplace lockdown",
+    "exact current OCI build plus startup/readiness and image identity",
+    "real Clerk browser/JWT/WebSocket PTY lifecycle",
+    "dual-session restart/concurrency/generation/privacy gates",
+    "whole-product supply-chain and recovery acceptance"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:01:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_receipt": "d04c04ee69a5809d7aeb645bc2323f68e05025f3",
+  "donor_prs": [482, 479],
+  "canonical_commits": {
+    "effect_credit_law": "a89061d6eabbe25598c176366ab675ec257e5476",
+    "recovery_credit_reuse": "07f1903e6a6d56aabc768a5381e9fffebc9771f1",
+    "focused_credit_regression": "d2cf47b51329347e4fa9b14aea17f30332d06649",
+    "existing_restart_test_alignment": "d04c04ee69a5809d7aeb645bc2323f68e05025f3"
+  },
+  "exact_main_blobs": {
+    "the artefact/clayverse/effect_journal.py": "bf80be1a53de07398c3c2773ccc405c171fe7174",
+    "the artefact/clayverse/recovery.py": "2c195ba038bf39eba1dcb84d2f825bf77aa02baf",
+    "the artefact/tests/test_effect_credit_authority.py": "88a802b02f62029e8be24d0adad756c3242c2c57",
+    "the artefact/tests/test_restart_recovery.py": "ad72b5537257c3d8c3f9f1381982a0d5eb22c47a"
+  },
+  "finding": "The admitted state.noop capability returned VERIFIED + ok=true and therefore could produce causal credit 1.0. Recovery separately reconstructed positive credit from outcome.ok, allowing both live and restart paths to manufacture adaptive MicroClay reward without a real task/external outcome.",
+  "repair": {
+    "single_credit_authority": "EffectJournal._credit(status,outcome,capability)",
+    "non_rewarding_capabilities": ["state.noop"],
+    "positive_credit_rule": "status=VERIFIED AND outcome.ok=true AND capability is reward-eligible",
+    "recovery_reuses_live_rule": true,
+    "unknown_failed_denied_stale_credit": 0.0,
+    "state_noop_credit": 0.0,
+    "verified_entityos_exec_ok_credit": 1.0
+  },
+  "adversarial_fusion": {
+    "pr_482_value_retained": "state.noop cannot self-award positive MicroClay causal credit",
+    "pr_479_value_retained": "recovery status must be VERIFIED before positive credit",
+    "pr_479_weaker_expectation_rejected": "VERIFIED state.noop is not positive reward under the stronger canonical anti-Goodhart rule"
+  },
+  "evidence_boundary": {
+    "source_and_regression_contract_committed": true,
+    "exact_authorized_isolated_current_head_execution": false,
+    "reason": "Confirmed Vercel Git-preview -> Sandbox/OIDC bridge is currently admission-blocked before Sandbox start by Vercel preview build rate limiting; redundant reprobe is not a useful discriminator.",
+    "whole_product_pass": false,
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "classification": "CANONICAL_SOURCE_FUSION_AWAITING_EXACT_ISOLATED_EXECUTION",
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "When Vercel preview admission reopens, run the focused effect-credit/recovery/MicroClay regressions on the exact then-current fused head, then carry the same credit law through restart/recovery and full OCI build/start/readiness/restart evidence."
+}

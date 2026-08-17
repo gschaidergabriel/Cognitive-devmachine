@@ -1,0 +1,60 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "scope": "Clerk subject-to-canonical-user identity mapping hardening",
+  "research_base": "fdd36498627435c8bcf4f856985260e0fffd83c5",
+  "fusion_branch": "go/clerk-map-bijection-fusion-20260817-1353-sol",
+  "service_blob_before": "4018d695cc1a802072a6408ec1350ad35ce17970",
+  "service_blob_candidate": "4aa97f7e9d5564bd82b48ca9a5eece890ab1b05e",
+  "focused_test_blob": "9feab619366e21e38a178ff3d57f7263753a8cc9",
+  "donor_pr": 443,
+  "observed_gap": "Current source accepted more than two Clerk subjects as long as both canonical user ids appeared among the values, permitting an additional subject alias into a canonical perspective.",
+  "candidate_contract": "Require exactly two nonblank Clerk subject mappings forming a bijection onto gabriel and andreas.",
+  "isolated_exact_blob_regression": {
+    "environment": "authorized non-production isolated OpenAI Python 3.13 runtime",
+    "network_required": false,
+    "git_blob_verified": "4aa97f7e9d5564bd82b48ca9a5eece890ab1b05e",
+    "exact_function_executed": "_clerk_map extracted by AST from the exact verified service blob",
+    "result": "PASS",
+    "focused_cases": "8/8 PASS",
+    "covers": [
+      "valid gabriel/andreas bijection",
+      "single mapping rejected",
+      "third subject alias rejected",
+      "duplicate canonical target rejected",
+      "blank subject rejected",
+      "whitespace-only subject rejected",
+      "foreign target rejected",
+      "non-object and malformed JSON rejected"
+    ]
+  },
+  "vercel_sandbox_bridge": {
+    "status": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-clerk-map-bijection-vercel-20260817-1353",
+    "staging_head": "ab6bf663fdd56b7f5c312266b071848906f979c6",
+    "staging_pr": 817,
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "runner_contract": "preview orchestration only; @vercel/sandbox Python 3.13, persistent=false, networkPolicy=deny-all, runCommand, stop in finally",
+    "candidate_blob_staged": "4aa97f7e9d5564bd82b48ca9a5eece890ab1b05e",
+    "observed_status": "Vercel commit status failure: Deployment rate limited — retry in 24 hours.",
+    "build_started": false,
+    "sandbox_started": false,
+    "test_started_in_vercel_sandbox": false,
+    "classification_law": "Admission/control-plane rejection before Sandbox start is not a product/test failure and is not evidence that Vercel Sandbox is unavailable."
+  },
+  "vercel_execution_path": "CONFIRMED independently by prior exact Sandbox.create/runCommand/stop execution; direct ChatGPT Vercel MCP lifecycle actions are not exported.",
+  "go_unusual_experiment": {
+    "additional_experiments_consumed_by_this_work": 0,
+    "reason": "The 13:53 go unusual-experiment slot was already consumed on main by the exact-head archive admission experiment and its BLOCKED result. This work is ordinary deterministic regression/fusion only."
+  },
+  "claim_level": "SOURCE_MECHANISM_SUPPORTED_AT_EXACT_SERVICE_BLOB",
+  "whole_product_pass": false,
+  "open_acceptance": [
+    "Vercel Sandbox exact candidate regression once admission is available",
+    "real Clerk JWT/browser/WebSocket PTY integration",
+    "exact OCI build/runtime/restart and complete ClayVerse acceptance vector"
+  ]
+}

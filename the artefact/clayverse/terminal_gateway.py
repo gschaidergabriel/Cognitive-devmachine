@@ -53,17 +53,22 @@ def _auth_token(hello: dict) -> str:
     return token
 
 
+def _require_auth_lease_live(deadline: float, *, now: float | None = None) -> None:
+    """Require the verified Clerk lease to still be live at an effect/output boundary."""
+    current = time.time() if now is None else float(now)
+    if not math.isfinite(deadline) or not math.isfinite(current):
+        raise AuthenticationError("Clerk session token expiration is invalid")
+    if deadline <= current:
+        raise AuthenticationError("Clerk session token expired")
+
+
 def _auth_expiry_deadline(claims: dict, *, now: float | None = None) -> float:
     """Return a finite future Clerk JWT expiry or fail closed."""
     exp = claims.get("exp")
     if isinstance(exp, bool) or not isinstance(exp, (int, float)):
         raise AuthenticationError("Clerk session token missing valid expiration")
     deadline = float(exp)
-    current = time.time() if now is None else float(now)
-    if not math.isfinite(deadline) or not math.isfinite(current):
-        raise AuthenticationError("Clerk session token expiration is invalid")
-    if deadline <= current:
-        raise AuthenticationError("Clerk session token expired")
+    _require_auth_lease_live(deadline, now=now)
     return deadline
 
 
@@ -100,11 +105,19 @@ def _bounded_pty_input(payload: bytes) -> bytes:
     return payload
 
 
-def _write_pty_all(fd: int, payload: bytes) -> None:
-    """Write one terminal-input frame completely or fail closed."""
+def _write_pty_all(fd: int, payload: bytes, auth_deadline: float) -> None:
+    """Write one terminal-input frame while its authenticated lease remains live.
+
+    PTY writes may complete partially or block in the worker thread. Re-check the
+    immutable deadline immediately before and after every kernel write so an expired
+    frame can never continue through a later partial-write iteration or be reported as
+    successfully written after a blocking syscall crossed the lease boundary.
+    """
     remaining = memoryview(payload)
     while remaining:
+        _require_auth_lease_live(auth_deadline)
         written = os.write(fd, remaining)
+        _require_auth_lease_live(auth_deadline)
         if written <= 0:
             raise OSError("PTY write made no progress")
         remaining = remaining[written:]
@@ -265,7 +278,14 @@ window.addEventListener('load', async () => {{
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
+            # PTY/tmux attachment is a blocking trust-boundary transition. If the
+            # verified Clerk lease expired while it blocked, do not mutate terminal
+            # state (including its initial size) under an expired authorization.
+            _require_auth_lease_live(auth_expires_at)
             terminals.resize(attach_fd, rows, cols)
+            # Resize may itself cross a scheduling/blocking boundary. Never publish
+            # readiness after the lease has expired in that interval.
+            _require_auth_lease_live(auth_expires_at)
             await send_json({
                 "type": "ready",
                 "user_id": user_id,
@@ -279,6 +299,9 @@ window.addEventListener('load', async () => {{
                     if not data:
                         return
                     async with send_lock:
+                        # Output is an authenticated capability too. Re-check after
+                        # the blocking PTY read and after waiting for the send lock.
+                        _require_auth_lease_live(auth_expires_at)
                         await ws.send_bytes(data)
 
             async def pump_in():
@@ -291,11 +314,24 @@ window.addEventListener('load', async () => {{
                         message = await asyncio.wait_for(ws.receive(), timeout=remaining)
                     except asyncio.TimeoutError as exc:
                         raise AuthenticationError("Clerk session token expired") from exc
+                    # wait_for() and websocket receive completion race at the deadline.
+                    # Re-check the lease before any received frame can affect PTY/control state.
+                    if auth_expires_at <= time.time():
+                        raise AuthenticationError("Clerk session token expired")
                     if message.get("type") == "websocket.disconnect":
                         return
                     if message.get("bytes") is not None:
                         _bounded_pty_input(message["bytes"])
-                        await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
+                        # Freeze the lease that admitted this frame. A concurrent reauth may
+                        # extend future frames but must not retroactively authorize a write
+                        # that already crossed its original admission deadline.
+                        frame_auth_deadline = auth_expires_at
+                        await asyncio.to_thread(
+                            _write_pty_all,
+                            attach_fd,
+                            message["bytes"],
+                            frame_auth_deadline,
+                        )
                     elif message.get("text") is not None:
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":

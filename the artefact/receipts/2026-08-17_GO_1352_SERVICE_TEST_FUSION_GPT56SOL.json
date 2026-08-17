@@ -1,0 +1,51 @@
+{
+  "schema": "clayverse_go_source_candidate_receipt_v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_test_commit": "c7a4a3afa8e97c5c7e1855fc2702df7e70d203b9",
+  "finding": {
+    "class": "regression_harness_source_coherence",
+    "observed": "main carried a serial-server regression that referenced retired ClaudeCodeInference, ClayVerseEngine, ClayVerseAPI and signal-driven server symbols absent from current clayverse.service",
+    "repair": "replace only that stale regression with assertions for the current Clerk terminal/Uvicorn service path",
+    "product_code_changed": false
+  },
+  "source_identity": {
+    "service_blob": "4018d695cc1a802072a6408ec1350ad35ce17970",
+    "stale_test_blob": "791c1e75f77f1c2aa770afd146a69f180b0f439a",
+    "landed_test_blob": "18820faa44164d8d05439d0af4022c5f440af87f"
+  },
+  "isolated_mechanism_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "exact_git_blob_reconstruction": true,
+    "service_blob_match": true,
+    "test_blob_match": true,
+    "dependency_boundary": "service import dependencies were stubbed; Uvicorn call was monkeypatched by the exact regression test",
+    "command": "python -m pytest -q tests/test_service_serial_server.py",
+    "result": "PASS",
+    "tests": "1/1",
+    "full_repository_checkout": false,
+    "exact_oci_runtime": false
+  },
+  "vercel_surface": {
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "sandbox_execution_path": "CONFIRMED_VIA_GIT_PREVIEW_AND_VERCEL_SANDBOX_BRIDGE",
+    "current_exact_execution_admission": "BLOCKED_BY_VERCEL_PREVIEW_DEPLOYMENT_RATE_LIMIT"
+  },
+  "coordination": {
+    "superseded_pr": 460,
+    "replacement_pr": 471,
+    "main_landed_directly_due_continuous_unrelated_main_motion": true,
+    "unusual_experiment": "NOT_EXECUTED_BY_THIS_ORGAN; current shared main already carries the macro-cycle claimed experiment lane"
+  },
+  "acceptance": "SOURCE_AND_FOCUSED_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "next_gate": "Execute exact current checkout on an actually-started authorized Vercel Sandbox when preview admission reopens, then broader ClayVerse regressions and exact OCI build/start/readiness/restart.",
+  "evidence_law": "Focused source-mechanism PASS does not imply whole ClayVerse container PASS.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

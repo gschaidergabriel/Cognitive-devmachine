@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse-go-convergence-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:01:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "cbee685471b2db8ff60d70d42a3af7a36485f453",
+  "go_experiment_accounting": {
+    "new_unusual_experiments": 0,
+    "reason": "the 13:53 go already has a durable unusual-experiment result; this work is source/evidence review and execution-path coordination only"
+  },
+  "vercel_execution_path": {
+    "platform_sandbox_capability": "CONFIRMED_AND_PREVIOUSLY_EXECUTED",
+    "direct_chatgpt_mcp_lifecycle_actions": "NOT_EXPORTED",
+    "authorized_bridge": "Dr.-Unterweger Git-preview orchestration + @vercel/sandbox + Vercel OIDC",
+    "current_target_preview_head": "e1c2b87f66e46c7aee40ad3b843d037b631218d2",
+    "current_target_preview_status": "BLOCKED_BEFORE_BUILD_BY_VERCEL_BUILD_RATE_LIMIT",
+    "target_preview_status_evidence": "GitHub Vercel status failure target upgradeToPro=build-rate-limit",
+    "ready_previews_inspected": [
+      "dpl_3f5Kgeih41yctsrjNYvHrKhsmGPg",
+      "dpl_9SkXAEjSz9Vv5om8r3nqv562NdsA",
+      "dpl_8ndcW87F9tGg3tuu5G23mfn7qLcX"
+    ],
+    "ready_previews_result": "SKIP_NON_TARGET_PREVIEW from inherited microclay-pr383 dispatcher; no Sandbox.create and no ClayVerse regression executed",
+    "test_failure": false
+  },
+  "stage_b_source_review": {
+    "retained_pr": 411,
+    "current_pr_head_observed": "1144082cdb4291ee5ef0e539dce65f8c1049f3b5",
+    "current_store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "current_method_memory_blob": "e80585be15b5014db17e22f9c2a5bd8a6cc8bfa3",
+    "current_method_validation_blob": "70c401c7e334057ea3792656b80e40c144bd1a8f",
+    "promotion_mechanism_observed": "MethodMemory.promote imports derive_promotion_stats, requires validated candidate-use outcome receipts, derives support/success/failure/calibration/last_validated_at from those receipts, binds validation receipt ids and evidence digest into promotion provenance, and rechecks those values on read-time promotion lineage.",
+    "method_validation_mechanism_observed": "CandidateValidation requires exact active causal identity before outcome; finalize requires a durable external entityos.exec effect outcome and rejects zero-credit/ineligible outcomes; derive_promotion_stats requires one validation receipt per distinct source episode, distinct causal ids, at least one falsifier-checked instance, and at least one validated success.",
+    "acceptance_class": "SOURCE_MECHANISM_ADVANCED_NOT_EXECUTABLY_ACCEPTED"
+  },
+  "staging_drift": {
+    "staging_branch": "chatgpt/go-stageb-promotion-gate-vercel-20260817-1346",
+    "staging_head": "e1c2b87f66e46c7aee40ad3b843d037b631218d2",
+    "runner_path": "mcp/vercel-sandbox-mcp/scripts/run-stageb-promotion-gate-sandbox.mjs",
+    "runner_bound_research_head": "34de4bea6edb8f1020000277d947e8fd079005db",
+    "runner_bound_method_memory_blob": "611e6617f705c92751ba3612e7cdbf43f326ea82",
+    "runner_bound_store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "runner_stages_method_validation": false,
+    "classification": "STALE_SOURCE_BINDING_WOULD_NOT_VALIDATE_CURRENT_PR411_HEAD",
+    "consequence": "Even if this exact staging head were admitted, it would test an older method-memory candidate and not the current PR411 validation-receipt implementation. Any result must remain historical to the staged blobs and cannot establish current PR411 PASS."
+  },
+  "runtime_probe_adjudication": {
+    "existing_endpoint": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "contract": "POST-only fixed diagnostic guarded by CLAY_SANDBOX_PROBE_TOKEN; Sandbox.stop in finally",
+    "decision": "DO_NOT_BYPASS_AUTH_DO_NOT_EXPAND_TO_GENERIC_COMMAND_EXECUTOR",
+    "current_use_for_exact_stage_b": false
+  },
+  "next_exact_gate": "When preview admission is available, first restage the then-current retained PR411 files including method_validation.py and bind their exact Git blob identities plus then-current PR head. Execute the canonical promotion-validation regression and adjacent lineage/privacy/replay gates inside the Sandbox, stop it, persist logs/exit codes/source bindings, then proceed to broader ClayVerse suite and OCI/runtime acceptance. Do not spend quota on bridge-only probes or stale-head reruns.",
+  "whole_clayverse_pass": false,
+  "acceptance": "IN_PROGRESS"
+}

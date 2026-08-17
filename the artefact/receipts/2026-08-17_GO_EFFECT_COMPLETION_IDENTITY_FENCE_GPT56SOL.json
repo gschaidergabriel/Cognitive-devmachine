@@ -1,0 +1,41 @@
+{
+  "schema": "clayverse-go-mechanism-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_merge_commit": "688d21d78bdc1a2b0e0d126801af18cdb2cde137",
+  "change": "EffectJournal verified completion is bound to the user_id and requested_generation persisted at effect begin",
+  "observed_counterexamples_before_fix": [
+    "A Gabriel PENDING effect could be completed VERIFIED by supplying a valid Andreas session/user at the same live generation",
+    "A generation-1 PENDING effect could be completed VERIFIED by supplying the later live generation 2"
+  ],
+  "candidate_behavior": [
+    "cross-user completion raises PermissionError effect owner mismatch and leaves PENDING unconsumed",
+    "requested-generation mismatch becomes STALE_OUTCOME with zero-credit causal reentry and raises StaleGeneration"
+  ],
+  "evidence": {
+    "pre_fix_effect_journal_blob": "bf80be1a53de07398c3c2773ccc405c171fe7174",
+    "candidate_effect_journal_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "candidate_test_blob": "9d2f18874215956bfba9bdbd6db77eca9841a91d",
+    "isolated_counterexample_discriminator": "OLD=cross-user VERIFIED and generation-rebound VERIFIED; FIXED=cross-user PermissionError/PENDING and generation-rebound StaleGeneration/STALE_OUTCOME",
+    "github_runner_run": 32005253197,
+    "github_runner_job": 95313268974,
+    "github_runner_visible_steps": 0,
+    "github_runner_adjudication": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_NOT_TEST_FAILURE"
+  },
+  "scope": {
+    "normal_effect_gate_external_path_changed": false,
+    "classification": "DEFENSE_IN_DEPTH_AND_JOURNAL_INTEGRITY_FENCE",
+    "full_tree_runtime_test": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "unusual_experiment_executed": false,
+    "vps_used": false,
+    "deployment_host_used_as_test_runtime": false
+  },
+  "next_falsifier": "Run the merged focused regression plus adjacent effect fencing/restart tests in an actually-started isolated executor bound to current main; then include the same cases in the exact ClayVerse OCI runtime acceptance batch."
+}

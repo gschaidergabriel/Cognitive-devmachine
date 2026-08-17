@@ -1,0 +1,75 @@
+{
+  "schema": "clayverse.go-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_timestamp_local": "2026-08-17T13:42+07:00",
+  "organ": "ChatGPT GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "e7d11124a2e3d51a7e1c7aaa188783cadf62c9ed",
+  "finding": {
+    "mechanism": "EntityOSBridge.run used subprocess.run(timeout=...) while EffectGate converted every raised exception into terminal FAILED. TimeoutExpired is raised only after child launch, so a real external effect may already have occurred. Definite FAILED would manufacture negative certainty and could encourage unsafe duplicate retry.",
+    "required_epistemic_state": "UNKNOWN_OUTCOME",
+    "counterhypothesis_rejected": "Treat all bridge exceptions as equivalent definite pre-execution failures. Source inspection distinguishes pre-launch integrity/argv failures from post-launch timeout uncertainty."
+  },
+  "retained_candidate": {
+    "pull_request": 430,
+    "branch": "go/effect-unknown-outcome-gpt56sol-20260817",
+    "head": "9c8ac77808fa094d780149e0a0ed0f2a626c4ff2",
+    "base_main": "e7d11124a2e3d51a7e1c7aaa188783cadf62c9ed",
+    "changed_files": 4,
+    "blobs": {
+      "the artefact/clayverse/effect_journal.py": "be1f71bde6fdf2666418871403510addf9f5b654",
+      "the artefact/clayverse/effects.py": "8527ae72d03d3797996ee1862874f43f6a6a5339",
+      "the artefact/clayverse/entityos_bridge.py": "3668b1acf481254f862523b0219a95d8f4647c74",
+      "the artefact/tests/test_effect_unknown_outcome.py": "ec56e9f061060cdb862565c0566210f0dbfe01f7"
+    },
+    "contract": [
+      "TimeoutExpired after child launch becomes typed EntityOSOutcomeUnknown",
+      "EffectGate journals typed uncertainty as terminal UNKNOWN_OUTCOME",
+      "UNKNOWN receipt asserts certainty=unknown and does not assert ok=false",
+      "causal re-entry remains single and zero-credit",
+      "known pre-launch/integrity failures remain FAILED",
+      "per-episode replay fence and managed lease cleanup remain intact",
+      "restart leaves terminal UNKNOWN stable and does not replay it"
+    ]
+  },
+  "microclay_adjudication": {
+    "canonical_main_merge": "aa1ad2c940b9c5f755ede4494af66e80c11633df",
+    "law": "automatic effect-derived MicroClay learning requires VERIFIED outcome and non-zero canonical causal credit",
+    "effect": "UNKNOWN/stale, denied/failed and verified zero-credit effects remain learning-neutral",
+    "local_duplicate_patch_retained": false,
+    "reason": "A weaker temporary MicroClay eligibility patch in the PR lane was discarded after canonical main fused the stricter rule."
+  },
+  "exact_isolated_source_slice": {
+    "environment": "authorized isolated non-production OpenAI container",
+    "candidate_blob_identity_checked": true,
+    "adjacent_dependency_blobs": {
+      "the artefact/clayverse/recovery.py": "2c195ba038bf39eba1dcb84d2f825bf77aa02baf",
+      "the artefact/tests/test_effect_fencing.py": "17d9ec70fbe1e65db77a614f0d54d6539bfd7a0b"
+    },
+    "command": "python -m pytest -q tests/test_effect_unknown_outcome.py tests/test_effect_fencing.py",
+    "result": "PASS",
+    "passed": 16,
+    "failed": 0,
+    "duration_seconds": 0.94,
+    "claim_scope": "EXACT_SOURCE_SLICE_MECHANISM_SUPPORTED_NOT_OCI_ACCEPTANCE"
+  },
+  "execution_admission": {
+    "github_hosted_runner": "Earlier exact-branch jobs ended before visible steps with runner_id=0/steps=[]; zero test credit.",
+    "vercel_bridge": "Repository-owned Git-preview + @vercel/sandbox/OIDC bridge confirmed.",
+    "fresh_vercel_state": "Provider build-rate-limit blocks preview admission before Sandbox start.",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAILURE",
+    "vps_testing_used": false,
+    "self_hosted_testing_used": false,
+    "production_testing_used": false
+  },
+  "unusual_experiment": {
+    "executed_by_this_organ": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision trigger identity was exposed for the 13:42 user turn and no immutable shared request id was available; atomic lease law fails closed."
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_gate": "When Vercel preview admission reopens, stage the exact then-current PR #430 candidate in an actually-started Sandbox and perform packaged EntityOS timeout/fault injection plus no-duplicate-retry and adjacent lifecycle/restart regressions; then include the path in exact OCI build/start/readiness/restart acceptance."
+}

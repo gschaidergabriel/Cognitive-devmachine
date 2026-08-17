@@ -12,6 +12,10 @@ class AuthenticationError(PermissionError):
     pass
 
 
+_JWKS_CACHE_LIFESPAN_SECONDS = 300
+_JWKS_FETCH_TIMEOUT_SECONDS = 5
+
+
 @dataclass(frozen=True)
 class ClerkConfig:
     issuer: str
@@ -25,7 +29,7 @@ class ClerkConfig:
     def from_env(cls) -> "ClerkConfig":
         issuer = os.environ.get("CLERK_ISSUER", "").strip().rstrip("/")
         jwt_key = os.environ.get("CLERK_JWT_KEY") or None
-        jwks_url = os.environ.get("CLERK_JWKS_URL") or (f"{issuer}/.well-known/jwks.json" if issuer else None)
+        requested_jwks_url = (os.environ.get("CLERK_JWKS_URL") or "").strip()
         audience = os.environ.get("CLERK_AUDIENCE") or None
         parties = tuple(
             x.strip()
@@ -34,8 +38,10 @@ class ClerkConfig:
         )
         if not issuer:
             raise RuntimeError("CLERK_ISSUER is required")
-        if not jwt_key and not jwks_url:
-            raise RuntimeError("CLERK_JWT_KEY or CLERK_JWKS_URL is required")
+        canonical_jwks_url = f"{issuer}/.well-known/jwks.json"
+        if not jwt_key and requested_jwks_url and requested_jwks_url != canonical_jwks_url:
+            raise RuntimeError("CLERK_JWKS_URL must match the CLERK_ISSUER JWKS endpoint")
+        jwks_url = None if jwt_key else (requested_jwks_url or canonical_jwks_url)
         if not parties:
             raise RuntimeError("CLERK_AUTHORIZED_PARTIES is required")
         return cls(
@@ -51,14 +57,32 @@ class ClerkTokenVerifier:
     """Fail-closed verifier for Clerk session JWTs.
 
     Networkless verification is preferred when CLERK_JWT_KEY is supplied. Otherwise
-    PyJWKClient fetches/caches the instance JWKS. Only RS256 is accepted and the Clerk
-    authorized-party claim must match the configured web origin set. Impersonated and
-    pending sessions are not admitted by the baseline two-perspective product boundary.
+    PyJWKClient uses only its finite-lived JWKS-set cache: the per-signing-key LRU is
+    intentionally disabled so an already-seen kid cannot bypass key-set refresh forever.
+    Only RS256 is accepted and the Clerk authorized-party claim must match the
+    configured web origin set. Baseline ClayVerse admits direct sessions, rejects
+    impersonation, and rejects any explicitly non-active Clerk session status. Clerk's
+    `sts` claim is optional for ordinary authenticated sessions, so absence of `sts`
+    does not itself invalidate an otherwise verified session JWT.
     """
 
     def __init__(self, config: ClerkConfig):
         self.config = config
-        self._jwks = PyJWKClient(config.jwks_url, cache_keys=True) if not config.jwt_key else None
+        if not config.jwt_key:
+            canonical_jwks_url = f"{config.issuer.rstrip('/')}/.well-known/jwks.json"
+            if config.jwks_url != canonical_jwks_url:
+                raise RuntimeError("network Clerk JWKS URL must match the configured issuer")
+        self._jwks = (
+            PyJWKClient(
+                config.jwks_url,
+                cache_keys=False,
+                cache_jwk_set=True,
+                lifespan=_JWKS_CACHE_LIFESPAN_SECONDS,
+                timeout=_JWKS_FETCH_TIMEOUT_SECONDS,
+            )
+            if not config.jwt_key
+            else None
+        )
 
     def verify(self, token: str) -> dict[str, Any]:
         if not token:
@@ -87,10 +111,11 @@ class ClerkTokenVerifier:
             raise AuthenticationError("Clerk token missing session ID")
         if not claims.get("sub"):
             raise AuthenticationError("Clerk token missing subject")
-        if claims.get("act") is not None:
+        session_status = claims.get("sts")
+        if session_status is not None and session_status != "active":
+            raise AuthenticationError("Clerk session is not active")
+        if "act" in claims:
             raise AuthenticationError("Clerk impersonated sessions are not admitted")
-        if claims.get("sts") == "pending":
-            raise AuthenticationError("pending Clerk session is not admitted")
         return claims
 
     @staticmethod

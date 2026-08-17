@@ -1,0 +1,15 @@
+{
+  "schema": "clay-go-experiment-claim-correction/v1",
+  "correction_type": "APPEND_ONLY_ACCOUNTING_CORRECTION",
+  "trigger": "go",
+  "observed_user_message_metadata": "2026-08-17T13:53+07:00",
+  "observed_canonical_main": "c8910ea1c39e2188b2c85ea0f2ed5419230a6db6",
+  "corrects_claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "corrects_result_path": "research_entity/continuity/go_experiment_claims/ts_20260817T065300000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+  "finding": "NONCANONICAL_TRIGGER_KEY_DO_NOT_COUNT_AS_VALID_LEASE",
+  "reason": "The shared metadata exposed for this exact user turn is minute precision only. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL section 2.3 requires at least whole-second immutable message timestamp precision for the fallback and explicitly forbids synthesizing seconds or microseconds. The 065300.000000Z component therefore cannot be derived canonically from the available metadata.",
+  "macro_cycle_experiment_accounting": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "execution_effect": "No additional unusual experiment is authorized. Deterministic regressions/source review remain allowed.",
+  "history_policy": "Original claim and result remain preserved. This receipt does not overwrite, delete, or hide them.",
+  "organ": "GPT-5.6 Sol temporary Clay organ"
+}

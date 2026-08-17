@@ -1,0 +1,75 @@
+name: clayverse-python-lock-generator
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/clayverse-python-lock-generator.yml'
+      - 'the artefact/requirements.txt'
+      - 'the artefact/requirements.lock.txt'
+      - 'the artefact/Dockerfile'
+      - 'the artefact/SOURCE_LOCK.json'
+      - 'the artefact/tests/test_python_dependency_lock.py'
+      - 'the artefact/tests/test_python_lock_generator_source_binding.py'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-lock:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact PR source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Generate and verify exact Python hash lock
+        shell: bash
+        run: |
+          set -euo pipefail
+          PRODUCT_DOCKERFILE='the artefact/Dockerfile'
+          PRODUCT_REQUIREMENTS='the artefact/requirements.txt'
+          test -f "$PRODUCT_DOCKERFILE"
+          test -f "$PRODUCT_REQUIREMENTS"
+
+          # Bind the resolver environment to the actual first product FROM image.
+          # Current ClayVerse uses a direct digest-pinned Python image rather than an
+          # ARG BASE_IMAGE indirection; deriving from any parallel hardcoded value
+          # would allow the generator to resolve a lock for different runtime bytes.
+          BASE_IMAGE="$(sed -n -E 's/^[[:space:]]*[Ff][Rr][Oo][Mm][[:space:]]+([^[:space:]]+).*/\1/p' "$PRODUCT_DOCKERFILE" | head -n1)"
+          if ! printf '%s\n' "$BASE_IMAGE" | grep -Eq '^python:[^[:space:]]+@sha256:[0-9a-f]{64}$'; then
+            echo "Product first FROM is not an exact digest-pinned Python image: $BASE_IMAGE" >&2
+            exit 1
+          fi
+          REQUIREMENTS_SHA256="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
+          echo "PRODUCT_BASE_IMAGE=$BASE_IMAGE"
+          echo "PRODUCT_REQUIREMENTS_SHA256=$REQUIREMENTS_SHA256"
+
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/workspace:ro" \
+            -e EXPECTED_REQUIREMENTS_SHA256="$REQUIREMENTS_SHA256" \
+            "$BASE_IMAGE" bash -s <<'INNER'
+          set -euo pipefail
+          PRODUCT_REQUIREMENTS='/workspace/the artefact/requirements.txt'
+          actual_sha="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
+          test "$actual_sha" = "$EXPECTED_REQUIREMENTS_SHA256"
+          cp "$PRODUCT_REQUIREMENTS" /tmp/requirements.in
+
+          python --version
+          python -m pip --version
+          python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.0'
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
+            -o /tmp/requirements.lock.1 /tmp/requirements.in
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
+            -o /tmp/requirements.lock.2 /tmp/requirements.in
+          diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2
+
+          echo -n 'LOCK_SHA256='; sha256sum /tmp/requirements.lock.1 | awk '{print $1}'
+          rm -rf /tmp/wheelhouse && mkdir /tmp/wheelhouse
+          python -m pip download --disable-pip-version-check --no-cache-dir \
+            --only-binary=:all: --require-hashes \
+            -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
+          echo -n 'WHEELHOUSE_FILE_COUNT='; find /tmp/wheelhouse -maxdepth 1 -type f | wc -l
+          printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
+          INNER

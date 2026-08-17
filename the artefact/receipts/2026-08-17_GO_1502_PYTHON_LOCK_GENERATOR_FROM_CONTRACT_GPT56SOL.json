@@ -1,0 +1,40 @@
+{
+  "schema": "ClayVerseGoSourceFinding/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_canonical_main_before_write": "985d1321c9a6634b761201f0d5201b85f0c3a374",
+  "scope": "python_dependency_hash_lock_generator_source_contract",
+  "canonical_lane": {"pull_request":379,"head_observed":"52069110f9b2e15e570cfcba4b26c723ff860065","decision":"REPAIR_EXISTING_LANE_DO_NOT_CREATE_SECOND_PRODUCT_LOCK_PATH"},
+  "observed_contract": {
+    "canonical_main_initial_head": "83c171c6881c7790904f1af955850341e69127f4",
+    "canonical_dockerfile_git_blob": "bb37882e5d9b98b95ccdcde6bddf5893ffb1a949",
+    "canonical_from": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+    "pr379_dockerfile_git_blob": "272ff61f07a99cdafacc4f55fbc88d0c03473f7f",
+    "generator_extraction": "sed -n s/^ARG BASE_IMAGE=//p the artefact/Dockerfile | head -n1",
+    "arg_base_image_present": false
+  },
+  "finding": {
+    "classification": "SOURCE_CONTRACT_BUG_BEFORE_DEPENDENCY_RESOLUTION",
+    "mechanism": "PR379 expects an ARG BASE_IMAGE declaration that does not exist in either the canonical current Dockerfile or PR379's own Dockerfile, so BASE_IMAGE resolves empty and the workflow fails before dependency resolution.",
+    "semantic_implication": "A failure at this gate is generator/source-contract failure, not evidence that dependency resolution or hash verification failed.",
+    "whole_product_pass": false
+  },
+  "coordination": {
+    "pr379_comment_id": 5313467145,
+    "duplicate_staging_prs_created_by_this_organ": [841,843],
+    "duplicate_staging_prs_closed": [841,843],
+    "canonical_prior_staging_pr": 840,
+    "further_unusual_experiments_for_1502_go": "FORBIDDEN_BY_CURRENT_COORDINATION_RECEIPT",
+    "new_unusual_experiment_count": 0
+  },
+  "repair_contract": [
+    "rejoin PR379 onto then-current main",
+    "derive the digest-pinned Python base image from the actual canonical FROM instruction or introduce one canonical ARG consumed by FROM without duplicating identity",
+    "preserve exact requirements-byte binding across the resolver boundary",
+    "execute the two-pass hash-lock plus --require-hashes verification in an actually-started authorized isolated sandbox",
+    "commit lock bytes only into the single canonical PR379 lane after exact execution evidence"
+  ],
+  "acceptance": "SOURCE_FINDING_COMMITTED_EXECUTION_STILL_BLOCKED"
+}

@@ -1,0 +1,75 @@
+{
+  "schema": "clayverse-go-adjudication-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:10:30+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "5baaa4b92183a6fd38fccaa90575c87ef49ffbd6",
+  "classification": "SOURCE_ADJUDICATION_COMMITTED_RUNTIME_UNOBSERVED",
+  "whole_product_pass": false,
+  "retained_target": {
+    "pr": 484,
+    "role": "SINGLE_MICROCLAY_STAGEB_FUSION_LINE",
+    "observed_head": "0da3bc2379aea2b98b28c01b671fb0bcb626c571",
+    "state": "DRAFT",
+    "source_blocked": true
+  },
+  "adjudication": {
+    "pr_470": {
+      "role": "DONOR_ONLY_STORAGE_AND_LINEAGE_AUTHORITY",
+      "head": "1c3a7602affb91703fc991269fdae0abed0260cd",
+      "unique_contracts": [
+        "all formation/source episodes share one canonical user session",
+        "supporting evidence cannot recursively be method-memory evidence",
+        "UnifiedDB reopen validates promoted candidate/receipt/source-evidence lineage",
+        "promoted payload source/support/counterexample sets exactly match PROMOTE receipt",
+        "broken/removed receipt lineage fails closed before routing"
+      ],
+      "must_not_remain_parallel_product_path": true
+    },
+    "pr_494": {
+      "role": "TESTS_ONLY_TRUE_HELDOUT_PROMOTION_GATE",
+      "unique_contracts": [
+        "promotion validation episodes are disjoint from candidate formation/source episodes",
+        "at least two distinct eligible validation episodes and causal identities",
+        "at least two SUCCESS validation receipts before reusable positive promotion",
+        "caller-supplied support/success/failure/calibration cannot authorize promotion"
+      ]
+    },
+    "pr_411": {
+      "role": "CLOSED_DONOR_FOR_PREBOUND_CANDIDATE_USE_AND_VERIFIED_OUTCOME_RECEIPT_ARCHITECTURE",
+      "warning": "its current derive_promotion_stats incorrectly equates validation episodes with formation source episodes and accepts one SUCCESS; do not copy those two semantics"
+    }
+  },
+  "source_falsifier_on_pr_484": {
+    "observation": "PR484 test_schema8_promotion_authority_gate requires promotion to reject caller counters, but its current MethodMemoryManager.promote copies the candidate record after reference checks and derives no authoritative validation stats.",
+    "expected_if_executed": "the newly added negative promotion-authority tests should fail until promotion validation authority is fused",
+    "classification": "SOURCE_LEVEL_RED_GATE_NOT_EXECUTED_TEST_FAILURE",
+    "review_id": 4949205317
+  },
+  "execution": {
+    "github_pr470_exact_job": {
+      "run_id": 32003819668,
+      "job_id": 95309196473,
+      "visible_steps": [],
+      "classification": "RUNNER_ADMISSION_FAILURE_BEFORE_TEST"
+    },
+    "vercel_bridge_pr": "gschaidergabriel/Dr.-Unterweger#819",
+    "vercel_bridge_exact_head": "1bfef8c0d6ea916009641025cb43bf31c12df36d",
+    "vercel_admission": "BLOCKED_BEFORE_PREVIEW_BUILD_BY_BUILD_RATE_LIMIT",
+    "sandbox_started_for_current_exact_probe": false,
+    "vps_self_hosted_production_testing_used": false,
+    "exact_pr484_runtime_test": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "next_exact_gate": "Fuse the #470 unique lineage fences plus the corrected #411/#494 true-heldout candidate-validation authority into a freshly rejoined #484 single path; then stage that exact retained head through the existing Vercel Sandbox bridge when preview admission is available and require actually-started exact-source focused regressions before merge or reusable method promotion.",
+  "security_constraints": {
+    "together_used": false,
+    "paid_or_final_training_started": false
+  }
+}

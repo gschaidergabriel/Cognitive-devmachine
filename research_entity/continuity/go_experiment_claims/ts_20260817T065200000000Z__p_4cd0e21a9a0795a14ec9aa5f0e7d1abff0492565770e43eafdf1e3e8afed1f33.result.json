@@ -1,0 +1,79 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "ts_20260817T065200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T065200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "experiment_name": "tmux_socket_namespace_adversarial_alias_collision",
+  "claimed_source_identity": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
+  "claimed_artifact_identity": "the artefact/clayverse/terminal_sessions.py git blob 5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+  "historical_staging_identity": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-1352-tmux-isolation-sandbox-sol",
+    "head": "2c13be872e8141d97b3766d5f12a27314fc97659",
+    "pull_request": 833,
+    "staged_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "status": "CLOSED_SUPERSEDED_DO_NOT_USE_AS_CURRENT_EVIDENCE"
+  },
+  "vercel_phase": {
+    "execution_path": "Git preview orchestration -> @vercel/sandbox -> non-persistent Python 3.13 Sandbox -> deny-all network",
+    "sandbox_command_started": false,
+    "classification": "ADMISSION_BLOCKED_BY_CURRENT_VERCEL_PREVIEW_QUOTA",
+    "note": "No new deployment for the staged head was admitted while the canonical execution-path receipt reported a 24-hour Vercel deployment rate limit. This is not a product/test failure."
+  },
+  "isolated_initial_execution": {
+    "environment": "authorized non-production isolated OpenAI container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "real_tmux_binary_present": false,
+    "artifact_identity": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "exact_blob_verified_before_execution": true,
+    "canonical_socket_isolation": "PASS",
+    "canonical_creation_binding": "PASS",
+    "canonical_attach_binding": "PASS",
+    "adversarial_alias_rejection": "PASS",
+    "adversarial_cases": 8,
+    "postcondition": "NO_NONCANONICAL_IDENTITY_REACHED_TMUX_NAMESPACE"
+  },
+  "managed_policy_replication": {
+    "source_identity": "d7eea6188a1321eb841d1dab9b26a96d429e342d",
+    "artifact_identity": "the artefact/clayverse/terminal_sessions.py git blob b42d175745fa53c45b81fa1affda4f12a4093541",
+    "managed_tmux_policy_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+    "exact_blob_verified_before_execution": true,
+    "managed_policy_argv": "PASS",
+    "canonical_socket_isolation": "PASS",
+    "canonical_attach_binding": "PASS",
+    "same_unusual_experiment_replication": "PASS",
+    "adversarial_cases": 8,
+    "unusual_experiment_count_added": 0,
+    "real_tmux_runtime_tested": false
+  },
+  "superseded_v1_attestation": {
+    "merge_commit": "02584a5dc31d7a5d2c8f384deddab66ccfef7c1d",
+    "pull_request": 541,
+    "terminal_sessions_blob": "b37101df4bc959996e5c6dfd3a17c87977ce9a68",
+    "managed_tmux_policy_blob": "840d5048bda96b778cd9fb7f148bf7f24b60fa88",
+    "isolated_focused_pytest": {"passed": 7, "failed": 0},
+    "superseded_reason": "current upstream tmux source shows unbind-key -a without -T removes only the prefix table, so v1 did not establish an empty effective keymap",
+    "whole_product_pass": false
+  },
+  "merged_transport_only_v2": {
+    "merge_commit": "6d80752c172c3a88727143e24ec092e57cd43cda",
+    "pull_request": 544,
+    "terminal_sessions_blob": "beaf9d829833525decc67338b08b70ffed4b7592",
+    "managed_tmux_policy_blob": "559c3bb7e53a81a487bc32250d7cd1b37ccd38d8",
+    "mechanism": "policy v2 explicitly removes prefix, root, copy-mode and copy-mode-vi tables, writes a final v2 server marker, and runtime admission requires marker, prefix=None, prefix2=None and an empty unfiltered list-keys result",
+    "isolated_exact_blob_compile": "PASS",
+    "isolated_focused_pytest": {"passed": 8, "failed": 0},
+    "v1_marker": "FAIL_CLOSED_PASS",
+    "surviving_root_binding": "FAIL_CLOSED_PASS",
+    "surviving_copy_mode_binding": "FAIL_CLOSED_PASS",
+    "reactivated_prefix": "FAIL_CLOSED_PASS",
+    "new_server_surviving_binding": "FAIL_CLOSED_PASS",
+    "same_unusual_experiment_added": false,
+    "real_tmux_runtime_tested": false,
+    "whole_product_pass": false
+  },
+  "unusual_experiment_count_added": 1,
+  "classification": "MERGED_V2_MECHANISM_SUPPORTED_WITH_LIVE_TMUX_AND_VERCEL_ADMISSION_STILL_OPEN",
+  "whole_product_evidence_established": false,
+  "next_isolated_discriminator": "When Vercel preview admission reopens, stage the current exact main terminal/policy blobs and run real tmux cases: a fresh v2 server must attest; a deliberately pre-existing v1/unmanaged server with a surviving root binding must be rejected before browser attachment. Then advance to packaged Claude Code inside the exact built ClayVerse OCI image."
+}

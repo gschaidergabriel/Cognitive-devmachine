@@ -1,0 +1,104 @@
+# Daytona Sandbox execution path — CURRENT
+
+Status: AUTHORIZED FALLBACK / API MECHANISM CONFIRMED BY PRIMARY DOCS / BOUNDED RUNNER CONTROL-FLOW SUPPORTED / EXACT CLAYVERSE DAYTONA RUNTIME UNOBSERVED
+Observed: 2026-08-17
+
+## Current truth
+
+The owner has explicitly authorized Daytona isolated sandboxes as the standard fallback when Vercel cannot admit the required run.
+
+Current provider-selection law is:
+
+`VERCEL WHEN ADMITTED + CAPABLE -> DAYTONA FALLBACK -> EXPLICIT BLOCKER`.
+
+VPS, self-hosted and production-host testing remain forbidden. Together remains forbidden.
+
+## Primary capability evidence
+
+Current Daytona primary documentation exposes:
+
+- API-key authentication using `DAYTONA_API_KEY`;
+- SDK/API/CLI sandbox creation;
+- `sandbox.process.exec(...)` / equivalent command execution;
+- file upload/staging into the sandbox;
+- bounded execution timeouts;
+- sandbox lifecycle operations;
+- runtime network-policy mutation including outbound blocking.
+
+This confirms that Daytona has a suitable candidate isolated-execution API surface. It does NOT by itself establish account admission, exact ClayVerse source execution or product PASS.
+
+Primary documentation refreshed 2026-08-17:
+- `https://www.daytona.io/docs/en/api-keys/`
+- `https://www.daytona.io/docs/en/python-sdk/`
+- `https://www.daytona.io/docs/en/process-code-execution/`
+- `https://www.daytona.io/docs/en/python-sdk/sync/file-system/`
+
+## Bounded research runner
+
+Canonical research tooling now includes:
+
+`research_entity/execution/daytona_sandbox_batch.py`
+
+Current runner contract:
+- locally verifies the exact staged bundle SHA-256;
+- reads Daytona credentials only from environment/provider configuration and never emits their values;
+- creates one bounded sandbox and applies a TTL;
+- uploads the bundle and re-verifies its SHA-256 inside the sandbox before extraction;
+- can request outbound network blocking after staging and fails closed if that requested tightening cannot be applied;
+- records target command identity by SHA-256 rather than writing the raw command into structured receipt events;
+- bounds stdout volume;
+- stops and deletes the sandbox in `finally` where provider lifecycle calls are available.
+
+A deterministic fake-provider control-flow regression of this exact runner path passed after one corrected harness-only shell-cwd mistake. The passing regression exercised local+remote bundle-hash agreement, requested network block, two successful target commands including a SQLite import/version probe, PASS emission, stop, delete, and absence of the test credential value from output.
+
+Classification:
+
+`BOUNDED_RUNNER_CONTROL_FLOW_SUPPORTED_FAKE_PROVIDER_NOT_DAYTONA_RUNTIME_PASS`
+
+This evidence supports the orchestration mechanism only. No Daytona sandbox/provider runtime was contacted by that regression and it contributes zero ClayVerse runtime acceptance credit.
+
+## Current session execution observation
+
+A deterministic attempt from the current ChatGPT non-production container to install the Daytona Python SDK did not reach the provider because the orchestration container could not resolve the package index hostname. The observed failure was local DNS/network admission before Daytona authentication or Sandbox creation.
+
+Classification:
+
+`ORCHESTRATION_NETWORK_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT`
+
+Consequences:
+- this is NOT `DAYTONA_SANDBOX_UNAVAILABLE`;
+- this is NOT ClayVerse TEST_FAIL;
+- zero Daytona runtime test credit is minted;
+- no API key value is recorded in repository source, logs or receipts;
+- the next worker with provider egress should use the secret from approved secret storage/environment, never source control.
+
+## Required first live Daytona gate
+
+The next actually-connected worker should run one bounded admission/capability batch before moving product tests:
+
+1. refresh current research `main` and target PR heads;
+2. create one ephemeral Daytona Sandbox;
+3. record sandbox/provider/runtime identity without exposing credentials;
+4. establish required base capabilities for ClayVerse (`python`, `_sqlite3`, `git`; container/OCI tooling only if needed by the selected gate);
+5. stage exact source bytes without embedding repository/API credentials inside the sandbox when avoidable;
+6. re-hash staged bytes against GitHub identities;
+7. tighten network policy after staging when the selected gate permits it;
+8. execute a focused deterministic regression batch;
+9. capture exit code + bounded stdout/stderr;
+10. stop/delete the Sandbox;
+11. persist a bounded receipt to GitHub.
+
+If base capability is missing before product assertions, classify it as provider/runtime substrate evidence and choose a Daytona snapshot/image/runtime that supplies the required dependency rather than weakening ClayVerse.
+
+## Security contract
+
+- `DAYTONA_API_KEY` is secret and never committed or echoed.
+- Prefer environment/secret-store injection.
+- No generic public command endpoint.
+- No product/state authority is delegated to Daytona.
+- Exact execution truth remains scoped to exact source/artifact/environment identity.
+- Provider admission/control-plane failure before Sandbox start earns zero product PASS/FAIL credit.
+
+## GO coordination
+
+The current exact `go` trigger exposes only minute-precision shared timestamp metadata, so `GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md` requires `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`. Ordinary deterministic provider integration, source work and future exact tests remain allowed; provider fallback does not mint another unusual-experiment slot.

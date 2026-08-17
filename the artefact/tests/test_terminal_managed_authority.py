@@ -20,7 +20,13 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
 
     assert settings["allowManagedHooksOnly"] is True
     assert settings["allowManagedPermissionRulesOnly"] is True
+    assert settings["allowManagedMcpServersOnly"] is True
+    assert settings["allowedMcpServers"] == [{"serverName": "clayverse"}]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
+    assert settings["permissions"]["deny"] == ["Bash"]
+    assert settings["disableSkillShellExecution"] is True
+    assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
+    assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
     assert settings["autoMemoryEnabled"] is False
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
     server = managed_mcp["mcpServers"]["clayverse"]
@@ -52,4 +58,33 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "CLAYVERSE_ENTITYOS_SHA256=" + "ab" * 32 in argv
     assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
+    assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
+    assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in argv
+    assert "mcp__clayverse" in argv
+    assert "mcp__clayverse__*" not in argv
     assert not any(item.startswith("CLERK_JWT_KEY=") for item in argv)
+
+
+def test_direct_shell_guard_fails_closed_without_executing_payload(tmp_path):
+    root = Path(__file__).parents[1]
+    guard = root / "policy" / "deny-shell"
+    marker = tmp_path / "must-not-exist"
+    cp = subprocess.run(
+        ["/bin/sh", str(guard), f"touch {marker}"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert cp.returncode == 126
+    assert cp.stdout == ""
+    assert "direct shell execution is disabled" in cp.stderr
+    assert not marker.exists()
+
+
+def test_container_keeps_code_policy_and_shell_guard_root_owned():
+    root = Path(__file__).parents[1]
+    dockerfile = (root / "Dockerfile").read_text()
+    assert "COPY --chown=root:root policy/deny-shell /opt/clayverse/runtime/deny-shell" in dockerfile
+    assert "chown -R root:root /opt/clayverse /opt/entityos" in dockerfile
+    assert "chown -R clayverse:clayverse /opt/clayverse" not in dockerfile
+    assert "chmod 0555 /opt/clayverse/runtime/deny-shell" in dockerfile

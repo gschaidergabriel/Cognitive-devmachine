@@ -1,12 +1,12 @@
 from __future__ import annotations
-import hashlib, uuid
+import hashlib,json,uuid
 from dataclasses import dataclass
 from .store import UnifiedDB,Lease,StaleGeneration
 from .entityos_bridge import EntityOSBridge
 from .effect_journal import EffectJournal
 @dataclass(frozen=True)
 class EffectRequest:
-    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None
+    user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None; request_key:str|None=None
 class EffectGate:
     ALLOWED={'entityos.exec','process.exec','state.noop'}
     AUTO_LEASE_TTL=300.0
@@ -21,6 +21,10 @@ class EffectGate:
     def _lease_resource(req:EffectRequest):
         payload=f'{req.capability}\0{req.target}'.encode('utf-8')
         return 'effect:'+hashlib.sha256(payload).hexdigest()
+    @staticmethod
+    def _request_hash(req:EffectRequest,generation:int):
+        payload={'user_id':req.user_id,'session_id':req.session_id,'capability':req.capability,'target':req.target,'argv':req.argv,'generation':generation}
+        return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
     def _release_exact_lease(self,lease:Lease):
         with self.db.tx() as db:
             db.execute('DELETE FROM leases WHERE resource=? AND holder=? AND generation=? AND nonce=?',(lease.resource,lease.holder,lease.generation,lease.nonce))
@@ -39,7 +43,11 @@ class EffectGate:
             lease=self.db.acquire_lease(self._lease_resource(req),holder,ttl=self.AUTO_LEASE_TTL)
             auto_lease=True
         try:
-            effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease)
+            if req.request_key is None:
+                effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease); replayed=None
+            else:
+                effect_id,replayed=self.journal.begin_once(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,req.request_key,self._request_hash(req,generation),lease=lease)
+            if replayed is not None: return effect_id,replayed
             if req.capability=='state.noop':
                 outcome={'ok':True,'target':req.target,'boundary':'internal'}
                 self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)

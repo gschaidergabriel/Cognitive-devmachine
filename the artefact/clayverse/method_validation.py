@@ -508,10 +508,10 @@ class CandidateValidation:
 def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, Any], user_id: str) -> dict[str, Any]:
     """Derive reusable promotion only from repeated true held-out validation receipts.
 
-    Candidate source episodes are formation/provenance, never promotion evidence. Every
-    eligible validation must be a separately pre-bound HELD_OUT causal instance disjoint
-    from that formation set. One positive anecdote can strengthen a candidate but cannot
-    mint a reusable framework/heuristic.
+    Candidate source episodes are formation/provenance, never promotion evidence. All
+    receipts remain auditable, but only separately pre-bound HELD_OUT causal instances
+    disjoint from formation are eligible. Earlier SHADOW/in-sample history neither counts
+    as success nor permanently poisons a candidate that later earns valid transfer evidence.
     """
     candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
     source_episode_ids = list(candidate.get("source_episode_ids") or [])
@@ -523,7 +523,7 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
         "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject LIKE ? AND user_id=? ORDER BY ts,memory_id",
         (f"candidate_validation:{candidate_memory_id}:%", user_id),
     ).fetchall()
-    receipts: list[tuple[str, dict[str, Any]]] = []
+    eligible: list[tuple[str, dict[str, Any]]] = []
     for row in rows:
         receipt = validate_candidate_validation_receipt(str(row["value"]))
         if receipt["candidate_memory_id"] != candidate_memory_id or receipt["user_id"] != user_id:
@@ -537,19 +537,21 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
         if receipt["truth_authority"] is not False or receipt["effect_authority"] is not False:
             raise MethodValidationError("candidate-validation authority broadening detected")
         if receipt["evaluation_mode"] != "HELD_OUT":
-            raise MethodValidationError("promotion requires HELD_OUT validation receipts")
+            continue
         if receipt["episode_id"] in formation_episodes:
-            raise MethodValidationError("promotion validation episodes must be disjoint from candidate source episodes")
-        receipts.append((str(row["memory_id"]), receipt))
+            continue
+        eligible.append((str(row["memory_id"]), receipt))
 
     by_episode: dict[str, tuple[str, dict[str, Any]]] = {}
-    for item in receipts:
+    for item in eligible:
         episode_id = item[1]["episode_id"]
         if episode_id in by_episode:
             raise MethodValidationError("multiple validation receipts for one promotion episode")
         by_episode[episode_id] = item
     if len(by_episode) < 2:
-        raise MethodValidationError("promotion requires at least two distinct held-out validation episodes")
+        raise MethodValidationError(
+            "promotion requires at least two distinct HELD_OUT validation episodes disjoint from candidate source episodes"
+        )
 
     causal_ids = [item[1]["causal_id"] for item in by_episode.values()]
     if len(set(causal_ids)) != len(causal_ids):

@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.5",
+  "schema_version": "5.6",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -15,6 +15,7 @@
   "fast_bootstrap_source": "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
   "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "microvm_outer_envelope_directive": "research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md",
   "live_fusion_hypofusion_worker_reentry_directive": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md",
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
@@ -24,7 +25,7 @@
   "go_experiment_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "artifact_manifest": "the artefact/manifest.json",
-  "mission": "Build the final ClayVerse architecture as one OCI/Docker-compatible container: one persistent central entity shared by authenticated users/machines, UnifiedDB as canonical state/world/data/wiki authority, ClayGraph as rebuildable projection, Clerk web authentication, Claude Code runtime cognition and explicit secure/recoverable effect boundaries. EntityOS may be internal execution/security/runtime substrate but is not the top-level product endpoint.",
+  "mission": "Build the final ClayVerse architecture as one OCI/Docker-compatible container: one persistent central entity shared by authenticated users/machines, UnifiedDB as canonical state/world/data/wiki authority, ClayGraph as rebuildable projection, Clerk web authentication, Claude Code runtime cognition and explicit secure/recoverable effect boundaries. The final accepted image MUST contain the complete accepted EntityOS internal substrate and the same accepted OCI digest MUST execute behind the required independent VM/microVM guest-kernel boundary; EntityOS is not the top-level product endpoint and the outer VM/microVM is not a second ClayVerse entity or artifact.",
   "truth_model": {
     "policy_and_product_authority": "NEWEST_EXPLICIT_OWNER_DIRECTIVE",
     "executable_empirical_truth": "ACTUALLY_OBSERVED_AUTHORIZED_ISOLATED_EXECUTION_AT_EXACT_SOURCE_ARTIFACT_IDENTITY",
@@ -38,9 +39,9 @@
   },
   "boot_sequence": [
     "verify current research main",
-    "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT",
+    "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE plus CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT; the newer MicroVM directive supersedes older text that makes final guest-kernel isolation optional",
     "load LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE before material work so new evidence, contradictions, blockers and worker outcomes re-enter affected research/worker lanes without creating a second authority",
-    "load PROGRAM_STATE and the artefact/manifest.json",
+    "load PROGRAM_STATE and the artefact/manifest.json; if their cached/dynamic role text conflicts with a newer explicit owner directive, follow the owner directive and flag the stale field rather than downgrading final acceptance law",
     "load VERCEL_SANDBOX_EXECUTION_PATH_CURRENT before declaring Vercel execution unavailable",
     "load DAYTONA_SANDBOX_FALLBACK_DIRECTIVE and DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT before treating a Vercel admission/runtime blocker as a global execution blocker",
     "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
@@ -77,7 +78,8 @@
     "claude_code": "RUNTIME_INFERENCE_ENGINE_NOT_CANONICAL_MEMORY",
     "clerk": "WEB_AUTH_BOUNDARY",
     "consciousness_daemon": "EXCLUDED",
-    "entityos": "INTERNAL_SUBSTRATE_WHERE_USEFUL_NOT_PRODUCT_ENDPOINT"
+    "entityos": "MANDATORY_IN_FINAL_ACCEPTED_IMAGE_INTERNAL_SUBSTRATE_NOT_PRODUCT_ENDPOINT",
+    "outer_isolation": "MANDATORY_FOR_FINAL_PASS_SAME_EXACT_ACCEPTED_OCI_DIGEST_BEHIND_INDEPENDENT_VM_MICROVM_GUEST_KERNEL"
   },
   "authority_rules": {
     "together_api": "FORBIDDEN",

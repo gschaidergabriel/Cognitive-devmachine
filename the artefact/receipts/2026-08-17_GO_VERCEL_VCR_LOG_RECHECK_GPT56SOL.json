@@ -3,7 +3,7 @@
   "date": "2026-08-17",
   "trigger": "go",
   "organ": "GPT-5.6 Sol temporary Clay organ",
-  "scope": "Vercel build-log recheck of the newest OCI/VCR discriminator deployments; no new experiment",
+  "scope": "Vercel build-log recheck and one unchanged read-only preflight retry; no new experiment",
   "product_endpoint": "ClayVerse",
   "product_claim": "NO_WHOLE_PRODUCT_PASS",
   "observations": [
@@ -36,17 +36,30 @@
         "build_exit": 2
       },
       "implication": "The outer Vercel build orchestrator having CLI 58.1.0 does not imply that a `vercel` binary is callable from the user npm build process. No VCR builder path is admitted by this observation."
+    },
+    {
+      "retry_source_head": "a3a03b6bd2f253347c8382ab3db71e4f457446e8",
+      "retry_parent": "09fabac24e839a08677b8b92f32536a042b037f2",
+      "retry_tree": "830a84f62036359807b91f9f7127931b0300557e",
+      "code_delta": "NONE_EMPTY_PROVENANCE_COMMIT",
+      "intended_preflight": "pinned local vercel@58.1.0; read-only vcr help/build help; writes_attempted=false",
+      "github_vercel_status": "FAILURE_PROVIDER_BUILD_RATE_LIMIT",
+      "target_signal": "upgradeToPro=build-rate-limit",
+      "deployment_observed": false,
+      "sandbox_started": false,
+      "executable_preflight_result": "NOT_EXECUTED",
+      "implication": "Provider admission remains the immediate blocker. Repeating another identical retry in this go would be low-information duplication."
     }
   ],
   "fusion_with_existing_receipts": {
     "infrastructure_receipt": "the artefact/receipts/2026-08-17_GO_VERCEL_OCI_VCR_INFRA_EVIDENCE_GPT56SOL.json",
     "entityos_transport_receipt": "the artefact/receipts/2026-08-17_GO_ENTITYOS_BUILD_EXPORT_TRANSPORT_GPT56SOL.json",
-    "result": "Existing blockers remain. The READY 021c deployment must not be misread as successful VCR preflight evidence."
+    "result": "Existing blockers remain. The READY 021c deployment must not be misread as successful VCR preflight evidence; the exact pinned retry is currently provider-rate-limited before deployment."
   },
   "experiment_accounting": {
     "new_unusual_experiment_count_this_recheck": 0,
-    "note": "No new deployment or Sandbox was triggered by this recheck. The 021c log contains two executions of the already-existing nested-OCI script; this receipt records that observation without promoting it or consuming another experiment slot."
+    "note": "No new unusual experiment was introduced. The retry reused the identical read-only infrastructure preflight source tree. The 021c log contains two executions of the already-existing nested-OCI script; this receipt records that observation without promoting it or consuming another experiment slot."
   },
   "acceptance": "IN_PROGRESS",
-  "next_executable_step": "After provider admission/rate limiting permits it, inspect an exact deployment whose source actually pins a user-callable Vercel CLI/VCR preflight. Require build logs proving the intended preflight executed before any VCR/OCI promotion. Separately, the EntityOS static export candidate must execute in an exact Vercel Sandbox and verify the locked 32cd4587.../9181696-byte artifact before it can become ClayVerse OCI input."
+  "next_executable_step": "Do not retry again until provider admission materially changes. Then require build logs for an exact pinned local Vercel CLI/VCR preflight and prove the intended script executed. Separately, the EntityOS static export candidate must execute in an exact Vercel Sandbox and verify the locked 32cd4587.../9181696-byte artifact before it can become ClayVerse OCI input."
 }

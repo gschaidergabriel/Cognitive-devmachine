@@ -3,11 +3,17 @@ import re
 from .store import UnifiedDB
 EXPLICIT=re.compile(r"(?im)^\s*(FACT|DECISION|TASK|COMMITMENT|PREFERENCE)\s*:\s*(.+?)\s*$")
 class MemoryManager:
-    """Newest 20 remain full; unknown meaning fails closed during compression."""
+    """Newest 20 remain full; pre-compression source is losslessly retained in UnifiedDB."""
     LEVELS=("full","detailed_summary","semantic_summary","fact_decision_trace","key_phrase","minimum_trace")
     def __init__(self,db:UnifiedDB,full_window=20): self.db=db; self.full_window=full_window
     def extract_explicit(self,turn_id,user_id,content):
         return [self.db.add_memory(k.lower(),user_id,v.strip(),turn_id,user_id,{"extractor":"explicit-v1","lossless":True}) for k,v in EXPLICIT.findall(content)]
+    def _archive_source_once(self,row):
+        exists=self.db.db.execute("SELECT 1 FROM durable_memory WHERE kind='source_archive' AND source_turn_id=? LIMIT 1",(row['turn_id'],)).fetchone()
+        if exists: return None
+        return self.db.add_memory('source_archive',row['session_id'],row['content'],row['turn_id'],row['user_id'],{
+            'archive':'pre-compression-v1','lossless':True,'role':row['role'],'original_fidelity':row['fidelity'],'original_generation':int(row['compression_generation'])
+        })
     @staticmethod
     def _compress(text,level):
         words=text.split()
@@ -25,5 +31,6 @@ class MemoryManager:
             if age<=self.full_window: continue
             level=min(5,1+(age-self.full_window-1)//20)
             if row['compression_generation']>=level: continue
+            self._archive_source_once(row)
             self.db.db.execute("UPDATE turns SET content=?, fidelity=?, compression_generation=? WHERE turn_id=?",(self._compress(row['content'],level),self.LEVELS[level],level,row['turn_id'])); changed+=1
         return changed

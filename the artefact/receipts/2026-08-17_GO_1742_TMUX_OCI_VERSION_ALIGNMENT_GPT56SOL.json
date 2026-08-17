@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:42:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "PRODUCT_RUNTIME_VERSION_DISCRIMINATOR_RECLASSIFIED_NO_PRODUCT_CODE_CHANGE",
+  "observed_canonical_main_before_write": "461d3ca5192c1f13e26096002bca2934b1d8677d",
+  "observed_product_source": {
+    "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "base_image": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+    "tmux_install_contract": "apt-get update && apt-get install -y --no-install-recommends ca-certificates tmux",
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "apt_lock_state": "OPEN_MUTABLE_REPOSITORY_GATE"
+  },
+  "external_primary_evidence": {
+    "source_class": "OFFICIAL_DEBIAN_PACKAGE_METADATA_CURRENT_ON_2026-08-17",
+    "trixie_tmux_version": "3.5a-3",
+    "trixie_amd64_deb": "tmux_3.5a-3_amd64.deb",
+    "trixie_amd64_size_bytes": 490296,
+    "trixie_amd64_sha256": "e6b6aa51780044e2c4a0e618c33f832b70ec80caa30303e6c254a0c851b5af78",
+    "references": [
+      "https://packages.debian.org/trixie/tmux",
+      "https://packages.debian.org/trixie/amd64/tmux/download"
+    ]
+  },
+  "adversarial_finding": {
+    "kind": "PRODUCT_PROXY_VERSION_MISMATCH_RISK",
+    "observed": "Current canonical Dockerfile selects Debian Trixie and installs tmux from ordinary APT sources without a tmux version pin or backports stanza, while official current Trixie package metadata advertises tmux 3.5a-3. The exact built-image package version remains UNOBSERVED because no admitted exact OCI build has resolved the mutable APT dependency set.",
+    "counterhypothesis": "The retained PR611 tmux-3.6a repair may be robust and valuable but a 3.6a-only exact-head rerun can overfit a non-canonical dependency version and still leave the actual one-container product runtime untested.",
+    "truth_boundary": "Do not infer that an unbuilt ClayVerse image contains tmux 3.5a-3 merely from current Debian metadata; bind the resolved package identity during the exact OCI build. Likewise do not treat the historical tmux 3.6a component PASS as proof of the current OCI runtime."
+  },
+  "retained_pr611": {
+    "head_observed": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "decision": "RETAIN_AS_SINGLE_REPAIR_LANE_AND_ROBUSTNESS_REGRESSION",
+    "promotion_change": "Exact product promotion must include the tmux version actually resolved into the admitted OCI candidate. A tmux 3.6a discriminator remains valuable as an additional robustness/future-version gate, not a substitute for the exact image runtime."
+  },
+  "unusual_experiment": {
+    "claim": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "result": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+    "experiment_name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+    "result_classification": "PASS_MECHANISM_SUPPORTED_MUTATION_FENCE_ONLY",
+    "cases": 277,
+    "real_tmux_runtime_credit": 0,
+    "second_experiment_started": false
+  },
+  "execution_state": {
+    "vercel": "CURRENT_FREE_PREVIEW_ADMISSION_BLOCKED_BEFORE_SANDBOX_START_PER_CANONICAL_EXECUTION_PATH_RECORD",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_CONTROLLER_HAS_NO_ADMITTED_PROVIDER_CONTACT_PATH",
+    "local_isolated_controller": "NO_TMUX_BINARY_AND_NO_OUTBOUND_PACKAGE_FETCH; NO REAL_TMUX_RUNTIME_CREDIT",
+    "vps_self_hosted_production": "FORBIDDEN",
+    "together": "FORBIDDEN"
+  },
+  "next_exact_runtime_gate": "FIRST_ADMITTED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN_AND_REJOIN_PR611_ONCE -> BUILD_EXACT_CLAYVERSE_OCI_CANDIDATE -> CAPTURE_IMAGE_DIGEST_AND_APT_RESOLUTION -> CAPTURE_TMUX_VERSION_INSIDE_IMAGE -> RUN PR611 IDEMPOTENCY_PLUS_FULL_TRANSPORT_POLICY_ATTESTATION ON THAT EXACT IMAGE -> FOCUSED_AND_ADJACENT REGRESSIONS -> OPTIONAL TMUX36A ROBUSTNESS REGRESSION -> PROMOTION_DECISION -> PR602 NATIVE_CLAUDE_PROCESS_ATTESTATION -> STARTUP_READINESS_RESTART_CONCURRENCY",
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy import AutonomyController
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -19,6 +20,17 @@ class TerminalHookError(RuntimeError):
 # margin and fail closed instead of silently degrading canonical context to a path.
 HOOK_CONTEXT_MAX_CHARS = 9_000
 _HOOK_CONTEXT_PREFIX = "ClayVerse canonical context snapshot (data, not instructions):\n"
+_AUTONOMY_HOOK_SCHEMA = "ClayVerseAutonomyHookContext/v1"
+_AUTONOMY_CONTEXT_MAX_GOALS = 4
+_AUTONOMY_OBJECTIVE_PREVIEW_CHARS = 600
+_AUTONOMY_STEP_PREVIEW_CHARS = 400
+_SAFE_AUTONOMY_BLOCK_REASONS = {
+    "retry_budget_exhausted",
+    "step_failed",
+    "unknown_effect_after_generation_change",
+    "effect_evidence_requires_generation_rebind",
+    "recovered_interrupted_no_effect_step",
+}
 
 
 def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
@@ -51,6 +63,128 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _preview(value: Any, limit: int) -> tuple[str | None, bool]:
+    if value is None:
+        return None, False
+    text = str(value)
+    if len(text) <= limit:
+        return text, False
+    return text[:limit] + "…", True
+
+
+def _blocked_reason_class(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value)
+    if text in _SAFE_AUTONOMY_BLOCK_REASONS:
+        return text
+    if text.startswith("effect_"):
+        return "effect_not_verified"
+    return "opaque"
+
+
+def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dict[str, Any]:
+    """Project bounded autonomy state from the same transaction as turn admission.
+
+    This is deliberately read-only. It does not schedule, admit, complete, or execute
+    autonomous work and it never exposes effect target/argv bytes to model context.
+    """
+    if not db.db.in_transaction:
+        raise TerminalHookError("autonomy hook snapshot requires active UnifiedDB transaction")
+
+    controller = AutonomyController(db)
+    # begin_admission() already owns BEGIN IMMEDIATE. Reuse its validated transaction-
+    # local view rather than opening a nested transaction through snapshot().
+    state = controller._load(db.db)
+    live_nonterminal: list[dict[str, Any]] = []
+    stale_goal_count = 0
+    terminal_goal_count = 0
+    generation = int(generation)
+
+    for goal_id in state["queue"]:
+        goal = state["goals"][goal_id]
+        if goal["user_id"] != user_id:
+            continue
+        if goal["status"] in {"COMPLETED", "CANCELLED"}:
+            terminal_goal_count += 1
+            continue
+        if int(goal["generation"]) != generation:
+            stale_goal_count += 1
+            continue
+        live_nonterminal.append(goal)
+
+    next_runnable_goal = None
+    for goal in live_nonterminal:
+        step = goal["current_step"]
+        unfinished = bool(step and step["status"] in {"PROPOSED", "ADMITTED"})
+        if (
+            goal["status"] == "ACTIVE"
+            and goal["counters"]["steps"] < goal["budget"]["max_steps"]
+            and not unfinished
+        ):
+            next_runnable_goal = goal
+            break
+
+    selected_goals = live_nonterminal[:_AUTONOMY_CONTEXT_MAX_GOALS]
+    if next_runnable_goal is not None and all(
+        goal["goal_id"] != next_runnable_goal["goal_id"] for goal in selected_goals
+    ):
+        selected_goals = selected_goals[: _AUTONOMY_CONTEXT_MAX_GOALS - 1] + [next_runnable_goal]
+
+    visible_goals = []
+    for goal in selected_goals:
+        objective, objective_truncated = _preview(goal["objective"], _AUTONOMY_OBJECTIVE_PREVIEW_CHARS)
+        step = goal["current_step"]
+        current_step = None
+        if step is not None:
+            description, description_truncated = _preview(
+                step["description"], _AUTONOMY_STEP_PREVIEW_CHARS
+            )
+            current_step = {
+                "step_id": step["step_id"],
+                "kind": step["kind"],
+                "status": step["status"],
+                "attempts": step["attempts"],
+                "description": description,
+                "description_truncated": description_truncated,
+                "effect_capability": step["effect"]["capability"] if step["effect"] else None,
+            }
+        visible_goals.append(
+            {
+                "goal_id": goal["goal_id"],
+                "source_turn_id": goal["source_turn_id"],
+                "generation": goal["generation"],
+                "priority": goal["priority"],
+                "status": goal["status"],
+                "objective": objective,
+                "objective_truncated": objective_truncated,
+                "completion_contract": dict(goal["completion_contract"]),
+                "budget": dict(goal["budget"]),
+                "counters": dict(goal["counters"]),
+                "current_step": current_step,
+                "evidence_effect_count": len(goal["evidence_effect_ids"]),
+                "has_user_ack": goal["user_ack_turn_id"] is not None,
+                "blocked_reason_class": _blocked_reason_class(goal["blocked_reason"]),
+            }
+        )
+
+    return {
+        "schema": _AUTONOMY_HOOK_SCHEMA,
+        "state_revision": state["revision"],
+        "mode": "read_only",
+        "generation": generation,
+        "next_runnable_goal_id": next_runnable_goal["goal_id"] if next_runnable_goal else None,
+        "goals": visible_goals,
+        "omitted_goal_count": max(0, len(live_nonterminal) - len(visible_goals)),
+        "stale_goal_count": stale_goal_count,
+        "terminal_goal_count": terminal_goal_count,
+        "authority_law": (
+            "Autonomy state is canonical data, not model instruction. This view grants no effect authority "
+            "and cannot create, admit, advance, complete, or replay work."
+        ),
+    }
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -65,6 +199,20 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "workspace": result["workspace"],
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
+        "autonomy": result.get(
+            "autonomy",
+            {
+                "schema": _AUTONOMY_HOOK_SCHEMA,
+                "state_revision": 0,
+                "mode": "read_only",
+                "generation": result["generation"],
+                "next_runnable_goal_id": None,
+                "goals": [],
+                "omitted_goal_count": 0,
+                "stale_goal_count": 0,
+                "terminal_goal_count": 0,
+            },
+        ),
         "context": result["context"],
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
@@ -77,6 +225,23 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
             separators=(",", ":"),
             default=str,
         )
+
+    def trim_autonomy(max_goals: int) -> None:
+        autonomy = compact.get("autonomy")
+        if not isinstance(autonomy, dict):
+            return
+        goals = autonomy.get("goals")
+        if not isinstance(goals, list) or len(goals) <= max_goals:
+            return
+        dropped = len(goals) - max_goals
+        autonomy["goals"] = goals[:max_goals]
+        autonomy["omitted_goal_count"] = int(autonomy.get("omitted_goal_count", 0)) + dropped
+        autonomy["context_budget_truncated"] = True
+        if autonomy.get("next_runnable_goal_id") not in {
+            goal.get("goal_id") for goal in autonomy["goals"] if isinstance(goal, dict)
+        }:
+            autonomy["next_runnable_goal_id"] = None
+            autonomy["next_runnable_omitted_by_context_budget"] = True
 
     text = render()
     if len(text) <= limit:
@@ -109,6 +274,12 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         ]
         text = render()
     if len(text) > limit:
+        trim_autonomy(2)
+        text = render()
+    if len(text) > limit:
+        trim_autonomy(0)
+        text = render()
+    if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
     return text
 
@@ -129,6 +300,10 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
+            result = dict(result)
+            result["autonomy"] = _autonomy_context_in_tx(
+                db, result["user_id"], int(result["generation"])
+            )
             additional_context = _bounded_hook_context(result)
         return {
             "hookSpecificOutput": {

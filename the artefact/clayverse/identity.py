@@ -5,6 +5,21 @@ CANONICAL_USERS=(('gabriel','Gabriel','clayverse-gabriel'),('andreas','Andreas',
 CANONICAL_USER_IDS={uid for uid,_,_ in CANONICAL_USERS}
 CANONICAL_TERMINAL_NAMES={uid:terminal for uid,_,terminal in CANONICAL_USERS}
 
+
+def assert_canonical_user_state(db:UnifiedDB):
+    """Read-only validation of the one-entity/two-equal-users identity contract."""
+    rows=db.db.execute('SELECT user_id,display_name,rights FROM users ORDER BY user_id').fetchall()
+    expected={uid:(name,'equal') for uid,name,_ in CANONICAL_USERS}
+    if len(rows)!=len(expected) or {row['user_id'] for row in rows} != set(expected):
+        raise PermissionError('canonical entity must contain exactly two users: gabriel and andreas')
+    for row in rows:
+        expected_name,expected_rights=expected[row['user_id']]
+        if row['display_name'] != expected_name:
+            raise PermissionError(f'canonical user display name mismatch: {row["user_id"]}')
+        if row['rights'] != expected_rights:
+            raise PermissionError(f'canonical user rights mismatch: {row["user_id"]}')
+
+
 class IdentityRouter:
     def __init__(self,db:UnifiedDB,clerk_map=None):
         self.db=db; self.clerk_map=clerk_map or {}
@@ -15,21 +30,12 @@ class IdentityRouter:
         self._bind_clerk_subjects()
 
     def _bootstrap_or_assert_canonical_users(self):
-        rows=self.db.db.execute('SELECT user_id,display_name,rights FROM users ORDER BY user_id').fetchall()
+        rows=self.db.db.execute('SELECT user_id FROM users ORDER BY user_id').fetchall()
         if not rows:
             with self.db.tx():
                 for uid,name,_ in CANONICAL_USERS:
                     self.db.ensure_user(uid,name)
-            rows=self.db.db.execute('SELECT user_id,display_name,rights FROM users ORDER BY user_id').fetchall()
-        expected={uid:(name,'equal') for uid,name,_ in CANONICAL_USERS}
-        if len(rows)!=len(expected) or {row['user_id'] for row in rows} != set(expected):
-            raise PermissionError('canonical entity must contain exactly two users: gabriel and andreas')
-        for row in rows:
-            expected_name,expected_rights=expected[row['user_id']]
-            if row['display_name'] != expected_name:
-                raise PermissionError(f'canonical user display name mismatch: {row["user_id"]}')
-            if row['rights'] != expected_rights:
-                raise PermissionError(f'canonical user rights mismatch: {row["user_id"]}')
+        assert_canonical_user_state(self.db)
 
     def _normalize_terminal_sessions(self):
         with self.db.tx() as sql:
@@ -63,6 +69,7 @@ class IdentityRouter:
     def resolve(self,clerk_subject):
         uid=self.clerk_map.get(clerk_subject)
         if uid not in CANONICAL_USER_IDS: raise PermissionError('unmapped Clerk subject')
+        assert_canonical_user_state(self.db)
         persisted=self.db.db.execute('SELECT user_id FROM users WHERE clerk_subject=?',(clerk_subject,)).fetchone()
         if not persisted or persisted[0] != uid: raise PermissionError('Clerk subject binding mismatch')
         rows=self.db.db.execute(

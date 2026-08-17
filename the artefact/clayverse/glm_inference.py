@@ -197,6 +197,8 @@ class GLMTokenInference:
         elif not isinstance(response_model, str):
             raise GLMInferenceError("GLM response model identifier is invalid")
         response_model = _validated_model(response_model)
+        if response_model != self.model:
+            raise GLMInferenceError("GLM response model does not match requested model")
         return {
             "text": text,
             "selection": "respond",

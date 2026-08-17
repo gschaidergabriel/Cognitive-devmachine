@@ -28,6 +28,7 @@ class RetrievalCandidate:
     provenance: dict[str, Any]
     baseline_score: float
     adaptive_score: float
+    learned_route_score: float
     entry_keys: tuple[str, ...]
 
     def public(self) -> dict[str, Any]:
@@ -80,6 +81,12 @@ class MicroClayRetrieval:
         return "cue:" + hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
 
     @staticmethod
+    def _route_key(token: str, subject: str) -> str:
+        cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
+        target = hashlib.sha256(subject.encode("utf-8")).hexdigest()[:16]
+        return f"route:{cue}:{target}"
+
+    @staticmethod
     def _safe_provenance(raw: str) -> dict[str, Any]:
         try:
             value = json.loads(raw)
@@ -93,12 +100,15 @@ class MicroClayRetrieval:
         *,
         limit: int,
         budget_chars: int,
+        allow_learned_route: bool = False,
     ) -> tuple[list[RetrievalCandidate], int]:
-        """Apply the same relevance, count and character budget to any ranking."""
+        """Apply one count/character budget, with learned entry only in adaptive packing."""
         selected: list[RetrievalCandidate] = []
         chars = 0
         for item in candidates:
-            if item.baseline_score <= 0.0:
+            if item.baseline_score <= 0.0 and not (
+                allow_learned_route and item.learned_route_score > 0.0
+            ):
                 continue
             item_chars = len(item.value)
             if chars + item_chars > budget_chars:
@@ -131,8 +141,17 @@ class MicroClayRetrieval:
         value_tokens: set[str],
     ) -> tuple[str, ...]:
         keys = [f"kind:{kind}", f"subject:{subject}"]
-        for token in sorted(query_tokens.intersection(value_tokens))[: self.MAX_ENTRY_KEYS - 2]:
+        for token in sorted(query_tokens.intersection(value_tokens)):
+            if len(keys) >= self.MAX_ENTRY_KEYS:
+                break
             keys.append(self._token_key(token))
+        # Query-only cues are bounded, hashed route proposals to this subject. They are
+        # learned only if the selected evidence later receives canonical outcome credit.
+        # Generic subject/kind capital alone can therefore never open a lexical miss.
+        for token in sorted(query_tokens.difference(value_tokens)):
+            if len(keys) >= self.MAX_ENTRY_KEYS:
+                break
+            keys.append(self._route_key(token, subject))
         return tuple(keys)
 
     def _score_candidate(
@@ -165,11 +184,15 @@ class MicroClayRetrieval:
         )
 
         keys = self._entry_keys(kind, subject, query_tokens, value_tokens)
-        learned = sum(
-            max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(k, 0.0)))
-            for k in keys
+        bounded_capitals = {
+            key: max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(key, 0.0)))
+            for key in keys
+        }
+        learned = sum(bounded_capitals.values()) / max(1, len(keys))
+        learned_route = max(
+            (capital for key, capital in bounded_capitals.items() if key.startswith("route:")),
+            default=0.0,
         )
-        learned /= max(1, len(keys))
         adaptive = baseline + 0.08 * learned
 
         return RetrievalCandidate(
@@ -181,6 +204,7 @@ class MicroClayRetrieval:
             provenance=self._safe_provenance(row["provenance"]),
             baseline_score=baseline,
             adaptive_score=adaptive,
+            learned_route_score=learned_route,
             entry_keys=keys,
         )
 
@@ -355,7 +379,7 @@ class MicroClayRetrieval:
             baseline, limit=limit, budget_chars=budget_chars
         )
         adaptive_selected, adaptive_chars = self._pack_candidates(
-            adaptive, limit=limit, budget_chars=budget_chars
+            adaptive, limit=limit, budget_chars=budget_chars, allow_learned_route=True
         )
         mode = self.mode()
         if mode == "ACTIVE":

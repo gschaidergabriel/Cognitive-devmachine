@@ -39,6 +39,23 @@ def test_kata_template_keeps_root_immutable_and_state_explicit():
     assert "hostPath:" not in text
 
 
+def test_kata_persistent_volumes_are_bound_to_nonroot_runtime_group():
+    text = TEMPLATE.read_text()
+    assert "runAsUser: 10001" in text
+    assert "runAsGroup: 10001" in text
+    assert "fsGroup: 10001" in text
+    assert 'fsGroupChangePolicy: "OnRootMismatch"' in text
+    assert "privileged: true" not in text
+    assert "initContainers:" not in text
+    assert "root chown init container" in text
+
+    contract = CONTRACT.read_text()
+    assert "VOLUME_MOUNT_GROUP" in contract
+    assert "create/write/fsync/read/rename/delete" in contract
+    assert "uid=10001,gid=10001" in contract
+    assert "unsupported or uncertain non-root volume ownership is `BLOCKED`" in contract
+
+
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     text = TEMPLATE.read_text()
     policies = [doc for doc in _yaml_documents(text) if "kind: NetworkPolicy" in doc]

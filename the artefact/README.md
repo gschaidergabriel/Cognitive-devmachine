@@ -177,3 +177,14 @@ ClayVerse remains **IN_PROGRESS**. This cycle produced one concrete controller r
 - no owner credential was used and no second unusual experiment was consumed.
 - durable receipt: `the artefact/receipts/2026-08-18_GO_TIER2_PERSISTENT_CARRIER_DONOR_SOURCE_GPT56SOL.json`.
 - no whole-product PASS is claimed.
+
+## Autonomous goal-control source candidate — 2026-08-18
+
+- Added a deterministic `GoalController` backed by the same UnifiedDB SQLite/WAL authority. Goals, ordered milestones, bounded runs, retry budgets, run deadlines, risk classes, explicit high-impact approval and append-only goal events are machine state rather than prompt-roleplay.
+- Added the anti-confabulation rule in code: model output is stored as `PROPOSAL_ONLY`; it cannot transition a milestone to `SUCCEEDED`. Success requires an admitted evidence class. `VERIFIED_EFFECT` references are additionally cross-checked against the canonical `effects` table and the same entity generation.
+- Added a global single-open-run baseline across both `RUNNING` and `WAITING_EVIDENCE`, strict milestone ordering, deadline reconciliation and terminal `BLOCKED` after retry exhaustion to prevent runaway loops.
+- Canonical goal context is injected into cognition after MicroClay retrieval so adaptive retrieval cannot suppress, rewrite or promote goal authority. The model sees controller-generated goals/constraints/status plus an explicit epistemic contract.
+- Added a separate architecture authority file: `research_entity/global/CLAYVERSE_AUTONOMOUS_GOAL_CONTROL_DIRECTIVE.md`. USB identity, cryptocurrency, smart contracts and metaphysical soul/life claims are explicitly outside this subsystem.
+- Added focused source tests in `the artefact/tests/test_autonomous_goals.py` for self-certification denial, fake effect evidence rejection, retry exhaustion, serial milestone execution, deadline/state-hash reconciliation, high-impact approval and controller-context injection.
+- **Execution status:** source candidate only at this point. No exact isolated execution evidence is claimed by this README entry until the branch test suite actually starts and passes on an authorized executor.
+- The periodic autonomous wake/LLM runner is deliberately **not** implemented as a hidden second shell or second effect path. The next integration must feed claimed goal work through the existing canonical cognition -> proposal re-ingest -> EffectGate/evidence spine; otherwise it would violate the one-state/one-effect-authority architecture.

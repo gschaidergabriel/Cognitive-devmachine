@@ -96,8 +96,23 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
     enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-    if not path or not sha256:
-        raise RuntimeError("embedded EntityOS path and SHA-256 are required")
+
+    # Baseline ClayVerse does not require EntityOS. Absence is admitted only when
+    # execution is disabled and no unpinned bytes are present at the configured
+    # path. This keeps optional packaging from becoming an execution bypass.
+    if not sha256:
+        if enable_exec:
+            raise RuntimeError("EntityOS execution requires an embedded SHA-256 pin")
+        if path and os.path.lexists(path):
+            raise RuntimeError("unpinned EntityOS bytes are present")
+        return None, {
+            "staged": False,
+            "verified": False,
+            "execution_enabled": False,
+        }
+
+    if not path:
+        raise RuntimeError("embedded EntityOS path is required when SHA-256 is configured")
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
 

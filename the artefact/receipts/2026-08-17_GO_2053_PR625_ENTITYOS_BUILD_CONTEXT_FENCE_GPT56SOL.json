@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T20:53:00+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "tested_code_head_before_receipt": "2bf1e190d880194f3fbd228ae567548b451e5076",
+  "base_main_observed_via_pr": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "classification": "FOCUSED_TEST_PASS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "novelty": "REFINES",
+  "problem": "PR625 re-included build-assets/entityos/** in the default-deny OCI build context, allowing arbitrary sibling bytes in that staging directory to enter the build context despite the intended single optional EntityOS artifact boundary.",
+  "repair": {
+    "dockerignore": "Replace recursive build-assets/entityos/** re-inclusion with exact .keep and EntityOS file allowlist entries.",
+    "regression": "Require exact allowlist entries and explicitly reject !build-assets/entityos/**."
+  },
+  "exact_git_blobs": {
+    "the artefact/.dockerignore": "ed348564f99e0ddff5cf2e9e38b3687cf25b07c6",
+    "the artefact/tests/test_build_context_boundary.py": "cee145278de57e23220b6aee1c0833b782ff79ec",
+    "the artefact/Dockerfile": "2ee2fe84f1fd7219869380ce3c864cade90c6c31",
+    "the artefact/tests/test_entityos_packaging_contract.py": "162dcf26236e08060efb820ee2cef442b6aa77cd",
+    "the artefact/stage-entityos.sh": "6e0103186d36a047c5ce5fc450bd91f68e301de2",
+    "the artefact/.gitignore": "8bdddac545b4b691f2c74a164d53261fbe64438d"
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "python": "3.13.5",
+    "pytest": "available system pytest",
+    "focused_command": "pytest -q tests/test_build_context_boundary.py tests/test_entityos_packaging_contract.py",
+    "focused_result": "5 passed in 0.06s",
+    "focused_exit_code": 0,
+    "static_checks": [
+      "git hash-object reconstructed .dockerignore matched ed348564f99e0ddff5cf2e9e38b3687cf25b07c6",
+      "git hash-object reconstructed test_build_context_boundary.py matched cee145278de57e23220b6aee1c0833b782ff79ec",
+      "sh -n stage-entityos.sh PASS",
+      "python -m py_compile focused test files PASS"
+    ],
+    "stager_checks": {
+      "valid_digest": "PASS; staged digest matched source; mode 0555",
+      "wrong_digest": "PASS_FAIL_CLOSED; exit 65; no staged EntityOS remained",
+      "symlink_source": "PASS_FAIL_CLOSED; exit 66; no staged EntityOS remained"
+    }
+  },
+  "counterhypothesis": "Even with exact source allowlisting, final Docker/BuildKit ignore semantics or the exact OCI build may differ from static reconstruction; no Docker/Podman binary was available on this isolated surface, so build-context transfer and image construction remain unobserved.",
+  "evidence_boundary": "This receipt establishes exact-file static/focused source-contract support for PR625 only. It does not establish an exact OCI build, runtime, packaged EntityOS admission, Clerk/PTY/Claude behavior, or whole ClayVerse PASS.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision trigger time is available and no shared immutable request/turn identifier is exposed; the atomic go experiment lease therefore fails closed.",
+    "executed": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Keep PR625 Draft; run the exact branch on the first authorized isolated Docker/OCI-capable surface, verify actual build-context membership, build the baseline without EntityOS, then build with a digest-bound EntityOS fixture and exercise mismatch/extra-file fail-closed cases before promotion."
+}

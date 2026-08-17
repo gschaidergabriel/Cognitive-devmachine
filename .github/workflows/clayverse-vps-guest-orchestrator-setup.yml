@@ -1,4 +1,4 @@
-name: ClayVerse VPS guest orchestrator setup
+name: ClayVerse VPS guest orchestrator rootless preflight
 
 on:
   workflow_dispatch:
@@ -11,49 +11,48 @@ permissions:
   contents: read
 
 concurrency:
-  group: clayverse-vps-guest-orchestrator-setup
+  group: clayverse-vps-disposable-guest-orchestrator
   cancel-in-progress: false
 
 jobs:
-  qemu-orchestrator-setup:
+  rootless-build-preflight:
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
-      - name: Install bounded guest-orchestration packages only
+      - name: Probe rootless QEMU build prerequisites only
         shell: bash
         run: |
           set -euo pipefail
-          export DEBIAN_FRONTEND=noninteractive
-          sudo -n apt-get update
-          sudo -n apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
-
-      - name: Attest installed VMM surface
-        shell: bash
-        run: |
-          set -euo pipefail
-          out="/tmp/clayverse-vps-qemu-setup-${GITHUB_RUN_ID}.json"
+          out="/tmp/clayverse-vps-qemu-rootless-preflight-${GITHUB_RUN_ID}.json"
           python3 - "$out" <<'PY'
           import json, os, pathlib, platform, shutil, subprocess, sys
           out=pathlib.Path(sys.argv[1])
           def cmd(argv):
               try: return subprocess.check_output(argv,text=True,stderr=subprocess.STDOUT,timeout=10).strip()
               except Exception as exc: return 'UNAVAILABLE:'+type(exc).__name__+':'+str(exc)
-          qemu=shutil.which('qemu-system-x86_64')
+          def which(name): return shutil.which(name)
+          def pkg(name):
+              if not which('pkg-config'): return False
+              return subprocess.run(['pkg-config','--exists',name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
+          tools={k:which(k) for k in ['cc','gcc','clang','make','ninja','meson','pkg-config','python3','pip3','git','curl','wget','tar','xz']}
+          libs={k:pkg(k) for k in ['glib-2.0','gio-2.0','gthread-2.0','pixman-1','zlib']}
+          qemu=which('qemu-system-x86_64')
           payload={
-            'schema':'ClayVerseVpsGuestOrchestratorSetup/v1',
+            'schema':'ClayVerseVpsQemuRootlessBuildPreflight/v1',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
             'host_kernel':platform.release(),
-            'qemu_system_x86_64':qemu,
-            'qemu_img':shutil.which('qemu-img'),
-            'cloud_localds':shutil.which('cloud-localds'),
-            'qemu_version':cmd(['qemu-system-x86_64','--version']) if qemu else 'UNAVAILABLE',
-            'qemu_accels':cmd(['qemu-system-x86_64','-accel','help']) if qemu else 'UNAVAILABLE',
-            'qemu_sandbox_help':cmd(['qemu-system-x86_64','-sandbox','help']) if qemu else 'UNAVAILABLE',
             'kvm_device_present':pathlib.Path('/dev/kvm').exists(),
-            'installed_packages':cmd(['dpkg-query','-W','-f=${Package}=${Version}\n','qemu-system-x86','qemu-utils','cloud-image-utils']),
-            'orchestrator_mutation_only':True,
+            'qemu_already_present':bool(qemu),
+            'qemu_version':cmd(['qemu-system-x86_64','--version']) if qemu else None,
+            'tools':tools,
+            'pkg_config_libraries':libs,
+            'cc_version':cmd([tools['cc'],'--version']) if tools['cc'] else None,
+            'python_version':cmd(['python3','--version']) if tools['python3'] else None,
+            'rootless_minimum_ready':bool((tools['cc'] or tools['gcc'] or tools['clang']) and tools['make'] and tools['python3'] and tools['pkg-config'] and libs['glib-2.0'] and libs['pixman-1']),
+            'orchestration_probe_only':True,
+            'host_packages_changed':False,
             'product_code_executed_on_host':False,
             'host_docker_used':False,
             'guest_started':False,
@@ -61,17 +60,15 @@ jobs:
             'whole_product_credit':0,
             'unusual_experiment_count_added':0,
           }
-          if not qemu or not payload['qemu_img'] or not payload['cloud_localds']:
-              raise SystemExit('QEMU_ORCHESTRATOR_SETUP_INCOMPLETE')
           out.write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
-          print(json.dumps({'qemu':True,'kvm':payload['kvm_device_present'],'guest_started':False,'runtime_credit':0},sort_keys=True))
+          print(json.dumps({'qemu_present':payload['qemu_already_present'],'rootless_minimum_ready':payload['rootless_minimum_ready'],'kvm':payload['kvm_device_present'],'guest_started':False,'runtime_credit':0},sort_keys=True))
           PY
 
-      - name: Upload setup receipt
+      - name: Upload bounded preflight receipt
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: clayverse-vps-qemu-setup-${{ github.run_id }}
-          path: /tmp/clayverse-vps-qemu-setup-${{ github.run_id }}.json
+          name: clayverse-vps-qemu-rootless-preflight-${{ github.run_id }}
+          path: /tmp/clayverse-vps-qemu-rootless-preflight-${{ github.run_id }}.json
           if-no-files-found: error
           retention-days: 7

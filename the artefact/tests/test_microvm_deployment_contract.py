@@ -1,8 +1,10 @@
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "deployment" / "MICROVM_DEPLOYMENT_CONTRACT.md"
 TEMPLATE = ROOT / "deployment" / "clayverse-kata-statefulset.template.yaml"
+MANIFEST = ROOT / "manifest.json"
 
 
 def _yaml_documents(text: str) -> list[str]:
@@ -37,6 +39,19 @@ def test_kata_template_keeps_root_immutable_and_state_explicit():
     assert "mountPath: /workspace" in text
     assert "medium: Memory" in text
     assert "hostPath:" not in text
+
+
+def test_kata_persistent_volumes_are_bound_to_nonroot_runtime_group():
+    text = TEMPLATE.read_text()
+    contract = CONTRACT.read_text()
+    assert "runAsUser: 10001" in text
+    assert "runAsGroup: 10001" in text
+    assert "fsGroup: 10001" in text
+    assert "fsGroupChangePolicy: OnRootMismatch" in text
+    assert "privileged: true" not in text
+    assert "initContainers:" not in text
+    assert "create/write/fsync/read/rename/delete" in contract
+    assert "uid=10001,gid=10001" in contract
 
 
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
@@ -77,6 +92,15 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "representative undeclared ingress and egress remain denied" in text
 
 
+def test_manifest_network_gates_match_the_deployment_contract():
+    manifest = json.loads(MANIFEST.read_text())
+    outer = manifest["outer_isolation"]
+    assert outer["required_for_final_pass"] is True
+    assert outer["network_policy_baseline"] == "DEFAULT_DENY_INGRESS_AND_EGRESS_FOR_APP_CLAYVERSE"
+    assert outer["functional_network_access"] == "SEPARATE_DEPLOYMENT_SPECIFIC_REVIEWED_ALLOW_POLICY_REQUIRED"
+    assert "ENFORCES_NETWORKPOLICY" in outer["network_policy_enforcement"]
+
+
 def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     contract = CONTRACT.read_text()
     template = TEMPLATE.read_text()
@@ -92,6 +116,15 @@ def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     assert "restartPolicy: OnFailure" not in template
 
 
+def test_tier2_signal_is_wired_to_kubernetes_termination_message():
+    text = TEMPLATE.read_text()
+    assert "reserved exit code" in text
+    assert "86" in text
+    assert "terminationMessagePath: /dev/termination-log" in text
+    assert "terminationMessagePolicy: File" in text
+    assert "exit 86 remains authoritative" in text
+
+
 def test_kata_runtime_security_floor_is_bound_and_refreshed():
     text = CONTRACT.read_text()
     assert "GHSA-2gv2-cffp-j227 / CVE-2026-47243" in text
@@ -102,6 +135,19 @@ def test_kata_runtime_security_floor_is_bound_and_refreshed():
     assert "bind the exact installed Kata/runtime-rs version and configuration" in text
     assert "shared-filesystem/virtiofs mode" in text
     assert "A version string alone is not microVM security evidence" in text
+
+
+def test_kata_final_acceptance_requires_current_supported_rolling_release():
+    text = CONTRACT.read_text()
+    assert "rolling-release project" in text
+    assert "only the current monthly release is security-supported" in text
+    assert "then-current upstream-supported Kata release" in text
+    assert "unsupported prior release is `BLOCKED`" in text
+    assert "GHSA-mp2j-xm59-qfgw / CVE-2026-50540" in text
+    assert "GHSA-7fhf-v3p3-rp56" in text
+    assert "`3.31.0` is **not an admissible current final-acceptance target**" in text
+    assert "reject unreviewed `io.katacontainers.*` workload annotations" in text
+    assert "effective admitted Pod annotations" in text
 
 
 def test_provider_credentials_remain_bounded():

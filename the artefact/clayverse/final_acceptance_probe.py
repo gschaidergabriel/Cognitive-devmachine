@@ -7,6 +7,7 @@ from typing import Any
 from .adapters import MistralInference
 from .engine import ClayVerseEngine
 from .entityos_bridge import EntityOSBridge
+from .final_acceptance_mistral_config import validate_final_mistral_runtime_config
 from .store import StaleGeneration, UnifiedDB
 
 
@@ -110,9 +111,13 @@ def run_mistral_acceptance_probe(
     if subject not in clerk_map:
         raise PermissionError("acceptance Clerk subject is not in the canonical mapping")
 
-    adapter = inference if inference is not None else MistralInference()
-    if inference is None and not adapter.available():
-        raise RuntimeError("Mistral acceptance provider is not locally configured")
+    if inference is None:
+        fixed_model = validate_final_mistral_runtime_config()
+        adapter = MistralInference(model=fixed_model)
+        if not adapter.available():
+            raise RuntimeError("Mistral acceptance provider is not locally configured")
+    else:
+        adapter = inference
 
     result = ClayVerseEngine(
         db,

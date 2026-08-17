@@ -13,6 +13,7 @@ from .store import StaleGeneration, UnifiedDB
 
 STATE_KEY = "autonomy_state_v1"
 STATE_SCHEMA = "ClayVerseAutonomyState/v1"
+AUTONOMY_TURN_SOURCE = "clayverse-autonomy:goal-step"
 GOAL_STATUSES = {"ACTIVE", "WAITING", "VERIFYING", "BLOCKED", "COMPLETED", "CANCELLED"}
 STEP_KINDS = {"reason", "effect", "wait", "complete_candidate"}
 EFFECT_CAPABILITIES = {"state.noop", "entityos.exec"}
@@ -342,6 +343,12 @@ class AutonomyController:
             return digest
         return None
 
+    @classmethod
+    def _parse_provenance(cls, raw: str | None) -> dict[str, Any]:
+        if not isinstance(raw, str):
+            raise AutonomyStateError("effect causal observation provenance missing")
+        return cls._loads(raw)
+
     @staticmethod
     def _resource_refs(raw: str | None) -> set[str]:
         if not isinstance(raw, str):
@@ -358,7 +365,7 @@ class AutonomyController:
         row = db.execute(
             "SELECT e.effect_id,e.episode_id,e.user_id,e.capability,e.target,e.argv,e.requested_generation,e.status,e.outcome,e.ts,"
             "w.session_id AS effect_session,c.causal_id,c.observation_turn_id,c.reentered,"
-            "t.session_id AS observation_session,t.user_id AS observation_user,t.resource_refs "
+            "t.session_id AS observation_session,t.user_id AS observation_user,t.resource_refs,t.provenance "
             "FROM effects e "
             "LEFT JOIN workspace_episodes w ON w.episode_id=e.episode_id "
             "LEFT JOIN causal_episodes c ON c.effect_id=e.effect_id "
@@ -383,6 +390,15 @@ class AutonomyController:
             or row["observation_user"] != goal["user_id"]
         ):
             raise PermissionError("effect receipt lacks canonical causal binding")
+        provenance = self._parse_provenance(row["provenance"])
+        if (
+            provenance.get("source") != AUTONOMY_TURN_SOURCE
+            or provenance.get("goal_id") != goal["goal_id"]
+            or provenance.get("autonomy_step_id") != step["step_id"]
+            or int(provenance.get("entity_generation", -1)) != goal["generation"]
+            or provenance.get("causal_id") != row["causal_id"]
+        ):
+            raise PermissionError("effect receipt lacks exact autonomous goal-step provenance")
         if float(row["ts"]) < max(float(goal["created_at"]), float(step["created_at"])):
             raise PermissionError("effect receipt predates autonomous step")
         refs = self._resource_refs(row["resource_refs"])

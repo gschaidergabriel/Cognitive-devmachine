@@ -36,7 +36,8 @@ class UnifiedDB:
         try:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
             self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','5') ON CONFLICT(key) DO UPDATE SET value='5'")
-            self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','0')")
+            self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
+            self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
         except Exception:
             self.db.close(); raise
     def _retire_hidden_raw_turn_ledger(self):
@@ -58,7 +59,7 @@ class UnifiedDB:
     def ensure_session(self,user_id,terminal_name):
         row=self.db.execute("SELECT session_id FROM sessions WHERE user_id=?",(user_id,)).fetchone()
         if row: return row[0]
-        sid=f"session:{user_id}"; now=time.time(); generation=max(1,self.entity_generation())
+        sid=f"session:{user_id}"; now=time.time(); generation=self.entity_generation()
         self.db.execute("INSERT INTO sessions(session_id,user_id,created_at,updated_at,generation,terminal_name) VALUES(?,?,?,?,?,?)",(sid,user_id,now,now,generation,terminal_name)); return sid
     def assert_session_owner(self,session_id,user_id):
         row=self.db.execute("SELECT user_id FROM sessions WHERE session_id=?",(session_id,)).fetchone()
@@ -67,12 +68,12 @@ class UnifiedDB:
         return True
     def entity_generation(self):
         row=self.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        return int(row[0]) if row else 0
+        return int(row[0]) if row else 1
     def advance_entity_generation(self):
         """Advance the one global live generation and fence both user sessions together."""
         with self.tx() as db:
-            row=db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone(); current=int(row[0]) if row else 0
-            generation=current+1; now=time.time()
+            row=db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone(); current=int(row[0]) if row else 1
+            generation=max(1,current)+1; now=time.time()
             db.execute("INSERT INTO meta(key,value) VALUES('entity_generation',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(generation),))
             db.execute("UPDATE sessions SET generation=?,updated_at=?",(generation,now))
         return generation

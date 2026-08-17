@@ -146,7 +146,7 @@ def test_collector_rejects_host_kernel_indistinguishable_from_guest_kernel():
 
 def test_collector_rejects_missing_default_deny_policy():
     with pytest.raises(AttestationError, match="no NetworkPolicy selects the ClayVerse pod"):
-        _attest(network_policies={"items": []})
+        _attest(network_policies={"items": [])
 
 
 def test_collector_rejects_obvious_allow_all_egress_even_when_default_deny_exists():
@@ -169,6 +169,23 @@ def test_collector_rejects_global_ipblock_allow():
             "podSelector": {"matchLabels": {"app": "clayverse"}},
             "policyTypes": ["Egress"],
             "egress": [{"to": [{"ipBlock": {"cidr": "0.0.0.0/0"}}], "ports": [{"port": 443}]}],
+        },
+    }
+    with pytest.raises(AttestationError, match="obvious broad NetworkPolicy allow"):
+        _attest(network_policies=_policies(broad))
+
+
+def test_notin_selector_without_key_still_selects_and_exposes_broad_policy():
+    broad = {
+        "metadata": {"name": "bad-notin", "uid": "bad3", "resourceVersion": "14"},
+        "spec": {
+            "podSelector": {
+                "matchExpressions": [
+                    {"key": "security-zone", "operator": "NotIn", "values": ["other"]}
+                ]
+            },
+            "policyTypes": ["Egress"],
+            "egress": [{}],
         },
     }
     with pytest.raises(AttestationError, match="obvious broad NetworkPolicy allow"):

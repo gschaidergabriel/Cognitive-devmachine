@@ -1,3 +1,4 @@
+import uuid
 import pytest
 
 from clayverse.effects import EffectGate,EffectRequest
@@ -13,8 +14,8 @@ def test_effect_rejects_cross_user_session_binding(tmp_path):
         andreas,_=router.resolve('a')
         gate=EffectGate(db)
 
-        effect_id,outcome=gate.execute(EffectRequest(gabriel,gabriel_session,'state.noop','same-user'))
-        assert effect_id and outcome['ok']
+        effect_id,outcome=gate.execute(EffectRequest(gabriel,gabriel_session,'state.noop','same-user',None,db.session_generation(gabriel_session),{'source':'test','request_id':uuid.uuid4().hex}))
+        assert effect_id and outcome['ok'] and db.effect_status(effect_id)=='VERIFIED'
 
         with pytest.raises(PermissionError,match='session owner mismatch'):
             gate.execute(EffectRequest(andreas,gabriel_session,'state.noop','cross-user'))

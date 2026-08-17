@@ -58,8 +58,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
-        if not self.MANAGED_TMUX.is_file():
-            raise TerminalRuntimeError("managed tmux command-surface policy unavailable")
+        if not self.MANAGED_TMUX.is_file() or self.MANAGED_TMUX.stat().st_mode & 0o222:
+            raise TerminalRuntimeError("managed tmux command-surface policy unavailable or writable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -95,13 +95,29 @@ class TerminalSessionManager:
             *args,
         ]
 
+    def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
+        """Reapply the immutable command-surface fence to a surviving tmux server."""
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=2.0,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError("tmux server policy enforcement unavailable") from exc
+        if cp.returncode != 0:
+            raise TerminalRuntimeError(
+                f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
+            )
+
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
         """Fail closed unless the connected tmux server is transport-only.
 
-        tmux only reads `-f` when a server starts. An already-running server can therefore
-        ignore the `-f` supplied by a later client. The managed policy writes a versioned
-        marker last after removing all default key tables. Verify the marker, both prefix
-        options, and the effective global key binding list before admitting attachment.
+        tmux only reads `-f` when a server starts. A persistent server may predate a
+        ClayVerse policy upgrade, so ensure() re-sources the immutable policy before
+        this check. Readiness remains non-mutating and only attests the effective state.
         """
         checks = (
             (
@@ -111,6 +127,13 @@ class TerminalSessionManager:
             ),
             ("prefix", ("show-options", "-gqv", "prefix"), "None"),
             ("prefix2", ("show-options", "-gqv", "prefix2"), "None"),
+            ("status", ("show-options", "-gqv", "status"), "off"),
+            ("mouse", ("show-options", "-gqv", "mouse"), "off"),
+            (
+                "default-shell",
+                ("show-options", "-gqv", "default-shell"),
+                str(self.DIRECT_SHELL_GUARD),
+            ),
             ("keymap", ("list-keys",), ""),
         )
         for label, args, expected in checks:
@@ -171,22 +194,12 @@ class TerminalSessionManager:
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False,
+            timeout=2.0,
         )
         return cp.returncode == 0
 
-    def ensure(self, user_id: str) -> TerminalBinding:
-        self._require_programs()
-        binding = self.binding(user_id)
-        binding.home.mkdir(parents=True, exist_ok=True)
-        self.workspace.mkdir(parents=True, exist_ok=True)
-        if self._has_session(binding):
-            self._assert_tmux_server_policy(binding)
-            return binding
-
-        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
-        # user/project MCP file in the launch path. User/session identity reaches the
-        # managed stdio server only through this sanitized process environment.
-        claude_argv = [
+    def _claude_argv(self) -> list[str]:
+        return [
             "claude",
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
@@ -197,13 +210,15 @@ class TerminalSessionManager:
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
+
+    def _launch_argv(self, binding: TerminalBinding) -> list[str]:
         mcp_env = self._mcp_env(binding)
         effect_env = [
             f"{key}={mcp_env[key]}"
             for key in ("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256")
             if key in mcp_env
         ]
-        env_argv = [
+        return [
             "env",
             "-i",
             f"HOME={binding.home}",
@@ -215,21 +230,80 @@ class TerminalSessionManager:
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
             *effect_env,
-            "DISABLE_UPDATES=1",
+            "DISABLE_AUTOUPDATER=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
             "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1",
             "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1",
             f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
-            *claude_argv,
+            *self._claude_argv(),
         ]
-        command = shlex.join(env_argv)
+
+    def _attest_existing_session(self, binding: TerminalBinding) -> bool:
+        """Verify one live pane owns the exact managed Claude launch contract."""
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(
+                    binding,
+                    "list-panes", "-s", "-t", binding.tmux_name,
+                    "-F", "#{pane_dead}\t#{pane_current_command}\t#{pane_start_command}",
+                ),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=2.0,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return False
+        if cp.returncode != 0:
+            return False
+        lines = [line for line in cp.stdout.splitlines() if line]
+        if len(lines) != 1:
+            return False
+        fields = lines[0].split("\t", 2)
+        if len(fields) != 3:
+            return False
+        pane_dead, current_command, start_command = fields
+        if pane_dead != "0" or current_command != "claude":
+            return False
+        try:
+            start_argv = shlex.split(start_command)
+        except ValueError:
+            return False
+        return start_argv == self._launch_argv(binding)
+
+    def is_managed_session(self, binding: TerminalBinding) -> bool:
+        """Read-only readiness predicate; existence alone never proves managed Claude health."""
+        try:
+            if not self._has_session(binding):
+                return False
+            self._assert_tmux_server_policy(binding)
+            return self._attest_existing_session(binding)
+        except (OSError, subprocess.TimeoutExpired, TerminalRuntimeError):
+            return False
+
+    def ensure(self, user_id: str) -> TerminalBinding:
+        self._require_programs()
+        binding = self.binding(user_id)
+        binding.home.mkdir(parents=True, exist_ok=True)
+        self.workspace.mkdir(parents=True, exist_ok=True)
+        if self._has_session(binding):
+            self._enforce_tmux_policy(binding)
+            self._assert_tmux_server_policy(binding)
+            if not self._attest_existing_session(binding):
+                raise TerminalRuntimeError(f"existing {binding.tmux_name} is not the managed Claude session")
+            return binding
+
+        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
+        # user/project MCP file in the launch path. User/session identity reaches the
+        # managed stdio server only through this sanitized process environment.
+        launch_argv = self._launch_argv(binding)
         cp = subprocess.run(
             self._tmux_argv(
                 binding,
                 "new-session", "-d", "-s", binding.tmux_name,
-                "-c", str(self.workspace), command,
+                "-c", str(self.workspace), *launch_argv,
             ),
             capture_output=True,
             text=True,
@@ -237,7 +311,10 @@ class TerminalSessionManager:
         )
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
+        self._enforce_tmux_policy(binding)
         self._assert_tmux_server_policy(binding)
+        if not self._attest_existing_session(binding):
+            raise TerminalRuntimeError(f"created {binding.tmux_name} failed managed Claude attestation")
         return binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:

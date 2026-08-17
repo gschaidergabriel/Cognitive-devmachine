@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from .autonomy_context import bounded_autonomy_context
+
 
 class BridgeStateError(RuntimeError):
     pass
@@ -73,6 +75,7 @@ class ClayVerseEffectBridge:
                 "generation": int(active["generation"]),
                 "effect_id": active["effect_id"],
             } if active else None,
+            "autonomy": bounded_autonomy_context(self.db, self.user_id),
             "capabilities": self.lifecycle.effects.available_capabilities(),
             "entityos_execution_enabled": self.lifecycle.effects.entityos_bridge is not None,
             "turn_ingestion": "automatic_claude_hooks",

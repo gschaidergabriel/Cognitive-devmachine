@@ -8,6 +8,7 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "build" / "install_pinned_xterm.py"
@@ -35,6 +36,23 @@ def archive(*, name="@xterm/xterm", version="6.0.0", extra=None) -> bytes:
     return buf.getvalue()
 
 
+def archive_with_duplicate(path: str) -> bytes:
+    entries = [
+        ("package/package.json", b'{"name":"@xterm/xterm","version":"6.0.0"}'),
+        ("package/lib/xterm.js", b"one"),
+        ("package/css/xterm.css", b"css"),
+        (path, b"two"),
+    ]
+    buf = io.BytesIO()
+    with tarfile.open(fileobj=buf, mode="w:gz") as tf:
+        for name, payload in entries:
+            info = tarfile.TarInfo(name)
+            info.size = len(payload)
+            info.mode = 0o644
+            tf.addfile(info, io.BytesIO(payload))
+    return buf.getvalue()
+
+
 class PinnedXtermSupplyChainTests(unittest.TestCase):
     def test_repository_lock_and_dockerfile_use_digest_pinned_installer(self):
         lock = json.loads((ROOT / "SOURCE_LOCK.json").read_text("utf-8"))
@@ -49,14 +67,14 @@ class PinnedXtermSupplyChainTests(unittest.TestCase):
         dockerignore = (ROOT / ".dockerignore").read_text("utf-8")
         self.assertIn("!build/install_pinned_xterm.py", dockerignore)
 
-    def test_valid_locked_archive_extracts_required_assets(self):
-        data = archive()
+    def test_valid_locked_archive_extracts_only_required_runtime_assets(self):
+        data = archive(extra={"package/README.md": b"not-runtime"})
         xterm.verify_digest(data, hashlib.sha512(data).hexdigest())
         with tempfile.TemporaryDirectory() as td:
             target = Path(td) / "xterm"
             xterm.install_archive(data, target, "@xterm/xterm", "6.0.0")
-            self.assertTrue((target / "lib" / "xterm.js").is_file())
-            self.assertTrue((target / "css" / "xterm.css").is_file())
+            files = sorted(str(path.relative_to(target)) for path in target.rglob("*") if path.is_file())
+            self.assertEqual(files, ["css/xterm.css", "lib/xterm.js", "package.json"])
             self.assertEqual(json.loads((target / "package.json").read_text())["version"], "6.0.0")
 
     def test_package_identity_mismatch_fails_closed(self):
@@ -89,6 +107,43 @@ class PinnedXtermSupplyChainTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             with self.assertRaisesRegex(SystemExit, "unsafe xterm archive member type"):
                 xterm.install_archive(buf.getvalue(), Path(td) / "xterm", "@xterm/xterm", "6.0.0")
+
+    def test_duplicate_file_member_fails_closed(self):
+        data = archive_with_duplicate("package/lib/xterm.js")
+        with tempfile.TemporaryDirectory() as td:
+            with self.assertRaisesRegex(SystemExit, "duplicate xterm archive member"):
+                xterm.install_archive(data, Path(td) / "xterm", "@xterm/xterm", "6.0.0")
+
+    def test_member_count_bound_fails_closed(self):
+        data = archive()
+        with mock.patch.object(xterm, "MAX_MEMBERS", 2):
+            with tempfile.TemporaryDirectory() as td:
+                with self.assertRaisesRegex(SystemExit, "too many members"):
+                    xterm.install_archive(data, Path(td) / "xterm", "@xterm/xterm", "6.0.0")
+
+    def test_unpacked_size_bound_fails_closed(self):
+        data = archive()
+        with mock.patch.object(xterm, "MAX_UNPACKED_BYTES", 4):
+            with tempfile.TemporaryDirectory() as td:
+                with self.assertRaisesRegex(SystemExit, "unpacked size limit"):
+                    xterm.install_archive(data, Path(td) / "xterm", "@xterm/xterm", "6.0.0")
+
+    def test_download_size_bound_fails_before_digest_acceptance(self):
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self, amount):
+                return b"x" * amount
+
+        with mock.patch.object(xterm, "MAX_ARCHIVE_BYTES", 8), mock.patch.object(
+            xterm.urllib.request, "urlopen", return_value=Response()
+        ):
+            with self.assertRaisesRegex(SystemExit, "download size limit"):
+                xterm.fetch_verified("https://registry.npmjs.org/xterm.tgz", "0" * 128)
 
     def test_digest_mismatch_fails_before_archive_open(self):
         data = archive()

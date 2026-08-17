@@ -1,0 +1,57 @@
+{
+  "schema": "ClayEntityOSGoFusionReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_endpoint": "single executable EntityOS",
+  "organ": "chatgpt-secondary temporary Clay organ",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_pr": 787,
+  "product_pr_head_observed": "e90b887111969becc922d25a73886af61d6b5340",
+  "source_only_review": {
+    "experiment_ledger": {
+      "schema": "ClayGoExperimentAccounting/v1",
+      "reserved_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+      "global_unusual_experiment_count": 0,
+      "global_slot_consumed": false,
+      "global_slot_reserved": true,
+      "experiment_status": "PENDING_EXECUTABLE_OBSERVATION"
+    },
+    "runner_observability": {
+      "file": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+      "finding": "The attested_snapshot_v2_exact_entityos_double_build step is executed by a wrapper that prepends set -euo pipefail. Each build_canonical_onefile.py invocation redirects stdout/stderr to snapshot-$lane.log, while tail/grep diagnostics occur only after a zero exit. A nonzero canonical builder exit therefore aborts the shell before its bounded log is surfaced.",
+      "classification": "DIAGNOSTIC_OBSERVABILITY_GAP_NOT_ENTITYOS_SEMANTIC_FAILURE",
+      "cheapest_discriminator": "Capture the builder return code without immediate set -e termination, emit bounded log/tail on nonzero, then return the original nonzero code. This repair/rerun is diagnostics/regression-only and must not consume the unusual-experiment slot."
+    }
+  },
+  "executed_evidence_reused_not_reexecuted": {
+    "exact_head": "fa9827d496602d7c5821b13103da665f7287b16c",
+    "deployment": "dpl_GSj3cvRJKMaxKGAkJvQuw1u9qJsN",
+    "started_isolated_vercel_sandbox": true,
+    "pinned_toolchain": "Python 3.13.13 + lark==1.3.1 + pyinstaller==6.21.0",
+    "network_policy": "DENY_ALL",
+    "failure_step": "attested_snapshot_v2_exact_entityos_double_build",
+    "failure_exit_code": 1,
+    "unusual_experiment_executed_count": 0,
+    "sandbox_stop": "PASS",
+    "whole_entityos_pass": false
+  },
+  "current_execution_blocker": {
+    "provider": "Vercel",
+    "status": "FREE_DEPLOYMENT_DAILY_LIMIT_EXCEEDED",
+    "reported_reason": "more than 100 deployments; api-deployments-free-per-day",
+    "free_only_action": "DO_NOT_BUY_OR_RAISE_CAPACITY; DO_NOT_ROUTE_ACCEPTANCE_TO_VPS_SELF_HOSTED_OR_PRODUCTION",
+    "current_pr_head_sandbox_observation": "UNEXECUTED"
+  },
+  "coordination_write": {
+    "product_pr_comment_id": 5310820849,
+    "purpose": "prevent another quota-consuming exact-head run from repeating the known hidden-log failure mode"
+  },
+  "hypothesis": "The attested snapshot build failure may be caused by the already-corrected cross-language ordering mismatch, or by a later verifier/PyInstaller cause; current logs do not discriminate.",
+  "counterhypothesis": "The ordering repair may be irrelevant and the canonical builder may still fail for an independent reason. Only a repaired diagnostic runner plus exact-head isolated Vercel Sandbox observation can collapse this uncertainty.",
+  "unusual_experiment_status": "0_EXECUTED_1_RESERVED",
+  "promotion": "NOT_ALLOWED",
+  "next_executable_step": "After free Vercel capacity is available, refresh the exact PR head, ensure the builder-failure log is surfaced, then run one exact-head isolated Vercel Sandbox batch. Require ATTESTED_SNAPSHOT_V2 twin one-file EntityOS build and all ordinary gates before executing the single reserved content-tamper intervention. Do not add a second unusual experiment.",
+  "evidence_note": "This receipt adds source-inspection and coordination evidence only. It does not convert source repair, deployment status, or historical sandbox results into current-head executable truth."
+}

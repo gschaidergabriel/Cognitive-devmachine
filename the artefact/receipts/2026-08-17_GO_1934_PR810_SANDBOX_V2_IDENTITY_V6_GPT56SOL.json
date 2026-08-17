@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T19:34:24+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES_CONTROLLER_PROVENANCE_SOURCE_ONLY",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "f07076310fe677df3fa1d2a43a1f21c0d7d80a92",
+  "canonical_product_bytes_changed": false,
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head": "78d92753d9442c66c3ffcff127c31faa98ffd622",
+    "wrapper_blob": "8ebef98df232695ce538b5c80290df8f7ce11834",
+    "identity_test_blob": "14908cdae7bc02c3171a5462e5b1922c545c9395",
+    "patch_schema": "ClayVerseCurrentTargetPatch/v6",
+    "runtime_credit": 0
+  },
+  "observed_pre_fix_execution": {
+    "deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "controller_commit": "2e5505983172e582a50f4f72bebd561bc650ff5a",
+    "patch_schema": "ClayVerseCurrentTargetPatch/v5",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": null,
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "mechanism": {
+    "defect": "The retained v5 runner attempted top-level sandbox.sandboxId/sessionId/id, but pinned @vercel/sandbox 2.9.2 exposes stable Sandbox identity as sandbox.name and the running VM identity as sandbox.currentSession().sessionId.",
+    "repair": "The current-target wrapper now exact-replaces the obsolete receipt assignment with sandbox.name plus currentSession().sessionId and fails closed with SANDBOX_PROVIDER_IDENTITY_UNOBSERVED if either identity is absent.",
+    "schema_separation": "Provider/session identity semantics are versioned as target patch v6 so historical executed v5 receipts remain distinguishable.",
+    "regression": "A deterministic source test binds the legacy runner marker, v6 schema, sandbox.name, current session id and fail-closed identity marker. An initial quoted-key assertion bug was corrected before any runtime credit was claimed."
+  },
+  "exact_sdk_evidence": {
+    "package": "@vercel/sandbox@2.9.2",
+    "sandbox_identity": "sandbox.name",
+    "session_identity": "sandbox.currentSession().sessionId"
+  },
+  "prepared_next_execution_closure": {
+    "commit": "218b51cad87e3907d1dd45adc7998c736be23cdb",
+    "tree": "f16c87737cf74ef0703a1fc0a51fd99298450cd1",
+    "runtime_credit": 0,
+    "note": "PR810 is intentionally not rebound until the approved Preview credential exists and one final product-relevant identity refresh is performed."
+  },
+  "current_blocker": "MISSING_HOST_SIDE_SENSITIVE_VERCEL_PREVIEW_GITHUB_READ_TOKEN_BEFORE_PRIVATE_RESEARCH_AND_ENTITYOS_SOURCE_FETCH",
+  "next_exact_gate": "Provision the approved host-side GITHUB_READ_TOKEN without exposing or forwarding it to the Sandbox; refresh product-relevant identities; bind the same retained PR810 controller once to the then-current closure; execute target patch v6 and continue through private-source verification, EntityOS reproduction/staging, full source regression, OCI build/image identity and in-image gates.",
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "reason": "No safely reproducible immutable shared request/turn identity is exposed; deterministic provenance hardening only."
+  },
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

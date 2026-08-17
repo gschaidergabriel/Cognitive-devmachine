@@ -5,7 +5,8 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from clayverse.adapters import AuthenticationError, ClerkConfig, ClerkTokenVerifier
+from clayverse import adapters
+from clayverse.clerk_auth import AuthenticationError, ClerkConfig, ClerkTokenVerifier
 
 
 def _keypair():
@@ -39,6 +40,12 @@ def _claims(now, *, sid="sess_1"):
     return claims
 
 
+def test_legacy_adapter_reexports_canonical_clerk_authority():
+    assert adapters.AuthenticationError is AuthenticationError
+    assert adapters.ClerkConfig is ClerkConfig
+    assert adapters.ClerkTokenVerifier is ClerkTokenVerifier
+
+
 def test_clerk_boundary_accepts_session_bound_token_and_rejects_custom_jwt_shape():
     private, public_pem = _keypair()
     verifier = _verifier(public_pem)
@@ -55,3 +62,29 @@ def test_clerk_boundary_accepts_session_bound_token_and_rejects_custom_jwt_shape
     empty_sid = _claims(now, sid="")
     with pytest.raises(AuthenticationError):
         verifier.verify(jwt.encode(empty_sid, private, algorithm="RS256"))
+
+
+def test_clerk_boundary_rejects_impersonated_session_actor_claim():
+    private, public_pem = _keypair()
+    verifier = _verifier(public_pem)
+    now = int(time.time())
+    impersonated = _claims(now)
+    impersonated["act"] = {
+        "iss": "https://dashboard.clerk.com",
+        "sid": "sess_actor",
+        "sub": "user_admin",
+    }
+
+    with pytest.raises(AuthenticationError, match="impersonated sessions"):
+        verifier.verify(jwt.encode(impersonated, private, algorithm="RS256"))
+
+
+def test_clerk_boundary_rejects_pending_session_status():
+    private, public_pem = _keypair()
+    verifier = _verifier(public_pem)
+    now = int(time.time())
+    pending = _claims(now)
+    pending["sts"] = "pending"
+
+    with pytest.raises(AuthenticationError, match="pending Clerk session"):
+        verifier.verify(jwt.encode(pending, private, algorithm="RS256"))

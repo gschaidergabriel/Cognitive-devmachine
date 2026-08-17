@@ -172,6 +172,11 @@ class ClayVerseEngine:
                     "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
                     (causal_id, ws["episode_id"], None, tid, None, time.time()),
                 )
+                # ClayGraph is derived/rebuildable, but a projection failure must not be
+                # reported after the canonical turn has already retired its replay fence.
+                # Rebuild before completion inside the same transaction: failure rolls
+                # back this completion while the admitted active turn remains recoverable.
+                self.graph.rebuild_in_tx()
                 cur = db.execute(
                     "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
                     (ws["episode_id"],),
@@ -244,6 +249,12 @@ class ClayVerseEngine:
                     decision = dict(decision)
                     prior = str(decision.get("text", "")).strip()
                     decision["text"] = f"{prior}\n\n{notice}" if prior else notice
+                # The effect outcome is already durable at this point. Keep the derived
+                # graph refresh inside the active-turn retirement transaction so a graph
+                # fault cannot surface as a post-effect failure after the replay fence is
+                # gone. On failure, Recovery sees the same causal re-entry and closes it
+                # without re-executing the external effect.
+                self.graph.rebuild_in_tx()
                 cur = db.execute(
                     "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
                     (ws["episode_id"],),
@@ -257,7 +268,6 @@ class ClayVerseEngine:
                 if cur.rowcount != 1:
                     raise StaleGeneration("engine_active_turn")
 
-        self.graph.rebuild()
         return {
             "user_id": uid,
             "session_id": sid,

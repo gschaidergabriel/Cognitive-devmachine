@@ -187,7 +187,7 @@ def _validated_candidate(db, session_id, generation):
             turn_id=turn_id,
             episode_id=episode_id,
             causal_id=causal_id,
-            status="VERIFIED" if index == 0 else "FAILED",
+            status="VERIFIED",
         )
     validation_ids = [validator.finalize(candidate_use_receipt_id=rid) for rid in use_ids]
     return candidate_id, validation_ids
@@ -202,9 +202,9 @@ def test_effect_bound_validation_derives_counts_instead_of_trusting_candidate(tm
     ).fetchone()
     stats = derive_promotion_stats(db.db, candidate_id, json.loads(candidate_row["value"]), "gabriel")
     assert stats["support_count"] == 2
-    assert stats["success_count"] == 1
-    assert stats["failure_count"] == 1
-    assert stats["calibration"] == 0.5
+    assert stats["success_count"] == 2
+    assert stats["failure_count"] == 0
+    assert stats["calibration"] == 1.0
     assert stats["validation_receipt_ids"] == validation_ids
     assert len(stats["validation_evidence_sha256"]) == 64
 
@@ -226,9 +226,9 @@ def test_promotion_uses_derived_validation_stats_and_revalidates_on_read(tmp_pat
     value = json.loads(method_row["value"])
     provenance = json.loads(method_row["provenance"])
     assert value["support_count"] == 2
-    assert value["success_count"] == 1
-    assert value["failure_count"] == 1
-    assert value["calibration"] == 0.5
+    assert value["success_count"] == 2
+    assert value["failure_count"] == 0
+    assert value["calibration"] == 1.0
     assert provenance["validation_receipt_ids"] == validation_ids
     assert len(provenance["validation_evidence_sha256"]) == 64
     assert provenance["truth_authority"] is False

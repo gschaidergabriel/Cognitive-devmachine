@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:24+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_before_write": "f818ea8f19ce154719a187e7c5ec6bbf324b970a",
+  "classification": "CONTROLLER_DEPLOYMENT_READY_WITH_PROVENANCE_BINDING_CORRECTION_NO_PRODUCT_RUNTIME_CREDIT",
+  "research_candidate": {
+    "pull_request": 680,
+    "commit": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "canonical_base": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+    "current_controller_expected_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "superseded_controller_expected_tree": "9904de551443129417631335132506707dd9aa15",
+    "tree_correction_status": "CONTROLLER_SOURCE_CORRECTED; PRIVATE_FETCH_IDENTITY_ASSERTION_NOT_YET_EXECUTED"
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head": "860c421e3c69830948e872e05bd32bf341318906",
+    "head_message": "fix(clayverse): bind one-shot controller to actual frozen research tree",
+    "single_retained_lane": true,
+    "runtime_ingress": "POST /api/go-cycle-v2 with owner-held scoped read-only GITHUB_READ_TOKEN",
+    "plan_compatibility_ancestor": "0442c4260462c947a004715e5cdb0df62ba5d46f",
+    "plan_compatibility_delta": "vercel.json maxDuration 1800 -> 300",
+    "ancestor_relation": "860c421e is one commit ahead of 0442c426 and inherits the 300-second Vercel configuration"
+  },
+  "vercel": {
+    "project": "dr-unterweger",
+    "deployment_id": "dpl_CAtTZvDnMWMDyPATWsWWxoicqibF",
+    "deployment_commit": "860c421e3c69830948e872e05bd32bf341318906",
+    "state": "READY",
+    "region": "iad1",
+    "cli": "58.1.0",
+    "build_machine": "2 cores / 8 GB",
+    "build_guard_status": "EXACT_RETAINED_RUNNER_SOURCE_BINDING_ADMITTED",
+    "build_guard_scope": "retained controller/runner source guard only; it is not private Research staging, PR680 tree verification, OCI build, or product runtime evidence",
+    "deployment_ready_is_product_pass": false
+  },
+  "github_actions_replication": {
+    "pr680_workflow_run": 32049042032,
+    "rerun_job": 95446494397,
+    "result": "failure before visible steps",
+    "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_CLAYVERSE_TEST_FAILURE"
+  },
+  "credential_and_runtime_boundary": {
+    "owner_token_exposed_to_this_organ": false,
+    "credential_bearing_post_attempted": false,
+    "secret_synthesized_or_recovered": false,
+    "next_start_requirement": "owner-authenticated credential-bearing POST to the exact-head READY deployment",
+    "successful_private_fetch_required_before_source_credit": true,
+    "successful_exact_oci_build_and_digest_required_before_oci_credit": true
+  },
+  "runtime_credit": {
+    "private_source_current_cycle": 0,
+    "exact_final_oci": 0,
+    "real_mistral": 0,
+    "approved_vault_secret": 0,
+    "entityos_final_roundtrip": 0,
+    "tier1_recovery": 0,
+    "tier2_full_recreation": 0,
+    "post_recovery_mistral": 0,
+    "whole_product": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "no shared immutable request/turn identity exposed; deployment and runner re-admission checks are ordinary validation"
+  },
+  "next_exact_step": "Use one owner-authorized POST with the scoped read-only GitHub credential against dpl_CAtTZvDnMWMDyPATWsWWxoicqibF; require exact private Research commit/tree verification against the corrected bound identity, Sandbox.create and guest identity, secret absence after fetch, then full exact-source regression and OCI build/digest. Only after those gates may approved runtime Vault/Mistral, EntityOS/effect, Tier-1/Tier-2 recreation and post-recovery cognition earn runtime credit."
+}

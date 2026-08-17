@@ -254,18 +254,28 @@ class MethodMemory:
         episode_ids = tuple(record.source_episode_ids)
         placeholders = ",".join("?" for _ in episode_ids)
         rows = self.db.db.execute(
-            f"SELECT episode_id,session_id FROM workspace_episodes WHERE episode_id IN ({placeholders})",
+            f"SELECT w.episode_id,w.session_id,w.state,"
+            "EXISTS(SELECT 1 FROM causal_episodes c WHERE c.episode_id=w.episode_id AND c.reentered=1) AS reentered "
+            f"FROM workspace_episodes w WHERE w.episode_id IN ({placeholders})",
             episode_ids,
         ).fetchall()
-        found = {str(row["episode_id"]): str(row["session_id"]) for row in rows}
+        found = {str(row["episode_id"]): row for row in rows}
         missing = sorted(set(episode_ids) - set(found))
         if missing:
             raise MethodRecordError(f"unknown source_episode_ids: {missing}")
+        unterminated = sorted(
+            episode_id for episode_id, row in found.items()
+            if str(row["state"]) not in {"COMPLETED", "ABORTED"} or not int(row["reentered"])
+        )
+        if unterminated:
+            raise MethodRecordError(
+                f"source episodes are not terminal causally re-entered episodes: {unterminated}"
+            )
         if user_id is not None:
             expected_session = f"session:{user_id}"
             wrong_scope = sorted(
-                episode_id for episode_id, session_id in found.items()
-                if session_id != expected_session
+                episode_id for episode_id, row in found.items()
+                if str(row["session_id"]) != expected_session
             )
             if wrong_scope:
                 raise MethodRecordError(f"source episodes cross user/session scope: {wrong_scope}")

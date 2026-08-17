@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:46:16+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_rebase": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+  "source_branch": "go/clerk-session-authority-fence-20260817-1342",
+  "source_commit_before_receipt": "b064e1a4c09a5f743a814638d7192aa4d643b9c7",
+  "finding": {
+    "path": "the artefact/clayverse/clerk_auth.py",
+    "pre_repair_blob": "62e484354818d8bf279e40262b41017173705209",
+    "classification": "AUTHORITY_BOUNDARY_GAP",
+    "observed": "The verifier validated signature/issuer/time/authorized-party/session/subject but admitted a cryptographically valid Clerk session carrying the act impersonation claim, and also admitted a valid sts=pending session.",
+    "product_contract": "Only the two explicitly mapped canonical user perspectives may enter the authenticated PTY boundary; delegated/impersonated or not-fully-admitted session states must not silently inherit a canonical user's authority."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "Clerk Session tokens documentation",
+      "fact": "The act claim is present for impersonated sessions and identifies the impersonator."
+    },
+    {
+      "source": "Clerk User impersonation documentation",
+      "fact": "Impersonated sessions are explicitly detectable via the act claim."
+    },
+    {
+      "source": "Clerk Manual JWT verification documentation",
+      "fact": "A valid session may carry sts=pending and backends may reject pending status to prevent bypass of admission requirements."
+    }
+  ],
+  "repair": {
+    "clerk_auth_blob": "2ed36e96b2198ecddabe021a59d6b12f35b93dbc",
+    "reject_any_act_claim_presence": true,
+    "reject_sts_pending": true,
+    "existing_rs256_issuer_time_azp_sid_sub_checks_preserved": true,
+    "new_test_blob": "ce27f35a8613f35d15fc4960f68f5ff009efa28f"
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container source-mechanism regression",
+    "python": "3.13",
+    "exact_clerk_auth_git_blob_match": true,
+    "observed_git_blob": "2ed36e96b2198ecddabe021a59d6b12f35b93dbc",
+    "focused_tests": 3,
+    "focused_passed": 3,
+    "focused_failed": 0,
+    "py_compile": "PASS",
+    "scope": "Exact repaired clerk_auth.py bytes plus focused authority-boundary tests; not a full checkout, not real Clerk infrastructure, not live browser/WebSocket PTY, not OCI acceptance."
+  },
+  "counterhypothesis": {
+    "claim": "Clerk impersonation is a legitimate support feature and could be intentionally admitted.",
+    "collapse": "ClayVerse baseline defines exactly two canonical equal-rights perspectives and no delegated support/admin perspective. Therefore impersonation must remain fail-closed unless a future explicit owner directive adds a typed delegated-authority contract."
+  },
+  "go_experiment_accounting": {
+    "this_lane_started_distinct_unusual_experiment": false,
+    "current_shared_rule": "NO_FURTHER_DISTINCT_UNUSUAL_EXPERIMENT",
+    "reason": "Current main already records the macro-cycle experiment-trigger race correction and closes additional distinct unusual experiments. This lane performed ordinary deterministic source hardening and regression only."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "plugin_search_for_vercel_sandbox_exec": "NO_INSTALLABLE_PLUGIN_FOUND",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run this current-main-derived auth fence together with terminal/auth regressions in an actually-started authorized isolated environment, then validate real Clerk regular vs impersonated/pending session behavior, key rotation, auth-first WebSocket PTY and exact OCI runtime."
+}

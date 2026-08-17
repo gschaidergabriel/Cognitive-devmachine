@@ -1,4 +1,4 @@
-name: ClayVerse VPS QEMU TCG disposable guest smoke
+name: ClayVerse VPS QEMU TCG disposable guest source smoke
 
 on:
   workflow_dispatch:
@@ -15,37 +15,36 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  qemu-tcg-guest-smoke:
+  qemu-tcg-guest-source-smoke:
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
-      - name: Resolve QEMU tooling without privileged host mutation
+      - name: Checkout exact source for immutable staging only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Resolve QEMU and ISO tooling without privileged host mutation
         shell: bash
         run: |
           set -Eeuo pipefail
           root="/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}"
           mkdir -p "$root"
-          if command -v qemu-system-x86_64 >/dev/null 2>&1; then
-            qemu=$(command -v qemu-system-x86_64)
-            datadir=''
-            libpath=''
-            bios=''
-            source='HOST_PREINSTALLED_ORCHESTRATION_TOOL'
-          else
-            debs="$root/debs"
-            fsroot="$root/rootfs"
-            mkdir -p "$debs" "$fsroot"
-            python3 - "$root/packages.txt" <<'PY'
+          debs="$root/debs"
+          fsroot="$root/rootfs"
+          mkdir -p "$debs" "$fsroot"
+          python3 - "$root/packages.txt" <<'PY'
           import re, subprocess, sys
           out=sys.argv[1]
-          seeds=['qemu-system-x86','qemu-system-data','seabios']
+          seeds=['qemu-system-x86','qemu-system-data','seabios','genisoimage']
           seen=set(); queue=list(seeds); needed=[]
           def installed(pkg):
               p=subprocess.run(['dpkg-query','-W','-f=${Status}',pkg],text=True,capture_output=True)
               return p.returncode==0 and p.stdout.strip()=='install ok installed'
           while queue:
-              pkg=queue.pop(0)
-              pkg=pkg.split(':',1)[0]
+              pkg=queue.pop(0).split(':',1)[0]
               if not re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',pkg) or pkg in seen:
                   continue
               seen.add(pkg)
@@ -62,44 +61,40 @@ jobs:
                   dep=m.group(1).strip('<>').split(':',1)[0]
                   if re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',dep): queue.append(dep)
           if not all(seed in needed or installed(seed) for seed in seeds):
-              raise SystemExit('ROOTLESS_QEMU_PACKAGE_RESOLUTION_INCOMPLETE')
+              raise SystemExit('ROOTLESS_ORCHESTRATOR_PACKAGE_RESOLUTION_INCOMPLETE')
           open(out,'w').write('\n'.join(needed)+'\n')
-          print('ROOTLESS_QEMU_PACKAGES='+str(len(needed)))
+          print('ROOTLESS_ORCHESTRATOR_PACKAGES='+str(len(needed)))
           PY
-            mapfile -t packages < "$root/packages.txt"
-            if [ "${#packages[@]}" -lt 1 ]; then echo 'ROOTLESS_QEMU_PACKAGE_SET_EMPTY' >&2; exit 76; fi
-            (
-              cd "$debs"
-              for pkg in "${packages[@]}"; do
-                apt-get download "$pkg"
-              done
-            )
-            shopt -s nullglob
-            archives=("$debs"/*.deb)
-            if [ "${#archives[@]}" -lt 1 ]; then echo 'ROOTLESS_QEMU_ARCHIVES_EMPTY' >&2; exit 77; fi
-            for deb in "${archives[@]}"; do dpkg-deb -x "$deb" "$fsroot"; done
-            qemu="$fsroot/usr/bin/qemu-system-x86_64"
-            test -x "$qemu"
-            datadir="$fsroot/usr/share/qemu"
-            libpath="$fsroot/usr/lib/x86_64-linux-gnu:$fsroot/lib/x86_64-linux-gnu:$fsroot/usr/lib64:$fsroot/lib64"
-            bios="$(find "$fsroot/usr/share" -type f \( -name 'bios-256k.bin' -o -name 'bios.bin' \) -print -quit)"
-            if [ -z "$bios" ] || [ ! -r "$bios" ]; then echo 'ROOTLESS_SEABIOS_NOT_FOUND' >&2; exit 78; fi
-            source='ROOTLESS_APT_DOWNLOAD_DPKG_EXTRACT_TO_TMP'
-          fi
+          mapfile -t packages < "$root/packages.txt"
+          if [ "${#packages[@]}" -lt 1 ]; then echo 'ROOTLESS_ORCHESTRATOR_PACKAGE_SET_EMPTY' >&2; exit 76; fi
+          (
+            cd "$debs"
+            for pkg in "${packages[@]}"; do apt-get download "$pkg"; done
+          )
+          shopt -s nullglob
+          archives=("$debs"/*.deb)
+          if [ "${#archives[@]}" -lt 1 ]; then echo 'ROOTLESS_ORCHESTRATOR_ARCHIVES_EMPTY' >&2; exit 77; fi
+          for deb in "${archives[@]}"; do dpkg-deb -x "$deb" "$fsroot"; done
+          qemu="$fsroot/usr/bin/qemu-system-x86_64"
+          geniso="$fsroot/usr/bin/genisoimage"
+          test -x "$qemu"
+          test -x "$geniso"
+          datadir="$fsroot/usr/share/qemu"
+          libpath="$fsroot/usr/lib/x86_64-linux-gnu:$fsroot/lib/x86_64-linux-gnu:$fsroot/usr/lib64:$fsroot/lib64"
+          bios="$(find "$fsroot/usr/share" -type f \( -name 'bios-256k.bin' -o -name 'bios.bin' \) -print -quit)"
+          if [ -z "$bios" ] || [ ! -r "$bios" ]; then echo 'ROOTLESS_SEABIOS_NOT_FOUND' >&2; exit 78; fi
           {
             printf 'CLAYVERSE_QEMU_BIN=%s\n' "$qemu"
             printf 'CLAYVERSE_QEMU_DATADIR=%s\n' "$datadir"
             printf 'CLAYVERSE_QEMU_LIBPATH=%s\n' "$libpath"
             printf 'CLAYVERSE_QEMU_BIOS=%s\n' "$bios"
-            printf 'CLAYVERSE_QEMU_TOOL_SOURCE=%s\n' "$source"
+            printf 'CLAYVERSE_GENISO_BIN=%s\n' "$geniso"
+            printf 'CLAYVERSE_QEMU_TOOL_SOURCE=ROOTLESS_APT_DOWNLOAD_DPKG_EXTRACT_TO_TMP\n'
           } >> "$GITHUB_ENV"
-          if [ -n "$libpath" ]; then
-            LD_LIBRARY_PATH="$libpath${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" QEMU_MODULE_DIR="$root/rootfs/usr/lib/x86_64-linux-gnu/qemu" "$qemu" --version | head -n1
-          else
-            "$qemu" --version | head -n1
-          fi
+          LD_LIBRARY_PATH="$libpath${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" QEMU_MODULE_DIR="$fsroot/usr/lib/x86_64-linux-gnu/qemu" "$qemu" --version | head -n1
+          "$geniso" --version 2>&1 | head -n1 || true
 
-      - name: Boot fresh networkless TCG guest and capture bounded receipt
+      - name: Boot networkless guest and execute exact ClayVerse source smoke inside guest
         shell: bash
         run: |
           set -Eeuo pipefail
@@ -109,11 +104,14 @@ jobs:
           serial="$work/serial.log"
           base="$work/ubuntu-noble-amd64.base.img"
           guest="$work/ubuntu-noble-amd64.guest.img"
+          seed="$work/cidata.iso"
+          payload="$work/clayverse-source.tar.gz"
           base_url='https://cloud-images.ubuntu.com/releases/noble/release-20260725'
           image_name='ubuntu-24.04-server-cloudimg-amd64.img'
           expected='d1940f7d69d343355e183dff1e08a59852d32e7309baa7a4bad8365b11b005ac'
           mkdir -p "$work"
           qemu="$CLAYVERSE_QEMU_BIN"
+          geniso="$CLAYVERSE_GENISO_BIN"
           qemu_pid=''
           cleanup() {
             rc=$?
@@ -127,48 +125,97 @@ jobs:
           }
           trap cleanup EXIT INT TERM
 
+          source_sha=$(git rev-parse HEAD)
+          source_tree=$(git rev-parse HEAD^{tree})
+          artefact_tree=$(git rev-parse 'HEAD:the artefact')
+          test "$source_sha" = "$GITHUB_SHA"
+          tar --sort=name --mtime='UTC 1970-01-01' --owner=0 --group=0 --numeric-owner -cf - 'the artefact' | gzip -n > "$payload"
+          payload_sha=$(sha256sum "$payload" | awk '{print $1}')
+          payload_size=$(stat -c '%s' "$payload")
+
+          cat > "$work/user-data" <<EOF
+          #!/bin/bash
+          set -Eeuo pipefail
+          exec >/dev/ttyS0 2>&1
+          echo 'CLAYVERSE_GUEST_SOURCE_SMOKE_BEGIN source_sha=$source_sha'
+          mkdir -p /mnt/clayinput /opt/claytest
+          dev=''
+          for candidate in /dev/disk/by-label/cidata /dev/sr0 /dev/sr1; do
+            if [ -e "\$candidate" ]; then dev="\$candidate"; break; fi
+          done
+          if [ -z "\$dev" ]; then echo 'CLAYVERSE_GUEST_PAYLOAD_DEVICE_MISSING'; poweroff -f; exit 71; fi
+          mount -o ro "\$dev" /mnt/clayinput
+          printf '%s  %s\n' '$payload_sha' '/mnt/clayinput/clayverse-source.tar.gz' | sha256sum -c -
+          mkdir -p /opt/claytest
+          tar -xzf /mnt/clayinput/clayverse-source.tar.gz -C /opt/claytest
+          cd '/opt/claytest/the artefact'
+          python3 -m compileall -q clayverse
+          PYTHONPATH=. python3 - <<'PY'
+          from clayverse.store import UnifiedDB
+          from clayverse.identity import IdentityRouter, CANONICAL_USER_IDS
+          db=UnifiedDB('/tmp/clayverse-unified.db')
+          IdentityRouter(db)
+          rows=db.db.execute('SELECT user_id,rights FROM users ORDER BY user_id').fetchall()
+          assert len(rows)==2
+          assert {r['user_id'] for r in rows}==CANONICAL_USER_IDS=={'gabriel','andreas'}
+          assert {r['rights'] for r in rows}=={'equal'}
+          before=db.entity_generation()
+          assert db.session_generation('session:gabriel')==before
+          assert db.session_generation('session:andreas')==before
+          after=db.advance_entity_generation()
+          assert after==before+1
+          assert db.session_generation('session:gabriel')==after
+          assert db.session_generation('session:andreas')==after
+          _,checkpoint=db.checkpoint('vps-qemu-tcg-guest-source-smoke')
+          print(f'CLAYVERSE_GUEST_SOURCE_SMOKE_PASS users=2 generation={after} checkpoint={checkpoint}')
+          db.close()
+          PY
+          sync
+          poweroff -f
+          EOF
+          cat > "$work/meta-data" <<EOF
+          instance-id: clayverse-source-${GITHUB_RUN_ID}
+          local-hostname: clayverse-source-guest
+          EOF
+          cp "$payload" "$work/clayverse-source.tar.gz"
+          "$geniso" -quiet -output "$seed" -volid cidata -joliet -rock \
+            "$work/user-data" "$work/meta-data" "$work/clayverse-source.tar.gz"
+          seed_sha=$(sha256sum "$seed" | awk '{print $1}')
+
           curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
             "$base_url/$image_name" -o "$base"
           printf '%s  %s\n' "$expected" "$base" | sha256sum -c -
-          chmod 0444 "$base"
+          chmod 0444 "$base" "$seed"
           cp --reflink=auto "$base" "$guest"
           chmod 0600 "$guest"
 
           export LD_LIBRARY_PATH="$CLAYVERSE_QEMU_LIBPATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-          if [ -n "$CLAYVERSE_QEMU_DATADIR" ]; then
-            qemu_data=(-L "$CLAYVERSE_QEMU_DATADIR")
-            export QEMU_MODULE_DIR="/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}/rootfs/usr/lib/x86_64-linux-gnu/qemu"
-          else
-            qemu_data=()
-          fi
-          if [ -n "$CLAYVERSE_QEMU_BIOS" ]; then
-            qemu_bios=(-bios "$CLAYVERSE_QEMU_BIOS")
-          else
-            qemu_bios=()
-          fi
+          qemu_data=(-L "$CLAYVERSE_QEMU_DATADIR")
+          qemu_bios=(-bios "$CLAYVERSE_QEMU_BIOS")
+          export QEMU_MODULE_DIR="/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}/rootfs/usr/lib/x86_64-linux-gnu/qemu"
           qemu_version=$("$qemu" --version | head -n1)
           "$qemu" "${qemu_data[@]}" "${qemu_bios[@]}" -accel tcg,thread=multi -machine q35 -cpu max -smp 2 -m 2048 \
             -drive "file=$guest,if=virtio,format=qcow2,cache=unsafe" \
+            -drive "file=$seed,media=cdrom,format=raw,readonly=on" \
             -net none -vga none -display none -monitor none -serial "file:$serial" -no-reboot \
             -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny &
           qemu_pid=$!
 
-          marker=''
-          deadline=$((SECONDS+300))
+          kernel_marker=''
+          source_marker=''
+          deadline=$((SECONDS+420))
           while kill -0 "$qemu_pid" 2>/dev/null && [ "$SECONDS" -lt "$deadline" ]; do
             if [ -f "$serial" ]; then
-              marker=$(grep -aE 'Linux version [^ ]+' "$serial" | head -n1 || true)
-              if [ -n "$marker" ]; then break; fi
+              kernel_marker=$(grep -aE 'Linux version [^ ]+' "$serial" | head -n1 || true)
+              source_marker=$(grep -aE '^CLAYVERSE_GUEST_SOURCE_SMOKE_PASS users=2 generation=[0-9]+ checkpoint=[0-9a-f]{64}$' "$serial" | tail -n1 || true)
+              if [ -n "$source_marker" ]; then break; fi
             fi
             sleep 2
           done
-          guest_started=false
           qemu_rc=0
-          if [ -n "$marker" ]; then
-            guest_started=true
-            kill -TERM "$qemu_pid" 2>/dev/null || true
-            for _ in $(seq 1 10); do kill -0 "$qemu_pid" 2>/dev/null || break; sleep 1; done
-            kill -KILL "$qemu_pid" 2>/dev/null || true
+          if [ -n "$source_marker" ]; then
+            for _ in $(seq 1 20); do kill -0 "$qemu_pid" 2>/dev/null || break; sleep 1; done
+            if kill -0 "$qemu_pid" 2>/dev/null; then kill -TERM "$qemu_pid" 2>/dev/null || true; fi
             wait "$qemu_pid" 2>/dev/null || qemu_rc=$?
           else
             if kill -0 "$qemu_pid" 2>/dev/null; then
@@ -184,25 +231,35 @@ jobs:
 
           test -f "$serial"
           serial_sha=$(sha256sum "$serial" | awk '{print $1}')
-          marker=$(printf '%s' "$marker" | tr -d '\r' | tail -c 1000)
-          python3 - "$receipt" "$expected" "$serial_sha" "$qemu_rc" "$guest_started" "$qemu_version" "$marker" "$CLAYVERSE_QEMU_TOOL_SOURCE" <<'PY'
-          import json, os, pathlib, sys
-          out,image_sha,serial_sha,qemu_rc,guest_started,qemu_version,marker,tool_source=sys.argv[1:]
+          kernel_marker=$(printf '%s' "$kernel_marker" | tr -d '\r' | tail -c 1000)
+          source_marker=$(printf '%s' "$source_marker" | tr -d '\r' | tail -c 1000)
+          python3 - "$receipt" "$expected" "$serial_sha" "$qemu_rc" "$qemu_version" "$kernel_marker" "$source_marker" "$source_sha" "$source_tree" "$artefact_tree" "$payload_sha" "$payload_size" "$seed_sha" <<'PY'
+          import json, os, pathlib, re, sys
+          (out,image_sha,serial_sha,qemu_rc,qemu_version,kernel_marker,source_marker,source_sha,source_tree,artefact_tree,payload_sha,payload_size,seed_sha)=sys.argv[1:]
+          m=re.fullmatch(r'CLAYVERSE_GUEST_SOURCE_SMOKE_PASS users=2 generation=([0-9]+) checkpoint=([0-9a-f]{64})',source_marker)
           payload={
-            'schema':'ClayVerseVpsQemuTcgGuestSmoke/v4',
+            'schema':'ClayVerseVpsQemuTcgGuestSourceSmoke/v1',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
             'executor_type':'QEMU_TCG_FULL_SYSTEM',
-            'orchestrator_tool_source':tool_source,
+            'orchestrator_tool_source':'ROOTLESS_APT_DOWNLOAD_DPKG_EXTRACT_TO_TMP',
             'host_orchestration_only':True,
             'product_code_executed_on_host':False,
             'host_docker_used':False,
             'privileged_host_mutation_used':False,
+            'source_sha':source_sha,
+            'source_tree':source_tree,
+            'artefact_tree':artefact_tree,
+            'source_payload_sha256':payload_sha,
+            'source_payload_size_bytes':int(payload_size),
+            'source_transport':'READ_ONLY_CIDATA_ISO',
+            'seed_iso_sha256':seed_sha,
+            'repo_credentials_in_guest':False,
             'guest_base':'ubuntu-24.04-server-cloudimg-amd64.img@release-20260725',
             'guest_base_sha256':image_sha,
-            'guest_kernel_marker':marker or None,
-            'independent_guest_kernel_observed':guest_started=='true',
+            'guest_kernel_marker':kernel_marker or None,
+            'independent_guest_kernel_observed':bool(kernel_marker),
             'guest_network_mode':'NONE',
             'guest_vga':'NONE',
             'guest_memory_mib':2048,
@@ -210,26 +267,31 @@ jobs:
             'guest_disk':'VERIFIED_READ_ONLY_BASE_PLUS_PER_RUN_DISPOSABLE_FULL_COPY',
             'qemu_sandbox':'on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny',
             'qemu_version':qemu_version,
-            'qemu_exit_status_after_bounded_termination':int(qemu_rc),
+            'qemu_exit_status':int(qemu_rc),
             'serial_log_sha256':serial_sha,
-            'guest_started':guest_started=='true',
+            'clayverse_source_executed_inside_guest':m is not None,
+            'canonical_two_user_equal_rights_observed':m is not None,
+            'global_generation_advance_observed':m is not None,
+            'guest_checkpoint_sha256':m.group(2) if m else None,
+            'guest_generation_after_advance':int(m.group(1)) if m else None,
             'cleanup_required':True,
-            'runtime_credit':0,
+            'oci_built_inside_guest':False,
+            'runtime_credit':'GUEST_SOURCE_COMPONENT_ONLY' if m else 0,
             'whole_product_credit':0,
             'final_hardware_microvm_credit':0,
             'unusual_experiment_count_added':0,
           }
           pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
           print(json.dumps(payload,sort_keys=True))
-          if not payload['guest_started']:
+          if m is None:
             raise SystemExit(42)
           PY
 
-      - name: Upload bounded QEMU guest receipt
+      - name: Upload bounded QEMU guest source receipt
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: clayverse-vps-qemu-guest-smoke-${{ github.run_id }}
+          name: clayverse-vps-qemu-guest-source-smoke-${{ github.run_id }}
           path: /tmp/clayverse-qemu-guest-${{ github.run_id }}.json
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 7

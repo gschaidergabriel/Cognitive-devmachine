@@ -36,8 +36,13 @@ class TerminalSessionManager:
     """Own exactly two durable tmux perspectives into one ClayVerse entity.
 
     Browser PTYs attach/detach from tmux. Disconnecting a browser therefore cannot
-    terminate the underlying interactive Claude Code CLI session.
+    terminate the underlying interactive Claude Code CLI session. Claude starts from
+    an empty allowlisted environment, no built-in tools, strict ClayVerse MCP and
+    fixed lifecycle hooks that bind every prompt/response to UnifiedDB.
     """
+
+    CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
+    MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -49,6 +54,10 @@ class TerminalSessionManager:
         for program in ("tmux", "claude", "python3"):
             if shutil.which(program) is None:
                 raise TerminalRuntimeError(f"required program unavailable: {program}")
+        if not self.runtime_prompt.is_file():
+            raise TerminalRuntimeError("runtime Claude contract unavailable")
+        if not self.MANAGED_SETTINGS.is_file():
+            raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
 
     def binding(self, user_id: str) -> TerminalBinding:
         if user_id not in CANONICAL_TERMINALS:
@@ -111,20 +120,23 @@ class TerminalSessionManager:
         if self._has_session(binding):
             return binding
 
-        # Empty built-in tool set: Claude remains the ordinary interactive CLI, while
-        # all machine/state effects are available only through the ClayVerse MCP server.
+        # Built-in Claude tools are absent. Explicit MCP remains available even with
+        # --tools ""; strict MCP prevents user/project MCP injection. Filesystem setting
+        # sources are disabled so project/user hooks cannot compete with the fixed hooks.
         claude_argv = [
             "claude",
             "--strict-mcp-config",
             "--mcp-config", str(binding.mcp_config),
+            "--settings", str(self.MANAGED_SETTINGS),
+            "--setting-sources", "",
             "--tools", "",
             "--allowedTools", "mcp__clayverse__*",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
-        # Start Claude from an empty environment. Subscription/OAuth state must live in
-        # the durable per-user HOME; arbitrary container secrets must never become an
-        # accidental alternate authentication or tool channel.
+        # Start Claude from an empty environment. Subscription/OAuth state lives in the
+        # durable per-user HOME. Arbitrary container secrets (especially Clerk signing
+        # material) never become an accidental alternate authentication/tool channel.
         env_argv = [
             "env",
             "-i",
@@ -138,6 +150,7 @@ class TerminalSessionManager:
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
             "DISABLE_AUTOUPDATER=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
+            "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             *claude_argv,
         ]
         command = shlex.join(env_argv)
@@ -159,8 +172,14 @@ class TerminalSessionManager:
         binding = self.ensure(user_id)
         pid, fd = pty.fork()
         if pid == 0:
-            env = os.environ.copy()
-            env["HOME"] = str(binding.home)
+            # The attach client cannot create a new command channel; it only connects to
+            # the already-running, sanitized tmux session.
+            env = {
+                "HOME": str(binding.home),
+                "PATH": "/usr/local/bin:/usr/bin:/bin",
+                "TERM": os.environ.get("TERM", "xterm-256color"),
+                "LANG": "C.UTF-8",
+            }
             os.execvpe(
                 "tmux",
                 ["tmux", "-L", self.tmux_socket, "attach-session", "-t", binding.tmux_name],

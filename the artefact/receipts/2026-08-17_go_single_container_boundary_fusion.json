@@ -1,0 +1,28 @@
+{
+  "kind": "CLAYVERSE_GO_SINGLE_CONTAINER_BOUNDARY_FUSION_RECEIPT",
+  "authority": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "observed_violation": "compose required an external host-mounted EntityOS executable while the product directive requires admitted runtime pieces to converge into one ClayVerse image",
+  "correction_commits": {
+    "compose": "3f2c02f3033c9aa33c2f0b26f5e6a7ce43ad4ef4",
+    "manifest": "cb5e0d7c09666476af94b1ac66946c7c785e100b"
+  },
+  "resulting_policy": {
+    "baseline_external_entityos_mount": "FORBIDDEN",
+    "entityos_required_before_embedding": false,
+    "direct_process_exec": "FORBIDDEN_FAIL_CLOSED",
+    "final_entityos_requirement": "exact accepted EntityOS/runtime substrate must be embedded in the ClayVerse image before it can become a required baseline runtime component"
+  },
+  "focused_isolated_validation": {
+    "surface": "OpenAI isolated local container",
+    "manifest_json": "PASS",
+    "compose_policy_shape": "PASS",
+    "assertions": [
+      "release form remains ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+      "no /opt/entityos host volume exists in baseline compose",
+      "CLAYVERSE_REQUIRE_ENTITYOS is 0 until image embedding is implemented"
+    ],
+    "scope": "syntax/policy-shape only; not OCI runtime evidence"
+  },
+  "whole_system_pass": false,
+  "next_blocker": "build/embed the exact accepted EntityOS internal substrate into the same ClayVerse image and validate the exact current image on an actually executable authorized isolated Sandbox/OCI runner"
+}

@@ -5,6 +5,13 @@ from clayverse.store import UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle
 
 
+class _VerifiedEffectBridge:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0, "stdout": "", "stderr": ""}
+
+
 def _db(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
@@ -25,11 +32,11 @@ def test_learned_alias_route_is_bound_to_rank1_memory_not_shared_subject(tmp_pat
     try:
         _add(db, "target", "orchid procedure", subject="topic:shared", ts=100.0)
         _add(db, "distractor", "bicycle violet", subject="topic:shared", ts=999.0)
-        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge())
 
         first = life.begin("orchid procedure codename")
         assert [m["memory_id"] for m in first["context"]["durable_memory"]] == ["target"]
-        effect = life.request_effect("state.noop", "learn-rank1-memory-alias")
+        effect = life.request_effect("entityos.exec", "learn-rank1-memory-alias", ["verified-outcome"])
         assert effect["verified"] is True
         life.complete("done")
 

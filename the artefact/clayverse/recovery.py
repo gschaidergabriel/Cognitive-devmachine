@@ -38,9 +38,10 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
          json.dumps({"source": "container-recovery", "causal_id": active["causal_id"], "generation": int(active["generation"])}, sort_keys=True)))
 
 def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> None:
-    """Apply only verified non-zero current-generation rewards before generation advance."""
+    """Apply only current-policy verified non-zero rewards before generation advance."""
     from .microclay_retrieval import MicroClayRetrieval
     current_generation = db.entity_generation()
+    current_policy = MicroClayRetrieval.POLICY_VERSION
     organ = MicroClayRetrieval(db)
     sessions = db.db.execute("SELECT session_id,generation FROM sessions ORDER BY session_id").fetchall()
     for session in sessions:
@@ -50,21 +51,27 @@ def _drain_known_retrieval_learning(db: UnifiedDB, counts: dict[str, int]) -> No
         rows = db.db.execute(
             "SELECT r.causal_id,r.generation,c.credit,e.status FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id JOIN effects e ON e.effect_id=c.effect_id "
-            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "WHERE r.session_id=? AND r.generation=? AND r.policy_version=? AND c.reentered=1 "
             "AND e.status='VERIFIED' AND c.credit != 0.0 "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
-            "ORDER BY r.ts LIMIT 100", (session_id, int(current_generation))).fetchall()
+            "ORDER BY r.ts LIMIT 100", (session_id, int(current_generation), int(current_policy))).fetchall()
         counts["retrieval_learning_eligible"] += len(rows)
         for row in rows:
             result = organ.credit(causal_id=str(row["causal_id"]), generation=int(row["generation"]),
                                   credit=float(row["credit"]), signal_class=f"effect_outcome:{row['status']}")
             counts["retrieval_learning_applied"] += int(bool(result.get("applied")))
+        counts["retrieval_learning_policy_mismatch_ignored"] += int(db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_episodes r JOIN causal_episodes c ON c.causal_id=r.causal_id "
+            "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? "
+            "AND r.policy_version<>? AND c.reentered=1 AND e.status='VERIFIED' AND c.credit != 0.0 "
+            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
+            (session_id, int(current_generation), int(current_policy))).fetchone()[0])
         counts["retrieval_learning_uncertain_ignored"] += int(db.db.execute(
             "SELECT COUNT(*) FROM retrieval_episodes r JOIN causal_episodes c ON c.causal_id=r.causal_id "
-            "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
-            "AND (e.status<>'VERIFIED' OR c.credit=0.0) "
+            "JOIN effects e ON e.effect_id=c.effect_id WHERE r.session_id=? AND r.generation=? "
+            "AND r.policy_version=? AND c.reentered=1 AND (e.status<>'VERIFIED' OR c.credit=0.0) "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%')",
-            (session_id, int(current_generation))).fetchone()[0])
+            (session_id, int(current_generation), int(current_policy))).fetchone()[0])
 
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     """Close interrupted work without replay, drain only known retrieval outcomes, then advance generation."""
@@ -72,6 +79,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     counts = {"scanned": 0, "reentered_effects": 0, "existing_reentries_closed": 0, "aborted_no_effect": 0,
               "uncertain_effects": 0, "ambiguous_effects": 0, "active_turns_closed": 0, "leases_expired": 0,
               "retrieval_learning_eligible": 0, "retrieval_learning_applied": 0,
+              "retrieval_learning_policy_mismatch_ignored": 0,
               "retrieval_learning_uncertain_ignored": 0, "generation": 0}
     with db.tx() as tx:
         active_rows = tx.execute("SELECT * FROM active_turns ORDER BY started_at,session_id").fetchall()

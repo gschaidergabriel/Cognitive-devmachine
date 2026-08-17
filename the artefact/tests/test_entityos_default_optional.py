@@ -6,7 +6,7 @@ from clayverse.service import _entityos_config
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_entityos_is_optional_by_default_for_single_container_baseline(monkeypatch):
+def test_entityos_is_optional_by_default_for_single_container_development_baseline(monkeypatch):
     for name in (
         "CLAYVERSE_REQUIRE_ENTITYOS",
         "CLAYVERSE_ENTITYOS_PATH",
@@ -22,14 +22,18 @@ def test_entityos_is_optional_by_default_for_single_container_baseline(monkeypat
     }
 
 
-def test_manifest_cannot_reintroduce_mandatory_entityos_into_baseline():
+def test_manifest_allows_tokenless_development_baseline_but_requires_entityos_for_final_pass():
     manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
 
-    assert manifest["entityos_role"].startswith("optional ")
-    assert "baseline may omit EntityOS" in manifest["entityos_transport"]
-    assert "baseline may omit EntityOS" in manifest["entityos_admission"]
-    assert "staged bytes are mandatory and verified" not in manifest["entityos_admission"]
+    assert "development/baseline builds may omit" in manifest["entityos_role"]
+    assert "can never receive whole-product PASS" in manifest["entityos_transport"]
+    assert "final acceptance requires" in manifest["entityos_transport"]
+    assert "final accepted image requires" in manifest["entityos_admission"]
     assert any(
-        "where EntityOS is deliberately admitted" in gate
+        "final accepted image contains the complete accepted EntityOS" in gate
+        for gate in manifest["requires_for_final_pass"]
+    )
+    assert any(
+        "accepted complete EntityOS embedded image runtime" in gate
         for gate in manifest["requires_for_final_pass"]
     )

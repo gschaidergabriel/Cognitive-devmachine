@@ -22,14 +22,23 @@ class FakeResponse:
         return self.payload[:limit] if limit >= 0 else self.payload
 
 
-def mistral_envelope(decision):
+def mistral_envelope(
+    decision,
+    *,
+    response_id="cmpl-test",
+    model="mistral-test-returned",
+    finish_reason="stop",
+):
     return json.dumps({
+        "id": response_id,
+        "model": model,
         "choices": [{
+            "finish_reason": finish_reason,
             "message": {
                 "role": "assistant",
                 "content": json.dumps(decision, separators=(",", ":")),
-            }
-        }]
+            },
+        }],
     }).encode()
 
 
@@ -52,6 +61,7 @@ def test_mistral_request_is_fixed_endpoint_json_mode_and_secret_is_not_retained(
     def fake_urlopen(request, timeout):
         captured["url"] = request.full_url
         captured["auth"] = request.get_header("Authorization")
+        captured["body_bytes"] = bytes(request.data)
         captured["body"] = json.loads(request.data)
         captured["timeout"] = timeout
         return FakeResponse(mistral_envelope({"text": "ok", "effect": None}))
@@ -60,13 +70,29 @@ def test_mistral_request_is_fixed_endpoint_json_mode_and_secret_is_not_retained(
     adapter = MistralInference(model="model-bound-for-test", timeout=9)
     out = adapter.reason({"shared": "state"}, "hello")
 
-    assert out == {"text": "ok", "selection": "respond", "effect": None}
+    assert out["text"] == "ok"
+    assert out["selection"] == "respond"
+    assert out["effect"] is None
+    receipt = out["inference_receipt"]
+    assert receipt["provider"] == "mistral"
+    assert receipt["model_requested"] == "model-bound-for-test"
+    assert receipt["model_returned"] == "mistral-test-returned"
+    assert receipt["response_id"] == "cmpl-test"
+    assert receipt["finish_reason"] == "stop"
+    assert len(receipt["request_sha256"]) == 64
+    assert len(receipt["response_sha256"]) == 64
+
     assert captured["url"] == "https://api.mistral.ai/v1/chat/completions"
     assert captured["auth"] == f"Bearer {secret}"
     assert captured["timeout"] == 9
     assert captured["body"]["model"] == "model-bound-for-test"
     assert captured["body"]["response_format"] == {"type": "json_object"}
     assert captured["body"]["temperature"] == 0
+    assert captured["body"]["tools"] == []
+    assert captured["body"]["tool_choice"] == "none"
+    assert captured["body"]["parallel_tool_calls"] is False
+    assert secret.encode() not in captured["body_bytes"]
+    assert secret not in json.dumps(receipt, sort_keys=True)
     assert set(adapter.__dict__) == {"model", "timeout", "_lock"}
     assert secret not in repr(adapter.__dict__)
 
@@ -86,15 +112,14 @@ def test_mistral_effect_is_only_schema_validated_intent(monkeypatch):
 
     monkeypatch.setattr(adapters, "urlopen", fake_urlopen)
     out = MistralInference(model="model-x").reason({}, "status")
-    assert out == {
-        "text": "request",
-        "selection": "request_effect",
-        "effect": {
-            "capability": "entityos.exec",
-            "target": "test",
-            "argv": ["status"],
-        },
+    assert out["text"] == "request"
+    assert out["selection"] == "request_effect"
+    assert out["effect"] == {
+        "capability": "entityos.exec",
+        "target": "test",
+        "argv": ["status"],
     }
+    assert out["inference_receipt"]["provider"] == "mistral"
 
 
 def test_mistral_forbidden_capability_fails_before_effectgate(monkeypatch):
@@ -130,7 +155,7 @@ def test_mistral_transport_error_never_echoes_secret(monkeypatch):
     assert secret not in message
 
 
-def test_mistral_malformed_or_oversized_response_fails_closed(monkeypatch):
+def test_mistral_malformed_oversized_or_incomplete_response_fails_closed(monkeypatch):
     monkeypatch.setenv("MISTRAL_API_KEY", "secret")
 
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(b"not-json"))
@@ -140,4 +165,17 @@ def test_mistral_malformed_or_oversized_response_fails_closed(monkeypatch):
     oversized = b"x" * (MistralInference.MAX_RESPONSE_BYTES + 1)
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(oversized))
     with pytest.raises(InferenceProtocolError, match="exceeds bound"):
+        MistralInference(model="model-x").reason({}, "hello")
+
+    missing_id = json.dumps({
+        "model": "mistral-returned",
+        "choices": [{"finish_reason": "stop", "message": {"content": '{"text":"ok","effect":null}'}}],
+    }).encode()
+    monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(missing_id))
+    with pytest.raises(InferenceProtocolError, match="response id"):
+        MistralInference(model="model-x").reason({}, "hello")
+
+    truncated = mistral_envelope({"text": "ok", "effect": None}, finish_reason="length")
+    monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(truncated))
+    with pytest.raises(InferenceProtocolError, match="did not finish cleanly"):
         MistralInference(model="model-x").reason({}, "hello")

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import json
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -9,10 +10,19 @@ from .adapters import AuthenticationError, ClerkTokenVerifier
 
 
 class ClayVerseAPI:
-    def __init__(self, engine: Any, verifier: ClerkTokenVerifier, *, max_body: int = 1_000_000):
+    def __init__(self, engine: Any, verifier: ClerkTokenVerifier, *, publishable_key: str = "", frontend_api_url: str = "", max_body: int = 1_000_000):
         self.engine = engine
         self.verifier = verifier
+        self.publishable_key = publishable_key
+        self.frontend_api_url = frontend_api_url.rstrip("/")
         self.max_body = max_body
+
+    def homepage(self) -> str:
+        key = html.escape(self.publishable_key, quote=True)
+        api = html.escape(self.frontend_api_url, quote=True)
+        if not key or not api:
+            return "<!doctype html><meta charset=utf-8><title>ClayVerse</title><h1>ClayVerse</h1><p>Clerk web configuration is incomplete.</p>"
+        return f"""<!doctype html><html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><title>ClayVerse</title><style>body{{font:16px system-ui;max-width:900px;margin:40px auto;padding:0 20px}}textarea{{width:100%;min-height:120px}}#out{{white-space:pre-wrap;border:1px solid #ccc;padding:16px;margin-top:16px}}header{{display:flex;justify-content:space-between;align-items:center}}</style></head><body><header><h1>ClayVerse</h1><div id=\"user-button\"></div></header><main id=\"app\"><p>Loading authentication…</p></main><script defer crossorigin=\"anonymous\" src=\"{api}/npm/@clerk/ui@1/dist/ui.browser.js\"></script><script defer crossorigin=\"anonymous\" data-clerk-publishable-key=\"{key}\" src=\"{api}/npm/@clerk/clerk-js@6/dist/clerk.browser.js\"></script><script>window.addEventListener('load',async()=>{{await Clerk.load({{ui:{{ClerkUI:window.__internal_ClerkUICtor}}}});const app=document.getElementById('app');if(!Clerk.isSignedIn){{app.innerHTML='<div id=\"sign-in\"></div>';Clerk.mountSignIn(document.getElementById('sign-in'));return;}}Clerk.mountUserButton(document.getElementById('user-button'));app.innerHTML='<textarea id=\"msg\" placeholder=\"Talk to ClayVerse\"></textarea><button id=\"send\">Send</button><div id=\"out\"></div>';document.getElementById('send').onclick=async()=>{{const token=await Clerk.session.getToken();const content=document.getElementById('msg').value;const r=await fetch('/api/chat',{{method:'POST',headers:{{'content-type':'application/json','authorization':'Bearer '+token}},body:JSON.stringify({{content}})}});const data=await r.json();document.getElementById('out').textContent=r.ok?(data.decision?.text??JSON.stringify(data,null,2)):(data.error??'request failed');}};}});</script></body></html>"""
 
     def handler(self):
         runtime = self
@@ -45,7 +55,7 @@ class ClayVerseAPI:
                 if self.path == "/healthz":
                     return self._send(HTTPStatus.OK, {"ok": True, "service": "clayverse"})
                 if self.path == "/":
-                    return self._send(HTTPStatus.OK, "ClayVerse web boundary is running. Clerk-authenticated API: POST /api/chat\n", "text/plain; charset=utf-8")
+                    return self._send(HTTPStatus.OK, runtime.homepage(), "text/html; charset=utf-8")
                 if self.path == "/api/status":
                     try:
                         claims = self._claims()

@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "state-authority fusion, adversarial review, bounded isolated experiment, supersession record",
+  "source_merge": {
+    "commit": "9090a2670beb5689051c0f38456b13cf771ccdd1",
+    "store_git_blob": "3f7bbb986e2fafd2a375ba35781bd1045b288e72",
+    "materialized_store_sha256": "7e3bfe583b54f1e64b2e1ee8cf5b3010a893bae6006d746c574cf1035b76905c",
+    "changes": [
+      "temporary immutable raw-turn ledger candidate",
+      "temporary engine-local serialized causal frontier",
+      "corrected migration/compression falsifiers"
+    ]
+  },
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "name": "mixed_legacy_migration_fail_closed_atomicity",
+    "execution_surface": "isolated non-production OpenAI tool container",
+    "vercel_sandbox": "direct create/exec surface unavailable in connected Vercel tooling; no Vercel PASS claimed",
+    "source_binding": "materialized file Git blob SHA-1 exactly matched 3f7bbb986e2fafd2a375ba35781bd1045b288e72",
+    "replication_note": "same experiment rerun once only to remove a TERM wrapper artifact; this was regression-only, not a second unusual intervention",
+    "result": "PASS_AT_9090_SOURCE_ONLY",
+    "observations": {
+      "expected_failure": "RuntimeError: cannot migrate compressed turns without immutable raw ledger",
+      "turn_ledger_rows_after_failure": 0,
+      "legacy_turns_unchanged": true,
+      "schema_v2_not_promoted": true
+    }
+  },
+  "adversarial_fusion_outcome": {
+    "status": "REJECT_RAW_LEDGER_AS_CANONICAL_CURRENT_DESIGN",
+    "reason": "current architecture intentionally uses destructive aging only after hash-bound semantic clearance; retaining a hidden full-text transcript would create a second lossless transcript authority and defeat that privacy/state contract",
+    "superseding_commit": "9850a261c0ffa3dea4d823c2c084ca332ed1ca32",
+    "superseding_change": "schema v3 retires hidden turn_ledger and its triggers",
+    "current_serialization_mechanism": "single HTTPServer mutation lane in ClayVerse API/service rather than engine-local RLock",
+    "preserved_value": "negative result and exact-source experiment remain bounded evidence; stale duplicate PRs were closed and no parallel canonical path remains"
+  },
+  "current_observation_before_receipt": {
+    "main": "9015ac072fed78842ee7359b80931a63f9596058",
+    "store_git_blob": "ae4d6a50d8835dda1eda0209d39f2af9477e0329",
+    "manifest_status": "CANDIDATE"
+  },
+  "open_product_gates": [
+    "exact-current-head full test suite in authorized isolated execution",
+    "exact OCI image build and runtime receipt",
+    "restart/recovery and persistent-state continuity",
+    "real Clerk homepage/JWT verification",
+    "authenticated Claude Code runtime verification",
+    "accepted external-effect/runtime artifact binding",
+    "deployment readiness"
+  ],
+  "claims_not_made": [
+    "whole ClayVerse PASS",
+    "Vercel Sandbox PASS",
+    "OCI runtime PASS",
+    "real Clerk PASS",
+    "real Claude Code authenticated runtime PASS",
+    "deployment readiness"
+  ]
+}

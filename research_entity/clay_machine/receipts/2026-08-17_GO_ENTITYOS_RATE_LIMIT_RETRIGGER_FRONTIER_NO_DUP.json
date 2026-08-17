@@ -1,0 +1,45 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "EntityOS exact-head acceptance lane",
+  "research_head_before_write": "af0e18cdd6a99b5f315de74ecfb6209df07aa7bb",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_product_pr": 787,
+  "active_pr_head_last_observed": "e2cbeb4c301e12750b9f160b121d3b8ddedf13a3",
+  "observations": {
+    "vercel_project": "dr-unterweger",
+    "exact_pr_head_status": "FAILURE_BEFORE_SANDBOX_START",
+    "provider_reason": "build-rate-limit",
+    "exact_runtime_claim": "UNVERIFIED",
+    "full_pytest_gate": "SOURCE_WIRED_BUT_EXACT_HEAD_UNEXECUTED",
+    "attested_snapshot_v2": "UNRESOLVED",
+    "whole_entityos": "NOT_PASSED"
+  },
+  "intervention": {
+    "kind": "TREE_IDENTICAL_GIT_RETRIGGER",
+    "commit": "8b18a6657f716debfc7a59697896a60d1f28d734",
+    "parent": "f299eeca8b8b6c9f62aeb7e97935593180ff5942",
+    "tree": "586517756ba87c542ec5e68a2bfc49861a0f55ad",
+    "source_tree_changed": false,
+    "purpose": "Retry exact Git-bound Vercel admission after other contemporaneous branches showed READY deployments without inventing source/runtime progress.",
+    "result": "Vercel status again failed at build-rate-limit before Sandbox start."
+  },
+  "experiment_accounting": {
+    "reserved_unusual_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "executed_in_this_organ": false,
+    "count_consumed": 0,
+    "reason": "No exact-head Sandbox started; do not substitute a second experiment."
+  },
+  "frontier_check": {
+    "main_clayvm_has_typed_format_v2": true,
+    "main_clayvm_bytes_param_admitted": true,
+    "main_clayvm_string_param_admitted": false,
+    "existing_overlapping_candidates": [740, 744],
+    "decision": "NO_NEW_STRING_ARGV_BRANCH",
+    "reason": "Avoid duplicating the already-open canonical String/process candidates while the product-nearest PR787 exact-artifact lane is blocked only by Vercel admission."
+  },
+  "negative_evidence_preserved": true,
+  "promotion": "NOT_ALLOWED",
+  "next_step": "On the first Vercel-admitted refreshed descendant of PR787, execute the already-wired full pytest gate under DENY_ALL with zero unusual experiments, then the canonical attested-snapshot v2 EntityOS batch and only its preregistered tamper falsifier; preserve exact source head/tree, artifact digests, logs and Sandbox stop result."
+}

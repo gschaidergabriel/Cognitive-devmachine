@@ -3,6 +3,8 @@ import hashlib, json, re
 from dataclasses import dataclass
 from typing import Any
 
+from .store import StaleGeneration
+
 METHOD_KINDS = frozenset({
     "framework_candidate","framework","heuristic_candidate","heuristic",
     "failure_pattern","counterexample","method_receipt"
@@ -138,9 +140,22 @@ class MethodTransfer:
             if record.get("status") != "PROMOTED":
                 raise MethodRecordError("servable method must be PROMOTED")
             cls.normalize_signature(record.get("problem_signature"))
-            required_lists = ("preconditions","method_steps","invariants","falsifiers","failure_modes","scope_limits","source_episode_ids")
+            required_lists = (
+                "preconditions","method_steps","invariants","expected_observations","falsifiers",
+                "failure_modes","scope_limits","source_episode_ids","supporting_memory_ids",
+                "counterexample_memory_ids"
+            )
             for field in required_lists:
-                cls._string_list(record.get(field), field, min_items=1 if field in {"method_steps","falsifiers","source_episode_ids"} else 0)
+                cls._string_list(
+                    record.get(field), field,
+                    min_items=1 if field in {"method_steps","falsifiers","source_episode_ids"} else 0
+                )
+            goal_shape = record.get("goal_shape")
+            if not isinstance(goal_shape, str) or goal_shape.strip().lower() != cls.normalize_signature(record["problem_signature"])["goal_shape"]:
+                raise MethodRecordError("goal_shape must match problem_signature.goal_shape")
+            provenance = record.get("provenance")
+            if not isinstance(provenance, dict) or not provenance:
+                raise MethodRecordError("missing method provenance")
             calibration = record.get("calibration")
             if not isinstance(calibration, (int,float)) or isinstance(calibration, bool) or not 0.0 <= float(calibration) <= 1.0:
                 raise MethodRecordError("invalid calibration")
@@ -149,6 +164,9 @@ class MethodTransfer:
                     raise MethodRecordError(f"invalid {field}")
             if not isinstance(record.get("abstraction_version"), str) or not record["abstraction_version"]:
                 raise MethodRecordError("missing abstraction_version")
+            validated = record.get("last_validated_at")
+            if not isinstance(validated, (int,float)) or isinstance(validated, bool) or float(validated) <= 0:
+                raise MethodRecordError("invalid last_validated_at")
         elif kind in {"framework_candidate","heuristic_candidate"}:
             if record.get("status") != "CANDIDATE":
                 raise MethodRecordError("candidate method must be CANDIDATE")
@@ -164,17 +182,33 @@ class MethodTransfer:
         return bool(tokens & MethodTransfer.STRATEGY_WORDS)
 
     def retrieve(self, *, query: str, signature: dict[str, Any], evidence_status: str,
-                 user_id: str, session_id: str, turn_id: str, generation: int,
-                 limit: int = 4) -> dict[str, Any]:
+                 user_id: str, session_id: str, turn_id: str, episode_id: str,
+                 causal_id: str, generation: int, limit: int = 4) -> dict[str, Any]:
+        if not all(isinstance(x, str) and x for x in (user_id, session_id, turn_id, episode_id, causal_id)):
+            raise ValueError("method retrieval requires complete causal identity")
         self.db.assert_live_generation(session_id, generation)
         status = str(evidence_status).upper()
         triggered = status in {"UNKNOWN","UNDERCOVERED"} or self._strategy_requested(query)
         normalized_sig = self.normalize_signature(signature)
         signature_hash = hashlib.sha256(json.dumps(normalized_sig, sort_keys=True, separators=(",",":")).encode()).hexdigest()
+        query_hash = hashlib.sha256(query.encode("utf-8")).hexdigest()
+        receipt_base = {
+            "policy_version": self.POLICY_VERSION,
+            "routing_mode": "BASELINE_STRUCTURAL",
+            "learned_routing_active": False,
+            "query_sha256": query_hash,
+            "signature_sha256": signature_hash,
+            "turn_id": turn_id,
+            "episode_id": episode_id,
+            "causal_id": causal_id,
+            "generation": int(generation),
+            "truth_authority": False,
+            "effect_authority": False,
+        }
         if not triggered:
-            return {"items":[],"counterevidence":[],"fact_status":status,"method_status":"NOT_TRIGGERED",
-                    "receipt":{"policy_version":self.POLICY_VERSION,"signature_sha256":signature_hash,
-                               "truth_authority":False,"effect_authority":False,"triggered":False}}
+            receipt = dict(receipt_base)
+            receipt.update({"triggered": False, "selected_method_ids": [], "fact_status_unchanged": True})
+            return {"items":[],"counterevidence":[],"fact_status":status,"method_status":"NOT_TRIGGERED","receipt":receipt}
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory WHERE kind IN ('framework','heuristic','failure_pattern','counterexample') "
             "AND (user_id IS NULL OR user_id=?) AND (source_turn_id IS NULL OR source_turn_id<>?) "
@@ -225,19 +259,38 @@ class MethodTransfer:
             "truth_authority": False, "effect_authority": False,
         } for x in selected]
         counters = sorted({cid for x in selected for cid in x.counterevidence})
+        method_status = "PRESENT" if items else "UNKNOWN"
+        receipt = dict(receipt_base)
+        receipt.update({
+            "selected_method_ids": [x["memory_id"] for x in items],
+            "malformed_rejected": malformed,
+            "fact_status": status,
+            "method_status": method_status,
+            "fact_status_unchanged": True,
+            "triggered": True,
+        })
+        receipt_subject = f"method-use:{causal_id}"
+        receipt_json = json.dumps(receipt, sort_keys=True, separators=(",",":"))
+        existing = self.db.db.execute(
+            "SELECT memory_id,value FROM durable_memory WHERE kind='method_receipt' "
+            "AND subject=? AND source_turn_id=? AND user_id=? ORDER BY ts DESC LIMIT 1",
+            (receipt_subject, turn_id, user_id),
+        ).fetchone()
+        if existing:
+            if str(existing["value"]) != receipt_json:
+                raise StaleGeneration("method_receipt_identity")
+            receipt_id = str(existing["memory_id"])
+        else:
+            receipt_id = self.db.add_memory(
+                "method_receipt", receipt_subject, receipt_json, turn_id, user_id,
+                {"source":"method_transfer:use","causal_id":causal_id,"episode_id":episode_id,
+                 "generation":int(generation),"truth_authority":False,"effect_authority":False},
+            )
+        receipt["use_receipt_memory_id"] = receipt_id
         return {
             "items": items,
             "counterevidence": counters,
             "fact_status": status,
-            "method_status": "PRESENT" if items else "UNKNOWN",
-            "receipt": {
-                "policy_version": self.POLICY_VERSION,
-                "signature_sha256": signature_hash,
-                "selected_method_ids": [x["memory_id"] for x in items],
-                "malformed_rejected": malformed,
-                "truth_authority": False,
-                "effect_authority": False,
-                "fact_status_unchanged": True,
-                "triggered": True,
-            },
+            "method_status": method_status,
+            "receipt": receipt,
         }

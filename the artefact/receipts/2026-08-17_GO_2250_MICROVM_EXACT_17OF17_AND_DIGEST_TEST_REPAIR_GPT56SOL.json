@@ -1,0 +1,91 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "EXACT_BOUND_SOURCE_REGRESSION_AND_TEST_REPAIR",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "current stronger MicroVM deployment source contract",
+  "pre_repair_exact_execution": {
+    "blobs": {
+      "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "f42bfb4746b58c887137bc102b21bc50826fd817",
+      "deployment/clayverse-kata-statefulset.template.yaml": "112de17cc97be535581a8986778db4286a728b26",
+      "tests/test_microvm_deployment_contract.py": "3238b02ce8a0f5c283827ade1293460c9d3e89f0",
+      "manifest.json": "0b070a7c6f1cfd4cfc051ae9535be036d316857f",
+      "Dockerfile": "f573055d34aef3c983135eddc00cb908cf9fd997",
+      "entityos.lock.json": "457258e59450ea6eba80792fb2ede6434e88e484"
+    },
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "14 passed, 1 failed",
+    "exit_code": 1,
+    "failure": "test asserted CLAYVERSE_ENTITYOS_SHA256 was absent from the entire template, but the token existed only in a comment documenting that deployment must not override the image-authoritative digest"
+  },
+  "repair": {
+    "commit": "3e34e5faeb06054651cc43ec4001c348bab555ad",
+    "test_blob": "de4544834cd76b0205237e67739aff20351a4a61",
+    "runtime_code_changed": false,
+    "change": "fence the actual dangerous YAML env declaration '- name: CLAYVERSE_ENTITYOS_SHA256' instead of banning an explanatory comment string",
+    "security_semantics": "deployment may not supply/override EntityOS digest identity; Docker image build remains bound to the tracked entityos.lock.json digest"
+  },
+  "post_repair_exact_bound_execution": {
+    "environment": "authorized isolated OpenAI container",
+    "blobs": {
+      "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
+      "deployment/clayverse-kata-statefulset.template.yaml": "bd04961f5de42d92df6201c1605f876b307df4b5",
+      "tests/test_microvm_deployment_contract.py": "de4544834cd76b0205237e67739aff20351a4a61",
+      "manifest.json": "6da4d0dcc6a9e2298b1840356a23a225ab945175",
+      "Dockerfile": "f573055d34aef3c983135eddc00cb908cf9fd997",
+      "entityos.lock.json": "457258e59450ea6eba80792fb2ede6434e88e484"
+    },
+    "identity_check": "6/6 git hash-object values matched the captured GitHub blobs before execution",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "17 passed in 0.06s",
+    "exit_code": 0
+  },
+  "contracts_exercised": [
+    "mandatory independent guest-kernel final envelope",
+    "single exact image / single entity",
+    "headless StatefulSet governing service separated from client Service",
+    "read-only root and explicit state surfaces",
+    "non-root PVC fsGroup contract",
+    "ReadWriteOncePod single-writer fence",
+    "default-deny ingress+egress NetworkPolicy",
+    "CNI enforcement and node/control-plane/metadata exception obligations",
+    "readiness /readyz distinct from liveness /healthz",
+    "Tier-2 requires full Kata Pod sandbox/VM replacement and rejects in-place restart credit",
+    "rolling Kata security/review contract",
+    "bounded GLM/Claude credential shape",
+    "EntityOS digest is image-authoritative and cannot be deployment-secret overridden"
+  ],
+  "parallel_fusion": {
+    "observed": "main advanced repeatedly during this GO with stronger network, storage-writer and Tier-2 fences",
+    "action": "CAS failures were treated as stale-write protection; overlapping implementation was not duplicated; exact evidence was rebound to later blobs before credit"
+  },
+  "execution_blocker": {
+    "retained_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "state": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "classification": "CREDENTIAL_ADMIN_BLOCKER_NOT_CLAYVERSE_TEST_FAIL",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "note": "host-side sensitive Vercel Preview GITHUB_READ_TOKEN must not be committed, forwarded to Sandbox, or logged"
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "no safely shared immutable request/turn identity exposed for the atomic GO experiment lease"
+  },
+  "nonclaims": [
+    "not full exact-current-main pytest",
+    "not exact OCI build/runtime evidence",
+    "not Kubernetes/CNI runtime evidence",
+    "not Kata/microVM guest-kernel runtime evidence",
+    "not Clerk/browser/PTY runtime evidence",
+    "not whole ClayVerse PASS"
+  ],
+  "next_discriminator": "Provision the retained PR810 Preview controller with host-side sensitive GITHUB_READ_TOKEN, rebind once to then-current source and accepted EntityOS bytes, execute the private-source -> exact OCI build/runtime batch, then run that same accepted digest on a real admitted Kata/equivalent microVM target with CNI, ReadWriteOncePod, Tier-2 full-sandbox replacement and node/control-plane/metadata reachability gates.",
+  "together_api": "FORBIDDEN",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "final_paid_model_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

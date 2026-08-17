@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T17:26:11+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXACT_HEAD_FROZEN_AND_BRIDGE_REBOUND_ADMISSION_BLOCKED",
+  "canonical_main_before_status_sync": "2fefc099a65da5c275eaa1468abef87f4e9b245c",
+  "repair_candidate": {
+    "pull_request": 611,
+    "head": "6a27ddab361938b4ab875610b7a51ac9e845c744",
+    "freeze_policy": "KEEP_THIS_EXACT_HEAD_STABLE_DURING_STATUS_ONLY_MAIN_ADVANCES_UNTIL_EXACT_HEAD_RUNTIME_DISCRIMINATOR_EXECUTES",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "changed_paths_at_freeze": [
+      "the artefact/clayverse/terminal_sessions.py",
+      "the artefact/tests/test_terminal_tmux_control_timeouts.py"
+    ]
+  },
+  "prior_runtime_evidence": {
+    "deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+    "bound_old_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "classification": "COMPONENT_MECHANISM_PASS_OLD_BOUND_HEAD_ONLY",
+    "scope_limits": [
+      "NOT_EXACT_CURRENT_PR611_PASS",
+      "NOT_NATIVE_CLAUDE_PASS",
+      "NOT_OCI_PASS",
+      "NOT_WHOLE_PRODUCT_PASS"
+    ]
+  },
+  "execution_bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 846,
+    "head": "17efb3fe28691359bbee47ee7e20522b6075b326",
+    "bound_candidate_head": "6a27ddab361938b4ab875610b7a51ac9e845c744",
+    "vercel_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "exact_current_runtime_credit": "ZERO"
+  },
+  "daytona": {
+    "provider_interface": "DIRECT_DOCUMENTED_HTTPS_API_SDK_CLI",
+    "current_chatgpt_controller": "BLOCKED_BEFORE_PROVIDER_CONTACT_NO_APPROVED_SECRET_PATH_AND_NO_DNS_EGRESS",
+    "provider_or_account_availability": "UNOBSERVED",
+    "runtime_credit": "ZERO"
+  },
+  "coordination": {
+    "pr603": "CLOSED_UNMERGED_SUPERSEDED",
+    "pr612": "CLOSED_DUPLICATE",
+    "pr614": "CLOSED_DUPLICATE_STATUS_LANE",
+    "one_retained_repair_lane": "PR611"
+  },
+  "experiment": {
+    "unusual_experiment_count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "acceptance": {
+    "exact_pr611_runtime": "UNKNOWN_NOT_EXECUTED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_exact_gate": [
+    "Do not move PR611 head for status-only canonical changes before the exact-head discriminator runs.",
+    "When Vercel admits the bridge, execute bridge head 17efb3fe28691359bbee47ee7e20522b6075b326 against frozen PR611 head 6a27ddab361938b4ab875610b7a51ac9e845c744 under real tmux 3.6a.",
+    "Require pre-policy upgrade, already-hardened reapply, new-server second source, direct multi-argv transport, and mixed/unknown/empty diagnostic fail-closed assertions.",
+    "Only after exact-head PASS, refresh then-current main, run focused plus adjacent regressions, and consider repair promotion before OCI/native-Claude/readiness/restart/concurrency acceptance."
+  ]
+}

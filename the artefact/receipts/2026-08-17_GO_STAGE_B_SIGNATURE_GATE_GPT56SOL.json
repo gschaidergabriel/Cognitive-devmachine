@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-08-17T13:37:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_receipt": "1aa57a9fa25285fee78ebd555567328663159d36",
+  "pr": 411,
+  "branch": "go/meta-learning-method-memory-stageb-20260817-sol",
+  "branch_head": "530c4f8b5a5db129a7c5aba8e3c0ca7904458c7a",
+  "source_repair": {
+    "commit": "29d8c037d45108e0173bb33dc20d6be2624fc6c9",
+    "file": "the artefact/clayverse/method_stage_b.py",
+    "mechanism": "the causal Stage-B product wrapper no longer falls back to raw-query problem-signature inference when problem_signature is absent; it returns no method context with SIGNATURE_REQUIRED, preserves factual status, and grants no truth/effect authority",
+    "explicit_signature_receipt_marker": "signature_source=EXPLICIT_STRUCTURED_INPUT"
+  },
+  "regression_obligation": {
+    "commit": "530c4f8b5a5db129a7c5aba8e3c0ca7904458c7a",
+    "file": "the artefact/tests/test_method_stage_b_signature_gate.py",
+    "scope": "ordinary deterministic regression only; no unusual experiment"
+  },
+  "execution_boundary": {
+    "latest_checked_branch_head": "530c4f8b5a5db129a7c5aba8e3c0ca7904458c7a",
+    "github_actions_run": 32002281503,
+    "github_actions_job": 95304766086,
+    "observation": "job concluded failure before visible step execution; steps=null; zero product-test PASS/FAIL credit",
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "exact_regression_execution": false,
+    "whole_clayverse_oci_pass": false
+  },
+  "remaining_blockers": [
+    "promotion authority: ordinary method admission must not mint PROMOTED framework/heuristic; fuse PR 405 dedicated promotion lifecycle/receipt gate",
+    "signature admission authority: explicit structured input is now required at the causal wrapper, but the producer/admission/provenance contract for that signature is still open; use PR 410 structural matcher semantics without lexical fallback",
+    "durable Stage-B replay identity issue 412: bind evidence status, normalized resource refs digest, limit, budget, admitted signature identity/version, policy version, selected IDs and causal/generation identity before serving",
+    "fuse method channels into PR 408 retained hard-bounded Claude-world transport without a second _bound_world semantic",
+    "exact authorized isolated execution of focused regressions, held-out structural transfer/lexical decoy, malformed/promotion smuggling, privacy, replay and context-bound gates"
+  ],
+  "experiment_accounting": {
+    "new_unusual_experiment_executed_by_this_repair": false,
+    "observed_parallel_claim_on_main": "METHOD_REPLAY_TRIGGER_GATE_INVERSION at commit 1aa57a9fa25285fee78ebd555567328663159d36",
+    "action": "not executed by this organ; do not expand the macro-cycle unusual-experiment count from this repair",
+    "note": "parallel experiment accounting remains a coordination issue and must not be used to manufacture extra canonical slots"
+  },
+  "promotion_status": "SOURCE_REPAIR_RETAIN_EXECUTION_BLOCKED",
+  "truth_boundary": "source inspection establishes the intended fail-closed code delta only; no exact-head runtime PASS is claimed",
+  "vps_or_production_testing": false,
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

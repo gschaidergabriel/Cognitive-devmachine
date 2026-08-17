@@ -6,12 +6,15 @@ class EffectJournal:
     """Transactional causal journal inside UnifiedDB; never a second state authority."""
     FINAL={'VERIFIED','DENIED','FAILED','STALE_OUTCOME','UNKNOWN_AFTER_RESTART'}
     SAFE_OUTCOME_FIELDS=('ok','exit','boundary','entityos_sha256','denied','reason','error','certainty')
+    NON_REWARDING_CAPABILITIES={'state.noop'}
     def __init__(self,db:UnifiedDB):
         self.db=db
     @staticmethod
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
-    @staticmethod
-    def _credit(status,outcome): return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
+    @classmethod
+    def _credit(cls,status,outcome,capability):
+        if capability in cls.NON_REWARDING_CAPABILITIES: return 0.0
+        return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
     @staticmethod
     def _target_receipt(target):
         raw=str(target).encode('utf-8')
@@ -58,7 +61,7 @@ class EffectJournal:
     def _reenter_tx(self,db,effect_id,status,outcome):
         row=db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone()
         if row: return row[0]
-        effect=db.execute('SELECT episode_id FROM effects WHERE effect_id=?',(effect_id,)).fetchone()
+        effect=db.execute('SELECT episode_id,capability FROM effects WHERE effect_id=?',(effect_id,)).fetchone()
         if not effect: raise KeyError(effect_id)
         episode_id=effect['episode_id']; observation_turn_id=None
         if episode_id:
@@ -69,7 +72,7 @@ class EffectJournal:
         if existing:
             raise RuntimeError('predeclared causal identity already consumed')
         payload=self._payload(outcome)
-        db.execute('INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)',(cid,episode_id,effect_id,observation_turn_id,hashlib.sha256(payload.encode()).hexdigest(),self._credit(status,outcome),time.time()))
+        db.execute('INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)',(cid,episode_id,effect_id,observation_turn_id,hashlib.sha256(payload.encode()).hexdigest(),self._credit(status,outcome,effect['capability']),time.time()))
         return cid
     def _finish_tx(self,db,effect_id,outcome,status):
         row=db.execute('SELECT status FROM effects WHERE effect_id=?',(effect_id,)).fetchone()

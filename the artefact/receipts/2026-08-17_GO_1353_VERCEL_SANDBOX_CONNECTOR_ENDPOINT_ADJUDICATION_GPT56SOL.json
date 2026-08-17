@@ -1,0 +1,67 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "scope": "Vercel Sandbox execution-admission and connector/runtime endpoint adjudication",
+  "research_head_observed_before_receipt": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
+  "classification": "EXECUTION_PATH_CONFIRMED_CURRENT_BATCH_ADMISSION_BLOCKED",
+  "observations": {
+    "vercel_connector_authenticated": true,
+    "vercel_team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "vercel_project_name": "dr-unterweger",
+    "direct_chatgpt_mcp_sandbox_lifecycle_exported": false,
+    "vercel_sandbox_cli_sdk_rest_exist": true,
+    "git_preview_oidc_sandbox_bridge_previously_executed": true,
+    "current_corrected_stageb_preview_admission": "BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_RETRY_24H",
+    "ready_previews_inspected": 3,
+    "ready_previews_stageb_sandbox_execution": false,
+    "ready_preview_reason": "inherited runner emitted SKIP_NON_TARGET_PREVIEW before Sandbox.create",
+    "runtime_fixed_probe_endpoint_exists": true,
+    "runtime_probe_endpoint_path": "mcp/vercel-sandbox-mcp/api/sandbox-probe.js",
+    "runtime_probe_contract": {
+      "method": "POST_ONLY",
+      "authentication": "EXACT_BEARER_CLAY_SANDBOX_PROBE_TOKEN",
+      "caller_supplied_command": false,
+      "command": "FIXED_READ_ONLY_DIAGNOSTIC",
+      "sandbox_stop_in_finally": true
+    },
+    "runtime_probe_invokable_from_current_chatgpt_surface": false,
+    "runtime_probe_blocker": "current connector exposes no generic authenticated POST with custom Authorization header and does not expose the probe secret; local isolated container has no Vercel CLI login/token",
+    "go_cycle_runtime_endpoint": "BUILD_INTERNAL_ONLY_404"
+  },
+  "security_adjudication": {
+    "verdict": "PRESERVE_FAIL_CLOSED_BOUNDARY",
+    "do_not_make_probe_public": true,
+    "do_not_copy_secret_into_chat_source_logs_or_receipts": true,
+    "do_not_expand_to_arbitrary_command_endpoint": true,
+    "preferred_execution_path": "one coordinated exact-source Git-preview + VERCEL_OIDC_TOKEN + @vercel/sandbox batch when preview admission reopens"
+  },
+  "execution_evidence_this_receipt": {
+    "new_sandbox_started": false,
+    "product_test_started": false,
+    "product_test_pass": false,
+    "product_test_fail": false,
+    "reason": "provider preview quota blocks the corrected exact runner before build; fixed runtime endpoint remains correctly inaccessible without its bearer credential"
+  },
+  "go_unusual_experiment_accounting": {
+    "unusual_experiments_added_by_this_organ": 0,
+    "reason": "the shared 13:53 go already has a durable unusual-experiment result on main; this organ performs regression/review/coordination only"
+  },
+  "source_bindings": {
+    "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md_blob": "5c2fa800a2495b412e6bb8b298ee81f9140a6b7d",
+    "Dr.-Unterweger/mcp/vercel-sandbox-mcp/api/sandbox-probe.js_blob": "88e2bacfc060773fb51d4a0a5ecb62e40640987d",
+    "Dr.-Unterweger/mcp/vercel-sandbox-mcp/api/go-cycle-v2.js_blob": "1bea24f2a2805cb0a3012a6977a96da30a58c189"
+  },
+  "next_exact_gate": "After Vercel preview quota admits builds again, run one high-information exact-source Sandbox batch on the then-current ClayVerse candidate, bind current research SHA plus staged source blobs/image identity, execute focused regressions and OCI/runtime gates inside Sandbox, stop Sandbox, capture logs/exit codes/digests, and persist bounded receipts. Do not spend additional preview quota on bridge-only probes.",
+  "nonclaims": [
+    "No whole ClayVerse PASS",
+    "No exact current ClayVerse runtime PASS",
+    "No Stage-B PASS from READY previews",
+    "No test failure inferred from Vercel rate limiting",
+    "No VPS/self-hosted/production testing",
+    "No Together API",
+    "No paid/final training"
+  ]
+}

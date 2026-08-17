@@ -1,0 +1,69 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "finding": "Parallel Clerk hardening had already fused the desired active-only direct-session verifier into main, together with bounded JWKS cache/timeout hardening, but two older signed-token regression fixtures still omitted sts and therefore no longer matched the canonical verifier contract.",
+  "canonical_source_observed": {
+    "the artefact/clayverse/clerk_auth.py": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "the artefact/tests/test_clerk_session_authority.py": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+    "the artefact/tests/test_clerk_session_shape.py_after_repair": "9c35b86a1afe1a3d3dc750997bd7424ced861c44",
+    "the artefact/tests/test_clerk_temporal_claims.py_after_repair": "37a1b3ef613b5f04f712b745d6d0b31382087d1a"
+  },
+  "canonical_main_repairs": [
+    {
+      "commit": "3eba0b68b1aa6bfabe4e524ab4a978f6a6d42f91",
+      "effect": "align session-shape fixture to Clerk v2 active status and add pending/missing/unknown non-active falsifiers"
+    },
+    {
+      "commit": "07ee586d4ff3213e65c01e5bf256c79a316e4bff",
+      "effect": "align temporal signed-session fixture to active Clerk v2 status"
+    }
+  ],
+  "contract_after_repair": {
+    "single_clerk_verifier_authority": true,
+    "authorized_party_required": true,
+    "sid_sub_required": true,
+    "sts_must_equal": "active",
+    "impersonation_act_rejected": true,
+    "legacy_adapters_symbols_are_aliases_only": true
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "CURRENT_SOURCE_SEMANTICS_REPLICATION_NOT_EXACT_CHECKOUT",
+    "python": "3.13.5",
+    "pyjwt": "2.13.0",
+    "cryptography": "46.0.4",
+    "pytest": "9.0.2",
+    "focused_tests_passed": 11,
+    "focused_tests_failed": 0,
+    "compile_check": "PASS",
+    "coverage": [
+      "active canonical session",
+      "legacy adapter alias identity",
+      "sid shape",
+      "impersonation",
+      "pending/ended/abandoned",
+      "missing status",
+      "unknown status",
+      "missing nbf",
+      "future nbf"
+    ],
+    "scope_limit": "No exact private-repository checkout, exact OCI build/start, real Clerk/JWKS rotation, or live browser WebSocket PTY was executed on this surface."
+  },
+  "runner_state": {
+    "retained_auth_pr_head_workflow_runs_observed": 0,
+    "direct_main_test_repair_commit_combined_statuses_observed": 0,
+    "classification": "NO_EXECUTABLE_CI_EVIDENCE_FROM_QUERIED_HEADS"
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available shared trigger metadata is minute-precision only and does not satisfy the atomic experiment protocol fallback trigger identity requirement."
+  },
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run the exact then-current main source/image in an actually-started authorized isolated execution surface: full Clerk/auth regressions, real Clerk active versus non-active/impersonation/JWKS rotation through browser WebSocket PTY, then exact OCI build/start/readiness/restart."
+}

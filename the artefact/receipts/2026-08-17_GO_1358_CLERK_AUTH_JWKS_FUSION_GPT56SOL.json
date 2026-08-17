@@ -1,0 +1,61 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:58:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_receipt": "a736543f989a353be25255e3b44d15f1a62a2055",
+  "donor_pr": 428,
+  "canonical_commits": {
+    "clerk_auth": "578257bb1023218bb89e3a3bff8a58ed681eb6cd",
+    "websocket_eventloop_fence": "323f5bca7b80559eeb96df911d2b23f340f0029b",
+    "session_authority_tests": "62fcfa4721bea4c851dd6ecbb4529d310c6f2836",
+    "jwks_runtime_boundary_tests": "6a4f39a2de73ce24a04cc698781b61c3c4be724d"
+  },
+  "exact_main_blobs": {
+    "the artefact/clayverse/clerk_auth.py": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "the artefact/clayverse/terminal_gateway.py": "f6eb4d0ecbc56ffcdaef90de181e3e9567f64336",
+    "the artefact/tests/test_clerk_session_authority.py": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+    "the artefact/tests/test_clerk_jwks_runtime_boundary.py": "ec204480452885df9067842cf34b7df6eb09e0a1"
+  },
+  "repair": {
+    "session_authority": "Only direct Clerk sessions with sts=active are admitted; missing/non-active status and any act impersonation claim fail closed.",
+    "jwks_rotation": "Disable PyJWT per-signing-key LRU; retain a finite JWKS-set cache with explicit 300s lifespan and 5s fetch timeout.",
+    "static_key_mode": "CLERK_JWT_KEY remains networkless.",
+    "websocket_async_boundary": "Both initial token verification and renewable reauthentication verification execute via asyncio.to_thread so network-backed JWKS verification does not block the ASGI event loop.",
+    "renewable_auth_lease_preserved": true,
+    "identity_authority_changed": false,
+    "unifieddb_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "primary_dependency_basis": [
+    "Clerk session-token documentation: sts represents session status and act represents impersonation actor context.",
+    "Clerk manual JWT verification guidance: pending is a valid session-token state that backends may reject to prevent admission bypass.",
+    "PyJWT PyJWKClient contract: separate JWKS-set cache and optional per-signing-key cache, with lifespan and timeout controls."
+  ],
+  "evidence_reentry": {
+    "donor_clerk_auth_blob": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "donor_session_test_blob": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+    "byte_identical_on_main": true,
+    "donor_focused_verifier_tests": "6/6 PASS",
+    "donor_py_compile": "PASS",
+    "current_main_eventloop_extension": "Source-bound regression additionally requires both initial and reauth verifier calls to use asyncio.to_thread."
+  },
+  "execution_boundary": {
+    "real_clerk_active_pending_impersonated_tokens": "UNOBSERVED",
+    "real_jwks_rotation": "UNOBSERVED",
+    "live_browser_websocket_pty": "UNOBSERVED_FOR_THIS_FUSED_HEAD",
+    "exact_oci_build_start": "UNOBSERVED",
+    "vercel_sandbox_path": "INDIRECT_GIT_PREVIEW_BRIDGE_DISCOVERED_BY_PARALLEL_WORK_BUT CURRENT ADMISSION REPORTED RATE_LIMIT_BLOCKED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "classification": "SOURCE_AND_FOCUSED_MECHANISM_SUPPORTED_CANONICAL_FUSION",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Execute the exact then-current fused head in an actually-started authorized Vercel Sandbox when preview admission is available; exercise active, pending/non-active and impersonated Clerk tokens, JWKS rotation, renewable reauth, adjacent PTY/tmux privacy regressions, then exact OCI build/start/readiness/restart."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "observed_canonical_main_at_closure": "b0210496a3a2bc9c79d4815c3d659646bc5eead8",
+  "fusion_pr": 415,
+  "fusion_head_with_repair": "3faf29c585652cae0315c5c4cb3167dab8fcbd7b",
+  "stacked_repair_pr": 417,
+  "repair_rebased_commit": "9b6c38467da744aade64119d25dd6fa1f2712507",
+  "finding": {
+    "class": "REPLAY_ROUTE_INTEGRITY_GAP",
+    "summary": "Stage-A replay route validation checked selected_memory_ids only and did not fail closed on unresolved persisted memory references.",
+    "risk": "A historical SHADOW replay could retain method memory in shadow_memory_ids while passing the method-as-evidence fence before adaptive outcome learning; unresolved persisted IDs could also degrade replay silently.",
+    "source_blob_before": "e9f22fecfb0b968dd87a90406b5dc19e45e2725e",
+    "source_blob_after": "48b7a37c30a3b96adb0d62664c8a04d46bed8d17"
+  },
+  "repair": {
+    "selected_and_shadow_lists_validated": true,
+    "nonempty_string_ids_required": true,
+    "all_persisted_ids_must_resolve": true,
+    "method_kinds_rejected_across_both_routes": true,
+    "failure": "StaleGeneration:retrieval_route_contract",
+    "learning_occurs_after_route_fence": true,
+    "test_blob": "f2c3c81b1664bcbb6035ef2d040297377e378b69"
+  },
+  "ordinary_isolated_mechanism_regression": {
+    "execution_surface": "OpenAI isolated non-production container",
+    "classification": "SOURCE_MECHANISM_SUPPORT_ONLY",
+    "unusual_experiment": false,
+    "shadow_method_case": {
+      "pre_repair_rejected": false,
+      "repaired_fence_rejected": true
+    },
+    "missing_memory_reference_case": {
+      "pre_repair_rejected": false,
+      "repaired_fence_rejected": true
+    },
+    "exact_full_branch_pytest": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "unusual_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable request/turn id is exposed and the shared user-message timestamp available to this organ is minute-precision only; the canonical atomic-lease protocol forbids timestamp fallback below whole-second precision.",
+    "claim_created": false,
+    "experiment_executed": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOL_SURFACE",
+    "installable_vercel_sandbox_plugin_search": "NO_MATCH",
+    "vps_testing": "NOT_USED_FORBIDDEN",
+    "self_hosted_testing": "NOT_USED_FORBIDDEN",
+    "production_testing": "NOT_USED_FORBIDDEN"
+  },
+  "next_gate": "Actually-started authorized isolated exact-head execution of the replay-route tests together with PR 415 method-fusion/replay/credit/context regressions; then adjacent retrieval/lifecycle/restart/privacy suite and exact OCI build/runtime gates.",
+  "acceptance": "IN_PROGRESS",
+  "notes": [
+    "MicroClay remains SHADOW; no ACTIVE promotion is claimed.",
+    "No exact branch, OCI, Clerk, Claude, restart, concurrency, EntityOS, or whole ClayVerse PASS is claimed.",
+    "The repair is fused into PR 415; no second permanent retrieval path is retained."
+  ]
+}

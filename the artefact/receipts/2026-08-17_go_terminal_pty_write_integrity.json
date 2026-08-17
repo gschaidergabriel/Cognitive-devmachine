@@ -1,0 +1,59 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "active Browser -> WebSocket -> PTY terminal input integrity",
+  "product_path": "Clerk-authenticated WebSocket PTY -> persistent per-user tmux -> interactive Claude Code",
+  "observed_pre_repair": {
+    "source_head": "19aa9a0fc333e7cff041a54a3848dd979ef56ae8",
+    "gateway_blob": "4c17e59a5553e5e7cc5d57433a4996cd70eb3c89",
+    "mechanism": "pump_in performed one synchronous os.write for each binary WebSocket frame and discarded the returned byte count",
+    "risk": "a partial low-level write can silently drop the unwritten suffix; a blocking write also occupies the asyncio event-loop thread"
+  },
+  "primary_evidence": {
+    "source": "Python os.write official documentation",
+    "fact": "os.write returns the number of bytes actually written"
+  },
+  "repair": {
+    "commit": "e411037842ef86aabf7ca5e6f3ac7e5ed2cb23ab",
+    "mechanism": "_write_pty_all loops until the whole frame is written or fails on zero progress; pump_in executes it through asyncio.to_thread"
+  },
+  "regression": {
+    "commit": "216cf16eb9fe81d335cac6df075136a6e6593082",
+    "path": "the artefact/tests/test_terminal_gateway_pty_io.py",
+    "focused_isolated_probe": {
+      "environment": "OpenAI isolated non-VPS Python execution",
+      "partial_write_schedule": "maximum 3 bytes per os.write",
+      "payload_bytes": 16,
+      "write_calls": 6,
+      "observed_complete_payload": true,
+      "zero_progress_fails_closed": true,
+      "result": "PASS"
+    }
+  },
+  "counterhypothesis": {
+    "claim": "browser terminal input chunks are always small enough that one os.write is effectively complete",
+    "result": "REJECT_AS_CONTRACT",
+    "reason": "the low-level API contract exposes actual bytes written, so complete-frame delivery cannot depend on chunk-size luck"
+  },
+  "coordination": {
+    "overlapping_open_pr_found": false,
+    "later_main_checked": "5802f5b82367b4405fbac0c7ce5c770036cae7bf",
+    "repair_is_ancestor_of_later_main": true,
+    "later_main_rewrote_gateway_after_repair": false
+  },
+  "unusual_experiment": {
+    "executed_by_this_step": false,
+    "additional_count": 0,
+    "shared_go_budget": "already consumed; no second unusual experiment"
+  },
+  "evidence_limits": [
+    "focused helper probe is not an exact-current-head full-suite run",
+    "no authorized Vercel Sandbox execution surface is available in this session",
+    "no exact OCI container build/runtime, real Clerk JWT, live WebSocket PTY, tmux/Claude runtime or restart PASS is claimed"
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "vps_testing_used": false,
+  "together_api_used": false
+}

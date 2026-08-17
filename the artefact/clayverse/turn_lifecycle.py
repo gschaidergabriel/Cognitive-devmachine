@@ -74,10 +74,24 @@ class TurnLifecycle:
                     item["content"] = str(item["content"])[:20_000] + "…[context-truncated]"
         return packed
 
-    def begin(self, prompt: str, resources: list[str] | None = None) -> dict:
+    def begin(
+        self,
+        prompt: str,
+        resources: list[str] | None = None,
+        *,
+        claude_session_id: str | None = None,
+    ) -> dict:
         prompt = str(prompt)
         if not prompt or len(prompt) > 100_000:
             raise ValueError("invalid prompt")
+        if claude_session_id is not None:
+            if (
+                not isinstance(claude_session_id, str)
+                or not claude_session_id
+                or len(claude_session_id) > 512
+                or "\x00" in claude_session_id
+            ):
+                raise ValueError("invalid Claude session id")
         if self.active() is not None:
             self.abort("previous_turn_interrupted_before_next_prompt")
         resource_refs = sorted(set(resources or infer_resource_refs(prompt)))[:50]
@@ -92,6 +106,13 @@ class TurnLifecycle:
             {"id": "request_effect", "kind": "effect_intent"},
             {"id": "defer_effect", "kind": "no_effect"},
         ]
+        provenance = {
+            "source": "claude-hook:UserPromptSubmit",
+            "session_generation": generation,
+            "causal_id": causal_id,
+        }
+        if claude_session_id is not None:
+            provenance["claude_session_id"] = claude_session_id
         with self.db.tx() as db:
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
@@ -99,11 +120,7 @@ class TurnLifecycle:
             db.execute(
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (turn_id, self.session_id, self.user_id, ordinal, now, "user", prompt,
-                 json.dumps(resource_refs), "[]", json.dumps({
-                     "source": "claude-hook:UserPromptSubmit",
-                     "session_generation": generation,
-                     "causal_id": causal_id,
-                 }, sort_keys=True)),
+                 json.dumps(resource_refs), "[]", json.dumps(provenance, sort_keys=True)),
             )
             db.execute(
                 "INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",
@@ -189,13 +206,21 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
                 )
+            cur = db.execute(
+                "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+                (row["episode_id"],),
+            )
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("active turn workspace cannot be completed")
             db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
         self.graph.rebuild()
         return {"completed": True, "assistant_turn_id": assistant_id, "causal_id": row["causal_id"], "effect_id": effect_id, "credit": credit}
 
-    def abort(self, reason: str) -> dict:
+    def abort(self, reason: str, *, final_state: str = "ABANDONED") -> dict:
+        if final_state not in {"ABANDONED", "FAILED"}:
+            raise ValueError("invalid abort workspace state")
         row = self.active()
         if row is None:
             return {"aborted": False, "reason": "no_active_turn"}
@@ -227,7 +252,14 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
                 )
+            cur = db.execute(
+                "UPDATE workspace_episodes SET state=? WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+                (final_state, row["episode_id"]),
+            )
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("active turn workspace cannot be aborted")
             db.execute("DELETE FROM active_turns WHERE session_id=?", (self.session_id,))
+            db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
         self.graph.rebuild()
         return {"aborted": True, "causal_id": row["causal_id"], "reason": reason}

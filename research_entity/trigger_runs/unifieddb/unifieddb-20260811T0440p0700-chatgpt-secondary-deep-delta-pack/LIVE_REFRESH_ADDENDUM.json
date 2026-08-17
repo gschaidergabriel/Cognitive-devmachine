@@ -1,0 +1,25 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "observed_after_initial_report":true,
+  "target_repo":"gschaidergabriel/Dr.-Unterweger",
+  "pr288":{
+    "workflow_run_id":31434825206,
+    "job_id":93606495029,
+    "status":"PASS_PRIVATE_SQLITE_35304_PYTHON_RUNTIME_PREFLIGHT",
+    "runner":"clay / digital-retina",
+    "platform":"Ubuntu Linux x86_64",
+    "python":"3.12.3",
+    "baseline":{"sqlite_version":"3.45.1","package":"libsqlite3-0=3.45.1-1ubuntu2.7","compile_feature_of_interest":"ENABLE_SESSION present"},
+    "private_candidate":{"sqlite_version":"3.53.4","sqlite_source_id":"2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc","python_ldd_private_library":true,"threadsafe":"THREADSAFE=1","v16_ingress":"PASS_FRANK_TOKEN_INGRESS_CORE_V16_CONTINUITY","wal_smoke":"PASS_PRIVATE_SQLITE_35304_WAL_COMPATIBILITY_SMOKE","rows_in_smoke":256,"integrity_check":"ok","foreign_key_violations":0,"system_install_performed":false,"canonical_state_mutated":false,"whole_frank_v0_1_acceptance":"NOT_CLAIMED","compile_feature_of_interest":"ENABLE_SESSION not observed in Python compile_options"}
+  },
+  "consequence":[
+    "The previous WAL fixed-runtime route now has direct accepted-target compatibility evidence, but is still a preflight rather than integrated production runtime acceptance.",
+    "SQLite runtime replacement must be treated as a capability-vector change, not only a version upgrade.",
+    "The optional Session-extension incremental-root accelerator cannot be assumed if the current private 3.53.4 build becomes the selected runtime; central-writer dirty tracking remains the simpler portable candidate.",
+    "Semantic content identity should not change merely because physical SQLite runtime identity changes, but the materialization/runtime commitment must record the changed version/source-id/compile-feature vector."
+  ],
+  "parallel_exact_head_status":{"pr286_target_gate":"CANCELLED_NOT_PASS","pr289_target_gate":"CANCELLED_NOT_PASS"},
+  "new_deltas":["UDB-D23-STORAGE-RUNTIME-CAPABILITY-CONTRACT","UDB-D24-SEMANTIC-VS-PHYSICAL-IDENTITY-SPLIT"],
+  "promotion":"HOLD_COMPOSITION_AND_CURRENT_HEAD_TARGET_GATES_REQUIRED"
+}

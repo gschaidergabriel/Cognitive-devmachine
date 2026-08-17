@@ -1,0 +1,76 @@
+{
+  "schema_version":"1.0",
+  "architecture_id":"FRANK_UNIFIEDDB_DEEP_CONTINUITY_CANDIDATE_V11",
+  "status":"CANDIDATE_NOT_PROMOTED",
+  "target":"self.root / Frank v0.1",
+  "premise":"UnifiedDB is authoritative semantic state; ClayGraph and retrieval indexes are derived. Authority requires an admitted published state commitment, not merely a healthy SQLite file or matching schema metadata.",
+  "components":{
+    "ActualMaterializationAttestation":{
+      "inputs":["ordered executable migration-chain bytes","live sqlite_schema logical declarations"],
+      "outputs":["migration_chain_digest","actual_schema_fingerprint"],
+      "rule":"both must match expected role-specific current values; stored metadata alone is not proof of actual materialization",
+      "scope":"drift detection, not semantic equivalence proof"
+    },
+    "RootDomainRegistry":{
+      "roles":["AUTHORITATIVE_SEMANTIC","EXECUTION_CONTINUITY","EFFECT_AND_CAUSAL_EVIDENCE","POLICY_CONTRACT","MATERIALIZATION_META","ROOT_PUBLICATION_META","DERIVED","CACHE","EXTERNAL_BACKING"],
+      "rule":"every persistent table/object crossing the semantic boundary has exactly one declared root-domain role; unclassified persistent state fails closed",
+      "self_reference_firebreak":"ROOT_PUBLICATION_META is not included recursively in the content root it records"
+    },
+    "HierarchicalStateCommitment":{
+      "leaves":"deterministic table/domain roots over typed logical values and logical schema",
+      "domain_roots":["semantic_content_root","execution_continuity_root","effect_causal_root","policy_contract_root","materialization_root"],
+      "top":"frank_state_commitment = H(protocol + ordered domain roots + selected schema/version identities)",
+      "incremental_rule":"authorized mutation recomputes dirty table/domain roots only; periodic/full recovery audit recomputes everything and must equal incremental commitment",
+      "cache_authority":"cached table roots are never sufficient without transaction-bound dirty tracking and audit"
+    },
+    "StatePublicationBarrier":{
+      "phase_1":"one authoritative DB transaction mutates state and records PREPARED publication receipt(parent_selected_head,new_content_commitment,tx_id,execution_binding)",
+      "phase_2":"external selected-head CAS advances parent -> new head bound to new commitment",
+      "phase_3":"DB marks receipt PUBLISHED",
+      "normal_open":"only PUBLISHED commitment matching selected external head is runnable; PREPARED enters bounded recovery",
+      "crash_recovery":[
+        "DB PREPARED + selector parent + DB commitment new => resume selector CAS",
+        "DB PREPARED + selector new => finalize PUBLISHED",
+        "DB old/rolled-back + selector new => fail closed",
+        "DB new + selector unrelated => fail closed",
+        "DB and selector both rolled back together => declared outer-failure-domain limitation"
+      ]
+    },
+    "StateWitness":{
+      "fields":["selected_head_hash","frank_state_commitment","semantic_content_root","unified_epoch","materialization_pair_digest","actual_unified_schema_fingerprint","graph_epoch","graph_source_semantic_root","graph_projection_root","query_or_candidate_universe_hash"],
+      "rule":"model/GWT/Needle/effect-relevant reads carry a witness describing exactly which state produced the result",
+      "use_policy":"observation may expose explicitly stale witness; authoritative mutation/effect reservation must revalidate/rebase witness against current selected head before effectful use"
+    },
+    "GraphProjectionWitness":{
+      "fields":["source_selected_head","source_semantic_root","source_unified_epoch","derivation_program_hash","graph_projection_root","graph_epoch","status"],
+      "rule":"same numeric epoch is insufficient; current graph must be derived from the exact selected semantic root/head",
+      "rebuild":"same source root + same derivation program must reproduce the same deterministic graph projection root for deterministic surfaces"
+    },
+    "SelectionWitness":{
+      "fields":["state_witness","candidate_universe_hash","selection_policy_hash","ordered_result_refs_hash","scorer/model identities","admissibility receipt"],
+      "rule":"retrieval rank/activation/salience is evidence about selection only and never mints truth or effect authority"
+    },
+    "StorageSafetyGate":{
+      "wal":"allow only when exact runtime build is proven fixed/backported or topology mechanically excludes the vulnerable race",
+      "rollback_journal":"DELETE + synchronous FULL remains fail-closed fallback candidate",
+      "cross_file_migration_candidate":"when rollback-journal mode is deliberately used, evaluate ATTACH + single transaction/super-journal for atomic UnifiedDB+ClayGraph schema transition; do not assume equivalent atomicity in WAL"
+    },
+    "ReplayAudit":{
+      "fast_path":"append-only/delta receipts + hierarchical dirty-root update",
+      "audit_path":"periodic full semantic commitment recomputation + deterministic replay from checkpoint/event cursor",
+      "acceptance":"replayed commitment must equal published commitment; mismatch quarantines state"
+    }
+  },
+  "invariants":[
+    "schema certificate metadata != actual materialization attestation",
+    "unified_epoch equality != semantic state identity",
+    "graph epoch/current != graph source-root correctness",
+    "semantic root/hash != SELF or effect authority",
+    "query result without state witness cannot authorize a later mutation/effect after state turnover",
+    "root/publication metadata cannot recursively define the root it records",
+    "every authoritative write is bound to exact current execution generation and selected semantic lineage",
+    "derived projections are rebuildable and never outrank UnifiedDB published semantic state",
+    "negative results and rollback-domain limitations remain explicit"
+  ],
+  "promotion":"HOLD_TARGET_VPS_AND_INTEGRATION_FALSIFIERS_REQUIRED"
+}

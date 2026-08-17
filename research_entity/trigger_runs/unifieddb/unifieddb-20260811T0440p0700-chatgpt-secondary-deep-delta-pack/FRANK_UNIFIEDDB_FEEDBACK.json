@@ -1,0 +1,47 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "program_target":"FRANK_V0_1",
+  "work_package_impacts":[
+    {
+      "work_package":"F-V01-01-IDENTITY-SERVER-BINARY",
+      "impact":"semantic root constructor must compose with one selected continuation head; root bytes alone are not identity or continuation authority",
+      "new_tests":["same-source same-epoch sibling state with different roots","controlled restore produces new child head","publication receipt self-reference firebreak"]
+    },
+    {
+      "work_package":"F-V01-04-UNIFIEDDB-STATE-CONTINUITY",
+      "impact":"primary owner; adds actual materialization attestation, hierarchical commitments, publication barrier, state witnesses, replay audit",
+      "status_effect":"REMAINS_OPEN_HOLD",
+      "reason":"new local falsifiers expose metadata-only schema attestation and epoch-only graph binding gaps; target integration unexecuted"
+    },
+    {
+      "work_package":"F-V01-05-GWT-HYPERPOSITION-TOPOLOGY",
+      "impact":"current graph/GWT results require exact source semantic-root/head witness and selection witness; numeric epoch/current flag alone is insufficient"
+    },
+    {
+      "work_package":"F-V01-08-TOKEN-API-CLIENTS",
+      "impact":"request response/replay should retain originating StateWitness so retries/reconstruction cannot silently adopt a later state generation"
+    },
+    {
+      "work_package":"F-V01-09-EFFECT-AUTHORITY",
+      "impact":"do not rebuild the already-supported execution-generation effect fence; add current selected-state witness revalidation at reservation/precommit as a conjunct, never a replacement for effect authority"
+    },
+    {
+      "work_package":"F-V01-11-MEMORY-REWARD-GOALS",
+      "impact":"learning/reward deltas need state-root witness continuity in addition to verified outcome + causal credit so stale-state evidence cannot update a later unrelated state silently"
+    },
+    {
+      "work_package":"F-V01-13-SECURITY-RECOVERY-OBSERVABILITY",
+      "impact":"storage WAL adjudication remains independent; publication crash windows, full commitment audits, external selector/floor survival assumptions become explicit recovery checks"
+    },
+    {
+      "work_package":"F-V01-16-END-TO-END-ACCEPTANCE",
+      "impact":"terminal UnifiedDB acceptance must include exact actual-schema attestation, published semantic commitment, graph source-root validity, witness TOCTOU controls, crash/restart/replay equivalence and resource budget"
+    }
+  ],
+  "architecture_delta_candidate":"UDB-D11..UDB-D22 deep delta pack",
+  "strongest_counterhypothesis":"The added hierarchy/witness/publication machinery may cost more complexity and latency than its failure classes justify. Promotion therefore requires differential target evidence against the simplest composed alternative: PR286 actual-schema attestation + PR289 full root + existing selected-head CAS, without incremental/witness extras.",
+  "rollback":"all new mechanisms shadow-first; existing verified target paths remain last-known-good until each discriminator passes",
+  "promotion":"CANDIDATE_TESTING_REQUIRED",
+  "status":"COMPLETE"
+}

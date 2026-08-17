@@ -1,0 +1,75 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "policy":"SHADOW_FIRST_REVERSIBLE_NO_CANONICAL_MUTATION_FROM_THIS_RUN",
+  "phases":[
+    {
+      "phase":"M0-FRESH-COMPOSE",
+      "action":"rebase/compose on the selected current state-loader lane rather than merging competing PR286/289 edits independently",
+      "acceptance":["fresh-main ancestry","no duplicate selected-head or effect-fence architecture","current target evidence preserved"],
+      "rollback":"close/supersede stale stack without merge"
+    },
+    {
+      "phase":"M1-ACTUAL-MATERIALIZATION-ATTEST",
+      "action":"extend materialization certificate with role-specific actual sqlite_schema fingerprint in addition to executable migration-chain digest",
+      "acceptance":["actual DDL drift with unchanged metadata rejected","metadata tamper rejected","fresh create and upgrade produce accepted fingerprints","repair/re-migration restores exact current fingerprint"],
+      "rollback":"retain current metadata-only certificate with narrowed claim; promotion stays HOLD"
+    },
+    {
+      "phase":"M2-ROOT-DOMAIN-REGISTRY",
+      "action":"classify every persistent table/object into a typed root domain; publication/root metadata gets explicit self-reference firebreak",
+      "acceptance":["100% persistent-table classification","unknown table fails closed","root receipt cannot change the content root merely by recording that root"],
+      "rollback":"disable hierarchical publication; PR289 full-root remains evidence-only"
+    },
+    {
+      "phase":"M3-HIERARCHICAL-COMMITMENT-SHADOW",
+      "action":"compute table/domain roots beside existing full semantic root; transaction-bound dirty tracking recomputes only touched leaves",
+      "acceptance":["incremental commitment == full recomputation across randomized mutations","crash/restart preserves or reconstructs leaf roots","periodic full audit detects injected stale/tampered cache roots","resource shadow beats or justifies full-root hot path"],
+      "rollback":"discard cached leaf roots and recompute full root"
+    },
+    {
+      "phase":"M4-GRAPH-SOURCE-ROOT-BINDING",
+      "action":"add source_selected_head, source_semantic_root and graph_projection_root to graph materialization/projection receipts",
+      "acceptance":["same-epoch sibling-root graph rejected","same source root + same deterministic derivation reproduces same graph projection root","activation/salience changes do not become truth authority"],
+      "rollback":"quarantine graph and rebuild; UnifiedDB remains authoritative"
+    },
+    {
+      "phase":"M5-STATE-WITNESS-EMIT-ONLY",
+      "action":"attach StateWitness and SelectionWitness to queries, assemblies, GWT candidates and tool/effect proposals without enforcing yet",
+      "acceptance":["witness fields complete","no mixed partial epoch/root","state turnover between read and use is observable"],
+      "rollback":"ignore witness for behavior while retaining diagnostics"
+    },
+    {
+      "phase":"M6-STATE-WITNESS-ENFORCEMENT",
+      "action":"require current selected-head witness at authoritative mutation/effect reservation/precommit boundaries; allow explicitly stale read-only observations",
+      "acceptance":["TOCTOU state-turnover falsifiers rejected before mutation/effect","rebase path produces a new selection witness rather than silently reusing old result"],
+      "rollback":"enforcement off; diagnostics remain"
+    },
+    {
+      "phase":"M7-PUBLICATION-BARRIER",
+      "action":"integrate DB PREPARED -> external selected-head CAS -> DB PUBLISHED state machine with existing selected-head/recovery candidates",
+      "acceptance":["crash at every transition","old DB/new selector fail closed","new DB/old selector deterministically resumes or rolls forward","controlled restore creates new continuation child","both-domain rollback limitation explicit"],
+      "rollback":"no state becomes runnable unless old selected head remains exact; quarantine prepared candidate"
+    },
+    {
+      "phase":"M8-STORAGE-MIGRATION-CHOICE",
+      "action":"compare KEEP_ISOLATED pair certificate against deliberate rollback-journal ATTACH multi-db schema migration for migration windows; separately adjudicate fixed WAL runtime path",
+      "acceptance":["target SQLite exact build/source-id proven","power/process crash matrix","no hidden mode-switch regression","p50/p95/p99 and write/read amplification measured"],
+      "rollback":"DELETE+FULL fail-closed fallback or prior verified storage mode"
+    },
+    {
+      "phase":"M9-TARGET-REPLAY-RECOVERY",
+      "action":"accepted VPS full checkpoint/replay/restore matrix with periodic full commitment audit",
+      "acceptance":["replay commitment equivalence","snapshot lineage/head equivalence","ClayGraph deterministic rebuild where declared","RSS/CPU/storage I/O/checkpoint latency measured","last-known-good rollback verified"],
+      "rollback":"quarantine candidate and restore verified last-known-good"
+    },
+    {
+      "phase":"M10-PROMOTION",
+      "action":"only after fresh-main target evidence update Frank v0.1 workspace and terminal UnifiedDB receipt",
+      "acceptance":["no simpler candidate dominates on correctness/recovery/resources","all known P0/P1 UnifiedDB continuity blockers closed"],
+      "rollback":"reopen F-V01-04 and restore last-known-good"
+    }
+  ],
+  "explicit_keep_isolated":["external continuation selector","execution-generation floor","ClayGraph derived physical store when measured benefits justify it","large model/tensor backing"],
+  "promotion":"HOLD"
+}

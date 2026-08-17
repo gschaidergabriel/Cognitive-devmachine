@@ -1,0 +1,72 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "stores":[
+    {
+      "store":"FRANK_UNIFIED.sqlite / UnifiedDB",
+      "physical_disposition":"PRIMARY_SQLITE_CANDIDATE",
+      "semantic_role":"AUTHORITATIVE_TYPED_STATE_AND_EVENT_PLANE",
+      "authority":"canonical semantic state only after publication/continuity gates",
+      "must_bind":["semantic content commitment","selected lineage head","execution generation on writes","provenance","schema materialization attestation"],
+      "rollback":"fail closed against surviving external continuation/recovery authority"
+    },
+    {
+      "store":"FRANK_CLAYGRAPH.sqlite / ClayGraph",
+      "physical_disposition":"KEEP_ISOLATED_DERIVED_SIDECAR",
+      "semantic_role":"DERIVED_REBUILDABLE_TOPOLOGY_AND_ACTIVATION",
+      "authority":"NONE_BY_ACTIVATION_OR_RANK",
+      "must_bind":["source semantic root/head","derivation program hash","graph projection root","graph epoch","materialization state"],
+      "rollback":"quarantine/rebuild from selected UnifiedDB state"
+    },
+    {
+      "store":"external selected semantic-head / continuation selector",
+      "physical_disposition":"KEEP_ISOLATED_OUTSIDE_PROTECTED_UNIFIEDDB_ROLLBACK_DOMAIN",
+      "semantic_role":"CONTINUATION_SELECTION_AND_ROLLBACK_DISCRIMINATOR",
+      "authority":"continuation gate only; never SELF/effect/user authority",
+      "must_bind":["parent selected head","new semantic root","source/build identity conjuncts where required"],
+      "rollback":"if rolled back together with protected state, declared failure-domain limitation remains"
+    },
+    {
+      "store":"external execution-generation recovery floor",
+      "physical_disposition":"KEEP_ISOLATED_OUTSIDE_UNIFIEDDB_SNAPSHOT_DOMAIN",
+      "semantic_role":"EXECUTION_GENERATION_HIGH_WATER_MARK",
+      "authority":"recovery/fencing evidence only",
+      "must_bind":["generation","anchor instance","durability receipt"],
+      "rollback":"missing/ahead/behind mismatch => fail closed"
+    },
+    {
+      "store":"vector/FTS/embedding indexes",
+      "physical_disposition":"DERIVED_OR_SIDECAR",
+      "semantic_role":"RETRIEVAL_ACCELERATION",
+      "authority":"rank is not truth",
+      "must_bind":["source semantic root/head","index model/version","build receipt"],
+      "rollback":"discard/rebuild"
+    },
+    {
+      "store":"model weights/KV/tensor backing",
+      "physical_disposition":"KEEP_ISOLATED_PHYSICAL_BACKING",
+      "semantic_role":"MODEL_RUNTIME_STATE",
+      "authority":"no semantic truth/effect authority by presence",
+      "must_bind":["model revision/hash","runtime configuration","admitted semantic boundary"],
+      "rollback":"model/runtime-specific"
+    },
+    {
+      "store":"materialization certificate metadata",
+      "physical_disposition":"IN_DB_METADATA",
+      "semantic_role":"DECLARED_MIGRATION_PAIR_COMPATIBILITY",
+      "authority":"insufficient alone",
+      "must_bind":["migration-chain digest","actual sqlite_schema fingerprint","role","pair digest","state CURRENT/UPDATING"],
+      "negative_result":"stored expected digest strings without actual schema recomputation do not attest physical logical schema"
+    },
+    {
+      "store":"root/publication metadata",
+      "physical_disposition":"SEPARATE_HASH_DOMAIN_OR_EXCLUDED_SYSTEM_TABLES",
+      "semantic_role":"COMMITMENT_AND_PUBLICATION_RECEIPTS",
+      "authority":"evidence/continuation input only",
+      "must_bind":["parent commitment","new content root","transaction id","execution binding","publication state"],
+      "negative_result":"including the root receipt inside its own content-hash domain creates self-reference instability"
+    }
+  ],
+  "global_rule":"logical semantic unification does not require one physical engine; physical isolation remains valid when it reduces rollback/common-mode risk or preserves rebuildable semantics",
+  "status":"COMPLETE"
+}

@@ -1,0 +1,86 @@
+{
+  "schema_version":"1.0",
+  "run_id":"unifieddb-20260811T0440p0700-chatgpt-secondary-deep-delta-pack",
+  "evidence_class":"LOCAL_SYNTHETIC_MECHANISM_ONLY",
+  "target_vps_replication_required":true,
+  "experiments":[
+    {
+      "id":"E1-ACTUAL-SCHEMA-DRIFT",
+      "question":"Can metadata-only pair certification detect actual sqlite_schema drift if certificate rows are untouched?",
+      "baseline":{"metadata_gate_before":true,"actual_schema_fingerprint_before":true},
+      "intervention":"CREATE TABLE unauthorized_drift(x TEXT) while preserving certificate metadata",
+      "result":{"metadata_gate_after":true,"actual_schema_fingerprint_match_after":false},
+      "classification":"NEGATIVE_RESULT_METADATA_ONLY_ATTESTATION_BYPASS_REPRODUCED",
+      "architecture_delta":"recompute and compare actual role-specific sqlite_schema fingerprint on open/publish"
+    },
+    {
+      "id":"E2-SAME-EPOCH-SIBLING-ROOT",
+      "question":"Is numeric unified_epoch sufficient to bind ClayGraph to authoritative semantic state?",
+      "baseline":{"unified_epoch":7,"semantic_root":"R1","graph_source_epoch":7,"graph_source_root":"R1","epoch_gate":true,"root_gate":true},
+      "intervention":"replace authoritative state with sibling R2 retaining numeric epoch 7",
+      "result":{"epoch_gate":true,"root_gate":false},
+      "classification":"NEGATIVE_RESULT_EPOCH_ONLY_BINDING_UNDERCONSTRAINED",
+      "architecture_delta":"graph materialization/projection receipts bind exact source semantic root and selected head"
+    },
+    {
+      "id":"E3-ROLLBACK-JOURNAL-ATTACH-CRASH",
+      "question":"Does one attached rollback-journal transaction behave as an atomic two-file unit in a local crash-before-commit proxy?",
+      "configuration":{"journal_mode":"DELETE","synchronous":"FULL","db_count":2},
+      "intervention":"child updates both attached DBs then os._exit(73) before COMMIT",
+      "result":{"after_crash_values":[0,0],"after_normal_commit_values":[2,2]},
+      "classification":"LOCAL_SUPPORT_FOR_MULTI_DB_ROLLBACK_JOURNAL_MIGRATION_CANDIDATE",
+      "nonclaim":"not power-loss/target-VPS proof; official SQLite multi-db transaction contract is primary design evidence"
+    },
+    {
+      "id":"E4-FULL-ROOT-SCALING",
+      "question":"How does a PR289-style full logical-row root scale in a local Python proxy?",
+      "samples":[
+        {"rows":1000,"elapsed_ms":8.964,"peak_python_bytes":78595},
+        {"rows":10000,"elapsed_ms":88.96,"peak_python_bytes":775625},
+        {"rows":100000,"elapsed_ms":1069.282,"peak_python_bytes":7701290}
+      ],
+      "classification":"PERFORMANCE_SHADOW_FULL_REHASH_COST_GROWS_WITH_STATE_SIZE",
+      "nonclaim":"not target-VPS latency; cache/environment sensitive"
+    },
+    {
+      "id":"E5-COMMIT-VERSUS-FULL-ROOT",
+      "rows":100000,
+      "result":{"ordinary_one_row_commit_median_us":1956.9,"warm_full_root_median_ms":213.836,"ratio_full_root_to_commit":109.27},
+      "classification":"NEGATIVE_RESULT_FULL_ROOT_EVERY_WRITE_NOT_DEFAULT_HOT_PATH_CANDIDATE",
+      "nonclaim":"local proxy only"
+    },
+    {
+      "id":"E6-HIERARCHICAL-DIRTY-TABLE-ROOT",
+      "dataset":{"tables":50,"rows_per_table":2000,"total_rows":100000},
+      "result":{"initial_full_ms":177.412,"after_one_row_mutation_dirty_table_plus_combine_ms":3.726,"after_mutation_full_ms":175.13,"speedup":47.0,"incremental_equals_full":true},
+      "classification":"SUPPORTS_HIERARCHICAL_INCREMENTAL_COMMITMENT_CANDIDATE",
+      "required_control":"periodic/full audit and transaction-bound dirty tracking; cached roots are not independently authoritative"
+    },
+    {
+      "id":"E7-PUBLICATION-BARRIER-CRASH-WINDOWS",
+      "mechanism":"content root excludes publication metadata; DB PREPARED receipt then external selected-head CAS then DB PUBLISHED",
+      "observed_cases":[
+        "DB PREPARED + selector parent + DB root new => recover by advancing selector",
+        "DB PREPARED + selector new => recover by finalizing PUBLISHED",
+        "old DB rollback + selector new => detected/fail closed",
+        "final published root matches selector commitment"
+      ],
+      "classification":"SUPPORTS_RECOVERABLE_PUBLICATION_BARRIER_STATE_MACHINE",
+      "nonclaim":"outer failure domain where state and selector roll back together remains unsolved"
+    },
+    {
+      "id":"E8-ROOT-SELF-REFERENCE",
+      "question":"Can the root receipt be stored inside the same content domain being hashed without special treatment?",
+      "result":{"root_before":"49790fe4...","root_after_persisting_root_inside_hashed_content":"0247951d...","stable":false},
+      "classification":"NEGATIVE_RESULT_RECURSIVE_ROOT_METADATA",
+      "architecture_delta":"separate/exclude ROOT_PUBLICATION_META from content root and bind it one layer above"
+    }
+  ],
+  "summary":{
+    "new_negative_results":4,
+    "supported_candidate_mechanisms":4,
+    "promotion":"NONE_LOCAL_ONLY",
+    "highest_value_next_tests":["actual schema attestation on PR286 successor","hierarchical commitment differential against PR289 full root","source-root-bound ClayGraph rebuild","publication crash/restart matrix on accepted target"]
+  },
+  "status":"COMPLETE"
+}

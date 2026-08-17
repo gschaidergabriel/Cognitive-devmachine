@@ -1,5 +1,5 @@
 {
-  "schema": "clayverse.source-slice-receipt/v1",
+  "schema": "clayverse.source-slice-receipt/v2",
   "trigger": "go",
   "trigger_time_local": "2026-08-17T15:02:00+07:00",
   "organ": "gpt-5.6-sol-chatgpt-project-organ",
@@ -7,27 +7,37 @@
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "rejoin_main": "7ba2a384ac3710a568b6f3165e938b5dc00cdae3",
-  "latest_main_observed_before_evidence_update": "94b3d9b9646b658201156b6d3ddb9eeef5c966fd",
-  "latest_main_delta_from_rejoin": "receipt-only, no overlap with recovery/test paths",
+  "latest_main_observed_before_evidence_update": "c4eb17d034f3451b44ab505c5d02593a414ca641",
+  "latest_main_delta_from_rejoin": "five commits; only receipts plus test_single_container_entityos_boundary.py changed; no overlap with the recovery/lifecycle/effect/retrieval source paths executed here",
   "branch": "go/recovery-preflight-receipt-fusion-current-20260817-sol",
-  "code_head_before_receipt": "8a1478ecbc2bc5c789b50d21ec18db91461232e7",
+  "code_head_before_receipt_update": "8c8293279139322f0b8ed305b781b92e229d9cd1",
   "source": {
     "recovery_blob": "a7aecd25573c5827470310f8389e6efdca12d14f",
-    "focused_test_blob": "463ec1c9404d02e884a6933871a373303fb2571f",
-    "restart_test_blob": "b9c21818485f9aaeea693441dcf23e832d1417fc",
-    "receipt_identity_test_blob": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
-    "effect_journal_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
     "store_blob": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
     "identity_blob": "c3b8ecba0942c722d08efbf03e57d71c3a4f5cf3",
     "workspace_blob": "2f3142a4f7695fa58521b27321e9759d314dd736",
+    "effect_journal_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "effects_blob": "a9fbb88dbbae258680e6ed5e968bd502d5638d40",
+    "entityos_bridge_blob": "23441f3276d73e15ec0e32bbe8929534d131054f",
+    "turn_lifecycle_blob": "c484b9088d9f838e350a146c991e998c84e80332",
+    "memory_blob": "84e82ddde8a896ac0049840bf87d51e860d62d0b",
+    "retrieval_blob": "48b388be5ab0f7b5543d70f72e511dc3f740f6e4",
+    "microclay_retrieval_blob": "7fc7c7cdadf7bc606c091b977169051e9d767dd0",
+    "graph_blob": "d09bda21eabc04ad149ece4b1474b41119449363",
+    "hyperposition_blob": "bced03612a39f109b61f48f18a92e758025d4e34",
+    "needle_blob": "41a17c38b2afadab43306c782b5503be7ab96d64",
+    "focused_preflight_test_blob": "463ec1c9404d02e884a6933871a373303fb2571f",
+    "restart_test_blob": "b9c21818485f9aaeea693441dcf23e832d1417fc",
+    "receipt_identity_test_blob": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
+    "global_generation_test_blob": "2b278e10a5eabdaecd1c09b41a8557af2ac63f0d",
+    "effect_replay_restart_test_blob": "c9517cb717b01e6a1caae0eaa5030b58977cde40",
     "base_recovery_blob": "66540a9d2d20860fed015033da8013965ef830be",
-    "delta": "read-only active causal-spine preflight before recover_pending; re-check at mutation transaction boundary; exact active causal_id lookup; preserve merged redacted-outcome identity and zero-credit reconstruction semantics"
+    "delta": "read-only active causal-spine preflight before recover_pending; re-check at mutation transaction boundary; exact active causal_id lookup; preserve merged redacted-outcome identity and zero-credit reconstruction semantics; align one stale adjacent replay-test message expectation with the stronger current persisted-effect fence"
   },
   "execution": {
     "surface": "OpenAI isolated non-production container",
     "network_used": false,
     "all_listed_source_and_test_blobs_verified_with_git_hash_object": true,
-    "py_compile_recovery_exit": 0,
     "focused_exact_source_mechanism_probe": {
       "results": [
         "PASS_FOREIGN_CAUSAL_PRE_MUTATION calls=0",
@@ -36,33 +46,41 @@
       ],
       "classification": "EXACT_SOURCE_MECHANISM_PASS"
     },
-    "exact_current_recovery_source_slice_pytest": {
+    "first_expanded_slice_run": {
+      "passed": 16,
+      "failed": 1,
+      "exit_code": 1,
+      "failure": "test_effect_journal_denies_second_effect_for_same_episode_before_execution expected legacy error text 'automatic replay denied'; current TurnLifecycle correctly rejected before EffectGate with 'different effect already persisted for active turn'",
+      "classification": "STALE_TEST_EXPECTATION_NOT_PRODUCT_SAFETY_FAILURE"
+    },
+    "repair": {
+      "product_code_changed": false,
+      "test_only": true,
+      "effect_replay_restart_test_blob_after_repair": "c9517cb717b01e6a1caae0eaa5030b58977cde40",
+      "preserved_invariant": "a second different effect for the same episode is denied before EffectGate/execution and only the original VERIFIED effect remains"
+    },
+    "exact_current_recovery_lifecycle_source_slice_pytest": {
       "command_scope": [
         "the artefact/tests/test_recovery_causal_preflight.py",
         "the artefact/tests/test_restart_recovery.py",
-        "the artefact/tests/test_recovery_effect_receipt_identity.py"
+        "the artefact/tests/test_recovery_effect_receipt_identity.py",
+        "the artefact/tests/test_global_entity_generation.py",
+        "the artefact/tests/test_effect_replay_restart_fusion.py"
       ],
-      "real_dependencies": [
-        "clayverse/store.py",
-        "clayverse/identity.py",
-        "clayverse/workspace.py",
-        "clayverse/effect_journal.py",
-        "clayverse/recovery.py"
-      ],
-      "passed": 11,
+      "passed": 17,
       "failed": 0,
       "exit_code": 0,
-      "elapsed_seconds_reported_by_pytest": 0.33,
-      "classification": "EXACT_CURRENT_RECOVERY_SOURCE_SLICE_PASS"
+      "elapsed_seconds_reported_by_pytest": 0.72,
+      "classification": "EXACT_CURRENT_RECOVERY_LIFECYCLE_EFFECT_MICROCLAY_SOURCE_SLICE_PASS"
     },
     "full_branch_checkout_pytest_executed": false,
     "oci_build_executed": false,
     "packaged_runtime_restart_executed": false
   },
   "github_actions": {
-    "head": "7a9a351ac7fb8651f58ab18315bbc13ddaf22382",
-    "workflow_run": 32009806790,
-    "job": 95326775622,
+    "head": "4d54c21257b1de1ea7aa201bf051014708214bb0",
+    "workflow_run": 32010077529,
+    "job": 95327590380,
     "runner_id": 0,
     "steps": 0,
     "conclusion": "failure",
@@ -71,11 +89,15 @@
   "coordination": {
     "unusual_experiment_added_by_this_fusion": 0,
     "single_go_unusual_experiment": "recovery_receipt_semantic_forgery_discriminator",
-    "further_unusual_experiments_forbidden": true
+    "further_unusual_experiments_forbidden": true,
+    "retained_current_recovery_lane": 562,
+    "closed_duplicate_donors": [444, 486, 503, 473],
+    "merged_canonical_input": 552
   },
   "execution_admission": {
     "vercel_git_preview_sandbox_bridge": "CONFIRMED_HISTORICALLY_IN_CURRENT_GO",
     "current_fresh_vercel_preview": "BLOCKED_BY_FREE_DAILY_DEPLOYMENT_CAP",
+    "github_actions_current_behavior": "RUNNER_OR_PRE_STEP_ADMISSION_FAILURE_ZERO_TEST_CREDIT",
     "vps_testing": "FORBIDDEN",
     "self_hosted_testing": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN",
@@ -83,16 +105,11 @@
   },
   "claims": {
     "preflight_source_mechanism_supported": true,
-    "exact_current_recovery_source_slice_pass": true,
+    "exact_current_recovery_lifecycle_effect_microclay_source_slice_pass": true,
     "full_branch_pass": false,
     "exact_oci_pass": false,
     "whole_clayverse_pass": false
   },
-  "supersession": {
-    "retained_current_lane": 562,
-    "closed_donors": [444, 486, 503, 473],
-    "merged_canonical_input": 552
-  },
-  "next_gate": "On the next actually-started authorized isolated current-source batch, run this exact fusion in a full checkout with adjacent EffectGate/TurnLifecycle active-turn fencing, global generation and MicroClay effect-learning regressions; if green, continue into exact OCI build/start/readiness/restart/concurrency acceptance.",
-  "evidence_scope": "EXACT_CURRENT_RECOVERY_SOURCE_SLICE_PASS_NOT_FULL_BRANCH_OR_OCI"
+  "next_gate": "Use the next actually-started authorized isolated full-checkout execution to run the broader ClayVerse regression on the then-current PR/main ancestry, then exact OCI build/image identity/start/readiness, packaged restart/recovery, dual-session concurrency/stale-generation, Clerk/PTY/Claude hook lifecycle, effect boundaries and MicroClay learning gates. Do not substitute VPS/self-hosted/production execution.",
+  "evidence_scope": "EXACT_CURRENT_RECOVERY_LIFECYCLE_EFFECT_MICROCLAY_SOURCE_SLICE_PASS_NOT_FULL_BRANCH_OR_OCI"
 }

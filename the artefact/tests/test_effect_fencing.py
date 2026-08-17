@@ -76,7 +76,7 @@ def test_effect_journal_persists_hash_receipts_not_raw_payloads(tmp_path):
     assert len(outcome_receipt['sha256'])==64 and 'stdout' not in outcome_receipt and 'stderr' not in outcome_receipt
     db.close()
 
-def test_completion_rechecks_auto_lease_and_records_stale_outcome(tmp_path):
+def test_completion_rechecks_auto_lease_and_records_stale_outcome_without_reentry(tmp_path):
     db,uid,sid=setup_db(tmp_path)
     def run(argv):
         db.db.execute("UPDATE leases SET generation=generation+1,nonce='replaced' WHERE resource='effect:entityos.exec'")
@@ -84,7 +84,7 @@ def test_completion_rechecks_auto_lease_and_records_stale_outcome(tmp_path):
     with pytest.raises(StaleGeneration): EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
     effect=db.db.execute('SELECT effect_id,status,outcome FROM effects').fetchone(); persisted=json.loads(effect['outcome'])
     assert effect['status']=='STALE_OUTCOME' and 'did-it' not in effect['outcome'] and persisted['audit']=='redacted-outcome-v1' and persisted['ok'] is True
-    causal=db.db.execute('SELECT credit,reentered,outcome_hash FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone(); assert causal['credit']==0.0 and causal['reentered']==1 and len(causal['outcome_hash'])==64; db.close()
+    causal=db.db.execute('SELECT credit,reentered,outcome_hash FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone(); assert causal['credit']==0.0 and causal['reentered']==0 and len(causal['outcome_hash'])==64; db.close()
 
 def test_generation_change_during_entityos_effect_is_stale_not_verified(tmp_path):
     db,uid,sid=setup_db(tmp_path)
@@ -93,14 +93,14 @@ def test_generation_change_during_entityos_effect_is_stale_not_verified(tmp_path
         return {'ok':True,'exit':0,'stdout':'did-it','stderr':''}
     with pytest.raises(StaleGeneration): EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
     effect=db.db.execute('SELECT effect_id,status,outcome FROM effects').fetchone(); assert effect['status']=='STALE_OUTCOME' and 'did-it' not in effect['outcome']
-    assert db.db.execute('SELECT credit FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]==0.0; db.close()
+    causal=db.db.execute('SELECT credit,reentered FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone(); assert tuple(causal)==(0.0,0); db.close()
 
-def test_failed_entityos_attempt_is_receipted(tmp_path):
+def test_failed_entityos_attempt_is_receipted_without_reentry(tmp_path):
     db,uid,sid=setup_db(tmp_path)
     def run(argv): raise EntityOSIntegrityError('digest mismatch')
     with pytest.raises(EntityOSIntegrityError): EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',['hello']))
     effect=db.db.execute('SELECT effect_id,status,outcome FROM effects').fetchone(); assert effect['status']=='FAILED' and 'EntityOSIntegrityError' in effect['outcome']
-    assert db.db.execute('SELECT credit FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone()[0]==0.0; db.close()
+    causal=db.db.execute('SELECT credit,reentered FROM causal_episodes WHERE effect_id=?',(effect['effect_id'],)).fetchone(); assert tuple(causal)==(0.0,0); db.close()
 
 def test_second_effect_gate_does_not_recover_another_live_pending_effect(tmp_path):
     p=tmp_path/'unified.db'; db1,uid,sid=setup_db(tmp_path); eid=EffectGate(db1).journal.begin(None,sid,uid,'state.noop','x',db1.session_generation(sid))
@@ -108,10 +108,10 @@ def test_second_effect_gate_does_not_recover_another_live_pending_effect(tmp_pat
     assert db2.db.execute('SELECT status FROM effects WHERE effect_id=?',(eid,)).fetchone()[0]=='PENDING'
     db2.close(); db1.close()
 
-def test_explicit_restart_recovery_reenters_pending_as_unknown(tmp_path):
+def test_explicit_restart_recovery_marks_pending_unknown_without_reentry(tmp_path):
     p=tmp_path/'unified.db'; db,uid,sid=setup_db(tmp_path); eid=EffectGate(db).journal.begin(None,sid,uid,'state.noop','x',db.session_generation(sid)); db.close()
     db=UnifiedDB(p); recover_incomplete_episodes(db); effect=db.db.execute('SELECT status,outcome FROM effects WHERE effect_id=?',(eid,)).fetchone(); assert effect['status']=='UNKNOWN_AFTER_RESTART' and 'restart_before_verified_outcome' in effect['outcome']
-    assert db.db.execute('SELECT credit FROM causal_episodes WHERE effect_id=?',(eid,)).fetchone()[0]==0.0; db.close()
+    causal=db.db.execute('SELECT credit,reentered FROM causal_episodes WHERE effect_id=?',(eid,)).fetchone(); assert tuple(causal)==(0.0,0); db.close()
 
 def test_direct_host_process_remains_forbidden(tmp_path):
     db,uid,sid=setup_db(tmp_path)

@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse-go-source-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:59:20+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "169c308c39cf6fa075ed7b69c69d2c674e5e0691",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image from main/the artefact/",
+  "classification": "SOURCE_CANDIDATE_PROMOTION_AUTHORITY_FENCE_EXECUTION_ADMISSION_BLOCKED",
+  "whole_product_pass": false,
+  "integration": {
+    "draft_pr": 470,
+    "branch": "go/stageb-promotion-authority-fence-20260817-1342",
+    "branch_head_before_receipt": "ae65d1bae768810f0cc197803e572cd0e4f3ccb5",
+    "stacked_base_pr": 423,
+    "stacked_base_head": "f5a897cc61ae96ef063b4e6f2db79ae8e11490da",
+    "latest_base_rejoined": true,
+    "pr_mergeable_after_rejoin": true,
+    "current_main_directly_merged": false,
+    "current_main_divergence_note": "The Stage-B stack remains a donor/fusion lane rather than a current-main product head; current main advanced independently across Clerk/PTY/supply-chain work. Do not infer current-main runtime integration from this source candidate."
+  },
+  "defects_observed": [
+    "Stage-B donor UnifiedDB generic add_memory allowed reserved method-memory kinds to bypass the intended MethodMemoryManager admission boundary.",
+    "Promotion accepted source workspace episode existence without requiring terminal state, causal re-entry, same user, or a single canonical user session.",
+    "Promoted-method validity was not rechecked against candidate/receipt/source-evidence lineage on database reopen."
+  ],
+  "repair": {
+    "unifieddb_reserved_kind_fence": "All canonical method-memory kinds are reserved at UnifiedDB; generic writes reject them.",
+    "sqlite_admission_capability": "A one-shot thread-bound content-bound authorization is consumed by one deterministic INSERT trigger before strict method validation.",
+    "immutability": "Method-memory rows cannot be UPDATEd or DELETEd through normal UnifiedDB trigger-protected access.",
+    "startup_validation": "Persisted method rows are schema-validated; promoted framework/heuristic rows must retain valid candidate and PROMOTE-receipt lineage.",
+    "promotion_source_gate": "Every source episode must exist, be COMPLETED or ABORTED, have causal_episodes.reentered=1, belong to the candidate user, and share one canonical user session.",
+    "evidence_scope_gate": "Referenced evidence must exist and respect user scope; supporting evidence cannot recursively be method memory; counterexample references must be negative-method kinds.",
+    "receipt_binding": "Promoted source/support/counterexample sets must match the PROMOTE receipt and source candidate lineage.",
+    "epistemic_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+    "truth_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "regression_obligations": [
+    "generic reserved-kind add_memory rejects method writes",
+    "raw SQL method insertion without canonical write capability rejects",
+    "manager admission succeeds only through the canonical write path",
+    "method rows reject update/delete",
+    "OPEN source episode cannot promote",
+    "terminal but non-reentered source episode cannot promote",
+    "cross-user source episode cannot promote",
+    "missing source episode rolls promotion back atomically",
+    "broken promotion receipt lineage is rejected on UnifiedDB reopen",
+    "latest #423 structural-signature grammar and active-turn identity regressions are preserved",
+    "successful Stage-B fixtures use terminal causally re-entered source episodes"
+  ],
+  "execution": {
+    "exact_head_checked": "ae65d1bae768810f0cc197803e572cd0e4f3ccb5",
+    "github_workflow_run_id": 32003819668,
+    "github_job_id": 95309196473,
+    "github_job_name": "identity-guard",
+    "github_job_conclusion": "failure",
+    "github_visible_steps": [],
+    "classification": "JOB_NOT_STARTED_EXECUTION_ADMISSION_FAILURE_NOT_PRODUCT_TEST_FAILURE",
+    "exact_branch_regression_suite_executed": false,
+    "exact_oci_build_executed": false,
+    "exact_container_runtime_executed": false,
+    "connected_vercel_direct_sandbox_start_exec_available": false,
+    "current_main_parallel_vercel_preview_observation": "indirect Git preview bridge discovered by parallel work but currently reported rate-limit blocked",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "unusual_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier was exposed and the exact user-message timestamp available to this organ had only minute precision for lease identity; the current atomic GO protocol therefore forbids claiming a new unusual experiment.",
+    "unusual_experiment_executed": false
+  },
+  "strongest_counterhypothesis": "The source-level admission capability and promotion-lineage checks may fail under exact SQLite/runtime integration or conflict with the broader current-main Stage-B fusion; without an actually-started exact-source runner these mechanisms remain unverified.",
+  "next_exact_gate": "Fuse the retained Stage-B authority lane onto the then-current canonical main without losing current Clerk/PTY/retrieval identity changes, then run an actually-started authorized isolated focused suite covering method admission/promotion/Stage-B/replay/privacy, followed by adjacent lifecycle/recovery regressions and exact OCI build/start/readiness/restart with source and image identity.",
+  "acceptance": "IN_PROGRESS"
+}

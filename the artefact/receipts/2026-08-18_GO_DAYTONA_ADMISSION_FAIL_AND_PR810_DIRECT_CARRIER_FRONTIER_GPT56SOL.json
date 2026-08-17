@@ -1,0 +1,91 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T02:00:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXECUTION_ADMISSION_EXHAUSTED_SOURCE_FRONTIER_ADVANCED",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "547b175eee2aa63e095378d6a50ec3f8efeb5ebb",
+    "direct_carrier_commit": "88fb7e9d3d02e8d47f1e428127705fa7585de48d",
+    "mid_phase_guard_commit": "547b175eee2aa63e095378d6a50ec3f8efeb5ebb",
+    "source_progress": [
+      "retained handler removed Snapshot import and snapshot-derived replacement",
+      "deterministic carrier and replacement names are source-implemented",
+      "replacement is fresh persistent:false and receives declared transfer by direct carrier copy",
+      "Tier2 guard now requires recovery for source-sanitized and incomplete-replacement mid-phase crash windows"
+    ],
+    "remaining_source_conflict": [
+      "retained carrier remains persistent:false, so controller loss can destroy the handoff boundary",
+      "Tier2 guard v16 and source guard v18 still require old snapshot/persistent carrier receipt markers that no longer exist in the retained handler",
+      "recoverSanitizedSource and recoverIncompleteReplacement are required by guard but not yet implemented in the retained handler"
+    ],
+    "expected_current_guard_result": "FAIL_CLOSED"
+  },
+  "bounded_donor": {
+    "pull_request": 860,
+    "head": "d46c47ed6276e743d61a29ce5777b0685a75cd8f",
+    "still_useful_semantics": [
+      "deterministic persistent:true carrier only",
+      "carrier stop/re-get persistence boundary before source deletion",
+      "direct carrier to fresh replacement copy without Snapshot/fork",
+      "typed receipt and cleanup confirmation"
+    ],
+    "merge_as_whole": false,
+    "reason": "retained PR810 already independently implemented direct-copy structure and added stricter crash-window guards; only nonduplicate donor semantics should be fused"
+  },
+  "execution_admission": {
+    "vercel": {
+      "status": "FAILURE_BUILD_RATE_LIMIT",
+      "build_started": false,
+      "runtime_credit": 0
+    },
+    "daytona_via_github_actions": {
+      "dispatch_issue": 862,
+      "dispatcher_run_id": 32057771319,
+      "dispatcher_head": "bc14d340dd6bb217ab55a27c18b3620add50bb04",
+      "job_id": 95471767458,
+      "runner_allocated": false,
+      "steps_started": false,
+      "github_annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+      "daytona_sandbox_created": false,
+      "guard_executed": false,
+      "classification": "CONTROL_PLANE_ADMISSION_BLOCKER_NOT_TEST_FAILURE",
+      "runtime_credit": 0
+    }
+  },
+  "writes_this_go": {
+    "pr810_source_guard_tier1_blob_repair": "84fbaa8c765ceb872ab4747747cb4158d1a5512e",
+    "pr810_phase1_network_policy_sdk_repair_was_superseded_by_parallel_equivalent": true,
+    "pr810_coordination_comment_initial": 5318895738,
+    "pr810_coordination_comment_latest": 5318959618,
+    "daytona_issue_closed_after_admission_failure": 862,
+    "stale_parallel_overwrite_attempted": false
+  },
+  "unusual_experiment": {
+    "global_go_slot_already_consumed": true,
+    "new_experiment_count": 0,
+    "daytona_guard_dispatch_classification": "ORDINARY_REGRESSION_EXECUTION_ATTEMPT"
+  },
+  "epistemic_status": {
+    "exact_current_source_inspected": true,
+    "exact_current_guard_executed": false,
+    "exact_current_oci_built": false,
+    "mistral_provider_turn_executed": false,
+    "effectgate_entityos_roundtrip_executed": false,
+    "tier1_recovery_executed": false,
+    "tier2_replacement_executed": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Fuse PR860's deterministic persistent-carrier stop/re-get persistence semantics into the retained direct-copy PR810 handler without reintroducing Snapshot/fork; implement recoverSanitizedSource and recoverIncompleteReplacement; update source guard v18 and Tier2 guard v16 to that same no-snapshot direct-copy contract. Then execute the three exact guards on the first actually-started authorized isolated runner. Only after source gates pass should the immutable PR686 OCI -> Mistral Stage1 -> EffectGate/EntityOS -> Tier1 recovery -> source deletion -> new-controller carrier reconciliation -> fresh replacement -> exact restore -> fresh Mistral Stage2 sequence receive runtime credit."
+}

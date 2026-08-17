@@ -29,6 +29,19 @@ def _identity(db: UnifiedDB, query: str = "sensor timeout dependency"):
     return session_id, generation, turn_id, episode_id, causal_id
 
 
+def _activate_identity(db, sid, generation, turn_id, episode_id, causal_id):
+    db.db.execute(
+        "INSERT INTO active_turns("
+        "session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,"
+        "effect_id,outcome,workspace_selected,started_at"
+        ") VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            sid, "gabriel", turn_id, episode_id, causal_id, generation, "[]",
+            None, None, 0, time.time(),
+        ),
+    )
+
+
 def _framework_record():
     return {
         "problem_signature": ["timeout dependency sensor", "bounded diagnosis"],
@@ -173,6 +186,65 @@ def test_legacy_evidence_replay_containing_method_fails_before_learning(tmp_path
                 episode_id=episode_id, causal_id=causal_id, generation=generation,
             )
         assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_partial_turn_identity_matches_active_and_is_completed(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, generation, turn_id, episode_id, causal_id = _identity(db)
+        _activate_identity(db, sid, generation, turn_id, episode_id, causal_id)
+        _add_framework(db)
+
+        world = WorldAssembler(db).assemble(
+            sid,
+            (),
+            query="sensor timeout dependency",
+            generation=generation,
+        )
+
+        assert world["retrieval_receipt"]["turn_id"] == turn_id
+        assert world["retrieval_receipt"]["episode_id"] == episode_id
+        assert world["retrieval_receipt"]["causal_id"] == causal_id
+        assert world["retrieval_receipt"]["generation"] == generation
+        assert world["retrieval_receipt"]["status"] == "UNKNOWN"
+        assert world["method_receipt"]["status"] == "METHOD_PRESENT"
+    finally:
+        db.close()
+
+
+def test_partial_turn_identity_conflict_fails_before_retrieval_mutation(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, generation, turn_id, episode_id, causal_id = _identity(db)
+        _activate_identity(db, sid, generation, turn_id, episode_id, causal_id)
+
+        with pytest.raises(StaleGeneration, match="active_turn_identity:turn_id"):
+            WorldAssembler(db).assemble(
+                sid,
+                (),
+                query="sensor timeout dependency",
+                turn_id="foreign-turn",
+            )
+
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_episodes").fetchone()[0] == 0
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_partial_turn_identity_without_active_turn_fails_closed(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, _, _, _, _ = _identity(db)
+        with pytest.raises(StaleGeneration, match="partial_turn_identity_without_active_turn"):
+            WorldAssembler(db).assemble(
+                sid,
+                (),
+                query="sensor timeout dependency",
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_episodes").fetchone()[0] == 0
     finally:
         db.close()
 

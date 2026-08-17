@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse-mechanism-regression-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "issue": 425,
+  "stacked_gate_pr": 494,
+  "branch": "go/meta-learning-true-heldout-promotion-repair-20260817-1408",
+  "base_head": "8cb50988ffb7a0dea9025ce7e451fcc1c565ecd4",
+  "candidate_head_before_receipt": "14ff2eb902a3f9589ca28ce7e1b7b9e91ac7aca0",
+  "source_blob": "f350d79b99fa1946f96851d9ecee536ffac9fe67",
+  "true_heldout_gate_test_blob": "95ad5a9bdacc0fe03b63e6101b4c5361dcbd27aa",
+  "migrated_candidate_validation_test_blob": "a211026b1f89a08633f1800b2bf0c461af171040",
+  "finding": {
+    "name": "PROMOTION_VALIDATION_WAS_IN_SAMPLE_AND_SINGLE_SUCCESS_SUFFICIENT",
+    "old_semantics": [
+      "validation episodes had to equal candidate source/formation episodes",
+      "one validated success could authorize reusable promotion"
+    ],
+    "risk": "A method could be promoted as reusable without demonstrating repeated transfer beyond the episodes that formed the abstraction."
+  },
+  "repair": {
+    "formation_episode_role": "provenance only; terminal causal re-entry remains required but does not count as method utility",
+    "eligible_promotion_evidence": "candidate-validation receipts with evaluation_mode=HELD_OUT and episode_id disjoint from candidate source_episode_ids",
+    "minimum_distinct_validation_episodes": 2,
+    "minimum_distinct_validation_causal_ids": 2,
+    "minimum_successes": 2,
+    "falsifier_checked_required": true,
+    "failure_receipts_remain_evidence": true,
+    "counters_and_calibration": "derived only from eligible durable validation receipts",
+    "shadow_history": "auditable but excluded from promotion statistics; it cannot count as success and cannot permanently poison later valid held-out transfer",
+    "truth_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "fixture_migration": {
+    "positive_candidate_validation_tests": "candidate formation uses two separate terminal/re-entered no-reward episodes; validation uses two later disjoint external EntityOS effect episodes, both successful",
+    "negative_authority_tests": "retained unchanged",
+    "new_regression": "prior SHADOW validation plus two later disjoint HELD_OUT successes yields support_count=2 and ignores the SHADOW receipt"
+  },
+  "bounded_isolated_logic_regression": {
+    "surface": "OpenAI isolated non-production Python runtime",
+    "scope": "promotion-statistics mechanism only; not full module/repository execution",
+    "cases": {
+      "shadow_then_two_heldout_successes": "ACCEPTED; support=2 success=2 failure=0 calibration=1.0; SHADOW excluded",
+      "one_heldout_success_one_failure": "REJECTED: requires at least two validated successes",
+      "source_episode_only_heldout_receipts": "REJECTED: lacks two HELD_OUT episodes disjoint from candidate sources",
+      "shadow_only_receipts": "REJECTED: lacks two HELD_OUT episodes disjoint from candidate sources"
+    },
+    "classification": "MECHANISM_SUPPORTED",
+    "limitations": "Not byte-exact full method_validation.py execution, not full private-repository pytest, not OCI/runtime/Clerk/Claude acceptance."
+  },
+  "branch_scope": {
+    "files_changed_before_receipt": 3,
+    "files": [
+      "the artefact/clayverse/method_validation.py",
+      "the artefact/tests/test_method_candidate_validation.py",
+      "the artefact/tests/test_method_promotion_true_heldout_gate.py"
+    ],
+    "second_method_memory_path_added": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX",
+    "current_exact_full_source_execution": "UNOBSERVED_DUE_TO_PREVIEW_ADMISSION_RATE_LIMIT",
+    "github_hosted_runner_history": "control-plane failures before visible steps on current ClayVerse candidate lanes",
+    "classification": "NO_FULL_RUNTIME_CREDIT"
+  },
+  "experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_by_this_work": false
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "whole_clayverse_container_pass": false,
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"],
+  "next_exact_gate": "Run the exact stacked branch in an actually-started authorized Vercel Sandbox: true-heldout gate, candidate-validation integration tests, promotion lineage/read-revalidation tests, then fuse the repair into the single retained Stage-B line if green."
+}

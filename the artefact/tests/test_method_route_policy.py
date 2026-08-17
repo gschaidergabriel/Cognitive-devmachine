@@ -21,13 +21,17 @@ def promoted(signature, subject):
     }
 
 
+def add_methods(db, signature):
+    for subject in ("alpha frame", "beta frame"):
+        db.add_memory("framework", subject, json.dumps(promoted(signature, subject), sort_keys=True), None, "gabriel", {"test": True})
+
+
 def test_verified_negative_outcome_changes_shadow_not_served_ranking(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:
         IdentityRouter(db, {})
         signature = {"goal_shape": "diagnose_repair", "facets": ["evidence_gap", "failure_observed"], "resource_shapes": ["file"]}
-        for subject in ("alpha frame", "beta frame"):
-            db.add_memory("framework", subject, json.dumps(promoted(signature, subject), sort_keys=True), None, "gabriel", {"test": True})
+        add_methods(db, signature)
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         first = life.begin("diagnose file:broken.py failure")
         receipt_a = first["context"]["method_retrieval_receipt"]
@@ -58,6 +62,29 @@ def test_verified_negative_outcome_changes_shadow_not_served_ranking(tmp_path):
         }
         assert any(key.startswith(f"method:id:{served[0]}") and value < 0 for key, value in capitals.items())
         assert not any(key.startswith(f"method:id:{served[1]}") and value != 0 for key, value in capitals.items())
+        life.abort("test-end")
+    finally:
+        db.close()
+
+
+def test_ordinary_completion_creates_no_method_route_reward(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        IdentityRouter(db, {})
+        signature = {"goal_shape": "diagnose_repair", "facets": ["evidence_gap", "failure_observed"], "resource_shapes": ["file"]}
+        add_methods(db, signature)
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        first = life.begin("diagnose file:broken.py failure")
+        served = first["context"]["method_retrieval_receipt"]["selected_method_ids"]
+        life.complete("I used the supplied context but performed no external effect.")
+        second = life.begin("diagnose file:broken.py failure")
+        receipt = second["context"]["method_retrieval_receipt"]
+        assert receipt["selected_method_ids"] == served
+        assert receipt["shadow_method_ids"] == served
+        assert receipt["outcome_learning_applied"] == 0
+        assert db.db.execute(
+            "SELECT COUNT(*) FROM retrieval_entrypoint_policy WHERE entry_key LIKE 'method:%'"
+        ).fetchone()[0] == 0
         life.abort("test-end")
     finally:
         db.close()

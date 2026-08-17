@@ -51,6 +51,56 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _clip_text(value: Any, limit: int) -> str:
+    text = str(value)
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
+def _compact_method(item: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(item, dict):
+        raise TerminalHookError("method context item must be an object")
+    compact: dict[str, Any] = {
+        "memory_id": item.get("memory_id"),
+        "kind": item.get("kind"),
+        "subject": _clip_text(item.get("subject", ""), 240),
+        "goal_shape": item.get("goal_shape"),
+        "problem_signature": item.get("problem_signature", {}),
+        "calibration": item.get("calibration"),
+        "structural_score": item.get("structural_score"),
+        "truth_authority": item.get("truth_authority"),
+        "effect_authority": item.get("effect_authority"),
+    }
+    for field in (
+        "preconditions", "method_steps", "invariants", "expected_observations",
+        "falsifiers", "failure_modes", "scope_limits", "source_episode_ids",
+        "supporting_memory_ids", "counterexample_memory_ids",
+    ):
+        values = item.get(field, [])
+        if isinstance(values, list):
+            compact[field] = [_clip_text(value, 300) for value in values[:4]]
+    provenance = item.get("provenance")
+    if isinstance(provenance, dict):
+        compact["provenance"] = {
+            str(key)[:80]: _clip_text(value, 240)
+            for key, value in list(provenance.items())[:8]
+        }
+    return compact
+
+
+def _hook_context_view(world: dict[str, Any]) -> dict[str, Any]:
+    """Remove the legacy evidence alias and keep the semantic channels explicit."""
+    return {
+        "own_recent": [dict(item) for item in world.get("own_recent", [])],
+        "cross_session_collision": [dict(item) for item in world.get("cross_session_collision", [])],
+        "evidence_context": [dict(item) for item in world.get("evidence_context", world.get("durable_memory", []))],
+        "method_context": [_compact_method(item) for item in world.get("method_context", [])],
+        "unknowns": [_clip_text(item, 1000) for item in world.get("unknowns", [])[:8]],
+        "counterevidence": [_clip_text(item, 256) for item in world.get("counterevidence", [])[:32]],
+        "retrieval_receipt": dict(world.get("retrieval_receipt", {})),
+        "method_retrieval_receipt": dict(world.get("method_retrieval_receipt", {})),
+    }
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -65,7 +115,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "workspace": result["workspace"],
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
-        "context": result["context"],
+        "context": _hook_context_view(result["context"]),
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
@@ -83,31 +133,69 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         return text
 
     context = compact["context"]
-    context["durable_memory"] = context.get("durable_memory", [])[:12]
-    context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
-    context["own_recent"] = context.get("own_recent", [])[-8:]
+    context["evidence_context"] = context["evidence_context"][:10]
+    context["method_context"] = context["method_context"][:3]
+    context["cross_session_collision"] = context["cross_session_collision"][:3]
+    context["own_recent"] = context["own_recent"][-8:]
     for item in context["own_recent"]:
-        if len(str(item.get("content", ""))) > 700:
-            item["content"] = str(item["content"])[:700] + "…"
-    compact["hyperpositions"] = compact["hyperpositions"][:8]
+        if isinstance(item, dict) and len(str(item.get("content", ""))) > 600:
+            item["content"] = _clip_text(item["content"], 600)
+    compact["hyperpositions"] = compact["hyperpositions"][:6]
     for hp in compact["hyperpositions"]:
         if isinstance(hp, dict):
             hp["facets"] = list(hp.get("facets", []))[:3]
 
     text = render()
-    if len(text) > limit:
-        compact["hyperpositions"] = [
-            {
-                "relation_id": hp.get("relation_id"),
-                "subject": hp.get("subject"),
-                "kind": hp.get("kind"),
-                "alternative_count": hp.get("alternative_count"),
-                "uncertainty": hp.get("uncertainty"),
-                "semantic_hash": hp.get("semantic_hash"),
-            }
-            for hp in compact["hyperpositions"] if isinstance(hp, dict)
-        ]
-        text = render()
+    if len(text) <= limit:
+        return text
+
+    # Second pass preserves causal receipts and explicit evidence/method separation,
+    # but makes every remaining semantic payload sharply bounded.
+    context["evidence_context"] = context["evidence_context"][:5]
+    context["method_context"] = context["method_context"][:2]
+    context["unknowns"] = [_clip_text(item, 400) for item in context["unknowns"][:3]]
+    context["counterevidence"] = context["counterevidence"][:12]
+    context["cross_session_collision"] = context["cross_session_collision"][:1]
+    context["own_recent"] = context["own_recent"][-4:]
+    for item in context["evidence_context"]:
+        if isinstance(item, dict):
+            if "value" in item:
+                item["value"] = _clip_text(item["value"], 600)
+            if "content" in item:
+                item["content"] = _clip_text(item["content"], 600)
+    for method in context["method_context"]:
+        if isinstance(method, dict):
+            method["method_steps"] = [_clip_text(x, 220) for x in method.get("method_steps", [])[:3]]
+            method["falsifiers"] = [_clip_text(x, 220) for x in method.get("falsifiers", [])[:2]]
+            for field in ("preconditions", "invariants", "expected_observations", "failure_modes", "scope_limits"):
+                method[field] = [_clip_text(x, 180) for x in method.get(field, [])[:2]]
+            method["source_episode_ids"] = method.get("source_episode_ids", [])[:2]
+            method["supporting_memory_ids"] = method.get("supporting_memory_ids", [])[:2]
+            method["counterexample_memory_ids"] = method.get("counterexample_memory_ids", [])[:4]
+    compact["hyperpositions"] = [
+        {
+            "relation_id": hp.get("relation_id"),
+            "subject": hp.get("subject"),
+            "kind": hp.get("kind"),
+            "alternative_count": hp.get("alternative_count"),
+            "uncertainty": hp.get("uncertainty"),
+            "semantic_hash": hp.get("semantic_hash"),
+        }
+        for hp in compact["hyperpositions"][:4] if isinstance(hp, dict)
+    ]
+
+    text = render()
+    if len(text) <= limit:
+        return text
+
+    # Last bounded degradation still keeps both receipts, factual unknowns and at
+    # least one method candidate when one exists; duplicate legacy evidence is absent.
+    context["evidence_context"] = context["evidence_context"][:2]
+    context["method_context"] = context["method_context"][:1]
+    context["own_recent"] = context["own_recent"][-2:]
+    context["cross_session_collision"] = []
+    compact["hyperpositions"] = compact["hyperpositions"][:2]
+    text = render()
     if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
     return text
@@ -125,9 +213,6 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, _, session_id, lifecycle = _runtime()
     try:
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(result)
         return {

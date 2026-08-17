@@ -1,0 +1,65 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:47:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "5b67eafa68b91d32091450c18d2ea9fafa95baef",
+  "source_branch": "go/clerk-session-active-no-impersonation-20260817-1342",
+  "finding": {
+    "path": "the artefact/clayverse/clerk_auth.py",
+    "classification": "AUTH_ADMISSION_GAP",
+    "observed": "The existing verifier validated signature, issuer, temporal claims, sid/sub and authorized party, but did not require the Clerk session-status claim to be active and did not reject Clerk actor/impersonation tokens before mapping subject identity into the ClayVerse terminal path.",
+    "product_contract": "Only an admitted direct active Clerk session may enter the canonical authenticated PTY for gabriel/andreas; delegated/impersonated or incomplete sessions fail closed."
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://clerk.com/docs/guides/sessions/session-tokens",
+      "observation": "Current Clerk session-token claims include sts session status and act actor claim for impersonation."
+    },
+    {
+      "source": "https://clerk.com/docs/react-router/reference/types/session-status",
+      "observation": "Clerk defines active as valid with all activity allowed and pending as signed in with session tasks incomplete."
+    },
+    {
+      "source": "https://clerk.com/docs/guides/sessions/manual-jwt-verification",
+      "observation": "Clerk documents optional sts handling for pending sessions and recommends authorized-party validation."
+    }
+  ],
+  "repair": {
+    "require_sts": "active",
+    "reject_actor_claim": true,
+    "existing_signature_issuer_temporal_sid_sub_azp_contract_preserved": true,
+    "new_auth_authority": false
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container focused verifier regression",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "pyjwt": "2.13.0",
+    "cryptography": "46.0.4",
+    "pytest": "9.0.2",
+    "command_scope": "focused reconstructed clerk_auth.py plus the two affected Clerk regression modules",
+    "tests_collected": 3,
+    "tests_passed": 3,
+    "tests_failed": 0,
+    "covers": [
+      "valid active direct session",
+      "missing/empty sid rejection",
+      "missing nbf rejection",
+      "future nbf rejection",
+      "pending status rejection",
+      "missing status rejection",
+      "actor/impersonation rejection"
+    ],
+    "scope_limit": "Mechanism-level isolated replication of intended source semantics; not an exact repository checkout, not live Clerk/JWKS rotation/browser WebSocket PTY, not exact OCI runtime."
+  },
+  "go_experiment_accounting": {
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available shared metadata for this exact user go is minute-precision only, so the current atomic unusual-experiment protocol forbids a new experiment claim. This work is ordinary deterministic source hardening/regression."
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run the exact then-current fused source in an actually-started authorized isolated environment, then verify real Clerk v2 active JWT, pending-session rejection, impersonation rejection, JWKS key rotation and browser WebSocket PTY before whole-product acceptance."
+}

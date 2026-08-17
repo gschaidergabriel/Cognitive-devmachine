@@ -123,3 +123,35 @@ def test_private_other_user_memory_in_replay_fails_closed_before_learning(tmp_pa
         assert calls == []
     finally:
         db.close()
+
+
+def test_current_turn_echo_in_shadow_replay_fails_closed_before_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "sensor timeout dependency"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        historical_id = db.add_memory(
+            "fact", "sensor", "historical sensor timeout dependency observed",
+            None, "gabriel", {"source": "test"},
+        )
+        echo_id = db.add_memory(
+            "fact", "sensor", "current turn must not masquerade as historical retrieval",
+            turn_id, "gabriel", {"source": "test-current-turn"},
+        )
+        _insert_replay(
+            db, query=query, session_id=sid, generation=generation, turn_id=turn_id,
+            episode_id=episode_id, causal_id=causal_id,
+            selected_ids=[historical_id], shadow_ids=[echo_id],
+        )
+        organ = MicroClayRetrieval(db); calls = []
+        def fake_learning(**kwargs):
+            calls.append(kwargs); return {"eligible": 0, "applied": 0}
+        organ.learn_from_verified_outcomes = fake_learning
+        with pytest.raises(StaleGeneration, match="retrieval_route_contract"):
+            organ.retrieve(
+                query=query, user_id="gabriel", session_id=sid, turn_id=turn_id,
+                episode_id=episode_id, causal_id=causal_id, generation=generation,
+            )
+        assert calls == []
+    finally:
+        db.close()

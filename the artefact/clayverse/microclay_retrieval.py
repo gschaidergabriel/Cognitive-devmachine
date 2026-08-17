@@ -287,7 +287,7 @@ class MicroClayRetrieval:
         if not ids:
             return
         rows = self.db.db.execute(
-            "SELECT memory_id,kind,user_id FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind,user_id,source_turn_id FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
@@ -299,6 +299,12 @@ class MicroClayRetrieval:
         replay_user = str(existing["user_id"])
         if replay_user not in _CANONICAL_USERS or any(
             row["user_id"] is not None and str(row["user_id"]) != replay_user for row in rows
+        ):
+            raise StaleGeneration("retrieval_route_contract")
+        replay_turn = str(existing["turn_id"])
+        if any(
+            row["source_turn_id"] is not None and str(row["source_turn_id"]) == replay_turn
+            for row in rows
         ):
             raise StaleGeneration("retrieval_route_contract")
 

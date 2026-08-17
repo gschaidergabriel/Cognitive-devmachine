@@ -14,22 +14,24 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Runtime readiness: `/readyz` now requires canonical state **and** both canonical tmux sessions to be live and pass the same managed transport-policy-v3 attestation used by attach admission; this is source/mechanism hardening, not live OCI/runtime acceptance.
+- Runtime readiness: current `main` requires canonical state plus both live canonical tmux sessions and transport-policy-v3 attestation. This branch extends the same admission path to require exactly one live pane whose foreground process and recorded start argv match the exact managed Claude launch contract. This remains a source candidate until exact isolated tmux/native-Claude/OCI execution is observed.
 - Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease; the focused attach-expiry resize regression is retained on current `main`.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` now also rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked by orchestration-network/DNS before provider contact. These are execution-admission blockers, not product test failures.
-- Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
+- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
+- Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked from this ChatGPT execution surface by orchestration/network/DNS before provider contact. These are execution-admission blockers, not product test failures.
+- Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, exact managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 — effect causal-spine + terminal/readiness convergence on current `main`**
+**2026-08-17 — managed Claude process identity/readiness source candidate on current terminal spine**
 
-- Merged live effect causal-spine hardening: a foreign episode causal row or an already-consumed matching causal identity now fails closed before `EffectJournal.begin()` can journal a new `PENDING` effect. The exact repaired product blob had supporting four-case isolated mechanism evidence; this is not full-checkout/OCI/runtime PASS.
-- Merged terminal/readiness convergence: both canonical tmux perspectives must be live and pass the canonical manager-owned transport-policy-v3 attestation before `/readyz` can advertise readiness. Supporting bounded mechanism evidence exists; live tmux/native-Claude/OCI acceptance remains outstanding.
-- Restored the focused Clerk post-attach expiry/resize regression on current `main`; this is regression/evidence convergence and does not add a second auth path.
-- Merged current documented Claude auxiliary managed-policy fences and tmux-v3 control/policy reapply hardening earlier in this cycle; these remain source/mechanism scoped until exact packaged native-Claude/tmux execution is observed.
-- The stronger managed-Claude foreground/start-command attestation remains a current source candidate, not canonical runtime truth; it must be rejoined without regressing the just-merged readiness path and then proven in exact isolated OCI/live-tmux execution.
+- Rebased the retained process-attestation lane directly onto current `main` `62de4777f77936c0ce4540b97a682414158e8a62`, after live tmux transport-policy-v3 readiness, policy reapply/control timeouts, Clerk lease fences, effect causal-spine hardening and the living-status contract had landed.
+- Added one retained process discriminator: exactly one live pane, `pane_current_command=claude`, and `pane_start_command` parsing exactly to the sanitized managed ClayVerse launch argv. Existing or newly-created sessions fail closed when this process contract does not attest.
+- Extended the already-canonical live+policy readiness concept so both canonical perspectives must satisfy the exact managed Claude process predicate before `/readyz` can advertise product readiness.
+- Repaired adjacent tests that still encoded the superseded shell-string tmux launch assumption, and separated lower-layer tmux-policy tests from the new process-identity layer.
+- Preserved the strongest counterhypothesis: exact packaged tmux/native Claude may represent `pane_current_command` or `pane_start_command` differently for a legitimate process. Do not weaken the predicate speculatively; resolve it in exact isolated OCI/live-tmux execution.
+- The exact rebased r5 branch is **not runtime-verified**. Earlier equivalent bounded source reconstructions passed focused regressions, but those do not establish exact r5, live tmux/native-Claude or OCI behavior.
 - No unusual experiment was executed for this `go`: shared trigger identity is only minute precision, so the atomic experiment protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` rather than inventing a timestamp.
+- Superseded process-attestation lanes, including closed draft PR #598, must not be fused alongside this retained lane.
 - Whole-product acceptance remains unchanged: **IN_PROGRESS**.
 
 ### Cycle update rule

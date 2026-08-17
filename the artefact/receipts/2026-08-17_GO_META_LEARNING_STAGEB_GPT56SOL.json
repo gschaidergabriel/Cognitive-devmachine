@@ -23,6 +23,7 @@
     "fact_method_separation": "FACT_UNKNOWN + METHOD_PRESENT remains FACT_UNKNOWN; method context has no truth/effect authority",
     "candidate_gate": "framework_candidate/heuristic_candidate are not served as promoted methods",
     "promotion_gate": "explicit candidate->framework/heuristic promotion requires validated envelope, last_validated_at, strict numeric types and at least two distinct existing workspace source episodes",
+    "promotion_user_scope": "all source workspace episodes used to promote a user-scoped framework/heuristic must belong to that same canonical user; global method promotion fails closed until an explicit share/declassification contract exists; PROMOTE receipt binds user_id",
     "counterevidence_gate": "failure_pattern/counterexample ordinary admission is CANDIDATE-only; candidate counterevidence cannot serve or block methods until a dedicated provenance/receipt-bound promotion path exists",
     "demotion": "promoted framework/heuristic methods can be demoted without erasing receipt history",
     "method_policy": "SHADOW only; no learned method-route ACTIVE service",
@@ -30,11 +31,17 @@
     "runtime_readiness": "schema 8 aligned",
     "context_bound": "latest retained PR #402 fail-closed hard bound fused byte-for-byte"
   },
-  "source_review_repair": {
-    "finding": "ordinary add_method_memory accepted PROMOTED counterexample/failure_pattern records, allowing caller-asserted counterevidence to suppress otherwise promoted method context without an equivalent promotion/provenance gate",
-    "repair": "PROMOTED counterevidence is rejected by the ordinary admission validator; candidate counterevidence is retained but cannot serve/block; promoted method validation now requires last_validated_at and rejects boolean numeric fields",
-    "classification": "SOURCE_LEVEL_AUTHORITY_REPAIR_NOT_RUNTIME_PASS"
-  },
+  "source_review_repairs": [
+    {
+      "finding": "ordinary add_method_memory accepted PROMOTED counterexample/failure_pattern records, allowing caller-asserted counterevidence to suppress otherwise promoted method context without an equivalent promotion/provenance gate",
+      "repair": "PROMOTED counterevidence is rejected by the ordinary admission validator; candidate counterevidence is retained but cannot serve/block; promoted method validation now requires last_validated_at and rejects boolean numeric fields"
+    },
+    {
+      "finding": "framework/heuristic promotion checked only source episode existence, so a user-scoped method could borrow source workspace episodes from the other canonical user",
+      "repair": "promotion now joins every source workspace episode through sessions and requires the same candidate user_id; global promotion fails closed pending explicit share/declassification authority; the promotion receipt binds that user_id"
+    }
+  ],
+  "source_review_classification": "SOURCE_LEVEL_AUTHORITY_REPAIR_NOT_RUNTIME_PASS",
   "unusual_experiment": {
     "status": "NO_NEW_UNUSUAL_EXPERIMENT_BY_THIS_ORGAN",
     "reason": "shared trigger identity is not uniquely recoverable across the many same-minute user go turns; fail closed under GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL",
@@ -44,6 +51,7 @@
     "surface": "isolated OpenAI container",
     "scope": "py_compile plus validator-level promoted-counter rejection, strict calibration type and required validation-time checks",
     "result": "PASS",
+    "promotion_user_scope_change": "SOURCE_REVIEW_PLUS_REGRESSION_OBLIGATION_ONLY_NOT_EXECUTED_ON_EXACT_BRANCH",
     "accepted_vercel_executable_evidence": false,
     "whole_product_evidence": false
   },
@@ -51,6 +59,9 @@
     "method memory remains separate from factual durable memory",
     "single-episode candidate cannot serve or direct-mint promoted framework",
     "promotion requires two real source workspace episodes and writes receipt",
+    "promotion rejects any source workspace episode owned by another canonical user",
+    "global method promotion fails closed until explicit share/declassification authority exists",
+    "PROMOTE receipt binds the user scope",
     "promoted framework requires last_validated_at and strict non-boolean numeric fields",
     "FACT_UNKNOWN + METHOD_PRESENT does not become FACT_PRESENT",
     "direct promoted counterexample/failure_pattern admission fails closed",
@@ -71,7 +82,7 @@
   },
   "open_gates": [
     "dedicated atomic counterevidence promotion/demotion/retirement lifecycle with causal provenance, source-episode and user-scope validation before counterevidence may suppress methods",
-    "framework/heuristic promotion must bind source episodes to the same authorized user scope and accepted terminal/causal evidence",
+    "framework/heuristic source episodes still need accepted terminal-state/causal-reentry validation before promotion authority is complete",
     "actually-started authorized isolated exact-head Vercel Sandbox regression suite",
     "schema-7-to-8 migration/reopen/idempotence execution",
     "WorldAssembler-to-TurnLifecycle end-to-end evidence/method/unknown/counterevidence separation",
@@ -80,7 +91,7 @@
     "automatic framework-candidate abstraction with provenance/counterhypothesis/falsifier binding",
     "full ClayVerse OCI build/runtime acceptance gates"
   ],
-  "next_exact_gate": "First complete the dedicated counterevidence promotion authority and user-scoped promotion provenance on this retained lane; then, on the first actually-started authorized Vercel Sandbox, execute the exact branch focused MicroClay + Stage-B regression lane, schema-7-to-8 migration/reopen and end-to-end TurnLifecycle context checks. Do not promote method routing ACTIVE before held-out transfer and causal-utility evidence.",
+  "next_exact_gate": "On this retained lane, complete terminal-state/causal-reentry validation for promotion and the dedicated counterevidence promotion authority; then, on the first actually-started authorized Vercel Sandbox, execute the exact branch focused MicroClay + Stage-B regression lane, schema-7-to-8 migration/reopen and end-to-end TurnLifecycle context checks. Do not promote method routing ACTIVE before held-out transfer and causal-utility evidence.",
   "forbidden_or_not_used": {
     "vps_testing": true,
     "self_hosted_vps_runner_testing": true,

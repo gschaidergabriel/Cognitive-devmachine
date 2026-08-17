@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:42+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_branch": "8654d4e7d909e279902723291c99f178b7ace985",
+  "source_branch": "go/ws-preasgi-message-bound-20260817-1342",
+  "source_code_test_head": "9c1ebfd9f48aefba32c344cd3e9fe9aaa51d5a81",
+  "finding": {
+    "classification": "TRANSPORT_BOUNDARY_GAP",
+    "observed": "Current main bounded auth/control/PTy messages only after Uvicorn had delivered a complete ASGI WebSocket message. clayverse.service invoked uvicorn.run without an explicit WebSocket message-size or queue bound.",
+    "counterhypothesis": "The application-level 64 KiB check is sufficient because the ASGI server already enforces an equally small transport bound.",
+    "counterhypothesis_result": "REJECTED_BY_CONFIGURATION_SOURCE: service.py supplied no ws_max_size, while the pinned Uvicorn line exposes a much larger default unless configured.",
+    "product_contract": "Inbound terminal traffic must be bounded and fail closed without depending on a larger framework default before application validation."
+  },
+  "repair": {
+    "service_blob_sha1": "fce12509e748a31ac94c9a18f2c5f9b4dcd7288c",
+    "ws_protocol": "websockets",
+    "ws_max_size_bytes": 65536,
+    "ws_max_queue_messages": 4,
+    "ws_per_message_deflate": false,
+    "single_size_authority": "terminal_gateway._PTY_INPUT_FRAME_MAX_BYTES",
+    "effect_on_authorities": "NONE: no identity, UnifiedDB, retrieval, effect or recovery authority changes"
+  },
+  "regression_candidate": {
+    "path": "the artefact/tests/test_service_websocket_transport_bounds.py",
+    "checks": [
+      "service helper returns exact transport policy",
+      "Uvicorn Config accepts the selected protocol and bound fields",
+      "message-size bound equals the existing PTY input-frame bound",
+      "queue bound remains finite",
+      "per-message compression is disabled"
+    ]
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "uvicorn_available": "0.48.0",
+    "result": "PASS_FOR_API_SHAPE_AND_CONFIG_MECHANISM_ONLY",
+    "observed": {
+      "ws": "websockets",
+      "ws_max_size": 65536,
+      "ws_max_queue": 4,
+      "ws_per_message_deflate": false
+    },
+    "limitation": "The product pins Uvicorn 0.51.0, but the available isolated container had 0.48.0. Current upstream Uvicorn primary documentation/source independently exposes the same run/config fields; exact pinned-dependency execution still requires the authorized exact environment.",
+    "whole_product_evidence": false
+  },
+  "external_primary_evidence": {
+    "uvicorn_settings": "Current official Uvicorn settings document ws-max-size default 16777216 bytes, ws-max-queue default 32 and per-message-deflate default enabled; these are configurable programmatically.",
+    "uvicorn_release_context": "Uvicorn release notes show ws_max_size support extended to wsproto in 0.46; this repair explicitly selects websockets so the documented queue/deflate controls are not protocol-ambiguous."
+  },
+  "go_experiment_accounting": {
+    "distinct_unusual_experiment_started": false,
+    "state": "COORDINATION_BLOCKED",
+    "reason": "The exact user trigger provided local timestamp 2026-08-17T13:42+07:00 without whole-second precision or a shared immutable request/turn id. Current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL/BOOTSTRAP law therefore forbids minting a canonical unique experiment lease for this trigger. Ordinary deterministic hardening/regression remains allowed."
+  },
+  "execution_admission": {
+    "vercel_connected_surface": "Documentation only; no Sandbox start/exec primitive exposed",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_PRODUCT_PASS",
+  "next_exact_gate": "Run this branch on an actually-started authorized isolated environment with Uvicorn 0.51.0: focused terminal/service regressions, then an oversized WebSocket message rejection check, adjacent Clerk/auth/PTY tests, and exact OCI build/start/readiness/restart."
+}

@@ -1,0 +1,82 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_integration_pr": 484,
+  "integration_branch": "fusion/microclay-stageb-schema8-20260817",
+  "source_head_verified": "7207a6447cbb511abcca79fa9c2495b7fbe99815",
+  "later_head_observed_before_receipt": "c353fe3529a2e8a9f3d77a1f0aa5156191d6cc60",
+  "status": "SCHEMA8_FINAL_PROMOTION_SOURCE_FENCES_PRESENT_REMOTE_EXECUTION_UNRESOLVED",
+  "verified_source_contracts": [
+    "promotion derives support_count/success_count/failure_count/calibration only from HELD_OUT candidate-validation receipts",
+    "held-out validation episodes are disjoint from abstraction source episodes",
+    "promotion requires at least two distinct held-out validation episodes and distinct causal instances",
+    "promotion requires at least one falsifier-checked held-out validation instance",
+    "promotion requires at least two validated successes; one success plus one failure cannot mint a reusable method",
+    "SHADOW validation is audit/diagnostic only and excluded from promotion statistics",
+    "positive supporting_memory_ids cannot reference any method/lifecycle memory kind",
+    "counterexample_memory_ids remain restricted to counterexample/failure_pattern method memory",
+    "PROMOTE receipt source_episode_ids/supporting_memory_ids/counterexample_memory_ids must exactly match promoted and candidate payloads on read/reopen",
+    "promotion validation receipt ids and validation evidence digest are re-derived at read time",
+    "truth_authority=false and effect_authority=false remain invariant"
+  ],
+  "source_bindings_at_verified_head": [
+    {
+      "path": "the artefact/clayverse/method_memory.py",
+      "git_blob_sha1": "2a172c163d702b7c4c17099d86b92ef909b08304"
+    },
+    {
+      "path": "the artefact/clayverse/method_validation.py",
+      "git_blob_sha1": "b0ed95b2c8b3e304754ed88fe314b3d654e6ced3"
+    },
+    {
+      "path": "the artefact/tests/test_schema8_final_promotion_fences.py",
+      "git_blob_sha1": "e07bc37795c1c38de13f294cd15c744b908e3b7e"
+    }
+  ],
+  "later_head_delta_check": {
+    "compare_base": "7207a6447cbb511abcca79fa9c2495b7fbe99815",
+    "compare_head": "c353fe3529a2e8a9f3d77a1f0aa5156191d6cc60",
+    "method_memory_changed": false,
+    "method_validation_changed": false,
+    "interpretation": "later parallel commits observed before this receipt did not alter the verified promotion-fence source files"
+  },
+  "regression_contracts_present": [
+    "one success plus one failure cannot promote",
+    "SHADOW history does not count or poison later true HELD_OUT transfer",
+    "method memory cannot recursively serve as positive support evidence",
+    "tampered promotion receipt source/support/counterexample sets fail closed on reopen"
+  ],
+  "execution_evidence": {
+    "current_head_remote_exact_execution_pass": false,
+    "vercel_sandbox_started_for_this_head": false,
+    "known_remote_blocker": "authorized Vercel Sandbox execution is not exposed/available in the current connected tool surface; deployment or READY state is not test evidence",
+    "github_hosted_runner_current_head_pass": false,
+    "local_current_head_test_pass_claimed": false,
+    "historical_note": "earlier donor-branch exact-blob local focused mechanism runs passed, but are not promoted to current #484 runtime truth"
+  },
+  "unusual_experiment": {
+    "macrocycle_slot": "1/1_consumed_earlier",
+    "name": "METHOD_RECORD_TRUTH_SMUGGLE",
+    "new_unusual_experiment_here": false
+  },
+  "acceptance_boundary": {
+    "schema8_source_fences": "PRESENT",
+    "stage_b_active_product_acceptance": "NOT_CLAIMED",
+    "whole_clayverse_pass": false,
+    "oci_build_runtime_pass": false,
+    "remote_exact_head_pass": false
+  },
+  "next_exact_gate": "Obtain an actually-started authorized isolated remote execution for the current fused #484 head, run the final promotion-fence regressions plus positive schema-8 Stage-B/MicroClay integration suite, then resolve current main/PR mergeability without overwriting newer parallel work. Only after that may the fused line advance toward ACTIVE Stage-B and exact OCI build/runtime acceptance.",
+  "invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_training": true
+  }
+}

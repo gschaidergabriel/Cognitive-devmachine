@@ -138,6 +138,10 @@ class TurnLifecycle:
             raise TurnLifecycleError("only one effect admitted per turn in candidate contract")
         if not int(row["workspace_selected"]):
             self.workspace.select(row["episode_id"], "request_effect")
+            self.db.db.execute(
+                "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
+                (self.session_id, row["causal_id"]),
+            )
         effect_id, outcome = self.effects.execute(
             EffectRequest(self.user_id, self.session_id, capability, target, argv, int(row["generation"])),
             row["episode_id"],
@@ -174,6 +178,7 @@ class TurnLifecycle:
         now = time.time()
         assistant_id = str(uuid.uuid4())
         credit = float(existing_causal["credit"]) if existing_causal else 0.0
+        response_hash = hashlib.sha256(response.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
@@ -187,8 +192,12 @@ class TurnLifecycle:
             if existing_causal is None:
                 db.execute(
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                    (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], response_hash, 0.0, 1, now),
                 )
+            db.execute(
+                "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
+                (row["episode_id"],),
+            )
             db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
@@ -212,6 +221,8 @@ class TurnLifecycle:
             raise TurnLifecycleError("effect causal identity diverged during abort")
         now = time.time()
         system_id = str(uuid.uuid4())
+        reason = str(reason)[:2000]
+        reason_hash = hashlib.sha256(reason.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
@@ -225,9 +236,14 @@ class TurnLifecycle:
             if existing_causal is None:
                 db.execute(
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                    (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], reason_hash, 0.0, 1, now),
                 )
+            db.execute(
+                "UPDATE workspace_episodes SET state='ABORTED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+                (row["episode_id"],),
+            )
             db.execute("DELETE FROM active_turns WHERE session_id=?", (self.session_id,))
+            db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
         self.graph.rebuild()
         return {"aborted": True, "causal_id": row["causal_id"], "reason": reason}

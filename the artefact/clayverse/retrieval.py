@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 from .microclay_methods import METHOD_KINDS, MicroClayMethodRetrieval
 from .microclay_retrieval import MicroClayRetrieval
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
 
 
 class WorldAssembler:
@@ -42,6 +42,15 @@ class WorldAssembler:
             "causal_id": row["causal_id"],
             "generation": int(row["generation"]),
         }
+
+    @staticmethod
+    def _identity_value_matches(field, supplied, active):
+        if field == "generation":
+            try:
+                return int(supplied) == int(active)
+            except (TypeError, ValueError):
+                return False
+        return str(supplied) == str(active)
 
     def assemble(
         self,
@@ -100,10 +109,25 @@ class WorldAssembler:
             "causal_id": causal_id,
             "generation": generation,
         }
-        if not all(value is not None for value in supplied.values()):
+        supplied_any = any(value is not None for value in supplied.values())
+        supplied_all = all(value is not None for value in supplied.values())
+        if not supplied_all:
             active = self._active_identity(session_id)
             if active is not None:
-                supplied = active
+                if supplied_any:
+                    for field, value in supplied.items():
+                        if value is None:
+                            continue
+                        if not self._identity_value_matches(field, value, active[field]):
+                            raise StaleGeneration(f"active_turn_identity:{field}")
+                    supplied = {
+                        field: active[field] if value is None else value
+                        for field, value in supplied.items()
+                    }
+                else:
+                    supplied = active
+            elif supplied_any:
+                raise StaleGeneration("partial_turn_identity_without_active_turn")
 
         if all(value is not None for value in supplied.values()):
             result = self.microclay.retrieve(

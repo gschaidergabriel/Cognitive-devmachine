@@ -1,0 +1,41 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T22:59:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "ADVERSARIAL_SOURCE_REPAIR_MECHANISM_SUPPORTED_EXACT_FULL_SUITE_UNOBSERVED",
+  "target_pr": 635,
+  "finding": {
+    "counterexample": "A selecting NetworkPolicy using matchExpressions operator NotIn also selects a pod when that key is absent. The first collector implementation returned false for that case, so a real selecting broad-allow policy could be omitted from the claimed complete additive policy inventory.",
+    "upstream_semantics": "Kubernetes set-based NotIn selectors include resources that do not carry the key; matchLabels and matchExpressions requirements are ANDed.",
+    "security_consequence": "Omitting such a selecting NetworkPolicy can hide a broad allow path from the collector inventory and violates the fail-closed complete-policy-set contract."
+  },
+  "repair": {
+    "collector_blob_after_parallel_fix": "4023b734d3dae95163017a0db36b6795d787dc57",
+    "test_commit": "57201801183a533b56a3f5165be55fb3ffb56ad7",
+    "test_blob": "3ad4c6be63d7f65bd028bc854ad5b0cfe0ae242f",
+    "regression": "test_notin_selector_without_key_still_selects_and_exposes_broad_policy",
+    "expected_behavior": "The NotIn policy selects the ClayVerse pod even though security-zone is absent, then the empty egress rule is detected as an obvious broad allow and attestation fails closed."
+  },
+  "bounded_discriminator": {
+    "surface": "authorized isolated OpenAI non-production container",
+    "scope": "function-level reconstruction of the current selector and obvious-broad-policy logic",
+    "result": {
+      "selector_matches": true,
+      "broad_allow": true
+    },
+    "note": "This supports the repaired mechanism only. It is not exact-branch pytest, Kubernetes API admission, Kata/microVM, CNI enforcement, final OCI runtime or whole-product evidence."
+  },
+  "evidence_boundary": {
+    "exact_full_branch_pytest": "UNOBSERVED",
+    "kata_microvm_runtime": "UNOBSERVED",
+    "cni_enforcement": "UNOBSERVED",
+    "clayverse_oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "next_gate": "Execute the exact current PR635 collector and focused regression suite in an admitted isolated checkout; keep the lane Draft until that passes, then run the collector only against the exact accepted same-digest Kata/equivalent deployment and separately execute active CNI deny/allow probes."
+}

@@ -36,10 +36,21 @@
       "exit_code": 0,
       "result": "PASS"
     },
+    "github_runner_attempt": {
+      "workflow_run_id": 32003159965,
+      "workflow": "Research Entity Identity Guard",
+      "job_id": 95307294969,
+      "job": "identity-guard",
+      "conclusion": "failure",
+      "steps_observed": 0,
+      "logs": "UNAVAILABLE_404_BLOB_NOT_FOUND",
+      "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAILURE"
+    },
     "limitations": [
       "GitHub connector exposed repository text but not a filesystem mount into the isolated container.",
       "The isolated container had no network route to clone the private repository.",
       "The available Vercel connector exposed Sandbox documentation only, not sandbox start or exec.",
+      "The GitHub PR workflow failed before any visible step executed, so it establishes no pytest result.",
       "Therefore no pytest, OCI build, startup, Clerk, PTY, Claude Code, restart-runtime, or whole-product PASS is claimed."
     ]
   },
@@ -48,7 +59,7 @@
     "reason": "No immutable request id was available and the supplied trigger timestamp had minute precision only; the current atomic lease protocol requires a canonical per-trigger identity before consuming the one unusual-experiment slot."
   },
   "next_isolated_execution": {
-    "source": "exact branch head after this receipt commit",
+    "source": "exact PR head after this receipt update",
     "command": "pytest -q 'the artefact/tests/test_restart_recovery.py' 'the artefact/tests/test_global_entity_generation.py' 'the artefact/tests/test_effect_replay_restart_fusion.py'",
     "then": "broader deterministic suite -> exact OCI build/digest -> startup/readiness -> restart/recovery/concurrency acceptance"
   },

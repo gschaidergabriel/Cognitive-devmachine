@@ -11,7 +11,7 @@ from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB
-from .terminal_gateway import create_terminal_app
+from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
@@ -146,7 +146,14 @@ def main():
     }), flush=True)
 
     try:
-        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
+        uvicorn.run(
+            app,
+            host=host,
+            port=port,
+            workers=1,
+            access_log=False,
+            ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
+        )
     finally:
         db.checkpoint("shutdown")
         db.close()

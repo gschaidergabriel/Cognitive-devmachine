@@ -1,0 +1,132 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "7ff1e98a264ec8b05dd93e7abbb96991712b7107",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_pr_head_observed": "8ab2b9e7b2ce59edebbff3eb166b8709c4005670",
+  "execution_classification": "SOURCE_INSPECTION_AND_CANONICAL_CONTRACT_SELECTION_ONLY",
+  "sandbox_execution": false,
+  "product_code_changed": false,
+  "observed_anchors": {
+    "clayvm_bytes": "CLAYVM/2 already admits owned immutable Bytes for function parameters/returns and rejects mutable or borrowed byte exporters without an epoch/lease contract.",
+    "hostcall_gap": "OP_HOSTCALL still rejects every non-int argument and ClayHost is still list[int] -> int, while exact hostcall signatures currently live only in executable_ir_adapter.py.",
+    "existing_real_bytes_source": "HostProcessReceipt already records bounded stdout and stderr as built-in immutable bytes after direct shell=false Linux process execution.",
+    "existing_request_identity": "HostProcessVMHost already maps an admitted Int request_id to a completed HostProcessReceipt and fails closed for unknown receipt IDs."
+  },
+  "architecture_decision": {
+    "status": "RETAIN_PREFERRED_CANDIDATE",
+    "mechanism": "one versioned canonical hostcall ABI registry keyed by stable call_id and imported by both executable lowering and ClayVM runtime",
+    "registry_fields": [
+      "stable call_id",
+      "canonical signature identity",
+      "required capability/effect identity",
+      "ordered Clay parameter types",
+      "Clay return type",
+      "ABI version/compatibility identity"
+    ],
+    "runtime_rule": "ClayVM validates both hostcall arguments and the host return value against the same immutable ABI contract used by lowering; host adapters do not define Clay type semantics.",
+    "rejected_shortcut": "generic ClayValue widening without VM-enforced per-call signature authority"
+  },
+  "first_real_bytes_contract": {
+    "status": "SELECTED_AS_IMPLEMENTATION_CANDIDATE_NOT_YET_CANONICAL_CODE",
+    "candidate_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "candidate_call_semantics": "Given an already-admitted completed process request_id, return the exact bounded HostProcessReceipt.stdout bytes without text decoding, transcoding, parsing or hidden shell semantics.",
+    "parameter_types": ["Int"],
+    "return_type": "Bytes",
+    "capability_identity": "linux.process.spawn.v0",
+    "effect_identity": "EXTERNAL_COMMUNICATION",
+    "unknown_request_behavior": "fail closed with PROCESS_RECEIPT_UNKNOWN:<request_id>",
+    "ownership": "HostProcessReceipt.stdout is already a built-in immutable bytes snapshot produced by the bounded process capture path; ClayVM Bytes admission must preserve exact octets.",
+    "payload_semantics": "opaque bytes; NUL and non-UTF-8 octets are data and must not be interpreted as text",
+    "bound": "inherits the existing admitted process capture max_output_bytes bound for the originating request",
+    "why_real_not_test_echo": "Clay-visible byte-preserving stdout is an explicit CM-TERM requirement and already exists as a canonical process receipt payload; this exercises required product behavior rather than inventing test-only echo semantics."
+  },
+  "scope_and_nonclaims": {
+    "proves_when_implemented_and_tested": "first real Bytes return crossing from the host capability boundary through the single ClayVM into a Clay-visible value",
+    "does_not_prove": [
+      "Bytes arguments from Clay to host",
+      "stdin byte transport",
+      "live stdout/stderr streaming",
+      "PTY or explicit shell semantics",
+      "general argv/env/cwd semantics",
+      "CM-NET connectivity",
+      "CM-DATA streaming/backpressure",
+      "CM-VIS or CM-AUDIO transport",
+      "whole CM-TERM PASS",
+      "whole EntityOS or Clay Computer PASS"
+    ],
+    "request_id_limit": "The existing Int request_id is retained only for this bounded already-present process bridge. It must not be generalized into a hidden untyped byte-buffer handle architecture; future first-class Process/Buffer resource semantics remain open."
+  },
+  "counterhypotheses_and_required_falsifiers": [
+    {
+      "counterhypothesis": "The shared registry becomes a second semantic authority that can disagree with TypedIR.",
+      "falsifier": "A TypedIR capability/signature/type disagreement with the registry must fail before VM execution; no adapter override is accepted."
+    },
+    {
+      "counterhypothesis": "The VM still trusts a host adapter return value.",
+      "falsifier": "Force the Int->Int legacy hostcall to return Bytes and force the stdout Int->Bytes hostcall to return Int; both must trap at the VM hostcall boundary before the value reaches a Clay caller frame."
+    },
+    {
+      "counterhypothesis": "Opaque stdout bytes are accidentally treated as text.",
+      "falsifier": "A harmless process emits NUL plus non-UTF-8 octets; the exact byte sequence must round-trip through the serialized ClayVM unchanged."
+    },
+    {
+      "counterhypothesis": "Capability denial can be bypassed by the new result accessor.",
+      "falsifier": "Without the required process capability, stdout access must fail closed independently of whether a receipt object exists."
+    },
+    {
+      "counterhypothesis": "The new ABI widening perturbs legacy CLAYVM/1 or linux.process.spawn.v0 Int->Int behavior.",
+      "falsifier": "Existing serialized fixtures and process request-id regressions remain byte/behavior compatible unless an explicit versioned migration is introduced."
+    },
+    {
+      "counterhypothesis": "call_id identity can be silently rebound across ABI evolution.",
+      "falsifier": "An incompatible registry rebind under an existing stable call_id must fail closed by ABI version/identity rather than reinterpret old bytecode."
+    }
+  ],
+  "next_product_delta": {
+    "order": [
+      "add one neutral canonical hostcall ABI registry module with the existing linux.process.spawn.v0 Int->Int contract",
+      "make executable_ir_adapter import that registry instead of owning an independent HOSTCALL_SIGNATURES table",
+      "make ClayVM/ClayHost validate arguments and return values using that same registry",
+      "add linux.process.stdout.v0::(Int)->Bytes as the first real Bytes return contract backed by the existing completed HostProcessReceipt",
+      "add deterministic source/type/effect/signature mismatch, wrong return type, capability denial, unknown receipt, binary stdout and legacy compatibility regressions",
+      "run all execution as regression-only with new_unusual_experiment_count=0",
+      "when Vercel accepts the exact target head, run an actually-started exact-head Vercel Sandbox batch and, if carried into EntityOS, double-build and test the exact one-file artifact"
+    ]
+  },
+  "current_execution_blocker": {
+    "exact_head": "8ab2b9e7b2ce59edebbff3eb166b8709c4005670",
+    "vercel_status": "failure",
+    "provider_target": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "interpretation": "No executable PASS/FAIL is inferred for this exact head. A separate recent non-target preview READY observation only refutes a generalized total Vercel outage and is not EntityOS execution evidence."
+  },
+  "last_verified_entityos_scope": {
+    "product_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "deployment": "dpl_7CZDVst5XGJp67fKs1EeT9KNwiwg",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "do not generalize to descendants or whole EntityOS acceptance"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "claims": {
+    "contract_selected": true,
+    "canonical_product_implementation_exists": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

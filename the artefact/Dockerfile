@@ -1,7 +1,6 @@
 FROM python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
 
 ARG TARGETARCH
-ARG XTERM_SPEC=@xterm/xterm@6.0.0
 ARG ENTITYOS_SHA256
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -15,19 +14,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DISABLE_AUTOUPDATER=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
-# Node/npm remains a build input only for the vendored xterm web asset. Claude
-# Code itself is installed from exact upstream native release bytes below.
+# Keep the baseline OS package surface small. Browser xterm and native Claude Code
+# are installed from repository-owned digest locks below rather than via npm.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates nodejs npm tmux \
- && npm install --global "${XTERM_SPEC}" \
- && mkdir -p /opt/clayverse/vendor \
- && cp -a "$(npm root -g)/@xterm/xterm" /opt/clayverse/vendor/xterm \
- && test -f /opt/clayverse/vendor/xterm/lib/xterm.js \
- && test -f /opt/clayverse/vendor/xterm/css/xterm.css \
- && npm cache clean --force \
+ && apt-get install -y --no-install-recommends ca-certificates tmux \
  && rm -rf /var/lib/apt/lists/*
 COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
+COPY build/install_pinned_xterm.py /opt/clayverse-build/install_pinned_xterm.py
 COPY build/install_pinned_claude.py /opt/clayverse-build/install_pinned_claude.py
+RUN mkdir -p /opt/clayverse/vendor \
+ && python /opt/clayverse-build/install_pinned_xterm.py \
+ && test -f /opt/clayverse/vendor/xterm/lib/xterm.js \
+ && test -f /opt/clayverse/vendor/xterm/css/xterm.css
 RUN TARGETARCH="${TARGETARCH}" python /opt/clayverse-build/install_pinned_claude.py \
  && /usr/local/bin/claude --version
 

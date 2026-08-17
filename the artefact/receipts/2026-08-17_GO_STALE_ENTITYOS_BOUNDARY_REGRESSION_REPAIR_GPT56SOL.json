@@ -1,0 +1,84 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "observed_main_before_branch": "a3775a1c68a73cd98a44596f661a3cc3a26edc36",
+  "revalidated_against_main": "cf6ecc57699d465af50f94b56e2c535e56468f36",
+  "final_reentry_main": "87c9eb3f8d435fcf33d6cdb5398487e6adfcd109",
+  "final_reentry_note": "cf6ecc..87c9eb changed no files used by this 11-test batch; current EntityOS boundary test remained stale and current Dockerfile retained blob 1722b0983154e389efa723b5f1afeea8c42fd373.",
+  "branch": "chatgpt/go-fix-stale-entityos-boundary-test-20260817-1352",
+  "initial_repair_commit": "540295f2127cb4c6bfc32e23c6352b9c3910d046",
+  "problem": {
+    "classification": "STALE_REGRESSION_CONTRACT",
+    "test": "the artefact/tests/test_single_container_entityos_boundary.py",
+    "old_expectation": "CLAYVERSE_REQUIRE_ENTITYOS=0 / CLAYVERSE_REQUIRE_ENTITYOS: \"0\"",
+    "current_product_contract": "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0 / CLAYVERSE_ENABLE_ENTITYOS_EXEC: \"0\"",
+    "semantic_note": "EntityOS is digest-bound inside the one ClayVerse image, while execution is disabled by default. It is not a mandatory runtime sidecar and is not the top-level product endpoint."
+  },
+  "pre_repair_observation": {
+    "execution_surface": "authorized isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "command": "python -m pytest -q tests/test_single_container_entityos_boundary.py",
+    "result": "1 failed, 1 passed",
+    "exit_code": 1,
+    "failure": "test_baseline_container_has_no_mandatory_entityos_runtime_sidecar asserted retired CLAYVERSE_REQUIRE_ENTITYOS contract",
+    "evidence_boundary": "Exact relevant Git blobs were bound; this was deterministic source-mechanism evidence, not OCI/Vercel whole-product evidence."
+  },
+  "repair": {
+    "test_blob": "ebeef0ba62938601a3d7be7c93be53210c6acedc",
+    "dockerfile_blob": "1722b0983154e389efa723b5f1afeea8c42fd373",
+    "compose_blob": "07e74c44499409a3386d164caf1887979e71dd6b",
+    "gitignore_blob": "057234d74dfcc207025ded9a071de366e6b384b8",
+    "delta": [
+      "assert execution-disabled EntityOS baseline via CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+      "assert compose execution-disabled baseline",
+      "reject retired CLAYVERSE_REQUIRE_ENTITYOS contract in Dockerfile and Compose",
+      "preserve no host EntityOS sidecar mount and staged-artifact gitignore checks"
+    ]
+  },
+  "post_repair_observation": {
+    "execution_surface": "authorized isolated non-production container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "command": "python -m pytest -q tests/test_single_container_entityos_boundary.py tests/test_supply_chain_lock.py tests/test_build_context_boundary.py",
+    "result": "11 passed in 0.05s",
+    "exit_code": 0,
+    "revalidation_note": "The same 11-test batch was rerun after main's managed-tmux Dockerfile change; the current Dockerfile blob matched and all 11 passed again. Subsequent main changes through final_reentry_main did not touch the batch inputs.",
+    "exact_blob_checks": {
+      "test_single_container_entityos_boundary.py": "ebeef0ba62938601a3d7be7c93be53210c6acedc",
+      "Dockerfile": "1722b0983154e389efa723b5f1afeea8c42fd373",
+      "compose.yaml": "07e74c44499409a3386d164caf1887979e71dd6b",
+      ".gitignore": "057234d74dfcc207025ded9a071de366e6b384b8"
+    }
+  },
+  "vercel_execution_state": {
+    "execution_path": "CONFIRMED via Dr.-Unterweger Git-preview orchestration + @vercel/sandbox + Vercel OIDC",
+    "direct_chatgpt_mcp_lifecycle": "NOT_EXPORTED",
+    "live_ready_previews_checked": [
+      "dpl_3f5Kgeih41yctsrjNYvHrKhsmGPg",
+      "dpl_9SkXAEjSz9Vv5om8r3nqv562NdsA",
+      "dpl_8ndcW87F9tGg3tuu5G23mfn7qLcX"
+    ],
+    "live_ready_preview_result": "SKIP_NON_TARGET_PREVIEW via inherited run-microclay-pr383-sandbox.mjs; zero Sandbox test credit",
+    "corrected_stageb_head_state": "documented provider admission block before Sandbox start due preview deployment rate limit",
+    "classification": "SANDBOX_PATH_CONFIRMED_EXACT_CURRENT_BATCH_NOT_EXECUTED"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request id was exposed and available user-message timestamp metadata was only minute-precision; atomic lease protocol therefore fails closed."
+  },
+  "non_claims": [
+    "No exact OCI image build or digest was produced.",
+    "No current repaired branch ran inside Vercel Sandbox.",
+    "No real Clerk/browser/WebSocket PTY/Claude acceptance was established.",
+    "No VPS, self-hosted runner, production host, Together API, paid training, or owner-gated model training was used.",
+    "11/11 deterministic source-mechanism PASS does not imply whole ClayVerse PASS."
+  ],
+  "next_gate": "When Vercel preview admission permits, run one coordinated exact-source high-information Sandbox batch covering focused regressions, broader suite, exact OCI build/image identity, startup/readiness, persistence/restart and adjacent auth/lifecycle/effect gates."
+}

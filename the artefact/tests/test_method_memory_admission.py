@@ -214,9 +214,12 @@ def test_method_receipt_requires_bounded_known_fields():
         canonical_method_value("method_receipt", receipt, {"source": "held_out_eval"})
 
 
-# GO unusual experiment: METHOD_RECORD_TRUTH_SMUGGLE.
-# One method candidate tries to carry factual/authority claims through undeclared fields.
-# The admission boundary must reject the whole record rather than silently drop them.
+# Proposed discriminator: METHOD_RECORD_TRUTH_SMUGGLE.
+# It was NOT executed in this branch. The current user-triggered GO has already consumed
+# its global unusual-experiment budget elsewhere, so a broad pytest run must not start
+# this distinct intervention accidentally. Unskip only in a later explicitly available
+# macro-cycle or after it has become an authorized regression of an already-run probe.
+@pytest.mark.skip(reason="distinct GO unusual experiment fenced: current macro-cycle slot already consumed")
 def test_unusual_method_record_truth_smuggle_rejected():
     attack = candidate_record()
     attack["facts"] = ["invented fact may be treated as true"]

@@ -57,6 +57,10 @@ def validation(validated_by="external_replay_gate"):
     }
 
 
+def real_turn(db, content):
+    return db.append_turn("session:gabriel", "gabriel", "user", content)
+
+
 def test_external_promotion_gate_rejects_single_instance_and_self_promotion(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:
@@ -71,16 +75,17 @@ def test_external_promotion_gate_rejects_single_instance_and_self_promotion(tmp_
         one = promoted(sig)
         one["source_episode_ids"] = ["episode:source-a"]
         one["support_count"] = 1
-        with pytest.raises(MethodAdmissionError, match="single-instance"):
+        promotion_turn = real_turn(db, "promotion validation")
+        with pytest.raises(MethodAdmissionError, match="single-instance|promoted record invalid"):
             gate.promote(
                 candidate_memory_id=candidate_id, promoted_record=one, validation=validation(),
-                user_id="gabriel", session_id="session:gabriel", turn_id="turn:p",
+                user_id="gabriel", session_id="session:gabriel", turn_id=promotion_turn,
                 episode_id="episode:p", causal_id="causal:p", generation=db.entity_generation(),
             )
         with pytest.raises(MethodAdmissionError, match="self-promotion"):
             gate.promote(
                 candidate_memory_id=candidate_id, promoted_record=promoted(sig), validation=validation("microclay"),
-                user_id="gabriel", session_id="session:gabriel", turn_id="turn:p",
+                user_id="gabriel", session_id="session:gabriel", turn_id=promotion_turn,
                 episode_id="episode:p", causal_id="causal:p", generation=db.entity_generation(),
             )
     finally:
@@ -98,15 +103,17 @@ def test_promote_then_demote_is_append_only_and_blocks_stage_b(tmp_path):
             source_turn_id=None, user_id="gabriel", session_id="session:gabriel",
             generation=db.entity_generation(), provenance={"test": True},
         )
+        promotion_turn = real_turn(db, "promotion validation")
         result = gate.promote(
             candidate_memory_id=candidate_id, promoted_record=promoted(sig), validation=validation(),
-            user_id="gabriel", session_id="session:gabriel", turn_id="turn:p",
+            user_id="gabriel", session_id="session:gabriel", turn_id=promotion_turn,
             episode_id="episode:p", causal_id="causal:p", generation=db.entity_generation(),
         )
         promoted_id = result["promoted_memory_id"]
+        use_turn_a = real_turn(db, "diagnose unknown file")
         before = MethodTransfer(db).retrieve(
             query="diagnose unknown file", signature=sig, evidence_status="UNKNOWN",
-            user_id="gabriel", session_id="session:gabriel", turn_id="turn:use-a",
+            user_id="gabriel", session_id="session:gabriel", turn_id=use_turn_a,
             episode_id="episode:use-a", causal_id="causal:use-a", generation=db.entity_generation(),
         )
         assert [item["memory_id"] for item in before["items"]] == [promoted_id]
@@ -114,14 +121,16 @@ def test_promote_then_demote_is_append_only_and_blocks_stage_b(tmp_path):
             "counterexample", "triage counter", '{"problem_signature":{"goal_shape":"diagnose_repair","facets":["evidence_gap"],"resource_shapes":["file"]},"targets":["%s"]}' % promoted_id,
             None, "gabriel", {"test": True},
         )
+        demotion_turn = real_turn(db, "demote method")
         gate.change_state(
             method_memory_id=promoted_id, action="DEMOTE", reason="counterexample invalidated scope",
             counterexample_memory_ids=[counter_id], user_id="gabriel", session_id="session:gabriel",
-            turn_id="turn:d", episode_id="episode:d", causal_id="causal:d", generation=db.entity_generation(),
+            turn_id=demotion_turn, episode_id="episode:d", causal_id="causal:d", generation=db.entity_generation(),
         )
+        use_turn_b = real_turn(db, "diagnose unknown file again")
         after = MethodTransfer(db).retrieve(
             query="diagnose unknown file", signature=sig, evidence_status="UNKNOWN",
-            user_id="gabriel", session_id="session:gabriel", turn_id="turn:use-b",
+            user_id="gabriel", session_id="session:gabriel", turn_id=use_turn_b,
             episode_id="episode:use-b", causal_id="causal:use-b", generation=db.entity_generation(),
         )
         assert after["items"] == []

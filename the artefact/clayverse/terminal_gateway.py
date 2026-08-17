@@ -3,7 +3,9 @@ from __future__ import annotations
 import asyncio
 import html
 import json
+import math
 import os
+import time
 from pathlib import Path
 
 from fastapi import WebSocket, WebSocketDisconnect
@@ -18,6 +20,7 @@ _AUTH_TOKEN_MAX_CHARS = 16_384
 _CONTROL_MESSAGE_MAX_CHARS = 4_096
 _PTY_INPUT_FRAME_MAX_BYTES = 65_536
 _PTY_OUTPUT_CHUNK_MAX_BYTES = 65_536
+_AUTH_REFRESH_HEADROOM_SECONDS = 10
 
 
 def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
@@ -35,11 +38,48 @@ def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
     return value
 
 
+def _decode_terminal_control(payload: str) -> dict:
+    """Allow a bounded auth refresh envelope without widening ordinary controls."""
+    control = _decode_json_object(payload, name="control", max_chars=_AUTH_MESSAGE_MAX_CHARS)
+    if control.get("type") != "reauth" and len(payload) > _CONTROL_MESSAGE_MAX_CHARS:
+        raise ValueError("control message exceeds bound")
+    return control
+
+
 def _auth_token(hello: dict) -> str:
     token = hello.get("token")
     if not isinstance(token, str) or not token or len(token) > _AUTH_TOKEN_MAX_CHARS:
         raise AuthenticationError("invalid Clerk session token shape")
     return token
+
+
+def _auth_expiry_deadline(claims: dict, *, now: float | None = None) -> float:
+    """Return a finite future Clerk JWT expiry or fail closed."""
+    exp = claims.get("exp")
+    if isinstance(exp, bool) or not isinstance(exp, (int, float)):
+        raise AuthenticationError("Clerk session token missing valid expiration")
+    deadline = float(exp)
+    current = time.time() if now is None else float(now)
+    if not math.isfinite(deadline) or not math.isfinite(current):
+        raise AuthenticationError("Clerk session token expiration is invalid")
+    if deadline <= current:
+        raise AuthenticationError("Clerk session token expired")
+    return deadline
+
+
+def _reauthenticated_expiry(
+    claims: dict,
+    *,
+    expected_subject: str,
+    expected_clerk_session_id: str,
+    now: float | None = None,
+) -> float:
+    """Fence a refreshed token to the already-authenticated Clerk identity/session."""
+    if str(claims.get("sub", "")) != expected_subject:
+        raise AuthenticationError("Clerk refresh changed subject")
+    if str(claims.get("sid", "")) != expected_clerk_session_id:
+        raise AuthenticationError("Clerk refresh changed session")
+    return _auth_expiry_deadline(claims, now=now)
 
 
 def _terminal_dimensions(message: dict) -> tuple[int, int]:
@@ -152,13 +192,25 @@ window.addEventListener('load', async () => {{
   const term=new Terminal({{cursorBlink:true,scrollback:10000,convertEol:false}}); term.open(node);
   const proto=location.protocol==='https:'?'wss':'ws'; const ws=new WebSocket(`${{proto}}://${{location.host}}/ws/terminal`); ws.binaryType='arraybuffer';
   const maxInputFrameBytes={_PTY_INPUT_FRAME_MAX_BYTES};
-  let terminalReady=false;
-  ws.onopen=async()=>{{ const token=await Clerk.session.getToken(); ws.send(JSON.stringify({{type:'auth',token,rows:term.rows,cols:term.cols}})); }};
+  let terminalReady=false; let authRefreshTimer=null;
+  const scheduleAuthRefresh=(expiresAt)=>{{
+    if(authRefreshTimer) clearTimeout(authRefreshTimer);
+    const delay=Math.max(1000,Number(expiresAt)*1000-Date.now()-{_AUTH_REFRESH_HEADROOM_SECONDS * 1000});
+    authRefreshTimer=setTimeout(async()=>{{
+      try{{
+        const token=await Clerk.session.getToken({{skipCache:true}});
+        if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'reauth',token}}));
+      }}catch{{ws.close();}}
+    }},delay);
+  }};
+  ws.onopen=async()=>{{ const token=await Clerk.session.getToken({{skipCache:true}}); ws.send(JSON.stringify({{type:'auth',token,rows:term.rows,cols:term.cols}})); }};
   ws.onmessage=(ev)=>{{
     if(typeof ev.data==='string'){{
       try{{
         const m=JSON.parse(ev.data);
+        if(m.type==='ready'){{scheduleAuthRefresh(m.auth_expires_at);}}
         if(m.type==='ready'){{terminalReady=true;term.focus();return;}}
+        if(m.type==='reauthenticated'){{scheduleAuthRefresh(m.auth_expires_at);return;}}
         if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[ClayVerse] '+m.message);return;}}
       }}catch{{if(terminalReady)term.write(ev.data);}}
     }}else if(terminalReady) term.write(new Uint8Array(ev.data));
@@ -172,6 +224,7 @@ window.addEventListener('load', async () => {{
   }});
   const resize=()=>{{ if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'resize',rows:term.rows,cols:term.cols}})); }};
   ws.onclose=()=>{{terminalReady=false;}};
+  ws.addEventListener('close',()=>{{if(authRefreshTimer)clearTimeout(authRefreshTimer);}});
   window.addEventListener('resize',resize);
 }});
 </script></body></html>''')
@@ -180,6 +233,12 @@ window.addEventListener('load', async () => {{
     async def terminal_ws(ws: WebSocket):
         await ws.accept()
         attach_pid = attach_fd = None
+        send_lock = asyncio.Lock()
+
+        async def send_json(payload: dict) -> None:
+            async with send_lock:
+                await ws.send_text(json.dumps(payload))
+
         try:
             first = await asyncio.wait_for(ws.receive_text(), timeout=10)
             hello = _decode_json_object(first, name="auth", max_chars=_AUTH_MESSAGE_MAX_CHARS)
@@ -188,32 +247,58 @@ window.addEventListener('load', async () => {{
             token = _auth_token(hello)
             rows, cols = _terminal_dimensions(hello)
             claims = verifier.verify(token)
-            user_id, session_id = identity.resolve(str(claims["sub"]))
+            auth_expires_at = _auth_expiry_deadline(claims)
+            clerk_subject = str(claims["sub"])
+            clerk_session_id = str(claims["sid"])
+            user_id, session_id = identity.resolve(clerk_subject)
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
             terminals.resize(attach_fd, rows, cols)
-            await ws.send_text(json.dumps({"type": "ready", "user_id": user_id, "session_id": session_id}))
+            await send_json({
+                "type": "ready",
+                "user_id": user_id,
+                "session_id": session_id,
+                "auth_expires_at": int(auth_expires_at),
+            })
 
             async def pump_out():
                 while True:
                     data = await asyncio.to_thread(os.read, attach_fd, _PTY_OUTPUT_CHUNK_MAX_BYTES)
                     if not data:
                         return
-                    await ws.send_bytes(data)
+                    async with send_lock:
+                        await ws.send_bytes(data)
 
             async def pump_in():
+                nonlocal auth_expires_at
                 while True:
-                    message = await ws.receive()
+                    remaining = auth_expires_at - time.time()
+                    if remaining <= 0:
+                        raise AuthenticationError("Clerk session token expired")
+                    try:
+                        message = await asyncio.wait_for(ws.receive(), timeout=remaining)
+                    except asyncio.TimeoutError as exc:
+                        raise AuthenticationError("Clerk session token expired") from exc
                     if message.get("type") == "websocket.disconnect":
                         return
                     if message.get("bytes") is not None:
                         _bounded_pty_input(message["bytes"])
                         await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
                     elif message.get("text") is not None:
-                        control = _decode_json_object(
-                            message["text"], name="control", max_chars=_CONTROL_MESSAGE_MAX_CHARS
-                        )
+                        control = _decode_terminal_control(message["text"])
+                        if control.get("type") == "reauth":
+                            refreshed = verifier.verify(_auth_token(control))
+                            auth_expires_at = _reauthenticated_expiry(
+                                refreshed,
+                                expected_subject=clerk_subject,
+                                expected_clerk_session_id=clerk_session_id,
+                            )
+                            await send_json({
+                                "type": "reauthenticated",
+                                "auth_expires_at": int(auth_expires_at),
+                            })
+                            continue
                         if control.get("type") != "resize":
                             raise ValueError("unsupported terminal control message")
                         rows, cols = _terminal_dimensions(control)
@@ -231,7 +316,7 @@ window.addEventListener('load', async () => {{
             pass
         except Exception as exc:
             try:
-                await ws.send_text(json.dumps({"type": "error", "message": str(exc)}))
+                await send_json({"type": "error", "message": str(exc)})
             except Exception:
                 pass
         finally:

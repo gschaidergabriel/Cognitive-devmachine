@@ -230,6 +230,10 @@ class TerminalSessionManager:
             "--allowedTools",
             "mcp__clayverse__session_state",
             "mcp__clayverse__request_effect",
+            "mcp__clayverse__goal_state",
+            "mcp__clayverse__goal_create",
+            "mcp__clayverse__goal_set_status",
+            "mcp__clayverse__milestone_review",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]

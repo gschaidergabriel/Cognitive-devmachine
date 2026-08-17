@@ -66,6 +66,11 @@ jobs:
 
           python --version
           python -m pip --version
+          python -m pip freeze --all | LC_ALL=C sort > /tmp/generator.base.freeze
+          echo -n 'GENERATOR_BASE_FREEZE_SHA256='; sha256sum /tmp/generator.base.freeze | awk '{print $1}'
+          echo 'GENERATOR_BASE_ENVIRONMENT_BEGIN'
+          cat /tmp/generator.base.freeze
+          echo 'GENERATOR_BASE_ENVIRONMENT_END'
 
           # The resolver executable itself is part of the lock-generation trust root.
           # Bind the pip-tools wheel bytes before installation. Its transitive bootstrap
@@ -104,8 +109,61 @@ jobs:
           printf '%s  %s\n' "$PIP_TOOLS_SHA256" "$PIP_TOOLS_WHEEL_PATH" | sha256sum -c -
           echo "PIP_TOOLS_WHEEL_SHA256=$PIP_TOOLS_SHA256"
           python -m pip install --disable-pip-version-check --no-cache-dir \
-            --only-binary=:all: "$PIP_TOOLS_WHEEL_PATH"
+            --only-binary=:all: --report /tmp/generator-install-report.json \
+            "$PIP_TOOLS_WHEEL_PATH"
           pip-compile --version | grep -F "version $PIP_TOOLS_VERSION"
+
+          # pip's stable installation-report v1 exposes the exact downloaded archive
+          # hashes selected for newly installed transitive bootstrap dependencies. This
+          # is evidence for the next local-hash closure, not itself a trusted lock.
+          python - <<'PY' > /tmp/generator.download-provenance
+          import json
+          import re
+          from pathlib import Path
+          from urllib.parse import unquote, urlparse
+
+          source_lock = json.loads(Path('/workspace/the artefact/SOURCE_LOCK.json').read_text(encoding='utf-8'))
+          pip_tools_lock = source_lock['python_lock_generator']['pip_tools']
+          report = json.loads(Path('/tmp/generator-install-report.json').read_text(encoding='utf-8'))
+          if report.get('version') != '1':
+              raise SystemExit(f"PIP_INSTALL_REPORT_VERSION_UNSUPPORTED:{report.get('version')}")
+          rows = []
+          for item in report.get('install', []):
+              metadata = item.get('metadata') or {}
+              name = str(metadata.get('name') or '').strip()
+              version = str(metadata.get('version') or '').strip()
+              if not name or not version:
+                  raise SystemExit('PIP_INSTALL_REPORT_METADATA_MISSING')
+              normalized_name = name.lower().replace('_', '-')
+              download_info = item.get('download_info') or {}
+              url = str(download_info.get('url') or '')
+              parsed = urlparse(url)
+              filename = Path(unquote(parsed.path)).name
+              hashes = (download_info.get('archive_info') or {}).get('hashes') or {}
+              sha256 = hashes.get('sha256')
+
+              if normalized_name == 'pip-tools':
+                  if filename != pip_tools_lock['wheel']:
+                      raise SystemExit(f'PIP_TOOLS_REPORT_WHEEL_MISMATCH:{filename}')
+                  sha256 = pip_tools_lock['sha256']
+                  source = 'SOURCE_LOCK'
+              else:
+                  if parsed.scheme != 'https':
+                      raise SystemExit(f'GENERATOR_DEPENDENCY_NON_HTTPS_SOURCE:{name}:{url}')
+                  if re.fullmatch(r'[0-9a-f]{64}', str(sha256 or '')) is None:
+                      raise SystemExit(f'GENERATOR_DEPENDENCY_SHA256_MISSING:{name}:{version}')
+                  source = parsed.netloc
+
+              rows.append(f'{normalized_name}=={version}\t{filename}\t{sha256}\t{source}')
+
+          for row in sorted(rows):
+              print(row)
+          PY
+          echo -n 'GENERATOR_DOWNLOAD_PROVENANCE_SHA256='; sha256sum /tmp/generator.download-provenance | awk '{print $1}'
+          echo 'GENERATOR_DOWNLOAD_PROVENANCE_BEGIN'
+          cat /tmp/generator.download-provenance
+          echo 'GENERATOR_DOWNLOAD_PROVENANCE_END'
+
           python -m pip freeze --all | LC_ALL=C sort > /tmp/generator.freeze
           echo -n 'GENERATOR_FREEZE_SHA256='; sha256sum /tmp/generator.freeze | awk '{print $1}'
           echo 'GENERATOR_ENVIRONMENT_BEGIN'

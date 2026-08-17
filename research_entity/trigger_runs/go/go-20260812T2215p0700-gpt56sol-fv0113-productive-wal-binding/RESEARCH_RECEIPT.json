@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0",
+  "receipt_id": "GO-20260812T2215P0700-GPT56SOL-FV0113-PRODUCTIVE-WAL-BINDING",
+  "program": "FRANK_V0_1",
+  "work_package": "F-V01-13",
+  "state": "CANDIDATE_REENTRY",
+  "generated_at": "2026-08-12T15:15:00Z",
+  "trigger": "go",
+  "worker": "RESEARCH_ENTITY_TEMPORARY_WORKER:GPT-5.6-Sol",
+  "observed_anchors": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "research_main_base": "63081293fd637ae4aaed56e1b84a35446ab9ffc8",
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "productive_readonly_workflow": ".github/workflows/frank-sqlite-productive-path-readonly-v1.yml",
+    "productive_readonly_workflow_behavior": "opens sqlite3.connect(':memory:') to obtain version/source-id and loader/anchor evidence; it does not open an on-disk Frank database or exercise WAL",
+    "overlap_avoided": "open Frank PR #555 already addresses in-process SQLite symbol-origin; this receipt does not duplicate that work",
+    "upstream_primary_evidence": [
+      "https://sqlite.org/inmemorydb.html",
+      "https://sqlite.org/wal.html"
+    ]
+  },
+  "generated_reality_hypothesis": "The remaining F-V01-13 acceptance gap is binding the already-attested fixed SQLite runtime to the exact productive on-disk Frank persistence/WAL path, not merely proving version, loader mapping, or in-process symbol origin.",
+  "strongest_counter_reality": "The existing workflow named productive-path-readonly already constitutes sufficient evidence that Frank's productive persistence path uses the attested runtime, so a real on-disk WAL-path probe would add no discriminating evidence.",
+  "hidden_assumption": "A probe against ':memory:' has the same persistence/WAL semantics as Frank's productive database.",
+  "falsifier": "Show that the existing ':memory:' probe actually opens the exact productive Frank DB and exercises its WAL topology, or bind a same-process attested SQLite connection to that exact DB/WAL path with provenance and restart/swap controls.",
+  "exactly_one_unusual_experiment": {
+    "name": "MEMORY_VS_REAL_FILE_WAL_SEMANTIC_CONTRAST",
+    "class": "BOUNDED_LOCAL_SYNTHETIC_CONTROL_TREATMENT",
+    "control": "sqlite3.connect(':memory:'); query journal_mode; request PRAGMA journal_mode=WAL; write one row",
+    "treatment": "temporary on-disk SQLite file; request PRAGMA journal_mode=WAL; disable auto-checkpoint; write one row; observe directory while connection remains open",
+    "control_observation": {
+      "journal_before": "memory",
+      "wal_request_result": "memory",
+      "journal_after": "memory"
+    },
+    "treatment_observation": {
+      "wal_request_result": "wal",
+      "journal_after": "wal",
+      "files_while_open": [
+        "probe.sqlite3",
+        "probe.sqlite3-shm",
+        "probe.sqlite3-wal"
+      ],
+      "files_after_close": [
+        "probe.sqlite3"
+      ]
+    },
+    "interpretation": "The ':memory:' pattern used by the current readonly workflow cannot discriminate real file-backed WAL persistence. The workflow remains valuable for runtime/anchor observation but its name overstates persistence-path coverage.",
+    "scope_limit": "Local synthetic evidence only; not accepted Hostinger VPS evidence and not Frank-v0.1 acceptance."
+  },
+  "predicted_observations": {
+    "if_hypothesis_right": "A real productive-path probe will expose exact DB/WAL/SHM file identity and can fail closed under wrong-path, library-swap, downgrade, restart, or lineage mismatch conditions that ':memory:' cannot represent.",
+    "if_counter_reality_right": "The current ':memory:' workflow will be demonstrably bound to the same exact productive on-disk Frank persistence objects and WAL lifecycle without adding such a probe."
+  },
+  "collapse": {
+    "counter_reality_outcome": "REJECT_AS_SUFFICIENCY_CLAIM",
+    "hypothesis_outcome": "RETAIN",
+    "promotion_to_verified": false,
+    "f_v01_13_status_change": false
+  },
+  "next_smallest_discriminating_test": {
+    "target": "accepted Hostinger Ubuntu VPS",
+    "requirements": [
+      "identify the exact productive Frank DB opener and canonical DB path from current code/config/runtime",
+      "within the same attested process generation open that exact file-backed DB rather than ':memory:'",
+      "verify PRAGMA journal_mode returns wal on the productive DB",
+      "bind DB, -wal and -shm paths to device/inode/ownership/permissions and canonical lineage where applicable",
+      "re-observe SQLite source-id/library hash and symbol origin before and after the productive DB interaction",
+      "fail closed on path substitution, library downgrade/swap, stale generation or missing anchors",
+      "then perform the contract-required crash/restart/replay evidence separately as normal acceptance work"
+    ]
+  },
+  "claim_boundary": {
+    "accepted_hostinger_vps_proven_by_this_receipt": false,
+    "productive_frank_db_identified": false,
+    "productive_wal_exercised": false,
+    "sqlite_fixed_runtime_upstream_supported": true,
+    "f_v01_13_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "final_training_authorized": false,
+    "frank_harness_mutated": false
+  }
+}

@@ -161,7 +161,8 @@ class MicroClayRetrieval:
 
         Learning is delayed until a causally re-entered external outcome exists. Pure
         conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
+        "the retriever liked its own result" feedback. Only definite external outcome
+        classes are eligible; uncertain/stale outcomes remain evidence-neutral.
         """
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
@@ -170,6 +171,7 @@ class MicroClayRetrieval:
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
             "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "AND e.status IN ('VERIFIED','DENIED','FAILED') "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",

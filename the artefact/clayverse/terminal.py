@@ -30,6 +30,8 @@ class PermanentTerminal:
             raise TerminalError("terminal argv is empty")
         pid, fd = pty.fork()
         if pid == 0:
+            os.environ["CLAYVERSE_USER_ID"] = self.user_id
+            os.environ["CLAYVERSE_SESSION_ID"] = f"terminal-{self.user_id}"
             os.execvp(self.argv[0], self.argv)
         os.set_blocking(fd, False)
         self.pid = pid

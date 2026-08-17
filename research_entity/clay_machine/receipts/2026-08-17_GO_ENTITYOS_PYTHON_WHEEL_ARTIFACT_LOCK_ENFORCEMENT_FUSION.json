@@ -5,11 +5,11 @@
   "stage": "CLAY_MACHINE",
   "trigger": "go",
   "product_boundary": "exactly one executable file named EntityOS",
-  "research_parent_observed": "ef91bdba55c548d5e757e87539ec40d2dba60d12",
+  "research_parent_observed": "b52097ae30977f357625ff5bbc6a47b2bc9296d1",
   "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
   "active_entityos_pr": 787,
-  "active_entityos_pr_head": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
-  "execution_classification": "PRODUCT_SOURCE_ENFORCEMENT_AND_COORDINATION_FUSION_ONLY",
+  "active_entityos_pr_head": "fdbb10503bad844edb706dceb8560ad45fe57c54",
+  "execution_classification": "PRODUCT_SOURCE_ENFORCEMENT_COMMITTED_EXECUTION_BLOCKED_BEFORE_SANDBOX",
   "sandbox_execution_for_current_head": false,
   "source_delta": {
     "canonical_artifact_lock": "entityos/python_artifact_lock_v1.json",
@@ -22,7 +22,12 @@
     "requirements_each_pin_has_one_sha256": true,
     "verifier_binds_artifact_lock_sha256": true,
     "verifier_binds_exact_wheel_filename_and_sha256": true,
+    "verifier_binds_wheel_filename_to_normalized_distribution_version_and_tag": true,
+    "wheel_identity_mismatch_fails_closed": true,
+    "wheel_identity_negative_test_committed": true,
     "verifier_binds_exact_installed_distribution_set": true,
+    "full_pytest_receipt_binds_artifact_lock_sha256_and_artifact_authority": true,
+    "batch5_receipt_binds_artifact_lock_sha256": true,
     "static_preflight_binds_lock_to_requirements": true,
     "duplicate_artifact_lock_fixture_removed": true,
     "single_artifact_lock_authority": true
@@ -32,14 +37,15 @@
     "uv_binary_mode": "Official uv documentation states --only-binary :all: refuses source-distribution builds for registry dependencies.",
     "pypi": "Exact wheel filenames and SHA-256 values were derived from official PyPI release metadata for the admitted distributions."
   },
-  "counterhypothesis": "A committed artifact lock is decorative unless the actual installer consumes hash-bearing requirements and the exact installed set plus lock digest are observed in the same exact-head Sandbox run.",
+  "counterhypothesis": "A source-level artifact lock can still mislead durable receipts if a valid digest is paired with a filename that is not structurally the declared distribution/version/tag identity; executable promotion also remains invalid until the same exact head is observed in an actually-started Vercel Sandbox.",
   "current_observation": {
-    "latest_separate_ready_deployment": "dpl_8KkWa1Rnib7mUPjYtsoeHhS1Pq3r",
-    "latest_separate_ready_source_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
-    "latest_separate_ready_ref": "chatgpt/go-attestation-authority-regression-20260817-0845",
-    "sandbox_runner_result": "SKIP_NON_TARGET_PREVIEW",
-    "current_fa7ca80_sandbox_started": false,
-    "current_fa7ca80_executable_status": "UNVERIFIED"
+    "product_head_checked": "fdbb10503bad844edb706dceb8560ad45fe57c54",
+    "github_vercel_status": "failure",
+    "github_vercel_failure_class": "build-rate-limit",
+    "exact_head_vercel_deployment_observed": false,
+    "exact_head_sandbox_started": false,
+    "executable_status": "UNVERIFIED_INFRASTRUCTURE_BLOCKED",
+    "classification_rule": "build-rate-limit before Sandbox start is non-execution; it is neither code FAIL nor executable PASS"
   },
   "last_promoted_exact_entityos_evidence": {
     "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
@@ -55,15 +61,16 @@
     "mode": "REGRESSION_ONLY"
   },
   "next_executable_discriminator": [
-    "refresh exact PR787 head",
+    "refresh exact PR787 head after Vercel build capacity is available",
     "obtain an actually-started exact-head Vercel Sandbox through the existing v7 lane",
-    "observe hash-enforced wheel-only provisioning and artifact-lock SHA-256 plus exact installed-set receipt",
+    "observe hash-enforced wheel-only provisioning, strict wheel identity, artifact-lock SHA-256 and exact installed-set receipt",
     "run ordinary full pytest with nonzero tests, zero skips and new_unusual_experiment_count=0",
     "run Git-free attested twin EntityOS build, byte identity, runtime/self-test/no-host-Python/relocation and successful Sandbox stop",
     "persist exact source/artifact digests and negative evidence without inferring whole EntityOS acceptance"
   ],
   "claims": {
     "source_artifact_lock_enforcement_wired": true,
+    "strict_wheel_identity_fence_committed": true,
     "single_artifact_lock_source_authority": true,
     "current_exact_head_sandbox_pass": false,
     "whole_entityos_pass": false,

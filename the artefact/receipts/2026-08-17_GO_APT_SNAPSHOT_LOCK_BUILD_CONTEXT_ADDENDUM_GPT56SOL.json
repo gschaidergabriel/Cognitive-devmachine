@@ -1,0 +1,26 @@
+{
+  "schema": "ClayVerseEvidenceAddendum/v1",
+  "parent_receipt": "the artefact/receipts/2026-08-17_GO_APT_SNAPSHOT_LOCK_GPT56SOL.json",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-17T13:48:00+07:00",
+  "branch": "go/apt-snapshot-lock-current-20260817-gpt56sol",
+  "source_head_before_addendum": "f2788a35d6fddfe31ddff80654c4a09e026a4550",
+  "reason": "Adversarial review found that the existing build-context regression did not require SOURCE_LOCK or the admitted pinned build helpers, so an accidental future removal from .dockerignore could evade that regression.",
+  "repair": "test_build_context_boundary.py now requires SOURCE_LOCK.json, install_pinned_apt.py, install_pinned_xterm.py, install_pinned_claude.py, and entityos.lock.json in addition to the existing product inputs.",
+  "final_tested_blob_identity": {
+    "the artefact/Dockerfile": "20d13c8f7a23ac3abbe661e874f0643c68d805a3",
+    "the artefact/SOURCE_LOCK.json": "eecc0d6816f230049c4ba161b4d938b8eb3d40a8",
+    "the artefact/.dockerignore": "fad9689766702cd4f7142e786142590218d03163",
+    "the artefact/build/install_pinned_apt.py": "53418a5078ef37994a0dcfb16d0984c48d10361d",
+    "the artefact/tests/test_apt_snapshot_lock.py": "9af8ae64746657bd18cfde37895b02c889268c65",
+    "the artefact/tests/test_build_context_boundary.py": "076f79a4111a17019201a36354e3f829ff7aa512"
+  },
+  "ordinary_isolated_source_mechanism_regression": {
+    "surface": "OpenAI isolated non-production container source slice",
+    "command": "python -m pytest -q tests/test_apt_snapshot_lock.py tests/test_build_context_boundary.py",
+    "observed": "7 passed in 0.04s",
+    "compile_command": "python -m py_compile build/install_pinned_apt.py",
+    "compile_observed": "PASS"
+  },
+  "evidence_boundary": "Bounded exact-blob source-mechanism evidence only; no APT network resolution, OCI build, image digest, startup/readiness/restart, Vercel Sandbox PASS or whole-product PASS."
+}

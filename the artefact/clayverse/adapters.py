@@ -183,9 +183,20 @@ class MistralInference:
         ):
             raise InferenceProtocolError("invalid Mistral observation")
 
-        world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        try:
+            world_json = json.dumps(
+                world,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+                allow_nan=False,
+            )
+        except (TypeError, ValueError):
+            raise InferenceProtocolError("Mistral WORLD is not canonical JSON") from None
         if len(world_json.encode("utf-8")) > self.MAX_WORLD_BYTES:
             raise RuntimeError("assembled world exceeds Mistral boundary")
+        if token in world_json or token in observation:
+            raise InferenceProtocolError("Mistral credential appeared in inference content")
 
         body = json.dumps(
             {
@@ -247,6 +258,8 @@ class MistralInference:
             raise InferenceProtocolError("Mistral response id is missing or invalid")
         if not isinstance(model_returned, str) or not model_returned or len(model_returned) > 256:
             raise InferenceProtocolError("Mistral response model is missing or invalid")
+        if model_returned != self.model:
+            raise InferenceProtocolError("Mistral response model does not match requested model")
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
             raise InferenceProtocolError("Mistral response must contain exactly one choice")
 

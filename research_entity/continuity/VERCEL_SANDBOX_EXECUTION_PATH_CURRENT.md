@@ -56,63 +56,112 @@ Observed build log result contained:
 
 This proves the bridge can actually create and execute a Vercel Sandbox. It is not merely documentation or deployment READY evidence.
 
-## Fresh 2026-08-17 capability re-check
+## Resumed executable proof — 15:18 +07
 
-A new bounded capability-only branch was created:
+Connected Vercel build logs were refreshed for deployment:
+`dpl_CmQJ5bkaXf4GUxZKJgrMq9QSH3wo`
+
+Bound staging identity:
+- repository: `gschaidergabriel/Dr.-Unterweger`;
+- branch: `chatgpt/go-microclay-explicit-feedback-pr501-vercel-20260817-1418`;
+- staging head: `dc2b524961137c40c427cc6d371d411ee6c4cfac`;
+- exact MicroClay feedback blob: `b293b8c2903eb01ce83523b0d483c3ebbdafee8c`;
+- exact MicroClay retrieval blob: `b264802d77917cd5c81ef091bc0a07cdf3b06393`.
+
+Observed isolated execution facts from the Vercel build log:
+- `execution_surface="VERCEL_SANDBOX_MICROVM"`;
+- `network_policy="DENY_ALL"`;
+- exact blob binding passed for both target files;
+- `sandbox_stopped=true`;
+- `test_exit_code=1`;
+- recorded `test_output` was empty;
+- build then exited nonzero because the regression result was false.
+
+Classification:
+`EXECUTED_CROSS_BRANCH_COUNTEREVIDENCE_UNADJUDICATED`.
+
+This is important in two directions:
+1. Vercel Sandbox execution is **currently not uniformly admission-blocked**; a real microVM did start and run the exact-bound test command.
+2. The MicroClay result is **not yet a semantic TEST_FAIL attribution** because the staging harness persisted only `stdout` for the test command while Python assertion/import failures normally appear on `stderr`. The exact failing assertion/error identity is therefore not bound by this receipt.
+
+The staging script at that exact head confirms the observability gap: it assigns `summary.test_output = String(await cmd.stdout())...` and does not persist `cmd.stderr()` for the failing test command. The next diagnostic execution must bind both stdout and stderr (or a merged bounded diagnostic stream) before interpreting the exit-1 result.
+
+Do not rerun merely to prove the bridge works. Rerun only as one coordinated discriminator after FREE_ONLY eligibility is established and after the harness captures the failing assertion identity.
+
+## Current official free-tier facts
+
+Current official Vercel pricing documents Vercel Sandbox as available with recurring included Hobby usage, including:
+- 5 hours Active CPU per month;
+- 420 GB-hours provisioned memory per month;
+- 5,000 Sandbox creations per month;
+- 20 GB network per month;
+- 10 concurrent Sandboxes on Hobby.
+
+Primary current references:
+- `https://vercel.com/pricing`
+- `https://vercel.com/sandbox`
+
+Therefore:
+- `VERCEL_SANDBOX_REQUIRES_PAID_PLAN = FALSE` as a general product claim;
+- `HOBBY_HAS_RECURRING_INCLUDED_SANDBOX_ALLOWANCE = TRUE`;
+- `THIS_ACCOUNT_REMAINING_INCLUDED_ALLOWANCE = UNVERIFIED` because the connected MCP currently does not expose the account's billing/usage balance;
+- FREE_ONLY still forbids assuming remaining quota or silently crossing into paid overage.
+
+A non-starting account-specific usage/free-allocation check is still preferred before launching another Sandbox. If such usage state becomes directly observable, bind it before execution. If it remains unobservable, do not misstate the platform as unavailable or paid-only; state the narrower remaining-quota uncertainty.
+
+## Historical fresh capability re-check
+
+A bounded capability-only branch was created earlier:
 `chatgpt/vercel-sandbox-capability-proof-20260817-1350`
 head: `87237ab4544b21aea011c3ab396bbd9593c21875`
 PR: `gschaidergabriel/Dr.-Unterweger#815`
 
-It contains a fresh `Sandbox.create -> runCommand -> stop` probe with Python 3.13, non-persistent mode and `networkPolicy: deny-all`.
+It contained a fresh `Sandbox.create -> runCommand -> stop` probe with Python 3.13, non-persistent mode and `networkPolicy: deny-all`.
 
-Current result: Vercel rejected the preview **before build/Sandbox start** with the Vercel status target `upgradeToPro=build-rate-limit`.
+That specific preview was rejected **before build/Sandbox start** with the Vercel status target `upgradeToPro=build-rate-limit`.
 
-Classification:
-`EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT`
+Classification for that attempt:
+`EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT`.
 
-This is **not** evidence that Sandbox is unavailable and is not a test failure. It means the known working execution path is currently admission-blocked for this particular fresh preview attempt.
+This remains valid bounded history for that attempt only. It must not be generalized into a current claim that Vercel Sandbox cannot start, because the later `dpl_CmQJ5bkaXf4GUxZKJgrMq9QSH3wo` microVM actually started and executed.
 
-## Live GO re-check — 13:53 +07
+## Historical Live GO re-check — 13:53 +07
 
-The current connected Vercel surface was enumerated again. It still does **not** export direct Sandbox lifecycle actions, while current Vercel documentation confirms `sandbox run`, `sandbox exec`, the Sandbox SDK `runCommand`, and Sandbox REST/CLI lifecycle support.
+The connected Vercel surface still did **not** export direct Sandbox lifecycle actions, while Vercel documentation confirmed `sandbox run`, `sandbox exec`, the Sandbox SDK `runCommand`, and Sandbox REST/CLI lifecycle support.
 
-The staging bridge itself remains real and usable when preview admission is available. During this re-check, three READY `dr-unterweger` previews on branch `chatgpt/go-stageb-promotion-gate-vercel-20260817-1346` were inspected. Their build logs did **not** establish Stage-B execution because those deployed commits still invoked inherited `run-microclay-pr383-sandbox.mjs` and emitted `SKIP_NON_TARGET_PREVIEW`.
+During that earlier re-check, three READY `dr-unterweger` previews on branch `chatgpt/go-stageb-promotion-gate-vercel-20260817-1346` were inspected. Their build logs did **not** establish Stage-B execution because those deployed commits still invoked inherited `run-microclay-pr383-sandbox.mjs` and emitted `SKIP_NON_TARGET_PREVIEW`.
 
-The same staging branch has since advanced to head:
+The same staging branch later advanced to head:
 `bbf1ad778045420afb4103335a8afd8cc1e7d625`
 
-At that head, `mcp/vercel-sandbox-mcp/package.json` is correctly wired to:
+At that head, `mcp/vercel-sandbox-mcp/package.json` was correctly wired to:
 `node scripts/run-stageb-promotion-gate-sandbox.mjs`
 
-However, the exact head was rejected by Vercel before build at `2026-08-17T06:55:21Z` with:
+That exact head was rejected by Vercel before build at `2026-08-17T06:55:21Z` with:
 `Deployment rate limited — retry in 24 hours.`
 
-Therefore the current classification is:
-- `VERCEL_SANDBOX_EXECUTION_PATH = CONFIRMED`;
-- `DIRECT_CHATGPT_MCP_SANDBOX_LIFECYCLE = NOT_EXPORTED`;
-- `CURRENT_EXACT_STAGEB_SANDBOX_EXECUTION = ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT`;
-- the READY previews that skipped on stale orchestration are **not** Stage-B test evidence;
-- no product/test failure is inferred from the provider admission block.
-
-Do not spend more preview deployments merely to prove that the bridge exists. Prefer one coordinated, exact-source, high-information Sandbox batch when the deployment quota admits the corrected head again.
+Preserve these as exact-attempt admission facts only. READY previews that skipped are not execution evidence, and a rate-limited attempt does not negate later successful Sandbox admission.
 
 ## Worker law
 
 For all Clay/ClayVerse workers:
 - absence of direct Sandbox actions in the ChatGPT Vercel MCP != absence of Vercel Sandbox execution;
 - inspect/use the existing `Dr.-Unterweger` Git-preview + `@vercel/sandbox` bridge before declaring Vercel Sandbox unavailable;
+- Vercel Sandbox is not generally paid-only: current official Hobby pricing includes recurring Sandbox allowance;
+- remaining account-specific included quota may still be unknown and must not be invented;
 - distinguish `DIRECT_MCP_ACTION_UNAVAILABLE` from `SANDBOX_EXECUTION_PATH_UNAVAILABLE`;
 - distinguish `BUILD_RATE_LIMIT / PREVIEW_ADMISSION_BLOCKED` from code/test failure;
 - distinguish a READY preview that only emits a staging `SKIP_*` result from actual Sandbox execution;
+- distinguish `exit_code != 0 with missing stderr/assertion identity` from a fully adjudicated semantic test failure;
 - never treat Vercel deployment READY as executable evidence;
 - only commands actually run in the isolated Sandbox may establish executable behavior;
-- bind exact source/artifact identity and persist receipts;
+- bind exact source/artifact identity, stdout/stderr or equivalent bounded diagnostics, command, exit code, network policy and stop state;
 - stop/delete bounded Sandboxes after use;
 - VPS/self-hosted/production-host testing remains forbidden;
 - Together remains forbidden.
 
 ## Current operational wording
 
-Preferred status wording when the direct connector lacks lifecycle tools but the staging bridge exists:
+Preferred current status wording:
 
-`Vercel Sandbox execution path CONFIRMED via Git-preview orchestration + @vercel/sandbox/OIDC; direct ChatGPT-MCP lifecycle actions are not exported. Current exact Stage-B run is admission-blocked by the Vercel preview deployment quota. A rate-limit/control-plane rejection before Sandbox start is ADMISSION_BLOCKED, not SANDBOX_UNAVAILABLE and not TEST_FAIL. READY previews that only emit SKIP_NON_TARGET_PREVIEW are staging evidence only, not Sandbox test evidence.`
+`Vercel Sandbox execution path CONFIRMED via Git-preview orchestration + @vercel/sandbox/OIDC; direct ChatGPT-MCP lifecycle actions are not exported. A current 2026-08-17 MicroClay staging deployment actually started a DENY_ALL Vercel Sandbox, bound exact target blobs, executed the test command and stopped cleanly; its exit 1 remains UNADJUDICATED because the staging harness persisted stdout but not stderr/assertion identity. Official Vercel Hobby pricing includes recurring Sandbox allowance, so Sandbox is not paid-only; only this account's remaining included quota is currently unverified. READY/SKIP previews and pre-Sandbox rate-limit rejections mint zero runtime credit.`

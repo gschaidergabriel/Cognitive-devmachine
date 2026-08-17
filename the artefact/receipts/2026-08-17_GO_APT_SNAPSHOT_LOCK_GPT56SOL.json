@@ -1,0 +1,83 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-17T13:46:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "go/apt-snapshot-lock-current-20260817-gpt56sol",
+  "branch_base": "2d77e3c07df11375e6448e2c0d86e76b29b0cc9e",
+  "source_candidate_pre_receipt_head": "e897cd66481593d535af78eecf07deed3964a99d",
+  "latest_main_observed_before_receipt": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+  "latest_main_delta_after_branch_base": {
+    "classification": "NON_OVERLAPPING_PRODUCT_DELTA",
+    "files": [
+      "the artefact/clayverse/service.py",
+      "the artefact/clayverse/terminal_gateway.py",
+      "the artefact/tests/test_terminal_gateway_protocol_bounds.py"
+    ],
+    "note": "Refresh/rebase again before any exact runtime acceptance batch; no current-main executable claim is made from this branch."
+  },
+  "frontier": "The OCI build inherited mutable Debian mirror configuration before installing ca-certificates and tmux, leaving OS package resolution outside the repository-owned source identity.",
+  "delta": {
+    "the artefact/SOURCE_LOCK.json": "Adds a strict ClayVerseDebianSnapshot/v1 contract for Debian + Debian Security at 20260817T000000Z, fixed suites/components/keyring/package set, and forbids mutable mirror fallback.",
+    "the artefact/build/install_pinned_apt.py": "Validates the snapshot contract fail-closed and renders deb822 APT sources plus the exact admitted package list.",
+    "the artefact/Dockerfile": "Copies and validates SOURCE_LOCK before any apt-get update, deletes inherited mutable APT source files, installs only through the rendered snapshot sources, then removes package indices.",
+    "the artefact/.dockerignore": "Admits only the pinned APT helper into the default-deny OCI build context.",
+    "the artefact/tests/test_apt_snapshot_lock.py": "Adds deterministic regressions for mutable-mirror substitution, timestamp drift, package-set/signing drift, fixed snapshot rendering and Dockerfile ordering.",
+    "the artefact/manifest.json": "Narrows the APT gate from unpinned source selection to exact isolated package-resolution/download observation."
+  },
+  "tested_blob_identity": {
+    "the artefact/Dockerfile": "20d13c8f7a23ac3abbe661e874f0643c68d805a3",
+    "the artefact/SOURCE_LOCK.json": "eecc0d6816f230049c4ba161b4d938b8eb3d40a8",
+    "the artefact/.dockerignore": "fad9689766702cd4f7142e786142590218d03163",
+    "the artefact/build/install_pinned_apt.py": "53418a5078ef37994a0dcfb16d0984c48d10361d",
+    "the artefact/tests/test_apt_snapshot_lock.py": "9af8ae64746657bd18cfde37895b02c889268c65",
+    "the artefact/tests/test_build_context_boundary.py": "9fe0a22cd967b680f103eb28282703c39c1f1a30"
+  },
+  "ordinary_isolated_source_mechanism_evidence": {
+    "surface": "OpenAI isolated non-production container source slice",
+    "commands": [
+      "python -m pytest -q tests/test_apt_snapshot_lock.py tests/test_build_context_boundary.py",
+      "python -m py_compile build/install_pinned_apt.py",
+      "python build/install_pinned_apt.py --lock SOURCE_LOCK.json --write-sources /tmp/clayverse-snapshot.sources",
+      "python build/install_pinned_apt.py --lock SOURCE_LOCK.json --print-packages"
+    ],
+    "observed": [
+      "7 passed",
+      "py_compile PASS",
+      "rendered only snapshot.debian.org Debian/trixie and Debian-Security/trixie-security sources at 20260817T000000Z",
+      "package list exactly: ca-certificates tmux"
+    ],
+    "evidence_class": "BOUNDED_SOURCE_MECHANISM_SUPPORTED_NOT_OCI_RUNTIME"
+  },
+  "external_primary_design_basis": [
+    "Debian snapshot.debian.org timestamped archive semantics",
+    "Debian APT per-source Check-Valid-Until control for historic snapshots"
+  ],
+  "strongest_counterhypothesis": "A syntactically correct fixed snapshot contract can still fail or resolve differently in the real OCI build because the selected timestamp/archive/suite/keyring/package dependency chain has not actually been fetched and verified on the admitted build surface.",
+  "unusual_experiment": {
+    "this_organ_executed": false,
+    "canonical_trigger_key": "2026-08-17T13-34+07-00__go__4cd0e21a9a07",
+    "canonical_result_path": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.result.json",
+    "slot_state": "CONSUMED_1_OF_1_BY_PARALLEL_ORGAN",
+    "experiment": "METHOD_PROMOTION_OPEN_EPISODE_SMUGGLE",
+    "reason_no_second_experiment": "Atomic GO experiment budget is global per user-triggered macro-cycle."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_exposed": false,
+    "vercel_connector_surface": "documentation/search only for Sandbox",
+    "installable_vercel_sandbox_execution_plugin_found": false,
+    "vps_self_hosted_production_fallback_used": false
+  },
+  "non_claims": [
+    "No apt repository/package bytes were downloaded in an accepted exact OCI build.",
+    "No exact OCI image build or image digest was observed.",
+    "No exact container startup/readiness/restart was observed.",
+    "No Vercel Sandbox runtime PASS is claimed.",
+    "No whole ClayVerse PASS is claimed."
+  ],
+  "next_exact_gate": "Refresh/rebase onto then-current main, start an authorized isolated Vercel Sandbox, build the exact ClayVerse OCI image, capture snapshot APT resolution and downloaded package identities plus image digest, then continue startup/readiness, persistence/restart and adjacent product regressions."
+}

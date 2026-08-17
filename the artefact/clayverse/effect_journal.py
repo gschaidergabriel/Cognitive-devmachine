@@ -60,18 +60,19 @@ class EffectJournal:
         causal_rows=db.execute('SELECT causal_id FROM causal_episodes WHERE episode_id=? ORDER BY ts,causal_id',(episode_id,)).fetchall()
         if any(row['causal_id']!=active['causal_id'] for row in causal_rows):
             raise StaleGeneration('effect_causal_spine')
-        if causal_rows:
-            raise RuntimeError('active causal identity already consumed before effect begin')
+        return bool(causal_rows)
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
             self._assert_generation_tx(db,session_id,user_id,generation)
             if lease is not None: self._assert_lease_tx(db,lease)
             if episode_id is not None:
-                self._assert_active_effect_intent_tx(db,episode_id,session_id,user_id,generation)
+                causal_consumed=self._assert_active_effect_intent_tx(db,episode_id,session_id,user_id,generation)
                 prior=db.execute('SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1',(episode_id,)).fetchone()
                 if prior is not None:
                     raise RuntimeError('effect already persisted for episode; automatic replay denied')
+                if causal_consumed:
+                    raise RuntimeError('active causal identity already consumed before effect begin')
             audit_target=self._target_receipt(target)
             audit_argv=self._argv_receipt(argv)
             db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,self._payload(audit_target),json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))

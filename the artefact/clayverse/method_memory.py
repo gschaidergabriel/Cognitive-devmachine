@@ -18,10 +18,14 @@ METHOD_KINDS = frozenset({
     "counterexample",
     "method_receipt",
 })
+METHOD_RECORD_KINDS = frozenset(METHOD_KINDS - {"method_receipt"})
 ROUTABLE_METHOD_KINDS = frozenset({"framework", "heuristic", "failure_pattern", "counterexample"})
 CANDIDATE_KINDS = frozenset({"framework_candidate", "heuristic_candidate"})
 PROMOTABLE_KINDS = frozenset({"framework", "heuristic"})
 VALID_STATUS = frozenset({"CANDIDATE", "PROMOTED", "DEMOTED", "RETIRED"})
+MAX_METHOD_JSON_BYTES = 64 * 1024
+MAX_LIST_ITEM_CHARS = 2048
+MAX_LIST_ITEMS = 256
 
 _LIST_FIELDS = (
     "preconditions",
@@ -82,6 +86,15 @@ def _norm_atom(value: Any) -> str:
     return atom
 
 
+def _bounded_string(value: Any, field: str) -> str:
+    if not isinstance(value, str):
+        raise MethodRecordError(f"{field} items must be strings")
+    item = value.strip()
+    if not item or len(item) > MAX_LIST_ITEM_CHARS:
+        raise MethodRecordError(f"invalid {field} item")
+    return item
+
+
 def canonical_problem_signature(raw: Any) -> dict[str, list[str]]:
     if not isinstance(raw, dict) or not raw or len(raw) > 24:
         raise MethodRecordError("problem_signature must be a non-empty bounded object")
@@ -125,7 +138,9 @@ def _parse_json_object(raw: str, label: str) -> dict[str, Any]:
 
 
 def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
-    if kind not in METHOD_KINDS:
+    if kind == "method_receipt":
+        raise MethodRecordError("method_receipt uses a separate receipt contract")
+    if kind not in METHOD_RECORD_KINDS:
         raise MethodRecordError("unrecognized method memory kind")
     if not isinstance(record, dict):
         raise MethodRecordError("method record must be an object")
@@ -157,20 +172,20 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
 
     for field in _LIST_FIELDS:
         value = record[field]
-        if not isinstance(value, list) or len(value) > 256:
+        if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
             raise MethodRecordError(f"{field} must be a bounded list")
-        normalized[field] = [str(x) for x in value]
+        normalized[field] = [_bounded_string(x, field) for x in value]
 
     if not isinstance(record["abstraction_version"], str) or not record["abstraction_version"].strip():
         raise MethodRecordError("invalid abstraction_version")
-    normalized["abstraction_version"] = record["abstraction_version"].strip()
+    normalized["abstraction_version"] = _bounded_string(record["abstraction_version"], "abstraction_version")
 
     for field in ("support_count", "success_count", "failure_count"):
         value = record[field]
         if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             raise MethodRecordError(f"{field} must be a non-negative integer")
         normalized[field] = value
-    if record["success_count"] + record["failure_count"] > record["support_count"]:
+    if normalized["success_count"] + normalized["failure_count"] > normalized["support_count"]:
         raise MethodRecordError("success/failure counts exceed support_count")
 
     calibration = record["calibration"]
@@ -200,8 +215,12 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
     limits = record.get("limits_method_ids", [])
     if not isinstance(limits, list) or len(limits) > 128:
         raise MethodRecordError("limits_method_ids must be a bounded list")
-    normalized["limits_method_ids"] = [str(x) for x in limits]
+    normalized["limits_method_ids"] = [_bounded_string(x, "limits_method_ids") for x in limits]
     normalized["method_schema_version"] = METHOD_SCHEMA_VERSION
+
+    encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    if len(encoded) > MAX_METHOD_JSON_BYTES:
+        raise MethodRecordError("method record exceeds bounded serialized size")
     return normalized
 
 
@@ -224,22 +243,30 @@ def structural_score(query: dict[str, list[str]], candidate: dict[str, list[str]
 class MethodMemory:
     """Validated method-memory admission and deterministic Stage-B retrieval.
 
-    This layer stores HOW-to-solve knowledge in UnifiedDB without granting factual,
-    effect, privacy, or promotion authority to retrieval. Candidate memories are never
-    served as active methods. PROMOTED method use remains structurally matched and
-    receipt-bounded; malformed active records fail closed.
+    V1 is deliberately user-scoped. Cross-user/global method promotion requires a later
+    explicit declassification/share contract; this baseline cannot broaden session/user
+    accessibility merely because an abstraction looks generic.
     """
 
     def __init__(self, db: UnifiedDB):
         self.db = db
 
-    def _assert_refs(self, record: dict[str, Any]) -> None:
+    def _assert_refs(self, record: dict[str, Any], user_id: str) -> None:
         for episode_id in set(record["source_episode_ids"]):
-            if not self.db.db.execute("SELECT 1 FROM workspace_episodes WHERE episode_id=?", (episode_id,)).fetchone():
+            row = self.db.db.execute(
+                "SELECT s.user_id FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id WHERE w.episode_id=?",
+                (episode_id,),
+            ).fetchone()
+            if row is None:
                 raise MethodRecordError("unknown source_episode_id")
+            if str(row["user_id"]) != user_id:
+                raise MethodRecordError("cross-user source episode denied")
         for memory_id in set(record["supporting_memory_ids"] + record["counterexample_memory_ids"] + record["limits_method_ids"]):
-            if not self.db.db.execute("SELECT 1 FROM durable_memory WHERE memory_id=?", (memory_id,)).fetchone():
+            row = self.db.db.execute("SELECT user_id FROM durable_memory WHERE memory_id=?", (memory_id,)).fetchone()
+            if row is None:
                 raise MethodRecordError("unknown referenced memory_id")
+            if row["user_id"] not in (None, user_id):
+                raise MethodRecordError("cross-user referenced memory denied")
 
     def admit(
         self,
@@ -251,27 +278,28 @@ class MethodMemory:
         user_id: str | None,
         provenance: dict[str, Any],
     ) -> str:
+        if user_id not in {"gabriel", "andreas"}:
+            raise MethodRecordError("v1 method admission requires an explicit canonical user scope")
         if not isinstance(subject, str) or not subject.strip() or len(subject) > 300:
             raise MethodRecordError("invalid method subject")
         if not isinstance(provenance, dict) or not provenance:
             raise MethodRecordError("method admission requires provenance")
         normalized = validate_method_record(kind, record)
-        self._assert_refs(normalized)
+        self._assert_refs(normalized, user_id)
+        if source_turn_id is not None:
+            source = self.db.db.execute("SELECT user_id FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
+            if source is None or str(source["user_id"]) != user_id:
+                raise MethodRecordError("source turn is absent or cross-user")
         stored_provenance = dict(provenance)
         stored_provenance.update({
             "method_schema_version": METHOD_SCHEMA_VERSION,
             "admission": "method_memory:v1",
+            "user_scope": user_id,
             "truth_authority": False,
             "effect_authority": False,
         })
-        return self.db.add_memory(
-            kind,
-            subject.strip(),
-            json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False),
-            source_turn_id,
-            user_id,
-            stored_provenance,
-        )
+        encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        return self.db.add_memory(kind, subject.strip(), encoded, source_turn_id, user_id, stored_provenance)
 
     @staticmethod
     def strategy_intent(query: str) -> bool:
@@ -288,6 +316,12 @@ class MethodMemory:
         limit: int = 6,
         min_score: float = 0.20,
     ) -> dict[str, Any]:
+        if user_id not in {"gabriel", "andreas"}:
+            raise MethodRecordError("invalid method retrieval user")
+        if not 1 <= int(limit) <= 24:
+            raise MethodRecordError("invalid method retrieval limit")
+        if not 0.0 <= float(min_score) <= 1.0:
+            raise MethodRecordError("invalid structural threshold")
         status = str(evidence_status).upper()
         if status not in {"PRESENT", "UNDERCOVERED", "UNKNOWN"}:
             raise MethodRecordError("invalid evidence status")
@@ -305,7 +339,7 @@ class MethodMemory:
 
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory WHERE kind IN ('framework','heuristic','failure_pattern','counterexample') "
-            "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 2000",
+            "AND user_id=? ORDER BY ts DESC LIMIT 2000",
             (user_id,),
         ).fetchall()
         matches: list[MethodMatch] = []
@@ -314,6 +348,8 @@ class MethodMemory:
             if record["status"] != "PROMOTED":
                 continue
             provenance = _parse_json_object(str(row["provenance"]), "method provenance")
+            if provenance.get("admission") != "method_memory:v1" or provenance.get("user_scope") != user_id:
+                raise MethodRecordError("unadmitted or scope-divergent method row")
             score = structural_score(query_signature, record["problem_signature"])
             if score <= 0.0:
                 continue

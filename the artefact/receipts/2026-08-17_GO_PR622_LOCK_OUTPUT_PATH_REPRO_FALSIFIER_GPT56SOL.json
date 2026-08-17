@@ -1,0 +1,44 @@
+{
+  "schema": "clayverse-bounded-receipt-v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "lane": "PR622_PYTHON_HASH_LOCK_GENERATOR",
+  "classification": "SOURCE_CANDIDATE_REPAIRED_RUNTIME_UNOBSERVED",
+  "observed": {
+    "predecessor_head": "44ec5e109d40304b152c2fa05ba3e42e690f2820",
+    "predecessor_workflow_blob": "060af30915f7c291655e005d012e0d9bbfde9fa9",
+    "falsifier": "The predecessor generated /tmp/requirements.lock.1 and /tmp/requirements.lock.2 and required byte equality. pip-tools generated-file headers record the compile invocation/output path, so two distinct -o paths can create a deterministic false reproducibility difference even when dependency resolution is identical.",
+    "primary_metadata_check": "Official PyPI release JSON was checked for pip-tools 7.5.3, build 1.2.2.post1, click 8.3.3, packaging 24.2, pip 26.1.2, pyproject-hooks 1.2.0, setuptools 83.0.0 and wheel 0.46.2. Declared wheel filenames/SHA-256 values match; Python-3.13-applicable non-extra dependencies are covered by the declared eight-package set at source-metadata scope.",
+    "workflow_runs_at_first_post_repair_refresh": 0
+  },
+  "repair": {
+    "workflow_commit": "de935824c523a4a4b09cdeecbade3d9fabebeee8",
+    "test_fence_commit": "b6b5a83c390944c9f8c9494d29c1d793ed701dcb",
+    "mechanism": "Compile twice independently to the same /tmp/requirements.lock path; copy run 1 aside; delete the output before run 2; diff saved run-1 bytes against fresh run-2 bytes; reuse the stable accepted candidate path for SHA, wheelhouse download and gzip evidence.",
+    "source_test_fence": "Requires stable LOCK_PATH/LOCK_FIRST sequence and forbids predecessor .lock.1/.lock.2 output paths."
+  },
+  "evidence_boundary": {
+    "source_review": true,
+    "official_package_metadata": true,
+    "authorized_isolated_execution": false,
+    "oci_runtime_credit": 0,
+    "clayverse_test_fail": false,
+    "whole_product_pass": false
+  },
+  "execution_blocker": "Current retained Vercel OCI lane still requires sensitive host-side GITHUB_READ_TOKEN before private Research/EntityOS staging; connected Vercel tools do not expose secret mutation/value recovery. Do not retrigger only to reproduce the known credential blocker.",
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "Shared living state reports no safely exposed immutable request/turn identity for the atomic unusual-experiment lease; no duplicate uncoordinated experiment was consumed."
+  },
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted_or_production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_exposure": false
+  },
+  "next_exact_step": "After credential-capable authorized isolated admission, refresh main and retained lanes, rebind #810 once, execute #622 bootstrap/download/offline-install/stable-output double compile/product wheelhouse checks in the exact digest-pinned product base, and only then accept lock bytes or switch Docker to --require-hashes."
+}

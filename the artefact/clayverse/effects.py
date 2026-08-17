@@ -12,7 +12,9 @@ class EffectGate:
     def __init__(self,db:UnifiedDB,allow_process=False): self.db=db; self.allow_process=allow_process
     def execute(self,req:EffectRequest,episode_id=None,lease:Lease|None=None):
         if req.capability not in self.ALLOWED: raise PermissionError('capability denied')
-        generation=self.db.session_generation(req.session_id)
+        row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
+        if not row: raise PermissionError('session owner mismatch')
+        generation=int(row[0])
         if lease: self.db.assert_lease(lease)
         if req.capability=='state.noop': outcome={'ok':True,'target':req.target}
         else:

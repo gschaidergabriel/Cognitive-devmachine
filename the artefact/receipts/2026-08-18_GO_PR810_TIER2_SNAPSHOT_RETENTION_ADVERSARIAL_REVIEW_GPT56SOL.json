@@ -1,0 +1,44 @@
+{
+  "schema": "ClayVerseGoSourceReviewReceipt/v1",
+  "date_local": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "SOURCE_ADVERSARIAL_REVIEW_ONLY_ZERO_RUNTIME_CREDIT",
+  "canonical_research_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+  "controller_pr": 810,
+  "controller_head_reviewed": "ba78e1624e299c7ed8e7f202c66fdae0c8db3009",
+  "controller_file": "mcp/vercel-sandbox-mcp/lib/tier2-recreate-handler.js",
+  "controller_file_blob": "f18c428ee4788f1136408e5b351fbf1b81ba22c4",
+  "durable_review_id": 4953508368,
+  "observed_source_mechanism": {
+    "source_snapshot_created": true,
+    "carrier_snapshot_created": true,
+    "source_sandbox_deleted_before_recreate": true,
+    "carrier_sandbox_deleted_after_replacement_create": true,
+    "snapshot_delete_calls_present_in_error_path": true,
+    "snapshot_delete_calls_present_in_success_path": false
+  },
+  "risk": "A successful Tier-2 source path can leave project-scoped snapshot carrier objects after source/carrier sandbox deletion. Those retained objects are additional durable recovery artifacts until expiry or explicit deletion and therefore require an explicit admitted retention/authority contract or deterministic cleanup before promotion.",
+  "required_resolution": [
+    "Prefer explicit deletion of sourceSnapshot and carrierSnapshot after the replacement has been created and transfer identity has survived source and carrier deletion, or explicitly admit them as bounded retained recovery artifacts with provenance and lifecycle authority.",
+    "Snapshot cleanup failure must fail closed or remain explicit uncertainty; it must not silently receive full Tier-2 replacement credit.",
+    "Bind cleanup/retention state into the Tier-2 receipt/gate.",
+    "Re-run the exact source/head in an authorized isolated execution before assigning runtime credit."
+  ],
+  "execution_admission": {
+    "vercel_status_on_reviewed_head": "FAILURE_CONTROL_PLANE",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "classification": "ADMISSION_BLOCKER_NOT_CLAYVERSE_TEST_FAILURE"
+  },
+  "unusual_experiment": "NONE_EXECUTED_BY_THIS_ORGAN",
+  "runtime_credit": 0,
+  "tier2_runtime_pass": false,
+  "whole_product_pass": false,
+  "notes": [
+    "Current Vercel documentation supports Sandbox snapshots as project-scoped carrier candidates that can outlive a deleted sandbox; this is platform lifecycle evidence, not ClayVerse runtime proof.",
+    "No VPS/self-hosted/production-host execution was used.",
+    "No secret was requested, synthesized, logged, or persisted.",
+    "Together API was not used."
+  ]
+}

@@ -6,7 +6,7 @@ from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with factual MicroClay retrieval plus Stage-B method transfer."""
+    """Bounded world assembly with factual MicroClay retrieval plus shadow Stage-B evaluation."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
@@ -107,11 +107,15 @@ class WorldAssembler:
             "mode": "LEGACY_COMPATIBILITY",
             "status": "UNKNOWN",
             "fact_status": "UNKNOWN",
-            "method_status": "NOT_EVALUATED",
+            "method_status": "NOT_SERVED",
+            "method_shadow_status": "NOT_EVALUATED",
             "method_triggered": False,
             "method_count": 0,
+            "method_shadow_count": 0,
             "counterevidence_count": 0,
+            "counterevidence_shadow_count": 0,
             "method_policy_mode": "SHADOW",
+            "method_served": False,
             "truth_authority": False,
             "effect_authority": False,
         }
@@ -150,22 +154,35 @@ class WorldAssembler:
                 user_id=user_id,
                 fact_status=fact_status,
             )
-            method_context = list(methods["items"])
-            counterevidence = list(methods["counterevidence"])
+            policy_mode = str(methods.get("policy_mode", "")).upper()
+            if policy_mode != "SHADOW":
+                # ACTIVE serving is not admitted until causal method-use receipts bind
+                # request identity, replay, generation and downstream verified utility.
+                raise RuntimeError("method serving requires admitted causal receipt gate")
+
+            # SHADOW may measure/rank methods, but it must not alter the context delivered
+            # to Claude. Only compact observation counts enter the factual retrieval receipt.
+            shadow_method_count = len(methods.get("items", []))
+            shadow_counter_count = len(methods.get("counterevidence", []))
+            method_context = []
+            counterevidence = []
             unknowns = self._unknown_context(fact_status)
             retrieval_receipt.update({
                 "fact_status": fact_status,
                 "method_triggered": bool(methods["triggered"]),
-                "method_status": str(methods["method_status"]),
-                "method_count": len(method_context),
-                "counterevidence_count": len(counterevidence),
-                "method_policy_mode": str(methods["policy_mode"]),
+                "method_status": "NOT_SERVED",
+                "method_shadow_status": str(methods["method_status"]),
+                "method_count": 0,
+                "method_shadow_count": shadow_method_count,
+                "counterevidence_count": 0,
+                "counterevidence_shadow_count": shadow_counter_count,
+                "method_policy_mode": policy_mode,
+                "method_served": False,
                 "method_invalid_count": len(methods.get("invalid_method_ids", [])),
             })
-            # Compatibility carrier: TurnLifecycle currently bounds the historical
-            # durable_memory field. Typed context_class keeps evidence/method/unknown/
-            # counterevidence visibly distinct without letting method context become fact.
-            memories = evidence_context + method_context + counterevidence + unknowns
+            # TurnLifecycle packs durable_memory into Claude context. SHADOW observations
+            # therefore stay out of this carrier entirely.
+            memories = evidence_context + unknowns
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.

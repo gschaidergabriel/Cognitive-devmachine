@@ -5,7 +5,8 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from clayverse.adapters import AuthenticationError, ClerkConfig, ClerkTokenVerifier
+from clayverse import adapters
+from clayverse.clerk_auth import AuthenticationError, ClerkConfig, ClerkTokenVerifier
 
 
 def _keypair():
@@ -37,6 +38,12 @@ def _claims(now, *, sid="sess_1"):
         "jti": "jwt_1",
     }
     return claims
+
+
+def test_legacy_adapter_reexports_canonical_clerk_authority():
+    assert adapters.AuthenticationError is AuthenticationError
+    assert adapters.ClerkConfig is ClerkConfig
+    assert adapters.ClerkTokenVerifier is ClerkTokenVerifier
 
 
 def test_clerk_boundary_accepts_session_bound_token_and_rejects_custom_jwt_shape():

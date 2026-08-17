@@ -46,6 +46,7 @@ def test_existing_session_reapplies_then_attests(monkeypatch, tmp_path):
     order = []
     monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: order.append("enforce"))
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: order.append("attest"))
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
 
     manager.ensure("gabriel")
 
@@ -66,6 +67,56 @@ def test_policy_reapply_timeout_fails_closed(monkeypatch, tmp_path):
         manager._enforce_tmux_policy(binding)
 
 
+def test_policy_reapply_tolerates_only_already_removed_key_tables(monkeypatch, tmp_path):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    binding = manager.binding("gabriel")
+
+    def fake_run(argv, **kwargs):
+        assert argv[5:] == ["source-file", "/etc/clayverse/managed-tmux.conf"]
+        assert kwargs["timeout"] == manager.TMUX_CONTROL_TIMEOUT_SECONDS
+        return SimpleNamespace(
+            returncode=1,
+            stdout="",
+            stderr=(
+                "table prefix doesn't exist\n"
+                "table copy-mode doesn't exist\n"
+                "table copy-mode-vi doesn't exist\n"
+            ),
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    manager._enforce_tmux_policy(binding)
+
+
+def test_policy_reapply_rejects_mixed_or_unknown_diagnostics(monkeypatch, tmp_path):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    binding = manager.binding("andreas")
+
+    def fake_run(argv, **kwargs):
+        return SimpleNamespace(
+            returncode=1,
+            stdout="",
+            stderr="table prefix doesn't exist\nunknown option: unsafe-policy\n",
+        )
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    with pytest.raises(TerminalRuntimeError, match="failed to enforce tmux policy"):
+        manager._enforce_tmux_policy(binding)
+
+
+def test_policy_reapply_rejects_nonzero_without_diagnostic(monkeypatch, tmp_path):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    binding = manager.binding("andreas")
+
+    monkeypatch.setattr(
+        subprocess,
+        "run",
+        lambda argv, **kwargs: SimpleNamespace(returncode=1, stdout="", stderr=""),
+    )
+    with pytest.raises(TerminalRuntimeError, match="failed to enforce tmux policy"):
+        manager._enforce_tmux_policy(binding)
+
+
 def test_new_session_direct_argv_then_reapplies_then_attests(monkeypatch, tmp_path):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
@@ -81,6 +132,7 @@ def test_new_session_direct_argv_then_reapplies_then_attests(monkeypatch, tmp_pa
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: order.append("enforce"))
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: order.append("attest"))
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
 
     manager.ensure("andreas")
 

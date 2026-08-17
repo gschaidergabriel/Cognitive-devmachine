@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "mission": "ClayVerse single-container artifact",
+  "base_main_commit": "ade452bf887d62da2ca3f61e8c66e9a68c5e83e8",
+  "tested_source_commit": "a0c7c1a6e0bcb9ac76e0ae2fced2682045e62670",
+  "branch": "go-causal-reentry-fence-r2-20260817",
+  "problem": "Host process execution could occur before a durable effect receipt existed, and causal re-entry was recorded later. A crash or generation/lease change could therefore leave an untracked or falsely-current external outcome.",
+  "implemented_contract": [
+    "persist effect intent as PENDING before host execution",
+    "retain current-main explicit argv validation, shell denial and shell=false process boundary",
+    "recheck session generation and optional resource lease after host execution",
+    "record post-execution fence failure as STALE_OUTCOME with zero causal credit",
+    "commit effect outcome and causal re-entry atomically",
+    "recover restart-surviving PENDING effects as UNKNOWN_AFTER_RESTART with zero causal credit",
+    "engine reuses the causal record created by effect completion rather than duplicating it"
+  ],
+  "exact_modified_blob_binding": {
+    "the artefact/clayverse/store.py": "e30366f0db42d1868ee7014911a61d58525d9b87",
+    "the artefact/clayverse/effects.py": "603e5a7c799fda3c8fadebf9ffd45574c822e263",
+    "the artefact/clayverse/engine.py": "0d71d955621dcb7cd559a2bd257024f46a793cbe",
+    "the artefact/tests/test_causal_effect_fence.py": "b2291e8ab8e96d7c1450d75d0c426d265cf3369e"
+  },
+  "isolated_regression": {
+    "surface": "non-VPS isolated container runner available to the Research Entity",
+    "command": "PYTHONPATH=. pytest -q tests/test_clayverse.py tests/test_runtime_adapters.py tests/test_workspace_boundary.py tests/test_causal_effect_fence.py",
+    "result": "PASS",
+    "passed": 19,
+    "failed": 0,
+    "runtime": {
+      "python": "3.13.5",
+      "sqlite": "3.46.1",
+      "pyjwt": "2.13.0",
+      "cryptography": "46.0.4",
+      "kernel": "Linux x86_64 6.18.35"
+    }
+  },
+  "new_regression_obligations": [
+    "PENDING exists before subprocess.run is invoked",
+    "restart converts unresolved PENDING to UNKNOWN_AFTER_RESTART and re-enters it",
+    "session generation change during an effect prevents VERIFIED status",
+    "lease generation/nonce change during an effect prevents VERIFIED status"
+  ],
+  "unusual_experiment": {
+    "count_for_trigger": 1,
+    "intervention": "SIGKILL during causal re-entry on a precursor non-canonical local prototype",
+    "first_observation": "SQLite integrity stayed ok but one PENDING episode survived, falsifying the assumption that WAL durability alone closed causal continuity.",
+    "repair_regression": "A rerun of the same intervention after adding restart reconciliation produced zero pending residue and one observation/re-entry per episode.",
+    "scope": "mechanism discriminator only; the exact branch is supported by deterministic regressions, not by promotion of the precursor result"
+  },
+  "github_oci_gate": {
+    "workflow": "clayverse-artifact-ci",
+    "run_id": 31995439287,
+    "head_sha": "a0c7c1a6e0bcb9ac76e0ae2fced2682045e62670",
+    "status": "BLOCKED_BEFORE_RUNNER_START",
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "technical_clayverse_failure_observed": false
+  },
+  "whole_clayverse_pass": false,
+  "acceptance": "CANDIDATE_IN_PROGRESS",
+  "next_executable_frontier": [
+    "restore an authorized OCI runner and execute exact image build plus hardened two-restart continuity gate",
+    "run exact current-main full test/build gate after fusion",
+    "continue real Clerk plus two permanent sessions and real Claude Code end-to-end validation",
+    "continue EntityOS execution/capability substrate integration without creating a second state authority"
+  ],
+  "evidence_law": "Regression PASS is bounded evidence only; whole ClayVerse PASS requires the exact integrated container gates."
+}

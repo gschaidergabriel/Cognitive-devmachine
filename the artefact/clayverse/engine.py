@@ -100,6 +100,13 @@ class ClayVerseEngine:
                     now,
                 ),
             )
+            # Memory extraction/compression are canonical writes derived from this user
+            # turn. Keep them under the same BEGIN IMMEDIATE generation transaction so
+            # recovery cannot advance the global generation between turn admission and
+            # durable-memory mutation. Any memory failure rolls back the entire admitted
+            # turn/workspace/active spine rather than leaving stale canonical memory.
+            self.memory.extract_explicit(tid, uid, content)
+            self.memory.compact(sid)
         return tid, ws, generation, causal_id
 
     def ingest(self, clerk_subject, content, *, resources=None):
@@ -116,8 +123,6 @@ class ClayVerseEngine:
         tid, ws, reasoning_generation, causal_id = self._begin_engine_turn(
             uid, sid, content, resources
         )
-        self.memory.extract_explicit(tid, uid, content)
-        self.memory.compact(sid)
 
         world = self.world.assemble(sid, resources)
         world["runtime_capabilities"] = list(self.effects.available_capabilities())

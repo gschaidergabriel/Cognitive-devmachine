@@ -442,6 +442,66 @@ class AutonomyController:
             self._save(db, state)
             return {"goal_id": goal_id, "status": "CANCELLED"}
 
+    def recover_generation(self, *, expected_generation: int | None = None) -> dict[str, int]:
+        """Rebind durable goals after restart without replaying or inventing effects."""
+        live = self.db.entity_generation()
+        if expected_generation is not None and int(expected_generation) != live:
+            raise StaleGeneration("autonomy-recovery")
+        counts = {
+            "rebound": 0,
+            "interrupted_no_effect_requeued": 0,
+            "ambiguous_effect_blocked": 0,
+            "effect_evidence_rebind_required": 0,
+            "blocked_preserved": 0,
+            "terminal_preserved": 0,
+        }
+        changed = False
+        with self.db.tx() as db:
+            state = self._load(db)
+            now = time.time()
+            for goal_id in state["queue"]:
+                goal = state["goals"][goal_id]
+                prior_generation = int(goal["generation"])
+                if prior_generation == live:
+                    continue
+                if prior_generation > live:
+                    raise AutonomyStateError("goal generation is ahead of live entity")
+                if goal["status"] in {"COMPLETED", "CANCELLED"}:
+                    counts["terminal_preserved"] += 1
+                    continue
+
+                step = goal["current_step"]
+                goal["generation"] = int(live)
+                if step and step["status"] == "ADMITTED" and step["kind"] == "effect":
+                    step["status"] = "FAILED"
+                    goal["status"] = "BLOCKED"
+                    goal["blocked_reason"] = "unknown_effect_after_generation_change"
+                    counts["ambiguous_effect_blocked"] += 1
+                elif goal["evidence_effect_ids"]:
+                    # Old-generation verified evidence is preserved but never silently
+                    # promoted to current-generation completion or used to trigger replay.
+                    goal["status"] = "BLOCKED"
+                    goal["blocked_reason"] = "effect_evidence_requires_generation_rebind"
+                    counts["effect_evidence_rebind_required"] += 1
+                elif step and step["status"] in {"PROPOSED", "ADMITTED"}:
+                    step["status"] = "FAILED"
+                    goal["status"] = "ACTIVE"
+                    goal["blocked_reason"] = "recovered_interrupted_no_effect_step"
+                    counts["interrupted_no_effect_requeued"] += 1
+                elif goal["status"] == "BLOCKED":
+                    counts["blocked_preserved"] += 1
+                else:
+                    if goal["status"] in {"WAITING", "VERIFYING"}:
+                        goal["status"] = "ACTIVE"
+                    goal["blocked_reason"] = None
+                    counts["rebound"] += 1
+                goal["updated_at"] = now
+                changed = True
+
+            if changed:
+                self._save(db, state)
+        return counts
+
     def next_runnable(self, *, user_id: str | None = None) -> dict[str, Any] | None:
         with self.db.tx() as db:
             state, live = self._load(db), self.db.entity_generation()

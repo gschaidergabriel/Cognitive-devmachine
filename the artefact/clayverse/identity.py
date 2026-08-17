@@ -65,4 +65,17 @@ class IdentityRouter:
         if uid not in CANONICAL_USER_IDS: raise PermissionError('unmapped Clerk subject')
         persisted=self.db.db.execute('SELECT user_id FROM users WHERE clerk_subject=?',(clerk_subject,)).fetchone()
         if not persisted or persisted[0] != uid: raise PermissionError('Clerk subject binding mismatch')
-        return uid,self.db.ensure_session(uid,CANONICAL_TERMINAL_NAMES[uid])
+        rows=self.db.db.execute(
+            'SELECT session_id,terminal_name,generation FROM sessions WHERE user_id=? ORDER BY created_at,session_id',
+            (uid,),
+        ).fetchall()
+        if len(rows)!=1:
+            raise PermissionError(f'canonical user must own exactly one permanent session: {uid}')
+        session=rows[0]
+        if session['terminal_name'] != CANONICAL_TERMINAL_NAMES[uid]:
+            raise PermissionError(f'canonical terminal name mismatch: {uid}')
+        try:
+            self.db.assert_live_generation(session['session_id'],int(session['generation']))
+        except Exception as exc:
+            raise PermissionError(f'canonical session generation mismatch: {uid}') from exc
+        return uid,session['session_id']

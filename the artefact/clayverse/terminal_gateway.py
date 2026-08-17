@@ -140,6 +140,7 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
             schema and schema[0] == "6"
             and entity_generation >= 1
             and users and int(users[0]) == 2
+            and len(session_rows) == len(CANONICAL_TERMINAL_NAMES)
             and set(sessions) == {"gabriel", "andreas"}
             and all(
                 sessions[user_id]["terminal_name"] == terminal_name

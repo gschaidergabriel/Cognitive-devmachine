@@ -38,6 +38,7 @@ def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypa
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     calls: list[list[str]] = []
 
     def fake_run(argv, **kwargs):

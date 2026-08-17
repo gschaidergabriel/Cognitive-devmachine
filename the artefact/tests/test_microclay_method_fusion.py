@@ -7,7 +7,11 @@ import uuid
 
 import pytest
 
-from clayverse.microclay_methods import MicroClayMethodRetrieval
+from clayverse.microclay_methods import (
+    METHOD_SCHEMA,
+    PROMOTION_RECEIPT_SCHEMA,
+    MicroClayMethodRetrieval,
+)
 from clayverse.microclay_retrieval import MicroClayRetrieval
 from clayverse.retrieval import WorldAssembler
 from clayverse.store import StaleGeneration, UnifiedDB
@@ -42,33 +46,106 @@ def _activate_identity(db, sid, generation, turn_id, episode_id, causal_id):
     )
 
 
-def _framework_record():
+def _method_source_episodes(db: UnifiedDB, *, user_id="gabriel", count=2):
+    db.ensure_user(user_id, user_id.title())
+    sid = db.ensure_session(user_id, f"clayverse-{user_id}")
+    result = []
+    for _ in range(count):
+        episode_id = str(uuid.uuid4())
+        causal_id = str(uuid.uuid4())
+        db.db.execute(
+            "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (episode_id, sid, time.time(), None, 1.0, "[]", None, "COMPLETED"),
+        )
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (causal_id, episode_id, None, None, f"outcome:{episode_id}", 1.0, 1, time.time()),
+        )
+        result.append(episode_id)
+    return result
+
+
+def _framework_record(source_episode_ids):
     return {
+        "schema": METHOD_SCHEMA,
         "problem_signature": ["timeout dependency sensor", "bounded diagnosis"],
         "preconditions": ["a dependency boundary exists"],
+        "goal_shape": "diagnose the controlling dependency without manufacturing facts",
         "method_steps": ["isolate dependency", "run bounded falsifier"],
+        "invariants": ["direct evidence outranks analogical method context"],
+        "expected_observations": ["dependency removal changes the timeout if causal"],
         "falsifiers": ["timeout persists with dependency removed"],
+        "failure_modes": ["surface similarity hides a different causal structure"],
         "scope_limits": ["not a factual claim about the current sensor"],
-        "lifecycle_status": "PROMOTED",
+        "source_episode_ids": list(source_episode_ids),
+        "supporting_memory_ids": [],
+        "counterexample_memory_ids": [],
+        "abstraction_version": 1,
+        "support_count": len(source_episode_ids),
+        "success_count": len(source_episode_ids),
+        "failure_count": 0,
+        "calibration": 0.8,
+        "last_validated_at": time.time(),
+        "status": "PROMOTED",
     }
 
 
-def _add_framework(db: UnifiedDB, *, kind="framework", provenance=None):
-    return db.add_memory(
+def _add_promoted_framework(
+    db: UnifiedDB,
+    *,
+    user_id="gabriel",
+    kind="framework",
+    source_episode_ids=None,
+):
+    source_episode_ids = source_episode_ids or _method_source_episodes(db, user_id=user_id)
+    record = _framework_record(source_episode_ids)
+    method_id = db.add_memory(
         kind,
         "dependency-timeout-diagnosis",
-        "diagnostic framework",
+        json.dumps(record, sort_keys=True, separators=(",", ":")),
         None,
-        "gabriel",
-        provenance if provenance is not None else {"method_record": _framework_record()},
+        user_id,
+        {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "pending"},
     )
+    receipt = {
+        "schema": PROMOTION_RECEIPT_SCHEMA,
+        "action": "PROMOTE",
+        "method_memory_id": method_id,
+        "source_episode_ids": list(source_episode_ids),
+        "supporting_memory_ids": [],
+        "counterexample_memory_ids": [],
+        "ts": time.time(),
+    }
+    receipt_id = db.add_memory(
+        "method_receipt",
+        method_id,
+        json.dumps(receipt, sort_keys=True, separators=(",", ":")),
+        None,
+        user_id,
+        {"source": "test-only-promotion-fixture"},
+    )
+    db.db.execute(
+        "UPDATE durable_memory SET provenance=? WHERE memory_id=?",
+        (
+            json.dumps({
+                "method_schema": METHOD_SCHEMA,
+                "promotion_receipt_id": receipt_id,
+                "truth_authority": False,
+                "effect_authority": False,
+            }, sort_keys=True, separators=(",", ":")),
+            method_id,
+        ),
+    )
+    return method_id
 
 
 def test_fact_unknown_survives_method_present_and_receipts_stay_separate(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
-        _add_framework(db)
+        _add_promoted_framework(db)
         evidence = MicroClayRetrieval(db).retrieve(
             query="sensor timeout dependency",
             user_id="gabriel",
@@ -104,6 +181,7 @@ def test_fact_unknown_survives_method_present_and_receipts_stay_separate(tmp_pat
         assert world["method_receipt"]["causal_id"] == causal_id
         assert world["method_receipt"]["generation"] == generation
         assert world["method_receipt"]["truth_authority"] is False
+        assert world["method_receipt"]["promotion_verified"] is True
     finally:
         db.close()
 
@@ -117,7 +195,7 @@ def test_direct_evidence_suppresses_unknown_triggered_method_lane(tmp_path):
             "sensor timeout dependency is confirmed by current measurement",
             None, "gabriel", {"source": "test-measurement"},
         )
-        _add_framework(db)
+        _add_promoted_framework(db)
         world = WorldAssembler(db).assemble(
             sid, (), query="sensor timeout dependency", turn_id=turn_id,
             episode_id=episode_id, causal_id=causal_id, generation=generation,
@@ -131,11 +209,13 @@ def test_direct_evidence_suppresses_unknown_triggered_method_lane(tmp_path):
         db.close()
 
 
-def test_candidate_and_malformed_method_fail_closed(tmp_path):
+def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
-        _add_framework(db, kind="framework_candidate")
+        db.add_memory(
+            "framework_candidate", "candidate", "{}", None, "gabriel", {"source": "test"}
+        )
         method = MicroClayMethodRetrieval(db).retrieve(
             query="sensor timeout dependency", user_id="gabriel", session_id=sid,
             turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
@@ -144,14 +224,104 @@ def test_candidate_and_malformed_method_fail_closed(tmp_path):
         assert method["items"] == []
         assert method["receipt"]["status"] == "METHOD_UNKNOWN"
 
-        _add_framework(
-            db,
-            provenance={"method_record": {
-                "problem_signature": ["sensor timeout dependency"],
-                "lifecycle_status": "PROMOTED",
-            }},
+        malformed_id = db.add_memory(
+            "framework", "malformed", "{}", None, "gabriel",
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing"},
         )
-        with pytest.raises(ValueError, match="scope_limits|preconditions|method_steps|falsifiers"):
+        with pytest.raises(ValueError, match="fields mismatch"):
+            MicroClayMethodRetrieval(db).retrieve(
+                query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+                turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
+                generation=generation,
+            )
+        db.db.execute("DELETE FROM durable_memory WHERE memory_id=?", (malformed_id,))
+
+        source_episode_ids = _method_source_episodes(db)
+        record = _framework_record(source_episode_ids)
+        db.add_memory(
+            "framework",
+            "unreceipted",
+            json.dumps(record, sort_keys=True, separators=(",", ":")),
+            None,
+            "gabriel",
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "missing"},
+        )
+        with pytest.raises(ValueError, match="promotion receipt is missing"):
+            MicroClayMethodRetrieval(db).retrieve(
+                query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+                turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
+                generation=generation,
+            )
+    finally:
+        db.close()
+
+
+def test_unscoped_global_method_is_not_admitted_to_user_method_context(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, generation, turn_id, episode_id, causal_id = _identity(db)
+        db.add_memory(
+            "framework",
+            "global-unadmitted",
+            "{}",
+            None,
+            None,
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "forged"},
+        )
+        result = MicroClayMethodRetrieval(db).retrieve(
+            query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+            turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
+            generation=generation,
+        )
+        assert result["items"] == []
+        assert result["receipt"]["status"] == "METHOD_UNKNOWN"
+    finally:
+        db.close()
+
+
+def test_nonterminal_or_cross_user_source_episode_fails_closed(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        sid, generation, turn_id, episode_id, causal_id = _identity(db)
+        good_episode = _method_source_episodes(db, count=1)[0]
+        db.ensure_user("andreas", "Andreas")
+        andreas_sid = db.ensure_session("andreas", "clayverse-andreas")
+        foreign_episode = str(uuid.uuid4())
+        db.db.execute(
+            "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (foreign_episode, andreas_sid, time.time(), None, 1.0, "[]", None, "COMPLETED"),
+        )
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (str(uuid.uuid4()), foreign_episode, None, None, "foreign", 1.0, 1, time.time()),
+        )
+        record = _framework_record([good_episode, foreign_episode])
+        method_id = db.add_memory(
+            "framework", "cross-user-source",
+            json.dumps(record, sort_keys=True, separators=(",", ":")),
+            None, "gabriel",
+            {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "pending"},
+        )
+        receipt_id = db.add_memory(
+            "method_receipt", method_id,
+            json.dumps({
+                "schema": PROMOTION_RECEIPT_SCHEMA,
+                "action": "PROMOTE",
+                "method_memory_id": method_id,
+                "source_episode_ids": [good_episode, foreign_episode],
+                "supporting_memory_ids": [],
+                "counterexample_memory_ids": [],
+                "ts": time.time(),
+            }, sort_keys=True, separators=(",", ":")),
+            None, "gabriel", {"source": "test"},
+        )
+        db.db.execute(
+            "UPDATE durable_memory SET provenance=? WHERE memory_id=?",
+            (json.dumps({"method_schema": METHOD_SCHEMA, "promotion_receipt_id": receipt_id}), method_id),
+        )
+        with pytest.raises(ValueError, match="crosses user boundary"):
             MicroClayMethodRetrieval(db).retrieve(
                 query="sensor timeout dependency", user_id="gabriel", session_id=sid,
                 turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
@@ -165,7 +335,7 @@ def test_legacy_evidence_replay_containing_method_fails_before_learning(tmp_path
     db = UnifiedDB(tmp_path / "u.db")
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
-        method_id = _add_framework(db)
+        method_id = _add_promoted_framework(db)
         query = "sensor timeout dependency"
         db.db.execute(
             "INSERT INTO retrieval_episodes("
@@ -195,7 +365,7 @@ def test_partial_turn_identity_matches_active_and_is_completed(tmp_path):
     try:
         sid, generation, turn_id, episode_id, causal_id = _identity(db)
         _activate_identity(db, sid, generation, turn_id, episode_id, causal_id)
-        _add_framework(db)
+        _add_promoted_framework(db)
 
         world = WorldAssembler(db).assemble(
             sid,
@@ -210,6 +380,7 @@ def test_partial_turn_identity_matches_active_and_is_completed(tmp_path):
         assert world["retrieval_receipt"]["generation"] == generation
         assert world["retrieval_receipt"]["status"] == "UNKNOWN"
         assert world["method_receipt"]["status"] == "METHOD_PRESENT"
+        assert world["method_receipt"]["promotion_verified"] is True
     finally:
         db.close()
 

@@ -137,6 +137,8 @@ class TerminalSessionManager:
         # Start Claude from an empty environment. Subscription/OAuth state lives in the
         # durable per-user HOME. Arbitrary container secrets (especially Clerk signing
         # material) never become an accidental alternate authentication/tool channel.
+        # Claude's own transcript and auto-memory stores are disabled so UnifiedDB is
+        # the sole durable conversation/memory authority after ClayVerse compression.
         env_argv = [
             "env",
             "-i",
@@ -151,6 +153,8 @@ class TerminalSessionManager:
             "DISABLE_AUTOUPDATER=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
+            "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
+            "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1",
             *claude_argv,
         ]
         command = shlex.join(env_argv)

@@ -13,6 +13,52 @@ from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
+_AUTH_MESSAGE_MAX_CHARS = 32_768
+_AUTH_TOKEN_MAX_CHARS = 16_384
+_CONTROL_MESSAGE_MAX_CHARS = 4_096
+_PTY_INPUT_FRAME_MAX_BYTES = 65_536
+_PTY_OUTPUT_CHUNK_MAX_BYTES = 65_536
+
+
+def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
+    """Decode one bounded WebSocket control message or fail closed."""
+    if not isinstance(payload, str) or not payload:
+        raise ValueError(f"{name} message must be non-empty text")
+    if len(payload) > max_chars:
+        raise ValueError(f"{name} message exceeds bound")
+    try:
+        value = json.loads(payload)
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{name} message must be valid JSON") from exc
+    if not isinstance(value, dict):
+        raise ValueError(f"{name} message must be an object")
+    return value
+
+
+def _auth_token(hello: dict) -> str:
+    token = hello.get("token")
+    if not isinstance(token, str) or not token or len(token) > _AUTH_TOKEN_MAX_CHARS:
+        raise AuthenticationError("invalid Clerk session token shape")
+    return token
+
+
+def _terminal_dimensions(message: dict) -> tuple[int, int]:
+    rows = message.get("rows", 24)
+    cols = message.get("cols", 80)
+    if isinstance(rows, bool) or not isinstance(rows, int):
+        raise ValueError("terminal rows must be an integer")
+    if isinstance(cols, bool) or not isinstance(cols, int):
+        raise ValueError("terminal cols must be an integer")
+    return rows, cols
+
+
+def _bounded_pty_input(payload: bytes) -> bytes:
+    if not isinstance(payload, bytes):
+        raise TypeError("PTY input frame must be bytes")
+    if len(payload) > _PTY_INPUT_FRAME_MAX_BYTES:
+        raise ValueError("PTY input frame exceeds bound")
+    return payload
+
 
 def _write_pty_all(fd: int, payload: bytes) -> None:
     """Write one terminal-input frame completely or fail closed."""
@@ -129,20 +175,22 @@ window.addEventListener('load', async () => {{
         attach_pid = attach_fd = None
         try:
             first = await asyncio.wait_for(ws.receive_text(), timeout=10)
-            hello = json.loads(first)
+            hello = _decode_json_object(first, name="auth", max_chars=_AUTH_MESSAGE_MAX_CHARS)
             if hello.get("type") != "auth":
                 raise AuthenticationError("authentication must be first message")
-            claims = verifier.verify(str(hello.get("token", "")))
+            token = _auth_token(hello)
+            rows, cols = _terminal_dimensions(hello)
+            claims = verifier.verify(token)
             user_id, session_id = identity.resolve(str(claims["sub"]))
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
-            terminals.resize(attach_fd, int(hello.get("rows", 24)), int(hello.get("cols", 80)))
+            terminals.resize(attach_fd, rows, cols)
             await ws.send_text(json.dumps({"type": "ready", "user_id": user_id, "session_id": session_id}))
 
             async def pump_out():
                 while True:
-                    data = await asyncio.to_thread(os.read, attach_fd, 65536)
+                    data = await asyncio.to_thread(os.read, attach_fd, _PTY_OUTPUT_CHUNK_MAX_BYTES)
                     if not data:
                         return
                     await ws.send_bytes(data)
@@ -150,12 +198,21 @@ window.addEventListener('load', async () => {{
             async def pump_in():
                 while True:
                     message = await ws.receive()
+                    if message.get("type") == "websocket.disconnect":
+                        return
                     if message.get("bytes") is not None:
+                        _bounded_pty_input(message["bytes"])
                         await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
-                    elif message.get("text"):
-                        control = json.loads(message["text"])
-                        if control.get("type") == "resize":
-                            terminals.resize(attach_fd, int(control.get("rows", 24)), int(control.get("cols", 80)))
+                    elif message.get("text") is not None:
+                        control = _decode_json_object(
+                            message["text"], name="control", max_chars=_CONTROL_MESSAGE_MAX_CHARS
+                        )
+                        if control.get("type") != "resize":
+                            raise ValueError("unsupported terminal control message")
+                        rows, cols = _terminal_dimensions(control)
+                        terminals.resize(attach_fd, rows, cols)
+                    else:
+                        raise ValueError("unsupported WebSocket terminal frame")
 
             tasks = [asyncio.create_task(pump_out()), asyncio.create_task(pump_in())]
             done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)

@@ -129,6 +129,32 @@ def test_mistral_receipt_is_required_for_canonical_provider_provenance():
     assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
 
 
+def test_mistral_receipt_rejects_extra_secret_like_metadata():
+    decision = FakeInference().decision.copy()
+    decision["inference_receipt"] = dict(decision["inference_receipt"])
+    decision["inference_receipt"]["authorization"] = "Bearer should-never-persist"
+    lifecycle = FakeLifecycle()
+
+    with pytest.raises(MistralTurnError, match="receipt is missing or invalid"):
+        MistralTurnRunner(FakeInference(decision)).run(lifecycle, "hello")
+
+    assert lifecycle.complete_call is None
+    assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
+
+
+def test_mistral_receipt_rejects_non_digest_hash_fields():
+    decision = FakeInference().decision.copy()
+    decision["inference_receipt"] = dict(decision["inference_receipt"])
+    decision["inference_receipt"]["response_sha256"] = "not-a-digest"
+    lifecycle = FakeLifecycle()
+
+    with pytest.raises(MistralTurnError, match="response_sha256 is invalid"):
+        MistralTurnRunner(FakeInference(decision)).run(lifecycle, "hello")
+
+    assert lifecycle.complete_call is None
+    assert lifecycle.abort_reason == "mistral_turn_failed_or_stale"
+
+
 def test_mistral_cognition_turn_cannot_return_with_effect_binding():
     lifecycle = FakeLifecycle(effect_id="unexpected-effect")
 

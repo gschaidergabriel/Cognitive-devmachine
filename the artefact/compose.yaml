@@ -1,6 +1,9 @@
 services:
   clayverse:
-    build: .
+    build:
+      context: .
+      args:
+        ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
     restart: unless-stopped
     ports:
       - "${CLAYVERSE_PORT:-3000}:3000"
@@ -8,10 +11,12 @@ services:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
-      # Single-container law: EntityOS may only become required after the exact
-      # accepted artifact is embedded into this image. A host bind-mounted
-      # executable is not an admissible baseline product dependency.
+      # Single-container law: EntityOS is digest-bound into this image at build
+      # time. Runtime enforcement remains disabled until the exact embedded
+      # artifact has external isolated-sandbox acceptance evidence.
       CLAYVERSE_REQUIRE_ENTITYOS: "0"
+      CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
+      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
       CLERK_ISSUER: "${CLERK_ISSUER:?required}"
       CLERK_JWKS_URL: "${CLERK_JWKS_URL:-}"

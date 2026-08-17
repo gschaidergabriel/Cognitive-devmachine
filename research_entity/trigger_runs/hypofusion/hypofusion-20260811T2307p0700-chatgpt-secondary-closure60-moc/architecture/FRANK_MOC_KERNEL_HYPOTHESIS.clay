@@ -1,0 +1,119 @@
+module research.frank.moc_kernel_hypothesis
+
+status NEW_ARCHITECTURE_HYPOTHESIS_NOT_PROMOTED
+subject self.root
+human_surface Frank
+program FRANK_V0_1
+
+// MOC = Multiscale Operational Closure.
+// Core thesis: higher-order Frank function arises from nested causal closure across
+// timescales, not from maximizing recurrence count or adding another broad cognitive layer.
+
+hypothesis H_ARCH_MOC_01 {
+  defining_property = OPERATIONAL_CLOSURE
+  implementation_target = ONE_COMPLETE_CLAYCODE_LOOP_CORE
+  open_workflow_architecture_equivalence = REJECTED_AS_MISSPECIFIED_NULL
+  simpler_closed_loop_compression = REQUIRED_COUNTERHYPOTHESIS
+}
+
+ring R0_NATIVE_COGNITION {
+  timescale = WITHIN_MODEL_INFERENCE
+  contains = [AUTOMATIC_PROCESSING, OPTIONAL_NATIVE_MODEL_WORKSPACE, OPTIONAL_LCOP_OBSERVATION]
+  recurrence_requirement = NONE_BY_MOC
+  authority = NONE
+  law decoded_state != causal_state
+  law native_workspace != ClayGWT
+}
+
+ring R1_DELIBERATIVE_REGULATION {
+  timescale = WITHIN_ONE_FRANK_EXECUTION
+  contains = [SELF_WORLD_MEMORY_ASSEMBLY, PROSPECTION, CONTROL_PRESSURES, HYPERPOSITION, ClayGWT, NEEDLE, ADAPTIVE_RESTART_RESEED]
+  recurrence = ADAPTIVE_BUDGETED
+  continue_if = expected_verified_outcome_gain > compute_resource_instability_cost AND unresolved_pressure_material
+  law low_state_delta + high_unresolved_pressure -> STALLED_CANDIDATE
+  law more_recurrence != better
+  law GWT_salience != truth_or_effect_authority
+}
+
+ring R2_WORLD_CAUSAL_CLOSURE {
+  timescale = ACTION_TO_VERIFIED_CONSEQUENCE
+  path = [INTENT, EFFECT_GATE, ACTION, WORLD_OR_INTERNAL_CONSEQUENCE, VERIFIED_OUTCOME, CAUSAL_CREDIT, ADMISSION, PROVENANCE_VALID_REENTRY]
+  recurrence_requirement = MANDATORY_FOR_MATERIAL_CLOSURE
+  closure_requires = [PRODUCER_BINDING, OBJECT_OR_STATE_BINDING, SOURCE_FRONTIER, AUTHORITY_BINDING_WHEN_APPLICABLE, CONSUMER_VERIFICATION]
+  law same_outcome != same_causal_closure
+  law caller_carried_ids != producer_bound_ancestry
+  law reentry != authority_escalation
+}
+
+ring R3_SLOW_ORGANISM_REGULATION {
+  timescale = CROSS_CYCLE_SESSION_RESTART
+  contains = [GOALS, REWARD_CONTROL_SUCCESSOR, REGULATORY_PERSONALITY, CONSOLIDATION, CAPABILITY_SELF_MODEL, HOMEOSTASIS, CHECKPOINT_RECOVERY]
+  recurrence_requirement = PERSISTENT_ACROSS_CONTEXT_AND_RESTART
+  law self_generated_activity != material_reward
+  law slow_plasticity requires VERIFIED_OUTCOME + CAUSAL_CREDIT
+  law persona != identity
+}
+
+state_spine MOC_STATE {
+  authority = UnifiedDB
+  semantic_memory != execution_state_memory
+  episode_history = IMMUTABLE_PROVENANCE_BOUND
+  current_belief = ADJUDICATED_PROJECTION
+  temporal_validity = CANDIDATE_VALID_TIME_PLUS_TRANSACTION_ADMISSION_TIME
+  selected_continuation_head = EXPLICIT
+  materialization_attestation != semantic_state_identity
+}
+
+projection_spine MOC_PROJECTIONS {
+  ClayGraph = DERIVED_ONLY
+  require source_semantic_root
+  require selected_continuation_head
+  candidate StateWitness
+  candidate SelectionWitness
+  candidate GraphProjectionRoot
+  pairwise_first = true
+  higher_order_promote_if = INTERVENTIONAL_IRREDUCIBILITY_PLUS_INCREMENTAL_UTILITY
+}
+
+execution_spine MOC_EXECUTION {
+  authority_clock = lease_epoch
+  delivery_replay_clock = stream_seq_candidate
+  require authority_clock != delivery_replay_clock
+  candidate ResumeCompatibilityFingerprint
+  resume_if = EXACT_COMPATIBILITY OR VALIDATED_MIGRATION_RELATION
+}
+
+observation_spine MOC_OBSERVATION {
+  require LoopDynamicsReadout
+  candidate CognitiveCycleShadow
+  optional LatentCognitionObservationPlane
+  latent_control_gate = OBSERVABILITY + ACTIONABILITY + INCREMENTAL_VERIFIED_OUTCOME_VALUE + BUILD_TRANSFER_VALIDATION
+  law no_emergence_scalar
+}
+
+binary_stabilization MOC_FREEZE {
+  target = ROBUST_OPERATING_REGION_NOT_TRANSIENT_PEAK
+  require matched_replay
+  require lesion_rescue
+  require truthful_shuffled_no_reentry_controls
+  require restart_recovery
+  require OOD
+  require resource_shadows
+  require no_known_simpler_closed_loop_candidate_dominates
+}
+
+counterhypothesis CH_MOC_COMPRESSION {
+  statement = "Operational closure is necessary but this four-ring realization is overfactored; a much smaller one-module closed-loop controller preserves the required closure, causal, restart and goal signatures at lower cost."
+  test = PROGRESSIVE_INTERNAL_MECHANISM_FUSION_WITH_CLOSURE_SPINE_FROZEN
+}
+
+prediction MOC_SIGNATURE {
+  statement = "Breaking R2 or R3 while preserving isolated prompt-answer ability causes structured divergence on state-changing, interrupted, multi-session, recovery and self-correction trajectories. The predicted evidence is a multivariate causal/continuity signature, not one scalar."
+}
+
+nonclaim consciousness = false
+nonclaim every_subsystem_recurrent = false
+nonclaim recurrence_count_is_value = false
+nonclaim LCOP_is_loop_owner = false
+nonclaim architecture_promoted = false
+nonclaim final_training_authorized = false

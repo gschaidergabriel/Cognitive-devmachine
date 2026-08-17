@@ -33,6 +33,7 @@ _REQUIRED_PROMOTED_FIELDS = (
     "success_count",
     "failure_count",
     "calibration",
+    "last_validated_at",
     "status",
 )
 
@@ -122,8 +123,12 @@ def validate_method_payload(kind: str, raw_value: str) -> dict[str, Any]:
         return payload
 
     if kind in COUNTER_KINDS:
-        if status not in {"PROMOTED", "CANDIDATE"}:
-            raise ValueError("counterevidence status invalid")
+        # Counterevidence can suppress otherwise promoted method context, so ordinary
+        # admission must never be able to mint that authority. Until a dedicated
+        # receipt/provenance-bound counterevidence promotion transaction exists, only
+        # CANDIDATE counter records are admitted and they are never served or blocking.
+        if status != "CANDIDATE":
+            raise ValueError("counterevidence requires dedicated promotion path before serving")
         payload["problem_signature"] = _normalize_signature(payload.get("problem_signature"))
         payload["blocks_method_ids"] = _bounded_string_list(payload.get("blocks_method_ids", []), field="blocks_method_ids")
         return payload
@@ -144,18 +149,25 @@ def validate_method_payload(kind: str, raw_value: str) -> dict[str, Any]:
         )
     if len(set(payload["source_episode_ids"])) < 2:
         raise ValueError("promoted method requires at least two distinct source episodes")
-    if not isinstance(payload["abstraction_version"], int) or payload["abstraction_version"] < 1:
+    abstraction_version = payload["abstraction_version"]
+    if isinstance(abstraction_version, bool) or not isinstance(abstraction_version, int) or abstraction_version < 1:
         raise ValueError("abstraction_version invalid")
     for field in ("support_count", "success_count", "failure_count"):
-        if not isinstance(payload[field], int) or payload[field] < 0:
+        value = payload[field]
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
             raise ValueError(f"{field} invalid")
+    if payload["success_count"] + payload["failure_count"] > payload["support_count"]:
+        raise ValueError("success/failure counts exceed support_count")
     if payload["support_count"] < 2:
         raise ValueError("promoted method requires support_count >= 2")
     calibration = payload["calibration"]
-    if not isinstance(calibration, (int, float)) or not math.isfinite(float(calibration)):
+    if isinstance(calibration, bool) or not isinstance(calibration, (int, float)) or not math.isfinite(float(calibration)):
         raise ValueError("calibration invalid")
     if not 0.0 <= float(calibration) <= 1.0:
         raise ValueError("calibration out of range")
+    last_validated_at = payload["last_validated_at"]
+    if not isinstance(last_validated_at, str) or not last_validated_at.strip() or len(last_validated_at) > 128:
+        raise ValueError("last_validated_at invalid")
     return payload
 
 
@@ -277,7 +289,10 @@ class MethodMemoryRetriever:
             provenance = self._provenance(str(row["provenance"]))
             if kind in METHOD_KINDS:
                 methods.append(MethodContext(memory_id, kind, str(row["subject"]), score, payload, provenance))
-            elif kind in COUNTER_KINDS:
+            elif kind in COUNTER_KINDS and payload.get("status") == "PROMOTED":
+                # Currently unreachable by admitted writes. This guard keeps legacy or
+                # malformed rows from gaining blocking authority until a dedicated
+                # counterevidence promotion receipt path is implemented.
                 counters.append((memory_id, score, payload, provenance, str(row["subject"])))
 
         blocked_ids: set[str] = set()

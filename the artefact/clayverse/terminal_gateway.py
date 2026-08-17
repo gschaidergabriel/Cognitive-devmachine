@@ -111,7 +111,7 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
 
 
 def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
-    """Read-only readiness check for canonical state plus both live product terminals."""
+    """Read-only readiness check for canonical state plus both managed Claude terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
@@ -137,7 +137,7 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         if not state_ready:
             return False
         return all(
-            terminals._has_session(terminals.binding(user_id))
+            terminals.is_managed_session(terminals.binding(user_id))
             for user_id in CANONICAL_TERMINAL_NAMES
         )
     except Exception:

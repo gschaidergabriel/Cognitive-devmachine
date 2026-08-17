@@ -1,0 +1,22 @@
+{
+  "schema": "clay-go-experiment-coordination-correction/v1",
+  "recorded_at_local": "2026-08-17T13:50:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "observed_canonical_main": "4ca945b772ebf8a68cd5e4ecbbe3f7e39a1f46fc",
+  "protocol_path": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+  "protocol_blob_observed": "2ef09d1e48dde3566bd7661dbe77b2a882cebbda",
+  "user_turn_timestamp_available_to_this_organ": "2026-08-17T13:42+07:00",
+  "timestamp_precision": "minute_only",
+  "shared_immutable_request_or_turn_id_available_to_this_organ": false,
+  "invalid_claim": {
+    "commit": "89baf998e3c4a2597303de2b44af19d5723fd6d0",
+    "path": "research_entity/continuity/go_experiment_claims/ts_20260817T064200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "problem": "The timestamp fallback synthesized second/microsecond precision (06:42:00.000000Z) from shared metadata that is only minute-precision. The current protocol explicitly forbids this and requires COORDINATION_BLOCKED when whole-second immutable message precision is unavailable."
+  },
+  "classification": "NONCANONICAL_CLAIM_DOES_NOT_AUTHORIZE_EXECUTION",
+  "macro_cycle_experiment_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "required_action": "Do not execute a new unusual intervention for this 13:42 go from that claim. Preserve the claim and this append-only correction. If an intervention already executed, preserve its result as protocol-invalid coordination evidence and do not count it as a valid 1/1 lease.",
+  "this_organ_unusual_experiment_executed": false,
+  "whole_product_pass": false
+}

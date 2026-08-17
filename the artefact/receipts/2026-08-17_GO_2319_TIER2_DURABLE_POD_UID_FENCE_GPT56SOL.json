@@ -1,16 +1,19 @@
 {
   "schema": "clayverse-go-receipt/v1",
   "date": "2026-08-17",
-  "local_time": "23:19+07:00",
+  "local_time": "23:26+07:00",
   "trigger": "go",
   "organ": "GPT-5.6 Sol temporary Clay organ",
-  "classification": "SOURCE_MECHANISM_SUPPORTED_FRESH_MAIN_REJOIN",
+  "classification": "SOURCE_MECHANISM_SUPPORTED_FRESH_MAIN_MISTRAL_FUSION_PENDING_FULL_EXECUTION",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "fresh_main_parent": "cd6ad7ba4ee8fcb119d92e02fd977e49f800562d",
-  "product_commit": "f548089b0acf4c44df8de7df5727a6b3a577cd51",
+  "initial_fresh_main_parent": "cd6ad7ba4ee8fcb119d92e02fd977e49f800562d",
+  "initial_product_commit": "f548089b0acf4c44df8de7df5727a6b3a577cd51",
+  "latest_main_semantically_rejoined": "a4e06502e135fe26fbfddc6bbb6407c631a202a4",
+  "latest_merge_commit_before_receipt_refresh": "f1ba4dd0a95a2595a044f821c2273a407a21886c",
   "branch": "gpt56sol/go-tier2-poduid-fence-freshmain-20260817-2319",
-  "purpose": "Close the fail-open window where RecoveryIntegrityError can emit a Tier-2 signal but kubelet restartPolicy Always can restart the application inside the same Pod/Kata sandbox before external full-sandbox replacement occurs.",
+  "pr": 666,
+  "purpose": "Close the fail-open window where RecoveryIntegrityError can emit a Tier-2 signal but an in-place process/container restart can reopen inside the same Pod/Kata sandbox before external full-sandbox replacement occurs, while preserving the newer canonical Mistral final-acceptance probe on main.",
   "mechanism": {
     "signal_exit_code": 86,
     "fatal_trigger": "RecoveryIntegrityError only",
@@ -20,16 +23,29 @@
     "kubernetes_api_credential_in_application": false,
     "same_pod_restart": "BLOCKED_BEFORE_UNIFIEDDB_OPEN",
     "replacement_admission": "requires new Pod UID plus canonical recovery advancing global entity generation",
-    "fence_clear": "after replacement checkpoint and generation fence, with directory fsync",
+    "fence_clear": "after successful replacement-path pre-readiness/probe work and a Tier-2 replacement checkpoint, with directory fsync",
+    "mistral_once_integration": "--mistral-once uses the same RecoveryIntegrityError -> Tier-2 path and may clear a prior fence only after canonical recovery advanced generation and the canonical Mistral probe succeeded",
     "external_full_sandbox_controller_required": true,
     "whole_tier2_gate_closed": false
   },
-  "exact_blobs": {
+  "exact_current_candidate_blobs": {
     "the artefact/clayverse/tier2.py": "bc2e767807ff9d4fc314b4a6a447bdca4fcc1487",
-    "the artefact/clayverse/service.py": "00105291f650a4fc1813e4a36d35a768b1562c9f",
+    "the artefact/clayverse/service.py": "98336563f73ee56dd1f29927f9efb4bb4b7d1b76",
     "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "5199acd2cca2f8814eef661c62799edaddf883d8",
     "the artefact/deployment/TIER2_REPLACEMENT_SIGNAL_CONTRACT.md": "9b5b215f169d0b691cbb5ec6c7b81b2c12980238",
     "the artefact/tests/test_tier2_replacement_fence.py": "c65641cda2f3e2f849364e166b7be55b74ba7d8e"
+  },
+  "parallel_main_fusion": {
+    "preserved_main_features": [
+      "canonical Mistral final-acceptance probe module and tests",
+      "service --mistral-once mode",
+      "Mistral traceback-secret hardening",
+      "all unrelated main ancestry through a4e06502e135fe26fbfddc6bbb6407c631a202a4"
+    ],
+    "force_push_used": false,
+    "merge_strategy": "true multi-parent re-entry commits with main-derived trees plus exact Tier-2 blobs",
+    "service_overlap_detected_and_semantically_fused": true,
+    "blind_old_service_blob_restore": false
   },
   "adversarial_repair_history": {
     "predecessor_defect": "initial fence writer assumed one os.write call writes the complete payload",
@@ -40,8 +56,8 @@
   "isolated_execution": {
     "surface": "authorized isolated OpenAI Python container",
     "exact_tier2_blob_reconstructed": true,
-    "git_blob_sha256_note": "Git blob SHA-1 matched GitHub exact tier2.py blob bc2e7678... before execution",
-    "focused_behavior_matrix": "9/9 PASS",
+    "exact_tier2_git_blob_match": "bc2e767807ff9d4fc314b4a6a447bdca4fcc1487",
+    "focused_tier2_behavior_matrix": "9/9 PASS",
     "cases": [
       "no fence permits normal probe",
       "same Pod UID blocked",
@@ -53,31 +69,23 @@
       "malformed fence fails closed",
       "oversized fence fails closed / missing current UID while fenced fails closed"
     ],
+    "fused_service_blob_executed": false,
     "exact_full_branch_pytest": false,
+    "github_actions_identity_guard": "ADMISSION_FAILURE_BEFORE_STEPS",
+    "github_actions_identity_guard_evidence": "runner_id=0; steps=[] on predecessor PR head",
     "kubernetes_or_kata_executed": false,
     "oci_executed": false
   },
-  "coordination": {
-    "closed_zero-commit_pr_653_semantics": "adopted/refined rather than revived as a duplicate permanent path",
-    "stale_work_branch_promoted": false,
-    "fresh_main_tree_rebind": true,
-    "parallel_mistral_main_changes_preserved": true,
-    "current_main_search_for_CLAYVERSE_POD_UID_before_pr": "no canonical main hit observed"
-  },
   "current_owner_gate": {
-    "final_test": "Vercel Sandbox Firecracker -> exact accepted OCI digest -> runtime approved Vault secret -> transient Mistral -> canonical re-ingest/effect path -> full Sandbox/appliance destruction and recreation from same digest -> secret reacquisition -> repeat",
+    "final_test": "Vercel Sandbox Firecracker -> exact accepted OCI digest -> runtime approved Vault/secret-store Mistral token -> canonical cognition/re-ingest/effect path -> destroy whole Sandbox/appliance -> recreate same digest with persisted canonical state -> reacquire secret -> repeat cognition/effect/recovery",
     "github_read_token_forwarding": "scoped read-only forwarding into authorized disposable Vercel Sandbox is permitted by current owner correction",
-    "latest_observed_execution_blocker": "approved GITHUB_READ_TOKEN is not currently provisioned/injectable through the connected Vercel tool surface",
-    "mistral_main_state": "canonical main now contains bounded Mistral adapter and pre-effect re-ingest source candidates; no real provider/Vault/OCI credit"
+    "latest_observed_execution": "Vercel Sandbox admitted and Firecracker guest kernel observed, then source stage blocked because GITHUB_READ_TOKEN was absent",
+    "latest_observed_execution_blocker": "approved scoped GITHUB_READ_TOKEN is not provisioned on the retained PR810 Preview/controller path and the connected Vercel tool surface cannot mutate that secret",
+    "mistral_main_state": "canonical main now contains a hardened inference-only Mistral boundary and canonical final-acceptance probe, but no real provider/Vault/OCI runtime credit"
   },
-  "primary_source_basis": [
-    "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
-    "https://kubernetes.io/docs/reference/kubernetes-api/definitions/preconditions-v1-meta/",
-    "https://kubernetes.io/docs/reference/kubernetes-api/definitions/delete-options-v1-meta/",
-    "https://kubernetes.io/docs/tasks/run-application/force-delete-stateful-set-pod/"
-  ],
   "runtime_credit": {
-    "tier2_source_mechanism": "SUPPORTED_AT_EXACT_TIER2_MODULE_SCOPE",
+    "tier2_module_source_mechanism": "SUPPORTED_AT_EXACT_TIER2_MODULE_SCOPE",
+    "fused_service_runtime": 0,
     "kubernetes_api": 0,
     "kata_sandbox_replacement": 0,
     "exact_final_oci": 0,
@@ -86,12 +94,12 @@
     "whole_product": 0
   },
   "open_gates": [
-    "external fail-closed controller must observe Tier-2 signal and delete exact old Pod with UID/resource precondition",
-    "prove old Pod/Kata sandbox terminal and new Pod UID + new sandbox/VM identity",
-    "prove same accepted OCI digest and declared persistent volumes only",
+    "start exact full PR666 regressions in an authorized isolated execution surface; current GitHub identity-guard job failed before any steps",
+    "external fail-closed controller must observe Tier-2 signal and delete/recreate the exact old isolation domain with identity preconditions",
+    "prove old isolation domain terminal and new Pod/Kata sandbox or full Vercel Firecracker Sandbox identity as required by the selected final envelope",
+    "prove same accepted OCI digest and only declared persistent state",
     "prove canonical recovery advances generation, stale writers/results fail closed and ambiguous effects are never blindly replayed",
-    "execute exact full branch regressions and then exact OCI/runtime path",
-    "provision approved scoped GITHUB_READ_TOKEN for retained Vercel controller and continue final Firecracker/Vault/Mistral test-of-tests"
+    "provision approved scoped GITHUB_READ_TOKEN for retained Vercel controller and continue final Firecracker/OCI/Vault/Mistral test-of-tests"
   ],
   "go_unusual_experiment": {
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",

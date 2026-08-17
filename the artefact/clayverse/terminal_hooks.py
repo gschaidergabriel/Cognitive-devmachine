@@ -44,20 +44,6 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _bind_claude_session(db: UnifiedDB, turn_id: str, claude_session_id: str) -> None:
-    row = db.db.execute("SELECT provenance FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
-    if not row:
-        raise TerminalHookError("new canonical user turn disappeared")
-    try:
-        provenance = json.loads(row["provenance"])
-    except Exception:
-        provenance = {}
-    if not isinstance(provenance, dict):
-        provenance = {}
-    provenance["claude_session_id"] = claude_session_id
-    db.db.execute("UPDATE turns SET provenance=? WHERE turn_id=?", (json.dumps(provenance, sort_keys=True), turn_id))
-
-
 def _bounded_hook_context(result: dict[str, Any], limit: int = 12_000) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -99,18 +85,21 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, user_id, session_id, lifecycle = _runtime()
+    db, _, session_id, lifecycle = _runtime()
     try:
         if lifecycle.active() is not None:
             if _active_claude_session(db, session_id) == claude_session_id:
                 raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
             lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
-        result = lifecycle.begin(prompt)
-        _bind_claude_session(db, result["turn_id"], claude_session_id)
+        # Keep canonical admission uncommitted until the exact hook context that Claude
+        # will receive has also passed its bounded-envelope gate. Any exception here is
+        # therefore one rollback rather than a prompt visible only to UnifiedDB.
+        with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
+            additional_context = _bounded_hook_context(result)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
-                "additionalContext": _bounded_hook_context(result),
+                "additionalContext": additional_context,
             },
             "suppressOutput": True,
         }

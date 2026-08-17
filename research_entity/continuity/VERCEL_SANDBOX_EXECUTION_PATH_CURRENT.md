@@ -1,145 +1,111 @@
 # Vercel Sandbox execution path — CURRENT
 
-Status: **CURRENT BRIDGE CONFIRMED / CLAYVERSE SANDBOX ADMISSION PASS / PRIVATE-SOURCE CREDENTIAL BLOCKED**  
-Observed: 2026-08-17 19:27 +07:00
+Status: **BRIDGE CONFIRMED / SANDBOX ADMISSION PROVEN / GITHUB TOKEN FORWARDING AUTHORIZED / FINAL TEST-OF-TESTS DEFINED**  
+Current owner corrections: 2026-08-17 23:03 +07:00
 
 ## Current truth
 
-Do **not** infer `Vercel Sandbox unavailable` because the connected ChatGPT Vercel connector does not export direct `sandbox.create` / `sandbox.exec` lifecycle actions.
-
-The authorized execution bridge is confirmed and has actually started Vercel Sandbox microVMs:
+The authorized bridge has actually created disposable Vercel Sandbox instances:
 
 `Dr.-Unterweger Git preview -> Vercel build orchestration -> VERCEL_OIDC_TOKEN -> @vercel/sandbox -> Sandbox.create -> runCommand -> stop`.
 
-The Vercel Preview/build machine is orchestration only. Runtime credit exists only for behavior actually observed at the admitted isolated boundary, and product-runtime credit requires product assertions to execute.
+Do not infer `Vercel Sandbox unavailable` merely because the connected ChatGPT Vercel connector does not export direct `sandbox.create` / `sandbox.exec` lifecycle actions.
 
-Canonical staging project:
+Canonical staging project remains:
 - repository: `gschaidergabriel/Dr.-Unterweger`;
 - retained controller: draft PR **#810**;
 - Vercel project: `dr-unterweger`;
 - project id: `prj_ifIgM9X7jqIQS8mNIGllImziePPG`.
 
-VPS, self-hosted and production-host testing remain forbidden. Together remains forbidden.
+VPS/self-hosted/production-host testing remains forbidden. Together remains forbidden.
 
-## Exact current ClayVerse execution closure
+## Historical directly observed admission evidence
 
-The currently observed admitted closure is execution provenance over Research `main` plus the retained #611 and fused #622 execution-relevant bytes:
+Two retained exact-closure runs reached `Sandbox.create=PASS_CREATED` and then stopped before private-source staging because `GITHUB_READ_TOKEN` was absent:
 
-- Research base: `f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b`;
-- closure commit: `5e5adce0591058608bbd7381ecf570a39b282f0d`;
-- closure tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`;
-- #611 terminal blob: `c185009f8af84e1288747d8352645777a36b2053`;
-- #611 focused-test blob: `b6bb645dd07645f21ca2e5574f8392c9f13beafc`;
-- #622 generator-workflow blob: `ad34476c0092b7e724240c927a7cb14858d1a8dc`;
-- #622 source-binding-test blob: `ed77f5c9446295fa973512ddf7e9d11ea3292010`.
+- deployment `dpl_21efibLYnww6hhrEMp5SAh6enCsQ`;
+- deployment `dpl_7BkVnngPJUPiVyrqwFarGFZDevAG`.
 
-This closure is not a second product authority. Later Research documentation/receipt commits do not retroactively change its observed bytes. Before the next real compute, refresh and rebind once to the then-current canonical Research/#611/#622 identity.
+The strongest historical exercised closure was bound to Research base `f7eb4df7600b0f4de1a6381a04acf5d1057d8f9b`, closure commit `5e5adce0591058608bbd7381ecf570a39b282f0d`, tree `1e02285d77b08e6edd86f9017d0ceac5db262cf2`, plus retained #611/#622 bytes.
 
-## Current executable evidence
+Those historical runs produced **zero source/product/OCI runtime credit** because no private source was staged and no ClayVerse product assertion executed. They remain valid historical observations; newer owner policy changes do not retroactively change what happened.
 
-### First admitted current-closure run
+## Owner correction — GitHub read token MAY enter the Sandbox
 
-- PR810 controller commit: `5d89ebb4d7a15c679a6c37861fb3a1352cc812df`;
-- Vercel deployment: `dpl_21efibLYnww6hhrEMp5SAh6enCsQ`;
-- Vercel build started, cloned exact controller source, installed dependencies and entered `npm run vercel-build`;
-- guard v3 admitted retained-runner source/provenance markers;
-- current-target patch v4 rebound the runner to closure `5e5adce…` / tree `1e02285d…`;
-- `Sandbox.create` returned `sandbox_admission=PASS_CREATED`;
-- execution then failed closed before private-source fetch because `GITHUB_READ_TOKEN` was absent;
-- `source_stage=BLOCKED_MISSING_GITHUB_READ_TOKEN`;
-- error: `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`;
-- Sandbox stopped successfully;
-- `source_runtime_credit=0`; `oci_runtime_credit=0`.
+The previous rule that `GITHUB_READ_TOKEN` must remain host-side and must never be forwarded into the disposable Sandbox is **SUPERSEDED**.
 
-Receipt:
-`the artefact/receipts/2026-08-17_GO_1924_PR810_SANDBOX_ADMISSION_PRIVATE_SOURCE_TOKEN_BLOCK_GPT56SOL.json`.
+A scoped read-only `GITHUB_READ_TOKEN` MAY be securely injected/forwarded into an authorized disposable Vercel Sandbox for the narrow purpose of fetching the bound private Research and EntityOS source inputs.
 
-### Replicated and hardened current-closure run
+Current directive:
+`research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md`.
 
-Strongest directly observed replication:
+Required controls:
+- never commit or print the token;
+- never persist it in UnifiedDB, ClayGraph, snapshots, receipts, generated locks, OCI layers or durable workspace/state;
+- prefer least privilege and bounded lifetime;
+- after fetch, verify exact expected repository/commit/tree/blob/archive identity before product assertions receive provenance credit;
+- fail closed on substitution or identity uncertainty;
+- unset/remove the token when no longer required where the execution interface permits;
+- stop/clean the Sandbox after the batch.
 
-- PR810 controller commit: `2e5505983172e582a50f4f72bebd561bc650ff5a`;
-- Vercel deployment: `dpl_7BkVnngPJUPiVyrqwFarGFZDevAG`;
-- guard v4 admitted the exact retained-runner Git blob `1298ca8002704414f86cd0c036d44e5b32be2918` plus existing provenance markers;
-- current-target patch v5 retained closure `5e5adce…` / tree `1e02285d…`;
-- Sandbox lifetime was explicitly expanded to `2700000` ms above the retained explicit-step ceiling `2490000` ms;
-- `Sandbox.create` again returned `sandbox_admission=PASS_CREATED`;
-- the same fail-closed boundary fired before private-source fetch: `BLOCKED_MISSING_GITHUB_READ_TOKEN` / `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`;
-- Sandbox stopped successfully;
-- `source_runtime_credit=0`; `oci_runtime_credit=0`.
+Therefore the blocker is no longer **"policy forbids token forwarding"**. The live prerequisite is simply that an appropriate read token be securely available/injectable at execution time.
 
-Receipt:
-`the artefact/receipts/2026-08-17_GO_1925_PR810_SANDBOX_CREDENTIAL_BLOCK_REPLICATION_GPT56SOL.json`.
+## Final test-of-tests — mandatory
 
-An intermediate guard-v4 replication is also preserved at deployment `dpl_HWjU1DGTiXaMcYD4mT5waFsT53Us` with its bounded receipt.
+The newest owner directive makes the final acceptance run a real full-system test:
 
-Current observed PR810 head after the strongest measured run is `02f9157a15485b49f96dd4d4b20201fe148db710`; it adds a deterministic timeout-budget fence test. Do not transfer runtime credit from `2e550598…` to this newer source-only head unless it is separately executed and bound.
+`Vercel Sandbox Firecracker microVM -> Docker/OCI runtime -> exact accepted ClayVerse OCI digest -> runtime Vault secret acquisition -> transient Mistral token injection -> full ClayVerse causal operation -> recovery -> repeat`.
 
-## Current classification
+The Vercel Sandbox microVM itself may serve as the independent guest-kernel outer envelope for this acceptance run; a second nested KVM guest is not required merely to satisfy the guest-kernel invariant when the Sandbox guest identity and exact inner OCI digest are both attested.
 
-`SANDBOX_ADMISSION_PASS_PRIVATE_SOURCE_CREDENTIAL_BLOCK_REPLICATED`
+Current directive:
+`research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md`.
 
-The earlier classifications `FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED` and `upgradeToPro=build-rate-limit` are **historical provider observations**, not the current ClayVerse execution blocker. Current admitted runs prove that Vercel build/Sandbox admission was available for the exact bound closure at the times above.
-
-This is **not** ClayVerse TEST_FAIL and **not** whole-product PASS.
-
-The current runs stopped before:
-- private Research source fetch;
-- private EntityOS source fetch;
-- EntityOS reconstruction/reproduction;
-- full exact source regression;
-- OCI build;
-- image digest/dependency inventory;
-- in-image #611 tmux behavior;
-- hardened `service --once` product assertions.
-
-Therefore source/OCI runtime credit remains zero.
-
-## Credential boundary
-
-The next prerequisite is precise:
-
-**Provision `GITHUB_READ_TOKEN` as an appropriate sensitive Vercel Preview build credential for the retained PR810 branch.**
-
-Security law:
-- credential remains in the Vercel host/build orchestration process;
-- never commit it to GitHub;
-- never print/log its value;
-- never forward it into the disposable Sandbox;
-- only source bytes whose exact commit/tree identity was verified host-side may cross into the Sandbox;
-- missing/uncertain credential continues to fail closed.
-
-The current connector surface does not expose Vercel project-environment-variable mutation, so this session cannot safely provision that credential itself.
+Mistral is a mandatory token/API inference provider for this final test. The token must be acquired at runtime from the approved Vault/secret store, injected transiently, never persisted, and reacquired after full appliance/Sandbox recreation.
 
 ## Next accepted execution sequence
 
-After credential provisioning:
+At the next admitted run:
 
-`refresh current Research main/#611/#622 -> rebind retained PR810 once -> fail-closed guard/current wrapper -> Sandbox.create -> host-side exact private Research + EntityOS verification -> stage only verified archive bytes -> reconstruct/attest/reproduce exact locked EntityOS -> full exact source regression -> build exact ClayVerse OCI -> capture image digest + APT/tmux/Claude/Python identities -> deny network -> run in-image #611 double-reapply/full policy attestation for gabriel and andreas -> hardened service --once + adjacent regressions -> execute/materialize/verify #622 canonical Python hash lock and selected-wheel manifest -> switch Docker to --require-hashes only after accepted lock evidence -> rebuild/rebind exact image -> continue native-Claude, startup/readiness, Clerk/browser/PTY, managed-hook lifecycle, persistence/recovery and dual-session concurrency/global-generation gates`.
+`refresh current Research main + retained admitted lanes`
+`-> rebind retained #810 controller once`
+`-> Sandbox.create`
+`-> attest Sandbox Firecracker guest identity/kernel`
+`-> securely inject GITHUB_READ_TOKEN`
+`-> fetch exact private Research + EntityOS inside Sandbox`
+`-> verify exact Git/object/artifact identities`
+`-> reconstruct/attest accepted EntityOS`
+`-> full exact source regressions`
+`-> build exact ClayVerse OCI`
+`-> capture exact image digest + APT/tmux/Claude/Python/supply-chain identities`
+`-> install/start Docker in the Sandbox microVM or use an equivalently bound OCI runtime`
+`-> run the EXACT accepted ClayVerse digest`
+`-> enforce read-only root + declared state/tmpfs surfaces`
+`-> retrieve Mistral token from approved Vault/secret store`
+`-> inject token transiently into the running ClayVerse container`
+`-> enable only admitted egress/auth paths`
+`-> bring /healthz and full /readyz to their intended states`
+`-> run real cognition through UnifiedDB/retrieval/workspace/Mistral`
+`-> re-ingest model output before effect authority`
+`-> execute safe admitted EntityOS/EffectGate round-trip`
+`-> verify effect/outcome causal re-entry`
+`-> verify one-entity/two-user generation and persistence contracts`
+`-> exercise Tier-1 recovery`
+`-> destroy/recreate the full Sandbox/appliance from the SAME image digest`
+`-> recover UnifiedDB/WAL/snapshot/EffectJournal under a new generation`
+`-> reacquire Mistral secret from Vault, never from recovered ClayVerse state`
+`-> prove stale-result rejection and no blind effect replay`
+`-> repeat real Mistral cognition after recovery`
+`-> complete Clerk/WebSocket PTY + managed terminal + dual-user gates at admitted final scope`
+`-> WHOLE_CLAYVERSE_PASS only if the complete vector is green`.
 
-Do not create a parallel controller, generic host execution path, or second EntityOS staging authority merely to bypass the credential boundary.
+## Evidence law
 
-## Historical runtime note — bare Python 3.13 / SQLite
+- Sandbox creation alone is not product PASS.
+- Successful private Git fetch alone is not product PASS.
+- Successful OCI build alone is not product PASS.
+- A direct Mistral API call outside ClayVerse is not product PASS.
+- Container liveness alone is not product PASS.
+- Whole-product credit requires the integrated exact-digest path and recovery/causal/security contracts actually to execute.
 
-Earlier MicroClay diagnostics on Vercel's bare `runtime: 'python3.13'` reached real Sandboxes but failed while importing Python `sqlite3` with:
-
-`ModuleNotFoundError: No module named '_sqlite3'`
-
-That historical result is a runtime dependency failure before product assertions, not a MicroClay semantic failure, and does not transfer to current v3 product claims. UnifiedDB/SQLite-dependent product validation should use the exact ClayVerse OCI candidate or another admitted digest-bound SQLite-capable image.
-
-## Worker law
-
-For every Clay/ClayVerse worker:
-- `DIRECT_CHATGPT_MCP_SANDBOX_LIFECYCLE_NOT_EXPORTED` != `VERCEL_SANDBOX_UNAVAILABLE`;
-- distinguish provider/Preview admission failure from Sandbox admission, runtime dependency failure and product semantic failure;
-- bind exact source/artifact/image identity, commands, exit codes, diagnostics, network policy and Sandbox stop state;
-- a Sandbox start alone does not mint ClayVerse product-runtime PASS;
-- an absent private-source credential after Sandbox admission is a credential/pre-source blocker, not TEST_FAIL;
-- refresh fast-moving Research/PR identities before the next admitted compute;
-- stop bounded Sandboxes after use;
-- no VPS/self-hosted/production testing;
-- Together forbidden.
-
-## Preferred operational wording
-
-`Vercel Sandbox execution path CONFIRMED via Git-preview orchestration + @vercel/sandbox/OIDC. For the exact current ClayVerse closure, Sandbox.create has succeeded repeatedly. The current blocker is not Sandbox/provider admission but the absent host-side GITHUB_READ_TOKEN required to fetch and verify the private Research/EntityOS sources before they enter the disposable Sandbox. Source/OCI product-runtime credit remains zero because execution stops before source staging and product assertions. Provision the sensitive Preview credential without forwarding/logging it, refresh/rebind exact source once, then continue the retained OCI acceptance batch.`
+The prior bare Python 3.13 `_sqlite3` failure remains historical runtime-dependency evidence only and does not apply to the exact ClayVerse OCI path unless reproduced there.

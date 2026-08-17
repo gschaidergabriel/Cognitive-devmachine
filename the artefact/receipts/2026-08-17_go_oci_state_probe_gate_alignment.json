@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "OCI state-only restart gate contract alignment",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "observed_main_before_receipt": "32dddaa82ff0750d95efcbdfbfd3f31d09d3fc93",
+  "repair_commit": "8a64813ac97405f10c87cbe18cc87853f2c6b8db",
+  "finding": {
+    "service_contract": "--once emits status=probe_ok, scope=state_only, ready=false plus checkpoint and state_hash",
+    "pre_repair_ci_contract": "accepted status only in {ok,ready}",
+    "failure_mode": "the OCI restart gate could not accept the canonical state-only probe even if the container executed correctly",
+    "repair": "assert exact probe_ok/state_only/ready=false semantics and positive checkpoint instead of readiness-like status"
+  },
+  "isolated_regression": {
+    "environment": "OpenAI isolated non-production container",
+    "kind": "ordinary deterministic contract regression",
+    "result": "PASS",
+    "output": [
+      "NEW_GATE_PASS=2/2",
+      "OLD_GATE_REJECTS_CANONICAL_PROBE=YES"
+    ],
+    "limitation": "This validates the assertion logic against the canonical probe payload contract; it is not an exact OCI build/runtime execution."
+  },
+  "github_hosted_execution": {
+    "repair_head_run_id": 31995918952,
+    "repair_head_job_id": 95287432904,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "PRE_STEP_RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE",
+    "test_credit": "NONE"
+  },
+  "newer_main_observation": {
+    "latest_artifact_run_id": 31996022023,
+    "latest_artifact_head": "427dd9623b11e79e8038e6fb4ac7bf508ec162ac",
+    "latest_job_id": 95287697126,
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "PRE_STEP_RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE",
+    "test_credit": "NONE"
+  },
+  "coordination": {
+    "closed_conflicting_pr": 297,
+    "reason": "raw full-turn ledger conflicted with the newer destructive-compression contract; its in-process lock duplicated the currently admitted single-threaded HTTP mutation lane",
+    "merged": false
+  },
+  "unusual_experiment": {
+    "executed_by_this_worker": 0,
+    "note": "No additional unusual experiment was introduced; the shared GO slot was preserved for the already-recorded ABA lease-fencing experiment."
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_gate": "Run the exact then-current the artefact/ candidate in an authorized isolated execution surface with full pytest, OCI build, hardened state-only restart continuity, and exact artifact identity; then proceed to real Clerk and authenticated Claude Code runtime gates.",
+  "vps_used": false,
+  "together_api_used": false
+}

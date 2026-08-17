@@ -1,0 +1,59 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:44:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "NO_CHANGE_PRODUCT_RUNTIME_RESEARCH_REENTRY_DELIVERY_ATOMICITY_REPAIR",
+  "canonical_main_observed_before_repair": "579840eff9a2d81b537691185f9d86903dfe8104",
+  "canonical_main_revalidated_after_parallel_fusion": "fc2c05b5ef5c1a2fe1228850a44ee14181ce81ea",
+  "observed_defect": {
+    "class": "EXTERNAL_DELIVERY_RACE_BEFORE_CANONICAL_MANIFEST_FINALIZATION",
+    "evidence": [
+      "Canonical receipt 2026-08-17_GO_1735_LIVE_FUSION_WORKER_REENTRY_DELIVERY_GPT56SOL.json records a stale manifest SHA update rejected by HTTP 409 after semantically duplicate PR feedback had already been posted.",
+      "PR #611 visibly accumulated several semantically duplicate live-reentry comments from parallel organs before anti-entropy correction.",
+      "Existing GitHub SHA fencing prevented stale canonical manifest overwrite, but did not serialize the external comment effect before it happened."
+    ],
+    "impact": "Duplicate worker instructions and noisy causal provenance are possible even though canonical shared-state overwrite remains fenced."
+  },
+  "repair": {
+    "protocol": "research_entity/global/LIVE_REENTRY_DELIVERY_ATOMICITY_PROTOCOL.md",
+    "directive_update": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md",
+    "state_machine": "research_entity/coordination/live_reentry_delivery_atomicity.py",
+    "tests": "research_entity/tests/test_live_reentry_delivery_atomicity.py",
+    "contract": "deterministic route_id -> canonical manifest CAS claim -> re-read own claim -> external delivery with route marker -> CAS finalize; uncertain post-effect state remains UNKNOWN_DELIVERY and recovery scans for the exact marker before retry"
+  },
+  "exact_file_evidence": {
+    "state_machine_git_blob": "236bf052b66f884e402847f198bdb2fb319e4ff2",
+    "test_git_blob": "f4254aa1b79ecd18326df93bc7bf1bb1aa44853e",
+    "isolated_environment": "OpenAI isolated container; Python 3.13.5",
+    "command": "python -m unittest -v research_entity.tests.test_live_reentry_delivery_atomicity",
+    "result": "PASS_5_OF_5",
+    "git_blob_reconstruction": "BOTH_EXPECTED_BLOBS_RECOMPUTED_AND_MATCHED_BEFORE_EXECUTION",
+    "scope": "BOUNDED_COORDINATION_STATE_MACHINE_EXACT_FILE_REGRESSION_ONLY"
+  },
+  "falsification": {
+    "strongest_counterhypothesis": "The state machine can be correct while real GitHub delivery still duplicates if a worker bypasses claim-before-effect or if claim/finalize integration does not actually use the canonical manifest blob SHA as the CAS precondition.",
+    "what_current_test_proves": "Deterministic route identity, single-owner transition semantics, marker-bound finalization and fail-closed UNKNOWN recovery for the exact tested files.",
+    "what_current_test_does_not_prove": "End-to-end exactly-once GitHub delivery across independent live workers or immunity to noncompliant callers.",
+    "next_discriminator": "A later coordination-safe integration test should race two compliant workers against one disposable route and verify one CAS claim plus one route-marker delivery; this macro-cycle does not execute that external-effect experiment."
+  },
+  "live_fusion": {
+    "classification": "NEW_COORDINATION_MECHANISM_FROM_OBSERVED_DUPLICATE_DELIVERY_RACE",
+    "relationship_to_current_main": "Complements the 17:42 parallel coordination reconciliation. That reconciliation adjudicates duplicate semantic lanes and invalid experiment leases; it does not add claim-before-effect serialization for live worker delivery.",
+    "authority_boundary": "Research coordination only; no second UnifiedDB, EffectGate, identity, truth or product runtime path."
+  },
+  "unusual_experiment": {
+    "status": "NO_VALID_ADDITIONAL_EXPERIMENT_AUTHORIZED",
+    "canonical_adjudication": "The current 17:42 reconciliation records zero valid unusual experiments and forbids an additional unusual experiment for this go after the invalid minute-precision lease incident.",
+    "this_repair": "Deterministic regression/build work only; no external race experiment executed."
+  },
+  "execution_credit": {
+    "new_clayverse_product_runtime": 0,
+    "new_vercel_sandbox_runtime": 0,
+    "new_daytona_sandbox_runtime": 0,
+    "whole_product_acceptance_credit": 0
+  },
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "primary_product_frontier": "FIRST_ADMITTED_ISOLATED_OCI_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BUILD_EXACT_IMAGE -> CAPTURE_IMAGE_DIGEST_APT_TMUX_PYTHON_IDENTITIES -> RUN_REPAIR_AND_FULL_ATTESTATION_ON_IN_IMAGE_TMUX -> FOCUSED_AND_ADJACENT_REGRESSIONS -> PROMOTION_DECISION -> PR602_NATIVE_CLAUDE -> READINESS_RESTART_CONCURRENCY"
+}

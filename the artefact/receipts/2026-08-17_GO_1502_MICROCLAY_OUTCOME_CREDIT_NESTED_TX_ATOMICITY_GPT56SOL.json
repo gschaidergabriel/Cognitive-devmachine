@@ -13,9 +13,15 @@
   "repaired_microclay_retrieval_blob": "71a9a8315bcaadbe1c079b89749173da4c1751bd",
   "unusual_experiment_count_added": 0,
   "finding": {
-    "classification": "SOURCE_CONFIRMED_NESTED_TRANSACTION_ATOMICITY_GAP",
-    "mechanism": "MicroClayRetrieval.credit() mutates retrieval_entrypoint_policy before inserting its retrieval_feedback receipt. The prior _credit_tx() joined an already-open outer SQLite transaction without an inner rollback boundary. If the receipt INSERT raises, an outer caller catches that exception, and the outer transaction later commits, prior policy mutations can survive without the provenance/idempotency receipt.",
-    "existing_test_gap": "test_microclay_credit_crash_atomicity.py covers a standalone credit transaction whose exception rolls back the whole transaction; it does not cover a caught inner failure inside a still-live outer transaction."
+    "classification": "SOURCE_CONFIRMED_LATENT_NESTED_TRANSACTION_ATOMICITY_HARDENING_GAP",
+    "mechanism": "MicroClayRetrieval.credit() mutates retrieval_entrypoint_policy before inserting its retrieval_feedback receipt. The prior _credit_tx() joined an already-open outer SQLite transaction without an inner rollback boundary. If a receipt INSERT raises AND an outer caller catches that exception AND the outer transaction later commits, prior policy mutations can survive without the provenance/idempotency receipt.",
+    "existing_test_gap": "test_microclay_credit_crash_atomicity.py covers a standalone credit transaction whose exception rolls back the whole transaction; it does not cover a caught inner failure inside a still-live outer transaction.",
+    "canonical_reachability_adjudication": {
+      "begin_admission": "Nested outcome learning is reachable because TurnLifecycle.begin_admission holds UnifiedDB.tx() while WorldAssembler.assemble -> MicroClayRetrieval.retrieve -> learn_from_verified_outcomes may call credit(). However the current canonical begin path does not catch an inner credit exception, so such an exception propagates and rolls back the full outer turn transaction.",
+      "recovery": "Recovery performs _drain_known_retrieval_learning after the large recovery transaction closes, so recovery credit is standalone under current source.",
+      "current_product_corruption_claim": false,
+      "hardening_value": "Preserves local learning atomicity if any present/future canonical caller catches a credit failure while intentionally continuing unrelated outer work."
+    }
   },
   "repair": {
     "scope": "MicroClayRetrieval._credit_tx only",
@@ -41,9 +47,10 @@
   "execution": {
     "authorized_vps_used": false,
     "vercel_sandbox_started_for_this_repair": false,
+    "github_actions_observation": "Research Entity Identity Guard failed before any visible step execution; job steps=[]; runtime/product test credit remains zero.",
     "reason": "Vercel preview admission is currently rate-limited before build/Sandbox start; current execution policy forbids VPS/self-hosted fallback.",
     "runtime_credit": "ZERO",
-    "source_candidate_status": "REPAIR_CANDIDATE_UNEXECUTED"
+    "source_candidate_status": "DEFENSIVE_REPAIR_CANDIDATE_UNEXECUTED"
   },
   "authority": {
     "truth_authority_changed": false,
@@ -53,5 +60,5 @@
     "together_used": false,
     "final_paid_training_used": false
   },
-  "next_exact_gate": "On next actually-started authorized Vercel Sandbox, refresh/rebase exact surviving PR484 and this repair, execute the new nested outcome-credit atomicity regression together with existing credit crash/authority/replay/restart v3 gates under a SQLite-capable distro Python substrate and DENY_ALL during regression. Only then fuse into PR484 if green."
+  "next_exact_gate": "On next actually-started authorized Vercel Sandbox, refresh/rebase exact surviving PR484 and this defensive repair, execute the new nested outcome-credit atomicity regression together with existing credit crash/authority/replay/restart v3 gates under a SQLite-capable distro Python substrate and DENY_ALL during regression. Fuse only if green and still non-duplicate/current."
 }

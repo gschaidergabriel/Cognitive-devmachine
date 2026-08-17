@@ -1,0 +1,107 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_branch": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "product_endpoint": "ClayVerse OCI image from the artefact/",
+  "status": "METHOD_MEMORY_ADMISSION_CANDIDATE_FOCUSED_MECHANISM_PASS",
+  "candidate": {
+    "branch": "go/meta-learning-method-admission-20260817-1320",
+    "code_head_before_receipt": "42696fd8bddc137e49da6a0890a88a3ac2611f48",
+    "draft_pr": 405,
+    "module": {
+      "path": "the artefact/clayverse/method_memory.py",
+      "git_blob_sha1": "6fe4f27061110148ffe4ecb74864836c285e114c",
+      "bytes": 14010
+    },
+    "tests": {
+      "path": "the artefact/tests/test_method_memory_admission.py",
+      "git_blob_sha1": "9d0596d8c4518c97e0b29d8d0b7932c09cbd0c6f",
+      "bytes": 8239
+    }
+  },
+  "implemented_contract": [
+    "dedicated method-memory kinds and schema version inside the canonical UnifiedDB memory namespace",
+    "strict canonical finite JSON admission and fail-closed stored-row decoding",
+    "explicit problem_signature with deterministic normalized structural facets for the future Stage-B baseline",
+    "required preconditions, method steps, invariants, expected observations, falsifiers, failure modes, scope limits and provenance-bearing evidence references",
+    "candidate/promoted/demoted/retired lifecycle validation",
+    "method receipts use a separate bounded schema",
+    "unknown fields are rejected rather than silently ignored, blocking fact/truth/effect-authority smuggling through method records",
+    "generic admission is forbidden from minting framework/heuristic records; promotion remains closed until a dedicated evidence-bound lifecycle transaction exists"
+  ],
+  "execution": {
+    "vercel_sandbox_start_exec_surface_available": false,
+    "github_runner_attempts": [
+      {
+        "source_head": "346d1c931d9bc7dc0ae3cd3a1e731244d325f003",
+        "workflow_run": 32001524457,
+        "job": 95302633200,
+        "conclusion": "failure_before_step_execution",
+        "steps": null
+      },
+      {
+        "source_head": "42696fd8bddc137e49da6a0890a88a3ac2611f48",
+        "workflow_run": 32001894759,
+        "job": 95303675743,
+        "conclusion": "failure_before_step_execution",
+        "steps": null
+      }
+    ],
+    "fallback_surface": "isolated local sandbox",
+    "environment": "Python 3.13.5; Linux 6.18.35 x86_64",
+    "source_binding": "local tested files reproduced Git blob identities exactly",
+    "initial_run": {
+      "module_blob": "9a0ea69c7f4b1892ae1d36df958d032da39a639c",
+      "test_blob": "57a0cfa7d9cee18e00c6819240f1cc62cf3d9c0d",
+      "py_compile": "PASS",
+      "pytest": "6 passed, 2 failed",
+      "negative_results": [
+        "NaN was correctly rejected at canonical-JSON boundary but regression expected a narrower calibration-specific message",
+        "problem_signature facet ordering was deterministic but case-sensitive before normalization"
+      ]
+    },
+    "repairs": [
+      "normalize structural facet values before deterministic sorting",
+      "align NaN regression with the stronger canonical-JSON fail-closed boundary",
+      "block generic framework/heuristic admission after adversarial review exposed a forged-promotion-receipt authority gap"
+    ],
+    "final_regression": {
+      "module_blob": "6fe4f27061110148ffe4ecb74864836c285e114c",
+      "test_blob": "9d0596d8c4518c97e0b29d8d0b7932c09cbd0c6f",
+      "py_compile": "PASS",
+      "ordinary_tests": "8 passed, 1 deselected",
+      "unusual_experiment_regression_only": "1 passed"
+    },
+    "whole_clayverse_or_oci_pass_claimed": false
+  },
+  "unusual_experiment": {
+    "name": "METHOD_RECORD_TRUTH_SMUGGLE",
+    "macrocycle_slot": "1/1_consumed",
+    "first_execution": "PASS",
+    "attack": "inject undeclared facts, truth_confidence and effect_authority into an otherwise valid framework candidate",
+    "required_observation": "reject the whole record instead of silently admitting or dropping authority-bearing fields",
+    "observed": "whole record rejected with MethodMemoryValidationError",
+    "final_code_repeat": "REGRESSION_ONLY_PASS"
+  },
+  "evidence_boundary": {
+    "method_admission_mechanism_supported": true,
+    "stage_b_serving_or_ranking_implemented": false,
+    "promotion_transaction_implemented": false,
+    "microclay_serving_changed": false,
+    "claude_context_changed": false,
+    "whole_clayverse_pass": false,
+    "oci_build_runtime_pass": false
+  },
+  "next_exact_gate": "Implement the dedicated evidence-bound candidate-to-method promotion transaction, then Stage-B structural retrieval over only decoded validated method rows. Preserve FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT. Validate on an actually-started authorized isolated execution surface and only then consider wiring Stage B into bounded Claude context.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

@@ -35,6 +35,21 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     assert "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1" in argv
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
-    assert not any(item.startswith("ANTHROPIC_API_KEY=") for item in argv)
-    assert not any(item.startswith("ANTHROPIC_AUTH_TOKEN=") for item in argv)
+
+    # Provider/auth/build-orchestration secrets belong to the ClayVerse supervisor
+    # or its external orchestration boundary, never to the interactive Claude process.
+    forbidden_secret_env = (
+        "ANTHROPIC_API_KEY=",
+        "ANTHROPIC_AUTH_TOKEN=",
+        "CLAUDE_API_KEY=",
+        "GLM_API_TOKEN=",
+        "CLERK_ISSUER=",
+        "CLERK_JWKS_URL=",
+        "CLERK_AUDIENCE=",
+        "CLERK_AUTHORIZED_PARTIES=",
+        "CLERK_PUBLISHABLE_KEY=",
+        "CLERK_FRONTEND_API_URL=",
+        "GITHUB_READ_TOKEN=",
+    )
+    assert not any(item.startswith(forbidden_secret_env) for item in argv)
     assert argv[-1] == "/opt/clayverse/runtime/CLAUDE.md"

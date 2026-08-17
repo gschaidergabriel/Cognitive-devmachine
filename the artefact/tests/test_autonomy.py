@@ -41,11 +41,14 @@ def _effect(
     capability,
     *,
     target="autonomy-test",
+    argv=None,
     generation=1,
     status="VERIFIED",
     ok=True,
 ):
     target_receipt = EffectJournal._payload(EffectJournal._target_receipt(target))
+    argv_receipt = EffectJournal._argv_receipt(argv)
+    argv_payload = EffectJournal._payload(argv_receipt) if argv_receipt is not None else None
     outcome = (
         EffectJournal._payload(EffectJournal._outcome_receipt({"ok": ok}))
         if ok is not None
@@ -60,7 +63,7 @@ def _effect(
             "gabriel",
             capability,
             target_receipt,
-            None,
+            argv_payload,
             generation,
             status,
             outcome,
@@ -150,6 +153,37 @@ def test_same_capability_wrong_target_receipt_cannot_be_rebound(tmp_path):
         controller.verify_completion(goal["goal_id"])
 
 
+def test_same_target_wrong_argv_receipt_cannot_be_rebound(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(db, controller, required_capability="entityos.exec")
+    step = controller.propose_step(
+        goal["goal_id"],
+        "effect",
+        "Verify exact argument identity",
+        effect={
+            "capability": "entityos.exec",
+            "target": "entityos-target",
+            "argv": ["operation", "expected"],
+        },
+    )
+    controller.admit_step(goal["goal_id"], step["step_id"])
+    _effect(
+        db,
+        "e-wrong-argv",
+        "entityos.exec",
+        target="entityos-target",
+        argv=["operation", "different"],
+    )
+    with pytest.raises(PermissionError, match="intent mismatch"):
+        controller.record_effect_result(
+            goal["goal_id"], step["step_id"], "e-wrong-argv"
+        )
+    snapshot = controller.snapshot(user_id="gabriel")["goals"][0]
+    assert snapshot["current_step"]["status"] == "ADMITTED"
+    assert snapshot["evidence_effect_ids"] == []
+
+
 def test_pending_effect_never_counts_as_success(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
@@ -214,8 +248,8 @@ def test_process_exec_is_denied_at_proposal_boundary(tmp_path):
         controller.propose_step(
             goal["goal_id"],
             "effect",
-            "forbidden bypass",
-            effect={"capability": "process.exec", "target": "host", "argv": ["probe"]},
+            "bypass",
+            effect={"capability": "process.exec", "target": "host", "argv": ["id"]},
         )
 
 

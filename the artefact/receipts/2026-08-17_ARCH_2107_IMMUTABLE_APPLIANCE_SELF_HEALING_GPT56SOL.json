@@ -1,0 +1,23 @@
+{
+  "schema": "ClayVerseArchitectureReceipt/v1",
+  "local_time": "2026-08-17T21:07:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "decision": "ADOPT_IMMUTABLE_APPLIANCE_RUNTIME_STATE_SEPARATION_AND_TWO_TIER_SELF_HEALING",
+  "owner_model": {
+    "shock_absorber": "sealed OCI userspace appliance isolates the ClayVerse continuum from outside variability as far as the container boundary permits",
+    "root_filesystem": "read-only",
+    "ephemeral_writes": "RAM/tmpfs only in declared locations",
+    "durable_writes": "UnifiedDB/WAL/checkpoints/effect journal and admitted workspace only in explicit persistent areas",
+    "runtime": "EntityOS/Claude/PTY/tmux reconstructed from immutable image bytes",
+    "state": "UnifiedDB is persistent canonical authority"
+  },
+  "processing_loop": "INGRESS -> UnifiedDB -> context/retrieval -> LLM -> proposed command re-ingest -> policy -> EntityOS -> managed PTY/tmux Linux execution -> stdout/stderr/effect receipt -> UnifiedDB -> EGRESS",
+  "recovery": {
+    "tier_1": "restart/fence failed internal component when continuum invariants remain trustworthy",
+    "tier_2": "full container fail-closed restart from immutable base when invariants cannot be trusted; recover UnifiedDB/WAL/logical snapshot and mint new generation before reopening ingress"
+  },
+  "effect_safety": "ambiguous external effects are never blindly replayed; UNKNOWN_AFTER_CRASH unless idempotence and durable EffectJournal evidence prove replay safe",
+  "host_kernel_boundary": "OCI isolates product userspace but shares host kernel; stronger kernel isolation can be supplied by deployment VM/microVM without changing ClayVerse internals",
+  "performance_note": "fast deterministic restart is required as a design goal; no millisecond guarantee is claimed until measured on admitted runtime",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

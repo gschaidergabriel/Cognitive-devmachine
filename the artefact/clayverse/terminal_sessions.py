@@ -78,16 +78,10 @@ class TerminalSessionManager:
 
     @classmethod
     def _tmux_socket(cls, binding: TerminalBinding) -> str:
-        # A tmux client can address sessions inside its connected server. Keep the
-        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
-        # attached client cannot switch from one canonical user's session to the other.
         return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
 
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
-        # The browser is attached to tmux, so tmux itself is part of the effect boundary.
-        # Always select the root-owned policy that removes tmux's command keymaps;
-        # never allow an invocation to fall back to user/default tmux configuration.
         return [
             "tmux",
             "-L", cls._tmux_socket(binding),
@@ -96,20 +90,8 @@ class TerminalSessionManager:
         ]
 
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
-        """Fail closed unless the connected tmux server is transport-only.
-
-        tmux only reads `-f` when a server starts. An already-running server can therefore
-        ignore the `-f` supplied by a later client. The managed policy writes a versioned
-        marker last after removing all default key tables. Verify the marker, both prefix
-        options, inert status/mouse/default-shell settings, and the effective global key
-        binding list before admitting attachment.
-        """
         checks = (
-            (
-                "managed-policy marker",
-                ("show-options", "-sqv", "@clayverse_managed_policy"),
-                self.MANAGED_TMUX_POLICY_ID,
-            ),
+            ("managed-policy marker", ("show-options", "-sqv", "@clayverse_managed_policy"), self.MANAGED_TMUX_POLICY_ID),
             ("prefix", ("show-options", "-gqv", "prefix"), "None"),
             ("prefix2", ("show-options", "-gqv", "prefix2"), "None"),
             ("status", ("show-options", "-gqv", "status"), "off"),
@@ -148,11 +130,6 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
-        """Diagnostic-only mirror; never a product MCP authority.
-
-        `managed-mcp.json` is the sole runtime server-definition source. This helper is
-        retained for bounded tests/inspection and is deliberately not called by ensure().
-        """
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
@@ -179,19 +156,10 @@ class TerminalSessionManager:
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
-            raise TerminalRuntimeError(
-                f"tmux session liveness probe unavailable for {binding.tmux_name}"
-            ) from exc
+            raise TerminalRuntimeError(f"tmux session liveness probe unavailable for {binding.tmux_name}") from exc
         return cp.returncode == 0
 
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
-        """Reapply the immutable command-surface fence to a running tmux server.
-
-        tmux configuration is loaded when a server starts, not whenever a new session
-        or client is created. A persistent per-user server may therefore predate a
-        ClayVerse policy upgrade. Source the root-owned policy before every admitted
-        attach path and fail closed if the running server cannot accept it.
-        """
         try:
             cp = subprocess.run(
                 self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
@@ -201,13 +169,9 @@ class TerminalSessionManager:
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
-            raise TerminalRuntimeError(
-                f"tmux policy enforcement unavailable for {binding.tmux_name}"
-            ) from exc
+            raise TerminalRuntimeError(f"tmux policy enforcement unavailable for {binding.tmux_name}") from exc
         if cp.returncode != 0:
-            raise TerminalRuntimeError(
-                f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
-            )
+            raise TerminalRuntimeError(f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}")
 
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
@@ -219,9 +183,6 @@ class TerminalSessionManager:
             self._assert_tmux_server_policy(binding)
             return binding
 
-        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
-        # user/project MCP file in the launch path. User/session identity reaches the
-        # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
             "--settings", str(self.MANAGED_SETTINGS),
@@ -233,7 +194,7 @@ class TerminalSessionManager:
             "mcp__clayverse__goal_state",
             "mcp__clayverse__goal_create",
             "mcp__clayverse__goal_set_status",
-            "mcp__clayverse__milestone_review",
+            "mcp__clayverse__goal_acknowledge",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
@@ -277,9 +238,7 @@ class TerminalSessionManager:
                 timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
-            raise TerminalRuntimeError(
-                f"tmux session creation unavailable for {binding.tmux_name}"
-            ) from exc
+            raise TerminalRuntimeError(f"tmux session creation unavailable for {binding.tmux_name}") from exc
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
         self._enforce_tmux_policy(binding)
@@ -319,7 +278,6 @@ class TerminalSessionManager:
             os.kill(pid, signal.SIGHUP)
         except ProcessLookupError:
             return
-
         deadline = time.monotonic() + 0.5
         while True:
             try:

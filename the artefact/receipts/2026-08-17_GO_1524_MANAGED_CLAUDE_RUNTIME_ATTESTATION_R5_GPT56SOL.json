@@ -1,0 +1,66 @@
+{
+  "receipt_type": "clayverse_go_source_candidate",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "user_message_time_available": "2026-08-17T15:24+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "candidate_branch": "go/managed-claude-runtime-attestation-sol-20260817-1524-r5",
+  "candidate_base_main": "62de4777f77936c0ce4540b97a682414158e8a62",
+  "candidate_code_head_before_receipt": "31ced6ba1e743ce751194969371b7baa2ba10eea",
+  "status": "SOURCE_CANDIDATE_UNOBSERVED_EXACT_RUNTIME",
+  "canonical_precondition": "Current main already requires canonical UnifiedDB state plus both live canonical tmux sessions passing transport-policy-v3 attestation. This candidate adds exact managed Claude process identity/start-contract attestation without creating a parallel readiness path.",
+  "delta": [
+    "preserve canonical tmux v3 transport attestation, policy reapply, bounded control timeouts and direct argv launch",
+    "centralize the exact sanitized managed Claude launch argv",
+    "require exactly one live pane whose current command is claude and whose pane_start_command parses exactly to the managed launch argv",
+    "fail closed for existing and newly-created tmux sessions that do not pass process attestation",
+    "extend canonical /readyz admission so both user-bound sessions must pass the exact managed-session predicate",
+    "repair adjacent tests that encoded the superseded shell-string launch assumption and isolate lower-layer policy tests from the new process layer"
+  ],
+  "source_binding": {
+    "base": "62de4777f77936c0ce4540b97a682414158e8a62",
+    "ahead_by_before_receipt": 8,
+    "behind_by_before_receipt": 0,
+    "changed_product_files_before_receipt": 8
+  },
+  "execution_evidence": {
+    "equivalent_pre_r5_source_mechanism": "Earlier bounded local source reconstructions in this GO passed focused regressions; the expanded equivalent slice reached 11/11.",
+    "exact_rebased_r5_branch": "UNOBSERVED",
+    "live_tmux_native_claude": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED"
+  },
+  "execution_admission": {
+    "vercel": "Blocked before Sandbox start by current free daily admission limit.",
+    "daytona": "Authorized repository fallback, but unavailable from this ChatGPT execution surface because no Daytona connector is exposed and the local isolated runtime has no outbound DNS/network.",
+    "classification": "EXECUTION_ADMISSION_OR_ORCHESTRATION_BLOCKER_NOT_TEST_FAILURE",
+    "vps": "FORBIDDEN_FOR_CURRENT_ACCEPTANCE"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "lease_consumed": false,
+    "reason": "Only minute-precision trigger time is available; the atomic lease protocol forbids inventing seconds or microseconds.",
+    "counter_reality": "transport-policy-valid tmux whose pane is no longer the exact managed Claude launch",
+    "treatment": "ordinary deterministic regression only, not unusual-experiment credit"
+  },
+  "strongest_counterhypothesis": "Exact packaged tmux/native Claude may render pane_current_command or pane_start_command differently for a legitimate process. That representation must be measured in the exact OCI runtime; the safety predicate must not be loosened speculatively.",
+  "superseded_lanes": [
+    "go/terminal-runtime-attestation-fusion-sol-20260817-1524",
+    "go/terminal-process-readiness-fusion-sol-20260817-1524-r2",
+    "go/managed-claude-runtime-attestation-sol-20260817-1524-r3",
+    "go/managed-claude-runtime-attestation-sol-20260817-1524-r4",
+    "closed draft PR #598"
+  ],
+  "next_exact_gate": [
+    "refresh/rejoin latest main if overlapping terminal code changes",
+    "run focused process/readiness plus adjacent terminal regressions in an authorized isolated sandbox",
+    "run the broader relevant deterministic suite",
+    "build exact ClayVerse OCI image and capture digest",
+    "start both canonical managed Claude/tmux sessions and require /readyz=200",
+    "perturb one pane process/start contract and require /readyz=503 plus attach fail-closed",
+    "verify restart preserves continuity without admitting stale process identity"
+  ],
+  "acceptance_boundary": "Bounded source candidate only. No exact rebased-r5 execution, live tmux/native-Claude evidence, OCI runtime evidence or whole ClayVerse PASS is claimed.",
+  "together_api": "FORBIDDEN",
+  "paid_or_final_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

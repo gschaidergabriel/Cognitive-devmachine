@@ -124,7 +124,7 @@ def _write_pty_all(fd: int, payload: bytes, auth_deadline: float) -> None:
 
 
 def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
-    """Read-only readiness for canonical state and policy-attested product terminals."""
+    """Read-only readiness for canonical state and exact managed Claude terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
@@ -149,15 +149,10 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         )
         if not state_ready:
             return False
-        for user_id in CANONICAL_TERMINAL_NAMES:
-            binding = terminals.binding(user_id)
-            if not terminals._has_session(binding):
-                return False
-            # `attach_pty()` will fail closed on this same attestation. Readiness
-            # must never advertise a stale/unmanaged tmux server that cannot be
-            # admitted by the real attach path.
-            terminals._assert_tmux_server_policy(binding)
-        return True
+        return all(
+            terminals.is_managed_session(terminals.binding(user_id))
+            for user_id in CANONICAL_TERMINAL_NAMES
+        )
     except Exception:
         return False
 
@@ -186,7 +181,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/readyz")
     async def readyz():
-        ready = _runtime_ready(db, terminals)
+        ready = await asyncio.to_thread(_runtime_ready, db, terminals)
         return JSONResponse({
             "status": "ready" if ready else "not_ready",
             "scope": "runtime",
@@ -278,13 +273,8 @@ window.addEventListener('load', async () => {{
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
-            # PTY/tmux attachment is a blocking trust-boundary transition. If the
-            # verified Clerk lease expired while it blocked, do not mutate terminal
-            # state (including its initial size) under an expired authorization.
             _require_auth_lease_live(auth_expires_at)
             terminals.resize(attach_fd, rows, cols)
-            # Resize may itself cross a scheduling/blocking boundary. Never publish
-            # readiness after the lease has expired in that interval.
             _require_auth_lease_live(auth_expires_at)
             await send_json({
                 "type": "ready",
@@ -299,8 +289,6 @@ window.addEventListener('load', async () => {{
                     if not data:
                         return
                     async with send_lock:
-                        # Output is an authenticated capability too. Re-check after
-                        # the blocking PTY read and after waiting for the send lock.
                         _require_auth_lease_live(auth_expires_at)
                         await ws.send_bytes(data)
 
@@ -314,17 +302,12 @@ window.addEventListener('load', async () => {{
                         message = await asyncio.wait_for(ws.receive(), timeout=remaining)
                     except asyncio.TimeoutError as exc:
                         raise AuthenticationError("Clerk session token expired") from exc
-                    # wait_for() and websocket receive completion race at the deadline.
-                    # Re-check the lease before any received frame can affect PTY/control state.
                     if auth_expires_at <= time.time():
                         raise AuthenticationError("Clerk session token expired")
                     if message.get("type") == "websocket.disconnect":
                         return
                     if message.get("bytes") is not None:
                         _bounded_pty_input(message["bytes"])
-                        # Freeze the lease that admitted this frame. A concurrent reauth may
-                        # extend future frames but must not retroactively authorize a write
-                        # that already crossed its original admission deadline.
                         frame_auth_deadline = auth_expires_at
                         await asyncio.to_thread(
                             _write_pty_all,

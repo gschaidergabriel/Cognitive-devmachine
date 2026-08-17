@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-18T00:18+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_after_parallel_reentry": "8f431687707ca251344069a0ddfa0288a2052fb8",
+  "candidate_pull_request": 680,
+  "candidate_original_base": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+  "candidate_pre_repair_head": "37bfaac92158168fff16e20ed29a1fe208429720",
+  "classification": "SOURCE_SECURITY_REPAIR_WITH_EXECUTION_ADMISSION_FAILURE",
+  "material_delta": {
+    "novelty": "REFINES",
+    "gap": "Turn-derived durable-memory extraction and compression executed after _begin_engine_turn committed. Recovery/global generation advancement in that window could permit a stale admitted turn to mutate durable_memory or compressed turn content before the later provider-response generation fence rejected stale cognition.",
+    "violated_invariant": "stale generation writers fail closed",
+    "repair": "Move MemoryManager.extract_explicit() and MemoryManager.compact() into the existing _begin_engine_turn BEGIN IMMEDIATE transaction, after user-turn/workspace/active-turn admission and before commit. Memory failure now rolls back the entire user-turn/workspace/active/memory spine.",
+    "engine_commit": "d9ed424c9412c4c207e257195c384ec2d876b2f5",
+    "regression_commit": "b62252e3830717c71beaabc12be2632191b3d895",
+    "current_engine_blob_after_parallel_refinement": "b3219e9fd39e276ea91951bae7b637b463c89e44",
+    "memory_generation_test_blob": "088ffa755a3e9e2280b1e8442faeaab27b72aa29"
+  },
+  "regressions_added": [
+    "assert turn-derived explicit-memory extraction and compression observe an active database transaction",
+    "assert a memory write followed by an extractor exception rolls back turns, durable_memory, workspace_episodes and active_turns together"
+  ],
+  "parallel_reentry": {
+    "classification": "REFINES_ADOPT",
+    "head_observed": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "additional_repair_commit": "5a837aa09538b478176ef5264b5de043e4bf0c42",
+    "additional_test_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "summary": "A parallel organ built directly on the memory-fence head and additionally terminalized successful workspaces to COMPLETED before active-turn retirement, with recovery regressions. The changes are causally stacked and non-conflicting."
+  },
+  "execution_attempt": {
+    "exact_test_head_attempted": "b62252e3830717c71beaabc12be2632191b3d895",
+    "github_workflow_run_id": 32050054514,
+    "github_job_id": 95447014543,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure_before_steps",
+    "steps": 0,
+    "runner_id": 0,
+    "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "focused_memory_regression_runtime_credit": 0,
+    "full_checkout_runtime_credit": 0
+  },
+  "runtime_frontier": {
+    "vercel_sandbox_admission": "HISTORICALLY_PROVEN",
+    "runtime_one_shot_github_token_ingress": "IMPLEMENTED_IN_RETAINED_DR_UNTERWEGER_PR810",
+    "credential_bearing_post_this_cycle": false,
+    "reason": "No owner-held scoped read-only GITHUB_READ_TOKEN value is exposed to this organ and the connected Vercel tool surface does not provide the required arbitrary credential-bearing POST/Sandbox lifecycle action.",
+    "exact_final_oci_runtime_credit": 0,
+    "real_mistral_runtime_credit": 0,
+    "entityos_final_roundtrip_credit": 0,
+    "tier2_full_recreation_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "The exact user trigger metadata is minute precision only and no shared immutable request/turn identifier is available; the atomic GO experiment lease therefore fails closed."
+  },
+  "promotion": "DO_NOT_PROMOTE_FROM_SOURCE_ONLY",
+  "next_exact_step": "Execute the focused memory-generation transaction regressions plus adjacent Engine/Recovery tests on an actually-started authorized isolated runner at the exact current PR680 head. Then rebind the retained PR810 controller once to the accepted exact Research candidate and perform the owner-held one-shot token POST -> private-source identity proof -> Vercel Sandbox Firecracker -> exact OCI digest -> runtime approved Mistral secret -> canonical cognition/re-ingest/effect -> Tier-1 -> full same-digest Sandbox recreation -> secret reacquisition -> repeated cognition and remaining auth/PTY/dual-user gates."
+}

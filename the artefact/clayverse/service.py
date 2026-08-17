@@ -4,6 +4,7 @@ import base64
 import binascii
 import json
 import os
+import stat
 import sys
 from urllib.parse import urlsplit
 
@@ -21,6 +22,7 @@ from .terminal_sessions import TerminalSessionManager
 _ENTITYOS_PATH = "/opt/entityos/EntityOS"
 _ENTITYOS_LOCK_PATH = "/opt/entityos/entityos.lock.json"
 _ENTITYOS_LOCK_SCHEMA = "ClayVerseEntityOSArtifactLock/v1"
+_ENTITYOS_LOCK_MAX_BYTES = 64 * 1024
 
 
 def _clerk_map() -> dict[str, str]:
@@ -99,11 +101,32 @@ def _web_config(issuer: str) -> tuple[str, str]:
 
 def _load_entityos_lock() -> dict[str, object]:
     """Load the immutable in-image EntityOS authority lock or fail closed."""
+    flags = os.O_RDONLY | getattr(os, "O_CLOEXEC", 0) | getattr(os, "O_NOFOLLOW", 0)
     try:
-        with open(_ENTITYOS_LOCK_PATH, encoding="utf-8") as handle:
-            lock = json.load(handle)
-    except (OSError, json.JSONDecodeError) as exc:
+        fd = os.open(_ENTITYOS_LOCK_PATH, flags)
+    except OSError as exc:
         raise RuntimeError(f"embedded EntityOS lock unavailable: {exc}") from exc
+    try:
+        st = os.fstat(fd)
+        if not stat.S_ISREG(st.st_mode):
+            raise RuntimeError("embedded EntityOS lock must be a regular file")
+        if st.st_size <= 0 or st.st_size > _ENTITYOS_LOCK_MAX_BYTES:
+            raise RuntimeError("embedded EntityOS lock file size is invalid")
+        raw = bytearray()
+        while len(raw) <= _ENTITYOS_LOCK_MAX_BYTES:
+            chunk = os.read(fd, min(8192, _ENTITYOS_LOCK_MAX_BYTES + 1 - len(raw)))
+            if not chunk:
+                break
+            raw.extend(chunk)
+        if len(raw) != st.st_size or len(raw) > _ENTITYOS_LOCK_MAX_BYTES:
+            raise RuntimeError("embedded EntityOS lock read was inconsistent")
+    finally:
+        os.close(fd)
+
+    try:
+        lock = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise RuntimeError("embedded EntityOS lock unavailable: invalid JSON") from exc
 
     if not isinstance(lock, dict) or lock.get("schema") != _ENTITYOS_LOCK_SCHEMA:
         raise RuntimeError("embedded EntityOS lock schema is invalid")

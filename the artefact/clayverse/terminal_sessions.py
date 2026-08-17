@@ -9,11 +9,13 @@ import struct
 import subprocess
 import termios
 import fcntl
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
 
 from .identity import CANONICAL_TERMINAL_NAMES
+from .terminal_activity import TerminalActivityRegistry
 
 CANONICAL_TERMINALS = CANONICAL_TERMINAL_NAMES
 
@@ -43,10 +45,19 @@ class TerminalSessionManager:
     TMUX_SOCKET_PREFIX = "clayverse"
     TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
 
-    def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
+    def __init__(
+        self,
+        state_root: str | Path,
+        workspace: str | Path = "/workspace",
+        *,
+        activity: TerminalActivityRegistry | None = None,
+    ):
         self.state_root = Path(state_root)
         self.workspace = Path(workspace)
         self.runtime_prompt = Path("/opt/clayverse/runtime/CLAUDE.md")
+        self.activity = activity or TerminalActivityRegistry()
+        self._attach_lock = threading.RLock()
+        self._attach_users: dict[int, str] = {}
 
     def _require_programs(self) -> None:
         for program in ("tmux", "claude", "python3"):
@@ -284,55 +295,72 @@ class TerminalSessionManager:
         return binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
-        binding = self.ensure(user_id)
-        pid, fd = pty.fork()
-        if pid == 0:
-            env = {
-                "HOME": str(binding.home),
-                "PATH": "/usr/local/bin:/usr/bin:/bin",
-                "TERM": os.environ.get("TERM", "xterm-256color"),
-                "LANG": "C.UTF-8",
-            }
-            os.execvpe(
-                "tmux",
-                self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
-                env,
-            )
-        return pid, fd, binding
+        if not self.activity.begin_human(user_id):
+            raise TerminalRuntimeError("terminal temporarily reserved for autonomy dispatch")
+        registered = False
+        try:
+            binding = self.ensure(user_id)
+            pid, fd = pty.fork()
+            if pid == 0:
+                env = {
+                    "HOME": str(binding.home),
+                    "PATH": "/usr/local/bin:/usr/bin:/bin",
+                    "TERM": os.environ.get("TERM", "xterm-256color"),
+                    "LANG": "C.UTF-8",
+                }
+                os.execvpe(
+                    "tmux",
+                    self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
+                    env,
+                )
+            with self._attach_lock:
+                if pid in self._attach_users:
+                    raise TerminalRuntimeError("duplicate PTY attach pid")
+                self._attach_users[pid] = user_id
+                registered = True
+            return pid, fd, binding
+        except BaseException:
+            if not registered:
+                self.activity.end_human(user_id)
+            raise
 
-    @staticmethod
-    def resize(fd: int, rows: int, cols: int) -> None:
+    def resize(self, fd: int, rows: int, cols: int) -> None:
         rows = max(2, min(int(rows), 500))
         cols = max(10, min(int(cols), 1000))
         fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
 
-    @staticmethod
-    def close_attach(pid: int, fd: int) -> None:
+    def close_attach(self, pid: int, fd: int) -> None:
+        with self._attach_lock:
+            user_id = self._attach_users.pop(pid, None)
         try:
-            os.close(fd)
-        except OSError:
-            pass
-        try:
-            os.kill(pid, signal.SIGHUP)
-        except ProcessLookupError:
-            return
-
-        deadline = time.monotonic() + 0.5
-        while True:
             try:
-                waited, _ = os.waitpid(pid, os.WNOHANG)
-            except ChildProcessError:
+                os.close(fd)
+            except OSError:
+                pass
+            try:
+                os.kill(pid, signal.SIGHUP)
+            except ProcessLookupError:
                 return
-            if waited == pid:
-                return
-            if time.monotonic() >= deadline:
+
+            deadline = time.monotonic() + 0.5
+            while True:
                 try:
-                    os.kill(pid, signal.SIGKILL)
-                except ProcessLookupError:
-                    pass
-                try:
-                    os.waitpid(pid, 0)
+                    waited, _ = os.waitpid(pid, os.WNOHANG)
                 except ChildProcessError:
-                    pass
-                return
-            time.sleep(0.01)
+                    return
+                if waited == pid:
+                    return
+                if time.monotonic() >= deadline:
+                    try:
+                        os.kill(pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    try:
+                        os.waitpid(pid, 0)
+                    except ChildProcessError:
+                        pass
+                    return
+                time.sleep(0.01)
+        finally:
+            if user_id is not None:
+                self.activity.end_human(user_id)

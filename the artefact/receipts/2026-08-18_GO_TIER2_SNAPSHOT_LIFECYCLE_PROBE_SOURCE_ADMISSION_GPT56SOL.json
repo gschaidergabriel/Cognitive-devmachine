@@ -2,12 +2,14 @@
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
   "observed_at_local": "2026-08-18T01:44:00+07:00",
-  "updated_at_local": "2026-08-18T01:46:00+07:00",
+  "updated_at_local": "2026-08-18T01:47:00+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "classification": "TIER2_SNAPSHOT_LIFECYCLE_PROBE_SOURCE_PRESENT_EXECUTION_ADMISSION_BLOCKED",
+  "classification": "SUPERSEDED_DIRECT_SNAPSHOT_PROBE_REMOVED_CLEAN_CARRIER_RETAINS_FRONTIER",
   "canonical_main_observed_before_write": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
+  "superseding_canonical_main_observed": "91ffeb7b2c665d6a3b8b3b60c4700cc8568468ac",
+  "superseding_receipt": "the artefact/receipts/2026-08-18_GO_PR810_CLEAN_CARRIER_AND_DUAL_EXECUTION_ADMISSION_BLOCK_GPT56SOL.json",
   "immutable_runtime_freeze": {
     "pull_request": 686,
     "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
@@ -15,91 +17,67 @@
     "runtime_credit": 0,
     "whole_product_credit": 0
   },
-  "controller": {
-    "repository": "gschaidergabriel/Dr.-Unterweger",
-    "pull_request": 810,
-    "branch": "clay/fusion-vcr-native-20260817",
-    "head_observed_before_probe_hardening": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
-    "head_observed_after_probe_hardening_and_parallel_writes": "5343a97e4154a982a2e7667c0729a72d57c62f0d",
-    "draft": true,
-    "mergeable_after_parallel_writes": false,
-    "mergeability_note": "Observed during a rapidly changing parallel hot lane; not treated as product runtime evidence.",
-    "runtime_credit": 0
-  },
-  "probe_source": {
+  "probe_history": {
     "path": "mcp/vercel-sandbox-mcp/api/snapshot-lifecycle-probe.js",
     "introduced_commit": "98e7447f1017364394fc8e940e5494cab0908367",
     "preview_fence_hardening_commit": "62abc25a4d9bbb4e15592a82550b9667f8af8d1a",
-    "blob_observed_on_current_head": "d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1",
-    "preview_only_fence": {
-      "required_vercel_env": "preview",
-      "required_git_ref": "clay/fusion-vcr-native-20260817",
-      "receipt_binds_executed_vercel_git_commit_sha": true
-    },
-    "classification": "ORDINARY_PROVIDER_CONTRACT_ACCEPTANCE_TEST",
-    "purpose": "Discriminate the current Vercel documentation conflict by testing whether an explicit manual snapshot remains addressable after full deletion of its named source sandbox and can instantiate a distinct persistent:false replacement with exact sentinel-byte recovery.",
-    "sequence": [
-      "create disposable persistent:false Vercel Sandbox with deny-all network",
-      "write random non-secret sentinel and local SHA-256",
-      "create explicit manual snapshot and bind snapshot_id",
-      "delete source sandbox",
-      "require source sandbox to be unretrievable with resume:false",
-      "call Snapshot.get on the exact snapshot_id after source deletion",
-      "create distinct persistent:false replacement from exact snapshot_id",
-      "verify replacement session identity differs from source",
-      "verify restored sentinel bytes and SHA-256 exactly match",
-      "delete replacement/source/snapshot resources in finally"
-    ],
-    "declared_credit": {
-      "tier2_credit": 0,
-      "whole_product_credit": 0,
-      "unusual_experiment_count_added": 0
-    }
-  },
-  "source_evidence": {
-    "probe_present_on_latest_observed_pr810_head": true,
+    "last_probe_blob": "d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1",
     "probe_executed": false,
-    "snapshot_survival_after_source_delete": "UNKNOWN",
-    "tier2_independent_carrier_verified": false,
-    "exact_runtime_verified": false,
-    "whole_product_accepted": false
+    "runtime_credit": 0,
+    "removal_commit": "43af5f4746c5fd9d36228c48ed9c49ebfdf3b8fa",
+    "removed_reason": "Latest canonical Research converged Tier2 onto a distinct clean carrier Sandbox. The old source Sandbox is not the snapshot producer, so deleting the source no longer depends on direct source-snapshot survival. Keeping the temporary direct-source lifecycle probe would add stale test infrastructure without advancing the retained product path."
+  },
+  "preview_trigger_history": {
+    "path": "mcp/vercel-sandbox-mcp/EXACT_CURRENT_PR810_DEPLOY_TRIGGER_20260818T0141p0700.txt",
+    "introduced_commit": "15510d1fe199991b1cc0174fbdaf199afcf18659",
+    "produced_exact_deployment_in_observed_window": false,
+    "removal_commit": "1b1a47d4a2d73ccad4625afc3f52edd38d8152a5"
+  },
+  "clean_carrier_reentry": {
+    "source_snapshot_forbidden": true,
+    "sandbox_fork_forbidden": true,
+    "carrier_is_distinct_clean_persistent_false_sandbox": true,
+    "declared_transfer_only": true,
+    "carrier_snapshot_created_before_source_delete": true,
+    "old_source_deleted_before_replacement_create": true,
+    "replacement_created_from_carrier_snapshot": true,
+    "replacement_persistent_false": true,
+    "carrier_deleted_only_after_replacement_restore": true,
+    "runtime_verified": false
   },
   "execution_admission": {
-    "canonical_current_blocker": "VERCEL_BUILD_RATE_LIMIT",
-    "canonical_blocker_receipt": "the artefact/receipts/2026-08-18_GO_PR810_SHA_GUARD_AND_TIER2_CARRIER_FENCE_GPT56SOL.json",
-    "direct_commit_status_check": {
-      "repository": "gschaidergabriel/Dr.-Unterweger",
-      "commit": "5343a97e4154a982a2e7667c0729a72d57c62f0d",
-      "context": "Vercel",
-      "state": "failure",
-      "target_class": "upgradeToPro=build-rate-limit"
+    "vercel": {
+      "status": "FAILURE_BUILD_RATE_LIMIT",
+      "build_started": false,
+      "product_runtime_executed": false
     },
-    "latest_directly_observed_vercel_deployment_in_this_organ": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
-    "latest_directly_observed_deployment_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
-    "latest_directly_observed_deployment_state": "ERROR_SOURCE_GUARD_BEFORE_PRODUCT_RUNTIME",
-    "exact_probe_head_deployment_observed": false,
-    "vercel_deploy_connector_attempt": "FAILED_TOOL_SCHEMA_MISMATCH_REQUIRES_UNEXPOSED_TARGET_NAME_FILES",
-    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
+    "daytona_free_only_fallback": {
+      "authorized_by_current_research": true,
+      "dispatch_attempts_observed_by_superseding_receipt": 3,
+      "steps": 0,
+      "runner_id": 0,
+      "provider_contact_proven": false
+    },
+    "direct_daytona_plugin_available_in_this_session": false,
+    "classification": "DUAL_CONTROL_PLANE_EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE"
   },
   "coordination": {
-    "preview_trigger_commit_by_this_organ": "15510d1fe199991b1cc0174fbdaf199afcf18659",
-    "preview_trigger_produced_exact_deployment_in_observed_window": false,
     "pr810_snapshot_comment_supersession_id": 5318763096,
     "duplicate_controller_path_added": false,
+    "stale_probe_removed": true,
     "research_product_bytes_changed": false,
-    "controller_test_infrastructure_changed": true,
     "owner_credentials_used": false,
     "paid_or_beta_storage_provisioned": false
   },
-  "carrier_alternatives_checked": {
-    "vercel_drive": "DEFERRED_PRIVATE_BETA_OWNER_AUTHORIZATION_UNPROVEN",
-    "vercel_container_registry": "DEFERRED_BETA_OR_USAGE_BILLING_OWNER_AUTHORIZATION_UNPROVEN",
-    "vercel_private_blob": "DEFERRED_BETA_OWNER_AUTHORIZATION_UNPROVEN",
-    "public_blob": "REJECTED_WITHOUT_SEPARATELY_ADMITTED_ENCRYPTION_AND_KEY_RECOVERY_CONTRACT"
-  },
   "unusual_experiment": {
     "new_experiment_count": 0,
-    "reason": "The shared go unusual-experiment slot was already consumed/unsafe to duplicate; the snapshot lifecycle discriminator is explicitly classified by current canonical Research as an ordinary provider contract acceptance test."
+    "reason": "No duplicate unusual intervention was created; the temporary source probe was never executed and was removed after canonical clean-carrier convergence."
   },
-  "next_exact_step": "Restore authorized Vercel build/execution admission, obtain a Preview whose deployment metadata exactly binds a retained PR810 head containing probe blob d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1 and passes source guards, then execute the bounded snapshot lifecycle probe. If lifecycle passes, continue full declared Tier2 transfer/OCI/generation/effect/secret-reacquisition/second-cognition gates; if it fails, reject direct manual snapshot carriage and evaluate only explicitly authorized independent durable carriers."
+  "epistemic_status": {
+    "clean_carrier_source_candidate": true,
+    "clean_carrier_exact_runtime_verified": false,
+    "exact_oci_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Restore one authorized execution admission path. Prefer an exact-current PR810 Vercel Preview; otherwise use the already-authorized FREE_ONLY Daytona fallback through a control plane that actually starts. Execute exact source guards first, then the immutable PR686 private-source -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS -> Tier1 recovery -> clean declared-transfer carrier -> delete old source -> fresh persistent:false replacement -> exact identity restore -> fresh provider cognition path. No runtime credit until those steps actually execute."
 }

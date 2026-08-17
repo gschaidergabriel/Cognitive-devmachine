@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Install the exact digest-pinned xterm browser package.
+"""Install the exact digest-pinned xterm browser assets.
 
 Build-only helper. It verifies the repository-owned SHA-512 lock before opening
-an npm tarball, validates package identity, rejects links/path traversal and
-extracts only regular files beneath the canonical `package/` root.
+an npm tarball, validates package identity and bounded archive shape, rejects
+links/path traversal/duplicates, and extracts only the three runtime files
+ClayVerse actually serves from the canonical ``package/`` root.
 """
 from __future__ import annotations
 
@@ -18,6 +19,14 @@ import urllib.request
 
 LOCK_PATH = Path(os.environ.get("CLAYVERSE_SOURCE_LOCK", "/opt/clayverse-build/SOURCE_LOCK.json"))
 TARGET = Path(os.environ.get("CLAYVERSE_XTERM_TARGET", "/opt/clayverse/vendor/xterm"))
+MAX_ARCHIVE_BYTES = 20 * 1024 * 1024
+MAX_MEMBERS = 4096
+MAX_UNPACKED_BYTES = 64 * 1024 * 1024
+REQUIRED_FILES = {
+    "package/package.json": "package.json",
+    "package/lib/xterm.js": "lib/xterm.js",
+    "package/css/xterm.css": "css/xterm.css",
+}
 
 
 def load_config() -> tuple[str, str, str, str]:
@@ -44,13 +53,19 @@ def verify_digest(data: bytes, expected_sha512: str) -> None:
 def fetch_verified(url: str, expected_sha512: str) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": "ClayVerse-build/1"})
     with urllib.request.urlopen(req, timeout=180) as response:
-        data = response.read()
+        data = response.read(MAX_ARCHIVE_BYTES + 1)
+    if len(data) > MAX_ARCHIVE_BYTES:
+        raise SystemExit("xterm archive exceeds download size limit")
     verify_digest(data, expected_sha512)
     return data
 
 
 def safe_members(tf: tarfile.TarFile) -> list[tarfile.TarInfo]:
     members = tf.getmembers()
+    if len(members) > MAX_MEMBERS:
+        raise SystemExit("xterm archive has too many members")
+    seen_files: set[str] = set()
+    unpacked_bytes = 0
     for member in members:
         path = Path(member.name)
         if path.is_absolute() or ".." in path.parts:
@@ -59,6 +74,13 @@ def safe_members(tf: tarfile.TarFile) -> list[tarfile.TarInfo]:
             raise SystemExit(f"unexpected xterm archive root: {member.name}")
         if member.issym() or member.islnk() or not (member.isdir() or member.isfile()):
             raise SystemExit(f"unsafe xterm archive member type: {member.name}")
+        if member.isfile():
+            if member.name in seen_files:
+                raise SystemExit(f"duplicate xterm archive member: {member.name}")
+            seen_files.add(member.name)
+            unpacked_bytes += member.size
+            if unpacked_bytes > MAX_UNPACKED_BYTES:
+                raise SystemExit("xterm archive exceeds unpacked size limit")
     return members
 
 
@@ -77,11 +99,15 @@ def install_archive(
 ) -> None:
     with tarfile.open(fileobj=io.BytesIO(data), mode="r:gz") as tf:
         members = safe_members(tf)
-        manifests = [m for m in members if m.isfile() and m.name == "package/package.json"]
-        if len(manifests) != 1:
-            raise SystemExit(f"expected exactly one xterm package.json, got {len(manifests)}")
+        files = {member.name: member for member in members if member.isfile()}
+        missing = sorted(set(REQUIRED_FILES) - set(files))
+        if missing:
+            raise SystemExit(f"xterm archive missing required files: {','.join(missing)}")
+
+        manifest = files["package/package.json"]
         try:
-            metadata = json.loads(_read_member(tf, manifests[0]).decode("utf-8"))
+            manifest_bytes = _read_member(tf, manifest)
+            metadata = json.loads(manifest_bytes.decode("utf-8"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
             raise SystemExit("invalid xterm package.json") from exc
         if metadata.get("name") != expected_package or str(metadata.get("version")) != expected_version:
@@ -95,25 +121,15 @@ def install_archive(
             shutil.rmtree(tmp)
         tmp.mkdir(mode=0o755)
         try:
-            for member in members:
-                rel_parts = Path(member.name).parts[1:]
-                if not rel_parts:
-                    continue
-                dest = tmp.joinpath(*rel_parts)
-                if member.isdir():
-                    dest.mkdir(parents=True, exist_ok=True)
-                    continue
+            for archive_name, relative_name in REQUIRED_FILES.items():
+                payload = manifest_bytes if archive_name == "package/package.json" else _read_member(tf, files[archive_name])
+                dest = tmp / relative_name
                 dest.parent.mkdir(parents=True, exist_ok=True)
-                payload = _read_member(tf, member)
                 with dest.open("wb") as out:
                     out.write(payload)
                     out.flush()
                     os.fsync(out.fileno())
                 dest.chmod(0o444)
-            required = [tmp / "package.json", tmp / "lib" / "xterm.js", tmp / "css" / "xterm.css"]
-            missing = [str(path.relative_to(tmp)) for path in required if not path.is_file()]
-            if missing:
-                raise SystemExit(f"xterm archive missing required files: {','.join(missing)}")
             for directory in sorted((p for p in tmp.rglob("*") if p.is_dir()), reverse=True):
                 directory.chmod(0o555)
             tmp.chmod(0o555)

@@ -6,10 +6,11 @@
   "stage": "CLAYVERSE_ARTIFACT",
   "issue": 425,
   "stacked_gate_pr": 494,
+  "candidate_pr": 538,
   "branch": "go/meta-learning-true-heldout-promotion-repair-20260817-1408",
   "base_head": "8cb50988ffb7a0dea9025ce7e451fcc1c565ecd4",
-  "candidate_head_before_receipt": "14ff2eb902a3f9589ca28ce7e1b7b9e91ac7aca0",
-  "source_blob": "f350d79b99fa1946f96851d9ecee536ffac9fe67",
+  "candidate_head_before_receipt_update": "f9b3eb72a7c0ac3196bbab9ee6f4e521eb7dae62",
+  "source_blob": "2b2bb35b5282769fdbe471714b93e18d15836adc",
   "true_heldout_gate_test_blob": "95ad5a9bdacc0fe03b63e6101b4c5361dcbd27aa",
   "migrated_candidate_validation_test_blob": "a211026b1f89a08633f1800b2bf0c461af171040",
   "finding": {
@@ -32,6 +33,12 @@
     "shadow_history": "auditable but excluded from promotion statistics; it cannot count as success and cannot permanently poison later valid held-out transfer",
     "truth_authority_changed": false,
     "effect_authority_changed": false
+  },
+  "adjacent_replay_repair": {
+    "finding": "CandidateValidation.begin retry rebuilt the same receipt with a new wall-clock ts and compared ts as request identity, so otherwise identical retries could fail replay identity.",
+    "repair": "candidate-use replay comparison ignores ts only; all causal/user/session/generation/signature/mode/falsifier/authority fields remain identity-bound",
+    "existing_regression": "test_candidate_use_retry_is_idempotent_despite_new_wall_clock_time",
+    "second_receipt_path_added": false
   },
   "fixture_migration": {
     "positive_candidate_validation_tests": "candidate formation uses two separate terminal/re-entered no-reward episodes; validation uses two later disjoint external EntityOS effect episodes, both successful",
@@ -72,5 +79,5 @@
   "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
   "whole_clayverse_container_pass": false,
   "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"],
-  "next_exact_gate": "Run the exact stacked branch in an actually-started authorized Vercel Sandbox: true-heldout gate, candidate-validation integration tests, promotion lineage/read-revalidation tests, then fuse the repair into the single retained Stage-B line if green."
+  "next_exact_gate": "Run the exact stacked branch in an actually-started authorized Vercel Sandbox: true-heldout gate, candidate-validation integration tests including retry idempotency, promotion lineage/read-revalidation tests, then fuse the repair into the single retained Stage-B line if green."
 }

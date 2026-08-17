@@ -1,0 +1,50 @@
+name: GO Meta Learning Transfer 2026-08-17
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  meta-learning-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Bind exact source identity
+        run: |
+          echo "SOURCE_SHA=$(git rev-parse HEAD)"
+          git status --short
+      - name: Install bounded test dependencies
+        working-directory: the artefact
+        run: |
+          python -m pip install --disable-pip-version-check pytest
+          python -m pip install --disable-pip-version-check -r requirements.txt
+      - name: Meta-learning and adjacent retrieval regressions
+        working-directory: the artefact
+        env:
+          PYTHONPATH: .
+        run: |
+          python -m pytest -q \
+            tests/test_method_transfer.py \
+            tests/test_cognitive_routing.py \
+            tests/test_microclay_retrieval_budget_parity.py \
+            tests/test_microclay_replay_full_identity.py \
+            tests/test_microclay_replay_identity.py \
+            tests/test_microclay_replay_integration.py \
+            tests/test_microclay_receipt_context.py
+      - name: Static import and compile gate
+        working-directory: the artefact
+        env:
+          PYTHONPATH: .
+        run: |
+          python -m py_compile \
+            clayverse/method_transfer.py \
+            clayverse/retrieval.py \
+            clayverse/turn_lifecycle.py

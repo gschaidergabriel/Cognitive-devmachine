@@ -202,17 +202,20 @@ spec:
             medium: Memory
             sizeLimit: 128Mi
   volumeClaimTemplates:
+    # ClayVerse is a one-entity/single-writer appliance. Kubernetes ReadWriteOnce
+    # is node-scoped and can still admit multiple Pods on one node; use the CSI
+    # ReadWriteOncePod fence so stale/replacement Pods cannot share a writable PVC.
     - metadata:
         name: clayverse-state
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi
     - metadata:
         name: clayverse-workspace
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes: ["ReadWriteOncePod"]
         resources:
           requests:
             storage: 20Gi

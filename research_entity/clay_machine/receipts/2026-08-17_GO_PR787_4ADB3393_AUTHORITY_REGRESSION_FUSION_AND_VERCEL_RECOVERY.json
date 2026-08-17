@@ -1,0 +1,60 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "db37afeea1c70f6158b8a181216b876e4513c007",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_pr": 787,
+  "product_pr_head_after_fusion": "4adb33930ddd7d006b8b69c62e345c794a3aa002",
+  "product_delta": {
+    "source_only": true,
+    "fused_pr": 791,
+    "fused_commit": "4adb33930ddd7d006b8b69c62e345c794a3aa002",
+    "file": "tests/test_entityos_build_provenance.py",
+    "checks_added": [
+      "GIT_CLEAN_HEAD has no external source-attestation authority digest",
+      "ATTESTED_SNAPSHOT_V2 binds SHA-256 of the exact external attestation document bytes",
+      "semantically equivalent reserialization with different bytes changes the bound authority digest"
+    ],
+    "execution_credit": "NONE_UNTIL_EXACT_HEAD_VERCEL_SANDBOX"
+  },
+  "vercel_observation": {
+    "project": "dr-unterweger",
+    "team": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "fresh_preview_deployment": "dpl_8KkWa1Rnib7mUPjYtsoeHhS1Pq3r",
+    "observed_source_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
+    "state": "READY",
+    "provider_rate_limit_generalized_blocker": "REFUTED_FOR_THIS_NON_TARGET_PREVIEW_BUILD",
+    "source_stage": "PASS",
+    "source_tree": "4b67892e64df646bcff63e0dc3f699283eaac613",
+    "archive_sha256": "4c43bdce0122b7e0228f91ddd8e4ea955eedbbb6bf0f631671b3667c2166312b",
+    "source_attestation_sha256": "d35dadfffc6d168be9d3753ce73836ddf3f51da5ed24d505053237bb1357cd8c",
+    "sandbox_batch_status": "SKIP_NON_TARGET_PREVIEW",
+    "sandbox_started_for_entityos_acceptance": false,
+    "executable_evidence": "NONE",
+    "interpretation": "Vercel can currently accept at least a preview build, but the canonical runner correctly refuses non-target branch refs; this does not promote ef5bed69 and says nothing executable about 4adb3393."
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "descendant_mode": "REGRESSION_ONLY"
+  },
+  "frontier": {
+    "immediate": "obtain an actually-started exact-head Vercel Sandbox regression-only acceptance batch for PR787 head 4adb33930ddd7d006b8b69c62e345c794a3aa002 or later exact refreshed head",
+    "semantic_after_provenance": "canonical shared hostcall ABI authority that lets already-admitted ClayVM Bytes cross VM->host without backend-local type authority",
+    "supply_chain_after_dependency_set": "platform-scoped exact package artifact filename+SHA256 authority, not version equality alone"
+  },
+  "claims": {
+    "current_pr_head_entityos_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

@@ -115,14 +115,36 @@ class TurnLifecycle:
             self.memory.compact(self.session_id); self.graph.rebuild_in_tx()
         return {"aborted":True,"causal_id":row["causal_id"],"reason":reason}
 
+    @staticmethod
+    def _claude_identity_from_provenance(raw: str) -> tuple[str | None, str | None]:
+        try:
+            provenance=json.loads(raw)
+        except (TypeError,json.JSONDecodeError) as exc:
+            raise TurnLifecycleError("active turn provenance is invalid") from exc
+        if not isinstance(provenance,dict): raise TurnLifecycleError("active turn provenance is invalid")
+        session=provenance.get("claude_session_id"); prompt=provenance.get("claude_prompt_id")
+        return (
+            session if isinstance(session,str) and session else None,
+            prompt if isinstance(prompt,str) and prompt else None,
+        )
+
     @contextlib.contextmanager
-    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None):
+    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None,claude_prompt_id:str|None=None):
         prompt=str(prompt)
         if not prompt or len(prompt)>100_000: raise ValueError("invalid prompt")
         if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if claude_prompt_id is not None and (not isinstance(claude_prompt_id,str) or not claude_prompt_id or len(claude_prompt_id)>2048): raise ValueError("invalid Claude prompt id")
         resource_refs=sorted(set(resources or infer_resource_refs(prompt)))[:50]; turn_id=str(uuid.uuid4()); episode_id=str(uuid.uuid4()); causal_id=str(uuid.uuid4())
         alternatives=[{"id":"respond","kind":"reason"},{"id":"request_effect","kind":"effect_intent"},{"id":"defer_effect","kind":"no_effect"}]
         with self.db.tx() as db:
+            active=db.execute(
+                "SELECT t.provenance FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",
+                (self.session_id,),
+            ).fetchone()
+            if active is not None and claude_prompt_id is not None:
+                active_identity=self._claude_identity_from_provenance(active["provenance"])
+                if active_identity==(claude_session_id,claude_prompt_id):
+                    raise TurnLifecycleError("duplicate UserPromptSubmit for active Claude prompt")
             predecessor=self._abort_active_in_tx(db,"previous_turn_interrupted_before_next_prompt",finalize_projection=False)
             if self.active() is not None: raise TurnLifecycleError("active turn remained after predecessor retirement")
             generation=self.db.session_generation(self.session_id); entity_generation=self.db.entity_generation()
@@ -130,6 +152,7 @@ class TurnLifecycle:
             now=time.time(); salience=min(1.0,0.15+0.03*len(resource_refs)+min(len(prompt),1200)/2400)
             provenance={"source":"claude-hook:UserPromptSubmit","session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
             if claude_session_id is not None: provenance["claude_session_id"]=claude_session_id
+            if claude_prompt_id is not None: provenance["claude_prompt_id"]=claude_prompt_id
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
             db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(turn_id,self.session_id,self.user_id,ordinal,now,"user",prompt,json.dumps(resource_refs),"[]",json.dumps(provenance,sort_keys=True)))
             db.execute("INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",(episode_id,self.session_id,now,turn_id,salience,json.dumps(alternatives),None,"OPEN"))

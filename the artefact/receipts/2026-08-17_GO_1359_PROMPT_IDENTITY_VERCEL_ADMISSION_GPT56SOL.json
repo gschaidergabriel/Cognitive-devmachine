@@ -1,0 +1,46 @@
+{
+  "schema": "clayverse-isolated-execution-admission-receipt/v1",
+  "observed_at": "2026-08-17T06:59:41Z",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "canonical_main_observed_after_attempt": "a3775a1c68a73cd98a44596f661a3cc3a26edc36",
+  "clayverse_pull_request": 454,
+  "clayverse_source_branch": "go/prompt-identity-fusion-20260817-1342-sol",
+  "clayverse_source_commit_before_this_receipt": "d6ea29f06742e6703a3e8af0b5cf322d91c7d6a9",
+  "terminal_hooks_git_blob": "5137785193cb1ee6b6bdd1be954e16749ce166b4",
+  "source_binding_check": "PASS_IDENTICAL_GIT_BLOB_IN_STAGING_REPOSITORY",
+  "staging": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-prompt-identity-mechanism-vercel-20260817-1355",
+    "pull_request": 828,
+    "orchestration_commit": "d995f33d01182c39fa88a38932ba56756cea5e06",
+    "preview_trigger_commit": "5a02dd99781193be273ff534de4da7d2b1d69ad2",
+    "vercel_project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "sandbox_sdk": "@vercel/sandbox 2.9.2",
+    "intended_execution_surface": "VERCEL_SANDBOX_MICROVM",
+    "sandbox_runtime": "python3.13",
+    "sandbox_persistent": false,
+    "sandbox_network_policy": "deny-all",
+    "sandbox_stop_in_finally": true
+  },
+  "regression_scope": "Exact terminal_hooks.py source mechanism with controlled SQLite-backed DB/lifecycle stubs covering duplicate prompt replay, new prompt identity, stale Stop, stale StopFailure, exact Stop completion, repeated-Stop cleanup and stale cleanup preservation.",
+  "regression_only": true,
+  "unusual_experiment_count": 0,
+  "execution_observation": {
+    "vercel_commit_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "build_started": false,
+    "sandbox_started": false,
+    "test_executed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "test_failure": false
+  },
+  "current_main_recheck": {
+    "main": "a3775a1c68a73cd98a44596f661a3cc3a26edc36",
+    "terminal_hooks_blob": "d6248c7e0b64c39e1d81d538ec637e4cd70cb192",
+    "prompt_identity_fusion_present_on_main": false
+  },
+  "evidence_class": "SOURCE_FUSION_PLUS_CONFIRMED_SANDBOX_PATH_BUT_CURRENT_ATTEMPT_ADMISSION_BLOCKED",
+  "whole_product_pass": false,
+  "next_exact_gate": "When Vercel preview admission is available, run the staged exact-source prompt-identity regression inside the Sandbox microVM. If it passes, expand to exact full UnifiedDB/TurnLifecycle hook regressions and packaged Claude Code 2.1.233 hook-payload verification before merge/promotion."
+}

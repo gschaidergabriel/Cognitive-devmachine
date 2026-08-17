@@ -1,0 +1,72 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "trigger": "go",
+  "trigger_local_minute": "2026-08-17T13:43+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "pull_request": 444,
+  "branch": "go/recovery-causal-preflight-20260817-1343-sol",
+  "fused_onto_main": "cbee685471b2db8ff60d70d42a3af7a36485f453",
+  "fused_recovery_commit": "75f780ff0d475bc41b0ae72f351dce2f277ed960",
+  "focused_test_commit": "29c276e1b1af382aa1d132f979c31ce8fdaa64df",
+  "frontier": "restart/recovery causal-integrity preflight before pending-effect mutation",
+  "candidate": {
+    "main_recovery_blob_before_fusion": "2c195ba038bf39eba1dcb84d2f825bf77aa02baf",
+    "fused_recovery_blob": "0fb81a6b036d48b4effd565ea5b5e027349981cc",
+    "focused_test_blob": "463ec1c9404d02e884a6933871a373303fb2571f",
+    "preserved_current_main_semantics": [
+      "recovery delegates causal credit to EffectJournal._credit(status,outcome,capability)",
+      "non-rewarding capability policy remains owned by EffectJournal"
+    ],
+    "added_semantics": [
+      "read-only active causal-spine preflight before EffectJournal.recover_pending",
+      "reject foreign causal identity before any pending-effect mutation",
+      "re-check causal integrity at recovery transaction boundary",
+      "bind active causal lookup to exact active causal_id instead of latest-by-time"
+    ]
+  },
+  "mechanism_evidence": {
+    "executed_prior_candidate_blob": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "surface": "OpenAI isolated non-production container",
+    "result": "PASS_FOR_BOUNDED_SOURCE_MECHANISM",
+    "observations": [
+      "foreign causal identity was detected before recover_pending",
+      "pending effect and foreign causal evidence remained unmodified"
+    ],
+    "binding_warning": "this executable result is bound to the prior recovery blob and is mechanism support only; it is not executable evidence for fused blob 0fb81a6b036d48b4effd565ea5b5e027349981cc"
+  },
+  "parallel_adjudication": {
+    "general_restart_test_alignment": "already landed on main and not duplicated",
+    "credit_semantics_overlap": "detected on current main and explicitly preserved in fused recovery blob",
+    "parallel_multi_effect_guard": "REJECTED_NO_CHANGE",
+    "reason": "prior exact-source EffectJournal transaction check showed consumed causal identity causes rollback; current main later changed credit/capability semantics, so that prior exact execution remains blob-scoped and is not promoted to current runtime evidence"
+  },
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "distinct_unusual_experiments_executed_by_this_organ": 0
+  },
+  "execution_admission": {
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "vercel_sandbox_execution_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_VERCEL_OIDC",
+    "current_fresh_preview_admission": "BLOCKED_BY_VERCEL_BUILD_DEPLOYMENT_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "additional_preview_attempts": "NOT_SPENT_PER_CURRENT_COORDINATION_DIRECTIVE",
+    "github_actions_fused_head": "UNEXECUTED_AT_RECEIPT_WRITE",
+    "full_checkout_regression": "NOT_EXECUTED",
+    "exact_oci_build_runtime": "NOT_EXECUTED",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED"
+  },
+  "evidence_scope": {
+    "defect_mechanism_reproduced": true,
+    "current_main_credit_semantics_preserved_in_source_fusion": true,
+    "focused_regression_added": true,
+    "fused_blob_exact_isolated_execution_verified": false,
+    "full_repository_exact_head_suite_verified": false,
+    "exact_oci_build_verified": false,
+    "whole_clayverse_product_pass": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "When Vercel preview admission reopens, run the exact PR #444 fused head inside the confirmed Sandbox bridge: focused causal-preflight plus adjacent effect/restart/global-generation/credit regressions; only after green exact execution may this source fusion be considered for main."
+}

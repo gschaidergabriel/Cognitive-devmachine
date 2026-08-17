@@ -1,0 +1,53 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:43:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "SOURCE_CANDIDATE_BUILD_CONTEXT_HARDENING",
+  "observed_canonical_main_before_write": "b798a5171217660fc220391fe848fa90bf17767c",
+  "target_lane": {
+    "pr": 422,
+    "branch": "go/apt-snapshot-lock-current-20260817-gpt56sol",
+    "candidate_head_before_receipt": "5446b6ecebbf7171c64ab089bb41b64a94fb362d",
+    "noncanonical": true,
+    "mergeable_at_observation": false
+  },
+  "observed_gap": {
+    "file": "the artefact/.dockerignore",
+    "prior_contract": "default-deny allowlist; only consumed product inputs enter OCI build context",
+    "counterexample": "!clayverse/** and !policy/** re-included arbitrary untracked bytes below runtime/policy subtrees, so a cache/temp/secret file placed there could be sent to the builder despite not being a canonical product input",
+    "existing_test_gap": "test_build_context_boundary.py explicitly required !clayverse/** and therefore did not falsify subtree contamination"
+  },
+  "repair": {
+    "dockerignore_blob": "ea5a33cc2aa47fa315a3c19ad58d4beb39f487ba",
+    "test_blob": "fa94a67fd124713c040f599f2146d1c480560ffc",
+    "mechanism": "replace broad runtime/policy subtree reinclusions with explicit file-level allowlists matching Dockerfile-consumed runtime and managed-policy files; reject wildcard reinclusion in regression"
+  },
+  "supporting_isolated_source_evidence": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "reconstructed exact .dockerignore and build-context test bytes plus branch runtime filename set",
+    "baseline_result": "2 passed in 0.05s",
+    "adversarial_mutation": "synthetic clayverse/untracked_secret.py caused the allowlist regression to fail as expected",
+    "mutation_result": "1 failed, 1 passed; failure identified untracked_secret.py as an unadmitted runtime file",
+    "docker_or_oci_builder_available": false,
+    "evidence_class": "BOUNDED_SOURCE_MECHANISM_ONLY"
+  },
+  "unusual_experiment_adjudication": {
+    "canonical_status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT_LEASE",
+    "valid_unusual_experiment_count": 0,
+    "additional_unusual_experiment_authorized": false,
+    "invalid_parallel_incident": "the artefact/receipts/2026-08-17_GO_1741_INVALID_LEASE_EXECUTION_INCIDENT_GPT56SOL.json",
+    "this_work": "ordinary deterministic source review/regression; not an unusual experiment"
+  },
+  "nonclaims": [
+    "no exact current main product delta",
+    "no exact full PR-head suite PASS",
+    "no Docker/OCI build-context enumeration by a real builder",
+    "no exact OCI image build/digest",
+    "no startup/readiness/restart evidence",
+    "no whole ClayVerse PASS"
+  ],
+  "strongest_counterhypothesis": "Static .dockerignore regression may diverge from exact Docker/BuildKit ignore semantics or the stale PR lane may omit later runtime inputs after rejoin.",
+  "next_discriminator": "Refresh current main at actual execution admission, rejoin PR#422 once, verify the file-level allowlist against the resulting runtime tree, then run an authorized isolated exact OCI/BuildKit context/build gate and capture image identity.",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

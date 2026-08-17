@@ -1,0 +1,90 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:20:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "mandatory_mistral_boundary_plus_provider_response_reentry_before_effect",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "retained_pr": 629,
+  "exact_git_blobs": {
+    "the artefact/clayverse/mistral_inference.py": "5a0fac9132e86c0bf7ac85d7322f7eabf4f1372b",
+    "the artefact/tests/test_mistral_inference_boundary.py": "53033c68e11173495ae021a024f042f8a07e82e0",
+    "the artefact/clayverse/engine.py": "d24d412f9d288ca54883af72bbd46241510f31c5",
+    "the artefact/tests/test_mistral_canonical_reentry.py": "df556d02a5b74f06e240f4b9d8f71db42f281fdf"
+  },
+  "owner_directive": {
+    "file": "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
+    "sha": "16a61ed2a08e0133a2c1b62f71599b277d2eade1",
+    "required_provider": "Mistral token/API",
+    "required_order": "bind provider response to the same canonical turn/session/generation and re-ingest into ClayVerse before any action/effect"
+  },
+  "defect_found": {
+    "pre_repair_engine_blob": "cb8a3fcf420c5401ca27c2811dc0394942342a52",
+    "observation": "generic inference engine executed a requested EffectGate effect before appending the assistant/provider response to UnifiedDB",
+    "impact": "violated the current final test-of-tests causal-order requirement and weakened proof that model output cannot bypass canonical re-entry before effects"
+  },
+  "repair": {
+    "engine_blob": "d24d412f9d288ca54883af72bbd46241510f31c5",
+    "changes": [
+      "recheck live session/entity generation after inference",
+      "persist provider text into the canonical turns table before any EffectGate execution",
+      "record bounded provider/model/entity_generation provenance",
+      "bind effect causal_refs back onto the already re-ingested provider turn after EffectGate outcome is known",
+      "do not create a parallel response/state ledger"
+    ]
+  },
+  "mistral_boundary": {
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "default_model": "mistral-small-2603",
+    "secret_env": "MISTRAL_API_KEY",
+    "authority": "INFERENCE_ONLY",
+    "effect": null,
+    "tools_sent": false,
+    "redirects": "DENIED",
+    "canonical_json": true,
+    "response_model_identity": "EXACT_MATCH_REQUIRED"
+  },
+  "execution": {
+    "mistral_boundary_exact_file_command": "PYTHONPATH=. python -m pytest -q test_mistral_inference_boundary.py",
+    "mistral_boundary_result": "20 passed in 0.05s",
+    "mistral_py_compile": "PASS",
+    "engine_exact_blob_sequencing_harness": "PASS",
+    "mistral_canonical_reentry_mapping_harness": "PASS",
+    "harness_note": "engine sequencing harness used the exact engine and Mistral Git blobs with lightweight deterministic dependency doubles to isolate the response-before-effect mechanism; the repository-level test file is committed but has not received full private-checkout execution credit"
+  },
+  "external_primary_evidence": {
+    "source": "Mistral AI official API/model documentation",
+    "finding": "Bearer-authenticated chat completions use /v1/chat/completions; current stable Mistral Small model code used by this candidate is mistral-small-2603"
+  },
+  "runtime_credit": {
+    "real_mistral_network_call": 0,
+    "vault_secret_acquisition": 0,
+    "full_private_checkout": 0,
+    "exact_oci": 0,
+    "vercel_firecracker_final_vector": 0,
+    "tier1_recovery": 0,
+    "tier2_recovery": 0,
+    "whole_clayverse": 0
+  },
+  "execution_frontier": {
+    "policy": "a scoped read-only GITHUB_READ_TOKEN may now be transiently injected into the authorized disposable Vercel Sandbox for narrow private source fetch under the current owner correction",
+    "next_exact_gate": "securely provide/inject the scoped GitHub read credential and approved Vault-backed Mistral secret into the retained Vercel execution path; bind exact current source; run full repository regressions; build/capture exact OCI digest; execute the real UnifiedDB/retrieval/workspace/Mistral re-entry and bounded EffectGate/EntityOS round-trip inside the Sandbox Firecracker guest; then Tier-1/Tier-2 recovery and secret reacquisition"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "no uniquely reproducible shared immutable request/turn id is exposed for this go trigger"
+  },
+  "non_claims": [
+    "no real Mistral API call",
+    "no Vault secret retrieval",
+    "no full private-repository checkout regression PASS",
+    "no exact OCI image build/digest",
+    "no Vercel Firecracker whole-vector runtime evidence",
+    "no whole-product PASS"
+  ]
+}

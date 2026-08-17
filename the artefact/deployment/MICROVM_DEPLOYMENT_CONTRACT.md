@@ -29,6 +29,12 @@ The preferred implementation line is an OCI-compatible sandboxed runtime such as
 
 A Kubernetes/containerd deployment MAY use a sandboxed runtime class such as `kata`. If Kubernetes is used, the admitted ClayVerse workload MUST select the sandboxed RuntimeClass explicitly; silently falling back to the default host-kernel runtime is a final-acceptance failure.
 
+### Kata runtime-rs security floor
+
+Any admitted deployment using Kata Containers `runtime-rs` MUST use a release containing the upstream fix for **GHSA-2gv2-cffp-j227 / CVE-2026-47243**. Upstream classifies `runtime-rs` versions `<= 3.30.0` as affected and `3.31.0` as the first patched release, so `runtime-rs <= 3.30.0` is explicitly forbidden for ClayVerse final acceptance.
+
+The `3.31.0` floor is a historical minimum fence, not a permanent safety claim. Immediately before final acceptance, ClayVerse MUST refresh current Kata upstream security advisories and release state, bind the exact installed Kata/runtime-rs version and configuration, and reject any version/configuration then known to be affected by a guest-to-host isolation escape or another critical boundary failure. Acceptance evidence MUST record the Kata release/runtime identity, relevant runtime configuration (including shared-filesystem/virtiofs mode where applicable), guest-kernel identity and the security-advisory review timestamp/source identity. A version string alone is not microVM security evidence.
+
 The repository deployment template is deliberately fail-closed on networking: its ClayVerse-selected `NetworkPolicy` contains both `Ingress` and `Egress` policy types with empty rule sets. That baseline is intentionally non-functional until an environment-specific allow policy is supplied. The allow policy MUST admit only the exact product-required paths (for example the authenticated web ingress and the narrowly admitted external inference/authentication dependencies), must not silently grant broad host/cluster authority, and MUST be captured and tested as part of the deployment receipt. A permissive implicit cluster default is not acceptance evidence.
 
 A Kubernetes `NetworkPolicy` object is declarative intent, not proof of enforcement. Before final deployment the selected CNI/network plugin and version MUST be identified and shown to enforce NetworkPolicy on the admitted nodes/runtime. The default-deny baseline MUST be exercised on the real target before any allow policy is added. After explicit allow policies are applied, acceptance MUST inspect the complete additive set of policies selecting the ClayVerse pod and prove that required flows work while representative undeclared ingress and egress remain denied. If the network plugin ignores NetworkPolicy, or policy inventory/effective behavior is uncertain, ClayVerse networking is `BLOCKED`, not accepted.
@@ -47,6 +53,8 @@ Final whole-product acceptance MUST include at least:
 - identify and attest the actual network plugin/CNI and prove it enforces Kubernetes NetworkPolicy on the admitted target;
 - prove the baseline ClayVerse network policy denies ingress and egress before any allow policy is added, including an undeclared external egress probe;
 - apply the exact reviewed deployment allow policies, enumerate the full additive set selecting the ClayVerse pod, prove only admitted flows open, and prove representative undeclared flows remain denied;
+- prove the installed Kata/runtime-rs identity satisfies the current upstream security baseline, explicitly rejecting `runtime-rs <= 3.30.0`, and record a fresh upstream advisory review before acceptance;
+- where virtiofs/shared-filesystem transport is enabled, attest the exact runtime configuration and demonstrate that the admitted patched runtime/configuration is the one actually executing the ClayVerse workload;
 - kill EntityOS and verify Tier-1 recovery;
 - kill the full ClayVerse workload/microVM and verify Tier-2 reconstruction from the same image digest plus UnifiedDB/WAL/logical snapshot recovery;
 - inject stale pre-crash results and verify generation fencing;

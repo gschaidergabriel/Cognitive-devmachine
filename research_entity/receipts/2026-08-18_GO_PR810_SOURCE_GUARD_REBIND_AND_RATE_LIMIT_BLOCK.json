@@ -1,0 +1,82 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PR810_SOURCE_GUARD_REPAIR_PLUS_EXECUTION_ADMISSION_BLOCK",
+  "canonical_main_observed_before_write": "91ffeb7b2c665d6a3b8b3b60c4700cc8568468ac",
+  "immutable_runtime_candidate": {
+    "pull_request": 686,
+    "head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "exact_head_after_rebind": "92edcbc19abb2e88a24989105783c65f6f2af371",
+    "draft": true,
+    "mergeable": true
+  },
+  "source_guard_repair": {
+    "commit": "92edcbc19abb2e88a24989105783c65f6f2af371",
+    "path": "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-vcr-source.mjs",
+    "guard_content_blob": "eef64c7e7989b29e09d945ce910e38d9b73f7315",
+    "status": "SOURCE_REPAIRED_NOT_RUNTIME_EXECUTED",
+    "stale_blockers_removed": [
+      "old effect-tier1-handler blob binding",
+      "old tier2-recreate-handler blob binding",
+      "old clean-recovery Tier-1 assumptions",
+      "old source-snapshot Tier-2 assumption",
+      "spacing-sensitive whole_product_pass marker"
+    ],
+    "current_fences_bound": [
+      "exact immutable PR686 research SHA/tree",
+      "exact current controller active blobs",
+      "exact thin final-phase wrappers",
+      "real two-process interrupted no-effect Tier-1 recovery path",
+      "active_before == 1 and active_after == 0 handler gate",
+      "one aborted_no_effect recovery scan",
+      "verified prior effect not replayed",
+      "declared-transfer-only carrier sandbox",
+      "carrier snapshot before destructive source deletion",
+      "source sandbox snapshot forbidden",
+      "Sandbox.fork forbidden",
+      "fresh persistent:false replacement from carrier snapshot",
+      "post-restore carrier cleanup path"
+    ]
+  },
+  "execution_admission": {
+    "vercel_commit_checked": "92edcbc19abb2e88a24989105783c65f6f2af371",
+    "combined_status_context": "Vercel",
+    "status": "failure",
+    "classification": "BUILD_RATE_LIMIT",
+    "build_steps_observed": false,
+    "runtime_steps_observed": false,
+    "semantic_test_failure": false,
+    "runtime_credit": 0,
+    "interpretation": "Control-plane deployment/build admission failed before source guards or ClayVerse runtime could execute. Do not infer Tier-1, Tier-2, OCI or whole-product failure."
+  },
+  "fallback_execution": {
+    "daytona": "AUTHORIZED_BY_CURRENT_PROJECT_LAW_BUT_NO_CONNECTED_EXECUTION_SURFACE_AVAILABLE_TO_THIS_ORGAN",
+    "vps": "FORBIDDEN_FOR_CURRENT_ACCEPTANCE_TESTING",
+    "together": "FORBIDDEN"
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED"
+  },
+  "epistemic_status": {
+    "controller_source_guard_coherence_repaired": true,
+    "controller_source_guard_executed_on_exact_head": false,
+    "tier1_runtime_verified": false,
+    "tier2_runtime_verified": false,
+    "exact_pr686_oci_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Restore authorized isolated execution admission, then execute the exact PR810 head source guards before any owner credential spend. Only after exact source-guard PASS proceed through PR686 private-source binding -> OCI build/digest -> provider cognition -> EffectGate/EntityOS -> strengthened Tier-1 interrupted recovery -> declared-transfer carrier snapshot -> source delete -> fresh persistent:false replacement -> exact restore/generation fences -> fresh provider cognition -> remaining Clerk/PTY/dual-user acceptance gates."
+}

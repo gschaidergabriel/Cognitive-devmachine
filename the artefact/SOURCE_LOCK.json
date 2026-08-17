@@ -1,0 +1,26 @@
+{
+  "schema": "ClayVerseSourceLock/v1",
+  "generated_on": "2026-08-17",
+  "base_image": {
+    "reference": "python:3.13.14-slim-trixie",
+    "index_digest": "sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91"
+  },
+  "claude_code": {
+    "version": "2.1.233",
+    "source": "anthropics/claude-code GitHub release v2.1.233",
+    "linux_amd64": {
+      "asset": "claude-linux-x64.tar.gz",
+      "sha256": "23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741"
+    },
+    "linux_arm64": {
+      "asset": "claude-linux-arm64.tar.gz",
+      "sha256": "b5ca70610eadee40a82c6fa74f5f873eb70d5fde94bdc67df1c51416eb45e72b"
+    },
+    "autoupdate": false
+  },
+  "known_open_supply_chain_gates": [
+    "apt repository package bytes are not yet snapshot/hash pinned",
+    "Python requirements are version pinned but not yet installed with --require-hashes",
+    "browser Clerk/xterm assets are version-addressed but do not yet carry a repository-owned SRI lock"
+  ]
+}

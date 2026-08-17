@@ -215,7 +215,7 @@ class TerminalSessionManager:
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
             *effect_env,
-            "DISABLE_AUTOUPDATER=1",
+            "DISABLE_UPDATES=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
             "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
             "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",

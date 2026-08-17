@@ -9,6 +9,7 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
+from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB
 from .terminal_gateway import create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -86,6 +87,7 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
+    recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -136,6 +138,7 @@ def main():
         "claude_code": claude_status.as_dict(),
         "terminals": terminal_status,
         "auth": "clerk",
+        "recovery": recovery,
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

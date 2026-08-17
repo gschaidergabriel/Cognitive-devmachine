@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import re
@@ -44,10 +45,30 @@ class AdmittedProblemQuery:
         record = {"problem_signature": {k: list(v) for k, v in self.problem_signature.items()}}
         return signature_facets(record)
 
+    def canonical_payload(self) -> dict[str, Any]:
+        return {
+            "schema": QUERY_SCHEMA,
+            "problem_signature": {k: list(self.problem_signature[k]) for k in sorted(self.problem_signature)},
+            "goal_shape": self.goal_shape,
+            "provenance": {k: self.provenance[k] for k in sorted(self.provenance)},
+        }
+
+    @property
+    def query_sha256(self) -> str:
+        raw = json.dumps(
+            self.canonical_payload(),
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
+        return hashlib.sha256(raw).hexdigest()
+
     def receipt(self) -> dict[str, Any]:
         return {
             "schema": QUERY_SCHEMA,
             "admission_version": QUERY_ADMISSION_VERSION,
+            "query_sha256": self.query_sha256,
             "facet_count": len(self.facets),
             "goal_shape": self.goal_shape,
             "source": self.provenance["source"],
@@ -271,6 +292,7 @@ class AdmittedMethodRetriever:
                 "policy_mode": self.POLICY_MODE,
                 "schema_version": METHOD_SCHEMA_VERSION,
                 "query_schema": QUERY_SCHEMA,
+                "query_sha256": admitted.query_sha256,
                 "fact_status": fact_status,
                 "method_status": "PRESENT" if selected else "UNKNOWN",
                 "selected_count": len(selected),

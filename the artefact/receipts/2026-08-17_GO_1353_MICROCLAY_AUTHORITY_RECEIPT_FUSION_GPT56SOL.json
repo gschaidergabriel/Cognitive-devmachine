@@ -1,0 +1,80 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T13:53+07:00",
+  "organ": "GPT-5.6 Sol",
+  "scope": "MicroClay Stage-A retrieval receipt transport plus fail-closed context bound",
+  "status": "SOURCE_FUSION_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED",
+  "current_main_rejoin_target": "4428331c192d523a20cf3923d4caeac9167b1baf",
+  "current_main_turn_lifecycle_blob_before_rejoin": "c484b9088d9f838e350a146c991e998c84e80332",
+  "retained_donor_pr": 408,
+  "exact_fused_blobs": {
+    "the artefact/clayverse/turn_lifecycle.py": "e4943be66d484e9e52389e43e09e95cef2469bac",
+    "the artefact/tests/test_context_bound_fail_closed.py": "97cf31bdce934232732fefa72e76e39e57fe2bc9",
+    "the artefact/tests/test_microclay_receipt_context.py": "349ac20cdd38d734510cde3d7122c961583da130"
+  },
+  "observed_source_defects": [
+    "WorldAssembler produces retrieval_receipt but current main TurnLifecycle._bound_world omits it before canonical Claude context.",
+    "Current main _bound_world can still return a payload above max_chars after safe trimming instead of failing closed."
+  ],
+  "fusion": [
+    "preserve canonical Stage-A retrieval_receipt through bounded context packing",
+    "require compact canonical scalar receipt JSON and reject malformed/oversized receipts",
+    "preserve truth_authority=false and effect_authority=false metadata",
+    "fail closed if world context still exceeds max_chars after safe trimming"
+  ],
+  "stage_b": {
+    "status": "NOT_FUSED_IN_THIS_LANE",
+    "reason": "The broader method/analogical transport requires independent structural-signature, promotion and replay authority gates. A partial method_receipt transport was rejected in favor of the smaller already-adjudicated Stage-A hard-bound donor.",
+    "serving_authority": false,
+    "invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+  },
+  "isolated_mechanism_execution": {
+    "environment": "OpenAI isolated non-production container, Linux x86_64, Python 3.13.5",
+    "result": "PASS_2_OF_2",
+    "observations": [
+      "authority receipt survives bounded packing",
+      "oversized context does not require dropping authority metadata before memory trimming"
+    ],
+    "evidence_scope": "bounded mechanism evidence only; donor hard-bound regression remains unexecuted on an exact full checkout in this turn"
+  },
+  "github_runner_observation": {
+    "workflow_run": 32003811749,
+    "job": 95309172416,
+    "head_sha": "5ff775260e3b038880467ac1d6f9c68314900d0c",
+    "conclusion": "failure",
+    "steps": 0,
+    "runner_id": 0,
+    "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_TEST_STEPS_NOT_TEST_FAILURE"
+  },
+  "vercel": {
+    "platform_capability": "SUPPORTED_BY_VERCEL",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPOSED",
+    "repository_owned_git_preview_bridge": "CONFIRMED_WORKING_EXECUTION_PATH",
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "bridge_project": "dr-unterweger",
+    "bridge_sdk": "@vercel/sandbox@2.9.2",
+    "confirmed_execution_commit": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+    "confirmed_execution_deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "confirmed_result": "PASS_ATTACH_CHILD_REAP_AND_BOUND",
+    "current_fresh_execution_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_PREVIEW_BUILD_RATE_LIMIT",
+    "classification": "SANDBOX_PATH_CONFIRMED_CURRENT_RATE_LIMIT_IS_ADMISSION_BLOCKER_NOT_TEST_FAILURE",
+    "coordination_source": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_SURFACE_CURRENT.json"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "reason": "available trigger identity is minute-precision only and current atomic lease protocol requires fail-closed coordination"
+  },
+  "coordination": {
+    "superseded_pr_closed": 447,
+    "retained_current_fusion_pr": 475,
+    "no_second_retrieval_path_created": true
+  },
+  "nonclaims": [
+    "no exact full repository regression PASS for this fusion",
+    "no fresh Vercel Sandbox run for this fusion because preview admission is rate-limited before Sandbox start",
+    "no OCI build/start/readiness PASS",
+    "no whole ClayVerse PASS"
+  ],
+  "next_gate": "When Vercel preview admission reopens, stage the exact then-current source through the confirmed Git-preview Sandbox bridge and run test_context_bound_fail_closed.py plus test_microclay_receipt_context.py and adjacent MicroClay/turn-lifecycle regressions via sandbox.runCommand; then include the path in exact OCI build/start/readiness/restart acceptance."
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go-continuation",
+  "organ": "GPT-5.6 Sol",
+  "observed_at": "2026-08-17T23:27:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CREDENTIAL_EXISTS_VAULT_PREVIEW_BINDING_UNRESOLVED",
+  "owner_correction": {
+    "fact": "GITHUB_READ_TOKEN already exists in the Vault",
+    "secret_value_observed": false,
+    "secret_value_recorded": false
+  },
+  "evidence": {
+    "historical_control_plane": "Dr.-Unterweger PR #751 source-stage.ts reads process.env.GITHUB_READ_TOKEN and fails with 'required in the Vercel vault for private source staging' when absent",
+    "vault_contract": "Dr.-Unterweger PR #751 VAULT.md defines Vercel Sensitive Environment Variables as the runtime Vault/secret store",
+    "retained_controller": "Dr.-Unterweger PR #810 v7 expects GITHUB_READ_TOKEN in the Vercel Preview/controller environment before command-scoped forwarding into the disposable Sandbox",
+    "latest_observed_controller_result": "PR #810 current v7 Sandbox creation and guest-kernel attestation succeeded, but the Preview environment did not expose GITHUB_READ_TOKEN and therefore stopped before private source staging",
+    "vercel_scope_rule": "Vercel Sensitive Environment Variables are environment-scoped; Preview and branch-specific Preview variables must be configured for the deployment scope that needs them"
+  },
+  "corrected_blocker": "NOT_TOKEN_CREATION_OR_EXISTENCE. Existing Vault secret is not reaching the retained #810 Preview/controller scope. Bind/link the existing sensitive GITHUB_READ_TOKEN to the applicable Preview environment/branch/project scope, then rerun #810.",
+  "security": {
+    "do_not_copy_secret_into_git": true,
+    "do_not_log_secret": true,
+    "do_not_persist_secret": true,
+    "do_not_bake_secret_into_oci": true,
+    "sandbox_forwarding": "command-scoped only under current owner directive and #810 v7",
+    "post_fetch_secret_absence_probe_required": true
+  },
+  "next_gate": "Expose/link the already-existing Vault GITHUB_READ_TOKEN to the retained Dr.-Unterweger #810 Vercel Preview/controller scope without revealing its value; rerun once on freshly rebound current product bytes; require private source exact-identity verification before OCI/runtime credit.",
+  "runtime_credit": {
+    "private_source": "UNOBSERVED_WITH_CREDENTIAL",
+    "oci": "UNOBSERVED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0
+}

@@ -18,6 +18,11 @@ from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
 
+_ENTITYOS_PATH = "/opt/entityos/EntityOS"
+_ENTITYOS_LOCK_PATH = "/opt/entityos/entityos.lock.json"
+_ENTITYOS_LOCK_SCHEMA = "ClayVerseEntityOSArtifactLock/v1"
+
+
 def _clerk_map() -> dict[str, str]:
     raw = os.environ.get("CLAYVERSE_CLERK_MAP_JSON", "")
     if not raw:
@@ -92,24 +97,63 @@ def _web_config(issuer: str) -> tuple[str, str]:
     return publishable_key, expected_frontend_api
 
 
+def _load_entityos_lock() -> dict[str, object]:
+    """Load the immutable in-image EntityOS authority lock or fail closed."""
+    try:
+        with open(_ENTITYOS_LOCK_PATH, encoding="utf-8") as handle:
+            lock = json.load(handle)
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(f"embedded EntityOS lock unavailable: {exc}") from exc
+
+    if not isinstance(lock, dict) or lock.get("schema") != _ENTITYOS_LOCK_SCHEMA:
+        raise RuntimeError("embedded EntityOS lock schema is invalid")
+
+    sha256 = lock.get("sha256")
+    if (
+        not isinstance(sha256, str)
+        or len(sha256) != 64
+        or any(char not in "0123456789abcdefABCDEF" for char in sha256)
+    ):
+        raise RuntimeError("embedded EntityOS lock SHA-256 is invalid")
+
+    size_bytes = lock.get("size_bytes")
+    if isinstance(size_bytes, bool) or not isinstance(size_bytes, int) or size_bytes <= 0:
+        raise RuntimeError("embedded EntityOS lock size is invalid")
+
+    return {"sha256": sha256.lower(), "size_bytes": size_bytes}
+
+
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
     enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
-    path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
-    sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-    if not path or not sha256:
-        raise RuntimeError("embedded EntityOS path and SHA-256 are required")
-    if not os.path.isabs(path):
-        raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
+    lock = _load_entityos_lock()
+    locked_sha256 = str(lock["sha256"])
+    locked_size = int(lock["size_bytes"])
 
-    candidate = EntityOSBridge(path=path, sha256=sha256)
+    # Runtime configuration may confirm the image-owned identity, but it may not
+    # select different EntityOS bytes. The tracked lock baked into the immutable
+    # image is the sole artifact authority.
+    configured_path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", _ENTITYOS_PATH).strip()
+    if configured_path != _ENTITYOS_PATH:
+        raise RuntimeError("CLAYVERSE_ENTITYOS_PATH cannot override the embedded EntityOS path")
+
+    configured_sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", locked_sha256).strip().lower()
+    if configured_sha256 != locked_sha256:
+        raise RuntimeError("CLAYVERSE_ENTITYOS_SHA256 cannot override the embedded EntityOS lock")
+
+    candidate = EntityOSBridge(path=_ENTITYOS_PATH, sha256=locked_sha256)
     try:
         verified = candidate.verify()
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
+    if int(verified["size"]) != locked_size:
+        raise RuntimeError("EntityOS verification failed: embedded size does not match lock")
+
     status = {
         "staged": True,
         "verified": True,
         "execution_enabled": enable_exec,
+        "artifact_authority": "embedded-lock",
+        "lock_path": _ENTITYOS_LOCK_PATH,
         **verified,
     }
     return (candidate if enable_exec else None), status

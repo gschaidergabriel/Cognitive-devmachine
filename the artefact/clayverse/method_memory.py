@@ -151,7 +151,9 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
     if kind in {"failure_pattern", "counterexample"} and status not in {"PROMOTED", "DEMOTED", "RETIRED"}:
         raise MethodMemoryError("evidence limiter requires a non-candidate status")
 
-    # A single successful episode is explicitly insufficient for promoted reusable methods.
+    # This is only a minimum validation floor for a record that claims promotion.
+    # It does not itself authorize promotion. The write API below deliberately admits
+    # candidates only until a causal/cross-instance promotion receipt is implemented.
     if kind in PROMOTED_METHOD_KINDS:
         if value["support_count"] < 2 or len(set(value["source_episode_ids"])) < 2:
             raise MethodMemoryError("promoted method requires evidence from at least two source episodes")
@@ -160,8 +162,6 @@ def validate_method_envelope(kind: str, raw: Any) -> dict[str, Any]:
         if not value["scope_limits"]:
             raise MethodMemoryError("promoted method requires explicit scope limits")
 
-    # Preserve a stable JSON representation so malformed/non-canonical values cannot
-    # become a second interpretation surface across retrieval and receipts.
     json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False)
     return value
 
@@ -208,15 +208,17 @@ class _ScoredMethod:
 
 
 class MethodMemoryStore:
-    """Validated UnifiedDB-backed method memory and Stage-B structural retrieval.
+    """Fail-closed UnifiedDB method-memory boundary.
 
-    This module deliberately does not infer structural signatures from raw user text.
-    Signature derivation is a separate future admission problem. Here, the boundary is
-    explicit: once a bounded structural signature exists, method selection is based on
-    those facets rather than lexical resemblance to the surface prompt.
+    The currently admitted write path creates user-bound *candidates only*. It cannot
+    mint a promoted framework/heuristic, a counterexample, or a globally shared method.
+    Those require a future explicit promotion/admission receipt with cross-instance and
+    privacy evidence. Stage-B can read already-admitted user-bound promoted records, so
+    retrieval semantics can be built/tested without silently inventing promotion power.
 
-    Method memory remains accessibility/advice only. It never mutates factual retrieval
-    status, provenance, rights, or effect authority.
+    The module also deliberately does not derive structural signatures from raw user
+    text. Signature derivation/admission is a separate future boundary. Method context
+    is advice/accessibility only and never upgrades factual status or effect authority.
     """
 
     ENVELOPE_VERSION = 1
@@ -224,78 +226,87 @@ class MethodMemoryStore:
     def __init__(self, db: UnifiedDB):
         self.db = db
 
-    def _assert_refs(self, envelope: dict[str, Any]) -> None:
+    @staticmethod
+    def _assert_candidate_refs(sql, envelope: dict[str, Any], user_id: str) -> None:
         episode_ids = tuple(envelope["source_episode_ids"])
         placeholders = ",".join("?" for _ in episode_ids)
-        found = {
-            str(row[0])
-            for row in self.db.db.execute(
-                f"SELECT episode_id FROM workspace_episodes WHERE episode_id IN ({placeholders})",
-                episode_ids,
-            ).fetchall()
-        }
-        missing = sorted(set(episode_ids) - found)
+        rows = sql.execute(
+            f"SELECT w.episode_id,s.user_id FROM workspace_episodes w "
+            f"JOIN sessions s ON s.session_id=w.session_id WHERE w.episode_id IN ({placeholders})",
+            episode_ids,
+        ).fetchall()
+        found = {str(row["episode_id"]): str(row["user_id"]) for row in rows}
+        missing = sorted(set(episode_ids) - set(found))
         if missing:
             raise MethodMemoryError(f"unknown source episodes: {missing}")
+        if any(owner != user_id for owner in found.values()):
+            raise MethodMemoryError("candidate source episode crosses user boundary")
 
         memory_ids = tuple(dict.fromkeys(
             envelope["supporting_memory_ids"] + envelope["counterexample_memory_ids"]
         ))
         if memory_ids:
             placeholders = ",".join("?" for _ in memory_ids)
-            found_memories = {
-                str(row[0])
-                for row in self.db.db.execute(
-                    f"SELECT memory_id FROM durable_memory WHERE memory_id IN ({placeholders})",
-                    memory_ids,
-                ).fetchall()
-            }
-            missing_memories = sorted(set(memory_ids) - found_memories)
+            rows = sql.execute(
+                f"SELECT memory_id,user_id FROM durable_memory WHERE memory_id IN ({placeholders})",
+                memory_ids,
+            ).fetchall()
+            found_memories = {str(row["memory_id"]): row["user_id"] for row in rows}
+            missing_memories = sorted(set(memory_ids) - set(found_memories))
             if missing_memories:
                 raise MethodMemoryError(f"unknown supporting/counterexample memories: {missing_memories}")
+            if any(owner not in (None, user_id) for owner in found_memories.values()):
+                raise MethodMemoryError("candidate evidence crosses user boundary")
 
-    def add_method(
+    def add_candidate(
         self,
         *,
         kind: str,
         subject: str,
         envelope: dict[str, Any],
         source_turn_id: str | None = None,
-        user_id: str | None = None,
+        user_id: str,
         provenance: dict[str, Any] | None = None,
     ) -> str:
+        if kind not in CANDIDATE_METHOD_KINDS:
+            raise MethodMemoryError("current write boundary admits method candidates only")
         value = validate_method_envelope(kind, envelope)
         subject = _text(subject, field="subject", max_chars=256)
-        self._assert_refs(value)
-        if source_turn_id is not None:
-            if not self.db.db.execute("SELECT 1 FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone():
-                raise MethodMemoryError("unknown source_turn_id")
-        if user_id is not None:
-            if not self.db.db.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone():
-                raise MethodMemoryError("unknown user_id")
-
+        memory_id = str(uuid.uuid4())
+        now = time.time()
         receipt = dict(provenance or {})
         receipt.update({
-            "memory_class": "method",
+            "memory_class": "method_candidate",
             "method_envelope_version": self.ENVELOPE_VERSION,
             "truth_authority": False,
             "effect_authority": False,
+            "promotion_authority": False,
         })
-        memory_id = str(uuid.uuid4())
-        self.db.db.execute(
-            "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
-            "VALUES(?,?,?,?,?,?,?,?)",
-            (
-                memory_id,
-                kind,
-                subject,
-                json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
-                source_turn_id,
-                user_id,
-                time.time(),
-                json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
-            ),
-        )
+
+        with self.db.tx() as sql:
+            if not sql.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone():
+                raise MethodMemoryError("unknown user_id")
+            self._assert_candidate_refs(sql, value, user_id)
+            if source_turn_id is not None:
+                row = sql.execute("SELECT user_id FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
+                if not row:
+                    raise MethodMemoryError("unknown source_turn_id")
+                if row["user_id"] != user_id:
+                    raise MethodMemoryError("candidate source turn crosses user boundary")
+            sql.execute(
+                "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
+                "VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    memory_id,
+                    kind,
+                    subject,
+                    json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                    source_turn_id,
+                    user_id,
+                    now,
+                    json.dumps(receipt, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                ),
+            )
         return memory_id
 
     @staticmethod
@@ -332,7 +343,7 @@ class MethodMemoryStore:
         placeholders = ",".join("?" for _ in linked)
         rows = self.db.db.execute(
             f"SELECT * FROM durable_memory WHERE memory_id IN ({placeholders}) "
-            "AND kind IN ('counterexample','failure_pattern') AND (user_id IS NULL OR user_id=?)",
+            "AND kind IN ('counterexample','failure_pattern') AND user_id=?",
             (*linked, user_id),
         ).fetchall()
         matched: list[dict[str, Any]] = []
@@ -383,9 +394,12 @@ class MethodMemoryStore:
                 "effect_authority": False,
             }
 
+        # Until cross-user abstraction/privacy admission exists, even user_id=NULL
+        # methods fail closed here. A shared central entity is not permission to leak one
+        # perspective's learned method into the other perspective by default.
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory WHERE kind IN ('framework','heuristic') "
-            "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 2000",
+            "AND user_id=? ORDER BY ts DESC LIMIT 2000",
             (user_id,),
         ).fetchall()
         scored: list[_ScoredMethod] = []
@@ -437,8 +451,6 @@ class MethodMemoryStore:
             if len(methods) >= limit:
                 break
 
-        # This invariant is intentionally explicit in the returned boundary. Method
-        # availability cannot upgrade a factual UNKNOWN/UNDERCOVERED state.
         return {
             "fact_status": fact_status,
             "method_status": "PRESENT" if methods else "UNKNOWN",

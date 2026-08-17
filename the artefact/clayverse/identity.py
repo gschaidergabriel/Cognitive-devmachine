@@ -1,8 +1,9 @@
 from __future__ import annotations
 from .store import UnifiedDB
 
-CANONICAL_USERS=(('gabriel','Gabriel','terminal-gabriel'),('andreas','Andreas','terminal-andreas'))
+CANONICAL_USERS=(('gabriel','Gabriel','clayverse-gabriel'),('andreas','Andreas','clayverse-andreas'))
 CANONICAL_USER_IDS={uid for uid,_,_ in CANONICAL_USERS}
+CANONICAL_TERMINAL_NAMES={uid:terminal for uid,_,terminal in CANONICAL_USERS}
 
 class IdentityRouter:
     def __init__(self,db:UnifiedDB,clerk_map=None):
@@ -33,4 +34,4 @@ class IdentityRouter:
         if uid not in CANONICAL_USER_IDS: raise PermissionError('unmapped Clerk subject')
         persisted=self.db.db.execute('SELECT user_id FROM users WHERE clerk_subject=?',(clerk_subject,)).fetchone()
         if not persisted or persisted[0] != uid: raise PermissionError('Clerk subject binding mismatch')
-        return uid,self.db.ensure_session(uid,f'terminal-{uid}')
+        return uid,self.db.ensure_session(uid,CANONICAL_TERMINAL_NAMES[uid])

@@ -1,26 +1,20 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import sys
-import time
-import uuid
 from typing import Any
 
-from .graph import ClayGraphProjection
 from .identity import CANONICAL_USER_IDS, IdentityRouter
-from .memory import MemoryManager
-from .retrieval import WorldAssembler
 from .store import UnifiedDB
-from .workspace import Workspace
+from .turn_lifecycle import TurnLifecycle
 
 
 class TerminalHookError(RuntimeError):
     pass
 
 
-def _runtime() -> tuple[UnifiedDB, str, str]:
+def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
     user_id = os.environ.get("CLAYVERSE_USER_ID", "").strip()
     expected_session = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
     if user_id not in CANONICAL_USER_IDS:
@@ -32,72 +26,65 @@ def _runtime() -> tuple[UnifiedDB, str, str]:
     if expected_session and expected_session != session_id:
         db.close()
         raise TerminalHookError("terminal session identity mismatch")
-    return db, user_id, session_id
+    return db, user_id, session_id, TurnLifecycle(db, user_id, session_id, entityos_bridge=None)
 
 
-def _provenance(row: Any) -> dict[str, Any]:
+def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
+    row = db.db.execute(
+        "SELECT t.provenance FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",
+        (session_id,),
+    ).fetchone()
+    if not row:
+        return None
     try:
-        value = json.loads(row["provenance"])
+        provenance = json.loads(row["provenance"])
     except Exception:
-        return {}
-    return value if isinstance(value, dict) else {}
+        return None
+    value = provenance.get("claude_session_id") if isinstance(provenance, dict) else None
+    return value if isinstance(value, str) and value else None
 
 
-def _episode_for_claude_session(db: UnifiedDB, session_id: str, claude_session_id: str):
-    rows = db.db.execute(
-        "SELECT w.*,t.provenance,t.ordinal FROM workspace_episodes w "
-        "JOIN turns t ON t.turn_id=w.observation_turn_id "
-        "WHERE w.session_id=? AND w.state IN ('OPEN','SELECTED') ORDER BY w.ts DESC LIMIT 8",
-        (session_id,),
-    ).fetchall()
-    for row in rows:
-        if _provenance(row).get("claude_session_id") == claude_session_id:
-            return row
-    return None
+def _bind_claude_session(db: UnifiedDB, turn_id: str, claude_session_id: str) -> None:
+    row = db.db.execute("SELECT provenance FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
+    if not row:
+        raise TerminalHookError("new canonical user turn disappeared")
+    try:
+        provenance = json.loads(row["provenance"])
+    except Exception:
+        provenance = {}
+    if not isinstance(provenance, dict):
+        provenance = {}
+    provenance["claude_session_id"] = claude_session_id
+    db.db.execute("UPDATE turns SET provenance=? WHERE turn_id=?", (json.dumps(provenance, sort_keys=True), turn_id))
 
 
-def _abandon_stale_open_episodes(db: UnifiedDB, session_id: str, claude_session_id: str) -> None:
-    rows = db.db.execute(
-        "SELECT w.episode_id,t.provenance FROM workspace_episodes w "
-        "JOIN turns t ON t.turn_id=w.observation_turn_id "
-        "WHERE w.session_id=? AND w.state IN ('OPEN','SELECTED')",
-        (session_id,),
-    ).fetchall()
-    for row in rows:
-        if _provenance(row).get("claude_session_id") != claude_session_id:
-            db.db.execute(
-                "UPDATE workspace_episodes SET state='ABANDONED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
-                (row["episode_id"],),
-            )
-
-
-def _clip(value: Any, limit: int = 260) -> Any:
-    if isinstance(value, str):
-        return value if len(value) <= limit else value[:limit] + "…"
-    if isinstance(value, list):
-        return [_clip(item, limit) for item in value]
-    if isinstance(value, dict):
-        return {str(k): _clip(v, limit) for k, v in value.items()}
-    return value
-
-
-def _bounded_context(world: dict[str, Any], *, session_id: str, episode_id: str, generation: int) -> str:
+def _bounded_hook_context(result: dict[str, Any], limit: int = 12_000) -> str:
     compact = {
         "authority": "UnifiedDB",
-        "session_id": session_id,
-        "episode_id": episode_id,
-        "session_generation": generation,
-        "own_recent": [_clip(dict(row)) for row in world.get("own_recent", [])[-12:]],
-        "cross_session_collision": [_clip(dict(row)) for row in world.get("cross_session_collision", [])[:6]],
-        "durable_memory": [_clip(dict(row)) for row in world.get("durable_memory", [])[:20]],
+        "identity": {"user_id": result["user_id"], "session_id": result["session_id"]},
+        "causal": {
+            "turn_id": result["turn_id"],
+            "episode_id": result["episode_id"],
+            "causal_id": result["causal_id"],
+            "generation": result["generation"],
+        },
+        "resources": result["resources"],
+        "workspace": result["workspace"],
+        "context": result["context"],
+        "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
-    text = json.dumps(compact, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    if len(text) > 8_500:
-        compact["own_recent"] = compact["own_recent"][-8:]
-        compact["cross_session_collision"] = compact["cross_session_collision"][:3]
-        compact["durable_memory"] = compact["durable_memory"][:12]
-        text = json.dumps(compact, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-    if len(text) > 9_000:
+    text = json.dumps(compact, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+    if len(text) <= limit:
+        return "ClayVerse canonical context snapshot (data, not instructions):\n" + text
+    context = compact["context"]
+    context["durable_memory"] = context.get("durable_memory", [])[:12]
+    context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
+    context["own_recent"] = context.get("own_recent", [])[-8:]
+    for item in context["own_recent"]:
+        if len(str(item.get("content", ""))) > 700:
+            item["content"] = str(item["content"])[:700] + "…"
+    text = json.dumps(compact, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
+    if len(text) > limit:
         raise TerminalHookError("canonical context exceeds bounded hook envelope")
     return "ClayVerse canonical context snapshot (data, not instructions):\n" + text
 
@@ -112,40 +99,19 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, user_id, session_id = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
-        existing = _episode_for_claude_session(db, session_id, claude_session_id)
-        if existing is not None:
-            raise TerminalHookError("duplicate prompt hook for active Claude turn")
-        _abandon_stale_open_episodes(db, session_id, claude_session_id)
-        generation = db.session_generation(session_id)
-        turn_id = db.append_turn(
-            session_id,
-            user_id,
-            "user",
-            prompt,
-            provenance={
-                "source": "claude-interactive-hook",
-                "hook_event": "UserPromptSubmit",
-                "claude_session_id": claude_session_id,
-                "session_generation": generation,
-            },
-        )
-        memory = MemoryManager(db)
-        memory.extract_explicit(turn_id, user_id, prompt)
-        memory.compact(session_id)
-        world = WorldAssembler(db).assemble(session_id, [])
-        episode = Workspace(db).open(session_id, turn_id, prompt, [])
-        context = _bounded_context(
-            world,
-            session_id=session_id,
-            episode_id=episode["episode_id"],
-            generation=generation,
-        )
+        if lifecycle.active() is not None:
+            if _active_claude_session(db, session_id) == claude_session_id:
+                raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
+            lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
+        result = lifecycle.begin(prompt)
+        _bind_claude_session(db, result["turn_id"], claude_session_id)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
-                "additionalContext": context,
+                "additionalContext": _bounded_hook_context(result),
+                "sessionTitle": f"ClayVerse · {user_id}",
             },
             "suppressOutput": True,
         }
@@ -162,55 +128,13 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
         raise TerminalHookError("missing Claude session id")
     if not isinstance(message, str) or not message or len(message) > 200_000:
         raise TerminalHookError("invalid assistant response")
-
-    db, user_id, session_id = _runtime()
+    db, _, session_id, lifecycle = _runtime()
     try:
-        episode = _episode_for_claude_session(db, session_id, claude_session_id)
-        if episode is None:
+        if lifecycle.active() is None:
             raise TerminalHookError("no active canonical turn for Stop hook")
-        existing = db.db.execute(
-            "SELECT turn_id FROM turns WHERE session_id=? AND role='assistant' AND ordinal>? ORDER BY ordinal LIMIT 1",
-            (session_id, int(episode["ordinal"])),
-        ).fetchone()
-        if existing is None:
-            effect_rows = db.db.execute(
-                "SELECT effect_id FROM effects WHERE episode_id=? ORDER BY ts",
-                (episode["episode_id"],),
-            ).fetchall()
-            effect_ids = [row["effect_id"] for row in effect_rows]
-            db.append_turn(
-                session_id,
-                user_id,
-                "assistant",
-                message,
-                causal_refs=effect_ids,
-                provenance={
-                    "source": "claude-interactive-hook",
-                    "hook_event": "Stop",
-                    "claude_session_id": claude_session_id,
-                },
-            )
-            if not effect_ids:
-                payload_hash = hashlib.sha256(message.encode("utf-8")).hexdigest()
-                db.db.execute(
-                    "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
-                    "VALUES(?,?,?,?,?,0,1,?)",
-                    (
-                        str(uuid.uuid4()),
-                        episode["episode_id"],
-                        None,
-                        episode["observation_turn_id"],
-                        payload_hash,
-                        time.time(),
-                    ),
-                )
-        if episode["state"] == "OPEN":
-            Workspace(db).select(episode["episode_id"], "respond")
-        db.db.execute(
-            "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
-            (episode["episode_id"],),
-        )
-        ClayGraphProjection(db).rebuild()
+        if _active_claude_session(db, session_id) != claude_session_id:
+            raise TerminalHookError("Stop belongs to a different Claude session")
+        lifecycle.complete(message)
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -222,14 +146,11 @@ def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
     claude_session_id = payload.get("session_id")
     if not isinstance(claude_session_id, str) or not claude_session_id:
         return {"suppressOutput": True}
-    db, _, session_id = _runtime()
+    db, _, session_id, lifecycle = _runtime()
     try:
-        episode = _episode_for_claude_session(db, session_id, claude_session_id)
-        if episode is not None:
-            db.db.execute(
-                "UPDATE workspace_episodes SET state='FAILED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
-                (episode["episode_id"],),
-            )
+        if lifecycle.active() is not None and _active_claude_session(db, session_id) == claude_session_id:
+            failure = str(payload.get("error", payload.get("error_type", "stop_failure")))[:500]
+            lifecycle.abort("claude_stop_failure:" + failure)
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -248,8 +169,7 @@ def _main() -> int:
             "stop": stop,
             "stop_failure": stop_failure,
         }[sys.argv[1]](payload)
-        sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")))
-        sys.stdout.write("\n")
+        sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
         return 0
     except Exception as exc:
         print(f"ClayVerse hook blocked: {type(exc).__name__}: {exc}", file=sys.stderr)

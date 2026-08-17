@@ -8,7 +8,6 @@ class EffectJournal:
     SAFE_OUTCOME_FIELDS=('ok','exit','boundary','entityos_sha256','denied','reason','error','certainty')
     def __init__(self,db:UnifiedDB):
         self.db=db
-        self.recover_pending()
     @staticmethod
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @staticmethod

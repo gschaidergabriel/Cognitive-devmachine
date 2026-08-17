@@ -162,8 +162,16 @@ def test_tmux_session_creation_is_pinned_to_managed_policy(tmp_path, monkeypatch
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     manager.ensure("andreas")
-    _assert_managed_tmux_argv(calls[-1], user_id="andreas")
-    assert calls[-1][5:9] == ["new-session", "-d", "-s", "clayverse-andreas"]
+
+    creation = [call for call in calls if "new-session" in call]
+    reapply = [call for call in calls if call[5:] == [
+        "source-file", "/etc/clayverse/managed-tmux.conf"
+    ]]
+    assert len(creation) == 1
+    assert len(reapply) == 1
+    _assert_managed_tmux_argv(creation[0], user_id="andreas")
+    assert creation[0][5:9] == ["new-session", "-d", "-s", "clayverse-andreas"]
+    _assert_managed_tmux_argv(reapply[0], user_id="andreas")
 
 
 def test_new_tmux_session_must_attest_policy_before_admission(tmp_path, monkeypatch):

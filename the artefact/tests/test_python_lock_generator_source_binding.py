@@ -50,56 +50,66 @@ def test_current_product_first_from_is_exact_digest_pinned_python():
     assert image in DOCKERFILE.read_text(encoding="utf-8")
 
 
-def test_python_lock_generator_uses_source_locked_python_313_supported_pip_tools():
+def test_python_lock_generator_source_locks_complete_linux_py313_bootstrap_set():
     lock = _source_lock()
-    pip_tools = lock["python_lock_generator"]["pip_tools"]
+    generator = lock["python_lock_generator"]
+    pip_tools = generator["pip_tools"]
     assert pip_tools == {
         "version": "7.5.3",
         "wheel": "pip_tools-7.5.3-py3-none-any.whl",
         "sha256": "3aac0c473240ae90db7213c033401f345b05197293ccbdd2704e52e7a783785e",
         "source": "PyPI pip-tools 7.5.3 bdist_wheel metadata",
     }
+
+    dependencies = generator["bootstrap_dependencies"]
+    expected = {
+        "build==1.2.2.post1": ("build-1.2.2.post1-py3-none-any.whl", "1d61c0887fa860c01971625baae8bdd338e517b836a2f70dd1f7aa3a6b2fc5b5"),
+        "click==8.3.3": ("click-8.3.3-py3-none-any.whl", "a2bf429bb3033c89fa4936ffb35d5cb471e3719e1f3c8a7c3fff0b8314305613"),
+        "packaging==24.2": ("packaging-24.2-py3-none-any.whl", "09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759"),
+        "pip==26.1.2": ("pip-26.1.2-py3-none-any.whl", "382ff9f685ee3bc25864f820aa50505825f10f5458ffff07e30a6d96e5715cab"),
+        "pyproject-hooks==1.2.0": ("pyproject_hooks-1.2.0-py3-none-any.whl", "9e5c6bfa8dcc30091c74b0cf803c81fdd29d94f01992a7707bc97babb1141913"),
+        "setuptools==83.0.0": ("setuptools-83.0.0-py3-none-any.whl", "29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3"),
+        "wheel==0.46.2": ("wheel-0.46.2-py3-none-any.whl", "33ae60725d69eaa249bc1982e739943c23b34b58d51f1cb6253453773aca6e65"),
+    }
+    observed = {
+        item["requirement"]: (item["wheel"], item["sha256"])
+        for item in dependencies
+    }
+    assert observed == expected
     assert any(
-        "transitive generator dependencies" in gate
+        "source-locked" in gate and "no-extra-download closure" in gate
         for gate in lock["known_open_supply_chain_gates"]
     )
 
+
+def test_python_lock_generator_downloads_hash_checked_bootstrap_then_installs_offline():
     text = _workflow_text()
-    assert "lock['python_lock_generator']['pip_tools']" in text
-    assert "pip-tools==$PIP_TOOLS_VERSION" in text
-    assert "--only-binary=:all: --no-deps" in text
-    assert 'PIP_TOOLS_WHEEL_PATH="/tmp/pip-tools-bootstrap/$PIP_TOOLS_WHEEL"' in text
-    assert "PIP_TOOLS_WHEEL_SHA256=" in text
-    assert '"$PIP_TOOLS_SHA256" "$PIP_TOOLS_WHEEL_PATH" | sha256sum -c -' in text
-    assert '--only-binary=:all: --report /tmp/generator-install-report.json' in text
-    assert '"$PIP_TOOLS_WHEEL_PATH"' in text
-    assert 'pip-compile --version | grep -F "version $PIP_TOOLS_VERSION"' in text
+    assert "generator['bootstrap_dependencies']" in text
+    assert "GENERATOR_BOOTSTRAP_CLOSURE_MISMATCH" in text
+    assert "generator-bootstrap.requirements" in text
+    assert "generator-bootstrap.expected" in text
+    assert "GENERATOR_BOOTSTRAP_EXPECTED_COUNT=" in text
+    assert "--only-binary=:all: --require-hashes" in text
+    assert "-r /tmp/generator-bootstrap.requirements" in text
+    assert "-d /tmp/pip-tools-bootstrap" in text
+    assert "sha256sum -c /tmp/generator-bootstrap.expected" in text
+    assert "GENERATOR_BOOTSTRAP_SHA256_BEGIN" in text
+    assert "GENERATOR_BOOTSTRAP_SHA256_END" in text
+    assert "--no-index --find-links=/tmp/pip-tools-bootstrap" in text
+    assert "python -m pip --version | grep -F 'pip 26.1.2 '" in text
+    assert "pip-compile --version | grep -F 'version 7.5.3'" in text
+    assert "--only-binary=:all: --no-deps" not in text
+    assert "generator-install-report.json" not in text
+
+
+def test_python_lock_generator_preserves_base_and_final_environment_evidence():
+    text = _workflow_text()
     assert "GENERATOR_BASE_FREEZE_SHA256=" in text
     assert "GENERATOR_BASE_ENVIRONMENT_BEGIN" in text
     assert "GENERATOR_BASE_ENVIRONMENT_END" in text
     assert "GENERATOR_FREEZE_SHA256=" in text
     assert "GENERATOR_ENVIRONMENT_BEGIN" in text
     assert "GENERATOR_ENVIRONMENT_END" in text
-    assert "'pip-tools==7.5.3'" not in text
-    assert "'pip-tools==7.5.0'" not in text
-
-
-def test_python_lock_generator_emits_transitive_bootstrap_download_provenance_without_promoting_it_to_lock():
-    text = _workflow_text()
-    assert "generator-install-report.json" in text
-    assert "report.get('version') != '1'" in text
-    assert "download_info" in text
-    assert "archive_info" in text
-    assert "hashes" in text
-    assert "GENERATOR_DEPENDENCY_NON_HTTPS_SOURCE" in text
-    assert "GENERATOR_DEPENDENCY_SHA256_MISSING" in text
-    assert "SOURCE_LOCK" in text
-    assert "GENERATOR_DOWNLOAD_PROVENANCE_SHA256=" in text
-    assert "GENERATOR_DOWNLOAD_PROVENANCE_BEGIN" in text
-    assert "GENERATOR_DOWNLOAD_PROVENANCE_END" in text
-    assert "generator.download-provenance" in text
-    assert "transitive bootstrap" in text
-    assert "not itself a trusted lock" in text
 
 
 def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_experiment():

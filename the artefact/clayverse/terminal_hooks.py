@@ -6,6 +6,7 @@ import sys
 from typing import Any
 
 from .autonomy import AutonomyState
+from .autonomy_context import user_autonomy_context
 from .goal_admission import admit_explicit_user_goal
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
@@ -109,8 +110,6 @@ def _bounded_hook_context(
         if isinstance(hp, dict):
             hp["facets"] = list(hp.get("facets", []))[:3]
 
-    # Goal identity matters, but full goal prose must not crowd out causal/current
-    # evidence. Keep only a bounded compact frontier if the initial envelope is large.
     autonomy_state = compact.get("autonomy")
     if isinstance(autonomy_state, dict):
         active_goals = list(autonomy_state.get("active_goals", []))[:3]
@@ -155,21 +154,15 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, user_id, session_id, lifecycle = _runtime()
     try:
-        # Ensure additive goal-state schema before begin_admission starts its canonical
-        # BEGIN IMMEDIATE transaction. No executescript/DDL may occur inside that turn.
         autonomy_state = AutonomyState(db)
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(
                 result,
-                autonomy=autonomy_state.context_summary(),
+                autonomy=user_autonomy_context(autonomy_state, user_id),
             )
 
         # Persistent autonomous goals are admitted only after the canonical user turn
-        # committed successfully. `/goal ...` is an explicit owner/user act, not an LLM
-        # inference. Goal + first step + provenance receipt are then one atomic tx.
+        # committed successfully. `/goal ...` is an explicit user act, not LLM inference.
         admit_explicit_user_goal(
             autonomy_state,
             user_id=user_id,
@@ -184,8 +177,6 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             "suppressOutput": True,
         }
     except Exception:
-        # If goal admission fails after the prompt commit, close the still-active turn
-        # explicitly rather than leaving a dangling causal episode.
         try:
             if lifecycle.active() is not None:
                 lifecycle.abort("user_prompt_post_admission_failure")

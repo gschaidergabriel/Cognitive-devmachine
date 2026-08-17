@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseVpsQemuTcgUbuntuGuestKernelReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "DEVELOPMENT_EXECUTION_SURFACE_EVIDENCE_ONLY",
+  "source": {
+    "workflow_commit": "4e65e6179780bb5ae5b1be5c004e15f70340030b",
+    "workflow_path": ".github/workflows/clayverse-vps-qemu-tcg-guest-smoke.yml",
+    "run_id": 32059568537,
+    "job_id": 95477509242,
+    "job_conclusion": "success",
+    "artifact_id": 9297680280,
+    "artifact_digest": "sha256:26b3d417adea0fccfad0b1e3c0f8ee5d47b04fa610ed1644d01a26f2b9a1c039",
+    "artifact_size_bytes": 1141
+  },
+  "observed": {
+    "runner": "rae-1",
+    "vmm": "QEMU emulator version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.18)",
+    "vmm_staging": "ROOTLESS_APT_DOWNLOAD_DPKG_EXTRACT_TO_TMP",
+    "guest_base": "ubuntu-24.04-server-cloudimg-amd64.img@release-20260725",
+    "guest_base_sha256": "d1940f7d69d343355e183dff1e08a59852d32e7309baa7a4bad8365b11b005ac",
+    "guest_kernel_marker": "Linux version 6.8.0-136-generic",
+    "serial_log_sha256": "f2d1b2a894ccd2154fd425a47d6b493fdafbd0dfa891101390a0023d039e1764",
+    "independent_guest_kernel_observed": true,
+    "guest_network": "NONE",
+    "guest_vga": "NONE",
+    "guest_memory_mib": 2048,
+    "guest_vcpus": 2,
+    "guest_disk": "VERIFIED_READ_ONLY_BASE_PLUS_PER_RUN_DISPOSABLE_FULL_COPY",
+    "qemu_sandbox": "on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny",
+    "product_code_executed_on_host": false,
+    "host_docker_used": false,
+    "privileged_host_mutation_used": false,
+    "bounded_termination_exit_status": 0,
+    "cleanup_observed": true
+  },
+  "evidence_limits": {
+    "clayverse_product_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "final_hardware_microvm_credit": 0,
+    "qemu_tcg_isolation_credit": "DEVELOPMENT_ONLY_NOT_FINAL_HARDWARE_MICROVM",
+    "unusual_experiment_count_added": 0
+  },
+  "collapse": {
+    "independent_guest_kernel_lane": "EXACT_RUNTIME_VERIFIED_FOR_QEMU_TCG_DEVELOPMENT_SCOPE",
+    "ubuntu_cloud_image_guest_kernel": "PASS",
+    "clayverse_inside_guest": "UNEXECUTED",
+    "same_exact_accepted_oci_digest_inside_guest": "UNEXECUTED",
+    "final_hardware_microvm_boundary": "UNEXECUTED",
+    "next_discriminator": "execute a bounded guest-resident ClayVerse payload or exact OCI path inside the disposable independent guest while keeping the VPS host orchestration-only"
+  }
+}

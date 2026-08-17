@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:01:43+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "lane": "PR625_TOKENLESS_CANONICAL_BASELINE",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "observed_branch_head_before_receipt": "714bbfe43fc0eb17335dc886accfe996c0d7bf64",
+  "classification": "COMPONENT_RUNTIME_PASS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "component": "EntityOSBridge pinned sealed-memfd execution boundary",
+  "exact_source": {
+    "path": "the artefact/clayverse/entityos_bridge.py",
+    "git_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "reconstruction_git_blob_match": true
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "fixture": "copy of container /bin/true, chmod 0555, SHA-256 pinned at runtime",
+    "checks": [
+      "verify() returned snapshot=sealed-memfd with matching digest, size and mode 0500",
+      "run(['probe']) executed the pinned snapshot successfully with exit 0",
+      "replacing the mutable source path with different executable bytes caused EntityOSIntegrityError digest mismatch before execution",
+      "replacing the source path with a symlink caused EntityOSIntegrityError via the O_NOFOLLOW/open boundary"
+    ],
+    "result": "4/4 PASS",
+    "exit_code": 0
+  },
+  "counterhypothesis": "The final ClayVerse image may run under a different kernel/seccomp/memfd policy or package environment; this component PASS does not establish in-image EntityOS execution, exact OCI packaging, EffectGate round-trip, or whole-product acceptance.",
+  "evidence_boundary": "Exact-source bounded Linux component-runtime evidence for the retained EntityOSBridge only. No OCI/image digest, normal packaged ClayVerse startup, Clerk/PTY/Claude, lifecycle, persistence/recovery or whole-product credit is claimed.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision user-trigger metadata and no shared immutable request/turn identifier are available; deterministic component regression is not an unusual experiment.",
+    "executed": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Keep PR625 Draft; bind the exact latest branch on an authorized OCI-capable isolated surface and prove actual build-context membership, EntityOS-free baseline build plus normal service readiness, then optional digest-bound embedding and in-image bridge/effect behavior."
+}

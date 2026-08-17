@@ -46,8 +46,9 @@ def test_provider_credentials_remain_bounded():
 def test_kata_template_network_boundary_is_default_deny():
     text = TEMPLATE.read_text()
     assert "apiVersion: networking.k8s.io/v1" in text
-    assert "kind: NetworkPolicy" in text
+    assert text.count("kind: NetworkPolicy") == 1
     assert "name: clayverse-default-deny" in text
+    assert "podSelector:\n    matchLabels:\n      app: clayverse" in text
     assert "policyTypes:\n    - Ingress\n    - Egress" in text
     assert "ingress: []" in text
     assert "egress: []" in text

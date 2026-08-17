@@ -125,6 +125,19 @@ def test_manifest_network_gates_match_the_deployment_contract():
     assert "exact reviewed deployment network allow policy identity captured and only admitted flows open while tested non-admitted flows remain denied" in required
 
 
+def test_manifest_microvm_security_and_tier2_gates_match_the_contract():
+    manifest = json.loads(MANIFEST.read_text())
+    outer = manifest["outer_isolation"]
+    required = set(manifest["requires_for_final_pass"])
+
+    assert "THEN_CURRENT_UPSTREAM_SUPPORTED_KATA_RELEASE" in outer["runtime_security_support"]
+    assert "UNREVIEWED_IO_KATACONTAINERS_RUNTIME_MUTATING_ANNOTATIONS" in outer["runtime_annotation_policy"]
+    assert "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED" in outer["tier2_replacement"]
+    assert any("then-current upstream-supported security release" in item for item in required)
+    assert any("io.katacontainers.* workload annotations" in item for item in required)
+    assert any("new Pod UID and new Kata sandbox/VM identity" in item for item in required)
+
+
 def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     contract = CONTRACT.read_text()
     template = TEMPLATE.read_text()

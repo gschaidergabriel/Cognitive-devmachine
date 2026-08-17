@@ -32,10 +32,11 @@ RUN TARGETARCH="${TARGETARCH}" python /opt/clayverse-build/install_pinned_claude
 WORKDIR /opt/clayverse
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-RUN mkdir -p /etc/claude-code /opt/entityos /opt/clayverse/runtime
+RUN mkdir -p /etc/claude-code /etc/clayverse /opt/entityos /opt/clayverse/runtime
 COPY --chown=root:root policy/managed-mcp.json /etc/claude-code/managed-mcp.json
 COPY --chown=root:root policy/managed-settings.json /etc/claude-code/managed-settings.json
-RUN chmod 0444 /etc/claude-code/managed-mcp.json /etc/claude-code/managed-settings.json
+COPY --chown=root:root policy/tmux.conf /etc/clayverse/tmux.conf
+RUN chmod 0444 /etc/claude-code/managed-mcp.json /etc/claude-code/managed-settings.json /etc/clayverse/tmux.conf
 COPY clayverse ./clayverse
 COPY --chown=root:root runtime_CLAUDE.md /opt/clayverse/runtime/CLAUDE.md
 COPY --chown=root:root policy/deny-shell /opt/clayverse/runtime/deny-shell

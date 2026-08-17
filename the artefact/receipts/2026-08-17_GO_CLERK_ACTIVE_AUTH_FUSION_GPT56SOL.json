@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:56:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_lane": {
+    "pull_request": 428,
+    "branch": "go/clerk-session-authority-fence-20260817-1342"
+  },
+  "fusion": {
+    "donor_pull_request": 437,
+    "donor_mechanism": "require direct Clerk session status to be active rather than only rejecting pending",
+    "reason": "Current Clerk primary documentation defines active as valid with all activity allowed; pending sessions have incomplete session tasks and are treated as signed-out by default. Requiring active is the simpler fail-closed admission rule for the canonical PTY boundary.",
+    "duplicate_auth_path_created": false
+  },
+  "exact_source": {
+    "clerk_auth_blob": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "session_authority_test_blob": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+    "session_shape_test_blob": "410c22c060f8d058276586f6285f3b24b6ad282e",
+    "temporal_test_blob": "e1f7c392b1e67a7727858d835cf9e8c547d6ee04"
+  },
+  "admission_contract": {
+    "sts_must_equal": "active",
+    "actor_claim_present": "DENY",
+    "missing_status": "DENY",
+    "non_active_status": "DENY",
+    "existing_rs256_issuer_temporal_sid_sub_azp_checks": "PRESERVED",
+    "jwks_finite_set_cache_and_timeout": "PRESERVED"
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container exact-source mechanism regression",
+    "exact_git_blob_matches": true,
+    "tests_collected": 8,
+    "tests_passed": 8,
+    "tests_failed": 0,
+    "py_compile": "PASS",
+    "covers": [
+      "active direct canonical claims admitted",
+      "impersonated act denied",
+      "pending ended abandoned statuses denied",
+      "missing sts denied",
+      "signed RS256 session shape accepted only with sid",
+      "missing and empty sid denied",
+      "missing nbf and future nbf denied"
+    ],
+    "scope_limit": "Exact four Git blobs above; not full repository checkout, not live Clerk/JWKS rotation/browser WebSocket PTY, not exact OCI runtime acceptance."
+  },
+  "primary_dependency_evidence": [
+    "Clerk v2 session-token docs list sts as the session-status claim and act only for impersonation.",
+    "Clerk SessionStatus docs define active as valid/all activity allowed and pending as incomplete session tasks.",
+    "Clerk session-task docs state pending sessions are treated as signed-out by default and become active after tasks complete."
+  ],
+  "go_experiment_accounting": {
+    "new_distinct_unusual_experiment": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Rebase the fused #428 lane onto then-current main, run exact-head auth plus adjacent terminal regressions in an actually-started authorized isolated environment, then real Clerk active/pending/impersonation/JWKS rotation through browser WebSocket PTY and exact OCI runtime/restart."
+}

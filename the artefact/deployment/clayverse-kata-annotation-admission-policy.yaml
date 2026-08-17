@@ -4,11 +4,19 @@
 # state, identity, effect, or execution authority. It protects the effective Pod
 # specification after mutation by denying unreviewed Kata runtime annotations.
 #
-# Baseline law: no io.katacontainers.* Pod annotation is admitted for the
-# app=clayverse workload. If a future deployment genuinely requires one, the
-# exact annotation/value MUST be separately reviewed, encoded into a replacement
-# policy, receipt-bound, and exercised on the admitted target before acceptance.
-# Merely changing the StatefulSet template is not sufficient.
+# Baseline law: no io.katacontainers.* Pod annotation is admitted. The reference
+# binding intentionally has no objectSelector: Kubernetes documents objectSelector
+# as an opt-in mechanism that end users can skip by changing labels, so it is not
+# a suitable security boundary for this fence.
+#
+# On a shared cluster the binding MAY be narrowed only by a separately reviewed,
+# receipt-bound namespaceSelector whose namespace labels/RBAC are themselves part
+# of acceptance evidence. Do not replace this baseline with a Pod-label selector.
+#
+# If a future deployment genuinely requires a Kata runtime annotation, the exact
+# annotation/value MUST be separately reviewed, encoded into a replacement policy,
+# receipt-bound, and exercised on the admitted target before acceptance. Merely
+# changing the StatefulSet template is not sufficient.
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -26,7 +34,7 @@ spec:
         !has(object.metadata.annotations) ||
         object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))
       message: >-
-        ClayVerse Pods must not carry unreviewed io.katacontainers.* runtime annotations.
+        Pod carries an unreviewed io.katacontainers.* runtime annotation.
       reason: Forbidden
 ---
 apiVersion: admissionregistration.k8s.io/v1
@@ -37,7 +45,3 @@ spec:
   policyName: clayverse-kata-runtime-annotation-fence.seimensch.net
   validationActions:
     - Deny
-  matchResources:
-    objectSelector:
-      matchLabels:
-        app: clayverse

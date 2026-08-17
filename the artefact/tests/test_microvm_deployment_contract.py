@@ -174,3 +174,15 @@ def test_provider_credentials_remain_bounded():
     assert "secretKeyRef:" in text
     assert "CLAYVERSE_REQUIRE_CLAUDE" in text
     assert "CLAUDE_API_KEY" not in text
+
+
+def test_entityos_digest_identity_cannot_be_overridden_by_deployment_secret():
+    template = TEMPLATE.read_text()
+    dockerfile = (ROOT / "Dockerfile").read_text()
+    lock = json.loads((ROOT / "entityos.lock.json").read_text())
+
+    assert "CLAYVERSE_ENTITYOS_SHA256" not in template
+    assert "entityos-sha256" not in template
+    assert "CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256}" in dockerfile
+    assert 'test "${ENTITYOS_SHA256}" = "$LOCK_SHA256"' in dockerfile
+    assert "not a caller-supplied digest" in lock["authority_note"]

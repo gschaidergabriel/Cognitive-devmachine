@@ -56,10 +56,45 @@ class TurnLifecycle:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"
         return packed
 
+    def _persisted_effect_in_tx(self,db,row):
+        effects=db.execute("SELECT * FROM effects WHERE episode_id=? ORDER BY ts,effect_id",(row["episode_id"],)).fetchall()
+        if len(effects)>1: raise TurnLifecycleError("multiple effect records for active episode")
+        if not effects:
+            if row["effect_id"] is not None: raise TurnLifecycleError("active turn references missing effect")
+            return row,None,None
+        effect=effects[0]
+        if effect["status"]=="PENDING": raise TurnLifecycleError("effect outcome pending; automatic replay denied until recovery")
+        causal=db.execute("SELECT * FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect["effect_id"],)).fetchone()
+        if causal is None: raise TurnLifecycleError("final effect lacks causal re-entry")
+        if causal["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("persisted effect causal identity diverged")
+        if row["effect_id"] is not None and row["effect_id"]!=effect["effect_id"]: raise TurnLifecycleError("active turn effect identity diverged")
+        if row["effect_id"] is None:
+            cur=db.execute("UPDATE active_turns SET effect_id=?,outcome=?,workspace_selected=1 WHERE session_id=? AND causal_id=? AND effect_id IS NULL",(effect["effect_id"],effect["outcome"],self.session_id,row["causal_id"]))
+            if cur.rowcount!=1: raise TurnLifecycleError("active turn changed during effect rebind")
+            row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            if row is None: raise TurnLifecycleError("active turn disappeared during effect rebind")
+        return row,effect,causal
+
+    def _effect_request_matches(self,effect,capability,target,argv):
+        if effect["capability"]!=capability: return False
+        journal=self.effects.journal
+        expected_target=journal._payload(journal._target_receipt(target))
+        expected_argv=journal._argv_receipt(argv)
+        expected_argv=json.dumps(expected_argv,sort_keys=True,separators=(",",":")) if expected_argv else None
+        return effect["target"]==expected_target and effect["argv"]==expected_argv
+
+    @staticmethod
+    def _recovered_effect_result(effect,causal):
+        try: receipt=json.loads(effect["outcome"]) if effect["outcome"] else None
+        except (TypeError,json.JSONDecodeError): receipt={"audit":"invalid-persisted-outcome-receipt"}
+        verified=bool(effect["status"]=="VERIFIED" and isinstance(receipt,dict) and receipt.get("ok") is True)
+        return {"effect_id":effect["effect_id"],"causal_id":causal["causal_id"],"verified":verified,"outcome":{"recovered":True,"replayed":False,"status":effect["status"],"receipt":receipt}}
+
     def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool)->dict:
         if not self.db.db.in_transaction: raise TurnLifecycleError("abort requires active transaction")
         row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
         if row is None: return {"aborted":False,"reason":"no_active_turn"}
+        row,_,_=self._persisted_effect_in_tx(db,row)
         ws=db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
         if ws is None: raise TurnLifecycleError("active turn workspace missing during abort")
         if ws["state"]=="OPEN": self.workspace.select_in_tx(row["episode_id"],"defer_effect")
@@ -109,16 +144,39 @@ class TurnLifecycle:
         with self.begin_admission(prompt,resources) as result: return result
 
     def request_effect(self,capability:str,target:str,argv:list[str]|None=None)->dict:
-        row=self.active()
-        if row is None: raise TurnLifecycleError("no active turn; effect denied")
-        if row["effect_id"] is not None: raise TurnLifecycleError("only one effect admitted per turn in candidate contract")
-        if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
-        if not int(row["workspace_selected"]):
-            self.workspace.select(row["episode_id"],"request_effect"); self.db.db.execute("UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",(self.session_id,row["causal_id"]))
-        effect_id,outcome=self.effects.execute(EffectRequest(self.user_id,self.session_id,capability,target,argv,int(row["generation"])),row["episode_id"])
+        with self.db.tx() as db:
+            row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            if row is None: raise TurnLifecycleError("no active turn; effect denied")
+            if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
+            if not int(row["workspace_selected"]):
+                ws=db.execute("SELECT state,selected FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
+                if ws is None: raise TurnLifecycleError("active turn workspace missing before effect")
+                if ws["state"]=="OPEN": self.workspace.select_in_tx(row["episode_id"],"request_effect")
+                elif not (ws["state"]=="SELECTED" and ws["selected"]=="request_effect"): raise TurnLifecycleError("workspace already selected for a different action")
+                cur=db.execute("UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",(self.session_id,row["causal_id"]))
+                if cur.rowcount!=1: raise TurnLifecycleError("active turn changed during effect selection")
+                row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            row,effect,causal=self._persisted_effect_in_tx(db,row)
+            if effect is not None:
+                if not self._effect_request_matches(effect,capability,target,argv): raise TurnLifecycleError("different effect already persisted for active turn")
+                return self._recovered_effect_result(effect,causal)
+        try:
+            effect_id,outcome=self.effects.execute(EffectRequest(self.user_id,self.session_id,capability,target,argv,int(row["generation"])),row["episode_id"])
+        except RuntimeError as exc:
+            if "effect already persisted for episode" not in str(exc): raise
+            with self.db.tx() as db:
+                current=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+                if current is None: raise TurnLifecycleError("active turn disappeared while reconciling effect") from exc
+                current,effect,causal=self._persisted_effect_in_tx(db,current)
+                if effect is None or not self._effect_request_matches(effect,capability,target,argv): raise TurnLifecycleError("persisted effect does not match retry") from exc
+                return self._recovered_effect_result(effect,causal)
         causal_id=self.effects.causal_for_effect(effect_id)
         if causal_id!=row["causal_id"]: raise TurnLifecycleError("verified effect re-entered through wrong causal identity")
-        self.db.db.execute("UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 WHERE session_id=? AND causal_id=?",(effect_id,json.dumps(outcome,sort_keys=True),self.session_id,row["causal_id"]))
+        with self.db.tx() as db:
+            current=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
+            if current is None or current["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("active turn changed before effect binding")
+            current,effect,causal=self._persisted_effect_in_tx(db,current)
+            if effect is None or effect["effect_id"]!=effect_id: raise TurnLifecycleError("journaled effect unavailable for active binding")
         return {"effect_id":effect_id,"causal_id":causal_id,"verified":bool(isinstance(outcome,dict) and outcome.get("ok") is True),"outcome":outcome}
 
     def complete(self,response:str)->dict:
@@ -128,6 +186,7 @@ class TurnLifecycle:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            row,_,_=self._persisted_effect_in_tx(db,row)
             if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
             effect_id=row["effect_id"]; existing_causal=db.execute("SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone() if effect_id else None
             if effect_id and existing_causal is None: raise TurnLifecycleError("effect lacks causal re-entry before Stop")

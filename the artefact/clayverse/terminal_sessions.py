@@ -33,18 +33,18 @@ class TerminalBinding:
 
 
 class TerminalSessionManager:
-    """Own exactly two durable tmux perspectives into one ClayVerse entity."""
+    """Own exactly two durable, tmux-isolated perspectives into one ClayVerse entity."""
 
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
+    TMUX_SOCKET_PREFIX = "clayverse"
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
         self.workspace = Path(workspace)
         self.runtime_prompt = Path("/opt/clayverse/runtime/CLAUDE.md")
-        self.tmux_socket = "clayverse"
 
     def _require_programs(self) -> None:
         for program in ("tmux", "claude", "python3"):
@@ -71,6 +71,13 @@ class TerminalSessionManager:
             home=home,
             mcp_config=home / "clayverse-mcp.json",
         )
+
+    @classmethod
+    def _tmux_socket(cls, binding: TerminalBinding) -> str:
+        # A tmux client can address sessions inside its connected server. Keep the
+        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
+        # attached client cannot switch from one canonical user's session to the other.
+        return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
 
     def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
         enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
@@ -112,7 +119,7 @@ class TerminalSessionManager:
 
     def _has_session(self, binding: TerminalBinding) -> bool:
         cp = subprocess.run(
-            ["tmux", "-L", self.tmux_socket, "has-session", "-t", binding.tmux_name],
+            ["tmux", "-L", self._tmux_socket(binding), "has-session", "-t", binding.tmux_name],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False,
@@ -169,7 +176,7 @@ class TerminalSessionManager:
         command = shlex.join(env_argv)
         cp = subprocess.run(
             [
-                "tmux", "-L", self.tmux_socket,
+                "tmux", "-L", self._tmux_socket(binding),
                 "new-session", "-d", "-s", binding.tmux_name,
                 "-c", str(self.workspace), command,
             ],
@@ -193,7 +200,7 @@ class TerminalSessionManager:
             }
             os.execvpe(
                 "tmux",
-                ["tmux", "-L", self.tmux_socket, "attach-session", "-t", binding.tmux_name],
+                ["tmux", "-L", self._tmux_socket(binding), "attach-session", "-t", binding.tmux_name],
                 env,
             )
         return pid, fd, binding

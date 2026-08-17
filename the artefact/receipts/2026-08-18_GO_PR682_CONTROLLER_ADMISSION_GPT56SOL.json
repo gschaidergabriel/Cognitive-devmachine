@@ -1,0 +1,100 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "23cce3265010b27ecd32b4024dc6f02dc6c5381e",
+  "classification": "PR682_RUNTIME_FREEZE_CONTROLLER_READY_IN_SOURCE_DEPLOYMENT_ADMISSION_RATE_LIMITED",
+  "scope": "source/control-plane repair and admission evidence only; zero ClayVerse runtime promotion",
+  "research_runtime_freeze": {
+    "pull_request": 682,
+    "state": "open_draft",
+    "base_main": "9580103d3e2c289a62bd601855699669fee8c91b",
+    "frozen_head": "6e8838651e39e181321e71a9a0b5b0f2bdfc5df1",
+    "frozen_tree": "dbc4c97c578a8b06782936fe2658f7a56bca8dc0",
+    "origin": "fresh current-main fusion/freeze of the single retained PR680 final-Mistral product/test lineage",
+    "authority_boundary": "SOURCE_CANDIDATE_RUNTIME_FREEZE_ONLY"
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "observed_head": "cbdafaa5bb8587dc10e737caf8ddcd18b7645596",
+    "observed_tree": "fc619f91763acdd8b7a308758a4eae5e78323e9f",
+    "bound_research_candidate_pr": 682,
+    "bound_research_sha": "6e8838651e39e181321e71a9a0b5b0f2bdfc5df1",
+    "bound_research_tree": "dbc4c97c578a8b06782936fe2658f7a56bca8dc0",
+    "batch_source_default_sha": "215a52d0a0b862ec3e80a817cb6c8ee9ab75cd16",
+    "batch_source_default_tree": "cf846436450bd3627947e27294f08b76dd383a74",
+    "batch_rebind_law": "controller requires the default SHA/tree exactly once, then rewrites both to the PR682 frozen SHA/tree before the script enters the Sandbox",
+    "candidate_head_fence": "PR682 head is checked before and after the private source fetch",
+    "snapshot_expiration_ms": 86400000,
+    "snapshot_expiration_repair_commit": "e39731505bf3f92d431fed7ce5b5de63f7591557",
+    "snapshot_repair_is_ancestor_of_observed_head": true,
+    "detached_status_semantics": "OCI_STAGE_PASS remains explicitly below final_test_of_tests_pass and whole_product_pass"
+  },
+  "external_provider_contract_check": {
+    "provider": "Vercel Sandbox",
+    "supported_mechanisms_observed_in_current_primary_docs": [
+      "detached runCommand",
+      "named persistent Sandbox",
+      "Python 3.13 runtime",
+      "plan-bounded Sandbox session duration",
+      "custom snapshot retention minimum of one day"
+    ],
+    "runtime_credit": 0
+  },
+  "deployment_admission": {
+    "latest_ready_deployment_observed": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
+    "latest_ready_controller_commit_observed": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "exact_current_controller_head_deployed": false,
+    "exact_current_head_vercel_status": "failure",
+    "exact_current_head_vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "provider_status_context": "Vercel",
+    "classification": "CONTROL_PLANE_DEPLOYMENT_ADMISSION_BLOCKER_NOT_CLAYVERSE_TEST_FAILURE"
+  },
+  "security_and_truth_fences": {
+    "owner_github_read_token_used_this_cycle": false,
+    "credential_bearing_post_executed": false,
+    "secret_synthesized_or_committed": false,
+    "old_ready_deployment_may_substitute_for_exact_current_head": false,
+    "vercel_ready_implies_runtime_pass": false,
+    "oci_stage_pass_implies_final_test_of_tests_pass": false,
+    "whole_product_pass_claimed": false
+  },
+  "runtime_credit_added": {
+    "private_source": 0,
+    "full_regression": 0,
+    "exact_oci": 0,
+    "real_mistral": 0,
+    "entityos_roundtrip": 0,
+    "tier1_recovery": 0,
+    "tier2_same_digest_recreation": 0,
+    "auth_pty_two_user": 0,
+    "whole_product": 0
+  },
+  "final_test_sequence_still_required": [
+    "exact-current retained PR810 deployment admission",
+    "owner-held scoped read-only GitHub token POST",
+    "exact PR682 private source/tree proof",
+    "authorized Vercel Sandbox creation and guest-kernel receipt",
+    "full exact regression",
+    "EntityOS reproduction/staging",
+    "exact OCI build and digest",
+    "in-image Vault-backed real Mistral cognition",
+    "canonical UnifiedDB re-ingest before effect",
+    "verified EffectGate/EntityOS causal round-trip",
+    "Tier-1 recovery",
+    "destroy/recreate complete Sandbox appliance using the same exact OCI digest",
+    "new-generation secret reacquisition and stale/no-blind-replay rejection",
+    "second real Mistral cognition",
+    "remaining Clerk/PTY/tmux/two-user/persistence/concurrency gates"
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable per-trigger request identity is exposed to this organ; fail closed rather than double-spending the one unusual experiment allowance."
+  },
+  "next_exact_step": "Do not spend the owner-held token on any stale READY ancestor. When Vercel admits a deployment of the exact retained PR810 descendant still bound to PR682 6e883865.../dbc4c97c..., perform the explicit credential-bearing POST and collect the actual detached source/regression/EntityOS/OCI receipt; only after that stage passes continue the same retained Sandbox with Vault-backed Mistral/effect/recovery/Tier-2 and remaining whole-product gates.",
+  "acceptance": "IN_PROGRESS"
+}

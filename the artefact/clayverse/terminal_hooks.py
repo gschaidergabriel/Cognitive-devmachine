@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController
 from .autonomy_context import admit_explicit_goal_from_turn, bounded_autonomy_context
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
@@ -49,6 +50,111 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _active_autonomy_preemption(db: UnifiedDB, session_id: str, user_id: str) -> dict[str, Any] | None:
+    """Capture exact autonomous predecessor identity before a human prompt preempts it."""
+    row = db.db.execute(
+        "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,a.effect_id,t.provenance "
+        "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id "
+        "WHERE a.session_id=? AND a.user_id=?",
+        (session_id, user_id),
+    ).fetchone()
+    if row is None:
+        return None
+    try:
+        provenance = json.loads(row["provenance"])
+    except Exception as exc:
+        raise TerminalHookError("active turn provenance malformed before preemption") from exc
+    if not isinstance(provenance, dict) or provenance.get("source") != AUTONOMY_TURN_SOURCE:
+        return None
+    goal_id = provenance.get("goal_id")
+    step_id = provenance.get("autonomy_step_id")
+    if not isinstance(goal_id, str) or not goal_id or not isinstance(step_id, str) or not step_id:
+        raise TerminalHookError("autonomous predecessor identity missing")
+    if provenance.get("causal_id") != row["causal_id"]:
+        raise TerminalHookError("autonomous predecessor causal identity drift")
+    try:
+        entity_generation = int(provenance.get("entity_generation"))
+        session_generation = int(provenance.get("session_generation"))
+    except (TypeError, ValueError) as exc:
+        raise TerminalHookError("autonomous predecessor generation provenance missing") from exc
+    if entity_generation != int(row["generation"]) or session_generation != int(row["generation"]):
+        raise TerminalHookError("autonomous predecessor generation drift")
+    return {
+        "goal_id": goal_id,
+        "step_id": step_id,
+        "turn_id": row["turn_id"],
+        "episode_id": row["episode_id"],
+        "causal_id": row["causal_id"],
+        "generation": int(row["generation"]),
+        "effect_id": row["effect_id"],
+    }
+
+
+def _reconcile_preempted_autonomy(db: UnifiedDB, user_id: str, captured: dict[str, Any] | None) -> dict[str, Any]:
+    """Re-enter a human-preempted goal step without replaying effects or inventing success."""
+    if captured is None:
+        return {"reconciled": False, "reason": "no_autonomous_predecessor"}
+    controller = AutonomyController(db)
+    snapshot = controller.snapshot(user_id=user_id)
+    goal = next((item for item in snapshot["goals"] if item["goal_id"] == captured["goal_id"]), None)
+    if goal is None:
+        raise TerminalHookError("preempted autonomy goal disappeared")
+    if int(goal["generation"]) != int(captured["generation"]):
+        raise TerminalHookError("preempted autonomy goal generation changed")
+    step = goal.get("current_step")
+    if not isinstance(step, dict) or step.get("step_id") != captured["step_id"]:
+        raise TerminalHookError("preempted autonomy step identity changed")
+    if step.get("status") != "ADMITTED":
+        return {
+            "reconciled": False,
+            "reason": "step_already_terminalized",
+            "goal_id": captured["goal_id"],
+            "step_id": captured["step_id"],
+            "status": step.get("status"),
+        }
+
+    effects = db.db.execute(
+        "SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id",
+        (captured["episode_id"],),
+    ).fetchall()
+    if len(effects) > 1:
+        raise TerminalHookError("preempted autonomy episode has multiple effects")
+    if effects:
+        effect = effects[0]
+        if effect["status"] == "PENDING":
+            raise TerminalHookError("preempted autonomy effect is still pending")
+        result = controller.record_effect_result(
+            captured["goal_id"],
+            captured["step_id"],
+            effect["effect_id"],
+            expected_generation=captured["generation"],
+        )
+        return {
+            "reconciled": True,
+            "mode": "final_effect_reentry",
+            "goal_id": captured["goal_id"],
+            "step_id": captured["step_id"],
+            "effect_id": effect["effect_id"],
+            "verified": bool(result["verified"]),
+            "status": result["status"],
+        }
+
+    result = controller.record_step_failure(
+        captured["goal_id"],
+        captured["step_id"],
+        "human_preempted_autonomy_step",
+        expected_generation=captured["generation"],
+    )
+    return {
+        "reconciled": True,
+        "mode": "no_effect_requeue",
+        "goal_id": captured["goal_id"],
+        "step_id": captured["step_id"],
+        "status": result["status"],
+        "reason": result["reason"],
+    }
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -65,7 +171,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
         "autonomy": result.get("autonomy", {}),
-        "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
+        "effect_law": "Ordinary effects use mcp__clayverse__request_effect. An already-admitted autonomy effect step must use mcp__clayverse__request_autonomy_effect(goal_id,step_id), which dispatches only the stored canonical intent. Only verified EffectJournal outcomes are operational truth.",
     }
 
     def render() -> str:
@@ -124,9 +230,11 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, user_id, session_id, lifecycle = _runtime()
     try:
+        preempted = _active_autonomy_preemption(db, session_id, user_id)
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             pass
         try:
+            _reconcile_preempted_autonomy(db, user_id, preempted)
             admit_explicit_goal_from_turn(
                 db,
                 user_id=user_id,

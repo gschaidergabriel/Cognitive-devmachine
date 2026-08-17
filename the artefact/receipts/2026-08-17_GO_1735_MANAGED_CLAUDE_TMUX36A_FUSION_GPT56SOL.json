@@ -1,0 +1,63 @@
+{
+  "schema": "clayverse.go.receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:35:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "a9e08309ceefb441f38f2bdcf89af1a335e8dfd0",
+  "retained_process_attestation_pr": 602,
+  "retained_process_attestation_branch": "go/managed-claude-runtime-attestation-sol-20260817-1524-r5",
+  "prior_process_attestation_head": "84d459622aa8b0e94339b0498ba352b6be17ac97",
+  "tested_fusion_head": "075474a01bd76eedefcbd3a5d2ab91c6bf93c8a1",
+  "retained_tmux_repair_pr": 611,
+  "retained_tmux_repair_head_observed": "2957e80228815ac266635981a55f22bc15dc9ed4",
+  "finding": {
+    "class": "DOWNSTREAM_SEMANTIC_REGRESSION_RISK",
+    "summary": "PR602 overlapped terminal_sessions.py but still carried the pre-PR611 tmux policy reapply behavior, so later promotion could reintroduce the real-tmux-3.6a failure. Its timeout tests also did not stub the new process-attestation layer, so two lower-layer tests were no longer isolated from the newly-added process predicate.",
+    "counterhypothesis": "The process-attestation lane can preserve the exact PR611 idempotent reapply diagnostics without weakening its independent transport-policy-v3 attestation or managed-Claude process predicate."
+  },
+  "delta": {
+    "terminal_sessions_blob": "13b895d06d6f99b367e9e6b014a48155d6356095",
+    "timeout_test_blob": "08c30cca4452f789aedfc39606d71e3bf058013e",
+    "process_attestation_test_blob": "6bfc5cb5a208e85357492ffadff578b1f9f5527d",
+    "preserved_tmux_reapply_contract": [
+      "nonzero source-file is tolerated only when every nonempty diagnostic is an exact missing-table line for prefix/root/copy-mode/copy-mode-vi",
+      "mixed or unknown diagnostics remain fatal",
+      "nonzero with empty diagnostics remains fatal",
+      "full transport-policy-v3 effective-state attestation remains independently mandatory"
+    ],
+    "test_repair": "Lower-layer ensure/new-session timeout tests now stub only the new managed-process attestation predicate so they continue testing transport ordering rather than accidentally failing on an unrelated process probe."
+  },
+  "isolated_execution": {
+    "surface": "authorized isolated OpenAI tool container",
+    "scope": "supporting exact-file source/mechanism execution; not full branch checkout, not Vercel Sandbox, not OCI, not native Claude",
+    "identity_stub": "minimal CANONICAL_TERMINAL_NAMES only; no UnifiedDB/runtime claim",
+    "git_blob_binding": {
+      "terminal_sessions.py": "13b895d06d6f99b367e9e6b014a48155d6356095",
+      "test_terminal_tmux_control_timeouts.py": "08c30cca4452f789aedfc39606d71e3bf058013e",
+      "test_terminal_managed_process_attestation.py": "6bfc5cb5a208e85357492ffadff578b1f9f5527d"
+    },
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_terminal_tmux_control_timeouts.py tests/test_terminal_managed_process_attestation.py && python -m py_compile clayverse/terminal_sessions.py",
+    "result": "15 passed in 0.06s; py_compile PASS; exit 0",
+    "credit": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION"
+  },
+  "external_execution_state": {
+    "vercel": "Current exact retained tmux repair rerun remains build-rate-limited before Sandbox start; older READY deployment is old-head component evidence only.",
+    "daytona": "No admitted provider-contact/credential path from this controller; zero runtime credit.",
+    "vps_testing": "FORBIDDEN"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The shared exact-go trigger identity available to this organ has minute precision only and no immutable shared request id; the atomic lease protocol therefore fails closed."
+  },
+  "acceptance": "IN_PROGRESS",
+  "nonclaims": [
+    "No exact full PR602 branch runtime PASS",
+    "No exact current PR611 real-tmux rerun PASS",
+    "No native Claude process representation PASS",
+    "No OCI build/start/readiness/restart PASS",
+    "No whole ClayVerse PASS"
+  ],
+  "next_gate": "When an authorized isolated runner can actually start: refresh main, rejoin and execute PR611 exact real-tmux-3.6a discriminator, promote only if green, then rejoin PR602 on that accepted/current terminal spine and run focused+adjacent process/readiness regressions followed by exact OCI/native-Claude readiness and restart checks."
+}

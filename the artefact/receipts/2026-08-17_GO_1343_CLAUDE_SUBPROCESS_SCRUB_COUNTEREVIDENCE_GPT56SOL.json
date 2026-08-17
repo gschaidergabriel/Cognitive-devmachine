@@ -1,0 +1,62 @@
+{
+  "schema": "clayverse-go-counterevidence-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:53:19+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_write": "97d4384b37f5e925360ba007f1a3e104b7dcf7a8",
+  "exact_current_source": {
+    "source_lock_blob": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "terminal_sessions_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "managed_settings_blob": "fb839d6bd413aaa7853fbdcd813a443a1ef81f78",
+    "claude_code_version": "2.1.233",
+    "terminal_permission_mode": "dontAsk",
+    "terminal_builtin_tools": "disabled",
+    "managed_mcp_allowlist": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"],
+    "launch_environment": "env -i allowlist",
+    "remote_control_disabled": true
+  },
+  "candidate": {
+    "mechanism": "Set CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1 in managed settings to reduce provider-credential exposure to hooks and MCP stdio subprocesses.",
+    "upstream_support": "Claude Code changelog records the scrub control from 2.1.83, earlier than the pinned 2.1.233 release. Current docs describe stripping Anthropic/cloud-provider credentials from Bash, hooks and MCP stdio subprocess environments."
+  },
+  "counterevidence": {
+    "classification": "UPSTREAM_RUNTIME_COMPATIBILITY_RISK",
+    "observed_upstream_reports": "Current upstream Claude Code 2.1.x reports reproduce CLAUDE_CODE_SUBPROCESS_ENV_SCRUB forcing requested permission modes, including dontAsk, back to default; a July 2026 report reproduces this on 2.1.207. No current changelog evidence found in this review proves the interaction fixed by 2.1.233.",
+    "clayverse_consequence": "ClayVerse intentionally launches interactive Claude with --permission-mode dontAsk and an explicit MCP-only allowedTools boundary. Silently forcing default could change unattended terminal semantics or introduce permission prompts/stalls.",
+    "existing_mitigation": "ClayVerse already launches Claude under env -i with an explicit allowlist, so inherited service/container secrets are not admitted into the Claude parent environment by default. Missing subprocess scrub is therefore not evidence of a currently observed credential leak."
+  },
+  "adjudication": {
+    "result": "DEFER",
+    "policy_delta_promoted": false,
+    "reason": "Do not trade an unverified compatibility regression for defense-in-depth without exact packaged Claude 2.1.233 execution.",
+    "required_discriminator": "In an actually-started authorized isolated exact-image environment, launch pinned Claude 2.1.233 with ClayVerse managed settings and verify both (a) hooks/MCP child credential scrubbing and (b) effective permission mode remains the intended fail-closed MCP-only behavior without unexpected prompts or mode downgrade."
+  },
+  "duplicate_work_fusion": {
+    "superseded_pr": 445,
+    "closed_without_merge": true,
+    "reason": "Current main independently landed the command-pinned MCP authority regression plus remote-control lockout in commit a87bd8d0fd0bcdd48857714af3fc48ba85e1f2a7; retaining a second repair line would violate non-duplication law."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "github_actions_observation": {
+      "run": 32003349315,
+      "job": 95307847980,
+      "conclusion": "failure",
+      "steps": [],
+      "runner_id": 0,
+      "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_TEST_STEPS_ZERO_TEST_CREDIT"
+    },
+    "local_oci_builder_runtime": "UNAVAILABLE",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED",
+    "together": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_executed": false,
+    "reason": "Only minute-precision immutable trigger metadata is exposed for this user turn; the current atomic lease protocol forbids inventing whole-second identity."
+  },
+  "classification": "COUNTEREVIDENCE_PERSISTED_NO_PRODUCT_POLICY_DELTA",
+  "whole_product_pass": false
+}

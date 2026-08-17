@@ -8,7 +8,7 @@ from pathlib import Path
 
 from fastapi import WebSocket, WebSocketDisconnect
 
-from .adapters import AuthenticationError, ClerkTokenVerifier
+from .clerk_auth import AuthenticationError, ClerkTokenVerifier
 from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
@@ -157,7 +157,7 @@ window.addEventListener('load', async () => {{
             pass
         except Exception as exc:
             try:
-                await ws.send_text(json.dumps({"type": "error", "message": str(exc)))
+                await ws.send_text(json.dumps({"type": "error", "message": str(exc)}))
             except Exception:
                 pass
         finally:

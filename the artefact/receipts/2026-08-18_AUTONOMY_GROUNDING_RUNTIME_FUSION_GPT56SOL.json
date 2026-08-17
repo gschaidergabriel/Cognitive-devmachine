@@ -1,0 +1,86 @@
+{
+  "schema": "ClayVerseAutonomyGroundingFusionReceipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_observed": "b4e98995b88efe75aafff9daad7d1f98cf1adb6d",
+  "fusion_source_commit": "735980251010905311246c221904e46069011117",
+  "branch": "gpt56sol/autonomy-grounding-fusion-current-20260818",
+  "owner_request": {
+    "goal": "weave autonomous goal pursuit and persistent identity/continuity semantics into architecture without power hallucination",
+    "explicitly_excluded": ["USB identity anchor", "cryptocurrency", "smart contracts", "escrow"]
+  },
+  "existing_canonical_autonomy_reused": {
+    "controller": "the artefact/clayverse/autonomy.py",
+    "state_authority": "UnifiedDB.meta[autonomy_state_v1]",
+    "effect_authority": "EffectGate/EffectJournal",
+    "exact_effect_intent_fence_preserved": true,
+    "self_ack_hardening_preserved": true,
+    "effect_budget_decoupling_preserved": true,
+    "new_autonomy_controller": false,
+    "new_state_authority": false,
+    "new_effect_path": false,
+    "new_identity_service": false,
+    "new_consciousness_daemon": false
+  },
+  "fusion_delta": {
+    "integration": "the artefact/clayverse/autonomy_integration.py",
+    "terminal_hook": "the artefact/clayverse/terminal_hooks.py",
+    "service_recovery": "the artefact/clayverse/service.py",
+    "architecture_delta": "the artefact/AUTONOMY_GROUNDING_FUSION.md",
+    "tests": "the artefact/tests/test_autonomy_integration.py",
+    "mechanisms": [
+      "explicit /goal admission only from exact live claude-hook:UserPromptSubmit owner turn",
+      "idempotent source-turn goal adoption",
+      "own-user bounded autonomy context injection",
+      "identity text grants zero capability",
+      "model proposal/execution/completion truth separation",
+      "safe goal generation rebinding after canonical restart generation advance",
+      "PROPOSED step retirement on restart",
+      "ADMITTED step -> UNKNOWN_AFTER_RESTART BLOCKED with no blind replay",
+      "unfinished prior-generation effect evidence -> explicit review block",
+      "non-sensitive process status counts only"
+    ]
+  },
+  "generic_completion_boundary": {
+    "interactive_goal_command": "/goal <objective>",
+    "default_contract": "user_ack",
+    "reason": "arbitrary natural-language goals have no universal machine-verifiable semantic completion predicate; intermediate autonomy remains allowed while model self-certification remains denied",
+    "future_direction": "typed independent verifiers for machine-verifiable goal classes"
+  },
+  "background_scheduler": {
+    "status": "NOT_ACTIVATED",
+    "reason": "must fuse into retained provider-generic cognition/runtime lane rather than create a second inference path",
+    "additional_required_budget": "explicit planner token/time/cost budget before unattended activation"
+  },
+  "research_basis": [
+    {"work": "ReAct", "arxiv": "2210.03629", "architectural_use": "reason/action must be grounded by environmental observations"},
+    {"work": "Reflexion", "arxiv": "2303.11366", "architectural_use": "feedback/episodic evidence can guide later attempts without becoming self-authored truth"},
+    {"work": "PDoctor", "arxiv": "2404.17833", "architectural_use": "explicit constraints/test oracles outside model self-judgment"},
+    {"work": "AgentHallu", "arxiv": "2601.06818", "architectural_use": "fine-grained action/receipt boundaries for long agent trajectories"}
+  ],
+  "source_defined_falsifiers": [
+    "ordinary prose cannot silently mint a durable goal",
+    "forged/non-hook user turn cannot mint a goal",
+    "replayed source turn cannot duplicate a goal",
+    "Gabriel goal context cannot leak Andreas goal text by default",
+    "safe pending goal survives generation advance",
+    "unadmitted proposal is retired after restart",
+    "admitted in-flight step becomes UNKNOWN/BLOCKED and is not runnable after restart",
+    "prior-generation effect evidence is not silently reinterpreted"
+  ],
+  "execution_evidence": {
+    "authorized_isolated_execution_surface_observed_in_this_turn": false,
+    "vercel_connector_exposed": "documentation-only sandbox search, no start/exec surface",
+    "tests_executed": false,
+    "test_conclusion": "UNOBSERVED",
+    "classification": "SOURCE_CANDIDATE_ONLY"
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported_by_source_review": true,
+    "exact_runtime_verified": false,
+    "whole_product_pass": false
+  },
+  "remaining_gate": "Execute the integration and adjacent autonomy suites on exact fused bytes in an authorized isolated full checkout, then fuse provider-backed scheduler ticks into the retained cognition lane with explicit planner resource budgets and exact causal episode/request/effect identity before unattended activation."
+}

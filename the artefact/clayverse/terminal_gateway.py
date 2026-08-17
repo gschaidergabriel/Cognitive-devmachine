@@ -11,7 +11,7 @@ from pathlib import Path
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import CANONICAL_SESSION_IDS, CANONICAL_TERMINAL_NAMES, IdentityRouter
+from .identity import CANONICAL_SESSION_IDS, CANONICAL_TERMINAL_NAMES, IdentityRouter, assert_canonical_user_state
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
@@ -128,9 +128,7 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        users = db.db.execute(
-            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
-        ).fetchone()
+        assert_canonical_user_state(db)
         session_rows = db.db.execute(
             "SELECT session_id,user_id,terminal_name,generation FROM sessions ORDER BY user_id"
         ).fetchall()
@@ -139,7 +137,6 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
-            and users and int(users[0]) == 2
             and len(session_rows) == len(CANONICAL_TERMINAL_NAMES)
             and set(sessions) == {"gabriel", "andreas"}
             and all(

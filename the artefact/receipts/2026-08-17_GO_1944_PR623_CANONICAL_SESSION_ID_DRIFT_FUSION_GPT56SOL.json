@@ -1,0 +1,59 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T19:44:26+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "PR623 canonical session-id drift fail-closed fusion",
+  "canonical_main_observed_before_receipt": "0ef4cb706b171e6d57390f693a56a45dcad88f97",
+  "retained_pr": 623,
+  "retained_branch": "clay/go-identity-session-drift-failclosed-20260817",
+  "pre_fusion_head": "3a3282ca5bc000b1bf9ecf64219b2367b04ef958",
+  "fusion_commit": "7308bbbf39302e1207bda11d8dd212e7950dca7d",
+  "adversarial_review_id": 4951664966,
+  "mechanism": {
+    "observed_gap": "TerminalSessionManager binds each canonical user to session:{user_id}, while the retained identity/readiness candidate validated session cardinality, terminal name and generation but did not validate the canonical database session_id itself.",
+    "counter_reality": "A sole Gabriel session row with session_id=session:gabriel:drift, canonical terminal name and live generation could pass runtime readiness even though the real WebSocket attach later rejects binding.session_id != resolved session_id.",
+    "result": "SOURCE_MECHANISM_SUPPORTED_AND_FUSED",
+    "authority_effect": "none; UnifiedDB remains the sole canonical state/identity authority and no second identity/readiness path was introduced"
+  },
+  "source_delta": {
+    "identity": "adds one shared CANONICAL_SESSION_IDS invariant; startup normalization and request-time resolve reject noncanonical permanent session ids",
+    "readiness": "selects session_id and requires each canonical user row to match its canonical session id before terminal probing",
+    "focused_regressions": [
+      "request-time resolve rejects noncanonical session id",
+      "startup IdentityRouter rejects an already-drifted permanent session id",
+      "runtime readiness rejects noncanonical session id before tmux probing"
+    ]
+  },
+  "execution_evidence": {
+    "workflow_runs_observed_for_fusion_head": 0,
+    "semantic_test_execution": false,
+    "runtime_credit": 0,
+    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "external_primary_evidence": {
+    "python_lock_lane": "official PyPI metadata independently matched the already-retained PR622 declared Linux/Python-3.13 bootstrap dependency closure and wheel hashes at source level; this did not confer runtime credit"
+  },
+  "oci_frontier": {
+    "strongest_started_deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "next_external_prerequisite": "Provision GITHUB_READ_TOKEN as an approved sensitive Vercel Preview credential on the retained PR810 controller; keep the secret host-side and transfer only verified private-source archive bytes into the disposable Sandbox."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No safely shared immutable request/turn identity was available for the single atomic unusual-experiment lease."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "promotion": "NOT_AUTHORIZED_FROM_SOURCE_ONLY_EVIDENCE"
+}

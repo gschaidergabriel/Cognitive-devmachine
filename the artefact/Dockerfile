@@ -1,7 +1,7 @@
 FROM python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
 
 ARG CLAUDE_CODE_SPEC=@anthropic-ai/claude-code@2.1.220
-ARG ENTITYOS_SHA256
+ARG ENTITYOS_SHA256=""
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     CLAYVERSE_STATE_ROOT=/var/lib/clayverse \
@@ -20,20 +20,31 @@ RUN apt-get update \
 WORKDIR /opt/clayverse
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-RUN mkdir -p /etc/claude-code /opt/entityos
+RUN mkdir -p /etc/claude-code /opt/entityos /opt/entityos-stage
 COPY --chown=root:root policy/managed-mcp.json /etc/claude-code/managed-mcp.json
 RUN chmod 0444 /etc/claude-code/managed-mcp.json
 COPY clayverse ./clayverse
-COPY --chown=root:root EntityOS /opt/entityos/EntityOS
-RUN test -n "${ENTITYOS_SHA256}" \
- && printf '%s  %s\n' "${ENTITYOS_SHA256}" /opt/entityos/EntityOS | sha256sum -c - \
- && chmod 0555 /opt/entityos/EntityOS
+COPY --chown=root:root build-assets/entityos/ /opt/entityos-stage/
+RUN set -eu; \
+    if [ -n "${ENTITYOS_SHA256}" ]; then \
+      test -f /opt/entityos-stage/EntityOS; \
+      test ! -L /opt/entityos-stage/EntityOS; \
+      printf '%s  %s\n' "${ENTITYOS_SHA256}" /opt/entityos-stage/EntityOS | sha256sum -c -; \
+      cp -- /opt/entityos-stage/EntityOS /opt/entityos/EntityOS; \
+      chown root:root /opt/entityos/EntityOS; \
+      chmod 0555 /opt/entityos/EntityOS; \
+    else \
+      if [ -e /opt/entityos-stage/EntityOS ]; then \
+        echo "staged EntityOS requires ENTITYOS_SHA256" >&2; \
+        exit 65; \
+      fi; \
+    fi; \
+    rm -rf /opt/entityos-stage
 RUN useradd --system --uid 10001 --create-home clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
- && chown root:root /opt/entityos /opt/entityos/EntityOS \
- && chmod 0755 /opt/entityos \
- && chmod 0555 /opt/entityos/EntityOS
+ && chown root:root /opt/entityos \
+ && chmod 0755 /opt/entityos
 
 USER clayverse
 VOLUME ["/var/lib/clayverse"]

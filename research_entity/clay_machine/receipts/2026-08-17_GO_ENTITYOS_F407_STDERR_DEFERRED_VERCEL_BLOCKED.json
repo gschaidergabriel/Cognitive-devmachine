@@ -1,0 +1,69 @@
+{
+  "schema": "ClayEntityOSGoConvergenceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_main_before_write": "ae2155190ae6d9e00df7502ed5c52013d7baadf4",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "current_product_head_observed": "f407c768652c941086168f713e0f966c4da6ca9b",
+  "source_observations": {
+    "canonical_hostcall_abi_version_bound": true,
+    "stdout_signature": "linux.process.stdout.v0::(Int)->Bytes",
+    "stdout_vm_versions": [2],
+    "stdout_source": "existing bounded immutable HostProcessReceipt.stdout",
+    "module_load_vm_version_fence": true,
+    "runtime_vm_version_fence": true,
+    "module_load_arity_fence": true,
+    "test_and_loader_diagnostics_aligned": true,
+    "stderr_bytes_candidate_removed_on_current_head": true,
+    "stderr_deferral_reason": "do not stack stderr Bytes before stdout path has exact-current-head Sandbox promotion",
+    "no_new_runtime_path": true,
+    "source_only_not_executable_promotion": true
+  },
+  "adjudication": {
+    "temporary_worker_fix_commit": "aeb614faca3b6742bf64a4bd9ef7ffa2e76d9cd0",
+    "temporary_worker_fix_scope": "load-time hostcall VM-version and arity validation",
+    "canonical_pr_independently_fused_equivalent_or_stronger_fix": true,
+    "temporary_worker_pr_opened": false,
+    "reason_no_pr": "avoid duplicate canonical implementation after PR 787 absorbed the mechanism"
+  },
+  "goodhart_check": {
+    "result": "PASS_SOURCE_DISCIPLINE",
+    "reason": "current canonical head removed the speculative stderr Bytes extension and stops semantic widening until stdout has executable Sandbox evidence"
+  },
+  "vercel": {
+    "exact_head": "f407c768652c941086168f713e0f966c4da6ca9b",
+    "status": "failure",
+    "provider_blocker": "build-rate-limit",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED"
+  },
+  "last_bounded_exact_head_entityos_evidence": {
+    "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_transfer_to_current_head": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "open_after_source_convergence": [
+    "exact-current-head isolated Vercel Sandbox execution",
+    "full ordinary pytest with nonzero tests and zero skips",
+    "canonical one-file EntityOS twin build and digest identity",
+    "runtime self-test, no-host-Python and relocation gates under DENY_ALL",
+    "exact source/artifact/lock receipt binding",
+    "successful Sandbox stop"
+  ],
+  "next_executable_step": "When Vercel provider admission returns, refresh the then-current PR 787 head and execute the existing coordinated regression-only exact-head Sandbox sequence with zero new unusual experiments before adding stderr or wider CM-TERM semantics.",
+  "acceptance": "BLOCKED",
+  "whole_entityos_pass": false,
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false
+}

@@ -51,7 +51,6 @@ def _mistral_receipt_from_assistant(
     if not isinstance(receipt, dict) or receipt.get("provider") != "mistral":
         raise RuntimeError("canonical Mistral inference receipt is missing")
 
-    # Revalidate the non-secret receipt before serialising it outside the product.
     expected_keys = {
         "provider",
         "model_requested",
@@ -97,6 +96,7 @@ def run_mistral_acceptance_probe(
     entityos_bridge: EntityOSBridge | None = None,
     inference: Any | None = None,
     require_effect: bool = False,
+    required_effect_capability: str | None = None,
 ) -> dict[str, Any]:
     """Run one canonical Mistral turn through the real ClayVerse causal spine.
 
@@ -104,12 +104,26 @@ def run_mistral_acceptance_probe(
     authentication test. It uses the same UnifiedDB, ClayVerseEngine and EffectGate
     as the product. The caller must separately establish the final Clerk/browser/PTTY
     gate. No provider secret is accepted as an argument or returned in this payload.
+
+    ``required_effect_capability`` strengthens the generic effect requirement for
+    final gates that must prove a specific EffectGate capability (notably
+    ``entityos.exec``). It validates the persisted canonical effect row, so a
+    successful ``state.noop`` cannot masquerade as an EntityOS round-trip.
     """
 
     subject = _bounded_string(clerk_subject, "acceptance Clerk subject", max_length=2048)
     prompt = _bounded_string(content, "acceptance prompt", max_length=100_000)
     if subject not in clerk_map:
         raise PermissionError("acceptance Clerk subject is not in the canonical mapping")
+
+    required_capability = None
+    if required_effect_capability is not None:
+        required_capability = _bounded_string(
+            required_effect_capability,
+            "required acceptance effect capability",
+            max_length=128,
+        )
+        require_effect = True
 
     if inference is None:
         fixed_model = validate_final_mistral_runtime_config()
@@ -150,11 +164,30 @@ def run_mistral_acceptance_probe(
 
     outcome = result.get("outcome")
     effect_id = result.get("effect_id")
+    effect_capability = None
+    if effect_id:
+        effect_row = db.db.execute(
+            "SELECT capability FROM effects WHERE effect_id=?",
+            (effect_id,),
+        ).fetchone()
+        if effect_row is None:
+            raise RuntimeError("Mistral acceptance probe effect journal row is missing")
+        effect_capability = _bounded_string(
+            effect_row["capability"],
+            "acceptance effect capability",
+            max_length=128,
+        )
+
     if require_effect:
         if not effect_id:
             raise RuntimeError("Mistral acceptance probe required an effect but none was requested")
         if not isinstance(outcome, dict) or outcome.get("ok") is not True:
             raise RuntimeError("Mistral acceptance probe required a verified successful effect")
+    if required_capability is not None and effect_capability != required_capability:
+        raise RuntimeError(
+            "Mistral acceptance probe required effect capability "
+            f"{required_capability} but observed {effect_capability or 'none'}"
+        )
 
     return {
         "service": "clayverse",
@@ -176,6 +209,8 @@ def run_mistral_acceptance_probe(
         "inference_receipt": receipt,
         "effect": {
             "required": bool(require_effect),
+            "required_capability": required_capability,
+            "capability": effect_capability,
             "effect_id": effect_id,
             "present": effect_id is not None,
             "verified_ok": isinstance(outcome, dict) and outcome.get("ok") is True,

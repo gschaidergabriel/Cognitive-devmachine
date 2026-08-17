@@ -210,14 +210,28 @@ class MicroClayRetrieval:
         return {"eligible": len(rows), "applied": applied}
 
     def _assert_replay_route(self, existing) -> None:
-        ids = json.loads(existing["selected_memory_ids"])
+        ids: list[str] = []
+        for field in ("selected_memory_ids", "shadow_memory_ids"):
+            try:
+                parsed = json.loads(existing[field])
+            except Exception as exc:
+                raise StaleGeneration("retrieval_route_contract") from exc
+            if not isinstance(parsed, list) or not all(
+                isinstance(memory_id, str) and memory_id for memory_id in parsed
+            ):
+                raise StaleGeneration("retrieval_route_contract")
+            ids.extend(parsed)
+
+        ids = list(dict.fromkeys(ids))
         if not ids:
             return
         rows = self.db.db.execute(
-            "SELECT kind FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
+        if len(rows) != len(ids):
+            raise StaleGeneration("retrieval_route_contract")
         if any(str(row["kind"]) in METHOD_KINDS for row in rows):
             raise StaleGeneration("retrieval_route_contract")
 

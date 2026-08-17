@@ -95,7 +95,7 @@ def load_and_validate(lock_path: Path) -> dict:
         parsed = urlparse(uri)
         expected_path = f"/archive/{archive}/{snapshot}/"
         if (
-            parsed.scheme != "http"
+            parsed.scheme != "https"
             or parsed.hostname != EXPECTED_HOST
             or parsed.port is not None
             or parsed.username is not None
@@ -104,7 +104,7 @@ def load_and_validate(lock_path: Path) -> dict:
             or parsed.fragment
             or parsed.path != expected_path
         ):
-            raise _fail("archive uri must be the exact Debian snapshot path")
+            raise _fail("archive uri must be the exact HTTPS Debian snapshot path")
 
     if seen != set(EXPECTED_ARCHIVES):
         raise _fail("missing archive")

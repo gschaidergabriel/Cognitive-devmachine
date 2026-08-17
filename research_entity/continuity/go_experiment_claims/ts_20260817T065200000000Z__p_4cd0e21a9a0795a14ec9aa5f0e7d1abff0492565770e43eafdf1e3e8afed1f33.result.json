@@ -46,26 +46,34 @@
     "unusual_experiment_count_added": 0,
     "real_tmux_runtime_tested": false
   },
-  "merged_attestation_hardening": {
+  "superseded_v1_attestation": {
     "merge_commit": "02584a5dc31d7a5d2c8f384deddab66ccfef7c1d",
     "pull_request": 541,
     "terminal_sessions_blob": "b37101df4bc959996e5c6dfd3a17c87977ce9a68",
     "managed_tmux_policy_blob": "840d5048bda96b778cd9fb7f148bf7f24b60fa88",
-    "mechanism": "managed policy writes a final server marker; existing and newly-created canonical tmux servers must attest marker, prefix=None, and prefix2=None before admission",
+    "isolated_focused_pytest": {"passed": 7, "failed": 0},
+    "superseded_reason": "current upstream tmux source shows unbind-key -a without -T removes only the prefix table, so v1 did not establish an empty effective keymap",
+    "whole_product_pass": false
+  },
+  "merged_transport_only_v2": {
+    "merge_commit": "6d80752c172c3a88727143e24ec092e57cd43cda",
+    "pull_request": 544,
+    "terminal_sessions_blob": "beaf9d829833525decc67338b08b70ffed4b7592",
+    "managed_tmux_policy_blob": "559c3bb7e53a81a487bc32250d7cd1b37ccd38d8",
+    "mechanism": "policy v2 explicitly removes prefix, root, copy-mode and copy-mode-vi tables, writes a final v2 server marker, and runtime admission requires marker, prefix=None, prefix2=None and an empty unfiltered list-keys result",
     "isolated_exact_blob_compile": "PASS",
-    "isolated_focused_pytest": {
-      "passed": 7,
-      "failed": 0
-    },
-    "existing_server_missing_marker": "FAIL_CLOSED_PASS",
-    "existing_server_restored_prefix": "FAIL_CLOSED_PASS",
-    "new_server_missing_marker": "FAIL_CLOSED_PASS",
+    "isolated_focused_pytest": {"passed": 8, "failed": 0},
+    "v1_marker": "FAIL_CLOSED_PASS",
+    "surviving_root_binding": "FAIL_CLOSED_PASS",
+    "surviving_copy_mode_binding": "FAIL_CLOSED_PASS",
+    "reactivated_prefix": "FAIL_CLOSED_PASS",
+    "new_server_surviving_binding": "FAIL_CLOSED_PASS",
     "same_unusual_experiment_added": false,
     "real_tmux_runtime_tested": false,
     "whole_product_pass": false
   },
   "unusual_experiment_count_added": 1,
-  "classification": "MERGED_MECHANISM_SUPPORTED_WITH_LIVE_TMUX_AND_VERCEL_ADMISSION_STILL_OPEN",
+  "classification": "MERGED_V2_MECHANISM_SUPPORTED_WITH_LIVE_TMUX_AND_VERCEL_ADMISSION_STILL_OPEN",
   "whole_product_evidence_established": false,
-  "next_isolated_discriminator": "When Vercel preview admission reopens, re-stage the current exact main terminal/policy blobs and execute a real tmux server pair: fresh managed server must attest; deliberately pre-existing unmanaged server must be rejected before browser attachment. Then advance to packaged Claude Code inside the exact built ClayVerse OCI image."
+  "next_isolated_discriminator": "When Vercel preview admission reopens, stage the current exact main terminal/policy blobs and run real tmux cases: a fresh v2 server must attest; a deliberately pre-existing v1/unmanaged server with a surviving root binding must be rejected before browser attachment. Then advance to packaged Claude Code inside the exact built ClayVerse OCI image."
 }

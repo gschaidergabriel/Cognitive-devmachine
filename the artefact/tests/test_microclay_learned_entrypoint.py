@@ -79,7 +79,6 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         receipt = second["context"]["retrieval_receipt"]
         assert receipt["policy_version"] == 2
         assert receipt["outcome_learning_applied"] == 1
-        # SHADOW never changes factual serving authority: lexical Stage A is still UNKNOWN.
         assert second["context"]["durable_memory"] == []
         assert receipt["status"] == "UNKNOWN"
 
@@ -90,7 +89,7 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["m1"]
 
-        route_key = MicroClayRetrieval._route_key("codename", "procedure:orchid")
+        route_key = MicroClayRetrieval._route_key("codename", "m1")
         learned = db.db.execute(
             "SELECT capital,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
             (route_key,),
@@ -99,6 +98,39 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         assert learned is not None
         assert float(learned["capital"]) > 0.0
         assert int(learned["pulls"]) == 1
+        life.abort("test-end")
+    finally:
+        db.close()
+
+
+def test_same_subject_sibling_cannot_inherit_learned_route(tmp_path):
+    db = _db(tmp_path)
+    try:
+        shared = "procedure:shared"
+        _add(db, "target", "orchid procedure", subject=shared, ts=200.0)
+        _add(db, "sibling", "violet bicycle", subject=shared, ts=100.0)
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+
+        first = life.begin("orchid procedure codename")
+        assert first["context"]["durable_memory"][0]["memory_id"] == "target"
+        _bind_positive_canonical_outcome(db, first)
+        life.complete("done")
+
+        second = life.begin("codename")
+        row = db.db.execute(
+            "SELECT selected_memory_ids,shadow_memory_ids FROM retrieval_episodes WHERE causal_id=?",
+            (second["causal_id"],),
+        ).fetchone()
+        assert json.loads(row["selected_memory_ids"]) == []
+        assert json.loads(row["shadow_memory_ids"]) == ["target"]
+        target_key = MicroClayRetrieval._route_key("codename", "target")
+        sibling_key = MicroClayRetrieval._route_key("codename", "sibling")
+        assert db.db.execute(
+            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (target_key,)
+        ).fetchone() is not None
+        assert db.db.execute(
+            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (sibling_key,)
+        ).fetchone() is None
         life.abort("test-end")
     finally:
         db.close()
@@ -149,8 +181,8 @@ def test_new_alias_route_credit_is_bound_to_rank1_served_evidence(tmp_path):
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["top"]
 
-        top_key = MicroClayRetrieval._route_key("codename", "procedure:top")
-        other_key = MicroClayRetrieval._route_key("codename", "procedure:other")
+        top_key = MicroClayRetrieval._route_key("codename", "top")
+        other_key = MicroClayRetrieval._route_key("codename", "other")
         assert db.db.execute(
             "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (top_key,)
         ).fetchone() is not None

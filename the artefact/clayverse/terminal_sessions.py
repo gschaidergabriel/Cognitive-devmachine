@@ -141,12 +141,32 @@ class TerminalSessionManager:
         )
         return cp.returncode == 0
 
+    def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
+        """Reapply the immutable command-surface fence to a running tmux server.
+
+        tmux configuration is loaded when a server starts, not whenever a new session
+        or client is created. A persistent per-user server may therefore predate a
+        ClayVerse policy upgrade. Source the root-owned policy before every admitted
+        attach path and fail closed if the running server cannot accept it.
+        """
+        cp = subprocess.run(
+            self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if cp.returncode != 0:
+            raise TerminalRuntimeError(
+                f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
+            )
+
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
         binding = self.binding(user_id)
         binding.home.mkdir(parents=True, exist_ok=True)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
+            self._enforce_tmux_policy(binding)
             return binding
 
         # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
@@ -203,6 +223,7 @@ class TerminalSessionManager:
         )
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
+        self._enforce_tmux_policy(binding)
         return binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:

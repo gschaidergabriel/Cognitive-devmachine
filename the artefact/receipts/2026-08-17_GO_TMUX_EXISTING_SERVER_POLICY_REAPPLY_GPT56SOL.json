@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / current ChatGPT project worker",
+  "recorded_on": "2026-08-17",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main": "4b433935d7d31578f22fd0f4c51ac972a03904b9",
+  "tested_branch_code_head": "61b972c7b9e75247e7bc21bad455332d8d92f30b",
+  "branch": "go/tmux-existing-server-lockdown-20260817-gpt56sol",
+  "issue": 491,
+  "frontier": "A running per-user tmux server can predate the newly managed tmux configuration; tmux only reads its startup configuration when the server starts, so -f on later client commands does not retroactively apply the new key/prefix fence.",
+  "repair": [
+    "Add fail-closed _enforce_tmux_policy() that sends source-file /etc/clayverse/managed-tmux.conf to the already-running dedicated user server.",
+    "Call the enforcement path before returning an existing session from ensure().",
+    "Call the same enforcement path after new-session and before any browser attach can proceed.",
+    "Preserve current exact Claude MCP allowlist for session_state and request_effect; do not regress to the earlier wildcard candidate."
+  ],
+  "exact_tested_blobs": {
+    "the artefact/clayverse/terminal_sessions.py": "9a902ebd898606ba94cd760c51252fe0b1bf8c8c",
+    "the artefact/tests/test_tmux_command_surface_fence.py": "840c48dffca1ee21f6c3c1c2671891705b89d056",
+    "the artefact/policy/managed-tmux.conf": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+    "the artefact/Dockerfile": "1722b0983154e389efa723b5f1afeea8c42fd373"
+  },
+  "identity_method": "Each reconstructed target file was hashed as a Git blob using SHA-1 over 'blob <len>\\0<bytes>' and matched to the GitHub content blob SHA before execution.",
+  "ordinary_isolated_source_regression": {
+    "surface": "OpenAI isolated non-production container source slice",
+    "commands": [
+      "PYTHONPATH=. python -m py_compile clayverse/terminal_sessions.py",
+      "PYTHONPATH=. python -m pytest -q tests/test_tmux_command_surface_fence.py"
+    ],
+    "observed": [
+      "all four target Git blob identities MATCH",
+      "py_compile PASS",
+      "7 passed in 0.03s"
+    ],
+    "scope_note": "The unchanged IdentityRouter dependency was replaced only by a minimal CANONICAL_TERMINAL_NAMES import stub to isolate the target module; no IdentityRouter behavior claim is made by this focused regression.",
+    "evidence_class": "EXACT_TARGET_BLOB_SOURCE_MECHANISM_SUPPORTED_NOT_TMUX_RUNTIME"
+  },
+  "primary_upstream_basis": [
+    "tmux upstream documentation states that its configuration file is run when the tmux server starts, not when a new session is created.",
+    "tmux upstream documentation documents source-file for loading configuration into a running server.",
+    "tmux manual documents prefix/command key behavior and that unbind-key -a removes all key bindings."
+  ],
+  "counterhypothesis": "The packaged tmux 3.5a runtime may apply source-file differently than assumed, or a non-key client control surface may remain reachable despite empty key tables and None prefixes.",
+  "required_runtime_falsifier": "In an exact built ClayVerse OCI image, start a user tmux server with the old/default command surface, then apply the upgraded code without killing that server, call ensure/attach, inspect effective prefixes/key tables, and prove the former browser prefix/command path no longer creates any out-of-band process while normal Claude pane input still works.",
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED",
+    "reason": "Available user-trigger identity is not uniquely reproducible under the current atomic GO experiment lease protocol."
+  },
+  "external_execution_state": "Vercel Preview admission is currently rate-limited before build/Sandbox start for this GO; do not reinterpret this source regression as Vercel Sandbox or OCI runtime evidence.",
+  "non_claims": [
+    "No live tmux binary execution is claimed by this receipt.",
+    "No OCI build/image digest/startup/restart PASS is claimed.",
+    "No browser exploit probe was executed.",
+    "No VPS/self-hosted/production test was used.",
+    "No whole ClayVerse PASS is claimed."
+  ]
+}

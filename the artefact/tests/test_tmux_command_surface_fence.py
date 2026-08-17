@@ -4,7 +4,7 @@ from types import SimpleNamespace
 import pytest
 
 import clayverse.terminal_sessions as terminal_sessions
-from clayverse.terminal_sessions import TerminalSessionManager
+from clayverse.terminal_sessions import TerminalRuntimeError, TerminalSessionManager
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +17,14 @@ def _assert_managed_tmux_argv(argv, *, user_id: str):
         "-L",
         f"clayverse-{user_id}",
         "-f",
+        "/etc/clayverse/managed-tmux.conf",
+    ]
+
+
+def _assert_policy_reapply(argv, *, user_id: str):
+    _assert_managed_tmux_argv(argv, user_id=user_id)
+    assert argv[5:] == [
+        "source-file",
         "/etc/clayverse/managed-tmux.conf",
     ]
 
@@ -48,7 +56,38 @@ def test_tmux_session_probe_is_pinned_to_managed_policy(tmp_path, monkeypatch):
     assert calls[-1][5:] == ["has-session", "-t", "clayverse-gabriel"]
 
 
-def test_tmux_session_creation_is_pinned_to_managed_policy(tmp_path, monkeypatch):
+def test_existing_tmux_server_reapplies_managed_policy_before_return(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    monkeypatch.setattr(manager, "_require_programs", lambda: None)
+    monkeypatch.setattr(manager, "_has_session", lambda binding: True)
+    calls = []
+
+    def fake_run(argv, **kwargs):
+        calls.append(argv)
+        return SimpleNamespace(returncode=0, stderr="", stdout="")
+
+    monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
+    binding = manager.ensure("gabriel")
+
+    assert binding.user_id == "gabriel"
+    assert len(calls) == 1
+    _assert_policy_reapply(calls[0], user_id="gabriel")
+
+
+def test_existing_tmux_server_policy_reapply_fails_closed(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    monkeypatch.setattr(manager, "_require_programs", lambda: None)
+    monkeypatch.setattr(manager, "_has_session", lambda binding: True)
+
+    def fake_run(argv, **kwargs):
+        return SimpleNamespace(returncode=1, stderr="policy rejected", stdout="")
+
+    monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
+    with pytest.raises(TerminalRuntimeError, match="failed to enforce tmux policy"):
+        manager.ensure("andreas")
+
+
+def test_tmux_session_creation_is_pinned_and_reapplies_managed_policy(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
@@ -60,8 +99,11 @@ def test_tmux_session_creation_is_pinned_to_managed_policy(tmp_path, monkeypatch
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     manager.ensure("andreas")
-    _assert_managed_tmux_argv(calls[-1], user_id="andreas")
-    assert calls[-1][5:9] == ["new-session", "-d", "-s", "clayverse-andreas"]
+
+    assert len(calls) == 2
+    _assert_managed_tmux_argv(calls[0], user_id="andreas")
+    assert calls[0][5:9] == ["new-session", "-d", "-s", "clayverse-andreas"]
+    _assert_policy_reapply(calls[1], user_id="andreas")
 
 
 def test_browser_attach_cannot_fall_back_to_default_tmux_policy(tmp_path, monkeypatch):

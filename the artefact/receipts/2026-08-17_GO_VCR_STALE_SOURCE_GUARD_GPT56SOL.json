@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "whole_product_pass": false,
+  "owner_authority_note": "The current ClayVerse single-container owner/repository authority supersedes the older EntityOS-as-final-product bootstrap cache. EntityOS is an internal execution/security/runtime substrate candidate only.",
+  "coordination": {
+    "initial_research_head_observed": "6fb5f96ae7ffe768175dadade560c66fc7a5c4e8",
+    "research_head_at_stale_guard_creation": "36ffa14945baa3030b36bcedbfdadb542e4da33f",
+    "latest_research_head_observed_before_receipt": "5780637136f7c394b256a77b618d855511d12b3b",
+    "product_repo_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+    "product_pr": 810,
+    "product_branch": "clay/fusion-vcr-native-20260817",
+    "no_duplicate_canonical_runtime_path": true
+  },
+  "frontier": "exact-current ClayVerse OCI build/runtime path through native Vercel Container Registry plus image-backed Vercel Sandbox",
+  "observations": [
+    "PR 810 remained bound to historical ClayVerse research source edaee6307c56669819164cd95b0f2dbca0985e1e and artefact tree 35ca41cf1ac44a61eab2222c60ff65519156172a while current research main had advanced materially.",
+    "The historical VCR runner also expected the obsolete --once marker status=ok; current ClayVerse diagnostic contract is service=clayverse, status=probe_ok, scope=state_only, ready=false.",
+    "Current ClayVerse build closure additionally requires the source lock/native Claude installer and the exact locked embedded EntityOS artifact; the historical fixture cannot represent the current image.",
+    "A separate ordinary regression on product commit 4decb8b44f206653af6c87317dbd26991a5eb71b produced an actually-started Vercel Sandbox receipt, demonstrating that the provider was admitting some new Sandbox builds again during this macrocycle.",
+    "PR 810 was then retriggered with identical source tree at f8ff0d60df380cabf8516c5cd80d7acbe1734e16. GitHub Vercel status returned failure build-rate-limit before build; no VCR build and no Sandbox start occurred.",
+    "The guarded PR head 71d191514076d185f9a6f84fa030aea9a4555f31 was also rejected by the provider with build-rate-limit before build. No executable result is claimed for that head."
+  ],
+  "source_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "commit": "71d191514076d185f9a6f84fa030aea9a4555f31",
+    "files": [
+      "mcp/vercel-sandbox-mcp/package.json",
+      "mcp/vercel-sandbox-mcp/scripts/guard-clayverse-vcr-source.mjs"
+    ],
+    "mechanism": "A fail-closed pre-run guard recognizes the historical fixture source binding and exits BLOCKED_STALE_CLAYVERSE_SNAPSHOT before any VCR build or Sandbox start. The guard baseline captured 36ffa149/909db1c3 only as a stale-rejection floor; it is not represented as a current acceptance target after main advances.",
+    "product_semantics_changed": false,
+    "vcr_build_started_by_guarded_head": false,
+    "sandbox_started_by_guarded_head": false
+  },
+  "counterhypotheses": [
+    {
+      "hypothesis": "The existing PR 810 could be rerun unchanged and still provide useful current ClayVerse acceptance evidence.",
+      "result": "REJECT",
+      "reason": "Its fixture, image contract and runtime oracle are materially stale relative to the canonical current artifact."
+    },
+    {
+      "hypothesis": "Provider recovery on one Vercel Sandbox regression implies PR 810 is now executable.",
+      "result": "REJECT",
+      "reason": "Exact PR 810 retrigger commits were immediately build-rate-limited before build/Sandbox start."
+    },
+    {
+      "hypothesis": "A historical-source VCR green result could be safely interpreted as current product progress.",
+      "result": "REJECT_AND_FAIL_CLOSED",
+      "reason": "The new guard prevents the stale fixture from reaching VCR/Sandbox execution until the source closure is refreshed."
+    }
+  ],
+  "unusual_experiment": {
+    "global_user_triggered_go_accounting": "CONSUMED_1_OF_1_BY_EXISTING_PARALLEL_ATTACH_CHILD_EXPERIMENT",
+    "new_unusual_experiment_count_this_organ": 0,
+    "remaining_work_class": "REGRESSION_SOURCE_STAGING_AND_PROVENANCE_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "current_blocker": "The exact-current ClayVerse VCR source closure is not yet staged in PR 810, and the provider is currently rejecting this branch with build-rate-limit before build. Therefore no exact-current OCI image or image-backed Sandbox receipt exists.",
+  "next_executable_step": "Refresh one exact then-current research `the artefact` closure into the existing PR 810 lane, including SOURCE_LOCK/native Claude installer, current live runtime modules/tests, and exact locked EntityOS staging; update --once oracle to probe_ok/state_only/ready=false; resolve and bind an immutable VCR image digest if exposed; then, on the next provider-admitted build, execute full source regression plus exact image-backed Sandbox runtime/restart gates with zero new unusual experiments and explicit stop receipts.",
+  "evidence_note": "Source/component/historical Sandbox PASS does not imply whole ClayVerse container PASS. Vercel deployment readiness alone is not executable acceptance evidence."
+}

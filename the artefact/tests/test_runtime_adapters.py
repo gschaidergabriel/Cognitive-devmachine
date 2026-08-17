@@ -87,7 +87,7 @@ def test_claude_code_adapter_is_toolless_ephemeral_structured_one_turn(tmp_path)
     args = json.loads(log.read_text())
     env = json.loads(envlog.read_text())
     assert out == {"text": "ok", "selection": "respond", "effect": None}
-    assert "--bare" in args
+    assert "--bare" not in args
     assert "-p" in args
     assert args[args.index("--permission-mode") + 1] == "plan"
     assert args[args.index("--max-turns") + 1] == "1"

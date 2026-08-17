@@ -12,6 +12,16 @@ from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
 
+def _write_pty_all(fd: int, payload: bytes) -> None:
+    """Write one terminal-input frame completely or fail closed."""
+    remaining = memoryview(payload)
+    while remaining:
+        written = os.write(fd, remaining)
+        if written <= 0:
+            raise OSError("PTY write made no progress")
+        remaining = remaining[written:]
+
+
 def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: ClerkTokenVerifier,
                         state_root: str | Path, publishable_key: str, frontend_api_url: str):
     from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -90,7 +100,7 @@ window.addEventListener('load', async () => {{
                 while True:
                     message = await ws.receive()
                     if message.get("bytes") is not None:
-                        os.write(attach_fd, message["bytes"])
+                        await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
                     elif message.get("text"):
                         control = json.loads(message["text"])
                         if control.get("type") == "resize":

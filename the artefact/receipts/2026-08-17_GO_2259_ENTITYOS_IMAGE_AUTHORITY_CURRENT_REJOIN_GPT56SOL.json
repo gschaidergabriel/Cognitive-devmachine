@@ -9,10 +9,21 @@
   "scope": "entityos_runtime_identity_image_authority_fresh_current_rejoin",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "rejoin_base": "97a5125abe0e74a510fd5083f59d363e67529905",
+  "initial_rejoin_base": "97a5125abe0e74a510fd5083f59d363e67529905",
+  "later_main_observed_during_reconciliation": "13675f8b97df0930e799c8fedf75a0400bec9b95",
   "branch": "gpt56sol/go-entityos-image-authority-current-20260817-2259",
+  "pull_request": 664,
   "supersedes_candidate_pr": 645,
   "reason_for_rejoin": "adversarial PR diff review found that the first branch carried a broad stale-ancestry README/Kata diff; a fresh branch was created from the then-current observed main and only the bounded EntityOS authority hardening plus living README/receipt delta was replayed",
+  "parallel_main_reconciliation": {
+    "status": "TOUCHED_FILES_RECHECKED",
+    "main_advanced_by_commits_from_initial_rejoin_base_when_checked": 42,
+    "service": "UNCHANGED_IN_RELEVANT_BYTES; vulnerability still present on later main",
+    "compose": "UNCHANGED_IN_RELEVANT_BYTES",
+    "kata_template": "CURRENT CNI_NODE_LOCAL_AND_READWRITEONCEPOD_FENCES_PRESERVED",
+    "dockerfile": "MAIN_ADDED_LIVENESS_ONLY_HEALTHCHECK_/healthz; candidate explicitly fused it and does not regress to /readyz",
+    "readme": "MAIN_ADDED_MISTRAL_SOURCE_EVIDENCE_AND_CSI/TIER2/VERCEL_REENTRY_STATE; candidate README was replaced from later main content and only the bounded EntityOS delta was appended"
+  },
   "observed_gap": {
     "source": "the artefact/clayverse/service.py",
     "behavior": "runtime environment selected CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256 even though the image already contained a tracked EntityOS artifact lock",
@@ -21,11 +32,13 @@
   "candidate_commits": [
     {"commit": "1faa437027dc690213cb6b5e2aeeaa0639b58237", "purpose": "bind runtime EntityOS identity to fixed image path and embedded lock"},
     {"commit": "50fefbaca50f29a594fe3eb4336ff1304f703f04", "purpose": "adversarial boot regressions including attacker path+matching digest override"},
-    {"commit": "6794027350708ca99113c339d55cad16c50b867e", "purpose": "remove runtime EntityOS path/digest Docker ENV authority"},
+    {"commit": "6794027350708ca99113c339d55cad16c50b867e", "purpose": "initial removal of runtime EntityOS path/digest Docker ENV authority", "superseded_same_turn": true},
     {"commit": "049443a86fe87eff8f60b667c3f70429db985557", "purpose": "remove runtime EntityOS path/digest Compose authority while retaining build-time lock cross-check"},
     {"commit": "ee7adadb5b9fb343cd7cc6104b4c278356f4f805", "purpose": "remove Kata runtime EntityOS path authority while preserving current CNI/node-local and ReadWriteOncePod fences"},
     {"commit": "2ebcb8ffce680367acc182827a3e0d1599b16e41", "purpose": "cross-file source fence against runtime EntityOS path/digest authority"},
-    {"commit": "5d5123774ff0a48454981581e3fc745ada666f66", "purpose": "refresh living product README with bounded cycle delta"}
+    {"commit": "5d5123774ff0a48454981581e3fc745ada666f66", "purpose": "initial living README delta from first rejoin base", "superseded_same_turn": true},
+    {"commit": "19c7141946fa9a5e087c06e0121ba7ce6eab821c", "purpose": "preserve later-main liveness /healthz HEALTHCHECK while retaining sealed EntityOS runtime identity"},
+    {"commit": "edaccdab2f2746bfc66793c03d1fb9c3095b8e1f", "purpose": "replace README from later current main and append bounded EntityOS authority delta without losing Mistral/CSI/Tier2 evidence"
   ],
   "candidate_contract": [
     "runtime EntityOS executable path is fixed to /opt/entityos/EntityOS",
@@ -34,7 +47,8 @@
     "embedded lock must be a bounded regular file with exact schema, lowercase SHA-256 and positive size",
     "EntityOSBridge digest verification remains mandatory and observed executable size must equal the embedded lock",
     "deployment may toggle CLAYVERSE_ENABLE_ENTITYOS_EXEC but may not redirect EntityOS path/digest authority",
-    "Docker/Compose/Kata source surfaces no longer carry runtime EntityOS path/digest selection"
+    "Docker/Compose/Kata source surfaces no longer carry runtime EntityOS path/digest selection",
+    "Docker image HEALTHCHECK remains the later-main liveness-only /healthz probe; /readyz stays separate runtime readiness"
   ],
   "execution_evidence": {
     "focused_regression": "NOT_EXECUTED",
@@ -74,7 +88,7 @@
     "no pytest PASS for this fresh-current candidate",
     "no exact OCI digest",
     "no live EntityOS execution credit",
-    "no Mistral cognition evidence",
+    "no Mistral cognition evidence attributable to this candidate",
     "no Clerk/browser/PTY final evidence",
     "no whole-product PASS"
   ]

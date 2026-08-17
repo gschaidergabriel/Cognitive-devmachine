@@ -190,11 +190,12 @@ class MicroClayExplicitFeedback:
         return target
 
     @staticmethod
-    def _receipt_id(row, *, feedback_turn_id: str, feedback_class: str, target_memory_id: str | None) -> str:
+    def _receipt_id(row, *, feedback_class: str, target_memory_id: str | None) -> str:
+        # Equivalent repeated feedback for the same retrieval/class/target is one
+        # logical signal even if the user emits another canonical feedback turn.
         payload = {
             "schema": _FEEDBACK_SCHEMA,
             "retrieval_id": str(row["retrieval_id"]),
-            "feedback_turn_id": feedback_turn_id,
             "turn_id": str(row["turn_id"]),
             "episode_id": str(row["episode_id"]),
             "causal_id": str(row["causal_id"]),
@@ -317,7 +318,6 @@ class MicroClayExplicitFeedback:
 
             receipt_id = self._receipt_id(
                 row,
-                feedback_turn_id=feedback_turn_id,
                 feedback_class=feedback_class,
                 target_memory_id=target_memory_id,
             )
@@ -356,7 +356,7 @@ class MicroClayExplicitFeedback:
                     str(row["causal_id"]),
                     int(row["generation"]),
                     value,
-                    f"user_explicit:{feedback_class.lower()}:{target_suffix}",
+                    f"user_explicit:{feedback_class.lower()}:target={target_suffix}:turn={feedback_turn_id}",
                     now,
                 ),
             )

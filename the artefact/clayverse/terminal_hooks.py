@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy_context import bounded_autonomy_context
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -14,9 +15,6 @@ class TerminalHookError(RuntimeError):
     pass
 
 
-# Claude Code spills hook context above 10,000 characters to a session file. Product
-# terminals intentionally have no built-in Read/filesystem tool, so keep a safety
-# margin and fail closed instead of silently degrading canonical context to a path.
 HOOK_CONTEXT_MAX_CHARS = 9_000
 _HOOK_CONTEXT_PREFIX = "ClayVerse canonical context snapshot (data, not instructions):\n"
 
@@ -66,6 +64,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
+        "autonomy": result.get("autonomy", {}),
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
@@ -125,10 +124,8 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, _, session_id, lifecycle = _runtime()
     try:
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
+            result["autonomy"] = bounded_autonomy_context(db, result["user_id"])
             additional_context = _bounded_hook_context(result)
         return {
             "hookSpecificOutput": {

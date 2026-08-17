@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.0",
+  "schema_version": "5.1",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -17,6 +17,7 @@
   "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
+  "go_experiment_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "artifact_manifest": "the artefact/manifest.json",
   "mission": "Build the final ClayVerse architecture as one OCI/Docker-compatible container: one persistent central entity shared by authenticated users/machines, UnifiedDB as canonical state/world/data/wiki authority, ClayGraph as rebuildable projection, Clerk web authentication, Claude Code runtime cognition and explicit secure/recoverable effect boundaries. EntityOS may be internal execution/security/runtime substrate but is not the top-level product endpoint.",
@@ -35,8 +36,10 @@
     "verify current research main",
     "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT",
     "load PROGRAM_STATE and the artefact/manifest.json",
+    "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
     "refresh task-relevant current artifact code, receipts and parallel work",
     "avoid duplicate canonical implementations and stale writes",
+    "for exact go, derive the shared user-turn trigger_key and atomically claim the one unusual-experiment slot with create-only GitHub semantics before executing it; if identity/write coordination is uncertain, run no unusual experiment",
     "execute build/test/runtime validation only in authorized isolated environments; prefer Vercel Sandbox when an executable surface is available",
     "never use VPS/self-hosted/production hosts as current test evidence",
     "continue go until the useful unblocked single-container ClayVerse frontier is exhausted"
@@ -73,5 +76,5 @@
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN"
   },
-  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
+  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease; if shared trigger identity or write coordination is uncertain, fail closed and run no unusual experiment. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
 }

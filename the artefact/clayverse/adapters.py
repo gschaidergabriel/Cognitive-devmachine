@@ -103,7 +103,24 @@ class ClaudeCodeInference:
     authority. Claude may return a schema-validated effect intent, but only the
     canonical ClayVerse EffectGate can execute it. Bare mode is intentionally not
     used because it disables Claude subscription/OAuth credentials.
+
+    The child environment is allowlisted so unrelated Clerk/application secrets do
+    not cross the inference subprocess boundary. HOME remains available for Claude
+    subscription/OAuth credential storage.
     """
+
+    _ENV_ALLOWLIST = frozenset({
+        "HOME", "USER", "LOGNAME", "PATH", "SHELL", "LANG", "LC_ALL", "LC_CTYPE", "TERM", "TMPDIR",
+        "SSL_CERT_FILE", "SSL_CERT_DIR", "NODE_EXTRA_CA_CERTS", "HTTPS_PROXY", "HTTP_PROXY",
+        "ANTHROPIC_API_KEY", "ANTHROPIC_AUTH_TOKEN", "ANTHROPIC_BASE_URL",
+        "ANTHROPIC_MODEL", "ANTHROPIC_SMALL_FAST_MODEL", "CLAUDE_CODE_API_KEY_HELPER_TTL_MS",
+        "CLAUDE_CODE_USE_BEDROCK", "CLAUDE_CODE_SKIP_BEDROCK_AUTH", "ANTHROPIC_BEDROCK_BASE_URL",
+        "ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY",
+        "AWS_SESSION_TOKEN", "AWS_PROFILE", "AWS_REGION", "AWS_DEFAULT_REGION", "AWS_BEARER_TOKEN_BEDROCK",
+        "CLAUDE_CODE_USE_VERTEX", "CLAUDE_CODE_SKIP_VERTEX_AUTH", "ANTHROPIC_VERTEX_BASE_URL",
+        "ANTHROPIC_VERTEX_PROJECT_ID", "CLOUD_ML_REGION", "GOOGLE_APPLICATION_CREDENTIALS",
+        "DISABLE_PROMPT_CACHING",
+    })
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
         self.binary = binary or os.environ.get("CLAUDE_CODE_BIN", "claude")
@@ -111,12 +128,30 @@ class ClaudeCodeInference:
         self.timeout = int(timeout or os.environ.get("CLAYVERSE_CLAUDE_TIMEOUT_SECONDS", "120"))
         self._lock = threading.Lock()
 
+    def _child_env(self) -> dict[str, str]:
+        env = {key: value for key, value in os.environ.items() if key in self._ENV_ALLOWLIST}
+        env.update({
+            "DISABLE_AUTOUPDATER": "1",
+            "DISABLE_TELEMETRY": "1",
+            "DISABLE_ERROR_REPORTING": "1",
+            "DISABLE_BUG_COMMAND": "1",
+            "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+            "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1",
+        })
+        return env
+
     def available(self) -> bool:
         executable = shutil.which(self.binary)
         if executable is None:
             return False
         try:
-            cp = subprocess.run([executable, "--version"], shell=False, capture_output=True, timeout=5)
+            cp = subprocess.run(
+                [executable, "--version"],
+                shell=False,
+                capture_output=True,
+                timeout=5,
+                env=self._child_env(),
+            )
             return cp.returncode == 0
         except Exception:
             return False
@@ -154,7 +189,7 @@ class ClaudeCodeInference:
             "--append-system-prompt",
             system,
         ]
-        env = {**os.environ, "DISABLE_AUTOUPDATER": "1", "CLAUDE_CODE_SKIP_PROMPT_HISTORY": "1"}
+        env = self._child_env()
         with self._lock:
             try:
                 cp = subprocess.run(

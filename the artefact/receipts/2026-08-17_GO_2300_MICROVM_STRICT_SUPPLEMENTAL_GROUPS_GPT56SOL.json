@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T23:00+07:00",
+  "timestamp_precision": "minute",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroVM/Kubernetes persistent-volume process-group identity hardening",
+  "source_binding": {
+    "main_at_clean_rebind": "416a93bca2b28bd4a1678f957cdbe39b150c6294",
+    "branch": "gpt56sol/go-microvm-pvc-strictgroups-20260817-2300",
+    "template_before_blob": "bd04961f5de42d92df6201c1605f876b307df4b5",
+    "template_after_blob": "6fcf10043197e09e37bc19f53d63167baa1d4dbc",
+    "template_commit": "23c456e20c980a2900b78d7e9cf60137b1c34037",
+    "focused_test_blob": "d69027ab89204fd6ac8a66b6ae92aeaa1e3a62df",
+    "focused_test_commit": "f9a0b1579449464dcc070247a90a8251070ebd2c"
+  },
+  "observed_main_preconditions": {
+    "fsGroup": 10001,
+    "fsGroupChangePolicy": "OnRootMismatch",
+    "persistent_volume_access_mode": "ReadWriteOncePod",
+    "classification": "ALREADY_PRESENT_ON_CURRENT_MAIN_AFTER_PARALLEL_FUSION",
+    "duplicate_storage_implementation_created": false
+  },
+  "delta": {
+    "supplementalGroupsPolicy": "Strict",
+    "purpose": "Prevent implicit image /etc/group memberships from widening the manifest-declared supplemental group identity around persistent volumes.",
+    "root_or_privileged_chown_helper_added": false,
+    "state_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "external_primary_evidence": {
+    "kubernetes": "Current official Kubernetes security-context/API documentation defines Merge as the default supplemental group policy and Strict as excluding implicit image /etc/group memberships; the feature is GA in Kubernetes 1.35.",
+    "kata": "Current upstream Kata releases/latest was rechecked during this go and resolved to immutable release 4.0.0; the repository rolling-release/fresh-advisory acceptance rule remains necessary."
+  },
+  "counterhypothesis": {
+    "claim": "The selected Kubernetes/Kata target may reject or fail to expose Strict supplemental-groups behavior, and CSI volume ownership semantics may differ by driver.",
+    "falsifier": "Admit the exact deployment on the selected target, verify supplementalGroupsPolicy support/effective process identity, inspect effective UID/GID/supplemental groups, and exercise create/write/fsync/read/rename/delete on both persistent mounts before and after full appliance replacement.",
+    "failure_classification": "BLOCKED_NOT_FALLBACK_TO_MERGE"
+  },
+  "execution_evidence": {
+    "exact_branch_pytest_executed": false,
+    "kubernetes_api_admission_observed": false,
+    "kata_or_equivalent_runtime_observed": false,
+    "csi_volume_behavior_observed": false,
+    "oci_runtime_credit_added": 0,
+    "whole_product_credit_added": 0,
+    "classification": "SOURCE_SECURITY_CANDIDATE_UNEXECUTED"
+  },
+  "current_external_execution_frontier": {
+    "vercel_sandbox_admission": "PREVIOUSLY_OBSERVED_PASS_CREATED_IN_CURRENT_PROGRAM_STATE",
+    "private_source_fetch": "BLOCKED_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "rule": "Credential remains host-side and is never forwarded into the sandbox."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This exact go exposes no shared immutable request/turn id and only minute-precision immutable message time, insufficient for the atomic GO experiment lease."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_high_information_runtime_step": "Provision the approved host-side GITHUB_READ_TOKEN on the retained Vercel Preview controller, rebind then-current source exactly once, execute the exact OCI closure, then prove Strict process-group and CSI volume semantics under the final same-digest Kata/equivalent microVM target."
+}

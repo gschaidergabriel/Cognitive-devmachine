@@ -7,6 +7,8 @@ import shutil
 import subprocess
 import threading
 from typing import Any
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 from .clerk_auth import AuthenticationError, ClerkConfig, ClerkTokenVerifier
 from .inference_protocol import (
@@ -104,3 +106,108 @@ class ClaudeCodeInference:
         if structured is None:
             raise InferenceProtocolError("Claude Code structured_output is missing")
         return parse_claude_decision_payload(structured)
+
+
+class MistralInference:
+    """Token/API cognition boundary used by the final ClayVerse sandbox gate.
+
+    The API token is read for each request and is never retained on this object.
+    Mistral has inference authority only: its JSON response is independently parsed
+    through the same fail-closed ClayVerse decision protocol before EffectGate can
+    observe an effect intent.
+    """
+
+    ENDPOINT = "https://api.mistral.ai/v1/chat/completions"
+    MAX_WORLD_CHARS = 600_000
+    MAX_RESPONSE_BYTES = 2_000_000
+
+    def __init__(self, *, model: str | None = None, timeout: int | None = None):
+        self.model = (model or os.environ.get("CLAYVERSE_MISTRAL_MODEL", "")).strip()
+        self.timeout = int(timeout or os.environ.get("CLAYVERSE_MISTRAL_TIMEOUT_SECONDS", "120"))
+        self._lock = threading.Lock()
+
+    def available(self) -> bool:
+        # Availability is intentionally local-only: do not spend a provider request
+        # merely to advertise readiness and never retain the secret on the adapter.
+        return bool(self.model and os.environ.get("MISTRAL_API_KEY", "").strip())
+
+    @staticmethod
+    def _system_prompt() -> str:
+        return (
+            "You are a cognition engine inside ClayVerse, one persistent central entity. "
+            "UnifiedDB is authoritative state; the supplied WORLD is bounded context only. "
+            "You have no direct tool, shell, filesystem, terminal, EntityOS or effect authority. "
+            "Return exactly one JSON object with keys text and effect. effect must be null for a normal reply. "
+            "Only when the user's intent and arguments are explicit may effect be an object containing exactly "
+            "capability, target and argv. capability may only be entityos.exec or state.noop. "
+            "Never request process.exec or any other capability. The response is only a proposal; ClayVerse "
+            "independently validates it and EffectGate alone decides whether execution is admitted."
+        )
+
+    def reason(self, world: Any, observation: str) -> dict[str, Any]:
+        if not self.model:
+            raise RuntimeError("CLAYVERSE_MISTRAL_MODEL is required")
+        token = os.environ.get("MISTRAL_API_KEY", "").strip()
+        if not token:
+            raise RuntimeError("MISTRAL_API_KEY is required")
+        world_json = json.dumps(world, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        if len(world_json) > self.MAX_WORLD_CHARS:
+            raise RuntimeError("assembled world exceeds Mistral boundary")
+        if not isinstance(observation, str):
+            raise TypeError("observation must be a string")
+
+        body = json.dumps({
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": self._system_prompt()},
+                {"role": "user", "content": f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"},
+            ],
+            "response_format": {"type": "json_object"},
+            "temperature": 0,
+        }, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        request = Request(
+            self.ENDPOINT,
+            data=body,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            method="POST",
+        )
+
+        try:
+            with self._lock:
+                with urlopen(request, timeout=self.timeout) as response:
+                    raw = response.read(self.MAX_RESPONSE_BYTES + 1)
+        except HTTPError as exc:
+            raise RuntimeError(f"Mistral inference HTTP failure status={exc.code}") from None
+        except (URLError, TimeoutError, OSError) as exc:
+            raise RuntimeError(f"Mistral inference transport failure type={type(exc).__name__}") from None
+        finally:
+            # Do not keep an unnecessary second reference to the secret after the
+            # request has been constructed/sent. The Request is scoped to this call.
+            token = ""
+
+        if len(raw) > self.MAX_RESPONSE_BYTES:
+            raise InferenceProtocolError("Mistral response exceeds bound")
+        try:
+            envelope = json.loads(raw)
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            raise InferenceProtocolError("Mistral response envelope is not JSON") from exc
+        if not isinstance(envelope, dict):
+            raise InferenceProtocolError("Mistral response envelope must be an object")
+        choices = envelope.get("choices")
+        if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
+            raise InferenceProtocolError("Mistral response must contain exactly one choice")
+        message = choices[0].get("message")
+        if not isinstance(message, dict):
+            raise InferenceProtocolError("Mistral choice message is missing")
+        content = message.get("content")
+        if not isinstance(content, str) or not content:
+            raise InferenceProtocolError("Mistral message content must be non-empty JSON text")
+        try:
+            decision = json.loads(content)
+        except json.JSONDecodeError as exc:
+            raise InferenceProtocolError("Mistral message content is not JSON") from exc
+        return parse_claude_decision_payload(decision)

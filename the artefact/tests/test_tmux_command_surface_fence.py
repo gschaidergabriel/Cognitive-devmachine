@@ -34,6 +34,8 @@ def _attested_policy_run(argv, **kwargs):
         ["show-options", "-gqv", "prefix2"],
     ):
         return SimpleNamespace(returncode=0, stdout="None\n", stderr="")
+    if tail == ["list-keys"]:
+        return SimpleNamespace(returncode=0, stdout="", stderr="")
     return SimpleNamespace(returncode=0, stdout="", stderr="")
 
 
@@ -45,11 +47,16 @@ def test_managed_tmux_policy_removes_browser_command_surface():
     ]
     assert "set-option -g prefix None" in lines
     assert "set-option -g prefix2 None" in lines
-    assert "unbind-key -a" in lines
+    assert "unbind-key -a -T prefix" in lines
+    assert "unbind-key -a -T root" in lines
+    assert "unbind-key -a -T copy-mode" in lines
+    assert "unbind-key -a -T copy-mode-vi" in lines
+    assert "unbind-key -a" not in lines
     assert lines[-1] == (
         "set-option -s @clayverse_managed_policy "
         + TerminalSessionManager.MANAGED_TMUX_POLICY_ID
     )
+    assert TerminalSessionManager.MANAGED_TMUX_POLICY_ID.endswith("-v2")
     assert not any(line.startswith("bind ") or line.startswith("bind-key ") for line in lines)
 
 
@@ -84,6 +91,7 @@ def test_tmux_server_policy_attestation_checks_effective_server(tmp_path, monkey
         ["show-options", "-sqv", "@clayverse_managed_policy"],
         ["show-options", "-gqv", "prefix"],
         ["show-options", "-gqv", "prefix2"],
+        ["list-keys"],
     ]
     assert all(call[:5] == [
         "tmux", "-L", "clayverse-gabriel", "-f", "/etc/clayverse/managed-tmux.conf"
@@ -120,6 +128,25 @@ def test_existing_tmux_session_with_wrong_effective_prefix_fails_closed(tmp_path
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     with pytest.raises(TerminalRuntimeError, match="prefix"):
         manager.ensure("gabriel")
+
+
+def test_existing_tmux_session_with_any_surviving_key_binding_fails_closed(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    monkeypatch.setattr(manager, "_require_programs", lambda: None)
+    monkeypatch.setattr(manager, "_has_session", lambda binding: True)
+
+    def fake_run(argv, **kwargs):
+        if argv[5:] == ["list-keys"]:
+            return SimpleNamespace(
+                returncode=0,
+                stdout="bind-key -T root C-x run-shell /bin/sh\n",
+                stderr="",
+            )
+        return _attested_policy_run(argv, **kwargs)
+
+    monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
+    with pytest.raises(TerminalRuntimeError, match="keymap"):
+        manager.ensure("andreas")
 
 
 def test_tmux_session_creation_is_pinned_to_managed_policy(tmp_path, monkeypatch):

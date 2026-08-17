@@ -64,7 +64,7 @@ def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
     log = tmp_path / "args.json"
     envlog = tmp_path / "env.json"
     fake = tmp_path / "claude"
-    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':'ok'}))\n")
+    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':json.dumps({'text':'ok','effect':None})}))\n")
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
     old_log = os.environ.get("FAKE_LOG")
     old_envlog = os.environ.get("FAKE_ENVLOG")

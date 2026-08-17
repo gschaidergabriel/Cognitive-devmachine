@@ -256,7 +256,8 @@ class MicroClayRetrieval:
         ).fetchall()
         if len(rows) != len(ids):
             raise StaleGeneration("retrieval_route_contract")
-        if any(str(row["kind"]) in METHOD_KINDS for row in rows):
+        excluded_kinds = METHOD_KINDS | _CONTROL_KINDS
+        if any(str(row["kind"]) in excluded_kinds for row in rows):
             raise StaleGeneration("retrieval_route_contract")
 
     def retrieve(
@@ -391,7 +392,16 @@ class MicroClayRetrieval:
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
         shadow_ids = [x.memory_id for x in adaptive_selected]
-        entry_keys = sorted({k for item in selected for k in item.entry_keys})[:256]
+        # Generic cue/kind/subject priors can learn from all served evidence as before.
+        # New query->subject routes are more dangerous: bind them to rank-1 served
+        # evidence only so one successful turn cannot spray an alias over the full pack.
+        non_route_keys = {
+            key for item in selected for key in item.entry_keys if not key.startswith("route:")
+        }
+        rank1_route_keys = {
+            key for key in (selected[0].entry_keys if selected else ()) if key.startswith("route:")
+        }
+        entry_keys = sorted(non_route_keys | rank1_route_keys)[:256]
 
         self.db.db.execute(
             "INSERT INTO retrieval_episodes("

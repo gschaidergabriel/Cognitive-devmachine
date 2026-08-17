@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:40:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CONTRADICTS_REFINES_VERCEL_SNAPSHOT_CARRIER_PROMOTION",
+  "canonical_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "reason": "Current official Vercel sources conflict on whether deleting a named sandbox also deletes snapshots produced by that sandbox. This external dependency behavior must therefore remain UNKNOWN at the exact delete boundary until directly observed or Vercel resolves the documentation conflict.",
+  "official_source_conflict": {
+    "survive_side": [
+      {
+        "source": "Vercel Sandbox persistent-sandboxes documentation",
+        "claim": "sandbox.delete() permanently removes the sandbox and sessions while snapshots survive/remain until expiry or explicit deletion."
+      },
+      {
+        "source": "Vercel Sandbox snapshot/REST surfaces",
+        "claim": "snapshots have separately addressable IDs, get/delete operations and can seed new sandboxes."
+      }
+    ],
+    "delete_side": [
+      {
+        "source": "Vercel Knowledge Base: The Complete Guide to Vercel Drives, last updated 2026-06-29",
+        "claim": "snapshots belong to the sandbox that produced them, so deleting that sandbox also deletes its snapshots."
+      },
+      {
+        "source": "Vercel Knowledge Base: How Vercel Sandbox duration and persistence work, last updated 2026-06-29",
+        "claim": "snapshots are tied to the sandbox lifecycle and Drives are prescribed when data must outlive the sandbox entirely."
+      }
+    ],
+    "epistemic_result": "DEPENDENCY_SEMANTICS_CONFLICT_FAIL_CLOSED",
+    "platform_lifecycle_credit": 0
+  },
+  "current_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "exact_trigger_commit_observed": "01b50b49c99e0482739de36d0f1c0f7c8a3fc412",
+    "source_direction": "two-stage snapshot carrier with distinct carrier/replacement sandboxes and persistent:false replacement",
+    "source_candidate_credit": true,
+    "tier2_runtime_credit": 0
+  },
+  "execution_observation": {
+    "vercel_commit_status": "FAILURE_CONTROL_PLANE_ADMISSION",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "build_started": false,
+    "source_guard_executed": false,
+    "tier2_executed": false,
+    "clayverse_test_failure": false,
+    "whole_product_credit": 0
+  },
+  "hypofusion": {
+    "h1": "Manual snapshot IDs survive named-sandbox deletion and can seed a distinct later Sandbox.create; the persistent-sandbox documentation is current and the KB deletion statement is stale or refers to a different snapshot class/lifecycle.",
+    "h2": "Deleting the named sandbox invalidates/deletes all snapshots associated with it; the KB/Drives documentation describes actual current behavior and the persistent-sandbox documentation is inaccurate or incomplete.",
+    "cheapest_discriminator": "In an authorized Vercel Sandbox execution surface, create a bounded sentinel filesystem in a disposable named sandbox, take a manual snapshot and record snapshot ID/status, delete the named sandbox, then query/use the exact snapshot ID to create a distinct persistent:false sandbox and verify the sentinel plus distinct sandbox/session identity. Capture provider/API versions and cleanup. Do not infer product Tier-2 PASS from this dependency probe.",
+    "product_gate_after_dependency_probe": "Only if H1 is empirically supported, execute the exact PR686/PR810 declared-transfer Tier-2 sequence and require exact OCI/state/workspace identities, source deletion, distinct replacement identity, generation increment, no blind effect replay, fresh provider secret and second cognition."
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_experiment_count": 0,
+    "reason": "No shared immutable request/turn id is exposed to this organ and the exact user go message metadata available here is only minute precision (2026-08-18 01:29 +07), insufficient for the canonical atomic fallback key. The proposed dependency discriminator was NOT executed."
+  },
+  "supersession_boundary": {
+    "preserve": "PR686 corrected immutable identity 9dd7da1c7f1d2acf29142a74effd2b51282661f7 / tree 47c09ff6d661b3da02743435dd8a343ddef85efd; Vercel rate-limit admission blocker; zero exact runtime credit.",
+    "retract": "Any current claim that Vercel snapshot survival across sandbox.delete is already established strongly enough to grant durable-carrier mechanism credit.",
+    "current_truth": "Snapshot carrier remains a plausible source candidate with conflicting official dependency documentation and zero exact runtime evidence."
+  },
+  "next_exact_step": "Do not create another canonical carrier path and do not spend owner credentials on stale deployments. First restore authorized execution admission, then settle the Vercel manual-snapshot delete-boundary discriminator. Only after that dependency behavior is observed should the retained PR810 Tier-2 path receive carrier mechanism credit and proceed to the exact product run."
+}

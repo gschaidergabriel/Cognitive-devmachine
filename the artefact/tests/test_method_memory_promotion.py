@@ -1,67 +1,36 @@
-import contextlib
-import json
-import sqlite3
 import time
+import uuid
 
 import pytest
 
+from clayverse.identity import IdentityRouter
 from clayverse.method_memory import MethodMemoryManager, MethodMemoryValidationError
+from clayverse.store import UnifiedDB
 
 
-class PromotionDB:
-    def __init__(self):
-        self.db = sqlite3.connect(":memory:", isolation_level=None)
-        self.db.row_factory = sqlite3.Row
-        self.db.executescript(
-            """
-            CREATE TABLE durable_memory(
-                memory_id TEXT PRIMARY KEY,
-                kind TEXT NOT NULL,
-                subject TEXT NOT NULL,
-                value TEXT NOT NULL,
-                source_turn_id TEXT,
-                user_id TEXT,
-                ts REAL NOT NULL,
-                provenance TEXT NOT NULL
-            );
-            CREATE TABLE workspace_episodes(
-                episode_id TEXT PRIMARY KEY
-            );
-            """
+def _db(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    IdentityRouter(db, {})
+    return db
+
+
+def _episode(db, user_id, label, *, state="COMPLETED", reentered=True):
+    session_id = f"session:{user_id}"
+    turn_id = db.append_turn(session_id, user_id, "user", label)
+    episode_id = str(uuid.uuid4())
+    db.db.execute(
+        "INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",
+        (episode_id, session_id, time.time(), turn_id, 0.5, "[]", None, state),
+    )
+    if reentered:
+        db.db.execute(
+            "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
+            (str(uuid.uuid4()), episode_id, None, turn_id, "test-outcome", 1.0, 1, time.time()),
         )
-        self._next = 0
-
-    @contextlib.contextmanager
-    def tx(self):
-        self.db.execute("BEGIN IMMEDIATE")
-        try:
-            yield self.db
-        except Exception:
-            self.db.execute("ROLLBACK")
-            raise
-        else:
-            self.db.execute("COMMIT")
-
-    def add_memory(self, kind, subject, value, source_turn_id, user_id, provenance):
-        self._next += 1
-        memory_id = f"db:m{self._next}"
-        self.db.execute(
-            "INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",
-            (
-                memory_id,
-                kind,
-                subject,
-                value,
-                source_turn_id,
-                user_id,
-                time.time(),
-                json.dumps(provenance, sort_keys=True),
-            ),
-        )
-        return memory_id
+    return turn_id, episode_id
 
 
-def candidate_record(**overrides):
+def candidate_record(episodes, **overrides):
     value = {
         "problem_signature": {
             "goal": ["identify causal fault"],
@@ -76,7 +45,7 @@ def candidate_record(**overrides):
         "falsifiers": ["candidate predictions remain indistinguishable"],
         "failure_modes": ["proxy metric is not causally diagnostic"],
         "scope_limits": ["not for settled factual lookup"],
-        "source_episode_ids": ["episode:a", "episode:b"],
+        "source_episode_ids": list(episodes),
         "supporting_memory_ids": [],
         "counterexample_memory_ids": [],
         "abstraction_version": "1",
@@ -91,82 +60,117 @@ def candidate_record(**overrides):
     return value
 
 
-def test_promotion_transaction_binds_candidate_episodes_evidence_and_receipt():
-    db = PromotionDB()
-    db.db.executemany(
-        "INSERT INTO workspace_episodes(episode_id) VALUES(?)",
-        [("episode:a",), ("episode:b",)],
-    )
-    evidence_a = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
-    evidence_b = db.add_memory("fact", "evidence", "B", None, "gabriel", {"source": "test"})
-    manager = MethodMemoryManager(db)
-    candidate_id = manager.admit(
+def _candidate(db, episodes, *, user_id="gabriel", supporting=()):
+    return MethodMemoryManager(db).admit(
         "framework_candidate",
         "causal discrimination",
-        candidate_record(supporting_memory_ids=[evidence_a, evidence_b]),
-        "turn:promotion",
-        "gabriel",
+        candidate_record(episodes, supporting_memory_ids=list(supporting)),
+        None,
+        user_id,
         {"source": "episode_abstraction", "extractor": "test"},
     )
 
-    result = manager.promote(
-        candidate_id,
-        evaluation="held-out transfer succeeded on a second source episode",
-        provenance={"source": "held_out_eval", "evaluator": "test"},
-    )
-    receipt = manager.decode_row(
-        db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (result["receipt_memory_id"],),
-        ).fetchone()
-    )
-    promoted = manager.decode_row(
-        db.db.execute(
-            "SELECT * FROM durable_memory WHERE memory_id=?",
-            (result["promoted_memory_id"],),
-        ).fetchone()
-    )
-    assert receipt["value"]["action"] == "PROMOTE"
-    assert receipt["value"]["method_memory_id"] == candidate_id
-    assert promoted["kind"] == "framework"
-    assert promoted["value"]["status"] == "PROMOTED"
-    assert promoted["provenance"]["promotion_source_memory_id"] == candidate_id
-    assert promoted["provenance"]["promotion_receipt_id"] == result["receipt_memory_id"]
 
-    row_count = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodMemoryValidationError, match="already has a promotion receipt"):
-        manager.promote(
+def test_promotion_transaction_binds_terminal_causal_episodes_evidence_and_receipt(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _, e1 = _episode(db, "gabriel", "source one")
+        _, e2 = _episode(db, "gabriel", "source two")
+        evidence_a = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
+        evidence_b = db.add_memory("fact", "evidence", "B", None, "gabriel", {"source": "test"})
+        manager = MethodMemoryManager(db)
+        candidate_id = _candidate(db, [e1, e2], supporting=[evidence_a, evidence_b])
+
+        result = manager.promote(
             candidate_id,
-            evaluation="duplicate promotion attempt",
+            evaluation="held-out transfer succeeded on a second terminal source episode",
             provenance={"source": "held_out_eval", "evaluator": "test"},
         )
-    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == row_count
+        receipt = db.method_memory(result["receipt_memory_id"])
+        promoted = db.method_memory(result["promoted_memory_id"])
+        assert receipt["value"]["action"] == "PROMOTE"
+        assert receipt["value"]["method_memory_id"] == candidate_id
+        assert promoted["kind"] == "framework"
+        assert promoted["value"]["status"] == "PROMOTED"
+        assert promoted["provenance"]["promotion_source_memory_id"] == candidate_id
+        assert promoted["provenance"]["promotion_receipt_id"] == result["receipt_memory_id"]
+
+        row_count = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
+        with pytest.raises(MethodMemoryValidationError, match="already has a promotion receipt"):
+            manager.promote(
+                candidate_id,
+                evaluation="duplicate promotion attempt",
+                provenance={"source": "held_out_eval", "evaluator": "test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == row_count
+    finally:
+        db.close()
 
 
-def test_promotion_missing_episode_rolls_back_without_receipt_or_framework():
-    db = PromotionDB()
-    db.db.execute("INSERT INTO workspace_episodes(episode_id) VALUES('episode:a')")
-    evidence = db.add_memory("fact", "evidence", "A", None, "gabriel", {"source": "test"})
-    manager = MethodMemoryManager(db)
-    candidate_id = manager.admit(
-        "framework_candidate",
-        "causal discrimination",
-        candidate_record(
-            source_episode_ids=["episode:a", "episode:missing"],
-            supporting_memory_ids=[evidence],
-        ),
-        "turn:promotion",
-        "gabriel",
-        {"source": "episode_abstraction", "extractor": "test"},
-    )
-    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodMemoryValidationError, match="episode evidence is incomplete"):
-        manager.promote(
-            candidate_id,
-            evaluation="must not promote with a missing source episode",
-            provenance={"source": "held_out_eval", "evaluator": "test"},
-        )
-    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
-    assert db.db.execute(
-        "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('method_receipt','framework','heuristic')"
-    ).fetchone()[0] == 0
+def test_open_source_episode_cannot_promote(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _, e1 = _episode(db, "gabriel", "terminal source")
+        _, e2 = _episode(db, "gabriel", "open source", state="OPEN", reentered=False)
+        candidate_id = _candidate(db, [e1, e2])
+        with pytest.raises(MethodMemoryValidationError, match="must be terminal"):
+            MethodMemoryManager(db).promote(
+                candidate_id,
+                evaluation="must reject open evidence",
+                provenance={"source": "test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='framework'").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_terminal_but_not_reentered_source_episode_cannot_promote(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _, e1 = _episode(db, "gabriel", "source one")
+        _, e2 = _episode(db, "gabriel", "not reentered", state="COMPLETED", reentered=False)
+        candidate_id = _candidate(db, [e1, e2])
+        with pytest.raises(MethodMemoryValidationError, match="causally re-entered"):
+            MethodMemoryManager(db).promote(
+                candidate_id,
+                evaluation="must reject non-reentered evidence",
+                provenance={"source": "test"},
+            )
+    finally:
+        db.close()
+
+
+def test_cross_user_source_episode_cannot_promote(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _, e1 = _episode(db, "gabriel", "gabriel source")
+        _, e2 = _episode(db, "andreas", "andreas source")
+        candidate_id = _candidate(db, [e1, e2], user_id="gabriel")
+        with pytest.raises(MethodMemoryValidationError, match="crosses user boundary"):
+            MethodMemoryManager(db).promote(
+                candidate_id,
+                evaluation="must not cross user perspective boundary",
+                provenance={"source": "test"},
+            )
+    finally:
+        db.close()
+
+
+def test_promotion_missing_episode_rolls_back_without_receipt_or_framework(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _, e1 = _episode(db, "gabriel", "source one")
+        candidate_id = _candidate(db, [e1, "episode:missing"])
+        before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
+        with pytest.raises(MethodMemoryValidationError, match="episode evidence is incomplete"):
+            MethodMemoryManager(db).promote(
+                candidate_id,
+                evaluation="must not promote with a missing source episode",
+                provenance={"source": "held_out_eval", "evaluator": "test"},
+            )
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
+        assert db.db.execute(
+            "SELECT COUNT(*) FROM durable_memory WHERE kind IN ('method_receipt','framework','heuristic')"
+        ).fetchone()[0] == 0
+    finally:
+        db.close()

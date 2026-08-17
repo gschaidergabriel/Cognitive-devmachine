@@ -6,6 +6,7 @@ import sys
 from typing import Any
 
 from .autonomy import AutonomyState
+from .goal_admission import admit_explicit_user_goal
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -152,11 +153,10 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, _, session_id, lifecycle = _runtime()
+    db, user_id, session_id, lifecycle = _runtime()
     try:
-        # Ensure the additive goal-state schema before begin_admission starts its
-        # canonical BEGIN IMMEDIATE transaction. No executescript/DDL may occur
-        # inside that causal transaction.
+        # Ensure additive goal-state schema before begin_admission starts its canonical
+        # BEGIN IMMEDIATE transaction. No executescript/DDL may occur inside that turn.
         autonomy_state = AutonomyState(db)
         # Claude keeps one session_id across turns, and Stop does not run on a user
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
@@ -166,6 +166,16 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
                 result,
                 autonomy=autonomy_state.context_summary(),
             )
+
+        # Persistent autonomous goals are admitted only after the canonical user turn
+        # committed successfully. `/goal ...` is an explicit owner/user act, not an LLM
+        # inference. Goal + first step + provenance receipt are then one atomic tx.
+        admit_explicit_user_goal(
+            autonomy_state,
+            user_id=user_id,
+            source_turn_id=result["turn_id"],
+            prompt=prompt,
+        )
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",
@@ -173,6 +183,15 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             },
             "suppressOutput": True,
         }
+    except Exception:
+        # If goal admission fails after the prompt commit, close the still-active turn
+        # explicitly rather than leaving a dangling causal episode.
+        try:
+            if lifecycle.active() is not None:
+                lifecycle.abort("user_prompt_post_admission_failure")
+        except Exception:
+            pass
+        raise
     finally:
         db.close()
 

@@ -59,7 +59,13 @@ spec:
       hostPID: false
       hostIPC: false
       terminationGracePeriodSeconds: 30
+      # PVC mounts replace image-directory ownership at /var/lib/clayverse and
+      # /workspace. Bind supported volumes to the non-root ClayVerse group and
+      # fail closed at runtime if the admitted CSI cannot provide equivalent
+      # uid/gid 10001 write semantics; do not add a privileged chown helper.
       securityContext:
+        fsGroup: 10001
+        fsGroupChangePolicy: "OnRootMismatch"
         seccompProfile:
           type: RuntimeDefault
       containers:

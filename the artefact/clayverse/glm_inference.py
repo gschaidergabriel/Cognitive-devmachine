@@ -27,6 +27,10 @@ class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
         return None
 
 
+def _reject_json_constant(value: str) -> None:
+    raise ValueError(f"non-finite JSON constant rejected: {value}")
+
+
 def _validated_endpoint(value: str) -> str:
     endpoint = value.strip().rstrip("/")
     try:
@@ -132,9 +136,10 @@ class GLMTokenInference:
                 ensure_ascii=False,
                 sort_keys=True,
                 separators=(",", ":"),
+                allow_nan=False,
             )
         except (TypeError, ValueError) as exc:
-            raise GLMInferenceError("assembled world is not serializable") from exc
+            raise GLMInferenceError("assembled world is not canonical JSON") from exc
         if len(world_json) > _MAX_WORLD_JSON_CHARS:
             raise GLMInferenceError("assembled world exceeds GLM inference boundary")
         system = (
@@ -154,7 +159,12 @@ class GLMTokenInference:
             ],
             "stream": False,
         }
-        return json.dumps(body, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        return json.dumps(
+            body,
+            ensure_ascii=False,
+            separators=(",", ":"),
+            allow_nan=False,
+        ).encode("utf-8")
 
     def reason(self, world: Any, observation: str) -> dict[str, Any]:
         payload = self._payload(world, observation)
@@ -180,9 +190,9 @@ class GLMTokenInference:
         if len(raw) > _MAX_RESPONSE_BYTES:
             raise GLMInferenceError("GLM response exceeds admitted size")
         try:
-            envelope = json.loads(raw)
-        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
-            raise GLMInferenceError("GLM response is not valid JSON") from exc
+            envelope = json.loads(raw, parse_constant=_reject_json_constant)
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+            raise GLMInferenceError("GLM response is not valid canonical JSON") from exc
         try:
             choices = envelope["choices"]
             message = choices[0]["message"]
@@ -192,12 +202,9 @@ class GLMTokenInference:
         if not isinstance(text, str) or not text.strip():
             raise GLMInferenceError("GLM response content is invalid")
         response_model = envelope.get("model")
-        if response_model is None:
-            response_model = self.model
-        elif not isinstance(response_model, str):
-            raise GLMInferenceError("GLM response model identifier is invalid")
-        response_model = _validated_model(response_model)
-        if response_model != self.model:
+        if not isinstance(response_model, str):
+            raise GLMInferenceError("GLM response model identifier is missing or invalid")
+        if _validated_model(response_model) != self.model:
             raise GLMInferenceError("GLM response model does not match requested model")
         return {
             "text": text,

@@ -45,24 +45,24 @@ def _blocked_reason_class(value: Any) -> str | None:
 
 
 def _snapshot(db: UnifiedDB, user_id: str) -> dict[str, Any]:
-    """Read canonical autonomy state without opening a nested transaction."""
+    """Read goal state and live generation from one UnifiedDB transaction."""
+    if not db.db.in_transaction:
+        with db.tx():
+            return _snapshot(db, user_id)
+
     controller = AutonomyController(db)
-    if db.db.in_transaction:
-        state = controller._load(db.db)
-        goals = [
-            state["goals"][goal_id]
-            for goal_id in state["queue"]
-            if state["goals"][goal_id]["user_id"] == user_id
-        ]
-        return {
-            "schema": state["schema"],
-            "revision": state["revision"],
-            "generation": db.entity_generation(),
-            "goals": goals,
-        }
-    snapshot = controller.snapshot(user_id=user_id)
-    snapshot["generation"] = db.entity_generation()
-    return snapshot
+    state = controller._load(db.db)
+    goals = [
+        state["goals"][goal_id]
+        for goal_id in state["queue"]
+        if state["goals"][goal_id]["user_id"] == user_id
+    ]
+    return {
+        "schema": state["schema"],
+        "revision": state["revision"],
+        "generation": db.entity_generation(),
+        "goals": goals,
+    }
 
 
 def _is_runnable(goal: dict[str, Any]) -> bool:

@@ -5,7 +5,7 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from clayverse.adapters import AuthenticationError, ClerkConfig, ClerkTokenVerifier
+from clayverse.clerk_auth import AuthenticationError, ClerkConfig, ClerkTokenVerifier
 
 
 def _keypair():
@@ -26,6 +26,8 @@ def _claims(now):
         "iat": now,
         "nbf": now - 1,
         "exp": now + 60,
+        "v": 2,
+        "sts": "active",
     }
 
 

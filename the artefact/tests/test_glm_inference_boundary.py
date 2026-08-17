@@ -99,7 +99,7 @@ def test_glm_rejects_control_characters_in_token():
         GLMTokenInference(api_token="token\nsecond-line")
 
 
-def test_glm_http_failure_does_not_surface_provider_body():
+def test_glm_http_failure_suppresses_provider_body_and_exception_chain():
     class _ErrorOpener:
         def open(self, request, timeout):
             raise urllib.error.HTTPError(
@@ -115,6 +115,7 @@ def test_glm_http_failure_does_not_surface_provider_body():
         inference.reason({}, "hello")
     assert "secret-derived-provider-body" not in str(caught.value)
     assert "token" not in str(caught.value)
+    assert caught.value.__cause__ is None
 
 
 def test_glm_world_boundary_is_bounded_before_network():
@@ -125,3 +126,25 @@ def test_glm_world_boundary_is_bounded_before_network():
     with pytest.raises(GLMInferenceError, match="assembled world exceeds"):
         inference.reason({"x": "a" * 600_001}, "hello")
     assert opener.request is None
+
+
+def test_glm_observation_boundary_is_bounded_before_network():
+    opener = _CapturingOpener(
+        {"choices": [{"message": {"content": "unused"}}]}
+    )
+    inference = GLMTokenInference(api_token="token", opener=opener)
+    with pytest.raises(GLMInferenceError, match="observation is outside"):
+        inference.reason({}, "x" * 100_001)
+    assert opener.request is None
+
+
+def test_glm_rejects_non_glm_provider_response_model():
+    opener = _CapturingOpener(
+        {
+            "model": "other-provider-model",
+            "choices": [{"message": {"content": "hello"}}],
+        }
+    )
+    inference = GLMTokenInference(api_token="token", opener=opener)
+    with pytest.raises(GLMInferenceError, match="model identifier is invalid"):
+        inference.reason({}, "hello")

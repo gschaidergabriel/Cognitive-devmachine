@@ -52,6 +52,10 @@ def test_kata_template_has_default_deny_and_explicit_network_admission():
     assert "port: 3000" in text
     assert "port: 53" in text
     assert "port: 443" in text
+    assert "node-local and NAT/ipBlock caveats" in text
+    contract = CONTRACT.read_text()
+    assert "worker-node" in contract
+    assert "Service/NAT-rewritten destinations" in contract
 
 
 def test_provider_credentials_remain_bounded():

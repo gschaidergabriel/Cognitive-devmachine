@@ -5,6 +5,7 @@ import html
 import json
 import math
 import os
+import subprocess
 import time
 from pathlib import Path
 
@@ -110,8 +111,24 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
         remaining = remaining[written:]
 
 
-def _runtime_ready(db: UnifiedDB) -> bool:
-    """Read-only readiness check for the canonical UnifiedDB spine."""
+def _terminal_sessions_ready(terminals: TerminalSessionManager) -> bool:
+    """Read-only liveness probe for both canonical managed tmux/Claude sessions."""
+    for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items():
+        binding = terminals.binding(user_id)
+        cp = subprocess.run(
+            terminals._tmux_argv(binding, "has-session", "-t", terminal_name),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            timeout=2,
+            check=False,
+        )
+        if cp.returncode != 0:
+            return False
+    return True
+
+
+def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
+    """Read-only readiness check for canonical state plus both live product terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
@@ -123,7 +140,7 @@ def _runtime_ready(db: UnifiedDB) -> bool:
         ).fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
-        return bool(
+        state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
             and users and int(users[0]) == 2
@@ -134,6 +151,7 @@ def _runtime_ready(db: UnifiedDB) -> bool:
                 for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
             )
         )
+        return state_ready and _terminal_sessions_ready(terminals)
     except Exception:
         return False
 
@@ -162,7 +180,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/readyz")
     async def readyz():
-        ready = _runtime_ready(db)
+        ready = await asyncio.to_thread(_runtime_ready, db, terminals)
         return JSONResponse({
             "status": "ready" if ready else "not_ready",
             "scope": "runtime",

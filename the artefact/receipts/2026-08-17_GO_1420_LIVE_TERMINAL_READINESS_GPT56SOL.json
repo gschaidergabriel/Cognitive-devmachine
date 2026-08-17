@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T14:20:11+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "31e20ac470456d982214096ad6c3312a1a682782",
+  "current_main_observed_after_build": "e1d7e8e4a5d3fba843208806037565afc3b465ac",
+  "branch": "go/live-terminal-readiness-20260817-1418",
+  "finding": {
+    "classification": "FALSE_READY_AFTER_PRODUCT_TERMINAL_DEATH",
+    "observed": "The canonical /readyz implementation checked UnifiedDB schema/users/sessions/generation only. Service startup creates both managed tmux/Claude sessions, but readiness did not re-check their continued existence.",
+    "risk": "After a managed Claude/tmux session exits, the container can continue returning HTTP 200 ready while the advertised permanent-Claude-terminal product surface is partially or fully dead.",
+    "counterhypothesis": "Boot-time TerminalSessionManager.ensure() makes a separate live-terminal readiness probe unnecessary.",
+    "counterhypothesis_result": "REJECTED: boot-time existence is not a durable liveness guarantee; managed tmux policy does not set remain-on-exit, so direct Claude process exit can remove the session while UnifiedDB remains healthy."
+  },
+  "repair": {
+    "terminal_gateway_git_blob": "7b6a72a07c1485cdacb991ddb9300b5d7fd27073",
+    "test_git_blob": "53d0cbfa95fec1a4dbac2173b4fc04c13c80efa3",
+    "readiness_contract": "UnifiedDB state ready AND gabriel managed tmux session live AND andreas managed tmux session live",
+    "probe_timeout_seconds_per_tmux_call": 2,
+    "probe_execution": "asyncio.to_thread",
+    "readiness_side_effects": false,
+    "auto_restart_from_readyz": false
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "reconstructed relevant readiness helper/source slice plus exact test semantics",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_live_terminal_readiness.py",
+    "result": "2 passed in 0.03s",
+    "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_EXACT_BRANCH_OR_RUNTIME_PASS",
+    "real_tmux_started": false,
+    "real_claude_started": false,
+    "http_server_started": false,
+    "oci_image_built": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "parallel_state": {
+    "main_advanced_after_branch": true,
+    "intervening_current_main_files": [
+      "the artefact/clayverse/effect_journal.py",
+      "the artefact/receipts/2026-08-17_GO_EFFECT_COMPLETION_IDENTITY_FENCE_GPT56SOL.json",
+      "the artefact/tests/test_effect_completion_identity_fence.py"
+    ],
+    "overlap_with_this_delta": false
+  },
+  "vercel": {
+    "new_attempt_started": false,
+    "reason": "Fresh Vercel Git-preview execution remains admission-blocked before build/Sandbox start by the observed account deployment rate limit; repeating it would not discriminate this readiness mechanism."
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_added_by_this_lane": 0,
+    "note": "Ordinary deterministic product regression only; the global unusual-experiment slot for this user-triggered go was already consumed by parallel work."
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_PASS",
+  "next_gate": "In the next actually-started authorized exact-current container run: prove /readyz=200 with both managed Claude/tmux sessions alive, terminate exactly one managed Claude process, prove /readyz becomes 503 without mutating UnifiedDB, then restore through the admitted product lifecycle and prove readiness returns only after both sessions are live."
+}

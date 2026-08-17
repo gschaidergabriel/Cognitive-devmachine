@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoMicroClayReceiptContextFusion/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_research_main_observed_before_write": "edc7c38656e61ddc39ba2056648ff0a751eb2f0f",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "issue": 386,
+  "fusion": {
+    "retained_pr": 394,
+    "retained_head": "af849dd0efbd83eedb46b897b573b98b73438e70",
+    "retired_duplicate_pr": 395,
+    "retired_staging_pr": 814,
+    "source_files_changed": 2,
+    "turn_lifecycle_diff": {
+      "additions": 10,
+      "deletions": 1
+    },
+    "mechanism": [
+      "preserve existing MicroClay retrieval_receipt through TurnLifecycle._bound_world and Claude hook context",
+      "include receipt in existing bounded-world character accounting",
+      "fail closed when receipt is missing or not an object",
+      "require string keys and scalar values",
+      "require canonical JSON with NaN rejected",
+      "cap serialized retrieval receipt at 4096 characters",
+      "do not grant truth or effect authority and do not change retrieval ranking or learning"
+    ]
+  },
+  "bounded_local_mechanism_regression": {
+    "authority": "SUPPORTING_ONLY_NOT_EXECUTABLE_TRUTH",
+    "receipt_preserved": true,
+    "max_chars": 1000,
+    "serialized_world_chars": 965,
+    "durable_items_before": 20,
+    "durable_items_after": 1,
+    "missing_receipt_rejected": true,
+    "non_object_receipt_rejected": true,
+    "non_string_key_rejected": true,
+    "nested_value_rejected": true,
+    "nan_rejected": true,
+    "oversized_receipt_rejected": true
+  },
+  "vercel_execution": {
+    "staging_final_head": "1b42782775c6fe075bfa076f09c2f23e06f7a9cb",
+    "provider_status": "FAILURE",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "deployment_created_for_final_head": false,
+    "sandbox_started": false,
+    "sandbox_assertions_reached": false,
+    "executable_pass": false
+  },
+  "promotion_boundary": {
+    "retained_pr_state": "OPEN_DRAFT_SOURCE_CANDIDATE",
+    "exact_identity_vercel_sandbox_required": true,
+    "full_unifieddb_turn_begin_regression": "OPEN",
+    "whole_clayverse_oci_acceptance": "IN_PROGRESS"
+  },
+  "go_unusual_experiment_accounting": {
+    "new_unusual_experiments_added": 0,
+    "shared_slot": "ALREADY_CONSUMED_ELSEWHERE"
+  },
+  "forbidden_or_unused": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

@@ -69,8 +69,7 @@ class MistralCanonicalTurn:
             ),
         }
 
-    @staticmethod
-    def _validate_decision(decision: Any) -> tuple[str, str]:
+    def _validate_decision(self, decision: Any) -> tuple[str, str]:
         if not isinstance(decision, dict):
             raise MistralCanonicalTurnError("Mistral decision must be an object")
         if decision.get("provider") != "mistral":
@@ -85,6 +84,9 @@ class MistralCanonicalTurn:
             raise MistralCanonicalTurnError("Mistral text is outside admitted bound")
         if not isinstance(model, str) or not model.strip():
             raise MistralCanonicalTurnError("Mistral model identity is missing")
+        expected_model = getattr(self.inference, "model", None)
+        if not isinstance(expected_model, str) or model != expected_model:
+            raise MistralCanonicalTurnError("Mistral model identity changed across inference boundary")
         return text, model
 
     @staticmethod
@@ -130,11 +132,22 @@ class MistralCanonicalTurn:
                 text,
                 provider="mistral",
                 model=model,
+                expected_causal_id=begin["causal_id"],
+                expected_generation=begin["generation"],
             )
             if effect is not None:
                 capability, target, argv = self._validate_trusted_effect(effect)
-                effect_result = self.lifecycle.request_effect(capability, target, argv)
-            completed = self.lifecycle.complete_reingested_provider_response()
+                effect_result = self.lifecycle.request_effect(
+                    capability,
+                    target,
+                    argv,
+                    expected_causal_id=begin["causal_id"],
+                    expected_generation=begin["generation"],
+                )
+            completed = self.lifecycle.complete_reingested_provider_response(
+                expected_causal_id=begin["causal_id"],
+                expected_generation=begin["generation"],
+            )
             if not completed.get("completed"):
                 raise MistralCanonicalTurnError("canonical Mistral turn did not complete")
             return {
@@ -152,12 +165,15 @@ class MistralCanonicalTurn:
                 "effect": effect_result,
             }
         except Exception:
-            if begin is not None and self.lifecycle.active() is not None:
+            if begin is not None:
                 try:
                     self.lifecycle.abort(
                         "mistral_turn_failed",
                         provenance_source="mistral-runtime:failure",
+                        expected_causal_id=begin["causal_id"],
                     )
-                except Exception:
-                    pass
+                except Exception as abort_exc:
+                    raise MistralCanonicalTurnError(
+                        "Mistral turn failed and its exact canonical turn could not be aborted"
+                    ) from abort_exc
             raise

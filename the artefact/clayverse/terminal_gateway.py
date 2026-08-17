@@ -11,7 +11,7 @@ from pathlib import Path
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
+from .identity import CANONICAL_SESSION_IDS, CANONICAL_TERMINAL_NAMES, IdentityRouter, assert_canonical_user_state
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
@@ -87,6 +87,19 @@ def _reauthenticated_expiry(
     return _auth_expiry_deadline(claims, now=now)
 
 
+def _assert_reauth_identity_current(
+    identity: IdentityRouter,
+    clerk_subject: str,
+    *,
+    expected_user_id: str,
+    expected_session_id: str,
+) -> None:
+    """Revalidate canonical UnifiedDB identity before extending an attached auth lease."""
+    current_user_id, current_session_id = identity.resolve(clerk_subject)
+    if current_user_id != expected_user_id or current_session_id != expected_session_id:
+        raise AuthenticationError("ClayVerse identity/session changed during Clerk refresh")
+
+
 def _terminal_dimensions(message: dict) -> tuple[int, int]:
     rows = message.get("rows", 24)
     cols = message.get("cols", 80)
@@ -128,21 +141,20 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        users = db.db.execute(
-            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
-        ).fetchone()
+        assert_canonical_user_state(db)
         session_rows = db.db.execute(
-            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
+            "SELECT session_id,user_id,terminal_name,generation FROM sessions ORDER BY user_id"
         ).fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
         state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
-            and users and int(users[0]) == 2
+            and len(session_rows) == len(CANONICAL_TERMINAL_NAMES)
             and set(sessions) == {"gabriel", "andreas"}
             and all(
-                sessions[user_id]["terminal_name"] == terminal_name
+                sessions[user_id]["session_id"] == CANONICAL_SESSION_IDS[user_id]
+                and sessions[user_id]["terminal_name"] == terminal_name
                 and int(sessions[user_id]["generation"]) == entity_generation
                 for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
             )
@@ -336,11 +348,23 @@ window.addEventListener('load', async () => {{
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":
                             refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))
-                            auth_expires_at = _reauthenticated_expiry(
+                            refreshed_expiry = _reauthenticated_expiry(
                                 refreshed,
                                 expected_subject=clerk_subject,
                                 expected_clerk_session_id=clerk_session_id,
                             )
+                            await asyncio.to_thread(
+                                _assert_reauth_identity_current,
+                                identity,
+                                clerk_subject,
+                                expected_user_id=user_id,
+                                expected_session_id=session_id,
+                            )
+                            # UnifiedDB revalidation is a blocking boundary. A token that
+                            # expired during that check must never extend or be published
+                            # as the live socket authorization lease.
+                            _require_auth_lease_live(refreshed_expiry)
+                            auth_expires_at = refreshed_expiry
                             await send_json({
                                 "type": "reauthenticated",
                                 "auth_expires_at": int(auth_expires_at),

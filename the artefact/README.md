@@ -88,8 +88,11 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 - this organ found a separate authority drift: Dockerfile/README made EntityOS optional for the baseline while `manifest.json` still stated staged bytes were mandatory and retained an unconditional final EntityOS runtime gate;
 - repaired manifest blob `c89269e8dd65aa7dd173dcb53a248c1c88aa8d39` and added packaging regression blob `85508bef83aac154d0cfe845cd875dea5b479183`;
 - exact reconstructed focused source-contract suite on the bound Dockerfile/.dockerignore/.gitignore/stager/manifest/test blobs: **6/6 PASS**, plus focused `py_compile` and `sh -n` PASS;
-- new receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_MANIFEST_OPTIONAL_ENTITYOS_FENCE_GPT56SOL.json`;
-- earlier parallel receipt remains: `the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json`;
+- a separate exact-file check bound `service.py` blob `c9151e339c0ec4b23a454ee7684a6bd9255bf229` and focused test blob `bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021`: **4/4 PASS** for baseline absence, execution-without-pin, unpinned regular bytes and unpinned symlink fail-closed behavior. Unrelated import-time dependencies were deterministic stubs, so this is supporting mechanism evidence only;
+- the first service reconstruction attempt was rejected before execution credit because its local test file did not match the Git blob; only the byte-exact rerun is retained;
+- new service addendum receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_OPTIONAL_SERVICE_ADDENDUM_GPT56SOL.json`;
+- new manifest receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_MANIFEST_OPTIONAL_ENTITYOS_FENCE_GPT56SOL.json`;
+- earlier parallel build-context receipt remains: `the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json`;
 - #625 continued moving concurrently during the cycle; do not force-rewrite or infer merge readiness from a stale head;
 - Vercel project inventory remained `dr-unterweger` only; final exact OCI gate remains deferred, not a development stop;
 - unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because no shared immutable request/turn ID and only minute-precision trigger time were available;

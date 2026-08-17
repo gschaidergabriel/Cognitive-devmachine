@@ -5,7 +5,7 @@
   "started_from_main": "327af0f53a4d48def0344a0d3c736c2364ca3fee",
   "branch": "gpt56sol/go-kata-annotation-admission-20260817-2259-r1",
   "retained_pr": 643,
-  "classification": "SOURCE_CANDIDATE_REQUEST_IDENTITY_HARDENED_K8S_UNEXECUTED",
+  "classification": "MECHANISM_SUPPORTED_EXACT_CURRENT_TWO_BLOB_SOURCE_CHECK_K8S_UNEXECUTED",
   "novelty": "ORTHOGONAL_MICROVM_ADMISSION_FENCE_FUSED_INTO_RETAINED_LANE",
   "observed_gap": "The canonical MicroVM contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation and forbids RuntimeClass drift to host-kernel fallback. The retained source policy also had a documented CREATE residual: oldObject is null on CREATE, so a mutator rewriting every current-object ClayVerse marker could make current/previous identity tests vacuous.",
   "delta": [
@@ -22,13 +22,26 @@
     "deployment/clayverse-kata-runtime-annotation-admission.yaml": "35eb0a17c6f9675c71b604f54ac639fe639e00e2",
     "tests/test_kata_runtime_annotation_admission.py": "fc896130456ca860ba9b8521ed10ed360c92c379"
   },
+  "current_isolated_source_check": {
+    "surface": "OpenAI isolated non-production container",
+    "environment": {
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "exact_policy_git_blob": "35eb0a17c6f9675c71b604f54ac639fe639e00e2",
+    "exact_test_git_blob": "fc896130456ca860ba9b8521ed10ed360c92c379",
+    "blob_reconstruction": "MATCH_2_OF_2",
+    "command": "python -m pytest -q tests/test_kata_runtime_annotation_admission.py -k 'not microvm_contract'",
+    "result": "4 passed, 1 deselected in 0.07s",
+    "exit_code": 0,
+    "scope": "EXACT_CURRENT_POLICY_INTERNAL_SOURCE_REGRESSIONS_ONLY; CONTRACT_LINK_TEST_DESELECTED; NOT_KUBERNETES_API_ADMISSION"
+  },
   "previous_isolated_source_check": {
     "surface": "OpenAI isolated non-production container",
     "exact_policy_git_blob": "5f84118dd939da14a59e0e20eb8002664aca4bd6",
     "exact_test_git_blob": "b43e564d5b34e0498fabc7a6258e7a99322616f8",
-    "result": "PASS_FOR_PREVIOUS_BLOBS_ONLY",
-    "scope": "SOURCE_MECHANISM_ONLY_NOT_KUBERNETES_API_ADMISSION",
-    "note": "The request.name CREATE hardening changed both current blobs after this bounded source check; the historical PASS must not be generalized to the new blobs."
+    "result": "HISTORICAL_PASS_FOR_PREVIOUS_BLOBS_ONLY",
+    "scope": "SOURCE_MECHANISM_ONLY_NOT_KUBERNETES_API_ADMISSION"
   },
   "external_primary_basis": [
     "Kubernetes ValidatingAdmissionPolicy v1/stable exposes admission request variables including request.name separately from the mutable admitted object",
@@ -40,7 +53,7 @@
   "adversarial_review": {
     "counter_reality": "On CREATE, oldObject is null. If a mutating admission component rewrites both app=clayverse and the clayverse container name before validation, a policy based only on current/previous Pod-object markers can stop recognizing the canonical request and admit a RuntimeClass or Kata-annotation mutation.",
     "repair": "requestClayVerse is derived from AdmissionRequest request.name == clayverse-0, independently of current Pod labels/containers. That request anchor participates in both RuntimeClass and io.katacontainers.* validations, and the admitted object name must remain equal to request.name.",
-    "remaining_uncertainty": "The new CEL/YAML has not yet been compiled or evaluated by the selected Kubernetes API server. Exact API support, admission ordering/effective mutation behavior, installed binding presence, and the final post-mutation Pod identity/annotations remain runtime gates."
+    "remaining_uncertainty": "The exact current CEL/YAML has passed bounded byte-bound source regressions but has not yet been compiled or evaluated by the selected Kubernetes API server. Exact API support, admission ordering/effective mutation behavior, installed binding presence, and the final post-mutation Pod identity/annotations remain runtime gates."
   },
   "latest_execution_surface_observation": {
     "provider": "Vercel Sandbox",
@@ -65,11 +78,11 @@
   },
   "next_discriminator": "Provision the approved host-side Preview GITHUB_READ_TOKEN without forwarding it into the Sandbox, bind fresh current Research/EntityOS source, then on an authorized isolated Kubernetes/Kata-capable path compile/apply the exact current policy plus binding and prove: clean clayverse-0 admitted; bad/missing RuntimeClass denied; io.katacontainers.* annotation denied; CREATE with all mutable ClayVerse markers rewritten still denied via request.name; object-name rewrite denied; UPDATE identity removal still denied via oldObject; unrelated Pods unaffected; effective post-mutation Pod identity/annotations attested before continuing exact OCI/Kata/Tier-2 gates.",
   "execution": {
-    "current_policy_source_check_started": false,
+    "current_policy_source_check_started": true,
     "kubernetes_api_admission_started": false,
     "clayverse_oci_runtime_started": false,
     "blocker": "Host-side Preview GITHUB_READ_TOKEN is absent from the retained Vercel controller; connected Vercel tooling does not expose environment-secret mutation.",
-    "test_credit": "NO_NEW_TEST_CREDIT_FOR_CURRENT_BLOBS",
+    "test_credit": "BOUNDED_EXACT_CURRENT_TWO_BLOB_SOURCE_MECHANISM_ONLY",
     "oci_runtime_credit": 0,
     "whole_product_credit": 0
   },

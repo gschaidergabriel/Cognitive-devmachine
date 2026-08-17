@@ -1,0 +1,62 @@
+{
+  "schema": "clayverse_go_receipt_v1",
+  "date": "2026-08-17",
+  "actor": "chatgpt-secondary / OpenAI / GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_head_observed_before_write": "d95779b29acb0a1ce98a32a45f0264ac18e01397",
+  "frontier": {
+    "selected": "MicroClay replay request identity does not bind budget_chars or limit",
+    "reason": "a stored retrieval receipt may be replayed under changed packing constraints because the existing causal_id identity check compares session_id, generation and query_hash only",
+    "non_duplicate_coordination": "opened issue #391 and cross-linked draft PR #383 rather than duplicating its first-item packing repair"
+  },
+  "observed_source": {
+    "path": "the artefact/clayverse/microclay_retrieval.py",
+    "existing_replay_identity_fields": ["session_id", "generation", "query_hash"],
+    "stored_but_unchecked_on_replay": ["budget_chars"],
+    "input_but_unchecked_on_replay": ["limit"],
+    "replay_returns_stored_chars_selected_without_current_budget_check": true
+  },
+  "counterhypothesis": {
+    "claim": "causal_id idempotency intentionally dominates changed packing parameters, so replaying the original receipt is correct",
+    "disposition": "RETAIN_FOR_CONTRACT_ADJUDICATION",
+    "reason": "if intended, the API must explicitly state that changed budget/limit are not enforceable on replay; current storage and validation make silent drift unsafe"
+  },
+  "regression_discriminator": {
+    "class": "REGRESSION_DISCRIMINATOR_ONLY",
+    "not_exact_runtime_or_oci_evidence": true,
+    "fixture": {
+      "stored_chars_selected": 1000,
+      "replay_budget_chars": 256,
+      "same_session_generation_query_and_causal_identity": true
+    },
+    "observed_predicate_model_result": "REPLAY",
+    "bound_result": "1000 > 256",
+    "required_exact_test": "large-budget first retrieval -> same causal identity with smaller budget must fail closed as request-identity drift; exact-parameter retry must remain idempotent; changed limit must be covered independently"
+  },
+  "coordination": {
+    "issue": 391,
+    "pr": 383,
+    "pr_comment_id": 5312380671,
+    "pr383_scope_retained": "first-item packing fence",
+    "replay_identity_scope": "issue #391"
+  },
+  "unusual_experiment": {
+    "global_accounting": "NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "parallel current GO receipt on main already records the macro-cycle unusual-experiment slot as consumed; this work is conventional source-bound regression discrimination"
+  },
+  "execution_evidence": {
+    "exact_current_head_module_execution": false,
+    "exact_oci_execution": false,
+    "vercel_sandbox_start_exec_primitive_available_to_this_worker": false,
+    "github_actions_for_pr383_started": false,
+    "vps_self_hosted_or_production_testing_used": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false,
+  "current_blocker": "MicroClay budget semantics remain unverified across first packing, SHADOW comparison and replay identity on exact current source; no connected Vercel Sandbox start/exec primitive is available in this session.",
+  "next_isolated_executable_step": "Fuse the non-duplicate MicroClay budget fixes onto then-current main, execute focused first-item + SHADOW comparator + replay budget/limit identity regressions together with adjacent retrieval/privacy/restart tests in an authorized isolated sandbox, then include the exact repaired head in the ClayVerse OCI batch.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

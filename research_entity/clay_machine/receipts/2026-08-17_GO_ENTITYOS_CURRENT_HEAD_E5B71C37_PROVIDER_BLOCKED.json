@@ -1,0 +1,64 @@
+{
+  "schema": "ClayEntityOSGoCurrentHeadReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_main_before_write": "5ee6deae7c61f508aba1d735fe876cf79be0d3fd",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "current_product_head_observed": "e5b71c37f52b67ad58fe3e45b843e97e62e1cdb4",
+  "ancestry": {
+    "base": "71910c90086e6a72bb8b815632508eddd457dcac",
+    "head": "e5b71c37f52b67ad58fe3e45b843e97e62e1cdb4",
+    "status": "ahead",
+    "ahead_by": 9,
+    "behind_by": 0
+  },
+  "source_delta_since_71910c90": {
+    "stderr_bytes_call_id": 4,
+    "stderr_bytes_signature": "linux.process.stderr.v0::(Int)->Bytes",
+    "stderr_bytes_vm_versions": [2],
+    "stderr_source": "existing bounded immutable HostProcessReceipt.stderr",
+    "stderr_gate_present": "tests/clay_cm_term_stderr_bytes_gate.py",
+    "stderr_gate_is_regression_only": true,
+    "stderr_gate_new_unusual_experiment_count": 0,
+    "other_hardening": [
+      "unknown serialized hostcall ID regression",
+      "VM-version admission regression",
+      "hostcall ABI registry hardening"
+    ]
+  },
+  "source_interpretation": {
+    "stdout_and_stderr_are_opaque_bytes": true,
+    "no_text_decode_or_transcode": true,
+    "no_new_runtime_path": true,
+    "live_streaming_stdin_pty_shell_general_argv_env_cwd_remain_open": true,
+    "source_only_not_executable_promotion": true
+  },
+  "vercel": {
+    "exact_head": "e5b71c37f52b67ad58fe3e45b843e97e62e1cdb4",
+    "status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED"
+  },
+  "last_bounded_exact_head_entityos_evidence": {
+    "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_transfer_to_current_head": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_step": "When provider admission returns, refresh the then-current PR 787 head and execute the coordinated exact-head Vercel Sandbox full-pytest plus canonical v7 one-file EntityOS artifact sequence with zero new unusual experiments.",
+  "acceptance": "BLOCKED",
+  "whole_entityos_pass": false,
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false
+}

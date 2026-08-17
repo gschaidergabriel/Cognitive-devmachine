@@ -1,60 +1,64 @@
 {
   "schema": "clayverse-mechanism-regression-receipt/v1",
-  "recorded_at_local": "2026-08-17T13:54:00+07:00",
+  "recorded_at_local": "2026-08-17T13:57:00+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "canonical_main_observed": "f881fbd4393314a693bc705d5e36aea2cc5013ea",
+  "canonical_main_at_clean_rebase": "f881fbd4393314a693bc705d5e36aea2cc5013ea",
   "candidate_pr": 431,
   "candidate_branch": "go/retrieval-active-identity-fence-20260817-1347",
   "candidate_source_commit": "34992e96fad1b6739822ab1508aa63638a9bb8c7",
-  "candidate_regression_commit": "58f185ea2862d5653903d37fc0822c598aaa63cb",
+  "candidate_regression_commit": "1282e7a0ddd277f7fbda9596b3e48440f5de5477",
   "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
   "unusual_experiment_started_by_this_work": false,
   "finding": {
     "name": "ACTIVE_TURN_COMPOSITE_IDENTITY_NOT_ENFORCED_BY_INDEPENDENT_FOREIGN_KEYS",
-    "mechanism": "An active_turns row can be individually foreign-key valid while its referenced turn or workspace episode belongs to another canonical session/user perspective.",
+    "mechanism": "An active_turns row can be individually foreign-key valid while its referenced user, turn or workspace episode belongs to another canonical session/user perspective.",
     "risk": "The canonical retrieval entry identity can become semantically forked across Gabriel/Andreas despite all individual SQLite foreign keys resolving."
   },
   "candidate_repair": {
     "retrieval_blob_git_sha1": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
-    "test_blob_git_sha1": "18d02f7264d5ce1c744d8f47a5df35d4e18b4124",
+    "test_blob_git_sha1": "8385edc7b2019af419bbfb37e92f33ec0127646b",
     "contracts": [
       "active user equals session user and turn user",
       "turn session equals requested active session",
       "workspace episode session equals requested active session",
       "workspace observation_turn_id equals active turn_id",
       "incomplete composite join fails closed",
-      "semantic composite mismatch fails closed"
+      "semantic composite mismatch fails closed",
+      "coherent canonical identity remains admissible"
     ]
   },
-  "isolated_mechanism_regression": {
+  "isolated_mechanism_evidence": {
     "surface": "OpenAI isolated non-production container",
-    "exact_source_binding": {
+    "exact_retrieval_source_binding": {
       "materialized_retrieval_git_hash_object": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
       "github_candidate_blob": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
       "match": true,
       "python_compile": "PASS"
     },
-    "setup": "Minimal SQLite schema preserving the relevant sessions/turns/workspace_episodes/active_turns foreign-key topology; non-target module imports stubbed only so the exact retrieval.py blob can load.",
-    "corrupt_case": {
-      "description": "Gabriel active turn references an Andreas workspace episode whose observation_turn_id is Gabriel's turn; every individual FK resolves.",
-      "observed": "RuntimeError: active causal identity mismatch",
-      "result": "REJECTED_AS_REQUIRED"
+    "exact_blob_minimal_schema_probe": {
+      "cross_session_episode": "REJECTED_AS_REQUIRED",
+      "coherent_identity": "ACCEPTED_AS_REQUIRED"
     },
-    "coherent_case": {
-      "description": "Gabriel active turn, turn and workspace episode all bind to the same Gabriel session and observation turn.",
-      "result": "ACCEPTED_AS_REQUIRED"
+    "adjacent_source_schema_regression": {
+      "cases": 4,
+      "passed": 4,
+      "cross_session_episode": "REJECTED_AS_REQUIRED",
+      "cross_session_turn": "REJECTED_AS_REQUIRED",
+      "active_user_drift": "REJECTED_AS_REQUIRED",
+      "coherent_identity": "ACCEPTED_AS_REQUIRED",
+      "pytest_observation": "4 passed in 0.25s"
     },
     "classification": "MECHANISM_SUPPORTED",
-    "limitations": "Not a full private-repository checkout, not the full pytest suite, not OCI build/start, not Clerk/browser/PTY/Claude acceptance."
+    "limitations": "The 4-case regression used the canonical UnifiedDB schema topology and the candidate identity predicate but remained locally source-minimized. It is not a full private-repository checkout, exact full pytest suite, OCI build/start, Clerk/browser/PTY/Claude acceptance or whole-product PASS."
   },
-  "github_runner_prior_observation": {
-    "workflow_run": 32003102411,
-    "job": 95307131258,
+  "github_runner_latest_observation": {
+    "workflow_run": 32003507703,
+    "job": 95308296672,
     "conclusion": "failure_before_visible_steps",
-    "visible_steps": 0,
+    "steps": null,
     "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE"
   },
   "whole_clayverse_container_pass": false,
@@ -64,5 +68,5 @@
     "production host",
     "Together API"
   ],
-  "next_exact_step": "Run the rebased PR's exact full-source retrieval/lifecycle regression set in an admitted isolated runner; if green and ancestry remains clean, merge the identity fence without importing the divergent Stage-B stack."
+  "next_exact_step": "Run the current PR head's exact full-source retrieval/lifecycle regression set in an actually-started admitted isolated runner; if green and ancestry remains clean, merge the horizontal identity fence without importing the divergent Stage-B stack."
 }

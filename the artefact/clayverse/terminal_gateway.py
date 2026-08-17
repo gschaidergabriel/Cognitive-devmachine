@@ -9,7 +9,7 @@ from pathlib import Path
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .adapters import AuthenticationError, ClerkTokenVerifier
-from .identity import IdentityRouter
+from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
@@ -25,29 +25,28 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
 
 
 def _runtime_ready(db: UnifiedDB) -> bool:
-    """Read-only readiness check for the canonical UnifiedDB spine.
-
-    Liveness and readiness are deliberately separate. This probe never rebuilds,
-    checkpoints, advances generations, starts terminals, or performs network I/O.
-    It only verifies that the live connection can still read the minimum canonical
-    schema/entity/user/session invariants required by the terminal product surface.
-    """
+    """Read-only readiness check for the canonical UnifiedDB spine."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
         users = db.db.execute(
             "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
         ).fetchone()
-        sessions = db.db.execute(
-            "SELECT COUNT(*) FROM sessions WHERE "
-            "(user_id='gabriel' AND terminal_name='terminal-gabriel') OR "
-            "(user_id='andreas' AND terminal_name='terminal-andreas')"
-        ).fetchone()
+        session_rows = db.db.execute(
+            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
+        ).fetchall()
+        sessions = {row["user_id"]: row for row in session_rows}
+        entity_generation = int(generation[0]) if generation else -1
         return bool(
             schema and schema[0] == "5"
-            and generation and int(generation[0]) >= 1
+            and entity_generation >= 1
             and users and int(users[0]) == 2
-            and sessions and int(sessions[0]) == 2
+            and set(sessions) == {"gabriel", "andreas"}
+            and all(
+                sessions[user_id]["terminal_name"] == terminal_name
+                and int(sessions[user_id]["generation"]) == entity_generation
+                for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
+            )
         )
     except Exception:
         return False
@@ -158,13 +157,11 @@ window.addEventListener('load', async () => {{
             pass
         except Exception as exc:
             try:
-                await ws.send_text(json.dumps({"type": "error", "message": str(exc)}))
+                await ws.send_text(json.dumps({"type": "error", "message": str(exc)))
             except Exception:
                 pass
         finally:
             if attach_pid is not None and attach_fd is not None:
-                # Reaping may wait briefly for a stubborn attach child; keep that bounded
-                # process cleanup off the websocket event loop.
                 await asyncio.to_thread(terminals.close_attach, attach_pid, attach_fd)
 
     return app

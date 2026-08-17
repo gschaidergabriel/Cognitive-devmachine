@@ -1,0 +1,62 @@
+{
+  "schema": "ClayVerseEvidenceReceipt/v1",
+  "trigger": "go",
+  "recorded_at_local": "2026-08-17T22:50:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay research organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "novelty_class": "CONFIRMS_AFTER_CONCURRENT_FUSION",
+  "scope": "exact-file MicroVM deployment contract/source regression only",
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "exact user trigger exposes only minute-precision immutable message time and no shared immutable request/turn id",
+    "unusual_experiments_executed_by_this_organ": 0,
+    "stale_write_fence_observed": true,
+    "stale_write_result": "GitHub update of pre-fusion template blob ac0f76e9... returned 409 after main advanced; no stale overwrite occurred",
+    "duplicate_write_avoided": true
+  },
+  "canonical_files": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "2608f5ca9c18ff2682d137a099c7047966fb872c",
+    "the artefact/tests/test_microvm_deployment_contract.py": "cc7e3cb7628314c51534330878ca886bc464713e"
+  },
+  "execution_surface": {
+    "class": "authorized isolated non-production OpenAI container",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel_observed": "Linux 6.18.35 x86_64",
+    "network_to_github": "unavailable; exact files reconstructed from authenticated GitHub connector bytes and rebound with git hash-object before execution"
+  },
+  "reconstruction_binding": {
+    "template_git_blob_observed": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "contract_git_blob_observed": "2608f5ca9c18ff2682d137a099c7047966fb872c",
+    "test_git_blob_observed": "cc7e3cb7628314c51534330878ca886bc464713e",
+    "all_three_match_current_github_blobs": true
+  },
+  "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+  "result": {
+    "exit_code": 0,
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "duration_observed": "0.06s",
+    "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION"
+  },
+  "supported_claims": [
+    "canonical MicroVM template now carries a ClayVerse-selected default-deny Kubernetes NetworkPolicy for both ingress and egress",
+    "canonical contract requires actual CNI NetworkPolicy enforcement and complete additive-policy inventory before final acceptance",
+    "existing static regression passes on the exact current three-file blob set"
+  ],
+  "not_claimed": [
+    "no Kubernetes cluster execution",
+    "no Kata/microVM execution",
+    "no CNI enforcement evidence",
+    "no exact OCI build or image digest",
+    "no real Clerk/browser/PTY/Claude runtime evidence",
+    "no whole ClayVerse PASS"
+  ],
+  "strongest_counterhypothesis": "A syntactically correct default-deny NetworkPolicy can still provide zero isolation if the admitted CNI ignores NetworkPolicy or if a separate broad matching policy opens the additive effective union.",
+  "next_falsifier": "On the exact accepted image digest inside the admitted Kata/equivalent guest-kernel runtime, attest CNI identity/version, prove deny-all ingress+egress before allow policy, enumerate every matching policy, apply the exact reviewed allow policy, then prove admitted flows work and representative undeclared flows remain denied.",
+  "primary_oci_execution_blocker_at_refresh": "Vercel Sandbox admission is proven, but the private Research/EntityOS source staging path is blocked before source fetch by missing host-side GITHUB_READ_TOKEN; the token must not be forwarded into the sandbox.",
+  "acceptance": "IN_PROGRESS"
+}

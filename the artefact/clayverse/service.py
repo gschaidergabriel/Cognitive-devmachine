@@ -23,12 +23,17 @@ def _clerk_map() -> dict[str, str]:
         mapping = json.loads(raw)
     except json.JSONDecodeError as exc:
         raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON is invalid JSON") from exc
-    if not isinstance(mapping, dict) or not mapping:
-        raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must be a non-empty object")
-    if any(not isinstance(k, str) or v not in {"gabriel", "andreas"} for k, v in mapping.items()):
-        raise RuntimeError("Clerk mapping may only target gabriel/andreas")
+    if not isinstance(mapping, dict) or len(mapping) != 2:
+        raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must contain exactly two subject mappings")
+    if any(
+        not isinstance(subject, str)
+        or not subject.strip()
+        or user_id not in {"gabriel", "andreas"}
+        for subject, user_id in mapping.items()
+    ):
+        raise RuntimeError("Clerk mapping subjects must be non-empty strings and may only target gabriel/andreas")
     if set(mapping.values()) != {"gabriel", "andreas"}:
-        raise RuntimeError("Clerk mapping must identify both canonical users")
+        raise RuntimeError("Clerk mapping must identify each canonical user exactly once")
     return mapping
 
 

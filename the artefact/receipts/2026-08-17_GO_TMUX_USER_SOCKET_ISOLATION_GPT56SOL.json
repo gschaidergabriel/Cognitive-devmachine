@@ -1,0 +1,65 @@
+{
+  "schema": "clayverse-go-source-receipt/v1",
+  "recorded_at": "2026-08-17T13:47:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "joined_main": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+  "branch": "go/terminal-tmux-user-isolation-20260817-1342",
+  "candidate_head_before_receipt": "0d7d08fb54d0203ded132fb71d2bcf383fd90226",
+  "classification": "SOURCE_CANDIDATE_PRIVACY_BOUNDARY_REPAIR_UNEXECUTED",
+  "observed_source_defect": {
+    "file": "the artefact/clayverse/terminal_sessions.py",
+    "prior_blob": "3fe4b74eebaef6d2dea66ca0e2443ac2b6de19b2",
+    "mechanism": "Both canonical user sessions were created and attached through one shared tmux server socket name, clayverse. Authentication selected the initial target session, but the tmux client remained connected to the same server that contained both canonical sessions.",
+    "affected_contracts": [
+      "two user-bound durable Claude/tmux perspectives",
+      "cross-user privacy boundary",
+      "Clerk-authenticated identity must remain bound through PTY runtime"
+    ]
+  },
+  "counterhypothesis": "Targeting a canonical tmux session with attach-session -t is sufficient isolation even when both sessions share one tmux server.",
+  "counterhypothesis_result": "REJECT_AT_SOURCE_CONTRACT_LEVEL",
+  "rationale": "tmux clients connect to a server through a socket and server-scoped commands can target sessions in that server. Therefore the security boundary should not rely on the initial session target when the authenticated user must not gain a route to the peer user's terminal perspective.",
+  "repair": {
+    "runtime_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+    "test_blob": "cd4bcf8dd79bbaa5d0a34e7bc2dd8b16b5cb75db",
+    "mechanism": "Derive a distinct tmux -L socket/server name from the already-validated canonical user binding and use it consistently for has-session, new-session and attach-session.",
+    "gabriel_socket": "clayverse-gabriel",
+    "andreas_socket": "clayverse-andreas",
+    "state_authority_changed": false,
+    "container_count_changed": false,
+    "identity_model_changed": false,
+    "effect_authority_changed": false
+  },
+  "regression_obligations_added": [
+    "canonical users resolve to distinct tmux server sockets",
+    "session creation uses only the bound user's tmux server",
+    "PTY attachment uses only the bound user's tmux server"
+  ],
+  "external_primary_evidence": [
+    "tmux official GitHub wiki: Getting Started - clients connect to the tmux server through its socket",
+    "tmux official GitHub wiki: Advanced Use - separate servers may be selected with -L and can be used for complete isolation"
+  ],
+  "parallel_work": {
+    "gateway_lane": "Current main already contains the separate WebSocket protocol/input-bound hardening from PR #419 lineage; this candidate changes terminal_sessions.py only and does not duplicate terminal_gateway.py.",
+    "microclay_method_lanes": "No overlap.",
+    "supply_chain_lanes": "No overlap."
+  },
+  "execution_evidence": {
+    "authorized_vercel_sandbox_start_exec_available_to_this_organ": false,
+    "focused_tests_executed": false,
+    "oci_build_executed": false,
+    "live_tmux_cross_user_test_executed": false,
+    "whole_product_pass": false,
+    "note": "Source inspection, test definitions and GitHub writes are not executable ClayVerse runtime evidence."
+  },
+  "unusual_experiment_accounting": {
+    "new_unusual_experiment_executed": false,
+    "reason": "Current shared GO experiment accounting already closed the macro-cycle slot after the recorded trigger-race violation; additional distinct experiments are forbidden."
+  },
+  "next_exact_gate": "In an actually-started authorized isolated Vercel Sandbox on the then-current fused head, run the focused tmux isolation regressions plus a live two-user tmux discriminator proving a Gabriel-attached client cannot list/switch/select Andreas's server/session; then run adjacent Clerk/WebSocket/PTY/persistence regressions and the exact OCI build/start/readiness/restart lane.",
+  "acceptance": "IN_PROGRESS"
+}

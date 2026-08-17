@@ -1,0 +1,75 @@
+{
+  "schema": "ClayVerseBoundedEvidenceReceipt/v1",
+  "timestamp_local": "2026-08-17T21:03:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / OpenAI isolated non-production container",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "pr": 625,
+  "observed_head_before_receipt": "b4208edd975a673a21f98ce8984733593175f2f4",
+  "base_main_observed_via_pr": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "purpose": "Align the retained tokenless ClayVerse baseline across workflow and EntityOS staging tests without reintroducing a mandatory private-read token or mandatory EntityOS artifact.",
+  "commits_authored_in_this_pass": [
+    "cf9118cc4e2ee5fe96de851d3d64d55b766d93ee",
+    "ea1a00b6dd8a360673bae4373c2c397ebf2b0cc2",
+    "714bbfe43fc0eb17335dc886accfe996c0d7bf64",
+    "78cae34d660124fdb605990afd6bcc3cd7384f60"
+  ],
+  "source_delta": [
+    "stage-entityos regression now expects the bounded build-assets/entityos/EntityOS staging path and checks temporary-residue cleanup",
+    "manual OCI workflow no longer requires EntityOS inputs for the baseline path",
+    "optional EntityOS inputs must be supplied as a tag+SHA pair or fail closed",
+    "github.token is exposed only to the explicitly optional same-repository release-download step",
+    "baseline OCI verification explicitly asserts EntityOS absence when no digest is supplied",
+    "artifact-authority and OCI-workflow regressions were aligned with the optional staging contract and reject GITHUB_READ_TOKEN"
+  ],
+  "isolated_execution": {
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "docker": "UNAVAILABLE",
+    "podman": "UNAVAILABLE",
+    "buildah": "UNAVAILABLE",
+    "tmux": "UNAVAILABLE",
+    "focused_reconstructed_contract_pytest": {
+      "result": "PASS",
+      "passed": 18,
+      "failed": 0,
+      "duration_seconds": 0.10,
+      "scope": [
+        "test_build_context_boundary.py",
+        "test_entityos_packaging_contract.py",
+        "test_single_container_entityos_boundary.py",
+        "test_stage_entityos.py",
+        "test_entityos_artifact_authority.py",
+        "test_oci_entityos_staging_workflow.py"
+      ],
+      "identity_limit": "Focused source slices were reconstructed from the observed GitHub branch contents; this is not a byte-for-byte checkout of the entire branch and is not full-branch pytest."
+    },
+    "stager_process_falsifiers": {
+      "valid_digest": "PASS; output digest exact; mode 0555",
+      "wrong_digest": "PASS_FAIL_CLOSED; exit 65; no staged artifact or temp residue",
+      "symlink_source": "PASS_FAIL_CLOSED; exit 66; no staged artifact",
+      "uppercase_digest": "PASS; normalized and accepted"
+    }
+  },
+  "evidence_class": "FOCUSED_TEST_PASS",
+  "not_proven": [
+    "actual Docker .dockerignore transfer semantics",
+    "baseline OCI image build",
+    "optional EntityOS OCI image build",
+    "image digest",
+    "packaged service readiness/runtime",
+    "whole ClayVerse acceptance"
+  ],
+  "next_discriminator": "Fresh exact-head execution on an authorized isolated Docker/OCI-capable surface: inspect real build-context membership, build EntityOS-free baseline, verify absent EntityOS in image, exercise optional digest-bound embedding and negative cases, capture image digest.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persistence": false
+  },
+  "whole_clayverse_pass": false
+}

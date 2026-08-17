@@ -1,0 +1,86 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_parent_observed": "8155ae9ec5303b0d720fefbf2f7a8d30a63d4134",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_pr_head_observed": "4dc90f07a6b22147db6e7ae9cf5439ebe8d05e02",
+  "execution_classification": "CURRENT_SOURCE_REVIEW_PLUS_PROVIDER_NEGATIVE_EVIDENCE_ONLY",
+  "observations": {
+    "non_target_ready_deployment": {
+      "deployment": "dpl_8KkWa1Rnib7mUPjYtsoeHhS1Pq3r",
+      "source_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
+      "source_ref": "chatgpt/go-attestation-authority-regression-20260817-0845",
+      "deployment_state": "READY",
+      "full_pytest_runner": "SKIP_NON_TARGET_PREVIEW",
+      "entityos_v7_runner": "SKIP_NON_TARGET_PREVIEW",
+      "sandbox_evidence": false,
+      "interpretation": "READY on a non-target preview proves deployment completion only; the guarded build scripts explicitly skipped both Vercel Sandbox execution paths. It does not establish recovery of current EntityOS executable acceptance."
+    },
+    "current_target_head_provider_state": {
+      "head": "4dc90f07a6b22147db6e7ae9cf5439ebe8d05e02",
+      "github_vercel_status": "failure",
+      "failure_class": "build-rate-limit",
+      "exact_head_sandbox_started": false,
+      "current_exact_head_executable_status": "UNVERIFIED_INFRASTRUCTURE_BLOCKED"
+    },
+    "current_cmterm_stdout_bytes_source_slice": {
+      "canonical_abi_contract": "linux.process.stdout.v0::(Int)->Bytes",
+      "call_id": 3,
+      "effect_class": "EXTERNAL_COMMUNICATION",
+      "lowering_uses_shared_hostcall_registry": true,
+      "host_process_vm_exposes_completed_receipt_stdout_as_builtin_immutable_bytes": true,
+      "opaque_binary_regression_gate_committed": true,
+      "regression_payload": "NUL plus non-UTF8 byte",
+      "new_unusual_experiment_count": 0,
+      "source_review_limit": "The generic ClayHost type annotations/registration shape and serialized OP_HOSTCALL validator are not yet fully registry-driven. The current slice is therefore narrower than the stronger single-authority architecture: real process stdout Bytes is source-wired through the concrete HostProcessVMHost, but generic hostcall ABI validation remains a follow-on convergence point.",
+      "executable_pass_claimed": false
+    }
+  },
+  "counterhypotheses": [
+    {
+      "hypothesis": "A newly READY Vercel preview means the current EntityOS target can run Sandbox acceptance again.",
+      "result": "REJECTED_FOR_OBSERVED_PREVIEW",
+      "evidence": "The READY preview logged SKIP_NON_TARGET_PREVIEW for both full-pytest and v7 runners."
+    },
+    {
+      "hypothesis": "Declaring a stdout Bytes ABI contract alone closes the canonical hostcall authority boundary.",
+      "result": "REJECTED_AS_TOO_STRONG",
+      "evidence": "At the observed head, lowering consults the registry and HostProcessVMHost checks the concrete contracts, while generic ClayHost registration/invoke typing and serialized OP_HOSTCALL validation remain only partially registry-bound."
+    }
+  ],
+  "last_promoted_exact_entityos_evidence": {
+    "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "deployment": "dpl_7CZDVst5XGJp67fKs1EeT9KNwiwg",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope": "historical exact-head bounded evidence only"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by_prior_evidence": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_discriminator": [
+    "refresh the then-current PR787 head and overlapping hostcall branches",
+    "wait only for provider capacity as an external blocker; do not substitute VPS, self-hosted or production-host execution",
+    "on the exact target ref, require an actually-started Vercel Sandbox full-pytest run with nonzero tests, zero skips, DENY_ALL and new_unusual_experiment_count=0",
+    "run the canonical v7 Git-free attested twin EntityOS build/runtime/no-host-Python/relocation/provenance gates and successful Sandbox stop",
+    "require the CM-TERM stdout Bytes gate on those exact bytes",
+    "after executable evidence, converge generic ClayHost and serialized OP_HOSTCALL validation on the same canonical HostcallABI rather than preserving duplicate signature authority"
+  ],
+  "claims": {
+    "current_source_stdout_bytes_slice_exists": true,
+    "current_exact_head_sandbox_pass": false,
+    "current_exact_head_entityos_artifact_observed": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

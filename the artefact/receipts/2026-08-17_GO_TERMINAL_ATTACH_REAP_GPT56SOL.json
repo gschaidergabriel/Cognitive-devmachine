@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "owner_authority_note": "Current 2026-08-17 ClayVerse single-container owner directive supersedes legacy EntityOS-as-single-file endpoint cache.",
+  "frontier": "Browser WebSocket PTY attach lifecycle / transient child reaping",
+  "observed_head_before_receipt": "bc372def898b379df5735abe923cbe381f7e13dc",
+  "bug": {
+    "mechanism": "TerminalSessionManager.close_attach closed the PTY fd and sent SIGHUP but did not waitpid the transient attach child.",
+    "product_risk": "Repeated browser disconnect/reconnect cycles can leave waitable zombie attach children in the long-lived ClayVerse container.",
+    "pre_fix_reproduction": {
+      "environment": "isolated local execution surface",
+      "result": "FAIL_CHILD_STILL_RUNNING_OR_NOT_REAPED",
+      "post_close_waitpid": [0, 0]
+    }
+  },
+  "repair": {
+    "commit": "e1ff12352cf3e6b44cdbf1a2267745e669cc5402",
+    "initial_fixed_blob": "96561f0472d7a5e916f5f321a307795c6f5f7856",
+    "current_preserving_blob_at_observed_head": "3fe4b74eebaef6d2dea66ca0e2443ac2b6de19b2",
+    "behavior": "After SIGHUP, bounded nonblocking waitpid reaps the child; after 0.5 s the cleanup escalates to SIGKILL and blocking waitpid. terminal_gateway keeps cleanup off the asyncio event loop via asyncio.to_thread.",
+    "current_source_preservation": "PASS_SOURCE_INSPECTION"
+  },
+  "unusual_experiment": {
+    "count_for_this_user_triggered_go": 1,
+    "name": "SIGHUP-resistant transient attach child",
+    "purpose": "Falsify the assumption that SIGHUP alone guarantees bounded attach cleanup.",
+    "result": "SUPPORTED_BOUNDED_ESCALATION",
+    "replications": "Subsequent synchronized and Vercel repetitions are regression-only repetitions of the same intervention and add zero unusual experiments."
+  },
+  "vercel_sandbox": {
+    "runner_repository": "gschaidergabriel/Dr.-Unterweger",
+    "runner_branch": "chatgpt/go-clayverse-attach-reap-20260817-1220",
+    "runner_commit_executed": "4decb8b44f206653af6c87317dbd26991a5eb71b",
+    "deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
+    "runtime": "python3.13",
+    "network_policy": "deny-all",
+    "source_binding": {
+      "research_commit": "e1ff12352cf3e6b44cdbf1a2267745e669cc5402",
+      "terminal_sessions_blob": "96561f0472d7a5e916f5f321a307795c6f5f7856"
+    },
+    "result": "PASS_ATTACH_CHILD_REAP_AND_BOUND",
+    "normal_reap": "PASS",
+    "same_unusual_experiment_replication": "PASS",
+    "hup_resistant_elapsed_seconds": 0.504,
+    "postcondition": "CHILD_NOT_WAITABLE",
+    "sandbox_stopped": true,
+    "duplicate_build_invocation_note": "Vercel invoked the build script twice; both outputs were identical PASS results and count only as ordinary replication.",
+    "scope_limit": "This execution proves the e1ff1235/96561f blob behavior. Later main commits preserve the same close_attach logic by source inspection, but no second exact-current-total-blob Vercel execution was observed because the low-level test-branch ref update did not trigger a new Git deployment."
+  },
+  "parallel_state": {
+    "note": "Main advanced concurrently with independent Clay workers. The repaired close_attach logic was rechecked at observed head bc372def and remained present in terminal_sessions blob 3fe4b74e.",
+    "no_duplicate_canonical_path": true
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "evidence_note": "Component/source/Sandbox PASS for terminal attach cleanup does not imply whole ClayVerse container PASS.",
+  "next_frontier": "Obtain exact-current-head whole-container OCI build/start/restart/authenticated terminal acceptance in an actually started isolated Vercel Sandbox once the current OCI execution path is available; keep exact source/artifact identity and sandbox stop receipts."
+}

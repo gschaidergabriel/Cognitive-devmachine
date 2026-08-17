@@ -1,0 +1,45 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T14:07:31+07:00",
+  "rebased_at": "2026-08-17T14:28:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "4b8ce693a7eb127611279975bc857c44a081338e",
+  "branch": "go/mcp-startup-binding-20260817-1405",
+  "finding": {
+    "classification": "MCP_FIRST_PROMPT_AVAILABILITY_HARDENING",
+    "observed": "The sole managed ClayVerse stdio MCP server did not opt its two product-critical tools out of Claude Code deferred MCP discovery.",
+    "risk": "The first product turn unnecessarily depends on asynchronous discovery even though session_state and request_effect are part of the canonical local product boundary."
+  },
+  "repair": {
+    "managed_mcp_git_blob": "139aecb69513e91df56b3791c79405c79372112e",
+    "change": "Set alwaysLoad=true on the sole managed ClayVerse stdio MCP server.",
+    "authority_change": false,
+    "new_capability": false,
+    "new_server": false
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "exact reconstructed managed-mcp/test content",
+    "result": "1 passed in 0.02s",
+    "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_VERIFIED",
+    "runtime_claude_started": false,
+    "mcp_stdio_started": false,
+    "oci_image_built": false
+  },
+  "rebase": {
+    "reason": "Original draft became non-mergeable after parallel main advancement.",
+    "action": "Branch was rebuilt from current main and the same bounded two-file product delta was reapplied; no parallel main files were reverted."
+  },
+  "vercel": {
+    "status": "EXECUTION_ADMISSION_BLOCKED",
+    "reason": "Observed deployment rate limit before build/Sandbox start; no duplicate attempt was made."
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_added_by_this_lane": 0
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_PASS",
+  "next_gate": "Actually-started exact-current Vercel Sandbox/OCI run proving both exact ClayVerse tools are present on the first prompt and MCP startup failure fails closed."
+}

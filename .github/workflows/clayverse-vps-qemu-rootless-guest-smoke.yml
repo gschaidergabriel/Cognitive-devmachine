@@ -1,0 +1,221 @@
+name: ClayVerse VPS rootless QEMU TCG guest smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clayverse-vps-qemu-rootless-guest-smoke.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-vps-qemu-rootless-guest-smoke
+  cancel-in-progress: false
+
+jobs:
+  rootless-qemu-tcg-guest-smoke:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Stage rootless QEMU from Ubuntu packages
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          prefix="$work/root"
+          debs="$work/debs"
+          mkdir -p "$prefix" "$debs"
+          test "$(id -u)" -ne 0
+          command -v apt-cache >/dev/null
+          command -v apt-get >/dev/null
+          command -v dpkg-deb >/dev/null
+
+          python3 - "$debs/packages.txt" <<'PY'
+          import collections, re, subprocess, sys
+          out = sys.argv[1]
+          roots = ['qemu-system-x86', 'qemu-system-common', 'qemu-system-data']
+          queue = collections.deque(roots)
+          seen = set()
+          ordered = []
+          while queue:
+              pkg = queue.popleft().split(':', 1)[0]
+              if not pkg or pkg in seen:
+                  continue
+              probe = subprocess.run(['apt-cache', 'show', pkg], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+              if probe.returncode != 0:
+                  continue
+              seen.add(pkg)
+              ordered.append(pkg)
+              proc = subprocess.run(['apt-cache', 'depends', pkg], text=True, capture_output=True, check=False)
+              if proc.returncode != 0:
+                  raise SystemExit(f'APT_DEPENDS_FAILED:{pkg}')
+              for line in proc.stdout.splitlines():
+                  match = re.match(r'^\s*(?:PreDepends|Depends):\s+([^\s]+)', line)
+                  if not match:
+                      continue
+                  dep = match.group(1)
+                  if dep.startswith('<') and dep.endswith('>'):
+                      continue
+                  dep = dep.strip('<>').split(':', 1)[0]
+                  if dep and dep not in seen:
+                      queue.append(dep)
+          if not all(root in seen for root in roots):
+              raise SystemExit('QEMU_ROOT_PACKAGE_CANDIDATE_MISSING')
+          with open(out, 'w', encoding='utf-8') as handle:
+              handle.write('\n'.join(ordered) + '\n')
+          print(f'ROOTLESS_QEMU_PACKAGE_COUNT={len(ordered)}')
+          PY
+
+          cd "$debs"
+          while IFS= read -r pkg; do
+            apt-get download "$pkg" >/dev/null
+          done < packages.txt
+          test -n "$(find . -maxdepth 1 -name '*.deb' -print -quit)"
+          for deb in ./*.deb; do
+            dpkg-deb -x "$deb" "$prefix"
+          done
+
+          qemu="$prefix/usr/bin/qemu-system-x86_64"
+          test -x "$qemu"
+          export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
+          "$qemu" --version | head -n1
+          "$qemu" -accel help
+          if ldd "$qemu" | grep -F 'not found'; then
+            echo 'ROOTLESS_QEMU_SHARED_LIBRARY_MISSING' >&2
+            exit 51
+          fi
+
+      - name: Boot verified networkless Alpine guest kernel under TCG
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          prefix="$work/root"
+          receipt="/tmp/clayverse-rootless-qemu-guest-${GITHUB_RUN_ID}.json"
+          serial="$work/serial.log"
+          netboot="$work/alpine-netboot.tar.gz"
+          extract="$work/netboot"
+          qemu="$prefix/usr/bin/qemu-system-x86_64"
+          export LD_LIBRARY_PATH="$prefix/usr/lib/x86_64-linux-gnu:$prefix/lib/x86_64-linux-gnu${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="$prefix/usr/lib/x86_64-linux-gnu/qemu"
+          base='https://dl-cdn.alpinelinux.org/alpine/v3.24/releases/x86_64'
+          image='alpine-netboot-3.24.1-x86_64.tar.gz'
+          mkdir -p "$extract"
+
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base/$image.sha256" -o "$work/$image.sha256"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base/$image" -o "$netboot"
+          expected=$(awk -v f="$image" '$2==f || $2=="*"f {print $1; exit}' "$work/$image.sha256")
+          printf '%s' "$expected" | grep -Eq '^[0-9a-f]{64}$'
+          printf '%s  %s\n' "$expected" "$netboot" | sha256sum -c -
+
+          kernel_member=$(tar -tzf "$netboot" | grep -E '(^|/)vmlinuz-virt$' | head -n1)
+          initrd_member=$(tar -tzf "$netboot" | grep -E '(^|/)initramfs-virt$' | head -n1)
+          test -n "$kernel_member"
+          test -n "$initrd_member"
+          tar -xzf "$netboot" -C "$extract" "$kernel_member" "$initrd_member"
+          kernel="$extract/$kernel_member"
+          initrd="$extract/$initrd_member"
+          test -s "$kernel"
+          test -s "$initrd"
+          kernel_sha=$(sha256sum "$kernel" | awk '{print $1}')
+          initrd_sha=$(sha256sum "$initrd" | awk '{print $1}')
+          qemu_version=$("$qemu" --version | head -n1)
+
+          set +e
+          timeout --signal=TERM --kill-after=3s 45s "$qemu" \
+            -accel tcg,thread=multi \
+            -machine q35 \
+            -cpu max \
+            -smp 1 \
+            -m 768 \
+            -nodefaults \
+            -no-user-config \
+            -kernel "$kernel" \
+            -initrd "$initrd" \
+            -append 'console=ttyS0,115200 earlyprintk=ttyS0' \
+            -serial "file:$serial" \
+            -display none \
+            -monitor none \
+            -nic none \
+            -no-reboot \
+            -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny
+          qemu_rc=$?
+          set -e
+
+          test -f "$serial"
+          serial_sha=$(sha256sum "$serial" | awk '{print $1}')
+          kernel_line=$(grep -aEm1 '^\[[[:space:]]*[0-9]+\.[0-9]+\].*Linux version |^Linux version ' "$serial" || true)
+          boot_signal=$(grep -aEm1 'Run /init as init process|Alpine Init|Alpine Linux' "$serial" || true)
+          guest_started=false
+          if [ -n "$kernel_line" ]; then guest_started=true; fi
+          if [ "$guest_started" != true ]; then
+            tail -c 32768 "$serial" >&2 || true
+          fi
+
+          python3 - "$receipt" "$expected" "$kernel_sha" "$initrd_sha" "$serial_sha" "$qemu_rc" "$guest_started" "$qemu_version" "$kernel_line" "$boot_signal" <<'PY'
+          import json, os, pathlib, platform, sys
+          out,base_sha,kernel_sha,initrd_sha,serial_sha,qemu_rc,started,qemu_version,kernel_line,boot_signal=sys.argv[1:]
+          payload={
+            'schema':'ClayVerseVpsRootlessQemuTcgGuestSmoke/v1',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'executor_type':'QEMU_TCG',
+            'vmm_rootless_temp_payload':True,
+            'vmm_installed_on_host':False,
+            'host_orchestration_only':True,
+            'product_code_executed_on_host':False,
+            'host_docker_used':False,
+            'host_kernel':platform.release(),
+            'guest_base':'alpine-netboot-3.24.1-x86_64.tar.gz',
+            'guest_base_sha256':base_sha,
+            'guest_kernel_sha256':kernel_sha,
+            'guest_initramfs_sha256':initrd_sha,
+            'guest_kernel_marker':kernel_line or None,
+            'guest_boot_signal':boot_signal or None,
+            'guest_network_mode':'NONE',
+            'guest_memory_mib':768,
+            'guest_vcpus':1,
+            'host_filesystem_share':False,
+            'qemu_monitor_exposed':False,
+            'qemu_sandbox':'on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny',
+            'qemu_version':qemu_version,
+            'qemu_exit_status':int(qemu_rc),
+            'serial_log_sha256':serial_sha,
+            'guest_kernel_boot_observed':started=='true',
+            'cleanup_boundary':'workflow removes temporary VMM payload and guest inputs in final step',
+            'product_runtime_credit':0,
+            'whole_product_credit':0,
+            'unusual_experiment_count_added':0,
+          }
+          pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps({'guest_kernel_boot_observed':payload['guest_kernel_boot_observed'],'executor_type':'QEMU_TCG','product_runtime_credit':0,'whole_product_credit':0},sort_keys=True))
+          if not payload['guest_kernel_boot_observed']:
+            raise SystemExit(52)
+          PY
+
+      - name: Destroy temporary VMM and guest payloads
+        if: always()
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          work="/tmp/clayverse-rootless-qemu-${GITHUB_RUN_ID}"
+          pkill -TERM -P $$ qemu-system-x86_64 2>/dev/null || true
+          sleep 1
+          pkill -KILL -P $$ qemu-system-x86_64 2>/dev/null || true
+          rm -rf "$work"
+          test ! -e "$work"
+
+      - name: Upload bounded guest receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-vps-rootless-qemu-guest-${{ github.run_id }}
+          path: /tmp/clayverse-rootless-qemu-guest-${{ github.run_id }}.json
+          if-no-files-found: warn
+          retention-days: 7

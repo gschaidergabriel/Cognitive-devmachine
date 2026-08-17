@@ -30,6 +30,7 @@ class EffectGate:
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
         if not row: raise PermissionError('session owner mismatch')
         generation=int(row[0])
+        self.db.assert_live_generation(req.session_id,generation)
         if req.expected_generation is not None and req.expected_generation != generation: raise StaleGeneration(req.session_id)
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':

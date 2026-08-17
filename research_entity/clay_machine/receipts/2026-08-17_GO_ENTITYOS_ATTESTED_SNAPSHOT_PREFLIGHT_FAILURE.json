@@ -38,10 +38,17 @@
     "independent_correction_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
     "independent_correction": "stage-go-source.mjs changed localeCompare ordering to Buffer.compare over UTF-8 path bytes."
   },
+  "coordination_correction": {
+    "current_candidate_head": "e90b887111969becc922d25a73886af61d6b5340",
+    "parent_with_sort_fix": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
+    "semantic_product_delta_after_sort_fix": "NONE; accounting/receipt truth only",
+    "accounting_delta": "The reserved unusual experiment remains unconsumed until an actually-started Vercel Sandbox executes it; prior exact-head failure executed 0 unusual experiments.",
+    "current_candidate_executable_observation": "UNEXECUTED"
+  },
   "current_execution_blocker": {
-    "corrected_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
-    "vercel_commit_status": "FAILURE_BEFORE_SANDBOX",
-    "provider_reason": "build-rate-limit",
+    "corrected_head": "e90b887111969becc922d25a73886af61d6b5340",
+    "vercel_commit_status": "NO_ACCEPTED_GIT_BOUND_SANDBOX_RUN_OBSERVED_YET",
+    "provider_reason": "recent corrected-head attempt recorded build-rate-limit before Sandbox; no later exact-head Sandbox evidence observed",
     "corrected_head_sandbox_observation": "UNEXECUTED",
     "executable_claim": "UNRESOLVED"
   },
@@ -49,9 +56,10 @@
     "reserved_id": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
     "limit": 1,
     "empirically_executed_as_of_receipt": 0,
+    "slot_state": "RESERVED_NOT_CONSUMED",
     "instruction": "Do not add or execute a second unusual intervention. Reruns of inherited gates are regression-only."
   },
-  "next_exact_sandbox_step": "When Vercel accepts a build again, run corrected exact head 580fe7ac84b2d3930a4a944a6e32ddc51be47f33 through the existing build-internal lane. Require Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with non-null bound archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity and successful sandbox stop.",
+  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, run exact head e90b887111969becc922d25a73886af61d6b5340 through the existing build-internal lane. Require Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with non-null bound archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity and successful sandbox stop.",
   "promotion": "NOT_ALLOWED_YET",
   "negative_evidence_preserved": true
 }

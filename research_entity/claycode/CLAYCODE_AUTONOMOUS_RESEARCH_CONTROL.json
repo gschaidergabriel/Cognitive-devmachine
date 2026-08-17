@@ -1,5 +1,5 @@
 {
-  "schema_version": "4.0",
+  "schema_version": "4.1",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
@@ -8,7 +8,7 @@
   "component_target": "CLAYCODE_COMPILER_VM_FRONTIER",
   "product_endpoint": "EntityOS",
   "product_endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
-  "owner_directive": "Converge the ClayCode compiler/runtime component into EntityOS, the single-file Clay Computer. Use only authorized isolated sandbox execution for build/test/runtime validation; Vercel Sandbox is the empirical source of truth for executable claims. Never create paid usage automatically, never use Together, and never modify Frank's Harness.",
+  "owner_directive": "Converge the ClayCode compiler/runtime component into EntityOS, the single-file Clay Computer. Use only authorized isolated FREE_ONLY sandbox execution for build/test/runtime validation. Route Vercel first when admitted and capable; use Daytona only as the standard pre-assertion FREE_ONLY fallback after account-specific no-paid-use/free-credit admission; otherwise fail closed. Never create paid usage automatically, never use Together, and never modify Frank's Harness.",
   "cycle_policy": {
     "supervisor_review_target": "hourly",
     "max_llm_calls_per_cycle": 8,
@@ -18,8 +18,10 @@
     "paid_fallback": false,
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
-    "next_execution_surface": "VERCEL_SANDBOX_ONLY_WHEN_VERIFIED_AVAILABLE_AND_ZERO_COST_ELSE_FAIL_CLOSED",
-    "vercel_sandbox_role": "EXECUTABLE_EMPIRICAL_SOURCE_OF_TRUTH",
+    "next_execution_surface": "VERCEL_FIRST_THEN_DAYTONA_PREASSERTION_FREE_ONLY_FALLBACK_ELSE_FAIL_CLOSED",
+    "vercel_sandbox_role": "PRIMARY_EXECUTABLE_EMPIRICAL_SOURCE_OF_TRUTH_WHEN_ADMITTED_AND_CAPABLE",
+    "daytona_sandbox_role": "PREASSERTION_FALLBACK_ONLY_AFTER_ACCOUNT_SPECIFIC_FREE_CREDIT_NO_PAID_USE_ATTESTATION",
+    "daytona_live_runtime_credit": "ZERO_UNTIL_ACTUAL_PROVIDER_CONTACT_SANDBOX_START_RECEIPT_AND_CLEANUP",
     "vps_testing": "FORBIDDEN",
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN",
@@ -46,7 +48,7 @@
     "INDEPENDENT_ALTERNATIVE_DESIGN",
     "SYNTHESIS_WITH_ANCESTRY_COLLAPSE",
     "GENERATE_BOUNDED_EXECUTABLE_TEST_REQUESTS",
-    "RUN_SAFE_ZERO_COST_VERCEL_SANDBOX_ORACLES_WHEN_AVAILABLE",
+    "RUN_SAFE_ZERO_COST_VERCEL_FIRST_THEN_DAYTONA_PREASSERTION_FALLBACK_ORACLES_WHEN_ADMITTED",
     "PRESERVE_NEGATIVE_RESULTS",
     "WRITE_CYCLE_RECEIPT_AND_SUPERVISOR_INBOX",
     "REENTER_RESULT_INTO_ENTITYOS_SINGLE_FILE_PRODUCT_BOUNDARY",
@@ -77,7 +79,8 @@
       "nvidia:llama-nemotron-rerank-vl-1b-v2"
     ],
     "execution_oracles": [
-      "vercel_sandbox_exact_identity",
+      "vercel_sandbox_exact_identity_primary_when_admitted",
+      "daytona_sandbox_exact_identity_preassertion_fallback_after_free_only_admission",
       "other_execution_oracles_only_if_newer_owner_directive_explicitly_authorizes_them"
     ]
   },
@@ -165,48 +168,55 @@
     "all_current_build_test_experiment_and_runtime_validation_execution_is_isolated_sandbox_only",
     "vps_self_hosted_vps_and_production_host_testing_are_forbidden_for_current_entityos_evidence",
     "exact_identity_vercel_sandbox_observation_overrides_stale_receipt_or_unexecuted_source_expectation_for_executable_claims",
-    "entityos_whole_machine_pass_requires_the_exact_single_file_artifact_at_the_admitted_acceptance_scope"
+    "entityos_whole_machine_pass_requires_the_exact_single_file_artifact_at_the_admitted_acceptance_scope",
+    "daytona_fallback_is_permitted_only_before_vercel_reaches_the_intended_semantic_assertion",
+    "daytona_must_not_erase_reclassify_or_override_an_assertion_reaching_vercel_semantic_failure",
+    "daytona_start_requires_fresh_account_specific_free_credit_or_equivalent_no_paid_use_attestation_and_must_fail_closed_if_unavailable",
+    "daytona_api_key_possession_balance_visibility_controller_source_or_zero_controller_runs_mint_zero_live_runtime_credit",
+    "daytona_runtime_credit_requires_actual_provider_contact_sandbox_start_exact_repo_sha_runtime_assertion_exit_log_receipt_and_guaranteed_stop_delete"
   ],
   "priority_order": [
-    "PR787_CURRENT_EXACT_HEAD_ASSERTION_REACHING_ISOLATED_VERCEL_REVALIDATION",
-    "CLAYHOST_ABI_STDOUT_BYTES_NEGATIVE_CONTROLS_ON_EXACT_REVIEWED_BYTES",
+    "PR611_EXACT_OCI_RESOLVED_TMUX_REAPPLY_AND_EFFECTIVE_STATE_ATTESTATION",
+    "PR623_CURRENT_EXACT_HEAD_IDENTITY_READINESS_REAUTH_ASSERTION_REACHING_ISOLATED_EXECUTION",
     "PACKAGE_ARTIFACT_HASH_AND_INDEPENDENT_ENTITYOS_RELEASE_AUTHORITY",
     "CM-DATA:BYTES_BUFFER_PRODUCER_EPOCH_LEASE_STABILITY",
     "CM-05:EXECUTABLE_OBJECT_IDENTITY",
     "CM-01/04:CALL_OWNERSHIP_AND_METHODCHAIN_MEMBER_SEGMENTS",
     "CM-02/03/04:WP04_ADMISSION_PRIVATE_STATE_NON_BYPASSABILITY",
-    "CM-TERM:STDERR_STRING_BYTES_ARGV_DEFERRED_UNTIL_STDOUT_BYTES_CURRENT_HEAD_CLOSES"
+    "CM-TERM:STDERR_STRING_BYTES_ARGV_DEFERRED_UNTIL_CURRENT_AUTHORITY_GATES_CLOSE"
   ],
-  "current_focus": "Supervisor 9.1 is authoritative for work selection. Preserve exact isolated Vercel executable truth only at gschaidergabriel/Dr.-Unterweger PR787 head 92b629566452d8f45fd208fba943b823ddd37e8c: full pytest passed 156 tests with zero skips under DENY_ALL; attested v7 produced byte-identical attested-vs-Git EntityOS SHA-256 a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00 and the preregistered content-tamper unusual experiment passed fail-closed. That unusual experiment is consumed 1_of_1 and may only recur as regression with new_unusual_experiment_count=0. Fresh GitHub state binds PR787 current exact head 897df35d3d800f6889793f937ad6d38ccafc98ff. Its consolidated ClayHostcallABI/v1, CLAYVM/2-only linux.process.stdout.v0::(Int)->Bytes, handler-only adapters, dependency lock and artifact-lock source changes remain SOURCE/REVIEW CANDIDATE ONLY because current-head runs 31988144770 and 31988144818 executed zero steps, while descendant Vercel READY deployments ef5bed69 and 6acafd1 explicitly SKIP_NON_TARGET_PREVIEW and reached no Sandbox acceptance assertions. Do not generalize the 92b PASS to 897df35 or descendants. Next research spend only when a verified zero-cost exact-current PR787 target deployment actually admits an isolated Vercel Sandbox: require nonzero full pytest with zero skips, exact dependency/artifact-lock evidence, existing stdout-Bytes/ClayHost ABI negative controls, attested-v7 one-file build/runtime/relocation/provenance, artifact identity and Sandbox stop, with zero new unusual experiments. Do not widen stderr or String/argv semantics before this closes. Package artifact/hash and independent EntityOS release authority, mutable/borrowed Bytes epoch provenance, process executable object identity, 429/464 Calls, 22 MethodChain/member segments, WP04 non-bypassability, Hostinger ProductStart/storage and live provider authority remain OPEN. FREE_ONLY remains hard; no paid fallback/Together; no BASE/Frank PASS from consensus; no canonical semantics without executable counterevidence and review; never modify Frank's Harness.",
+  "current_focus": "Supervisor 9.5 / Inbox 7.42 are authoritative for work selection. Fresh repository truth binds gschaidergabriel/clay-global-research-entity PR611 OPEN/DRAFT at exact head 2957e80228815ac266635981a55f22bc15dc9ed4 as the single retained tmux repair lane. Preserve the historical Vercel real-tmux 3.6a PASS only as old-head component/mechanism evidence; do not infer current-head or product PASS. At the first admitted isolated FREE_ONLY execution surface, refresh current main once, rejoin PR611 once, bind the resulting exact head, build the exact ClayVerse OCI, capture image digest plus actually resolved tmux package/version, run idempotent reapply plus complete managed transport-policy effective-state attestation in the same image/runtime, and only then adjudicate promotion. Fresh repository truth also binds PR623 OPEN/DRAFT at exact head daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5. Bounded source/mechanism evidence reports readiness 5/5, reauth helper 4/4 and live identity probe 3/3 fail-closed, but PR623 reports no PR workflow runs for this exact head; runtime/semantic promotion credit is zero until assertion-reaching isolated exact-head execution. UnifiedDB remains the sole canonical identity/state authority. Execution routing is Vercel first when admitted and capable. Daytona is allowed only as a FREE_ONLY pre-assertion fallback after fresh account-specific free-credit/no-paid-use admission; if Vercel reaches the intended semantic assertion, its PASS or FAIL stands and Daytona may only provide separately scoped reproduction. Daytona currently has zero live runtime credit until actual provider contact, sandbox start, exact repo/SHA/runtime/assertion/exit/log receipt and guaranteed stop/delete are observed. Do not route candidate execution to persistent self-hosted/VPS compute. After PR611/PR623 execution closure, prioritize independent package/release authority, mutable/borrowed Bytes producer epoch/lease provenance, executable-object identity, 429/464 unresolved Call ownership, 22 MethodChain/member segments and WP04 admission/private-state non-bypassability. FREE_ONLY remains hard; no paid fallback/Together; no BASE/Frank PASS from consensus; no canonical semantics without executable counterevidence and review; never modify Frank's Harness.",
   "supervisor_last_steer": {
-    "supervisor_state": "9.1",
-    "supervisor_state_commit": "9e8f072f6c1ebf6116542e1ff48a86a6f833c3f9",
-    "research_head_observed_before_sync": "512daeb2a44bbdec27c1ecfd4c5e35eccc890c6f",
-    "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
-    "reason": "Control 3.9 remained on Supervisor 8.9 dependency/bootstrap work selection after Supervisor State 9.1 had incorporated the exact PR787@92b isolated Vercel PASS and fresh PR787 current head 897df35 source-only ABI/dependency-lock frontier. Synchronize work selection only; preserve every inherited authority rule. Fresh current-head GitHub failures are zero-step instrument state, and latest READY Vercel descendants explicitly skip the target Sandbox matrix, so no new semantic or release promotion is justified.",
+    "supervisor_state": "9.5",
+    "supervisor_state_commit": "e43b7ac0f2c47d86c51720b9bf0d8889472dcad6",
+    "supervisor_inbox": "7.42",
+    "supervisor_inbox_commit": "c2453f25b7b16a3c9f15f65d804900dff25cd24f",
+    "research_head_observed_before_sync": "8b38dd24f3fca94b66ace705a62902a82cf26f29",
+    "reason": "Control 4.0 remained on stale PR787/Vercel-only work selection while Supervisor State/Inbox had moved to repository-bound PR611 tmux OCI adjudication, PR623 identity/readiness drift hardening, and the owner-authorized Vercel-first then Daytona pre-assertion FREE_ONLY fallback. Fresh PR623 advanced again to daf48f2c with bounded source/mechanism evidence but still no exact-head PR workflow execution. Synchronize work selection and execution-oracle wording only while preserving inherited authority rules; add explicit Daytona fail-closed rules without promoting any semantic, BASE, provider or product status.",
     "evidence_priority": [
-      "one assertion-reaching zero-cost isolated Vercel execution on the then-current exact PR787 head before upgrading current ClayHost ABI/stdout Bytes or dependency-lock changes",
-      "full pytest nonzero tests and zero skips plus inherited attested-v7 regression sequence with zero new unusual experiments",
-      "wrong VM version wrong argument type wrong return type and unknown call-id fail closed before host effect or Clay reentry",
-      "independent package artifact/hash and EntityOS release authority rather than version or candidate-selected self-consistency",
+      "PR611 exact OCI image digest plus actual resolved tmux version plus reapply and complete effective-state attestation on one admitted isolated FREE_ONLY runtime",
+      "PR623 exact current head assertion-reaching isolated execution of canonical identity session readiness and reauth regressions before merge or promotion",
+      "Vercel first when admitted/capable; Daytona only pre-assertion after account-specific free-credit/no-paid-use admission and never as semantic-fail override",
+      "independent package artifact/hash and EntityOS release authority rather than candidate-selected self-consistency",
       "mutable/borrowed Bytes producer epoch/lease provenance and executable object identity",
       "429/464 unresolved Call ownership, 22 MethodChain/member segments, and productive WP04 admission/private-state non-bypassability"
     ],
     "required_next_actions": [
-      "refetch PR787 current head immediately before any execution or attribution",
-      "treat zero-step/no-runner GitHub jobs and READY plus SKIP_NON_TARGET_PREVIEW as zero semantic/release credit",
-      "do not spend or widen semantics until a verified zero-cost isolated Vercel Sandbox admits the exact then-current target",
-      "repeat the consumed content-tamper experiment only as regression with new_unusual_experiment_count=0",
-      "do not widen stderr or String/argv before current-head stdout Bytes and ClayHost ABI closure",
-      "persist only observed exact-identity sandbox truth back into GitHub receipts"
+      "refetch PR611 and PR623 current heads immediately before execution or attribution",
+      "treat zero-step/no-runner jobs and deployment READY without reached assertions as zero semantic/release credit",
+      "do not start Daytona without fresh account-specific free-credit/no-paid-use admission and guaranteed cleanup",
+      "do not use Daytona to erase or reclassify an assertion-reaching Vercel semantic failure",
+      "do not merge or promote PR623 from bounded source-slice evidence or model consensus",
+      "persist only observed exact-identity executable truth back into GitHub receipts"
     ],
     "do_not_infer": [
-      "current exact-head PASS from historical PR787@92b executable truth",
-      "acceptance from Vercel READY when target Sandbox assertions were skipped",
-      "code semantic BASE or release failure from zero-step/no-runner GitHub jobs",
-      "canonical package or release authority from source locks or caller-selected digest self-consistency",
+      "current exact-head or product PASS from historical tmux 3.6a component evidence",
+      "PR623 runtime or semantic acceptance from source-slice 5/5 4/4 and 3/3 evidence without exact-head isolated execution",
+      "Daytona live capability from API key possession controller source balance visibility or zero controller runs",
+      "code semantic BASE or release failure from zero-step/no-runner jobs",
+      "canonical package or release authority from caller-selected digest self-consistency",
       "independent semantic replication from repeated shared-project or model-family ancestry",
-      "whole-machine EntityOS, Frank v0.1, ProductStart or live provider PASS from component evidence"
+      "whole-machine EntityOS Frank v0.1 ProductStart or live provider PASS from component evidence"
     ]
   },
   "supervisor": {

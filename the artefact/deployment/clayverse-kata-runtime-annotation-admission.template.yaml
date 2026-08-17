@@ -1,0 +1,54 @@
+# TEMPLATE: mandatory admission fence for the canonical ClayVerse Kata workload.
+# Apply this together with clayverse-kata-statefulset.template.yaml.
+#
+# SECURITY LAW:
+# Kata `io.katacontainers.*` annotations can alter runtime configuration and,
+# depending on runtime/version, have been involved in guest/host boundary
+# vulnerabilities. The repository baseline therefore admits NONE of these
+# annotations. A future annotation may be allowed only by an explicit reviewed
+# source change whose exact policy bytes and effective post-mutation Pod
+# annotations are bound into deployment acceptance evidence.
+#
+# This policy is evaluated by Kubernetes validating admission after mutation.
+# It is not runtime evidence: final acceptance must still prove the policy and
+# binding are installed, effective, and reject representative forbidden Pods on
+# the admitted cluster before the Kata sandbox is created.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: clayverse-kata-runtime-annotations
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  # Avoid an objectSelector-only scope: Kubernetes documents object selectors as
+  # opt-in and labels can be changed. The canonical StatefulSet produces Pods
+  # named clayverse-N and explicitly selects the Kata runtime class; both must
+  # remain true for the admitted reference deployment.
+  matchConditions:
+    - name: canonical-clayverse-kata-pod
+      expression: >-
+        object.metadata.name.startsWith('clayverse-') &&
+        has(object.spec.runtimeClassName) &&
+        object.spec.runtimeClassName == 'kata-qemu-runtime-rs'
+  validations:
+    - expression: >-
+        !has(object.metadata.annotations) ||
+        object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))
+      reason: Forbidden
+      message: >-
+        ClayVerse rejects io.katacontainers.* runtime annotations unless a
+        specific annotation/value is explicitly reviewed and receipt-bound in
+        the canonical admission policy.
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: clayverse-kata-runtime-annotations
+spec:
+  policyName: clayverse-kata-runtime-annotations
+  validationActions: [Deny]

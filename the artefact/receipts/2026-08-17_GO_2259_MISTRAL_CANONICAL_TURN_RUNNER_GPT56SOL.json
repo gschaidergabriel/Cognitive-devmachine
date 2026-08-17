@@ -1,15 +1,14 @@
 {
   "schema": "ClayVerseBoundedExecutionReceipt/v1",
-  "timestamp_local": "2026-08-17T23:22:00+07:00",
+  "timestamp_local": "2026-08-17T23:24:00+07:00",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "classification": "BOUNDED_MECHANISM_SUPPORT",
   "canonical_main_at_pr_creation": "f4bfa0d0fbc2aa6baa53be747729d9ff734a5ab8",
   "branch": "gpt56sol/go-mistral-causal-reingest-20260817-2259",
-  "branch_head_before_receipt": "de749efc31c01fa697252becadca5d1f0f99e782",
   "pull_request": 667,
   "scope": {
-    "claim": "The new MistralTurnRunner fail-closes on effect intent, stale generation, missing provider receipt, and unexpected effect binding while delegating begin/complete to the existing TurnLifecycle interface.",
+    "claim": "The new MistralTurnRunner uses the existing TurnLifecycle, fail-closes on model effect intent and stale generation, requires bounded allowlisted non-secret provider provenance, and refuses unexpected effect binding.",
     "not_claimed": [
       "full branch pytest",
       "exact TurnLifecycle integration execution",
@@ -23,8 +22,8 @@
     ]
   },
   "exact_git_blobs": {
-    "the artefact/clayverse/mistral_turn.py": "addc3107a701505777b7d51cd9c35e8e3d6d4ad2",
-    "the artefact/tests/test_mistral_turn.py": "6a3c07bf889eb6014102359a2772a088b289510c",
+    "the artefact/clayverse/mistral_turn.py": "0228d39105fe164e938e16b800b21c2696daca9d",
+    "the artefact/tests/test_mistral_turn.py": "f70ae63c7a63e8390c10ae2a1cdeba32cbd64bc7",
     "the artefact/clayverse/turn_lifecycle.py": "d9053c9f4877fa2230ef79bca19710a03f98f985"
   },
   "isolated_execution": {
@@ -33,16 +32,19 @@
     "secrets_used": false,
     "command": "python -m py_compile clayverse/mistral_turn.py tests/test_mistral_turn.py && python -m pytest -q tests/test_mistral_turn.py",
     "exit_code": 0,
-    "result": "5 passed in 0.03s",
+    "result": "7 passed in 0.04s",
     "runner_blob_match": true,
     "test_blob_match": true,
-    "support_boundary": "Existing adapters/store/turn_lifecycle imports were represented by minimal stubs solely to execute the exact new runner/test blobs; therefore this is not exact full-product integration evidence."
+    "support_boundary": "Existing adapters/store/turn_lifecycle imports were represented by minimal stubs solely to execute the exact new runner/test blobs; therefore this is not exact full-product integration evidence.",
+    "supersedes_within_cycle": "Earlier 5/5 focused result on prior runner/test blobs."
   },
   "falsifiers_executed": [
     "canonical lifecycle begin/complete binding and Mistral provider receipt handoff",
-    "Mistral effect intent rejected before effect path",
+    "Mistral effect intent rejected before any effect path",
     "response rejected after generation changes during inference latency",
     "missing Mistral inference receipt rejected",
+    "extra secret-like provider receipt field rejected",
+    "non-digest receipt hash rejected",
     "Mistral cognition completion rejected if an effect_id is unexpectedly bound"
   ],
   "github_actions": {
@@ -56,8 +58,9 @@
   "coordination": {
     "duplicate_http_client_created_then_removed": true,
     "single_http_client_authority": "clayverse.adapters.MistralInference",
+    "competing_pr_668": "COUNTERCANDIDATE_REQUIRES_FUSION: duplicate HTTP client must be removed; provider_responses schema needs a discriminator against the simpler two-turn baseline before promotion.",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_experiment_count": 0
   },
-  "next_exact_gate": "Rejoin then-current main once, execute exact branch/full relevant tests in an admitted isolated checkout, then run the owner-mandated Vercel Firecracker -> exact OCI digest -> Vault Mistral -> canonical turn/re-ingest -> separate EffectGate/EntityOS -> Tier-2 recreate -> secret reacquisition sequence."
+  "next_exact_gate": "Rejoin then-current main once, execute exact relevant full-tree tests in an admitted isolated checkout, then run the owner-mandated Vercel Firecracker -> exact OCI digest -> Vault Mistral -> canonical turn/re-ingest -> separate EffectGate/EntityOS -> Tier-2 recreate -> secret reacquisition sequence."
 }

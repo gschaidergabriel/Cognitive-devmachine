@@ -1,0 +1,70 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:52:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_lane": {
+    "pull_request": 424,
+    "branch": "go/clerk-impersonation-failclosed-20260817-1345"
+  },
+  "findings": [
+    {
+      "classification": "AUTHORITY_BOUNDARY_GAP",
+      "mechanism": "A cryptographically valid Clerk session with non-null act could otherwise inherit a canonical mapped sub identity despite being an impersonated session."
+    },
+    {
+      "classification": "AUTHORITY_BOUNDARY_GAP",
+      "mechanism": "A cryptographically valid Clerk session with sts=pending could otherwise cross the baseline PTY boundary before the upstream admission state is fully satisfied."
+    },
+    {
+      "classification": "DUPLICATE_AUTH_IMPLEMENTATION",
+      "mechanism": "clayverse.adapters carried an older independent ClerkConfig/ClerkTokenVerifier implementation while the live service and terminal gateway used clayverse.clerk_auth; the existing Clerk regression imported the stale adapter implementation rather than the live authority."
+    }
+  ],
+  "repair": {
+    "canonical_auth_module": "clayverse.clerk_auth",
+    "clerk_auth_blob": "8f321ef6a2fb63515a4c150db17d58c9cb5b4585",
+    "adapters_blob": "fe72f5fd57a9a047b3bc54f6ecf4c6e8e0d44308",
+    "test_blob": "5015bc0fa7b3c11c4d570ec88db847fb02a4f4b3",
+    "reject_non_null_act": true,
+    "reject_sts_pending": true,
+    "legacy_adapter_reexports_canonical_classes": true,
+    "test_imports_live_canonical_auth": true
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container source-mechanism regression",
+    "exact_git_blob_matches": {
+      "clerk_auth": true,
+      "adapters": true,
+      "test": true
+    },
+    "focused_tests": 4,
+    "focused_passed": 4,
+    "focused_failed": 0,
+    "py_compile": "PASS",
+    "scope": "Exact three repaired Git blobs plus required inference-protocol dependency; not full repository checkout, not real Clerk infrastructure, not live browser/WebSocket PTY, not OCI acceptance."
+  },
+  "external_dependency_basis": [
+    "Clerk documents act on impersonated session tokens and backend impersonation detection.",
+    "Clerk documents sts=pending as a valid session status and backend rejection as a way to prevent admission bypass."
+  ],
+  "coordination": {
+    "duplicate_pr": 428,
+    "action": "CLOSE_DUPLICATE_AFTER_FUSING_UNIQUE_PENDING_FENCE_INTO_424",
+    "second_auth_authority_created": false
+  },
+  "go_experiment_accounting": {
+    "new_distinct_unusual_experiment": false,
+    "shared_slot_state": "CLOSED_BY_CURRENT_MAIN_COORDINATION_RECORDS"
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "plugin_search": "NO_INSTALLABLE_VERCEL_SANDBOX_EXECUTION_PLUGIN",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Rebase/fuse this single auth lane onto then-current main and execute focused auth/terminal regressions in an actually-started authorized isolated environment; then validate real Clerk regular/impersonated/pending behavior, key rotation, browser auth-first WebSocket PTY, and exact OCI runtime."
+}

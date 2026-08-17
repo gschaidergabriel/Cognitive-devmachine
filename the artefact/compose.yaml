@@ -2,10 +2,25 @@ services:
   clayverse:
     build: .
     restart: unless-stopped
+    ports:
+      - "${CLAYVERSE_PORT:-3000}:3000"
     environment:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
+      CLAYVERSE_WORKSPACE: /workspace
+      CLAYVERSE_REQUIRE_CLAUDE: "1"
+      CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
+      CLERK_ISSUER: "${CLERK_ISSUER:?required}"
+      CLERK_JWKS_URL: "${CLERK_JWKS_URL:-}"
+      CLERK_JWT_KEY: "${CLERK_JWT_KEY:-}"
+      CLERK_AUDIENCE: "${CLERK_AUDIENCE:-}"
+      CLERK_AUTHORIZED_PARTIES: "${CLERK_AUTHORIZED_PARTIES:?required}"
+      CLERK_PUBLISHABLE_KEY: "${CLERK_PUBLISHABLE_KEY:?required}"
+      CLERK_FRONTEND_API_URL: "${CLERK_FRONTEND_API_URL:?required}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
     volumes:
       - clayverse-state:/var/lib/clayverse
+      - clayverse-workspace:/workspace
+      - clayverse-claude:/home/clayverse/.claude
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev
@@ -15,3 +30,5 @@ services:
       - ALL
 volumes:
   clayverse-state:
+  clayverse-workspace:
+  clayverse-claude:

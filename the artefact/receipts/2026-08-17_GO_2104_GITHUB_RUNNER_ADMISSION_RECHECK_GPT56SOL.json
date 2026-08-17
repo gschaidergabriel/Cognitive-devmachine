@@ -1,0 +1,44 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T21:04:22+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "lane": "PR625_TOKENLESS_CANONICAL_BASELINE",
+  "classification": "INFRASTRUCTURE_ADMISSION_BLOCKED_ZERO_RUNTIME_CREDIT",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "probe": {
+    "provider": "GitHub Actions hosted runner control plane",
+    "historical_run_id": 31995291479,
+    "historical_source_sha": "ade452bf887d62da2ca3f61e8c66e9a68c5e83e8",
+    "rerun_request": "ACCEPTED_BY_GITHUB_API",
+    "run_attempt": 2,
+    "run_started_at_utc": "2026-08-17T14:04:16Z",
+    "run_updated_at_utc": "2026-08-17T14:04:22Z",
+    "status": "completed",
+    "conclusion": "failure",
+    "job_step_visibility": "BLOCKED_403_RESOURCE_NOT_ACCESSIBLE_BY_INTEGRATION"
+  },
+  "interpretation": "The re-run request itself was accepted, but the historical run again completed with failure within seconds and job/step details remain inaccessible. Because no test/build step execution is observable, this is not classified as ClayVerse TEST_FAIL or PASS and receives zero product runtime credit. It is only a current negative execution-admission/control-plane observation. The exact current PR625 head was not executed by this probe.",
+  "related_current_evidence": {
+    "entityos_bridge_component_receipt": "the artefact/receipts/2026-08-17_GO_2101_PR625_ENTITYOS_MEMFD_COMPONENT_GPT56SOL.json",
+    "component_classification": "COMPONENT_RUNTIME_PASS",
+    "component_scope": "exact-source EntityOSBridge sealed-memfd Linux component only; not OCI"
+  },
+  "counterhypothesis": "The runner may be failing for a reason different from the original billing/spending-limit admission failure. Without job/step/log visibility, the cause remains unresolved and must not be guessed.",
+  "next_gate": "Keep PR625 Draft. Obtain an authorized source-bound Docker/OCI-capable isolated execution surface or restored observable GitHub-hosted runner execution, then bind the exact latest PR625 head and run the tokenless baseline build/start/readiness path before optional EntityOS embedding.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "No shared immutable request/turn identifier is exposed for the macro-cycle; the runner admission recheck is an ordinary infrastructure retry, not an unusual experiment."
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  }
+}

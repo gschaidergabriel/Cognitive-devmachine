@@ -1,0 +1,35 @@
+{
+  "kind": "CLAYVERSE_GO_FUSION_RECEIPT",
+  "timestamp_utc": "2026-08-17T04:40:00Z",
+  "integration_basis": "moving main; fused through stale-write-safe Contents API after repeated non-fast-forward protection",
+  "product_donor_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "execution_surface": "OpenAI isolated container workspace (non-VPS); available Vercel connector exposed deployment/docs but no Vercel Sandbox execution action",
+  "local_delta_verification": {
+    "command": "python3 -m pytest -q tests/test_effect_fencing.py && python3 -m py_compile clayverse/effects.py clayverse/entityos_bridge.py clayverse/engine.py tests/test_effect_fencing.py",
+    "count": 2,
+    "result": "PASS",
+    "patch_payload_sha256_before_parallel-fusion": "7a3512656be6275aa32dc45c6f4f58dca91bb68deddc3a0e4ad9d395937f5e3b"
+  },
+  "prior_parallel_receipt": {
+    "path": "the artefact/receipts/2026-08-17_go_candidate.json",
+    "tests": 11,
+    "result": "PASS",
+    "unusual_experiment": "cross-user crash/reopen ABA lease fencing"
+  },
+  "effect_fencing_result": "EffectGate revalidates a supplied lease immediately after the outcome and before record_effect, so a stale completion cannot persist a VERIFIED outcome on that path.",
+  "entityos_transport_result": "entityos.exec is fail-closed unless an explicit EntityOSBridge is injected. The bridge opens with no-follow semantics, requires executable regular-file mode, hashes the opened object, compares an exact SHA-256 pin, and executes that opened Linux object through /proc/self/fd without a shell.",
+  "preserved_parallel_improvements": ["session-to-user ownership validation before effects", "direct shell-name denial for legacy process.exec", "pinned Python image and Claude Code package version", "Clerk browser runtime configuration"],
+  "coordination_anomaly": {
+    "status": "PRESERVED_NEGATIVE_EVIDENCE",
+    "detail": "Parallel go work had already executed the cross-user crash/reopen ABA unusual experiment before this worker discovered its receipt. This worker had independently executed STALE_EFFECT_COMPLETION_AFTER_LEASE_TAKEOVER before that discovery. The global one-unusual-experiment law was therefore accidentally exceeded across parallel workers; no further unusual experiment was executed after discovery."
+  },
+  "open_gates": [
+    "final real Clerk/JWKS runtime verification",
+    "browser terminal end-to-end transport",
+    "authenticated Claude Code CLI end-to-end terminal verification",
+    "accepted exact EntityOS artifact embedding plus admitted ClayCode/CLI semantic contract",
+    "full current-head OCI build and runtime receipt in an authorized isolated sandbox",
+    "deployment readiness and donor-state migration"
+  ],
+  "whole_system_pass": false
+}

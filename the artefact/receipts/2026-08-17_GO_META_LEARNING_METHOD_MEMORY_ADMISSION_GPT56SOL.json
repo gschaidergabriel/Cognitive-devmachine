@@ -6,18 +6,21 @@
   "program": "ClayVerse single-container",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
-  "canonical_main_refreshed_before_final_receipt": "632d7e8307d5281ec6553cd93b4643422a0520ae",
+  "canonical_main_refreshed_before_final_reconciliation": "632d7e8307d5281ec6553cd93b4643422a0520ae",
   "candidate_branch": "go/meta-learning-method-admission-20260817",
-  "candidate_head_before_final_receipt": "68199cfbf376dd59f76e87c08def3393f8289c5c",
-  "status": "SOURCE_CANDIDATE_SUPPORTING_REGRESSION_ONLY",
-  "frontier": "validated durable method-memory admission plus epistemic separation from factual evidence retrieval",
+  "branch_head_observed_before_this_receipt_update": "c9e3e04dd163d279dea7efab5f9dcbd6e55870fd",
+  "status": "FUSED_SOURCE_CANDIDATE_WITH_UNEXECUTED_HARDENING_AND_OPEN_PROMOTION_AUTHORITY_GATE",
+  "frontier": "validated durable method-memory admission, strict epistemic separation from factual evidence retrieval, and fail-closed promotion authority",
   "observed_gaps": {
-    "durable_memory_kind_unconstrained": true,
-    "generic_add_memory_accepted_arbitrary_kind": true,
-    "dedicated_validated_method_memory_path_before_change": false,
+    "durable_memory_kind_was_unconstrained": true,
+    "generic_add_memory_accepted_arbitrary_kind_before_candidate": true,
+    "dedicated_validated_method_memory_path_before_candidate": false,
     "existing_world_assembler_excluded_only_three_control_kinds": true,
     "existing_microclay_candidate_query_excluded_only_three_control_kinds": true,
     "method_memory_could_have_been_served_as_normal_evidence_on_lexical_match_without_partition_repair": true,
+    "dedicated_promotion_lifecycle_transaction_exists_on_reconciled_candidate": false,
+    "current_candidate_still_allows_direct_framework_or_heuristic_admission_if_shape_and_minimum_support_checks_pass": true,
+    "raw_sql_method_receipt_target_existence_is_not_yet_proven_referentially_closed": true,
     "owner_required_method_classes": [
       "framework_candidate",
       "framework",
@@ -29,28 +32,41 @@
     ]
   },
   "candidate_delta": {
-    "files": [
+    "files_observed_on_branch": [
       "the artefact/clayverse/method_memory.py",
       "the artefact/clayverse/store.py",
       "the artefact/clayverse/retrieval.py",
       "the artefact/clayverse/microclay_retrieval.py",
       "the artefact/tests/test_method_memory_admission.py",
-      "the artefact/tests/test_method_memory_epistemic_partition.py"
+      "the artefact/tests/test_method_memory_epistemic_partition.py",
+      "the artefact/tests/test_method_memory_hardening.py"
     ],
     "schema_version_changed": false,
-    "mechanism": [
+    "core_mechanism": [
       "reserve all seven method-memory kinds at UnifiedDB.add_memory so generic factual memory admission cannot silently write them",
-      "admit method records only through UnifiedDB.add_method_memory with deterministic canonical JSON and non-empty provenance",
+      "admit method records through validated canonical JSON with non-empty provenance",
       "validate reusable framework/heuristic records for problem signature, method steps, invariants, falsifiers, scope limits, evidence references, counts, calibration and lifecycle status",
       "validate failure-pattern, counterexample and method-receipt contracts separately",
-      "require method_receipt to reference an existing non-receipt method memory",
-      "revalidate stored method rows on read so malformed legacy or raw-SQL rows fail closed",
+      "require Python-path method_receipt admission to reference an existing non-receipt method memory",
+      "revalidate stored method rows on read/startup so malformed persisted rows fail closed",
       "exclude every method-memory kind from WorldAssembler ordinary durable evidence and extracted-fragment context",
       "exclude every method-memory kind from new MicroClay factual/evidence retrieval candidates",
       "reject replay of historical retrieval receipts whose selected memory IDs now resolve to method-memory kinds",
       "reject retrieval-policy credit for receipts whose selected IDs resolve to method-memory kinds",
       "do not grant factual truth, rights, capability, effect authority or automatic promotion"
     ],
+    "parallel_hardening_fused_into_same_branch": {
+      "method_contract_commit": "4b31abaa5b75da88bab5b8c7819c91ce7aac56ef",
+      "sql_restart_fence_commit": "1f614ec180980095124e7b5303c35adce9633677",
+      "hardening_test_commit": "653de8dd5b7694ad0c2022da6566fe4eca3291bb",
+      "mechanism": [
+        "reject duplicate source_episode_ids",
+        "require at least two supporting successful episodes for PROMOTED reusable method shape",
+        "install SQLite UDF-backed INSERT/UPDATE validation triggers for reserved method rows",
+        "block relabeling method memory into evidence memory",
+        "fail startup on malformed persisted reserved method rows"
+      ]
+    },
     "migration_collision_avoidance": "no schema bump; intentionally orthogonal to active MicroClay schema-v7 replay-identity candidates",
     "container_source_inclusion_observed": "Dockerfile uses COPY clayverse ./clayverse; source inspection only, no image build claim"
   },
@@ -58,31 +74,49 @@
     "authority": "SUPPORTING_ONLY_NOT_EXACT_REPO_OR_CONTAINER_TRUTH",
     "runtime": "Python 3.13.5",
     "pytest": "9.0.2",
-    "source_binding": "manual reconstruction from the branch source written in this go; exact git clone was unavailable because the isolated container could not resolve github.com",
-    "focused_pytest": "14 passed in 0.43s",
+    "source_binding": "manual reconstruction because exact git clone was unavailable when the isolated container could not resolve github.com",
+    "focused_subset": "14 passed in 0.43s",
     "py_compile": "PASS",
-    "checks": [
-      "reserved method kind bypass rejected",
+    "scope_warning": "the 14-test subset does not establish PASS for the subsequently observed test_method_memory_hardening.py obligations and is not exact-repository or exact-container evidence",
+    "covered_checks": [
+      "reserved method kind bypass rejected through public generic memory path",
       "framework candidate canonical round-trip",
-      "promoted lifecycle and last-validation requirements",
+      "promoted lifecycle shape and last-validation requirements",
       "under-specified reusable method rejected",
-      "non-finite calibration rejected with field-specific diagnostic",
+      "non-finite calibration rejected",
       "inconsistent support/success/failure counts rejected",
       "malformed raw/legacy method row rejected on read",
       "counterexample target binding required",
-      "method receipt target existence required",
+      "Python-path method receipt target existence required",
       "ordinary fact memory path unchanged",
       "strong lexical method match excluded from MicroClay evidence candidates",
       "method memory excluded from legacy compatibility world assembly",
       "tainted historical retrieval receipt cannot replay method memory as fact",
       "tainted retrieval receipt cannot train the factual retrieval policy"
+    ],
+    "unexecuted_after_parallel_hardening": [
+      "raw SQL trigger bypass regression",
+      "method-to-fact relabel fence regression",
+      "restart malformed-row admission regression",
+      "duplicate source episode promotion regression",
+      "two-success promoted-shape regression"
     ]
+  },
+  "promotion_authority_adjudication": {
+    "current_branch_behavior": "direct framework/heuristic insertion remains possible when promoted shape satisfies current validation",
+    "countercandidate_branch": "go/meta-learning-method-admission-20260817-1320",
+    "countercandidate_head": "42696fd8bddc137e49da6a0890a88a3ac2611f48",
+    "countercandidate_behavior": "generic framework/heuristic admission is rejected and reserved for a future dedicated promotion lifecycle transaction",
+    "countercandidate_has_complete_promotion_transaction": false,
+    "preferred_direction": "fail closed on direct promoted-kind minting until a provenance-bound dedicated promotion/demotion transaction is implemented and exact-run validated",
+    "fusion_state": "NOT_FUSED_PENDING_EXACT_RUNNER_AND_CURRENT_MAIN_MICROCLAY_FUSION"
   },
   "execution_admission": {
     "vercel_sandbox_start_exec_surface_available_in_session": false,
     "github_pr_creation_attempts": 2,
     "github_pr_creation_result": "BLOCKED_BY_CONNECTOR_SAFETY_STATUS_BEFORE_PR_CREATION",
     "git_clone_from_isolated_container": "FAILED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "parallel_github_hosted_runner_attempts_on_retained_microclay_integration": "FAILED_BEFORE_VISIBLE_STEP_EXECUTION",
     "exact_branch_ci_started": false,
     "exact_oci_build_started": false,
     "executable_pass_claimed": false
@@ -93,6 +127,7 @@
     "latest_main_change_class": "MicroClay context hard-bound receipt only",
     "latest_main_source_overlap_with_method_memory_candidate_observed": false,
     "retained_parallel_integration_pr": 402,
+    "candidate_vs_latest_main_at_reconciliation": "DIVERGED_12_AHEAD_2_BEHIND",
     "do_not_force_merge": true
   },
   "go_unusual_experiment_accounting": {
@@ -107,7 +142,7 @@
     "microclay_mode_changed": false,
     "current_main_promoted": false,
     "whole_clayverse_oci_acceptance": "IN_PROGRESS",
-    "next_exact_gate": "fuse/rebase this candidate with fresh current main and retained MicroClay integration without losing either context-hard-bound or replay/packing repairs; then execute exact-identity method-memory admission and epistemic-partition tests plus adjacent UnifiedDB/memory/retrieval regressions on an actually-started authorized isolated runner; only after green exact-source execution proceed to broader suite and exact OCI build/runtime acceptance"
+    "next_exact_gate": "from fresh current main, fuse retained MicroClay PR 402 plus this method-memory admission/epistemic partition and the fail-closed direct-promotion direction without semantic duplication; run the complete method-memory admission, hardening, epistemic-partition, MicroClay replay/packing/context-hard-bound/credit regressions on an actually-started authorized exact-source isolated runner; only after green evidence implement or promote a dedicated provenance-bound promotion/demotion lifecycle and then proceed to Stage-B structural method retrieval and broader exact OCI acceptance"
   },
   "forbidden_or_unused": {
     "vps_testing": true,

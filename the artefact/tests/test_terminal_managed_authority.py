@@ -26,11 +26,15 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     ]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
     assert settings["permissions"]["deny"] == ["Bash"]
+    assert settings["autoMemoryEnabled"] is False
+    assert settings["crossSessionInbound"] == "refuse"
+    assert settings["disableBundledSkills"] is True
+    assert settings["disableClaudeAiConnectors"] is True
     assert settings["disableRemoteControl"] is True
+    assert settings["disableSideloadFlags"] is True
     assert settings["disableSkillShellExecution"] is True
     assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
     assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
-    assert settings["autoMemoryEnabled"] is False
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
     server = managed_mcp["mcpServers"]["clayverse"]
     assert server["command"] == "/usr/local/bin/python"

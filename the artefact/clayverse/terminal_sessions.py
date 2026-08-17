@@ -40,6 +40,13 @@ class TerminalSessionManager:
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
+    TMUX_EMPTY_CONFIG = "/dev/null"
+    TMUX_CONTROL_LOCKDOWN = (
+        ("set-option", "-g", "prefix", "None"),
+        ("set-option", "-g", "prefix2", "None"),
+        ("unbind-key", "-a"),
+        ("set-option", "-g", "mouse", "off"),
+    )
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -126,12 +133,40 @@ class TerminalSessionManager:
         )
         return cp.returncode == 0
 
+    def _kill_tmux_server(self, binding: TerminalBinding) -> None:
+        subprocess.run(
+            ["tmux", "-L", self._tmux_socket(binding), "kill-server"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+
+    def _lock_tmux_control_plane(self, binding: TerminalBinding) -> None:
+        """Remove every interactive tmux command path before a browser may attach.
+
+        The PTY needs tmux only for persistence. Its command plane is not an admitted
+        ClayVerse effect authority: tmux commands such as run-shell would otherwise
+        provide a second host-command path below Claude's managed tool boundary.
+        """
+        for command in self.TMUX_CONTROL_LOCKDOWN:
+            cp = subprocess.run(
+                ["tmux", "-L", self._tmux_socket(binding), *command],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if cp.returncode != 0:
+                detail = (cp.stderr or cp.stdout or "unknown tmux error").strip()[-1000:]
+                self._kill_tmux_server(binding)
+                raise TerminalRuntimeError(f"failed to lock tmux control plane: {detail}")
+
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
         binding = self.binding(user_id)
         binding.home.mkdir(parents=True, exist_ok=True)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
+            self._lock_tmux_control_plane(binding)
             return binding
 
         # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
@@ -176,7 +211,7 @@ class TerminalSessionManager:
         command = shlex.join(env_argv)
         cp = subprocess.run(
             [
-                "tmux", "-L", self._tmux_socket(binding),
+                "tmux", "-f", self.TMUX_EMPTY_CONFIG, "-L", self._tmux_socket(binding),
                 "new-session", "-d", "-s", binding.tmux_name,
                 "-c", str(self.workspace), command,
             ],
@@ -186,6 +221,7 @@ class TerminalSessionManager:
         )
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
+        self._lock_tmux_control_plane(binding)
         return binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:

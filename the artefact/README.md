@@ -1,19 +1,29 @@
-# the artefact
+# ClayVerse artefact — integrated core candidate
 
-Canonical ClayVerse product workspace.
+This directory is the canonical implementation home for the single ClayVerse OCI/Docker image.
 
-This directory contains the reproducible source, container definitions, tests, manifests and acceptance/release-candidate receipts for the single-container ClayVerse artifact.
+Current candidate scope is deliberately narrow and executable:
 
-Build law:
+- one durable ClayVerse identity shared by sessions;
+- UnifiedDB-style SQLite/WAL authority with a hash-chained event stream;
+- ClayGraph as a rebuildable projection of authoritative `LINK` events;
+- causal process-effect path: request -> outcome -> verification -> causal re-entry -> credit update;
+- explicit argv process execution with `shell=False`;
+- fail-closed event tamper detection and effect-id collision handling;
+- restart continuity and first-two-session proof.
 
-- build and test away from the live VPS;
-- use Vercel Sandbox where its capabilities fit and other authorized isolated tools as needed;
-- do not use Claude Code as a research/coding/build/test helper;
-- use the strongest valid non-falsified generations from Frank donor systems, UnifiedDB/ClayGraph/Hyperposition/GWT research and the complete EntityOS research line;
-- `consciousness_daemon` is removed;
-- UnifiedDB is the canonical state authority;
-- ClayGraph is a derived/rebuildable projection;
-- the finished product is one OCI/Docker-compatible ClayVerse container;
-- the live VPS remains read-only evidence until explicitly authorized for deployment/mutation.
+It does **not** claim whole ClayVerse acceptance. Clerk, Hyperposition/GWT, full ClayCode/EntityOS integration, network/audio/visual surfaces, inference-engine integration, container build portability, and final VPS deployment remain open.
 
-Current status: workspace initialized; no whole-system PASS is claimed.
+## Local isolated verification
+
+```sh
+python3 -m unittest discover -s tests -v
+python3 clayverse.py --selftest --state /tmp/clayverse-selftest
+```
+
+## Container candidate
+
+```sh
+docker build -t clayverse:dev .
+docker run --rm -v clayverse-state:/var/lib/clayverse clayverse:dev --selftest --state /var/lib/clayverse
+```

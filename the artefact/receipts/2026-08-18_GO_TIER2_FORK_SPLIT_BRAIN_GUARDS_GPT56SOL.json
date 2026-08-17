@@ -1,0 +1,76 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:15:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "6d04a8ac293a164ea5a12b10d99960c9155f09bf",
+  "classification": "TIER2_FORK_REJECTION_PLUS_FINAL_PHASE_IDENTITY_FENCE",
+  "scope": "source/control-plane/adversarial evidence only; zero Tier-2 or whole-product runtime credit",
+  "runtime_freeze_observed": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "status": "SOURCE_CANDIDATE_IMMUTABLE_COORDINATION_ONLY",
+    "whole_product_credit": 0
+  },
+  "controller_observed": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_after_guards": "56bc53e24733e6c9203d3dfde58035f70d7f3a89",
+    "draft": true,
+    "mergeable": true,
+    "runtime_credit": 0
+  },
+  "tier2_falsifier": {
+    "observed_recreate_source_before_guard": "a4f01a8a292421943649e2e9876acc42832c50ee",
+    "mechanism": "Sandbox.fork({sourceSandbox,...persistent:true,snapshotExpiration:...}) followed by deletion of the source sandbox",
+    "reason_rejected": "Vercel documents fork as seeding the child from the source sandbox current snapshot and inheriting source configuration. That carries undeclared old-guest state and is not the required destroy-old/create-new appliance replacement boundary.",
+    "source_identity_gap": "the recreate endpoint was still bound to Research 4768e4286c53da5d94f41eab9b61205b46469651 while the current provider/effect phase was already bound to immutable PR686 9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tier2_credit": 0
+  },
+  "controller_guards_added": {
+    "fork_snapshot_guard_commit": "a670096a529ddef7355eb71abb6e3aa089e96286",
+    "fork_snapshot_guard_contract": "forbid Sandbox.fork, persistent:true and snapshotExpiration in the Tier-2 recreate phase; require independent Sandbox.create plus sourceSandbox.delete semantics",
+    "phase_identity_guard_source_commit": "334ba2e70c0493f8ff4051dbca1f14d6ae75c6ca",
+    "phase_identity_guard_enabled_commit": "56bc53e24733e6c9203d3dfde58035f70d7f3a89",
+    "phase_identity_guard_contract": "start, provider, effect/recovery and Tier-2 recreate must expose one identical exact RESEARCH_SHA and RESEARCH_TREE; divergent phases fail build before credentials/runtime",
+    "current_expected_result": "BUILD_RED_UNTIL_CONTROLLER_CONVERGES",
+    "runtime_pass_claimed": false
+  },
+  "tier2_transport_candidates": {
+    "declared_transfer_law": "only canonical logical state/workspace, exact OCI artifact identity/artifact and bounded receipts may leave Sandbox1; Sandbox1 must be deleted before independent Sandbox2 gains replacement credit",
+    "vercel_sandbox_drive": {
+      "classification": "STRUCTURALLY_STRONG_CANDIDATE_NOT_ADMITTED",
+      "evidence": "current Vercel primary docs expose persistent Drives with currentSessionId/currentSandboxName attachment identity and remount semantics",
+      "blocker": "Sandbox Drive functionality is documented as private beta; project access and exact accepted SDK/API version are not empirically established"
+    },
+    "vercel_container_registry": {
+      "classification": "OCI_ARTIFACT_TRANSPORT_CANDIDATE_NOT_YET_ADMITTED",
+      "evidence": "current Vercel primary docs support OIDC-authenticated VCR OCI push/pull and manifest-digest addressing",
+      "benefit": "separates the large exact OCI artifact from the much smaller canonical logical-state transfer instead of carrying docker-save through serverless memory",
+      "blocker": "no repository owner directive/current exact acceptance run has yet admitted VCR as the Tier-2 artifact carrier"
+    }
+  },
+  "tier2_source_hardening": {
+    "moving_candidate_pr": 682,
+    "known_red_gate": "test_tier2_restore_order.py",
+    "issue": "service currently permits optional snapshot restore before assert_tier2_boot_allowed; this remains a hardening/falsifier for later candidate convergence and is not treated as runtime PASS",
+    "note": "outer full-delete semantics remain mandatory regardless of inner service ordering"
+  },
+  "execution_admission": {
+    "github_hosted_runner": "REPEATED_FAILURE_BEFORE_STEPS_ZERO_CREDIT",
+    "daytona": "AUTHORIZED_FREE_ONLY_FALLBACK_BUT_CURRENT_BRIDGE_FAILED_BEFORE_PROVIDER_CONTACT",
+    "vercel": "CURRENT_CONTROLLER_SOURCE_INTENTIONALLY_BUILD_RED_UNTIL_FORK_AND_PHASE_IDENTITY_GATES_ARE_CLOSED",
+    "vps_self_hosted_production_testing": false,
+    "together_api": false
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "shared immutable per-trigger experiment identity is not exposed; no duplicate experiment lease was invented"
+  },
+  "next_exact_step": "Converge PR810 all final phases onto one immutable accepted Research freeze; replace Sandbox.fork with a genuinely new Sandbox.create flow that carries only declared state/workspace plus exact OCI artifact through an explicitly admitted transport. Prove transport admission first (Drive beta access/version or stronger alternative; optionally separate OCI artifact through an admitted digest-bound VCR). Then obtain exact-head READY/build evidence and only then perform the owner-credential one-shot runtime sequence.",
+  "acceptance": "IN_PROGRESS"
+}

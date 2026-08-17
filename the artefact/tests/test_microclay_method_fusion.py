@@ -18,6 +18,9 @@ from clayverse.store import StaleGeneration, UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle, TurnLifecycleError
 
 
+SHADOW_SIGNATURE = ["timeout dependency sensor", "bounded diagnosis"]
+
+
 def _identity(db: UnifiedDB, query: str = "sensor timeout dependency"):
     db.ensure_user("gabriel", "Gabriel")
     session_id = db.ensure_session("gabriel", "clayverse-gabriel")
@@ -163,6 +166,7 @@ def test_fact_unknown_survives_method_present_and_receipts_stay_separate(tmp_pat
             sid,
             (),
             query="sensor timeout dependency",
+            problem_signature=SHADOW_SIGNATURE,
             turn_id=turn_id,
             episode_id=episode_id,
             causal_id=causal_id,
@@ -182,6 +186,7 @@ def test_fact_unknown_survives_method_present_and_receipts_stay_separate(tmp_pat
         assert world["method_receipt"]["generation"] == generation
         assert world["method_receipt"]["truth_authority"] is False
         assert world["method_receipt"]["promotion_verified"] is True
+        assert world["method_receipt"]["served"] is False
     finally:
         db.close()
 
@@ -217,7 +222,8 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
             "framework_candidate", "candidate", "{}", None, "gabriel", {"source": "test"}
         )
         method = MicroClayMethodRetrieval(db).retrieve(
-            query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+            query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
+            user_id="gabriel", session_id=sid,
             turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
             generation=generation,
         )
@@ -230,7 +236,8 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
         )
         with pytest.raises(ValueError, match="fields mismatch"):
             MicroClayMethodRetrieval(db).retrieve(
-                query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+                query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
+                user_id="gabriel", session_id=sid,
                 turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
                 generation=generation,
             )
@@ -248,7 +255,8 @@ def test_candidate_malformed_and_unreceipted_method_fail_closed(tmp_path):
         )
         with pytest.raises(ValueError, match="promotion receipt is missing"):
             MicroClayMethodRetrieval(db).retrieve(
-                query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+                query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
+                user_id="gabriel", session_id=sid,
                 turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
                 generation=generation,
             )
@@ -269,7 +277,8 @@ def test_unscoped_global_method_is_not_admitted_to_user_method_context(tmp_path)
             {"method_schema": METHOD_SCHEMA, "promotion_receipt_id": "forged"},
         )
         result = MicroClayMethodRetrieval(db).retrieve(
-            query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+            query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
+            user_id="gabriel", session_id=sid,
             turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
             generation=generation,
         )
@@ -323,7 +332,8 @@ def test_nonterminal_or_cross_user_source_episode_fails_closed(tmp_path):
         )
         with pytest.raises(ValueError, match="crosses user boundary"):
             MicroClayMethodRetrieval(db).retrieve(
-                query="sensor timeout dependency", user_id="gabriel", session_id=sid,
+                query="sensor timeout dependency", problem_signature=SHADOW_SIGNATURE,
+                user_id="gabriel", session_id=sid,
                 turn_id=turn_id, episode_id=episode_id, causal_id=causal_id,
                 generation=generation,
             )
@@ -371,6 +381,7 @@ def test_partial_turn_identity_matches_active_and_is_completed(tmp_path):
             sid,
             (),
             query="sensor timeout dependency",
+            problem_signature=SHADOW_SIGNATURE,
             generation=generation,
         )
 
@@ -381,6 +392,7 @@ def test_partial_turn_identity_matches_active_and_is_completed(tmp_path):
         assert world["retrieval_receipt"]["status"] == "UNKNOWN"
         assert world["method_receipt"]["status"] == "METHOD_PRESENT"
         assert world["method_receipt"]["promotion_verified"] is True
+        assert world["method_receipt"]["served"] is False
     finally:
         db.close()
 

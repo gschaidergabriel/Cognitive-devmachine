@@ -55,7 +55,7 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
 
 
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
-    """Close interrupted work without replay, then advance the one entity generation."""
+    """Close interrupted work without replay, preserve verified learning, then advance generation."""
 
     # Explicit boot boundary: no concurrent request path performs this recovery.
     EffectJournal(db).recover_pending()
@@ -69,6 +69,8 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         "ambiguous_effects": 0,
         "active_turns_closed": 0,
         "leases_expired": 0,
+        "retrieval_learning_eligible": 0,
+        "retrieval_learning_applied": 0,
         "generation": 0,
     }
 
@@ -182,6 +184,25 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
 
         counts["leases_expired"] = int(tx.execute("SELECT COUNT(*) FROM leases WHERE expires_at>0").fetchone()[0])
         tx.execute("UPDATE leases SET expires_at=0")
+
+    # Verified effect outcomes are legitimate learning evidence in the current
+    # generation. Drain them before advancing the global generation so restart
+    # cannot strand an otherwise valid retrieval outcome behind the stale fence.
+    # Re-running after a crash is idempotent because retrieval_feedback receipts
+    # are canonical and duplicate-protected.
+    current_generation = db.entity_generation()
+    from .microclay_retrieval import MicroClayRetrieval
+    organ = MicroClayRetrieval(db)
+    sessions = db.db.execute("SELECT session_id,generation FROM sessions ORDER BY session_id").fetchall()
+    for session in sessions:
+        if int(session["generation"]) != int(current_generation):
+            raise RecoveryIntegrityError("session generation diverged before retrieval learning drain")
+        learned = organ.learn_from_verified_outcomes(
+            session_id=str(session["session_id"]),
+            generation=int(current_generation),
+        )
+        counts["retrieval_learning_eligible"] += int(learned["eligible"])
+        counts["retrieval_learning_applied"] += int(learned["applied"])
 
     counts["generation"] = db.advance_entity_generation()
     return counts

@@ -3,7 +3,7 @@ services:
     build:
       context: .
       args:
-        ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:-}"
+        ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256}"
     restart: unless-stopped
     ports:
       - "${CLAYVERSE_PORT:-3000}:3000"
@@ -16,7 +16,7 @@ services:
       # the exact embedded artifact has accepted isolated-sandbox runtime evidence.
       CLAYVERSE_ENABLE_ENTITYOS_EXEC: "0"
       CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
-      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:-}"
+      CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256}"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"
       CLERK_ISSUER: "${CLERK_ISSUER:?required}"
       CLERK_JWKS_URL: "${CLERK_JWKS_URL:-}"

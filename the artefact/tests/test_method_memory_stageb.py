@@ -123,7 +123,36 @@ def test_promotion_requires_two_real_source_episodes_and_is_receipted(tmp_path):
         row = db.db.execute("SELECT kind,value FROM method_memory WHERE memory_id=?", (candidate_id,)).fetchone()
         assert row["kind"] == "framework"
         assert json.loads(row["value"])["status"] == "PROMOTED"
-        assert db.db.execute("SELECT COUNT(*) FROM method_receipts WHERE memory_id=? AND action='PROMOTE'", (candidate_id,)).fetchone()[0] == 1
+        receipt = db.db.execute("SELECT payload FROM method_receipts WHERE memory_id=? AND action='PROMOTE'", (candidate_id,)).fetchone()
+        assert receipt is not None
+        assert json.loads(receipt["payload"])["user_id"] == "gabriel"
+    finally:
+        db.close()
+
+
+def test_promotion_cannot_borrow_cross_user_source_episode(tmp_path):
+    db, gabriel_session = _db(tmp_path)
+    try:
+        db.ensure_user("andreas", "Andreas")
+        andreas_session = db.ensure_session("andreas", "clayverse-andreas")
+        candidate_id = db.add_method_memory(
+            "framework_candidate",
+            "user-scoped discriminator",
+            _candidate(["diagnose", "validate"]),
+            "gabriel",
+            {"source": "test"},
+        )
+        own_episode = _episode(db, gabriel_session, "gabriel", "gabriel case")
+        foreign_episode = _episode(db, andreas_session, "andreas", "andreas case")
+        with pytest.raises(PermissionError, match="user scope mismatch"):
+            db.promote_method_memory(
+                candidate_id,
+                "framework",
+                _promoted(["diagnose", "validate"], [own_episode, foreign_episode]),
+                {"source": "cross-user-test"},
+            )
+        row = db.db.execute("SELECT kind FROM method_memory WHERE memory_id=?", (candidate_id,)).fetchone()
+        assert row["kind"] == "framework_candidate"
     finally:
         db.close()
 
@@ -258,7 +287,7 @@ def test_demoted_method_stops_serving_without_deleting_receipt_history(tmp_path)
 
 
 def test_structural_match_beats_lexical_decoy_regression_only(tmp_path):
-    # Regression-only rerun of the GO's one unusual ANALOGICAL_LEXICAL_DECOY experiment.
+    # Regression-only rerun of the branch's existing bounded ANALOGICAL_LEXICAL_DECOY evidence.
     db, session_id = _db(tmp_path)
     try:
         e1 = _episode(db, session_id, "gabriel", "case one")

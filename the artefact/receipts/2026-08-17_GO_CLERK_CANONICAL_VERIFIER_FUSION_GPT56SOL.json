@@ -1,0 +1,78 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "6d15ed597a5c48006cb7737ba7e8287fac8600ec",
+  "source_branch": "fusion/clerk-canonical-verifier-20260817-1350",
+  "source_head_before_receipt": "27c654602318346504e1cb727d4a0beff2791ead",
+  "findings": [
+    {
+      "classification": "DUPLICATE_AUTH_IMPLEMENTATION",
+      "observed": "ClayVerse contained two independent AuthenticationError/ClerkConfig/ClerkTokenVerifier implementations: the canonical terminal path imported clayverse.clerk_auth while existing Clerk unit tests imported the duplicate implementation from clayverse.adapters.",
+      "risk": "A green test could validate a non-runtime copy while the browser/WebSocket PTY continued using different authentication semantics; future fixes could drift and create a hidden second auth authority."
+    },
+    {
+      "classification": "CLERK_SESSION_ADMISSION_GAP",
+      "observed": "The canonical verifier accepted otherwise valid signed/session-bound tokens without requiring Clerk session status sts=active and did not reject tokens carrying Clerk's act actor/impersonation claim.",
+      "risk": "Incomplete or delegated/impersonated Clerk sessions could reach subject-to-canonical-user resolution unless another external layer happened to reject them."
+    }
+  ],
+  "repair": {
+    "canonical_implementation": "the artefact/clayverse/clerk_auth.py",
+    "adapters_behavior": "compatibility re-export only for AuthenticationError, ClerkConfig and ClerkTokenVerifier",
+    "require_sts": "active",
+    "reject_actor_claim": true,
+    "tests_import_canonical_verifier_directly": true,
+    "authority_identity_regression": "adapters Clerk symbols must be object-identical to clerk_auth symbols",
+    "new_auth_authority": false
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://clerk.com/docs/guides/sessions/session-tokens",
+      "observation": "Current Clerk session-token documentation describes sts as session status and act as actor information present for impersonation."
+    },
+    {
+      "source": "https://clerk.com/docs/react-router/reference/types/session-status",
+      "observation": "Clerk defines active as a valid session with activity allowed and pending as signed in with outstanding session tasks."
+    },
+    {
+      "source": "https://clerk.com/docs/guides/sessions/manual-jwt-verification",
+      "observation": "Clerk documents manual token verification including authorized-party validation and status handling."
+    }
+  ],
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "MECHANISM_REPLICATION_NOT_EXACT_CHECKOUT",
+    "python": "3.13.5",
+    "pyjwt": "2.13.0",
+    "cryptography": "46.0.4",
+    "pytest": "9.0.2",
+    "focused_tests_passed": 4,
+    "focused_tests_failed": 0,
+    "compile_check": "PASS",
+    "covers": [
+      "valid active direct Clerk session",
+      "missing/empty sid rejection",
+      "missing/future nbf rejection",
+      "pending status rejection",
+      "missing status rejection",
+      "actor/impersonation rejection",
+      "legacy adapters import is the same canonical verifier object"
+    ],
+    "scope_limit": "Source semantics were reconstructed from the exact branch files into an isolated container because no executable Vercel Sandbox start/exec surface and no exact private-repository checkout surface were available. This does not establish exact-checkout, OCI, live Clerk/JWKS rotation, browser WebSocket PTY, or whole-product PASS."
+  },
+  "supersession_note": {
+    "earlier_receipt": "the artefact/receipts/2026-08-17_GO_CLERK_ACTIVE_DIRECT_SESSION_GPT56SOL.json",
+    "correction": "The earlier focused 3/3 result was insufficient as evidence for the real terminal auth boundary because the repository Clerk tests imported clayverse.adapters, which held a separate verifier implementation. This fusion receipt preserves that negative finding and supersedes the earlier source recommendation."
+  },
+  "go_experiment_accounting": {
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The available shared user-trigger timestamp is minute-precision only, while the current atomic unusual-experiment protocol requires at least whole-second precision for the fallback trigger key. Ordinary deterministic source hardening/regression continued; no unusual experiment is claimed."
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run the then-current fused source in an actually-started authorized isolated exact checkout/image, then verify real Clerk v2 active JWT acceptance, pending-session rejection, impersonation rejection, JWKS/key rotation, canonical gabriel/andreas mapping, and browser WebSocket PTY attachment."
+}

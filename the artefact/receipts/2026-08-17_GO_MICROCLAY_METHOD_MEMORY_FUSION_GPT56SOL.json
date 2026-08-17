@@ -1,0 +1,92 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "ClayVerse OCI image from the artefact/",
+  "canonical_main_observed_before_receipt": "b0210496a3a2bc9c79d4815c3d659646bc5eead8",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "fusion": {
+    "branch": "go/microclay-method-fusion-20260817",
+    "pre_receipt_head": "bdb701810dc2a5e695b2ca5305da8c0e8c7afdb2",
+    "draft_pr": 418,
+    "mergeable_observed": true,
+    "mergeable_state_observed": "unstable",
+    "source_lanes": [393, 394, 396],
+    "main_promoted": false
+  },
+  "owner_law": {
+    "meta_learning_required": true,
+    "hard_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT",
+    "stage_a": "EVIDENCE_STAGE_A",
+    "stage_b": "METHOD_STAGE_B",
+    "method_truth_authority": false,
+    "method_effect_authority": false
+  },
+  "implemented_contracts": [
+    "one budget-feasible packer is shared by baseline and adaptive rankings",
+    "same-causal replay binds session/user/turn/episode/generation/query/budget/limit before outcome-learning",
+    "schema-v7 nullable legacy replay limit migrates restart-idempotently and unknown legacy request identity fails closed",
+    "bounded retrieval receipts survive the Claude context boundary",
+    "method/control memory classes are excluded from fresh factual evidence retrieval",
+    "pre-fence replay containing method/control memory fails closed with retrieval_semantic_class",
+    "validated method candidates and promoted method records are separate from factual evidence",
+    "Stage-B structural retrieval uses bounded problem signatures and preserves user privacy",
+    "candidate methods are never served; framework/heuristic promotion requires cross-instance support plus promotion receipt",
+    "matching linked counterevidence can block an otherwise structurally similar method",
+    "WorldAssembler exposes problem_signature/method_context/counterevidence/unknowns/method_receipt separately from retrieval_receipt",
+    "context pressure removes method/counterevidence before direct durable evidence",
+    "Stage-B never upgrades or overwrites Stage-A fact status"
+  ],
+  "supporting_regression_evidence": {
+    "class": "OPENAI_ISOLATED_NORMAL_REGRESSION_SUPPORT_ONLY",
+    "not_authoritative_vercel_truth": true,
+    "observed_passes": [
+      "MicroClay budget packing and SHADOW parity discriminator",
+      "full replay identity drift rejection and no-learning-before-invalid-replay",
+      "restart-idempotent schema-v6-to-v7 migration with legacy NULL fail-closed",
+      "bounded retrieval receipt propagation and malformed receipt rejection",
+      "method-memory structural hit/miss, candidate non-serving, single-instance non-promotion, malformed-record rejection, privacy, linked counterexample blocking",
+      "method record cannot satisfy factual Stage A even with perfect lexical overlap",
+      "FACT_UNKNOWN plus METHOD_PRESENT remains FACT_UNKNOWN through the product turn context"
+    ]
+  },
+  "github_ci": {
+    "fusion_head_run": 32002636582,
+    "job": 95305805083,
+    "conclusion": "failure",
+    "executed_steps": 0,
+    "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_NOT_PRODUCT_TEST_EVIDENCE"
+  },
+  "execution_authority": {
+    "vercel_sandbox_start_exec_surface_available_to_this_worker": false,
+    "prior_microclay_integration_receipt": "the artefact/receipts/2026-08-17_GO_MICROCLAY_CURRENT_HEAD_INTEGRATION_GPT56SOL.json",
+    "prior_receipt_classification": "RUNNER_OR_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "authoritative_current_head_sandbox_execution_observed": false,
+    "oci_build_runtime_pass_observed": false,
+    "whole_clayverse_pass": false
+  },
+  "unusual_experiment": {
+    "new_experiment_executed_by_this_lane": false,
+    "reason": "repository coordination/atomic lease records show the user-triggered GO experiment slot is already closed/contested; this lane performed normal regressions and fusion only",
+    "slot_reuse_forbidden": true
+  },
+  "adjudication": {
+    "outcome": "RETAIN_AS_SINGLE_FUSED_VERCEL_TARGET",
+    "keep_draft": true,
+    "keep_source_prs_open_until_authoritative_fused_execution": true,
+    "promotion_to_main_authorized": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "current_blocker": "No actually-started authorized exact-head Vercel Sandbox execution exists for PR #418; GitHub Actions executed zero steps, so executable behavior and exact OCI acceptance remain unobserved.",
+  "next_exact_gate": "Refresh main and PR #418 head, preserve exact ancestry, then on an actually-started authorized Vercel Sandbox execute the focused MicroClay + Method-Memory product-path tests, adjacent privacy/replay/restart/context-pressure invariants, and only if green the broader ClayVerse suite plus exact OCI build/runtime/health/restart gates with source SHA, commands, exit codes, logs and image digest captured.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

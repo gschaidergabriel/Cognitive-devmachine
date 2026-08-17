@@ -52,10 +52,9 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _autonomy_snapshot_in_tx(db: UnifiedDB, user_id: str) -> dict[str, Any]:
-    """Read validated canonical autonomy state without nesting UnifiedDB.tx()."""
-    controller = AutonomyController(db)
-    state = controller._load(db.db)
+def _autonomy_snapshot_in_tx(controller: AutonomyController, user_id: str) -> dict[str, Any]:
+    """Read validated canonical autonomy state from the lifecycle's open transaction."""
+    state = controller._load(controller.db.db)
     goals = [
         state["goals"][goal_id]
         for goal_id in state["queue"]
@@ -145,14 +144,16 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, user_id, session_id, lifecycle = _runtime()
     try:
+        # Construct the controller before begin_admission so future controller
+        # initialization/migration work never nests a transaction inside the
+        # lifecycle's BEGIN IMMEDIATE. The actual state read stays in that same
+        # lifecycle transaction and therefore shares its atomic rollback boundary.
+        autonomy_controller = AutonomyController(db)
         # Claude keeps one session_id across turns, and Stop does not run on a user
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            # begin_admission intentionally owns one BEGIN IMMEDIATE transaction.
-            # Reuse that transaction so invalid/oversized autonomy context rolls the
-            # entire prompt admission back instead of leaving a phantom active turn.
-            autonomy = _autonomy_snapshot_in_tx(db, user_id)
+            autonomy = _autonomy_snapshot_in_tx(autonomy_controller, user_id)
             additional_context = _bounded_hook_context(result, autonomy=autonomy)
         return {
             "hookSpecificOutput": {

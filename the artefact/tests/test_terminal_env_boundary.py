@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import shlex
 import subprocess
 
 from clayverse.terminal_sessions import TerminalSessionManager
@@ -25,8 +24,11 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
     monkeypatch.setattr(subprocess, "run", fake_run)
     manager.ensure("gabriel")
 
-    command = calls[-1][-1]
-    argv = shlex.split(command)
+    new_session_calls = [call for call in calls if "new-session" in call]
+    assert len(new_session_calls) == 1
+    command = new_session_calls[0]
+    env_index = command.index("env")
+    argv = command[env_index:]
     assert argv[:2] == ["env", "-i"]
     assert "PATH=/usr/local/bin:/usr/bin:/bin" in argv
     assert "HOME=" + str(tmp_path / "state" / "users" / "gabriel" / "home") in argv

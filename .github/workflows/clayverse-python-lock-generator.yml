@@ -1,0 +1,74 @@
+name: clayverse-python-lock-generator
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/clayverse-python-lock-generator.yml'
+      - 'the artefact/requirements.txt'
+      - 'the artefact/requirements.lock.txt'
+      - 'the artefact/Dockerfile'
+      - 'the artefact/SOURCE_LOCK.json'
+      - 'the artefact/tests/test_python_dependency_lock.py'
+
+permissions:
+  contents: read
+
+jobs:
+  generate-lock:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+    steps:
+      - name: Generate exact hash lock twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >/tmp/requirements.in <<'EOF'
+          PyJWT[crypto]==2.13.0
+          fastapi==0.139.2
+          uvicorn[standard]==0.51.0
+          mcp==2.0.0
+          EOF
+          python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.0'
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking -o /tmp/requirements.lock.1 /tmp/requirements.in
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking -o /tmp/requirements.lock.2 /tmp/requirements.in
+          diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2
+          sha256sum /tmp/requirements.lock.1
+          rm -rf /tmp/wheelhouse && mkdir /tmp/wheelhouse
+          python -m pip download --disable-pip-version-check --no-cache-dir --only-binary=:all: --require-hashes -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
+          printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
+      - name: One bounded unusual experiment - hash lesion
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/requirements.lock.1')
+          lines=p.read_text().splitlines()
+          out=[]
+          in_first=False
+          changed=0
+          for line in lines:
+              if line and not line[0].isspace() and not line.startswith(('#','--')):
+                  if in_first:
+                      in_first=False
+                  elif not any(x and not x[0].isspace() and not x.startswith(('#','--')) for x in out):
+                      in_first=True
+              if in_first and '--hash=sha256:' in line:
+                  prefix=line.split('--hash=sha256:',1)[0]
+                  suffix=' \\' if line.rstrip().endswith('\\') else ''
+                  line=prefix+'--hash=sha256:'+'0'*64+suffix
+                  changed += 1
+              out.append(line)
+          assert changed > 0
+          Path('/tmp/requirements.lock.lesion').write_text('\n'.join(out)+'\n')
+          print('PYTHON_LOCK_HASH_LESION hashes_replaced=', changed)
+          PY
+          rm -rf /tmp/lesion-wheelhouse && mkdir /tmp/lesion-wheelhouse
+          set +e
+          python -m pip download --disable-pip-version-check --no-cache-dir --only-binary=:all: --require-hashes -r /tmp/requirements.lock.lesion -d /tmp/lesion-wheelhouse >/tmp/lesion.out 2>&1
+          rc=$?
+          set -e
+          cat /tmp/lesion.out
+          test "$rc" -ne 0
+          echo "PYTHON_LOCK_HASH_LESION_REJECTED rc=$rc"

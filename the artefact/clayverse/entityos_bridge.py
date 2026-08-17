@@ -13,6 +13,10 @@ class EntityOSIntegrityError(PermissionError):
     pass
 
 
+class EntityOSOutcomeUnknown(RuntimeError):
+    """EntityOS started, but ClayVerse cannot know whether external effects occurred."""
+
+
 @dataclass(frozen=True)
 class EntityOSBridge:
     """Execute an exact SHA-256 pinned EntityOS snapshot, not a mutable path inode."""
@@ -135,16 +139,24 @@ class EntityOSBridge:
         fd = self._open_verified()
         try:
             executable = f"/proc/self/fd/{fd}"
-            cp = subprocess.run(
-                [executable, *argv],
-                executable=executable,
-                pass_fds=(fd,),
-                shell=False,
-                capture_output=True,
-                text=False,
-                timeout=self.timeout,
-                env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
-            )
+            try:
+                cp = subprocess.run(
+                    [executable, *argv],
+                    executable=executable,
+                    pass_fds=(fd,),
+                    shell=False,
+                    capture_output=True,
+                    text=False,
+                    timeout=self.timeout,
+                    env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
+                )
+            except subprocess.TimeoutExpired as exc:
+                # subprocess.run only raises TimeoutExpired after process creation.
+                # The child is killed/waited by subprocess.run, but an external
+                # side effect may already have happened. Never relabel that as FAILED.
+                raise EntityOSOutcomeUnknown(
+                    "EntityOS execution timed out after process start; external outcome is uncertain"
+                ) from exc
         finally:
             os.close(fd)
         return {

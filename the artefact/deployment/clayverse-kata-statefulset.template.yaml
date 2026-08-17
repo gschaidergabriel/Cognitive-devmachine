@@ -103,14 +103,11 @@ spec:
               value: /workspace
             - name: CLAYVERSE_REQUIRE_CLAUDE
               value: "1"
+            # EntityOS path/digest authority is image-internal. Deployment may
+            # enable the already-admitted embedded substrate but may not select
+            # different executable bytes through env/Secret/ConfigMap values.
             - name: CLAYVERSE_ENABLE_ENTITYOS_EXEC
               value: "1"
-            - name: CLAYVERSE_ENTITYOS_PATH
-              value: /opt/entityos/EntityOS
-            # EntityOS artifact identity is image-authoritative. The image bakes
-            # CLAYVERSE_ENTITYOS_SHA256 only after Docker build-time verification
-            # against the tracked entityos.lock.json and the embedded bytes.
-            # Do not override that digest from a deployment Secret/config source.
             - name: CLAYVERSE_CLERK_MAP_JSON
               valueFrom:
                 secretKeyRef:

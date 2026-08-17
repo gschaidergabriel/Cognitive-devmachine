@@ -1,0 +1,82 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_parent_observed": "dff48f8dc1fee70719abdb3f1fa2ece5210d5f09",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_pr_head_observed": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
+  "active_cm_io_pr": 798,
+  "active_cm_io_head_observed": "6002d5a6422b75a3e2204146fed5ec22459296e3",
+  "execution_classification": "SOURCE_ADVERSARIAL_REVIEW_AND_PROVIDER_NEGATIVE_EVIDENCE_ONLY",
+  "observed_source_finding": {
+    "severity": "PROMOTION_BLOCKER",
+    "mechanism": "PR798 introduces HostcallABIContract.release_semantic_authority and marks test.bytes.echo.v0 false, but clayvm serialized-code validation and ClayHost.invoke resolve the contract through get_hostcall_contract without enforcing release_semantic_authority.",
+    "consequence": "The diagnostic-only flag is descriptive rather than a fail-closed release/runtime authority fence. A serialized module can be recognized for the diagnostic call ID, and a host registering that handler can execute it without an explicit diagnostic runtime mode.",
+    "source_scope": [
+      "claymachine/hostcall_abi.py",
+      "claymachine/clayvm.py",
+      "tests/test_clay_cm_io_hostcall_abi_bytes.py"
+    ]
+  },
+  "strongest_counterhypothesis": "Source admission already excludes the diagnostic signature and normal production hosts do not register its handler, so no product path can execute it.",
+  "counterhypothesis_result": "INSUFFICIENT_FOR_PROMOTION",
+  "counterhypothesis_reason": "The contract explicitly carries release_semantic_authority=false, therefore the machine/runtime authority boundary must enforce that property rather than rely on current caller convention or handler absence. The low-level loader is also documented as a validation boundary and should fail closed by default.",
+  "required_repair": [
+    "default release load rejects hostcall contracts with release_semantic_authority=false",
+    "default runtime host rejects a non-release contract even if a handler is registered",
+    "diagnostic execution requires explicit opt-in rather than ambient registry presence",
+    "diagnostic Bytes echo is restricted to the typed CLAYVM/2 scope",
+    "legacy linux.process.spawn.v0 Int-to-Int ABI identity and behavior remain unchanged"
+  ],
+  "ordinary_regression_obligations": [
+    "default load_module rejects diagnostic hostcall ID",
+    "default runtime host rejects diagnostic hostcall with handler present before handler invocation",
+    "explicit diagnostic mode round-trips opaque NUL/non-UTF8 owned Bytes only on CLAYVM/2",
+    "wrong argument and wrong return types remain fail-closed",
+    "mutable/borrowed Bytes remain behind epoch/lease fence",
+    "legacy process Int-to-Int regressions pass"
+  ],
+  "coordination": {
+    "pr798_comment_id": 5311011063,
+    "duplicate_policy": "do not create another permanent ABI implementation; repair/fuse on the active stacked lane",
+    "superseded_pr793_note": "closed unmerged donor evidence retained because it specified stronger VM-version and diagnostic-only fencing"
+  },
+  "vercel_observation": {
+    "exact_head": "6002d5a6422b75a3e2204146fed5ec22459296e3",
+    "github_vercel_check": "failure",
+    "failure_target_class": "build-rate-limit",
+    "exact_head_vercel_sandbox_started": false,
+    "exact_head_executable_status": "UNVERIFIED",
+    "available_connector_limit": "current Vercel connector exposes deployment and observability operations but no Sandbox start/exec action",
+    "interpretation": "No source test, runtime, EntityOS rebuild or artifact PASS is inferred. READY state from another earlier Git-bound deployment is not evidence for this SHA."
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by_prior_shared_go_evidence": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_discriminator": [
+    "repair the diagnostic release/runtime fence on the active #798 stacked lane without creating a second semantic path",
+    "refresh #787/#798 exact heads and shared worker state",
+    "when Vercel accepts the exact Git-bound head, start one coordinated isolated Vercel Sandbox batch",
+    "run the diagnostic-release-fence regressions plus adjacent ABI/process/single-VM gates and ordinary full pytest with zero new unusual experiments",
+    "if green, execute the canonical v7 exact one-file EntityOS twin build, byte identity, runtime/self-test/no-host-Python/relocation/provenance gates, and successful Sandbox stop",
+    "persist the exact source SHA, commands, exit codes, logs and EntityOS digest before promotion"
+  ],
+  "claims": {
+    "source_promotion_blocker_identified": true,
+    "durable_pr_coordination_written": true,
+    "current_exact_head_sandbox_pass": false,
+    "current_exact_head_entityos_artifact_observed": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

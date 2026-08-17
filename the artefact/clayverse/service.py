@@ -12,10 +12,11 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
-from .recovery import recover_incomplete_episodes
+from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+from .tier2_signal import request_tier2_replacement
 
 
 def _clerk_map() -> dict[str, str]:
@@ -141,7 +142,16 @@ def main():
         db.close()
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    try:
+        recovery = recover_incomplete_episodes(db)
+    except RecoveryIntegrityError as exc:
+        exit_code = request_tier2_replacement("RECOVERY_INTEGRITY_ERROR", str(exc))
+        try:
+            db.close()
+        except Exception:
+            pass
+        return exit_code
+
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 

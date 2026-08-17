@@ -1,0 +1,82 @@
+{
+  "schema": "ClayVerseSourceMechanismReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroClay Stage-A learned memory entry-point routing",
+  "pr": 504,
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "go/microclay-stagea-entrypoint-v2-current-20260817",
+    "fused_head_before_receipt": "9d82769f6590e906d34d06419b252cc314bf60f5",
+    "main_rejoined_through": "aaf83cf3c7ee94a4c4e082d62719711c66b92cf0",
+    "main_microclay_blob_at_later_pr_base": "891eb6306416460dda739fce00fba473840c1ee0",
+    "candidate_microclay_blob": "8f3f7d369c420837db7bf34e3b8b7541d1987cc7",
+    "candidate_test_blob": "8ecd3f44c1e461e96f479662437a6ac0b610c33a"
+  },
+  "observed_problem": {
+    "current_main": "Adaptive ranking can learn weights, but candidates with zero lexical baseline are filtered from both serving and shadow selection, so MicroClay cannot open a genuinely learned memory entry point after a lexical miss.",
+    "donor": "PR #415 contains a route concept but mixes Stage A, Stage B and terminal work and retained policy version 1 across changed adaptive semantics."
+  },
+  "candidate_delta": [
+    "Adaptive routing semantics advance to policy version 2.",
+    "All new policy entry keys are v2-scoped; persisted v1 capital cannot silently influence v2.",
+    "An ACTIVE state from a different policy version fails closed to SHADOW.",
+    "Hashed query-only cue to subject routes may acquire capital only from actually served evidence that later receives canonical causal outcome credit.",
+    "Only positive learned route capital may open a zero-lexical candidate in adaptive packing.",
+    "Generic subject/kind capital cannot open a lexical miss.",
+    "New route credit is limited to rank-1 served evidence to reduce alias spraying.",
+    "SHADOW remains factual serving authority; learned routes can change shadow_memory_ids without changing served PRESENT/UNKNOWN."
+  ],
+  "reward_law_rejoin": {
+    "main_commit": "a89061d6eabbe25598c176366ab675ec257e5476",
+    "law": "state.noop is explicitly NON_REWARDING and contributes causal credit 0.",
+    "test_repair": "The current focused retrieval regression no longer treats state.noop as a training signal. It injects the already-authoritative persisted positive causal receipt at the retrieval-layer fixture boundary; EffectJournal execution/credit semantics remain covered by their canonical tests."
+  },
+  "bounded_execution": {
+    "environment": "OpenAI isolated non-production container",
+    "exact_candidate_microclay_blob_reconstructed": true,
+    "git_blob_sha_observed": "8f3f7d369c420837db7bf34e3b8b7541d1987cc7",
+    "git_blob_matches_candidate": true,
+    "py_compile_candidate_microclay": "PASS",
+    "mechanism_regression": {
+      "result": "PASS",
+      "checks": "11/11",
+      "covered": [
+        "v1 ACTIVE state fails closed to SHADOW under v2 code",
+        "exact v2 state can expose ACTIVE mode",
+        "v2 route keys are version-scoped",
+        "zero lexical baseline remains zero",
+        "positive learned route opens adaptive packing only",
+        "baseline serving does not open the route",
+        "generic subject capital cannot open a miss",
+        "negative learned route capital cannot open a miss"
+      ]
+    },
+    "exact_current_branch_full_pytest": "UNOBSERVED",
+    "current_reward-aligned_test_file_execution": "UNOBSERVED"
+  },
+  "execution_admission": {
+    "connected_vercel_mcp_direct_sandbox_create_start_exec": false,
+    "repository_prior_git_preview_bridge_status": "Vercel build-rate-limited before Sandbox start",
+    "deployment_used_as_test_substitute": false,
+    "vps_self_hosted_production_testing_used": false,
+    "exact_oci_build_runtime": "UNOBSERVED"
+  },
+  "counterhypotheses_and_gates": [
+    "Learned cue-to-subject routes may overfit aliases or preserve stale subject structure; held-out contamination/staleness tests are required before ACTIVE promotion.",
+    "Automatic positive reward remains sparse because state.noop is correctly non-rewarding and EntityOS execution is separately gated; explicit user correction/retrieval-miss feedback remains an open product contract.",
+    "Replay full-request identity, crash-atomic learning and Stage-A method/control-kind isolation from donor lanes remain separate current-head fusion obligations.",
+    "Stage-B analogical/method retrieval remains a separate strict authority path and must not be fused as raw-prompt factual retrieval."
+  ],
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable shared request/turn id or uniquely reproducible whole-second trigger identity is exposed to this organ; BOOTSTRAP_MINIMAL schema 5.2 requires fail-closed no unusual experiment.",
+    "unusual_experiment_executed": false,
+    "ordinary_deterministic_regression_only": true
+  },
+  "acceptance": "SOURCE_MECHANISM_SUPPORTED_NOT_PRODUCT_PASS",
+  "next_exact_gate": "Actually-started authorized isolated exact checkout of PR #504 head: learned-entry regression plus adjacent MicroClay replay/credit/crash-atomic/context/recovery tests, followed by held-out SHADOW-vs-baseline alias, contamination, stale-route, negative-correction and unnecessary-personalization evaluation before ACTIVE promotion."
+}

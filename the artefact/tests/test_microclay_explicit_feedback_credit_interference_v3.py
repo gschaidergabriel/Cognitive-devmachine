@@ -1,4 +1,5 @@
 import hashlib
+import time
 
 from clayverse.identity import IdentityRouter
 from clayverse.microclay_feedback import MicroClayExplicitFeedback
@@ -69,9 +70,19 @@ def test_explicit_miss_receipt_does_not_block_or_rewrite_verified_outcome_credit
         )
         outcome_hash = hashlib.sha256(b'{"ok":true}').hexdigest()
         db.db.execute(
-            "UPDATE causal_episodes SET effect_id=?,outcome_hash=?,credit=1.0,reentered=1 "
-            "WHERE causal_id=?",
-            (effect_id, outcome_hash, row["causal_id"]),
+            "INSERT INTO causal_episodes("
+            "causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts"
+            ") VALUES(?,?,?,?,?,?,?,?)",
+            (
+                row["causal_id"],
+                row["episode_id"],
+                effect_id,
+                row["turn_id"],
+                outcome_hash,
+                1.0,
+                1,
+                time.time(),
+            ),
         )
 
         automatic = MicroClayRetrieval(db).credit(
@@ -102,7 +113,5 @@ def test_explicit_miss_receipt_does_not_block_or_rewrite_verified_outcome_credit
         assert int(route_after["pulls"]) == 1
         assert float(route_after["capital"]) == float(route_before["capital"])
         assert float(route_after["reward_ema"]) == float(route_before["reward_ema"])
-
-        lifecycle.abort("test-end")
     finally:
         db.close()

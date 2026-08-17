@@ -1,0 +1,35 @@
+{
+  "schema": "clayverse-mechanism-regression-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:47:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "canonical_main_observed": "717d488a065c85ed62e6b24819d153b3d5e16f68",
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "surface": "OpenAI isolated non-production container",
+  "scope": "exact current service.py + exact current terminal_gateway.py source-mechanism integration with external/runtime dependencies stubbed; not full checkout and not OCI/live Clerk/browser acceptance",
+  "exact_sources": {
+    "the artefact/clayverse/service.py": {
+      "git_blob_sha1": "4018d695cc1a802072a6408ec1350ad35ce17970",
+      "match": true
+    },
+    "the artefact/clayverse/terminal_gateway.py": {
+      "git_blob_sha1": "428246f7d62873a7bc5a755ac3a3b66686c9c0f0",
+      "match": true
+    }
+  },
+  "observed": {
+    "service_main_return_code": 0,
+    "uvicorn_kwargs": {
+      "host": "127.0.0.1",
+      "port": 3000,
+      "workers": 1,
+      "access_log": false,
+      "ws_max_size": 65536
+    },
+    "transport_bound_equals_gateway_pty_input_bound": true
+  },
+  "classification": "MECHANISM_SUPPORTED",
+  "whole_product_pass": false,
+  "remaining_blocker": "No connected Vercel Sandbox start/exec primitive; isolated local container has no Docker/Podman/Buildah and no external DNS/network access, so exact full private-repo checkout plus OCI build/start cannot be established here. Real Clerk JWT/browser/WebSocket PTY remains an external acceptance gate.",
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"]
+}

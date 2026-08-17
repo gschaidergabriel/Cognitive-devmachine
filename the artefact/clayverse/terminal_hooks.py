@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy import AutonomyState
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -51,7 +52,11 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
-def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
+def _bounded_hook_context(
+    result: dict[str, Any],
+    autonomy: dict[str, Any] | None = None,
+    limit: int = HOOK_CONTEXT_MAX_CHARS,
+) -> str:
     compact = {
         "authority": "UnifiedDB",
         "identity": {"user_id": result["user_id"], "session_id": result["session_id"]},
@@ -66,6 +71,15 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
+        "autonomy": autonomy or {
+            "active_goals": [],
+            "truth_boundary": {
+                "capability_claims": "must be observed, never inferred from identity prose",
+                "effect_success": "verified effect outcome only",
+                "step_success": "trusted verification receipt only",
+                "unknown": "remain UNKNOWN/BLOCKED",
+            },
+        },
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
@@ -93,6 +107,21 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
     for hp in compact["hyperpositions"]:
         if isinstance(hp, dict):
             hp["facets"] = list(hp.get("facets", []))[:3]
+
+    # Goal identity matters, but full goal prose must not crowd out causal/current
+    # evidence. Keep only a bounded compact frontier if the initial envelope is large.
+    autonomy_state = compact.get("autonomy")
+    if isinstance(autonomy_state, dict):
+        active_goals = list(autonomy_state.get("active_goals", []))[:3]
+        bounded_goals = []
+        for goal in active_goals:
+            if not isinstance(goal, dict):
+                continue
+            item = dict(goal)
+            if len(str(item.get("objective", ""))) > 600:
+                item["objective"] = str(item["objective"])[:600] + "…"
+            bounded_goals.append(item)
+        autonomy_state["active_goals"] = bounded_goals
 
     text = render()
     if len(text) > limit:
@@ -129,7 +158,8 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            additional_context = _bounded_hook_context(result)
+            autonomy = AutonomyState(db).context_summary()
+            additional_context = _bounded_hook_context(result, autonomy=autonomy)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",

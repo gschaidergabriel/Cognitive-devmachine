@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6-Sol temporary research organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse image from the artefact/",
+  "joined_main_head": "fa9471d39e3c96a8de9128b4a2c9b1df3f71c220",
+  "fusion_base_head": "d96683082bacb22db7e11cf88ad90768a1c23644",
+  "latest_main_observed_before_receipt": "5564be35ac572963f5ceeed9247ad24657792834",
+  "finding": {
+    "boundary": "packaged ClayVerse application/control-plane ownership",
+    "pre_repair_dockerfile_blob": "0b3912f73d511d7b9eb488d08cb016eb16677b3a",
+    "failure": "the Dockerfile recursively assigned /opt/clayverse to runtime UID 10001; runtime/CLAUDE.md was mode 0444 but remained replaceable because its parent directory was owned and writable by that runtime identity"
+  },
+  "counterhypothesis": "0444 on the control file plus Compose read_only is sufficient and image-internal ownership adds no fail-closed value",
+  "unusual_experiment": {
+    "count_for_this_go": 1,
+    "surface": "OpenAI isolated container workspace; not VPS and not production",
+    "intervention": "attempt identical UID 10001 atomic replacement of a 0444 CLAUDE.md under the current user-owned parent versus a root-owned non-writable parent",
+    "current_pattern": {"exit_code": 0, "final_content": "mutated"},
+    "hardened_pattern": {"exit_code": 23, "final_content": "canonical"},
+    "conclusion": "counterhypothesis rejected for the tested Linux permission mechanism only; this is not an OCI-image runtime PASS"
+  },
+  "repair": {
+    "pr": 344,
+    "branch": "go/root-own-control-plane-fusion-20260817",
+    "dockerfile_blob": "10f7fd3b4b531a9a67baa02e4aa0b6bf63ae8d16",
+    "test_blob": "2dc6479c400c6aca80b8e4e19d7afc75a3ed32fd",
+    "contract": [
+      "/opt/clayverse remains root-owned",
+      "/opt/clayverse is recursively non-writable to runtime identities",
+      "/var/lib/clayverse, /workspace and per-user Claude home remain explicitly writable"
+    ]
+  },
+  "focused_isolated_regression": {
+    "source_binding": "reconstructed files matched GitHub git-blob SHA-1 exactly",
+    "command": "python -m pytest -q tests/test_container_control_plane_permissions.py",
+    "result": "PASS",
+    "tests": "2 passed in 0.05s"
+  },
+  "vercel_sandbox_gate": {
+    "result": "BLOCKED_BY_CONNECTED_TOOL_SURFACE",
+    "reason": "connected Vercel tools expose deployment/log/documentation operations but no Sandbox start or command-execution action",
+    "exact_current_head_oci_pass": false
+  },
+  "whole_system_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_blocker": "actually start an authorized isolated exact-current-head OCI build/runtime run, verify packaged ownership as UID 10001, then continue live Clerk/Claude Code/EntityOS/recovery gates on that exact image"
+}

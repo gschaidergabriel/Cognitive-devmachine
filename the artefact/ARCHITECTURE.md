@@ -12,6 +12,26 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
+## Autonomous goal spine
+
+High agency is a deterministic ClayVerse property, not a literal model-identity claim. The runtime may describe cognition as autonomous/high-capability to encourage initiative, but durable identity, goals, budgets, permissions, effects and completion remain external state-machine authorities.
+
+Target loop:
+
+`canonical owner goal -> generation/lease claim -> bounded step proposal -> deterministic admission -> canonical EffectGate when needed -> observed receipt/causal re-entry -> deterministic success-contract evaluation -> COMPLETED | next bounded step | BLOCKED`
+
+Hard laws:
+
+- top-level durable goals originate only from canonical owner `user` turns; cognition cannot mint or silently broaden them;
+- model output is `PROPOSAL_ONLY`; text, confidence or self-scoring never constitutes effect or completion evidence;
+- autonomy state, including the `HIGH_AGENCY_GROUNDED` operating identity, lives inside the same canonical UnifiedDB state authority;
+- automatic completion currently requires an exact pre-admitted target-bound `entityos.exec`, same owner/session/live generation, `VERIFIED` positive receipt and causal re-entry; `state.noop` cannot prove a goal completed;
+- goals without an independently observable automatic success predicate require an explicit later owner acknowledgement rather than model self-judgment;
+- step/retry/effect budgets are hard code bounds; parallel wake workers use generation-bound goal leases;
+- no second autonomy/consciousness daemon, database, effect path or identity is admitted. Continuous wake/resume must drive the same controller through the existing ClayVerse supervisor/lifecycle/provider boundary.
+
+Detailed contract and promotion gates: `AUTONOMY_ARCHITECTURE.md`.
+
 ## Canonical state and memory invariants
 
 - UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
@@ -87,6 +107,7 @@ The current source candidate implements the persistent receipt/policy spine, que
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
 - Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Autonomous Goal Controller exact isolated focused/adjacent regression, v1->v2 persistence migration, lifecycle/context injection, bounded Stop/provider continuation, cost/time budgets, restart/UNKNOWN and dual-worker lease/recovery behavior.
 - MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
 - Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.

@@ -1,0 +1,74 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:38:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_FUSION_WITH_BOUNDED_MECHANISM_SUPPORT",
+  "scope": "single_existing_mistral_adapter_json_and_model_identity_fences",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "retained_pr": 674,
+  "retained_branch": "gpt56sol/go-mistral-model-identity-fence-20260817-2330",
+  "superseded_pr": 670,
+  "exact_candidate_blobs": {
+    "the artefact/clayverse/adapters.py": "6b2e09f3525700ba110f455590db1e03e08edb0e",
+    "the artefact/tests/test_mistral_model_identity_fence.py": "845d8d05c7671db7bf56854d252908fb164fcb90",
+    "the artefact/tests/test_mistral_canonical_json_boundary.py": "2fb8f91bdba75d9c1d94004944f5b27600109e5e"
+  },
+  "fused_invariants": [
+    "outbound WORLD/request reject NaN and +/-Infinity before transport",
+    "provider envelope and inner decision JSON reject non-finite constants",
+    "provider-returned model must exactly equal the configured requested model",
+    "existing malformed-JSON outward error contract remains stable",
+    "one existing clayverse.adapters.MistralInference transport remains the intended canonical transport"
+  ],
+  "constituent_exact_evidence": {
+    "strict_json_pr_670": "exact-file adapter/test slice previously reached 17/17 PASS after one compatibility-only error-message regression was repaired",
+    "strict_json_receipt": "the artefact/receipts/2026-08-17_GO_2328_MISTRAL_CANONICAL_JSON_ADAPTER_GPT56SOL.json"
+  },
+  "fusion_reproduction": {
+    "environment": "isolated non-production container",
+    "scope": "semantic reconstruction of the combined Mistral adapter mechanisms with inert Clerk stubs",
+    "tests": "7 strict-json cases + 2 model-identity cases",
+    "result": "9 passed in 0.03s",
+    "exit_code": 0,
+    "exact_combined_blob_match": false,
+    "local_reconstruction_blob": "45dd4bcc4e8072984ef0a7acda51f70a07fe99dc",
+    "evidence_limit": "this 9/9 run supports compatibility of the fused mechanisms but earns no exact-current combined-file runtime credit"
+  },
+  "github_actions_observation": {
+    "head_checked": "18ff2ee8437b8286af9df72834d081ae073acf52",
+    "workflow_run": 32046382401,
+    "job": 95435152845,
+    "job_conclusion": "failure",
+    "executed_steps": 0,
+    "classification": "PRE_STEP_ADMISSION_OR_RUNNER_FAILURE_NOT_TEST_FAILURE"
+  },
+  "coordination": {
+    "reason_for_fusion": "PR 674 is the fresher retained current-main adapter hardening lane; PR 670 overlapped the same adapter and is superseded after its unique strict-JSON invariant was fused",
+    "turn_lifecycle": "keep separate universal stale-completion/generation fencing in PR 675 and fuse only once into the eventual canonical lifecycle",
+    "final_preflight": "PR 677 remains complementary fixed-model/secret preflight work and should consume the single retained adapter"
+  },
+  "runtime_credit": {
+    "real_mistral_call": 0,
+    "vault_secret": 0,
+    "exact_full_checkout": 0,
+    "exact_oci": 0,
+    "vercel_firecracker_integrated": 0,
+    "tier2_recreation": 0,
+    "whole_clayverse": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0
+  },
+  "next_gate": "refresh exact current main, converge one TurnLifecycle re-ingest-before-effect path, then execute the owner-mandated Vercel Firecracker -> exact OCI -> runtime Vault Mistral -> canonical re-ingest -> EffectGate/EntityOS -> Tier-2 recreation -> secret reacquisition/repeat sequence",
+  "non_claims": [
+    "no exact combined adapter execution",
+    "no real Mistral provider call",
+    "no Vault secret acquisition",
+    "no exact OCI build/digest",
+    "no whole-product PASS"
+  ]
+}

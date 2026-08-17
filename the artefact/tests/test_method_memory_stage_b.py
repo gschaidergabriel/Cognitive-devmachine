@@ -52,6 +52,17 @@ def _db(tmp_path) -> UnifiedDB:
     return UnifiedDB(tmp_path / "clayverse.db")
 
 
+def _seed_episodes(db: UnifiedDB, user_id: str, episode_ids: list[str]) -> None:
+    db.ensure_user(user_id, user_id.title())
+    session_id = db.ensure_session(user_id, f"clayverse-{user_id}")
+    for index, episode_id in enumerate(episode_ids):
+        db.db.execute(
+            "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (episode_id, session_id, float(index + 1), None, 0.5, "[]", None, "OPEN"),
+        )
+
+
 def test_single_episode_cannot_promote_reusable_framework():
     payload = _payload(
         name="single anecdote",
@@ -64,18 +75,41 @@ def test_single_episode_cannot_promote_reusable_framework():
         validate_method_record("framework", payload)
 
 
+def test_fabricated_source_episode_ids_fail_closed_at_admission(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _seed_episodes(db, "gabriel", ["episode:a"])
+        methods = MethodMemory(db)
+        payload = _payload(
+            name="forged provenance",
+            signature={"topology": ["shared state"], "risk": ["stale replay"]},
+            source_episode_ids=["episode:a", "episode:invented"],
+        )
+        with pytest.raises(MethodRecordError, match="unknown source_episode_ids"):
+            methods.admit(
+                kind="framework",
+                payload=payload,
+                source_turn_id=None,
+                user_id="gabriel",
+                provenance={"source": "test"},
+            )
+    finally:
+        db.close()
+
+
 def test_candidate_can_be_stored_but_is_not_stage_b_served(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:only"])
         methods = MethodMemory(db)
         payload = _payload(
             name="candidate only",
             signature={"topology": ["shared state"], "risk": ["stale replay"]},
             status="CANDIDATE",
+            source_episode_ids=["episode:only"],
+            support_count=1,
+            success_count=1,
         )
-        payload["source_episode_ids"] = ["episode:only"]
-        payload["support_count"] = 1
-        payload["success_count"] = 1
         memory_id = methods.admit(
             kind="framework_candidate",
             payload=payload,
@@ -99,28 +133,23 @@ def test_candidate_can_be_stored_but_is_not_stage_b_served(tmp_path):
 def test_unknown_fact_remains_unknown_when_method_context_is_present(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
         methods = MethodMemory(db)
+        signature = {
+            "topology": ["shared mutable state"],
+            "risk": ["stale replay"],
+            "goal": ["separate competing mechanisms"],
+        }
         methods.admit(
             kind="framework",
-            payload=_payload(
-                name="causal discriminator",
-                signature={
-                    "topology": ["shared mutable state"],
-                    "risk": ["stale replay"],
-                    "goal": ["separate competing mechanisms"],
-                },
-            ),
+            payload=_payload(name="causal discriminator", signature=signature),
             source_turn_id=None,
             user_id="gabriel",
             provenance={"source": "test"},
         )
         result = methods.retrieve_stage_b(
             evidence_status="UNKNOWN",
-            problem_signature={
-                "topology": ["shared mutable state"],
-                "risk": ["stale replay"],
-                "goal": ["separate competing mechanisms"],
-            },
+            problem_signature=signature,
             user_id="gabriel",
         )
         assert result["fact_status"] == "UNKNOWN"
@@ -135,20 +164,19 @@ def test_unknown_fact_remains_unknown_when_method_context_is_present(tmp_path):
 def test_present_evidence_does_not_trigger_stage_b_by_default(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
         methods = MethodMemory(db)
+        signature = {"topology": ["shared state"], "risk": ["stale replay"]}
         methods.admit(
             kind="framework",
-            payload=_payload(
-                name="not needed",
-                signature={"topology": ["shared state"], "risk": ["stale replay"]},
-            ),
+            payload=_payload(name="not needed", signature=signature),
             source_turn_id=None,
             user_id="gabriel",
             provenance={"source": "test"},
         )
         result = methods.retrieve_stage_b(
             evidence_status="PRESENT",
-            problem_signature={"topology": ["shared state"], "risk": ["stale replay"]},
+            problem_signature=signature,
             user_id="gabriel",
         )
         assert result["fact_status"] == "PRESENT"
@@ -162,6 +190,7 @@ def test_structural_match_beats_surface_lexical_decoy_regression(tmp_path):
     """Regression of GO unusual experiment STRUCTURAL_LEXICAL_DECOY_INVERSION."""
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
         methods = MethodMemory(db)
         methods.admit(
             kind="framework",
@@ -208,6 +237,7 @@ def test_structural_match_beats_surface_lexical_decoy_regression(tmp_path):
 def test_matching_linked_counterexample_blocks_framework(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
         methods = MethodMemory(db)
         signature = {
             "topology": ["shared mutable state"],
@@ -243,9 +273,35 @@ def test_matching_linked_counterexample_blocks_framework(tmp_path):
         db.close()
 
 
+def test_counterexample_link_must_reference_counter_kind(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
+        methods = MethodMemory(db)
+        evidence_id = db.add_memory(
+            "fact", "x", "supporting fact", None, "gabriel", {"source": "test"}
+        )
+        payload = _payload(
+            name="bad counter link",
+            signature={"topology": ["shared state"], "risk": ["stale replay"]},
+            counterexample_memory_ids=[evidence_id],
+        )
+        with pytest.raises(MethodRecordError, match="counterexample link has wrong kind"):
+            methods.admit(
+                kind="framework",
+                payload=payload,
+                source_turn_id=None,
+                user_id="gabriel",
+                provenance={"source": "test"},
+            )
+    finally:
+        db.close()
+
+
 def test_malformed_promoted_method_fails_closed_during_stage_b(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "gabriel", ["episode:a", "episode:b"])
         methods = MethodMemory(db)
         db.add_memory(
             "framework",
@@ -268,12 +324,14 @@ def test_malformed_promoted_method_fails_closed_during_stage_b(tmp_path):
 def test_method_retrieval_does_not_broaden_user_scope(tmp_path):
     db = _db(tmp_path)
     try:
+        _seed_episodes(db, "andreas", ["episode:andreas:a", "episode:andreas:b"])
         methods = MethodMemory(db)
         methods.admit(
             kind="framework",
             payload=_payload(
                 name="andreas private method",
                 signature={"topology": ["shared state"], "risk": ["stale replay"]},
+                source_episode_ids=["episode:andreas:a", "episode:andreas:b"],
             ),
             source_turn_id=None,
             user_id="andreas",

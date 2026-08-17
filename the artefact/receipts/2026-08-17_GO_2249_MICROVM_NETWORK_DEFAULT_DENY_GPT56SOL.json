@@ -26,10 +26,23 @@
     "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
     "python": "3.13.5",
     "pytest": "9.0.2",
+    "pyyaml": "6.0.3",
     "source_reconstruction": "byte-exact Git blob reconstruction verified with git hash-object before execution",
-    "command": "python -m pytest -q /tmp/clay_microvm_exact/tests/test_microvm_deployment_contract.py -k network_is_fail_closed_until_explicit_allow_policy",
-    "exit_code": 0,
-    "result": "1 passed, 4 deselected in 0.10s"
+    "pytest_command": "python -m pytest -q /tmp/clay_microvm_exact/tests/test_microvm_deployment_contract.py -k network_is_fail_closed_until_explicit_allow_policy",
+    "pytest_exit_code": 0,
+    "pytest_result": "1 passed, 4 deselected in 0.10s",
+    "semantic_yaml_parse": {
+      "exit_code": 0,
+      "documents": ["Service", "StatefulSet", "NetworkPolicy"],
+      "assertions": [
+        "exact app=clayverse pod selector",
+        "Ingress and Egress policyTypes",
+        "empty ingress and egress rule lists",
+        "hostNetwork is false",
+        "runtimeClassName is kata-qemu-runtime-rs"
+      ],
+      "result": "SEMANTIC_YAML_PARSE_PASS"
+    }
   },
   "external_primary_evidence": {
     "source": "Kubernetes NetworkPolicy official documentation",

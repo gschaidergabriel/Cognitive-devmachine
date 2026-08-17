@@ -11,6 +11,7 @@ from .engine import ClayVerseEngine
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
+from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB
 
 
@@ -80,6 +81,7 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
+    recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -129,6 +131,7 @@ def main():
         "claude_code": claude_available,
         "auth": "clerk",
         "mutation_lane": "serialized",
+        "recovery": recovery,
         "entityos": entityos_status,
         "port": port,
     }), flush=True)

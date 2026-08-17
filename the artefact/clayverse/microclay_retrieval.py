@@ -91,9 +91,9 @@ class MicroClayRetrieval:
         return "cue:" + hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
 
     @staticmethod
-    def _route_key(token: str, subject: str) -> str:
+    def _route_key(token: str, memory_id: str) -> str:
         cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
-        target = hashlib.sha256(subject.encode("utf-8")).hexdigest()[:16]
+        target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
         return f"route:{cue}:{target}"
 
     @staticmethod
@@ -147,6 +147,7 @@ class MicroClayRetrieval:
         self,
         kind: str,
         subject: str,
+        memory_id: str,
         query_tokens: set[str],
         value_tokens: set[str],
     ) -> tuple[str, ...]:
@@ -155,13 +156,14 @@ class MicroClayRetrieval:
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
             keys.append(self._token_key(token))
-        # Query-only cues are bounded, hashed route proposals to this subject. They are
-        # learned only if the selected evidence later receives canonical outcome credit.
-        # Generic subject/kind capital alone can therefore never open a lexical miss.
+        # Query-only cues are bounded, hashed route proposals to this exact durable
+        # memory. They are learned only if that selected evidence later receives
+        # canonical outcome credit. Shared kind/subject capital remains ranking-only
+        # and can therefore never open a sibling memory on a lexical miss.
         for token in sorted(query_tokens.difference(value_tokens)):
             if len(keys) >= self.MAX_ENTRY_KEYS:
                 break
-            keys.append(self._route_key(token, subject))
+            keys.append(self._route_key(token, memory_id))
         return tuple(keys)
 
     def _score_candidate(
@@ -171,6 +173,7 @@ class MicroClayRetrieval:
         now: float,
         capitals: dict[str, float],
     ) -> RetrievalCandidate:
+        memory_id = str(row["memory_id"])
         value = str(row["value"])
         subject = str(row["subject"])
         kind = str(row["kind"])
@@ -193,7 +196,7 @@ class MicroClayRetrieval:
             if lexical > 0.0 else 0.0
         )
 
-        keys = self._entry_keys(kind, subject, query_tokens, value_tokens)
+        keys = self._entry_keys(kind, subject, memory_id, query_tokens, value_tokens)
         bounded_capitals = {
             key: max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, capitals.get(key, 0.0)))
             for key in keys
@@ -206,7 +209,7 @@ class MicroClayRetrieval:
         adaptive = baseline + 0.08 * learned
 
         return RetrievalCandidate(
-            memory_id=str(row["memory_id"]),
+            memory_id=memory_id,
             kind=kind,
             subject=subject,
             value=value,
@@ -414,7 +417,7 @@ class MicroClayRetrieval:
         selected_ids = [x.memory_id for x in selected]
         shadow_ids = [x.memory_id for x in adaptive_selected]
         # Generic cue/kind/subject priors can learn from all served evidence as before.
-        # New query->subject routes are more dangerous: bind them to rank-1 served
+        # New query->memory routes are more dangerous: bind them to rank-1 served
         # evidence only so one successful turn cannot spray an alias over the full pack.
         non_route_keys = {
             key for item in selected for key in item.entry_keys if not key.startswith("route:")

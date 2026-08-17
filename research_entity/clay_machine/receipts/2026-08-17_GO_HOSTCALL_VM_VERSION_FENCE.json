@@ -1,0 +1,94 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "5e433b2d10051af3a428cf8845b25dff32451208",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "active_entityos_pr_head_observed_after_source_fusion": "38f1aa8daaefbc7dec708535d574e3c02727c35f",
+  "execution_classification": "PRODUCT_ABI_VERSION_FENCE_COMMITTED_EXECUTION_BLOCKED_BEFORE_SANDBOX",
+  "sandbox_execution": false,
+  "product_code_changed": true,
+  "coordination": {
+    "parallel_workers_active": true,
+    "duplicate_abi_candidates_adjudicated": true,
+    "selected_authority": "the existing canonical claymachine/hostcall_abi.py on PR787",
+    "donor_strength_retained": "the vm-version and load-time fail-closed idea from superseded candidate PR793",
+    "donor_semantics_rejected": "diagnostic-only Bytes echo was not promoted as product semantics",
+    "runtime_candidate_note": "PR800 remains a source-only runtime donor and was reviewed to preserve exact VM-version authority during recomposition"
+  },
+  "source_delta": {
+    "hostcall_registry_commit": "19be6e721dedc56676d5cf02a36c6bf925334e11",
+    "regression_commit": "c5530915ae0be757a7bef8efa84ab68ba32874bf",
+    "canonical_registry": "claymachine/hostcall_abi.py",
+    "regression": "tests/test_clay_hostcall_abi_vm_versions.py",
+    "abi_rule": "hostcall identity is scoped by exact serialized ClayVM format version as well as stable call_id",
+    "legacy_ids": {
+      "linux.uname_hash": {"call_id": 1, "vm_versions": [1, 2]},
+      "linux.process.spawn.v0": {"call_id": 2, "vm_versions": [1, 2]}
+    },
+    "first_real_bytes_return": {
+      "signature": "linux.process.stdout.v0::(Int)->Bytes",
+      "call_id": 3,
+      "vm_versions": [2],
+      "clayvm1_admission": false
+    },
+    "unknown_vm_or_call_identity": "contract_for_vm returns unadmitted/None; callers must fail closed",
+    "registry_digest_now_binds_vm_versions": true,
+    "new_unusual_experiment_count": 0
+  },
+  "concurrent_follow_on_observed": {
+    "batch5_stdout_gate_commit": "38f1aa8daaefbc7dec708535d574e3c02727c35f",
+    "interpretation": "parallel worker wired the real CM-TERM stdout Bytes regression into Batch-5 after the version-fence commits; this is source coordination, not executed evidence"
+  },
+  "adversarial_review": {
+    "preferred_mechanism": "a single immutable hostcall ABI registry shared by lowering and runtime, with call admission bound to the exact serialized VM format",
+    "strongest_counterhypothesis": "a registry that records vm_versions but is not consumed by ClayVM load/runtime still permits stale or malformed bytecode to reach runtime under call-id-only authority",
+    "cheapest_remaining_falsifier": "make ClayVM load_module/_validate_code resolve every OP_HOSTCALL through contract_for_vm(module_format, call_id), reject unknown/version-inadmissible IDs and wrong arity, then make ClayHost runtime validate args and return through that same contract before caller-frame reentry",
+    "runtime_candidate": "PR800 implements generic registry-based runtime type checks but currently resolves by call_id only; review requested exact module-format preservation",
+    "status": "RETAIN_VERSION_FENCE_SOURCE_NOT_EXECUTABLE_VERIFIED"
+  },
+  "execution_blocker": {
+    "exact_head_checked": "38f1aa8daaefbc7dec708535d574e3c02727c35f",
+    "github_vercel_status": "failure",
+    "provider_target": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "interpretation": "Vercel build rate limiting occurred before an exact-head Sandbox could start. No current source/test/runtime/EntityOS PASS or FAIL is inferred from this provider refusal."
+  },
+  "last_verified_entityos_scope": {
+    "product_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "historical exact-head evidence only; do not generalize to current descendants or whole EntityOS acceptance"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_product_delta": [
+    "refresh PR787 head and preserve parallel ancestry",
+    "fuse generic ClayHost registry validation without reintroducing backend-local type authority",
+    "pass module.format_version into hostcall resolution and reject CLAYVM/1 use of the Bytes-return call id",
+    "validate serialized OP_HOSTCALL call id and arity at load time against contract_for_vm",
+    "execute targeted and full regressions only in an actually-started exact-head Vercel Sandbox when provider rate limiting clears",
+    "if green, run the canonical exact one-file EntityOS twin-build/runtime/no-host-Python/relocation/provenance sequence and persist exact artifact digest evidence"
+  ],
+  "claims": {
+    "vm_versioned_hostcall_registry_source_exists": true,
+    "vm_version_regression_source_exists": true,
+    "stdout_bytes_clayvm2_only_source_contract": true,
+    "generic_clayvm_loadtime_vm_version_enforcement_complete": false,
+    "generic_clayvm_runtime_registry_enforcement_complete": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

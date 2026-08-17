@@ -1,0 +1,78 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "observed_head_before_receipt": "f4dff8e08dcad1f5d7d9de9e14582175f7e50802",
+  "product_authority": {
+    "endpoint": "ClayVerse",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "active_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> per-user persistent tmux -> normal interactive Claude Code -> managed hooks + ClayVerse MCP",
+    "entityos_role": "internal sha256-pinned execution/security/runtime substrate candidate, not product endpoint"
+  },
+  "product_path_repairs": [
+    {
+      "finding": "WebSocket terminal input used one synchronous os.write and ignored the returned byte count, so partial writes could truncate terminal input and a blocking write occupied the asyncio loop",
+      "repair_commit": "e411037842ef86aabf7ca5e6f3ac7e5ed2cb23ab",
+      "regression_commit": "216cf16eb9fe81d335cac6df075136a6e6593082",
+      "receipt_commit": "a6f006f7859700e3dc6688372dca8e2a55f4aea7",
+      "result": "canonical gateway now writes each binary frame completely or fails closed and moves the blocking PTY write to asyncio.to_thread",
+      "focused_probe": "16 byte payload with forced max-3-byte writes completed in 6 writes; zero progress failed closed",
+      "evidence_scope": "bounded mechanism evidence only"
+    },
+    {
+      "finding": "test_terminal_policy.py required an empty managed MCP config while the current product policy and managed-authority regression require exactly the clayverse stdio server",
+      "repair_commit": "5564be35ac572963f5ceeed9247ad24657792834",
+      "result": "guaranteed source-level regression contradiction removed"
+    }
+  ],
+  "fusions_and_falsifiers": [
+    {
+      "candidate": "terminal/session identifier mismatch between IdentityRouter and TerminalSessionManager",
+      "outcome": "REJECTED",
+      "reason": "UnifiedDB.ensure_session and TerminalSessionManager both use session:<user_id>"
+    },
+    {
+      "candidate": "mcp__clayverse__* unsupported as Claude Code allow rule",
+      "outcome": "REJECTED_AFTER_PRIMARY_SOURCE_ADJUDICATION",
+      "reason": "current Claude Code permissions documentation explicitly supports tool-name globs after a literal mcp__<server>__ prefix",
+      "temporary_wrong_commits": ["947ccf61a8614adb6ed276dc7ed8b82feb7140dd", "9930159af036dd8df2754c75286c3448a371301a"],
+      "correction_commits": ["593dc152c048abe443c919cccfa247d34a87053d", "1d46eb811b3f28cae67de60cc4572a303ac896ba"],
+      "corrected_receipt_commit": "cbf4cb697c7ca7c1d496f17b7133481a90d404dc",
+      "final_contract": "mcp__clayverse__*"
+    },
+    {
+      "candidate": "retired custom /api/chat typed-input coercion",
+      "outcome": "FUSED_AS_DEFENSE_IN_DEPTH_NOT_ACTIVE_PRODUCT_PATH",
+      "canonical_fix_commit": "cd118260c5e4b7df2cb5ede8d849fdc5bdae4c50",
+      "note": "parallel canonical implementation was stronger than local candidates; local PRs 314 and 320 were closed rather than merged"
+    }
+  ],
+  "coordination": {
+    "duplicate_canonical_paths_added": false,
+    "stale_or_weaker_local_prs_merged": false,
+    "parallel_main_rechecked": true,
+    "latest_checked_gateway_retains_pty_fix": true,
+    "latest_checked_policy_test_retains_mcp_reconciliation": true
+  },
+  "unusual_experiment": {
+    "additional_experiment_executed_by_this_organ": false,
+    "additional_count": 0,
+    "shared_macrocycle_budget": "already consumed 1/1 by concurrent GO work; no second unusual experiment executed"
+  },
+  "execution_truth": {
+    "exact_current_head_full_suite_executed": false,
+    "exact_current_oci_build_executed": false,
+    "live_clerk_websocket_pty_executed": false,
+    "live_interactive_claude_mcp_executed": false,
+    "restart_persistence_executed": false,
+    "vercel_sandbox_exec_available_in_current_connector_surface": false,
+    "github_hosted_oci_runner_available": false,
+    "vps_testing_used": false,
+    "whole_product_pass_claimed": false
+  },
+  "next_exact_isolated_step": "On an authorized isolated OCI-capable executor, bind the then-current main SHA; run the complete test suite; build the exact one-image candidate; then verify real Clerk JWT -> browser WebSocket PTY -> both persistent tmux/Claude homes -> managed prompt/Stop/StopFailure hooks -> ClayVerse MCP -> admitted EntityOS effect -> same-volume restart and dual-session stale-generation controls.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "together_api_used": false
+}

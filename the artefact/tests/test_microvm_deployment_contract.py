@@ -77,6 +77,18 @@ def test_network_contract_requires_real_enforcement_not_yaml_only():
     assert "representative undeclared ingress and egress remain denied" in text
 
 
+def test_network_contract_fences_node_local_policy_exception():
+    contract = CONTRACT.read_text()
+    template = TEMPLATE.read_text()
+    assert "node-local, control-plane and metadata-service reachability" in contract
+    assert "node-local exception" in contract
+    assert "explicitly probe node-local, metadata-service and relevant control-plane routes" in contract
+    assert "node-local traffic exceptions" in template
+    assert "does NOT imply Kubernetes'" in template
+    assert "node-local NetworkPolicy exceptions are denied" in template
+    assert "denies every network flow" not in template
+
+
 def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     contract = CONTRACT.read_text()
     template = TEMPLATE.read_text()

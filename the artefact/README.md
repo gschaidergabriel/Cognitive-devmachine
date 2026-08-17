@@ -55,6 +55,8 @@ The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs
 
 The same template now also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, and show that only admitted flows open while tested non-admitted flows remain denied.
 
+The candidate deployment evidence helper `deployment/collect_microvm_attestation.py` is deliberately outside the ClayVerse application runtime path. It binds the expected OCI digest to pod spec/runtime identity, RuntimeClass/handler, host-versus-guest kernel identity, security-context invariants and the complete additive NetworkPolicy inventory selecting the ClayVerse pod. It always leaves `whole_product_pass=false` and `network_policy.enforcement_observed=false`; active target-network probes remain mandatory.
+
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
 ### Retained convergence lanes
@@ -65,6 +67,7 @@ The installed RuntimeClass and target hardware virtualization support must be ve
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
 - **#625** tokenless development/baseline packaging — useful lower-layer lane; EntityOS omission is development-only and can never be final acceptance.
 - **#810** retained Vercel Sandbox controller evidence — historical/bounded execution bridge, not the final deployment architecture.
+- **MicroVM attestation collector candidate** — deployment evidence helper only; focused byte-exact source tests pass, exact Kata/CNI execution remains unobserved.
 
 ### Testing law
 
@@ -86,24 +89,29 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 ### Current execution boundary
 
-The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
+The architecture and fail-closed Kata deployment profile are canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
 Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope with its admitted network boundary enforced.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> collect exact runtime/policy identity -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 22:50 +07:00 — MicroVM network boundary hardened fail-closed on canonical `main`.**
+**2026-08-17 22:50 +07:00 — MicroVM runtime-attestation collector added as a bounded candidate on the fail-closed deployment path.**
 
-- the Kata StatefulSet template now contains `clayverse-default-deny`, selecting `app=clayverse` with both `Ingress` and `Egress` policy types and empty rule sets;
-- `MICROVM_DEPLOYMENT_CONTRACT.md` now states explicitly that `hostNetwork: false` is insufficient and requires a separate deployment-specific reviewed allow policy whose exact identity is acceptance evidence;
-- `tests/test_microvm_deployment_contract.py` now fences the deny-all policy and rejects broad `0.0.0.0/0` / `::/0` source-template escapes;
-- this closes the source-level gap previously identified on the retained #623 lane without creating a second network authority or a duplicate product path;
-- this is **source/contract hardening only**: no exact Kubernetes/Kata/CNI runtime enforcement test has executed for the final image, so runtime credit remains zero for this boundary;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because this user trigger exposes only minute-precision immutable message time and no shared immutable request/turn id; ordinary source review/regression work remains allowed.
+- new candidate: `deployment/collect_microvm_attestation.py`;
+- exact Git blob exercised: `b366c602c09d6d8fdf876fb4dd1f3954d71029eb`;
+- exact focused regression blob exercised: `19cc7428d4662580823c93892798bec1ee552f6d`;
+- isolated source evidence: `py_compile PASS`, **8/8 focused tests PASS**;
+- collector fails closed on image-digest drift, RuntimeClass/security drift, hostPath, non-ready runtime, absent selecting NetworkPolicy, missing default-deny and obvious broad selecting allow policies;
+- collector inventories every NetworkPolicy selecting the live pod and hashes that projection, because Kubernetes policies combine additively;
+- collector intentionally cannot claim CNI enforcement, independent whole-product isolation or ClayVerse acceptance from declarative objects; target active probes remain required;
+- no second ClayVerse service/container/state authority is introduced;
+- GO unusual experiment remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed.
+
+Earlier in this same shared cycle, canonical `main` closed the source-level MicroVM network gap with `clayverse-default-deny`, strengthened the deployment contract to require actual CNI enforcement, and fenced that source contract with deterministic tests. The collector is a non-duplicate evidence bridge for the later live target gate, not another network-policy authority.
 
 ## Verification
 

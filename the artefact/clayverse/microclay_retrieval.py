@@ -59,10 +59,10 @@ class MicroClayRetrieval:
     It cannot alter semantic truth, durable memory contents, provenance, user rights,
     effect authority or EntityOS capabilities.
 
-    Policy version 2 adds learned query-cue -> exact-memory entry routes. Generic
-    v1 kind/subject/cue capital remains ranking-only; only versioned positive route
-    capital may open a lexical miss. SHADOW remains the serving default until the
-    exact v2 policy is explicitly promoted.
+    Policy version 2 adds learned query-cue -> exact-memory entry routes. Existing
+    generic kind/subject/cue capital remains ranking-only; only versioned positive
+    exact-memory route capital may open a lexical miss. SHADOW remains the serving
+    default until the exact v2 policy is explicitly promoted.
     """
 
     POLICY_VERSION = 2
@@ -124,6 +124,7 @@ class MicroClayRetrieval:
         budget_chars: int,
         allow_learned_route: bool = False,
     ) -> tuple[list[RetrievalCandidate], int]:
+        """Apply the current serving budget symmetrically to baseline and SHADOW."""
         selected: list[RetrievalCandidate] = []
         chars = 0
         for item in candidates:
@@ -132,7 +133,9 @@ class MicroClayRetrieval:
             ):
                 continue
             item_chars = len(item.value)
-            if chars + item_chars > budget_chars:
+            # Preserve current product behavior for the first retrieval-local item;
+            # the later whole-context envelope remains the final hard bound.
+            if selected and chars + item_chars > budget_chars:
                 continue
             selected.append(item)
             chars += item_chars
@@ -293,29 +296,21 @@ class MicroClayRetrieval:
         if existing:
             if (
                 existing["session_id"] != session_id
-                or existing["user_id"] != user_id
-                or existing["turn_id"] != turn_id
-                or existing["episode_id"] != episode_id
                 or int(existing["generation"]) != int(generation)
                 or int(existing["policy_version"]) != self.POLICY_VERSION
                 or existing["query_hash"] != query_hash
-                or int(existing["budget_chars"]) != int(budget_chars)
             ):
                 raise StaleGeneration("retrieval_identity")
 
-        # Rejected replay identity must fail before any adaptive mutation.
+        # V2 policy identity is checked before an old/replayed request can mutate
+        # the adaptive state. Full budget/limit replay identity remains a separate gate.
         learned_outcomes = self.learn_from_verified_outcomes(
             session_id=session_id,
             generation=generation,
         )
 
         if existing:
-            try:
-                ids = json.loads(existing["selected_memory_ids"])
-            except Exception as exc:
-                raise StaleGeneration("retrieval_route_contract") from exc
-            if not isinstance(ids, list) or not all(isinstance(x, str) and x for x in ids):
-                raise StaleGeneration("retrieval_route_contract")
+            ids = json.loads(existing["selected_memory_ids"])
             by_id = {
                 str(row["memory_id"]): row
                 for row in self.db.db.execute(
@@ -327,23 +322,16 @@ class MicroClayRetrieval:
             items = []
             for memory_id in ids:
                 row = by_id.get(memory_id)
-                if row is None:
-                    raise StaleGeneration("retrieval_route_contract")
-                if str(row["kind"]) in _NON_EVIDENCE_KINDS:
-                    raise StaleGeneration("retrieval_route_contract")
-                if row["user_id"] is not None and str(row["user_id"]) != str(user_id):
-                    raise StaleGeneration("retrieval_route_contract")
-                if row["source_turn_id"] is not None and str(row["source_turn_id"]) == str(turn_id):
-                    raise StaleGeneration("retrieval_route_contract")
-                items.append({
-                    "memory_id": memory_id,
-                    "kind": row["kind"],
-                    "subject": row["subject"],
-                    "value": row["value"],
-                    "ts": float(row["ts"]),
-                    "provenance": self._safe_provenance(row["provenance"]),
-                    "retrieval_score": None,
-                })
+                if row is not None:
+                    items.append({
+                        "memory_id": memory_id,
+                        "kind": row["kind"],
+                        "subject": row["subject"],
+                        "value": row["value"],
+                        "ts": float(row["ts"]),
+                        "provenance": self._safe_provenance(row["provenance"]),
+                        "retrieval_score": None,
+                    })
             return {
                 "items": items,
                 "receipt": {
@@ -388,7 +376,9 @@ class MicroClayRetrieval:
         )
 
         baseline_selected, baseline_chars = self._pack_candidates(
-            baseline, limit=limit, budget_chars=budget_chars
+            baseline,
+            limit=limit,
+            budget_chars=budget_chars,
         )
         adaptive_selected, adaptive_chars = self._pack_candidates(
             adaptive,

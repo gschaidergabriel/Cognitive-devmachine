@@ -36,19 +36,73 @@ def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
     return db, user_id, session_id, TurnLifecycle(db, user_id, session_id, entityos_bridge=None)
 
 
-def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
+def _prompt_id(payload: dict[str, Any], *, required: bool = False) -> str | None:
+    value = payload.get("prompt_id")
+    if value is None and not required:
+        return None
+    if not isinstance(value, str) or not value.strip() or len(value) > 2048:
+        raise TerminalHookError("missing or invalid Claude prompt id")
+    return value
+
+
+def _active_claude_identity(db: UnifiedDB, session_id: str) -> tuple[str | None, str | None]:
     row = db.db.execute(
         "SELECT t.provenance FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",
         (session_id,),
     ).fetchone()
     if not row:
-        return None
+        return None, None
     try:
         provenance = json.loads(row["provenance"])
     except Exception:
-        return None
-    value = provenance.get("claude_session_id") if isinstance(provenance, dict) else None
-    return value if isinstance(value, str) and value else None
+        return None, None
+    if not isinstance(provenance, dict):
+        return None, None
+    claude_session_id = provenance.get("claude_session_id")
+    claude_prompt_id = provenance.get("claude_prompt_id")
+    return (
+        claude_session_id if isinstance(claude_session_id, str) and claude_session_id else None,
+        claude_prompt_id if isinstance(claude_prompt_id, str) and claude_prompt_id else None,
+    )
+
+
+def _retire_failed_active_stop(payload: dict[str, Any], exc: Exception) -> bool:
+    """Terminalize the exact active prompt before loop protection lets Claude stop."""
+    claude_session_id = payload.get("session_id")
+    if not isinstance(claude_session_id, str) or not claude_session_id:
+        return False
+    try:
+        claude_prompt_id = _prompt_id(payload, required=True)
+    except TerminalHookError:
+        return False
+    try:
+        db, _, session_id, lifecycle = _runtime()
+    except Exception as cleanup_exc:
+        print(
+            f"ClayVerse stop cleanup unavailable: {type(cleanup_exc).__name__}: {cleanup_exc}",
+            file=sys.stderr,
+        )
+        return False
+    try:
+        with db.tx() as tx:
+            active_identity = _active_claude_identity(db, session_id)
+            if lifecycle.active() is None or active_identity != (claude_session_id, claude_prompt_id):
+                return False
+            detail = f"{type(exc).__name__}:{exc}"[:500]
+            retired = lifecycle._abort_active_in_tx(
+                tx,
+                "claude_stop_hook_active_failure:" + detail,
+                finalize_projection=False,
+            )
+        return bool(retired.get("aborted"))
+    except Exception as cleanup_exc:
+        print(
+            f"ClayVerse stop cleanup failed: {type(cleanup_exc).__name__}: {cleanup_exc}",
+            file=sys.stderr,
+        )
+        return False
+    finally:
+        db.close()
 
 
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
@@ -118,6 +172,7 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         raise TerminalHookError("unexpected hook event")
     prompt = payload.get("prompt")
     claude_session_id = payload.get("session_id")
+    claude_prompt_id = _prompt_id(payload)
     if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100_000:
         raise TerminalHookError("invalid user prompt")
     if not isinstance(claude_session_id, str) or not claude_session_id:
@@ -125,10 +180,21 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, _, session_id, lifecycle = _runtime()
     try:
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
-        with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
+        active_session_id, active_prompt_id = _active_claude_identity(db, session_id)
+        if (
+            claude_prompt_id is not None
+            and active_session_id == claude_session_id
+            and active_prompt_id == claude_prompt_id
+        ):
+            raise TerminalHookError("duplicate UserPromptSubmit for active Claude prompt")
+        # The fast precheck above avoids unnecessary work for ordinary replay. The
+        # canonical replay fence lives inside begin_admission's BEGIN IMMEDIATE
+        # transaction, so concurrent duplicate deliveries cannot both retire/admit.
+        with lifecycle.begin_admission(
+            prompt,
+            claude_session_id=claude_session_id,
+            claude_prompt_id=claude_prompt_id,
+        ) as result:
             additional_context = _bounded_hook_context(result)
         return {
             "hookSpecificOutput": {
@@ -145,6 +211,7 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("hook_event_name") != "Stop":
         raise TerminalHookError("unexpected hook event")
     claude_session_id = payload.get("session_id")
+    claude_prompt_id = _prompt_id(payload)
     message = payload.get("last_assistant_message")
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
@@ -154,9 +221,16 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         if lifecycle.active() is None:
             raise TerminalHookError("no active canonical turn for Stop hook")
-        if _active_claude_session(db, session_id) != claude_session_id:
+        active_identity = _active_claude_identity(db, session_id)
+        if active_identity[0] != claude_session_id:
             raise TerminalHookError("Stop belongs to a different Claude session")
-        lifecycle.complete(message)
+        if claude_prompt_id is not None and active_identity[1] != claude_prompt_id:
+            raise TerminalHookError("Stop belongs to a different Claude prompt")
+        lifecycle.complete(
+            message,
+            claude_session_id=claude_session_id,
+            claude_prompt_id=claude_prompt_id,
+        )
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -166,13 +240,22 @@ def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("hook_event_name") != "StopFailure":
         raise TerminalHookError("unexpected hook event")
     claude_session_id = payload.get("session_id")
+    claude_prompt_id = _prompt_id(payload)
     if not isinstance(claude_session_id, str) or not claude_session_id:
         return {"suppressOutput": True}
     db, _, session_id, lifecycle = _runtime()
     try:
-        if lifecycle.active() is not None and _active_claude_session(db, session_id) == claude_session_id:
+        active_identity = _active_claude_identity(db, session_id)
+        identity_matches = active_identity[0] == claude_session_id
+        if claude_prompt_id is not None:
+            identity_matches = identity_matches and active_identity[1] == claude_prompt_id
+        if lifecycle.active() is not None and identity_matches:
             failure = str(payload.get("error", payload.get("error_type", "stop_failure")))[:500]
-            lifecycle.abort("claude_stop_failure:" + failure)
+            lifecycle.abort(
+                "claude_stop_failure:" + failure,
+                claude_session_id=claude_session_id,
+                claude_prompt_id=claude_prompt_id,
+            )
         return {"suppressOutput": True}
     finally:
         db.close()
@@ -187,6 +270,11 @@ def _main() -> int:
         payload = json.load(sys.stdin)
         if not isinstance(payload, dict):
             raise TerminalHookError("hook input must be an object")
+        # Product terminals pin a Claude Code version that emits prompt_id. Require it
+        # at the managed hook process boundary so stale/replayed terminal events cannot
+        # fall back to session-only correlation. Direct Python callers remain compatible
+        # for bounded unit tests and internal migrations.
+        _prompt_id(payload, required=True)
         result = {
             "user_prompt": user_prompt,
             "stop": stop,
@@ -197,6 +285,7 @@ def _main() -> int:
     except Exception as exc:
         print(f"ClayVerse hook blocked: {type(exc).__name__}: {exc}", file=sys.stderr)
         if sys.argv[1] == "stop" and isinstance(payload, dict) and payload.get("stop_hook_active") is True:
+            _retire_failed_active_stop(payload, exc)
             return 0
         return 2 if sys.argv[1] in {"user_prompt", "stop"} else 0
 

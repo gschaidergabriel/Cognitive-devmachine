@@ -45,6 +45,7 @@ def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_pat
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
     calls = []
 
     def fake_run(argv, **kwargs):
@@ -61,7 +62,9 @@ def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_pat
     assert "--strict-mcp-config" not in command
     assert "clayverse-mcp.json" not in command
     assert "--tools ''" in command or '--tools ""' in command
-    assert "mcp__clayverse__*" in command
+    assert "mcp__clayverse__session_state" in command
+    assert "mcp__clayverse__request_effect" in command
+    assert "mcp__clayverse__*" not in command
     assert "--append-system-prompt-file" in command
     assert "/etc/claude-code/managed-settings.json" in command
 
@@ -98,13 +101,17 @@ def test_browser_surface_is_terminal_not_textarea_chat():
 
 def test_browser_terminal_io_waits_for_authenticated_ready_frame():
     source = (ROOT / "clayverse" / "terminal_gateway.py").read_text()
-    assert "let terminalReady=false;" in source
+    assert "let terminalReady=false; let authRefreshTimer=null;" in source
+    assert "if(m.type==='ready'){{scheduleAuthRefresh(m.auth_expires_at);}}" in source
     assert "if(m.type==='ready'){{terminalReady=true;term.focus();return;}}" in source
+    assert "if(m.type==='reauthenticated'){{scheduleAuthRefresh(m.auth_expires_at);return;}}" in source
+    assert "Clerk.session.getToken({{skipCache:true}})" in source
+    assert "type:'reauth'" in source
     assert "if(!terminalReady||ws.readyState!==1)return;" in source
     assert "offset+=maxInputFrameBytes" in source
     assert "encoded.slice(offset,offset+maxInputFrameBytes)" in source
     assert "if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'resize'" in source
-    assert "ws.onclose=()=>{{terminalReady=false;}};" in source
+    assert "ws.addEventListener('close',()=>{{if(authRefreshTimer)clearTimeout(authRefreshTimer);}});" in source
     assert source.index("type:'auth'") < source.index("term.onData")
 
 

@@ -39,10 +39,12 @@
     "deployment": "dpl_HU8CECeN9KdYBSUcd5GVzSjApPtR",
     "runtime": "python3.13",
     "network_policy": "deny-all",
-    "source_binding": {
+    "declared_source_binding": {
       "research_commit": "e1ff12352cf3e6b44cdbf1a2267745e669cc5402",
       "terminal_sessions_blob": "96561f0472d7a5e916f5f321a307795c6f5f7856"
     },
+    "source_binding_method": "The runner executed a code slice transcribed from the inspected repaired close_attach implementation and carried the source commit/blob identifiers as metadata. It did not independently reconstruct or cryptographically verify the Git blob inside the Sandbox.",
+    "evidence_class": "BEHAVIORAL_SANDBOX_REGRESSION_NOT_EXACT_GIT_BLOB_EXECUTION",
     "result": "PASS_ATTACH_CHILD_REAP_AND_BOUND",
     "normal_reap": "PASS",
     "same_unusual_experiment_replication": "PASS",
@@ -50,7 +52,7 @@
     "postcondition": "CHILD_NOT_WAITABLE",
     "sandbox_stopped": true,
     "duplicate_build_invocation_note": "Vercel invoked the build script twice; both outputs were identical PASS results and count only as ordinary replication.",
-    "scope_limit": "This execution proves the e1ff1235/96561f blob behavior. Later main commits preserve the same close_attach logic by source inspection, but no second exact-current-total-blob Vercel execution was observed because the low-level test-branch ref update did not trigger a new Git deployment."
+    "scope_limit": "This establishes the repaired mechanism on an actually started isolated Vercel Sandbox, but it is not exact-Git-blob or whole-container acceptance evidence. Later main commits preserve the same close_attach logic by source inspection. A prepared exact-current-blob runner was not observed executing because the low-level test-branch ref update did not trigger a new Git deployment."
   },
   "parallel_state": {
     "note": "Main advanced concurrently with independent Clay workers. The repaired close_attach logic was rechecked at observed head bc372def and remained present in terminal_sessions blob 3fe4b74e.",
@@ -58,6 +60,6 @@
   },
   "acceptance": "IN_PROGRESS",
   "whole_product_pass": false,
-  "evidence_note": "Component/source/Sandbox PASS for terminal attach cleanup does not imply whole ClayVerse container PASS.",
-  "next_frontier": "Obtain exact-current-head whole-container OCI build/start/restart/authenticated terminal acceptance in an actually started isolated Vercel Sandbox once the current OCI execution path is available; keep exact source/artifact identity and sandbox stop receipts."
+  "evidence_note": "Source inspection plus behavioral Sandbox PASS supports the terminal attach cleanup mechanism only; it does not establish exact-current-source or whole ClayVerse container PASS.",
+  "next_frontier": "Obtain exact-current-head whole-container OCI build/start/restart/authenticated terminal acceptance in an actually started isolated Vercel Sandbox with in-Sandbox source/artifact digest verification and preserved stop receipts."
 }

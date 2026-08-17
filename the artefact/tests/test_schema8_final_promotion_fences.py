@@ -105,6 +105,7 @@ def _finalize_validation(
     *,
     classification: str,
     falsifier_checked: bool,
+    evaluation_mode: str = "HELD_OUT",
 ):
     turn_id, episode_id, causal_id, generation = _active(db, sid, "held-out validation case")
     validator = CandidateValidation(db)
@@ -118,7 +119,7 @@ def _finalize_validation(
         generation=generation,
         evidence_status="UNKNOWN",
         problem_signature={"goal": ["diagnose"], "mechanism": ["causal_boundary"]},
-        evaluation_mode="HELD_OUT",
+        evaluation_mode=evaluation_mode,
         falsifier_checked=falsifier_checked,
     )
     now = time.time()
@@ -171,6 +172,48 @@ def test_one_success_plus_one_failure_cannot_promote_reusable_method(tmp_path):
             )
         assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
         assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='framework'").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_shadow_history_does_not_count_or_poison_later_true_heldout_transfer(tmp_path):
+    db, sid, _ = _db(tmp_path)
+    try:
+        candidate_id = _candidate(db, sid)
+        shadow_receipt = _finalize_validation(
+            db,
+            sid,
+            candidate_id,
+            classification="SUCCESS",
+            falsifier_checked=True,
+            evaluation_mode="SHADOW",
+        )
+        heldout_one = _finalize_validation(
+            db,
+            sid,
+            candidate_id,
+            classification="SUCCESS",
+            falsifier_checked=True,
+        )
+        heldout_two = _finalize_validation(
+            db,
+            sid,
+            candidate_id,
+            classification="SUCCESS",
+            falsifier_checked=False,
+        )
+        result = db.promote_method_memory(
+            candidate_id,
+            evaluation="shadow history is audit-only; two later held-out successes authorize transfer",
+            provenance={"source": "shadow-to-heldout-gate"},
+        )
+        promoted = db.method_memory(result["promoted_memory_id"])
+        assert promoted["value"]["support_count"] == 2
+        assert promoted["value"]["success_count"] == 2
+        assert promoted["value"]["failure_count"] == 0
+        receipt = db.method_memory(result["receipt_memory_id"])
+        assert receipt["value"]["validation_receipt_ids"] == [heldout_one, heldout_two]
+        assert shadow_receipt not in receipt["value"]["validation_receipt_ids"]
     finally:
         db.close()
 

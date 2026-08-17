@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import hashlib
-import json
 import os
 import time
 import uuid
@@ -99,6 +97,14 @@ class ClayVerseBridge:
             "context": world,
         }
 
+    def _bind_effect_causal_record(self, effect_id: str) -> str:
+        causal_id = self.effects.causal_for_effect(effect_id)
+        if causal_id is None:
+            raise BridgeStateError("effect completed without causal journal re-entry")
+        self.current["effect_id"] = effect_id
+        self.current["causal_id"] = causal_id
+        return causal_id
+
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
         from .effects import EffectRequest
 
@@ -117,10 +123,22 @@ class ClayVerseBridge:
             argv,
             self.current["generation"],
         )
-        effect_id, outcome = self.effects.execute(req, self.current["episode_id"])
-        self.current["effect_id"] = effect_id
+        try:
+            effect_id, outcome = self.effects.execute(req, self.current["episode_id"])
+        except Exception:
+            # If execution crossed the journal admission boundary, bind the failed
+            # effect to this turn before propagating the error so the terminal cannot
+            # silently request a second external attempt for the same open turn.
+            row = self.db.db.execute(
+                "SELECT effect_id FROM effects WHERE episode_id=? ORDER BY ts DESC LIMIT 1",
+                (self.current["episode_id"],),
+            ).fetchone()
+            if row is not None:
+                self._bind_effect_causal_record(row["effect_id"])
+            raise
+        causal_id = self._bind_effect_causal_record(effect_id)
         self.current["outcome"] = outcome
-        return {"effect_id": effect_id, "verified": True, "outcome": outcome}
+        return {"effect_id": effect_id, "causal_id": causal_id, "verified": True, "outcome": outcome}
 
     def complete_turn(self, response: str) -> dict:
         if self.current is None:
@@ -133,27 +151,39 @@ class ClayVerseBridge:
             self.current["workspace_selected"] = True
 
         effect_id = self.current["effect_id"]
-        outcome = self.current["outcome"]
+        causal_id = self.current["causal_id"]
+        if effect_id is not None:
+            # EffectJournal already finalized exactly one causal re-entry. Reuse it;
+            # never create a second causal_episodes row for the same external effect.
+            row = self.db.db.execute(
+                "SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",
+                (effect_id,),
+            ).fetchone()
+            if row is None or row["causal_id"] != causal_id:
+                raise BridgeStateError("effect causal journal binding lost")
+            credit = float(row["credit"])
+        else:
+            credit = 0.0
+
         assistant_id = self.db.append_turn(
             self.session_id, self.user_id, "assistant", response,
             resources=self.current["resources"],
             causal_refs=[effect_id] if effect_id else [],
-            provenance={"source": "permanent-claude-terminal", "causal_id": self.current["causal_id"]},
+            provenance={"source": "permanent-claude-terminal", "causal_id": causal_id},
         )
-        out_hash = hashlib.sha256(json.dumps(outcome, sort_keys=True).encode()).hexdigest() if outcome is not None else None
-        credit = 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
-        self.db.db.execute(
-            "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-            (
-                self.current["causal_id"], self.current["episode_id"], effect_id,
-                self.current["turn_id"], out_hash, credit, 1, time.time(),
-            ),
-        )
+        if effect_id is None:
+            self.db.db.execute(
+                "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    causal_id, self.current["episode_id"], None,
+                    self.current["turn_id"], None, 0.0, 1, time.time(),
+                ),
+            )
         self.memory.compact(self.session_id)
         self.graph.rebuild()
         result = {
             "assistant_turn_id": assistant_id,
-            "causal_id": self.current["causal_id"],
+            "causal_id": causal_id,
             "effect_id": effect_id,
             "credit": credit,
         }

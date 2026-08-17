@@ -92,6 +92,18 @@ def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():
     assert "restartPolicy: OnFailure" not in template
 
 
+def test_kata_runtime_security_floor_is_bound_and_refreshed():
+    text = CONTRACT.read_text()
+    assert "GHSA-2gv2-cffp-j227 / CVE-2026-47243" in text
+    assert "`runtime-rs <= 3.30.0` is explicitly forbidden" in text
+    assert "`3.31.0` as the first patched release" in text
+    assert "historical minimum fence, not a permanent safety claim" in text
+    assert "refresh current Kata upstream security advisories" in text
+    assert "bind the exact installed Kata/runtime-rs version and configuration" in text
+    assert "shared-filesystem/virtiofs mode" in text
+    assert "A version string alone is not microVM security evidence" in text
+
+
 def test_provider_credentials_remain_bounded():
     text = TEMPLATE.read_text()
     assert "GLM_API_TOKEN" in text

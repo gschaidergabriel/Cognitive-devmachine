@@ -96,7 +96,7 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 The architecture and fail-closed Kata deployment profile are canonical source, but **actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-A previous exact three-blob reconstruction exercised the then-current MicroVM contract/template/test set at **7/7 PASS**. That result remains valid only for its recorded blob identities; it is no longer exact-current-head evidence because live fusion subsequently strengthened Tier-2 sandbox-replacement semantics and Kata rolling-release/advisory requirements. At the 2026-08-17 23:01 +07 refresh, observed current blobs are contract `794b209bc8ff14cbaf898b31557daac075977818`, template `629f7bbb7627e997839597edd499ce008c569a0f`, and focused test `283b269042e056e7adca227e84ae31a055f898da`. Those stronger exact-current blobs have **not** been executed as a bound set by this organ, so they receive source-contract credit only, not a carried-forward 7/7 runtime/test claim.
+The current MicroVM source slice has now been independently reconstructed from the exact Git blobs and executed together in an isolated non-production container: contract `794b209bc8ff14cbaf898b31557daac075977818`, template `629f7bbb7627e997839597edd499ce008c569a0f`, and focused test `283b269042e056e7adca227e84ae31a055f898da` all matched GitHub under `git hash-object`, and `pytest -q tests/test_microvm_deployment_contract.py` passed **10/10**. This exact-current source-slice result includes default-deny networking, separate `/healthz` versus `/readyz`, full Pod/Kata-sandbox Tier-2 semantics, rolling-release Kata security and runtime-annotation fences. It is bounded source/mechanism evidence only — not an OCI build, Kubernetes runtime, CNI enforcement, live Kata guest-kernel attestation or Tier-2 recovery execution.
 
 The Claude terminal source starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
 
@@ -108,17 +108,17 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Latest cycle delta
 
-**2026-08-17 23:01 +07:00 — stale-head evidence fenced; Kata security/Tier-2 contract re-entered.**
+**2026-08-17 23:02 +07:00 — exact-current MicroVM source slice 10/10 PASS; Kata rolling-release security gate durably recorded.**
 
-- current research `main` was observed at `7c27a1bd1d06e74aa39ffe20d1aa1e7cb63008e3` before this README write;
-- the earlier 7/7 MicroVM regression is retained as bounded exact-file evidence for its recorded blobs, but is no longer described as exact-current because the contract/template/test advanced afterward;
-- current source now requires full Kata Pod-sandbox/VM replacement for Tier-2 recovery; an in-place container restart cannot satisfy Tier-2 or whole-product acceptance;
-- current upstream Kata security evidence confirms rolling-release support semantics, current `4.0.0` release state at this refresh, and July advisories that make the old `3.31.0` historical floor insufficient for current final acceptance;
-- current contract/test now fence the then-current supported Kata release and reject unreviewed runtime-mutating `io.katacontainers.*` annotations after admission mutation;
-- two attempted stale direct writes during this cycle were rejected atomically with GitHub `409`, preventing overwrite of newer parallel fusion; duplicate implementations were not forced through;
+- parallel current-main work that closed the NetworkPolicy gap and strengthened full-sandbox Tier-2 semantics was classified `DUPLICATE/CONFIRMS` / `ADOPT`, preserved and not overwritten by the earlier stale candidate;
+- canonical contract commit `1583c98f5c34f55d870e8bcd8cd2849dacc27f14` requires the then-current upstream-supported Kata release, not merely a numeric version above the historical `3.31.0` floor, and fails closed on unreviewed runtime-mutating `io.katacontainers.*` annotations;
+- canonical focused-test commit `647ba7f0b2e2735a2b9226a52f29f33b2af28ed6` binds the rolling-release/advisory/annotation gate;
+- exact reconstructed current blobs contract `794b209b…`, template `629f7bbb…`, test `283b2690…` passed the full focused MicroVM regression **10/10** in an isolated non-production container;
+- upstream security review: Kata is rolling-release/current-month-only support; `releases/latest` was `4.0.0`; `GHSA-mp2j-xm59-qfgw` and `GHSA-7fhf-v3p3-rp56` affect `<=3.32.0` and are patched in `4.0.0`; this is dated evidence, not a permanent 4.0.0 pin;
+- durable receipt: `receipts/2026-08-17_GO_2249_KATA_ROLLING_RELEASE_SECURITY_FLOOR_GPT56SOL.json`;
 - strongest executable OCI blocker remains host-side provisioning of the sensitive Vercel Preview `GITHUB_READ_TOKEN` for private Research/EntityOS staging; it must remain outside the Sandbox and cannot be provisioned through the connected Vercel surface available to this organ;
-- runtime credit remains **zero** for exact final OCI, Kubernetes, Kata/microVM and CNI enforcement;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id for the atomic lease.
+- runtime credit remains **zero** for exact final OCI, Kubernetes, Kata/microVM, CNI enforcement and Tier-2 full-sandbox replacement;
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id and only minute-precision immutable message time.
 
 ## Verification
 

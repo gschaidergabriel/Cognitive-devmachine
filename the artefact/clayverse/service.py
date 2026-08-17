@@ -2,17 +2,16 @@ from __future__ import annotations
 
 import json
 import os
-import signal
 import sys
 
-from .adapters import ClerkConfig, ClerkTokenVerifier, ClaudeCodeInference
-from .api import ClayVerseAPI
-from .engine import ClayVerseEngine
+from .adapters import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .store import UnifiedDB
+from .terminal_gateway import create_terminal_app
+from .terminal_sessions import TerminalSessionManager
 
 
 def _clerk_map() -> dict[str, str]:
@@ -27,6 +26,8 @@ def _clerk_map() -> dict[str, str]:
         raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must be a non-empty object")
     if any(not isinstance(k, str) or v not in {"gabriel", "andreas"} for k, v in mapping.items()):
         raise RuntimeError("Clerk mapping may only target gabriel/andreas")
+    if set(mapping.values()) != {"gabriel", "andreas"}:
+        raise RuntimeError("Clerk mapping must identify both canonical users")
     return mapping
 
 
@@ -41,19 +42,14 @@ def _web_config() -> tuple[str, str]:
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
-    # ClayVerse is the product endpoint. A staged EntityOS artifact may be present
-    # in the single image before execution is admitted. REQUIRE=0 therefore means
-    # verify staged bytes if configured, but do not return an executable bridge.
-    required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "0") == "1"
+    # The single-container artifact always carries digest-bound EntityOS bytes once
+    # built. Execution authority remains a separate fail-closed gate until the exact
+    # embedded artifact has the required acceptance evidence.
+    enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-
-    if not path and not sha256:
-        if required:
-            raise RuntimeError("EntityOS is required: set CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256")
-        return None, {"required": False, "bound": False}
     if not path or not sha256:
-        raise RuntimeError("EntityOS configuration is incomplete")
+        raise RuntimeError("embedded EntityOS path and SHA-256 are required")
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
 
@@ -62,12 +58,16 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
         verified = candidate.verify()
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
-    if not required:
-        return None, {"required": False, "bound": False, "staged": True, "verified": True, **verified}
-    return candidate, {"required": True, "bound": True, "staged": True, "verified": True, **verified}
+    status = {
+        "staged": True,
+        "verified": True,
+        "execution_enabled": enable_exec,
+        **verified,
+    }
+    return (candidate if enable_exec else None), status
 
 
-def _state_probe_payload(checkpoint: int, state_hash: str) -> dict[str, object]:
+def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     """Describe the bounded --once probe without implying product readiness."""
     return {
         "service": "clayverse",
@@ -80,6 +80,8 @@ def _state_probe_payload(checkpoint: int, state_hash: str) -> dict[str, object]:
 
 
 def main():
+    import uvicorn
+
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
@@ -95,54 +97,53 @@ def main():
     clerk_map = _clerk_map()
     publishable_key, frontend_api = _web_config()
     verifier = ClerkTokenVerifier(ClerkConfig.from_env())
-    inference = ClaudeCodeInference()
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
     try:
-        claude_status = claude_readiness(inference, required=require_claude)
-    except RuntimeError:
+        claude_status = claude_readiness(required=require_claude)
+        _, entityos_status = _entityos_config()
+        terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
+        terminal_status = {}
+        for user_id in ("gabriel", "andreas"):
+            binding = terminals.ensure(user_id)
+            terminal_status[user_id] = {
+                "session_id": binding.session_id,
+                "tmux_name": binding.tmux_name,
+                "home": str(binding.home),
+            }
+    except Exception:
         db.close()
         raise
 
-    entityos_bridge, entityos_status = _entityos_config()
-    engine = ClayVerseEngine(
-        db,
-        clerk_map,
-        inference=inference,
-        allow_process=False,
-        entityos_bridge=entityos_bridge,
+    app = create_terminal_app(
+        db=db,
+        clerk_map=clerk_map,
+        verifier=verifier,
+        state_root=state_root,
+        publishable_key=publishable_key,
+        frontend_api_url=frontend_api,
     )
-    api = ClayVerseAPI(engine, verifier, publishable_key=publishable_key, frontend_api_url=frontend_api)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
-    server = api.server(host, port)
-    server.timeout = 1.0
-    running = True
-
-    def stop(*_):
-        nonlocal running
-        running = False
-
-    signal.signal(signal.SIGTERM, stop)
-    signal.signal(signal.SIGINT, stop)
     print(json.dumps({
         "service": "clayverse",
-        "status": "ready",
+        "status": "candidate_ready",
+        "surface": "clerk-browser-pty-normal-claude-code-cli",
         "state_root": state_root,
         "checkpoint": cid,
         "state_hash": digest,
         "users": ["gabriel", "andreas"],
+        "rights": "equal",
         "claude_code": claude_status.as_dict(),
+        "terminals": terminal_status,
         "auth": "clerk",
-        "mutation_lane": "serialized",
         "entityos": entityos_status,
+        "consciousness_daemon": False,
         "port": port,
     }), flush=True)
 
     try:
-        while running:
-            server.handle_request()
+        uvicorn.run(app, host=host, port=port, workers=1, access_log=False)
     finally:
-        server.server_close()
         db.checkpoint("shutdown")
         db.close()
     return 0

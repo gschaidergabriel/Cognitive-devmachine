@@ -175,6 +175,17 @@ def test_controller_requires_exact_runtime_image_and_uid_bound_receipt(tmp_path)
             runtime_class="kata-qemu-runtime-rs",
         )
 
+    nonfinite = json.loads(message)
+    nonfinite["requested_at"] = float("nan")
+    with pytest.raises(controller.ControllerError):
+        controller.replacement_request(
+            _pod("pod-old", json.dumps(nonfinite), digest=digest),
+            namespace="clayverse",
+            pod_name="clayverse-0",
+            expected_image_digest=digest,
+            runtime_class="kata-qemu-runtime-rs",
+        )
+
 
 def test_controller_rejects_non_trigger_and_identity_drift(tmp_path):
     db = FakeDB()
@@ -210,6 +221,23 @@ def test_controller_rejects_non_trigger_and_identity_drift(tmp_path):
         )
 
 
+def test_controller_treats_missing_pod_during_replacement_as_transient():
+    class MissingAPI:
+        def get_pod(self, namespace, pod_name):
+            return None
+
+        def delete_pod(self, namespace, pod_name, options):
+            raise AssertionError("delete must not be attempted without a live exact Pod")
+
+    assert controller.run_once(
+        MissingAPI(),
+        namespace="clayverse",
+        pod_name="clayverse-0",
+        digest="sha256:" + "a" * 64,
+        runtime_class="kata-qemu-runtime-rs",
+    ) is False
+
+
 def test_kata_template_exposes_pod_uid_without_granting_clayverse_api_credentials():
     text = (ROOT / "deployment" / "clayverse-kata-statefulset.template.yaml").read_text()
     assert "name: CLAYVERSE_POD_UID" in text
@@ -217,6 +245,16 @@ def test_kata_template_exposes_pod_uid_without_granting_clayverse_api_credential
     assert "terminationMessagePath: /dev/termination-log" in text
     assert "terminationMessagePolicy: File" in text
     assert "automountServiceAccountToken: false" in text
+
+
+def test_tier2_controller_rbac_is_exact_pod_get_delete_only():
+    text = (ROOT / "deployment" / "tier2-controller-rbac.template.yaml").read_text()
+    role = next(doc for doc in text.split("\n---\n") if "kind: Role\n" in doc)
+    assert 'resources: ["pods"]' in role
+    assert 'resourceNames: ["clayverse-0"]' in role
+    assert 'verbs: ["get", "delete"]' in role
+    for forbidden in ("list", "watch", "create", "update", "patch"):
+        assert f'"{forbidden}"' not in role
 
 
 def test_service_promotes_recovery_integrity_failure_to_tier2_request():

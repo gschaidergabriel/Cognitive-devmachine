@@ -28,13 +28,12 @@ def test_restart_aborts_open_non_effect_episode_and_is_idempotent(tmp_path):
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
     ).fetchone()[0]
     assert state == "RECOVERY_ABORTED_NO_EFFECT"
-    assert first == {
-        "scanned": 1,
-        "reentered_effects": 0,
-        "aborted_no_effect": 1,
-        "uncertain_effects": 0,
-        "ambiguous_effects": 0,
-    }
+    assert first["scanned"] == 1
+    assert first["reentered_effects"] == 0
+    assert first["non_reentered_effects"] == 0
+    assert first["aborted_no_effect"] == 1
+    assert first["uncertain_effects"] == 0
+    assert first["ambiguous_effects"] == 0
     assert second["scanned"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
 
@@ -50,11 +49,12 @@ def test_restart_never_replays_selected_effect_without_persisted_outcome(tmp_pat
     ).fetchone()[0]
     assert state == "RECOVERY_ABORTED_EFFECT_UNCERTAIN"
     assert result["uncertain_effects"] == 1
+    assert result["reentered_effects"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
 
 
-def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecution(tmp_path):
+def test_restart_reenters_exactly_one_persisted_verified_effect_outcome_without_reexecution(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
     session_id, _, episode_id = _episode(db, selection="request_effect")
     generation = db.session_generation(session_id)
@@ -85,14 +85,15 @@ def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecuti
         "reentered": 1,
     }
     assert first["reentered_effects"] == 1
+    assert first["non_reentered_effects"] == 0
     assert second["scanned"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 1
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
-    ).fetchone()[0] == "RECOVERED_EFFECT_REENTERED"
+    ).fetchone()[0] == "RECOVERED_LEGACY_EFFECT_REENTERED"
 
 
-def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
+def test_restart_keeps_denied_effect_as_evidence_without_reentry(tmp_path):
     db = UnifiedDB(tmp_path / "state.db")
     session_id, _, episode_id = _episode(db, selection="request_effect")
     outcome = {
@@ -102,7 +103,7 @@ def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
         "target": "x",
         "boundary": "EntityOS",
     }
-    db.record_effect(
+    effect_id = db.record_effect(
         episode_id,
         "gabriel",
         "entityos.exec",
@@ -116,10 +117,17 @@ def test_restart_reenters_denied_effect_with_zero_credit(tmp_path):
     result = recover_incomplete_episodes(db)
 
     row = db.db.execute(
-        "SELECT credit,reentered FROM causal_episodes WHERE episode_id=?", (episode_id,)
+        "SELECT effect_id,credit,reentered,outcome_hash FROM causal_episodes WHERE episode_id=?", (episode_id,)
     ).fetchone()
-    assert tuple(row) == (0.0, 1)
-    assert result["reentered_effects"] == 1
+    assert row["effect_id"] == effect_id
+    assert row["credit"] == 0.0
+    assert row["reentered"] == 0
+    assert row["outcome_hash"]
+    assert result["reentered_effects"] == 0
+    assert result["non_reentered_effects"] == 1
+    assert db.db.execute(
+        "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)
+    ).fetchone()[0] == "RECOVERED_LEGACY_EFFECT_NOT_REENTERED"
 
 
 def test_restart_fails_closed_on_multiple_effect_records(tmp_path):
@@ -141,6 +149,7 @@ def test_restart_fails_closed_on_multiple_effect_records(tmp_path):
     result = recover_incomplete_episodes(db)
 
     assert result["ambiguous_effects"] == 1
+    assert result["reentered_effects"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM causal_episodes").fetchone()[0] == 0
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (episode_id,)

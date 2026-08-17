@@ -5,6 +5,10 @@ CONTRACT = ROOT / "deployment" / "MICROVM_DEPLOYMENT_CONTRACT.md"
 TEMPLATE = ROOT / "deployment" / "clayverse-kata-statefulset.template.yaml"
 
 
+def _yaml_documents(text: str) -> list[str]:
+    return [doc.strip() for doc in text.split("\n---\n") if doc.strip()]
+
+
 def test_microvm_contract_is_mandatory_for_final_acceptance():
     text = CONTRACT.read_text()
     assert "MANDATORY FOR FINAL ACCEPTANCE" in text
@@ -37,16 +41,30 @@ def test_kata_template_keeps_root_immutable_and_state_explicit():
 
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     text = TEMPLATE.read_text()
-    assert "kind: NetworkPolicy" in text
-    assert "name: clayverse-default-deny" in text
-    assert "policyTypes:" in text
-    assert "- Ingress" in text
-    assert "- Egress" in text
-    assert "ingress: []" in text
-    assert "egress: []" in text
+    policies = [doc for doc in _yaml_documents(text) if "kind: NetworkPolicy" in doc]
+    assert len(policies) == 1
+    policy = policies[0]
+    assert "name: clayverse-default-deny" in policy
+    assert "podSelector:" in policy
+    assert "app: clayverse" in policy
+    assert "policyTypes:" in policy
+    assert "- Ingress" in policy
+    assert "- Egress" in policy
+    assert "ingress: []" in policy
+    assert "egress: []" in policy
+    assert "0.0.0.0/0" not in policy
+    assert "::/0" not in policy
     assert "hostNetwork: false alone is NOT a network-isolation policy" in text
-    assert "0.0.0.0/0" not in text
-    assert "::/0" not in text
+
+
+def test_network_contract_requires_real_enforcement_not_yaml_only():
+    text = CONTRACT.read_text()
+    assert "network plugin/CNI" in text
+    assert "actually support and enforce Kubernetes `NetworkPolicy`" in text
+    assert "zero network-isolation evidence" in text
+    assert "combine additively" in text
+    assert "complete additive set of policies" in text
+    assert "representative undeclared ingress and egress remain denied" in text
 
 
 def test_provider_credentials_remain_bounded():

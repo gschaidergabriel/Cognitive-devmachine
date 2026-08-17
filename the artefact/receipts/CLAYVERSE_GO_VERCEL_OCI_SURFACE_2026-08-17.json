@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoVercelOciSurfaceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE",
+  "product_endpoint": "ONE_OCI_CONTAINER_IMAGE",
+  "entityos_role": "INTERNAL_DIGEST_BOUND_SUBSTRATE_ONLY",
+  "research_base": "6f172132a2e01efe5b798b0584edd072bc051458",
+  "product_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "execution_surface": {
+    "provider": "Vercel",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "deployment_id": "dpl_84M7gmb85kvx5KV4tG9ZqLL9oy4t",
+    "deployment_source_head": "f3ac8d115349179d99b34f60472b0013ae6eb5b3",
+    "deployment_branch": "chatgpt/go-vercel-oci-surface-20260817-1155",
+    "deployment_state_after_execution": "READY",
+    "reusable_public_execution_endpoint": false
+  },
+  "experiment": {
+    "name": "VERCEL_SANDBOX_NESTED_OCI_RUNTIME",
+    "intended_new_unusual_experiment_count": 1,
+    "actual_provider_invocation_count": 2,
+    "accounting_status": "VIOLATION_DUPLICATE_PROVIDER_BUILD_INVOCATION_RETAINED",
+    "cause": "the Vercel project invoked vercel-build twice and the bounded probe lacked an already-finished marker",
+    "distinct_interventions": 1,
+    "further_unusual_interventions_this_go": "FORBIDDEN",
+    "network_policy_declared_for_oci_execution": "DENY_ALL",
+    "result": "BLOCKED_OCI_TOOLCHAIN_PROVISION",
+    "provision_exit": 1,
+    "observed_error": [
+      "No match for argument: podman",
+      "No match for argument: buildah"
+    ],
+    "sandbox_stopped_each_invocation": true,
+    "interpretation": "This falsifies the direct dnf-provisioned Podman/Buildah route in the observed Vercel Sandbox image. It does not establish that OCI execution is impossible on Vercel or that all nested-container mechanisms fail."
+  },
+  "entityos_substrate_evidence": {
+    "note": "bounded substrate evidence only; not ClayVerse single-container acceptance",
+    "tested_product_branch_head": "c1ca61ec2281480dffd14d714b0cf489ddc5be63",
+    "source_tree": "6497baacd17ce6100454859e65aa23c5fcf29ac2",
+    "entityos_sha256": "c6a9286d3ca0f4ad5a0f420681511f16b201fb11d0c7b5941cf0c81efa17b008",
+    "entityos_size_bytes": 9181760,
+    "double_build_byte_identical": true,
+    "runtime_gates": "PASS",
+    "path_without_host_python": "PASS",
+    "relocation": "BYTE_IDENTICAL_COPY_RENAME",
+    "network_policy_during_tests": "DENY_ALL",
+    "sandbox_stopped": true,
+    "whole_entityos_acceptance": false,
+    "whole_clayverse_acceptance": false
+  },
+  "current_convergence": {
+    "container_embeds_entityos_at_build_time": true,
+    "entityos_digest_binding_required": true,
+    "entityos_execution_gate": "CLAYVERSE_ENABLE_ENTITYOS_EXEC",
+    "claude_surface": "persistent per-user Claude Code terminal perspectives over one ClayVerse state",
+    "current_frontier": "obtain an authorized exact ClayVerse OCI image build/run path that binds current research source plus an exact accepted EntityOS substrate, then exercise container startup, auth/state/terminal continuity and fail-closed effect boundaries as one artifact"
+  },
+  "next_discriminator": {
+    "type": "NORMAL_INTEGRATION_VALIDATION_NOT_NEW_UNUSUAL_EXPERIMENT",
+    "preferred_path": "use a native Vercel container/image build surface or another explicitly authorized Vercel-supported OCI path rather than dnf-installed Podman/Buildah inside Sandbox; preserve exact source/artifact identity and run the resulting exact image in an isolated accepted surface",
+    "blocked_on": "an authorized Vercel path that can build/materialize the private research-repo Docker context and exact EntityOS binary into the same OCI artifact"
+  },
+  "claims": {
+    "clayverse_single_container_pass": false,
+    "entityos_top_level_product": false,
+    "negative_result_preserved": true,
+    "vps_test_used": false,
+    "together_used": false
+  }
+}

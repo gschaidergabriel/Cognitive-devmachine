@@ -21,7 +21,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     identity = IdentityRouter(db, clerk_map)
     terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="ClayVerse", docs_url=None, redoc_url=None)
-    app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm"), name="xterm")
+    app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     frontend_api_url = frontend_api_url.rstrip("/")
 
     @app.get("/healthz")

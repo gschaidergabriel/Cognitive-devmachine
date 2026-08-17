@@ -1,0 +1,78 @@
+{
+  "schema": "ClayEntityOSSandboxObservation/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "final_product": "single-file EntityOS Clay Computer",
+  "research_base": "68de25fddabe6502a39627d79921d8c2120bc143",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_pr": 787,
+  "observed_product_head": "fa9827d496602d7c5821b13103da665f7287b16c",
+  "observed_product_tree": "c1e6f94ca0c9f535177719266f92ce8994850a11",
+  "vercel_project": "dr-unterweger",
+  "vercel_deployment": "dpl_GSj3cvRJKMaxKGAkJvQuw1u9qJsN",
+  "execution_surface": "VERCEL_BUILD_INTERNAL_ISOLATED_SANDBOX",
+  "source_archive_sha256": "c846bc53cef2ae356ca9365318b6074f09c094a6b8985e9a5e4a57b169f9f7be",
+  "source_attestation_schema": "EntityOSSourceSnapshotAttestation/v2",
+  "source_attestation_sha256": "78fb1780f20b4a4d14c3746b70704110ea70f930d4fa1014f58073a7df2c2ef2",
+  "source_git_bundle_sha256": "9e63dcc1ee7ec6a12bcb8b4132b22ab9dd9eb05d8c121e2f44c0e24f6a1cd2d6",
+  "sandbox_sdk_version": "2.9.2",
+  "network_policy_during_tests": "DENY_ALL",
+  "toolchain": {
+    "python": "3.13.13",
+    "lark": "1.3.1",
+    "pyinstaller": "6.21.0"
+  },
+  "observed_steps": [
+    {"label": "unpack_and_bind_raw_git_tree_source_bytes", "exit_code": 0},
+    {"label": "provision_system_freeze_toolchain_sudo", "exit_code": 0},
+    {"label": "provision_pinned_python_toolchain", "exit_code": 0},
+    {"label": "attested_snapshot_v2_exact_entityos_double_build", "exit_code": 1}
+  ],
+  "observed_summary": {
+    "ok": false,
+    "status": "GO_SANDBOX_MATRIX_FAILED",
+    "error": "STEP_FAILED:attested_snapshot_v2_exact_entityos_double_build:exit=1",
+    "sandbox_stopped": true,
+    "sandbox_stop_error": null,
+    "new_unusual_experiment_count": 0,
+    "global_unusual_experiment_accounting": "PENDING_1_OF_1_THIS_GO"
+  },
+  "entityos_acceptance": "FAIL_AT_ATTESTED_SNAPSHOT_PRODUCT_BUILD",
+  "whole_machine_pass": false,
+  "observed_negative_result": "The exact Git-free ATTESTED_SNAPSHOT_V2 EntityOS double-build did not complete on fa9827d; no current EntityOS artifact PASS may be inferred.",
+  "diagnostic_observability_gap": "The failing freeze command redirected output to snapshot-$lane.log while the enclosing shell ran with set -e; a nonzero freeze exit aborted before the subsequent tail, hiding the underlying EntityOS build error in Vercel logs.",
+  "hypotheses": [
+    {
+      "id": "H_SORT_CONTRACT",
+      "status": "SUPPORTED_BUT_NOT_YET_EXECUTABLY_CONFIRMED",
+      "mechanism": "The failing source attestation was ordered with JavaScript localeCompare(path, 'en'), while EntityOSSourceSnapshotAttestation/v2 validation uses Python lexicographic path ordering. A locale-sensitive ordering can violate the verifier's canonical order and fail closed before freeze.",
+      "supporting_delta": "PR787 later head 580fe7ac84b2d3930a4a944a6e32ddc51be47f33 replaces localeCompare with locale-independent UTF-8 Buffer.compare and documents equivalence to the Python contract.",
+      "falsifier": "An exact isolated Vercel Sandbox run on the repaired head still fails at the same attestation validation before PyInstaller, with emitted bounded underlying build diagnostics proving a different mechanism."
+    },
+    {
+      "id": "H_OTHER_FREEZE_FAILURE",
+      "status": "RETAIN_AS_COUNTERHYPOTHESIS",
+      "mechanism": "The ordering mismatch may not be the actual cause; provenance verification, snapshot fileset/mode/content validation, PyInstaller freeze, or another canonical product-build precondition may be failing.",
+      "falsifier": "The repaired exact-head Sandbox completes both Git-free builds byte-identically with source_provenance=ATTESTED_SNAPSHOT_V2 and the bound archive digest, then passes the inherited artifact/runtime gates."
+    }
+  ],
+  "coordination": {
+    "product_pr_comment_id": 5310808792,
+    "parallel_dependency_lane": "PR788 was observed as a short-lived stacked dependency-closure lane and is not to be duplicated as a permanent competing path.",
+    "unusual_experiment_rule": "Do not introduce a second unusual experiment. The PR787 lane already reserves the single 1-of-1 GO experiment; the observed fa9827d run failed before executing it."
+  },
+  "next_exact_discriminator": "Run the approved build-internal isolated Vercel Sandbox on the newest PR787 head containing the locale-independent attestation ordering repair; preserve exact head/tree/archive/attestation identity and emit bounded freeze logs on nonzero before returning the original failure code.",
+  "promotion_requirements": [
+    "actual Git-free EntityOS freeze/build receipt reports source_provenance=ATTESTED_SNAPSHOT_V2",
+    "receipt binds non-null source_tree and source_archive_sha256",
+    "two exact-source builds are byte-identical",
+    "tamper/substitution controls fail closed",
+    "self-test, no-host-Python, copy/rename relocation and inherited canonical gates remain green",
+    "Sandbox stop succeeds",
+    "no VPS/self-hosted/deployment-READY substitution for Sandbox evidence"
+  ],
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

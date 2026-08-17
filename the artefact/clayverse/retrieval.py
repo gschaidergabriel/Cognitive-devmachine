@@ -22,6 +22,23 @@ class WorldAssembler:
         ).fetchall()
         return [dict(r) for r in rows]
 
+    def _active_identity(self, session_id):
+        row = self.db.db.execute(
+            "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,t.content "
+            "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id "
+            "WHERE a.session_id=?",
+            (session_id,),
+        ).fetchone()
+        if not row:
+            return None
+        return {
+            "query": row["content"],
+            "turn_id": row["turn_id"],
+            "episode_id": row["episode_id"],
+            "causal_id": row["causal_id"],
+            "generation": int(row["generation"]),
+        }
+
     def assemble(
         self,
         session_id,
@@ -65,21 +82,33 @@ class WorldAssembler:
             "truth_authority": False,
             "effect_authority": False,
         }
-        if all(x is not None for x in (query, turn_id, episode_id, causal_id, generation)):
+        supplied = {
+            "query": query,
+            "turn_id": turn_id,
+            "episode_id": episode_id,
+            "causal_id": causal_id,
+            "generation": generation,
+        }
+        if not all(value is not None for value in supplied.values()):
+            active = self._active_identity(session_id)
+            if active is not None:
+                supplied = active
+
+        if all(value is not None for value in supplied.values()):
             result = self.microclay.retrieve(
-                query=str(query),
+                query=str(supplied["query"]),
                 user_id=user_id,
                 session_id=session_id,
-                turn_id=str(turn_id),
-                episode_id=str(episode_id),
-                causal_id=str(causal_id),
-                generation=int(generation),
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
         else:
-            # Compatibility path for legacy tests/non-product callers. The canonical
-            # Claude hook path always supplies a query and causal identity above.
+            # Compatibility path for legacy tests/non-product callers with no active
+            # causal turn. Product Claude hooks always have an active turn here.
             memories = [
                 dict(r)
                 for r in self.db.db.execute(

@@ -15,6 +15,7 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
 - Research coordination: material deltas now use **Live Fusion** for targeted research/worker re-entry, with **Live Hypofusion** automatically opening an adversarial counterhypothesis lane for material contradiction, promotion/merge, shared-ancestry pseudo-replication, persistent blockers, OOD/security results or competing worker semantics. Exact `fusion` and `hypofusion` commands remain full-depth macro-runs. Delivery, reconstruction, plan revalidation, use, local effect and causal credit remain explicitly distinct; this layer creates no second state/effect authority.
+- Minimal boot now carries that coordination law explicitly: `research_entity/continuity/BOOTSTRAP_MINIMAL.json` schema **5.5** names and loads `LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md` before material work, requires novelty classification plus targeted `ADOPT|CHALLENGE|DEFER|NO_CHANGE` re-entry after material outcomes, and keeps delivery/use/causal-credit states distinct. This is coordination boot wiring only, not a second state authority or product-runtime PASS.
 - Runtime readiness on current `main`: `/readyz` requires canonical state and both canonical tmux sessions to be live and pass the managed transport-policy-v3 attestation used by attach admission. This gate is read-only and does not create or repair sessions.
 - Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
 - Effects: generic host `process.exec` is fail-closed; admitted effects must pass the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
@@ -32,8 +33,9 @@ This directory is the canonical product workspace for the current ClayVerse endp
 
 ### Latest cycle delta
 
-**2026-08-17 17:42 +07:00 — `NO_CHANGE` product/runtime code; invalid unusual-experiment lease and execution adjudicated fail-closed**
+**2026-08-17 17:42 +07:00 — `NO_CHANGE` product/runtime code; live re-entry boot wired and invalid unusual-experiment execution adjudicated fail-closed**
 
+- Closed the compact-boot lag introduced by the 17:25 owner directive: `BOOTSTRAP_MINIMAL.json` advanced from schema 5.4 to **5.5**, now explicitly loading the current Live Fusion/Hypofusion worker-reentry directive before material work and requiring targeted re-entry after material outcomes. Commit `461d3ca5192c1f13e26096002bca2934b1d8677d` is in current-main ancestry; bounded receipt `the artefact/receipts/2026-08-17_GO_1741_BOOT_LIVE_REENTRY_WIRING_GPT56SOL.json` records the evidence boundary.
 - Refreshed fast-moving canonical `main` through the experiment claim/result/correction race and preserved all contradictory records append-only rather than rewriting history.
 - A fresh GitHub-hosted rerun for retained #611 was accepted by the control plane and again ended before Step 1 (`steps=[]` / no visible step execution). This adds only execution-admission evidence: **zero test/runtime credit, not TEST_FAIL**.
 - Reconfirmed Vercel: the latest visible READY tmux bridge remains `dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T`, bound to the older accepted component head. Later exact-head attempts remain build-rate-limited before Sandbox start; the already-built old bridge cannot be retrofitted into exact-current evidence.

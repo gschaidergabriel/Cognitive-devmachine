@@ -23,6 +23,10 @@ def main() -> int:
         clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
         prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
         require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+        required_effect_capability = (
+            os.environ.get("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", "").strip()
+            or None
+        )
         entityos_bridge, entityos_status = _entityos_config()
 
         payload = run_api_acceptance_probe(
@@ -32,6 +36,7 @@ def main() -> int:
             prompt,
             entityos_bridge=entityos_bridge,
             require_effect=require_effect,
+            required_effect_capability=required_effect_capability,
         )
         checkpoint_id, state_hash = db.checkpoint("generic-api-direct-probe")
         payload.update(

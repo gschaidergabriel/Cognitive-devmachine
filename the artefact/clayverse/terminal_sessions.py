@@ -16,7 +16,6 @@ from pathlib import Path
 
 from .identity import CANONICAL_TERMINAL_NAMES
 
-# Compatibility alias for tests/importers. IdentityRouter is the single naming source.
 CANONICAL_TERMINALS = CANONICAL_TERMINAL_NAMES
 
 
@@ -34,13 +33,7 @@ class TerminalBinding:
 
 
 class TerminalSessionManager:
-    """Own exactly two durable tmux perspectives into one ClayVerse entity.
-
-    Browser PTYs attach/detach from tmux. Disconnecting a browser therefore cannot
-    terminate the underlying interactive Claude Code CLI session. Claude starts from
-    an empty allowlisted environment, no built-in tools, exclusive managed ClayVerse
-    MCP and fixed lifecycle hooks that bind every prompt/response to UnifiedDB.
-    """
+    """Own exactly two durable tmux perspectives into one ClayVerse entity."""
 
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
@@ -88,9 +81,6 @@ class TerminalSessionManager:
             "CLAYVERSE_SESSION_ID": binding.session_id,
             "CLAYVERSE_ENABLE_ENTITYOS_EXEC": "1" if enable_entityos else "0",
         }
-        # Artifact identity is not capability authority. Do not disclose executable
-        # path/digest while the separate execution gate is closed. mcp_server
-        # independently rechecks the gate before constructing an EntityOS bridge.
         if enable_entityos:
             for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
                 value = os.environ.get(key, "").strip()
@@ -99,16 +89,17 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
-        # This per-user file is a compatibility mirror. /etc/claude-code/managed-mcp.json
-        # has exclusive server-definition authority; the managed server inherits the
-        # sanitized terminal environment below. Keeping the mirror makes direct bounded
-        # diagnostics explicit without widening the server set.
+        """Diagnostic-only mirror; never a product MCP authority.
+
+        `managed-mcp.json` is the sole runtime server-definition source. This helper is
+        retained for bounded tests/inspection and is deliberately not called by ensure().
+        """
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
                 "clayverse": {
                     "type": "stdio",
-                    "command": "python3",
+                    "command": "/usr/local/bin/python",
                     "args": ["-m", "clayverse.mcp_server"],
                     "env": self._mcp_env(binding),
                 }
@@ -131,21 +122,16 @@ class TerminalSessionManager:
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
         binding = self.binding(user_id)
-        self._write_mcp_config(binding)
+        binding.home.mkdir(parents=True, exist_ok=True)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
             return binding
 
-        # Built-in Claude tools are absent. Claude Code permission rules admit MCP
-        # tool-name globs after a literal mcp__<server>__ prefix, so this rule grants
-        # exactly the tools exported by the fixed clayverse server and no other server.
-        # Filesystem setting sources are disabled so project/user hooks cannot compete
-        # with the fixed managed lifecycle hooks. Managed Bash deny plus the immutable
-        # shell prefix prevent interactive ! mode becoming a second process/effect path.
+        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
+        # user/project MCP file in the launch path. User/session identity reaches the
+        # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
-            "--strict-mcp-config",
-            "--mcp-config", str(binding.mcp_config),
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
@@ -153,11 +139,6 @@ class TerminalSessionManager:
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
-        # Start Claude from an empty environment. Subscription/OAuth state lives in the
-        # durable per-user HOME. Arbitrary container secrets (especially Clerk signing
-        # material) never become an accidental alternate authentication/tool channel.
-        # Claude's own prompt history, auto-memory and CLAUDE.md discovery are disabled
-        # so UnifiedDB + the managed runtime contract remain the durable context authority.
         mcp_env = self._mcp_env(binding)
         effect_env = [
             f"{key}={mcp_env[key]}"
@@ -204,8 +185,6 @@ class TerminalSessionManager:
         binding = self.ensure(user_id)
         pid, fd = pty.fork()
         if pid == 0:
-            # The attach client cannot create a new command channel; it only connects to
-            # the already-running, sanitized tmux session.
             env = {
                 "HOME": str(binding.home),
                 "PATH": "/usr/local/bin:/usr/bin:/bin",
@@ -236,9 +215,6 @@ class TerminalSessionManager:
         except ProcessLookupError:
             return
 
-        # Browser disconnects must not leave waitable attach children behind. This runs
-        # off the event loop (terminal_gateway uses asyncio.to_thread), so bounded reaping
-        # is safe here. Escalate only if the transient tmux attach client ignores HUP.
         deadline = time.monotonic() + 0.5
         while True:
             try:

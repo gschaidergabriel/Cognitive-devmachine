@@ -1,43 +1,55 @@
 {
   "schema": "ClayVerseBoundedExecutionReceipt/v1",
-  "timestamp_local": "2026-08-17T23:31:00+07:00",
+  "timestamp_local": "2026-08-17T23:39:00+07:00",
   "trigger": "go",
-  "organ": "GPT-5.6 Sol",
-  "classification": "BOUNDED_MECHANISM_SUPPORT",
-  "canonical_main_at_latest_reentry": "56ba81c24af019ebe1729344c2f954d66c80c0ee",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "BOUNDED_MECHANISM_SUPPORT_REAL_DB_SOURCE_REGRESSION_UNEXECUTED",
+  "canonical_main_at_latest_reentry": "d55ae59dd21e35150192a2c65cad8ff6e507eb87",
   "branch": "gpt56sol/go-mistral-causal-reingest-20260817-2259",
-  "branch_head_before_this_receipt_update": "cda8ea653122db2d7631af9b206ef1a05c00263b",
   "pull_request": 667,
+  "preferred_architecture": "ONE_CANONICAL_MISTRAL_HTTP_ADAPTER_PLUS_EXISTING_UNIFIEDDB_TURNLIFECYCLE_REINGEST_THEN_SEPARATE_EFFECTGATE_TURN",
   "scope": {
-    "claim": "The exact new MistralTurnRunner fail-closes on effect intent, stale generation around inference latency, unsafe provider provenance, and unexpected effect binding while delegating canonical persistence to TurnLifecycle. A parallel source delta additionally fences TurnLifecycle.complete against a pre-recovery generation, but that Real-DB integration test is not yet executed by this receipt.",
+    "claim": "The retained thin MistralTurnRunner uses the existing canonical adapters.MistralInference and now fences provider completion and failure cleanup by the exact admitted causal_id plus generation. A late same-generation provider response cannot complete or abort a newer active turn. Mistral effect intent remains rejected on this cognition path; any later safe EffectGate/EntityOS probe is separately admitted after canonical re-ingest.",
     "not_claimed": [
       "full branch pytest",
-      "executed exact TurnLifecycle Real-DB generation-fence integration",
+      "executed exact Real-DB same-generation interleaving regression",
       "real Mistral API execution",
       "Vault secret acquisition",
       "exact OCI build or runtime",
       "Vercel Firecracker ClayVerse runtime",
       "Clerk/browser/PTY runtime",
       "EntityOS runtime",
+      "Tier-2 full Sandbox recreation",
       "whole ClayVerse PASS"
     ]
   },
   "exact_git_blobs": {
-    "the artefact/clayverse/mistral_turn.py": "0228d39105fe164e938e16b800b21c2696daca9d",
-    "the artefact/tests/test_mistral_turn.py": "f70ae63c7a63e8390c10ae2a1cdeba32cbd64bc7",
-    "the artefact/clayverse/turn_lifecycle.py": "e7ed97b5c390d9b31435bc99cb0ffa8671e09864",
-    "the artefact/tests/test_turn_lifecycle_complete_generation_fence.py": "90302a41657a34325a5fc413a86e97eb2300b91c"
+    "the artefact/clayverse/mistral_turn.py": "97ee1f59cfcc27c8a538b1eca21614852f9d8c17",
+    "the artefact/tests/test_mistral_turn.py": "fb5e97a41bca71ecfd7b96ba430b943f40370e8c",
+    "the artefact/clayverse/turn_lifecycle.py": "fb5d931b2ee6dd7c8e44d5fd63d4f7f2d0e3fb6d",
+    "the artefact/tests/test_turn_lifecycle_complete_generation_fence.py": "16466474d8aa235f11070ad8137d9e18f533dd9e"
   },
   "isolated_execution": {
     "surface": "OpenAI isolated non-production container",
     "network_used": false,
     "secrets_used": false,
-    "command": "python -m py_compile clayverse/mistral_turn.py tests/test_mistral_turn.py && python -m pytest -q tests/test_mistral_turn.py",
-    "exit_code": 0,
-    "result": "7 passed in 0.04s",
+    "preferred_runner_command": "python -m py_compile clayverse/mistral_turn.py tests/test_mistral_turn.py && python -m pytest -q tests/test_mistral_turn.py",
+    "preferred_runner_exit_code": 0,
+    "preferred_runner_result": "8 passed in 0.04s",
     "runner_blob_match": true,
-    "test_blob_match": true,
-    "support_boundary": "Existing adapters/store/turn_lifecycle imports were represented by minimal stubs solely to execute the exact new runner/test blobs. The later TurnLifecycle generation-fence source delta and its Real-DB test are recorded by exact Git blob identity but were not executed in this bounded run."
+    "runner_test_blob_match": true,
+    "preferred_runner_support_boundary": "Exact new runner/test blobs executed with minimal dependency stubs. This is bounded mechanism support, not a full-tree integration run.",
+    "donor_http_countercandidate": {
+      "pull_request": 668,
+      "initial_exact_boundary_result": "8 passed, 2 failed",
+      "bugs_found": [
+        "explicit empty model value silently fell back to default in the duplicate donor HTTP client",
+        "raising from inside an HTTPError handler left the secret-bearing provider exception reachable through __context__"
+      ],
+      "repaired_exact_boundary_result": "10 passed in 0.03s",
+      "classification": "USEFUL_DONOR_EVIDENCE_ONLY_NOT_CANONICAL_TRANSPORT",
+      "canonical_note": "Current main adapters.MistralInference already carries the important post-except error conversion and per-request token scrubbing pattern, so the duplicate donor transport is not retained."
+    }
   },
   "falsifiers_executed": [
     "canonical lifecycle begin/complete interface binding and Mistral provider receipt handoff",
@@ -46,27 +58,46 @@
     "missing Mistral inference receipt rejected",
     "extra secret-like provider receipt field rejected",
     "non-digest receipt hash rejected",
-    "Mistral cognition completion rejected if an effect_id is unexpectedly bound"
+    "Mistral cognition completion rejected if an effect_id is unexpectedly bound",
+    "same-generation interleaving proxy rejects an old response without aborting the newer active causal turn"
   ],
-  "source_only_new_falsifier": {
-    "test": "test_complete_rejects_active_turn_from_pre_recovery_generation",
-    "mechanism": "TurnLifecycle.complete calls assert_live_generation against the active turn generation before canonical provider completion.",
-    "evidence": "SOURCE_CANDIDATE_UNEXECUTED_IN_THIS_RECEIPT"
+  "real_db_source_regressions": [
+    {
+      "test": "test_complete_rejects_active_turn_from_pre_recovery_generation",
+      "mechanism": "TurnLifecycle.complete validates the active generation before provider completion.",
+      "evidence": "SOURCE_CANDIDATE_UNEXECUTED_ON_EXACT_FULL_TREE"
+    },
+    {
+      "test": "test_complete_rejects_stale_same_generation_provider_response_after_newer_turn",
+      "mechanism": "TurnLifecycle.complete atomically checks expected_causal_id and expected_generation before mutating workspace/turn/causal state.",
+      "evidence": "SOURCE_CANDIDATE_UNEXECUTED_ON_EXACT_FULL_TREE"
+    }
+  ],
+  "effect_race_adjudication": {
+    "observation": "EffectJournal.begin already atomically binds an effect intent to the currently active episode/session/user/generation before PENDING is persisted; after PENDING, predecessor retirement cannot silently replay or discard the effect.",
+    "result": "No second effect mechanism added. The new fence only closes provider completion/abort same-generation causal drift."
   },
-  "github_actions": {
-    "workflow_run_id": 32045291485,
-    "job_id": 95431707303,
+  "github_actions_latest": {
+    "workflow_run_id": 32046315608,
+    "job_id": 95434948896,
+    "head_sha": "a0fc99ce584a4c841becd9a1cccb058f75ce33b1",
     "conclusion": "failure_before_steps",
     "steps": 0,
     "runner_id": 0,
+    "runner_name": "",
     "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE"
   },
   "coordination": {
-    "duplicate_http_client_created_then_removed": true,
-    "single_http_client_authority": "clayverse.adapters.MistralInference",
-    "competing_pr_668": "COUNTERCANDIDATE_REQUIRES_FUSION: duplicate HTTP client must be removed; provider_responses schema needs a discriminator against the simpler two-turn baseline before promotion.",
+    "canonical_main_parallel_preflight": {
+      "commit": "d55ae59dd21e35150192a2c65cad8ff6e507eb87",
+      "pull_request": 677,
+      "responsibility": "final-only fixed-model and MISTRAL_API_KEY preflight around the existing canonical adapter",
+      "relationship": "NON_DUPLICATE_COMPLEMENT"
+    },
+    "competing_pr_668": "SUPERSEDED_DONOR: its causal interleaving insight is fused into PR667; duplicate HTTP client and provider_responses schema are not preferred without a new discriminator.",
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_experiment_count": 0
   },
-  "next_exact_gate": "Execute the exact current PR relevant full-tree tests with the Real-DB TurnLifecycle generation fence in an admitted isolated checkout, then rejoin current main once and proceed to the owner-mandated Vercel Firecracker -> exact OCI digest -> Vault Mistral -> canonical turn/re-ingest -> separate EffectGate/EntityOS -> Tier-2 recreate -> secret reacquisition sequence."
+  "owner_final_gate": "Vercel Sandbox Firecracker -> exact accepted ClayVerse OCI digest -> approved runtime Vault/secret acquisition -> real Mistral canonical turn and UnifiedDB re-ingest -> separately admitted bounded EffectGate/EntityOS round-trip -> state/provenance checks -> Tier-2 full Sandbox/appliance recreation from same digest -> new generation/no blind replay -> secret reacquisition -> second real Mistral turn -> remaining Clerk/PTTY/dual-user/security gates.",
+  "next_exact_gate": "Rejoin the four semantic files and this receipt onto exact current main without overwriting parallel #677, execute exact-current full-tree TurnLifecycle/Mistral regressions on an admitted isolated checkout, then run the owner-mandated Vercel Firecracker/Vault/Mistral/OCI/EntityOS/Tier-2 test-of-tests when the connected execution surface and credentials are available."
 }

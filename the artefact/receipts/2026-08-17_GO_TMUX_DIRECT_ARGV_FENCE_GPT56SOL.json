@@ -1,64 +1,84 @@
 {
-  "schema": "clayverse-go-tmux-direct-argv-fence-receipt/v1",
+  "schema": "clayverse-go-tmux-direct-argv-fence-receipt/v2",
   "recorded_at_local": "2026-08-17T14:08:00+07:00",
-  "organ": "GPT-5.6 Sol",
+  "rejoined_at_local": "2026-08-17T14:12:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "canonical_main_observed": "94bd064fab50a23a7f8a3ffe27d8ba3f59707877",
   "candidate_branch": "go/tmux-direct-argv-fence-20260817-1404-sol",
-  "candidate_source_head_before_receipt": "9c276915e19e0d1d3092afa02b19b755f945df03",
   "product_pull_request": 513,
+  "canonical_main_rejoin": "841d83f34f84b0d23adb5b283c3ae667e458cded",
+  "rejoin_merge_commit": "c841083747031f6f637830b55c8c0f795720db22",
   "finding": {
     "canonical_main_already_had": [
       "separate per-user tmux servers",
       "root-installed managed-tmux.conf",
       "prefix=None and prefix2=None",
-      "all tmux keybindings removed"
+      "all tmux keybindings removed",
+      "explicit ClayVerse MCP tool allowlist limited to session_state and request_effect",
+      "runtime user default login shell fenced to /opt/clayverse/runtime/deny-shell"
     ],
-    "remaining_gap": "Claude launch was still joined into one tmux shell-command string via shlex.join; managed tmux policy admission checked only presence; default-shell remained ambient.",
+    "remaining_gap_at_rejoin": "Claude launch was still joined into one tmux shell-command string via shlex.join; managed tmux policy admission checked only presence; tmux default-shell/status/mouse remained ambient.",
     "repair": [
       "pass env -i and Claude launch as multiple tmux argv entries",
       "reject managed tmux policy when any write permission bit is set",
-      "set tmux default-shell to ClayVerse deny-shell",
+      "set tmux default-shell to ClayVerse deny-shell as defense-in-depth",
       "disable tmux status and mouse surfaces"
-    ]
+    ],
+    "main_preservation": "The rejoin was rebuilt from current-main bytes rather than copying the stale PR terminal blob, preserving the newer explicit MCP tool allowlist and later main work."
   },
-  "exact_candidate_blobs": {
-    "terminal_sessions.py": "33e7f4141e1b2aec827e834dd5594ed03097240e",
+  "primary_upstream_discriminator": {
+    "source": "official tmux documentation",
+    "contract": "new-session with one command argument passes that command through the shell; multiple command arguments run the command directly",
+    "interpretation": "replacing shlex.join(env_argv) with multiple tmux argv entries removes an actual shell trampoline"
+  },
+  "exact_rejoined_blobs": {
+    "terminal_sessions.py": "d76d0ddb4cd2524a74d7b3166befc1c4c6409e0f",
     "managed-tmux.conf": "d7bfd79cb0edcdcb7e70d0910a0c67f241320690",
     "test_terminal_tmux_isolation.py": "a2e16aedb104b155a33f394c0d913bf6ef182aa6"
   },
   "isolated_source_regression": {
     "surface": "OpenAI isolated non-production container",
-    "exact_git_blob_matches": true,
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "git_blob_identity": {
+      "terminal_sessions.py": "MATCH d76d0ddb4cd2524a74d7b3166befc1c4c6409e0f",
+      "managed-tmux.conf": "MATCH d7bfd79cb0edcdcb7e70d0910a0c67f241320690",
+      "test_terminal_tmux_isolation.py": "MATCH a2e16aedb104b155a33f394c0d913bf6ef182aa6"
+    },
     "py_compile": "PASS",
-    "first_run": "FAIL_4_OF_5",
-    "first_run_negative_result": "os.access(path, W_OK) is context-dependent under root and rejected a 0444 test policy; no product PASS was credited",
-    "repair_after_negative_result": "inspect st_mode write bits with 0o222 instead of os.access W_OK",
-    "rerun": "PASS_5_OF_5",
-    "pytest_version": "9.0.2",
+    "focused_pytest": "PASS_5_OF_5",
+    "duration": "0.22s",
+    "dependency_scope": "terminal module exercised with a bounded identity-map stub because this focused test imports only CANONICAL_TERMINAL_NAMES; this is not a full-checkout regression",
     "real_tmux_binary_available": false,
-    "evidence_scope": "EXACT_SOURCE_MECHANISM_ONLY"
+    "evidence_scope": "EXACT_REJOINED_FILE_MECHANISM_ONLY"
+  },
+  "preserved_negative_result": {
+    "original_first_run": "FAIL_4_OF_5",
+    "cause": "os.access(policy, W_OK) is context-dependent under root and rejected a 0444 test policy",
+    "repair": "inspect st_mode write bits with 0o222 instead of effective-UID writability",
+    "status_after_repair": "PASS"
   },
   "vercel_execution_admission": {
     "bridge": "Git preview -> VERCEL_OIDC_TOKEN -> @vercel/sandbox",
     "bridge_general_capability": "CONFIRMED_BY_PRIOR_ACTUALLY_STARTED_RUNS",
-    "current_status": "BLOCKED_BEFORE_DEPLOYMENT_BUILD",
+    "current_status": "BLOCKED_BEFORE_SANDBOX_START_BY_BUILD_RATE_LIMIT",
     "observed_status": "Deployment rate limited — retry in 24 hours.",
-    "stale_staging_pr_closed": 836,
-    "stale_staging_head": "c745836e8e7ece213af2e1fda702267fec3d3d32",
     "sandbox_started": false,
-    "test_command_started": false,
+    "real_tmux_test_command_started": false,
     "runtime_credit": false
   },
   "go_experiment_accounting": {
     "new_unusual_experiment_count": 0,
-    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "reason": "available exact user trigger timestamp is minute-precision only"
+    "status": "NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "this work is deterministic rebase/regression only; no additional unusual intervention was admitted"
   },
   "vps_self_hosted_production_testing": false,
   "whole_product_evidence": false,
   "acceptance": "IN_PROGRESS",
-  "next_exact_gate": "When Vercel preview admission is available, stage the then-current exact PR 513-equivalent head and run real tmux attached-client command-surface regression inside a non-persistent Sandbox with deny-all networking during tests, then continue to exact OCI build/start/Claude/Clerk/restart gates."
+  "next_exact_gate": "When Vercel preview admission is available, execute the then-current rebased PR 513 head with real tmux in a non-persistent Sandbox, bind exact source and policy blobs, verify direct multi-argv startup and attached-client command-surface fences, stop the Sandbox, then proceed to exact OCI build/start/native Claude/Clerk/restart gates."
 }

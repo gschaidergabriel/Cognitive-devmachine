@@ -157,8 +157,8 @@ def validate_method_record(kind: str, value: Any, provenance: Any) -> dict[str, 
         if status == "CANDIDATE": raise MethodMemoryValidationError("framework/heuristic cannot retain CANDIDATE status")
         _timestamp(record["last_validated_at"], "last_validated_at"); promoted = status == "PROMOTED"; _validate_provenance(provenance, promoted=promoted)
         if promoted:
-            if support_count < 2 or success_count < 1 or len(source_episode_ids) < 2:
-                raise MethodMemoryValidationError("promoted reusable method requires multi-episode support and validated success")
+            if support_count < 2 or success_count < 2 or len(source_episode_ids) < 2:
+                raise MethodMemoryValidationError("promoted reusable method requires multi-episode support and repeated validated success")
             if calibration <= 0.0: raise MethodMemoryValidationError("promoted method requires non-zero calibration")
     else:
         if status == "CANDIDATE": raise MethodMemoryValidationError("negative method evidence cannot be CANDIDATE")
@@ -241,6 +241,8 @@ class MethodMemoryManager:
             if set(by_id) != set(evidence_ids): raise MethodMemoryValidationError("promotion referenced memory evidence is incomplete")
             for memory_id, row in by_id.items():
                 if str(row["user_id"] or "") != user_id: raise MethodMemoryValidationError("promotion referenced memory lacks exact user scope")
+                if memory_id in record["supporting_memory_ids"] and str(row["kind"]) in METHOD_KINDS:
+                    raise MethodMemoryValidationError("supporting evidence cannot be method memory")
                 if memory_id in record["counterexample_memory_ids"] and str(row["kind"]) not in NEGATIVE_METHOD_KINDS:
                     raise MethodMemoryValidationError("counterexample_memory_ids must reference counterexample/failure_pattern memory")
 
@@ -318,6 +320,9 @@ class MethodMemoryManager:
         candidate = self.decode_row(candidate_row); receipt = self.decode_row(receipt_row)["value"]
         if candidate["kind"] not in CANDIDATE_KINDS or receipt.get("action") != "PROMOTE" or receipt.get("method_memory_id") != source_id:
             raise MethodMemoryValidationError("promotion lineage mismatch")
+        lineage_fields = ("source_episode_ids", "supporting_memory_ids", "counterexample_memory_ids")
+        if any(receipt.get(field) != result["value"].get(field) or result["value"].get(field) != candidate["value"].get(field) for field in lineage_fields):
+            raise MethodMemoryValidationError("promotion receipt source/support/counterexample drift")
         from .method_validation import MethodValidationError, derive_promotion_stats
         try: stats = derive_promotion_stats(self.db.db, source_id, candidate["value"], result["user_id"])
         except MethodValidationError as exc: raise MethodMemoryValidationError("promotion validation evidence is invalid") from exc

@@ -14,25 +14,27 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Runtime readiness: current `main` requires canonical state plus both live canonical tmux sessions and transport-policy-v3 attestation. This branch extends the same admission path to require exactly one live pane whose foreground process and recorded start argv match the exact managed Claude launch contract. This remains a source candidate until exact isolated tmux/native-Claude/OCI execution is observed.
-- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease; the focused attach-expiry resize regression is retained on current `main`.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked from this ChatGPT execution surface by orchestration/network/DNS before provider contact. These are execution-admission blockers, not product test failures.
-- Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, exact managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
+- Canonical `main` observed for this cycle: `a9e08309ceefb441f38f2bdcf89af1a335e8dfd0`. Current `main` still requires canonical state plus both live canonical tmux sessions and transport-policy-v3 attestation; PR #611 remains the single retained tmux-3.6a reapply repair lane and must receive an exact admitted real-tmux rerun before promotion.
+- This retained PR #602 lane adds the next discriminator: exactly one live pane whose foreground process and recorded start argv match the exact sanitized managed Claude launch contract. It now also preserves the exact fail-closed tmux-3.6a idempotent reapply semantics from #611 so later process-attestation work cannot silently reintroduce the already-falsified predecessor behavior.
+- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
+- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
+- Current execution admission: the exact retained #611 rerun remains Vercel build-rate-limited before Sandbox start. Older READY Vercel evidence is old-head component evidence only. Daytona remains an authorized fallback but this controller has no admitted provider-contact/credential path, so Daytona runtime credit is zero.
+- Remaining major acceptance gates: exact #611 real-tmux rerun and promotion decision; then current-main rejoin of this process-attestation lane, focused + adjacent regressions, exact OCI build/image identity, live native-Claude process representation, startup/readiness, real Clerk JWT/browser WebSocket PTY, automatic hook lifecycle, persistence/recovery, and live dual-session concurrency/generation fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 — managed Claude process identity/readiness source candidate on current terminal spine**
+**2026-08-17 17:35 +07:00 — fused tmux-3.6a repair semantics into the retained managed-Claude process-attestation lane**
 
-- Rebased the retained process-attestation lane directly onto current `main` `62de4777f77936c0ce4540b97a682414158e8a62`, after live tmux transport-policy-v3 readiness, policy reapply/control timeouts, Clerk lease fences, effect causal-spine hardening and the living-status contract had landed.
-- Added one retained process discriminator: exactly one live pane, `pane_current_command=claude`, and `pane_start_command` parsing exactly to the sanitized managed ClayVerse launch argv. Existing or newly-created sessions fail closed when this process contract does not attest.
-- Extended the already-canonical live+policy readiness concept so both canonical perspectives must satisfy the exact managed Claude process predicate before `/readyz` can advertise product readiness.
-- Repaired adjacent tests that still encoded the superseded shell-string tmux launch assumption, and separated lower-layer tmux-policy tests from the new process-identity layer.
-- Preserved the strongest counterhypothesis: exact packaged tmux/native Claude may represent `pane_current_command` or `pane_start_command` differently for a legitimate process. Do not weaken the predicate speculatively; resolve it in exact isolated OCI/live-tmux execution.
-- The exact rebased r5 branch is **not runtime-verified**. Earlier equivalent bounded source reconstructions passed focused regressions, but those do not establish exact r5, live tmux/native-Claude or OCI behavior.
-- No unusual experiment was executed for this `go`: shared trigger identity is only minute precision, so the atomic experiment protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` rather than inventing a timestamp.
-- Superseded process-attestation lanes, including closed draft PR #598, must not be fused alongside this retained lane.
-- Whole-product acceptance remains unchanged: **IN_PROGRESS**.
+- Refreshed live `main` to `a9e08309ceefb441f38f2bdcf89af1a335e8dfd0`, retained tmux repair PR #611 at observed head `2957e80228815ac266635981a55f22bc15dc9ed4`, and process-attestation PR #602 before this repair at head `84d459622aa8b0e94339b0498ba352b6be17ac97`.
+- Adversarial review found a downstream regression risk: #602 also modifies `terminal_sessions.py` but still carried the pre-#611 `_enforce_tmux_policy()` semantics, so promoting it later without semantic fusion could restore the real-tmux-3.6a failure.
+- Fused the #611 fail-closed idempotency contract into #602 without creating a second terminal path: only exact missing-table diagnostics for `prefix`, `root`, `copy-mode`, and `copy-mode-vi` are tolerated on nonzero re-source; mixed/unknown/empty diagnostics remain fatal; independent transport-policy-v3 attestation remains mandatory.
+- Repaired two lower-layer timeout/order tests so they stub only the new process-attestation predicate and continue testing the transport contract rather than accidentally failing on an unrelated pane probe.
+- Exact written Git blobs were rebound before credit: `terminal_sessions.py` `13b895d06d6f99b367e9e6b014a48155d6356095`, timeout regression `08c30cca4452f789aedfc39606d71e3bf058013e`, process-attestation regression `6bfc5cb5a208e85357492ffadff578b1f9f5527d`.
+- Authorized isolated supporting exact-file execution on those byte identities: `15 passed in 0.06s`; `py_compile` PASS; exit 0. A prior semantically-equivalent but byte-mismatched local timeout-test reconstruction received zero exact-blob credit and was rerun only after exact Git-blob equality was established.
+- Evidence class remains **MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION**. This is not a full PR #602 checkout/runtime PASS, not the exact #611 real-tmux rerun, not native-Claude process evidence, not OCI acceptance, and not whole-product PASS.
+- Durable receipt: `the artefact/receipts/2026-08-17_GO_1735_MANAGED_CLAUDE_TMUX36A_FUSION_GPT56SOL.json`.
+- No unusual experiment was consumed: the shared trigger identity available to this organ has minute precision only and no immutable request id, so the atomic lease protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+- Whole-product acceptance remains **IN_PROGRESS**.
 
 ### Cycle update rule
 
@@ -48,19 +50,19 @@ Git history and bounded receipts remain the detailed audit trail; this README st
 
 ## Architecture
 
-Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas identity routing, bounded workspace/causal re-entry, Clerk JWT verification, and the current terminal-pivot surface: browser → Clerk → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code built-in tools are disabled in product terminals; a strict local stdio ClayVerse MCP is the admitted state/context/effect bridge. The runtime contract requires each human prompt to enter canonical ClayVerse state through `begin_turn` and to re-enter through `complete_turn`; UnifiedDB remains the durable state/memory authority. Generic host `process.exec` remains fail-closed. EntityOS is a digest-bound internal execution/security/runtime substrate candidate, not the product endpoint, and its external-effect execution remains separately gated.
+Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas identity routing, bounded workspace/causal re-entry, Clerk JWT verification, and the current terminal-pivot surface: browser → Clerk → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code built-in tools are disabled in product terminals; a strict local stdio ClayVerse MCP is the admitted state/context/effect bridge. The runtime contract requires each human prompt to enter canonical ClayVerse state through the managed lifecycle and to re-enter through the same causal identity; UnifiedDB remains the durable state/memory authority. Generic host `process.exec` remains fail-closed. EntityOS is a digest-bound internal execution/security/runtime substrate candidate, not the product endpoint, and its external-effect execution remains separately gated.
 
 The previous custom chat API and headless `claude -p` path are retired as product runtime surfaces. `consciousness_daemon` is not part of the target architecture.
 
 ## Verification
 
-Focused isolated tests have exercised bounded source mechanisms, but **whole-product PASS is not claimed**. The exact current head still requires a full authorized isolated test run, exact OCI build/runtime receipt, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, full ClayVerse MCP begin/effect/complete integration, accepted embedded EntityOS runtime evidence, and restart/recovery plus live dual-session concurrency/fencing validation.
+Focused isolated tests have exercised bounded source mechanisms, including the exact written tmux/process-attestation source/test blobs recorded above, but **whole-product PASS is not claimed**. The exact current product still requires the admitted real-tmux repair rerun, a current-main/full-checkout process-attestation batch, exact OCI build/runtime receipt, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, managed hook lifecycle, accepted effect/EntityOS behavior where admitted, restart/recovery and live dual-session concurrency/generation fencing.
 
-GitHub-hosted Actions are not current runtime evidence while jobs are blocked before execution by the account billing/spending state.
+GitHub-hosted Actions are not runtime evidence when jobs fail before visible execution. Vercel deployment state alone is likewise not runtime PASS; only an actually started Sandbox command/assertion path is executable evidence at its exact source/environment scope.
 
 ## Local isolated source checks
 
-Where an authorized isolated Python environment is available:
+Where an **authorized** isolated Python environment is available:
 
 ```bash
 python -m pytest -q

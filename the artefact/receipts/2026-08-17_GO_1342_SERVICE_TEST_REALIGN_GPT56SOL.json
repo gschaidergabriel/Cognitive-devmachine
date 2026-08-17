@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse_go_source_candidate_receipt_v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_base_sha": "a87bd8d0fd0bcdd48857714af3fc48ba85e1f2a7",
+  "branch": "go/1342-service-runtime-test-sync",
+  "service_blob_sha": "4018d695cc1a802072a6408ec1350ad35ce17970",
+  "stale_test_blob_sha": "791c1e75f77f1c2aa770afd146a69f180b0f439a",
+  "finding": {
+    "class": "regression_harness_source_coherence",
+    "observed": "test_service_serial_server.py mocked retired ClaudeCodeInference, ClayVerseEngine, ClayVerseAPI and signal-driven serial server symbols absent from current clayverse.service",
+    "current_runtime": "Uvicorn serves create_terminal_app with both canonical persistent terminal perspectives and ws_max_size bound to _PTY_INPUT_FRAME_MAX_BYTES",
+    "product_code_changed": false
+  },
+  "repair": {
+    "files": ["the artefact/tests/test_service_serial_server.py"],
+    "checks": [
+      "current Uvicorn terminal app construction",
+      "gabriel and andreas terminal perspective bootstrap",
+      "session generation reads",
+      "single-worker Uvicorn and PTY WebSocket input bound",
+      "boot/shutdown checkpoint and DB close"
+    ]
+  },
+  "parallel_fusion": {
+    "discarded_overlap": "A concurrent main update already repaired restart/recovery expectations; the duplicate recovery-test delta was removed before this final rebase.",
+    "result": "one remaining non-duplicate service-test repair"
+  },
+  "isolated_mechanism_check": {
+    "environment": "OpenAI isolated container",
+    "network": "unavailable",
+    "scope": "reconstructed current service control-flow slice with dependency boundaries stubbed; candidate test executed under pytest",
+    "result": "PASS",
+    "tests": "1/1",
+    "full_repository_checkout": false,
+    "exact_oci_runtime": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_exposed": false,
+    "github_hosted_exact_candidate_execution": "UNOBSERVED",
+    "whole_product_acceptance": "NOT_ESTABLISHED"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable request id is exposed and the user-message time is minute precision only; current atomic GO protocol forbids manufacturing a second-precision trigger key."
+  },
+  "next_gate": "Run the focused service regression from the exact PR head on an authorized isolated full repository checkout, then run the broader ClayVerse regression suite and exact OCI/runtime gates.",
+  "evidence_law": "Source/mechanism PASS does not imply whole ClayVerse container PASS."
+}

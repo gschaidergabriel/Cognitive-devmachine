@@ -1,0 +1,85 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:01:46+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "rebased_main": "07f1903e6a6d56aabc768a5381e9fffebc9771f1",
+  "candidate_branch": "go/recovery-causal-preflight-20260817-1343-gpt56sol-r2-3d1bd9",
+  "frontier": "restart/recovery causal-integrity preflight before pending-effect mutation",
+  "source_observation": {
+    "canonical_recovery_blob_before_delta": "2c195ba038bf39eba1dcb84d2f825bf77aa02baf",
+    "failure_mechanism": "recover_pending mutates/re-enters pending effects before active-turn causal-integrity validation; latest-by-time validation can then observe the newly inserted expected causal id and mask an older foreign causal row for the same active episode"
+  },
+  "candidate": {
+    "recovery_blob": "4ac594a1b5e813fa5e5f14c7b11d8cc41e173122",
+    "preserved_main_delta": "07f1903 recovery canonical effect-credit law",
+    "changes": [
+      "read-only active causal-spine preflight before EffectJournal.recover_pending",
+      "reject any causal row for an active episode whose causal_id differs from the active turn",
+      "repeat integrity check at the recovery transaction boundary",
+      "bind active causal lookup to exact active causal_id",
+      "add focused regression preserving pending effect, active turn, foreign causal evidence and generation on integrity failure"
+    ]
+  },
+  "mechanism_evidence": {
+    "previous_exact_candidate_blob": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "surface": "OpenAI isolated non-production container",
+    "scope": "exact recovery.py source-mechanism slice with dependency stubs before subsequent independent main effect-credit refactor",
+    "result": "PASS",
+    "observations": [
+      "corrupt active episode raised RecoveryIntegrityError",
+      "EffectJournal.recover_pending call count before rejection was 0",
+      "foreign causal row remained visible/unmodified"
+    ],
+    "current_candidate_exact_execution": "NOT_EXECUTED_AFTER_07f1903_REBASE",
+    "interpretation": "the tested preflight mechanism is preserved byte-for-byte in the current fused candidate, but exact current-candidate runtime verification remains pending"
+  },
+  "vercel_sandbox_admission": {
+    "execution_path": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "staging_repo": "gschaidergabriel/Dr.-Unterweger",
+    "staging_pr": 822,
+    "staging_head": "bbd2d0dfcb8687c769ce964158841b272aea8697",
+    "staged_blob_before_07f1903_rebase": "3d1bd9acbffd913d0d2956a26ac3f98af5c01b24",
+    "status": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "vercel_status_target": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "test_command_started": false,
+    "staging_pr_closed_after_admission_result": true,
+    "interpretation": "Vercel Sandbox execution path exists; the bounded preview was rejected before build/Sandbox start. This is not a test failure and provides no current-candidate executable evidence."
+  },
+  "github_runner_admission": {
+    "observed_run": 32003438973,
+    "observed_job": 95308105567,
+    "steps": 0,
+    "runner_id": 0,
+    "classification": "ADMISSION_FAILURE_BEFORE_STEPS",
+    "interpretation": "not a test failure"
+  },
+  "parallel_coordination": {
+    "duplicate_general_restart_test_delta": "DROPPED_AFTER_MAIN_FUSION",
+    "first_candidate_branch_collision": {
+      "branch": "go/recovery-causal-preflight-20260817-1343-sol",
+      "original_pr": 444,
+      "observed_later_head": "ebb16ac031780c920fe9e4617b404ade73c4dd20",
+      "observed_state": "PR_CLOSED_EMPTY_AFTER_BRANCH_REF_MOVED_BY_PARALLEL_WORK",
+      "action": "do not treat as fusion; recreate candidate on collision-resistant r2 branch"
+    },
+    "second_rebase": {
+      "reason": "main independently changed recovery effect-credit semantics while r2 was open",
+      "new_main": "07f1903e6a6d56aabc768a5381e9fffebc9771f1",
+      "action": "force-rebase r2 onto new main and reapply only causal-preflight delta while preserving canonical effect-credit law"
+    }
+  },
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This user trigger is only available at minute precision (2026-08-17 13:43 +07) with no immutable shared request/turn id, so the atomic GO experiment protocol does not permit a canonical claim for this macro-cycle.",
+    "distinct_unusual_experiments_executed_by_this_organ": 0,
+    "vercel_attempt_class": "ordinary regression execution-admission attempt, not unusual experiment"
+  },
+  "evidence_class": "SOURCE_CANDIDATE_WITH_MECHANISM_SUPPORT_ON_IMMEDIATELY_PRIOR_BASE",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "When Vercel preview admission permits, execute the exact current candidate blob 4ac594a1b5e813fa5e5f14c7b11d8cc41e173122 and the exact then-current full ClayVerse checkout recovery/effect/global-generation regressions inside an actually-started isolated Sandbox before fusion; then continue exact OCI startup/restart evidence."
+}

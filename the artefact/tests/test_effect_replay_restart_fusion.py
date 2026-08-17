@@ -45,6 +45,7 @@ def test_restart_retires_active_turn_after_verified_effect_causal_reentry(tmp_pa
 
     assert recovered["scanned"] == 1
     assert recovered["active_turns_closed"] == 1
+    assert recovered["reentered_effects"] == 0
     assert db.db.execute("SELECT COUNT(*) FROM active_turns").fetchone()[0] == 0
     causal = db.db.execute(
         "SELECT causal_id,effect_id,credit FROM causal_episodes WHERE episode_id=?", (opened["episode_id"],)
@@ -75,10 +76,15 @@ def test_restart_collapses_pending_effect_to_unknown_then_retires_active_turn(tm
     )
     assert db.db.execute("SELECT status FROM effects WHERE effect_id=?", (effect_id,)).fetchone()[0] == "PENDING"
 
-    recover_incomplete_episodes(db)
+    recovered = recover_incomplete_episodes(db)
 
+    assert recovered["scanned"] == 1
+    assert recovered["active_turns_closed"] == 1
     effect = db.db.execute("SELECT status FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
     causal = db.db.execute("SELECT causal_id,effect_id,credit FROM causal_episodes WHERE effect_id=?", (effect_id,)).fetchone()
     assert effect["status"] == "UNKNOWN_AFTER_RESTART"
     assert tuple(causal) == (opened["causal_id"], effect_id, 0.0)
     assert db.db.execute("SELECT COUNT(*) FROM active_turns").fetchone()[0] == 0
+    assert db.db.execute(
+        "SELECT state FROM workspace_episodes WHERE episode_id=?", (opened["episode_id"],)
+    ).fetchone()[0] == "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY"

@@ -1,6 +1,13 @@
 # TEMPLATE: final ClayVerse deployment profile.
 # Replace image and secret/PVC details only after exact artifact acceptance.
 # The installed Kata RuntimeClass name MUST be verified on the target cluster.
+#
+# NETWORK FAIL-CLOSED LAW:
+# This template intentionally ships with a default-deny NetworkPolicy for the
+# ClayVerse pod. It is not network-functional by itself. Final deployment MUST
+# add a separate deployment-specific, reviewed allow policy for only the exact
+# admitted ingress/egress surfaces and bind that policy into acceptance
+# evidence. hostNetwork: false alone is NOT a network-isolation policy.
 apiVersion: v1
 kind: Service
 metadata:
@@ -169,3 +176,21 @@ spec:
         resources:
           requests:
             storage: 20Gi
+---
+# Fail-closed baseline. This deliberately denies every network flow to/from the
+# ClayVerse pod until a deployment-specific allow policy is supplied. The allow
+# policy is deployment material because exact ingress controller, DNS resolver,
+# Clerk/Claude/GLM destinations and cluster CIDRs vary by admitted platform.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: clayverse-default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app: clayverse
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []
+  egress: []

@@ -14,7 +14,7 @@ SPEC.loader.exec_module(MODULE)
 
 AttestationError = MODULE.AttestationError
 attest_snapshot = MODULE.attest_snapshot
-_parse_allowed_annotations = MODULE._parse_allowed_annotations
+parse_expected_annotations = MODULE.parse_expected_annotations
 
 DIGEST = "sha256:" + "a" * 64
 
@@ -187,8 +187,13 @@ def test_snapshot_pass_is_bounded_and_lists_external_acceptance_gates():
     assert result["runtime"]["guest_kernel_distinguishable_from_host"] is True
     assert result["runtime"]["independent_guest_kernel_proven_by_this_collector"] is False
     assert result["runtime"]["kata_runtime_version_observed"] is False
+    assert result["expectations"]["external_review_binding_observed"] is False
+    assert result["network_policy"]["selecting_policy_review_observed"] is False
     assert result["network_policy"]["enforcement_observed"] is False
     assert result["storage"]["nonroot_rw_semantics_observed"] is False
+    assert result["security"]["read_only_root_declared"] is True
+    assert result["security"]["runtime_enforcement_observed"] is False
+    assert result["security"]["active_enforcement_probe_required"] is True
     assert result["tier2"]["full_replacement_observed"] is False
     assert len(result["missing_acceptance_evidence"]) >= 5
 
@@ -222,7 +227,7 @@ def test_current_security_context_and_probe_contracts_are_fenced():
 def test_effective_kata_annotations_default_deny_and_exact_allowset():
     annotation = "io.katacontainers.config.hypervisor.path"
     pod = _pod(annotations={annotation: "/opt/kata/bin/qemu"})
-    with pytest.raises(AttestationError, match="exact reviewed allowset"):
+    with pytest.raises(AttestationError, match="declared expected allowset"):
         _attest(pod=pod)
 
     result = _attest(
@@ -230,20 +235,21 @@ def test_effective_kata_annotations_default_deny_and_exact_allowset():
         allowed_kata_annotations={annotation: "/opt/kata/bin/qemu"},
     )
     assert result["pod"]["effective_kata_annotations"] == {annotation: "/opt/kata/bin/qemu"}
+    assert result["expectations"]["kata_annotations"] == {annotation: "/opt/kata/bin/qemu"}
 
-    with pytest.raises(AttestationError, match="exact reviewed allowset"):
+    with pytest.raises(AttestationError, match="declared expected allowset"):
         _attest(pod=pod, allowed_kata_annotations={annotation: "/other"})
 
 
-def test_allowed_annotation_parser_is_prefix_and_duplicate_fenced():
+def test_expected_annotation_parser_is_prefix_and_duplicate_fenced():
     key = "io.katacontainers.config.runtime.disable_guest_seccomp"
-    assert _parse_allowed_annotations([f"{key}=false"]) == {key: "false"}
+    assert parse_expected_annotations([f"{key}=false"]) == {key: "false"}
     with pytest.raises(AttestationError, match="KEY=VALUE"):
-        _parse_allowed_annotations([key])
+        parse_expected_annotations([key])
     with pytest.raises(AttestationError, match="io.katacontainers"):
-        _parse_allowed_annotations(["example.invalid/key=value"])
+        parse_expected_annotations(["example.invalid/key=value"])
     with pytest.raises(AttestationError, match="duplicate"):
-        _parse_allowed_annotations([f"{key}=false", f"{key}=true"])
+        parse_expected_annotations([f"{key}=false", f"{key}=true"])
 
 
 def test_network_policy_inventory_is_additive_and_broad_allows_fail_closed():
@@ -266,39 +272,6 @@ def test_network_policy_inventory_is_additive_and_broad_allows_fail_closed():
     }
     result = _attest(network_policies=_policies(unrelated))
     assert result["network_policy"]["selecting_policy_names"] == ["clayverse-default-deny"]
-
-
-def test_notin_selector_without_key_still_selects_broad_policy_fail_closed():
-    broad = {
-        "apiVersion": "networking.k8s.io/v1",
-        "kind": "NetworkPolicy",
-        "metadata": {"namespace": "clayverse", "name": "bad-notin", "uid": "notin-bad", "resourceVersion": "12"},
-        "spec": {
-            "podSelector": {"matchExpressions": [{"key": "exposure", "operator": "NotIn", "values": ["blocked"]}]},
-            "policyTypes": ["Egress"],
-            "egress": [{}],
-        },
-    }
-    with pytest.raises(AttestationError, match="obvious broad"):
-        _attest(network_policies=_policies(broad))
-
-
-def test_notin_selector_without_key_is_present_in_complete_inventory():
-    selected = {
-        "apiVersion": "networking.k8s.io/v1",
-        "kind": "NetworkPolicy",
-        "metadata": {"namespace": "clayverse", "name": "missing-key-notin", "uid": "notin-good", "resourceVersion": "13"},
-        "spec": {
-            "podSelector": {"matchExpressions": [{"key": "exposure", "operator": "NotIn", "values": ["blocked"]}]},
-            "policyTypes": ["Egress"],
-            "egress": [],
-        },
-    }
-    result = _attest(network_policies=_policies(selected))
-    assert result["network_policy"]["selecting_policy_names"] == [
-        "clayverse-default-deny",
-        "missing-key-notin",
-    ]
 
 
 def test_missing_or_malformed_network_policy_fails_closed():
@@ -324,6 +297,10 @@ def test_storage_identity_must_cover_both_persistent_mounts_with_csi_identity():
     broken[0] = dict(broken[0], csi_driver="")
     with pytest.raises(AttestationError, match="csi_driver"):
         _attest(storage_inventory=broken)
+    broken = _storage()
+    broken[0] = dict(broken[0], mount_path="/wrong")
+    with pytest.raises(AttestationError, match="mount_path drift"):
+        _attest(storage_inventory=broken)
 
 
 def test_required_persistent_mount_and_pvc_volume_must_match():
@@ -346,3 +323,33 @@ def test_policy_and_storage_inventory_hashes_are_deterministic():
     )
     assert first["network_policy"]["inventory_sha256"] == second["network_policy"]["inventory_sha256"]
     assert first["storage"]["inventory_sha256"] == second["storage"]["inventory_sha256"]
+
+
+def test_absent_key_notin_broad_policy_still_selects_and_fails_closed():
+    broad = {
+        "apiVersion": "networking.k8s.io/v1",
+        "kind": "NetworkPolicy",
+        "metadata": {"namespace": "clayverse", "name": "absent-notin-broad", "uid": "notin-broad", "resourceVersion": "14"},
+        "spec": {
+            "podSelector": {"matchExpressions": [{"key": "tier", "operator": "NotIn", "values": ["blocked"]}]},
+            "policyTypes": ["Egress"],
+            "egress": [{}],
+        },
+    }
+    with pytest.raises(AttestationError, match="obvious broad"):
+        _attest(network_policies=_policies(broad))
+
+
+def test_absent_key_notin_narrow_empty_policy_appears_in_inventory():
+    selected = {
+        "apiVersion": "networking.k8s.io/v1",
+        "kind": "NetworkPolicy",
+        "metadata": {"namespace": "clayverse", "name": "absent-notin-empty", "uid": "notin-empty", "resourceVersion": "15"},
+        "spec": {
+            "podSelector": {"matchExpressions": [{"key": "tier", "operator": "NotIn", "values": ["blocked"]}]},
+            "policyTypes": ["Egress"],
+            "egress": [],
+        },
+    }
+    result = _attest(network_policies=_policies(selected))
+    assert result["network_policy"]["selecting_policy_names"] == ["absent-notin-empty", "clayverse-default-deny"]

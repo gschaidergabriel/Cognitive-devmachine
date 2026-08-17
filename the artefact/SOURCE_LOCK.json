@@ -18,9 +18,15 @@
     },
     "autoupdate": false
   },
+  "xterm": {
+    "package": "@xterm/xterm",
+    "version": "6.0.0",
+    "registry": "https://registry.npmjs.org",
+    "tarball_integrity": "sha512-TQwDdQGtwwDt+2cgKDLn0IRaSxYu1tSUjgKarSDkUM0ZNiSRXFpjxEsvc/Zgc5kq5omJ+V0a8/kIM2WD3sMOYg=="
+  },
   "known_open_supply_chain_gates": [
     "apt repository package bytes are not yet snapshot/hash pinned",
     "Python requirements are version pinned but not yet installed with --require-hashes",
-    "browser Clerk/xterm assets are version-addressed but do not yet carry a repository-owned SRI lock"
+    "repository-owned xterm SRI is present, but exact locked registry fetch/install remains to be observed in an authorized isolated OCI build"
   ]
 }

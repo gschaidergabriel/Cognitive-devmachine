@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 from .autonomy import AutonomyController
+from .identity import CANONICAL_USER_IDS
 from .store import UnifiedDB
 
 AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v1"
@@ -94,6 +95,8 @@ def bounded_autonomy_context(
     This changes accessibility only. It does not create goals, schedule work, grant
     capabilities, execute effects, or treat model output as completion evidence.
     """
+    if user_id not in CANONICAL_USER_IDS:
+        raise PermissionError("autonomy context requires a canonical user")
     if not isinstance(max_chars, int) or max_chars < 512:
         raise ValueError("autonomy context max_chars is too small")
     if not isinstance(max_goals, int) or not 0 <= max_goals <= 32:

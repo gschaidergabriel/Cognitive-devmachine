@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "b527277c713ba714ae7ff42c9d6a76dfda68866c",
+  "branch": "go/runtime-readiness-terminal-liveness-20260817-1342-sol-v2",
+  "scope": "runtime_readiness_terminal_liveness",
+  "observed_source_gap": {
+    "claim": "The canonical /readyz implementation validated UnifiedDB schema, the two canonical user/session rows, terminal names, and global generation, but did not inspect whether either persistent tmux product session currently existed.",
+    "consequence": "After a product tmux/Claude session disappeared post-boot, the HTTP readiness surface could remain green even though the canonical browser -> PTY -> persistent tmux -> interactive Claude product path was incomplete.",
+    "source_only": true
+  },
+  "repair": {
+    "terminal_gateway": "_runtime_ready now requires the existing TerminalSessionManager to report both canonical tmux sessions through its non-mutating has-session path after canonical UnifiedDB state passes; /readyz passes the live manager into the probe.",
+    "test": "Healthcheck regressions cover both-live PASS, one-session-missing rejection, schema rejection before any tmux probe, and closed-DB fail-closed behavior.",
+    "manifest": "runtime_readiness now explicitly binds readiness to both canonical tmux sessions currently being live.",
+    "self_heal_in_readiness": false,
+    "state_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "exact_candidate_blobs": {
+    "the artefact/clayverse/terminal_gateway.py": "f3e6c6aa67149959534500d091c642afdaf97910",
+    "the artefact/tests/test_container_healthcheck.py": "834590eb985f17efdbf428dadf05df631c5f45e6",
+    "the artefact/manifest.json": "b0bd00c7b2d92c7196766ac41b5947f1684c84d1"
+  },
+  "isolated_mechanism_evidence": {
+    "surface": "isolated non-production OpenAI container",
+    "kind": "focused source-mechanism reconstruction of the exact _runtime_ready function body",
+    "result": "PASS",
+    "checks": 4,
+    "cases": [
+      "canonical DB plus gabriel+andreas live => ready",
+      "canonical DB plus andreas absent => not_ready",
+      "wrong schema => not_ready and terminal probe not called",
+      "closed DB => not_ready"
+    ],
+    "probe_sha256": "42fc42cc234d1d3d14bdd901a3b979dbb9e6f1f9e0ae3d35ae57d11bb770e56d",
+    "evidence_boundary": "mechanism-only; not an exact full package test, not an OCI runtime, not live tmux/Claude/Clerk evidence"
+  },
+  "parallel_reentry": {
+    "first_work_base": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+    "main_advanced_during_work": true,
+    "overlap_found": "terminal_gateway.py gained canonical browser input chunking on main",
+    "action": "discarded stale integration direction and reapplied only the readiness delta onto fresh main b527277c713ba714ae7ff42c9d6a76dfda68866c, preserving the browser chunking repair"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This trigger is available only at minute precision in the current interface; current main also records the canonical correction blocking a noncanonical 13:42 experiment claim. No new unusual intervention was executed."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_exposed": false,
+    "full_branch_regression_executed": false,
+    "exact_oci_build_executed": false,
+    "vps_or_self_hosted_testing_used": false,
+    "together_used": false
+  },
+  "strongest_counterhypothesis": "tmux has-session proves the named product session exists, but does not independently attest that its foreground process is the expected managed Claude Code binary. Exact-container fault injection may show that a surviving/replaced named tmux session can still make readiness too weak.",
+  "next_exact_gate": "On an actually-started authorized isolated executor, run the exact branch healthcheck/terminal regressions, build the exact OCI image, start both managed Claude/tmux sessions, kill exactly one canonical tmux session and require /readyz=503 without mutation; then attach through the normal authenticated path, verify controlled session recreation, and require /readyz=200 only after both canonical sessions are live again. Capture exact source and image identity.",
+  "acceptance": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED"
+}

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import uuid
-
 import pytest
 
 from clayverse.microclay_retrieval import MicroClayRetrieval
@@ -30,8 +28,8 @@ def _promoted_framework(*, problem_signature=None):
         "calibration": 0.67,
         "last_validated_at": "2026-08-17T00:00:00Z",
         "status": "PROMOTED",
-        # Compatibility alias used by the current #404 implementation.  The test below
-        # intentionally requires the canonical full contract as well.
+        # Compatibility alias used by the current #404 implementation. The gates below
+        # still require the full canonical envelope rather than trusting this alias.
         "lifecycle_status": "PROMOTED",
     }
 
@@ -66,7 +64,7 @@ def test_product_turn_context_surfaces_fact_unknown_and_method_context(tmp_path)
         context = result["context"]
 
         assert context["retrieval_receipt"]["status"] == "UNKNOWN"
-        assert context["unknowns"] == [pytest.helpers.anything] if False else context["unknowns"]
+        assert context["unknowns"]
         assert context["unknowns"][0]["status"] == "FACT_UNKNOWN"
         assert context["unknowns"][0]["method_present"] is True
         assert [item["memory_id"] for item in context["method_context"]] == [method_id]
@@ -91,7 +89,14 @@ def test_promoted_method_requires_complete_contract_envelope(tmp_path):
         micro = MicroClayRetrieval(db)
         turn_id = db.append_turn(sid, "gabriel", "user", "sensor timeout dependency")
 
-        with pytest.raises(ValueError, match="goal_shape|invariants|expected_observations|source_episode_ids|support_count|calibration|status"):
+        with pytest.raises(
+            ValueError,
+            match=(
+                "goal_shape|invariants|expected_observations|source_episode_ids|"
+                "supporting_memory_ids|counterexample_memory_ids|abstraction_version|"
+                "support_count|success_count|failure_count|calibration|last_validated_at|status"
+            ),
+        ):
             micro.retrieve_methods(
                 query="sensor timeout dependency",
                 user_id="gabriel",
@@ -102,7 +107,7 @@ def test_promoted_method_requires_complete_contract_envelope(tmp_path):
 
 
 def test_structurally_similar_lexically_dissimilar_problem_retrieves_framework(tmp_path):
-    """Contract test: structural transfer must not require token overlap with the saved signature."""
+    """Structural transfer must not require token overlap with the saved problem signature."""
     db, sid = _db(tmp_path)
     try:
         method_id = _add_method(

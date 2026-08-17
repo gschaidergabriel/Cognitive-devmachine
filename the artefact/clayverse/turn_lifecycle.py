@@ -47,7 +47,7 @@ class TurnLifecycle:
 
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        receipt=world.get("retrieval_receipt",{})
+        receipt=world.get("retrieval_receipt")
         if not isinstance(receipt,dict): raise TurnLifecycleError("retrieval receipt must be an object")
         if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError("retrieval receipt keys must be strings")
         scalar=(str,int,float,bool,type(None))

@@ -1,0 +1,94 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:29+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "a53a9de49f480db0cbd3a4000c991d31980de720",
+  "bootstrap_basis": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER",
+  "immutable_runtime_freeze": {
+    "research_pr": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "1b1a47d4a2d73ccad4625afc3f52edd38d8152a5",
+    "mergeable": true,
+    "draft": true,
+    "runtime_credit": 0
+  },
+  "tier2_source_adjudication": {
+    "current_handler": "declared-transfer-only chunked carrier with SHA-256 bundle/chunk/manifest fences; current retained implementation still uses a process-local random carrier name plus carrier snapshot and nonpersistent replacement",
+    "current_guard": "v11 intentionally rejects snapshot/fork carrier promotion and requires an independently recoverable durable carrier contract",
+    "remaining_source_fusion": "one crash-resumable carrier identity/ledger must be recoverable after controller-process death and after source deletion; guard and handler are not yet one satisfiable mechanism",
+    "pr810_crash_review_id": 4953529257,
+    "pr810_exact_head_fusion_comment_id": 5318814688,
+    "required_crash_points": [
+      "immediately after source deletion",
+      "after replacement creation before replacement receipt durability",
+      "after replacement receipt durability before phase completion"
+    ],
+    "required_invariants": [
+      "no duplicate replacement",
+      "no external effect replay",
+      "declared transfer and exact OCI identity preserved",
+      "stale or missing handoff is explicit UNKNOWN/BLOCKED",
+      "retry deterministically locates/adjudicates the one admitted handoff",
+      "cleanup is deterministic after durable replacement success"
+    ],
+    "source_runtime_verified": false
+  },
+  "execution_admission": {
+    "vercel": {
+      "status": "BLOCKED_BEFORE_ASSERTION",
+      "classification": "BUILD_RATE_LIMIT",
+      "product_test_executed": false,
+      "runtime_credit": 0
+    },
+    "daytona_fallback": {
+      "existing_workflow": ".github/workflows/entityos-sandbox-fallback.yml",
+      "bridge_improvement_commits": [
+        "8fd830a86473a05da4fbb873dc638cf373d60b54",
+        "2b5bd3f8e24447c9fe835c4b03e60a943c79a323"
+      ],
+      "first_dispatch_issue": 855,
+      "retry_dispatch_issue": 856,
+      "retry_dispatch_run": 32056548782,
+      "retry_dispatch_job": 95467919188,
+      "retry_job_runner_id": 0,
+      "retry_job_steps": [],
+      "status": "BLOCKED_BEFORE_DAYTONA_INVOCATION",
+      "classification": "GITHUB_HOSTED_RUNNER_ADMISSION_FAILURE",
+      "daytona_sandbox_created": false,
+      "pr810_guard_executed": false,
+      "runtime_credit": 0
+    },
+    "combined_result": "NO_AUTHORIZED_EXECUTABLE_SURFACE_REACHED_A_CLAYVERSE_ASSERTION_IN_THIS_ORGAN_CYCLE"
+  },
+  "research_and_coordination_delta": {
+    "durable_snapshot_lifecycle_correction_receipt_commit": "9f82d363236e930242c998b4aeeeee053d803c47",
+    "readme_stale_write_attempt": "REJECTED_409_AND_NOT_OVERWRITTEN",
+    "duplicate_controller_path_added": false,
+    "owner_credentials_used": false,
+    "together_used": false
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "status": "COORDINATION_BLOCKED_OR_ALREADY_CONSUMED_SHARED_SLOT",
+    "reason": "This organ did not possess a unique shared immutable go-request lease and therefore admitted no new unusual experiment. Source adjudication, normal guards, dispatcher repair and execution-admission checks are not counted as a new unusual experiment."
+  },
+  "epistemic_status": {
+    "source_candidate_progress": true,
+    "exact_current_oci_runtime_verified": false,
+    "live_provider_verified": false,
+    "tier2_recovery_verified": false,
+    "clerk_websocket_pty_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_step": "Fuse one independently recoverable crash-resumable Tier2 carrier mechanism into the single retained PR810 handler and its v11 guard without weakening fail-closed semantics; then restore an authorized isolated execution admission surface (Vercel capacity or an admitted Daytona path that actually starts), run exact-head guards, and only after that execute PR686 private-source -> exact OCI -> provider -> EffectGate/EntityOS -> Tier1 -> destructive Tier2 crash/retry -> second cognition -> Clerk/WebSocket/PTY -> dual-user/concurrency/privacy acceptance."
+}

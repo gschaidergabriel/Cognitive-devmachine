@@ -149,7 +149,7 @@ jobs:
           qemu_version=$("$qemu" --version | head -n1)
           "$qemu" "${qemu_data[@]}" "${qemu_bios[@]}" -accel tcg,thread=multi -machine q35 -cpu max -smp 2 -m 2048 \
             -drive "file=$guest,if=virtio,format=qcow2,cache=unsafe" \
-            -net none -display none -monitor none -serial "file:$serial" -no-reboot \
+            -net none -vga none -display none -monitor none -serial "file:$serial" -no-reboot \
             -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny &
           qemu_pid=$!
 
@@ -189,7 +189,7 @@ jobs:
           import json, os, pathlib, sys
           out,image_sha,serial_sha,qemu_rc,guest_started,qemu_version,marker,tool_source=sys.argv[1:]
           payload={
-            'schema':'ClayVerseVpsQemuTcgGuestSmoke/v3',
+            'schema':'ClayVerseVpsQemuTcgGuestSmoke/v4',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
@@ -204,6 +204,7 @@ jobs:
             'guest_kernel_marker':marker or None,
             'independent_guest_kernel_observed':guest_started=='true',
             'guest_network_mode':'NONE',
+            'guest_vga':'NONE',
             'guest_memory_mib':2048,
             'guest_vcpus':2,
             'guest_disk':'VERIFIED_READ_ONLY_BASE_PLUS_PER_RUN_DISPOSABLE_FULL_COPY',

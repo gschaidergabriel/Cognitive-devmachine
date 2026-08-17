@@ -1,0 +1,52 @@
+{
+  "schema": "clayverse.go-effect-live-causal-spine-fence/v1",
+  "trigger": "go",
+  "trigger_time_local_available": "2026-08-17T15:24+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "branch": "go/effect-live-causal-spine-fence-20260817-1524-sol",
+  "counterhypothesis": "An active selected effect turn can coexist with a foreign causal_episodes row for the same episode; the current EffectJournal.begin active-turn fence does not inspect the causal spine, so PENDING can be journaled and an external bridge can be reached before later causal re-entry detects or compounds the split spine.",
+  "repair": "Before PENDING insertion, bind active_turns.causal_id and require the episode causal set to be empty. A foreign causal_id fails with StaleGeneration(effect_causal_spine); an already-consumed matching causal_id fails before a new effect begins.",
+  "authority": {
+    "canonical_state": "UnifiedDB",
+    "effect_path": "existing EffectJournal/EffectGate only",
+    "new_effect_authority_added": false,
+    "external_effect_replay_added": false
+  },
+  "source": {
+    "baseline_effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "repaired_effect_journal_blob": "6d8cb025a09bebadde851adcfe761c305be6654a",
+    "regression_test_blob": "4eff68f05b7acb558fbec1d7cbe39cc732e0bee7"
+  },
+  "isolated_execution": {
+    "surface": "OpenAI non-production isolated container",
+    "python": "3.13.5",
+    "platform": "Linux 6.18.35 x86_64 glibc 2.41",
+    "sqlite": "3.46.1",
+    "exact_effect_journal_blob_recomputed": "6d8cb025a09bebadde851adcfe761c305be6654a",
+    "blob_identity_match": true,
+    "probe_scope": "exact repaired EffectJournal file with a minimal SQLite schema/store stub sufficient to exercise EffectJournal.begin preconditions",
+    "cases": [
+      "foreign causal row -> StaleGeneration(effect_causal_spine), zero effect rows",
+      "empty coherent causal spine -> PENDING accepted",
+      "matching already-consumed active causal id -> RuntimeError before PENDING"
+    ],
+    "result": "3 deterministic mechanism cases PASS",
+    "full_checkout_executed": false,
+    "exact_oci_executed": false,
+    "whole_product_pass": false
+  },
+  "provider_state": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED",
+    "daytona": "AUTHORIZED_FALLBACK; provider execution still separate from this supporting exact-file mechanism probe"
+  },
+  "coordination": {
+    "duplicate_issue_or_open_pr_found_before_write": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "shared user-message timestamp available only at minute precision"
+  },
+  "classification": "MECHANISM_SUPPORTED_EXACT_FILE_SQLITE_PROBE_SOURCE_CANDIDATE",
+  "next_gate": "Run the exact branch regression in a full current checkout on the first admitted SQLite-capable Vercel or Daytona sandbox together with adjacent EffectGate, TurnLifecycle and recovery tests; if green, fuse and continue exact OCI startup/readiness/restart/concurrency acceptance."
+}

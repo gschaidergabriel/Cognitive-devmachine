@@ -1,0 +1,42 @@
+# Fail-closed admission fence for the canonical ClayVerse Kata workload.
+#
+# Baseline law: no io.katacontainers.* workload annotation is admitted on a
+# ClayVerse pod. A future exception must be an explicit, separately reviewed,
+# receipt-bound policy change; do not weaken this baseline with wildcards.
+#
+# Apply BOTH documents before admitting the ClayVerse StatefulSet. Static YAML
+# presence is supporting source evidence only; final acceptance must prove the
+# policy and binding are installed and reject negative CREATE/UPDATE probes on
+# the admitted cluster after all mutation.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: clayverse-kata-runtime-annotations
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  validations:
+    - expression: >-
+        !has(object.metadata.labels) ||
+        !("app" in object.metadata.labels) ||
+        object.metadata.labels["app"] != "clayverse" ||
+        !has(object.metadata.annotations) ||
+        object.metadata.annotations.all(k, !k.startsWith("io.katacontainers."))
+      message: >-
+        ClayVerse pods must not carry unreviewed io.katacontainers.* runtime annotations;
+        bind any required exception as a separate explicitly reviewed and receipt-bound policy delta.
+      reason: Forbidden
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: clayverse-kata-runtime-annotations
+spec:
+  policyName: clayverse-kata-runtime-annotations
+  validationActions: [Deny]

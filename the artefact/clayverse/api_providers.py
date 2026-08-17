@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import ctypes
 import hashlib
 import json
 import os
 import re
+import sys
 import threading
 from dataclasses import dataclass
 from typing import Any
@@ -16,6 +18,9 @@ from .inference_protocol import InferenceProtocolError, parse_claude_decision_pa
 
 _PROVIDER_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,63}$")
 _MISTRAL_ENDPOINT = "https://api.mistral.ai/v1/chat/completions"
+_PR_GET_DUMPABLE = 3
+_PR_SET_DUMPABLE = 4
+_SUID_DUMP_DISABLE = 0
 
 
 class _NoRedirectHandler(HTTPRedirectHandler):
@@ -27,6 +32,33 @@ class _NoRedirectHandler(HTTPRedirectHandler):
 
 def _urlopen(request: Request, timeout: int):
     return build_opener(_NoRedirectHandler()).open(request, timeout=timeout)
+
+
+def harden_api_secret_process_boundary() -> dict[str, object]:
+    """Make the API-secret-holding service non-dumpable before terminal children exist.
+
+    ClayVerse terminal processes intentionally share the container UID. The provider
+    token may enter this service through the runtime secret environment, whose initial
+    bytes remain visible through procfs subject to Linux ptrace access checks. Refuse
+    API terminal mode unless the kernel can make this process non-dumpable and reports
+    that state back. Child processes still receive explicitly sanitized environments.
+    """
+    if sys.platform != "linux":
+        raise RuntimeError("API terminal secret boundary requires Linux PR_SET_DUMPABLE")
+    libc = ctypes.CDLL(None, use_errno=True)
+    prctl = libc.prctl
+    prctl.restype = ctypes.c_int
+    result = prctl(_PR_SET_DUMPABLE, _SUID_DUMP_DISABLE, 0, 0, 0)
+    if result != 0:
+        err = ctypes.get_errno()
+        raise OSError(err, "PR_SET_DUMPABLE failed")
+    observed = prctl(_PR_GET_DUMPABLE, 0, 0, 0, 0)
+    if observed != _SUID_DUMP_DISABLE:
+        if observed < 0:
+            err = ctypes.get_errno()
+            raise OSError(err, "PR_GET_DUMPABLE failed")
+        raise RuntimeError("API secret process remained dumpable")
+    return {"linux_pr_set_dumpable": True, "process_dumpable": False}
 
 
 def _validated_https_endpoint(value: str) -> str:
@@ -90,13 +122,7 @@ class ChatCompletionsProviderConfig:
 
 
 class GenericChatCompletionsInference:
-    """Fail-closed inference-only boundary for JSON chat-completion APIs.
-
-    This is deliberately not a dynamic plugin loader. New protocols get explicit
-    adapters, while providers implementing this bounded chat-completion contract can
-    be configured without changing ClayVerse. Provider output is only a proposal:
-    ClayVerseEngine re-ingests it into UnifiedDB before EffectGate may execute it.
-    """
+    """Fail-closed inference-only boundary for JSON chat-completion APIs."""
 
     MAX_WORLD_BYTES = 600_000
     MAX_OBSERVATION_CHARS = 100_000
@@ -168,9 +194,7 @@ class GenericChatCompletionsInference:
             raise RuntimeError("assembled world exceeds LLM API boundary")
         if token in world_json or token in observation:
             token = ""
-            raise InferenceProtocolError(
-                "LLM API runtime credential reached model-visible context"
-            )
+            raise InferenceProtocolError("LLM API runtime credential reached model-visible context")
 
         try:
             body = json.dumps(
@@ -220,16 +244,13 @@ class GenericChatCompletionsInference:
             transport_failure_type = type(exc).__name__
             raw = b""
         finally:
-            # Do not retain bearer credentials in adapter state or traceback locals.
             token = ""
             request = None
 
         if http_error_status is not None:
             raise RuntimeError(f"LLM API inference HTTP failure status={http_error_status}")
         if transport_failure_type is not None:
-            raise RuntimeError(
-                f"LLM API inference transport failure type={transport_failure_type}"
-            )
+            raise RuntimeError(f"LLM API inference transport failure type={transport_failure_type}")
         if secret_echoed:
             raw = b""
             raise InferenceProtocolError("LLM API response contains runtime credential")
@@ -237,11 +258,7 @@ class GenericChatCompletionsInference:
             raise InferenceProtocolError("LLM API response exceeds bound")
 
         try:
-            envelope = json.loads(
-                raw,
-                parse_constant=_reject_nonfinite_json,
-                object_pairs_hook=_reject_duplicate_json_pairs,
-            )
+            envelope = json.loads(raw, parse_constant=_reject_nonfinite_json, object_pairs_hook=_reject_duplicate_json_pairs)
         except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
             raise InferenceProtocolError("LLM API response envelope is not canonical JSON") from exc
         if not isinstance(envelope, dict):
@@ -267,18 +284,10 @@ class GenericChatCompletionsInference:
         if not isinstance(message, dict):
             raise InferenceProtocolError("LLM API choice message is missing")
         content = message.get("content")
-        if (
-            not isinstance(content, str)
-            or not content
-            or len(content.encode("utf-8")) > self.MAX_RESPONSE_BYTES
-        ):
+        if not isinstance(content, str) or not content or len(content.encode("utf-8")) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("LLM API message content must be bounded JSON text")
         try:
-            decision_payload = json.loads(
-                content,
-                parse_constant=_reject_nonfinite_json,
-                object_pairs_hook=_reject_duplicate_json_pairs,
-            )
+            decision_payload = json.loads(content, parse_constant=_reject_nonfinite_json, object_pairs_hook=_reject_duplicate_json_pairs)
         except (json.JSONDecodeError, ValueError) as exc:
             raise InferenceProtocolError("LLM API message content is not canonical JSON") from exc
 
@@ -302,14 +311,9 @@ def build_api_inference_from_env() -> GenericChatCompletionsInference:
 
     profile = os.environ.get("CLAYVERSE_LLM_API_PROFILE", "").strip().lower()
     if profile == "mistral":
-        model = os.environ.get("CLAYVERSE_LLM_API_MODEL", "").strip() or os.environ.get(
-            "CLAYVERSE_MISTRAL_MODEL", ""
-        ).strip()
+        model = os.environ.get("CLAYVERSE_LLM_API_MODEL", "").strip() or os.environ.get("CLAYVERSE_MISTRAL_MODEL", "").strip()
         config = ChatCompletionsProviderConfig(
-            provider="mistral",
-            endpoint=_MISTRAL_ENDPOINT,
-            model=model,
-            token_env="MISTRAL_API_KEY",
+            provider="mistral", endpoint=_MISTRAL_ENDPOINT, model=model, token_env="MISTRAL_API_KEY"
         )
         return GenericChatCompletionsInference(config)
 
@@ -322,6 +326,4 @@ def build_api_inference_from_env() -> GenericChatCompletionsInference:
         )
         return GenericChatCompletionsInference(config)
 
-    raise RuntimeError(
-        "CLAYVERSE_LLM_API_PROFILE must be mistral or openai-compatible"
-    )
+    raise RuntimeError("CLAYVERSE_LLM_API_PROFILE must be mistral or openai-compatible")

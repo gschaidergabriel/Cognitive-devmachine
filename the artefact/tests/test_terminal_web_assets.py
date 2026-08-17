@@ -1,13 +1,18 @@
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_xterm_is_vendored_into_single_container_image():
+def test_xterm_is_digest_locked_and_vendored_without_node_or_npm():
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
-    assert "ARG XTERM_SPEC=@xterm/xterm@6.0.0" in dockerfile
-    assert 'npm install --global "${CLAUDE_CODE_SPEC}" "${XTERM_SPEC}"' in dockerfile
-    assert 'cp -a "$(npm root -g)/@xterm/xterm" /opt/clayverse/vendor/xterm' in dockerfile
+    lock = json.loads((ROOT / "SOURCE_LOCK.json").read_text(encoding="utf-8"))["xterm"]
+    assert lock["package"] == "@xterm/xterm"
+    assert lock["version"] == "6.0.0"
+    assert len(lock["sha512"]) == 128
+    assert "install_pinned_xterm.py" in dockerfile
+    assert "npm install" not in dockerfile
+    assert "nodejs" not in dockerfile
     assert "test -f /opt/clayverse/vendor/xterm/lib/xterm.js" in dockerfile
     assert "test -f /opt/clayverse/vendor/xterm/css/xterm.css" in dockerfile
 

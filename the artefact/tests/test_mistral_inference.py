@@ -40,7 +40,7 @@ def mistral_envelope(
                     "finish_reason": finish_reason,
                     "message": {
                         "role": "assistant",
-                        "content": json.dumps(decision, separators=(",", ",")),
+                        "content": json.dumps(decision, separators=(",", ":")),
                     },
                 }
             ],

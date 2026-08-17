@@ -34,6 +34,7 @@ COPY --chown=root:root policy/managed-settings.json /etc/claude-code/managed-set
 RUN chmod 0444 /etc/claude-code/managed-mcp.json /etc/claude-code/managed-settings.json
 COPY clayverse ./clayverse
 COPY --chown=root:root runtime_CLAUDE.md /opt/clayverse/runtime/CLAUDE.md
+COPY --chown=root:root policy/deny-shell /opt/clayverse/runtime/deny-shell
 COPY --chown=root:root entityos.lock.json /opt/entityos/entityos.lock.json
 COPY --chown=root:root EntityOS /opt/entityos/EntityOS
 RUN LOCK_SCHEMA="$(python -c 'import json; print(json.load(open("/opt/entityos/entityos.lock.json", encoding="utf-8"))["schema"])')" \
@@ -46,7 +47,8 @@ RUN LOCK_SCHEMA="$(python -c 'import json; print(json.load(open("/opt/entityos/e
  && printf '%s  %s\n' "$LOCK_SHA256" /opt/entityos/EntityOS | sha256sum -c - \
  && chmod 0555 /opt/entityos/EntityOS \
  && chmod 0444 /opt/entityos/entityos.lock.json \
- && chmod 0444 /opt/clayverse/runtime/CLAUDE.md
+ && chmod 0444 /opt/clayverse/runtime/CLAUDE.md \
+ && chmod 0555 /opt/clayverse/runtime/deny-shell
 RUN useradd --system --uid 10001 --create-home --shell /bin/bash clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R root:root /opt/clayverse \

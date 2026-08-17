@@ -35,25 +35,33 @@ class EffectJournal:
         if not isinstance(value,dict): value={}
         value=dict(value); value['replayed']=True
         return value
-    def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,request_key=None,request_hash=None):
-        if (request_key is None)!=(request_hash is None): raise ValueError('request key/hash must be paired')
-        if request_key is not None and (not isinstance(request_key,str) or not request_key or len(request_key)>512): raise ValueError('invalid effect request key')
-        if request_hash is not None and (not isinstance(request_hash,str) or len(request_hash)!=64): raise ValueError('invalid effect request hash')
+    def _insert_pending(self,db,eid,episode_id,user_id,capability,target,generation,argv,request_key=None,request_hash=None):
+        audit_argv=self._argv_receipt(argv)
+        db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at,request_key,request_hash) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time(),request_key,request_hash))
+    def _check_identity(self,db,session_id,user_id,generation):
+        row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
+        if not row: raise PermissionError('session owner mismatch')
+        if int(row[0])!=int(generation): raise StaleGeneration(session_id)
+    def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
-            row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
-            if not row: raise PermissionError('session owner mismatch')
-            if int(row[0])!=int(generation): raise StaleGeneration(session_id)
-            if request_key is not None:
-                prior=db.execute('SELECT effect_id,status,outcome,request_hash FROM effects WHERE request_key=?',(request_key,)).fetchone()
-                if prior:
-                    if prior['request_hash']!=request_hash: raise RuntimeError('EFFECT_REQUEST_CONFLICT')
-                    status=prior['status']
-                    if status in self.REUSABLE: return prior['effect_id'],self._decode_receipt(prior['outcome'])
-                    if status in self.AMBIGUOUS: raise RuntimeError(f'EFFECT_REEXECUTION_BLOCKED:{status}')
-                    raise RuntimeError(f'EFFECT_STATUS_INVALID:{status}')
-            audit_argv=self._argv_receipt(argv)
-            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at,request_key,request_hash) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time(),request_key,request_hash))
+            self._check_identity(db,session_id,user_id,generation)
+            self._insert_pending(db,eid,episode_id,user_id,capability,target,generation,argv)
+        return eid
+    def begin_once(self,episode_id,session_id,user_id,capability,target,generation,argv,request_key,request_hash):
+        if not isinstance(request_key,str) or not request_key or len(request_key)>512: raise ValueError('invalid effect request key')
+        if not isinstance(request_hash,str) or len(request_hash)!=64: raise ValueError('invalid effect request hash')
+        eid=str(uuid.uuid4())
+        with self.db.tx() as db:
+            self._check_identity(db,session_id,user_id,generation)
+            prior=db.execute('SELECT effect_id,status,outcome,request_hash FROM effects WHERE request_key=?',(request_key,)).fetchone()
+            if prior:
+                if prior['request_hash']!=request_hash: raise RuntimeError('EFFECT_REQUEST_CONFLICT')
+                status=prior['status']
+                if status in self.REUSABLE: return prior['effect_id'],self._decode_receipt(prior['outcome'])
+                if status in self.AMBIGUOUS: raise RuntimeError(f'EFFECT_REEXECUTION_BLOCKED:{status}')
+                raise RuntimeError(f'EFFECT_STATUS_INVALID:{status}')
+            self._insert_pending(db,eid,episode_id,user_id,capability,target,generation,argv,request_key,request_hash)
         return eid,None
     def _reenter_tx(self,db,effect_id,status,outcome):
         row=db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone()

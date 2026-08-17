@@ -1,0 +1,52 @@
+{
+  "schema": "ClayGoFrontierResult/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "original_frontier": "MICROVM_NETWORK_BOUNDARY_DEFAULT_DENY",
+  "fusion_outcome": "SUPERSEDED_BY_PARALLEL_CURRENT_MAIN",
+  "current_main_source": {
+    "microvm_contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+    "kata_template_blob": "b075755d24fcd3dbd203b02f67eeff8a5a8c571b",
+    "microvm_static_test_blob": "a03de2e8fe1473c7e019dce66710bc04d244aa75"
+  },
+  "canonical_repair_observed": [
+    "default-deny NetworkPolicy selects app=clayverse for both Ingress and Egress with empty rule sets",
+    "hostNetwork=false is explicitly treated as insufficient network isolation",
+    "deployment-specific allow policies are required and must be reviewed/bound to acceptance evidence",
+    "network plugin/CNI enforcement and the complete additive selecting-policy set are explicit acceptance gates",
+    "readiness remains /readyz while liveness is separated to /healthz"
+  ],
+  "duplicate_lane": {
+    "pr": 626,
+    "state": "closed_unmerged",
+    "classification": "DUPLICATE_SUPERSEDED_BY_CURRENT_MAIN"
+  },
+  "execution": {
+    "local_isolated_static_checkout_attempt": "BLOCKED_BEFORE_SOURCE_STAGING_DNS_RESOLUTION",
+    "static_test_credit": 0,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "vercel_refresh": {
+    "project": "dr-unterweger",
+    "retained_pr": 810,
+    "latest_observed_deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "controller_commit": "a341eb107f8499f301e730de12680fd2df580fd8",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_stopped": true,
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "connector_secret_mutation_surface": "NOT_EXPOSED"
+  },
+  "current_frontier": "Provision host-side sensitive GITHUB_READ_TOKEN for the retained Vercel Preview/controller without logging or forwarding it into the Sandbox; then refresh/rebind exact Research/EntityOS source and execute the retained exact OCI acceptance batch. MicroVM network enforcement still requires later real CNI/Kata target evidence.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "reason_unusual_experiment_blocked": "No shared immutable request identifier is exposed and the available exact user-message timestamp is only minute precision, so the canonical atomic lease protocol fails closed.",
+  "no_vps_self_hosted_production_testing": true,
+  "together_forbidden_respected": true,
+  "whole_product_pass": false
+}

@@ -14,17 +14,20 @@
       "payload_digest": "f71d4ccaed920f7a1a4835093521461366b582ba7cdba9dbb3da3a817e4e1ff7",
       "requires_reply_or_observable_action": true,
       "delivery": {
-        "status": "CLAIMED",
+        "status": "DELIVERED_ACK_PENDING",
         "channel": "github_pr_comment",
+        "comment_id": 5317716466,
+        "delivered_at": "2026-08-17T23:31:11+07:00",
         "delivery_claim": {
           "claim_id": "b54c4ff962614a557d9221f6b7f9f334794b01493da7b26dbad5f4c84a92440c",
           "claimant_organ": "GPT-5.6-Sol/go-2250",
           "claimed_at": "2026-08-17T23:28:21+07:00",
           "expires_at": "2026-08-17T23:43:21+07:00"
-        }
+        },
+        "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
     }
   ],
-  "delivery_state": "PR670_MODEL_IDENTITY_CLAIMED",
+  "delivery_state": "PR670_MODEL_IDENTITY_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

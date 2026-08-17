@@ -233,9 +233,10 @@ class MistralInference:
             transport_failure_type = type(exc).__name__
             raw = b""
         finally:
-            # Do not keep an unnecessary second reference to the secret after the
-            # request has been constructed/sent. The Request is scoped to this call.
+            # Scrub references that can retain the bearer credential before any
+            # post-transport validation raises and publishes this frame in traceback.
             token = ""
+            request = None
 
         if http_error_status is not None:
             raise RuntimeError(f"Mistral inference HTTP failure status={http_error_status}")

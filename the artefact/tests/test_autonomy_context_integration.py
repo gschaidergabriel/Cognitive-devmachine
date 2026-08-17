@@ -22,13 +22,19 @@ def _db(tmp_path):
     return db
 
 
-def _goal(db, controller, user_id: str, objective: str):
+def _goal(db, controller, user_id: str, objective: str, *, priority: int = 50):
     session_id = f"session:{user_id}"
     turn_id = db.append_turn(session_id, user_id, "user", objective)
-    return controller.create_goal_from_turn(user_id, session_id, turn_id, completion_mode="user_ack")
+    return controller.create_goal_from_turn(
+        user_id,
+        session_id,
+        turn_id,
+        completion_mode="user_ack",
+        priority=priority,
+    )
 
 
-def test_autonomy_context_is_user_scoped_and_hides_effect_payload(tmp_path):
+def test_autonomy_context_is_user_scoped_and_hides_effect_payload_and_freeform_block_reason(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
     gabriel = _goal(db, controller, "gabriel", "Gabriel bounded goal")
@@ -39,8 +45,10 @@ def test_autonomy_context_is_user_scoped_and_hides_effect_payload(tmp_path):
         "Execute admitted operation",
         effect={"capability": "entityos.exec", "target": "do-not-prompt-target-secret", "argv": ["do-not-prompt-argv-secret"]},
     )
+    controller.block_goal(gabriel["goal_id"], "private-block-detail-must-not-enter-context")
     context = bounded_autonomy_context(db, "gabriel")
     encoded = str(context)
+    assert context["schema"] == "ClayVerseAutonomyContext/v2"
     assert context["authority"] == "UnifiedDB"
     assert context["model_authority"] == "PROPOSAL_ONLY"
     assert context["user_id"] == "gabriel"
@@ -48,10 +56,12 @@ def test_autonomy_context_is_user_scoped_and_hides_effect_payload(tmp_path):
     assert context["goals"][0]["goal_id"] == gabriel["goal_id"]
     assert context["goals"][0]["current_step"]["step_id"] == step["step_id"]
     assert context["goals"][0]["current_step"]["effect_capability"] == "entityos.exec"
+    assert context["goals"][0]["blocked_reason_class"] == "opaque"
     assert andreas["goal_id"] not in encoded
     assert "Andreas private goal" not in encoded
     assert "do-not-prompt-target-secret" not in encoded
     assert "do-not-prompt-argv-secret" not in encoded
+    assert "private-block-detail-must-not-enter-context" not in encoded
 
 
 def test_autonomy_context_rejects_noncanonical_identity(tmp_path):
@@ -80,6 +90,47 @@ def test_autonomy_context_reads_inside_existing_transaction(tmp_path):
         assert db.db.in_transaction is True
 
 
+def test_stale_generation_goals_are_counted_but_not_projected(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    stale = _goal(db, controller, "gabriel", "Stale pre-generation objective", priority=90)
+    db.advance_entity_generation()
+    fresh = _goal(db, controller, "gabriel", "Fresh live-generation objective", priority=10)
+
+    context = bounded_autonomy_context(db, "gabriel")
+    encoded = json.dumps(context, sort_keys=True)
+
+    assert context["stale_attention_goal_count"] == 1
+    assert context["attention_goal_count"] == 1
+    assert context["goals"][0]["goal_id"] == fresh["goal_id"]
+    assert stale["goal_id"] not in encoded
+    assert "Stale pre-generation objective" not in encoded
+    assert all(goal["generation"] == context["live_generation"] for goal in context["goals"])
+
+
+def test_next_runnable_goal_is_visible_even_after_blocked_higher_priority_goals(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    for index in range(4):
+        blocked = _goal(
+            db,
+            controller,
+            "gabriel",
+            f"Blocked high-priority goal {index}",
+            priority=100 - index,
+        )
+        controller.block_goal(blocked["goal_id"], "dependency")
+
+    runnable = _goal(db, controller, "gabriel", "Lower-priority runnable goal", priority=10)
+    context = bounded_autonomy_context(db, "gabriel", max_goals=4)
+    visible_ids = {goal["goal_id"] for goal in context["goals"]}
+
+    assert context["next_runnable_goal_id"] == runnable["goal_id"]
+    assert runnable["goal_id"] in visible_ids
+    assert context["included_goal_count"] == 4
+    assert context["omitted_goal_count"] == 1
+
+
 def test_autonomy_context_is_deterministically_bounded(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
@@ -91,6 +142,11 @@ def test_autonomy_context_is_deterministically_bounded(tmp_path):
     assert context["attention_goal_count"] == 7
     assert context["included_goal_count"] <= 3
     assert context["omitted_goal_count"] == 7 - context["included_goal_count"]
+    visible_ids = {goal["goal_id"] for goal in context["goals"]}
+    if context["next_runnable_goal_id"] is not None:
+        assert context["next_runnable_goal_id"] in visible_ids
+    else:
+        assert context["next_runnable_omitted_by_context_budget"] is True
 
 
 def test_hook_context_contains_autonomy_inside_existing_inline_budget(tmp_path):

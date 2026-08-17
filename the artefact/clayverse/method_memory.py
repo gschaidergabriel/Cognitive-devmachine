@@ -190,7 +190,6 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
         raise MethodMemoryValidationError(f"unsupported method-memory kind: {kind!r}")
     if not isinstance(record, dict):
         raise MethodMemoryValidationError("record must be an object")
-    _json_safe(record, "record")
     if kind in REUSABLE_KINDS:
         _validate_reusable(kind, record)
     elif kind == "failure_pattern":
@@ -199,6 +198,7 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
         _validate_counterexample(record)
     else:
         _validate_receipt(record)
+    _json_safe(record, "record")
     return record
 
 

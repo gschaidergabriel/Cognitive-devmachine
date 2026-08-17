@@ -148,6 +148,8 @@ class WorldAssembler:
                 user_id=user_id,
                 session_id=session_id,
                 turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
                 generation=int(supplied["generation"]),
             )
             method_context = methods["items"]

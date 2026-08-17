@@ -9,6 +9,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .effect_journal import EffectJournal
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
@@ -156,16 +157,44 @@ class MicroClayRetrieval:
             entry_keys=keys,
         )
 
+    def _consume_nonrewarding_outcome(self, row) -> dict[str, Any]:
+        """Consume a canonical non-learning effect outcome without touching policy state."""
+        signal_class = f"effect_outcome:{row['status']}:non_rewarding"
+        rid = hashlib.sha256(
+            f"{row['retrieval_id']}\x1f{row['causal_id']}\x1f{row['generation']}\x1f"
+            f"{signal_class}\x1f0.000000000\x1fnon_rewarding".encode()
+        ).hexdigest()
+        exists = self.db.db.execute(
+            "SELECT 1 FROM retrieval_feedback WHERE receipt_id=?", (rid,)
+        ).fetchone()
+        if exists:
+            return {"consumed": False, "reason": "duplicate_receipt", "receipt_id": rid}
+        self.db.db.execute(
+            "INSERT INTO retrieval_feedback(receipt_id,retrieval_id,causal_id,generation,"
+            "credit,signal_class,ts) VALUES(?,?,?,?,?,?,?)",
+            (
+                rid,
+                row["retrieval_id"],
+                row["causal_id"],
+                int(row["generation"]),
+                0.0,
+                signal_class,
+                time.time(),
+            ),
+        )
+        return {"consumed": True, "receipt_id": rid}
+
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
         """Consume new effect-outcome receipts from earlier retrieval episodes.
 
         Learning is delayed until a causally re-entered external outcome exists. Pure
         conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
+        "the retriever liked its own result" feedback. Capabilities marked non-rewarding
+        by EffectJournal are consumed idempotently without mutating retrieval policy.
         """
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
-            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "SELECT r.retrieval_id,r.causal_id,r.generation,c.credit,e.status,e.capability "
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
@@ -177,6 +206,9 @@ class MicroClayRetrieval:
         ).fetchall()
         applied = 0
         for row in rows:
+            if not EffectJournal.learning_eligible(row["capability"]):
+                self._consume_nonrewarding_outcome(row)
+                continue
             result = self.credit(
                 causal_id=row["causal_id"],
                 generation=int(row["generation"]),

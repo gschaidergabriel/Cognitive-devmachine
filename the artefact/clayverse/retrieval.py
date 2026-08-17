@@ -54,7 +54,7 @@ class WorldAssembler:
         episode_id=None,
         causal_id=None,
         generation=None,
-        method_problem_signature=None,
+        method_signature_receipt_id=None,
         method_trigger=None,
         method_budget_chars=12_000,
     ):
@@ -133,7 +133,8 @@ class WorldAssembler:
                 causal_id=str(supplied["causal_id"]),
                 generation=int(supplied["generation"]),
                 evidence_status=str(retrieval_receipt.get("status", "UNKNOWN")),
-                problem_signature=method_problem_signature,
+                signature_receipt_id=method_signature_receipt_id,
+                resource_refs=list(resource_refs or []),
                 trigger=method_trigger,
                 budget_chars=int(method_budget_chars),
             )

@@ -19,6 +19,7 @@ from .workspace import Workspace
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
+_RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
 
 
 class TurnLifecycleError(RuntimeError):
@@ -46,7 +47,15 @@ class TurnLifecycle:
 
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
+        receipt=world.get("retrieval_receipt")
+        if not isinstance(receipt,dict): raise TurnLifecycleError("retrieval receipt must be an object")
+        if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError("retrieval receipt keys must be strings")
+        scalar=(str,int,float,bool,type(None))
+        if any(not isinstance(value,scalar) for value in receipt.values()): raise TurnLifecycleError("retrieval receipt values must be scalar")
+        try: receipt_chars=len(json.dumps(receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
+        except (TypeError,ValueError) as exc: raise TurnLifecycleError("retrieval receipt is not canonical JSON") from exc
+        if receipt_chars>_RETRIEVAL_RECEIPT_MAX_CHARS: raise TurnLifecycleError("retrieval receipt exceeds compact context bound")
+        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[])),"retrieval_receipt":dict(receipt)}
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)

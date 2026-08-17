@@ -19,10 +19,13 @@ class PermanentTerminal:
     argv: list[str]
     pid: int | None = None
     master_fd: int | None = None
+    exit_status: int | None = None
 
     def start(self) -> None:
         if self.alive():
             return
+        if self.master_fd is not None:
+            raise TerminalError("terminal output must be drained before restart")
         if not self.argv or not self.argv[0]:
             raise TerminalError("terminal argv is empty")
         pid, fd = pty.fork()
@@ -31,18 +34,22 @@ class PermanentTerminal:
         os.set_blocking(fd, False)
         self.pid = pid
         self.master_fd = fd
+        self.exit_status = None
 
     def alive(self) -> bool:
         if self.pid is None:
             return False
         try:
-            waited, _ = os.waitpid(self.pid, os.WNOHANG)
+            waited, status = os.waitpid(self.pid, os.WNOHANG)
         except ChildProcessError:
-            self._close_parent_state()
+            self.pid = None
             return False
         if waited == 0:
             return True
-        self._close_parent_state()
+        self.pid = None
+        self.exit_status = status
+        # Do not close master_fd here. A PTY may still contain final buffered
+        # output after the child has exited; read() owns draining that buffer.
         return False
 
     def write(self, data: bytes | str, *, max_bytes: int = 65_536) -> int:
@@ -59,38 +66,49 @@ class PermanentTerminal:
     def read(self, *, max_bytes: int = 65_536) -> bytes:
         if max_bytes <= 0 or max_bytes > 1_048_576:
             raise ValueError("terminal read size out of bounds")
-        if not self.alive() or self.master_fd is None:
+        fd = self.master_fd
+        if fd is None:
             return b""
         try:
-            return os.read(self.master_fd, max_bytes)
+            data = os.read(fd, max_bytes)
         except BlockingIOError:
+            self.alive()
             return b""
         except OSError as exc:
-            # Linux PTY masters commonly report EIO after the slave exits.
+            # Linux PTY masters commonly report EIO after the slave exits and
+            # all buffered bytes have already been consumed.
             if exc.errno == errno.EIO:
-                self._close_parent_state()
+                self.alive()
+                self._close_master()
                 return b""
             raise
+        if not data:
+            self.alive()
+            self._close_master()
+        return data
 
     def stop(self, *, grace_seconds: float = 1.0) -> None:
         pid = self.pid
         if pid is None:
-            self._close_parent_state()
+            self._close_master()
             return
         try:
             os.kill(pid, signal.SIGTERM)
         except ProcessLookupError:
-            self._close_parent_state()
+            self.alive()
+            self._close_master()
             return
 
         deadline = time.monotonic() + max(0.0, grace_seconds)
         while time.monotonic() < deadline:
             try:
-                waited, _ = os.waitpid(pid, os.WNOHANG)
+                waited, status = os.waitpid(pid, os.WNOHANG)
             except ChildProcessError:
-                waited = pid
+                waited, status = pid, self.exit_status or 0
             if waited:
-                self._close_parent_state()
+                self.pid = None
+                self.exit_status = status
+                self._close_master()
                 return
             time.sleep(0.01)
 
@@ -99,14 +117,15 @@ class PermanentTerminal:
         except ProcessLookupError:
             pass
         try:
-            os.waitpid(pid, 0)
+            _, status = os.waitpid(pid, 0)
+            self.exit_status = status
         except ChildProcessError:
             pass
-        self._close_parent_state()
-
-    def _close_parent_state(self) -> None:
-        fd = self.master_fd
         self.pid = None
+        self._close_master()
+
+    def _close_master(self) -> None:
+        fd = self.master_fd
         self.master_fd = None
         if fd is not None:
             try:

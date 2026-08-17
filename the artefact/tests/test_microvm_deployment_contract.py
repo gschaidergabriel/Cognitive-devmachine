@@ -30,6 +30,22 @@ def test_kata_template_requires_vm_runtime_and_single_entity():
     assert "automountServiceAccountToken: false" in text
 
 
+def test_kata_statefulset_uses_headless_governing_service_and_separate_client_service():
+    text = TEMPLATE.read_text()
+    docs = _yaml_documents(text)
+    services = [doc for doc in docs if "kind: Service" in doc]
+    assert len(services) == 2
+
+    client = next(doc for doc in services if "\n  name: clayverse\n" in doc)
+    headless = next(doc for doc in services if "\n  name: clayverse-headless\n" in doc)
+    stateful = next(doc for doc in docs if "kind: StatefulSet" in doc)
+
+    assert "clusterIP: None" not in client
+    assert "clusterIP: None" in headless
+    assert "serviceName: clayverse-headless" in stateful
+    assert "serviceName: clayverse\n" not in stateful
+
+
 def test_kata_template_keeps_root_immutable_and_state_explicit():
     text = TEMPLATE.read_text()
     assert "readOnlyRootFilesystem: true" in text

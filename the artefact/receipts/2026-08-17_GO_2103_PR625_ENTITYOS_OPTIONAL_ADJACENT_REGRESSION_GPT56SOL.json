@@ -1,0 +1,65 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:03:14+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "exact_file_set_observed_at_head": "ea1a00b6dd8a360673bae4373c2c397ebf2b0cc2",
+  "branch_head_after_execution_refresh": "61360b097820266707987bcb58782478c8faaee1",
+  "classification": "ADJACENT_REGRESSION_PASS_EXACT_FILE_SET",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "defect_repaired": {
+    "description": "The retained default-optional regression still expected the superseded {required,bound} status shape after service._entityos_config had moved to {staged,verified,execution_enabled}.",
+    "pre_repair_test_blob": "b5d41823419bcea752c3f6bf95b61ac99fe32101",
+    "pre_repair_result": "1 FAILED in 0.06s on exact status-shape mismatch",
+    "repair_commit": "424eead7300e4857db5415da9a52b77851031e08",
+    "repaired_test_blob": "c5e9ea7a156e05665236403ce9c1bae0abb549d0",
+    "product_semantics_changed_by_this_repair": false
+  },
+  "exact_git_blobs_executed": {
+    "the artefact/clayverse/service.py": "c9151e339c0ec4b23a454ee7684a6bd9255bf229",
+    "the artefact/clayverse/entityos_bridge.py": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "the artefact/tests/test_service_entityos_optional_baseline.py": "a9bc8e2941800591bb38a7becac1e2ea81e1652b",
+    "the artefact/tests/test_entityos_boot_binding.py": "e672c112a8c14445cbc387f36786290a9f5c3f82",
+    "the artefact/tests/test_entityos_default_optional.py": "c5e9ea7a156e05665236403ce9c1bae0abb549d0"
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "byte_binding": "PASS; git hash-object matched every declared service/bridge/test blob before execution",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_service_entityos_optional_baseline.py tests/test_entityos_boot_binding.py tests/test_entityos_default_optional.py::test_entityos_is_optional_by_default_for_single_container_baseline",
+    "result": "15 passed in 0.05s",
+    "exit_code": 0,
+    "import_boundary": "service.py was exact; entityos_bridge.py was exact; unrelated service import-time modules were deterministic stubs. The exercised EntityOS configuration/bridge paths do not call those unrelated stubs."
+  },
+  "verified_contracts": [
+    "baseline EntityOS absence is admitted only with execution disabled",
+    "unpinned bytes and symlinks fail closed",
+    "execution without digest binding fails closed",
+    "configured digest requires an absolute path",
+    "pinned EntityOS is verified even when execution remains disabled",
+    "the EntityOS bridge is exposed only when execution is enabled",
+    "digest drift and symlink verification fail closed",
+    "the retained default-optional regression now matches the current runtime status contract"
+  ],
+  "evidence_boundary": "This is adjacent exact-file source/component evidence only. The PR head moved during parallel work, so this is not a full exact-head checkout test, Docker/OCI build, packaged service runtime, real Clerk/PTY/Claude evidence, restart/concurrency acceptance, or whole ClayVerse PASS.",
+  "coordination": {
+    "parallel_lane": "PR625 reused; no duplicate packaging/runtime lane created",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "unusual_experiment_reason": "Only minute-precision shared trigger metadata and no immutable shared request/turn identifier are available."
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Rebind the moving PR625 head, run the broadest available exact checkout suite, then perform exact isolated Docker/OCI baseline build/startup without EntityOS plus digest-bound optional embedding as soon as an authorized OCI-capable source-bound surface is available."
+}

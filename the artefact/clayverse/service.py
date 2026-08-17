@@ -12,10 +12,14 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
-from .recovery import recover_incomplete_episodes
+from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+
+
+TIER2_REPLACEMENT_EXIT_CODE = 86
+TIER2_RECOVERY_INTEGRITY_REASON = "RECOVERY_INTEGRITY_UNTRUSTED"
 
 
 def _clerk_map() -> dict[str, str]:
@@ -126,6 +130,28 @@ def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     }
 
 
+def _recover_or_request_tier2(db: UnifiedDB) -> dict[str, int]:
+    """Translate only an untrusted recovery spine into the external Tier-2 signal.
+
+    A generic startup/configuration/readiness failure is deliberately *not* mapped to
+    this code. The deployment-side replacer may use exit code 86 as a narrow trigger
+    to replace the entire Pod/Kata sandbox instead of letting kubelet repeatedly
+    restart the ClayVerse container inside an already-untrusted guest boundary.
+    """
+    try:
+        return recover_incomplete_episodes(db)
+    except RecoveryIntegrityError:
+        payload = {
+            "service": "clayverse",
+            "status": "tier2_replacement_required",
+            "reason": TIER2_RECOVERY_INTEGRITY_REASON,
+            "exit_code": TIER2_REPLACEMENT_EXIT_CODE,
+        }
+        print(json.dumps(payload, sort_keys=True, separators=(",", ":")), file=sys.stderr, flush=True)
+        db.close()
+        raise SystemExit(TIER2_REPLACEMENT_EXIT_CODE) from None
+
+
 def main():
     import uvicorn
 
@@ -141,7 +167,7 @@ def main():
         db.close()
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_or_request_tier2(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 

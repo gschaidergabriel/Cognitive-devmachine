@@ -172,6 +172,7 @@ class CandidateValidation:
               episode_id: str, causal_id: str, generation: int, evidence_status: str,
               problem_signature: dict[str, Any], evaluation_mode: str, falsifier_checked: bool) -> str:
         if user_id not in _ALLOWED_USERS: raise MethodValidationError("candidate validation requires canonical user scope")
+        if not isinstance(falsifier_checked, bool): raise MethodValidationError("falsifier_checked must be boolean")
         candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
         signature = _canonical_signature(problem_signature)
         try: candidate = self.db.method_memory(candidate_memory_id)
@@ -203,7 +204,7 @@ class CandidateValidation:
             "user_id": user_id, "session_id": session_id, "turn_id": turn_id, "episode_id": episode_id,
             "causal_id": causal_id, "generation": int(generation), "evidence_status": str(evidence_status).upper(),
             "problem_signature": signature, "problem_signature_sha256": _sha256_json(signature),
-            "evaluation_mode": str(evaluation_mode).upper(), "falsifier_checked": bool(falsifier_checked),
+            "evaluation_mode": str(evaluation_mode).upper(), "falsifier_checked": falsifier_checked,
             "truth_authority": False, "effect_authority": False, "ts": time.time(),
         })
         subject = f"candidate_use:{candidate_memory_id}:{causal_id}"
@@ -311,7 +312,7 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
     success_count=sum(1 for _,receipt in receipts if receipt["classification"]=="SUCCESS")
     failure_count=sum(1 for _,receipt in receipts if receipt["classification"]=="FAILURE")
     support_count=len(receipts)
-    if success_count < 1: raise MethodValidationError("promotion requires at least one validated success")
+    if success_count < 2: raise MethodValidationError("promotion requires two validated successes")
     calibration=success_count/support_count; last_validated_at=max(receipt["ts"] for _,receipt in receipts)
     receipt_ids=[memory_id for memory_id,_ in receipts]
     evidence_digest=hashlib.sha256(_canonical_json([{"memory_id":memory_id,"causal_receipt_id":receipt["causal_receipt_id"],

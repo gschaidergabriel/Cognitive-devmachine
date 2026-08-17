@@ -96,10 +96,12 @@ class ClayVerseEffectBridge:
             generation,
         )
         effect_id, outcome = self.effects.execute(req, active["episode_id"])
+        status = self.effects.status_for_effect(effect_id)
         return {
             "effect_id": effect_id,
             "causal_id": self.effects.causal_for_effect(effect_id),
-            "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
+            "verified": status == "VERIFIED",
+            "status": status,
             "outcome": outcome,
             "boundary": "ClayVerse EffectGate -> EntityOS" if capability == "entityos.exec" else "ClayVerse EffectGate",
         }

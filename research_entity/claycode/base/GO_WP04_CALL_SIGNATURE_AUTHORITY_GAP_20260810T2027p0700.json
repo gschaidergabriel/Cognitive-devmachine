@@ -1,0 +1,109 @@
+{
+  "schema_version": "1.0",
+  "run_id": "GO-WP04-CALL-SIGNATURE-AUTHORITY-GAP-20260810T2027p0700",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "parent": "research_entity/claycode/base/GO_WP03_OWNER_FULL_TYPED_STATE_VPS_PASS_20260810T2021p0700.json",
+  "coordination": {
+    "existing_lanes": [
+      "PR175 WP03/WP05 CycleRegionIR",
+      "PR177 WP04 CallContract schema v1.1",
+      "PR178 WP04 evidence-backed call constraints and anchor leverage"
+    ],
+    "duplicate_signature_implementation_avoided": true,
+    "selected_lane": "EVIDENCE_GAP_AND_NEXT_FALSIFIER"
+  },
+  "target_vps_measurement": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 101,
+    "workflow_run": 31392404848,
+    "job": 93467035390,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "call_constraint_status": "PASS",
+    "anchor_plan_status": "PASS",
+    "call_site_occurrences": 27,
+    "unique_target_arities": 27,
+    "exact_declared_matches": 0,
+    "unresolved_signatures": 26,
+    "effect_boundary_missing_signatures": 1,
+    "type_name_resemblance_only": 2,
+    "type_name_resemblance_targets": ["Delta/1", "EffectIntent/1"],
+    "type_equality_constraints": 59,
+    "type_equality_components": 37,
+    "call_associated_components": 37,
+    "greedy_signature_contracts_for_call_component_cover": 18,
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "constraint_graph_sha256": "cc0fba02e079a89af95489b8812f4473b02a09df92cc29a79530691a3dd0e51b",
+    "anchor_plan_sha256": "3c78ffe578a9ea89cdff92b34f2254179c9f7ad8a1502ffe184f1fc57a358a00"
+  },
+  "top_measured_anchor_leverage": [
+    ["verify/5",5,12],
+    ["frank_reward.derive_typed_reward_outcome_evidence/3",4,15],
+    ["admit_slow_plasticity/3",4,13],
+    ["resolve_latest/3",4,9],
+    ["causal_credit/2",3,11],
+    ["observe_changes/2",3,9],
+    ["frank_reward.control/2",3,7],
+    ["graph.project/1",2,7],
+    ["normalize/1",2,7],
+    ["state.answer_capsule/1",2,7]
+  ],
+  "exact_sources_checked": {
+    "g9_v3": "research_entity/claycode/g9/CLAYCODE_G9_FUSION_SPEC_V3.clay",
+    "dialect_registry_v3": "research_entity/claycode/g9/DIALECT_REGISTRY_V3.clay",
+    "reward_successor_v1": "research_entity/global/FRANK_REWARD_STATE_SUCCESSOR_V1.clay",
+    "call_contract_schema_v1_1": "research_entity/claycode/g9/CLAYCODE_CALL_CONTRACT_SCHEMA_V1_CANDIDATE.clay@PR177",
+    "observations": [
+      "G9 V3 supplies call uses and typed surrounding records but no exact declared call contracts for the 27 measured target+arity identities",
+      "Reward successor supplies typed reward records and a homologous reward cycle but no explicit concrete parameter/return signature declaration for derive_typed_reward_outcome_evidence, control, update, causal_credit or admit_slow_plasticity",
+      "Dialect Registry V3 has Verifiable.verify(receipt:ReceiptRef)->Verification as an interface member; this is not evidence for the distinct measured global verify/5 call",
+      "CallContract schema explicitly forbids basename/suffix matching, type-name resemblance as constructor contract, unresolved execution and contract-only authority"
+    ]
+  },
+  "external_primary_crosscheck": {
+    "sources": [
+      "https://llvm.org/docs/LangRef.html",
+      "https://mlir.llvm.org/docs/Interfaces/",
+      "https://mlir.llvm.org/docs/Dialects/Func/"
+    ],
+    "finding": "LLVM models a function type as return type plus formal parameter types and requires caller/callee prototype agreement in strict call conventions; MLIR models call sites and callable targets through explicit call/callable interfaces exposing argument and result types. This supports explicit provenance-bound callable signatures rather than invented concrete types from names or caller context. External practice informs the mechanism but does not define ClayCode semantics."
+  },
+  "hypothesis_matrix": {
+    "H1": {
+      "claim": "The next useful WP04 step is to add only provenance-backed exact CallContracts for independently justified call identities, then remeasure constraint closure; current G9 caller constraints are insufficient by themselves to mint those concrete signatures.",
+      "status": "SUPPORTED"
+    },
+    "H0": {
+      "claim": "Caller-side equality components plus target names are sufficient to infer concrete call signatures safely.",
+      "status": "REFUTED_FOR_PROMOTION",
+      "reason": "target-VPS gate deliberately reports zero exact declared matches and forbids type-name resemblance/signature invention; no examined canonical source provides the missing exact contracts"
+    }
+  },
+  "negative_result": {
+    "status": "ACTIVE_ARCHITECTURE_KNOWLEDGE",
+    "finding": "DO_NOT_POPULATE_CALL_CONTRACTS_FROM_NAME_RESEMBLANCE_OR_CALLER_CONSTRAINTS_ALONE",
+    "why": "doing so would convert a symbolic constraint graph into invented semantic authority and could later misbind runtime/effect behavior"
+  },
+  "architecture_delta": {
+    "status": "TEST_OBLIGATION_NO_PROMOTION",
+    "decision": "Preserve PR177 CallContract identity/runtime-binding separation and PR178 fail-closed unresolved calls. Introduce a contract only when an independent source specifies exact target identity, arity, parameter types, result type, effect class and evidence refs. Keep Needle.execute/1 on the separate sealed EXTERNAL_EFFECT path and require runtime broker authority/rollback rather than ordinary call inference.",
+    "next_falsifier": "locate or authoritatively specify the first exact high-leverage callable contract (prefer verify/5 or reward-path anchors only if source-backed), bind its semantic hash and current runtime component identity, rerun the same 37-component constraint graph, and prove deterministic component reduction without execution admission. If no independent signature source exists, create an explicit typed callable-interface specification as a versioned architecture artifact rather than inferring types from usage.",
+    "wp03_status": "OPEN",
+    "wp04_status": "OPEN",
+    "wp05_status": "OPEN"
+  },
+  "out_of_box_experiment": "NONE_ALREADY_CONSUMED_BY_PARENT_GO_MACROCYCLE",
+  "authority": {
+    "frank_harness_mutation": "NONE",
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "training_authorization": "NONE"
+  }
+}

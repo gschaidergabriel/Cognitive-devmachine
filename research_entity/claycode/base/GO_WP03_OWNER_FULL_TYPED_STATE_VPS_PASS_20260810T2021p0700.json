@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "run_id": "GO-WP03-OWNER-FULL-TYPED-STATE-VPS-PASS-20260810T2021p0700",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "parent_receipt": "research_entity/claycode/base/GO_WP03_BINDING_OWNER_REPRESENTABILITY_FUSION_20260810T2016p0700.json",
+  "target_vps_transport": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 101,
+    "head_commit": "0a9b8894465bde1aadd2ee011186bc95e6ff5ea5",
+    "workflow_run": 31392402946,
+    "job": 93467028451,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "status": "PASS"
+  },
+  "transport_repairs": [
+    {
+      "class": "CONTENT_ADDRESS_BINDING_ONLY",
+      "field": "CORE_BLOB",
+      "old": "d7271c1f00896617ce6533712a88854848341d88",
+      "new": "d727e638105fcb04864d04594244be1d2bc77f9b",
+      "semantic_change": false
+    },
+    {
+      "class": "CONTENT_ADDRESS_BINDING_ONLY",
+      "field": "TEST_BLOB",
+      "old": "b1fffb5be8ade89e88bfafde94dec8ca79aab1da",
+      "new": "b1fff9bad540a24bab9b346deb430ca4ba5fb42c",
+      "semantic_change": false
+    }
+  ],
+  "exact_selected_inputs": {
+    "frontend_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+    "grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3",
+    "base_typed_ir_blob": "e8525ee10f5fe4b8d40db79f0d8264a5231eea63",
+    "residual_blob": "d7f4c9b475466c813ae85716e9c57d7ee9f99512",
+    "structural_typed_ir_blob": "67baf2fb5d0bd7241903b773bd94c1778a895aa5",
+    "binding_gate_blob": "ba2ff133e769fbd56db2121db10fe64fa526eaeb",
+    "owner_core_blob": "d727e638105fcb04864d04594244be1d2bc77f9b",
+    "test_blob": "b1fff9bad540a24bab9b346deb430ca4ba5fb42c"
+  },
+  "measurement": {
+    "scope": "WP03_OWNER_AGENCY_WEB_FULL_TYPED_STATE_FRONTIER_V2",
+    "status": "PASS",
+    "typed_ir_sha256": "9226ebf440fbb8bb80ff9c553c243f51156c7b1112af4af40d755ec3ff02cc3a",
+    "closed_sum_types": 10,
+    "required_records": 10,
+    "rule_invariant_semantics": 63,
+    "binding_ambiguities": 0,
+    "agency_epoch_identity": "PASS",
+    "research_question_state_identity": "PASS",
+    "experiment_state_identity": "PASS",
+    "web_authority_separation": "PASS",
+    "untyped_escape_hatch": "ABSENT_IN_REQUIRED_RECORDS",
+    "implicit_execution_count": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "language_strategy": "FROZEN_V18_CORE_WITH_EXPLICIT_OWNER_SURFACE_LOWERING",
+    "promotion": "NONE",
+    "wp03_status": "OPEN_PENDING_FULL_DIRECTIVE_FIDELITY_AND_DOWNSTREAM_CONSUMPTION"
+  },
+  "hypothesis_update": {
+    "H1_frozen_v18_plus_explicit_owner_surface_lowering": "SUPPORTED_ON_TARGET_VPS_FOR_FULL_TYPED_STATE_FRONTIER_V2",
+    "H0_core_language_expansion_required": "WEAKENED_NOT_REFUTED",
+    "reason_H0_remains_live": "exact raw owner directive surface still contains forms rejected by frozen V18; the passing candidate is an explicit lowering and downstream semantic/runtime consumption remains to be proven"
+  },
+  "architecture_delta": {
+    "status": "TEST_OBLIGATION_ADVANCED_NO_CANONICAL_PROMOTION",
+    "decision": "keep frozen V18 core as selected strategy for WP03 unless a later downstream executable counterexample proves semantic loss; preserve explicit owner-surface lowering and provenance; do not infer global operator precedence",
+    "next_falsifier": "consume this exact typed-state identity and authority model through byte-current WP04 type/effect semantics and WP05 evaluator/runtime without reparse, untyped escape, authority minting or state-identity collapse",
+    "affected": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-05-EVALUATOR"]
+  },
+  "negative_results_preserved": [
+    "raw owner surface is not itself frozen-V18 parsable",
+    "surface lowering is therefore a real compatibility layer and must remain provenance-visible",
+    "WP03 is not promoted by this pass"
+  ],
+  "authority": {
+    "frank_harness_mutation": "NONE",
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "training_authorization": "NONE"
+  }
+}

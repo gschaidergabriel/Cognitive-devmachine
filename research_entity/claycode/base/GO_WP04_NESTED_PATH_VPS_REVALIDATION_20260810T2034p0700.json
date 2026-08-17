@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0",
+  "run_id": "GO-WP04-NESTED-PATH-VPS-REVALIDATION-20260810T2034p0700",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol"
+  },
+  "supersedes_for_promotion_readiness": "research_entity/claycode/base/GO_WP04_CALL_SIGNATURE_AUTHORITY_GAP_20260810T2027p0700.json",
+  "supersession_scope": "PR178 call-constraint/anchor hashes and structural-path evidence only; the negative result forbidding invented signatures remains supported",
+  "live_invalidator": {
+    "clay_pull_request": 180,
+    "head": "1887be310132638222f0489bc7fcb7f5c0c2df39",
+    "finding": "nested IF recursion restarted operation indices, so occurrence paths could collide across ancestor regions even while op_semantic_id remained distinct",
+    "repair": "ancestor-preserving structural paths with -1 condition and -2 then-region sentinels plus fail-closed malformed-IF rejection",
+    "promotion_before_revalidation": "BLOCKED"
+  },
+  "target_vps_revalidation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 104,
+    "head": "3d09140e690dc567820ba51bf68ac92aaaa1ae6a",
+    "workflow_run": 31393455295,
+    "job": 93470507673,
+    "runner": "clay",
+    "machine": "digital-retina",
+    "workflow": "Clay WP04 Call Constraints VPS",
+    "status": "PASS",
+    "exact_constraint_blob": "fd1c1797a7e1052727540e3bee8cdb5b25738f3a",
+    "exact_nested_test_blob": "4bc6a622809301ff8e5f1c6496af19ee76a9d2bb"
+  },
+  "nested_path_adversarial": {
+    "scope": "WP04_NESTED_CALL_STRUCTURAL_PATH_V2",
+    "status": "PASS",
+    "unique_structural_paths": 5,
+    "paths": {
+      "top_zero": [0],
+      "condition_call": [1,-1],
+      "nested_zero": [1,-2,0],
+      "deep_zero": [1,-2,1,-2,0],
+      "top_two": [2]
+    },
+    "malformed_if": "REJECTED_FAIL_CLOSED",
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "promotion": "NONE"
+  },
+  "real_g9_constraint_frontier_after_fix": {
+    "status": "PASS",
+    "call_site_occurrences": 27,
+    "unique_target_arities": 27,
+    "exact_declared_matches": 0,
+    "unresolved_signatures": 26,
+    "effect_boundary_missing_signatures": 1,
+    "type_name_resemblance_only": 2,
+    "type_name_resemblance_targets": ["Delta/1","EffectIntent/1"],
+    "type_equality_constraints": 59,
+    "type_equality_components": 37,
+    "execution_admitted_calls": 0,
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "verify_suffix_fuzzy_resolution": "REJECTED",
+    "exact_declared_positive_control": "PASS_NONEXECUTABLE",
+    "same_basename_counter_control": "PASS_FAIL_CLOSED",
+    "signature_invention": "FORBIDDEN",
+    "constraint_graph_sha256": "55f2e22518f5072f9f3e14d48bb59f57dc04777bc4f12535c9b1bba5efb37e54",
+    "promotion": "NONE"
+  },
+  "anchor_frontier_after_fix": {
+    "status": "PASS",
+    "call_associated_components": 37,
+    "greedy_signature_contracts_for_call_component_cover": 18,
+    "max_components_covered_by_one_signature": 5,
+    "max_symbolic_nodes_covered_by_one_signature": 15,
+    "anchor_plan_sha256": "1b1d718fa56bbbdf2b5fd459d556eccd6ccc2b6c5930d399b7a83dfd328e3da5",
+    "source_constraint_graph_sha256": "55f2e22518f5072f9f3e14d48bb59f57dc04777bc4f12535c9b1bba5efb37e54",
+    "top_anchor_leverage": [
+      ["verify/5",5,12],
+      ["frank_reward.derive_typed_reward_outcome_evidence/3",4,15],
+      ["admit_slow_plasticity/3",4,13],
+      ["resolve_latest/3",4,9],
+      ["causal_credit/2",3,11],
+      ["observe_changes/2",3,9],
+      ["frank_reward.control/2",3,7],
+      ["graph.project/1",2,7],
+      ["normalize/1",2,7],
+      ["state.answer_capsule/1",2,7]
+    ],
+    "concrete_type_invention": "FORBIDDEN",
+    "signature_promotion": "NONE",
+    "execution_promotion": "NONE"
+  },
+  "differential_vs_prefixed_buggy_path_frontier": {
+    "call_site_occurrences": "UNCHANGED_27",
+    "unique_target_arities": "UNCHANGED_27",
+    "type_equality_constraints": "UNCHANGED_59",
+    "type_equality_components": "UNCHANGED_37",
+    "greedy_signature_cover": "UNCHANGED_18",
+    "top_anchor_order": "UNCHANGED_FOR_REPORTED_TOP10",
+    "constraint_graph_hash": "CHANGED_AS_EXPECTED_BY_STRUCTURAL_PATH_IDENTITY_REPAIR",
+    "anchor_plan_hash": "CHANGED_AS_EXPECTED_FROM_SOURCE_GRAPH_HASH",
+    "interpretation": "the path collision was a real identity/observability bug but did not alter the measured real-G9 target+arity/equality-component frontier on this corpus"
+  },
+  "hypothesis_update": {
+    "H1_explicit_provenance_backed_call_contracts_only": "SUPPORTED_AND_REVALIDATED_ON_TARGET_VPS",
+    "H0_infer_concrete_signatures_from_names_or_caller_constraints": "REFUTED_FOR_PROMOTION",
+    "structural_path_fix": "SUPPORTED_ON_TARGET_VPS",
+    "wp04_call_frontier": "REVALIDATED_NOT_PROMOTED"
+  },
+  "architecture_delta": {
+    "status": "TEST_OBLIGATION_ADVANCED_NO_PROMOTION",
+    "decision": "accept ancestor-preserving call occurrence paths as the current structural identity candidate; preserve exact target+arity CallContract identity and fail-closed unresolved execution; do not invent concrete types or signature authority from names/caller constraints",
+    "next_falsifier": "supply the first independently authoritative exact callable signature and runtime binding, preferably a high-leverage non-effect anchor only when source-backed; bind semantic/runtime identity, rerun the exact 37-component graph, and prove deterministic component closure without execution admission. Needle.execute/1 remains a separately sealed EXTERNAL_EFFECT broker path.",
+    "wp03_status": "OPEN",
+    "wp04_status": "OPEN",
+    "wp05_status": "OPEN",
+    "base_status": "IN_PROGRESS"
+  },
+  "negative_results_preserved": [
+    "pre-fix occurrence paths were not globally unique across nested regions",
+    "canonical sources inspected still do not independently provide the missing concrete signatures",
+    "signature invention remains forbidden",
+    "target-VPS PASS does not promote WP04 or BASE"
+  ],
+  "out_of_box_experiment": "NONE_ALREADY_CONSUMED_BY_PARENT_GO_MACROCYCLE",
+  "authority": {
+    "frank_harness_mutation": "NONE",
+    "effect_authority": "NONE",
+    "truth_authority": "NONE",
+    "training_authorization": "NONE"
+  }
+}

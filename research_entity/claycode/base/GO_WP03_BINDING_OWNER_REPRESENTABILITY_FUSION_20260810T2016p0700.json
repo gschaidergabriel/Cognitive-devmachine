@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0",
+  "run_id": "GO-WP03-BINDING-OWNER-REPRESENTABILITY-20260810T2016p0700",
+  "trigger": "go",
+  "actor": {
+    "actor_id": "chatgpt-secondary",
+    "provider": "OpenAI",
+    "model": "GPT-5.6 Sol",
+    "role": "RESEARCH_ENTITY_TEMPORARY_WORKER"
+  },
+  "canonical_boot": {
+    "entity_id": "frank-project-global-research-entity",
+    "entity_version": "RAE-8.8",
+    "canonical_revision": 2,
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "current_program_stage": "BASE_CLAYCODE_RELEASE",
+    "target": "self.root v0.1 on accepted target VPS",
+    "work_package": "CC-WP-03-IR-TYPES"
+  },
+  "coordination": {
+    "duplicate_implementation_avoided": true,
+    "observed_active_clay_prs": [173, 175, 176, 177, 178],
+    "observed_target_vps_transport_pr": "gschaidergabriel/Dr.-Unterweger#101",
+    "selected_lane": "CROSS_BRANCH_INTEGRATION_AND_COUNTERHYPOTHESIS",
+    "reason": "multiple active WP03 implementation lanes already existed; this run integrates current target-VPS evidence and isolates the next falsifier instead of duplicating code"
+  },
+  "evidence": {
+    "wp02": {
+      "status": "PASS",
+      "receipt": "research_entity/claycode/base/CC_WP02_V18_HOSTINGER_EXACT_BYTE_ACCEPTANCE_20260810T074624Z.json",
+      "selected_frontend_blob": "31598f85a27ade2d98466606af6bdf5a8473cc8d",
+      "selected_v18_grammar_blob": "b27a4da99c9eff68302d550aad78c4e64cabe5c3"
+    },
+    "binding_frontier_target_vps": {
+      "repository": "gschaidergabriel/Dr.-Unterweger",
+      "workflow_run": 31390923198,
+      "job": 93462213583,
+      "runner": "clay",
+      "machine": "digital-retina",
+      "result": "PASS_DIAGNOSTIC_EXACT_BINDING_FRONTIER",
+      "real_rule_invariant_clauses": 81,
+      "v3_explicit_or_single_binding": 64,
+      "v3_ambiguous_binding": 17,
+      "mixed_flat_chain": "FAIL_CLOSED_PASS",
+      "implicit_execution_count": 0,
+      "effect_authority": "NONE",
+      "truth_authority": "NONE"
+    },
+    "binding_only_v4_differential_target_vps": {
+      "workflow_run": 31390923198,
+      "result": "PASS",
+      "flat_token_multiset_equal": true,
+      "binding_ast_changed": 17,
+      "binding_ast_unchanged": 64,
+      "v3_ambiguous": 17,
+      "v4_ambiguous": 0,
+      "v4_typed_ir_sha256": "062b4c1898bd631d41e9e80714160361897def983c6de45b9d83a4f7fac3bf92",
+      "v4_bundle_sha256": "fe920315609de1ff9679d2d60fc1a7eb707dd08f5d0ab6c2fd7f07b16a7ce736",
+      "promotion": "NONE"
+    },
+    "owner_fidelity_target_vps": {
+      "workflow_run": 31390923215,
+      "job": 93462213341,
+      "result": "PASS",
+      "requirements": 40,
+      "unique_requirements": 40,
+      "unknown_mappings": 0,
+      "required_typed_records": 10,
+      "wp03_target_markers_checked": 17,
+      "phase_counts": {
+        "ACCEPTANCE": 4,
+        "EFFECT_BOUNDARY": 3,
+        "FORBIDDEN_GUARD": 4,
+        "MEASUREMENT": 2,
+        "WP03_TYPED_CORE": 17,
+        "WP04_SEMANTICS": 2,
+        "WP05_RUNTIME": 8
+      },
+      "owner_semantics_may_disappear": false,
+      "effect_authority": "NONE",
+      "truth_authority": "NONE",
+      "promotion": "NONE"
+    },
+    "owner_exact_prefix_counterexample_target_vps": {
+      "workflow_run": 31390923161,
+      "job": 93462212992,
+      "result": "PASS_COUNTEREXAMPLE",
+      "raw_v18": "REJECTED",
+      "first_counterexample": {
+        "line": 6,
+        "token": "target",
+        "interpretation": "owner surface contains a free reference-binding form not admitted as a top-level V18 statement"
+      },
+      "diagnostic_import_rewrite": "REJECTED_AT_NEXT_SURFACE_GAP",
+      "next_counterexample": {
+        "line": 18,
+        "token": "may",
+        "interpretation": "one local surface rewrite does not close owner representability"
+      },
+      "core_v18_language_change_required": "NOT_YET_DECIDED",
+      "promotion": "NONE"
+    },
+    "owner_full_typed_state_frontier_transport": {
+      "workflow_run": 31390923174,
+      "job": 93462215885,
+      "result": "TRANSPORT_BLOB_MISMATCH_BEFORE_EXECUTION",
+      "failed_step": "Bind exact owner full typed-state frontier bytes",
+      "scientific_interpretation": "UNEXECUTED; not semantic failure evidence",
+      "observed_expected_core_blob": "d7271c1f00896617ce6533712a88854848341d88",
+      "current_candidate_core_blob_observed_in_clay_branch": "d727e638105fcb04864d04594244be1d2bc77f9b"
+    }
+  },
+  "hypothesis_matrix": {
+    "H1": {
+      "claim": "CC-WP-03 can remain on frozen V18 core semantics if owner agency/web surface forms are deterministically lowered/desugared into already-admitted V18 constructs before the authoritative frontend artifact boundary.",
+      "status": "SUPPORTED_AS_NEXT_TEST_ONLY",
+      "support": [
+        "owner fidelity ledger maps all 40 owner requirements with zero unknown mappings",
+        "candidate owner core already expresses typed records, closed sums, numeric bounds as invariants and authority separation using existing V18 constructs",
+        "F40 explicitly prefers surface lowering over core V18 language expansion"
+      ]
+    },
+    "H0": {
+      "claim": "Frozen V18 cannot faithfully represent the owner-fixed agency/web contract without a versioned language-surface extension.",
+      "status": "LIVE_COUNTERHYPOTHESIS",
+      "support": [
+        "exact owner-prefix V18 counterexample rejects at free binding token target",
+        "single diagnostic import rewrite exposes a second surface gap at may",
+        "full typed-state frontier has not yet executed against the byte-current candidate"
+      ]
+    },
+    "binding_counterhypothesis": {
+      "claim": "A global precedence table should be inferred from conventional language practice to resolve the 17 V3 ambiguous clauses.",
+      "status": "REJECTED_FOR_CURRENT_PROMOTION",
+      "reason": "the selected V18 grammar does not encode that precedence and target-VPS evidence shows the same flat token multiset can map to changed binding ASTs; guessing precedence would silently create semantics"
+    }
+  },
+  "out_of_box_experiment": {
+    "count_for_this_go_macrocycle": 1,
+    "id": "OPERATOR_SKELETON_ABLATION_V1",
+    "class": "BOUNDED_SYNTHETIC_OBSERVATIONAL",
+    "hypothesis": "the 17 ambiguous V3 clauses collapse into a small repeated operator-skeleton family, so a few local desugaring templates may safely replace explicit per-clause binding",
+    "strongest_counterhypothesis": "the ambiguity patterns are structurally diverse, making generic template desugaring or guessed precedence high-risk",
+    "method": "remove semantic atom identity and nested-call contents from the 17 measured ambiguous source clauses; compare only ordered top-level operator/relation skeletons",
+    "baseline": {
+      "ambiguous_clause_count": 17
+    },
+    "result": {
+      "distinct_top_level_operator_skeletons": 15,
+      "total_ambiguous_clauses": 17,
+      "only_repeated_skeleton": ["requires", "+"],
+      "only_repeated_skeleton_count": 3,
+      "other_skeletons_singletons": 14
+    },
+    "interpretation": "REFUTES_SMALL_TEMPLATE_FAMILY; supports explicit source binding or formally specified versioned precedence over heuristic desugaring",
+    "authority": "NONE",
+    "promotion": "NONE"
+  },
+  "external_primary_crosscheck": {
+    "sources": [
+      "https://llvm.org/docs/LangRef.html",
+      "https://mlir.llvm.org/docs/DefiningDialects/AttributesAndTypes/"
+    ],
+    "finding": "mainstream compiler IR practice explicitly distinguishes structural/content identity from identified/nominal or key-bound type identity; this is compatible with the current WP03 structural semantic identity plus explicit epoch/version/resource state identity direction and does not require a new ClayCode primitive by itself"
+  },
+  "architecture_delta": {
+    "status": "NO_PROMOTION_TEST_OBLIGATION_ADDED",
+    "affected": ["CC-WP-03-IR-TYPES", "CC-WP-04-TYPE-EFFECT", "CC-WP-05-EVALUATOR"],
+    "decision": "Do not merge a guessed global precedence model. Do not declare V18 inadequate yet. First execute the byte-current owner-core lowering candidate through the exact selected V18 frontend -> receipt-bound TypedIR path, with no silent reparse, and prove every F05-F14/F17-F20/F23-F25 WP03 mapping plus numeric/authority invariants. If deterministic lowering cannot cover the owner source without semantic loss, reopen only the minimal demonstrated surface forms as a versioned language amendment.",
+    "next_falsifier": "repair only the stale Dr.-Unterweger transport blob binding for SELF_ROOT_AGENCY_WEB_CORE_V18_CANDIDATE.clay, then execute the full owner typed-state frontier against current candidate blob d727e638105fcb04864d04594244be1d2bc77f9b on target VPS; classify every failure as transport, parser surface, TypedIR, binding, or fidelity before any language change",
+    "rollback": "no canonical semantics or package status changed; discard this branch receipt if later exact-current evidence contradicts it"
+  },
+  "negative_results_preserved": [
+    "V3 has 17 real mixed-binding clauses that must not be silently interpreted",
+    "one import-style rewrite does not make exact owner prefix V18-representable",
+    "workflow 31390923174 did not execute semantics because exact candidate blob binding was stale"
+  ],
+  "promotion": {
+    "CC-WP-03-IR-TYPES": "OPEN",
+    "BASE_CLAYCODE_RELEASE": "IN_PROGRESS",
+    "canonical_change": "NONE",
+    "frank_harness_mutation": "NONE",
+    "training_authorization": "NONE"
+  }
+}

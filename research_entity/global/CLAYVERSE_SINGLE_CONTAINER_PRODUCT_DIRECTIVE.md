@@ -68,6 +68,36 @@ Only explicit admitted output/effect surfaces may cross the boundary. Egress inc
 
 Egress must remain attributable to a canonical causal turn/effect receipt. Unknown, stale, replayed or unauthorized effects fail closed.
 
+### 3.5 Shock-absorber isolation and automatic snapshot recovery
+
+The sealed machine boundary is intentionally a **stability shock absorber** between the persistent ClayVerse continuum and the outside environment. Faults inside EntityOS, Claude, terminal processes or internal orchestration must be contained inside this boundary wherever possible instead of corrupting external owner systems or requiring manual reconstruction.
+
+ClayVerse MUST maintain periodic and event-triggered **known-good logical machine snapshots**. A snapshot is not merely a copy of one process RAM image. It binds at minimum:
+
+- a consistent UnifiedDB checkpoint/backup identity;
+- the active global entity generation and canonical session generations;
+- exact EntityOS binary/config/policy hashes;
+- active causal turn/episode identities and resumable internal queue position;
+- EffectJournal state, including which effects are confirmed, pending, unknown or forbidden to replay;
+- relevant managed runtime/configuration identities needed to reconstruct the internal machine state.
+
+Snapshots MUST be atomic enough that recovery cannot combine mutually inconsistent generations/state authorities.
+
+If EntityOS or another critical internal runtime component crashes, wedges, violates its health contract or produces an unrecoverable internal fault, the outer ClayVerse supervisor MUST automatically:
+
+1. close/freeze new ingress and nonessential egress;
+2. fence the crashed runtime generation so stale processes/results cannot rejoin;
+3. terminate/recreate the affected internal runtime components;
+4. restore/reconstruct the last accepted known-good logical machine snapshot;
+5. advance to a new global runtime generation/epoch;
+6. mark any external effect whose completion is not durably verified as `UNKNOWN_AFTER_CRASH`/equivalent rather than replaying it automatically;
+7. re-establish UnifiedDB/EntityOS/terminal/Claude readiness and policy attestations;
+8. resume admitted work through causal re-entry only after the recovered continuum is internally consistent.
+
+Automatic recovery MUST NOT blindly replay external side effects. A command/effect may be replayed only when its contract is explicitly idempotent and the EffectJournal proves replay is safe; otherwise it remains unknown and requires reconciliation.
+
+This logical snapshot/reconstruction mechanism is the required product behavior. A future implementation MAY additionally use CRIU, filesystem snapshots or VM-style memory snapshots as an optimization, but those mechanisms may not replace UnifiedDB/EffectJournal consistency rules.
+
 ## 4. Cognition and web boundary
 
 Claude Code is the runtime inference/cognition engine. It is not a separate persistent identity and must not own canonical memory. It receives context assembled from canonical ClayVerse state and returns reasoning results/intents/commands into the internal loop above.
@@ -86,6 +116,8 @@ Persistent volumes are data, not companion product artifacts. They must be expli
 
 Current build, test, experiment and runtime validation are isolated-sandbox-only. Exact whole-container execution remains the final acceptance gate. Lack of one provider connection must not stop independent source, contract, adversarial, restart, concurrency, fuzz, reproducibility, component-runtime or integration testing that remains possible under `the artefact/TESTING_STRATEGY.md`.
 
+Snapshot/recovery behavior MUST be tested adversarially before whole-product acceptance: EntityOS crash, terminal child crash, interrupted UnifiedDB write, crash before/after effect acknowledgement, stale-generation result arrival, repeated crash during recovery, corrupted snapshot candidate and recovery from the previous known-good snapshot.
+
 VPS/self-hosted/production-host testing is forbidden unless later explicitly authorized as deployment validation. Together API/service remains forbidden. Final paid/model training remains owner-authorization-required.
 
 A deployment READY state, source inspection, CI definition, receipt, component test or baseline build is never whole-product PASS.
@@ -100,4 +132,4 @@ Exact `go` means maximum useful product-convergent work on this ClayVerse single
 
 Any older file that says the active endpoint is `EntityOS`, `ONE_EXECUTABLE_FILE`, `SINGLE_FILE_CLAY_COMPUTER`, FRANK, self.root, UCM2 or a historical harness is superseded where it conflicts with this directive. Such material may still contribute bounded internal implementation/regression evidence.
 
-Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, or removes EntityOS from the final accepted continuum violates this directive.
+Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, removes EntityOS from the final accepted continuum, or lacks automatic known-good snapshot recovery violates this directive.

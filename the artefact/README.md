@@ -11,69 +11,54 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- Canonical durable cognition/state authority: **UnifiedDB**. ClayGraph is derived/rebuildable projection only. MicroClay adapts accessibility/routing only, never truth, identity, privacy or effect authority.
-- Product path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code is runtime cognition, not canonical durable memory/identity.
-- Effects remain fail-closed through ClayVerse EffectGate/MCP; generic host `process.exec` is not an admitted product path. EntityOS remains an optional digest-bound internal execution/security substrate, not the product endpoint.
+- Canonical durable cognition/state authority: **UnifiedDB**. ClayGraph is derived/rebuildable only. MicroClay adapts retrieval/accessibility, never truth, identity, privacy or effect authority.
+- Product path remains Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code is runtime cognition, not durable canonical memory/identity.
+- Effects remain fail-closed through ClayVerse EffectGate/MCP. Generic host `process.exec` is not admitted. EntityOS is an optional digest-bound internal execution/security substrate, not the product endpoint.
+- Live Fusion/Hypofusion coordination is active; external worker delivery uses claim-before-effect/CAS semantics. Coordination evidence is not product-runtime evidence.
 
-### Coordination integrity
+### Retained terminal / Claude lanes
 
-- Compact boot schema **5.5** loads Live Fusion/Hypofusion before material work. Delivery, reconstruction, plan revalidation, use, effect and causal credit remain distinct; coordination creates no second state/effect authority.
-- External live re-entry delivery is now **claim-before-effect**: deterministic `route_id` → canonical manifest CAS claim → re-read own claim → external effect with exact route marker → CAS finalization. Unknown post-effect state stays `UNKNOWN_DELIVERY`; recovery scans the route marker before retry. Exact-file deterministic state-machine regression passed **5/5**; real multi-worker GitHub exactly-once delivery remains unverified.
-- Concurrent stale README/shared-state writes have repeatedly been rejected by GitHub SHA/CAS fencing rather than overwriting newer state. This is coordination evidence only, not product-runtime evidence.
+- Draft PR **#611** is the single retained tmux reapply repair lane. Exact semantic blobs remain `c185009f8af84e1288747d8352645777a36b2053` (terminal) + `b6bb645dd07645f21ca2e5574f8392c9f13beafc` (focused test), preserved at head `2957e80228815ac266635981a55f22bc15dc9ed4` until admitted execution-time rejoin/promotion.
+- Historical real Vercel Sandbox evidence under tmux **3.6a** falsified the predecessor and passed the byte-identical repair component at an older bound head; supporting exact-file focused source regression is **9/9 PASS**. Neither is exact-current OCI/native-Claude/whole-product PASS.
+- Draft PR **#602** remains the single downstream managed-Claude process-attestation lane. It carries #611 semantics plus managed process/start-argv checks with bounded exact-file evidence (**15 focused PASS + py_compile PASS**) only; it must be rejoined/revalidated after #611 product promotion.
 
-### Terminal / managed-Claude spine
+### Exact OCI / supply-chain gate
 
-- Draft PR **#611** remains the single retained tmux reapply repair lane. Its semantic delta remains terminal blob `c185009f8af84e1288747d8352645777a36b2053` plus focused-test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc`; preserved branch head is `2957e80228815ac266635981a55f22bc15dc9ed4` until the next admitted execution-time rejoin/promotion decision.
-- Historical real Vercel Sandbox evidence under tmux **3.6a** falsified the predecessor and passed the byte-identical repair component at an older bound head under deny-all network. Native Claude and the OCI product image were not tested there; this remains component/mechanism evidence only.
-- Supporting byte-exact source reconstruction ran the focused tmux tests **9/9 PASS**.
-- Draft PR **#602** remains the single downstream managed-Claude lane. Live Fusion has incorporated #611 idempotent reapply semantics while retaining managed pane process/start-argv attestation; supporting exact-file checks report **15 focused tests PASS + py_compile PASS**. #602 still requires rejoin/revalidation after #611 product promotion and exact packaged native-Claude/in-image evidence.
-
-### Exact OCI dependency gate
-
-- Current source uses digest-pinned Python 3.13 slim Trixie but installs tmux through ordinary mutable Trixie APT resolution. Current Debian Trixie metadata observed this cycle advertises `tmux 3.5a-3`; that is dependency metadata, **not proof of the version in an unbuilt ClayVerse image**.
-- Exact in-image tmux/APT package identity and final image digest remain **UNOBSERVED** until an admitted OCI build records them. Historical tmux 3.6a is an additional robustness/future-version regression, not the sole product proxy.
-- The existing source-bound Python hash-lock generator remains the single lane. Draft PR **#622** repairs generator-only `pip-tools` compatibility for the Python 3.13 product base (`7.5.0` → `7.5.3`) and adds a regression rejecting the old pin. #622 is source candidate only: no canonical lock bytes have been minted, Docker is not yet on `--require-hashes`, and authorized isolated runtime credit is zero.
-- The exact next OCI source closure is now materialized, not hypothetical: integration branch `go/1750-oci-vcr-source-closure-gpt56sol` at `f8e4deebcb2f4b0b2904fddbcb0006600bc45c50` starts from canonical `main` `7b2a31c9defc76bead047823487c4384ee4bef3e` and differs by **exactly two files** — the retained #611 terminal blob `c185009f8af84e1288747d8352645777a36b2053` and focused-test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc`. It is an ephemeral exact product-candidate closure for execution, not a second permanent product lane.
-- Dr.-Unterweger draft PR **#810** remains the single retained OCI/VCR execution controller. Its runner is rebound to the exact closure above. The controller first attempts `Sandbox.create`; only after Sandbox admission does the Vercel build host use vault-only `GITHUB_READ_TOKEN` to fetch/verify the exact private commit/tree/archive. Only archive bytes are written into the Sandbox; the GitHub credential is never forwarded. The controller verifies the #611/Dockerfile/.dockerignore blobs and EntityOS digest/size, installs Docker inside the authorized Sandbox, builds the exact image, records image + tmux/Claude/Python/APT identities, switches the Sandbox to deny-all network, then runs #611 double-reapply/full policy attestation for both canonical users and `clayverse.service --once` inside the exact image.
-- PR #810's separate fail-closed source guard is aligned to that same exact runner at commit `0edd4e6b6c262daa2c1af95d300f63855f73029e` / guard blob `fb9766042ff753881440cd33568a59d556e5bcaf`: base `7b2a31c9…`, fused source `f8e4deeb…`, tree `a012708e…`, #611 blobs, Dockerfile/.dockerignore blobs and EntityOS digest/size must all match before the controller is admitted. This is controller coherence only; current OCI runtime remains unobserved.
-- A dedicated guard↔runner drift regression is now on the same retained #810 branch at `7ffb47212f8cf17ff174d2db2e01b5414eea7ec2`. It requires every exact identity binding, execution-surface marker, `github_secret_forwarded_to_sandbox=false`, zero unusual-experiment accounting and fail-closed drift rejection to remain aligned. The regression is **source-added but not yet executed**, so it carries zero runtime credit.
+- Canonical source uses digest-pinned Python 3.13 slim Trixie, but tmux still resolves through mutable Trixie APT and the ClayVerse Python dependency install is not yet backed by an accepted canonical `--require-hashes` lock. Exact image digest, APT/tmux, Claude and Python artifact identities remain **UNOBSERVED** until an admitted OCI build records them.
+- Draft PR **#622** remains the single Python lock-generator compatibility lane (`pip-tools` 7.5.0 → 7.5.3 for the Python 3.13 generator). No canonical lock bytes are accepted yet and Docker is not yet on `--require-hashes`.
+- The retained exact tmux execution closure `f8e4deebcb2f4b0b2904fddbcb0006600bc45c50` starts from source base `7b2a31c9defc76bead047823487c4384ee4bef3e` and differs by exactly the two #611 files above. It is an ephemeral execution closure, not a second permanent product lane.
+- Dr.-Unterweger draft PR **#810** remains the single retained OCI/Vercel controller. Its hardened host-side source fetch does not forward `GITHUB_READ_TOKEN` into the Sandbox; guard↔runner identity drift now has a dedicated source regression. Vercel currently blocks the repaired trigger at deployment admission before build/`Sandbox.create`, so runtime credit is **0**.
+- **New source falsifier:** the #810 runner fetches the private Research GitHub archive for `f8e4deeb…`, extracts it, and requires `the artefact/EntityOS` to exist before source verification/OCI build. That binary is intentionally not Git-tracked; `f8e4deeb…` differs from its base by only the two #611 files. Therefore, if the current runner were admitted unchanged, its first source stage is predicted to fail closed on the missing `EntityOS` file before OCI build. This is source-level falsification, not an observed Sandbox/test failure.
+- Existing canonical recovery evidence already defines the correct repair on the **same #810 lane**: rebuild EntityOS inside an authorized isolated Vercel Sandbox from locked source head `79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c` / tree `d55d9d41f5a294a4a692cdee6fa46750652a390d`, require artifact SHA-256 `32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586` and size `9181696`, then stage those exact bytes into the ClayVerse OCI build context. No exact GitHub Actions artifact is recoverable for that lock.
 
 ### Execution admission
 
-- Earlier exact-current Vercel preview attempts were rejected before Sandbox start by the free deployment-rate limit. Those attempts have zero test/runtime credit and are not TEST_FAIL.
-- Vercel deployment `dpl_62R4EoLGtLoi8FqXZAyNXDFaUHeq` was admitted, built and reached READY with OIDC present, but its older hard-coded target guard emitted `SKIP_NON_TARGET_PREVIEW` before `Sandbox.create`. That established build admission at that instant only; it did not establish current ClayVerse Sandbox/OCI runtime behavior.
-- The first recomposed #810 preview, deployment `dpl_BH8m9HTYUXWNSPQTDzURrJy5QmuE` at Dr.-Unterweger commit `fd12feb34caa10707e5c94f1c6dcf3d3a11fdce0`, failed closed in the stale `VCR_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED` guard **before `Sandbox.create`**. This is bridge-preflight failure with zero product-runtime credit, not ClayVerse TEST_FAIL.
-- The hardened runner at `21e2d1386573a5e054ecafc34371b082d26d5806` was triggered at `7ee72a8489533325d1fe44a73ba8834733a92ea0`, but Vercel rejected that trigger before build with **`Deployment rate limited — retry in 24 hours.`**
-- The stale guard/runner binding mismatch was then repaired on the same retained #810 branch at `0edd4e6b6c262daa2c1af95d300f63855f73029e`. Vercel immediately applied the same deployment-rate limit to that repaired exact head before build/Sandbox start. Therefore the controller defect is source-localized and repaired, but **no repaired deployment build, `Sandbox.create`, private-source fetch, OCI build or in-image assertion has executed**. Runtime credit remains **0**; classification is deployment-admission blocker, not TEST_FAIL.
-- Daytona remains the owner-authorized **FREE_ONLY** fallback for Vercel pre-assertion failure. The current documented controller state still has no admitted Daytona credential/provider-contact path from this worker, so Daytona provider/account availability remains unobserved and Daytona runtime credit remains zero.
-- No VPS, self-hosted runner or production host may substitute for current acceptance execution.
+- Vercel has previously demonstrated that the bridge can build and reach READY and that an older bounded Sandbox path can really execute, but the current repaired #810 trigger is deployment-rate-limited **before build and before `Sandbox.create`**. This is admission failure with zero runtime credit, not ClayVerse TEST_FAIL.
+- Daytona remains owner-authorized **FREE_ONLY** fallback after Vercel pre-assertion failure. The 17:36 controller recheck has one GitHub Actions run/job, but it ended pre-Step-1 with `steps=[]`, `runner_id=0`; no Daytona provider contact, credential use or Sandbox runtime occurred. Daytona provider/account availability therefore remains unobserved.
+- Current testing remains isolated-sandbox-only. VPS, self-hosted VPS runners and production hosts are forbidden for current acceptance evidence. Together remains forbidden.
 
 ### Unusual-experiment accounting
 
-- This `go` exposes only minute-precision trigger identity and no immutable shared request/turn id, so the atomic unusual-experiment lease fails closed: **0 valid unusual experiments executed**.
-- The earlier 17:36 synthetic-second experiment lease was invalid because shared trigger metadata had only minute precision. Its already-executed 277-case parser matrix remains only coordination-tainted bounded mechanism history and provides no current macro-cycle experiment credit.
-- Separate macro-cycle trigger identities must never borrow experiment claims/results from one another.
+- The 17:36 `go` has only minute-precision shared trigger identity. Its synthetic-second lease was invalid; the already-observed 277-case parser matrix is retained only as coordination-tainted bounded mechanism history with **0 valid experiment credit**.
+- No further unusual experiment is permitted for that 17:36 macro-cycle. Separate trigger identities must not borrow one another's claims/results.
 
 ### Remaining acceptance path
 
-First actually-started authorized isolated **current-target OCI** run:
+First actually-started authorized isolated current-target run:
 
-`execute the already-staged exact-source #810 controller without creating a parallel OCI lane → run guard↔runner alignment regression → Sandbox admission → host-side exact private source binding without secret forwarding → build exact OCI image → capture image digest + resolved APT/tmux + Claude/Python artifact identities → run #611 idempotency/fail-closed + full transport-policy attestation on actual in-image tmux for gabriel/andreas → service --once + focused/adjacent regressions → promotion decision → materialize/verify canonical Python hash lock via the retained #622 lane → switch Docker to --require-hashes after exact lock acceptance → rejoin/revalidate #602 → packaged native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`
+`same retained #810 lane → Sandbox.create → exact locked EntityOS source staging/rebuild → require locked EntityOS digest+size → stage exact binary into the f8e4deeb… ClayVerse source closure → build exact OCI image → capture image digest + APT/tmux + Claude/Python identities → run #611 idempotency/fail-closed + full transport-policy attestation on actual in-image tmux for gabriel/andreas → service --once + focused/adjacent regressions → #611 promotion decision → materialize/verify canonical Python hash lock on retained #622 lane → switch Docker to --require-hashes after acceptance → rejoin/revalidate #602 → packaged native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`
 
-Whole-product PASS requires the complete path. Source inspection, PRs, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
+Whole-product PASS requires that complete path. Source inspection, PRs, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
 
 ### Latest cycle delta
 
-**2026-08-17 18:05 +07:00 — `NO_CHANGE` canonical product/runtime bytes; retained PR810 guard↔runner seam now has a dedicated drift regression; execution remains admission-blocked**
+**2026-08-17 18:06 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; retained #810 EntityOS staging path source-falsified and exact repair obligation re-entered**
 
-- Refreshed canonical shared reality after the parallel guard-repair cycle; no canonical ClayVerse product/runtime bytes changed and whole-product acceptance remains **IN_PROGRESS**.
-- Preserved the single retained #810 OCI controller and the exact `main + #611` execution closure; no second OCI lane, state authority or semantic product path was created.
-- Added `tests/test_clayverse_current_oci_guard_runner_alignment.py` on #810 at `7ffb47212f8cf17ff174d2db2e01b5414eea7ec2`. The test binds every guard identity field to the corresponding runner constant and also fences execution-surface, no-secret-forwarding, zero unusual-experiment and fail-closed drift semantics.
-- This regression directly covers the seam that previously allowed the stale guard to reject the intentionally recomposed exact runner. It is currently **UNEXECUTED source hardening**, not PASS; runtime credit remains zero.
-- Vercel remains deployment-rate-limited before repaired controller build/Sandbox start. Daytona remains authorized but the current controller lacks an admitted credential/provider-contact path. Neither provider state is rewritten as a ClayVerse TEST_FAIL.
-- No unusual experiment was executed because the shared trigger identity is minute-precision only. No VPS/self-hosted/production test path was used. Together remains forbidden.
-- Durable receipt: `the artefact/receipts/2026-08-17_GO_1805_PR810_GUARD_RUNNER_ALIGNMENT_REGRESSION_GPT56SOL.json`.
-- Next discriminator: execute the **same** repaired #810 controller plus this guard↔runner regression at the first admitted isolated deployment, then proceed through Sandbox admission → exact source bind → OCI build → in-image dependency/PR611/service evidence.
+- Preserved the single retained #810 controller and did **not** overwrite its concurrently active 18:00 worker lane.
+- Persisted `the artefact/receipts/2026-08-17_GO_1736_PR810_ENTITYOS_STAGE_FALSIFIER_GPT56SOL.json` after proving from exact source ancestry that `f8e4deeb…` contains only the two #611 deltas and cannot supply the untracked `the artefact/EntityOS` binary currently required by the runner.
+- Re-entered the already-canonical recovery law instead of inventing a second artifact transport: reproduce EntityOS from locked `79dc06…` source inside the authorized Vercel Sandbox, require exact `32cd4587…` / `9181696`, then stage those bytes into the OCI context before build.
+- Earlier in this 17:36 cycle, corrected Daytona admission evidence durably: exact bridge head `e9a50a8…` has **one** Actions run (`32021241780`) / job (`95361186733`) ending before Step 1, not zero runs. Classification remains pre-step controller/runner admission failure with zero runtime credit.
+- No product/runtime byte promotion and no new unusual experiment occurred. Whole-product acceptance stays **IN_PROGRESS**.
 
 ### Cycle update rule
 
@@ -82,7 +67,7 @@ Whole-product PASS requires the complete path. Source inspection, PRs, deploymen
 3. Update **Latest cycle delta** with concrete code/evidence/blocker movement. If canonical product bytes did not change, record `NO_CHANGE` and why.
 4. Never promote source inspection, a PR, CI configuration, deployment READY, component evidence or historical evidence into whole-product PASS.
 5. Persist the README update in the same fusion cycle as the evidence it summarizes.
-6. For fast-moving feature branches, rebind branch SHA immediately before execution rather than continuously churning ancestry while no runner can start.
+6. Rebind fast-moving feature branches immediately before execution; do not churn ancestry while no runner can start.
 
 ## Architecture
 
@@ -92,20 +77,16 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for multiple bounded source/components, including historical real-tmux evidence, but **whole-product PASS is not claimed**. Exact current product evidence still requires the current-target OCI/image/dependency gate and all downstream auth/Claude/lifecycle/recovery/concurrency gates above.
+Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. GitHub-hosted jobs that fail before visible steps and Vercel deployments that never reach Sandbox execution provide zero semantic runtime credit.
 
-GitHub-hosted jobs that fail before visible steps and Vercel deployments that never reach Sandbox execution provide zero semantic runtime credit.
-
-## Local isolated source checks
-
-Where an **authorized isolated** Python environment is available:
+Where an **authorized isolated** Python environment is available, source checks may use:
 
 ```bash
 python -m pytest -q
 PYTHONPATH=. CLAYVERSE_STATE_ROOT=/tmp/clayverse-state python -m clayverse.service --once
 ```
 
-These source checks do not substitute for the exact container build/runtime gate.
+These do not substitute for the exact container build/runtime gate.
 
 ## Container source
 

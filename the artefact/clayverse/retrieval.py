@@ -1,17 +1,19 @@
 from __future__ import annotations
 import json
+from .method_memory import MethodMemoryRetriever
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with factual MicroClay retrieval plus Stage-B method transfer."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.methods = MethodMemoryRetriever(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -39,6 +41,31 @@ class WorldAssembler:
             "generation": int(row["generation"]),
         }
 
+    @staticmethod
+    def _evidence_context(items):
+        out = []
+        for item in items:
+            value = dict(item)
+            value["context_class"] = "evidence_context"
+            value["retrieval_is_truth_authority"] = False
+            out.append(value)
+        return out
+
+    @staticmethod
+    def _unknown_context(fact_status):
+        status = str(fact_status).upper()
+        if status == "PRESENT":
+            return []
+        return [{
+            "memory_id": "runtime:fact-status",
+            "kind": "runtime_unknown",
+            "subject": "fact_status",
+            "value": status,
+            "context_class": "unknowns",
+            "truth_authority": False,
+            "effect_authority": False,
+        }]
+
     def assemble(
         self,
         session_id,
@@ -59,7 +86,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Method retrieval cannot broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -79,9 +106,20 @@ class WorldAssembler:
         retrieval_receipt = {
             "mode": "LEGACY_COMPATIBILITY",
             "status": "UNKNOWN",
+            "fact_status": "UNKNOWN",
+            "method_status": "NOT_EVALUATED",
+            "method_triggered": False,
+            "method_count": 0,
+            "counterevidence_count": 0,
+            "method_policy_mode": "SHADOW",
             "truth_authority": False,
             "effect_authority": False,
         }
+        evidence_context = []
+        method_context = []
+        counterevidence = []
+        unknowns = []
+
         supplied = {
             "query": query,
             "turn_id": turn_id,
@@ -95,7 +133,7 @@ class WorldAssembler:
                 supplied = active
 
         if all(value is not None for value in supplied.values()):
-            result = self.microclay.retrieve(
+            factual = self.microclay.retrieve(
                 query=str(supplied["query"]),
                 user_id=user_id,
                 session_id=session_id,
@@ -104,12 +142,34 @@ class WorldAssembler:
                 causal_id=str(supplied["causal_id"]),
                 generation=int(supplied["generation"]),
             )
-            memories = result["items"]
-            retrieval_receipt = result["receipt"]
+            evidence_context = self._evidence_context(factual["items"])
+            retrieval_receipt = dict(factual["receipt"])
+            fact_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
+            methods = self.methods.retrieve(
+                query=str(supplied["query"]),
+                user_id=user_id,
+                fact_status=fact_status,
+            )
+            method_context = list(methods["items"])
+            counterevidence = list(methods["counterevidence"])
+            unknowns = self._unknown_context(fact_status)
+            retrieval_receipt.update({
+                "fact_status": fact_status,
+                "method_triggered": bool(methods["triggered"]),
+                "method_status": str(methods["method_status"]),
+                "method_count": len(method_context),
+                "counterevidence_count": len(counterevidence),
+                "method_policy_mode": str(methods["policy_mode"]),
+                "method_invalid_count": len(methods.get("invalid_method_ids", [])),
+            })
+            # Compatibility carrier: TurnLifecycle currently bounds the historical
+            # durable_memory field. Typed context_class keeps evidence/method/unknown/
+            # counterevidence visibly distinct without letting method context become fact.
+            memories = evidence_context + method_context + counterevidence + unknowns
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.
-            memories = [
+            evidence_context = [
                 dict(r)
                 for r in self.db.db.execute(
                     "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
@@ -117,11 +177,18 @@ class WorldAssembler:
                     (user_id,),
                 )
             ]
+            evidence_context = self._evidence_context(evidence_context)
+            memories = evidence_context
+            unknowns = self._unknown_context("UNKNOWN")
 
         return {
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "evidence_context": evidence_context,
+            "method_context": method_context,
+            "unknowns": unknowns,
+            "counterevidence": counterevidence,
             "retrieval_receipt": retrieval_receipt,
         }
 

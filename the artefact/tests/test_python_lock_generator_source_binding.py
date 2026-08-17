@@ -40,6 +40,12 @@ def test_current_product_first_from_is_exact_digest_pinned_python():
     assert image in DOCKERFILE.read_text(encoding="utf-8")
 
 
+def test_python_lock_generator_uses_python_313_supported_pip_tools():
+    text = _workflow_text()
+    assert "'pip-tools==7.5.3'" in text
+    assert "'pip-tools==7.5.0'" not in text
+
+
 def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_experiment():
     text = _workflow_text()
     assert "cat >/tmp/requirements.in <<'EOF'" not in text

@@ -136,6 +136,7 @@ class GenericChatCompletionsInference:
             or "\n" in token
             or "\r" in token
             or len(token) > 16_384
+            or any(ord(ch) < 0x21 or ord(ch) > 0x7E for ch in token)
         ):
             raise RuntimeError("LLM API token is required at runtime")
         return token
@@ -148,6 +149,7 @@ class GenericChatCompletionsInference:
             or len(observation) > self.MAX_OBSERVATION_CHARS
             or "\x00" in observation
         ):
+            token = ""
             raise InferenceProtocolError("invalid LLM API observation")
 
         try:
@@ -159,9 +161,16 @@ class GenericChatCompletionsInference:
                 allow_nan=False,
             )
         except (TypeError, ValueError) as exc:
+            token = ""
             raise InferenceProtocolError("LLM API WORLD is not canonical JSON") from exc
         if len(world_json.encode("utf-8")) > self.MAX_WORLD_BYTES:
+            token = ""
             raise RuntimeError("assembled world exceeds LLM API boundary")
+        if token in world_json or token in observation:
+            token = ""
+            raise InferenceProtocolError(
+                "LLM API runtime credential reached model-visible context"
+            )
 
         try:
             body = json.dumps(
@@ -182,6 +191,7 @@ class GenericChatCompletionsInference:
                 allow_nan=False,
             ).encode("utf-8")
         except (TypeError, ValueError) as exc:
+            token = ""
             raise InferenceProtocolError("LLM API request is not canonical JSON") from exc
         request = Request(
             self.config.endpoint,
@@ -197,10 +207,12 @@ class GenericChatCompletionsInference:
 
         http_error_status = None
         transport_failure_type = None
+        secret_echoed = False
         try:
             with self._lock:
                 with _urlopen(request, timeout=self.timeout) as response:
                     raw = response.read(self.MAX_RESPONSE_BYTES + 1)
+                    secret_echoed = token.encode("ascii") in raw
         except HTTPError as exc:
             http_error_status = int(exc.code)
             raw = b""
@@ -218,6 +230,9 @@ class GenericChatCompletionsInference:
             raise RuntimeError(
                 f"LLM API inference transport failure type={transport_failure_type}"
             )
+        if secret_echoed:
+            raw = b""
+            raise InferenceProtocolError("LLM API response contains runtime credential")
         if len(raw) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("LLM API response exceeds bound")
 

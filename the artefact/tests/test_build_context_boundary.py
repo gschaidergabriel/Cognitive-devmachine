@@ -9,10 +9,15 @@ def test_oci_build_context_is_allowlisted():
     for required in (
         "!Dockerfile",
         "!requirements.txt",
+        "!SOURCE_LOCK.json",
+        "!build/install_pinned_apt.py",
+        "!build/install_pinned_xterm.py",
+        "!build/install_pinned_claude.py",
         "!clayverse/",
         "!clayverse/**",
         "!policy/",
         "!policy/**",
+        "!entityos.lock.json",
         "!EntityOS",
     ):
         assert required in rules

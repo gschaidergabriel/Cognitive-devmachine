@@ -60,6 +60,20 @@ def _activate(db, session_id, generation, turn_id, episode_id, causal_id):
     )
 
 
+def _finish_formation(db, *, turn_id, episode_id, causal_id):
+    """Close candidate-formation provenance without creating method-utility reward."""
+    outcome_hash = hashlib.sha256(f"{episode_id}:formation".encode()).hexdigest()
+    db.db.execute(
+        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+        "VALUES(?,?,?,?,?,?,?,?)",
+        (causal_id, episode_id, None, turn_id, outcome_hash, 0.0, 1, time.time()),
+    )
+    db.db.execute(
+        "UPDATE workspace_episodes SET selected='respond',state='COMPLETED' WHERE episode_id=?",
+        (episode_id,),
+    )
+
+
 def _finish_external(db, *, session_id, generation, turn_id, episode_id, causal_id, status):
     effect_id = f"effect:{episode_id}"
     outcome_hash = hashlib.sha256(f"{episode_id}:{status}".encode()).hexdigest()
@@ -134,6 +148,9 @@ def _validated_candidate(db, session_id, generation):
     # Formation/provenance episodes are intentionally distinct from held-out validation.
     formation_a = _make_episode(db, session_id, generation, "formation-a", 1)
     formation_b = _make_episode(db, session_id, generation, "formation-b", 2)
+    _finish_formation(db, turn_id=formation_a[0], episode_id=formation_a[1], causal_id=formation_a[2])
+    _finish_formation(db, turn_id=formation_b[0], episode_id=formation_b[1], causal_id=formation_b[2])
+
     heldout_a = _make_episode(db, session_id, generation, "heldout-a", 3)
     heldout_b = _make_episode(db, session_id, generation, "heldout-b", 4)
     candidate_id = _admit_candidate(db, [formation_a[1], formation_b[1]])

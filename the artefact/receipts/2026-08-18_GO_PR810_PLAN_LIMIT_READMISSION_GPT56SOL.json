@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date_local": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "CONTROL_PLANE_READMITTED_RUNTIME_STILL_BLOCKED",
+  "canonical_research_main_before_write": "f818ea8f19ce154719a187e7c5ec6bbf324b970a",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "exact_head_observed": "860c421e3c69830948e872e05bd32bf341318906",
+    "research_base_sha": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+    "frozen_research_candidate_sha": "37bfaac92158168fff16e20ed29a1fe208429720",
+    "frozen_research_tree": "99041e4e5641f99b03fb304712220fb90390b246",
+    "vercel_deployment": "dpl_CAtTZvDnMWMDyPATWsWWxoicqibF",
+    "deployment_state": "READY"
+  },
+  "observations": [
+    "Exact controller head d2be9c870dc4c2b223f6c202a946aba9dd36f264 was rejected before deployment with Vercel status: Deployment failed — invalid maxDuration for plan.",
+    "The retained branch changed vercel.json for api/go-cycle-v2.js from maxDuration 1800 to 300 and corrected the frozen PR680 research tree to 99041e4e5641f99b03fb304712220fb90390b246.",
+    "Exact head 860c421e3c69830948e872e05bd32bf341318906 then received Vercel success / Deployment has completed and deployment dpl_CAtTZvDnMWMDyPATWsWWxoicqibF is READY.",
+    "READY removes the current control-plane deployment-admission blocker only. It is not private-source, OCI, Mistral, recovery, or whole-product runtime credit.",
+    "The retained one-shot runner contains individual sandbox operations with explicit 420000 ms and 480000 ms timeouts plus a 2700000 ms sandbox lifetime. Therefore a monolithic 300-second Vercel Function request is not a sufficient final orchestration envelope.",
+    "No owner-held GITHUB_READ_TOKEN is exposed to this organ. No credential-bearing POST was attempted, and no secret was guessed, recovered, logged, committed, or fabricated."
+  ],
+  "external_primary_evidence": [
+    "Current Vercel Sandbox documentation states Sandbox.get can reconnect to an actively running sandbox from a different process after the original script exits or crashes.",
+    "Current Vercel Sandbox documentation supports detached runCommand execution that returns immediately while the command continues in the microVM.",
+    "Current Vercel Sandbox REST surface exposes sandbox retrieval, command execution/status/logs, timeout extension, network-policy update, and sandbox stop primitives."
+  ],
+  "adjudication": {
+    "preferred_mechanism": "KEEP_PR810_AS_SINGLE_RETAINED_CONTROLLER_AND_MAKE_ITS_RUNTIME_ORCHESTRATION_RESUMABLE",
+    "do_not_do": [
+      "Do not create a second permanent controller path merely to bypass the Vercel Function duration cap.",
+      "Do not reintroduce Vercel Preview environment-secret coupling for GITHUB_READ_TOKEN.",
+      "Do not interpret READY as runtime PASS.",
+      "Do not send GITHUB_READ_TOKEN into OCI build args, layers, UnifiedDB, ClayGraph, Mistral context, receipts, or persistent sandbox state."
+    ],
+    "next_discriminator": "Refactor the retained /api/go-cycle-v2 control flow into bounded resumable phases on the SAME non-persistent long-lived Vercel Sandbox: credential-bearing phase performs only exact private source fetch with per-command token env then clears it; long no-secret build/test operations run detached or as separately reconnected phases; phase state is non-secret and fail-closed; later invocations use Sandbox.get against the exact sandbox identity; network deny-all transition and final stop remain explicit. Then deploy exact head and execute one owner-authenticated token-bearing start request.",
+    "strongest_counterhypothesis": "A 300-second synchronous endpoint might happen to finish on a fast cached run, so resumability is unnecessary.",
+    "counterhypothesis_falsifier": "The retained acceptance runner itself permits single operations longer than 300 seconds and explicitly budgets a 2700000 ms sandbox session; any success depending on all of those operations completing synchronously under a 300-second function cap is not a robust admitted operating region."
+  },
+  "runtime_credit": {
+    "exact_controller_deployment_ready": 1,
+    "credential_bearing_private_source_runtime": 0,
+    "exact_oci_build_runtime": 0,
+    "vault_mistral_runtime": 0,
+    "tier1_recovery": 0,
+    "tier2_same_digest_recreation": 0,
+    "whole_clayverse_pass": 0
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "reason_unusual_experiment_not_run": "No globally unique immutable trigger/request lease identity is exposed to this organ; shared one-experiment law therefore fails closed.",
+  "security": {
+    "together_api": "FORBIDDEN",
+    "vps_testing": "FORBIDDEN",
+    "final_paid_or_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+  },
+  "claim_boundary": "This receipt records control-plane readmission and an architecture discriminator. It does not claim ClayVerse runtime execution or whole-product acceptance."
+}

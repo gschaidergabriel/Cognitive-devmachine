@@ -13,11 +13,11 @@ def test_effect_rejects_cross_user_session_binding(tmp_path):
         andreas,_=router.resolve('a')
         gate=EffectGate(db)
 
-        effect_id,outcome=gate.execute(EffectRequest(gabriel,gabriel_session,'state.noop','same-user'))
+        effect_id,outcome=gate.execute(EffectRequest(gabriel,gabriel_session,'state.noop','same-user',request_key='gabriel:same-user:effect:0'))
         assert effect_id and outcome['ok']
 
         with pytest.raises(PermissionError,match='session owner mismatch'):
-            gate.execute(EffectRequest(andreas,gabriel_session,'state.noop','cross-user'))
+            gate.execute(EffectRequest(andreas,gabriel_session,'state.noop','cross-user',request_key='andreas:cross-user:effect:0'))
 
         assert db.db.execute('SELECT COUNT(*) FROM effects').fetchone()[0]==1
     finally:

@@ -12,6 +12,10 @@ class AuthenticationError(PermissionError):
     pass
 
 
+_JWKS_CACHE_LIFESPAN_SECONDS = 300
+_JWKS_FETCH_TIMEOUT_SECONDS = 5
+
+
 @dataclass(frozen=True)
 class ClerkConfig:
     issuer: str
@@ -51,13 +55,25 @@ class ClerkTokenVerifier:
     """Fail-closed verifier for Clerk session JWTs.
 
     Networkless verification is preferred when CLERK_JWT_KEY is supplied. Otherwise
-    PyJWKClient fetches/caches the instance JWKS. Only RS256 is accepted and the Clerk
-    authorized-party claim must match the configured web origin set.
+    PyJWKClient uses only its finite-lived JWKS-set cache: the per-signing-key LRU is
+    intentionally disabled so an already-seen kid cannot bypass key-set refresh forever.
+    Only RS256 is accepted and the Clerk authorized-party claim must match the
+    configured web origin set.
     """
 
     def __init__(self, config: ClerkConfig):
         self.config = config
-        self._jwks = PyJWKClient(config.jwks_url, cache_keys=True) if not config.jwt_key else None
+        self._jwks = (
+            PyJWKClient(
+                config.jwks_url,
+                cache_keys=False,
+                cache_jwk_set=True,
+                lifespan=_JWKS_CACHE_LIFESPAN_SECONDS,
+                timeout=_JWKS_FETCH_TIMEOUT_SECONDS,
+            )
+            if not config.jwt_key
+            else None
+        )
 
     def verify(self, token: str) -> dict[str, Any]:
         if not token:

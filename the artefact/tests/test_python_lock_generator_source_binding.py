@@ -127,7 +127,14 @@ def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_expe
 def test_python_lock_generator_verifies_reproducibility_hash_enforcement_and_selected_wheel_provenance():
     text = _workflow_text()
     assert text.count("pip-compile --generate-hashes") == 2
-    assert "diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2" in text
+    assert "LOCK_PATH='/tmp/requirements.lock'" in text
+    assert "LOCK_FIRST='/tmp/requirements.lock.first'" in text
+    assert text.count('-o "$LOCK_PATH" /tmp/requirements.in') == 2
+    assert 'cp "$LOCK_PATH" "$LOCK_FIRST"' in text
+    assert text.count('rm -f "$LOCK_PATH"') >= 2
+    assert 'diff -u "$LOCK_FIRST" "$LOCK_PATH"' in text
+    assert "/tmp/requirements.lock.1" not in text
+    assert "/tmp/requirements.lock.2" not in text
     assert "--only-binary=:all: --require-hashes" in text
     assert "LOCK_SHA256=" in text
     assert "WHEELHOUSE_FILE_COUNT=" in text

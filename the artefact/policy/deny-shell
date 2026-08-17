@@ -1,0 +1,7 @@
+#!/bin/sh
+# ClayVerse product terminals expose Claude Code as a conversational UI, not as a
+# second process-execution authority. Claude Code's interactive ! shell path and any
+# Bash command wrapped by CLAUDE_CODE_SHELL_PREFIX terminate here. Effects must enter
+# through the managed ClayVerse MCP boundary instead.
+printf '%s\n' 'ClayVerse: direct shell execution is disabled; use the managed ClayVerse MCP effect path.' >&2
+exit 126

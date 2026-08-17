@@ -38,6 +38,7 @@ class TerminalSessionManager:
     CANONICAL_USERS = tuple(CANONICAL_TERMINALS)
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
+    MANAGED_TMUX = Path("/etc/clayverse/tmux.conf")
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
 
@@ -56,6 +57,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
+        if not self.MANAGED_TMUX.is_file():
+            raise TerminalRuntimeError("managed tmux transport policy unavailable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -78,6 +81,18 @@ class TerminalSessionManager:
         # two authenticated ClayVerse perspectives on disjoint tmux servers so an
         # attached client cannot switch from one canonical user's session to the other.
         return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
+
+    @classmethod
+    def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
+        # tmux is persistence/PTY transport only. Every server/client invocation is
+        # pinned to the immutable managed policy that removes tmux's own interactive
+        # command surface; never fall back to a user-controlled ~/.tmux.conf.
+        return [
+            "tmux",
+            "-f", str(cls.MANAGED_TMUX),
+            "-L", cls._tmux_socket(binding),
+            *args,
+        ]
 
     def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
         enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
@@ -119,7 +134,7 @@ class TerminalSessionManager:
 
     def _has_session(self, binding: TerminalBinding) -> bool:
         cp = subprocess.run(
-            ["tmux", "-L", self._tmux_socket(binding), "has-session", "-t", binding.tmux_name],
+            self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False,
@@ -175,11 +190,11 @@ class TerminalSessionManager:
         ]
         command = shlex.join(env_argv)
         cp = subprocess.run(
-            [
-                "tmux", "-L", self._tmux_socket(binding),
+            self._tmux_argv(
+                binding,
                 "new-session", "-d", "-s", binding.tmux_name,
                 "-c", str(self.workspace), command,
-            ],
+            ),
             capture_output=True,
             text=True,
             check=False,
@@ -200,7 +215,7 @@ class TerminalSessionManager:
             }
             os.execvpe(
                 "tmux",
-                ["tmux", "-L", self._tmux_socket(binding), "attach-session", "-t", binding.tmux_name],
+                self._tmux_argv(binding, "attach-session", "-t", binding.tmux_name),
                 env,
             )
         return pid, fd, binding

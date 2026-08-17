@@ -63,6 +63,7 @@ class TurnLifecycle:
         if size()>max_chars:
             for item in packed["own_recent"]:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"
+        if size()>max_chars: raise TurnLifecycleError("world context exceeds bound after safe trimming")
         return packed
 
     def _persisted_effect_in_tx(self,db,row):

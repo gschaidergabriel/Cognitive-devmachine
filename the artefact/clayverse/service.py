@@ -8,6 +8,7 @@ import sys
 from .adapters import ClerkConfig, ClerkTokenVerifier, ClaudeCodeInference
 from .api import ClayVerseAPI
 from .engine import ClayVerseEngine
+from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .store import UnifiedDB
@@ -38,6 +39,28 @@ def _web_config() -> tuple[str, str]:
     return publishable_key, frontend_api
 
 
+def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
+    required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "1") == "1"
+    path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
+    sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
+
+    if not path and not sha256:
+        if required:
+            raise RuntimeError("EntityOS is required: set CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256")
+        return None, {"required": False, "bound": False}
+    if not path or not sha256:
+        raise RuntimeError("EntityOS configuration is incomplete")
+    if not os.path.isabs(path):
+        raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
+
+    bridge = EntityOSBridge(path=path, sha256=sha256)
+    try:
+        verified = bridge.verify()
+    except (EntityOSIntegrityError, OSError, ValueError) as exc:
+        raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
+    return bridge, {"required": required, "bound": True, **verified}
+
+
 def main():
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
@@ -61,7 +84,14 @@ def main():
         db.close()
         raise RuntimeError("Claude Code CLI is required but unavailable")
 
-    engine = ClayVerseEngine(db, clerk_map, inference=inference, allow_process=False)
+    entityos_bridge, entityos_status = _entityos_config()
+    engine = ClayVerseEngine(
+        db,
+        clerk_map,
+        inference=inference,
+        allow_process=False,
+        entityos_bridge=entityos_bridge,
+    )
     api = ClayVerseAPI(engine, verifier, publishable_key=publishable_key, frontend_api_url=frontend_api)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
@@ -85,6 +115,7 @@ def main():
         "claude_code": claude_available,
         "auth": "clerk",
         "mutation_lane": "serialized",
+        "entityos": entityos_status,
         "port": port,
     }), flush=True)
 

@@ -55,7 +55,7 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["m1"]
 
-        route_key = MicroClayRetrieval._route_key("codename", "procedure:orchid")
+        route_key = MicroClayRetrieval._route_key("codename", "m1")
         learned = db.db.execute(
             "SELECT capital,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
             (route_key,),
@@ -114,8 +114,8 @@ def test_new_alias_route_credit_is_bound_to_rank1_served_evidence(tmp_path):
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["top"]
 
-        top_key = MicroClayRetrieval._route_key("codename", "procedure:top")
-        other_key = MicroClayRetrieval._route_key("codename", "procedure:other")
+        top_key = MicroClayRetrieval._route_key("codename", "top")
+        other_key = MicroClayRetrieval._route_key("codename", "other")
         assert db.db.execute(
             "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (top_key,)
         ).fetchone() is not None

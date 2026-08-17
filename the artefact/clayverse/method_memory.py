@@ -154,8 +154,9 @@ def signature_facets(record: dict[str, Any]) -> tuple[str, ...]:
     signature = _problem_signature(record.get("problem_signature"))
     facets = []
     for key in sorted(signature):
-        for value in signature[key]:
-            facets.append(f"{key}={value.strip().lower()}")
+        normalized_values = sorted({value.strip().lower() for value in signature[key]})
+        for value in normalized_values:
+            facets.append(f"{key}={value}")
     return tuple(facets)
 
 

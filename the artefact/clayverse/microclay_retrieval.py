@@ -79,6 +79,28 @@ class MicroClayRetrieval:
         except Exception:
             return {"parse_error": True}
 
+    @staticmethod
+    def _pack_candidates(
+        candidates: list[RetrievalCandidate],
+        *,
+        limit: int,
+        budget_chars: int,
+    ) -> tuple[list[RetrievalCandidate], int]:
+        """Apply the same relevance, count and character budget to any ranking."""
+        selected: list[RetrievalCandidate] = []
+        chars = 0
+        for item in candidates:
+            if item.baseline_score <= 0.0:
+                continue
+            item_chars = len(item.value)
+            if chars + item_chars > budget_chars:
+                continue
+            selected.append(item)
+            chars += item_chars
+            if len(selected) >= limit:
+                break
+        return selected, chars
+
     def mode(self) -> str:
         row = self.db.db.execute(
             "SELECT mode FROM retrieval_policy_state WHERE singleton=1"
@@ -287,25 +309,22 @@ class MicroClayRetrieval:
             reverse=True,
         )
 
+        baseline_selected, baseline_chars = self._pack_candidates(
+            baseline, limit=limit, budget_chars=budget_chars
+        )
+        adaptive_selected, adaptive_chars = self._pack_candidates(
+            adaptive, limit=limit, budget_chars=budget_chars
+        )
         mode = self.mode()
-        serving = adaptive if mode == "ACTIVE" else baseline
-        selected: list[RetrievalCandidate] = []
-        chars = 0
-        for item in serving:
-            if item.baseline_score <= 0.0:
-                continue
-            item_chars = len(item.value)
-            if selected and chars + item_chars > budget_chars:
-                continue
-            selected.append(item)
-            chars += item_chars
-            if len(selected) >= limit:
-                break
+        if mode == "ACTIVE":
+            selected, chars = adaptive_selected, adaptive_chars
+        else:
+            selected, chars = baseline_selected, baseline_chars
 
         retrieval_id = str(uuid.uuid4())
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
-        shadow_ids = [x.memory_id for x in adaptive if x.baseline_score > 0.0][:limit]
+        shadow_ids = [x.memory_id for x in adaptive_selected]
         entry_keys = sorted({k for item in selected for k in item.entry_keys})[:256]
 
         self.db.db.execute(

@@ -552,8 +552,8 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
     success_count = sum(1 for _, receipt in ordered if receipt["classification"] == "SUCCESS")
     failure_count = sum(1 for _, receipt in ordered if receipt["classification"] == "FAILURE")
     support_count = len(ordered)
-    if success_count < 1:
-        raise MethodValidationError("promotion requires at least one validated success")
+    if success_count < 2:
+        raise MethodValidationError("promotion requires at least two validated successes")
     calibration = success_count / support_count
     last_validated_at = max(receipt["ts"] for _, receipt in ordered)
     receipt_ids = [memory_id for memory_id, _ in ordered]

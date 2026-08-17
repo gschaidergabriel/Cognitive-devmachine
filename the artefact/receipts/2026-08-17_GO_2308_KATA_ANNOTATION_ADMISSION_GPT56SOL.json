@@ -3,7 +3,7 @@
   "timestamp_local": "2026-08-17T23:08:53+07:00",
   "organ": "GPT-5.6 Sol / ChatGPT",
   "trigger": "go",
-  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED_WITH_BOUNDED_PROVIDER_MICROVM_EVIDENCE",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_workspace": "the artefact/",
   "pr": 642,
@@ -33,14 +33,36 @@
     "CEL all() iterates keys when its receiver is a map",
     "Kata upstream security policy supports only its current monthly release; runtime configuration remains acceptance identity"
   ],
-  "execution": {
+  "latest_authorized_execution_surface_observation": {
+    "vercel_project": "dr-unterweger",
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "guest_kernel": {
+      "system": "Linux",
+      "release": "6.12.76",
+      "machine": "x86_64",
+      "attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY"
+    },
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "github_secret_forwarded_to_sandbox": false,
+    "sandbox_stopped": true,
+    "evidence_scope": "Supporting evidence that the authorized Vercel Sandbox surface can create an isolated guest-kernel environment before private source staging. It does not bind ClayVerse source bytes, OCI image digest, Kata runtime identity, or whole-product behavior."
+  },
+  "execution_for_pr642_candidate": {
     "pytest": "NOT_RUN",
     "kubernetes_api_admission": "NOT_RUN",
     "cel_compile_eval": "NOT_RUN",
+    "source_runtime_credit": 0,
     "oci_runtime_credit": 0,
     "kata_microvm_runtime_credit": 0,
     "whole_product_credit": 0,
-    "reason": "Authorized Vercel Sandbox execution remains blocked before private Research/EntityOS source staging by missing approved host-side Preview GITHUB_READ_TOKEN; connected Vercel surface exposes no Sandbox lifecycle or environment-secret mutation action. VPS/self-hosted/production substitutes are forbidden."
+    "reason": "Authorized Vercel Sandbox execution reaches guest-kernel attestation but remains blocked before private Research/EntityOS source staging by missing approved host-side Preview GITHUB_READ_TOKEN; connected Vercel tools expose observation/deployment surfaces but no environment-secret mutation action. VPS/self-hosted/production substitutes are forbidden."
   },
   "promotion_falsifiers": [
     "clean canonical Pod is admitted",

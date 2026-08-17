@@ -32,13 +32,14 @@ def _hash(value: object) -> str:
 
 
 def _decode_persisted_effect_outcome(raw: object) -> tuple[dict, str, bool]:
-    """Recover one redacted outcome receipt without changing its causal identity.
+    """Recover one structurally valid redacted receipt without changing causal identity.
 
     Live EffectJournal re-entry hashes the raw outcome. The durable effect row stores
     only `redacted-outcome-v1`, whose inner `sha256` is that same raw-outcome digest.
-    Recovery must therefore reuse that inner digest rather than hashing the receipt a
-    second time. Malformed/untyped persisted bytes stay explicit UNKNOWN and receive
-    no positive causal credit.
+    Recovery can therefore reuse that inner digest for identity, but the raw outcome is
+    no longer available to authenticate copied safe fields such as `ok`. Structural
+    validity must never be treated as authority to reconstruct positive learning credit.
+    Malformed/untyped persisted bytes stay explicit UNKNOWN.
     """
     raw_text = raw if isinstance(raw, str) else repr(raw)
     persisted_digest = hashlib.sha256(raw_text.encode("utf-8", errors="replace")).hexdigest()
@@ -139,17 +140,20 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             if causal is None:
                 if len(effects) == 1 and effects[0]["outcome"] is not None:
                     effect = effects[0]
-                    outcome, outcome_hash, trusted_receipt = _decode_persisted_effect_outcome(effect["outcome"])
+                    _outcome, outcome_hash, structurally_valid_receipt = _decode_persisted_effect_outcome(effect["outcome"])
                     effect_id = effect["effect_id"]
                     tx.execute(
                         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
                         (
                             active["causal_id"], active["episode_id"], effect_id, active["turn_id"], outcome_hash,
-                            _causal_credit(str(effect["status"]), outcome, str(effect["capability"])), time.time(),
+                            0.0, time.time(),
                         ),
                     )
+                    # The redacted envelope preserves raw-outcome identity but cannot
+                    # authenticate copied safe fields after the original causal row is lost.
+                    # Never reconstruct positive learning authority from it.
                     counts["reentered_effects"] += 1
-                    if not trusted_receipt:
+                    if not structurally_valid_receipt:
                         counts["uncertain_effects"] += 1
                 elif len(effects) > 1:
                     receipt = {"ok": False, "certainty": "unknown", "reason": "multiple_effect_records_after_restart", "count": len(effects)}
@@ -204,18 +208,20 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             effects = tx.execute("SELECT * FROM effects WHERE episode_id=? ORDER BY ts,effect_id", (episode["episode_id"],)).fetchall()
             if len(effects) == 1 and effects[0]["outcome"] is not None:
                 effect = effects[0]
-                outcome, outcome_hash, trusted_receipt = _decode_persisted_effect_outcome(effect["outcome"])
+                _outcome, outcome_hash, structurally_valid_receipt = _decode_persisted_effect_outcome(effect["outcome"])
                 tx.execute(
                     "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
                     (
                         _causal_id(episode["episode_id"], effect["effect_id"]), episode["episode_id"], effect["effect_id"],
                         episode["observation_turn_id"], outcome_hash,
-                        _causal_credit(str(effect["status"]), outcome, str(effect["capability"])), time.time(),
+                        0.0, time.time(),
                     ),
                 )
+                # Missing canonical causal evidence is authority loss. Preserve the
+                # receipt identity, never recreate its former positive credit.
                 tx.execute("UPDATE workspace_episodes SET state='RECOVERED_LEGACY_EFFECT_REENTERED' WHERE episode_id=?", (episode["episode_id"],))
                 counts["reentered_effects"] += 1
-                if not trusted_receipt:
+                if not structurally_valid_receipt:
                     counts["uncertain_effects"] += 1
             elif len(effects) > 1:
                 _insert_unknown_reentry(tx, episode, "multiple_effect_records_after_restart", count=len(effects))

@@ -13,6 +13,10 @@ class EntityOSIntegrityError(PermissionError):
     pass
 
 
+class EntityOSOutcomeUnknown(RuntimeError):
+    """Execution started but its external outcome cannot be established safely."""
+
+
 @dataclass(frozen=True)
 class EntityOSBridge:
     """Execute an exact SHA-256 pinned EntityOS snapshot, not a mutable path inode."""
@@ -135,16 +139,22 @@ class EntityOSBridge:
         fd = self._open_verified()
         try:
             executable = f"/proc/self/fd/{fd}"
-            cp = subprocess.run(
-                [executable, *argv],
-                executable=executable,
-                pass_fds=(fd,),
-                shell=False,
-                capture_output=True,
-                text=False,
-                timeout=self.timeout,
-                env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
-            )
+            try:
+                cp = subprocess.run(
+                    [executable, *argv],
+                    executable=executable,
+                    pass_fds=(fd,),
+                    shell=False,
+                    capture_output=True,
+                    text=False,
+                    timeout=self.timeout,
+                    env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
+                )
+            except subprocess.TimeoutExpired as exc:
+                # The child crossed the execution boundary before the timeout.
+                # It may already have produced an external side effect, so a
+                # missing verified return receipt cannot be collapsed to FAIL.
+                raise EntityOSOutcomeUnknown("EntityOS execution timed out; external outcome unknown") from exc
         finally:
             os.close(fd)
         return {

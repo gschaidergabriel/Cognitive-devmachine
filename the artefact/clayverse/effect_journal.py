@@ -4,7 +4,7 @@ from .store import UnifiedDB,StaleGeneration,Lease
 
 class EffectJournal:
     """Transactional causal journal inside UnifiedDB; never a second state authority."""
-    FINAL={'VERIFIED','DENIED','FAILED','STALE_OUTCOME','UNKNOWN_AFTER_RESTART'}
+    FINAL={'VERIFIED','DENIED','FAILED','STALE_OUTCOME','UNKNOWN_AFTER_RESTART','UNKNOWN_AFTER_EXECUTION_TIMEOUT'}
     SAFE_OUTCOME_FIELDS=('ok','exit','boundary','entityos_sha256','denied','reason','error','certainty')
     def __init__(self,db:UnifiedDB):
         self.db=db

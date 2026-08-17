@@ -2,7 +2,7 @@ from __future__ import annotations
 import uuid
 from dataclasses import dataclass
 from .store import UnifiedDB,Lease,StaleGeneration
-from .entityos_bridge import EntityOSBridge
+from .entityos_bridge import EntityOSBridge,EntityOSOutcomeUnknown
 from .effect_journal import EffectJournal
 @dataclass(frozen=True)
 class EffectRequest:
@@ -54,6 +54,15 @@ class EffectGate:
                 return effect_id,outcome
             try:
                 outcome=dict(self.entityos_bridge.run(req.argv)); outcome['boundary']='EntityOS'; outcome['entityos_sha256']=self.entityos_bridge.sha256.lower()
+            except EntityOSOutcomeUnknown as exc:
+                self.journal.complete(effect_id,{
+                    'ok':False,
+                    'certainty':'unknown',
+                    'reason':'entityos_execution_timeout',
+                    'error':type(exc).__name__,
+                    'boundary':'EntityOS',
+                },'UNKNOWN_AFTER_EXECUTION_TIMEOUT')
+                raise
             except Exception as exc:
                 self.journal.complete(effect_id,{'ok':False,'error':type(exc).__name__,'boundary':'EntityOS'},'FAILED')
                 raise

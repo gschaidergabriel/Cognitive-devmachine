@@ -21,10 +21,10 @@ This is the canonical product workspace for the current ClayVerse endpoint: **on
 ### Retained convergence lanes
 
 - **#611** — single retained tmux idempotent-reapply repair. Exact retained blobs: `c185009f8af84e1288747d8352645777a36b2053` + `b6bb645dd07645f21ca2e5574f8392c9f13beafc`.
-- **#622** — single retained Python hash-lock generator lane. Current source head observed this cycle: `08f1fe82211676d5140723eeccc225b05bb6ea5f`. Resolver-wheel bootstrap trust is narrowed, but complete transitive generator-bootstrap hash closure and an accepted canonical product lock remain open; Docker is not yet on `--require-hashes`.
+- **#622** — single retained Python hash-lock generator lane. Current source head: `44ec5e109d40304b152c2fa05ba3e42e690f2820`. `SOURCE_LOCK.json` now declares the `pip-tools==7.5.3` wheel plus seven exact Linux/Python-3.13 bootstrap wheels (`build`, `click`, `packaging`, `pip`, `pyproject-hooks`, `setuptools`, `wheel`) with wheel filenames and SHA-256 values. The workflow materializes that exact set, downloads it with `--only-binary=:all: --require-hashes`, verifies the wheelhouse, then installs offline with `--no-index --find-links=... --require-hashes`. Matching source-contract tests are present at the current head. This remains **SOURCE CANDIDATE / UNEXECUTED**: exact digest-pinned runtime compatibility/no-extra-download closure is not yet observed, no canonical product `requirements.lock.txt` is accepted, and Docker is not yet on product `--require-hashes`.
 - **#602** — downstream managed native-Claude process attestation after successful in-image #611 validation.
 - **#623** — bounded identity/session-drift fail-closed **SOURCE CANDIDATE**, head `b519ee8b8f4ffa4fe35e7c921bbb314e877ac5a9`. Authenticated `IdentityRouter.resolve()` becomes read/validate-only: exactly one permanent session, canonical terminal name and live global generation; authentication no longer recreates a missing session. Four focused regressions cover normal non-mutating resolution, deleted session, duplicate rows and stale generation. It is unexecuted and remains DRAFT/unmerged.
-- Dr.-Unterweger **#810** — the single retained OCI/Vercel controller. Current source-only head observed at final refresh: `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second EntityOS staging path is admitted.
+- Dr.-Unterweger **#810** — the single retained OCI/Vercel controller. Current source-only head last observed before this README refresh: `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second EntityOS staging path is admitted.
 
 ### Current OCI execution identity
 
@@ -34,16 +34,16 @@ The strongest actually exercised closure remains:
 - exercised closure: `5e5adce0591058608bbd7381ecf570a39b282f0d`
 - exercised tree: `1e02285d77b08e6edd86f9017d0ceac5db262cf2`
 
-It is authoritative only for the already-observed Sandbox-admission/credential result and is stale for future compute because #622 advanced.
+It is authoritative only for the already-observed Sandbox-admission/credential result and is stale for future compute because retained product bytes moved.
 
-A prepared next execution closure exists on the already-retained closure lane:
+A later prepared execution closure exists on the already-retained closure lane:
 
 - closure: `218b51cad87e3907d1dd45adc7998c736be23cdb`
 - tree: `f16c87737cf74ef0703a1fc0a51fd99298450cd1`
 - base `main` at construction: `ce60e3544caceda22ae349021c952328cf62692b`
-- composition: retained #611 blobs + current #622 `SOURCE_LOCK`/workflow/source-binding-test blobs with previous exercised closure ancestry preserved.
+- composition at construction: retained #611 blobs + then-current #622 supply-chain bytes with previous exercised closure ancestry preserved.
 
-This is **SOURCE COMPOSITION ONLY** with zero runtime credit. PR810 is intentionally not rebound merely to retrigger compute while the credential prerequisite is absent; refresh/rebind product-relevant bytes exactly once immediately before the next real run.
+That prepared closure is now also **stale for the next execution attempt** because #622 advanced to `44ec5e10…`. It remains source-composition provenance with zero runtime credit. PR810 is intentionally not rebound merely to retrigger compute while the credential prerequisite is absent; refresh/rebind product-relevant bytes exactly once immediately before the next real run.
 
 ### Strongest executable evidence / blocker
 
@@ -80,7 +80,7 @@ The automatically-triggered GitHub workflow for #623 head `b519ee8…` ended bef
 
 After approved credential provisioning:
 
-`final product-byte refresh → rebind single #810 controller → Sandbox.create → host-side exact private Research + EntityOS verification → verified archives into Sandbox → reproduce/attest locked EntityOS → full source regression → exact OCI build → image digest + dependency identities → deny-all network → in-image #611 tmux transport policy → hardened service --once → materialize/verify #622 hash lock + complete generator bootstrap closure → rebuild with --require-hashes when accepted → #611 promotion → #602 native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
+`final product-byte refresh → rebind single #810 controller to then-current main/#611/#622 and any deliberately admitted source-only auth delta → Sandbox.create → host-side exact private Research + EntityOS verification → verified archives into Sandbox → reproduce/attest locked EntityOS → full source regression → exact OCI build → image digest + dependency identities → deny-all network → in-image #611 tmux transport policy → hardened service --once → execute/verify #622 hashed offline generator bootstrap + materialize canonical product hash lock → rebuild with product --require-hashes only after accepted lock evidence → #611 promotion → #602 native-Claude attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`.
 
 #623 may enter that closure only after deliberate review; its source-only state must not inherit runtime credit.
 
@@ -89,21 +89,23 @@ Whole-product PASS requires the complete path. Source inspection, PRs, CI defini
 ### Unusual-experiment accounting
 
 - This `go` has no safely shared immutable request/turn identity for an atomic unusual-experiment lease, so **0 valid unusual experiments** were executed.
-- Source composition, provenance/credential verification, deterministic regression design and fail-closed architecture hardening are ordinary work.
+- Source composition, supply-chain/provenance hardening, credential verification, deterministic regression design and fail-closed architecture hardening are ordinary work.
 - No VPS/self-hosted/production test path and no Together API were used.
 
 ### Latest cycle delta
 
-**2026-08-17 19:34 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; #623 runner-admission failure independently replicated; primary OCI credential blocker unchanged**
+**2026-08-17 19:36 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; #622 generator bootstrap is hash-closed/offline source-side, primary OCI credential blocker unchanged**
 
-- Prepared next OCI closure remains `218b51c…` / tree `f16c877…`, carrying current #622 supply-chain bytes with #611 and preserved exercised ancestry; it remains unexecuted.
-- PR810 remains the single controller at source-only v6 head `78d92753…`; latest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
-- Draft #623 remains the bounded request-time auth/session fail-closed candidate and is still unexecuted.
-- Its original GitHub job failed before steps, and independent rerun job `95389126338` again completed with **0 steps**. This strengthens the runner-admission classification only; it does not count as ClayVerse TEST_FAIL or PASS.
-- Browser/frontend runtime testing remains **not reached** because the accepted product source/image/service path is blocked before source staging; no proxy result is substituted.
-- Durable #623 rerun receipt: `the artefact/receipts/2026-08-17_GO_1934_PR623_GITHUB_RUNNER_ADMISSION_RERUN_GPT56SOL.json`.
-- Durable identity receipt: `the artefact/receipts/2026-08-17_GO_1931_IDENTITY_SESSION_DRIFT_FAILCLOSED_GPT56SOL.json`.
-- Durable refreshed-closure receipt: `the artefact/receipts/2026-08-17_GO_1931_OCI_CLOSURE_REBIND_CURRENT_PR622_GPT56SOL.json`.
+- PR **#622** advanced on the existing retained lane to `44ec5e109d40304b152c2fa05ba3e42e690f2820`; no second resolver/dependency authority was created.
+- `SOURCE_LOCK.json` now carries the exact `pip-tools==7.5.3` wheel plus seven exact bootstrap wheel identities/hashes for the declared Linux/Python-3.13 generator closure.
+- The generator workflow now downloads that declared closure under `--require-hashes`, verifies every expected wheel/hash, then performs installation offline under `--no-index` + `--require-hashes` before deterministic double compilation.
+- A matching source-contract test update is present at `44ec5e10…`; no pull-request workflow execution was observed for that head, so **zero runtime/acceptance credit** is awarded.
+- Durable fusion receipt already re-entered by the coordinated parallel organ: `the artefact/receipts/2026-08-17_GO_1935_PYTHON_LOCK_OFFLINE_BOOTSTRAP_CLOSURE_FUSION_GPT56SOL.json`. It records the source fusion through workflow head `be61f7af…`; the subsequent `44ec5e10…` commit tightens the matching source-contract test and does not convert the result into runtime evidence.
+- Prepared closure `218b51c…` / tree `f16c877…` is now stale for future compute because #622 advanced again; it must not be executed as if exact-current.
+- PR810 remains the single OCI controller; strongest actually-started evidence still proves `Sandbox.create=PASS_CREATED` and then fail-closed missing host-side `GITHUB_READ_TOKEN` before private source fetch. No source/OCI runtime credit is awarded.
+- Draft #623 remains unexecuted after two GitHub runner-admission failures with zero steps; it receives no semantic test credit.
+- Browser/frontend runtime testing remains **not reached** because the accepted product source/image/service path is blocked before private source staging.
+- No unusual experiment, VPS, self-hosted/production test or Together path was used.
 - Whole-product acceptance remains **IN_PROGRESS**.
 
 ### Cycle update rule
@@ -123,7 +125,7 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. A refreshed next closure and #623 architecture candidate exist source-side but remain unexecuted.
+Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The OCI path has repeatedly reached Sandbox admission and is currently blocked before private-source staging by the missing host-side read credential. The #622 generator-bootstrap trust root is now substantially narrower source-side but remains unexecuted; the next execution closure must be rebound only when the credential prerequisite is satisfied.
 
 ## Container source
 

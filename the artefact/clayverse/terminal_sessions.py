@@ -38,7 +38,7 @@ class TerminalSessionManager:
     MANAGED_SETTINGS = Path("/etc/claude-code/managed-settings.json")
     MANAGED_MCP = Path("/etc/claude-code/managed-mcp.json")
     MANAGED_TMUX = Path("/etc/clayverse/managed-tmux.conf")
-    MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v2"
+    MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v3"
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
 
@@ -100,7 +100,8 @@ class TerminalSessionManager:
         tmux only reads `-f` when a server starts. An already-running server can therefore
         ignore the `-f` supplied by a later client. The managed policy writes a versioned
         marker last after removing all default key tables. Verify the marker, both prefix
-        options, and the effective global key binding list before admitting attachment.
+        options, inert status/mouse/default-shell settings, and the effective global key
+        binding list before admitting attachment.
         """
         checks = (
             (
@@ -110,6 +111,9 @@ class TerminalSessionManager:
             ),
             ("prefix", ("show-options", "-gqv", "prefix"), "None"),
             ("prefix2", ("show-options", "-gqv", "prefix2"), "None"),
+            ("status", ("show-options", "-gqv", "status"), "off"),
+            ("mouse", ("show-options", "-gqv", "mouse"), "off"),
+            ("default-shell", ("show-options", "-gqv", "default-shell"), str(self.DIRECT_SHELL_GUARD)),
             ("keymap", ("list-keys",), ""),
         )
         for label, args, expected in checks:

@@ -9,9 +9,11 @@ import uuid
 
 from .effects import EffectGate, EffectRequest
 from .graph import ClayGraphProjection
+from .hyperposition import HyperpositionProjector
 from .memory import MemoryManager
+from .needle import NeedleRouter
 from .retrieval import WorldAssembler
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
 from .workspace import Workspace
 
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
@@ -77,13 +79,7 @@ class TurnLifecycle:
 
     @contextlib.contextmanager
     def begin_admission(self, prompt: str, resources: list[str] | None = None, *, claude_session_id: str | None = None):
-        """Open a user turn but commit only after the caller accepts its context.
-
-        UserPromptSubmit can reject a prompt. Keeping the SQLite transaction open
-        across the caller's bounded-context construction ensures a rejected hook does
-        not leave a turn, memory extraction, workspace episode or active-turn record
-        that Claude never actually received.
-        """
+        """Open a user turn but commit only after the caller accepts its context."""
         prompt = str(prompt)
         if not prompt or len(prompt) > 100_000:
             raise ValueError("invalid prompt")
@@ -104,11 +100,15 @@ class TurnLifecycle:
             if self.active() is not None:
                 raise TurnLifecycleError("active turn appeared during prompt admission")
             generation = self.db.session_generation(self.session_id)
+            entity_generation = self.db.entity_generation()
+            if generation != entity_generation:
+                raise StaleGeneration("entity_generation")
             now = time.time()
             salience = min(1.0, 0.15 + 0.03 * len(resource_refs) + min(len(prompt), 1200) / 2400)
             provenance = {
                 "source": "claude-hook:UserPromptSubmit",
                 "session_generation": generation,
+                "entity_generation": entity_generation,
                 "causal_id": causal_id,
             }
             if claude_session_id is not None:
@@ -134,6 +134,8 @@ class TurnLifecycle:
             self.memory.extract_explicit(turn_id, self.user_id, prompt)
             self.memory.compact(self.session_id)
             world = self._bound_world(self.world.assemble(self.session_id, resource_refs))
+            hyperpositions = HyperpositionProjector.from_world(world)
+            needle = NeedleRouter.analyze(prompt, world, hyperpositions, resource_refs)
             yield {
                 "user_id": self.user_id,
                 "session_id": self.session_id,
@@ -143,6 +145,8 @@ class TurnLifecycle:
                 "generation": generation,
                 "resources": resource_refs,
                 "workspace": {"salience": salience, "alternatives": alternatives},
+                "hyperpositions": hyperpositions,
+                "needle": needle,
                 "context": world,
             }
 
@@ -156,6 +160,8 @@ class TurnLifecycle:
             raise TurnLifecycleError("no active turn; effect denied")
         if row["effect_id"] is not None:
             raise TurnLifecycleError("only one effect admitted per turn in candidate contract")
+        if int(row["generation"]) != self.db.entity_generation():
+            raise StaleGeneration("entity_generation")
         if not int(row["workspace_selected"]):
             self.workspace.select(row["episode_id"], "request_effect")
             self.db.db.execute(
@@ -207,7 +213,7 @@ class TurnLifecycle:
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (assistant_id, self.session_id, self.user_id, ordinal, now, "assistant", response,
                  row["resource_refs"], json.dumps([effect_id] if effect_id else []),
-                 json.dumps({"source": "claude-hook:Stop", "causal_id": row["causal_id"]}, sort_keys=True)),
+                 json.dumps({"source": "claude-hook:Stop", "causal_id": row["causal_id"], "entity_generation": int(row["generation"])}, sort_keys=True)),
             )
             if existing_causal is None:
                 db.execute(
@@ -251,7 +257,7 @@ class TurnLifecycle:
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (system_id, self.session_id, self.user_id, ordinal, now, "system", f"TURN_ABORTED:{reason}",
                  row["resource_refs"], json.dumps([row["effect_id"]] if row["effect_id"] else []),
-                 json.dumps({"source": "claude-hook:failure", "causal_id": row["causal_id"]}, sort_keys=True)),
+                 json.dumps({"source": "claude-hook:failure", "causal_id": row["causal_id"], "entity_generation": int(row["generation"])}, sort_keys=True)),
             )
             if existing_causal is None:
                 db.execute(

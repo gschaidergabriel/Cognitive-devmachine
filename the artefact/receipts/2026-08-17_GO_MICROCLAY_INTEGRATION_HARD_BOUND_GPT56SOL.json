@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "recorded_at": "2026-08-17T13:27:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+  "product_main_at_join": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "integration_pr": 402,
+  "integration_branch": "go/integration-microclay-current-20260817-1315",
+  "branch_head_before_receipt": "71c30339cba11ab8dcf8fd686006b4d77ca08bc3",
+  "scope": [
+    "MicroClay serving/shadow packing parity",
+    "replay identity budget/limit binding and schema v7",
+    "retrieval receipt propagation into bounded Claude context",
+    "hard fail-closed total context bound"
+  ],
+  "observed_execution_boundary": {
+    "vercel": "connected surface exposes no direct Sandbox start/exec primitive",
+    "github_actions_runs": [32001305576, 32001619316, 32001683130],
+    "github_actions_observation": "microclay-integration jobs completed failure with no visible executed steps; runner/control-plane admission failure, zero product-test credit",
+    "vps_or_production_testing": false
+  },
+  "canonical_unusual_experiment": {
+    "name": "BOUND_WORLD_MINIMUM_OVERFLOW",
+    "count": "1/1",
+    "performed_by_parallel_worker": true,
+    "pre_repair_observation": "four 5000-character recent messages with max_chars=1000 returned 20319 serialized characters",
+    "interpretation": "hard-bound assumption falsified in bounded isolated source-mechanism slice only"
+  },
+  "independent_replication": {
+    "name": "RETRIEVAL_RECEIPT_DOMINATES_WORLD_BUDGET",
+    "canonical_experiment_credit": false,
+    "reason": "parallel worker had already consumed the macro-cycle unusual-experiment slot on the same hard-bound mechanism",
+    "pre_repair_observation": "receipt-dominant case returned 1954 serialized characters at max_chars=1000",
+    "post_repair_regression": "same mechanism fails closed; ordinary compact case returned 723 characters at max_chars=800",
+    "evidence_scope": "supporting source-mechanism replication/regression, not whole-product runtime truth"
+  },
+  "repair": {
+    "implementation_commit": "a1ecb5ec5bab65540412bae0d27f332714fa988a",
+    "canonical_regression_commit": "6ed4c5902fd35ce0b6557b7f6b0eee39a751d837",
+    "workflow_fusion_commit": "71c30339cba11ab8dcf8fd686006b4d77ca08bc3",
+    "mechanism": "after all allowed trims, recompute serialized world size and raise TurnLifecycleError if max_chars still cannot be satisfied",
+    "duplicate_test_fused": true,
+    "workflow_unusual_step_removed": true
+  },
+  "promotion_status": "RETAIN_REPAIR_UNEXECUTED_EXACT_HEAD",
+  "merge_status": "DO_NOT_MERGE_UNTIL_ACTUAL_ISOLATED_EXECUTION",
+  "next_exact_gate": "execute PR 402 exact current head in an authorized isolated runner with visible steps; run focused MicroClay fusion regressions including canonical hard-bound test, then schema migration/replay and whole ClayVerse OCI/runtime gates",
+  "truth_boundary": "source review and bounded mechanism regressions support the repair; no exact PR-head or whole ClayVerse PASS is claimed",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

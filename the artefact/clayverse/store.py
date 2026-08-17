@@ -3,6 +3,8 @@ import contextlib, hashlib, json, sqlite3, time, uuid
 from dataclasses import dataclass
 from pathlib import Path
 
+CURRENT_SCHEMA_VERSION = 6
+
 SCHEMA = r'''
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
@@ -39,13 +41,24 @@ class UnifiedDB:
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
         try:
-            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
-            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','6') ON CONFLICT(key) DO UPDATE SET value='6'")
+            self.db.execute("PRAGMA busy_timeout=30000"); self._assert_compatible_schema_version(); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
+            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(CURRENT_SCHEMA_VERSION),))
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
         except Exception:
             self.db.close(); raise
+    def _assert_compatible_schema_version(self):
+        meta=self.db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='meta'").fetchone()
+        if not meta: return
+        try: row=self.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        except sqlite3.DatabaseError as exc: raise RuntimeError('existing UnifiedDB schema metadata is incompatible') from exc
+        if row is None: raise RuntimeError('existing UnifiedDB is missing schema_version')
+        try: version=int(row[0])
+        except (TypeError,ValueError) as exc: raise RuntimeError('existing UnifiedDB schema_version is invalid') from exc
+        if version <= 0: raise RuntimeError('existing UnifiedDB schema_version is invalid')
+        if version > CURRENT_SCHEMA_VERSION:
+            raise RuntimeError(f'UnifiedDB schema version {version} is newer than supported {CURRENT_SCHEMA_VERSION}')
     def _retire_hidden_raw_turn_ledger(self):
         self.db.executescript("""
         DROP TRIGGER IF EXISTS turn_ledger_no_update;

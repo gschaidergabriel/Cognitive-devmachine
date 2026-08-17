@@ -6,6 +6,7 @@ import re
 import time
 import uuid
 
+from .autonomy import AutonomyController
 from .effect_journal import EffectJournal
 from .store import UnifiedDB
 
@@ -118,6 +119,67 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
     )
 
 
+def _recover_autonomy_generation(db: UnifiedDB, expected_generation: int) -> dict[str, int]:
+    """Rebind durable goal intent without replaying uncertain cross-restart effects."""
+    live = db.entity_generation()
+    if int(expected_generation) != live:
+        raise RecoveryIntegrityError("autonomy recovery generation changed unexpectedly")
+
+    controller = AutonomyController(db)
+    counts = {
+        "rebound": 0,
+        "interrupted_no_effect_requeued": 0,
+        "ambiguous_effect_blocked": 0,
+        "effect_evidence_rebind_required": 0,
+        "blocked_preserved": 0,
+        "terminal_preserved": 0,
+    }
+    changed = False
+    now = time.time()
+    with db.tx() as tx:
+        state = controller._load(tx)
+        for goal_id in state["queue"]:
+            goal = state["goals"][goal_id]
+            prior_generation = int(goal["generation"])
+            if prior_generation == live:
+                continue
+            if prior_generation > live:
+                raise RecoveryIntegrityError("autonomy goal generation is ahead of live entity")
+            if goal["status"] in {"COMPLETED", "CANCELLED"}:
+                counts["terminal_preserved"] += 1
+                continue
+
+            step = goal["current_step"]
+            goal["generation"] = live
+            if step and step["status"] == "ADMITTED" and step["kind"] == "effect":
+                step["status"] = "FAILED"
+                goal["status"] = "BLOCKED"
+                goal["blocked_reason"] = "unknown_effect_after_generation_change"
+                counts["ambiguous_effect_blocked"] += 1
+            elif goal["evidence_effect_ids"]:
+                goal["status"] = "BLOCKED"
+                goal["blocked_reason"] = "effect_evidence_requires_generation_rebind"
+                counts["effect_evidence_rebind_required"] += 1
+            elif step and step["status"] in {"PROPOSED", "ADMITTED"}:
+                step["status"] = "FAILED"
+                goal["status"] = "ACTIVE"
+                goal["blocked_reason"] = "recovered_interrupted_no_effect_step"
+                counts["interrupted_no_effect_requeued"] += 1
+            elif goal["status"] == "BLOCKED":
+                counts["blocked_preserved"] += 1
+            else:
+                if goal["status"] in {"WAITING", "VERIFYING"}:
+                    goal["status"] = "ACTIVE"
+                goal["blocked_reason"] = None
+                counts["rebound"] += 1
+            goal["updated_at"] = now
+            changed = True
+
+        if changed:
+            controller._save(tx, state)
+    return counts
+
+
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     """Close interrupted work without replay, then advance the one entity generation."""
 
@@ -172,9 +234,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                             0.0, time.time(),
                         ),
                     )
-                    # The redacted envelope preserves raw-outcome identity but cannot
-                    # authenticate copied safe fields after the original causal row is lost.
-                    # Never reconstruct positive learning authority from it.
                     counts["reentered_effects"] += 1
                     if not structurally_valid_receipt:
                         counts["uncertain_effects"] += 1
@@ -201,8 +260,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             tx.execute("DELETE FROM active_turns WHERE session_id=?", (active["session_id"],))
             counts["active_turns_closed"] += 1
 
-        # EffectJournal may have recovered a legacy PENDING effect that had no active
-        # hook row. The causal re-entry now exists; make workspace closure match it.
         already_reentered = tx.execute(
             "SELECT w.episode_id FROM workspace_episodes w "
             "WHERE w.state IN ('OPEN','SELECTED') "
@@ -216,9 +273,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
             )
             counts["existing_reentries_closed"] += 1
 
-        # Legacy/open episodes without an active hook row or causal row are evidence
-        # from older artifact generations. Every branch gets an explicit re-entry;
-        # unknown stays unknown and no external effect is replayed.
         episodes = tx.execute(
             "SELECT w.* FROM workspace_episodes w "
             "WHERE w.state IN ('OPEN','SELECTED') "
@@ -240,8 +294,6 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                         0.0, time.time(),
                     ),
                 )
-                # Missing canonical causal evidence is authority loss. Preserve the
-                # receipt identity, never recreate its former positive credit.
                 tx.execute("UPDATE workspace_episodes SET state='RECOVERED_LEGACY_EFFECT_REENTERED' WHERE episode_id=?", (episode["episode_id"],))
                 counts["reentered_effects"] += 1
                 if not structurally_valid_receipt:
@@ -263,4 +315,5 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         tx.execute("UPDATE leases SET expires_at=0")
 
     counts["generation"] = db.advance_entity_generation()
+    _recover_autonomy_generation(db, counts["generation"])
     return counts

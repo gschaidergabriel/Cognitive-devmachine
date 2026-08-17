@@ -78,12 +78,16 @@
     "runtime_credit": "ZERO"
   },
   "unusual_experiment_accounting": {
-    "trigger_key": "ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
-    "global_experiment_already_consumed": true,
+    "shared_coordination_correction": "the artefact/receipts/2026-08-17_GO_1502_EXPERIMENT_LEASE_RACE_CORRECTION_GPT56SOL.json",
+    "observed_executed_unusual_interventions": 1,
     "experiment_name": "recovery_receipt_semantic_forgery_discriminator",
-    "global_result": "FAIL_COUNTEREXAMPLE_FOUND",
+    "observed_result": "FAIL_COUNTEREXAMPLE_FOUND",
+    "result_bytes_preserved_as_negative_evidence": true,
+    "lease_validity": "INVALID_OR_UNRESOLVED_COORDINATION",
+    "reason": "Two competing claim encodings existed for the same minute-precision 15:02 go, including an invalid whole-second fallback.",
+    "further_unusual_experiments_for_this_macro_cycle": "FORBIDDEN",
     "this_lane_added_another_unusual_experiment": false,
-    "note": "This effect linearization work is ordinary deterministic regression/fusion and does not consume a second unusual-experiment slot."
+    "note": "This effect linearization work is ordinary deterministic regression/fusion only."
   },
   "acceptance": {
     "source_candidate": true,

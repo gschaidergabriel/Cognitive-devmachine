@@ -28,23 +28,30 @@ def test_docker_build_cannot_self_authorize_arbitrary_entityos_digest():
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
     assert "COPY --chown=root:root entityos.lock.json /opt/entityos/entityos.lock.json" in dockerfile
     assert 'test "${ENTITYOS_SHA256}" = "$LOCK_SHA256"' in dockerfile
-    assert 'test "$(stat -c %s /opt/entityos/EntityOS)" = "$LOCK_SIZE"' in dockerfile
+    assert 'test "$(stat -c %s /opt/entityos-stage/EntityOS)" = "$LOCK_SIZE"' in dockerfile
     assert "sha256sum -c -" in dockerfile
 
 
-def test_default_deny_build_context_admits_every_declared_non_tree_copy_input():
+def test_default_deny_build_context_admits_only_bounded_optional_entityos_input():
     dockerignore = (ROOT / ".dockerignore").read_text(encoding="utf-8")
-    assert dockerignore.splitlines()[3] == "*"
+    rules = dockerignore.splitlines()
+    assert "*" in rules
     for required in (
         "!runtime_CLAUDE.md",
         "!entityos.lock.json",
-        "!EntityOS",
+        "!build-assets/",
+        "!build-assets/entityos/",
+        "!build-assets/entityos/.keep",
+        "!build-assets/entityos/EntityOS",
     ):
-        assert required in dockerignore.splitlines()
+        assert required in rules
+    assert "!EntityOS" not in rules
+    assert "!build-assets/entityos/**" not in rules
 
 
-def test_oci_workflow_derives_build_digest_from_tracked_lock():
-    workflow = (REPO / ".github" / "workflows" / "clayverse-artifact-ci.yml").read_text(encoding="utf-8")
-    assert 'doc["schema"] == "ClayVerseEntityOSArtifactLock/v1"' in workflow
-    assert 'ACTUAL_SHA256="$(sha256sum "the artefact/EntityOS"' in workflow
-    assert '--build-arg "ENTITYOS_SHA256=${CLAYVERSE_ENTITYOS_SHA256}"' in workflow
+def test_oci_workflow_cannot_bypass_tracked_lock_for_optional_entityos():
+    workflow = (REPO / ".github" / "workflows" / "clayverse-artefact-ci.yml").read_text(encoding="utf-8")
+    assert "EntityOS release tag and SHA-256 must be supplied together" in workflow
+    assert 'sh ./stage-entityos.sh /tmp/clayverse-entityos-release/EntityOS "$ENTITYOS_SHA256"' in workflow
+    assert 'docker build --pull=false --build-arg "ENTITYOS_SHA256=${ENTITYOS_SHA256:-}"' in workflow
+    assert "GITHUB_READ_TOKEN" not in workflow

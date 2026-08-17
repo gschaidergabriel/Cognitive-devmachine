@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T18:10:00+07:00",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T18:01+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "SOURCE_CONTROLLER_DEFECT_REPAIRED_SUPPORTING_MECHANISM_CHECK_RUNTIME_UNOBSERVED",
+  "canonical_research_main_observed_before_write": "915d3e67ec9d83cb275c298dfccd6941a339adac",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "head_after_repair": "f9d5fcb53167545110f9a2eb10c4747c77112333",
+    "underlying_runner_blob": "5d56dd0d7a94289c96211ac467e2398adc958ff4",
+    "wrapper_repair_commit": "5d11386bdb6a8c13d3567c341a717487f588dcad",
+    "regression_commit": "f3fdbcba4c80cc4d80bf3fab9730421b17777061",
+    "regression_correction_commit": "f9d5fcb53167545110f9a2eb10c4747c77112333"
+  },
+  "defect": {
+    "location": "in_image_dependency_identity dpkg-query command embedded in an outer JavaScript template literal",
+    "unsafe_shape": "two-backslash ${Package}/${Version} dpkg format inside JS template literal",
+    "predicted_failure": "ReferenceError: Package is not defined when the inventory template is evaluated",
+    "failure_order": "after OCI build, before dependency inventory and in-image tmux/service assertions",
+    "product_semantics_changed": false
+  },
+  "repair": {
+    "same_retained_lane": true,
+    "mechanism": "current-target wrapper requires exactly two unsafe dpkg format occurrences and rewrites them to default dpkg-query -W before importing the generated runner",
+    "fail_closed_on_source_drift": "CURRENT_TARGET_DPKG_INVENTORY_IDENTITY_MISMATCH",
+    "generated_expected_commands": [
+      "dpkg-query -W tmux",
+      "dpkg-query -W ca-certificates"
+    ],
+    "unusual_experiment_count_added": 0
+  },
+  "supporting_isolated_mechanism_check": {
+    "surface": "isolated non-production container",
+    "unsafe_reference_error_observed": true,
+    "expected_unsafe_occurrences": 2,
+    "safe_rewrite_observed": true,
+    "scope": "mechanism/source support only; not exact Vercel Sandbox or OCI runtime evidence"
+  },
+  "current_higher_order_blockers": [
+    "Vercel deployment admission currently rate-limited before build/Sandbox.create",
+    "Daytona fallback remains blocked before provider contact on the current controller surface",
+    "current #810 source staging still requires the separately identified locked EntityOS reproduction/staging repair before OCI build can succeed"
+  ],
+  "runtime_credit": 0,
+  "whole_product_acceptance": "IN_PROGRESS",
+  "non_claims": [
+    "no exact current OCI build PASS",
+    "no Vercel Sandbox runtime PASS or FAIL",
+    "no Daytona runtime PASS or FAIL",
+    "no #611 promotion",
+    "no whole ClayVerse PASS"
+  ]
+}

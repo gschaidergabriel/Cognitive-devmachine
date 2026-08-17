@@ -58,6 +58,10 @@ The same template also selects the ClayVerse pod with an explicit **default-deny
 
 Readiness and liveness are intentionally distinct: `/readyz` is the full runtime admission gate, while `/healthz` is the narrower liveness surface. A recoverable readiness loss must stop traffic without automatically being treated as a dead appliance.
 
+Tier-2 is also explicitly stronger than an in-place application-container restart: final recovery must replace the whole Kata Pod sandbox/VM, prove a new Pod UID plus new sandbox/VM identity, reattach only declared persistent volumes, advance the canonical generation and re-attest readiness before ingress returns. Until an external fail-closed deployment mechanism proves that full-sandbox replacement, the reference Kubernetes/Kata profile is `TIER2_REPLACEMENT_BLOCKED` for final acceptance.
+
+Kata security is version-and-configuration bound, not a fixed historical number. Upstream operates a rolling-release security model in which only the current monthly release is supported. The 2026-08-17 refresh makes the old `3.31.0` historical floor insufficient for final acceptance: upstream `releases/latest` identifies `4.0.0`, while July advisories affecting releases through `3.32.0` are first patched in `4.0.0`. Final deployment therefore must resolve and use the then-current supported release, reject unsupported prior releases, bind exact runtime/hypervisor/shared-filesystem configuration, and reject unreviewed runtime-mutating `io.katacontainers.*` Pod annotations after admission mutation.
+
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
 ### Retained convergence lanes
@@ -79,8 +83,9 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - only declared persistent volumes survive full appliance replacement;
 - baseline ClayVerse ingress+egress deny is actually enforced by the deployed CNI;
 - the exact reviewed network allow policy opens only admitted paths while tested non-admitted flows remain denied;
+- the installed Kata/runtime identity is the then-current upstream-supported release and the effective runtime configuration/Pod annotations match the reviewed acceptance set;
 - Tier-1 EntityOS/internal recovery;
-- Tier-2 full microVM/workload replacement from the same image digest;
+- Tier-2 full Pod-sandbox/microVM replacement from the same image digest, with new Pod plus sandbox/VM identity rather than an in-place container restart;
 - UnifiedDB/WAL/snapshot recovery under a new generation;
 - stale pre-crash result rejection;
 - no blind effect replay around crash/acknowledgement boundaries;
@@ -89,32 +94,32 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 ### Current execution boundary
 
-The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
+The architecture and fail-closed Kata deployment profile are canonical source, but **actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-The now-current MicroVM source contract has been independently reconstructed from the exact three Git blobs and exercised in an authorized isolated non-production environment: Git blob identities matched **3/3** — contract `57db5224db000fc246445d68938b218ed8e4ff14`, template `b075755d24fcd3dbd203b02f67eeff8a5a8c571b`, focused test `a03de2e8fe1473c7e019dce66710bc04d244aa75` — and `tests/test_microvm_deployment_contract.py` passed **7/7**. The current set covers the mandatory guest-kernel envelope, immutable/runtime-state boundaries, default-deny ingress+egress, CNI enforcement obligations, `/readyz` readiness versus `/healthz` liveness, and bounded provider credential shape. This is bounded exact-file source/mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
+A previous exact three-blob reconstruction exercised the then-current MicroVM contract/template/test set at **7/7 PASS**. That result remains valid only for its recorded blob identities; it is no longer exact-current-head evidence because live fusion subsequently strengthened Tier-2 sandbox-replacement semantics and Kata rolling-release/advisory requirements. At the 2026-08-17 23:01 +07 refresh, observed current blobs are contract `794b209bc8ff14cbaf898b31557daac075977818`, template `629f7bbb7627e997839597edd499ce008c569a0f`, and focused test `283b269042e056e7adca227e84ae31a055f898da`. Those stronger exact-current blobs have **not** been executed as a bound set by this organ, so they receive source-contract credit only, not a carried-forward 7/7 runtime/test claim.
 
-The Claude terminal source already starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
+The Claude terminal source starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
 
 Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel #810 bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox. The connected Vercel tool surface available to this organ exposes inspection/documentation but no environment-secret mutation or direct Sandbox lifecycle mutation, so this prerequisite cannot be closed safely from this worker.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation + current-supported Kata/runtime configuration -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full Pod sandbox/microVM -> prove new sandbox identity -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 22:59 +07:00 — live-fused MicroVM contract independently replicated at current 7/7; execution blocker revalidated.**
+**2026-08-17 23:01 +07:00 — stale-head evidence fenced; Kata security/Tier-2 contract re-entered.**
 
-- parallel live fusion had already closed the MicroVM default-deny NetworkPolicy gap and the liveness/readiness probe separation, so no duplicate implementation was created;
-- independent exact reconstruction matched all three current Git blobs: contract `57db5224db000fc246445d68938b218ed8e4ff14`, template `b075755d24fcd3dbd203b02f67eeff8a5a8c571b`, focused test `a03de2e8fe1473c7e019dce66710bc04d244aa75`;
-- focused deterministic regression: **7/7 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
-- the parallel terminal secret-environment fence is retained: interactive Claude launches from the existing `env -i` allowlist and the new regression explicitly rejects provider/auth/orchestration secret forwarding; no second provider/security authority was introduced;
-- retained #810 controller remains Draft at `78d92753d9442c66c3ffcff127c31faa98ffd622`; strongest bounded execution remains real `Sandbox.create` followed by fail-closed `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit zero;
-- the connected Vercel surface exposes no secret/environment mutation path, so safe host-side credential provisioning remains the exact admission blocker rather than another retry/controller fork;
-- durable receipt: `receipts/2026-08-17_GO_2250_MICROVM_CURRENT_7OF7_INDEPENDENT_REPLICATION_GPT56SOL.json`; existing terminal/network receipts remain preserved;
-- runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
+- current research `main` was observed at `7c27a1bd1d06e74aa39ffe20d1aa1e7cb63008e3` before this README write;
+- the earlier 7/7 MicroVM regression is retained as bounded exact-file evidence for its recorded blobs, but is no longer described as exact-current because the contract/template/test advanced afterward;
+- current source now requires full Kata Pod-sandbox/VM replacement for Tier-2 recovery; an in-place container restart cannot satisfy Tier-2 or whole-product acceptance;
+- current upstream Kata security evidence confirms rolling-release support semantics, current `4.0.0` release state at this refresh, and July advisories that make the old `3.31.0` historical floor insufficient for current final acceptance;
+- current contract/test now fence the then-current supported Kata release and reject unreviewed runtime-mutating `io.katacontainers.*` annotations after admission mutation;
+- two attempted stale direct writes during this cycle were rejected atomically with GitHub `409`, preventing overwrite of newer parallel fusion; duplicate implementations were not forced through;
+- strongest executable OCI blocker remains host-side provisioning of the sensitive Vercel Preview `GITHUB_READ_TOKEN` for private Research/EntityOS staging; it must remain outside the Sandbox and cannot be provisioned through the connected Vercel surface available to this organ;
+- runtime credit remains **zero** for exact final OCI, Kubernetes, Kata/microVM and CNI enforcement;
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id for the atomic lease.
 
 ## Verification
 
-Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual enforcement of the accepted ingress/egress policy and live process-environment attestation.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including actual current-supported Kata runtime/configuration, full-sandbox Tier-2 replacement, enforced ingress/egress policy and live process-environment attestation.

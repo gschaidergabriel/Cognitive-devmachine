@@ -7,12 +7,14 @@ on:
   workflow_dispatch:
     inputs:
       entityos_release_tag:
-        description: 'Same-repository release tag containing exactly one asset named EntityOS'
-        required: true
+        description: 'Optional same-repository release tag containing exactly one asset named EntityOS'
+        required: false
+        default: ''
         type: string
       entityos_sha256:
-        description: 'Expected lowercase/uppercase 64-hex SHA-256 of the EntityOS asset'
-        required: true
+        description: 'Optional expected lowercase/uppercase 64-hex SHA-256 of the EntityOS asset'
+        required: false
+        default: ''
         type: string
 
 permissions:
@@ -32,18 +34,36 @@ jobs:
           python-version: '3.13'
           cache: pip
           cache-dependency-path: 'the artefact/requirements.txt'
-      - name: Stage exact EntityOS release asset
+      - name: Resolve optional EntityOS inputs
         env:
-          GH_TOKEN: ${{ github.token }}
-          ENTITYOS_RELEASE_TAG: ${{ inputs.entityos_release_tag }}
+          ENTITYOS_RELEASE_TAG_INPUT: ${{ inputs.entityos_release_tag }}
           ENTITYOS_SHA256_INPUT: ${{ inputs.entityos_sha256 }}
         run: |
           set -euo pipefail
+          entityos_release_tag="$ENTITYOS_RELEASE_TAG_INPUT"
           entityos_sha256=$(printf '%s' "$ENTITYOS_SHA256_INPUT" | tr 'A-F' 'a-f')
+          if [ -z "$entityos_release_tag" ] && [ -z "$entityos_sha256" ]; then
+            echo 'ENTITYOS_RELEASE_TAG=' >> "$GITHUB_ENV"
+            echo 'ENTITYOS_SHA256=' >> "$GITHUB_ENV"
+            echo 'EntityOS omitted: validating tokenless ClayVerse baseline.'
+            exit 0
+          fi
+          if [ -z "$entityos_release_tag" ] || [ -z "$entityos_sha256" ]; then
+            echo 'EntityOS release tag and SHA-256 must be supplied together' >&2
+            exit 64
+          fi
           case "$entityos_sha256" in
             *[!0-9a-f]*|'') echo 'invalid EntityOS SHA-256' >&2; exit 64 ;;
           esac
           test "${#entityos_sha256}" -eq 64
+          echo "ENTITYOS_RELEASE_TAG=$entityos_release_tag" >> "$GITHUB_ENV"
+          echo "ENTITYOS_SHA256=$entityos_sha256" >> "$GITHUB_ENV"
+      - name: Stage optional exact EntityOS release asset
+        if: ${{ inputs.entityos_release_tag != '' && inputs.entityos_sha256 != '' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
           rm -rf /tmp/clayverse-entityos-release
           mkdir -p /tmp/clayverse-entityos-release
           gh release download "$ENTITYOS_RELEASE_TAG" \
@@ -52,9 +72,8 @@ jobs:
             --dir /tmp/clayverse-entityos-release
           test -f /tmp/clayverse-entityos-release/EntityOS
           test "$(find /tmp/clayverse-entityos-release -maxdepth 1 -type f -name 'EntityOS' | wc -l)" -eq 1
-          sh ./stage-entityos.sh /tmp/clayverse-entityos-release/EntityOS "$entityos_sha256"
-          echo "ENTITYOS_SHA256=$entityos_sha256" >> "$GITHUB_ENV"
-          printf 'entityos_release_tag=%s entityos_sha256=%s\n' "$ENTITYOS_RELEASE_TAG" "$entityos_sha256"
+          sh ./stage-entityos.sh /tmp/clayverse-entityos-release/EntityOS "$ENTITYOS_SHA256"
+          printf 'entityos_release_tag=%s entityos_sha256=%s\n' "$ENTITYOS_RELEASE_TAG" "$ENTITYOS_SHA256"
       - name: Install test dependencies
         run: |
           python -m pip install --upgrade pip
@@ -62,14 +81,18 @@ jobs:
       - name: Run full candidate tests
         run: python -m pytest -q
       - name: Build exact OCI candidate
-        run: docker build --pull=false --build-arg "ENTITYOS_SHA256=${ENTITYOS_SHA256}" -t clayverse:${GITHUB_SHA} .
-      - name: Verify packaged runtimes, EntityOS bytes and non-root image
+        run: docker build --pull=false --build-arg "ENTITYOS_SHA256=${ENTITYOS_SHA256:-}" -t clayverse:${GITHUB_SHA} .
+      - name: Verify packaged runtimes, optional EntityOS bytes and non-root image
         run: |
           docker run --rm --entrypoint python clayverse:${GITHUB_SHA} --version
           docker run --rm --entrypoint node clayverse:${GITHUB_SHA} --version
           docker run --rm --entrypoint claude clayverse:${GITHUB_SHA} --version
-          embedded_sha=$(docker run --rm --entrypoint python clayverse:${GITHUB_SHA} -c "import hashlib; print(hashlib.sha256(open('/opt/entityos/EntityOS','rb').read()).hexdigest())")
-          test "$embedded_sha" = "$ENTITYOS_SHA256"
+          if [ -n "${ENTITYOS_SHA256:-}" ]; then
+            embedded_sha=$(docker run --rm --entrypoint python clayverse:${GITHUB_SHA} -c "import hashlib; print(hashlib.sha256(open('/opt/entityos/EntityOS','rb').read()).hexdigest())")
+            test "$embedded_sha" = "$ENTITYOS_SHA256"
+          else
+            docker run --rm --entrypoint sh clayverse:${GITHUB_SHA} -c 'test ! -e /opt/entityos/EntityOS'
+          fi
           test "$(docker image inspect clayverse:${GITHUB_SHA} --format '{{.Config.User}}')" = "clayverse"
       - name: Run packaged state self-check
         run: docker run --rm clayverse:${GITHUB_SHA} --once
@@ -83,8 +106,6 @@ jobs:
           test "$rc" -ne 0
           grep -q 'CLAYVERSE_CLERK_MAP_JSON is required' /tmp/clayverse-no-config.log
       - name: Capture exact image identity
-        env:
-          ENTITYOS_RELEASE_TAG: ${{ inputs.entityos_release_tag }}
         run: |
           docker image inspect clayverse:${GITHUB_SHA} --format 'repo_digest={{json .RepoDigests}} image_id={{.Id}} user={{.Config.User}}' | tee /tmp/clayverse-image-receipt.txt
-          printf 'source_sha=%s entityos_release_tag=%s entityos_sha256=%s\n' "$GITHUB_SHA" "$ENTITYOS_RELEASE_TAG" "$ENTITYOS_SHA256" | tee -a /tmp/clayverse-image-receipt.txt
+          printf 'source_sha=%s entityos_release_tag=%s entityos_sha256=%s\n' "$GITHUB_SHA" "${ENTITYOS_RELEASE_TAG:-}" "${ENTITYOS_SHA256:-}" | tee -a /tmp/clayverse-image-receipt.txt

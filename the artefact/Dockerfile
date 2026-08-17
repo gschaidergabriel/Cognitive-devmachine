@@ -14,12 +14,22 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DISABLE_AUTOUPDATER=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
-# Keep the baseline OS package surface small. Browser xterm and native Claude Code
-# are installed from repository-owned digest locks below rather than via npm.
-RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates tmux \
- && rm -rf /var/lib/apt/lists/*
 COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
+COPY build/install_pinned_apt.py /opt/clayverse-build/install_pinned_apt.py
+
+# Replace the mutable Debian mirror configuration inherited from the base image with
+# the exact repository-owned snapshot contract before resolving any new OS package.
+# APT still verifies Debian's signed Release -> Packages -> .deb hash chain; the
+# fixed snapshot timestamp prevents later mirror state from changing the resolution.
+RUN rm -f /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources \
+ && python /opt/clayverse-build/install_pinned_apt.py --write-sources /etc/apt/sources.list.d/clayverse-snapshot.sources \
+ && APT_PACKAGES="$(python /opt/clayverse-build/install_pinned_apt.py --print-packages)" \
+ && apt-get update \
+ && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ${APT_PACKAGES} \
+ && rm -rf /var/lib/apt/lists/*
+
+# Browser xterm and native Claude Code are installed from repository-owned digest
+# locks below rather than via npm.
 COPY build/install_pinned_xterm.py /opt/clayverse-build/install_pinned_xterm.py
 COPY build/install_pinned_claude.py /opt/clayverse-build/install_pinned_claude.py
 RUN mkdir -p /opt/clayverse/vendor \

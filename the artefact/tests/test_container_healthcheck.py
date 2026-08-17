@@ -6,6 +6,17 @@ from clayverse.store import UnifiedDB
 from clayverse.terminal_gateway import _runtime_ready
 
 
+class _ReadyTerminals:
+    def binding(self, user_id):
+        return user_id
+
+    def _has_session(self, binding):
+        return True
+
+    def _assert_tmux_server_policy(self, binding):
+        return None
+
+
 def test_container_healthcheck_is_read_only_runtime_readiness_probe():
     dockerfile=(Path(__file__).resolve().parents[1]/'Dockerfile').read_text()
     health=next(line for line in dockerfile.splitlines() if line.startswith('HEALTHCHECK '))
@@ -19,9 +30,10 @@ def test_container_healthcheck_is_read_only_runtime_readiness_probe():
 def test_runtime_readiness_tracks_minimum_canonical_state_and_fails_closed(tmp_path):
     db = UnifiedDB(tmp_path / 'unified.db')
     IdentityRouter(db, {})
-    assert _runtime_ready(db) is True
+    terminals = _ReadyTerminals()
+    assert _runtime_ready(db, terminals) is True
     db.close()
-    assert _runtime_ready(db) is False
+    assert _runtime_ready(db, terminals) is False
 
 
 def test_runtime_readiness_rejects_wrong_schema_without_mutation(tmp_path):
@@ -29,7 +41,7 @@ def test_runtime_readiness_rejects_wrong_schema_without_mutation(tmp_path):
     IdentityRouter(db, {})
     try:
         db.db.execute("UPDATE meta SET value='999' WHERE key='schema_version'")
-        assert _runtime_ready(db) is False
+        assert _runtime_ready(db, _ReadyTerminals()) is False
     finally:
         db.close()
 

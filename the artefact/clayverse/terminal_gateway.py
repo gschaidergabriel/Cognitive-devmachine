@@ -5,7 +5,6 @@ import html
 import json
 import math
 import os
-import subprocess
 import time
 from pathlib import Path
 
@@ -125,23 +124,17 @@ def _write_pty_all(fd: int, payload: bytes, auth_deadline: float) -> None:
 
 
 def _terminal_sessions_ready(terminals: TerminalSessionManager) -> bool:
-    """Read-only liveness probe for both canonical managed tmux/Claude sessions."""
-    for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items():
+    """Read-only readiness through the canonical manager-owned tmux control path."""
+    for user_id in CANONICAL_TERMINAL_NAMES:
         binding = terminals.binding(user_id)
-        cp = subprocess.run(
-            terminals._tmux_argv(binding, "has-session", "-t", terminal_name),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            timeout=2,
-            check=False,
-        )
-        if cp.returncode != 0:
+        if not terminals._has_session(binding):
             return False
+        terminals._assert_tmux_server_policy(binding)
     return True
 
 
 def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
-    """Read-only readiness check for canonical state plus both live product terminals."""
+    """Read-only readiness check for canonical state plus both admitted product terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()

@@ -47,56 +47,6 @@ _FACET_PATTERNS = (
     ("conflict", re.compile(r"(?i)\b(conflict|contradict|counterexample|gegenhypoth|widerspruch)\b")),
 )
 
-_METHOD_SCHEMA = r'''
-CREATE TABLE IF NOT EXISTS method_records(
-  method_id TEXT PRIMARY KEY,
-  kind TEXT NOT NULL CHECK(kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample')),
-  name TEXT NOT NULL,
-  problem_signature TEXT NOT NULL,
-  preconditions TEXT NOT NULL,
-  goal_shape TEXT NOT NULL,
-  method_steps TEXT NOT NULL,
-  invariants TEXT NOT NULL,
-  expected_observations TEXT NOT NULL,
-  falsifiers TEXT NOT NULL,
-  failure_modes TEXT NOT NULL,
-  scope_limits TEXT NOT NULL,
-  source_episode_ids TEXT NOT NULL,
-  supporting_memory_ids TEXT NOT NULL,
-  counterexample_memory_ids TEXT NOT NULL,
-  target_method_ids TEXT NOT NULL DEFAULT '[]',
-  provenance TEXT NOT NULL,
-  abstraction_version INTEGER NOT NULL,
-  support_count INTEGER NOT NULL,
-  success_count INTEGER NOT NULL,
-  failure_count INTEGER NOT NULL,
-  calibration REAL NOT NULL,
-  last_validated_at REAL NOT NULL,
-  status TEXT NOT NULL CHECK(status IN ('CANDIDATE','PROMOTED','DEMOTED','RETIRED')),
-  user_id TEXT REFERENCES users(user_id),
-  created_at REAL NOT NULL,
-  updated_at REAL NOT NULL
-);
-CREATE INDEX IF NOT EXISTS idx_method_records_status_kind ON method_records(status,kind,updated_at DESC);
-CREATE TABLE IF NOT EXISTS method_use_receipts(
-  receipt_id TEXT PRIMARY KEY,
-  causal_id TEXT NOT NULL UNIQUE,
-  turn_id TEXT NOT NULL,
-  episode_id TEXT NOT NULL,
-  session_id TEXT NOT NULL,
-  user_id TEXT NOT NULL,
-  generation INTEGER NOT NULL,
-  query_hash TEXT NOT NULL,
-  signature_hash TEXT NOT NULL,
-  evidence_status TEXT NOT NULL,
-  trigger TEXT NOT NULL,
-  selected_method_ids TEXT NOT NULL,
-  blocked_method_ids TEXT NOT NULL,
-  snapshot TEXT NOT NULL,
-  ts REAL NOT NULL
-);
-'''
-
 
 class MethodMemoryError(RuntimeError):
     pass
@@ -180,8 +130,10 @@ def should_activate_method_stage(evidence_status: str, query: str) -> str | None
 class MethodMemory:
     """Validated UnifiedDB method memory and deterministic Stage-B retrieval.
 
-    It changes method accessibility only. It never changes factual evidence status,
-    truth authority, effect authority, user rights, or MicroClay evidence ranking.
+    UnifiedDB owns schema/migration/checkpoint authority. This organ only consumes the
+    canonical method tables. It changes method accessibility only and never changes
+    factual evidence status, truth authority, effect authority, user rights, or
+    MicroClay evidence ranking.
     """
 
     MAX_RECORD_CHARS = 32_000
@@ -193,11 +145,15 @@ class MethodMemory:
 
     def __init__(self, db):
         self.db = db
-        self.db.db.executescript(_METHOD_SCHEMA)
-        self.db.db.execute(
-            "INSERT INTO meta(key,value) VALUES('method_schema_version','1') "
-            "ON CONFLICT(key) DO UPDATE SET value='1'"
-        )
+        tables = {
+            str(row["name"])
+            for row in self.db.db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+        }
+        if not {"method_records", "method_use_receipts"}.issubset(tables):
+            raise MethodMemoryError("canonical method memory schema unavailable")
+        schema = self.db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        if not schema or str(schema[0]) != "8":
+            raise MethodMemoryError("canonical UnifiedDB schema v8 required")
 
     @staticmethod
     def _normalize_problem_signature(value: Any) -> dict[str, Any]:

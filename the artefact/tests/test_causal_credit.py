@@ -10,7 +10,7 @@ class EffectInference:
     def reason(self, world, observation):
         return {
             "text": "effect observed",
-            "selection": "effect",
+            "selection": "request_effect",
             "effect": {"capability": "process.exec", "target": self.executable, "argv": [self.executable]},
         }
 

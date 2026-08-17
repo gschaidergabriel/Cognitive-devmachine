@@ -7,5 +7,7 @@
   "users": ["gabriel", "andreas"],
   "persistent_state_root": "/var/lib/clayverse",
   "container_boundary": "one OCI/Docker-compatible image",
-  "requires_for_final_pass": ["real_clerk_verification", "browser_terminal_adapter", "claude_code_cli", "entityos_integration", "isolated_container_build_receipt", "deployment_readiness"]
+  "entityos_transport": "sha256-pinned-open-object-candidate",
+  "direct_process_exec": "legacy-test-only-explicitly-enabled",
+  "requires_for_final_pass": ["real_clerk_verification", "browser_terminal_adapter", "claude_code_cli", "accepted_entityos_artifact_embedding_and_semantic_contract", "isolated_container_build_receipt", "deployment_readiness"]
 }

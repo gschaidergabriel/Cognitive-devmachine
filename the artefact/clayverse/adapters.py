@@ -8,7 +8,7 @@ import subprocess
 import threading
 from typing import Any
 from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .clerk_auth import AuthenticationError, ClerkConfig, ClerkTokenVerifier
 from .inference_protocol import (
@@ -16,6 +16,19 @@ from .inference_protocol import (
     InferenceProtocolError,
     parse_claude_decision_payload,
 )
+
+
+class _MistralNoRedirectHandler(HTTPRedirectHandler):
+    """Refuse redirects so a bearer token can never cross the fixed API origin."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+def urlopen(request, timeout):
+    """Open one Mistral request with redirect following disabled."""
+
+    return build_opener(_MistralNoRedirectHandler()).open(request, timeout=timeout)
 
 
 class ClaudeCodeInference:

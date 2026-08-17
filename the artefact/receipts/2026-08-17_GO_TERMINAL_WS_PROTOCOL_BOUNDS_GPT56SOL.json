@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T13:42:30+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_latest_observed": "2d77e3c07df11375e6448e2c0d86e76b29b0cc9e",
+  "source_branch": "go/terminal-bounded-input-20260817-1334",
+  "pull_request": 419,
+  "base_used_for_rebased_source_commit": "b0210496a3a2bc9c79d4815c3d659646bc5eead8",
+  "source_commit": "4ff52840616d3501ea6216dd4f4a9eee2bfdc0b9",
+  "finding": {
+    "path": "the artefact/clayverse/terminal_gateway.py",
+    "pre_repair_blob": "c975e581547a900c6e30aafbe5dd72c02c249139",
+    "classification": "SOURCE_CONTRACT_GAP",
+    "observed": "The authenticated WebSocket terminal path had auth-first handling and resize clamps but no explicit application-level size bound for auth/control text or binary PTY input frames; unknown post-auth text controls were silently ignored.",
+    "product_contract": "PTY input/output is bounded and malformed/unknown protocol input fails closed."
+  },
+  "repair": {
+    "terminal_gateway_blob": "428246f7d62873a7bc5a755ac3a3b66686c9c0f0",
+    "terminal_gateway_sha256": "c888ccb995702916b7889c1b1ac76f69be8e3dacb5b06e9a448123084f780d19",
+    "auth_message_max_chars": 32768,
+    "auth_token_max_chars": 16384,
+    "control_message_max_chars": 4096,
+    "pty_input_frame_max_bytes": 65536,
+    "pty_output_chunk_max_bytes": 65536,
+    "fail_closed_controls": true,
+    "explicit_disconnect_exit": true,
+    "complete_pty_write_off_event_loop_preserved": true
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container source-mechanism regression",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "exact_gateway_blob_match": true,
+    "gateway_blob_sha1": "428246f7d62873a7bc5a755ac3a3b66686c9c0f0",
+    "focused_checks": 8,
+    "focused_passed": 8,
+    "focused_failed": 0,
+    "new_bounds_test_harness_sha256": "475221c27c2f7b357eadcc9c0904972c6059170cb3c0852f56b55b7c0a207ada",
+    "existing_write_regression_harness_sha256": "1879b00166acdcf24f8a7fe424b3ba40a441e8ea6bfcb2cc90c99113ac3d1020",
+    "scope": "Exact repaired gateway bytes with focused helper/protocol and pre-existing complete-write invariants; not a full repository checkout, not exact OCI execution, not live Clerk/browser/PTY acceptance."
+  },
+  "go_experiment_accounting": {
+    "this_lane_started_distinct_unusual_experiment": false,
+    "current_shared_rule": "NO_FURTHER_DISTINCT_UNUSUAL_EXPERIMENT",
+    "reason": "Current main records experiment-budget trigger-identity race correction and closes additional distinct unusual experiments for the macro-cycle; this lane performs ordinary deterministic hardening only."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOLING",
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Run PR #419 plus adjacent terminal/auth regressions on an actually-started authorized isolated exact-head environment; then exercise real Clerk JWT/browser WebSocket PTY and exact OCI runtime before merge/whole-product acceptance."
+}

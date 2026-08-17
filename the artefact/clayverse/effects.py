@@ -1,5 +1,5 @@
 from __future__ import annotations
-import hashlib, uuid
+import uuid
 from dataclasses import dataclass
 from .store import UnifiedDB,Lease,StaleGeneration
 from .entityos_bridge import EntityOSBridge
@@ -10,6 +10,7 @@ class EffectRequest:
 class EffectGate:
     ALLOWED={'entityos.exec','process.exec','state.noop'}
     AUTO_LEASE_TTL=300.0
+    ENTITYOS_EFFECT_RESOURCE='effect:entityos.exec'
     def __init__(self,db:UnifiedDB,allow_process=False,entityos_bridge:EntityOSBridge|None=None):
         self.db=db; self.allow_process=allow_process; self.entityos_bridge=entityos_bridge; self.journal=EffectJournal(db)
     def available_capabilities(self):
@@ -17,10 +18,10 @@ class EffectGate:
         if self.entityos_bridge is not None: capabilities.add('entityos.exec')
         return tuple(sorted(capabilities))
     def causal_for_effect(self,effect_id): return self.journal.causal_for(effect_id)
-    @staticmethod
-    def _lease_resource(req:EffectRequest):
-        payload=f'{req.capability}\0{req.target}'.encode('utf-8')
-        return 'effect:'+hashlib.sha256(payload).hexdigest()
+    @classmethod
+    def _lease_resource(cls,req:EffectRequest):
+        if req.capability!='entityos.exec': raise ValueError('automatic lease only defined for entityos.exec')
+        return cls.ENTITYOS_EFFECT_RESOURCE
     def _release_exact_lease(self,lease:Lease):
         with self.db.tx() as db:
             db.execute('DELETE FROM leases WHERE resource=? AND holder=? AND generation=? AND nonce=?',(lease.resource,lease.holder,lease.generation,lease.nonce))

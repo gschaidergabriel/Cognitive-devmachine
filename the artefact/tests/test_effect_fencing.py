@@ -41,16 +41,17 @@ def test_entityos_effect_target_collision_fails_closed_before_execution(tmp_path
     db.assert_lease(incumbent); assert called==[] and db.db.execute('SELECT COUNT(*) FROM effects').fetchone()[0]==0; db.close()
 
 def test_effect_journal_persists_hash_receipts_not_raw_payloads(tmp_path):
-    db,uid,sid=setup_db(tmp_path); secret_arg='ARG_SECRET_42'; secret_out='OUTPUT_SECRET_77'
+    db,uid,sid=setup_db(tmp_path); secret_target='TARGET_SECRET_19'; secret_arg='ARG_SECRET_42'; secret_out='OUTPUT_SECRET_77'
     def run(argv):
         assert secret_arg in argv
         return {'ok':True,'exit':0,'stdout':secret_out,'stderr':'sensitive-stderr'}
-    eid,out=EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec','transport',[secret_arg]))
+    eid,out=EffectGate(db,entityos_bridge=FakeBridge(run)).execute(EffectRequest(uid,sid,'entityos.exec',secret_target,[secret_arg]))
     assert out['stdout']==secret_out
-    row=db.db.execute('SELECT argv,outcome FROM effects WHERE effect_id=?',(eid,)).fetchone()
-    assert secret_arg not in row['argv'] and secret_out not in row['outcome'] and 'sensitive-stderr' not in row['outcome']
-    argv_receipt=json.loads(row['argv']); outcome_receipt=json.loads(row['outcome'])
-    expected_argv=json.dumps([secret_arg],ensure_ascii=False,separators=(',',':')).encode()
+    row=db.db.execute('SELECT target,argv,outcome FROM effects WHERE effect_id=?',(eid,)).fetchone()
+    assert secret_target not in row['target'] and secret_arg not in row['argv'] and secret_out not in row['outcome'] and 'sensitive-stderr' not in row['outcome']
+    target_receipt=json.loads(row['target']); argv_receipt=json.loads(row['argv']); outcome_receipt=json.loads(row['outcome'])
+    expected_target=secret_target.encode('utf-8'); expected_argv=json.dumps([secret_arg],ensure_ascii=False,separators=(',',':')).encode()
+    assert target_receipt=={'audit':'redacted-target-v1','sha256':hashlib.sha256(expected_target).hexdigest(),'bytes':len(expected_target)}
     assert argv_receipt=={'audit':'redacted-argv-v1','argc':1,'sha256':hashlib.sha256(expected_argv).hexdigest(),'bytes':len(expected_argv)}
     assert outcome_receipt['audit']=='redacted-outcome-v1' and outcome_receipt['ok'] is True and outcome_receipt['exit']==0
     assert len(outcome_receipt['sha256'])==64 and 'stdout' not in outcome_receipt and 'stderr' not in outcome_receipt

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+from collections.abc import Mapping
 from typing import Any
 
 
@@ -28,7 +29,7 @@ class MethodMemoryValidationError(ValueError):
 
 
 def is_method_kind(kind: str) -> bool:
-    return kind in METHOD_KINDS
+    return str(kind) in METHOD_KINDS
 
 
 def _fail(field: str, detail: str) -> None:
@@ -78,6 +79,22 @@ def _json_safe(value: Any, field: str) -> None:
         raise MethodMemoryValidationError(f"{field}: must be deterministic JSON data") from exc
 
 
+def _json_object(value: Any, field: str) -> dict[str, Any]:
+    if isinstance(value, Mapping):
+        obj = dict(value)
+    elif isinstance(value, str):
+        try:
+            obj = json.loads(value)
+        except (TypeError, ValueError) as exc:
+            raise MethodMemoryValidationError(f"{field}: must be valid JSON") from exc
+    else:
+        _fail(field, "must be an object")
+    if not isinstance(obj, dict):
+        _fail(field, "must be an object")
+    _json_safe(obj, field)
+    return obj
+
+
 def _problem_signature(value: Any) -> dict[str, Any]:
     if not isinstance(value, dict) or not value:
         _fail("problem_signature", "must be a non-empty object")
@@ -98,10 +115,12 @@ def _status(record: dict[str, Any], kind: str) -> str:
     return status
 
 
-def _validate_common_method_record(kind: str, record: dict[str, Any]) -> None:
+def _validate_common_method_record(kind: str, record: dict[str, Any]) -> tuple[str, list[str]]:
     _nonempty_string(record.get("name"), "name")
     _problem_signature(record.get("problem_signature"))
-    _string_list(record.get("source_episode_ids"), "source_episode_ids", nonempty=True)
+    source_ids = _string_list(record.get("source_episode_ids"), "source_episode_ids", nonempty=True)
+    if len(source_ids) != len(set(source_ids)):
+        _fail("source_episode_ids", "must not contain duplicates")
     _string_list(record.get("supporting_memory_ids"), "supporting_memory_ids")
     _string_list(record.get("counterexample_memory_ids"), "counterexample_memory_ids")
     version = record.get("abstraction_version")
@@ -110,11 +129,11 @@ def _validate_common_method_record(kind: str, record: dict[str, Any]) -> None:
             _fail("abstraction_version", "must be >= 1")
     else:
         _nonempty_string(version, "abstraction_version")
-    _status(record, kind)
+    return _status(record, kind), source_ids
 
 
 def _validate_reusable(kind: str, record: dict[str, Any]) -> None:
-    _validate_common_method_record(kind, record)
+    status, source_ids = _validate_common_method_record(kind, record)
     _string_list(record.get("preconditions"), "preconditions")
     goal_shape = record.get("goal_shape")
     if not isinstance(goal_shape, (str, dict)):
@@ -142,6 +161,13 @@ def _validate_reusable(kind: str, record: dict[str, Any]) -> None:
         _finite_number(last_validated, "last_validated_at", minimum=0.0)
     elif last_validated is not None:
         _finite_number(last_validated, "last_validated_at", minimum=0.0)
+
+    # The product contract explicitly forbids promotion from one successful episode.
+    # Keep this invariant in durable admission so no caller can silently mint a
+    # promoted reusable method from a single memorable success.
+    if status == "PROMOTED":
+        if len(source_ids) < 2 or support_count < 2 or success_count < 2:
+            _fail("promotion_evidence", "PROMOTED methods require at least two supporting successful episodes")
 
 
 def _validate_failure_pattern(record: dict[str, Any]) -> None:
@@ -180,12 +206,7 @@ def _validate_receipt(record: dict[str, Any]) -> None:
 
 
 def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
-    """Validate one durable method record without granting it factual authority.
-
-    The validator checks structure only. Promotion truth, access rights, and factual
-    correctness remain outside this module and must be established by their own
-    evidence/authority paths.
-    """
+    """Validate one durable method record without granting it factual authority."""
     if kind not in METHOD_KINDS:
         raise MethodMemoryValidationError(f"unsupported method-memory kind: {kind!r}")
     if not isinstance(record, dict):
@@ -215,3 +236,38 @@ def decode_method_json(kind: str, value: str) -> dict[str, Any]:
     except (TypeError, json.JSONDecodeError) as exc:
         raise MethodMemoryValidationError("stored method memory is not valid JSON") from exc
     return validate_method_record(kind, record)
+
+
+def validate_method_row(kind: str, subject: Any, value: Any, provenance: Any) -> dict[str, Any]:
+    """Validate the complete reserved durable_memory envelope, including provenance."""
+    if kind not in METHOD_KINDS:
+        raise MethodMemoryValidationError(f"unsupported method-memory kind: {kind!r}")
+    _nonempty_string(subject, "subject")
+    record = decode_method_json(kind, value) if isinstance(value, str) else validate_method_record(kind, value)
+    provenance_obj = _json_object(provenance, "provenance")
+    if not provenance_obj:
+        _fail("provenance", "must be a non-empty object")
+    return record
+
+
+def sqlite_validate_method_row(kind: Any, subject: Any, value: Any, provenance: Any) -> int:
+    """SQLite trigger UDF. Any exception aborts the write and therefore fails closed."""
+    if str(kind) not in METHOD_KINDS:
+        return 1
+    validate_method_row(str(kind), subject, value, provenance)
+    return 1
+
+
+def validate_existing_method_rows(db) -> None:
+    """Fail startup if a legacy/bypassed reserved row violates current admission."""
+    placeholders = ",".join("?" for _ in METHOD_KINDS)
+    rows = db.execute(
+        f"SELECT memory_id,kind,subject,value,provenance FROM durable_memory "
+        f"WHERE kind IN ({placeholders}) ORDER BY memory_id",
+        tuple(sorted(METHOD_KINDS)),
+    ).fetchall()
+    for row in rows:
+        try:
+            validate_method_row(row["kind"], row["subject"], row["value"], row["provenance"])
+        except MethodMemoryValidationError as exc:
+            raise MethodMemoryValidationError(f"invalid persisted method memory {row['memory_id']}: {exc}") from exc

@@ -132,6 +132,45 @@ def test_user_prompt_injects_bounded_user_generation_scoped_autonomy(tmp_path, m
     assert "must-not-enter-hook-context" not in rendered
 
 
+def test_next_runnable_goal_is_never_only_an_omitted_identifier(tmp_path):
+    db = _db(tmp_path / "unified.db")
+    controller = AutonomyController(db)
+
+    for index in range(4):
+        source = db.append_turn(
+            "session:gabriel", "gabriel", "user", f"Blocked high-priority goal {index}"
+        )
+        blocked = controller.create_goal_from_turn(
+            "gabriel",
+            "session:gabriel",
+            source,
+            completion_mode="user_ack",
+            priority=100 - index,
+        )
+        controller.block_goal(blocked["goal_id"], "dependency")
+
+    source = db.append_turn(
+        "session:gabriel", "gabriel", "user", "Lower-priority runnable goal"
+    )
+    runnable = controller.create_goal_from_turn(
+        "gabriel",
+        "session:gabriel",
+        source,
+        completion_mode="user_ack",
+        priority=10,
+    )
+
+    with db.tx():
+        projection = _autonomy_context_in_tx(db, "gabriel", db.entity_generation())
+
+    visible_ids = {goal["goal_id"] for goal in projection["goals"]}
+    assert projection["next_runnable_goal_id"] == runnable["goal_id"]
+    assert runnable["goal_id"] in visible_ids
+    assert len(projection["goals"]) == 4
+    assert projection["omitted_goal_count"] == 1
+    db.close()
+
+
 def test_autonomy_projection_is_sacrificed_before_inline_context_spill():
     goals = [
         {
@@ -176,7 +215,7 @@ def test_autonomy_projection_is_sacrificed_before_inline_context_spill():
             "state_revision": 4,
             "mode": "read_only",
             "generation": 1,
-            "next_runnable_goal_id": "goal-0",
+            "next_runnable_goal_id": "goal-3",
             "goals": goals,
             "omitted_goal_count": 0,
             "stale_goal_count": 0,
@@ -197,3 +236,5 @@ def test_autonomy_projection_is_sacrificed_before_inline_context_spill():
     payload = json.loads(rendered.split("\n", 1)[1])
     assert payload["autonomy"]["omitted_goal_count"] >= 2
     assert payload["autonomy"]["context_budget_truncated"] is True
+    assert payload["autonomy"]["next_runnable_goal_id"] is None
+    assert payload["autonomy"]["next_runnable_omitted_by_context_budget"] is True

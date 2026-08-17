@@ -3,43 +3,79 @@ from __future__ import annotations
 import time
 from typing import Any
 
-from .autonomy import AutonomyController, TickResult
+from .autonomy import AutonomyController, AutonomyState, TickResult
+
+
+def recover_autonomy_after_restart(state: AutonomyState) -> dict[str, int]:
+    """Fail closed on autonomy work interrupted by a process/container restart.
+
+    Recovery of the normal turn/effect spine advances the global entity generation
+    first. This pass never replays a RUNNING autonomy step. A step that was in-flight
+    is epistemically unknown and therefore becomes BLOCKED with an explicit recovery
+    tick. WAITING_VERIFICATION remains quiescent and its goal is forced PAUSED.
+    """
+    generation = state.db.entity_generation()
+    counts = {
+        "running_blocked_unknown": 0,
+        "waiting_goals_paused": 0,
+        "generation": generation,
+    }
+    now = time.time()
+    with state.db.tx() as conn:
+        running = conn.execute(
+            "SELECT step_id,goal_id FROM autonomy_steps WHERE status='RUNNING' ORDER BY updated_at,step_id"
+        ).fetchall()
+        for row in running:
+            reason = "UNKNOWN_AFTER_RESTART:autonomy_step_interrupted"
+            conn.execute(
+                "UPDATE autonomy_steps SET status='BLOCKED',last_error=?,updated_at=? WHERE step_id=?",
+                (reason, now, row["step_id"]),
+            )
+            conn.execute(
+                "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=? AND status NOT IN ('DONE','CANCELLED')",
+                (now, row["goal_id"]),
+            )
+            conn.execute(
+                "INSERT INTO autonomy_ticks(tick_id,goal_id,step_id,generation,trigger,proposal,action_state,receipt_id,reason,ts) VALUES(?,?,?,?, 'recovery',NULL,'BLOCKED',NULL,?,?)",
+                (
+                    __import__("uuid").uuid4().hex,
+                    row["goal_id"],
+                    row["step_id"],
+                    generation,
+                    reason,
+                    now,
+                ),
+            )
+            counts["running_blocked_unknown"] += 1
+
+        waiting_goals = conn.execute(
+            "SELECT DISTINCT g.goal_id FROM autonomy_goals g JOIN autonomy_steps s ON s.goal_id=g.goal_id WHERE g.status='ACTIVE' AND s.status='WAITING_VERIFICATION'"
+        ).fetchall()
+        for row in waiting_goals:
+            conn.execute(
+                "UPDATE autonomy_goals SET status='PAUSED',updated_at=? WHERE goal_id=?",
+                (now, row["goal_id"]),
+            )
+            counts["waiting_goals_paused"] += 1
+    return counts
 
 
 class SupervisorAutonomyController:
     """Operational wrapper for the single ClayVerse supervisor autonomy path.
 
-    It closes two failure modes that are unacceptable for a timer-driven agent:
-    planner-declared missing prerequisites are durably blocked instead of re-polled,
-    and an unexpected controller exception becomes a bounded blocked state rather than
-    a hot retry loop. This wrapper owns no state; it writes only through the controller's
-    existing AutonomyState/UnifiedDB authority.
+    The base controller already persists semantic blockers and effect uncertainty.
+    This wrapper is the one supervisor-facing entry point and defensively re-applies a
+    durable block if any future controller implementation returns BLOCKED without one.
     """
 
     def __init__(self, controller: AutonomyController):
         self.controller = controller
         self.state = controller.state
 
-    def _durable_block(self, result: TickResult, reason: str) -> None:
-        if result.goal_id is None or result.step_id is None:
-            return
-        now = time.time()
-        with self.state.db.tx() as conn:
-            conn.execute(
-                "UPDATE autonomy_steps SET status='BLOCKED',last_error=?,updated_at=? WHERE step_id=? AND goal_id=? AND status!='VERIFIED'",
-                (str(reason)[:1000], now, result.step_id, result.goal_id),
-            )
-            conn.execute(
-                "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=? AND status='ACTIVE'",
-                (now, result.goal_id),
-            )
-
     def tick(self, *, trigger: str = "timer") -> TickResult:
         result = self.controller.tick(trigger=trigger)
         if result.state == "BLOCKED" and result.goal_id and result.step_id:
-            # In particular this persists planner {kind:"blocked"} so the next timer
-            # wake sees no frontier and therefore spends no additional model tokens.
-            self._durable_block(result, result.reason)
+            self.state.block(result.goal_id, result.step_id, result.reason)
         return result
 
 
@@ -66,13 +102,10 @@ class SupervisorAutonomyLoop:
             delay = self.interval_seconds
             try:
                 result = self.controller.tick(trigger="timer")
-                # BLOCKED and IDLE are quiescent states. The persistent frontier will
-                # only reappear after admitted state changes, so periodic polling stays
-                # bounded rather than immediately retrying.
-                if result.state == "BLOCKED":
+                if result.state in {"BLOCKED", "WAITING_VERIFICATION"}:
                     delay = self.error_backoff_seconds
             except Exception:
-                # The supervisor must not spin if a capability provider/planner bridge
-                # fails before the base controller can produce a TickResult.
+                # The supervisor must not spin if a provider/capability bridge fails
+                # outside the bounded base controller. No success is inferred here.
                 delay = self.error_backoff_seconds
             stop_event.wait(delay)

@@ -1,0 +1,42 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "trigger": "go",
+  "claim_commit": "1aa57a9fa25285fee78ebd555567328663159d36",
+  "claim_path": "research_entity/continuity/go_experiment_claims/2026-08-17T13-35+07-00__4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "experiment_name": "METHOD_REPLAY_TRIGGER_GATE_INVERSION",
+  "claimant_organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-17T13:41:00+07:00",
+  "source_candidate": {
+    "pr": 411,
+    "head_observed": "17658f04cc77b1b6ad6bd53ad7e6a9be3a102ead",
+    "method_stage_b_blob": "2d09627e4979c9a0bfb3160c89668b3ed1af5ef1",
+    "receipt_schema": "clayverse-stage-b-method-use/v2",
+    "policy_version": 2
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container mechanism discriminator",
+    "script_sha256": "01f2d1161fbae0f4ecc930c06fc951923afc542d81cf0e79970699a1744dcd63",
+    "scope": "bounded replay-ordering discriminator reproducing the current PR #411 durable request-identity contract; not an exact full-branch or OCI runtime execution",
+    "first_request": "same causal identity with evidence_status=UNKNOWN",
+    "retry_intervention": "change only evidence_status to PRESENT while keeping query/resource/signature/limit/budget and causal identity fixed",
+    "repaired_observation": "method_retrieval_identity",
+    "counter_reality_observation": "NOT_TRIGGERED when trigger evaluation is incorrectly allowed to precede existing-receipt identity validation"
+  },
+  "classification": "PASS_BOUNDED_MECHANISM",
+  "interpretation": "The current PR #411 ordering is consistent with the required fail-closed invariant: an already persisted causal method receipt prevents evidence-status drift from silently bypassing replay validation by becoming non-triggered. This supports issue #412's ordering mechanism only.",
+  "authority": {
+    "truth_promoted": false,
+    "effect_authority_granted": false,
+    "active_method_serving_authorized": false,
+    "whole_product_evidence": false
+  },
+  "remaining_gates": [
+    "exact persisted PR #411 focused regression on an actually-started authorized isolated execution surface",
+    "promotion authority fusion using dedicated transaction plus terminal causally re-entered user-scoped evidence",
+    "structural-signature admission authority",
+    "fusion with the retained #408 hard-bounded Claude-world transport",
+    "exact OCI build/runtime and whole ClayVerse acceptance"
+  ],
+  "status": "RECORDED"
+}

@@ -153,6 +153,7 @@ def test_tmux_session_creation_is_pinned_to_managed_policy(tmp_path, monkeypatch
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
     calls = []
 

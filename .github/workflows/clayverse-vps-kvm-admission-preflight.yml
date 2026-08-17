@@ -1,0 +1,71 @@
+name: ClayVerse VPS KVM admission preflight
+
+on:
+  push:
+    paths:
+      - '.github/workflows/clayverse-vps-kvm-admission-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  kvm-admission-only:
+    runs-on: self-hosted
+    timeout-minutes: 5
+    steps:
+      - name: Probe KVM hardware boundary without product execution
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          receipt="$RUNNER_TEMP/clayverse-kvm-admission-${GITHUB_RUN_ID}.json"
+          qemu=''
+          if command -v qemu-system-x86_64 >/dev/null 2>&1; then qemu=$(command -v qemu-system-x86_64); fi
+          device_present=false
+          device_rw=false
+          accel_kvm=false
+          [[ -c /dev/kvm ]] && device_present=true
+          [[ -r /dev/kvm && -w /dev/kvm ]] && device_rw=true
+          if [[ -n "$qemu" ]] && qemu-system-x86_64 -accel help 2>&1 | grep -Eq '(^|[[:space:]])kvm($|[[:space:]])'; then accel_kvm=true; fi
+          python3 - "$receipt" "$device_present" "$device_rw" "$accel_kvm" "${qemu:-MISSING}" <<'PY'
+          import hashlib, json, os, platform, sys
+          out, present, rw, accel, qemu = sys.argv[1:]
+          payload = {
+              'schema': 'ClayVerseVpsKvmAdmissionPreflight/v1',
+              'scope': 'HOST_ORCHESTRATOR_HARDWARE_ADMISSION_ONLY_NO_PRODUCT_EXECUTION',
+              'runner_name': os.environ.get('RUNNER_NAME'),
+              'runner_os': os.environ.get('RUNNER_OS'),
+              'host_kernel': platform.release(),
+              'kvm_device_present': present == 'true',
+              'kvm_device_rw_for_probe_identity': rw == 'true',
+              'qemu_binary': qemu,
+              'qemu_kvm_accel_advertised': accel == 'true',
+              'github_actions_required_for_final_lane': False,
+              'github_runner_required_for_final_lane': False,
+              'product_code_executed_on_host': False,
+              'product_code_executed_in_guest': False,
+              'security_isolation_credit': 0,
+              'whole_product_credit': 0,
+              'unusual_experiment_count_added': 0,
+          }
+          canonical = json.dumps(payload, sort_keys=True, separators=(',', ':')).encode()
+          payload['receipt_sha256'] = hashlib.sha256(canonical).hexdigest()
+          with open(out, 'w', encoding='utf-8') as f:
+              json.dump(payload, f, sort_keys=True, indent=2)
+              f.write('\n')
+          print(json.dumps(payload, sort_keys=True))
+          PY
+          if [[ "$device_present" != true || "$device_rw" != true || "$accel_kvm" != true ]]; then
+            echo 'BLOCKED_KVM_UNAVAILABLE_OR_UNUSABLE' >&2
+            exit 70
+          fi
+          echo 'KVM_HARDWARE_ADMISSION_PRESENT'
+
+      - name: Upload bounded admission receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-kvm-admission-${{ github.run_id }}
+          path: ${{ runner.temp }}/clayverse-kvm-admission-${{ github.run_id }}.json
+          if-no-files-found: error
+          retention-days: 7

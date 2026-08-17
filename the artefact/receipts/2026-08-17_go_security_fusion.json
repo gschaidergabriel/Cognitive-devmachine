@@ -1,0 +1,22 @@
+{
+  "kind": "CLAYVERSE_GO_SECURITY_FUSION_RECEIPT",
+  "observed_base": "2bd28667fcbb821903a2d37cfc392eb5765e0bf2",
+  "effect_delta_commit": "84d54b188768469f1130bf153386a7d2a1038c88",
+  "test_delta_commit": "f1ab569d031b9067d85bf844d0f39c7997ac9f09",
+  "observed_gap": "process.exec used shell=False but still admitted explicit shell executables such as /bin/sh -c when process capability was enabled",
+  "delta": [
+    "resolve executable path before spawn",
+    "deny shell executables in process.exec; shell/PTTY requires a separate explicit capability contract",
+    "reject NUL-bearing argv",
+    "extend regression test to assert shell and malformed argv rejection"
+  ],
+  "isolated_patch_regression": {
+    "surface": "OpenAI isolated container workspace",
+    "result": "PASS",
+    "checks": ["/usr/bin/printf remains admitted", "/bin/sh denied", "/bin/bash denied", "NUL argv denied"]
+  },
+  "pre_delta_candidate_receipt": "the artefact/receipts/2026-08-17_go_candidate.json reports 11 tests PASS on its base",
+  "post_delta_full_suite": "NOT_EXECUTED: the connector exposes repository bytes but the isolated container has no network/checkout bridge; focused exact-logic regression executed instead",
+  "additional_negative_evidence": "memory.py destructively compresses untyped old turns while only explicit FACT/DECISION/TASK/COMMITMENT/PREFERENCE lines are durably extracted. Semantic durable-fact preservation for ordinary prose remains an acceptance blocker.",
+  "whole_system_pass": false
+}

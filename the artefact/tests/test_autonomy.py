@@ -13,6 +13,14 @@ from clayverse.autonomy import (
 )
 from clayverse.effect_journal import EffectJournal
 from clayverse.store import StaleGeneration, UnifiedDB
+from clayverse.turn_lifecycle import TurnLifecycle
+
+
+class _FakeEntityOS:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0, "argv": list(argv or [])}
 
 
 def _db(tmp_path):
@@ -26,12 +34,16 @@ def _db(tmp_path):
 
 def _goal(db, controller, *, objective="Finish the bounded task", **kwargs):
     turn_id = db.append_turn("session:gabriel", "gabriel", "user", objective)
+    completion_mode = kwargs.pop("completion_mode", "user_ack")
+    required_capability = kwargs.pop(
+        "required_capability", "entityos.exec" if completion_mode == "verified_effect" else None
+    )
     return controller.create_goal_from_turn(
         "gabriel",
         "session:gabriel",
         turn_id,
-        completion_mode=kwargs.pop("completion_mode", "verified_effect"),
-        required_capability=kwargs.pop("required_capability", "state.noop"),
+        completion_mode=completion_mode,
+        required_capability=required_capability,
         **kwargs,
     )
 
@@ -114,37 +126,89 @@ def test_model_cannot_self_complete_without_independent_evidence(tmp_path):
     assert snapshot["current_step"]["step_id"] == step["step_id"]
 
 
-def test_verified_effect_receipt_is_required_and_capability_bound(tmp_path):
+def test_verified_effect_receipt_is_required_and_exact_autonomous_step_bound(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(db, controller, required_capability="state.noop")
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="verified_effect",
+        required_capability="entityos.exec",
+    )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
-        "Check a canonical no-op",
-        effect={"capability": "state.noop", "target": "autonomy-test", "argv": None},
+        "Execute the exact independently verifiable action",
+        effect={
+            "capability": "entityos.exec",
+            "target": "autonomy-test",
+            "argv": ["verify", "autonomy-test"],
+        },
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _effect(db, "e1", "state.noop", target="autonomy-test")
-    result = controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
+
+    lifecycle = TurnLifecycle(
+        db, "gabriel", "session:gabriel", entityos_bridge=_FakeEntityOS()
+    )
+    lifecycle.begin_autonomous(
+        "Run the admitted autonomous verification action", goal["goal_id"], step["step_id"]
+    )
+    receipt = lifecycle.request_effect(
+        "entityos.exec", "autonomy-test", ["verify", "autonomy-test"]
+    )
+    result = controller.record_effect_result(
+        goal["goal_id"], step["step_id"], receipt["effect_id"]
+    )
     assert result["verified"] is True
+    lifecycle.complete_autonomous(
+        "Verified action completed", goal["goal_id"], step["step_id"]
+    )
     done = controller.verify_completion(goal["goal_id"])
     assert done["status"] == "COMPLETED"
-    assert done["evidence"] == "e1"
+    assert done["evidence"] == receipt["effect_id"]
+
+
+def test_state_noop_cannot_be_automatic_completion_authority(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    source = db.append_turn("session:gabriel", "gabriel", "user", "Do a real task")
+    with pytest.raises(ValueError, match="independently verifiable"):
+        controller.create_goal_from_turn(
+            "gabriel",
+            "session:gabriel",
+            source,
+            completion_mode="verified_effect",
+            required_capability="state.noop",
+        )
 
 
 def test_same_capability_wrong_target_receipt_cannot_be_rebound(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(db, controller, required_capability="state.noop")
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="verified_effect",
+        required_capability="entityos.exec",
+    )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
         "Verify only the exact requested target",
-        effect={"capability": "state.noop", "target": "expected-target", "argv": None},
+        effect={
+            "capability": "entityos.exec",
+            "target": "expected-target",
+            "argv": ["verify", "expected-target"],
+        },
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _effect(db, "e-wrong", "state.noop", target="different-target")
+    _effect(
+        db,
+        "e-wrong",
+        "entityos.exec",
+        target="different-target",
+        argv=["verify", "expected-target"],
+    )
     with pytest.raises(PermissionError, match="intent mismatch"):
         controller.record_effect_result(goal["goal_id"], step["step_id"], "e-wrong")
     snapshot = controller.snapshot(user_id="gabriel")["goals"][0]
@@ -157,7 +221,12 @@ def test_same_capability_wrong_target_receipt_cannot_be_rebound(tmp_path):
 def test_same_target_wrong_argv_receipt_cannot_be_rebound(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(db, controller, required_capability="entityos.exec")
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="verified_effect",
+        required_capability="entityos.exec",
+    )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
@@ -185,6 +254,62 @@ def test_same_target_wrong_argv_receipt_cannot_be_rebound(tmp_path):
     assert snapshot["evidence_effect_ids"] == []
 
 
+def test_identical_intent_from_different_autonomous_episode_cannot_be_rebound(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    expected = _goal(
+        db,
+        controller,
+        objective="Expected goal",
+        completion_mode="verified_effect",
+        required_capability="entityos.exec",
+    )
+    expected_step = controller.propose_step(
+        expected["goal_id"],
+        "effect",
+        "Expected exact action",
+        effect={
+            "capability": "entityos.exec",
+            "target": "same-target",
+            "argv": ["verify", "same-target"],
+        },
+    )
+    controller.admit_step(expected["goal_id"], expected_step["step_id"])
+
+    other = _goal(db, controller, objective="Other goal")
+    other_step = controller.propose_step(
+        other["goal_id"],
+        "effect",
+        "Same bytes, different causal episode",
+        effect={
+            "capability": "entityos.exec",
+            "target": "same-target",
+            "argv": ["verify", "same-target"],
+        },
+    )
+    controller.admit_step(other["goal_id"], other_step["step_id"])
+
+    lifecycle = TurnLifecycle(
+        db, "gabriel", "session:gabriel", entityos_bridge=_FakeEntityOS()
+    )
+    lifecycle.begin_autonomous(
+        "Execute the other goal's identical intent", other["goal_id"], other_step["step_id"]
+    )
+    receipt = lifecycle.request_effect(
+        "entityos.exec", "same-target", ["verify", "same-target"]
+    )
+    controller.record_effect_result(other["goal_id"], other_step["step_id"], receipt["effect_id"])
+    lifecycle.complete_autonomous(
+        "Other goal effect complete", other["goal_id"], other_step["step_id"]
+    )
+
+    with pytest.raises(PermissionError, match="goal-step provenance mismatch"):
+        controller.record_effect_result(
+            expected["goal_id"], expected_step["step_id"], receipt["effect_id"]
+        )
+    assert controller.snapshot(user_id="gabriel")["goals"][0]["evidence_effect_ids"] == []
+
+
 def test_pending_effect_never_counts_as_success(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
@@ -206,7 +331,12 @@ def test_pending_effect_never_counts_as_success(tmp_path):
 def test_wrong_effect_capability_cannot_satisfy_completion(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(db, controller, required_capability="entityos.exec")
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="verified_effect",
+        required_capability="entityos.exec",
+    )
     step = controller.propose_step(
         goal["goal_id"],
         "effect",
@@ -215,21 +345,33 @@ def test_wrong_effect_capability_cannot_satisfy_completion(tmp_path):
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
     _effect(db, "e1", "state.noop", target="x")
-    controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
+    with pytest.raises((PermissionError, AutonomyStateError)):
+        controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
     with pytest.raises(CompletionNotVerified):
         controller.verify_completion(goal["goal_id"])
+
+
+def test_synthetic_verified_effect_without_causal_reentry_is_rejected(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(db, controller)
+    step = controller.propose_step(
+        goal["goal_id"],
+        "effect",
+        "Synthetic receipts are not operational evidence",
+        effect={"capability": "state.noop", "target": "synthetic", "argv": None},
+    )
+    controller.admit_step(goal["goal_id"], step["step_id"])
+    _effect(db, "synthetic", "state.noop", target="synthetic")
+    with pytest.raises((PermissionError, AutonomyStateError)):
+        controller.record_effect_result(goal["goal_id"], step["step_id"], "synthetic")
+    assert controller.snapshot(user_id="gabriel")["goals"][0]["evidence_effect_ids"] == []
 
 
 def test_user_ack_requires_canonical_owner_user_turn(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    goal = _goal(
-        db,
-        controller,
-        objective="Prepare report",
-        completion_mode="user_ack",
-        required_capability=None,
-    )
+    goal = _goal(db, controller, objective="Prepare report")
     assistant = db.append_turn("session:gabriel", "gabriel", "assistant", "done")
     other = db.append_turn("session:andreas", "andreas", "user", "yes")
     owner = db.append_turn("session:gabriel", "gabriel", "user", "yes")
@@ -260,8 +402,6 @@ def test_reasoning_remains_runnable_when_effect_budget_is_zero(tmp_path):
     goal = _goal(
         db,
         controller,
-        completion_mode="user_ack",
-        required_capability=None,
         budget=GoalBudget(max_steps=2, max_retries_per_step=0, max_effects=0),
     )
     step = controller.propose_step(goal["goal_id"], "reason", "Reason without effect authority")
@@ -339,22 +479,8 @@ def test_nonfinite_state_fails_closed(tmp_path):
 def test_priority_scheduler_selects_only_live_active_goal(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
-    low = _goal(
-        db,
-        controller,
-        objective="low",
-        completion_mode="user_ack",
-        required_capability=None,
-        priority=10,
-    )
-    high = _goal(
-        db,
-        controller,
-        objective="high",
-        completion_mode="user_ack",
-        required_capability=None,
-        priority=90,
-    )
+    low = _goal(db, controller, objective="low", priority=10)
+    high = _goal(db, controller, objective="high", priority=90)
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == high["goal_id"]
     controller.block_goal(high["goal_id"], "dependency")
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == low["goal_id"]

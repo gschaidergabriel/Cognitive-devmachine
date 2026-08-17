@@ -15,6 +15,8 @@ STATE_SCHEMA = "ClayVerseAutonomyState/v1"
 GOAL_STATUSES = {"ACTIVE", "WAITING", "VERIFYING", "BLOCKED", "COMPLETED", "CANCELLED"}
 STEP_KINDS = {"reason", "effect", "wait", "complete_candidate"}
 EFFECT_CAPABILITIES = {"state.noop", "entityos.exec"}
+AUTOMATIC_COMPLETION_CAPABILITIES = {"entityos.exec"}
+AUTONOMY_TURN_SOURCE = "clayverse-autonomy:goal-step"
 COMPLETION_MODES = {"verified_effect", "user_ack"}
 MAX_GOALS, MAX_STEPS, MAX_RETRIES, MAX_EFFECTS = 512, 256, 16, 64
 MAX_OBJECTIVE_CHARS, MAX_STEP_CHARS = 20_000, 8_000
@@ -194,8 +196,8 @@ class AutonomyController:
         self.db.assert_live_generation(session_id, generation)
         if completion_mode not in COMPLETION_MODES:
             raise ValueError("invalid completion mode")
-        if completion_mode == "verified_effect" and required_capability not in EFFECT_CAPABILITIES:
-            raise ValueError("verified_effect requires admitted capability")
+        if completion_mode == "verified_effect" and required_capability not in AUTOMATIC_COMPLETION_CAPABILITIES:
+            raise ValueError("verified_effect requires an independently verifiable effect capability")
         if completion_mode == "user_ack" and required_capability is not None:
             raise ValueError("user_ack does not accept required_capability")
         if not isinstance(priority, int) or not 0 <= priority <= 100:
@@ -277,6 +279,56 @@ class AutonomyController:
         expected_target, expected_argv = cls._effect_intent_receipts(step["effect"])
         return row["target"] == expected_target and row["argv"] == expected_argv
 
+    @classmethod
+    def _causal_effect_row(cls, db, goal: dict[str, Any], effect_id: str, step_id: str):
+        row = db.execute(
+            "SELECT e.user_id,e.capability,e.target,e.argv,e.requested_generation,e.status,e.outcome,e.episode_id,e.ts,"
+            "w.session_id AS effect_session_id,w.observation_turn_id AS workspace_observation_turn_id "
+            "FROM effects e LEFT JOIN workspace_episodes w ON w.episode_id=e.episode_id WHERE e.effect_id=?",
+            (effect_id,),
+        ).fetchone()
+        if row is None:
+            raise AutonomyStateError("effect receipt missing")
+        if row["episode_id"] is None or row["effect_session_id"] != goal["session_id"] or row["workspace_observation_turn_id"] is None:
+            raise PermissionError("effect receipt lacks canonical goal-session episode")
+        causal_rows = db.execute(
+            "SELECT causal_id,episode_id,observation_turn_id,reentered FROM causal_episodes WHERE effect_id=? ORDER BY ts,causal_id",
+            (effect_id,),
+        ).fetchall()
+        if len(causal_rows) != 1:
+            raise AutonomyStateError("effect receipt requires exactly one causal re-entry")
+        causal = causal_rows[0]
+        if (
+            causal["episode_id"] != row["episode_id"]
+            or int(causal["reentered"]) != 1
+            or causal["observation_turn_id"] != row["workspace_observation_turn_id"]
+        ):
+            raise PermissionError("effect receipt causal spine mismatch")
+        observation = db.execute(
+            "SELECT session_id,user_id,ts,provenance FROM turns WHERE turn_id=?",
+            (row["workspace_observation_turn_id"],),
+        ).fetchone()
+        if observation is None or observation["session_id"] != goal["session_id"] or observation["user_id"] != goal["user_id"]:
+            raise PermissionError("effect observation identity mismatch")
+        provenance = cls._loads(observation["provenance"] or "{}")
+        try:
+            provenance_generation = int(provenance.get("entity_generation"))
+            provenance_session_generation = int(provenance.get("session_generation"))
+        except (TypeError, ValueError) as exc:
+            raise PermissionError("effect observation generation provenance missing") from exc
+        if (
+            provenance.get("source") != AUTONOMY_TURN_SOURCE
+            or provenance.get("goal_id") != goal["goal_id"]
+            or provenance.get("autonomy_step_id") != step_id
+            or provenance.get("causal_id") != causal["causal_id"]
+            or provenance_generation != int(goal["generation"])
+            or provenance_session_generation != int(goal["generation"])
+        ):
+            raise PermissionError("effect receipt autonomous goal-step provenance mismatch")
+        if float(observation["ts"]) <= float(goal["created_at"]) or float(row["ts"]) <= float(goal["created_at"]):
+            raise PermissionError("effect receipt predates autonomous goal")
+        return row
+
     def propose_step(self, goal_id: str, kind: str, description: str, *, effect=None, expected_generation=None) -> dict[str, Any]:
         if kind not in STEP_KINDS:
             raise ValueError("invalid step kind")
@@ -352,7 +404,7 @@ class AutonomyController:
             if not step or step["step_id"] != step_id or step["status"] != "ADMITTED" or step["kind"] != "effect":
                 raise AutonomyStateError("effect step is not active")
             row = db.execute(
-                "SELECT user_id,capability,target,argv,requested_generation,status,outcome FROM effects WHERE effect_id=?",
+                "SELECT user_id,capability,target,argv,requested_generation,status,outcome,episode_id,ts FROM effects WHERE effect_id=?",
                 (effect_id,),
             ).fetchone()
             if row is None:
@@ -365,9 +417,10 @@ class AutonomyController:
                 raise PermissionError("effect receipt intent mismatch")
             if row["status"] == "PENDING":
                 raise AutonomyStateError("effect outcome is pending")
+            row = self._causal_effect_row(db, goal, effect_id, step["step_id"])
             verified = row["status"] == "VERIFIED" and self._loads(row["outcome"] or "{}").get("ok") is True
             step["status"] = "SUCCEEDED" if verified else "FAILED"
-            if effect_id not in goal["evidence_effect_ids"]:
+            if verified and effect_id not in goal["evidence_effect_ids"]:
                 goal["evidence_effect_ids"].append(effect_id)
             goal["counters"]["consecutive_failures"] = 0 if verified else goal["counters"]["consecutive_failures"] + 1
             goal["status"] = "ACTIVE" if verified else "BLOCKED"
@@ -407,17 +460,33 @@ class AutonomyController:
                         and float(row["ts"]) > float(goal["created_at"])
                     ):
                         evidence = turn_id
-            else:
+            elif contract["required_capability"] in AUTOMATIC_COMPLETION_CAPABILITIES:
                 required = contract["required_capability"]
-                for effect_id in goal["evidence_effect_ids"]:
-                    row = db.execute("SELECT user_id,capability,requested_generation,status,outcome FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
-                    if row and row["user_id"] == goal["user_id"] and row["capability"] == required and int(row["requested_generation"]) == goal["generation"] and row["status"] == "VERIFIED":
+                step = goal["current_step"]
+                if (
+                    step
+                    and step["kind"] == "effect"
+                    and step["status"] == "SUCCEEDED"
+                    and step["effect"]["capability"] == required
+                ):
+                    for effect_id in goal["evidence_effect_ids"]:
                         try:
-                            if self._loads(row["outcome"] or "{}").get("ok") is True:
-                                evidence = effect_id
-                                break
-                        except AutonomyStateError:
-                            pass
+                            row = self._causal_effect_row(db, goal, effect_id, step["step_id"])
+                        except (AutonomyStateError, PermissionError):
+                            continue
+                        if (
+                            row["user_id"] == goal["user_id"]
+                            and row["capability"] == required
+                            and int(row["requested_generation"]) == goal["generation"]
+                            and row["status"] == "VERIFIED"
+                            and self._effect_receipt_matches_step(step, row)
+                        ):
+                            try:
+                                if self._loads(row["outcome"] or "{}").get("ok") is True:
+                                    evidence = effect_id
+                                    break
+                            except AutonomyStateError:
+                                pass
             if not evidence:
                 raise CompletionNotVerified(goal_id)
             goal["status"], goal["blocked_reason"], goal["updated_at"] = "COMPLETED", None, time.time()
@@ -478,8 +547,6 @@ class AutonomyController:
                     goal["blocked_reason"] = "unknown_effect_after_generation_change"
                     counts["ambiguous_effect_blocked"] += 1
                 elif goal["evidence_effect_ids"]:
-                    # Old-generation verified evidence is preserved but never silently
-                    # promoted to current-generation completion or used to trigger replay.
                     goal["status"] = "BLOCKED"
                     goal["blocked_reason"] = "effect_evidence_requires_generation_rebind"
                     counts["effect_evidence_rebind_required"] += 1

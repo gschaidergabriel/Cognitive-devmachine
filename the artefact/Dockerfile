@@ -17,20 +17,20 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
 
 # Freeze Debian package resolution to the repository-owned snapshot contract before
-# installing the only extra OS packages used by the product image. HTTP is intentional
-# for the bootstrap path because ca-certificates may not yet be present; APT still
-# authenticates the archive through the Debian archive keyring and signed/hash-linked
-# repository metadata. Mutable inherited mirrors are removed first.
+# installing the only extra OS packages used by the product image. Mutable inherited
+# mirrors are removed first. The pinned Python slim base is expected to carry the CA
+# bundle and Debian archive keyring; if either trust root is absent, fail closed.
 RUN set -eu; \
     python -c 'import json,re; d=json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8")); a=d["debian_apt"]; assert a["archive"]=="debian"; assert re.fullmatch(r"[0-9]{8}T[0-9]{6}Z", a["snapshot"]); assert a["suite"]=="trixie"; assert a["components"]==["main"]; assert a["check_valid_until"] is False; assert a["signed_by"]=="/usr/share/keyrings/debian-archive-keyring.gpg"; assert set(a["packages"])=={"ca-certificates","tmux"}' ; \
     SNAPSHOT="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["snapshot"])')"; \
     CA_CERTIFICATES_VERSION="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["packages"]["ca-certificates"])')"; \
     TMUX_VERSION="$(python -c 'import json; print(json.load(open("/opt/clayverse-build/SOURCE_LOCK.json", encoding="utf-8"))["debian_apt"]["packages"]["tmux"])')"; \
+    test -s /etc/ssl/certs/ca-certificates.crt; \
     test -r /usr/share/keyrings/debian-archive-keyring.gpg; \
     rm -f /etc/apt/sources.list /etc/apt/sources.list.d/*; \
     printf '%s\n' \
       'Types: deb' \
-      "URIs: http://snapshot.debian.org/archive/debian/${SNAPSHOT}/" \
+      "URIs: https://snapshot.debian.org/archive/debian/${SNAPSHOT}/" \
       'Suites: trixie' \
       'Components: main' \
       'Check-Valid-Until: no' \

@@ -1,17 +1,18 @@
 {
   "schema": "ClayVerseBoundedExecutionReceipt/v1",
-  "timestamp_local": "2026-08-17T23:24:00+07:00",
+  "timestamp_local": "2026-08-17T23:31:00+07:00",
   "trigger": "go",
   "organ": "GPT-5.6 Sol",
   "classification": "BOUNDED_MECHANISM_SUPPORT",
-  "canonical_main_at_pr_creation": "f4bfa0d0fbc2aa6baa53be747729d9ff734a5ab8",
+  "canonical_main_at_latest_reentry": "56ba81c24af019ebe1729344c2f954d66c80c0ee",
   "branch": "gpt56sol/go-mistral-causal-reingest-20260817-2259",
+  "branch_head_before_this_receipt_update": "cda8ea653122db2d7631af9b206ef1a05c00263b",
   "pull_request": 667,
   "scope": {
-    "claim": "The new MistralTurnRunner uses the existing TurnLifecycle, fail-closes on model effect intent and stale generation, requires bounded allowlisted non-secret provider provenance, and refuses unexpected effect binding.",
+    "claim": "The exact new MistralTurnRunner fail-closes on effect intent, stale generation around inference latency, unsafe provider provenance, and unexpected effect binding while delegating canonical persistence to TurnLifecycle. A parallel source delta additionally fences TurnLifecycle.complete against a pre-recovery generation, but that Real-DB integration test is not yet executed by this receipt.",
     "not_claimed": [
       "full branch pytest",
-      "exact TurnLifecycle integration execution",
+      "executed exact TurnLifecycle Real-DB generation-fence integration",
       "real Mistral API execution",
       "Vault secret acquisition",
       "exact OCI build or runtime",
@@ -24,7 +25,8 @@
   "exact_git_blobs": {
     "the artefact/clayverse/mistral_turn.py": "0228d39105fe164e938e16b800b21c2696daca9d",
     "the artefact/tests/test_mistral_turn.py": "f70ae63c7a63e8390c10ae2a1cdeba32cbd64bc7",
-    "the artefact/clayverse/turn_lifecycle.py": "d9053c9f4877fa2230ef79bca19710a03f98f985"
+    "the artefact/clayverse/turn_lifecycle.py": "e7ed97b5c390d9b31435bc99cb0ffa8671e09864",
+    "the artefact/tests/test_turn_lifecycle_complete_generation_fence.py": "90302a41657a34325a5fc413a86e97eb2300b91c"
   },
   "isolated_execution": {
     "surface": "OpenAI isolated non-production container",
@@ -35,18 +37,22 @@
     "result": "7 passed in 0.04s",
     "runner_blob_match": true,
     "test_blob_match": true,
-    "support_boundary": "Existing adapters/store/turn_lifecycle imports were represented by minimal stubs solely to execute the exact new runner/test blobs; therefore this is not exact full-product integration evidence.",
-    "supersedes_within_cycle": "Earlier 5/5 focused result on prior runner/test blobs."
+    "support_boundary": "Existing adapters/store/turn_lifecycle imports were represented by minimal stubs solely to execute the exact new runner/test blobs. The later TurnLifecycle generation-fence source delta and its Real-DB test are recorded by exact Git blob identity but were not executed in this bounded run."
   },
   "falsifiers_executed": [
-    "canonical lifecycle begin/complete binding and Mistral provider receipt handoff",
+    "canonical lifecycle begin/complete interface binding and Mistral provider receipt handoff",
     "Mistral effect intent rejected before any effect path",
-    "response rejected after generation changes during inference latency",
+    "response rejected after generation changes during inference latency at runner boundary",
     "missing Mistral inference receipt rejected",
     "extra secret-like provider receipt field rejected",
     "non-digest receipt hash rejected",
     "Mistral cognition completion rejected if an effect_id is unexpectedly bound"
   ],
+  "source_only_new_falsifier": {
+    "test": "test_complete_rejects_active_turn_from_pre_recovery_generation",
+    "mechanism": "TurnLifecycle.complete calls assert_live_generation against the active turn generation before canonical provider completion.",
+    "evidence": "SOURCE_CANDIDATE_UNEXECUTED_IN_THIS_RECEIPT"
+  },
   "github_actions": {
     "workflow_run_id": 32045291485,
     "job_id": 95431707303,
@@ -62,5 +68,5 @@
     "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "unusual_experiment_count": 0
   },
-  "next_exact_gate": "Rejoin then-current main once, execute exact relevant full-tree tests in an admitted isolated checkout, then run the owner-mandated Vercel Firecracker -> exact OCI digest -> Vault Mistral -> canonical turn/re-ingest -> separate EffectGate/EntityOS -> Tier-2 recreate -> secret reacquisition sequence."
+  "next_exact_gate": "Execute the exact current PR relevant full-tree tests with the Real-DB TurnLifecycle generation fence in an admitted isolated checkout, then rejoin current main once and proceed to the owner-mandated Vercel Firecracker -> exact OCI digest -> Vault Mistral -> canonical turn/re-ingest -> separate EffectGate/EntityOS -> Tier-2 recreate -> secret reacquisition sequence."
 }

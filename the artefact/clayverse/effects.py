@@ -1,4 +1,5 @@
 from __future__ import annotations
+import hashlib, uuid
 from dataclasses import dataclass
 from .store import UnifiedDB,Lease,StaleGeneration
 from .entityos_bridge import EntityOSBridge
@@ -8,6 +9,7 @@ class EffectRequest:
     user_id:str; session_id:str; capability:str; target:str; argv:list[str]|None=None; expected_generation:int|None=None
 class EffectGate:
     ALLOWED={'entityos.exec','process.exec','state.noop'}
+    AUTO_LEASE_TTL=300.0
     def __init__(self,db:UnifiedDB,allow_process=False,entityos_bridge:EntityOSBridge|None=None):
         self.db=db; self.allow_process=allow_process; self.entityos_bridge=entityos_bridge; self.journal=EffectJournal(db)
     def available_capabilities(self):
@@ -15,6 +17,13 @@ class EffectGate:
         if self.entityos_bridge is not None: capabilities.add('entityos.exec')
         return tuple(sorted(capabilities))
     def causal_for_effect(self,effect_id): return self.journal.causal_for(effect_id)
+    @staticmethod
+    def _lease_resource(req:EffectRequest):
+        payload=f'{req.capability}\0{req.target}'.encode('utf-8')
+        return 'effect:'+hashlib.sha256(payload).hexdigest()
+    def _release_exact_lease(self,lease:Lease):
+        with self.db.tx() as db:
+            db.execute('DELETE FROM leases WHERE resource=? AND holder=? AND generation=? AND nonce=?',(lease.resource,lease.holder,lease.generation,lease.nonce))
     def execute(self,req:EffectRequest,episode_id=None,lease:Lease|None=None):
         if req.capability not in self.ALLOWED: raise PermissionError('capability denied')
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()
@@ -24,19 +33,28 @@ class EffectGate:
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':
             raise PermissionError('direct host process execution forbidden; no admitted generic EntityOS process contract')
-        effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease)
-        if req.capability=='state.noop':
-            outcome={'ok':True,'target':req.target,'boundary':'internal'}
+        auto_lease=False
+        if req.capability=='entityos.exec' and lease is None:
+            holder=f'{req.session_id}:{uuid.uuid4().hex}'
+            lease=self.db.acquire_lease(self._lease_resource(req),holder,ttl=self.AUTO_LEASE_TTL)
+            auto_lease=True
+        try:
+            effect_id=self.journal.begin(episode_id,req.session_id,req.user_id,req.capability,req.target,generation,req.argv,lease=lease)
+            if req.capability=='state.noop':
+                outcome={'ok':True,'target':req.target,'boundary':'internal'}
+                self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)
+                return effect_id,outcome
+            if not self.entityos_bridge:
+                outcome={'ok':False,'denied':True,'reason':'entityos_unavailable','target':req.target,'boundary':'EntityOS'}
+                self.journal.complete(effect_id,outcome,'DENIED')
+                return effect_id,outcome
+            try:
+                outcome=dict(self.entityos_bridge.run(req.argv)); outcome['boundary']='EntityOS'; outcome['entityos_sha256']=self.entityos_bridge.sha256.lower()
+            except Exception as exc:
+                self.journal.complete(effect_id,{'ok':False,'error':type(exc).__name__,'boundary':'EntityOS'},'FAILED')
+                raise
             self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)
             return effect_id,outcome
-        if not self.entityos_bridge:
-            outcome={'ok':False,'denied':True,'reason':'entityos_unavailable','target':req.target,'boundary':'EntityOS'}
-            self.journal.complete(effect_id,outcome,'DENIED')
-            return effect_id,outcome
-        try:
-            outcome=dict(self.entityos_bridge.run(req.argv)); outcome['boundary']='EntityOS'; outcome['entityos_sha256']=self.entityos_bridge.sha256.lower()
-        except Exception as exc:
-            self.journal.complete(effect_id,{'ok':False,'error':type(exc).__name__,'boundary':'EntityOS'},'FAILED')
-            raise
-        self.journal.complete_verified(effect_id,outcome,req.session_id,req.user_id,generation,lease)
-        return effect_id,outcome
+        finally:
+            if auto_lease and lease is not None:
+                self._release_exact_lease(lease)

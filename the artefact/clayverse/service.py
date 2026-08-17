@@ -5,18 +5,28 @@ import binascii
 import json
 import os
 import sys
+from pathlib import Path
 from urllib.parse import urlsplit
 
+from .api_acceptance_probe import run_api_acceptance_probe
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
-from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
+from .logical_snapshot import LogicalSnapshotManager
 from .readiness import claude_readiness
-from .recovery import recover_incomplete_episodes
+from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
+from .runtime_identity import collect_runtime_identity
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+from .tier2 import (
+    TIER2_EXIT_CODE,
+    Tier2ReplacementBlocked,
+    assert_tier2_boot_allowed,
+    clear_tier2_fence_after_boot,
+    request_tier2_replacement,
+)
 
 
 def _clerk_map() -> dict[str, str]:
@@ -42,7 +52,6 @@ def _clerk_map() -> dict[str, str]:
 
 
 def _clerk_frontend_api_from_publishable_key(publishable_key: str) -> str:
-    """Derive the direct Clerk FAPI URL encoded by a publishable key or fail closed."""
     encoded = ""
     for prefix in ("pk_test_", "pk_live_"):
         if publishable_key.startswith(prefix):
@@ -101,18 +110,12 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
         raise RuntimeError("embedded EntityOS path and SHA-256 are required")
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
-
     candidate = EntityOSBridge(path=path, sha256=sha256)
     try:
         verified = candidate.verify()
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
-    status = {
-        "staged": True,
-        "verified": True,
-        "execution_enabled": enable_exec,
-        **verified,
-    }
+    status = {"staged": True, "verified": True, "execution_enabled": enable_exec, **verified}
     return (candidate if enable_exec else None), status
 
 
@@ -127,6 +130,18 @@ def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
     }
 
 
+def _tier2_status(status: str, *, reason: str, pod_uid: str) -> dict[str, object]:
+    return {
+        "service": "clayverse",
+        "status": status,
+        "scope": "tier2_replacement",
+        "reason": reason,
+        "pod_uid": pod_uid or None,
+        "ready": False,
+        "exit_code": TIER2_EXIT_CODE,
+    }
+
+
 def _acceptance_bool(name: str, default: str = "0") -> bool:
     raw = os.environ.get(name, default)
     if raw not in {"0", "1"}:
@@ -134,36 +149,139 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
     return raw == "1"
 
 
-def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
-    """Run the internal canonical Mistral turn used by the final sandbox controller.
+def _acceptance_required_effect_capability() -> str | None:
+    raw = os.environ.get("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", "").strip()
+    if not raw:
+        return None
+    if raw != "entityos.exec":
+        raise RuntimeError(
+            "CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY may only be entityos.exec at the final service boundary"
+        )
+    return raw
 
-    This mode intentionally receives no Clerk auth credit. It proves the cognition /
-    re-ingest / EffectGate causal spine inside the exact product image; the final
-    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
+
+def _acceptance_effect_policy() -> tuple[bool, str | None]:
+    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    required_capability = _acceptance_required_effect_capability()
+    if require_effect and required_capability is None:
+        required_capability = "entityos.exec"
+    if required_capability is not None:
+        require_effect = True
+    return require_effect, required_capability
+
+
+def _snapshot_restore_before_db_open(state_root: str) -> dict[str, object] | None:
+    raw = os.environ.get("CLAYVERSE_RESTORE_SNAPSHOT_DIR", "").strip()
+    if not raw:
+        os.makedirs(state_root, exist_ok=True)
+        return None
+    if not os.path.isabs(raw) or any(char in raw for char in ("\x00", "\n", "\r")):
+        raise RuntimeError("CLAYVERSE_RESTORE_SNAPSHOT_DIR must be an absolute single-line path")
+    return LogicalSnapshotManager(state_root).restore_fresh(
+        Path(raw), runtime_identity=collect_runtime_identity()
+    )
+
+
+def _acceptance_snapshot(db: UnifiedDB) -> dict[str, object] | None:
+    if not _acceptance_bool("CLAYVERSE_ACCEPTANCE_CREATE_SNAPSHOT"):
+        return None
+    manifest = LogicalSnapshotManager(db.path.parent).create(
+        db,
+        runtime_identity=collect_runtime_identity(),
+        reason="generic-api-final-sandbox-probe",
+    )
+    anchor = manifest["state"]["checkpoint_anchor"]
+    return {
+        "created": True,
+        "snapshot_id": manifest["snapshot_id"],
+        "database_sha256": manifest["database"]["sha256"],
+        "checkpoint_id": anchor["checkpoint_id"],
+        "state_hash": anchor["state_hash"],
+        "entity_generation": manifest["state"]["entity_generation"],
+    }
+
+
+def _recover_with_tier2(db: UnifiedDB, state_root: str, pod_uid: str) -> dict[str, object]:
+    try:
+        return recover_incomplete_episodes(db)
+    except RecoveryIntegrityError:
+        generation = db.entity_generation()
+        try:
+            request_tier2_replacement(
+                state_root,
+                current_pod_uid=pod_uid,
+                reason="recovery_integrity_failure",
+                entity_generation=generation,
+            )
+            status = "tier2_replacement_required"
+            reason = "recovery_integrity_failure"
+        except Exception as fence_exc:
+            status = "tier2_fence_write_failed"
+            reason = f"recovery_integrity_failure:{type(fence_exc).__name__}"
+        db.close()
+        print(json.dumps(_tier2_status(status, reason=reason, pod_uid=pod_uid)), flush=True)
+        raise SystemExit(TIER2_EXIT_CODE)
+
+
+def _admit_tier2_after_recovery(
+    db: UnifiedDB, state_root: str, pod_uid: str, prior_fence
+) -> dict[str, object] | None:
+    if prior_fence is None:
+        return None
+    checkpoint_id, state_hash = db.checkpoint(
+        "tier2-replacement-admitted:"
+        f"old_pod_uid={prior_fence.old_pod_uid};new_pod_uid={pod_uid};reason={prior_fence.reason}"
+    )
+    cleared = clear_tier2_fence_after_boot(
+        state_root,
+        current_pod_uid=pod_uid,
+        live_entity_generation=db.entity_generation(),
+    )
+    return {
+        "old_pod_uid": cleared.old_pod_uid if cleared else None,
+        "new_pod_uid": pod_uid,
+        "reason": cleared.reason if cleared else None,
+        "checkpoint": checkpoint_id,
+        "state_hash": state_hash,
+        "entity_generation": db.entity_generation(),
+    }
+
+
+def _run_api_once(db: UnifiedDB, *, state_root: str, pod_uid: str) -> dict[str, object]:
+    """Run one provider-generic direct API turn through the canonical causal spine.
+
+    Mistral is selected only through the generic provider environment profile in the
+    current final acceptance run; this service boundary contains no provider-specific
+    cognition implementation and intentionally grants no Clerk/browser auth credit.
     """
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
     ClayGraphProjection(db).rebuild()
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
     prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
-    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    require_effect, required_effect_capability = _acceptance_effect_policy()
     entityos_bridge, entityos_status = _entityos_config()
+    if required_effect_capability == "entityos.exec" and entityos_bridge is None:
+        raise RuntimeError("final EntityOS acceptance effect is required but EntityOS execution is disabled")
 
-    payload = run_mistral_acceptance_probe(
+    payload = run_api_acceptance_probe(
         db,
         clerk_map,
         clerk_subject,
         prompt,
         entityos_bridge=entityos_bridge,
         require_effect=require_effect,
+        required_effect_capability=required_effect_capability,
     )
-    checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
+    checkpoint_id, state_hash = db.checkpoint("generic-api-final-sandbox-probe")
     payload.update(
         {
             "checkpoint": checkpoint_id,
             "state_hash": state_hash,
             "recovery": recovery,
+            "acceptance_snapshot": _acceptance_snapshot(db),
+            "required_effect_capability": required_effect_capability,
             "entityos": {
                 "verified": bool(entityos_status.get("verified")),
                 "execution_enabled": bool(entityos_status.get("execution_enabled")),
@@ -178,26 +296,46 @@ def main():
     import uvicorn
 
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
-    os.makedirs(state_root, exist_ok=True)
+    pod_uid = os.environ.get("CLAYVERSE_POD_UID", "").strip()
+    restore_receipt = _snapshot_restore_before_db_open(state_root)
+    try:
+        prior_tier2_fence = assert_tier2_boot_allowed(state_root, current_pod_uid=pod_uid)
+    except Tier2ReplacementBlocked as exc:
+        print(json.dumps(_tier2_status("tier2_replacement_blocked", reason=str(exc), pod_uid=pod_uid)), flush=True)
+        return TIER2_EXIT_CODE
+
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")
-        print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
+        payload = _state_probe_payload(cid, digest)
+        payload["snapshot_restore"] = restore_receipt
+        print(json.dumps(payload, sort_keys=True), flush=True)
         db.close()
         return 0
 
     if "--mistral-once" in sys.argv:
+        db.close()
+        raise RuntimeError("--mistral-once is retired; use provider-generic --api-once")
+
+    if "--api-once" in sys.argv:
         try:
-            payload = _run_mistral_once(db)
+            payload = _run_api_once(db, state_root=state_root, pod_uid=pod_uid)
+            payload["snapshot_restore"] = restore_receipt
+            payload["tier2_replacement"] = _admit_tier2_after_recovery(
+                db, state_root, pod_uid, prior_tier2_fence
+            )
             print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
         finally:
-            db.close()
+            try:
+                db.close()
+            except Exception:
+                pass
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -231,6 +369,7 @@ def main():
         publishable_key=publishable_key,
         frontend_api_url=frontend_api,
     )
+    tier2_replacement = _admit_tier2_after_recovery(db, state_root, pod_uid, prior_tier2_fence)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     print(json.dumps({
@@ -247,6 +386,8 @@ def main():
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
+        "snapshot_restore": restore_receipt,
+        "tier2_replacement": tier2_replacement,
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

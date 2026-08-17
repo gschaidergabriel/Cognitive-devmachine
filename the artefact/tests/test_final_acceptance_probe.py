@@ -30,6 +30,21 @@ class FakeMistral:
         }
 
 
+class FakeEntityOS:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        assert argv == ["acceptance-probe"]
+        return {
+            "ok": True,
+            "exit": 0,
+            "stdout_sha256": "b" * 64,
+            "stderr_sha256": "c" * 64,
+            "stdout": "",
+            "stderr": "",
+        }
+
+
 def test_probe_uses_canonical_engine_and_returns_only_sanitized_receipt(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     try:
@@ -50,6 +65,8 @@ def test_probe_uses_canonical_engine_and_returns_only_sanitized_receipt(tmp_path
         assert payload["workspace_episode_id"]
         assert payload["effect"] == {
             "required": False,
+            "required_capability": None,
+            "capability": None,
             "effect_id": None,
             "present": False,
             "verified_ok": False,
@@ -89,9 +106,56 @@ def test_probe_can_require_verified_effect_through_effectgate(tmp_path):
             require_effect=True,
         )
         assert payload["effect"]["required"] is True
+        assert payload["effect"]["required_capability"] is None
+        assert payload["effect"]["capability"] == "state.noop"
         assert payload["effect"]["present"] is True
         assert payload["effect"]["verified_ok"] is True
         assert payload["effect"]["effect_id"]
+    finally:
+        db.close()
+
+
+def test_probe_can_require_exact_entityos_effect_capability(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        payload = run_mistral_acceptance_probe(
+            db,
+            {"subject-g": "gabriel", "subject-a": "andreas"},
+            "subject-g",
+            "request the bounded EntityOS acceptance probe",
+            inference=FakeMistral(
+                effect={
+                    "capability": "entityos.exec",
+                    "target": "acceptance",
+                    "argv": ["acceptance-probe"],
+                }
+            ),
+            entityos_bridge=FakeEntityOS(),
+            required_effect_capability="entityos.exec",
+        )
+        assert payload["effect"]["required"] is True
+        assert payload["effect"]["required_capability"] == "entityos.exec"
+        assert payload["effect"]["capability"] == "entityos.exec"
+        assert payload["effect"]["present"] is True
+        assert payload["effect"]["verified_ok"] is True
+    finally:
+        db.close()
+
+
+def test_probe_rejects_noop_when_entityos_effect_is_required(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    try:
+        with pytest.raises(RuntimeError, match="required effect capability entityos.exec but observed state.noop"):
+            run_mistral_acceptance_probe(
+                db,
+                {"subject-g": "gabriel", "subject-a": "andreas"},
+                "subject-g",
+                "request the wrong bounded effect",
+                inference=FakeMistral(
+                    effect={"capability": "state.noop", "target": "acceptance", "argv": None}
+                ),
+                required_effect_capability="entityos.exec",
+            )
     finally:
         db.close()
 

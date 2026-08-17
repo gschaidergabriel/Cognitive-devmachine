@@ -44,10 +44,10 @@ jobs:
             tests/test_microclay_restart_learning.py \
             tests/test_method_memory_admission.py \
             tests/test_method_memory_promotion.py \
+            tests/test_method_memory_unifieddb_authority.py \
             tests/test_method_stageb_admitted.py \
             tests/test_retrieval_identity_fence.py
       - name: GO unusual-experiment accounting
         run: |
-          echo "UNUSUAL_EXPERIMENT_SLOT=CONSUMED_EXTERNALLY"
-          echo "CANONICAL_EXPERIMENT=BOUND_WORLD_MINIMUM_OVERFLOW"
+          echo "UNUSUAL_EXPERIMENT_SLOT=COORDINATION_BLOCKED_OR_CONSUMED_EXTERNALLY"
           echo "THIS_WORKFLOW=REGRESSION_ONLY"

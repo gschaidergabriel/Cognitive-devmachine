@@ -25,6 +25,20 @@ class _FakeResponse:
         return self._raw[:limit]
 
 
+class _RawResponse:
+    def __init__(self, raw: bytes):
+        self._raw = raw
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        return False
+
+    def read(self, limit: int) -> bytes:
+        return self._raw[:limit]
+
+
 class _CapturingOpener:
     def __init__(self, payload: dict):
         self.payload = payload
@@ -120,7 +134,7 @@ def test_glm_http_failure_suppresses_provider_body_and_exception_chain():
 
 def test_glm_world_boundary_is_bounded_before_network():
     opener = _CapturingOpener(
-        {"choices": [{"message": {"content": "unused"}}]}
+        {"model": "glm-5.2", "choices": [{"message": {"content": "unused"}}]}
     )
     inference = GLMTokenInference(api_token="token", opener=opener)
     with pytest.raises(GLMInferenceError, match="assembled world exceeds"):
@@ -128,9 +142,20 @@ def test_glm_world_boundary_is_bounded_before_network():
     assert opener.request is None
 
 
+@pytest.mark.parametrize("non_finite", [float("nan"), float("inf"), float("-inf")])
+def test_glm_rejects_non_finite_world_before_network(non_finite):
+    opener = _CapturingOpener(
+        {"model": "glm-5.2", "choices": [{"message": {"content": "unused"}}]}
+    )
+    inference = GLMTokenInference(api_token="token", opener=opener)
+    with pytest.raises(GLMInferenceError, match="assembled world is not canonical JSON"):
+        inference.reason({"value": non_finite}, "hello")
+    assert opener.request is None
+
+
 def test_glm_observation_boundary_is_bounded_before_network():
     opener = _CapturingOpener(
-        {"choices": [{"message": {"content": "unused"}}]}
+        {"model": "glm-5.2", "choices": [{"message": {"content": "unused"}}]}
     )
     inference = GLMTokenInference(api_token="token", opener=opener)
     with pytest.raises(GLMInferenceError, match="observation is outside"):
@@ -147,4 +172,37 @@ def test_glm_rejects_non_glm_provider_response_model():
     )
     inference = GLMTokenInference(api_token="token", opener=opener)
     with pytest.raises(GLMInferenceError, match="model identifier is invalid"):
+        inference.reason({}, "hello")
+
+
+def test_glm_rejects_different_glm_provider_response_model():
+    opener = _CapturingOpener(
+        {
+            "model": "glm-4.7",
+            "choices": [{"message": {"content": "hello"}}],
+        }
+    )
+    inference = GLMTokenInference(api_token="token", model="glm-5.2", opener=opener)
+    with pytest.raises(GLMInferenceError, match="does not match requested model"):
+        inference.reason({}, "hello")
+
+
+def test_glm_rejects_missing_provider_response_model():
+    opener = _CapturingOpener(
+        {"choices": [{"message": {"content": "hello"}}]}
+    )
+    inference = GLMTokenInference(api_token="token", opener=opener)
+    with pytest.raises(GLMInferenceError, match="model identifier is missing or invalid"):
+        inference.reason({}, "hello")
+
+
+def test_glm_rejects_non_finite_provider_json():
+    class _RawOpener:
+        def open(self, request, timeout):
+            return _RawResponse(
+                b'{"model":"glm-5.2","usage":{"total_tokens":NaN},"choices":[{"message":{"content":"hello"}}]}'
+            )
+
+    inference = GLMTokenInference(api_token="token", opener=_RawOpener())
+    with pytest.raises(GLMInferenceError, match="not valid canonical JSON"):
         inference.reason({}, "hello")

@@ -1,0 +1,77 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:12:41+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "candidate_branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "branch_head_before_receipt": "772dd4529c7ddab236b15041a022d266c75ba317",
+  "base_main_observed_via_pr": "ccfb71b973e8312fc20b027fdd37941e48a50a7b",
+  "classification": "ANTI_ENTROPY_REPAIR_SINGLE_CANONICAL_TOKENLESS_OCI_LANE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "material_delta": {
+    "problem": "Two manual ClayVerse OCI workflow paths coexisted. The stale clayverse-artifact-ci.yml path still required top-level the artefact/EntityOS and contradicted the tokenless baseline, while clayverse-artefact-ci.yml had already converged on optional paired EntityOS admission.",
+    "counterhypothesis": "The two workflows might represent intentionally distinct baseline and EntityOS-admitted product lanes.",
+    "counterhypothesis_result": "WEAKENED: the retained clayverse-artefact-ci.yml itself supports both the tokenless baseline and the optional digest-bound EntityOS variant, so the second workflow was a divergent semantic duplicate rather than a required complementary lane.",
+    "repair_commits": [
+      "01c994816bd3ad66e6a9a8400e76de03c794ac1c",
+      "41473e8dcc8df1cadde7aee3cce2bb627c143dd5"
+    ],
+    "living_readme_commit": "772dd4529c7ddab236b15041a022d266c75ba317",
+    "regression_blob": "9ddb4015e0a8d7b7881b366023e7df4bb6ad0b86",
+    "retained_workflow": ".github/workflows/clayverse-artefact-ci.yml",
+    "retired_workflow": ".github/workflows/clayverse-artifact-ci.yml"
+  },
+  "post_write_verification": {
+    "retained_workflow_present": true,
+    "retired_workflow_fetch": "404_NOT_FOUND",
+    "single_lane_regression_present": true,
+    "single_lane_regression": "test_only_one_canonical_clayverse_oci_workflow_exists",
+    "baseline_entityos_requirement_reintroduced": false
+  },
+  "execution_surface_refresh": {
+    "vercel": {
+      "classification": "SANDBOX_BRIDGE_CONFIRMED_PRIVATE_SOURCE_STAGE_CREDENTIAL_BLOCKED",
+      "controller": "gschaidergabriel/Dr.-Unterweger PR810",
+      "observed_sandbox_create": true,
+      "observed_sandbox_stop": true,
+      "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+      "source_runtime_credit": 0,
+      "oci_runtime_credit": 0,
+      "baseline_dependency_decision": "Do not reintroduce GITHUB_READ_TOKEN as a ClayVerse baseline prerequisite."
+    },
+    "openai_isolated_surface": {
+      "python_available": true,
+      "pytest_available": true,
+      "docker_available": false,
+      "podman_available": false,
+      "oci_runtime_credit": 0
+    },
+    "daytona": {
+      "classification": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_PROVIDER_CONTACT",
+      "runtime_credit": 0
+    }
+  },
+  "evidence_boundary": "This receipt binds a source/coordination anti-entropy repair and current execution-surface classification only. It is not a full moving-head checkout PASS, Docker/OCI build, image digest, packaged startup/readiness, Clerk/browser/PTY, native-Claude/tmux, restart/concurrency, or whole ClayVerse PASS.",
+  "mergeability": {
+    "classification": "UNKNOWN_NOT_USED_FOR_PROMOTION",
+    "note": "The raw GitHub PR response reported mergeable=null, rebaseable=null and mergeable_state=unknown at refresh; no conflict claim is made."
+  },
+  "coordination": {
+    "parallel_lane": "PR625 reused; no replacement packaging lane or second OCI controller created.",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiments_executed": 0,
+    "unusual_experiment_reason": "No immutable shared request/turn identifier or sufficiently precise reproducible fallback identity is exposed for this exact go trigger."
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  },
+  "next_gate": "Rebind the exact current PR625 head at an authorized source-bound Docker/OCI-capable isolated surface, build the EntityOS-free baseline, verify no EntityOS executable is present, run packaged service startup/readiness, then exercise the optional digest-bound EntityOS variant and continue the complete ClayVerse acceptance chain."
+}

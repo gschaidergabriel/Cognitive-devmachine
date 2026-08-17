@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "started_from_canonical_main": "79cdde5232e7047e2dabcd5e51a95da173e13bec",
+  "branch": "gpt56sol/go-microvm-network-boundary-20260817-2249-rejoin",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_REPAIR_WITH_EXACT_FILE_ISOLATED_REGRESSION",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_reason": "The exact user go trigger exposes no shared immutable request/turn identifier and only minute-precision message metadata; ordinary deterministic source review and regressions remain allowed under GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md.",
+  "observed_defect": {
+    "summary": "The canonical Kata StatefulSet template used hostNetwork:false but no Kubernetes NetworkPolicy, while the MicroVM contract required controlled ingress/egress. Kubernetes pods are otherwise non-isolated by default for ingress and egress.",
+    "source_gap": "MICROVM_NETWORK_BOUNDARY_DEFAULT_ALLOW",
+    "product_impact": "A final Kubernetes/Kata deployment could satisfy the guest-kernel/runtime-class source shape while still inheriting broad cluster-network reachability unless the CNI happened to add restrictions outside the product contract."
+  },
+  "parallel_fusion": {
+    "stale_donor_branch": "gpt56sol/go-microvm-network-boundary-20260817-2249",
+    "donor_status": "STALE_BASE_PARTIAL_DONOR_ONLY",
+    "action": "REJOINED_ON_CURRENT_MAIN_AND_FUSED_WITHOUT_REUSING_STALE_README_OR_MISSING_MICROVM_CONTRACT",
+    "duplicate_authority_created": false
+  },
+  "repair": {
+    "network_policy": [
+      "default-deny Ingress and Egress for app=clayverse",
+      "explicit in-cluster gateway ingress only on TCP/3000 using namespace+pod labels",
+      "portable DNS-only egress exception scoped to kube-system/k8s-app=kube-dns",
+      "no wildcard 0.0.0.0/0 or ::/0 public egress",
+      "provider Clerk/Claude/GLM egress remains fail-closed until separately admitted by endpoint-specific CNI/egress-gateway/proxy policy"
+    ],
+    "contract_fences": [
+      "cluster network plugin must actually enforce networking.k8s.io/v1 NetworkPolicy",
+      "DNS implementation/labels must be verified and adapted when node-local DNS is used",
+      "shipping policy YAML is not runtime evidence",
+      "node-local traffic must be separately tested because Kubernetes NetworkPolicy semantics may admit traffic from the pod node",
+      "final provider egress enforcement must be observed, not inferred"
+    ]
+  },
+  "source_blobs": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "793c0a76c5926e911a2e2a5b0da7be00e561210f",
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "37f41945da296b5ca4a8ec61892cca13cb0fc93b",
+    "the artefact/tests/test_microvm_deployment_contract.py": "8dd60ceaf0a99f6831d38e2e75ac79d11efebf08"
+  },
+  "primary_external_evidence": [
+    "Kubernetes NetworkPolicy documentation: pods are non-isolated by default; a selecting policy with Ingress/Egress isolates those directions and empty rule lists deny traffic.",
+    "Kubernetes NetworkPolicy API: policyTypes controls isolation direction and empty ingress/egress rule sets allow no traffic for the selected direction.",
+    "Kata Containers current quick-start/installation documentation: runtime-rs is recommended and kata-qemu-runtime-rs is a current RuntimeClass example; the guest kernel differs from the host kernel in the normal verification flow."
+  ],
+  "isolated_regression": {
+    "surface": "OpenAI isolated non-production container",
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "byte_binding": "git hash-object matched all three GitHub source blobs exactly before execution",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "7 passed in 0.07s",
+    "exit_code": 0,
+    "scope": "focused static deployment-contract regression only"
+  },
+  "non_claims": [
+    "no exact OCI image build or image digest",
+    "no live Kubernetes CNI NetworkPolicy enforcement",
+    "no live Kata/microVM execution",
+    "no node-local network bypass test",
+    "no Clerk/Claude/GLM endpoint-specific egress runtime test",
+    "no whole ClayVerse PASS"
+  ],
+  "next_exact_gate": "Merge/rebase this single retained network-boundary repair after review, then on the exact accepted OCI digest deploy through a NetworkPolicy-enforcing Kata/equivalent cluster and prove default-deny ingress/egress, admitted gateway-only ingress, denied arbitrary public egress, explicit provider egress, node-local non-bypass, guest-kernel isolation, persistence/recovery and the existing full ClayVerse acceptance vector.",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "vps_self_hosted_production_testing": "NOT_USED",
+  "paid_final_training": "NOT_STARTED_OWNER_AUTHORIZATION_REQUIRED"
+}

@@ -1,109 +1,92 @@
 # the artefact — ClayVerse single-container candidate
 
-This is the canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible container image** containing one persistent central ClayVerse entity.
+Canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker-compatible container image** containing one persistent central ClayVerse entity.
 
 ## Living cycle status
 
-**Refresh this state in every product-convergent cycle. A stale README means the cycle is incomplete; detailed evidence remains in Git history and bounded receipts.**
+Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries only the current product state and latest concrete delta.
 
-### Current product contract
+### Product contract
 
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- UnifiedDB is the sole durable canonical cognition/state authority. ClayGraph is derived/rebuildable only. MicroClay changes retrieval/accessibility only, never truth, identity, privacy or effect authority.
-- Canonical user path: Clerk-authenticated browser → auth-first WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
-- Gabriel and Andreas are equal-rights perspectives into the same central entity/global generation.
-- Claude Code is runtime cognition, not durable memory/identity authority. Managed hooks bind turns to UnifiedDB.
-- Effects remain fail-closed through ClayVerse MCP/EffectGate. Generic host `process.exec` is forbidden. EntityOS is an optional digest-bound internal execution/security substrate, not the product endpoint.
+- UnifiedDB is the sole durable canonical cognition/state authority; ClayGraph is derived/rebuildable.
+- Canonical path: Clerk-authenticated browser → auth-first WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
+- Gabriel and Andreas are equal-rights perspectives into one central entity/global generation.
+- Managed hooks bind turns to UnifiedDB; effects remain fail-closed through ClayVerse MCP/EffectGate.
+- EntityOS is an **optional** digest-bound internal execution/security substrate, not the product endpoint and not required for the baseline container.
 - Build/test/runtime validation remains authorized isolated-sandbox-only. VPS/self-hosted/production testing and Together are forbidden.
 
 ### Retained convergence lanes
 
-- **#611** — single retained tmux idempotent-reapply repair. Promotion still requires the actual tmux resolved inside the exact ClayVerse OCI image.
-- **#622** — single retained Python hash-lock generator lane. Current branch head after its bounded receipt is `84f0f17b42b31bb64ad902e619dd4d26894dcead`; semantic repair is `b6b5a83c390944c9f8c9494d29c1d793ed701dcb`. Primary PyPI metadata recheck supports the declared eight-package Python-3.13 bootstrap filenames/hashes at source scope. The predecessor reproducibility discriminator wrote the two `pip-compile` generations to different output paths (`.lock.1` / `.lock.2`), which can make generated headers differ by construction. The retained lane now performs two independent compilations at one stable output path and fences the old pattern in the source regression. It remains **SOURCE CANDIDATE / UNEXECUTED**. No canonical accepted `requirements.lock.txt` exists and Docker is not promoted to product `--require-hashes`.
-- **#623** — single retained auth/identity/readiness drift lane. Current observed head is `daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5`; `terminal_gateway.py` blob `c30003d4851380a1372ef6a8da98305308ac41f7` and reauth-test blob `4b4a1caa00e5d4e58a9dbd6b1784805c17d099e7`. The same lane fences canonical users/equal rights, canonical permanent session IDs, session cardinality, terminal identity and global generation; `_runtime_ready()` reuses the same read-only canonical-user-state validator used by authenticated resolution before tmux probing. It prevents Clerk `reauth` from extending the live socket lease until the already-attached Clerk subject is re-resolved through the existing `IdentityRouter` against current UnifiedDB and still maps to the same canonical user/session. The refreshed candidate lease is now checked again after that blocking identity boundary, so a token that expires during revalidation cannot be assigned or published as the live socket authorization. Bounded source-slice evidence observed readiness/user-contract **5/5 PASS**, reauth helper **4/4 PASS**, and an additional exact-identity supporting probe observed rights/session/generation drift **3/3 FAIL_CLOSED**. Classification remains **MECHANISM_SUPPORTED / SOURCE CANDIDATE** only; the exact latest PR-head regressions are unexecuted and no OCI, real Clerk/browser PTY, tmux/Claude runtime or whole-product PASS is claimed.
-- **#602** — downstream managed native-Claude process attestation after successful in-image #611 validation.
-- Dr.-Unterweger **#810** — the single retained Vercel OCI controller. Its retained branch has been restored by non-force fast-forward to semantic v6 head `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second source-staging authority is admitted.
+- **#625** tokenless canonical baseline packaging — primary current packaging lane; exact head is moving under coordinated parallel hardening and must be rebound immediately before executable claims.
+- **#611** tmux idempotent-reapply lane — exact in-image tmux remains the promotion discriminator.
+- **#622** Python hash-lock generator — source candidate/unexecuted; no canonical `requirements.lock.txt` accepted yet.
+- **#623** auth/identity/readiness/reauth drift lane — source/mechanism supported only, not exact OCI/runtime evidence.
+- **#602** managed native-Claude process attestation — downstream of exact in-image #611.
+- Dr.-Unterweger **#810** remains retained/historical controller evidence. Its cross-private-repo `GITHUB_READ_TOKEN` staging path is not the preferred baseline packaging route.
 
-### Current OCI execution evidence
+### Tokenless baseline decision
 
-The strongest actually-started product-boundary evidence includes Vercel deployment **`dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8`** from trigger-only Dr.-Unterweger commit **`a341eb107f8499f301e730de12680fd2df580fd8`**, whose parent is retained semantic controller `78d92753…`.
+PR #625 removes the accidental requirement that baseline ClayVerse must fetch/stage private EntityOS bytes before it can build. Baseline may omit EntityOS while execution is disabled. If EntityOS is later embedded, explicit digest, source-tracked lock identity and locked size remain mandatory and mismatches fail closed. No GitHub credential is admitted into product source.
 
-Observed in that build:
+The runtime contract now matches that packaging contract:
 
-1. Vercel cloned the private Dr.-Unterweger controller and entered the retained ClayVerse build wrapper.
-2. The exact retained-runner guard admitted the bound controller source and TargetPatch **v6** was active.
-3. `Sandbox.create` succeeded.
-4. The v2 provider-identity hardening emitted both real Sandbox name **`peach-traditional-sparrow-J4uLFC`** and current Sandbox session ID **`sbx_ZBNVvNkCkxdZFs1FmwAIFJcgkoyb`**.
-5. Execution then failed closed before any private Research/EntityOS source fetch because host-side Preview variable `GITHUB_READ_TOKEN` was absent: `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`.
-6. The disposable Sandbox stopped successfully.
-7. `source_runtime_credit=0`; `oci_runtime_credit=0`; this is **not** ClayVerse TEST_FAIL.
+- absent EntityOS + execution disabled is an admitted baseline state;
+- enabling EntityOS execution without an embedded SHA-256 pin fails closed;
+- unpinned bytes at the configured EntityOS path fail closed even when execution is disabled;
+- unpinned symlinks fail closed;
+- a configured pin still requires the normal absolute-path verification path before any execution bridge can be returned.
 
-The trigger-only `a341eb…` child is bounded execution provenance, not retained branch truth. During this cycle the single retained #810 branch was observed drifted back to ancestor `a86f4355…` while its durable controller contract identified `78d92753…` as the semantic v6 head. The existing branch was repaired by a **non-force fast-forward** through `c40a5099…` to `78d92753…`. No force rewrite, duplicate controller or second source-staging path was created, and the PR body was refreshed to distinguish retained source from transient execution provenance.
+The default-deny Docker build context is also hardened so optional EntityOS staging re-includes only the exact admitted `.keep`/`EntityOS` paths rather than a recursive sibling wildcard.
 
-### Primary current blocker
+### Testing policy — continue without waiting for Vercel
 
-The immediate external prerequisite is to provision **`GITHUB_READ_TOKEN` as a sensitive Vercel Preview build credential** for the retained PR810 path.
+The missing direct Vercel Git-project connection is **not a development blocker**. It is deferred to the final exact OCI acceptance gate.
 
-Security contract:
+Until that final gate is available, every product-convergent cycle must maximize all other independent evidence layers defined in `the artefact/TESTING_STRATEGY.md`, including static/source integrity, focused unit/contract tests, negative/fail-closed cases, deterministic adversarial regressions, persistence/restart/idempotency, dual-user concurrency/generation fencing, reproducibility/supply-chain checks, integration simulations and any real component runtime available on an authorized disposable surface.
 
-- the token stays in the Vercel build host;
-- the token value is never logged or forwarded into the disposable Sandbox;
-- the build host fetches exact private Research and EntityOS commits/trees;
-- only verified archive bytes cross into the Sandbox;
-- unknown source identity fails closed.
+Missing one runner must never suppress independent tests. Mock/simulated/component evidence remains explicitly bounded and cannot imply whole-product PASS.
 
-The connected Vercel tools available in the current cycle expose deployment/project/log inspection but do **not** expose environment-secret mutation or secret-value recovery; a plugin search found no installable Vercel secret-management alternative. Re-triggering the same lane without the credential would only reproduce the known infrastructure blocker and earns no product runtime credit.
+### Current execution boundary
 
-### Next exact execution sequence
+The connected Vercel surface still does not provide a directly linked `clay-global-research-entity` Git project or a connector mutation to create/relink that project. Exact whole-container OCI acceptance therefore remains deferred.
 
-After the Preview credential exists:
+Current GitHub Actions on the moving #625 head report failed workflow conclusions, but the linked integration currently returns `403` for job-step details. Without observable steps/logs, those workflow conclusions receive **zero executable product credit** and are not promoted to either ClayVerse TEST_FAIL or PASS.
 
-`refresh current main → refresh retained #611/#622 and deliberately admitted #623 → rebind the single #810 controller exactly once → Sandbox.create → host-side exact private Research + EntityOS fetch/tree verification → verified archives only into Sandbox → reproduce/attest locked EntityOS → full exact-source regressions including #623 reauth drift/lease-boundary cases → exact ClayVerse OCI build → capture image digest + APT/tmux/Python/Claude identities → deny network → in-image #611 policy/reapply attestation for both canonical users → service/readiness checks → execute repaired #622 offline hashed bootstrap and stable-output double lock generation → accept/materialize canonical product lock → rebuild with --require-hashes → #611 promotion decision → rejoin/revalidate #602 → packaged native Claude → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed lifecycle hooks → persistence/recovery → dual-session concurrency/global-generation fencing`.
+The exact `go` unusual-experiment slot is **COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT** because the shared trigger exposes only minute-precision timing and no immutable shared request/turn ID. Zero unusual experiments were executed in this macro-cycle.
 
-Whole-product PASS requires the complete path. Source inspection, PRs, CI definitions, deployment READY, `Sandbox.create`, historical receipts or component PASS do not imply ClayVerse PASS.
+### Working sequence before final OCI
 
-### Supply-chain state
+`tokenless #625 source/runtime convergence → maximum static/unit/contract/negative/adversarial/property/restart/concurrency/reproducibility/integration evidence → deliberately rejoin and harden #611/#622/#623 → #602 managed native-Claude source/component closure → Clerk/PTY/hooks/persistence/recovery/concurrency simulations and disposable component runtimes wherever available → repeat regression fan-out after each change`.
 
-The final container still has open acceptance gates until exact isolated OCI evidence closes them. In particular, current main has not yet accepted the #622 generated Python hash lock, and exact resolved package identities must be captured from the admitted image. Source candidates such as the APT snapshot and Claude archive hardening remain bounded until they are fused and executed on the accepted product path.
+### Final deferred exact execution sequence
+
+When an authorized isolated OCI/Sandbox route is available:
+
+`fresh canonical source → inspect actual Docker build-context membership → baseline build with EntityOS absent → normal baseline service start/readiness with EntityOS absent → optional digest-bound EntityOS build and negative cases → exact image digest → resolved APT/tmux/Python/Claude identities → deny network where required → exact in-image #611 → accepted #622 lock and --require-hashes rebuild → #602 packaged native Claude → UnifiedDB/ClayGraph → real Clerk JWT/browser WebSocket PTY → managed hooks/EffectGate → persistence/restart/recovery → dual-user concurrency/global-generation fencing → whole-product acceptance`.
+
+Whole-product PASS requires this exact closure. Source inspection, static tests, mocks, component runtime PASS, deployment READY, Sandbox creation or historical evidence do not imply ClayVerse PASS.
 
 ### Latest cycle delta
 
-**2026-08-17 20:28 +07:00 — `NO_CHANGE` canonical merged ClayVerse product/runtime bytes; retained #623 now also fails closed when a refreshed Clerk lease expires during the blocking current-UnifiedDB identity revalidation. The Vercel private-source credential blocker remains unchanged.**
+**2026-08-17 20:58 +07:00 — #625 tokenless baseline was hardened at both build-context and normal runtime boundaries.**
 
-- #623 current head `daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5` retains the current-UnifiedDB reauth fence and adds post-boundary lease validation. Repair commit `1c6b34a5a3c521bd8ea38ea81415839b3329faf9` calls `_require_auth_lease_live(refreshed_expiry)` after blocking identity revalidation and before `auth_expires_at` is extended or `reauthenticated` is published.
-- Test commit `daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5` updates the source-order regression to require verifier → refreshed expiry calculation → current UnifiedDB identity revalidation → post-identity lease-live check → lease extension → publication. Exact PR-head workflow execution remains **UNOBSERVED**.
-- Supporting isolated exact-identity probe observed **3/3 FAIL_CLOSED** for canonical rights drift, permanent-session deletion and session-generation drift through the existing `IdentityRouter`. This strengthens the mechanism evidence only; it is not exact PR-head WebSocket/OCI runtime evidence.
-- Durable receipt for this additional boundary: `the artefact/receipts/2026-08-17_GO_2028_PR623_REAUTH_POST_IDENTITY_LEASE_FENCE_GPT56SOL.json`.
-- Earlier same-cycle #623 evidence remains bounded: readiness/user-contract **5/5 PASS** and reauth helper **4/4 PASS**. No source/component result is promoted to whole-product PASS.
-- Shared current execution evidence remains Vercel deployment `dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8`, which created a real Sandbox, then stopped at missing host-side `GITHUB_READ_TOKEN` before private Research/EntityOS bytes crossed the boundary. Source/OCI runtime credit remains zero; this is not ClayVerse TEST_FAIL.
-- #810 remains repaired without force to retained semantic v6 head `78d92753…`; no duplicate controller was created. Append-only correction receipt remains `the artefact/receipts/2026-08-17_GO_2019_PR810_REF_REPAIR_LIVE_REENTRY_GPT56SOL.json`.
-- #622 remains a source-repaired but unexecuted stable-output hash-lock lane. No canonical lock bytes are accepted and Docker remains off product `--require-hashes`.
-- Daytona remains an authorized fallback but this worker is blocked before provider contact by missing `DAYTONA_API_KEY`/SDK/network path; this is zero runtime credit, not provider/test failure.
-- No valid unusual experiment was executed because no shared immutable request/turn identity is exposed for the atomic experiment lease; no uncoordinated duplicate experiment was consumed.
-- No VPS, self-hosted/production test, Together API, paid/final training or secret exposure was used.
-- Whole-product acceptance remains **IN_PROGRESS**.
-
-### Cycle update rule
-
-1. Refresh current `main`, artefact state, overlapping PRs/receipts and exact execution evidence.
-2. Rewrite this living state so stale dynamic claims are removed.
-3. Record the concrete latest-cycle delta; use `NO_CHANGE` when canonical product bytes did not change.
-4. Never promote source/component/controller/provider evidence into whole-product PASS.
-5. Keep detailed evidence in Git history/receipts rather than making this README a competing state database.
-6. Rebind fast-moving execution closures immediately before real compute; distinguish product-byte movement from documentation/receipt-only head churn and avoid retry-only or duplicate semantic paths.
+- Adversarial build-context review removed recursive optional-EntityOS sibling admission and added focused source-contract coverage; the parallel retained-lane receipt reports **5 focused tests PASS** plus valid/wrong-digest/symlink staging checks on an isolated non-production surface. This remains bounded source-contract evidence, not Docker/OCI runtime credit.
+- A second adversarial check found a product contradiction: the Dockerfile allowed an EntityOS-free baseline, while normal `service._entityos_config()` still required an EntityOS SHA/artifact. That would make the new baseline build but fail normal startup.
+- The same #625 lane now admits the absent-EntityOS state only with execution disabled and no unpinned bytes present, while preserving fail-closed execution/pin/path verification.
+- Added regression file `tests/test_service_entityos_optional_baseline.py` covers absent baseline, execution-without-pin, unpinned regular bytes and unpinned symlink cases.
+- Exact Git blobs observed after write: `service.py` `c9151e339c0ec4b23a454ee7684a6bd9255bf229`; optional-runtime regression `bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021`.
+- Bounded standalone mechanism check on an isolated non-production container: **4/4 PASS**. This is not full-branch pytest, OCI build or packaged service runtime evidence.
+- Durable receipt: `the artefact/receipts/2026-08-17_GO_2058_PR625_OPTIONAL_ENTITYOS_RUNTIME_FENCE_GPT56SOL.json`.
+- No duplicate packaging/runtime lane was created; parallel #625 hardening was adopted into the same retained branch.
+- No whole-product PASS, VPS/self-hosted/production testing, Together API, paid/final training or secret persistence is claimed.
 
 ## Architecture
 
-Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas perspectives, Clerk JWT verification, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, managed lifecycle hooks, bounded retrieval/workspace coordination, effect-only MCP/EffectGate, restart/recovery and optional digest-bound internal EntityOS substrate. UnifiedDB remains the sole durable canonical cognition/state authority.
-
-The retired custom chat API/headless `claude -p` path and a separate `consciousness_daemon` are not product runtime surfaces.
+Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas perspectives, Clerk JWT verification, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, managed lifecycle hooks, bounded retrieval/workspace coordination, effect-only MCP/EffectGate, restart/recovery and optional digest-bound EntityOS substrate.
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The current OCI path can start a disposable Vercel Sandbox and records its provider/VM-session identity correctly, but private product source still cannot be staged until the sensitive Preview read credential exists. The #622 source candidate now avoids its self-induced output-path reproducibility false failure, but has no exact current isolated execution; no lock bytes are accepted and Docker remains off product `--require-hashes`. The #623 readiness/auth and reauth/current-UnifiedDB alignment have bounded source-slice mechanism support; its latest source additionally fences a refreshed token that expires during blocking identity revalidation, but exact full PR/OCI/runtime acceptance remains unobserved. The next accepted runtime claim must bind freshly refreshed product bytes and continue beyond the credential gate.
-
-## Container source
-
-`Dockerfile` + `compose.yaml` define the single runtime container. The build context is default-deny/allowlisted; persistent state/workspace live in scoped volumes. The admitted Compose profile runs non-root with a read-only root filesystem, `no-new-privileges` and dropped Linux capabilities. Supply-chain acceptance remains open until exact build identities and current APT/Python integrity gates are closed.
+Authorized bounded component/source evidence exists, but **whole-product PASS is not claimed**. The strongest next discriminator for #625 is exact isolated Docker/OCI execution proving both the actual build-context membership and the normal service startup/readiness of the EntityOS-free baseline before optional EntityOS embedding is accepted.

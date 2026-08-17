@@ -37,6 +37,7 @@ def _insert_validation(
     episode_id: str,
     index: int,
     classification: str = "SUCCESS",
+    evaluation_mode: str = "HELD_OUT",
 ) -> str:
     candidate = _candidate()
     signature_sha = _sha256_json(candidate["problem_signature"])
@@ -59,7 +60,7 @@ def _insert_validation(
             "generation": 1,
             "evidence_status": "UNKNOWN",
             "problem_signature_sha256": signature_sha,
-            "evaluation_mode": "HELD_OUT",
+            "evaluation_mode": evaluation_mode,
             "falsifier_checked": True,
             "effect_id": f"effect:validation:{index}",
             "effect_capability": "entityos.exec",
@@ -152,5 +153,39 @@ def test_one_validated_success_still_cannot_promote_reusable_method(tmp_path):
 
         with pytest.raises(MethodValidationError, match="two validated successes"):
             derive_promotion_stats(db.db, candidate_id, _candidate(), "gabriel")
+    finally:
+        db.close()
+
+
+def test_shadow_history_is_auditable_but_does_not_poison_later_held_out_transfer(tmp_path):
+    """SHADOW can precede held-out evaluation but never count as promotion support."""
+    db = UnifiedDB(tmp_path / "world.db")
+    try:
+        candidate_id = "candidate:shadow-then-heldout"
+        _insert_validation(
+            db,
+            candidate_memory_id=candidate_id,
+            episode_id="episode:shadow:prior",
+            index=1,
+            evaluation_mode="SHADOW",
+        )
+        first = _insert_validation(
+            db,
+            candidate_memory_id=candidate_id,
+            episode_id="episode:heldout:a",
+            index=2,
+        )
+        second = _insert_validation(
+            db,
+            candidate_memory_id=candidate_id,
+            episode_id="episode:heldout:b",
+            index=3,
+        )
+
+        stats = derive_promotion_stats(db.db, candidate_id, _candidate(), "gabriel")
+        assert stats["support_count"] == 2
+        assert stats["success_count"] == 2
+        assert stats["failure_count"] == 0
+        assert stats["validation_receipt_ids"] == [first, second]
     finally:
         db.close()

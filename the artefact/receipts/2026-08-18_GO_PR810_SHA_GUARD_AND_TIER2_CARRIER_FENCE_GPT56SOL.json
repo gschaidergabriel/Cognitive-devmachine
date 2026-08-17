@@ -2,12 +2,12 @@
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
   "observed_at_local": "2026-08-18T01:34:23+07:00",
-  "updated_at_local": "2026-08-18T01:42:05+07:00",
+  "updated_at_local": "2026-08-18T01:44:55+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
-  "canonical_main_observed_during_reentry": "0a00b6e0d4a5e5de429c7164edb3c0b7e872db77",
+  "canonical_main_observed_during_reentry": "0a10fabf3216c5e26bbc486b9df6851a82b49f8a",
   "immutable_runtime_freeze": {
     "research_pr": 686,
     "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
@@ -20,7 +20,7 @@
     "pull_request": 810,
     "branch": "clay/fusion-vcr-native-20260817",
     "defect": "guard-clayverse-vcr-source.mjs expected a malformed 38-character retained RESEARCH_SHA while the exact retained runner contained the valid 40-character Git SHA",
-    "malformed_guard_value": "f8e4deebcb2f4b2904fddbcb0006600bc45c50",
+    "malformed_guard_value": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
     "runner_value": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
     "repair_commit": "b699ea2c5db4d9f69dd3b222bc4891e0a4d88563",
     "repair_persisted_in_later_branch_head": true,
@@ -47,12 +47,26 @@
     "v11_preview_trigger_created_at_utc": "2026-08-17T18:41:11Z",
     "v11_preview_git_status": "FAILURE_BUILD_RATE_LIMIT",
     "v11_preview_status_target": "VERCEL_BUILD_RATE_LIMIT",
+    "later_pr810_head_observed": "ba15ad95a4c7794ef06afb7806662443915e73c8",
+    "later_pr810_head_mergeable": true,
+    "later_pr810_head_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
     "post_v11_deployment_observed_in_this_turn": false,
     "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
     "product_runtime_executed": false,
     "exact_oci_runtime_credit": 0,
     "live_provider_credit": 0,
     "whole_product_credit": 0
+  },
+  "daytona_fallback_observation": {
+    "provider_authorization": "AUTHORIZED_STANDARD_FALLBACK",
+    "native_chatgpt_connector_required": false,
+    "daytona_api_key_present_in_this_worker": false,
+    "dns_app_daytona_io": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "dns_api_daytona_io": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "dns_pypi_org": "FAIL_BEFORE_PROVIDER_CONTACT",
+    "provider_contact_occurred": false,
+    "classification": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT",
+    "daytona_runtime_credit": 0
   },
   "tier1_recovery_hardening": {
     "source_fence_present": true,
@@ -79,11 +93,12 @@
     "owner_secrets_or_credentials_used": false,
     "pr810_coordination_comment_id": 5318673462,
     "superseded_donor_pr": 854,
-    "superseded_donor_closed": true
+    "superseded_donor_closed": true,
+    "temporary_unexecuted_probe_endpoint_removed": true
   },
   "unusual_experiment": {
     "new_experiment_count": 0,
-    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle; all work here was deterministic repair, coordination, and admission preparation."
+    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle; all work here was deterministic repair, coordination, admission preparation and fallback-admission checking."
   },
   "epistemic_status": {
     "source_candidate": true,
@@ -94,5 +109,5 @@
     "exact_runtime_verified": false,
     "whole_product_accepted": false
   },
-  "next_exact_step": "Restore authorized isolated execution admission (Vercel build capacity or an admitted zero-cost fallback), run the exact retained PR810 source guards, then execute the bounded direct snapshot lifecycle discriminator required by current fail-closed research state. Only after those gates pass may the credential-bearing PR686 private-source/OCI/provider/EntityOS/recovery/auth-PTY sequence receive runtime credit."
+  "next_exact_step": "Restore authorized isolated execution admission: Vercel must admit an exact-current PR810 preview build, or an egress-capable approved controller must dispatch Daytona with an approved DAYTONA_API_KEY secret path. Then run the exact retained PR810 source guards and the bounded direct snapshot lifecycle discriminator required by current fail-closed state. Only after those gates pass may the credential-bearing PR686 private-source/OCI/provider/EntityOS/recovery/auth-PTY sequence receive runtime credit."
 }

@@ -211,13 +211,67 @@ class MicroClayRetrieval:
             generation=generation,
         )
 
+        query_hash = hashlib.sha256(query.encode("utf-8")).hexdigest()
+        existing = self.db.db.execute(
+            "SELECT * FROM retrieval_episodes WHERE causal_id=?",
+            (causal_id,),
+        ).fetchone()
+        if existing:
+            if (
+                existing["session_id"] != session_id
+                or int(existing["generation"]) != int(generation)
+                or existing["query_hash"] != query_hash
+            ):
+                raise StaleGeneration("retrieval_identity")
+            ids = json.loads(existing["selected_memory_ids"])
+            by_id = {
+                str(row["memory_id"]): row
+                for row in self.db.db.execute(
+                    "SELECT * FROM durable_memory WHERE memory_id IN (%s)"
+                    % ",".join("?" for _ in ids),
+                    tuple(ids),
+                ).fetchall()
+            } if ids else {}
+            items = []
+            for memory_id in ids:
+                row = by_id.get(memory_id)
+                if row is not None:
+                    items.append({
+                        "memory_id": memory_id,
+                        "kind": row["kind"],
+                        "subject": row["subject"],
+                        "value": row["value"],
+                        "ts": float(row["ts"]),
+                        "provenance": self._safe_provenance(row["provenance"]),
+                        "retrieval_score": None,
+                    })
+            return {
+                "items": items,
+                "receipt": {
+                    "retrieval_id": existing["retrieval_id"],
+                    "policy_version": int(existing["policy_version"]),
+                    "mode": existing["mode"],
+                    "query_sha256": existing["query_hash"],
+                    "candidate_count": None,
+                    "selected_count": len(items),
+                    "chars_selected": int(existing["chars_selected"]),
+                    "status": existing["status"],
+                    "shadow_differs": json.loads(existing["selected_memory_ids"]) != json.loads(existing["shadow_memory_ids"]),
+                    "truth_authority": False,
+                    "effect_authority": False,
+                    "outcome_learning_applied": learned_outcomes["applied"],
+                    "replayed": True,
+                },
+            }
+
         query_tokens = set(sorted(self._tokens(query))[: self.MAX_QUERY_TOKENS])
         rows = self.db.db.execute(
             "SELECT * FROM durable_memory "
             "WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
             "AND (user_id IS NULL OR user_id=?) "
+            "AND (source_turn_id IS NULL OR source_turn_id<>?) "
             "ORDER BY ts DESC LIMIT ?",
-            (user_id, self.MAX_SOURCE_ROWS),
+            (user_id, turn_id, self.MAX_SOURCE_ROWS),
         ).fetchall()
         now = time.time()
         capitals = self._policy_capitals()
@@ -249,7 +303,6 @@ class MicroClayRetrieval:
                 break
 
         retrieval_id = str(uuid.uuid4())
-        query_hash = hashlib.sha256(query.encode("utf-8")).hexdigest()
         token_hashes = [self._token_key(x)[4:] for x in sorted(query_tokens)]
         selected_ids = [x.memory_id for x in selected]
         shadow_ids = [x.memory_id for x in adaptive if x.baseline_score > 0.0][:limit]

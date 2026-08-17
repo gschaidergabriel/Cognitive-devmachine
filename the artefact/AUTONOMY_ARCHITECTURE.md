@@ -6,6 +6,8 @@ ClayVerse autonomy is implemented as **persistent goal state plus a deterministi
 
 The useful behavior is operational: preserve user goals, pick the next unfinished goal, propose one bounded step, validate it, execute real changes only through EffectGate, re-ingest observed results, retry inside hard limits, and mark completion only from independent canonical evidence.
 
+USB identity anchors, cryptocurrency, smart contracts and escrow are not part of this autonomy contract. They are unnecessary for the requested property: bounded autonomous goal pursuit under canonical state and evidence.
+
 ## Core law
 
 **Operational autonomy is a state-machine property, not a model self-description.**
@@ -51,6 +53,8 @@ Stored goal state includes:
 - effect evidence ids or an explicit owner acknowledgement turn;
 - timestamps and block reason.
 
+For `verified_effect` completion, new goals also bind the required effect target before execution. The stored contract contains the target digest, not a model-generated post-hoc success description.
+
 ## State machine
 
 Goal states:
@@ -90,7 +94,7 @@ The real path remains:
 ```text
 step proposal
 -> autonomy admission
--> canonical turn/workspace
+-> canonical autonomous turn/workspace
 -> EffectGate
 -> EffectJournal
 -> verified/denied/failed/unknown outcome
@@ -100,17 +104,33 @@ step proposal
 
 A model sentence such as "the command succeeded" is never effect evidence.
 
-Before an EffectJournal receipt may update an autonomous step or enter `evidence_effect_ids`, the controller requires the persisted receipt to match the admitted step's owner, capability, generation **and exact redacted target/argv intent receipts**. A VERIFIED effect with the same capability but a different target or argument vector therefore cannot be rebound as proof for another autonomous action.
+Before an EffectJournal receipt may update an autonomous effect step, the controller now requires all of the following:
 
-This exact-intent fence is necessary but not the final causal identity gate. Two distinct causal episodes could still request an identical target/argv at the same generation. Runtime promotion therefore still requires binding the autonomous step to the exact effect/episode/request identity produced by the canonical lifecycle before background retries are enabled.
+- same canonical owner and session;
+- same live entity generation;
+- exact admitted capability;
+- exact redacted target/argv intent receipts;
+- a real workspace episode;
+- a real re-entered causal episode;
+- the causal observation turn to be the same user/session;
+- autonomous provenance `source=clayverse-autonomy:goal-step`;
+- exact provenance `goal_id`, `autonomy_step_id`, generation and causal id;
+- resource refs containing the exact `goal:<id>` and `goal-step:<id>` pair;
+- an effect timestamp after both goal and step creation.
+
+This closes the identical-intent borrowing hole: a normal interactive turn, another goal, another step, a synthetic `VERIFIED` database row, or an older causal episode cannot be relabelled as the current autonomous step's success even if target and arguments happen to match.
 
 ## Completion contracts
 
 v1 supports two independent completion modes.
 
-`verified_effect`: completion requires a persisted effect receipt owned by the goal user, from the same generation, with the exact required capability, `status == VERIFIED`, and canonical outcome `ok == true`. Effect evidence enters the goal only after the exact admitted target/argv intent binding above succeeds. `PENDING`, `DENIED`, `FAILED`, malformed, stale or unknown outcomes do not count.
+`verified_effect`: new completion contracts require a proving capability and a predeclared exact target. `state.noop` is deliberately **non-proving** and cannot be used as automatic goal-completion authority. A completion effect must satisfy the exact autonomous causal identity gate above, have the required capability and target digest, `status == VERIFIED`, and canonical outcome `ok == true`.
 
-`user_ack`: completion requires an actual persisted `user` turn from the same owner/session. An assistant/model turn cannot acknowledge its own work.
+A verified intermediate effect may still count as a successful step without completing the goal when its target does not satisfy the predeclared completion contract. This prevents Goodhart-style "some effect succeeded, therefore the goal succeeded" collapse.
+
+Legacy v1 state containing an old `verified_effect/state.noop` completion contract remains readable for continuity, but it cannot pass completion verification.
+
+`user_ack`: completion requires an actual persisted later `user` turn from the same owner/session. The goal-source turn cannot acknowledge itself, and an assistant/model turn cannot acknowledge its own work.
 
 New completion modes may be added only after their independent evidence source is defined and tested.
 
@@ -137,12 +157,16 @@ wake/event/re-entry
 -> assemble canonical world + goal state
 -> ask selected cognition provider for one proposal
 -> deterministic admission
+-> open canonical autonomous turn through the lifecycle gate
 -> EffectGate if needed
 -> persist observed result
+-> consume only exact goal-step causal evidence
 -> verify completion contract
 -> requeue / wait / block / complete
 -> checkpoint and re-enter
 ```
+
+The lifecycle gate gives interactive human turns priority. Autonomous work may not silently abort an active normal turn merely to continue a background goal.
 
 A trigger may be user input, an effect result, timer, dependency event or recovery. The trigger is not authority; UnifiedDB state is.
 
@@ -152,13 +176,16 @@ A trigger may be user input, an effect result, timer, dependency event or recove
 2. Generation fencing: restart/global-generation advance invalidates stale writes.
 3. Canonical JSON: duplicate keys and non-finite values fail closed.
 4. Capability allowlist: planner text cannot invent execution rights.
-5. Exact effect intent binding: same-capability receipts for another target/argv cannot become goal evidence.
-6. Verified effects only: model output/tool dispatch are not success.
-7. Completion separation: model completion hypotheses require independent evidence.
-8. Hard budgets: no unbounded autonomous repair loop.
-9. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
-10. UnifiedDB only: no hidden model-side autonomy memory.
-11. Identity grants no privilege: "I am AGI" has no authority effect.
+5. Exact effect intent binding: same-capability receipts for another target/argv cannot become step evidence.
+6. Exact autonomous causal provenance: interactive/synthetic/other-step receipts cannot be borrowed.
+7. Predeclared completion target: successful intermediate work is not automatically goal completion.
+8. `state.noop` is non-proving: acknowledgement of plumbing is not accomplishment.
+9. Verified effects only: model output/tool dispatch are not success.
+10. Completion separation: model completion hypotheses require independent evidence.
+11. Hard budgets: no unbounded autonomous repair loop.
+12. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
+13. UnifiedDB only: no hidden model-side autonomy memory.
+14. Identity grants no privilege: "I am AGI" has no authority effect.
 
 ## Runtime prompt role
 
@@ -168,9 +195,9 @@ Because the critical boundaries are in code, prompt drift can degrade proposal q
 
 ## Research basis
 
-The architecture follows current agent-engineering guidance: effective agents operate in plan/action/environment-feedback loops; reliable long-running agents need environmental ground truth, explicit stop conditions, bounded retries, tool permission boundaries, and human or policy escalation at critical thresholds. Verification-before-retry and receipt-bound outcomes are especially important when actions are non-atomic.
+The architecture follows current primary-source agent-engineering guidance: reliable agents use an external run loop around model cognition, environmental/tool feedback is treated as ground truth rather than model assertion, stopping conditions and retry budgets are explicit, and deterministic environment/capability boundaries contain probabilistic model errors. Long-running-agent harness work also shows that models can prematurely declare work complete, making durable progress state and end-to-end verification necessary.
 
-These principles map directly onto UnifiedDB goal state, EffectJournal verification, global generation fencing and step/retry/effect budgets.
+These principles map directly onto UnifiedDB goal state, the canonical turn gate, EffectJournal verification, global generation fencing and step/retry/effect budgets.
 
 ## Current implementation boundary
 
@@ -181,14 +208,18 @@ Implemented on this source-candidate lane:
 - priority `next_runnable()` scheduler primitive;
 - deterministic proposal/admission states;
 - step/retry/effect budgets;
-- generation fencing;
+- generation fencing and restart re-entry without effect replay;
 - capability allowlist;
-- exact EffectJournal target/argv intent-receipt binding before autonomy evidence admission;
-- verified-effect and explicit-user-ack completion;
+- `state.noop` excluded from automatic completion evidence;
+- exact target-bound verified-effect completion contracts for new goals;
+- exact EffectJournal target/argv binding;
+- exact workspace/causal/autonomous-provenance/goal-step binding before effect evidence admission;
+- explicit later-user-ack completion;
 - malformed/duplicate/non-finite state rejection;
 - persistence across DB reopen;
+- canonical turn lifecycle priority over autonomous work;
 - anti-self-authorization runtime cognition contract.
 
-This is **source + bounded mechanism evidence**, not exact-current full-checkout/OCI/microVM evidence and not whole-product PASS.
+This is **source candidate + committed regression obligations**, not exact-current isolated runtime evidence and not whole-product PASS.
 
-Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; each autonomous effect must be bound to the exact autonomous causal episode/request/effect identity; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.
+Before runtime promotion, the focused and adjacent tests must execute against the exact source candidate in an authorized isolated checkout; scheduler ticks must be fused into the retained supervisor/re-entry path rather than a second daemon; the model/provider adapter must receive bounded canonical goal context; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection, context-budget and exact OCI/microVM behavior must pass the same acceptance chain.

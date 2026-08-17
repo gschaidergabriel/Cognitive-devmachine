@@ -1,14 +1,16 @@
 {
-  "schema": "clayverse.go-effect-live-causal-spine-fence/v1",
+  "schema": "clayverse.go-effect-live-causal-spine-fence/v2",
   "trigger": "go",
   "trigger_time_local_available": "2026-08-17T15:24+07:00",
   "organ": "gpt-5.6-sol-chatgpt-project-organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "base_main": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "rejoined_main": "439da69a802f20f8be9cd8bb55f594fdd9d58753",
+  "rejoin_commit": "609cea5eb007ddb2cf6ceb84b75deeea0d5eacb1",
   "branch": "go/effect-live-causal-spine-fence-20260817-1524-sol",
   "counterhypothesis": "An active selected effect turn can coexist with a foreign causal_episodes row for the same episode; the current EffectJournal.begin active-turn fence does not inspect the causal spine, so PENDING can be journaled and an external bridge can be reached before later causal re-entry detects or compounds the split spine.",
-  "repair": "Before PENDING insertion, bind active_turns.causal_id and require the episode causal set to be empty. A foreign causal_id fails with StaleGeneration(effect_causal_spine); an already-consumed matching causal_id fails before a new effect begins.",
+  "repair": "Before PENDING insertion, bind active_turns.causal_id and inspect the episode causal set. Any foreign causal_id fails with StaleGeneration(effect_causal_spine). A matching already-consumed causal identity without a persisted effect fails before a new PENDING. If a matching causal row accompanies an already-persisted effect, preserve the pre-existing 'effect already persisted for episode' error so TurnLifecycle retry reconciliation remains intact.",
   "authority": {
     "canonical_state": "UnifiedDB",
     "effect_path": "existing EffectJournal/EffectGate only",
@@ -17,23 +19,24 @@
   },
   "source": {
     "baseline_effect_journal_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
-    "repaired_effect_journal_blob": "6d8cb025a09bebadde851adcfe761c305be6654a",
-    "regression_test_blob": "4eff68f05b7acb558fbec1d7cbe39cc732e0bee7"
+    "repaired_effect_journal_blob": "cda63471f1467481f2ff79032d3931730a334a20",
+    "regression_test_blob": "1c05f3d10e93bab5b258a48dadb07eddb8396d4d"
   },
   "isolated_execution": {
     "surface": "OpenAI non-production isolated container",
     "python": "3.13.5",
     "platform": "Linux 6.18.35 x86_64 glibc 2.41",
     "sqlite": "3.46.1",
-    "exact_effect_journal_blob_recomputed": "6d8cb025a09bebadde851adcfe761c305be6654a",
+    "exact_effect_journal_blob_recomputed": "cda63471f1467481f2ff79032d3931730a334a20",
     "blob_identity_match": true,
-    "probe_scope": "exact repaired EffectJournal file with a minimal SQLite schema/store stub sufficient to exercise EffectJournal.begin preconditions",
+    "probe_scope": "exact repaired EffectJournal file with a minimal SQLite schema/store stub sufficient to exercise EffectJournal.begin and its persisted-effect retry signal",
     "cases": [
       "foreign causal row -> StaleGeneration(effect_causal_spine), zero effect rows",
       "empty coherent causal spine -> PENDING accepted",
-      "matching already-consumed active causal id -> RuntimeError before PENDING"
+      "matching consumed causal id with no persisted effect -> RuntimeError before PENDING",
+      "matching causal id with already-persisted effect -> legacy 'effect already persisted for episode' retry/reconciliation error preserved"
     ],
-    "result": "3 deterministic mechanism cases PASS",
+    "result": "4 deterministic mechanism cases PASS",
     "full_checkout_executed": false,
     "exact_oci_executed": false,
     "whole_product_pass": false

@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "openai-gpt-5.6-sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "caa6cdbbd0ca7709b30b4c88120739f2b832caf0",
+  "candidate_branch": "go/xterm-sri-lock-20260817-gpt56sol-v2",
+  "candidate_head_before_receipt_refresh": "d20d18f38d74c60d9b861dd3a37df99fcebd72e4",
+  "rebase_provenance": "the five product/test source blobs were reused byte-for-byte from the already-tested branch while the new tree inherited current-main MicroClay retrieval/store changes; only this receipt metadata changed after rebasing",
+  "frontier": "remove the unbound npm/xterm build path without changing product runtime semantics",
+  "observed_anchors": [
+    "current canonical BOOTSTRAP_MINIMAL and PROGRAM_STATE define ClayVerse as one OCI/Docker-compatible container and EntityOS only as internal substrate",
+    "current Dockerfile installed nodejs/npm only to obtain @xterm/xterm@6.0.0 and copied lib/xterm.js plus css/xterm.css",
+    "current manifest listed xterm repository hash locking as an open supply-chain gate",
+    "npm package metadata identifies @xterm/xterm 6.0.0 with zero dependencies",
+    "three independently observed package-lock/pnpm-lock records reproduce the same @xterm/xterm 6.0.0 SHA-512 SRI"
+  ],
+  "mechanism": {
+    "selected": "download the exact registry tarball with Python, verify repository-owned SHA-512 SRI before reading assets, validate archive member paths, copy only the two required regular files atomically, and remove nodejs/npm from the OCI build dependencies",
+    "simpler_alternative_rejected": "keep npm install with only a semantic version pin; this still delegates archive selection/integrity to mutable package-manager metadata at build time",
+    "structurally_different_alternative_deferred": "commit the built xterm.js/css bytes directly into the repository; potentially stronger offline provenance but increases repository payload and requires an explicit owner choice about vendored third-party source bytes"
+  },
+  "counterhypotheses": [
+    "the helper can accept a digest mismatch due to implementation error",
+    "tar metadata can escape the intended vendor directory",
+    "the Dockerfile can retain node/npm despite the helper",
+    "the observed SRI could be stale or wrong until an exact registry retrieval verifies it"
+  ],
+  "source_delta": [
+    "the artefact/build/install_pinned_xterm.py",
+    "the artefact/tests/test_pinned_xterm_supply_chain.py",
+    "the artefact/SOURCE_LOCK.json",
+    "the artefact/Dockerfile",
+    "the artefact/manifest.json"
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "name": "XTERM_TARBALL_PATH_TRAVERSAL_MEMBER",
+    "intervention": "synthetic gzip tar carried both required assets plus package/../../escape",
+    "result": "PASS_FAIL_CLOSED",
+    "observation": "unsafe member rejected and no escape file created",
+    "note": "later execution of the same case was regression-only, not a second unusual experiment"
+  },
+  "negative_result_and_repair": {
+    "initial_normal_digest_test": "FAIL",
+    "failure": "AttributeError because compare_digest was incorrectly referenced from hashlib",
+    "repair": "use hmac.compare_digest for the verified SHA-512 comparison",
+    "post_repair_regression": "5/5 focused helper tests PASS plus py_compile PASS in isolated non-production Python 3.13.5 execution"
+  },
+  "static_source_checks": {
+    "dockerfile": "uses install_pinned_xterm.py and removes ARG XTERM_SPEC, npm install, nodejs and npm from the build path",
+    "source_lock": "binds @xterm/xterm 6.0.0 to sha512-TQwDdQGtwwDt+2cgKDLn0IRaSxYu1tSUjgKarSDkUM0ZNiSRXFpjxEsvc/Zgc5kq5omJ+V0a8/kIM2WD3sMOYg== and the two required assets",
+    "manifest": "narrows the xterm gate to exact authorized OCI retrieval/install observation rather than an unbound version-addressed npm install"
+  },
+  "evidence_boundary": {
+    "vercel_sandbox": "UNAVAILABLE_IN_CONNECTED_TOOLING_THIS_SESSION: connector exposes documentation/deployment management but no Sandbox start/exec primitive",
+    "registry_tarball_live_fetch": "UNOBSERVED: no authorized live npm tarball execution surface was available",
+    "exact_oci_build": "UNOBSERVED",
+    "whole_product_pass": false,
+    "vps_or_production_test_used": false,
+    "together_api_used": false,
+    "final_paid_training": "NOT_AUTHORIZED_NOT_RUN"
+  },
+  "promotion_status": "SOURCE_LEVEL_CANDIDATE_WITH_FOCUSED_ISOLATED_MECHANISM_EVIDENCE",
+  "next_exact_gate": "run an exact-current-head authorized isolated OCI build that retrieves the locked xterm registry archive, proves SRI verification and required-asset installation, proves node/npm are absent from the image, then run the full ClayVerse test/runtime lane and preserve source/image digests",
+  "acceptance": "IN_PROGRESS"
+}

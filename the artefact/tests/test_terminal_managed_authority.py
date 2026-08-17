@@ -89,6 +89,10 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "--tools" in argv and argv[argv.index("--tools") + 1] == ""
     assert "mcp__clayverse__session_state" in argv
     assert "mcp__clayverse__request_effect" in argv
+    assert "mcp__clayverse__goal_state" in argv
+    assert "mcp__clayverse__goal_create" in argv
+    assert "mcp__clayverse__goal_set_status" in argv
+    assert "mcp__clayverse__milestone_review" in argv
     assert "mcp__clayverse__*" not in argv
     assert "--remote-control" not in argv
     assert "--bg" not in argv

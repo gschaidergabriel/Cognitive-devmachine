@@ -1,0 +1,59 @@
+{
+  "schema": "ClayVerseSourceFusionReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroClay Stage-A adaptive learned entrypoint identity",
+  "classification": "SOURCE_FUSION_RUNTIME_UNOBSERVED",
+  "acceptance": "NON_PASS",
+  "active_lane": {
+    "pr": 504,
+    "branch": "go/microclay-stagea-entrypoint-v2-current-20260817",
+    "source_version_commit": "5a35aa8a3f160e0c54cafef4dca15a158ec89061",
+    "main_test_commit": "2745bd3c25d661910eacb9ff43d8f4cd069f42f0",
+    "store_slice_commit": "51d53552e19b4aa42a70ab241d73e1609d750056",
+    "cross_user_gate_commit": "897716433e06dbf50d1bd6675b20d475696e7305"
+  },
+  "donor": {
+    "pr": 531,
+    "state": "CLOSED_UNMERGED_DONOR",
+    "mechanism_consumed": "learned cue route binds exact durable memory_id rather than subject",
+    "runtime_evidence_transferred": false
+  },
+  "mechanism": {
+    "policy_version": 3,
+    "why_version_changed": "route identity changed after v2 existed; v2 encoded cue-to-subject while v3 encodes cue-to-exact-memory, so retaining v2 would make persisted policy semantics ambiguous",
+    "legacy_fence": "persisted v1/v2 key capital is ignored by v3-prefixed keys and ACTIVE policy state with a non-v3 version fails closed to SHADOW",
+    "learned_route_identity": "hash(cue) + hash(exact memory_id)",
+    "generic_kind_subject_capital": "ranking-only; cannot make baseline-zero candidate eligible",
+    "route_credit_scope": "rank-1 served evidence only",
+    "learning_signal": "canonical causally re-entered reward-eligible effect outcome; state.noop and uncertain/non-rewarding outcomes excluded",
+    "serving_mode": "SHADOW baseline remains factual serving authority",
+    "truth_authority_changed": false,
+    "effect_authority_changed": false
+  },
+  "collision_gates": [
+    "same-user same-subject sibling must not inherit learned alias eligibility",
+    "Gabriel learned route must not open Andreas distinct private same-subject memory",
+    "v2 subject-route capital plus v2 ACTIVE state must fail closed after v3 transition",
+    "generic v3 subject capital must not open lexical miss",
+    "same exact memory may still appear in adaptive SHADOW after valid outcome-backed learning"
+  ],
+  "issue_525_adjudication": "Narrowed from blanket user-scoped policy requirement to exact-memory nonlexical eligibility isolation. Global shared ranking priors are not by themselves adjudicated as a violation in one central entity; alias eligibility must not cross memory identity.",
+  "execution": {
+    "current_v3_assertions_executed": 0,
+    "sandbox_started_for_v3": false,
+    "test_pass": false,
+    "test_failure": false,
+    "prior_v2_mechanism_evidence_transfer_allowed": false,
+    "blocker": "Vercel Git-preview admission currently rejected before deployment/build/Sandbox start by account build-rate limit; no VPS/self-hosted/production fallback used"
+  },
+  "unusual_experiment": {
+    "new_count": 0,
+    "regression_only": true
+  },
+  "next_exact_gate": "Refresh the then-current PR504 head and exact blobs after Vercel preview admission reopens; execute v3 learned-entry, same-subject, cross-user, v2-version-fence, reward eligibility, replay/privacy, crash-atomic, restart and stale-generation regressions in an actually-started authorized isolated Sandbox before ACTIVE promotion.",
+  "whole_product_note": "This source fusion is one MicroClay subsystem improvement only. It does not establish ClayVerse OCI, Clerk/PTY/Claude, persistence/recovery, effect, concurrency, supply-chain or whole-product PASS."
+}

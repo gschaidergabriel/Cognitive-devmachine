@@ -69,6 +69,37 @@ def _bounded_text(value: Any, limit: int) -> dict[str, Any]:
     }
 
 
+def _goal_context(goal: dict[str, Any], *, runnable_goal_id: str | None) -> dict[str, Any]:
+    step = goal.get("current_step")
+    step_view = None
+    if isinstance(step, dict):
+        description = _bounded_text(step.get("description", ""), AUTONOMY_STEP_INLINE_MAX_CHARS)
+        effect = step.get("effect")
+        step_view = {
+            "step_id": step.get("step_id"),
+            "kind": step.get("kind"),
+            "status": step.get("status"),
+            "attempts": step.get("attempts"),
+            "description": description,
+            "effect_capability": effect.get("capability") if isinstance(effect, dict) else None,
+            "effect_intent_redacted_from_hook": isinstance(effect, dict),
+        }
+    return {
+        "goal_id": goal.get("goal_id"),
+        "source_turn_id": goal.get("source_turn_id"),
+        "priority": goal.get("priority"),
+        "status": goal.get("status"),
+        "generation": goal.get("generation"),
+        "runnable": goal.get("goal_id") == runnable_goal_id,
+        "objective": _bounded_text(goal.get("objective", ""), AUTONOMY_OBJECTIVE_INLINE_MAX_CHARS),
+        "completion_contract": goal.get("completion_contract"),
+        "budget": goal.get("budget"),
+        "counters": goal.get("counters"),
+        "current_step": step_view,
+        "blocked_reason": goal.get("blocked_reason"),
+    }
+
+
 def _autonomy_context(db: UnifiedDB, user_id: str) -> dict[str, Any]:
     """Return one bounded owner-scoped autonomy re-entry view, never a new authority."""
     controller = AutonomyController(db)
@@ -77,38 +108,13 @@ def _autonomy_context(db: UnifiedDB, user_id: str) -> dict[str, Any]:
     runnable_goal_id = runnable.get("goal_id") if isinstance(runnable, dict) else None
     goals = snapshot.get("goals", [])
     unfinished = [goal for goal in goals if goal.get("status") not in {"COMPLETED", "CANCELLED"}]
-    head = unfinished[0] if unfinished else None
 
-    head_view = None
-    if head is not None:
-        step = head.get("current_step")
-        step_view = None
-        if isinstance(step, dict):
-            description = _bounded_text(step.get("description", ""), AUTONOMY_STEP_INLINE_MAX_CHARS)
-            effect = step.get("effect")
-            step_view = {
-                "step_id": step.get("step_id"),
-                "kind": step.get("kind"),
-                "status": step.get("status"),
-                "attempts": step.get("attempts"),
-                "description": description,
-                "effect_capability": effect.get("capability") if isinstance(effect, dict) else None,
-                "effect_intent_redacted_from_hook": isinstance(effect, dict),
-            }
-        head_view = {
-            "goal_id": head.get("goal_id"),
-            "source_turn_id": head.get("source_turn_id"),
-            "priority": head.get("priority"),
-            "status": head.get("status"),
-            "generation": head.get("generation"),
-            "runnable": head.get("goal_id") == runnable_goal_id,
-            "objective": _bounded_text(head.get("objective", ""), AUTONOMY_OBJECTIVE_INLINE_MAX_CHARS),
-            "completion_contract": head.get("completion_contract"),
-            "budget": head.get("budget"),
-            "counters": head.get("counters"),
-            "current_step": step_view,
-            "blocked_reason": head.get("blocked_reason"),
-        }
+    if isinstance(runnable, dict):
+        focus = runnable
+        focus_reason = "RUNNABLE"
+    else:
+        focus = unfinished[0] if unfinished else None
+        focus_reason = "ATTENTION_ONLY" if focus is not None else "NONE"
 
     return {
         "authority": "UnifiedDB",
@@ -119,13 +125,15 @@ def _autonomy_context(db: UnifiedDB, user_id: str) -> dict[str, Any]:
         "completion_authority": "AutonomyController",
         "unfinished_goal_count": len(unfinished),
         "next_runnable_goal_id": runnable_goal_id,
-        "head_unfinished_goal": head_view,
+        "focus_reason": focus_reason,
+        "focus_goal": _goal_context(focus, runnable_goal_id=runnable_goal_id) if isinstance(focus, dict) else None,
         "law": (
             "Persisted autonomy state is context, not execution authority. Model text never proves admission, "
-            "effect success, or completion. Only a goal marked runnable by AutonomyController may be proposed "
-            "for continuation; BLOCKED/WAITING/VERIFYING/UNKNOWN state must not be treated as permission to act. "
-            "Real/state-changing actions remain behind mcp__clayverse__request_effect and canonical EffectGate "
-            "receipts. If canonical goal text is not inline, do not infer or reconstruct the missing text."
+            "effect success, or completion. Only focus_reason=RUNNABLE with focus_goal.runnable=true may be "
+            "proposed for continuation; ATTENTION_ONLY and BLOCKED/WAITING/VERIFYING/UNKNOWN state must not "
+            "be treated as permission to act. Real/state-changing actions remain behind "
+            "mcp__clayverse__request_effect and canonical EffectGate receipts. If canonical goal text is not "
+            "inline, do not infer or reconstruct the missing text."
         ),
     }
 
@@ -152,7 +160,8 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
                 "scope": "current_user_only",
                 "unfinished_goal_count": 0,
                 "next_runnable_goal_id": None,
-                "head_unfinished_goal": None,
+                "focus_reason": "NONE",
+                "focus_goal": None,
             },
         ),
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",

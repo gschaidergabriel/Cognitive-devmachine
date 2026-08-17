@@ -1,0 +1,47 @@
+{
+  "schema": "clayverse-mechanism-regression-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:47:46+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+  "candidate_pr": 426,
+  "candidate_head_before_receipt": "5131faf00bc87710530f899d85721c3740ebe05f",
+  "go_unusual_experiment": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+  "unusual_experiment_started_by_this_work": false,
+  "surface": "OpenAI isolated non-production container",
+  "scope": "browser PTY input chunking mechanism only; not exact OCI/live Clerk/browser acceptance",
+  "exact_candidate_source": {
+    "the artefact/clayverse/terminal_gateway.py": {
+      "git_blob_sha1": "4debd1b92a65f72bdfa54a51bec9c2fa2110d268",
+      "server_frame_budget_bytes": 65536
+    }
+  },
+  "ordinary_regression": {
+    "runtime": "node",
+    "input": "mixed ASCII + emoji + Greek UTF-8 payload",
+    "encoded_bytes": 120000,
+    "chunks": 2,
+    "maximum_chunk_bytes": 65536,
+    "all_chunks_within_budget": true,
+    "reassembled_byte_identity": true
+  },
+  "adversarial_review": {
+    "multibyte_utf8_split_across_websocket_frames": "byte stream remains identical after ordered concatenation",
+    "oversized_legitimate_browser_paste": "canonical browser now emits multiple bounded binary messages instead of one protocol-invalid oversized message",
+    "server_authority_changed": false,
+    "truth_or_effect_authority_changed": false
+  },
+  "github_runner": {
+    "workflow_run": 32003025523,
+    "job": 95306908079,
+    "conclusion": "failure_before_visible_steps",
+    "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE"
+  },
+  "classification": "MECHANISM_SUPPORTED",
+  "whole_product_pass": false,
+  "remaining_blocker": "No connected Vercel Sandbox start/exec primitive; exact OCI startup plus real Clerk/browser/WebSocket PTY acceptance remains unobserved.",
+  "forbidden_fallbacks_not_used": ["VPS", "self-hosted VPS runner", "production host", "Together API"]
+}

@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.1",
+  "schema_version": "5.2",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -39,7 +39,9 @@
     "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
     "refresh task-relevant current artifact code, receipts and parallel work",
     "avoid duplicate canonical implementations and stale writes",
-    "for exact go, derive the shared user-turn trigger_key and atomically claim the one unusual-experiment slot with create-only GitHub semantics before executing it; if identity/write coordination is uncertain, run no unusual experiment",
+    "for exact go, use only the protocol's single canonical trigger_key encoding; create-only lock paths with alternate timestamp/hash formatting are invalid",
+    "if no immutable request/turn id is shared and the exact user-message timestamp lacks whole-second precision or reproducible uniqueness, set COORDINATION_BLOCKED and execute no unusual experiment",
+    "after any canonical claim, fence legacy/noncanonical semantic duplicate claims for the same user turn before executing; any duplicate means EXPERIMENT_BUDGET_RACE_VIOLATION and closes the slot",
     "execute build/test/runtime validation only in authorized isolated environments; prefer Vercel Sandbox when an executable surface is available",
     "never use VPS/self-hosted/production hosts as current test evidence",
     "continue go until the useful unblocked single-container ClayVerse frontier is exhausted"
@@ -76,5 +78,5 @@
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN"
   },
-  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease; if shared trigger identity or write coordination is uncertain, fail closed and run no unusual experiment. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
+  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
 }

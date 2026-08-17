@@ -1,7 +1,8 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "receipt_type": "bounded_source_review_and_candidate_repair",
   "timestamp_local": "2026-08-17T13:50:34+07:00",
+  "updated_local": "2026-08-17T14:00:00+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
@@ -49,11 +50,34 @@
     "whole_clayverse_container_pass": false
   },
   "execution_admission": {
-    "vercel_sandbox": "connected Vercel surface exposes documentation only and no Sandbox start/exec primitive",
+    "vercel_sandbox_path": {
+      "classification": "CONFIRMED_EXECUTION_BRIDGE_CURRENTLY_ADMISSION_BLOCKED_FOR_THIS_RUN",
+      "bridge": "gschaidergabriel/Dr.-Unterweger Git preview -> Vercel project dr-unterweger -> @vercel/sandbox 2.9.2 with VERCEL_OIDC_TOKEN",
+      "direct_chatgpt_mcp_lifecycle_actions_required": false,
+      "staging_pr": 825,
+      "staging_ref": "chatgpt/go-unifieddb-future-schema-vercel-20260817-1354",
+      "staging_orchestration_commit": "246368c81594ecbeb44d988fb284c945a295e528",
+      "staging_retrigger_commit": "942c242b2c23bf4cab3fb0392ae80886ad37ab05",
+      "expected_store_blob": "a02c85c9622f7a8b2f61fc1348d41eb8f672a4b3",
+      "vercel_status": "failure",
+      "vercel_status_target": "upgradeToPro=build-rate-limit",
+      "preview_deployment_created": false,
+      "sandbox_started": false,
+      "sandbox_probe_executed": false,
+      "classification_detail": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_NOT_TEST_FAIL_NOT_PASS"
+    },
     "github_actions_probe": {
       "source_head": "011860e2125a8e32a25f424767d81f036e117139",
       "workflow_run": 32002761588,
       "retry_job": 95306563842,
+      "result": "failure_before_visible_steps",
+      "steps": null,
+      "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAIL_NOT_PASS"
+    },
+    "candidate_head_identity_guard": {
+      "source_head": "cfb1eb961ffba9cbb397163f076d5e74a1de5903",
+      "workflow_run": 32003341285,
+      "job": 95307825339,
       "result": "failure_before_visible_steps",
       "steps": null,
       "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_NOT_TEST_FAIL_NOT_PASS"
@@ -63,8 +87,13 @@
   "coordination": {
     "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "reason": "the shared user-message timestamp available to this organ is only minute-precision (2026-08-17 13:42 +07); current atomic lease protocol requires a reproducible immutable request id or at least whole-second immutable message timestamp",
+    "experiment_executed": false,
     "pr_418_fusion_note": "PR 418 advances the retrieval schema to 7 and has its own migration function; port this future-schema preflight fence ahead of that migration rather than creating a competing schema authority",
     "duplicate_product_path_created": false
   },
-  "next_exact_step": "Fuse the preflight future-schema fence into the then-current MicroClay/schema migration candidate, then run the focused state-authority + migration + retrieval/recovery regressions and exact OCI startup/readiness/restart batch in an actually-started authorized isolated Sandbox at exact source identity."
+  "historical_migration_review": {
+    "classification": "TEST_QUALITY_GAP_NOT_SECOND_PROVEN_BUG",
+    "note": "The existing schema-2 regression lowers only the version marker on a current-shaped database. Historical review shows the known 3->4, 4->5, and 5->6 transitions were primarily additive tables/meta behavior, so no second migration defect is claimed without exact historical schema fixtures."
+  },
+  "next_exact_step": "Fuse the preflight future-schema fence into the then-current MicroClay/schema migration candidate, then when Vercel preview admission is available run the focused state-authority + migration + retrieval/recovery regressions and exact OCI startup/readiness/restart batch in an actually-started authorized isolated Sandbox at exact source identity."
 }

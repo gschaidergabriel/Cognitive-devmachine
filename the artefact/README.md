@@ -24,17 +24,18 @@ This directory is the canonical product workspace for the current ClayVerse endp
 
 ### Latest cycle delta
 
-**2026-08-17 17:02 +07:00 — `NO_CHANGE` product code; Vercel availability counter-reality rejected, bridge parser repaired, execution reblocked pre-start**
+**2026-08-17 17:04 +07:00 — `NO_CHANGE` product code; execution evidence fused and dynamic program state synchronized**
 
 - `NO_CHANGE` to canonical ClayVerse product/runtime code and whole-product acceptance. The unchanged highest-information discriminator remains repair PR #603 against real tmux 3.6a.
-- Rejoined after parallel fusion at canonical `main` `9d32c7de1c57937b45abdb3370386bec53224bd3`; the preceding 16:55 README/receipt cycle was already merged as PR #605, so this delta records only newer evidence rather than duplicating that work.
+- Rejoined after parallel fusion at canonical `main` `867f0fe3bb62795c099b63db43458646301904cb`; PR #606 had already canonically fused the stronger 17:02 bridge-parser evidence, so duplicate receipt PR #607 was closed rather than creating a second evidence authority.
 - Rejected the counter-reality that Vercel was still globally unable to execute: deployment `dpl_D9dvKLk37x99xcNE2M9qsCkvA4MM` actually started a Vercel Sandbox batch and executed substantive steps before a later unrelated export-lock mismatch. This is provider-capability evidence only, not ClayVerse tmux repair credit.
 - Retriggered retained tmux bridge #846 with the current observed #603 head identity and unchanged candidate blob. Deployment `dpl_Cu8hEPnRsYVTGmnBG8vUypVuQHAc` failed before Sandbox creation with Node 24 `SyntaxError: Unexpected identifier 'unbind'` in the temporary bridge's generated template literal. That is **orchestration/pre-assertion failure**, not a tmux repair FAIL.
 - Repaired only the temporary execution bridge (`0a48f569775e281a95833a31bd383ae7f8a2fc66`, routed by `fde81e2fa7149e27396d9c0a7113f4b6236f1dca`) so the invalid generated-backtick escaping is normalized before dynamic import. The ClayVerse terminal candidate and managed-tmux blobs are unchanged.
 - The post-repair trigger `da602c728d363e1ffe375c5151af2be379820b04` is currently rejected by Vercel with `build-rate-limit` before deployment/Sandbox start. Therefore repair runtime status remains **UNKNOWN / NOT EXECUTED**.
-- Daytona fallback was rechecked against the merged FREE_ONLY law. Official provider documentation still describes sandbox lifecycle/network controls and free compute, but that general provider fact is not an account-specific wallet attestation. No Daytona connector/plugin is available in this session, and the local orchestration environment cannot resolve `app.daytona.io`; a paid/quota bypass or VPS substitution was not attempted.
+- Daytona fallback was rechecked against the merged FREE_ONLY law. No Daytona connector/plugin is available in this session, the local orchestration environment cannot resolve the provider endpoints and the Daytona SDK is absent; no provider contact or runtime test occurred.
+- Synchronized `research_entity/rooms/PROGRAM_STATE.json` with this already-canonical evidence so future workers no longer boot from the stale assertion that the old global Vercel daily-cap observation is the current execution state. The current blocker is now explicitly the **post-bridge-fix Vercel pre-Sandbox rate limit plus Daytona controller DNS/SDK blockage**, with PR #603 runtime still unknown.
 - No unusual experiment was executed. This work is regression-only re-entry of the already-defined real-tmux falsifier, and the shared trigger identity still lacks a unique atomic experiment lease key.
-- Durable detailed evidence for this delta is `receipts/2026-08-17_GO_1702_TMUX_BRIDGE_PARSER_REPAIR_NO_CHANGE_GPT56SOL.json`.
+- Durable detailed execution evidence remains `receipts/2026-08-17_GO_1702_TMUX_BRIDGE_PARSER_REPAIR_NO_CHANGE_GPT56SOL.json`.
 - Next gate: execute the **unchanged** `c185009f8af84e1288747d8352645777a36b2053` repair under real tmux 3.6a with pre-policy upgrade, already-hardened reapply, new-server second-source, direct multi-argv fake-Claude and mixed/unknown-diagnostic fail-closed markers. Only after that PASS: rejoin then-current `main`, run focused + adjacent regressions, and consider promotion before OCI/native-Claude/readiness/restart/concurrency acceptance.
 
 ### Cycle update rule

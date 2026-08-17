@@ -238,8 +238,10 @@ def validate_method_record(kind: str, value: Any, provenance: Any) -> dict[str, 
         promoted = status == "PROMOTED"
         _validate_provenance(provenance, promoted=promoted)
         if promoted:
-            if support_count < 2 or success_count < 1:
-                raise MethodMemoryValidationError("single success cannot promote a reusable method")
+            if support_count < 2 or success_count < 2:
+                raise MethodMemoryValidationError(
+                    "reusable promotion requires at least two validated successes"
+                )
             if len(source_episode_ids) < 2:
                 raise MethodMemoryValidationError(
                     "promoted method requires transfer evidence from multiple episodes"
@@ -259,6 +261,29 @@ def validate_method_record(kind: str, value: Any, provenance: Any) -> dict[str, 
 
 def validate_method_receipt(value: Any, provenance: Any) -> dict[str, Any]:
     receipt = _as_object(value)
+    schema = receipt.get("schema")
+    if schema in {
+        "clayverse.method-candidate-use/v1",
+        "clayverse.method-candidate-validation/v1",
+    }:
+        try:
+            from .method_validation import (
+                CANDIDATE_USE_SCHEMA,
+                validate_candidate_use_receipt,
+                validate_candidate_validation_receipt,
+            )
+            canonical = (
+                validate_candidate_use_receipt(receipt)
+                if schema == CANDIDATE_USE_SCHEMA
+                else validate_candidate_validation_receipt(receipt)
+            )
+        except Exception as exc:
+            if isinstance(exc, MethodMemoryValidationError):
+                raise
+            raise MethodMemoryValidationError("invalid candidate validation receipt") from exc
+        _validate_provenance(provenance, promoted=False)
+        return canonical
+
     unknown = set(receipt) - _RECEIPT_FIELDS
     missing = _RECEIPT_FIELDS - set(receipt)
     if unknown:
@@ -342,7 +367,7 @@ class MethodMemoryManager:
         source_episode_ids = list(record["source_episode_ids"])
         placeholders = ",".join("?" for _ in source_episode_ids)
         rows = self.db.db.execute(
-            "SELECT w.episode_id,w.state,s.user_id,"
+            "SELECT w.episode_id,w.state,w.session_id,s.user_id,"
             "EXISTS(SELECT 1 FROM causal_episodes c "
             "WHERE c.episode_id=w.episode_id AND c.reentered=1) AS reentered "
             "FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id "
@@ -352,13 +377,16 @@ class MethodMemoryManager:
         found = {str(row["episode_id"]): row for row in rows}
         if set(found) != set(source_episode_ids):
             raise MethodMemoryValidationError("promotion source episode evidence is incomplete")
+        expected_session = f"session:{user_id}"
         for episode_id, row in found.items():
             if row["state"] not in {"COMPLETED", "ABORTED"} or not int(row["reentered"]):
                 raise MethodMemoryValidationError(
                     f"promotion source episode is not terminal and causally re-entered: {episode_id}"
                 )
-            if str(row["user_id"]) != user_id:
-                raise MethodMemoryValidationError("promotion source episode crosses user scope")
+            if str(row["user_id"]) != user_id or str(row["session_id"]) != expected_session:
+                raise MethodMemoryValidationError(
+                    "promotion source episode crosses canonical user/session scope"
+                )
 
         evidence_ids = list(dict.fromkeys(
             list(record["supporting_memory_ids"]) + list(record["counterexample_memory_ids"])
@@ -393,8 +421,80 @@ class MethodMemoryManager:
     def lifecycle_action(self, method_memory_id: str) -> str | None:
         action = None
         for row in self._receipt_rows(method_memory_id):
-            action = self.decode_row(row)["value"]["action"]
+            value = self.decode_row(row)["value"]
+            if "action" in value:
+                action = value["action"]
         return action
+
+    def _assert_promoted_validation_lineage(self, method: dict[str, Any]) -> None:
+        provenance = method["provenance"]
+        candidate_id = provenance.get("promotion_source_memory_id")
+        receipt_id = provenance.get("promotion_receipt_id")
+        if (
+            provenance.get("promotion_transaction_version") != 2
+            or not isinstance(candidate_id, str)
+            or not candidate_id
+            or not isinstance(receipt_id, str)
+            or not receipt_id
+        ):
+            raise MethodMemoryValidationError("promoted method lacks validated promotion lineage")
+        candidate_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1", (candidate_id,)
+        ).fetchone()
+        receipt_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1", (receipt_id,)
+        ).fetchone()
+        if candidate_row is None or receipt_row is None:
+            raise MethodMemoryValidationError("promoted method candidate/receipt is missing")
+        candidate = self.decode_row(candidate_row)
+        receipt = self.decode_row(receipt_row)
+        expected_kind = "framework_candidate" if method["kind"] == "framework" else "heuristic_candidate"
+        if candidate["kind"] != expected_kind or candidate["value"]["status"] != "CANDIDATE":
+            raise MethodMemoryValidationError("promotion source is not the matching candidate")
+        if candidate["user_id"] != method["user_id"] or candidate["subject"] != method["subject"]:
+            raise MethodMemoryValidationError("promotion source identity/scope mismatch")
+        if (
+            receipt["kind"] != "method_receipt"
+            or receipt["subject"] != candidate_id
+            or receipt["value"].get("action") != "PROMOTE"
+            or receipt["value"].get("method_memory_id") != candidate_id
+            or receipt["user_id"] != method["user_id"]
+        ):
+            raise MethodMemoryValidationError("promotion receipt lineage mismatch")
+        if (
+            receipt["value"]["source_episode_ids"] != method["value"]["source_episode_ids"]
+            or receipt["value"]["supporting_memory_ids"] != method["value"]["supporting_memory_ids"]
+            or receipt["value"]["counterexample_memory_ids"] != method["value"]["counterexample_memory_ids"]
+        ):
+            raise MethodMemoryValidationError("promotion receipt evidence drift")
+
+        try:
+            from .method_validation import MethodValidationError, derive_promotion_stats
+            validation = derive_promotion_stats(
+                self.db.db, candidate_id, candidate["value"], str(method["user_id"])
+            )
+        except Exception as exc:
+            raise MethodMemoryValidationError(
+                "promoted method validation evidence is invalid"
+            ) from exc
+        for field in (
+            "support_count",
+            "success_count",
+            "failure_count",
+            "calibration",
+            "last_validated_at",
+        ):
+            if method["value"][field] != validation[field]:
+                raise MethodMemoryValidationError(
+                    "promoted method statistics drifted from validation receipts"
+                )
+        for prov in (provenance, receipt["provenance"]):
+            if (
+                prov.get("validation_receipt_ids") != validation["validation_receipt_ids"]
+                or prov.get("validation_evidence_sha256")
+                != validation["validation_evidence_sha256"]
+            ):
+                raise MethodMemoryValidationError("promotion validation provenance mismatch")
 
     def promote(
         self,
@@ -419,12 +519,32 @@ class MethodMemoryManager:
                 raise MethodMemoryValidationError("promotion source must be a method candidate")
             self._assert_promotion_references(candidate)
             if any(
-                self.decode_row(receipt)["value"]["action"] == "PROMOTE"
+                self.decode_row(receipt)["value"].get("action") == "PROMOTE"
                 for receipt in self._receipt_rows(candidate_memory_id)
             ):
                 raise MethodMemoryValidationError("candidate already has a promotion receipt")
 
-            record = candidate["value"]
+            try:
+                from .method_validation import MethodValidationError, derive_promotion_stats
+                validation = derive_promotion_stats(
+                    self.db.db,
+                    candidate_memory_id,
+                    candidate["value"],
+                    str(candidate["user_id"]),
+                )
+            except Exception as exc:
+                raise MethodMemoryValidationError(
+                    "promotion requires validated held-out causal outcome receipts"
+                ) from exc
+
+            record = {
+                **candidate["value"],
+                "support_count": validation["support_count"],
+                "success_count": validation["success_count"],
+                "failure_count": validation["failure_count"],
+                "calibration": validation["calibration"],
+                "last_validated_at": validation["last_validated_at"],
+            }
             now = time.time()
             receipt_value = {
                 "method_memory_id": candidate_memory_id,
@@ -435,10 +555,15 @@ class MethodMemoryManager:
                 "evaluation": evaluation,
                 "ts": now,
             }
+            validation_provenance = {
+                "validation_receipt_ids": validation["validation_receipt_ids"],
+                "validation_evidence_sha256": validation["validation_evidence_sha256"],
+            }
             receipt_provenance = {
                 **lifecycle_provenance,
                 "promotion_source_memory_id": candidate_memory_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                **validation_provenance,
             }
             receipt_id = self.admit(
                 "method_receipt",
@@ -449,13 +574,14 @@ class MethodMemoryManager:
                 receipt_provenance,
             )
             promoted_kind = "framework" if candidate["kind"] == "framework_candidate" else "heuristic"
-            promoted_record = {**record, "status": "PROMOTED", "last_validated_at": now}
+            promoted_record = {**record, "status": "PROMOTED"}
             promoted_provenance = {
                 **{k: v for k, v in candidate["provenance"].items() if k != "method_schema_version"},
                 **lifecycle_provenance,
                 "promotion_source_memory_id": candidate_memory_id,
                 "promotion_receipt_id": receipt_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                **validation_provenance,
                 "method_schema_version": METHOD_SCHEMA_VERSION,
                 "user_scope": candidate["user_id"],
                 "truth_authority": False,
@@ -541,7 +667,7 @@ class MethodMemoryManager:
         ):
             raise MethodMemoryValidationError("stored method memory has unknown schema version")
         canonical_value = canonical_method_value(kind, row["value"], provenance)
-        return {
+        method = {
             "memory_id": str(row["memory_id"]),
             "kind": kind,
             "subject": str(row["subject"]),
@@ -551,3 +677,6 @@ class MethodMemoryManager:
             "ts": float(row["ts"]),
             "provenance": provenance,
         }
+        if kind in PROMOTABLE_KINDS and method["value"].get("status") == "PROMOTED":
+            self._assert_promoted_validation_lineage(method)
+        return method

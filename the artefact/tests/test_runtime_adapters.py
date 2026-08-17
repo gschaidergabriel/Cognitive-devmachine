@@ -143,12 +143,12 @@ class FakeEngine:
     def __init__(self):
         self.calls = []
 
-    def ingest(self, subject, content, *, resources=None):
-        self.calls.append((subject, content, resources))
+    def ingest(self, subject, content, *, resources=None, request_id=None):
+        self.calls.append((subject, content, resources, request_id))
         return {"decision": {"text": "ack"}}
 
 
-def test_http_boundary_requires_auth_and_routes_subject_to_engine():
+def test_http_boundary_requires_auth_and_routes_subject_with_request_identity():
     engine = FakeEngine()
     api = ClayVerseAPI(engine, FakeVerifier())
     server = ThreadingHTTPServer(("127.0.0.1", 0), api.handler())
@@ -159,11 +159,11 @@ def test_http_boundary_requires_auth_and_routes_subject_to_engine():
         with pytest.raises(HTTPError) as exc:
             urlopen(base + "/api/status")
         assert exc.value.code == 401
-        body = json.dumps({"content": "hello", "resources": ["repo:x"]}).encode()
+        body = json.dumps({"content": "hello", "resources": ["repo:x"], "request_id": "req-http-1"}).encode()
         req = Request(base + "/api/chat", data=body, headers={"Authorization": "Bearer good", "Content-Type": "application/json"}, method="POST")
         out = json.loads(urlopen(req).read())
         assert out["decision"]["text"] == "ack"
-        assert engine.calls == [("clerk-g", "hello", ["repo:x"])]
+        assert engine.calls == [("clerk-g", "hello", ["repo:x"], "req-http-1")]
     finally:
         server.shutdown()
         server.server_close()
@@ -176,7 +176,7 @@ class SerialProbeEngine:
         self.max_active = 0
         self.lock = Lock()
 
-    def ingest(self, subject, content, *, resources=None):
+    def ingest(self, subject, content, *, resources=None, request_id=None):
         with self.lock:
             self.active += 1
             self.max_active = max(self.max_active, self.active)
@@ -202,7 +202,7 @@ def test_product_http_server_serializes_central_mutation_lane():
         barrier.wait()
         req = Request(
             base + "/api/chat",
-            data=json.dumps({"content": msg}).encode(),
+            data=json.dumps({"content": msg, "request_id": f"req-{msg}"}).encode(),
             headers={"Authorization": "Bearer good", "Content-Type": "application/json"},
             method="POST",
         )

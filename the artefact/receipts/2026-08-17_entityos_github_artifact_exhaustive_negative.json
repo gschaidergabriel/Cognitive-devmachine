@@ -1,0 +1,59 @@
+{
+  "schema": "ClayVerseNegativeEvidence/v1",
+  "kind": "entityos_exact_artifact_github_recovery",
+  "date": "2026-08-17",
+  "research_main_observed_before_write": "1832f0156ad151f0ce659b7362b732e899e69c6a",
+  "source_repository": "gschaidergabriel/Dr.-Unterweger",
+  "locked_source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+  "locked_source_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+  "locked_entityos_sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+  "locked_entityos_size_bytes": 9181696,
+  "checks": {
+    "exact_artifact_name_query": {
+      "name": "EntityOS-79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+      "matches": 0
+    },
+    "workflow_runs_for_exact_head": {
+      "count": 14,
+      "all_completed": true,
+      "all_conclusion": "failure",
+      "run_ids": [
+        31995639493,
+        31995639318,
+        31995639473,
+        31995639302,
+        31995639330,
+        31995639587,
+        31995639449,
+        31995639322,
+        31995639316,
+        31995639463,
+        31995639541,
+        31995639477,
+        31995639526,
+        31995639435
+      ],
+      "artifact_counts_by_run": {
+        "31995639493": 0,
+        "31995639318": 0,
+        "31995639473": 0,
+        "31995639302": 0,
+        "31995639330": 0,
+        "31995639587": 0,
+        "31995639449": 0,
+        "31995639322": 0,
+        "31995639316": 0,
+        "31995639463": 0,
+        "31995639541": 0,
+        "31995639477": 0,
+        "31995639526": 0,
+        "31995639435": 0
+      }
+    }
+  },
+  "result": "NO_EXACT_GITHUB_ACTIONS_ARTIFACT_RECOVERABLE",
+  "implication": "GitHub Actions cannot currently supply the exact locked EntityOS bytes for the ClayVerse OCI build. Historical Vercel evidence establishes the accepted identity but is not a durable binary transport surface.",
+  "next_executable_step": "In an authorized isolated Vercel Sandbox, rebuild EntityOS from exactly source_head 79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c, require sha256 32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586 and size 9181696, stage those exact bytes into the ClayVerse OCI build context, then execute the full exact-head OCI artifact gate.",
+  "unusual_experiment_consumed_here": false,
+  "whole_clayverse_acceptance": false
+}

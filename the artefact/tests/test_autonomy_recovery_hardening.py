@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import json
+import time
+
 import pytest
 
 from clayverse.autonomy import AutonomyBudgetExceeded, AutonomyController, GoalBudget
+from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
 
 
@@ -29,6 +33,26 @@ def _goal(db, controller, *, completion_mode="user_ack", required_capability=Non
         completion_mode=completion_mode,
         required_capability=required_capability,
         budget=budget,
+    )
+
+
+def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "state.noop"):
+    db.db.execute(
+        "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            effect_id,
+            None,
+            "gabriel",
+            capability,
+            "autonomy-recovery-test",
+            None,
+            generation,
+            "VERIFIED",
+            json.dumps({"ok": True}, sort_keys=True),
+            time.time(),
+            time.time(),
+        ),
     )
 
 
@@ -74,6 +98,23 @@ def test_generation_recovery_requeues_interrupted_non_effect_step(tmp_path):
     assert controller.next_runnable(user_id="gabriel")["goal_id"] == goal["goal_id"]
 
 
+def test_boot_recovery_reenters_durable_goal_after_generation_advance(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(db, controller)
+    step = controller.propose_step(goal["goal_id"], "reason", "Interrupted by restart")
+    controller.admit_step(goal["goal_id"], step["step_id"])
+
+    result = recover_incomplete_episodes(db)
+
+    assert result["generation"] == 2
+    recovered = controller.snapshot(user_id="gabriel")["goals"][0]
+    assert recovered["generation"] == 2
+    assert recovered["status"] == "ACTIVE"
+    assert recovered["current_step"]["status"] == "FAILED"
+    assert controller.next_runnable(user_id="gabriel")["goal_id"] == goal["goal_id"]
+
+
 def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
@@ -104,6 +145,41 @@ def test_generation_recovery_never_replays_or_self_verifies_ambiguous_effect(tmp
     assert recovered["blocked_reason"] == "unknown_effect_after_generation_change"
     assert controller.next_runnable(user_id="gabriel") is None
     assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 0
+
+
+def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(
+        db,
+        controller,
+        completion_mode="verified_effect",
+        required_capability="state.noop",
+        budget=GoalBudget(max_steps=3, max_retries_per_step=1, max_effects=1),
+    )
+    step = controller.propose_step(
+        goal["goal_id"],
+        "effect",
+        "One verified side-effect boundary",
+        effect={"capability": "state.noop", "target": "receipt-boundary", "argv": None},
+    )
+    controller.admit_step(goal["goal_id"], step["step_id"])
+    _verified_effect(db, "effect-before-restart", generation=1)
+    assert controller.record_effect_result(
+        goal["goal_id"], step["step_id"], "effect-before-restart"
+    )["verified"] is True
+
+    live = db.advance_entity_generation()
+    result = controller.recover_generation(expected_generation=live)
+
+    assert result["effect_evidence_rebind_required"] == 1
+    recovered = controller.snapshot(user_id="gabriel")["goals"][0]
+    assert recovered["generation"] == live
+    assert recovered["status"] == "BLOCKED"
+    assert recovered["blocked_reason"] == "effect_evidence_requires_generation_rebind"
+    assert recovered["evidence_effect_ids"] == ["effect-before-restart"]
+    assert controller.next_runnable(user_id="gabriel") is None
+    assert db.db.execute("SELECT COUNT(*) FROM effects").fetchone()[0] == 1
 
 
 def test_generation_recovery_preserves_existing_block_without_reactivation(tmp_path):

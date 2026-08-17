@@ -1,0 +1,113 @@
+{
+  "schema": "clayverse-go-claude-managed-boundary-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time_observed": "2026-08-17T13:42+07:00",
+  "trigger_identity_precision": "minute_only",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "main_observed_before_receipt_write": "664679acf5a22099179bde0f2ec37144a51f2cc9",
+  "goal": "keep Clerk-authenticated WebSocket PTY plus managed ClayVerse hooks/MCP as the admitted Claude interaction boundary, without Claude-native alternate remote, cross-session, connector, bundled-workflow or sideload paths silently becoming parallel authorities",
+  "source_changes": [
+    {
+      "commit": "dfcd93ba1f190bee0a72fa86ede51f64d0190f7d",
+      "path": "the artefact/policy/managed-settings.json",
+      "change": "set disableRemoteControl=true"
+    },
+    {
+      "commit": "a87bd8d0fd0bcdd48857714af3fc48ba85e1f2a7",
+      "path": "the artefact/tests/test_terminal_managed_authority.py",
+      "change": "bind regression to Remote Control lockout and the already-stronger exact serverCommand MCP allowlist"
+    },
+    {
+      "commit": "dd106944a8f7b8b4c4b7e1c20d34a7aea9cd4a17",
+      "path": "the artefact/policy/managed-settings.json",
+      "change": "set crossSessionInbound=refuse, disableBundledSkills=true, disableClaudeAiConnectors=true, disableSideloadFlags=true"
+    },
+    {
+      "commit": "aaf83cf3c7ee94a4c4e082d62719711c66b92cf0",
+      "path": "the artefact/tests/test_terminal_managed_authority.py",
+      "change": "bind alternate-ingress lockdown invariants"
+    }
+  ],
+  "current_bound_blobs": {
+    "managed_settings": "95a695eedf526298e36a74276e72861eaf6fd9a2",
+    "terminal_managed_authority_test": "d6a2d4e9d5443c4c1a2546a5fb08c01da69ea9b4",
+    "source_lock": "8fa36aa037da6052fcdc83e268b3d6ce8afefe01",
+    "terminal_sessions_observed": "b42d175745fa53c45b81fa1affda4f12a4093541"
+  },
+  "claude_source_lock": {
+    "version": "2.1.233",
+    "asset": "claude-linux-x64.tar.gz",
+    "sha256": "23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "official_release_asset_digest_observed": "sha256:23eec49e0453a3a7b9d933228cb09639fc0bcd962039258d8e4cde72fa5b8741",
+    "official_release_asset_size": 98452216
+  },
+  "upstream_contract_basis": {
+    "disableRemoteControl": "managed setting blocks the remote-control command, --remote-control flag, auto-start and in-session toggle; required version is older than the pinned 2.1.233",
+    "crossSessionInbound": "introduced in Claude Code 2.1.224; pinned 2.1.233 supports it; refuse is used to drop Claude-native inbound cross-session messages rather than bypass UnifiedDB/ClayVerse causal routing",
+    "disableBundledSkills": "introduced in Claude Code 2.1.169; pinned 2.1.233 supports it",
+    "disableClaudeAiConnectors": "requires Claude Code 2.1.182 or later; pinned 2.1.233 supports it",
+    "disableSideloadFlags": "managed policy blocks transient plugin/custom-agent/MCP sideload flags; current ClayVerse plain terminal launch does not use those flags"
+  },
+  "adversarial_counterhypothesis": {
+    "hypothesis": "disableSideloadFlags could accidentally deny the canonical ClayVerse Claude startup and convert security hardening into a product outage",
+    "source_observation": "terminal_sessions.py launches with --settings, --setting-sources, --tools, --allowedTools, --permission-mode and --append-system-prompt-file only; it does not use --plugin-dir, --plugin-url, --agents or --mcp-config",
+    "result": "COUNTERHYPOTHESIS_NOT_SUPPORTED_BY_CURRENT_LAUNCH_SOURCE",
+    "runtime_confirmation_still_required": true
+  },
+  "openai_isolated_source_slice": {
+    "environment": {
+      "class": "OpenAI isolated non-production exact-source slice",
+      "kernel": "Linux 6.18.35 x86_64",
+      "python": "3.13.5"
+    },
+    "managed_settings_git_blob_expected": "95a695eedf526298e36a74276e72861eaf6fd9a2",
+    "managed_settings_git_blob_observed": "95a695eedf526298e36a74276e72861eaf6fd9a2",
+    "json_parse": "PASS",
+    "policy_invariants": "PASS",
+    "classification": "EXACT_POLICY_BLOB_SOURCE_SLICE_VERIFIED",
+    "anti_claim": "This does not execute the packaged Claude binary, the ClayVerse OCI image, Clerk, PTY, hooks, MCP effects or restart path."
+  },
+  "vercel_native_claude_attempt": {
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_branch": "chatgpt/go-clayverse-remote-control-policy-20260817-1356",
+    "staging_head": "6f475fcdbc8159d265571cd46823c3c67a0a643a",
+    "staging_pr": 824,
+    "staging_pr_final_state": "CLOSED_STAGING_ONLY_DO_NOT_MERGE",
+    "planned_execution": "Vercel Sandbox; fetch digest-pinned Claude 2.1.233; verify archive SHA-256; install exact managed policy; deny network; invoke Remote Control entry points; sandbox.stop in finally",
+    "provider_status": "failure",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "native_claude_executed": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "anti_claim": "This is not a Claude/ClayVerse test failure because no build or Sandbox command started."
+  },
+  "github_workflow_observation": {
+    "current_boundary_commit_pr_workflow_runs_observed": 0,
+    "classification": "NO_NEW_GITHUB_RUNTIME_CREDIT"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_added": 0,
+    "reason": "The visible 13:42 trigger has minute-only identity and current coordination rejects inventing sub-minute identity for the atomic experiment lease. Only ordinary source/security regression work was performed."
+  },
+  "evidence_classification": {
+    "managed_policy_source": "SOURCE_HARDENED_AND_EXACT_BLOB_VERIFIED",
+    "canonical_launch_source_compatibility": "SOURCE_INSPECTED",
+    "native_claude_managed_policy_behavior": "UNOBSERVED_AT_CURRENT_POLICY_HEAD",
+    "exact_oci_runtime": "UNVERIFIED",
+    "real_clerk_browser_ws_pty": "UNVERIFIED_BY_THIS_RECEIPT",
+    "whole_clayverse_acceptance": "IN_PROGRESS"
+  },
+  "remaining_frontier": [
+    "actually-started authorized isolated native Claude 2.1.233 run proving Remote Control and sideload entry points fail closed while the canonical managed PTY launch remains healthy",
+    "exact current OCI build plus startup/readiness and image identity",
+    "real Clerk browser/JWT/WebSocket PTY lifecycle",
+    "dual-session restart/concurrency/generation/privacy gates",
+    "whole-product supply-chain and recovery acceptance"
+  ]
+}

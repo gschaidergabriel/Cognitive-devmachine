@@ -45,6 +45,7 @@ def _candidate(episodes, support_ids):
         "supporting_memory_ids": list(support_ids),
         "counterexample_memory_ids": [],
         "abstraction_version": "v1",
+        # These proposal counters are deliberately NOT promotion authority.
         "support_count": len(episodes),
         "success_count": len(episodes),
         "failure_count": 0,
@@ -63,12 +64,11 @@ def _support(db):
 
 
 def _admit_candidate(db, episodes):
-    support = _support(db)
     methods = MethodMemory(db)
     candidate_id = methods.admit(
         kind="framework_candidate",
         subject="causal discriminator",
-        record=_candidate(episodes, support),
+        record=_candidate(episodes, _support(db)),
         source_turn_id=None,
         user_id="gabriel",
         provenance={"source": "promotion-regression"},
@@ -76,48 +76,26 @@ def _admit_candidate(db, episodes):
     return methods, candidate_id
 
 
-def test_terminal_reentered_sources_promote_atomically_and_retrieve(tmp_path):
+def test_terminal_reentered_sources_are_necessary_but_not_method_utility(tmp_path):
     db, session_id = _db(tmp_path)
     _episode(db, session_id, "src:a")
     _episode(db, session_id, "src:b")
     methods, candidate_id = _admit_candidate(db, ["src:a", "src:b"])
+    before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
 
-    promoted = methods.promote(
-        candidate_memory_id=candidate_id,
-        evaluation="two terminal re-entered episodes support transfer",
-        user_id="gabriel",
-        provenance={"source": "held-out-eval", "evaluator": "test"},
-    )
+    with pytest.raises(MethodRecordError, match="at least two distinct validated method uses"):
+        methods.promote(
+            candidate_memory_id=candidate_id,
+            evaluation="two terminal re-entered episodes are not a utility evaluation",
+            user_id="gabriel",
+            provenance={"source": "held-out-eval", "evaluator": "test"},
+        )
 
-    receipt_row = db.db.execute(
-        "SELECT * FROM durable_memory WHERE memory_id=?",
-        (promoted["receipt_memory_id"],),
-    ).fetchone()
-    method_row = db.db.execute(
-        "SELECT * FROM durable_memory WHERE memory_id=?",
-        (promoted["promoted_memory_id"],),
-    ).fetchone()
-    receipt = json.loads(receipt_row["value"])
-    provenance = json.loads(method_row["provenance"])
-    assert receipt["action"] == "PROMOTE"
-    assert receipt["candidate_memory_id"] == candidate_id
-    assert receipt["promoted_memory_id"] == promoted["promoted_memory_id"]
-    assert provenance["promotion_source_memory_id"] == candidate_id
-    assert provenance["promotion_receipt_id"] == promoted["receipt_memory_id"]
-    assert provenance["truth_authority"] is False
-    assert provenance["effect_authority"] is False
-
-    result = methods.retrieve(
-        query="verify causal provenance",
-        user_id="gabriel",
-        evidence_status="UNKNOWN",
-        problem_signature={"goal": ["verify"], "mechanism": ["causal", "provenance"]},
-    )
-    assert [item["memory_id"] for item in result["methods"]] == [promoted["promoted_memory_id"]]
-    assert result["factual_status_unchanged"] == "UNKNOWN"
+    assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
+    assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind IN ('framework','heuristic')").fetchone()[0] == 0
 
 
-def test_open_or_nonreentered_source_blocks_promotion_without_partial_write(tmp_path):
+def test_open_or_nonreentered_abstraction_source_blocks_before_utility_gate(tmp_path):
     db, session_id = _db(tmp_path)
     _episode(db, session_id, "src:closed")
     _episode(db, session_id, "src:open", state="OPEN", reentered=False)
@@ -127,7 +105,7 @@ def test_open_or_nonreentered_source_blocks_promotion_without_partial_write(tmp_
     with pytest.raises(MethodRecordError, match="terminal and causally re-entered"):
         methods.promote(
             candidate_memory_id=candidate_id,
-            evaluation="open source must not count",
+            evaluation="open abstraction source must not count",
             user_id="gabriel",
             provenance={"source": "terminal-gate-regression"},
         )
@@ -138,25 +116,20 @@ def test_open_or_nonreentered_source_blocks_promotion_without_partial_write(tmp_
     ).fetchone()[0] == 0
 
 
-def test_duplicate_promotion_fails_closed_without_new_rows(tmp_path):
+def test_repeated_unvalidated_promotion_attempts_do_not_create_partial_rows(tmp_path):
     db, session_id = _db(tmp_path)
     _episode(db, session_id, "src:a")
     _episode(db, session_id, "src:b")
     methods, candidate_id = _admit_candidate(db, ["src:a", "src:b"])
-    methods.promote(
-        candidate_memory_id=candidate_id,
-        evaluation="first promotion",
-        user_id="gabriel",
-        provenance={"source": "held-out-eval"},
-    )
     before = db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0]
-    with pytest.raises(MethodRecordError, match="already has a promotion receipt"):
-        methods.promote(
-            candidate_memory_id=candidate_id,
-            evaluation="second promotion",
-            user_id="gabriel",
-            provenance={"source": "held-out-eval"},
-        )
+    for evaluation in ("first unvalidated claim", "second unvalidated claim"):
+        with pytest.raises(MethodRecordError, match="at least two distinct validated method uses"):
+            methods.promote(
+                candidate_memory_id=candidate_id,
+                evaluation=evaluation,
+                user_id="gabriel",
+                provenance={"source": "held-out-eval"},
+            )
     assert db.db.execute("SELECT COUNT(*) FROM durable_memory").fetchone()[0] == before
 
 

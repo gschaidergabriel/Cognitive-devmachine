@@ -68,6 +68,14 @@ def test_dockerfile_configures_snapshot_before_any_apt_resolution():
     assert dockerfile.count("apt-get update") == 1
 
 
+def test_default_deny_build_context_admits_only_the_new_helper_explicitly():
+    dockerignore = (ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
+    assert dockerignore[3] == "*"
+    assert "!build/configure_pinned_apt.py" in dockerignore
+    assert "!build/install_pinned_xterm.py" in dockerignore
+    assert "!build/install_pinned_claude.py" in dockerignore
+
+
 def test_source_lock_no_longer_claims_unpinned_apt_repositories():
     lock = json.loads((ROOT / "SOURCE_LOCK.json").read_text(encoding="utf-8"))
     assert lock["debian_apt_snapshot"]["timestamp"] == "20260817T000000Z"

@@ -8,22 +8,30 @@ on:
       - 'the artefact/clayverse/agency.py'
       - 'the artefact/clayverse/autonomy.py'
       - 'the artefact/clayverse/engine.py'
+      - 'the artefact/clayverse/mcp_server.py'
       - 'the artefact/clayverse/terminal_hooks.py'
+      - 'the artefact/clayverse/terminal_sessions.py'
       - 'the artefact/clayverse/service.py'
       - 'the artefact/runtime_CLAUDE.md'
       - 'the artefact/tests/test_agency_state.py'
       - 'the artefact/tests/test_autonomy_runner.py'
+      - 'the artefact/tests/test_goal_control_gate.py'
+      - 'the artefact/tests/test_terminal_managed_authority.py'
       - '.github/workflows/agency-state-ci.yml'
   pull_request:
     paths:
       - 'the artefact/clayverse/agency.py'
       - 'the artefact/clayverse/autonomy.py'
       - 'the artefact/clayverse/engine.py'
+      - 'the artefact/clayverse/mcp_server.py'
       - 'the artefact/clayverse/terminal_hooks.py'
+      - 'the artefact/clayverse/terminal_sessions.py'
       - 'the artefact/clayverse/service.py'
       - 'the artefact/runtime_CLAUDE.md'
       - 'the artefact/tests/test_agency_state.py'
       - 'the artefact/tests/test_autonomy_runner.py'
+      - 'the artefact/tests/test_goal_control_gate.py'
+      - 'the artefact/tests/test_terminal_managed_authority.py'
 
 permissions:
   contents: read
@@ -42,8 +50,8 @@ jobs:
       - name: Install test runner
         run: python -m pip install --disable-pip-version-check pytest
       - name: Compile changed runtime modules
-        run: python -m py_compile clayverse/agency.py clayverse/autonomy.py clayverse/engine.py clayverse/terminal_hooks.py clayverse/service.py
+        run: python -m py_compile clayverse/agency.py clayverse/autonomy.py clayverse/engine.py clayverse/mcp_server.py clayverse/terminal_hooks.py clayverse/terminal_sessions.py clayverse/service.py
       - name: Run agency tests
         env:
           PYTHONPATH: .
-        run: python -m pytest -q tests/test_agency_state.py tests/test_autonomy_runner.py
+        run: python -m pytest -q tests/test_agency_state.py tests/test_autonomy_runner.py tests/test_goal_control_gate.py tests/test_terminal_managed_authority.py

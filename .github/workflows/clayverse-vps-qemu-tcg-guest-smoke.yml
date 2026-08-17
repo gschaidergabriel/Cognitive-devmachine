@@ -19,40 +19,81 @@ jobs:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 20
     steps:
-      - name: Resolve orchestration-only QEMU tooling
+      - name: Resolve QEMU tooling without privileged host mutation
         shell: bash
         run: |
           set -Eeuo pipefail
-          missing=0
-          for cmd in qemu-system-x86_64 qemu-img cloud-localds gpgv curl; do
-            if ! command -v "$cmd" >/dev/null 2>&1; then
-              missing=1
-              break
-            fi
-          done
-          if [ ! -r /usr/share/keyrings/ubuntu-cloudimage-keyring.gpg ]; then missing=1; fi
-          if ! find /usr/share/OVMF -maxdepth 1 -type f \( -name 'OVMF_CODE_4M.fd' -o -name 'OVMF_CODE.fd' \) -print -quit 2>/dev/null | grep -q .; then missing=1; fi
-          if [ "$missing" -eq 1 ]; then
-            if [ "$(id -u)" -eq 0 ]; then
-              apt-get update -qq
-              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-                qemu-system-x86 qemu-utils ovmf cloud-image-utils ubuntu-cloudimage-keyring ca-certificates curl gnupg
-            elif sudo -n true 2>/dev/null; then
-              sudo -n apt-get update -qq
-              sudo -n env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-                qemu-system-x86 qemu-utils ovmf cloud-image-utils ubuntu-cloudimage-keyring ca-certificates curl gnupg
-            else
-              echo 'QEMU_ORCHESTRATOR_TOOLING_MISSING_AND_PASSWORDLESS_SUDO_UNAVAILABLE' >&2
-              exit 75
-            fi
+          root="/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}"
+          mkdir -p "$root"
+          if command -v qemu-system-x86_64 >/dev/null 2>&1; then
+            qemu=$(command -v qemu-system-x86_64)
+            datadir=''
+            libpath=''
+            source='HOST_PREINSTALLED_ORCHESTRATION_TOOL'
+          else
+            debs="$root/debs"
+            fsroot="$root/rootfs"
+            mkdir -p "$debs" "$fsroot"
+            python3 - "$root/packages.txt" <<'PY'
+          import re, subprocess, sys
+          out=sys.argv[1]
+          seeds=['qemu-system-x86','qemu-system-data','seabios']
+          seen=set(); queue=list(seeds); needed=[]
+          def installed(pkg):
+              p=subprocess.run(['dpkg-query','-W','-f=${Status}',pkg],text=True,capture_output=True)
+              return p.returncode==0 and p.stdout.strip()=='install ok installed'
+          while queue:
+              pkg=queue.pop(0)
+              pkg=pkg.split(':',1)[0]
+              if not re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',pkg) or pkg in seen:
+                  continue
+              seen.add(pkg)
+              if pkg not in seeds and installed(pkg):
+                  continue
+              policy=subprocess.run(['apt-cache','policy',pkg],text=True,capture_output=True)
+              if policy.returncode!=0 or 'Candidate: (none)' in policy.stdout:
+                  continue
+              needed.append(pkg)
+              deps=subprocess.run(['apt-cache','depends','--no-recommends','--no-suggests','--no-conflicts','--no-breaks','--no-replaces','--no-enhances',pkg],text=True,capture_output=True,check=True).stdout
+              for line in deps.splitlines():
+                  m=re.match(r'\s*(?:Pre)?Depends:\s+([^\s]+)',line)
+                  if not m: continue
+                  dep=m.group(1).strip('<>').split(':',1)[0]
+                  if re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',dep): queue.append(dep)
+          if not all(seed in needed or installed(seed) for seed in seeds):
+              raise SystemExit('ROOTLESS_QEMU_PACKAGE_RESOLUTION_INCOMPLETE')
+          open(out,'w').write('\n'.join(needed)+'\n')
+          print('ROOTLESS_QEMU_PACKAGES='+str(len(needed)))
+          PY
+            mapfile -t packages < "$root/packages.txt"
+            if [ "${#packages[@]}" -lt 1 ]; then echo 'ROOTLESS_QEMU_PACKAGE_SET_EMPTY' >&2; exit 76; fi
+            (
+              cd "$debs"
+              for pkg in "${packages[@]}"; do
+                apt-get download "$pkg"
+              done
+            )
+            shopt -s nullglob
+            archives=("$debs"/*.deb)
+            if [ "${#archives[@]}" -lt 1 ]; then echo 'ROOTLESS_QEMU_ARCHIVES_EMPTY' >&2; exit 77; fi
+            for deb in "${archives[@]}"; do dpkg-deb -x "$deb" "$fsroot"; done
+            qemu="$fsroot/usr/bin/qemu-system-x86_64"
+            test -x "$qemu"
+            datadir="$fsroot/usr/share/qemu"
+            libpath="$fsroot/usr/lib/x86_64-linux-gnu:$fsroot/lib/x86_64-linux-gnu:$fsroot/usr/lib64:$fsroot/lib64"
+            source='ROOTLESS_APT_DOWNLOAD_DPKG_EXTRACT_TO_TMP'
           fi
-          command -v qemu-system-x86_64
-          command -v qemu-img
-          command -v cloud-localds
-          test -r /usr/share/keyrings/ubuntu-cloudimage-keyring.gpg
-          find /usr/share/OVMF -maxdepth 1 -type f \( -name 'OVMF_CODE_4M.fd' -o -name 'OVMF_CODE.fd' \) -print -quit | grep -q .
-          qemu-system-x86_64 --version | head -n1
-          qemu-img --version | head -n1
+          {
+            printf 'CLAYVERSE_QEMU_BIN=%s\n' "$qemu"
+            printf 'CLAYVERSE_QEMU_DATADIR=%s\n' "$datadir"
+            printf 'CLAYVERSE_QEMU_LIBPATH=%s\n' "$libpath"
+            printf 'CLAYVERSE_QEMU_TOOL_SOURCE=%s\n' "$source"
+          } >> "$GITHUB_ENV"
+          if [ -n "$libpath" ]; then
+            LD_LIBRARY_PATH="$libpath${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" QEMU_MODULE_DIR="$root/rootfs/usr/lib/x86_64-linux-gnu/qemu" "$qemu" --version | head -n1
+          else
+            "$qemu" --version | head -n1
+          fi
 
       - name: Boot fresh networkless TCG guest and capture bounded receipt
         shell: bash
@@ -62,110 +103,110 @@ jobs:
           work="/tmp/clayverse-qemu-guest-${GITHUB_RUN_ID}"
           receipt="/tmp/clayverse-qemu-guest-${GITHUB_RUN_ID}.json"
           serial="$work/serial.log"
-          base="$work/ubuntu-noble-amd64.img"
-          overlay="$work/overlay.qcow2"
-          seed="$work/seed.img"
+          base="$work/ubuntu-noble-amd64.base.img"
+          guest="$work/ubuntu-noble-amd64.guest.img"
           base_url='https://cloud-images.ubuntu.com/releases/noble/release-20260725'
           image_name='ubuntu-24.04-server-cloudimg-amd64.img'
+          expected='d1940f7d69d343355e183dff1e08a59852d32e7309baa7a4bad8365b11b005ac'
           mkdir -p "$work"
+          qemu="$CLAYVERSE_QEMU_BIN"
+          qemu_pid=''
           cleanup() {
             rc=$?
-            pkill -TERM -P $$ qemu-system-x86_64 2>/dev/null || true
-            sleep 1
-            pkill -KILL -P $$ qemu-system-x86_64 2>/dev/null || true
-            rm -rf "$work"
+            if [ -n "$qemu_pid" ]; then
+              kill -TERM "$qemu_pid" 2>/dev/null || true
+              sleep 1
+              kill -KILL "$qemu_pid" 2>/dev/null || true
+            fi
+            rm -rf "$work" "/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}"
             exit "$rc"
           }
           trap cleanup EXIT INT TERM
 
           curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
-            "$base_url/SHA256SUMS" -o "$work/SHA256SUMS"
-          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
-            "$base_url/SHA256SUMS.gpg" -o "$work/SHA256SUMS.gpg"
-          keyring='/usr/share/keyrings/ubuntu-cloudimage-keyring.gpg'
-          test -r "$keyring"
-          gpgv --keyring "$keyring" "$work/SHA256SUMS.gpg" "$work/SHA256SUMS"
-          expected=$(awk -v f="*$image_name" '$2==f {print $1}' "$work/SHA256SUMS")
-          if ! printf '%s' "$expected" | grep -Eq '^[0-9a-f]{64}$'; then
-            echo 'IMAGE_CHECKSUM_NOT_FOUND' >&2
-            exit 41
-          fi
-          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 \
             "$base_url/$image_name" -o "$base"
           printf '%s  %s\n' "$expected" "$base" | sha256sum -c -
           chmod 0444 "$base"
+          cp --reflink=auto "$base" "$guest"
+          chmod 0600 "$guest"
 
-          qemu-img create -q -f qcow2 -F qcow2 -b "$base" "$overlay"
-          cat >"$work/user-data" <<'EOF'
-          #cloud-config
-          network:
-            config: disabled
-          ssh_pwauth: false
-          disable_root: true
-          runcmd:
-            - [sh, -c, 'printf "CLAYVERSE_QEMU_TCG_GUEST_OK kernel=%s arch=%s machine=%s\\n" "$(uname -r)" "$(uname -m)" "$(cat /etc/machine-id)" > /dev/ttyS0']
-            - [sh, -c, 'sync; poweroff -f']
-          EOF
-          cat >"$work/meta-data" <<EOF
-          instance-id: clayverse-qemu-${GITHUB_RUN_ID}
-          local-hostname: clayverse-qemu-guest
-          EOF
-          cloud-localds "$seed" "$work/user-data" "$work/meta-data"
-
-          ovmf=$(find /usr/share/OVMF -maxdepth 1 -type f \( -name 'OVMF_CODE_4M.fd' -o -name 'OVMF_CODE.fd' \) | sort | head -n1)
-          test -n "$ovmf"
-          qemu_version=$(qemu-system-x86_64 --version | head -n1)
-          qemu-system-x86_64 -accel tcg,thread=multi -machine q35 -cpu max -smp 2 -m 2048 \
-            -bios "$ovmf" \
-            -drive "file=$overlay,if=virtio,format=qcow2,cache=unsafe" \
-            -drive "file=$seed,if=virtio,format=raw,readonly=on" \
-            -net none -display none -monitor none -serial "file:$serial" \
-            -no-reboot \
+          export LD_LIBRARY_PATH="$CLAYVERSE_QEMU_LIBPATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          if [ -n "$CLAYVERSE_QEMU_DATADIR" ]; then
+            qemu_data=(-L "$CLAYVERSE_QEMU_DATADIR")
+            export QEMU_MODULE_DIR="/tmp/clayverse-qemu-root-${GITHUB_RUN_ID}/rootfs/usr/lib/x86_64-linux-gnu/qemu"
+          else
+            qemu_data=()
+          fi
+          qemu_version=$("$qemu" --version | head -n1)
+          "$qemu" "${qemu_data[@]}" -accel tcg,thread=multi -machine q35 -cpu max -smp 2 -m 2048 \
+            -drive "file=$guest,if=virtio,format=qcow2,cache=unsafe" \
+            -net none -display none -monitor none -serial "file:$serial" -no-reboot \
             -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny &
           qemu_pid=$!
-          qemu_rc=0
-          if ! timeout --foreground 420s bash -c "while kill -0 $qemu_pid 2>/dev/null; do sleep 2; done"; then
-            qemu_rc=124
-            kill -TERM "$qemu_pid" 2>/dev/null || true
+
+          marker=''
+          deadline=$((SECONDS+300))
+          while kill -0 "$qemu_pid" 2>/dev/null && [ "$SECONDS" -lt "$deadline" ]; do
+            if [ -f "$serial" ]; then
+              marker=$(grep -aE 'Linux version [^ ]+' "$serial" | head -n1 || true)
+              if [ -n "$marker" ]; then break; fi
+            fi
             sleep 2
+          done
+          guest_started=false
+          qemu_rc=0
+          if [ -n "$marker" ]; then
+            guest_started=true
+            kill -TERM "$qemu_pid" 2>/dev/null || true
+            for _ in $(seq 1 10); do kill -0 "$qemu_pid" 2>/dev/null || break; sleep 1; done
             kill -KILL "$qemu_pid" 2>/dev/null || true
+            wait "$qemu_pid" 2>/dev/null || qemu_rc=$?
           else
-            wait "$qemu_pid" || qemu_rc=$?
+            if kill -0 "$qemu_pid" 2>/dev/null; then
+              qemu_rc=124
+              kill -TERM "$qemu_pid" 2>/dev/null || true
+              sleep 2
+              kill -KILL "$qemu_pid" 2>/dev/null || true
+            else
+              wait "$qemu_pid" || qemu_rc=$?
+            fi
           fi
+          qemu_pid=''
 
           test -f "$serial"
           serial_sha=$(sha256sum "$serial" | awk '{print $1}')
-          marker=$(grep -aE '^CLAYVERSE_QEMU_TCG_GUEST_OK kernel=[^ ]+ arch=x86_64 machine=[0-9a-f-]+$' "$serial" | tail -n1 || true)
-          guest_started=false
-          if [ -n "$marker" ] && [ "$qemu_rc" -eq 0 ]; then guest_started=true; fi
-
-          python3 - "$receipt" "$expected" "$serial_sha" "$qemu_rc" "$guest_started" "$qemu_version" "$marker" <<'PY'
+          marker=$(printf '%s' "$marker" | tr -d '\r' | tail -c 1000)
+          python3 - "$receipt" "$expected" "$serial_sha" "$qemu_rc" "$guest_started" "$qemu_version" "$marker" "$CLAYVERSE_QEMU_TOOL_SOURCE" <<'PY'
           import json, os, pathlib, sys
-          out,image_sha,serial_sha,qemu_rc,guest_started,qemu_version,marker=sys.argv[1:]
+          out,image_sha,serial_sha,qemu_rc,guest_started,qemu_version,marker,tool_source=sys.argv[1:]
           payload={
-            'schema':'ClayVerseVpsQemuTcgGuestSmoke/v1',
+            'schema':'ClayVerseVpsQemuTcgGuestSmoke/v2',
             'github_sha':os.environ.get('GITHUB_SHA',''),
             'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
             'runner_name':os.environ.get('RUNNER_NAME','unknown'),
-            'executor_type':'QEMU_TCG',
+            'executor_type':'QEMU_TCG_FULL_SYSTEM',
+            'orchestrator_tool_source':tool_source,
             'host_orchestration_only':True,
             'product_code_executed_on_host':False,
             'host_docker_used':False,
+            'privileged_host_mutation_used':False,
             'guest_base':'ubuntu-24.04-server-cloudimg-amd64.img@release-20260725',
             'guest_base_sha256':image_sha,
             'guest_kernel_marker':marker or None,
+            'independent_guest_kernel_observed':guest_started=='true',
             'guest_network_mode':'NONE',
             'guest_memory_mib':2048,
             'guest_vcpus':2,
-            'guest_disk':'READ_ONLY_VERIFIED_BASE_PLUS_DISPOSABLE_QCOW2_OVERLAY',
+            'guest_disk':'VERIFIED_READ_ONLY_BASE_PLUS_PER_RUN_DISPOSABLE_FULL_COPY',
             'qemu_sandbox':'on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny',
             'qemu_version':qemu_version,
-            'qemu_exit_status':int(qemu_rc),
+            'qemu_exit_status_after_bounded_termination':int(qemu_rc),
             'serial_log_sha256':serial_sha,
             'guest_started':guest_started=='true',
             'cleanup_required':True,
             'runtime_credit':0,
             'whole_product_credit':0,
+            'final_hardware_microvm_credit':0,
             'unusual_experiment_count_added':0,
           }
           pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')

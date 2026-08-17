@@ -6,83 +6,32 @@
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "scope": "Initial Mistral token/API inference boundary required by the 23:03 final Sandbox test-of-tests owner directive",
+  "scope": "Initial Mistral token/API inference boundary lane",
   "source_binding": {
     "research_main_at_branch": "97a5125abe0e74a510fd5083f59d363e67529905",
     "branch": "gpt56sol/go-2259-mistral-inference-boundary-20260817",
-    "adapter_commit": "bd928b714c59dd5c3386a1b68540baf6a61955e0",
-    "engine_provenance_commit": "cad4e7812354d12c49ac9b2eb826adc90e6fb6dd",
-    "regression_candidate_commit": "511111b7c34dd7e66d46373c763f77fb1279eed8"
+    "head_before_supersession_receipt": "f761d386a3861d3d5adeed8971151bb7b34b96ae",
+    "pr": 659
   },
-  "owner_authority": {
-    "final_test_of_tests": "VERCEL_SANDBOX_FIRECRACKER_MICROVM -> DOCKER_OCI -> EXACT_CLAYVERSE_IMAGE -> RUNTIME_VAULT_SECRET -> TRANSIENT_MISTRAL_API_KEY -> FULL_CAUSAL_AND_RECOVERY_PATH",
-    "mistral_mandatory_for_final_test": true,
-    "mistral_role": "INFERENCE_ONLY_NOT_STATE_MEMORY_IDENTITY_OR_EFFECT_AUTHORITY",
-    "github_read_token_forwarding": "ALLOWED_IN_AUTHORIZED_DISPOSABLE_VERCEL_SANDBOX_UNDER_LEAST_PRIVILEGE_NO_LOGGING_NO_PERSISTENCE"
+  "initial_classification": "NEW_NON_DUPLICATE_SOURCE_LANE_AT_BRANCH_CREATION",
+  "live_reentry": {
+    "observed_new_main": "be5ad93a38a2db44e1ff8ec766e556e773643c06",
+    "parallel_mistral_adapter_present": true,
+    "parallel_pre_effect_reingest_present": true,
+    "classification": "SUPERSEDED_BY_STRONGER_CURRENT_MAIN",
+    "reason": "Current main canonicalizes the provider response into UnifiedDB before any effect reaches EffectGate. This branch inherited older assistant-after-effect ordering and must not be merged over the stronger causal invariant.",
+    "pr_state": "CLOSED_UNMERGED"
   },
-  "nonduplication": {
-    "mistral_source_hits_on_current_base": 0,
-    "mistral_open_prs_observed": 0,
-    "mistral_named_branches_observed": 0,
-    "classification": "NEW_NON_DUPLICATE_PRODUCT_IMPLEMENTATION_LANE_AT_BRANCH_CREATION"
-  },
-  "implementation_candidate": {
-    "adapter": "MistralAPIInference",
-    "canonical_integration_point": "existing ClayVerseEngine inference adapter boundary",
-    "endpoint": "https://api.mistral.ai/v1/chat/completions",
-    "runtime_secret_env": "MISTRAL_API_KEY",
-    "secret_read_time": "PER_INFERENCE_CALL_ONLY",
-    "response_mode": "JSON_OBJECT",
-    "effect_validation": "EXISTING_INDEPENDENT_PARSE_CLAUDE_DECISION_PAYLOAD",
-    "allowed_model_effect_intents": ["entityos.exec", "state.noop"],
-    "forbidden_generic_host_effect": "process.exec",
-    "assistant_provenance": "SANITIZED_SCALAR_PROVIDER_METADATA_AFTER_REASONING_ONLY",
-    "secret_values_in_provenance": false,
-    "http_error_body_policy": "HASH_AND_LENGTH_ONLY",
-    "response_envelope_max_bytes": 1000000
-  },
-  "regression_candidate": {
-    "file": "the artefact/tests/test_mistral_inference.py",
-    "cases": 6,
-    "covers": [
-      "missing token blocks before network",
-      "token stays Authorization-header-only and absent from request JSON/provenance",
-      "JSON-mode request contract",
-      "forbidden process.exec rejected before EffectGate",
-      "HTTP error never echoes token or provider body",
-      "response envelope bounded",
-      "engine provenance secret-key filtering"
-    ]
-  },
-  "external_primary_basis": {
-    "provider": "Mistral official API documentation",
-    "observed_contract": "POST /v1/chat/completions supports response_format json_object; JSON mode requires an explicit JSON instruction in the prompt",
-    "classification": "DEPENDENCY_INTERFACE_BASIS_NOT_PRODUCT_RUNTIME_EVIDENCE"
+  "retained_finding": {
+    "current_main_test_contract_mismatch": "The be5ad93 Mistral adapter requires response id, model and finish_reason=stop, while the current test fixture observed during this go omits those envelope fields. Treat as source mismatch candidate until isolated execution.",
+    "next_nonduplicate_lane": "Exact-current Mistral regression repair/adversarial fence only; do not reimplement the provider path."
   },
   "execution_evidence": {
-    "deterministic_tests_executed": false,
+    "tests_executed_for_superseded_branch": false,
     "real_mistral_request_executed": false,
-    "vault_secret_acquired": false,
-    "exact_oci_mistral_run_executed": false,
-    "tier2_recovery_mistral_rerun_executed": false,
-    "test_pass_claimed": false,
-    "source_runtime_credit_added": 0,
-    "oci_runtime_credit_added": 0,
-    "whole_product_credit_added": 0,
-    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+    "runtime_credit_added": 0,
+    "whole_product_credit_added": 0
   },
-  "known_remaining_gates": [
-    "admit/rebase candidate onto exact then-current main after review",
-    "wire the accepted final in-image test/runtime selection without creating a second state or chat authority",
-    "secure Vault/secret-store acquisition and transient process injection",
-    "verify Vercel Sandbox proxy CA/TLS trust path inside exact Docker image",
-    "enforce reviewed narrow network egress",
-    "run real Mistral cognition through canonical UnifiedDB turn and re-ingest before effects",
-    "run bounded EffectGate/EntityOS round-trip",
-    "destroy/recreate full Sandbox appliance from same image digest and reacquire secret",
-    "prove stale-result rejection, no blind effect replay and token non-persistence",
-    "repeat real Mistral cognition after recovery"
-  ],
   "latest_vercel_outer_evidence": {
     "deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
     "sandbox_admission": "PASS_CREATED",
@@ -95,15 +44,8 @@
   },
   "unusual_experiment": {
     "count": 0,
-    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "reason": "This exact user go exposes no shared immutable request/turn id and only minute-precision immutable message time, so the atomic experiment lease cannot be uniquely reproduced."
-  },
-  "prohibitions_observed": {
-    "together_api_used": false,
-    "secret_exposed": false,
-    "vps_or_self_hosted_or_production_testing": false,
-    "paid_or_final_training_started": false
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
   },
   "acceptance": "IN_PROGRESS",
-  "next_high_information_runtime_step": "Make the scoped read-only GITHUB_READ_TOKEN available under the new Vercel forwarding directive, refresh/bind the exact current Research + admitted source candidates + EntityOS bytes, execute deterministic regressions in the disposable Sandbox, build the exact OCI image, then proceed to real runtime Vault Mistral cognition before and after full Sandbox recreation."
+  "next_high_information_runtime_step": "Repair only the exact-current Mistral regression mismatch, retain current main's pre-effect re-ingest implementation, then execute exact-current deterministic gates in the authorized Vercel Sandbox once the scoped read-only GitHub credential is securely available under the owner forwarding directive."
 }

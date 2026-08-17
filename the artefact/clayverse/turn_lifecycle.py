@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import json
 import re
@@ -74,36 +75,51 @@ class TurnLifecycle:
                     item["content"] = str(item["content"])[:20_000] + "…[context-truncated]"
         return packed
 
-    def begin(self, prompt: str, resources: list[str] | None = None) -> dict:
+    @contextlib.contextmanager
+    def begin_admission(self, prompt: str, resources: list[str] | None = None, *, claude_session_id: str | None = None):
+        """Open a user turn but commit only after the caller accepts its context.
+
+        UserPromptSubmit can reject a prompt. Keeping the SQLite transaction open
+        across the caller's bounded-context construction ensures a rejected hook does
+        not leave a turn, memory extraction, workspace episode or active-turn record
+        that Claude never actually received.
+        """
         prompt = str(prompt)
         if not prompt or len(prompt) > 100_000:
             raise ValueError("invalid prompt")
+        if claude_session_id is not None and (not isinstance(claude_session_id, str) or not claude_session_id or len(claude_session_id) > 2048):
+            raise ValueError("invalid Claude session id")
         if self.active() is not None:
             self.abort("previous_turn_interrupted_before_next_prompt")
         resource_refs = sorted(set(resources or infer_resource_refs(prompt)))[:50]
-        now = time.time()
         turn_id = str(uuid.uuid4())
         episode_id = str(uuid.uuid4())
         causal_id = str(uuid.uuid4())
-        generation = self.db.session_generation(self.session_id)
-        salience = min(1.0, 0.15 + 0.03 * len(resource_refs) + min(len(prompt), 1200) / 2400)
         alternatives = [
             {"id": "respond", "kind": "reason"},
             {"id": "request_effect", "kind": "effect_intent"},
             {"id": "defer_effect", "kind": "no_effect"},
         ]
         with self.db.tx() as db:
+            if self.active() is not None:
+                raise TurnLifecycleError("active turn appeared during prompt admission")
+            generation = self.db.session_generation(self.session_id)
+            now = time.time()
+            salience = min(1.0, 0.15 + 0.03 * len(resource_refs) + min(len(prompt), 1200) / 2400)
+            provenance = {
+                "source": "claude-hook:UserPromptSubmit",
+                "session_generation": generation,
+                "causal_id": causal_id,
+            }
+            if claude_session_id is not None:
+                provenance["claude_session_id"] = claude_session_id
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
             ).fetchone()[0])
             db.execute(
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (turn_id, self.session_id, self.user_id, ordinal, now, "user", prompt,
-                 json.dumps(resource_refs), "[]", json.dumps({
-                     "source": "claude-hook:UserPromptSubmit",
-                     "session_generation": generation,
-                     "causal_id": causal_id,
-                 }, sort_keys=True)),
+                 json.dumps(resource_refs), "[]", json.dumps(provenance, sort_keys=True)),
             )
             db.execute(
                 "INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",
@@ -115,20 +131,24 @@ class TurnLifecycle:
                  json.dumps(resource_refs), None, None, 0, now),
             )
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
-        self.memory.extract_explicit(turn_id, self.user_id, prompt)
-        self.memory.compact(self.session_id)
-        world = self._bound_world(self.world.assemble(self.session_id, resource_refs))
-        return {
-            "user_id": self.user_id,
-            "session_id": self.session_id,
-            "turn_id": turn_id,
-            "episode_id": episode_id,
-            "causal_id": causal_id,
-            "generation": generation,
-            "resources": resource_refs,
-            "workspace": {"salience": salience, "alternatives": alternatives},
-            "context": world,
-        }
+            self.memory.extract_explicit(turn_id, self.user_id, prompt)
+            self.memory.compact(self.session_id)
+            world = self._bound_world(self.world.assemble(self.session_id, resource_refs))
+            yield {
+                "user_id": self.user_id,
+                "session_id": self.session_id,
+                "turn_id": turn_id,
+                "episode_id": episode_id,
+                "causal_id": causal_id,
+                "generation": generation,
+                "resources": resource_refs,
+                "workspace": {"salience": salience, "alternatives": alternatives},
+                "context": world,
+            }
+
+    def begin(self, prompt: str, resources: list[str] | None = None) -> dict:
+        with self.begin_admission(prompt, resources) as result:
+            return result
 
     def request_effect(self, capability: str, target: str, argv: list[str] | None = None) -> dict:
         row = self.active()

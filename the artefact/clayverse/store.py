@@ -27,6 +27,29 @@ CREATE INDEX IF NOT EXISTS idx_retrieval_session_ts ON retrieval_episodes(sessio
 CREATE TABLE IF NOT EXISTS retrieval_feedback(receipt_id TEXT PRIMARY KEY,retrieval_id TEXT NOT NULL REFERENCES retrieval_episodes(retrieval_id) ON DELETE CASCADE,causal_id TEXT NOT NULL,generation INTEGER NOT NULL,credit REAL NOT NULL,signal_class TEXT NOT NULL,ts REAL NOT NULL);
 '''
 
+CANONICAL_STATE_HASH_TABLES = (
+    "meta","users","sessions","turns","durable_memory","workspace_episodes",
+    "effects","causal_episodes","active_turns","leases","retrieval_policy_state",
+    "retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback",
+)
+
+
+def canonical_state_hash(conn: sqlite3.Connection) -> str:
+    """Hash exactly the canonical state covered by a checkpoint.
+
+    Checkpoint rows and rebuildable graph projections are deliberately excluded.
+    Callers operating on a copied/read-only SQLite database use this same function,
+    so snapshot integrity cannot silently diverge from checkpoint semantics.
+    """
+    payload=[]
+    for table in CANONICAL_STATE_HASH_TABLES:
+        cursor=conn.execute(f"SELECT * FROM {table} ORDER BY 1")
+        columns=[str(description[0]) for description in cursor.description]
+        rows=[{column: row[index] for index,column in enumerate(columns)} for row in cursor.fetchall()]
+        payload.append((table,rows))
+    return hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+
+
 @dataclass(frozen=True)
 class Lease:
     resource: str; holder: str; generation: int; expires_at: float; nonce: str
@@ -125,6 +148,4 @@ class UnifiedDB:
     def record_effect(self,episode_id,user_id,capability,target,requested_generation,status,argv=None,outcome=None):
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
-        payload=[]
-        for table in ("meta","users","sessions","turns","durable_memory","workspace_episodes","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
-        digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest
+        digest=canonical_state_hash(self.db); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

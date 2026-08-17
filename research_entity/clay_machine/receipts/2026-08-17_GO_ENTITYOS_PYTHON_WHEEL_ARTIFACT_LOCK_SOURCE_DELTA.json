@@ -1,0 +1,79 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_entityos_pr": 787,
+  "execution_classification": "PRIMARY_SOURCE_RESEARCH_PLUS_PRODUCT_SOURCE_DELTA_ONLY",
+  "product_deltas": [
+    {
+      "commit": "3aeef6f1a1484984746560c15c67ed8ef4fac448",
+      "path": "mcp/vercel-sandbox-mcp/fixtures/entityos-python-artifact-lock-linux-x86_64-py313.json",
+      "claim": "platform-scoped exact single-wheel filename plus SHA-256 candidate authority for the six build and ten full-pytest distributions"
+    },
+    {
+      "commit": "1ba6e1ef0003c196cbb64faaa14e4ea5964a9aee",
+      "path": "tests/test_entityos_python_artifact_lock.py",
+      "claim": "deterministic source regression binding lock scope, exact distribution sets, wheel-only shape, fail-closed policy and zero-new-experiment accounting to the existing requirements closure"
+    }
+  ],
+  "artifact_lock_scope": {
+    "os": "linux",
+    "arch": "x86_64",
+    "libc": "glibc",
+    "python_implementation": "CPython",
+    "python_major_minor": "3.13",
+    "index_authority": "https://pypi.org/simple",
+    "build_distribution_count": 6,
+    "full_pytest_distribution_count": 10,
+    "single_artifact_per_distribution": true,
+    "sdist_policy": "FORBIDDEN"
+  },
+  "primary_source_basis": {
+    "uv": "Official uv CLI/settings documentation: --require-hashes requires a matching hash for every exact requirement and hash-checking is all-or-nothing; --only-binary :all: / --no-build rejects source-distribution builds for registry dependencies; --default-index can explicitly bind the registry authority.",
+    "pypi": "Official PyPI release JSON metadata supplied exact wheel filenames and SHA-256 digests for the ten locked distributions.",
+    "important_nonclaim": "The PyPI metadata and source lock do not prove which artifact an EntityOS Sandbox actually installed. Promotion requires hash-enforced provisioning plus exact-head Vercel Sandbox receipt binding."
+  },
+  "architecture_outcome": {
+    "status": "RETAIN_SOURCE_LOCK_PENDING_RUNTIME_ENFORCEMENT",
+    "preferred_mechanism": "Generate or validate an exact single-hash requirements surface from EntityOSPythonArtifactLock/v1, provision with uv hash-checking and wheel-only policy against the explicitly admitted index, then verify the installed distribution set and bind both artifact-lock digest and installed-set receipt into the EntityOS batch result.",
+    "counterhypothesis": "A committed hash manifest can become decorative provenance if the installer does not consume it or if ambient index configuration can select an unbound source.",
+    "falsifier": "Wrong hash, missing hash, source-distribution substitution, ambient alternate index, extra distribution and lock/requirements disagreement must all fail before EntityOS build/test promotion."
+  },
+  "vercel_observation": {
+    "exact_product_delta_sandbox_started": false,
+    "exact_product_delta_executable_status": "UNVERIFIED",
+    "latest_separate_ready_deployment_observed": "dpl_8KkWa1Rnib7mUPjYtsoeHhS1Pq3r",
+    "latest_separate_ready_source_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
+    "latest_separate_ready_branch": "chatgpt/go-attestation-authority-regression-20260817-0845",
+    "interpretation": "A READY deployment on another branch is neither proof that the current #787 artifact-lock head executed nor EntityOS Sandbox evidence. No deployment newer than that READY observation had been returned for commits 3aeef6f1 or 1ba6e1ef at receipt time."
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by_prior_evidence": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_steps": [
+    "wire the active #787 build and full-pytest provisioning to consume the artifact lock with explicit hash-checking, wheel-only and index-authority enforcement without creating a second EntityOS lane",
+    "run deterministic fail-closed controls for wrong/missing hash, sdist substitution, alternate index and artifact-lock versus requirements disagreement",
+    "on an actually-started exact-head Vercel Sandbox, capture artifact-lock digest, exact installed-set receipt, full pytest with zero skips and new_unusual_experiment_count=0",
+    "if the lock-enforced candidate reaches the one-file path, perform the existing Git-free attested twin EntityOS build plus runtime/self-test/no-host-Python/relocation and exact artifact digest gates",
+    "do not infer whole EntityOS acceptance from this package-authority gate"
+  ],
+  "claims": {
+    "product_source_delta_committed": true,
+    "source_regression_committed": true,
+    "artifact_hashes_primary_source_bound": true,
+    "installer_consumes_artifact_lock": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

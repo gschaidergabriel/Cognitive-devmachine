@@ -1,0 +1,65 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_write": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "product_endpoint": "ClayVerse OCI image from the artefact/",
+  "status": "REPAIRED_IN_INTEGRATION_CANDIDATE_BLOCKED_ON_ACCEPTED_EXECUTION",
+  "integration": {
+    "pr": 402,
+    "branch": "go/integration-microclay-current-20260817-1315",
+    "observed_head": "71c30339cba11ab8dcf8fd686006b4d77ca08bc3",
+    "turn_lifecycle_blob": "e4943be66d484e9e52389e43e09e95cef2469bac",
+    "main_promoted": false
+  },
+  "finding": {
+    "contract": "TurnLifecycle._bound_world must never silently return serialized world context larger than max_chars; it must satisfy the bound or fail closed.",
+    "pre_repair_observation": {
+      "case": "four own_recent items with 5000-character content each, no durable/cross-session payload, compact scalar retrieval receipt, max_chars=1000",
+      "returned_chars": 20319,
+      "result": "CONTRACT_VIOLATION"
+    },
+    "repair": "After existing safe trimming, if serialized size still exceeds max_chars, raise TurnLifecycleError instead of returning oversized context.",
+    "regression_test": "the artefact/tests/test_context_bound_fail_closed.py",
+    "regression_commit": "6ed4c5902fd35ce0b6557b7f6b0eee39a751d837",
+    "parallel_fusion_note": "A concurrent worker landed the same minimal fail-closed implementation on the retained PR branch before this worker's stale write; the stale write was rejected with HTTP 409 and was not forced or duplicated."
+  },
+  "unusual_experiment": {
+    "name": "BOUND_WORLD_MINIMUM_OVERFLOW",
+    "macrocycle_accounting": "1/1_CONSUMED",
+    "execution_surface": "isolated OpenAI Python runtime; source-mechanism discriminator only",
+    "pre_repair_result": "CONTRACT_VIOLATION_20319_GT_1000",
+    "post_repair_same_intervention": "REGRESSION_ONLY_FAIL_CLOSED",
+    "post_repair_error": "world context exceeds bound after safe trimming",
+    "whole_product_evidence": false
+  },
+  "execution": {
+    "vercel_connector_direct_sandbox_start_exec_available": false,
+    "latest_github_hosted_attempt": {
+      "source_head": "71c30339cba11ab8dcf8fd686006b4d77ca08bc3",
+      "workflow_run": 32001683130,
+      "job": 95303084565,
+      "conclusion": "failure_before_visible_step_execution",
+      "steps": null
+    },
+    "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_NOT_PRODUCT_TEST_FAILURE",
+    "accepted_exact_head_test_pass_claimed": false,
+    "whole_clayverse_pass": false
+  },
+  "coordination": {
+    "pr_head_is_one_commit_behind_current_main_receipt": true,
+    "pr_mergeability_observed": false,
+    "action": "DO_NOT_FORCE_MERGE; rebase/fuse from fresh main before accepted execution and promotion"
+  },
+  "next_exact_gate": "Refresh main and PR head, fuse/rebase without semantic duplication, then on an actually-started authorized isolated execution surface run the focused MicroClay integration regressions including context hard-bound, replay full identity, packing parity, receipt context, credit authority and adjacent restart/generation/current-turn-echo/UNKNOWN invariants. Only after green exact-source execution proceed to broader ClayVerse suite and exact OCI build/runtime acceptance.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_vps_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

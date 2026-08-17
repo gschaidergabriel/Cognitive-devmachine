@@ -1,0 +1,109 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "observed_date": "2026-08-17",
+  "scope": "MISTRAL_FINAL_ACCEPTANCE_INFERENCE_BOUNDARY_SOURCE_MECHANISM_ONLY",
+  "classification": "FOCUSED_EXACT_BLOB_MECHANISM_SUPPORTED_FULL_RUNTIME_UNOBSERVED",
+  "canonical_product": "ClayVerse single-container",
+  "owner_authority": {
+    "final_test_directive": "research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md",
+    "github_token_forwarding_directive": "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md",
+    "mistral_role": "MANDATORY_TOKEN_API_INFERENCE_PROVIDER_FOR_FINAL_TEST_OF_TESTS_NOT_STATE_IDENTITY_MEMORY_EFFECT_OR_TRUTH_AUTHORITY"
+  },
+  "source_lane": {
+    "pr": 661,
+    "branch": "gpt56sol/go-mistral-final-inference-20260817-2311",
+    "branch_head_after_dedup": "14d282c2faefd70e6162ea59d91b2dfb4115942e",
+    "current_main_observed_before_receipt": "6b2a68f02d5e25879dac40e4ebf7067aee9d2f57",
+    "compare_status": "DIVERGED",
+    "ahead_by": 7,
+    "behind_by": 37,
+    "promotion_status": "DRAFT_REJOIN_REQUIRED_BEFORE_PROMOTION"
+  },
+  "exact_exercised_blobs": {
+    "the artefact/clayverse/mistral_inference.py": "dcdf9ab1ac351276abc406a97c711c50892e1fb3",
+    "the artefact/tests/test_mistral_inference_boundary.py": "44d3965be9151836350e77cb7d0f67363ddc803f",
+    "the artefact/tests/test_mistral_final_model_identity.py": "dcf40e6902b143b3adfac246c27e16f81e669617"
+  },
+  "provider_contract_basis": {
+    "source": "official Mistral documentation refreshed 2026-08-17",
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "authentication": "Authorization Bearer MISTRAL_API_KEY",
+    "fixed_model_example_for_final_acceptance": "mistral-small-2603",
+    "fixed_model_source": "Mistral Small 4 v26.03 model card",
+    "final_acceptance_rule": "moving *-latest aliases fail closed when CLAYVERSE_FINAL_ACCEPTANCE=1"
+  },
+  "security_contract": [
+    "exact HTTPS api.mistral.ai /v1/chat/completions boundary; redirects disabled",
+    "API key is visible-ASCII bounded authentication material held only in private memory and Authorization header by this module",
+    "secret in world/observation/provider text fails closed",
+    "provider HTTP/transport exceptions are collapsed outside the caught exception context so provider-controlled secret/body material is not retained in the ClayVerse exception chain",
+    "request contains no tools or tool_choice and response hard-codes effect=null",
+    "UnifiedDB remains canonical authority; Mistral owns no PTY/filesystem/EffectGate/EntityOS/capability/truth authority",
+    "final acceptance rejects moving *-latest model aliases and requires a fixed Mistral model identity"
+  ],
+  "negative_results_preserved": [
+    {
+      "class": "HARNESS_IMPORT_PATH_FAILURE",
+      "detail": "first isolated pytest attempt did not collect tests because PYTHONPATH was omitted; classified as harness failure, not Mistral test failure"
+    },
+    {
+      "class": "SOURCE_SECURITY_FAILURE",
+      "detail": "initial exercised boundary produced 8 PASS / 2 FAIL: explicit empty model silently fell back to default, and HTTPError remained reachable through exception __context__ despite from None"
+    },
+    {
+      "class": "GITHUB_ACTIONS_PRE_STEP_FAILURE",
+      "run_id": 32045096937,
+      "job_id": 95431117365,
+      "detail": "identity-guard workflow concluded failure with zero visible steps; no Mistral/product test failure inferred"
+    }
+  ],
+  "repairs": [
+    "explicit None checks prevent empty model/endpoint from silently falling back",
+    "HTTP and transport exception data are reduced to bounded status/boolean before a new ClayVerse exception is raised outside the except frame",
+    "final acceptance mode is strict 0/1 or bool and rejects *-latest model aliases",
+    "duplicate final-model test file was removed; unique endpoint/transport fences were fused into the existing canonical final-model test"
+  ],
+  "isolated_evidence": {
+    "environment": "isolated non-production OpenAI tool container",
+    "module_py_compile": "PASS",
+    "boundary_suite": "10 PASS, 1 engine integration test deliberately deselected, 0 FAIL in 0.03s",
+    "final_model_identity_suite": "7 PASS, 0 FAIL in 0.05s",
+    "blob_identity_verified_with_git_hash_object": true,
+    "engine_reingest_integration_on_current_branch": "UNOBSERVED",
+    "live_mistral_network_call": "UNOBSERVED",
+    "vault_secret_acquisition": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "vercel_firecracker_final_test": "UNOBSERVED"
+  },
+  "runtime_credit": {
+    "mistral_live_inference_credit": 0,
+    "engine_integration_credit": 0,
+    "oci_runtime_credit": 0,
+    "final_sandbox_test_of_tests_credit": 0,
+    "whole_product_pass": false
+  },
+  "remaining_fusion_obligations": [
+    "rejoin PR 661 onto exact current main once immediately before promotion/execution",
+    "wire canonical runtime provider selection without creating a second turn/state/effect authority",
+    "bind provider/model/response provenance into the canonical assistant-turn path without a second ledger",
+    "prove runtime/Vault secret acquisition and bounded secret lifetime; reacquire after full appliance recreation",
+    "execute the currently deselected engine re-ingestion/no-secret-persistence integration against exact current repository bytes",
+    "run full exact-current deterministic regression suite",
+    "execute mandatory Vercel Firecracker -> Docker/OCI -> exact accepted ClayVerse digest -> Vault Mistral -> canonical causal re-entry -> Tier-1 -> Tier-2 -> Mistral-after-recovery test-of-tests"
+  ],
+  "current_external_execution_blocker": "Connected Vercel surface exposes inspection/documentation but no direct secret mutation or Sandbox lifecycle/exec action. Final execution therefore requires an approved mechanism that makes scoped GITHUB_READ_TOKEN and Vault-backed MISTRAL_API_KEY available/injectable to the retained Vercel run under current owner directives.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The shared go trigger exposes minute-precision message time but no immutable shared request/turn id for the global experiment lease.",
+    "count_added": 0
+  },
+  "non_claims": [
+    "No real Mistral credential was used or exposed.",
+    "No live Mistral API request was credited.",
+    "No current exact ClayVerse OCI image was built or started by this Mistral lane.",
+    "No Vercel final test-of-tests, Tier-1/Tier-2 recovery or whole-product PASS is claimed.",
+    "No VPS/self-hosted/production testing, Together API, or owner-gated paid/final training was used."
+  ]
+}

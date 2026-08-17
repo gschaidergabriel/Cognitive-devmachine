@@ -285,6 +285,10 @@ class MethodMemoryManager:
     ) -> str:
         if kind not in METHOD_KINDS:
             raise MethodMemoryValidationError("kind is not method memory")
+        if kind in PROMOTABLE_KINDS:
+            raise MethodMemoryValidationError(
+                "framework/heuristic admission requires the dedicated promotion lifecycle transaction"
+            )
         _str(subject, "subject", max_len=1024)
         canonical_provenance = _validate_provenance(
             provenance,

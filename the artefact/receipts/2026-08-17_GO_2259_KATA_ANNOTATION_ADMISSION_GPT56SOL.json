@@ -7,7 +7,7 @@
   "retained_pr": 643,
   "classification": "MECHANISM_SUPPORTED_EXACT_CURRENT_TWO_BLOB_SOURCE_CHECK_K8S_UNEXECUTED",
   "novelty": "ORTHOGONAL_MICROVM_ADMISSION_FENCE_FUSED_INTO_RETAINED_LANE",
-  "observed_gap": "The canonical MicroVM contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation and forbids RuntimeClass drift to host-kernel fallback. The retained source policy also had a documented CREATE residual: oldObject is null on CREATE, so a mutator rewriting every current-object ClayVerse marker could make current/previous identity tests vacuous.",
+  "observed_gap": "The canonical Kata deployment contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation and forbids RuntimeClass drift to host-kernel fallback. The retained source policy also had a documented CREATE residual: oldObject is null on CREATE, so a mutator rewriting every current-object ClayVerse marker could make current/previous identity tests vacuous.",
   "delta": [
     "retain ValidatingAdmissionPolicy failurePolicy=Fail for Pod CREATE/UPDATE and selectorless Deny binding",
     "retain current ClayVerse identity by canonical app label or clayverse container name",
@@ -53,7 +53,7 @@
   "adversarial_review": {
     "counter_reality": "On CREATE, oldObject is null. If a mutating admission component rewrites both app=clayverse and the clayverse container name before validation, a policy based only on current/previous Pod-object markers can stop recognizing the canonical request and admit a RuntimeClass or Kata-annotation mutation.",
     "repair": "requestClayVerse is derived from AdmissionRequest request.name == clayverse-0, independently of current Pod labels/containers. That request anchor participates in both RuntimeClass and io.katacontainers.* validations, and the admitted object name must remain equal to request.name.",
-    "remaining_uncertainty": "The exact current CEL/YAML has passed bounded byte-bound source regressions but has not yet been compiled or evaluated by the selected Kubernetes API server. Exact API support, admission ordering/effective mutation behavior, installed binding presence, and the final post-mutation Pod identity/annotations remain runtime gates."
+    "remaining_uncertainty": "The exact current CEL/YAML has passed bounded byte-bound source regressions but has not yet been compiled or evaluated by the selected Kubernetes API server. Exact API support, admission ordering/effective mutation behavior, installed binding presence, and final post-mutation Pod identity/annotations remain Kata-profile runtime gates."
   },
   "latest_execution_surface_observation": {
     "provider": "Vercel Sandbox",
@@ -76,13 +76,19 @@
     "oci_runtime_credit": 0,
     "classification": "EXECUTION_ADMISSION_PROGRESS_NOT_CLAYVERSE_RUNTIME_PASS"
   },
-  "next_discriminator": "Provision the approved host-side Preview GITHUB_READ_TOKEN without forwarding it into the Sandbox, bind fresh current Research/EntityOS source, then on an authorized isolated Kubernetes/Kata-capable path compile/apply the exact current policy plus binding and prove: clean clayverse-0 admitted; bad/missing RuntimeClass denied; io.katacontainers.* annotation denied; CREATE with all mutable ClayVerse markers rewritten still denied via request.name; object-name rewrite denied; UPDATE identity removal still denied via oldObject; unrelated Pods unaffected; effective post-mutation Pod identity/annotations attested before continuing exact OCI/Kata/Tier-2 gates.",
+  "owner_correction_2026_08_17_2303": {
+    "github_read_token_forwarding": "AUTHORIZED_IN_DISPOSABLE_VERCEL_SANDBOX_FOR_NARROW_PRIVATE_SOURCE_FETCH_WITH_LEAST_PRIVILEGE_NO_LOG_NO_PERSIST_AND_EXACT_IDENTITY_VERIFICATION",
+    "outer_isolation_final_gate": "VERCEL_SANDBOX_FIRECRACKER_MICROVM_MAY_SUPPLY_REQUIRED_INDEPENDENT_GUEST_KERNEL_BOUNDARY; NESTED_KATA_GUEST_NOT_REQUIRED_SOLELY_FOR_OUTER_ISOLATION",
+    "final_test_topology": "VERCEL_SANDBOX_FIRECRACKER -> OCI_RUNTIME -> EXACT_ACCEPTED_CLAYVERSE_DIGEST -> RUNTIME_VAULT_SECRET_ACQUISITION -> TRANSIENT_MISTRAL_TOKEN -> FULL_CAUSAL_OPERATION -> RECOVERY -> FULL_RECREATE_SAME_DIGEST -> REPEAT",
+    "mistral": "MANDATORY_INFERENCE_PROVIDER_FOR_FINAL_TEST_OF_TESTS_ONLY; NOT_STATE_IDENTITY_MEMORY_OR_EFFECT_AUTHORITY"
+  },
+  "next_discriminator": "Make a scoped read-only GITHUB_READ_TOKEN securely available to the admitted Vercel controller/Sandbox path under the current forwarding directive; refresh and bind exact current Research plus admitted lanes and EntityOS; create/attest the Vercel Firecracker Sandbox; inject the token transiently; fetch and verify exact private Git/object identities; build the exact ClayVerse OCI and capture its digest; run that SAME digest inside the Sandbox guest; then continue the mandatory final test-of-tests including runtime Vault/Mistral secret acquisition, real causal turn/re-ingest/effect, Tier-1 recovery, full Sandbox/appliance destruction/recreation from the same digest, secret reacquisition, stale-generation/no-blind-replay checks, and repeated cognition. The separate Kata deployment profile remains an additional deploy-time hardening path and requires its own Kubernetes API/CEL negative probes before promotion.",
   "execution": {
     "current_policy_source_check_started": true,
     "kubernetes_api_admission_started": false,
     "clayverse_oci_runtime_started": false,
-    "blocker": "Host-side Preview GITHUB_READ_TOKEN is absent from the retained Vercel controller; connected Vercel tooling does not expose environment-secret mutation.",
-    "test_credit": "BOUNDED_EXACT_CURRENT_TWO_BLOB_SOURCE_MECHANISM_ONLY",
+    "blocker": "An appropriate scoped GITHUB_READ_TOKEN is not currently available/injectable through the connected execution controls. Forwarding is now authorized; policy prohibition is no longer the blocker.",
+    "test_credit": "BOUNDED_EXACT_CURRENT_TWO_BLOB_SOURCE_MECHANISM_ONLY_PLUS_PROVIDER_GUEST_KERNEL_OBSERVATION",
     "oci_runtime_credit": 0,
     "whole_product_credit": 0
   },
@@ -92,10 +98,10 @@
     "reason": "No shared immutable request/turn identifier is exposed for this trigger, so the global one-unusual-experiment law forbids claiming or executing a distinct experiment slot."
   },
   "coordination": {
-    "superseded_prs": [639, 642],
+    "superseded_prs": [639, 640, 642],
     "retained_pr": 643,
     "duplicate_policy_path_created": false,
-    "note": "Parallel policy work was adjudicated into the retained #643 lane; #642 remains closed rather than reopening a competing semantic path."
+    "note": "Parallel admission-policy work was adjudicated into retained Draft #643; #640 and #642 are closed unmerged rather than maintaining competing semantic paths."
   },
   "forbidden_surfaces_used": {
     "vps": false,

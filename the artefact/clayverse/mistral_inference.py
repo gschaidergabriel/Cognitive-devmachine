@@ -260,7 +260,10 @@ class MistralTurnRunner:
                 )
             except StaleGeneration:
                 raise
-            self.lifecycle.abort("mistral_inference_failed")
+            self.lifecycle.abort(
+                "mistral_inference_failed",
+                provenance_source="mistral-api:failure",
+            )
             raise
         completion = self.lifecycle.complete_inference(
             decision["text"],

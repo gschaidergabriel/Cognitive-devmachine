@@ -63,6 +63,8 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         },
         "resources": result["resources"],
         "workspace": result["workspace"],
+        "needle": result.get("needle", {}),
+        "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
@@ -87,8 +89,25 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
     for item in context["own_recent"]:
         if len(str(item.get("content", ""))) > 700:
             item["content"] = str(item["content"])[:700] + "…"
+    compact["hyperpositions"] = compact["hyperpositions"][:8]
+    for hp in compact["hyperpositions"]:
+        if isinstance(hp, dict):
+            hp["facets"] = list(hp.get("facets", []))[:3]
 
     text = render()
+    if len(text) > limit:
+        compact["hyperpositions"] = [
+            {
+                "relation_id": hp.get("relation_id"),
+                "subject": hp.get("subject"),
+                "kind": hp.get("kind"),
+                "alternative_count": hp.get("alternative_count"),
+                "uncertainty": hp.get("uncertainty"),
+                "semantic_hash": hp.get("semantic_hash"),
+            }
+            for hp in compact["hyperpositions"] if isinstance(hp, dict)
+        ]
+        text = render()
     if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
     return text
@@ -110,9 +129,6 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             if _active_claude_session(db, session_id) == claude_session_id:
                 raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
             lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
-        # Keep canonical admission uncommitted until the exact hook context that Claude
-        # will receive has also passed its bounded-envelope gate. Any exception here is
-        # therefore one rollback rather than a prompt visible only to UnifiedDB.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(result)
         return {

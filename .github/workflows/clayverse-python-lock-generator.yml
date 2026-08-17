@@ -145,22 +145,31 @@ jobs:
           cat /tmp/generator.freeze
           echo 'GENERATOR_ENVIRONMENT_END'
 
+          # Both independent compilations must target the same output path. pip-tools
+          # records the compile command/output path in the generated header, so using
+          # .lock.1 and .lock.2 as output names would create a deterministic false
+          # reproducibility failure before dependency bytes are even compared.
+          LOCK_PATH='/tmp/requirements.lock'
+          LOCK_FIRST='/tmp/requirements.lock.first'
+          rm -f "$LOCK_PATH" "$LOCK_FIRST"
           pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
-            -o /tmp/requirements.lock.1 /tmp/requirements.in
+            -o "$LOCK_PATH" /tmp/requirements.in
+          cp "$LOCK_PATH" "$LOCK_FIRST"
+          rm -f "$LOCK_PATH"
           pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
-            -o /tmp/requirements.lock.2 /tmp/requirements.in
-          diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2
+            -o "$LOCK_PATH" /tmp/requirements.in
+          diff -u "$LOCK_FIRST" "$LOCK_PATH"
 
-          echo -n 'LOCK_SHA256='; sha256sum /tmp/requirements.lock.1 | awk '{print $1}'
+          echo -n 'LOCK_SHA256='; sha256sum "$LOCK_PATH" | awk '{print $1}'
           rm -rf /tmp/wheelhouse && mkdir /tmp/wheelhouse
           python -m pip download --disable-pip-version-check --no-cache-dir \
             --only-binary=:all: --require-hashes \
-            -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
+            -r "$LOCK_PATH" -d /tmp/wheelhouse
           echo -n 'WHEELHOUSE_FILE_COUNT='; find /tmp/wheelhouse -maxdepth 1 -type f | wc -l
           echo 'WHEELHOUSE_SHA256_BEGIN'
           while IFS= read -r wheel; do
             printf '%s  %s\n' "$(sha256sum "$wheel" | awk '{print $1}')" "${wheel##*/}"
           done < <(find /tmp/wheelhouse -maxdepth 1 -type f -print | LC_ALL=C sort)
           echo 'WHEELHOUSE_SHA256_END'
-          printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
+          printf 'LOCK_GZIP_B64='; gzip -n -c "$LOCK_PATH" | base64 -w0; printf '\n'
           INNER

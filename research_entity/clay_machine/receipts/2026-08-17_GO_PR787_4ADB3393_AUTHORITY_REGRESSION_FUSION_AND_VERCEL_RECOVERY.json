@@ -27,7 +27,7 @@
     "fresh_preview_deployment": "dpl_8KkWa1Rnib7mUPjYtsoeHhS1Pq3r",
     "observed_source_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
     "state": "READY",
-    "provider_rate_limit_generalized_blocker": "REFUTED_FOR_THIS_NON_TARGET_PREVIEW_BUILD",
+    "provider_rate_limit_generalized_blocker": "REFUTED_FOR_THIS_NON_TARGET_PREVIEW_BUILD_ONLY",
     "source_stage": "PASS",
     "source_tree": "4b67892e64df646bcff63e0dc3f699283eaac613",
     "archive_sha256": "4c43bdce0122b7e0228f91ddd8e4ea955eedbbb6bf0f631671b3667c2166312b",
@@ -35,7 +35,17 @@
     "sandbox_batch_status": "SKIP_NON_TARGET_PREVIEW",
     "sandbox_started_for_entityos_acceptance": false,
     "executable_evidence": "NONE",
-    "interpretation": "Vercel can currently accept at least a preview build, but the canonical runner correctly refuses non-target branch refs; this does not promote ef5bed69 and says nothing executable about 4adb3393."
+    "interpretation": "Vercel accepted this non-target preview build, but the canonical runner correctly refused the non-target branch ref; this is not EntityOS executable evidence."
+  },
+  "current_target_head_vercel_status": {
+    "head": "4adb33930ddd7d006b8b69c62e345c794a3aa002",
+    "context": "Vercel",
+    "state": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "observed_at": "2026-08-17T02:03:55Z",
+    "sandbox_started": false,
+    "executable_evidence": "NONE_FOR_4ADB3393",
+    "scope": "EXACT_CURRENT_PR787_HEAD"
   },
   "unusual_experiment_accounting": {
     "limit": 1,
@@ -46,7 +56,7 @@
     "descendant_mode": "REGRESSION_ONLY"
   },
   "frontier": {
-    "immediate": "obtain an actually-started exact-head Vercel Sandbox regression-only acceptance batch for PR787 head 4adb33930ddd7d006b8b69c62e345c794a3aa002 or later exact refreshed head",
+    "immediate": "after Vercel accepts the exact then-current PR787 head, execute the existing regression-only full-pytest plus canonical v7 EntityOS acceptance batch and require actual Sandbox start, exact source/artifact identity, runtime/self-test/no-host-Python/relocation, attested-vs-Git-clean byte identity, zero new unusual experiments and successful Sandbox stop",
     "semantic_after_provenance": "canonical shared hostcall ABI authority that lets already-admitted ClayVM Bytes cross VM->host without backend-local type authority",
     "supply_chain_after_dependency_set": "platform-scoped exact package artifact filename+SHA256 authority, not version equality alone"
   },

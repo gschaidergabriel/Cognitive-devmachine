@@ -9,13 +9,17 @@ def test_oci_build_context_is_allowlisted():
     for required in (
         "!Dockerfile",
         "!requirements.txt",
+        "!build-assets/",
+        "!build-assets/entityos/",
+        "!build-assets/entityos/**",
         "!clayverse/",
         "!clayverse/**",
         "!policy/",
         "!policy/**",
-        "!EntityOS",
+        "!entityos.lock.json",
     ):
         assert required in rules
+    assert "!EntityOS" not in rules
 
 
 def test_sensitive_and_runtime_material_are_not_reincluded():

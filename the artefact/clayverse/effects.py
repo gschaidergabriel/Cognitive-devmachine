@@ -32,11 +32,13 @@ class EffectGate:
         generation=int(row[0])
         self.db.assert_live_generation(req.session_id,generation)
         if req.expected_generation is not None and req.expected_generation != generation: raise StaleGeneration(req.session_id)
+        if req.capability=='entityos.exec' and lease is not None:
+            raise ValueError('entityos.exec lease is managed by EffectGate')
         if lease: self.db.assert_lease(lease)
         if req.capability=='process.exec':
             raise PermissionError('direct host process execution forbidden; no admitted generic EntityOS process contract')
         auto_lease=False
-        if req.capability=='entityos.exec' and lease is None:
+        if req.capability=='entityos.exec':
             holder=f'{req.session_id}:{uuid.uuid4().hex}'
             lease=self.db.acquire_lease(self._lease_resource(req),holder,ttl=self.AUTO_LEASE_TTL)
             auto_lease=True

@@ -33,7 +33,7 @@ class UnifiedDB:
     def __init__(self,path):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
-        self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('schema_version','1')")
+        self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self.db.execute("PRAGMA synchronous=FULL"); self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('schema_version','1')"); self.recover_pending_effects()
     def close(self): self.db.close()
     @contextlib.contextmanager
     def tx(self):
@@ -77,8 +77,52 @@ class UnifiedDB:
     def assert_lease(self,lease):
         row=self.db.execute("SELECT * FROM leases WHERE resource=?",(lease.resource,)).fetchone()
         if not row or row['holder']!=lease.holder or int(row['generation'])!=lease.generation or row['nonce']!=lease.nonce or float(row['expires_at'])<=time.time(): raise StaleGeneration(lease.resource)
+    def assert_user_generation(self,user_id,generation):
+        row=self.db.execute("SELECT generation FROM sessions WHERE user_id=?",(user_id,)).fetchone()
+        if not row or int(row[0])!=int(generation): raise StaleGeneration(f"session generation changed for {user_id}")
+    @staticmethod
+    def _outcome_json(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
+    def _reenter_effect_tx(self,db,effect_id,status,outcome):
+        existing=db.execute("SELECT causal_id FROM causal_episodes WHERE effect_id=?",(effect_id,)).fetchone()
+        if existing: return existing[0]
+        effect=db.execute("SELECT episode_id FROM effects WHERE effect_id=?",(effect_id,)).fetchone()
+        if not effect: raise KeyError(effect_id)
+        episode_id=effect['episode_id']; observation_turn_id=None
+        if episode_id:
+            ws=db.execute("SELECT observation_turn_id FROM workspace_episodes WHERE episode_id=?",(episode_id,)).fetchone()
+            observation_turn_id=ws[0] if ws else None
+        payload=self._outcome_json(outcome); out_hash=hashlib.sha256(payload.encode()).hexdigest(); causal_id=str(uuid.uuid4())
+        db.execute("INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",(causal_id,episode_id,effect_id,observation_turn_id,out_hash,1.0 if status=='VERIFIED' else 0.0,time.time()))
+        return causal_id
+    def begin_effect(self,episode_id,user_id,capability,target,requested_generation,argv=None):
+        self.assert_user_generation(user_id,requested_generation); eid=str(uuid.uuid4())
+        self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,time.time()))
+        return eid
+    def complete_effect(self,effect_id,outcome,status='VERIFIED'):
+        if status not in {'VERIFIED','FAILED','STALE_OUTCOME','UNKNOWN_AFTER_RESTART'}: raise ValueError(status)
+        payload=self._outcome_json(outcome); now=time.time()
+        with self.tx() as db:
+            row=db.execute("SELECT status FROM effects WHERE effect_id=?",(effect_id,)).fetchone()
+            if not row: raise KeyError(effect_id)
+            if row['status']!='PENDING': raise RuntimeError(f"effect is not pending: {row['status']}")
+            db.execute("UPDATE effects SET status=?,outcome=?,verified_at=? WHERE effect_id=?",(status,payload,now,effect_id))
+            causal_id=self._reenter_effect_tx(db,effect_id,status,outcome)
+        return causal_id
+    def recover_pending_effects(self):
+        rows=self.db.execute("SELECT effect_id FROM effects WHERE status='PENDING' ORDER BY ts").fetchall()
+        if not rows: return 0
+        outcome={'ok':False,'certainty':'unknown','reason':'restart_before_verified_outcome'}
+        with self.tx() as db:
+            for row in rows:
+                eid=row['effect_id']; payload=self._outcome_json(outcome); db.execute("UPDATE effects SET status='UNKNOWN_AFTER_RESTART',outcome=?,verified_at=? WHERE effect_id=?",(payload,time.time(),eid)); self._reenter_effect_tx(db,eid,'UNKNOWN_AFTER_RESTART',outcome)
+        return len(rows)
+    def causal_for_effect(self,effect_id):
+        row=self.db.execute("SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone(); return row[0] if row else None
     def record_effect(self,episode_id,user_id,capability,target,requested_generation,status,argv=None,outcome=None):
-        eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
+        """Compatibility wrapper. New execution paths must begin PENDING before host execution."""
+        eid=self.begin_effect(episode_id,user_id,capability,target,requested_generation,argv)
+        if outcome is not None: self.complete_effect(eid,outcome,status=status)
+        return eid
     def checkpoint(self,note):
         payload=[]
         for table in ("users","sessions","turns","durable_memory","effects","causal_episodes","leases"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))

@@ -1,6 +1,6 @@
 # Daytona Sandbox execution path — CURRENT
 
-Status: AUTHORIZED FALLBACK / API MECHANISM CONFIRMED BY PRIMARY DOCS / BOUNDED RUNNER CONTROL-FLOW SUPPORTED / EXACT CLAYVERSE DAYTONA RUNTIME UNOBSERVED
+Status: AUTHORIZED FALLBACK / DIRECT API MECHANISM CONFIRMED BY PRIMARY DOCS / BOUNDED RUNNER CONTROL-FLOW SUPPORTED / EXACT CLAYVERSE DAYTONA RUNTIME UNOBSERVED
 Observed: 2026-08-17
 
 ## Current truth
@@ -13,29 +13,50 @@ Current provider-selection law is:
 
 VPS, self-hosted and production-host testing remain forbidden. Together remains forbidden.
 
+A native ChatGPT Daytona plugin/connector is **not** a requirement for Daytona eligibility. Daytona's documented HTTPS API/SDK/CLI is the canonical provider interface. Absence of a ChatGPT-native connector is only a property of the current orchestration surface; it must never be promoted into a provider-availability, account-credit or sandbox-capability claim.
+
 ## Primary capability evidence
 
 Current Daytona primary documentation exposes:
 
 - API-key authentication using `DAYTONA_API_KEY`;
-- SDK/API/CLI sandbox creation;
-- `sandbox.process.exec(...)` / equivalent command execution;
+- default API base `https://app.daytona.io/api`;
+- direct HTTPS API, SDK and CLI sandbox creation;
+- sandbox process/code execution;
 - file upload/staging into the sandbox;
 - bounded execution timeouts;
 - sandbox lifecycle operations;
 - runtime network-policy mutation including outbound blocking.
 
-This confirms that Daytona has a suitable candidate isolated-execution API surface. It does NOT by itself establish account admission, exact ClayVerse source execution or product PASS.
+This confirms that Daytona has a suitable candidate isolated-execution API surface. It does NOT by itself establish account admission, remaining free credit, exact ClayVerse source execution or product PASS.
 
 Primary documentation refreshed 2026-08-17:
 - `https://www.daytona.io/docs/en/api-keys/`
-- `https://www.daytona.io/docs/en/python-sdk/`
-- `https://www.daytona.io/docs/en/process-code-execution/`
-- `https://www.daytona.io/docs/en/python-sdk/sync/file-system/`
+- `https://www.daytona.io/docs/en/`
+- `https://www.daytona.io/docs/en/sandboxes/`
+- `https://www.daytona.io/docs/en/typescript-sdk/`
+
+## Connector-independent dispatch law
+
+Daytona fallback must be classified in three independent layers:
+
+1. **Provider mechanism** — Daytona exposes a documented API/SDK/CLI capable of creating and controlling sandboxes.
+2. **Orchestrator admission** — the current worker/controller must have outbound DNS/HTTPS plus an approved secret path for `DAYTONA_API_KEY` (and any required account configuration).
+3. **Sandbox runtime evidence** — only an actually created Daytona sandbox that runs the bound command can mint Daytona runtime credit.
+
+Therefore:
+
+- `NO_CHATGPT_DAYTONA_CONNECTOR` != `DAYTONA_UNAVAILABLE`;
+- `NO_CHATGPT_DAYTONA_CONNECTOR` != `NO_DAYTONA_ACCOUNT_CREDIT`;
+- `ORCHESTRATOR_NO_EGRESS` != `DAYTONA_PROVIDER_FAILURE`;
+- `DAYTONA_API_KEY_NOT_PRESENT_IN_THIS_WORKER` != `DAYTONA_ACCOUNT_NOT_CONFIGURED`;
+- zero runtime credit means only that no accepted Daytona sandbox command has executed at the required bound identity.
+
+Fallback implementations should call Daytona directly through the documented API/SDK from an authorized egress-capable controller. Do not add a permanent second application runtime merely to obtain provider access.
 
 ## Bounded research runner
 
-Canonical research tooling now includes:
+Canonical research tooling includes:
 
 `research_entity/execution/daytona_sandbox_batch.py`
 
@@ -57,36 +78,43 @@ Classification:
 
 This evidence supports the orchestration mechanism only. No Daytona sandbox/provider runtime was contacted by that regression and it contributes zero ClayVerse runtime acceptance credit.
 
-## Current session execution observation
+## Current ChatGPT-controller observation
 
-A deterministic attempt from the current ChatGPT non-production container to install the Daytona Python SDK did not reach the provider because the orchestration container could not resolve the package index hostname. The observed failure was local DNS/network admission before Daytona authentication or Sandbox creation.
+A fresh 2026-08-17 recheck of the current non-production ChatGPT controller observed:
+
+- no native/installable Daytona ChatGPT plugin/connector;
+- `DAYTONA_API_KEY` not present in this worker environment;
+- Daytona Python SDK not installed;
+- DNS resolution failure from this worker for `app.daytona.io`, `api.daytona.io` and `pypi.org`.
 
 Classification:
 
-`ORCHESTRATION_NETWORK_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT`
+`CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT`
 
 Consequences:
 - this is NOT `DAYTONA_SANDBOX_UNAVAILABLE`;
+- this is NOT evidence about the user's Daytona account balance or free-credit entitlement;
 - this is NOT ClayVerse TEST_FAIL;
-- zero Daytona runtime test credit is minted;
-- no API key value is recorded in repository source, logs or receipts;
-- the next worker with provider egress should use the secret from approved secret storage/environment, never source control.
+- no Daytona provider contact occurred from this worker;
+- Daytona runtime test credit remains zero because no Daytona sandbox command was executed;
+- the next authorized egress-capable controller should use the documented direct API/SDK with credentials from approved secret storage/environment, never source control.
 
 ## Required first live Daytona gate
 
-The next actually-connected worker should run one bounded admission/capability batch before moving product tests:
+When Daytona fallback is actually needed and an egress-capable authorized controller exists:
 
 1. refresh current research `main` and target PR heads;
-2. create one ephemeral Daytona Sandbox;
-3. record sandbox/provider/runtime identity without exposing credentials;
-4. establish required base capabilities for ClayVerse (`python`, `_sqlite3`, `git`; container/OCI tooling only if needed by the selected gate);
-5. stage exact source bytes without embedding repository/API credentials inside the sandbox when avoidable;
-6. re-hash staged bytes against GitHub identities;
-7. tighten network policy after staging when the selected gate permits it;
-8. execute a focused deterministic regression batch;
-9. capture exit code + bounded stdout/stderr;
-10. stop/delete the Sandbox;
-11. persist a bounded receipt to GitHub.
+2. verify account-specific FREE_ONLY/no-paid-use admission without exposing credentials or balance secrets;
+3. create one ephemeral Daytona Sandbox through the documented API/SDK;
+4. record sandbox/provider/runtime identity without exposing credentials;
+5. establish required base capabilities for ClayVerse (`python`, `_sqlite3`, `git`; container/OCI tooling only if needed by the selected gate);
+6. stage exact source bytes without embedding repository/API credentials inside the sandbox when avoidable;
+7. re-hash staged bytes against GitHub identities;
+8. tighten network policy after staging when the selected gate permits it;
+9. execute a focused deterministic regression batch;
+10. capture exit code + bounded stdout/stderr;
+11. stop/delete the Sandbox;
+12. persist a bounded receipt to GitHub.
 
 If base capability is missing before product assertions, classify it as provider/runtime substrate evidence and choose a Daytona snapshot/image/runtime that supplies the required dependency rather than weakening ClayVerse.
 

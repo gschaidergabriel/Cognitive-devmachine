@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "acceptance": "IN_PROGRESS",
+  "base": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "commit": "327af0f53a4d48def0344a0d3c736c2364ca3fee",
+    "branch": "gpt56sol/go-microvm-startup-probe-20260817-2307"
+  },
+  "frontier": {
+    "observed": "ClayVerse performs incomplete-episode recovery, ClayGraph rebuild, boot checkpointing, Clerk/Claude/EntityOS validation and durable terminal/tmux setup before uvicorn.run starts the HTTP listener. The current Kata profile had readiness and liveness probes but no startupProbe.",
+    "hypothesis": "A legitimate slow boot/recovery can fail /healthz before the HTTP listener exists and be killed by liveness before startup completes, producing restart churn and confusing Tier-1/Tier-2 recovery evidence.",
+    "counterhypothesis": "All accepted startup/recovery paths always complete before the liveness failure window, making a startup probe unnecessary.",
+    "counterhypothesis_status": "UNPROVEN_NO_BOUND_IN_SOURCE",
+    "cheapest_discriminator": "Add a finite startupProbe on the existing narrow /healthz surface and later inject a controlled slow startup below/above the admitted budget in an authorized Kubernetes/Kata execution."
+  },
+  "delta": {
+    "template_blob": "2d89a9e83352d2e3f9b2861a538964084844f35b",
+    "test_blob": "0e790267d5c332e1c9cd2fe87b854c536b400014",
+    "startup_probe": {
+      "path": "/healthz",
+      "period_seconds": 10,
+      "timeout_seconds": 5,
+      "failure_threshold": 30,
+      "maximum_probe_window_seconds": 300
+    },
+    "preserves": [
+      "readiness remains /readyz",
+      "liveness remains /healthz",
+      "read-only root and non-root runtime",
+      "ReadWriteOncePod single-writer PVC fencing",
+      "default-deny NetworkPolicy",
+      "Tier-2 full-sandbox replacement contract"
+    ]
+  },
+  "primary_upstream_basis": "Kubernetes official probe documentation: when a startupProbe is configured, liveness and readiness do not run until startup succeeds; startup failure remains bounded by failureThreshold times periodSeconds.",
+  "execution": {
+    "exact_branch_pytest": "UNOBSERVED",
+    "kubernetes_probe_behavior": "UNOBSERVED",
+    "kata_runtime": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED",
+    "slow_start_injection": "UNOBSERVED"
+  },
+  "promotion_gate": "In an authorized isolated Kubernetes/Kata-capable run, prove a deliberately delayed but valid startup inside the 300-second budget is not restarted, prove an intentionally hung startup exceeding the budget is terminated, and then continue exact-image Tier-2/recovery acceptance.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No safely shared immutable request/turn identity is exposed for the global GO experiment lease."
+  },
+  "safety": {
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "together_api_used": false,
+    "secrets_exposed": false,
+    "paid_or_final_training_started": false
+  }
+}

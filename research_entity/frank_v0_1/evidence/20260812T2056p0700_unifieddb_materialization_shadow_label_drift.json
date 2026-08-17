@@ -1,0 +1,77 @@
+{
+  "schema": "clay.frank_v0_1.grf_evidence.v1",
+  "created_at": "2026-08-12T20:56:00+07:00",
+  "updated_at": "2026-08-12T21:00:00+07:00",
+  "program_stage": "FRANK_V0_1",
+  "work_item": "F-V01-04",
+  "topic": "UnifiedDB to ClayGraph projection materialization equivalence",
+  "observed_anchors": {
+    "frank_repo": "gschaidergabriel/Dr.-Unterweger",
+    "v4_base_pr": 499,
+    "v4_base_head": "773acdeca3cef11034df9593d3cc8c9f76530c1c",
+    "v1_gate": "runtime/state/projection_outbox_v1_candidate.py::assert_projection_current",
+    "v1_gate_semantics": [
+      "exact authoritative outbox event signatures equal applied-event signatures/root",
+      "authoritative current relation refs equal VALIDATED non-expired ClayGraph relation refs"
+    ],
+    "v4_boundary": "derived graph work may commit after lease takeover but consequential use is stated to remain subject to exact event-set/root plus relation-equivalence gate"
+  },
+  "generated_reality": {
+    "hypothesis": "event-root plus relation-ref equality is sufficient to certify the materialized ClayGraph semantics used by a consequential reader",
+    "strongest_counter_reality": "a mutable projected field not included in either predicate drifts while event receipts and relation refs remain unchanged"
+  },
+  "unusual_experiment": {
+    "name": "MATERIALIZATION_SHADOW_LABEL_DRIFT",
+    "count_for_go_macro_cycle": 1,
+    "scope": "bounded disposable SQLite semantic reproduction of the fetched V1 currentness predicates",
+    "baseline": {
+      "event_signature_gate": true,
+      "relation_equivalence_gate": true,
+      "overall_gate": true,
+      "projected_object_label": "Correct Label"
+    },
+    "intervention": "change only the projected ClayGraph object node label to DRIFTED / WRONG LABEL; preserve authoritative outbox event, applied-event signature and relation refs",
+    "result": {
+      "event_signature_gate": true,
+      "relation_equivalence_gate": true,
+      "overall_gate": true,
+      "projected_object_label": "DRIFTED / WRONG LABEL"
+    },
+    "outcome": "REFUTES_SUFFICIENCY_FOR_ALL_MATERIALIZED_FIELDS",
+    "negative_result_preserved": true
+  },
+  "collapse": {
+    "refuted": "the current V1 event/root plus relation-ref predicates prove all mutable materialized ClayGraph fields",
+    "retained": "the V1 predicates still prove their narrower documented event-set/root and relation-ref properties",
+    "supported_only_for": "node-label drift can evade the V1 predicates in the bounded reproduction",
+    "not_proven": [
+      "production exploitability",
+      "whole-graph divergence",
+      "accepted Hostinger runtime failure",
+      "full materialization digest design"
+    ]
+  },
+  "implementation_reentry": {
+    "candidate_pr": 540,
+    "candidate_head": "c7d284b1c8e3da49de1bcb0e3d29100913173819",
+    "candidate_state": "SUPPORTED_SELF_HOSTED_EXACT_HEAD_NARROW_SCOPE",
+    "repair_scope": "preserve V1 gate and additionally compare authoritative entity labels for current projected relation participants against ClayGraph node labels",
+    "test": "tests/unifieddb_projection_materialization_equivalence_v2_gate.py",
+    "workflow": ".github/workflows/frank-unifieddb-materialization-equivalence-v2-vps.yml",
+    "self_hosted_ci": {
+      "run_id": 31604035115,
+      "runner": "clay",
+      "labels": ["self-hosted", "Linux", "X64"],
+      "exact_head": "c7d284b1c8e3da49de1bcb0e3d29100913173819",
+      "conclusion": "SUCCESS",
+      "steps": [
+        "exact PR head isolated fetch PASS",
+        "py_compile PASS",
+        "materialization regression PASS"
+      ]
+    },
+    "deep_integrity": "BASELINE_AND_CANDIDATE_BOTH_FAILED_WITH_ZERO_STEPS_ON_UBUNTU_LATEST; CLASSIFIED_TRANSPORT_PROVISIONING_NOT_CODE_EVIDENCE"
+  },
+  "next_discriminating_falsifier": "before broader promotion, derive the minimal authoritative materialization surface beyond labels and test additional mutable projected fields with conventional regressions; do not infer full materialization equivalence from the label-only success",
+  "authority_boundary": "candidate research/build evidence only; no production activation, no Harness authority change, no F-V01-04 closure, no final model training authorization"
+}

@@ -63,6 +63,20 @@ class TerminalSessionManager:
             mcp_config=home / "clayverse-mcp.json",
         )
 
+    def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
+        env = {
+            "PYTHONPATH": "/opt/clayverse",
+            "CLAYVERSE_STATE_ROOT": str(self.state_root),
+            "CLAYVERSE_USER_ID": binding.user_id,
+            "CLAYVERSE_SESSION_ID": binding.session_id,
+            "CLAYVERSE_ENABLE_ENTITYOS_EXEC": os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0"),
+        }
+        for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
+            value = os.environ.get(key, "").strip()
+            if value:
+                env[key] = value
+        return env
+
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
@@ -71,11 +85,7 @@ class TerminalSessionManager:
                     "type": "stdio",
                     "command": "python3",
                     "args": ["-m", "clayverse.mcp_server"],
-                    "env": {
-                        "CLAYVERSE_STATE_ROOT": str(self.state_root),
-                        "CLAYVERSE_USER_ID": binding.user_id,
-                        "CLAYVERSE_SESSION_ID": binding.session_id,
-                    },
+                    "env": self._mcp_env(binding),
                 }
             }
         }
@@ -115,6 +125,7 @@ class TerminalSessionManager:
         env_argv = [
             "env",
             f"HOME={binding.home}",
+            "PYTHONPATH=/opt/clayverse",
             f"CLAYVERSE_STATE_ROOT={self.state_root}",
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",

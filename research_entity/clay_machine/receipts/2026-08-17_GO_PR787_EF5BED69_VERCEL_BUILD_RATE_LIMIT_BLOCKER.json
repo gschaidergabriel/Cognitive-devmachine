@@ -1,0 +1,57 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "execution_classification": "CURRENT_HEAD_PROVIDER_BLOCKER_OBSERVATION_AND_FRONTIER_FUSION_ONLY",
+  "research_head_before_write": "7afffaca18ed35f1371b1e62c1a1a2d1fa92d07d",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_pr": 787,
+  "product_pr_state": "OPEN_DRAFT",
+  "product_pr_current_head": "ef5bed69c534b79c1a33e692dcf488408b7f01b3",
+  "product_pr_base": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "current_head_delta_from_f654": {
+    "ahead_by": 1,
+    "file": "tests/test_go_attested_regression_accounting.py",
+    "purpose": "freeze consumed unusual-experiment accounting for descendants and assert pending-owner fail-closed behavior",
+    "classification": "SOURCE_ONLY_UNTIL_EXACT_HEAD_SANDBOX_EXECUTION"
+  },
+  "vercel_current_head_status": {
+    "source": "GitHub combined commit status for exact ef5bed69c534b79c1a33e692dcf488408b7f01b3",
+    "context": "Vercel",
+    "state": "failure",
+    "target_classification": "BUILD_RATE_LIMIT_UPGRADE_TO_PRO",
+    "sandbox_started": false,
+    "executable_evidence": "NONE_FOR_EF5BED69"
+  },
+  "last_exact_vercel_verified_scope": {
+    "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "deployment": "dpl_7CZDVst5XGJp67fKs1EeT9KNwiwg",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "DO_NOT_GENERALIZE_TO_DESCENDANTS"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count_this_fusion": 0,
+    "descendant_mode": "REGRESSION_ONLY"
+  },
+  "frontier_fusion": {
+    "immediate_product_blocker": "Provider build-rate limit prevents exact-current-head Git-bound deployment and therefore prevents the required actually-started Vercel Sandbox regression-only acceptance batch.",
+    "next_exact_executable_step": "When Vercel accepts a Git-bound build, execute PR787 at the then-current exact head with full pytest nonzero/zero-skips, dependency-lock evidence, Git-free attested twin EntityOS freeze, runtime/self-test/no-host-Python/relocation under DENY_ALL, prior tamper regression only with new_unusual_experiment_count=0, sanitized Git + Batch-5 regressions, attested-vs-Git-clean byte identity, exact artifact digest and successful Sandbox stop.",
+    "next_semantic_frontier_after_provenance_stabilization": "canonical Bytes hostcall ABI authority shared by lowering and ClayVM; prefer one versioned canonical call_id contract registry and reject generic untyped ClayValue widening",
+    "next_supply_chain_frontier": "platform-scoped exact wheel artifact hash authority; exact versions/installed-set equality are not equivalent to exact package artifact-byte authority"
+  },
+  "claims": {
+    "current_descendant_entityos_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false,
+    "product_code_changed_by_this_receipt": false
+  }
+}

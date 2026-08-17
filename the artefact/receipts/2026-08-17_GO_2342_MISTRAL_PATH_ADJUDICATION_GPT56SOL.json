@@ -1,0 +1,96 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-17T23:42+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_parent": "85eb262fa3c97ee1f00775d95df424e2ddfa5669",
+  "classification": "ADVERSARIAL_PATH_ADJUDICATION_NEGATIVE_RESULT_WITH_BOUNDED_EXECUTION",
+  "question": "Should the Mistral final-sandbox requirement be implemented by introducing a second TurnLifecycle Mistral runtime, or should the existing canonical adapters.MistralInference -> ClayVerseEngine -> UnifiedDB pre-effect re-ingest -> EffectGate path remain authoritative?",
+  "observed_canonical_path": {
+    "transport": "clayverse.adapters.MistralInference",
+    "causal_runtime": "ClayVerseEngine",
+    "final_probe": "clayverse.final_acceptance_probe / python -m clayverse.service --mistral-once",
+    "ordering": "provider assistant proposal is persisted to UnifiedDB with pre-effect-reingest provenance before EffectGate execution",
+    "main_receipt": "the artefact/receipts/2026-08-17_GO_2249_MISTRAL_CAUSAL_REINGEST_GPT56SOL.json",
+    "main_receipt_decision": "duplicate provider path REJECTED_AND_REMOVED"
+  },
+  "countercandidates": [
+    {
+      "pull_request": 668,
+      "state": "CLOSED_UNMERGED",
+      "design": "duplicate Mistral HTTP client + provider_responses schema + same-turn optional trusted effect",
+      "adjudication": "REJECTED_AS_DUPLICATE_PATH",
+      "bounded_execution": {
+        "initial": "8/10 focused HTTP boundary tests passed",
+        "bugs_found": [
+          "explicit empty model silently fell back to default",
+          "secret-bearing HTTPError remained reachable through exception context"
+        ],
+        "after_repair": "10/10 focused HTTP boundary tests passed",
+        "credit": "donor/security mechanism evidence only; duplicate transport not promoted"
+      }
+    },
+    {
+      "pull_request": 667,
+      "state": "CLOSED_UNMERGED",
+      "design": "MistralTurnRunner over TurnLifecycle using the canonical HTTP adapter",
+      "adjudication": "REJECTED_AS_SECOND_RUNTIME_PATH_WITHOUT_DISCRIMINATOR",
+      "useful_falsifier": "generation-only completion fences are insufficient when a design resolves a remote response against one mutable active_turn; same-generation interleaving requires exact causal identity fencing",
+      "bounded_execution": {
+        "exact_runner_test_blobs": {
+          "clayverse/mistral_turn.py": "97ee1f59cfcc27c8a538b1eca21614852f9d8c17",
+          "tests/test_mistral_turn.py": "fb5e97a41bca71ecfd7b96ba430b943f40370e8c"
+        },
+        "result": "8/8 passed in 0.04s with minimal dependency stubs",
+        "credit": "bounded causal-race mechanism support only"
+      },
+      "real_db_source_test": "same-generation stale-response/newer-active-turn regression was authored but not executed on exact full-tree bytes because available GitHub jobs failed before step execution",
+      "why_not_promoted": "current canonical ClayVerseEngine carries each synchronous ingest's own turn/workspace/reasoning-generation identities and does not complete provider output by looking up one singular mutable active_turn; adding the TurnLifecycle runner would create a second Mistral turn runtime rather than harden the admitted path"
+    }
+  ],
+  "github_actions_observation": {
+    "countercandidate_head": "bffa1ed9075b55362560bbec7ade89d78eceb4ee",
+    "identity_guard": {
+      "run_id": 32046690699,
+      "job_id": 95436132427,
+      "steps": 0,
+      "runner_id": 0,
+      "conclusion": "failure_before_steps"
+    },
+    "verify": {
+      "run_id": 32046690625,
+      "job_id": 95436132636,
+      "steps": 0,
+      "runner_id": 0,
+      "conclusion": "failure_before_steps"
+    },
+    "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+  },
+  "canonical_delta": {
+    "product_code": "NO_CHANGE",
+    "coordination": "PR667 and PR668 closed unmerged; duplicate runtime paths removed from promotion frontier",
+    "research": "counterevidence and bounded execution preserved durably",
+    "reason": "the strongest product-convergent action was rejection/fusion, not adding another Mistral state/runtime path"
+  },
+  "owner_final_gate": "Vercel Sandbox Firecracker -> exact accepted ClayVerse OCI digest -> approved runtime Vault/secret acquisition -> real Mistral call on canonical engine path -> verify UnifiedDB pre-effect re-ingest -> bounded EffectGate/EntityOS round-trip -> causal outcome re-entry -> Tier-2 full Sandbox/appliance recreation from same digest -> new generation/no blind replay -> secret reacquisition -> second real Mistral -> remaining Clerk/PTTY/dual-user/security gates",
+  "current_execution_blocker": "The connected Vercel surface available to this organ exposes no direct Sandbox create/exec or secret-mutation action. The retained controller path still requires the scoped read-only GITHUB_READ_TOKEN through the authorized runtime one-shot ingress before private-source and exact OCI execution can proceed; MISTRAL_API_KEY must later be acquired only from the approved runtime secret path.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "no shared immutable request/turn identity was exposed for the global one-experiment lease"
+  },
+  "runtime_credit": {
+    "whole_product": 0,
+    "exact_final_oci": 0,
+    "real_mistral": 0,
+    "approved_vault_secret": 0,
+    "vercel_firecracker_exact_image": 0,
+    "entityos_final_roundtrip": 0,
+    "tier2_full_recreation": 0,
+    "post_recovery_mistral": 0
+  },
+  "next_exact_step": "Use the retained Vercel controller/runtime-token ingress to stage exact private source, build and attest the exact OCI digest inside the Firecracker Sandbox, acquire the Mistral secret from the approved runtime secret store, then execute the existing canonical final_acceptance_probe/service --mistral-once path before and after Tier-2 recreation."
+}

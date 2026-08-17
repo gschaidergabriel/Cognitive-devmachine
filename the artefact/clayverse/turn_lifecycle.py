@@ -114,11 +114,19 @@ class TurnLifecycle:
     def _provider_response_in_tx(db,row):
         return db.execute("SELECT * FROM provider_responses WHERE causal_id=?",(row["causal_id"],)).fetchone()
 
-    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool,provenance_source:str=_CLAUDE_FAILURE_SOURCE)->dict:
+    @staticmethod
+    def _assert_expected_active(row,expected_causal_id:str|None,expected_generation:int|None):
+        if expected_causal_id is not None and row["causal_id"]!=expected_causal_id:
+            raise TurnLifecycleError("active turn causal identity changed")
+        if expected_generation is not None and int(row["generation"])!=int(expected_generation):
+            raise StaleGeneration("expected_turn_generation")
+
+    def _abort_active_in_tx(self,db,reason:str,*,finalize_projection:bool,provenance_source:str=_CLAUDE_FAILURE_SOURCE,expected_causal_id:str|None=None)->dict:
         if provenance_source not in {_CLAUDE_FAILURE_SOURCE,_MISTRAL_FAILURE_SOURCE}: raise TurnLifecycleError("invalid abort provenance source")
         if not self.db.db.in_transaction: raise TurnLifecycleError("abort requires active transaction")
         row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
         if row is None: return {"aborted":False,"reason":"no_active_turn"}
+        self._assert_expected_active(row,expected_causal_id,None)
         row,_,_=self._persisted_effect_in_tx(db,row)
         ws=db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?",(row["episode_id"],)).fetchone()
         if ws is None: raise TurnLifecycleError("active turn workspace missing during abort")
@@ -171,7 +179,7 @@ class TurnLifecycle:
     def begin(self,prompt:str,resources:list[str]|None=None,*,input_source:str=_CLAUDE_INPUT_SOURCE)->dict:
         with self.begin_admission(prompt,resources,input_source=input_source) as result: return result
 
-    def reingest_provider_response(self,response:str,*,provider:str,model:str)->dict:
+    def reingest_provider_response(self,response:str,*,provider:str,model:str,expected_causal_id:str,expected_generation:int)->dict:
         response=str(response)
         if not response or len(response)>200_000: raise ValueError("provider response is outside admitted bound")
         if provider!="mistral": raise TurnLifecycleError("provider is outside admitted canonical runtime boundary")
@@ -179,6 +187,7 @@ class TurnLifecycle:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: raise TurnLifecycleError("no active turn for provider response")
+            self._assert_expected_active(row,expected_causal_id,expected_generation)
             if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
             if self._input_source_in_tx(db,row)!=_MISTRAL_INPUT_SOURCE: raise TurnLifecycleError("provider response belongs to a non-Mistral turn")
             if row["effect_id"] is not None or int(row["workspace_selected"]): raise TurnLifecycleError("provider response must re-enter before effect/action selection")
@@ -196,10 +205,11 @@ class TurnLifecycle:
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
         return {"reingested":True,"replayed":False,"response_turn_id":response_turn_id,"causal_id":row["causal_id"],"provider":provider,"model":model}
 
-    def request_effect(self,capability:str,target:str,argv:list[str]|None=None)->dict:
+    def request_effect(self,capability:str,target:str,argv:list[str]|None=None,*,expected_causal_id:str|None=None,expected_generation:int|None=None)->dict:
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: raise TurnLifecycleError("no active turn; effect denied")
+            self._assert_expected_active(row,expected_causal_id,expected_generation)
             if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
             if self._input_source_in_tx(db,row)==_MISTRAL_INPUT_SOURCE and self._provider_response_in_tx(db,row) is None: raise TurnLifecycleError("Mistral response must be re-ingested before any effect")
             if not int(row["workspace_selected"]):
@@ -221,6 +231,7 @@ class TurnLifecycle:
             with self.db.tx() as db:
                 current=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
                 if current is None: raise TurnLifecycleError("active turn disappeared while reconciling effect") from exc
+                self._assert_expected_active(current,expected_causal_id,expected_generation)
                 current,effect,causal=self._persisted_effect_in_tx(db,current)
                 if effect is None or not self._effect_request_matches(effect,capability,target,argv): raise TurnLifecycleError("persisted effect does not match retry") from exc
                 return self._recovered_effect_result(effect,causal)
@@ -229,6 +240,7 @@ class TurnLifecycle:
         with self.db.tx() as db:
             current=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if current is None or current["causal_id"]!=row["causal_id"]: raise TurnLifecycleError("active turn changed before effect binding")
+            self._assert_expected_active(current,expected_causal_id,expected_generation)
             current,effect,causal=self._persisted_effect_in_tx(db,current)
             if effect is None or effect["effect_id"]!=effect_id: raise TurnLifecycleError("journaled effect unavailable for active binding")
         return {"effect_id":effect_id,"causal_id":causal_id,"verified":bool(isinstance(outcome,dict) and outcome.get("ok") is True),"outcome":outcome}
@@ -259,11 +271,12 @@ class TurnLifecycle:
             result={"completed":True,"assistant_turn_id":assistant_id,"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit}
         return result
 
-    def complete_reingested_provider_response(self)->dict:
+    def complete_reingested_provider_response(self,*,expected_causal_id:str,expected_generation:int)->dict:
         now=time.time()
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            self._assert_expected_active(row,expected_causal_id,expected_generation)
             if self._input_source_in_tx(db,row)!=_MISTRAL_INPUT_SOURCE: raise TurnLifecycleError("provider-response completion belongs to a non-Mistral turn")
             if int(row["generation"])!=self.db.entity_generation(): raise StaleGeneration("entity_generation")
             provider_response=self._provider_response_in_tx(db,row)
@@ -288,5 +301,5 @@ class TurnLifecycle:
             result={"completed":True,"assistant_turn_id":provider_response["response_turn_id"],"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit,"provider":provider_response["provider"],"model":provider_response["model"]}
         return result
 
-    def abort(self,reason:str,*,provenance_source:str=_CLAUDE_FAILURE_SOURCE)->dict:
-        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True,provenance_source=provenance_source)
+    def abort(self,reason:str,*,provenance_source:str=_CLAUDE_FAILURE_SOURCE,expected_causal_id:str|None=None)->dict:
+        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True,provenance_source=provenance_source,expected_causal_id=expected_causal_id)

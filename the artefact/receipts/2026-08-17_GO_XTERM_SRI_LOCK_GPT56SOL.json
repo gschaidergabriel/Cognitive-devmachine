@@ -5,9 +5,10 @@
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "base_main": "e044c82806543584b636c646ed97d4016330c9e8",
-  "candidate_branch": "go/xterm-sri-lock-20260817-gpt56sol",
-  "candidate_head_before_receipt": "a0e7f0aa188734e9d7747c75262ea2fa9a3dbcfc",
+  "base_main": "caa6cdbbd0ca7709b30b4c88120739f2b832caf0",
+  "candidate_branch": "go/xterm-sri-lock-20260817-gpt56sol-v2",
+  "candidate_head_before_receipt_refresh": "d20d18f38d74c60d9b861dd3a37df99fcebd72e4",
+  "rebase_provenance": "the five product/test source blobs were reused byte-for-byte from the already-tested branch while the new tree inherited current-main MicroClay retrieval/store changes; only this receipt metadata changed after rebasing",
   "frontier": "remove the unbound npm/xterm build path without changing product runtime semantics",
   "observed_anchors": [
     "current canonical BOOTSTRAP_MINIMAL and PROGRAM_STATE define ClayVerse as one OCI/Docker-compatible container and EntityOS only as internal substrate",
@@ -55,7 +56,7 @@
   },
   "evidence_boundary": {
     "vercel_sandbox": "UNAVAILABLE_IN_CONNECTED_TOOLING_THIS_SESSION: connector exposes documentation/deployment management but no Sandbox start/exec primitive",
-    "registry_tarball_live_fetch": "UNOBSERVED: isolated execution environment DNS could not resolve pypi.org and no authorized live npm tarball execution surface was available",
+    "registry_tarball_live_fetch": "UNOBSERVED: no authorized live npm tarball execution surface was available",
     "exact_oci_build": "UNOBSERVED",
     "whole_product_pass": false,
     "vps_or_production_test_used": false,

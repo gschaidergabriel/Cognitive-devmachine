@@ -1,0 +1,47 @@
+{
+  "schema": "ClayVerseMicroClayV3NestedTxAtomicityFusion/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary worker",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "surviving_pr": 550,
+  "surviving_branch": "go/microclay-explicit-feedback-v3-schema8-20260817-sol",
+  "surviving_parent_pr": 484,
+  "parent_head": "6b2a5626c234283b9767394e423c68411a948634",
+  "parallel_coordination": {
+    "initial_observation": "PR550 was observed at acbb7effef3b7fd16ef8aa7a1a3c29234c6a5bc8 and 39 commits behind the then-current PR484 head.",
+    "later_observation": "A parallel organ rejoined PR550 to current PR484 while this organ was writing; PR550 reached feccbe10d6c227d5b802dc358e70b98d57cbcdf2 with behind_by=0 and additional independent policy-fence and credit-interference tests.",
+    "resolution": "Prefer the richer surviving PR550 line. Fuse only the non-duplicate nested-transaction atomicity repair into PR550 and retire temporary PR559 rather than preserve parallel canonical paths."
+  },
+  "finding": {
+    "class": "NESTED_TRANSACTION_ATOMICITY",
+    "pre_repair_mechanism": "MicroClayExplicitFeedback._tx() joined an already-open UnifiedDB transaction without an inner rollback boundary. Policy capital is mutated before retrieval_feedback receipt insertion. If receipt insertion fails and the outer caller catches that exception, the outer transaction can later commit partial learned routing without the matching idempotency/provenance receipt.",
+    "repair": "Use a unique SQLite SAVEPOINT for explicit-feedback calls that run inside an existing transaction; on any BaseException roll back to and release that savepoint, then re-raise. Standalone calls continue to use UnifiedDB.tx().",
+    "source_commit": "b98d973e20ac43a73a21374fcc59f780ad42ab6c",
+    "regression_commits": [
+      "62f83e82840ebefe2140653b4c81479f09522288",
+      "804ae1f7332747278a1fb60b40ed2ddf845fad9e"
+    ],
+    "regression": "test_caught_inner_feedback_failure_rolls_back_savepoint_without_poisoning_outer_tx"
+  },
+  "authority_boundary": {
+    "unifieddb_truth_authority": true,
+    "microclay_truth_authority": false,
+    "microclay_effect_authority": false,
+    "mode": "SHADOW_ONLY_UNTIL_SEPARATE_PROMOTION",
+    "second_retrieval_authority_created": false
+  },
+  "execution": {
+    "exact_clayverse_runtime": "UNOBSERVED",
+    "new_vercel_sandbox_started_by_this_organ": false,
+    "reason": "Shared go receipt on the surviving PR550 line records the unusual-experiment slot as already claimed by parallel work and the free Preview deployment cap as active. No duplicate experiment or uncertain-cost launch was started."
+  },
+  "remaining_scope": {
+    "nested_same_connection_feedback_atomicity": "SOURCE_REPAIR_CANDIDATE",
+    "broader_unifieddb_cross_thread_connection_ownership": "NOT_SOLVED_AND_REMAINS_SEPARATE_FRONTIER"
+  },
+  "next_exact_gate": "Run the then-current PR550 head in an actually-started authorized zero-cost SQLite-capable Vercel Sandbox, including the new nested-failure regression plus existing explicit-feedback privacy/version/replay/credit-interference/crash/restart and adjacent schema-8 gates. Preserve exact source/image/command/exit/stdout/stderr/stop evidence.",
+  "acceptance": "SOURCE_MECHANISM_CANDIDATE_NOT_RUNTIME_PASS",
+  "active_promotion": "NOT_AUTHORIZED",
+  "whole_clayverse_pass": false
+}

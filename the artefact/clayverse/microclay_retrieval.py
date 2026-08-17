@@ -81,12 +81,22 @@ class MicroClayRetrieval:
 
     @contextlib.contextmanager
     def _credit_tx(self):
-        """Join a canonical outer turn transaction or create one standalone credit transaction."""
-        if self.db.db.in_transaction:
-            yield self.db.db
-        else:
+        """Keep policy mutation + receipt atomic, including inside an outer transaction."""
+        if not self.db.db.in_transaction:
             with self.db.tx() as db:
                 yield db
+            return
+
+        savepoint = f"microclay_credit_{uuid.uuid4().hex}"
+        self.db.db.execute(f"SAVEPOINT {savepoint}")
+        try:
+            yield self.db.db
+        except BaseException:
+            self.db.db.execute(f"ROLLBACK TO SAVEPOINT {savepoint}")
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
+            raise
+        else:
+            self.db.db.execute(f"RELEASE SAVEPOINT {savepoint}")
 
     @staticmethod
     def _tokens(text: str) -> set[str]:
@@ -287,7 +297,7 @@ class MicroClayRetrieval:
         if not ids:
             return
         rows = self.db.db.execute(
-            "SELECT memory_id,kind,user_id FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind,user_id,source_turn_id FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
@@ -299,6 +309,12 @@ class MicroClayRetrieval:
         replay_user = str(existing["user_id"])
         if replay_user not in _CANONICAL_USERS or any(
             row["user_id"] is not None and str(row["user_id"]) != replay_user for row in rows
+        ):
+            raise StaleGeneration("retrieval_route_contract")
+        replay_turn = str(existing["turn_id"])
+        if any(
+            row["source_turn_id"] is not None and str(row["source_turn_id"]) == replay_turn
+            for row in rows
         ):
             raise StaleGeneration("retrieval_route_contract")
 

@@ -1,0 +1,88 @@
+{
+  "schema": "ClayVerseMicroClayV3ExactModuleAtomicityReplayReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T15:24+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "active_line": "PR550 stacked on retained PR484",
+  "target_pr": 550,
+  "target_head_before_receipt": "a004ec6fa3ea6ec09536452cf3fcb2d14031e002",
+  "target_module": "the artefact/clayverse/microclay_retrieval.py",
+  "target_module_git_blob": "0cdbdeb7353c5e5fbcbd7aa72a5182768f95b7aa",
+  "target_module_sha256": "29f831c78169d1c12ce6a0f72a52b2ab8f459c432fef541ce47117809579e763",
+  "execution_surface": "OPENAI_NON_PRODUCTION_ISOLATED_CONTAINER",
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1"
+  },
+  "source_binding": {
+    "observed_git_blob_recomputed_inside_container": "0cdbdeb7353c5e5fbcbd7aa72a5182768f95b7aa",
+    "matched_expected": true
+  },
+  "probes": [
+    {
+      "name": "nested_effect_credit_savepoint_atomicity",
+      "probe_sha256": "d36e15f3d85df9e03562e1d65cc5e8befc64d63724ea73ba1d198fe5d9c51c71",
+      "checks_passed": 14,
+      "checks_total": 14,
+      "exit_code": 0,
+      "observations": [
+        "injected retrieval_feedback insert failure observed",
+        "no retrieval policy mutation leaked inside the still-live outer transaction",
+        "no feedback receipt leaked inside the outer transaction",
+        "unrelated outer transaction work committed after caller caught the inner failure",
+        "no policy or receipt leakage existed after that outer commit",
+        "after fault removal exactly one credit application created one policy row and one feedback receipt",
+        "policy key remained v3 user scoped and expected credit math held",
+        "duplicate replay was rejected without another policy pull or receipt"
+      ]
+    },
+    {
+      "name": "replay_route_current_turn_and_cross_user_fences",
+      "probe_sha256": "926d1363f56006978dc2c766b212efebc8561281578f359091b33648b795a4c6",
+      "checks_passed": 3,
+      "checks_total": 3,
+      "exit_code": 0,
+      "observations": [
+        "current-turn durable-memory echo is rejected by replay-route contract",
+        "prior-turn same-user evidence is admitted by the focused route check",
+        "cross-user bound memory is rejected by replay-route contract"
+      ]
+    }
+  ],
+  "aggregate": {
+    "checks_passed": 17,
+    "checks_total": 17,
+    "result": "PASS_EXACT_ACTIVE_TARGET_MODULE_MECHANISMS"
+  },
+  "scaffolding_boundary": "The exact target module bytes were executed against minimal in-memory SQLite schema/DB adapter scaffolding to isolate these mechanisms. This is not the full PR550 test suite, full canonical UnifiedDB/TurnLifecycle runtime, OCI image, Clerk/PTY/Claude path, or whole ClayVerse product execution.",
+  "adjudication": {
+    "nested_credit_savepoint_mechanism_supported": true,
+    "replay_route_fences_supported": true,
+    "full_pr550_runtime_verified": false,
+    "retained_pr484_runtime_verified": false,
+    "current_main_runtime_verified": false,
+    "oci_runtime_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "coordination": {
+    "duplicate_donor_pr563": "closed/unmerged and not reopened; its evidence was used only to locate the already-merged PR561 repair on active PR550",
+    "canonical_active_path": "PR550 -> PR484 -> main",
+    "unusual_experiment_count_added": 0,
+    "go_experiment_accounting": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "provider_state": {
+    "vercel": "preferred but current free preview/deployment cap blocks new SQLite-capable retry",
+    "daytona": "authorized fallback; current orchestration environment lacks installed SDK/credential env and the current repo records DNS blocking before provider contact",
+    "fallback_used_for_this_probe": "authorized OpenAI non-production isolated container"
+  },
+  "authority": {
+    "microclay_active_promotion": false,
+    "truth_authority_changed": false,
+    "effect_authority_changed": false,
+    "together_api_used": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "final_paid_or_model_training_used": false
+  },
+  "next_exact_gate": "Rejoin PR550 onto the then-current retained PR484/current main, then execute the exact full MicroClay v3 explicit-feedback + credit authority/crash/savepoint/replay/restart/schema8 gates in an actually-started Vercel Sandbox when admitted, else Daytona when provider contact is available."
+}

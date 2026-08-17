@@ -64,6 +64,34 @@ def test_hooks_make_prompt_and_final_response_canonical(tmp_path, monkeypatch):
         db.close()
 
 
+def test_fresh_claude_session_rehydrates_canonical_unifieddb_context(tmp_path, monkeypatch):
+    configure(monkeypatch, tmp_path, "gabriel")
+    db = UnifiedDB(tmp_path / "unified.db")
+    IdentityRouter(db, {})
+    db.close()
+
+    user_prompt({
+        "hook_event_name": "UserPromptSubmit",
+        "session_id": "claude-before-restart",
+        "prompt": "FACT: restart continuity marker is heliotrope-731",
+    })
+    stop({
+        "hook_event_name": "Stop",
+        "session_id": "claude-before-restart",
+        "last_assistant_message": "stored centrally",
+    })
+
+    submitted = user_prompt({
+        "hook_event_name": "UserPromptSubmit",
+        "session_id": "claude-after-restart",
+        "prompt": "What continuity marker do we already know?",
+    })
+    context = submitted["hookSpecificOutput"]["additionalContext"]
+    assert "UnifiedDB" in context
+    assert "heliotrope-731" in context
+    assert "session:gabriel" in context
+
+
 def test_hook_world_does_not_cross_users_without_collision(tmp_path, monkeypatch):
     configure(monkeypatch, tmp_path, "gabriel")
     db = UnifiedDB(tmp_path / "unified.db")

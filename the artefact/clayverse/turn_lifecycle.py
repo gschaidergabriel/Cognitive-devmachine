@@ -44,6 +44,21 @@ class TurnLifecycle:
 
     def active(self): return self.db.db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
 
+    def _active_claude_identity_in_tx(self,db)->tuple[str|None,str|None]:
+        if not self.db.db.in_transaction: raise TurnLifecycleError("Claude identity check requires active transaction")
+        row=db.execute("SELECT t.provenance FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",(self.session_id,)).fetchone()
+        if row is None: return None,None
+        try: provenance=json.loads(row["provenance"])
+        except Exception as exc: raise TurnLifecycleError("active turn provenance invalid during Claude identity check") from exc
+        if not isinstance(provenance,dict): raise TurnLifecycleError("active turn provenance invalid during Claude identity check")
+        session_id=provenance.get("claude_session_id"); prompt_id=provenance.get("claude_prompt_id")
+        return (session_id if isinstance(session_id,str) and session_id else None,prompt_id if isinstance(prompt_id,str) and prompt_id else None)
+
+    def _assert_active_claude_identity_in_tx(self,db,claude_session_id:str|None,claude_prompt_id:str|None,event:str)->None:
+        active_session_id,active_prompt_id=self._active_claude_identity_in_tx(db)
+        if claude_session_id is not None and active_session_id!=claude_session_id: raise TurnLifecycleError(f"{event} belongs to a different Claude session")
+        if claude_prompt_id is not None and active_prompt_id!=claude_prompt_id: raise TurnLifecycleError(f"{event} belongs to a different Claude prompt")
+
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
         packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
@@ -116,13 +131,17 @@ class TurnLifecycle:
         return {"aborted":True,"causal_id":row["causal_id"],"reason":reason}
 
     @contextlib.contextmanager
-    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None):
+    def begin_admission(self,prompt:str,resources:list[str]|None=None,*,claude_session_id:str|None=None,claude_prompt_id:str|None=None):
         prompt=str(prompt)
         if not prompt or len(prompt)>100_000: raise ValueError("invalid prompt")
         if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if claude_prompt_id is not None and (not isinstance(claude_prompt_id,str) or not claude_prompt_id or len(claude_prompt_id)>2048): raise ValueError("invalid Claude prompt id")
         resource_refs=sorted(set(resources or infer_resource_refs(prompt)))[:50]; turn_id=str(uuid.uuid4()); episode_id=str(uuid.uuid4()); causal_id=str(uuid.uuid4())
         alternatives=[{"id":"respond","kind":"reason"},{"id":"request_effect","kind":"effect_intent"},{"id":"defer_effect","kind":"no_effect"}]
         with self.db.tx() as db:
+            if claude_prompt_id is not None:
+                active_session_id,active_prompt_id=self._active_claude_identity_in_tx(db)
+                if active_session_id==claude_session_id and active_prompt_id==claude_prompt_id: raise TurnLifecycleError("duplicate UserPromptSubmit for active Claude prompt")
             predecessor=self._abort_active_in_tx(db,"previous_turn_interrupted_before_next_prompt",finalize_projection=False)
             if self.active() is not None: raise TurnLifecycleError("active turn remained after predecessor retirement")
             generation=self.db.session_generation(self.session_id); entity_generation=self.db.entity_generation()
@@ -130,6 +149,7 @@ class TurnLifecycle:
             now=time.time(); salience=min(1.0,0.15+0.03*len(resource_refs)+min(len(prompt),1200)/2400)
             provenance={"source":"claude-hook:UserPromptSubmit","session_generation":generation,"entity_generation":entity_generation,"causal_id":causal_id}
             if claude_session_id is not None: provenance["claude_session_id"]=claude_session_id
+            if claude_prompt_id is not None: provenance["claude_prompt_id"]=claude_prompt_id
             ordinal=int(db.execute("SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?",(self.session_id,)).fetchone()[0])
             db.execute("INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",(turn_id,self.session_id,self.user_id,ordinal,now,"user",prompt,json.dumps(resource_refs),"[]",json.dumps(provenance,sort_keys=True)))
             db.execute("INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",(episode_id,self.session_id,now,turn_id,salience,json.dumps(alternatives),None,"OPEN"))
@@ -179,13 +199,16 @@ class TurnLifecycle:
             if effect is None or effect["effect_id"]!=effect_id: raise TurnLifecycleError("journaled effect unavailable for active binding")
         return {"effect_id":effect_id,"causal_id":causal_id,"verified":bool(isinstance(outcome,dict) and outcome.get("ok") is True),"outcome":outcome}
 
-    def complete(self,response:str)->dict:
+    def complete(self,response:str,*,claude_session_id:str|None=None,claude_prompt_id:str|None=None)->dict:
         response=str(response)
         if len(response)>200_000: raise ValueError("assistant response too large")
+        if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if claude_prompt_id is not None and (not isinstance(claude_prompt_id,str) or not claude_prompt_id or len(claude_prompt_id)>2048): raise ValueError("invalid Claude prompt id")
         now=time.time(); assistant_id=str(uuid.uuid4()); response_hash=hashlib.sha256(response.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
             row=db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
             if row is None: return {"completed":False,"reason":"no_active_turn"}
+            if claude_session_id is not None or claude_prompt_id is not None: self._assert_active_claude_identity_in_tx(db,claude_session_id,claude_prompt_id,"Stop")
             row,_,_=self._persisted_effect_in_tx(db,row)
             if not int(row["workspace_selected"]): self.workspace.select_in_tx(row["episode_id"],"respond")
             effect_id=row["effect_id"]; existing_causal=db.execute("SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1",(effect_id,)).fetchone() if effect_id else None
@@ -204,5 +227,10 @@ class TurnLifecycle:
             result={"completed":True,"assistant_turn_id":assistant_id,"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit}
         return result
 
-    def abort(self,reason:str)->dict:
-        with self.db.tx() as db: return self._abort_active_in_tx(db,reason,finalize_projection=True)
+    def abort(self,reason:str,*,claude_session_id:str|None=None,claude_prompt_id:str|None=None)->dict:
+        if claude_session_id is not None and (not isinstance(claude_session_id,str) or not claude_session_id or len(claude_session_id)>2048): raise ValueError("invalid Claude session id")
+        if claude_prompt_id is not None and (not isinstance(claude_prompt_id,str) or not claude_prompt_id or len(claude_prompt_id)>2048): raise ValueError("invalid Claude prompt id")
+        with self.db.tx() as db:
+            if self.active() is None: return {"aborted":False,"reason":"no_active_turn"}
+            if claude_session_id is not None or claude_prompt_id is not None: self._assert_active_claude_identity_in_tx(db,claude_session_id,claude_prompt_id,"StopFailure")
+            return self._abort_active_in_tx(db,reason,finalize_projection=True)

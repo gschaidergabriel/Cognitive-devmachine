@@ -1,0 +1,48 @@
+{
+  "schema": "clayverse-go-current-main-rejoin-receipt/v1",
+  "recorded_at_local": "2026-08-17T15:44:09+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "main/the artefact/",
+  "canonical_main_at_rejoin": "ad020cf746ad22870e58994ee6dc5cb9943e97a9",
+  "retained_pull_request": 454,
+  "retained_branch": "go/prompt-identity-fusion-20260817-1342-sol",
+  "prior_head": "1310aa9096407dc3e81b49d8f243a2e1ab68aeb5",
+  "delta_class": "ANCESTRY_PRESERVING_REJOIN_OF_EXISTING_PROMPT_IDENTITY_LANE",
+  "non_duplication": "No new prompt-identity implementation or PR was created. The existing retained PR #454 is rejoined onto current main because its two product target blobs remain byte-compatible with current main.",
+  "current_main_precondition": {
+    "terminal_hooks_blob": "d6248c7e0b64c39e1d81d538ec637e4cd70cb192",
+    "turn_lifecycle_blob": "c484b9088d9f838e350a146c991e998c84e80332",
+    "matches_pr454_expected_base_blobs": true
+  },
+  "rejoined_feature_blobs": {
+    "the artefact/clayverse/terminal_hooks.py": "32f6ba30897e804bb091f844828a4644b40cfa0d",
+    "the artefact/clayverse/turn_lifecycle.py": "46f771efcafec6d2be28642e809f476f349f28cb",
+    "the artefact/tests/test_terminal_prompt_identity.py": "d0efdb56aef745a9cb37d25379c87766a94953b0"
+  },
+  "mechanism": [
+    "Persist Claude prompt_id in canonical turn provenance.",
+    "Reject duplicate active UserPromptSubmit for the same Claude session_id + prompt_id inside the canonical BEGIN IMMEDIATE admission transaction before predecessor retirement.",
+    "Fence Stop and StopFailure by session_id + prompt_id again inside completion/abort transactions.",
+    "Repeated Stop loop cleanup may retire only the exact matching active prompt."
+  ],
+  "execution_recheck": {
+    "surface": "OpenAI isolated non-production orchestration container",
+    "daytona_dns_api_daytona_io": false,
+    "daytona_dns_app_daytona_io": false,
+    "pypi_dns": false,
+    "classification": "ORCHESTRATION_NETWORK_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT",
+    "daytona_runtime_credit": 0,
+    "vercel": "FREE_DAILY_PREVIEW_CAP_ALREADY_ACTIVE_PER_CURRENT_CANONICAL_NOTICE; NO_DUPLICATE_ATTEMPT"
+  },
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This exact user go exposes only minute-precision immutable message time; GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires whole-second-or-better reproducible timestamp fallback when no immutable request id is exposed.",
+    "unusual_experiment_executed": false
+  },
+  "evidence_class": "CURRENT_MAIN_REJOINED_SOURCE_CANDIDATE_RUNTIME_UNOBSERVED",
+  "whole_product_pass": false,
+  "next_exact_gate": "On the first actually-started authorized isolated full-checkout surface, bind the then-current PR454 merge candidate and run test_terminal_prompt_identity.py plus adjacent terminal hook/turn-lifecycle/recovery regressions; then verify packaged Claude Code 2.1.233 UserPromptSubmit/Stop/StopFailure prompt_id payloads before promotion to main."
+}

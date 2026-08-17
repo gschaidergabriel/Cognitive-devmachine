@@ -20,6 +20,11 @@ _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|serv
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
 _RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
+_METHOD_RECEIPT_MAX_CHARS = 4_096
+_PROBLEM_SIGNATURE_MAX_CHARS = 8_192
+_METHOD_CONTEXT_MAX_CHARS = 131_072
+_COUNTEREVIDENCE_MAX_CHARS = 131_072
+_UNKNOWNS_MAX_CHARS = 16_384
 
 
 class TurnLifecycleError(RuntimeError):
@@ -47,22 +52,60 @@ class TurnLifecycle:
 
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
-        receipt=world.get("retrieval_receipt")
-        if not isinstance(receipt,dict): raise TurnLifecycleError("retrieval receipt must be an object")
-        if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError("retrieval receipt keys must be strings")
         scalar=(str,int,float,bool,type(None))
-        if any(not isinstance(value,scalar) for value in receipt.values()): raise TurnLifecycleError("retrieval receipt values must be scalar")
-        try: receipt_chars=len(json.dumps(receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
-        except (TypeError,ValueError) as exc: raise TurnLifecycleError("retrieval receipt is not canonical JSON") from exc
-        if receipt_chars>_RETRIEVAL_RECEIPT_MAX_CHARS: raise TurnLifecycleError("retrieval receipt exceeds compact context bound")
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[])),"retrieval_receipt":dict(receipt)}
+
+        def canonical_size(value, label, max_size):
+            try: encoded=json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
+            except (TypeError,ValueError) as exc: raise TurnLifecycleError(f"{label} is not canonical JSON") from exc
+            if len(encoded)>max_size: raise TurnLifecycleError(f"{label} exceeds compact context bound")
+            return len(encoded)
+
+        def scalar_receipt(name, max_size):
+            receipt=world.get(name)
+            if not isinstance(receipt,dict): raise TurnLifecycleError(f"{name.replace('_',' ')} must be an object")
+            if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError(f"{name.replace('_',' ')} keys must be strings")
+            if any(not isinstance(value,scalar) for value in receipt.values()): raise TurnLifecycleError(f"{name.replace('_',' ')} values must be scalar")
+            canonical_size(receipt,name.replace('_',' '),max_size)
+            return dict(receipt)
+
+        retrieval_receipt=scalar_receipt("retrieval_receipt",_RETRIEVAL_RECEIPT_MAX_CHARS)
+        method_receipt=scalar_receipt("method_receipt",_METHOD_RECEIPT_MAX_CHARS)
+        problem_signature=world.get("problem_signature",{})
+        if not isinstance(problem_signature,dict): raise TurnLifecycleError("problem signature must be an object")
+        canonical_size(problem_signature,"problem signature",_PROBLEM_SIGNATURE_MAX_CHARS)
+        method_context=world.get("method_context",[])
+        counterevidence=world.get("counterevidence",[])
+        unknowns=world.get("unknowns",[])
+        for name,value,max_size in (
+            ("method context",method_context,_METHOD_CONTEXT_MAX_CHARS),
+            ("counterevidence",counterevidence,_COUNTEREVIDENCE_MAX_CHARS),
+            ("unknowns",unknowns,_UNKNOWNS_MAX_CHARS),
+        ):
+            if not isinstance(value,list) or len(value)>24: raise TurnLifecycleError(f"{name} must be a bounded list")
+            canonical_size(value,name,max_size)
+
+        packed={
+            "own_recent":list(world.get("own_recent",[])),
+            "cross_session_collision":list(world.get("cross_session_collision",[])),
+            "durable_memory":list(world.get("durable_memory",[])),
+            "retrieval_receipt":retrieval_receipt,
+            "problem_signature":dict(problem_signature),
+            "method_context":list(method_context),
+            "counterevidence":list(counterevidence),
+            "unknowns":list(unknowns),
+            "method_receipt":method_receipt,
+        }
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
+        # Analogical context yields to direct evidence under pressure.
+        while size()>max_chars and packed["method_context"]: packed["method_context"].pop()
+        while size()>max_chars and packed["counterevidence"]: packed["counterevidence"].pop()
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()
         if size()>max_chars:
             for item in packed["own_recent"]:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"
+        if size()>max_chars: raise TurnLifecycleError("bounded world still exceeds context budget")
         return packed
 
     def _persisted_effect_in_tx(self,db,row):
@@ -146,7 +189,8 @@ class TurnLifecycle:
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
             self.memory.extract_explicit(turn_id,self.user_id,prompt); self.memory.compact(self.session_id)
             if predecessor["aborted"]: self.graph.rebuild_in_tx()
-            world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
+            assembled=self.world.assemble(self.session_id,resource_refs,query=prompt,turn_id=turn_id,episode_id=episode_id,causal_id=causal_id,generation=generation)
+            world=self._bound_world(assembled); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
             yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
     def begin(self,prompt:str,resources:list[str]|None=None)->dict:

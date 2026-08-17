@@ -242,16 +242,12 @@ class MistralInference:
                 with urlopen(request, timeout=self.timeout) as response:
                     raw = response.read(self.MAX_RESPONSE_BYTES + 1)
         except HTTPError as exc:
-            # Do not raise while the provider exception is active: ``from None``
-            # only suppresses display and still leaves ``__context__`` reachable.
             http_error_status = int(exc.code)
             raw = b""
         except (URLError, TimeoutError, OSError) as exc:
             transport_failure_type = type(exc).__name__
             raw = b""
         finally:
-            # Scrub references that can retain the bearer credential before any
-            # post-transport validation raises and publishes this frame in traceback.
             token = ""
             request = None
 
@@ -267,7 +263,7 @@ class MistralInference:
         try:
             envelope = json.loads(raw, parse_constant=_reject_nonfinite_json)
         except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
-            raise InferenceProtocolError("Mistral response envelope is not canonical JSON") from exc
+            raise InferenceProtocolError("Mistral response envelope is not JSON") from exc
         if not isinstance(envelope, dict):
             raise InferenceProtocolError("Mistral response envelope must be an object")
 
@@ -293,7 +289,7 @@ class MistralInference:
         try:
             decision_payload = json.loads(content, parse_constant=_reject_nonfinite_json)
         except (json.JSONDecodeError, ValueError) as exc:
-            raise InferenceProtocolError("Mistral message content is not canonical JSON") from exc
+            raise InferenceProtocolError("Mistral message content is not JSON") from exc
 
         decision = parse_claude_decision_payload(decision_payload)
         decision["inference_receipt"] = {

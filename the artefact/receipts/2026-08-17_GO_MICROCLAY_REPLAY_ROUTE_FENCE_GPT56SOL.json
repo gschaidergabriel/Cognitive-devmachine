@@ -6,7 +6,7 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
-  "observed_canonical_main_at_closure": "b0210496a3a2bc9c79d4815c3d659646bc5eead8",
+  "observed_canonical_main_at_closure": "2d77e3c07df11375e6448e2c0d86e76b29b0cc9e",
   "fusion_pr": 415,
   "fusion_head_with_repair": "3faf29c585652cae0315c5c4cb3167dab8fcbd7b",
   "stacked_repair_pr": 417,
@@ -44,10 +44,16 @@
     "whole_product_pass": false
   },
   "unusual_experiment_accounting": {
-    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "status": "COORDINATION_BLOCKED_NO_FURTHER_UNUSUAL_EXPERIMENT",
     "reason": "No immutable request/turn id is exposed and the shared user-message timestamp available to this organ is minute-precision only; the canonical atomic-lease protocol forbids timestamp fallback below whole-second precision.",
-    "claim_created": false,
-    "experiment_executed": false
+    "this_organ_claim_created": false,
+    "this_organ_experiment_executed": false,
+    "known_prior_noncanonical_claim": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.json",
+    "known_prior_noncanonical_result": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.result.json",
+    "known_prior_noncanonical_intervention_executed": true,
+    "prior_execution_counts_as_valid_canonical_lease": false,
+    "correction_receipt": "the artefact/receipts/2026-08-17_GO_1334_NONCANONICAL_TRIGGER_ID_CORRECTION_GPT56SOL.json",
+    "macrocycle_rule": "Preserve the earlier invalidly leased execution as bounded evidence and run no additional distinct unusual experiment."
   },
   "execution_admission": {
     "vercel_sandbox_start_exec_surface": "UNAVAILABLE_IN_CONNECTED_TOOL_SURFACE",
@@ -56,7 +62,14 @@
     "self_hosted_testing": "NOT_USED_FORBIDDEN",
     "production_testing": "NOT_USED_FORBIDDEN"
   },
-  "next_gate": "Actually-started authorized isolated exact-head execution of the replay-route tests together with PR 415 method-fusion/replay/credit/context regressions; then adjacent retrieval/lifecycle/restart/privacy suite and exact OCI build/runtime gates.",
+  "current_ancestry": {
+    "fusion_branch_product_candidate": "d0c0e7f182868930d1050487b363aeef51a383b0",
+    "main": "2d77e3c07df11375e6448e2c0d86e76b29b0cc9e",
+    "state": "DIVERGED",
+    "behind_main_commits": 14,
+    "behind_main_scope": "coordination/bootstrap/receipt-only; no product-code paths in the 14-main-commit delta"
+  },
+  "next_gate": "First refresh/fuse the coordination-only main ancestry without changing the product repair, then run actually-started authorized isolated exact-head replay-route + PR 415 method-fusion/replay/credit/context regressions; if green continue adjacent retrieval/lifecycle/restart/privacy suite and exact OCI build/runtime gates.",
   "acceptance": "IN_PROGRESS",
   "notes": [
     "MicroClay remains SHADOW; no ACTIVE promotion is claimed.",

@@ -1,21 +1,34 @@
 {
-  "schema_version": "4.6",
-  "program_id": "clayverse-clay-machine-only",
+  "schema_version": "5.0",
+  "program_id": "clayverse-single-container",
   "status": "ACTIVE",
-  "owner_directive": "research_entity/global/CLAYVERSE_CLAY_MACHINE_ONLY_PROGRAM_DIRECTIVE.md",
-  "product_boundary_directive": "research_entity/global/ENTITYOS_SINGLE_FILE_PRODUCT_DIRECTIVE.md",
+  "last_updated": "2026-08-17T11:46:00+07:00",
+  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
-  "current_stage": "CLAY_MACHINE",
-  "stage_order": ["CLAY_MACHINE"],
+  "current_stage": "CLAYVERSE_ARTIFACT",
+  "stage_order": ["CLAYVERSE_ARTIFACT"],
   "target": {
-    "id": "CLAY_MACHINE",
-    "product_repository": "gschaidergabriel/Dr.-Unterweger",
-    "workspace": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
-    "fixed_capability_plan": "research_entity/clay_machine/CLAY_MACHINE_CONNECTIVITY_PORTABILITY_IO_PLAN.md",
-    "release_artifact": "EntityOS",
-    "release_form": "ONE_EXECUTABLE_FILE",
-    "mission": "ClayCode as a real programming language with compiler, virtual Clay Machine, self-contained runtime/environment, deep/direct Linux interoperability, general Internet/network connectivity, direct process/terminal execution, low-latency Clay data transformation, typed visual/image/video and audio transport, first-class optical/visual signal output, and a minimal ClayOS, delivered as exactly one executable file named EntityOS"
+    "id": "CLAYVERSE",
+    "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "artifact_workspace": "the artefact/",
+    "release_artifact": "ClayVerse OCI image",
+    "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+    "mission": "Build one persistent central ClayVerse entity as a single OCI/Docker-compatible container with UnifiedDB as canonical world/state/data/wiki authority, ClayGraph as rebuildable projection, Clerk-authenticated web access, Claude Code as runtime inference engine, explicit secure effect boundaries and recoverable persistent state. EntityOS may contribute an internal execution/security/runtime substrate but is not the release endpoint."
+  },
+  "architecture_laws": {
+    "entity_model": "ONE_PERSISTENT_CENTRAL_ENTITY_SHARED_ACROSS_CONNECTED_MACHINES_AND_AUTHENTICATED_USERS",
+    "users": ["gabriel", "andreas"],
+    "user_rights": "EQUAL_PERSPECTIVES_INTO_ONE_ENTITY",
+    "canonical_state_authority": "UnifiedDB",
+    "graph_role": "ClayGraph is derived/rebuildable projection only",
+    "inference_engine": "Claude Code runtime boundary",
+    "web_auth": "Clerk",
+    "consciousness_daemon": "EXCLUDED",
+    "entityos_role": "OPTIONAL_INTERNAL_EXECUTION_SECURITY_RUNTIME_SUBSTRATE_NOT_PRODUCT_ENDPOINT",
+    "mandatory_second_application_container": "FORBIDDEN"
   },
   "execution_policy": {
     "owner_rule": "SANDBOX_ONLY_TESTING",
@@ -23,44 +36,34 @@
     "experiments": "ISOLATED_SANDBOXES_ONLY",
     "build_validation": "ISOLATED_SANDBOXES_ONLY",
     "preferred_isolated_execution_surface": "VERCEL_SANDBOX",
-    "vercel_sandbox_authorization": "FULL",
-    "vercel_tooling_authorization": "USE_ALL_RELEVANT_AVAILABLE_VERCEL_TOOLS_INTELLIGENTLY_FOR_ENTITYOS",
+    "vercel_sandbox_authorization": "FULL_WHEN_EXECUTABLE_SURFACE_IS_AVAILABLE",
     "execution_batching": "COORDINATED_HIGH_INFORMATION_BATCHES_PREFERRED",
-    "batch_coordination_rule": "REFRESH_SHARED_STATE_AVOID_DUPLICATE_EXECUTION_FUSE_OVERLAPPING_CANDIDATES_PRESERVE_PER_TEST_SHA_COMMAND_EXITCODE_LOG_ARTIFACT_DIGEST",
     "vps_testing": "FORBIDDEN",
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN",
-    "vps_role": "DEPLOYMENT_TARGET_ONLY_WHEN_EXPLICITLY_REQUIRED_NOT_TEST_ENVIRONMENT",
-    "go_rule": "Exact go must perform build/test/experiment work only in isolated sandboxes, prefer coordinated Vercel Sandbox batches when available, use relevant Vercel tools intelligently, and never schedule, trigger, rely on, or promote VPS/self-hosted/production-host test execution as evidence."
+    "vps_role": "DEPLOYMENT_TARGET_ONLY_WHEN_EXPLICITLY_AUTHORIZED"
   },
   "stage_gates": {
-    "CLAY_MACHINE": {
-      "label": "Clay Machine / EntityOS",
+    "CLAYVERSE_ARTIFACT": {
+      "label": "ClayVerse single-container artifact",
       "status": "IN_PROGRESS",
-      "progress_source": {
-        "kind": "work_packages",
-        "path": "research_entity/clay_machine/CLAY_MACHINE_WORKSPACE.json",
-        "field": "work_packages"
-      },
-      "completion_law": "PASS only when the canonical ClayCode language/compiler/runtime executes real programs in the virtual Clay Machine and all currently accepted Clay Machine capability gates are satisfied by the exact delivered artifact, which must be one executable file named EntityOS. The artifact must carry/bind the Clay environment and minimal ClayOS, cross Linux through explicit typed boundaries, provide the accepted typed visual/optical path, real network path, direct Linux process path, low-latency data path, image/video and audio transport, state/recovery/provenance requirements, and copy-and-run on a fresh compatible Linux target without mandatory installation or companion runtime files. Runtime-generated user state is permitted data, not a release sidecar. Component, synthetic, source-tree or out-of-path host success does not imply whole-machine PASS."
+      "workspace": "the artefact/manifest.json",
+      "completion_law": "PASS only when the exact built single-container candidate has isolated executable evidence for the admitted product path: Clerk-authenticated entry, one central persisted entity, UnifiedDB authority and recovery, rebuildable ClayGraph, Claude Code cognition with no hidden durable memory authority, bounded effect execution through the accepted security/runtime substrate, container restart/state continuity and deployment readiness. Source/component/CI-definition success does not imply whole-product PASS."
     }
   },
-  "superseded_programs": {
-    "status": "HISTORICAL_EVIDENCE_ONLY",
-    "programs": ["FRANK_V0_1", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
-    "law": "Legacy Frank/self.root/UCM2/harness paths may contribute bounded implementation or regression evidence when semantics still match, but they do not select active work and they do not define completion."
+  "superseded_product_endpoints": {
+    "status": "INTERNAL_OR_HISTORICAL_EVIDENCE_ONLY",
+    "items": ["ENTITYOS_ONE_EXECUTABLE_FILE_AS_TOP_LEVEL_PRODUCT", "FRANK_V0_1", "self.root", "UCM2_ONLY", "H1_REFERENCE_HARNESS", "H2_CLAYCODE_HARNESS", "H3_ONE_MODULE_FRANK"],
+    "law": "EntityOS may still be used internally where its contracts strengthen ClayVerse, but older endpoint/release-form directives do not override the current ClayVerse single-container owner directive."
   },
-  "trigger_target_rule": "Every registered project trigger is a lens on CLAYVERSE_CLAY_MACHINE_ONLY and must re-enter ClayCode/compiler/VM/environment/Linux-interop/ClayOS/connectivity/portability/terminal/data-plane/media/typed-visual-signal code, tests, architecture, work items, or explicit negative results inside the one-file EntityOS product boundary. Exact go must load the fixed capability plan, preserve each capability stream's status/blockers, include them in frontier selection, and produce a concrete research/falsification/build/test/runtime delta whenever an unblocked high-information step exists. All build, test, experiment and runtime-validation execution must occur only inside isolated sandboxes; Vercel Sandbox is globally authorized and preferred for coordinated high-information batches; VPS, self-hosted VPS runners and production hosts are forbidden as test environments. Exact go must finish by rebuilding/testing EntityOS in sandbox when technically possible or naming the exact EntityOS blocker and next sandbox-executable step.",
+  "go_rule": "Exact go refreshes current shared state, avoids duplicate work, performs maximum useful build/test/falsification/fusion on the canonical the artefact/ single-container candidate, uses exactly one bounded unusual experiment per user-triggered macro-cycle, uses isolated execution only, never tests on VPS/production, and ends with concrete artifact evidence or the precise blocker plus next isolated executable step.",
   "authority_rules": {
-    "grf": "reasoning_framework_only",
+    "policy_and_product_authority": "NEWEST_EXPLICIT_OWNER_DIRECTIVE",
+    "canonical_source_and_durable_ledger": "CURRENT_VERIFIED_GITHUB_SOURCE_HISTORY_AND_RECEIPTS",
+    "executable_truth": "ACTUALLY_OBSERVED_AUTHORIZED_ISOLATED_EXECUTION_AT_EXACT_SOURCE_ARTIFACT_IDENTITY",
     "together": "FORBIDDEN",
     "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED",
-    "host_behavior": "NOT_LANGUAGE_AUTHORITY",
-    "model_consensus": "NOT_SEMANTIC_AUTHORITY",
-    "visual_renderer_behavior": "NOT_LANGUAGE_AUTHORITY",
-    "network_protocol_behavior": "NOT_LANGUAGE_AUTHORITY",
-    "shell_behavior": "NOT_IMPLICIT_LANGUAGE_AUTHORITY",
+    "unknown_semantics": "FAIL_CLOSED",
     "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
-  },
-  "last_updated": "2026-08-16T22:55:00+07:00"
+  }
 }

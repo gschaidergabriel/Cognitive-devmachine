@@ -52,9 +52,10 @@
     "classification": "EXECUTION_ADMISSION_PASS_THEN_PRE_SOURCE_CREDENTIAL_BLOCK; NOT_CLAYVERSE_TEST_FAIL"
   },
   "coordination": {
-    "closed_duplicate_pr": 639,
-    "reason": "PR 639 carried two competing admission-policy implementations for one responsibility while PR 637 already retained that semantic lane; closed to preserve one canonical path",
-    "retained_admission_lane": 637
+    "closed_duplicate_prs": [637, 639],
+    "retained_admission_lane": 640,
+    "race_repaired": true,
+    "reason": "PR 639 carried duplicate admission implementations and was closed. A later race left PR 637 and PR 640 each naming the other as retained while both were closed. PR 640 was reopened as the single retained candidate because it checks incoming object plus oldObject against same-update app-label removal without introducing a mutable namespace-label prerequisite; PR 637/639 remain closed."
   },
   "test_execution": {
     "focused_new_regressions_executed": false,

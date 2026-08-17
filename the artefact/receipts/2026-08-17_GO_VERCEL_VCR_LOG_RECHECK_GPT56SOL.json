@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseVercelLogRecheck/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "scope": "Vercel build-log recheck of the newest OCI/VCR discriminator deployments; no new experiment",
+  "product_endpoint": "ClayVerse",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "observations": [
+    {
+      "deployment": "dpl_4NzSV6eCvsDmGKEcCoV35fqfZ1E8",
+      "source_repository": "gschaidergabriel/Dr.-Unterweger",
+      "source_head": "021c863d32ec55577e39486cd5f679ccb2bd9c5d",
+      "deployment_state": "READY",
+      "commit_message": "test(vercel): probe VCR build CLI semantics without writes",
+      "observed_build_command": "node scripts/run-vercel-oci-surface-experiment.mjs",
+      "observed_result": "BLOCKED_OCI_TOOLCHAIN_PROVISION",
+      "observed_detail": "The build log executed the older VERCEL_SANDBOX_NESTED_OCI_RUNTIME path twice; Amazon Linux 2023 repositories provided neither podman nor buildah. The intended VCR preflight did not execute on this deployment.",
+      "evidence_rule": "READY is not executable PASS evidence"
+    },
+    {
+      "deployment": "dpl_48UEVTo4CFY12WtBLokT1F7hrHYj",
+      "source_repository": "gschaidergabriel/Dr.-Unterweger",
+      "source_head": "cfbe0e6be19d8912b14709141f821fdea13b88c3",
+      "deployment_state": "ERROR",
+      "observed_build_command": "node scripts/probe-vcr-build-semantics.mjs",
+      "observed_result": "VCR_BUILD_COMMAND_UNAVAILABLE",
+      "observed_facts": {
+        "vercel_cli_orchestrator_version": "58.1.0",
+        "spawn_vercel_in_user_build_path": "ENOENT",
+        "spawn_vcr_help": "ENOENT",
+        "spawn_vcr_build_help": "ENOENT",
+        "buildah_path_observed": "/usr/bin/buildah",
+        "vercel_oidc_present": true,
+        "writes_attempted": false,
+        "build_exit": 2
+      },
+      "implication": "The outer Vercel build orchestrator having CLI 58.1.0 does not imply that a `vercel` binary is callable from the user npm build process. No VCR builder path is admitted by this observation."
+    }
+  ],
+  "fusion_with_existing_receipts": {
+    "infrastructure_receipt": "the artefact/receipts/2026-08-17_GO_VERCEL_OCI_VCR_INFRA_EVIDENCE_GPT56SOL.json",
+    "entityos_transport_receipt": "the artefact/receipts/2026-08-17_GO_ENTITYOS_BUILD_EXPORT_TRANSPORT_GPT56SOL.json",
+    "result": "Existing blockers remain. The READY 021c deployment must not be misread as successful VCR preflight evidence."
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count_this_recheck": 0,
+    "note": "No new deployment or Sandbox was triggered by this recheck. The 021c log contains two executions of the already-existing nested-OCI script; this receipt records that observation without promoting it or consuming another experiment slot."
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_executable_step": "After provider admission/rate limiting permits it, inspect an exact deployment whose source actually pins a user-callable Vercel CLI/VCR preflight. Require build logs proving the intended preflight executed before any VCR/OCI promotion. Separately, the EntityOS static export candidate must execute in an exact Vercel Sandbox and verify the locked 32cd4587.../9181696-byte artifact before it can become ClayVerse OCI input."
+}

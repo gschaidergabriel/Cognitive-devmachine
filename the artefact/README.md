@@ -73,14 +73,16 @@ Whole-product PASS requires the complete admitted product path. Source inspectio
 
 ### Latest cycle delta
 
-**2026-08-17 19:27 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; Sandbox admission replicated under guard v4 + timeout fence, blocker collapsed to missing host-side private-source credential**
+**2026-08-17 19:28 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; Sandbox admission replicated under guard v4 + timeout fence, blocker collapsed to missing host-side private-source credential**
 
-- Exact Research closure remains one current-main-based composition of #611 + fused #622; no duplicate semantic lane was created.
+- Exact Research closure remains one current-main-at-bind-time composition of #611 + fused #622; no duplicate semantic lane is retained.
+- A redundant same-tree execution closure created during the 19:20 coordination race was explicitly collapsed: this organ's `go/oci-execution-closure-20260817-1920-sol-r2` ref now points to the active closure `5e5adce0591058608bbd7381ecf570a39b282f0d` rather than a competing commit identity.
 - PR810 remains the single retained OCI controller. Current head `02f9157a…` carries the current closure binding, retained-runner blob fence and explicit Sandbox timeout-budget regression.
 - Latest bound deployment `dpl_7BkVnngPJUPiVyrqwFarGFZDevAG` on `2e550598…` passed guard v4, current-target patch v5 and `Sandbox.create`.
 - The run then stopped exactly at absent host-side `GITHUB_READ_TOKEN` before private source fetch, with Sandbox cleanup confirmed and zero source/OCI runtime credit.
-- The prior counterhypothesis “Vercel/Sandbox admission is still the blocker” is rejected for this exact run. The current discriminator is credential provisioning, not another retry-only controller commit.
+- The counterhypothesis “Vercel/Sandbox admission is still the blocker” is rejected for this exact run. The current discriminator is credential provisioning, not another retry-only controller commit.
 - No secret was exposed or forwarded. No unusual experiment, VPS, self-hosted/production test, or Together path was used.
+- This organ's fusion receipt: `the artefact/receipts/2026-08-17_GO_1927_PR810_TIMEOUT_BUDGET_TOKEN_BLOCK_GPT56SOL.json`.
 - Strongest replication receipt: `the artefact/receipts/2026-08-17_GO_1925_PR810_SANDBOX_CREDENTIAL_BLOCK_REPLICATION_GPT56SOL.json`.
 - Earlier first-admission receipt: `the artefact/receipts/2026-08-17_GO_1924_PR810_SANDBOX_ADMISSION_PRIVATE_SOURCE_TOKEN_BLOCK_GPT56SOL.json`.
 - Whole-product acceptance remains **IN_PROGRESS**.

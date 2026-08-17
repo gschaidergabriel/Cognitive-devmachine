@@ -1,0 +1,48 @@
+{
+  "kind": "CLAYVERSE_GO_TURN_IDENTITY_BINDING_RECEIPT",
+  "timestamp_utc": "2026-08-17T04:45:00Z",
+  "canonical_workspace": "the artefact/",
+  "observed_bug": {
+    "status": "REPRODUCED_ON_PRE_FIX_LINEAGE",
+    "description": "UnifiedDB.append_turn accepted a user_id that did not own the supplied session_id because the two foreign keys were independently valid but not relationally bound. This permitted cross-user attribution inside one permanent-session boundary."
+  },
+  "fusion": {
+    "effect_boundary": "NO_DUPLICATE_DELTA: parallel main already added session-owner binding to EffectGate before this receipt",
+    "turn_boundary": "ADDED: UnifiedDB.assert_session_owner(session_id,user_id) and append_turn fail-closed owner assertion",
+    "store_blob_sha": "e48ea5e9436f06b044d38da67b14c109da360997",
+    "turn_test_commit": "9ed880bdf52703bfcfb6459265982a13f0fca54f",
+    "repair_commit": "64ac0679f3c6670f77ffc702b97f324d536eba97"
+  },
+  "self_review": {
+    "intermediate_commit": "f175eb7b74965af2c32753f1e702afc54e4aad67",
+    "finding": "The first contents-API write accidentally changed checkpoint() from self.db.execute to self.db.db.execute.",
+    "resolution": "Detected before acceptance and immediately restored in 64ac0679f3c6670f77ffc702b97f324d536eba97. The resulting store blob is the previously isolated-tested e48ea5e9436f06b044d38da67b14c109da360997."
+  },
+  "isolated_validation": {
+    "surface": "OpenAI isolated non-VPS container workspace",
+    "exact_store_git_blob": "e48ea5e9436f06b044d38da67b14c109da360997",
+    "focused_turn_owner_and_checkpoint": "PASS",
+    "reconstructed_candidate_suite": {
+      "command": "PYTHONPATH=. python3 -m pytest -q tests",
+      "result": "PASS",
+      "count": 12
+    }
+  },
+  "external_ci": {
+    "head_checked": "43ba0d43752452dec5354793d730aa34bc93f6bb",
+    "workflow": "ClayVerse artefact CI",
+    "result": "INFRASTRUCTURE_BLOCKED_BEFORE_FIRST_STEP",
+    "runner_id": 0,
+    "steps_started": 0,
+    "annotation": "The job was not started because recent account payments have failed or the spending limit needs to be increased.",
+    "interpretation": "No executed GitHub test/build result exists for this run; do not classify this as code failure or OCI PASS."
+  },
+  "unusual_experiment": "NO_NEW_CANONICAL_EXPERIMENT: retain the already-recorded cross-user crash/reopen ABA experiment from the base go cycle; later reruns are regression-only.",
+  "whole_system_pass": false,
+  "remaining_frontier": [
+    "restore an authorized external CI/sandbox execution surface and run the exact-current-head full suite plus OCI build",
+    "validate packaged Clerk/Claude Code integration with real authorized configuration",
+    "validate pinned EntityOS execution integration and failure/recovery semantics in the built container",
+    "produce exact OCI image identity/digest and restart-continuity evidence"
+  ]
+}

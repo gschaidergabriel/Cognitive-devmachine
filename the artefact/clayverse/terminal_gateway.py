@@ -11,7 +11,7 @@ from pathlib import Path
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
+from .identity import CANONICAL_SESSION_IDS, CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
@@ -132,7 +132,7 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
             "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
         ).fetchone()
         session_rows = db.db.execute(
-            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
+            "SELECT session_id,user_id,terminal_name,generation FROM sessions ORDER BY user_id"
         ).fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
@@ -143,7 +143,8 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
             and len(session_rows) == len(CANONICAL_TERMINAL_NAMES)
             and set(sessions) == {"gabriel", "andreas"}
             and all(
-                sessions[user_id]["terminal_name"] == terminal_name
+                sessions[user_id]["session_id"] == CANONICAL_SESSION_IDS[user_id]
+                and sessions[user_id]["terminal_name"] == terminal_name
                 and int(sessions[user_id]["generation"]) == entity_generation
                 for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
             )

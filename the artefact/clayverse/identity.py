@@ -4,6 +4,7 @@ from .store import UnifiedDB
 CANONICAL_USERS=(('gabriel','Gabriel','clayverse-gabriel'),('andreas','Andreas','clayverse-andreas'))
 CANONICAL_USER_IDS={uid for uid,_,_ in CANONICAL_USERS}
 CANONICAL_TERMINAL_NAMES={uid:terminal for uid,_,terminal in CANONICAL_USERS}
+CANONICAL_SESSION_IDS={uid:f'session:{uid}' for uid in CANONICAL_USER_IDS}
 
 
 def assert_canonical_user_state(db:UnifiedDB):
@@ -43,6 +44,8 @@ class IdentityRouter:
                 rows=sql.execute('SELECT session_id,terminal_name FROM sessions WHERE user_id=? ORDER BY created_at,session_id',(uid,)).fetchall()
                 if len(rows)!=1:
                     raise PermissionError(f'canonical user must own exactly one permanent session: {uid}')
+                if rows[0]['session_id'] != CANONICAL_SESSION_IDS[uid]:
+                    raise PermissionError(f'canonical session id mismatch: {uid}')
                 collision=sql.execute('SELECT user_id FROM sessions WHERE terminal_name=? AND user_id<>?',(term,uid)).fetchone()
                 if collision:
                     raise PermissionError(f'canonical terminal name already belongs to another user: {term}')
@@ -79,6 +82,8 @@ class IdentityRouter:
         if len(rows)!=1:
             raise PermissionError(f'canonical user must own exactly one permanent session: {uid}')
         session=rows[0]
+        if session['session_id'] != CANONICAL_SESSION_IDS[uid]:
+            raise PermissionError(f'canonical session id mismatch: {uid}')
         if session['terminal_name'] != CANONICAL_TERMINAL_NAMES[uid]:
             raise PermissionError(f'canonical terminal name mismatch: {uid}')
         try:

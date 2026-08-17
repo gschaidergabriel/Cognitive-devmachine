@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse-vercel-staging-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:07:23+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "main_observed_before_receipt": "1b6f182111085b5729b96b7c2556f292f108cab4",
+  "canonical_research_commit_bound_by_staging": "94bd064fab50a23a7f8a3ffe27d8ba3f59707877",
+  "canonical_terminal_sessions_blob": "b42d175745fa53c45b81fa1affda4f12a4093541",
+  "canonical_managed_tmux_blob": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+  "staging": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-1353-tmux-live-vercel-20260817",
+    "head": "3d0e2612fec310c79c5d2d84ab9d11963493c9af",
+    "draft_pr": 831,
+    "classification": "ORDINARY_DETERMINISTIC_REGRESSION",
+    "unusual_experiment": false,
+    "single_path_reuse": true,
+    "strengthened_checks": [
+      "exact managed-tmux policy blob self-check before execution",
+      "Gabriel/Andreas tmux server namespaces remain disjoint",
+      "effective managed prefix and prefix2 are None",
+      "effective managed key binding count is zero",
+      "positive control: default attached tmux receives raw PTY Ctrl-b c and creates a second window",
+      "negative control: ClayVerse-managed attached tmux receives the same raw PTY Ctrl-b c and remains at one window",
+      "ordinary raw PTY text still reaches the managed pane"
+    ],
+    "network_contract": "network allowed only for dnf tmux provisioning, then deny-all before behavioral test",
+    "sandbox_stop_in_finally": true
+  },
+  "current_vercel_observation": {
+    "commit_status_context": "Vercel",
+    "state": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "preview_build_started": false,
+    "sandbox_started": false,
+    "test_command_started": false,
+    "runtime_result": "UNOBSERVED"
+  },
+  "adjudication": {
+    "source_and_falsifier_design": "STAGED",
+    "current_execution_admission": "BLOCKED_BY_VERCEL_DEPLOYMENT_RATE_LIMIT",
+    "test_failure": false,
+    "live_tmux_command_surface_claim": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_clayverse_pass": false,
+    "next_exact_executable_step": "When preview admission is available, execute already-staged head 3d0e2612fec310c79c5d2d84ab9d11963493c9af through the existing Vercel preview/OIDC Sandbox bridge; require the positive-control default tmux result, managed raw-PTY no-window result, normal-input passthrough, user-server isolation, and sandbox stopped state before granting bounded live tmux runtime credit."
+  },
+  "coordination": {
+    "duplicate_staging_lane_created": false,
+    "existing_pr_831_reused": true,
+    "earlier_duplicate_research_pr_492_closed_without_merge": true,
+    "unusual_experiment_executed": false,
+    "vps_used": false,
+    "deployment_host_used_as_test_runtime": false
+  }
+}

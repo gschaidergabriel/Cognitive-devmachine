@@ -8,6 +8,13 @@ from clayverse.store import StaleGeneration, UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle
 
 
+class _VerifiedEffectBridge:
+    sha256 = "a" * 64
+
+    def run(self, argv):
+        return {"ok": True, "exit": 0, "stdout": "", "stderr": ""}
+
+
 def _db(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
@@ -138,10 +145,10 @@ def test_verified_effect_outcome_updates_entrypoint_on_next_turn_only(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
-        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge())
         first = life.begin("orchid procedure")
         assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
-        effect = life.request_effect("state.noop", "retrieval-test")
+        effect = life.request_effect("entityos.exec", "retrieval-test", ["verified-outcome"])
         assert effect["verified"] is True
         life.complete("done")
         assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
@@ -156,6 +163,39 @@ def test_verified_effect_outcome_updates_entrypoint_on_next_turn_only(tmp_path):
         ).fetchone()
         assert policy is not None
         assert float(policy["capital"]) > 0.0
+        assert int(policy["pulls"]) == 1
+        life.abort("test-end")
+    finally:
+        db.close()
+
+
+def test_state_noop_cannot_self_award_positive_retrieval_credit(tmp_path):
+    db = _db(tmp_path)
+    try:
+        _add(db, "m1", "orchid procedure", subject="procedure:orchid")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        first = life.begin("orchid procedure")
+        effect = life.request_effect("state.noop", "retrieval-test")
+        assert effect["verified"] is True
+        causal = db.db.execute(
+            "SELECT credit,reentered FROM causal_episodes WHERE causal_id=?",
+            (first["causal_id"],),
+        ).fetchone()
+        assert causal is not None
+        assert int(causal["reentered"]) == 1
+        assert float(causal["credit"]) == 0.0
+        life.complete("done")
+
+        second = life.begin("orchid procedure again")
+        assert second["context"]["retrieval_receipt"]["outcome_learning_applied"] == 1
+        feedback = db.db.execute("SELECT credit,signal_class FROM retrieval_feedback").fetchone()
+        assert float(feedback["credit"]) == 0.0
+        assert feedback["signal_class"] == "effect_outcome:VERIFIED"
+        policy = db.db.execute(
+            "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key='subject:procedure:orchid'"
+        ).fetchone()
+        assert policy is not None
+        assert float(policy["capital"]) <= 0.0
         assert int(policy["pulls"]) == 1
         life.abort("test-end")
     finally:

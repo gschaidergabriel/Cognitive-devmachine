@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-go-status-correction/v1",
+  "recorded_at_local": "2026-08-17T14:09:30+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "2198d2b58595e0b813e135c6e548388d8260df89",
+  "correction_type": "APPEND_ONLY_SOURCE_STATUS_CORRECTION",
+  "corrects_receipt": "the artefact/receipts/2026-08-17_GO_1335_STAGEB_TX_VERCEL_ADMISSION_GPT56SOL.json",
+  "corrects_field": "open_gates.425",
+  "incorrect_or_stale_classification": "SOURCE_IMPLEMENTED_EXACT_ISOLATED_EXECUTION_AND_ADVERSARIAL_VALIDATION_OPEN",
+  "current_classification": "SOURCE_PARTIAL_TRUE_HELDOUT_PROMOTION_REPAIR_OPEN_EXECUTION_ALSO_OPEN",
+  "observed_source": {
+    "former_stageb_pr": 411,
+    "former_stageb_pr_state": "CLOSED_WITHOUT_MERGE",
+    "former_stageb_head": "df5bcf4c77d02532fe662db2150eaf8d8b4c1615",
+    "retained_true_heldout_test_pr": 494,
+    "retained_true_heldout_test_head": "8cb50988ffb7a0dea9025ce7e451fcc1c565ecd4"
+  },
+  "falsified_assumptions": [
+    "Current donor derive_promotion_stats requires validation episode ids to equal candidate.source_episode_ids, but those are candidate formation/provenance episodes; relabeling those receipts HELD_OUT is still in-sample.",
+    "Current donor positive threshold permits reusable promotion with only one SUCCESS; one SUCCESS plus one FAILURE is therefore not an adequate anti-anecdote transfer gate."
+  ],
+  "required_source_repair": [
+    "Keep candidate.source_episode_ids as formation/provenance only.",
+    "Require promotion validation receipts from distinct HELD_OUT/cross-instance episodes disjoint from candidate formation episodes.",
+    "Require at least two distinct eligible validation episodes and causal identities.",
+    "Require at least two SUCCESS receipts before reusable positive promotion.",
+    "Retain failures as durable calibration/counterevidence and preserve at least one falsifier-checked instance.",
+    "Keep counters/calibration and promotion lineage derived from exact validation receipts, never caller payload."
+  ],
+  "coordination": {
+    "canonical_issue_425_body_corrected": true,
+    "duplicate_stageb_implementation_created": false,
+    "pr_494_role": "TESTS_ONLY_ADVERSARIAL_GATE",
+    "old_receipt_overwritten": false
+  },
+  "execution": {
+    "vercel_sandbox_bridge": "CONFIRMED",
+    "fresh_preview_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_BUILD_RATE_LIMIT",
+    "exact_true_heldout_runtime_test": "UNOBSERVED",
+    "test_failure": false,
+    "whole_product_pass": false
+  },
+  "experiment_accounting": {
+    "unusual_experiment_executed": false,
+    "reason": "Current go unusual-experiment slot is coordination-closed; this correction is source review and durable evidence bookkeeping only."
+  },
+  "security_constraints": {
+    "vps_or_self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false,
+    "paid_or_final_training_started": false
+  },
+  "next_gate": "Fuse the true-heldout source repair into the single retained Stage-B path, then execute exact-source promotion/validation regressions in an actually-started authorized isolated Sandbox before any reusable method promotion or Stage-B acceptance claim."
+}

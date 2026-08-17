@@ -76,10 +76,16 @@ class TerminalSessionManager:
 
     @classmethod
     def _tmux_socket(cls, binding: TerminalBinding) -> str:
+        # A tmux client can address sessions inside its connected server. Keep the
+        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
+        # attached client cannot switch from one canonical user's session to the other.
         return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
 
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
+        # The browser is attached to tmux, so tmux itself is part of the effect boundary.
+        # Always select the root-owned policy that removes tmux's command prefix/keymap;
+        # never allow an invocation to fall back to user/default tmux configuration.
         return [
             "tmux",
             "-L", cls._tmux_socket(binding),
@@ -104,6 +110,11 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
+        """Diagnostic-only mirror; never a product MCP authority.
+
+        `managed-mcp.json` is the sole runtime server-definition source. This helper is
+        retained for bounded tests/inspection and is deliberately not called by ensure().
+        """
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
@@ -137,12 +148,17 @@ class TerminalSessionManager:
         if self._has_session(binding):
             return binding
 
+        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
+        # user/project MCP file in the launch path. User/session identity reaches the
+        # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
-            "--allowedTools", "mcp__clayverse__*",
+            "--allowedTools",
+            "mcp__clayverse__session_state",
+            "mcp__clayverse__request_effect",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]

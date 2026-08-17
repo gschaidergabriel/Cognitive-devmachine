@@ -21,18 +21,24 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     assert settings["allowManagedHooksOnly"] is True
     assert settings["allowManagedPermissionRulesOnly"] is True
     assert settings["allowManagedMcpServersOnly"] is True
+    assert settings["allowedChannelPlugins"] == []
     assert settings["allowedMcpServers"] == [
         {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
     ]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
-    assert settings["permissions"]["deny"] == ["Bash"]
+    assert settings["permissions"]["deny"] == ["Bash", "Artifact"]
     assert settings["autoMemoryEnabled"] is False
+    assert settings["channelsEnabled"] is False
     assert settings["crossSessionInbound"] == "refuse"
+    assert settings["disableAgentView"] is True
+    assert settings["disableArtifact"] is True
     assert settings["disableBundledSkills"] is True
     assert settings["disableClaudeAiConnectors"] is True
+    assert settings["disableDeepLinkRegistration"] == "disable"
     assert settings["disableRemoteControl"] is True
     assert settings["disableSideloadFlags"] is True
     assert settings["disableSkillShellExecution"] is True
+    assert settings["strictKnownMarketplaces"] == []
     assert settings["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
     assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
@@ -67,7 +73,9 @@ def test_enabled_entityos_authority_reaches_only_sanitized_terminal_environment(
     assert "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1" in argv
     assert "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1" in argv
     assert "CLAUDE_CODE_SHELL_PREFIX=/opt/clayverse/runtime/deny-shell" in argv
-    assert "mcp__clayverse__*" in argv
+    assert "mcp__clayverse__session_state" in argv
+    assert "mcp__clayverse__request_effect" in argv
+    assert "mcp__clayverse__*" not in argv
     assert not any(item.startswith("CLERK_JWT_KEY=") for item in argv)
 
 

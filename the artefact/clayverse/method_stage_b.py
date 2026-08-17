@@ -13,6 +13,11 @@ class StageBMethodRetrieval:
 
     It does not change factual status. The receipt binds the selected method IDs to the
     same session/turn/episode/causal/generation identity as the evidence retrieval path.
+
+    Stage-B deliberately does not infer a structural signature from raw prompt text at
+    this boundary. Without an explicit structured problem_signature it fails closed to
+    no method context, preventing lexical heuristics from silently becoming analogy
+    selection authority. Signature derivation/admission remains a separate gate.
     """
 
     POLICY_VERSION = 1
@@ -52,10 +57,39 @@ class StageBMethodRetrieval:
         ):
             raise RuntimeError("Stage-B retrieval identity mismatch")
 
+        factual_status = str(evidence_status).upper()
+        if factual_status not in {"PRESENT", "UNDERCOVERED", "UNKNOWN"}:
+            raise ValueError("invalid Stage-B evidence status")
+
+        if problem_signature is None:
+            return {
+                "methods": [],
+                "counterevidence": [],
+                "problem_signature": None,
+                "receipt": {
+                    "policy_version": self.POLICY_VERSION,
+                    "session_id": session_id,
+                    "turn_id": turn_id,
+                    "episode_id": episode_id,
+                    "causal_id": causal_id,
+                    "generation": int(generation),
+                    "evidence_status": factual_status,
+                    "triggered": False,
+                    "status": "SIGNATURE_REQUIRED",
+                    "problem_signature_sha256": None,
+                    "selected_method_ids": [],
+                    "counterevidence_ids": [],
+                    "factual_status_unchanged": factual_status,
+                    "signature_source": "NONE",
+                    "truth_authority": False,
+                    "effect_authority": False,
+                },
+            }
+
         result = self.methods.retrieve(
             query=query,
             user_id=user_id,
-            evidence_status=evidence_status,
+            evidence_status=factual_status,
             resource_refs=resource_refs,
             problem_signature=problem_signature,
             limit=limit,
@@ -74,10 +108,12 @@ class StageBMethodRetrieval:
             "generation": int(generation),
             "evidence_status": str(result["evidence_status"]),
             "triggered": bool(result["triggered"]),
+            "status": "METHOD_PRESENT" if selected_method_ids else "METHOD_UNKNOWN",
             "problem_signature_sha256": hashlib.sha256(signature_bytes).hexdigest(),
             "selected_method_ids": selected_method_ids,
             "counterevidence_ids": counterevidence_ids,
             "factual_status_unchanged": str(result["factual_status_unchanged"]),
+            "signature_source": "EXPLICIT_STRUCTURED_INPUT",
             "truth_authority": False,
             "effect_authority": False,
         }

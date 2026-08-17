@@ -68,6 +68,9 @@ It adds:
 - a fixed Mistral profile using the official Mistral chat-completions endpoint and `MISTRAL_API_KEY`;
 - a configurable OpenAI-compatible profile using a dedicated `CLAYVERSE_LLM_API_TOKEN` secret;
 - fixed HTTPS endpoint validation, redirect refusal and secret-redacted failure behavior;
+- canonical JSON fences rejecting non-finite values and duplicate object keys;
+- exact returned-model versus requested-model identity checking;
+- runtime-credential exclusion from model-visible WORLD/observation and provider-response echo fencing;
 - the same fail-closed inference decision parser used by ClayVerse (`entityos.exec` / `state.noop`; `process.exec` rejected);
 - a generic direct acceptance probe on the existing `ClayVerseEngine` / UnifiedDB / EffectGate source path;
 - `python -m clayverse.api_probe_cli` as a direct-provider sandbox entry point;
@@ -75,23 +78,29 @@ It adds:
 
 ### Exact focused evidence
 
-The exact PR #683 `api_providers.py`, exact current `inference_protocol.py` and exact generic provider tests were reconstructed and executed in an isolated OpenAI Linux sandbox:
+The exact current PR #683 `api_providers.py`, exact current `inference_protocol.py` and exact generic provider tests were reconstructed and executed in an isolated OpenAI Linux sandbox. Git blob identities were checked before the run:
 
-**10/10 PASS + py_compile PASS.**
+- `api_providers.py`: `60a49d31422e00a35c72eb078fe17cc694c0795b`
+- `test_generic_api_provider.py`: `79ce6b469d9ac140a28777fdb15b6c2738d6e003`
+- `inference_protocol.py`: `cd5856ac58f4e86c4c045fda8099b7783e6724cf`
 
-Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses and redirect refusal.
+**15/15 PASS + py_compile PASS.**
+
+Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses, non-finite WORLD rejection, duplicate/non-finite provider JSON rejection, returned-model identity mismatch rejection, runtime credential exclusion from model-visible context, provider credential-echo rejection and redirect refusal.
 
 This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS.
 
 ### Current live-provider boundary
 
-No `MISTRAL_API_KEY`, generic API token or prior Mistral token is available in this worker's current isolated runtime. Therefore **no real Mistral request was fabricated or claimed**.
+No `MISTRAL_API_KEY` or generic API token is available in this worker's current isolated runtime. Therefore **no real provider request was fabricated or claimed**.
 
-The next direct live step is simply:
+The retained exact-OCI Vercel controller remains fail-closed before credential spend: the newest observed controller head has no accepted current READY deployment, Vercel reports a build-rate-limit failure, and the live PR #682 runtime-freeze head has materially advanced beyond the Research commit currently bound by that controller. The older READY deployment is not eligible for current runtime credit.
 
-`transient MISTRAL_API_KEY + selected Mistral model -> python -m clayverse.api_probe_cli -> capture sanitized logs -> verify re-ingest/effect/checkpoint`.
+The safe next sequence is:
 
-After that passes, proceed to Stage 2 real-user pass-through.
+`deliberately settle/freeze current PR #682 product bytes -> rebind the single retained PR #810 controller once -> exact current READY deployment -> transient scoped GitHub read token -> private source + EntityOS fetch inside authorized Sandbox -> full regression -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS + recovery -> same-digest Tier-2 recreation -> provider cognition again -> Stage 2 Clerk/WebSocket real-user pass-through`.
+
+Runtime/private-source/exact-OCI/live-provider/whole-product credit remains zero until those exact stages actually execute.
 
 ## Outer isolation / appliance law
 
@@ -105,8 +114,9 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 - **#622** Python hash-lock generator — source candidate; accepted product lock requires real isolated execution.
 - **#623** auth/identity/readiness/reauth drift — bounded source/mechanism candidate until exact runtime execution.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
-- **#683** generic API inference provider — Stage-1 source/focused-test candidate; real provider + full canonical integration remain open.
-- **#810** retained Vercel Sandbox controller — historical/execution bridge evidence; do not let controller setup block independent source/component/provider tests.
+- **#682** dedicated final-Mistral runtime-freeze lane — source candidate still moving; settle deliberately before final controller rebind.
+- **#683** generic API inference provider — hardened focused-test candidate; real provider + full canonical integration remain open.
+- **#810** retained Vercel Sandbox controller — single OCI orchestration lane; current exact deployment admission remains blocked and old READY evidence is stale.
 
 ## Testing authority
 
@@ -116,18 +126,18 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 
 A higher class is never inferred from a lower one.
 
-## Latest cycle delta — 2026-08-18 00:27 +07:00
+## Latest cycle delta — 2026-08-18 00:47 +07:00
 
-- owner clarified that Mistral is a test provider, while ClayVerse must accept arbitrary model APIs through bounded adapters;
-- wrote `research_entity/global/CLAYVERSE_GENERIC_LLM_PROVIDER_DIRECTIVE.md`, superseding Mistral-only/GLM-only provider interpretations;
-- opened Draft PR #683 with generic chat-completions adapter, Mistral profile, generic compatible profile, direct canonical API probe and source integration tests;
-- executed exact provider boundary tests in an isolated sandbox: **10/10 PASS + py_compile PASS**;
-- no Mistral/API token exists in the current isolated runtime, so no live provider call or token persistence/logging occurred;
-- full byte-exact UnifiedDB integration execution remains open because the private repository cannot be cloned into this worker's local isolated container;
-- next sequence is **Stage 1 live Mistral direct probe with sanitized full logs, then Stage 2 Clerk/WebSocket real-user pass-through**;
-- durable receipt: `receipts/2026-08-18_0027_GENERIC_LLM_API_PROVIDER_MISTRAL_STAGE1_GPT56SOL.json`;
+- hardened the existing generic provider boundary instead of creating a second inference path;
+- added canonical JSON fail-closed handling, duplicate-key rejection and exact returned-model identity;
+- fused parallel runtime-secret fences preventing credentials from entering model-visible context or provider output;
+- added explicit regressions for all new fences and executed exact focused bytes: **15/15 PASS + py_compile PASS**;
+- preserved the result in PR #683 coordination; no live provider or whole-product claim was made;
+- Vercel deployment `dpl_EW4vnoqUCTz5bt5otUeUjxox5GBf` reached `vercel-build` on controller commit `533b6d593b4e604cff0164f8b4538a6eda1bc544` and failed source guard on a stale expected endpoint blob; follow-up `05e4eb77780231418f466e7d9cc44936c9c8e7f5` corrects that guard but Vercel reports `Deployment rate limited — retry in 24 hours.`;
+- current PR #682 has again materially advanced beyond the Research SHA bound by the latest controller source, so no credential should be spent on an old READY deployment;
+- no unusual experiment was executed because shared immutable trigger identity remains unavailable;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. The provider architecture is now generic, the focused boundary is tested, and the missing live discriminator is a transient provider credential plus an executable repo-capable sandbox for the canonical direct probe. Source/component tests do not substitute for final exact-image/microVM/user-path acceptance.
+ClayVerse remains **IN_PROGRESS**. The generic provider boundary is now more strictly fail-closed and has stronger exact focused evidence, but the real product discriminator remains the exact current one-container/microVM run with private source, complete EntityOS, exact OCI digest, real provider cognition, recovery/recreation, and authenticated user-path validation.

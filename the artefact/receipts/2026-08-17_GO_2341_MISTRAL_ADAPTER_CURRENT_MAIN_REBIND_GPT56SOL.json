@@ -1,0 +1,60 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:41:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CURRENT_MAIN_SOURCE_REBIND_WITH_BOUNDED_MECHANISM_SUPPORT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "base_main_sha": "85eb262fa3c97ee1f00775d95df424e2ddfa5669",
+  "retained_branch": "gpt56sol/go-mistral-adapter-fused-current-20260817-2341",
+  "exact_candidate_blobs": {
+    "the artefact/clayverse/adapters.py": "6b2e09f3525700ba110f455590db1e03e08edb0e",
+    "the artefact/tests/test_mistral_model_identity_fence.py": "845d8d05c7671db7bf56854d252908fb164fcb90",
+    "the artefact/tests/test_mistral_canonical_json_boundary.py": "2fb8f91bdba75d9c1d94004944f5b27600109e5e"
+  },
+  "rebind_observation": {
+    "main_adapter_before_rebind": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "main_advanced_since_prior_retained_lane": 7,
+    "relevant_main_adapter_changed": false,
+    "reason": "retained fused adapter was rebound from exact current main instead of promoting a branch seven commits behind"
+  },
+  "fused_invariants": [
+    "outbound WORLD/request reject NaN and +/-Infinity",
+    "provider envelope and inner decision reject non-finite JSON constants",
+    "provider-returned model must exactly equal requested model",
+    "one existing Mistral transport remains canonical candidate"
+  ],
+  "supporting_evidence": {
+    "strict_json_exact_donor": "17/17 PASS in 0.04s on declared exact donor blobs after compatibility-only error-message repair",
+    "fused_semantic_reproduction": "9/9 PASS in 0.03s; local reconstructed aggregate blob did not match retained Git blob and therefore earns no exact-combined-file credit",
+    "github_actions": "latest checked fusion run failed before any workflow steps; not a test failure"
+  },
+  "runtime_credit": {
+    "exact_current_combined_file_execution": 0,
+    "real_mistral_call": 0,
+    "vault_secret": 0,
+    "exact_oci": 0,
+    "vercel_firecracker_integrated": 0,
+    "tier2_recreation": 0,
+    "whole_clayverse": 0
+  },
+  "coordination": {
+    "supersedes": [674, 670],
+    "lifecycle_lane": "PR 675 owns universal stale Stop/global-generation completion fence",
+    "final_preflight_lane": "PR 677 owns complementary final fixed-model/transient-secret preflight",
+    "law": "do not add another Mistral HTTP client or turn/state/effect authority"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0
+  },
+  "next_gate": "converge one same-causal TurnLifecycle response-reingest-before-effect path, then execute Vercel Firecracker -> exact OCI -> approved Vault Mistral -> canonical reentry -> EffectGate/EntityOS -> Tier-2 recreation -> secret reacquisition/repeat",
+  "non_claims": [
+    "no exact current combined-file runtime test",
+    "no real Mistral/Vault execution",
+    "no OCI or Firecracker integrated acceptance",
+    "no whole-product PASS"
+  ]
+}

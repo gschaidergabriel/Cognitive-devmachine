@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 import clayverse.adapters as adapters
@@ -54,6 +56,41 @@ def test_nonfinite_decision_json_fails_before_inference_protocol(monkeypatch, co
         '{"id":"cmpl-test","model":"model-x","choices":[{"finish_reason":"stop","message":{"content":"{\\"text\\":\\"ok\\",\\"effect\\":null,\\"bad\\":'
         + constant
         + '}"}}]}'
+    ).encode()
+    monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
+    with pytest.raises(InferenceProtocolError, match="message content is not JSON"):
+        MistralInference(model="model-x").reason({}, "hello")
+
+
+def test_duplicate_provider_envelope_key_fails_closed(monkeypatch):
+    monkeypatch.setenv("MISTRAL_API_KEY", "secret")
+    raw = (
+        '{"id":"cmpl-test","id":"cmpl-test","model":"model-x",'
+        '"choices":[{"finish_reason":"stop","message":{"content":"{\\"text\\":\\"ok\\",\\"effect\\":null}"}}]}'
+    ).encode()
+    monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
+    with pytest.raises(InferenceProtocolError, match="envelope is not JSON"):
+        MistralInference(model="model-x").reason({}, "hello")
+
+
+def test_duplicate_decision_effect_key_fails_closed(monkeypatch):
+    monkeypatch.setenv("MISTRAL_API_KEY", "secret")
+    decision = (
+        '{"text":"safe","effect":null,'
+        '"effect":{"capability":"state.noop","target":"probe","argv":null}}'
+    )
+    raw = json.dumps(
+        {
+            "id": "cmpl-test",
+            "model": "model-x",
+            "choices": [
+                {
+                    "finish_reason": "stop",
+                    "message": {"content": decision},
+                }
+            ],
+        },
+        separators=(",", ":"),
     ).encode()
     monkeypatch.setattr(adapters, "urlopen", lambda request, timeout: FakeResponse(raw))
     with pytest.raises(InferenceProtocolError, match="message content is not JSON"):

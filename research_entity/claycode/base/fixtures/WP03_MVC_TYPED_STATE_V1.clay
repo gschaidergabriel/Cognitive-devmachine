@@ -1,0 +1,65 @@
+module claycode.wp03.fixture.mvc_typed_state
+version "1.0"
+status TEST_FIXTURE
+
+type EvidenceTier = GOLD|SILVER|BRONZE
+type FamiliarityResult = KNOWN_HIGH_CONFIDENCE|KNOWN_NEEDS_CONFIRMATION|AMBIGUOUS|UNKNOWN|CONFLICT
+type LearnerStage = CURRENT|CANDIDATE|LAST_KNOWN_GOOD|REJECTED|ROLLED_BACK
+
+record VisualTrainingExample {
+  example_id:Ref
+  feature_ref:Ref
+  feature_backbone_version:Version
+  label_ref:Ref?
+  tier:EvidenceTier
+  evidence:Set<EvidenceRef>
+  observed_epoch:Epoch
+}
+
+record VisualClassifierVersion {
+  version:Version
+  feature_backbone_version:Version
+  stage:LearnerStage
+  prototype_state_ref:Ref?
+  readout_state_ref:Ref?
+  calibration_ref:Ref
+  training_examples:Set<Ref>
+  evaluation_receipts:Set<ReceiptRef>
+  parent_version:Version?
+  semantic_hash:Hash
+}
+
+record VisualFamiliarityResult {
+  result:FamiliarityResult
+  candidate_entity:Ref?
+  support_count:Int
+  classifier_version:Version
+  feature_backbone_version:Version
+  evidence_tier:EvidenceTier?
+  sensor_evidence:Set<EvidenceRef>
+}
+
+record LearnerBudgetState {
+  budget_ms:Int
+  used_ms:Int
+  learning_paused:Bool
+  perception_enabled:Bool
+  epoch:Epoch
+}
+
+record VisualLearnerState {
+  current:VisualClassifierVersion
+  candidate:VisualClassifierVersion?
+  last_known_good:VisualClassifierVersion
+  budget:LearnerBudgetState
+  replay_epoch:Epoch
+}
+
+record GenericCoreState {
+  evidence:Set<EvidenceRef>
+  ordered:Ordered<Ref>
+  history:List<Ref>
+  by_ref:Map<Ref,Epoch>
+  maybe_ref:Option<Ref>
+  operation:Result<Ref,ErrorRef>
+}

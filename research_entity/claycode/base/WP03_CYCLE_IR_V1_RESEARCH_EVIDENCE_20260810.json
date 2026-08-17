@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "status": "RESEARCH_EVIDENCE_ONLY",
+  "subject": "WP03/WP05 CycleRegionIR v1 and 100-node structural residual coverage",
+  "clay_branch": "chatgpt/claycode-wp03-cycle-ir-v1-20260810",
+  "stacked_on": "chatgpt/claycode-wp03-frontend-bridge-v3-20260810",
+  "source_identity": {
+    "cycle_ir_blob": "9c374ebcdabfee08fdbc4f1ee0009122f9e33470",
+    "cycle_ir_test_blob": "2105c4845f5189224233e0f5b996fa85ffb07fb8",
+    "structural_typed_ir_blob": "67baf2fb5d0bd7241903b773bd94c1778a895aa5",
+    "bridge_v3_blob": "b53f83c43ae996f2fe2bce7fad318cf462f6e7a7",
+    "clause_ir_blob": "08e60fd7fe52a8675fbf15c33508a60cfc260333",
+    "metadata_ir_blob": "0d3b7794613ce080216fc547aefe25362bd7cd11",
+    "residual_coverage_gate_blob": "b6f4dec5856f5b5e1774ed75ca71f6ae284fd665"
+  },
+  "self_hosted_receipts": [
+    {
+      "workflow_run_id": "31384304452",
+      "truth_class": "REMOTE_EXECUTION_RECEIPT",
+      "scope": "WP03_CYCLE_REGION_IR_V1_REAL_G9_CONTROL_FLOW",
+      "status": "PASS",
+      "result": {
+        "top_level_ops": 23,
+        "top_level_ifs": 2,
+        "params": ["input", "node"],
+        "external_call_invocations": 0,
+        "parser_calls_after_frontend_artifact_creation": 0,
+        "internal_repetition_inferred": false,
+        "effect_authority": "NONE",
+        "truth_authority": "NONE",
+        "negative_controls": [
+          "missing_condition_value_rejected",
+          "unsupported_statement_rejected",
+          "duplicate_param_rejected",
+          "unsupported_condition_operator_rejected",
+          "statement_order_changes_cycle_identity"
+        ]
+      }
+    },
+    {
+      "workflow_run_id": "31384572380",
+      "truth_class": "REMOTE_EXECUTION_RECEIPT",
+      "scope": "WP03_STRUCTURAL_BRIDGE_V3_100_NODE_CYCLE_IR_COVERAGE_V2_RESEARCH",
+      "status": "PASS",
+      "result": {
+        "residual_count": 100,
+        "clause_ir": 81,
+        "metadata_ir": 18,
+        "cycle_ir": 1,
+        "gaps": 0,
+        "overlaps": 0,
+        "rejected": 0,
+        "opaque_cycle_remaining": 0,
+        "parser_calls_after_frontend_artifact_creation": 0,
+        "authority": "NONE",
+        "falsifiers_rejected": [
+          "authority_forgery",
+          "cycle_identity_mismatch",
+          "implicit_call_binding",
+          "unsupported_repetition"
+        ]
+      }
+    }
+  ],
+  "current_conclusion": "The exact measured 100-node WP03 residual surface has a structurally validated disposition of 81 ClauseIR + 18 MetadataIR + 1 CycleRegionIR with zero gaps and zero overlaps. This does not establish executable call/effect semantics.",
+  "remaining_blocker": "CALL_EXPRESSION_TYPE_EFFECT_AND_RUNTIME_BINDING_FOR_WP05",
+  "promotion": "NONE",
+  "wp03_status": "OPEN",
+  "base_status": "NOT_PASS",
+  "frank_harness_mutation": false
+}

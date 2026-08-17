@@ -1,3 +1,4 @@
+import time
 from pathlib import Path
 
 from clayverse.identity import IdentityRouter
@@ -80,6 +81,57 @@ def test_runtime_readiness_rejects_wrong_schema_without_mutation(tmp_path):
     IdentityRouter(db, {})
     try:
         db.db.execute("UPDATE meta SET value='999' WHERE key='schema_version'")
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
+        assert terminals.attested == []
+    finally:
+        db.close()
+
+
+def test_runtime_readiness_rejects_duplicate_canonical_session_before_terminal_probe(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        now = time.time()
+        db.db.execute(
+            "INSERT INTO sessions(session_id,user_id,created_at,updated_at,generation,terminal_name) "
+            "VALUES(?,?,?,?,?,?)",
+            (
+                "session:gabriel:readiness-drift",
+                "gabriel",
+                now,
+                now,
+                db.entity_generation(),
+                "clayverse-gabriel-drift",
+            ),
+        )
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
+        assert terminals.attested == []
+    finally:
+        db.close()
+
+
+def test_runtime_readiness_rejects_extra_user_before_terminal_probe(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        db.ensure_user('intruder', 'Intruder')
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
+        assert terminals.attested == []
+    finally:
+        db.close()
+
+
+def test_runtime_readiness_rejects_equal_rights_drift_before_terminal_probe(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        db.db.execute("UPDATE users SET rights='owner' WHERE user_id='gabriel'")
         terminals = _TerminalProbe()
         assert _runtime_ready(db, terminals) is False
         assert terminals.checked == []

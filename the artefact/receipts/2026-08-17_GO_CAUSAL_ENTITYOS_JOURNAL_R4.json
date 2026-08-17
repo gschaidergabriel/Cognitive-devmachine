@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "product": "ClayVerse single OCI container",
+  "entityos_role": "internal execution/security substrate",
+  "base_main_sha": "225c8ff8c11a186456fcbb5e992044c6231aeb62",
+  "tested_branch_sha": "0d47a68de10773a9f566cf8066665aab129a70b1",
+  "branch": "go-causal-reentry-fence-r4-20260817",
+  "latest_nonoverlap_main_observed": "6a49f31553b550997353258518aaa2f2c07d0b34",
+  "problem": "The admitted EntityOS effect could execute before any durable effect intent existed, while causal re-entry was written later. Crash or stale-generation/lease windows could therefore leave an external outcome unknown to UnifiedDB or incorrectly promoted as current.",
+  "implemented_contract": [
+    "UnifiedDB remains the only persistent authority; EffectJournal is transactional policy over its existing effects and causal_episodes tables",
+    "persist PENDING before admitted state.noop or EntityOS execution",
+    "generic direct host process execution remains forbidden",
+    "preserve pinned/sealed EntityOS bridge boundary",
+    "post-execution session generation and optional lease fence are checked inside the same BEGIN IMMEDIATE transaction that finalizes the outcome and causal re-entry",
+    "stale post-execution outcomes become STALE_OUTCOME with zero causal credit",
+    "failed EntityOS attempts become FAILED with zero causal credit",
+    "unavailable EntityOS requests become DENIED with zero causal credit",
+    "restart-surviving PENDING effects become UNKNOWN_AFTER_RESTART with zero causal credit",
+    "engine reuses the effect journal causal record, preventing duplicate effect re-entry"
+  ],
+  "modified_blob_binding": {
+    "the artefact/clayverse/effect_journal.py": "3c7b92024d5eb64dec48c4ce69363602d867fa9c",
+    "the artefact/clayverse/effects.py": "13f9306f81e52bca1de002638054b569c018646b",
+    "the artefact/clayverse/engine.py": "3c76a59dd45deb5e49094b4d42a978baf73cc60c",
+    "the artefact/tests/test_effect_fencing.py": "f543424a71e41c5a765752866c7cc3bcba707ccc",
+    "the artefact/tests/test_causal_credit.py": "df5134d2c0ca1cc4e3b4d8f5c831bcd330f30cbf"
+  },
+  "isolated_regression": {
+    "surface": "non-VPS isolated container runner available to the Research Entity",
+    "command": "PYTHONPATH=. pytest -q tests/test_effect_fencing.py tests/test_causal_credit.py tests/test_inference_effect_route.py tests/test_effect_identity_latest.py tests/test_workspace_boundary.py",
+    "result": "PASS",
+    "passed": 12,
+    "failed": 0,
+    "note": "Modified R4 bytes were reconstructed exactly; adjacent identity/workspace/inference-route contracts were included. This is not an OCI image acceptance run."
+  },
+  "unusual_experiment": {
+    "count_for_trigger": 1,
+    "intervention": "SIGKILL during causal re-entry on a precursor non-canonical isolated prototype",
+    "first_observation": "SQLite integrity stayed ok but a pending episode survived restart, falsifying the assumption that WAL durability alone closed causal continuity.",
+    "repair_regression": "The same intervention rerun after restart reconciliation left zero pending residue and one re-entry per episode.",
+    "scope": "mechanism discriminator only, not exact current-image acceptance evidence"
+  },
+  "oci_gate": {
+    "status": "BLOCKED_BEFORE_RUNNER_START",
+    "known_blocker": "GitHub Actions account billing/spending-limit prevented the exact OCI job from starting on the previous exact branch attempt; no technical OCI failure was observed.",
+    "whole_container_pass": false
+  },
+  "acceptance": "CANDIDATE_IN_PROGRESS",
+  "next_executable_frontier": "Merge this non-overlapping causal journal fusion into current main, then run the exact integrated OCI build/restart gate on an authorized runner when the runner/billing block is cleared."
+}

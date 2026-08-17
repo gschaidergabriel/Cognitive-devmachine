@@ -6,15 +6,18 @@
   "program": "ClayVerse single-container",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
-  "canonical_main_refreshed_before_receipt": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "canonical_main_refreshed_before_final_receipt": "632d7e8307d5281ec6553cd93b4643422a0520ae",
   "candidate_branch": "go/meta-learning-method-admission-20260817",
-  "candidate_head_before_receipt": "2c9467e618927b4aa76a1d9e53018504c8f70465",
+  "candidate_head_before_final_receipt": "68199cfbf376dd59f76e87c08def3393f8289c5c",
   "status": "SOURCE_CANDIDATE_SUPPORTING_REGRESSION_ONLY",
-  "frontier": "validated durable method-memory admission for meta-learning and analogical transfer",
-  "observed_gap": {
+  "frontier": "validated durable method-memory admission plus epistemic separation from factual evidence retrieval",
+  "observed_gaps": {
     "durable_memory_kind_unconstrained": true,
     "generic_add_memory_accepted_arbitrary_kind": true,
     "dedicated_validated_method_memory_path_before_change": false,
+    "existing_world_assembler_excluded_only_three_control_kinds": true,
+    "existing_microclay_candidate_query_excluded_only_three_control_kinds": true,
+    "method_memory_could_have_been_served_as_normal_evidence_on_lexical_match_without_partition_repair": true,
     "owner_required_method_classes": [
       "framework_candidate",
       "framework",
@@ -29,7 +32,10 @@
     "files": [
       "the artefact/clayverse/method_memory.py",
       "the artefact/clayverse/store.py",
-      "the artefact/tests/test_method_memory_admission.py"
+      "the artefact/clayverse/retrieval.py",
+      "the artefact/clayverse/microclay_retrieval.py",
+      "the artefact/tests/test_method_memory_admission.py",
+      "the artefact/tests/test_method_memory_epistemic_partition.py"
     ],
     "schema_version_changed": false,
     "mechanism": [
@@ -39,6 +45,10 @@
       "validate failure-pattern, counterexample and method-receipt contracts separately",
       "require method_receipt to reference an existing non-receipt method memory",
       "revalidate stored method rows on read so malformed legacy or raw-SQL rows fail closed",
+      "exclude every method-memory kind from WorldAssembler ordinary durable evidence and extracted-fragment context",
+      "exclude every method-memory kind from new MicroClay factual/evidence retrieval candidates",
+      "reject replay of historical retrieval receipts whose selected memory IDs now resolve to method-memory kinds",
+      "reject retrieval-policy credit for receipts whose selected IDs resolve to method-memory kinds",
       "do not grant factual truth, rights, capability, effect authority or automatic promotion"
     ],
     "migration_collision_avoidance": "no schema bump; intentionally orthogonal to active MicroClay schema-v7 replay-identity candidates",
@@ -48,8 +58,8 @@
     "authority": "SUPPORTING_ONLY_NOT_EXACT_REPO_OR_CONTAINER_TRUTH",
     "runtime": "Python 3.13.5",
     "pytest": "9.0.2",
-    "source_binding": "manual reconstruction from the branch source written in this go; git clone was unavailable because the isolated container could not resolve github.com",
-    "focused_pytest": "10 passed in 0.33s",
+    "source_binding": "manual reconstruction from the branch source written in this go; exact git clone was unavailable because the isolated container could not resolve github.com",
+    "focused_pytest": "14 passed in 0.43s",
     "py_compile": "PASS",
     "checks": [
       "reserved method kind bypass rejected",
@@ -61,7 +71,11 @@
       "malformed raw/legacy method row rejected on read",
       "counterexample target binding required",
       "method receipt target existence required",
-      "ordinary fact memory path unchanged"
+      "ordinary fact memory path unchanged",
+      "strong lexical method match excluded from MicroClay evidence candidates",
+      "method memory excluded from legacy compatibility world assembly",
+      "tainted historical retrieval receipt cannot replay method memory as fact",
+      "tainted retrieval receipt cannot train the factual retrieval policy"
     ]
   },
   "execution_admission": {
@@ -75,16 +89,17 @@
   },
   "parallel_coordination": {
     "main_advanced_during_run": true,
-    "new_main_commit": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
-    "new_main_change_class": "MicroClay integration receipt only",
-    "overlap_with_method_memory_source_files_observed": false,
-    "candidate_branch_state_at_refresh": "4_ahead_1_behind_before_receipt"
+    "latest_main_commit": "632d7e8307d5281ec6553cd93b4643422a0520ae",
+    "latest_main_change_class": "MicroClay context hard-bound receipt only",
+    "latest_main_source_overlap_with_method_memory_candidate_observed": false,
+    "retained_parallel_integration_pr": 402,
+    "do_not_force_merge": true
   },
   "go_unusual_experiment_accounting": {
-    "new_unusual_experiments_added": 0,
-    "shared_designated_experiment_from_current_main": "DURABLE_RECEIPT_BUDGET_TAMPER",
-    "shared_designated_experiment_execution_state": "NOT_EXECUTED_RUNNER_ADMISSION_FAILED",
-    "reason_no_second_experiment": "preserve the one-unusual-experiment global macrocycle law"
+    "new_unusual_experiments_added_by_this_candidate": 0,
+    "shared_macrocycle_experiment": "BOUND_WORLD_MINIMUM_OVERFLOW",
+    "shared_macrocycle_accounting": "1/1_CONSUMED",
+    "reason_no_second_experiment": "preserve the global one-unusual-experiment law"
   },
   "promotion_boundary": {
     "method_memory_source_candidate": true,
@@ -92,7 +107,7 @@
     "microclay_mode_changed": false,
     "current_main_promoted": false,
     "whole_clayverse_oci_acceptance": "IN_PROGRESS",
-    "next_exact_gate": "fuse/rebase the candidate onto current main, then execute exact-identity focused method-memory tests plus adjacent UnifiedDB/memory/retrieval regressions on an actually-started authorized isolated runner; only then run broader suite and exact OCI build/runtime acceptance"
+    "next_exact_gate": "fuse/rebase this candidate with fresh current main and retained MicroClay integration without losing either context-hard-bound or replay/packing repairs; then execute exact-identity method-memory admission and epistemic-partition tests plus adjacent UnifiedDB/memory/retrieval regressions on an actually-started authorized isolated runner; only after green exact-source execution proceed to broader suite and exact OCI build/runtime acceptance"
   },
   "forbidden_or_unused": {
     "vps_testing": true,

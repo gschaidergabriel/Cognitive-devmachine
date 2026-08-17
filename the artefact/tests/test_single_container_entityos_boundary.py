@@ -22,7 +22,7 @@ def test_baseline_container_has_no_mandatory_entityos_runtime_sidecar():
 def test_baseline_compose_does_not_require_entityos_digest():
     compose = (ROOT / "compose.yaml").read_text()
 
-    assert compose.count('${CLAYVERSE_ENTITYOS_SHA256:-}') == 2
+    assert compose.count('${CLAYVERSE_ENTITYOS_SHA256}') == 2
     assert "CLAYVERSE_ENTITYOS_SHA256:?required" not in compose
     # Authentication configuration remains fail-closed; only the optional
     # internal EntityOS substrate loses the accidental baseline requirement.

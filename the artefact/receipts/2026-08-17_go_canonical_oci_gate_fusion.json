@@ -1,0 +1,56 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "base_main": "5802f5b82367b4405fbac0c7ce5c770036cae7bf",
+  "status": "SOURCE_FUSION_REGRESSION_PASS_OCI_RUNTIME_OPEN",
+  "observed_problem": {
+    "duplicate_workflows": [
+      ".github/workflows/clayverse-artefact-ci.yml",
+      ".github/workflows/clayverse-artifact-ci.yml"
+    ],
+    "counterevidence": "The tracked-lock workflow had no clean-checkout transport step for the untracked EntityOS bytes, while the release-staging workflow carried a second OCI acceptance path and accepted a caller digest even though the Dockerfile later re-bound it to the tracked lock.",
+    "product_risk": "Two semantically overlapping OCI gates could drift; one was structurally unable to reach image construction from a clean checkout without external pre-staging."
+  },
+  "fusion": {
+    "canonical_workflow": ".github/workflows/clayverse-artifact-ci.yml",
+    "retired_workflow": ".github/workflows/clayverse-artefact-ci.yml",
+    "transport_locator": "required same-repository release tag with asset named exactly EntityOS",
+    "artifact_authority": "the artefact/entityos.lock.json only",
+    "digest_input_from_caller": false,
+    "stage_gate": "stage-entityos.sh with tracked lock digest plus size and symlink checks",
+    "image_gate": "Dockerfile lock/digest/size checks plus post-build embedded SHA-256 verification",
+    "runtime_regression_contract": "non-root, network none, read-only rootfs, cap-drop ALL, no-new-privileges, two state-only restarts against one persistent volume, no-config fail-closed startup"
+  },
+  "isolated_regression": {
+    "environment": "OpenAI isolated non-VPS container",
+    "classification": "regression_only",
+    "tests": [
+      "the artefact/tests/test_oci_entityos_staging_workflow.py",
+      "the artefact/tests/test_entityos_artifact_authority.py"
+    ],
+    "result": "PASS",
+    "tests_passed": 7,
+    "yaml_parse": "PASS",
+    "oci_image_built": false,
+    "whole_clayverse_acceptance": false
+  },
+  "entityos_lock": {
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "size_bytes": 9181696,
+    "exact_internal_substrate_vercel_evidence": "OBSERVED_IN_CANONICAL_RECEIPT",
+    "durable_transport_asset_available": false
+  },
+  "unusual_experiment": {
+    "global_accounting": "CONSUMED_1_OF_1_BY_STAGING_TOCTOU_SOURCE_SWAP_PARALLEL_FUSION",
+    "new_unusual_experiment_count_this_lane": 0,
+    "remaining_work_class": "REGRESSION_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_exact_isolated_step": "Promote the exact locked 32cd4587.../9181696-byte EntityOS bytes as a provenance-bound same-repository release asset, then run this single canonical workflow on an admitted isolated OCI runner and persist exact source SHA, release tag, EntityOS digest, image identity/archive digest, full pytest, restart/state and fail-closed startup evidence."
+}

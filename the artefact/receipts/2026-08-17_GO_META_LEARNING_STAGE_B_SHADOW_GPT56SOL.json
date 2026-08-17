@@ -18,6 +18,7 @@
     "files": [
       "the artefact/clayverse/method_memory.py",
       "the artefact/tests/test_method_memory_stage_b.py",
+      "the artefact/tests/test_method_memory_structural_similarity.py",
       "the artefact/receipts/2026-08-17_GO_META_LEARNING_STAGE_B_SHADOW_GPT56SOL.json"
     ],
     "store_schema_changed": false,
@@ -29,7 +30,9 @@
   },
   "implemented_contracts": [
     "strict clayverse.method/v1 method-record validation over existing UnifiedDB durable_memory",
-    "explicit structured problem_signature facets with facet-aware structural similarity and no free-text lexical fallback",
+    "explicit structured problem_signature facets with symmetric facet-aware structural similarity and no free-text lexical fallback",
+    "candidate-only extra or contradictory structural facets count against similarity instead of being ignored",
+    "normalized duplicate problem-signature values fail closed",
     "single-episode reusable framework promotion is rejected",
     "framework_candidate and heuristic_candidate remain non-serving",
     "Stage-B defaults to UNKNOWN or UNDERCOVERED triggers and preserves the factual evidence status",
@@ -76,7 +79,9 @@
       "malformed promoted method failed closed",
       "matching linked counterexample blocked framework",
       "user-scoped method did not cross to the other user",
-      "PRESENT evidence did not trigger Stage-B by default"
+      "PRESENT evidence did not trigger Stage-B by default",
+      "extra candidate structural facets are penalized symmetrically",
+      "normalized duplicate signature values fail closed"
     ]
   },
   "external_primary_evidence": [
@@ -103,7 +108,7 @@
   },
   "next_exact_gate": [
     "execute this branch plus the non-overlapping MicroClay receipt/replay/packing candidates in one authorized exact-identity isolated batch",
-    "run test_method_memory_stage_b.py against the exact staged source",
+    "run test_method_memory_stage_b.py and test_method_memory_structural_similarity.py against the exact staged source",
     "add held-out structurally-similar/lexically-dissimilar and lexically-similar/structurally-different transfer cases",
     "measure relevance, miss rate, contamination, stale-state use, unnecessary personalization, latency and causal task utility",
     "only then consider fusing Stage-B method_context into the bounded Claude-facing context; ACTIVE serving remains forbidden before evidence"

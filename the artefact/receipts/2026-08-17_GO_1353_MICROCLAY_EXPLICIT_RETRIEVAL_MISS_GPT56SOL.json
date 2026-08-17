@@ -1,0 +1,91 @@
+{
+  "schema": "clayverse-mechanism-receipt/v1",
+  "recorded_at_utc": "2026-08-17T07:04:27Z",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "canonical_main_observed": "e3c705df766c0fd719bb5fb47e95ae86d330cec7",
+  "stacked_pr": 490,
+  "stacked_base": {
+    "branch": "go/integration-microclay-meta-fusion-20260817-1326",
+    "observed_head": "1ff3fc98ed808c0f3d9e37da92fe3a634e481988"
+  },
+  "candidate_head_before_receipt": "8969bb030d4a21415be717b8f8e46906ed1d4bdd",
+  "candidate_contract": {
+    "function": "apply_explicit_retrieval_miss",
+    "target_scope": "Stage-A evidence memory only",
+    "feedback_source": "later canonical user turn in the same user/session",
+    "generation_fenced": true,
+    "original_query_hash_bound": true,
+    "target_must_predate_retrieval": true,
+    "target_must_not_have_been_selected": true,
+    "policy_mutation": "existing hashed query-to-subject route capital only",
+    "durable_truth_mutation": false,
+    "provenance_mutation": false,
+    "effect_authority": false,
+    "truth_authority": false,
+    "serving_mode": "SHADOW"
+  },
+  "source_identity": {
+    "path": "the artefact/clayverse/microclay_feedback.py",
+    "git_blob_sha1": "0084b5f73f82813d79a469570d6d3677a912b813",
+    "raw_sha256": "34e522ed1b31e4c33bf0043016ac31e4c2b33ce98f7f7b844f611d8423c66e27"
+  },
+  "isolated_mechanism_evidence": {
+    "environment": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "exact_candidate_module_byte_identity_confirmed_by_git_hash_object": true,
+    "module_py_compile": "PASS",
+    "standalone_sqlite_contract_probe": {
+      "status": "PASS",
+      "observed": {
+        "first_feedback_applied": true,
+        "duplicate_receipt": true,
+        "query_subject_routes_updated": 2,
+        "route_capitals_positive": true,
+        "retrieval_feedback_rows": 1,
+        "truth_authority": false,
+        "effect_authority": false
+      },
+      "scope_limit": "probe used minimal stubs for surrounding ClayVerse classes; it is not an exact package/integration run"
+    },
+    "outer_transaction_rollback_probe": {
+      "status": "PASS",
+      "observed": {
+        "feedback_rows_after_forced_outer_rollback": 0,
+        "route_policy_rows_after_forced_outer_rollback": 0
+      },
+      "scope_limit": "probe validates transaction-composition mechanism against an isolated SQLite harness, not the full branch test suite"
+    }
+  },
+  "github_execution_admission": {
+    "head_checked": "9f1912ff2a6aba7cfe43a43a9a1eebb6d2220b3f",
+    "workflow_run": 32004090974,
+    "job": 95309975469,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "observed_steps": [],
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_VISIBLE_STEP_EXECUTION",
+    "test_failure": false
+  },
+  "vercel_mcp": {
+    "full_connector_surface_inspected": true,
+    "sandbox_start_exec_surface_exposed": false,
+    "classification": "VERCEL_SANDBOX_EXECUTION_SURFACE_UNAVAILABLE"
+  },
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count_added": 0,
+    "reason": "No shared immutable request identifier was exposed and the available user-message timestamp is minute-precision only; the atomic lease protocol therefore forbids minting a fallback experiment claim."
+  },
+  "remaining_gates": [
+    "actually-started exact-head isolated pytest execution of the stacked candidate and retained MicroClay regressions",
+    "admitted product ingress that resolves an explicit user correction to an existing missed memory without model self-reward",
+    "negative/irrelevance feedback semantics remain deliberately unimplemented pending a bounded query-specific design",
+    "fresh fusion against moving main before canonical admission",
+    "held-out/replay SHADOW-vs-baseline evidence before any ACTIVE MicroClay promotion",
+    "whole ClayVerse OCI/auth/PTY/Claude/recovery/concurrency acceptance"
+  ],
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXACT_RUNTIME_BLOCKED",
+  "whole_product_pass": false
+}

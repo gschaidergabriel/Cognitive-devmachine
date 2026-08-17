@@ -14,12 +14,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DISABLE_AUTOUPDATER=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
-# Keep the baseline OS package surface small. Browser xterm and native Claude Code
-# are installed from repository-owned digest locks below rather than via npm.
-RUN apt-get update \
+# Bind the OS package resolver to one repository-owned Debian snapshot before
+# installing anything. APT still verifies Debian Release/InRelease signatures
+# and package hashes; only Valid-Until is disabled for the immutable snapshot.
+COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
+COPY build/configure_pinned_apt.py /opt/clayverse-build/configure_pinned_apt.py
+RUN python /opt/clayverse-build/configure_pinned_apt.py \
+ && apt-get update \
  && apt-get install -y --no-install-recommends ca-certificates tmux \
  && rm -rf /var/lib/apt/lists/*
-COPY SOURCE_LOCK.json /opt/clayverse-build/SOURCE_LOCK.json
+
+# Browser xterm and native Claude Code are installed from repository-owned
+# digest locks rather than via npm or an updater.
 COPY build/install_pinned_xterm.py /opt/clayverse-build/install_pinned_xterm.py
 COPY build/install_pinned_claude.py /opt/clayverse-build/install_pinned_claude.py
 RUN mkdir -p /opt/clayverse/vendor \

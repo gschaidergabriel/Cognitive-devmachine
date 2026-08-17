@@ -1,0 +1,62 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T19:37:01+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "PR623 identity/session-drift fail-closed fusion",
+  "canonical_main_observed_before_fusion": "ac29b2d6b506583b5d523e18cad920d9ab039f78",
+  "retained_pr": 623,
+  "retained_branch": "clay/go-identity-session-drift-failclosed-20260817",
+  "pre_fusion_head": "b519ee8b8f4ffa4fe35e7c921bbb314e877ac5a9",
+  "source_commits": [
+    {
+      "sha": "4dd60afd38f947c7397590b302e828d24284a0e3",
+      "change": "terminal_gateway._runtime_ready now requires session row cardinality to equal the canonical two-user terminal map before the existing keyed projection can qualify state as ready"
+    },
+    {
+      "sha": "831e7e6fa9c9de9e7ace49476cbfcff56e420587",
+      "change": "focused regression inserts a duplicate canonical Gabriel session row and requires readiness to fail before any tmux terminal probe or policy attestation"
+    }
+  ],
+  "mechanism": {
+    "observed_source_gap": "readiness previously projected session rows into a dict keyed by user_id, so duplicate rows for one canonical user could collapse before canonical set/terminal/generation checks",
+    "counterhypothesis": "the existing set(sessions) check might already reject all drift",
+    "discriminator": "three rows containing two Gabriel rows plus one Andreas row preserve the canonical key set after dict projection; explicit row cardinality is therefore required",
+    "result": "SOURCE_MECHANISM_SUPPORTED",
+    "authority_effect": "none; UnifiedDB remains canonical and no second identity/session/readiness authority is introduced"
+  },
+  "execution_evidence": {
+    "github_workflow_run": 32030737590,
+    "github_job": 95389934157,
+    "head_sha": "831e7e6fa9c9de9e7ace49476cbfcff56e420587",
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": [],
+    "runner_id": 0,
+    "classification": "RUNNER_ADMISSION_FAILURE_ZERO_STEPS",
+    "semantic_test_execution": false,
+    "runtime_credit": 0
+  },
+  "oci_frontier": {
+    "strongest_started_deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "next_external_prerequisite": "Provision GITHUB_READ_TOKEN as an approved sensitive Vercel Preview credential on the retained PR810 controller; keep the secret host-side and transfer only verified archive bytes into the disposable Sandbox."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No safely shared immutable trigger/request identity was available for an atomic global experiment lease."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "promotion": "NOT_AUTHORIZED_FROM_SOURCE_OR_ZERO_STEP_RUNNER_EVIDENCE"
+}

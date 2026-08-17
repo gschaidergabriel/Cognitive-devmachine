@@ -1,0 +1,60 @@
+{
+  "schema": "ResearchReentryReceipt/v1",
+  "timestamp": "2026-08-17T17:35:00+07:00",
+  "trigger": "go",
+  "classification": "REFINES",
+  "canonical_main_before": "5fbf5b74a65db52d069fb7e0afc4d5e6e11005b9",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "material_delta": {
+    "kind": "EXECUTION_IDENTITY_DRIFT",
+    "retained_lane": "gschaidergabriel/clay-global-research-entity#611",
+    "actual_pr_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "changed_files": 2,
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "bridge_pr": "gschaidergabriel/Dr.-Unterweger#846",
+    "bridge_head": "4310f2ef3fef7fa9680158ff53a7978e18fdc622",
+    "bridge_runtime_binding": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "stale_shared_reference_observed": "PROGRAM_STATE still mentioned older retained PR611 head 6a27ddab361938b4ab875610b7a51ac9e845c744 in dynamic execution text"
+  },
+  "execution_observation": {
+    "local_isolated_controller": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "tmux": "MISSING",
+      "docker": "MISSING",
+      "podman": "MISSING",
+      "runtime_credit": "ZERO"
+    },
+    "vercel": {
+      "direct_chatgpt_sandbox_lifecycle": "NOT_EXPORTED",
+      "exact_bridge_source_binding": "CONFIRMED",
+      "latest_exact_head_attempt": "ADMISSION_BLOCKED_BEFORE_SANDBOX_START_BY_BUILD_RATE_LIMIT",
+      "runtime_credit_for_exact_pr611_head": "ZERO"
+    },
+    "daytona": "NO_ADMITTED_PROVIDER_CONTACT_PATH_FROM_THIS_CONTROLLER; ZERO_RUNTIME_CREDIT"
+  },
+  "live_hypofusion": {
+    "counterhypothesis": "A head-marker-only bridge rebind could still execute stale reconstructed bytes or a provider-side build path different from the inspected bridge source.",
+    "supporting_evidence": "The bridge runner independently enforces the candidate terminal Git blob before Sandbox.create, but no actually-started run exists at PR611 head 2957e80228815ac266635981a55f22bc15dc9ed4.",
+    "cheapest_falsifier": "First admitted isolated Vercel execution of Dr.-Unterweger PR846 head 4310f2ef3fef7fa9680158ff53a7978e18fdc622, requiring candidate_head=2957e80228815ac266635981a55f22bc15dc9ed4, exact terminal/policy blob checks, real tmux 3.6a markers, deny-all tested network, and Sandbox stop receipt.",
+    "if_true": "Do not promote or merge PR611; repair bridge provenance or candidate reconstruction before any runtime credit."
+  },
+  "worker_reentry": {
+    "targets": [
+      "retained tmux lane PR611",
+      "Vercel execution bridge PR846",
+      "program-state/execution-admission coordination lane"
+    ],
+    "action": "ADOPT current PR611 head 2957e80228815ac266635981a55f22bc15dc9ed4 for the next admitted exact run; do not use stale 6a27ddab361938b4ab875610b7a51ac9e845c744 as current identity.",
+    "delivery_is_not_causal_credit": true
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision trigger identity is exposed; no immutable shared request/turn identifier is available to guarantee the single global experiment lease."
+  },
+  "product_code_change": false,
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_executable_discriminator": "First actually-started authorized isolated runner -> refresh main -> rejoin PR611 once -> bind exact resulting head -> real tmux 3.6a discriminator -> focused plus adjacent regressions -> promotion decision -> native-Claude/OCI/readiness/restart/concurrency gates"
+}

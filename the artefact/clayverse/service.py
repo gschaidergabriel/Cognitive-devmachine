@@ -3,8 +3,10 @@ from __future__ import annotations
 import json
 import os
 import signal
+import sqlite3
 import sys
 from http.server import ThreadingHTTPServer
+from pathlib import Path
 
 from .adapters import ClerkConfig, ClerkTokenVerifier, ClaudeCodeInference
 from .api import ClayVerseAPI
@@ -12,6 +14,12 @@ from .engine import ClayVerseEngine
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .store import UnifiedDB
+
+
+REQUIRED_TABLES = frozenset({
+    "meta", "users", "sessions", "turns", "durable_memory", "workspace_episodes",
+    "effects", "causal_episodes", "leases", "checkpoints", "graph_nodes", "graph_edges",
+})
 
 
 def _clerk_map() -> dict[str, str]:
@@ -39,8 +47,38 @@ def _web_config() -> tuple[str, str]:
     return publishable_key, frontend_api
 
 
+def healthcheck(state_root: str) -> int:
+    """Read-only liveness check: never creates, migrates, rebuilds or checkpoints state."""
+    db_path = Path(state_root) / "unified.db"
+    if not db_path.is_file():
+        print(json.dumps({"service": "clayverse", "status": "unhealthy", "reason": "state_missing"}), flush=True)
+        return 1
+    try:
+        uri = db_path.resolve().as_uri() + "?mode=ro"
+        db = sqlite3.connect(uri, uri=True, timeout=2, isolation_level=None)
+        try:
+            db.execute("PRAGMA query_only=ON")
+            tables = {r[0] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            version = db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+            if not REQUIRED_TABLES.issubset(tables):
+                raise RuntimeError("schema_incomplete")
+            if not version:
+                raise RuntimeError("schema_version_missing")
+            db.execute("SELECT COUNT(*) FROM sessions").fetchone()
+        finally:
+            db.close()
+    except Exception:
+        print(json.dumps({"service": "clayverse", "status": "unhealthy", "reason": "state_unreadable"}), flush=True)
+        return 1
+    print(json.dumps({"service": "clayverse", "status": "ok", "schema_version": version[0]}), flush=True)
+    return 0
+
+
 def main():
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
+    if "--health" in sys.argv:
+        return healthcheck(state_root)
+
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})

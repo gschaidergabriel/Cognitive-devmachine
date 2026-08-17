@@ -114,6 +114,32 @@ def test_runtime_readiness_rejects_duplicate_canonical_session_before_terminal_p
         db.close()
 
 
+def test_runtime_readiness_rejects_extra_user_before_terminal_probe(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        db.ensure_user('intruder', 'Intruder')
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
+        assert terminals.attested == []
+    finally:
+        db.close()
+
+
+def test_runtime_readiness_rejects_equal_rights_drift_before_terminal_probe(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        db.db.execute("UPDATE users SET rights='owner' WHERE user_id='gabriel'")
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
+        assert terminals.attested == []
+    finally:
+        db.close()
+
+
 def test_once_probe_is_explicitly_state_only_and_never_ready():
     payload = _state_probe_payload(7, 'abc123')
     assert payload == {

@@ -50,8 +50,29 @@
     {"receiver": "research:gwt", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Delivery, reconstruction, plan revalidation, use and local effect remain distinct; no causal claim from communication alone.", "requires_reply_or_observable_action": false},
     {"receiver": "research:emergenz", "message_kind": "COUNTER_CHALLENGE", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Successful live feedback recurrence is coordination evidence, not emergence proof or independent replication.", "requires_reply_or_observable_action": false},
     {"receiver": "research:frank", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "Frank remains bounded legacy/domain evidence, not the active ClayVerse endpoint.", "requires_reply_or_observable_action": false},
-    {"receiver": "research:claycode", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "ClayCode remains an internal/historical lens where useful; live re-entry creates no new execution authority.", "requires_reply_or_observable_action": false}
+    {"receiver": "research:claycode", "message_kind": "MATERIAL_DELTA", "urgency": "INDEX_ONLY", "decision": "NO_CHANGE", "summary": "ClayCode remains an internal/historical lens where useful; live re-entry creates no new execution authority.", "requires_reply_or_observable_action": false},
+    {
+      "route_id": "63d2f1881f90b967566629f4b9e93603d4b034c187842a1382035ba52092fafa",
+      "receiver": "github:pull/630",
+      "message_kind": "COUNTER_CHALLENGE",
+      "urgency": "BEFORE_NEXT_MATERIAL_WRITE_OR_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "PR630's fsGroup/CSI hardening is semantically useful, but its current branch is stale against canonical MicroVM main: the branch template still uses /readyz for liveness and lacks the newer Tier-2 full Pod/Kata sandbox replacement annotations/contracts; its test file likewise lacks the new liveness/Tier-2 fences. Do not merge the branch wholesale. Transplant only the fsGroup/storage semantics onto fresh main and rerun the current MicroVM regression set.",
+      "required_revalidation": "Refresh current main immediately before the next material write; reapply only fsGroup=10001, fsGroupChangePolicy=OnRootMismatch and the CSI/non-root-volume contract/test delta while preserving current Tier-2 replacement, /healthz liveness, NetworkPolicy/CNI and current Kata advisory fences; then run exact current-branch MicroVM tests before promotion.",
+      "payload_digest": "12c8c6efe8f8635c145b65b23c1c69f73a440e9b75933e972421e8a3c559d9a8",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "CLAIMED",
+        "channel": "github_pr_comment",
+        "delivery_claim": {
+          "claim_id": "747deb2ee79b98728e93f7144bf767b95deec9e6b77e5594c71bec4feb641835",
+          "claimant_organ": "GPT-5.6-Sol/go-2250",
+          "claimed_at": "2026-08-17T23:01:24+07:00",
+          "expires_at": "2026-08-17T23:16:24+07:00"
+        }
+      }
+    }
   ],
-  "delivery_state": "PR611_AND_PR602_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
+  "delivery_state": "PR611_AND_PR602_DELIVERED_ACK_PLAN_REVALIDATION_PENDING; PR630_COUNTER_CHALLENGE_CLAIMED",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

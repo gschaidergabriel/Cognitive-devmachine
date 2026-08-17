@@ -1,0 +1,82 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T00:32:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_write": "9580103d3e2c289a62bd601855699669fee8c91b",
+  "classification": "DETACHED_EXACT_CONTROLLER_READY_FINAL_RUNTIME_GATES_OPEN",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "deployment_id": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
+    "deployment_state": "READY",
+    "function_max_duration_seconds": 300,
+    "bound_research_product_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "bound_research_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "pr680_head": "215a52d0a0b862ec3e80a817cb6c8ee9ab75cd16",
+    "pr680_delta_after_bound_product_commit": "RECEIPTS_ONLY"
+  },
+  "source_mechanism": {
+    "status": "SUPPORTED_NOT_YET_EXECUTED_WITH_OWNER_CREDENTIAL",
+    "flow": "POST owner scoped GitHub read token -> exact commit/tree checks -> named persistent Vercel Sandbox -> token-scoped private fetch command in Sandbox -> token reference cleared -> secret non-persistence fence -> detached in-Sandbox batch -> 202 plus status endpoint",
+    "explicit_response_fences": {
+      "final_test_of_tests_pass": false,
+      "whole_product_pass": false,
+      "unusual_experiment_count_added": 0
+    },
+    "sdk_contract_check": "@vercel/sandbox v2 primary documentation explicitly supports named persistent sandboxes and runCommand({detached:true}); controller dependency is @vercel/sandbox 2.9.2"
+  },
+  "detached_batch_scope": {
+    "implemented": [
+      "exact pre-staged private source extraction and closure verification",
+      "locked EntityOS reconstruction and digest check",
+      "full source regression command",
+      "exact OCI build and image identity capture",
+      "in-image tmux/Claude/Python/EntityOS identity probe",
+      "hardened docker service --once state probe"
+    ],
+    "explicit_terminal_detail": "source_regression+exact_oci+in_image_identity+service_once passed; final Mistral/Vault/recovery/auth gates still open",
+    "whole_product_pass": false
+  },
+  "mandatory_final_gates_still_absent_from_current_batch": [
+    "approved runtime Vault/secret-store acquisition of MISTRAL_API_KEY",
+    "fixed admitted CLAYVERSE_MISTRAL_MODEL binding",
+    "real in-image canonical clayverse.service --mistral-once cognition",
+    "verified UnifiedDB pre-effect re-ingest plus required safe EffectGate/EntityOS round-trip",
+    "Tier-1 recovery validation",
+    "full outer Sandbox/appliance destruction and recreation from the SAME accepted OCI digest",
+    "recovered canonical state under a new entity generation",
+    "stale-result rejection and no blind external effect replay across replacement",
+    "Mistral secret reacquisition after replacement",
+    "second real post-recovery Mistral cognition turn",
+    "remaining final Clerk/auth/PTY/dual-user/persistence/network gates"
+  ],
+  "runtime_observation": {
+    "owner_github_read_token_observed": false,
+    "credential_bearing_post_attempted_by_this_organ": false,
+    "sandbox_started_by_owner_credential": false,
+    "private_source_runtime_credit_added": 0,
+    "exact_oci_runtime_credit_added": 0,
+    "real_mistral_runtime_credit_added": 0,
+    "tier2_runtime_credit_added": 0,
+    "whole_product_runtime_credit_added": 0
+  },
+  "adjudication": {
+    "supersedes_blocker": "The Vercel 300-second Function wall-clock is no longer the primary structural blocker because the retained controller is now phase-split around a named persistent Sandbox and detached command.",
+    "current_frontier": "Run the exact READY detached controller only when the owner-held scoped GitHub token is available, then inspect bounded Source/OCI runtime evidence. In the same retained lane, implement the approved Vault/Mistral -> canonical --mistral-once -> EffectGate/EntityOS -> Tier-1 -> full same-digest Tier-2 recreation -> Vault reacquisition -> second Mistral sequence before any final-test or whole-product credit.",
+    "do_not_infer": [
+      "READY is not product runtime PASS",
+      "detached batch PASS is not final Mistral PASS",
+      "component OCI PASS is not whole ClayVerse PASS"
+    ]
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No immutable shared go-request experiment slot was exposed; no unusual intervention was executed."
+  },
+  "acceptance": "IN_PROGRESS"
+}

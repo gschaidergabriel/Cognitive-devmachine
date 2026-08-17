@@ -45,12 +45,25 @@ class EffectJournal:
         global_row=db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
         entity_generation=int(global_row[0]) if global_row else 0
         if entity_generation>0 and entity_generation!=int(generation): raise StaleGeneration('entity_generation')
+    @staticmethod
+    def _assert_active_effect_intent_tx(db,episode_id,session_id,user_id,generation):
+        active=db.execute(
+            'SELECT workspace_selected,effect_id FROM active_turns WHERE episode_id=? AND session_id=? AND user_id=? AND generation=?',
+            (episode_id,session_id,user_id,int(generation)),
+        ).fetchone()
+        if not active: raise StaleGeneration('effect_active_turn')
+        if not int(active['workspace_selected']): raise PermissionError('effect workspace intent not selected')
+        if active['effect_id'] is not None: raise RuntimeError('active turn already bound to an effect')
+        workspace=db.execute('SELECT state,selected FROM workspace_episodes WHERE episode_id=? AND session_id=?',(episode_id,session_id)).fetchone()
+        if not workspace or workspace['state']!='SELECTED' or workspace['selected']!='request_effect':
+            raise PermissionError('effect workspace selection mismatch')
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
             self._assert_generation_tx(db,session_id,user_id,generation)
             if lease is not None: self._assert_lease_tx(db,lease)
             if episode_id is not None:
+                self._assert_active_effect_intent_tx(db,episode_id,session_id,user_id,generation)
                 prior=db.execute('SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1',(episode_id,)).fetchone()
                 if prior is not None:
                     raise RuntimeError('effect already persisted for episode; automatic replay denied')

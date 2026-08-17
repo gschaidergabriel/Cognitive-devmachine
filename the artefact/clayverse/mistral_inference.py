@@ -97,10 +97,14 @@ class MistralTokenInference:
         opener: Any | None = None,
     ):
         self.endpoint = _validated_endpoint(
-            endpoint or os.environ.get("MISTRAL_API_URL", DEFAULT_MISTRAL_ENDPOINT)
+            endpoint
+            if endpoint is not None
+            else os.environ.get("MISTRAL_API_URL", DEFAULT_MISTRAL_ENDPOINT)
         )
         self.model = _validated_model(
-            model or os.environ.get("MISTRAL_MODEL", DEFAULT_MISTRAL_MODEL)
+            model
+            if model is not None
+            else os.environ.get("MISTRAL_MODEL", DEFAULT_MISTRAL_MODEL)
         )
         self._api_token = _validated_token(
             api_token if api_token is not None else os.environ.get("MISTRAL_API_KEY", "")
@@ -181,15 +185,21 @@ class MistralTokenInference:
             },
             method="POST",
         )
+        http_status: int | None = None
+        transport_failed = False
         try:
             with self._opener.open(request, timeout=self.timeout_seconds) as response:
                 raw = response.read(_MAX_RESPONSE_BYTES + 1)
         except urllib.error.HTTPError as exc:
-            raise MistralInferenceError(
-                f"Mistral inference failed with HTTP status {exc.code}"
-            ) from None
+            http_status = int(exc.code)
         except (urllib.error.URLError, TimeoutError, OSError):
-            raise MistralInferenceError("Mistral inference transport failed") from None
+            transport_failed = True
+        if http_status is not None:
+            raise MistralInferenceError(
+                f"Mistral inference failed with HTTP status {http_status}"
+            )
+        if transport_failed:
+            raise MistralInferenceError("Mistral inference transport failed")
         if len(raw) > _MAX_RESPONSE_BYTES:
             raise MistralInferenceError("Mistral response exceeds admitted size")
         parse_failed = False

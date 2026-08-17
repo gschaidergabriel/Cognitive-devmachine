@@ -1,24 +1,48 @@
 from __future__ import annotations
+
 import json
+from dataclasses import replace
+
+from .method_transfer import METHOD_MEMORY_KINDS, MethodTransfer
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
-class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+class EvidenceMicroClayRetrieval(MicroClayRetrieval):
+    """MicroClay evidence lane with method-memory kinds made non-servable."""
 
-    CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
+    def _score_candidate(self, row, query_tokens, now, capitals):
+        candidate = super()._score_candidate(row, query_tokens, now, capitals)
+        if candidate.kind in METHOD_MEMORY_KINDS:
+            return replace(candidate, baseline_score=0.0, adaptive_score=0.0, entry_keys=())
+        return candidate
+
+
+class WorldAssembler:
+    """Bounded evidence + optional method assembly with collision-only cross-session context."""
+
+    CONTROL_MEMORY_KINDS = tuple(sorted({
+        "source_archive",
+        "compression_receipt",
+        "compression_clearance",
+        *METHOD_MEMORY_KINDS,
+    }))
 
     def __init__(self, db: UnifiedDB):
         self.db = db
-        self.microclay = MicroClayRetrieval(db)
+        self.microclay = EvidenceMicroClayRetrieval(db)
+        self.methods = MethodTransfer(db)
+
+    @classmethod
+    def _not_control_clause(cls):
+        return ",".join("?" for _ in cls.CONTROL_MEMORY_KINDS)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
             "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+            f"WHERE source_turn_id=? AND kind NOT IN ({self._not_control_clause()}) "
             "ORDER BY ts LIMIT 20",
-            (turn_id,),
+            (turn_id, *self.CONTROL_MEMORY_KINDS),
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -59,7 +83,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Adaptive retrieval cannot broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -81,6 +105,15 @@ class WorldAssembler:
             "status": "UNKNOWN",
             "truth_authority": False,
             "effect_authority": False,
+        }
+        method_context = []
+        method_retrieval_receipt = {
+            "policy_version": MethodTransfer.POLICY_VERSION,
+            "status": "NOT_TRIGGERED",
+            "trigger": "NO_CAUSAL_TURN",
+            "truth_authority": False,
+            "effect_authority": False,
+            "replayed": False,
         }
         supplied = {
             "query": query,
@@ -106,15 +139,29 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = result["receipt"]
+            method_result = self.methods.retrieve(
+                query=str(supplied["query"]),
+                evidence_status=str(retrieval_receipt.get("status", "UNKNOWN")),
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
+                resource_refs=list(resource_refs or []),
+            )
+            method_context = method_result["items"]
+            method_retrieval_receipt = method_result["receipt"]
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "SELECT * FROM durable_memory "
+                    f"WHERE kind NOT IN ({self._not_control_clause()}) "
                     "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
+                    (*self.CONTROL_MEMORY_KINDS, user_id),
                 )
             ]
 
@@ -123,6 +170,8 @@ class WorldAssembler:
             "cross_session_collision": other,
             "durable_memory": memories,
             "retrieval_receipt": retrieval_receipt,
+            "method_context": method_context,
+            "method_retrieval_receipt": method_retrieval_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

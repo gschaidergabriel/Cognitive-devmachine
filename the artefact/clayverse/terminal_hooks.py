@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .agency import AgencyState
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -51,6 +52,44 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _truncate(value: Any, limit: int) -> Any:
+    if isinstance(value, str) and len(value) > limit:
+        return value[:limit] + "…"
+    return value
+
+
+def _compact_agency(agency: dict[str, Any]) -> dict[str, Any]:
+    compact = dict(agency)
+    goals = []
+    for raw_goal in list(compact.get("active_goals", []))[:4]:
+        if not isinstance(raw_goal, dict):
+            continue
+        goal = dict(raw_goal)
+        for key in ("title", "objective", "success_criteria"):
+            goal[key] = _truncate(goal.get(key), 700)
+        milestones = []
+        for raw_milestone in list(goal.get("milestones", []))[:8]:
+            if not isinstance(raw_milestone, dict):
+                continue
+            milestone = dict(raw_milestone)
+            for key in ("title", "acceptance_criteria"):
+                milestone[key] = _truncate(milestone.get(key), 700)
+            attempts = []
+            for raw_attempt in list(milestone.get("recent_attempts", []))[-2:]:
+                if not isinstance(raw_attempt, dict):
+                    continue
+                attempt = dict(raw_attempt)
+                attempt["proposal"] = _truncate(attempt.get("proposal"), 500)
+                attempt["outcome"] = _truncate(attempt.get("outcome"), 500)
+                attempts.append(attempt)
+            milestone["recent_attempts"] = attempts
+            milestones.append(milestone)
+        goal["milestones"] = milestones
+        goals.append(goal)
+    compact["active_goals"] = goals
+    return compact
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -65,6 +104,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "workspace": result["workspace"],
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
+        "agency": _compact_agency(result.get("agency", {})),
         "context": result["context"],
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
@@ -109,6 +149,9 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         ]
         text = render()
     if len(text) > limit:
+        compact["agency"]["active_goals"] = compact["agency"].get("active_goals", [])[:2]
+        text = render()
+    if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
     return text
 
@@ -129,7 +172,9 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            additional_context = _bounded_hook_context(result)
+            enriched = dict(result)
+            enriched["agency"] = AgencyState(db).snapshot(max_goals=4, max_attempts_per_milestone=2)
+            additional_context = _bounded_hook_context(enriched)
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",

@@ -1,0 +1,60 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "GO_PRODUCT_CONVERGENCE_FUSION",
+  "trigger": "go",
+  "go_trigger_local_time": "2026-08-17T20:13:00+07:00",
+  "organ": "GPT-5.6 Sol current ChatGPT worker",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "research_main_at_last_prewrite_refresh": "a944b64692260fb917d0f11c3bb0c887e0522389",
+  "retained_lane": {
+    "pr": 623,
+    "branch": "clay/go-identity-session-drift-failclosed-20260817",
+    "head_at_review": "3c6c4d98605d72d902ea36ceabf47a73eab11a54",
+    "state": "OPEN_DRAFT",
+    "workflow_runs_observed_for_head": 0,
+    "execution_credit": "ZERO_SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "parallel_fusion": {
+    "observed_new_commit": "3c6c4d98605d72d902ea36ceabf47a73eab11a54",
+    "message": "fix(clayverse): align readiness with canonical user contract",
+    "accepted_source_mechanism": "runtime readiness reuses assert_canonical_user_state(db), aligning READY with the exact two-user/display-name/equal-rights invariant used by request-time IdentityRouter.resolve()",
+    "duplication_avoided": true
+  },
+  "adversarial_finding": {
+    "classification": "SOURCE_OBSERVED_FAIL_CLOSED_GAP",
+    "boundary": "WebSocket Clerk reauthentication lease extension",
+    "observed": "reauth verifies a fresh Clerk JWT and requires unchanged Clerk sub/sid, then extends auth_expires_at without re-running the current UnifiedDB identity/session/generation contract",
+    "counter_reality": "a socket admitted before canonical state drift can extend its Clerk lease even when a fresh IdentityRouter.resolve(clerk_subject) would reject extra-user/equal-rights, permanent-session, terminal-name, or generation drift",
+    "smallest_repair": "after fresh JWT plus same-sub/sid validation, re-run the existing read-only IdentityRouter.resolve(clerk_subject), require the same already-attached user_id/session_id, and only then publish the new expiry",
+    "second_authority_created": false
+  },
+  "durable_review": {
+    "github_pr": 623,
+    "review_id": 4952022776,
+    "review_commit": "3c6c4d98605d72d902ea36ceabf47a73eab11a54"
+  },
+  "execution_surface": {
+    "current_strongest_runtime_evidence": "Vercel Sandbox admission previously PASS_CREATED, then fail-closed before private source staging because host Preview GITHUB_READ_TOKEN was missing",
+    "current_connector_check": "Vercel connector exposes documentation/runtime-log surfaces but no Sandbox start/exec action and no environment-secret write/recover action",
+    "source_runtime_credit_this_go": 0,
+    "oci_runtime_credit_this_go": 0,
+    "browser_runtime_credit_this_go": 0,
+    "classification": "EXECUTION_ADMISSION_PREREQUISITE_BLOCKED_NOT_CLAYVERSE_TEST_FAIL"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "count": 0,
+    "reason": "no safely shareable immutable server-provided ChatGPT request/turn identity was exposed for the required global atomic lease"
+  },
+  "canonical_product_delta": "NO_CHANGE",
+  "canonical_product_delta_reason": "no ClayVerse product/runtime bytes were merged to main in this go; work fused a concurrent retained source-lane improvement, found and durably bound the adjacent reauth extension gap, and preserved the runtime evidence boundary",
+  "acceptance": "IN_PROGRESS",
+  "next_discriminator": "credential-capable exact isolated OCI run after host-side Preview GITHUB_READ_TOKEN provisioning; before #623 promotion, close and execute the reauth current-identity extension regression on the retained lane",
+  "forbidden_paths_used": {
+    "vps": false,
+    "self_hosted_or_production_test": false,
+    "together_api": false
+  }
+}

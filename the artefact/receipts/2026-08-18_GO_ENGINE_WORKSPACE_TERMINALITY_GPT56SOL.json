@@ -1,0 +1,73 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-18T00:27+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_observed_at_join": "958e3c5fa2406b42d187727e2adb6099b6ed0aa2",
+  "candidate_pull_request": 680,
+  "candidate_product_head": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+  "candidate_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+  "classification": "SOURCE_RECOVERY_INTEGRITY_REPAIR_WITH_RUNTIME_ADMISSION_BLOCKED",
+  "material_delta": {
+    "novelty": "REFINES",
+    "gap": "Successful ClayVerseEngine turns selected a workspace and deleted active_turns without terminalizing workspace_episodes. Canonical recovery treats SELECTED/OPEN workspaces without an active row but with causal re-entry as interrupted recovery work, so a clean successful Engine turn could later be reclassified as RECOVERY_CLOSED_EXISTING_REENTRY.",
+    "counterhypothesis": "SELECTED without an active turn might intentionally represent successful Engine completion.",
+    "counterhypothesis_result": "REJECTED_BY_CANONICAL_CONTRACT",
+    "discriminator": "TurnLifecycle.complete() terminalizes SELECTED workspaces to COMPLETED before active-turn deletion, while recover_incomplete_episodes() explicitly scans OPEN/SELECTED orphaned workspaces as recovery candidates.",
+    "violated_invariant": "clean completion must remain distinguishable from crash/restart recovery",
+    "repair": "In both no-effect and effect-success Engine paths, update workspace state SELECTED->COMPLETED in the same final transaction before deleting the matching active_turn. Rowcount mismatch fails closed; crashes before that transaction still leave the active/select state for canonical Recovery.",
+    "engine_commit": "5a837aa09538b478176ef5264b5de043e4bf0c42",
+    "regression_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "engine_blob": "b3219e9fd39e276ea91951bae7b637b463c89e44",
+    "regression_blob": "222de10ed9335f77529e13678d31e9b8d7b3adbf"
+  },
+  "regressions_added": [
+    "effect-success Engine turn must end workspace in COMPLETED with no active_turn",
+    "subsequent recover_incomplete_episodes must scan/close zero rows for that clean effect-success turn and preserve COMPLETED",
+    "no-effect Engine response must end workspace in COMPLETED with no active_turn",
+    "subsequent recovery must not reclassify that clean no-effect turn",
+    "provider failure continues to leave an OPEN workspace plus active_turn for genuine recovery"
+  ],
+  "parallel_reentry": {
+    "classification": "ADOPT_NONCONFLICTING",
+    "head_after_repair": "220556a2ef768600fca7d489e9675d9a53c64030",
+    "note": "The post-repair head adds only a bounded Engine memory-generation receipt after the product/test commit; the controller is intentionally bound to the last product/test-byte commit 66b767d4... ."
+  },
+  "execution_evidence": {
+    "github_workflow_exact_post_repair_head": "220556a2ef768600fca7d489e9675d9a53c64030",
+    "github_workflow_run_id": 32050232016,
+    "github_job_id": 95447589749,
+    "conclusion": "failure_before_steps",
+    "steps": 0,
+    "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "focused_workspace_regression_runtime_credit": 0,
+    "full_private_checkout_runtime_credit": 0,
+    "exact_oci_runtime_credit": 0
+  },
+  "vercel_controller_reentry": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "ready_controller_commit": "139eb6149af515061c23cc865d34a7cbc7f88963",
+    "ready_deployment": "dpl_5A1w5oEVyrGv3eaqGzgA1oE5Cbt7",
+    "bound_research_sha": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "bound_research_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "endpoint_get_observation": "405_METHOD_NOT_ALLOWED_ALLOW_POST",
+    "credential_bearing_post_this_cycle": false,
+    "blocker": "No owner-held scoped read-only GITHUB_READ_TOKEN value is exposed to this organ; the available Vercel connector does not provide an arbitrary credential-bearing POST action. The secret is not synthesized, committed, logged, or requested through an unsafe path.",
+    "private_source_runtime_credit": 0,
+    "mistral_runtime_credit": 0,
+    "entityos_roundtrip_credit": 0,
+    "tier2_recreation_credit": 0,
+    "whole_product_credit": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable per-trigger request identifier is available to this organ; the atomic GO experiment lease therefore fails closed."
+  },
+  "promotion": "DO_NOT_PROMOTE_FROM_SOURCE_OR_READY_DEPLOYMENT_ONLY",
+  "next_exact_step": "Use the READY retained PR810 runtime ingress with the owner-held scoped read-only GitHub token to execute the exact private-source fetch and authorized Vercel Sandbox run bound to Research 66b767d4.../tree 5f30fc57... . First execute focused Engine/Recovery regressions and the adjacent suite on those exact bytes, then build/capture the exact OCI digest and continue the mandatory Firecracker + runtime Mistral + UnifiedDB re-ingest + EffectGate/EntityOS + Tier-1 + same-digest full Sandbox recreation + stale/no-replay + second cognition + auth/PTY/two-user gates."
+}

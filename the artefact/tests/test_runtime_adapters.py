@@ -60,27 +60,36 @@ def test_clerk_config_fails_closed_without_authorized_parties(monkeypatch):
         ClerkConfig.from_env()
 
 
-def test_claude_code_adapter_is_direct_plan_mode_one_turn(tmp_path):
+def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
     log = tmp_path / "args.json"
+    envlog = tmp_path / "env.json"
     fake = tmp_path / "claude"
-    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nprint(json.dumps({'result':'ok'}))\n")
+    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':'ok'}))\n")
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
-    old = os.environ.get("FAKE_LOG")
+    old_log = os.environ.get("FAKE_LOG")
+    old_envlog = os.environ.get("FAKE_ENVLOG")
     os.environ["FAKE_LOG"] = str(log)
+    os.environ["FAKE_ENVLOG"] = str(envlog)
     try:
         adapter = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5)
         out = adapter.reason({"shared": "state"}, "hello; touch /tmp/SHOULD_NOT_EXIST")
     finally:
-        if old is None:
-            os.environ.pop("FAKE_LOG", None)
-        else:
-            os.environ["FAKE_LOG"] = old
+        if old_log is None: os.environ.pop("FAKE_LOG", None)
+        else: os.environ["FAKE_LOG"] = old_log
+        if old_envlog is None: os.environ.pop("FAKE_ENVLOG", None)
+        else: os.environ["FAKE_ENVLOG"] = old_envlog
     args = json.loads(log.read_text())
+    env = json.loads(envlog.read_text())
     assert out == {"text": "ok", "selection": "respond", "effect": None}
-    assert args[0] == "-p"
+    assert "--bare" in args
+    assert "-p" in args
     assert args[args.index("--permission-mode") + 1] == "plan"
     assert args[args.index("--max-turns") + 1] == "1"
-    assert "hello; touch /tmp/SHOULD_NOT_EXIST" in args[1]
+    assert args[args.index("--tools") + 1] == ""
+    assert "--no-session-persistence" in args
+    assert env["skip_history"] == "1"
+    prompt = args[args.index("-p") + 1]
+    assert "hello; touch /tmp/SHOULD_NOT_EXIST" in prompt
     assert not Path("/tmp/SHOULD_NOT_EXIST").exists()
 
 

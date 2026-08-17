@@ -1,0 +1,105 @@
+{
+  "schema": "clayverse.go.supporting_execution_receipt/v1",
+  "observed_at": "2026-08-17T13:59:52+07:00",
+  "trigger": {
+    "command": "go",
+    "available_request_timestamp": "2026-08-17T13:42+07:00",
+    "immutable_request_id_available": false,
+    "unusual_experiment_slot": "COORDINATION_BLOCKED",
+    "unusual_experiment_executed": false,
+    "note": "Minute-precision request time cannot satisfy the current atomic GO experiment lease identity protocol. All executions in this receipt are deterministic regressions only."
+  },
+  "source": {
+    "repository": "gschaidergabriel/clay-global-research-entity",
+    "branch": "go/stageb-promotion-causal-fence-20260817-1342",
+    "tested_source_head": "747635cbf45c182e1863940e17eecb0d4c316dca",
+    "parent_integration_pr": 423,
+    "staging_pr": 462,
+    "parent_integration_head_at_branch_creation": "78f408f0ee7a30909d5c176aa423c3ccd3c23b86",
+    "exact_git_blobs": {
+      "the artefact/clayverse/__init__.py": "d67024a036acfc8761d6dbd7c068fe99601df8e2",
+      "the artefact/clayverse/method_memory.py": "3852fcc98247d10685b055233697b2e6fa0e70ec",
+      "the artefact/clayverse/store.py": "80a3c04d6d508998fcbdd5869e58f28985b91b79",
+      "the artefact/clayverse/method_stageb.py": "d0805901674c5a73c3ef983d3701b574c92a617e",
+      "the artefact/tests/test_method_memory_promotion.py": "74a725a0ebb8eb77712be87309132db0c0a06f82",
+      "the artefact/tests/test_method_memory_unifieddb_authority.py": "c157a22d3d410f52463a8abe14650e42e1dd0159"
+    },
+    "byte_binding": "PASS",
+    "byte_binding_method": "Local Git blob SHA-1 recomputation over exactly reconstructed connector-returned/written bytes matched every recorded GitHub blob SHA before execution."
+  },
+  "execution_surface": {
+    "class": "supporting_isolated_container",
+    "provider": "OpenAI ChatGPT isolated container",
+    "canonical_vercel_sandbox_acceptance": false,
+    "vps_used": false,
+    "self_hosted_runner_used": false,
+    "production_host_used": false,
+    "network_dependency_for_test": false,
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "sqlite": "3.46.1",
+    "pytest": "9.0.2"
+  },
+  "focused_regression": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_method_memory_promotion.py tests/test_method_memory_unifieddb_authority.py",
+    "exit_code": 0,
+    "result": "PASS",
+    "tests_passed": 14,
+    "tests_failed": 0,
+    "duration_reported_seconds": 0.87,
+    "log_sha256": "531dc712a154e51d99bfd41617c24d35a883bae21c1ebb5cb35b1460f1f1b255",
+    "verified_contracts": [
+      "generic UnifiedDB memory API cannot mint reserved method kinds",
+      "raw SQL method insert cannot bypass canonical one-shot admission capability",
+      "method rows are immutable and evidence rows cannot be relabelled into method authority",
+      "generic method admission cannot directly mint promoted framework/heuristic rows",
+      "startup fails closed on malformed persisted method rows",
+      "schema version 7 and normal fact memory path remain intact",
+      "promotion requires all source workspace episodes to exist",
+      "promotion requires source episodes to be terminal COMPLETED or ABORTED",
+      "promotion requires causal re-entry evidence",
+      "promotion source episodes must remain in the candidate canonical user/session",
+      "supporting/counterexample memory cannot cross private user scope",
+      "counterexample references must resolve to negative method evidence",
+      "promotion receipt and promoted record are bound to the dedicated transaction",
+      "duplicate promotion is rejected without partial durable writes"
+    ]
+  },
+  "adjacent_stageb_regression": {
+    "class": "deterministic_adjacent_regression",
+    "result": "PASS",
+    "exit_code": 0,
+    "exact_method_stageb_blob": "d0805901674c5a73c3ef983d3701b574c92a617e",
+    "assertions": [
+      "a promoted method created from terminal causally re-entered source episodes is retrievable by admitted structural Stage B",
+      "retrieved method id equals the receipt-bound promoted method id",
+      "FACT_UNKNOWN remains UNKNOWN",
+      "fact_status_unchanged is true",
+      "truth_authority is false"
+    ],
+    "note": "This is an adjacent deterministic regression over the same repaired mechanism, not the GO unusual-experiment slot."
+  },
+  "github_actions": {
+    "head_sha_checked": "747635cbf45c182e1863940e17eecb0d4c316dca",
+    "workflow_run_observed": false,
+    "combined_status_contexts_observed": 0,
+    "reason": "The focused GO workflow exists only on the staging head and is absent from main, so opening the pull request did not produce an actually-started runner for that workflow in the observed window.",
+    "classification": "EXECUTION_ADMISSION_NOT_OBSERVED",
+    "test_failure": false
+  },
+  "vercel_sandbox": {
+    "start_exec_surface_exposed_by_connected_tooling": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED"
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_BYTE_EXECUTION",
+  "claims_not_made": [
+    "Vercel Sandbox acceptance PASS",
+    "GitHub Actions exact-head PASS",
+    "OCI image build PASS",
+    "container startup/readiness PASS",
+    "real Clerk/browser/WebSocket PTY PASS",
+    "whole ClayVerse PASS",
+    "MicroClay ACTIVE promotion"
+  ],
+  "next_gate": "Fuse/adjudicate this authority repair into the single current Stage-B integration path on fresh ancestry, then run the exact fused head through an actually-started authorized isolated runner; whole-product convergence still requires exact OCI build/runtime plus Clerk/PTTY/Claude/recovery/concurrency gates."
+}

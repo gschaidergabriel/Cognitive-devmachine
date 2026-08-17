@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import os
-import time
 import uuid
 from pathlib import Path
 
@@ -75,6 +73,7 @@ class ClayVerseBridge:
         self.memory.extract_explicit(tid, self.user_id, text)
         self.memory.compact(self.session_id)
         world = self.world.assemble(self.session_id, resources)
+        world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(self.session_id, tid, text, resources)
         causal_id = str(uuid.uuid4())
         generation = self.db.session_generation(self.session_id)
@@ -115,11 +114,19 @@ class ClayVerseBridge:
             target,
             argv,
             self.current["generation"],
+            {
+                "source": "permanent-claude-terminal",
+                "request_id": uuid.uuid4().hex,
+                "causal_id": self.current["causal_id"],
+                "episode_id": self.current["episode_id"],
+                "observation_turn_id": self.current["turn_id"],
+            },
         )
         effect_id, outcome = self.effects.execute(req, self.current["episode_id"])
         self.current["effect_id"] = effect_id
         self.current["outcome"] = outcome
-        return {"effect_id": effect_id, "verified": True, "outcome": outcome}
+        status = self.db.effect_status(effect_id)
+        return {"effect_id": effect_id, "verified": status == "VERIFIED", "status": status, "outcome": outcome}
 
     def complete_turn(self, response: str) -> dict:
         if self.current is None:
@@ -139,22 +146,19 @@ class ClayVerseBridge:
             causal_refs=[effect_id] if effect_id else [],
             provenance={"source": "permanent-claude-terminal", "causal_id": self.current["causal_id"]},
         )
-        out_hash = hashlib.sha256(json.dumps(outcome, sort_keys=True).encode()).hexdigest() if outcome is not None else None
         credit = 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
-        self.db.db.execute(
-            "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-            (
-                self.current["causal_id"], self.current["episode_id"], effect_id,
-                self.current["turn_id"], out_hash, credit, 1, time.time(),
-            ),
+        causal_id = self.db.record_causal_episode(
+            self.current["episode_id"], effect_id, self.current["turn_id"], credit, self.current["causal_id"]
         )
         self.memory.compact(self.session_id)
         self.graph.rebuild()
+        row = self.db.db.execute("SELECT reentered FROM causal_episodes WHERE causal_id=?", (causal_id,)).fetchone()
         result = {
             "assistant_turn_id": assistant_id,
-            "causal_id": self.current["causal_id"],
+            "causal_id": causal_id,
             "effect_id": effect_id,
-            "credit": credit,
+            "credit": credit if row and int(row["reentered"]) == 1 else 0.0,
+            "reentered": bool(row and int(row["reentered"]) == 1),
         }
         self.current = None
         return result

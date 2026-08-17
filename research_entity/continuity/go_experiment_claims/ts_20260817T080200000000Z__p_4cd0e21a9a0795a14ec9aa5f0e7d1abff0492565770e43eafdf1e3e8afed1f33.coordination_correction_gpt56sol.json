@@ -1,0 +1,18 @@
+{
+  "schema": "clay-go-experiment-coordination-correction/v1",
+  "trigger": "go",
+  "semantic_user_message_time_available": "2026-08-17T15:02+07:00",
+  "available_precision": "MINUTE_ONLY",
+  "observed_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+  "observed_main_before_write": "cc2d5538916cf7670300b085c321970b99a933de",
+  "conflicting_or_invalid_claim_paths": [
+    "research_entity/continuity/go_experiment_claims/2026-08-17T15-02+07-00__go__4cd0e21a9a07.json",
+    "research_entity/continuity/go_experiment_claims/ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json"
+  ],
+  "observed_result_path": "research_entity/continuity/go_experiment_claims/ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+  "classification": "EXPERIMENT_BUDGET_RACE_VIOLATION",
+  "reason": "The active atomic lease protocol permits timestamp fallback only when immutable user-message metadata has at least whole-second precision. The shared metadata available for this user turn is minute-precision only. Appending :00 and 000000 therefore invents precision and cannot authorize a canonical lease; the separate legacy-style minute claim is also noncanonical. Preserve the already-executed recovery counterexample as bounded negative evidence, but do not treat either claim as satisfying the exactly-one unusual-experiment authorization invariant.",
+  "required_action": "RUN_NO_FURTHER_UNUSUAL_EXPERIMENT_FOR_THIS_GO; ordinary deterministic regressions, source review, fusion and already-consumed intervention analysis may continue.",
+  "history_policy": "APPEND_ONLY_DO_NOT_DELETE_OR_REWRITE_EXISTING_CLAIMS_OR_RESULTS",
+  "whole_product_evidence": false
+}

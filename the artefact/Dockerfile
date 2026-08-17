@@ -11,7 +11,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
     CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256} \
     PORT=3000 \
-    DISABLE_AUTOUPDATER=1 \
+    DISABLE_UPDATES=1 \
     CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
 # Keep the baseline OS package surface small. Browser xterm and native Claude Code

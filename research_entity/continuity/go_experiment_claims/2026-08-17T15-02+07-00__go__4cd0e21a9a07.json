@@ -1,0 +1,11 @@
+{
+  "schema": "clay-go-experiment-claim/v1",
+  "trigger_key": "2026-08-17T15-02+07-00__go__4cd0e21a9a07",
+  "trigger": "go",
+  "experiment_name": "PR552 persisted-receipt crash-recovery corruption canary",
+  "claimant_organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "claimed_at": "2026-08-17T15:02+07:00",
+  "observed_canonical_main": "83c171c6881c7790904f1af955850341e69127f4",
+  "intervention_contract": "On exact PR #552 source, create one verified effect and durable redacted outcome, remove only the causal re-entry row to emulate restart reconstruction, then deliberately replace the persisted outcome with syntactically valid non-canonical ok=true JSON. Run canonical recovery and assert explicit UNKNOWN/zero credit/no external replay; compare with the canonical receipt control. This is the sole bounded unusual intervention for this user-triggered go; all other executions are deterministic regression only.",
+  "status": "CLAIMED"
+}

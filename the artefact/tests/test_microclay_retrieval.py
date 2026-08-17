@@ -162,7 +162,7 @@ def test_verified_effect_outcome_updates_entrypoint_on_next_turn_only(tmp_path):
         db.close()
 
 
-def test_feedback_is_idempotent_generation_bound_and_never_rewrites_memory(tmp_path):
+def test_feedback_is_verified_idempotent_generation_bound_and_never_rewrites_memory(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
@@ -170,27 +170,43 @@ def test_feedback_is_idempotent_generation_bound_and_never_rewrites_memory(tmp_p
         result = life.begin("orchid procedure")
         organ = MicroClayRetrieval(db)
         before = [tuple(r) for r in db.db.execute("SELECT * FROM durable_memory ORDER BY memory_id")]
-        first = organ.credit(
+
+        unverified = organ.credit(
             causal_id=result["causal_id"], generation=result["generation"],
             credit=0.75, signal_class="verified-test", receipt_id="receipt-fixed",
+        )
+        assert unverified == {"applied": False, "reason": "unverified_outcome"}
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+
+        effect = life.request_effect("state.noop", "retrieval-feedback-test")
+        assert effect["verified"] is True
+        life.complete("done")
+        outcome = db.db.execute(
+            "SELECT c.credit,e.status FROM causal_episodes c JOIN effects e ON e.effect_id=c.effect_id "
+            "WHERE c.causal_id=? AND c.reentered=1",
+            (result["causal_id"],),
+        ).fetchone()
+        signal = f"effect_outcome:{outcome['status']}"
+        first = organ.credit(
+            causal_id=result["causal_id"], generation=result["generation"],
+            credit=float(outcome["credit"]), signal_class=signal,
         )
         duplicate = organ.credit(
             causal_id=result["causal_id"], generation=result["generation"],
-            credit=0.75, signal_class="verified-test", receipt_id="receipt-fixed",
+            credit=float(outcome["credit"]), signal_class=signal,
         )
         after = [tuple(r) for r in db.db.execute("SELECT * FROM durable_memory ORDER BY memory_id")]
         assert first["applied"] is True
-        assert duplicate == {"applied": False, "reason": "duplicate_receipt", "receipt_id": "receipt-fixed"}
+        assert duplicate["applied"] is False and duplicate["reason"] == "duplicate_receipt"
         assert before == after
         assert first["truth_authority"] is False
         assert first["effect_authority"] is False
 
-        db.db.execute("DELETE FROM active_turns WHERE session_id='session:gabriel'")
         db.advance_entity_generation()
         with pytest.raises(StaleGeneration):
             organ.credit(
                 causal_id=result["causal_id"], generation=result["generation"],
-                credit=1.0, signal_class="stale-test", receipt_id="receipt-stale",
+                credit=float(outcome["credit"]), signal_class=signal,
             )
     finally:
         db.close()

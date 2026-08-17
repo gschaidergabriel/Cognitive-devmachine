@@ -1,0 +1,119 @@
+name: ClayVerse VPS rootless QEMU staging preflight
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clayverse-vps-qemu-rootless-stage-preflight.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-vps-qemu-rootless-stage-preflight
+  cancel-in-progress: false
+
+jobs:
+  rootless-qemu-stage:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Stage Ubuntu QEMU packages without privilege
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-qemu-rootless-${GITHUB_RUN_ID}"
+          debs="$work/debs"
+          root="$work/root"
+          receipt="/tmp/clayverse-qemu-rootless-${GITHUB_RUN_ID}.json"
+          mkdir -p "$debs" "$root"
+          cleanup(){ rc=$?; rm -rf "$work"; exit "$rc"; }
+          trap cleanup EXIT INT TERM
+
+          command -v apt >/dev/null
+          command -v apt-cache >/dev/null
+          command -v dpkg-deb >/dev/null
+          command -v sha256sum >/dev/null
+
+          uid=$(id -u)
+          sudo_noninteractive=false
+          if command -v sudo >/dev/null && sudo -n true 2>/dev/null; then sudo_noninteractive=true; fi
+
+          packages=(qemu-system-x86 qemu-system-common qemu-system-data qemu-utils ovmf cloud-image-utils seabios)
+          policy="$work/policy.txt"
+          : >"$policy"
+          for p in "${packages[@]}"; do
+            apt-cache policy "$p" >>"$policy" || true
+          done
+
+          (
+            cd "$debs"
+            apt download "${packages[@]}"
+          ) >"$work/apt-download.out" 2>"$work/apt-download.err"
+
+          shopt -s nullglob
+          files=("$debs"/*.deb)
+          if [ "${#files[@]}" -lt 6 ]; then
+            echo "ROOTLESS_QEMU_DIRECT_PACKAGE_SET_INCOMPLETE:${#files[@]}" >&2
+            exit 31
+          fi
+          for f in "${files[@]}"; do dpkg-deb -x "$f" "$root"; done
+          sha256sum "${files[@]}" | LC_ALL=C sort >"$work/deb-sha256.txt"
+
+          qemu="$root/usr/bin/qemu-system-x86_64"
+          qemu_img="$root/usr/bin/qemu-img"
+          cloud_localds="$root/usr/bin/cloud-localds"
+          test -x "$qemu"
+          test -x "$qemu_img"
+          test -x "$cloud_localds"
+
+          ldd "$qemu" >"$work/qemu-ldd.txt" 2>&1 || true
+          missing=$(grep -c 'not found' "$work/qemu-ldd.txt" || true)
+          runnable=false
+          qemu_version='UNRUNNABLE_WITH_HOST_LIBRARY_SET'
+          if [ "$missing" -eq 0 ]; then
+            if qemu_version=$($qemu --version 2>&1 | head -n1); then runnable=true; fi
+          fi
+
+          policy_sha=$(sha256sum "$policy" | awk '{print $1}')
+          package_set_sha=$(sha256sum "$work/deb-sha256.txt" | awk '{print $1}')
+          ldd_sha=$(sha256sum "$work/qemu-ldd.txt" | awk '{print $1}')
+          python3 - "$receipt" "$uid" "$sudo_noninteractive" "${#files[@]}" "$policy_sha" "$package_set_sha" "$ldd_sha" "$missing" "$runnable" "$qemu_version" <<'PY'
+          import json, os, pathlib, sys
+          out,uid,sudo_ok,count,policy_sha,pkg_sha,ldd_sha,missing,runnable,qemu_version=sys.argv[1:]
+          payload={
+            'schema':'ClayVerseVpsRootlessQemuStagePreflight/v1',
+            'github_sha':os.environ.get('GITHUB_SHA',''),
+            'github_run_id':os.environ.get('GITHUB_RUN_ID',''),
+            'runner_name':os.environ.get('RUNNER_NAME','unknown'),
+            'host_uid':int(uid),
+            'sudo_noninteractive':sudo_ok=='true',
+            'staged_deb_count':int(count),
+            'apt_policy_sha256':policy_sha,
+            'staged_package_ledger_sha256':pkg_sha,
+            'qemu_ldd_sha256':ldd_sha,
+            'qemu_missing_library_count':int(missing),
+            'qemu_runnable_from_rootless_extract':runnable=='true',
+            'qemu_version':qemu_version,
+            'orchestration_only':True,
+            'product_code_executed_on_host':False,
+            'host_docker_used':False,
+            'guest_started':False,
+            'runtime_credit':0,
+            'whole_product_credit':0,
+            'unusual_experiment_count_added':0,
+          }
+          pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,sort_keys=True))
+          PY
+
+      - name: Upload bounded rootless staging receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-vps-qemu-rootless-${{ github.run_id }}
+          path: /tmp/clayverse-qemu-rootless-${{ github.run_id }}.json
+          if-no-files-found: warn
+          retention-days: 7

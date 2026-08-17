@@ -1,0 +1,58 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "classification": "STALE_REGRESSION_CONTRACT_REPAIRED_CURRENT_SOURCE_BOUND",
+  "current_rejoin_main": "94b3d9b9646b658201156b6d3ddb9eeef5c966fd",
+  "branch_rejoin_commit": "36bfc32e873b02296e5c438a29b5d3e511534a19",
+  "problem": {
+    "test": "the artefact/tests/test_single_container_entityos_boundary.py",
+    "retired_expectation": "CLAYVERSE_REQUIRE_ENTITYOS=0",
+    "current_product_contract": "CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+    "semantic_note": "EntityOS is digest-bound inside the one ClayVerse image, execution-disabled by default, not a mandatory sidecar and not the top-level product endpoint."
+  },
+  "repair": {
+    "test_blob": "ebeef0ba62938601a3d7be7c93be53210c6acedc",
+    "dockerfile_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "compose_blob": "07e74c44499409a3386d164caf1887979e71dd6b",
+    "gitignore_blob": "057234d74dfcc207025ded9a071de366e6b384b8",
+    "delta": [
+      "assert CLAYVERSE_ENABLE_ENTITYOS_EXEC=0 in Dockerfile and Compose",
+      "reject retired CLAYVERSE_REQUIRE_ENTITYOS contract",
+      "preserve no host EntityOS sidecar mount assertions",
+      "preserve staged EntityOS source-history exclusion assertions"
+    ]
+  },
+  "current_source_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "command": "python -m pytest -q tests/test_single_container_entityos_boundary.py",
+    "git_blob_identity_checks": {
+      "Dockerfile": "MATCH",
+      "compose.yaml": "MATCH",
+      ".gitignore": "MATCH",
+      "test_single_container_entityos_boundary.py": "MATCH"
+    },
+    "result": "2 passed in 0.06s",
+    "exit_code": 0
+  },
+  "prior_broader_source_execution": {
+    "command": "python -m pytest -q tests/test_single_container_entityos_boundary.py tests/test_supply_chain_lock.py tests/test_build_context_boundary.py",
+    "result": "11 passed in 0.05s",
+    "note": "Prior exact-source batch used an earlier Dockerfile blob. Current-source binding is therefore claimed only for the focused 2-test run above."
+  },
+  "execution_boundary": {
+    "vercel": "Confirmed Git-preview -> @vercel/sandbox OIDC path; new preview admission currently blocked before Sandbox start by daily deployment cap.",
+    "exact_oci_build_start": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "unusual_experiment": {
+    "count_added": 0,
+    "reason": "The 15:02 macro-cycle already consumed its one observed unusual intervention; this is deterministic regression repair only."
+  },
+  "next_gate": "Use the repaired deterministic gate in the next admitted exact-current full regression + OCI build/start/readiness/restart batch."
+}

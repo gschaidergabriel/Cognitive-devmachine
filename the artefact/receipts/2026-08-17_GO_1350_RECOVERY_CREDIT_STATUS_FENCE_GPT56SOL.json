@@ -1,0 +1,42 @@
+{
+  "schema": "clayverse-go-source-reentry/v1",
+  "recorded_at": "2026-08-17T13:53:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+  "finding": {
+    "scope": "restart recovery causal learning credit",
+    "mechanism": "EffectJournal normal finalization requires VERIFIED plus ok=true for positive credit, while recovery reconstruction used outcome.ok alone; a non-VERIFIED persisted outcome carrying inconsistent ok=true could therefore be re-entered as positive learning evidence after restart",
+    "risk": "restart-induced learning contamination without external effect replay"
+  },
+  "source_candidate": {
+    "pr": 453,
+    "branch": "go/recovery-credit-status-fence-20260817-1350",
+    "source_commit": "65bdb52860763a1d4f358fa6753348f2004a719c",
+    "regression_commit": "30dfc05d7015bb36ccf257331e965051786a7049",
+    "contract": "positive recovery causal credit requires effect status VERIFIED and outcome ok=true; DENIED, FAILED, STALE_OUTCOME and UNKNOWN_AFTER_RESTART remain zero-credit even if an inconsistent receipt says ok=true",
+    "effect_execution_changed": false,
+    "automatic_external_replay_added": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "github_run": 32003348386,
+    "github_job": 95307845606,
+    "github_job_conclusion": "failure",
+    "github_job_steps": null,
+    "classification": "CONTROL_PLANE_OR_RUNNER_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
+    "exact_branch_regression": "UNOBSERVED",
+    "oci_restart_runtime": "UNOBSERVED",
+    "vps_self_hosted_production_testing": "FORBIDDEN_NOT_USED"
+  },
+  "experiment_accounting": {
+    "state": "SLOT_CLOSED_BY_CURRENT_COORDINATION_RECORD",
+    "new_unusual_experiment_by_this_organ": false
+  },
+  "acceptance": "SOURCE_CANDIDATE_NOT_RUNTIME_ACCEPTED",
+  "truth_boundary": "The patch and regression obligation are durable source evidence only. No CI pre-step failure, source inspection, or local mechanism reasoning is represented as exact ClayVerse runtime PASS.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

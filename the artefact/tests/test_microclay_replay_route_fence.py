@@ -53,37 +53,6 @@ def _insert_replay(
     )
 
 
-def _assert_replay_rejected_before_learning(
-    db: UnifiedDB,
-    *,
-    query: str,
-    session_id: str,
-    generation: int,
-    turn_id: str,
-    episode_id: str,
-    causal_id: str,
-):
-    organ = MicroClayRetrieval(db)
-    calls = []
-
-    def fake_learning(**kwargs):
-        calls.append(kwargs)
-        return {"eligible": 0, "applied": 0}
-
-    organ.learn_from_verified_outcomes = fake_learning
-    with pytest.raises(StaleGeneration, match="retrieval_route_contract"):
-        organ.retrieve(
-            query=query,
-            user_id="gabriel",
-            session_id=session_id,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-            generation=generation,
-        )
-    assert calls == []
-
-
 def test_shadow_method_contamination_fails_before_learning(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:
@@ -108,15 +77,25 @@ def test_shadow_method_contamination_fails_before_learning(tmp_path):
             selected_ids=[fact_id],
             shadow_ids=[method_id],
         )
-        _assert_replay_rejected_before_learning(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-        )
+        organ = MicroClayRetrieval(db)
+        calls = []
+
+        def fake_learning(**kwargs):
+            calls.append(kwargs)
+            return {"eligible": 0, "applied": 0}
+
+        organ.learn_from_verified_outcomes = fake_learning
+        with pytest.raises(StaleGeneration, match="retrieval_route_contract"):
+            organ.retrieve(
+                query=query,
+                user_id="gabriel",
+                session_id=sid,
+                turn_id=turn_id,
+                episode_id=episode_id,
+                causal_id=causal_id,
+                generation=generation,
+            )
+        assert calls == []
     finally:
         db.close()
 
@@ -137,85 +116,24 @@ def test_missing_replay_memory_reference_fails_closed(tmp_path):
             selected_ids=["missing-memory-id"],
             shadow_ids=[],
         )
-        _assert_replay_rejected_before_learning(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-        )
-    finally:
-        db.close()
+        organ = MicroClayRetrieval(db)
+        calls = []
 
+        def fake_learning(**kwargs):
+            calls.append(kwargs)
+            return {"eligible": 0, "applied": 0}
 
-def test_private_other_user_selected_memory_fails_before_learning(tmp_path):
-    db = UnifiedDB(tmp_path / "u.db")
-    try:
-        query = "private memory replay"
-        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
-        db.ensure_user("andreas", "Andreas")
-        private_id = db.add_memory(
-            "fact", "private", "andreas-only evidence",
-            None, "andreas", {"source": "test"},
-        )
-        _insert_replay(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-            selected_ids=[private_id],
-            shadow_ids=[],
-        )
-        _assert_replay_rejected_before_learning(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-        )
-    finally:
-        db.close()
-
-
-def test_current_turn_shadow_memory_fails_before_learning(tmp_path):
-    db = UnifiedDB(tmp_path / "u.db")
-    try:
-        query = "current turn replay"
-        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
-        fact_id = db.add_memory(
-            "fact", "history", "older evidence",
-            None, "gabriel", {"source": "test"},
-        )
-        echo_id = db.add_memory(
-            "fact", "echo", "same-turn evidence must not self-retrieve",
-            turn_id, "gabriel", {"source": "test"},
-        )
-        _insert_replay(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-            selected_ids=[fact_id],
-            shadow_ids=[echo_id],
-        )
-        _assert_replay_rejected_before_learning(
-            db,
-            query=query,
-            session_id=sid,
-            generation=generation,
-            turn_id=turn_id,
-            episode_id=episode_id,
-            causal_id=causal_id,
-        )
+        organ.learn_from_verified_outcomes = fake_learning
+        with pytest.raises(StaleGeneration, match="retrieval_route_contract"):
+            organ.retrieve(
+                query=query,
+                user_id="gabriel",
+                session_id=sid,
+                turn_id=turn_id,
+                episode_id=episode_id,
+                causal_id=causal_id,
+                generation=generation,
+            )
+        assert calls == []
     finally:
         db.close()

@@ -16,6 +16,7 @@ def _candidate(memory_id: str, value: str) -> RetrievalCandidate:
         provenance={"source": "budget-parity-test"},
         baseline_score=1.0,
         adaptive_score=1.0,
+        learned_route_score=0.0,
         entry_keys=(),
     )
 

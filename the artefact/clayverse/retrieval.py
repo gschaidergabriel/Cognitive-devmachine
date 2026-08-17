@@ -1,15 +1,17 @@
 from __future__ import annotations
 import json
+from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Assemble bounded context with collision-triggered cross-session fragments only."""
+    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
+        self.microclay = MicroClayRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
@@ -20,7 +22,17 @@ class WorldAssembler:
         ).fetchall()
         return [dict(r) for r in rows]
 
-    def assemble(self, session_id, resource_refs):
+    def assemble(
+        self,
+        session_id,
+        resource_refs,
+        *,
+        query=None,
+        turn_id=None,
+        episode_id=None,
+        causal_id=None,
+        generation=None,
+    ):
         session = self.db.db.execute(
             "SELECT user_id FROM sessions WHERE session_id=?", (session_id,)
         ).fetchone()
@@ -28,6 +40,9 @@ class WorldAssembler:
             raise KeyError(session_id)
         user_id = session["user_id"]
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
+
+        # Another permanent perspective is loaded only when an explicit shared resource
+        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -43,16 +58,48 @@ class WorldAssembler:
                     other.append(item)
                     if len(other) >= 10:
                         break
-        memories = [
-            dict(r)
-            for r in self.db.db.execute(
-                "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-                "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                (user_id,),
+
+        retrieval_receipt = {
+            "mode": "LEGACY_COMPATIBILITY",
+            "status": "UNKNOWN",
+            "truth_authority": False,
+            "effect_authority": False,
+        }
+        if all(x is not None for x in (query, turn_id, episode_id, causal_id, generation)):
+            result = self.microclay.retrieve(
+                query=str(query),
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(turn_id),
+                episode_id=str(episode_id),
+                causal_id=str(causal_id),
+                generation=int(generation),
             )
-        ]
+            memories = result["items"]
+            retrieval_receipt = result["receipt"]
+        else:
+            # Compatibility path for legacy tests/non-product callers. The canonical
+            # Claude hook path always supplies a query and causal identity above.
+            memories = [
+                dict(r)
+                for r in self.db.db.execute(
+                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
+                    (user_id,),
+                )
+            ]
+
         return {
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "retrieval_receipt": retrieval_receipt,
         }
+
+    def credit(self, *, causal_id, generation, credit, signal_class):
+        return self.microclay.credit(
+            causal_id=str(causal_id),
+            generation=int(generation),
+            credit=float(credit),
+            signal_class=str(signal_class),
+        )

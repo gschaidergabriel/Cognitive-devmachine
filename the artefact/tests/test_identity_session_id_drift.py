@@ -62,6 +62,19 @@ def test_startup_identity_normalization_rejects_existing_noncanonical_session_id
         db.close()
 
 
+def test_startup_identity_normalization_rejects_missing_persisted_session_without_repair(tmp_path):
+    db, _ = _router(tmp_path)
+    try:
+        db.db.execute("DELETE FROM sessions WHERE user_id='gabriel'")
+        with pytest.raises(PermissionError, match="exactly one permanent session"):
+            IdentityRouter(db, {})
+        assert db.db.execute(
+            "SELECT COUNT(*) FROM sessions WHERE user_id='gabriel'"
+        ).fetchone()[0] == 0
+    finally:
+        db.close()
+
+
 def test_runtime_readiness_rejects_noncanonical_session_id_before_terminal_probe(tmp_path):
     db, _ = _router(tmp_path)
     try:

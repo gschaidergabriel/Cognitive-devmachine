@@ -20,6 +20,8 @@ _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|serv
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
 _RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
+_METHOD_RECEIPT_MAX_CHARS = 8_192
+_METHOD_CONTEXT_MAX_CHARS = 32_000
 
 
 class TurnLifecycleError(RuntimeError):
@@ -46,20 +48,55 @@ class TurnLifecycle:
     def active(self): return self.db.db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
 
     @staticmethod
+    def _canonical_bound(value, *, label: str, max_chars: int):
+        try:
+            encoded=json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
+        except (TypeError,ValueError) as exc: raise TurnLifecycleError(f"{label} is not canonical JSON") from exc
+        if len(encoded)>max_chars: raise TurnLifecycleError(f"{label} exceeds compact context bound")
+        return value
+
+    @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
         receipt=world.get("retrieval_receipt")
         if not isinstance(receipt,dict): raise TurnLifecycleError("retrieval receipt must be an object")
         if any(not isinstance(key,str) for key in receipt): raise TurnLifecycleError("retrieval receipt keys must be strings")
         scalar=(str,int,float,bool,type(None))
         if any(not isinstance(value,scalar) for value in receipt.values()): raise TurnLifecycleError("retrieval receipt values must be scalar")
-        try: receipt_chars=len(json.dumps(receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
-        except (TypeError,ValueError) as exc: raise TurnLifecycleError("retrieval receipt is not canonical JSON") from exc
-        if receipt_chars>_RETRIEVAL_RECEIPT_MAX_CHARS: raise TurnLifecycleError("retrieval receipt exceeds compact context bound")
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[])),"retrieval_receipt":dict(receipt)}
+        TurnLifecycle._canonical_bound(receipt,label="retrieval receipt",max_chars=_RETRIEVAL_RECEIPT_MAX_CHARS)
+
+        method_receipt=world.get("method_receipt")
+        if not isinstance(method_receipt,dict): raise TurnLifecycleError("method receipt must be an object")
+        TurnLifecycle._canonical_bound(method_receipt,label="method receipt",max_chars=_METHOD_RECEIPT_MAX_CHARS)
+        method_context=world.get("method_context",[])
+        counterevidence=world.get("counterevidence",[])
+        unknowns=world.get("unknowns",[])
+        if not isinstance(method_context,list) or any(not isinstance(item,dict) for item in method_context): raise TurnLifecycleError("method context must be a list of objects")
+        if not isinstance(counterevidence,list) or any(not isinstance(item,dict) for item in counterevidence): raise TurnLifecycleError("counterevidence must be a list of objects")
+        if not isinstance(unknowns,list) or any(not isinstance(item,dict) for item in unknowns): raise TurnLifecycleError("unknowns must be a list of objects")
+        TurnLifecycle._canonical_bound(
+            {"method_context":method_context,"counterevidence":counterevidence,"unknowns":unknowns},
+            label="method context",max_chars=_METHOD_CONTEXT_MAX_CHARS,
+        )
+
+        evidence=list(world.get("evidence_context",world.get("durable_memory",[])))
+        packed={
+            "own_recent":list(world.get("own_recent",[])),
+            "cross_session_collision":list(world.get("cross_session_collision",[])),
+            "durable_memory":list(evidence),
+            "evidence_context":list(evidence),
+            "method_context":list(method_context),
+            "unknowns":list(unknowns),
+            "counterevidence":list(counterevidence),
+            "retrieval_receipt":dict(receipt),
+            "method_receipt":dict(method_receipt),
+        }
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
-        while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
-        while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
+        # Keep method receipt/context identity intact. Evidence and its compatibility
+        # alias are trimmed together, so Claude never sees different factual lanes.
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()
+        while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
+        while size()>max_chars and packed["evidence_context"]:
+            packed["evidence_context"].pop(); packed["durable_memory"].pop()
         if size()>max_chars:
             for item in packed["own_recent"]:
                 if len(str(item.get("content","")))>20_000: item["content"]=str(item["content"])[:20_000]+"…[context-truncated]"

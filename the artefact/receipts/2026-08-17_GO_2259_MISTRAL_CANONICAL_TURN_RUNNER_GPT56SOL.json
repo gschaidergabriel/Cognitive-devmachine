@@ -1,11 +1,12 @@
 {
   "schema": "ClayVerseBoundedExecutionReceipt/v1",
-  "timestamp_local": "2026-08-17T23:41:00+07:00",
+  "timestamp_local": "2026-08-17T23:42:00+07:00",
   "trigger": "go",
   "organ": "GPT-5.6 Sol temporary Clay organ",
-  "classification": "BOUNDED_MECHANISM_SUPPORT_REAL_DB_SOURCE_REGRESSION_UNEXECUTED",
+  "classification": "BOUNDED_MECHANISM_SUPPORT_REAL_DB_SOURCE_REGRESSION_EXECUTION_ADMISSION_BLOCKED",
   "canonical_main_at_latest_reentry": "85eb262fa3c97ee1f00775d95df424e2ddfa5669",
   "branch": "gpt56sol/go-mistral-causal-reingest-20260817-2259",
+  "branch_final_rejoin_commit": "bffa1ed9075b55362560bbec7ade89d78eceb4ee",
   "pull_request": 667,
   "preferred_architecture": "ONE_CANONICAL_MISTRAL_HTTP_ADAPTER_PLUS_EXISTING_UNIFIEDDB_TURNLIFECYCLE_REINGEST_THEN_SEPARATE_EFFECTGATE_TURN",
   "scope": {
@@ -78,19 +79,30 @@
     "observation": "EffectJournal.begin already atomically binds an effect intent to the currently active episode/session/user/generation before PENDING is persisted; after PENDING, predecessor retirement cannot silently replay or discard the effect.",
     "result": "No second effect mechanism added. The new fence only closes provider completion/abort same-generation causal drift."
   },
-  "github_actions_latest_observed": {
-    "workflow_run_id": 32046315608,
-    "job_id": 95434948896,
-    "head_sha": "a0fc99ce584a4c841becd9a1cccb058f75ce33b1",
-    "conclusion": "failure_before_steps",
-    "steps": 0,
-    "runner_id": 0,
-    "runner_name": "",
+  "github_actions_final_rejoin_head": {
+    "head_sha": "bffa1ed9075b55362560bbec7ade89d78eceb4ee",
+    "identity_guard": {
+      "workflow_run_id": 32046690699,
+      "job_id": 95436132427,
+      "conclusion": "failure_before_steps",
+      "steps": 0,
+      "runner_id": 0,
+      "runner_name": ""
+    },
+    "verify": {
+      "workflow_run_id": 32046690625,
+      "job_id": 95436132636,
+      "conclusion": "failure_before_steps",
+      "steps": 0,
+      "runner_id": 0,
+      "runner_name": ""
+    },
     "interpretation": "EXECUTION_ADMISSION_FAILURE_NOT_TEST_FAILURE"
   },
   "coordination": {
     "first_rejoin_main": "d55ae59dd21e35150192a2c65cad8ff6e507eb87",
     "latest_rejoin_main": "85eb262fa3c97ee1f00775d95df424e2ddfa5669",
+    "latest_rejoin_state": "branch is ahead of and not behind observed main immediately after final rejoin",
     "parallel_main_after_first_rejoin": "Five additional commits concerned the retained Vercel controller/runtime GitHub-token ingress and did not alter the five Mistral-turn semantic files selected for this rejoin.",
     "canonical_main_parallel_preflight": {
       "commit": "d55ae59dd21e35150192a2c65cad8ff6e507eb87",

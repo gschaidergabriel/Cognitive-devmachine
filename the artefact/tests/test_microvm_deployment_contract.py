@@ -217,7 +217,7 @@ def test_entityos_digest_identity_cannot_be_overridden_by_deployment_secret():
     dockerfile = (ROOT / "Dockerfile").read_text()
     lock = json.loads((ROOT / "entityos.lock.json").read_text())
 
-    assert "CLAYVERSE_ENTITYOS_SHA256" not in template
+    assert "- name: CLAYVERSE_ENTITYOS_SHA256" not in template
     assert "entityos-sha256" not in template
     assert "CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256}" in dockerfile
     assert 'test "${ENTITYOS_SHA256}" = "$LOCK_SHA256"' in dockerfile

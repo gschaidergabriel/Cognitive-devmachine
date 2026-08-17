@@ -139,6 +139,17 @@ After exact source/OCI construction, the strongest new product discriminator is 
 - `TESTING_STRATEGY.md` now binds real Mistral inference before/after Tier-2 recovery, Vault secret reacquisition, exact OCI-in-microVM execution and the stronger evidence ladder;
 - no whole-product runtime result is claimed from these source/policy changes.
 
+## Latest cycle delta — 2026-08-17 23:10 +07:00
+
+- fresh-main rejoin identified a missing machine-readable bridge between canonical `RecoveryIntegrityError` and the external Tier-2 full-appliance replacer;
+- ClayVerse now has a source candidate `clayverse.tier2-fatal/v1` with reserved exit code **86**, allowlisted `RECOVERY_INTEGRITY_ERROR`, SHA-256-only detail binding, `replay_external_effects=false`, and no raw failure-text emission;
+- `service.py` maps canonical recovery-integrity failure to that fail-closed exit path and closes UnifiedDB before returning;
+- the Kubernetes/Kata reference profile exposes `/dev/termination-log` with `terminationMessagePolicy: File` as bounded diagnostic transport, while **exit 86 remains authoritative even if diagnostic writing fails**;
+- exact Git blob identity was matched before isolated execution: signal tests **4/4 PASS**, service dispatch integration **1/1 PASS**, `py_compile` PASS;
+- source manifest now binds the Tier-2 fatal signal to the full-sandbox replacement gate;
+- this is **mechanism-supported source evidence only**: no outer Vercel controller has yet observed exit 86 and destroyed/recreated the Firecracker Sandbox, and no exact OCI/Mistral/recovery test-of-tests PASS is claimed;
+- compatible startup-probe lane #647 must be fused rather than overwritten before promotion.
+
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, component tests, Sandbox creation and isolated API calls are not substitutes.

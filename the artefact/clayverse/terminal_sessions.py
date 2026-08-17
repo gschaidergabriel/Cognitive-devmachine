@@ -78,10 +78,16 @@ class TerminalSessionManager:
 
     @classmethod
     def _tmux_socket(cls, binding: TerminalBinding) -> str:
+        # A tmux client can address sessions inside its connected server. Keep the
+        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
+        # attached client cannot switch from one canonical user's session to the other.
         return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
 
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
+        # The browser is attached to tmux, so tmux itself is part of the effect boundary.
+        # Always select the root-owned policy that removes tmux's command keymaps;
+        # never allow an invocation to fall back to user/default tmux configuration.
         return [
             "tmux",
             "-L", cls._tmux_socket(binding),
@@ -90,6 +96,14 @@ class TerminalSessionManager:
         ]
 
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
+        """Fail closed unless the connected tmux server is transport-only.
+
+        tmux only reads `-f` when a server starts. An already-running server can therefore
+        ignore the `-f` supplied by a later client. The managed policy writes a versioned
+        marker last after removing all default key tables. Verify the marker, both prefix
+        options, inert status/mouse/default-shell settings, and the effective global key
+        binding list before admitting attachment.
+        """
         checks = (
             (
                 "managed-policy marker",
@@ -134,7 +148,11 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
-        """Diagnostic-only mirror; never a product MCP authority."""
+        """Diagnostic-only mirror; never a product MCP authority.
+
+        `managed-mcp.json` is the sole runtime server-definition source. This helper is
+        retained for bounded tests/inspection and is deliberately not called by ensure().
+        """
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
@@ -167,6 +185,13 @@ class TerminalSessionManager:
         return cp.returncode == 0
 
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
+        """Reapply the immutable command-surface fence to a running tmux server.
+
+        tmux configuration is loaded when a server starts, not whenever a new session
+        or client is created. A persistent per-user server may therefore predate a
+        ClayVerse policy upgrade. Source the root-owned policy before every admitted
+        attach path and fail closed if the running server cannot accept it.
+        """
         try:
             cp = subprocess.run(
                 self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
@@ -194,6 +219,9 @@ class TerminalSessionManager:
             self._assert_tmux_server_policy(binding)
             return binding
 
+        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
+        # user/project MCP file in the launch path. User/session identity reaches the
+        # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
             "--settings", str(self.MANAGED_SETTINGS),

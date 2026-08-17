@@ -39,6 +39,23 @@ class WorldAssembler:
             "generation": int(row["generation"]),
         }
 
+    @staticmethod
+    def _method_stage_b_receipt():
+        """Canonical Stage-B is closed until a structured problem signature is admitted.
+
+        Raw prompt text is deliberately not method-routing authority. This explicit
+        receipt prevents a future analogical-method candidate from silently serving
+        lexical prompt matches into canonical Claude context.
+        """
+        return {
+            "stage": "B",
+            "status": "UNADMITTED",
+            "served": False,
+            "reason": "independent_structured_problem_signature_required",
+            "raw_prompt_authority": False,
+            "truth_authority": False,
+        }
+
     def assemble(
         self,
         session_id,
@@ -123,6 +140,7 @@ class WorldAssembler:
             "cross_session_collision": other,
             "durable_memory": memories,
             "retrieval_receipt": retrieval_receipt,
+            "method_receipt": self._method_stage_b_receipt(),
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

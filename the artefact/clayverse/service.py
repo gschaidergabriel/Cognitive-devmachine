@@ -7,6 +7,8 @@ import os
 import sys
 from urllib.parse import urlsplit
 
+from .autonomy import AutonomyState
+from .autonomy_runtime import recover_autonomy_after_restart
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
@@ -134,6 +136,25 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
     return raw == "1"
 
 
+def _recover_all(db: UnifiedDB) -> dict[str, object]:
+    turn_effect = recover_incomplete_episodes(db)
+    autonomy = recover_autonomy_after_restart(AutonomyState(db))
+    return {"turn_effect": turn_effect, "autonomy": autonomy}
+
+
+def _autonomy_status(db: UnifiedDB, recovery: dict[str, object]) -> dict[str, object]:
+    state = AutonomyState(db)
+    return {
+        "state_authority": "UnifiedDB",
+        "schema_version": 1,
+        "operating_mode": "goal-directed-proactive",
+        "goal_admission": "explicit-user-/goal",
+        "background_loop": "SOURCE_CANDIDATE_DISABLED_PENDING_ACCEPTED_PROVIDER_BINDING",
+        "recovery": recovery.get("autonomy", {}),
+        "state": state.context_summary(),
+    }
+
+
 def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     """Run the internal canonical Mistral turn used by the final sandbox controller.
 
@@ -142,7 +163,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
     """
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_all(db)
     ClayGraphProjection(db).rebuild()
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
@@ -164,6 +185,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
             "checkpoint": checkpoint_id,
             "state_hash": state_hash,
             "recovery": recovery,
+            "autonomy": _autonomy_status(db, recovery),
             "entityos": {
                 "verified": bool(entityos_status.get("verified")),
                 "execution_enabled": bool(entityos_status.get("execution_enabled")),
@@ -197,7 +219,7 @@ def main():
             db.close()
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    recovery = _recover_all(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -247,6 +269,7 @@ def main():
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
+        "autonomy": _autonomy_status(db, recovery),
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

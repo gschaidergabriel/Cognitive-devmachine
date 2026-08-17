@@ -1,0 +1,77 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_parent_observed": "bf385acd61b117af2064c041e432d179a6bb66b7",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_lane": {
+    "pr": 787,
+    "head_observed": "71910c90086e6a72bb8b815632508eddd457dcac",
+    "state": "DRAFT_SOURCE_DESCENDANT_UNVERIFIED"
+  },
+  "source_convergence_observed": {
+    "one_canonical_hostcall_abi": true,
+    "serialized_loader_resolves_hostcalls_by_exact_vm_format": true,
+    "serialized_loader_rejects_unknown_or_version_inadmissible_call_id": true,
+    "serialized_loader_rejects_abi_arity_mismatch": true,
+    "runtime_rechecks_versioned_contract_before_host_effect": true,
+    "real_stdout_bytes_contract": "linux.process.stdout.v0::(Int)->Bytes / call_id=3 / CLAYVM2 only",
+    "clayos_exec_artifact_public_value_surface": "list[ClayValueInput] -> tuple[int, ClayValue]",
+    "provenance_strict_clayos_stdout_bytes_regression_source_present": true,
+    "full_pytest_uv_install_requires_hashes": true,
+    "full_pytest_uv_install_binary_only": true,
+    "new_unusual_experiment_count": 0
+  },
+  "source_evidence_paths": [
+    "claymachine/hostcall_abi.py",
+    "claymachine/clayvm.py",
+    "claymachine/clayos.py",
+    "tests/test_clay_hostcall_abi_bytes.py",
+    "tests/test_clay_hostcall_loader_abi.py",
+    "tests/test_clay_hostcall_vm_version_runtime.py",
+    "mcp/vercel-sandbox-mcp/scripts/run-full-pytest-sandbox.mjs"
+  ],
+  "adversarial_interpretation": {
+    "preferred_mechanism": "one ABI authority is consumed by lowering, serialized load validation, runtime dispatch and host adapters, with provenance-strict ClayOS admission carrying the bounded stdout Bytes product slice",
+    "strongest_counterhypothesis": "the source is internally coherent but a current exact-head build/runtime may still fail because none of these descendant deltas has been observed in a fresh exact-identity Vercel Sandbox",
+    "counterhypothesis_status": "OPEN_UNTIL_SANDBOX_EXECUTION"
+  },
+  "execution": {
+    "exact_head_checked": "71910c90086e6a72bb8b815632508eddd457dcac",
+    "github_vercel_status": "failure",
+    "provider_target": "Vercel rate-limit documentation",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "UNVERIFIED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "historical exact-head evidence does not transfer to this descendant or whole EntityOS acceptance"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_discriminator": [
+    "refresh the then-current PR787 head and overlapping worker state",
+    "require a Git-bound Vercel build that actually reaches Sandbox.create for that exact head",
+    "run the coordinated ordinary full-pytest Sandbox gate with exact wheel hashes, installed set, zero skips, DENY_ALL and unusual count zero",
+    "run the canonical v7 exact one-file EntityOS twin build with exact source/tree/archive/attestation/lock binding",
+    "require runtime, self-test, no-host-Python, relocation, provenance, Batch-5 and attested-vs-Git-clean byte-identity regressions",
+    "repeat the already-consumed content-tamper case only if useful and label it regression-only",
+    "capture exact commands, exit codes, logs, tool versions, artifact digest and successful Sandbox stop before promotion"
+  ],
+  "claims": {
+    "source_frontier_converged": true,
+    "current_exact_head_sandbox_pass": false,
+    "current_exact_head_entityos_artifact_observed": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

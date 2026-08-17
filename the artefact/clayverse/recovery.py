@@ -5,6 +5,7 @@ import json
 import time
 import uuid
 
+from .effect_journal import EffectJournal
 from .store import UnifiedDB
 
 
@@ -20,13 +21,17 @@ def _causal_id(episode_id: str, effect_id: str) -> str:
 
 
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
-    """Fail closed over interrupted workspace episodes without replaying effects.
+    """Fail closed over interrupted hook turns without replaying effects.
 
-    A persisted effect outcome is already an observed fact and may be causally
-    re-entered after a crash. A selected effect request without exactly one valid
-    persisted outcome is ambiguous: the external action might have happened before
-    the process died, so recovery must never execute it again automatically.
+    Pending journal entries are first collapsed to UNKNOWN_AFTER_RESTART by the
+    canonical EffectJournal. Any active turn already carrying causal evidence is
+    then retired; unresolved workspace episodes are classified transactionally.
     """
+
+    # The journal owns PENDING -> UNKNOWN_AFTER_RESTART semantics and causal
+    # re-entry. Running it first prevents recovery from inventing a competing
+    # interpretation of an effect that may already have crossed the boundary.
+    EffectJournal(db)
 
     counts = {
         "scanned": 0,
@@ -37,8 +42,21 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     }
 
     with db.tx() as tx:
+        # A verified/denied/failed/unknown journal result may have created causal
+        # evidence before Stop. Once that exists, the durable hook turn must no
+        # longer be considered live on the next UserPromptSubmit.
+        tx.execute(
+            "DELETE FROM active_turns WHERE episode_id IN ("
+            "SELECT a.episode_id FROM active_turns a "
+            "JOIN workspace_episodes w ON w.episode_id=a.episode_id "
+            "WHERE w.state NOT IN ('OPEN','SELECTED') "
+            "OR EXISTS (SELECT 1 FROM causal_episodes c WHERE c.episode_id=a.episode_id)"
+            ")"
+        )
+
         episodes = tx.execute(
-            "SELECT w.* FROM workspace_episodes w "
+            "SELECT w.*, a.causal_id AS active_causal_id FROM workspace_episodes w "
+            "LEFT JOIN active_turns a ON a.episode_id=w.episode_id "
             "WHERE w.state IN ('OPEN','SELECTED') "
             "AND NOT EXISTS (SELECT 1 FROM causal_episodes c WHERE c.episode_id=w.episode_id) "
             "ORDER BY w.ts,w.episode_id"
@@ -64,6 +82,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                         (episode["episode_id"],),
                     )
                     counts["aborted_no_effect"] += 1
+                tx.execute("DELETE FROM active_turns WHERE episode_id=?", (episode["episode_id"],))
                 continue
 
             if len(effects) != 1:
@@ -71,6 +90,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     "UPDATE workspace_episodes SET state='RECOVERY_ABORTED_AMBIGUOUS_EFFECTS' WHERE episode_id=?",
                     (episode["episode_id"],),
                 )
+                tx.execute("DELETE FROM active_turns WHERE episode_id=?", (episode["episode_id"],))
                 counts["ambiguous_effects"] += 1
                 continue
 
@@ -80,6 +100,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     "UPDATE workspace_episodes SET state='RECOVERY_ABORTED_EFFECT_OUTCOME_UNKNOWN' WHERE episode_id=?",
                     (episode["episode_id"],),
                 )
+                tx.execute("DELETE FROM active_turns WHERE episode_id=?", (episode["episode_id"],))
                 counts["uncertain_effects"] += 1
                 continue
 
@@ -92,13 +113,14 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     "UPDATE workspace_episodes SET state='RECOVERY_ABORTED_EFFECT_OUTCOME_UNKNOWN' WHERE episode_id=?",
                     (episode["episode_id"],),
                 )
+                tx.execute("DELETE FROM active_turns WHERE episode_id=?", (episode["episode_id"],))
                 counts["uncertain_effects"] += 1
                 continue
 
             outcome_hash = hashlib.sha256(
                 json.dumps(outcome, sort_keys=True).encode()
             ).hexdigest()
-            causal_id = _causal_id(episode["episode_id"], effect["effect_id"])
+            causal_id = episode["active_causal_id"] or _causal_id(episode["episode_id"], effect["effect_id"])
             tx.execute(
                 "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
                 "VALUES(?,?,?,?,?,?,1,?)",
@@ -116,6 +138,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                 "UPDATE workspace_episodes SET state='RECOVERED_EFFECT_REENTERED' WHERE episode_id=?",
                 (episode["episode_id"],),
             )
+            tx.execute("DELETE FROM active_turns WHERE episode_id=?", (episode["episode_id"],))
             counts["reentered_effects"] += 1
 
     return counts

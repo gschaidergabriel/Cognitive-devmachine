@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseBoundedSourceMechanismReceipt/v1",
+  "timestamp_local": "2026-08-17T23:06:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / temporary Clay organ",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-tier2-exit-signal-20260817-2306",
+  "base_main_observed": "3281e86bcda74ccd5e3083fa94d79921d618bebb",
+  "purpose": "Create a narrow machine-readable Tier-2 replacement trigger without turning generic readiness/startup failures into whole-MicroVM replacement authority.",
+  "source_delta": {
+    "service": "RecoveryIntegrityError is translated to reserved exit code 86 with bounded redacted JSON; generic RuntimeError is not translated.",
+    "contract": "External deployment controller must bind exact Pod UID/resourceVersion, replace the whole Pod/Kata sandbox, prove new Pod+sandbox identities and same OCI digest, and keep ingress closed until recovery/readiness attestation.",
+    "external_replacer_implemented": false
+  },
+  "supporting_isolated_mechanism_probe": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "reconstructed helper semantics only; not exact full branch or product runtime",
+    "command": "python -m pytest -q",
+    "result": "PASS",
+    "passed": 3,
+    "failed": 0,
+    "cases": [
+      "RecoveryIntegrityError -> exit 86 + redacted signal + DB close",
+      "generic startup failure -> no Tier-2 reclassification",
+      "successful recovery -> existing return path preserved"
+    ]
+  },
+  "primary_external_basis": {
+    "kubernetes_api": "list/watch is the supported change-tracking mechanism and clients must relist/recover from expired resourceVersion history",
+    "pod_lifecycle": "restartPolicy Always restarts a terminated application container, which is insufficient for ClayVerse Tier-2 whole-sandbox replacement"
+  },
+  "evidence_class": "SOURCE_CANDIDATE_WITH_BOUNDED_MECHANISM_SUPPORT",
+  "runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "kata_runtime_credit": 0,
+  "whole_clayverse_pass": false,
+  "remaining_gate": "Implement and live-test the external fail-closed Pod/Kata sandbox replacer on the admitted target; prove signal observation, exact old/new identities, same OCI digest, generation advance, no blind effect replay and ingress closure until readiness.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No shared immutable request/turn identity is exposed for this go trigger."
+  },
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secrets_persisted": false
+  }
+}

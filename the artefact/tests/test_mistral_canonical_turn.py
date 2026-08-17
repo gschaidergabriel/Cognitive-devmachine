@@ -37,6 +37,23 @@ def make_db(tmp_path):
     return db
 
 
+def reingest(lifecycle, begin, text="answer"):
+    return lifecycle.reingest_provider_response(
+        text,
+        provider="mistral",
+        model=MODEL,
+        expected_causal_id=begin["causal_id"],
+        expected_generation=begin["generation"],
+    )
+
+
+def finish(lifecycle, begin):
+    return lifecycle.complete_reingested_provider_response(
+        expected_causal_id=begin["causal_id"],
+        expected_generation=begin["generation"],
+    )
+
+
 def test_mistral_no_effect_reingests_one_assistant_turn_into_same_causal_episode(tmp_path):
     db = make_db(tmp_path)
     try:
@@ -76,11 +93,21 @@ def test_effect_is_denied_until_mistral_response_has_reentered_then_uses_same_ca
         lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
         begin = lifecycle.begin("test", input_source="mistral-runtime:input")
         with pytest.raises(TurnLifecycleError, match="re-ingested before any effect"):
-            lifecycle.request_effect("state.noop", "safe")
+            lifecycle.request_effect(
+                "state.noop",
+                "safe",
+                expected_causal_id=begin["causal_id"],
+                expected_generation=begin["generation"],
+            )
 
-        reingested = lifecycle.reingest_provider_response("answer", provider="mistral", model=MODEL)
-        effect = lifecycle.request_effect("state.noop", "safe")
-        completed = lifecycle.complete_reingested_provider_response()
+        reingested = reingest(lifecycle, begin)
+        effect = lifecycle.request_effect(
+            "state.noop",
+            "safe",
+            expected_causal_id=begin["causal_id"],
+            expected_generation=begin["generation"],
+        )
+        completed = finish(lifecycle, begin)
 
         assert reingested["causal_id"] == begin["causal_id"]
         assert effect["causal_id"] == begin["causal_id"]
@@ -97,13 +124,13 @@ def test_exact_duplicate_reingest_is_idempotent_but_different_response_is_denied
     db = make_db(tmp_path)
     try:
         lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
-        lifecycle.begin("test", input_source="mistral-runtime:input")
-        first = lifecycle.reingest_provider_response("answer", provider="mistral", model=MODEL)
-        same = lifecycle.reingest_provider_response("answer", provider="mistral", model=MODEL)
+        begin = lifecycle.begin("test", input_source="mistral-runtime:input")
+        first = reingest(lifecycle, begin)
+        same = reingest(lifecycle, begin)
         assert same["response_turn_id"] == first["response_turn_id"]
         with pytest.raises(TurnLifecycleError, match="different provider response"):
-            lifecycle.reingest_provider_response("different", provider="mistral", model=MODEL)
-        lifecycle.complete_reingested_provider_response()
+            reingest(lifecycle, begin, "different")
+        finish(lifecycle, begin)
     finally:
         db.close()
 
@@ -112,10 +139,61 @@ def test_stale_global_generation_rejects_provider_reingest(tmp_path):
     db = make_db(tmp_path)
     try:
         lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
-        lifecycle.begin("test", input_source="mistral-runtime:input")
+        begin = lifecycle.begin("test", input_source="mistral-runtime:input")
         db.advance_entity_generation()
         with pytest.raises(StaleGeneration):
-            lifecycle.reingest_provider_response("answer", provider="mistral", model=MODEL)
+            reingest(lifecycle, begin)
+    finally:
+        db.close()
+
+
+def test_interleaved_newer_turn_rejects_stale_provider_response_without_poisoning_new_turn(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel")
+        old = lifecycle.begin("old", input_source="mistral-runtime:input")
+        new = lifecycle.begin("new", input_source="mistral-runtime:input")
+        assert old["causal_id"] != new["causal_id"]
+
+        with pytest.raises(TurnLifecycleError, match="causal identity changed"):
+            reingest(lifecycle, old, "stale answer")
+
+        active = lifecycle.active()
+        assert active["causal_id"] == new["causal_id"]
+        assert db.db.execute("SELECT COUNT(*) FROM provider_responses WHERE causal_id=?", (new["causal_id"],)).fetchone()[0] == 0
+
+        current = reingest(lifecycle, new, "fresh answer")
+        completed = finish(lifecycle, new)
+        assert completed["assistant_turn_id"] == current["response_turn_id"]
+    finally:
+        db.close()
+
+
+def test_stale_mistral_effect_and_abort_cannot_target_newer_active_turn(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        lifecycle = TurnLifecycle(db, "andreas", "session:andreas")
+        old = lifecycle.begin("old", input_source="mistral-runtime:input")
+        reingest(lifecycle, old, "old answer")
+        new = lifecycle.begin("new", input_source="mistral-runtime:input")
+
+        with pytest.raises(TurnLifecycleError, match="causal identity changed"):
+            lifecycle.request_effect(
+                "state.noop",
+                "stale",
+                expected_causal_id=old["causal_id"],
+                expected_generation=old["generation"],
+            )
+        with pytest.raises(TurnLifecycleError, match="causal identity changed"):
+            lifecycle.abort(
+                "stale failure",
+                provenance_source="mistral-runtime:failure",
+                expected_causal_id=old["causal_id"],
+            )
+
+        assert lifecycle.active()["causal_id"] == new["causal_id"]
+        current = reingest(lifecycle, new, "new answer")
+        assert finish(lifecycle, new)["assistant_turn_id"] == current["response_turn_id"]
     finally:
         db.close()
 
@@ -134,6 +212,19 @@ def test_model_output_cannot_supply_effect_authority_and_failed_turn_is_aborted(
         system = db.db.execute("SELECT content,provenance FROM turns WHERE role='system' ORDER BY ordinal DESC LIMIT 1").fetchone()
         assert system["content"].startswith("TURN_ABORTED:")
         assert json.loads(system["provenance"])["source"] == "mistral-runtime:failure"
+    finally:
+        db.close()
+
+
+def test_model_identity_mismatch_is_rejected_and_turn_aborted(tmp_path):
+    db = make_db(tmp_path)
+    try:
+        fake = FakeMistral(model="mistral-small-latest")
+        runtime = MistralCanonicalTurn(db, "gabriel", fake)
+        fake.model = "mistral-large-latest"
+        with pytest.raises(MistralCanonicalTurnError, match="model identity changed"):
+            runtime.run("test")
+        assert db.db.execute("SELECT 1 FROM active_turns WHERE session_id='session:gabriel'").fetchone() is None
     finally:
         db.close()
 

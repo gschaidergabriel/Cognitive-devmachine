@@ -63,6 +63,18 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
     return bridge, {"required": required, "bound": True, **verified}
 
 
+def _state_probe_payload(checkpoint: int, state_hash: str) -> dict[str, object]:
+    """Describe the bounded --once probe without implying product readiness."""
+    return {
+        "service": "clayverse",
+        "status": "probe_ok",
+        "scope": "state_only",
+        "ready": False,
+        "checkpoint": checkpoint,
+        "state_hash": state_hash,
+    }
+
+
 def main():
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
@@ -72,7 +84,7 @@ def main():
     cid, digest = db.checkpoint("boot")
 
     if "--once" in sys.argv:
-        print(json.dumps({"service": "clayverse", "status": "ok", "checkpoint": cid, "state_hash": digest}), flush=True)
+        print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
         db.close()
         return 0
 

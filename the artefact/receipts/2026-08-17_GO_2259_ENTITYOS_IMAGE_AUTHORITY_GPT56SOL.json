@@ -1,0 +1,110 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_message_time": "2026-08-17T22:59+07:00",
+  "observed_at": "2026-08-17T23:09:19+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "scope": "entityos_runtime_identity_image_authority_fence",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "branch": "gpt56sol/go-entityos-image-authority-20260817-2259",
+  "pull_request": 645,
+  "initial_branch_base": "219044cf25d97a924b862e82c8e1b437ad3d2773",
+  "refreshed_main_observed_from_pr_base": "97a5125abe0e74a510fd5083f59d363e67529905",
+  "parallel_main_movement": {
+    "status": "OBSERVED_AND_RECONCILED_AT_FILE_CONTENT_SCOPE",
+    "behind_commits_when_checked": 34,
+    "notes": [
+      "service.py, Dockerfile, compose.yaml and test_entityos_artifact_authority.py were unchanged at refreshed main when re-read",
+      "the Kata template had newer CNI/node-local and ReadWriteOncePod fences; the candidate was rewritten to preserve those exact current semantics while removing runtime EntityOS path authority",
+      "README had newer owner directives for Vercel token forwarding and mandatory final Mistral test-of-tests; the candidate README was refreshed from that current content rather than the stale branch copy"
+    ]
+  },
+  "observed_gap": {
+    "source": "the artefact/clayverse/service.py",
+    "behavior": "_entityos_config read CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256 from runtime environment and treated those values as the executable identity authority",
+    "counter_reality": "a deployment that can control both values could point at writable workspace bytes and supply the matching digest, conflicting with the sealed-image law even though the Docker build already tracks an immutable entityos.lock.json",
+    "contract_mismatch": "deployment/source policy described EntityOS identity as image-authoritative while runtime selection still trusted mutable environment"
+  },
+  "candidate_delta": [
+    "fixed EntityOS executable path to /opt/entityos/EntityOS",
+    "fixed lock path to /opt/entityos/entityos.lock.json",
+    "read embedded lock fail-closed with O_NOFOLLOW where available, regular-file/size bound, JSON schema, lowercase SHA-256 and positive size validation",
+    "verify executable digest through EntityOSBridge and additionally require observed executable size to equal the image lock",
+    "runtime may toggle CLAYVERSE_ENABLE_ENTITYOS_EXEC only; path/digest selection is no longer an environment authority",
+    "removed runtime EntityOS path/digest injection from Docker ENV, Compose runtime environment and Kata template",
+    "added malicious runtime-env redirect regression candidate and cross-file source fence"
+  ],
+  "research_writes": [
+    {"commit": "99c84c1e73f21233683f5a45c9b5c8cda773d9e3", "purpose": "bind runtime EntityOS identity to embedded image lock"},
+    {"commit": "0963ca4787bfc6caacc53968a2ebc4a958ee58bb", "purpose": "replace stale boot-binding tests with image-authority adversarial tests"},
+    {"commit": "a110f1e3f3c98b9ecf2d8fd126a7504354d67a3e", "purpose": "remove runtime path/digest Docker ENV authority"},
+    {"commit": "4c3d4d0f60526d6f566abaea568d41b4d30587f2", "purpose": "remove runtime path/digest Compose authority while retaining build-time lock cross-check"},
+    {"commit": "25e685ce9dca3cb3cacd4c6909ac0eee6354223e", "purpose": "initial Kata template removal from stale base", "superseded_by_same_turn_refinement": true},
+    {"commit": "8f05d876fe02154f6a22007a4c7ddfd0c80c6221", "purpose": "cross-file source regression fence"},
+    {"commit": "afade6ea42233c1f69d115aa2c95f7fd4e18a234", "purpose": "preserve refreshed main Kata CNI/node-local/ReadWriteOncePod fences while removing EntityOS runtime path authority"},
+    {"commit": "635c6791401444a2014e3c9bc924c8e92788e4eb", "purpose": "refresh living artefact README from newer owner directives and record this source candidate"}
+  ],
+  "source_comparison": {
+    "before_refresh_compare": {
+      "base": "219044cf25d97a924b862e82c8e1b437ad3d2773",
+      "ahead_by": 6,
+      "behind_by": 0
+    },
+    "after_parallel_main_refresh": {
+      "base": "97a5125abe0e74a510fd5083f59d363e67529905",
+      "status": "diverged",
+      "ahead_by_before_readme_receipt_refinement": 6,
+      "behind_by": 34
+    },
+    "promotion_rule": "do not merge/promote from stale ancestry; refresh current main and preserve non-overlapping newer semantics before final integration"
+  },
+  "isolated_execution": {
+    "focused_regression": "NOT_EXECUTED",
+    "exact_oci": "NOT_EXECUTED",
+    "whole_clayverse": "NOT_EXECUTED",
+    "reason": "connected Vercel controller can create the authorized Sandbox but latest retained run still lacks an available GITHUB_READ_TOKEN before private source staging; connected Vercel surface exposes no environment-secret mutation action",
+    "github_actions_inspection": "BLOCKED_CONNECTOR_403; no test result inferred"
+  },
+  "vercel_control_plane_evidence": {
+    "deployment_id": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_repository": "gschaidergabriel/Dr.-Unterweger",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_name": "tomato-weary-porpoise-K4wNz6",
+    "sandbox_session_id": "sbx_JiOY9Ys4YJcCZAgzle0wTfi7aGaI",
+    "outer_microvm_guest_kernel": {"system": "Linux", "release": "6.12.76", "machine": "x86_64"},
+    "outer_microvm_guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "sandbox_stopped": true
+  },
+  "current_owner_token_law": {
+    "directive": "research_entity/global/VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE.md",
+    "status": "FORWARDING_NOW_PERMITTED",
+    "meaning": "a scoped read-only token may be securely forwarded into the disposable Vercel Sandbox or used host-side; the historical missing-token run remains valid but token forwarding is no longer policy-forbidden",
+    "remaining_operational_blocker": "credential must actually be available/injectable and exact requested source identities must be verified before runtime assertions"
+  },
+  "final_test_of_tests_alignment": {
+    "mistral_required": true,
+    "this_pr_scope": "does not implement or claim the mandatory final Mistral path; it hardens the EntityOS identity boundary that the final Vercel Firecracker + exact OCI + Mistral end-to-end run must exercise"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the exact user go trigger exposes no shared immutable request/turn id and only minute-precision immutable message time, which cannot mint a canonical atomic lease key",
+    "count_executed": 0
+  },
+  "next_exact_gate": "refresh current main and PR645 ancestry, preserve all newer source contracts, make a scoped GITHUB_READ_TOKEN actually available to the retained Vercel controller, rebind the single controller to the exact intended Research/EntityOS closure, run focused EntityOS authority regressions, then build/run the exact OCI in the Vercel Firecracker guest and continue through the owner-mandated Mistral final test-of-tests",
+  "non_claims": [
+    "no focused pytest PASS for PR645",
+    "no exact OCI image build or digest for PR645",
+    "no EntityOS runtime execution credit for PR645",
+    "no Mistral cognition evidence",
+    "no Clerk/browser/PTY final evidence",
+    "no whole-product PASS"
+  ]
+}

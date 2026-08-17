@@ -49,8 +49,8 @@ class EffectJournal:
         episode_id=effect['episode_id']; observation_turn_id=None
         if episode_id:
             ws=db.execute('SELECT observation_turn_id FROM workspace_episodes WHERE episode_id=?',(episode_id,)).fetchone(); observation_turn_id=ws[0] if ws else None
-        payload=self._payload(outcome); cid=str(uuid.uuid4())
-        db.execute('INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)',(cid,episode_id,effect_id,observation_turn_id,hashlib.sha256(payload.encode()).hexdigest(),self._credit(status,outcome),time.time()))
+        payload=self._payload(outcome); cid=str(uuid.uuid4()); reentered=1 if status=='VERIFIED' else 0
+        db.execute('INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,?,?)',(cid,episode_id,effect_id,observation_turn_id,hashlib.sha256(payload.encode()).hexdigest(),self._credit(status,outcome),reentered,time.time()))
         return cid
     def _finish_tx(self,db,effect_id,outcome,status):
         row=db.execute('SELECT status FROM effects WHERE effect_id=?',(effect_id,)).fetchone()
@@ -85,3 +85,5 @@ class EffectJournal:
         return len(rows)
     def causal_for(self,effect_id):
         row=self.db.db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone(); return row[0] if row else None
+    def status_for(self,effect_id):
+        row=self.db.db.execute('SELECT status FROM effects WHERE effect_id=?',(effect_id,)).fetchone(); return row[0] if row else None

@@ -1,3 +1,4 @@
+import sqlite3
 import time
 
 import pytest
@@ -51,6 +52,57 @@ def _begin(life, prompt):
     assert result["context"]["retrieval_receipt"]["truth_authority"] is False
     assert result["context"]["method_receipt"]["truth_authority"] is False
     return result
+
+
+def test_method_tables_are_canonical_unifieddb_v8_state_and_checkpointed(tmp_path):
+    db = _db(tmp_path)
+    try:
+        schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        assert schema and schema[0] == "8"
+        tables = {
+            row[0]
+            for row in db.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'method_%'"
+            ).fetchall()
+        }
+        assert {"method_records", "method_use_receipts"}.issubset(tables)
+
+        _, before = db.checkpoint("before-method")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life.world.methods.admit(_record(), method_id="checkpoint-bound-method")
+        _, after = db.checkpoint("after-method")
+        assert before != after
+    finally:
+        db.close()
+
+
+def test_schema7_database_reopens_as_schema8_with_method_state_tables(tmp_path):
+    path = tmp_path / "unified.db"
+    db = UnifiedDB(path)
+    db.close()
+
+    raw = sqlite3.connect(path)
+    try:
+        raw.execute("DROP TABLE method_use_receipts")
+        raw.execute("DROP TABLE method_records")
+        raw.execute("UPDATE meta SET value='7' WHERE key='schema_version'")
+        raw.commit()
+    finally:
+        raw.close()
+
+    migrated = UnifiedDB(path)
+    try:
+        schema = migrated.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
+        assert schema and schema[0] == "8"
+        tables = {
+            row[0]
+            for row in migrated.db.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'method_%'"
+            ).fetchall()
+        }
+        assert {"method_records", "method_use_receipts"}.issubset(tables)
+    finally:
+        migrated.close()
 
 
 def test_unknown_fact_can_receive_structural_method_without_becoming_fact(tmp_path):

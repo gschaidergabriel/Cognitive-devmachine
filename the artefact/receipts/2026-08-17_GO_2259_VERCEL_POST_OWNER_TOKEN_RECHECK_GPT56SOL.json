@@ -1,0 +1,30 @@
+{
+  "schema": "clayverse-execution-admission-recheck/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "observed_at": "2026-08-17T23:22+07:00",
+  "deployment_id": "dpl_58D2oabLHZQQ7zmjXFz3fwjTu7u7",
+  "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+  "controller_pr": 810,
+  "controller_commit": "5f7be902f9c24c41f0c505c4888d76475760b077",
+  "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+  "owner_token_policy_seen_by_runner": "APPROVED_ONE_COMMAND_ENV_ONLY",
+  "sandbox_admission": "PASS_CREATED",
+  "sandbox_id": "pink-forthcoming-mule-12DuZ3",
+  "guest_kernel": {
+    "system": "Linux",
+    "release": "6.18.40",
+    "machine": "x86_64",
+    "attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY"
+  },
+  "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+  "github_secret_forwarded_to_sandbox": false,
+  "sandbox_stopped": true,
+  "source_runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "classification": "OWNER_FORWARDING_POLICY_REACHED_RUNNER_BUT_SECRET_VALUE_ABSENT; EXECUTION_ADMISSION_PASS_THEN_PRE_SOURCE_CREDENTIAL_BLOCK; NOT_CLAYVERSE_TEST_FAIL",
+  "current_blocker": "Make the approved scoped read-only GITHUB_READ_TOKEN available to the retained #810 Vercel Preview/controller through an authorized secret-management surface, then retrigger. The connected Vercel tool available to this organ exposes deployment/log inspection but no environment-secret mutation action.",
+  "next_sequence_after_secret_admission": "verify exact current Research+EntityOS identity -> current deterministic regressions -> exact OCI build/digest -> run same image inside Firecracker -> runtime Vault MISTRAL_API_KEY -> generation-bound canonical Mistral turn/re-ingest/effect -> Tier-2 full appliance recreation same digest -> secret reacquisition -> second canonical Mistral turn -> final auth/terminal/concurrency gates",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS"
+}

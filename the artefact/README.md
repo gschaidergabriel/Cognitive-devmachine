@@ -19,6 +19,7 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 - Final image MUST contain complete accepted EntityOS, managed Linux PTY/tmux, Claude Code terminal runtime, GLM token/API client boundary, hooks/retrieval, EffectGate/EffectJournal and ClayVerse supervision.
 - Root filesystem is read-only. Runtime mutation is limited to declared RAM/tmpfs; durable mutation is limited to explicit persistent volumes such as `/var/lib/clayverse` and admitted workspace storage.
 - No host filesystem, host shell, host PID namespace, mutable host binaries or hidden companion cognition/state service is part of ClayVerse authority.
+- The Kubernetes reference profile now starts from an explicit **default-deny ingress+egress NetworkPolicy**. Functional networking requires a separate reviewed deployment-specific allow policy. Final acceptance additionally MUST prove the selected CNI actually enforces NetworkPolicy and must separately fence/probe node-local, metadata-service and control-plane reachability; the policy object is not a substitute for the MicroVM guest-kernel boundary.
 
 ### Canonical machine loop
 
@@ -51,7 +52,9 @@ Deployment authority:
 - `deployment/clayverse-kata-statefulset.template.yaml`
 - `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`
 
-The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, and persists only declared ClayVerse state/workspace volumes.
+The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, persists only declared ClayVerse state/workspace volumes and now appends a ClayVerse-selected default-deny `networking.k8s.io/v1` NetworkPolicy for both ingress and egress.
+
+That NetworkPolicy is intentionally a fail-closed baseline rather than a finished connectivity policy. The admitted deployment must provide a separate reviewed allow policy for only the exact required ingress/egress paths, prove the installed CNI enforces the policy, and separately test/fence node-local, metadata-service and control-plane paths that standard NetworkPolicy does not itself prove unreachable.
 
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
@@ -59,7 +62,7 @@ The installed RuntimeClass and target hardware virtualization support must be ve
 
 - **#611** tmux idempotent-reapply lane — exact final in-image runtime remains its promotion discriminator.
 - **#622** Python hash-lock generator — source candidate/unexecuted; no canonical accepted `requirements.lock.txt` yet.
-- **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact final runtime evidence.
+- **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact final runtime evidence. Its reported MicroVM network-policy gap is addressed by this retained current-main network-fusion lane, but #623 still needs fresh ancestry fusion before promotion.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
 - **#625** tokenless development/baseline packaging — useful lower-layer lane; EntityOS omission is development-only and can never be final acceptance.
 - **#810** retained Vercel Sandbox controller evidence — historical/bounded execution bridge, not the final deployment architecture.
@@ -72,6 +75,10 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - an independent guest-kernel boundary rather than host-kernel execution;
 - read-only root and denial of undeclared writes/host mounts;
 - only declared persistent volumes survive full appliance replacement;
+- the selected CNI really enforces the baseline NetworkPolicy;
+- default-deny blocks policy-governed ingress/egress before a reviewed allow policy exists;
+- the exact reviewed allow policy opens only admitted paths while tested non-admitted flows stay denied;
+- node-local, metadata-service and control-plane paths are explicitly probed and fenced outside the assumptions of standard NetworkPolicy;
 - Tier-1 EntityOS/internal recovery;
 - Tier-2 full microVM/workload replacement from the same image digest;
 - UnifiedDB/WAL/snapshot recovery under a new generation;
@@ -82,26 +89,32 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 ### Current execution boundary
 
-The architecture and deployable Kata profile are now canonical source. **Actual Kata/microVM execution has not yet been observed for the exact final ClayVerse image**, so no VM-isolation runtime credit or whole-product PASS is claimed.
+The architecture, Kata profile and source-level MicroVM network default-deny contract are concrete. The current network-fusion source blobs were rebound byte-for-byte in an authorized isolated non-production container and the focused static contract regression passed **6/6**. This is bounded exact-file source/mechanism evidence only.
 
-Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The final release discriminator is now stronger: the completed exact image must also pass inside the mandatory VM/microVM outer envelope.
+**Actual Kubernetes CNI enforcement and Kata/microVM execution have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-runtime credit or whole-product PASS is claimed.
+
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The strongest refreshed Vercel observation still creates a disposable Firecracker Sandbox successfully but fails closed before private Research source staging because the sensitive host-side Preview `GITHUB_READ_TOKEN` is absent; source-runtime and OCI-runtime credit remain zero. Retrying that same blocked path without credential admission would add no product evidence.
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation -> verify CNI/default-deny + exact allow policy + node/metadata/control-plane fences -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full microVM/workload -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 21:17 +07:00 — architecture strengthened: the outer VM/microVM envelope is now mandatory for final ClayVerse acceptance, not an optional future hardening.**
+**2026-08-17 22:49 +07:00 — MicroVM network boundary strengthened from `hostNetwork: false` to an explicit fail-closed policy contract without overclaiming Kubernetes NetworkPolicy.**
 
-- new global directive: `research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md`;
-- new deployment contract: `the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md`;
-- new concrete Kata StatefulSet template: `the artefact/deployment/clayverse-kata-statefulset.template.yaml`;
-- new static deployment-contract regression: `the artefact/tests/test_microvm_deployment_contract.py`;
-- the product artifact remains one ClayVerse OCI image; the MicroVM is an execution envelope, not a second product/entity;
-- Claude Code remains direct terminal-login; GLM remains token/API inference-only;
-- no actual final MicroVM runtime test has been executed in this architecture cycle, therefore acceptance remains `IN_PROGRESS`.
+- retained fresh-current-main lane: `gpt56sol/go-microvm-network-fusion-current-main-20260817-2249`;
+- `clayverse-kata-statefulset.template.yaml` now contains one ClayVerse-selected `networking.k8s.io/v1` default-deny policy with both `Ingress` and `Egress`, `ingress: []`, `egress: []`, and an explicit `ClusterIP` Service baseline;
+- `MICROVM_DEPLOYMENT_CONTRACT.md` now requires exact reviewed allow-policy identity, verified CNI enforcement, separate node-local/metadata/control-plane fencing, and records that NetworkPolicy is not a substitute for the mandatory guest-kernel boundary;
+- focused regression now checks the default-deny source shape, forbids broad `0.0.0.0/0` / `::/0` source grants, and checks the CNI/node-local non-overclaim contract;
+- exact Git blobs were independently rebound in an isolated container and the focused regression observed **6 passed in 0.06s**;
+- Vercel admission remains empirically open, but the retained OCI controller remains blocked before private source staging by absent host-side `GITHUB_READ_TOKEN`; no source/OCI/Kata runtime credit is claimed;
+- unusual experiment state: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because this trigger exposes only minute-precision immutable message time and no shared immutable request/turn id;
+- no VPS/self-hosted/production testing, Together API, secret exposure or paid/final training was used;
+- whole-product acceptance remains **IN_PROGRESS**.
+
+Previous architecture delta remains valid: the outer VM/microVM envelope is mandatory for final ClayVerse acceptance, not an optional future hardening.
 
 ## Verification
 
-Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract.
+Architecture/source convergence is concrete, but **whole-product PASS is not claimed**. Final acceptance requires the exact same accepted ClayVerse image to pass both the internal appliance contract and the outer independent guest-kernel MicroVM contract, including measured network enforcement rather than policy-object presence alone.

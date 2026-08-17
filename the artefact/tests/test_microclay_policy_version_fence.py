@@ -14,18 +14,24 @@ def _db(tmp_path):
 def test_legacy_shadow_policy_remains_shadow_under_v3_code(tmp_path):
     db = _db(tmp_path)
     try:
-        row = db.db.execute("SELECT mode,policy_version FROM retrieval_policy_state WHERE singleton=1").fetchone()
-        assert row["mode"] == "SHADOW"
-        assert int(row["policy_version"]) == 1
-        assert MicroClayRetrieval(db).mode() == "SHADOW"
+        for legacy_version in (1, 2):
+            db.db.execute(
+                "UPDATE retrieval_policy_state SET mode='SHADOW',policy_version=? WHERE singleton=1",
+                (legacy_version,),
+            )
+            assert MicroClayRetrieval(db).mode() == "SHADOW"
     finally:
         db.close()
 
 
-def test_legacy_active_policy_cannot_drive_v3_adaptive_serving(tmp_path):
+@pytest.mark.parametrize("legacy_version", [1, 2])
+def test_legacy_active_policy_cannot_drive_v3_adaptive_serving(tmp_path, legacy_version):
     db = _db(tmp_path)
     try:
-        db.db.execute("UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=2 WHERE singleton=1")
+        db.db.execute(
+            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=? WHERE singleton=1",
+            (legacy_version,),
+        )
         with pytest.raises(StaleGeneration, match="retrieval_policy_version"):
             MicroClayRetrieval(db).mode()
     finally:

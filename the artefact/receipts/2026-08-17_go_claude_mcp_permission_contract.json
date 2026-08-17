@@ -1,0 +1,47 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "active interactive Claude Code MCP permission contract and contradictory regression cleanup",
+  "observed_head_before_repair": "510d56d4ccdb4fb44d5f77f37d13db39022d1f31",
+  "finding": {
+    "runtime_source": "the artefact/clayverse/terminal_sessions.py",
+    "pre_repair_permission": "mcp__clayverse__*",
+    "mechanism": "the product terminal relied on an MCP tool-name glob for --allowedTools",
+    "primary_upstream_contract": "Anthropic Claude Code documentation states MCP glob permission patterns are not supported and that the server-level name mcp__<serverName> admits all tools for that server",
+    "full_suite_contradiction": "test_terminal_policy.py required managed-mcp.json to be empty while the current product policy and test_terminal_managed_authority.py require exactly the clayverse stdio server"
+  },
+  "repair": [
+    {
+      "commit": "947ccf61a8614adb6ed276dc7ed8b82feb7140dd",
+      "change": "replace unsupported mcp__clayverse__* permission with server-level mcp__clayverse"
+    },
+    {
+      "commit": "9930159af036dd8df2754c75286c3448a371301a",
+      "change": "lock the supported server-level permission and reject reintroduction of the wildcard in the active terminal regression"
+    },
+    {
+      "commit": "5564be35ac572963f5ceeed9247ad24657792834",
+      "change": "reconcile stale managed-MCP-empty regression with the exclusive clayverse stdio server product policy"
+    }
+  ],
+  "counterhypothesis": {
+    "claim": "the wildcard is accepted by the current Claude Code CLI or is equivalent to server-level permission",
+    "status": "REJECTED_BY_PRIMARY_DOCUMENTATION_FOR_PRODUCT_CONTRACT",
+    "remaining_empirical_check": "verify exact installed Claude Code binary behavior inside the exact OCI candidate"
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "additional_count": 0,
+    "shared_go_budget": "already consumed elsewhere; no second unusual experiment"
+  },
+  "evidence_limits": [
+    "source and upstream-contract repair is not an exact OCI runtime PASS",
+    "full suite cannot be claimed without authorized isolated exact-current-head execution",
+    "real interactive Claude Code MCP discovery/call remains an exact-container runtime gate"
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "vps_testing_used": false,
+  "together_api_used": false
+}

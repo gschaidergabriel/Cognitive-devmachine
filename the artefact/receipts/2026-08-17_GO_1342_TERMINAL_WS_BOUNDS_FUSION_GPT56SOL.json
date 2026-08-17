@@ -1,0 +1,72 @@
+{
+  "schema": "clayverse-go-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:45:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "join_main": "2d77e3c07df11375e6448e2c0d86e76b29b0cc9e",
+  "latest_main_observed_before_receipt": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+  "frontier": "Clerk-authenticated browser -> WebSocket PTY protocol/resource bounding",
+  "selection_reason": "Current MicroClay/meta-learning work had multiple overlapping open fusion lanes, while the WebSocket PTY boundary had a narrow non-duplicating fail-closed input-bound candidate directly on the whole-product user entry path.",
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id was exposed and the available user-message timestamp metadata was only minute precision (2026-08-17 13:42 +07). GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL therefore forbids minting a timestamp fallback claim or running a distinct unusual experiment.",
+    "distinct_unusual_experiments_executed_by_this_organ": 0
+  },
+  "source_fusion": {
+    "donor_pr": 419,
+    "donor_gateway_blob": "428246f7d62873a7bc5a755ac3a3b66686c9c0f0",
+    "canonical_commits_by_this_organ": [
+      "9a5819a77b35eadebc11365e235a26c674f93a3c",
+      "8654d4e7d909e279902723291c99f178b7ace985"
+    ],
+    "changes": [
+      "bounded auth/control JSON objects",
+      "bounded Clerk token shape before verification",
+      "strict integer terminal dimensions",
+      "64 KiB PTY input frame bound",
+      "explicit bounded PTY output chunk",
+      "explicit WebSocket disconnect exit",
+      "unknown text/control/frame fail closed",
+      "focused regression test added"
+    ],
+    "duplicate_lane_action": "PR #419 closed after canonical fusion to avoid retaining a second implementation lane."
+  },
+  "parallel_reentry": {
+    "observed": "While this GO was running, main independently advanced with Uvicorn transport-level WebSocket message bounding tied to the same PTY ingress constant and a regression assertion.",
+    "latest_observed_head": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+    "decision": "NO_DUPLICATE_DELTA",
+    "reason": "Current main already contains ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES in service.py and an adjacent test; no second transport-bound implementation was added."
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "exact gateway source-mechanism regression with dependency stubs; not full checkout, not OCI, not live Clerk/browser/PTY",
+    "exact_git_blob_sha1": "428246f7d62873a7bc5a755ac3a3b66686c9c0f0",
+    "git_blob_match": true,
+    "bytes": 10766,
+    "focused_checks": 8,
+    "passed": 8,
+    "failed": 0,
+    "elapsed_seconds": 0.25,
+    "claims_established": [
+      "bounded JSON/object decoding helpers behave fail closed",
+      "oversized/invalid Clerk token shape is rejected before verifier call",
+      "terminal dimensions reject boolean/string coercion",
+      "PTY input bound accepts 65536 bytes and rejects 65537",
+      "complete PTY writes survive short os.write progress",
+      "zero-progress PTY write fails closed",
+      "source contains explicit disconnect and unsupported-control handling",
+      "output chunk constant is 65536"
+    ]
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_VERCEL_TOOLING",
+    "other_isolated_nonproduction_execution_used": true,
+    "vps_self_hosted_production_tests": "FORBIDDEN_NOT_USED"
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_CANONICAL_SOURCE_FUSED",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Execute the exact then-current full ClayVerse checkout/image in an authorized actually-started isolated environment: terminal/auth regressions, exact OCI build/start/readiness, real Clerk JWT/browser WebSocket PTY, tmux/Claude session persistence, restart/recovery and dual-session generation/concurrency fences."
+}

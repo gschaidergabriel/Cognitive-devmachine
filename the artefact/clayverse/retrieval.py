@@ -82,6 +82,9 @@ class WorldAssembler:
             "truth_authority": False,
             "effect_authority": False,
         }
+        method_context = []
+        counterevidence = []
+        unknowns = []
         supplied = {
             "query": query,
             "turn_id": turn_id,
@@ -105,16 +108,43 @@ class WorldAssembler:
                 generation=int(supplied["generation"]),
             )
             memories = result["items"]
-            retrieval_receipt = result["receipt"]
+            retrieval_receipt = dict(result["receipt"])
+
+            # Stage B currently activates only on the strongest fail-safe trigger:
+            # Stage A returned factual UNKNOWN. Method presence never changes that status.
+            if retrieval_receipt.get("status") == "UNKNOWN":
+                methods = self.microclay.retrieve_methods(
+                    query=str(supplied["query"]),
+                    user_id=user_id,
+                    turn_id=str(supplied["turn_id"]),
+                )
+                method_context = [
+                    item for item in methods["items"] if item.get("kind") != "counterexample"
+                ]
+                counterevidence = [
+                    item for item in methods["items"] if item.get("kind") == "counterexample"
+                ]
+                retrieval_receipt["method"] = methods["receipt"]
+                unknowns = [{
+                    "status": "FACT_UNKNOWN",
+                    "query_sha256": retrieval_receipt.get("query_sha256"),
+                    "method_present": bool(method_context or counterevidence),
+                }]
         else:
             # Compatibility path for legacy tests/non-product callers with no active
             # causal turn. Product Claude hooks always have an active turn here.
+            # Method memory is excluded even here so legacy assembly cannot collapse a
+            # reusable method into factual durable memory.
+            excluded = tuple(sorted(
+                set(self.CONTROL_MEMORY_KINDS) | set(MicroClayRetrieval.METHOD_KINDS)
+            ))
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
+                    "SELECT * FROM durable_memory "
+                    f"WHERE kind NOT IN ({','.join('?' for _ in excluded)}) "
                     "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
+                    (*excluded, user_id),
                 )
             ]
 
@@ -122,6 +152,9 @@ class WorldAssembler:
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "method_context": method_context,
+            "unknowns": unknowns,
+            "counterevidence": counterevidence,
             "retrieval_receipt": retrieval_receipt,
         }
 

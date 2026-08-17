@@ -1,0 +1,60 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REGRESSION_TEST_REPAIR_WITH_NEGATIVE_EVIDENCE",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "Claude interactive terminal secret-environment regression fence",
+  "runtime_code_changed": false,
+  "observed_runtime_source": {
+    "path": "the artefact/clayverse/terminal_sessions.py",
+    "github_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "mechanism": "ensure() invokes tmux new-session with env -i allowlisted Claude environment, then invokes tmux source-file through _enforce_tmux_policy before returning"
+  },
+  "predecessor_test": {
+    "path": "the artefact/tests/test_terminal_env_boundary.py",
+    "github_blob": "41b42e1b2b01cdc76cc1006d14587066da3ad8dd",
+    "bug": "the test selected calls[-1][-1] after ensure(); the last subprocess call is the post-create tmux source-file enforcement call, not the new-session launch call",
+    "observed_supporting_reconstruction_result": "FAIL at argv[:2] == ['env','-i']; observed argv was ['/etc/clayverse/managed-tmux.conf']",
+    "credit": "MECHANISM_NEGATIVE_EVIDENCE_ONLY; predecessor test reconstruction was not byte-identical and therefore receives no exact-blob test credit"
+  },
+  "repair": {
+    "commit": "ccccc0b6573529a62c292a61d68f57e8ba988ea0",
+    "test_blob": "6f7c8b6be9bd7b6b527a8e8bfd252d3e128af52a",
+    "change": "select exactly one recorded subprocess argv containing new-session, locate the env token in that argv, and assert the allowlisted environment from that actual tmux new-session command"
+  },
+  "supporting_execution": {
+    "environment": "authorized isolated OpenAI container",
+    "exact_fixed_test_blob_recomputed": "6f7c8b6be9bd7b6b527a8e8bfd252d3e128af52a",
+    "terminal_manager_reconstruction_blob": "07635cd07599dbc10706dce81cfebed2c7b31178",
+    "terminal_manager_exact_github_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "command": "python -m pytest -q tests/test_terminal_env_boundary.py",
+    "result": "1 passed in 0.03s",
+    "exit_code": 0,
+    "credit": "SUPPORTING_MECHANISM_EXECUTION_ONLY; full exact-current terminal_sessions.py checkout was not executed"
+  },
+  "security_contract_preserved": [
+    "interactive Claude starts through env -i",
+    "only explicit ClayVerse/session/runtime variables are admitted",
+    "Anthropic/Claude API-key variables are forbidden from the interactive process environment",
+    "GLM_API_TOKEN is forbidden from the interactive process environment",
+    "Clerk runtime secrets are forbidden from the interactive process environment",
+    "GITHUB_READ_TOKEN is forbidden from the interactive process environment"
+  ],
+  "nonclaims": [
+    "not full exact-current-main pytest",
+    "not live Claude process attestation",
+    "not OCI runtime evidence",
+    "not whole ClayVerse PASS"
+  ],
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0
+  },
+  "next_discriminator": "Run the fixed test against the exact current full checkout/OCI image when the retained credential-capable isolated execution path is admitted; retain the host-side GITHUB_READ_TOKEN blocker as the OCI admission gate.",
+  "together_api": "FORBIDDEN",
+  "vps_self_hosted_production_testing": "NOT_USED"
+}

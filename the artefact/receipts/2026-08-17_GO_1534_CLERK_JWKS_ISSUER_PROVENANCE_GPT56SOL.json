@@ -1,0 +1,62 @@
+{
+  "schema": "clayverse.clerk-jwks-issuer-provenance/v1",
+  "trigger": "go",
+  "trigger_metadata": "2026-08-17T15:34+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "organ": "GPT-5.6 Sol",
+  "research_main_rejoined": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+  "branch": "go/clerk-jwks-issuer-fence-20260817",
+  "pull_request": 574,
+  "classification": "EXACT_SOURCE_MECHANISM_SUPPORTED_RUNTIME_UNOBSERVED",
+  "problem": "Network Clerk verification accepted an arbitrary CLERK_JWKS_URL even though browser Frontend API and token issuer were already bound to one Clerk instance, allowing the key-discovery trust root to drift from that instance.",
+  "authority_contract": {
+    "network_jwks": "CLERK_ISSUER + '/.well-known/jwks.json' only",
+    "static_key_mode": "CLERK_JWT_KEY remains networkless and does not retain an unused JWKS override",
+    "truth_boundary": "This changes authentication trust-root provenance only; it grants no state, retrieval, effect or identity authority beyond the existing Clerk boundary."
+  },
+  "exact_source": {
+    "baseline_clerk_auth_blob": "bb65e0aadbc7ce3f538dc2c9178bd044c49c92e5",
+    "candidate_clerk_auth_blob": "5f0c047ff785f0b42403eaca36dbea6c492f1389",
+    "candidate_test_blob": "c14430150c252d04d432911fa14a6b2d458f653e",
+    "adjacent_jwks_runtime_test_blob": "ec204480452885df9067842cf34b7df6eb09e0a1"
+  },
+  "isolated_source_slice_evidence": {
+    "environment": {
+      "surface": "OpenAI isolated non-production container",
+      "python": "3.13.5",
+      "pyjwt": "2.13.0",
+      "pytest": "9.0.2"
+    },
+    "baseline_red_gate": {
+      "result": "3 failed, 2 passed",
+      "exit_code": 1,
+      "observed_failures": [
+        "cross-instance JWKS override was accepted",
+        "same-host wrong-path JWKS override was accepted",
+        "direct ClerkConfig drift reached the mocked PyJWKClient"
+      ]
+    },
+    "candidate_compile": "PASS",
+    "candidate_green_gate": {
+      "result": "9 passed, 1 deselected",
+      "exit_code": 0,
+      "scope": "new provenance regression plus the two adjacent non-network JWKS runtime-boundary tests; the terminal_gateway source-inspection test was intentionally deselected because that unrelated exact file was not staged in the bounded slice"
+    }
+  },
+  "execution_admission": {
+    "vercel": "FREE_DAILY_PREVIEW_DEPLOYMENT_CAP_REACHED_BEFORE_SANDBOX_START",
+    "daytona": "ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "runtime_credit": "ZERO"
+  },
+  "counterhypothesis": "Real Clerk key rotation/cache behavior may differ from source-level PyJWKClient construction; only an admitted real-instance isolated runtime can establish rotation behavior and end-to-end PTY auth continuity.",
+  "next_exact_gate": "In the next admitted exact OCI/isolated runtime with a real Clerk test instance: verify an initial JWT, rotate the signing key, require finite JWKS-set refresh from the issuer-bound endpoint, reject non-issuer key discovery, and preserve authenticated WebSocket PTY behavior.",
+  "unusual_experiment_count_added": 0,
+  "experiment_budget_note": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT: the shared go trigger exposes only minute-precision identity, so no atomic unusual-experiment lease was minted.",
+  "whole_product_pass": false,
+  "real_clerk_runtime_verified": false,
+  "oci_runtime_verified": false,
+  "vps_used": false,
+  "together_used": false,
+  "paid_or_final_training_started": false
+}

@@ -11,33 +11,40 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- Final runtime model: **sealed VM-like sandbox/appliance with explicit ingress and egress**.
-- UnifiedDB is the sole durable canonical cognition/state/world/memory authority; ClayGraph is derived/rebuildable.
+- Final runtime model: **immutable sealed appliance / VM-like sandbox with controlled ingress and egress**.
+- UnifiedDB is the sole durable canonical state/world/memory authority; ClayGraph is derived/rebuildable.
 - The final accepted image MUST contain the complete accepted EntityOS execution/security/runtime substrate. EntityOS may be omitted only from explicitly classified development/baseline builds that can never receive whole-product PASS.
-- Canonical internal loop: `INGRESS -> UnifiedDB -> retrieval/context -> Claude cognition -> proposed intent/command re-ingest -> policy/authority validation -> EntityOS/managed Linux PTY/tmux execution -> stdout/stderr/result/effect receipt -> UnifiedDB causal re-entry -> repeat -> EGRESS`.
-- Claude/LLM output never bypasses ClayVerse directly into execution; it returns as proposed action/data first.
-- Managed terminal control is mandatory inside the boundary. Unmediated generic host `process.exec` remains forbidden; admitted execution goes through the ClayVerse/EntityOS security/effect contract.
+- The accepted OCI root filesystem is read-only. Runtime mutation is restricted to declared RAM/tmpfs paths; durable mutation is restricted to explicit persistent data areas such as `/var/lib/clayverse` and separately admitted workspace storage.
+- Runtime code, EntityOS binaries, policies and managed settings are reconstructed from immutable image bytes after failure rather than repaired in place.
 - Gabriel and Andreas are equal-rights perspectives into one central entity/global generation.
-- Build/test/runtime validation remains authorized isolated-sandbox-only. VPS/self-hosted/production testing and Together are forbidden.
 
-### Shock-absorber / automatic recovery law
+### Canonical machine loop
 
-The internal container boundary is deliberately a **stability shock absorber**. Internal failures should remain inside the ClayVerse machine continuum instead of making outside systems part of the runtime or state authority.
+`INGRESS -> UnifiedDB canonicalize/record -> retrieval/context -> Claude cognition -> proposed intent/command re-ingest -> policy/authority validation -> EntityOS -> managed Linux PTY/tmux execution -> stdout/stderr/exit/effect receipt -> UnifiedDB causal re-entry -> repeat as needed -> EGRESS`
 
-ClayVerse must maintain known-good logical machine snapshots binding at least:
+The LLM never bypasses ClayVerse directly into shell execution. Its output returns into the continuum first and remains proposed action/data until admitted by the execution/effect boundary.
 
-- consistent UnifiedDB checkpoint/backup identity;
-- global and canonical session generations;
-- EntityOS binary/config/policy hashes;
-- active causal turn/episode and resumable queue position;
-- EffectJournal status for confirmed/pending/unknown effects;
-- managed runtime identities required to reconstruct readiness.
+The accepted ClayVerse/EntityOS layer must directly control the managed Linux PTY/tmux surface inside the appliance. Unmediated generic host `process.exec` remains forbidden.
 
-On EntityOS or other critical internal runtime crash/wedge, the supervisor must automatically freeze new ingress/nonessential egress, fence the old generation, reconstruct from the last accepted snapshot, advance generation, re-attest UnifiedDB/EntityOS/terminal/Claude readiness and resume only through causal re-entry.
+### Shock-absorber / self-healing law
 
-Ambiguous outside effects MUST NOT be blindly replayed after rollback. They become `UNKNOWN_AFTER_CRASH`/equivalent unless an explicitly idempotent contract plus durable EffectJournal evidence proves replay safe.
+The inner machine boundary is deliberately a **stability shock absorber**. Runtime and state are separated:
 
-CRIU/filesystem/RAM snapshots may later optimize recovery, but they never replace the logical UnifiedDB/EffectJournal consistency contract.
+- **Runtime:** EntityOS, Claude, PTY/tmux and orchestration are reconstructable/ephemeral from immutable image bytes.
+- **State:** UnifiedDB/WAL/checkpoints, EffectJournal and admitted durable workspace are persistent and explicitly scoped.
+
+ClayVerse maintains known-good logical machine snapshots binding at least UnifiedDB checkpoint identity, global/session generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state.
+
+Recovery is two-tiered:
+
+1. **Internal recovery:** if invariants remain trustworthy, fence/restart only the failed EntityOS/Claude/PTY/tmux component, reconcile the last valid snapshot, re-attest readiness and resume through causal re-entry.
+2. **Full appliance recovery:** if invariants cannot be trusted, fail the container closed and let the OCI runtime/orchestrator restart the entire appliance from the immutable base image. UnifiedDB/WAL/snapshot/effect-journal recovery runs before a new generation is minted and ingress reopens.
+
+Ambiguous external effects are never blindly replayed after a crash. They become `UNKNOWN_AFTER_CRASH`/equivalent unless explicit idempotence plus durable EffectJournal evidence proves replay safe.
+
+Fast deterministic restart is a design goal, but no fixed millisecond restart guarantee is claimed until measured on the admitted runtime.
+
+OCI isolates product userspace but still shares the host kernel. If stronger kernel isolation is required later, the same ClayVerse image may run inside a deployment VM/microVM without changing the internal ClayVerse architecture.
 
 ### Retained convergence lanes
 
@@ -52,7 +59,7 @@ CRIU/filesystem/RAM snapshots may later optimize recovery, but they never replac
 
 Missing direct Vercel Git-project linkage is not a development blocker. Continue maximum independent tests under `the artefact/TESTING_STRATEGY.md`.
 
-Crash/recovery testing is now mandatory and includes EntityOS crash idle/active, terminal child crash, crash before/after effect emission and acknowledgement, interrupted UnifiedDB write, stale pre-crash result rejection, corrupt newest snapshot fallback, crash during recovery, no blind effect replay, ingress freeze during inconsistent state, and rejection of stale auth/session/generation resurrection.
+Crash/recovery testing is mandatory: EntityOS crash idle/active, terminal child crash, crash before/after effect emission and acknowledgement, interrupted UnifiedDB write, stale pre-crash result rejection, corrupt newest snapshot fallback, crash during recovery, no blind effect replay, ingress freeze during inconsistent state, stale auth/session/generation rejection, read-only-root enforcement and undeclared-write denial.
 
 ### Current execution boundary
 
@@ -60,21 +67,24 @@ The final exact OCI/Sandbox gate remains deferred because the canonical Research
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact image/digest -> complete accepted EntityOS + UnifiedDB sealed continuum -> resolved dependency identities -> ingress/egress boundary -> managed Linux PTY/tmux -> Claude cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> automatic known-good snapshot crash recovery -> Clerk/WebSocket PTY -> managed hooks -> persistence/restart/recovery -> dual-user concurrency/global-generation -> whole-product acceptance`.
+`fresh canonical source -> reproducible exact image/digest -> read-only rootfs + declared tmpfs/persistent write surfaces -> complete accepted EntityOS + UnifiedDB sealed continuum -> ingress/egress boundary -> managed Linux PTY/tmux -> Claude cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> automatic tier-1 and tier-2 snapshot recovery -> Clerk/WebSocket PTY -> managed hooks -> persistence/restart/recovery -> dual-user concurrency/global-generation -> whole-product acceptance`.
 
 Whole-product PASS requires this exact closure. Source inspection, static tests, mocks, component runtime PASS, deployment READY, Sandbox creation or historical evidence do not imply ClayVerse PASS.
 
 ### Latest cycle delta
 
-**2026-08-17 21:07 +07:00 — architecture contract changed: final ClayVerse is explicitly a sealed VM-like ingress/process/egress machine continuum with complete EntityOS, direct managed Linux terminal control and automatic known-good snapshot recovery.**
+**2026-08-17 21:07 +07:00 — the appliance paradigm was made explicit and hardened: immutable read-only runtime, persistent UnifiedDB state, direct managed PTY loop, complete EntityOS in the final image, and two-tier automatic self-healing from known-good logical snapshots.**
 
-- owner directive commit introduced the sealed machine-continuum law and made final accepted EntityOS mandatory;
-- snapshot recovery is a product requirement, not an optional reliability enhancement;
-- recovery advances/fences generations and never blindly replays ambiguous external effects;
-- `TESTING_STRATEGY.md` now requires an adversarial crash/recovery matrix;
-- receipt: `the artefact/receipts/2026-08-17_ARCH_2107_SEALED_CONTINUUM_SNAPSHOT_RECOVERY_GPT56SOL.json`;
-- no whole-product PASS claimed and no final OCI runtime evidence added in this architecture-only update.
+- owner directive: sealed VM-like ingress/process/egress continuum plus automatic snapshot recovery;
+- immutable appliance refinement: read-only OCI rootfs, RAM/tmpfs for ephemeral mutation, explicit persistent data areas only;
+- recovery refinement: Tier 1 internal component reconstruction and Tier 2 full container restart from immutable image;
+- manifest updated to encode the same runtime/state/recovery laws;
+- testing strategy requires the adversarial crash/recovery matrix;
+- receipts:
+  - `the artefact/receipts/2026-08-17_ARCH_2107_SEALED_CONTINUUM_SNAPSHOT_RECOVERY_GPT56SOL.json`
+  - `the artefact/receipts/2026-08-17_ARCH_2107_IMMUTABLE_APPLIANCE_SELF_HEALING_GPT56SOL.json`
+- no whole-product PASS claimed and no final OCI runtime evidence added in this architecture update.
 
 ## Verification
 
-Authorized bounded component evidence exists, but **whole-product PASS is not claimed**. Current work must now converge implementation toward the sealed continuum and its automatic snapshot recovery contract while maximizing all independently executable tests.
+Authorized bounded component evidence exists, but **whole-product PASS is not claimed**. Current work must now converge implementation toward this immutable self-healing appliance contract while maximizing all independently executable tests.

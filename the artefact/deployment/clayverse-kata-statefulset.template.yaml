@@ -59,7 +59,12 @@ spec:
       hostPID: false
       hostIPC: false
       terminationGracePeriodSeconds: 30
+      # PVC mounts replace the image-owned /var/lib/clayverse and /workspace
+      # directories. Keep those volumes writable by the non-root runtime group
+      # without introducing a privileged/root chown init container.
       securityContext:
+        fsGroup: 10001
+        fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
           type: RuntimeDefault
       containers:

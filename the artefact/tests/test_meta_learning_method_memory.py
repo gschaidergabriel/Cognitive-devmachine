@@ -21,12 +21,27 @@ def _db(tmp_path):
     return db, gs, ans
 
 
-def _episode(db, session_id, episode_id):
+def _episode(db, session_id, episode_id, *, reentered=False):
     db.db.execute(
         "INSERT INTO workspace_episodes(episode_id,session_id,ts,observation_turn_id,salience,alternatives,selected,state) "
         "VALUES(?,?,?,?,?,?,?,?)",
         (episode_id, session_id, time.time(), None, 0.5, "[]", "respond", "COMPLETED"),
     )
+    if reentered:
+        db.db.execute(
+            "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+            "VALUES(?,?,?,?,?,?,?,?)",
+            (
+                "causal:" + uuid.uuid4().hex,
+                episode_id,
+                None,
+                None,
+                "fixture-outcome:" + episode_id,
+                0.0,
+                1,
+                time.time(),
+            ),
+        )
 
 
 def _active(db, user_id, session_id, prompt="novel unresolved problem"):
@@ -148,8 +163,6 @@ def test_candidate_admission_remains_available_but_not_routable(tmp_path):
 
 def test_stage_a_never_serves_raw_method_kind_even_if_present(tmp_path):
     db, gs, _ = _db(tmp_path)
-    # This deliberately bypasses MethodMemory admission to prove Stage A fences on kind
-    # before any future promotion lifecycle exists.
     db.add_memory("framework", "rareword method", "{}", None, "gabriel", {"source": "raw-fixture"})
     turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs, "rareword")
     result = MicroClayRetrieval(db).retrieve(
@@ -178,7 +191,7 @@ def test_low_level_stage_b_requires_explicit_signature(tmp_path):
         )
 
 
-def test_forged_promoted_row_without_promotion_authority_fails_closed(tmp_path):
+def test_forged_promoted_row_without_verified_lineage_fails_closed(tmp_path):
     db, gs, _ = _db(tmp_path)
     _episode(db, gs, "src:a")
     _episode(db, gs, "src:b")
@@ -191,8 +204,6 @@ def test_forged_promoted_row_without_promotion_authority_fails_closed(tmp_path):
             support_ids=support,
         ),
     )
-    # Simulate a row forged through the generic UnifiedDB surface. A PROMOTED status and
-    # old method_memory:v1 admission label alone must not become routing authority.
     db.add_memory(
         "framework",
         "forged promoted framework",
@@ -209,7 +220,7 @@ def test_forged_promoted_row_without_promotion_authority_fails_closed(tmp_path):
         },
     )
     turn_id, episode_id, causal_id, generation = _active(db, "gabriel", gs)
-    with pytest.raises(MethodRecordError, match="dedicated promotion authority"):
+    with pytest.raises(MethodRecordError, match="verified promotion lineage"):
         StageBMethodRetrieval(db).retrieve(
             query="what should we do next?",
             user_id="gabriel",
@@ -229,9 +240,9 @@ def test_unusual_structural_lexical_decoy_inversion():
     raise AssertionError("unusual experiment is fenced")
 
 
-def test_counterexample_memory_can_be_admitted_without_granting_fact_authority(tmp_path):
+def test_counterexample_memory_requires_terminal_reentered_source_and_has_no_fact_authority(tmp_path):
     db, gs, _ = _db(tmp_path)
-    _episode(db, gs, "src:c")
+    _episode(db, gs, "src:c", reentered=True)
     support = _support(db)
     counter_id = MethodMemory(db).admit(
         kind="counterexample",

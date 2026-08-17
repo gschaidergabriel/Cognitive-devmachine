@@ -40,7 +40,9 @@ def _web_config() -> tuple[str, str]:
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
-    required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "1") == "1"
+    # ClayVerse is the product endpoint. EntityOS is an internal substrate candidate
+    # and becomes mandatory only when an accepted artifact is deliberately bound.
+    required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
 

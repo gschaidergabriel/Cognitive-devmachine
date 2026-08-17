@@ -59,7 +59,7 @@ class MicroClayRetrieval:
     serving path until an explicit externally validated promotion changes the mode.
     """
 
-    POLICY_VERSION = 2
+    POLICY_VERSION = 3
     DEFAULT_MODE = "SHADOW"
     MAX_SOURCE_ROWS = 5000
     MAX_QUERY_TOKENS = 64
@@ -95,7 +95,7 @@ class MicroClayRetrieval:
     def _route_key(token: str, memory_id: str) -> str:
         cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
         target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
-        return f"route:v2:{cue}:{target}"
+        return f"route:v3:{cue}:{target}"
 
     @staticmethod
     def _safe_provenance(raw: str) -> dict[str, Any]:

@@ -1,0 +1,11 @@
+# Fail-closed build context: only bytes explicitly consumed by the ClayVerse image
+# are sent to the Docker/OCI builder. Local state, credentials, receipts, tests,
+# VCS metadata and unrelated research material stay outside the build context.
+*
+!Dockerfile
+!requirements.txt
+!clayverse/
+!clayverse/**
+!policy/
+!policy/**
+!EntityOS

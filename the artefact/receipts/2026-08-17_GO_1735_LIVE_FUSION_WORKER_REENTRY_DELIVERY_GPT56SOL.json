@@ -7,28 +7,41 @@
   "canonical_main_observed_before_delivery_fusion": "10a4e1731bb02610f1085353954e0b52d69f9a16",
   "program": "ClayVerse single-container",
   "stage": "CLAYVERSE_ARTIFACT",
-  "classification": "NO_CHANGE_PRODUCT_CODE_LIVE_FUSION_WORKER_REENTRY_DELIVERED",
+  "classification": "NO_CHANGE_PRODUCT_CODE_PARALLEL_DELIVERY_RACE_ADJUDICATED",
   "owner_directive": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md",
   "material_delta": {
-    "classification": "REFINES",
-    "description": "The activation manifest declared PR #611 and PR #602 live delivery pending. This GO completed targeted delivery to both retained lanes without creating a second product/state/effect path.",
+    "classification": "DUPLICATE_AFTER_PARALLEL_FUSION",
+    "description": "This organ attempted the same targeted PR #611/#602 live re-entry while a parallel organ completed canonical delivery and updated WORKER_REENTRY_MANIFEST. The stale manifest write was rejected by the GitHub SHA fence with HTTP 409. This organ then downgraded its own comments to explicit DUPLICATE supporting routing rather than creating two active worker instructions.",
     "product_runtime_delta": "NO_CHANGE",
     "whole_product_acceptance_movement": "NONE"
   },
-  "delivery_evidence": [
+  "canonical_delivery": {
+    "receipt": "the artefact/receipts/2026-08-17_GO_1735_LIVE_REENTRY_DELIVERY_GPT56SOL.json",
+    "pr611_comment_id": 5314946954,
+    "pr602_comment_id": 5314948109,
+    "state": "DELIVERED_ACK_PENDING",
+    "causal_credit": "NONE_FROM_DELIVERY_ALONE"
+  },
+  "duplicate_delivery_adjudication": [
     {
       "receiver": "github:pull/611",
-      "github_comment_id": 5314946349,
-      "decision": "ADOPT",
-      "payload": "Retain the single tmux 3.6a repair lane, preserve exact-current runtime uncertainty, and rejoin exactly once at real execution admission before the exact-head discriminator."
+      "duplicate_comment_id": 5314946349,
+      "action": "COMMENT_UPDATED_TO_DUPLICATE_NO_ADDITIONAL_WORKER_ACTION",
+      "canonical_comment_id": 5314946954
     },
     {
       "receiver": "github:pull/602",
-      "github_comment_id": 5314947675,
-      "decision": "DEFER",
-      "payload": "Keep one managed-Claude process-attestation lane downstream of PR #611 and falsify it only against exact OCI/live-tmux/native-Claude behavior plus perturbation."
+      "duplicate_comment_id": 5314947675,
+      "action": "COMMENT_UPDATED_TO_DUPLICATE_NO_ADDITIONAL_WORKER_ACTION",
+      "canonical_comment_id": 5314948109
     }
   ],
+  "coordination_fence": {
+    "attempted_manifest_sha": "411ea2f0b83ce295384b2bd7a70613cc251d4380",
+    "result": "HTTP_409_STALE_SHA_REJECTED",
+    "refetched_manifest_sha": "b551f03806d83e1a4c09f8c602ade6d3efb5f305",
+    "interpretation": "STALE_WORKER_DID_NOT_OVERWRITE_NEWER_SHARED_STATE"
+  },
   "hypofusion": {
     "pr611_counterhypothesis": "Byte-stable repair semantics plus old-head live evidence may still fail or be insufficient in the exact then-current integrated runtime.",
     "pr611_cheapest_falsifier": "First actually-startable authorized isolated runner: refresh main, rejoin PR #611 once, bind the resulting exact head, execute real tmux 3.6a idempotency/fail-closed discriminator, then focused and adjacent regressions.",
@@ -43,14 +56,15 @@
     "local_effect": "UNOBSERVED",
     "causal_credit_supported": false
   },
-  "execution_evidence": "NO_NEW_RUNTIME_EXECUTION; current exact PR #611 runtime remains unobserved and current provider-admission blocker remains authoritative until refreshed by an actually-started authorized isolated runner.",
+  "execution_evidence": "NO_NEW_RUNTIME_EXECUTION_BY_THIS_ORGAN; fresh parallel GitHub runner rerun also remained pre-step admission failure with zero runtime/test credit.",
   "unusual_experiment": {
     "consumed": false,
-    "reason": "No uniquely claimable shared atomic experiment lease is exposed for this trigger; delivery and adversarial routing are deterministic coordination work."
+    "reason": "No uniquely claimable shared atomic experiment lease is exposed for this trigger; delivery and anti-entropy adjudication are deterministic coordination work."
   },
   "anti_hallucination": [
     "Delivery is not reconstruction, plan revalidation, use, local effect or causal credit.",
     "Old-head component PASS and exact-file source regression do not establish exact-current runtime PASS.",
+    "Parallel duplicate routing was explicitly collapsed rather than counted as independent evidence.",
     "No source/product merge or whole-product acceptance is claimed by this receipt."
   ],
   "next_executable_step": "At the first actually-startable authorized isolated runner, refresh main, rejoin retained PR #611 exactly once, bind the resulting head, execute the real tmux 3.6a discriminator and focused plus adjacent regressions; only then decide promotion and proceed to PR #602/native-Claude/OCI gates.",

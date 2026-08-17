@@ -1,44 +1,51 @@
 {
   "schema": "clayverse-source-hardening-receipt/v1",
-  "recorded_at_local": "2026-08-17T13:49:08+07:00",
+  "recorded_at_local": "2026-08-17T13:51:26+07:00",
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_at_branch": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+  "latest_main_rechecked_during_work": "4ca945b772ebf8a68cd5e4ecbbe3f7e39a1f46fc",
   "source_branch": "go/claude-child-env-scrub-20260817-1343",
-  "source_head_before_receipt": "99c86c9083a0ccd6e772c7370e884c2fe3ac9832",
   "finding": {
-    "classification": "SOURCE_CONTRACT_AND_TEST_DRIFT",
-    "managed_policy_blob_before": "2eaa5c460cfcbfce03e224ca0ac62b699aec298e",
+    "classification": "SOURCE_TEST_DRIFT",
+    "managed_policy_blob": "2eaa5c460cfcbfce03e224ca0ac62b699aec298e",
     "test_blob_before": "24e2684f7aadf54c120858b6d5313457c812c13e",
-    "observed": "Current main used an exact serverCommand allowlist for the managed ClayVerse stdio MCP, while test_terminal_managed_authority.py still asserted the weaker historical serverName form. Current managed policy also did not explicitly enable Claude Code subprocess credential scrubbing for hooks and MCP stdio children.",
-    "counterhypothesis": "The existing env -i terminal launch already prevents inherited service/container secrets from entering Claude, so missing subprocess scrubbing is defense-in-depth rather than evidence of a current credential leak."
+    "observed": "Current main uses an exact serverCommand allowlist for the managed ClayVerse stdio MCP, while test_terminal_managed_authority.py still asserted the weaker historical serverName form.",
+    "security_relevance": "A stale test encoded a weaker authority model than the current managed policy and could mislead future changes back toward name-only matching."
   },
-  "upstream_primary_evidence": {
+  "primary_upstream_evidence": {
     "managed_mcp": "Current Claude Code documentation states stdio allowlists can match exact serverCommand arrays and warns that name-only allowlists are not a security control.",
-    "subprocess_scrub": "Current Claude Code documentation states CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1 strips Anthropic and cloud-provider credentials from hooks and MCP stdio subprocess environments.",
-    "settings_env": "Current Claude Code documentation states settings.json env variables apply to every session and can be centrally rolled out via managed settings."
+    "subprocess_scrub_feature": "Claude Code changelog records CLAUDE_CODE_SUBPROCESS_ENV_SCRUB from 2.1.83; ClayVerse pins 2.1.233, so the feature predates the pinned client.",
+    "subprocess_scrub_counterevidence": "Current upstream 2.1.x reports show CLAUDE_CODE_SUBPROCESS_ENV_SCRUB can force requested permission modes, including dontAsk, back to default; no changelog evidence was found that proves this interaction fixed by 2.1.233."
   },
-  "repair": {
-    "managed_policy_blob": "7002a1ace4d97947b4c768bf36a81065c23db647",
-    "test_blob": "08216f19c2860a47baa06393f2409575a5609086",
+  "candidate_adjudication": {
+    "candidate": "Add CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1 to managed settings.",
+    "initial_reason": "Reduce credential exposure to managed hooks and MCP stdio child processes.",
+    "counterhypothesis": "The setting can change Claude permission-mode semantics and break the intended unattended dontAsk + explicitly allowed MCP-only terminal contract.",
+    "result": "DEFERRED_NOT_RETAINED",
+    "final_policy_change": false,
+    "reason": "Exact packaged Claude 2.1.233 behavior is not executable on the available authorized surface, and upstream counterevidence is sufficient to reject an unverified managed-policy change. Existing env -i launch already excludes inherited service/container secrets, so no observed current credential leak justifies taking this compatibility risk."
+  },
+  "retained_repair": {
+    "file": "the artefact/tests/test_terminal_managed_authority.py",
+    "test_blob_after": "a1360208029b55fc03ff4ceab74378ad7db4c1cb",
     "kept_exact_server_command_authority": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"],
-    "added_managed_env": {"CLAUDE_CODE_SUBPROCESS_ENV_SCRUB": "1"},
-    "test_updated_to_exact_command_authority": true
+    "policy_bytes_changed": false
   },
   "bounded_execution": {
     "surface": "OpenAI isolated non-production container",
-    "scope": "Exact managed-settings.json branch bytes only; deterministic source-policy regression, not full checkout/OCI/live Claude execution.",
-    "exact_policy_git_blob_match": true,
-    "policy_git_blob_sha1": "7002a1ace4d97947b4c768bf36a81065c23db647",
+    "scope": "Exact final managed-settings.json bytes; deterministic source-policy regression only, not full checkout/OCI/live Claude execution.",
+    "exact_final_policy_git_blob_match": true,
+    "policy_git_blob_sha1": "2eaa5c460cfcbfce03e224ca0ac62b699aec298e",
     "checks": 6,
     "passed": 6,
     "failed": 0,
     "checked": [
       "managed MCP allowlist remains authoritative",
       "exact stdio serverCommand matches ClayVerse MCP",
-      "CLAUDE_CODE_SUBPROCESS_ENV_SCRUB=1 is managed",
+      "unverified subprocess scrub is absent from final policy",
       "managed hooks remain exclusive",
       "bypass permission mode remains disabled",
       "Bash remains denied"
@@ -56,5 +63,5 @@
   },
   "classification": "MECHANISM_SUPPORTED",
   "whole_product_pass": false,
-  "next_exact_gate": "Run the branch's terminal managed-authority regression and broader suite on an actually-started authorized isolated exact-head environment, then verify the packaged native Claude process applies subprocess env scrubbing to managed hooks/MCP before merge/whole-product acceptance."
+  "next_exact_gate": "Run the repaired managed-authority test and adjacent terminal suite on an actually-started authorized isolated exact-head environment. Separately test packaged Claude 2.1.233 permission-mode behavior with subprocess scrubbing before considering that defense-in-depth setting."
 }

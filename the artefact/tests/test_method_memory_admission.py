@@ -108,6 +108,21 @@ def test_candidate_cannot_self_promote_by_status_flip():
         )
 
 
+def test_generic_admission_cannot_mint_promoted_method():
+    db = FakeDB()
+    manager = MethodMemoryManager(db)
+    with pytest.raises(MethodMemoryValidationError, match="dedicated promotion lifecycle"):
+        manager.admit(
+            "framework",
+            "causal discrimination",
+            promoted_record(),
+            "turn:2",
+            "gabriel",
+            {"source": "promotion", "promotion_receipt_id": "forged-receipt"},
+        )
+    assert db.rows == []
+
+
 def test_promoted_method_requires_cross_episode_support_and_receipt():
     with pytest.raises(MethodMemoryValidationError, match="single success cannot promote"):
         validate_method_record(

@@ -26,12 +26,18 @@ class EffectJournal:
             for key in cls.SAFE_OUTCOME_FIELDS:
                 if key in outcome and isinstance(outcome[key],(str,int,float,bool,type(None))): receipt[key]=outcome[key]
         return receipt
-    def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None):
+    @staticmethod
+    def _assert_lease_tx(db,lease:Lease):
+        lr=db.execute('SELECT holder,generation,expires_at,nonce FROM leases WHERE resource=?',(lease.resource,)).fetchone()
+        if not lr or lr['holder']!=lease.holder or int(lr['generation'])!=lease.generation or lr['nonce']!=lease.nonce or float(lr['expires_at'])<=time.time():
+            raise StaleGeneration(lease.resource)
+    def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())
         with self.db.tx() as db:
             row=db.execute('SELECT generation FROM sessions WHERE session_id=? AND user_id=?',(session_id,user_id)).fetchone()
             if not row: raise PermissionError('session owner mismatch')
             if int(row[0])!=int(generation): raise StaleGeneration(session_id)
+            if lease is not None: self._assert_lease_tx(db,lease)
             audit_argv=self._argv_receipt(argv)
             db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
         return eid
@@ -63,8 +69,8 @@ class EffectJournal:
             if not row: stale=PermissionError('session owner mismatch')
             elif int(row[0])!=int(generation): stale=StaleGeneration(session_id)
             if stale is None and lease is not None:
-                lr=db.execute('SELECT holder,generation,expires_at,nonce FROM leases WHERE resource=?',(lease.resource,)).fetchone()
-                if not lr or lr['holder']!=lease.holder or int(lr['generation'])!=lease.generation or lr['nonce']!=lease.nonce or float(lr['expires_at'])<=time.time(): stale=StaleGeneration(lease.resource)
+                try: self._assert_lease_tx(db,lease)
+                except StaleGeneration as exc: stale=exc
             status='STALE_OUTCOME' if stale else 'VERIFIED'
             cid=self._finish_tx(db,effect_id,outcome,status)
         if stale: raise stale

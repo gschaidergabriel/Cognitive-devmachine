@@ -33,7 +33,7 @@ def test_direct_host_process_is_forbidden_even_when_legacy_flag_enabled(db):
 def test_stale_reasoning_generation_blocks_effect(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); expected=db.session_generation(sid); db.bump_generation(sid)
     with pytest.raises(StaleGeneration): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','must-not-run'],expected))
-def test_causal_reentry_and_restart_continuity(tmp_path):
-    p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
+def test_effectless_turn_preserves_restart_continuity_without_false_reentry(tmp_path):
+    p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==0; assert d.db.execute('select count(*) from causal_episodes where reentered=0').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
 def test_checkpoint_hash_changes_on_canonical_state(db):
     r=IdentityRouter(db,{'g':'gabriel'}); _,h1=db.checkpoint('before'); uid,sid=r.resolve('g'); db.append_turn(sid,uid,'user','x'); _,h2=db.checkpoint('after'); assert h1!=h2

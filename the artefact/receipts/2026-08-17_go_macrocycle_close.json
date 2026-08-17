@@ -1,0 +1,42 @@
+{
+  "kind": "CLAYVERSE_GO_MACROCYCLE_CLOSE_RECEIPT",
+  "authority": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "trigger": "go",
+  "observed_main_snapshot_before_close": "4291a788eaa6413ff965f0c4f2f73c100fcfb811",
+  "product": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "canonical_deltas_from_this_organ": [
+    "af62fa851d80cefc43f8c5b3bce101eb55c2d473: direct host process execution removed from canonical effect path",
+    "a918604f99da68e64228975639ad99f46081b0e9: regression locks EntityOS-only effect boundary while preserving generation fencing",
+    "3f2c02f3033c9aa33c2f0b26f5e6a7ce43ad4ef4: external runtime EntityOS bind dependency removed from baseline compose",
+    "cb5e0d7c09666476af94b1ac66946c7c785e100b: manifest requires one-image EntityOS convergence",
+    "15fc37d15d7f9f359d42010600ebfee5478b106c: OCI build context made default-deny",
+    "f13ddcea1100f70c3d5ff71d9a0df1f077d4f003: regression locks minimal OCI build context",
+    "e56456166ad6226a7f9a658afe724b8e73af9838: manifest aligned with digest-bound embedding/build-context truth"
+  ],
+  "parallel_fusion_observed": [
+    "EntityOS is now copied into the same image at build time and checked against ENTITYOS_SHA256",
+    "compose passes the same digest as build argument and runtime pin without a host executable mount",
+    "Claude Code bare-mode readiness now fails closed when its required credential is absent"
+  ],
+  "unusual_experiment": {
+    "count_for_macrocycle": 1,
+    "canonical_experiment": "existing crash/reopen ABA generation-fencing experiment in the shared artifact test suite",
+    "additional_unusual_experiments_from_this_organ": 0
+  },
+  "focused_isolated_evidence": [
+    "effect control-flow falsifier PASS: legacy allow_process cannot bypass EntityOS; stale generation/session mismatch fail closed; EntityOS digest boundary preserved",
+    "OCI build-context policy falsifier PASS: default deny with seven explicit required re-includes"
+  ],
+  "full_executable_evidence": {
+    "github_actions_run": 31996009737,
+    "head_sha": "4291a788eaa6413ff965f0c4f2f73c100fcfb811",
+    "job": "oci-artifact",
+    "result": "INFRASTRUCTURE_BLOCKED",
+    "steps_started": 0,
+    "vercel_sandbox": "NOT_EXECUTED_NO_CREATE_EXEC_SURFACE_EXPOSED_BY_CONNECTED_VERCEL_TOOLING"
+  },
+  "whole_product_pass": false,
+  "next_executable_step": "In an actually executable authorized isolated sandbox, bind the exact current GitHub head and exact accepted staged EntityOS digest; run the complete artifact test suite, build the OCI image, start that exact image, verify Clerk-authenticated Gabriel/Andreas entry, authenticated Claude Code inference, EntityOS effect execution, persistence/restart recovery, and capture source/image digests plus logs and exit codes.",
+  "status": "SOURCE_FRONTIER_ADVANCED_EXECUTABLE_FRONTIER_BLOCKED"
+}

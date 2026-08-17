@@ -26,16 +26,21 @@ spec:
         operations: ["CREATE", "UPDATE"]
         resources: ["pods"]
   # Avoid an objectSelector-only scope: Kubernetes documents object selectors as
-  # opt-in and labels can be changed. The canonical StatefulSet produces Pods
-  # named clayverse-N and explicitly selects the Kata runtime class; both must
-  # remain true for the admitted reference deployment.
+  # opt-in and labels can be changed. The canonical StatefulSet reserves Pod
+  # names clayverse-N. RuntimeClass is deliberately NOT a match condition: a
+  # mutating admission component must not bypass this fence by changing Kata to
+  # a host-kernel runtime before validation.
   matchConditions:
-    - name: canonical-clayverse-kata-pod
-      expression: >-
-        object.metadata.name.startsWith('clayverse-') &&
+    - name: canonical-clayverse-pod
+      expression: object.metadata.name.startsWith('clayverse-')
+  validations:
+    - expression: >-
         has(object.spec.runtimeClassName) &&
         object.spec.runtimeClassName == 'kata-qemu-runtime-rs'
-  validations:
+      reason: Forbidden
+      message: >-
+        Canonical ClayVerse Pods must retain the admitted Kata VM-backed
+        RuntimeClass after all admission mutation.
     - expression: >-
         !has(object.metadata.annotations) ||
         object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))

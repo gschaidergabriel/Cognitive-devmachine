@@ -24,6 +24,9 @@ STEP_STATES = frozenset({"OPEN", "COMPLETED", "FAILED", "BLOCKED", "UNKNOWN"})
 MODEL_SELECTIONS = frozenset({"request_effect", "no_effect", "blocked"})
 MODEL_KEYS = frozenset({"selection", "effect", "reason"})
 NON_PROVING_EFFECTS = frozenset({"state.noop"})
+FINAL_EFFECT_STATES = frozenset(
+    {"VERIFIED", "DENIED", "FAILED", "STALE_OUTCOME", "UNKNOWN_AFTER_RESTART"}
+)
 MAX_OBJECTIVE_CHARS = 20_000
 MAX_REASON_CHARS = 4_096
 MAX_TARGET_CHARS = 4_096
@@ -197,29 +200,27 @@ class AutonomyStore:
             raise AutonomyIntegrityError(f"invalid {what}") from exc
 
     def _ensure_schema(self) -> None:
-        # executescript may manage its own transaction. All statements are idempotent;
-        # component version/digest admission is then committed under BEGIN IMMEDIATE.
         self.db.db.executescript(_SCHEMA)
-        with self.db.tx() as db:
-            row = db.execute(
+        with self.db.tx() as sql:
+            row = sql.execute(
                 "SELECT value FROM meta WHERE key=?", (AUTONOMY_SCHEMA_KEY,)
             ).fetchone()
             if row is not None and int(row[0]) != AUTONOMY_SCHEMA_VERSION:
                 raise AutonomyIntegrityError("unsupported autonomy schema version")
-            db.execute(
+            sql.execute(
                 "INSERT INTO meta(key,value) VALUES(?,?) "
                 "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
                 (AUTONOMY_SCHEMA_KEY, str(AUTONOMY_SCHEMA_VERSION)),
             )
-            if (
-                db.execute(
-                    "SELECT 1 FROM meta WHERE key=?", (AUTONOMY_DIGEST_KEY,)
-                ).fetchone()
-                is None
-            ):
-                self._refresh_digest_in_tx(db)
+            digest_row = sql.execute(
+                "SELECT value FROM meta WHERE key=?", (AUTONOMY_DIGEST_KEY,)
+            ).fetchone()
+            if digest_row is None:
+                self._refresh_digest_in_tx(sql)
+            else:
+                self._assert_digest_in_tx(sql)
 
-    def _state_payload_in_tx(self, db) -> list[Any]:
+    def _state_payload_in_tx(self, sql) -> list[Any]:
         specs = (
             ("autonomy_goals", "goal_id"),
             ("autonomy_steps", "goal_id,ordinal,step_id"),
@@ -233,7 +234,7 @@ class AutonomyStore:
                     table,
                     [
                         dict(row)
-                        for row in db.execute(
+                        for row in sql.execute(
                             f"SELECT * FROM {table} ORDER BY {order}"
                         ).fetchall()
                     ],
@@ -241,13 +242,24 @@ class AutonomyStore:
             )
         return payload
 
-    def _computed_digest_in_tx(self, db) -> str:
-        raw = self.canonical_json(self._state_payload_in_tx(db)).encode("utf-8")
+    def _computed_digest_in_tx(self, sql) -> str:
+        raw = self.canonical_json(self._state_payload_in_tx(sql)).encode("utf-8")
         return hashlib.sha256(raw).hexdigest()
 
-    def _refresh_digest_in_tx(self, db) -> str:
-        digest = self._computed_digest_in_tx(db)
-        db.execute(
+    def _assert_digest_in_tx(self, sql) -> str:
+        row = sql.execute(
+            "SELECT value FROM meta WHERE key=?", (AUTONOMY_DIGEST_KEY,)
+        ).fetchone()
+        if row is None:
+            raise AutonomyIntegrityError("autonomy digest missing")
+        actual = self._computed_digest_in_tx(sql)
+        if str(row[0]) != actual:
+            raise AutonomyIntegrityError("autonomy state digest mismatch")
+        return actual
+
+    def _refresh_digest_in_tx(self, sql) -> str:
+        digest = self._computed_digest_in_tx(sql)
+        sql.execute(
             "INSERT INTO meta(key,value) VALUES(?,?) "
             "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
             (AUTONOMY_DIGEST_KEY, digest),
@@ -255,16 +267,8 @@ class AutonomyStore:
         return digest
 
     def verify_integrity(self) -> str:
-        with self.db.tx() as db:
-            row = db.execute(
-                "SELECT value FROM meta WHERE key=?", (AUTONOMY_DIGEST_KEY,)
-            ).fetchone()
-            if row is None:
-                raise AutonomyIntegrityError("autonomy digest missing")
-            actual = self._computed_digest_in_tx(db)
-            if str(row[0]) != actual:
-                raise AutonomyIntegrityError("autonomy state digest mismatch")
-            return actual
+        with self.db.tx() as sql:
+            return self._assert_digest_in_tx(sql)
 
     @staticmethod
     def _validate_limits(limits: GoalLimits) -> None:
@@ -337,9 +341,23 @@ class AutonomyStore:
                 raise ValueError("unsupported verifier kind")
         return result
 
+    @staticmethod
+    def _limits_from_raw(raw: str) -> GoalLimits:
+        value = AutonomyStore.parse_json(raw, "limits")
+        if not isinstance(value, dict):
+            raise AutonomyIntegrityError("invalid limits")
+        limits = GoalLimits(
+            max_steps=int(value["max_steps"]),
+            max_failures=int(value["max_failures"]),
+            max_effects=int(value["max_effects"]),
+            max_same_failure=int(value["max_same_failure"]),
+        )
+        AutonomyStore._validate_limits(limits)
+        return limits
+
     def _append_event_in_tx(
         self,
-        db,
+        sql,
         goal_id: str,
         event_type: str,
         generation: int,
@@ -348,12 +366,12 @@ class AutonomyStore:
         step_id: str | None = None,
     ) -> None:
         seq = int(
-            db.execute(
+            sql.execute(
                 "SELECT COALESCE(MAX(seq),0)+1 FROM autonomy_goal_events WHERE goal_id=?",
                 (goal_id,),
             ).fetchone()[0]
         )
-        db.execute(
+        sql.execute(
             "INSERT INTO autonomy_goal_events(event_id,goal_id,seq,event_type,generation,step_id,payload,ts) "
             "VALUES(?,?,?,?,?,?,?,?)",
             (
@@ -368,29 +386,17 @@ class AutonomyStore:
             ),
         )
 
-    def _row_to_snapshot(self, row) -> GoalSnapshot:
+    def _snapshot_from_row(self, row, sql) -> GoalSnapshot:
         allowed = self.parse_json(row["allowed_capabilities"], "allowed_capabilities")
         verifiers = self.parse_json(row["verifiers"], "verifiers")
-        limits_raw = self.parse_json(row["limits"], "limits")
-        if (
-            not isinstance(allowed, list)
-            or not isinstance(verifiers, list)
-            or not isinstance(limits_raw, dict)
-        ):
+        if not isinstance(allowed, list) or not isinstance(verifiers, list):
             raise AutonomyIntegrityError("invalid goal envelope")
-        limits = GoalLimits(
-            max_steps=int(limits_raw["max_steps"]),
-            max_failures=int(limits_raw["max_failures"]),
-            max_effects=int(limits_raw["max_effects"]),
-            max_same_failure=int(limits_raw["max_same_failure"]),
-        )
-        self._validate_limits(limits)
         status = str(row["status"])
         if status not in GOAL_STATES:
             raise AutonomyIntegrityError("invalid goal status")
         verified_ids = tuple(
-            r["verifier_id"]
-            for r in self.db.db.execute(
+            item["verifier_id"]
+            for item in sql.execute(
                 "SELECT verifier_id FROM autonomy_goal_verifications "
                 "WHERE goal_id=? ORDER BY verifier_id",
                 (row["goal_id"],),
@@ -405,7 +411,7 @@ class AutonomyStore:
             priority=int(row["priority"]),
             allowed_capabilities=tuple(allowed),
             verifiers=tuple(verifiers),
-            limits=limits,
+            limits=self._limits_from_raw(row["limits"]),
             created_generation=int(row["created_generation"]),
             created_at=float(row["created_at"]),
             updated_at=float(row["updated_at"]),
@@ -418,21 +424,23 @@ class AutonomyStore:
         )
 
     def get(self, goal_id: str) -> GoalSnapshot:
-        self.verify_integrity()
-        row = self.db.db.execute(
-            "SELECT * FROM autonomy_goals WHERE goal_id=?", (goal_id,)
-        ).fetchone()
-        if row is None:
-            raise KeyError(goal_id)
-        return self._row_to_snapshot(row)
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            row = sql.execute(
+                "SELECT * FROM autonomy_goals WHERE goal_id=?", (goal_id,)
+            ).fetchone()
+            if row is None:
+                raise KeyError(goal_id)
+            return self._snapshot_from_row(row, sql)
 
     def list(self) -> list[GoalSnapshot]:
-        self.verify_integrity()
-        rows = self.db.db.execute(
-            "SELECT * FROM autonomy_goals "
-            "ORDER BY priority DESC,created_at,goal_id"
-        ).fetchall()
-        return [self._row_to_snapshot(row) for row in rows]
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            rows = sql.execute(
+                "SELECT * FROM autonomy_goals "
+                "ORDER BY priority DESC,created_at,goal_id"
+            ).fetchall()
+            return [self._snapshot_from_row(row, sql) for row in rows]
 
     def create_goal(
         self,
@@ -459,8 +467,10 @@ class AutonomyStore:
         self._validate_limits(limits)
         goal_id = str(uuid.uuid4())
         now = time.time()
-        with self.db.tx() as db:
-            db.execute(
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            self.db.assert_live_generation(session_id, generation)
+            sql.execute(
                 "INSERT INTO autonomy_goals("
                 "goal_id,user_id,session_id,objective,status,priority,allowed_capabilities,"
                 "verifiers,limits,created_generation,created_at,updated_at"
@@ -481,7 +491,7 @@ class AutonomyStore:
                 ),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 goal_id,
                 "GOAL_CREATED",
                 generation,
@@ -491,7 +501,7 @@ class AutonomyStore:
                     "limits": limits.as_dict(),
                 },
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return goal_id
 
     def _transition(
@@ -505,8 +515,9 @@ class AutonomyStore:
     ) -> GoalSnapshot:
         if to_state not in GOAL_STATES:
             raise ValueError(to_state)
-        with self.db.tx() as db:
-            row = db.execute(
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            row = sql.execute(
                 "SELECT * FROM autonomy_goals WHERE goal_id=?", (goal_id,)
             ).fetchone()
             if row is None:
@@ -517,25 +528,25 @@ class AutonomyStore:
                 raise GoalStateError(
                     f"cannot transition {row['status']} -> {to_state}"
                 )
-            if db.execute(
+            if sql.execute(
                 "SELECT 1 FROM autonomy_steps WHERE goal_id=? AND status='OPEN'",
                 (goal_id,),
             ).fetchone():
                 raise GoalBusy("goal has an open step")
             generation = self.db.entity_generation()
             self.db.assert_live_generation(row["session_id"], generation)
-            db.execute(
+            sql.execute(
                 "UPDATE autonomy_goals SET status=?,updated_at=? WHERE goal_id=?",
                 (to_state, time.time(), goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 goal_id,
                 event_type,
                 generation,
                 {"reason": str(reason)[:512], "by": user_id},
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return self.get(goal_id)
 
     def activate(self, goal_id: str, user_id: str) -> GoalSnapshot:
@@ -550,7 +561,12 @@ class AutonomyStore:
 
     def pause(self, goal_id: str, user_id: str) -> GoalSnapshot:
         return self._transition(
-            goal_id, user_id, {"PENDING", "ACTIVE", "BLOCKED"}, "PAUSED", "GOAL_PAUSED", "user_pause"
+            goal_id,
+            user_id,
+            {"PENDING", "ACTIVE", "BLOCKED"},
+            "PAUSED",
+            "GOAL_PAUSED",
+            "user_pause",
         )
 
     def cancel(self, goal_id: str, user_id: str) -> GoalSnapshot:
@@ -563,141 +579,171 @@ class AutonomyStore:
             "user_cancel",
         )
 
-    def _verifier(self, snapshot: GoalSnapshot, verifier_id: str) -> dict[str, Any]:
-        for verifier in snapshot.verifiers:
+    @staticmethod
+    def _find_verifier(verifiers: tuple[dict[str, Any], ...], verifier_id: str):
+        for verifier in verifiers:
             if verifier.get("id") == verifier_id:
                 return verifier
         raise KeyError(verifier_id)
 
-    def _record_verification(
-        self,
-        snapshot: GoalSnapshot,
-        verifier_id: str,
-        evidence_type: str,
-        evidence_id: str,
-    ) -> bool:
-        if snapshot.status in TERMINAL_GOAL_STATES:
-            raise GoalStateError("terminal goal cannot accept evidence")
-        generation = self.db.entity_generation()
-        self.db.assert_live_generation(snapshot.session_id, generation)
-        with self.db.tx() as db:
-            existing = db.execute(
-                "SELECT evidence_type,evidence_id FROM autonomy_goal_verifications "
-                "WHERE goal_id=? AND verifier_id=?",
-                (snapshot.goal_id, verifier_id),
-            ).fetchone()
-            if existing is not None:
-                if (
-                    existing["evidence_type"] == evidence_type
-                    and existing["evidence_id"] == evidence_id
-                ):
-                    return False
-                raise GoalStateError("verifier already bound to different evidence")
-            db.execute(
-                "INSERT INTO autonomy_goal_verifications("
-                "goal_id,verifier_id,evidence_type,evidence_id,generation,ts"
-                ") VALUES(?,?,?,?,?,?)",
-                (
-                    snapshot.goal_id,
-                    verifier_id,
-                    evidence_type,
-                    evidence_id,
-                    generation,
-                    time.time(),
-                ),
-            )
-            self._append_event_in_tx(
-                db,
-                snapshot.goal_id,
-                "VERIFICATION_RECORDED",
-                generation,
-                {
-                    "verifier_id": verifier_id,
-                    "evidence_type": evidence_type,
-                    "evidence_id": evidence_id,
-                },
-            )
-            self._maybe_succeed_in_tx(db, snapshot.goal_id, generation)
-            self._refresh_digest_in_tx(db)
-        return True
-
-    def record_checkpoint(
-        self, goal_id: str, verifier_id: str, checkpoint_id: str
-    ) -> bool:
-        snapshot = self.get(goal_id)
-        verifier = self._verifier(snapshot, verifier_id)
-        if verifier.get("kind") != "checkpoint":
-            raise ValueError("wrong verifier kind")
-        row = self.db.db.execute(
-            "SELECT checkpoint_id,ts,note FROM checkpoints WHERE checkpoint_id=?",
-            (checkpoint_id,),
-        ).fetchone()
-        if row is None:
-            raise KeyError(checkpoint_id)
-        if float(row["ts"]) < snapshot.created_at:
-            raise GoalStateError("checkpoint predates goal")
-        prefix = verifier.get("note_prefix", "")
-        if prefix and not str(row["note"]).startswith(prefix):
-            raise GoalStateError("checkpoint does not match verifier")
-        return self._record_verification(
-            snapshot, verifier_id, "checkpoint", checkpoint_id
-        )
-
-    def record_user_ack(self, goal_id: str, verifier_id: str, user_id: str) -> bool:
-        snapshot = self.get(goal_id)
-        if snapshot.user_id != user_id:
-            raise PermissionError("goal owner mismatch")
-        verifier = self._verifier(snapshot, verifier_id)
-        if verifier.get("kind") != "user_ack":
-            raise ValueError("wrong verifier kind")
-        return self._record_verification(
-            snapshot, verifier_id, "user_ack", f"user:{user_id}"
-        )
-
-    def _all_verified_in_tx(self, db, goal_id: str) -> bool:
-        row = db.execute(
+    def _all_verified_in_tx(self, sql, goal_id: str) -> bool:
+        row = sql.execute(
             "SELECT verifiers FROM autonomy_goals WHERE goal_id=?", (goal_id,)
         ).fetchone()
-        required = {
-            item["id"]
-            for item in self.parse_json(row["verifiers"], "verifiers")
-        }
+        if row is None:
+            raise KeyError(goal_id)
+        verifiers = self.parse_json(row["verifiers"], "verifiers")
+        required = {item["id"] for item in verifiers}
         found = {
             item["verifier_id"]
-            for item in db.execute(
+            for item in sql.execute(
                 "SELECT verifier_id FROM autonomy_goal_verifications WHERE goal_id=?",
                 (goal_id,),
             ).fetchall()
         }
         return bool(required) and required == found
 
-    def _maybe_succeed_in_tx(self, db, goal_id: str, generation: int) -> bool:
-        row = db.execute(
+    def _maybe_succeed_in_tx(self, sql, goal_id: str, generation: int) -> bool:
+        row = sql.execute(
             "SELECT status FROM autonomy_goals WHERE goal_id=?", (goal_id,)
         ).fetchone()
         if row is None:
             raise KeyError(goal_id)
         if row["status"] in TERMINAL_GOAL_STATES:
             return row["status"] == "SUCCEEDED"
-        if db.execute(
+        if sql.execute(
             "SELECT 1 FROM autonomy_steps WHERE goal_id=? AND status='OPEN'",
             (goal_id,),
         ).fetchone():
             return False
-        if not self._all_verified_in_tx(db, goal_id):
+        if not self._all_verified_in_tx(sql, goal_id):
             return False
-        db.execute(
+        sql.execute(
             "UPDATE autonomy_goals SET status='SUCCEEDED',updated_at=? WHERE goal_id=?",
             (time.time(), goal_id),
         )
         self._append_event_in_tx(
-            db,
+            sql,
             goal_id,
             "GOAL_SUCCEEDED",
             generation,
             {"basis": "all_typed_verifiers_satisfied"},
         )
         return True
+
+    def _insert_verification_in_tx(
+        self,
+        sql,
+        *,
+        goal_id: str,
+        verifier_id: str,
+        evidence_type: str,
+        evidence_id: str,
+        generation: int,
+        step_id: str | None = None,
+    ) -> bool:
+        existing = sql.execute(
+            "SELECT evidence_type,evidence_id FROM autonomy_goal_verifications "
+            "WHERE goal_id=? AND verifier_id=?",
+            (goal_id, verifier_id),
+        ).fetchone()
+        if existing is not None:
+            if (
+                existing["evidence_type"] == evidence_type
+                and existing["evidence_id"] == evidence_id
+            ):
+                return False
+            raise GoalStateError("verifier already bound to different evidence")
+        sql.execute(
+            "INSERT INTO autonomy_goal_verifications("
+            "goal_id,verifier_id,evidence_type,evidence_id,generation,ts"
+            ") VALUES(?,?,?,?,?,?)",
+            (goal_id, verifier_id, evidence_type, evidence_id, generation, time.time()),
+        )
+        self._append_event_in_tx(
+            sql,
+            goal_id,
+            "VERIFICATION_RECORDED",
+            generation,
+            {
+                "verifier_id": verifier_id,
+                "evidence_type": evidence_type,
+                "evidence_id": evidence_id,
+            },
+            step_id=step_id,
+        )
+        return True
+
+    def record_checkpoint(
+        self, goal_id: str, verifier_id: str, checkpoint_id: str
+    ) -> bool:
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            goal = sql.execute(
+                "SELECT * FROM autonomy_goals WHERE goal_id=?", (goal_id,)
+            ).fetchone()
+            if goal is None:
+                raise KeyError(goal_id)
+            if goal["status"] in TERMINAL_GOAL_STATES:
+                raise GoalStateError("terminal goal cannot accept evidence")
+            verifiers = tuple(self.parse_json(goal["verifiers"], "verifiers"))
+            verifier = self._find_verifier(verifiers, verifier_id)
+            if verifier.get("kind") != "checkpoint":
+                raise ValueError("wrong verifier kind")
+            checkpoint = sql.execute(
+                "SELECT checkpoint_id,ts,note FROM checkpoints WHERE checkpoint_id=?",
+                (checkpoint_id,),
+            ).fetchone()
+            if checkpoint is None:
+                raise KeyError(checkpoint_id)
+            if float(checkpoint["ts"]) < float(goal["created_at"]):
+                raise GoalStateError("checkpoint predates goal")
+            prefix = verifier.get("note_prefix", "")
+            if prefix and not str(checkpoint["note"]).startswith(prefix):
+                raise GoalStateError("checkpoint does not match verifier")
+            generation = self.db.entity_generation()
+            self.db.assert_live_generation(goal["session_id"], generation)
+            changed = self._insert_verification_in_tx(
+                sql,
+                goal_id=goal_id,
+                verifier_id=verifier_id,
+                evidence_type="checkpoint",
+                evidence_id=checkpoint_id,
+                generation=generation,
+            )
+            self._maybe_succeed_in_tx(sql, goal_id, generation)
+            self._refresh_digest_in_tx(sql)
+            return changed
+
+    def record_user_ack(self, goal_id: str, verifier_id: str, user_id: str) -> bool:
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            goal = sql.execute(
+                "SELECT * FROM autonomy_goals WHERE goal_id=?", (goal_id,)
+            ).fetchone()
+            if goal is None:
+                raise KeyError(goal_id)
+            if goal["user_id"] != user_id:
+                raise PermissionError("goal owner mismatch")
+            if goal["status"] in TERMINAL_GOAL_STATES:
+                raise GoalStateError("terminal goal cannot accept evidence")
+            verifiers = tuple(self.parse_json(goal["verifiers"], "verifiers"))
+            verifier = self._find_verifier(verifiers, verifier_id)
+            if verifier.get("kind") != "user_ack":
+                raise ValueError("wrong verifier kind")
+            generation = self.db.entity_generation()
+            self.db.assert_live_generation(goal["session_id"], generation)
+            changed = self._insert_verification_in_tx(
+                sql,
+                goal_id=goal_id,
+                verifier_id=verifier_id,
+                evidence_type="user_ack",
+                evidence_id=f"user:{user_id}",
+                generation=generation,
+            )
+            self._maybe_succeed_in_tx(sql, goal_id, generation)
+            self._refresh_digest_in_tx(sql)
+            return changed
 
     @staticmethod
     def _fingerprint(failure_class: str) -> str:
@@ -708,69 +754,66 @@ class AutonomyStore:
             raise GoalStateError("goal is not active")
         generation = self.db.entity_generation()
         self.db.assert_live_generation(snapshot.session_id, generation)
-        with self.db.tx() as db:
-            row = db.execute(
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            row = sql.execute(
                 "SELECT * FROM autonomy_goals WHERE goal_id=?", (snapshot.goal_id,)
             ).fetchone()
             if row is None or row["status"] != "ACTIVE":
                 raise GoalStateError("goal changed before step admission")
-            if db.execute(
+            if row["user_id"] != snapshot.user_id or row["session_id"] != snapshot.session_id:
+                raise AutonomyIntegrityError("goal identity changed before step admission")
+            self.db.assert_live_generation(row["session_id"], generation)
+            if sql.execute(
                 "SELECT 1 FROM autonomy_steps WHERE goal_id=? AND status='OPEN'",
                 (snapshot.goal_id,),
             ).fetchone():
                 raise GoalBusy("goal already has an open step")
-            limits = self.parse_json(row["limits"], "limits")
+            limits = self._limits_from_raw(row["limits"])
             budget_reason = None
-            if int(row["steps_used"]) >= int(limits["max_steps"]):
+            if int(row["steps_used"]) >= limits.max_steps:
                 budget_reason = "max_steps"
-            elif int(row["failures"]) >= int(limits["max_failures"]):
+            elif int(row["failures"]) >= limits.max_failures:
                 budget_reason = "max_failures"
-            elif int(row["same_failure_streak"]) >= int(limits["max_same_failure"]):
+            elif int(row["same_failure_streak"]) >= limits.max_same_failure:
                 budget_reason = "repeated_failure"
             if budget_reason:
                 state = "BLOCKED" if budget_reason == "repeated_failure" else "FAILED"
                 event = "GOAL_BLOCKED" if state == "BLOCKED" else "GOAL_FAILED"
-                db.execute(
+                sql.execute(
                     "UPDATE autonomy_goals SET status=?,updated_at=? WHERE goal_id=?",
                     (state, time.time(), snapshot.goal_id),
                 )
                 self._append_event_in_tx(
-                    db,
+                    sql,
                     snapshot.goal_id,
                     event,
                     generation,
                     {"reason": budget_reason},
                 )
-                self._refresh_digest_in_tx(db)
+                self._refresh_digest_in_tx(sql)
                 return None
             ordinal = int(row["steps_used"]) + 1
             step_id = str(uuid.uuid4())
-            db.execute(
+            sql.execute(
                 "INSERT INTO autonomy_steps("
                 "step_id,goal_id,ordinal,generation,status,created_at"
                 ") VALUES(?,?,?,?,?,?)",
-                (
-                    step_id,
-                    snapshot.goal_id,
-                    ordinal,
-                    generation,
-                    "OPEN",
-                    time.time(),
-                ),
+                (step_id, snapshot.goal_id, ordinal, generation, "OPEN", time.time()),
             )
-            db.execute(
+            sql.execute(
                 "UPDATE autonomy_goals SET steps_used=steps_used+1,updated_at=? WHERE goal_id=?",
                 (time.time(), snapshot.goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 snapshot.goal_id,
                 "STEP_STARTED",
                 generation,
                 {"ordinal": ordinal},
                 step_id=step_id,
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return GoalStep(
             goal_id=snapshot.goal_id,
             step_id=step_id,
@@ -785,24 +828,25 @@ class AutonomyStore:
     def record_proposal(self, step: GoalStep, proposal: dict[str, Any]) -> None:
         canonical = self.canonical_json(proposal)
         digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
-        with self.db.tx() as db:
-            row = db.execute(
-                "SELECT status,generation FROM autonomy_steps WHERE step_id=? AND goal_id=?",
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            row = sql.execute(
+                "SELECT status,generation,proposal_digest FROM autonomy_steps "
+                "WHERE step_id=? AND goal_id=?",
                 (step.step_id, step.goal_id),
             ).fetchone()
             if row is None or row["status"] != "OPEN":
                 raise GoalStateError("step is not open")
             if int(row["generation"]) != step.generation:
                 raise GoalStateError("step generation mismatch")
-            cur = db.execute(
-                "UPDATE autonomy_steps SET proposal_digest=?,selection=? "
-                "WHERE step_id=? AND proposal_digest IS NULL",
+            if row["proposal_digest"] is not None:
+                raise GoalStateError("step already has a proposal")
+            sql.execute(
+                "UPDATE autonomy_steps SET proposal_digest=?,selection=? WHERE step_id=?",
                 (digest, proposal["selection"], step.step_id),
             )
-            if cur.rowcount != 1:
-                raise GoalStateError("step already has a proposal")
             self._append_event_in_tx(
-                db,
+                sql,
                 step.goal_id,
                 "MODEL_PROPOSAL_RECORDED",
                 step.generation,
@@ -813,11 +857,11 @@ class AutonomyStore:
                 },
                 step_id=step.step_id,
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
 
+    @staticmethod
     def _close_step_in_tx(
-        self,
-        db,
+        sql,
         step: GoalStep,
         status: str,
         *,
@@ -827,7 +871,7 @@ class AutonomyStore:
     ) -> None:
         if status not in STEP_STATES or status == "OPEN":
             raise ValueError(status)
-        cur = db.execute(
+        cur = sql.execute(
             "UPDATE autonomy_steps SET status=?,effect_id=?,causal_id=?,failure_class=?,completed_at=? "
             "WHERE step_id=? AND goal_id=? AND status='OPEN'",
             (
@@ -844,31 +888,33 @@ class AutonomyStore:
             raise GoalStateError("step is no longer open")
 
     def complete_no_effect(self, step: GoalStep) -> GoalSnapshot:
-        with self.db.tx() as db:
-            self._close_step_in_tx(db, step, "COMPLETED")
-            db.execute(
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            self._close_step_in_tx(sql, step, "COMPLETED")
+            sql.execute(
                 "UPDATE autonomy_goals SET same_failure_streak=0,last_failure_fingerprint=NULL,updated_at=? "
                 "WHERE goal_id=?",
                 (time.time(), step.goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 step.goal_id,
                 "STEP_COMPLETED",
                 step.generation,
                 {"effect": False},
                 step_id=step.step_id,
             )
-            self._maybe_succeed_in_tx(db, step.goal_id, step.generation)
-            self._refresh_digest_in_tx(db)
+            self._maybe_succeed_in_tx(sql, step.goal_id, step.generation)
+            self._refresh_digest_in_tx(sql)
         return self.get(step.goal_id)
 
     def fail_step(self, step: GoalStep, failure_class: str) -> GoalSnapshot:
         failure_class = str(failure_class)[:128]
         fingerprint = self._fingerprint(failure_class)
-        with self.db.tx() as db:
-            row = db.execute(
-                "SELECT failures,same_failure_streak,last_failure_fingerprint FROM autonomy_goals "
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            row = sql.execute(
+                "SELECT same_failure_streak,last_failure_fingerprint FROM autonomy_goals "
                 "WHERE goal_id=?",
                 (step.goal_id,),
             ).fetchone()
@@ -880,110 +926,153 @@ class AutonomyStore:
                 else 1
             )
             self._close_step_in_tx(
-                db, step, "FAILED", failure_class=failure_class
+                sql, step, "FAILED", failure_class=failure_class
             )
-            db.execute(
+            sql.execute(
                 "UPDATE autonomy_goals SET failures=failures+1,same_failure_streak=?,"
                 "last_failure_fingerprint=?,updated_at=? WHERE goal_id=?",
                 (streak, fingerprint, time.time(), step.goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 step.goal_id,
                 "STEP_FAILED",
                 step.generation,
                 {"failure_class": failure_class},
                 step_id=step.step_id,
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return self.get(step.goal_id)
 
-    def block_step(self, step: GoalStep, reason: str, *, unknown: bool = False) -> GoalSnapshot:
+    def block_step(
+        self, step: GoalStep, reason: str, *, unknown: bool = False
+    ) -> GoalSnapshot:
         event_generation = self.db.entity_generation()
-        with self.db.tx() as db:
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
             self._close_step_in_tx(
-                db,
+                sql,
                 step,
                 "UNKNOWN" if unknown else "BLOCKED",
                 failure_class=str(reason)[:128],
             )
-            db.execute(
+            sql.execute(
                 "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
                 (time.time(), step.goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 step.goal_id,
                 "GOAL_BLOCKED",
                 event_generation,
                 {"reason": str(reason)[:512], "unknown_outcome": bool(unknown)},
                 step_id=step.step_id,
             )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return self.get(step.goal_id)
 
-    def record_effect(self, step: GoalStep, effect_id: str) -> GoalSnapshot:
-        """Bind only an actually persisted effect on this goal-step resource path."""
-        effect = self.db.db.execute(
-            "SELECT * FROM effects WHERE effect_id=?", (effect_id,)
-        ).fetchone()
-        if effect is None:
-            raise AutonomyIntegrityError("effect receipt missing")
-        if effect["user_id"] != step.user_id:
-            raise AutonomyIntegrityError("effect user mismatch")
-        if int(effect["requested_generation"]) != step.generation:
-            raise AutonomyIntegrityError("effect generation mismatch")
-        status = str(effect["status"])
-        if status == "PENDING":
-            raise GoalBusy("effect is still pending")
-        causal = self.db.db.execute(
-            "SELECT causal_id,episode_id,observation_turn_id FROM causal_episodes "
-            "WHERE effect_id=? ORDER BY ts DESC LIMIT 1",
-            (effect_id,),
-        ).fetchone()
-        if causal is None:
-            raise AutonomyIntegrityError("effect has no causal re-entry")
-        turn = self.db.db.execute(
-            "SELECT session_id,user_id,resource_refs FROM turns WHERE turn_id=?",
-            (causal["observation_turn_id"],),
-        ).fetchone()
-        if turn is None:
-            raise AutonomyIntegrityError("effect observation turn missing")
-        if turn["session_id"] != step.session_id or turn["user_id"] != step.user_id:
-            raise AutonomyIntegrityError("effect turn identity mismatch")
-        resources = self.parse_json(turn["resource_refs"], "effect resource refs")
+    @staticmethod
+    def _positive_effect_receipt(raw: str | None) -> bool:
+        if not isinstance(raw, str):
+            return False
+        try:
+            receipt = json.loads(raw)
+        except json.JSONDecodeError:
+            return False
+        if not isinstance(receipt, dict) or receipt.get("audit") != "redacted-outcome-v1":
+            return False
+        digest = receipt.get("sha256")
+        byte_count = receipt.get("bytes")
         if (
-            not isinstance(resources, list)
-            or step.goal_resource not in resources
-            or step.step_resource not in resources
+            not isinstance(digest, str)
+            or len(digest) != 64
+            or any(ch not in "0123456789abcdef" for ch in digest)
+            or isinstance(byte_count, bool)
+            or not isinstance(byte_count, int)
+            or byte_count < 0
         ):
-            raise AutonomyIntegrityError("effect is not bound to this goal step")
-        snapshot = self.get(step.goal_id)
-        if effect["capability"] not in snapshot.allowed_capabilities:
-            raise AutonomyIntegrityError("effect capability outside goal contract")
+            return False
+        return receipt.get("ok") is True
 
-        with self.db.tx() as db:
-            step_state = (
-                "COMPLETED"
-                if status == "VERIFIED"
-                else "UNKNOWN"
-                if status == "UNKNOWN_AFTER_RESTART"
-                else "FAILED"
+    def record_effect(self, step: GoalStep, effect_id: str) -> GoalSnapshot:
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            goal = sql.execute(
+                "SELECT * FROM autonomy_goals WHERE goal_id=?", (step.goal_id,)
+            ).fetchone()
+            if goal is None:
+                raise KeyError(step.goal_id)
+            current_step = sql.execute(
+                "SELECT status,generation FROM autonomy_steps WHERE step_id=? AND goal_id=?",
+                (step.step_id, step.goal_id),
+            ).fetchone()
+            if current_step is None or current_step["status"] != "OPEN":
+                raise GoalStateError("step is not open")
+            if int(current_step["generation"]) != step.generation:
+                raise AutonomyIntegrityError("step generation mismatch")
+            effect = sql.execute(
+                "SELECT * FROM effects WHERE effect_id=?", (effect_id,)
+            ).fetchone()
+            if effect is None:
+                raise AutonomyIntegrityError("effect receipt missing")
+            if effect["user_id"] != step.user_id:
+                raise AutonomyIntegrityError("effect user mismatch")
+            if int(effect["requested_generation"]) != step.generation:
+                raise AutonomyIntegrityError("effect generation mismatch")
+            status = str(effect["status"])
+            if status == "PENDING":
+                raise GoalBusy("effect is still pending")
+            if status not in FINAL_EFFECT_STATES:
+                raise AutonomyIntegrityError("unknown final effect status")
+            causal = sql.execute(
+                "SELECT causal_id,episode_id,observation_turn_id FROM causal_episodes "
+                "WHERE effect_id=? ORDER BY ts DESC LIMIT 1",
+                (effect_id,),
+            ).fetchone()
+            if causal is None:
+                raise AutonomyIntegrityError("effect has no causal re-entry")
+            turn = sql.execute(
+                "SELECT session_id,user_id,resource_refs FROM turns WHERE turn_id=?",
+                (causal["observation_turn_id"],),
+            ).fetchone()
+            if turn is None:
+                raise AutonomyIntegrityError("effect observation turn missing")
+            if turn["session_id"] != step.session_id or turn["user_id"] != step.user_id:
+                raise AutonomyIntegrityError("effect turn identity mismatch")
+            resources = self.parse_json(turn["resource_refs"], "effect resource refs")
+            if (
+                not isinstance(resources, list)
+                or step.goal_resource not in resources
+                or step.step_resource not in resources
+            ):
+                raise AutonomyIntegrityError("effect is not bound to this goal step")
+            capabilities = self.parse_json(
+                goal["allowed_capabilities"], "allowed_capabilities"
             )
+            if effect["capability"] not in capabilities:
+                raise AutonomyIntegrityError("effect capability outside goal contract")
+
+            if status == "VERIFIED":
+                step_state = "COMPLETED"
+            elif status == "UNKNOWN_AFTER_RESTART":
+                step_state = "UNKNOWN"
+            else:
+                step_state = "FAILED"
+            failure_class = None if status == "VERIFIED" else f"effect_{status.lower()}"
             self._close_step_in_tx(
-                db,
+                sql,
                 step,
                 step_state,
                 effect_id=effect_id,
                 causal_id=causal["causal_id"],
-                failure_class=None if status == "VERIFIED" else f"effect_{status.lower()}",
+                failure_class=failure_class,
             )
-            db.execute(
+            sql.execute(
                 "UPDATE autonomy_goals SET effects_used=effects_used+1,updated_at=? WHERE goal_id=?",
                 (time.time(), step.goal_id),
             )
             self._append_event_in_tx(
-                db,
+                sql,
                 step.goal_id,
                 "EFFECT_RECEIPT_BOUND",
                 step.generation,
@@ -995,126 +1084,100 @@ class AutonomyStore:
                 },
                 step_id=step.step_id,
             )
+
             if status == "UNKNOWN_AFTER_RESTART":
-                db.execute(
+                sql.execute(
                     "UPDATE autonomy_goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
                     (time.time(), step.goal_id),
                 )
                 self._append_event_in_tx(
-                    db,
+                    sql,
                     step.goal_id,
                     "GOAL_BLOCKED",
                     step.generation,
-                    {"reason": "effect_outcome_unknown_after_restart", "unknown_outcome": True},
+                    {
+                        "reason": "effect_outcome_unknown_after_restart",
+                        "unknown_outcome": True,
+                    },
                     step_id=step.step_id,
                 )
             elif status == "VERIFIED":
-                db.execute(
+                sql.execute(
                     "UPDATE autonomy_goals SET same_failure_streak=0,last_failure_fingerprint=NULL "
                     "WHERE goal_id=?",
                     (step.goal_id,),
                 )
                 self._append_event_in_tx(
-                    db,
+                    sql,
                     step.goal_id,
                     "STEP_COMPLETED",
                     step.generation,
                     {"effect": True, "effect_id": effect_id},
                     step_id=step.step_id,
                 )
-                receipt = self.parse_json(effect["outcome"], "effect outcome")
-                if isinstance(receipt, dict) and receipt.get("ok") is True:
-                    verifiers = self.parse_json(
-                        db.execute(
-                            "SELECT verifiers FROM autonomy_goals WHERE goal_id=?",
-                            (step.goal_id,),
-                        ).fetchone()[0],
-                        "goal verifiers",
-                    )
+                if self._positive_effect_receipt(effect["outcome"]):
+                    verifiers = self.parse_json(goal["verifiers"], "goal verifiers")
                     for verifier in verifiers:
                         if (
                             verifier.get("kind") == "effect_verified"
                             and verifier.get("capability") == effect["capability"]
                             and effect["capability"] not in NON_PROVING_EFFECTS
                         ):
-                            exists = db.execute(
-                                "SELECT 1 FROM autonomy_goal_verifications "
-                                "WHERE goal_id=? AND verifier_id=?",
-                                (step.goal_id, verifier["id"]),
-                            ).fetchone()
-                            if exists:
-                                continue
-                            db.execute(
-                                "INSERT INTO autonomy_goal_verifications("
-                                "goal_id,verifier_id,evidence_type,evidence_id,generation,ts"
-                                ") VALUES(?,?,?,?,?,?)",
-                                (
-                                    step.goal_id,
-                                    verifier["id"],
-                                    "effect",
-                                    effect_id,
-                                    step.generation,
-                                    time.time(),
-                                ),
-                            )
-                            self._append_event_in_tx(
-                                db,
-                                step.goal_id,
-                                "VERIFICATION_RECORDED",
-                                step.generation,
-                                {
-                                    "verifier_id": verifier["id"],
-                                    "evidence_type": "effect",
-                                    "evidence_id": effect_id,
-                                },
+                            self._insert_verification_in_tx(
+                                sql,
+                                goal_id=step.goal_id,
+                                verifier_id=verifier["id"],
+                                evidence_type="effect",
+                                evidence_id=effect_id,
+                                generation=step.generation,
                                 step_id=step.step_id,
                             )
-                self._maybe_succeed_in_tx(db, step.goal_id, step.generation)
+                self._maybe_succeed_in_tx(sql, step.goal_id, step.generation)
             else:
-                failure_class = f"effect_{status.lower()}"
+                fingerprint = self._fingerprint(failure_class)
+                row = sql.execute(
+                    "SELECT same_failure_streak,last_failure_fingerprint FROM autonomy_goals "
+                    "WHERE goal_id=?",
+                    (step.goal_id,),
+                ).fetchone()
+                streak = (
+                    int(row["same_failure_streak"]) + 1
+                    if row["last_failure_fingerprint"] == fingerprint
+                    else 1
+                )
+                sql.execute(
+                    "UPDATE autonomy_goals SET failures=failures+1,same_failure_streak=?,"
+                    "last_failure_fingerprint=? WHERE goal_id=?",
+                    (streak, fingerprint, step.goal_id),
+                )
                 self._append_event_in_tx(
-                    db,
+                    sql,
                     step.goal_id,
                     "STEP_FAILED",
                     step.generation,
                     {"failure_class": failure_class, "effect_id": effect_id},
                     step_id=step.step_id,
                 )
-                fingerprint = self._fingerprint(failure_class)
-                goal_row = db.execute(
-                    "SELECT same_failure_streak,last_failure_fingerprint FROM autonomy_goals "
-                    "WHERE goal_id=?",
-                    (step.goal_id,),
-                ).fetchone()
-                streak = (
-                    int(goal_row["same_failure_streak"]) + 1
-                    if goal_row["last_failure_fingerprint"] == fingerprint
-                    else 1
-                )
-                db.execute(
-                    "UPDATE autonomy_goals SET failures=failures+1,same_failure_streak=?,"
-                    "last_failure_fingerprint=? WHERE goal_id=?",
-                    (streak, fingerprint, step.goal_id),
-                )
-            self._refresh_digest_in_tx(db)
+            self._refresh_digest_in_tx(sql)
         return self.get(step.goal_id)
 
     def event_log(self, goal_id: str) -> list[dict[str, Any]]:
-        self.verify_integrity()
-        rows = self.db.db.execute(
-            "SELECT * FROM autonomy_goal_events WHERE goal_id=? ORDER BY seq",
-            (goal_id,),
-        ).fetchall()
-        out: list[dict[str, Any]] = []
-        expected = 1
-        for row in rows:
-            if int(row["seq"]) != expected:
-                raise AutonomyIntegrityError("goal event sequence gap")
-            expected += 1
-            item = dict(row)
-            item["payload"] = self.parse_json(item["payload"], "event payload")
-            out.append(item)
-        return out
+        with self.db.tx() as sql:
+            self._assert_digest_in_tx(sql)
+            rows = sql.execute(
+                "SELECT * FROM autonomy_goal_events WHERE goal_id=? ORDER BY seq",
+                (goal_id,),
+            ).fetchall()
+            out: list[dict[str, Any]] = []
+            expected = 1
+            for row in rows:
+                if int(row["seq"]) != expected:
+                    raise AutonomyIntegrityError("goal event sequence gap")
+                expected += 1
+                item = dict(row)
+                item["payload"] = self.parse_json(item["payload"], "event payload")
+                out.append(item)
+            return out
 
 
 class AutonomySupervisor:
@@ -1135,8 +1198,8 @@ class AutonomySupervisor:
         )
 
     def _release(self, lease: Lease) -> None:
-        with self.db.tx() as db:
-            db.execute(
+        with self.db.tx() as sql:
+            sql.execute(
                 "DELETE FROM leases WHERE resource=? AND holder=? AND generation=? AND nonce=?",
                 (
                     lease.resource,
@@ -1159,29 +1222,26 @@ class AutonomySupervisor:
         for snapshot in self.store.list():
             if snapshot.status != "ACTIVE":
                 continue
-            # Human/canonical interactive turns have priority. Autonomy never aborts one.
             if self.db.db.execute(
                 "SELECT 1 FROM active_turns WHERE session_id=?",
                 (snapshot.session_id,),
             ).fetchone():
                 continue
             if self._has_open_step(snapshot.goal_id):
-                # After lease loss/crash we cannot assume whether an executor acted.
-                # Close ambiguity by blocking, never by automatic retry.
-                open_row = self.db.db.execute(
+                row = self.db.db.execute(
                     "SELECT * FROM autonomy_steps WHERE goal_id=? AND status='OPEN' "
                     "ORDER BY ordinal LIMIT 1",
                     (snapshot.goal_id,),
                 ).fetchone()
                 step = GoalStep(
                     goal_id=snapshot.goal_id,
-                    step_id=open_row["step_id"],
-                    ordinal=int(open_row["ordinal"]),
+                    step_id=row["step_id"],
+                    ordinal=int(row["ordinal"]),
                     user_id=snapshot.user_id,
                     session_id=snapshot.session_id,
-                    generation=int(open_row["generation"]),
+                    generation=int(row["generation"]),
                     goal_resource=f"goal:{snapshot.goal_id}",
-                    step_resource=f"goal-step:{open_row['step_id']}",
+                    step_resource=f"goal-step:{row['step_id']}",
                 )
                 self.store.block_step(
                     step, "open_step_after_supervisor_lease_loss", unknown=True
@@ -1240,9 +1300,7 @@ class AutonomySupervisor:
             },
         }
 
-    def validate_proposal(
-        self, step: GoalStep, raw: Any
-    ) -> dict[str, Any]:
+    def validate_proposal(self, step: GoalStep, raw: Any) -> dict[str, Any]:
         if not isinstance(raw, dict):
             raise ModelDecisionError("proposal must be an object")
         if set(raw) - MODEL_KEYS:
@@ -1302,7 +1360,6 @@ class AutonomySupervisor:
             return self.store.block_step(step, proposal["reason"] or "model_blocked")
         if proposal["selection"] == "no_effect":
             if receipt != {"kind": "no_effect"}:
-                # Executor contract is uncertain; do not retry an ambiguous step.
                 return self.store.block_step(
                     step, "malformed_no_effect_executor_receipt", unknown=True
                 )
@@ -1320,7 +1377,7 @@ class AutonomySupervisor:
         try:
             return self.store.record_effect(step, receipt["effect_id"])
         except GoalBusy:
-            raise
+            return self.store.block_step(step, "effect_receipt_pending", unknown=True)
         except AutonomyIntegrityError:
             return self.store.block_step(
                 step, "unverifiable_effect_executor_receipt", unknown=True
@@ -1364,8 +1421,6 @@ class AutonomySupervisor:
                 goal = self.store.fail_step(step, "pre_effect_admission_error")
                 return {"status": "STEP_FAILED", "goal": goal, "step": step}
             except Exception:
-                # The executor may have crossed the effect boundary before failing.
-                # Never infer "nothing happened"; block with explicit uncertainty.
                 goal = self.store.block_step(
                     step, "executor_outcome_unknown", unknown=True
                 )

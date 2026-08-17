@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:02:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "75aae86390507780b11d4b14b869af8b2a8f89dd",
+  "go_experiment_accounting": {
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id was exposed and the available exact user-message metadata for this go had only minute precision, which is insufficient for the canonical timestamp fallback.",
+    "new_unusual_experiment_started_by_this_organ": false
+  },
+  "vercel_execution": {
+    "bridge_capability": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_PLUS_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_lifecycle_actions": false,
+    "staging_pr": "gschaidergabriel/Dr.-Unterweger#818",
+    "staging_head": "60f29b573a8342f6d1e6069c1b9245c23cb77e35",
+    "target_clay_head_when_staged": "64ecd8ba019e5a253666a786e42427ca22e5fd31",
+    "requested_scope": "ordinary deterministic exact-blob Clerk session and live disjoint-tmux regression",
+    "provider_status": "upgradeToPro=build-rate-limit",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "sandbox_started": false,
+    "test_executed": false,
+    "staging_pr_closed_without_merge": true,
+    "stale_after_parallel_reentry": true
+  },
+  "parallel_reentry": {
+    "clerk_result": "CONVERGED_ON_MAIN_BY_OTHER_LANES_DURING_THIS_GO",
+    "current_clerk_blob_observed": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+    "current_clerk_contract": [
+      "sts must equal active",
+      "act claim rejected",
+      "finite JWKS-set cache",
+      "per-key cache disabled",
+      "JWKS fetch timeout 5 seconds"
+    ],
+    "stale_auth_staging_lane_retired": true
+  },
+  "effect_frontier": {
+    "retained_candidate_pr": 430,
+    "finding": "Current main MicroClay learn_from_verified_outcomes still consumes every causally re-entered effect status. If PR430 adds UNKNOWN_OUTCOME with causal credit 0, MicroClay credit() still applies ACCESS_RENT and mutates retrieval entry-point policy. Unknown external outcome is not retrieval failure.",
+    "required_fusion_before_pr430_promotion": "Only admitted known outcome statuses may create automatic effect-outcome retrieval feedback; current candidate set is VERIFIED, DENIED, FAILED. UNKNOWN_OUTCOME, UNKNOWN_AFTER_RESTART and STALE_OUTCOME must create zero retrieval feedback and zero policy pulls.",
+    "durable_coordination_comment": "PR430 issue comment 5312877558"
+  },
+  "evidence_boundary": {
+    "source_review": true,
+    "github_rw_verified": true,
+    "new_exact_current_head_isolated_execution": false,
+    "whole_product_pass": false,
+    "vps_self_hosted_production_testing_used": false,
+    "together_used": false,
+    "paid_final_training_used": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_gate": "When isolated execution admission is available, refresh exact main first; execute the current effect-credit/MicroClay/UNKNOWN-outcome regression set in Vercel Sandbox, then continue to exact OCI build/start/readiness/restart and live Clerk/browser/PTY/lifecycle/concurrency acceptance."
+}

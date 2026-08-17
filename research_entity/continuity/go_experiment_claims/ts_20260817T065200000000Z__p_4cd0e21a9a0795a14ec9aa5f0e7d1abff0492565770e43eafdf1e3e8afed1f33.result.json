@@ -1,0 +1,40 @@
+{
+  "schema": "clay-go-experiment-result/v1",
+  "trigger_key": "ts_20260817T065200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T065200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "experiment_name": "tmux_socket_namespace_adversarial_alias_collision",
+  "source_identity": "4f75ac865fce6a8fcff4ebf232693c33c37c619a",
+  "artifact_identity": "the artefact/clayverse/terminal_sessions.py git blob 5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d",
+  "staging_identity": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-1352-tmux-isolation-sandbox-sol",
+    "head": "2c13be872e8141d97b3766d5f12a27314fc97659",
+    "pull_request": 833,
+    "staged_blob": "5001b0d2cb071b6b6d88b6764ac0ba67fc7c0a8d"
+  },
+  "vercel_phase": {
+    "execution_path": "Git preview orchestration -> @vercel/sandbox -> non-persistent Python 3.13 Sandbox -> deny-all network",
+    "sandbox_command_started": false,
+    "classification": "ADMISSION_BLOCKED_BY_CURRENT_VERCEL_PREVIEW_QUOTA",
+    "note": "No new deployment for the staged head was admitted while the canonical execution-path receipt reported a 24-hour Vercel deployment rate limit. This is not a product/test failure."
+  },
+  "isolated_replication": {
+    "environment": "authorized non-production isolated OpenAI container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "real_tmux_binary_present": false,
+    "exact_blob_verified_before_execution": true,
+    "canonical_socket_isolation": "PASS",
+    "canonical_creation_binding": "PASS",
+    "canonical_attach_binding": "PASS",
+    "adversarial_alias_rejection": "PASS",
+    "adversarial_cases": 8,
+    "postcondition": "NO_NONCANONICAL_IDENTITY_REACHED_TMUX_NAMESPACE",
+    "scope": "exact Python mechanism and command-construction evidence only; not real tmux/Claude/OCI runtime evidence"
+  },
+  "unusual_experiment_count_added": 1,
+  "fallback_replication_added_experiment_count": 0,
+  "classification": "MECHANISM_SUPPORTED_WITH_VERCEL_ADMISSION_BLOCKED",
+  "whole_product_evidence_established": false,
+  "next_isolated_discriminator": "When Vercel preview admission reopens, run the already-staged exact-blob batch in a real Vercel Sandbox; then advance to real tmux + packaged Claude Code inside the exact built ClayVerse OCI image."
+}

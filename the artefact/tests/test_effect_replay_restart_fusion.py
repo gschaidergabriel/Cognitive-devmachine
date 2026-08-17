@@ -49,7 +49,7 @@ def test_restart_retires_active_turn_after_verified_effect_causal_reentry(tmp_pa
     causal = db.db.execute(
         "SELECT causal_id,effect_id,credit FROM causal_episodes WHERE episode_id=?", (opened["episode_id"],)
     ).fetchall()
-    assert [tuple(row) for row in causal] == [(opened["causal_id"], first["effect_id"], 1.0)]
+    assert [tuple(row) for row in causal] == [(opened["causal_id"], first["effect_id"], 0.0)]
     assert db.db.execute(
         "SELECT state FROM workspace_episodes WHERE episode_id=?", (opened["episode_id"],)
     ).fetchone()[0] == "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY"

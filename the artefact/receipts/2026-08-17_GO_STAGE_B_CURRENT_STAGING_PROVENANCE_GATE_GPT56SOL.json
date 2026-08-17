@@ -1,0 +1,83 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T14:01:30+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_write": "d04c04ee69a5809d7aeb645bc2323f68e05025f3",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image from main/the artefact/",
+  "status": "STAGE_B_SOURCE_ADVANCED_STAGING_PROVENANCE_FENCED_EXECUTION_ADMISSION_BLOCKED",
+  "stage_b_source": {
+    "pr": 411,
+    "branch": "go/meta-learning-method-memory-stageb-20260817-sol",
+    "head": "a70623f3206e30d087d38a55aa8e62e689b82f87",
+    "mergeable": false,
+    "draft": true,
+    "exact_blobs": {
+      "the artefact/clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+      "the artefact/clayverse/method_memory.py": "e80585be15b5014db17e22f9c2a5bd8a6cc8bfa3",
+      "the artefact/clayverse/method_validation.py": "70c401c7e334057ea3792656b80e40c144bd1a8f"
+    },
+    "promotion_validation_source_status": "IMPLEMENTED_SOURCE_ONLY",
+    "promotion_validation_summary": [
+      "candidate-use is bound before outcome to exact active causal identity",
+      "final validation requires terminal re-entry plus durable external entityos.exec outcome",
+      "VERIFIED positive causal credit is SUCCESS; DENIED/FAILED are FAILURE; stale/unknown/zero-credit is ineligible",
+      "promotion statistics are derived from validation receipts for every distinct source episode",
+      "distinct causal instances and at least one falsifier-checked validation are required",
+      "promotion/read lineage binds validation receipt IDs and evidence digest and recomputes derived statistics"
+    ],
+    "remaining_source_blockers": [
+      "issue #451: fuse one canonical symmetric facet-aware structural matcher and remove duplicate weighted semantics",
+      "issue #441: admit a canonical exact turn-bound structural problem_signature before Stage-B serving"
+    ]
+  },
+  "vercel_staging": {
+    "bridge": "gschaidergabriel/Dr.-Unterweger:mcp/vercel-sandbox-mcp",
+    "bridge_capability": "CONFIRMED_BUILD_TIME_ORCHESTRATION_USING_@vercel/sandbox",
+    "branch": "chatgpt/go-stageb-promotion-gate-vercel-20260817-1346",
+    "staging_head": "6312015fb6e76bc50239edeb3fc01dcc43f41fce",
+    "change": "fail closed on stale Stage-B staging blobs before Sandbox.create",
+    "required_research_head": "a70623f3206e30d087d38a55aa8e62e689b82f87",
+    "required_blobs": {
+      "clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+      "clayverse/method_memory.py": "e80585be15b5014db17e22f9c2a5bd8a6cc8bfa3",
+      "clayverse/method_validation.py": "70c401c7e334057ea3792656b80e40c144bd1a8f"
+    },
+    "fail_closed_error": "STAGING_FIXTURE_REFRESH_REQUIRED",
+    "reason": "the previously staged method_memory fixture was from an older #411 head; running it as if it represented current #411 would create false executable evidence",
+    "current_provider_admission": "BLOCKED",
+    "provider_status": "Deployment rate limited — retry in 24 hours.",
+    "provider_status_observed_on_commit": "6312015fb6e76bc50239edeb3fc01dcc43f41fce",
+    "sandbox_started_for_current_staging_head": false,
+    "test_credit": "ZERO"
+  },
+  "execution_truth": {
+    "current_stage_b_exact_source_sandbox_run": false,
+    "current_stage_b_exact_source_test_pass": false,
+    "current_stage_b_exact_source_test_fail": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_DEPLOYMENT_OR_SANDBOX_START",
+    "whole_clayverse_oci_pass": false
+  },
+  "experiment_accounting": {
+    "new_distinct_unusual_experiment_run_by_this_delta": false,
+    "current_1320_macrocycle_additional_unusual_experiment_authorized": false,
+    "coordination_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md"
+  },
+  "next_exact_step": [
+    "Refresh the Vercel staging fixtures to the exact current #411 blobs, including method_validation.py, without weakening blob checks.",
+    "Refresh #411 head again immediately before execution because the branch is actively moving.",
+    "Use an admitted Vercel preview execution window/eligible branch; require SANDBOX_GATE evidence and exact origin+in-sandbox blob bindings.",
+    "Run deterministic promotion-validation, replay/lineage, privacy, structural-signature and context-bound regressions with deny-all network where applicable.",
+    "Promote only the observed component claims; do not infer whole ClayVerse OCI PASS."
+  ],
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_vps_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

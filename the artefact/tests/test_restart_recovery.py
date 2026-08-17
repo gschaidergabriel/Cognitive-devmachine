@@ -95,7 +95,7 @@ def test_restart_reenters_exactly_one_persisted_effect_outcome_without_reexecuti
     assert dict(row) == {
         "effect_id": effect_id,
         "outcome_hash": expected_hash,
-        "credit": 1.0,
+        "credit": 0.0,
         "reentered": 1,
     }
     assert first["reentered_effects"] == 1

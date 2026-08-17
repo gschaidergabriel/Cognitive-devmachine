@@ -1,0 +1,88 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:35:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "FOCUSED_TEST_PASS_EXACT_FILE_SCOPE",
+  "scope": "mistral_provider_response_model_identity_fence",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "fresh_main_base": "2eb030b281e4e3177ac4715057b8c344b32730f1",
+  "latest_nonoverlap_main_observed": "b16578a095aafa632f22d0ccabe93ad92242a9d3",
+  "branch": "gpt56sol/go-mistral-model-identity-fence-20260817-2330",
+  "pull_request": 674,
+  "exact_git_blobs": {
+    "the artefact/clayverse/adapters.py": "d64a9fc936f81f09206c9b27b168091bf7cff512",
+    "the artefact/clayverse/inference_protocol.py": "cd5856ac58f4e86c4c045fda8099b7783e6724cf",
+    "the artefact/clayverse/clerk_auth.py": "5f0c047ff785f0b42403eaca36dbea6c492f1389",
+    "the artefact/tests/test_mistral_inference.py": "188d03a9b798046bdb4e2182cd7ceb84cfd4debc",
+    "the artefact/tests/test_mistral_model_identity_fence.py": "845d8d05c7671db7bf56854d252908fb164fcb90"
+  },
+  "defect": {
+    "pre_fix_adapter_blob": "6dfaa81d0ad0fb57acb1dcc69d45009538b8c507",
+    "observation": "MistralInference required and recorded model_returned but did not require it to equal the configured requested model",
+    "risk": "provider/model-routing drift could be accepted as a valid inference receipt and later persisted into canonical ClayVerse provenance",
+    "counterexample": "requested mistral-small-2603; provider reports mistral-other-model"
+  },
+  "repair": {
+    "rule": "model_returned must equal self.model exactly or the provider response fails closed before decision admission",
+    "new_parallel_authority": false,
+    "new_transport": false,
+    "state_authority_change": false,
+    "effect_authority_change": false
+  },
+  "exact_reconstruction": {
+    "environment": "authorized isolated OpenAI container",
+    "git_hash_object_matches": true,
+    "adapter_blob_match": true,
+    "existing_test_blob_match": true,
+    "new_test_blob_match": true,
+    "parser_blob_match": true,
+    "clerk_auth_blob_match": true
+  },
+  "execution": {
+    "focused_new_test": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_mistral_model_identity_fence.py",
+      "result": "2 passed in 0.12s",
+      "exit_code": 0
+    },
+    "adjacent_mistral_regression": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_mistral_inference.py tests/test_mistral_model_identity_fence.py",
+      "result": "12 passed in 0.11s",
+      "exit_code": 0
+    },
+    "py_compile": "PASS"
+  },
+  "coordination": {
+    "stale_pr_629": "used only as prior invariant evidence; not merged/revived",
+    "pr_667": "owns canonical TurnLifecycle/Mistral generation-fence lane; intentionally not duplicated",
+    "main_overlap_after_rebase": "latest observed main delta after 2eb030b2 touched only mesh feedback, not adapters/tests"
+  },
+  "runtime_credit": {
+    "full_private_checkout": 0,
+    "real_mistral_network_call": 0,
+    "vault_secret_acquisition": 0,
+    "exact_oci": 0,
+    "vercel_firecracker_final_vector": 0,
+    "whole_clayverse": 0
+  },
+  "current_execution_limit": {
+    "github_actions_for_head": "NO_RUN_OBSERVED",
+    "vercel_connector": "no direct Sandbox exec or secret-injection action exposed in this session",
+    "next_exact_gate": "execute the current integrated candidate in the retained Vercel Sandbox Firecracker path with scoped private-source access and runtime Vault-backed Mistral secret, then build/run exact OCI and exercise the owner-mandated full causal/recovery test-of-tests"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "no shared immutable request/turn id is exposed for the global unusual-experiment coordination lock"
+  },
+  "non_claims": [
+    "no full-repository regression PASS",
+    "no real Mistral API call",
+    "no Vault secret acquisition",
+    "no exact OCI image build/digest",
+    "no Vercel Firecracker integrated runtime vector",
+    "no whole-product PASS"
+  ]
+}

@@ -45,15 +45,17 @@ def _append_recovery_turn(tx, active, reason: str, effect_id: str | None) -> Non
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     """Fail closed over interrupted work, then create one fresh global entity generation.
 
-    Recovery never replays an external effect. PENDING effects are first collapsed by
-    EffectJournal to UNKNOWN_AFTER_RESTART. A hook-created active turn keeps its
-    predeclared causal_id through any effect re-entry; restart then records an explicit
-    interrupted-turn system event and retires the active row. Finally every old lease is
-    expired and both permanent sessions are fenced together into one new entity generation.
+    This function is the explicit container-restart boundary. Recovery never replays
+    an external effect. PENDING effects are first collapsed to UNKNOWN_AFTER_RESTART
+    here, not while constructing an EffectJournal in a concurrent MCP/terminal process.
+    A hook-created active turn keeps its predeclared causal_id through any effect re-entry;
+    restart then records an explicit interrupted-turn system event and retires the active
+    row. Finally every old lease is expired and both permanent sessions are fenced
+    together into one new entity generation.
     """
 
     # This may create UNKNOWN_AFTER_RESTART causal receipts for PENDING effects.
-    EffectJournal(db)
+    EffectJournal(db).recover_pending()
 
     counts = {
         "scanned": 0,

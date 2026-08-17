@@ -99,13 +99,14 @@ Historical Vercel runs that stopped because the token was absent remain valid hi
 - **#622** Python hash-lock generator — source candidate; accepted product lock requires real isolated execution.
 - **#623** auth/identity/readiness/reauth drift — bounded source/mechanism candidate until exact runtime execution.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
+- **#629** bounded GLM/Mistral inference + causal re-entry fence — current source/mechanism lane; real provider/Vault/full-checkout/OCI evidence remains open.
 - **#810** retained Vercel Sandbox controller — single execution bridge/controller lane; do not create a duplicate controller merely to bypass credentials.
 
 ## Current source convergence
 
 Parallel work before this owner update had already strengthened the MicroVM deployment contract around current-supported Kata/runtime/hypervisor identity, runtime-mutating annotation fences, non-root persistent-volume semantics, image-authoritative EntityOS digest binding, and full Pod/Kata-sandbox Tier-2 replacement. Those source changes remain bounded by their own exact receipts; no runtime credit is transferred to later bytes without execution.
 
-The new owner requirements add a separate concrete implementation obligation: **the exact final product image must provide and exercise an admitted Mistral runtime inference/secret path**. Current source/policy convergence alone does not prove that path exists or works.
+The mandatory Mistral source gap is now partially closed on retained lane #629: a bounded inference-only Mistral client exists, and the generic inference engine now rechecks the live generation and persists provider output/provenance into UnifiedDB before any requested EffectGate execution. This is source/mechanism convergence only until the full private checkout and final Vercel test-of-tests execute.
 
 ## Testing authority
 
@@ -128,16 +129,21 @@ A higher class is never inferred from a lower one.
 
 The previous host-only-token policy blocker is gone. The next real execution requires a scoped `GITHUB_READ_TOKEN` to be **available/injectable**, then the retained Vercel path can fetch/verify the exact current private source and execute the final build/runtime sequence.
 
-After exact source/OCI construction, the strongest new product discriminator is the **full Vercel Firecracker + Docker + Vault Mistral end-to-end path**, including Mistral cognition before and after Tier-2 recreation, secret non-persistence, causal effect re-entry, two-user generation fencing and final auth/terminal gates.
+After exact source/OCI construction, the strongest product discriminator is the **full Vercel Firecracker + Docker + Vault Mistral end-to-end path**, including Mistral cognition before and after Tier-2 recreation, secret non-persistence, causal effect re-entry, two-user generation fencing and final auth/terminal gates.
 
-## Latest cycle delta — 2026-08-17 23:03 +07:00
+## Latest cycle delta — 2026-08-17 23:20 +07:00
 
-- owner explicitly authorized forwarding scoped `GITHUB_READ_TOKEN` into the disposable Vercel Sandbox;
-- durable token-forwarding directive committed;
-- owner defined the final **test of tests** as Vercel Firecracker microVM + exact ClayVerse OCI + runtime Vault Mistral token + fully functional causal/recovery path;
-- durable final test-of-tests directive committed;
-- `TESTING_STRATEGY.md` now binds real Mistral inference before/after Tier-2 recovery, Vault secret reacquisition, exact OCI-in-microVM execution and the stronger evidence ladder;
-- no whole-product runtime result is claimed from these source/policy changes.
+- bounded Mistral token/API inference client added on retained #629; exact source blob `5a0fac91...`;
+- exact Mistral boundary regression: **20/20 PASS**, `py_compile` PASS;
+- adversarial review found the generic engine executed requested effects before persisting the provider response, contrary to the current final test-of-tests causal-order law;
+- engine repaired: exact blob `d24d412f...` now rechecks live generation, persists provider text with bounded provider/model/generation provenance, and only then permits EffectGate execution;
+- exact-engine isolated sequencing discriminator: **PASS**; exact Mistral provider/model/generation re-entry mapping discriminator: **PASS**;
+- repository-level test `tests/test_mistral_canonical_reentry.py` committed as blob `df556d02...`, but full private-checkout execution credit remains zero;
+- durable evidence receipt: `receipts/2026-08-17_GO_2320_MISTRAL_REENTRY_BEFORE_EFFECT_GPT56SOL.json`;
+- PR #629 description/title refreshed to current GLM/Mistral + causal-re-entry scope and current GitHub-token forwarding law;
+- no real Mistral API call, Vault acquisition, exact OCI digest, Firecracker integrated vector, Tier-1/Tier-2 recovery or whole-product PASS is claimed;
+- next exact gate: securely inject approved scoped GitHub read access and Vault-backed Mistral secret into the retained Vercel path, bind current source, run full regressions/build/digest, then execute the complete Mistral causal/recovery test-of-tests;
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because no shared immutable request/turn id is exposed for the global coordination lock.
 
 ## Verification
 

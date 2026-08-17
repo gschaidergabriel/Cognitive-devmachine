@@ -1,12 +1,14 @@
 {
-  "schema_version": "3.8",
+  "schema_version": "3.9",
   "process_id": "claycode-autonomous-research-cycles",
   "status": "ACTIVE",
   "mode": "FREE_ONLY",
-  "owner_directive": "Exploit currently free provider, repository, retrieval and execution capabilities to accelerate the ClayCode compiler/runtime component of Frank v0.1. Never create paid usage automatically.",
-  "target_stage": "FRANK_V0_1",
-  "component_target": "F-V01-02-CLAYCODE-COMPILER-RUNTIME",
-  "target_host": "HOSTINGER_UBUNTU_TARGET_VPS_OWNER_FIXED_FINAL_V0_1_ACCEPTANCE_HOST",
+  "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "target_stage": "CLAY_MACHINE",
+  "component_target": "CLAYCODE_COMPILER_VM_FRONTIER",
+  "product_endpoint": "EntityOS",
+  "product_endpoint_definition": "SINGLE_FILE_CLAY_COMPUTER",
+  "owner_directive": "Converge the ClayCode compiler/runtime component into EntityOS, the single-file Clay Computer. Use only authorized isolated sandbox execution for build/test/runtime validation; Vercel Sandbox is the empirical source of truth for executable claims. Never create paid usage automatically, never use Together, and never modify Frank's Harness.",
   "cycle_policy": {
     "supervisor_review_target": "hourly",
     "max_llm_calls_per_cycle": 8,
@@ -16,34 +18,38 @@
     "paid_fallback": false,
     "automatic_subscription_upgrade": false,
     "github_hosted_actions_paid_remediation": false,
-    "next_execution_surface": "VERIFIED_ZERO_COST_ONLY_PREFER_SELF_HOSTED_UBUNTU_WHEN_EVENT_TRUST_BOUNDARY_IS_ACCEPTABLE_ELSE_FAIL_CLOSED",
-    "generic_self_hosted_labels_mint_product_target_identity": false,
-    "persistent_self_hosted_pull_request_default": "FAIL_CLOSED_UNLESS_SOURCE_ADMISSION_OR_ISOLATION_IS_EXPLICIT"
+    "next_execution_surface": "VERCEL_SANDBOX_ONLY_WHEN_VERIFIED_AVAILABLE_AND_ZERO_COST_ELSE_FAIL_CLOSED",
+    "vercel_sandbox_role": "EXECUTABLE_EMPIRICAL_SOURCE_OF_TRUTH",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_vps_test_runners": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN",
+    "generic_runner_labels_mint_product_target_identity": false,
+    "persistent_self_hosted_pull_request_default": "FORBIDDEN_FOR_CURRENT_TEST_EVIDENCE"
   },
   "research_loop": [
-    "REFRESH_CURRENT_FRANK_V0_1_GATE_AND_CLAYCODE_COMPONENT_EVIDENCE",
-    "VERIFY_FREE_EXECUTION_SURFACE_BEFORE_COMPUTE",
-    "VERIFY_EVENT_TRUST_BOUNDARY_BEFORE_PERSISTENT_SELF_HOSTED_EXECUTION",
+    "REFRESH_CURRENT_ENTITYOS_CLAY_MACHINE_AND_CLAYCODE_EVIDENCE",
+    "VERIFY_CURRENT_RESEARCH_AND_PRODUCT_HEADS_BEFORE_WORK",
+    "VERIFY_FREE_AUTHORIZED_ISOLATED_EXECUTION_SURFACE_BEFORE_COMPUTE",
     "VERIFY_EXECUTION_DEPTH_AND_WORKFLOW_LINEAGE_BEFORE_READING_GATE_VERDICT",
-    "VERIFY_EXACT_TESTED_COMMIT_PROVENANCE_BEFORE_CREDIT",
+    "VERIFY_EXACT_TESTED_COMMIT_AND_ARTIFACT_PROVENANCE_BEFORE_CREDIT",
     "VERIFY_EVIDENCE_REFERENT_REPOSITORY_PR_REF_REACHABILITY_AND_COMMIT_ROLE_BEFORE_CREDIT",
     "VERIFY_AUTHORIZED_CLAYCODE_CORPUS_SEPARATELY_FROM_FILESYSTEM_DISCOVERY",
     "VERIFY_RUNNER_AND_PRODUCT_TARGET_PROVENANCE_SEPARATELY_FROM_ROUTING_LABELS",
     "VERIFY_SUCCESSOR_ENTRYPOINT_PRESERVES_PREDECESSOR_SECURITY_INVARIANTS",
-    "VERIFY_PRODUCTSTART_SERVICE_FILESYSTEM_NAMESPACE_SEMANTICS",
+    "VERIFY_PRODUCTSTART_SERVICE_FILESYSTEM_NAMESPACE_SEMANTICS_AS_BOUNDED_LEGACY_EVIDENCE_ONLY",
     "VERIFY_LIVE_PRODUCT_OBSERVATION_IS_POSITIVE_NOT_TYPED_BLOCKED_BEFORE_PRODUCTIVE_CREDIT",
-    "HARVEST_PROVIDER_MODELS_AND_CAPABILITIES",
+    "HARVEST_FREE_PROVIDER_MODELS_AND_CAPABILITIES_WHEN_AUTHORIZED",
     "SELECT_NON_REDUNDANT_MODEL_FAMILIES",
     "RETRIEVE_AND_RERANK_RELEVANT_CLAYCODE_EVIDENCE",
-    "ARCHITECT_CANDIDATE",
+    "ARCHITECT_MULTIPLE_CANDIDATES",
     "ADVERSARIAL_FALSIFICATION",
     "INDEPENDENT_ALTERNATIVE_DESIGN",
     "SYNTHESIS_WITH_ANCESTRY_COLLAPSE",
     "GENERATE_BOUNDED_EXECUTABLE_TEST_REQUESTS",
-    "RUN_OR_QUEUE_SAFE_ZERO_COST_SANDBOX_ORACLES",
+    "RUN_SAFE_ZERO_COST_VERCEL_SANDBOX_ORACLES_WHEN_AVAILABLE",
     "PRESERVE_NEGATIVE_RESULTS",
     "WRITE_CYCLE_RECEIPT_AND_SUPERVISOR_INBOX",
-    "REENTER_RESULT_INTO_FRANK_V0_1_WORK_SURFACE",
+    "REENTER_RESULT_INTO_ENTITYOS_SINGLE_FILE_PRODUCT_BOUNDARY",
     "SELECT_NEXT_HIGHEST_INFORMATION_TARGET"
   ],
   "model_role_policy": {
@@ -71,9 +77,8 @@
       "nvidia:llama-nemotron-rerank-vl-1b-v2"
     ],
     "execution_oracles": [
-      "fixed_local_tests",
-      "self_hosted_ubuntu_target",
-      "other_oracles_only_when_free_verified"
+      "vercel_sandbox_exact_identity",
+      "other_execution_oracles_only_if_newer_owner_directive_explicitly_authorizes_them"
     ]
   },
   "independence_rules": [
@@ -156,55 +161,54 @@
     "entityos_initial_grant_test_acceptance_proves_persistence_mechanism_not_physical_user_click_on_final_product_host",
     "entityos_visual_surface_must_keep_unifieddb_as_semantic_source_and_must_not_mint_gui_host_behavior_as_claycode_semantics",
     "vercel_ready_or_deployment_success_without_started_sandbox_and_reached_acceptance_assertions_must_not_mint_entityos_claycode_or_release_credit",
-    "free_only_provider_or_sandbox_rate_limit_must_cool_down_without_paid_capacity_or_quota_bypass"
+    "free_only_provider_or_sandbox_rate_limit_must_cool_down_without_paid_capacity_or_quota_bypass",
+    "all_current_build_test_experiment_and_runtime_validation_execution_is_isolated_sandbox_only",
+    "vps_self_hosted_vps_and_production_host_testing_are_forbidden_for_current_entityos_evidence",
+    "exact_identity_vercel_sandbox_observation_overrides_stale_receipt_or_unexecuted_source_expectation_for_executable_claims",
+    "entityos_whole_machine_pass_requires_the_exact_single_file_artifact_at_the_admitted_acceptance_scope"
   ],
   "priority_order": [
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-03-IR-TYPES",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-04-TYPE-EFFECT",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-05-EVALUATOR",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-06-COMPILER-LOWERING",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-07-RUNTIME-ABI-FFI",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-08-STDLIB-SDK",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-09-CONCURRENCY-MEMORY",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-10-GENERAL-APP-SUITE",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-11-FUZZ-CONFORMANCE",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-12-CORPUS-HELDOUT",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-13-REAL-FRANK-HANDOFF",
-    "F-V01-02-CLAYCODE-COMPILER-RUNTIME:CC-WP-14-COMPONENT-AUDIT"
+    "DEPENDENCY_BOOTSTRAP_CLOSURE_AND_EXACT_CURRENT_MAIN_DEEP_INTEGRITY",
+    "CANONICAL_ENTITYOS_BUILD_RECIPE_BUILDER_TOOLCHAIN_DEPENDENCIES_AND_RELEASE_AUTHORITY",
+    "CM-DATA:BYTES_BUFFER_PRODUCER_EPOCH_LEASE_STABILITY",
+    "CM-05:EXECUTABLE_OBJECT_IDENTITY",
+    "CM-01/04:CALL_OWNERSHIP_AND_METHODCHAIN_MEMBER_SEGMENTS",
+    "CM-02/03/04:WP04_ADMISSION_PRIVATE_STATE_NON_BYPASSABILITY",
+    "CM-TERM:STRING_BYTES_ARGV_EFFECT_SIGNATURES",
+    "CM-NET:CANONICAL_BYTE_STREAM_AND_TYPED_NETWORK_EFFECTS"
   ],
-  "current_focus": "Supervisor 8.4 is authoritative for work selection. PR786 in gschaidergabriel/Dr.-Unterweger is the preferred EntityOS Batch-5 lane at exact head ad4a7dff6db3132f11c61e553ee4c762c0c378a2 while product main remains bfd3bdf5c74d9b0419e83350258b9cf72f6367db. Preserve the executable READY-with-skip counterexample: deployment dpl_6dT9WsEySQsfMfDB85UJwdhffXEX reached READY but build logs executed SKIP_NON_TARGET_PREVIEW and no Sandbox/EntityOS matrix/build started, so READY never mints acceptance. The current PR786 expected-ref repair has no runtime credit because Vercel blocked exact-head deployment creation under the free rate limit; do not retry while rate-limited and never buy capacity under FREE_ONLY. The last started Sandbox was predecessor dpl_DAUg8yPV9MS581NDrWC1zd86488v on bdca4ea235735b6838696a8b1828a6d7e8212649; provenance/toolchain reconstruction passed, then runner-generated Python heredoc syntax failed before DENY_ALL/offline matrix/EntityOS build, and the Sandbox stopped cleanly. Preserve the PR741 concurrent-mmap Bytes epoch-consistency counterexample and PR732 executable-object identity frontier. Until zero-cost isolated execution reopens, spend on source-only/high-information ClayCode work: producer epoch/lease/version validation for Bytes, executable object identity, 429 unique/464 unresolved Calls, 22 MethodChain/member segments, and productive WP04-admission/private-state non-bypassability. Keep WP03-WP14, release-root, EntityOS extraction/runtime trust, Hostinger ProductStart/storage, and live model-provider authority OPEN. FREE_ONLY hard; Together denied; paid fallback false; Goodman-correlated ancestry is not independent replication; no BASE/Frank PASS from consensus; no provider capability without accepted Ubuntu live external-effect receipt; no canonical semantic promotion without executable counterevidence and review; never modify Frank's Harness.",
+  "current_focus": "Supervisor 8.9 is authoritative for work selection. Preserve PR786 merge/artifact divergence: reviewed head 9a413e2e69262c8da2ed814e5c157d61ed44fd12 and merge commit 171b37f294de72cada8a4f0c0018cacec204be60 share tree 0495375b94c985f15bf2ff7e6b1619bc8153840c, yet Vercel and post-merge Ubuntu recipes produced distinct valid EntityOS artifacts, so canonical artifact/build authority remains unselected. The post-merge Deep Integrity run 31974660013/job 95232215712 executed 23 gates: 22 PASS and pytest_all rc=2 during collection because runtime/claycode_eval_v1/syntax.py imports lark while the workflow-created /opt/frank/venv installs pytest but not lark. Classify this as EXECUTED_DEPENDENCY_BOOTSTRAP_CLOSURE_COUNTEREVIDENCE, not ClayCode semantic failure, not zero-step, and not full-suite PASS. Next: bind one reviewed/versioned dependency closure for release-relevant Deep Integrity/full pytest and canonical EntityOS build; do not use an ad-hoc unpinned latest install as authority. Then rerun exact-current-product-main Deep Integrity in an actually-started authorized isolated Vercel Sandbox and require collection plus all assertions to execute without weakening/skipping tests. Keep canonical EntityOS build/release authority open until recipe, builder, toolchain, dependencies and independent release trust are selected. Whole-machine acceptance remains false. FREE_ONLY remains hard; no paid fallback/Together; never modify Frank's Harness.",
   "supervisor_last_steer": {
-    "reason": "Control 3.7 was stale at Supervisor 7.6 while Supervisor 8.4 had already bound PR786 READY-with-skip false-green and the free Vercel rate-limit blocker. No new semantic executable result arrived after State 8.4; the latest repository Identity Guard on eca0797c executed zero steps with runner_id 0 and therefore has zero code/guard/release credit. Work selection is synchronized without weakening existing authority rules.",
+    "supervisor_state": "8.9",
+    "supervisor_state_commit": "253d0f80c2ccf5452567a02f8906c56bcbc79d49",
+    "research_head_observed_before_sync": "8e5f178bc4273453ed24a453c2db86dbd3b5a421",
+    "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+    "reason": "Control 3.8 remained stale at Supervisor 8.4 and still targeted FRANK_V0_1/Hostinger/self-hosted execution after the active program moved to EntityOS/CLAY_MACHINE with sandbox-only execution. Supervisor 8.9 additionally adjudicated the post-merge pytest rc=2 to missing lark during collection. Work selection is synchronized without deleting prior authority rules.",
     "evidence_priority": [
-      "do not retry Vercel until exact-head deployment is admitted at verified zero cost; do not buy or bypass quota",
-      "when zero-cost Vercel execution reopens, run one actually-started isolated Sandbox on the exact then-current PR786 head and require GO_SANDBOX_MATRIX_VERIFIED rather than deployment READY",
-      "bind EntityOS digest twin-build equality copy/move/rename relocation identity DENY_ALL transition and successful Sandbox stop on the same exact head",
-      "build bounded producer-epoch/lease/version or seqlock-style Bytes provenance discriminator preserving the mixed-snapshot counterexample",
-      "bind executable process identity to object/descriptor identity rather than path-only identity",
-      "classify 429/464 unresolved Call ownership and 22 MethodChain/member segments without host/library defaulting",
-      "falsify productive evaluator/compiler/lowering/FFI routes for WP04 admission bypass and post-admission private-state mutation",
-      "retain release-root EntityOS extraction/runtime Hostinger ProductStart/storage and live model-provider authority as separate gates"
+      "bind reviewed/versioned lark dependency closure shared by release-relevant Deep Integrity/full pytest and canonical EntityOS build provenance",
+      "rerun exact-current-product-main Deep Integrity only in an actually-started authorized isolated Vercel Sandbox and require all 23 gates to execute",
+      "adjudicate why identical source tree produced distinct SELFTEST_PASS EntityOS artifacts under different build recipes before selecting canonical release identity",
+      "preserve mutable/borrowed Bytes producer epoch/lease counterevidence and executable-object identity frontier after dependency/build closure",
+      "keep WP03-WP14 legacy status, release-root/extraction/runtime, ProductStart/storage and live provider authority open and bounded"
     ],
     "required_next_actions": [
-      "treat Vercel READY plus SKIP_NON_TARGET_PREVIEW as execution-plane false-green with zero EntityOS/ClayCode acceptance credit",
-      "do not retry or purchase Vercel/GitHub hosted capacity while FREE_ONLY quota/rate-limit blocks execution",
-      "prefer source-only high-information falsifiers while external isolated compute is transiently blocked",
-      "preserve corpus authority 40 authorized/36 parsed and leave 429/464 calls and 22 member segments unresolved",
-      "preserve all existing ProductStart provider exact-head Goodman BASE and Frank-Harness authority rules"
+      "inspect product dependency/bootstrap/build files at current main and select the smallest versioned closure",
+      "do not weaken or skip pytest collection/assertions",
+      "do not run current build/test/runtime validation on VPS self-hosted VPS or production host",
+      "do not infer EntityOS acceptance from Vercel deployment READY or historical artifacts",
+      "persist only observed sandbox truth back into GitHub receipts"
     ],
     "do_not_infer": [
-      "EntityOS or ClayCode acceptance from Vercel READY without a started Sandbox and reached assertions",
-      "current PR786 runtime correctness from source repair alone",
-      "semantic failure from runner-generated heredoc syntax or zero-step hosted failures",
-      "canonical Bytes or executable semantics from host behavior",
-      "BASE WP03-WP14 PASS from component or model consensus",
-      "live provider capability from source local mock or zero-step evidence",
-      "independent semantic replication from shared project runner or model ancestry"
+      "ClayCode semantic failure from missing lark dependency bootstrap",
+      "full pytest PASS from 22 other Deep Integrity gates",
+      "canonical EntityOS artifact identity from either of the two SELFTEST_PASS artifacts alone",
+      "whole-machine EntityOS PASS from component or historical evidence",
+      "current executable truth from source inspection without exact-identity sandbox observation"
     ]
   },
   "supervisor": {
     "actor": "chatgpt-secondary",
-    "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, route high-information experiments, and enforce FRANK_V0_1 re-entry",
+    "responsibility": "observe cycle receipts, detect drift/redundancy/provider-correlation, change focus/model roles/quotas, demand stronger falsifiers, route high-information experiments, enforce EntityOS re-entry, and preserve sandbox-only execution authority",
     "inbox": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
     "state": "research_entity/claycode/autonomous/SUPERVISOR_STATE.json"
   }

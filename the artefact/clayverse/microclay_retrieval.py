@@ -9,6 +9,7 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .effect_journal import EffectJournal
 from .store import StaleGeneration, UnifiedDB
 
 _TOKEN = re.compile(r"[\w.-]{2,}", re.UNICODE)
@@ -59,6 +60,7 @@ class MicroClayRetrieval:
     LEARNING_RATE = 0.20
     REWARD_EMA_ALPHA = 0.10
     ACCESS_RENT = 0.005
+    AUTOMATIC_OUTCOME_STATUSES = frozenset({"VERIFIED", "DENIED", "FAILED"})
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -157,23 +159,34 @@ class MicroClayRetrieval:
         )
 
     def learn_from_verified_outcomes(self, *, session_id: str, generation: int) -> dict[str, int]:
-        """Consume new effect-outcome receipts from earlier retrieval episodes.
+        """Consume only known, reward-eligible effect outcomes from retrieval episodes.
 
         Learning is delayed until a causally re-entered external outcome exists. Pure
-        conversational completion is not treated as reward, avoiding self-reinforcing
-        "the retriever liked its own result" feedback.
+        conversational completion is not reward. Uncertain/stale outcomes and capabilities
+        explicitly marked non-rewarding by EffectJournal must not create access-rent pulls.
         """
         self.db.assert_live_generation(session_id, generation)
+        statuses = tuple(sorted(self.AUTOMATIC_OUTCOME_STATUSES))
+        non_rewarding = tuple(sorted(EffectJournal.NON_REWARDING_CAPABILITIES))
+        status_marks = ",".join("?" for _ in statuses)
+        capability_clause = ""
+        params: list[Any] = [session_id, int(generation), *statuses]
+        if non_rewarding:
+            capability_marks = ",".join("?" for _ in non_rewarding)
+            capability_clause = f"AND e.capability NOT IN ({capability_marks}) "
+            params.extend(non_rewarding)
         rows = self.db.db.execute(
-            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "SELECT r.causal_id,r.generation,c.credit,e.status,e.capability "
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
             "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
-            "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
+            f"AND e.status IN ({status_marks}) "
+            + capability_clause
+            + "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",
-            (session_id, int(generation)),
+            tuple(params),
         ).fetchall()
         applied = 0
         for row in rows:

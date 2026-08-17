@@ -1,0 +1,67 @@
+{
+  "schema": "clayverse-go-cycle-closure-receipt/v1",
+  "recorded_at_local": "2026-08-17T15:52:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_at_final_rejoin": "3f29357e43a6b3a5c005f6a68113a3b7486d48a9",
+  "retained_pull_request": 454,
+  "retained_branch": "go/prompt-identity-fusion-20260817-1342-sol",
+  "rejoined_code_head_before_this_receipt": "7b7ff439782b4fc87cbc363e8c6628a830d698fe",
+  "product_delta": {
+    "terminal_hooks_blob": "32f6ba30897e804bb091f844828a4644b40cfa0d",
+    "turn_lifecycle_blob": "46f771efcafec6d2be28642e809f476f349f28cb",
+    "prompt_identity_test_blob": "d0efdb56aef745a9cb37d25379c87766a94953b0",
+    "prompt_aware_stop_guard_blob": "6ea3fc7705c28b648d9f69ad94c3a25c343d3e75",
+    "mechanism": "Canonical Claude lifecycle correlation is upgraded from long-lived session identity alone to transactional session_id + prompt_id fencing, including duplicate UserPromptSubmit replay, Stop, StopFailure and repeated-Stop cleanup."
+  },
+  "adversarial_fusion": {
+    "finding": "The retained PR initially omitted the existing adjacent Stop-loop regression update required by mandatory prompt_id at the managed hook boundary.",
+    "repair": "Fused the unique prompt-aware test_terminal_hook_stop_guard.py donor delta from PR373 without changing product code.",
+    "donor_pr_373": "CLOSED_SUPERSEDED_AFTER_UNIQUE_REGRESSION_FUSION"
+  },
+  "primary_upstream_contract": {
+    "source": "Official Claude Code Hooks reference",
+    "observed": "prompt_id is a common hook input UUID for the current user prompt and requires Claude Code v2.1.196 or later.",
+    "product_pin": "2.1.233",
+    "packaged_runtime_payload_verified": false
+  },
+  "execution_evidence": {
+    "vercel": "CURRENT_FREE_PREVIEW_DAILY_ADMISSION_CAP; NO_DUPLICATE_ATTEMPT",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_FAILED_BEFORE_PROVIDER_CONTACT",
+    "daytona_runtime_credit": 0,
+    "github_current_pr_runs": "VERIFY_IDENTITY_GUARD_AND_PYTHON_LOCK_GENERATOR_FAILED_PRE_STEP_WITH_STEPS_NULL",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAILURE",
+    "vps_testing": "FORBIDDEN",
+    "self_hosted_testing": "FORBIDDEN",
+    "production_host_testing": "FORBIDDEN"
+  },
+  "supply_chain_frontier": {
+    "workflow": ".github/workflows/clayverse-python-lock-generator.yml",
+    "workflow_state": "ACTIVE_SOURCE_CANDIDATE",
+    "observed_historical_run_count": 21,
+    "observed_successful_runs": 0,
+    "requirements_lock_present_on_main": false,
+    "manual_unverified_lock_created": false,
+    "reason": "A hash lock must come from an actually executed resolver plus --require-hashes wheel verification bound to the exact product base image and requirements; inventing lock bytes would weaken provenance."
+  },
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request id is exposed and the exact user-message timestamp available to this organ has only minute precision; canonical protocol requires whole-second-or-better reproducible fallback.",
+    "unusual_experiment_executed": false
+  },
+  "promotion": {
+    "pr454_merge_authorized_by_evidence": false,
+    "microclay_active_promotion": false,
+    "whole_clayverse_pass": false
+  },
+  "next_exact_gate": [
+    "First actually-started authorized isolated full-checkout surface: bind then-current PR454 candidate and run prompt identity + prompt-aware Stop guard + adjacent lifecycle/recovery/generation regressions.",
+    "Verify packaged interactive Claude Code 2.1.233 UserPromptSubmit/Stop/StopFailure payload prompt_id behavior.",
+    "Obtain an actually executed deterministic Python hash-lock generator result and commit only exact verified lock bytes.",
+    "Then run exact OCI build/image identity/start/readiness/restart and continue whole-product acceptance."
+  ],
+  "evidence_class": "CURRENT_MAIN_REJOINED_SOURCE_CANDIDATE_WITH_ADVERSARIAL_REGRESSION_FUSION_RUNTIME_UNOBSERVED"
+}

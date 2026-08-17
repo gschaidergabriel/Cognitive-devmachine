@@ -108,10 +108,10 @@ class GoalClaim:
 class GoalKernel:
     """Deterministic goal state inside UnifiedDB; never a second effect authority.
 
-    Planner/model output may propose one bounded action. It cannot create capability,
+    Model output may propose one bounded action. It cannot create capability,
     execution evidence, or success. Execution must happen through the existing
-    TurnLifecycle/EffectGate path. This kernel only admits the proposal and later
-    binds the exact resulting EffectJournal receipt back to that proposal.
+    TurnLifecycle/EffectGate path. This kernel only admits proposals and binds an
+    exact final EffectJournal receipt back to the admitted step.
     """
 
     FEATURE = "deterministic_goal_autonomy_v1"
@@ -119,8 +119,7 @@ class GoalKernel:
     def __init__(self, db: UnifiedDB):
         self.db = db
         # sqlite3.executescript controls its own transaction boundary. Install the
-        # additive tables first, then bind the feature and canonical goal-state hash
-        # in one explicit UnifiedDB transaction.
+        # additive schema first, then bind feature/hash state transactionally.
         self.db.db.executescript(_SCHEMA)
         with self.db.tx() as tx:
             tx.execute(
@@ -135,7 +134,9 @@ class GoalKernel:
             raise GoalIntegrityError("goal-state hash requires an active transaction")
         payload = []
         for table in ("goals", "goal_steps", "goal_events"):
-            payload.append((table, [dict(row) for row in tx.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+            payload.append(
+                (table, [dict(row) for row in tx.execute(f"SELECT * FROM {table} ORDER BY 1")])
+            )
         digest = hashlib.sha256(_json(payload).encode("utf-8")).hexdigest()
         tx.execute(
             "INSERT INTO meta(key,value) VALUES('goal_state_hash',?) "
@@ -206,7 +207,12 @@ class GoalKernel:
             raise ValueError("verified_effects requires 1..64 requirements")
         normalized = []
         for item in requirements:
-            if not isinstance(item, dict) or set(item) - {"capability", "target", "min_verified", "exit"}:
+            if not isinstance(item, dict) or set(item) - {
+                "capability",
+                "target",
+                "min_verified",
+                "exit",
+            }:
                 raise ValueError("invalid verified_effects requirement")
             capability = item.get("capability")
             target = item.get("target")
@@ -418,113 +424,138 @@ class GoalKernel:
         if any(not isinstance(item, str) for item in runtime):
             raise ValueError("runtime capabilities must be strings")
 
+        error: Exception | None = None
+        result: dict[str, Any] | None = None
+        changed = False
         with self.db.tx() as tx:
             goal = tx.execute("SELECT * FROM goals WHERE goal_id=?", (goal_id,)).fetchone()
             if goal is None:
-                raise KeyError(goal_id)
-            if goal["status"] != "ACTIVE":
-                raise GoalPolicyError("goal is not active")
-            outstanding = tx.execute(
+                error = KeyError(goal_id)
+            elif goal["status"] != "ACTIVE":
+                error = GoalPolicyError("goal is not active")
+            elif tx.execute(
                 "SELECT step_id FROM goal_steps WHERE goal_id=? AND status='ADMITTED' LIMIT 1",
                 (goal_id,),
-            ).fetchone()
-            if outstanding is not None:
-                raise GoalPolicyError("goal already has an admitted step awaiting evidence")
-            allowed = set(_load(goal["allowed_capabilities"], list))
-            capability = proposal["capability"]
-            if capability not in allowed:
-                raise GoalPolicyError("proposal exceeds goal capability envelope")
-            if capability not in runtime:
-                self._event_tx(
-                    tx,
-                    goal_id,
-                    "PROPOSAL_REJECTED_CAPABILITY_UNAVAILABLE",
-                    {"capability": capability, "proposal_hash": proposal_hash},
-                )
+            ).fetchone() is not None:
+                error = GoalPolicyError("goal already has an admitted step awaiting evidence")
+            else:
+                allowed = set(_load(goal["allowed_capabilities"], list))
+                capability = proposal["capability"]
+                if capability not in allowed:
+                    error = GoalPolicyError("proposal exceeds goal capability envelope")
+                elif capability not in runtime:
+                    now = time.time()
+                    tx.execute(
+                        "UPDATE goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
+                        (now, goal_id),
+                    )
+                    self._event_tx(
+                        tx,
+                        goal_id,
+                        "GOAL_BLOCKED_CAPABILITY_UNAVAILABLE",
+                        {"capability": capability, "proposal_hash": proposal_hash},
+                    )
+                    changed = True
+                    error = GoalPolicyError("proposal capability is not currently available")
+                elif int(goal["steps_used"]) >= int(goal["max_steps"]):
+                    now = time.time()
+                    tx.execute(
+                        "UPDATE goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
+                        (now, goal_id),
+                    )
+                    self._event_tx(
+                        tx,
+                        goal_id,
+                        "GOAL_BLOCKED_STEP_BUDGET",
+                        {"max_steps": int(goal["max_steps"])},
+                    )
+                    changed = True
+                    error = GoalPolicyError("goal step budget exhausted")
+                else:
+                    failures = int(
+                        tx.execute(
+                            "SELECT COUNT(*) FROM goal_steps WHERE goal_id=? AND proposal_hash=? "
+                            "AND status IN ('FAILED','UNKNOWN')",
+                            (goal_id, proposal_hash),
+                        ).fetchone()[0]
+                    )
+                    if failures > int(goal["max_retries_per_proposal"]):
+                        now = time.time()
+                        tx.execute(
+                            "UPDATE goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
+                            (now, goal_id),
+                        )
+                        self._event_tx(
+                            tx,
+                            goal_id,
+                            "GOAL_BLOCKED_RETRY_BUDGET",
+                            {
+                                "proposal_hash": proposal_hash,
+                                "failed_or_unknown_attempts": failures,
+                            },
+                        )
+                        changed = True
+                        error = GoalPolicyError("proposal retry budget exhausted")
+                    else:
+                        ordinal = int(goal["steps_used"]) + 1
+                        step_id = str(uuid.uuid4())
+                        now = time.time()
+                        generation = self.db.entity_generation()
+                        tx.execute(
+                            "INSERT INTO goal_steps(step_id,goal_id,ordinal,generation,proposal_hash,capability,target,argv,summary,status,effect_id,admitted_at,observed_at) "
+                            "VALUES(?,?,?,?,?,?,?,?,?,'ADMITTED',NULL,?,NULL)",
+                            (
+                                step_id,
+                                goal_id,
+                                ordinal,
+                                generation,
+                                proposal_hash,
+                                capability,
+                                proposal["target"],
+                                _json(proposal["argv"]) if proposal["argv"] is not None else None,
+                                proposal["summary"],
+                                now,
+                            ),
+                        )
+                        tx.execute(
+                            "UPDATE goals SET steps_used=?,updated_at=? WHERE goal_id=?",
+                            (ordinal, now, goal_id),
+                        )
+                        self._event_tx(
+                            tx,
+                            goal_id,
+                            "STEP_ADMITTED",
+                            {
+                                "proposal_hash": proposal_hash,
+                                "capability": capability,
+                                "generation": generation,
+                                "target_sha256": _sha(proposal["target"]),
+                                "argv_sha256": (
+                                    _sha(_json(proposal["argv"]))
+                                    if proposal["argv"] is not None
+                                    else None
+                                ),
+                            },
+                            step_id,
+                        )
+                        changed = True
+                        result = {
+                            "step_id": step_id,
+                            "goal_id": goal_id,
+                            "ordinal": ordinal,
+                            "generation": generation,
+                            **proposal,
+                            "proposal_hash": proposal_hash,
+                            "execution_authority": "TURN_LIFECYCLE_EFFECTGATE_ONLY",
+                        }
+            if changed:
                 self._refresh_hash_tx(tx)
-                raise GoalPolicyError("proposal capability is not currently available")
-            if int(goal["steps_used"]) >= int(goal["max_steps"]):
-                tx.execute(
-                    "UPDATE goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
-                    (time.time(), goal_id),
-                )
-                self._event_tx(
-                    tx,
-                    goal_id,
-                    "GOAL_BLOCKED_STEP_BUDGET",
-                    {"max_steps": int(goal["max_steps"])},
-                )
-                self._refresh_hash_tx(tx)
-                raise GoalPolicyError("goal step budget exhausted")
-            failures = int(
-                tx.execute(
-                    "SELECT COUNT(*) FROM goal_steps WHERE goal_id=? AND proposal_hash=? "
-                    "AND status IN ('FAILED','UNKNOWN')",
-                    (goal_id, proposal_hash),
-                ).fetchone()[0]
-            )
-            if failures > int(goal["max_retries_per_proposal"]):
-                tx.execute(
-                    "UPDATE goals SET status='BLOCKED',updated_at=? WHERE goal_id=?",
-                    (time.time(), goal_id),
-                )
-                self._event_tx(
-                    tx,
-                    goal_id,
-                    "GOAL_BLOCKED_RETRY_BUDGET",
-                    {"proposal_hash": proposal_hash, "failed_or_unknown_attempts": failures},
-                )
-                self._refresh_hash_tx(tx)
-                raise GoalPolicyError("proposal retry budget exhausted")
 
-            ordinal = int(goal["steps_used"]) + 1
-            step_id = str(uuid.uuid4())
-            now = time.time()
-            generation = self.db.entity_generation()
-            tx.execute(
-                "INSERT INTO goal_steps(step_id,goal_id,ordinal,generation,proposal_hash,capability,target,argv,summary,status,effect_id,admitted_at,observed_at) "
-                "VALUES(?,?,?,?,?,?,?,?,?,'ADMITTED',NULL,?,NULL)",
-                (
-                    step_id,
-                    goal_id,
-                    ordinal,
-                    generation,
-                    proposal_hash,
-                    capability,
-                    proposal["target"],
-                    _json(proposal["argv"]) if proposal["argv"] is not None else None,
-                    proposal["summary"],
-                    now,
-                ),
-            )
-            tx.execute(
-                "UPDATE goals SET steps_used=?,updated_at=? WHERE goal_id=?",
-                (ordinal, now, goal_id),
-            )
-            self._event_tx(
-                tx,
-                goal_id,
-                "STEP_ADMITTED",
-                {
-                    "proposal_hash": proposal_hash,
-                    "capability": capability,
-                    "generation": generation,
-                    "target_sha256": _sha(proposal["target"]),
-                    "argv_sha256": _sha(_json(proposal["argv"])) if proposal["argv"] is not None else None,
-                },
-                step_id,
-            )
-            self._refresh_hash_tx(tx)
-
-        return {
-            "step_id": step_id,
-            "goal_id": goal_id,
-            "ordinal": ordinal,
-            "generation": generation,
-            **proposal,
-            "proposal_hash": proposal_hash,
-            "execution_authority": "TURN_LIFECYCLE_EFFECTGATE_ONLY",
-        }
+        if error is not None:
+            raise error
+        if result is None:
+            raise GoalIntegrityError("goal proposal admission produced no result")
+        return result
 
     @staticmethod
     def _outcome(raw: str | None) -> dict[str, Any] | None:
@@ -712,7 +743,8 @@ class GoalKernel:
         counts = {"admitted_steps_marked_unknown": 0, "goals_blocked": 0}
         with self.db.tx() as tx:
             rows = tx.execute(
-                "SELECT step_id,goal_id FROM goal_steps WHERE status='ADMITTED' ORDER BY admitted_at,step_id"
+                "SELECT step_id,goal_id FROM goal_steps WHERE status='ADMITTED' "
+                "ORDER BY admitted_at,step_id"
             ).fetchall()
             affected = set()
             now = time.time()

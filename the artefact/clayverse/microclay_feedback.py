@@ -142,6 +142,13 @@ class MicroClayExplicitFeedback:
             raise PermissionError("target memory kind is not Stage-A evidence")
         if target["user_id"] is not None and str(target["user_id"]) != str(user_id):
             raise PermissionError("target memory is outside user visibility")
+        try:
+            target_ts = float(target["ts"])
+            retrieval_ts = float(row["ts"])
+        except (TypeError, ValueError, KeyError, IndexError) as exc:
+            raise StaleGeneration("retrieval_feedback_temporal_identity") from exc
+        if target_ts > retrieval_ts:
+            raise PermissionError("target memory did not exist at retrieval time")
         if (
             target["source_turn_id"] is not None
             and str(target["source_turn_id"]) == str(row["turn_id"])
@@ -192,8 +199,8 @@ class MicroClayExplicitFeedback:
         budget_chars: int,
         limit_items: int,
         feedback_class: str,
+        source: str,
         target_memory_id: str | None = None,
-        source: str = SOURCE,
     ) -> dict[str, Any]:
         if str(source) != self.SOURCE:
             raise PermissionError("retrieval feedback requires explicit user provenance")

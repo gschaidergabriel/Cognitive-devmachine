@@ -1,11 +1,9 @@
 name: ClayVerse artefact CI
 
+# Manual until GitHub-hosted runners are available again. The first automatic
+# run (31995291479) was rejected before any step because of account billing /
+# spending-limit state, so push-triggered runs would only create false-red noise.
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'the artefact/**'
-      - '.github/workflows/clayverse-artefact-ci.yml'
   workflow_dispatch:
 
 permissions:

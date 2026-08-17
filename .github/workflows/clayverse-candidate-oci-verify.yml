@@ -1,0 +1,67 @@
+name: clayverse-candidate-oci-verify
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/**'
+      - '.github/workflows/clayverse-candidate-oci-verify.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-canonical-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        working-directory: the artefact
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bind exact source identity
+        run: |
+          echo "source_sha=${GITHUB_SHA}"
+          git rev-parse HEAD
+          find . -type f -not -path './.state/*' -print0 | sort -z | xargs -0 sha256sum | tee /tmp/clayverse-source-sha256.txt
+
+      - name: Python compile and tests
+        run: |
+          python -m pip install --disable-pip-version-check pytest
+          PYTHONPATH=. python -m compileall -q clayverse tests
+          PYTHONPATH=. python -m pytest -q
+
+      - name: Build OCI candidate
+        run: docker build --pull -t clayverse:candidate .
+
+      - name: Boot non-root candidate with durable state
+        run: |
+          docker volume create clayverse-ci-state
+          docker run --rm \
+            --cap-drop=ALL \
+            --security-opt no-new-privileges:true \
+            -v clayverse-ci-state:/var/lib/clayverse \
+            clayverse:candidate --once | tee /tmp/boot-1.json
+          python - <<'PY'
+          import json
+          d=json.load(open('/tmp/boot-1.json'))
+          assert d['service']=='clayverse' and d['status']=='ready'
+          assert d['users']==['gabriel','andreas']
+          PY
+          docker run --rm \
+            --cap-drop=ALL \
+            --security-opt no-new-privileges:true \
+            -v clayverse-ci-state:/var/lib/clayverse \
+            --entrypoint python clayverse:candidate -c \
+            "import os,sqlite3; p='/var/lib/clayverse/unified.db'; assert os.path.getsize(p)>0; db=sqlite3.connect(p); assert db.execute('select count(*) from users').fetchone()[0]==2; print('persisted_users=2')"
+          docker run --rm \
+            --cap-drop=ALL \
+            --security-opt no-new-privileges:true \
+            -v clayverse-ci-state:/var/lib/clayverse \
+            clayverse:candidate --once | tee /tmp/boot-2.json
+
+      - name: Capture image identity and security user
+        run: |
+          docker image inspect clayverse:candidate --format 'image_id={{.Id}} user={{.Config.User}}'
+          test "$(docker image inspect clayverse:candidate --format '{{.Config.User}}')" = "clayverse"

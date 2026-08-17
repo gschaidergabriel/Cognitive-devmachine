@@ -1,0 +1,56 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "local_time": "22:59+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES_AND_CONFIRMS_MICROVM_SECURITY_ACCEPTANCE_CONTRACT",
+  "scope": "Kata runtime-rs security admission and exact static MicroVM contract regression",
+  "primary_upstream_evidence": [
+    {
+      "source": "kata-containers/kata-containers GHSA-2gv2-cffp-j227 / CVE-2026-47243",
+      "observed": "Critical runtime-rs guest-root to host-root escape; affected <=3.30.0; first patched release 3.31.0; affected path includes standalone virtio-fs with QEMU/Cloud Hypervisor configurations described by upstream."
+    },
+    {
+      "source": "kata-containers/kata-containers SECURITY.md",
+      "observed": "Kata Containers documents a rolling-release security model: only the latest monthly release is actively maintained and prior releases are unsupported."
+    }
+  ],
+  "canonical_source_observation": {
+    "contract_blob": "afff2c3f66961316f6ad554c3aaebd21973481be",
+    "template_blob": "629f7bbb7627e997839597edd499ce008c569a0f",
+    "test_blob": "8c59f6ae9dda51b8970ea080d5bc519a7dac2a50",
+    "contract": "Current main already contains the runtime-rs security floor, rejects <=3.30.0, treats 3.31.0 only as a historical minimum, requires fresh upstream advisory/release review, exact runtime/config identity and shared-filesystem/virtiofs attestation.",
+    "regression_fence": "Current main now contains test_kata_runtime_security_floor_is_bound_and_refreshed so the security admission law is statically fenced."
+  },
+  "exact_supporting_execution": {
+    "environment": "isolated non-production OpenAI container; no Docker/Kata/KVM runtime",
+    "blob_reconstruction": "3/3 exact Git blob IDs matched before execution",
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "result": "9 passed in 0.04s",
+    "exit_code": 0
+  },
+  "negative_result_preserved": "The immediately preceding exact run exposed a wording-coupled Tier-2 assertion (8 pass, 1 fail). Concurrent main repair changed the assertion to the semantic existing contract phrase; the re-fetched exact current test blob then passed 9/9. No stale overwrite was forced.",
+  "evidence_class": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "runtime_credit": {
+    "kata_microvm": 0,
+    "kubernetes_cni": 0,
+    "oci_image": 0,
+    "whole_clayverse": 0
+  },
+  "strongest_counterhypothesis": "Static contract and tests can be correct while the actual target runs an unsupported/vulnerable Kata release or configuration, a non-enforcing CNI, or performs only in-place container restart instead of full Kata sandbox replacement. Only exact target execution can collapse those alternatives.",
+  "next_discriminator": "Provision the host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox, execute the exact private-source/EntityOS OCI batch, capture final image digest, then run the same digest on a currently security-supported Kata runtime and empirically attest runtime/config/advisory identity, CNI deny/allow enforcement and true Pod/Kata-sandbox Tier-2 replacement.",
+  "coordination": {
+    "stale_writes_forced": false,
+    "duplicate_product_path_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "nonclaims": [
+    "no full repository regression PASS",
+    "no exact OCI build/runtime PASS",
+    "no live Kata runtime PASS",
+    "no live CNI NetworkPolicy enforcement PASS",
+    "no WHOLE_CLAYVERSE_PASS"
+  ]
+}

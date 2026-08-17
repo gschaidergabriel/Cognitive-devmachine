@@ -44,10 +44,23 @@ def test_python_lock_generator_checks_out_exact_source_and_uses_product_inputs()
     assert "EXPECTED_SOURCE_LOCK_SHA256" in text
 
 
-def test_current_product_first_from_is_exact_digest_pinned_python():
+def test_current_product_first_from_is_exact_digest_pinned_python_and_matches_source_lock():
     image = _first_from_image()
     assert re.fullmatch(r"python:\S+@sha256:[0-9a-f]{64}", image), image
     assert image in DOCKERFILE.read_text(encoding="utf-8")
+    source_base = _source_lock()["base_image"]
+    assert image == f"{source_base['reference']}@{source_base['index_digest']}"
+
+
+def test_workflow_fails_closed_on_dockerfile_source_lock_base_image_drift_before_container_execution():
+    text = _workflow_text()
+    assert "SOURCE_LOCK_BASE_IMAGE=" in text
+    assert "SOURCE_LOCK_BASE_IMAGE_MISSING" in text
+    assert "SOURCE_LOCK_BASE_REFERENCE_INVALID" in text
+    assert "SOURCE_LOCK_BASE_DIGEST_INVALID" in text
+    assert "Dockerfile/SOURCE_LOCK base image drift" in text
+    assert 'if [ "$BASE_IMAGE" != "$SOURCE_LOCK_BASE_IMAGE" ]; then' in text
+    assert text.index('if [ "$BASE_IMAGE" != "$SOURCE_LOCK_BASE_IMAGE" ]; then') < text.index("docker run --rm -i")
 
 
 def test_python_lock_generator_source_locks_complete_linux_py313_bootstrap_set():

@@ -34,7 +34,7 @@ Inside that single boundary runs one continuous machine-like domain containing:
 - ClayGraph as rebuildable derived projection;
 - ClayVerse orchestration/runtime supervision;
 - the managed Linux terminal/PTY/tmux execution surface;
-- Claude Code as runtime inference/cognition engine;
+- the admitted LLM inference boundary: Claude Code and/or GLM according to the provider law below;
 - managed hooks, retrieval/routing organs and EffectGate/effect journal;
 - the authenticated web/API/transport boundary needed to accept inputs and return outputs.
 
@@ -50,7 +50,7 @@ Ingress is normalized, authenticated/authorized where applicable, causally ident
 
 The canonical processing cycle is conceptually:
 
-`INGRESS -> canonicalize/record in UnifiedDB -> retrieve/assemble current state -> LLM/Claude cognition -> re-ingest model output as proposed intent/command -> policy/authority validation -> EntityOS/managed terminal execution when admitted -> capture stdout/stderr/result/effect receipt -> re-ingest result into UnifiedDB/current causal turn -> continue cognition as needed -> EGRESS`
+`INGRESS -> canonicalize/record in UnifiedDB -> retrieve/assemble current state -> selected LLM cognition -> re-ingest model output as proposed intent/command -> policy/authority validation -> EntityOS/managed terminal execution when admitted -> capture stdout/stderr/result/effect receipt -> re-ingest result into UnifiedDB/current causal turn -> continue cognition as needed -> EGRESS`
 
 The LLM does not directly own state and does not directly bypass the execution boundary. Its output returns into ClayVerse first and is treated as proposed action/data until validated.
 
@@ -64,13 +64,13 @@ Unmediated generic host `process.exec` remains forbidden. Terminal control is no
 
 ### 3.4 Egress
 
-Only explicit admitted output/effect surfaces may cross the boundary. Egress includes user-visible responses, approved files/data, terminal/effect results exposed to an authenticated user, and explicitly authorized external effects.
+Only explicit admitted output/effect surfaces may cross the boundary. Egress includes user-visible responses, approved files/data, terminal/effect results exposed to an authenticated user, explicitly authorized external effects, and the narrowly admitted inference request needed for token-based GLM use.
 
 Egress must remain attributable to a canonical causal turn/effect receipt. Unknown, stale, replayed or unauthorized effects fail closed.
 
 ### 3.5 Shock-absorber isolation and automatic snapshot recovery
 
-The sealed machine boundary is intentionally a **stability shock absorber** between the persistent ClayVerse continuum and the outside environment. Faults inside EntityOS, Claude, terminal processes or internal orchestration must be contained inside this boundary wherever possible instead of corrupting external owner systems or requiring manual reconstruction.
+The sealed machine boundary is intentionally a **stability shock absorber** between the persistent ClayVerse continuum and the outside environment. Faults inside EntityOS, an LLM client/runtime, terminal processes or internal orchestration must be contained inside this boundary wherever possible instead of corrupting external owner systems or requiring manual reconstruction.
 
 ClayVerse MUST maintain periodic and event-triggered **known-good logical machine snapshots**. A snapshot is not merely a copy of one process RAM image. It binds at minimum:
 
@@ -91,7 +91,7 @@ If EntityOS or another critical internal runtime component crashes, wedges, viol
 4. restore/reconstruct the last accepted known-good logical machine snapshot;
 5. advance to a new global runtime generation/epoch;
 6. mark any external effect whose completion is not durably verified as `UNKNOWN_AFTER_CRASH`/equivalent rather than replaying it automatically;
-7. re-establish UnifiedDB/EntityOS/terminal/Claude readiness and policy attestations;
+7. re-establish UnifiedDB/EntityOS/terminal/selected-LLM readiness and policy attestations;
 8. resume admitted work through causal re-entry only after the recovered continuum is internally consistent.
 
 Automatic recovery MUST NOT blindly replay external side effects. A command/effect may be replayed only when its contract is explicitly idempotent and the EffectJournal proves replay is safe; otherwise it remains unknown and requires reconciliation.
@@ -110,25 +110,53 @@ The accepted runtime MUST separate **ephemeral runtime** from **persistent canon
 
 Recovery has two tiers:
 
-**Tier 1 — internal component recovery.** If EntityOS, Claude, PTY/tmux or another replaceable internal process fails while the machine-continuum invariants remain trustworthy, the ClayVerse supervisor fences the failed generation/component, rebuilds it from immutable image bytes, reconciles with the last valid logical snapshot and resumes after readiness attestation.
+**Tier 1 — internal component recovery.** If EntityOS, the selected LLM runtime/client, PTY/tmux or another replaceable internal process fails while the machine-continuum invariants remain trustworthy, the ClayVerse supervisor fences the failed generation/component, rebuilds it from immutable image bytes where applicable, reconciles with the last valid logical snapshot and resumes after readiness attestation.
 
-**Tier 2 — full appliance restart.** If canonical invariants cannot be trusted, recovery itself fails, memory/resource corruption is suspected, or the supervisor cannot prove a consistent generation, the container MUST fail closed so the external OCI runtime/orchestrator restarts the whole appliance from the immutable base image. On restart, ClayVerse opens only the declared persistent data areas, performs UnifiedDB/WAL recovery plus snapshot/effect-journal reconciliation, creates a new runtime generation and reconstitutes EntityOS/terminal/Claude from clean image bytes before ingress reopens.
+**Tier 2 — full appliance restart.** If canonical invariants cannot be trusted, recovery itself fails, memory/resource corruption is suspected, or the supervisor cannot prove a consistent generation, the container MUST fail closed so the external OCI runtime/orchestrator restarts the whole appliance from the immutable base image. On restart, ClayVerse opens only the declared persistent data areas, performs UnifiedDB/WAL recovery plus snapshot/effect-journal reconciliation, creates a new runtime generation and reconstitutes EntityOS/terminal/LLM integration from clean image bytes/configuration before ingress reopens.
 
 The full-appliance restart target is **fast and deterministic**, but no fixed millisecond restart guarantee may be claimed until measured on the admitted deployment/runtime.
 
 An OCI container still shares the host kernel. Therefore this appliance boundary strongly isolates product userspace, libraries, filesystem and process state, but it does not make host-kernel/driver changes physically impossible. If stronger kernel isolation is later required, the same ClayVerse image may be run by the deployment platform inside a VM/microVM without changing the internal ClayVerse state/execution architecture.
 
-## 4. Cognition and web boundary
+## 4. Cognition and LLM provider law
 
-Claude Code is the runtime inference/cognition engine. It is not a separate persistent identity and must not own canonical memory. It receives context assembled from canonical ClayVerse state and returns reasoning results/intents/commands into the internal loop above.
+ClayVerse supports two admitted LLM modes. They are inference engines only; neither is a persistent identity, memory authority or execution authority.
 
-The user-facing entry point is a Clerk-authenticated web application/homepage. Authentication maps users into the one central ClayVerse entity without creating separate agent identities.
+### 4.1 Claude Code — direct managed terminal login
+
+Claude Code is the **interactive terminal-native LLM path**. It runs inside the managed ClayVerse Linux PTY/tmux environment as the normal Claude Code CLI.
+
+Authentication for Claude Code is performed **directly through its terminal login flow**. ClayVerse must not replace this primary path with a hidden Claude API-token abstraction. The authenticated Claude Code process remains inside the managed terminal continuum and is supervised/attested like the other internal runtime processes.
+
+ClayVerse supplies context/state through the admitted terminal/hook/runtime interfaces and receives Claude Code output back through the same managed runtime boundary. Claude Code output is always re-ingested into ClayVerse as proposed reasoning/action before any EntityOS/terminal effect is authorized.
+
+Any Claude authentication/session material required by the CLI is credential state, not canonical cognition or memory. It must stay in a narrowly scoped credential boundary and must never become UnifiedDB truth or be copied into receipts/logs.
+
+### 4.2 GLM — token/API inference only
+
+GLM is the **token-authenticated inference path**. GLM is always called through its admitted token/API channel; it is not logged in through the ClayVerse terminal and does not receive a direct PTY/shell session.
+
+The GLM token is a secret. It must be supplied through a dedicated secret boundary, never committed to source, never written into UnifiedDB as model memory/state, never included in snapshots/receipts, and never emitted to terminal or application logs.
+
+For a GLM turn, ClayVerse assembles the bounded context from UnifiedDB, sends only the admitted inference request outward, receives the model response, binds it to the current causal turn, and re-ingests it into UnifiedDB/ClayVerse before any execution decision. GLM has **no direct filesystem, terminal, EntityOS, EffectGate or external-effect authority**.
+
+### 4.3 Provider switching and common law
+
+ClayVerse may choose Claude Code or GLM for an admitted cognition step according to routing/policy, but switching providers MUST NOT fork the entity or state. The same UnifiedDB turn/session/generation identity continues across providers.
+
+Both providers obey the same loop:
+
+`UnifiedDB/context -> LLM -> response back into ClayVerse -> policy/authority check -> EntityOS/terminal when admitted -> result back into UnifiedDB`.
+
+A model response is never an effect receipt and never self-authorizes a command. Provider failure, timeout or stale response must fail closed or be causally retried/reconciled without bypassing UnifiedDB generation fencing.
+
+The user-facing entry point remains a Clerk-authenticated web application/homepage. Authentication maps users into the one central ClayVerse entity without creating separate agent identities.
 
 ## 5. Container law
 
-All admitted runtime pieces needed for the product path MUST converge into the **same ClayVerse container image**: ClayVerse service, complete accepted EntityOS substrate, UnifiedDB authority, Claude Code runtime, managed Linux PTY/tmux terminal, web/API boundary and effect/security gates.
+All admitted runtime pieces needed for the product path MUST converge into the **same ClayVerse container image**: ClayVerse service, complete accepted EntityOS substrate, UnifiedDB authority, Claude Code terminal runtime, GLM token/API client boundary, managed Linux PTY/tmux terminal, web/API boundary and effect/security gates.
 
-No mandatory second application container, separate consciousness service, hidden state authority or external execution brain may be required for the product to function.
+No mandatory second application container, separate consciousness service, hidden state authority or external execution brain may be required for the product to function. A remote GLM inference service is an admitted bounded inference dependency only and may never become state/execution authority.
 
 Persistent volumes are data, not companion product artifacts. They must be explicitly scoped, recoverable and attach to this one machine continuum.
 
@@ -137,6 +165,8 @@ Persistent volumes are data, not companion product artifacts. They must be expli
 Current build, test, experiment and runtime validation are isolated-sandbox-only. Exact whole-container execution remains the final acceptance gate. Lack of one provider connection must not stop independent source, contract, adversarial, restart, concurrency, fuzz, reproducibility, component-runtime or integration testing that remains possible under `the artefact/TESTING_STRATEGY.md`.
 
 Snapshot/recovery behavior MUST be tested adversarially before whole-product acceptance: EntityOS crash, terminal child crash, interrupted UnifiedDB write, crash before/after effect acknowledgement, stale-generation result arrival, repeated crash during recovery, corrupted snapshot candidate and recovery from the previous known-good snapshot.
+
+LLM-provider behavior MUST also be tested independently: Claude Code direct-terminal auth/runtime continuity, GLM token non-persistence/redaction, provider timeout/failure, stale response rejection, provider switching inside one causal turn/generation, and proof that neither provider can bypass EntityOS/EffectGate into terminal/effect execution.
 
 VPS/self-hosted/production-host testing is forbidden unless later explicitly authorized as deployment validation. Together API/service remains forbidden. Final paid/model training remains owner-authorization-required.
 
@@ -152,4 +182,4 @@ Exact `go` means maximum useful product-convergent work on this ClayVerse single
 
 Any older file that says the active endpoint is `EntityOS`, `ONE_EXECUTABLE_FILE`, `SINGLE_FILE_CLAY_COMPUTER`, FRANK, self.root, UCM2 or a historical harness is superseded where it conflicts with this directive. Such material may still contribute bounded internal implementation/regression evidence.
 
-Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, removes EntityOS from the final accepted continuum, lacks automatic known-good snapshot recovery, or makes the runtime root filesystem mutable violates this directive.
+Any newer ClayVerse implementation that treats the final product as a normal stateless web app, makes UnifiedDB non-canonical, bypasses the internal terminal/effect boundary, removes EntityOS from the final accepted continuum, lacks automatic known-good snapshot recovery, makes the runtime root filesystem mutable, logs/persists GLM tokens, gives GLM direct terminal/effect authority, or replaces the Claude Code direct-terminal-login path with an unrelated hidden API path violates this directive.

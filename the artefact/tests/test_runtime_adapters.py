@@ -60,11 +60,17 @@ def test_clerk_config_fails_closed_without_authorized_parties(monkeypatch):
         ClerkConfig.from_env()
 
 
-def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
+def test_claude_code_adapter_is_toolless_ephemeral_structured_one_turn(tmp_path):
     log = tmp_path / "args.json"
     envlog = tmp_path / "env.json"
     fake = tmp_path / "claude"
-    fake.write_text("#!/usr/bin/env python3\nimport json,os,sys\nopen(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\nopen(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\nprint(json.dumps({'result':json.dumps({'text':'ok','effect':None})}))\n")
+    fake.write_text(
+        "#!/usr/bin/env python3\n"
+        "import json,os,sys\n"
+        "open(os.environ['FAKE_LOG'],'w').write(json.dumps(sys.argv[1:]))\n"
+        "open(os.environ['FAKE_ENVLOG'],'w').write(json.dumps({'skip_history':os.environ.get('CLAUDE_CODE_SKIP_PROMPT_HISTORY')}))\n"
+        "print(json.dumps({'structured_output':{'text':'ok','effect':None}}))\n"
+    )
     fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
     old_log = os.environ.get("FAKE_LOG")
     old_envlog = os.environ.get("FAKE_ENVLOG")
@@ -87,10 +93,30 @@ def test_claude_code_adapter_is_toolless_ephemeral_one_turn(tmp_path):
     assert args[args.index("--max-turns") + 1] == "1"
     assert args[args.index("--tools") + 1] == ""
     assert "--no-session-persistence" in args
+    assert "--json-schema" in args
+    schema = json.loads(args[args.index("--json-schema") + 1])
+    capability = schema["properties"]["effect"]["anyOf"][1]["properties"]["capability"]
+    assert set(capability["enum"]) == {"entityos.exec", "state.noop"}
     assert env["skip_history"] == "1"
     prompt = args[args.index("-p") + 1]
     assert "hello; touch /tmp/SHOULD_NOT_EXIST" in prompt
     assert not Path("/tmp/SHOULD_NOT_EXIST").exists()
+
+
+def test_claude_code_structured_effect_is_only_an_intent(tmp_path):
+    fake = tmp_path / "claude"
+    fake.write_text(
+        "#!/usr/bin/env python3\n"
+        "import json\n"
+        "print(json.dumps({'structured_output':{'text':'request','effect':{'capability':'entityos.exec','target':'test','argv':['status']}}}))\n"
+    )
+    fake.chmod(fake.stat().st_mode | stat.S_IXUSR)
+    out = ClaudeCodeInference(binary=str(fake), cwd=str(tmp_path), timeout=5).reason({}, "status")
+    assert out == {
+        "text": "request",
+        "selection": "request_effect",
+        "effect": {"capability": "entityos.exec", "target": "test", "argv": ["status"]},
+    }
 
 
 class FakeVerifier:

@@ -1,0 +1,93 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "EXTERNAL_TIER2_REPLACER_SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "canonical_main_at_lane_bind": "e63e82d4ac3bcd6e87b9e985bf865a7d8494a942",
+  "branch": "gpt56sol/go-tier2-external-replacer-20260817-2259",
+  "dependency": {
+    "retained_inner_fence_pr": 666,
+    "contract": "reserved Tier-2 exit code 86 plus durable same-Pod UID fence",
+    "note": "This lane is complementary deployment infrastructure. It does not duplicate or replace the application-side fence, UnifiedDB, recovery or effect authority."
+  },
+  "canonical_delta": {
+    "controller": {
+      "path": "the artefact/deployment/tier2_kubernetes_controller.py",
+      "blob": "6c049ef3662cd988811846500c894a2ef7f90aeb"
+    },
+    "rbac": {
+      "path": "the artefact/deployment/tier2-controller-rbac.template.yaml",
+      "blob": "42e520b52b05ced45fa3da5fc9995422d7090910"
+    },
+    "contract": {
+      "path": "the artefact/deployment/TIER2_EXTERNAL_REPLACER_CONTRACT.md",
+      "blob": "e728085dcc696d1e90fde0a81f17ab71c01e873f"
+    },
+    "test": {
+      "path": "the artefact/tests/test_tier2_kubernetes_controller.py",
+      "blob": "c98cf414eeb2de15027288f3a6959adfcb4516b6"
+    }
+  },
+  "mechanism": [
+    "observe only the reserved Tier-2 exit code 86 on the exact ClayVerse container",
+    "verify exact namespace/name/Pod UID, app label and StatefulSet/clayverse controller owner",
+    "verify admitted Kata RuntimeClass and application ServiceAccount-token automount remains false",
+    "verify Pod spec image and runtime imageID both match the exact accepted immutable OCI digest",
+    "delete only with Kubernetes DeleteOptions preconditions.uid bound to the observed old Pod UID",
+    "treat missing Pod or UID-precondition conflict as safe convergence and never broaden deletion to a successor",
+    "keep controller stateless with respect to ClayVerse cognition and avoid shell/process execution",
+    "optional cluster-local RBAC grants only get/delete on exact resourceName clayverse-0"
+  ],
+  "isolated_execution": {
+    "environment": "authorized isolated OpenAI non-production container",
+    "git_blob_identity": {
+      "controller": "MATCH",
+      "rbac": "MATCH",
+      "test": "MATCH"
+    },
+    "command": "python -m py_compile deployment/tier2_kubernetes_controller.py tests/test_tier2_kubernetes_controller.py && python -m pytest -q tests/test_tier2_kubernetes_controller.py",
+    "result": "7 passed in 0.03s",
+    "exit_code": 0,
+    "scope": "deterministic source/mechanism only"
+  },
+  "primary_evidence": [
+    "Kubernetes DeleteOptions supports deletion preconditions including resource UID",
+    "Kubernetes RBAC supports resourceNames-restricted get/delete authorization",
+    "current ClayVerse MicroVM contract requires full Pod/Kata sandbox replacement rather than same-Pod restart"
+  ],
+  "coordination": {
+    "initial_fusion_attempt": "Controller commits were first added directly to PR 666, but a concurrent force-rejoin of that retained branch removed them.",
+    "response": "No force-overwrite was performed. A fresh main-bound external deployment lane was created instead.",
+    "duplicate_state_authority_created": false,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "runtime_credit": {
+    "kubernetes_api": 0,
+    "rbac_admission": 0,
+    "actual_pod_delete": 0,
+    "statefulset_recreate": 0,
+    "kata_new_sandbox_vm_identity": 0,
+    "csi": 0,
+    "cni": 0,
+    "exact_oci": 0,
+    "whole_clayverse": 0
+  },
+  "non_claims": [
+    "Pod UID change alone does not prove a new Kata VM/guest-kernel boundary",
+    "No real Kubernetes API or Kata target was exercised",
+    "No exact final OCI runtime was exercised by this lane",
+    "No Clerk/PTY/Claude/Mistral/Vault end-to-end runtime credit",
+    "No VPS/self-hosted/production test",
+    "Together API not used",
+    "No owner-gated paid/final training",
+    "No whole-product PASS"
+  ],
+  "owner_reentry": "Scoped read-only GITHUB_READ_TOKEN forwarding into the authorized disposable Vercel Sandbox is permitted under current owner law, but the latest retained Vercel run still observed the secret value absent and therefore stopped before private source staging.",
+  "next_gate": "Fuse with the retained application-side Tier-2 fence after fresh-main review, then exercise the controller on the admitted Kubernetes/Kata target: observe exit 86, UID-preconditioned graceful deletion of the exact old Pod, old sandbox termination, new Pod UID plus independently attested new Kata sandbox/VM identity, same accepted OCI digest, persistent-state recovery with global generation advance, stale-writer rejection and no blind external-effect replay.",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

@@ -29,6 +29,16 @@ def _reject_nonfinite_json(value: str):
     raise ValueError(f"non-finite JSON constant rejected: {value}")
 
 
+def _reject_duplicate_json_pairs(pairs):
+    """Decode one JSON object only when every member name is unique."""
+    obj = {}
+    for key, value in pairs:
+        if key in obj:
+            raise ValueError("duplicate JSON object key rejected")
+        obj[key] = value
+    return obj
+
+
 def urlopen(request, timeout):
     """Open one Mistral request with redirect following disabled."""
 
@@ -259,7 +269,11 @@ class MistralInference:
         if len(raw) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("Mistral response exceeds bound")
         try:
-            envelope = json.loads(raw, parse_constant=_reject_nonfinite_json)
+            envelope = json.loads(
+                raw,
+                parse_constant=_reject_nonfinite_json,
+                object_pairs_hook=_reject_duplicate_json_pairs,
+            )
         except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
             raise InferenceProtocolError("Mistral response envelope is not JSON") from exc
         if not isinstance(envelope, dict):
@@ -287,7 +301,11 @@ class MistralInference:
         if not isinstance(content, str) or not content or len(content.encode("utf-8")) > self.MAX_RESPONSE_BYTES:
             raise InferenceProtocolError("Mistral message content must be bounded non-empty JSON text")
         try:
-            decision_payload = json.loads(content, parse_constant=_reject_nonfinite_json)
+            decision_payload = json.loads(
+                content,
+                parse_constant=_reject_nonfinite_json,
+                object_pairs_hook=_reject_duplicate_json_pairs,
+            )
         except (json.JSONDecodeError, ValueError) as exc:
             raise InferenceProtocolError("Mistral message content is not JSON") from exc
 

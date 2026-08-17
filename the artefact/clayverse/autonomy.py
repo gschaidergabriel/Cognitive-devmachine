@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import os
 import threading
-import time
 from dataclasses import asdict
 from typing import Any, Callable
 
@@ -46,7 +45,7 @@ class AutonomyRunner:
             "Choose exactly one next bounded move toward this milestone from the supplied canonical state. "
             "Use only capabilities listed in runtime_capabilities. If a real action is needed, propose one EffectGate intent. "
             "If no further executable move is justified from current evidence, return effect=null and explain what is ready "
-            "for human review or what is missing. Never claim an action happened merely because you proposed it."
+            "for review or what is missing. Never claim an action happened merely because you proposed it."
         )
 
     def run_cycle(self) -> dict[str, Any]:
@@ -81,7 +80,11 @@ class AutonomyRunner:
                     },
                 )
                 world = self.world.assemble(session_id, [])
-                world["agency"] = self.agency.snapshot()
+                world["agency"] = self.agency.snapshot(
+                    user_id=work.user_id,
+                    max_goals=8,
+                    max_attempts_per_milestone=5,
+                )
                 world["autonomous_work_item"] = asdict(work)
                 world["runtime_capabilities"] = list(self.effects.available_capabilities())
                 world["grounding"] = {
@@ -121,6 +124,7 @@ class AutonomyRunner:
 
                 effect_id = None
                 outcome = None
+                effect_exception = None
                 effect = decision.get("effect")
                 if effect is not None:
                     _, current_effects = self.agency.cycle_counts(cycle_id)
@@ -142,7 +146,8 @@ class AutonomyRunner:
                             episode_id=None,
                         )
                     except Exception as exc:
-                        outcome = {"ok":False,"error":type(exc).__name__,"boundary":"EffectGate"}
+                        effect_exception = type(exc).__name__
+                        outcome = {"ok":False,"error":effect_exception,"boundary":"EffectGate"}
 
                 status = self.agency.complete_attempt(work.attempt_id, decision, effect_id, outcome)
                 completed += 1
@@ -174,6 +179,11 @@ class AutonomyRunner:
                         "cycle_id":cycle_id,
                     },
                 )
+                if effect_exception is not None:
+                    # EffectGate/runtime exceptions are not a reason to retry in a tight
+                    # inner loop. Persist the failed observation and defer to next cycle.
+                    self.agency.close_cycle(cycle_id, f"effect_exception:{effect_exception}")
+                    break
 
             self.agency.close_cycle(cycle_id,"cycle_complete")
             steps,effect_count = self.agency.cycle_counts(cycle_id)
@@ -230,7 +240,6 @@ class AutonomyDaemon:
                     if result.get("status") != "idle":
                         db.checkpoint("autonomy-cycle")
             except Exception as exc:
-                # Never tight-loop on provider/runtime failures and never log secrets or goal text.
                 print(
                     json.dumps({"service":"clayverse-autonomy","status":"cycle_error","error":type(exc).__name__}),
                     flush=True,

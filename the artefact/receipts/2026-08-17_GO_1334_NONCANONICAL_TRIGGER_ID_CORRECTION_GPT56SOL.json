@@ -1,0 +1,28 @@
+{
+  "schema": "clayverse-go-receipt-correction/v1",
+  "recorded_at": "2026-08-17T13:41:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_main_policy_commit": "a333cd624c06b8b8a3a9c70b021529f511812662",
+  "corrects_receipt": "the artefact/receipts/2026-08-17_GO_METHOD_PROMOTION_TERMINAL_CAUSAL_GATE_GPT56SOL.json",
+  "corrects_claim": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.json",
+  "corrects_result": "research_entity/continuity/go_experiment_claims/2026-08-17T13-34+07-00__go__4cd0e21a9a07.result.json",
+  "classification": "NONCANONICAL_TRIGGER_ID_EXECUTION_PRESERVED_BUT_NOT_VALID_LEASE",
+  "reason": "The platform metadata available to this organ for the user message is only minute-precision (2026-08-17T13:34+07:00) and exposes no immutable shared request/turn identifier. Current GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires a shared immutable request id or at least whole-second immutable timestamp, normalized into the single canonical key encoding. The earlier shortened-hash/punctuated fallback path is therefore noncanonical under the current coordination law.",
+  "accounting": {
+    "earlier_claim_create_succeeded": true,
+    "earlier_intervention_executed": true,
+    "earlier_result_must_be_preserved": true,
+    "counts_as_valid_canonical_1_of_1_lease": false,
+    "current_macrocycle_unusual_experiment_state": "COORDINATION_BLOCKED_NO_FURTHER_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_after_correction": false
+  },
+  "evidence_preserved": {
+    "finding": "PR #405 promotion donor checks source workspace episode existence but does not itself require terminal state + causal re-entry; PR #410 contains the stricter terminal causal user/session-scoped reference gate.",
+    "use": "May be retained as bounded source-mechanism evidence and a fusion requirement; may not be represented as protocol-valid canonical GO unusual-experiment evidence.",
+    "whole_product_evidence": false
+  },
+  "next_work_rule": "Continue only ordinary source review, deterministic regressions, fusion and already-existing evidence inspection for this user turn. No additional distinct unusual experiment."
+}

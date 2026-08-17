@@ -134,7 +134,7 @@ The connected Vercel surface available to this organ can inspect projects/deploy
 
 Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTRAL_GATE_REENTRY_GPT56SOL.json`, `receipts/2026-08-17_GO_2300_MICROVM_TIER2_FULL_SANDBOX_REPLACEMENT_GPT56SOL.json`, and `receipts/2026-08-17_GO_2320_VERCEL_FIRECRACKER_CREDENTIAL_GATE_RECHECK_GPT56SOL.json`.
 
-## Latest cycle delta — 2026-08-17 23:21 +07:00
+## Previous cycle delta — 2026-08-17 23:21 +07:00
 
 - refreshed live owner authority and adopted the mandatory final Vercel Firecracker + exact OCI + Vault/Mistral test-of-tests;
 - corrected the stale credential interpretation: scoped read-only `GITHUB_READ_TOKEN` forwarding into the disposable authorized Sandbox is allowed, while historical token-missing runs remain valid evidence;
@@ -147,6 +147,21 @@ Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTR
 - closed superseded GLM draft #650 and deferred stale GLM draft #660 rather than creating a duplicate provider/turn architecture after the newest Mistral final-gate authority became canonical;
 - wrote `receipts/2026-08-17_GO_2320_VERCEL_FIRECRACKER_CREDENTIAL_GATE_RECHECK_GPT56SOL.json` as the bounded independent recheck;
 - no unusual experiment was executed because the cross-worker atomic experiment-lease protocol could not derive a shared immutable trigger identity from this interface and therefore failed closed;
+- no whole-product PASS is claimed.
+
+## Latest cycle delta — 2026-08-17 23:33 +07:00
+
+- re-entered the fast-moving shared `main` repeatedly instead of preserving stale assumptions; detected that parallel workers had already integrated a Mistral transport and opened overlapping TurnLifecycle candidates;
+- closed this organ's duplicate PR #663 as **SUPERSEDED** immediately after the canonical Mistral implementation appeared on `main`;
+- isolated the non-duplicate transport defect on the already-integrated `clayverse.adapters.MistralInference`: Python non-finite JSON was still accepted/emitted by stdlib defaults;
+- opened focused draft **#670** instead of another provider path; outbound WORLD/request now use strict `allow_nan=False`, while provider envelope and inner decision JSON reject `NaN`, `Infinity` and `-Infinity`;
+- reconstructed exact final candidate blobs `adapters.py` `48c7ea87d2dcb6e492b94b1c381809fedaf80c34`, `inference_protocol.py` `cd5856ac58f4e86c4c045fda8099b7783e6724cf`, existing Mistral test `188d03a9b798046bdb4e2182cd7ceb84cfd4debc`, and new adversarial test `2fb8f91bdba75d9c1d94004944f5b27600109e5e`;
+- new adversarial matrix first passed **7/7**; adjacent regression then correctly exposed one compatibility-only failure caused by changed error wording (**16 PASS / 1 FAIL**); the wording was restored without weakening strict JSON and the final combined matrix passed **17/17 in 0.04s**;
+- wrote `receipts/2026-08-17_GO_2328_MISTRAL_CANONICAL_JSON_ADAPTER_GPT56SOL.json`; evidence class remains **MECHANISM_SUPPORTED / SUPPORTING EXACT-FILE EXECUTION**, not full-checkout/runtime credit;
+- fused coordination explicitly: #667 reuses the existing adapter and can consume #670; #668 contains the stronger same-active-turn response-reingest-before-effect ordering but duplicates the HTTP client, so the recommended single path is existing `adapters.MistralInference` + #670 strict JSON + one TurnLifecycle same-causal re-ingest/effect implementation;
+- #629 was notified to retain its unique GLM work but not promote a second permanent Mistral transport;
+- the mandatory final gate remains real Vercel Firecracker + exact OCI digest + runtime Vault Mistral + response re-ingest before EffectGate/EntityOS + Tier-2 recreation + secret reacquisition/repeat; none of those runtime credits were inferred from the source tests;
+- `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed;
 - no whole-product PASS is claimed.
 
 ## Verification

@@ -1,6 +1,6 @@
-FROM python:3.13-slim
+FROM python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
 
-ARG CLAUDE_CODE_SPEC=@anthropic-ai/claude-code
+ARG CLAUDE_CODE_SPEC=@anthropic-ai/claude-code@2.1.220
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     CLAYVERSE_STATE_ROOT=/var/lib/clayverse \

@@ -44,7 +44,7 @@ def test_acceptance_proves_allowed_and_denied_flows_on_real_target():
 
 def test_static_success_never_becomes_runtime_credit():
     text = CONTRACT.read_text()
-    assert "Static YAML policy" in text
+    assert "static YAML policy" in text
     assert "does not establish whole ClayVerse PASS" in text
     assert "Final acceptance MUST refresh" in text
     assert "execute the real target tests" in text

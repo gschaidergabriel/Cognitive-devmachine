@@ -18,9 +18,9 @@ def test_valid_redacted_receipt_reuses_live_raw_outcome_digest():
     receipt = EffectJournal._outcome_receipt(raw_outcome)
     persisted = EffectJournal._payload(receipt)
 
-    recovered, outcome_hash, structurally_valid = _decode_persisted_effect_outcome(persisted)
+    recovered, outcome_hash, identity_valid = _decode_persisted_effect_outcome(persisted)
 
-    assert structurally_valid is True
+    assert identity_valid is True
     assert recovered == receipt
     assert outcome_hash == receipt["sha256"]
     assert outcome_hash == hashlib.sha256(
@@ -32,9 +32,9 @@ def test_valid_redacted_receipt_reuses_live_raw_outcome_digest():
 
 
 def test_malformed_json_receipt_stays_unknown_and_non_rewarding():
-    recovered, outcome_hash, structurally_valid = _decode_persisted_effect_outcome("{not-json")
+    recovered, outcome_hash, identity_valid = _decode_persisted_effect_outcome("{not-json")
 
-    assert structurally_valid is False
+    assert identity_valid is False
     assert recovered["ok"] is False
     assert recovered["certainty"] == "unknown"
     assert recovered["reason"] == "invalid_persisted_outcome_receipt"
@@ -43,14 +43,17 @@ def test_malformed_json_receipt_stays_unknown_and_non_rewarding():
     assert _causal_credit("VERIFIED", recovered, "entityos.exec") == 0.0
 
 
-def test_structurally_invalid_verified_receipt_cannot_mint_positive_credit():
-    malformed = '{"ok":true,"sha256":"' + ("a" * 64) + '","bytes":12}'
-    recovered, _outcome_hash, structurally_valid = _decode_persisted_effect_outcome(malformed)
+def test_legacy_raw_outcome_preserves_its_canonical_identity():
+    legacy = {"ok": True, "target": "checkpoint", "boundary": "internal"}
+    persisted = json.dumps(legacy, sort_keys=True)
 
-    assert structurally_valid is False
-    assert recovered["ok"] is False
-    assert recovered["certainty"] == "unknown"
-    assert _causal_credit("VERIFIED", recovered, "entityos.exec") == 0.0
+    recovered, outcome_hash, identity_valid = _decode_persisted_effect_outcome(persisted)
+
+    assert identity_valid is True
+    assert recovered == legacy
+    assert outcome_hash == hashlib.sha256(
+        json.dumps(legacy, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
 def test_receipt_with_unknown_fields_or_invalid_digest_is_rejected():
@@ -58,9 +61,10 @@ def test_receipt_with_unknown_fields_or_invalid_digest_is_rejected():
         '{"audit":"redacted-outcome-v1","sha256":"xyz","bytes":12,"ok":true}',
         '{"audit":"redacted-outcome-v1","sha256":"' + ("a" * 64) + '","bytes":12,"ok":true,"surprise":1}',
         '{"audit":"redacted-outcome-v1","sha256":"' + ("a" * 64) + '","bytes":true,"ok":true}',
+        '{"audit":"unexpected-v1","sha256":"' + ("a" * 64) + '","bytes":12,"ok":true}',
     ):
-        recovered, _outcome_hash, structurally_valid = _decode_persisted_effect_outcome(persisted)
-        assert structurally_valid is False
+        recovered, _outcome_hash, identity_valid = _decode_persisted_effect_outcome(persisted)
+        assert identity_valid is False
         assert recovered["certainty"] == "unknown"
         assert _causal_credit("VERIFIED", recovered, "entityos.exec") == 0.0
 
@@ -100,8 +104,8 @@ def test_structurally_valid_forged_receipt_preserves_identity_but_cannot_reward_
     )
     db.db.execute("UPDATE effects SET outcome=? WHERE effect_id=?", (forged, effect_id))
 
-    decoded, decoded_hash, structurally_valid = _decode_persisted_effect_outcome(forged)
-    assert structurally_valid is True
+    decoded, decoded_hash, identity_valid = _decode_persisted_effect_outcome(forged)
+    assert identity_valid is True
     assert decoded["ok"] is True
     assert decoded_hash == forged_digest
     assert _causal_credit("VERIFIED", decoded, "entityos.exec") == 1.0

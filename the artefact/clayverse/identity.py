@@ -24,19 +24,26 @@ def assert_canonical_user_state(db:UnifiedDB):
 class IdentityRouter:
     def __init__(self,db:UnifiedDB,clerk_map=None):
         self.db=db; self.clerk_map=clerk_map or {}
-        self._bootstrap_or_assert_canonical_users()
-        for uid,_,term in CANONICAL_USERS:
-            db.ensure_session(uid,term)
+        fresh_identity=self._bootstrap_or_assert_canonical_users()
+        if fresh_identity:
+            for uid,_,term in CANONICAL_USERS:
+                db.ensure_session(uid,term)
         self._normalize_terminal_sessions()
         self._bind_clerk_subjects()
 
     def _bootstrap_or_assert_canonical_users(self):
         rows=self.db.db.execute('SELECT user_id FROM users ORDER BY user_id').fetchall()
         if not rows:
+            session_count=int(self.db.db.execute('SELECT COUNT(*) FROM sessions').fetchone()[0])
+            if session_count:
+                raise PermissionError('canonical identity bootstrap requires an empty session set')
             with self.db.tx():
                 for uid,name,_ in CANONICAL_USERS:
                     self.db.ensure_user(uid,name)
+            assert_canonical_user_state(self.db)
+            return True
         assert_canonical_user_state(self.db)
+        return False
 
     def _normalize_terminal_sessions(self):
         with self.db.tx() as sql:

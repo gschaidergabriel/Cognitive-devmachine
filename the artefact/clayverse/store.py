@@ -1,17 +1,26 @@
 from __future__ import annotations
-import contextlib, hashlib, json, sqlite3, time, uuid
+import contextlib, hashlib, json, sqlite3, threading, time, uuid
 from dataclasses import dataclass
 from pathlib import Path
 
-SCHEMA = r'''
+METHOD_MEMORY_KINDS = frozenset({
+    "framework_candidate", "framework", "heuristic_candidate", "heuristic",
+    "failure_pattern", "counterexample", "method_receipt",
+})
+_METHOD_KIND_SQL = "'framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample','method_receipt'"
+
+SCHEMA = rf'''
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
 CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS users(user_id TEXT PRIMARY KEY,display_name TEXT NOT NULL,rights TEXT NOT NULL DEFAULT 'equal',clerk_subject TEXT UNIQUE);
 CREATE TABLE IF NOT EXISTS sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(user_id),created_at REAL NOT NULL,updated_at REAL NOT NULL,generation INTEGER NOT NULL DEFAULT 1,terminal_name TEXT NOT NULL UNIQUE);
-CREATE TABLE IF NOT EXISTS turns(turn_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),ordinal INTEGER NOT NULL,ts REAL NOT NULL,role TEXT NOT NULL CHECK(role IN ('user','assistant','system','tool')),content TEXT NOT NULL,fidelity TEXT NOT NULL DEFAULT 'full',compression_generation INTEGER NOT NULL DEFAULT 0,resource_refs TEXT NOT NULL DEFAULT '[]',causal_refs TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL DEFAULT '{}',UNIQUE(session_id, ordinal));
+CREATE TABLE IF NOT EXISTS turns(turn_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),ordinal INTEGER NOT NULL,ts REAL NOT NULL,role TEXT NOT NULL CHECK(role IN ('user','assistant','system','tool')),content TEXT NOT NULL,fidelity TEXT NOT NULL DEFAULT 'full',compression_generation INTEGER NOT NULL DEFAULT 0,resource_refs TEXT NOT NULL DEFAULT '[]',causal_refs TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL DEFAULT '{{}}',UNIQUE(session_id, ordinal));
 CREATE INDEX IF NOT EXISTS idx_turns_session_ord ON turns(session_id, ordinal DESC);
 CREATE TABLE IF NOT EXISTS durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_admission_guard BEFORE INSERT ON durable_memory WHEN NEW.kind IN ({_METHOD_KIND_SQL}) BEGIN SELECT CASE WHEN clay_method_write_authorized(NEW.kind,NEW.subject,NEW.value,NEW.provenance)<>1 THEN RAISE(ABORT,'method memory requires canonical admission') END; END;
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_immutable BEFORE UPDATE OF kind,subject,value,source_turn_id,user_id,provenance ON durable_memory WHEN OLD.kind IN ({_METHOD_KIND_SQL}) OR NEW.kind IN ({_METHOD_KIND_SQL}) BEGIN SELECT RAISE(ABORT,'method memory is immutable'); END;
+CREATE TRIGGER IF NOT EXISTS durable_method_memory_no_delete BEFORE DELETE ON durable_memory WHEN OLD.kind IN ({_METHOD_KIND_SQL}) BEGIN SELECT RAISE(ABORT,'method memory is immutable'); END;
 CREATE TABLE IF NOT EXISTS workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
 CREATE TABLE IF NOT EXISTS causal_episodes(causal_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),effect_id TEXT REFERENCES effects(effect_id),observation_turn_id TEXT REFERENCES turns(turn_id),outcome_hash TEXT,credit REAL NOT NULL DEFAULT 0,reentered INTEGER NOT NULL DEFAULT 0,ts REAL NOT NULL);
@@ -37,7 +46,9 @@ class UnifiedDB:
     """Single canonical state authority. ClayGraph tables are rebuildable projections only."""
     def __init__(self,path):
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
+        self._method_write_lock=threading.RLock(); self._method_write_auth=None
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
+        self.db.create_function("clay_method_write_authorized",4,self._consume_method_write_authorization,deterministic=False)
         try:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._migrate_schema(); self._retire_hidden_raw_turn_ledger()
             self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','7') ON CONFLICT(key) DO UPDATE SET value='7'")
@@ -46,6 +57,23 @@ class UnifiedDB:
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
         except Exception:
             self.db.close(); raise
+    @staticmethod
+    def _method_write_fingerprint(kind,subject,value,provenance_json):
+        raw=json.dumps([str(kind),str(subject),str(value),str(provenance_json)],ensure_ascii=False,separators=(',',':'))
+        return hashlib.sha256(raw.encode('utf-8')).hexdigest()
+    @contextlib.contextmanager
+    def _authorize_method_write(self,kind,subject,value,provenance_json):
+        fingerprint=self._method_write_fingerprint(kind,subject,value,provenance_json); thread_id=threading.get_ident()
+        with self._method_write_lock:
+            if self._method_write_auth is not None: raise RuntimeError('nested method write authorization')
+            self._method_write_auth=(thread_id,fingerprint)
+            try: yield
+            finally: self._method_write_auth=None
+    def _consume_method_write_authorization(self,kind,subject,value,provenance_json):
+        fingerprint=self._method_write_fingerprint(kind,subject,value,provenance_json); thread_id=threading.get_ident()
+        with self._method_write_lock:
+            if self._method_write_auth != (thread_id,fingerprint): return 0
+            self._method_write_auth=None; return 1
     def _migrate_schema(self):
         columns={str(row['name']) for row in self.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()}
         if 'limit_items' not in columns:
@@ -110,7 +138,14 @@ class UnifiedDB:
     def recent_turns(self,session_id,limit=20):
         rows=self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal DESC LIMIT ?",(session_id,limit)).fetchall(); return list(reversed(rows))
     def all_turns(self,session_id): return self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal",(session_id,)).fetchall()
+    def _insert_method_memory(self,kind,subject,value,source_turn_id,user_id,provenance,*,memory_id=None):
+        if str(kind) not in METHOD_MEMORY_KINDS: raise ValueError('kind is not reserved method memory')
+        mid=str(memory_id or uuid.uuid4()); provenance_json=json.dumps(provenance,sort_keys=True,separators=(',',':'),allow_nan=False)
+        with self._authorize_method_write(kind,subject,value,provenance_json):
+            self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject,value,source_turn_id,user_id,time.time(),provenance_json))
+        return mid
     def add_memory(self,kind,subject,value,source_turn_id,user_id,provenance):
+        if str(kind) in METHOD_MEMORY_KINDS: raise ValueError('reserved method-memory kind requires canonical method admission')
         mid=str(uuid.uuid4()); self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject,value,source_turn_id,user_id,time.time(),json.dumps(provenance,sort_keys=True))); return mid
     def memories(self): return self.db.execute("SELECT * FROM durable_memory ORDER BY ts").fetchall()
     def acquire_lease(self,resource,holder,ttl=30.0):

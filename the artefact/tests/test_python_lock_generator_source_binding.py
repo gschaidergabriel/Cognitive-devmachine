@@ -59,4 +59,9 @@ def test_python_lock_generator_verifies_reproducibility_and_hash_enforcement():
     assert "--only-binary=:all: --require-hashes" in text
     assert "LOCK_SHA256=" in text
     assert "WHEELHOUSE_FILE_COUNT=" in text
+    assert "WHEELHOUSE_SHA256_BEGIN" in text
+    assert "WHEELHOUSE_SHA256_END" in text
+    assert 'sha256sum "$wheel"' in text
+    assert '${wheel##*/}' in text
+    assert "LC_ALL=C sort" in text
     assert "LOCK_GZIP_B64=" in text

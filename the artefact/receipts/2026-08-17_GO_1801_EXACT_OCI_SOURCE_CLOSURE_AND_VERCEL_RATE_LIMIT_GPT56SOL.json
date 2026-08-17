@@ -1,0 +1,110 @@
+{
+  "schema": "clayverse-go-cycle-receipt/v1",
+  "trigger": "go",
+  "trigger_time": "2026-08-17T17:36+07:00",
+  "trigger_time_precision": "minute",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "canonical_main": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "product_runtime_code_delta_on_main": "NO_CHANGE",
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "valid_unusual_experiment_credit": 0,
+    "reason": "Shared trigger metadata exposes only minute precision and no immutable shared request/turn id. The synthetic-second claim used elsewhere in this macro-cycle was invalid; its already-executed parser matrix remains coordination-tainted mechanism history only. No further unusual experiment was permitted."
+  },
+  "exact_source_closure": {
+    "base_main_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "integration_branch": "go/1750-oci-vcr-source-closure-gpt56sol",
+    "integration_head": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "integration_tree": "a012708e469de32615ea9933371a13795669db5a",
+    "retained_tmux_pr": 611,
+    "retained_tmux_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "compare_against_base": {
+      "ahead_by": 2,
+      "changed_files_exactly": [
+        "the artefact/clayverse/terminal_sessions.py",
+        "the artefact/tests/test_terminal_tmux_control_timeouts.py"
+      ],
+      "other_changes": 0
+    },
+    "classification": "EPHEMERAL_EXACT_PRODUCT_CANDIDATE_SOURCE_CLOSURE_NOT_SECOND_PRODUCT_LANE"
+  },
+  "vercel_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "current_observed_head": "7ee72a8489533325d1fe44a73ba8834733a92ea0",
+    "runner_commit": "21e2d1386573a5e054ecafc34371b082d26d5806",
+    "runner_blob": "5d56dd0d7a94289c96211ac467e2398adc958ff4",
+    "runner_security_contract": {
+      "sandbox_create_before_private_source_secret_check": true,
+      "private_source_fetch_location": "VERCEL_BUILD_HOST",
+      "github_read_token_forwarded_to_sandbox": false,
+      "source_binding": "EXACT_COMMIT_TREE_ARCHIVE_AND_GIT_BLOBS",
+      "archive_redirect_allowlist": "codeload.github.com only",
+      "archive_size_bound_bytes": 134217728,
+      "runtime_network_after_build": "DENY_ALL",
+      "sandbox_stop_in_finally": true
+    },
+    "intended_exact_gate": [
+      "create authorized Vercel Sandbox",
+      "host-fetch exact private f8e4deeb source archive and verify commit/tree",
+      "stage archive bytes into Sandbox without GitHub secret",
+      "verify PR611 blobs + Dockerfile/.dockerignore + EntityOS digest/size",
+      "install/start Docker inside Sandbox",
+      "build exact ClayVerse image with no cache/pull",
+      "capture image identity plus tmux/Claude/Python/APT/Python-package identities",
+      "switch Sandbox network to deny-all",
+      "run PR611 double reapply + full tmux policy attestation for gabriel and andreas inside exact image",
+      "run clayverse.service --once inside exact image",
+      "stop Sandbox"
+    ]
+  },
+  "execution_observations": {
+    "predecessor_deployment": {
+      "deployment_id": "dpl_BH8m9HTYUXWNSPQTDzURrJy5QmuE",
+      "commit": "fd12feb34caa10707e5c94f1c6dcf3d3a11fdce0",
+      "state": "ERROR",
+      "classification": "BRIDGE_GUARD_FAIL_BEFORE_SANDBOX_CREATE_ZERO_PRODUCT_RUNTIME_CREDIT",
+      "error": "VCR_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED"
+    },
+    "current_exact_controller_trigger": {
+      "commit": "7ee72a8489533325d1fe44a73ba8834733a92ea0",
+      "github_vercel_status": "failure",
+      "description": "Deployment rate limited — retry in 24 hours.",
+      "sandbox_started": false,
+      "private_source_fetched": false,
+      "oci_build_started": false,
+      "pr611_in_image_test_started": false,
+      "runtime_credit": 0,
+      "classification": "VERCEL_DEPLOYMENT_ADMISSION_RATE_LIMIT_BEFORE_BUILD_AND_SANDBOX_NOT_TEST_FAIL"
+    }
+  },
+  "counterhypothesis": {
+    "preferred": "The exact-source controller now removes the stale fixture/private-clone ambiguity and can directly discriminate the actual in-image tmux behavior when Vercel admits the deployment.",
+    "strongest_counter": "The controller may still fail at private-source vault admission, Docker-in-Sandbox, mutable APT resolution, exact Docker build, packaged Claude, service startup, or actual in-image tmux behavior; none of these mechanisms has current exact-image runtime evidence yet.",
+    "next_discriminator": "Execute the already-staged #810 exact-source controller unchanged at the first admitted authorized isolated deployment; classify the first reached assertion precisely and do not create a parallel OCI lane."
+  },
+  "cycle_delta": {
+    "canonical_product_bytes": "NO_CHANGE",
+    "canonical_semantic_authority": "NO_CHANGE",
+    "whole_product_acceptance": "IN_PROGRESS",
+    "durable_progress": [
+      "Materialized exact current-main plus PR611 two-file source closure at f8e4deeb... and verified only those two files differ from main.",
+      "Reworked retained PR810 controller to host-side exact private-source staging with no GitHub secret forwarding into the Sandbox.",
+      "Separated Sandbox admission from source-vault admission and preserved zero-credit classifications before assertions.",
+      "Observed current exact-controller trigger rate-limited before deployment execution."
+    ]
+  },
+  "prohibitions_observed": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_final_training_without_owner_authorization": true
+  }
+}

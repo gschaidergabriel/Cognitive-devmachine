@@ -18,6 +18,10 @@ class StageBMethodRetrieval:
     this boundary. Without an explicit structured problem_signature it fails closed to
     no method context, preventing lexical heuristics from silently becoming analogy
     selection authority. Signature derivation/admission remains a separate gate.
+
+    The active-turn identity check is relational, not merely referential: the active row,
+    referenced session, turn and workspace episode must all agree on the same canonical
+    user/session boundary before any method retrieval is allowed.
     """
 
     POLICY_VERSION = 1
@@ -44,13 +48,25 @@ class StageBMethodRetrieval:
         self.db.assert_session_owner(session_id, user_id)
         self.db.assert_live_generation(session_id, generation)
         active = self.db.db.execute(
-            "SELECT turn_id,episode_id,causal_id,generation FROM active_turns WHERE session_id=?",
+            "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,a.user_id AS active_user_id,"
+            "s.user_id AS session_user_id,t.session_id AS turn_session_id,t.user_id AS turn_user_id,"
+            "w.session_id AS episode_session_id "
+            "FROM active_turns a "
+            "JOIN sessions s ON s.session_id=a.session_id "
+            "JOIN turns t ON t.turn_id=a.turn_id "
+            "JOIN workspace_episodes w ON w.episode_id=a.episode_id "
+            "WHERE a.session_id=?",
             (session_id,),
         ).fetchone()
         if active is None:
             raise RuntimeError("Stage-B retrieval requires an active canonical turn")
         if (
-            str(active["turn_id"]) != str(turn_id)
+            str(active["active_user_id"]) != str(user_id)
+            or str(active["session_user_id"]) != str(user_id)
+            or str(active["turn_session_id"]) != str(session_id)
+            or str(active["turn_user_id"]) != str(user_id)
+            or str(active["episode_session_id"]) != str(session_id)
+            or str(active["turn_id"]) != str(turn_id)
             or str(active["episode_id"]) != str(episode_id)
             or str(active["causal_id"]) != str(causal_id)
             or int(active["generation"]) != int(generation)

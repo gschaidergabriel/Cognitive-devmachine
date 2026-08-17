@@ -29,6 +29,7 @@ PROMOTION_EVALUATION_FIELDS = frozenset({
     "evaluated_at",
 })
 _WS = re.compile(r"\s+")
+_SHA256 = re.compile(r"[0-9a-f]{64}")
 
 
 class MethodRecordError(ValueError):
@@ -40,6 +41,22 @@ def _canonical_json(value: Any) -> str:
         return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
     except (TypeError, ValueError) as exc:
         raise MethodRecordError("method memory must be finite canonical JSON") from exc
+
+
+def _parse_json_object(raw: Any, field: str) -> dict[str, Any]:
+    if isinstance(raw, dict):
+        value = raw
+    elif isinstance(raw, str):
+        try:
+            value = json.loads(raw, parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)))
+        except Exception as exc:
+            raise MethodRecordError(f"{field} is invalid JSON") from exc
+    else:
+        raise MethodRecordError(f"{field} must be an object")
+    if not isinstance(value, dict):
+        raise MethodRecordError(f"{field} must be an object")
+    _canonical_json(value)
+    return value
 
 
 def _bounded_string(value: Any, field: str, *, max_len: int = 4096, allow_empty: bool = False) -> str:
@@ -83,8 +100,12 @@ def _count(value: Any, field: str) -> int:
     return value
 
 
+def _digest(value: Any) -> str:
+    return hashlib.sha256(_canonical_json(value).encode("utf-8")).hexdigest()
+
+
 def canonical_problem_signature(value: Any) -> dict[str, tuple[str, ...]]:
-    """Validate an admitted structural signature; never derive it from free text here."""
+    """Validate explicit structural facets. No prompt/free-text derivation is permitted here."""
     if not isinstance(value, dict) or not 2 <= len(value) <= 24:
         raise MethodRecordError("problem_signature requires 2..24 explicit facets")
     out: dict[str, tuple[str, ...]] = {}
@@ -248,22 +269,6 @@ def validate_method_record(kind: str, payload: Any, *, memory_id: str | None = N
     )
 
 
-def _parse_json_object(raw: Any, field: str) -> dict[str, Any]:
-    if isinstance(raw, dict):
-        value = raw
-    elif isinstance(raw, str):
-        try:
-            value = json.loads(raw, parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)))
-        except Exception as exc:
-            raise MethodRecordError(f"{field} is invalid JSON") from exc
-    else:
-        raise MethodRecordError(f"{field} must be an object")
-    if not isinstance(value, dict):
-        raise MethodRecordError(f"{field} must be an object")
-    _canonical_json(value)
-    return value
-
-
 def validate_promotion_evaluation(value: Any) -> dict[str, Any]:
     evaluation = _parse_json_object(value, "promotion evaluation")
     if set(evaluation) != PROMOTION_EVALUATION_FIELDS:
@@ -271,12 +276,10 @@ def validate_promotion_evaluation(value: Any) -> dict[str, Any]:
             f"promotion evaluation fields mismatch missing={sorted(PROMOTION_EVALUATION_FIELDS-set(evaluation))} extra={sorted(set(evaluation)-PROMOTION_EVALUATION_FIELDS)}"
         )
     held_out = _string_list(evaluation["held_out_episode_ids"], "held_out_episode_ids", min_items=1, max_items=64, item_max=200)
-    safe_true = ("counterexample_search_performed", "memorization_only_rejected")
-    safe_false = ("contamination_detected", "stale_state_detected", "privacy_leakage_detected", "authority_leakage_detected")
-    for field in safe_true:
+    for field in ("counterexample_search_performed", "memorization_only_rejected"):
         if evaluation[field] is not True:
             raise MethodRecordError(f"promotion blocked: {field} must be true")
-    for field in safe_false:
+    for field in ("contamination_detected", "stale_state_detected", "privacy_leakage_detected", "authority_leakage_detected"):
         if evaluation[field] is not False:
             raise MethodRecordError(f"promotion blocked: {field} must be false")
     return {
@@ -300,8 +303,8 @@ def validate_method_receipt(payload: Any) -> dict[str, Any]:
     common = {"schema", "receipt_type", "user_id", "ts", "truth_authority", "effect_authority"}
     if receipt_type == "PROMOTION":
         expected = common | {
-            "candidate_memory_id", "target_kind", "source_episode_ids", "held_out_episode_ids",
-            "evaluation_sha256",
+            "candidate_memory_id", "target_kind", "promoted_payload_sha256", "source_episode_ids",
+            "held_out_episode_ids", "evaluation_sha256",
         }
         if set(receipt) != expected:
             raise MethodRecordError("promotion receipt fields mismatch")
@@ -310,27 +313,29 @@ def validate_method_receipt(payload: Any) -> dict[str, Any]:
             raise MethodRecordError("promotion receipt target kind invalid")
         _string_list(receipt["source_episode_ids"], "source_episode_ids", min_items=2, max_items=128, item_max=200)
         _string_list(receipt["held_out_episode_ids"], "held_out_episode_ids", min_items=1, max_items=64, item_max=200)
-        digest = _bounded_string(receipt["evaluation_sha256"], "evaluation_sha256", max_len=64)
-        if not re.fullmatch(r"[0-9a-f]{64}", digest):
-            raise MethodRecordError("evaluation_sha256 invalid")
+        for field in ("promoted_payload_sha256", "evaluation_sha256"):
+            digest = _bounded_string(receipt[field], field, max_len=64)
+            if not _SHA256.fullmatch(digest):
+                raise MethodRecordError(f"{field} invalid")
     elif receipt_type == "USE":
         expected = common | {
             "session_id", "turn_id", "episode_id", "causal_id", "generation", "evidence_status",
-            "trigger", "problem_signature_sha256", "request_identity_sha256", "selected_method_ids",
+            "trigger", "signature_receipt_id", "signature_identity_sha256", "problem_signature_sha256",
+            "resource_refs_sha256", "request_identity_sha256", "selected_method_ids",
             "counterexample_memory_ids", "limit", "budget_chars", "served",
         }
         if set(receipt) != expected:
             raise MethodRecordError("method-use receipt fields mismatch")
-        for field in ("session_id", "turn_id", "episode_id", "causal_id"):
+        for field in ("session_id", "turn_id", "episode_id", "causal_id", "signature_receipt_id"):
             _bounded_string(receipt[field], field, max_len=300)
         _count(receipt["generation"], "generation")
         if receipt["evidence_status"] not in {"UNKNOWN", "UNDERCOVERED", "PRESENT"}:
             raise MethodRecordError("use receipt evidence_status invalid")
         if receipt["trigger"] not in {"UNKNOWN", "UNDERCOVERED", "OOD", "CONFLICT", "STRATEGY"}:
             raise MethodRecordError("use receipt trigger invalid")
-        for field in ("problem_signature_sha256", "request_identity_sha256"):
+        for field in ("signature_identity_sha256", "problem_signature_sha256", "resource_refs_sha256", "request_identity_sha256"):
             digest = _bounded_string(receipt[field], field, max_len=64)
-            if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            if not _SHA256.fullmatch(digest):
                 raise MethodRecordError(f"{field} invalid")
         _string_list(receipt["selected_method_ids"], "selected_method_ids", max_items=32, item_max=200)
         _string_list(receipt["counterexample_memory_ids"], "counterexample_memory_ids", max_items=32, item_max=200)
@@ -342,6 +347,7 @@ def validate_method_receipt(payload: Any) -> dict[str, Any]:
             raise MethodRecordError("v1 method-use receipt must remain SHADOW/not served")
     else:
         raise MethodRecordError("unknown method receipt type")
+
     if receipt["user_id"] not in {"gabriel", "andreas"}:
         raise MethodRecordError("method receipt user invalid")
     _finite_float(receipt["ts"], "receipt ts", minimum=1.0)
@@ -351,7 +357,7 @@ def validate_method_receipt(payload: Any) -> dict[str, Any]:
 
 
 class MethodMemoryManager:
-    """Canonical method-memory admission/read/promotion boundary inside UnifiedDB."""
+    """Canonical fail-closed admission, promotion and receipt boundary in UnifiedDB."""
 
     def __init__(self, db: UnifiedDB):
         self.db = db
@@ -414,6 +420,15 @@ class MethodMemoryManager:
         if row is None or str(row["user_id"]) != user_id:
             raise MethodRecordError("source turn missing or cross-user")
 
+    @staticmethod
+    def _method_provenance(raw: Any) -> dict[str, Any]:
+        prov = _parse_json_object(raw, "method provenance")
+        if prov.get("method_schema") != METHOD_SCHEMA:
+            raise MethodRecordError("stored method has unknown admission schema")
+        if prov.get("truth_authority") is not False or prov.get("effect_authority") is not False:
+            raise MethodRecordError("stored method authority fields diverged")
+        return prov
+
     def admit(
         self,
         *,
@@ -423,7 +438,7 @@ class MethodMemoryManager:
         user_id: str,
         provenance: dict[str, Any],
     ) -> str:
-        """Normal admission can never mint a reusable promoted framework/heuristic."""
+        """Ordinary admission can never mint framework/heuristic or lifecycle receipts."""
         if user_id not in {"gabriel", "andreas"}:
             raise MethodRecordError("method admission requires canonical user scope")
         if kind in ACTIVE_METHOD_KINDS or kind == "method_receipt":
@@ -432,10 +447,16 @@ class MethodMemoryManager:
         self._assert_references(record, user_id)
         self._assert_source_turn(source_turn_id, user_id)
         prov = _parse_json_object(provenance, "method provenance")
-        forbidden = {"truth_authority", "effect_authority", "promotion_receipt_id"}.intersection(prov)
+        forbidden = {"truth_authority", "effect_authority", "promotion_receipt_id", "candidate_memory_id"}.intersection(prov)
         if forbidden:
             raise MethodRecordError(f"ordinary admission cannot set authority/promotion fields: {sorted(forbidden)}")
-        prov = {**prov, "method_schema": METHOD_SCHEMA, "user_scope": user_id, "truth_authority": False, "effect_authority": False}
+        prov = {
+            **prov,
+            "method_schema": METHOD_SCHEMA,
+            "user_scope": user_id,
+            "truth_authority": False,
+            "effect_authority": False,
+        }
         return self.db.add_memory(
             record.kind,
             record.name,
@@ -445,34 +466,6 @@ class MethodMemoryManager:
             prov,
         )
 
-    def decode_row(self, row) -> MethodRecord:
-        kind = str(row["kind"])
-        if kind == "method_receipt":
-            raise MethodRecordError("method receipt is not a method record")
-        payload = _parse_json_object(str(row["value"]), "stored method")
-        record = validate_method_record(kind, payload, memory_id=str(row["memory_id"]))
-        provenance = _parse_json_object(str(row["provenance"]), "stored method provenance")
-        if provenance.get("method_schema") != METHOD_SCHEMA:
-            raise MethodRecordError("stored method has unknown admission schema")
-        if row["user_id"] not in {"gabriel", "andreas"} or provenance.get("user_scope") != row["user_id"]:
-            raise MethodRecordError("stored method user scope diverged")
-        if provenance.get("truth_authority") is not False or provenance.get("effect_authority") is not False:
-            raise MethodRecordError("stored method authority fields diverged")
-        if record.kind in ACTIVE_METHOD_KINDS and record.status == "PROMOTED":
-            receipt_id = provenance.get("promotion_receipt_id")
-            if not isinstance(receipt_id, str) or not receipt_id:
-                raise MethodRecordError("promoted method lacks promotion receipt")
-            receipt_row = self.db.db.execute(
-                "SELECT * FROM durable_memory WHERE memory_id=? AND kind='method_receipt' AND user_id=?",
-                (receipt_id, row["user_id"]),
-            ).fetchone()
-            if receipt_row is None:
-                raise MethodRecordError("promotion receipt missing")
-            receipt = validate_method_receipt(str(receipt_row["value"]))
-            if receipt["receipt_type"] != "PROMOTION" or receipt["target_kind"] != record.kind:
-                raise MethodRecordError("promotion receipt does not authorize method kind")
-        return record
-
     def row_by_id(self, memory_id: str, user_id: str):
         row = self.db.db.execute(
             "SELECT * FROM durable_memory WHERE memory_id=? AND user_id=?",
@@ -481,6 +474,65 @@ class MethodMemoryManager:
         if row is None:
             raise MethodRecordError("method memory missing or outside user scope")
         return row
+
+    def _validate_promotion_lineage(self, row, record: MethodRecord, provenance: dict[str, Any]) -> None:
+        receipt_id = provenance.get("promotion_receipt_id")
+        candidate_id = provenance.get("candidate_memory_id")
+        if not isinstance(receipt_id, str) or not receipt_id or not isinstance(candidate_id, str) or not candidate_id:
+            raise MethodRecordError("promoted method lacks promotion lineage")
+        receipt_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? AND kind='method_receipt' AND user_id=?",
+            (receipt_id, row["user_id"]),
+        ).fetchone()
+        if receipt_row is None:
+            raise MethodRecordError("promotion receipt missing")
+        receipt_provenance = _parse_json_object(str(receipt_row["provenance"]), "promotion receipt provenance")
+        if (
+            receipt_provenance.get("method_receipt_schema") != METHOD_RECEIPT_SCHEMA
+            or receipt_provenance.get("receipt_type") != "PROMOTION"
+            or receipt_provenance.get("truth_authority") is not False
+            or receipt_provenance.get("effect_authority") is not False
+        ):
+            raise MethodRecordError("promotion receipt provenance invalid")
+        receipt = validate_method_receipt(str(receipt_row["value"]))
+        if receipt["receipt_type"] != "PROMOTION":
+            raise MethodRecordError("promotion lineage points at wrong receipt type")
+        if receipt["candidate_memory_id"] != candidate_id or receipt["target_kind"] != record.kind:
+            raise MethodRecordError("promotion receipt candidate/kind mismatch")
+        if receipt["promoted_payload_sha256"] != _digest(record.payload()):
+            raise MethodRecordError("promotion receipt payload hash mismatch")
+        if list(record.source_episode_ids) != receipt["source_episode_ids"]:
+            raise MethodRecordError("promotion receipt source evidence mismatch")
+        evaluation = validate_promotion_evaluation(receipt_provenance.get("evaluation"))
+        if receipt["evaluation_sha256"] != _digest(evaluation):
+            raise MethodRecordError("promotion receipt evaluation hash mismatch")
+        if receipt["held_out_episode_ids"] != evaluation["held_out_episode_ids"]:
+            raise MethodRecordError("promotion receipt held-out evidence mismatch")
+        candidate_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? AND user_id=?",
+            (candidate_id, row["user_id"]),
+        ).fetchone()
+        if candidate_row is None or str(candidate_row["kind"]) not in CANDIDATE_KINDS:
+            raise MethodRecordError("promotion candidate missing or wrong kind")
+        candidate_record = self.decode_row(candidate_row)
+        expected_candidate_kind = "framework_candidate" if record.kind == "framework" else "heuristic_candidate"
+        if candidate_record.kind != expected_candidate_kind or candidate_record.status != "CANDIDATE":
+            raise MethodRecordError("promotion candidate lineage diverged")
+        if not set(candidate_record.source_episode_ids).issubset(record.source_episode_ids):
+            raise MethodRecordError("promoted method dropped candidate source evidence")
+
+    def decode_row(self, row) -> MethodRecord:
+        kind = str(row["kind"])
+        if kind == "method_receipt":
+            raise MethodRecordError("method receipt is not a method record")
+        payload = _parse_json_object(str(row["value"]), "stored method")
+        record = validate_method_record(kind, payload, memory_id=str(row["memory_id"]))
+        provenance = self._method_provenance(str(row["provenance"]))
+        if row["user_id"] not in {"gabriel", "andreas"} or provenance.get("user_scope") != row["user_id"]:
+            raise MethodRecordError("stored method user scope diverged")
+        if record.kind in ACTIVE_METHOD_KINDS and record.status == "PROMOTED":
+            self._validate_promotion_lineage(row, record, provenance)
+        return record
 
     def promote(
         self,
@@ -492,7 +544,7 @@ class MethodMemoryManager:
         user_id: str,
         provenance: dict[str, Any],
     ) -> dict[str, str]:
-        """Atomically promote a candidate only after explicit held-out/safety evidence."""
+        """Atomic, single-use promotion with causal held-out and anti-contamination gates."""
         if self.db.db.in_transaction:
             raise MethodRecordError("method promotion requires an independent atomic transaction")
         if user_id not in {"gabriel", "andreas"} or target_kind not in ACTIVE_METHOD_KINDS:
@@ -511,37 +563,53 @@ class MethodMemoryManager:
         self._episode_rows(held_out, user_id)
         if set(held_out).intersection(candidate.source_episode_ids):
             raise MethodRecordError("held-out promotion evidence overlaps candidate source episodes")
-        if not set(candidate.source_episode_ids).issubset(set(promoted.source_episode_ids)):
+        if not set(candidate.source_episode_ids).issubset(promoted.source_episode_ids):
             raise MethodRecordError("promoted record dropped candidate source evidence")
-        if not set(held_out).issubset(set(promoted.source_episode_ids)):
+        if not set(held_out).issubset(promoted.source_episode_ids):
             raise MethodRecordError("promoted record omits held-out transfer episodes")
         prov = _parse_json_object(provenance, "promotion provenance")
-        forbidden = {"truth_authority", "effect_authority", "promotion_receipt_id"}.intersection(prov)
+        forbidden = {"truth_authority", "effect_authority", "promotion_receipt_id", "candidate_memory_id"}.intersection(prov)
         if forbidden:
             raise MethodRecordError(f"promotion caller cannot forge authority fields: {sorted(forbidden)}")
-        evaluation_json = _canonical_json(evidence)
+
+        promoted_payload_hash = _digest(promoted.payload())
+        evaluation_hash = _digest(evidence)
         receipt_payload = {
             "schema": METHOD_RECEIPT_SCHEMA,
             "receipt_type": "PROMOTION",
             "user_id": user_id,
             "candidate_memory_id": candidate_memory_id,
             "target_kind": target_kind,
+            "promoted_payload_sha256": promoted_payload_hash,
             "source_episode_ids": list(promoted.source_episode_ids),
             "held_out_episode_ids": list(held_out),
-            "evaluation_sha256": hashlib.sha256(evaluation_json.encode("utf-8")).hexdigest(),
+            "evaluation_sha256": evaluation_hash,
             "ts": time.time(),
             "truth_authority": False,
             "effect_authority": False,
         }
         validate_method_receipt(receipt_payload)
+        receipt_subject = f"promotion:{candidate_memory_id}"
         with self.db.tx():
+            prior = self.db.db.execute(
+                "SELECT memory_id FROM durable_memory WHERE kind='method_receipt' AND subject=? AND user_id=? LIMIT 1",
+                (receipt_subject, user_id),
+            ).fetchone()
+            if prior is not None:
+                raise MethodRecordError("candidate already has a promotion receipt")
             receipt_id = self.db.add_memory(
                 "method_receipt",
-                f"promotion:{candidate_memory_id}",
+                receipt_subject,
                 _canonical_json(receipt_payload),
                 candidate_row["source_turn_id"],
                 user_id,
-                {"method_receipt_schema": METHOD_RECEIPT_SCHEMA, "receipt_type": "PROMOTION", "evaluation": evidence},
+                {
+                    "method_receipt_schema": METHOD_RECEIPT_SCHEMA,
+                    "receipt_type": "PROMOTION",
+                    "evaluation": evidence,
+                    "truth_authority": False,
+                    "effect_authority": False,
+                },
             )
             promoted_id = self.db.add_memory(
                 target_kind,
@@ -555,35 +623,73 @@ class MethodMemoryManager:
                     "user_scope": user_id,
                     "promotion_receipt_id": receipt_id,
                     "candidate_memory_id": candidate_memory_id,
+                    "promoted_payload_sha256": promoted_payload_hash,
                     "truth_authority": False,
                     "effect_authority": False,
                 },
             )
-        return {"candidate_memory_id": candidate_memory_id, "promotion_receipt_id": receipt_id, "promoted_memory_id": promoted_id}
+        # Re-read through the full lineage validator before acknowledging success.
+        self.decode_row(self.row_by_id(promoted_id, user_id))
+        return {
+            "candidate_memory_id": candidate_memory_id,
+            "promotion_receipt_id": receipt_id,
+            "promoted_memory_id": promoted_id,
+        }
+
+    @staticmethod
+    def _validate_use_provenance(raw: Any) -> dict[str, Any]:
+        provenance = _parse_json_object(raw, "method-use receipt provenance")
+        if (
+            provenance.get("method_receipt_schema") != METHOD_RECEIPT_SCHEMA
+            or provenance.get("receipt_type") != "USE"
+            or provenance.get("truth_authority") is not False
+            or provenance.get("effect_authority") is not False
+        ):
+            raise MethodRecordError("method-use receipt provenance invalid")
+        return provenance
 
     def write_use_receipt(self, payload: dict[str, Any], *, source_turn_id: str, user_id: str, subject: str) -> str:
         receipt = validate_method_receipt(payload)
         if receipt["receipt_type"] != "USE" or receipt["user_id"] != user_id or receipt["turn_id"] != source_turn_id:
             raise MethodRecordError("method-use receipt identity mismatch")
-        return self.db.add_memory(
-            "method_receipt",
-            subject,
-            _canonical_json(receipt),
-            source_turn_id,
-            user_id,
-            {"method_receipt_schema": METHOD_RECEIPT_SCHEMA, "receipt_type": "USE", "truth_authority": False, "effect_authority": False},
-        )
+
+        def insert_once() -> str:
+            existing = self.db.db.execute(
+                "SELECT memory_id FROM durable_memory WHERE kind='method_receipt' AND subject=? AND user_id=? LIMIT 1",
+                (subject, user_id),
+            ).fetchone()
+            if existing is not None:
+                raise MethodRecordError("method-use receipt already exists; replay required")
+            return self.db.add_memory(
+                "method_receipt",
+                subject,
+                _canonical_json(receipt),
+                source_turn_id,
+                user_id,
+                {
+                    "method_receipt_schema": METHOD_RECEIPT_SCHEMA,
+                    "receipt_type": "USE",
+                    "truth_authority": False,
+                    "effect_authority": False,
+                },
+            )
+
+        if self.db.db.in_transaction:
+            return insert_once()
+        with self.db.tx():
+            return insert_once()
 
     def read_use_receipt(self, *, subject: str, user_id: str) -> tuple[str, dict[str, Any]] | None:
-        row = self.db.db.execute(
-            "SELECT memory_id,value FROM durable_memory WHERE kind='method_receipt' AND subject=? AND user_id=? ORDER BY ts LIMIT 2",
+        rows = self.db.db.execute(
+            "SELECT memory_id,value,provenance FROM durable_memory WHERE kind='method_receipt' AND subject=? AND user_id=? ORDER BY ts LIMIT 2",
             (subject, user_id),
         ).fetchall()
-        if not row:
+        if not rows:
             return None
-        if len(row) != 1:
+        if len(rows) != 1:
             raise MethodRecordError("duplicate method-use receipts fail closed")
-        receipt = validate_method_receipt(str(row[0]["value"]))
-        if receipt["receipt_type"] != "USE":
-            raise MethodRecordError("method-use subject bound to wrong receipt type")
-        return str(row[0]["memory_id"]), receipt
+        self._validate_use_provenance(str(rows[0]["provenance"]))
+        receipt = validate_method_receipt(str(rows[0]["value"]))
+        if receipt["receipt_type"] != "USE" or receipt["user_id"] != user_id:
+            raise MethodRecordError("method-use receipt identity/provenance diverged")
+        return str(rows[0]["memory_id"]), receipt

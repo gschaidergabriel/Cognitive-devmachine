@@ -1,10 +1,14 @@
 # TEMPLATE: fail-closed admission fence for the final ClayVerse Kata profile.
 #
 # This is deployment security material, not a second ClayVerse application.
-# The policy validates Pod CREATE/UPDATE requests and rejects any unreviewed
-# io.katacontainers.* workload annotation whenever the current or previous Pod
-# identity is app=clayverse. Checking oldObject prevents label-removal plus
-# annotation injection from bypassing the fence during UPDATE.
+# The canonical StatefulSet reserves Pod names clayverse-N. Match that stable
+# canonical Pod path rather than mutable labels or RuntimeClass, then validate
+# the required label, Kata RuntimeClass and the complete unreviewed
+# io.katacontainers.* annotation namespace after admission mutation.
+#
+# This structure prevents a mutating admission component from bypassing the
+# fence by removing app=clayverse or switching runtimeClassName before
+# validating admission runs.
 #
 # Final acceptance must bind the exact applied policy/binding bytes, prove that
 # the API server admits the policy, and exercise positive/negative requests on
@@ -21,12 +25,24 @@ spec:
         apiVersions: ["v1"]
         operations: ["CREATE", "UPDATE"]
         resources: ["pods"]
+  # RuntimeClass and labels are deliberately NOT match conditions. They are
+  # required below, so mutation cannot make the canonical Pod skip validation.
+  matchConditions:
+    - name: canonical-clayverse-pod
+      expression: object.metadata.name.startsWith('clayverse-')
   validations:
     - expression: >-
-        !(
-          (has(object.metadata.labels) && 'app' in object.metadata.labels && object.metadata.labels['app'] == 'clayverse') ||
-          (oldObject != null && has(oldObject.metadata.labels) && 'app' in oldObject.metadata.labels && oldObject.metadata.labels['app'] == 'clayverse')
-        ) ||
+        has(object.metadata.labels) &&
+        'app' in object.metadata.labels &&
+        object.metadata.labels['app'] == 'clayverse'
+      message: "Canonical ClayVerse Pods must retain app=clayverse after admission mutation"
+      reason: Forbidden
+    - expression: >-
+        has(object.spec.runtimeClassName) &&
+        object.spec.runtimeClassName == 'kata-qemu-runtime-rs'
+      message: "Canonical ClayVerse Pods must retain the admitted Kata VM-backed RuntimeClass after admission mutation"
+      reason: Forbidden
+    - expression: >-
         !has(object.metadata.annotations) ||
         object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))
       message: "ClayVerse Pods may not carry unreviewed io.katacontainers.* workload annotations"

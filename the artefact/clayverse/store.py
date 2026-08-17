@@ -31,23 +31,28 @@ CREATE TABLE IF NOT EXISTS retrieval_feedback(receipt_id TEXT PRIMARY KEY,retrie
 
 _METHOD_KIND_SQL = ",".join(f"'{kind}'" for kind in sorted(METHOD_KINDS))
 METHOD_MEMORY_GUARDS = f'''
-CREATE TRIGGER IF NOT EXISTS durable_method_memory_admission_guard
+DROP TRIGGER IF EXISTS durable_method_memory_admission_guard;
+DROP TRIGGER IF EXISTS durable_method_memory_validate_insert;
+DROP TRIGGER IF EXISTS durable_method_memory_admission_validate;
+CREATE TRIGGER durable_method_memory_admission_validate
 BEFORE INSERT ON durable_memory
 WHEN NEW.kind IN ({_METHOD_KIND_SQL})
- AND clay_allow_method_write(NEW.kind,NEW.subject,NEW.value,NEW.provenance)<>1
-BEGIN SELECT RAISE(ABORT,'method memory requires canonical admission'); END;
+BEGIN
+  SELECT CASE
+    WHEN clay_allow_method_write(NEW.kind,NEW.subject,NEW.value,NEW.provenance)=1 THEN 1
+    ELSE RAISE(ABORT,'method memory requires canonical admission')
+  END;
+  SELECT clay_validate_method_memory(NEW.kind,NEW.subject,NEW.value,NEW.provenance);
+END;
 
-CREATE TRIGGER IF NOT EXISTS durable_method_memory_validate_insert
-BEFORE INSERT ON durable_memory
-WHEN NEW.kind IN ({_METHOD_KIND_SQL})
-BEGIN SELECT clay_validate_method_memory(NEW.kind,NEW.subject,NEW.value,NEW.provenance); END;
-
-CREATE TRIGGER IF NOT EXISTS durable_method_memory_immutable
+DROP TRIGGER IF EXISTS durable_method_memory_immutable;
+CREATE TRIGGER durable_method_memory_immutable
 BEFORE UPDATE ON durable_memory
 WHEN OLD.kind IN ({_METHOD_KIND_SQL}) OR NEW.kind IN ({_METHOD_KIND_SQL})
 BEGIN SELECT RAISE(ABORT,'method memory is immutable'); END;
 
-CREATE TRIGGER IF NOT EXISTS durable_method_memory_no_delete
+DROP TRIGGER IF EXISTS durable_method_memory_no_delete;
+CREATE TRIGGER durable_method_memory_no_delete
 BEFORE DELETE ON durable_memory
 WHEN OLD.kind IN ({_METHOD_KIND_SQL})
 BEGIN SELECT RAISE(ABORT,'method memory is immutable'); END;

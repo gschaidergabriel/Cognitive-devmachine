@@ -22,15 +22,16 @@ def _causal_id(episode_id: str, effect_id: str) -> str:
 def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     """Fail closed over interrupted workspace episodes without replaying effects.
 
-    A persisted effect outcome is already an observed fact and may be causally
-    re-entered after a crash. A selected effect request without exactly one valid
-    persisted outcome is ambiguous: the external action might have happened before
-    the process died, so recovery must never execute it again automatically.
+    Only an effect explicitly persisted with status VERIFIED may causally re-enter
+    after a crash. DENIED/FAILED/STALE/UNKNOWN outcomes remain durable evidence but
+    are not causal re-entry. A selected request with no trustworthy final outcome
+    is ambiguous and is never replayed automatically.
     """
 
     counts = {
         "scanned": 0,
         "reentered_effects": 0,
+        "non_reentered_effects": 0,
         "aborted_no_effect": 0,
         "uncertain_effects": 0,
         "ambiguous_effects": 0,
@@ -75,6 +76,21 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                 continue
 
             effect = effects[0]
+            if effect["status"] != "VERIFIED":
+                if effect["status"] == "PENDING" or effect["outcome"] is None:
+                    tx.execute(
+                        "UPDATE workspace_episodes SET state='RECOVERY_ABORTED_EFFECT_OUTCOME_UNKNOWN' WHERE episode_id=?",
+                        (episode["episode_id"],),
+                    )
+                    counts["uncertain_effects"] += 1
+                else:
+                    tx.execute(
+                        "UPDATE workspace_episodes SET state='RECOVERY_EFFECT_NOT_REENTERED' WHERE episode_id=?",
+                        (episode["episode_id"],),
+                    )
+                    counts["non_reentered_effects"] += 1
+                continue
+
             if effect["outcome"] is None:
                 tx.execute(
                     "UPDATE workspace_episodes SET state='RECOVERY_ABORTED_EFFECT_OUTCOME_UNKNOWN' WHERE episode_id=?",

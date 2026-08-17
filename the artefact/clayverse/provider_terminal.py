@@ -65,13 +65,10 @@ def main() -> int:
     _require_secretless_client_env()
     _socket_path()
     print("ClayVerse API provider terminal — canonical UnifiedDB / EffectGate path")
-    print("Type /quit to return only by ending this provider pane.")
     while True:
         try:
             prompt = input("clay> ")
         except EOFError:
-            return 0
-        if prompt == "/quit":
             return 0
         if not prompt:
             continue

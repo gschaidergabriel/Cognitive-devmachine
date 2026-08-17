@@ -346,7 +346,11 @@ class CandidateValidation:
         ).fetchone()
         if existing is not None:
             old = validate_candidate_use_receipt(str(existing["value"]))
-            if _canonical_json(old) != _canonical_json(value):
+            comparable_old = dict(old)
+            comparable_new = dict(value)
+            comparable_old.pop("ts", None)
+            comparable_new.pop("ts", None)
+            if _canonical_json(comparable_old) != _canonical_json(comparable_new):
                 raise MethodValidationError("candidate-use replay identity drift")
             return str(existing["memory_id"])
 

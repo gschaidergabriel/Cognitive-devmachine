@@ -32,6 +32,28 @@ def test_entityos_config_can_be_explicitly_disabled(monkeypatch):
     assert status == {"required": False, "bound": False}
 
 
+def test_staged_entityos_is_verified_but_not_bound_when_disabled(monkeypatch, tmp_path):
+    _clear_entityos_env(monkeypatch)
+    binary = tmp_path / "EntityOS"
+    payload = b"#!/bin/sh\nexit 0\n"
+    binary.write_bytes(payload)
+    binary.chmod(binary.stat().st_mode | stat.S_IXUSR)
+    digest = hashlib.sha256(payload).hexdigest()
+
+    monkeypatch.setenv("CLAYVERSE_REQUIRE_ENTITYOS", "0")
+    monkeypatch.setenv("CLAYVERSE_ENTITYOS_PATH", str(binary))
+    monkeypatch.setenv("CLAYVERSE_ENTITYOS_SHA256", digest)
+
+    bridge, status = _entityos_config()
+    assert bridge is None
+    assert status["required"] is False
+    assert status["bound"] is False
+    assert status["staged"] is True
+    assert status["verified"] is True
+    assert status["sha256"] == digest
+    assert status["size"] == len(payload)
+
+
 def test_entityos_config_rejects_partial_and_relative_binding(monkeypatch, tmp_path):
     _clear_entityos_env(monkeypatch)
     monkeypatch.setenv("CLAYVERSE_REQUIRE_ENTITYOS", "1")

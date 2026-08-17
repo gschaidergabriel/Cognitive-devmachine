@@ -95,9 +95,11 @@ class WorldAssembler:
         }
         method_receipt = {
             "route": "method",
+            "mode": "SHADOW_METHOD_V1",
             "status": "METHOD_NOT_REQUESTED",
             "truth_authority": False,
             "effect_authority": False,
+            "served": False,
         }
         method_context = []
         counterevidence = []
@@ -109,7 +111,11 @@ class WorldAssembler:
             "causal_id": causal_id,
             "generation": generation,
         }
-        supplied_any = any(value is not None for value in supplied.values())
+        # Canonical TurnLifecycle calls assemble() without these values and lets the
+        # active turn provide the identity. Supplying any identity field is therefore
+        # an explicit internal/shadow evaluation request, not product serving authority.
+        shadow_method_requested = any(value is not None for value in supplied.values())
+        supplied_any = shadow_method_requested
         supplied_all = all(value is not None for value in supplied.values())
         if not supplied_all:
             active = self._active_identity(session_id)
@@ -142,30 +148,50 @@ class WorldAssembler:
             memories = result["items"]
             retrieval_receipt = dict(result["receipt"])
 
-            # Conservative Stage-B admission: factual UNKNOWN only. Method presence
-            # cannot mutate or replace the Stage-A evidence status.
+            # Raw-query Stage B remains measurable only as an explicit SHADOW path.
+            # The canonical product path must not inject method content until an admitted
+            # structured problem-signature/receipt contract exists.
             if retrieval_receipt.get("status") == "UNKNOWN":
-                methods = self.methods.retrieve(
-                    query=str(supplied["query"]),
-                    user_id=user_id,
-                    session_id=session_id,
-                    turn_id=str(supplied["turn_id"]),
-                    episode_id=str(supplied["episode_id"]),
-                    causal_id=str(supplied["causal_id"]),
-                    generation=int(supplied["generation"]),
-                )
-                method_context = [
-                    item for item in methods["items"] if item.get("kind") != "counterexample"
-                ]
-                counterevidence = [
-                    item for item in methods["items"] if item.get("kind") == "counterexample"
-                ]
-                method_receipt = dict(methods["receipt"])
-                unknowns = [{
-                    "status": "FACT_UNKNOWN",
-                    "query_sha256": retrieval_receipt.get("query_sha256"),
-                    "method_present": bool(method_context or counterevidence),
-                }]
+                if shadow_method_requested:
+                    methods = self.methods.retrieve(
+                        query=str(supplied["query"]),
+                        user_id=user_id,
+                        session_id=session_id,
+                        turn_id=str(supplied["turn_id"]),
+                        episode_id=str(supplied["episode_id"]),
+                        causal_id=str(supplied["causal_id"]),
+                        generation=int(supplied["generation"]),
+                    )
+                    method_context = [
+                        item for item in methods["items"] if item.get("kind") != "counterexample"
+                    ]
+                    counterevidence = [
+                        item for item in methods["items"] if item.get("kind") == "counterexample"
+                    ]
+                    method_receipt = dict(methods["receipt"])
+                    method_receipt["mode"] = "SHADOW_METHOD_V1"
+                    method_receipt["served"] = False
+                    unknowns = [{
+                        "status": "FACT_UNKNOWN",
+                        "query_sha256": retrieval_receipt.get("query_sha256"),
+                        "method_present": bool(method_context or counterevidence),
+                    }]
+                else:
+                    method_receipt = {
+                        "route": "method",
+                        "mode": "SHADOW_METHOD_V1",
+                        "status": "METHOD_NOT_SERVED_SIGNATURE_ADMISSION_REQUIRED",
+                        "causal_id": str(supplied["causal_id"]),
+                        "generation": int(supplied["generation"]),
+                        "truth_authority": False,
+                        "effect_authority": False,
+                        "served": False,
+                    }
+                    unknowns = [{
+                        "status": "FACT_UNKNOWN",
+                        "query_sha256": retrieval_receipt.get("query_sha256"),
+                        "method_present": False,
+                    }]
         else:
             excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
             memories = [

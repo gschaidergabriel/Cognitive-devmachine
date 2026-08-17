@@ -244,6 +244,16 @@ class MicroClayRetrieval:
         return {"eligible": len(rows), "applied": applied}
 
     def _assert_replay_route(self, existing) -> None:
+        try:
+            limit_items = int(existing["limit_items"])
+            budget_chars = int(existing["budget_chars"])
+            chars_selected = int(existing["chars_selected"])
+        except (TypeError, ValueError) as exc:
+            raise StaleGeneration("retrieval_route_contract") from exc
+        if limit_items < 1 or limit_items > 100 or budget_chars < 256 or budget_chars > 200_000:
+            raise StaleGeneration("retrieval_route_contract")
+
+        routes: dict[str, list[str]] = {}
         ids: list[str] = []
         for field in ("selected_memory_ids", "shadow_memory_ids"):
             try:
@@ -254,18 +264,24 @@ class MicroClayRetrieval:
                 isinstance(memory_id, str) and memory_id for memory_id in parsed
             ):
                 raise StaleGeneration("retrieval_route_contract")
+            if len(parsed) > limit_items or len(set(parsed)) != len(parsed):
+                raise StaleGeneration("retrieval_route_contract")
+            routes[field] = parsed
             ids.extend(parsed)
 
         ids = list(dict.fromkeys(ids))
         if not ids:
+            if chars_selected != 0:
+                raise StaleGeneration("retrieval_route_contract")
             return
         rows = self.db.db.execute(
-            "SELECT memory_id,kind,user_id,source_turn_id FROM durable_memory WHERE memory_id IN (%s)"
+            "SELECT memory_id,kind,user_id,source_turn_id,value FROM durable_memory WHERE memory_id IN (%s)"
             % ",".join("?" for _ in ids),
             tuple(ids),
         ).fetchall()
         if len(rows) != len(ids):
             raise StaleGeneration("retrieval_route_contract")
+        by_id = {str(row["memory_id"]): row for row in rows}
         excluded_kinds = METHOD_KINDS | _CONTROL_KINDS
         if any(str(row["kind"]) in excluded_kinds for row in rows):
             raise StaleGeneration("retrieval_route_contract")
@@ -279,6 +295,11 @@ class MicroClayRetrieval:
             and str(row["source_turn_id"]) == str(existing["turn_id"])
             for row in rows
         ):
+            raise StaleGeneration("retrieval_route_contract")
+
+        selected_chars = sum(len(str(by_id[memory_id]["value"])) for memory_id in routes["selected_memory_ids"])
+        shadow_chars = sum(len(str(by_id[memory_id]["value"])) for memory_id in routes["shadow_memory_ids"])
+        if selected_chars != chars_selected or selected_chars > budget_chars or shadow_chars > budget_chars:
             raise StaleGeneration("retrieval_route_contract")
 
     def retrieve(

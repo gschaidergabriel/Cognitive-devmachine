@@ -6,6 +6,19 @@ from clayverse.store import UnifiedDB
 from clayverse.terminal_gateway import _runtime_ready
 
 
+class _TerminalProbe:
+    def __init__(self, live=None):
+        self.live = live or {"gabriel": True, "andreas": True}
+        self.checked = []
+
+    def binding(self, user_id):
+        return user_id
+
+    def _has_session(self, binding):
+        self.checked.append(binding)
+        return bool(self.live.get(binding, False))
+
+
 def test_container_healthcheck_is_read_only_runtime_readiness_probe():
     dockerfile=(Path(__file__).resolve().parents[1]/'Dockerfile').read_text()
     health=next(line for line in dockerfile.splitlines() if line.startswith('HEALTHCHECK '))
@@ -16,12 +29,25 @@ def test_container_healthcheck_is_read_only_runtime_readiness_probe():
     assert 'clayverse.service' not in health
 
 
-def test_runtime_readiness_tracks_minimum_canonical_state_and_fails_closed(tmp_path):
+def test_runtime_readiness_tracks_canonical_state_and_live_product_terminals(tmp_path):
     db = UnifiedDB(tmp_path / 'unified.db')
     IdentityRouter(db, {})
-    assert _runtime_ready(db) is True
+    terminals = _TerminalProbe()
+    assert _runtime_ready(db, terminals) is True
+    assert terminals.checked == ['gabriel', 'andreas']
     db.close()
-    assert _runtime_ready(db) is False
+    assert _runtime_ready(db, _TerminalProbe()) is False
+
+
+def test_runtime_readiness_rejects_missing_product_terminal(tmp_path):
+    db = UnifiedDB(tmp_path / 'unified.db')
+    IdentityRouter(db, {})
+    try:
+        terminals = _TerminalProbe({"gabriel": True, "andreas": False})
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == ['gabriel', 'andreas']
+    finally:
+        db.close()
 
 
 def test_runtime_readiness_rejects_wrong_schema_without_mutation(tmp_path):
@@ -29,7 +55,9 @@ def test_runtime_readiness_rejects_wrong_schema_without_mutation(tmp_path):
     IdentityRouter(db, {})
     try:
         db.db.execute("UPDATE meta SET value='999' WHERE key='schema_version'")
-        assert _runtime_ready(db) is False
+        terminals = _TerminalProbe()
+        assert _runtime_ready(db, terminals) is False
+        assert terminals.checked == []
     finally:
         db.close()
 

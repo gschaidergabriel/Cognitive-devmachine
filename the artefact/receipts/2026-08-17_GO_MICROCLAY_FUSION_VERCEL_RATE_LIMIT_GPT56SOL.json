@@ -1,0 +1,107 @@
+{
+  "schema": "ClayVerseGoMicroClayFusionReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_research_main_observed": "f942c25a8416e4951d88fb07086c3ef08902218a",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "entityos_scope": "optional internal execution/security/runtime substrate only",
+  "go_unusual_experiment_accounting": {
+    "shared_slot_state": "CONSUMED_1_OF_1_BEFORE_THIS_WORKER_REENTRY",
+    "new_unusual_experiments_added_by_this_receipt_cycle": 0
+  },
+  "microclay_candidates": {
+    "packing_parity": {
+      "pr": 393,
+      "head_observed": "ef02f78bfd70b8ebffdbd900fb9150a577aca2c6",
+      "state": "OPEN_DRAFT_SOURCE_CANDIDATE",
+      "mechanism": "one canonical candidate packer applies relevance, item limit and character budget to both serving and SHADOW rankings",
+      "executable_status": "UNEXECUTED_EXACT_HEAD"
+    },
+    "receipt_context": {
+      "pr": 395,
+      "head_observed": "4fb5e4f6367c7ad3cbde9df1b426b4c7b07b8a1d",
+      "state": "OPEN_DRAFT_SOURCE_CANDIDATE",
+      "mechanism": "retrieval receipt survives bounded prompt-context propagation and malformed/missing receipt fails closed",
+      "executable_status": "UNEXECUTED_EXACT_HEAD"
+    },
+    "replay_identity": {
+      "issue": 391,
+      "pr": 396,
+      "head_observed": "c3692ced85899fd5fe2891d6f76330199e1c9569",
+      "state": "OPEN_DRAFT_SOURCE_CANDIDATE",
+      "mechanism": "same-causal replay binds exact budget_chars and limit_items; legacy unknown limit fails closed; schema v7 migration is explicit",
+      "adversarial_review": "unrelated bump_generation drift and malformed lease write were detected and removed before promotion",
+      "regression_strengthening": "true pre-v7 retrieval_episodes table without limit_items must migrate exactly once across two opens",
+      "executable_status": "UNEXECUTED_EXACT_HEAD"
+    },
+    "retired": {
+      "pr": 383,
+      "state": "CLOSED_SUPERSEDED_BY_393",
+      "promotion_credit": false
+    }
+  },
+  "vercel_execution": {
+    "empirical_authority": "VERCEL_SANDBOX_REQUIRED",
+    "latest_final_staging_head": "8818aaa35a46e1e1bf5081e8d5ff10576ea1f57b",
+    "provider_status": "FAILURE",
+    "provider_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "sandbox_assertions_reached": false,
+    "executable_pass": false,
+    "deployment_ready_is_evidence": false,
+    "stale_product_staging_prs_closed": [812, 813],
+    "vps_or_self_hosted_test_used": false
+  },
+  "next_exact_vercel_batch": {
+    "precondition": "refresh research main and exact PR heads; abort on any head drift; do not reuse retired PR383 staging",
+    "source_candidates": [
+      "PR393 current exact head",
+      "PR396 current exact head",
+      "PR395 current exact head",
+      "current-main adjacent MicroClay tests and dependencies"
+    ],
+    "normal_regressions": [
+      "oversized first candidate cannot exceed budget_chars",
+      "SHADOW and serving rankings use identical limit plus budget feasibility",
+      "exact-parameter same-causal replay remains idempotent",
+      "smaller and larger budget_chars replay drift fail closed",
+      "smaller and larger limit replay drift fail closed",
+      "legacy NULL limit replay fails closed",
+      "pre-v7 table without limit_items migrates exactly once and schema advances only after column exists",
+      "query-sensitive retrieval instead of latest-N",
+      "no matching cue returns UNKNOWN",
+      "current prompt extraction is not echoed back into retrieval",
+      "generation/session/query identity fences remain intact",
+      "verified outcome credit remains delayed, idempotent and unable to rewrite durable memory",
+      "retrieval receipt survives bounded prompt and hook context with truth/effect authority false",
+      "restart/recovery preserves retrieval and migration identities",
+      "held-out baseline-vs-SHADOW comparison uses equal feasibility constraints"
+    ],
+    "execution_constraints": [
+      "actually start isolated Vercel Sandbox",
+      "bind exact source/blob identities before assertions",
+      "pin test dependencies before network shutdown",
+      "DENY_ALL during deterministic assertions",
+      "capture commands, exit codes, logs and stop result",
+      "stop Sandbox after batch",
+      "no unusual experiment beyond already-consumed shared GO slot"
+    ]
+  },
+  "truth_boundary": {
+    "microclay_source_mechanisms_supported": true,
+    "microclay_exact_current_executable_pass": false,
+    "clayverse_container_acceptance": "IN_PROGRESS",
+    "reason": "Vercel build admission blocked the exact-head Sandbox batch before any Sandbox start; source/review candidates cannot substitute for executable truth"
+  },
+  "forbidden": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "owner_gated_final_training_without_authorization": true
+  }
+}

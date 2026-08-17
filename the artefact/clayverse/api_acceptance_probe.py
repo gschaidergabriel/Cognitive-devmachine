@@ -10,6 +10,9 @@ from .entityos_bridge import EntityOSBridge
 from .store import StaleGeneration, UnifiedDB
 
 
+_ALLOWED_REQUIRED_EFFECT_CAPABILITIES = {"entityos.exec", "state.noop"}
+
+
 def _bounded_string(value: Any, name: str, *, max_length: int) -> str:
     if not isinstance(value, str) or not value or len(value) > max_length or "\x00" in value:
         raise RuntimeError(f"invalid {name}")
@@ -88,6 +91,21 @@ def _receipt_from_assistant(
     )
 
 
+def _persisted_effect_capability(db: UnifiedDB, effect_id: str | None) -> str | None:
+    if not effect_id:
+        return None
+    row = db.db.execute(
+        "SELECT capability FROM effects WHERE effect_id=?",
+        (effect_id,),
+    ).fetchone()
+    if row is None:
+        raise RuntimeError("API acceptance effect id is not present in EffectJournal")
+    capability = _bounded_string(row["capability"], "API effect capability", max_length=64)
+    if capability not in _ALLOWED_REQUIRED_EFFECT_CAPABILITIES:
+        raise RuntimeError("API acceptance effect capability is not admitted")
+    return capability
+
+
 def run_api_acceptance_probe(
     db: UnifiedDB,
     clerk_map: dict[str, str],
@@ -97,6 +115,7 @@ def run_api_acceptance_probe(
     entityos_bridge: EntityOSBridge | None = None,
     inference: Any | None = None,
     require_effect: bool = False,
+    required_effect_capability: str | None = None,
 ) -> dict[str, Any]:
     """Run one generic API turn through the canonical ClayVerse causal spine.
 
@@ -109,6 +128,16 @@ def run_api_acceptance_probe(
     prompt = _bounded_string(content, "acceptance prompt", max_length=100_000)
     if subject not in clerk_map:
         raise PermissionError("acceptance Clerk subject is not in the canonical mapping")
+
+    required_capability = None
+    if required_effect_capability is not None:
+        required_capability = _bounded_string(
+            required_effect_capability,
+            "required API effect capability",
+            max_length=64,
+        )
+        if required_capability not in _ALLOWED_REQUIRED_EFFECT_CAPABILITIES:
+            raise RuntimeError("required API effect capability is not admitted")
 
     adapter = inference if inference is not None else build_api_inference_from_env()
     if inference is None and not adapter.available():
@@ -143,11 +172,16 @@ def run_api_acceptance_probe(
 
     outcome = result.get("outcome")
     effect_id = result.get("effect_id")
-    if require_effect:
+    effect_capability = _persisted_effect_capability(db, effect_id)
+    if require_effect or required_capability is not None:
         if not effect_id:
             raise RuntimeError("API acceptance required an effect but none was requested")
         if not isinstance(outcome, dict) or outcome.get("ok") is not True:
             raise RuntimeError("API acceptance required a verified successful effect")
+        if required_capability is not None and effect_capability != required_capability:
+            raise RuntimeError(
+                f"API acceptance required {required_capability} but observed {effect_capability}"
+            )
 
     return {
         "service": "clayverse",
@@ -168,7 +202,7 @@ def run_api_acceptance_probe(
         "assistant_content_bytes": assistant_bytes,
         "inference_receipt": receipt,
         "effect": {
-            "required": bool(require_effect),
+            "required": bool(require_effect or required_capability is not None),
             "effect_id": effect_id,
             "present": effect_id is not None,
             "verified_ok": isinstance(outcome, dict) and outcome.get("ok") is True,

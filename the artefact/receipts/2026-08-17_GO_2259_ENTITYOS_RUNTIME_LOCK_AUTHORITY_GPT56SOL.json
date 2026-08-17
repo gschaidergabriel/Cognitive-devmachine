@@ -1,0 +1,84 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger_timestamp": "2026-08-17T22:59+07:00",
+  "timestamp_precision": "minute",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "EntityOS runtime artifact-authority closure after parallel MicroVM reentry",
+  "source_binding": {
+    "research_main_at_branch": "bd254c6e767eba208346a4dd7262cf134e980beb",
+    "branch": "gpt56sol/go-2259-entityos-runtime-lock-authority-20260817",
+    "service_commit": "37b92f8ce30c5d259adffeaa034c0931a7368361",
+    "boot_binding_test_commit": "44684ab216eecc6cfaac384cde521bd8ab7da7e1",
+    "artifact_authority_test_commit": "6636566c6d184392cd7fac11282ac8443413a4e2"
+  },
+  "parallel_reentry": {
+    "classification": "ADOPT_AND_REFINE_NO_DUPLICATE_IMPLEMENTATION",
+    "observed_commits": [
+      "a420a7e7342d29a2713d6eddabfa353997876b01",
+      "bd254c6e767eba208346a4dd7262cf134e980beb"
+    ],
+    "detail": "Parallel current-main work removed CLAYVERSE_ENTITYOS_SHA256 from the Kata deployment Secret surface and documented image authority. This organ retained that delta and closed the remaining service-side runtime override path instead of creating a competing deployment implementation."
+  },
+  "finding": {
+    "classification": "SOURCE_AUTHORITY_GAP",
+    "observed": "entityos.lock.json declared the tracked lock as sole artifact authority while service.py still accepted CLAYVERSE_ENTITYOS_PATH and CLAYVERSE_ENTITYOS_SHA256 as runtime selectors.",
+    "counter_reality": "A deployment/runtime environment could replace both expected path and expected digest, making verification internally consistent with caller-selected bytes despite the image lock authority claim.",
+    "falsifier": "Runtime path/digest values that differ from the embedded lock/path must fail before EntityOS binding."
+  },
+  "repair": {
+    "embedded_path": "/opt/entityos/EntityOS",
+    "embedded_lock": "/opt/entityos/entityos.lock.json",
+    "authority": "EMBEDDED_LOCK_ONLY",
+    "runtime_path_env": "ASSERTION_ONLY_MATCH_REQUIRED",
+    "runtime_digest_env": "ASSERTION_ONLY_MATCH_REQUIRED",
+    "lock_schema_validation": true,
+    "lock_sha256_validation": true,
+    "lock_size_validation": true,
+    "verified_size_matches_lock_required": true,
+    "entityos_exec_enable_switch_preserved": true
+  },
+  "regression_candidate": {
+    "test_file": "the artefact/tests/test_entityos_boot_binding.py",
+    "covers": [
+      "execution-disabled staged verification",
+      "execution-enabled exact lock binding",
+      "runtime path override rejection",
+      "runtime digest override rejection",
+      "matching assertion acceptance without authority transfer",
+      "malformed lock rejection",
+      "missing/invalid JSON lock rejection",
+      "digest drift rejection",
+      "size drift rejection",
+      "symlink rejection"
+    ],
+    "static_authority_test": "the artefact/tests/test_entityos_artifact_authority.py"
+  },
+  "execution_evidence": {
+    "authorized_isolated_test_started_for_this_branch": false,
+    "test_pass_claimed": false,
+    "oci_runtime_credit_added": 0,
+    "whole_product_credit_added": 0,
+    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "provider_frontier": {
+    "vercel": "BLOCKED_BEFORE_PRIVATE_SOURCE_STAGE_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "daytona": "CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_PROVIDER_CONTACT_NO_DAYTONA_API_KEY_NO_EGRESS",
+    "vps_self_hosted_production_fallback": "FORBIDDEN"
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This exact user go exposes no shared immutable request/turn id and only minute-precision immutable message time, so the atomic experiment lease cannot be uniquely reproduced."
+  },
+  "prohibitions_observed": {
+    "together_api_used": false,
+    "secret_exposed": false,
+    "vps_or_self_hosted_or_production_testing": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_high_information_runtime_step": "Provision approved host-side GITHUB_READ_TOKEN on the retained Vercel Preview controller or admit an egress-capable credentialed Daytona controller, then execute this exact branch or its rebased current-head successor in an authorized isolated sandbox; only after regressions pass should the source delta be promoted and the exact OCI closure continue."
+}

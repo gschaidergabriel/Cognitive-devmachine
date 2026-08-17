@@ -75,8 +75,9 @@ def test_unexpected_child_exit_preserves_final_output_until_drain():
     assert not terminal.alive()
     assert terminal.pid is None
 
-    # This is the bounded unusual experiment for this go: the child is already
-    # dead, but its final PTY bytes must survive the lifecycle transition.
+    # Regression-only lifecycle check. The go macro-cycle's single unusual
+    # experiment remains test_unusual_experiment.py; this must not consume a
+    # second experiment slot when the full suite is rerun.
     output = _read_until(terminal, b"FINAL")
     assert b"FINAL" in output
 

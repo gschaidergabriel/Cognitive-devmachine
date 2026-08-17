@@ -1,19 +1,20 @@
 from __future__ import annotations
 import json
-from .microclay_methods import METHOD_KINDS, MicroClayMethodRetrieval
+from .method_memory import METHOD_KINDS
+from .method_stage_b import StageBMethodRetrieval
 from .microclay_retrieval import MicroClayRetrieval
 from .store import StaleGeneration, UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with separate evidence and method retrieval lanes."""
+    """Bounded world assembly with separate factual Stage A and durable Stage B."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
-        self.methods = MicroClayMethodRetrieval(db)
+        self.stage_b = StageBMethodRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
         excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
@@ -95,12 +96,14 @@ class WorldAssembler:
             "effect_authority": False,
         }
         method_receipt = {
-            "route": "method",
-            "mode": "SHADOW_METHOD_V1",
+            "receipt_schema": StageBMethodRetrieval.RECEIPT_SCHEMA,
+            "policy_version": StageBMethodRetrieval.POLICY_VERSION,
+            "triggered": False,
             "status": "METHOD_NOT_REQUESTED",
+            "factual_status_unchanged": "UNKNOWN",
             "truth_authority": False,
             "effect_authority": False,
-            "served": False,
+            "replayed": False,
         }
         method_context = []
         counterevidence = []
@@ -112,12 +115,8 @@ class WorldAssembler:
             "causal_id": causal_id,
             "generation": generation,
         }
-        # Identity fields resolve/verify the active turn only. They never authorize Stage B.
-        # A method lookup is an explicit internal SHADOW request only when the caller also
-        # supplies a problem signature; the canonical product path supplies no signature.
         supplied_any = any(value is not None for value in supplied.values())
         supplied_all = all(value is not None for value in supplied.values())
-        shadow_method_requested = problem_signature is not None
         if not supplied_all:
             active = self._active_identity(session_id)
             if active is not None:
@@ -148,49 +147,44 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = dict(result["receipt"])
+            factual_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
 
-            if retrieval_receipt.get("status") == "UNKNOWN":
-                if shadow_method_requested:
-                    methods = self.methods.retrieve(
-                        query=str(supplied["query"]),
-                        problem_signature=problem_signature,
-                        user_id=user_id,
-                        session_id=session_id,
-                        turn_id=str(supplied["turn_id"]),
-                        episode_id=str(supplied["episode_id"]),
-                        causal_id=str(supplied["causal_id"]),
-                        generation=int(supplied["generation"]),
-                    )
-                    method_context = [
-                        item for item in methods["items"] if item.get("kind") != "counterexample"
-                    ]
-                    counterevidence = [
-                        item for item in methods["items"] if item.get("kind") == "counterexample"
-                    ]
-                    method_receipt = dict(methods["receipt"])
-                    method_receipt["mode"] = "SHADOW_METHOD_V1"
-                    method_receipt["served"] = False
-                    unknowns = [{
-                        "status": "FACT_UNKNOWN",
-                        "query_sha256": retrieval_receipt.get("query_sha256"),
-                        "method_present": bool(method_context or counterevidence),
-                    }]
-                else:
-                    method_receipt = {
-                        "route": "method",
-                        "mode": "SHADOW_METHOD_V1",
-                        "status": "METHOD_NOT_SERVED_SIGNATURE_ADMISSION_REQUIRED",
-                        "causal_id": str(supplied["causal_id"]),
-                        "generation": int(supplied["generation"]),
-                        "truth_authority": False,
-                        "effect_authority": False,
-                        "served": False,
-                    }
-                    unknowns = [{
-                        "status": "FACT_UNKNOWN",
-                        "query_sha256": retrieval_receipt.get("query_sha256"),
-                        "method_present": False,
-                    }]
+            # Stage B is invoked only for an unresolved factual route. A missing explicit
+            # structural signature still goes through StageBMethodRetrieval so the causal
+            # SIGNATURE_REQUIRED decision is durably replay-bound. It never serves a method.
+            if factual_status in {"UNKNOWN", "UNDERCOVERED"}:
+                stage_b = self.stage_b.retrieve(
+                    query=str(supplied["query"]),
+                    user_id=user_id,
+                    session_id=session_id,
+                    turn_id=str(supplied["turn_id"]),
+                    episode_id=str(supplied["episode_id"]),
+                    causal_id=str(supplied["causal_id"]),
+                    generation=int(supplied["generation"]),
+                    evidence_status=factual_status,
+                    resource_refs=list(resource_refs or []),
+                    problem_signature=problem_signature,
+                )
+                method_context = list(stage_b["methods"])
+                counterevidence = list(stage_b["counterevidence"])
+                method_receipt = dict(stage_b["receipt"])
+                unknowns = [{
+                    "status": f"FACT_{factual_status}",
+                    "query_sha256": retrieval_receipt.get("query_sha256"),
+                    "method_present": bool(method_context or counterevidence),
+                    "truth_authority": False,
+                }]
+            else:
+                method_receipt = {
+                    "receipt_schema": StageBMethodRetrieval.RECEIPT_SCHEMA,
+                    "policy_version": StageBMethodRetrieval.POLICY_VERSION,
+                    "triggered": False,
+                    "status": "FACT_PRESENT_STAGE_B_NOT_TRIGGERED",
+                    "factual_status_unchanged": factual_status,
+                    "truth_authority": False,
+                    "effect_authority": False,
+                    "replayed": False,
+                }
         else:
             excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
             memories = [

@@ -19,7 +19,7 @@ def test_exactly_two_canonical_terminal_perspectives():
     }
 
 
-def test_per_user_mcp_config_binds_one_session_and_no_other_user(tmp_path, monkeypatch):
+def test_diagnostic_mcp_mirror_binds_one_session_and_no_other_user(tmp_path, monkeypatch):
     monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0")
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     g = manager.binding("gabriel")
@@ -35,11 +35,12 @@ def test_per_user_mcp_config_binds_one_session_and_no_other_user(tmp_path, monke
     assert ae["CLAYVERSE_USER_ID"] == "andreas"
     assert ae["CLAYVERSE_SESSION_ID"] == "session:andreas"
     assert ge["PYTHONPATH"] == "/opt/clayverse"
+    assert gp["mcpServers"]["clayverse"]["command"] == "/usr/local/bin/python"
     assert a.home != g.home
     assert a.mcp_config != g.mcp_config
 
 
-def test_product_claude_process_is_interactive_not_headless(tmp_path, monkeypatch):
+def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setattr(manager, "_has_session", lambda binding: False)
@@ -55,10 +56,23 @@ def test_product_claude_process_is_interactive_not_headless(tmp_path, monkeypatc
     assert "claude" in command
     assert " -p " not in f" {command} "
     assert "--no-session-persistence" not in command
-    assert "--strict-mcp-config" in command
+    assert "--mcp-config" not in command
+    assert "--strict-mcp-config" not in command
+    assert "clayverse-mcp.json" not in command
     assert "--tools ''" in command or '--tools ""' in command
     assert "mcp__clayverse__*" in command
     assert "--append-system-prompt-file" in command
+    assert "/etc/claude-code/managed-settings.json" in command
+
+
+def test_managed_mcp_is_exclusive_and_command_bound():
+    mcp = json.loads((ROOT / "policy" / "managed-mcp.json").read_text())
+    settings = json.loads((ROOT / "policy" / "managed-settings.json").read_text())
+    assert set(mcp["mcpServers"]) == {"clayverse"}
+    server = mcp["mcpServers"]["clayverse"]
+    expected_command = [server["command"], *server.get("args", [])]
+    assert settings["allowManagedMcpServersOnly"] is True
+    assert settings["allowedMcpServers"] == [{"serverCommand": expected_command}]
 
 
 def test_service_source_uses_terminal_gateway_not_custom_chat_engine():
@@ -68,6 +82,7 @@ def test_service_source_uses_terminal_gateway_not_custom_chat_engine():
     assert "ClaudeCodeInference" not in source
     assert "ClayVerseAPI" not in source
     assert "ClayVerseEngine" not in source
+    assert "from .clerk_auth import" in source
 
 
 def test_browser_surface_is_terminal_not_textarea_chat():
@@ -77,6 +92,7 @@ def test_browser_surface_is_terminal_not_textarea_chat():
     assert "/ws/terminal" in source
     assert "/api/chat" not in source
     assert "textarea" not in source.lower()
+    assert "from .clerk_auth import" in source
 
 
 class _NoopIdentityDB:

@@ -360,6 +360,10 @@ window.addEventListener('load', async () => {{
                                 expected_user_id=user_id,
                                 expected_session_id=session_id,
                             )
+                            # UnifiedDB revalidation is a blocking boundary. A token that
+                            # expired during that check must never extend or be published
+                            # as the live socket authorization lease.
+                            _require_auth_lease_live(refreshed_expiry)
                             auth_expires_at = refreshed_expiry
                             await send_json({
                                 "type": "reauthenticated",

@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from clayverse.autonomy import AutonomyController
+import json
+
+import pytest
+
+import clayverse.terminal_hooks as terminal_hooks
+from clayverse.autonomy import AutonomyController, AutonomyStateError
 from clayverse.autonomy_context import bounded_autonomy_context
 from clayverse.mcp_server import ClayVerseEffectBridge
 from clayverse.store import UnifiedDB
@@ -60,6 +65,24 @@ def test_autonomy_context_is_user_scoped_and_hides_effect_payload(tmp_path):
     assert "do-not-prompt-argv-secret" not in encoded
 
 
+def test_autonomy_context_rejects_noncanonical_identity(tmp_path):
+    db = _db(tmp_path)
+    with pytest.raises(PermissionError):
+        bounded_autonomy_context(db, "not-a-canonical-user")
+
+
+def test_terminal_goals_do_not_consume_attention_context(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(db, controller, "gabriel", "Already terminal goal")
+    controller.cancel_goal(goal["goal_id"])
+
+    context = bounded_autonomy_context(db, "gabriel")
+
+    assert context["attention_goal_count"] == 0
+    assert context["goals"] == []
+
+
 def test_autonomy_context_reads_inside_existing_transaction(tmp_path):
     db = _db(tmp_path)
     controller = AutonomyController(db)
@@ -78,7 +101,7 @@ def test_autonomy_context_is_deterministically_bounded(tmp_path):
         _goal(db, controller, "gabriel", f"goal-{index}:" + ("x" * 10_000))
 
     context = bounded_autonomy_context(db, "gabriel", max_chars=1_400, max_goals=3)
-    encoded = __import__("json").dumps(
+    encoded = json.dumps(
         context,
         ensure_ascii=False,
         sort_keys=True,
@@ -122,6 +145,41 @@ def test_hook_context_contains_autonomy_inside_existing_inline_budget(tmp_path):
     assert '"autonomy":' in rendered
     assert '"model_authority":"PROPOSAL_ONLY"' in rendered
     assert "Continue canonical autonomous work" in rendered
+
+
+def test_invalid_autonomy_state_rolls_back_user_prompt_admission(tmp_path, monkeypatch):
+    db = _db(tmp_path)
+    db.db.execute(
+        "INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+        ("autonomy_state_v1", '{"schema":"corrupt"}'),
+    )
+    db.db.commit()
+    lifecycle = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=None)
+    monkeypatch.setattr(
+        terminal_hooks,
+        "_runtime",
+        lambda: (db, "gabriel", "session:gabriel", lifecycle),
+    )
+
+    with pytest.raises(AutonomyStateError):
+        terminal_hooks.user_prompt(
+            {
+                "hook_event_name": "UserPromptSubmit",
+                "prompt": "this turn must not survive missing trusted context",
+                "session_id": "claude-session-test",
+            }
+        )
+
+    check = UnifiedDB(tmp_path / "unified.db")
+    assert check.db.execute(
+        "SELECT 1 FROM turns WHERE content=?",
+        ("this turn must not survive missing trusted context",),
+    ).fetchone() is None
+    assert check.db.execute(
+        "SELECT 1 FROM active_turns WHERE session_id=?",
+        ("session:gabriel",),
+    ).fetchone() is None
+    check.close()
 
 
 def test_read_state_mcp_exposes_the_same_user_scoped_projection(tmp_path):

@@ -1,24 +1,29 @@
 from __future__ import annotations
 import json
+
+from .method_memory import METHOD_KINDS
+from .method_stage_b import StageBShadowRetrieval
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Bounded world assembly with factual Stage-A and non-serving structural Stage-B."""
 
     CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
 
     def __init__(self, db: UnifiedDB):
         self.db = db
         self.microclay = MicroClayRetrieval(db)
+        self.stage_b = StageBShadowRetrieval(db)
 
     def _extracted_fragments(self, turn_id):
+        excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
         rows = self.db.db.execute(
             "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-            "ORDER BY ts LIMIT 20",
-            (turn_id,),
+            "WHERE source_turn_id=? AND kind NOT IN (%s) ORDER BY ts LIMIT 20"
+            % ",".join("?" for _ in excluded),
+            (turn_id, *excluded),
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -49,6 +54,9 @@ class WorldAssembler:
         episode_id=None,
         causal_id=None,
         generation=None,
+        method_problem_signature=None,
+        method_trigger=None,
+        method_budget_chars=12_000,
     ):
         session = self.db.db.execute(
             "SELECT user_id FROM sessions WHERE session_id=?", (session_id,)
@@ -59,7 +67,7 @@ class WorldAssembler:
         own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
+        # collides. Retrieval/meta-learning cannot broaden this privacy/attention boundary.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
@@ -84,7 +92,15 @@ class WorldAssembler:
         }
         method_context = []
         counterevidence = []
-        unknowns = []
+        method_shadow_context = []
+        method_shadow_counterevidence = []
+        method_retrieval_receipt = {
+            "mode": "SHADOW_METHOD_V1",
+            "signature_status": "NOT_EVALUATED",
+            "served": False,
+            "truth_authority": False,
+            "effect_authority": False,
+        }
         supplied = {
             "query": query,
             "turn_id": turn_id,
@@ -109,38 +125,27 @@ class WorldAssembler:
             )
             memories = result["items"]
             retrieval_receipt = dict(result["receipt"])
-
-            # Start with the strongest safe Stage-B trigger. More nuanced UNDERCOVERED,
-            # strategy and novelty triggers require explicit later calibration.
-            if retrieval_receipt.get("status") == "UNKNOWN":
-                methods = self.microclay.retrieve_methods(
-                    query=str(supplied["query"]),
-                    user_id=user_id,
-                    session_id=session_id,
-                    turn_id=str(supplied["turn_id"]),
-                    episode_id=str(supplied["episode_id"]),
-                    causal_id=str(supplied["causal_id"]),
-                    generation=int(supplied["generation"]),
-                )
-                method_context = [
-                    item for item in methods["items"] if item.get("kind") != "counterexample"
-                ]
-                counterevidence = [
-                    item for item in methods["items"] if item.get("kind") == "counterexample"
-                ]
-                retrieval_receipt["method"] = methods["receipt"]
-                unknowns = [{
-                    "status": "FACT_UNKNOWN",
-                    "query_sha256": retrieval_receipt.get("query_sha256"),
-                    "method_present": bool(method_context or counterevidence),
-                }]
+            stage_b = self.stage_b.retrieve_shadow(
+                user_id=user_id,
+                session_id=session_id,
+                turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]),
+                generation=int(supplied["generation"]),
+                evidence_status=str(retrieval_receipt.get("status", "UNKNOWN")),
+                problem_signature=method_problem_signature,
+                trigger=method_trigger,
+                budget_chars=int(method_budget_chars),
+            )
+            # Stage-B v1 is evaluation-only: the current Claude-facing bounded world does
+            # not receive these shadow selections. FACT_UNKNOWN remains FACT_UNKNOWN.
+            method_shadow_context = stage_b["shadow_method_context"]
+            method_shadow_counterevidence = stage_b["shadow_counterevidence"]
+            method_retrieval_receipt = stage_b["receipt"]
         else:
-            # Compatibility path for legacy tests/non-product callers with no active
-            # causal turn. Method memory is excluded here too: a reusable method must
-            # never collapse into factual durable-memory context merely through fallback.
-            excluded = tuple(sorted(
-                set(self.CONTROL_MEMORY_KINDS) | set(MicroClayRetrieval.METHOD_KINDS)
-            ))
+            # Compatibility path for legacy/non-product callers. All method classes stay
+            # outside factual durable-memory context.
+            excluded = tuple(sorted(set(self.CONTROL_MEMORY_KINDS) | set(METHOD_KINDS)))
             memories = [
                 dict(r)
                 for r in self.db.db.execute(
@@ -151,14 +156,25 @@ class WorldAssembler:
                 )
             ]
 
+        evidence_status = str(retrieval_receipt.get("status", "UNKNOWN"))
+        unknowns = [] if evidence_status == "PRESENT" else [{
+            "status": "FACT_UNKNOWN" if evidence_status == "UNKNOWN" else evidence_status,
+            "query_sha256": retrieval_receipt.get("query_sha256"),
+            "method_shadow_present": bool(method_shadow_context or method_shadow_counterevidence),
+            "fact_resolved": False,
+        }]
         return {
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "evidence_context": memories,
             "method_context": method_context,
             "unknowns": unknowns,
             "counterevidence": counterevidence,
+            "method_shadow_context": method_shadow_context,
+            "method_shadow_counterevidence": method_shadow_counterevidence,
             "retrieval_receipt": retrieval_receipt,
+            "method_retrieval_receipt": method_retrieval_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

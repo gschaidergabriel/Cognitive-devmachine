@@ -47,11 +47,14 @@ def test_inference_intent_reaches_effect_gate_without_direct_process(tmp_path):
         ws = db.db.execute("SELECT selected,state FROM workspace_episodes WHERE episode_id=?", (result["workspace"]["episode_id"],)).fetchone()
         assert ws["selected"] == "request_effect"
         assert ws["state"] == "SELECTED"
+        causal = db.db.execute("SELECT credit,reentered FROM causal_episodes WHERE causal_id=?", (result["causal_id"],)).fetchone()
+        assert causal["credit"] == 1.0
+        assert causal["reentered"] == 1
     finally:
         db.close()
 
 
-def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
+def test_unavailable_entityos_is_denied_without_false_causal_reentry(tmp_path):
     db = UnifiedDB(tmp_path / "unified.db")
     inference = EntityOSIntentInference()
     try:
@@ -88,7 +91,7 @@ def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
             (result["causal_id"],),
         ).fetchone()
         assert causal["credit"] == 0.0
-        assert causal["reentered"] == 1
+        assert causal["reentered"] == 0
         assert causal["outcome_hash"]
     finally:
         db.close()

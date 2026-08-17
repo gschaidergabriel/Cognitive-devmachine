@@ -3,7 +3,7 @@ import os
 import stat
 import time
 from pathlib import Path
-from threading import Thread
+from threading import Thread, Barrier, Lock
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from http.server import ThreadingHTTPServer
@@ -129,6 +129,59 @@ def test_http_boundary_requires_auth_and_routes_subject_to_engine():
         out = json.loads(urlopen(req).read())
         assert out["decision"]["text"] == "ack"
         assert engine.calls == [("clerk-g", "hello", ["repo:x"])]
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=2)
+
+
+class SerialProbeEngine:
+    def __init__(self):
+        self.active = 0
+        self.max_active = 0
+        self.lock = Lock()
+
+    def ingest(self, subject, content, *, resources=None):
+        with self.lock:
+            self.active += 1
+            self.max_active = max(self.max_active, self.active)
+        try:
+            time.sleep(0.05)
+            return {"decision": {"text": content}}
+        finally:
+            with self.lock:
+                self.active -= 1
+
+
+def test_product_http_server_serializes_central_mutation_lane():
+    engine = SerialProbeEngine()
+    api = ClayVerseAPI(engine, FakeVerifier())
+    server = api.server("127.0.0.1", 0)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{server.server_address[1]}"
+    barrier = Barrier(3)
+    results = []
+
+    def send(msg):
+        barrier.wait()
+        req = Request(
+            base + "/api/chat",
+            data=json.dumps({"content": msg}).encode(),
+            headers={"Authorization": "Bearer good", "Content-Type": "application/json"},
+            method="POST",
+        )
+        results.append(json.loads(urlopen(req, timeout=3).read())["decision"]["text"])
+
+    workers = [Thread(target=send, args=(x,)) for x in ("one", "two")]
+    for worker in workers:
+        worker.start()
+    barrier.wait()
+    for worker in workers:
+        worker.join(timeout=3)
+    try:
+        assert sorted(results) == ["one", "two"]
+        assert engine.max_active == 1
     finally:
         server.shutdown()
         server.server_close()

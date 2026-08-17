@@ -1,0 +1,38 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:40:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "NO_CHANGE_PRODUCT_CODE_INVALID_EXPERIMENT_CLAIM_PRECISION_CORRECTED",
+  "observed_canonical_main_before_write": "f1d96d1fe20e70f37c8f79baef0ecb7f49579c88",
+  "material_observation": {
+    "kind": "CONTRADICTS",
+    "claim_commit": "2de642140d1101d9b32152407254c17deda5b9bc",
+    "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "claim_experiment": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+    "problem": "The shared user-trigger metadata available for this go is only minute-precision (2026-08-17 17:36 +07:00). The claim synthesized 17:36:00.000000 as if whole-second immutable message metadata had been exposed.",
+    "protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md section 2.3",
+    "protocol_effect": "Minute-precision or inferred timestamps are COORDINATION_BLOCKED and may not mint a timestamp-fallback lease.",
+    "adjudication": "INVALID_NONAUTHORIZING_CLAIM_PRESERVED_AS_HISTORY",
+    "result_receipt_observed_at_correction": "NOT_FOUND"
+  },
+  "experiment_budget": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_authorized": false,
+    "claim_may_authorize_execution": false,
+    "if_execution_later_observed": "PRESERVE_AS_UNAUTHORIZED_COORDINATION_INCIDENT; DO_NOT COUNT_AS_VALID_1_OF_1 EXPERIMENT",
+    "history_policy": "Do not delete or overwrite the invalid claim; corrections are append-only."
+  },
+  "live_hypofusion": {
+    "strongest_counterhypothesis": "Treating a canonical-looking path as sufficient atomic authority can silently bypass the protocol's immutable-source-identity requirement.",
+    "cheapest_falsifier": "Verify whether an immutable request/turn id or at-least-whole-second exact user-message timestamp was actually shared across workers for this turn. None is exposed in the current canonical receipts or worker-visible metadata; minute precision is explicitly recorded.",
+    "work_consequence": "No worker may initiate the claimed mutation experiment from this file. Ordinary deterministic regressions and the existing exact runtime admission path may continue."
+  },
+  "execution_evidence": {
+    "new_runtime_credit": 0,
+    "new_test_credit": 0,
+    "product_runtime_delta": "NO_CHANGE"
+  },
+  "whole_product_acceptance": "IN_PROGRESS",
+  "next_exact_runtime_gate": "FIRST_ADMITTED_ISOLATED_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BIND_EXACT_HEAD -> REAL_TMUX36A_DISCRIMINATOR -> FOCUSED_AND_ADJACENT_REGRESSIONS -> PROMOTION_DECISION -> REJOIN_PR602 -> NATIVE_CLAUDE -> OCI_READINESS_RESTART_CONCURRENCY"
+}

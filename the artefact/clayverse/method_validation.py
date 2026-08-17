@@ -506,7 +506,7 @@ class CandidateValidation:
 
 
 def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, Any], user_id: str) -> dict[str, Any]:
-    """Derive promotion counters only from durable candidate-validation receipts."""
+    """Derive promotion counters only from durable HELD_OUT candidate-validation receipts."""
     candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
     source_episode_ids = list(candidate.get("source_episode_ids") or [])
     if len(source_episode_ids) < 2 or len(set(source_episode_ids)) != len(source_episode_ids):
@@ -528,6 +528,8 @@ def derive_promotion_stats(db, candidate_memory_id: str, candidate: dict[str, An
             raise MethodValidationError("candidate-validation candidate signature diverged")
         if receipt["truth_authority"] is not False or receipt["effect_authority"] is not False:
             raise MethodValidationError("candidate-validation authority broadening detected")
+        if receipt["evaluation_mode"] != "HELD_OUT":
+            raise MethodValidationError("promotion requires HELD_OUT candidate-validation receipts")
         receipts.append((str(row["memory_id"]), receipt))
 
     by_episode: dict[str, tuple[str, dict[str, Any]]] = {}

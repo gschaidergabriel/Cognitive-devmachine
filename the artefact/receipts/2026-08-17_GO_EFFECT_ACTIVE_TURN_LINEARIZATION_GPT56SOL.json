@@ -6,6 +6,7 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_rebase_point": "4428331c192d523a20cf3923d4caeac9167b1baf",
+  "latest_main_effect_journal_rechecked_at": "267ff2c899ad4e79a42459da04af1a19a5490202",
   "issue": 446,
   "research_pr": 456,
   "repair_branch": "go/effect-active-turn-linearization-20260817-sol",
@@ -41,10 +42,52 @@
     "active_turn_schema_fields_confirmed": ["session_id","user_id","episode_id","causal_id","generation","effect_id","workspace_selected"],
     "turn_begin_generation_result_confirmed": true,
     "selection_to_execute_transaction_gap_confirmed": true,
-    "latest_main_still_missing_active_turn_fence_at_rebase": true,
+    "latest_main_still_missing_active_turn_fence": true,
     "classification": "SOURCE_CANDIDATE_REBASED"
   },
-  "deterministic_regression_obligations": [
+  "isolated_source_regression": {
+    "surface": "authorized isolated non-production OpenAI container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "network_required": false,
+    "classification": "FOCUSED_EXACT_BLOB_SOURCE_LEVEL_DETERMINISTIC_REGRESSION",
+    "exact_git_blob_hashes_verified_before_execution": true,
+    "executed_source": [
+      "baseline EffectJournal blob bf80be1a53de07398c3c2773ccc405c171fe7174",
+      "patched EffectJournal blob d03b698f0b9c96b62486d160a51fcb38b8e0955a",
+      "EffectGate/effects.py blob a9fbb88dbbae258680e6ed5e968bd502d5638d40"
+    ],
+    "harness_boundary": "minimal in-memory SQLite/store compatibility harness; not the full ClayVerse store/lifecycle package",
+    "baseline_retired_predecessor": {
+      "bridge_calls": 1,
+      "effect_rows": 1,
+      "final_status": "VERIFIED",
+      "error": null,
+      "result": "BUG_REPRODUCED"
+    },
+    "patched_retired_predecessor": {
+      "bridge_calls": 0,
+      "effect_rows": 0,
+      "error": "StaleGeneration: effect_active_turn",
+      "result": "PASS_FAIL_CLOSED_BEFORE_EXTERNAL_CALL"
+    },
+    "patched_legitimate_active_turn": {
+      "bridge_calls": 1,
+      "effect_rows": 1,
+      "final_status": "VERIFIED",
+      "error": null,
+      "result": "PASS_NO_FALSE_DENIAL"
+    },
+    "patched_wrong_workspace_selection": {
+      "bridge_calls": 0,
+      "effect_rows": 0,
+      "error": "PermissionError: effect workspace selection mismatch",
+      "result": "PASS_FAIL_CLOSED_BEFORE_EXTERNAL_CALL"
+    },
+    "overall_result": "PASS",
+    "evidence_scope": "MECHANISM_SUPPORTED_AT_EXACT_SOURCE_SUBSET_ONLY"
+  },
+  "deterministic_branch_regression_obligations": [
     "retirement commits first -> stale active effect rejected before bridge call; zero effect row",
     "PENDING insert commits first -> successor retirement blocked while effect remains pending"
   ],
@@ -77,7 +120,7 @@
     "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
     "test_credit": "ZERO",
     "staging_pr_closed_without_merge": true,
-    "note": "Because no build/Sandbox/test started, the later rebase does not invalidate any runtime evidence; there is none. A future run must stage the new rebased blobs."
+    "note": "Because no build/Sandbox/test started, the later rebase does not invalidate any runtime evidence; there is none. A future Vercel run must stage the new rebased blobs."
   },
   "experiment_accounting": {
     "new_distinct_unusual_experiment_run_by_this_delta": false,
@@ -85,16 +128,18 @@
     "unusual_experiment_count_added": 0
   },
   "acceptance": {
-    "repair_source_status": "SOURCE_CANDIDATE_REBASED",
-    "mechanism_runtime_status": "UNOBSERVED_ON_AUTHORIZED_ISOLATED_RUNTIME",
-    "focused_branch_pytest": "UNOBSERVED",
+    "repair_source_status": "MECHANISM_SUPPORTED_SOURCE_LEVEL",
+    "focused_exact_blob_source_regression": "PASS",
+    "full_branch_pytest": "UNOBSERVED",
+    "vercel_sandbox_runtime": "ADMISSION_BLOCKED",
+    "exact_oci_runtime": "UNOBSERVED",
     "whole_clayverse_oci_pass": false,
     "merge_authorized_by_this_receipt": false
   },
   "next_exact_step": [
-    "Refresh main and PR 456 immediately before execution and preserve any new non-overlapping effect-journal semantics.",
-    "When Vercel preview admission is available, stage the exact then-current rebased blobs and run focused effect/lifecycle regressions inside a started isolated Vercel Sandbox with source/blob identity captured.",
-    "Run adjacent effect fencing, pending-effect recovery, predecessor interruption and causal re-entry regressions before promotion.",
+    "Refresh main and PR 456 immediately before further execution and preserve any new non-overlapping effect-journal semantics.",
+    "When Vercel preview admission is available, stage the exact then-current rebased blobs and run the focused branch test plus adjacent effect/lifecycle/recovery regressions inside a started isolated Vercel Sandbox.",
+    "Require the PENDING-first successor-abort regression on the real branch lifecycle path before promotion.",
     "Only after component evidence, continue broader exact ClayVerse OCI build/start/restart/concurrency gates; do not infer whole-product PASS from this component."
   ],
   "forbidden_or_not_used": {

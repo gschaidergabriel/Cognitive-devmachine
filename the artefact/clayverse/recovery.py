@@ -6,6 +6,7 @@ import re
 import time
 import uuid
 
+from .autonomy import AutonomyController
 from .effect_journal import EffectJournal
 from .store import UnifiedDB
 
@@ -263,4 +264,7 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
         tx.execute("UPDATE leases SET expires_at=0")
 
     counts["generation"] = db.advance_entity_generation()
+    # Goal state uses the same boot recovery boundary. Safe/no-effect intent may re-enter
+    # the new generation; any effect ambiguity remains blocked and is never replayed.
+    AutonomyController(db).recover_generation(expected_generation=counts["generation"])
     return counts

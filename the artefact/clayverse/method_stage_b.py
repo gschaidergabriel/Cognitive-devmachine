@@ -170,6 +170,35 @@ class StageBMethodRetrieval:
         problem_signature = payload.get("problem_signature")
         if not isinstance(receipt, dict) or not isinstance(methods, list) or not isinstance(counterevidence, list):
             raise StaleGeneration("method_retrieval_receipt")
+
+        def bound_ids(items: list[Any]) -> list[str]:
+            result: list[str] = []
+            for item in items:
+                if not isinstance(item, dict):
+                    raise StaleGeneration("method_retrieval_receipt")
+                memory_id_value = item.get("memory_id")
+                if not isinstance(memory_id_value, str) or not memory_id_value:
+                    raise StaleGeneration("method_retrieval_receipt")
+                result.append(memory_id_value)
+            return result
+
+        selected_ids = bound_ids(methods)
+        counter_ids = bound_ids(counterevidence)
+        if receipt.get("selected_method_ids") != selected_ids:
+            raise StaleGeneration("method_retrieval_receipt")
+        if receipt.get("counterevidence_ids") != counter_ids:
+            raise StaleGeneration("method_retrieval_receipt")
+        if receipt.get("factual_status_unchanged") != expected_identity.get("evidence_status"):
+            raise StaleGeneration("method_retrieval_receipt")
+        if receipt.get("truth_authority") is not False or receipt.get("effect_authority") is not False:
+            raise StaleGeneration("method_retrieval_receipt")
+
+        expected_chars = sum(len(self._canonical_json(item)) for item in counterevidence + methods)
+        if receipt.get("chars_selected") != expected_chars:
+            raise StaleGeneration("method_retrieval_receipt")
+        if expected_chars > int(expected_identity["budget_chars"]):
+            raise StaleGeneration("method_retrieval_receipt")
+
         replay_receipt = dict(receipt)
         replay_receipt["replayed"] = True
         return {

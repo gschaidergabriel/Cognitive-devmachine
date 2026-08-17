@@ -24,7 +24,7 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 - **#622** Python hash-lock generator — retained source candidate/unexecuted; no canonical `requirements.lock.txt` accepted yet.
 - **#623** auth/identity/readiness/reauth drift lane — retained source/mechanism candidate; not exact OCI/runtime evidence.
 - **#602** managed native-Claude process attestation — downstream of exact in-image #611.
-- **#625** tokenless canonical baseline packaging — observed during the 20:53 cycle advancing through head `fcb60ed857b14895d92691fa7b92a9bad160bcb8`; remains Draft/source candidate, now with bounded focused lower-layer evidence and additional optional-EntityOS service/compose/manifest fences.
+- **#625** tokenless canonical baseline packaging — observed during the 20:53 cycle advancing through head `951c14d03f88c2b1ec3a4fa30c95e5c175e18d03`; remains Draft/source candidate, now with bounded focused lower-layer evidence plus optional-EntityOS build-context, service/compose and manifest authority fences. The branch is moving concurrently and must be freshly rejoined before promotion.
 - Dr.-Unterweger **#810** remains historical/retained controller evidence; its `GITHUB_READ_TOKEN` cross-private-repo staging path is not the preferred baseline route.
 
 ### Tokenless baseline decision
@@ -32,6 +32,8 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 PR #625 removes the accidental requirement that baseline ClayVerse must fetch/stage private EntityOS bytes before it can build. Baseline may omit EntityOS while execution is disabled. If EntityOS is later embedded, explicit digest, source-tracked lock identity and locked size remain mandatory and mismatches fail closed. No GitHub credential is admitted into product source.
 
 The optional staging directory is also constrained by the default-deny build context: only its tracked `.keep` and exact staged `EntityOS` artifact may be re-included; a recursive `build-assets/entityos/**` allowlist is rejected by regression.
+
+The artifact manifest is now fenced to the same law on #625: EntityOS is optional for the baseline, omission is allowed only with `CLAYVERSE_ENABLE_ENTITYOS_EXEC=0`, and embedded EntityOS runtime acceptance is conditional on deliberate admission rather than an unconditional whole-product prerequisite.
 
 ### Testing policy — continue without waiting for Vercel
 
@@ -78,16 +80,18 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 
 ### Latest cycle delta
 
-**2026-08-17 20:53 +07:00 — #625 tokenless baseline was adversarially narrowed and lower-layer tested; no product-code promotion to `main` and no OCI PASS.**
+**2026-08-17 20:53 +07:00 — #625 tokenless baseline was adversarially narrowed, its product-authority manifest was aligned, and lower-layer tests were expanded; no product-code promotion to `main` and no OCI PASS.**
 
-- found a supply-chain boundary defect in the Draft candidate: recursive `!build-assets/entityos/**` could admit arbitrary sibling bytes into the OCI build context;
-- repaired #625 to allow only `build-assets/entityos/.keep` and exact `build-assets/entityos/EntityOS`;
-- added regression forbidding restoration of the recursive wildcard;
-- exact reconstructed focused packaging/build-context tests: **5/5 PASS**;
-- shell staging controls: valid digest PASS; wrong digest fail-closed `65`; symlink source fail-closed `66`;
-- evidence receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json`;
-- concurrent #625 work preserved this fence and added optional EntityOS service/compose/manifest tests; branch remained Draft and kept moving during the cycle;
-- Vercel project inventory rechecked: still only `dr-unterweger`; final OCI gate remains deferred, not a development stop;
+- parallel #625 review found a supply-chain boundary defect: recursive `!build-assets/entityos/**` could admit arbitrary sibling bytes into the OCI build context;
+- #625 was repaired to allow only `build-assets/entityos/.keep` and exact `build-assets/entityos/EntityOS`, with a regression forbidding restoration of the recursive wildcard;
+- parallel focused packaging/build-context and stager evidence remained bounded source-contract support;
+- this organ found a separate authority drift: Dockerfile/README made EntityOS optional for the baseline while `manifest.json` still stated staged bytes were mandatory and retained an unconditional final EntityOS runtime gate;
+- repaired manifest blob `c89269e8dd65aa7dd173dcb53a248c1c88aa8d39` and added packaging regression blob `85508bef83aac154d0cfe845cd875dea5b479183`;
+- exact reconstructed focused source-contract suite on the bound Dockerfile/.dockerignore/.gitignore/stager/manifest/test blobs: **6/6 PASS**, plus focused `py_compile` and `sh -n` PASS;
+- new receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_MANIFEST_OPTIONAL_ENTITYOS_FENCE_GPT56SOL.json`;
+- earlier parallel receipt remains: `the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json`;
+- #625 continued moving concurrently during the cycle; do not force-rewrite or infer merge readiness from a stale head;
+- Vercel project inventory remained `dr-unterweger` only; final exact OCI gate remains deferred, not a development stop;
 - unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because no shared immutable request/turn ID and only minute-precision trigger time were available;
 - no whole-product PASS claimed;
 - no VPS/self-hosted/production test, Together API, paid/final training or secret persistence admitted.

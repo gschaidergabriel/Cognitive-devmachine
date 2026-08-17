@@ -29,16 +29,23 @@ def test_docker_uses_current_digest_pinned_native_claude_release():
     lock=json.loads((ROOT/'SOURCE_LOCK.json').read_text())
     docker=(ROOT/'Dockerfile').read_text()
     assert lock['claude_code']['version']=='2.1.233'
+    assert lock['xterm']['package']=='@xterm/xterm'
+    assert lock['xterm']['version']=='6.0.0'
+    assert lock['xterm']['integrity'].startswith('sha512-')
     assert '@anthropic-ai/claude-code' not in docker
     assert 'CLAUDE_CODE_SPEC' not in docker
-    assert 'npm install --global "${XTERM_SPEC}"' in docker
+    assert 'XTERM_SPEC' not in docker
+    assert 'npm install' not in docker
+    assert 'nodejs' not in docker
+    assert 'install_pinned_xterm.py' in docker
     assert 'install_pinned_claude.py' in docker
     assert lock['base_image']['index_digest'] in docker
 
-def test_build_context_admits_lock_and_installer_but_not_receipts_or_state():
+def test_build_context_admits_lock_and_installers_but_not_receipts_or_state():
     ignore=(ROOT/'.dockerignore').read_text().splitlines()
     assert '!SOURCE_LOCK.json' in ignore
     assert '!build/install_pinned_claude.py' in ignore
+    assert '!build/install_pinned_xterm.py' in ignore
     assert not any(x in ignore for x in ('!receipts/','!tests/','.git'))
 
 def test_installer_accepts_only_locked_architectures_and_sha_shape(monkeypatch,tmp_path):

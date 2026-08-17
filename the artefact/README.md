@@ -95,19 +95,19 @@ This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS. It 
 
 The immutable runtime candidate is now Draft PR **#686** at exact head `9dd7da1c7f1d2acf29142a74effd2b51282661f7` / tree `47c09ff6d661b3da02743435dd8a343ddef85efd`. Runtime and whole-product credit for that exact freeze remain zero.
 
-The single retained Vercel controller is Draft PR **#810**. Its current source candidate implements the Tier-2 carrier as:
+The single retained Vercel controller is Draft PR **#810**. A parallel two-stage source candidate attempted to preserve the Tier-2 transfer by restoring a source snapshot into a distinct carrier Sandbox before source deletion, then snapshotting that carrier into a distinct replacement Sandbox. This is materially stronger than direct `snapshot -> delete source -> restore`, but it is still only a source candidate.
 
-`sanitize old guest to declared tier2-transfer -> create Vercel Sandbox snapshot -> delete source sandbox -> create distinct persistent:false replacement sandbox from the snapshot -> remeasure declared snapshot/workspace/OCI identities -> generation-fenced recovery -> fresh HCP-WIF provider-secret reacquisition -> second cognition`.
+The newest relevant official Vercel lifecycle guidance says Sandbox snapshots are tied to the Sandbox that produced them and that deleting that Sandbox deletes its snapshots; Vercel Drives have an independent lifecycle, but Drives are private beta and are not assumed authorized. Older snapshot documentation demonstrates snapshot restore and reuse but does not override this newer delete-lifecycle statement. Therefore **direct snapshot/delete/restore is not an admitted independent durable-carrier mechanism**.
 
-Current Vercel primary documentation explicitly states that deleting a named sandbox removes the sandbox and sessions while snapshots remain until expiry or explicit snapshot deletion. Therefore the earlier claim that sandbox deletion necessarily deletes its snapshots is superseded. The Vercel snapshot is now an **independent post-delete durable-carrier candidate at the platform-lifecycle level**, not runtime proof by itself.
+The retained PR #810 Tier-2 source guard has correspondingly converged fail-closed: snapshot-only and fork-only replacement are forbidden for full Tier-2 credit and an independent durable carrier is required. The observed two-stage carrier-Sandbox candidate additionally needs crash-safe, independently recoverable handoff identity before it can be promoted; a random carrier name held only by the live controller is insufficient recovery evidence if the controller fails after source deletion.
 
-The current PR #810 exact head is still not deployment-verified. Vercel currently reports **`Deployment rate limited — retry in 24 hours.`** for the current head, and the connected project shows no newer preview deployment after the last stale failed preview. No source-guard, snapshot-delete/recreate, exact-OCI or live-provider runtime credit is transferred from older READY deployments.
+The current PR #810 exact head is still not deployment-verified. The connected Vercel project shows no newer preview deployment after the stale failed preview that died in build/source-guard admission; no source-guard, exact-OCI, live-provider or Tier-2 runtime credit is transferred from older READY deployments.
 
-No current authorized Vercel runtime log indicates an already-running replacement acceptance sequence that can be resumed. Daytona is the authorized fallback execution provider under current project law, but no Daytona execution surface is exposed to this worker. Therefore the current hard frontier is **execution admission**, not a demonstrated Tier-2 semantic failure.
+No current authorized Vercel runtime log indicates an already-running replacement acceptance sequence that can be resumed. Daytona remains an authorized fallback under current project law, but no Daytona execution surface is exposed to this worker. Therefore the current hard frontier is **independent crash-safe Tier-2 carrier + exact execution admission**, not a demonstrated ClayVerse product-runtime failure.
 
 The safe next sequence is:
 
-`restore authorized isolated execution admission (current Vercel deploy capacity or Daytona) -> run exact current PR #810 source guards -> execute PR #686 private-source/EntityOS fetch in authorized Sandbox -> full regression -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS + Tier-1 recovery -> Vercel snapshot carrier -> delete old sandbox -> create distinct new persistent:false sandbox from the snapshot -> remeasure exact declared state/workspace/OCI identities -> fresh provider secret reacquisition -> second cognition -> Stage 2 Clerk/WebSocket real-user pass-through`.
+`bind an authorized independently recoverable Tier-2 carrier without assuming private-beta storage -> run exact current PR #810 source guards -> execute PR #686 private-source/EntityOS fetch in authorized Sandbox -> full regression -> exact OCI build/digest -> provider Stage 1 -> EffectGate/EntityOS + Tier-1 recovery -> destroy old guest only after declared transfer is independently recoverable -> create distinct replacement guest -> remeasure exact declared state/workspace/OCI identities -> fresh provider secret reacquisition -> second cognition -> Stage 2 Clerk/WebSocket real-user pass-through`.
 
 Runtime/private-source/exact-OCI/live-provider/Tier-2/whole-product credit remains zero until those exact stages actually execute.
 
@@ -126,7 +126,7 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 - **#682** provider-generalization/runtime-convergence ancestry — bounded exact focused provider evidence; no longer the final immutable runtime identity.
 - **#683** closed source-development lane — useful ancestry/evidence only; fused into retained lineage, not a second runtime path.
 - **#686** immutable runtime candidate freeze — exact Research identity `9dd7da1c...` / tree `47c09ff6...`; current exact runtime credit remains zero.
-- **#810** retained Vercel Sandbox controller — single OCI orchestration lane; snapshot-carrier source candidate exists, but exact current deployment admission is Vercel build-rate-limited.
+- **#810** retained Vercel Sandbox controller — single OCI orchestration lane; independent durable-carrier and exact deployment/runtime evidence remain open gates.
 
 ## Testing authority
 
@@ -136,19 +136,20 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 
 A higher class is never inferred from a lower one.
 
-## Latest cycle delta — 2026-08-18 01:37 +07:00
+## Latest cycle delta — 2026-08-18 01:39 +07:00
 
 - refreshed canonical Research and corrected the immutable PR #686 identity to `9dd7da1c...` / `47c09ff6...`;
-- corrected a false Vercel lifecycle assumption using current primary documentation: manual Sandbox snapshots survive named-sandbox deletion until expiry or explicit snapshot deletion;
-- observed PR #810 source convergence from `fork/persistent:true` toward an explicit snapshot carrier followed by source deletion and a distinct `persistent:false` replacement sandbox;
-- preserved strict evidence separation: the snapshot carrier is a source/platform-lifecycle candidate only, not Tier-2 runtime PASS;
-- observed the current exact PR #810 Vercel status fail closed with `Deployment rate limited — retry in 24 hours.`; no new preview/source-guard/runtime credit exists for that head;
-- checked current Vercel preview runtime logs and found no already-running acceptance execution to resume;
-- Daytona remains the authorized fallback, but no Daytona execution surface is available to this worker;
+- isolated and repaired a real PR #810 build/source-guard defect: a malformed 38-character retained `RESEARCH_SHA` marker was corrected to the runner's valid 40-character SHA at controller commit `b699ea2c5db4d9f69dd3b222bc4891e0a4d88563`;
+- observed the stale pre-fix Vercel preview fail on that exact malformed marker before any ClayVerse product runtime executed, so the failure receives controller/build-admission classification only;
+- corrected a conflicting snapshot-lifecycle overclaim using newer official Vercel guidance: direct snapshot/delete/restore is not admitted because snapshots are tied to the producing Sandbox lifecycle;
+- observed PR #810 converge its Tier-2 guard to `INDEPENDENT_DURABLE_CARRIER_REQUIRED_SNAPSHOT_AND_FORK_FAIL_CLOSED`;
+- retained the two-stage carrier-Sandbox idea only as a candidate requiring crash-safe independently recoverable identity/handoff evidence;
+- checked the connected Vercel deployment list and found no new exact-head preview after the stale failed preview; runtime credit remains zero;
+- no owner secret or provider credential was used, no second canonical path was created, and no product semantic bytes were changed by this organ;
 - the globally shared unusual-experiment slot was already consumed before this organ joined this macro-cycle, so no second unusual experiment was created;
-- no product semantic bytes were changed in this cycle; this README refresh records the current execution frontier and epistemic correction;
+- durable receipt: `the artefact/receipts/2026-08-18_GO_PR810_SHA_GUARD_AND_TIER2_CARRIER_FENCE_GPT56SOL.json`;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. The durable-carrier *availability* blocker has narrowed: Vercel snapshots are a legitimate post-delete carrier candidate according to current platform lifecycle semantics. The exact discriminator is now executable: prove the current PR #810 source guards and then the full snapshot -> delete old guest -> create distinct replacement -> exact-identity restore/recovery -> fresh-provider-cognition path in an authorized isolated runtime. Current Vercel deployment rate limiting prevents that discriminator from running here, and no fallback execution surface is connected.
+ClayVerse remains **IN_PROGRESS**. This cycle produced one concrete controller repair and removed a false Tier-2 promotion path. The next exact discriminator is a crash-safe independent carrier bound to the single retained PR #810 controller, followed by an exact-head authorized isolated run of the immutable PR #686 source/OCI/provider/recovery path. Source candidates, deployment READY states and historical component evidence remain insufficient for whole-product PASS.

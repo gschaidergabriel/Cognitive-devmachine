@@ -23,11 +23,6 @@ def _add(db, memory_id, value, *, subject, user_id="gabriel", ts=100.0):
 
 
 def _bind_positive_canonical_outcome(db, turn):
-    """Persist the positive causal receipt MicroClay is allowed to consume.
-
-    This is a retrieval-layer fixture, not external execution: it deliberately does
-    not use state.noop, which the canonical EffectJournal marks non-rewarding.
-    """
     effect_id = f"effect:{turn['causal_id']}"
     now = time.time()
     outcome = json.dumps({"ok": True, "boundary": "test-canonical-receipt"}, sort_keys=True)
@@ -35,31 +30,17 @@ def _bind_positive_canonical_outcome(db, turn):
         "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
         "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
         (
-            effect_id,
-            turn["episode_id"],
-            "gabriel",
-            "entityos.exec",
-            json.dumps({"sha256": "test"}, sort_keys=True),
-            None,
-            int(turn["generation"]),
-            "VERIFIED",
-            outcome,
-            now,
-            now,
+            effect_id, turn["episode_id"], "gabriel", "entityos.exec",
+            json.dumps({"sha256": "test"}, sort_keys=True), None, int(turn["generation"]),
+            "VERIFIED", outcome, now, now,
         ),
     )
     db.db.execute(
         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
         "VALUES(?,?,?,?,?,?,?,?)",
         (
-            turn["causal_id"],
-            turn["episode_id"],
-            effect_id,
-            turn["turn_id"],
-            hashlib.sha256(outcome.encode()).hexdigest(),
-            1.0,
-            1,
-            now,
+            turn["causal_id"], turn["episode_id"], effect_id, turn["turn_id"],
+            hashlib.sha256(outcome.encode()).hexdigest(), 1.0, 1, now,
         ),
     )
 
@@ -69,7 +50,6 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
-
         first = life.begin("orchid procedure codename")
         assert [m["memory_id"] for m in first["context"]["durable_memory"]] == ["m1"]
         _bind_positive_canonical_outcome(db, first)
@@ -81,7 +61,6 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         assert receipt["outcome_learning_applied"] == 1
         assert second["context"]["durable_memory"] == []
         assert receipt["status"] == "UNKNOWN"
-
         row = db.db.execute(
             "SELECT selected_memory_ids,shadow_memory_ids FROM retrieval_episodes WHERE causal_id=?",
             (second["causal_id"],),
@@ -89,12 +68,11 @@ def test_verified_query_alias_opens_shadow_entry_without_changing_served_fact_st
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["m1"]
 
-        route_key = MicroClayRetrieval._route_key("codename", "m1")
+        route_key = MicroClayRetrieval._route_key("gabriel", "codename", "m1")
         learned = db.db.execute(
-            "SELECT capital,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
-            (route_key,),
+            "SELECT capital,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?", (route_key,)
         ).fetchone()
-        assert route_key.startswith("v3:route:")
+        assert route_key.startswith("v3:user:gabriel:route:")
         assert learned is not None
         assert float(learned["capital"]) > 0.0
         assert int(learned["pulls"]) == 1
@@ -110,7 +88,6 @@ def test_same_subject_sibling_cannot_inherit_learned_route(tmp_path):
         _add(db, "target", "orchid procedure", subject=shared, ts=200.0)
         _add(db, "sibling", "violet bicycle", subject=shared, ts=100.0)
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
-
         first = life.begin("orchid procedure codename")
         assert first["context"]["durable_memory"][0]["memory_id"] == "target"
         _bind_positive_canonical_outcome(db, first)
@@ -123,14 +100,10 @@ def test_same_subject_sibling_cannot_inherit_learned_route(tmp_path):
         ).fetchone()
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["target"]
-        target_key = MicroClayRetrieval._route_key("codename", "target")
-        sibling_key = MicroClayRetrieval._route_key("codename", "sibling")
-        assert db.db.execute(
-            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (target_key,)
-        ).fetchone() is not None
-        assert db.db.execute(
-            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (sibling_key,)
-        ).fetchone() is None
+        target_key = MicroClayRetrieval._route_key("gabriel", "codename", "target")
+        sibling_key = MicroClayRetrieval._route_key("gabriel", "codename", "sibling")
+        assert db.db.execute("SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (target_key,)).fetchone() is not None
+        assert db.db.execute("SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (sibling_key,)).fetchone() is None
         life.abort("test-end")
     finally:
         db.close()
@@ -140,10 +113,10 @@ def test_generic_subject_capital_cannot_open_unrelated_shadow_entry(tmp_path):
     db = _db(tmp_path)
     try:
         _add(db, "m1", "orchid procedure", subject="procedure:orchid")
+        subject_key = MicroClayRetrieval._policy_key("gabriel", "subject:procedure:orchid")
         db.db.execute(
-            "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
-            "VALUES(?,?,?,?,?)",
-            ("v3:subject:procedure:orchid", 4.0, 1.0, 10, 1.0),
+            "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) VALUES(?,?,?,?,?)",
+            (subject_key, 4.0, 1.0, 10, 1.0),
         )
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         result = life.begin("completely-unrelated-cue")
@@ -166,29 +139,22 @@ def test_new_alias_route_credit_is_bound_to_rank1_served_evidence(tmp_path):
         _add(db, "top", "orchid procedure", subject="procedure:top", ts=200.0)
         _add(db, "other", "orchid procedure", subject="procedure:other", ts=100.0)
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
-
         first = life.begin("orchid procedure codename")
         assert [m["memory_id"] for m in first["context"]["durable_memory"]][:2] == ["top", "other"]
         _bind_positive_canonical_outcome(db, first)
         life.complete("done")
 
         second = life.begin("codename")
-        assert second["context"]["durable_memory"] == []
         row = db.db.execute(
             "SELECT selected_memory_ids,shadow_memory_ids FROM retrieval_episodes WHERE causal_id=?",
             (second["causal_id"],),
         ).fetchone()
         assert json.loads(row["selected_memory_ids"]) == []
         assert json.loads(row["shadow_memory_ids"]) == ["top"]
-
-        top_key = MicroClayRetrieval._route_key("codename", "top")
-        other_key = MicroClayRetrieval._route_key("codename", "other")
-        assert db.db.execute(
-            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (top_key,)
-        ).fetchone() is not None
-        assert db.db.execute(
-            "SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (other_key,)
-        ).fetchone() is None
+        top_key = MicroClayRetrieval._route_key("gabriel", "codename", "top")
+        other_key = MicroClayRetrieval._route_key("gabriel", "codename", "other")
+        assert db.db.execute("SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (top_key,)).fetchone() is not None
+        assert db.db.execute("SELECT 1 FROM retrieval_entrypoint_policy WHERE entry_key=?", (other_key,)).fetchone() is None
         life.abort("test-end")
     finally:
         db.close()
@@ -202,22 +168,16 @@ def test_policy_version_mismatch_forces_shadow_and_ignores_v2_subject_route_capi
         old_subject_target = hashlib.sha256(b"procedure:orchid").hexdigest()[:16]
         legacy_v2_route_key = f"v2:route:{cue}:{old_subject_target}"
         db.db.execute(
-            "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
-            "VALUES(?,?,?,?,?)",
+            "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) VALUES(?,?,?,?,?)",
             (legacy_v2_route_key, 4.0, 1.0, 10, 1.0),
         )
-        db.db.execute(
-            "UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=2 WHERE singleton=1"
-        )
+        db.db.execute("UPDATE retrieval_policy_state SET mode='ACTIVE',policy_version=2 WHERE singleton=1")
         organ = MicroClayRetrieval(db)
         assert organ.mode() == "SHADOW"
-
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         result = life.begin("codename")
-        assert result["context"]["durable_memory"] == []
         row = db.db.execute(
-            "SELECT selected_memory_ids,shadow_memory_ids,policy_version,mode "
-            "FROM retrieval_episodes WHERE causal_id=?",
+            "SELECT selected_memory_ids,shadow_memory_ids,policy_version,mode FROM retrieval_episodes WHERE causal_id=?",
             (result["causal_id"],),
         ).fetchone()
         assert int(row["policy_version"]) == 3

@@ -8,7 +8,6 @@ class EffectJournal:
     SAFE_OUTCOME_FIELDS=('ok','exit','boundary','entityos_sha256','denied','reason','error','certainty')
     def __init__(self,db:UnifiedDB):
         self.db=db
-        self.recover_pending()
     @staticmethod
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @staticmethod
@@ -42,8 +41,6 @@ class EffectJournal:
         if int(row[0])!=int(generation): raise StaleGeneration(session_id)
         global_row=db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
         entity_generation=int(global_row[0]) if global_row else 0
-        # entity_generation==0 is pre-runtime/test construction. A real service boot
-        # advances it and thereafter both permanent sessions must match it exactly.
         if entity_generation>0 and entity_generation!=int(generation): raise StaleGeneration('entity_generation')
     def begin(self,episode_id,session_id,user_id,capability,target,generation,argv=None,lease:Lease|None=None):
         eid=str(uuid.uuid4())

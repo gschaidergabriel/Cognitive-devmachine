@@ -136,7 +136,7 @@ def test_counts_and_calibration_fail_closed():
             candidate_record(support_count=0, success_count=1),
             {"source": "episode_abstraction"},
         )
-    with pytest.raises(MethodMemoryValidationError, match="calibration"):
+    with pytest.raises(MethodMemoryValidationError, match="canonical JSON"):
         validate_method_record(
             "framework_candidate",
             candidate_record(calibration=float("nan")),

@@ -2,23 +2,30 @@
   "allowManagedHooksOnly": true,
   "allowManagedPermissionRulesOnly": true,
   "allowManagedMcpServersOnly": true,
+  "allowedChannelPlugins": [],
   "allowedMcpServers": [
     {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
   ],
   "autoMemoryEnabled": false,
+  "channelsEnabled": false,
   "crossSessionInbound": "refuse",
+  "disableAgentView": true,
+  "disableArtifact": true,
   "disableBundledSkills": true,
   "disableClaudeAiConnectors": true,
+  "disableDeepLinkRegistration": "disable",
   "disableRemoteControl": true,
   "disableSideloadFlags": true,
   "disableSkillShellExecution": true,
+  "strictKnownMarketplaces": [],
   "env": {
     "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
     "CLAUDE_CODE_SHELL_PREFIX": "/opt/clayverse/runtime/deny-shell"
   },
   "permissions": {
     "deny": [
-      "Bash"
+      "Bash",
+      "Artifact"
     ],
     "disableBypassPermissionsMode": "disable"
   },

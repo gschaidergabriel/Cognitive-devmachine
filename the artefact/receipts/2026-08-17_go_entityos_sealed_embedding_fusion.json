@@ -1,0 +1,50 @@
+{
+  "kind": "CLAYVERSE_GO_ENTITYOS_SEALED_EMBEDDING_FUSION_RECEIPT",
+  "date": "2026-08-17",
+  "authority": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "trigger": "go",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "observed_frontier": [
+    "ClayVerse -> EntityOS bridge verified a mutable source inode and then executed that same inode, leaving a post-hash pre-exec mutation window",
+    "single-container boundary test required build-time EntityOS embedding while current Dockerfile/compose had not implemented the asserted build contract"
+  ],
+  "fusion_commits": {
+    "sealed_verified_snapshot": "4fa7f5af19f50d90e8bd4ae53219de23ce3111e6",
+    "bounded_mutation_lesion_test": "c4a59ec4232322ba0af18d46c4e78641ed9f7f11",
+    "digest_pinned_image_embedding": "6fa8fa63610470e25bd2a78d59529e2bf8f5fd5b",
+    "compose_digest_binding": "8f0e40b04c82e52f11076727bea8a417721d18af"
+  },
+  "resulting_contract": {
+    "entityos_execution_object": "SHA-256-verified sealed Linux memfd snapshot",
+    "post_verification_source_mutation_affects_execution": false,
+    "image_embedding": "COPY EntityOS -> /opt/entityos/EntityOS at build time",
+    "build_digest_gate": "ENTITYOS_SHA256 checked by sha256sum before image completion",
+    "embedded_mode": "root-owned 0555",
+    "runtime_host_bind_mount": "FORBIDDEN",
+    "runtime_required_flag": false,
+    "runtime_binding": "path and digest are supplied for verification; mandatory baseline flag remains disabled pending external isolated-sandbox acceptance"
+  },
+  "exactly_one_unusual_experiment": {
+    "name": "post-verification backing-path mutation lesion",
+    "test": "the artefact/tests/test_entityos_snapshot_integrity.py",
+    "intervention": "after _open_verified(), replace the backing EntityOS path bytes with a different executable and attempt a direct write to the returned execution fd",
+    "prediction_if_vulnerable": "MUTATED executes or snapshot remains writable",
+    "prediction_if_hardened": "PINNED executes and direct write is rejected",
+    "isolated_local_preflight": "PASS: 1 passed"
+  },
+  "regression": {
+    "pre_repair_exact_main": "0c9606b6e906a6c16a00d8b67f452bf99ef8f0bd",
+    "pre_repair_single_container_boundary": "FAIL: 1 failed, 1 passed",
+    "post_repair_single_container_boundary": "PASS: 2 passed",
+    "surface": "OpenAI isolated local container",
+    "scope": "focused source/policy regression only; not OCI runtime acceptance"
+  },
+  "vercel_sandbox": {
+    "status": "NOT_RUN_TOOL_SURFACE_BLOCKED",
+    "reason": "available Vercel connector exposes deployment/domain/log operations but no executable Vercel Sandbox create/exec surface",
+    "substitution_used": false
+  },
+  "whole_system_pass": false,
+  "remaining_blocker": "stage an exact accepted EntityOS artifact in the build context and execute the exact current ClayVerse image on an authorized isolated Sandbox/OCI execution surface, preserving source SHA, EntityOS digest, image digest, commands, exits, logs, Clerk/Claude integration gates and stop result"
+}

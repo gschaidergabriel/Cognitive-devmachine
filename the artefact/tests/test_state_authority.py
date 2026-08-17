@@ -1,6 +1,9 @@
 import json
 import sqlite3
+import threading
+import time
 
+from clayverse.engine import ClayVerseEngine
 from clayverse.identity import IdentityRouter
 from clayverse.memory import MemoryManager
 from clayverse.store import UnifiedDB
@@ -68,3 +71,47 @@ def test_schema2_hidden_raw_ledger_is_retired_on_open(tmp_path):
     assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "3"
     assert reopened.db.execute("SELECT content FROM turns WHERE turn_id=?", (turn_id,)).fetchone()[0] == "ordinary full turn"
     reopened.close()
+
+
+class _ConcurrencyProbe:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.active = 0
+        self.max_active = 0
+
+    def reason(self, world, observation):
+        with self.lock:
+            self.active += 1
+            self.max_active = max(self.max_active, self.active)
+        time.sleep(0.03)
+        with self.lock:
+            self.active -= 1
+        return {"text": f"ack:{observation}", "selection": "respond", "effect": None}
+
+
+def test_central_entity_turns_are_serialized_across_users(tmp_path):
+    db = UnifiedDB(tmp_path / "central.db")
+    probe = _ConcurrencyProbe()
+    engine = ClayVerseEngine(db, {"g": "gabriel", "a": "andreas"}, inference=probe)
+    errors = []
+
+    def run(subject, text):
+        try:
+            engine.ingest(subject, text)
+        except Exception as exc:
+            errors.append(exc)
+
+    threads = [
+        threading.Thread(target=run, args=("g", "one")),
+        threading.Thread(target=run, args=("a", "two")),
+    ]
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
+
+    assert not errors
+    assert probe.max_active == 1
+    assert db.db.execute("SELECT COUNT(*) FROM causal_episodes WHERE reentered=1").fetchone()[0] == 2
+    assert not _table_exists(db, "turn_ledger")
+    db.close()

@@ -89,6 +89,11 @@ def test_glm_endpoint_fails_closed_outside_exact_provider_boundary(endpoint):
         GLMTokenInference(api_token="token", endpoint=endpoint)
 
 
+def test_glm_rejects_non_glm_model_id():
+    with pytest.raises(GLMInferenceError, match="model identifier is invalid"):
+        GLMTokenInference(api_token="token", model="other-provider-model")
+
+
 def test_glm_rejects_control_characters_in_token():
     with pytest.raises(GLMInferenceError, match="missing or malformed"):
         GLMTokenInference(api_token="token\nsecond-line")

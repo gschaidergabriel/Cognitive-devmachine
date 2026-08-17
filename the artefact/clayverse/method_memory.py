@@ -8,10 +8,11 @@ import uuid
 from dataclasses import dataclass
 from typing import Any
 
+from .method_validation import MethodValidationAuthority, MethodValidationError
 from .store import UnifiedDB
 
 METHOD_SCHEMA_VERSION = 1
-PROMOTION_RECEIPT_SCHEMA = "clayverse.method-promotion/v1"
+PROMOTION_RECEIPT_SCHEMA = "clayverse.method-promotion/v2"
 METHOD_KINDS = frozenset({
     "framework_candidate",
     "framework",
@@ -159,6 +160,13 @@ def validate_method_receipt(receipt: Any) -> dict[str, Any]:
         "source_episode_ids",
         "supporting_memory_ids",
         "counterexample_memory_ids",
+        "validation_receipt_ids",
+        "derived_support_count",
+        "derived_success_count",
+        "derived_failure_count",
+        "derived_calibration",
+        "derived_last_validated_at",
+        "validation_signal_class",
         "evaluation",
         "ts",
     }
@@ -172,24 +180,54 @@ def validate_method_receipt(receipt: Any) -> dict[str, Any]:
     if receipt["schema"] != PROMOTION_RECEIPT_SCHEMA:
         raise MethodRecordError("unsupported method receipt schema")
     normalized["schema"] = PROMOTION_RECEIPT_SCHEMA
-    normalized["candidate_memory_id"] = _bounded_string(
-        receipt["candidate_memory_id"], "candidate_memory_id"
-    )
-    normalized["promoted_memory_id"] = _bounded_string(
-        receipt["promoted_memory_id"], "promoted_memory_id"
-    )
+    normalized["candidate_memory_id"] = _bounded_string(receipt["candidate_memory_id"], "candidate_memory_id")
+    normalized["promoted_memory_id"] = _bounded_string(receipt["promoted_memory_id"], "promoted_memory_id")
     if receipt["action"] != "PROMOTE":
         raise MethodRecordError("unsupported method receipt action")
     normalized["action"] = "PROMOTE"
-    for field in ("source_episode_ids", "supporting_memory_ids", "counterexample_memory_ids"):
+    for field in (
+        "source_episode_ids", "supporting_memory_ids", "counterexample_memory_ids", "validation_receipt_ids"
+    ):
         value = receipt[field]
         if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
             raise MethodRecordError(f"{field} must be a bounded list")
-        if field == "source_episode_ids" and len(value) < 2:
-            raise MethodRecordError("promotion receipt requires at least two source episodes")
+        if field == "validation_receipt_ids" and len(value) < 2:
+            raise MethodRecordError("promotion receipt requires at least two validation receipts")
         normalized[field] = [_bounded_string(x, field) for x in value]
         if len(set(normalized[field])) != len(normalized[field]):
             raise MethodRecordError(f"duplicate {field} values are forbidden")
+    for field in ("derived_support_count", "derived_success_count", "derived_failure_count"):
+        value = receipt[field]
+        if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+            raise MethodRecordError(f"{field} must be a non-negative integer")
+        normalized[field] = value
+    if normalized["derived_support_count"] != len(normalized["validation_receipt_ids"]):
+        raise MethodRecordError("derived support count does not match validation receipt count")
+    if normalized["derived_success_count"] + normalized["derived_failure_count"] != normalized["derived_support_count"]:
+        raise MethodRecordError("derived success/failure counts do not match support count")
+    calibration = receipt["derived_calibration"]
+    if isinstance(calibration, bool) or not isinstance(calibration, (int, float)):
+        raise MethodRecordError("invalid derived calibration")
+    calibration = float(calibration)
+    if not math.isfinite(calibration) or not 0.0 <= calibration <= 1.0:
+        raise MethodRecordError("derived calibration must be finite and in [0,1]")
+    expected_calibration = (
+        normalized["derived_success_count"] / normalized["derived_support_count"]
+        if normalized["derived_support_count"] else 0.0
+    )
+    if calibration != expected_calibration:
+        raise MethodRecordError("derived calibration does not match validation outcomes")
+    normalized["derived_calibration"] = calibration
+    validated = receipt["derived_last_validated_at"]
+    if isinstance(validated, bool) or not isinstance(validated, (int, float)):
+        raise MethodRecordError("invalid derived_last_validated_at")
+    validated = float(validated)
+    if not math.isfinite(validated) or validated <= 0:
+        raise MethodRecordError("invalid derived_last_validated_at")
+    normalized["derived_last_validated_at"] = validated
+    if receipt["validation_signal_class"] != "VERIFIED_EFFECT_OUTCOME":
+        raise MethodRecordError("unsupported method validation signal class")
+    normalized["validation_signal_class"] = "VERIFIED_EFFECT_OUTCOME"
     normalized["evaluation"] = _bounded_string(receipt["evaluation"], "evaluation")
     ts = receipt["ts"]
     if isinstance(ts, bool) or not isinstance(ts, (int, float)):
@@ -287,8 +325,8 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
     if kind in PROMOTABLE_KINDS and status == "CANDIDATE":
         raise MethodRecordError("promoted method kind cannot retain CANDIDATE status")
     if kind in PROMOTABLE_KINDS and status == "PROMOTED":
-        if normalized["support_count"] < 2 or len(set(normalized["source_episode_ids"])) < 2:
-            raise MethodRecordError("single-episode promotion is forbidden")
+        if normalized["support_count"] < 2:
+            raise MethodRecordError("promotion requires at least two validated method uses")
         if not normalized["falsifiers"]:
             raise MethodRecordError("promoted method requires explicit falsifier")
         if normalized["calibration"] <= 0.0:
@@ -334,7 +372,8 @@ class MethodMemory:
 
     Ordinary admission can persist candidates and bounded negative method memory. It
     cannot mint reusable promoted frameworks/heuristics. Positive promotion requires an
-    atomic causal lifecycle bound to terminal, causally re-entered source episodes.
+    atomic lifecycle whose support/success/failure/calibration are derived exclusively
+    from canonical method-validation receipts bound to objective EffectJournal outcomes.
     """
 
     def __init__(self, db: UnifiedDB):
@@ -391,6 +430,14 @@ class MethodMemory:
         provenance = _parse_json_object(str(row["provenance"]), "method provenance")
         return record, provenance
 
+    def _promotion_aggregate(self, candidate_memory_id: str, user_id: str) -> dict[str, Any]:
+        try:
+            return MethodValidationAuthority(self.db).promotion_aggregate(
+                candidate_memory_id=candidate_memory_id, user_id=user_id
+            )
+        except MethodValidationError as exc:
+            raise MethodRecordError(str(exc)) from exc
+
     def _assert_promotion_lineage(
         self,
         row,
@@ -401,7 +448,7 @@ class MethodMemory:
         source_id = provenance.get("promotion_source_memory_id")
         receipt_id = provenance.get("promotion_receipt_id")
         if (
-            provenance.get("promotion_transaction_version") != 1
+            provenance.get("promotion_transaction_version") != 2
             or not isinstance(source_id, str)
             or not source_id
             or not isinstance(receipt_id, str)
@@ -438,10 +485,10 @@ class MethodMemory:
         if (
             receipt["candidate_memory_id"] != source_id
             or receipt["promoted_memory_id"] != str(row["memory_id"])
-            or receipt_provenance.get("admission") != "method_memory_receipt:v1"
+            or receipt_provenance.get("admission") != "method_memory_receipt:v2"
             or receipt_provenance.get("promotion_source_memory_id") != source_id
             or receipt_provenance.get("promoted_memory_id") != str(row["memory_id"])
-            or receipt_provenance.get("promotion_transaction_version") != 1
+            or receipt_provenance.get("promotion_transaction_version") != 2
             or receipt_provenance.get("user_scope") != user_id
         ):
             raise MethodRecordError("promotion receipt provenance mismatch")
@@ -460,21 +507,35 @@ class MethodMemory:
             "supporting_memory_ids",
             "counterexample_memory_ids",
             "abstraction_version",
-            "support_count",
-            "success_count",
-            "failure_count",
-            "calibration",
             "limits_method_ids",
         )
         if any(record[field] != candidate[field] for field in immutable_fields):
             raise MethodRecordError("promoted method payload drifted from candidate")
+        aggregate = self._promotion_aggregate(source_id, user_id)
+        if (
+            receipt["validation_receipt_ids"] != aggregate["validation_receipt_ids"]
+            or receipt["derived_support_count"] != aggregate["support_count"]
+            or receipt["derived_success_count"] != aggregate["success_count"]
+            or receipt["derived_failure_count"] != aggregate["failure_count"]
+            or float(receipt["derived_calibration"]) != float(aggregate["calibration"])
+            or float(receipt["derived_last_validated_at"]) != float(aggregate["last_validated_at"])
+            or receipt["validation_signal_class"] != aggregate["signal_class"]
+        ):
+            raise MethodRecordError("promotion receipt validation aggregate drifted")
+        if (
+            record["support_count"] != aggregate["support_count"]
+            or record["success_count"] != aggregate["success_count"]
+            or record["failure_count"] != aggregate["failure_count"]
+            or float(record["calibration"]) != float(aggregate["calibration"])
+            or float(record["last_validated_at"]) != float(aggregate["last_validated_at"])
+        ):
+            raise MethodRecordError("promoted method utility is not derived from validation receipts")
         if (
             receipt["source_episode_ids"] != record["source_episode_ids"]
             or receipt["supporting_memory_ids"] != record["supporting_memory_ids"]
             or receipt["counterexample_memory_ids"] != record["counterexample_memory_ids"]
-            or float(receipt["ts"]) != float(record["last_validated_at"])
         ):
-            raise MethodRecordError("promotion receipt evidence mismatch")
+            raise MethodRecordError("promotion receipt abstraction evidence mismatch")
         self._assert_refs(record, user_id, require_terminal=True)
 
     def admit(
@@ -550,6 +611,7 @@ class MethodMemory:
             ):
                 raise MethodRecordError("promotion source is not canonically admitted")
             self._assert_refs(candidate, user_id, require_terminal=True)
+            aggregate = self._promotion_aggregate(candidate_memory_id, user_id)
 
             receipt_subject = f"promotion:{candidate_memory_id}"
             prior_receipts = db.execute(
@@ -568,8 +630,14 @@ class MethodMemory:
             promoted_id = str(uuid.uuid4())
             receipt_id = str(uuid.uuid4())
             promoted_record = dict(candidate)
-            promoted_record["status"] = "PROMOTED"
-            promoted_record["last_validated_at"] = now
+            promoted_record.update({
+                "status": "PROMOTED",
+                "support_count": aggregate["support_count"],
+                "success_count": aggregate["success_count"],
+                "failure_count": aggregate["failure_count"],
+                "calibration": aggregate["calibration"],
+                "last_validated_at": aggregate["last_validated_at"],
+            })
             promoted_record = validate_method_record(promoted_kind, promoted_record)
             receipt = validate_method_receipt({
                 "schema": PROMOTION_RECEIPT_SCHEMA,
@@ -579,6 +647,13 @@ class MethodMemory:
                 "source_episode_ids": list(promoted_record["source_episode_ids"]),
                 "supporting_memory_ids": list(promoted_record["supporting_memory_ids"]),
                 "counterexample_memory_ids": list(promoted_record["counterexample_memory_ids"]),
+                "validation_receipt_ids": list(aggregate["validation_receipt_ids"]),
+                "derived_support_count": aggregate["support_count"],
+                "derived_success_count": aggregate["success_count"],
+                "derived_failure_count": aggregate["failure_count"],
+                "derived_calibration": aggregate["calibration"],
+                "derived_last_validated_at": aggregate["last_validated_at"],
+                "validation_signal_class": aggregate["signal_class"],
                 "evaluation": evaluation,
                 "ts": now,
             })
@@ -587,11 +662,12 @@ class MethodMemory:
             receipt_provenance = dict(provenance)
             receipt_provenance.update({
                 "method_schema_version": METHOD_SCHEMA_VERSION,
-                "admission": "method_memory_receipt:v1",
+                "admission": "method_memory_receipt:v2",
                 "user_scope": user_id,
                 "promotion_source_memory_id": candidate_memory_id,
                 "promoted_memory_id": promoted_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                "validation_receipt_ids": list(aggregate["validation_receipt_ids"]),
                 "truth_authority": False,
                 "effect_authority": False,
             })
@@ -603,7 +679,8 @@ class MethodMemory:
                 "user_scope": user_id,
                 "promotion_source_memory_id": candidate_memory_id,
                 "promotion_receipt_id": receipt_id,
-                "promotion_transaction_version": 1,
+                "promotion_transaction_version": 2,
+                "validation_receipt_ids": list(aggregate["validation_receipt_ids"]),
                 "truth_authority": False,
                 "effect_authority": False,
             }

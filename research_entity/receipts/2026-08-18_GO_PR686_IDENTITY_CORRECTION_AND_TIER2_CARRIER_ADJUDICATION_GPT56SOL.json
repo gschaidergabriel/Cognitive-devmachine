@@ -1,0 +1,83 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-18",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "join": {
+    "canonical_main_sha": "6c39cebeaaad807ed2ee66e3299be9a15be25276",
+    "canonical_main_verified_immediately_before_write": true
+  },
+  "correction": {
+    "supersedes_identity_fields_in": "research_entity/receipts/2026-08-18_GO_PR686_TIER2_DURABLE_CARRIER_BLOCKER.json",
+    "prior_receipt_bytes_preserved": true,
+    "reason": "The prior receipt recorded a non-existent PR686 head/tree identity. GitHub PR and commit objects establish the actual immutable freeze identity.",
+    "invalid_recorded_head_sha": "9dd7be2133dd54d92ae3f17ce0e3a53d3cc7ed02",
+    "invalid_recorded_tree_sha": "47c09cf7c7d00b1c372454389509c8f4115c4b91",
+    "invalid_head_lookup": "NO_COMMIT_FOUND",
+    "actual_pr686_head_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "actual_pr686_tree_sha": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "pr686_status": "OPEN_DRAFT_IMMUTABLE_FREEZE",
+    "runtime_credit": "NONE_CURRENT_HEAD_UNOBSERVED"
+  },
+  "controller_reconciliation": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "observed_head": "c7e22878d1e6399638e5679301da0091cf24dfa4",
+    "active_effect_tier1_handler_binding": {
+      "research_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+      "research_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+      "classification": "CORRECT_CURRENT_PR686_BINDING"
+    },
+    "conclusion": "The canonical research receipt identity was wrong, but the observed active PR810 Tier1 handler is bound to the real PR686 freeze identity. Do not rewrite the controller merely to match the stale receipt."
+  },
+  "tier2_current_source": {
+    "handler": "mcp/vercel-sandbox-mcp/lib/tier2-recreate-handler.js",
+    "observed_controller_head": "c7e22878d1e6399638e5679301da0091cf24dfa4",
+    "current_sequence": "prepare transfer inside source guest -> stop source -> Sandbox.fork(sourceSandbox=sourceName, persistent=true) -> delete source -> continue from inherited filesystem",
+    "acceptance_gap": "This does not prove declared-artifacts-only export to storage independent of the old sandbox before deletion followed by a genuinely fresh persistent:false replacement sandbox.",
+    "classification": "SOURCE_BLOCKER_CONFIRMED"
+  },
+  "carrier_adjudication": {
+    "vercel_drive": {
+      "technical_fit": "STRONG",
+      "property": "storage lifecycle independent from any sandbox and mountable into a later sandbox",
+      "availability": "PRIVATE_BETA_PRO_OR_ENTERPRISE",
+      "cost_note": "documented free during private beta, but beta enablement is still an authorization/capability gate",
+      "authorization": "NOT_ASSUMED",
+      "decision": "DEFER_UNTIL_EXPLICIT_OWNER_AUTHORIZATION_OR_EXISTING_ENABLED_DRIVE_IS_VERIFIED"
+    },
+    "sandbox_snapshot": {
+      "technical_fit": "REJECT_FOR_FINAL_TIER2_CARRIER",
+      "reason": "snapshot captures the whole sandbox filesystem and is lifecycle-derived state, so using it as the final carrier would weaken the declared-artifacts-only fresh-appliance discriminator"
+    },
+    "vercel_blob": {
+      "technical_fit": "POSSIBLE_OBJECT_CARRIER",
+      "decision": "NOT_SELECTED",
+      "reason": "private Blob is beta and requires a read/write storage credential; public Blob is inappropriate for canonical private state. No existing authorized store/credential was verified in this go."
+    },
+    "function_memory": {
+      "technical_fit": "REJECT",
+      "reason": "not an independently durable/retrievable carrier across the required destructive boundary"
+    }
+  },
+  "hypotheses": {
+    "preferred": "An independently durable, integrity-bound object/drive carrier can close Tier2 without preserving the old guest filesystem.",
+    "strongest_counterhypothesis": "Any storage carrier that is beta, credential-coupled, whole-filesystem-derived, or not independently retrievable merely moves the trust boundary and does not establish fresh-appliance recovery.",
+    "falsifier": "After declared transfer export, delete the old sandbox fully; create a new persistent:false sandbox with no inherited filesystem/image cache; retrieve only the declared carrier objects; verify hashes/runtime identity; restore; require global generation advance, no blind effect replay, fresh HCP/Vault secret acquisition, same exact OCI identity, and a second canonical provider turn."
+  },
+  "experiment_accounting": {
+    "unusual_experiment_count_added": 0,
+    "global_go_slot_already_consumed": true,
+    "consumed_experiment": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "note": "No second unusual experiment was executed."
+  },
+  "epistemic_status": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "next_exact_isolated_step": "First verify whether the existing Vercel project already has an owner-authorized Drive or other private durable carrier. If not, obtain explicit owner authorization before enabling beta/new storage. Then replace fork/persistent inheritance with integrity-bound declared-artifact export -> full source Sandbox delete -> fresh persistent:false Sandbox create -> carrier restore, re-run source guards, and only then execute the exact PR686 OCI/provider/EntityOS/Tier1/Tier2 acceptance sequence."
+}

@@ -20,6 +20,8 @@ _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|serv
 _PATH = re.compile(r"(?<![\w.-])(?:\.?\.?/|/)?(?:[A-Za-z0-9_.-]+/)+[A-Za-z0-9_.-]+")
 _FILE = re.compile(r"(?<![\w.-])[A-Za-z0-9_.-]+\.(?:py|js|jsx|ts|tsx|json|jsonl|ya?ml|toml|md|sql|clay|service|timer|conf|cfg)(?![\w.-])", re.I)
 _RETRIEVAL_RECEIPT_MAX_CHARS = 4_096
+_METHOD_RECEIPT_MAX_CHARS = 8_192
+_METHOD_CONTEXT_MAX_CHARS = 24_000
 
 
 class TurnLifecycleError(RuntimeError):
@@ -55,8 +57,25 @@ class TurnLifecycle:
         try: receipt_chars=len(json.dumps(receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
         except (TypeError,ValueError) as exc: raise TurnLifecycleError("retrieval receipt is not canonical JSON") from exc
         if receipt_chars>_RETRIEVAL_RECEIPT_MAX_CHARS: raise TurnLifecycleError("retrieval receipt exceeds compact context bound")
-        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[])),"retrieval_receipt":dict(receipt)}
+
+        method_receipt=world.get("method_retrieval_receipt",{"status":"NOT_TRIGGERED","truth_authority":False,"effect_authority":False})
+        if not isinstance(method_receipt,dict): raise TurnLifecycleError("method retrieval receipt must be an object")
+        if any(not isinstance(key,str) for key in method_receipt): raise TurnLifecycleError("method retrieval receipt keys must be strings")
+        try: method_receipt_chars=len(json.dumps(method_receipt,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
+        except (TypeError,ValueError) as exc: raise TurnLifecycleError("method retrieval receipt is not canonical JSON") from exc
+        if method_receipt_chars>_METHOD_RECEIPT_MAX_CHARS: raise TurnLifecycleError("method retrieval receipt exceeds compact context bound")
+        if method_receipt.get("truth_authority") is not False or method_receipt.get("effect_authority") is not False: raise TurnLifecycleError("method retrieval receipt cannot carry authority")
+
+        method_context=list(world.get("method_context",[]))
+        if any(not isinstance(item,dict) for item in method_context): raise TurnLifecycleError("method context items must be objects")
+        if any(item.get("truth_authority") is not False or item.get("effect_authority") is not False for item in method_context): raise TurnLifecycleError("method context cannot carry authority")
+        try: method_chars=len(json.dumps(method_context,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False))
+        except (TypeError,ValueError) as exc: raise TurnLifecycleError("method context is not canonical JSON") from exc
+        if method_chars>_METHOD_CONTEXT_MAX_CHARS: raise TurnLifecycleError("method context exceeds dedicated bound")
+
+        packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[])),"retrieval_receipt":dict(receipt),"method_context":method_context,"method_retrieval_receipt":dict(method_receipt)}
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
+        while size()>max_chars and packed["method_context"]: packed["method_context"].pop()
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()

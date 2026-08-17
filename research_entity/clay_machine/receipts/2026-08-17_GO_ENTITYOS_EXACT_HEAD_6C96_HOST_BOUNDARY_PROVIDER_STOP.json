@@ -1,0 +1,62 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "HOSTCALL_ABI_CONSOLIDATED_EXACT_HEAD_PROVIDER_STOP",
+  "canonical_product_pr": 787,
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "exact_product_head": "6c96c7606fe3bf2974b2e828531c28dd17c0d1c3",
+  "parent_receipt_head": "2473a30b6efc0915ac5ae4818e767ac9ef04f2a8",
+  "source_observations": {
+    "stdout_only_hostcall_scope": true,
+    "stderr_hostcall_deferred": true,
+    "versioned_hostcall_serialized_admission_fence_present": true,
+    "versioned_hostcall_runtime_authority_moved_to_clayhost": true,
+    "host_adapters_bind_handlers_and_receipts_without_redefining_capability_or_type_identity": true,
+    "wrong_vm_version_fails_before_host_effect": true,
+    "wrong_argument_type_fails_before_handler": true,
+    "wrong_host_return_type_fails_before_clay_reentry": true,
+    "build_runner_catch_finally_source_fence_present": true,
+    "build_uv_cli_hash_and_wheel_flags_present": true,
+    "full_pytest_uv_cli_hash_and_wheel_flags_present": true,
+    "uv_version_logged_on_both_paths": true,
+    "new_unusual_experiment_count": 0
+  },
+  "execution": {
+    "github_vercel_status": "failure",
+    "provider_reason": "build-rate-limit before Sandbox start",
+    "sandbox_started": false,
+    "exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "entityos_artifact_for_exact_head_observed": false,
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfer": false
+  },
+  "coordination": {
+    "duplicate_diagnostic_echo_lane_promoted": false,
+    "duplicate_pr_793_closed": true,
+    "canonical_runtime_path": "PR787 only",
+    "parallel_fusion_policy": "adjudicate and consolidate rather than retain competing permanent paths"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "consumed_on_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "stop_reason": "The exact observed current product head is rejected by Vercel build-rate limiting before Sandbox start. The source frontier has been consolidated to one versioned ClayHost ABI boundary and the admitted stdout Bytes slice; adding stderr or another I/O surface before fresh stdout exact-head Sandbox promotion would lower evidence quality rather than converge the one-file EntityOS product.",
+  "next_executable_step": "When Vercel admits a Git-bound build, refresh the then-current PR787 head and run only the existing regression sequence in an actually-started exact-identity Vercel Sandbox: static source/dependency/ABI preflight; exact raw-tree/archive/attestation staging; full pytest with nonzero tests and zero skips; exact wheel hashes/artifact-lock/installed-set binding; Git-free attested twin EntityOS freeze; runtime/self-test/no-host-Python/relocation under DENY_ALL; Batch-5 stdout-Bytes regression with zero new unusual experiments; attested-vs-Git-clean byte identity; exact artifact digest; successful Sandbox stop.",
+  "claims": {
+    "source_convergence_advanced": true,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

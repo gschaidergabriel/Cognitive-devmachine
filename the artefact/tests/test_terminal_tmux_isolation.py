@@ -31,7 +31,9 @@ def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
 def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
+    monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_attest_existing_session", lambda binding: True)
     calls: list[list[str]] = []
 
     def fake_run(argv, **kwargs):

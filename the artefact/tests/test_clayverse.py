@@ -26,12 +26,10 @@ def test_stale_lease_is_rejected_aba(db):
     IdentityRouter(db,{'g':'gabriel'}); l1=db.acquire_lease('repo:x','worker-A',ttl=.01); time.sleep(.02); l2=db.acquire_lease('repo:x','worker-B',ttl=10)
     with pytest.raises(StaleGeneration): db.assert_lease(l1)
     db.assert_lease(l2)
-def test_process_gate_no_shell_and_disabled_by_default(db):
-    r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); gate=EffectGate(db,allow_process=False)
-    with pytest.raises(PermissionError): gate.execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
-    eid,out=EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'])); assert out['ok'] and out['stdout'].strip()=='ok'
-    with pytest.raises(PermissionError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','shell',['/bin/sh','-c','echo forbidden']))
-    with pytest.raises(ValueError): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','nul',['/bin/echo','bad\x00arg']))
+def test_direct_host_process_is_forbidden_even_when_legacy_flag_enabled(db):
+    r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g')
+    with pytest.raises(PermissionError,match='direct host process execution forbidden'):
+        EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
 def test_stale_reasoning_generation_blocks_effect(db):
     r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); expected=db.session_generation(sid); db.bump_generation(sid)
     with pytest.raises(StaleGeneration): EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','must-not-run'],expected))

@@ -1,12 +1,22 @@
 {
-  "schema_version": "1.5",
+  "schema_version": "1.6",
   "protocol": "research_entity/global/REPO_NATIVE_RESEARCH_CENTER_PROTOCOL.md",
+  "live_fusion_hypofusion_directive": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_FEEDBACK_DIRECTIVE.md",
   "transport": "repository_only",
   "global_chief": false,
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "program_narrative": "research_entity/global/RESEARCH_CENTER_PROGRAM_NARRATIVE.md",
   "capacity_state": "research_entity/rooms/CAPACITY_STATE.json",
   "room_root": "research_entity/rooms/rooms",
+  "live_feedback": {
+    "status": "ACTIVE",
+    "applies_to": "ALL_REGISTERED_ROOMS_AND_ALL_ACTIVE_OR_NEW_WORKERS",
+    "fusion_mode": "CONTINUOUS_COMPATIBILITY_PROVENANCE_AND_INTERFACE_FUSION",
+    "hypofusion_mode": "CONTINUOUS_COUNTERHYPOTHESIS_FALSIFIER_AND_DISSENT_PRESERVATION",
+    "delivery_semantics": "NEXT_SAFE_PULSE_BEFORE_CONSEQUENTIAL_DECISION",
+    "blocking_feedback_delivery": "INTERRUPT_NEXT_SAFE_POINT",
+    "worker_response_contract": ["ACCEPT_AND_APPLY", "TEST_BEFORE_APPLY", "REJECT_WITH_EVIDENCE", "DEFER_NONBLOCKING", "STALE_SUPERSEDED"]
+  },
   "standing_shared_missions": [
     {
       "mission_id": "SEMANTIC_COUPLING_FABRIC_GWT_EMERGENCE_CONTROL",
@@ -26,6 +36,7 @@
       "kind": "whole_mesh_meta_room",
       "triggers": ["fusion", "hypofusion", "666", "q12"],
       "persistent_chief": false,
+      "live_fusion_hypofusion": "ACTIVE_COUPLED_LOOP",
       "autonomous_protocol": "research_entity/triggers/666_AUTONOMOUS_RESEARCH_PROTOCOL.md",
       "level0_protocol": "research_entity/triggers/666_ARCHIVE_ASSIMILATION_PROTOCOL.md",
       "post_level0_field_protocol": "research_entity/global/EMERGENT_RESEARCH_FIELD_SPAWNING_PROTOCOL.md",
@@ -67,13 +78,17 @@
   ],
   "delivery_classes": ["INTERRUPT_NEXT_SAFE_POINT", "NEXT_CHECKPOINT", "INDEX_ONLY"],
   "mandatory_pulse_boundaries": [
+    "after_material_repo_commit_pr_or_receipt",
+    "after_material_external_runtime_or_sandbox_result",
+    "before_next_consequential_tool_batch_or_implementation_branch",
     "before_hypothesis_or_architecture_freeze",
     "before_substantial_experiment_or_implementation_branch",
     "after_substantial_external_or_runtime_result",
+    "after_interrupt_next_safe_point_feedback",
     "before_durable_research_write",
     "before_synthesis_or_fusion",
     "before_final_visible_response"
   ],
   "event_types": ["JOIN", "PULSE", "ROLE_CLAIM", "TASK", "DELTA", "CROSS_ROOM_DELTA", "QUESTION", "REPLY", "CHALLENGE", "ROAST", "HANDOFF", "CROSSREAD", "INVALIDATE", "COMPLETE", "LEAVE"],
-  "rule": "Trigger sessions auto-join their pinned home room. Every substantive registered-room worker also loads and contributes to every active PROJECT_OWNER_STANDING_MISSION from this registry through branch-local work, then publishes a center-visible contribution status before completion. Same-room peers self-organize with ephemeral complementary roles. All dispatch must honor CAPACITY_STATE.json so unavailable AI workers or future compute are not scheduled as current capacity. Cross-room deltas may change knowledge but not trigger loyalty. The 666 meta-trigger joins center; before Level-0 PASS it resumes archive assimilation, and after Level-0 PASS it spawns a seeded diverse research field that cross-connects and feeds results into specialist rooms. The q12 meta-trigger joins center as the human creator-advisor simulation, loads its separate persistent state/world/goals/memory, reads the Research Entity only through the information bridge, and may coordinate rooms only when delegated by the owner. No room, standing mission or advisor role changes evidence status by itself."
+  "rule": "Trigger sessions auto-join their pinned home room. Every substantive registered-room worker loads the live fusion/hypofusion directive, contributes branch-local work to active standing missions, and consumes targeted fusion/hypofusion feedback at the next safe pulse before another consequential decision. Same-room peers self-organize with ephemeral complementary roles. All dispatch must honor current capacity and current product/execution authority; stale CAPACITY_STATE claims never override newer owner directives or PROGRAM_STATE. Cross-room deltas may change knowledge but not trigger loyalty. The 666 meta-trigger joins center; q12 behavior remains separately bounded by its protocol. No room, standing mission, advisor role, fusion result or hypofusion result changes evidence status by itself."
 }

@@ -20,7 +20,7 @@ def test_kata_annotation_fence_is_fail_closed_and_bound():
     assert "failurePolicy: Fail" in policy
     assert 'operations: ["CREATE", "UPDATE"]' in policy
     assert 'resources: ["pods"]' in policy
-    assert "reason: Forbidden" in policy
+    assert policy.count("reason: Forbidden") == 3
 
     assert "policyName: clayverse-kata-annotation-fence.seimensch.net" in binding
     assert "validationActions:" in binding
@@ -29,16 +29,19 @@ def test_kata_annotation_fence_is_fail_closed_and_bound():
     assert "Audit" not in binding
 
 
-def test_kata_annotation_fence_covers_create_and_label_removal_update():
+def test_kata_annotation_fence_selection_cannot_be_removed_by_label_or_runtime_mutation():
     text = POLICY.read_text()
     policy = next(doc for doc in _documents(text) if "kind: ValidatingAdmissionPolicy\n" in doc)
+    match_conditions = policy.split("matchConditions:", 1)[1].split("validations:", 1)[0]
+    validations = policy.split("validations:", 1)[1]
 
-    # CREATE is identified from the incoming ClayVerse label; UPDATE is also
-    # fenced from oldObject so removing the label cannot authorize annotation
-    # injection in the same request.
-    assert "object.metadata.labels['app'] == 'clayverse'" in policy
-    assert "oldObject != null" in policy
-    assert "oldObject.metadata.labels['app'] == 'clayverse'" in policy
+    assert "object.metadata.name.startsWith('clayverse-')" in match_conditions
+    assert "runtimeClassName" not in match_conditions
+    assert "metadata.labels" not in match_conditions
+
+    assert "object.metadata.labels['app'] == 'clayverse'" in validations
+    assert "has(object.spec.runtimeClassName)" in validations
+    assert "object.spec.runtimeClassName == 'kata-qemu-runtime-rs'" in validations
 
 
 def test_kata_annotation_fence_rejects_the_entire_unreviewed_namespace():

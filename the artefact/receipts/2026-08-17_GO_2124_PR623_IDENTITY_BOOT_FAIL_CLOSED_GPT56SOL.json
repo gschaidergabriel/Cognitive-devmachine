@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseBoundedEvidenceReceipt/v1",
+  "timestamp_local": "2026-08-17T21:24:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / OpenAI isolated non-production container",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "clay/go-identity-session-drift-failclosed-20260817",
+  "pr": 623,
+  "observed_head_before_receipt": "4ead235be191878e9e64ebdf3c5c8f4b09190d9e",
+  "observed_main_via_pr_base": "79cdde5232e7047e2dabcd5e51a95da173e13bec",
+  "purpose": "Prevent startup from silently recreating a missing persisted canonical user session after UnifiedDB identity state already exists.",
+  "commits_authored_in_this_pass": [
+    "c1c4290bc22e1163b4e0efa6a804a445e1277012",
+    "df61ca8805ad960113c3b140a493b5f7af483fe9",
+    "4ead235be191878e9e64ebdf3c5c8f4b09190d9e"
+  ],
+  "mechanism": {
+    "before": "IdentityRouter always called ensure_session for both canonical users before startup normalization; a deleted permanent session in an otherwise persisted canonical identity could be recreated and hidden from drift detection.",
+    "after": "Only a genuinely empty identity state may bootstrap canonical sessions. If canonical users already exist, startup performs read/validate normalization only. If users are empty while persisted sessions exist, bootstrap fails closed before mutation."
+  },
+  "durable_regressions": [
+    "fresh boot creates exactly Gabriel/Andreas and exactly session:gabriel/session:andreas",
+    "existing canonical state with deleted Gabriel session fails startup and leaves the session absent",
+    "existing noncanonical permanent session id still fails startup",
+    "empty users plus persisted orphan session fails before canonical-user bootstrap and preserves corrupted evidence"
+  ],
+  "isolated_execution": {
+    "sqlite_identity_bootstrap_micro_falsifier": {
+      "result": "PASS",
+      "cases": 4,
+      "scope": "Reconstructed exact bootstrap/normalization mechanism against in-memory SQLite schema; not full PR-head pytest.",
+      "observations": [
+        "fresh empty identity bootstraps two users and two sessions",
+        "deleted persisted canonical session remains missing and startup fails closed",
+        "noncanonical session id remains rejected",
+        "orphan persisted session with no users blocks bootstrap without mutation"
+      ]
+    },
+    "github_actions_job_steps": "UNAVAILABLE_403",
+    "docker": "UNAVAILABLE",
+    "tmux": "UNAVAILABLE",
+    "real_clerk_browser_pty": "UNAVAILABLE"
+  },
+  "evidence_class": "MECHANISM_SUPPORTED_SOURCE_CANDIDATE",
+  "not_proven": [
+    "exact full PR-head pytest",
+    "packaged startup/restart behavior inside OCI image",
+    "real Clerk browser WebSocket PTY behavior",
+    "persistent tmux/Claude behavior",
+    "whole ClayVerse acceptance"
+  ],
+  "promotion": "DENIED_PENDING_EXACT_AUTHORIZED_EXECUTION",
+  "next_discriminator": "Run exact current #623 identity/restart regressions on an authorized isolated executable source checkout, then repeat inside the exact accepted OCI image before Clerk/PT Y promotion.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "safety": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persistence": false
+  },
+  "whole_clayverse_pass": false
+}

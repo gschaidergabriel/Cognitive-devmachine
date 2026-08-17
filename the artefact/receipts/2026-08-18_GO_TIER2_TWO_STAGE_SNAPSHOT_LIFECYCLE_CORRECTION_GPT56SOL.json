@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:40:06+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PRIMARY_SOURCE_CORRECTION_AND_TWO_STAGE_CARRIER_RETENTION",
+  "canonical_main_observed_before_write": "2d33f05eb7794bf0b7690bf05bdd8f71e0c3a943",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "bb7cdfad22040e9909c9e4c97e0391137c4b94ed",
+    "draft": true,
+    "current_vercel_status": "FAILURE_BUILD_RATE_LIMIT",
+    "current_vercel_target": "upgradeToPro=build-rate-limit",
+    "runtime_credit": 0
+  },
+  "primary_vercel_lifecycle_correction": {
+    "source_1": "https://vercel.com/kb/guide/how-vercel-sandbox-duration-and-persistence-work",
+    "source_1_observation": "Vercel states snapshots are tied to the sandbox lifecycle; for data that must outlive the sandbox entirely, use a Drive.",
+    "source_2": "https://vercel.com/kb/guide/vercel-drives",
+    "source_2_observation": "Vercel states deleting a sandbox also deletes its snapshots; Drives have an independent lifecycle.",
+    "source_3": "https://vercel.com/docs/vercel-sandbox/concepts/snapshots",
+    "source_3_observation": "Vercel documents explicit snapshot creation, snapshot IDs, and Sandbox.create from a snapshot ID.",
+    "supersedes_claim": "A manual snapshot from the source sandbox can itself survive deletion of that same sandbox and directly seed the final replacement.",
+    "corrected_claim": "A source-owned snapshot is not an independent post-delete carrier. A valid snapshot-based Tier-2 candidate must materialize the declared transfer into another sandbox before deleting the source, then use the carrier sandbox's snapshot to create the final replacement before deleting the carrier."
+  },
+  "current_two_stage_candidate": {
+    "observed_controller_contract": "sanitize source -> source.snapshot -> create distinct non-persistent carrier from source snapshot -> verify transfer manifest in carrier -> delete source -> verify carrier still holds transfer -> carrier.snapshot -> create distinct non-persistent final replacement from carrier snapshot -> verify transfer manifest -> delete carrier -> verify final replacement still holds transfer",
+    "snapshot_carrier_label": "VERCEL_SANDBOX_TWO_STAGE_SNAPSHOT",
+    "source_deleted_before_final_recreate": true,
+    "carrier_deleted_after_final_recreate": true,
+    "replacement_persistent": false,
+    "source_runtime_verified": false,
+    "tier2_runtime_verified": false
+  },
+  "alternative_adjudication": {
+    "vercel_drive": "Lifecycle-independent storage would structurally solve the carrier problem, but current Vercel documentation places Drives in private beta on Pro/Enterprise. No new paid/beta storage path is admitted by this go.",
+    "direct_source_snapshot": "Rejected as an independent post-delete carrier by current Vercel lifecycle documentation.",
+    "two_stage_snapshot": "Retained as the cheapest current source candidate because it uses already-admitted Sandbox primitives and preserves full source-sandbox deletion before final replacement creation."
+  },
+  "execution_evidence": {
+    "exact_controller_head_build_guard_executed": false,
+    "reason": "GitHub/Vercel status for bb7cdfad22040e9909c9e4c97e0391137c4b94ed is failure with upgradeToPro=build-rate-limit; no exact-head deployment was admitted.",
+    "latest_visible_older_build": "582f4ac6691d3782207c247f28665d2d8bf9e84f failed before Tier-2 guard execution on stale source-binding guard state.",
+    "daytona_connector_available": false,
+    "vps_used": false,
+    "whole_product_pass": false
+  },
+  "product_delta": {
+    "product_runtime_bytes_changed_by_this_organ": false,
+    "controller_lane_changed_by_parallel_organs": true,
+    "canonical_readme_refresh_already_present_in_shared_go": true,
+    "required_followup": "Correct the README direct-snapshot lifecycle wording to the two-stage carrier law; do not regress to direct snapshot survival after source deletion."
+  },
+  "unusual_experiment": {
+    "new_experiment_count": 0,
+    "reason": "The shared go macro-cycle unusual-experiment slot was already consumed; this work is primary-source adjudication and normal acceptance preparation only."
+  },
+  "next_exact_step": "When authorized isolated execution admission is available again, run the exact PR810 build/source guards on the then-current immutable binding, then execute the two-stage carrier path and require observed distinct session identities plus transfer-manifest preservation across source deletion, carrier snapshot, final replacement creation and carrier deletion before any Tier-2 credit. Continue with exact OCI restore, generation-fenced recovery, no blind effect replay, fresh HCP-WIF provider-secret reacquisition, second cognition, and later Clerk/PTTY/dual-user gates.",
+  "acceptance": "IN_PROGRESS"
+}

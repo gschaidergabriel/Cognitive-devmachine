@@ -12,6 +12,54 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
+## Deterministic goal autonomy
+
+ClayVerse autonomy is a property of canonical state and the machine loop, not a literal model self-description.
+
+The useful operational consequences of an "autonomous AGI" framing are decomposed into enforceable runtime facts:
+
+- continuity = UnifiedDB + causal lifecycle + recovery;
+- objective = durable user-authorized goal state;
+- initiative = repeated bounded goal pulses while a goal remains runnable;
+- agency = cognition may choose the next proposed step inside the admitted envelope;
+- capability = current EffectGate/runtime capability, never a capability claimed in model prose;
+- execution = the existing TurnLifecycle -> EffectGate -> EffectJournal path only;
+- success = independent canonical evidence under the goal completion contract, never model self-assessment;
+- uncertainty = explicit UNKNOWN/BLOCKED rather than plausible invention;
+- stopping = deterministic step/retry/effect/resource ceilings plus completion/cancel/block states.
+
+The canonical control shape is:
+
+`owner user turn -> AutonomyController goal state -> next runnable goal -> cognition proposes one step -> deterministic admission -> human-priority TurnLifecycle gate -> canonical effect path when needed -> verified observation -> completion verifier -> replan | wait | block | complete`
+
+`AutonomyController` remains state/control logic inside the same UnifiedDB. It is not a second agent, second identity, second database, second memory authority or second effect executor. The periodic/background supervisor is not promoted merely because the controller exists.
+
+The human-priority turn invariant is asymmetric by design:
+
+`AUTONOMY MAY NOT PREEMPT HUMAN; HUMAN MAY PREEMPT AUTONOMY.`
+
+An autonomous goal step is admitted through the existing TurnLifecycle only when no canonical turn is active. Its internal observation is role `system`, with provenance binding the live generation, turn/episode/causal identity, `goal_id` and `autonomy_step_id`; it is never persisted as a new owner `user` turn. Human and autonomous completion/abort paths are origin-bound so they cannot terminalize each other's active turn.
+
+Model text has zero authority to mint operational facts. In particular:
+
+`CLAIM != EVIDENCE`
+
+`PROPOSAL != ADMISSION`
+
+`ADMISSION != EXECUTION`
+
+`TOOL_DISPATCH != SUCCESS`
+
+`MODEL_COMPLETION != GOAL_COMPLETION`
+
+`UNKNOWN != SUCCESS`
+
+Effect evidence is already bound to the admitted target/argv receipt before it can update autonomous step state. Promotion of continuous background execution additionally requires consumer-side binding to the exact autonomous goal-step causal episode/request/effect identity, so two identical intents from distinct episodes cannot be confused.
+
+No USB anchor, cryptocurrency, smart contract or cryptographic "soul" is required by this autonomy architecture. Security/identity mechanisms may exist elsewhere for ordinary product security, but autonomous goal pursuit is grounded in canonical goal state, permissions, receipts, budgets, causal identity and recovery rather than metaphysical or economic prompt claims.
+
+The detailed autonomy contracts are `AUTONOMY_ARCHITECTURE.md` and `AUTONOMOUS_TURN_GATE.md`.
+
 ## Canonical state and memory invariants
 
 - UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
@@ -87,6 +135,9 @@ The current source candidate implements the persistent receipt/policy spine, que
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
 - Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Autonomous TurnLifecycle admission/completion/abort tests on an exact authorized isolated checkout.
+- Exact autonomous goal-step causal episode/request/effect binding at the AutonomyController evidence-consumption boundary.
+- Default-on periodic autonomy supervisor remains disabled until those causal, recovery, concurrency and resource-budget gates pass.
 - MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
 - Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.

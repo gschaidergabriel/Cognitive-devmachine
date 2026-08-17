@@ -438,66 +438,71 @@ class MicroClayRetrieval:
         signal_class: str,
         receipt_id: str | None = None,
     ) -> dict[str, Any]:
-        """Apply provenance-bound outcome credit to retrieval policy only.
+        """Atomically apply provenance-bound outcome credit to retrieval policy only.
 
+        The duplicate-receipt check, all policy-capital mutations and the feedback
+        receipt are one BEGIN IMMEDIATE transaction. A crash/failure before the
+        receipt insert therefore rolls back the capital mutations as well.
         Replaying the same receipt is idempotent; stale generations are rejected.
         No durable-memory row is changed.
         """
         value = max(-1.0, min(1.0, float(credit)))
-        row = self.db.db.execute(
-            "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
-            (causal_id,),
-        ).fetchone()
-        if not row:
-            return {"applied": False, "reason": "no_retrieval_episode"}
-        if int(row["generation"]) != int(generation):
-            raise StaleGeneration("retrieval_generation")
-        self.db.assert_live_generation(row["session_id"], generation)
-
-        rid = receipt_id or hashlib.sha256(
-            f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{signal_class}\x1f{value:.9f}".encode()
-        ).hexdigest()
-        exists = self.db.db.execute(
-            "SELECT 1 FROM retrieval_feedback WHERE receipt_id=?", (rid,)
-        ).fetchone()
-        if exists:
-            return {"applied": False, "reason": "duplicate_receipt", "receipt_id": rid}
-
-        keys = json.loads(row["entry_keys"])
-        now = time.time()
-        for key in keys:
-            current = self.db.db.execute(
-                "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
-                (key,),
+        with self.db.tx() as db:
+            row = db.execute(
+                "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
+                (causal_id,),
             ).fetchone()
-            if current:
-                old_capital = float(current["capital"])
-                old_ema = float(current["reward_ema"])
-                pulls = int(current["pulls"])
-            else:
-                old_capital, old_ema, pulls = 0.0, 0.0, 0
-            new_ema = (1.0 - self.REWARD_EMA_ALPHA) * old_ema + self.REWARD_EMA_ALPHA * value
-            delta = self.LEARNING_RATE * (value - old_ema) - self.ACCESS_RENT
-            new_capital = max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, old_capital + delta))
-            self.db.db.execute(
-                "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
-                "VALUES(?,?,?,?,?) ON CONFLICT(entry_key) DO UPDATE SET "
-                "capital=excluded.capital,reward_ema=excluded.reward_ema,"
-                "pulls=excluded.pulls,updated_at=excluded.updated_at",
-                (key, new_capital, new_ema, pulls + 1, now),
-            )
+            if not row:
+                return {"applied": False, "reason": "no_retrieval_episode"}
+            if int(row["generation"]) != int(generation):
+                raise StaleGeneration("retrieval_generation")
+            self.db.assert_live_generation(row["session_id"], generation)
 
-        self.db.db.execute(
-            "INSERT INTO retrieval_feedback(receipt_id,retrieval_id,causal_id,generation,"
-            "credit,signal_class,ts) VALUES(?,?,?,?,?,?,?)",
-            (rid, row["retrieval_id"], causal_id, int(generation), value, str(signal_class)[:80], now),
-        )
-        return {
-            "applied": True,
-            "receipt_id": rid,
-            "policy_version": int(row["policy_version"]),
-            "mode": row["mode"],
-            "updated_entrypoints": len(keys),
-            "truth_authority": False,
-            "effect_authority": False,
-        }
+            rid = receipt_id or hashlib.sha256(
+                f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{signal_class}\x1f{value:.9f}".encode()
+            ).hexdigest()
+            exists = db.execute(
+                "SELECT 1 FROM retrieval_feedback WHERE receipt_id=?", (rid,)
+            ).fetchone()
+            if exists:
+                return {"applied": False, "reason": "duplicate_receipt", "receipt_id": rid}
+
+            keys = json.loads(row["entry_keys"])
+            now = time.time()
+            for key in keys:
+                current = db.execute(
+                    "SELECT capital,reward_ema,pulls FROM retrieval_entrypoint_policy WHERE entry_key=?",
+                    (key,),
+                ).fetchone()
+                if current:
+                    old_capital = float(current["capital"])
+                    old_ema = float(current["reward_ema"])
+                    pulls = int(current["pulls"])
+                else:
+                    old_capital, old_ema, pulls = 0.0, 0.0, 0
+                new_ema = (1.0 - self.REWARD_EMA_ALPHA) * old_ema + self.REWARD_EMA_ALPHA * value
+                delta = self.LEARNING_RATE * (value - old_ema) - self.ACCESS_RENT
+                new_capital = max(self.CAPITAL_MIN, min(self.CAPITAL_MAX, old_capital + delta))
+                db.execute(
+                    "INSERT INTO retrieval_entrypoint_policy(entry_key,capital,reward_ema,pulls,updated_at) "
+                    "VALUES(?,?,?,?,?) ON CONFLICT(entry_key) DO UPDATE SET "
+                    "capital=excluded.capital,reward_ema=excluded.reward_ema,"
+                    "pulls=excluded.pulls,updated_at=excluded.updated_at",
+                    (key, new_capital, new_ema, pulls + 1, now),
+                )
+
+            db.execute(
+                "INSERT INTO retrieval_feedback(receipt_id,retrieval_id,causal_id,generation,"
+                "credit,signal_class,ts) VALUES(?,?,?,?,?,?,?)",
+                (rid, row["retrieval_id"], causal_id, int(generation), value, str(signal_class)[:80], now),
+            )
+            result = {
+                "applied": True,
+                "receipt_id": rid,
+                "policy_version": int(row["policy_version"]),
+                "mode": row["mode"],
+                "updated_entrypoints": len(keys),
+                "truth_authority": False,
+                "effect_authority": False,
+            }
+        return result

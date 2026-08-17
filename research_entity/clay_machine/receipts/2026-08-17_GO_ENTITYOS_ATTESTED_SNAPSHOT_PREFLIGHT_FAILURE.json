@@ -1,0 +1,57 @@
+{
+  "schema": "ClayEntityOSEvidenceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_endpoint": "single executable EntityOS",
+  "organ": "GPT-5.6 Sol project organ",
+  "repositories": {
+    "research_repo": "gschaidergabriel/clay-global-research-entity",
+    "product_repo": "gschaidergabriel/Dr.-Unterweger",
+    "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+    "pr": 787,
+    "pr_branch": "clay/go-entityos-attestation-recomposed-20260817",
+    "pr_state": "DRAFT"
+  },
+  "empirical_observation": {
+    "provider": "Vercel Sandbox via build-internal lane",
+    "deployment_id": "dpl_GSj3cvRJKMaxKGAkJvQuw1u9qJsN",
+    "exact_source_head": "fa9827d496602d7c5821b13103da665f7287b16c",
+    "source_tree": "c1e6f94ca0c9f535177719266f92ce8994850a11",
+    "source_archive_sha256": "c846bc53cef2ae356ca9365318b6074f09c094a6b8985e9a5e4a57b169f9f7be",
+    "source_attestation_sha256": "78fb1780f20b4a4d14c3746b70704110ea70f930d4fa1014f58073a7df2c2ef2",
+    "network_policy_during_tests": "DENY_ALL",
+    "started_isolated_sandbox": true,
+    "staging_and_toolchain": "PASS",
+    "attested_snapshot_v2_exact_entityos_double_build": "FAIL_EXIT_1",
+    "unusual_experiment_executed_count": 0,
+    "global_unusual_experiment_accounting": "PENDING_1_OF_1_THIS_GO",
+    "sandbox_stopped": true,
+    "stop_error": null,
+    "whole_entityos_acceptance": false
+  },
+  "source_inspection_after_failure": {
+    "candidate_mechanism": "Attestation producer sorted file paths with JavaScript localeCompare(path, 'en') while the EntityOS Python verifier requires locale-independent Python lexicographic path order.",
+    "counterhypothesis": "The freeze may fail later for an unrelated dependency or PyInstaller reason; source inspection alone cannot establish the runtime failure cause.",
+    "discriminator": "Rerun the exact corrected head after replacing locale-sensitive ordering with UTF-8 byte ordering that matches valid-Unicode code-point order.",
+    "independent_correction_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
+    "independent_correction": "stage-go-source.mjs changed localeCompare ordering to Buffer.compare over UTF-8 path bytes."
+  },
+  "current_execution_blocker": {
+    "corrected_head": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
+    "vercel_commit_status": "FAILURE_BEFORE_SANDBOX",
+    "provider_reason": "build-rate-limit",
+    "corrected_head_sandbox_observation": "UNEXECUTED",
+    "executable_claim": "UNRESOLVED"
+  },
+  "current_go_unusual_experiment": {
+    "reserved_id": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "limit": 1,
+    "empirically_executed_as_of_receipt": 0,
+    "instruction": "Do not add or execute a second unusual intervention. Reruns of inherited gates are regression-only."
+  },
+  "next_exact_sandbox_step": "When Vercel accepts a build again, run corrected exact head 580fe7ac84b2d3930a4a944a6e32ddc51be47f33 through the existing build-internal lane. Require Git-free ATTESTED_SNAPSHOT_V2 twin EntityOS build with non-null bound archive digest, self-test, no-host-Python and relocation; then execute only the preregistered content-tamper falsifier; reconstruct sanitized Git provenance; run inherited Batch-5 regression matrix; require attested-vs-Git artifact byte identity and successful sandbox stop.",
+  "promotion": "NOT_ALLOWED_YET",
+  "negative_evidence_preserved": true
+}

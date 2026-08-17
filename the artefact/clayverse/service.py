@@ -43,9 +43,6 @@ def _web_config() -> tuple[str, str]:
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
-    # The single-container artifact always carries digest-bound EntityOS bytes once
-    # built. Execution authority remains a separate fail-closed gate until the exact
-    # embedded artifact has the required acceptance evidence.
     enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
@@ -69,7 +66,6 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
 
 
 def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
-    """Describe the bounded --once probe without implying product readiness."""
     return {
         "service": "clayverse",
         "status": "probe_ok",
@@ -87,14 +83,19 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
-    recovery = recover_incomplete_episodes(db)
-    ClayGraphProjection(db).rebuild()
-    cid, digest = db.checkpoint("boot")
 
+    # A bounded diagnostic probe must not advance the live entity generation or
+    # consume crash-recovery state. Real generation fencing belongs only to a real boot.
     if "--once" in sys.argv:
+        ClayGraphProjection(db).rebuild()
+        cid, digest = db.checkpoint("state-probe")
         print(json.dumps(_state_probe_payload(cid, digest)), flush=True)
         db.close()
         return 0
+
+    recovery = recover_incomplete_episodes(db)
+    ClayGraphProjection(db).rebuild()
+    cid, digest = db.checkpoint("boot")
 
     clerk_map = _clerk_map()
     publishable_key, frontend_api = _web_config()
@@ -111,6 +112,7 @@ def main():
                 "session_id": binding.session_id,
                 "tmux_name": binding.tmux_name,
                 "home": str(binding.home),
+                "generation": db.session_generation(binding.session_id),
             }
     except Exception:
         db.close()
@@ -133,6 +135,7 @@ def main():
         "state_root": state_root,
         "checkpoint": cid,
         "state_hash": digest,
+        "entity_generation": db.entity_generation(),
         "users": ["gabriel", "andreas"],
         "rights": "equal",
         "claude_code": claude_status.as_dict(),

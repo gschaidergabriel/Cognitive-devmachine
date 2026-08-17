@@ -100,7 +100,8 @@ def test_terminal_reentered_sources_promote_atomically_and_retrieve(tmp_path):
     receipt = json.loads(receipt_row["value"])
     provenance = json.loads(method_row["provenance"])
     assert receipt["action"] == "PROMOTE"
-    assert receipt["method_memory_id"] == candidate_id
+    assert receipt["candidate_memory_id"] == candidate_id
+    assert receipt["promoted_memory_id"] == promoted["promoted_memory_id"]
     assert provenance["promotion_source_memory_id"] == candidate_id
     assert provenance["promotion_receipt_id"] == promoted["receipt_memory_id"]
     assert provenance["truth_authority"] is False

@@ -8,8 +8,21 @@ CANONICAL_TERMINAL_NAMES={uid:terminal for uid,_,terminal in CANONICAL_USERS}
 class IdentityRouter:
     def __init__(self,db:UnifiedDB,clerk_map=None):
         self.db=db; self.clerk_map=clerk_map or {}
-        for uid,name,term in CANONICAL_USERS: db.ensure_user(uid,name); db.ensure_session(uid,term)
+        for uid,name,term in CANONICAL_USERS:
+            db.ensure_user(uid,name); db.ensure_session(uid,term)
+        self._normalize_terminal_sessions()
         self._bind_clerk_subjects()
+
+    def _normalize_terminal_sessions(self):
+        with self.db.tx() as sql:
+            for uid,_,term in CANONICAL_USERS:
+                rows=sql.execute('SELECT session_id,terminal_name FROM sessions WHERE user_id=? ORDER BY created_at,session_id',(uid,)).fetchall()
+                if len(rows)!=1:
+                    raise PermissionError(f'canonical user must own exactly one permanent session: {uid}')
+                collision=sql.execute('SELECT user_id FROM sessions WHERE terminal_name=? AND user_id<>?',(term,uid)).fetchone()
+                if collision:
+                    raise PermissionError(f'canonical terminal name already belongs to another user: {term}')
+                sql.execute('UPDATE sessions SET terminal_name=? WHERE session_id=?',(term,rows[0]['session_id']))
 
     def _bind_clerk_subjects(self):
         if not self.clerk_map:

@@ -5,64 +5,77 @@
   "organ": "GPT-5.6 Sol",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "scope": "MicroClay Stage-A adaptive learned entrypoint identity",
+  "scope": "MicroClay Stage-A learned entry identity, reward fence, and canonical-user adaptive policy scope",
   "classification": "SOURCE_FUSION_RUNTIME_UNOBSERVED_SEMANTIC_REBASE_REQUIRED",
   "acceptance": "NON_PASS",
   "active_lane": {
     "pr": 504,
     "branch": "go/microclay-stagea-entrypoint-v2-current-20260817",
-    "source_version_commit": "5a35aa8a3f160e0c54cafef4dca15a158ec89061",
-    "main_test_commit": "2745bd3c25d661910eacb9ff43d8f4cd069f42f0",
-    "store_slice_commit": "51d53552e19b4aa42a70ab241d73e1609d750056",
-    "cross_user_gate_commit": "897716433e06dbf50d1bd6675b20d475696e7305"
-  },
-  "donor": {
-    "pr": 531,
-    "state": "CLOSED_UNMERGED_DONOR",
-    "mechanism_consumed": "learned cue route binds exact durable memory_id rather than subject",
-    "runtime_evidence_transferred": false
+    "source_head_before_receipt_refresh": "bc8309d7e549417b3baa8ea168627fd145f75c5f",
+    "role": "FOCUSED_STAGE_A_DONOR_TO_SCHEMA8_TARGET"
   },
   "mechanism": {
     "policy_version": 3,
-    "why_version_changed": "route identity changed after v2 existed; v2 encoded cue-to-subject while v3 encodes cue-to-exact-memory, so retaining v2 would make persisted policy semantics ambiguous",
-    "legacy_fence": "persisted v1/v2 key capital is ignored by v3-prefixed keys and ACTIVE policy state with a non-v3 version fails closed to SHADOW",
-    "learned_route_identity": "hash(cue) + hash(exact memory_id)",
-    "generic_kind_subject_capital": "ranking-only; cannot make baseline-zero candidate eligible",
+    "policy_namespace": "v3:user:<gabriel|andreas>:*",
+    "why_version_changed": "v2 encoded cue-to-subject semantics; v3 exact-memory identity and user-scoped capital are semantically different persisted policy bytes",
+    "legacy_fence": "v1/v2 and unscoped policy capital are ignored; non-v3 ACTIVE state fails closed to SHADOW",
+    "learned_route_identity": "canonical user + hash(cue) + hash(exact memory_id)",
+    "generic_capital_scope": "kind/subject/cue priors are also per-user and ranking-only",
     "route_credit_scope": "rank-1 served evidence only",
-    "learning_signal": "canonical causally re-entered reward-eligible effect outcome; state.noop and uncertain/non-rewarding outcomes excluded in this source candidate",
+    "automatic_learning_signal": "only canonical causally re-entered reward-eligible effect outcomes; uncertain/stale/non-rewarding paths are excluded in the donor",
     "serving_mode": "SHADOW baseline remains factual serving authority",
+    "replay_fences": [
+      "retrieval replay binds stored user and exact policy version",
+      "credit rejects old-policy retrieval episodes",
+      "all replayed entry_keys must match the retrieval episode user's v3 namespace before mutation",
+      "policy mutation and feedback receipt remain atomic/idempotent"
+    ],
     "truth_authority_changed": false,
-    "effect_authority_changed": false
+    "effect_authority_changed": false,
+    "central_entity_changed": false
   },
-  "collision_gates": [
-    "same-user same-subject sibling must not inherit learned alias eligibility",
-    "Gabriel learned route must not open Andreas distinct private same-subject memory",
-    "v2 subject-route capital plus v2 ACTIVE state must fail closed after v3 transition",
-    "generic v3 subject capital must not open lexical miss",
-    "same exact memory may still appear in adaptive SHADOW after valid outcome-backed learning"
+  "source_gates": [
+    "same-user same-subject sibling cannot inherit learned alias eligibility",
+    "Gabriel learned capital creates no Andreas policy rows and cannot open Andreas private miss",
+    "old-policy replay cannot mutate v3 capital",
+    "cross-user forged replay key fails closed before mutation",
+    "v2/unscoped policy bytes cannot become v3 behavior",
+    "UNKNOWN/stale/non-rewarding effect outcomes are excluded from automatic donor learning"
   ],
-  "issue_525_adjudication": "Narrowed from blanket user-scoped policy requirement to exact-memory nonlexical eligibility isolation. Global shared ranking priors are not by themselves adjudicated as a violation in one central entity; alias eligibility must not cross memory identity.",
+  "issue_525_adjudication": "Source candidate now scopes all adaptive capital to the canonical user perspective while preserving one shared ClayVerse entity and one UnifiedDB. Executable acceptance remains pending.",
+  "schema8_fusion_law": {
+    "target_pr": 484,
+    "preserve_target_semantics": [
+      "method/control kinds excluded from Stage-A evidence before scoring/packing/credit",
+      "turn/episode/causal/session/user/generation/query/budget/limit replay identity",
+      "canonical outcome is re-read inside credit rather than trusting caller-supplied reward",
+      "current target reward eligibility remains authoritative",
+      "canonical transaction joining and replay-route validation"
+    ],
+    "port_only": [
+      "policy v3 semantic fence",
+      "exact memory-id learned route",
+      "canonical-user policy namespace",
+      "old-policy/user-prefix credit rejection"
+    ]
+  },
   "main_convergence": {
-    "observed_main": "e1d7e8e4a5d3fba843208806037565afc3b465ac",
-    "merge_base": "aaf83cf3c7ee94a4c4e082d62719711c66b92cf0",
-    "pr_ahead_by": 19,
-    "pr_behind_by": 50,
+    "observed_main_before_receipt_refresh": "8710287cafbb13a0eb760aa7e553185afe774a9a",
     "pr_mergeable_at_observation": false,
-    "semantic_overlap": "main changed microclay_retrieval.py after the merge base, including automatic outcome-learning selection, while PR504 also changed that region",
-    "adjudication": "Do not force-rebase or wholesale-replace current main. Preserve current-main reward semantics and fuse the v3 exact-memory eligibility/version fences deliberately on a refreshed head."
+    "adjudication": "Do not force wholesale donor overwrite. Reapply only the bounded V3 identity/scope delta onto the refreshed Schema8 target/current-main semantics."
   },
   "execution": {
-    "current_v3_assertions_executed": 0,
-    "sandbox_started_for_v3": false,
+    "current_v3_user_scoped_assertions_executed": 0,
+    "sandbox_started_for_current_head": false,
     "test_pass": false,
     "test_failure": false,
-    "prior_v2_mechanism_evidence_transfer_allowed": false,
+    "prior_v2_evidence_transfer_allowed": false,
     "blocker": "Vercel Git-preview admission currently rejected before deployment/build/Sandbox start by account build-rate limit; no VPS/self-hosted/production fallback used"
   },
   "unusual_experiment": {
     "new_count": 0,
     "regression_only": true
   },
-  "next_exact_gate": "First perform a semantics-aware refresh of PR504 onto current main, retaining current-main reward law while preserving v3 exact-memory route/version/collision fences. Then, when Vercel preview admission reopens, bind the exact fused head and execute learned-entry, same-subject, cross-user, v2-version-fence, reward eligibility, replay/privacy, crash-atomic, restart and stale-generation regressions in an actually-started authorized isolated Sandbox before ACTIVE promotion.",
-  "whole_product_note": "This source fusion is one MicroClay subsystem improvement only. It does not establish ClayVerse OCI, Clerk/PTY/Claude, persistence/recovery, effect, concurrency, supply-chain or whole-product PASS."
+  "next_exact_gate": "Semantics-aware port of the bounded V3 identity/scope delta into the refreshed Schema8 integration target, then exact authorized Vercel Sandbox regression when preview admission is available.",
+  "whole_product_note": "This source candidate is one MicroClay subsystem improvement only. It does not establish ClayVerse OCI, Clerk/PTY/Claude, persistence/recovery, effect, concurrency, supply-chain or whole-product PASS."
 }

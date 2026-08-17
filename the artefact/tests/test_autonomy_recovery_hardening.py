@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 import time
 
 import pytest
 
 from clayverse.autonomy import AutonomyBudgetExceeded, AutonomyController, GoalBudget
+from clayverse.effect_journal import EffectJournal
 from clayverse.recovery import recover_incomplete_episodes
 from clayverse.store import UnifiedDB
 
@@ -36,7 +36,16 @@ def _goal(db, controller, *, completion_mode="user_ack", required_capability=Non
     )
 
 
-def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "state.noop"):
+def _verified_effect(
+    db,
+    effect_id: str,
+    *,
+    generation: int,
+    target: str,
+    capability: str = "state.noop",
+):
+    target_receipt = EffectJournal._payload(EffectJournal._target_receipt(target))
+    outcome_receipt = EffectJournal._payload(EffectJournal._outcome_receipt({"ok": True}))
     db.db.execute(
         "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
         "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
@@ -45,11 +54,11 @@ def _verified_effect(db, effect_id: str, *, generation: int, capability: str = "
             None,
             "gabriel",
             capability,
-            "autonomy-recovery-test",
+            target_receipt,
             None,
             generation,
             "VERIFIED",
-            json.dumps({"ok": True}, sort_keys=True),
+            outcome_receipt,
             time.time(),
             time.time(),
         ),
@@ -164,7 +173,12 @@ def test_verified_pre_restart_effect_is_not_automatically_reexecuted_or_rebound(
         effect={"capability": "state.noop", "target": "receipt-boundary", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _verified_effect(db, "effect-before-restart", generation=1)
+    _verified_effect(
+        db,
+        "effect-before-restart",
+        generation=1,
+        target="receipt-boundary",
+    )
     assert controller.record_effect_result(
         goal["goal_id"], step["step_id"], "effect-before-restart"
     )["verified"] is True

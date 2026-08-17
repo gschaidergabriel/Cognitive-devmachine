@@ -1,0 +1,117 @@
+name: clayverse-artifact-ci
+
+on:
+  push:
+    paths:
+      - "the artefact/**"
+      - ".github/workflows/clayverse-artifact-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-artifact-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  oci-artifact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Record source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          echo "source_sha=$GITHUB_SHA"
+          git status --porcelain=v1
+
+      - name: Validate Compose shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker compose -f "the artefact/compose.yaml" config >/tmp/clayverse-compose.rendered.yaml
+          grep -q 'read_only: true' /tmp/clayverse-compose.rendered.yaml
+          grep -q 'no-new-privileges:true' /tmp/clayverse-compose.rendered.yaml
+
+      - name: Build exact OCI candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE="clayverse:${GITHUB_SHA}"
+          docker build --pull --no-cache -t "$IMAGE" "the artefact"
+          IMAGE_ID="$(docker image inspect "$IMAGE" --format '{{.Id}}')"
+          ARCHIVE_SHA256="$(docker save "$IMAGE" | sha256sum | awk '{print $1}')"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+          echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_ENV"
+          echo "ARCHIVE_SHA256=$ARCHIVE_SHA256" >> "$GITHUB_ENV"
+          printf 'image_id=%s\narchive_sha256=%s\n' "$IMAGE_ID" "$ARCHIVE_SHA256"
+
+      - name: Enforce non-root and hardened offline restart continuity
+        shell: bash
+        run: |
+          set -euo pipefail
+          UID_ACTUAL="$(docker run --rm --entrypoint id "$IMAGE" -u)"
+          test "$UID_ACTUAL" = "10001"
+
+          VOL="clayverse-ci-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          docker volume create "$VOL" >/dev/null
+          cleanup() { docker volume rm -f "$VOL" >/dev/null 2>&1 || true; }
+          trap cleanup EXIT
+
+          run_once() {
+            docker run --rm \
+              --network none \
+              --read-only \
+              --tmpfs /tmp:rw,noexec,nosuid,nodev,size=16m \
+              --cap-drop ALL \
+              --security-opt no-new-privileges \
+              --pids-limit 128 \
+              --memory 512m \
+              --cpus 1.0 \
+              -v "$VOL:/var/lib/clayverse" \
+              "$IMAGE" --once
+          }
+
+          OUT1="$(run_once)"
+          OUT2="$(run_once)"
+          printf '%s\n%s\n' "$OUT1" "$OUT2"
+          python3 - "$OUT1" "$OUT2" <<'PY'
+          import json, sys
+          for raw in sys.argv[1:]:
+              doc = json.loads(raw)
+              assert doc["service"] == "clayverse"
+              assert doc["status"] in {"ok", "ready"}
+              assert len(doc["state_hash"]) == 64
+          PY
+
+          CHECKPOINTS="$(docker run --rm \
+            --network none \
+            --read-only \
+            --tmpfs /tmp:rw,noexec,nosuid,nodev,size=16m \
+            --cap-drop ALL \
+            --security-opt no-new-privileges \
+            -v "$VOL:/var/lib/clayverse" \
+            --entrypoint python "$IMAGE" \
+            -c 'import sqlite3; db=sqlite3.connect("/var/lib/clayverse/unified.db"); print(db.execute("select count(*) from checkpoints").fetchone()[0])')"
+          test "$CHECKPOINTS" -ge 2
+          echo "runtime_uid=$UID_ACTUAL checkpoints_after_restart=$CHECKPOINTS"
+
+      - name: Artifact evidence summary
+        shell: bash
+        run: |
+          {
+            echo "## ClayVerse OCI artifact gate"
+            echo "- source: $GITHUB_SHA"
+            echo "- image: $IMAGE"
+            echo "- image id: $IMAGE_ID"
+            echo "- docker-save sha256: $ARCHIVE_SHA256"
+            echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
+            echo "- continuity: two isolated container restarts against one persistent state volume"
+          } >> "$GITHUB_STEP_SUMMARY"

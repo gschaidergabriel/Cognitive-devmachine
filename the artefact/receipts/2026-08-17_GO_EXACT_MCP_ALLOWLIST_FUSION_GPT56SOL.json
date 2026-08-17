@@ -1,0 +1,43 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "scope": "Claude Code automatic MCP permission surface",
+  "research_base": "267ff2c899ad4e79a42459da04af1a19a5490202",
+  "fusion_branch": "go/mcp-exact-allowlist-fusion-20260817-1353-sol",
+  "donor_pr": 502,
+  "candidate_terminal_sessions_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+  "candidate_test_blob": "167a6cc200c10163580ea25de95e27016fdced56",
+  "source_delta": "Preserve current managed-tmux/per-user terminal boundary and replace mcp__clayverse__* automatic approval with exactly mcp__clayverse__session_state and mcp__clayverse__request_effect.",
+  "primary_dependency_evidence": {
+    "provider": "Anthropic Claude Code documentation",
+    "observed_contract": "MCP tool names use mcp__<server>__<tool>; allowedTools grants permission; a server wildcard permits all tools from that server; individual tool names can be listed instead.",
+    "sources": [
+      "https://code.claude.com/docs/en/agent-sdk/mcp",
+      "https://code.claude.com/docs/en/agent-sdk/custom-tools",
+      "https://code.claude.com/docs/en/permissions"
+    ]
+  },
+  "isolated_mechanism_regression": {
+    "environment": "authorized non-production isolated Python runtime",
+    "result": "PASS",
+    "check": "shlex join/split of the candidate Claude argv preserves exactly the two admitted MCP tool names after --allowedTools and contains no mcp__clayverse__* token"
+  },
+  "vercel_exact_execution": {
+    "status": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "note": "Known current provider admission condition occurs before build/Sandbox start; no additional preview was spent to reconfirm it."
+  },
+  "go_unusual_experiment": {
+    "additional_experiments_consumed": 0,
+    "reason": "The canonical 13:53 go unusual-experiment slot was already consumed by the exact-head archive admission experiment."
+  },
+  "claim_level": "SOURCE_MECHANISM_SUPPORTED",
+  "whole_product_pass": false,
+  "open_acceptance": [
+    "packaged Claude Code behavior in actually-started Vercel Sandbox",
+    "exact OCI runtime",
+    "real Clerk/browser/PTY/MCP effect path",
+    "whole ClayVerse acceptance vector"
+  ]
+}

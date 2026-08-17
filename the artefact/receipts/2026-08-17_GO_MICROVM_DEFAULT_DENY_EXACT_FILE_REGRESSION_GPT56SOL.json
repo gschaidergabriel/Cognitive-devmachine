@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseBoundedEvidenceReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / temporary Clay organ",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "product_acceptance": "IN_PROGRESS",
+  "scope": "Exact-current source/contract regression for the mandatory ClayVerse MicroVM Kubernetes network default-deny boundary. This is not Kubernetes, CNI, Kata, OCI, Clerk, Claude, EntityOS or whole-product runtime acceptance.",
+  "canonical_files": {
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": {
+      "git_blob_sha": "788492efedcdc47c9a308bb5ecbbce79fdd8f380"
+    },
+    "the artefact/tests/test_microvm_deployment_contract.py": {
+      "git_blob_sha": "5c2f48f7f97a2ef6d3ac1e5357a828ec4562ee3d"
+    },
+    "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md": {
+      "git_blob_sha": "2608f5ca9c18ff2682d137a099c7047966fb872c"
+    }
+  },
+  "execution": {
+    "environment": "authorized isolated non-production OpenAI container",
+    "python": "3.13.5",
+    "exact_git_blob_reconstruction": "PASS",
+    "command": "python -m pytest -q 'the artefact/tests/test_microvm_deployment_contract.py'",
+    "result": "6 passed in 0.04s",
+    "exit_code": 0,
+    "yaml_probe": {
+      "result": "PASS",
+      "document_count": 3,
+      "kinds": [
+        "Service",
+        "StatefulSet",
+        "NetworkPolicy"
+      ],
+      "network_policy": {
+        "name": "clayverse-default-deny",
+        "policy_types": [
+          "Ingress",
+          "Egress"
+        ],
+        "ingress_rules": [],
+        "egress_rules": []
+      }
+    }
+  },
+  "observed_contract": {
+    "hostNetwork_false_alone_is_sufficient": false,
+    "source_template_default_deny_ingress": true,
+    "source_template_default_deny_egress": true,
+    "broad_ipv4_allow_in_baseline_policy": false,
+    "broad_ipv6_allow_in_baseline_policy": false,
+    "deployment_specific_allow_policy_required": true,
+    "actual_cni_enforcement_required_for_final_acceptance": true,
+    "additive_selecting_network_policies_must_be_enumerated": true
+  },
+  "counterhypothesis": "The YAML contract can be correct while the admitted target CNI ignores NetworkPolicy, or another selecting NetworkPolicy broadens the effective additive union. Therefore runtime enforcement remains unverified until the exact accepted image is deployed behind the admitted MicroVM runtime and the target CNI/policy union is exercised.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn id and only minute-precision trigger time were available; ordinary deterministic regression does not consume the unusual-experiment slot.",
+    "count_added": 0
+  },
+  "execution_frontier_after_this_receipt": "Vercel Sandbox admission is observed working, but retained PR810 still fails closed before private Research/EntityOS source staging because host-side sensitive Preview GITHUB_READ_TOKEN is absent. The next credential-capable run must refresh/rebind current Research main plus retained execution-relevant PRs before exact OCI execution; source/OCI runtime credit remains zero until product assertions actually execute.",
+  "safety": {
+    "vps_testing": "FORBIDDEN_NOT_USED",
+    "self_hosted_testing": "FORBIDDEN_NOT_USED",
+    "production_host_testing": "FORBIDDEN_NOT_USED",
+    "together_api": "FORBIDDEN_NOT_USED",
+    "paid_or_final_training": "NOT_AUTHORIZED_NOT_USED",
+    "secrets_exposed": false
+  }
+}

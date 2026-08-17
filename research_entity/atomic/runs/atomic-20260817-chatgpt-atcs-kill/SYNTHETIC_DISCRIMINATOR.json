@@ -1,0 +1,49 @@
+{
+  "candidate": "ATCS-001_ACTIVE_TURN_CAPABILITY_SEAL",
+  "evidence_class": "LOCAL_SYNTHETIC_MODEL_ONLY",
+  "seed": 20260817,
+  "episodes": 20000,
+  "ground_truth": "effect admissible iff one hook-owned active turn exists, its workspace episode is current, owner/session binding is valid, active generation equals live session generation, and state is active",
+  "models": {
+    "M0_historical_workspace_provenance": {
+      "tp": 3917,
+      "tn": 10370,
+      "fp": 3367,
+      "fn": 2346,
+      "accuracy": 0.71435,
+      "false_accept_rate": 0.2451,
+      "false_reject_rate": 0.3746
+    },
+    "M1_canonical_active_turn_join": {
+      "tp": 6263,
+      "tn": 13737,
+      "fp": 0,
+      "fn": 0,
+      "accuracy": 1.0,
+      "false_accept_rate": 0.0,
+      "false_reject_rate": 0.0
+    },
+    "M2_active_turn_plus_extra_capability_seal": {
+      "tp": 6232,
+      "tn": 13737,
+      "fp": 0,
+      "fn": 31,
+      "accuracy": 0.99845,
+      "false_accept_rate": 0.0,
+      "false_reject_rate": 0.00495
+    }
+  },
+  "targeted_cases": [
+    {"case": "valid_active", "truth": true, "M0": false, "M1": true, "M2": true},
+    {"case": "completed_stale_selected", "truth": false, "M0": true, "M1": false, "M2": false},
+    {"case": "wrong_active_generation", "truth": false, "M0": true, "M1": false, "M2": false},
+    {"case": "wrong_workspace_episode", "truth": false, "M0": true, "M1": false, "M2": false},
+    {"case": "wrong_owner", "truth": false, "M0": false, "M1": false, "M2": false}
+  ],
+  "interpretation": [
+    "The corpus is deliberately aligned to the proposed current-turn authority law and is not target/runtime evidence.",
+    "M1 supplies every modeled safety rejection without a second credential lifecycle.",
+    "M2 adds no modeled safety win and introduces propagation/freshness failure surface.",
+    "The synthetic result therefore supports killing ATCS as a runtime organ unless a real isolated concurrency/restart discriminator shows a unique safety gap in M1."
+  ]
+}

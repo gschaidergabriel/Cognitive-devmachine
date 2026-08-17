@@ -78,6 +78,7 @@ class MistralTurnRunner:
         )
         try:
             generation = int(admission["generation"])
+            causal_id = str(admission["causal_id"])
             lifecycle.db.assert_live_generation(lifecycle.session_id, generation)
             decision = self.inference.reason(admission["context"], prompt)
             lifecycle.db.assert_live_generation(lifecycle.session_id, generation)
@@ -95,10 +96,12 @@ class MistralTurnRunner:
                 text,
                 source="mistral-api:response",
                 provider_receipt=receipt,
+                expected_causal_id=causal_id,
+                expected_generation=generation,
             )
             if not completion.get("completed"):
                 raise MistralTurnError("Mistral turn did not complete")
-            if completion.get("causal_id") != admission["causal_id"]:
+            if completion.get("causal_id") != causal_id:
                 raise MistralTurnError("Mistral response diverged from admitted causal identity")
             if completion.get("effect_id") is not None:
                 raise MistralTurnError("Mistral cognition turn unexpectedly bound an effect")
@@ -108,15 +111,17 @@ class MistralTurnRunner:
                 "session_id": admission["session_id"],
                 "turn_id": admission["turn_id"],
                 "assistant_turn_id": completion["assistant_turn_id"],
-                "causal_id": admission["causal_id"],
+                "causal_id": causal_id,
                 "generation": generation,
                 "text": text,
                 "inference_receipt": receipt,
             }
         except Exception:
             try:
-                if lifecycle.active() is not None:
-                    lifecycle.abort("mistral_turn_failed_or_stale")
+                lifecycle.abort(
+                    "mistral_turn_failed_or_stale",
+                    expected_causal_id=str(admission["causal_id"]),
+                )
             except (TurnLifecycleError, RuntimeError):
                 pass
             raise

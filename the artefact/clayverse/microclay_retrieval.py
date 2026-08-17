@@ -221,6 +221,8 @@ class MicroClayRetrieval:
                 existing["session_id"] != session_id
                 or int(existing["generation"]) != int(generation)
                 or existing["query_hash"] != query_hash
+                or int(existing["budget_chars"]) != int(budget_chars)
+                or int(existing["limit_count"]) != int(limit)
             ):
                 raise StaleGeneration("retrieval_identity")
             ids = json.loads(existing["selected_memory_ids"])
@@ -312,13 +314,13 @@ class MicroClayRetrieval:
             "INSERT INTO retrieval_episodes("
             "retrieval_id,turn_id,episode_id,causal_id,session_id,user_id,generation,"
             "policy_version,mode,query_hash,query_token_hashes,selected_memory_ids,"
-            "shadow_memory_ids,entry_keys,budget_chars,chars_selected,status,ts"
-            ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "shadow_memory_ids,entry_keys,budget_chars,limit_count,chars_selected,status,ts"
+            ") VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 retrieval_id, turn_id, episode_id, causal_id, session_id, user_id, int(generation),
                 self.POLICY_VERSION, mode, query_hash, json.dumps(token_hashes),
                 json.dumps(selected_ids), json.dumps(shadow_ids), json.dumps(entry_keys),
-                int(budget_chars), int(chars),
+                int(budget_chars), int(limit), int(chars),
                 "PRESENT" if selected else "UNKNOWN", now,
             ),
         )

@@ -155,3 +155,17 @@ Durable re-entry receipts: `receipts/2026-08-17_GO_2315_VERCEL_FIRECRACKER_MISTR
 ## Verification
 
 ClayVerse remains **IN_PROGRESS**. Whole-product PASS requires the complete exact-digest test-of-tests to execute successfully with durable evidence. Source, documentation, focused tests, Sandbox creation and isolated API calls are not substitutes.
+
+## Latest cycle delta — 2026-08-18 00:19 +07:00
+
+- refreshed canonical Research `main` to `958e3c5fa2406b42d187727e2adb6099b6ed0aa2` and current owner/execution authority before making current claims;
+- this section supersedes the older execution-frontier paragraph above that still described a Vercel Preview secret-management prerequisite: retained PR #810 now implements one-shot runtime `POST /api/go-cycle-v2` token ingress, so the owner-held scoped read-only `GITHUB_READ_TOKEN` does not need to be coupled to Vercel Environment Variables;
+- current PR #810 head is `d2be9c870dc4c2b223f6c202a946aba9dd36f264`; the latest observed READY deployment remains ancestor `ba52934acff8bd620e1d968dfa437bf96dbf1a54` (`dpl_6RSuuunC96JnmXeXN3Z9eYGTceE9`), so no exact-current-controller runtime credit is transferred;
+- no owner-held GitHub token was supplied in this `go`; therefore no credential-bearing POST, private Research/EntityOS fetch, exact OCI build/runtime, Vault-backed real Mistral call, EntityOS round-trip, recovery execution or whole-product runtime credit is claimed;
+- PR #680 remains the single retained current-main Mistral hardening candidate at head `37bfaac92158168fff16e20ed29a1fe208429720`. Source review retains it as Draft: it adds exact returned-model identity, finite-only JSON, final fixed-model preflight, OCI build-context closure and atomic generation/causal re-entry fences on the already-adjudicated Engine path, but source/focused evidence alone does not authorize whole-product promotion;
+- current Mistral API documentation was checked against the retained request shape; this dependency-contract check supports the candidate's request controls but grants no ClayVerse runtime credit and does not replace independent response validation;
+- product/runtime bytes are `NO_CHANGE`: no second Mistral runtime, controller, state authority or effect path was created, and the controller was not rebound/deployed merely to chase moving source before a real owner-token run;
+- unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`, because the exact user-message timestamp exposed here is minute-precision only and no shared immutable request/turn identifier is available for the atomic lease;
+- durable receipt: `receipts/2026-08-18_GO_0019_RUNTIME_INGRESS_MISTRAL_REENTRY_GPT56SOL.json`.
+
+ClayVerse remains **IN_PROGRESS**. The next exact product discriminator is the credential-bearing retained #810 one-shot after one fresh exact-source rebind, followed in the same admitted run by Firecracker -> exact OCI digest -> approved runtime Vault Mistral -> canonical re-ingest/effect -> Tier-1 -> full Tier-2 recreation from the same digest -> secret reacquisition -> second real Mistral -> remaining auth/PTY/dual-user gates.

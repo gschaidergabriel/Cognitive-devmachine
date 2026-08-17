@@ -1,0 +1,44 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "observed_at": "2026-08-17T23:00:37+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT connected GitHub+Vercel organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
+  "finding": "Kubernetes StatefulSet restart semantics can restart the ClayVerse application container inside the same Pod, while Kata maps the Pod sandbox to the VM. Therefore an in-place container restart cannot satisfy ClayVerse Tier-2 full-appliance recovery, which requires replacement of the whole Pod/Kata sandbox/VM.",
+  "primary_evidence": [
+    "https://kubernetes.io/docs/reference/kubernetes-api/apps/stateful-set-v1/ — StatefulSet Pod template restartPolicy only allows Always",
+    "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/ — kubelet restartPolicy restarts replacement containers inside the same Pod/node",
+    "https://github.com/kata-containers/kata-containers/blob/main/docs/design/virtualization.md — CRI Pod Sandbox maps to a VM; container maps to a process in the VM"
+  ],
+  "canonical_delta": {
+    "contract_commit": "2a813a127a732a0a70e5b547faacd3d44d720a7a",
+    "template_commit": "0ef307ff3ca475235795de2744ec21e4315cae47",
+    "initial_test_commit": "80515c3faf94234e0e747929353a0c61970a48a8",
+    "semantic_test_alignment_commit": "d664e6b7b87e55318b31edae9638e2c2060cb965",
+    "contract_change": "Container restart inside an existing VM/microVM is not Tier 2; external fail-closed orchestration must delete/replace the whole Pod/Kata sandbox/VM and prove identity/state/replay invariants.",
+    "template_change": "StatefulSet is explicitly only the workload/isolation profile and marks external-full-sandbox-required / in-place-container-restart:not-tier2.",
+    "test_change": "Regression prevents restartPolicy Never/OnFailure pseudo-fixes and requires the full-sandbox replacement contract."
+  },
+  "exact_current_blob_reconstruction": {
+    "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "794b209bc8ff14cbaf898b31557daac075977818",
+    "deployment/clayverse-kata-statefulset.template.yaml": "629f7bbb7627e997839597edd499ce008c569a0f",
+    "tests/test_microvm_deployment_contract.py": "8c59f6ae9dda51b8970ea080d5bc519a7dac2a50",
+    "all_blob_identities_match_github": true
+  },
+  "deterministic_regression": {
+    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
+    "environment": "authorized isolated non-production OpenAI container source-slice reconstruction",
+    "first_run": "7 passed, 1 failed due to over-specific test wording only",
+    "repair": "test-only semantic wording alignment; no product-contract weakening",
+    "final_run": "9 passed in 0.05s",
+    "exit_code": 0,
+    "runtime_credit": {"kubernetes": 0, "kata_microvm": 0, "tier2_replacement": 0, "whole_clayverse": 0}
+  },
+  "current_acceptance_gate": "TIER2_REPLACEMENT_BLOCKED until an admitted final target proves fatal-invariant signaling causes deletion/replacement of the entire Kata Pod sandbox/VM with new Pod UID + sandbox/VM identity, same exact image digest, recovered canonical state under a newly advanced generation, stale-result fencing and no blind effect replay.",
+  "execution_frontier": "Retained Vercel #810 still proves Sandbox.create admission but exact private Research/EntityOS staging remains blocked by absent host-side sensitive GITHUB_READ_TOKEN; source/OCI runtime credit remains zero. Final microVM acceptance additionally requires an admitted Kata/equivalent target with full-sandbox Tier-2 replacement.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_count": 0,
+  "non_claims": ["No Kubernetes/Kata/microVM executed", "No Tier-2 runtime replacement observed", "No whole-product PASS", "No VPS/self-hosted/production testing", "Together not used", "No owner-gated paid/final training"]
+}

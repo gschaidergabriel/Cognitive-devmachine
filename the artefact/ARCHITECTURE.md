@@ -8,7 +8,7 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 ## Canonical product runtime path
 
-`browser -> Clerk sign-in/session -> verified Clerk JWT -> authenticated WebSocket PTY -> IdentityRouter -> user-bound persistent tmux -> normal interactive Claude Code CLI -> managed UserPromptSubmit hook -> UnifiedDB observation + memory + workspace + bounded canonical-context injection -> Claude reasoning -> effect-only local ClayVerse MCP when an admitted action is needed -> EffectGate -> internal EntityOS only when explicitly admitted -> verified/denied outcome -> managed Stop/StopFailure hook -> assistant turn + causal re-entry -> UnifiedDB -> rebuilt ClayGraph`
+`browser -> Clerk sign-in/session -> verified Clerk JWT -> authenticated WebSocket PTY -> IdentityRouter -> user-bound persistent tmux -> normal interactive Claude Code CLI -> managed UserPromptSubmit hook -> UnifiedDB observation -> MicroClay retrieval entry/activation -> ClayGraph/temporal/provenance context -> Hyperposition -> bounded workspace context injection -> Claude reasoning -> effect-only local ClayVerse MCP when an admitted action is needed -> EffectGate -> internal EntityOS only when explicitly admitted -> verified/denied outcome -> causal re-entry/credit -> MicroClay retrieval-policy learning -> managed Stop/StopFailure hook -> assistant turn -> UnifiedDB -> rebuilt ClayGraph`
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
@@ -22,6 +22,33 @@ The retired headless `claude -p`/custom chat API path is not the product runtime
 - After destructive compression there is no hidden lossless transcript authority. Provenance retains non-reversible source digest/size metadata plus admitted durable semantic extraction.
 - Cross-session retrieval is collision-triggered and bounded rather than routinely injecting another user's full session.
 - Workspace episodes are explicit, selection-fenced, and connected to causal re-entry.
+
+## MicroClay adaptive retrieval organ
+
+MicroClay is a persistent small retrieval organ inside the single ClayVerse entity, not a second identity, second agent or second source of truth. Its job is to learn the best **entry point into memory**, not merely to sort a fixed top-k after the fact.
+
+The target retrieval path is:
+
+`current cue + user/session + resource context -> MicroClay entry-point proposal -> exact/structured temporal lookup + FTS/vector candidates + bounded ClayGraph seed activation/expansion -> provenance/valid-time/conflict filters -> adaptive budget/ranking/abstention -> Hyperposition for unresolved facets -> GWT/context coalition -> Claude`
+
+MicroClay may adapt:
+
+- query/cue normalization and entry-point seeds;
+- memory/source/class routing;
+- relative exact/FTS/vector/graph/recency/provenance weights;
+- graph seed quality, bounded activation radius and widen-search threshold;
+- context-budget packing and abstention/UNKNOWN thresholds;
+- repeated usefulness/irrelevance/staleness priors for retrieval routes.
+
+MicroClay may **not** adapt semantic truth, provenance, user rights, capability authority, EffectGate policy, EntityOS admission or the canonical memory record. Retrieval activation/accessibility is never truth or execution authority.
+
+Every canonical product retrieval is causally receipt-bound to `turn_id`, `episode_id`, `causal_id`, user/session and the live entity generation. Query content is not duplicated into the retrieval-policy ledger; bounded hashes/entry keys and selected IDs provide replay/audit identity. A repeated retrieval of the same causal turn reuses the same receipt rather than learning twice.
+
+Learning is outcome-bound. The initial safe learning signal is a later verified EffectJournal/causal outcome from the same retrieval episode. A normal Claude answer is not automatically positive reward. Duplicate feedback receipts are idempotent and stale generations are rejected. User corrections, retrieval misses, unnecessary personalization and verified task outcomes are intended additional supervised/causal signals once their admission contracts are explicit.
+
+The learned policy starts in `SHADOW`: the deterministic baseline continues serving Claude while the adaptive route is scored and recorded. Promotion to `ACTIVE` requires isolated replay/held-out evidence showing positive net retrieval utility without higher contamination, stale-memory use, unnecessary personalization or authority leakage. Cold/random learned parameters must never replace a known-safe baseline merely because training has begun.
+
+The current source candidate implements the persistent receipt/policy spine, query-sensitive baseline, hashed cue entry keys, causal outcome learning and SHADOW gating. Full graph-native entry selection, FTS/vector fusion and any neural MicroClay implementation remain acceptance work and must be benchmarked against simpler retrieval rather than assumed superior.
 
 ## Permanent Claude Code boundary
 
@@ -59,7 +86,9 @@ The retired headless `claude -p`/custom chat API path is not the product runtime
 - Exact OCI image build and runtime checks for the packaged Python/Node/tmux/Claude Code/xterm/managed-hook stack.
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
-- Exact hook lifecycle: prompt ingestion/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
+- Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.
 - Accepted exact embedded EntityOS runtime/effect contract.
 - Restart/crash/recovery and persistent-volume continuity at exact image identity.

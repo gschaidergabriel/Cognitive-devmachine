@@ -241,10 +241,10 @@ class AutonomyController:
         return state, goal
 
     @staticmethod
-    def _budget(goal: dict[str, Any]) -> None:
+    def _budget(goal: dict[str, Any], *, needs_effect: bool = False) -> None:
         if goal["counters"]["steps"] >= goal["budget"]["max_steps"]:
             raise AutonomyBudgetExceeded("step budget exhausted")
-        if goal["counters"]["effects"] >= goal["budget"]["max_effects"]:
+        if needs_effect and goal["counters"]["effects"] >= goal["budget"]["max_effects"]:
             raise AutonomyBudgetExceeded("effect budget exhausted")
 
     @staticmethod
@@ -293,7 +293,7 @@ class AutonomyController:
                 raise AutonomyStateError("goal is not runnable")
             if goal["current_step"] and goal["current_step"]["status"] in {"PROPOSED", "ADMITTED"}:
                 raise AutonomyStateError("goal already has an unfinished step")
-            self._budget(goal)
+            self._budget(goal, needs_effect=kind == "effect")
             step = {"step_id": str(uuid.uuid4()), "kind": kind, "description": description, "effect": effect, "attempts": 0, "status": "PROPOSED", "created_at": time.time()}
             goal["current_step"] = step
             goal["status"] = "VERIFYING" if kind == "complete_candidate" else ("WAITING" if kind == "wait" else "ACTIVE")
@@ -309,7 +309,7 @@ class AutonomyController:
                 raise AutonomyStateError("step not admissible")
             if step["attempts"] > goal["budget"]["max_retries_per_step"]:
                 raise AutonomyBudgetExceeded("retry budget exhausted")
-            self._budget(goal)
+            self._budget(goal, needs_effect=step["kind"] == "effect")
             step["attempts"] += 1
             step["status"] = "ADMITTED"
             goal["counters"]["steps"] += 1

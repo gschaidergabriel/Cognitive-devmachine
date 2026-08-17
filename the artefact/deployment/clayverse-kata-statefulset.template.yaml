@@ -103,11 +103,10 @@ spec:
               value: "1"
             - name: CLAYVERSE_ENTITYOS_PATH
               value: /opt/entityos/EntityOS
-            - name: CLAYVERSE_ENTITYOS_SHA256
-              valueFrom:
-                secretKeyRef:
-                  name: clayverse-runtime-secrets
-                  key: entityos-sha256
+            # EntityOS artifact identity is image-authoritative. The image bakes
+            # CLAYVERSE_ENTITYOS_SHA256 only after Docker build-time verification
+            # against the tracked entityos.lock.json and the embedded bytes.
+            # Do not override that digest from a deployment Secret/config source.
             - name: CLAYVERSE_CLERK_MAP_JSON
               valueFrom:
                 secretKeyRef:

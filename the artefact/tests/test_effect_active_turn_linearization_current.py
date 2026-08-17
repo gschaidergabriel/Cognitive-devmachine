@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import time
+
 import pytest
 
 from clayverse.effects import EffectRequest
@@ -49,6 +51,51 @@ def test_retired_predecessor_cannot_start_external_effect(tmp_path):
         "SELECT COUNT(*) FROM effects WHERE episode_id=?", (predecessor["episode_id"],)
     ).fetchone()[0] == 0
     assert lifecycle.active()["episode_id"] == successor["episode_id"]
+    db.close()
+
+
+def test_foreign_causal_row_cannot_reach_external_effect(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    uid, sid = IdentityRouter(db, {"g": "gabriel"}).resolve("g")
+    bridge = _Bridge()
+    lifecycle = TurnLifecycle(db, uid, sid, entityos_bridge=bridge)
+    predecessor = _selected_effect_turn(db, lifecycle)
+
+    db.db.execute(
+        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
+        "VALUES(?,?,?,?,?,0,1,?)",
+        ("causal-foreign", predecessor["episode_id"], None, predecessor["turn_id"], "0" * 64, time.time()),
+    )
+
+    request = EffectRequest(uid, sid, "entityos.exec", "transport", ["hello"], db.entity_generation())
+    with pytest.raises(StaleGeneration, match="effect_causal_spine"):
+        lifecycle.effects.execute(request, predecessor["episode_id"])
+
+    assert bridge.calls == 0
+    assert db.db.execute(
+        "SELECT COUNT(*) FROM effects WHERE episode_id=?", (predecessor["episode_id"],)
+    ).fetchone()[0] == 0
+    assert lifecycle.active()["episode_id"] == predecessor["episode_id"]
+    db.close()
+
+
+def test_matching_causal_with_persisted_effect_keeps_retry_error(tmp_path):
+    db = UnifiedDB(tmp_path / "unified.db")
+    uid, sid = IdentityRouter(db, {"g": "gabriel"}).resolve("g")
+    lifecycle = TurnLifecycle(db, uid, sid)
+    predecessor = _selected_effect_turn(db, lifecycle)
+
+    effect_id = lifecycle.effects.journal.begin(
+        predecessor["episode_id"], sid, uid, "state.noop", "retry-control", predecessor["generation"]
+    )
+    lifecycle.effects.journal.complete_verified(
+        effect_id, {"ok": True, "boundary": "internal"}, sid, uid, predecessor["generation"]
+    )
+
+    with pytest.raises(RuntimeError, match="effect already persisted for episode"):
+        lifecycle.effects.journal.begin(
+            predecessor["episode_id"], sid, uid, "state.noop", "retry-control", predecessor["generation"]
+        )
     db.close()
 
 

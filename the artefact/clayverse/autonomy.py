@@ -4,14 +4,61 @@ import json
 import os
 import threading
 from dataclasses import asdict
+from pathlib import Path
 from typing import Any, Callable
 
+from .adapters import ClaudeCodeInference
 from .agency import AgencyState
 from .effects import EffectGate, EffectRequest
 from .entityos_bridge import EntityOSBridge
 from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .retrieval import WorldAssembler
 from .store import UnifiedDB
+
+
+class UserHomeClaudeCodeInference(ClaudeCodeInference):
+    """Headless Claude cognition using the same canonical per-user HOME as its terminal.
+
+    This lets background goal work reuse the authenticated Claude subscription/OAuth
+    identity already owned by that user's permanent ClayVerse terminal without
+    attaching to tmux or inheriting the service account's unrelated HOME.
+    """
+
+    def __init__(self, home: str | Path, **kwargs):
+        self.user_home = str(Path(home))
+        super().__init__(**kwargs)
+
+    def _subprocess_env(self) -> dict[str, str]:
+        env = super()._subprocess_env()
+        env["HOME"] = self.user_home
+        return env
+
+
+class UserHomeClaudeInferenceRouter:
+    """Select one headless cognition adapter from canonical goal ownership."""
+
+    def __init__(self, state_root: str | Path):
+        self.state_root = Path(state_root)
+        self._adapters: dict[str, UserHomeClaudeCodeInference] = {}
+
+    def _adapter(self, user_id: str) -> UserHomeClaudeCodeInference:
+        if user_id not in CANONICAL_TERMINAL_NAMES:
+            raise PermissionError("unknown autonomous goal owner")
+        if user_id not in self._adapters:
+            home = self.state_root / "users" / user_id / "home"
+            self._adapters[user_id] = UserHomeClaudeCodeInference(home)
+        return self._adapters[user_id]
+
+    def reason(self, world: Any, observation: str) -> dict[str, Any]:
+        if not isinstance(world, dict):
+            raise RuntimeError("autonomous world must be an object")
+        work = world.get("autonomous_work_item")
+        if not isinstance(work, dict):
+            raise RuntimeError("autonomous work item missing")
+        user_id = work.get("user_id")
+        if not isinstance(user_id, str):
+            raise RuntimeError("autonomous goal owner missing")
+        return self._adapter(user_id).reason(world, observation)
 
 
 class AutonomyRunner:

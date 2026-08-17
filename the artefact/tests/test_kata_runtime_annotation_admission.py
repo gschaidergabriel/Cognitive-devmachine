@@ -22,10 +22,18 @@ def test_kata_runtime_annotation_policy_is_fail_closed_and_bound():
     assert "failurePolicy: Fail" in policy
     assert 'operations: ["CREATE", "UPDATE"]' in policy
     assert 'resources: ["pods"]' in policy
-    assert "object.metadata.name.startsWith('clayverse-')" in policy
-    assert "object.spec.runtimeClassName == 'kata-qemu-runtime-rs'" in policy
-    assert "object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))" in policy
-    assert "reason: Forbidden" in policy
+
+    match_conditions = policy.split("matchConditions:", 1)[1].split("validations:", 1)[0]
+    validations = policy.split("validations:", 1)[1]
+    assert "object.metadata.name.startsWith('clayverse-')" in match_conditions
+    # RuntimeClass must be validated, not used to decide whether validation runs;
+    # otherwise a mutating admission component could switch to host-kernel runc
+    # and make this policy skip the canonical Pod entirely.
+    assert "runtimeClassName" not in match_conditions
+    assert "has(object.spec.runtimeClassName)" in validations
+    assert "object.spec.runtimeClassName == 'kata-qemu-runtime-rs'" in validations
+    assert "object.metadata.annotations.all(k, !k.startsWith('io.katacontainers.'))" in validations
+    assert policy.count("reason: Forbidden") == 2
 
     assert "policyName: clayverse-kata-runtime-annotations" in binding
     assert "validationActions: [Deny]" in binding

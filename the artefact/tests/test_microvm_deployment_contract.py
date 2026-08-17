@@ -104,6 +104,19 @@ def test_kata_runtime_security_floor_is_bound_and_refreshed():
     assert "A version string alone is not microVM security evidence" in text
 
 
+def test_kata_final_acceptance_requires_current_supported_rolling_release():
+    text = CONTRACT.read_text()
+    assert "rolling-release project" in text
+    assert "only the current monthly release is security-supported" in text
+    assert "then-current upstream-supported Kata release" in text
+    assert "unsupported prior release is `BLOCKED`" in text
+    assert "GHSA-mp2j-xm59-qfgw / CVE-2026-50540" in text
+    assert "GHSA-7fhf-v3p3-rp56" in text
+    assert "`3.31.0` is **not an admissible current final-acceptance target**" in text
+    assert "reject unreviewed `io.katacontainers.*` workload annotations" in text
+    assert "effective admitted Pod annotations" in text
+
+
 def test_provider_credentials_remain_bounded():
     text = TEMPLATE.read_text()
     assert "GLM_API_TOKEN" in text

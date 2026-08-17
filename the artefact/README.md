@@ -25,7 +25,7 @@ Model output never self-authorizes execution.
 
 Final acceptance requires the exact accepted OCI digest behind an **independent guest-kernel VM/microVM boundary**.
 
-The Kubernetes/Kata reference profile remains a deployment option and must retain its fail-closed contracts: default-deny networking, current-supported runtime/hypervisor configuration, read-only root, declared volumes, no host authority, distinct `/healthz` liveness and `/readyz` readiness, image-authoritative EntityOS identity, and real Tier-2 full sandbox/VM replacement rather than an in-place container restart.
+The Kubernetes/Kata reference profile remains a deployment option and must retain its fail-closed contracts: default-deny networking, current-supported runtime/hypervisor configuration, read-only root, declared volumes, no host authority, distinct `/healthz` liveness and `/readyz` readiness, image-authoritative EntityOS identity, `ReadWriteOncePod` single-writer PVC semantics, `supplementalGroupsPolicy: Strict` with effective process-GID attestation, and real Tier-2 full sandbox/VM replacement rather than an in-place container restart.
 
 For the mandatory final sandbox acceptance run, the **Vercel Sandbox Firecracker microVM itself may serve as the independent guest-kernel envelope** when its guest identity/kernel is attested and the exact accepted ClayVerse OCI digest runs inside it through Docker/OCI runtime. A second nested KVM guest is not required merely to satisfy the guest-kernel invariant.
 
@@ -103,7 +103,7 @@ Historical Vercel runs that stopped because the token was absent remain valid hi
 
 ## Current source convergence
 
-Parallel work before this owner update had already strengthened the MicroVM deployment contract around current-supported Kata/runtime/hypervisor identity, runtime-mutating annotation fences, non-root persistent-volume semantics, image-authoritative EntityOS digest binding, and full Pod/Kata-sandbox Tier-2 replacement. Those source changes remain bounded by their own exact receipts; no runtime credit is transferred to later bytes without execution.
+Parallel work before this owner update had already strengthened the MicroVM deployment contract around current-supported Kata/runtime/hypervisor identity, runtime-mutating annotation fences, non-root persistent-volume semantics, `ReadWriteOncePod` single-writer fencing, image-authoritative EntityOS digest binding, and full Pod/Kata-sandbox Tier-2 replacement. This `go` adds a bounded process-identity hardening candidate: the Kubernetes reference profile requires `supplementalGroupsPolicy: Strict` so image `/etc/group` membership cannot silently widen effective groups, and final acceptance must attest node/CRI support plus the effective process GIDs before and after full appliance replacement. These source changes remain bounded by their own exact receipts; no runtime credit is transferred to later bytes without execution.
 
 The new owner requirements add a separate concrete implementation obligation: **the exact final product image must provide and exercise an admitted Mistral runtime inference/secret path**. Current source/policy convergence alone does not prove that path exists or works.
 
@@ -138,6 +138,16 @@ After exact source/OCI construction, the strongest new product discriminator is 
 - durable final test-of-tests directive committed;
 - `TESTING_STRATEGY.md` now binds real Mistral inference before/after Tier-2 recovery, Vault secret reacquisition, exact OCI-in-microVM execution and the stronger evidence ladder;
 - no whole-product runtime result is claimed from these source/policy changes.
+
+### GO 22:59 re-entry — strict process-group identity
+
+- canonical MicroVM source still lacked `supplementalGroupsPolicy` after the newer owner directives landed;
+- current Kubernetes documentation says default `Merge` may add matching image `/etc/group` memberships, while `Strict` restricts groups to those declared by Pod security context;
+- candidate template now sets `supplementalGroupsPolicy: Strict` while preserving `fsGroup: 10001`, `OnRootMismatch`, `ReadWriteOncePod`, default-deny networking, image-authoritative EntityOS identity and Tier-2 markers;
+- candidate contract requires node/CRI support attestation and effective first-process group verification with no implicit image-derived GID before and after full appliance replacement;
+- focused regression `tests/test_microvm_strict_supplemental_groups.py` fences those source contracts;
+- exact Kubernetes/Kata/CSI/OCI execution remains unobserved for this candidate; source coherence is not product PASS;
+- unusual experiment remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because the shared trigger identity is only minute precision and no immutable request/turn id is exposed.
 
 ## Verification
 

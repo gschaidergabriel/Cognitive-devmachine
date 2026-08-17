@@ -1,0 +1,59 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main_sha": "b16578a095aafa632f22d0ccabe93ad92242a9d3",
+  "branch": "gpt56sol/go-turn-complete-generation-fence-20260817-2259",
+  "classification": "SOURCE_CANDIDATE",
+  "finding": {
+    "gap": "TurnLifecycle.complete() canonicalized Stop/assistant output without revalidating the active turn generation inside its own write transaction. A recovery generation advance between provider/Stop-side checks and completion commit could therefore admit a stale response.",
+    "repair": "Call assert_live_generation(session_id, active_turn.generation) inside the existing UnifiedDB BEGIN IMMEDIATE completion transaction before workspace selection, assistant insertion or causal completion.",
+    "scope": "General canonical TurnLifecycle Stop/completion path; independent of Mistral transport/provider architecture."
+  },
+  "source_identity": {
+    "turn_lifecycle_blob": "7fc5be927241555d4c649285a1a32cebeec5ecdb",
+    "red_gate_blob": "31679d81e60ad9bf16b95a84e540aa83c7a47f3c",
+    "red_gate_path": "the artefact/tests/test_turn_complete_generation_fence.py",
+    "pre_rebind_donor_commits": [
+      "68af27402b292895c774049c468f09d84e518640",
+      "878f06ee502d3e465a8bedda6ee5e692a60aa756"
+    ]
+  },
+  "red_gate": {
+    "intervention": "Begin a canonical turn at generation 1, advance the single global entity generation to 2 before Stop, then call complete().",
+    "required": "StaleGeneration; no assistant turn; no causal episode; stale active turn remains available for canonical recovery rather than being falsely completed."
+  },
+  "execution_evidence": {
+    "focused_test": "UNOBSERVED",
+    "adjacent_regression": "UNOBSERVED",
+    "exact_oci": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "vercel_reentry": {
+    "latest_observed_retrigger_deployment": "dpl_58D2oabLHZQQ7zmjXFz3fwjTu7u7",
+    "sandbox_admission": "PASS_CREATED",
+    "sandbox_id": "pink-forthcoming-mule-12DuZ3",
+    "guest_kernel": "Linux 6.18.40 x86_64",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "github_secret_forwarded_to_sandbox": false,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "note": "Current owner law permits scoped read-only token forwarding, but the observed retrigger still did not receive the token. This is execution-admission blocking, not a ClayVerse test failure."
+  },
+  "coordination": {
+    "mistral_provider_clients_added": 0,
+    "generic_fence_extracted_from_provider_lane": true,
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "unusual_experiment_count": 0
+  },
+  "constraints": {
+    "vps_self_hosted_production_testing": false,
+    "together_api": false,
+    "paid_final_training": false
+  },
+  "promotion_gate": "Execute the exact focused red gate and adjacent TurnLifecycle/recovery regressions on a freshly bound authorized isolated source checkout, then continue through the owner-mandated exact OCI/Firecracker/Vault-Mistral test-of-tests. Source coherence alone is not runtime or whole-product PASS.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -1,0 +1,62 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "research_execution_classification": "SOURCE_REVIEW_AND_CONNECTED_VERCEL_OBSERVABILITY_ONLY",
+  "canonical_product_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_product_pr": 787,
+  "active_product_pr_head_observed": "f299eeca8b8b6c9f62aeb7e97935593180ff5942",
+  "active_product_pr_state": "DRAFT_OPEN",
+  "observed": [
+    "Current PR #787 source binds Vercel sandbox Python build dependencies to the source-staged requirements-entityos-build.txt instead of independent literal pins.",
+    "Current PR #787 still verifies EntityOSSourceSnapshotAttestation/v2 and emits source_provenance, source_tree and source_archive_sha256, but EntityOSBuildReceipt/v1 does not bind the SHA-256 of the exact external attestation document.",
+    "Connected Vercel deployment inventory shows no deployment for current PR #787 heads after the rate-limited cohort; the newest READY preview inspected on another dependency branch skipped the target sandbox lane and is not executable evidence for #787.",
+    "An older #787 Vercel Sandbox actually started, reconstructed exact Git authority and provisioned the pinned toolchain, then failed before the attested EntityOS build because the generated attestation Python snippet had a SyntaxError; the sandbox stopped successfully. This is bounded negative evidence only for that older source head.",
+    "No exact-current-head Vercel Sandbox observation exists for f299eeca8b8b6c9f62aeb7e97935593180ff5942 in this turn."
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "claim": "Exact external attestation-document digest binding in EntityOSBuildReceipt/v1 strengthens durable provenance replay without creating a second runtime path.",
+      "status": "RETAIN"
+    },
+    {
+      "id": "H2",
+      "claim": "The current external attestation may intentionally be the authority, so absence of its digest is not by itself an exploit; the narrower defect is inability to identify the exact authority document from the build receipt alone.",
+      "status": "RETAIN_COUNTERHYPOTHESIS"
+    }
+  ],
+  "required_hardening": [
+    "Extend SourceProvenance with source_attestation_sha256 nullable for Git-clean mode.",
+    "Hash the exact external attestation bytes after successful validation in ATTESTED_SNAPSHOT_V2 mode.",
+    "Emit source_attestation_sha256 in EntityOSBuildReceipt/v1.",
+    "Make the build-internal Vercel lane compare receipt source_attestation_sha256 with the independently staged manifest-bound attestation digest.",
+    "Add deterministic ordinary regressions for exact digest binding and substituted-authority mismatch; these are not a second unusual experiment."
+  ],
+  "unusual_experiment": {
+    "global_limit_for_user_triggered_go": 1,
+    "reserved": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_executed_by_this_receipt": 0,
+    "reason": "Current exact-head Sandbox execution is blocked/unavailable; do not multiply experiments."
+  },
+  "capability_frontier_preserved": {
+    "CM-NET": "OPEN",
+    "CM-PORT": "OPEN",
+    "CM-TERM": "OPEN",
+    "CM-DATA": "IN_PROGRESS",
+    "CM-VIS": "OPEN",
+    "CM-AUDIO": "OPEN",
+    "selection_reason": "Exact EntityOS artifact/provenance acceptance is the current higher-information shared blocker; capability streams remain required and unchanged by this receipt."
+  },
+  "current_blocker": "Current PR #787 has no exact-current-head actually-started Vercel Sandbox run. New Git-bound deployments are blocked by Vercel deployment rate limiting, and the connected Vercel tool surface does not expose a direct Sandbox start/exec action.",
+  "next_sandbox_executable_step": "When Vercel accepts a Git-bound preview again, run the single existing build-internal sequence on the then-current #787 head: dependency preflight -> isolated full pytest under DENY_ALL with zero unusual experiments -> Git-free attested twin EntityOS build and receipt binding -> only the reserved content-tamper unusual experiment -> sanitized Git reconstruction -> inherited Batch-5 regression -> artifact byte comparison -> sandbox stop.",
+  "acceptance": "IN_PROGRESS",
+  "whole_entityos_pass": false,
+  "vps_testing": "FORBIDDEN",
+  "together_api": "FORBIDDEN",
+  "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

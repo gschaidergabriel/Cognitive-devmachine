@@ -37,13 +37,16 @@ class ClayVerseEffectBridge:
         user_id = os.environ.get("CLAYVERSE_USER_ID", "").strip()
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()
 
+        # Artifact presence/integrity and effect authority are distinct contracts.
+        # Never infer execution permission merely because a path+digest are present.
         bridge = None
-        path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
-        sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
-        if path or sha256:
+        enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
+        if enable_entityos:
+            path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
+            sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
             if not path or not sha256 or not os.path.isabs(path):
                 db.close()
-                raise BridgeStateError("EntityOS configuration is incomplete")
+                raise BridgeStateError("EntityOS execution enabled but configuration is incomplete")
             bridge = EntityOSBridge(path=path, sha256=sha256)
             bridge.verify()
         return cls(db, user_id, session_id, bridge)

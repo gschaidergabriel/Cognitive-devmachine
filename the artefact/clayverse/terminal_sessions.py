@@ -43,6 +43,7 @@ class TerminalSessionManager:
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
     TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
+    _IDEMPOTENT_MISSING_KEY_TABLES = frozenset({"prefix", "root", "copy-mode", "copy-mode-vi"})
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -164,6 +165,18 @@ class TerminalSessionManager:
             ) from exc
         return cp.returncode == 0
 
+    @classmethod
+    def _tmux_policy_reapply_errors_are_idempotent(cls, stderr: str) -> bool:
+        """Accept only tmux's exact diagnostics for already-removed default key tables."""
+        lines = [line.strip() for line in stderr.splitlines() if line.strip()]
+        if not lines:
+            return False
+        expected = {
+            f"table {table} doesn't exist"
+            for table in cls._IDEMPOTENT_MISSING_KEY_TABLES
+        }
+        return all(line in expected for line in lines)
+
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
         """Reapply the immutable command-surface fence to a running tmux server."""
         try:
@@ -178,7 +191,7 @@ class TerminalSessionManager:
             raise TerminalRuntimeError(
                 f"tmux policy enforcement unavailable for {binding.tmux_name}"
             ) from exc
-        if cp.returncode != 0:
+        if cp.returncode != 0 and not self._tmux_policy_reapply_errors_are_idempotent(cp.stderr):
             raise TerminalRuntimeError(
                 f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
             )

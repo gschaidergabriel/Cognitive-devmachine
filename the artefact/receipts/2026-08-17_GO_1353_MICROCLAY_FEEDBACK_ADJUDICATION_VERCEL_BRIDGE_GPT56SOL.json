@@ -9,25 +9,38 @@
   ],
   "microclay_adjudication": {
     "retained_implementation_candidate_pr": 501,
+    "retained_fix_commit": "879696b367f5afb2474120aaf56c322498cc4ea5",
     "retired_duplicate_pr": 490,
     "red_gate_pr": 522,
+    "red_gate_head_after_refresh": "938d0e8fccab8032c614f92024594cbb926ac4b4",
     "retired_duplicate_policy": "PR490 closed donor-only to preserve one canonical feedback implementation path",
-    "blocking_falsifiers": [
+    "falsifiers_found_and_adopted": [
       {
         "id": "HINDSIGHT_LEAKAGE",
-        "claim": "A miss target created after the original retrieval can currently train query-to-subject capital backward in time in PR501 because target.ts is not fenced to retrieval_episode.ts.",
-        "required_gate": "Reject target.ts > retrieval_episode.ts before policy or feedback mutation."
+        "original_problem": "A miss target created after the original retrieval could train query-to-memory capital backward in time.",
+        "adopted_fix": "MicroClayExplicitFeedback._target rejects target.ts > retrieval_episode.ts before policy or feedback mutation."
       },
       {
         "id": "DEFAULT_MINTED_USER_EXPLICIT",
-        "claim": "PR501 currently defaults the source argument to USER_EXPLICIT, so trusted feedback provenance can be manufactured by omission at the low-level call boundary.",
-        "required_gate": "No USER_EXPLICIT default; product ingress must provide trusted explicit provenance, eventually bound to an authenticated canonical user action/receipt."
+        "original_problem": "The low-level apply call defaulted source to USER_EXPLICIT, manufacturing trusted provenance by omission.",
+        "adopted_fix": "source is now a required keyword argument and must equal USER_EXPLICIT. End-to-end authenticated feedback ingress remains open."
       }
     ],
-    "red_gate_kind": "tests-only stacked donor; no second implementation",
+    "regression_gate": "PR522 preserves both adversarial obligations without introducing a second implementation",
     "truth_authority_changed": false,
     "effect_authority_changed": false,
-    "serving_mode": "SHADOW"
+    "serving_mode": "SHADOW",
+    "remaining_product_gate": "USER_EXPLICIT still needs an authenticated canonical user action/receipt at product ingress; a required low-level caller string is necessary but not sufficient end-to-end provenance."
+  },
+  "github_execution_admission": {
+    "candidate_head": "879696b367f5afb2474120aaf56c322498cc4ea5",
+    "workflow_run": 32004953123,
+    "job": 95312428484,
+    "workflow": "Research Entity Identity Guard",
+    "conclusion": "failure",
+    "observed_steps": [],
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_VISIBLE_STEP_EXECUTION",
+    "test_failure": false
   },
   "vercel_bridge_observation": {
     "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
@@ -69,7 +82,7 @@
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "reason": "No shared immutable trigger request identity was available to safely acquire the global per-go experiment lease."
   },
-  "acceptance": "IN_PROGRESS",
+  "acceptance": "SOURCE_REPAIRED_EXACT_RUNTIME_BLOCKED",
   "whole_clayverse_pass": false,
-  "next_exact_step": "When Vercel preview admission is available, stage the then-current retained PR501 plus red-gate obligations onto the confirmed Git-preview @vercel/sandbox bridge, bind exact blobs/heads, run focused feedback plus adjacent Stage-A replay/credit/privacy/collision regressions, then stop the sandbox and persist the exact receipt."
+  "next_exact_step": "When Vercel preview admission is available, refresh the retained PR501 and PR522 heads, stage exact bound source onto the confirmed Git-preview @vercel/sandbox bridge, run focused feedback plus adjacent Stage-A replay/credit/privacy/collision regressions under deny-all networking, stop the sandbox, and persist the exact receipt."
 }

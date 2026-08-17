@@ -18,11 +18,12 @@ def test_debian_apt_lock_is_explicit_and_bounded() -> None:
     apt = lock["debian_apt"]
     assert apt["archive"] == "debian"
     assert re.fullmatch(r"[0-9]{8}T[0-9]{6}Z", apt["snapshot"])
+    assert apt["uri_template"] == "https://snapshot.debian.org/archive/debian/{snapshot}/"
     assert apt["suite"] == "trixie"
     assert apt["components"] == ["main"]
     assert apt["check_valid_until"] is False
     assert apt["signed_by"] == "/usr/share/keyrings/debian-archive-keyring.gpg"
-    assert apt["integrity"] == "APT_SIGNED_RELEASE_INDEX_AND_PACKAGE_HASH_CHAIN"
+    assert apt["integrity"] == "TLS_PLUS_APT_SIGNED_RELEASE_INDEX_AND_PACKAGE_HASH_CHAIN"
     assert apt["packages"] == {
         "ca-certificates": "20250419",
         "tmux": "3.5a-3",
@@ -35,8 +36,10 @@ def test_dockerfile_replaces_mutable_mirrors_and_consumes_lock() -> None:
     apt_pos = dockerfile.index("apt-get update")
     assert copy_pos < apt_pos
     assert "deb.debian.org" not in dockerfile
-    assert "snapshot.debian.org/archive/debian/${SNAPSHOT}/" in dockerfile
+    assert "https://snapshot.debian.org/archive/debian/${SNAPSHOT}/" in dockerfile
     assert "rm -f /etc/apt/sources.list /etc/apt/sources.list.d/*" in dockerfile
+    assert "test -s /etc/ssl/certs/ca-certificates.crt" in dockerfile
+    assert "test -r /usr/share/keyrings/debian-archive-keyring.gpg" in dockerfile
     assert "Check-Valid-Until: no" in dockerfile
     assert "Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg" in dockerfile
     assert '"ca-certificates=${CA_CERTIFICATES_VERSION}"' in dockerfile

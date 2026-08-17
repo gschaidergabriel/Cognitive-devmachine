@@ -2,13 +2,23 @@
 
 ## Purpose
 
-ClayVerse autonomy is implemented as **persistent goal state plus a deterministic bounded control loop**, not as a personality prompt and not as a claim that the currently selected language model is literally AGI, conscious, sovereign, or able to use capabilities that the runtime has not exposed.
+ClayVerse autonomy is **persistent user-goal state plus a deterministic bounded control loop**. It is not a personality prompt and it is not a claim that the selected language model is literally AGI, conscious, sovereign or able to use capabilities that ClayVerse has not exposed.
 
-The useful behavior is operational: preserve user goals, pick the next unfinished goal, propose one bounded step, validate it, execute real changes only through EffectGate, re-ingest observed results, retry inside hard limits, and mark completion only from independent canonical evidence.
+The operational target is:
 
-## Core law
+```text
+canonical user goal
+-> durable UnifiedDB goal state
+-> bounded next-step selection
+-> cognition proposal
+-> deterministic admission
+-> exact causal execution when admitted
+-> EffectJournal/environment observation
+-> causal re-entry
+-> bounded retry/wait/block/complete
+```
 
-**Operational autonomy is a state-machine property, not a model self-description.**
+## Core epistemic law
 
 ```text
 CLAIM != EVIDENCE
@@ -21,35 +31,29 @@ UNKNOWN != FAILURE
 FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT
 ```
 
-Calling the model "frontier AGI", "autonomous", "sovereign" or an "organism" may shape initiative/style, but it grants zero permissions and creates zero facts.
+Calling cognition "frontier AGI", "autonomous", "sovereign" or an "organism" grants zero permissions and creates zero facts.
 
-## Existing authority stays intact
+## Authority model
 
-- one persistent ClayVerse entity;
-- UnifiedDB = sole durable canonical state/memory authority;
-- selected LLM = replaceable cognition interface, not durable identity;
+Autonomy does not create a new authority:
+
+- one persistent central ClayVerse entity;
+- UnifiedDB = sole durable canonical state/world/memory/goal authority;
+- selected LLM = replaceable cognition interface;
 - ClayGraph = rebuildable projection only;
-- EffectGate/EffectJournal = real-action authority;
-- no second `consciousness_daemon`, memory ledger, effect path or identity service.
+- TurnLifecycle = canonical observation/workspace/causal spine;
+- EffectGate + EffectJournal = action/outcome authority;
+- no second memory ledger, effect path, identity service, `consciousness_daemon` or `autonomy_daemon`.
 
-The v1 controller is `clayverse/autonomy.py`. Its state is one canonical JSON value under `UnifiedDB.meta['autonomy_state_v1']`. This deliberately reuses the existing UnifiedDB transaction/WAL/checkpoint authority and avoids a parallel database or competing schema-migration lane. If normalized autonomy tables are introduced later, they must replace this representation through one explicit canonical migration.
+The controller is `clayverse/autonomy.py`. Its state is stored under `UnifiedDB.meta['autonomy_state_v1']`, reusing the existing SQLite/WAL transaction and checkpoint authority rather than introducing a parallel database.
 
 ## User alignment as code
 
-A durable v1 goal can only be adopted by `create_goal_from_turn(...)` from an existing canonical UnifiedDB turn that belongs to the same canonical user/session and has role `user`.
+A durable goal may be created only from an existing canonical owner `user` turn. The objective is copied from that turn; cognition cannot silently replace or broaden the durable objective text.
 
-The goal objective is copied from that stored turn. The planner does not provide or rewrite the objective text. This prevents the cognition model from silently inventing or broadening the user's durable goal.
+The normal managed hook path also supports explicit goal adoption from the newly admitted canonical user turn. Goal adoption occurs only after UserPromptSubmit has created the canonical turn identity.
 
-Stored goal state includes:
-
-- goal id, user/session and global generation;
-- canonical source turn id and verbatim objective;
-- priority and status;
-- explicit completion contract;
-- hard step/retry/effect budgets;
-- current step;
-- effect evidence ids or an explicit owner acknowledgement turn;
-- timestamps and block reason.
+Stored goal state contains owner/session/generation, source turn and objective, priority/status, completion contract, hard budgets, current step, evidence identities, acknowledgement and timestamps/block reason.
 
 ## State machine
 
@@ -59,136 +63,164 @@ Goal states:
 ACTIVE | WAITING | VERIFYING | BLOCKED | COMPLETED | CANCELLED
 ```
 
-Typical lifecycle:
+Step classes:
 
 ```text
-canonical user turn
--> adopt goal at live generation
--> ACTIVE
--> next_runnable()
--> cognition proposes one step
--> PROPOSED
--> deterministic admission
--> ADMITTED
--> observed result
-   -> SUCCEEDED -> ACTIVE/VERIFYING
-   -> FAILED -> bounded retry or BLOCKED
--> independent completion verification
--> COMPLETED
+reason | effect | wait | complete_candidate
 ```
 
-A stale-generation goal is never runnable. `COMPLETED` and `CANCELLED` are terminal.
+A `complete_candidate` is a hypothesis only. It never changes durable completion authority.
 
-Step classes are deliberately small: `reason`, `effect`, `wait`, and `complete_candidate`. A `complete_candidate` is only a hypothesis and moves the goal to verification; it can never mark the goal complete itself.
+`next_runnable()` selects the highest-priority live `ACTIVE` goal within hard budget and with no unfinished proposed/admitted step.
 
-## Effects: no new execution path
+## Human priority and autonomous turns
 
-Autonomy adds no execution bypass. Effect proposals are limited to the already admitted `state.noop` and `entityos.exec` classes; `process.exec` is rejected.
-
-The real path remains:
+Autonomous work uses the existing TurnLifecycle with explicit provenance:
 
 ```text
-step proposal
--> autonomy admission
--> canonical turn/workspace
--> EffectGate
--> EffectJournal
--> verified/denied/failed/unknown outcome
--> causal re-entry
--> autonomy evidence update
+source = clayverse-autonomy:goal-step
+goal_id
+step_id
+turn_id
+episode_id
+causal_id
+entity/session generation
 ```
 
-A model sentence such as "the command succeeded" is never effect evidence.
+Autonomy may not preempt a live human turn. A new human prompt may preempt autonomous work.
 
-Before an EffectJournal receipt may update an autonomous step or enter `evidence_effect_ids`, the controller requires the persisted receipt to match the admitted step's owner, capability, generation **and exact redacted target/argv intent receipts**. A VERIFIED effect with the same capability but a different target or argument vector therefore cannot be rebound as proof for another autonomous action.
+Human preemption is not allowed to leave an invisible `ADMITTED` zombie:
 
-This exact-intent fence is necessary but not the final causal identity gate. Two distinct causal episodes could still request an identical target/argv at the same generation. Runtime promotion therefore still requires binding the autonomous step to the exact effect/episode/request identity produced by the canonical lifecycle before background retries are enabled.
+- before human admission, the managed hook captures the exact autonomous predecessor identity;
+- TurnLifecycle performs the canonical abort/preemption;
+- if no effect was emitted, the admitted step is re-entered as a normal failed/retryable step inside its existing retry budget;
+- if a final effect exists, the controller re-enters that exact effect through `record_effect_result` rather than replaying it;
+- a `PENDING` effect blocks preemption/reconciliation until recovery or a final receipt resolves its uncertainty;
+- zero remaining retry budget becomes explicit `BLOCKED`, never silent deadlock or invented success.
+
+This preserves both laws:
+
+```text
+HUMAN MAY PREEMPT AUTONOMY
+AUTONOMY MAY NOT PREEMPT HUMAN
+```
+
+without creating a second scheduler or effect path.
+
+## Exact effect admission — before dispatch and after outcome
+
+Autonomous effect safety has two independent fences.
+
+### 1. Pre-dispatch intent fence
+
+An autonomous turn cannot use the generic MCP `request_effect` path. It must call:
+
+```text
+request_autonomy_effect(goal_id, step_id)
+```
+
+The caller does **not** resupply capability/target/argv. The bridge loads the already-admitted current step from UnifiedDB and requires the active turn to carry the exact autonomous goal/step/causal/generation provenance. Only then is the stored intent passed into the existing `TurnLifecycle.request_effect -> EffectGate -> EffectJournal` path.
+
+Therefore a model cannot execute target B and later discover that target A was the admitted goal step. Intent drift is blocked before any EffectJournal action is started.
+
+### 2. Post-outcome causal evidence fence
+
+A receipt can update an autonomous step only when the controller can prove the exact causal spine:
+
+- same goal owner/session;
+- same live generation;
+- exact admitted capability;
+- exact redacted target receipt;
+- exact redacted argv receipt;
+- exact workspace episode;
+- exactly one causal re-entry;
+- exact observation turn;
+- observation provenance `clayverse-autonomy:goal-step`;
+- exact `goal_id`, `step_id` and `causal_id`;
+- observation/effect timestamps after goal creation.
+
+A successful identical effect from another episode is therefore not reusable as goal evidence.
 
 ## Completion contracts
 
-v1 supports two independent completion modes.
+`user_ack` requires a later canonical owner `user` turn. The source goal turn cannot acknowledge itself and an assistant/model turn cannot acknowledge its own work.
 
-`verified_effect`: completion requires a persisted effect receipt owned by the goal user, from the same generation, with the exact required capability, `status == VERIFIED`, and canonical outcome `ok == true`. Effect evidence enters the goal only after the exact admitted target/argv intent binding above succeeds. `PENDING`, `DENIED`, `FAILED`, malformed, stale or unknown outcomes do not count.
+Automatic `verified_effect` completion is deliberately narrower than general effect execution. Current automatic completion authority is restricted to independently meaningful admitted capabilities such as `entityos.exec`; `state.noop` may exercise the effect spine but is non-rewarding and cannot automatically prove real-world goal completion.
 
-`user_ack`: completion requires an actual persisted `user` turn from the same owner/session. An assistant/model turn cannot acknowledge its own work.
+`PENDING`, `DENIED`, `FAILED`, `STALE_OUTCOME`, `UNKNOWN_AFTER_RESTART`, malformed or causally mismatched receipts never count as successful completion.
 
-New completion modes may be added only after their independent evidence source is defined and tested.
+## Recovery and uncertainty
 
-## Runaway-agent containment
+Global recovery remains the only recovery authority. On generation change:
 
-Every goal carries hard `max_steps`, `max_retries_per_step`, and `max_effects`. Global maxima also bound goal count, state size, objective/step text and effect shapes.
+- stale goal writers are fenced;
+- interrupted no-effect steps may be requeued under bounded retry policy;
+- admitted effects without safe current-generation evidence become explicit blocked/unknown state;
+- old effect evidence is not silently rebound into the new generation;
+- completed/cancelled goals remain terminal;
+- no external effect is blindly replayed.
 
-Budget exhaustion is a deterministic block/error, not a prompt suggestion. The model cannot talk the controller into another retry. This directly contains the classic failure loop:
+Human preemption is handled separately at the same live generation, as described above, so it does not require an artificial global-generation bump.
+
+## Bounded cognition context
+
+The managed context path injects a compact user-scoped autonomy projection, not raw mutable controller state. The projection is bounded and marks itself as data, not instructions, with no truth/effect/completion authority.
+
+Cross-user goal state is not widened by the autonomy context path. UnifiedDB remains canonical; prompt text does not become a second controller.
+
+## Runaway containment
+
+Each goal has hard limits for:
+
+- steps;
+- retries per step;
+- effects.
+
+Global limits bound goal count and objective/step/effect shapes. Budget exhaustion is a deterministic state/error. Repeated human preemption may consume retry budget; when exhausted the goal becomes explicit `BLOCKED` rather than looping indefinitely.
+
+## Scheduler, not a consciousness daemon
+
+The deterministic scheduler primitive is `next_runnable()`. Continuous work must reuse the existing ClayVerse event/supervisor/re-entry continuum:
 
 ```text
-failure -> model changes something -> failure -> model changes something -> ...
-```
-
-## Scheduler, not consciousness daemon
-
-`next_runnable()` is the deterministic scheduler primitive. It returns the highest-priority live `ACTIVE` goal that is inside budget and has no unfinished proposed/admitted step.
-
-Continuous autonomous work must be driven by the **existing ClayVerse supervisor/event/re-entry loop**, not a second durable mind process:
-
-```text
-wake/event/re-entry
--> load canonical autonomy state
--> choose next_runnable
--> assemble canonical world + goal state
--> ask selected cognition provider for one proposal
+wake/event/user/effect/recovery
+-> canonical state/recovery check
+-> next_runnable
+-> bounded world + goal context
+-> selected cognition proposes one step
 -> deterministic admission
--> EffectGate if needed
--> persist observed result
--> verify completion contract
--> requeue / wait / block / complete
--> checkpoint and re-enter
+-> exact autonomous TurnLifecycle
+-> request_autonomy_effect when needed
+-> EffectGate / EffectJournal
+-> causal outcome re-entry
+-> retry / wait / block / completion verification
+-> checkpoint
 ```
 
-A trigger may be user input, an effect result, timer, dependency event or recovery. The trigger is not authority; UnifiedDB state is.
+A timer or wake signal is a trigger, not an authority. A future periodic scheduler must call this same controller/lifecycle path and may not create a second durable mind process.
 
 ## Anti-hallucination fences
 
-1. Goal provenance: durable objective comes from a canonical user turn.
-2. Generation fencing: restart/global-generation advance invalidates stale writes.
-3. Canonical JSON: duplicate keys and non-finite values fail closed.
-4. Capability allowlist: planner text cannot invent execution rights.
-5. Exact effect intent binding: same-capability receipts for another target/argv cannot become goal evidence.
-6. Verified effects only: model output/tool dispatch are not success.
-7. Completion separation: model completion hypotheses require independent evidence.
-8. Hard budgets: no unbounded autonomous repair loop.
-9. Unknown preservation: unresolved effects/dependencies remain unknown/blocked.
-10. UnifiedDB only: no hidden model-side autonomy memory.
-11. Identity grants no privilege: "I am AGI" has no authority effect.
+1. Durable objective originates from canonical owner input.
+2. Model self-description grants no authority.
+3. Duplicate/non-finite autonomy JSON fails closed.
+4. Global generation fences stale writers.
+5. Step/retry/effect budgets are code-enforced.
+6. Capability allowlist rejects generic host execution.
+7. Autonomous intent is exact before dispatch.
+8. Exact turn/episode/causal provenance is required after outcome.
+9. Identical effects from another episode cannot become evidence.
+10. Model completion hypotheses are non-authoritative.
+11. User acknowledgement must be a later canonical owner turn.
+12. `state.noop` cannot automatically prove real-world completion.
+13. Pending/unknown effects are never converted to success or replayed blindly.
+14. Human preemption cannot silently strand an admitted step.
+15. UnifiedDB remains the sole durable autonomy authority.
 
-## Runtime prompt role
+## Evidence boundary
 
-The runtime cognition prompt reinforces these code laws instead of pretending to enforce them. It instructs the model to be proactive and goal-directed, avoid generic passive-assistant boilerplate, use only injected canonical state, distinguish planned/admitted/executed/verified/blocked/unknown, and never claim completion without canonical evidence.
+Current source has converged substantially beyond the first autonomy draft: explicit goal adoption, bounded goal context, non-preempting autonomous TurnLifecycle, exact causal effect evidence, pre-dispatch stored-intent enforcement, recovery hardening and human-preemption re-entry are now present on `main`.
 
-Because the critical boundaries are in code, prompt drift can degrade proposal quality or style but cannot manufacture effect truth or durable completion.
+The exact-head GitHub-hosted autonomy guard was attempted repeatedly, but the observed runs failed before runner assignment/visible steps (`runner_id=0`, `steps=[]`). Those runs provide **zero pytest/runtime credit** and are not ClayVerse semantic test failures.
 
-## Research basis
-
-The architecture follows current agent-engineering guidance: effective agents operate in plan/action/environment-feedback loops; reliable long-running agents need environmental ground truth, explicit stop conditions, bounded retries, tool permission boundaries, and human or policy escalation at critical thresholds. Verification-before-retry and receipt-bound outcomes are especially important when actions are non-atomic.
-
-These principles map directly onto UnifiedDB goal state, EffectJournal verification, global generation fencing and step/retry/effect budgets.
-
-## Current implementation boundary
-
-Implemented on this source-candidate lane:
-
-- canonical autonomy state inside UnifiedDB `meta`;
-- user-turn-bound goal adoption;
-- priority `next_runnable()` scheduler primitive;
-- deterministic proposal/admission states;
-- step/retry/effect budgets;
-- generation fencing;
-- capability allowlist;
-- exact EffectJournal target/argv intent-receipt binding before autonomy evidence admission;
-- verified-effect and explicit-user-ack completion;
-- malformed/duplicate/non-finite state rejection;
-- persistence across DB reopen;
-- anti-self-authorization runtime cognition contract.
-
-This is **source + bounded mechanism evidence**, not exact-current full-checkout/OCI/microVM evidence and not whole-product PASS.
-
-Before promotion into the retained runtime lane, the committed tests must run against exact current UnifiedDB in an authorized isolated checkout; autonomy state must be injected through the existing bounded context path; scheduler ticks must be fused into the existing supervisor/re-entry path; each autonomous effect must be bound to the exact autonomous causal episode/request/effect identity; and crash/restart, UNKNOWN effects, dual-user concurrency, prompt injection and context-budget behavior must be tested through the same OCI/microVM acceptance chain.
+Promotion still requires an actually-started authorized isolated exact-checkout run of the focused and adjacent regressions, followed by exact OCI build/runtime and the required same-image VM/microVM acceptance path. Source coherence, commits, a workflow definition and pre-step runner failures do not imply whole-product PASS.

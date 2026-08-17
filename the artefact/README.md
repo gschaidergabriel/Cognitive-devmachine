@@ -30,16 +30,19 @@ This directory is the canonical product workspace for the current ClayVerse endp
 
 ### Latest cycle delta
 
-**2026-08-17 17:38 +07:00 — `NO_CHANGE` product/runtime code; live re-entry adopted, provider admission reconfirmed, downstream terminal dependency fenced**
+**2026-08-17 17:39 +07:00 — `NO_CHANGE` product/runtime code; live re-entry fused with duplicate-lane anti-entropy**
 
-- Refreshed fast-moving canonical `main`; the latest observed head before this README closure was `97d4401ba3f2235860c27bb59c555e8f7d00d05c`. Parallel Live Fusion receipts had already adopted the retained #611 plan, so this cycle deliberately avoided a duplicate receipt or second semantic terminal lane.
+- Refreshed fast-moving canonical `main`; the live re-entry closure had already fenced #602 downstream of #611 and reconfirmed provider admission without minting runtime credit.
 - Reconfirmed exact execution admission: Vercel status on the retained bridge remains `build-rate-limit` before Sandbox start; current connected tooling exposes no direct Sandbox lifecycle action. No new Vercel runtime command executed and runtime credit remains zero.
 - Reconfirmed the latest GitHub-hosted #611 identity-guard job ended with `steps=null`; this remains pre-step admission evidence with zero test credit, not TEST_FAIL.
 - Rechecked Daytona fallback availability from this controller: provider mechanism remains owner-authorized, but no current installable Daytona plugin/connector is exposed and no approved credential/provider-contact path is available here. No Daytona provider contact or runtime execution occurred.
-- Adversarial dependency check compared the retained terminal lanes: #611 contains the byte-identical tmux-3.6a idempotent reapply repair, while current PR #602's `terminal_sessions.py` still carries the pre-repair nonzero-`source-file` failure behavior. This does not create a new code delta; it strengthens the fusion order: **#611 exact runtime gate/promotion first, then #602 rejoin/revalidation**.
+- Adversarial dependency check compared the retained terminal lanes: #611 contains the byte-identical tmux-3.6a idempotent reapply repair, while current PR #602's `terminal_sessions.py` still carries the pre-repair nonzero-`source-file` failure behavior. This strengthens the fusion order: **#611 exact runtime gate/promotion first, then #602 rejoin/revalidation**.
+- Anti-entropy closed PR #448 unmerged as a semantic duplicate of retained WebSocket transport candidate #434. Both proposed the same explicit `websockets` backend, queue bound 8 and disabled per-message deflate; #434 keeps the stronger adversarial hold requiring repository-pinned Uvicorn 0.51.0 runtime evidence before promotion.
+- Anti-entropy closed PR #368 unmerged as a weaker duplicate of retained managed-hook prompt-identity lane #454. #454 preserves the stronger transactional prompt replay/Stop/StopFailure fences and fused adjacent Stop-loop regression.
+- Persisted bounded receipt `the artefact/receipts/2026-08-17_GO_1738_ANTI_ENTROPY_DUPLICATE_LANE_CLOSURE_GPT56SOL.json`; no competing product bytes were merged by these closures.
 - The local isolated work container has Python 3.13.5 and Git but no `tmux`, so it cannot add a new real-tmux discriminator beyond the already-recorded byte-exact 9/9 source regression. No synthetic substitute was promoted as runtime evidence.
 - Unusual experiment status is `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`: the user trigger exposes only minute-precision shared timestamp metadata and no immutable shared request id, so the atomic lease protocol forbids inventing a claim key.
-- `NO_CHANGE` to ClayVerse product/runtime code and whole-product acceptance. The next high-information step remains the first actually-startable authorized isolated runner: refresh `main` → rejoin #611 once → bind exact head → real tmux 3.6a discriminator → focused + adjacent regressions → promotion decision → rejoin/revalidate #602 → native Claude/OCI/readiness/restart/concurrency gates.
+- `NO_CHANGE` to ClayVerse product/runtime code, executable evidence class and whole-product acceptance. Coordination entropy is lower, while the next high-information step remains the first actually-startable authorized isolated runner: refresh `main` → rejoin #611 once → bind exact head → real tmux 3.6a discriminator → focused + adjacent regressions → promotion decision → rejoin/revalidate #602 → native Claude/OCI/readiness/restart/concurrency gates.
 
 ### Cycle update rule
 

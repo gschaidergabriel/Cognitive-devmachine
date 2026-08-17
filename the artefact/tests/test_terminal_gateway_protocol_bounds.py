@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+import clayverse.service as service
 import clayverse.terminal_gateway as gateway
 
 
@@ -52,3 +53,9 @@ def test_gateway_source_handles_disconnect_and_rejects_unknown_text_control():
     assert 'message.get("type") == "websocket.disconnect"' in source
     assert '_bounded_pty_input(message["bytes"])' in source
     assert "unsupported terminal control message" in source
+
+
+def test_uvicorn_transport_bound_matches_pty_ingress_bound():
+    kwargs = service._uvicorn_run_kwargs("127.0.0.1", 3000)
+    assert kwargs["ws_max_size"] == service._WS_MAX_MESSAGE_BYTES
+    assert kwargs["ws_max_size"] == gateway._PTY_INPUT_FRAME_MAX_BYTES

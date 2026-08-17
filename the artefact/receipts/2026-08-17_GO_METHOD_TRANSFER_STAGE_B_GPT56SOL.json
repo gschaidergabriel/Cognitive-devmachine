@@ -1,0 +1,98 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_at_initial_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+  "canonical_main_at_final_refresh_before_receipt": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
+  "product_endpoint": "one ClayVerse OCI/Docker-compatible container image from the artefact/",
+  "status": "STAGE_B_SOURCE_CANDIDATE_MECHANISM_SUPPORTED_BLOCKED_ON_FULL_REPLAY_IDENTITY_AND_WHOLE_ARTIFACT_EXECUTION",
+  "candidate": {
+    "branch": "go/method-transfer-stage-b-20260817",
+    "head_before_receipt": "017aa9663f3515b740cbfecf190da989e9fe68f3",
+    "method_transfer_blob": "c49a544de9468a0717effff783e6d6c947f644a3",
+    "retrieval_blob": "e4a48af291dba7e1064bbc7f206f158c36291de9",
+    "turn_lifecycle_blob": "887b0913b1b9f5d6ebd58897740772a38db3f9cc",
+    "test_method_transfer_commit": "5bf6affe7185912b8b9ecc672956efd6fcdd3076",
+    "main_promoted": false
+  },
+  "implemented_contract": [
+    "dedicated Stage-B MethodTransfer path separate from factual Stage-A retrieval",
+    "method-memory classes are non-servable in Stage-A evidence scoring and compatibility retrieval",
+    "Stage B triggers on UNKNOWN/UNDERCOVERED evidence or explicit method/strategy/diagnosis/planning intent",
+    "promoted framework/heuristic records fail closed on missing required method contract fields",
+    "single-support anecdote cannot be served as a promoted reusable method",
+    "problem routing uses bounded canonical structural facets rather than raw lexical similarity alone",
+    "verified counterexample/failure-pattern records can penalize or hard-block a method",
+    "method_context and method_retrieval_receipt remain separate from durable factual evidence context",
+    "method output and receipts carry truth_authority=false and effect_authority=false",
+    "method context is bounded and dropped before factual durable memory when total context must shrink",
+    "method receipts are durable UnifiedDB records and do not create a second state authority"
+  ],
+  "fusion": {
+    "bounded_receipt_context_source": "PR #394",
+    "fusion_commit": "3d4ec61d10cc206081486f7394d9f4d72d2c2975",
+    "reason": "reuse the existing bounded canonical retrieval-receipt propagation instead of creating a duplicate context path"
+  },
+  "execution": {
+    "vercel_sandbox_start_exec_surface_available": false,
+    "vps_or_self_hosted_used": false,
+    "surface": "isolated local container only",
+    "network_clone_available": false,
+    "exact_source_binding": "GitHub blob fetched through connector, written into isolated container, then verified with git hash-object before execution",
+    "method_transfer_exact_blob_verified": true,
+    "method_transfer_syntax_compile": "PASS",
+    "retrieval_exact_blob_verified": true,
+    "retrieval_syntax_compile": "PASS",
+    "turn_lifecycle_runtime_executed": false,
+    "whole_repository_suite_executed": false,
+    "whole_oci_build_or_runtime_executed": false
+  },
+  "ordinary_regressions": {
+    "count": 7,
+    "results": [
+      "known PRESENT evidence with no method intent => Stage B NOT_TRIGGERED",
+      "UNKNOWN evidence may return method context while truth/effect authority remain false",
+      "single-support method rejected",
+      "verified structurally matching counterexample hard-blocks framework",
+      "same-causal exact query replay is deterministic and query drift fails closed",
+      "other-user private method is not visible",
+      "exact retrieval.py Stage-A fence zeros method-memory serving scores while preserving ordinary fact-path scores in a bounded stubbed-super test"
+    ]
+  },
+  "unusual_experiment": {
+    "count_for_this_user_triggered_go": 1,
+    "name": "LEXICAL_DECOY_INVERSION",
+    "purpose": "falsify accidental lexical retrieval by giving a structurally wrong framework maximal query-word overlap while the structurally correct framework has an unrelated subject label",
+    "exact_tested_method_blob": "c49a544de9468a0717effff783e6d6c947f644a3",
+    "result": "PASS",
+    "observed_selected_method_ids": ["good"],
+    "observed_rejected_decoy": "decoy",
+    "interpretation": "supports the bounded structural-routing mechanism only; does not establish general analogical-transfer quality or whole ClayVerse acceptance"
+  },
+  "adversarial_followup": {
+    "issue": 412,
+    "status": "OPEN_BLOCKER",
+    "finding": "canonical branch method replay identity does not yet bind evidence_status, resource_refs, limit, or budget_chars",
+    "local_noncanonical_probe": "a local uncommitted hardening patch rejected independent drift on all four dimensions",
+    "promotion_rule": "do not promote the Stage-B candidate until the identity fix is canonical and rerun from exact persisted bytes"
+  },
+  "claims": {
+    "source_candidate_written": true,
+    "focused_exact_module_mechanism_evidence_observed": true,
+    "full_Stage_B_integration_runtime_observed": false,
+    "general_meta_learning_quality_verified": false,
+    "microclay_active_promotion_authorized": false,
+    "whole_clayverse_pass": false
+  },
+  "next_exact_gate": "Implement issue #412 on the canonical Stage-B branch, refresh/fuse against the active MicroClay integration lane without duplicating semantics, then on an actually-started authorized isolated execution surface run test_method_transfer.py plus adjacent MicroClay receipt/budget/replay/privacy/generation regressions, followed by the broader ClayVerse suite and exact OCI build/runtime gate. Preserve exact source SHA/blob identity, commands, exit codes, logs and image digest.",
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_runner_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

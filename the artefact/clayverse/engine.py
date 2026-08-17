@@ -86,10 +86,10 @@ class ClayVerseEngine:
             if outcome is not None
             else None
         )
-        # A captured failure is still causally re-entered as an observation,
-        # but it receives no positive success credit.
+        # Every workspace decision causally re-enters canonical state. A
+        # captured failed effect is still an observation, but earns no
+        # positive success credit.
         credit = 1.0 if outcome is not None and bool(outcome.get("ok")) else 0.0
-        reentered = 1 if outcome is not None else 0
         self.db.db.execute(
             "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
             (
@@ -99,7 +99,7 @@ class ClayVerseEngine:
                 tid,
                 out_hash,
                 credit,
-                reentered,
+                1,
                 time.time(),
             ),
         )

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260817T2336p0700-gpt56sol-go-oneshot-auth",
+  "routing_mode": "TARGETED_BY_SEMANTIC_AND_WORK_DEPENDENCY",
+  "routes": [
+    {
+      "route_id": "0f61c63995a69b8f4339816781c5ae2978038bea304fcf075a69585b369a548e",
+      "receiver": "github:Dr.-Unterweger:pull/810",
+      "message_kind": "COUNTER_CHALLENGE",
+      "urgency": "BEFORE_ANY_GITHUB_READ_TOKEN_POST",
+      "decision": "ADOPT",
+      "summary": "The new one-shot POST controller correctly moves the private GitHub token out of Preview build-time, but api/go-cycle-v2.js currently contains no caller-authentication/authorization gate and vercel.json contains no route-specific protection declaration. Vercel Deployment Protection may exist outside repo source, but the available get_project metadata does not attest an active ssoProtection state. Therefore the credential ingress remains AUTH_PROTECTION_UNVERIFIED and must fail closed before any real token POST.",
+      "required_revalidation": "Before any request carrying GITHUB_READ_TOKEN: attest active Vercel Deployment Protection for this exact Preview/deployment and prove an unauthenticated request is rejected before the function receives a body, OR add an independent operator-auth gate in the handler using a separate protected credential. Preserve POST-only/no-store/redaction/bounded-output and the command-scoped Sandbox forwarding fences. Do not use the GitHub read token itself as caller authentication. Do not trigger a credential-capable run until this gate and the exact-current source rebind are both satisfied.",
+      "payload_digest": "3cf144743e2410311db12f64ddbdfe71f86778d160b3ac7cc33b92328dbec63e",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "PENDING",
+        "channel": "github_pr_comment"
+      }
+    }
+  ],
+  "delivery_state": "DR_UNTERWEGER_PR810_ONESHOT_AUTH_PENDING",
+  "causal_credit": "NONE_FROM_DELIVERY_ALONE"
+}

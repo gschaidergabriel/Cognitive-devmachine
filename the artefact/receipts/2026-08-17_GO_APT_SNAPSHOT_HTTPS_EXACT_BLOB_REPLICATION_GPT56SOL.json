@@ -1,0 +1,63 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / current ChatGPT project worker",
+  "recorded_at": "2026-08-17T13:51:54+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "parent_pr": 422,
+  "branch": "go/apt-snapshot-lock-current-20260817-gpt56sol",
+  "tested_branch_code_head": "e3a8f76f30510af04e31f171800555ce9a2283cc",
+  "branch_head_observed_immediately_after_test": "de789d4029585df165c7ad4fb410247f73ec24ae",
+  "post_test_head_delta": "receipt-only: the artefact/receipts/2026-08-17_GO_APT_SNAPSHOT_HTTPS_HARDENING_GPT56SOL.json",
+  "purpose": "Independent exact-blob replication of the HTTPS Debian snapshot source mechanism after the prior receipt explicitly stopped short of an exact-blob identity claim.",
+  "exact_tested_blobs": {
+    "the artefact/Dockerfile": "20d13c8f7a23ac3abbe661e874f0643c68d805a3",
+    "the artefact/SOURCE_LOCK.json": "eb87e9ba86169316db1b1d092175dd7bcddbbfe9",
+    "the artefact/.dockerignore": "fad9689766702cd4f7142e786142590218d03163",
+    "the artefact/build/install_pinned_apt.py": "1a83978b52e7903bdb0ecfe8bb005dd4c92647e4",
+    "the artefact/tests/test_apt_snapshot_lock.py": "c628d6cdb476f864450c701a47f5287021280bc5",
+    "the artefact/tests/test_build_context_boundary.py": "076f79a4111a17019201a36354e3f829ff7aa512"
+  },
+  "identity_method": "Each reconstructed file was hashed as a Git blob using SHA-1 over 'blob <len>\\0<bytes>' and compared to the blob SHA returned by GitHub fetch_file for the same branch head.",
+  "identity_observed": {
+    "the artefact/Dockerfile": "MATCH",
+    "the artefact/SOURCE_LOCK.json": "MATCH",
+    "the artefact/.dockerignore": "MATCH",
+    "the artefact/build/install_pinned_apt.py": "MATCH",
+    "the artefact/tests/test_apt_snapshot_lock.py": "MATCH",
+    "the artefact/tests/test_build_context_boundary.py": "MATCH"
+  },
+  "ordinary_isolated_source_mechanism_regression": {
+    "surface": "OpenAI isolated non-production container exact-blob source slice",
+    "commands": [
+      "python -m py_compile build/install_pinned_apt.py",
+      "python -m pytest -q tests/test_apt_snapshot_lock.py tests/test_build_context_boundary.py"
+    ],
+    "observed": [
+      "py_compile PASS",
+      "8 passed in 0.06s"
+    ],
+    "evidence_class": "EXACT_TESTED_CODE_BLOB_SOURCE_MECHANISM_SUPPORTED_NOT_OCI_RUNTIME"
+  },
+  "external_primary_basis": [
+    "snapshot.debian.org documents timestamped APT archive URLs, HTTPS access and per-source Valid-Until handling for historic snapshots",
+    "Debian APT documents timestamp-form snapshot identifiers and signed repository handling",
+    "docker-library/python slim Debian variants install ca-certificates as a runtime dependency, supporting HTTPS bootstrap from the pinned base image family"
+  ],
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED",
+    "reason": "Available user-trigger metadata is minute-precision only (2026-08-17T13:42+07:00), insufficient for the current atomic GO experiment lease identity rule."
+  },
+  "counterhypothesis": "Exact source-level locking can still fail in the real OCI build if the referenced snapshot state, signing keyring, architecture-specific package closure or network path behaves differently at build time.",
+  "remaining_gate": "Authorized exact-current-source OCI build with actual APT fetch/resolution identities, image digest, startup/readiness and restart evidence.",
+  "non_claims": [
+    "No APT network fetch or package-resolution PASS is claimed by this receipt.",
+    "No OCI image build/digest, startup/readiness/restart or whole ClayVerse PASS is claimed.",
+    "No VPS/self-hosted/production test was used.",
+    "No Together API/service or paid/final model training was used."
+  ]
+}

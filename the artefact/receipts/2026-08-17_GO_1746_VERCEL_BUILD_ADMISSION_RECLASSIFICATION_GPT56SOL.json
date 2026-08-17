@@ -1,0 +1,46 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:46:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "VERCEL_BUILD_ADMISSION_RESUMED_EXACT_SANDBOX_STILL_UNOBSERVED",
+  "observed_canonical_main_before_write": "433d102ab4a2029e1d78982af0281292d6f4a6ad",
+  "product_runtime_delta": "NO_CHANGE",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "material_observation": {
+    "deployment_id": "dpl_62R4EoLGtLoi8FqXZAyNXDFaUHeq",
+    "deployment_state": "READY",
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "bridge_ref": "chatgpt/go-daytona-admission-preflight-20260817-1736",
+    "bridge_commit": "e9a50a8325810410b837b1bae85212ef5710fa3f",
+    "vercel_cli": "58.1.0",
+    "build_region": "iad1",
+    "vercel_oidc_present": true,
+    "source_stage_head": "e9a50a8325810410b837b1bae85212ef5710fa3f",
+    "build_result": "READY_AFTER_NON_TARGET_SKIP",
+    "sandbox_create_reached": false,
+    "runtime_credit": 0,
+    "test_credit": 0
+  },
+  "build_log_discriminator": {
+    "observed_marker": "ClayVercelBuildBatch/v6 status=SKIP_NON_TARGET_PREVIEW",
+    "reason": "run-buildtime-go-sandbox.mjs hard-codes EXPECTED_REF=chatgpt/go-entityos-batch5-bytes-provenance-20260816-2348 while the admitted preview ref was chatgpt/go-daytona-admission-preflight-20260817-1736",
+    "interpretation": "The previous account-wide free Preview build-rate-limit observation is no longer sufficient to classify Vercel build admission as currently blocked. A Vercel preview build was admitted and completed. However the exact ClayVerse target branch did not reach Sandbox.create, so exact Sandbox/OCI execution admission remains UNOBSERVED rather than PASS or FAIL."
+  },
+  "source_inspection": {
+    "bridge_script": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+    "sandbox_sdk_call_present": "Sandbox.create({ runtime: python3.13, timeout: 600000, persistent: false })",
+    "target_guard_precedes_sandbox_create": true,
+    "current_script_semantics": "OLD_ENTITYOS_BATCH5_TARGET_NOT_CURRENT_CLAYVERSE_OCI"
+  },
+  "live_hypofusion": {
+    "strongest_counterhypothesis": "A READY non-target preview could be mistaken for restored exact ClayVerse runtime capacity even though the target guard skipped Sandbox.create before any isolated execution.",
+    "falsifier": "Stage exactly one current-target bridge bound to current ClayVerse source/PR611 and observe whether Sandbox.create starts; if it does, proceed directly to the exact OCI dependency/image batch. If it is rejected before Sandbox start, classify that exact admission failure separately.",
+    "result": "BUILD_ADMISSION_SUPPORTED; EXACT_SANDBOX_ADMISSION_UNKNOWN"
+  },
+  "unusual_experiment": {
+    "new_unusual_experiment_executed": false,
+    "canonical_go_state": "NO_FURTHER_UNUSUAL_EXPERIMENTS_PER_EXISTING_FAIL_CLOSED_ADJUDICATION"
+  },
+  "next_exact_step": "Avoid another generic deployment probe. Reuse the existing exact-source staging pattern and stage exactly one current-target Vercel build bridge only if no overlapping bridge worker exists; bind current main plus the retained PR611 delta, then on successful Sandbox.create build the exact ClayVerse OCI image, capture image digest and resolved APT/tmux/Python identities, run PR611 plus full transport-policy/focused/adjacent regressions, and preserve exact receipt identity."
+}

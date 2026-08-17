@@ -177,6 +177,7 @@ class WorldAssembler:
                     "counterevidence_count": int(method_receipt["counterevidence_count"]),
                     "method_policy_mode": str(method_receipt["policy_mode"]),
                     "method_query_schema": str(method_receipt["query_schema"]),
+                    "method_query_sha256": str(method_receipt["query_sha256"]),
                     "method_truth_authority": False,
                     "method_effect_authority": False,
                 })

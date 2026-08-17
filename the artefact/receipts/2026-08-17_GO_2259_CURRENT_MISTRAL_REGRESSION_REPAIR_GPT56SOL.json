@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger_timestamp": "2026-08-17T22:59+07:00",
+  "timestamp_precision": "minute",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "Exact-current Mistral regression-contract repair after parallel stronger implementation superseded this organ's provider lane",
+  "source_binding": {
+    "research_main": "be5ad93a38a2db44e1ff8ec766e556e773643c06",
+    "branch": "gpt56sol/go-2259-current-mistral-regression-repair-20260817",
+    "current_adapter_blob": "566df232ada2d0f6dc5ed0b622408b1cd4e5bfdc",
+    "current_engine_blob": "66eee8a33326ae998a17db62f296e59bb3b49481",
+    "prior_test_blob": "2b8d2ac08b16cf3a0acea67e0781a181dbaefd9e",
+    "repair_commit": "01536f801f49e9d2bb361e7751654dfbdd772924"
+  },
+  "live_reentry": {
+    "parallel_mistral_implementation": "ADOPT",
+    "parallel_pre_effect_unifieddb_reingest": "ADOPT_STRONGER_THAN_SUPERSEDED_PR659",
+    "superseded_pr": 659,
+    "superseded_pr_state": "CLOSED_UNMERGED",
+    "duplicate_provider_implementation_created": false
+  },
+  "observed_source_mismatch": {
+    "adapter_requires": ["response id", "returned model", "exactly one choice", "finish_reason=stop", "message content JSON"],
+    "prior_fixture_supplied": ["choices", "message content"],
+    "prior_assertion_ignored": "inference_receipt attached by current adapter",
+    "classification": "SOURCE_TEST_CONTRACT_MISMATCH_NOT_EXECUTED_TEST_FAILURE"
+  },
+  "repair": {
+    "fixture_now_supplies": ["id", "model", "finish_reason=stop", "message JSON"],
+    "asserts_inference_receipt": true,
+    "asserts_secret_absent_from_request_body": true,
+    "asserts_secret_absent_from_receipt_and_adapter_state": true,
+    "asserts_no_model_tools": true,
+    "asserts_missing_response_id_fails_closed": true,
+    "asserts_non_stop_finish_reason_fails_closed": true,
+    "preserves_forbidden_process_exec_fence": true,
+    "preserves_http_secret_redaction_fence": true,
+    "preserves_oversize_malformed_response_fence": true
+  },
+  "execution_evidence": {
+    "authorized_isolated_test_started": false,
+    "test_pass_claimed": false,
+    "real_mistral_request_executed": false,
+    "source_runtime_credit_added": 0,
+    "oci_runtime_credit_added": 0,
+    "whole_product_credit_added": 0,
+    "classification": "SOURCE_CANDIDATE_UNEXECUTED"
+  },
+  "latest_vercel_outer_evidence": {
+    "deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "sandbox_admission": "PASS_CREATED",
+    "guest_kernel": "Linux 6.12.76 x86_64",
+    "guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_high_information_runtime_step": "Securely provide the scoped read-only GitHub token to the retained Vercel Sandbox path under the current forwarding directive, bind the then-current exact Research source including this repair only if still nonduplicate, execute the focused Mistral regression plus adjacent causal tests, then proceed to exact OCI and real Vault-backed Mistral test-of-tests."
+}

@@ -13,11 +13,13 @@ from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
+WS_MESSAGE_MAX_BYTES = 65_536
+WS_MESSAGE_MAX_QUEUE = 8
 _AUTH_MESSAGE_MAX_CHARS = 32_768
 _AUTH_TOKEN_MAX_CHARS = 16_384
 _CONTROL_MESSAGE_MAX_CHARS = 4_096
-_PTY_INPUT_FRAME_MAX_BYTES = 65_536
-_PTY_OUTPUT_CHUNK_MAX_BYTES = 65_536
+_PTY_INPUT_FRAME_MAX_BYTES = WS_MESSAGE_MAX_BYTES
+_PTY_OUTPUT_CHUNK_MAX_BYTES = WS_MESSAGE_MAX_BYTES
 
 
 def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:

@@ -26,6 +26,7 @@ class EntityOSBridge:
     # vm.memfd_noexec hardening is enabled; old kernels reject the unknown flag
     # with EINVAL, where the historical executable default is safe to retry.
     _MFD_EXEC = 0x0010
+    _EXEC_PATH = "/usr/bin:/bin"
 
     @staticmethod
     def _write_all(fd: int, data: bytes) -> None:
@@ -143,7 +144,7 @@ class EntityOSBridge:
                 capture_output=True,
                 text=False,
                 timeout=self.timeout,
-                env={"PATH": os.environ.get("PATH", "/usr/bin:/bin")},
+                env={"PATH": self._EXEC_PATH},
             )
         finally:
             os.close(fd)

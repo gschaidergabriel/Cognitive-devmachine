@@ -85,15 +85,11 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, _, session_id, lifecycle = _runtime()
+    db, _, _, lifecycle = _runtime()
     try:
-        if lifecycle.active() is not None:
-            if _active_claude_session(db, session_id) == claude_session_id:
-                raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
-            lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
-        # Keep canonical admission uncommitted until the exact hook context that Claude
-        # will receive has also passed its bounded-envelope gate. Any exception here is
-        # therefore one rollback rather than a prompt visible only to UnifiedDB.
+        # TurnLifecycle owns predecessor retirement and the new admission in one
+        # transaction. Claude can reuse one session id across an interrupted turn, so
+        # the wrapper must not invent a same-session duplicate rule here.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(result)
         return {
@@ -148,10 +144,12 @@ def _main() -> int:
     if len(sys.argv) != 2 or sys.argv[1] not in {"user_prompt", "stop", "stop_failure"}:
         print("invalid terminal hook invocation", file=sys.stderr)
         return 2
+    payload: dict[str, Any] | None = None
     try:
-        payload = json.load(sys.stdin)
-        if not isinstance(payload, dict):
+        raw = json.load(sys.stdin)
+        if not isinstance(raw, dict):
             raise TerminalHookError("hook input must be an object")
+        payload = raw
         result = {
             "user_prompt": user_prompt,
             "stop": stop,
@@ -161,6 +159,13 @@ def _main() -> int:
         return 0
     except Exception as exc:
         print(f"ClayVerse hook blocked: {type(exc).__name__}: {exc}", file=sys.stderr)
+        # The first Stop failure remains blocking so Claude sees the canonical
+        # persistence failure. If Claude re-enters this Stop because that block is
+        # already active, terminate the hook loop instead of recursively continuing.
+        # The transaction-safe lifecycle leaves the turn recoverable/abortable rather
+        # than fabricating a successful persistence result.
+        if sys.argv[1] == "stop" and isinstance(payload, dict) and payload.get("stop_hook_active") is True:
+            return 0
         return 2 if sys.argv[1] in {"user_prompt", "stop"} else 0
 
 

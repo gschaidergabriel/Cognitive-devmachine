@@ -23,6 +23,13 @@ spec:
         operations: ["CREATE", "UPDATE"]
         resources: ["pods"]
   variables:
+    # `request.name` is an AdmissionRequest attribute, not a mutable field of the
+    # post-mutation object. The canonical one-replica StatefulSet is named
+    # `clayverse`, so its admitted Pod request identity is `clayverse-0`.
+    # This keeps CREATE fenced even if a mutating admission component rewrites
+    # every Pod-internal ClayVerse label/container marker before validation.
+    - name: requestClayVerse
+      expression: request.name == "clayverse-0"
     - name: currentClayVerse
       expression: >-
         (has(object.metadata.labels) &&
@@ -38,7 +45,13 @@ spec:
          oldObject.spec.containers.exists(c, c.name == "clayverse"))
   validations:
     - expression: >-
-        !(variables.currentClayVerse || variables.previousClayVerse) ||
+        !variables.requestClayVerse ||
+        object.metadata.name == request.name
+      message: >-
+        The reserved ClayVerse StatefulSet Pod request identity clayverse-0 must not be renamed by admission mutation.
+      reason: Forbidden
+    - expression: >-
+        !(variables.requestClayVerse || variables.currentClayVerse || variables.previousClayVerse) ||
         (has(object.spec.runtimeClassName) &&
          object.spec.runtimeClassName == "kata-qemu-runtime-rs")
       message: >-
@@ -46,7 +59,7 @@ spec:
         host-kernel fallback or runtime-class mutation is forbidden.
       reason: Forbidden
     - expression: >-
-        !(variables.currentClayVerse || variables.previousClayVerse) ||
+        !(variables.requestClayVerse || variables.currentClayVerse || variables.previousClayVerse) ||
         !has(object.metadata.annotations) ||
         object.metadata.annotations.all(k, !k.startsWith("io.katacontainers."))
       message: >-

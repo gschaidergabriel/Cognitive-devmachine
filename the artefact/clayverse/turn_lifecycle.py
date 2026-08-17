@@ -23,12 +23,7 @@ class TurnLifecycleError(RuntimeError):
 
 
 def infer_resource_refs(text: str) -> list[str]:
-    """Conservative deterministic collision keys from a human prompt.
-
-    This intentionally favors precision over pretending to understand every implicit
-    project reference. Explicit typed labels are strongest; obvious paths/files are
-    added as secondary keys. Semantic collision extraction remains an open quality gate.
-    """
+    """Conservative deterministic collision keys from a human prompt."""
     refs: set[str] = set()
     for kind, value in _EXPLICIT_RESOURCE.findall(text):
         refs.add(f"{kind.lower()}:{value.strip()}")
@@ -104,7 +99,11 @@ class TurnLifecycle:
             db.execute(
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (turn_id, self.session_id, self.user_id, ordinal, now, "user", prompt,
-                 json.dumps(resource_refs), "[]", json.dumps({"source": "claude-hook:UserPromptSubmit"}, sort_keys=True)),
+                 json.dumps(resource_refs), "[]", json.dumps({
+                     "source": "claude-hook:UserPromptSubmit",
+                     "session_generation": generation,
+                     "causal_id": causal_id,
+                 }, sort_keys=True)),
             )
             db.execute(
                 "INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",
@@ -143,11 +142,19 @@ class TurnLifecycle:
             EffectRequest(self.user_id, self.session_id, capability, target, argv, int(row["generation"])),
             row["episode_id"],
         )
+        causal_id = self.effects.causal_for_effect(effect_id)
+        if causal_id != row["causal_id"]:
+            raise TurnLifecycleError("verified effect re-entered through wrong causal identity")
         self.db.db.execute(
             "UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 WHERE session_id=? AND causal_id=?",
             (effect_id, json.dumps(outcome, sort_keys=True), self.session_id, row["causal_id"]),
         )
-        return {"effect_id": effect_id, "verified": True, "outcome": outcome}
+        return {
+            "effect_id": effect_id,
+            "causal_id": causal_id,
+            "verified": bool(isinstance(outcome, dict) and outcome.get("ok") is True),
+            "outcome": outcome,
+        }
 
     def complete(self, response: str) -> dict:
         row = self.active()
@@ -159,14 +166,14 @@ class TurnLifecycle:
         if not int(row["workspace_selected"]):
             self.workspace.select(row["episode_id"], "respond")
         effect_id = row["effect_id"]
-        outcome = json.loads(row["outcome"]) if row["outcome"] else None
-        if effect_id and outcome is None:
-            effect = self.db.db.execute("SELECT outcome FROM effects WHERE effect_id=?", (effect_id,)).fetchone()
-            outcome = json.loads(effect["outcome"]) if effect and effect["outcome"] else None
-        out_hash = hashlib.sha256(json.dumps(outcome, sort_keys=True).encode()).hexdigest() if outcome is not None else None
-        credit = 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
+        existing_causal = self.db.db.execute(
+            "SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (effect_id,)
+        ).fetchone() if effect_id else None
+        if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
+            raise TurnLifecycleError("effect causal identity diverged before Stop")
         now = time.time()
         assistant_id = str(uuid.uuid4())
+        credit = float(existing_causal["credit"]) if existing_causal else 0.0
         with self.db.tx() as db:
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
@@ -177,10 +184,11 @@ class TurnLifecycle:
                  row["resource_refs"], json.dumps([effect_id] if effect_id else []),
                  json.dumps({"source": "claude-hook:Stop", "causal_id": row["causal_id"]}, sort_keys=True)),
             )
-            db.execute(
-                "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                (row["causal_id"], row["episode_id"], effect_id, row["turn_id"], out_hash, credit, 1, now),
-            )
+            if existing_causal is None:
+                db.execute(
+                    "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
+                )
             db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
@@ -197,6 +205,11 @@ class TurnLifecycle:
                 self.workspace.select(row["episode_id"], "defer_effect")
         except Exception:
             pass
+        existing_causal = self.db.db.execute(
+            "SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (row["effect_id"],)
+        ).fetchone() if row["effect_id"] else None
+        if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
+            raise TurnLifecycleError("effect causal identity diverged during abort")
         now = time.time()
         system_id = str(uuid.uuid4())
         with self.db.tx() as db:
@@ -207,12 +220,13 @@ class TurnLifecycle:
                 "INSERT INTO turns(turn_id,session_id,user_id,ordinal,ts,role,content,resource_refs,causal_refs,provenance) VALUES(?,?,?,?,?,?,?,?,?,?)",
                 (system_id, self.session_id, self.user_id, ordinal, now, "system", f"TURN_ABORTED:{reason}",
                  row["resource_refs"], json.dumps([row["effect_id"]] if row["effect_id"] else []),
-                 json.dumps({"source": "claude-hook:failure"}, sort_keys=True)),
+                 json.dumps({"source": "claude-hook:failure", "causal_id": row["causal_id"]}, sort_keys=True)),
             )
-            db.execute(
-                "INSERT OR IGNORE INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
-                (row["causal_id"], row["episode_id"], row["effect_id"], row["turn_id"], None, 0.0, 1, now),
-            )
+            if existing_causal is None:
+                db.execute(
+                    "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
+                    (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
+                )
             db.execute("DELETE FROM active_turns WHERE session_id=?", (self.session_id,))
         self.memory.compact(self.session_id)
         self.graph.rebuild()

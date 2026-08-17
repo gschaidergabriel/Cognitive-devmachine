@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT
 CREATE TABLE IF NOT EXISTS turns(turn_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),ordinal INTEGER NOT NULL,ts REAL NOT NULL,role TEXT NOT NULL CHECK(role IN ('user','assistant','system','tool')),content TEXT NOT NULL,fidelity TEXT NOT NULL DEFAULT 'full',compression_generation INTEGER NOT NULL DEFAULT 0,resource_refs TEXT NOT NULL DEFAULT '[]',causal_refs TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL DEFAULT '{}',UNIQUE(session_id, ordinal));
 CREATE INDEX IF NOT EXISTS idx_turns_session_ord ON turns(session_id, ordinal DESC);
 CREATE TABLE IF NOT EXISTS durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS method_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL CHECK(kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample')),subject TEXT NOT NULL,value TEXT NOT NULL,user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_method_memory_kind_ts ON method_memory(kind,ts DESC);
+CREATE TABLE IF NOT EXISTS method_receipts(receipt_id TEXT PRIMARY KEY,memory_id TEXT NOT NULL REFERENCES method_memory(memory_id) ON DELETE CASCADE,action TEXT NOT NULL CHECK(action IN ('CREATE','PROMOTE','DEMOTE','RETIRE')),ts REAL NOT NULL,payload TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
 CREATE TABLE IF NOT EXISTS causal_episodes(causal_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),effect_id TEXT REFERENCES effects(effect_id),observation_turn_id TEXT REFERENCES turns(turn_id),outcome_hash TEXT,credit REAL NOT NULL DEFAULT 0,reentered INTEGER NOT NULL DEFAULT 0,ts REAL NOT NULL);
@@ -40,7 +43,7 @@ class UnifiedDB:
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
         try:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._migrate_schema(); self._retire_hidden_raw_turn_ledger()
-            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','7') ON CONFLICT(key) DO UPDATE SET value='7'")
+            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','8') ON CONFLICT(key) DO UPDATE SET value='8'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
@@ -52,6 +55,9 @@ class UnifiedDB:
             self.db.execute("ALTER TABLE retrieval_episodes ADD COLUMN limit_items INTEGER")
             columns={str(row['name']) for row in self.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()}
         if 'limit_items' not in columns: raise RuntimeError('retrieval replay identity migration incomplete')
+        required={'method_memory','method_receipts'}
+        existing={str(row['name']) for row in self.db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+        if not required.issubset(existing): raise RuntimeError('method memory migration incomplete')
     def _retire_hidden_raw_turn_ledger(self):
         self.db.executescript("""
         DROP TRIGGER IF EXISTS turn_ledger_no_update;
@@ -113,6 +119,48 @@ class UnifiedDB:
     def add_memory(self,kind,subject,value,source_turn_id,user_id,provenance):
         mid=str(uuid.uuid4()); self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject,value,source_turn_id,user_id,time.time(),json.dumps(provenance,sort_keys=True))); return mid
     def memories(self): return self.db.execute("SELECT * FROM durable_memory ORDER BY ts").fetchall()
+    def add_method_memory(self,kind,subject,payload,user_id,provenance):
+        from .method_memory import METHOD_KINDS, validate_method_payload
+        if kind in METHOD_KINDS: raise PermissionError('promoted methods require promotion path')
+        raw=json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
+        normalized=validate_method_payload(str(kind),raw)
+        canonical=json.dumps(normalized,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
+        mid=str(uuid.uuid4()); now=time.time(); prov=json.dumps(provenance or {},ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
+        with self.tx() as db:
+            db.execute("INSERT INTO method_memory(memory_id,kind,subject,value,user_id,ts,provenance) VALUES(?,?,?,?,?,?,?)",(mid,str(kind),str(subject),canonical,user_id,now,prov))
+            db.execute("INSERT INTO method_receipts VALUES(?,?,?,?,?)",(str(uuid.uuid4()),mid,'CREATE',now,json.dumps({'kind':str(kind),'payload_sha256':hashlib.sha256(canonical.encode()).hexdigest()},sort_keys=True)))
+        return mid
+    def promote_method_memory(self,memory_id,promoted_kind,payload,provenance):
+        from .method_memory import METHOD_KINDS, validate_method_payload
+        if promoted_kind not in METHOD_KINDS: raise ValueError('invalid promoted method kind')
+        row=self.db.execute("SELECT * FROM method_memory WHERE memory_id=?",(memory_id,)).fetchone()
+        if not row: raise KeyError(memory_id)
+        expected={'framework_candidate':'framework','heuristic_candidate':'heuristic'}.get(str(row['kind']))
+        if expected!=promoted_kind: raise ValueError('candidate/promoted kind mismatch')
+        raw=json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
+        normalized=validate_method_payload(promoted_kind,raw)
+        source_ids=sorted(set(normalized['source_episode_ids']))
+        placeholders=','.join('?' for _ in source_ids)
+        existing=int(self.db.execute(f"SELECT COUNT(*) FROM workspace_episodes WHERE episode_id IN ({placeholders})",tuple(source_ids)).fetchone()[0]) if source_ids else 0
+        if existing!=len(source_ids): raise ValueError('promotion source episode missing')
+        canonical=json.dumps(normalized,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
+        prov=json.dumps(provenance or {},ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False); now=time.time()
+        with self.tx() as db:
+            db.execute("UPDATE method_memory SET kind=?,value=?,ts=?,provenance=? WHERE memory_id=?",(promoted_kind,canonical,now,prov,memory_id))
+            db.execute("INSERT INTO method_receipts VALUES(?,?,?,?,?)",(str(uuid.uuid4()),memory_id,'PROMOTE',now,json.dumps({'source_episode_ids':source_ids,'payload_sha256':hashlib.sha256(canonical.encode()).hexdigest()},sort_keys=True)))
+        return memory_id
+    def demote_method_memory(self,memory_id,reason):
+        row=self.db.execute("SELECT * FROM method_memory WHERE memory_id=?",(memory_id,)).fetchone()
+        if not row: raise KeyError(memory_id)
+        mapping={'framework':'framework_candidate','heuristic':'heuristic_candidate'}
+        target=mapping.get(str(row['kind']))
+        if target is None: raise ValueError('only promoted framework/heuristic can be demoted')
+        payload=json.loads(row['value']); payload['status']='CANDIDATE'; payload['demotion_reason']=str(reason)[:2000]
+        canonical=json.dumps(payload,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False); now=time.time()
+        with self.tx() as db:
+            db.execute("UPDATE method_memory SET kind=?,value=?,ts=? WHERE memory_id=?",(target,canonical,now,memory_id))
+            db.execute("INSERT INTO method_receipts VALUES(?,?,?,?,?)",(str(uuid.uuid4()),memory_id,'DEMOTE',now,json.dumps({'reason':str(reason)[:2000],'payload_sha256':hashlib.sha256(canonical.encode()).hexdigest()},sort_keys=True)))
+        return memory_id
     def acquire_lease(self,resource,holder,ttl=30.0):
         now=time.time(); nonce=uuid.uuid4().hex
         with self.tx() as db:
@@ -128,5 +176,5 @@ class UnifiedDB:
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
-        for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+        for table in ("meta","users","sessions","turns","durable_memory","method_memory","method_receipts","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
         digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

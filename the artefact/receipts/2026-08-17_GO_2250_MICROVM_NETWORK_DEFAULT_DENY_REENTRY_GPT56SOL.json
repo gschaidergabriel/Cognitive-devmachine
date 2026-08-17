@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp": "2026-08-17T22:50+07:00",
+  "timestamp_precision": "minute",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "MicroVM/Kata default-deny network boundary reentry and living README closure",
+  "source_basis": {
+    "bootstrap_cache": "000_CLAY_CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT_2026-08-17_DEEPWORK_FULL_CONTAINER(1).txt",
+    "current_owner_directive": "research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md",
+    "deployment_contract": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+    "deployment_template": "the artefact/deployment/clayverse-kata-statefulset.template.yaml",
+    "static_regression": "the artefact/tests/test_microvm_deployment_contract.py"
+  },
+  "observed_parallel_reentry": {
+    "classification": "ADOPT_NO_DUPLICATE_IMPLEMENTATION",
+    "detail": "A parallel organ updated canonical main while this organ was reviewing the same PR623-identified source gap. The current template now contains clayverse-default-deny selecting app=clayverse with Ingress+Egress and empty rule sets; the deployment contract and static regression were updated consistently. This organ did not create a competing network-policy lane."
+  },
+  "network_boundary": {
+    "source_status": "FAIL_CLOSED_DEFAULT_DENY_PRESENT_ON_MAIN",
+    "hostNetwork_false_alone_sufficient": false,
+    "default_deny_ingress": true,
+    "default_deny_egress": true,
+    "broad_source_template_escape_present": false,
+    "functional_allow_policy": "DEPLOYMENT_SPECIFIC_REVIEWED_ARTIFACT_REQUIRED",
+    "cni_enforcement": "UNOBSERVED_RUNTIME_GATE",
+    "kata_microvm_enforcement": "UNOBSERVED_RUNTIME_GATE"
+  },
+  "external_primary_evidence": {
+    "kubernetes_networkpolicy": "Official Kubernetes documentation confirms pods are non-isolated by default; a selecting NetworkPolicy with Ingress/Egress policy types and empty allow rules provides default-deny semantics, provided the cluster networking plugin enforces NetworkPolicy."
+  },
+  "living_readme": {
+    "prior_status": "STALE_AFTER_PARALLEL_NETWORK_POLICY_DELTA",
+    "action": "REFRESHED_ON_MAIN",
+    "commit": "0bbc43e646fdc2377c8b568044805a4c05fdaef7",
+    "content_sha": "10185329d472c711f3e7e28bc75b186e064d567b",
+    "latest_cycle_delta": "MicroVM network boundary hardened fail-closed; no runtime enforcement credit claimed"
+  },
+  "execution_evidence": {
+    "exact_kubernetes_or_kata_run": false,
+    "networkpolicy_runtime_enforcement_observed": false,
+    "oci_runtime_credit_added": 0,
+    "whole_product_credit_added": 0,
+    "classification": "SOURCE_CONTRACT_HARDENING_ONLY"
+  },
+  "current_external_execution_frontier": {
+    "vercel_sandbox_admission": "PREVIOUSLY_OBSERVED_PASS_CREATED_IN_CURRENT_PROGRAM_STATE",
+    "private_source_fetch": "BLOCKED_BY_MISSING_HOST_SIDE_GITHUB_READ_TOKEN",
+    "rule": "Secret must remain host-side; only verified source archive bytes may enter the disposable sandbox."
+  },
+  "unusual_experiment": {
+    "count": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "This exact user go exposes no shared immutable request/turn id and only minute-precision immutable message time, which is insufficient under GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "next_high_information_runtime_step": "Provision the approved host-side GITHUB_READ_TOKEN on the retained Vercel Preview controller, rebind the then-current product source exactly once, run the isolated exact OCI closure, and later execute that same accepted image digest behind the mandatory Kata/equivalent guest-kernel envelope with actual NetworkPolicy enforcement and an explicitly reviewed allow policy."
+}

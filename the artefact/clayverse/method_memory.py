@@ -1,14 +1,17 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import time
+import uuid
 from dataclasses import dataclass
 from typing import Any
 
 from .store import UnifiedDB
 
 METHOD_SCHEMA_VERSION = 1
+PROMOTION_RECEIPT_SCHEMA = "clayverse.method-promotion/v1"
 METHOD_KINDS = frozenset({
     "framework_candidate",
     "framework",
@@ -130,11 +133,18 @@ def infer_problem_signature(text: str, resource_refs: list[str] | None = None) -
 
 def _parse_json_object(raw: str, label: str) -> dict[str, Any]:
     try:
-        value = json.loads(raw)
+        value = json.loads(
+            raw,
+            parse_constant=lambda token: (_ for _ in ()).throw(ValueError(token)),
+        )
     except Exception as exc:
         raise MethodRecordError(f"invalid {label} JSON") from exc
     if not isinstance(value, dict):
         raise MethodRecordError(f"{label} must be an object")
+    try:
+        json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False)
+    except (TypeError, ValueError) as exc:
+        raise MethodRecordError(f"{label} must be finite canonical JSON") from exc
     return value
 
 
@@ -142,7 +152,9 @@ def validate_method_receipt(receipt: Any) -> dict[str, Any]:
     if not isinstance(receipt, dict):
         raise MethodRecordError("method receipt must be an object")
     required = {
-        "method_memory_id",
+        "schema",
+        "candidate_memory_id",
+        "promoted_memory_id",
         "action",
         "source_episode_ids",
         "supporting_memory_ids",
@@ -157,7 +169,15 @@ def validate_method_receipt(receipt: Any) -> dict[str, Any]:
     if missing:
         raise MethodRecordError("missing method receipt fields: " + ",".join(missing))
     normalized = dict(receipt)
-    normalized["method_memory_id"] = _bounded_string(receipt["method_memory_id"], "method_memory_id")
+    if receipt["schema"] != PROMOTION_RECEIPT_SCHEMA:
+        raise MethodRecordError("unsupported method receipt schema")
+    normalized["schema"] = PROMOTION_RECEIPT_SCHEMA
+    normalized["candidate_memory_id"] = _bounded_string(
+        receipt["candidate_memory_id"], "candidate_memory_id"
+    )
+    normalized["promoted_memory_id"] = _bounded_string(
+        receipt["promoted_memory_id"], "promoted_memory_id"
+    )
     if receipt["action"] != "PROMOTE":
         raise MethodRecordError("unsupported method receipt action")
     normalized["action"] = "PROMOTE"
@@ -165,14 +185,19 @@ def validate_method_receipt(receipt: Any) -> dict[str, Any]:
         value = receipt[field]
         if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
             raise MethodRecordError(f"{field} must be a bounded list")
-        if field == "source_episode_ids" and not value:
-            raise MethodRecordError("source_episode_ids must be non-empty")
+        if field == "source_episode_ids" and len(value) < 2:
+            raise MethodRecordError("promotion receipt requires at least two source episodes")
         normalized[field] = [_bounded_string(x, field) for x in value]
+        if len(set(normalized[field])) != len(normalized[field]):
+            raise MethodRecordError(f"duplicate {field} values are forbidden")
     normalized["evaluation"] = _bounded_string(receipt["evaluation"], "evaluation")
     ts = receipt["ts"]
-    if isinstance(ts, bool) or not isinstance(ts, (int, float)) or float(ts) <= 0:
+    if isinstance(ts, bool) or not isinstance(ts, (int, float)):
         raise MethodRecordError("invalid method receipt ts")
-    normalized["ts"] = float(ts)
+    ts = float(ts)
+    if not math.isfinite(ts) or ts <= 0:
+        raise MethodRecordError("invalid method receipt ts")
+    normalized["ts"] = ts
     encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
     if len(encoded) > MAX_METHOD_JSON_BYTES:
         raise MethodRecordError("method receipt exceeds bounded serialized size")
@@ -199,9 +224,15 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
         "status",
         *_LIST_FIELDS,
     }
+    allowed = required | {"limits_method_ids", "method_schema_version"}
     missing = sorted(required.difference(record))
+    unknown = sorted(set(record).difference(allowed))
     if missing:
         raise MethodRecordError("missing method fields: " + ",".join(missing))
+    if unknown:
+        raise MethodRecordError("unknown method fields: " + ",".join(unknown))
+    if "method_schema_version" in record and record["method_schema_version"] != METHOD_SCHEMA_VERSION:
+        raise MethodRecordError("unsupported method_schema_version")
 
     normalized = dict(record)
     normalized["problem_signature"] = canonical_problem_signature(record["problem_signature"])
@@ -217,6 +248,8 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
         if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
             raise MethodRecordError(f"{field} must be a bounded list")
         normalized[field] = [_bounded_string(x, field) for x in value]
+        if len(set(normalized[field])) != len(normalized[field]):
+            raise MethodRecordError(f"duplicate {field} values are forbidden")
 
     if not isinstance(record["abstraction_version"], str) or not record["abstraction_version"].strip():
         raise MethodRecordError("invalid abstraction_version")
@@ -231,14 +264,20 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
         raise MethodRecordError("success/failure counts exceed support_count")
 
     calibration = record["calibration"]
-    if isinstance(calibration, bool) or not isinstance(calibration, (int, float)) or not 0.0 <= float(calibration) <= 1.0:
+    if isinstance(calibration, bool) or not isinstance(calibration, (int, float)):
         raise MethodRecordError("calibration must be in [0,1]")
-    normalized["calibration"] = float(calibration)
+    calibration = float(calibration)
+    if not math.isfinite(calibration) or not 0.0 <= calibration <= 1.0:
+        raise MethodRecordError("calibration must be finite and in [0,1]")
+    normalized["calibration"] = calibration
 
     last_validated_at = record["last_validated_at"]
-    if isinstance(last_validated_at, bool) or not isinstance(last_validated_at, (int, float)) or float(last_validated_at) < 0:
+    if isinstance(last_validated_at, bool) or not isinstance(last_validated_at, (int, float)):
         raise MethodRecordError("invalid last_validated_at")
-    normalized["last_validated_at"] = float(last_validated_at)
+    last_validated_at = float(last_validated_at)
+    if not math.isfinite(last_validated_at) or last_validated_at < 0:
+        raise MethodRecordError("invalid last_validated_at")
+    normalized["last_validated_at"] = last_validated_at
 
     status = str(record["status"]).upper()
     if status not in VALID_STATUS:
@@ -252,12 +291,16 @@ def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
             raise MethodRecordError("single-episode promotion is forbidden")
         if not normalized["falsifiers"]:
             raise MethodRecordError("promoted method requires explicit falsifier")
+        if normalized["calibration"] <= 0.0:
+            raise MethodRecordError("promoted method requires non-zero calibration")
     normalized["status"] = status
 
     limits = record.get("limits_method_ids", [])
     if not isinstance(limits, list) or len(limits) > 128:
         raise MethodRecordError("limits_method_ids must be a bounded list")
     normalized["limits_method_ids"] = [_bounded_string(x, "limits_method_ids") for x in limits]
+    if len(set(normalized["limits_method_ids"])) != len(normalized["limits_method_ids"]):
+        raise MethodRecordError("duplicate limits_method_ids values are forbidden")
     normalized["method_schema_version"] = METHOD_SCHEMA_VERSION
 
     encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
@@ -328,8 +371,8 @@ class MethodMemory:
             ).fetchone()
             if row is None:
                 raise MethodRecordError("unknown referenced memory_id")
-            if row["user_id"] not in (None, user_id):
-                raise MethodRecordError("cross-user referenced memory denied")
+            if str(row["user_id"] or "") != user_id:
+                raise MethodRecordError("referenced memory lacks exact user scope")
             if memory_id in counter_ids and str(row["kind"]) not in {"counterexample", "failure_pattern"}:
                 raise MethodRecordError("counterexample link must reference counterexample/failure_pattern memory")
 
@@ -386,14 +429,18 @@ class MethodMemory:
             or candidate_provenance.get("user_scope") != user_id
         ):
             raise MethodRecordError("promotion source is not canonically admitted")
-        if str(receipt_row["kind"]) != "method_receipt" or str(receipt_row["subject"]) != source_id:
+        if str(receipt_row["kind"]) != "method_receipt" or str(receipt_row["subject"]) != f"promotion:{source_id}":
             raise MethodRecordError("promotion receipt identity mismatch")
+        if str(receipt_row["user_id"] or "") != user_id:
+            raise MethodRecordError("promotion receipt crosses user scope")
         receipt = validate_method_receipt(_parse_json_object(str(receipt_row["value"]), "method receipt"))
         receipt_provenance = _parse_json_object(str(receipt_row["provenance"]), "method receipt provenance")
         if (
-            receipt["method_memory_id"] != source_id
+            receipt["candidate_memory_id"] != source_id
+            or receipt["promoted_memory_id"] != str(row["memory_id"])
             or receipt_provenance.get("admission") != "method_memory_receipt:v1"
             or receipt_provenance.get("promotion_source_memory_id") != source_id
+            or receipt_provenance.get("promoted_memory_id") != str(row["memory_id"])
             or receipt_provenance.get("promotion_transaction_version") != 1
             or receipt_provenance.get("user_scope") != user_id
         ):
@@ -483,8 +530,8 @@ class MethodMemory:
             raise MethodRecordError("promotion requires provenance")
         self._assert_source_turn(source_turn_id, user_id)
 
-        with self.db.tx():
-            row = self.db.db.execute(
+        with self.db.tx() as db:
+            row = db.execute(
                 "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1",
                 (candidate_memory_id,),
             ).fetchone()
@@ -504,23 +551,30 @@ class MethodMemory:
                 raise MethodRecordError("promotion source is not canonically admitted")
             self._assert_refs(candidate, user_id, require_terminal=True)
 
-            prior_receipts = self.db.db.execute(
+            receipt_subject = f"promotion:{candidate_memory_id}"
+            prior_receipts = db.execute(
                 "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject=? ORDER BY ts",
-                (candidate_memory_id,),
+                (receipt_subject,),
             ).fetchall()
             for prior in prior_receipts:
-                receipt = validate_method_receipt(_parse_json_object(str(prior["value"]), "method receipt"))
+                receipt = validate_method_receipt(
+                    _parse_json_object(str(prior["value"]), "method receipt")
+                )
                 if receipt["action"] == "PROMOTE":
                     raise MethodRecordError("candidate already has a promotion receipt")
 
             now = time.time()
             promoted_kind = "framework" if str(row["kind"]) == "framework_candidate" else "heuristic"
+            promoted_id = str(uuid.uuid4())
+            receipt_id = str(uuid.uuid4())
             promoted_record = dict(candidate)
             promoted_record["status"] = "PROMOTED"
             promoted_record["last_validated_at"] = now
             promoted_record = validate_method_record(promoted_kind, promoted_record)
             receipt = validate_method_receipt({
-                "method_memory_id": candidate_memory_id,
+                "schema": PROMOTION_RECEIPT_SCHEMA,
+                "candidate_memory_id": candidate_memory_id,
+                "promoted_memory_id": promoted_id,
                 "action": "PROMOTE",
                 "source_episode_ids": list(promoted_record["source_episode_ids"]),
                 "supporting_memory_ids": list(promoted_record["supporting_memory_ids"]),
@@ -536,18 +590,11 @@ class MethodMemory:
                 "admission": "method_memory_receipt:v1",
                 "user_scope": user_id,
                 "promotion_source_memory_id": candidate_memory_id,
+                "promoted_memory_id": promoted_id,
                 "promotion_transaction_version": 1,
                 "truth_authority": False,
                 "effect_authority": False,
             })
-            receipt_id = self.db.add_memory(
-                "method_receipt",
-                candidate_memory_id,
-                json.dumps(receipt, sort_keys=True, separators=(",", ":"), allow_nan=False),
-                effective_source_turn,
-                user_id,
-                receipt_provenance,
-            )
             promoted_provenance = {
                 **candidate_provenance,
                 **provenance,
@@ -560,13 +607,33 @@ class MethodMemory:
                 "truth_authority": False,
                 "effect_authority": False,
             }
-            promoted_id = self.db.add_memory(
-                promoted_kind,
-                str(row["subject"]),
-                json.dumps(promoted_record, sort_keys=True, separators=(",", ":"), allow_nan=False),
-                effective_source_turn,
-                user_id,
-                promoted_provenance,
+            db.execute(
+                "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
+                "VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    receipt_id,
+                    "method_receipt",
+                    receipt_subject,
+                    json.dumps(receipt, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                    effective_source_turn,
+                    user_id,
+                    now,
+                    json.dumps(receipt_provenance, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                ),
+            )
+            db.execute(
+                "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
+                "VALUES(?,?,?,?,?,?,?,?)",
+                (
+                    promoted_id,
+                    promoted_kind,
+                    str(row["subject"]),
+                    json.dumps(promoted_record, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                    effective_source_turn,
+                    user_id,
+                    now,
+                    json.dumps(promoted_provenance, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                ),
             )
             return {
                 "candidate_memory_id": candidate_memory_id,

@@ -1,0 +1,62 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "NONCANONICAL_DONOR_REJECTED_STALE_BASE_AND_EVIDENCE_ORDER",
+  "canonical_product_pr": 787,
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_head_observed": "2473a30b6efc0915ac5ae4818e767ac9ef04f2a8",
+  "canonical_source_scope": {
+    "stdout_bytes_hostcall": "ADMITTED_SOURCE_CLAYVM2_UNVERIFIED_CURRENT_HEAD",
+    "stderr_bytes_hostcall": "DEFERRED_AND_REVERTED_PENDING_STDOUT_SANDBOX_PROMOTION",
+    "stdin_live_streaming_pty_shell": "OPEN_NOT_ADMITTED"
+  },
+  "discarded_donor": {
+    "branch": "chatgpt/go-cm-term-stdin-bytes-20260817-0924",
+    "commit": "14674772dd86c64d86992eebde9eeff82a3c60c9",
+    "delta": "source-only bounded immutable stdin-bytes process backend sketch",
+    "pull_request_created": false,
+    "merged": false,
+    "canonical_authority": false,
+    "executable_evidence": false,
+    "disposition": "REJECT_FOR_CURRENT_FUSION",
+    "reason": "After donor creation, exact canonical refresh showed that stderr had been explicitly reverted/deferred until stdout current-head Sandbox promotion and that the donor base did not carry the observed canonical ABI tree. Continuing would expand unverified CM-TERM surface and risk stale-base semantic overwrite."
+  },
+  "coordination_result": {
+    "duplicate_or_premature_surface_avoided": true,
+    "stale_base_detected_before_abi_write": true,
+    "canonical_branch_overwrite_attempted": false,
+    "new_product_pr_created": false,
+    "source_scope_frozen_on_stdout": true
+  },
+  "execution": {
+    "canonical_head_github_vercel_status": "failure",
+    "provider_reason": "build-rate-limit before Sandbox start",
+    "sandbox_started_for_current_head": false,
+    "current_exact_head_executable_status": "BLOCKED_UNEXECUTED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfer": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "second_order_check": "Adding stdin/stderr before exact-current stdout artifact promotion would increase unverified surface faster than evidence quality. The product-convergent action is to preserve the narrower canonical stdout slice and resume capability expansion only after exact-head Vercel Sandbox observation.",
+  "next_executable_step": "On the first Vercel-admitted Git-bound build, refresh the then-current PR787 exact head and execute the existing ordinary full-pytest plus canonical v7 regression batch in an actually-started exact-identity Vercel Sandbox; require zero new unusual experiments, source/tree/archive/attestation/wheel/tool identity, stdout-Bytes regression, EntityOS twin byte identity, runtime/self-test/no-host-Python/relocation, exact artifact digest, and successful Sandbox stop. Only after that evidence should stderr/stdin/live-streaming/PTy expansion be reconsidered.",
+  "claims": {
+    "donor_source_pass": false,
+    "canonical_source_changed_by_this_organ": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

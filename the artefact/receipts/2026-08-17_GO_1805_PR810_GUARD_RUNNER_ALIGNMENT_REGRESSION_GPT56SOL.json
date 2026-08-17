@@ -1,0 +1,59 @@
+{
+  "schema": "clayverse.go.receipt/v1",
+  "trigger": "go",
+  "trigger_identity": "COORDINATION_BLOCKED_MINUTE_PRECISION_NO_SHARED_IMMUTABLE_REQUEST_ID",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-17T18:05:00+07:00",
+  "classification": "NO_CHANGE_PRODUCT_BYTES_CONTROLLER_REGRESSION_ADDED_RUNTIME_UNOBSERVED",
+  "observed_research_main_before_write": "7b304be706eb49c6c1df2a8c0440d6a94ef7360d",
+  "product_endpoint": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_product_bytes_changed": false,
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "regression_commit": "7ffb47212f8cf17ff174d2db2e01b5414eea7ec2",
+    "new_test": "tests/test_clayverse_current_oci_guard_runner_alignment.py",
+    "purpose": "Prevent recurrence of the already-observed stale source-guard versus current exact OCI runner binding mismatch on the single retained PR810 controller lane."
+  },
+  "observed_defect_history": {
+    "deployment": "dpl_BH8m9HTYUXWNSPQTDzURrJy5QmuE",
+    "failure": "VCR_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED",
+    "scope": "VERCEL_BUILD_CONTROLLER_PREFLIGHT_BEFORE_SANDBOX_CREATE",
+    "product_test_fail": false,
+    "runtime_credit": 0
+  },
+  "current_guard_repair": {
+    "commit": "0edd4e6b6c262daa2c1af95d300f63855f73029e",
+    "guard_blob": "fb9766042ff753881440cd33568a59d556e5bcaf",
+    "binding": "base main + fused source/tree + PR611 blobs + Dockerfile/.dockerignore blobs + EntityOS digest/size + execution-surface/no-secret-forwarding/zero-unusual-experiment markers",
+    "runtime_observed": false
+  },
+  "regression_contract": [
+    "parse every fail-closed REQUIRED guard identity field",
+    "require the mapped runner constant to equal the guard value",
+    "require identical VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER execution-surface marker",
+    "require github_secret_forwarded_to_sandbox=false in both guard and runner",
+    "require unusual_experiment_count_added=0 in both guard and runner",
+    "require the guard to retain explicit fail-closed drift rejection"
+  ],
+  "evidence_boundary": {
+    "source_write_observed": true,
+    "regression_execution_observed": false,
+    "vercel_repaired_head_execution_observed": false,
+    "oci_build_observed": false,
+    "whole_product_pass": false
+  },
+  "execution_admission": {
+    "vercel": "CURRENT_REPAIRED_EXACT_HEAD_RATE_LIMITED_BEFORE_BUILD_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_CONTROLLER_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "vps_self_hosted_production": "FORBIDDEN_NOT_USED"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "valid_count_added": 0
+  },
+  "next_discriminator": "At the first admitted authorized isolated deployment, execute the same repaired PR810 exact-source controller; run the guard-runner alignment regression plus the bound controller path, then Sandbox.create -> exact private source binding -> exact OCI build -> dependency/image identity -> in-image PR611/service assertions. Do not fork a second OCI controller lane.",
+  "acceptance": "IN_PROGRESS"
+}

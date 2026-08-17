@@ -1,0 +1,77 @@
+{
+  "schema": "clayverse-go-cycle-receipt/v1",
+  "trigger": "go",
+  "trigger_time": "2026-08-17T18:00+07:00",
+  "trigger_time_precision": "minute",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "acceptance": "IN_PROGRESS",
+  "canonical_main_observed_before_receipt": "7b304be706eb49c6c1df2a8c0440d6a94ef7360d",
+  "product_runtime_code_delta_on_main": "NO_CHANGE",
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "valid_unusual_experiment_credit": 0,
+    "reason": "The shared trigger identity is minute-precision and exposes no immutable request/turn id; the unusual-experiment lease therefore fails closed. No unusual experiment was executed."
+  },
+  "frontier": {
+    "selected": "exact current OCI execution admission through retained Dr.-Unterweger PR810",
+    "non_duplicate_lanes_preserved": [611, 622, 602, 810],
+    "action": "recheck the already-repaired retained controller once; do not create a parallel OCI lane"
+  },
+  "recheck": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "branch": "clay/fusion-vcr-native-20260817",
+    "trigger_commit": "50a6f3e24813d46a934c4aefb3c9dcdb2355f7b9",
+    "trigger_parent": "0edd4e6b6c262daa2c1af95d300f63855f73029e",
+    "execution_intent": "go-20260817T1800p0700-current-retained-oci-gate",
+    "bound_research_source": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "bound_research_tree": "a012708e469de32615ea9933371a13795669db5a",
+    "retained_pr611_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "github_vercel_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "status_observed_at": "2026-08-17T11:03:18Z",
+    "deployment_created": false,
+    "deployment_build_started": false,
+    "sandbox_started": false,
+    "private_source_fetch_started": false,
+    "oci_build_started": false,
+    "product_assertion_started": false,
+    "runtime_credit": 0,
+    "classification": "VERCEL_DEPLOYMENT_ADMISSION_RATE_LIMIT_BEFORE_BUILD_AND_SANDBOX_NOT_TEST_FAIL"
+  },
+  "adversarial_review": {
+    "observed_controller_order": "Sandbox.create precedes the optional GITHUB_READ_TOKEN source-staging check; therefore a future admitted deployment can distinguish Sandbox admission from private-source credential availability.",
+    "remaining_unverified_risks": [
+      "Sandbox.create admission on the repaired exact head",
+      "GITHUB_READ_TOKEN availability and exact private archive staging",
+      "Docker daemon availability inside the admitted Sandbox",
+      "exact OCI dependency resolution/build",
+      "packaged Claude/tmux identities",
+      "in-image PR611 policy behavior",
+      "service --once"
+    ],
+    "external_primary_evidence": "Current Vercel documentation supports OCI build/push through VCR and Sandbox creation from images; the retained controller's Docker-in-Sandbox path remains an unverified implementation choice until actually executed.",
+    "next_discriminator": "At the first admitted Vercel preview, run the same retained PR810 exact-source controller once and capture the first actually reached stage. Do not spend additional previews while the provider is explicitly rate-limiting this head."
+  },
+  "daytona_fallback": {
+    "policy": "AUTHORIZED_FREE_ONLY_FALLBACK_AFTER_VERCEL_PREASSERTION_BLOCK",
+    "current_controller_observation": "BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "runtime_credit": 0,
+    "provider_or_account_failure_claimed": false
+  },
+  "cycle_delta": {
+    "canonical_product_bytes": "NO_CHANGE",
+    "canonical_semantic_authority": "NO_CHANGE",
+    "execution_delta": "independent exact-head admission recheck reproduced the Vercel pre-build rate-limit classification",
+    "whole_product_acceptance": "IN_PROGRESS"
+  },
+  "prohibitions_observed": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_final_training_without_owner_authorization": true
+  }
+}

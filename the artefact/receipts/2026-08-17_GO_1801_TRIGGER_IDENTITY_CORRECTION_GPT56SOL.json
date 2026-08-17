@@ -1,0 +1,36 @@
+{
+  "schema": "clayverse-receipt-correction/v1",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "correction_scope": "TRIGGER_IDENTITY_ONLY",
+  "target_receipt": "the artefact/receipts/2026-08-17_GO_1801_EXACT_OCI_SOURCE_CLOSURE_AND_VERCEL_RATE_LIMIT_GPT56SOL.json",
+  "observed_defect": "The GO_1801 receipt carries trigger_time 2026-08-17T17:36+07:00 even though it records the current 18:01 macro-cycle closure. Reusing the older trigger timestamp violates the rule that separate go macro-cycles must not borrow trigger identity or unusual-experiment accounting from one another.",
+  "correct_trigger": {
+    "command": "go",
+    "trigger_time": "2026-08-17T18:01+07:00",
+    "trigger_time_precision": "minute",
+    "immutable_shared_request_id_available": false
+  },
+  "experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "valid_unusual_experiment_credit": 0,
+    "reason": "The corrected 18:01 trigger still has no immutable shared request/turn id suitable for an atomic cross-worker lease. No unusual experiment is retroactively borrowed from 17:36 and no new unusual experiment is minted by this correction."
+  },
+  "preserved_evidence": {
+    "exact_source_closure_head": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
+    "base_main_sha": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "retained_tmux_pr": 611,
+    "vercel_controller_pr": 810,
+    "runtime_credit": 0,
+    "whole_product_acceptance": "IN_PROGRESS"
+  },
+  "latest_admission_observation": {
+    "controller_head": "50a6f3e24813d46a934c4aefb3c9dcdb2355f7b9",
+    "vercel_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "classification": "VERCEL_DEPLOYMENT_ADMISSION_RATE_LIMIT_BEFORE_BUILD_AND_SANDBOX_NOT_TEST_FAIL"
+  },
+  "mutation_policy": "APPEND_ONLY_CORRECTION; original receipt retained as historical bytes",
+  "product_runtime_code_delta": "NO_CHANGE",
+  "semantic_authority_delta": "NO_CHANGE"
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:43:18+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "SOURCE_CANDIDATE_PYTHON_LOCK_SELECTED_WHEEL_PROVENANCE",
+  "observed_canonical_main_before_branch": "47d6f97775acd41912fb6d3c96887f005e55e651",
+  "branch": "go/python-lock-wheel-provenance-gpt56sol",
+  "branch_head_before_receipt": "cbf38f5f92b48c0460be1f5c9ec34e69a8e06718",
+  "frontier": {
+    "issue": 576,
+    "gate": "Python requirements are version-pinned but canonical complete transitive hash lock is not yet materialized or installed under --require-hashes",
+    "non_duplication": "Existing .github/workflows/clayverse-python-lock-generator.yml remains the single generator lane; no second resolver or requirements semantics path was created."
+  },
+  "observed_gap": {
+    "kind": "PROVENANCE_UNDERCAPTURE",
+    "before": "The generator verified a hash-enforced binary download but emitted only WHEELHOUSE_FILE_COUNT for selected distributions.",
+    "required_by_issue_576": "Persist selected distribution filenames and digests with lock provenance."
+  },
+  "source_delta": {
+    "workflow_commit": "56e64da84c0ddcbe982a34256a6b504cee7e9132",
+    "test_commit": "991a43a391e70a184c89e3fb634082662c0915d1",
+    "readme_commit": "cbf38f5f92b48c0460be1f5c9ec34e69a8e06718",
+    "workflow_change": "Emit deterministic WHEELHOUSE_SHA256_BEGIN/END manifest with SHA-256 and basename for every downloaded wheel after --only-binary=:all: --require-hashes succeeds.",
+    "guard_change": "Static source contract now requires the wheel digest manifest, digest operation, basename projection and LC_ALL=C ordering.",
+    "product_runtime_bytes_changed": false,
+    "requirements_lock_materialized": false,
+    "docker_require_hashes_activated": false
+  },
+  "execution_evidence": {
+    "new_runtime_credit": 0,
+    "new_test_credit": 0,
+    "github_branch_run_state": "NO_PR_WORKFLOW_RUN_OBSERVED_FOR_THIS_BRANCH_AT_RECEIPT_REVIEW",
+    "github_repository_runner_context": "Latest repository-wide evidence observed during this go remained queued/pre-step only; this is not branch execution evidence.",
+    "vercel": "No duplicate cap-bypass deployment attempt was initiated",
+    "daytona": "No admitted provider-contact path or runtime command available to this controller",
+    "vps_self_hosted_production_testing": "NOT_USED"
+  },
+  "experiment_budget": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_authorized": false,
+    "new_unusual_experiment_executed": false
+  },
+  "counterhypothesis": "A source-visible wheel digest manifest can still be incomplete or platform-specific unless the exact product resolver environment actually executes and the selected artifacts are subsequently bound into the exact OCI build.",
+  "cheapest_discriminator": "First admitted isolated runner: bind exact then-current product base image and requirements digest, run the existing generator twice, require byte-identical lock and hash-enforced binary download, capture the selected-wheel digest manifest, persist verified lock bytes/provenance, then perform the hash-enforced OCI build.",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "evidence_note": "Source candidate only. No current-runtime, exact-lock, OCI, native-Claude, Clerk, restart or whole-product PASS is claimed."
+}

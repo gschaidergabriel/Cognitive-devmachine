@@ -58,9 +58,9 @@ jobs:
 
           python --version
           python -m pip --version
-          # 7.5.0 predated pip-tools' declared/tested Python 3.13 support. Keep the
-          # generator tool inside the same Python-3.13 product base, but use a
-          # maintenance release that explicitly supports Python 3.13 and pip 25.2+.
+          # 7.5.0 predates pip-tools' declared/tested Python 3.13 support. Keep the
+          # generator inside the exact Python-3.13 product base, but use a maintenance
+          # release that explicitly supports the product interpreter generation.
           python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.3'
           pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
             -o /tmp/requirements.lock.1 /tmp/requirements.in
@@ -74,5 +74,10 @@ jobs:
             --only-binary=:all: --require-hashes \
             -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
           echo -n 'WHEELHOUSE_FILE_COUNT='; find /tmp/wheelhouse -maxdepth 1 -type f | wc -l
+          echo 'WHEELHOUSE_SHA256_BEGIN'
+          while IFS= read -r wheel; do
+            printf '%s  %s\n' "$(sha256sum "$wheel" | awk '{print $1}')" "${wheel##*/}"
+          done < <(find /tmp/wheelhouse -maxdepth 1 -type f -print | LC_ALL=C sort)
+          echo 'WHEELHOUSE_SHA256_END'
           printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
           INNER

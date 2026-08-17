@@ -4,87 +4,87 @@ This directory is the canonical product workspace for the current ClayVerse endp
 
 ## Living cycle status
 
-**This section is mandatory living state. It must be refreshed in every product-convergent work cycle after canonical code/evidence fusion and before that cycle is considered complete.** A stale README means the cycle is incomplete; detailed evidence remains in Git history and bounded receipts.
+**Refresh this living state in every product-convergent cycle after canonical evidence/code fusion. A stale README means the cycle is incomplete; detailed evidence stays in Git history and bounded receipts.**
 
 ### Current state
 
 - Program: **ClayVerse single-container**
 - Stage: **CLAYVERSE_ARTIFACT**
 - Acceptance: **IN_PROGRESS** — no whole-product PASS is claimed.
-- Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
-- User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
-- Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Research coordination: material deltas now use **Live Fusion** for targeted research/worker re-entry, with **Live Hypofusion** automatically opening an adversarial counterhypothesis lane for material contradiction, promotion/merge, shared-ancestry pseudo-replication, persistent blockers, OOD/security results or competing worker semantics. Exact `fusion` and `hypofusion` commands remain full-depth macro-runs. Delivery, reconstruction, plan revalidation, use, local effect and causal credit remain explicitly distinct; this layer creates no second state/effect authority.
-- Minimal boot now carries that coordination law explicitly: `research_entity/continuity/BOOTSTRAP_MINIMAL.json` schema **5.5** names and loads `LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md` before material work, requires novelty classification plus targeted `ADOPT|CHALLENGE|DEFER|NO_CHANGE` re-entry after material outcomes, and keeps delivery/use/causal-credit states distinct. This is coordination boot wiring only, not a second state authority or product-runtime PASS.
-- Runtime readiness on current `main`: `/readyz` requires canonical state and both canonical tmux sessions to be live and pass the managed transport-policy-v3 attestation used by attach admission. This gate is read-only and does not create or repair sessions.
-- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must pass the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Real terminal evidence: the predecessor reapply mechanism was first falsified under real tmux 3.6a. Authorized Vercel Sandbox deployment `dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T` then executed terminal blob `c185009f8af84e1288747d8352645777a36b2053` and focused-test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc` at bound old head `ef61bfb85ab59291c3b0b33d024aa098b1f29089` and passed pre-policy upgrade, already-hardened reapply, new-server second source, direct multi-argv fake-Claude launch, plus fail-closed mixed/unknown/empty diagnostic assertions. Network was deny-all during the candidate test. This is strong **component/mechanism PASS at that bound old head**, not exact-current or whole-product PASS; native Claude and the OCI product image were not tested.
-- Supporting exact-file regression: after rejecting a first reconstruction with a blob mismatch for zero test credit, a byte-exact isolated reconstruction recomputed the expected terminal/test Git blobs above and ran `tests/test_terminal_tmux_control_timeouts.py` **9/9 PASS**. This is supporting exact-file source regression only; it used a bounded identity stub and is not full-branch, OCI, native-Claude, or whole-product runtime evidence.
-- Unusual-experiment coordination incident: a 17:36 `tmux_3_6a_idempotent_diagnostic_mutation_fence` was executed after a claim synthesized `17:36:00.000000` from user-message metadata that was available only at **minute precision**. That claim is invalid under the atomic lease protocol and did not authorize execution. The observed 277-case parser matrix (19 positive controls, 258 negative mutations, zero unexpected acceptances/rejections) is preserved only as coordination-tainted bounded mechanism history. Valid unusual-experiment credit is **0**; real-tmux/OCI/native-Claude/whole-product credit is **0**; no further unusual experiment is permitted for this `go`.
-- Retained repair: draft PR #611 remains the **single retained semantic tmux reapply repair lane**. Its product delta is still exactly the terminal repair blob `c185009f8af84e1288747d8352645777a36b2053` plus focused-test blob `b6bb645dd07645f21ca2e5574f8392c9f13beafc`; duplicate PR #612 is closed unmerged. Historical tmux 3.6a evidence remains useful robustness/mechanism evidence, but promotion must bind the tmux version actually resolved into the exact OCI candidate rather than assuming 3.6a is the current product dependency.
-- OCI dependency-version boundary: canonical `Dockerfile` uses digest-pinned `python:3.13.14-slim-trixie` but installs `tmux` through ordinary mutable Trixie APT sources. Official Debian Trixie package metadata observed on 2026-08-17 advertises `tmux 3.5a-3`; therefore a 3.6a-only rerun is not sufficient evidence for the current one-container runtime. The exact built-image version remains **UNOBSERVED** until an admitted OCI build captures APT resolution, image digest and `tmux -V` inside that image. This is consistent with the existing open APT supply-chain gate in `SOURCE_LOCK.json`.
-- Python dependency integrity boundary: a source-bound lock generator already exists and is the single retained lane; canonical `requirements.lock.txt` is still absent and the Dockerfile still does not enforce `--require-hashes`. Do not create a duplicate generator. The same next exact OCI batch must materialize/verify the canonical Python hash lock and bind the resolved Python artifacts before product acceptance.
-- Python lock-generator compatibility candidate: draft PR #622 keeps that existing generator lane and changes generator-only `pip-tools==7.5.0` to `7.5.3`, because upstream added declared/tested Python 3.13 support after 7.5.0. The source-binding regression now fences that version. This is **source candidate only**: no canonical lock bytes were synthesized, no Docker `--require-hashes` switch was made, and authorized isolated execution credit remains zero until the generator actually runs inside the exact digest-pinned product base.
-- Latest retained-lane rejoin attempt: #611 was ancestry-rejoined through `main` `6f274dab83836175145d89e68d2ee28a75c32575` at branch head `2957e80228815ac266635981a55f22bc15dc9ed4`, preserving only the same two product/test blobs. Canonical `main` has since advanced through evidence/status/re-entry work without promoting those repair bytes, so that branch head is intentionally stale until execution admission exists.
-- Exact-head admission evidence: product-bearing reconstruction and retained-lane bridge attempts were rejected by Vercel **before build/Sandbox start** with the build-rate limit. Runtime credit for those exact-head attempts is zero, not TEST_FAIL.
-- Fresh GitHub Actions admission recheck on retained #611 was accepted by the control plane but again terminated before any visible step (`steps=[]`/no step execution). It contributes zero regression/runtime credit and is classified as runner/pre-step admission failure, not semantic TEST_FAIL.
-- Daytona remains the owner-authorized **FREE_ONLY** fallback for Vercel pre-assertion failure. The merged fallback mechanism is connector-independent and fail-closed. A fresh GitHub-hosted controller bridge was staged in `gschaidergabriel/Dr.-Unterweger` at exact commit `e9a50a8325810410b837b1bae85212ef5710fa3f`, requesting fallback only for `RATE_LIMIT` with `vercel_assertion_reached=false`. The exact-head Actions query returned **0 workflow runs**, so no Daytona provider contact, credential use, sandbox creation or runtime command occurred. This narrows the blocker to controller/trigger admission; it is not Daytona TEST_FAIL and gives no provider/account/credit evidence.
-- Managed Claude process attestation: draft PR #602 is the single retained downstream lane. Live Fusion has repaired its overlapping tmux semantics source candidate, but exact integrated OCI/native-Claude behavior remains unobserved; #602 stays Draft/downstream until the exact #611 product gate is admitted and promoted.
-- WebSocket queue/compression hardening: the parallel anti-entropy race closed **both** historical candidates #434 and #448 unmerged while receipts briefly encoded opposite retained-lane claims. Neither closed PR is retained product authority. Current `main` remains canonical with the already-admitted simpler WebSocket size bound; any future queue/compression/backend candidate must be freshly adjudicated against then-current source and repository-pinned runtime evidence rather than revived by coordination prose alone.
-- Remaining major acceptance gates: on the first actually-startable authorized isolated OCI runner, refresh `main`, rejoin #611 once, rejoin #622 if still needed, build/run in the exact digest-pinned product environment, capture image digest + APT/tmux + Python dependency identities, run #611 idempotency/fail-closed behavior plus full transport-policy attestation on the image's actual tmux, execute focused + adjacent regressions, materialize/verify the canonical Python hash lock, switch the Docker dependency install to `--require-hashes`, and only then decide repair promotion. After promotion, rejoin/revalidate #602 and advance to packaged native-Claude process attestation, startup/readiness, real Clerk JWT/browser WebSocket PTY, automatic hook lifecycle, persistence/recovery, and live dual-session concurrency/generation fencing.
+- UnifiedDB is the sole canonical durable cognition/state authority. ClayGraph is derived/rebuildable only. MicroClay adapts retrieval/accessibility, never truth, identity, privacy or effect authority.
+- Product path remains Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code is runtime cognition, not durable canonical memory/identity.
+- Effects remain fail-closed through ClayVerse EffectGate/MCP. Generic host `process.exec` is not admitted. EntityOS is an optional digest-bound internal substrate, not the product endpoint.
+
+### Retained terminal / Claude lanes
+
+- Draft PR **#611** is the single retained tmux reapply repair lane. Historical real Vercel Sandbox evidence under tmux 3.6a supports the byte-identical repair only at an older bound head; exact current OCI/in-image behavior remains unobserved.
+- Draft PR **#602** is the single downstream managed-Claude process-attestation lane and remains gated on #611 product promotion plus exact packaged native-Claude evidence.
+
+### Exact OCI / supply-chain gate
+
+- Current source uses digest-pinned Python 3.13 slim Trixie, but tmux still resolves through mutable Trixie APT and Python dependencies are not yet installed from an accepted canonical `--require-hashes` lock. Exact image digest, APT/tmux, Claude and Python artifact identities remain **UNOBSERVED**.
+- The latest retained execution closure is `f4c91d0129bbcd9d5e83bceb66b44c2e52f517ee` / tree `ff89be29ea79df92edd547b32abce9c7eceb34da`. It contains the retained #611 terminal/test delta plus execution-relevant #622 Python-lock generator delta and is an ephemeral execution closure, not a second product lane.
+- Dr.-Unterweger draft PR **#810** remains the single retained OCI/Vercel controller. Current source head `f9d5fcb53167545110f9a2eb10c4747c77112333` also fences the previously unsafe JavaScript-interpolated `dpkg-query` inventory shape by rewriting the two exact occurrences to default `dpkg-query -W`; the supporting mechanism check is source-only. Vercel remains deployment-rate-limited before build/`Sandbox.create`, so exact runtime credit is **0**.
+- **EntityOS staging falsifier:** the exact Research archive omits intentionally untracked `the artefact/EntityOS`, while the retained runner requires it before OCI build. The same #810 lane must reproduce EntityOS inside authorized isolated execution from locked source head `79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c`, require SHA-256 `32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586` and size `9181696`, then stage exactly those bytes into the `f4c91d…` build context. This is source falsification/repair obligation, not an observed Sandbox failure.
+- Daytona remains owner-authorized **FREE_ONLY** fallback. Original and fresh rerun both failed pre-Step-1 with no provider contact, so Daytona runtime credit remains **0** and this is not Daytona TEST_FAIL.
+
+### Python supply-chain lane
+
+- The Python hash-lock generator now has exactly **one retained semantic lane: draft PR #622**.
+- Draft PR **#621 is superseded by fusion into #622** and is not retained as a second resolver/generator path.
+- Fused #622 preserves both unique contracts:
+  - generator-only `pip-tools==7.5.3`, with a regression rejecting `7.5.0`, for the Python 3.13 product-base generator;
+  - deterministic selected-wheel provenance after `pip download --only-binary=:all: --require-hashes`: `WHEELHOUSE_SHA256_BEGIN/END`, SHA-256 plus basename, ordered under `LC_ALL=C`.
+- The fused source-binding regression passed **5/5** in an isolated non-production Python 3.13.5 source slice. This is supporting source/mechanism evidence only. No canonical `requirements.lock.txt` was minted, Docker remains off `--require-hashes`, and OCI/runtime credit is zero.
+
+### Unusual-experiment accounting
+
+- The corrected 18:01 `go` has only minute-precision shared trigger metadata and no immutable shared request/turn id. The atomic lease fails closed: **COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT**, valid credit **0**.
+- No unusual experiment was executed by this fusion lane.
+
+### Remaining acceptance path
+
+First actually-started authorized isolated current-target run:
+
+`same retained #810 lane → Sandbox admission → reproduce/stage exact locked EntityOS → build exact f4c91d… ClayVerse image → capture image digest + APT/tmux + Claude/Python identities → run #611 + service/readiness assertions in-image → execute retained fused #622 generator in exact digest-pinned Python base → require byte-identical hash lock + complete binary wheelhouse + selected-wheel SHA256 manifest → persist canonical requirements.lock.txt → switch Docker install to --require-hashes → rebuild/rebind exact image → rejoin/revalidate #602 → packaged native-Claude → real Clerk/browser PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/global-generation fencing`
+
+Whole-product PASS requires the complete path. Source inspection, PRs, deployment READY, historical evidence or component PASS do not imply ClayVerse PASS.
 
 ### Latest cycle delta
 
-**2026-08-17 17:44 +07:00 — Python hash-lock generator compatibility repaired as Draft source candidate; lock/runtime evidence still blocked**
+**2026-08-17 18:10 +07:00 — Python hash-lock donors fused into one retained lane; `NO_CHANGE` canonical product/runtime bytes**
 
-- Rejoined fast-moving canonical `main` through `6b9caf0db8c1346c3db5136b0666b021e66a3c07` before rebuilding the retained Python generator candidate; no stale branch ancestry was treated as current truth.
-- Preserved the existing single source-bound generator instead of creating a second resolver path. Draft PR #622 changes only the generator workflow, its regression, this living README and a bounded receipt.
-- Adversarial upstream check found that the old generator pin `pip-tools==7.5.0` predates declared/tested Python 3.13 support, while the generator intentionally executes inside ClayVerse's digest-pinned Python 3.13 base. PR #622 moves generator-only tooling to `pip-tools==7.5.3`.
-- Added a deterministic source regression that requires `7.5.3` and rejects regression to `7.5.0`, while preserving exact first-`FROM` derivation, requirements SHA binding, double `pip-compile --generate-hashes`, byte-identical diff gating, full binary `pip download --require-hashes`, and lock digest/base64 evidence outputs.
-- Controller-only structural assertions passed, but carry **zero authorized ClayVerse runtime credit**. No local resolver/network execution is promoted as product evidence.
-- Durable receipt: `the artefact/receipts/2026-08-17_GO_1744_PYTHON_LOCK_GENERATOR_PY313_COMPAT_GPT56SOL.json`.
-- No `requirements.lock.txt` bytes were fabricated and Docker was not prematurely switched to `--require-hashes`; this avoids converting an unexecuted source candidate into false supply-chain PASS.
-- Preserved the canonical unusual-experiment adjudication and started no second unusual experiment.
-- Exact next gate: first admitted authorized isolated OCI runner → refresh/rejoin current source → execute #622 generator inside the exact digest-pinned Python base → require byte-identical double compile → verify complete binary wheelhouse under `--require-hashes` → persist canonical `requirements.lock.txt` → switch Docker install to `--require-hashes` → continue exact OCI image/start/readiness/runtime acceptance.
+- Rejoined moving canonical `main` through `d6faec4187c28a0ec7331f63e1176a3a5ceda924` before the durable fusion write. The newest intervening PR810 change is a non-overlapping controller-source fence and does not alter the Python-lock fusion semantics.
+- Adjudicated overlapping drafts **#621** and **#622** as one semantic responsibility. #622 is retained; #621 is superseded instead of creating parallel dependency-resolution semantics.
+- Fused Python-3.13-compatible generator tooling and deterministic selected-wheel SHA-256 provenance into one workflow/test contract.
+- Supporting isolated source-slice result: **5 passed in 0.05s**, exit 0, Python 3.13.5. Evidence remains bounded to source/mechanism scope.
+- Preserved both predecessor receipts append-only and added `the artefact/receipts/2026-08-17_GO_1801_PYTHON_LOCK_LANE_FUSION_GPT56SOL.json`.
+- Re-entered the latest parallel OCI state: retained closure remains `f4c91d…`; PR810 head now also fences the dpkg inventory interpolation defect; the same lane still requires locked EntityOS reproduction/staging before image construction. Vercel remains pre-Sandbox rate-limited and Daytona remains pre-provider-contact.
+- Did **not** fabricate `requirements.lock.txt`, did **not** switch Docker to `--require-hashes`, and did **not** infer OCI/runtime acceptance from source regressions.
+- No unusual experiment was executed. No VPS/self-hosted/production path or Together API was used.
 - Whole-product acceptance remains **IN_PROGRESS**.
 
 ### Cycle update rule
 
-At the end of every product-convergent cycle:
-
 1. Refresh current `main`, canonical artefact state, relevant receipts and observed execution evidence.
-2. Rewrite **Current state** so it reflects the newest canonical reality, removing stale claims.
-3. Add or replace **Latest cycle delta** with the concrete changes from that cycle, including code, tests, evidence, blockers and acceptance movement. If nothing canonical changed, write `NO_CHANGE` and why.
-4. Never promote source inspection, a PR, CI configuration, deployment `READY`, component evidence or historical evidence into whole-product PASS.
-5. Persist the README update in the same branch/PR/fusion cycle as the artefact/evidence it describes.
-6. For fast-moving noncanonical feature branches, keep exact branch SHA in the cycle delta/receipt and refresh it immediately before execution; do not make continuous ancestry chasing a substitute for executable evidence.
-
-Git history and bounded receipts remain the detailed audit trail; this README stays compact and reflects the **latest** state rather than becoming a second canonical database.
+2. Rewrite current state to newest canonical reality; remove stale dynamic claims.
+3. Update latest-cycle delta with concrete code/evidence/blocker movement; if canonical product bytes did not change, record `NO_CHANGE` and why.
+4. Never promote source inspection, PRs, CI definitions, deployment READY, component evidence or historical evidence into whole-product PASS.
+5. Persist this README update in the same fusion cycle as the evidence it summarizes.
+6. Rebind fast-moving feature branches immediately before executable acceptance rather than continuously churning ancestry while no runner can start.
 
 ## Architecture
 
-Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas identity routing, bounded workspace/causal re-entry, Clerk JWT verification, and the terminal surface: browser → Clerk → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI. Claude Code built-in tools are disabled in product terminals; a strict local stdio ClayVerse MCP is the admitted state/context/effect bridge. UnifiedDB remains the durable state/memory authority. Generic host `process.exec` remains fail-closed. EntityOS is a digest-bound internal execution/security/runtime substrate candidate, not the product endpoint.
+Current source implements the UnifiedDB/ClayGraph continuity core, equal-rights Gabriel/Andreas perspectives, Clerk JWT verification, browser WebSocket PTY, persistent user-bound tmux, normal interactive Claude Code, managed lifecycle hooks, bounded retrieval/workspace coordination, effect-only MCP/EffectGate, restart/recovery and optional digest-bound internal EntityOS substrate. UnifiedDB remains the sole durable canonical cognition/state authority.
 
-The previous custom chat API and headless `claude -p` path are retired as product runtime surfaces. `consciousness_daemon` is not part of the target architecture.
+The retired custom chat API/headless `claude -p` path and a separate `consciousness_daemon` are not product runtime surfaces.
 
 ## Verification
 
-Focused isolated tests have exercised bounded source mechanisms, and real Vercel Sandbox execution has both falsified the predecessor tmux reapply behavior and verified the byte-identical repair component at an older bound head under tmux 3.6a, but **whole-product PASS is not claimed**. Exact current retained repair runtime and the exact current product still require authorized isolated evidence: exact OCI dependency/image binding plus repair rerun, canonical Python hash-lock materialization/enforcement, startup/readiness, real Clerk JWT plus browser WebSocket PTY, authenticated native Claude Code for both user homes, managed hook lifecycle, UnifiedDB persistence/recovery, accepted effect/EntityOS behavior where admitted, and live dual-session concurrency/generation fencing.
+Authorized isolated evidence exists for multiple bounded source/components, but **whole-product PASS is not claimed**. Exact current product evidence still requires current-target OCI/image/dependency execution and all downstream auth/Claude/lifecycle/recovery/concurrency gates above.
 
-GitHub-hosted Actions are not runtime evidence when jobs fail before visible execution. Vercel deployment state alone is likewise not runtime PASS; only an actually started Sandbox command/assertion path is executable evidence at its exact source/environment scope.
-
-## Local isolated source checks
-
-Where an **authorized** isolated Python environment is available:
-
-```bash
-python -m pytest -q
-PYTHONPATH=. CLAYVERSE_STATE_ROOT=/tmp/clayverse-state python -m clayverse.service --once
-```
-
-These source checks do not substitute for an exact container build/runtime gate.
+GitHub-hosted jobs that fail before visible steps and Vercel deployments that never reach Sandbox execution provide zero semantic runtime credit.
 
 ## Container source
 
-`Dockerfile` + `compose.yaml` define the single runtime container. The Docker build context is default-deny and allowlists only consumed product inputs, including the runtime Claude contract and digest-bound staged EntityOS artifact. Persistent ClayVerse state and workspace are externalized as scoped volumes, while the application image runs non-root with a read-only root filesystem in Compose, `no-new-privileges`, and dropped Linux capabilities.
+`Dockerfile` + `compose.yaml` define the single runtime container. The build context is default-deny/allowlisted; persistent state/workspace live in scoped volumes. The admitted Compose profile runs non-root with a read-only root filesystem, `no-new-privileges` and dropped Linux capabilities. Supply-chain acceptance remains open until exact build identities and current APT/Python integrity gates are closed.

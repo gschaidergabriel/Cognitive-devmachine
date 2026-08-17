@@ -4,6 +4,7 @@
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
   "canonical_main_at_join": "b5f862218752ceb24cfb3e2e1067522a0076db92",
+  "latest_main_observed_during_cycle": "172563489284fdc1fd59f3dd4873530fd9ebc20d",
   "branch": "go/meta-learning-stageb-shadow-gpt56sol-20260817",
   "program": "ClayVerse single-container",
   "stage": "CLAYVERSE_ARTIFACT",
@@ -35,6 +36,10 @@
     "normalized duplicate problem-signature values fail closed",
     "single-episode reusable framework promotion is rejected",
     "framework_candidate and heuristic_candidate remain non-serving",
+    "source_episode_ids must resolve to real UnifiedDB workspace episodes before admission and again before SHADOW retrieval",
+    "user-scoped method source episodes must remain inside that user's session scope",
+    "supporting/counterexample memory references must exist and remain inside the visible user scope",
+    "counterexample_memory_ids must point to counterexample/failure_pattern kinds rather than arbitrary facts",
     "Stage-B defaults to UNKNOWN or UNDERCOVERED triggers and preserves the factual evidence status",
     "method and retrieval receipts expose truth_authority=false and effect_authority=false",
     "malformed promoted method records fail closed during Stage-B retrieval",
@@ -44,7 +49,8 @@
   ],
   "coordination": {
     "avoided_overlapping_prs": [393, 394, 396, 398],
-    "reason": "Those lanes own MicroClay serving/shadow packing, retrieval-receipt context propagation, and replay budget/limit identity. This delta introduces a separate method-memory substrate and does not create competing semantics for those contracts."
+    "new_main_receipt_observed": "the artefact/receipts/2026-08-17_GO_MICROCLAY_CURRENT_HEAD_INTEGRATION_GPT56SOL.json",
+    "reason": "Those lanes own MicroClay serving/shadow packing, retrieval-receipt context propagation, replay budget/limit identity, and causal credit integration. This delta introduces a separate method-memory substrate and does not create competing semantics for those contracts. The main-head change observed during this cycle added only an integration/execution-admission receipt and does not overlap these source files."
   },
   "hypotheses": [
     {
@@ -76,8 +82,10 @@
     "observed_assertions": [
       "FACT_UNKNOWN remained UNKNOWN when method_context was present",
       "single-success promoted framework was rejected",
+      "fabricated source episode IDs were rejected",
       "malformed promoted method failed closed",
       "matching linked counterexample blocked framework",
+      "counterexample links to non-counter memory were rejected",
       "user-scoped method did not cross to the other user",
       "PRESENT evidence did not trigger Stage-B by default",
       "extra candidate structural facets are penalized symmetrically",
@@ -107,7 +115,7 @@
     "paid_or_final_training_used": false
   },
   "next_exact_gate": [
-    "execute this branch plus the non-overlapping MicroClay receipt/replay/packing candidates in one authorized exact-identity isolated batch",
+    "execute this branch together with the non-overlapping current MicroClay integration candidate on one authorized exact-identity isolated execution surface",
     "run test_method_memory_stage_b.py and test_method_memory_structural_similarity.py against the exact staged source",
     "add held-out structurally-similar/lexically-dissimilar and lexically-similar/structurally-different transfer cases",
     "measure relevance, miss rate, contamination, stale-state use, unnecessary personalization, latency and causal task utility",

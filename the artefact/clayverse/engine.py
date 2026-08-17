@@ -24,5 +24,8 @@ class ClayVerseEngine:
         if eff: effect_id,outcome=self.effects.execute(EffectRequest(uid,sid,eff['capability'],eff['target'],eff.get('argv'),reasoning_generation),ws['episode_id'])
         if isinstance(outcome,dict) and outcome.get('denied') is True:
             decision=dict(decision); notice=f"Requested action was not executed ({outcome.get('reason','effect_denied')})."; prior=str(decision.get('text','')).strip(); decision['text']=f"{prior}\n\n{notice}" if prior else notice
-        aid=self.db.append_turn(sid,uid,'assistant',decision.get('text',''),resources=resources,causal_refs=[effect_id] if effect_id else [],provenance={'source':'inference-adapter'}); causal_id=str(uuid.uuid4()); out_hash=hashlib.sha256(json.dumps(outcome,sort_keys=True).encode()).hexdigest() if outcome is not None else None; self.db.db.execute("INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",(causal_id,ws['episode_id'],effect_id,tid,out_hash,self._causal_credit(outcome),1,time.time())); self.graph.rebuild()
+        aid=self.db.append_turn(sid,uid,'assistant',decision.get('text',''),resources=resources,causal_refs=[effect_id] if effect_id else [],provenance={'source':'inference-adapter'}); causal_id=self.effects.causal_for_effect(effect_id) if effect_id else None
+        if causal_id is None:
+            causal_id=str(uuid.uuid4()); out_hash=hashlib.sha256(json.dumps(outcome,sort_keys=True).encode()).hexdigest() if outcome is not None else None; self.db.db.execute("INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",(causal_id,ws['episode_id'],effect_id,tid,out_hash,self._causal_credit(outcome),1,time.time()))
+        self.graph.rebuild()
         return {'user_id':uid,'session_id':sid,'turn_id':tid,'assistant_turn_id':aid,'workspace':ws,'decision':decision,'effect_id':effect_id,'outcome':outcome,'causal_id':causal_id,'collision_count':len(world['cross_session_collision'])}

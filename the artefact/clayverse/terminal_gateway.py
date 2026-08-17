@@ -111,7 +111,7 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
 
 
 def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
-    """Read-only readiness check for canonical state plus both live product terminals."""
+    """Read-only readiness for canonical state and policy-attested product terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
@@ -136,10 +136,15 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         )
         if not state_ready:
             return False
-        return all(
-            terminals._has_session(terminals.binding(user_id))
-            for user_id in CANONICAL_TERMINAL_NAMES
-        )
+        for user_id in CANONICAL_TERMINAL_NAMES:
+            binding = terminals.binding(user_id)
+            if not terminals._has_session(binding):
+                return False
+            # `attach_pty()` will fail closed on this same attestation. Readiness
+            # must never advertise a stale/unmanaged tmux server that cannot be
+            # admitted by the real attach path.
+            terminals._assert_tmux_server_policy(binding)
+        return True
     except Exception:
         return False
 

@@ -73,17 +73,23 @@ class TerminalSessionManager:
         )
 
     def _mcp_env(self, binding: TerminalBinding) -> dict[str, str]:
+        enable_entityos = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
         env = {
             "PYTHONPATH": "/opt/clayverse",
             "CLAYVERSE_STATE_ROOT": str(self.state_root),
             "CLAYVERSE_USER_ID": binding.user_id,
             "CLAYVERSE_SESSION_ID": binding.session_id,
-            "CLAYVERSE_ENABLE_ENTITYOS_EXEC": os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0"),
+            "CLAYVERSE_ENABLE_ENTITYOS_EXEC": "1" if enable_entityos else "0",
         }
-        for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
-            value = os.environ.get(key, "").strip()
-            if value:
-                env[key] = value
+        # Artifact identity is not capability authority. Do not disclose executable
+        # path/digest into the generated MCP config while the separate execution gate
+        # is closed. mcp_server independently rechecks the gate before constructing a
+        # bridge, so stale/generated configuration cannot widen authority either.
+        if enable_entityos:
+            for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
+                value = os.environ.get(key, "").strip()
+                if value:
+                    env[key] = value
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:

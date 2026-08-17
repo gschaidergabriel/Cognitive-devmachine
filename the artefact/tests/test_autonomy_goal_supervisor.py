@@ -111,7 +111,6 @@ def test_checkpoint_verifier_deterministically_completes_goal(db):
         supervisor.store.record_checkpoint(
             goal_id, "verified-checkpoint", checkpoint_id
         )
-        # The goal cannot complete while the admitted step is still open.
         assert supervisor.store.get(goal_id).status == "ACTIVE"
         return {"kind": "no_effect"}
 
@@ -175,9 +174,12 @@ def test_repeated_invalid_model_output_hits_deterministic_loop_brake(db):
     assert goal.same_failure_streak == 2
 
 
-def test_state_digest_detects_out_of_band_goal_tampering(db):
+def test_state_digest_detects_tamper_and_mutation_cannot_reseal_it(db):
     supervisor, goal_id = new_goal(db)
     assert supervisor.store.verify_integrity()
+    original_digest = db.db.execute(
+        "SELECT value FROM meta WHERE key='autonomy_state_digest'"
+    ).fetchone()[0]
 
     db.db.execute(
         "UPDATE autonomy_goals SET objective='tampered outside autonomy state machine' "
@@ -187,6 +189,15 @@ def test_state_digest_detects_out_of_band_goal_tampering(db):
 
     with pytest.raises(AutonomyIntegrityError, match="digest mismatch"):
         supervisor.store.verify_integrity()
+    with pytest.raises(AutonomyIntegrityError, match="digest mismatch"):
+        supervisor.store.pause(goal_id, "gabriel")
+
+    assert db.db.execute(
+        "SELECT value FROM meta WHERE key='autonomy_state_digest'"
+    ).fetchone()[0] == original_digest
+    assert db.db.execute(
+        "SELECT status FROM autonomy_goals WHERE goal_id=?", (goal_id,)
+    ).fetchone()[0] == "ACTIVE"
 
 
 def _insert_effect_fixture(
@@ -198,6 +209,7 @@ def _insert_effect_fixture(
     capability="entityos.exec",
     status="VERIFIED",
     ok=True,
+    canonical_outcome=True,
 ):
     now = time.time()
     episode_id = str(uuid.uuid4())
@@ -230,7 +242,7 @@ def _insert_effect_fixture(
     )
     effect_id = str(uuid.uuid4())
     outcome = {
-        "audit": "redacted-outcome-v1",
+        "audit": "redacted-outcome-v1" if canonical_outcome else "model-claimed-outcome",
         "sha256": "0" * 64,
         "bytes": 2,
         "ok": bool(ok),
@@ -273,8 +285,8 @@ def _insert_effect_fixture(
     return effect_id
 
 
-def test_verified_effect_must_be_bound_to_exact_goal_step_resources(db):
-    supervisor, goal_id = new_goal(
+def _effect_goal(db):
+    return new_goal(
         db,
         verifiers=[
             {
@@ -285,6 +297,9 @@ def test_verified_effect_must_be_bound_to_exact_goal_step_resources(db):
         ],
         allowed_capabilities=["entityos.exec"],
     )
+
+
+def _record_effect_proposal(supervisor, goal_id):
     step = supervisor.store.begin_step(supervisor.store.get(goal_id))
     supervisor.store.record_proposal(
         step,
@@ -298,6 +313,12 @@ def test_verified_effect_must_be_bound_to_exact_goal_step_resources(db):
             "reason": "test receipt binding",
         },
     )
+    return step
+
+
+def test_verified_effect_must_be_bound_to_exact_goal_step_resources(db):
+    supervisor, goal_id = _effect_goal(db)
+    step = _record_effect_proposal(supervisor, goal_id)
     effect_id = _insert_effect_fixture(
         db, goal_id=goal_id, step=step, correct_resources=True
     )
@@ -309,30 +330,8 @@ def test_verified_effect_must_be_bound_to_exact_goal_step_resources(db):
 
 
 def test_effect_from_other_resource_cannot_satisfy_goal(db):
-    supervisor, goal_id = new_goal(
-        db,
-        verifiers=[
-            {
-                "id": "effect-proof",
-                "kind": "effect_verified",
-                "capability": "entityos.exec",
-            }
-        ],
-        allowed_capabilities=["entityos.exec"],
-    )
-    step = supervisor.store.begin_step(supervisor.store.get(goal_id))
-    supervisor.store.record_proposal(
-        step,
-        {
-            "selection": "request_effect",
-            "effect": {
-                "capability": "entityos.exec",
-                "target": "bounded-target",
-                "argv": ["verify"],
-            },
-            "reason": "test receipt isolation",
-        },
-    )
+    supervisor, goal_id = _effect_goal(db)
+    step = _record_effect_proposal(supervisor, goal_id)
     effect_id = _insert_effect_fixture(
         db, goal_id=goal_id, step=step, correct_resources=False
     )
@@ -343,5 +342,22 @@ def test_effect_from_other_resource_cannot_satisfy_goal(db):
         supervisor.store.record_effect(step, effect_id)
 
     goal = supervisor.store.get(goal_id)
+    assert goal.status == "ACTIVE"
+    assert goal.verified_ids == ()
+
+
+def test_verified_status_without_canonical_outcome_receipt_cannot_prove_goal(db):
+    supervisor, goal_id = _effect_goal(db)
+    step = _record_effect_proposal(supervisor, goal_id)
+    effect_id = _insert_effect_fixture(
+        db,
+        goal_id=goal_id,
+        step=step,
+        correct_resources=True,
+        canonical_outcome=False,
+    )
+
+    goal = supervisor.store.record_effect(step, effect_id)
+
     assert goal.status == "ACTIVE"
     assert goal.verified_ids == ()

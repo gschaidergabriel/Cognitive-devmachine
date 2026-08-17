@@ -1,0 +1,60 @@
+{
+  "schema": "clayverse_go_receipt_v1",
+  "timestamp_local": "2026-08-17T20:28:00+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "PR623 Clerk reauth post-identity lease-expiry fence",
+  "canonical_authority": "UnifiedDB via existing IdentityRouter",
+  "retained_pr": 623,
+  "retained_branch": "clay/go-identity-session-drift-failclosed-20260817",
+  "observed_branch_head": "daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5",
+  "repair_commit": "1c6b34a5a3c521bd8ea38ea81415839b3329faf9",
+  "test_commit": "daf48f2ccf7b07cb10ea4d397b34b44a4c6895e5",
+  "repair_terminal_gateway_blob": "c30003d4851380a1372ef6a8da98305308ac41f7",
+  "test_blob": "4b4a1caa00e5d4e58a9dbd6b1784805c17d099e7",
+  "observed": {
+    "predecessor_identity_reauth_fix": "80753efc73be4399d603cb2e7103a517fcffe1d3",
+    "predecessor_behavior": "fresh Clerk expiry was validated before blocking asyncio.to_thread current-UnifiedDB identity revalidation, then assigned to auth_expires_at without a second lease-live check",
+    "counter_reality": "the refreshed token can expire while current UnifiedDB identity revalidation is blocked; without a post-boundary check the expired deadline can still be assigned and published as reauthenticated",
+    "workflow_runs_at_test_head": 0
+  },
+  "repair": {
+    "change": "call _require_auth_lease_live(refreshed_expiry) after blocking current-UnifiedDB identity revalidation and before assigning auth_expires_at or publishing reauthenticated",
+    "authority_effect": "none; no new identity/session/auth authority was added",
+    "fail_closed_property": "a token that expires during identity revalidation cannot extend or be published as the live socket lease"
+  },
+  "tests": {
+    "source_regression": "test_terminal_clerk_reauth.py now orders verifier -> candidate refreshed expiry -> current UnifiedDB identity revalidation -> post-identity lease-live check -> auth_expires_at extension -> reauthenticated publication",
+    "exact_pr_head_execution": "UNOBSERVED",
+    "supporting_identity_probe": {
+      "environment": "authorized isolated OpenAI container",
+      "cases": 3,
+      "result": "3/3 FAIL_CLOSED",
+      "cases_detail": [
+        "canonical rights drift rejected",
+        "canonical permanent session deletion rejected",
+        "canonical session generation drift rejected"
+      ],
+      "credit": "supporting mechanism evidence only"
+    }
+  },
+  "classification": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NO_RUNTIME_CREDIT",
+  "source_runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "whole_product_acceptance": "IN_PROGRESS",
+  "primary_external_blocker": "Vercel Preview host-side GITHUB_READ_TOKEN is absent, so exact private Research/EntityOS source staging cannot proceed into the retained OCI controller path",
+  "next_isolated_step": "after host-side credential provisioning, refresh main and retained PRs, rebind the single PR810 controller exactly once, stage verified private source bytes, execute exact PR623 regressions, then continue OCI build/digest and whole-product runtime gates",
+  "unusual_experiment": {
+    "count": 0,
+    "reason": "no shared immutable request/turn identity exposed for the atomic unusual-experiment lease"
+  },
+  "forbidden_paths_used": [],
+  "notes": [
+    "No VPS/self-hosted/production test was used.",
+    "Together API was not used.",
+    "No secret was exposed.",
+    "No source/component result is promoted to whole ClayVerse PASS."
+  ]
+}

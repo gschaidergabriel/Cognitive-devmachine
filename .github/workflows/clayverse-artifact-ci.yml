@@ -32,6 +32,27 @@ jobs:
           echo "source_sha=$GITHUB_SHA"
           git status --porcelain=v1
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: "the artefact/requirements.txt"
+
+      - name: Install candidate test dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install -r "the artefact/requirements.txt" pytest
+
+      - name: Run full candidate tests
+        shell: bash
+        working-directory: "the artefact"
+        run: |
+          set -euo pipefail
+          python -m pytest -q
+
       - name: Validate Compose shape
         shell: bash
         run: |
@@ -112,6 +133,7 @@ jobs:
             echo "- image: $IMAGE"
             echo "- image id: $IMAGE_ID"
             echo "- docker-save sha256: $ARCHIVE_SHA256"
+            echo "- tests: full candidate pytest suite"
             echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
             echo "- continuity: two isolated container restarts against one persistent state volume"
           } >> "$GITHUB_STEP_SUMMARY"

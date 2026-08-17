@@ -42,6 +42,7 @@ class PinnedXtermSupplyChainTests(unittest.TestCase):
         self.assertEqual(item["package"], "@xterm/xterm")
         self.assertEqual(item["version"], "6.0.0")
         self.assertEqual(len(item["sha512"]), 128)
+        self.assertTrue(any("xterm SHA-512 lock" in gate for gate in lock["known_open_supply_chain_gates"]))
         dockerfile = (ROOT / "Dockerfile").read_text("utf-8")
         self.assertIn("install_pinned_xterm.py", dockerfile)
         self.assertNotIn("npm install", dockerfile)
@@ -49,14 +50,23 @@ class PinnedXtermSupplyChainTests(unittest.TestCase):
         dockerignore = (ROOT / ".dockerignore").read_text("utf-8")
         self.assertIn("!build/install_pinned_xterm.py", dockerignore)
 
-    def test_valid_locked_archive_extracts_required_assets(self):
-        data = archive()
+    def test_archive_resource_bounds_are_explicit(self):
+        self.assertEqual(xterm.MAX_ARCHIVE_BYTES, 20 * 1024 * 1024)
+        self.assertEqual(xterm.MAX_MEMBERS, 4096)
+        self.assertEqual(xterm.MAX_UNPACKED_BYTES, 64 * 1024 * 1024)
+        source = MODULE_PATH.read_text("utf-8")
+        self.assertIn("response.read(MAX_ARCHIVE_BYTES + 1)", source)
+        self.assertIn("len(members) > MAX_MEMBERS", source)
+        self.assertIn("unpacked_bytes > MAX_UNPACKED_BYTES", source)
+
+    def test_valid_locked_archive_extracts_required_assets_only(self):
+        data = archive(extra={"package/README.md": b"not a runtime asset"})
         xterm.verify_digest(data, hashlib.sha512(data).hexdigest())
         with tempfile.TemporaryDirectory() as td:
             target = Path(td) / "xterm"
             xterm.install_archive(data, target, "@xterm/xterm", "6.0.0")
-            self.assertTrue((target / "lib" / "xterm.js").is_file())
-            self.assertTrue((target / "css" / "xterm.css").is_file())
+            files = sorted(str(path.relative_to(target)) for path in target.rglob("*") if path.is_file())
+            self.assertEqual(files, ["css/xterm.css", "lib/xterm.js", "package.json"])
             self.assertEqual(json.loads((target / "package.json").read_text())["version"], "6.0.0")
 
     def test_package_identity_mismatch_fails_closed(self):

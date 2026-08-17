@@ -9,7 +9,7 @@ from clayverse.store import UnifiedDB
 from clayverse.turn_lifecycle import TurnLifecycle
 
 
-def _turn_with_effect_status(tmp_path, status):
+def _turn_with_effect_status(tmp_path, status, *, ok=False):
     db = UnifiedDB(tmp_path / "unified.db")
     IdentityRouter(db, {})
     db.db.execute(
@@ -45,22 +45,26 @@ def _turn_with_effect_status(tmp_path, status):
         turn["generation"],
     )
     outcome = (
-        {"ok": False, "reason": "known_failure"}
-        if status == "FAILED"
+        {"ok": bool(ok), "reason": "known_effect"}
+        if status in {"VERIFIED", "DENIED", "FAILED"}
         else {"certainty": "unknown", "reason": "uncertain_effect"}
     )
     with db.tx() as tx:
         causal_id = journal._finish_tx(tx, effect_id, outcome, status)
     assert causal_id == turn["causal_id"]
-    return db, turn
+    credit = float(db.db.execute(
+        "SELECT credit FROM causal_episodes WHERE causal_id=?",
+        (causal_id,),
+    ).fetchone()[0])
+    return db, turn, credit
 
 
 @pytest.mark.parametrize(
     "status",
-    ["UNKNOWN_OUTCOME", "UNKNOWN_AFTER_RESTART", "STALE_OUTCOME", "PENDING"],
+    ["UNKNOWN_OUTCOME", "UNKNOWN_AFTER_RESTART", "STALE_OUTCOME", "PENDING", "DENIED", "FAILED"],
 )
-def test_uncertain_or_nonterminal_effect_never_trains_selector_or_direct_credit(tmp_path, status):
-    db, turn = _turn_with_effect_status(tmp_path, status)
+def test_nonrewarding_effect_status_never_trains_selector_or_effect_credit(tmp_path, status):
+    db, turn, credit = _turn_with_effect_status(tmp_path, status)
     try:
         organ = MicroClayRetrieval(db)
         learned = organ.learn_from_verified_outcomes(
@@ -76,7 +80,7 @@ def test_uncertain_or_nonterminal_effect_never_trains_selector_or_direct_credit(
         direct = organ.credit(
             causal_id=turn["causal_id"],
             generation=turn["generation"],
-            credit=0.0,
+            credit=credit,
             signal_class=f"effect_outcome:{status}",
         )
         assert direct == {"applied": False, "reason": "outcome_not_learning_eligible"}
@@ -88,9 +92,30 @@ def test_uncertain_or_nonterminal_effect_never_trains_selector_or_direct_credit(
         db.close()
 
 
-def test_known_failed_effect_remains_an_eligible_negative_learning_signal(tmp_path):
-    db, turn = _turn_with_effect_status(tmp_path, "FAILED")
+def test_verified_zero_credit_effect_is_learning_neutral(tmp_path):
+    db, turn, credit = _turn_with_effect_status(tmp_path, "VERIFIED", ok=False)
     try:
+        assert credit == 0.0
+        organ = MicroClayRetrieval(db)
+        assert organ.learn_from_verified_outcomes(
+            session_id="session:gabriel",
+            generation=turn["generation"],
+        ) == {"eligible": 0, "applied": 0}
+        assert organ.credit(
+            causal_id=turn["causal_id"],
+            generation=turn["generation"],
+            credit=0.0,
+            signal_class="effect_outcome:VERIFIED",
+        ) == {"applied": False, "reason": "zero_credit_not_learning_eligible"}
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 0
+    finally:
+        db.close()
+
+
+def test_verified_positive_effect_remains_rewarding(tmp_path):
+    db, turn, credit = _turn_with_effect_status(tmp_path, "VERIFIED", ok=True)
+    try:
+        assert credit > 0.0
         learned = MicroClayRetrieval(db).learn_from_verified_outcomes(
             session_id="session:gabriel",
             generation=turn["generation"],
@@ -99,12 +124,12 @@ def test_known_failed_effect_remains_an_eligible_negative_learning_signal(tmp_pa
         feedback = db.db.execute(
             "SELECT credit,signal_class FROM retrieval_feedback"
         ).fetchone()
-        assert float(feedback["credit"]) == 0.0
-        assert feedback["signal_class"] == "effect_outcome:FAILED"
+        assert float(feedback["credit"]) == credit
+        assert feedback["signal_class"] == "effect_outcome:VERIFIED"
         policy = db.db.execute(
             "SELECT COALESCE(SUM(pulls),0),COALESCE(SUM(capital),0.0) FROM retrieval_entrypoint_policy"
         ).fetchone()
         assert int(policy[0]) > 0
-        assert float(policy[1]) < 0.0
+        assert float(policy[1]) > 0.0
     finally:
         db.close()

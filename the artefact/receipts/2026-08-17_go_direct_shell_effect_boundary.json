@@ -1,0 +1,78 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "interactive Claude Code direct-shell effect-boundary repair",
+  "observed_main_before_receipt": "83365004cda1d8c7dc79eeff3e8c0b6413016552",
+  "finding": {
+    "status": "CONFIRMED_ARCHITECTURE_GAP",
+    "product_surface": "browser -> Clerk -> WebSocket PTY -> durable tmux -> interactive Claude Code",
+    "mechanism": "interactive Claude Code exposes a direct shell path that is distinct from the managed ClayVerse MCP effect path; prior terminal policy disabled built-in tools but did not explicitly close that direct shell path",
+    "contract_conflict": "ClayVerse declares direct process execution fail-closed and effects must cross the canonical managed boundary",
+    "primary_upstream_basis": [
+      "current Anthropic Claude Code interactive-mode documentation describes ! shell mode as direct shell execution",
+      "current Anthropic settings documentation supports managed Bash deny rules, CLAUDE_CODE_SHELL_PREFIX, disableSkillShellExecution, and background-task disabling"
+    ]
+  },
+  "repair": [
+    {
+      "commit": "8d2c772cb711e21878508bd104df21285bcc2123",
+      "change": "add fail-closed /opt/clayverse/runtime/deny-shell guard source; exits 126 without executing payload"
+    },
+    {
+      "commit": "dab9cd754b08b53ab13f56c1c1827a1a3facde6e",
+      "change": "managed policy denies Bash, disables skill shell execution and background tasks, and binds CLAUDE_CODE_SHELL_PREFIX to the guard"
+    },
+    {
+      "commit": "59433f331275ed367a0625e0a4a7c6454c2d706c",
+      "change": "terminal startup requires executable guard and exports the shell-prefix/background-disable settings while preserving the documented fixed-server MCP wildcard mcp__clayverse__*"
+    },
+    {
+      "commit": "32d69ad0c283fb3630c3e2bdafb1b17a2d76fdec",
+      "change": "embed guard root-owned/executable in the OCI image; preserve independently landed root ownership and non-writable /opt/clayverse runtime"
+    },
+    {
+      "commit": "d06bb968afdf340de5156b521b72dca23a53c9dc",
+      "change": "lock policy/startup/image invariants and prove guard payload is not executed"
+    }
+  ],
+  "ordinary_regression_evidence": {
+    "execution_surface": "ISOLATED_LOCAL_TOOL_CONTAINER_NOT_PRODUCT_ACCEPTANCE",
+    "guard_exit_code": 126,
+    "payload_executed": false,
+    "managed_policy_invariants": "PASS",
+    "interpretation": "mechanism evidence only; not an exact OCI/Vercel runtime PASS"
+  },
+  "vercel_context": {
+    "sha_bound_source_closure": "PASS at historical research SHA edaee6307c56669819164cd95b0f2dbca0985e1e for 30-file runtime+test closure",
+    "nested_sandbox_oci_runtime": "BLOCKED because Amazon Linux 2023 sandbox could not provision podman/buildah",
+    "build_host_preflight": "buildah exists at /usr/bin/buildah on the Vercel build host; child npm build process did not expose a vercel executable on PATH",
+    "current_head_oci_validation": "OPEN"
+  },
+  "counterhypotheses": [
+    {
+      "claim": "--tools empty plus strict managed MCP already removes all process execution",
+      "outcome": "REJECTED_BY_CURRENT_CLAUDE_CODE_INTERACTIVE_SHELL_CONTRACT"
+    },
+    {
+      "claim": "prompt wording alone can enforce the effect boundary",
+      "outcome": "REJECTED_AS_INSUFFICIENT; repair is enforced at managed policy, environment, executable guard and immutable image layers"
+    }
+  ],
+  "unusual_experiment": {
+    "executed": false,
+    "additional_count": 0,
+    "shared_go_budget": "already consumed elsewhere by VERCEL_SANDBOX_NESTED_OCI_RUNTIME"
+  },
+  "evidence_limits": [
+    "no exact-current-head OCI build/run has validated this repair inside Vercel Sandbox",
+    "no whole-product ClayVerse PASS is claimed",
+    "deployment READY state is not execution evidence"
+  ],
+  "next_discriminator": "build the exact current main/the artefact OCI candidate on an authorized Vercel-supported OCI path, start the exact image in isolated Sandbox, then verify health, non-root immutable runtime, interactive Claude startup, direct-shell rejection, managed MCP turn, state restart and dual-user isolation",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "vps_testing_used": false,
+  "together_api_used": false,
+  "paid_training_used": false
+}

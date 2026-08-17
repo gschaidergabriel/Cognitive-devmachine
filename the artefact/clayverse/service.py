@@ -12,10 +12,16 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
-from .recovery import recover_incomplete_episodes
+from .recovery import RecoveryIntegrityError, recover_incomplete_episodes
 from .store import UnifiedDB
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
+from .tier2_replacement import (
+    TIER2_EXIT_CODE,
+    Tier2ReplacementPending,
+    reconcile_tier2_replacement,
+    request_tier2_replacement,
+)
 
 
 def _clerk_map() -> dict[str, str]:
@@ -134,6 +140,22 @@ def main():
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
 
+    try:
+        tier2_status = reconcile_tier2_replacement(db)
+    except Tier2ReplacementPending as exc:
+        print(json.dumps({
+            "service": "clayverse",
+            "status": "tier2_replacement_pending",
+            "request_id": exc.receipt["request_id"],
+            "generation": exc.receipt["generation"],
+            "reason": exc.receipt["reason"],
+        }, sort_keys=True), flush=True)
+        db.close()
+        return TIER2_EXIT_CODE
+    except Exception:
+        db.close()
+        raise
+
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")
@@ -141,7 +163,24 @@ def main():
         db.close()
         return 0
 
-    recovery = recover_incomplete_episodes(db)
+    try:
+        recovery = recover_incomplete_episodes(db)
+    except RecoveryIntegrityError:
+        try:
+            receipt = request_tier2_replacement(db, "recovery_integrity_error")
+        except Exception:
+            db.close()
+            raise
+        print(json.dumps({
+            "service": "clayverse",
+            "status": "tier2_replacement_requested",
+            "request_id": receipt["request_id"],
+            "generation": receipt["generation"],
+            "reason": receipt["reason"],
+        }, sort_keys=True), flush=True)
+        db.close()
+        return TIER2_EXIT_CODE
+
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -191,6 +230,7 @@ def main():
         "terminals": terminal_status,
         "auth": "clerk",
         "recovery": recovery,
+        "tier2": tier2_status,
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "port": port,

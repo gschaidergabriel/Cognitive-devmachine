@@ -7,7 +7,7 @@ import sys
 from typing import Any
 
 from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController
-from .autonomy_context import admit_explicit_goal_from_turn, bounded_autonomy_context
+from .autonomy_context import apply_explicit_goal_command, bounded_autonomy_context
 from .autonomy_dispatch import AutonomyDispatch, consume_dispatch_prompt
 from .autonomy_planner import AutonomyDecisionError, AutonomyPlanner
 from .identity import CANONICAL_USER_IDS, IdentityRouter
@@ -222,6 +222,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "context": result["context"],
         "autonomy": result.get("autonomy", {}),
         "autonomy_dispatch": result.get("autonomy_dispatch"),
+        "autonomy_command": result.get("autonomy_command"),
         "effect_law": "Ordinary effects use mcp__clayverse__request_effect. An already-admitted autonomy effect step must use mcp__clayverse__request_autonomy_effect(goal_id,step_id), which dispatches only the stored canonical intent. Only verified EffectJournal outcomes are operational truth.",
     }
 
@@ -322,12 +323,19 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
                 result = _admit_dispatch_turn(db, lifecycle, dispatch, claude_session_id)
                 additional_context = _bounded_hook_context(result)
             except Exception:
-                if lifecycle.active() is not None:
-                    lifecycle.abort_autonomous(
-                        "autonomy_dispatch_post_admission_failure",
-                        dispatch.goal_id,
-                        dispatch.step_id,
-                    )
+                active = lifecycle.active()
+                if active is not None:
+                    provenance = _active_turn_provenance(db, session_id) or {}
+                    if (
+                        provenance.get("source") == AUTONOMY_TURN_SOURCE
+                        and provenance.get("goal_id") == dispatch.goal_id
+                        and provenance.get("autonomy_step_id") == dispatch.step_id
+                    ):
+                        lifecycle.abort_autonomous(
+                            "autonomy_dispatch_post_admission_failure",
+                            dispatch.goal_id,
+                            dispatch.step_id,
+                        )
                 raise
             return {
                 "hookSpecificOutput": {
@@ -342,7 +350,7 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             pass
         try:
             _reconcile_preempted_autonomy(db, user_id, preempted)
-            admit_explicit_goal_from_turn(
+            result["autonomy_command"] = apply_explicit_goal_command(
                 db,
                 user_id=user_id,
                 session_id=session_id,
@@ -389,21 +397,16 @@ def _finish_autonomous_stop(
         raise TerminalHookError("autonomous goal missing after Stop")
     step = goal.get("current_step")
     if not isinstance(step, dict) or step.get("step_id") != step_id:
-        # A verified-effect completion may already terminalize but must not replace the
-        # exact current effect step before Stop. Anything else is state drift.
         raise TerminalHookError("autonomous step changed before Stop re-entry")
 
     transition: dict[str, Any] | None = None
     if step.get("kind") == "reason" and step.get("status") == "ADMITTED":
-        try:
-            transition = AutonomyPlanner(db).ingest_reason_response(
-                goal_id,
-                step_id,
-                message,
-                expected_generation=generation,
-            )
-        except AutonomyDecisionError:
-            raise
+        transition = AutonomyPlanner(db).ingest_reason_response(
+            goal_id,
+            step_id,
+            message,
+            expected_generation=generation,
+        )
     elif step.get("kind") == "effect" and step.get("status") == "ADMITTED":
         transition = controller.record_step_failure(
             goal_id,

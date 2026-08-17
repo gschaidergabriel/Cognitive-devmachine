@@ -250,8 +250,55 @@ class MethodMemory:
     def __init__(self, db: UnifiedDB):
         self.db = db
 
+    def _assert_references(self, record: MethodRecord, *, user_id: str | None) -> None:
+        episode_ids = tuple(record.source_episode_ids)
+        placeholders = ",".join("?" for _ in episode_ids)
+        rows = self.db.db.execute(
+            f"SELECT episode_id,session_id FROM workspace_episodes WHERE episode_id IN ({placeholders})",
+            episode_ids,
+        ).fetchall()
+        found = {str(row["episode_id"]): str(row["session_id"]) for row in rows}
+        missing = sorted(set(episode_ids) - set(found))
+        if missing:
+            raise MethodRecordError(f"unknown source_episode_ids: {missing}")
+        if user_id is not None:
+            expected_session = f"session:{user_id}"
+            wrong_scope = sorted(
+                episode_id for episode_id, session_id in found.items()
+                if session_id != expected_session
+            )
+            if wrong_scope:
+                raise MethodRecordError(f"source episodes cross user/session scope: {wrong_scope}")
+
+        referenced_memory_ids = tuple(dict.fromkeys(record.supporting_memory_ids + record.counterexample_memory_ids))
+        if not referenced_memory_ids:
+            return
+        placeholders = ",".join("?" for _ in referenced_memory_ids)
+        memory_rows = self.db.db.execute(
+            f"SELECT memory_id,kind,user_id FROM durable_memory WHERE memory_id IN ({placeholders})",
+            referenced_memory_ids,
+        ).fetchall()
+        by_id = {str(row["memory_id"]): row for row in memory_rows}
+        missing_memory = sorted(set(referenced_memory_ids) - set(by_id))
+        if missing_memory:
+            raise MethodRecordError(f"unknown supporting/counterexample memory ids: {missing_memory}")
+        if user_id is not None:
+            hidden = sorted(
+                memory_id for memory_id, row in by_id.items()
+                if row["user_id"] is not None and str(row["user_id"]) != user_id
+            )
+            if hidden:
+                raise MethodRecordError(f"referenced memory crosses user scope: {hidden}")
+        wrong_counter_kind = sorted(
+            memory_id for memory_id in record.counterexample_memory_ids
+            if str(by_id[memory_id]["kind"]) not in COUNTER_METHOD_KINDS
+        )
+        if wrong_counter_kind:
+            raise MethodRecordError(f"counterexample link has wrong kind: {wrong_counter_kind}")
+
     def admit(self, *, kind: str, payload: dict[str, Any], source_turn_id: str | None, user_id: str | None, provenance: dict[str, Any]) -> str:
         record = validate_method_record(kind, payload)
+        self._assert_references(record, user_id=user_id)
         prov = dict(provenance or {})
         prov.update({
             "method_schema": METHOD_SCHEMA,
@@ -321,6 +368,7 @@ class MethodMemory:
         counters: list[tuple[float, MethodRecord]] = []
         for row in self._active_rows(user_id):
             record = self._decode_row(row)
+            self._assert_references(record, user_id=user_id)
             if record.status != _ACTIVE_SERVE_STATUS:
                 continue
             score = structural_similarity(signature, record.problem_signature)

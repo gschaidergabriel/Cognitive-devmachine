@@ -1,6 +1,7 @@
 {
   "schema": "clayverse-go-source-hardening-receipt/v1",
   "recorded_at": "2026-08-17T13:53+07:00",
+  "updated_at": "2026-08-17T13:58+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
@@ -8,15 +9,17 @@
   "base_main": "79626fd3b7b712e0b34c8208da0b24fee7b64f13",
   "branch": "go/explicit-mcp-tool-surface-fresh-20260817-1353",
   "supersedes_stale_branch_pr": 450,
+  "current_pr": 464,
   "finding": {
     "classification": "FAIL_CLOSED_PERMISSION_SURFACE_HARDENING",
-    "observed": "Current main still launched Claude with --allowedTools mcp__clayverse__* while the admitted baseline MCP exposes session_state and request_effect.",
+    "observed": "Current main still launches Claude with --allowedTools mcp__clayverse__* while the admitted baseline MCP exposes session_state and request_effect.",
     "risk": "A later tool added to the same managed MCP server would inherit automatic approval without an explicit terminal-boundary admission change.",
     "counterhypothesis": "Managed server allowlisting alone is sufficient.",
     "counterhypothesis_result": "WEAKER_THAN_EXACT_TOOL_ADMISSION: server identity stays managed, but wildcard approval broadens automatically when the server grows."
   },
   "repair": {
     "terminal_sessions_commit": "8116f2a8f495d200ca7282724649f69f003b5206",
+    "terminal_sessions_blob": "f1713c567542850c48e0f660fba640c66eb5f756",
     "test_commit": "5c17d68a8420d5523a23a337d7d843ccd8d1e420",
     "allowed_tools": [
       "mcp__clayverse__session_state",
@@ -30,19 +33,36 @@
     "anthropic": "Current Claude Code documentation supports exact MCP permission names; --allowedTools is the approval layer, and dontAsk denies unapproved tools rather than prompting."
   },
   "execution": {
-    "exact_fresh_head_tests": "UNOBSERVED_EXECUTION_ADMISSION_BLOCKED",
-    "previous_checkout_attempt": "DNS failure before tests; not a test failure",
-    "bounded_argv_mechanism_probe": "PASS_ON_PRIOR_EQUIVALENT_DELTA_ONLY",
-    "vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "openai_exact_checkout_attempt": {
+      "result": "ADMISSION_FAILED_BEFORE_TESTS",
+      "reason": "DNS could not resolve github.com",
+      "classification": "NOT_TEST_FAILURE"
+    },
+    "bounded_argv_mechanism_probe": "PASS_ON_EQUIVALENT_DELTA_ONLY",
+    "vercel_bridge": {
+      "status": "CONFIRMED_EXECUTION_PATH",
+      "staging_repo": "gschaidergabriel/Dr.-Unterweger",
+      "staging_branch": "chatgpt/go-mcp-tool-surface-vercel-20260817-1356",
+      "staging_head": "37e7ea8dc600bea4d8edc6db9714058e9387e854",
+      "runner": "mcp/vercel-sandbox-mcp/scripts/run-mcp-tool-surface-sandbox.mjs",
+      "source_blob_staged": "f1713c567542850c48e0f660fba640c66eb5f756",
+      "intended_policy": "Sandbox.create python3.13 -> stage exact bound source -> deny-all -> execute deterministic two-user argv/tmux probe -> stop",
+      "deployment_status": "ADMISSION_FAILED_BEFORE_BUILD_AND_SANDBOX_START",
+      "vercel_status": "Deployment rate limited — retry in 24 hours.",
+      "test_command_started": false,
+      "sandbox_started": false,
+      "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT_NOT_TEST_FAILURE"
+    },
     "vps_self_hosted_production_testing": false
   },
   "go_experiment_accounting": {
     "experiment_started_by_this_organ": false,
     "invalid_concurrent_claim_commit": "89baf998e3c4a2597303de2b44af19d5723fd6d0",
     "canonical_blocking_result_commit": "b527277c713ba714ae7ff42c9d6a76dfda68866c",
-    "canonical_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "reason": "Only minute-precision immutable source user-message time is available; no admissible immutable trigger identity was exposed."
+    "canonical_state_for_13_42_trigger": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision immutable source user-message time is available; no admissible immutable trigger identity was exposed.",
+    "note": "The Vercel run staged here is an ordinary deterministic regression, not the unusual go experiment."
   },
-  "acceptance": "SOURCE_CANDIDATE_NOT_EXACT_RUNTIME_PASS",
-  "next_gate": "Run focused terminal_managed_authority and adjacent terminal/policy regressions plus packaged-Claude permission inspection in an actually-started authorized exact environment before promotion."
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXECUTION_ADMISSION_BLOCKED_NOT_EXACT_RUNTIME_PASS",
+  "next_gate": "When Vercel preview admission is available again, run the already-staged exact-blob deterministic Sandbox regression, then packaged-Claude permission inspection; only after those gates consider promotion/merge."
 }

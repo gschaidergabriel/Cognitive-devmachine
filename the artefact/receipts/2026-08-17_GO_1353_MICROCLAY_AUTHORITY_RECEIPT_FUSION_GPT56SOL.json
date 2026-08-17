@@ -31,12 +31,16 @@
   },
   "isolated_mechanism_execution": {
     "environment": "OpenAI isolated non-production container, Linux x86_64, Python 3.13.5",
-    "result": "PASS_2_OF_2",
-    "observations": [
-      "authority receipt survives bounded packing",
-      "oversized context does not require dropping authority metadata before memory trimming"
+    "result": "PASS_6_OF_6",
+    "checks": [
+      "retrieval receipt preserved unchanged",
+      "durable memory trimmed before authority metadata is lost",
+      "residual world overflow fails closed",
+      "nested receipt value rejected",
+      "NaN/non-canonical JSON receipt rejected",
+      "oversized compact receipt rejected"
     ],
-    "evidence_scope": "bounded mechanism evidence only; donor hard-bound regression remains unexecuted on an exact full checkout in this turn"
+    "evidence_scope": "direct bounded execution of the retained _bound_world mechanism; not an exact full-checkout pytest run and not OCI runtime"
   },
   "github_runner_observation": {
     "workflow_run": 32003811749,

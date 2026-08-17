@@ -126,7 +126,7 @@ class UnifiedDB:
         row=self.db.execute("SELECT * FROM leases WHERE resource=?",(lease.resource,)).fetchone()
         if not row or row['holder']!=lease.holder or int(row['generation'])!=lease.generation or row['nonce']!=lease.nonce or float(row['expires_at'])<=time.time(): raise StaleGeneration(lease.resource)
     def record_effect(self,episode_id,user_id,capability,target,requested_generation,status,argv=None,outcome=None):
-        eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,outcome and json.dumps(outcome,sort_keys=True),time.time(),time.time() if outcome is not None else None)); return eid
+        eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
         for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))

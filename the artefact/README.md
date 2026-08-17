@@ -4,7 +4,7 @@ Canonical product workspace for the current ClayVerse endpoint: **one OCI/Docker
 
 ## Living cycle status
 
-Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries the current product state.
+Refresh this file in every product-convergent cycle. Detailed evidence belongs in receipts/history; this file carries the current product state and latest concrete delta.
 
 ### Product contract
 
@@ -52,18 +52,22 @@ OCI isolates product userspace but still shares the host kernel. If stronger ker
 - **#622** Python hash-lock generator — source candidate/unexecuted; no canonical accepted `requirements.lock.txt` yet.
 - **#623** auth/identity/readiness/reauth drift lane — bounded source/mechanism candidate; not exact OCI/runtime evidence.
 - **#602** managed native-Claude process attestation — downstream of exact in-image #611.
-- **#625** tokenless baseline packaging — useful development/baseline lane. Its ability to omit EntityOS applies only to non-final builds; final ClayVerse acceptance requires complete accepted EntityOS in the same sealed continuum.
-- Dr.-Unterweger **#810** remains historical/retained controller evidence; its cross-private-repo credential path is not the preferred baseline route.
+- **#625** tokenless development/baseline packaging — useful development lane. Its ability to omit EntityOS applies only to non-final builds; final ClayVerse acceptance requires complete accepted EntityOS in the same sealed continuum. The branch now explicitly fences this distinction in manifest/test/README; those source changes remain unmerged.
+- Dr.-Unterweger **#810** is the retained Vercel Sandbox orchestration bridge/controller evidence. Its current cross-private-repo source-fetch route is credential-blocked before Research source staging when host-side `GITHUB_READ_TOKEN` is absent; this is not Sandbox unavailability and not ClayVerse TEST_FAIL.
 
 ### Testing policy
 
-Missing direct Vercel Git-project linkage is not a development blocker. Continue maximum independent tests under `the artefact/TESTING_STRATEGY.md`.
+Continue maximum independent tests under `the artefact/TESTING_STRATEGY.md` while preserving isolated-sandbox-only execution.
 
 Crash/recovery testing is mandatory: EntityOS crash idle/active, terminal child crash, crash before/after effect emission and acknowledgement, interrupted UnifiedDB write, stale pre-crash result rejection, corrupt newest snapshot fallback, crash during recovery, no blind effect replay, ingress freeze during inconsistent state, stale auth/session/generation rejection, read-only-root enforcement and undeclared-write denial.
 
 ### Current execution boundary
 
-The final exact OCI/Sandbox gate remains deferred because the canonical Research repo is not directly connected to an executable Vercel project through the available connector surface. This does not stop source/product convergence or lower-layer testing.
+Vercel Sandbox execution is **confirmed** through the retained Dr.-Unterweger #810 Git-preview/OIDC controller. Bound runs have reached real `Sandbox.create` and clean stop. The current #810 cross-private-repo source-fetch design fails closed before Research source staging because the host-side sensitive `GITHUB_READ_TOKEN` is absent; source/OCI product-runtime credit therefore remains zero.
+
+The tokenless #625 development baseline must not regain `GITHUB_READ_TOKEN` or mandatory private EntityOS staging merely to obtain lower-layer execution. Conversely, tokenless baseline evidence can never substitute for the final EntityOS-bearing image required by owner authority.
+
+The authorized Daytona fallback remains a provider option, but the current ChatGPT orchestrator is blocked before Daytona provider contact. That is not evidence Daytona itself is unavailable.
 
 ### Final exact acceptance sequence
 
@@ -73,18 +77,17 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 
 ### Latest cycle delta
 
-**2026-08-17 21:07 +07:00 — the appliance paradigm was made explicit and hardened: immutable read-only runtime, persistent UnifiedDB state, direct managed PTY loop, complete EntityOS in the final image, and two-tier automatic self-healing from known-good logical snapshots.**
+**2026-08-17 21:17 +07:00 — `NO_CANONICAL_RUNTIME_CHANGE`: #625 was re-entered under the newest final-EntityOS authority, stale OCI-path duplication was fenced on its branch, and the current Sandbox execution boundary was corrected.**
 
-- owner directive: sealed VM-like ingress/process/egress continuum plus automatic snapshot recovery;
-- immutable appliance refinement: read-only OCI rootfs, RAM/tmpfs for ephemeral mutation, explicit persistent data areas only;
-- recovery refinement: Tier 1 internal component reconstruction and Tier 2 full container restart from immutable image;
-- manifest updated to encode the same runtime/state/recovery laws;
-- testing strategy requires the adversarial crash/recovery matrix;
-- receipts:
-  - `the artefact/receipts/2026-08-17_ARCH_2107_SEALED_CONTINUUM_SNAPSHOT_RECOVERY_GPT56SOL.json`
-  - `the artefact/receipts/2026-08-17_ARCH_2107_IMMUTABLE_APPLIANCE_SELF_HEALING_GPT56SOL.json`
-- no whole-product PASS claimed and no final OCI runtime evidence added in this architecture update.
+- Canonical product law remains the immutable sealed appliance contract: final accepted ClayVerse MUST contain complete accepted EntityOS and automatic known-good snapshot/self-healing recovery.
+- #625 remains an unmerged development/baseline source lane; tokenless builds may omit EntityOS only with execution disabled and can never receive whole-product PASS.
+- On #625, the stale duplicate `clayverse-artifact-ci.yml` path was retired and a regression fences the single retained `clayverse-artefact-ci.yml` workflow authority. This is source-lane anti-entropy repair, not a canonical runtime promotion.
+- After refreshing the newer owner directive, #625 manifest/test/README were corrected so development tokenlessness cannot be mistaken for final acceptance. Exact GitHub blobs `d25b9b69b0d5eb817549cd5db083955f33d43b50` and `a1ac6828421123b3ad09d2e7d775d66ff5e4a578` were byte-bound with `git hash-object`; the selected manifest-only acceptance-fence regression passed **1/1 in 0.66s** in the authorized isolated OpenAI container.
+- Superseding branch receipt: `the artefact/receipts/2026-08-17_GO_2117_PR625_FINAL_ENTITYOS_AUTHORITY_REENTRY_GPT56SOL.json`. The earlier 21:12 receipt remains valid only for duplicate-workflow/execution-surface scope; any final-EntityOS-optional interpretation is superseded.
+- Vercel classification is aligned with current continuity notices: Sandbox admission is confirmed through #810; its old private-source path is blocked before source staging by absent host-side credential. No source or OCI runtime credit is claimed.
+- No unusual experiment was executed because the shared exact-go trigger identity remains insufficient for the atomic experiment lease.
+- Exact OCI build/image digest, complete accepted EntityOS-in-image runtime, immutable/read-only appliance enforcement, sealed-continuum crash/snapshot recovery, Clerk/PTY/Claude and whole-product PASS remain open.
 
 ## Verification
 
-Authorized bounded component evidence exists, but **whole-product PASS is not claimed**. Current work must now converge implementation toward this immutable self-healing appliance contract while maximizing all independently executable tests.
+Authorized bounded component/source evidence exists, but **whole-product PASS is not claimed**. Current work must converge implementation toward this immutable self-healing appliance contract while maximizing all independently executable tests.

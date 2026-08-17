@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import os
 import pty
-import shlex
 import shutil
 import signal
 import struct
@@ -57,8 +56,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
-        if not self.MANAGED_TMUX.is_file():
-            raise TerminalRuntimeError("managed tmux command-surface policy unavailable")
+        if not self.MANAGED_TMUX.is_file() or os.access(self.MANAGED_TMUX, os.W_OK):
+            raise TerminalRuntimeError("managed tmux command-surface policy unavailable or writable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")
 
@@ -77,16 +76,10 @@ class TerminalSessionManager:
 
     @classmethod
     def _tmux_socket(cls, binding: TerminalBinding) -> str:
-        # A tmux client can address sessions inside its connected server. Keep the
-        # two authenticated ClayVerse perspectives on disjoint tmux servers so an
-        # attached client cannot switch from one canonical user's session to the other.
         return f"{cls.TMUX_SOCKET_PREFIX}-{binding.user_id}"
 
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
-        # The browser is attached to tmux, so tmux itself is part of the effect boundary.
-        # Always select the root-owned policy that removes tmux's command prefix/keymap;
-        # never allow an invocation to fall back to user/default tmux configuration.
         return [
             "tmux",
             "-L", cls._tmux_socket(binding),
@@ -111,11 +104,6 @@ class TerminalSessionManager:
         return env
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
-        """Diagnostic-only mirror; never a product MCP authority.
-
-        `managed-mcp.json` is the sole runtime server-definition source. This helper is
-        retained for bounded tests/inspection and is deliberately not called by ensure().
-        """
         binding.home.mkdir(parents=True, exist_ok=True)
         payload = {
             "mcpServers": {
@@ -149,9 +137,6 @@ class TerminalSessionManager:
         if self._has_session(binding):
             return binding
 
-        # /etc/claude-code/managed-mcp.json is an exclusive server set. There is no
-        # user/project MCP file in the launch path. User/session identity reaches the
-        # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
             "--settings", str(self.MANAGED_SETTINGS),
@@ -188,12 +173,11 @@ class TerminalSessionManager:
             f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
             *claude_argv,
         ]
-        command = shlex.join(env_argv)
         cp = subprocess.run(
             self._tmux_argv(
                 binding,
                 "new-session", "-d", "-s", binding.tmux_name,
-                "-c", str(self.workspace), command,
+                "-c", str(self.workspace), *env_argv,
             ),
             capture_output=True,
             text=True,

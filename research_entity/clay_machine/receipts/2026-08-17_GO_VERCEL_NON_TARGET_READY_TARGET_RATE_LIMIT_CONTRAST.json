@@ -1,0 +1,43 @@
+{
+  "schema": "ClayEntityOSVercelAdmissionEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "3c129182c8756a41786da75e209d9288a046b311",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "target_head_observed": "f6d0d3eed8a6992733a9cc764b594415252e91ef",
+  "target_commit_status": {
+    "context": "Vercel",
+    "state": "failure",
+    "provider_blocker": "build-rate-limit",
+    "sandbox_started": false,
+    "interpretation": "provider admission failure before isolated Sandbox execution; not a code/runtime FAIL"
+  },
+  "non_target_preview_observation": {
+    "deployment_id": "dpl_4xqWcrH3MfeWaHWFGvegdXCp8Sjo",
+    "state": "READY",
+    "git_ref": "chatgpt/go-hostcall-abi-bytes-20260817",
+    "git_sha": "6acafd1bf871d773efc9c2783d7cb14539a698ab",
+    "source_stage_observed": true,
+    "full_pytest_status": "SKIP_NON_TARGET_PREVIEW",
+    "canonical_v7_status": "SKIP_NON_TARGET_PREVIEW",
+    "sandbox_acceptance_evidence": false,
+    "interpretation": "Vercel accepted a contemporaneous non-target preview build, but the canonical runner correctly refused to promote it; READY is not EntityOS executable truth"
+  },
+  "discriminator": "The observed blocker is target Git-build admission/rate limiting rather than a general inability of Vercel to accept every preview build. Exact-current-head EntityOS behavior remains unobserved until the target ref is admitted and an isolated Sandbox actually starts.",
+  "last_bounded_verified_entityos_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+  "historical_evidence_transfers_to_current_head": false,
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_step": "Refresh the then-current PR 787 head when Vercel admits its Git-bound target build, then execute the existing exact-head regression-only full-pytest plus canonical v7 one-file EntityOS sequence and stop the Sandbox successfully.",
+  "whole_entityos_pass": false,
+  "vps_or_self_hosted_acceptance_used": false,
+  "together_used": false
+}

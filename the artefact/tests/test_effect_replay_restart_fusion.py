@@ -21,11 +21,12 @@ def test_effect_journal_denies_second_effect_for_same_episode_before_execution(t
 
     # Simulate the narrow post-journal/pre-active-pointer failure window. The
     # persisted journal is authoritative and must prevent a second effect before
-    # any new PENDING record can be created.
+    # any new PENDING record can be created. TurnLifecycle first rebinds the
+    # persisted final effect, then rejects a mismatched retry before EffectGate.
     db.db.execute(
         "UPDATE active_turns SET effect_id=NULL,outcome=NULL WHERE session_id='session:gabriel'"
     )
-    with pytest.raises(RuntimeError, match="automatic replay denied"):
+    with pytest.raises(RuntimeError, match="different effect already persisted for active turn"):
         lifecycle.request_effect("state.noop", "second")
 
     effects = db.db.execute(
@@ -64,6 +65,17 @@ def test_restart_collapses_pending_effect_to_unknown_then_retires_active_turn(tm
     db, lifecycle = _stack(tmp_path)
     opened = lifecycle.begin("effect boundary interrupted")
     row = lifecycle.active()
+
+    # Model a crash after the canonical effect intent was selected but before
+    # the effect outcome completed. Episode-bound PENDING effects are admitted
+    # only from that selected active-turn state.
+    with db.tx() as sql:
+        lifecycle.workspace.select_in_tx(opened["episode_id"], "request_effect")
+        sql.execute(
+            "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
+            ("session:gabriel", opened["causal_id"]),
+        )
+
     journal = EffectJournal(db)
     effect_id = journal.begin(
         opened["episode_id"],

@@ -1,0 +1,46 @@
+{
+  "schema": "clayverse.source-slice-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_branch": "go/pty-input-lease-fence-20260817-1534-sol",
+  "original_candidate_base": "00391e228ef24c34506c1d0a2e22fb0fbe263108",
+  "canonical_main_rejoined": "0b10ddab6fe0c8bc54e03bb0de491f4969ecc8ce",
+  "pre_rejoin_candidate_head": "0b3ba1c881beee3845255c0a07bc303d6f521fda",
+  "rejoin_overlap_check": "terminal_gateway.py and test_terminal_gateway_pty_io.py retained the same canonical blobs on main (3b1aa61e... and f7503cd7...), so intervening main changes did not overlap this repair",
+  "problem": "The Clerk-authenticated WebSocket input path rechecked token expiry after receive, but the worker-thread PTY write loop carried no admitting auth deadline. A frame accepted just before exp could therefore continue through later partial os.write iterations after the Clerk lease expired.",
+  "counterhypothesis": "Because PTY frames are bounded to 65536 bytes, os.write might normally complete immediately and the missing inner deadline check could be operationally irrelevant. This cannot be assumed: current code explicitly handles partial writes, so the security contract must remain correct under that already-admitted partial-write reality.",
+  "repair": {
+    "terminal_gateway": "freeze frame_auth_deadline from the lease that admitted each binary frame; pass that immutable deadline into _write_pty_all; check lease immediately before and after every kernel write so expiry cannot authorize later partial-write continuation or be reported as successful after a blocking syscall crosses the deadline",
+    "reauth_semantics": "reauth may extend future frames but does not retroactively extend an input frame already admitted under an older deadline",
+    "tests": "extend PTY I/O regressions for live partial completion, no-progress failure, expiry during a partial write, already-expired pre-write denial, and source binding of frame deadline into the worker-thread call"
+  },
+  "isolated_source_mechanism_evidence": {
+    "surface": "OpenAI isolated non-production source-slice probe; not the exact ClayVerse OCI runtime",
+    "probe_sha256": "d9d8137c8842b7401cf16d2edccea1e8eecba8f7a5279e90f98a5a8e07be3e4b",
+    "focused_checks": "3/3 PASS: live partial completion; expiry stops continuation; pre-expired frame denied",
+    "counter_reality_discriminator": "PASS: old semantics continued 16/16 bytes after simulated expiry during first 3-byte partial write; repaired semantics stopped after first 3 bytes and failed closed",
+    "scope": "MECHANISM_SUPPORTED only"
+  },
+  "limitations": [
+    "A single blocking os.write that begins while the lease is live may still return after exp; the post-write check detects and fails that crossing but cannot undo bytes already accepted by the kernel.",
+    "No exact branch pytest execution is claimed until an authorized isolated runner actually starts and executes the branch tests.",
+    "No OCI image build/start, real Clerk browser/JWT, PTY/tmux/Claude runtime, restart, or whole-product acceptance is claimed."
+  ],
+  "execution_surface": {
+    "vercel": "current connected surface exposes no direct Sandbox start/exec primitive; repository continuity records Vercel admission/cap blocking for the bridge path",
+    "daytona": "authorized standard fallback remains blocked before provider contact by orchestration DNS in current continuity evidence",
+    "vps": "FORBIDDEN_FOR_CURRENT_TEST_EVIDENCE"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The available user-message trigger time is only minute precision (2026-08-17T15:34+07:00); current GO experiment lease protocol forbids claiming the one global unusual-experiment slot without reproducible canonical trigger identity.",
+    "note": "The deterministic partial-write counter-reality probe is a focused regression/falsifier, not the unusual experiment."
+  },
+  "next_exact_gate": "On the then-current fused head in an actually-started authorized isolated sandbox: run test_terminal_gateway_pty_io.py plus adjacent Clerk WebSocket lease/protocol tests; then exact OCI build/start and real Clerk browser -> WebSocket PTY -> persistent tmux -> Claude input expiry/reauth acceptance. Capture source SHA, image digest, commands, exits, logs and provider state.",
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_RUNTIME_UNVERIFIED"
+}

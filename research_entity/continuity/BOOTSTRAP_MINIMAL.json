@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.3",
+  "schema_version": "5.4",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -18,6 +18,8 @@
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
   "vercel_sandbox_execution_path_notice": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
+  "daytona_fallback_directive": "research_entity/global/DAYTONA_SANDBOX_FALLBACK_DIRECTIVE.md",
+  "daytona_sandbox_execution_path_notice": "research_entity/continuity/DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT.md",
   "go_experiment_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "artifact_manifest": "the artefact/manifest.json",
@@ -38,14 +40,16 @@
     "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT",
     "load PROGRAM_STATE and the artefact/manifest.json",
     "load VERCEL_SANDBOX_EXECUTION_PATH_CURRENT before declaring Vercel execution unavailable",
+    "load DAYTONA_SANDBOX_FALLBACK_DIRECTIVE and DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT before treating a Vercel admission/runtime blocker as a global execution blocker",
     "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
     "refresh task-relevant current artifact code, receipts and parallel work",
     "avoid duplicate canonical implementations and stale writes",
     "for exact go, use only the protocol's single canonical trigger_key encoding; create-only lock paths with alternate timestamp/hash formatting are invalid",
     "if no immutable request/turn id is shared and the exact user-message timestamp lacks whole-second precision or reproducible uniqueness, set COORDINATION_BLOCKED and execute no unusual experiment",
     "after any canonical claim, fence legacy/noncanonical semantic duplicate claims for the same user turn before executing; any duplicate means EXPERIMENT_BUDGET_RACE_VIOLATION and closes the slot",
-    "execute build/test/runtime validation only in authorized isolated environments; prefer Vercel Sandbox when an executable surface is available",
+    "execute build/test/runtime validation only in authorized isolated environments; use Vercel when admitted and runtime-capable, otherwise use Daytona as the standard isolated fallback when admitted",
     "do not equate absence of direct ChatGPT Vercel MCP Sandbox lifecycle actions with Sandbox unavailability; the confirmed Dr.-Unterweger Git-preview + @vercel/sandbox/OIDC bridge may orchestrate actual isolated Sandbox execution, subject to current Vercel admission/rate limits",
+    "do not equate an orchestration-network failure before Daytona provider contact with Daytona Sandbox unavailability; refresh the Daytona execution-path notice and use approved secret/environment injection only",
     "never use VPS/self-hosted/production hosts as current test evidence",
     "continue go until the useful unblocked single-container ClayVerse frontier is exhausted"
   ],
@@ -75,12 +79,14 @@
     "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
   },
   "execution_authorization": {
-    "vercel_sandbox": "AUTHORIZED_AND_PREFERRED_WHEN_EXECUTABLE_SURFACE_IS_AVAILABLE",
+    "vercel_sandbox": "AUTHORIZED_AND_PREFERRED_WHEN_ADMITTED_AND_RUNTIME_CAPABLE",
     "vercel_sandbox_bridge": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_ORCHESTRATION_PLUS_AT_VERCEL_SANDBOX_OIDC; DIRECT_CHATGPT_MCP_LIFECYCLE_ACTIONS_NOT_REQUIRED; CHECK_CURRENT_PREVIEW_ADMISSION",
+    "daytona_sandbox": "AUTHORIZED_STANDARD_FALLBACK_WHEN_VERCEL_IS_ADMISSION_BLOCKED_UNAVAILABLE_TO_THE_WORKER_OR_RUNTIME_INCAPABLE_BEFORE_PRODUCT_ASSERTIONS",
+    "daytona_credentials": "SECRET_ENVIRONMENT_OR_APPROVED_SECRET_STORE_ONLY_NEVER_COMMIT_OR_ECHO",
     "other_isolated_tools": "AUTHORIZED_WHEN_NEEDED_AND_NON_PRODUCTION",
     "vps_testing": "FORBIDDEN",
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN"
   },
-  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
+  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. Provider order is Vercel when admitted and capable, then Daytona fallback, then explicit blocker. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
 }

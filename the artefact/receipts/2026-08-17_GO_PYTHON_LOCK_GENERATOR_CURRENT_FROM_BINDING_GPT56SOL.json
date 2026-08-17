@@ -1,0 +1,71 @@
+{
+  "schema": "clayverse.python-lock-generator-source-receipt/v3",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "gpt-5.6-sol-chatgpt-project-organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_branch": "go/python-hash-lock-current-main-20260817-1502-sol",
+  "candidate_base": "1e749ed5a16e1003287113683c3f36b1bf2aa412",
+  "merged_to_main_commit": "972e7037bbd38246ec1b4eae70d6dd8e25849339",
+  "supersedes_closed_pr": 379,
+  "canonical_generator_pr": 558,
+  "problem": "The prior PR379 generator derived BASE_IMAGE only from an ARG BASE_IMAGE line, while current ClayVerse Dockerfile directly begins with a digest-pinned FROM python image and has no ARG BASE_IMAGE. Reusing PR379 unchanged would fail before dependency resolution and would not bind the generator to the current product Dockerfile contract.",
+  "repair": {
+    "workflow_path": ".github/workflows/clayverse-python-lock-generator.yml",
+    "workflow_git_blob": "98c4d533a24114c3d78843be10fcffff0410de48",
+    "test_path": "the artefact/tests/test_python_lock_generator_source_binding.py",
+    "test_git_blob": "55eb1548dd314c5bcd042d5a8d7b4004c8d404eb",
+    "dockerfile_git_blob": "f573055d34aef3c983135eddc00cb908cf9fd997",
+    "derived_base_image": "python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91",
+    "source_binding": "FIRST_FROM_IMAGE_FROM_CHECKED_OUT_PRODUCT_DOCKERFILE_PLUS_REQUIREMENTS_SHA256",
+    "parallel_hardcoded_product_semantics": false,
+    "lock_generation": "TWO_PIP_COMPILE_GENERATE_HASHES_PASSES_MUST_BE_BYTE_IDENTICAL",
+    "hash_enforcement": "PIP_DOWNLOAD_ONLY_BINARY_REQUIRE_HASHES"
+  },
+  "isolated_source_test": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "command": "python -m pytest -q 'the artefact/tests/test_python_lock_generator_source_binding.py'",
+    "result": "4 passed in 0.05s",
+    "base_image_extraction": "PASS",
+    "network_dependency_resolution_executed": false
+  },
+  "github_actions_execution_admission": {
+    "workflow_run": 32009163771,
+    "job": 95324790479,
+    "tested_head": "90e18ce4491580376f062ff4f9d95521ca6accca",
+    "conclusion": "failure",
+    "steps": [],
+    "runner_id": 0,
+    "runner_name": "",
+    "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_STEP_EXECUTION_NOT_GENERATOR_FAIL",
+    "lock_bytes_generated": false
+  },
+  "vercel_execution_admission": {
+    "staging_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_pr": 839,
+    "staging_commit": "45608a513d1fec2db8b39c693eac0fcba55e34bf",
+    "status": "BLOCKED_BEFORE_BUILD_OR_SANDBOX_START",
+    "provider_status": "Deployment rate limited — retry in 24 hours.",
+    "lock_bytes_generated": false,
+    "existing_main_http_surfaces": {
+      "sandbox_probe": "FIXED_READ_ONLY_DIAGNOSTIC_REQUIRES_APP_BEARER_TOKEN_NOT_A_CURRENT_SOURCE_EXECUTION_ENDPOINT",
+      "go_cycle_v2": "BUILD_INTERNAL_ONLY_404",
+      "reusable_current_source_generator_endpoint": false
+    }
+  },
+  "unusual_experiment": {
+    "added_by_this_lane": 0,
+    "classification": "ORDINARY_DETERMINISTIC_SOURCE_REGRESSION_ONLY"
+  },
+  "claims": {
+    "stale_generator_contract_repaired": true,
+    "source_binding_mechanism_supported": true,
+    "requirements_hash_lock_generated": false,
+    "docker_require_hashes_enabled": false,
+    "oci_build_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "next_gate": "No currently observed authorized networked execution surface admitted this exact generator run: GitHub hosted runner failed before steps and the Vercel staging deployment was rejected before build/Sandbox start by the daily cap. When execution admission returns, refresh current main first and run one coordinated exact-current dependency-resolution batch. Persist the generated lock only after two byte-identical generations plus --require-hashes wheel download verification; then switch the ClayVerse Dockerfile to consume that exact lock with --require-hashes and continue to exact OCI build/start/readiness evidence.",
+  "evidence_scope": "SOURCE_MECHANISM_SUPPORTED_AND_EXECUTION_ADMISSION_BOUND; NETWORK_RESOLUTION_AND_PRODUCT_RUNTIME_UNEXECUTED"
+}

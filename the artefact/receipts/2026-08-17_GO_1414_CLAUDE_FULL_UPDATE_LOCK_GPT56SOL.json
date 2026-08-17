@@ -1,0 +1,45 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T14:14:37+07:00",
+  "rebased_at": "2026-08-17T14:29:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "4b8ce693a7eb127611279975bc857c44a081338e",
+  "branch": "go/claude-full-update-lock-20260817-1412",
+  "finding": {
+    "classification": "CLAUDE_RUNTIME_SUPPLY_CHAIN_IMMUTABILITY_GAP",
+    "observed": "Canonical image and managed Claude launch used DISABLE_AUTOUPDATER=1 rather than the documented full update lock.",
+    "risk": "Manual Claude update/install paths could diverge runtime bytes from the repository-owned locked artifact identity."
+  },
+  "repair": {
+    "image_env": "DISABLE_UPDATES=1",
+    "launch_env": "DISABLE_UPDATES=1",
+    "managed_settings_env": "DISABLE_UPDATES=1",
+    "removed_weaker_variable": "DISABLE_AUTOUPDATER=1",
+    "authority_change": false,
+    "new_capability": false
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "scope": "focused reconstructed image/policy/launch source semantics",
+    "result": "1 passed in 0.03s",
+    "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_VERIFIED",
+    "packaged_claude_started": false,
+    "oci_image_built": false
+  },
+  "rebase": {
+    "reason": "Original draft became non-mergeable after parallel tmux hardening landed on main.",
+    "action": "Rebuilt from current main, preserving the new tmux transport-only attestation and applying only the update-lock delta."
+  },
+  "vercel": {
+    "status": "EXECUTION_ADMISSION_BLOCKED",
+    "reason": "Observed deployment rate limit before build/Sandbox start; no duplicate attempt was made."
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_added_by_this_lane": 0
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_PASS",
+  "next_gate": "Actually-started exact-current OCI run proving DISABLE_UPDATES reaches the packaged Claude runtime and manual update/install cannot mutate locked runtime bytes."
+}

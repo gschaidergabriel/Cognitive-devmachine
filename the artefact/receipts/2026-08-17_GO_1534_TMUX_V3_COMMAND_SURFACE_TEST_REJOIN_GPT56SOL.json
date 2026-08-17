@@ -1,0 +1,71 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:34+07:00",
+  "organ": "GPT-5.6 Sol / current ChatGPT project worker",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "go/tmux-v3-command-surface-test-rejoin-20260817-gpt56sol",
+  "main_observed_before_branch_work": "50e64571bc5d6cf73bfd93de95ed9187a7341673",
+  "frontier": "After PR #571 moved the managed tmux contract to transport-v3 and PR #580 fused policy reapplication/control timeouts, the retained test_tmux_command_surface_fence.py still encoded the v2 marker and a four-check attestation shape, creating current-main regression drift.",
+  "repair": [
+    "Update the retained command-surface regression to transport-v3 without changing product code.",
+    "Cover status=off, mouse=off and deny-shell default-shell in the effective attestation helper and expected sequence.",
+    "Require existing-session source-file policy reapplication before v3 attestation.",
+    "Require new-session creation to preserve managed direct-argv semantics and reapply policy before attestation.",
+    "Keep the current 2-second control timeout and root-owned/read-only policy obligations visible in the retained regression."
+  ],
+  "exact_source_blobs": {
+    "current_main_terminal_sessions": "185a748f80011b324b2c4786644ad42ff369203e",
+    "stale_current_main_command_surface_test": "15ae3be48cc8b808c4aca42e5cd1d08220457c4b",
+    "candidate_command_surface_test": "eea577f6edbe53243919b15a952f78efb344bc34",
+    "current_terminal_isolation_test": "f3c6bc0adb6fa115cf5287ab138b5687ca977b37",
+    "current_managed_tmux_policy": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "timeout_test_donor": "e49c1bcd9c3d228a926dc08902b41e490034b599"
+  },
+  "ordinary_isolated_source_regression": {
+    "surface": "OpenAI isolated non-production container reconstructed exact current product/source blobs",
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2"
+    },
+    "identity_checks": [
+      "current product terminal_sessions.py git hash-object == 185a748f80011b324b2c4786644ad42ff369203e",
+      "candidate command-surface test git hash-object == eea577f6edbe53243919b15a952f78efb344bc34",
+      "current terminal-isolation test git hash-object == f3c6bc0adb6fa115cf5287ab138b5687ca977b37",
+      "current managed tmux policy git hash-object == fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+    ],
+    "predecessor_drift": "Current GitHub command-surface test blob 15ae3be... explicitly requires MANAGED_TMUX_POLICY_ID.endswith('-v2') and omits status/mouse/default-shell attestation despite current v3 product policy.",
+    "green_gate": {
+      "command": "PYTHONPATH=. python3 -m pytest -q tests/test_terminal_tmux_control_timeouts.py tests/test_tmux_command_surface_fence.py tests/test_terminal_tmux_isolation.py",
+      "exit_code": 0,
+      "observed": "22 passed in 0.05s"
+    },
+    "evidence_class": "EXACT_CURRENT_DERIVED_TEST_CONVERGENCE_SOURCE_SLICE_PASS_NOT_LIVE_TMUX_NOT_OCI_PASS"
+  },
+  "counterhypothesis": "Test convergence can hide a runtime mismatch if real packaged tmux reports sourced options or command metadata differently; only live exact-container tmux execution can settle that.",
+  "next_runtime_falsifier": "On the first actually-started authorized Vercel/Daytona runtime, retain a pre-policy tmux server across the current image upgrade, require v3 source-file reapply plus full effective attestation, force slow control operations to hit fail-closed bounds, then verify healthy attach before continuing exact OCI/readiness/restart/concurrency acceptance.",
+  "execution_admission": {
+    "vercel": "CURRENT_FREE_PREVIEW_DAILY_CAP_BLOCKED_BEFORE_NEW_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "product_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision trigger metadata is shared and no immutable request/turn identifier is exposed."
+  },
+  "security": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false,
+    "secret_value_recorded": false
+  },
+  "non_claims": [
+    "No live tmux runtime PASS is claimed.",
+    "No exact OCI/Clerk/browser/Claude runtime PASS is claimed.",
+    "No whole ClayVerse PASS is claimed."
+  ]
+}

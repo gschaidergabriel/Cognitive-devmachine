@@ -1,0 +1,47 @@
+{
+  "schema": "clayverse-go-execution-admission-receipt/v1",
+  "recorded_at": "2026-08-17T14:08+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "trigger_source_time": "2026-08-17T13:42+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_write": "1b6f182111085b5729b96b7c2556f292f108cab4",
+  "canonical_source_state": {
+    "mcp_exact_allowlist_fused": true,
+    "canonical_fusion_commit": "c8910ea1c39e2188b2c85ea0f2ed5419230a6db6",
+    "terminal_sessions_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+    "allowed_tools": ["mcp__clayverse__session_state", "mcp__clayverse__request_effect"],
+    "managed_tmux_preserved": true
+  },
+  "vercel_staging": {
+    "repo": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-mcp-tool-surface-vercel-20260817-1356",
+    "head": "fc964f3343d7ee34fe5ed22723602501cffb375f",
+    "staged_terminal_sessions_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+    "exact_blob_match": true,
+    "runner": "mcp/vercel-sandbox-mcp/scripts/run-mcp-tool-surface-sandbox.mjs",
+    "runner_contract": "create Python 3.13 Vercel Sandbox; verify exact staged git blob; stage candidate; switch network policy to deny-all; probe both canonical users for exact MCP allowlist, dontAsk, empty built-in tool list, per-user tmux socket and root-owned managed tmux config; stop Sandbox"
+  },
+  "vercel_observation": {
+    "commit_status": "failure",
+    "description": "Deployment rate limited — retry in 24 hours.",
+    "build_started": false,
+    "sandbox_started": false,
+    "test_started": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAILURE"
+  },
+  "go_unusual_experiment": {
+    "executed_by_this_organ": false,
+    "state_for_13_42_trigger": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The immutable user trigger timestamp exposed to this organ has minute precision only, so no unique whole-second/request-id experiment key can be admitted. The Vercel staging above is ordinary deterministic regression work."
+  },
+  "security_constraints": {
+    "vps_or_self_hosted_testing_used": false,
+    "production_testing_used": false,
+    "together_used": false
+  },
+  "claim_level": "SOURCE_MECHANISM_FUSED_EXECUTION_ADMISSION_BLOCKED",
+  "whole_product_pass": false,
+  "next_gate": "When Vercel preview admission is available, execute the already-staged exact-blob Sandbox regression, then verify the packaged Claude Code runtime and continue exact OCI/browser/Clerk/PTY/restart acceptance."
+}

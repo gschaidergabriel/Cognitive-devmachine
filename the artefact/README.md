@@ -24,7 +24,7 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 - **#622** Python hash-lock generator — retained source candidate/unexecuted; no canonical `requirements.lock.txt` accepted yet.
 - **#623** auth/identity/readiness/reauth drift lane — retained source/mechanism candidate; not exact OCI/runtime evidence.
 - **#602** managed native-Claude process attestation — downstream of exact in-image #611.
-- **#625** tokenless canonical baseline packaging — observed during the 20:53 cycle advancing through head `951c14d03f88c2b1ec3a4fa30c95e5c175e18d03`; remains Draft/source candidate, now with bounded focused lower-layer evidence plus optional-EntityOS build-context, service/compose and manifest authority fences. The branch is moving concurrently and must be freshly rejoined before promotion.
+- **#625** tokenless canonical baseline packaging — observed through receipt commit `dec0509e57cd0ef987cef05274931186912a8f9b` during this cycle; remains Draft/source candidate with bounded focused source evidence plus optional-EntityOS build-context, service/compose, manifest authority and digest-bound bridge component-runtime fences. The branch is moving concurrently and must be freshly rejoined before promotion.
 - Dr.-Unterweger **#810** remains historical/retained controller evidence; its `GITHUB_READ_TOKEN` cross-private-repo staging path is not the preferred baseline route.
 
 ### Tokenless baseline decision
@@ -58,7 +58,7 @@ Missing one runner must never suppress tests that can execute independently. Moc
 
 ### Current execution boundary
 
-Fresh Vercel connector inspection in the 20:53 cycle still exposed only project `dr-unterweger`; no project was directly connected to `gschaidergabriel/clay-global-research-entity`.
+Fresh Vercel connector inspection in this cycle exposes documentation/project tooling but no direct Sandbox start/exec surface for this repo; no project is directly connected to `gschaidergabriel/clay-global-research-entity`.
 
 This state remains classified as:
 
@@ -80,21 +80,20 @@ Whole-product PASS requires this exact closure. Source inspection, static tests,
 
 ### Latest cycle delta
 
-**2026-08-17 20:53 +07:00 — #625 tokenless baseline was adversarially narrowed, its product-authority manifest was aligned, and lower-layer tests were expanded; no product-code promotion to `main` and no OCI PASS.**
+**2026-08-17 21:01 +07:00 — #625 tokenless baseline was adversarially narrowed, its product/runtime optional-EntityOS contract was aligned, and bounded component-runtime evidence was added; no product-code promotion to `main` and no OCI PASS.**
 
 - parallel #625 review found a supply-chain boundary defect: recursive `!build-assets/entityos/**` could admit arbitrary sibling bytes into the OCI build context;
-- #625 was repaired to allow only `build-assets/entityos/.keep` and exact `build-assets/entityos/EntityOS`, with a regression forbidding restoration of the recursive wildcard;
-- parallel focused packaging/build-context and stager evidence remained bounded source-contract support;
-- this organ found a separate authority drift: Dockerfile/README made EntityOS optional for the baseline while `manifest.json` still stated staged bytes were mandatory and retained an unconditional final EntityOS runtime gate;
-- repaired manifest blob `c89269e8dd65aa7dd173dcb53a248c1c88aa8d39` and added packaging regression blob `85508bef83aac154d0cfe845cd875dea5b479183`;
-- exact reconstructed focused source-contract suite on the bound Dockerfile/.dockerignore/.gitignore/stager/manifest/test blobs: **6/6 PASS**, plus focused `py_compile` and `sh -n` PASS;
-- a separate exact-file check bound `service.py` blob `c9151e339c0ec4b23a454ee7684a6bd9255bf229` and focused test blob `bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021`: **4/4 PASS** for baseline absence, execution-without-pin, unpinned regular bytes and unpinned symlink fail-closed behavior. Unrelated import-time dependencies were deterministic stubs, so this is supporting mechanism evidence only;
-- the first service reconstruction attempt was rejected before execution credit because its local test file did not match the Git blob; only the byte-exact rerun is retained;
-- new service addendum receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_OPTIONAL_SERVICE_ADDENDUM_GPT56SOL.json`;
-- new manifest receipt on #625: `the artefact/receipts/2026-08-17_GO_2053_PR625_MANIFEST_OPTIONAL_ENTITYOS_FENCE_GPT56SOL.json`;
-- earlier parallel build-context receipt remains: `the artefact/receipts/2026-08-17_GO_2053_PR625_ENTITYOS_BUILD_CONTEXT_FENCE_GPT56SOL.json`;
+- #625 was repaired to allow only `build-assets/entityos/.keep` and exact `build-assets/entityos/EntityOS`, with regression coverage forbidding restoration of the recursive wildcard;
+- a separate authority drift was found and repaired: Dockerfile/README made EntityOS optional for the baseline while `manifest.json` still stated staged bytes were mandatory and retained an unconditional final EntityOS runtime gate;
+- repaired manifest blob `c89269e8dd65aa7dd173dcb53a248c1c88aa8d39` is now aligned with the optional-baseline law and fenced by source-contract tests;
+- a second runtime-contract contradiction was found and repaired in the same #625 lane: tokenless packaging could omit EntityOS while normal `_entityos_config()` still required SHA/artifact; current service logic admits absence only with execution disabled and no unpinned bytes present, while execution-without-pin/unpinned-file/unpinned-symlink remain fail-closed;
+- bounded focused source/service checks remain supporting evidence only; unrelated imports may be stubbed in the narrow mechanism reconstructions and do not earn packaged-service or OCI credit;
+- this organ independently rebound exact `the artefact/clayverse/entityos_bridge.py` blob `3118cb6a6758ec1612a33ff3c6766c937d79d4ac` and executed the real bridge on an OpenAI isolated Linux container: sealed-memfd verify PASS, pinned `/bin/true` snapshot execution PASS, mutable-path byte replacement FAIL_CLOSED on digest mismatch, symlink substitution FAIL_CLOSED; **4/4 PASS**;
+- component receipt: `the artefact/receipts/2026-08-17_GO_2101_PR625_ENTITYOS_MEMFD_COMPONENT_GPT56SOL.json` (receipt commit `dec0509e57cd0ef987cef05274931186912a8f9b`);
+- this component result is explicitly below exact in-image/OCI/EffectGate acceptance; final container kernel/seccomp/memfd behavior remains an open discriminator;
+- earlier parallel build-context/service/manifest receipts remain preserved in #625; no duplicate packaging/runtime lane was created;
 - #625 continued moving concurrently during the cycle; do not force-rewrite or infer merge readiness from a stale head;
-- Vercel project inventory remained `dr-unterweger` only; final exact OCI gate remains deferred, not a development stop;
+- direct Vercel Sandbox start/exec is still not exposed for the Research repo; final exact OCI gate remains deferred, not a development stop;
 - unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` because no shared immutable request/turn ID and only minute-precision trigger time were available;
 - no whole-product PASS claimed;
 - no VPS/self-hosted/production test, Together API, paid/final training or secret persistence admitted.

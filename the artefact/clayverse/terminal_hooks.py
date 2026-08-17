@@ -103,7 +103,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "hyperpositions": result.get("hyperpositions", []),
         "agency": _compact_agency(result.get("agency", {})),
         "context": result["context"],
-        "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
+        "effect_law": "Operational external/state-changing effects use mcp__clayverse__request_effect and only verified EffectGate outcomes are operational truth. Durable goal/control changes use only the owner-scoped AgencyGate tools bound to an exact quote from the active user prompt.",
     }
 
     def render() -> str:

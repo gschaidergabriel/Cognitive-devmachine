@@ -104,6 +104,7 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 - exact Git blobs were independently reconstructed and matched before execution: deployment template `788492ef...`, MicroVM contract `1e41ce84...`, focused test `cc7e3cb7...`;
 - focused deterministic regression: **5/5 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
 - YAML semantic probe: `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy has exact empty ingress/egress rule sets;
+- `manifest.json` now explicitly binds the default-deny baseline, deployment-specific reviewed allow-policy requirement and final CNI enforcement gate into the canonical artifact manifest;
 - durable receipt: `receipts/2026-08-17_GO_2254_MICROVM_NETWORK_DEFAULT_DENY_EXACT_BLOBS_GPT56SOL.json`;
 - runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
 - strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required for exact private Research/EntityOS staging before the retained OCI batch can execute;

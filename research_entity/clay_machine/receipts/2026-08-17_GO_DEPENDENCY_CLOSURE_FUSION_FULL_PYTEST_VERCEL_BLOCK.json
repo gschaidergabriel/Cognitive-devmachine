@@ -1,0 +1,56 @@
+{
+  "schema": "ClayGoResearchReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "scope": "ENTITYOS_DEPENDENCY_CLOSURE_FULL_PYTEST_COORDINATION",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "canonical_product_pr_head_observed": "5ac65c1ab03c8961da2c698aa524d36bd01f61d5",
+  "observed": {
+    "historical_deep_integrity_failure_mechanism": "pytest_all collection failed because runtime/claycode_eval_v1/syntax.py imports lark while the historical self-hosted bootstrap installed pytest only",
+    "historical_execution_authority": "CAUSAL_COUNTEREVIDENCE_ONLY_NOT_CURRENT_ACCEPTANCE",
+    "reviewed_dependency_closure": {
+      "requirements_test": "requirements-test.txt",
+      "requirements_test_includes": "requirements-entityos-build.txt",
+      "pytest": "9.1.1",
+      "lark": "1.3.1",
+      "pyinstaller": "6.21.0"
+    },
+    "canonical_runner": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+    "canonical_runner_full_pytest_gate_observed": false,
+    "pr_788": "CLOSED_UNMERGED_AFTER_DEPENDENCY_CLOSURE_FUSION_INTO_PR_787",
+    "pr_789": "CLOSED_UNMERGED_AS_DUPLICATE_SEPARATE_RUNNER_PATH",
+    "duplicate_preview_b976d2d": "READY_DEPLOYMENT_BUT_RUNNER_SKIPPED_NON_TARGET_PREVIEW_NO_SANDBOX_START",
+    "duplicate_preview_5c39cd7": "READY_DEPLOYMENT_BUT_RUNNER_SKIPPED_NON_TARGET_PREVIEW_NO_SANDBOX_START",
+    "current_pr_787_execution": "UNEXECUTED_AT_CURRENT_HEAD",
+    "current_provider_blocker": "VERCEL_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START"
+  },
+  "counterhypotheses": [
+    {
+      "hypothesis": "Adding lark to a requirements file is sufficient to close Deep Integrity.",
+      "status": "REJECTED_AS_INSUFFICIENT",
+      "reason": "A versioned dependency surface must actually be consumed by the exact isolated Sandbox lane, and full pytest collection plus assertions must execute."
+    },
+    {
+      "hypothesis": "A READY Vercel Preview on a dependency branch proves the fix.",
+      "status": "REJECTED_BY_BUILD_LOGS",
+      "reason": "The observed previews returned SKIP_NON_TARGET_PREVIEW and did not start a Sandbox."
+    },
+    {
+      "hypothesis": "A separate Deep Integrity runner should be preserved alongside PR 787.",
+      "status": "REJECTED_BY_COORDINATION_LAW",
+      "reason": "PR 787 owns the single canonical build-internal runner; the duplicate PR 789 was closed unmerged."
+    }
+  ],
+  "experiment_accounting": {
+    "global_unusual_experiment_limit": 1,
+    "new_unusual_experiments_from_this_receipt_lane": 0,
+    "slot_owner": "PR_787_ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "slot_state_observed": "RESERVED_NOT_CONSUMED",
+    "rule": "Do not add or execute a second unusual intervention."
+  },
+  "next_exact_sandbox_step": "When Vercel accepts a Git-bound build again, refresh PR 787 to the exact current head; consume the reviewed requirements-test.txt dependency closure in the single canonical build-internal runner; execute full python -m pytest -q tests with collection and all assertions under the isolated Sandbox contract; then continue the same bounded EntityOS acceptance sequence: exact source binding, Git-free ATTESTED_SNAPSHOT_V2 twin one-file build, self-test, no-host-Python, relocation, only the preregistered content-tamper falsifier, sanitized-Git inherited regression matrix, attested-vs-Git artifact identity comparison, external digest verification, DENY_ALL during tests and successful Sandbox stop.",
+  "promotion": "NOT_ALLOWED_YET",
+  "whole_entityos_acceptance": false,
+  "negative_evidence_preserved": true
+}

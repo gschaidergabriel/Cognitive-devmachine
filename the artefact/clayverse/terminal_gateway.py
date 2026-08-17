@@ -180,7 +180,7 @@ window.addEventListener('load', async () => {{
                 raise AuthenticationError("authentication must be first message")
             token = _auth_token(hello)
             rows, cols = _terminal_dimensions(hello)
-            claims = verifier.verify(token)
+            claims = await asyncio.to_thread(verifier.verify, token)
             user_id, session_id = identity.resolve(str(claims["sub"]))
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
             if binding.session_id != session_id:

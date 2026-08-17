@@ -1,0 +1,71 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "d00fe7bebee29a7f2ffbcd6b16f455e557b23d29",
+  "source_branch": "go/clerk-require-active-status-20260817-1356",
+  "finding": {
+    "classification": "CLERK_SESSION_STATUS_FAIL_OPEN_GAP",
+    "observed": "Current canonical Clerk verifier already rejected actor/impersonation tokens and sts=pending, but accepted a signed session-bound token when sts was missing or carried an unrecognized value.",
+    "product_contract": "The baseline browser/WebSocket PTY admits only a direct Clerk session whose current session-status claim is exactly active. Unknown or absent status fails closed before canonical-user mapping."
+  },
+  "parallel_fusion_reentry": {
+    "already_on_main_at_base": [
+      "single canonical Clerk verifier implementation in clayverse.clerk_auth",
+      "legacy clayverse.adapters Clerk names re-export canonical objects",
+      "tests exercise canonical verifier",
+      "actor/impersonation rejection",
+      "explicit pending-session rejection"
+    ],
+    "this_delta_only": "replace pending-only status rejection with exact sts == active admission and update affected active-session fixtures/falsifiers"
+  },
+  "external_primary_evidence": [
+    {
+      "source": "https://clerk.com/docs/guides/sessions/session-tokens",
+      "observation": "Current Clerk session-token documentation includes the sts session-status claim and act actor information for impersonation."
+    },
+    {
+      "source": "https://clerk.com/docs/react-router/reference/types/session-status",
+      "observation": "Clerk defines active as a valid session where all activity is allowed and pending as signed-in with outstanding session tasks."
+    }
+  ],
+  "repair": {
+    "canonical_file": "the artefact/clayverse/clerk_auth.py",
+    "admission_rule": "claims.get('sts') == 'active'",
+    "rejects": ["pending", "missing", "unknown/non-active"],
+    "actor_rejection_preserved": true,
+    "authorized_party_signature_issuer_temporal_sid_sub_checks_preserved": true
+  },
+  "bounded_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "classification": "MECHANISM_REPLICATION_NOT_EXACT_CHECKOUT",
+    "python": "3.13.5",
+    "pyjwt": "2.13.0",
+    "cryptography": "46.0.4",
+    "pytest": "9.0.2",
+    "focused_tests_passed": 5,
+    "focused_tests_failed": 0,
+    "compile_check": "PASS",
+    "covers": [
+      "legacy adapter aliases canonical verifier",
+      "valid active direct session",
+      "missing/empty sid",
+      "actor/impersonation",
+      "pending status",
+      "missing status",
+      "unknown status",
+      "missing/future nbf"
+    ],
+    "scope_limit": "Mechanism-level reconstruction from exact branch source semantics. Not an exact private-repository checkout, not exact OCI runtime, not live Clerk/JWKS rotation, not browser WebSocket PTY, and not whole-product PASS."
+  },
+  "go_experiment_accounting": {
+    "classification": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Shared metadata for this exact go provides only minute-level trigger time; the current atomic experiment protocol requires at least whole-second precision for fallback trigger identity. No unusual experiment is claimed."
+  },
+  "whole_product_evidence": false,
+  "acceptance": "IN_PROGRESS",
+  "next_exact_gate": "Actually start the then-current authorized isolated exact checkout/image and verify a real Clerk v2 active token is admitted while pending/missing/unknown status and impersonation are rejected before gabriel/andreas PTY mapping; then exercise JWKS rotation and browser WebSocket PTY."
+}

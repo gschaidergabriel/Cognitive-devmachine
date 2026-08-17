@@ -1,0 +1,81 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "recorded_at": "2026-08-17T22:56:35+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "REFINES",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_fusion": "79cdde5232e7047e2dabcd5e51a95da173e13bec",
+  "frontier": "re-enter the newly mandatory MicroVM boundary, avoid duplicate NetworkPolicy repair, and preserve the credential-blocked single OCI execution lane",
+  "coordination": {
+    "work_branch": "gpt56sol/go-2250-reentry-20260817",
+    "retained_tmux_pr": 611,
+    "retained_tmux_head_observed": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "retained_python_lock_pr": 622,
+    "retained_python_lock_head_observed": "3b47c65dfbf97e15c50f9c49272d73a082f2bfcf",
+    "retained_identity_pr": 623,
+    "retained_identity_head_observed": "3434408612ee44599ff0da033343970f575d6806",
+    "retained_oci_controller": "gschaidergabriel/Dr.-Unterweger#810",
+    "retained_oci_controller_head_observed": "78d92753d9442c66c3ffcff127c31faa98ffd622",
+    "duplicate_network_policy_lane_created": false,
+    "duplicate_oci_lane_created": false
+  },
+  "observed": {
+    "microvm_template_blob": "788492efedcdc47c9a308bb5ecbbce79fdd8f380",
+    "microvm_contract_test_blob": "cc7e3cb7628314c51534330878ca886bc464713e",
+    "network_policy_name": "clayverse-default-deny",
+    "network_policy_types": ["Ingress", "Egress"],
+    "network_policy_ingress_rules": [],
+    "network_policy_egress_rules": [],
+    "allow_all_ipv4_present": false,
+    "allow_all_ipv6_present": false,
+    "primary_oci_controller_last_observed_sandbox_admission": "PASS_CREATED",
+    "primary_oci_controller_blocker": "PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+    "connected_vercel_environment_secret_write_action": false
+  },
+  "hypothesis": "A default-deny Kubernetes NetworkPolicy on the ClayVerse pod removes the source-level fail-open network posture while keeping deployment-specific ingress/egress admission explicit and reviewable.",
+  "counterhypothesis": "A NetworkPolicy object alone does not prove network isolation because enforcement depends on an admitted NetworkPolicy-capable CNI/runtime configuration and the deployment-specific allow rules remain unexecuted.",
+  "counterhypothesis_status": "RETAINED",
+  "source_delta": {
+    "canonical_product_runtime_bytes_changed_by_this_organ": false,
+    "reason": "parallel re-entry landed the exact default-deny policy on main before this organ wrote; duplicate implementation was intentionally avoided",
+    "documentation_and_receipt_only": true
+  },
+  "bounded_execution": {
+    "executor": "OpenAI isolated non-production Python sandbox",
+    "source_reconstruction": "template bytes reconstructed from current GitHub connector content and verified against the Git blob identity",
+    "blob_hash_match": true,
+    "focused_network_assertions": "10/10 PASS",
+    "canonical_pytest_started": false,
+    "canonical_pytest_not_started_reason": "sandbox DNS could not resolve raw.githubusercontent.com while attempting independent source fetch",
+    "cni_or_kata_runtime_executed": false
+  },
+  "evidence_class": "EXACT_BLOB_BOUNDED_SOURCE_MECHANISM_PASS",
+  "runtime_credit": 0,
+  "source_runtime_credit": 0,
+  "oci_runtime_credit": 0,
+  "unusual_experiment": {
+    "executed": false,
+    "valid_credit": 0,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "the shared go trigger exposes only minute precision and no safely shared immutable request/turn identifier; no seconds were synthesized"
+  },
+  "acceptance": "IN_PROGRESS",
+  "open_gates": [
+    "provision host-side sensitive Vercel Preview GITHUB_READ_TOKEN on the retained #810 controller without forwarding it into Sandbox",
+    "rebind retained #810 exactly once to then-current Research/#611/#622 and deliberately reviewed #623 immediately before credential-capable execution",
+    "execute exact private-source regression and build the final ClayVerse OCI image with complete accepted EntityOS",
+    "close Python --require-hashes and remaining supply-chain admission gates",
+    "capture exact image digest and execute startup/readiness, in-image tmux/Claude, Clerk/browser PTY, hooks/effects, persistence/recovery and dual-session generation fencing",
+    "run the same accepted OCI digest behind the mandatory VM/microVM guest-kernel boundary",
+    "prove NetworkPolicy enforcement with an admitted CNI plus deployment-specific least-privilege ingress/egress allow policy",
+    "prove Tier-2 appliance recreation and no blind external-effect replay"
+  ],
+  "security": {
+    "secret_exposed": false,
+    "vps_used": false,
+    "self_hosted_or_production_test_used": false,
+    "together_used": false
+  }
+}

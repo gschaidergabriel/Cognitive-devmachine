@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import time
 
 import pytest
@@ -11,6 +10,7 @@ from clayverse.autonomy import (
     CompletionNotVerified,
     GoalBudget,
 )
+from clayverse.effect_journal import EffectJournal
 from clayverse.store import StaleGeneration, UnifiedDB
 
 
@@ -35,8 +35,22 @@ def _goal(db, controller, *, objective="Finish the bounded task", **kwargs):
     )
 
 
-def _effect(db, effect_id, capability, *, generation=1, status="VERIFIED", ok=True):
-    outcome = json.dumps({"ok": ok}, sort_keys=True) if ok is not None else None
+def _effect(
+    db,
+    effect_id,
+    capability,
+    *,
+    target="autonomy-test",
+    generation=1,
+    status="VERIFIED",
+    ok=True,
+):
+    target_receipt = EffectJournal._payload(EffectJournal._target_receipt(target))
+    outcome = (
+        EffectJournal._payload(EffectJournal._outcome_receipt({"ok": ok}))
+        if ok is not None
+        else None
+    )
     db.db.execute(
         "INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) "
         "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
@@ -45,7 +59,7 @@ def _effect(db, effect_id, capability, *, generation=1, status="VERIFIED", ok=Tr
             None,
             "gabriel",
             capability,
-            "autonomy-test",
+            target_receipt,
             None,
             generation,
             status,
@@ -107,12 +121,33 @@ def test_verified_effect_receipt_is_required_and_capability_bound(tmp_path):
         effect={"capability": "state.noop", "target": "autonomy-test", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _effect(db, "e1", "state.noop")
+    _effect(db, "e1", "state.noop", target="autonomy-test")
     result = controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
     assert result["verified"] is True
     done = controller.verify_completion(goal["goal_id"])
     assert done["status"] == "COMPLETED"
     assert done["evidence"] == "e1"
+
+
+def test_same_capability_wrong_target_receipt_cannot_be_rebound(tmp_path):
+    db = _db(tmp_path)
+    controller = AutonomyController(db)
+    goal = _goal(db, controller, required_capability="state.noop")
+    step = controller.propose_step(
+        goal["goal_id"],
+        "effect",
+        "Verify only the exact requested target",
+        effect={"capability": "state.noop", "target": "expected-target", "argv": None},
+    )
+    controller.admit_step(goal["goal_id"], step["step_id"])
+    _effect(db, "e-wrong", "state.noop", target="different-target")
+    with pytest.raises(PermissionError, match="intent mismatch"):
+        controller.record_effect_result(goal["goal_id"], step["step_id"], "e-wrong")
+    snapshot = controller.snapshot(user_id="gabriel")["goals"][0]
+    assert snapshot["current_step"]["status"] == "ADMITTED"
+    assert snapshot["evidence_effect_ids"] == []
+    with pytest.raises(CompletionNotVerified):
+        controller.verify_completion(goal["goal_id"])
 
 
 def test_pending_effect_never_counts_as_success(tmp_path):
@@ -126,7 +161,7 @@ def test_pending_effect_never_counts_as_success(tmp_path):
         effect={"capability": "state.noop", "target": "x", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _effect(db, "e1", "state.noop", status="PENDING", ok=None)
+    _effect(db, "e1", "state.noop", target="x", status="PENDING", ok=None)
     with pytest.raises(AutonomyStateError):
         controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
     with pytest.raises(CompletionNotVerified):
@@ -144,7 +179,7 @@ def test_wrong_effect_capability_cannot_satisfy_completion(tmp_path):
         effect={"capability": "state.noop", "target": "x", "argv": None},
     )
     controller.admit_step(goal["goal_id"], step["step_id"])
-    _effect(db, "e1", "state.noop")
+    _effect(db, "e1", "state.noop", target="x")
     controller.record_effect_result(goal["goal_id"], step["step_id"], "e1")
     with pytest.raises(CompletionNotVerified):
         controller.verify_completion(goal["goal_id"])
@@ -179,8 +214,8 @@ def test_process_exec_is_denied_at_proposal_boundary(tmp_path):
         controller.propose_step(
             goal["goal_id"],
             "effect",
-            "bypass",
-            effect={"capability": "process.exec", "target": "host", "argv": ["id"]},
+            "forbidden bypass",
+            effect={"capability": "process.exec", "target": "host", "argv": ["probe"]},
         )
 
 

@@ -21,13 +21,20 @@ def _db(tmp_path):
     return db, "session:gabriel"
 
 
-def _episode(db, session_id, label):
-    turn_id = db.append_turn(session_id, "gabriel", "user", label)
+def _episode(db, session_id, label, *, terminal=False):
+    user_id = str(db.db.execute("SELECT user_id FROM sessions WHERE session_id=?", (session_id,)).fetchone()[0])
+    turn_id = db.append_turn(session_id, user_id, "user", label)
     episode_id = str(uuid.uuid4())
+    state = "COMPLETED" if terminal else "OPEN"
     db.db.execute(
         "INSERT INTO workspace_episodes VALUES(?,?,?,?,?,?,?,?)",
-        (episode_id, session_id, time.time(), turn_id, 0.5, "[]", None, "OPEN"),
+        (episode_id, session_id, time.time(), turn_id, 0.5, "[]", None, state),
     )
+    if terminal:
+        db.db.execute(
+            "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
+            (str(uuid.uuid4()), episode_id, None, turn_id, "test-outcome", 1.0, 1, time.time()),
+        )
     return turn_id, episode_id
 
 
@@ -76,8 +83,8 @@ def _query(*, turn_id, episode_id, causal_id, generation, signature=None, goal_s
 
 
 def _promoted_method(db, session_id, *, signature=None, goal_shape="identify_mechanism", counterexample_ids=()):
-    _, e1 = _episode(db, session_id, "source case one")
-    _, e2 = _episode(db, session_id, "source case two")
+    _, e1 = _episode(db, session_id, "source case one", terminal=True)
+    _, e2 = _episode(db, session_id, "source case two", terminal=True)
     manager = MethodMemoryManager(db)
     candidate_id = manager.admit(
         "framework_candidate",
@@ -98,7 +105,7 @@ def _promoted_method(db, session_id, *, signature=None, goal_shape="identify_mec
     )
     promoted = manager.promote(
         candidate_id,
-        evaluation="two independent episodes support transfer",
+        evaluation="two independent terminal causal episodes support transfer",
         provenance={"source": "stageb-test-promotion"},
     )
     return promoted["promoted_memory_id"]

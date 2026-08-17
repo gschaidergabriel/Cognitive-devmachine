@@ -11,7 +11,11 @@ from typing import Any
 import jwt
 from jwt import PyJWKClient
 
-from .inference_protocol import InferenceProtocolError, parse_claude_decision
+from .inference_protocol import (
+    CLAUDE_DECISION_SCHEMA,
+    InferenceProtocolError,
+    parse_claude_decision_payload,
+)
 
 
 class AuthenticationError(PermissionError):
@@ -96,8 +100,8 @@ class ClaudeCodeInference:
 
     Cognition runs with auto-discovery disabled, all built-in tools disabled and no
     Claude session persistence. UnifiedDB/WorldAssembler remains the sole durable
-    memory/world authority. Claude can emit a bounded effect intent, but only the
-    canonical ClayVerse EffectGate can execute it.
+    memory/world authority. Claude may return a schema-validated effect intent, but
+    only the canonical ClayVerse EffectGate can execute it.
     """
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
@@ -123,15 +127,14 @@ class ClaudeCodeInference:
         system = (
             "You are the cognition engine inside ClayVerse, one persistent central entity shared by authenticated users. "
             "UnifiedDB is authoritative state and the supplied WORLD is the only persisted context for this turn. ClayGraph "
-            "is a derived projection. You have no tool authority in this cognition call. Return exactly one JSON object and "
-            "nothing else with keys text and effect. For a normal reply use {\"text\":\"...\",\"effect\":null}. Only when "
-            "the user's intent and required arguments are sufficiently explicit may effect be "
-            "{\"capability\":\"entityos.exec\",\"target\":\"audit label\",\"argv\":[\"arg1\"]} or "
-            "{\"capability\":\"state.noop\",\"target\":\"audit label\",\"argv\":null}. Never request process.exec, a shell, "
-            "or any other capability. If required action parameters are missing, ask for them in text and use effect:null. "
-            "An effect object is only an intent; ClayVerse independently validates and executes it through EffectGate."
+            "is a derived projection. You have no tool authority in this cognition call. Produce the schema-constrained response. "
+            "For a normal reply set effect to null. Only when the user's intent and required arguments are sufficiently explicit "
+            "may you request entityos.exec or state.noop. Never request process.exec, a shell, or any other capability. If required "
+            "action parameters are missing, ask for them in text and set effect to null. An effect is only an intent; ClayVerse "
+            "independently validates and executes it through EffectGate."
         )
         prompt = f"WORLD:\n{world_json}\n\nOBSERVATION:\n{observation}"
+        schema = json.dumps(CLAUDE_DECISION_SCHEMA, sort_keys=True, separators=(",", ":"))
         args = [
             self.binary,
             "--bare",
@@ -139,6 +142,8 @@ class ClaudeCodeInference:
             prompt,
             "--output-format",
             "json",
+            "--json-schema",
+            schema,
             "--max-turns",
             "1",
             "--permission-mode",
@@ -167,12 +172,12 @@ class ClaudeCodeInference:
         if cp.returncode != 0:
             raise RuntimeError(f"Claude Code inference failed rc={cp.returncode}: {cp.stderr[-2000:]}")
         try:
-            payload = json.loads(cp.stdout)
+            envelope = json.loads(cp.stdout)
         except json.JSONDecodeError as exc:
             raise InferenceProtocolError("Claude Code envelope is not JSON") from exc
-        if not isinstance(payload, dict) or payload.get("is_error") is True:
+        if not isinstance(envelope, dict) or envelope.get("is_error") is True:
             raise InferenceProtocolError("Claude Code returned an error envelope")
-        result = payload.get("result")
-        if not isinstance(result, str):
-            raise InferenceProtocolError("Claude Code result field is missing")
-        return parse_claude_decision(result)
+        structured = envelope.get("structured_output")
+        if structured is None:
+            raise InferenceProtocolError("Claude Code structured_output is missing")
+        return parse_claude_decision_payload(structured)

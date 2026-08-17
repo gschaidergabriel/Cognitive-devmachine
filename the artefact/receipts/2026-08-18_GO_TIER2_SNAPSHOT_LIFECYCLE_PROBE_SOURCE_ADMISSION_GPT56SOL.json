@@ -2,6 +2,7 @@
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
   "observed_at_local": "2026-08-18T01:44:00+07:00",
+  "updated_at_local": "2026-08-18T01:45:00+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
@@ -18,15 +19,23 @@
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "pull_request": 810,
     "branch": "clay/fusion-vcr-native-20260817",
-    "head_observed": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
+    "head_observed_before_probe_hardening": "517587ab97bf0a0fd9e78a7d9a3d38a10a120936",
+    "head_observed_after_probe_hardening_and_parallel_writes": "5343a97e4154a982a2e7667c0729a72d57c62f0d",
     "draft": true,
-    "mergeable": true,
+    "mergeable_after_parallel_writes": false,
+    "mergeability_note": "Observed during a rapidly changing parallel hot lane; not treated as product runtime evidence.",
     "runtime_credit": 0
   },
   "probe_source": {
     "path": "mcp/vercel-sandbox-mcp/api/snapshot-lifecycle-probe.js",
     "introduced_commit": "98e7447f1017364394fc8e940e5494cab0908367",
-    "blob_observed_on_current_head": "883729220861e40e0900d4bc54bcf06124e072d5",
+    "preview_fence_hardening_commit": "62abc25a4d9bbb4e15592a82550b9667f8af8d1a",
+    "blob_observed_on_current_head": "d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1",
+    "preview_only_fence": {
+      "required_vercel_env": "preview",
+      "required_git_ref": "clay/fusion-vcr-native-20260817",
+      "receipt_binds_executed_vercel_git_commit_sha": true
+    },
     "classification": "ORDINARY_PROVIDER_CONTRACT_ACCEPTANCE_TEST",
     "purpose": "Discriminate the current Vercel documentation conflict by testing whether an explicit manual snapshot remains addressable after full deletion of its named source sandbox and can instantiate a distinct persistent:false replacement with exact sentinel-byte recovery.",
     "sequence": [
@@ -48,7 +57,7 @@
     }
   },
   "source_evidence": {
-    "probe_present_on_observed_pr810_head": true,
+    "probe_present_on_latest_observed_pr810_head": true,
     "probe_executed": false,
     "snapshot_survival_after_source_delete": "UNKNOWN",
     "tier2_independent_carrier_verified": false,
@@ -85,5 +94,5 @@
     "new_experiment_count": 0,
     "reason": "The shared go unusual-experiment slot was already consumed/unsafe to duplicate; the snapshot lifecycle discriminator is explicitly classified by current canonical Research as an ordinary provider contract acceptance test."
   },
-  "next_exact_step": "Restore authorized Vercel build/execution admission, obtain a Preview whose deployment metadata exactly binds the retained PR810 head containing blob 883729220861e40e0900d4bc54bcf06124e072d5 and passes source guards, then execute the bounded snapshot lifecycle probe. If lifecycle passes, continue full declared Tier2 transfer/OCI/generation/effect/secret-reacquisition/second-cognition gates; if it fails, reject direct manual snapshot carriage and evaluate only explicitly authorized independent durable carriers."
+  "next_exact_step": "Restore authorized Vercel build/execution admission, obtain a Preview whose deployment metadata exactly binds a retained PR810 head containing probe blob d8c9d3cdb0cb5f842bdbe10a5820b4cd5f09c4e1 and passes source guards, then execute the bounded snapshot lifecycle probe. If lifecycle passes, continue full declared Tier2 transfer/OCI/generation/effect/secret-reacquisition/second-cognition gates; if it fails, reject direct manual snapshot carriage and evaluate only explicitly authorized independent durable carriers."
 }

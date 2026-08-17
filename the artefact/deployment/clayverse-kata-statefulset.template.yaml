@@ -2,11 +2,12 @@
 # Replace image and secret/PVC details only after exact artifact acceptance.
 # The installed Kata RuntimeClass name MUST be verified on the target cluster.
 #
-# Network admission is intentionally fail-closed. hostNetwork: false alone is NOT a
-# network-isolation policy. A final deployment MUST prove that its CNI enforces
-# Kubernetes NetworkPolicy and MUST add narrowly scoped site-specific allow policies
-# for the admitted ingress and provider/DNS egress surfaces. Do not replace this
-# baseline with a blanket Internet CIDR allow rule.
+# Network admission is intentionally fail-closed.
+# hostNetwork: false alone is NOT a network-isolation policy.
+# A final deployment MUST prove that its CNI enforces Kubernetes NetworkPolicy and
+# MUST add narrowly scoped site-specific allow policies for the admitted ingress and
+# provider/DNS egress surfaces. Do not replace this baseline with a blanket Internet
+# CIDR allow rule.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

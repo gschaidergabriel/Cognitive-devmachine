@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.2",
+  "schema_version": "5.3",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -17,6 +17,7 @@
   "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
+  "vercel_sandbox_execution_path_notice": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
   "go_experiment_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
   "program_state": "research_entity/rooms/PROGRAM_STATE.json",
   "artifact_manifest": "the artefact/manifest.json",
@@ -36,6 +37,7 @@
     "verify current research main",
     "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT",
     "load PROGRAM_STATE and the artefact/manifest.json",
+    "load VERCEL_SANDBOX_EXECUTION_PATH_CURRENT before declaring Vercel execution unavailable",
     "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
     "refresh task-relevant current artifact code, receipts and parallel work",
     "avoid duplicate canonical implementations and stale writes",
@@ -43,6 +45,7 @@
     "if no immutable request/turn id is shared and the exact user-message timestamp lacks whole-second precision or reproducible uniqueness, set COORDINATION_BLOCKED and execute no unusual experiment",
     "after any canonical claim, fence legacy/noncanonical semantic duplicate claims for the same user turn before executing; any duplicate means EXPERIMENT_BUDGET_RACE_VIOLATION and closes the slot",
     "execute build/test/runtime validation only in authorized isolated environments; prefer Vercel Sandbox when an executable surface is available",
+    "do not equate absence of direct ChatGPT Vercel MCP Sandbox lifecycle actions with Sandbox unavailability; the confirmed Dr.-Unterweger Git-preview + @vercel/sandbox/OIDC bridge may orchestrate actual isolated Sandbox execution, subject to current Vercel admission/rate limits",
     "never use VPS/self-hosted/production hosts as current test evidence",
     "continue go until the useful unblocked single-container ClayVerse frontier is exhausted"
   ],
@@ -73,6 +76,7 @@
   },
   "execution_authorization": {
     "vercel_sandbox": "AUTHORIZED_AND_PREFERRED_WHEN_EXECUTABLE_SURFACE_IS_AVAILABLE",
+    "vercel_sandbox_bridge": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_ORCHESTRATION_PLUS_AT_VERCEL_SANDBOX_OIDC; DIRECT_CHATGPT_MCP_LIFECYCLE_ACTIONS_NOT_REQUIRED; CHECK_CURRENT_PREVIEW_ADMISSION",
     "other_isolated_tools": "AUTHORIZED_WHEN_NEEDED_AND_NON_PRODUCTION",
     "vps_testing": "FORBIDDEN",
     "self_hosted_vps_test_runners": "FORBIDDEN",

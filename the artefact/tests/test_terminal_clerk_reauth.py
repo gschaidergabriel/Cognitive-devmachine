@@ -122,6 +122,7 @@ def test_reauth_revalidates_unifieddb_binding_before_extending_live_socket_lease
     verifier_at = source.index("refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))")
     expiry_at = source.index("refreshed_expiry = _reauthenticated_expiry(", verifier_at)
     identity_at = source.index("_assert_reauth_identity_current,", expiry_at)
-    extend_at = source.index("auth_expires_at = refreshed_expiry", identity_at)
+    post_identity_lease_at = source.index("_require_auth_lease_live(refreshed_expiry)", identity_at)
+    extend_at = source.index("auth_expires_at = refreshed_expiry", post_identity_lease_at)
     publish_at = source.index('"type": "reauthenticated"', extend_at)
-    assert verifier_at < expiry_at < identity_at < extend_at < publish_at
+    assert verifier_at < expiry_at < identity_at < post_identity_lease_at < extend_at < publish_at

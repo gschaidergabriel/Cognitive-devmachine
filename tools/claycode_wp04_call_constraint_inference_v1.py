@@ -25,6 +25,8 @@ SCHEMA = "ClayCodeCallConstraintGraph/v1-research"
 DOMAIN = b"ClayCodeCallConstraintGraph/v1-research\x00"
 OCC_DOMAIN = b"ClayCodeCallOccurrence/v1\x00"
 CONSTRAINT_DOMAIN = b"ClayCodeCallTypeConstraint/v1\x00"
+CONDITION_PATH_SENTINEL = -1
+THEN_REGION_PATH_SENTINEL = -2
 
 
 class CallConstraintError(ValueError):
@@ -118,13 +120,23 @@ def declared_type_names(typed_ir: dict[str, Any]) -> set[str]:
     return names
 
 
-def iter_cycle_ops(region: dict[str, Any]):
+def iter_cycle_ops(region: dict[str, Any], *, prefix: tuple[int, ...] = ()):
+    """Yield each op with an ancestor-preserving structural path.
+
+    Paths are stable semantic location evidence, not execution authority. `-2` marks descent
+    into an IF then-region; `-1` is reserved by the caller for the IF condition. Keeping the
+    ancestor path prevents nested regions from reusing top-level `(0,)`, `(1,)`, ... paths.
+    """
     for op_index, op in enumerate(region.get("ops", [])):
         if not isinstance(op, dict):
             continue
-        yield op_index, op
+        op_path = prefix + (op_index,)
+        yield op_path, op
         if op.get("kind") == "IF":
-            yield from iter_cycle_ops(op["then_region"])
+            then_region = op.get("then_region")
+            if not isinstance(then_region, dict):
+                raise CallConstraintError("IF op missing then_region")
+            yield from iter_cycle_ops(then_region, prefix=op_path + (THEN_REGION_PATH_SENTINEL,))
 
 
 def collect_calls(cycle: dict[str, Any], typed_ir: dict[str, Any]) -> dict[str, Any]:
@@ -198,16 +210,22 @@ def collect_calls(cycle: dict[str, Any], typed_ir: dict[str, Any]) -> dict[str, 
             if child.get("kind"):
                 visit(child, op=op, path=path + (child_index,), parent_call=parent_call, assigned_root=False)
 
-    for op_index, op in iter_cycle_ops(cycle["region"]):
+    for op_path, op in iter_cycle_ops(cycle["region"]):
         if op.get("kind") == "ASSIGN":
             rhs = unwrap_single_expr(op["rhs_ast"])
-            visit(rhs, op=op, path=(op_index,), parent_call=None, assigned_root=node_kind(rhs) == "call")
+            visit(rhs, op=op, path=op_path, parent_call=None, assigned_root=node_kind(rhs) == "call")
         elif op.get("kind") == "EXPR":
             expr = unwrap_single_expr(op["expr_ast"])
-            visit(expr, op=op, path=(op_index,), parent_call=None, assigned_root=False)
+            visit(expr, op=op, path=op_path, parent_call=None, assigned_root=False)
         elif op.get("kind") == "IF":
             # Calls in conditions are inventoried too; current G9 conditions contain none.
-            visit(op["condition_ast"], op=op, path=(op_index, -1), parent_call=None, assigned_root=False)
+            visit(
+                op["condition_ast"],
+                op=op,
+                path=op_path + (CONDITION_PATH_SENTINEL,),
+                parent_call=None,
+                assigned_root=False,
+            )
 
     # Deduplicate constraints by semantic content while preserving deterministic order.
     unique = {row["constraint_sha256"]: row for row in constraints}
@@ -260,6 +278,7 @@ def collect_calls(cycle: dict[str, Any], typed_ir: dict[str, Any]) -> dict[str, 
             "unresolved_call_executes": "FORBIDDEN",
             "constraint_graph_mints_effect_authority": "FORBIDDEN",
             "constraint_graph_mints_truth_authority": "FORBIDDEN",
+            "nested_region_path_collision": "FORBIDDEN",
         },
     }
     graph_hash = sha256(DOMAIN, core)

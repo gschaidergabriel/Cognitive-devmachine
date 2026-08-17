@@ -261,6 +261,8 @@ class MistralInference:
             raise InferenceProtocolError("Mistral response id is missing or invalid")
         if not isinstance(model_returned, str) or not model_returned or len(model_returned) > 256:
             raise InferenceProtocolError("Mistral response model is missing or invalid")
+        if model_returned != self.model:
+            raise InferenceProtocolError("Mistral response model does not match requested model")
         if not isinstance(choices, list) or len(choices) != 1 or not isinstance(choices[0], dict):
             raise InferenceProtocolError("Mistral response must contain exactly one choice")
 

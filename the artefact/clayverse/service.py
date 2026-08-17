@@ -7,8 +7,9 @@ import os
 import sys
 from urllib.parse import urlsplit
 
-from .agency import AgencyState
-from .autonomy import AutonomyDaemon, UserHomeClaudeInferenceRouter
+from .agency import AgencyView
+from .autonomy import AutonomyController
+from .autonomy_scheduler import AutonomyScheduler
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .final_acceptance_probe import run_mistral_acceptance_probe
@@ -31,12 +32,7 @@ def _clerk_map() -> dict[str, str]:
         raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON is invalid JSON") from exc
     if not isinstance(mapping, dict) or len(mapping) != 2:
         raise RuntimeError("CLAYVERSE_CLERK_MAP_JSON must contain exactly two subject mappings")
-    if any(
-        not isinstance(subject, str)
-        or not subject.strip()
-        or user_id not in {"gabriel", "andreas"}
-        for subject, user_id in mapping.items()
-    ):
+    if any(not isinstance(subject, str) or not subject.strip() or user_id not in {"gabriel", "andreas"} for subject, user_id in mapping.items()):
         raise RuntimeError("Clerk mapping subjects must be non-empty strings and may only target gabriel/andreas")
     if set(mapping.values()) != {"gabriel", "andreas"}:
         raise RuntimeError("Clerk mapping must identify each canonical user exactly once")
@@ -44,7 +40,6 @@ def _clerk_map() -> dict[str, str]:
 
 
 def _clerk_frontend_api_from_publishable_key(publishable_key: str) -> str:
-    """Derive the direct Clerk FAPI URL encoded by a publishable key or fail closed."""
     encoded = ""
     for prefix in ("pk_test_", "pk_live_"):
         if publishable_key.startswith(prefix):
@@ -67,17 +62,7 @@ def _clerk_frontend_api_from_publishable_key(publishable_key: str) -> str:
         port = parsed.port
     except ValueError as exc:
         raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid") from exc
-    if (
-        parsed.scheme != "https"
-        or not parsed.hostname
-        or parsed.hostname != domain.lower()
-        or parsed.username is not None
-        or parsed.password is not None
-        or port is not None
-        or parsed.path
-        or parsed.query
-        or parsed.fragment
-    ):
+    if parsed.scheme != "https" or not parsed.hostname or parsed.hostname != domain.lower() or parsed.username is not None or parsed.password is not None or port is not None or parsed.path or parsed.query or parsed.fragment:
         raise RuntimeError("CLERK_PUBLISHABLE_KEY FAPI domain is invalid")
     return f"https://{domain}"
 
@@ -103,30 +88,17 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
         raise RuntimeError("embedded EntityOS path and SHA-256 are required")
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
-
     candidate = EntityOSBridge(path=path, sha256=sha256)
     try:
         verified = candidate.verify()
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
-    status = {
-        "staged": True,
-        "verified": True,
-        "execution_enabled": enable_exec,
-        **verified,
-    }
+    status = {"staged": True, "verified": True, "execution_enabled": enable_exec, **verified}
     return (candidate if enable_exec else None), status
 
 
 def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
-    return {
-        "service": "clayverse",
-        "status": "probe_ok",
-        "scope": "state_only",
-        "ready": False,
-        "checkpoint": checkpoint,
-        "state_hash": state_hash,
-    }
+    return {"service": "clayverse", "status": "probe_ok", "scope": "state_only", "ready": False, "checkpoint": checkpoint, "state_hash": state_hash}
 
 
 def _acceptance_bool(name: str, default: str = "0") -> bool:
@@ -137,43 +109,17 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
 
 
 def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
-    """Run the internal canonical Mistral turn used by the final sandbox controller.
-
-    This mode intentionally receives no Clerk auth credit. It proves the cognition /
-    re-ingest / EffectGate causal spine inside the exact product image; the final
-    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
-    """
-
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
-    AgencyState(db)
+    AgencyView(db)
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
     prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
     require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
     entityos_bridge, entityos_status = _entityos_config()
-
-    payload = run_mistral_acceptance_probe(
-        db,
-        clerk_map,
-        clerk_subject,
-        prompt,
-        entityos_bridge=entityos_bridge,
-        require_effect=require_effect,
-    )
+    payload = run_mistral_acceptance_probe(db, clerk_map, clerk_subject, prompt, entityos_bridge=entityos_bridge, require_effect=require_effect)
     checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
-    payload.update(
-        {
-            "checkpoint": checkpoint_id,
-            "state_hash": state_hash,
-            "recovery": recovery,
-            "entityos": {
-                "verified": bool(entityos_status.get("verified")),
-                "execution_enabled": bool(entityos_status.get("execution_enabled")),
-                "sha256": entityos_status.get("sha256"),
-            },
-        }
-    )
+    payload.update({"checkpoint": checkpoint_id, "state_hash": state_hash, "recovery": recovery, "entityos": {"verified": bool(entityos_status.get("verified")), "execution_enabled": bool(entityos_status.get("execution_enabled")), "sha256": entityos_status.get("sha256")}})
     return payload
 
 
@@ -184,21 +130,21 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
     IdentityRouter(db, {})
-    agency = AgencyState(db)
+    agency = AgencyView(db)
+    autonomy_controller = AutonomyController(db)
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
         cid, digest = db.checkpoint("state-probe")
         payload = _state_probe_payload(cid, digest)
-        payload["agency"] = agency.snapshot(max_goals=4, max_attempts_per_milestone=2)
+        payload["agency"] = agency.snapshot()
         print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
         db.close()
         return 0
 
     if "--mistral-once" in sys.argv:
         try:
-            payload = _run_mistral_once(db)
-            print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
+            print(json.dumps(_run_mistral_once(db), ensure_ascii=False, sort_keys=True), flush=True)
         finally:
             db.close()
         return 0
@@ -206,13 +152,16 @@ def main():
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
-
     clerk_map = _clerk_map()
     clerk_config = ClerkConfig.from_env()
     publishable_key, frontend_api = _web_config(clerk_config.issuer)
     verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
-    autonomy_enabled = _acceptance_bool("CLAYVERSE_AUTONOMY_ENABLED", "1")
+    autonomy_enabled = _acceptance_bool("CLAYVERSE_AUTONOMY_ENABLED", "0")
+    autonomy_interval = float(os.environ.get("CLAYVERSE_AUTONOMY_INTERVAL_SECONDS", "60"))
+    if not 1 <= autonomy_interval <= 86_400:
+        raise RuntimeError("CLAYVERSE_AUTONOMY_INTERVAL_SECONDS out of range")
+
     try:
         claude_status = claude_readiness(required=require_claude)
         entityos_bridge, entityos_status = _entityos_config()
@@ -220,39 +169,21 @@ def main():
         terminal_status = {}
         for user_id in ("gabriel", "andreas"):
             binding = terminals.ensure(user_id)
-            terminal_status[user_id] = {
-                "session_id": binding.session_id,
-                "tmux_name": binding.tmux_name,
-                "home": str(binding.home),
-                "generation": db.session_generation(binding.session_id),
-            }
+            terminal_status[user_id] = {"session_id": binding.session_id, "tmux_name": binding.tmux_name, "home": str(binding.home), "generation": db.session_generation(binding.session_id)}
     except Exception:
         db.close()
         raise
 
-    app = create_terminal_app(
-        db=db,
-        clerk_map=clerk_map,
-        verifier=verifier,
-        state_root=state_root,
-        publishable_key=publishable_key,
-        frontend_api_url=frontend_api,
-    )
+    app = create_terminal_app(db=db, clerk_map=clerk_map, verifier=verifier, state_root=state_root, publishable_key=publishable_key, frontend_api_url=frontend_api)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
 
-    autonomy = None
+    scheduler = None
     if autonomy_enabled:
-        # The daemon gets its own DB connection and headless cognition router. The
-        # router derives HOME only from canonical goal ownership, reusing each user's
-        # authenticated terminal identity without attaching to or driving tmux.
-        autonomy = AutonomyDaemon(
-            state_root,
-            lambda: UserHomeClaudeInferenceRouter(state_root),
-            entityos_bridge=entityos_bridge,
-        )
-        autonomy.start()
+        scheduler = AutonomyScheduler(state_root, entityos_bridge=entityos_bridge, interval_seconds=autonomy_interval)
+        scheduler.start()
 
+    autonomy_snapshot = autonomy_controller.snapshot()
     print(json.dumps({
         "service": "clayverse",
         "status": "candidate_ready",
@@ -268,31 +199,16 @@ def main():
         "auth": "clerk",
         "recovery": recovery,
         "entityos": entityos_status,
-        "autonomy": {
-            "enabled": autonomy_enabled,
-            "mode": agency.policy()["autonomy_mode"],
-            "cognition_home_scope": "canonical_goal_owner",
-            "cycle_interval_seconds": agency.policy()["cycle_interval_seconds"],
-            "max_steps_per_cycle": agency.policy()["max_steps_per_cycle"],
-            "max_failed_retries_per_milestone": agency.policy()["max_failed_retries_per_milestone"],
-            "max_effects_per_cycle": agency.policy()["max_effects_per_cycle"],
-        },
+        "autonomy": {"enabled": autonomy_enabled, "scheduler_kind": "process_local_stateless_timer", "interval_seconds": autonomy_interval, "schema": autonomy_snapshot["schema"], "revision": autonomy_snapshot["revision"], "goal_count": len(autonomy_snapshot["goals"]), "cognition_home_scope": "canonical_goal_owner"},
         "consciousness_daemon": False,
         "port": port,
     }), flush=True)
 
     try:
-        uvicorn.run(
-            app,
-            host=host,
-            port=port,
-            workers=1,
-            access_log=False,
-            ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES,
-        )
+        uvicorn.run(app, host=host, port=port, workers=1, access_log=False, ws_max_size=_PTY_INPUT_FRAME_MAX_BYTES)
     finally:
-        if autonomy is not None:
-            autonomy.stop()
+        if scheduler is not None:
+            scheduler.stop()
         db.checkpoint("shutdown")
         db.close()
     return 0

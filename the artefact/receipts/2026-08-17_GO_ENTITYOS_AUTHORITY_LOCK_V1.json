@@ -1,0 +1,55 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "status": "SOURCE_CONVERGENCE_WITH_EXACT_INTERNAL_SUBSTRATE_EVIDENCE",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "branch_base": "9850a261c0ffa3dea4d823c2c084ca332ed1ca32",
+  "authority_problem": "Caller-supplied ENTITYOS_SHA256 could authorize arbitrary replacement bytes if the caller supplied a matching digest. The digest therefore was not itself a canonical source authority.",
+  "source_delta": {
+    "lock": "the artefact/entityos.lock.json",
+    "dockerfile": "tracked lock schema, digest and size must match caller argument and staged EntityOS before image construction can continue",
+    "docker_context": "default-deny allowlist now admits runtime_CLAUDE.md and entityos.lock.json because both are declared Dockerfile COPY inputs",
+    "ci": "manual OCI gate derives the expected digest/size from the tracked lock, rejects missing/symlink/mismatched staged bytes, and passes only that digest into the image build",
+    "regression": "the artefact/tests/test_entityos_artifact_authority.py"
+  },
+  "entityos_lock": {
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "source_tree": "d55d9d41f5a294a4a692cdee6fa46750652a390d",
+    "sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "size_bytes": 9181696,
+    "source_archive_sha256": "4daf761a56164e43d332082e9357865a06d88035c54902f5adf99c204d773b8c",
+    "source_attestation_sha256": "4e08e2ea96420d1671451af09601509013018807bdcd5b321be5b6620a0a3ce4",
+    "git_bundle_sha256": "948e53b78378a274366479888249076ed56d541be006cd63af4aa9df78930395"
+  },
+  "vercel_exact_internal_substrate_evidence": {
+    "deployment_id": "dpl_Wr1eZgxbWsT8N39eiEE8JJ3h1Qdz",
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "exact_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "full_pytest": "PASS_ZERO_SKIPS",
+    "tests_passed": 207,
+    "double_build": "BYTE_IDENTICAL",
+    "runtime_gates": "PASS",
+    "path_without_host_python": "PASS",
+    "relocation": "BYTE_IDENTICAL_COPY_RENAME",
+    "network_policy_during_tests": "DENY_ALL",
+    "sandbox_stopped": true,
+    "whole_clayverse_acceptance": false
+  },
+  "negative_results": [
+    "GitHub Actions artifact 9274361528 from prior #787 head 6c96c7606fe3bf2974b2e828531c28dd17c0d1c3 was independently downloaded and rejected as a transport source because its EntityOS bytes were not identical: sha256 cb698027bf383b7a0224c0f4dc5e010b03a37a469c7fe5804c55966c698052a4, size 1217497.",
+    "Current ClayVerse GitHub-hosted OCI jobs still fail before executing any step; this is control-plane/runner admission failure and provides no build/test evidence.",
+    "No exact 32cd4587... EntityOS binary was available as a durable GitHub workflow artifact, so no substitute binary was staged and no whole-image build PASS is claimed."
+  ],
+  "unusual_experiment": {
+    "global_accounting": "CONSUMED_1_OF_1_BY_STAGING_TOCTOU_SOURCE_SWAP_PARALLEL_FUSION",
+    "new_unusual_experiment_count_this_lane": 0,
+    "remaining_work_class": "REGRESSION_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_exact_isolated_step": "Make the exact locked 32cd4587.../9181696-byte EntityOS artifact available as a provenance-bound build-time input, stage it with the existing fail-closed staging helper, then execute the exact current ClayVerse OCI build and state-only restart gate. Only after that succeeds proceed to the normal-service Clerk + authenticated Claude Code + EntityOS effect/re-entry gate."
+}

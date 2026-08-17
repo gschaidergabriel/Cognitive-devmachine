@@ -62,7 +62,7 @@ Readiness and liveness are intentionally distinct: `/readyz` is the full runtime
 
 Tier-2 is explicitly stronger than an in-place application-container restart: final recovery must replace the whole Kata Pod sandbox/VM, prove a new Pod UID plus new sandbox/VM identity, reattach only declared persistent volumes, advance the canonical generation and re-attest readiness before ingress returns. Until an external fail-closed deployment mechanism proves that full-sandbox replacement, the reference Kubernetes/Kata profile is `TIER2_REPLACEMENT_BLOCKED` for final acceptance.
 
-Kata security is version-and-configuration bound, not a fixed historical number. Upstream operates a rolling-release security model in which only the current monthly release is supported. The 2026-08-17 refresh makes the old `3.31.0` historical floor insufficient for final acceptance: upstream `releases/latest` identifies `4.0.0`, while July advisories affecting releases through `3.32.0` are first patched in `4.0.0`. Final deployment therefore must resolve and use the then-current supported release, reject unsupported prior releases, bind exact runtime/hypervisor/shared-filesystem configuration, and reject unreviewed runtime-mutating `io.katacontainers.*` Pod annotations after admission mutation.
+Kata security is version-and-configuration bound, not a fixed historical number. Upstream operates a rolling-release security model in which only the current monthly release is supported. The 2026-08-17 refresh makes the old `3.31.0` historical floor insufficient for final acceptance: upstream `releases/latest` identifies `4.0.0`, while July advisories affecting releases through `3.32.0` are first patched in `4.0.0`. Final deployment therefore must resolve and use the then-current supported release, reject unsupported prior releases, bind exact runtime/hypervisor/shared-filesystem configuration, and reject unreviewed runtime-mutating `io.katacontainers.*` Pod annotations after admission mutation. The selected hypervisor path is acceptance identity as well; where Dragonball is selected, the executing runtime must carry the corresponding admitted security fix.
 
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
@@ -83,9 +83,10 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 - an independent guest-kernel boundary rather than host-kernel execution;
 - read-only root and denial of undeclared writes/host mounts;
 - only declared persistent volumes survive full appliance replacement;
+- as the non-root runtime, create/write/fsync/read/rename/delete on both declared persistent mounts and the exact CSI/mount-group behavior before and after full replacement;
 - baseline ClayVerse ingress+egress deny is actually enforced by the deployed CNI;
 - the exact reviewed network allow policy opens only admitted paths while tested non-admitted flows remain denied;
-- the installed Kata/runtime identity is the then-current upstream-supported release and the effective runtime configuration/Pod annotations match the reviewed acceptance set;
+- the installed Kata/runtime identity is the then-current upstream-supported release and the effective runtime/hypervisor configuration/Pod annotations match the reviewed acceptance set;
 - Tier-1 EntityOS/internal recovery;
 - Tier-2 full Pod-sandbox/microVM replacement from the same image digest, with new Pod plus sandbox/VM identity rather than an in-place container restart;
 - UnifiedDB/WAL/snapshot recovery under a new generation;
@@ -96,9 +97,9 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 ### Current execution boundary
 
-The architecture and fail-closed Kata deployment profile are canonical source, but **actual Kata/microVM execution, CNI NetworkPolicy enforcement and Tier-2 full-sandbox replacement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy/Tier-2 runtime credit or whole-product PASS is claimed.
+The architecture and fail-closed Kata deployment profile are canonical source, but **actual exact-final OCI execution, Kata/microVM execution, CNI NetworkPolicy enforcement, CSI non-root volume behavior and Tier-2 full-sandbox replacement remain unobserved**, so no such runtime credit or whole-product PASS is claimed.
 
-A prior stronger MicroVM source slice was independently reconstructed from exact Git blobs and executed together in an isolated non-production container: contract `2e03fb7074c7b88191df31f12627bf656fe6d84e`, template `73f4dcf80f78fcb4d78e144e281758c194aff6df`, focused test `f0360882a33660ac49c7b9eb24a93ad99324526d`, and manifest `9ac10e882b4f760935f3671f479eb064d8fa058d` matched GitHub exactly; `pytest -q tests/test_microvm_deployment_contract.py` passed **12/12 in 0.06s**. That result remains bounded to those recorded blobs and is no longer exact-current after the EntityOS deployment-authority hardening in this cycle. The new template/test blobs therefore have source-contract credit only until an exact bound rerun executes.
+A prior stronger MicroVM source slice was independently reconstructed from exact Git blobs and passed **12/12 in 0.06s**, but that evidence remains strictly bound to the receipt's recorded old blobs and is not transferred to later source bytes. Current observed source after this cycle is contract `b84fb5d04ad89a5e4c643dcb2fec136b506d8abc`, template `155ea70ad39241a61807e6fe5b084fbd9822a90f`, manifest `0b070a7c6f1cfd4cfc051ae9535be036d316857f`, and focused test `3238b02ce8a0f5c283827ade1293460c9d3e89f0`. The manifest/test pair now explicitly binds current-supported Kata runtime/configuration, runtime-mutating annotation policy and full Pod/Kata-sandbox Tier-2 replacement into final acceptance, while the focused regression also preserves the image-authoritative EntityOS digest fence. **This exact four-blob set has not been executed as a bound set by this organ**, so it receives source-contract credit only.
 
 The Claude terminal source starts the interactive process from `env -i`; the current source also carries an explicit regression fence against forwarding provider/auth/orchestration secret variables. Its byte-exact source/compile evidence remains bounded source-contract hardening until full exact-current-main pytest/live Claude-process attestation executes.
 
@@ -106,17 +107,19 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Final exact acceptance sequence
 
-`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation + current-supported Kata/runtime configuration -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full Pod sandbox/microVM -> prove new sandbox identity -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
+`fresh canonical source -> reproducible exact OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only root + declared volumes -> deploy SAME digest through Kata/equivalent microVM -> verify guest-kernel isolation + current-supported Kata/runtime/hypervisor configuration -> verify PVC non-root semantics -> verify default-deny network enforcement -> bind/test explicit admitted network allow policy -> ingress/egress -> managed PTY/tmux -> Claude terminal login and process-env attestation and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> destroy/recreate full Pod sandbox/microVM -> prove new sandbox identity -> WAL/snapshot recovery/new generation/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> WHOLE_CLAYVERSE_PASS`.
 
 ### Latest cycle delta
 
-**2026-08-17 — EntityOS deployment digest authority collapsed back into the immutable image.**
+**2026-08-17 23:06 +07:00 — MicroVM final-acceptance authority synchronized across image, manifest and regression.**
 
-- current `go` detected that the tracked `entityos.lock.json` declares itself the EntityOS artifact authority while the Kubernetes template separately injected `CLAYVERSE_ENTITYOS_SHA256` from a mutable Secret;
-- Kubernetes primary documentation confirms Pod `env` / `envFrom` values override environment values defined in the container image, so the deployment Secret could replace the image-baked expected digest even though it could not replace the read-only embedded EntityOS bytes;
-- canonical MicroVM template commit `a420a7e7342d29a2713d6eddabfa353997876b01` removes that deployment-time digest override and documents the image-authoritative boundary;
-- canonical focused-test commit `e612abc14cd5c6546f094537d8cd8810e24ab6aa` adds a regression requiring the template to expose no `CLAYVERSE_ENTITYOS_SHA256` / `entityos-sha256` deployment knob while retaining Docker build binding to the tracked lock;
-- this is source/contract hardening only; no new exact-current pytest, OCI, Kubernetes or Kata runtime credit is claimed for these new blobs;
+- parallel convergence first removed the mutable deployment-Secret override for `CLAYVERSE_ENTITYOS_SHA256`, keeping the tracked lock plus build-time verified embedded EntityOS bytes as the single artifact authority; the focused test now fences that boundary;
+- canonical manifest commit `f84e2271d42f9c8718710e3fa2ce0a10fec21f4f` adds explicit final gates for the then-current upstream-supported Kata release/effective runtime configuration, fail-closed `io.katacontainers.*` runtime-mutating annotation handling and full Pod/Kata sandbox/VM Tier-2 replacement;
+- canonical focused-test commit `81d1db4b4760cebeff5464b8aca63c9ec0626824` binds those manifest fields to the existing MicroVM contract while preserving current tests for headless StatefulSet governance, PVC `fsGroup` semantics, rolling-release advisories and image-authoritative EntityOS digest identity;
+- current source also retains the selected-hypervisor/Dragonball advisory fence and executable CSI ownership obligation rather than degrading these to YAML-only claims;
+- stale concurrent writes were rejected atomically with GitHub `409` and never force-overwritten; duplicate/superseded lanes were closed rather than allowed to become competing canonical paths;
+- durable bounded receipt: `receipts/2026-08-17_GO_2306_MICROVM_MANIFEST_AUTHORITY_FENCE_GPT56SOL.json` (commit `8da92a454c0e4af955abb3a879a260375c7a87d6`);
+- current exact four-blob source set is **not** credited with a new test PASS by this organ; the earlier 12/12 result remains scoped to its own recorded bytes;
 - strongest executable OCI blocker remains host-side provisioning of the sensitive Vercel Preview `GITHUB_READ_TOKEN` for private Research/EntityOS staging; it must remain outside the Sandbox and cannot be provisioned through the connected Vercel surface available to this organ;
 - runtime credit remains **zero** for exact final OCI, Kubernetes, Kata/microVM, CNI enforcement, CSI behavior and Tier-2 full-sandbox replacement;
 - GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id and only minute-precision immutable message time.

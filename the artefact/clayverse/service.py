@@ -11,6 +11,7 @@ from .api import ClayVerseAPI
 from .engine import ClayVerseEngine
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
+from .integrity import seal, verify_latest
 from .store import UnifiedDB
 
 
@@ -43,12 +44,13 @@ def main():
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(os.path.join(state_root, "unified.db"))
+    verified = verify_latest(db)
     IdentityRouter(db, {})
     ClayGraphProjection(db).rebuild()
-    cid, digest = db.checkpoint("boot")
+    cid, digest = seal(db, "boot")
 
     if "--once" in sys.argv:
-        print(json.dumps({"service": "clayverse", "status": "ok", "checkpoint": cid, "state_hash": digest}), flush=True)
+        print(json.dumps({"service": "clayverse", "status": "ok", "checkpoint": cid, "state_hash": digest, "previous_integrity_seal": verified["checkpoint_id"] if verified else None}), flush=True)
         db.close()
         return 0
 
@@ -82,6 +84,7 @@ def main():
         "state_root": state_root,
         "checkpoint": cid,
         "state_hash": digest,
+        "previous_integrity_seal": verified["checkpoint_id"] if verified else None,
         "users": ["gabriel", "andreas"],
         "claude_code": claude_available,
         "auth": "clerk",
@@ -93,7 +96,7 @@ def main():
             server.handle_request()
     finally:
         server.server_close()
-        db.checkpoint("shutdown")
+        seal(db, "shutdown")
         db.close()
     return 0
 

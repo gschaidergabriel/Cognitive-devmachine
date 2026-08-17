@@ -59,7 +59,7 @@ class MicroClayRetrieval:
     serving path until an explicit externally validated promotion changes the mode.
     """
 
-    POLICY_VERSION = 1
+    POLICY_VERSION = 2
     DEFAULT_MODE = "SHADOW"
     MAX_SOURCE_ROWS = 5000
     MAX_QUERY_TOKENS = 64
@@ -94,7 +94,7 @@ class MicroClayRetrieval:
     def _route_key(token: str, memory_id: str) -> str:
         cue = hashlib.sha256(token.encode("utf-8")).hexdigest()[:16]
         target = hashlib.sha256(memory_id.encode("utf-8")).hexdigest()[:16]
-        return f"route:{cue}:{target}"
+        return f"route:v2:{cue}:{target}"
 
     @staticmethod
     def _safe_provenance(raw: str) -> dict[str, Any]:
@@ -131,9 +131,15 @@ class MicroClayRetrieval:
 
     def mode(self) -> str:
         row = self.db.db.execute(
-            "SELECT mode FROM retrieval_policy_state WHERE singleton=1"
+            "SELECT mode,policy_version FROM retrieval_policy_state WHERE singleton=1"
         ).fetchone()
-        return row["mode"] if row else self.DEFAULT_MODE
+        if not row:
+            return self.DEFAULT_MODE
+        if int(row["policy_version"]) != self.POLICY_VERSION:
+            if row["mode"] == "ACTIVE":
+                raise StaleGeneration("retrieval_policy_version")
+            return self.DEFAULT_MODE
+        return row["mode"]
 
     def _policy_capitals(self) -> dict[str, float]:
         return {

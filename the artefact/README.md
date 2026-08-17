@@ -14,21 +14,24 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Runtime readiness: `/readyz` now requires canonical state **and** both canonical tmux sessions to be live and pass the same managed transport-policy-v3 attestation used by attach admission; this is source/mechanism hardening, not live OCI/runtime acceptance.
+- Runtime readiness: `/readyz` requires canonical state and both canonical tmux sessions to be live and pass the managed transport-policy-v3 attestation used by attach admission; this remains broader product-runtime acceptance work, not whole-container PASS.
 - Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease; the focused attach-expiry resize regression is retained on current `main`.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` now also rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Current execution admission: exact current-head whole-runtime evidence remains unobserved. Vercel execution is currently blocked by the free daily deployment cap; the authorized Daytona fallback is currently blocked by orchestration-network/DNS before provider contact. These are execution-admission blockers, not product test failures.
+- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. `EffectJournal.begin()` rejects foreign or already-consumed episode causal identity before a new `PENDING` effect can be journaled. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
+- **Observed live tmux result:** an exact-byte Vercel Sandbox run reached real tmux 3.6a and SQLite-capable Python. Upgrading an intentionally pre-policy persistent Gabriel server to transport-policy v3 passed, but creating Andreas then re-sourcing the already-loaded destructive v3 policy failed because tmux 3.6a reports already-removed key tables as errors. This is a real component/runtime failure of the predecessor terminal mechanism, not provider admission failure.
+- **Current repair gate:** PR #603 keeps the managed tmux file as the single policy source and tolerates only exact missing-default-key-table diagnostics, while every unknown/mixed/empty error remains fatal and the complete v3 effective-state attestation remains mandatory. The repair is **SOURCE CANDIDATE only** until the same real-tmux falsifier reruns successfully and the branch is rejoined to then-current `main`.
+- Current execution admission: Vercel Sandbox executed the predecessor probe successfully up to the product failure, but no new Vercel Preview has yet been observed for the staged repair rerun. GitHub Actions still fail before visible steps (`runner_id=0`, `steps=[]`). The authorized Daytona fallback has no new provider-contact/runtime evidence for this repair rerun.
 - Remaining major acceptance gates include an exact OCI build/runtime receipt, real Clerk JWT + browser WebSocket PTY verification, authenticated interactive Claude Code verification for both canonical user homes, automatic hook lifecycle integration, persistence/recovery, managed-Claude process identity in live tmux, and live dual-session concurrency/fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 — effect causal-spine + terminal/readiness convergence on current `main`**
+**2026-08-17 — real tmux 3.6a falsification → bounded idempotent reapply repair candidate**
 
-- Merged live effect causal-spine hardening: a foreign episode causal row or an already-consumed matching causal identity now fails closed before `EffectJournal.begin()` can journal a new `PENDING` effect. The exact repaired product blob had supporting four-case isolated mechanism evidence; this is not full-checkout/OCI/runtime PASS.
-- Merged terminal/readiness convergence: both canonical tmux perspectives must be live and pass the canonical manager-owned transport-policy-v3 attestation before `/readyz` can advertise readiness. Supporting bounded mechanism evidence exists; live tmux/native-Claude/OCI acceptance remains outstanding.
-- Restored the focused Clerk post-attach expiry/resize regression on current `main`; this is regression/evidence convergence and does not add a second auth path.
-- Merged current documented Claude auxiliary managed-policy fences and tmux-v3 control/policy reapply hardening earlier in this cycle; these remain source/mechanism scoped until exact packaged native-Claude/tmux execution is observed.
-- The stronger managed-Claude foreground/start-command attestation remains a current source candidate, not canonical runtime truth; it must be rejoined without regressing the just-merged readiness path and then proven in exact isolated OCI/live-tmux execution.
+- Reopened the previously source-only terminal assumption under real tmux rather than accepting mock regressions as runtime truth.
+- Vercel Sandbox provisioned tmux 3.6a and Python 3.13.13; SQLite 3.40.0 worked, eliminating the earlier bare-runtime `_sqlite3` blocker for this bounded mechanism path.
+- Exact predecessor terminal blob `185a748f80011b324b2c4786644ad42ff369203e` plus policy blob `fd3a0a3b5f0b595c0e15d9f36991148eed67df7d` upgraded a live unsafe persistent Gabriel server in ~15 ms, then failed on Andreas when the already-loaded policy was sourced a second time: `table prefix/copy-mode/copy-mode-vi doesn't exist`.
+- Added PR #603 repair candidate: exact candidate terminal blob `c185009f8af84e1288747d8352645777a36b2053`; only the four expected missing-default-table diagnostics may be treated as idempotent, and the full policy attestation remains the final admission authority.
+- Added focused source regressions for expected-only, mixed/unknown and empty nonzero `source-file` diagnostics, plus a durable failure/candidate receipt. These tests are not promoted to runtime PASS because current GitHub runners still fail before steps.
+- Staged the identical real-tmux regression rerun through the existing Vercel execution bridge. No second Preview has yet appeared, so the candidate remains draft/unmerged rather than converting design confidence into a false runtime claim.
 - No unusual experiment was executed for this `go`: shared trigger identity is only minute precision, so the atomic experiment protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` rather than inventing a timestamp.
 - Whole-product acceptance remains unchanged: **IN_PROGRESS**.
 
@@ -52,9 +55,9 @@ The previous custom chat API and headless `claude -p` path are retired as produc
 
 ## Verification
 
-Focused isolated tests have exercised bounded source mechanisms, but **whole-product PASS is not claimed**. The exact current head still requires a full authorized isolated test run, exact OCI build/runtime receipt, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, full ClayVerse MCP begin/effect/complete integration, accepted embedded EntityOS runtime evidence, and restart/recovery plus live dual-session concurrency/fencing validation.
+Focused isolated tests have exercised bounded source mechanisms, and a real Vercel tmux probe has now falsified one predecessor terminal assumption, but **whole-product PASS is not claimed**. The exact current head still requires the repaired real-tmux rerun, full authorized isolated test run, exact OCI build/runtime receipt, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, full ClayVerse MCP begin/effect/complete integration, accepted embedded EntityOS runtime evidence, and restart/recovery plus live dual-session concurrency/fencing validation.
 
-GitHub-hosted Actions are not current runtime evidence while jobs are blocked before execution by the account billing/spending state.
+GitHub-hosted Actions are not current runtime evidence while jobs are blocked before step execution.
 
 ## Local isolated source checks
 

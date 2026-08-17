@@ -60,7 +60,12 @@ def _validated_token(value: str) -> str:
 
 def _validated_model(value: str) -> str:
     model = value.strip()
-    if not model or len(model) > 128 or any(ord(char) < 0x21 or ord(char) > 0x7E for char in model):
+    if (
+        not model
+        or len(model) > 128
+        or not model.startswith("glm-")
+        or any(ord(char) < 0x21 or ord(char) > 0x7E for char in model)
+    ):
         raise GLMInferenceError("GLM model identifier is invalid")
     return model
 

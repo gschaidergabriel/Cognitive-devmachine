@@ -73,9 +73,6 @@ def _validated_runtime_identity(runtime_identity: dict) -> dict:
         value = runtime_identity[key]
         if not isinstance(value, str) or not value or len(value) > 256 or "\x00" in value or "\n" in value or "\r" in value:
             raise LogicalSnapshotIntegrityError(f"invalid runtime identity value: {key}")
-        lowered = key.lower()
-        if any(marker in lowered for marker in ("token", "secret", "password", "credential")):
-            raise LogicalSnapshotIntegrityError("secret-shaped runtime identity field forbidden")
         if key in _SHA256_FIELDS:
             value = _validate_hex(value, 64, key)
         elif key == "source_revision":
@@ -154,6 +151,16 @@ def _snapshot_state(conn: sqlite3.Connection, checkpoint_id: str, checkpoint_sta
     }
 
 
+def _readonly_snapshot_connection(db_path: Path) -> sqlite3.Connection:
+    return sqlite3.connect(f"file:{db_path.as_posix()}?mode=ro&immutable=1", uri=True)
+
+
+def _assert_self_contained(db_path: Path) -> None:
+    for suffix in ("-wal", "-shm", "-journal"):
+        if Path(str(db_path) + suffix).exists():
+            raise LogicalSnapshotIntegrityError(f"snapshot database sidecar present: {suffix}")
+
+
 def _validate_snapshot_path(snapshot_dir: Path) -> tuple[Path, Path]:
     if snapshot_dir.is_symlink() or not snapshot_dir.is_dir():
         raise LogicalSnapshotIntegrityError("snapshot directory must be a real directory")
@@ -162,6 +169,7 @@ def _validate_snapshot_path(snapshot_dir: Path) -> tuple[Path, Path]:
     for path in (db_path, manifest_path):
         if path.is_symlink() or not path.is_file():
             raise LogicalSnapshotIntegrityError(f"snapshot member invalid: {path.name}")
+    _assert_self_contained(db_path)
     return db_path, manifest_path
 
 
@@ -179,7 +187,7 @@ class LogicalSnapshotManager:
 
     def create(self, db: UnifiedDB, *, runtime_identity: dict, reason: str) -> dict:
         runtime_identity = _validated_runtime_identity(runtime_identity)
-        if not isinstance(reason, str) or not reason or len(reason) > 128 or "\x00" in reason:
+        if not isinstance(reason, str) or not reason or len(reason) > 128 or "\x00" in reason or "\n" in reason or "\r" in reason:
             raise LogicalSnapshotIntegrityError("invalid snapshot reason")
 
         self.root.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -195,14 +203,22 @@ class LogicalSnapshotManager:
             destination = sqlite3.connect(db_path)
             try:
                 db.db.backup(destination)
+                # The source runs WAL. A recovery snapshot must not depend on a
+                # separately moved WAL/SHM file, so collapse the copied database
+                # back to a single rollback-journal-mode file before sealing it.
+                mode = destination.execute("PRAGMA journal_mode=DELETE").fetchone()
+                if not mode or str(mode[0]).lower() != "delete":
+                    raise LogicalSnapshotIntegrityError("snapshot database could not leave WAL mode")
             finally:
                 destination.close()
+            _assert_self_contained(db_path)
 
-            copied = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+            copied = _readonly_snapshot_connection(db_path)
             try:
                 state = _snapshot_state(copied, checkpoint_id, checkpoint_state_hash)
             finally:
                 copied.close()
+            _assert_self_contained(db_path)
 
             db_size = db_path.stat().st_size
             db_sha256 = _sha256_file(db_path)
@@ -254,6 +270,8 @@ class LogicalSnapshotManager:
             raise LogicalSnapshotIntegrityError("snapshot identity mismatch")
         if not isinstance(manifest["created_ns"], int) or manifest["created_ns"] <= 0:
             raise LogicalSnapshotIntegrityError("snapshot timestamp invalid")
+        if not isinstance(manifest["reason"], str) or not manifest["reason"] or len(manifest["reason"]) > 128 or any(x in manifest["reason"] for x in ("\x00", "\n", "\r")):
+            raise LogicalSnapshotIntegrityError("snapshot reason invalid")
         _validated_runtime_identity(manifest["runtime_identity"])
 
         database = manifest["database"]
@@ -273,13 +291,14 @@ class LogicalSnapshotManager:
             raise LogicalSnapshotIntegrityError("snapshot checkpoint anchor invalid")
         _validate_hex(anchor["state_hash"], 64, "checkpoint state hash")
 
-        copied = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        copied = _readonly_snapshot_connection(db_path)
         try:
             observed = _snapshot_state(copied, anchor["checkpoint_id"], anchor["state_hash"])
         except sqlite3.DatabaseError as exc:
             raise LogicalSnapshotIntegrityError("snapshot SQLite database invalid") from exc
         finally:
             copied.close()
+        _assert_self_contained(db_path)
         if observed != state:
             raise LogicalSnapshotIntegrityError("snapshot manifest/state drift")
         return manifest

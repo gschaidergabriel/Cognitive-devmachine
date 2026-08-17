@@ -10,7 +10,7 @@ import uuid
 from collections import Counter
 from pathlib import Path
 
-from .store import UnifiedDB
+from .store import UnifiedDB, canonical_state_hash
 
 
 class LogicalSnapshotIntegrityError(RuntimeError):
@@ -35,22 +35,6 @@ _SHA256_FIELDS = {
 }
 _MANIFEST_SCHEMA = "ClayVerseKnownGoodLogicalMachineSnapshot/v1"
 _MAX_MANIFEST_BYTES = 128 * 1024
-_CANONICAL_STATE_TABLES = (
-    "meta",
-    "users",
-    "sessions",
-    "turns",
-    "durable_memory",
-    "workspace_episodes",
-    "effects",
-    "causal_episodes",
-    "active_turns",
-    "leases",
-    "retrieval_policy_state",
-    "retrieval_entrypoint_policy",
-    "retrieval_episodes",
-    "retrieval_feedback",
-)
 
 
 def _canonical(value) -> str:
@@ -110,23 +94,6 @@ def _digest_rows(rows: list[dict]) -> str:
     return hashlib.sha256(_canonical(rows).encode("utf-8")).hexdigest()
 
 
-def _checkpoint_state_hash(conn: sqlite3.Connection) -> str:
-    """Recompute the canonical UnifiedDB checkpoint digest on a read-only copy.
-
-    UnifiedDB.checkpoint() hashes these exact canonical tables in this exact order.
-    Recomputing the same digest on the copied database fences the checkpoint->backup
-    race: if canonical state changed after the checkpoint but before backup, the
-    snapshot is rejected rather than mislabeled as that older checkpoint.
-    """
-
-    payload = []
-    for table in _CANONICAL_STATE_TABLES:
-        payload.append((table, _rows(conn, f"SELECT * FROM {table} ORDER BY 1")))
-    return hashlib.sha256(
-        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
-    ).hexdigest()
-
-
 def _snapshot_state(conn: sqlite3.Connection, checkpoint_id: str, checkpoint_state_hash: str) -> dict:
     quick = conn.execute("PRAGMA quick_check").fetchone()
     if not quick or quick[0] != "ok":
@@ -139,7 +106,7 @@ def _snapshot_state(conn: sqlite3.Connection, checkpoint_id: str, checkpoint_sta
     if not checkpoint or checkpoint[0] != checkpoint_id or checkpoint[1] != checkpoint_state_hash:
         raise LogicalSnapshotIntegrityError("snapshot lost canonical checkpoint anchor")
 
-    observed_state_hash = _checkpoint_state_hash(conn)
+    observed_state_hash = canonical_state_hash(conn)
     if observed_state_hash != checkpoint_state_hash:
         raise LogicalSnapshotIntegrityError("snapshot checkpoint state hash drift")
 

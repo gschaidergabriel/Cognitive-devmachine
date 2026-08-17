@@ -135,13 +135,7 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
 
 
 def _acceptance_required_effect_capability() -> str | None:
-    """Return the single final-test capability fence or fail closed.
-
-    The internal final Mistral probe may generically require an effect, but the
-    owner-mandated test-of-tests specifically needs an EntityOS round-trip. Keep
-    that stronger requirement explicit and narrow so ``state.noop`` can never earn
-    EntityOS acceptance credit merely because it is a successful effect.
-    """
+    """Return the single final-test capability fence or fail closed."""
 
     raw = os.environ.get("CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY", "").strip()
     if not raw:
@@ -151,6 +145,24 @@ def _acceptance_required_effect_capability() -> str | None:
             "CLAYVERSE_ACCEPTANCE_REQUIRED_EFFECT_CAPABILITY may only be entityos.exec"
         )
     return raw
+
+
+def _acceptance_effect_policy() -> tuple[bool, str | None]:
+    """Resolve final sandbox effect policy without allowing generic-effect credit.
+
+    ``--mistral-once`` is the final internal sandbox probe. When an effect is
+    required here, the owner-mandated contract is specifically an EntityOS
+    round-trip. Keep generic-effect tests at the lower-level probe API instead of
+    allowing ``state.noop`` to satisfy this final service boundary.
+    """
+
+    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    required_capability = _acceptance_required_effect_capability()
+    if require_effect and required_capability is None:
+        required_capability = "entityos.exec"
+    if required_capability is not None:
+        require_effect = True
+    return require_effect, required_capability
 
 
 def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
@@ -166,9 +178,12 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     clerk_map = _clerk_map()
     clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
     prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
-    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
-    required_effect_capability = _acceptance_required_effect_capability()
+    require_effect, required_effect_capability = _acceptance_effect_policy()
     entityos_bridge, entityos_status = _entityos_config()
+    if required_effect_capability == "entityos.exec" and entityos_bridge is None:
+        raise RuntimeError(
+            "final EntityOS acceptance effect is required but EntityOS execution is disabled"
+        )
 
     payload = run_mistral_acceptance_probe(
         db,

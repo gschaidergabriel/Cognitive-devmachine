@@ -1,32 +1,55 @@
 from __future__ import annotations
+
 import json
+from dataclasses import replace
+
+from .method_transfer import METHOD_KINDS, MethodTransfer
 from .microclay_retrieval import MicroClayRetrieval
-from .store import UnifiedDB
+from .store import StaleGeneration, UnifiedDB
+
+
+class EvidenceMicroClayRetrieval(MicroClayRetrieval):
+    """Current MicroClay serving lane with a hard evidence/method boundary."""
+
+    def _score_candidate(self, row, query_tokens, now, capitals):
+        candidate = super()._score_candidate(row, query_tokens, now, capitals)
+        if candidate.kind in METHOD_KINDS:
+            return replace(candidate, baseline_score=0.0, adaptive_score=0.0, entry_keys=())
+        return candidate
+
+    def retrieve(self, **kwargs):
+        result = super().retrieve(**kwargs)
+        if any(str(item.get("kind")) in METHOD_KINDS for item in result.get("items", [])):
+            raise StaleGeneration("evidence_method_boundary")
+        return result
 
 
 class WorldAssembler:
-    """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
+    """Stage A admitted evidence plus separate bounded Stage B method transfer."""
 
-    CONTROL_MEMORY_KINDS = ("source_archive", "compression_receipt", "compression_clearance")
+    CONTROL_MEMORY_KINDS = frozenset({"source_archive", "compression_receipt", "compression_clearance"})
+    UNKNOWN_MARKER_MAX_CHARS = 1_000
 
     def __init__(self, db: UnifiedDB):
         self.db = db
-        self.microclay = MicroClayRetrieval(db)
+        self.microclay = EvidenceMicroClayRetrieval(db)
+        self.method_transfer = MethodTransfer(db)
+
+    @classmethod
+    def _is_evidence_kind(cls, kind):
+        return str(kind) not in cls.CONTROL_MEMORY_KINDS and str(kind) not in METHOD_KINDS
 
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
-            "SELECT kind,value,provenance FROM durable_memory "
-            "WHERE source_turn_id=? AND kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-            "ORDER BY ts LIMIT 20",
+            "SELECT kind,value,provenance FROM durable_memory WHERE source_turn_id=? ORDER BY ts LIMIT 100",
             (turn_id,),
         ).fetchall()
-        return [dict(r) for r in rows]
+        return [dict(row) for row in rows if self._is_evidence_kind(row["kind"])][:20]
 
     def _active_identity(self, session_id):
         row = self.db.db.execute(
             "SELECT a.turn_id,a.episode_id,a.causal_id,a.generation,t.content "
-            "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id "
-            "WHERE a.session_id=?",
+            "FROM active_turns a JOIN turns t ON t.turn_id=a.turn_id WHERE a.session_id=?",
             (session_id,),
         ).fetchone()
         if not row:
@@ -39,96 +62,92 @@ class WorldAssembler:
             "generation": int(row["generation"]),
         }
 
-    def assemble(
-        self,
-        session_id,
-        resource_refs,
-        *,
-        query=None,
-        turn_id=None,
-        episode_id=None,
-        causal_id=None,
-        generation=None,
-    ):
-        session = self.db.db.execute(
-            "SELECT user_id FROM sessions WHERE session_id=?", (session_id,)
-        ).fetchone()
+    @classmethod
+    def _unknown_marker(cls, query):
+        text = str(query)
+        return text if len(text) <= cls.UNKNOWN_MARKER_MAX_CHARS else text[:cls.UNKNOWN_MARKER_MAX_CHARS] + "…[unknown-truncated]"
+
+    def assemble(self, session_id, resource_refs, *, query=None, turn_id=None, episode_id=None, causal_id=None, generation=None):
+        session = self.db.db.execute("SELECT user_id FROM sessions WHERE session_id=?", (session_id,)).fetchone()
         if not session:
             raise KeyError(session_id)
         user_id = session["user_id"]
-        own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
+        own = [dict(row) for row in self.db.recent_turns(session_id, 20)]
 
-        # Another permanent perspective is loaded only when an explicit shared resource
-        # collides. MicroClay cannot broaden this privacy/attention boundary by learning.
         other = []
         if resource_refs:
             wanted = set(resource_refs)
-            for r in self.db.db.execute(
-                "SELECT * FROM turns WHERE session_id<>? ORDER BY ts DESC LIMIT 200",
-                (session_id,),
+            for row in self.db.db.execute(
+                "SELECT * FROM turns WHERE session_id<>? ORDER BY ts DESC LIMIT 200", (session_id,)
             ).fetchall():
-                if wanted.intersection(json.loads(r["resource_refs"])):
-                    item = dict(r)
-                    if int(r["compression_generation"]) > 0:
+                if wanted.intersection(json.loads(row["resource_refs"])):
+                    item = dict(row)
+                    if int(row["compression_generation"]) > 0:
                         item["retrieval_fidelity"] = "compressed_with_extracted_fragments"
-                        item["extracted_fragments"] = self._extracted_fragments(r["turn_id"])
+                        item["extracted_fragments"] = self._extracted_fragments(row["turn_id"])
                     other.append(item)
                     if len(other) >= 10:
                         break
 
-        retrieval_receipt = {
-            "mode": "LEGACY_COMPATIBILITY",
-            "status": "UNKNOWN",
+        retrieval_receipt = {"mode": "LEGACY_COMPATIBILITY", "status": "UNKNOWN", "truth_authority": False, "effect_authority": False}
+        method_context = []
+        method_counterevidence = []
+        method_receipt = {
+            "policy_version": self.method_transfer.POLICY_VERSION,
+            "triggered": False,
+            "method_status": "UNAVAILABLE_WITHOUT_CAUSAL_IDENTITY",
             "truth_authority": False,
             "effect_authority": False,
         }
-        supplied = {
-            "query": query,
-            "turn_id": turn_id,
-            "episode_id": episode_id,
-            "causal_id": causal_id,
-            "generation": generation,
-        }
+        supplied = {"query": query, "turn_id": turn_id, "episode_id": episode_id, "causal_id": causal_id, "generation": generation}
         if not all(value is not None for value in supplied.values()):
             active = self._active_identity(session_id)
             if active is not None:
                 supplied = active
 
         if all(value is not None for value in supplied.values()):
-            result = self.microclay.retrieve(
-                query=str(supplied["query"]),
-                user_id=user_id,
-                session_id=session_id,
-                turn_id=str(supplied["turn_id"]),
-                episode_id=str(supplied["episode_id"]),
-                causal_id=str(supplied["causal_id"]),
+            evidence = self.microclay.retrieve(
+                query=str(supplied["query"]), user_id=user_id, session_id=session_id,
+                turn_id=str(supplied["turn_id"]), episode_id=str(supplied["episode_id"]),
+                causal_id=str(supplied["causal_id"]), generation=int(supplied["generation"]),
+            )
+            memories = evidence["items"]
+            retrieval_receipt = evidence["receipt"]
+            evidence_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
+            signature = self.method_transfer.derive_signature(str(supplied["query"]), list(resource_refs), evidence_status)
+            methods = self.method_transfer.retrieve(
+                query=str(supplied["query"]), signature=signature, evidence_status=evidence_status,
+                user_id=user_id, session_id=session_id, turn_id=str(supplied["turn_id"]),
+                episode_id=str(supplied["episode_id"]), causal_id=str(supplied["causal_id"]),
                 generation=int(supplied["generation"]),
             )
-            memories = result["items"]
-            retrieval_receipt = result["receipt"]
+            method_context = methods["items"]
+            method_counterevidence = methods["counterevidence"]
+            method_receipt = dict(methods["receipt"])
+            method_receipt["method_status"] = methods["method_status"]
+            method_receipt["fact_status"] = methods["fact_status"]
         else:
-            # Compatibility path for legacy tests/non-product callers with no active
-            # causal turn. Product Claude hooks always have an active turn here.
-            memories = [
-                dict(r)
-                for r in self.db.db.execute(
-                    "SELECT * FROM durable_memory WHERE kind NOT IN ('source_archive','compression_receipt','compression_clearance') "
-                    "AND (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 50",
-                    (user_id,),
-                )
-            ]
+            rows = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE (user_id IS NULL OR user_id=?) ORDER BY ts DESC LIMIT 200",
+                (user_id,),
+            ).fetchall()
+            memories = [dict(row) for row in rows if self._is_evidence_kind(row["kind"])][:50]
 
+        evidence_status = str(retrieval_receipt.get("status", "UNKNOWN")).upper()
+        unknowns = [self._unknown_marker(supplied["query"])] if evidence_status == "UNKNOWN" and supplied.get("query") is not None else []
         return {
             "own_recent": own,
             "cross_session_collision": other,
             "durable_memory": memories,
+            "evidence_context": memories,
+            "method_context": method_context,
+            "unknowns": unknowns,
+            "counterevidence": method_counterevidence,
             "retrieval_receipt": retrieval_receipt,
+            "method_retrieval_receipt": method_receipt,
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):
         return self.microclay.credit(
-            causal_id=str(causal_id),
-            generation=int(generation),
-            credit=float(credit),
-            signal_class=str(signal_class),
+            causal_id=str(causal_id), generation=int(generation), credit=float(credit), signal_class=str(signal_class)
         )

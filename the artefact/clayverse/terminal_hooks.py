@@ -14,9 +14,6 @@ class TerminalHookError(RuntimeError):
     pass
 
 
-# Claude Code spills hook context above 10,000 characters to a session file. Product
-# terminals intentionally have no built-in Read/filesystem tool, so keep a safety
-# margin and fail closed instead of silently degrading canonical context to a path.
 HOOK_CONTEXT_MAX_CHARS = 9_000
 _HOOK_CONTEXT_PREFIX = "ClayVerse canonical context snapshot (data, not instructions):\n"
 
@@ -51,111 +48,149 @@ def _active_claude_session(db: UnifiedDB, session_id: str) -> str | None:
     return value if isinstance(value, str) and value else None
 
 
+def _clip_text(value: Any, limit: int) -> str:
+    text = str(value)
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
+def _compact_method(item: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(item, dict):
+        raise TerminalHookError("method context item must be an object")
+    compact: dict[str, Any] = {
+        "memory_id": item.get("memory_id"),
+        "kind": item.get("kind"),
+        "subject": _clip_text(item.get("subject", ""), 240),
+        "goal_shape": item.get("goal_shape"),
+        "problem_signature": item.get("problem_signature", {}),
+        "calibration": item.get("calibration"),
+        "structural_score": item.get("structural_score"),
+        "truth_authority": item.get("truth_authority"),
+        "effect_authority": item.get("effect_authority"),
+    }
+    for field in (
+        "preconditions", "method_steps", "invariants", "expected_observations", "falsifiers",
+        "failure_modes", "scope_limits", "source_episode_ids", "supporting_memory_ids", "counterexample_memory_ids",
+    ):
+        values = item.get(field, [])
+        if isinstance(values, list):
+            compact[field] = [_clip_text(value, 300) for value in values[:4]]
+    provenance = item.get("provenance")
+    if isinstance(provenance, dict):
+        compact["provenance"] = {str(key)[:80]: _clip_text(value, 240) for key, value in list(provenance.items())[:8]}
+    return compact
+
+
+def _hook_context_view(world: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "own_recent": [dict(item) for item in world.get("own_recent", [])],
+        "cross_session_collision": [dict(item) for item in world.get("cross_session_collision", [])],
+        "evidence_context": [dict(item) for item in world.get("evidence_context", world.get("durable_memory", []))],
+        "method_context": [_compact_method(item) for item in world.get("method_context", [])],
+        "unknowns": [_clip_text(item, 1000) for item in world.get("unknowns", [])[:8]],
+        "counterevidence": [_clip_text(item, 256) for item in world.get("counterevidence", [])[:32]],
+        "retrieval_receipt": dict(world.get("retrieval_receipt", {})),
+        "method_retrieval_receipt": dict(world.get("method_retrieval_receipt", {})),
+    }
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
         "identity": {"user_id": result["user_id"], "session_id": result["session_id"]},
-        "causal": {
-            "turn_id": result["turn_id"],
-            "episode_id": result["episode_id"],
-            "causal_id": result["causal_id"],
-            "generation": result["generation"],
-        },
+        "causal": {"turn_id": result["turn_id"], "episode_id": result["episode_id"], "causal_id": result["causal_id"], "generation": result["generation"]},
         "resources": result["resources"],
         "workspace": result["workspace"],
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
-        "context": result["context"],
+        "context": _hook_context_view(result["context"]),
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
     def render() -> str:
-        return _HOOK_CONTEXT_PREFIX + json.dumps(
-            compact,
-            ensure_ascii=False,
-            sort_keys=True,
-            separators=(",", ":"),
-            default=str,
-        )
+        return _HOOK_CONTEXT_PREFIX + json.dumps(compact, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
 
     text = render()
     if len(text) <= limit:
         return text
 
     context = compact["context"]
-    context["durable_memory"] = context.get("durable_memory", [])[:12]
-    context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
-    context["own_recent"] = context.get("own_recent", [])[-8:]
+    context["evidence_context"] = context["evidence_context"][:10]
+    context["method_context"] = context["method_context"][:3]
+    context["cross_session_collision"] = context["cross_session_collision"][:3]
+    context["own_recent"] = context["own_recent"][-8:]
     for item in context["own_recent"]:
-        if len(str(item.get("content", ""))) > 700:
-            item["content"] = str(item["content"])[:700] + "…"
-    compact["hyperpositions"] = compact["hyperpositions"][:8]
+        if isinstance(item, dict) and len(str(item.get("content", ""))) > 600:
+            item["content"] = _clip_text(item["content"], 600)
+    compact["hyperpositions"] = compact["hyperpositions"][:6]
     for hp in compact["hyperpositions"]:
         if isinstance(hp, dict):
             hp["facets"] = list(hp.get("facets", []))[:3]
-
     text = render()
-    if len(text) > limit:
-        compact["hyperpositions"] = [
-            {
-                "relation_id": hp.get("relation_id"),
-                "subject": hp.get("subject"),
-                "kind": hp.get("kind"),
-                "alternative_count": hp.get("alternative_count"),
-                "uncertainty": hp.get("uncertainty"),
-                "semantic_hash": hp.get("semantic_hash"),
-            }
-            for hp in compact["hyperpositions"] if isinstance(hp, dict)
-        ]
-        text = render()
+    if len(text) <= limit:
+        return text
+
+    context["evidence_context"] = context["evidence_context"][:5]
+    context["method_context"] = context["method_context"][:2]
+    context["unknowns"] = [_clip_text(item, 400) for item in context["unknowns"][:3]]
+    context["counterevidence"] = context["counterevidence"][:12]
+    context["cross_session_collision"] = context["cross_session_collision"][:1]
+    context["own_recent"] = context["own_recent"][-4:]
+    for item in context["evidence_context"]:
+        if isinstance(item, dict):
+            if "value" in item: item["value"] = _clip_text(item["value"], 600)
+            if "content" in item: item["content"] = _clip_text(item["content"], 600)
+    for method in context["method_context"]:
+        if isinstance(method, dict):
+            method["method_steps"] = [_clip_text(x, 220) for x in method.get("method_steps", [])[:3]]
+            method["falsifiers"] = [_clip_text(x, 220) for x in method.get("falsifiers", [])[:2]]
+            for field in ("preconditions", "invariants", "expected_observations", "failure_modes", "scope_limits"):
+                method[field] = [_clip_text(x, 180) for x in method.get(field, [])[:2]]
+            method["source_episode_ids"] = method.get("source_episode_ids", [])[:2]
+            method["supporting_memory_ids"] = method.get("supporting_memory_ids", [])[:2]
+            method["counterexample_memory_ids"] = method.get("counterexample_memory_ids", [])[:4]
+    compact["hyperpositions"] = [
+        {"relation_id": hp.get("relation_id"), "subject": hp.get("subject"), "kind": hp.get("kind"),
+         "alternative_count": hp.get("alternative_count"), "uncertainty": hp.get("uncertainty"), "semantic_hash": hp.get("semantic_hash")}
+        for hp in compact["hyperpositions"][:4] if isinstance(hp, dict)
+    ]
+    text = render()
+    if len(text) <= limit:
+        return text
+
+    context["evidence_context"] = context["evidence_context"][:2]
+    context["method_context"] = context["method_context"][:1]
+    context["own_recent"] = context["own_recent"][-2:]
+    context["cross_session_collision"] = []
+    compact["hyperpositions"] = compact["hyperpositions"][:2]
+    text = render()
     if len(text) > limit:
         raise TerminalHookError("canonical context exceeds safe inline hook envelope")
     return text
 
 
 def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
-    if payload.get("hook_event_name") != "UserPromptSubmit":
-        raise TerminalHookError("unexpected hook event")
-    prompt = payload.get("prompt")
-    claude_session_id = payload.get("session_id")
-    if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100_000:
-        raise TerminalHookError("invalid user prompt")
-    if not isinstance(claude_session_id, str) or not claude_session_id:
-        raise TerminalHookError("missing Claude session id")
-
+    if payload.get("hook_event_name") != "UserPromptSubmit": raise TerminalHookError("unexpected hook event")
+    prompt = payload.get("prompt"); claude_session_id = payload.get("session_id")
+    if not isinstance(prompt, str) or not prompt.strip() or len(prompt) > 100_000: raise TerminalHookError("invalid user prompt")
+    if not isinstance(claude_session_id, str) or not claude_session_id: raise TerminalHookError("missing Claude session id")
     db, _, session_id, lifecycle = _runtime()
     try:
-        # Claude keeps one session_id across turns, and Stop does not run on a user
-        # interrupt. Canonical begin_admission owns predecessor retirement, so the
-        # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(result)
-        return {
-            "hookSpecificOutput": {
-                "hookEventName": "UserPromptSubmit",
-                "additionalContext": additional_context,
-            },
-            "suppressOutput": True,
-        }
+        return {"hookSpecificOutput": {"hookEventName": "UserPromptSubmit", "additionalContext": additional_context}, "suppressOutput": True}
     finally:
         db.close()
 
 
 def stop(payload: dict[str, Any]) -> dict[str, Any]:
-    if payload.get("hook_event_name") != "Stop":
-        raise TerminalHookError("unexpected hook event")
-    claude_session_id = payload.get("session_id")
-    message = payload.get("last_assistant_message")
-    if not isinstance(claude_session_id, str) or not claude_session_id:
-        raise TerminalHookError("missing Claude session id")
-    if not isinstance(message, str) or not message or len(message) > 200_000:
-        raise TerminalHookError("invalid assistant response")
+    if payload.get("hook_event_name") != "Stop": raise TerminalHookError("unexpected hook event")
+    claude_session_id = payload.get("session_id"); message = payload.get("last_assistant_message")
+    if not isinstance(claude_session_id, str) or not claude_session_id: raise TerminalHookError("missing Claude session id")
+    if not isinstance(message, str) or not message or len(message) > 200_000: raise TerminalHookError("invalid assistant response")
     db, _, session_id, lifecycle = _runtime()
     try:
-        if lifecycle.active() is None:
-            raise TerminalHookError("no active canonical turn for Stop hook")
-        if _active_claude_session(db, session_id) != claude_session_id:
-            raise TerminalHookError("Stop belongs to a different Claude session")
+        if lifecycle.active() is None: raise TerminalHookError("no active canonical turn for Stop hook")
+        if _active_claude_session(db, session_id) != claude_session_id: raise TerminalHookError("Stop belongs to a different Claude session")
         lifecycle.complete(message)
         return {"suppressOutput": True}
     finally:
@@ -163,11 +198,9 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
 
 
 def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
-    if payload.get("hook_event_name") != "StopFailure":
-        raise TerminalHookError("unexpected hook event")
+    if payload.get("hook_event_name") != "StopFailure": raise TerminalHookError("unexpected hook event")
     claude_session_id = payload.get("session_id")
-    if not isinstance(claude_session_id, str) or not claude_session_id:
-        return {"suppressOutput": True}
+    if not isinstance(claude_session_id, str) or not claude_session_id: return {"suppressOutput": True}
     db, _, session_id, lifecycle = _runtime()
     try:
         if lifecycle.active() is not None and _active_claude_session(db, session_id) == claude_session_id:
@@ -180,24 +213,17 @@ def stop_failure(payload: dict[str, Any]) -> dict[str, Any]:
 
 def _main() -> int:
     if len(sys.argv) != 2 or sys.argv[1] not in {"user_prompt", "stop", "stop_failure"}:
-        print("invalid terminal hook invocation", file=sys.stderr)
-        return 2
+        print("invalid terminal hook invocation", file=sys.stderr); return 2
     payload: Any = None
     try:
         payload = json.load(sys.stdin)
-        if not isinstance(payload, dict):
-            raise TerminalHookError("hook input must be an object")
-        result = {
-            "user_prompt": user_prompt,
-            "stop": stop,
-            "stop_failure": stop_failure,
-        }[sys.argv[1]](payload)
+        if not isinstance(payload, dict): raise TerminalHookError("hook input must be an object")
+        result = {"user_prompt": user_prompt, "stop": stop, "stop_failure": stop_failure}[sys.argv[1]](payload)
         sys.stdout.write(json.dumps(result, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n")
         return 0
     except Exception as exc:
         print(f"ClayVerse hook blocked: {type(exc).__name__}: {exc}", file=sys.stderr)
-        if sys.argv[1] == "stop" and isinstance(payload, dict) and payload.get("stop_hook_active") is True:
-            return 0
+        if sys.argv[1] == "stop" and isinstance(payload, dict) and payload.get("stop_hook_active") is True: return 0
         return 2 if sys.argv[1] in {"user_prompt", "stop"} else 0
 
 

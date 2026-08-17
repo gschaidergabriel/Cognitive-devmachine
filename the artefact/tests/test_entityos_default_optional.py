@@ -15,7 +15,11 @@ def test_entityos_is_optional_by_default_for_single_container_baseline(monkeypat
         monkeypatch.delenv(name, raising=False)
     bridge, status = _entityos_config()
     assert bridge is None
-    assert status == {"required": False, "bound": False}
+    assert status == {
+        "staged": False,
+        "verified": False,
+        "execution_enabled": False,
+    }
 
 
 def test_manifest_cannot_reintroduce_mandatory_entityos_into_baseline():

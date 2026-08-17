@@ -1,0 +1,90 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_endpoint": "EntityOS",
+  "release_contract": "exactly one executable file named EntityOS",
+  "research_main_at_join": "d2112702483a763e8e5b1e76b07d06b6ca70865f",
+  "product_main_at_join": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_pr": 787,
+  "product_branch": "clay/go-entityos-attestation-recomposed-20260817",
+  "latest_product_head_reviewed": "e90b887111969becc922d25a73886af61d6b5340",
+  "objective": "Exercise the real one-file EntityOS freeze from an exact Git-free source snapshot through external EntityOSSourceSnapshotAttestation/v2, then preserve inherited one-file/runtime/provenance gates.",
+  "observed": [
+    {
+      "kind": "historical_same_pr_baseline",
+      "source_head": "e5b800f1238762b4e4b7ee0c950674579e7037e2",
+      "deployment_id": "dpl_9r9bBKKpDiscPBqEszGW2bd8pr8B",
+      "sandbox_execution": true,
+      "network_policy": "DENY_ALL",
+      "result": "PASS_INHERITED_GIT_CLEAN_MATRIX_ONLY",
+      "entityos_sha256": "e3cf97caf15dbbd9228b7da3bb6b6db351d02771aa621767747c71390ad3a774",
+      "entityos_bytes": 9175952,
+      "source_provenance": "GIT_CLEAN_HEAD",
+      "source_archive_sha256": null,
+      "sandbox_stop": "PASS",
+      "scope_note": "Did not exercise ATTESTED_SNAPSHOT_V2; therefore not sufficient for PR787 promotion."
+    },
+    {
+      "kind": "exact_sandbox_negative_result",
+      "source_head": "8afc19e3f8053104c4a453ebae03956c72256955",
+      "deployment_id": "dpl_F7p2sRqzWYzwH9kHWaHaT9f8fEL3",
+      "sandbox_execution": true,
+      "network_policy": "DENY_ALL",
+      "source_tree": "010b37865509d19fdc782f4b61fec7d47ead1f4f",
+      "source_archive_sha256": "e7a9b19fa738886bfac9cc228b040ee7ad93f2ee7ecc8d36345bb53d172e5c0c",
+      "source_attestation_sha256": "f7f064412b5bce78508f6ac94fc4efe5cd79d0c8b6cc5054115d43abc81b7e65",
+      "passed_before_failure": [
+        "raw Git tree source archive and git bundle digest checks",
+        "external v2 attestation digest transport",
+        "system freeze toolchain provisioning",
+        "pinned Python 3.13.13 + lark 1.3.1 + PyInstaller 6.21.0 provisioning"
+      ],
+      "failure_step": "attested_snapshot_v2_exact_entityos_double_build",
+      "result": "FAIL_BEFORE_ATTESTED_ENTITYOS_ARTIFACT",
+      "new_unusual_experiment_count": 0,
+      "sandbox_stop": "PASS"
+    },
+    {
+      "kind": "provider_block",
+      "source_head": "e90b887111969becc922d25a73886af61d6b5340",
+      "sandbox_execution": false,
+      "github_vercel_status": "failure",
+      "provider_reason": "build-rate-limit",
+      "result": "NO_EXECUTABLE_EVIDENCE_FOR_THIS_HEAD"
+    }
+  ],
+  "source_review": {
+    "supported_mechanism": "The source-stage attestation file list used String.localeCompare(..., 'en'), while the Python EntityOS verifier requires canonical lexicographic path ordering. Locale collation can reorder mixed-case/path strings and cause an early attestation rejection before PyInstaller.",
+    "counterhypothesis": "The attested build failure could instead be a later freeze/toolchain defect unrelated to ordering.",
+    "falsifier": "Run the exact repaired head in an isolated Vercel Sandbox; if the attested snapshot freeze still fails, capture the exact builder log and reject ordering as a complete explanation.",
+    "repair": {
+      "commit": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
+      "change": "Replace localeCompare path ordering with UTF-8 Buffer.compare ordering in stage-go-source.mjs.",
+      "evidence_level": "SOURCE_REVIEW_ONLY_UNTIL_EXACT_SANDBOX_RERUN"
+    },
+    "coordination_repair": {
+      "commit": "3c0b024fc538ad393fbb1f64ffae6ba79a5f2b51",
+      "change": "Restore inherited Batch-5 GO_EXPERIMENT_ACCOUNTING.json to regression-only v1 and keep the current 2026-08-17 experiment accounting separate."
+    }
+  },
+  "unusual_experiment": {
+    "limit": 1,
+    "reserved_id": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "executed_count": 0,
+    "consumed": false,
+    "status": "PENDING_EXECUTABLE_OBSERVATION",
+    "note": "Git-free double-build, Git-clean comparison and inherited Batch-5 checks are acceptance/regression controls, not additional unusual experiments."
+  },
+  "current_truth": {
+    "pr787_promotion": "BLOCKED",
+    "whole_entityos_acceptance": "IN_PROGRESS",
+    "blocking_condition": "No exact repaired-head Vercel Sandbox observation is currently available because Vercel Git deployment creation is provider-blocked by build-rate-limit.",
+    "next_sandbox_executable_step": "On the exact then-current PR787 head, run the existing build-internal v7 lane: exact raw Git tree + external v2 attestation -> Git-free twin EntityOS freeze -> runtime/pathless/relocation -> the single reserved content-tamper experiment -> sanitized Git reconstruction -> inherited Batch-5 matrix -> compare Git-free and Git-clean EntityOS SHA-256 -> stop sandbox. Preserve exact head/tree/archive/attestation/artifact digests and all exit codes."
+  },
+  "anti_goodhart": "A Vercel READY state, source-only repair, unit behavior, or the earlier GIT_CLEAN_HEAD artifact does not prove the repaired ATTESTED_SNAPSHOT_V2 product path. Whole EntityOS PASS remains false until the exact one-file artifact satisfies the admitted full-machine gates.",
+  "together_api": "FORBIDDEN",
+  "vps_test_evidence": "FORBIDDEN"
+}

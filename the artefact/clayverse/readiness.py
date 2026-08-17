@@ -17,8 +17,19 @@ class ClaudeReadiness:
 
 
 def _command_ok(argv: list[str], timeout: int = 5) -> bool:
+    """Run a non-interactive readiness probe with no ambient service credentials."""
     try:
-        cp = subprocess.run(argv, shell=False, capture_output=True, timeout=timeout, check=False)
+        cp = subprocess.run(
+            argv,
+            shell=False,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
+            env={
+                "PATH": "/usr/local/bin:/usr/bin:/bin",
+                "LANG": "C.UTF-8",
+            },
+        )
         return cp.returncode == 0
     except Exception:
         return False

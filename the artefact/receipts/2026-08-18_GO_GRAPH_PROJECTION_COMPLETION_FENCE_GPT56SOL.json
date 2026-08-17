@@ -1,0 +1,82 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "observed_date": "2026-08-18",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "9580103d3e2c289a62bd601855699669fee8c91b",
+  "retained_candidate_pr": 680,
+  "candidate_head_before_receipt": "0a678b758b37a2df0cec54783750d4c4f315f59d",
+  "candidate_tree_before_receipt": "e4dcb7104ce0cd5985a40bd44cc6059869c03259",
+  "classification": "SOURCE_REPLAY_FENCE_REPAIR_RUNTIME_UNEXECUTED",
+  "finding": {
+    "novelty": "NEW",
+    "gap": "ClayVerseEngine rebuilt the derived ClayGraph only after canonical completion and active_turn retirement. If that rebuild raised after a verified effect had already been durably re-entered, ingest could report failure after the replay fence was gone, making caller retry semantics ambiguous and potentially duplicating a real effect.",
+    "why_material": "ClayGraph is rebuildable projection only. A projection failure must not erase or outlive the canonical active-turn fence around an already re-entered effect.",
+    "strongest_counterhypothesis": "Because ClayGraph is derived, projection failure should eventually be decoupled from canonical turn success entirely via an explicit durable projection-dirty/rebuild contract rather than blocking completion.",
+    "counterhypothesis_disposition": "DEFER. The existing Engine already surfaced graph rebuild failure as ingest failure. This repair preserves that fail-closed observable behavior while moving the failure before replay-fence retirement; it does not invent a second graph/state authority. A future fail-open projection contract requires its own explicit state/recovery design and evidence."
+  },
+  "repair": {
+    "engine_commit": "4f1e80c9359739e2f655fb051352d00680fe66ca",
+    "engine_blob": "00ecdfaaa1a2c8e4b67b5006dab404ac86841475",
+    "mechanism": "Use ClayGraphProjection.rebuild_in_tx() inside the existing completion/finalization transaction before workspace COMPLETED and active_turn deletion on both no-effect and effect paths; remove the trailing separate self.graph.rebuild().",
+    "authority_change": false,
+    "second_effect_path": false,
+    "second_state_authority": false
+  },
+  "regression_candidate": {
+    "commit": "ab64e4c887c3fd7bfb21b3f0296e5b95b2cbbbb5",
+    "path": "the artefact/tests/test_engine_graph_projection_completion_fence.py",
+    "blob": "4d9f93da73162b3e252838776b976232c06d217d",
+    "cases": [
+      "no-effect graph failure rolls completion back while keeping admitted active turn recoverable",
+      "post-effect graph failure preserves one VERIFIED effect plus matching causal re-entry, keeps active retry fence, rejects a second ingest, and lets Recovery close without a second effect"
+    ]
+  },
+  "live_fusion": {
+    "current_candidate_head_rechecked": "0a678b758b37a2df0cec54783750d4c4f315f59d",
+    "repair_bytes_still_present": true,
+    "regression_bytes_still_present": true,
+    "parallel_overwrite_observed": false,
+    "controller_pr810_current_head_observed": "e39731505bf3f92d431fed7ce5b5de63f7591557",
+    "controller_current_bound_research_sha": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
+    "controller_current_bound_research_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
+    "controller_binding_includes_this_repair": false
+  },
+  "execution_evidence": {
+    "exact_candidate_test_executed": false,
+    "exact_candidate_oci_executed": false,
+    "github_actions_runs_observed_for_candidate_head": 0,
+    "classification": "SOURCE_CANDIDATE_ONLY_NO_RUNTIME_CREDIT",
+    "runtime_credit": 0,
+    "reason": "No started exact-head isolated runner was exposed for the current candidate. The retained Vercel controller is still bound to earlier Research product bytes and requires later exact-head rebind before any owner credential-bearing run can test this repair."
+  },
+  "controller_frontier": {
+    "retained_pr": 810,
+    "detached_batch_improvement_observed": true,
+    "current_detached_batch_scope": "exact private-source verification, full source pytest, EntityOS reconstruction/staging, exact OCI build/identity, hardened service --once",
+    "still_missing_from_final_test_of_tests": [
+      "approved runtime Mistral secret acquisition",
+      "real in-image canonical Mistral turn",
+      "required verified EffectGate/EntityOS round-trip",
+      "Tier-1 recovery validation",
+      "full same-digest Sandbox/appliance destroy and recreate under new generation",
+      "post-recreation secret reacquisition and stale/no-blind-replay checks",
+      "second real cognition turn and remaining auth/PTY/two-user/concurrency gates"
+    ]
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No shared immutable go-request identifier was exposed; deterministic graph-failure regressions are ordinary falsifiers and do not consume the unusual-experiment slot."
+  },
+  "non_claims": [
+    "No deterministic regression PASS is claimed for the current candidate head.",
+    "No exact OCI/image-digest PASS is claimed for this repair.",
+    "No real Mistral/Vault or EntityOS external-effect final gate was executed.",
+    "No whole ClayVerse PASS is claimed."
+  ],
+  "next_discriminator": "After overlapping PR680 product-byte fusion settles, freeze/rebase the exact retained candidate, rebind PR810 once to that exact Research commit/tree including this graph fence, execute its isolated detached full-regression/OCI batch with the owner-held scoped GitHub read credential, then continue only on green into the missing Vault-Mistral-Effect-Tier1-Tier2-second-cognition/auth gates.",
+  "acceptance": "IN_PROGRESS"
+}

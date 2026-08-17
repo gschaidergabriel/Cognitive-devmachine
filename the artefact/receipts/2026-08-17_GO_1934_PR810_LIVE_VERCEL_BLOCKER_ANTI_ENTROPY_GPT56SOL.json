@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T19:33:55+07:00",
+  "organ": "GPT-5.6 Sol",
+  "canonical_main_observed_before_write": "12d1fbe1c961dc234f62be80bc9d4f113bb2525d",
+  "classification": "NO_CHANGE_PRODUCT_BYTES_LIVE_EXECUTION_BLOCKER_ANTI_ENTROPY",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container",
+  "prepared_next_execution_closure": {
+    "commit": "218b51cad87e3907d1dd45adc7998c736be23cdb",
+    "tree": "f16c87737cf74ef0703a1fc0a51fd99298450cd1",
+    "runtime_credit": 0
+  },
+  "retained_oci_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "current_observed_head": "c40a509971e15605ec1c9cddab8d9624198b5a17",
+    "current_head_change": "test-only correction tightening the Sandbox identity source assertion",
+    "current_head_runtime_credit": 0
+  },
+  "strongest_actual_execution": {
+    "provider": "Vercel Sandbox via retained Git-preview orchestration",
+    "deployment": "dpl_7BkVnngPJUPiVyrqwFarGFZDevAG",
+    "controller_commit": "2e5505983172e582a50f4f72bebd561bc650ff5a",
+    "observed_build_log": [
+      "guard v4 admitted exact retained runner binding",
+      "current-target patch v5 bound exercised Research closure 5e5adce0591058608bbd7381ecf570a39b282f0d",
+      "Sandbox.create => sandbox_admission=PASS_CREATED",
+      "private source staging => BLOCKED_MISSING_GITHUB_READ_TOKEN",
+      "error => PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING",
+      "sandbox_stopped=true"
+    ],
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "test_fail": false
+  },
+  "current_blocker": "Provision GITHUB_READ_TOKEN as a sensitive Vercel Preview build credential on the retained PR810 path. Keep it host-side; never commit, log, or forward it into the disposable Sandbox.",
+  "connector_capability_observation": "Current connected Vercel tool surface exposes deployment/log inspection but no project environment-variable mutation action, so this organ cannot safely provision the missing secret.",
+  "counterhypothesis": "Retrying or rebinding PR810 before credential provisioning would consume another Preview/Sandbox attempt without crossing the already-replicated private-source boundary and therefore would not increase product information.",
+  "decision": "Do not create a parallel controller, alternate source-staging authority, or retry-only commit. Preserve the prepared closure and rebind once after approved credential provisioning plus one final product-relevant identity refresh.",
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_reason": "No shared immutable request/turn id is exposed and the shared user-message timestamp available to workers is minute-precision only; canonical atomic lease protocol therefore fails closed.",
+  "security": {
+    "vps_testing": "FORBIDDEN_NOT_USED",
+    "self_hosted_testing": "FORBIDDEN_NOT_USED",
+    "production_testing": "FORBIDDEN_NOT_USED",
+    "together_api": "FORBIDDEN_NOT_USED",
+    "secret_exposed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false
+}

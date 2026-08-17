@@ -157,11 +157,23 @@ class TurnLifecycle:
         if row["effect_id"] is not None:
             raise TurnLifecycleError("only one effect admitted per turn in candidate contract")
         if not int(row["workspace_selected"]):
-            self.workspace.select(row["episode_id"], "request_effect")
-            self.db.db.execute(
-                "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
-                (self.session_id, row["causal_id"]),
-            )
+            with self.db.tx() as db:
+                locked = db.execute("SELECT * FROM active_turns WHERE session_id=?", (self.session_id,)).fetchone()
+                if locked is None or locked["causal_id"] != row["causal_id"]:
+                    raise TurnLifecycleError("active turn changed before effect selection")
+                if locked["effect_id"] is not None:
+                    raise TurnLifecycleError("effect appeared before selection")
+                if not int(locked["workspace_selected"]):
+                    self.workspace.select_in_tx(locked["episode_id"], "request_effect")
+                    cur = db.execute(
+                        "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
+                        (self.session_id, locked["causal_id"]),
+                    )
+                    if cur.rowcount != 1:
+                        raise TurnLifecycleError("active turn changed during effect selection")
+            row = self.active()
+            if row is None:
+                raise TurnLifecycleError("active turn disappeared after effect selection")
         effect_id, outcome = self.effects.execute(
             EffectRequest(self.user_id, self.session_id, capability, target, argv, int(row["generation"])),
             row["episode_id"],
@@ -169,10 +181,18 @@ class TurnLifecycle:
         causal_id = self.effects.causal_for_effect(effect_id)
         if causal_id != row["causal_id"]:
             raise TurnLifecycleError("verified effect re-entered through wrong causal identity")
-        self.db.db.execute(
-            "UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 WHERE session_id=? AND causal_id=?",
-            (effect_id, json.dumps(outcome, sort_keys=True), self.session_id, row["causal_id"]),
-        )
+        with self.db.tx() as db:
+            current = db.execute("SELECT causal_id,effect_id FROM active_turns WHERE session_id=?", (self.session_id,)).fetchone()
+            if current is None or current["causal_id"] != row["causal_id"]:
+                raise TurnLifecycleError("active turn changed before verified effect binding")
+            if current["effect_id"] is not None:
+                raise TurnLifecycleError("active turn already carries an effect")
+            cur = db.execute(
+                "UPDATE active_turns SET effect_id=?, outcome=?, workspace_selected=1 WHERE session_id=? AND causal_id=?",
+                (effect_id, json.dumps(outcome, sort_keys=True), self.session_id, row["causal_id"]),
+            )
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("active turn changed during verified effect binding")
         return {
             "effect_id": effect_id,
             "causal_id": causal_id,
@@ -181,25 +201,27 @@ class TurnLifecycle:
         }
 
     def complete(self, response: str) -> dict:
-        row = self.active()
-        if row is None:
-            return {"completed": False, "reason": "no_active_turn"}
         response = str(response)
         if len(response) > 200_000:
             raise ValueError("assistant response too large")
-        if not int(row["workspace_selected"]):
-            self.workspace.select(row["episode_id"], "respond")
-        effect_id = row["effect_id"]
-        existing_causal = self.db.db.execute(
-            "SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (effect_id,)
-        ).fetchone() if effect_id else None
-        if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
-            raise TurnLifecycleError("effect causal identity diverged before Stop")
         now = time.time()
         assistant_id = str(uuid.uuid4())
-        credit = float(existing_causal["credit"]) if existing_causal else 0.0
         response_hash = hashlib.sha256(response.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
+            row = db.execute("SELECT * FROM active_turns WHERE session_id=?", (self.session_id,)).fetchone()
+            if row is None:
+                return {"completed": False, "reason": "no_active_turn"}
+            if not int(row["workspace_selected"]):
+                self.workspace.select_in_tx(row["episode_id"], "respond")
+            effect_id = row["effect_id"]
+            existing_causal = db.execute(
+                "SELECT causal_id,credit FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (effect_id,)
+            ).fetchone() if effect_id else None
+            if effect_id and existing_causal is None:
+                raise TurnLifecycleError("effect lacks causal re-entry before Stop")
+            if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
+                raise TurnLifecycleError("effect causal identity diverged before Stop")
+            credit = float(existing_causal["credit"]) if existing_causal else 0.0
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
             ).fetchone()[0])
@@ -214,36 +236,44 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], response_hash, 0.0, 1, now),
                 )
-            db.execute(
+            cur = db.execute(
                 "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state='SELECTED'",
                 (row["episode_id"],),
             )
-            db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("workspace did not terminalize during Stop")
+            self.memory.compact(self.session_id)
+            self.graph.rebuild_in_tx()
+            cur = db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("active turn changed during Stop")
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
-        self.memory.compact(self.session_id)
-        self.graph.rebuild()
-        return {"completed": True, "assistant_turn_id": assistant_id, "causal_id": row["causal_id"], "effect_id": effect_id, "credit": credit}
+            result = {"completed": True, "assistant_turn_id": assistant_id, "causal_id": row["causal_id"], "effect_id": effect_id, "credit": credit}
+        return result
 
     def abort(self, reason: str) -> dict:
-        row = self.active()
-        if row is None:
-            return {"aborted": False, "reason": "no_active_turn"}
-        try:
-            ws = self.db.db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?", (row["episode_id"],)).fetchone()
-            if ws and ws["state"] == "OPEN":
-                self.workspace.select(row["episode_id"], "defer_effect")
-        except Exception:
-            pass
-        existing_causal = self.db.db.execute(
-            "SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (row["effect_id"],)
-        ).fetchone() if row["effect_id"] else None
-        if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
-            raise TurnLifecycleError("effect causal identity diverged during abort")
+        reason = str(reason)[:2000]
         now = time.time()
         system_id = str(uuid.uuid4())
-        reason = str(reason)[:2000]
         reason_hash = hashlib.sha256(reason.encode("utf-8")).hexdigest()
         with self.db.tx() as db:
+            row = db.execute("SELECT * FROM active_turns WHERE session_id=?", (self.session_id,)).fetchone()
+            if row is None:
+                return {"aborted": False, "reason": "no_active_turn"}
+            ws = db.execute("SELECT state FROM workspace_episodes WHERE episode_id=?", (row["episode_id"],)).fetchone()
+            if ws is None:
+                raise TurnLifecycleError("active turn workspace missing during abort")
+            if ws["state"] == "OPEN":
+                self.workspace.select_in_tx(row["episode_id"], "defer_effect")
+            elif ws["state"] != "SELECTED":
+                raise TurnLifecycleError(f"workspace is {ws['state']}, not abortable")
+            existing_causal = db.execute(
+                "SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1", (row["effect_id"],)
+            ).fetchone() if row["effect_id"] else None
+            if row["effect_id"] and existing_causal is None:
+                raise TurnLifecycleError("effect lacks causal re-entry during abort")
+            if existing_causal and existing_causal["causal_id"] != row["causal_id"]:
+                raise TurnLifecycleError("effect causal identity diverged during abort")
             ordinal = int(db.execute(
                 "SELECT COALESCE(MAX(ordinal),0)+1 FROM turns WHERE session_id=?", (self.session_id,)
             ).fetchone()[0])
@@ -258,12 +288,17 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], reason_hash, 0.0, 1, now),
                 )
-            db.execute(
-                "UPDATE workspace_episodes SET state='ABORTED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+            cur = db.execute(
+                "UPDATE workspace_episodes SET state='ABORTED' WHERE episode_id=? AND state='SELECTED'",
                 (row["episode_id"],),
             )
-            db.execute("DELETE FROM active_turns WHERE session_id=?", (self.session_id,))
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("workspace did not terminalize during abort")
+            self.memory.compact(self.session_id)
+            self.graph.rebuild_in_tx()
+            cur = db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
+            if cur.rowcount != 1:
+                raise TurnLifecycleError("active turn changed during abort")
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
-        self.memory.compact(self.session_id)
-        self.graph.rebuild()
-        return {"aborted": True, "causal_id": row["causal_id"], "reason": reason}
+            result = {"aborted": True, "causal_id": row["causal_id"], "reason": reason}
+        return result

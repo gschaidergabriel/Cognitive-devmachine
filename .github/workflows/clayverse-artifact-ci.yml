@@ -1,12 +1,16 @@
 name: clayverse-artifact-ci
 
-# Manual while GitHub-hosted runner admission is unavailable. The latest
-# attempted OCI run failed before any step with runner_id=0; automatic pushes
-# would therefore create repeated false-red control-plane noise rather than
-# executable evidence. Re-enable push only after runner admission itself has
-# materially changed.
+# Canonical manual ClayVerse OCI gate. GitHub-hosted runner admission has been
+# unavailable, so this workflow remains dispatch-only. The release tag is a
+# transport locator only: EntityOS identity is derived exclusively from the
+# tracked lock and reverified before and after image construction.
 on:
   workflow_dispatch:
+    inputs:
+      entityos_release_tag:
+        description: 'Same-repository release tag containing exactly one asset named EntityOS'
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -18,7 +22,7 @@ concurrency:
 jobs:
   oci-artifact:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
@@ -32,6 +36,53 @@ jobs:
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           echo "source_sha=$GITHUB_SHA"
           git status --porcelain=v1
+
+      - name: Resolve tracked EntityOS authority and stage exact release bytes
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ENTITYOS_RELEASE_TAG: ${{ inputs.entityos_release_tag }}
+        run: |
+          set -euo pipefail
+          readarray -t LOCK < <(python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          doc = json.loads(Path("the artefact/entityos.lock.json").read_text(encoding="utf-8"))
+          assert doc["schema"] == "ClayVerseEntityOSArtifactLock/v1"
+          sha = doc["sha256"]
+          size = doc["size_bytes"]
+          assert isinstance(sha, str) and len(sha) == 64 and all(c in "0123456789abcdef" for c in sha)
+          assert isinstance(size, int) and size > 0
+          print(sha)
+          print(size)
+          PY
+          )
+          LOCK_SHA256="${LOCK[0]}"
+          LOCK_SIZE="${LOCK[1]}"
+
+          rm -rf /tmp/clayverse-entityos-release
+          mkdir -p /tmp/clayverse-entityos-release
+          gh release download "$ENTITYOS_RELEASE_TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'EntityOS' \
+            --dir /tmp/clayverse-entityos-release
+          test "$(find /tmp/clayverse-entityos-release -maxdepth 1 -type f -name 'EntityOS' | wc -l)" -eq 1
+          test -f /tmp/clayverse-entityos-release/EntityOS
+          test ! -L /tmp/clayverse-entityos-release/EntityOS
+          test "$(stat -c %s /tmp/clayverse-entityos-release/EntityOS)" = "$LOCK_SIZE"
+
+          cd "the artefact"
+          sh ./stage-entityos.sh /tmp/clayverse-entityos-release/EntityOS "$LOCK_SHA256"
+          test -f ./EntityOS
+          test ! -L ./EntityOS
+          test "$(sha256sum ./EntityOS | awk '{print $1}')" = "$LOCK_SHA256"
+          test "$(stat -c %s ./EntityOS)" = "$LOCK_SIZE"
+
+          echo "CLAYVERSE_ENTITYOS_SHA256=$LOCK_SHA256" >> "$GITHUB_ENV"
+          echo "ENTITYOS_LOCK_SIZE=$LOCK_SIZE" >> "$GITHUB_ENV"
+          echo "ENTITYOS_RELEASE_TAG=$ENTITYOS_RELEASE_TAG" >> "$GITHUB_ENV"
+          echo "entityos_release_tag=$ENTITYOS_RELEASE_TAG entityos_sha256=$LOCK_SHA256 entityos_size=$LOCK_SIZE"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,38 +105,16 @@ jobs:
           set -euo pipefail
           python -m pytest -q
 
-      - name: Resolve authoritative EntityOS lock and require exact staged bytes
+      - name: Reverify tracked EntityOS authority before image construction
         shell: bash
         run: |
           set -euo pipefail
-          readarray -t LOCK < <(python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          doc = json.loads(Path("the artefact/entityos.lock.json").read_text(encoding="utf-8"))
-          assert doc["schema"] == "ClayVerseEntityOSArtifactLock/v1"
-          sha = doc["sha256"]
-          size = doc["size_bytes"]
-          assert isinstance(sha, str) and len(sha) == 64 and all(c in "0123456789abcdef" for c in sha)
-          assert isinstance(size, int) and size > 0
-          print(sha)
-          print(size)
-          PY
-          )
-          LOCK_SHA256="${LOCK[0]}"
-          LOCK_SIZE="${LOCK[1]}"
-          test -f "the artefact/EntityOS" || {
-            echo "::error::Exact locked EntityOS bytes are not staged at the artefact/EntityOS; OCI acceptance remains blocked."
-            exit 86
-          }
+          test -f "the artefact/EntityOS"
           test ! -L "the artefact/EntityOS"
           ACTUAL_SHA256="$(sha256sum "the artefact/EntityOS" | awk '{print $1}')"
           ACTUAL_SIZE="$(stat -c %s "the artefact/EntityOS")"
-          test "$ACTUAL_SHA256" = "$LOCK_SHA256"
-          test "$ACTUAL_SIZE" = "$LOCK_SIZE"
-          echo "CLAYVERSE_ENTITYOS_SHA256=$LOCK_SHA256" >> "$GITHUB_ENV"
-          echo "ENTITYOS_LOCK_SIZE=$LOCK_SIZE" >> "$GITHUB_ENV"
-          echo "entityos_sha256=$LOCK_SHA256 entityos_size=$LOCK_SIZE"
+          test "$ACTUAL_SHA256" = "$CLAYVERSE_ENTITYOS_SHA256"
+          test "$ACTUAL_SIZE" = "$ENTITYOS_LOCK_SIZE"
 
       - name: Validate Compose shape
         shell: bash
@@ -95,7 +124,7 @@ jobs:
           grep -q 'read_only: true' /tmp/clayverse-compose.rendered.yaml
           grep -q 'no-new-privileges:true' /tmp/clayverse-compose.rendered.yaml
 
-      - name: Build exact OCI candidate
+      - name: Build exact OCI candidate and verify embedded EntityOS bytes
         shell: bash
         run: |
           set -euo pipefail
@@ -105,10 +134,12 @@ jobs:
             -t "$IMAGE" "the artefact"
           IMAGE_ID="$(docker image inspect "$IMAGE" --format '{{.Id}}')"
           ARCHIVE_SHA256="$(docker save "$IMAGE" | sha256sum | awk '{print $1}')"
+          EMBEDDED_SHA256="$(docker run --rm --entrypoint python "$IMAGE" -c "import hashlib; print(hashlib.sha256(open('/opt/entityos/EntityOS','rb').read()).hexdigest())")"
+          test "$EMBEDDED_SHA256" = "$CLAYVERSE_ENTITYOS_SHA256"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
           echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_ENV"
           echo "ARCHIVE_SHA256=$ARCHIVE_SHA256" >> "$GITHUB_ENV"
-          printf 'image_id=%s\narchive_sha256=%s\n' "$IMAGE_ID" "$ARCHIVE_SHA256"
+          printf 'image_id=%s\narchive_sha256=%s\nembedded_entityos_sha256=%s\n' "$IMAGE_ID" "$ARCHIVE_SHA256" "$EMBEDDED_SHA256"
 
       - name: Enforce non-root and hardened offline restart continuity
         shell: bash
@@ -163,6 +194,18 @@ jobs:
           test "$CHECKPOINTS" -ge 2
           echo "runtime_uid=$UID_ACTUAL checkpoints_after_restart=$CHECKPOINTS"
 
+      - name: Verify production startup fails closed without identity and Clerk config
+        shell: bash
+        run: |
+          set -euo pipefail
+          set +e
+          docker run --rm "$IMAGE" >/tmp/clayverse-no-config.log 2>&1
+          rc=$?
+          set -e
+          cat /tmp/clayverse-no-config.log
+          test "$rc" -ne 0
+          grep -q 'CLAYVERSE_CLERK_MAP_JSON is required' /tmp/clayverse-no-config.log
+
       - name: Artifact evidence summary
         shell: bash
         run: |
@@ -172,10 +215,12 @@ jobs:
             echo "- image: $IMAGE"
             echo "- image id: $IMAGE_ID"
             echo "- docker-save sha256: $ARCHIVE_SHA256"
+            echo "- EntityOS release locator: $ENTITYOS_RELEASE_TAG"
             echo "- embedded EntityOS sha256: $CLAYVERSE_ENTITYOS_SHA256"
             echo "- embedded EntityOS size: $ENTITYOS_LOCK_SIZE"
             echo "- tests: full candidate pytest suite"
             echo "- runtime: non-root uid 10001, network=none, read-only rootfs, cap-drop=ALL, no-new-privileges"
             echo "- continuity: two isolated state-only probe restarts against one persistent state volume"
+            echo "- production no-config: required fail-closed Clerk/identity startup gate"
             echo "- readiness claim: none; --once must report probe_ok with ready=false"
           } >> "$GITHUB_STEP_SUMMARY"

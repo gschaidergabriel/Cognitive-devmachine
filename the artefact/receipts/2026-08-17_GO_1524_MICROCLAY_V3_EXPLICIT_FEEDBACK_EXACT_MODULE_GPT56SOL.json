@@ -1,0 +1,93 @@
+{
+  "schema": "ClayVerseMicroClayV3ExplicitFeedbackExactModuleReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T15:24+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "active_path": "PR550 -> retained PR484 -> main",
+  "target_pr": 550,
+  "target_branch_head_before_receipt": "f22af5c0e6e016bc3c216dc6370e1523d2e22122",
+  "target_modules": {
+    "microclay_feedback": {
+      "path": "the artefact/clayverse/microclay_feedback.py",
+      "git_blob": "f4637b914db915a5b1d090c20f416c69d16e9be8",
+      "sha256": "9480b37e5a6cc09a181f1e74692b457d527a71cd52bbbcfced0346125cece546"
+    },
+    "microclay_retrieval": {
+      "path": "the artefact/clayverse/microclay_retrieval.py",
+      "git_blob": "0cdbdeb7353c5e5fbcbd7aa72a5182768f95b7aa",
+      "sha256": "29f831c78169d1c12ce6a0f72a52b2ab8f459c432fef541ce47117809579e763"
+    }
+  },
+  "execution_surface": "OPENAI_NON_PRODUCTION_ISOLATED_CONTAINER",
+  "runtime": {
+    "python": "3.13.5",
+    "sqlite": "3.46.1"
+  },
+  "source_binding": {
+    "feedback_git_blob_recomputed_in_container": "f4637b914db915a5b1d090c20f416c69d16e9be8",
+    "retrieval_git_blob_recomputed_in_container": "0cdbdeb7353c5e5fbcbd7aa72a5182768f95b7aa",
+    "matched_expected": true
+  },
+  "probe": {
+    "name": "explicit_feedback_authority_idempotency_temporal_nested_atomicity",
+    "probe_sha256": "97975374d0dd3d70aa0fabd73a072dbb7d93137e50becb585f3812ccaaf076bf",
+    "checks_passed": 17,
+    "checks_total": 17,
+    "exit_code": 0,
+    "checks": {
+      "USER_MISS_TARGET_applies_one_query_only_exact_memory_route": true,
+      "route_is_v3_gabriel_scoped": true,
+      "positive_policy_math_matches_contract": true,
+      "feedback_receipt_written": true,
+      "duplicate_feedback_is_idempotent": true,
+      "model_inferred_source_rejected": true,
+      "cross_user_request_identity_rejected": true,
+      "future_hindsight_target_rejected": true,
+      "current_turn_echo_target_rejected": true,
+      "USER_NO_MEMORY_records_calibration_without_route": true,
+      "nested_feedback_insert_fault_observed": true,
+      "nested_failure_leaks_no_route_inside_outer_tx": true,
+      "nested_failure_leaks_no_receipt_inside_outer_tx": true,
+      "unrelated_outer_commit_survives_caught_inner_failure": true,
+      "nested_failure_leaks_no_route_after_outer_commit": true,
+      "nested_failure_leaks_no_receipt_after_outer_commit": true,
+      "clean_retry_after_fault_applies_once": true
+    },
+    "result": "PASS_EXACT_ACTIVE_EXPLICIT_FEEDBACK_MODULE_MECHANISMS"
+  },
+  "scaffolding_boundary": "Exact target module bytes were executed with a minimal in-memory SQLite schema and narrow DB adapter to isolate the feedback organ. This is not the repository's full canonical test suite, full UnifiedDB/TurnLifecycle runtime, container runtime, or real user/UI ingress.",
+  "adjudication": {
+    "explicit_user_miss_learning_mechanism_supported": true,
+    "explicit_source_authority_fence_supported": true,
+    "cross_user_and_temporal_fences_supported": true,
+    "feedback_idempotency_supported": true,
+    "feedback_nested_transaction_atomicity_supported": true,
+    "full_pr550_runtime_verified": false,
+    "full_pr484_runtime_verified": false,
+    "current_main_runtime_verified": false,
+    "oci_runtime_verified": false,
+    "whole_clayverse_pass": false
+  },
+  "coordination": {
+    "pr568_rejoin": "merged retained PR484 ancestry into PR550 before this receipt commit",
+    "duplicate_pr563": "closed/unmerged and not reopened",
+    "unusual_experiment_count_added": 0,
+    "go_experiment_accounting": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "provider_state": {
+    "vercel": "preferred but current free preview/deployment cap blocks new SQLite-capable retry",
+    "daytona": "authorized fallback; current orchestration environment remains provider-contact blocked by local SDK/network/credential injection availability",
+    "fallback_for_this_probe": "authorized OpenAI non-production isolated container"
+  },
+  "authority": {
+    "truth_authority_changed": false,
+    "effect_authority_changed": false,
+    "serving_mode_changed": false,
+    "microclay_active_promotion": false,
+    "together_api_used": false,
+    "vps_self_hosted_or_production_testing_used": false,
+    "final_paid_or_model_training_used": false
+  },
+  "next_exact_gate": "Execute the full PR550 v3 explicit-feedback + credit/interference/nested-transaction/replay/restart/schema8 suite on an actually-started provider sandbox after exact rejoin to then-current retained PR484/main; then broader ClayVerse and OCI gates before any promotion."
+}

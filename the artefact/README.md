@@ -14,6 +14,7 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
+- Research coordination: material deltas now use **Live Fusion** for targeted research/worker re-entry, with **Live Hypofusion** automatically opening an adversarial counterhypothesis lane for material contradiction, promotion/merge, shared-ancestry pseudo-replication, persistent blockers, OOD/security results or competing worker semantics. Exact `fusion` and `hypofusion` commands remain full-depth macro-runs. Delivery, reconstruction, plan revalidation, use, local effect and causal credit remain explicitly distinct; this layer creates no second state/effect authority.
 - Runtime readiness on current `main`: `/readyz` requires canonical state and both canonical tmux sessions to be live and pass the managed transport-policy-v3 attestation used by attach admission. This gate is read-only and does not create or repair sessions.
 - Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
 - Effects: generic host `process.exec` is fail-closed; admitted effects must pass the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
@@ -29,16 +30,16 @@ This directory is the canonical product workspace for the current ClayVerse endp
 
 ### Latest cycle delta
 
-**2026-08-17 17:34 +07:00 — `NO_CHANGE` product code; execution-admission frontier exhausted and duplicate lanes reduced**
+**2026-08-17 17:36 +07:00 — `NO_CHANGE` product/runtime code; Live Fusion + conditional Live Hypofusion made canonical and routed back to research/workers**
 
-- Refreshed canonical `main` through `a9e08309ceefb441f38f2bdcf89af1a335e8dfd0`. The canonical state already contains the byte-exact tmux focused regression **9/9 PASS**, the old-head real-tmux 3.6a component evidence, and the durable **rejoin-on-admission** rule.
-- Attempted a stricter local real-tmux discriminator only as an execution-admission check. The isolated controller has Python/pytest but no tmux binary; external package/provider DNS was not usable, so no tmux command or ClayVerse runtime assertion executed. Runtime credit: **zero**.
-- Rechecked available execution surfaces: the connected Vercel surface exposes no direct Sandbox lifecycle action here and current exact-head Preview attempts are rate-limited before Sandbox start. Daytona remains authorized fallback but this controller has no admitted credential/provider-contact path; missing connector/egress is not evidence of Daytona provider unavailability or account credit.
-- Closed stale status PR #615 unmerged instead of letting its older README/PROGRAM_STATE overwrite stronger later canonical evidence.
-- Closed stale managed-Claude process-attestation donor PR #527 unmerged; PR #602 remains the single retained process-attestation lane. PR #598 was already closed as superseded.
-- Whole-product frontier scan found no higher-information non-duplicate source lane that can currently cross its promotion gate without an actually-started authorized isolated runner: #611 tmux repair, #602 native-Claude process attestation, #454 prompt-identity hooks, #484/#550 MicroClay, #421 supply chain, and #430 effect/recovery UNKNOWN all require exact runtime/build evidence before promotion.
-- No unusual experiment was consumed because no uniquely claimable shared atomic experiment lease was available from this trigger's exposed coordination identity.
-- `NO_CHANGE` to ClayVerse product/runtime code, semantic authority, and whole-product acceptance. Next executable discriminator: first admitted isolated runner → refresh `main` → rejoin #611 exactly once → bind exact resulting head → real tmux 3.6a discriminator → focused + adjacent regressions → promotion decision; then proceed to native-Claude/OCI/readiness/restart/concurrency acceptance.
+- Refreshed fast-moving canonical state throughout the cycle and wrote the owner-directed live research rule directly to current `main` after repeated parallel evidence/status movement made stale side-branch promotion undesirable. Canonical head immediately before the living README write was `10a4e1731bb02610f1085353954e0b52d69f9a16`.
+- Added `research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md`: every material delta enters Live Fusion; high-impact contradiction/promotion/shared-ancestry/persistent-blocker/OOD-security/competing-worker conditions also open Live Hypofusion automatically.
+- Persisted `FUSION_HYPOFUSION_RECEIPT.json` and `WORKER_REENTRY_MANIFEST.json` under `research_entity/mesh_feedback/20260817T1725p0700-live-fusion-hypofusion-reentry/`, reusing the existing OmniSource/swarm re-entry semantics rather than creating another bus, identity or truth authority.
+- `PROGRAM_STATE.json` now makes the live re-entry directive and receipt boot-discoverable; exact short commands `fusion` and `hypofusion` remain deeper explicit macro-runs with their existing full completion contracts.
+- First live re-entry fused concurrent work instead of repeating it: PR #612 was already retired as duplicate with evidence preserved; PR #611 remains the single tmux repair lane, gains the exact-file **9/9 PASS** only as supporting evidence, and stays unpromoted because exact integrated runtime never started. Its plan is `rejoin exactly once at real execution admission -> bind exact head -> real tmux discriminator -> regressions` rather than continuous ancestry churn.
+- PR #602 is explicitly routed as a downstream adversarial lane: after tmux repair promotion it must revalidate managed-Claude process identity against exact OCI/live-tmux/native-Claude behavior and a deliberate perturbation/falsifier, not source predicates alone.
+- Research branch routing records `ADOPT`, `CHALLENGE`, `DEFER` or `NO_CHANGE` semantics while preserving the invariants: UnifiedDB is canonical authority, ClayGraph is rebuildable projection, consensus does not mint truth, and `FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT`.
+- `NO_CHANGE` to ClayVerse product/runtime code, runtime evidence class or whole-product acceptance. Live Fusion/Hypofusion can revise hypotheses, test obligations and worker plans; they cannot mint truth, effects or PASS by consensus.
 
 ### Cycle update rule
 

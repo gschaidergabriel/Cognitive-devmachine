@@ -1,0 +1,165 @@
+{
+  "schema_version": "1.1",
+  "evidence_id": "GO-20260811-FV01-08-TASK-SWITCH-CONSENT-AUTHORITY-COUNTEREVIDENCE",
+  "recorded_at_utc": "2026-08-11T16:13:10Z",
+  "updated_at_utc": "2026-08-11T16:16:30Z",
+  "trigger": "go",
+  "origin_actor": "chatgpt-secondary",
+  "provider": "OpenAI",
+  "model": "GPT-5.6 Sol",
+  "research_entity_identity": "Clay temporary worker; not self.root; not Frank",
+  "target": "self.root / Frank v0.1",
+  "work_package": "F-V01-08-TOKEN-API-CLIENTS",
+  "target_repo": "gschaidergabriel/Dr.-Unterweger",
+  "parent_candidate_pr": 370,
+  "parent_candidate_head": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
+  "parent_candidate_runtime_blob": "6af60e078043693290544b6da66530a5a3d7b168",
+  "adversarial_child_pr": 378,
+  "adversarial_child_head": "0992370d02e1014029a930fde462294bfdc89505",
+  "current_classification": "TARGET_MECHANISM_PASS_WITH_TWO_DISTINCT_PROMOTION_BLOCKERS",
+  "hypothesis_under_test": "A nonce-bound one-shot task-switch challenge is sufficient to prove current-user consent for replacing an unfinished task.",
+  "strongest_counterhypothesis": "Nonce possession plus a caller-supplied stable TaskSnapshot is not current-user consent authority. If the same proposer receives the nonce and may call grant(), it can self-grant without any new authenticated user confirmation event.",
+  "source_observation": {
+    "request_returns_nonce_to_calling_path": true,
+    "grant_inputs": ["TaskSnapshot", "challenge_id", "consent_nonce"],
+    "separate_authenticated_user_confirmation_receipt_required_by_grant": false,
+    "current_code_outcome_if_exact_nonce_echoed_with_same_snapshot": "GRANTED then consumable as ALLOW_SWITCH_ONCE",
+    "claim_scope": "Current parent code path plus target receipt for parent mechanism. Dedicated adversarial child target receipt remains pending/unknown."
+  },
+  "owner_contract_relation": {
+    "owner_fixed_requirement": "unfinished current user task may not be silently abandoned; unrelated task switch requires current-user consent",
+    "gap": "The candidate proves challenge freshness/replay binding but does not itself prove that a distinct current-user confirmation occurred.",
+    "promotion_effect": "BLOCK_CURRENT_USER_CONSENT_GATE_PROMOTION_UNTIL_CONFIRMATION_AUTHORITY_BOUND"
+  },
+  "parent_target_vps_evidence": {
+    "workflow_run_id": 31510821479,
+    "workflow_overall_conclusion": "FAILURE_DUE_TO_REPOSITORY_STATIC_INTEGRITY_STEP",
+    "candidate_gate_step_conclusion": "SUCCESS",
+    "receipt_status": "PASS_TARGET_VPS_TASK_SWITCH_CONSENT_V1",
+    "evidence_class": "REAL_SELF_HOSTED_ACCEPTED_TARGET_VPS_TASK_SWITCH_CONSENT_CANDIDATE",
+    "tested_sha": "5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba",
+    "receipt_sha256": "450afb6e0fa1481a0f877b186afe56a5c15c939ccb6822d180c0eae0f106e283",
+    "artifact_id": 9109154898,
+    "artifact_sha256": "15796ae254ae83054334ec61a8bac3657f0c1d9ca148391a4da9b8acb3503c8f",
+    "candidate_result": "PASS_TASK_SWITCH_CONSENT_V1_CANDIDATE",
+    "checks_passed": 13,
+    "checks_total": 13,
+    "current_v16_baseline": "SUPPORTED_CURRENT_V16_CANNOT_DISTINGUISH_UNRELATED_FOLLOWUP_TASK",
+    "current_v16_task_identity_present_in_api": false,
+    "parent_oob_experiment": {
+      "name": "CONSENT_REPLAY_AFTER_TASK_ADVANCE",
+      "result": "PASS_STALE_CONSENT_INVALIDATED"
+    },
+    "runtime_metadata": {
+      "runner_name": "clay",
+      "runner_os": "Linux",
+      "runner_arch": "X64",
+      "hostname": "digital-retina",
+      "kernel": "Linux digital-retina 6.8.0-117-generic #117-Ubuntu SMP PREEMPT_DYNAMIC Tue May 5 19:26:24 UTC 2026 x86_64",
+      "python": "3.12.3",
+      "sqlite": "3.45.1",
+      "elapsed_seconds": 0.15,
+      "user_cpu_seconds": 0.07,
+      "system_cpu_seconds": 0.03,
+      "cpu_percent": 69,
+      "max_rss_kb": 23680
+    },
+    "nonclaims": {
+      "whole_F_V01_08_complete": false,
+      "whole_frank_v0_1_acceptance": false,
+      "canonical_state_mutated": false,
+      "external_effect_performed": false,
+      "training_authorized": false
+    }
+  },
+  "promotion_blockers": [
+    {
+      "id": "CONSENT_AUTHORITY_SEPARATION",
+      "status": "SUPPORTED_FROM_CURRENT_CODE_PATH_DEDICATED_TARGET_COUNTERCHECK_PENDING",
+      "finding": "The proposer receives the nonce and grant() requires no distinct authenticated current-user confirmation receipt.",
+      "required_fix": "Bind grant to an authenticated current-user confirmation receipt that the proposer/model cannot synthesize."
+    },
+    {
+      "id": "RUNTIME_DDL_OUTSIDE_EXPLICIT_MIGRATOR",
+      "status": "MEASURED_ON_TARGET_WORKFLOW",
+      "finding": "Repository static-integrity step failed with SCHEMA_EXECUTESCRIPT_OUTSIDE_MIGRATOR for runtime/api/frank_task_switch_consent_v1_candidate.py.",
+      "contract_relation": "Normal Frank runtime must open admitted existing state; schema creation/migration belongs to explicit Research-Entity/installer migration authority.",
+      "required_fix": "Move consent schema DDL into the explicit ordered UnifiedDB migration path or an independently justified isolated-store installer path; runtime must fail closed when required schema is absent."
+    }
+  ],
+  "exactly_one_go_out_of_box_experiment": {
+    "name": "CONSENT_NONCE_ECHO_SELF_GRANT",
+    "sequence": [
+      "sync RUNNING current-task snapshot",
+      "request unrelated task switch",
+      "perform zero external user-confirmation/elicitation events",
+      "echo returned nonce into grant() with same snapshot",
+      "consume the granted switch"
+    ],
+    "support_condition": "grant=GRANTED and consume=ALLOW_SWITCH_ONCE with external_user_confirmation_events=0",
+    "current_code_prediction": "SUPPORTED_AUTHORITY_GAP",
+    "dedicated_target_vps_status": "NOT_YET_OBSERVED_NO_PASS_CLAIM"
+  },
+  "external_primary_mechanism_evidence": [
+    {
+      "source": "Model Context Protocol 2026-07-28 release",
+      "url": "https://blog.modelcontextprotocol.io/posts/2026-07-28/",
+      "relevance": "MRTR represents user confirmation/input as an input_required response followed by a client-supplied answer on retry, separating request-for-input from receipt-of-input. Mechanism evidence only."
+    },
+    {
+      "source": "MCP 2026-07-28 elicitation/MRTR SDK documentation",
+      "url": "https://csharp.sdk.modelcontextprotocol.io/concepts/elicitation/elicitation.html",
+      "relevance": "User confirmation is returned as client input and then processed on re-entry; mechanism evidence only, not Frank authority."
+    }
+  ],
+  "required_architecture_delta_candidate": {
+    "name": "AUTHENTICATED_CURRENT_USER_CONFIRMATION_RECEIPT",
+    "status": "TEST_OBLIGATION",
+    "must_bind": [
+      "challenge_id",
+      "stable_user_principal",
+      "session_or_client_provenance",
+      "execution_id",
+      "lease_epoch",
+      "from_task_id",
+      "from_task_revision",
+      "to_task_id",
+      "explicit_action_accept_decline_cancel"
+    ],
+    "invariants": [
+      "proposer/model cannot synthesize the confirmation receipt",
+      "nonce possession alone is not consent authority",
+      "confirmation receipt cannot mint execution/effect authority",
+      "stale execution/task revision invalidates confirmation",
+      "decline/cancel remain distinguishable from accept"
+    ],
+    "storage_integration_obligation": "Do not promote a runtime-created second task-state schema as semantic authority. Prefer explicit UnifiedDB migration plus canonical task projection, or measure and justify KEEP_ISOLATED while retaining one semantic authority.",
+    "rollback": "Keep #370 as candidate-only snapshot/replay mechanism; do not promote current-user consent authority until independent confirmation producer and storage migration obligations are closed."
+  },
+  "counterevidence_scope": {
+    "parent_snapshot_replay_mechanism_refuted": false,
+    "parent_snapshot_replay_mechanism_target_supported": true,
+    "parent_current_user_consent_authority_claim_supported": false,
+    "parent_candidate_promotable_now": false,
+    "whole_F_V01_08_complete": false,
+    "whole_frank_v0_1_acceptance": false,
+    "canonical_frank_state_mutated": false,
+    "external_effect_performed": false,
+    "training_authorized": false,
+    "self_root_harness_authority_changed": false
+  },
+  "next_falsifiers": [
+    "Run PR #378 on the accepted target VPS and preserve the bounded authority-counterexample receipt; until then the dedicated target classification is UNKNOWN/NOT_OBSERVED.",
+    "Add a distinct authenticated user-confirmation producer/receipt to #370 and rerun CONSENT_NONCE_ECHO_SELF_GRANT; repaired candidate must deny self-grant without a valid receipt.",
+    "Move runtime consent DDL out of frank_task_switch_consent_v1_candidate.py into the explicit admitted migration path and require repo static integrity PASS.",
+    "Verify AI_BRIDGE versus HUMAN_DIRECT semantics so bridge transport cannot silently substitute model assent for current-user assent.",
+    "Integrate accepted consent decision with canonical task transition/cancel-or-suspend/new-admission receipts without creating a second semantic state authority."
+  ],
+  "provenance": {
+    "parent_pr_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/370",
+    "countercheck_pr_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/pull/378",
+    "parent_runtime_url": "https://github.com/gschaidergabriel/Dr.-Unterweger/blob/5ea1f55f59c281b0b3cbf617c13a5b0b5541c4ba/runtime/api/frank_task_switch_consent_v1_candidate.py",
+    "verification_class": "CURRENT_CODE_INSPECTION_PLUS_REAL_PARENT_TARGET_VPS_RECEIPT_PLUS_DURABLE_ADVERSARIAL_TEST_PENDING_DEDICATED_TARGET_EXECUTION",
+    "confidence": "HIGH_FOR_PARENT_MECHANISM_TARGET_BEHAVIOR_AND_STORAGE_BLOCKER; HIGH_FOR_CODE_LEVEL_AUTHORITY_GAP; DEDICATED_COUNTERCHECK_TARGET_EXECUTION_PENDING"
+  }
+}

@@ -1,8 +1,9 @@
 # Fail-closed admission fence for the canonical ClayVerse Kata workload.
 #
-# Baseline law: no io.katacontainers.* workload annotation is admitted on a
-# ClayVerse pod. A future exception must be an explicit, separately reviewed,
-# receipt-bound policy change; do not weaken this baseline with wildcards.
+# Baseline law: an admitted ClayVerse Pod must use the exact reviewed Kata
+# RuntimeClass and must carry no io.katacontainers.* workload annotation.
+# A future exception must be an explicit, separately reviewed, receipt-bound
+# policy change; do not weaken this baseline with wildcards.
 #
 # Apply BOTH documents before admitting the ClayVerse StatefulSet. Static YAML
 # presence is supporting source evidence only; final acceptance must prove the
@@ -11,7 +12,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: clayverse-kata-runtime-annotations
+  name: clayverse-kata-runtime-boundary
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -21,22 +22,42 @@ spec:
         apiVersions: ["v1"]
         operations: ["CREATE", "UPDATE"]
         resources: ["pods"]
+  variables:
+    - name: currentClayVerse
+      expression: >-
+        (has(object.metadata.labels) &&
+         "app" in object.metadata.labels &&
+         object.metadata.labels["app"] == "clayverse") ||
+        object.spec.containers.exists(c, c.name == "clayverse")
+    - name: previousClayVerse
+      expression: >-
+        oldObject != null &&
+        ((has(oldObject.metadata.labels) &&
+          "app" in oldObject.metadata.labels &&
+          oldObject.metadata.labels["app"] == "clayverse") ||
+         oldObject.spec.containers.exists(c, c.name == "clayverse"))
   validations:
     - expression: >-
-        !has(object.metadata.labels) ||
-        !("app" in object.metadata.labels) ||
-        object.metadata.labels["app"] != "clayverse" ||
+        !(variables.currentClayVerse || variables.previousClayVerse) ||
+        (has(object.spec.runtimeClassName) &&
+         object.spec.runtimeClassName == "kata-qemu-runtime-rs")
+      message: >-
+        ClayVerse Pods must execute through the exact reviewed kata-qemu-runtime-rs RuntimeClass;
+        host-kernel fallback or runtime-class mutation is forbidden.
+      reason: Forbidden
+    - expression: >-
+        !(variables.currentClayVerse || variables.previousClayVerse) ||
         !has(object.metadata.annotations) ||
         object.metadata.annotations.all(k, !k.startsWith("io.katacontainers."))
       message: >-
-        ClayVerse pods must not carry unreviewed io.katacontainers.* runtime annotations;
+        ClayVerse Pods must not carry unreviewed io.katacontainers.* runtime annotations;
         bind any required exception as a separate explicitly reviewed and receipt-bound policy delta.
       reason: Forbidden
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: clayverse-kata-runtime-annotations
+  name: clayverse-kata-runtime-boundary
 spec:
-  policyName: clayverse-kata-runtime-annotations
+  policyName: clayverse-kata-runtime-boundary
   validationActions: [Deny]

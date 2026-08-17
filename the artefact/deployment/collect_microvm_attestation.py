@@ -107,7 +107,7 @@ def _selector_matches(selector: dict[str, Any], labels: dict[str, str]) -> bool:
 
         if operator == "In" and (key not in labels or labels[key] not in values):
             return False
-        if operator == "NotIn" and (key not in labels or labels[key] in values):
+        if operator == "NotIn" and key in labels and labels[key] in values:
             return False
         if operator == "Exists" and key not in labels:
             return False

@@ -25,6 +25,32 @@ The preferred implementation line is an OCI-compatible sandboxed runtime such as
 11. **No hidden writable host dependency** — final ClayVerse functionality may not rely on mutable host binaries, host libraries, host home directories or undeclared host mounts.
 12. **Attested boundary** — final acceptance records image digest, microVM runtime identity/version, guest kernel identity, host/guest isolation mode, mounted persistent volumes, exact network-policy identity, network-plugin/CNI identity and successful recovery evidence.
 
+## Tier-2 full-sandbox replacement gate
+
+A **container restart inside an existing VM/microVM is not Tier 2** and MUST NOT be reported as full-appliance recovery.
+
+For the canonical Kubernetes/Kata profile this distinction is security-critical:
+
+- a StatefulSet Pod template uses Kubernetes' required `restartPolicy: Always` semantics, so a terminated ClayVerse application container can be restarted by kubelet without deleting the Pod;
+- Kata maps the **Pod sandbox** to the VM. Recreating a container inside the same Pod therefore does not itself prove that the Kata VM/sandbox was discarded or that a fresh guest-kernel boundary was created.
+
+Accordingly, the reference StatefulSet is only the workload/isolation profile. Final deployment MUST additionally bind an **external orchestration mechanism** that converts a ClayVerse fatal-invariant/Tier-2 signal into deletion/replacement of the entire Pod sandbox/VM. That mechanism is deployment infrastructure, not a second ClayVerse cognition/state authority and not a companion application container.
+
+The Tier-2 mechanism MUST fail closed and prove all of the following before ingress reopens:
+
+- the old Pod UID and old Kata sandbox/VM identity are terminal and cannot rejoin;
+- a new Pod UID and new sandbox/VM identity are observed;
+- the new workload executes the exact same accepted ClayVerse image digest;
+- only the declared persistent state/workspace volumes are reattached;
+- UnifiedDB/WAL/logical-snapshot/EffectJournal recovery completes under a newly advanced global generation;
+- stale pre-crash results are rejected;
+- ambiguous external effects remain `UNKNOWN_AFTER_CRASH`/equivalent and are not blindly replayed;
+- readiness re-attests EntityOS, terminal/PTY/tmux, selected LLM boundary, canonical users/sessions, network policy and generation consistency.
+
+A normal kubelet container restart in the same Pod/sandbox may contribute Tier-1/component evidence only. It cannot satisfy the Tier-2 or `WHOLE_CLAYVERSE_PASS` gate.
+
+Until a target deployment proves the external full-sandbox replacement behavior, the Kubernetes/Kata profile is explicitly **TIER2_REPLACEMENT_BLOCKED** for final acceptance even if its static security fields are correct.
+
 ## Runtime-class implementation profile
 
 A Kubernetes/containerd deployment MAY use a sandboxed runtime class such as `kata`. If Kubernetes is used, the admitted ClayVerse workload MUST select the sandboxed RuntimeClass explicitly; silently falling back to the default host-kernel runtime is a final-acceptance failure.
@@ -57,6 +83,7 @@ Final whole-product acceptance MUST include at least:
 - where virtiofs/shared-filesystem transport is enabled, attest the exact runtime configuration and demonstrate that the admitted patched runtime/configuration is the one actually executing the ClayVerse workload;
 - kill EntityOS and verify Tier-1 recovery;
 - kill the full ClayVerse workload/microVM and verify Tier-2 reconstruction from the same image digest plus UnifiedDB/WAL/logical snapshot recovery;
+- prove Tier-2 replacement changes both Pod UID and Kata sandbox/VM identity rather than merely restarting the ClayVerse container in place;
 - inject stale pre-crash results and verify generation fencing;
 - crash around external-effect acknowledgement and prove no blind replay;
 - verify Claude Code terminal login path survives/re-establishes according to its credential/session contract;

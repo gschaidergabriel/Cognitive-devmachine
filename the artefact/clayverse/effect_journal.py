@@ -13,6 +13,10 @@ class EffectJournal:
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @staticmethod
     def _credit(status,outcome): return 1.0 if status=='VERIFIED' and isinstance(outcome,dict) and outcome.get('ok') is True else 0.0
+    @staticmethod
+    def _target_receipt(target):
+        raw=str(target).encode('utf-8')
+        return {'audit':'redacted-target-v1','sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
     @classmethod
     def _argv_receipt(cls,argv):
         if not argv: return None
@@ -42,8 +46,9 @@ class EffectJournal:
                 prior=db.execute('SELECT effect_id,status FROM effects WHERE episode_id=? ORDER BY ts,effect_id LIMIT 1',(episode_id,)).fetchone()
                 if prior is not None:
                     raise RuntimeError('effect already persisted for episode; automatic replay denied')
+            audit_target=self._target_receipt(target)
             audit_argv=self._argv_receipt(argv)
-            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,target,json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
+            db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,'PENDING',NULL,?,NULL)",(eid,episode_id,user_id,capability,self._payload(audit_target),json.dumps(audit_argv,sort_keys=True,separators=(',',':')) if audit_argv else None,generation,time.time()))
         return eid
     def _reenter_tx(self,db,effect_id,status,outcome):
         row=db.execute('SELECT causal_id FROM causal_episodes WHERE effect_id=? ORDER BY ts DESC LIMIT 1',(effect_id,)).fetchone()

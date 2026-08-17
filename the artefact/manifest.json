@@ -8,6 +8,13 @@
   "persistent_state_root": "/var/lib/clayverse",
   "container_boundary": "one OCI/Docker-compatible image",
   "entityos_transport": "sha256-pinned-open-object-candidate",
-  "direct_process_exec": "legacy-test-only-explicitly-enabled",
-  "requires_for_final_pass": ["real_clerk_verification", "browser_terminal_adapter", "claude_code_cli", "accepted_entityos_artifact_embedding_and_semantic_contract", "isolated_container_build_receipt", "deployment_readiness"]
+  "direct_process_exec": "FORBIDDEN_FAIL_CLOSED_PENDING_ADMITTED_ENTITYOS_PROCESS_CONTRACT",
+  "requires_for_final_pass": [
+    "isolated_real_clerk_verification",
+    "isolated_browser_terminal_adapter_verification",
+    "isolated_claude_code_cli_verification",
+    "accepted_entityos_artifact_embedding_and_semantic_contract",
+    "isolated_container_build_receipt",
+    "deployment_readiness"
+  ]
 }

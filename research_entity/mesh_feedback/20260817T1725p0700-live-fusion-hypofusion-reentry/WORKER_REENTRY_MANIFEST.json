@@ -123,8 +123,29 @@
         "clock_note": "Claim timestamp was generated before refreshing the available local clock and is several minutes ahead of the first post-delivery observed local time. Preserve the acquired claim identity; delivered_at is the first observed local clock after the successful external API response, not a fabricated exact GitHub server timestamp.",
         "note": "Delivery is observable routing only; no plan-revalidation/use/causal-credit inference is authorized until receiver action is observed."
       }
+    },
+    {
+      "route_id": "8f758d9f011ad8ac5045badbd324616c361f378e24cb9a64244473711b83867a",
+      "receiver": "github:pull/648",
+      "message_kind": "COUNTER_CHALLENGE",
+      "urgency": "BEFORE_NEXT_MATERIAL_WRITE_OR_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "PR648 is the retained MicroVM attestation successor, but its _selector_matches reintroduces the Kubernetes NotIn absence-key bug: it returns False when the key is missing, while Kubernetes NotIn selects resources that do not carry the key. This can omit a real selecting NetworkPolicy and make the claimed complete additive policy inventory unsound. Transplant the corrected semantics from closed #635 and preserve the missing-key broad-allow regression before promotion.",
+      "required_revalidation": "Refresh PR648 head; change NotIn to fail only when the key exists and its value is in the excluded set; add a negative regression where the ClayVerse pod lacks security-zone and a broad egress policy selects via NotIn; run the exact focused suite and rebind exercised blobs/receipt. Reconfirm every selecting policy remains inventoried before live CNI probes.",
+      "payload_digest": "bd6711c6bd8b4c54ff4d5387a5bb80d86626f47af94fb192f593f97a60b1aa01",
+      "requires_reply_or_observable_action": true,
+      "delivery": {
+        "status": "CLAIMED",
+        "channel": "github_pr_comment",
+        "delivery_claim": {
+          "claim_id": "438d7db296ebd759e302939e0dea1439978b94667a87a49e3a263086ae3769e7",
+          "claimant_organ": "GPT-5.6-Sol/go-2259",
+          "claimed_at": "2026-08-17T23:14:13+07:00",
+          "expires_at": "2026-08-17T23:29:13+07:00"
+        }
+      }
     }
   ],
-  "delivery_state": "PR611_PR602_PR630_PR635_PR643_DELIVERED_ACK_PLAN_REVALIDATION_PENDING",
+  "delivery_state": "PR611_PR602_PR630_PR635_PR643_DELIVERED_ACK_PLAN_REVALIDATION_PENDING; PR648_NOTIN_COUNTER_CHALLENGE_CLAIMED",
   "causal_credit": "NONE_FROM_DELIVERY_ALONE"
 }

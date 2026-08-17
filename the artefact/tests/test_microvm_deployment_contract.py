@@ -41,3 +41,18 @@ def test_provider_credentials_remain_bounded():
     assert "secretKeyRef:" in text
     assert "CLAYVERSE_REQUIRE_CLAUDE" in text
     assert "CLAUDE_API_KEY" not in text
+
+
+def test_kata_template_network_boundary_is_default_deny():
+    text = TEMPLATE.read_text()
+    assert "apiVersion: networking.k8s.io/v1" in text
+    assert "kind: NetworkPolicy" in text
+    assert "name: clayverse-default-deny" in text
+    assert "policyTypes:\n    - Ingress\n    - Egress" in text
+    assert "ingress: []" in text
+    assert "egress: []" in text
+    assert "type: ClusterIP" in text
+    assert "type: LoadBalancer" not in text
+    assert "type: NodePort" not in text
+    assert "0.0.0.0/0" not in text
+    assert "::/0" not in text

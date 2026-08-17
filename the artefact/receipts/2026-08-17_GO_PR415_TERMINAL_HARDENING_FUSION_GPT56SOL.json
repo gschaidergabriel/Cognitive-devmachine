@@ -1,0 +1,43 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T13:47:35+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "integration_pr": 415,
+  "observed_main": "a6c66a0a26e7b288a564ac42dcaf7d9c4a99e20f",
+  "observed_pr_head_before_receipt": "d78d433dfaad8d34da70e726761276a0787cb20f",
+  "source_fusion": {
+    "terminal_gateway_commit": "73a5ca9b1b8ef1ba84e7ff54afb8c7d607d3d87f",
+    "service_commit": "4a7256dc2dfdf29d9d9ad16039f8b7342c71efea",
+    "regression_commit": "d78d433dfaad8d34da70e726761276a0787cb20f",
+    "mechanism": "Fuse current main WebSocket auth/control/PTY input bounds and disconnect/unknown-frame fail-closed handling into the schema-7 MicroClay integration lane; bind Uvicorn ws_max_size to the same PTY input frame maximum; retain schema_version 7 readiness required by the integration store.",
+    "main_security_contract_preserved": true,
+    "integration_schema_7_preserved": true
+  },
+  "concurrency": {
+    "stale_merge_candidate_force_applied": false,
+    "note": "An attempted non-force ancestry ref update was rejected as not-fast-forward after the branch advanced concurrently. No force update was used and the stale merge candidate remains unreferenced."
+  },
+  "stage_b": {
+    "canonical_raw_query_serving": "DISABLED_IN_WORLDASSEMBLER_SOURCE_CANDIDATE",
+    "raw_query_method_route": "SHADOW_ONLY",
+    "strict_structural_signature_authority": "NOT_YET_FUSED",
+    "promotion_write_lifecycle": "NOT_YET_FUSED"
+  },
+  "experiment_accounting": {
+    "macrocycle_state": "EXPERIMENT_BUDGET_RACE_VIOLATION_SLOT_CLOSED",
+    "additional_unusual_experiment_executed_for_this_fusion": false
+  },
+  "execution": {
+    "authorized_vercel_sandbox_start_exec": "UNAVAILABLE_IN_CONNECTED_SURFACE",
+    "exact_source_tests_executed": false,
+    "exact_oci_build_runtime_executed": false,
+    "vps_self_hosted_production_testing": false
+  },
+  "evidence_class": "SOURCE_FUSION_ONLY",
+  "whole_clayverse_pass": false,
+  "acceptance": "IN_PROGRESS",
+  "next_gate": "Execute exact PR #415 head in an actually-started authorized isolated sandbox. First run terminal protocol-bound regressions plus Stage-A replay/credit/context and Stage-B shadow/admission tests; then adjacent lifecycle/restart/privacy; only then proceed to full suite and exact OCI build/start/readiness/restart."
+}

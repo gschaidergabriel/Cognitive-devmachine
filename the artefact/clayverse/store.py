@@ -25,6 +25,9 @@ CREATE TABLE IF NOT EXISTS retrieval_entrypoint_policy(entry_key TEXT PRIMARY KE
 CREATE TABLE IF NOT EXISTS retrieval_episodes(retrieval_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL UNIQUE REFERENCES turns(turn_id),episode_id TEXT NOT NULL UNIQUE REFERENCES workspace_episodes(episode_id),causal_id TEXT NOT NULL UNIQUE,session_id TEXT NOT NULL REFERENCES sessions(session_id),user_id TEXT NOT NULL REFERENCES users(user_id),generation INTEGER NOT NULL,policy_version INTEGER NOT NULL,mode TEXT NOT NULL CHECK(mode IN ('SHADOW','ACTIVE')),query_hash TEXT NOT NULL,query_token_hashes TEXT NOT NULL,selected_memory_ids TEXT NOT NULL,shadow_memory_ids TEXT NOT NULL,entry_keys TEXT NOT NULL,budget_chars INTEGER NOT NULL,limit_items INTEGER,chars_selected INTEGER NOT NULL,status TEXT NOT NULL CHECK(status IN ('PRESENT','UNKNOWN')),ts REAL NOT NULL);
 CREATE INDEX IF NOT EXISTS idx_retrieval_session_ts ON retrieval_episodes(session_id,ts DESC);
 CREATE TABLE IF NOT EXISTS retrieval_feedback(receipt_id TEXT PRIMARY KEY,retrieval_id TEXT NOT NULL REFERENCES retrieval_episodes(retrieval_id) ON DELETE CASCADE,causal_id TEXT NOT NULL,generation INTEGER NOT NULL,credit REAL NOT NULL,signal_class TEXT NOT NULL,ts REAL NOT NULL);
+CREATE TABLE IF NOT EXISTS method_records(method_id TEXT PRIMARY KEY,kind TEXT NOT NULL CHECK(kind IN ('framework_candidate','framework','heuristic_candidate','heuristic','failure_pattern','counterexample')),name TEXT NOT NULL,problem_signature TEXT NOT NULL,preconditions TEXT NOT NULL,goal_shape TEXT NOT NULL,method_steps TEXT NOT NULL,invariants TEXT NOT NULL,expected_observations TEXT NOT NULL,falsifiers TEXT NOT NULL,failure_modes TEXT NOT NULL,scope_limits TEXT NOT NULL,source_episode_ids TEXT NOT NULL,supporting_memory_ids TEXT NOT NULL,counterexample_memory_ids TEXT NOT NULL,target_method_ids TEXT NOT NULL DEFAULT '[]',provenance TEXT NOT NULL,abstraction_version INTEGER NOT NULL,support_count INTEGER NOT NULL,success_count INTEGER NOT NULL,failure_count INTEGER NOT NULL,calibration REAL NOT NULL,last_validated_at REAL NOT NULL,status TEXT NOT NULL CHECK(status IN ('CANDIDATE','PROMOTED','DEMOTED','RETIRED')),user_id TEXT REFERENCES users(user_id),created_at REAL NOT NULL,updated_at REAL NOT NULL);
+CREATE INDEX IF NOT EXISTS idx_method_records_status_kind ON method_records(status,kind,updated_at DESC);
+CREATE TABLE IF NOT EXISTS method_use_receipts(receipt_id TEXT PRIMARY KEY,causal_id TEXT NOT NULL UNIQUE,turn_id TEXT NOT NULL,episode_id TEXT NOT NULL,session_id TEXT NOT NULL,user_id TEXT NOT NULL,generation INTEGER NOT NULL,query_hash TEXT NOT NULL,signature_hash TEXT NOT NULL,evidence_status TEXT NOT NULL,trigger TEXT NOT NULL,selected_method_ids TEXT NOT NULL,blocked_method_ids TEXT NOT NULL,snapshot TEXT NOT NULL,ts REAL NOT NULL);
 '''
 
 @dataclass(frozen=True)
@@ -40,7 +43,7 @@ class UnifiedDB:
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
         try:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._migrate_schema(); self._retire_hidden_raw_turn_ledger()
-            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','7') ON CONFLICT(key) DO UPDATE SET value='7'")
+            self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','8') ON CONFLICT(key) DO UPDATE SET value='8'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
@@ -52,6 +55,9 @@ class UnifiedDB:
             self.db.execute("ALTER TABLE retrieval_episodes ADD COLUMN limit_items INTEGER")
             columns={str(row['name']) for row in self.db.execute("PRAGMA table_info(retrieval_episodes)").fetchall()}
         if 'limit_items' not in columns: raise RuntimeError('retrieval replay identity migration incomplete')
+        required_method_tables={"method_records","method_use_receipts"}
+        tables={str(row['name']) for row in self.db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+        if not required_method_tables.issubset(tables): raise RuntimeError('method memory schema migration incomplete')
     def _retire_hidden_raw_turn_ledger(self):
         self.db.executescript("""
         DROP TRIGGER IF EXISTS turn_ledger_no_update;
@@ -128,5 +134,5 @@ class UnifiedDB:
         eid=str(uuid.uuid4()); self.db.execute("INSERT INTO effects(effect_id,episode_id,user_id,capability,target,argv,requested_generation,status,outcome,ts,verified_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(eid,episode_id,user_id,capability,target,json.dumps(argv) if argv else None,requested_generation,status,json.dumps(outcome,sort_keys=True) if outcome else None,time.time(),time.time() if outcome is not None else None)); return eid
     def checkpoint(self,note):
         payload=[]
-        for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
+        for table in ("meta","users","sessions","turns","durable_memory","effects","causal_episodes","active_turns","leases","retrieval_policy_state","retrieval_entrypoint_policy","retrieval_episodes","retrieval_feedback","method_records","method_use_receipts"): payload.append((table,[dict(r) for r in self.db.execute(f"SELECT * FROM {table} ORDER BY 1")]))
         digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest(); cid=str(uuid.uuid4()); self.db.execute("INSERT INTO checkpoints VALUES(?,?,?,?)",(cid,time.time(),digest,note)); return cid,digest

@@ -1,0 +1,52 @@
+{
+  "schema": "ClayVerseEntityOSTransportEvidence/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "scope": "internal EntityOS byte transport from an already-verified Vercel build-internal Sandbox into a content-addressed static build output",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "canonical_base_observed_before_write": "8d2c772cb711e21878508bd104df21285bcc2123",
+  "locked_entityos": {
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "size_bytes": 9181696,
+    "authority": "the artefact/entityos.lock.json"
+  },
+  "source_delta": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "clay/go-entityos-attestation-recomposed-20260817",
+    "head_after_delta": "c1621a0cadd32f73b467c2aa242780127e345531",
+    "new_file": "mcp/vercel-sandbox-mcp/scripts/export-entityos-build-artifact.mjs",
+    "package_wiring": "mcp/vercel-sandbox-mcp/package.json",
+    "mechanism": "A Node preload wraps only the existing Sandbox.create result. At sandbox.stop it reads snapshot-a/EntityOS and snapshot-a.log through the Vercel Sandbox fs API, verifies EntityOSBuildReceipt/v1 schema/status, ATTESTED_SNAPSHOT_V2 provenance, build head, SHA-256, size and reproducibility marker, writes a content-addressed public/entityos/<sha256>/EntityOS plus receipt.json, then always calls the original sandbox.stop. Export failure is propagated after stop and therefore fails closed.",
+    "execution_surface_change": "NONE: no reusable arbitrary-command endpoint and no new runtime effect path; static transport candidate only",
+    "unusual_experiment_count": 0
+  },
+  "execution_observation": {
+    "exact_delta_head": "c1621a0cadd32f73b467c2aa242780127e345531",
+    "github_vercel_status": "FAILURE_PROVIDER_BUILD_RATE_LIMIT",
+    "target_signal": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "transport_export_executed": false,
+    "transport_export_pass": "NOT_CLAIMED",
+    "reason": "Vercel rejected the preview before build/Sandbox execution. Source inspection is not executable evidence."
+  },
+  "coordination": {
+    "stale_raw_ledger_pr_297": "CLOSED_UNMERGED",
+    "existing_infrastructure_receipt": "the artefact/receipts/2026-08-17_GO_VERCEL_OCI_VCR_INFRA_EVIDENCE_GPT56SOL.json",
+    "nested_default_sandbox_podman_buildah": "ALREADY_OBSERVED_BLOCKED; NOT_REPEATED",
+    "cross_private_repo_ambient_fetch": "ALREADY_OBSERVED_BLOCKED_FAIL_CLOSED; NOT_REPEATED"
+  },
+  "unusual_experiment": {
+    "global_accounting": "CONSUMED_1_OF_1_BY_EXISTING_GO_EVIDENCE",
+    "new_unusual_experiment_count_this_delta": 0,
+    "remaining_work_class": "REGRESSION_AND_TRANSPORT_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false,
+  "current_blocker": "The static transport candidate is source-complete but not Vercel-executed because the exact delta head is provider build-rate-limited. Even after transport passes, exact-current-head ClayVerse OCI construction/runtime remains separately gated by an admitted isolated OCI/VCR path and current research-source binding.",
+  "next_executable_step": "On the next provider-admitted preview of the existing branch, require the existing regression sequence plus ENTITYOS_BUILD_EXPORT_READY, verify the exported bytes equal the same Vercel-observed EntityOS digest, and only then use those exact bytes as the locked ClayVerse OCI build input. No substitute blob and no second unusual experiment are permitted."
+}

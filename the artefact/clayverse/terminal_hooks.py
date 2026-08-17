@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import sys
@@ -192,16 +191,14 @@ def stop(payload: dict[str, Any]) -> dict[str, Any]:
                 },
             )
             if not effect_ids:
-                payload_hash = hashlib.sha256(message.encode("utf-8")).hexdigest()
                 db.db.execute(
                     "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) "
-                    "VALUES(?,?,?,?,?,0,1,?)",
+                    "VALUES(?,?,?,?,NULL,0,0,?)",
                     (
                         str(uuid.uuid4()),
                         episode["episode_id"],
                         None,
                         episode["observation_turn_id"],
-                        payload_hash,
                         time.time(),
                     ),
                 )

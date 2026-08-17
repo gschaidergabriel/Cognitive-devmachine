@@ -42,6 +42,7 @@ class TerminalSessionManager:
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
     TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
+    _IDEMPOTENT_MISSING_KEY_TABLES = frozenset({"prefix", "root", "copy-mode", "copy-mode-vi"})
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -184,13 +185,33 @@ class TerminalSessionManager:
             ) from exc
         return cp.returncode == 0
 
+    @classmethod
+    def _tmux_policy_reapply_errors_are_idempotent(cls, stderr: str) -> bool:
+        """Accept only tmux's exact diagnostics for already-removed default key tables.
+
+        tmux 3.6a removes an empty key table after `unbind-key -a -T <table>`. Re-sourcing
+        the same immutable policy can therefore return nonzero even though the desired
+        state is already reached. Ignore only those known diagnostics; the independent
+        effective-state attestation remains mandatory immediately after reapplication.
+        """
+        lines = [line.strip() for line in stderr.splitlines() if line.strip()]
+        if not lines:
+            return False
+        expected = {
+            f"table {table} doesn't exist"
+            for table in cls._IDEMPOTENT_MISSING_KEY_TABLES
+        }
+        return all(line in expected for line in lines)
+
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
         """Reapply the immutable command-surface fence to a running tmux server.
 
         tmux configuration is loaded when a server starts, not whenever a new session
         or client is created. A persistent per-user server may therefore predate a
         ClayVerse policy upgrade. Source the root-owned policy before every admitted
-        attach path and fail closed if the running server cannot accept it.
+        attach path. Real tmux 3.6a reports already-removed default key tables as errors
+        on a second source; tolerate only those exact idempotency diagnostics and leave
+        final admission to the independent full effective-state attestation.
         """
         try:
             cp = subprocess.run(
@@ -204,7 +225,7 @@ class TerminalSessionManager:
             raise TerminalRuntimeError(
                 f"tmux policy enforcement unavailable for {binding.tmux_name}"
             ) from exc
-        if cp.returncode != 0:
+        if cp.returncode != 0 and not self._tmux_policy_reapply_errors_are_idempotent(cp.stderr):
             raise TerminalRuntimeError(
                 f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
             )

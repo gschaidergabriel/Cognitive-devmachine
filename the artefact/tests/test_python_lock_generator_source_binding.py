@@ -40,6 +40,12 @@ def test_current_product_first_from_is_exact_digest_pinned_python():
     assert image in DOCKERFILE.read_text(encoding="utf-8")
 
 
+def test_python_lock_generator_uses_python_313_supported_pip_tools():
+    text = _workflow_text()
+    assert "'pip-tools==7.5.3'" in text
+    assert "'pip-tools==7.5.0'" not in text
+
+
 def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_experiment():
     text = _workflow_text()
     assert "cat >/tmp/requirements.in <<'EOF'" not in text
@@ -52,11 +58,16 @@ def test_python_lock_generator_does_not_embed_parallel_product_semantics_or_expe
     assert "requirements.lock.lesion" not in text
 
 
-def test_python_lock_generator_verifies_reproducibility_and_hash_enforcement():
+def test_python_lock_generator_verifies_reproducibility_hash_enforcement_and_selected_wheel_provenance():
     text = _workflow_text()
     assert text.count("pip-compile --generate-hashes") == 2
     assert "diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2" in text
     assert "--only-binary=:all: --require-hashes" in text
     assert "LOCK_SHA256=" in text
     assert "WHEELHOUSE_FILE_COUNT=" in text
+    assert "WHEELHOUSE_SHA256_BEGIN" in text
+    assert "WHEELHOUSE_SHA256_END" in text
+    assert 'sha256sum "$wheel"' in text
+    assert '${wheel##*/}' in text
+    assert "LC_ALL=C sort" in text
     assert "LOCK_GZIP_B64=" in text

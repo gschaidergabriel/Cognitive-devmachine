@@ -145,6 +145,36 @@ def test_schema8_keeps_method_records_in_durable_memory_only(tmp_path):
         db.close()
 
 
+def test_future_schema_fails_closed_before_schema8_mutation(tmp_path):
+    path = tmp_path / "future.db"
+    db = UnifiedDB(path)
+    db.ensure_user("gabriel", "Gabriel")
+    sid = db.ensure_session("gabriel", "clayverse-gabriel")
+    turn_id = db.append_turn(sid, "gabriel", "user", "future-schema sentinel")
+    db.close()
+
+    future_version = UnifiedDB.SCHEMA_VERSION + 1
+    raw = sqlite3.connect(path)
+    raw.execute("DROP TABLE method_use_receipts")
+    raw.execute("CREATE TABLE future_only(k TEXT PRIMARY KEY, v TEXT NOT NULL)")
+    raw.execute("INSERT INTO future_only VALUES('sentinel','future-semantics')")
+    raw.execute("UPDATE meta SET value=? WHERE key='schema_version'", (str(future_version),))
+    raw.commit()
+    raw.close()
+
+    with pytest.raises(RuntimeError, match="newer than supported"):
+        UnifiedDB(path)
+
+    raw = sqlite3.connect(path)
+    assert raw.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == str(future_version)
+    assert raw.execute("SELECT content FROM turns WHERE turn_id=?", (turn_id,)).fetchone()[0] == "future-schema sentinel"
+    assert raw.execute("SELECT v FROM future_only WHERE k='sentinel'").fetchone()[0] == "future-semantics"
+    assert raw.execute(
+        "SELECT 1 FROM sqlite_master WHERE type='table' AND name='method_use_receipts'"
+    ).fetchone() is None
+    raw.close()
+
+
 def test_reserved_method_kinds_require_canonical_admission(tmp_path):
     db, _ = _db(tmp_path)
     try:

@@ -14,7 +14,8 @@
   "entity_model": "one persistent central entity with two user-bound conversation perspectives",
   "persistent_state_root": "/var/lib/clayverse",
   "container_boundary": "one OCI/Docker-compatible image",
-  "build_context": "default-deny allowlist; only Dockerfile, requirements, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
+  "build_context": "default-deny allowlist; only Dockerfile, requirements, SOURCE_LOCK, digest-checking Claude build helper, live ClayVerse runtime, managed policy, runtime contract, vendored terminal assets and staged EntityOS enter OCI build context; retired headless/custom-chat runtimes are excluded",
+  "claude_code_distribution": "native v2.1.233 release archives digest-pinned for linux/amd64 and linux/arm64; autoupdate disabled; exact OCI startup remains separately gated",
   "visible_surface": "Browser -> Clerk -> authenticated WebSocket PTY -> user-bound persistent tmux -> normal interactive Claude Code CLI",
   "terminal_sessions": {
     "gabriel": "clayverse-gabriel",

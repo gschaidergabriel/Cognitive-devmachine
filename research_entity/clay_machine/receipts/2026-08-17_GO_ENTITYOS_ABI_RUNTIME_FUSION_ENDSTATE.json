@@ -1,0 +1,61 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "71416dee723ef9432b454b06ed1ea7847ed6bc8c",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_lane": {
+    "pr": 787,
+    "head_observed": "97b56de2cb5c06298420220d96000cf95ef4cfe6",
+    "state": "DRAFT_SOURCE_DESCENDANT_UNVERIFIED"
+  },
+  "fusion_endstate": {
+    "canonical_hostcall_abi_path": "claymachine/hostcall_abi.py",
+    "abi_owns_process_capability_identity": true,
+    "legacy_process_spawn": "linux.process.spawn.v0::(Int)->Int / call_id=2 / CLAYVM1+2",
+    "real_stdout_bytes": "linux.process.stdout.v0::(Int)->Bytes / call_id=3 / CLAYVM2 only",
+    "runtime_contract_resolution_by_module_vm_version": true,
+    "runtime_v1_rejects_stdout_id3_before_host_effect_regression_source": true,
+    "serialized_loadtime_contract_for_vm_validation": false,
+    "duplicate_prs_closed": [796, 798],
+    "retained_donor_pr": 800
+  },
+  "adversarial_state": {
+    "preferred_mechanism": "one hostcall ABI authority consumed by lowering, serialized VM validation, runtime and host adapters",
+    "strongest_counterhypothesis": "runtime-only VM-version rejection still allows malformed or version-inadmissible serialized hostcall identity to survive load-time validation and fail later than necessary",
+    "cheapest_remaining_source_falsifier": "make load_module/_validate_code resolve every OP_HOSTCALL through contract_for_vm(serialized_format_version, call_id) and reject unknown/version-inadmissible id or wrong arity before returning ClayModule",
+    "secondary_blocker": "actual uv pip install commands do not yet explicitly pass --require-hashes --only-binary :all: even though hashed wheel authority files exist"
+  },
+  "execution": {
+    "exact_head_checked": "97b56de2cb5c06298420220d96000cf95ef4cfe6",
+    "github_vercel_status": "failure",
+    "provider_reason": "rate-limit before Sandbox start",
+    "sandbox_started": false,
+    "current_exact_head_executable_status": "UNVERIFIED",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "scope_rule": "historical exact-head evidence does not transfer to current descendants or whole EntityOS acceptance"
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "next_executable_step": "After load-time VM-version hostcall validation and explicit uv CLI hash/binary enforcement land on the then-current PR787 head, run ordinary full pytest plus canonical v7 only in an actually-started exact-identity Vercel Sandbox; capture exact source/tree/artifact/lock/tool-version receipts; require zero new unusual experiments; stop the Sandbox successfully.",
+  "claims": {
+    "single_canonical_abi_lane": true,
+    "runtime_vm_version_fence_source_present": true,
+    "loadtime_vm_version_fence_complete": false,
+    "package_install_cli_authority_complete": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  }
+}

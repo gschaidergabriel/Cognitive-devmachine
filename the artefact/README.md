@@ -53,7 +53,7 @@ Deployment authority:
 
 The supplied Kubernetes template selects `runtimeClassName: kata-qemu-runtime-rs`, runs exactly one ClayVerse replica, disables host PID/IPC/network authority, disables automatic ServiceAccount-token mounting, drops capabilities, enforces a read-only root filesystem, uses memory-backed `/tmp` and `/run`, and persists only declared ClayVerse state/workspace volumes.
 
-The same template now also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, and show that only admitted flows open while tested non-admitted flows remain denied.
+The same template also selects the ClayVerse pod with an explicit **default-deny `NetworkPolicy` for both ingress and egress**. It is intentionally network-nonfunctional until a separate deployment-specific reviewed allow policy is supplied. `hostNetwork: false` alone is not treated as network isolation. Final acceptance must bind the exact allow-policy bytes/identity, prove the chosen CNI actually enforces NetworkPolicy, enumerate the complete additive set of policies selecting the ClayVerse pod, and show that only admitted flows open while tested non-admitted flows remain denied.
 
 The installed RuntimeClass and target hardware virtualization support must be verified on the actual deployment platform before final acceptance. Provider-specific configuration may vary, but the VM/microVM invariants may not.
 
@@ -88,9 +88,9 @@ Continue maximum independent testing under `TESTING_STRATEGY.md`. In addition to
 
 The architecture and fail-closed Kata deployment profile are now canonical source. **Actual Kata/microVM execution and CNI NetworkPolicy enforcement have not yet been observed for the exact final ClayVerse image**, so no VM-isolation/network-policy runtime credit or whole-product PASS is claimed.
 
-The current default-deny source contract has now also been independently reconstructed from the exact three Git blobs and exercised in an isolated non-production container: blob identities matched GitHub exactly, `tests/test_microvm_deployment_contract.py` passed **5/5**, and a YAML semantic probe confirmed exactly one `NetworkPolicy` named `clayverse-default-deny` with both policy types and empty ingress/egress rule sets. This is bounded exact-file mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
+The current default-deny source contract has been independently reconstructed from the exact three current Git blobs and exercised in an isolated non-production environment: Git blob identities matched **3/3**, `tests/test_microvm_deployment_contract.py` passed **6/6**, and a PyYAML 6.0.3 semantic probe loaded exactly `Service`, `StatefulSet`, `NetworkPolicy` with `clayverse-default-deny`, `app: clayverse`, `Ingress` + `Egress`, and empty ingress/egress rule sets. This is bounded exact-file source/mechanism evidence only, not Kubernetes/Kata/CNI runtime evidence.
 
-Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox.
+Vercel/Sandbox and other direct-container execution may continue to provide lower-layer development evidence. The retained Vercel #810 bridge has already proven Sandbox creation, but the exact private-source/OCI batch remains blocked before source staging by the missing host-side sensitive `GITHUB_READ_TOKEN`; that credential must never be committed or forwarded into the Sandbox. A fresh Vercel project check in this cycle found **zero new deployments since 2026-08-17 14:30 UTC**, so no newer credential-capable runtime evidence supersedes that blocker.
 
 ### Final exact acceptance sequence
 
@@ -98,17 +98,17 @@ Vercel/Sandbox and other direct-container execution may continue to provide lowe
 
 ### Latest cycle delta
 
-**2026-08-17 22:54 +07:00 — fail-closed MicroVM network source contract independently bound and regressed.**
+**2026-08-17 22:57 +07:00 — current MicroVM network source re-bound after parallel fusion; OCI blocker rechecked.**
 
-- canonical source already closed the #623-discovered gap with `clayverse-default-deny`, selecting `app=clayverse` with `Ingress` + `Egress` and empty rules;
-- exact Git blobs were independently reconstructed and matched before execution: deployment template `788492ef...`, MicroVM contract `1e41ce84...`, focused test `cc7e3cb7...`;
-- focused deterministic regression: **5/5 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
-- YAML semantic probe: `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy has exact empty ingress/egress rule sets;
-- `manifest.json` now explicitly binds the default-deny baseline, deployment-specific reviewed allow-policy requirement and final CNI enforcement gate into the canonical artifact manifest;
-- durable receipt: `receipts/2026-08-17_GO_2254_MICROVM_NETWORK_DEFAULT_DENY_EXACT_BLOBS_GPT56SOL.json`;
+- a stale write attempt was correctly rejected with `409`; after refresh, parallel work had already closed the #623-discovered NetworkPolicy gap, so no duplicate implementation was created;
+- exact current Git blobs independently reconstructed and matched: template `788492ef...`, MicroVM contract `2608f5ca...`, focused test `5c2f48f7...`;
+- focused deterministic regression: **6/6 PASS** (`python -m pytest -q tests/test_microvm_deployment_contract.py`);
+- semantic YAML probe: exactly `Service`, `StatefulSet`, one `NetworkPolicy`; deny policy selects `app=clayverse`, carries `Ingress` + `Egress`, and has exact empty ingress/egress rule sets;
+- canonical manifest already binds the default-deny baseline, reviewed deployment-specific allow-policy requirement and final CNI enforcement gate;
+- fresh #810/Vercel evidence check: zero new deployments since 14:30 UTC; retained deployment `dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8` remains `Sandbox.create` PASS then `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`, with source/OCI runtime credit zero;
+- durable receipt: `receipts/2026-08-17_GO_2257_MICROVM_NETWORK_EXACT_RECHECK_AND_OCI_BLOCKER_GPT56SOL.json`;
 - runtime credit remains **zero** for exact OCI, Kubernetes, Kata/microVM and CNI enforcement; source/mechanism evidence is not whole-product PASS;
-- strongest current execution blocker remains the absent host-side Vercel Preview `GITHUB_READ_TOKEN` required for exact private Research/EntityOS staging before the retained OCI batch can execute;
-- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes only minute-precision immutable message time and no shared immutable request/turn id.
+- GO unusual experiment: `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`; zero unusual experiments executed because this trigger exposes no shared immutable request/turn id for the atomic lease.
 
 ## Verification
 

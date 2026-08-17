@@ -98,10 +98,11 @@ class ClerkTokenVerifier:
 class ClaudeCodeInference:
     """Tool-less Claude Code cognition boundary for ClayVerse.
 
-    Cognition runs with auto-discovery disabled, all built-in tools disabled and no
-    Claude session persistence. UnifiedDB/WorldAssembler remains the sole durable
-    memory/world authority. Claude may return a schema-validated effect intent, but
-    only the canonical ClayVerse EffectGate can execute it.
+    Cognition runs with all built-in tools disabled and no Claude session
+    persistence. UnifiedDB/WorldAssembler remains the sole durable memory/world
+    authority. Claude may return a schema-validated effect intent, but only the
+    canonical ClayVerse EffectGate can execute it. Bare mode is intentionally not
+    used because it disables Claude subscription/OAuth credentials.
     """
 
     def __init__(self, binary: str | None = None, cwd: str | None = None, timeout: int | None = None):
@@ -137,7 +138,6 @@ class ClaudeCodeInference:
         schema = json.dumps(CLAUDE_DECISION_SCHEMA, sort_keys=True, separators=(",", ":"))
         args = [
             self.binary,
-            "--bare",
             "-p",
             prompt,
             "--output-format",

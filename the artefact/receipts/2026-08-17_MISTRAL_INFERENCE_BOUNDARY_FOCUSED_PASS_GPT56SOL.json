@@ -1,0 +1,48 @@
+{
+  "schema": "clayverse-component-receipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "SOURCE_MECHANISM_SUPPORTED",
+  "product_scope": "Mistral token/API inference boundary for final Vercel sandbox test-of-tests",
+  "source_identity": {
+    "adapters_blob_observed_on_main": "53a33320927c9532092c4b3b4361fa353b6d28fd",
+    "mistral_test_blob_observed_on_main": "2b8d2ac08b16cf3a0acea67e0781a181dbaefd9e",
+    "inference_protocol_blob_observed_on_main": "cd5856ac58f4e86c4c045fda8099b7783e6724cf"
+  },
+  "mechanism": {
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "secret_boundary": "MISTRAL_API_KEY is read per request and is not stored on the adapter object",
+    "model_binding": "explicit CLAYVERSE_MISTRAL_MODEL or constructor model required",
+    "response_mode": "JSON object mode requested; returned content independently JSON-decoded",
+    "effect_boundary": "response passes through existing fail-closed parse_claude_decision_payload before EffectGate can observe any proposed effect",
+    "allowed_effect_intents": ["state.noop", "entityos.exec"],
+    "forbidden_example": "process.exec",
+    "failure_redaction": "HTTP failures record status only; provider error body/token is not surfaced"
+  },
+  "isolated_execution": {
+    "surface": "authorized non-production local isolated container",
+    "scope": "focused exact Mistral adapter/parser/test mechanism reconstructed from current Git source; not full repository checkout and not network provider execution",
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_mistral_inference.py",
+    "result": "6 passed in 0.13s",
+    "tests": [
+      "runtime secret and explicit model required",
+      "fixed endpoint + JSON mode + secret not retained in adapter state",
+      "valid entityos.exec remains schema-validated intent only",
+      "process.exec rejected before EffectGate",
+      "HTTP failure does not echo secret",
+      "malformed and oversized response fail closed"
+    ]
+  },
+  "evidence_limits": {
+    "real_mistral_call": false,
+    "vault_secret_acquisition": false,
+    "exact_full_repo_test": false,
+    "exact_oci_execution": false,
+    "vercel_firecracker_docker": false,
+    "canonical_full_turn_effect_reentry": false,
+    "tier2_recovery": false,
+    "whole_product": false
+  },
+  "next_discriminator": "Wire/exercise Mistral through the integrated ClayVerse canonical cognition/effect path in the exact accepted OCI image inside Vercel Sandbox Firecracker, with runtime Vault secret acquisition, then repeat after full appliance recreation using the same image digest.",
+  "acceptance": "IN_PROGRESS"
+}

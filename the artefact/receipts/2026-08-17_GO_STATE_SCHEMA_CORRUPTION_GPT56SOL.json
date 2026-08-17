@@ -1,0 +1,70 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "owner_authority_note": "Current ClayVerse single-container owner directive supersedes the legacy EntityOS-as-one-file endpoint cache.",
+  "observed_head_before_receipt": "c11cc1fe09273ca673f2322d534b87679d0f2787",
+  "frontier_selected": "UnifiedDB state recovery gate correctness while exact-current whole-container Vercel OCI acceptance remains open",
+  "source_binding": {
+    "unifieddb_store_git_blob": "a320fff9f1fbfa21522cc3dfea54f5e273061aa9",
+    "merged_state_authority_test_blob": "1ffd49c76b25d3c8da29f009b0ce51e3e9957c0e",
+    "merged_corruption_test_blob": "61cd7b89b1241fd27459296e74f8a8b1c85ea8f7",
+    "repair_merge_commit": "c11cc1fe09273ca673f2322d534b87679d0f2787",
+    "repair_pr": 375
+  },
+  "observed_bug": {
+    "kind": "STALE_ACCEPTANCE_TEST",
+    "mechanism": "UnifiedDB current constructor writes schema_version 5 while test_schema2_hidden_raw_ledger_is_retired_on_open still required schema_version 3.",
+    "effect": "The exact current product tree carried a deterministic false-negative gate unrelated to runtime behavior."
+  },
+  "repair": {
+    "runtime_semantics_changed": false,
+    "test_delta": [
+      "schema-2 migration expectation aligned from 3 to current 5",
+      "physical SQLite truncation fail-closed behavior preserved as permanent ordinary regression"
+    ],
+    "stale_pr_closed": 374,
+    "fresh_ancestry_pr_merged": 375
+  },
+  "unusual_experiment": {
+    "count_for_this_user_triggered_go": 1,
+    "name": "PHYSICAL_SQLITE_STATE_TRUNCATION_REOPEN",
+    "purpose": "Falsify the possibility that a physically truncated authoritative UnifiedDB silently reinitializes or rewrites state on reopen.",
+    "intervention": "Create valid persisted state and checkpoint, close, truncate the SQLite file to 50 percent, then reopen through the exact current UnifiedDB constructor.",
+    "result": "PASS_FAIL_CLOSED",
+    "observed_exception": "sqlite3.DatabaseError: database disk image is malformed",
+    "size_before_bytes": 147456,
+    "size_after_truncate_bytes": 73728,
+    "corrupt_authoritative_bytes_unchanged_by_failed_reopen": true,
+    "lingering_wal_or_shm_sidecars": false,
+    "replication_rule": "The committed regression is replay-only and adds zero unusual experiments."
+  },
+  "isolated_regression": {
+    "environment": "isolated local Python execution surface",
+    "python": "3.13.5",
+    "exact_store_blob_verified": true,
+    "corruption_regression": "1/1 PASS in 0.08s",
+    "schema2_migration_replay": {
+      "schema_version_after_reopen": "5",
+      "hidden_turn_ledger_retired": true,
+      "existing_turn_preserved": true
+    },
+    "scope_limit": "Auxiliary isolated regression evidence; not whole-container or Vercel Sandbox acceptance."
+  },
+  "vercel_infrastructure_observations": {
+    "stock_sandbox_oci_probe_deployment": "dpl_84M7gmb85kvx5KV4tG9ZqLL9oy4t",
+    "stock_sandbox_oci_probe": "BLOCKED_OCI_TOOLCHAIN_PROVISION: Amazon Linux 2023 Sandbox package repositories expose neither podman nor buildah for the tested install path.",
+    "vcr_preflight_deployment": "dpl_48UEVTo4CFY12WtBLokT1F7hrHYj",
+    "vcr_preflight": "Vercel build environment exposed /usr/bin/buildah in the observed preflight, while direct spawned vercel CLI was unavailable on PATH in that script; no write/build acceptance follows from this preflight.",
+    "evidence_boundary": "Deployment READY and build-machine capability inspection do not imply an actually started exact-current whole-container Vercel Sandbox PASS."
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_frontier": "Obtain exact-current-head whole-container OCI build/start/restart/authenticated-terminal and persistent-state acceptance in an actually started isolated Vercel Sandbox with in-Sandbox source/artifact digest verification and preserved stop receipt.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

@@ -32,9 +32,83 @@ class UCM2:
         self.db_path = (self.state_dir / "UCM2.sqlite").resolve()
         if self.db_path.name in {"FRANK_UNIFIED.sqlite", "FRANK_CLAYGRAPH.sqlite"}:
             raise RuntimeError("MAIN_INSTANCE_DB_FORBIDDEN")
+        self._preflight_existing_db()
         self.db = sqlite3.connect(self.db_path)
         self.db.row_factory = sqlite3.Row
         self._init()
+
+    def _preflight_existing_db(self) -> None:
+        """Reject non-replay-complete legacy state before any migration write."""
+        if not self.db_path.exists():
+            return
+
+        uri = f"file:{self.db_path.as_posix()}?mode=ro"
+        try:
+            probe = sqlite3.connect(uri, uri=True)
+            probe.row_factory = sqlite3.Row
+        except sqlite3.Error as exc:
+            raise RuntimeError("UCM2_EXISTING_DB_UNREADABLE") from exc
+
+        try:
+            tables = {
+                row["name"]
+                for row in probe.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+                )
+            }
+            if not tables:
+                return
+            if "meta" not in tables:
+                raise RuntimeError("UCM2_EXISTING_SCHEMA_UNRECOGNIZED")
+
+            schema_row = probe.execute(
+                "SELECT value FROM meta WHERE key='schema_version'"
+            ).fetchone()
+            if schema_row is None:
+                raise RuntimeError("UCM2_EXISTING_SCHEMA_UNRECOGNIZED")
+            schema_version = str(schema_row["value"])
+            if schema_version == str(SCHEMA_VERSION):
+                return
+            if schema_version != "1":
+                raise RuntimeError(f"UCM2_SCHEMA_UNSUPPORTED:{schema_version}")
+
+            required_v1_tables = {"meta", "objects", "edges", "events", "experiences"}
+            if not required_v1_tables.issubset(tables):
+                raise RuntimeError("UCM2_V1_SCHEMA_INCOMPLETE")
+
+            epoch_row = probe.execute("SELECT value FROM meta WHERE key='epoch'").fetchone()
+            if epoch_row is None:
+                raise RuntimeError("UCM2_V1_EPOCH_MISSING")
+            epoch = int(epoch_row["value"])
+            event_count = int(probe.execute("SELECT COUNT(*) FROM events").fetchone()[0])
+            edge_count = int(probe.execute("SELECT COUNT(*) FROM edges").fetchone()[0])
+            experience_count = int(
+                probe.execute("SELECT COUNT(*) FROM experiences").fetchone()[0]
+            )
+            objects = list(
+                probe.execute(
+                    "SELECT object_id,root_module,kind,status,payload_json,version "
+                    "FROM objects ORDER BY object_id"
+                )
+            )
+            clean_root_only = (
+                epoch == 0
+                and event_count == 0
+                and edge_count == 0
+                and experience_count == 0
+                and len(objects) == 1
+                and objects[0]["object_id"] == ROOT_MODULE
+                and objects[0]["root_module"] == ROOT_MODULE
+                and objects[0]["kind"] == "clay_machine_key_module"
+            )
+            if not clean_root_only:
+                raise RuntimeError("UCM2_V1_HISTORY_NOT_REPLAY_COMPLETE")
+        except ValueError as exc:
+            raise RuntimeError("UCM2_V1_METADATA_INVALID") from exc
+        except sqlite3.Error as exc:
+            raise RuntimeError("UCM2_EXISTING_SCHEMA_INVALID") from exc
+        finally:
+            probe.close()
 
     def _init(self) -> None:
         self.db.executescript(

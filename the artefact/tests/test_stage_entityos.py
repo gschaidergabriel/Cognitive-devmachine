@@ -19,6 +19,10 @@ def _run(tmp_path: Path, source: Path, digest: str):
     )
 
 
+def _staged(tmp_path: Path) -> Path:
+    return tmp_path / "build-assets" / "entityos" / "EntityOS"
+
+
 def test_stage_entityos_binds_exact_bytes_and_seals_mode(tmp_path):
     source = tmp_path / "candidate"
     payload = b"bounded-entityos-staging-regression\x00\xff"
@@ -28,7 +32,7 @@ def test_stage_entityos_binds_exact_bytes_and_seals_mode(tmp_path):
     result = _run(tmp_path, source, digest.upper())
 
     assert result.returncode == 0, result.stderr
-    staged = tmp_path / "EntityOS"
+    staged = _staged(tmp_path)
     assert staged.read_bytes() == payload
     assert hashlib.sha256(staged.read_bytes()).hexdigest() == digest
     assert stat.S_IMODE(staged.stat().st_mode) == 0o555
@@ -42,7 +46,8 @@ def test_stage_entityos_rejects_digest_mismatch_without_output(tmp_path):
 
     assert result.returncode == 65
     assert "digest mismatch" in result.stderr.lower()
-    assert not (tmp_path / "EntityOS").exists()
+    assert not _staged(tmp_path).exists()
+    assert not list((tmp_path / "build-assets" / "entityos").glob(".EntityOS.stage.*"))
 
 
 def test_stage_entityos_rejects_symlink_source(tmp_path):
@@ -56,4 +61,4 @@ def test_stage_entityos_rejects_symlink_source(tmp_path):
 
     assert result.returncode == 66
     assert "symlink rejected" in result.stderr.lower()
-    assert not (tmp_path / "EntityOS").exists()
+    assert not _staged(tmp_path).exists()

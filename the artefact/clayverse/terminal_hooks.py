@@ -113,7 +113,7 @@ def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dic
             continue
         live_nonterminal.append(goal)
 
-    next_runnable_goal_id = None
+    next_runnable_goal = None
     for goal in live_nonterminal:
         step = goal["current_step"]
         unfinished = bool(step and step["status"] in {"PROPOSED", "ADMITTED"})
@@ -122,11 +122,17 @@ def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dic
             and goal["counters"]["steps"] < goal["budget"]["max_steps"]
             and not unfinished
         ):
-            next_runnable_goal_id = goal["goal_id"]
+            next_runnable_goal = goal
             break
 
+    selected_goals = live_nonterminal[:_AUTONOMY_CONTEXT_MAX_GOALS]
+    if next_runnable_goal is not None and all(
+        goal["goal_id"] != next_runnable_goal["goal_id"] for goal in selected_goals
+    ):
+        selected_goals = selected_goals[: _AUTONOMY_CONTEXT_MAX_GOALS - 1] + [next_runnable_goal]
+
     visible_goals = []
-    for goal in live_nonterminal[:_AUTONOMY_CONTEXT_MAX_GOALS]:
+    for goal in selected_goals:
         objective, objective_truncated = _preview(goal["objective"], _AUTONOMY_OBJECTIVE_PREVIEW_CHARS)
         step = goal["current_step"]
         current_step = None
@@ -167,7 +173,7 @@ def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dic
         "state_revision": state["revision"],
         "mode": "read_only",
         "generation": generation,
-        "next_runnable_goal_id": next_runnable_goal_id,
+        "next_runnable_goal_id": next_runnable_goal["goal_id"] if next_runnable_goal else None,
         "goals": visible_goals,
         "omitted_goal_count": max(0, len(live_nonterminal) - len(visible_goals)),
         "stale_goal_count": stale_goal_count,
@@ -231,6 +237,11 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         autonomy["goals"] = goals[:max_goals]
         autonomy["omitted_goal_count"] = int(autonomy.get("omitted_goal_count", 0)) + dropped
         autonomy["context_budget_truncated"] = True
+        if autonomy.get("next_runnable_goal_id") not in {
+            goal.get("goal_id") for goal in autonomy["goals"] if isinstance(goal, dict)
+        }:
+            autonomy["next_runnable_goal_id"] = None
+            autonomy["next_runnable_omitted_by_context_budget"] = True
 
     text = render()
     if len(text) <= limit:

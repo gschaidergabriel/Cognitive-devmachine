@@ -48,18 +48,17 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
     This function is the explicit container-restart boundary. Recovery never replays
     an external effect. PENDING effects are first collapsed to UNKNOWN_AFTER_RESTART
     here, not while constructing an EffectJournal in a concurrent MCP/terminal process.
-    A hook-created active turn keeps its predeclared causal_id through any effect re-entry;
-    restart then records an explicit interrupted-turn system event and retires the active
-    row. Finally every old lease is expired and both permanent sessions are fenced
-    together into one new entity generation.
+    A hook-created active turn keeps its predeclared causal_id through durable effect
+    evidence, but only status VERIFIED is causal re-entry. Finally every old lease is
+    expired and both permanent sessions are fenced together into one new entity generation.
     """
 
-    # This may create UNKNOWN_AFTER_RESTART causal receipts for PENDING effects.
     EffectJournal(db).recover_pending()
 
     counts = {
         "scanned": 0,
         "reentered_effects": 0,
+        "non_reentered_effects": 0,
         "aborted_no_effect": 0,
         "uncertain_effects": 0,
         "ambiguous_effects": 0,
@@ -95,15 +94,20 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     except (TypeError, json.JSONDecodeError):
                         outcome = {"ok": False, "certainty": "unknown", "reason": "invalid_persisted_outcome_receipt"}
                     effect_id = effect["effect_id"]
+                    reentered = 1 if effect["status"] == "VERIFIED" else 0
+                    credit = _causal_credit(outcome) if reentered else 0.0
                     tx.execute(
-                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
-                        (active["causal_id"], active["episode_id"], effect_id, active["turn_id"], _hash(outcome), _causal_credit(outcome), time.time()),
+                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,?,?)",
+                        (active["causal_id"], active["episode_id"], effect_id, active["turn_id"], _hash(outcome), credit, reentered, time.time()),
                     )
-                    counts["reentered_effects"] += 1
+                    if reentered:
+                        counts["reentered_effects"] += 1
+                    else:
+                        counts["non_reentered_effects"] += 1
                 elif len(effects) > 1:
                     receipt = {"ok": False, "certainty": "unknown", "reason": "multiple_effect_records_after_restart", "count": len(effects)}
                     tx.execute(
-                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
+                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,0,?)",
                         (active["causal_id"], active["episode_id"], None, active["turn_id"], _hash(receipt), time.time()),
                     )
                     counts["ambiguous_effects"] += 1
@@ -111,20 +115,26 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     reason = "effect_requested_but_no_effect_receipt" if episode["selected"] == "request_effect" else "restart_before_assistant_completion"
                     receipt = {"ok": False, "certainty": "unknown", "reason": reason}
                     tx.execute(
-                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,1,?)",
+                        "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,0,0,?)",
                         (active["causal_id"], active["episode_id"], None, active["turn_id"], _hash(receipt), time.time()),
                     )
                     if episode["selected"] == "request_effect": counts["uncertain_effects"] += 1
                     else: counts["aborted_no_effect"] += 1
 
-            state = "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY" if effect_id else "RECOVERY_ABORTED_INCOMPLETE_TURN"
+            causal_now = tx.execute(
+                "SELECT effect_id,reentered FROM causal_episodes WHERE causal_id=?", (active["causal_id"],)
+            ).fetchone()
+            if causal_now and causal_now["effect_id"] and int(causal_now["reentered"]) == 1:
+                state = "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY"
+            elif causal_now and causal_now["effect_id"]:
+                state = "RECOVERY_CLOSED_AFTER_EFFECT_EVIDENCE"
+            else:
+                state = "RECOVERY_ABORTED_INCOMPLETE_TURN"
             tx.execute("UPDATE workspace_episodes SET state=? WHERE episode_id=?", (state, active["episode_id"]))
             _append_recovery_turn(tx, active, "container_restart", effect_id)
             tx.execute("DELETE FROM active_turns WHERE session_id=?", (active["session_id"],))
             counts["active_turns_closed"] += 1
 
-        # Legacy/open episodes without an active hook row are evidence from older
-        # artifact generations. Preserve them, but close them without replay.
         episodes = tx.execute(
             "SELECT w.* FROM workspace_episodes w "
             "WHERE w.state IN ('OPEN','SELECTED') "
@@ -139,12 +149,18 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                 effect = effects[0]
                 try: outcome = json.loads(effect["outcome"])
                 except (TypeError, json.JSONDecodeError): outcome = {"ok": False, "certainty": "unknown", "reason": "invalid_persisted_outcome_receipt"}
+                reentered = 1 if effect["status"] == "VERIFIED" else 0
+                credit = _causal_credit(outcome) if reentered else 0.0
                 tx.execute(
-                    "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
-                    (_causal_id(episode["episode_id"], effect["effect_id"]), episode["episode_id"], effect["effect_id"], episode["observation_turn_id"], _hash(outcome), _causal_credit(outcome), time.time()),
+                    "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,?,?)",
+                    (_causal_id(episode["episode_id"], effect["effect_id"]), episode["episode_id"], effect["effect_id"], episode["observation_turn_id"], _hash(outcome), credit, reentered, time.time()),
                 )
-                tx.execute("UPDATE workspace_episodes SET state='RECOVERED_LEGACY_EFFECT_REENTERED' WHERE episode_id=?", (episode["episode_id"],))
-                counts["reentered_effects"] += 1
+                state = "RECOVERED_LEGACY_EFFECT_REENTERED" if reentered else "RECOVERED_LEGACY_EFFECT_NOT_REENTERED"
+                tx.execute("UPDATE workspace_episodes SET state=? WHERE episode_id=?", (state, episode["episode_id"]))
+                if reentered:
+                    counts["reentered_effects"] += 1
+                else:
+                    counts["non_reentered_effects"] += 1
             elif len(effects) > 1:
                 tx.execute("UPDATE workspace_episodes SET state='RECOVERY_ABORTED_AMBIGUOUS_EFFECTS' WHERE episode_id=?", (episode["episode_id"],))
                 counts["ambiguous_effects"] += 1

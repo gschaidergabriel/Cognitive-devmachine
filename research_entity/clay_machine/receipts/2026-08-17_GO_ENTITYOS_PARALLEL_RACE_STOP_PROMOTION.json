@@ -1,0 +1,69 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "NEGATIVE_SOURCE_EVIDENCE_AND_PARALLEL_RACE_STOP_PROMOTION",
+  "canonical_product_pr": 787,
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "product_heads_observed": {
+    "hashed_build_cli_commit": "bce2675832d9eb206fc04c2877cba55138260135",
+    "stdout_scope_rollback": "f407c768652c941086168f713e0f966c4da6ca9b",
+    "stale_stderr_clayos_test": "bf216952177333c1fbeb516c30639ccade60fe30",
+    "stale_stderr_vm_test": "df5946375809631d2a12f2e3af5984cc6eb54361"
+  },
+  "positive_source_state": {
+    "hostcall_abi_loadtime_vm_version_validation": true,
+    "hostcall_abi_runtime_vm_version_validation": true,
+    "stdout_bytes_product_contract": "linux.process.stdout.v0::(Int)->Bytes / call_id=3 / CLAYVM2 only",
+    "full_pytest_uv_require_hashes_cli": true,
+    "full_pytest_uv_only_binary_cli": true,
+    "build_uv_require_hashes_cli": true,
+    "build_uv_only_binary_cli": true,
+    "uv_version_logged_on_both_install_paths": true,
+    "new_unusual_experiment_count": 0
+  },
+  "stop_promotion_findings": [
+    {
+      "path": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+      "first_observed_at": "bce2675832d9eb206fc04c2877cba55138260135",
+      "still_observed_at": "f407c768652c941086168f713e0f966c4da6ca9b",
+      "failure": "malformed catch/finally: summary object assignment ends with `} finally {` instead of `};` followed by catch close and `finally {`",
+      "effect": "canonical v7 build runner cannot parse/reach Sandbox.create",
+      "required_repair": "restore `  };` and `} finally {` without weakening hashed-wheel CLI flags"
+    },
+    {
+      "scope_authority": "stdout-only until exact-head Sandbox promotion",
+      "rollback_commit": "f407c768652c941086168f713e0f966c4da6ca9b",
+      "subsequent_conflicts": [
+        "bf216952177333c1fbeb516c30639ccade60fe30 adds ClayOS stderr test importing deferred symbols",
+        "df5946375809631d2a12f2e3af5984cc6eb54361 adds VM-version stderr test importing deferred symbols"
+      ],
+      "effect": "current descendant test collection/source coherence is not promotable and parallel workers are re-expanding a deliberately deferred ABI surface",
+      "required_repair": "remove/defer stale stderr tests and freeze stdout-only source until exact-head Sandbox evidence exists"
+    }
+  ],
+  "execution": {
+    "current_descendant_sandbox_pass": false,
+    "provider_state_observed": "Vercel build-rate-limit before Sandbox start on recent descendants",
+    "last_bounded_verified_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "last_bounded_entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "historical_scope_transfer": false
+  },
+  "adjudication": {
+    "action": "STOP_PROMOTION_AND_FREEZE_SCOPE",
+    "do_not_add": "new stderr/String/NET/VIS/AUDIO hostcall surface before stdout exact-head execution",
+    "next_source_step": "repair build-runner syntax and remove/defer stale stderr tests on one refreshed exact PR787 head",
+    "next_executable_step": "after source coherence is restored and Vercel admits the build, run ordinary full pytest plus canonical v7 in an actually-started exact-identity Vercel Sandbox and require zero new unusual experiments"
+  },
+  "claims": {
+    "current_source_head_promotable": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

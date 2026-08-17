@@ -98,7 +98,10 @@ def _selector_matches(selector: dict[str, Any], labels: dict[str, str]) -> bool:
             if key not in labels or labels[key] not in values:
                 return False
         elif operator == "NotIn":
-            if key not in labels or labels[key] in values:
+            # Kubernetes set-based selector semantics explicitly include objects
+            # that do not carry the key. Fail only when the key exists and its
+            # value is one of the excluded values.
+            if key in labels and labels[key] in values:
                 return False
         elif operator == "Exists":
             if key not in labels:
@@ -140,7 +143,11 @@ def _policy_has_obvious_broad_allow(policy: dict[str, Any]) -> bool:
                 return True
             peers = rule.get(peer_key)
             _require(isinstance(peers, list), f"NetworkPolicy {peer_key} must be a list")
-            if any(_peer_is_broad(peer) for peer in peers if isinstance(peer, dict)):
+            _require(
+                all(isinstance(peer, dict) for peer in peers),
+                f"NetworkPolicy {peer_key} entries must be objects",
+            )
+            if any(_peer_is_broad(peer) for peer in peers):
                 return True
     return False
 

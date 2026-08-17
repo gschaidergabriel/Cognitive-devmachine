@@ -1,0 +1,86 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary ChatGPT project organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_status_write": "9020da21e2ad0ab1c8289ad5b7fde00f11b1b5b1",
+  "scope": "tmux_repair_rerun_execution_admission_reclassification",
+  "canonical_product_code_delta": "NO_CHANGE",
+  "predecessor_runtime_truth": {
+    "receipt": "the artefact/receipts/2026-08-17_GO_1534_LIVE_TMUX36A_FALSIFIER_GPT56SOL.json",
+    "terminal_sessions_blob": "185a748f80011b324b2c4786644ad42ff369203e",
+    "managed_tmux_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "classification": "EXACT_COMPONENT_RUNTIME_FAIL",
+    "unchanged": true
+  },
+  "repair_candidate": {
+    "pull_request": 603,
+    "head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "status": "DRAFT_UNMERGED_RUNTIME_UNVERIFIED",
+    "merge_authorized": false
+  },
+  "vercel_capability_recheck": {
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "deployment_id": "dpl_D9dvKLk37x99xcNE2M9qsCkvA4MM",
+    "source_commit": "b5bb27915f178b424a4dbe76e3f55f269422863e",
+    "sandbox_execution_observed": true,
+    "network_policy_during_tests": "DENY_ALL",
+    "classification": "VERCEL_SANDBOX_ADMISSION_OBSERVED_REOPENED_BOUNDED_NON_CLAYVERSE_PRODUCT_RUN",
+    "meaning": "The earlier blanket assumption that Vercel Sandbox admission remained continuously closed was stale; this separate bounded run proves actual Sandbox execution was admitted during this cycle.",
+    "not_claimed": [
+      "ClayVerse PR603 execution",
+      "ClayVerse OCI acceptance",
+      "native Claude Code acceptance",
+      "whole-product PASS"
+    ]
+  },
+  "repair_rerun_attempts": [
+    {
+      "bridge_pull_request": 846,
+      "bridge_commit": "f3eff0ef179961110f338e18159ab47a46e69fd9",
+      "deployment_id": "dpl_Cu8hEPnRsYVTGmnBG8vUypVuQHAc",
+      "candidate_head_bound": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+      "candidate_terminal_blob_bound": "c185009f8af84e1288747d8352645777a36b2053",
+      "sandbox_start_observed": false,
+      "product_assertions_reached": false,
+      "observed_error": "Node.js SyntaxError: Unexpected identifier 'unbind' in the temporary execution bridge template literal before Sandbox.create",
+      "classification": "EXECUTION_BRIDGE_PARSER_FAILURE_BEFORE_SANDBOX_START_ZERO_PRODUCT_CREDIT"
+    },
+    {
+      "bridge_pull_request": 846,
+      "bridge_fix_observed": true,
+      "current_bridge_head": "07beb9b5ef4f61b3281a7c0aa702dda789d6da34",
+      "bridge_fix_scope": "execution bridge only; repair the exact over-escaped backtick sequence in a generated runtime copy without changing canonical ClayVerse product bytes",
+      "github_vercel_status": "Deployment rate limited — retry in 24 hours.",
+      "sandbox_start_observed": false,
+      "product_assertions_reached": false,
+      "classification": "EXECUTION_ADMISSION_BLOCKED_AFTER_BRIDGE_FIX_ZERO_PRODUCT_CREDIT"
+    }
+  ],
+  "coordination": {
+    "stale_write_conflict_observed": true,
+    "stale_write_result": "GitHub contents update returned 409 after the shared bridge branch advanced; no stale overwrite was performed.",
+    "parallel_worker_retrigger_fused": true,
+    "single_retained_repair_lane": "ClayVerse PR #603 + Dr.-Unterweger execution bridge PR #846",
+    "duplicate_new_product_path_created": false
+  },
+  "daytona_fallback": {
+    "owner_authorized_free_only": true,
+    "connected_provider_action_available_to_this_organ": false,
+    "installable_daytona_plugin_found": false,
+    "runtime_executed_for_this_repair": false,
+    "classification": "NO_RUNTIME_CREDIT",
+    "note": "Do not infer Daytona itself unavailable. This organ has no admitted provider dispatch surface; FREE_ONLY entitlement/credential contracts remain required and must not be bypassed."
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed and the user-message timestamp available to this organ is minute-precision only; the current atomic GO lease protocol forbids fabricating a unique trigger key."
+  },
+  "next_exact_gate": "When an authorized isolated execution slot is admitted, rerun the exact PR #603 candidate against real tmux 3.6a using the retained same-falsifier bridge and require: pre-policy persistent-server upgrade PASS; already-hardened second reapply PASS; new-server second source PASS; direct multi-argv transport check PASS; unknown/mixed diagnostic fail-closed. Merge PR #603 only if that exact repair rerun passes, then rejoin current main and advance to exact OCI/native-Claude/readiness/restart/concurrency acceptance.",
+  "acceptance": "IN_PROGRESS_REPAIR_RERUN_EXECUTION_ADMISSION_BLOCKED"
+}

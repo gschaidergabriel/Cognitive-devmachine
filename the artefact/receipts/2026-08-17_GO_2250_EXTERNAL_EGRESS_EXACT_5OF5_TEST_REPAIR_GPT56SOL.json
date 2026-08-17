@@ -1,0 +1,55 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:50:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "classification": "EXACT_BOUND_SOURCE_REGRESSION_AND_TEST_REPAIR",
+  "product": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "external egress policy source contract",
+  "pre_repair_exact_execution": {
+    "contract_blob": "de7ca5deaec4e5017be23106249707e2ccd2fecb",
+    "test_blob": "eef8366ee03b4d75962cd4e6f89aa7ae1ae137b2",
+    "identity_check": "2/2 git hash-object values matched captured GitHub blobs",
+    "command": "python -m pytest -q tests/test_external_egress_policy_contract.py",
+    "result": "4 passed, 1 failed",
+    "exit_code": 1,
+    "failure": "test searched case-sensitively for 'Static YAML policy' while the exact contract sentence is 'A static YAML policy ...'; contract semantics were intact"
+  },
+  "repair": {
+    "commit": "9dbac6a6467e1a0e9e0b07dfeb31edc8cef8e37d",
+    "test_blob": "9679f911953238b8503ff73d7c7b726499f14381",
+    "runtime_or_policy_code_changed": false,
+    "change": "match the exact lowercase semantic phrase 'static YAML policy'"
+  },
+  "post_repair_exact_execution": {
+    "environment": "authorized isolated OpenAI container",
+    "contract_blob": "de7ca5deaec4e5017be23106249707e2ccd2fecb",
+    "test_blob": "9679f911953238b8503ff73d7c7b726499f14381",
+    "command": "python -m pytest -q tests/test_external_egress_policy_contract.py",
+    "result": "5 passed in 0.03s",
+    "exit_code": 0
+  },
+  "contracts_exercised": [
+    "default-deny remains baseline",
+    "exactly one deployment-specific external-egress strategy is selected",
+    "provider domain list is runtime/deployment-bound rather than guessed permanently in source",
+    "allowed and denied flows are both required on real target and repeated across DNS/Tier-2 changes",
+    "static YAML/source/provider-login success alone receives no network-runtime or whole-product credit"
+  ],
+  "nonclaims": [
+    "not CNI enforcement evidence",
+    "not provider connectivity evidence",
+    "not Kubernetes/Kata runtime evidence",
+    "not OCI runtime evidence",
+    "not whole ClayVerse PASS"
+  ],
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0
+  },
+  "next_discriminator": "After exact OCI admission is unblocked, choose and bind one deployment-specific egress strategy on the real admitted microVM target, then prove required Clerk/Claude/optional-GLM flows and denied undeclared/DNS/node/control-plane/metadata routes before and after Tier-2 replacement.",
+  "together_api": "FORBIDDEN",
+  "vps_self_hosted_production_testing": "NOT_USED"
+}

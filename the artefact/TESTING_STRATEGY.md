@@ -6,7 +6,7 @@ This policy applies to every product-convergent ClayVerse cycle until replaced b
 
 Missing one external execution surface is **not a development blocker**. Source/product convergence continues while every independently executable evidence layer is maximized.
 
-No source/component/container result may be promoted to whole-product PASS. Final `WHOLE_CLAYVERSE_PASS` requires the exact accepted ClayVerse OCI image to execute successfully **inside the mandatory independent guest-kernel VM/microVM envelope** defined by `deployment/MICROVM_DEPLOYMENT_CONTRACT.md`.
+No source/component/container result may be promoted to whole-product PASS. Final `WHOLE_CLAYVERSE_PASS` requires the exact accepted ClayVerse OCI image to execute successfully **inside an independent guest-kernel VM/microVM envelope** and to pass the mandatory final sandbox test-of-tests defined by `research_entity/global/CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE.md`.
 
 Direct host-kernel OCI execution remains useful development/component evidence only.
 
@@ -32,8 +32,8 @@ For each material change, select every applicable independent layer rather than 
 Every material recovery implementation must cover every applicable case below:
 
 - kill EntityOS idle and during an active command;
-- kill managed PTY/tmux/Claude client while a causal turn remains open;
-- fail GLM request/timeout and inject a stale GLM response after generation change;
+- kill managed PTY/tmux/Claude/provider client while a causal turn remains open;
+- fail a token/API inference request and inject a stale provider response after generation change;
 - crash before an external effect is emitted, after emission but before acknowledgement, and after durable acknowledgement;
 - interrupt UnifiedDB writes/WAL and recover to one consistent canonical generation;
 - inject stale pre-crash results after recovery and require fail-closed rejection;
@@ -43,35 +43,86 @@ Every material recovery implementation must cover every applicable case below:
 - idempotent effects replay only when the EffectJournal proves replay safety;
 - ingress remains frozen while the continuum is inconsistent;
 - snapshot metadata binds UnifiedDB checkpoint, generations, EntityOS/config/policy hashes, causal queue position and EffectJournal state;
-- snapshot restore cannot resurrect stale authorization, terminal sessions, effect leases or generations.
+- snapshot restore cannot resurrect stale authorization, terminal sessions, effect leases, provider secrets or generations.
 
 ## Mandatory LLM-provider matrix
 
-- Claude Code authenticates and operates through the managed internal terminal login/runtime path;
+- Claude Code authenticates and operates through the managed internal terminal login/runtime path where that product lane is under test;
 - Claude credential/session material is not canonical UnifiedDB cognition/memory and does not appear in receipts/logs;
-- GLM token is injected only through the secret boundary and never appears in source, UnifiedDB, snapshots, receipts or logs;
-- GLM receives no terminal/filesystem/EntityOS/EffectGate authority;
+- token/API provider secrets are injected only through an admitted secret boundary and never appear in source, UnifiedDB, snapshots, receipts or logs;
+- token/API providers receive no direct terminal/filesystem/EntityOS/EffectGate authority;
 - provider switching preserves the same causal turn/session/global generation;
-- model output from either provider is re-ingested as proposed action and cannot self-authorize execution.
+- model output from every provider is re-ingested as proposed action and cannot self-authorize execution.
+
+### Mandatory Mistral final-provider gate
+
+For the final test-of-tests, Mistral is mandatory:
+
+- retrieve the Mistral API credential at runtime from the owner-approved Vault/secret store;
+- inject it transiently into the exact running ClayVerse container as the admitted `MISTRAL_API_KEY` boundary or canonical equivalent;
+- prove the token is absent from Git source, OCI layers, logs, receipts, UnifiedDB, snapshots and durable workspace/state;
+- perform a real Mistral inference from inside the ClayVerse continuum;
+- bind the response to the same canonical turn/session/generation;
+- re-ingest the response before any EffectGate/EntityOS action;
+- after Tier-2 appliance replacement, reacquire the token from Vault instead of recovering it from ClayVerse persistence;
+- perform another real Mistral inference after recovery;
+- direct Mistral API calls made outside ClayVerse never count as product evidence.
 
 ## Mandatory MicroVM outer-envelope matrix
 
 Final acceptance additionally requires all applicable checks below on the exact accepted image digest:
 
-- launch through a VM/microVM OCI runtime such as the admitted Kata RuntimeClass rather than the default host-kernel runtime;
+- launch through an independent VM/microVM guest-kernel envelope rather than direct host-kernel runtime;
+- for the mandatory final sandbox test, Vercel Sandbox's Firecracker microVM may serve as this outer guest-kernel envelope when its identity/kernel is attested and the exact accepted OCI digest runs inside it through Docker/OCI runtime;
 - prove the image digest executed in the guest equals the accepted image digest exactly;
 - capture/attest microVM runtime identity/version and guest-kernel identity;
 - prove the workload is behind an independent guest-kernel execution boundary;
 - prove root filesystem read-only enforcement and undeclared-write denial;
-- prove there is no `hostPath`, host PID/IPC/network authority or hidden host-shell execution path;
-- prove only declared state/workspace persistent volumes survive full workload/microVM replacement;
+- prove there is no hostPath, host PID/IPC/network authority or hidden host-shell execution path into ClayVerse authority;
+- prove only declared state/workspace persistent surfaces survive the admitted recovery boundary;
+- exercise the accepted network boundary and only admitted provider/auth traffic;
+- when Docker is run inside Vercel Sandbox, explicitly handle the Sandbox HTTPS proxy CA/trust boundary so TLS success/failure is attributable rather than accidental;
 - kill EntityOS and prove Tier-1 reconstruction;
-- destroy/recreate the full workload/microVM and prove Tier-2 recovery from the same image digest plus UnifiedDB/WAL/known-good logical snapshot;
+- destroy/recreate the full appliance/Sandbox boundary and prove Tier-2 recovery from the same image digest plus UnifiedDB/WAL/known-good logical snapshot;
 - prove stale results from the destroyed generation are rejected;
 - crash around effect acknowledgement and prove no blind external replay;
-- prove Claude direct-terminal login path and GLM inference-only secret boundary still satisfy their contracts inside the guest.
+- prove the admitted terminal path and Mistral runtime-secret inference boundary still satisfy their contracts after recovery.
 
 A normal OCI/container PASS without this independent guest-kernel layer is bounded evidence only.
+
+## Mandatory final Vercel sandbox test-of-tests
+
+The final owner acceptance sequence is:
+
+`exact current source + admitted retained lanes`
+`-> Vercel Sandbox.create`
+`-> attest Firecracker guest/kernel identity`
+`-> securely inject scoped GITHUB_READ_TOKEN when private source fetch is required`
+`-> fetch and verify exact private Research + EntityOS source identities`
+`-> reproduce/build exact ClayVerse OCI`
+`-> capture immutable image digest and runtime/dependency identities`
+`-> install/start Docker inside the Sandbox microVM or use an equivalently bound OCI runtime`
+`-> run EXACT accepted ClayVerse digest`
+`-> verify read-only root + declared persistence/tmpfs`
+`-> retrieve Mistral token from approved Vault/secret store`
+`-> transiently inject Mistral token into ClayVerse`
+`-> configure only admitted network/auth egress and required TLS trust`
+`-> achieve process liveness and full runtime readiness`
+`-> execute a real canonical cognition turn through UnifiedDB/retrieval/workspace/Mistral`
+`-> re-ingest model response`
+`-> execute one safe admitted EffectGate/EntityOS round-trip`
+`-> verify result/effect receipt causal re-entry`
+`-> verify one central entity with Gabriel/Andreas perspectives and global-generation fencing`
+`-> exercise authenticated terminal/WebSocket/Clerk path at final admitted scope`
+`-> Tier-1 recovery`
+`-> destroy/recreate the full appliance/Sandbox from the SAME image digest`
+`-> recover UnifiedDB/WAL/snapshot/EffectJournal under new generation`
+`-> reacquire Mistral token from Vault`
+`-> prove no token persistence, no stale-result acceptance and no blind effect replay`
+`-> repeat real Mistral cognition after recovery`
+`-> WHOLE_CLAYVERSE_PASS only if every admitted gate is green`.
+
+`fully functional` means this integrated path operates. Process startup, one API response, one container build or one component test is insufficient.
 
 ## Evidence ladder
 
@@ -83,20 +134,16 @@ A normal OCI/container PASS without this independent guest-kernel layer is bound
 - `MULTICOMPONENT_INTEGRATION_PASS`
 - `EXACT_OCI_COMPONENT_PASS`
 - `EXACT_MICROVM_COMPONENT_PASS`
+- `FINAL_SANDBOX_TEST_OF_TESTS_PASS`
 - `WHOLE_CLAYVERSE_PASS`
 
 A higher class must not be inferred from a lower one.
-
-## Final exact gate
-
-`exact source -> reproducible OCI image/digest -> complete EntityOS + UnifiedDB sealed continuum -> read-only runtime -> same exact digest launched inside VM/microVM guest kernel -> ingress/egress -> managed PTY/tmux -> Claude terminal login and/or GLM token inference -> cognition/re-ingest/execute/result loop -> EffectGate/EffectJournal -> Tier-1 recovery -> full microVM/workload destruction/recreation -> WAL/snapshot/new-generation recovery/no replay -> Clerk/WebSocket PTY -> dual-user concurrency -> final acceptance`.
-
-Until that exact closure succeeds, continue maximizing all lower evidence layers.
 
 ## Safety boundaries
 
 - No VPS/self-hosted/production-host testing unless separately authorized as deployment validation.
 - No Together API.
-- No secret persistence in source, UnifiedDB, snapshots, receipts or logs.
+- `GITHUB_READ_TOKEN` may be securely forwarded into the authorized disposable Vercel Sandbox under the current owner directive; it must never be committed/logged/persisted.
+- Mistral and other provider secrets must never persist in source, UnifiedDB, snapshots, receipts, logs or OCI layers.
 - Paid/final training remains owner-authorization-only.
 - Destructive tests use disposable/isolated state only.

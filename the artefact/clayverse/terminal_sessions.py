@@ -84,20 +84,11 @@ class TerminalSessionManager:
 
     @classmethod
     def _tmux_argv(cls, binding: TerminalBinding, *args: str) -> list[str]:
-        return [
-            "tmux",
-            "-L", cls._tmux_socket(binding),
-            "-f", str(cls.MANAGED_TMUX),
-            *args,
-        ]
+        return ["tmux", "-L", cls._tmux_socket(binding), "-f", str(cls.MANAGED_TMUX), *args]
 
     @staticmethod
     def _tmux_control_env() -> dict[str, str]:
-        return {
-            "PATH": "/usr/local/bin:/usr/bin:/bin",
-            "TERM": "xterm-256color",
-            "LANG": "C.UTF-8",
-        }
+        return {"PATH": "/usr/local/bin:/usr/bin:/bin", "TERM": "xterm-256color", "LANG": "C.UTF-8"}
 
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
         checks = (
@@ -111,11 +102,8 @@ class TerminalSessionManager:
         )
         for label, args, expected in checks:
             try:
-                cp = subprocess.run(
-                    self._tmux_argv(binding, *args), capture_output=True, text=True,
-                    check=False, timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
-                    env=self._tmux_control_env(),
-                )
+                cp = subprocess.run(self._tmux_argv(binding, *args), capture_output=True, text=True, check=False,
+                                    timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
             except (OSError, subprocess.TimeoutExpired) as exc:
                 raise TerminalRuntimeError(f"tmux server policy attestation unavailable: {label}") from exc
             if cp.returncode != 0 or cp.stdout.strip() != expected:
@@ -139,16 +127,8 @@ class TerminalSessionManager:
 
     def _write_mcp_config(self, binding: TerminalBinding) -> None:
         binding.home.mkdir(parents=True, exist_ok=True)
-        payload = {
-            "mcpServers": {
-                "clayverse": {
-                    "type": "stdio",
-                    "command": "/usr/local/bin/python",
-                    "args": ["-m", "clayverse.mcp_server"],
-                    "env": self._mcp_env(binding),
-                }
-            }
-        }
+        payload = {"mcpServers": {"clayverse": {"type": "stdio", "command": "/usr/local/bin/python",
+                                                  "args": ["-m", "clayverse.mcp_server"], "env": self._mcp_env(binding)}}}
         tmp = binding.mcp_config.with_suffix(".tmp")
         tmp.write_text(json.dumps(payload, sort_keys=True, indent=2) + "\n", encoding="utf-8")
         os.chmod(tmp, 0o600)
@@ -156,22 +136,18 @@ class TerminalSessionManager:
 
     def _has_session(self, binding: TerminalBinding) -> bool:
         try:
-            cp = subprocess.run(
-                self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
-                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env(),
-            )
+            cp = subprocess.run(self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False,
+                                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(f"tmux session liveness probe unavailable for {binding.tmux_name}") from exc
         return cp.returncode == 0
 
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
         try:
-            cp = subprocess.run(
-                self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
-                capture_output=True, text=True, check=False,
-                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env(),
-            )
+            cp = subprocess.run(self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
+                                capture_output=True, text=True, check=False,
+                                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(f"tmux policy enforcement unavailable for {binding.tmux_name}") from exc
         if cp.returncode != 0:
@@ -187,35 +163,25 @@ class TerminalSessionManager:
             self._assert_tmux_server_policy(binding)
             return binding
 
-        claude_argv = [
-            "claude", "--settings", str(self.MANAGED_SETTINGS), "--setting-sources", "",
-            "--tools", "", "--allowedTools", "mcp__clayverse__session_state",
-            "mcp__clayverse__request_effect", "--permission-mode", "dontAsk",
-            "--append-system-prompt-file", str(self.runtime_prompt),
-        ]
+        claude_argv = ["claude", "--settings", str(self.MANAGED_SETTINGS), "--setting-sources", "", "--tools", "",
+                       "--allowedTools", "mcp__clayverse__session_state", "mcp__clayverse__request_effect",
+                       "--permission-mode", "dontAsk", "--append-system-prompt-file", str(self.runtime_prompt)]
         mcp_env = self._mcp_env(binding)
-        effect_env = [
-            f"{key}={mcp_env[key]}"
-            for key in ("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256")
-            if key in mcp_env
-        ]
-        env_argv = [
-            "env", "-i", f"HOME={binding.home}", "PATH=/usr/local/bin:/usr/bin:/bin",
-            "TERM=xterm-256color", "LANG=C.UTF-8", "PYTHONPATH=/opt/clayverse",
-            f"CLAYVERSE_STATE_ROOT={self.state_root}", f"CLAYVERSE_USER_ID={binding.user_id}",
-            f"CLAYVERSE_SESSION_ID={binding.session_id}", *effect_env, "DISABLE_UPDATES=1",
-            "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1", "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1",
-            "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1", "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1",
-            "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1", f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}",
-            *claude_argv,
-        ]
+        effect_env = [f"{key}={mcp_env[key]}" for key in
+                      ("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256")
+                      if key in mcp_env]
+        env_argv = ["env", "-i", f"HOME={binding.home}", "PATH=/usr/local/bin:/usr/bin:/bin", "TERM=xterm-256color",
+                    "LANG=C.UTF-8", "PYTHONPATH=/opt/clayverse", f"CLAYVERSE_STATE_ROOT={self.state_root}",
+                    f"CLAYVERSE_USER_ID={binding.user_id}", f"CLAYVERSE_SESSION_ID={binding.session_id}", *effect_env,
+                    "DISABLE_UPDATES=1", "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",
+                    "CLAUDE_CODE_SKIP_PROMPT_HISTORY=1", "CLAUDE_CODE_DISABLE_AUTO_MEMORY=1",
+                    "CLAUDE_CODE_DISABLE_CLAUDE_MDS=1", "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1",
+                    f"CLAUDE_CODE_SHELL_PREFIX={self.DIRECT_SHELL_GUARD}", *claude_argv]
         try:
-            cp = subprocess.run(
-                self._tmux_argv(binding, "new-session", "-d", "-s", binding.tmux_name,
-                                "-c", str(self.workspace), *env_argv),
-                capture_output=True, text=True, check=False,
-                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env(),
-            )
+            cp = subprocess.run(self._tmux_argv(binding, "new-session", "-d", "-s", binding.tmux_name,
+                                                "-c", str(self.workspace), *env_argv),
+                                capture_output=True, text=True, check=False,
+                                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
         except (OSError, subprocess.TimeoutExpired) as exc:
             raise TerminalRuntimeError(f"tmux session creation unavailable for {binding.tmux_name}") from exc
         if cp.returncode != 0:
@@ -226,11 +192,9 @@ class TerminalSessionManager:
 
     def _pane_pid(self, binding: TerminalBinding, target: str, *, required: bool) -> int | None:
         try:
-            cp = subprocess.run(
-                self._tmux_argv(binding, "display-message", "-p", "-t", target, "#{pane_pid}"),
-                capture_output=True, text=True, check=False,
-                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env(),
-            )
+            cp = subprocess.run(self._tmux_argv(binding, "display-message", "-p", "-t", target, "#{pane_pid}"),
+                                capture_output=True, text=True, check=False,
+                                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
         except (OSError, subprocess.TimeoutExpired) as exc:
             if required:
                 raise TerminalRuntimeError("provider pane identity probe unavailable") from exc
@@ -247,12 +211,8 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("provider pane PID invalid")
         return pid
 
-    def ensure_api_provider(
-        self,
-        user_id: str,
-        broker_socket: str | Path,
-        register_peer: Callable[..., None],
-    ) -> tuple[TerminalBinding, str, int]:
+    def ensure_api_provider(self, user_id: str, broker_socket: str | Path,
+                            register_peer: Callable[..., None]) -> tuple[TerminalBinding, str, int]:
         binding = self.ensure(user_id)
         socket_path = Path(broker_socket)
         raw_socket = str(socket_path)
@@ -261,21 +221,15 @@ class TerminalSessionManager:
         target = f"{binding.tmux_name}:{self.API_PROVIDER_WINDOW}"
         pane_pid = self._pane_pid(binding, target, required=False)
         if pane_pid is None:
-            provider_env = [
-                "env", "-i", f"HOME={binding.home}", "PATH=/usr/local/bin:/usr/bin:/bin",
-                "TERM=xterm-256color", "LANG=C.UTF-8", "PYTHONPATH=/opt/clayverse",
-                f"CLAYVERSE_PROVIDER_BROKER_SOCKET={socket_path}",
-                "python3", "-m", "clayverse.provider_terminal",
-            ]
+            provider_env = ["env", "-i", f"HOME={binding.home}", "PATH=/usr/local/bin:/usr/bin:/bin",
+                            "TERM=xterm-256color", "LANG=C.UTF-8", "PYTHONPATH=/opt/clayverse",
+                            f"CLAYVERSE_PROVIDER_BROKER_SOCKET={socket_path}",
+                            "python3", "-m", "clayverse.provider_terminal"]
             try:
-                cp = subprocess.run(
-                    self._tmux_argv(
-                        binding, "new-window", "-d", "-t", binding.tmux_name,
-                        "-n", self.API_PROVIDER_WINDOW, "-c", str(self.workspace), *provider_env,
-                    ),
-                    capture_output=True, text=True, check=False,
-                    timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env(),
-                )
+                cp = subprocess.run(self._tmux_argv(binding, "new-window", "-d", "-t", binding.tmux_name,
+                                                    "-n", self.API_PROVIDER_WINDOW, "-c", str(self.workspace), *provider_env),
+                                    capture_output=True, text=True, check=False,
+                                    timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS, env=self._tmux_control_env())
             except (OSError, subprocess.TimeoutExpired) as exc:
                 raise TerminalRuntimeError("provider terminal window creation unavailable") from exc
             if cp.returncode != 0:
@@ -289,30 +243,30 @@ class TerminalSessionManager:
     def _attach_binding(self, binding: TerminalBinding, target: str) -> tuple[int, int, TerminalBinding]:
         pid, fd = pty.fork()
         if pid == 0:
-            env = {
-                "HOME": str(binding.home), "PATH": "/usr/local/bin:/usr/bin:/bin",
-                "TERM": os.environ.get("TERM", "xterm-256color"), "LANG": "C.UTF-8",
-            }
+            env = {"HOME": str(binding.home), "PATH": "/usr/local/bin:/usr/bin:/bin",
+                   "TERM": os.environ.get("TERM", "xterm-256color"), "LANG": "C.UTF-8"}
             os.execvpe("tmux", self._tmux_argv(binding, "attach-session", "-t", target), env)
         return pid, fd, binding
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
-        binding = self.ensure(user_id)
-        return self._attach_binding(binding, binding.tmux_name)
+        provider = os.environ.get("CLAYVERSE_TERMINAL_PROVIDER", "claude").strip().lower()
+        if provider == "claude":
+            binding = self.ensure(user_id)
+            return self._attach_binding(binding, binding.tmux_name)
+        if provider == "api":
+            from .provider_terminal_broker import active_provider_terminal_broker
+            broker = active_provider_terminal_broker()
+            return self.attach_api_provider_pty(user_id, broker.socket_path, broker.register_peer)
+        raise TerminalRuntimeError("CLAYVERSE_TERMINAL_PROVIDER must be claude or api")
 
-    def attach_api_provider_pty(
-        self,
-        user_id: str,
-        broker_socket: str | Path,
-        register_peer: Callable[..., None],
-    ) -> tuple[int, int, TerminalBinding]:
+    def attach_api_provider_pty(self, user_id: str, broker_socket: str | Path,
+                                register_peer: Callable[..., None]) -> tuple[int, int, TerminalBinding]:
         binding, target, _pane_pid = self.ensure_api_provider(user_id, broker_socket, register_peer)
         return self._attach_binding(binding, target)
 
     @staticmethod
     def resize(fd: int, rows: int, cols: int) -> None:
-        rows = max(2, min(int(rows), 500))
-        cols = max(10, min(int(cols), 1000))
+        rows = max(2, min(int(rows), 500)); cols = max(10, min(int(cols), 1000))
         fcntl.ioctl(fd, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
 
     @staticmethod

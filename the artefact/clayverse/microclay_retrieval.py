@@ -215,6 +215,9 @@ class MicroClayRetrieval:
         if existing:
             if (
                 existing["session_id"] != session_id
+                or existing["user_id"] != user_id
+                or existing["turn_id"] != turn_id
+                or existing["episode_id"] != episode_id
                 or int(existing["generation"]) != int(generation)
                 or existing["query_hash"] != query_hash
                 or int(existing["budget_chars"]) != int(budget_chars)
@@ -261,6 +264,8 @@ class MicroClayRetrieval:
                     "query_sha256": existing["query_hash"],
                     "candidate_count": None,
                     "selected_count": len(items),
+                    "limit_requested": int(existing["limit_items"]),
+                    "budget_chars": int(existing["budget_chars"]),
                     "chars_selected": int(existing["chars_selected"]),
                     "status": existing["status"],
                     "shadow_differs": json.loads(existing["selected_memory_ids"]) != json.loads(existing["shadow_memory_ids"]),
@@ -339,6 +344,8 @@ class MicroClayRetrieval:
                 "query_sha256": query_hash,
                 "candidate_count": len(candidates),
                 "selected_count": len(selected),
+                "limit_requested": int(limit),
+                "budget_chars": int(budget_chars),
                 "chars_selected": chars,
                 "status": "PRESENT" if selected else "UNKNOWN",
                 "shadow_differs": selected_ids != shadow_ids,

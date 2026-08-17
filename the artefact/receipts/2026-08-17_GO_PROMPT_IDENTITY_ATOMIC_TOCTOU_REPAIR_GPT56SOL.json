@@ -1,0 +1,51 @@
+{
+  "schema": "clayverse-adversarial-source-repair-receipt/v1",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "pull_request": 454,
+  "head_after_repair": "b2628699ba17f2a09bf079b937b2b564db2eaddc",
+  "files": {
+    "the artefact/clayverse/terminal_hooks.py": "32f6ba30897e804bb091f844828a4644b40cfa0d",
+    "the artefact/clayverse/turn_lifecycle.py": "46f771efcafec6d2be28642e809f476f349f28cb",
+    "the artefact/tests/test_terminal_prompt_identity.py": "d0efdb56aef745a9cb37d25379c87766a94953b0"
+  },
+  "observed_main_defect": "Current main still lacks Claude prompt_id fencing and correlates managed hook terminal events by the long-lived Claude session identity.",
+  "adversarial_findings": [
+    {
+      "id": "PROMPT_REPLAY_TOCTOU",
+      "finding": "The first fusion revision checked duplicate active (Claude session_id,prompt_id) in terminal_hooks before TurnLifecycle.begin_admission opened its BEGIN IMMEDIATE transaction. Concurrent duplicate deliveries could both pass that precheck and the second could retire the first admitted turn.",
+      "repair": "TurnLifecycle.begin_admission now accepts claude_prompt_id, rechecks the active canonical turn identity inside UnifiedDB.tx()/BEGIN IMMEDIATE before predecessor retirement, fails closed on malformed active provenance, and persists session_id+prompt_id in the new turn provenance atomically."
+    },
+    {
+      "id": "STOP_STOPFAILURE_TOCTOU",
+      "finding": "The first fusion revision checked Stop/StopFailure identity in terminal_hooks before calling lifecycle.complete()/abort(). A new prompt could become active between precheck and terminalization.",
+      "repair": "TurnLifecycle.complete() and abort() now accept Claude session/prompt identity and re-check it inside their own UnifiedDB.tx()/BEGIN IMMEDIATE transaction before completing or aborting the active turn. terminal_hooks passes the exact identity into those transactional gates."
+    }
+  ],
+  "regression_obligations_added": [
+    "duplicate replay is rejected inside canonical admission transaction before predecessor abort",
+    "transactional complete rejects stale prompt identity and preserves current active turn",
+    "transactional abort rejects stale prompt identity and preserves current active turn"
+  ],
+  "source_review": {
+    "unifieddb_tx_contract": "store.UnifiedDB.tx executes BEGIN IMMEDIATE and rolls back on exception",
+    "second_state_authority_introduced": false,
+    "identity_authority": "existing turn provenance inside UnifiedDB",
+    "fast_hook_prechecks": "retained only as non-authoritative early rejection; canonical fences are transactional lifecycle checks"
+  },
+  "upstream_contract": {
+    "official_claude_hooks": "prompt_id is a common hook input from Claude Code v2.1.196 onward; exact pinned ClayVerse 2.1.233 runtime payload verification remains required"
+  },
+  "execution": {
+    "latest_attempt": "BLOCKED_BEFORE_BUILD_AND_SANDBOX_START_BY_VERCEL_BUILD_RATE_LIMIT",
+    "staging_pr": "gschaidergabriel/Dr.-Unterweger#828",
+    "staging_pr_state": "CLOSED_SUPERSEDED_BEFORE_EXECUTION",
+    "sandbox_started": false,
+    "test_executed": false,
+    "test_failure": false,
+    "unusual_experiment_count": 0
+  },
+  "classification": "STRONGER_SOURCE_CANDIDATE_NOT_RUNTIME_VERIFIED",
+  "whole_product_pass": false,
+  "next_exact_gate": "Stage the then-current exact terminal_hooks.py + turn_lifecycle.py + focused regression bytes in the authorized Vercel Sandbox bridge once preview admission is available; run focused and adjacent lifecycle/recovery regressions, then verify packaged interactive Claude Code 2.1.233 hook payloads."
+}

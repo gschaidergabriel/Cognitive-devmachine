@@ -1,0 +1,64 @@
+{
+  "schema": "clayverse-go-source-fusion-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:51:02+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "main/the artefact/",
+  "observed_main_at_fusion": "4ca945b772ebf8a68cd5e4ecbbe3f7e39a1f46fc",
+  "later_main_observed_during_pr_creation": "4ab26f5e7ce6ab1140093764ff074d43b9c73f7c",
+  "branch": "go/prompt-identity-fusion-20260817-1342-sol",
+  "pre_receipt_head": "23d6ff22564ead5aa8e772d9c9a99c23d0809c48",
+  "pull_request": 454,
+  "source_donor": {
+    "pull_request": 373,
+    "head": "a6418c8da426257e7cb601e079b3454a461d9da8",
+    "terminal_hooks_blob": "5137785193cb1ee6b6bdd1be954e16749ce166b4",
+    "test_blob": "0b9b77fa765470e3ecec0151ec1935bc891759e5"
+  },
+  "current_main_defect_observed": "Managed UserPromptSubmit/Stop/StopFailure correlation on the observed current-main terminal_hooks.py used Claude session_id only; prompt identity was not persisted or checked, so stale/replayed hook delivery inside a long-lived Claude session was not fenced at the prompt boundary.",
+  "fusion": [
+    "Persist Claude prompt_id into the active canonical turn provenance during the existing UnifiedDB admission transaction.",
+    "Reject duplicate active UserPromptSubmit delivery for the same Claude session_id + prompt_id.",
+    "Fence Stop and StopFailure by Claude session_id + prompt_id.",
+    "Require prompt_id at the managed hook process boundary.",
+    "On stop_hook_active loop escape, retire only the exact matching active prompt; preserve a different current prompt."
+  ],
+  "regression_file": "the artefact/tests/test_terminal_prompt_identity.py",
+  "regression_obligations": [
+    "missing managed prompt identity fails closed",
+    "duplicate UserPromptSubmit replay does not replace active canonical turn",
+    "new prompt_id with identical text remains a genuine next prompt",
+    "stale Stop cannot complete a newer prompt in the same Claude session",
+    "stale StopFailure cannot abort a newer prompt",
+    "matching Stop completes the current prompt",
+    "repeated Stop failure cleanup retires the exact active prompt",
+    "repeated stale Stop cleanup preserves a different active prompt"
+  ],
+  "upstream_contract": {
+    "source": "https://code.claude.com/docs/en/hooks",
+    "observed": "Official current Claude Code hook reference documents prompt_id as a common hook input field and states it requires Claude Code v2.1.196 or later; StopFailure input includes the common input fields.",
+    "clayverse_pinned_version": "2.1.233",
+    "runtime_verification": "REQUIRED"
+  },
+  "execution_evidence": {
+    "vercel_sandbox_start_exec_available": false,
+    "github_identity_guard_run": 32003358411,
+    "github_identity_guard_job": 95307876038,
+    "github_identity_guard_steps": [],
+    "github_identity_guard_runner_id": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE",
+    "focused_regressions_executed_on_exact_fused_source": false,
+    "oci_runtime_verified": false
+  },
+  "go_experiment_accounting": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available immutable user-message timestamp is minute precision only. Current atomic lease protocol requires whole-second-or-better timestamp fallback when no immutable request id is exposed.",
+    "noncanonical_claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T064200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "canonical_correction_result": "BLOCKED / NONCANONICAL_TRIGGER_IDENTITY_MINUTE_PRECISION_SOURCE / experiment_executed=false"
+  },
+  "classification": "SOURCE_FUSION_CANDIDATE_NOT_RUNTIME_VERIFIED",
+  "whole_product_pass": false,
+  "next_exact_gate": "On an actually-started authorized isolated surface, execute the exact then-current merge candidate: test_terminal_prompt_identity.py plus adjacent terminal hook/turn-lifecycle/recovery regressions, then verify packaged Claude Code UserPromptSubmit/Stop/StopFailure payloads and lifecycle behavior. Only then consider merge/promotion."
+}

@@ -11,7 +11,8 @@ def test_oci_build_context_is_allowlisted():
         "!requirements.txt",
         "!build-assets/",
         "!build-assets/entityos/",
-        "!build-assets/entityos/**",
+        "!build-assets/entityos/.keep",
+        "!build-assets/entityos/EntityOS",
         "!clayverse/",
         "!clayverse/**",
         "!policy/",
@@ -20,6 +21,7 @@ def test_oci_build_context_is_allowlisted():
     ):
         assert required in rules
     assert "!EntityOS" not in rules
+    assert "!build-assets/entityos/**" not in rules
 
 
 def test_sensitive_and_runtime_material_are_not_reincluded():

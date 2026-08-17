@@ -15,6 +15,7 @@ Canonical runtime path:
 - ClayGraph is derived and can be deleted/rebuilt from UnifiedDB.
 - Workspace alternatives remain explicit until the inference boundary selects one.
 - Effects are capability gated; process execution requires explicit argv and uses `shell=False`.
+- Effect intents bind the session generation before inference and fail closed if that generation changes before dispatch.
 - Resource leases use generation+nonce fencing to reject stale/ABA writers.
 - Outcomes are hashed and causally re-entered into canonical state.
 - Container state is externalized at `/var/lib/clayverse`.

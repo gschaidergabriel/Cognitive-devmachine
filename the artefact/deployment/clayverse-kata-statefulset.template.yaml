@@ -29,6 +29,22 @@ spec:
       port: 3000
       targetPort: 3000
 ---
+# Governing service for StatefulSet network identity. Keep this separate from
+# the client-facing ClusterIP service above: Kubernetes StatefulSets require a
+# headless governing Service, while ingress may continue to target `clayverse`.
+apiVersion: v1
+kind: Service
+metadata:
+  name: clayverse-headless
+spec:
+  clusterIP: None
+  selector:
+    app: clayverse
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -37,7 +53,7 @@ metadata:
     clayverse.seimensch.net/tier2-replacement: external-full-sandbox-required
     clayverse.seimensch.net/in-place-container-restart: not-tier2
 spec:
-  serviceName: clayverse
+  serviceName: clayverse-headless
   replicas: 1
   selector:
     matchLabels:

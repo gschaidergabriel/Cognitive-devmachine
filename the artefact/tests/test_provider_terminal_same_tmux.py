@@ -3,28 +3,25 @@ from types import SimpleNamespace
 from clayverse.terminal_sessions import TerminalSessionManager
 
 
-def test_api_provider_window_uses_same_tmux_and_secretless_env(tmp_path, monkeypatch):
+def test_api_provider_is_canonical_secretless_tmux_session_process(tmp_path, monkeypatch):
     monkeypatch.setenv("MISTRAL_API_KEY", "must-not-enter-pane")
     monkeypatch.setenv("CLAYVERSE_LLM_API_TOKEN", "also-must-not-enter-pane")
 
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
-    monkeypatch.setattr(manager, "_has_session", lambda binding: True)
+    monkeypatch.setattr(manager, "_has_session", lambda binding: False)
+    monkeypatch.setattr(manager, "_set_provider_marker", lambda binding, provider: None)
     monkeypatch.setattr(manager, "_enforce_tmux_policy", lambda binding: None)
     monkeypatch.setattr(manager, "_assert_tmux_server_policy", lambda binding: None)
+    monkeypatch.setattr(manager, "_pane_pid", lambda binding, target: 4242)
+    monkeypatch.setattr(manager, "_assert_single_provider_pane", lambda binding, pid: None)
 
-    display_calls = 0
-    new_window = None
+    new_session = None
 
     def fake_run(argv, **kwargs):
-        nonlocal display_calls, new_window
-        if "display-message" in argv:
-            display_calls += 1
-            if display_calls == 1:
-                return SimpleNamespace(returncode=1, stdout="", stderr="missing")
-            return SimpleNamespace(returncode=0, stdout="4242\n", stderr="")
-        if "new-window" in argv:
-            new_window = list(argv)
+        nonlocal new_session
+        if "new-session" in argv:
+            new_session = list(argv)
             assert kwargs["env"] == manager._tmux_control_env()
             return SimpleNamespace(returncode=0, stdout="", stderr="")
         raise AssertionError(argv)
@@ -41,21 +38,22 @@ def test_api_provider_window_uses_same_tmux_and_secretless_env(tmp_path, monkeyp
         register_peer,
     )
 
-    assert binding.tmux_name in target
-    assert target.endswith(":" + manager.API_PROVIDER_WINDOW)
+    assert target == binding.tmux_name
     assert pid == 4242
     assert registered == {
         "user_id": "gabriel",
         "session_id": "session:gabriel",
         "pid": 4242,
     }
-    assert new_window is not None
-    rendered = "\n".join(new_window)
-    assert "new-window" in new_window
-    assert binding.tmux_name in new_window
-    assert manager.API_PROVIDER_WINDOW in new_window
-    assert "env" in new_window and "-i" in new_window
-    assert "CLAYVERSE_PROVIDER_BROKER_SOCKET=/tmp/clayverse/provider.sock" in new_window
+    assert new_session is not None
+    rendered = "\n".join(new_session)
+    assert "new-session" in new_session
+    assert "new-window" not in new_session
+    assert binding.tmux_name in new_session
+    assert "env" in new_session and "-i" in new_session
+    assert "CLAYVERSE_PROVIDER_BROKER_SOCKET=/tmp/clayverse/provider.sock" in new_session
+    assert "python3" in new_session
+    assert "clayverse.provider_terminal" in new_session
     assert "must-not-enter-pane" not in rendered
     assert "also-must-not-enter-pane" not in rendered
     assert "MISTRAL_API_KEY" not in rendered

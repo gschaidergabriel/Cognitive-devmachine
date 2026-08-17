@@ -49,7 +49,7 @@
   "direct_process_exec": "FORBIDDEN_FAIL_CLOSED",
   "consciousness_daemon": "EXCLUDED",
   "supply_chain_open_gates": [
-    "apt package bytes are not yet snapshot/hash pinned",
+    "repository-owned Debian snapshot/package-version lock is present, but exact signed snapshot metadata and installed package closure have not yet been observed in an authorized isolated OCI build",
     "Python requirements are version pinned but not yet installed with --require-hashes",
     "exact native Claude archive and exact digest-locked xterm archive install/startup must still be observed in the authorized isolated OCI build"
   ],
@@ -63,7 +63,8 @@
   "unverified_current_source_candidates": [
     "MicroClay query-sensitive shadow retrieval",
     "MicroClay causal outcome learning and entry-point policy",
-    "MicroClay replay/idempotency/current-turn-echo exclusion tests added but exact-current-head execution not yet observed"
+    "MicroClay replay/idempotency/current-turn-echo exclusion tests added but exact-current-head execution not yet observed",
+    "Debian APT snapshot/package-version lock with mutable inherited mirrors removed; exact OCI installation remains unobserved"
   ],
   "requires_for_final_pass": [
     "exact_current_head_full_test_suite_in_authorized_isolated_execution",

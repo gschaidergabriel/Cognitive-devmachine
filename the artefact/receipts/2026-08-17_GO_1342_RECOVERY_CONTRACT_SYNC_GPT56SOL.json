@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_local_time_observed": "2026-08-17T13:42+07:00",
+  "trigger_identity_precision": "minute_only",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_workspace": "gschaidergabriel/clay-global-research-entity/main/the artefact/",
+  "main_observed_before_receipt_write": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+  "scope": "restart/recovery regression contract synchronization; source-slice mechanism evidence only",
+  "hypothesis": "Two restart/recovery regression files retained pre-hardening expectations after recovery.py began explicit causal UNKNOWN re-entry, active-turn retirement, compact receipt hashing and global generation advancement.",
+  "counterhypothesis": "The recovery implementation is wrong and the older tests correctly require no causal re-entry / no recovery abort evidence.",
+  "discriminator": "Bind exact current Git blob identities into an isolated local slice, execute the focused recovery regression before and after test-contract alignment, and directly reproduce the active-turn verified-effect restart state.",
+  "source_bindings": {
+    "the artefact/clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "the artefact/clayverse/recovery.py": "ea585507ff6e5b46922b4219d125915caa8488fb",
+    "the artefact/clayverse/effect_journal.py": "5d66208963053d17e78d5dd31b41f6f8016ed478",
+    "the artefact/clayverse/identity.py": "c3b8ecba0942c722d08efbf03e57d71c3a4f5cf3",
+    "the artefact/clayverse/workspace.py": "2f3142a4f7695fa58521b27321e9759d314dd736",
+    "test_restart_recovery_before": "6789589fd1e5a8b230c007036182fb2a3782d1d8",
+    "test_restart_recovery_after": "8230e0aa6def6e1b031f325135a3720534239981",
+    "test_effect_replay_restart_fusion_before": "e3bafcec249e4f6d197c469391740ae95a003bc2",
+    "test_effect_replay_restart_fusion_after": "26fca7e8d8f38fe27d9612948906b1314bc204b9"
+  },
+  "isolated_environment": {
+    "class": "OpenAI isolated non-production container source slice",
+    "kernel": "Linux 6.18.35 x86_64",
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "network_repo_clone": "BLOCKED",
+    "github_connector": "VERIFIED_RW"
+  },
+  "focused_execution": {
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_restart_recovery.py",
+    "pre_alignment": {
+      "result": "4 failed, 1 passed",
+      "interpretation": [
+        "old test omitted new recovery result counters and generation",
+        "old test rejected explicit UNKNOWN causal re-entry for no-effect and ambiguous-effect recovery",
+        "old test used non-canonical JSON hashing instead of compact receipt serialization",
+        "old test expected obsolete RECOVERED_EFFECT_REENTERED state"
+      ]
+    },
+    "post_alignment": {
+      "result": "5 passed in 0.28s",
+      "exact_test_blob": "8230e0aa6def6e1b031f325135a3720534239981"
+    }
+  },
+  "active_turn_restart_reproduction": {
+    "execution_class": "direct exact-source persisted-state mechanism reproduction; not full test_effect_replay_restart_fusion.py execution",
+    "scenario": "verified state.noop effect has already causally re-entered, but active turn survives until simulated container restart",
+    "observed": {
+      "recovered_scanned": 1,
+      "active_turns_closed": 1,
+      "remaining_active_turns": 0,
+      "causal_rows_for_episode": 1,
+      "causal_credit": 1.0,
+      "workspace_state": "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY",
+      "restart_abort_system_turns": 1
+    },
+    "interpretation": "Current recovery implementation preserves the already verified causal effect once, retires the interrupted active turn explicitly, and records container_restart rather than silently erasing the interruption."
+  },
+  "canonical_deltas": [
+    {
+      "commit": "8fef6397dcf76d0c8c3c58914f628ed43a622f8b",
+      "path": "the artefact/tests/test_restart_recovery.py",
+      "purpose": "align legacy restart regression with explicit causal re-entry, compact outcome hash, generation result and current recovery states"
+    },
+    {
+      "commit": "d47ff869243076add00b12914977f520d47a6431",
+      "path": "the artefact/tests/test_effect_replay_restart_fusion.py",
+      "purpose": "align active-turn verified-effect restart regression with explicit scan/retirement, recovery state and TURN_ABORTED:container_restart evidence"
+    }
+  ],
+  "adjacent_coherence": {
+    "test_hook_causal_lifecycle.py": "already expects generation advancement, active-turn closure, UNKNOWN_AFTER_RESTART, lease expiry and no replay",
+    "conclusion": "adjacent canonical tests support the current recovery semantics rather than the stale assertions that were repaired"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The visible trigger identity is only minute-precision 2026-08-17T13:42+07:00. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires at least whole-second precision when no immutable request id is available. No seconds were invented.",
+    "parallel_note": "A temporary noncanonical 13:42 claim on main was subsequently corrected/blocked by coordination commits; it is not counted as an admitted unusual experiment for this turn."
+  },
+  "evidence_classification": {
+    "restart_recovery_focused_regression": "EXACT_SOURCE_SLICE_RUNTIME_VERIFIED",
+    "effect_restart_fusion_full_test": "NOT_EXECUTED",
+    "active_turn_restart_mechanism": "EXACT_SOURCE_STATE_MECHANISM_SUPPORTED",
+    "whole_oci_runtime": "UNVERIFIED",
+    "real_clerk_browser_ws_pty": "UNVERIFIED",
+    "live_packaged_claude_code": "UNVERIFIED",
+    "whole_clayverse_acceptance": "IN_PROGRESS"
+  },
+  "remaining_frontier": [
+    "actually-started authorized isolated exact OCI build/runtime with image digest and readiness",
+    "real Clerk browser/JWT/key-rotation -> WebSocket PTY -> persistent tmux -> packaged interactive Claude Code",
+    "full live managed-hook lifecycle and two-user restart/concurrency on exact image",
+    "supply-chain closure and remaining MicroClay crash-atomic/promotion gates"
+  ],
+  "anti_claims": [
+    "This receipt is not whole ClayVerse PASS.",
+    "The 5/5 result is scoped to the exact recovery source slice and exact test blob listed above.",
+    "The full effect replay/restart fusion test file was not executed in this receipt.",
+    "No OCI image was built or started by this organ in this cycle.",
+    "No real Clerk or live packaged Claude Code acceptance was executed by this organ in this cycle."
+  ]
+}

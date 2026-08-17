@@ -1,17 +1,19 @@
 {
   "schema": "clayverse-go-receipt/v1",
   "observed_at": "2026-08-17T23:00:37+07:00",
-  "refreshed_at": "2026-08-17T23:12:38+07:00",
+  "refreshed_at": "2026-08-17T23:18:00+07:00",
   "organ": "GPT-5.6 Sol / ChatGPT connected GitHub+Vercel organ",
   "trigger": "go",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "classification": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_ACCEPTED",
-  "finding": "Kubernetes/Kata in-place container or Pod restart semantics cannot satisfy ClayVerse Tier-2 full-appliance recovery because the Pod sandbox/VM identity may be retained. Tier-2 requires fail-closed deletion/replacement of the whole Pod/Kata sandbox/VM and explicit old/new identity evidence.",
+  "finding": "Kubernetes/Kata in-place container or Pod restart semantics cannot satisfy ClayVerse Tier-2 full-appliance recovery because the Pod sandbox/VM identity may be retained. Tier-2 requires fail-closed deletion/replacement of the whole Pod/Kata sandbox/VM and explicit old/new identity evidence. Newer owner authority additionally makes the final Vercel Firecracker test-of-tests require Vault-backed Mistral inference before and after full Tier-2 recreation.",
   "primary_evidence": [
     "Kubernetes StatefulSet Pod-template restart semantics can restart application containers without deleting the Pod",
     "Kata maps the CRI Pod sandbox to the VM and containers to processes inside that VM",
-    "current canonical contract additionally fences Kubernetes RestartAllContainers/PodRestartInPlace as Tier-1/component-only because the Pod/sandbox identity is retained"
+    "current canonical contract fences Kubernetes RestartAllContainers/PodRestartInPlace as Tier-1/component-only because the Pod/sandbox identity is retained",
+    "CLAYVERSE_FINAL_SANDBOX_TEST_OF_TESTS_DIRECTIVE requires Vercel Firecracker -> exact OCI digest -> runtime Vault secret -> Mistral -> full causal/effect path -> full recreation -> secret reacquisition -> second Mistral turn",
+    "VERCEL_SANDBOX_GITHUB_READ_TOKEN_FORWARDING_DIRECTIVE supersedes the earlier no-forward rule and permits scoped read-only GITHUB_READ_TOKEN injection into the disposable Sandbox"
   ],
   "canonical_delta": {
     "contract_commit": "2a813a127a732a0a70e5b547faacd3d44d720a7a",
@@ -22,19 +24,38 @@
     "template_change": "StatefulSet is the workload/isolation profile only and carries external-full-sandbox-required / in-place-container-restart:not-tier2 acceptance metadata.",
     "test_change": "Regression prevents invalid restartPolicy pseudo-fixes and binds full-sandbox replacement semantics."
   },
-  "parallel_fusion_reentry": "Main advanced repeatedly during this go. Compatible changes were adopted rather than overwritten: Kata rolling-security/hypervisor gates, headless StatefulSet governance, non-root fsGroup/CSI checks, ReadWriteOncePod single-writer fencing, node-local/control-plane/metadata NetworkPolicy caveats, image-authoritative EntityOS digest, and liveness/readiness separation.",
-  "exact_current_blob_reconstruction": {
+  "parallel_fusion_reentry": "Main advanced repeatedly during this go. Compatible changes were adopted rather than overwritten: Kata rolling-security/hypervisor gates, headless StatefulSet governance, non-root fsGroup/CSI checks, ReadWriteOncePod single-writer fencing, node-local/control-plane/metadata NetworkPolicy caveats, image-authoritative EntityOS digest, liveness/readiness separation, the final Vercel Firecracker test-of-tests, secure scoped GitHub token forwarding, and Vault-backed Mistral as the mandatory final cognition probe.",
+  "microvm_source_snapshot": {
     "deployment/MICROVM_DEPLOYMENT_CONTRACT.md": "3e6dcf417e7b9dbd83aae9cda75e9c2cb54a4e1b",
     "deployment/clayverse-kata-statefulset.template.yaml": "bd04961f5de42d92df6201c1605f876b307df4b5",
     "tests/test_microvm_deployment_contract.py": "de4544834cd76b0205237e67739aff20351a4a61",
     "manifest.json": "6da4d0dcc6a9e2298b1840356a23a225ab945175",
     "Dockerfile": "a3ab78ff59eb622b128976dd768eabb1da3ffbb5",
     "entityos.lock.json": "457258e59450ea6eba80792fb2ede6434e88e484",
-    "all_blob_identities_match_github": true
+    "all_six_blob_identities_matched_github_at_observation": true,
+    "focused_regression": "17 passed in 0.06s",
+    "note": "This is exact bounded evidence for the observed snapshot; main continued advancing afterwards."
   },
-  "deterministic_regression": {
-    "command": "python -m pytest -q tests/test_microvm_deployment_contract.py",
-    "environment": "authorized isolated non-production OpenAI container source-slice reconstruction",
+  "mistral_source_reentry": {
+    "clayverse/adapters.py": "53a33320927c9532092c4b3b4361fa353b6d28fd",
+    "clayverse/inference_protocol.py": "cd5856ac58f4e86c4c045fda8099b7783e6724cf",
+    "clayverse/clerk_auth.py": "5f0c047ff785f0b42403eaca36dbea6c492f1389",
+    "tests/test_mistral_inference.py": "2b8d2ac08b16cf3a0acea67e0781a181dbaefd9e",
+    "all_four_blob_identities_match_github": true,
+    "command": "PYTHONPATH=. python -m pytest -q tests/test_mistral_inference.py",
+    "result": "6 passed in 0.06s",
+    "exit_code": 0,
+    "supported_contracts": [
+      "runtime MISTRAL_API_KEY required and not retained on adapter object",
+      "fixed Mistral chat-completions endpoint and explicit model",
+      "malformed/oversized responses fail closed",
+      "transport error text does not echo the token",
+      "process.exec is rejected by shared inference protocol",
+      "entityos.exec/state.noop remain schema-validated intents only"
+    ],
+    "non_credit": "No real Vault acquisition, no real Mistral API request, no exact final OCI runtime, no causal re-ingestion/effect round-trip, and no post-Tier2 secret reacquisition were executed."
+  },
+  "deterministic_regression_history": {
     "negative_results_preserved": [
       "7 passed, 1 failed: over-specific Tier-2 wording assertion; test-only semantic alignment followed",
       "14 passed, 1 failed: EntityOS digest override fence scanned explanatory comment text instead of deployable env-key shape"
@@ -43,26 +64,29 @@
       "9 passed in 0.05s on then-current three-blob set",
       "12 passed in 0.06s on then-current four-file set"
     ],
-    "final_exact_current_run": "17 passed in 0.06s on exact six-file current source set",
-    "exit_code": 0,
-    "runtime_credit": {
-      "exact_oci": 0,
-      "kubernetes": 0,
-      "kata_microvm": 0,
-      "cni_enforcement": 0,
-      "csi_runtime": 0,
-      "tier2_replacement": 0,
-      "whole_clayverse": 0
-    }
+    "strongest_microvm_snapshot_run": "17 passed in 0.06s on exact six-file observed source set",
+    "mistral_source_run": "6 passed in 0.06s on exact four-blob provider/protocol test set"
   },
-  "current_acceptance_gate": "TIER2_REPLACEMENT_BLOCKED until an admitted final target proves fatal-invariant signaling deletes/replaces the entire Kata Pod sandbox/VM with new Pod UID + sandbox/VM identity, same exact image digest, declared-volume-only recovery, new canonical generation, stale-result fencing and no blind effect replay.",
-  "execution_frontier": "Exact private ClayVerse/EntityOS OCI staging remains blocked by absent host-side sensitive Vercel Preview GITHUB_READ_TOKEN; the connected Vercel surface exposes no safe environment-secret mutation path. Final MicroVM acceptance additionally requires an admitted Kata/equivalent target proving CNI, CSI/ReadWriteOncePod, guest-kernel and full-sandbox Tier-2 behavior.",
+  "runtime_credit": {
+    "exact_oci": 0,
+    "vercel_final_sandbox": 0,
+    "vault_secret_acquisition": 0,
+    "real_mistral_inference": 0,
+    "kubernetes_kata": 0,
+    "cni_enforcement": 0,
+    "csi_runtime": 0,
+    "tier2_replacement": 0,
+    "post_tier2_mistral_reacquisition": 0,
+    "whole_clayverse": 0
+  },
+  "current_acceptance_gate": "Execute the exact current ClayVerse OCI digest inside the authorized Vercel Firecracker Sandbox, securely inject the scoped read-only GitHub token only if supplied through an owner-approved secret surface, acquire MISTRAL_API_KEY at runtime from the approved Vault/secret store, run a real Mistral turn through canonical re-ingestion/EffectGate/EntityOS, destroy/recreate the full Sandbox/appliance with the same digest, recover canonical state under a new generation, reacquire the Mistral secret rather than restoring it from state, reject stale results/no blind effect replay, and complete a second real Mistral turn.",
+  "execution_frontier": "The former architectural prohibition on forwarding GITHUB_READ_TOKEN is superseded: secure scoped forwarding into the disposable Sandbox is now allowed. Historical token-missing runs remain valid. This organ's connected Vercel tool surface still exposes inspection/deployment-log functions but no direct Sandbox lifecycle or environment/secret mutation action, so the mandatory live test-of-tests cannot be executed from this surface without an additional authorized executable/secret-injection capability.",
   "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
   "unusual_experiment_count": 0,
   "non_claims": [
-    "No exact final OCI build/runtime executed in this final source reentry",
-    "No Kubernetes/Kata/microVM executed",
-    "No CNI/CSI/Tier-2 runtime acceptance observed",
+    "No exact final OCI build/runtime executed in the final Vercel Firecracker path",
+    "No real Vault secret acquisition or Mistral API request executed",
+    "No Kubernetes/Kata/microVM or Vercel Tier-2 recreation acceptance observed",
     "No whole-product PASS",
     "No VPS/self-hosted/production testing",
     "Together not used",

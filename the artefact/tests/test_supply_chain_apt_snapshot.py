@@ -82,3 +82,13 @@ def test_source_lock_no_longer_claims_unpinned_apt_repositories():
     gates = lock["known_open_supply_chain_gates"]
     assert all("not yet snapshot/hash pinned" not in gate for gate in gates)
     assert any("exact apt metadata resolution" in gate for gate in gates)
+
+
+def test_manifest_tracks_source_pinned_but_runtime_unobserved_apt_gate():
+    manifest = json.loads((ROOT / "manifest.json").read_text(encoding="utf-8"))
+    assert "Debian snapshot configurator" in manifest["build_context"]
+    gates = manifest["supply_chain_open_gates"]
+    assert all("apt package bytes are not yet snapshot/hash pinned" not in gate for gate in gates)
+    assert any("source-pinned to a timestamped snapshot candidate" in gate for gate in gates)
+    candidates = manifest["unverified_current_source_candidates"]
+    assert any("Debian apt snapshot lock" in item for item in candidates)

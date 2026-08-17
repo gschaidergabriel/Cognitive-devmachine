@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "receipt_type": "GO_TMUX_DIAGNOSTIC_MUTATION_FENCE",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T17:36:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_claim": "97d4401ba3f2235860c27bb59c555e8f7d00d05c",
+  "claim_commit": "2de642140d1101d9b32152407254c17deda5b9bc",
+  "result_commit": "eeae46293cd223251137d0d18a1f4242d92a5ec1",
+  "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+  "result_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+  "experiment": {
+    "name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+    "retained_pr": 611,
+    "retained_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "hypothesis": "The narrow idempotent tmux reapply predicate accepts only known already-removed key-table diagnostics plus benign line-boundary whitespace and rejects materially altered, mixed or unknown diagnostics.",
+    "counterhypothesis": "A near-miss, mixed, prefixed/suffixed, control-character or randomly mutated diagnostic can cross the allowlist and convert an unknown tmux failure into an admitted reapply.",
+    "falsifier": "Any materially non-exact diagnostic is accepted.",
+    "execution_surface": "authorized isolated non-production controller",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64 GNU/Linux",
+    "network_used": false,
+    "tmux_executed": false,
+    "harness_sha256": "4ce554e0577cfe4d3ef4cb557f726eb7b20b3d0813665492d35c4e5867fecdb5",
+    "total_cases": 277,
+    "positive_controls": 19,
+    "negative_mutation_cases": 258,
+    "unexpected_acceptances": 0,
+    "unexpected_rejections": 0,
+    "result": "PASS"
+  },
+  "classification": "MECHANISM_SUPPORTED_MUTATION_FENCE_ONLY",
+  "product_code_delta": "NO_CHANGE",
+  "runtime_execution_credit": "ZERO_FOR_REAL_TMUX_OCI_NATIVE_CLAUDE",
+  "whole_product_acceptance_movement": "NONE",
+  "coordination": {
+    "atomic_claim": "SUCCESS",
+    "semantic_duplicate_for_same_exact_trigger_identity": "NONE_OBSERVED",
+    "unusual_experiment_budget": "CONSUMED_1_OF_1"
+  },
+  "frontier": "First actually-startable authorized isolated runner -> refresh main -> rejoin retained PR611 exactly once -> bind exact resulting head/blobs -> real tmux 3.6a idempotency/fail-closed discriminator -> focused + adjacent regressions -> promotion decision -> rejoin/revalidate PR602 -> native Claude/OCI/readiness/restart/concurrency gates.",
+  "nonclaims": [
+    "No exact-current PR611 runtime PASS",
+    "No tmux binary was executed in this mutation experiment",
+    "No native-Claude PASS",
+    "No OCI build/runtime PASS",
+    "No Clerk/browser/PTY PASS",
+    "No whole ClayVerse PASS"
+  ]
+}

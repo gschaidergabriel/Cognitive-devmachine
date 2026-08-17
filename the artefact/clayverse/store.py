@@ -143,11 +143,19 @@ class UnifiedDB:
         placeholders=','.join('?' for _ in source_ids)
         existing=int(self.db.execute(f"SELECT COUNT(*) FROM workspace_episodes WHERE episode_id IN ({placeholders})",tuple(source_ids)).fetchone()[0]) if source_ids else 0
         if existing!=len(source_ids): raise ValueError('promotion source episode missing')
+        source_user=row['user_id']
+        if source_user is None:
+            raise PermissionError('global method promotion requires explicit share/declassification contract')
+        scoped=int(self.db.execute(
+            f"SELECT COUNT(*) FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id WHERE w.episode_id IN ({placeholders}) AND s.user_id=?",
+            (*source_ids, str(source_user)),
+        ).fetchone()[0]) if source_ids else 0
+        if scoped!=len(source_ids): raise PermissionError('promotion source episode user scope mismatch')
         canonical=json.dumps(normalized,ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False)
         prov=json.dumps(provenance or {},ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False); now=time.time()
         with self.tx() as db:
             db.execute("UPDATE method_memory SET kind=?,value=?,ts=?,provenance=? WHERE memory_id=?",(promoted_kind,canonical,now,prov,memory_id))
-            db.execute("INSERT INTO method_receipts VALUES(?,?,?,?,?)",(str(uuid.uuid4()),memory_id,'PROMOTE',now,json.dumps({'source_episode_ids':source_ids,'payload_sha256':hashlib.sha256(canonical.encode()).hexdigest()},sort_keys=True)))
+            db.execute("INSERT INTO method_receipts VALUES(?,?,?,?,?)",(str(uuid.uuid4()),memory_id,'PROMOTE',now,json.dumps({'source_episode_ids':source_ids,'user_id':str(source_user),'payload_sha256':hashlib.sha256(canonical.encode()).hexdigest()},sort_keys=True)))
         return memory_id
     def demote_method_memory(self,memory_id,reason):
         row=self.db.execute("SELECT * FROM method_memory WHERE memory_id=?",(memory_id,)).fetchone()

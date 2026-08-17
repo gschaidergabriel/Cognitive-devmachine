@@ -1,4 +1,4 @@
-name: GO MicroClay Integration 2026-08-17
+name: GO MicroClay + Admitted Stage-B Integration 2026-08-17
 
 on:
   pull_request:
@@ -26,7 +26,7 @@ jobs:
         run: |
           python -m pip install --disable-pip-version-check pytest
           python -m pip install --disable-pip-version-check -r requirements.txt
-      - name: Focused MicroClay fusion regressions
+      - name: Focused MicroClay and admitted Stage-B regressions
         working-directory: the artefact
         env:
           PYTHONPATH: .
@@ -38,12 +38,16 @@ jobs:
             tests/test_microclay_replay_integration.py \
             tests/test_microclay_receipt_context.py \
             tests/test_microclay_credit_authority.py \
-            tests/test_microclay_restart_learning.py \
             tests/test_microclay_retrieval.py \
             tests/test_context_bound_fail_closed.py \
-            tests/test_microclay_method_isolation.py
+            tests/test_microclay_method_isolation.py \
+            tests/test_microclay_restart_learning.py \
+            tests/test_method_memory_admission.py \
+            tests/test_method_memory_promotion.py \
+            tests/test_method_stageb_admitted.py \
+            tests/test_retrieval_identity_fence.py
       - name: GO unusual-experiment accounting
         run: |
           echo "UNUSUAL_EXPERIMENT_SLOT=CONSUMED_EXTERNALLY"
-          echo "EXPERIMENT=BOUND_WORLD_MINIMUM_OVERFLOW"
+          echo "CANONICAL_EXPERIMENT=BOUND_WORLD_MINIMUM_OVERFLOW"
           echo "THIS_WORKFLOW=REGRESSION_ONLY"

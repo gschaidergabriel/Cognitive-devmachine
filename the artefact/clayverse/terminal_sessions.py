@@ -142,7 +142,9 @@ class TerminalSessionManager:
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
-            "--allowedTools", "mcp__clayverse__*",
+            "--allowedTools",
+            "mcp__clayverse__session_state",
+            "mcp__clayverse__request_effect",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]

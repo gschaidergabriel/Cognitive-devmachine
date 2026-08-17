@@ -50,13 +50,13 @@ class MicroClayRetrieval:
     The adaptive policy starts in SHADOW. Classical retrieval remains the serving
     path until an explicit externally validated promotion changes the mode.
 
-    Policy version 2 adds learned query-cue -> exact-memory entry routes. Entry-policy
-    keys are version-scoped so persisted v1 capital cannot silently change v2
+    Policy version 3 adds learned query-cue -> exact-memory entry routes. Entry-policy
+    keys are version-scoped so persisted v1/v2 capital cannot silently change v3
     behavior. A persisted ACTIVE mode from a different policy version is treated
     as SHADOW until that exact policy version is explicitly promoted.
     """
 
-    POLICY_VERSION = 2
+    POLICY_VERSION = 3
     DEFAULT_MODE = "SHADOW"
     MAX_SOURCE_ROWS = 5000
     MAX_QUERY_TOKENS = 64

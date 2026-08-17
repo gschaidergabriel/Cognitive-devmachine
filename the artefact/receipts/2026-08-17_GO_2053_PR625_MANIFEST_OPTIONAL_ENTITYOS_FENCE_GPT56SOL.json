@@ -1,0 +1,68 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-17T20:53:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "lane": "PR625_TOKENLESS_CANONICAL_BASELINE",
+  "classification": "MECHANISM_SUPPORTED_EXACT_FILE_EXECUTION",
+  "observed_branch_head_before_receipt": "efbca46cfa750d29686ba23ef46a83b703e04e20",
+  "parallel_fusion": {
+    "state": "REFINES_EXISTING_PR625_ONLY",
+    "note": "Parallel work had already removed the unsafe recursive build-assets/entityos wildcard and recorded focused stager/build-context evidence. This receipt adds the non-duplicate manifest-authority fence; no second packaging lane was created."
+  },
+  "defect": {
+    "observed": "PR625 Dockerfile and living README define EntityOS as optional for the baseline container, while manifest.json still stated that staged EntityOS bytes were mandatory and retained an unconditional final-pass EntityOS runtime requirement.",
+    "risk": "A merge could leave canonical product authority internally contradictory and later reintroduce a mandatory private-artifact/token dependency despite the tokenless baseline decision.",
+    "counterhypothesis": "The manifest language was merely descriptive and could safely lag the Dockerfile.",
+    "falsifier": "Require a focused regression to parse manifest.json and prove optional baseline semantics, execution-disabled omission, digest/size admission when embedding, and conditional rather than unconditional final EntityOS acceptance."
+  },
+  "repair": {
+    "manifest_blob": "c89269e8dd65aa7dd173dcb53a248c1c88aa8d39",
+    "packaging_test_blob": "85508bef83aac154d0cfe845cd875dea5b479183",
+    "dockerfile_blob": "2ee2fe84f1fd7219869380ce3c864cade90c6c31",
+    "dockerignore_blob": "ed348564f99e0ddff5cf2e9e38b3687cf25b07c6",
+    "gitignore_blob": "8bdddac545b4b691f2c74a164d53261fbe64438d",
+    "stager_blob": "6e0103186d36a047c5ce5fc450bd91f68e301de2",
+    "build_context_test_blob": "cee145278de57e23220b6aee1c0833b782ff79ec",
+    "semantics": [
+      "baseline may omit EntityOS only while CLAYVERSE_ENABLE_ENTITYOS_EXEC=0",
+      "if EntityOS is staged/embedded, explicit digest, locked size and source-tracked lock identity remain mandatory",
+      "EntityOS runtime acceptance is required only where EntityOS is deliberately admitted",
+      "UnifiedDB/state/effect/identity authority is unchanged"
+    ]
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "command": "python -m pytest -q tests/test_build_context_boundary.py tests/test_entityos_packaging_contract.py",
+    "result": "6 passed in 0.02s",
+    "exit_code": 0,
+    "additional_checks": [
+      "exact Git blob reconstruction matched manifest c89269e8..., packaging test 85508bef..., Dockerfile 2ee2fe84..., .dockerignore ed348564..., .gitignore 8bdddac5..., stager 6e010318..., build-context test cee14527...",
+      "python -m py_compile focused tests PASS",
+      "sh -n stage-entityos.sh PASS"
+    ]
+  },
+  "evidence_boundary": {
+    "established": "Focused source-contract/mechanism support for optional-baseline authority coherence.",
+    "not_established": [
+      "full PR-head repository test PASS",
+      "Docker/OCI build-context transfer semantics",
+      "baseline image build without EntityOS",
+      "embedded EntityOS image build",
+      "image digest/startup/readiness/restart",
+      "whole ClayVerse PASS"
+    ]
+  },
+  "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_reason": "No shared immutable request/turn identifier is exposed and the shared user-message timestamp is only minute precision, so the atomic lease protocol forbids an unusual experiment.",
+  "policy": {
+    "vps_testing": "FORBIDDEN_NOT_USED",
+    "self_hosted_or_production_testing": "NOT_USED",
+    "together_api": "FORBIDDEN_NOT_USED",
+    "paid_or_final_training": "NOT_USED",
+    "secrets": "NONE_STORED_OR_ECHOED"
+  },
+  "next_gate": "Rejoin PR625 onto fresh canonical main without losing concurrent changes, then on the first authorized Docker/OCI-capable isolated surface inspect actual context membership and build both baseline-without-EntityOS and digest-bound-EntityOS variants before promotion."
+}

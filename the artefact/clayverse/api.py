@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import html
 import json
+import threading
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Any
@@ -16,6 +17,11 @@ class ClayVerseAPI:
         self.publishable_key = publishable_key
         self.frontend_api_url = frontend_api_url.rstrip("/")
         self.max_body = max_body
+        self._chat_lock = threading.Lock()
+
+    def ingest(self, clerk_subject: str, content: str, *, resources: list[str] | None = None):
+        with self._chat_lock:
+            return self.engine.ingest(clerk_subject, content, resources=resources or [])
 
     def homepage(self) -> str:
         key = html.escape(self.publishable_key, quote=True)
@@ -76,7 +82,7 @@ class ClayVerseAPI:
                     resources = body.get("resources") or []
                     if not isinstance(resources, list) or not all(isinstance(x, str) for x in resources):
                         return self._send(HTTPStatus.BAD_REQUEST, {"error": "invalid_resources"})
-                    result = runtime.engine.ingest(claims["sub"], content, resources=resources)
+                    result = runtime.ingest(claims["sub"], content, resources=resources)
                     return self._send(HTTPStatus.OK, result)
                 except AuthenticationError:
                     return self._send(HTTPStatus.UNAUTHORIZED, {"error": "unauthorized"})

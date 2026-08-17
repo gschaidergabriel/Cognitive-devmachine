@@ -3,6 +3,8 @@ from pathlib import Path
 import pytest
 
 from clayverse.clerk_auth import AuthenticationError
+from clayverse.identity import IdentityRouter
+from clayverse.store import UnifiedDB
 from clayverse.terminal_gateway import (
     _assert_reauth_identity_current,
     _auth_expiry_deadline,
@@ -76,6 +78,34 @@ def test_reauth_revalidates_current_clayverse_user_and_session_binding():
                 expected_user_id="gabriel",
                 expected_session_id="session:gabriel",
             )
+
+
+@pytest.mark.parametrize("drift", ["extra_user", "rights", "generation"])
+def test_reauth_rechecks_live_unifieddb_identity_contract(tmp_path, drift):
+    db = UnifiedDB(tmp_path / "unified.db")
+    identity = IdentityRouter(db, {"clerk_g": "gabriel"})
+    try:
+        _assert_reauth_identity_current(
+            identity,
+            "clerk_g",
+            expected_user_id="gabriel",
+            expected_session_id="session:gabriel",
+        )
+        if drift == "extra_user":
+            db.ensure_user("shadow", "Shadow")
+        elif drift == "rights":
+            db.db.execute("UPDATE users SET rights='admin' WHERE user_id='gabriel'")
+        else:
+            db.db.execute("UPDATE sessions SET generation=generation+1 WHERE user_id='gabriel'")
+        with pytest.raises(PermissionError):
+            _assert_reauth_identity_current(
+                identity,
+                "clerk_g",
+                expected_user_id="gabriel",
+                expected_session_id="session:gabriel",
+            )
+    finally:
+        db.close()
 
 
 def test_received_frames_are_rechecked_against_expiry_before_state_effects():

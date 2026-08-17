@@ -93,6 +93,11 @@ spec:
           # MUST be replaced by the exact accepted immutable image digest.
           image: registry.example.invalid/clayverse@sha256:REPLACE_WITH_ACCEPTED_DIGEST
           imagePullPolicy: IfNotPresent
+          # Kubernetes copies this bounded file into container status. ClayVerse
+          # emits only a typed Tier-2 replacement receipt here; no credential or
+          # general log content is admitted into the replacement protocol.
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
           ports:
             - name: http
               containerPort: 3000
@@ -107,6 +112,13 @@ spec:
               value: "1"
             - name: CLAYVERSE_ENTITYOS_PATH
               value: /opt/entityos/EntityOS
+            # Bind recovery admission to the actual Pod object without giving the
+            # ClayVerse application Kubernetes API credentials or self-delete rights.
+            - name: CLAYVERSE_POD_UID
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.uid
             # EntityOS artifact identity is image-authoritative. The image bakes
             # CLAYVERSE_ENTITYOS_SHA256 only after Docker build-time verification
             # against the tracked entityos.lock.json and the embedded bytes.

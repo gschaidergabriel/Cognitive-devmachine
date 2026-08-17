@@ -99,12 +99,11 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(claude_session_id, str) or not claude_session_id:
         raise TerminalHookError("missing Claude session id")
 
-    db, user_id, session_id, lifecycle = _runtime()
+    db, _, session_id, lifecycle = _runtime()
     try:
-        if lifecycle.active() is not None:
-            if _active_claude_session(db, session_id) == claude_session_id:
-                raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
-            lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
+        # Claude keeps one session_id across turns, and Stop does not fire on a user
+        # interrupt. TurnLifecycle.begin() owns predecessor retirement, so every new
+        # prompt re-enters through that single canonical abort/new-turn path.
         result = lifecycle.begin(prompt)
         _bind_claude_session(db, result["turn_id"], claude_session_id)
         return {

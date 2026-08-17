@@ -1,0 +1,60 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER_PROGRAM",
+  "stage": "CLAYVERSE_CONTAINER_INTEGRATION",
+  "product_endpoint": "ClayVerse",
+  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
+  "canonical_research_head_before_write": "dd2e2124a6d13a9c3e200adf7fe96d0479478f6f",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "frontier": {
+    "selected": "transport the exact source-locked EntityOS bytes from the already-attested Vercel build lane into the ClayVerse OCI staging lane",
+    "reason": "whole-image construction remains blocked because the source tree intentionally excludes the EntityOS binary while the Dockerfile requires the exact locked bytes",
+    "non_duplicate_fusion": "reused the already-merged digest-bound stage-entityos.sh and the existing product-side Vercel exporter instead of creating a second staging implementation"
+  },
+  "locked_entityos": {
+    "source_repository": "gschaidergabriel/Dr.-Unterweger",
+    "source_head": "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c",
+    "sha256": "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586",
+    "size_bytes": 9181696,
+    "execution_surface": "VERCEL_BUILD_INTERNAL_ONLY",
+    "source_provenance": "ATTESTED_SNAPSHOT_V2",
+    "authority": "the artefact/entityos.lock.json"
+  },
+  "transport_retry": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "parent": "c203fe00ea9d62bd5072dc926ff97e259ff283b1",
+    "branch": "chatgpt/go-entityos-export-retry-20260817-1249",
+    "commit": "ec74df62f32a05aacc381f16e20206e0838b2dc3",
+    "delta_class": "CONTENT_EQUIVALENT_RETRIGGER_MARKER_ONLY",
+    "runtime_or_entityos_semantics_changed": false,
+    "exporter": "mcp/vercel-sandbox-mcp/scripts/export-entityos-build-artifact.mjs",
+    "expected_export_status": "ENTITYOS_BUILD_EXPORT_READY"
+  },
+  "observations": {
+    "locked_79dc_deployment": "dpl_Wr1eZgxbWsT8N39eiEE8JJ3h1Qdz",
+    "locked_79dc_content_addressed_receipt_fetch": "HTTP_404_NOT_FOUND",
+    "retry_commit_vercel_status": "FAILURE_PROVIDER_BUILD_RATE_LIMIT",
+    "retry_target": "upgradeToPro=build-rate-limit",
+    "sandbox_started_for_retry": false,
+    "entityos_export_executed_for_retry": false,
+    "entityos_export_pass": "NOT_CLAIMED",
+    "oci_build_executed": false,
+    "whole_clayverse_pass": false
+  },
+  "counterhypothesis_result": {
+    "counterhypothesis": "the already-READY locked 79dc preview might expose the content-addressed EntityOS export even though the exporter was added later",
+    "falsifier": "fetch /entityos/<locked-sha256>/receipt.json from the exact 79dc deployment",
+    "result": "REJECTED_BY_404"
+  },
+  "unusual_experiment": {
+    "global_accounting": "ALREADY_CONSUMED_1_OF_1_BY_EXISTING_GO_EVIDENCE",
+    "new_unusual_experiment_count_this_delta": 0,
+    "retry_class": "REGRESSION_AND_TRANSPORT_ONLY"
+  },
+  "acceptance": "IN_PROGRESS",
+  "current_blocker": "Vercel rejects the content-equivalent exporter retry before build/Sandbox start because of the provider build-rate limit. The exact locked EntityOS bytes therefore remain unavailable to the current OCI staging lane; no substitute blob is admissible.",
+  "next_executable_step": "When Vercel admits the existing ec74df62f32a05aacc381f16e20206e0838b2dc3 transport retry or a content-equivalent descendant, require ENTITYOS_BUILD_EXPORT_READY with sha256=32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586 and size_bytes=9181696, fetch the emitted EntityOS plus receipt.json, stage only those exact bytes through the existing digest-bound helper, and then run exact-current-head whole-OCI build/runtime/restart/fail-closed gates in actually-started isolated Vercel Sandbox."
+}

@@ -1,0 +1,40 @@
+{
+  "schema": "ClayVerseSourceConvergenceAddendum/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "scope": "MicroClay learned entrypoint regression reward-law alignment",
+  "classification": "SOURCE_TEST_COHERENCE_REPAIRED_RUNTIME_UNOBSERVED",
+  "acceptance": "NON_PASS",
+  "observed_conflict": {
+    "current_main_law": "EffectJournal treats state.noop as NON_REWARDING_CAPABILITIES and assigns it causal credit 0.0",
+    "stale_new_test_assumption": "the newly added learned-entrypoint regression used state.noop as if it supplied positive retrieval credit",
+    "risk": "the test could encode a second/obsolete reward law even though no such Vercel test actually executed"
+  },
+  "repair": {
+    "commit": "ef72b820b571ba38cfeeb76670800af3534b4fdc",
+    "file": "the artefact/tests/test_microclay_learned_entrypoint.py",
+    "change": "positive learned-entrypoint cases now use the existing deterministic _VerifiedEffectBridge with entityos.exec, matching the canonical reward-bearing effect test pattern",
+    "reward_authority_duplicated": false,
+    "product_reward_law_changed_here": false
+  },
+  "stale_execution_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 835,
+    "state": "CLOSED_STALE",
+    "reason": "Vercel rejected the bound staging head before deployment/build/Sandbox start; PR415 then moved and current reward law made its staged noop-positive fixture obsolete",
+    "reuse_for_future_execution": false
+  },
+  "runtime_evidence": {
+    "sandbox_started": false,
+    "assertions_executed": 0,
+    "test_pass": false,
+    "test_failure": false,
+    "reason": "Vercel deployment rate limit before executable steps"
+  },
+  "unusual_experiment": {
+    "new_count": 0,
+    "regression_only": true
+  },
+  "next_gate": "Refresh/rebase the surviving MicroClay fusion lane onto the then-current main reward law before the next isolated execution; bind exact bytes and use only outcome-bearing admitted effect identity for positive learning tests."
+}

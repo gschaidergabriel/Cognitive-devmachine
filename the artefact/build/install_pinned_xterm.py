@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import base64
 import hashlib
+import hmac
 import io
 import json
 import os
@@ -47,7 +48,7 @@ def _verify_archive(blob: bytes, integrity: str) -> None:
         raise ValueError("xterm archive exceeds the configured size limit")
     expected = _parse_sha512_sri(integrity)
     actual = hashlib.sha512(blob).digest()
-    if not hashlib.compare_digest(actual, expected):
+    if not hmac.compare_digest(actual, expected):
         raise ValueError("xterm archive sha512 mismatch")
 
 

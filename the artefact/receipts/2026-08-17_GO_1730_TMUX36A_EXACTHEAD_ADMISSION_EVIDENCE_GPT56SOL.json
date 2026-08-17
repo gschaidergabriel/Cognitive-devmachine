@@ -1,0 +1,80 @@
+{
+  "schema": "ClayGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T17:14+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_before_receipt": "6f274dab83836175145d89e68d2ee28a75c32575",
+  "classification": "MECHANISM_SUPPORTED_PLUS_EXACT_HEAD_EXECUTION_ADMISSION_BLOCKED",
+  "product_change": "NO_CHANGE",
+  "retained_product_lane": {
+    "pull_request": 611,
+    "head": "6a27ddab361938b4ab875610b7a51ac9e845c744",
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "status": "DRAFT_ANCESTRY_STALE_UNPROMOTED"
+  },
+  "live_component_evidence": {
+    "vercel_deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+    "bound_old_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "tmux": "3.6a-1.amzn2023.0.1",
+    "network_during_product_test": "DENY_ALL",
+    "result": "PASS",
+    "markers": [
+      "PREPOLICY_UPGRADE_REAPPLY=PASS",
+      "ALREADY_HARDENED_REAPPLY_IDEMPOTENT=PASS",
+      "NEW_SERVER_SECOND_SOURCE_IDEMPOTENT=PASS",
+      "DIRECT_MULTI_ARGV_FAKE_CLAUDE_LAUNCH=PASS"
+    ],
+    "scope": "BYTE_IDENTICAL_REPAIR_COMPONENT_AT_OLD_BOUND_HEAD_ONLY"
+  },
+  "supporting_exact_file_regression": {
+    "environment": "OpenAI isolated non-production container",
+    "credit_class": "SUPPORTING_EXACT_FILE_SOURCE_REGRESSION_ONLY",
+    "first_reconstruction": "ZERO_CREDIT_BLOB_MISMATCH",
+    "accepted_reconstruction": {
+      "terminal_blob_recomputed": "c185009f8af84e1288747d8352645777a36b2053",
+      "focused_test_blob_recomputed": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_terminal_tmux_control_timeouts.py",
+      "result": "9 passed in 0.08s",
+      "exit_code": 0,
+      "identity_dependency": "MINIMAL_BOUNDED_STUB_FOR_CANONICAL_USER_MAPPING"
+    },
+    "scope_limit": "NOT_FULL_BRANCH_NOT_OCI_NOT_NATIVE_CLAUDE_NOT_WHOLE_PRODUCT"
+  },
+  "exact_head_execution_attempt": {
+    "temporary_product_bearing_head": "18291f820474507a642e6429616b2b21d0cbd2ce",
+    "product_bytes_equal_retained_lane": true,
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "bridge_pull_request": 848,
+    "bridge_commit": "7900ac2d9ad468150f06092927c90700b4b276a1",
+    "candidate_head_binding": "18291f820474507a642e6429616b2b21d0cbd2ce",
+    "vercel_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "runtime_credit": "ZERO",
+    "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_SANDBOX_START",
+    "bridge_pr_final_state": "CLOSED_UNMERGED_STALE_EXECUTION_ONLY"
+  },
+  "coordination": {
+    "duplicate_clayverse_pr_612": "CLOSED_UNMERGED_SUPERSEDED",
+    "temporary_bridge_pr_848": "CLOSED_UNMERGED_AFTER_RATE_LIMIT_EVIDENCE",
+    "decision": "KEEP_PR611_AS_SINGLE_RETAINED_PRODUCT_REPAIR_LANE_AND_DO_NOT_CREATE_ANOTHER_PERMANENT_SEMANTIC_PATH",
+    "main_delta_since_e963": "DAYTONA_STATUS_README_RECEIPTS_ONLY_NO_TERMINAL_PRODUCT_OVERLAP"
+  },
+  "experiment": {
+    "unusual_experiment_count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "note": "All execution in this macro-cycle was deterministic regression/falsifier rerun; no new unusual intervention was consumed."
+  },
+  "acceptance": {
+    "tmux_repair_mechanism": "SUPPORTED",
+    "exact_current_head_runtime": "UNOBSERVED_ADMISSION_BLOCKED",
+    "native_claude": "UNOBSERVED",
+    "oci_product_image": "UNOBSERVED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_exact_gate": "When authorized isolated execution admission is available, rejoin the retained two-file repair onto then-current main, bind that exact candidate head, rerun the real tmux 3.6a discriminator, then rerun focused/adjacent regressions before promotion. After promotion, advance to managed native-Claude process attestation and exact OCI build/start/readiness/restart.",
+  "evidence_law": "Component/source evidence does not imply whole ClayVerse container PASS."
+}

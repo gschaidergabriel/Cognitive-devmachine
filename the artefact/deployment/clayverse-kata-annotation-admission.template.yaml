@@ -1,0 +1,43 @@
+# TEMPLATE: cluster-side admission fence for the final ClayVerse Kata/microVM profile.
+#
+# Apply the binding only to the dedicated ClayVerse runtime namespace by labeling
+# that namespace exactly:
+#
+#   clayverse.seimensch.net/runtime: "true"
+#
+# This policy intentionally rejects every user/admission-mutated Pod annotation
+# beginning with io.katacontainers.*. Any future exception must be separately
+# reviewed, narrowed to an exact key/value contract, receipt-bound, and tested
+# before the baseline may be changed. Runtime/containerd configuration remains a
+# separate acceptance surface and must still be attested independently.
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: clayverse-deny-kata-runtime-annotations.seimensch.net
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+      - apiGroups: [""]
+        apiVersions: ["v1"]
+        operations: ["CREATE", "UPDATE"]
+        resources: ["pods"]
+  validations:
+    - expression: >-
+        !has(object.metadata.annotations) ||
+        !object.metadata.annotations.exists(k, k.startsWith('io.katacontainers.'))
+      message: >-
+        ClayVerse runtime Pods may not carry unreviewed io.katacontainers.*
+        annotations; runtime-mutating Kata configuration must fail closed.
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: clayverse-deny-kata-runtime-annotations-binding.seimensch.net
+spec:
+  policyName: clayverse-deny-kata-runtime-annotations.seimensch.net
+  validationActions: [Deny]
+  matchResources:
+    namespaceSelector:
+      matchLabels:
+        clayverse.seimensch.net/runtime: "true"

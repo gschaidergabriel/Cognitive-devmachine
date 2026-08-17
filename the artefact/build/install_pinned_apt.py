@@ -50,7 +50,7 @@ def load_and_validate(lock_path: Path) -> dict:
     if not isinstance(snapshot, str) or not SNAPSHOT_RE.fullmatch(snapshot):
         raise _fail("snapshot must be YYYYMMDDThhmmssZ")
 
-    if apt.get("integrity") != "DEBIAN_SIGNED_RELEASE_TO_PACKAGES_TO_DEB_HASH_CHAIN":
+    if apt.get("integrity") != "HTTPS_PLUS_DEBIAN_SIGNED_RELEASE_TO_PACKAGES_TO_DEB_HASH_CHAIN":
         raise _fail("unexpected integrity contract")
     if apt.get("mutable_mirror_fallback") is not False:
         raise _fail("mutable mirror fallback must be false")
@@ -95,7 +95,7 @@ def load_and_validate(lock_path: Path) -> dict:
         parsed = urlparse(uri)
         expected_path = f"/archive/{archive}/{snapshot}/"
         if (
-            parsed.scheme != "http"
+            parsed.scheme != "https"
             or parsed.hostname != EXPECTED_HOST
             or parsed.port is not None
             or parsed.username is not None
@@ -104,7 +104,7 @@ def load_and_validate(lock_path: Path) -> dict:
             or parsed.fragment
             or parsed.path != expected_path
         ):
-            raise _fail("archive uri must be the exact Debian snapshot path")
+            raise _fail("archive uri must be the exact HTTPS Debian snapshot path")
 
     if seen != set(EXPECTED_ARCHIVES):
         raise _fail("missing archive")

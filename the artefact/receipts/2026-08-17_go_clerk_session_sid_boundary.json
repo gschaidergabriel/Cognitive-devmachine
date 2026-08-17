@@ -1,0 +1,27 @@
+{
+  "kind": "CLAYVERSE_CLERK_SESSION_SHAPE_RECEIPT",
+  "trigger": "go",
+  "product": "ClayVerse",
+  "base_head": "d0c15f39a7e98ffa1bc16979f0a63319619a94dc",
+  "branch": "go/clerk-session-sid-boundary-20260817",
+  "code_commit": "9120bf3ea512fc59f2696c9285070833f652062b",
+  "test_commit": "4b668cb9a93ec1d8876409d8aee060fb95a19975",
+  "source_gap": "The canonical verifier identified its input as a Clerk session JWT but did not require sid. Clerk custom JWT templates can carry the same exp/iat/iss/jti/nbf/sub defaults while omitting sid because custom JWTs are not inherently session-bound.",
+  "primary_external_basis": [
+    "https://clerk.com/docs/guides/sessions/session-tokens",
+    "https://clerk.com/docs/guides/sessions/jwt-templates"
+  ],
+  "delta": "Require a non-empty sid in the Clerk session-token boundary, retaining exp/nbf/sub, issuer, RS256 and authorized-party checks.",
+  "focused_isolated_falsifier": {
+    "environment_class": "isolated local execution surface; not Vercel Sandbox and not real Clerk",
+    "baseline_custom_jwt_shape_without_sid": "ACCEPT",
+    "patched_custom_jwt_shape_without_sid": "REJECT:MissingRequiredClaimError",
+    "patched_session_bound_shape_with_sid": "ACCEPT"
+  },
+  "unusual_experiment": {
+    "additional_count": 0,
+    "note": "Deterministic auth-boundary regression only; no additional unusual experiment."
+  },
+  "claim_boundary": "Source-level session-token discrimination only. No real Clerk instance, OCI runtime, Vercel executable truth, deployment readiness or whole-product PASS is claimed.",
+  "next_executable_step": "Exercise the exact built image against a real Clerk instance in an authorized executable isolated sandbox and prove that browser/API tokens are session-bound and survive the full identity/restart path."
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T23:08:53+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT",
+  "trigger": "go",
+  "classification": "SOURCE_CANDIDATE_UNEXECUTED",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_workspace": "the artefact/",
+  "pr": 642,
+  "main_at_pr_bind": "813990240d1e1ad9bcd7afd4fa5284fd1f43f65b",
+  "source_head_before_receipt": "13194f64915783988fe2c381275c02f08352cd46",
+  "source_blobs": {
+    "deployment/clayverse-kata-runtime-annotation-admission.template.yaml": "353fe9a983e97ae3f9dbe3dfdb0ab71b14ab9d47",
+    "tests/test_kata_runtime_annotation_admission.py": "bbb4eafb69aac4b4a5daea24bb5a11a8604e940b"
+  },
+  "observed_gap": "The current MicroVM contract and manifest require fail-closed post-mutation handling of unreviewed io.katacontainers.* runtime annotations, while canonical main had no concrete ValidatingAdmissionPolicy source at the checked deployment path.",
+  "delta": [
+    "add admissionregistration.k8s.io/v1 ValidatingAdmissionPolicy for canonical clayverse-* Pods",
+    "failurePolicy Fail and CREATE/UPDATE Pod resource scope",
+    "require kata-qemu-runtime-rs after admission mutation",
+    "reject all io.katacontainers.* annotations in the baseline",
+    "bind policy with validationActions Deny",
+    "add structural regression tied to existing contract and manifest gates"
+  ],
+  "adversarial_finding": {
+    "first_candidate_failure": "RuntimeClass was initially used as a match condition, allowing a mutating admission component to change the RuntimeClass and make validation skip the canonical Pod.",
+    "repair": "Scope matching now uses only the canonical clayverse-* Pod name; RuntimeClass itself is a mandatory validation, so mutation away from Kata is denied rather than skipped.",
+    "fence": "test source requires runtimeClassName absent from matchConditions and present in validations"
+  },
+  "primary_external_basis": [
+    "Kubernetes ValidatingAdmissionPolicy and Binding use admissionregistration.k8s.io/v1 and support failurePolicy Fail plus Deny actions",
+    "Kubernetes documents objectSelector as opt-in/bypassable by label changes",
+    "CEL all() iterates keys when its receiver is a map",
+    "Kata upstream security policy supports only its current monthly release; runtime configuration remains acceptance identity"
+  ],
+  "execution": {
+    "pytest": "NOT_RUN",
+    "kubernetes_api_admission": "NOT_RUN",
+    "cel_compile_eval": "NOT_RUN",
+    "oci_runtime_credit": 0,
+    "kata_microvm_runtime_credit": 0,
+    "whole_product_credit": 0,
+    "reason": "Authorized Vercel Sandbox execution remains blocked before private Research/EntityOS source staging by missing approved host-side Preview GITHUB_READ_TOKEN; connected Vercel surface exposes no Sandbox lifecycle or environment-secret mutation action. VPS/self-hosted/production substitutes are forbidden."
+  },
+  "promotion_falsifiers": [
+    "clean canonical Pod is admitted",
+    "missing or changed runtimeClassName is denied",
+    "representative io.katacontainers.* annotation present after mutation is denied",
+    "unrelated Pod is unaffected",
+    "effective post-mutation Pod annotations and runtime identity are captured before Kata sandbox creation"
+  ],
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_VALID_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "No safely shared immutable request/turn identity is exposed for this trigger; do not consume a parallel experiment slot."
+  },
+  "forbidden_surfaces_used": [],
+  "together_api": "NOT_USED",
+  "paid_or_final_training": "NOT_STARTED",
+  "whole_clayverse_acceptance": "IN_PROGRESS"
+}

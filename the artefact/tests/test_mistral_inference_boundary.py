@@ -4,9 +4,7 @@ import urllib.error
 
 import pytest
 
-from clayverse.engine import ClayVerseEngine
 from clayverse.mistral_inference import MistralInferenceError, MistralTokenInference
-from clayverse.store import UnifiedDB
 
 
 TOKEN = "mistral-test-secret-ASCII-123"
@@ -179,6 +177,9 @@ def test_timeout_and_size_bounds_fail_closed():
 
 
 def test_engine_reingests_mistral_text_without_persisting_secret(tmp_path):
+    from clayverse.engine import ClayVerseEngine
+    from clayverse.store import UnifiedDB
+
     db = UnifiedDB(tmp_path / "unified.db")
     try:
         inference = client(RecordingOpener())

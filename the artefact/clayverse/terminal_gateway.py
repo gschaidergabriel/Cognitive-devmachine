@@ -38,7 +38,7 @@ def _runtime_ready(db: UnifiedDB) -> bool:
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
         return bool(
-            schema and schema[0] == "6"
+            schema and schema[0] == "7"
             and entity_generation >= 1
             and users and int(users[0]) == 2
             and set(sessions) == {"gabriel", "andreas"}

@@ -75,6 +75,16 @@ def _validated_model(value: str) -> str:
     return model
 
 
+def _validated_final_acceptance(value: bool | str | None) -> bool:
+    if isinstance(value, bool):
+        return value
+    raw = os.environ.get("CLAYVERSE_FINAL_ACCEPTANCE", "0") if value is None else value
+    normalized = str(raw).strip()
+    if normalized not in {"0", "1"}:
+        raise MistralInferenceError("final acceptance mode is invalid")
+    return normalized == "1"
+
+
 class MistralTokenInference:
     """Inference-only Mistral adapter for the single ClayVerse causal authority.
 
@@ -85,6 +95,11 @@ class MistralTokenInference:
     ``MISTRAL_API_KEY`` is authentication material only. The key is held in a
     private in-memory field and an Authorization header, never in the request body,
     return value, provider metadata, receipt, UnifiedDB or ClayGraph by this module.
+
+    Development may intentionally use a provider ``*-latest`` alias. The mandatory
+    final-acceptance lane must instead supply a fixed model identifier so cognition
+    before and after appliance recreation cannot silently target different provider
+    revisions while claiming one reproducible acceptance vector.
     """
 
     def __init__(
@@ -95,6 +110,7 @@ class MistralTokenInference:
         endpoint: str | None = None,
         timeout_seconds: float | None = None,
         opener: Any | None = None,
+        final_acceptance: bool | str | None = None,
     ):
         endpoint_value = (
             endpoint
@@ -107,7 +123,12 @@ class MistralTokenInference:
             else os.environ.get("MISTRAL_MODEL", DEFAULT_MISTRAL_MODEL)
         )
         self.endpoint = _validated_endpoint(endpoint_value)
+        self.final_acceptance = _validated_final_acceptance(final_acceptance)
         self.model = _validated_model(model_value)
+        if self.final_acceptance and self.model.endswith("-latest"):
+            raise MistralInferenceError(
+                "final acceptance requires a fixed Mistral model identifier"
+            )
         self._api_token = _validated_token(
             api_token if api_token is not None else os.environ.get("MISTRAL_API_KEY", "")
         )
@@ -127,7 +148,7 @@ class MistralTokenInference:
     def __repr__(self) -> str:
         return (
             f"MistralTokenInference(endpoint={self.endpoint!r}, model={self.model!r}, "
-            "api_token=<redacted>)"
+            f"final_acceptance={self.final_acceptance!r}, api_token=<redacted>)"
         )
 
     def _payload(self, world: Any, observation: str) -> bytes:

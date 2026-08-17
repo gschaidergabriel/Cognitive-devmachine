@@ -122,6 +122,8 @@ def test_unavailable_or_unapproved_capability_fails_closed(db):
             runtime_capabilities=[],
             lease=claim.lease,
         )
+    assert kernel.get_goal(goal_id)["status"] == "BLOCKED"
+    assert kernel.events(goal_id)[-1]["event_type"] == "GOAL_BLOCKED_CAPABILITY_UNAVAILABLE"
 
     with pytest.raises(GoalPolicyError):
         kernel.create_goal(

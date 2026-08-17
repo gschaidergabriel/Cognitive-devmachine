@@ -3,7 +3,7 @@ from __future__ import annotations
 import html
 import json
 from http import HTTPStatus
-from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from typing import Any
 
 from .adapters import AuthenticationError, ClerkTokenVerifier
@@ -89,6 +89,11 @@ class ClayVerseAPI:
 
         return Handler
 
+    def server(self, host: str = "0.0.0.0", port: int = 3000):
+        # UnifiedDB currently owns one SQLite connection and the central entity is
+        # deliberately one ordered mutation lane. Do not admit concurrent request
+        # handlers until DB access is refactored to a proven multi-connection model.
+        return HTTPServer((host, port), self.handler())
+
     def serve(self, host: str = "0.0.0.0", port: int = 3000):
-        server = ThreadingHTTPServer((host, port), self.handler())
-        server.serve_forever()
+        self.server(host, port).serve_forever()

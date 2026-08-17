@@ -1,0 +1,54 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "chatgpt-secondary / OpenAI / GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "canonical_branch": "main",
+  "observed_base_main": "495c4d2dfdf17dc08982bf25c230e23b9f0abc5a",
+  "candidate_branch": "go/clerk-map-bijection-20260817-1342-sol",
+  "candidate_head_before_receipt": "f11574dc25d3c9cd7c64885880635d80489f85d7",
+  "product_delta": {
+    "area": "Clerk identity routing / browser authentication boundary",
+    "defect": "CLAYVERSE_CLERK_MAP_JSON admitted any non-empty mapping whose values covered gabriel and andreas, so extra Clerk subject IDs could silently alias either canonical perspective.",
+    "repair": "Require exactly two non-empty Clerk subject mappings and a bijection onto gabriel and andreas; reject extra subjects, missing users, duplicate user targets, blank subjects and foreign targets.",
+    "service_blob_sha": "4aa97f7e9d5564bd82b48ca9a5eece890ab1b05e",
+    "test_blob_sha": "9feab619366e21e38a178ff3d57f7263753a8cc9"
+  },
+  "isolated_mechanism_evidence": {
+    "surface": "OpenAI isolated container",
+    "python": "3.13.5",
+    "kernel": "Linux 6.18.35 x86_64",
+    "scope": "extracted _clerk_map logic only; not full checkout, not Vercel Sandbox, not OCI runtime",
+    "function_slice_sha256": "393dec40cb60d6fbb7607544303ecd9d3bbf7162af44562867f4a97dbcba3dbd",
+    "checks": 8,
+    "passed": 8,
+    "cases": [
+      "exact two-subject bijection accepted",
+      "missing canonical subject route rejected",
+      "extra Clerk subject alias rejected",
+      "duplicate canonical user target rejected",
+      "empty subject rejected",
+      "whitespace-only subject rejected",
+      "foreign target rejected",
+      "malformed JSON rejected"
+    ],
+    "classification": "MECHANISM_SUPPORTED_NOT_EXACT_RUNTIME_VERIFIED"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable request/turn identifier is exposed and the available exact user-message timestamp is only minute-precision (2026-08-17T13:42+07:00); GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL requires whole-second precision or stronger identity for timestamp fallback.",
+    "executed": false
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_available": false,
+    "vps_or_self_hosted_used": false,
+    "production_host_used": false,
+    "whole_product_runtime_claim": false
+  },
+  "counterhypothesis": "Multiple Clerk subjects per canonical user might be intentionally desired for account migration or alternate identities. The baseline product does not currently define such alias semantics; silently allowing aliases weakens explicit identity binding. Any future aliasing should therefore be separately typed, bounded and tested rather than inferred from a permissive map.",
+  "next_exact_gate": "Run the exact then-current fused head in an actually-started authorized Vercel Sandbox: focused Clerk mapping regressions plus existing JWT/session/auth-first WebSocket tests, then broader artifact tests and exact OCI build/start/readiness with real Clerk browser/JWT behavior.",
+  "whole_clayverse_acceptance": false
+}

@@ -1,0 +1,57 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "timestamp_local": "2026-08-17T17:14:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+  "canonical_main_at_join": "37b36ba7af90b5337852a0c6daf21313b6a1d170",
+  "product_stage": "CLAYVERSE_ARTIFACT",
+  "classification": "NO_CHANGE_PRODUCT_CODE_EXECUTION_ADMISSION_RECHECK",
+  "product_code_changed": false,
+  "whole_product_acceptance_changed": false,
+  "frontier": {
+    "retained_pr": 603,
+    "retained_pr_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "candidate_terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "managed_tmux_policy_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d",
+    "required_discriminator": "real tmux 3.6a rerun with pre-policy upgrade, already-hardened reapply, new-server second source, direct multi-argv transport, and mixed/unknown diagnostic fail-closed markers"
+  },
+  "observations": [
+    {
+      "kind": "VERCEL_DEPLOYMENT_HISTORY_RECHECK",
+      "deployment": "dpl_5fhrwfPFEo4bM947eUR2Bnwe3fK5",
+      "bridge_commit": "0a48f569775e281a95833a31bd383ae7f8a2fc66",
+      "result": "BUILD_STEP_SYNTAX_ERROR_BEFORE_SANDBOX_CREATE",
+      "detail": "Node 24 parsed run-clayverse-tmux-livefix.mjs and failed at the staged markdown backtick near `unbind-key`; zero ClayVerse repair runtime credit."
+    },
+    {
+      "kind": "CURRENT_RETAINED_BRIDGE_STATUS",
+      "bridge_repo": "gschaidergabriel/Dr.-Unterweger",
+      "bridge_pr": 846,
+      "bridge_head": "49204d3f20bbb86a153f83d29cda2ddadf062b4f",
+      "vercel_combined_status": "failure",
+      "vercel_status_target": "upgradeToPro=build-rate-limit",
+      "result": "ADMISSION_BLOCKED_BEFORE_SANDBOX_START"
+    },
+    {
+      "kind": "DAYTONA_FALLBACK_RECHECK",
+      "result": "NO_EXECUTABLE_PLUGIN_OR_CONNECTOR_FOUND",
+      "detail": "Plugin search for Daytona sandbox returned no installable plugin; no provider contact and zero runtime credit."
+    }
+  ],
+  "counterhypothesis": "The tmux repair may still fail under real tmux 3.6a even though its source candidate is narrow and fail-closed; source coherence cannot resolve this without an admitted isolated rerun.",
+  "decision": "Do not merge PR #603 and do not spend another duplicate Vercel preview while the current retained bridge head is explicitly build-rate-limited. Preserve the exact candidate and rerun the same falsifier at the first admitted Vercel Sandbox; Daytona remains fallback only when an executable FREE_ONLY surface is actually available.",
+  "unusual_experiment": {
+    "count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No unique shared atomic experiment lease key is exposed for this trigger; this cycle performed regression/admission re-entry only."
+  },
+  "prohibitions_observed": {
+    "vps_testing": true,
+    "self_hosted_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_final_training": true
+  },
+  "next_exact_gate": "On first admitted Vercel Sandbox, execute the unchanged PR #603 terminal blob c185009f8af84e1288747d8352645777a36b2053 against real tmux 3.6a and capture all five required markers; only after PASS rejoin then-current main, run adjacent regressions, and consider promotion before OCI/native-Claude/readiness/restart/concurrency acceptance."
+}

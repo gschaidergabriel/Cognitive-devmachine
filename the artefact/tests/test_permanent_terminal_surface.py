@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from fastapi.testclient import TestClient
 
 import clayverse.terminal_sessions as terminal_sessions
+from clayverse.store import UnifiedDB
 from clayverse.terminal_gateway import create_terminal_app
 from clayverse.terminal_sessions import CANONICAL_TERMINALS, TerminalSessionManager
 
@@ -105,35 +106,31 @@ def test_browser_terminal_io_waits_for_authenticated_ready_frame():
     assert source.index("type:'auth'") < source.index("term.onData")
 
 
-class _NoopIdentityDB:
-    def ensure_user(self, user_id, name):
-        return None
-
-    def ensure_session(self, user_id, session_id):
-        return session_id
-
-
 class _RejectVerifier:
     def verify(self, token):
         raise RuntimeError("expected-auth-reject")
 
 
 def test_terminal_websocket_is_injected_before_auth_processing(tmp_path):
-    app = create_terminal_app(
-        db=_NoopIdentityDB(),
-        clerk_map={},
-        verifier=_RejectVerifier(),
-        state_root=tmp_path / "state",
-        publishable_key="pk_test_browser_gate",
-        frontend_api_url="https://clerk.invalid",
-    )
-    with TestClient(app) as client:
-        with client.websocket_connect("/ws/terminal") as websocket:
-            websocket.send_text(json.dumps({
-                "type": "auth",
-                "token": "rejected-token",
-                "rows": 24,
-                "cols": 80,
-            }))
-            message = websocket.receive_json()
-    assert message == {"type": "error", "message": "expected-auth-reject"}
+    db = UnifiedDB(tmp_path / "state" / "unified.db")
+    try:
+        app = create_terminal_app(
+            db=db,
+            clerk_map={},
+            verifier=_RejectVerifier(),
+            state_root=tmp_path / "state",
+            publishable_key="pk_test_browser_gate",
+            frontend_api_url="https://clerk.invalid",
+        )
+        with TestClient(app) as client:
+            with client.websocket_connect("/ws/terminal") as websocket:
+                websocket.send_text(json.dumps({
+                    "type": "auth",
+                    "token": "rejected-token",
+                    "rows": 24,
+                    "cols": 80,
+                }))
+                message = websocket.receive_json()
+        assert message == {"type": "error", "message": "expected-auth-reject"}
+    finally:
+        db.close()

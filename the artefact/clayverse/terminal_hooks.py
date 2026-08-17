@@ -125,10 +125,9 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
 
     db, _, session_id, lifecycle = _runtime()
     try:
-        if lifecycle.active() is not None:
-            if _active_claude_session(db, session_id) == claude_session_id:
-                raise TerminalHookError("duplicate UserPromptSubmit for active Claude turn")
-            lifecycle.abort("stale_or_interrupted_claude_session_before_new_prompt")
+        # Claude keeps one session_id across turns, and Stop does not run on a user
+        # interrupt. Canonical begin_admission owns predecessor retirement, so the
+        # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
             additional_context = _bounded_hook_context(result)
         return {

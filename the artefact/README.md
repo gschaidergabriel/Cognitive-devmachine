@@ -34,13 +34,14 @@ This directory is the canonical product workspace for the current ClayVerse endp
 ### Execution admission
 
 - Vercel has previously demonstrated that the bridge can build and reach READY and that an older bounded Sandbox path can really execute, but the current repaired #810 trigger is deployment-rate-limited **before build and before `Sandbox.create`**. This is admission failure with zero runtime credit, not ClayVerse TEST_FAIL.
-- Daytona remains owner-authorized **FREE_ONLY** fallback after Vercel pre-assertion failure. The 17:36 controller recheck has one GitHub Actions run/job, but it ended pre-Step-1 with `steps=[]`, `runner_id=0`; no Daytona provider contact, credential use or Sandbox runtime occurred. Daytona provider/account availability therefore remains unobserved.
+- Daytona remains owner-authorized **FREE_ONLY** fallback after Vercel pre-assertion failure. GitHub Actions run `32021241780` on head `e9a50a8325810410b837b1bae85212ef5710fa3f` failed before visible Step 1 on both the original job `95361186733` and a fresh rerun job `95367346696`; both expose `steps=[]`. No Daytona provider contact, credential use or Sandbox runtime occurred. Daytona provider/account availability remains unobserved and Daytona runtime credit is zero.
 - Current testing remains isolated-sandbox-only. VPS, self-hosted VPS runners and production hosts are forbidden for current acceptance evidence. Together remains forbidden.
 
 ### Unusual-experiment accounting
 
-- The 17:36 `go` has only minute-precision shared trigger identity. Its synthetic-second lease was invalid; the already-observed 277-case parser matrix is retained only as coordination-tainted bounded mechanism history with **0 valid experiment credit**.
-- No further unusual experiment is permitted for that 17:36 macro-cycle. Separate trigger identities must not borrow one another's claims/results.
+- This `go` has only minute-precision shared trigger identity and no immutable shared request/turn id, so the atomic unusual-experiment lease fails closed: **0 valid unusual experiments executed**.
+- The earlier 17:36 synthetic-second lease was invalid; its already-observed 277-case parser matrix remains only coordination-tainted bounded mechanism history with **0 valid experiment credit**.
+- Separate trigger identities must not borrow one another's claims/results.
 
 ### Remaining acceptance path
 
@@ -52,13 +53,15 @@ Whole-product PASS requires that complete path. Source inspection, PRs, deployme
 
 ### Latest cycle delta
 
-**2026-08-17 18:06 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; retained #810 EntityOS staging path source-falsified and exact repair obligation re-entered**
+**2026-08-17 18:08 +07:00 — `NO_CHANGE` canonical ClayVerse product/runtime bytes; EntityOS staging falsifier retained and Daytona pre-step blocker independently reproduced**
 
-- Preserved the single retained #810 controller and did **not** overwrite its concurrently active 18:00 worker lane.
-- Persisted `the artefact/receipts/2026-08-17_GO_1736_PR810_ENTITYOS_STAGE_FALSIFIER_GPT56SOL.json` after proving from exact source ancestry that `f8e4deeb…` contains only the two #611 deltas and cannot supply the untracked `the artefact/EntityOS` binary currently required by the runner.
-- Re-entered the already-canonical recovery law instead of inventing a second artifact transport: reproduce EntityOS from locked `79dc06…` source inside the authorized Vercel Sandbox, require exact `32cd4587…` / `9181696`, then stage those bytes into the OCI context before build.
-- Earlier in this 17:36 cycle, corrected Daytona admission evidence durably: exact bridge head `e9a50a8…` has **one** Actions run (`32021241780`) / job (`95361186733`) ending before Step 1, not zero runs. Classification remains pre-step controller/runner admission failure with zero runtime credit.
-- No product/runtime byte promotion and no new unusual experiment occurred. Whole-product acceptance stays **IN_PROGRESS**.
+- Preserved the single retained #810 controller and did **not** overwrite or fork its parallel worker lane.
+- Retained the source falsifier showing the current #810 runner cannot obtain the untracked `the artefact/EntityOS` binary from the `f8e4deeb…` Git archive. The accepted repair obligation remains: rebuild the locked EntityOS source inside the authorized Sandbox, verify exact `32cd4587…` / `9181696`, then stage it into the OCI context.
+- Corrected Daytona admission accounting using the GitHub Actions API: run `32021241780` exists. Its original job `95361186733` failed before Step 1 with `steps=[]`; a fresh ordinary rerun produced job `95367346696`, which independently failed the same way with `steps=[]`.
+- Therefore the Daytona fallback is currently blocked at GitHub-hosted runner/pre-step admission **before provider contact**. This is not Daytona TEST_FAIL, not account/credit evidence and not ClayVerse runtime failure; runtime credit remains zero.
+- Vercel remains rate-limited before the repaired #810 deployment build/`Sandbox.create`. The next useful discriminator is the same retained lane reaching an admitted isolated executor, after first repairing the EntityOS staging path already source-falsified above.
+- No unusual experiment was executed. No VPS/self-hosted/production test path was used. Together remains forbidden.
+- Durable receipts include `the artefact/receipts/2026-08-17_GO_1736_PR810_ENTITYOS_STAGE_FALSIFIER_GPT56SOL.json` and `the artefact/receipts/2026-08-17_GO_1807_DAYTONA_FALLBACK_RERUN_ADMISSION_GPT56SOL.json`.
 
 ### Cycle update rule
 

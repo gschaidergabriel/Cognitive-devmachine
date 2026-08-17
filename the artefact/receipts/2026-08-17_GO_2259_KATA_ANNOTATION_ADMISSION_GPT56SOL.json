@@ -4,52 +4,43 @@
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "started_from_main": "327af0f53a4d48def0344a0d3c736c2364ca3fee",
   "branch": "gpt56sol/go-kata-annotation-admission-20260817-2259-r1",
-  "classification": "MECHANISM_SUPPORTED_EXACT_POLICY_BLOB_SOURCE_CHECK_K8S_UNEXECUTED",
-  "novelty": "NEW_ORTHOGONAL_MICROVM_ADMISSION_FENCE",
-  "observed_gap": "The canonical MicroVM contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation, while the reference template's RuntimeClass identity must also not be mutable into host-kernel fallback. Canonical main had no executable Kubernetes admission-policy artifact for either runtime boundary at rejoin.",
+  "retained_pr": 643,
+  "classification": "SOURCE_CANDIDATE_REQUEST_IDENTITY_HARDENED_K8S_UNEXECUTED",
+  "novelty": "ORTHOGONAL_MICROVM_ADMISSION_FENCE_FUSED_INTO_RETAINED_LANE",
+  "observed_gap": "The canonical MicroVM contract requires fail-closed rejection of unreviewed io.katacontainers.* workload annotations after admission mutation and forbids RuntimeClass drift to host-kernel fallback. The retained source policy also had a documented CREATE residual: oldObject is null on CREATE, so a mutator rewriting every current-object ClayVerse marker could make current/previous identity tests vacuous.",
   "delta": [
-    "add deployment/clayverse-kata-runtime-annotation-admission.yaml with ValidatingAdmissionPolicy failurePolicy=Fail for Pod CREATE/UPDATE",
-    "identify ClayVerse Pods by canonical app label or clayverse container name, with previous-object identity retained across UPDATE",
-    "require exact kata-qemu-runtime-rs RuntimeClass for identified ClayVerse Pods",
-    "reject every io.katacontainers.* annotation on identified ClayVerse Pods; future exceptions require explicit reviewed receipt-bound policy change",
-    "add ValidatingAdmissionPolicyBinding with validationActions=Deny",
-    "add focused source regression test_kata_runtime_annotation_admission.py"
+    "retain ValidatingAdmissionPolicy failurePolicy=Fail for Pod CREATE/UPDATE and selectorless Deny binding",
+    "retain current ClayVerse identity by canonical app label or clayverse container name",
+    "retain previous ClayVerse identity through oldObject on UPDATE",
+    "add independent AdmissionRequest request.name anchor for canonical StatefulSet Pod clayverse-0 on CREATE",
+    "deny a post-mutation object name that differs from the reserved clayverse-0 request identity",
+    "require exact kata-qemu-runtime-rs RuntimeClass whenever request/current/previous identity is ClayVerse",
+    "reject every io.katacontainers.* annotation whenever request/current/previous identity is ClayVerse",
+    "extend focused source regression to fence CREATE identity-removal mutation"
   ],
-  "source_blobs_after_adversarial_hardening": {
-    "deployment/clayverse-kata-runtime-annotation-admission.yaml": "5f84118dd939da14a59e0e20eb8002664aca4bd6",
-    "tests/test_kata_runtime_annotation_admission.py": "b43e564d5b34e0498fabc7a6258e7a99322616f8"
+  "current_source_blobs": {
+    "deployment/clayverse-kata-runtime-annotation-admission.yaml": "35eb0a17c6f9675c71b604f54ac639fe639e00e2",
+    "tests/test_kata_runtime_annotation_admission.py": "fc896130456ca860ba9b8521ed10ed360c92c379"
   },
-  "isolated_source_check": {
+  "previous_isolated_source_check": {
     "surface": "OpenAI isolated non-production container",
-    "environment": {
-      "python": "3.13.5",
-      "pyyaml": "6.0.3",
-      "kernel": "Linux 6.18.35 x86_64"
-    },
     "exact_policy_git_blob": "5f84118dd939da14a59e0e20eb8002664aca4bd6",
-    "blob_reconstruction": "MATCH",
-    "yaml_documents": 2,
-    "result": "PASS",
-    "checked": [
-      "ValidatingAdmissionPolicy plus ValidatingAdmissionPolicyBinding parse as YAML",
-      "failurePolicy=Fail",
-      "validationActions=Deny",
-      "Pod CREATE and UPDATE rules present",
-      "exact kata-qemu-runtime-rs RuntimeClass fence present",
-      "io.katacontainers.* prefix fence present",
-      "oldObject UPDATE identity fence present"
-    ],
-    "scope": "SOURCE_MECHANISM_ONLY_NOT_KUBERNETES_API_ADMISSION"
+    "exact_test_git_blob": "b43e564d5b34e0498fabc7a6258e7a99322616f8",
+    "result": "PASS_FOR_PREVIOUS_BLOBS_ONLY",
+    "scope": "SOURCE_MECHANISM_ONLY_NOT_KUBERNETES_API_ADMISSION",
+    "note": "The request.name CREATE hardening changed both current blobs after this bounded source check; the historical PASS must not be generalized to the new blobs."
   },
   "external_primary_basis": [
-    "Kubernetes ValidatingAdmissionPolicy v1/stable: policy plus binding, CEL validation, failurePolicy Fail, validationActions Deny",
-    "Kubernetes CEL: standard all and exists macros plus string startsWith are supported",
-    "Kata configuration treats enable_annotations as a security-sensitive allow surface and defaults it empty"
+    "Kubernetes ValidatingAdmissionPolicy v1/stable exposes admission request variables including request.name separately from the mutable admitted object",
+    "Kubernetes StatefulSet Pod identity uses the StatefulSet name plus ordinal; for canonical StatefulSet clayverse with replicas=1 the Pod request name is clayverse-0",
+    "Kubernetes ValidatingAdmissionPolicy plus Binding support CEL validation, failurePolicy Fail, and validationActions Deny",
+    "Kubernetes objectSelector is opt-in and can be bypassed by changing labels, so the retained binding remains selectorless",
+    "CEL map all() iterates annotation keys for the io.katacontainers.* prefix fence"
   ],
   "adversarial_review": {
-    "counter_reality": "A label-only policy could be weakened by an UPDATE that removes the label while introducing a dangerous runtime mutation, and static RuntimeClass presence in the repository template alone does not prevent later runtime-class drift.",
-    "repair": "Target identity now survives UPDATE through oldObject and is also recognized by the canonical clayverse container name; the same admission policy requires the exact reviewed RuntimeClass and rejects Kata runtime annotations.",
-    "residual_uncertainty": "A source YAML policy may still fail Kubernetes API admission, be absent/unbound on the target, or face a CREATE-time admission mutation that rewrites all ClayVerse identity markers before validation. Final effective-Pod identity and annotations must therefore be runtime-attested."
+    "counter_reality": "On CREATE, oldObject is null. If a mutating admission component rewrites both app=clayverse and the clayverse container name before validation, a policy based only on current/previous Pod-object markers can stop recognizing the canonical request and admit a RuntimeClass or Kata-annotation mutation.",
+    "repair": "requestClayVerse is derived from AdmissionRequest request.name == clayverse-0, independently of current Pod labels/containers. That request anchor participates in both RuntimeClass and io.katacontainers.* validations, and the admitted object name must remain equal to request.name.",
+    "remaining_uncertainty": "The new CEL/YAML has not yet been compiled or evaluated by the selected Kubernetes API server. Exact API support, admission ordering/effective mutation behavior, installed binding presence, and the final post-mutation Pod identity/annotations remain runtime gates."
   },
   "latest_execution_surface_observation": {
     "provider": "Vercel Sandbox",
@@ -72,27 +63,26 @@
     "oci_runtime_credit": 0,
     "classification": "EXECUTION_ADMISSION_PROGRESS_NOT_CLAYVERSE_RUNTIME_PASS"
   },
-  "next_discriminator": "Provision the approved host-side Preview GITHUB_READ_TOKEN without forwarding it into the Sandbox, bind fresh current Research/EntityOS source, then on an authorized isolated Kubernetes/Kata-capable path apply the exact policy plus binding before the workload; prove clean ClayVerse Pod CREATE/UPDATE is admitted, wrong/missing RuntimeClass is denied, injected io.katacontainers.* annotations are denied, UPDATE identity-removal attempts remain fenced, and effective Pod identity/annotations are attested before continuing exact OCI/Kata/Tier-2 gates.",
+  "next_discriminator": "Provision the approved host-side Preview GITHUB_READ_TOKEN without forwarding it into the Sandbox, bind fresh current Research/EntityOS source, then on an authorized isolated Kubernetes/Kata-capable path compile/apply the exact current policy plus binding and prove: clean clayverse-0 admitted; bad/missing RuntimeClass denied; io.katacontainers.* annotation denied; CREATE with all mutable ClayVerse markers rewritten still denied via request.name; object-name rewrite denied; UPDATE identity removal still denied via oldObject; unrelated Pods unaffected; effective post-mutation Pod identity/annotations attested before continuing exact OCI/Kata/Tier-2 gates.",
   "execution": {
-    "exact_policy_source_check_started": true,
+    "current_policy_source_check_started": false,
     "kubernetes_api_admission_started": false,
     "clayverse_oci_runtime_started": false,
     "blocker": "Host-side Preview GITHUB_READ_TOKEN is absent from the retained Vercel controller; connected Vercel tooling does not expose environment-secret mutation.",
-    "test_credit": "BOUNDED_SOURCE_MECHANISM_ONLY",
+    "test_credit": "NO_NEW_TEST_CREDIT_FOR_CURRENT_BLOBS",
     "oci_runtime_credit": 0,
     "whole_product_credit": 0
   },
   "unusual_experiment": {
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
-    "reason": "The available immutable user-message metadata is minute precision and no shared immutable request/turn identifier is exposed, so the atomic GO experiment protocol forbids claiming or executing a distinct unusual experiment."
+    "count": 0,
+    "reason": "No shared immutable request/turn identifier is exposed for this trigger, so the global one-unusual-experiment law forbids claiming or executing a distinct experiment slot."
   },
-  "rejoin": {
-    "superseded_branch": "gpt56sol/go-kata-annotation-admission-20260817-2259",
-    "superseded_pr": 639,
+  "coordination": {
+    "superseded_prs": [639, 642],
     "retained_pr": 643,
-    "reason": "main advanced during the macro-cycle; stale PR 639 was closed and the intended additive delta was recreated from freshly observed main ancestry rather than force-merging stale work",
-    "latest_main_observed_during_go": "972a1c4ce2be1073793bb52fc7f1115ab62538ba",
-    "retained_pr_merge_state_at_latest_check": "NON_MERGEABLE_REJOIN_REQUIRED_BEFORE_PROMOTION"
+    "duplicate_policy_path_created": false,
+    "note": "Parallel policy work was adjudicated into the retained #643 lane; #642 remains closed rather than reopening a competing semantic path."
   },
   "forbidden_surfaces_used": {
     "vps": false,

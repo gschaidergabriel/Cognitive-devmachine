@@ -105,10 +105,20 @@ window.addEventListener('load', async () => {{
   auth.style.display='none'; node.style.display='block';
   const term=new Terminal({{cursorBlink:true,scrollback:10000,convertEol:false}}); term.open(node);
   const proto=location.protocol==='https:'?'wss':'ws'; const ws=new WebSocket(`${{proto}}://${{location.host}}/ws/terminal`); ws.binaryType='arraybuffer';
+  let terminalReady=false;
   ws.onopen=async()=>{{ const token=await Clerk.session.getToken(); ws.send(JSON.stringify({{type:'auth',token,rows:term.rows,cols:term.cols}})); }};
-  ws.onmessage=(ev)=>{{ if(typeof ev.data==='string'){{try{{const m=JSON.parse(ev.data);if(m.type==='error')term.writeln('\\r\\n[ClayVerse] '+m.message);}}catch{{term.write(ev.data);}}}}else term.write(new Uint8Array(ev.data)); }};
-  term.onData(data=>{{ if(ws.readyState===1) ws.send(new TextEncoder().encode(data)); }});
-  const resize=()=>{{ if(ws.readyState===1) ws.send(JSON.stringify({{type:'resize',rows:term.rows,cols:term.cols}})); }};
+  ws.onmessage=(ev)=>{{
+    if(typeof ev.data==='string'){{
+      try{{
+        const m=JSON.parse(ev.data);
+        if(m.type==='ready'){{terminalReady=true;term.focus();return;}}
+        if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[ClayVerse] '+m.message);return;}}
+      }}catch{{if(terminalReady)term.write(ev.data);}}
+    }}else if(terminalReady) term.write(new Uint8Array(ev.data));
+  }};
+  term.onData(data=>{{ if(terminalReady&&ws.readyState===1) ws.send(new TextEncoder().encode(data)); }});
+  const resize=()=>{{ if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'resize',rows:term.rows,cols:term.cols}})); }};
+  ws.onclose=()=>{{terminalReady=false;}};
   window.addEventListener('resize',resize);
 }});
 </script></body></html>''')

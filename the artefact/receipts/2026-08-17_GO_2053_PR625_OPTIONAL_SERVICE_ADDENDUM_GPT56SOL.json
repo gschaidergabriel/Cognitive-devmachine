@@ -1,0 +1,44 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T20:53:00+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate_pr": 625,
+  "observed_branch_head_at_fetch": "424eead7300e4857db5415da9a52b77851031e08",
+  "classification": "FOCUSED_TEST_PASS",
+  "novelty": "CONFIRMS",
+  "scope": "Optional EntityOS service baseline fail-closed semantics added concurrently to PR625.",
+  "exact_git_blobs": {
+    "the artefact/clayverse/service.py": "c9151e339c0ec4b23a454ee7684a6bd9255bf229",
+    "the artefact/tests/test_service_entityos_optional_baseline.py": "bb8e70d347e3a92ed4d3c06aa03f4f9a5b70c021"
+  },
+  "isolated_execution": {
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "method": "Exact service.py and exact focused test Git blobs reconstructed; unrelated import-time modules replaced with minimal deterministic stubs. The exercised _entityos_config absent/unpinned branches do not call those stubbed dependencies.",
+    "command": "PYTHONPATH=. pytest -q tests/test_service_entityos_optional_baseline.py",
+    "result": "4 passed in 0.03s",
+    "exit_code": 0,
+    "byte_binding": "service.py and test file both matched their GitHub Git blob SHA-1 before execution"
+  },
+  "verified_cases": [
+    "baseline with no EntityOS + execution disabled returns unstaged/unverified/disabled status",
+    "execution enable without SHA-256 pin fails closed",
+    "unpinned regular EntityOS bytes fail closed even with execution disabled",
+    "unpinned EntityOS symlink fails closed"
+  ],
+  "evidence_boundary": "Supporting exact-file focused mechanism evidence with import-time stubs only. This is not full-package integration, exact PR-head checkout, Docker/OCI runtime, packaged EntityOS acceptance, or whole ClayVerse PASS.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0
+  },
+  "safety": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false,
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_persisted": false
+  }
+}

@@ -49,7 +49,14 @@ class EffectJournal:
         episode_id=effect['episode_id']; observation_turn_id=None
         if episode_id:
             ws=db.execute('SELECT observation_turn_id FROM workspace_episodes WHERE episode_id=?',(episode_id,)).fetchone(); observation_turn_id=ws[0] if ws else None
-        payload=self._payload(outcome); cid=str(uuid.uuid4())
+        # UserPromptSubmit creates the causal identity before reasoning. If the effect
+        # belongs to that active turn, verification re-enters through exactly that ID.
+        active=db.execute('SELECT causal_id FROM active_turns WHERE episode_id=?',(episode_id,)).fetchone() if episode_id else None
+        cid=active['causal_id'] if active else str(uuid.uuid4())
+        existing=db.execute('SELECT effect_id FROM causal_episodes WHERE causal_id=?',(cid,)).fetchone()
+        if existing:
+            raise RuntimeError('predeclared causal identity already consumed')
+        payload=self._payload(outcome)
         db.execute('INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)',(cid,episode_id,effect_id,observation_turn_id,hashlib.sha256(payload.encode()).hexdigest(),self._credit(status,outcome),time.time()))
         return cid
     def _finish_tx(self,db,effect_id,outcome,status):

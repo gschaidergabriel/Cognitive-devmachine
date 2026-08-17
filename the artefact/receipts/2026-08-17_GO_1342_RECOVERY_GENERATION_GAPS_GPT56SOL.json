@@ -1,5 +1,5 @@
 {
-  "schema": "clayverse.go.current-main-regression-gap.v2",
+  "schema": "clayverse.go.current-main-regression-gap.v3",
   "date": "2026-08-17",
   "trigger": "go",
   "trigger_time_local": "2026-08-17T13:42+07:00",
@@ -7,6 +7,7 @@
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "base_main_sha": "249761916c1ac7ecf79b2e2753524f288c825f26",
+  "latest_reentry_note": "After this branch was rebuilt, main continued advancing on unrelated parallel lanes; the two touched main test blobs remained unchanged when rechecked.",
   "branch": "go/recovery-generation-gap-20260817-1342-gpt56sol",
   "parallel_fusion": {
     "closed_superseded_pr": 439,
@@ -32,9 +33,9 @@
       "A PENDING effect recovered to UNKNOWN_AFTER_RESTART is counted as one scanned/closed active turn and its workspace closes as RECOVERY_CLOSED_AFTER_EFFECT_REENTRY."
     ],
     "source_blobs": {
-      "restart_main_before": "8230e0aa6def6e1b031f325135a3720534239981",
+      "restart_main_before_and_latest_rechecked": "8230e0aa6def6e1b031f325135a3720534239981",
       "restart_candidate": "fcfaf6fd2053768cde239d52d34735a847234782",
-      "effect_restart_main_before": "26fca7e8d8f38fe27d9612948906b1314bc204b9",
+      "effect_restart_main_before_and_latest_rechecked": "26fca7e8d8f38fe27d9612948906b1314bc204b9",
       "effect_restart_candidate": "090c67288867f3d08f81c1b034e2bd84b456f757",
       "recovery_runtime_main": "ea585507ff6e5b46922b4219d125915caa8488fb"
     }
@@ -42,14 +43,17 @@
   "validation": {
     "exact_branch_pytest": "UNOBSERVED",
     "exact_oci_runtime": "UNOBSERVED",
-    "reason": "Connected Vercel surface exposes no Sandbox start/exec primitive and the GitHub connector does not mount the private checkout into the isolated local executor.",
-    "nonclaim": "Source assertions are regression obligations only; no component/runtime/whole-product PASS is inferred."
+    "vercel_sandbox_execution_path": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX_OIDC",
+    "direct_chatgpt_mcp_sandbox_lifecycle": "NOT_EXPORTED",
+    "fresh_execution_admission": "BLOCKED_BEFORE_SANDBOX_START_BY_VERCEL_PREVIEW_BUILD_RATE_LIMIT",
+    "github_private_checkout_in_local_isolated_executor": "NOT_MOUNTED",
+    "nonclaim": "Provider admission failure before Sandbox start is not test failure; source assertions are regression obligations only and establish no component/runtime/whole-product PASS."
   },
   "unusual_experiment": {
     "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "executed": false,
     "reason": "Only minute-resolution trigger time is available and no immutable request id is exposed; the atomic GO experiment protocol therefore forbids minting a canonical claim."
   },
-  "next_exact_gate": "Run test_restart_recovery.py + test_global_entity_generation.py + test_effect_replay_restart_fusion.py on exact fused current head in an actually-started authorized isolated executor, then broader deterministic suite and exact OCI build/start/restart acceptance.",
+  "next_exact_gate": "When preview admission is available, use the confirmed Vercel Git-preview -> @vercel/sandbox/OIDC bridge for one coordinated exact-source batch: test_restart_recovery.py + test_global_entity_generation.py + test_effect_replay_restart_fusion.py, then broader deterministic suite and exact OCI build/start/restart acceptance.",
   "whole_clayverse_pass": false
 }

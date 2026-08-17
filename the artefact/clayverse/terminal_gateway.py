@@ -24,7 +24,6 @@ _AUTH_REFRESH_HEADROOM_SECONDS = 10
 
 
 def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
-    """Decode one bounded WebSocket control message or fail closed."""
     if not isinstance(payload, str) or not payload:
         raise ValueError(f"{name} message must be non-empty text")
     if len(payload) > max_chars:
@@ -39,7 +38,6 @@ def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
 
 
 def _decode_terminal_control(payload: str) -> dict:
-    """Allow a bounded auth refresh envelope without widening ordinary controls."""
     control = _decode_json_object(payload, name="control", max_chars=_AUTH_MESSAGE_MAX_CHARS)
     if control.get("type") != "reauth" and len(payload) > _CONTROL_MESSAGE_MAX_CHARS:
         raise ValueError("control message exceeds bound")
@@ -54,7 +52,6 @@ def _auth_token(hello: dict) -> str:
 
 
 def _require_auth_lease_live(deadline: float, *, now: float | None = None) -> None:
-    """Require the verified Clerk lease to still be live at an effect/output boundary."""
     current = time.time() if now is None else float(now)
     if not math.isfinite(deadline) or not math.isfinite(current):
         raise AuthenticationError("Clerk session token expiration is invalid")
@@ -63,7 +60,6 @@ def _require_auth_lease_live(deadline: float, *, now: float | None = None) -> No
 
 
 def _auth_expiry_deadline(claims: dict, *, now: float | None = None) -> float:
-    """Return a finite future Clerk JWT expiry or fail closed."""
     exp = claims.get("exp")
     if isinstance(exp, bool) or not isinstance(exp, (int, float)):
         raise AuthenticationError("Clerk session token missing valid expiration")
@@ -79,7 +75,6 @@ def _reauthenticated_expiry(
     expected_clerk_session_id: str,
     now: float | None = None,
 ) -> float:
-    """Fence a refreshed token to the already-authenticated Clerk identity/session."""
     if str(claims.get("sub", "")) != expected_subject:
         raise AuthenticationError("Clerk refresh changed subject")
     if str(claims.get("sid", "")) != expected_clerk_session_id:
@@ -106,7 +101,6 @@ def _bounded_pty_input(payload: bytes) -> bytes:
 
 
 def _write_pty_all(fd: int, payload: bytes) -> None:
-    """Write one terminal-input frame completely or fail closed."""
     remaining = memoryview(payload)
     while remaining:
         written = os.write(fd, remaining)
@@ -115,20 +109,16 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
         remaining = remaining[written:]
 
 
-def _runtime_ready(db: UnifiedDB) -> bool:
-    """Read-only readiness check for the canonical UnifiedDB spine."""
+def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
+    """Read-only readiness check for canonical state plus both managed Claude terminals."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        users = db.db.execute(
-            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
-        ).fetchone()
-        session_rows = db.db.execute(
-            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
-        ).fetchall()
+        users = db.db.execute("SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')").fetchone()
+        session_rows = db.db.execute("SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id").fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
-        return bool(
+        state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
             and users and int(users[0]) == 2
@@ -138,6 +128,12 @@ def _runtime_ready(db: UnifiedDB) -> bool:
                 and int(sessions[user_id]["generation"]) == entity_generation
                 for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
             )
+        )
+        if not state_ready:
+            return False
+        return all(
+            terminals.is_managed_session(terminals.binding(user_id))
+            for user_id in CANONICAL_TERMINAL_NAMES
         )
     except Exception:
         return False
@@ -157,17 +153,11 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/healthz")
     async def healthz():
-        return JSONResponse({
-            "status": "ok",
-            "scope": "liveness",
-            "surface": "permanent-claude-code-terminal",
-            "users": ["gabriel", "andreas"],
-            "consciousness_daemon": False,
-        })
+        return JSONResponse({"status": "ok", "scope": "liveness", "surface": "permanent-claude-code-terminal", "users": ["gabriel", "andreas"], "consciousness_daemon": False})
 
     @app.get("/readyz")
     async def readyz():
-        ready = _runtime_ready(db)
+        ready = await asyncio.to_thread(_runtime_ready, db, terminals)
         return JSONResponse({
             "status": "ready" if ready else "not_ready",
             "scope": "runtime",
@@ -260,15 +250,8 @@ window.addEventListener('load', async () => {{
             if binding.session_id != session_id:
                 raise PermissionError("terminal/session identity mismatch")
             terminals.resize(attach_fd, rows, cols)
-            # Authentication can expire while PTY/tmux attachment is blocking in a
-            # worker thread. Never publish readiness for an already-expired lease.
             _require_auth_lease_live(auth_expires_at)
-            await send_json({
-                "type": "ready",
-                "user_id": user_id,
-                "session_id": session_id,
-                "auth_expires_at": int(auth_expires_at),
-            })
+            await send_json({"type": "ready", "user_id": user_id, "session_id": session_id, "auth_expires_at": int(auth_expires_at)})
 
             async def pump_out():
                 while True:
@@ -276,8 +259,6 @@ window.addEventListener('load', async () => {{
                     if not data:
                         return
                     async with send_lock:
-                        # Output is an authenticated capability too. Re-check after
-                        # the blocking PTY read and after waiting for the send lock.
                         _require_auth_lease_live(auth_expires_at)
                         await ws.send_bytes(data)
 
@@ -291,8 +272,6 @@ window.addEventListener('load', async () => {{
                         message = await asyncio.wait_for(ws.receive(), timeout=remaining)
                     except asyncio.TimeoutError as exc:
                         raise AuthenticationError("Clerk session token expired") from exc
-                    # wait_for() and websocket receive completion race at the deadline.
-                    # Re-check the lease before any received frame can affect PTY/control state.
                     if auth_expires_at <= time.time():
                         raise AuthenticationError("Clerk session token expired")
                     if message.get("type") == "websocket.disconnect":
@@ -309,10 +288,7 @@ window.addEventListener('load', async () => {{
                                 expected_subject=clerk_subject,
                                 expected_clerk_session_id=clerk_session_id,
                             )
-                            await send_json({
-                                "type": "reauthenticated",
-                                "auth_expires_at": int(auth_expires_at),
-                            })
+                            await send_json({"type": "reauthenticated", "auth_expires_at": int(auth_expires_at)})
                             continue
                         if control.get("type") != "resize":
                             raise ValueError("unsupported terminal control message")

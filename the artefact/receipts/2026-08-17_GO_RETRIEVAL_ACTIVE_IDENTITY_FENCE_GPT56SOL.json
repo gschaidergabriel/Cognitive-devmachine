@@ -1,0 +1,68 @@
+{
+  "schema": "clayverse-mechanism-regression-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:54:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed": "f881fbd4393314a693bc705d5e36aea2cc5013ea",
+  "candidate_pr": 431,
+  "candidate_branch": "go/retrieval-active-identity-fence-20260817-1347",
+  "candidate_source_commit": "34992e96fad1b6739822ab1508aa63638a9bb8c7",
+  "candidate_regression_commit": "58f185ea2862d5653903d37fc0822c598aaa63cb",
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "unusual_experiment_started_by_this_work": false,
+  "finding": {
+    "name": "ACTIVE_TURN_COMPOSITE_IDENTITY_NOT_ENFORCED_BY_INDEPENDENT_FOREIGN_KEYS",
+    "mechanism": "An active_turns row can be individually foreign-key valid while its referenced turn or workspace episode belongs to another canonical session/user perspective.",
+    "risk": "The canonical retrieval entry identity can become semantically forked across Gabriel/Andreas despite all individual SQLite foreign keys resolving."
+  },
+  "candidate_repair": {
+    "retrieval_blob_git_sha1": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
+    "test_blob_git_sha1": "18d02f7264d5ce1c744d8f47a5df35d4e18b4124",
+    "contracts": [
+      "active user equals session user and turn user",
+      "turn session equals requested active session",
+      "workspace episode session equals requested active session",
+      "workspace observation_turn_id equals active turn_id",
+      "incomplete composite join fails closed",
+      "semantic composite mismatch fails closed"
+    ]
+  },
+  "isolated_mechanism_regression": {
+    "surface": "OpenAI isolated non-production container",
+    "exact_source_binding": {
+      "materialized_retrieval_git_hash_object": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
+      "github_candidate_blob": "f2117915d4d19024fd83dc3886f31eb80d2acd16",
+      "match": true,
+      "python_compile": "PASS"
+    },
+    "setup": "Minimal SQLite schema preserving the relevant sessions/turns/workspace_episodes/active_turns foreign-key topology; non-target module imports stubbed only so the exact retrieval.py blob can load.",
+    "corrupt_case": {
+      "description": "Gabriel active turn references an Andreas workspace episode whose observation_turn_id is Gabriel's turn; every individual FK resolves.",
+      "observed": "RuntimeError: active causal identity mismatch",
+      "result": "REJECTED_AS_REQUIRED"
+    },
+    "coherent_case": {
+      "description": "Gabriel active turn, turn and workspace episode all bind to the same Gabriel session and observation turn.",
+      "result": "ACCEPTED_AS_REQUIRED"
+    },
+    "classification": "MECHANISM_SUPPORTED",
+    "limitations": "Not a full private-repository checkout, not the full pytest suite, not OCI build/start, not Clerk/browser/PTY/Claude acceptance."
+  },
+  "github_runner_prior_observation": {
+    "workflow_run": 32003102411,
+    "job": 95307131258,
+    "conclusion": "failure_before_visible_steps",
+    "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_TEST_FAILURE"
+  },
+  "whole_clayverse_container_pass": false,
+  "forbidden_fallbacks_not_used": [
+    "VPS",
+    "self-hosted VPS runner",
+    "production host",
+    "Together API"
+  ],
+  "next_exact_step": "Run the rebased PR's exact full-source retrieval/lifecycle regression set in an admitted isolated runner; if green and ancestry remains clean, merge the identity fence without importing the divergent Stage-B stack."
+}

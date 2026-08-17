@@ -1,5 +1,5 @@
-import hashlib
 import json
+import time
 
 import pytest
 
@@ -28,7 +28,7 @@ def _memory(
 ):
     db.db.execute(
         "INSERT INTO durable_memory(memory_id,kind,subject,value,source_turn_id,user_id,ts,provenance) "
-        "VALUES(?,?,?,?,?,?,strftime('%s','now') + (julianday('now') - julianday(date('now'))) * 0,?)",
+        "VALUES(?,?,?,?,?,?,?,?)",
         (
             memory_id,
             kind,
@@ -36,6 +36,7 @@ def _memory(
             value,
             source_turn_id,
             user_id,
+            time.time() - 10.0,
             json.dumps({"source": "test"}),
         ),
     )
@@ -99,9 +100,12 @@ def test_explicit_miss_opens_only_exact_memory_in_shadow(tmp_path):
             feedback_class="USER_MISS_TARGET",
             target_memory_id="target",
         )
+        repeated_turn_id = _feedback_turn(
+            db, request, "USER_MISS_TARGET", "target"
+        )
         duplicate = MicroClayExplicitFeedback(db).apply(
             **request,
-            feedback_turn_id=feedback_turn_id,
+            feedback_turn_id=repeated_turn_id,
             feedback_class="USER_MISS_TARGET",
             target_memory_id="target",
         )
@@ -117,11 +121,17 @@ def test_explicit_miss_opens_only_exact_memory_in_shadow(tmp_path):
             "receipt_id": learned["receipt_id"],
         }
         route_rows = db.db.execute(
-            "SELECT entry_key,capital FROM retrieval_entrypoint_policy "
+            "SELECT entry_key,capital,pulls FROM retrieval_entrypoint_policy "
             "WHERE entry_key LIKE 'route:v2:%' ORDER BY entry_key"
         ).fetchall()
         assert len(route_rows) == 2
         assert all(float(item["capital"]) > 0.0 for item in route_rows)
+        assert all(int(item["pulls"]) == 1 for item in route_rows)
+        feedback_row = db.db.execute(
+            "SELECT signal_class FROM retrieval_feedback WHERE receipt_id=?",
+            (learned["receipt_id"],),
+        ).fetchone()
+        assert f"turn={feedback_turn_id}" in feedback_row["signal_class"]
 
         second = life.begin("orchid alias")
         second_row, _ = _request(db, second)

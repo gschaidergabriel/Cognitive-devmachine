@@ -60,9 +60,9 @@ This is the requested "wie ein echter User" discriminator. It must prove that sw
 
 ## Generic API runtime lane
 
-Draft PR **#683** (`gpt56sol/generic-llm-api-provider-20260818`) is the current provider-generalization lane.
+The generic API-provider work originally developed in Draft PR **#683** has been fused into the retained PR **#682** runtime-freeze lane. PR #683 is closed and is not a separate canonical runtime path.
 
-It adds:
+The fused provider boundary includes:
 
 - a generic bounded `chat-completions-json-v1` adapter;
 - a fixed Mistral profile using the official Mistral chat-completions endpoint and `MISTRAL_API_KEY`;
@@ -74,27 +74,28 @@ It adds:
 - the same fail-closed inference decision parser used by ClayVerse (`entityos.exec` / `state.noop`; `process.exec` rejected);
 - a generic direct acceptance probe on the existing `ClayVerseEngine` / UnifiedDB / EffectGate source path;
 - `python -m clayverse.api_probe_cli` as a direct-provider sandbox entry point;
-- generic canonical integration tests adapted from the existing Mistral probe.
+- focused generic-provider and secret-boundary regression tests.
 
 ### Exact focused evidence
 
-The exact current PR #683 `api_providers.py`, exact current `inference_protocol.py` and exact generic provider tests were reconstructed and executed in an isolated OpenAI Linux sandbox. Git blob identities were checked before the run:
+At retained PR #682 head `220262b856f024fe43a50098cee557738bf97777`, the following exact blobs were reconstructed and executed in an isolated OpenAI Linux sandbox:
 
 - `api_providers.py`: `60a49d31422e00a35c72eb078fe17cc694c0795b`
-- `test_generic_api_provider.py`: `79ce6b469d9ac140a28777fdb15b6c2738d6e003`
 - `inference_protocol.py`: `cd5856ac58f4e86c4c045fda8099b7783e6724cf`
+- `test_generic_api_provider.py`: `79ce6b469d9ac140a28777fdb15b6c2738d6e003`
+- `test_generic_api_provider_secret_boundary.py`: `17e06238c042512039654d75eb22285b29c54f07`
 
-**15/15 PASS + py_compile PASS.**
+**19/19 PASS + py_compile PASS.**
 
-Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses, non-finite WORLD rejection, duplicate/non-finite provider JSON rejection, returned-model identity mismatch rejection, runtime credential exclusion from model-visible context, provider credential-echo rejection and redirect refusal.
+Covered: Mistral profile, generic compatible profile, allowed EntityOS intent, forbidden `process.exec`, HTTPS endpoint-smuggling rejection, arbitrary secret-env rejection, non-stop response rejection, HTTP-error secret redaction, malformed/oversized responses, non-finite WORLD rejection, duplicate/non-finite provider JSON rejection, returned-model identity mismatch rejection, runtime credential exclusion from model-visible context, provider credential-echo rejection, visible-ASCII token enforcement and redirect refusal.
 
-This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS.
+This is `FOCUSED_TEST_PASS`, not full UnifiedDB integration or runtime PASS. It does not automatically validate the other later service/final-gate changes in the same moving runtime-freeze lane.
 
 ### Current live-provider boundary
 
 No `MISTRAL_API_KEY` or generic API token is available in this worker's current isolated runtime. Therefore **no real provider request was fabricated or claimed**.
 
-The retained exact-OCI Vercel controller remains fail-closed before credential spend: the newest observed controller head has no accepted current READY deployment, Vercel reports a build-rate-limit failure, and the live PR #682 runtime-freeze head has materially advanced beyond the Research commit currently bound by that controller. The older READY deployment is not eligible for current runtime credit.
+The retained exact-OCI Vercel controller remains fail-closed before credential spend. Current PR #810 head `ed7438b85bdd6b0a74512aa505f2848e00ceaa8a` binds PR #682 Research `9bebd3d22f59b1c8dab6a3cb2b5e080ef49610fb` / tree `38d6a38313bf068508570147a8dacc599b7ea551`, while current PR #682 head is `220262b856f024fe43a50098cee557738bf97777`. The direct compare shows three later material commits touching `service.py`, final-Mistral manifest coherence and EntityOS-capability tests. The current controller commit itself has no accepted READY deployment; Vercel reports `Deployment rate limited — retry in 24 hours.` The older READY deployment is not eligible for current runtime credit.
 
 The safe next sequence is:
 
@@ -114,8 +115,8 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 - **#622** Python hash-lock generator — source candidate; accepted product lock requires real isolated execution.
 - **#623** auth/identity/readiness/reauth drift — bounded source/mechanism candidate until exact runtime execution.
 - **#602** managed native-Claude process attestation — downstream of exact terminal/runtime acceptance.
-- **#682** dedicated final-Mistral runtime-freeze lane — source candidate still moving; settle deliberately before final controller rebind.
-- **#683** generic API inference provider — hardened focused-test candidate; real provider + full canonical integration remain open.
+- **#682** retained final runtime-freeze lane — now includes the generic API-provider boundary plus final-Mistral/engine/service gates; still moving and must settle before final controller rebind.
+- **#683** closed source-development lane — useful ancestry/evidence only; fused into #682, not a second runtime path.
 - **#810** retained Vercel Sandbox controller — single OCI orchestration lane; current exact deployment admission remains blocked and old READY evidence is stale.
 
 ## Testing authority
@@ -126,18 +127,17 @@ A normal container-only provider PASS is supporting evidence only. Final accepta
 
 A higher class is never inferred from a lower one.
 
-## Latest cycle delta — 2026-08-18 00:47 +07:00
+## Latest cycle delta — 2026-08-18 00:51 +07:00
 
-- hardened the existing generic provider boundary instead of creating a second inference path;
-- added canonical JSON fail-closed handling, duplicate-key rejection and exact returned-model identity;
-- fused parallel runtime-secret fences preventing credentials from entering model-visible context or provider output;
-- added explicit regressions for all new fences and executed exact focused bytes: **15/15 PASS + py_compile PASS**;
-- preserved the result in PR #683 coordination; no live provider or whole-product claim was made;
-- Vercel deployment `dpl_EW4vnoqUCTz5bt5otUeUjxox5GBf` reached `vercel-build` on controller commit `533b6d593b4e604cff0164f8b4538a6eda1bc544` and failed source guard on a stale expected endpoint blob; follow-up `05e4eb77780231418f466e7d9cc44936c9c8e7f5` corrects that guard but Vercel reports `Deployment rate limited — retry in 24 hours.`;
-- current PR #682 has again materially advanced beyond the Research SHA bound by the latest controller source, so no credential should be spent on an old READY deployment;
+- hardened the generic provider boundary without creating a second inference authority;
+- fused the hardened provider bytes from the now-closed PR #683 into the retained PR #682 runtime-freeze path;
+- executed exact current PR #682 provider/secret-boundary blobs in an isolated sandbox: **19/19 PASS + py_compile PASS**;
+- verified canonical JSON, duplicate/non-finite rejection, exact model identity and credential-context/echo fences;
+- preserved this as focused mechanism evidence only; no live provider or whole-product claim was made;
+- current PR #810 is still behind the moving PR #682 freeze by three material commits and its exact head is Vercel build-rate-limited, so no owner credential should be spent on an older READY deployment;
 - no unusual experiment was executed because shared immutable trigger identity remains unavailable;
 - no whole-product PASS is claimed.
 
 ## Verification
 
-ClayVerse remains **IN_PROGRESS**. The generic provider boundary is now more strictly fail-closed and has stronger exact focused evidence, but the real product discriminator remains the exact current one-container/microVM run with private source, complete EntityOS, exact OCI digest, real provider cognition, recovery/recreation, and authenticated user-path validation.
+ClayVerse remains **IN_PROGRESS**. The provider-generalization work is now fused into the retained runtime-freeze lane and has stronger exact focused evidence, but the real product discriminator remains the exact current one-container/microVM run with private source, complete EntityOS, exact OCI digest, real provider cognition, recovery/recreation, and authenticated user-path validation.

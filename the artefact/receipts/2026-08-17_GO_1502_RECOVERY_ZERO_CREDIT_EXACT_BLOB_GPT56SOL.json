@@ -1,0 +1,86 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "recovery_redacted_receipt_identity_zero_credit_exact_blob_mechanism",
+  "product_claim": "NO_WHOLE_PRODUCT_PASS",
+  "canonical_lane": {
+    "pull_request": 556,
+    "branch": "fusion/recovery-effect-receipt-identity-current-20260817-1502-sol",
+    "code_head_before_receipt": "00e1a9154bb4174ca7039a1a7611d4e8c89589de",
+    "donor_pr": 552,
+    "donor_head_absorbed": "72637dc0f4aaaa24d4a0391e6bead64945cdb2b7"
+  },
+  "exact_product_input": {
+    "path": "the artefact/clayverse/recovery.py",
+    "git_blob": "66540a9d2d20860fed015033da8013965ef830be",
+    "blob_identity_recomputed_before_execution": true,
+    "adjacent_test_blobs_on_lane": {
+      "the artefact/tests/test_recovery_effect_receipt_identity.py": "8d130286581e33cd9b0e63c092225a3ea7f84bb1",
+      "the artefact/tests/test_restart_recovery.py": "b9c21818485f9aaeea693441dcf23e832d1417fc"
+    }
+  },
+  "execution": {
+    "surface": "OpenAI isolated non-production container",
+    "python": "3.13.5",
+    "kernel": "Linux x86_64 6.18.35",
+    "network_dependency": "none",
+    "classification": "EXACT_PRODUCT_BLOB_MECHANISM_EXECUTION_WITH_MINIMAL_DEPENDENCY_STUBS",
+    "harness_boundary": "Executed the exact recovery.py bytes unchanged. EffectJournal and UnifiedDB imports were supplied by a minimal compatibility harness sufficient for the exercised recovery SQL/state contracts; this was not a full checkout or full branch pytest run.",
+    "cases": [
+      {
+        "name": "orphan_structurally_valid_forged_receipt",
+        "observed_outcome_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "uncertain_effects": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "orphan_malformed_receipt",
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "uncertain_effects": 1,
+        "result": "PASS"
+      },
+      {
+        "name": "active_turn_structurally_valid_forged_receipt",
+        "observed_outcome_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "observed_credit": 0.0,
+        "reentered": 1,
+        "active_turns_closed": 1,
+        "workspace_state": "RECOVERY_CLOSED_AFTER_EFFECT_REENTRY",
+        "recovery_turn": "TURN_ABORTED:container_restart",
+        "result": "PASS"
+      }
+    ],
+    "assertion_result": "ALL_ASSERTIONS_PASS"
+  },
+  "execution_admission": {
+    "github_actions_head": "00e1a9154bb4174ca7039a1a7611d4e8c89589de",
+    "github_run": 32009197300,
+    "github_jobs_observed": 0,
+    "github_classification": "ADMISSION_FAILURE_BEFORE_JOB_OR_TEST_EXECUTION",
+    "vercel_bridge": "CONFIRMED_PLATFORM_PATH_BUT_NEW_PREVIEWS_CURRENTLY_RATE_LIMITED_BEFORE_BUILD_AND_SANDBOX_START",
+    "vercel_runtime_credit_for_this_head": false
+  },
+  "coordination": {
+    "unusual_experiment": "NO_NEW_UNUSUAL_EXPERIMENT",
+    "reason": "the 15:02 GO unusual experiment was already consumed by the recorded recovery receipt forgery discriminator; this run is deterministic regression/mechanism validation only",
+    "duplicate_lane_cleanup": "PR #557 closed after discovering earlier canonical fusion lane #556"
+  },
+  "result": {
+    "source_fusion": "PASS_AT_BLOB_LEVEL",
+    "zero_credit_recovery_mechanism": "SUPPORTED",
+    "full_branch_pytest": "UNOBSERVED",
+    "exact_oci_runtime": "UNOBSERVED",
+    "whole_product_pass": false
+  },
+  "next_exact_gate": [
+    "when an authorized full-checkout isolated runner is admitted, execute the focused recovery receipt regression plus adjacent restart/effect/generation tests on the then-current exact lane",
+    "then validate the same contract through an exact ClayVerse image restart with persisted UnifiedDB state",
+    "do not promote whole-product acceptance from this source-slice mechanism result"
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "observed_at": "2026-08-17T21:06:31+07:00",
+  "trigger": "go",
+  "worker": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "PRODUCT_CONVERGENCE_WITH_BOUNDED_COMPONENT_EVIDENCE_AND_ADMISSION_BLOCKERS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "canonical_main_write_anchor_before_receipt": "aabfc8a02ad8c3735bb5b7a8f3d7fc3bf0273b25",
+  "canonical_readme_blob_before_receipt": "f1bc128ff05e84a28d886bad600ea4df938c6b18",
+  "main_ref_read_note": "The GitHub connector's direct git/ref endpoint returned 403, so no unsupported independent pre-receipt main-head claim is made. This create-only receipt write is performed on current main and its returned commit is the durable post-write anchor.",
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "The exact user trigger exposes only minute-precision shared message time and no immutable shared request/turn identifier; the canonical atomic-lease fallback therefore fails closed.",
+    "executed": 0
+  },
+  "pr625": {
+    "lane": "gpt56sol/go-tokenless-canonical-build-20260817",
+    "observed_head_late_cycle": "6f49e14645d99e31c881c16c4e00145093c823c5",
+    "state": "DRAFT_MOVING_CONCURRENTLY",
+    "convergence": [
+      "baseline EntityOS packaging is optional while execution is disabled",
+      "default-deny build context admits only exact optional EntityOS staging paths",
+      "manifest/Compose/service contracts were aligned with optional-baseline semantics",
+      "unpinned bytes, symlinks, execution-without-pin and digest drift remain fail-closed",
+      "no second packaging/runtime authority was introduced"
+    ],
+    "new_component_runtime_receipt": "the artefact/receipts/2026-08-17_GO_2101_PR625_ENTITYOS_MEMFD_COMPONENT_GPT56SOL.json",
+    "new_component_runtime_receipt_commit": "dec0509e57cd0ef987cef05274931186912a8f9b",
+    "exact_entityos_bridge_blob": "3118cb6a6758ec1612a33ff3c6766c937d79d4ac",
+    "component_runtime": {
+      "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+      "result": "4/4 PASS",
+      "checks": [
+        "sealed-memfd verification of exact SHA-256 pinned executable",
+        "real pinned snapshot execution exit 0",
+        "post-verification mutable-path byte replacement rejected on digest mismatch",
+        "symlink substitution rejected at open boundary"
+      ],
+      "credit": "COMPONENT_RUNTIME_PASS_ONLY"
+    },
+    "open_discriminator": "Exact moving-head checkout plus OCI/BuildKit build-context membership, baseline image build, normal packaged service startup/readiness without EntityOS, optional embedded EntityOS image variant, image digest and downstream whole-product chain remain unobserved."
+  },
+  "pr611": {
+    "lane": "go/tmux-source-reapply-idempotent-livefix-20260817-1714-r2",
+    "retained_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "goal": "replicate retained tmux reapply contract on Debian Trixie target-like tmux rather than historical tmux 3.6a only",
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "environment": "Debian GNU/Linux 13 (trixie), root, Python 3.13.5",
+    "attempt": "apt-get update followed by no-recommends tmux install",
+    "result": "EXECUTION_ADMISSION_BLOCKED_TOOL_TIMEOUT",
+    "observation": "The combined apt operation exceeded the 120-second tool limit. Follow-up dpkg-query reported tmux not installed. No tmux semantic assertion executed.",
+    "runtime_credit": 0,
+    "test_failure": false
+  },
+  "pr622": {
+    "lane": "go/python-lock-py313-generator-20260817-1742-sol",
+    "observed_head": "84f0f17b42b31bb64ad902e619dd4d26894dcead",
+    "source_lock_blob": "5f68dbd63cf5a134ed7fd90fb88d213e33515804",
+    "surface": "OPENAI_ISOLATED_NON_PRODUCTION_CONTAINER",
+    "environment": "Python 3.13.5; system pip 25.1.1",
+    "attempt": "execute the hash-bound pip-tools bootstrap/offline-install discriminator",
+    "result": "EXECUTION_ADMISSION_BLOCKED_NETWORK_AND_BINARY_TRANSFER",
+    "observations": [
+      "direct sandbox DNS access to pypi.org failed before package download",
+      "pip-tools/build/pyproject-hooks bootstrap modules are absent on the surface",
+      "official PyPI JSON metadata was accessible externally and remained consistent with the source-locked declared wheel identities inspected in this cycle",
+      "the tool safety boundary did not admit direct files.pythonhosted wheel transfer into the container, so no offline install was executed"
+    ],
+    "runtime_credit": 0,
+    "test_failure": false,
+    "next_discriminator": "Actually-started authorized isolated Python-3.13 execution with admitted PyPI egress or pre-staged exact locked wheels, then --require-hashes download/identity verification, offline install, version assertions, stable-output double compilation and full product wheelhouse closure."
+  },
+  "execution_surface_summary": {
+    "vercel": "No direct Sandbox start/exec action is exposed for the Research repo by the connected Vercel tool surface; exact OCI remains deferred.",
+    "openai_isolated_container": "Useful for bounded source/component execution; no Docker/Podman/buildah/nerdctl present, no tmux installed, direct PyPI DNS unavailable.",
+    "vps": "FORBIDDEN_NOT_USED",
+    "self_hosted_or_production": "FORBIDDEN_NOT_USED"
+  },
+  "safety": {
+    "together_api": false,
+    "paid_final_training": false,
+    "secrets_exposed_or_persisted": false,
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_testing": false
+  },
+  "cycle_outcome": "ClayVerse source/product convergence improved materially around the tokenless optional-EntityOS baseline and gained exact-source bounded Linux component-runtime evidence for the pinned EntityOSBridge. Attempts to advance target-like tmux and Python hash-lock runtime gates were blocked before semantic assertions and receive zero runtime credit, not FAIL.",
+  "next_highest_information_gate": "Bind the latest retained #625 source on an authorized isolated OCI-capable surface and prove actual build context, baseline no-EntityOS build plus normal packaged readiness, optional digest-bound EntityOS variant and image identity; then rejoin exact #611/#622/#623 and continue the complete acceptance chain."
+}

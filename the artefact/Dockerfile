@@ -6,6 +6,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_STATE_ROOT=/var/lib/clayverse \
     CLAYVERSE_WORKSPACE=/workspace \
     CLAYVERSE_REQUIRE_CLAUDE=1 \
+    CLAYVERSE_REQUIRE_ENTITYOS=1 \
+    CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
     PORT=3000 \
     DISABLE_AUTOUPDATER=1
 
@@ -20,8 +22,10 @@ COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 COPY clayverse ./clayverse
 RUN useradd --system --uid 10001 --create-home clayverse \
- && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
- && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude
+ && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude /opt/entityos \
+ && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
+ && chown root:root /opt/entityos \
+ && chmod 0755 /opt/entityos
 
 USER clayverse
 VOLUME ["/var/lib/clayverse"]

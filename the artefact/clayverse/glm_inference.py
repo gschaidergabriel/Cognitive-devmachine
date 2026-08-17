@@ -142,6 +142,11 @@ class GLMTokenInference:
             raise GLMInferenceError("assembled world is not canonical JSON") from exc
         if len(world_json) > _MAX_WORLD_JSON_CHARS:
             raise GLMInferenceError("assembled world exceeds GLM inference boundary")
+        # A bearer credential is authentication material, never cognition/context.
+        # If the exact secret appears in canonical context or the current observation,
+        # fail before constructing or sending a provider request.
+        if self._api_token in world_json or self._api_token in observation:
+            raise GLMInferenceError("GLM credential appeared in inference content")
         system = (
             "You are an inference-only cognition provider inside ClayVerse. "
             "The supplied WORLD is canonical context assembled by ClayVerse; UnifiedDB remains authoritative. "
@@ -189,16 +194,22 @@ class GLMTokenInference:
             raise GLMInferenceError("GLM inference transport failed") from None
         if len(raw) > _MAX_RESPONSE_BYTES:
             raise GLMInferenceError("GLM response exceeds admitted size")
+        parse_failed = False
         try:
             envelope = json.loads(raw, parse_constant=_reject_json_constant)
-        except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
-            raise GLMInferenceError("GLM response is not valid canonical JSON") from exc
+        except (json.JSONDecodeError, UnicodeDecodeError, ValueError):
+            # Do not raise from the provider-controlled parsing frame: even an
+            # explicitly suppressed context remains attached to the exception object.
+            parse_failed = True
+            envelope = None
+        if parse_failed:
+            raise GLMInferenceError("GLM response is not valid canonical JSON")
         try:
             choices = envelope["choices"]
             message = choices[0]["message"]
             text = message["content"]
-        except (KeyError, IndexError, TypeError) as exc:
-            raise GLMInferenceError("GLM response shape is invalid") from exc
+        except (KeyError, IndexError, TypeError):
+            raise GLMInferenceError("GLM response shape is invalid") from None
         if not isinstance(text, str) or not text.strip():
             raise GLMInferenceError("GLM response content is invalid")
         response_model = envelope.get("model")
@@ -206,6 +217,8 @@ class GLMTokenInference:
             raise GLMInferenceError("GLM response model identifier is missing or invalid")
         if _validated_model(response_model) != self.model:
             raise GLMInferenceError("GLM response model does not match requested model")
+        if self._api_token in text:
+            raise GLMInferenceError("GLM credential appeared in provider response")
         return {
             "text": text,
             "selection": "respond",

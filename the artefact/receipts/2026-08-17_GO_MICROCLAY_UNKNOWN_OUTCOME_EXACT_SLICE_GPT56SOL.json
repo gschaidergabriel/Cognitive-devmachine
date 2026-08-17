@@ -1,0 +1,66 @@
+{
+  "schema": "clayverse-isolated-component-execution/v1",
+  "recorded_at": "2026-08-17T14:12:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "candidate": {
+    "pr": 523,
+    "branch": "go/microclay-unknown-outcome-fence-20260817-1408",
+    "source_head_before_receipt": "b88b38afbf3ac69df9bd73d2c2b8f2c8166a401c",
+    "base_main_at_pr_refresh": "5baaa4b92183a6fd38fccaa90575c87ef49ffbd6"
+  },
+  "execution_surface": {
+    "type": "isolated_local_container",
+    "not_vps": true,
+    "not_self_hosted_product_runner": true,
+    "not_production": true,
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "kernel": "Linux 6.18.35 x86_64",
+    "network_checkout": "BLOCKED_DNS_COULD_NOT_RESOLVE_GITHUB_COM",
+    "reconstruction": "The exact dependency slice required by the focused test was reconstructed from GitHub connector content and independently verified with Git blob hashing before execution."
+  },
+  "exact_blobs": {
+    "the artefact/clayverse/microclay_retrieval.py": "49ac8e2459aa6dcedfce0e040811dff79a1785de",
+    "the artefact/tests/test_microclay_uncertain_outcome_learning.py": "de7edb753ad6b25b9be6a8c01aa26bd42ef175e8",
+    "the artefact/clayverse/store.py": "a88d923ea3d0eab5847f304f35463e5a2b2c4acd",
+    "the artefact/clayverse/identity.py": "c3b8ecba0942c722d08efbf03e57d71c3a4f5cf3"
+  },
+  "command": "cd /tmp/clay-exact && PYTHONPATH=/tmp/clay-exact python -m pytest -q tests/test_microclay_uncertain_outcome_learning.py",
+  "result": {
+    "exit_code": 0,
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "duration_reported": "0.31s",
+    "stdout": "..... [100%] 5 passed in 0.31s"
+  },
+  "contracts_observed": [
+    "UNKNOWN_OUTCOME creates no retrieval feedback and no retrieval entrypoint policy pull",
+    "UNKNOWN_AFTER_RESTART creates no retrieval feedback and no retrieval entrypoint policy pull",
+    "STALE_OUTCOME creates no retrieval feedback and no retrieval entrypoint policy pull",
+    "PENDING creates no retrieval feedback and no retrieval entrypoint policy pull",
+    "known FAILED outcome remains eligible for the pre-existing zero-credit/access-rent update"
+  ],
+  "evidence_scope": "EXACT_DEPENDENCY_SLICE_COMPONENT_PASS",
+  "limitations": [
+    "This was not a full repository checkout because the isolated container could not resolve github.com.",
+    "This did not execute the full current branch test suite.",
+    "This did not build or start the ClayVerse OCI image.",
+    "This did not execute the combined PR 430 + PR 523 path.",
+    "This did not execute EntityOS or a real external effect.",
+    "Vercel Sandbox fresh execution remains admission-blocked before Sandbox start by Preview build rate limiting."
+  ],
+  "github_runner": "Current hosted jobs continue failing before visible steps with runner_id=0/steps=[], so they add zero test credit.",
+  "experiment_accounting": {
+    "classification": "DETERMINISTIC_REGRESSION_NOT_UNUSUAL_EXPERIMENT",
+    "new_unusual_experiment_by_this_organ": false,
+    "shared_go_unusual_experiment_slot": "ALREADY_CLOSED_BY_COORDINATION"
+  },
+  "acceptance": "COMPONENT_PASS_ONLY_NOT_WHOLE_PRODUCT_PASS",
+  "next_gate": "Fuse PR 523 with retained PR 430 on one exact current-main integration head, then execute the combined focused effect/recovery/MicroClay regressions in an actually-started authorized Vercel Sandbox and finally an exact OCI EntityOS timeout fault-injection run.",
+  "together_api": "FORBIDDEN",
+  "final_paid_model_training": "OWNER_AUTHORIZATION_REQUIRED"
+}

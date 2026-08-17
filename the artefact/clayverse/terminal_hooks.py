@@ -5,6 +5,7 @@ import os
 import sys
 from typing import Any
 
+from .autonomy_context import bounded_autonomy_context
 from .identity import CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
 from .turn_lifecycle import TurnLifecycle
@@ -66,6 +67,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         "needle": result.get("needle", {}),
         "hyperpositions": result.get("hyperpositions", []),
         "context": result["context"],
+        "autonomy": result.get("autonomy", {}),
         "effect_law": "All real/state-changing actions use mcp__clayverse__request_effect; only its verified outcome is operational truth.",
     }
 
@@ -129,6 +131,10 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
         # interrupt. Canonical begin_admission owns predecessor retirement, so the
         # next prompt must enter that one abort/new-turn path even in the same session.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
+            # Read autonomy from the same UnifiedDB transaction. A malformed goal state
+            # or an oversized combined context therefore aborts turn admission instead
+            # of leaving an active canonical turn whose trusted context was not delivered.
+            result["autonomy"] = bounded_autonomy_context(db, result["user_id"])
             additional_context = _bounded_hook_context(result)
         return {
             "hookSpecificOutput": {

@@ -1,5 +1,5 @@
 {
-  "schema": "clayverse.go.source-contract-repair.v1",
+  "schema": "clayverse.go.source-contract-repair.v2",
   "date": "2026-08-17",
   "trigger": "go",
   "trigger_time_local": "2026-08-17T13:42+07:00",
@@ -12,27 +12,35 @@
     "class": "SOURCE_TEST_CONTRACT_DRIFT",
     "runtime_changed": false,
     "recovery_blob_sha": "ea585507ff6e5b46922b4219d125915caa8488fb",
-    "stale_test_blob_sha": "6789589fd1e5a8b230c007036182fb2a3782d1d8",
-    "repaired_test_blob_sha": "28a936d9ad05eacc4389669c7e27d5507609ad12",
+    "stale_restart_test_blob_sha": "6789589fd1e5a8b230c007036182fb2a3782d1d8",
+    "repaired_restart_test_blob_sha": "28a936d9ad05eacc4389669c7e27d5507609ad12",
+    "stale_effect_replay_test_blob_sha": "e3bafcec249e4f6d197c469391740ae95a003bc2",
+    "repaired_effect_replay_test_blob_sha": "2f51fd7d509129cae95bf510230ecb31c7173492",
     "details": [
-      "Current recovery creates explicit zero-credit causal UNKNOWN re-entry for interrupted or ambiguous legacy episodes; stale tests asserted zero causal rows.",
-      "Current recovery advances one global entity generation and returns generation plus additional recovery counters; stale tests asserted an older exact result dictionary.",
-      "Current recovery hashes receipts with compact JSON separators; stale test used default json.dumps separators.",
-      "Current legacy persisted-effect closure state is RECOVERED_LEGACY_EFFECT_REENTERED; stale test expected RECOVERED_EFFECT_REENTERED."
+      "Current recovery creates explicit zero-credit causal UNKNOWN re-entry for interrupted or ambiguous legacy episodes; stale restart tests asserted zero causal rows.",
+      "Current recovery advances one global entity generation and returns generation plus additional recovery counters; stale restart tests asserted an older exact result dictionary.",
+      "Current recovery hashes receipts with compact JSON separators; stale restart test used default json.dumps separators.",
+      "Current legacy persisted-effect closure state is RECOVERED_LEGACY_EFFECT_REENTERED; stale restart test expected RECOVERED_EFFECT_REENTERED.",
+      "Current recovery counts every active_turn as scanned and appends one TURN_ABORTED recovery system turn; stale effect-replay regression expected scanned=0 and zero recovery abort turns.",
+      "Pending effects recovered to UNKNOWN_AFTER_RESTART are causally re-entered before the active turn is retired, after which the workspace closes as RECOVERY_CLOSED_AFTER_EFFECT_REENTRY."
     ]
   },
   "delta": {
     "files": [
-      "the artefact/tests/test_restart_recovery.py"
+      "the artefact/tests/test_restart_recovery.py",
+      "the artefact/tests/test_effect_replay_restart_fusion.py"
     ],
-    "intent": "Align regression assertions with the already-current fail-closed recovery and global-generation contract without changing runtime semantics.",
-    "commit": "e4e6f5b1d8399625e7c041f72d03f23778d8515a"
+    "intent": "Align directly coupled restart/effect-replay regression assertions with the already-current fail-closed recovery and global-generation contract without changing runtime semantics.",
+    "commits": [
+      "e4e6f5b1d8399625e7c041f72d03f23778d8515a",
+      "9a0137767953bdeb00c3d77d2676e9a8d34c075d"
+    ]
   },
   "validation": {
     "authorized_surface": "OpenAI isolated local container",
     "repo_runtime_execution": "UNOBSERVED",
     "syntax_check": {
-      "command": "python -m py_compile /tmp/clay_go_1342/test_restart_recovery.py",
+      "command": "python -m py_compile /tmp/clay_go_1342/test_restart_recovery.py /tmp/clay_go_1342/test_effect_replay_restart_fusion.py",
       "exit_code": 0,
       "result": "PASS"
     },

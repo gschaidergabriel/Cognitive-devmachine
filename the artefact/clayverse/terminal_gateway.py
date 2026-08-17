@@ -6,6 +6,8 @@ import json
 import os
 from pathlib import Path
 
+from fastapi import WebSocket, WebSocketDisconnect
+
 from .adapters import AuthenticationError, ClerkTokenVerifier
 from .identity import IdentityRouter
 from .store import UnifiedDB
@@ -24,7 +26,7 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
 
 def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: ClerkTokenVerifier,
                         state_root: str | Path, publishable_key: str, frontend_api_url: str):
-    from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+    from fastapi import FastAPI
     from fastapi.responses import HTMLResponse, JSONResponse
     from fastapi.staticfiles import StaticFiles
 

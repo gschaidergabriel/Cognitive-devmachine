@@ -32,6 +32,16 @@ def test_docker_build_cannot_self_authorize_arbitrary_entityos_digest():
     assert "sha256sum -c -" in dockerfile
 
 
+def test_runtime_cannot_self_authorize_arbitrary_entityos_identity():
+    service = (ROOT / "clayverse" / "service.py").read_text(encoding="utf-8")
+    assert '_ENTITYOS_PATH = "/opt/entityos/EntityOS"' in service
+    assert '_ENTITYOS_LOCK_PATH = "/opt/entityos/entityos.lock.json"' in service
+    assert "lock = _load_entityos_lock()" in service
+    assert "CLAYVERSE_ENTITYOS_PATH cannot override the embedded EntityOS path" in service
+    assert "CLAYVERSE_ENTITYOS_SHA256 cannot override the embedded EntityOS lock" in service
+    assert '"artifact_authority": "embedded-lock"' in service
+
+
 def test_default_deny_build_context_admits_every_declared_non_tree_copy_input():
     dockerignore = (ROOT / ".dockerignore").read_text(encoding="utf-8")
     assert dockerignore.splitlines()[3] == "*"

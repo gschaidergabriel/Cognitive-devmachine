@@ -1,0 +1,31 @@
+{
+  "schema_version":"1.0",
+  "evidence_class":"LOCAL_SYNTHETIC_REFERENCE_MICROHARNESS_NOT_FRANK_RUNTIME",
+  "implementation":"implementation/swc_reference.py",
+  "executed_by":"chatgpt-secondary private Python sandbox",
+  "executed_at":"2026-08-11",
+  "protocol":{"seed_range":"0..19","episodes_per_seed":500,"episodes_total":10000,"variables":"6..14 binary","cycle_generation_probability":0.35},
+  "aggregate": {
+    "pairwise_false_coherent_mean_per_500":68.9,
+    "pairwise_false_coherent_sd":8.1104221448961,
+    "pairwise_false_coherent_range":[51,84],
+    "pairwise_accuracy_mean":0.8622,
+    "pairwise_accuracy_sd":0.016220844289792213,
+    "pairwise_accuracy_range":[0.832,0.898],
+    "swc_candidate_errors_total":0,
+    "swc_global_solver_call_fraction_mean":0.2918,
+    "swc_global_solver_call_fraction_sd":0.02608407459290862,
+    "swc_global_solver_call_fraction_range":[0.246,0.352],
+    "swc_to_ac3_always_global_counted_operation_ratio_mean":0.3489809850147571,
+    "swc_to_ac3_always_global_counted_operation_ratio_sd":0.02176898976049264,
+    "swc_to_ac3_always_global_counted_operation_ratio_range":[0.3096565812720848,0.3838478429346422]
+  },
+  "interpretation": [
+    "On this generator, pairwise projection agreement is an unsafe coherence proxy and produces false coherent admissions.",
+    "SWC matched exact satisfiability on all 10,000 generated episodes in this narrow binary-CSP test.",
+    "SWC avoided the explicit global backtracking solver on about 70.82% of generated episodes because local contradiction detection or the certified forest fast path was sufficient.",
+    "The counted-operation ratio suggests a large toy-workload reduction versus AC3 plus global solving on every surviving case; it is not a hardware latency, CPU, memory or production cost measurement."
+  ],
+  "not_measured":["target VPS latency p50/p95/p99","CPU","RSS/PSS","storage","state amplification bytes","ClayCode compile/runtime cost","real Frank task outcome","OOD transfer","recovery/restart","solver timeout distribution"],
+  "promotion":"FORBIDDEN_FROM_THIS_EVIDENCE_ALONE"
+}

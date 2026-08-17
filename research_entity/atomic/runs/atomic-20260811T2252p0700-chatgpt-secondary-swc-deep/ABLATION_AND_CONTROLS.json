@@ -1,0 +1,21 @@
+{
+  "schema_version":"1.0",
+  "candidate":"SWC-001",
+  "executed_controls":[
+    {"control":"PAIRWISE_PROJECTION_ONLY","result":"REFUTED_AS_SAFE_GLOBAL_COHERENCE_PROXY_ON_GENERATED_CYCLIC_CASES","evidence":"68.9 false coherent admissions per 500 episodes on average across 20 seeds"},
+    {"control":"AC3_PLUS_ALWAYS_GLOBAL_EXACT_SOLVER","result":"EXACT_REFERENCE_BASELINE","evidence":"matched truth oracle on generated cases; candidate compared by counted operations"},
+    {"control":"TOPOLOGY_FAST_PATH_PLUS_RESIDUAL_SOLVER","result":"SUPPORTED_IN_TOY_DOMAIN","evidence":"0 candidate classification errors across 10,000 generated cases"}
+  ],
+  "required_not_yet_executed":[
+    {"ablation":"disable_topology_fast_path","prediction":"correctness unchanged, global solver calls and resource cost rise"},
+    {"ablation":"force_pairwise_only_on_cycles","prediction":"false coherent admissions reappear"},
+    {"ablation":"discard_multiple_global_sections","prediction":"Hyperposition diversity collapses without correctness justification"},
+    {"ablation":"remove_epoch_guard","prediction":"stale coherent witness can be replayed incorrectly"},
+    {"ablation":"break_provenance_binding","prediction":"mathematically coherent but causally invalid re-entry may survive"},
+    {"control":"SHUFFLED_REENTRY","prediction":"coherence alone must not rescue causal validity"},
+    {"control":"PROVENANCE_BROKEN_REENTRY","prediction":"must reject even when section family is satisfiable"},
+    {"control":"NO_REENTRY","prediction":"isolates validation from recurrence benefit"},
+    {"control":"LESION_AND_RESCUE","prediction":"lesion exact residual solving on cyclic unresolved families increases false admissions or unresolved outcomes; restoring it rescues exactness"}
+  ],
+  "safety_boundary":"No control may convert a coherence witness into truth, identity, effect authority or self-Harness authority."
+}

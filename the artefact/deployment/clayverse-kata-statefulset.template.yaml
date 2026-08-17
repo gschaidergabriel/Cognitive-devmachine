@@ -1,17 +1,40 @@
 # TEMPLATE: final ClayVerse deployment profile.
 # Replace image and secret/PVC details only after exact artifact acceptance.
 # The installed Kata RuntimeClass name MUST be verified on the target cluster.
+#
+# NETWORK LAW:
+# - this file installs a default-deny ingress+egress NetworkPolicy for ClayVerse;
+# - the Service stays ClusterIP-only;
+# - deployment-specific ingress and egress MUST be admitted by separate explicit
+#   target-bound policy (for example an authenticated ingress proxy plus the exact
+#   Clerk/Claude/GLM destinations through an admitted egress proxy/CNI FQDN policy);
+# - do not weaken this template with wildcard Internet or private-network egress.
 apiVersion: v1
 kind: Service
 metadata:
   name: clayverse
 spec:
+  type: ClusterIP
   selector:
     app: clayverse
   ports:
     - name: http
       port: 3000
       targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: clayverse-default-deny
+spec:
+  podSelector:
+    matchLabels:
+      app: clayverse
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress: []
+  egress: []
 ---
 apiVersion: apps/v1
 kind: StatefulSet

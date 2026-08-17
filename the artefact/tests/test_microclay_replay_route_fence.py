@@ -38,6 +38,19 @@ def _insert_replay(
     selected_ids: list[str],
     shadow_ids: list[str],
 ):
+    selected_rows = {
+        str(row["memory_id"]): row
+        for row in db.db.execute(
+            "SELECT memory_id,value FROM durable_memory WHERE memory_id IN (%s)"
+            % ",".join("?" for _ in selected_ids),
+            tuple(selected_ids),
+        ).fetchall()
+    } if selected_ids else {}
+    chars_selected = sum(
+        len(str(selected_rows[memory_id]["value"]))
+        for memory_id in selected_ids
+        if memory_id in selected_rows
+    )
     db.db.execute(
         "INSERT INTO retrieval_episodes("
         "retrieval_id,turn_id,episode_id,causal_id,session_id,user_id,generation,"
@@ -47,7 +60,7 @@ def _insert_replay(
         (
             str(uuid.uuid4()), turn_id, episode_id, causal_id, session_id, "gabriel", generation,
             1, "SHADOW", hashlib.sha256(query.encode()).hexdigest(), "[]",
-            json.dumps(selected_ids), json.dumps(shadow_ids), "[]", 12000, 24, 20,
+            json.dumps(selected_ids), json.dumps(shadow_ids), "[]", 12000, 24, chars_selected,
             "PRESENT", time.time(),
         ),
     )
@@ -82,6 +95,49 @@ def _assert_replay_rejected_before_learning(
             generation=generation,
         )
     assert calls == []
+
+
+def test_valid_replay_route_still_serves_and_then_learning_runs(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "valid replay"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        fact_id = db.add_memory(
+            "fact", "history", "older evidence",
+            None, "gabriel", {"source": "test"},
+        )
+        _insert_replay(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            selected_ids=[fact_id],
+            shadow_ids=[fact_id],
+        )
+        organ = MicroClayRetrieval(db)
+        calls = []
+
+        def fake_learning(**kwargs):
+            calls.append(kwargs)
+            return {"eligible": 0, "applied": 0}
+
+        organ.learn_from_verified_outcomes = fake_learning
+        result = organ.retrieve(
+            query=query,
+            user_id="gabriel",
+            session_id=sid,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            generation=generation,
+        )
+        assert [item["memory_id"] for item in result["items"]] == [fact_id]
+        assert len(calls) == 1
+    finally:
+        db.close()
 
 
 def test_shadow_method_contamination_fails_before_learning(tmp_path):
@@ -207,6 +263,108 @@ def test_current_turn_shadow_memory_fails_before_learning(tmp_path):
             causal_id=causal_id,
             selected_ids=[fact_id],
             shadow_ids=[echo_id],
+        )
+        _assert_replay_rejected_before_learning(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+        )
+    finally:
+        db.close()
+
+
+def test_duplicate_selected_memory_fails_before_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "duplicate replay"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        fact_id = db.add_memory(
+            "fact", "history", "older evidence",
+            None, "gabriel", {"source": "test"},
+        )
+        _insert_replay(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            selected_ids=[fact_id, fact_id],
+            shadow_ids=[],
+        )
+        _assert_replay_rejected_before_learning(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+        )
+    finally:
+        db.close()
+
+
+def test_selected_route_over_item_limit_fails_before_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "oversized route"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        ids = [
+            db.add_memory(
+                "fact", f"history-{index}", f"older evidence {index}",
+                None, "gabriel", {"source": "test"},
+            )
+            for index in range(25)
+        ]
+        _insert_replay(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            selected_ids=ids,
+            shadow_ids=[],
+        )
+        _assert_replay_rejected_before_learning(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+        )
+    finally:
+        db.close()
+
+
+def test_selected_route_over_character_budget_fails_before_learning(tmp_path):
+    db = UnifiedDB(tmp_path / "u.db")
+    try:
+        query = "oversized context"
+        sid, generation, turn_id, episode_id, causal_id = _identity(db, query)
+        huge_id = db.add_memory(
+            "fact", "history", "x" * 12001,
+            None, "gabriel", {"source": "test"},
+        )
+        _insert_replay(
+            db,
+            query=query,
+            session_id=sid,
+            generation=generation,
+            turn_id=turn_id,
+            episode_id=episode_id,
+            causal_id=causal_id,
+            selected_ids=[huge_id],
+            shadow_ids=[],
         )
         _assert_replay_rejected_before_learning(
             db,

@@ -1,0 +1,57 @@
+{
+  "schema": "clayverse-go-convergence-receipt/v1",
+  "recorded_at_local": "2026-08-17T13:55:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_write": "d00fe7bebee29a7f2ffbcd6b16f455e557b23d29",
+  "go_experiment_accounting": {
+    "status": "COORDINATION_BLOCKED_NO_FURTHER_UNUSUAL_EXPERIMENT",
+    "reason": "this organ has only minute-precision user-message metadata and no shared immutable request/turn id; earlier noncanonical claim was corrected append-only at 3cfdf1f789c1c049fbc13581df0b5d6579e30daf",
+    "new_unusual_experiments_after_correction": 0
+  },
+  "stage_b": {
+    "retained_pr": 411,
+    "head_after_regression_write": "2564512a354268dcbc1adcc311f0478d85b4184c",
+    "promotion_blocker_issue": 425,
+    "regression_commit": "2564512a354268dcbc1adcc311f0478d85b4184c",
+    "regression_path": "the artefact/tests/test_meta_learning_promotion_validation_receipts.py",
+    "regression_contract": "two COMPLETED/reentered=1/credit=0.0 episodes plus caller-claimed success_count=2/calibration=1.0 must not mint a promoted framework without durable method-validation receipts; zero new framework/promotion receipt rows on rejection",
+    "classification": "MERGE_GATE_ADDED_EXPECTED_RED_UNTIL_VALIDATION_RECEIPT_PATH_EXISTS",
+    "source_state": "atomic promotion/replay/context scaffolding exists; positive promotion evidence is still insufficient because causal re-entry is not method utility"
+  },
+  "microclay": {
+    "retained_pr": 415,
+    "head_observed": "af63b79e653ef0bb68f884b4530fadf9dbe80c20",
+    "crash_atomicity_issue": 438,
+    "source_repair_commit": "5e947480503bf88832709d31ead0e7fc06558220",
+    "regression_commit": "af63b79e653ef0bb68f884b4530fadf9dbe80c20",
+    "classification": "SOURCE_FIXED_EXECUTION_OPEN",
+    "note": "credit path now encloses canonical rechecks, duplicate receipt check, policy updates and feedback insertion in one UnifiedDB transaction; exact authorized execution remains required"
+  },
+  "vercel_sandbox": {
+    "capability": "CONFIRMED_VIA_GIT_PREVIEW_ORCHESTRATION_AND_AT_VERCEL_SANDBOX_OIDC",
+    "direct_connector_lifecycle_actions": "NOT_EXPORTED",
+    "current_admission": "BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+    "proof_contract_commit": "64ecd8ba019e5da93f08e2aa23b1310d8929a767",
+    "fresh_capability_probe_head": "87237ab4544b21aea011c3ab396bbd9593c21875",
+    "fresh_capability_probe_status": "Vercel failure target upgradeToPro=build-rate-limit",
+    "this_organ_staging_head": "7f3384fe82efe0b99b584c7f2a696a7e26fba802",
+    "this_organ_staging_status": "Vercel failure target upgradeToPro=build-rate-limit",
+    "last_started_staging_deployment_observed": "dpl_8ndcW87F9tGg3tuu5G23mfn7qLcX",
+    "last_started_staging_result": "SKIP_NON_TARGET_PREVIEW because it predates the package script switch; no ClayVerse regression executed",
+    "test_failure": false
+  },
+  "writes": [
+    "noncanonical GO claim accounting corrected append-only",
+    "PR #413 duplicate Stage-B endpoint retired",
+    "PR #411 promotion-gate donor fusion requirements recorded",
+    "issue #425 hard merge-gate regression committed",
+    "Vercel Git-preview Sandbox harness staged with exact historical blobs; admission blocked before its target build"
+  ],
+  "evidence_boundary": "No exact current #411/#415 isolated execution, no full suite, no OCI build/start, no real Clerk/browser/PTY/Claude end-to-end acceptance and no whole ClayVerse PASS. Vercel build-rate-limit is execution admission failure, not test failure.",
+  "next_exact_gate": "When Vercel preview admission reopens, execute exact current retained #411/#415 fused source inside the confirmed Sandbox bridge. First observe the #425 promotion-validation merge gate and #438 crash-atomicity regression; only after source repair and green focused gates proceed to lifecycle/privacy/restart, full artifact suite, then exact OCI build/start/readiness/recovery evidence.",
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false
+}

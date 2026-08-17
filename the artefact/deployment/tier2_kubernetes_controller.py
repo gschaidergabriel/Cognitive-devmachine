@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import ssl
@@ -24,11 +25,15 @@ class ControllerError(RuntimeError):
     pass
 
 
+class KubernetesObjectNotFound(ControllerError):
+    pass
+
+
 def _required_text(value: object, name: str, *, max_len: int = 512) -> str:
     if not isinstance(value, str):
         raise ControllerError(f"{name} must be text")
     value = value.strip()
-    if not value or len(value) > max_len or any(ord(ch) < 0x20 for ch in value):
+    if not value or len(value) > max_len or any(ord(ch) < 0x21 or ord(ch) > 0x7E for ch in value):
         raise ControllerError(f"{name} has invalid shape")
     return value
 
@@ -93,7 +98,9 @@ def _decode_receipt(raw: object, *, pod_uid: str) -> dict[str, object]:
     if not isinstance(value["reason"], str) or _REASON.fullmatch(value["reason"]) is None:
         raise ControllerError("Tier-2 reason is invalid")
     requested_at = value["requested_at"]
-    if isinstance(requested_at, bool) or not isinstance(requested_at, (int, float)) or requested_at <= 0:
+    if isinstance(requested_at, bool) or not isinstance(requested_at, (int, float)):
+        raise ControllerError("Tier-2 timestamp is invalid")
+    if not math.isfinite(float(requested_at)) or float(requested_at) <= 0:
         raise ControllerError("Tier-2 timestamp is invalid")
     return value
 
@@ -167,8 +174,16 @@ class KubernetesAPI:
     def __init__(self, base_url: str, token_file: str, ca_file: str):
         self.base_url = _required_text(base_url, "Kubernetes API URL").rstrip("/")
         parsed = urllib.parse.urlsplit(self.base_url)
-        if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
-            raise ControllerError("Kubernetes API URL must be credential-free HTTPS")
+        if (
+            parsed.scheme != "https"
+            or not parsed.hostname
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path not in ("", "/")
+            or parsed.query
+            or parsed.fragment
+        ):
+            raise ControllerError("Kubernetes API URL must be a credential-free HTTPS origin")
         token = Path(token_file).read_text(encoding="utf-8").strip()
         if not token or len(token) > 16384 or any(ch.isspace() for ch in token):
             raise ControllerError("Kubernetes bearer token has invalid shape")
@@ -191,6 +206,8 @@ class KubernetesAPI:
             with urllib.request.urlopen(request, context=self._ssl, timeout=10) as response:
                 raw = response.read(1_000_001)
         except urllib.error.HTTPError as exc:
+            if exc.code == 404:
+                raise KubernetesObjectNotFound("Kubernetes object not found") from exc
             raise ControllerError(f"Kubernetes API {method} failed with HTTP {exc.code}") from exc
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
             raise ControllerError(f"Kubernetes API {method} transport failure") from exc
@@ -204,19 +221,31 @@ class KubernetesAPI:
             raise ControllerError("Kubernetes API returned non-object JSON")
         return value
 
-    def get_pod(self, namespace: str, pod_name: str) -> dict:
+    def get_pod(self, namespace: str, pod_name: str) -> dict | None:
         ns = urllib.parse.quote(namespace, safe="")
         name = urllib.parse.quote(pod_name, safe="")
-        return self._request("GET", f"/api/v1/namespaces/{ns}/pods/{name}")
+        try:
+            return self._request("GET", f"/api/v1/namespaces/{ns}/pods/{name}")
+        except KubernetesObjectNotFound:
+            # Expected transient during StatefulSet replacement. Keep polling for
+            # the new Pod rather than turning one successful deletion into a dead controller.
+            return None
 
-    def delete_pod(self, namespace: str, pod_name: str, options: dict) -> dict:
+    def delete_pod(self, namespace: str, pod_name: str, options: dict) -> dict | None:
         ns = urllib.parse.quote(namespace, safe="")
         name = urllib.parse.quote(pod_name, safe="")
-        return self._request("DELETE", f"/api/v1/namespaces/{ns}/pods/{name}", options)
+        try:
+            return self._request("DELETE", f"/api/v1/namespaces/{ns}/pods/{name}", options)
+        except KubernetesObjectNotFound:
+            # The UID-preconditioned target has already disappeared. This is safe
+            # idempotent convergence; never broaden deletion to a replacement Pod.
+            return None
 
 
 def run_once(api: KubernetesAPI, *, namespace: str, pod_name: str, digest: str, runtime_class: str) -> bool:
     pod = api.get_pod(namespace, pod_name)
+    if pod is None:
+        return False
     request = replacement_request(
         pod,
         namespace=namespace,
@@ -249,8 +278,11 @@ def main() -> int:
     api_url = os.environ.get("CLAYVERSE_TIER2_KUBE_API_URL", "")
     token_file = os.environ.get("CLAYVERSE_TIER2_KUBE_TOKEN_FILE", "")
     ca_file = os.environ.get("CLAYVERSE_TIER2_KUBE_CA_FILE", "")
-    poll_seconds = float(os.environ.get("CLAYVERSE_TIER2_POLL_SECONDS", "2"))
-    if not 0.5 <= poll_seconds <= 60:
+    try:
+        poll_seconds = float(os.environ.get("CLAYVERSE_TIER2_POLL_SECONDS", "2"))
+    except ValueError as exc:
+        raise ControllerError("Tier-2 poll interval must be numeric") from exc
+    if not math.isfinite(poll_seconds) or not 0.5 <= poll_seconds <= 60:
         raise ControllerError("Tier-2 poll interval must be between 0.5 and 60 seconds")
 
     api = KubernetesAPI(api_url, token_file, ca_file)

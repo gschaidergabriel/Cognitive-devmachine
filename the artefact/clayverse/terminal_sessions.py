@@ -56,7 +56,7 @@ class TerminalSessionManager:
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():
             raise TerminalRuntimeError("exclusive managed ClayVerse MCP unavailable")
-        if not self.MANAGED_TMUX.is_file() or os.access(self.MANAGED_TMUX, os.W_OK):
+        if not self.MANAGED_TMUX.is_file() or self.MANAGED_TMUX.stat().st_mode & 0o222:
             raise TerminalRuntimeError("managed tmux command-surface policy unavailable or writable")
         if not self.DIRECT_SHELL_GUARD.is_file() or not os.access(self.DIRECT_SHELL_GUARD, os.X_OK):
             raise TerminalRuntimeError("direct-shell guard unavailable")

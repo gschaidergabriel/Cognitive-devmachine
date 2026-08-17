@@ -1,0 +1,69 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T23:28:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION",
+  "scope": "canonical_main_mistral_adapter_nonfinite_json_fail_closed_boundary",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "candidate_pr": 670,
+  "candidate_branch": "gpt56sol/go-mistral-adapter-json-fence-20260817-2325",
+  "exact_git_blobs": {
+    "the artefact/clayverse/adapters.py": "48c7ea87d2dcb6e492b94b1c381809fedaf80c34",
+    "the artefact/clayverse/inference_protocol.py": "cd5856ac58f4e86c4c045fda8099b7783e6724cf",
+    "the artefact/tests/test_mistral_inference.py": "188d03a9b798046bdb4e2182cd7ceb84cfd4debc",
+    "the artefact/tests/test_mistral_canonical_json_boundary.py": "2fb8f91bdba75d9c1d94004944f5b27600109e5e"
+  },
+  "falsifier": {
+    "mechanism": "Python stdlib JSON accepts and emits NaN/Infinity by default unless explicitly rejected",
+    "risk": "non-canonical provider/world JSON can cross the inference trust boundary",
+    "repair": "allow_nan=false outbound plus parse_constant rejection on provider envelope and inner decision JSON"
+  },
+  "adversarial_regression": {
+    "initial_focused": "7 passed in 0.03s",
+    "adjacent_first_run": "16 passed, 1 failed in 0.10s",
+    "first_failure_classification": "COMPATIBILITY_REGRESSION_ERROR_MESSAGE_ONLY",
+    "repair": "preserved the pre-existing 'is not JSON' error contract while retaining strict non-finite rejection",
+    "final_command": "PYTHONPATH=. python3 -m pytest -q tests/test_mistral_inference.py tests/test_mistral_canonical_json_boundary.py",
+    "final_result": "17 passed in 0.04s",
+    "exit_code": 0
+  },
+  "blob_reconstruction": {
+    "environment": "authorized isolated non-production container",
+    "source_blob_match": true,
+    "protocol_blob_match": true,
+    "existing_test_blob_match": true,
+    "new_test_blob_match": true,
+    "note": "clerk_auth import names were supplied as inert local stubs because the exercised Mistral slice does not call Clerk code; no full-repository runtime credit is claimed"
+  },
+  "fusion": {
+    "preferred_transport": "existing main clayverse.adapters.MistralInference",
+    "turn_lifecycle_dependency": "PR #667 imports this existing adapter",
+    "same_causal_effect_ordering_donor": "PR #668 contains the stronger response-reingest-before-same-turn-effect ordering but duplicates the HTTP transport",
+    "recommendation": "retain one existing adapter transport; fuse strict JSON and same-causal lifecycle semantics without parallel Mistral clients"
+  },
+  "runtime_credit": {
+    "real_mistral_call": 0,
+    "vault_secret": 0,
+    "full_private_checkout": 0,
+    "exact_oci": 0,
+    "vercel_firecracker": 0,
+    "tier2_recreation": 0,
+    "whole_clayverse": 0
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0
+  },
+  "next_gate": "fuse one canonical Mistral TurnLifecycle path, rejoin exact current main, then execute the owner-mandated Vercel Firecracker -> exact OCI digest -> runtime Vault Mistral -> reingest-before-effect -> EffectGate/EntityOS -> Tier-2 recreation -> secret reacquisition/repeat test-of-tests",
+  "non_claims": [
+    "no real Mistral token/network request",
+    "no Vault acquisition",
+    "no exact full-current repository checkout",
+    "no OCI image build or digest",
+    "no Vercel Firecracker integrated runtime",
+    "no whole-product PASS"
+  ]
+}

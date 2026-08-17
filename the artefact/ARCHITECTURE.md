@@ -12,6 +12,44 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
+## Deterministic grounded autonomy
+
+ClayVerse is goal-directed and proactive by architecture, not by pretending a role prompt grants physical capabilities.
+
+Operational identity is canonical state:
+
+- entity `ClayVerse`;
+- UnifiedDB state authority;
+- active user-admitted goals, steps, budgets and status;
+- current global generation;
+- observed runtime capabilities;
+- verified receipts and explicit unknowns;
+- model role as cognition/proposal organ, never durable truth/effect authority.
+
+A persistent top-level autonomous goal is not silently invented by an LLM. The initial deterministic admission primitive is explicit user input `/goal <objective>`. After that canonical user turn commits, ClayVerse atomically records the goal, first step and provenance receipt in the same UnifiedDB. The model may autonomously propose/advance bounded intermediate work, but it may not self-award goal creation or completion.
+
+The target machine loop is:
+
+`SELECT GOAL FRONTIER -> GROUNDED SNAPSHOT -> MODEL PROPOSAL -> CAPABILITY VALIDATION -> OBSERVATION/EFFECT -> VERIFIED RECEIPT -> TYPED STEP VERIFIER -> STATE TRANSITION -> GOAL VERIFIER -> SLEEP/RE-ENTER`
+
+This is an in-process supervisor state-machine worker, not a second `consciousness_daemon`, second database or second effect path. One wake executes at most one bounded work unit. Attempts are bounded per step and per goal; repeated identical failures and planner-declared missing prerequisites become persistent blockers, and error paths back off rather than hot-looping.
+
+Anti-hallucination invariants:
+
+- identity prose does not grant capability;
+- model proposal is not an effect;
+- an effect request is not effect success;
+- verified effect execution is not semantic step/goal success;
+- model text saying "done" cannot complete state;
+- stale-generation evidence cannot advance state;
+- UNKNOWN/BLOCKED is preserved rather than converted into a plausible success story.
+
+Step and goal completion require typed trusted verification receipts. Execution/observation receipts are evidence but cannot by themselves prove semantic success. The bounded autonomy state is injected into Claude as canonical data alongside the normal turn snapshot; capability claims remain limited to observed runtime state.
+
+Detailed source-candidate contract: `AUTONOMY_GROUNDING.md`.
+
+The background planner/provider binding is deliberately not made a second inference implementation here. It must fuse with the accepted provider-generic cognition boundary and pass exact isolated regression/recovery/concurrency tests before autonomous background cognition is activated in the accepted product.
+
 ## Canonical state and memory invariants
 
 - UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
@@ -87,6 +125,8 @@ The current source candidate implements the persistent receipt/policy spine, que
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
 - Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Exact runtime activation of the new autonomy loop against the accepted provider-generic planner boundary.
+- Exact autonomy falsifiers: goal admission provenance, unobserved capability, self-completion denial, stale receipts, verifier separation and blocked-loop quiescence.
 - MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
 - Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.

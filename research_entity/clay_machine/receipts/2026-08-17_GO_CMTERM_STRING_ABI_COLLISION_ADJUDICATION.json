@@ -1,0 +1,76 @@
+{
+  "schema": "ClayEntityOSGoReceipt/v1",
+  "date": "2026-08-17",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "classification": "SOURCE_ADJUDICATION_NO_EXECUTABLE_PASS",
+  "observed": {
+    "canonical_entityos_pr": 787,
+    "canonical_head": "98f3494ef16c3b97c9e50790c578624c0ded7d50",
+    "canonical_hostcall_registry": "claymachine/hostcall_abi.py",
+    "canonical_call_ids": {
+      "linux.uname_hash.v0::()->Int": 1,
+      "linux.process.spawn.v0::(Int)->Int": 2,
+      "linux.process.stdout.v0::(Int)->Bytes": 3,
+      "linux.process.stderr.v0::(Int)->Bytes": 4
+    },
+    "string_path_donor_pr": 808,
+    "string_path_donor_head": "a441ea455c711fa1da8dbc706e4740732250dba4",
+    "donor_signature": "linux.process.spawn.path.v1::(String)->Int",
+    "donor_local_call_id": 3,
+    "donor_uses_backend_local_call_identity": true,
+    "vercel_status_for_donor_head": "failure_build_rate_limit_before_sandbox",
+    "sandbox_execution_for_this_adjudication": false
+  },
+  "conflict": {
+    "kind": "HOSTCALL_CALL_ID_SEMANTIC_COLLISION",
+    "detail": "PR808 assigns call_id 3 to String-path spawn, while canonical PR787 already assigns stable call_id 3 to linux.process.stdout.v0::(Int)->Bytes. Direct merge would silently reinterpret an admitted serialized ABI identity.",
+    "direct_merge_allowed": false
+  },
+  "retained_donor_value": [
+    "CLAYVM/2 String parameter transport candidate",
+    "typed/effectful String executable-path process request",
+    "direct no-shell host_process boundary reuse",
+    "UTF-8-scalar/NUL/path rejection regressions from the existing String-path lane"
+  ],
+  "rejected_donor_value": [
+    "backend-local hostcall ID/signature authority",
+    "call_id 3 for String-path spawn",
+    "any merge that overwrites or aliases canonical stdout/stderr ABI identities"
+  ],
+  "fusion_rule": {
+    "authority": "current canonical claymachine/hostcall_abi.py on PR787",
+    "rule": "If String-path spawn is selected, rebase/recompose its mechanism onto the then-current canonical EntityOS head and allocate an identity that is free in that exact registry; never reuse IDs 1-4 observed here. At this observed head, the next free numeric ID is 5, but integration must re-resolve the current registry before writing.",
+    "vm_version": "CLAYVM/2_ONLY_FOR_STRING_PATH_UNLESS_A_SEPARATE_COMPATIBILITY_CONTRACT_IS_PROVEN",
+    "required_cross_layer_path": "canonical HostcallABI -> ExecutableTypedIR lowering -> serialized CLAYVM/2 load/runtime version fence -> HostProcessVMHost -> existing no-shell CM-13 boundary",
+    "required_regressions": [
+      "legacy ids/signatures remain byte-for-byte semantically stable",
+      "CLAYVM/1 rejects String-path call identity at load and runtime",
+      "wrong source signature/type fails before VM",
+      "capability denial fails before host effect",
+      "String UTF-8 scalar and NUL/path constraints fail closed",
+      "new_unusual_experiment_count remains 0",
+      "Batch-5 executes the fused gate"
+    ]
+  },
+  "counterhypothesis": "The String-path donor could be merged unchanged because call IDs are merely implementation details.",
+  "counterhypothesis_result": "REJECTED_BY_CANONICAL_ABI_LAW: call_id plus VM-version is serialized machine identity and is already bound to stdout Bytes for id 3.",
+  "unusual_experiment_accounting": {
+    "global_limit": 1,
+    "global_consumed": 1,
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "claims": {
+    "source_collision_verified": true,
+    "string_path_promoted": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_evidence_used": false,
+    "together_used": false
+  },
+  "next_step": "Refresh PR787 and all overlapping String-path lanes. If no current worker has already recomposed the donor, fuse only the String transport/no-shell mechanism through the canonical registry on the latest head, then execute the existing regression-only exact-head Vercel Sandbox sequence when provider rate limiting permits an actual Sandbox start."
+}

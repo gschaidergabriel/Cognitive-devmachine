@@ -15,6 +15,7 @@ class EffectGate:
         if self.entityos_bridge is not None: capabilities.add('entityos.exec')
         return tuple(sorted(capabilities))
     def causal_for_effect(self,effect_id): return self.journal.causal_for(effect_id)
+    def status_for_effect(self,effect_id): return self.journal.status_for(effect_id)
     def execute(self,req:EffectRequest,episode_id=None,lease:Lease|None=None):
         if req.capability not in self.ALLOWED: raise PermissionError('capability denied')
         row=self.db.db.execute("SELECT generation FROM sessions WHERE session_id=? AND user_id=?",(req.session_id,req.user_id)).fetchone()

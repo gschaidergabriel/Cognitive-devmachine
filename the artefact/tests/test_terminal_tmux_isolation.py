@@ -1,9 +1,15 @@
 from __future__ import annotations
 
+from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
+
 import clayverse.terminal_sessions as terminal_sessions
-from clayverse.terminal_sessions import TerminalSessionManager
+from clayverse.terminal_sessions import TerminalSessionManager, TerminalRuntimeError
+
+
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def _assert_managed_socket(argv: list[str], user_id: str) -> None:
@@ -28,7 +34,7 @@ def test_canonical_users_have_disjoint_tmux_server_sockets(tmp_path):
     assert andreas.tmux_name == "clayverse-andreas"
 
 
-def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
+def test_session_creation_uses_managed_socket_and_direct_argv(tmp_path, monkeypatch):
     manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     calls: list[list[str]] = []
@@ -44,14 +50,14 @@ def test_session_creation_uses_only_the_bound_users_tmux_server(tmp_path, monkey
     manager.ensure("gabriel")
     manager.ensure("andreas")
 
-    gabriel_calls = [argv for argv in calls if "clayverse-gabriel" in argv]
-    andreas_calls = [argv for argv in calls if "clayverse-andreas" in argv]
-    assert gabriel_calls
-    assert andreas_calls
-    assert all(argv[argv.index("-L") + 1] == "clayverse-gabriel" for argv in gabriel_calls)
-    assert all(argv[argv.index("-L") + 1] == "clayverse-andreas" for argv in andreas_calls)
-    assert all(argv[argv.index("-f") + 1] == "/etc/clayverse/managed-tmux.conf" for argv in gabriel_calls)
-    assert all(argv[argv.index("-f") + 1] == "/etc/clayverse/managed-tmux.conf" for argv in andreas_calls)
+    creation = [argv for argv in calls if "new-session" in argv]
+    assert len(creation) == 2
+    for argv, user_id in zip(creation, ("gabriel", "andreas"), strict=True):
+        _assert_managed_socket(argv, user_id)
+        env_index = argv.index("env")
+        assert argv[env_index + 1] == "-i"
+        assert "claude" in argv[env_index + 2:]
+        assert all(not item.startswith("env -i ") for item in argv)
 
 
 def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch):
@@ -78,3 +84,38 @@ def test_attach_pty_uses_only_the_bound_users_tmux_server(tmp_path, monkeypatch)
         "clayverse-andreas",
     ]
     assert env["HOME"] == str(binding.home)
+
+
+def test_managed_tmux_policy_disables_commands_and_shell_fallback():
+    policy = (ROOT / "policy" / "managed-tmux.conf").read_text()
+    assert "set-option -g prefix None" in policy
+    assert "set-option -g prefix2 None" in policy
+    assert "unbind-key -a" in policy
+    assert "set-option -g status off" in policy
+    assert "set-option -g mouse off" in policy
+    assert "set-option -g default-shell /opt/clayverse/runtime/deny-shell" in policy
+
+
+def test_runtime_rejects_writable_managed_tmux_policy(tmp_path, monkeypatch):
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
+    runtime_prompt = tmp_path / "CLAUDE.md"
+    settings = tmp_path / "managed-settings.json"
+    mcp = tmp_path / "managed-mcp.json"
+    policy = tmp_path / "managed-tmux.conf"
+    guard = tmp_path / "deny-shell"
+    for path in (runtime_prompt, settings, mcp, policy, guard):
+        path.write_text("x")
+    policy.chmod(0o444)
+    guard.chmod(0o555)
+
+    manager.runtime_prompt = runtime_prompt
+    manager.MANAGED_SETTINGS = settings
+    manager.MANAGED_MCP = mcp
+    manager.MANAGED_TMUX = policy
+    manager.DIRECT_SHELL_GUARD = guard
+    monkeypatch.setattr(terminal_sessions.shutil, "which", lambda program: f"/usr/bin/{program}")
+
+    manager._require_programs()
+    policy.chmod(0o644)
+    with pytest.raises(TerminalRuntimeError, match="tmux command-surface policy"):
+        manager._require_programs()

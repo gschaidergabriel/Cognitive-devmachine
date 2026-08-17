@@ -9,6 +9,7 @@ from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
+from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
@@ -145,6 +146,103 @@ def _tier2_status(status: str, *, reason: str, pod_uid: str) -> dict[str, object
     }
 
 
+def _recover_with_tier2(db: UnifiedDB, state_root: str, pod_uid: str) -> dict[str, object]:
+    try:
+        return recover_incomplete_episodes(db)
+    except RecoveryIntegrityError:
+        generation = db.entity_generation()
+        try:
+            request_tier2_replacement(
+                state_root,
+                current_pod_uid=pod_uid,
+                reason="recovery_integrity_failure",
+                entity_generation=generation,
+            )
+            status = "tier2_replacement_required"
+            reason = "recovery_integrity_failure"
+        except Exception as fence_exc:
+            status = "tier2_fence_write_failed"
+            reason = f"recovery_integrity_failure:{type(fence_exc).__name__}"
+        db.close()
+        print(json.dumps(_tier2_status(status, reason=reason, pod_uid=pod_uid)), flush=True)
+        raise SystemExit(TIER2_EXIT_CODE)
+
+
+def _admit_tier2_after_recovery(
+    db: UnifiedDB,
+    state_root: str,
+    pod_uid: str,
+    prior_fence,
+) -> dict[str, object] | None:
+    if prior_fence is None:
+        return None
+    checkpoint_id, state_hash = db.checkpoint(
+        "tier2-replacement-admitted:"
+        f"old_pod_uid={prior_fence.old_pod_uid};"
+        f"new_pod_uid={pod_uid};reason={prior_fence.reason}"
+    )
+    cleared = clear_tier2_fence_after_boot(
+        state_root,
+        current_pod_uid=pod_uid,
+        live_entity_generation=db.entity_generation(),
+    )
+    return {
+        "old_pod_uid": cleared.old_pod_uid if cleared else None,
+        "new_pod_uid": pod_uid,
+        "reason": cleared.reason if cleared else None,
+        "checkpoint": checkpoint_id,
+        "state_hash": state_hash,
+        "entity_generation": db.entity_generation(),
+    }
+
+
+def _acceptance_bool(name: str, default: str = "0") -> bool:
+    raw = os.environ.get(name, default)
+    if raw not in {"0", "1"}:
+        raise RuntimeError(f"{name} must be 0 or 1")
+    return raw == "1"
+
+
+def _run_mistral_once(db: UnifiedDB, *, state_root: str, pod_uid: str) -> dict[str, object]:
+    """Run the internal canonical Mistral turn used by the final sandbox controller.
+
+    This mode intentionally receives no Clerk auth credit. It proves the cognition /
+    re-ingest / EffectGate causal spine inside the exact product image; the final
+    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
+    """
+
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
+    ClayGraphProjection(db).rebuild()
+    clerk_map = _clerk_map()
+    clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
+    prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
+    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
+    entityos_bridge, entityos_status = _entityos_config()
+
+    payload = run_mistral_acceptance_probe(
+        db,
+        clerk_map,
+        clerk_subject,
+        prompt,
+        entityos_bridge=entityos_bridge,
+        require_effect=require_effect,
+    )
+    checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
+    payload.update(
+        {
+            "checkpoint": checkpoint_id,
+            "state_hash": state_hash,
+            "recovery": recovery,
+            "entityos": {
+                "verified": bool(entityos_status.get("verified")),
+                "execution_enabled": bool(entityos_status.get("execution_enabled")),
+                "sha256": entityos_status.get("sha256"),
+            },
+        }
+    )
+    return payload
+
+
 def main():
     import uvicorn
 
@@ -168,26 +266,22 @@ def main():
         db.close()
         return 0
 
-    try:
-        recovery = recover_incomplete_episodes(db)
-    except RecoveryIntegrityError:
-        generation = db.entity_generation()
+    if "--mistral-once" in sys.argv:
         try:
-            request_tier2_replacement(
-                state_root,
-                current_pod_uid=pod_uid,
-                reason="recovery_integrity_failure",
-                entity_generation=generation,
+            payload = _run_mistral_once(db, state_root=state_root, pod_uid=pod_uid)
+            payload["tier2_replacement"] = _admit_tier2_after_recovery(
+                db, state_root, pod_uid, prior_tier2_fence
             )
-            status = "tier2_replacement_required"
-            reason = "recovery_integrity_failure"
-        except Exception as fence_exc:
-            status = "tier2_fence_write_failed"
-            reason = f"recovery_integrity_failure:{type(fence_exc).__name__}"
-        db.close()
-        print(json.dumps(_tier2_status(status, reason=reason, pod_uid=pod_uid)), flush=True)
-        return TIER2_EXIT_CODE
+            print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
+        finally:
+            if getattr(db, "db", None) is not None:
+                try:
+                    db.close()
+                except Exception:
+                    pass
+        return 0
 
+    recovery = _recover_with_tier2(db, state_root, pod_uid)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
 
@@ -221,27 +315,7 @@ def main():
         publishable_key=publishable_key,
         frontend_api_url=frontend_api,
     )
-    tier2_replacement = None
-    if prior_tier2_fence is not None:
-        replacement_checkpoint, replacement_state_hash = db.checkpoint(
-            "tier2-replacement-admitted:"
-            f"old_pod_uid={prior_tier2_fence.old_pod_uid};"
-            f"new_pod_uid={pod_uid};reason={prior_tier2_fence.reason}"
-        )
-        cleared = clear_tier2_fence_after_boot(
-            state_root,
-            current_pod_uid=pod_uid,
-            live_entity_generation=db.entity_generation(),
-        )
-        tier2_replacement = {
-            "old_pod_uid": cleared.old_pod_uid if cleared else None,
-            "new_pod_uid": pod_uid,
-            "reason": cleared.reason if cleared else None,
-            "checkpoint": replacement_checkpoint,
-            "state_hash": replacement_state_hash,
-            "entity_generation": db.entity_generation(),
-        }
-
+    tier2_replacement = _admit_tier2_after_recovery(db, state_root, pod_uid, prior_tier2_fence)
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     print(json.dumps({

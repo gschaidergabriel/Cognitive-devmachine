@@ -138,6 +138,47 @@ def _parse_json_object(raw: str, label: str) -> dict[str, Any]:
     return value
 
 
+def validate_method_receipt(receipt: Any) -> dict[str, Any]:
+    if not isinstance(receipt, dict):
+        raise MethodRecordError("method receipt must be an object")
+    required = {
+        "method_memory_id",
+        "action",
+        "source_episode_ids",
+        "supporting_memory_ids",
+        "counterexample_memory_ids",
+        "evaluation",
+        "ts",
+    }
+    unknown = sorted(set(receipt) - required)
+    missing = sorted(required - set(receipt))
+    if unknown:
+        raise MethodRecordError("unknown method receipt fields: " + ",".join(unknown))
+    if missing:
+        raise MethodRecordError("missing method receipt fields: " + ",".join(missing))
+    normalized = dict(receipt)
+    normalized["method_memory_id"] = _bounded_string(receipt["method_memory_id"], "method_memory_id")
+    if receipt["action"] != "PROMOTE":
+        raise MethodRecordError("unsupported method receipt action")
+    normalized["action"] = "PROMOTE"
+    for field in ("source_episode_ids", "supporting_memory_ids", "counterexample_memory_ids"):
+        value = receipt[field]
+        if not isinstance(value, list) or len(value) > MAX_LIST_ITEMS:
+            raise MethodRecordError(f"{field} must be a bounded list")
+        if field == "source_episode_ids" and not value:
+            raise MethodRecordError("source_episode_ids must be non-empty")
+        normalized[field] = [_bounded_string(x, field) for x in value]
+    normalized["evaluation"] = _bounded_string(receipt["evaluation"], "evaluation")
+    ts = receipt["ts"]
+    if isinstance(ts, bool) or not isinstance(ts, (int, float)) or float(ts) <= 0:
+        raise MethodRecordError("invalid method receipt ts")
+    normalized["ts"] = float(ts)
+    encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    if len(encoded) > MAX_METHOD_JSON_BYTES:
+        raise MethodRecordError("method receipt exceeds bounded serialized size")
+    return normalized
+
+
 def validate_method_record(kind: str, record: Any) -> dict[str, Any]:
     if kind == "method_receipt":
         raise MethodRecordError("method_receipt uses a separate receipt contract")
@@ -249,29 +290,145 @@ class MethodMemory:
     accessibility merely because an abstraction looks generic.
 
     Ordinary admission can persist candidates and bounded negative method memory. It
-    cannot mint reusable promoted frameworks/heuristics. Positive promotion requires a
-    separate atomic causal promotion lifecycle that does not exist in this baseline yet.
+    cannot mint reusable promoted frameworks/heuristics. Positive promotion requires an
+    atomic causal lifecycle bound to terminal, causally re-entered source episodes.
     """
 
     def __init__(self, db: UnifiedDB):
         self.db = db
 
-    def _assert_refs(self, record: dict[str, Any], user_id: str) -> None:
+    def _assert_refs(self, record: dict[str, Any], user_id: str, *, require_terminal: bool = False) -> None:
+        expected_session = f"session:{user_id}"
         for episode_id in set(record["source_episode_ids"]):
             row = self.db.db.execute(
-                "SELECT s.user_id FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id WHERE w.episode_id=?",
+                "SELECT s.user_id,w.session_id,w.state,"
+                "EXISTS(SELECT 1 FROM causal_episodes c WHERE c.episode_id=w.episode_id AND c.reentered=1) AS reentered "
+                "FROM workspace_episodes w JOIN sessions s ON s.session_id=w.session_id WHERE w.episode_id=?",
                 (episode_id,),
             ).fetchone()
             if row is None:
                 raise MethodRecordError("unknown source_episode_id")
-            if str(row["user_id"]) != user_id:
-                raise MethodRecordError("cross-user source episode denied")
-        for memory_id in set(record["supporting_memory_ids"] + record["counterexample_memory_ids"] + record["limits_method_ids"]):
-            row = self.db.db.execute("SELECT user_id FROM durable_memory WHERE memory_id=?", (memory_id,)).fetchone()
+            if str(row["user_id"]) != user_id or str(row["session_id"]) != expected_session:
+                raise MethodRecordError("source episode crosses canonical user/session scope")
+            if require_terminal and (
+                str(row["state"]) not in {"COMPLETED", "ABORTED"} or not int(row["reentered"])
+            ):
+                raise MethodRecordError("source episode is not terminal and causally re-entered")
+
+        referenced = set(
+            record["supporting_memory_ids"]
+            + record["counterexample_memory_ids"]
+            + record["limits_method_ids"]
+        )
+        counter_ids = set(record["counterexample_memory_ids"])
+        for memory_id in referenced:
+            row = self.db.db.execute(
+                "SELECT user_id,kind FROM durable_memory WHERE memory_id=?",
+                (memory_id,),
+            ).fetchone()
             if row is None:
                 raise MethodRecordError("unknown referenced memory_id")
             if row["user_id"] not in (None, user_id):
                 raise MethodRecordError("cross-user referenced memory denied")
+            if memory_id in counter_ids and str(row["kind"]) not in {"counterexample", "failure_pattern"}:
+                raise MethodRecordError("counterexample link must reference counterexample/failure_pattern memory")
+
+    def _assert_source_turn(self, source_turn_id: str | None, user_id: str) -> None:
+        if source_turn_id is None:
+            return
+        source = self.db.db.execute("SELECT user_id FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
+        if source is None or str(source["user_id"]) != user_id:
+            raise MethodRecordError("source turn is absent or cross-user")
+
+    def _decode_method_row(self, row) -> tuple[dict[str, Any], dict[str, Any]]:
+        record = validate_method_record(
+            str(row["kind"]),
+            _parse_json_object(str(row["value"]), "method record"),
+        )
+        provenance = _parse_json_object(str(row["provenance"]), "method provenance")
+        return record, provenance
+
+    def _assert_promotion_lineage(
+        self,
+        row,
+        record: dict[str, Any],
+        provenance: dict[str, Any],
+        user_id: str,
+    ) -> None:
+        source_id = provenance.get("promotion_source_memory_id")
+        receipt_id = provenance.get("promotion_receipt_id")
+        if (
+            provenance.get("promotion_transaction_version") != 1
+            or not isinstance(source_id, str)
+            or not source_id
+            or not isinstance(receipt_id, str)
+            or not receipt_id
+        ):
+            raise MethodRecordError("promoted method lacks verified promotion lineage")
+        candidate_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1",
+            (source_id,),
+        ).fetchone()
+        receipt_row = self.db.db.execute(
+            "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1",
+            (receipt_id,),
+        ).fetchone()
+        if candidate_row is None or receipt_row is None:
+            raise MethodRecordError("promoted method source/receipt is missing")
+        candidate, candidate_provenance = self._decode_method_row(candidate_row)
+        expected_candidate_kind = "framework_candidate" if str(row["kind"]) == "framework" else "heuristic_candidate"
+        if str(candidate_row["kind"]) != expected_candidate_kind or candidate["status"] != "CANDIDATE":
+            raise MethodRecordError("promotion source is not the matching candidate kind")
+        if str(candidate_row["subject"]) != str(row["subject"]) or str(candidate_row["user_id"]) != user_id:
+            raise MethodRecordError("promotion source identity/scope mismatch")
+        if (
+            candidate_provenance.get("admission") != "method_memory:v1"
+            or candidate_provenance.get("user_scope") != user_id
+        ):
+            raise MethodRecordError("promotion source is not canonically admitted")
+        if str(receipt_row["kind"]) != "method_receipt" or str(receipt_row["subject"]) != source_id:
+            raise MethodRecordError("promotion receipt identity mismatch")
+        receipt = validate_method_receipt(_parse_json_object(str(receipt_row["value"]), "method receipt"))
+        receipt_provenance = _parse_json_object(str(receipt_row["provenance"]), "method receipt provenance")
+        if (
+            receipt["method_memory_id"] != source_id
+            or receipt_provenance.get("admission") != "method_memory_receipt:v1"
+            or receipt_provenance.get("promotion_source_memory_id") != source_id
+            or receipt_provenance.get("promotion_transaction_version") != 1
+            or receipt_provenance.get("user_scope") != user_id
+        ):
+            raise MethodRecordError("promotion receipt provenance mismatch")
+
+        immutable_fields = (
+            "problem_signature",
+            "preconditions",
+            "goal_shape",
+            "method_steps",
+            "invariants",
+            "expected_observations",
+            "falsifiers",
+            "failure_modes",
+            "scope_limits",
+            "source_episode_ids",
+            "supporting_memory_ids",
+            "counterexample_memory_ids",
+            "abstraction_version",
+            "support_count",
+            "success_count",
+            "failure_count",
+            "calibration",
+            "limits_method_ids",
+        )
+        if any(record[field] != candidate[field] for field in immutable_fields):
+            raise MethodRecordError("promoted method payload drifted from candidate")
+        if (
+            receipt["source_episode_ids"] != record["source_episode_ids"]
+            or receipt["supporting_memory_ids"] != record["supporting_memory_ids"]
+            or receipt["counterexample_memory_ids"] != record["counterexample_memory_ids"]
+            or float(receipt["ts"]) != float(record["last_validated_at"])
+        ):
+            raise MethodRecordError("promotion receipt evidence mismatch")
+        self._assert_refs(record, user_id, require_terminal=True)
 
     def admit(
         self,
@@ -286,19 +443,18 @@ class MethodMemory:
         if user_id not in {"gabriel", "andreas"}:
             raise MethodRecordError("v1 method admission requires an explicit canonical user scope")
         if kind in PROMOTABLE_KINDS:
-            raise MethodRecordError(
-                "framework/heuristic admission requires dedicated promotion lifecycle"
-            )
+            raise MethodRecordError("framework/heuristic admission requires dedicated promotion lifecycle")
         if not isinstance(subject, str) or not subject.strip() or len(subject) > 300:
             raise MethodRecordError("invalid method subject")
         if not isinstance(provenance, dict) or not provenance:
             raise MethodRecordError("method admission requires provenance")
         normalized = validate_method_record(kind, record)
-        self._assert_refs(normalized, user_id)
-        if source_turn_id is not None:
-            source = self.db.db.execute("SELECT user_id FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
-            if source is None or str(source["user_id"]) != user_id:
-                raise MethodRecordError("source turn is absent or cross-user")
+        self._assert_refs(
+            normalized,
+            user_id,
+            require_terminal=(kind in ROUTABLE_METHOD_KINDS and normalized["status"] == "PROMOTED"),
+        )
+        self._assert_source_turn(source_turn_id, user_id)
         stored_provenance = dict(provenance)
         stored_provenance.update({
             "method_schema_version": METHOD_SCHEMA_VERSION,
@@ -309,6 +465,114 @@ class MethodMemory:
         })
         encoded = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False)
         return self.db.add_memory(kind, subject.strip(), encoded, source_turn_id, user_id, stored_provenance)
+
+    def promote(
+        self,
+        *,
+        candidate_memory_id: str,
+        evaluation: str,
+        user_id: str,
+        provenance: dict[str, Any],
+        source_turn_id: str | None = None,
+    ) -> dict[str, str]:
+        if user_id not in {"gabriel", "andreas"}:
+            raise MethodRecordError("promotion requires an explicit canonical user scope")
+        candidate_memory_id = _bounded_string(candidate_memory_id, "candidate_memory_id")
+        evaluation = _bounded_string(evaluation, "evaluation")
+        if not isinstance(provenance, dict) or not provenance:
+            raise MethodRecordError("promotion requires provenance")
+        self._assert_source_turn(source_turn_id, user_id)
+
+        with self.db.tx():
+            row = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE memory_id=? LIMIT 1",
+                (candidate_memory_id,),
+            ).fetchone()
+            if row is None:
+                raise MethodRecordError("promotion candidate does not exist")
+            if str(row["kind"]) not in CANDIDATE_KINDS:
+                raise MethodRecordError("promotion source must be a framework/heuristic candidate")
+            if str(row["user_id"]) != user_id:
+                raise MethodRecordError("promotion candidate crosses user scope")
+            candidate, candidate_provenance = self._decode_method_row(row)
+            if candidate["status"] != "CANDIDATE":
+                raise MethodRecordError("promotion source is not CANDIDATE")
+            if (
+                candidate_provenance.get("admission") != "method_memory:v1"
+                or candidate_provenance.get("user_scope") != user_id
+            ):
+                raise MethodRecordError("promotion source is not canonically admitted")
+            self._assert_refs(candidate, user_id, require_terminal=True)
+
+            prior_receipts = self.db.db.execute(
+                "SELECT * FROM durable_memory WHERE kind='method_receipt' AND subject=? ORDER BY ts",
+                (candidate_memory_id,),
+            ).fetchall()
+            for prior in prior_receipts:
+                receipt = validate_method_receipt(_parse_json_object(str(prior["value"]), "method receipt"))
+                if receipt["action"] == "PROMOTE":
+                    raise MethodRecordError("candidate already has a promotion receipt")
+
+            now = time.time()
+            promoted_kind = "framework" if str(row["kind"]) == "framework_candidate" else "heuristic"
+            promoted_record = dict(candidate)
+            promoted_record["status"] = "PROMOTED"
+            promoted_record["last_validated_at"] = now
+            promoted_record = validate_method_record(promoted_kind, promoted_record)
+            receipt = validate_method_receipt({
+                "method_memory_id": candidate_memory_id,
+                "action": "PROMOTE",
+                "source_episode_ids": list(promoted_record["source_episode_ids"]),
+                "supporting_memory_ids": list(promoted_record["supporting_memory_ids"]),
+                "counterexample_memory_ids": list(promoted_record["counterexample_memory_ids"]),
+                "evaluation": evaluation,
+                "ts": now,
+            })
+            effective_source_turn = source_turn_id if source_turn_id is not None else row["source_turn_id"]
+            self._assert_source_turn(effective_source_turn, user_id)
+            receipt_provenance = dict(provenance)
+            receipt_provenance.update({
+                "method_schema_version": METHOD_SCHEMA_VERSION,
+                "admission": "method_memory_receipt:v1",
+                "user_scope": user_id,
+                "promotion_source_memory_id": candidate_memory_id,
+                "promotion_transaction_version": 1,
+                "truth_authority": False,
+                "effect_authority": False,
+            })
+            receipt_id = self.db.add_memory(
+                "method_receipt",
+                candidate_memory_id,
+                json.dumps(receipt, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                effective_source_turn,
+                user_id,
+                receipt_provenance,
+            )
+            promoted_provenance = {
+                **candidate_provenance,
+                **provenance,
+                "method_schema_version": METHOD_SCHEMA_VERSION,
+                "admission": "method_memory:v1",
+                "user_scope": user_id,
+                "promotion_source_memory_id": candidate_memory_id,
+                "promotion_receipt_id": receipt_id,
+                "promotion_transaction_version": 1,
+                "truth_authority": False,
+                "effect_authority": False,
+            }
+            promoted_id = self.db.add_memory(
+                promoted_kind,
+                str(row["subject"]),
+                json.dumps(promoted_record, sort_keys=True, separators=(",", ":"), allow_nan=False),
+                effective_source_turn,
+                user_id,
+                promoted_provenance,
+            )
+            return {
+                "candidate_memory_id": candidate_memory_id,
+                "receipt_memory_id": receipt_id,
+                "promoted_memory_id": promoted_id,
+            }
 
     @staticmethod
     def strategy_intent(query: str) -> bool:
@@ -355,12 +619,15 @@ class MethodMemory:
         ).fetchall()
         matches: list[MethodMatch] = []
         for row in rows:
-            record = validate_method_record(str(row["kind"]), _parse_json_object(str(row["value"]), "method record"))
+            record, provenance = self._decode_method_row(row)
             if record["status"] != "PROMOTED":
                 continue
-            provenance = _parse_json_object(str(row["provenance"]), "method provenance")
             if provenance.get("admission") != "method_memory:v1" or provenance.get("user_scope") != user_id:
                 raise MethodRecordError("unadmitted or scope-divergent method row")
+            if str(row["kind"]) in PROMOTABLE_KINDS:
+                self._assert_promotion_lineage(row, record, provenance, user_id)
+            else:
+                self._assert_refs(record, user_id, require_terminal=True)
             score = structural_score(query_signature, record["problem_signature"])
             if score <= 0.0:
                 continue

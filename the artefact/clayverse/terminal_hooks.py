@@ -24,7 +24,13 @@ _AUTONOMY_HOOK_SCHEMA = "ClayVerseAutonomyHookContext/v1"
 _AUTONOMY_CONTEXT_MAX_GOALS = 4
 _AUTONOMY_OBJECTIVE_PREVIEW_CHARS = 600
 _AUTONOMY_STEP_PREVIEW_CHARS = 400
-_AUTONOMY_BLOCKED_PREVIEW_CHARS = 300
+_SAFE_AUTONOMY_BLOCK_REASONS = {
+    "retry_budget_exhausted",
+    "step_failed",
+    "unknown_effect_after_generation_change",
+    "effect_evidence_requires_generation_rebind",
+    "recovered_interrupted_no_effect_step",
+}
 
 
 def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
@@ -64,6 +70,17 @@ def _preview(value: Any, limit: int) -> tuple[str | None, bool]:
     if len(text) <= limit:
         return text, False
     return text[:limit] + "…", True
+
+
+def _blocked_reason_class(value: Any) -> str | None:
+    if value is None:
+        return None
+    text = str(value)
+    if text in _SAFE_AUTONOMY_BLOCK_REASONS:
+        return text
+    if text.startswith("effect_"):
+        return "effect_not_verified"
+    return "opaque"
 
 
 def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dict[str, Any]:
@@ -111,9 +128,6 @@ def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dic
     visible_goals = []
     for goal in live_nonterminal[:_AUTONOMY_CONTEXT_MAX_GOALS]:
         objective, objective_truncated = _preview(goal["objective"], _AUTONOMY_OBJECTIVE_PREVIEW_CHARS)
-        blocked_reason, blocked_reason_truncated = _preview(
-            goal["blocked_reason"], _AUTONOMY_BLOCKED_PREVIEW_CHARS
-        )
         step = goal["current_step"]
         current_step = None
         if step is not None:
@@ -144,8 +158,7 @@ def _autonomy_context_in_tx(db: UnifiedDB, user_id: str, generation: int) -> dic
                 "current_step": current_step,
                 "evidence_effect_count": len(goal["evidence_effect_ids"]),
                 "has_user_ack": goal["user_ack_turn_id"] is not None,
-                "blocked_reason": blocked_reason,
-                "blocked_reason_truncated": blocked_reason_truncated,
+                "blocked_reason_class": _blocked_reason_class(goal["blocked_reason"]),
             }
         )
 

@@ -1,0 +1,82 @@
+{
+  "receipt_type": "bounded_source_mechanism_regression",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "trigger": {
+    "command": "go",
+    "user_local_time": "2026-08-17T13:42+07:00",
+    "available_precision": "minute",
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No immutable request id or whole-second trigger timestamp was available; deterministic source/mechanism regression remained permitted."
+  },
+  "source_identity": {
+    "canonical_repo": "gschaidergabriel/clay-global-research-entity",
+    "canonical_branch": "main",
+    "fusion_base_main": "faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f",
+    "candidate_branch": "go/clerk-ws-auth-lease-fused-20260817-sol",
+    "candidate_head_before_receipt": "afaad098987817bca4b86c1cb7fcd027128f8500",
+    "gateway_blob": "0af019461094671703d27a7e2cd860138f77ed48",
+    "auth_lease_test_blob": "3e427c8f1c513e5236b8a45a066ad96d400ec682"
+  },
+  "problem": "The authenticated WebSocket PTY verified a Clerk JWT only at initial attach, so a long-lived PTY attachment had no explicit lease tied to the verified token exp claim.",
+  "delta": [
+    "Validate exp as finite and future before the PTY attach is admitted.",
+    "Bound the live receive loop to the current token expiration using asyncio.wait_for.",
+    "Allow a bounded reauth control envelope and verify every refreshed JWT through the same ClerkTokenVerifier.",
+    "Fence refreshes to the originally authenticated Clerk sub and sid.",
+    "Force a fresh browser session token before expiry and reschedule from the verified refreshed exp.",
+    "Serialize concurrent WebSocket output frames with a send lock.",
+    "Preserve the already-fused 65536-byte browser PTY input chunking and ordinary 4096-character control bound."
+  ],
+  "primary_dependency_evidence": [
+    {
+      "source": "Clerk manual JWT verification",
+      "url": "https://clerk.com/docs/guides/sessions/manual-jwt-verification",
+      "observed_contract": "Validate session token authenticity and temporal claims including exp/nbf; authorized party validation remains required."
+    },
+    {
+      "source": "Clerk force session token refresh",
+      "url": "https://clerk.com/docs/guides/sessions/force-token-refresh",
+      "observed_contract": "Client-side getToken({skipCache:true}) forces a newly minted session token."
+    },
+    {
+      "source": "Clerk architecture overview",
+      "url": "https://clerk.com/docs/guides/how-clerk-works/overview",
+      "observed_contract": "Clerk session tokens are intentionally short-lived and frontend SDKs refresh them to preserve session continuity."
+    }
+  ],
+  "isolated_execution": {
+    "surface": "OpenAI isolated container",
+    "network_note": "PyPI DNS was unavailable; no dependency downloads were used for this regression.",
+    "python": "3.13.5",
+    "fastapi_present": "0.128.2",
+    "pyjwt_present": "2.13.0",
+    "cryptography_present": "46.0.4",
+    "pytest_present": "9.0.2",
+    "exact_blob_binding": {
+      "gateway_local_git_hash_object": "0af019461094671703d27a7e2cd860138f77ed48",
+      "auth_test_local_git_hash_object": "3e427c8f1c513e5236b8a45a066ad96d400ec682"
+    },
+    "focused_result": "4 passed in 0.20s",
+    "adjacent_source_regression": "7 current terminal Ready/chunking/resize/order invariants PASS",
+    "scope_limit": "Focused helper and source-bound mechanism regression. Internal ClayVerse imports were minimally stubbed for the focused helper test. This is not a full repository suite, live Clerk browser/JWT test, OCI runtime test, or whole-product acceptance run."
+  },
+  "adversarial_review": {
+    "rejected_intermediate_change": "Awaiting gather() on a cancelled asyncio.to_thread(os.read(...)) PTY task could block until the attach FD closed, while the FD close occurred only in finally.",
+    "repair": "Do not await the cancelled blocking read task before finally closes the PTY attach; preserve the prior cancellation/cleanup ordering.",
+    "stale_head_event": "main changed terminal_gateway.py after the first branch was created by adding browser input chunking. That stale branch was not fused. The candidate was rebuilt from current main faa4288822b1e5ccb5a4b8aa9c345271ebd1de1f and preserves the chunking delta."
+  },
+  "claims": {
+    "mechanism_supported": true,
+    "exact_live_clerk_verified": false,
+    "exact_oci_runtime_verified": false,
+    "whole_clayverse_accepted": false
+  },
+  "remaining_gates": [
+    "Real Clerk browser/JWT/authorized-party/key-rotation and refresh behavior in authorized isolated runtime.",
+    "Exact OCI image build/start/readiness and digest-bound acceptance.",
+    "Full current deterministic regression suite on the final fused head.",
+    "Python transitive --require-hashes lock and apt package snapshot/hash closure remain open supply-chain gates.",
+    "No executable Vercel Sandbox start/exec action was exposed through the available connector during this run."
+  ]
+}

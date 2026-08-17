@@ -1,0 +1,55 @@
+{
+  "schema": "ClayEntityOSGoEvidence/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_before_write": "ce7e77b3502b3d4034bfd47966d88740cf02f777",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "active_product_pr": 787,
+  "active_pr_head_observed": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
+  "classification": "SOURCE_REVIEW_AND_PRIMARY_UPSTREAM_EVIDENCE_ONLY",
+  "observed": {
+    "single_canonical_python_artifact_lock": "entityos/python_artifact_lock_v1.json",
+    "duplicate_fixture_lock_removed_at": "fa7ca80b668b1cf59b48f2b314c046b3a4c772f2",
+    "build_runner_install": "uv pip install --python $BUILDPY --target /vercel/sandbox/pylib -r /vercel/sandbox/src/requirements-entityos-build.txt",
+    "full_pytest_runner_install": "uv pip install --python /usr/bin/python3.13 --target /vercel/sandbox/test-pylib -r requirements-test.txt",
+    "runner_cli_require_hashes": false,
+    "runner_cli_only_binary_all": false,
+    "current_exact_head_vercel_sandbox_started": false
+  },
+  "primary_upstream_evidence": {
+    "uv_0_12_0_changelog": "Astral uv 0.12.0 states that before change #19336, --require-hashes inside requirements.txt produced a warning but dependencies were still installed without hash checking; 0.12.0 makes the file directive enable hash-checking mode.",
+    "uv_cli_reference": "Astral uv CLI documents --require-hashes as an explicit uv pip install option requiring exact pinned/direct requirements with hashes.",
+    "uv_only_binary_reference": "Astral uv compatibility/CLI documentation defines --only-binary :all: as refusal to build source distributions for registry requirements."
+  },
+  "counterhypothesis": "The committed hashed requirements and canonical artifact lock can be correct while an ambient pre-0.12 uv still installs without enforcing the requirements-file --require-hashes directive. Static source checks and post-install version equality would not by themselves prove that the exact downloaded artifact hash was enforced during resolution/download.",
+  "falsifier_and_repair": {
+    "required_build_runner_delta": "Pass --require-hashes --only-binary :all: directly on the build uv pip install invocation and log uv --version.",
+    "required_full_pytest_delta": "Pass --require-hashes --only-binary :all: directly on the full-pytest uv pip install invocation and log uv --version.",
+    "required_static_gate": "Fail closed unless both Vercel runner install commands carry the explicit CLI enforcement flags.",
+    "execution_gate": "Run the existing exact-head Vercel Sandbox sequence after the repair; source/static success alone is not executable truth."
+  },
+  "coordination": {
+    "pr_comment_id": 5310989139,
+    "force_update_used": false,
+    "new_permanent_runtime_lane_created": false
+  },
+  "unusual_experiment_accounting": {
+    "global_limit": 1,
+    "global_count": 1,
+    "consumed_prior_at_head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "claims": {
+    "package_artifact_source_authority_materially_improved": true,
+    "ambient_uv_version_is_currently_bound": false,
+    "explicit_cli_hash_enforcement_currently_present": false,
+    "current_exact_head_sandbox_pass": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false
+  },
+  "next_step": "Fuse the explicit uv CLI enforcement into PR #787 without creating a second lock or runtime path, then execute exact-current-head full-pytest plus canonical v7 Vercel Sandbox regression with new_unusual_experiment_count=0."
+}

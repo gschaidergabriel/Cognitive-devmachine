@@ -25,7 +25,7 @@ Refresh this file in every product-convergent cycle. Detailed evidence belongs i
 - **#622** Python hash-lock generator — source candidate/unexecuted; no canonical `requirements.lock.txt` accepted yet.
 - **#623** auth/identity/readiness/reauth drift — source/mechanism supported only.
 - **#602** managed native-Claude process attestation — downstream of exact in-image #611.
-- Dr.-Unterweger **#810** remains historical/controller evidence; its cross-private-repo `GITHUB_READ_TOKEN` route is not the preferred baseline path.
+- Dr.-Unterweger **#810** remains the confirmed Vercel Sandbox orchestration bridge/controller evidence; its cross-private-repo `GITHUB_READ_TOKEN` source-fetch route is not required by the tokenless baseline and is not being reintroduced as a baseline prerequisite.
 
 ### Tokenless baseline contract
 
@@ -39,21 +39,24 @@ Dockerfile, Compose, normal runtime and the manual OCI workflow now converge on 
 - Compose does not require an EntityOS digest while Clerk/auth inputs remain mandatory;
 - manual OCI workflow EntityOS inputs are optional for baseline and must be supplied as a tag+SHA pair when embedding is requested;
 - `github.token` is exposed only to that explicit optional same-repository download step; `GITHUB_READ_TOKEN` is not required by the baseline lane;
-- the baseline image verification path asserts `/opt/entityos/EntityOS` is absent.
+- the baseline image verification path asserts `/opt/entityos/EntityOS` is absent;
+- exactly one canonical ClayVerse OCI workflow remains: `.github/workflows/clayverse-artefact-ci.yml`; the divergent legacy `.github/workflows/clayverse-artifact-ci.yml` path is retired and fenced by regression.
 
 ### Testing policy / current execution boundary
 
-The missing direct Vercel Git-project connection is **not a development blocker**. It is deferred to the final exact OCI acceptance gate. Until then, maximize independent static, unit, negative, adversarial, persistence/restart, concurrency, supply-chain, simulation and disposable component-runtime evidence without upgrading it into OCI/whole-product credit.
+Vercel Sandbox execution is confirmed through the retained Dr.-Unterweger #810 Git-preview/OIDC controller; lack of direct ChatGPT `sandbox.create/exec` actions is not evidence of Sandbox unavailability. The retained #810 path has repeatedly reached `Sandbox.create`, but its current cross-private-repo source-fetch design stops before Research source staging when host-side `GITHUB_READ_TOKEN` is absent. That credential blocker earns zero source/OCI runtime credit and is not ClayVerse TEST_FAIL.
 
-The available OpenAI isolated surface has Python/pytest but no Docker, Podman, Buildah or tmux. GitHub Actions runner admission was also rechecked; the rerun failed before observable job/step evidence and job details remain inaccessible through the integration. Therefore exact OCI build/runtime remains unobserved.
+For the user-directed tokenless baseline, do not restore the private EntityOS/read-token prerequisite merely to obtain a run. Continue maximizing source/component evidence while seeking an authorized source-bound OCI surface that can receive exact #625 bytes without creating a second product authority.
 
-The authorized Daytona fallback was freshly rechecked from this worker and is blocked **before provider contact**: no `DAYTONA_API_KEY` is present in this worker environment, the Daytona SDK is absent, and DNS resolution for Daytona/PyPI fails. Classification remains `CURRENT_CHATGPT_ORCHESTRATOR_BLOCKED_BEFORE_DAYTONA_PROVIDER_CONTACT`; this is not evidence that Daytona itself is unavailable and is not ClayVerse TEST_FAIL.
+The available OpenAI isolated surface has Python/pytest but no Docker or Podman. Exact OCI build/runtime therefore remains unobserved on that surface.
+
+The authorized Daytona fallback remains blocked from the current ChatGPT orchestrator before provider contact according to the current execution-path notice; that is not evidence that Daytona itself is unavailable and is not ClayVerse TEST_FAIL.
 
 The exact `go` unusual-experiment slot remains **COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT** because no immutable shared request/turn ID is exposed. Zero unusual experiments were executed.
 
 ### Latest cycle delta
 
-**2026-08-17 21:05 +07:00 — #625 tokenless baseline is now aligned across packaging, Compose, runtime, staging tests and manual OCI-workflow source contracts; bounded component evidence increased, exact OCI remains open.**
+**2026-08-17 — #625 tokenless baseline is aligned across packaging, Compose, runtime, staging tests and the single retained manual OCI-workflow source contract; bounded component evidence increased, exact OCI remains open.**
 
 - Build-context hardening removed recursive optional-EntityOS sibling admission; focused contract evidence remains green.
 - Compose was aligned to an EntityOS-free baseline while preserving mandatory Clerk/auth interpolation.
@@ -61,16 +64,19 @@ The exact `go` unusual-experiment slot remains **COORDINATION_BLOCKED_NO_UNUSUAL
 - Exact-source Linux component execution of `entityos_bridge.py` exercised real sealed-memfd `run()` behavior: **4/4 PASS**; digest drift and symlink replacement failed closed. This is **COMPONENT_RUNTIME_PASS**, not in-image/OCI acceptance.
 - This pass repaired `test_stage_entityos.py` to the bounded staging path and residue checks; converted the manual OCI workflow from mandatory EntityOS inputs to an optional paired/fail-closed path; restricted token exposure to the optional same-repo download step; added baseline image absence verification; and aligned artifact/workflow regression contracts.
 - Focused reconstructed contract suite across build-context, packaging, single-container boundary, stager, artifact authority and OCI workflow: **18/18 PASS in 0.10s**. Direct stager checks: valid/uppercase digest PASS with mode `0555`; wrong digest exit `65` with no staged artifact/temp residue; symlink source exit `66` with no staged artifact.
-- Commits authored in this pass: `cf9118cc4e2ee5fe96de851d3d64d55b766d93ee`, `ea1a00b6dd8a360673bae4373c2c397ebf2b0cc2`, `714bbfe43fc0eb17335dc886accfe996c0d7bf64`, `78cae34d660124fdb605990afd6bcc3cd7384f60`; bounded receipt commit `4ddc915ce2efc5d7598ad0530941d19f12a3c6cb`.
-- New receipt: `the artefact/receipts/2026-08-17_GO_2053_PR625_TOKENLESS_WORKFLOW_CONTRACT_ALIGNMENT_GPT56SOL.json`. Other retained receipts remain authoritative for their narrower runtime/boot/component slices.
-- Daytona fallback was independently rechecked and remains an orchestrator-admission blocker before provider contact; no Daytona sandbox/runtime credit was minted.
+- The stale second OCI workflow `.github/workflows/clayverse-artifact-ci.yml`, which still required top-level `the artefact/EntityOS`, was removed. `test_only_one_canonical_clayverse_oci_workflow_exists` now fences reintroduction of that divergent path. This cycle added commits `01c994816bd3ad66e6a9a8400e76de03c794ac1c` and `41473e8dcc8df1cadde7aee3cce2bb627c143dd5`; a direct post-write GitHub read confirms the retired path is absent while the regression remains present.
+- Vercel execution-path classification was corrected against current canonical state: PR810 is a confirmed Sandbox bridge, but its host-side private Research fetch remains credential-blocked before product source staging. The tokenless baseline itself does not regain a `GITHUB_READ_TOKEN` dependency.
+- Earlier commits in this pass include `cf9118cc4e2ee5fe96de851d3d64d55b766d93ee`, `ea1a00b6dd8a360673bae4373c2c397ebf2b0cc2`, `714bbfe43fc0eb17335dc886accfe996c0d7bf64`, `78cae34d660124fdb605990afd6bcc3cd7384f60`; bounded receipt commit `4ddc915ce2efc5d7598ad0530941d19f12a3c6cb`.
+- New retained receipt: `the artefact/receipts/2026-08-17_GO_2053_PR625_TOKENLESS_WORKFLOW_CONTRACT_ALIGNMENT_GPT56SOL.json`. Other retained receipts remain authoritative for their narrower runtime/boot/component slices.
 - Evidence remains bounded: no full moving-branch pytest, actual Docker build-context transfer, OCI image build/digest, packaged service readiness/runtime or whole-product PASS is claimed.
 
 ### Next discriminator
 
-At the first authorized isolated Docker/OCI-capable surface — Vercel when admitted/capable, otherwise an egress-capable credentialed Daytona controller:
+At the first authorized isolated Docker/OCI-capable source-bound surface:
 
 `fresh exact #625 head → real build-context membership → EntityOS-free baseline build → verify no EntityOS executable in image → normal baseline service startup/readiness → optional digest-bound EntityOS build + half-input/wrong-digest/extra-file negatives → image digest → continue #611/#622/#602 and full Clerk/PTY/hooks/persistence/recovery/concurrency acceptance`.
+
+The preferred path remains Vercel when exact #625 source can be admitted without restoring the retired baseline token dependency; otherwise use an admitted egress-capable Daytona controller. Do not use VPS/self-hosted/production hosts.
 
 ## Architecture
 

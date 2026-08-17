@@ -18,6 +18,13 @@ def _archive(name='bundle/claude', payload=b'bin'):
         info=tarfile.TarInfo(name); info.size=len(payload); info.mode=0o755; tf.addfile(info,io.BytesIO(payload))
     return out.getvalue()
 
+def _archive_many(entries):
+    out=io.BytesIO()
+    with tarfile.open(fileobj=out,mode='w:gz') as tf:
+        for name,payload in entries:
+            info=tarfile.TarInfo(name); info.size=len(payload); info.mode=0o755; tf.addfile(info,io.BytesIO(payload))
+    return out.getvalue()
+
 def test_docker_uses_current_digest_pinned_native_claude_release():
     lock=json.loads((ROOT/'SOURCE_LOCK.json').read_text())
     docker=(ROOT/'Dockerfile').read_text()
@@ -81,4 +88,15 @@ def test_digest_fault_injection_fails_before_install(monkeypatch,tmp_path):
         assert 'digest mismatch' in str(exc)
     else:
         raise AssertionError('tampered archive was accepted')
+    assert not target.exists()
+
+def test_installer_rejects_ambiguous_duplicate_claude_without_target(tmp_path):
+    mod=_installer(); target=tmp_path/'claude'
+    archive=_archive_many((('a/claude',b'first'),('b/claude',b'second')))
+    try:
+        mod.install_archive(archive,target)
+    except SystemExit as exc:
+        assert 'expected exactly one Claude binary, got 2' in str(exc)
+    else:
+        raise AssertionError('ambiguous archive was accepted')
     assert not target.exists()

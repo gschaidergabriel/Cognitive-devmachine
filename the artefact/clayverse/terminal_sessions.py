@@ -122,9 +122,16 @@ class TerminalSessionManager:
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]
+        # Start Claude from an empty environment. Subscription/OAuth state must live in
+        # the durable per-user HOME; arbitrary container secrets must never become an
+        # accidental alternate authentication or tool channel.
         env_argv = [
             "env",
+            "-i",
             f"HOME={binding.home}",
+            "PATH=/usr/local/bin:/usr/bin:/bin",
+            "TERM=xterm-256color",
+            "LANG=C.UTF-8",
             "PYTHONPATH=/opt/clayverse",
             f"CLAYVERSE_STATE_ROOT={self.state_root}",
             f"CLAYVERSE_USER_ID={binding.user_id}",

@@ -1,0 +1,81 @@
+{
+  "schema": "clayverse.go-receipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "trigger_timestamp_local": "2026-08-17T13:52+07:00",
+  "organ": "ChatGPT GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "observed_main_before_write": "aa1ad2c940b9c5f755ede4494af66e80c11633df",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED",
+    "count_added": 0,
+    "reason": "The immutable user-message timestamp exposed to this organ had only minute precision and no shared immutable request/turn id. GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL therefore forbids consuming the one unusual-experiment slot. All work in this receipt is ordinary deterministic source/regression/coordination work."
+  },
+  "finding": {
+    "issue": 477,
+    "mechanism": "Learned query-only MicroClay route keys in retained Stage-A integration were keyed by cue plus subject. Distinct durable factual memories sharing that subject therefore shared the same non-lexical learned route, defeating the nearby rank-1-served-evidence-only credit fence. A newer unrelated sibling could become adaptive-route eligible after another memory earned verified credit.",
+    "authority_boundary": "This is retrieval-access contamination, not semantic truth mutation. SHADOW still prevents adaptive serving, but contaminated SHADOW evidence is not acceptable for ACTIVE promotion."
+  },
+  "repair": {
+    "current_donor_pr": 531,
+    "current_donor_branch": "go/microclay-route-memory-fence-current-20260817-1410",
+    "observed_current_donor_head": "dee0f11f25b79b4f8fa65e43917ea3fac4d9baec",
+    "observed_integration_base_at_pr_open": "3872f6d6d72a951d46c88382ab3483b86e65e54e",
+    "source_commit": "09546c45b8ee347de826e2d48360727fcb1a8bf1",
+    "source_blob": "94a048dbe2f93bf4ba71b1150f10bd36718ac833",
+    "learned_entrypoint_test_commit": "c77c2d66717dcad6c3e13ca0ebec088cf307131f",
+    "learned_entrypoint_test_blob": "baad6e18c8f1ec352bfe7a42c1b4973e42e0ed70",
+    "collision_gate_commit": "f77cfeda9e96aa555ee13a5e913302682ba22596",
+    "collision_gate_blob": "abb1cb85369228b83bc9e2bf3b1a98cac8108f7d",
+    "budget_parity_helper_commit": "dee0f11f25b79b4f8fa65e43917ea3fac4d9baec",
+    "budget_parity_helper_blob": "c420883848d424e04991e3f83d290f93009aab2a",
+    "contract": [
+      "query-only learned route eligibility binds to exact durable memory identity via opaque hash(cue)+hash(memory_id)",
+      "kind and subject capital remain ranking priors only and cannot open a lexical miss",
+      "route credit remains restricted to rank-1 served evidence",
+      "current retained replay/privacy hardening is preserved",
+      "collision regression uses the current verified entityos.exec outcome-credit path",
+      "SHADOW remains serving authority boundary"
+    ],
+    "superseded_donor_pr": 499,
+    "superseded_donor_state": "CLOSED_UNMERGED"
+  },
+  "execution_attempt": {
+    "provider": "Vercel",
+    "bridge_repository": "gschaidergabriel/Dr.-Unterweger",
+    "staging_pr": 837,
+    "staging_pr_state": "CLOSED_UNMERGED_AFTER_ADMISSION_RESULT",
+    "staging_head": "0e3961298c3363fd91604f617745b178eb962a91",
+    "staged_exact_earlier_donor_microclay_blob": "b264802d77917cd5c81ef091bc0a07cdf3b06393",
+    "planned_runtime": "@vercel/sandbox 2.9.2, non-persistent Python 3.13, deny-all network before discriminator, in-sandbox Git-blob rebinding, explicit stop",
+    "result": "EXECUTION_ADMISSION_BLOCKED",
+    "commit_status": "Vercel=failure",
+    "status_target": "upgradeToPro=build-rate-limit",
+    "sandbox_started": false,
+    "target_test_started": false,
+    "test_credit": "ZERO",
+    "classification": "Admission/control-plane failure before build/Sandbox start; neither test PASS nor test FAIL. No repeated rate-limit retrigger was performed."
+  },
+  "evidence_class": {
+    "source_candidate": true,
+    "mechanism_supported_by_source_and_regression_design": true,
+    "exact_current_donor_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "open_gates": [
+    "Vercel preview admission must reopen and actually start a Sandbox for exact current PR #531 head",
+    "run same-subject collision + learned-entry + replay/privacy + credit-transaction focused regressions on exact current donor",
+    "adjudicate Stage-A retrieval policy-version/migration semantics before any ACTIVE promotion because route-key meaning changed",
+    "fuse only one donor into retained #415; do not create a second Stage-A authority",
+    "after Stage-A/Stage-B fusion, continue lifecycle/restart/privacy/full artifact and exact OCI acceptance gates"
+  ],
+  "prohibitions_observed": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api_used": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

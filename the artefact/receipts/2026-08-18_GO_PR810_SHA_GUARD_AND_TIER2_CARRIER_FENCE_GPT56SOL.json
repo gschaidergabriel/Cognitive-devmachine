@@ -2,10 +2,12 @@
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
   "observed_at_local": "2026-08-18T01:34:23+07:00",
+  "updated_at_local": "2026-08-18T01:41:11+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
   "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
+  "canonical_main_observed_during_reentry": "0a00b6e0d4a5e5de429c7164edb3c0b7e872db77",
   "immutable_runtime_freeze": {
     "research_pr": 686,
     "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
@@ -21,28 +23,47 @@
     "malformed_guard_value": "f8e4deebcb2f4b2904fddbcb0006600bc45c50",
     "runner_value": "f8e4deebcb2f4b0b2904fddbcb0006600bc45c50",
     "repair_commit": "b699ea2c5db4d9f69dd3b222bc4891e0a4d88563",
-    "deploy_trigger_commit": "f740760fe0711c5052405e2ef69012a5db9f33d7",
     "repair_persisted_in_later_branch_head": true,
-    "later_guard_blob_observed": "c9e625458fe228da2a3593c10f5a088863e90fcd",
     "classification": "CONTROLLER_GUARD_DEFECT_REPAIRED_NO_PRODUCT_RUNTIME_CREDIT"
+  },
+  "controller_source_guard_v11": {
+    "commit": "08998fd5cacec6d11e3a9f7154004a132db7dc07",
+    "schema": "ClayVerseCurrentOCISourceGuard/v11",
+    "status": "EXACT_ACTIVE_PR686_HANDLER_AND_SANITIZED_SNAPSHOT_CARRIER_BYTES_ADMITTED",
+    "active_controller_layout": "starter + provider wrapper/handler + effect wrapper/handler + Tier2 wrapper/handler + Tier1/Tier2 scripts + vercel config",
+    "research_sha": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "research_tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "duplicate_write_prevented": true,
+    "duplicate_write_detail": "A concurrent update of the same guard was detected by GitHub contents-API optimistic locking; the competing update returned 409 and no overwrite occurred.",
+    "runtime_credit": 0
   },
   "vercel_observation": {
     "project": "dr-unterweger",
-    "pre_fix_deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
-    "pre_fix_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
-    "pre_fix_state": "ERROR",
-    "pre_fix_failure": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED on malformed 38-character RESEARCH_SHA marker",
+    "last_observed_deployment": "dpl_5KK74eSESoQkyQpagWPANQrq5bGL",
+    "last_observed_commit": "582f4ac6691d3782207c247f28665d2d8bf9e84f",
+    "last_observed_state": "ERROR",
+    "last_observed_failure": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED on malformed retained RESEARCH_SHA marker",
+    "v11_preview_trigger_commit": "4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4",
+    "v11_preview_trigger_created_at_utc": "2026-08-17T18:41:11Z",
+    "post_v11_deployment_observed_in_this_turn": false,
     "product_runtime_executed": false,
     "exact_oci_runtime_credit": 0,
     "live_provider_credit": 0,
     "whole_product_credit": 0
   },
+  "tier1_recovery_hardening": {
+    "source_fence_present": true,
+    "interrupted_no_effect_turn_required": true,
+    "verified_effect_identity_must_remain_unchanged": true,
+    "blind_external_effect_replay_forbidden": true,
+    "exact_runtime_verified": false
+  },
   "tier2_carrier_adjudication": {
-    "newer_official_vercel_evidence": "Sandbox snapshots are tied to the producing sandbox lifecycle; deleting that sandbox also deletes its snapshots. Vercel Drives are lifecycle-independent but private beta and are not assumed authorized.",
     "direct_snapshot_delete_then_restore": "REJECTED_FAIL_CLOSED",
     "sandbox_fork": "REJECTED_FOR_FULL_APPLIANCE_REPLACEMENT_CREDIT",
-    "parallel_two_stage_carrier_candidate": "A distinct carrier sandbox can preserve bytes while the source is deleted, but the observed random carrier identity/control-flow still requires crash-safe independently recoverable handoff evidence before Tier2 credit.",
-    "retained_guard_state_observed": "INDEPENDENT_DURABLE_CARRIER_REQUIRED_SNAPSHOT_AND_FORK_FAIL_CLOSED",
+    "current_source_candidate": "two-stage carrier sandbox snapshot transfer with source deletion before replacement creation and carrier deletion only after replacement exists",
+    "source_guard_binds_sanitized_transfer": true,
+    "tier2_independent_carrier_verified": false,
     "runtime_credit": 0
   },
   "coordination": {
@@ -50,19 +71,21 @@
     "duplicate_semantic_path_added": false,
     "research_product_bytes_changed_by_this_organ": false,
     "controller_infrastructure_changed_by_this_organ": true,
-    "owner_secrets_or_credentials_used": false
+    "owner_secrets_or_credentials_used": false,
+    "pr810_coordination_comment_id": 5318673462
   },
   "unusual_experiment": {
     "new_experiment_count": 0,
-    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle."
+    "reason": "The global go unusual-experiment slot was already consumed before this organ joined the macro-cycle; all work here was deterministic repair, coordination, and admission preparation."
   },
   "epistemic_status": {
     "source_candidate": true,
     "controller_guard_defect_verified": true,
     "controller_guard_repair_committed": true,
+    "refactored_controller_layout_guarded": true,
     "tier2_independent_carrier_verified": false,
     "exact_runtime_verified": false,
     "whole_product_accepted": false
   },
-  "next_exact_step": "Keep snapshot/fork-only Tier2 replacement fail-closed. Bind a crash-safe independently recoverable carrier to the single retained PR810 path without assuming private-beta storage, obtain an exact-head Vercel preview whose guards actually execute, then run the isolated PR686 source/OCI/provider/recovery sequence."
+  "next_exact_step": "Observe the Vercel preview caused by commit 4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4. If all build guards pass on the exact retained PR810 head, perform the explicit owner-credential-bearing POST to /api/go-cycle-v2 and evaluate private-source identity, Sandbox.create, exact OCI build/digest, provider, EntityOS effect, Tier1/Tier2 recovery, auth/PTY and whole-product gates without transferring any credit from source inspection."
 }

@@ -44,6 +44,7 @@ class TerminalSessionManager:
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
     TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
+    AUTONOMY_PROMPT_MAX_CHARS = 256
 
     def __init__(
         self,
@@ -106,6 +107,18 @@ class TerminalSessionManager:
             *args,
         ]
 
+    def _run_tmux(self, binding: TerminalBinding, *args: str) -> subprocess.CompletedProcess:
+        try:
+            return subprocess.run(
+                self._tmux_argv(binding, *args),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError("tmux control operation unavailable") from exc
+
     def _assert_tmux_server_policy(self, binding: TerminalBinding) -> None:
         """Fail closed unless the connected tmux server is transport-only.
 
@@ -129,16 +142,7 @@ class TerminalSessionManager:
             ("keymap", ("list-keys",), ""),
         )
         for label, args, expected in checks:
-            try:
-                cp = subprocess.run(
-                    self._tmux_argv(binding, *args),
-                    capture_output=True,
-                    text=True,
-                    check=False,
-                    timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
-                )
-            except (OSError, subprocess.TimeoutExpired) as exc:
-                raise TerminalRuntimeError(f"tmux server policy attestation unavailable: {label}") from exc
+            cp = self._run_tmux(binding, *args)
             if cp.returncode != 0 or cp.stdout.strip() != expected:
                 raise TerminalRuntimeError(f"tmux server policy attestation failed: {label}")
 
@@ -203,18 +207,7 @@ class TerminalSessionManager:
         ClayVerse policy upgrade. Source the root-owned policy before every admitted
         attach path and fail closed if the running server cannot accept it.
         """
-        try:
-            cp = subprocess.run(
-                self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
-                capture_output=True,
-                text=True,
-                check=False,
-                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
-            )
-        except (OSError, subprocess.TimeoutExpired) as exc:
-            raise TerminalRuntimeError(
-                f"tmux policy enforcement unavailable for {binding.tmux_name}"
-            ) from exc
+        cp = self._run_tmux(binding, "source-file", str(self.MANAGED_TMUX))
         if cp.returncode != 0:
             raise TerminalRuntimeError(
                 f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
@@ -293,6 +286,58 @@ class TerminalSessionManager:
         self._enforce_tmux_policy(binding)
         self._assert_tmux_server_policy(binding)
         return binding
+
+    def assert_detached_idle_claude(self, user_id: str) -> tuple[TerminalBinding, str]:
+        """Attest the only state in which synthetic autonomous terminal input is allowed."""
+        binding = self.ensure(user_id)
+        activity = self.activity.snapshot(user_id)
+        if activity.human_clients != 0 or not activity.autonomy_reserved:
+            raise TerminalRuntimeError("autonomy terminal input lacks exclusive activity reservation")
+
+        clients = self._run_tmux(
+            binding,
+            "list-clients", "-t", binding.tmux_name, "-F", "#{client_name}",
+        )
+        if clients.returncode != 0:
+            raise TerminalRuntimeError("tmux client attestation unavailable")
+        if clients.stdout.strip():
+            raise TerminalRuntimeError("tmux session has an attached client")
+
+        panes = self._run_tmux(
+            binding,
+            "list-panes", "-t", binding.tmux_name,
+            "-F", "#{pane_id}\t#{pane_dead}\t#{pane_in_mode}\t#{pane_current_command}",
+        )
+        if panes.returncode != 0:
+            raise TerminalRuntimeError("tmux pane attestation unavailable")
+        lines = [line for line in panes.stdout.splitlines() if line]
+        if len(lines) != 1:
+            raise TerminalRuntimeError("autonomy dispatch requires exactly one tmux pane")
+        fields = lines[0].split("\t")
+        if len(fields) != 4:
+            raise TerminalRuntimeError("tmux pane attestation malformed")
+        pane_id, dead, in_mode, current_command = fields
+        if not pane_id.startswith("%") or dead != "0" or in_mode != "0" or current_command != "claude":
+            raise TerminalRuntimeError("tmux pane is not a detached idle managed Claude surface")
+        return binding, pane_id
+
+    def dispatch_autonomy_prompt(self, user_id: str, prompt: str) -> None:
+        """Inject only a bounded one-shot dispatch token into an exclusively reserved idle pane."""
+        if (
+            not isinstance(prompt, str)
+            or not prompt
+            or len(prompt) > self.AUTONOMY_PROMPT_MAX_CHARS
+            or any(ord(char) < 0x20 or ord(char) > 0x7E for char in prompt)
+        ):
+            raise ValueError("invalid autonomy terminal prompt")
+        binding, pane_id = self.assert_detached_idle_claude(user_id)
+        cp = self._run_tmux(
+            binding,
+            "send-keys", "-t", pane_id, "-l", prompt,
+            ";", "send-keys", "-t", pane_id, "Enter",
+        )
+        if cp.returncode != 0:
+            raise TerminalRuntimeError("tmux autonomy dispatch failed")
 
     def attach_pty(self, user_id: str) -> tuple[int, int, TerminalBinding]:
         if not self.activity.begin_human(user_id):

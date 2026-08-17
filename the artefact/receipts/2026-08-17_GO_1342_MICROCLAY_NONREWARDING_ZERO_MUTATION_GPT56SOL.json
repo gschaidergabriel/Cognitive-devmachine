@@ -1,0 +1,60 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at_local": "2026-08-17T14:10:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "issue": 509,
+  "pull_request": 519,
+  "branch": "go/noop-zero-policy-mutation-20260817-gpt56sol",
+  "base_at_branch_creation": "267ff2c899ad4e79a42459da04af1a19a5490202",
+  "main_observed_after_pr_creation": "4b433935d7d31578f22fd0f4c51ac972a03904b9",
+  "source_commits": {
+    "shared_effect_learning_eligibility": "cdb1ee732d338f512aaefd1b02ae0166ec0138fc",
+    "nonrewarding_consumption_without_policy_mutation": "4df3d086c187fa314f0dd0f8f1791e7de0d7038f",
+    "regression_contract": "a2d9d602b14dd36886d32ee02739de1cae5de533"
+  },
+  "finding": {
+    "classification": "ANTI_GOODHART_ZERO_CREDIT_POLICY_MUTATION_SOURCE_REPAIRED_PENDING_EXECUTION",
+    "canonical_defect": "state.noop causal credit was fenced to 0.0, but MicroClay automatic outcome learning still applied ACCESS_RENT and incremented pulls, allowing a model-triggerable no-op to alter retrieval policy negatively.",
+    "stronger_invariant": "NON_REWARDING_CAPABILITY preserves causal/effect evidence and is consumed idempotently, but produces zero retrieval capital/reward_ema/pulls mutation."
+  },
+  "repair_contract": {
+    "single_capability_policy_authority": "EffectJournal.learning_eligible",
+    "nonrewarding_feedback_signal": "effect_outcome:<status>:non_rewarding",
+    "nonrewarding_credit_receipt": 0.0,
+    "retrieval_policy_mutation": false,
+    "automatic_learning_applied": 0,
+    "later_scan_replays_nonrewarding_outcome": false,
+    "explicit_manual_credit_semantics_changed": false,
+    "positive_entityos_outcome_learning_preserved": true
+  },
+  "coordination": {
+    "pr_415_fusion_comment_id": 5312941806,
+    "issue_509_status_comment_id": 5312943156,
+    "parallel_duplicate_found_before_write": false
+  },
+  "execution": {
+    "github_actions_run": 32004476385,
+    "github_actions_job": 95311087470,
+    "github_actions_steps": 0,
+    "github_actions_runner_id": 0,
+    "github_actions_classification": "RUNNER_ADMISSION_FAILURE_NOT_TEST_FAILURE",
+    "openai_isolated_checkout": "FAILED_BEFORE_CHECKOUT_DNS_GITHUB_UNRESOLVED",
+    "vercel_sandbox_bridge": "CONFIRMED",
+    "fresh_vercel_preview": "ADMISSION_BLOCKED_BY_BUILD_RATE_LIMIT_BEFORE_SANDBOX_START",
+    "exact_branch_tests_executed": false,
+    "exact_oci_runtime_executed": false
+  },
+  "experiment_accounting": {
+    "shared_user_timestamp": "2026-08-17T13:42+07:00",
+    "timestamp_precision": "minute_only",
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "this_organ_unusual_experiment_executed": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "next_gate": "Actually-started authorized isolated execution of #519 and fused #415 semantics; then broader lifecycle/retrieval/recovery/privacy regressions and exact OCI build/start/readiness/restart."
+}

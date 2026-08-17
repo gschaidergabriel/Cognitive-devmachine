@@ -128,6 +128,31 @@ def test_promotion_requires_two_real_source_episodes_and_is_receipted(tmp_path):
         db.close()
 
 
+def test_promoted_method_requires_validation_time_and_strict_numeric_types(tmp_path):
+    db, session_id = _db(tmp_path)
+    try:
+        e1 = _episode(db, session_id, "gabriel", "case one")
+        e2 = _episode(db, session_id, "gabriel", "case two")
+
+        missing_validation = db.add_method_memory(
+            "framework_candidate", "missing validation", _candidate(["diagnose"]), "gabriel", {"source": "test"}
+        )
+        payload = _promoted(["diagnose"], [e1, e2])
+        payload.pop("last_validated_at")
+        with pytest.raises(ValueError):
+            db.promote_method_memory(missing_validation, "framework", payload, {"source": "test"})
+
+        bool_calibration = db.add_method_memory(
+            "framework_candidate", "bool calibration", _candidate(["diagnose"]), "gabriel", {"source": "test"}
+        )
+        payload = _promoted(["diagnose"], [e1, e2])
+        payload["calibration"] = True
+        with pytest.raises(ValueError):
+            db.promote_method_memory(bool_calibration, "framework", payload, {"source": "test"})
+    finally:
+        db.close()
+
+
 def test_fact_unknown_plus_method_present_never_becomes_fact_present(tmp_path):
     db, session_id = _db(tmp_path)
     try:
@@ -155,7 +180,7 @@ def test_fact_unknown_plus_method_present_never_becomes_fact_present(tmp_path):
         db.close()
 
 
-def test_counterexample_blocks_matching_framework(tmp_path):
+def test_direct_promoted_counterexample_cannot_gain_blocking_authority(tmp_path):
     db, session_id = _db(tmp_path)
     try:
         mid = db.add_method_memory(
@@ -168,25 +193,41 @@ def test_counterexample_blocks_matching_framework(tmp_path):
         e1 = _episode(db, session_id, "gabriel", "case one")
         e2 = _episode(db, session_id, "gabriel", "case two")
         db.promote_method_memory(mid, "framework", _promoted(["diagnose", "validate"], [e1, e2]), {"source": "test"})
-        db.add_method_memory(
+
+        with pytest.raises(ValueError):
+            db.add_method_memory(
+                "counterexample",
+                "unverified blocker",
+                {
+                    "schema": METHOD_SCHEMA,
+                    "status": "PROMOTED",
+                    "problem_signature": {"task_shape": ["diagnose", "validate"]},
+                    "blocks_method_ids": [mid],
+                },
+                "gabriel",
+                {"source": "caller-assertion-only"},
+            )
+
+        candidate_counter = db.add_method_memory(
             "counterexample",
-            "known boundary",
+            "candidate boundary",
             {
                 "schema": METHOD_SCHEMA,
-                "status": "PROMOTED",
+                "status": "CANDIDATE",
                 "problem_signature": {"task_shape": ["diagnose", "validate"]},
                 "blocks_method_ids": [mid],
             },
             "gabriel",
-            {"source": "counterexample-test"},
+            {"source": "candidate-only"},
         )
         result = MethodMemoryRetriever(db).retrieve(
             query="Why did this mechanism fail; verify the cause",
             user_id="gabriel",
             fact_status="UNKNOWN",
         )
-        assert result["method_status"] == "UNKNOWN"
-        assert result["counterevidence"]
+        assert mid in [item["memory_id"] for item in result["items"]]
+        assert result["counterevidence"] == []
+        assert candidate_counter not in [item["memory_id"] for item in result["counterevidence"]]
     finally:
         db.close()
 

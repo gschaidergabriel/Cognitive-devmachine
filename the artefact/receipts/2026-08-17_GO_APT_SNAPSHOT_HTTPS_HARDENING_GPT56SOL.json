@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "recorded_at": "2026-08-17T13:51:00+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "product_endpoint": "one OCI/Docker-compatible ClayVerse container image",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "parent_pr": 422,
+  "branch": "go/apt-snapshot-lock-current-20260817-gpt56sol",
+  "branch_head_before_receipt": "e3a8f76f30510af04e31f171800555ce9a2283cc",
+  "main_observed_before_receipt": "9e90d1ffcabe10cad20807b4dfc5ed9615b3decf",
+  "finding": "Adversarial review found that the draft snapshot contract admitted HTTP transport while Check-Valid-Until was intentionally disabled for the fixed historic snapshot. The source contract was strengthened to require HTTPS in addition to Debian Release/Packages/.deb signature and hash-chain verification.",
+  "repair": {
+    "source_lock_commit": "3fd38329ba7a29b75af16a8dc99b200e724c7642",
+    "source_lock_blob": "eb87e9ba86169316db1b1d092175dd7bcddbbfe9",
+    "validator_commit": "9b4c52a004d9f820fd0b154157906598a0e8f659",
+    "validator_blob": "1a83978b52e7903bdb0ecfe8bb005dd4c92647e4",
+    "regression_commit": "e3a8f76f30510af04e31f171800555ce9a2283cc",
+    "regression_blob": "c628d6cdb476f864450c701a47f5287021280bc5",
+    "contract": "exact snapshot.debian.org host/path/timestamp, HTTPS only, no explicit port/userinfo/query/fragment, fixed package set, fixed Debian archive keyring, no mutable mirror fallback"
+  },
+  "ordinary_isolated_source_mechanism_evidence": {
+    "surface": "OpenAI isolated non-production container reconstructed source slice",
+    "commands": [
+      "python -m pytest -q tests/test_apt_snapshot_lock.py tests/test_build_context_boundary.py",
+      "python -m py_compile build/install_pinned_apt.py",
+      "python build/install_pinned_apt.py --lock SOURCE_LOCK.json --write-sources /tmp/clayverse-snapshot.sources",
+      "python build/install_pinned_apt.py --lock SOURCE_LOCK.json --print-packages"
+    ],
+    "observed": [
+      "8 passed",
+      "py_compile PASS",
+      "renderer emitted only https://snapshot.debian.org Debian/trixie and Debian-Security/trixie-security snapshot sources at 20260817T000000Z",
+      "HTTP downgrade to the otherwise exact snapshot path was rejected fail-closed",
+      "package list exactly: ca-certificates tmux"
+    ],
+    "evidence_class": "BOUNDED_SOURCE_MECHANISM_SUPPORTED_NOT_EXACT_PR_HEAD_OR_OCI_RUNTIME",
+    "exact_pr_head_test_claim": false
+  },
+  "primary_design_basis": [
+    "Debian snapshot.debian.org documents HTTPS snapshot access and timestamped archives",
+    "Debian APT documents Check-Valid-Until as replay/staleness protection and its per-source disablement for historic archives",
+    "the pinned upstream python slim-trixie image family includes ca-certificates, so the snapshot fetch need not depend on unauthenticated HTTP bootstrap"
+  ],
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED",
+    "reason": "The available user-turn trigger metadata is minute-precision only (2026-08-17T13:42+07:00), below the current atomic GO lease protocol's minimum immutable request identity requirement. No new unusual experiment lease was minted."
+  },
+  "execution_admission": {
+    "vercel_sandbox_start_exec_exposed": false,
+    "private_repo_clone_into_local_isolated_container": "BLOCKED_BY_MISSING_GITHUB_CREDENTIAL",
+    "vps_self_hosted_production_fallback_used": false
+  },
+  "counterhypothesis": "HTTPS plus a fixed signed snapshot source can still fail in the actual image or resolve an unexpected dependency closure; source validation alone cannot establish the downloaded package bytes, image identity, startup, readiness or restart behavior.",
+  "remaining_gate": "Refresh/rebase the draft lane onto then-current main and execute an authorized exact-source OCI build that captures actual APT resolution/package identities, image digest, startup/readiness and restart evidence.",
+  "non_claims": [
+    "No exact PR-head test PASS is claimed from the reconstructed source slice.",
+    "No actual APT package fetch/resolution receipt on an admitted OCI build is claimed.",
+    "No image build/digest, startup/readiness/restart, Vercel runtime or whole ClayVerse PASS is claimed.",
+    "No VPS/self-hosted/production test was used.",
+    "No Together API/service or paid/final model training was used."
+  ]
+}

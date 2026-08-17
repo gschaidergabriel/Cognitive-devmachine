@@ -1,0 +1,109 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "date": "2026-08-17",
+  "local_time": "23:19+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "classification": "SOURCE_MECHANISM_SUPPORTED_FRESH_MAIN_REJOIN",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "fresh_main_parent": "cd6ad7ba4ee8fcb119d92e02fd977e49f800562d",
+  "product_commit": "f548089b0acf4c44df8de7df5727a6b3a577cd51",
+  "branch": "gpt56sol/go-tier2-poduid-fence-freshmain-20260817-2319",
+  "purpose": "Close the fail-open window where RecoveryIntegrityError can emit a Tier-2 signal but kubelet restartPolicy Always can restart the application inside the same Pod/Kata sandbox before external full-sandbox replacement occurs.",
+  "mechanism": {
+    "signal_exit_code": 86,
+    "fatal_trigger": "RecoveryIntegrityError only",
+    "durable_fence": "/var/lib/clayverse/tier2-replacement.json",
+    "fence_identity": ["old_pod_uid", "reason", "entity_generation"],
+    "pod_identity_input": "CLAYVERSE_POD_UID from Kubernetes Downward API metadata.uid",
+    "kubernetes_api_credential_in_application": false,
+    "same_pod_restart": "BLOCKED_BEFORE_UNIFIEDDB_OPEN",
+    "replacement_admission": "requires new Pod UID plus canonical recovery advancing global entity generation",
+    "fence_clear": "after replacement checkpoint and generation fence, with directory fsync",
+    "external_full_sandbox_controller_required": true,
+    "whole_tier2_gate_closed": false
+  },
+  "exact_blobs": {
+    "the artefact/clayverse/tier2.py": "bc2e767807ff9d4fc314b4a6a447bdca4fcc1487",
+    "the artefact/clayverse/service.py": "00105291f650a4fc1813e4a36d35a768b1562c9f",
+    "the artefact/deployment/clayverse-kata-statefulset.template.yaml": "5199acd2cca2f8814eef661c62799edaddf883d8",
+    "the artefact/deployment/TIER2_REPLACEMENT_SIGNAL_CONTRACT.md": "9b5b215f169d0b691cbb5ec6c7b81b2c12980238",
+    "the artefact/tests/test_tier2_replacement_fence.py": "c65641cda2f3e2f849364e166b7be55b74ba7d8e"
+  },
+  "adversarial_repair_history": {
+    "predecessor_defect": "initial fence writer assumed one os.write call writes the complete payload",
+    "falsifier": "partial os.write monkeypatch",
+    "repair": "bounded _write_all loop before fsync plus O_NOFOLLOW/regular-file/bounded reads and idempotent same-Pod first-fence preservation",
+    "negative_result_preserved": true
+  },
+  "isolated_execution": {
+    "surface": "authorized isolated OpenAI Python container",
+    "exact_tier2_blob_reconstructed": true,
+    "git_blob_sha256_note": "Git blob SHA-1 matched GitHub exact tier2.py blob bc2e7678... before execution",
+    "focused_behavior_matrix": "9/9 PASS",
+    "cases": [
+      "no fence permits normal probe",
+      "same Pod UID blocked",
+      "new Pod UID requires generation advance",
+      "same-Pod repeated request is idempotent",
+      "new Pod may re-fence after a second integrity failure",
+      "partial os.write is completed",
+      "symlink fence fails closed",
+      "malformed fence fails closed",
+      "oversized fence fails closed / missing current UID while fenced fails closed"
+    ],
+    "exact_full_branch_pytest": false,
+    "kubernetes_or_kata_executed": false,
+    "oci_executed": false
+  },
+  "coordination": {
+    "closed_zero-commit_pr_653_semantics": "adopted/refined rather than revived as a duplicate permanent path",
+    "stale_work_branch_promoted": false,
+    "fresh_main_tree_rebind": true,
+    "parallel_mistral_main_changes_preserved": true,
+    "current_main_search_for_CLAYVERSE_POD_UID_before_pr": "no canonical main hit observed"
+  },
+  "current_owner_gate": {
+    "final_test": "Vercel Sandbox Firecracker -> exact accepted OCI digest -> runtime approved Vault secret -> transient Mistral -> canonical re-ingest/effect path -> full Sandbox/appliance destruction and recreation from same digest -> secret reacquisition -> repeat",
+    "github_read_token_forwarding": "scoped read-only forwarding into authorized disposable Vercel Sandbox is permitted by current owner correction",
+    "latest_observed_execution_blocker": "approved GITHUB_READ_TOKEN is not currently provisioned/injectable through the connected Vercel tool surface",
+    "mistral_main_state": "canonical main now contains bounded Mistral adapter and pre-effect re-ingest source candidates; no real provider/Vault/OCI credit"
+  },
+  "primary_source_basis": [
+    "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+    "https://kubernetes.io/docs/reference/kubernetes-api/definitions/preconditions-v1-meta/",
+    "https://kubernetes.io/docs/reference/kubernetes-api/definitions/delete-options-v1-meta/",
+    "https://kubernetes.io/docs/tasks/run-application/force-delete-stateful-set-pod/"
+  ],
+  "runtime_credit": {
+    "tier2_source_mechanism": "SUPPORTED_AT_EXACT_TIER2_MODULE_SCOPE",
+    "kubernetes_api": 0,
+    "kata_sandbox_replacement": 0,
+    "exact_final_oci": 0,
+    "real_mistral": 0,
+    "vault_reacquisition": 0,
+    "whole_product": 0
+  },
+  "open_gates": [
+    "external fail-closed controller must observe Tier-2 signal and delete exact old Pod with UID/resource precondition",
+    "prove old Pod/Kata sandbox terminal and new Pod UID + new sandbox/VM identity",
+    "prove same accepted OCI digest and declared persistent volumes only",
+    "prove canonical recovery advances generation, stale writers/results fail closed and ambiguous effects are never blindly replayed",
+    "execute exact full branch regressions and then exact OCI/runtime path",
+    "provision approved scoped GITHUB_READ_TOKEN for retained Vercel controller and continue final Firecracker/Vault/Mistral test-of-tests"
+  ],
+  "go_unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count_executed": 0,
+    "reason": "No safely shared immutable request/turn id is exposed; no seconds were synthesized."
+  },
+  "safety": {
+    "vps_self_hosted_production_test": false,
+    "together_api": false,
+    "secret_value_observed_or_logged": false,
+    "paid_or_final_training": false,
+    "whole_product_pass_claimed": false
+  },
+  "acceptance": "IN_PROGRESS"
+}

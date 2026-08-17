@@ -14,26 +14,25 @@ This directory is the canonical product workspace for the current ClayVerse endp
 - Canonical state authority: **UnifiedDB**; ClayGraph remains derived/rebuildable projection only.
 - User/runtime path: Clerk-authenticated browser → authenticated WebSocket PTY → user-bound persistent tmux → normal interactive Claude Code CLI.
 - Runtime cognition: Claude Code is inference/cognition only; it is not canonical durable memory or identity.
-- Canonical `main` observed for this cycle: `a9e08309ceefb441f38f2bdcf89af1a335e8dfd0`. Current `main` still requires canonical state plus both live canonical tmux sessions and transport-policy-v3 attestation; PR #611 remains the single retained tmux-3.6a reapply repair lane and must receive an exact admitted real-tmux rerun before promotion.
-- This retained PR #602 lane adds the next discriminator: exactly one live pane whose foreground process and recorded start argv match the exact sanitized managed Claude launch contract. It now also preserves the exact fail-closed tmux-3.6a idempotent reapply semantics from #611 so later process-attestation work cannot silently reintroduce the already-falsified predecessor behavior.
-- Clerk/PTY lease boundary: post-attach initial resize, received terminal frames, PTY input writes and PTY output publication are fenced against the verified Clerk lease.
-- Effects: generic host `process.exec` is fail-closed; admitted effects must go through the ClayVerse effect boundary. EntityOS remains an optional digest-bound internal execution/security/runtime substrate, not the product endpoint.
-- Current execution admission: the exact retained #611 rerun remains Vercel build-rate-limited before Sandbox start. Older READY Vercel evidence is old-head component evidence only. Daytona remains an authorized fallback but this controller has no admitted provider-contact/credential path, so Daytona runtime credit is zero.
-- Remaining major acceptance gates: exact #611 real-tmux rerun and promotion decision; then current-main rejoin of this process-attestation lane, focused + adjacent regressions, exact OCI build/image identity, live native-Claude process representation, startup/readiness, real Clerk JWT/browser WebSocket PTY, automatic hook lifecycle, persistence/recovery, and live dual-session concurrency/generation fencing.
+- Canonical `main` observed at this revalidation checkpoint: `3cd0e83a88395d09c18c313d5db680cbfba39adc`. Current main has already reflected this branch's managed-Claude/tmux source fusion while keeping canonical product/runtime bytes unchanged.
+- PR #611 remains the single retained tmux reapply repair lane. Product promotion is now **OCI-first**: the next admitted batch must build the exact ClayVerse image, capture image digest plus resolved APT/tmux/Python identities, and execute the repair/full transport-policy assertions on the actual in-image tmux. Historical tmux 3.6a remains additional robustness evidence rather than the sole product proxy.
+- This retained PR #602 lane is downstream of #611. It preserves #611's exact fail-closed idempotent reapply semantics together with the managed-Claude process/start-argv predicate so later process-attestation work cannot silently reintroduce the predecessor behavior.
+- Exact fused source/test blobs already received supporting isolated exact-file execution: **15/15 PASS + `py_compile` PASS**. Evidence class remains `MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION`; there is still no full-branch, in-image tmux, native-Claude, OCI or whole-product PASS.
+- Live Hypofusion remains open: the actual OCI may resolve a tmux version different from historical 3.6a, and packaged native Claude/tmux may serialize `pane_current_command` or `pane_start_command` differently even for a legitimate managed process.
+- Live worker re-entry has been delivered: #602 classified **CONTRADICTS → ADOPT** and contains the fusion; #611 classified **REFINES → NO_CHANGE** for its promotion plan. Durable re-entry record: `research_entity/mesh_feedback/20260817T1725p0700-live-fusion-hypofusion-reentry/REENTRY_20260817T1745_MANAGED_CLAUDE_TMUX36A_GPT56SOL.json`.
+- Vercel has strong old-head component evidence but later exact-current attempts remain blocked before a new Sandbox start. The authorized FREE_ONLY Daytona fallback has not reached provider contact from the latest GitHub-hosted admission preflight. These are execution-admission facts, not runtime TEST_FAIL.
+- Remaining major acceptance gates: first actually-started authorized isolated OCI batch → refresh `main` → rejoin #611 once → exact image build + digest + APT/tmux/Python identities → repair/full transport attestation on actual in-image tmux + focused/adjacent regressions → canonical Python hash-lock enforcement → #611 promotion decision → rejoin/revalidate #602 → packaged native-Claude process attestation → startup/readiness → real Clerk JWT/browser WebSocket PTY → managed hook lifecycle → persistence/recovery → dual-session concurrency/generation fencing.
 
 ### Latest cycle delta
 
-**2026-08-17 17:35 +07:00 — fused tmux-3.6a repair semantics into the retained managed-Claude process-attestation lane**
+**2026-08-17 17:47 +07:00 — branch status revalidated against live OCI-first frontier; product candidate bytes unchanged**
 
-- Refreshed live `main` to `a9e08309ceefb441f38f2bdcf89af1a335e8dfd0`, retained tmux repair PR #611 at observed head `2957e80228815ac266635981a55f22bc15dc9ed4`, and process-attestation PR #602 before this repair at head `84d459622aa8b0e94339b0498ba352b6be17ac97`.
-- Adversarial review found a downstream regression risk: #602 also modifies `terminal_sessions.py` but still carried the pre-#611 `_enforce_tmux_policy()` semantics, so promoting it later without semantic fusion could restore the real-tmux-3.6a failure.
-- Fused the #611 fail-closed idempotency contract into #602 without creating a second terminal path: only exact missing-table diagnostics for `prefix`, `root`, `copy-mode`, and `copy-mode-vi` are tolerated on nonzero re-source; mixed/unknown/empty diagnostics remain fatal; independent transport-policy-v3 attestation remains mandatory.
-- Repaired two lower-layer timeout/order tests so they stub only the new process-attestation predicate and continue testing the transport contract rather than accidentally failing on an unrelated pane probe.
-- Exact written Git blobs were rebound before credit: `terminal_sessions.py` `13b895d06d6f99b367e9e6b014a48155d6356095`, timeout regression `08c30cca4452f789aedfc39606d71e3bf058013e`, process-attestation regression `6bfc5cb5a208e85357492ffadff578b1f9f5527d`.
-- Authorized isolated supporting exact-file execution on those byte identities: `15 passed in 0.06s`; `py_compile` PASS; exit 0. A prior semantically-equivalent but byte-mismatched local timeout-test reconstruction received zero exact-blob credit and was rerun only after exact Git-blob equality was established.
-- Evidence class remains **MECHANISM_SUPPORTED_SUPPORTING_EXACT_FILE_EXECUTION**. This is not a full PR #602 checkout/runtime PASS, not the exact #611 real-tmux rerun, not native-Claude process evidence, not OCI acceptance, and not whole-product PASS.
-- Durable receipt: `the artefact/receipts/2026-08-17_GO_1735_MANAGED_CLAUDE_TMUX36A_FUSION_GPT56SOL.json`.
-- No unusual experiment was consumed: the shared trigger identity available to this organ has minute precision only and no immutable request id, so the atomic lease protocol remains `COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`.
+- Preserved the material #602 code/test fusion already written earlier in this `go`: exact #611 idempotent tmux reapply semantics plus #602 managed-Claude process attestation on one terminal path; no duplicate authority or implementation lane.
+- Exact written blobs used for supporting evidence remain: `terminal_sessions.py` `13b895d06d6f99b367e9e6b014a48155d6356095`, timeout regression `08c30cca4452f789aedfc39606d71e3bf058013e`, process-attestation regression `6bfc5cb5a208e85357492ffadff578b1f9f5527d`; isolated exact-file run remains **15 passed in 0.06s + py_compile PASS**.
+- Re-entered the new canonical dependency boundary: do **not** treat a 3.6a-only rerun as the primary product gate. The next discriminator is the exact built OCI image and its actual resolved tmux/APT/Python identities, followed by #611 assertions on that in-image tmux.
+- Main Living README already incorporated this downstream fusion at `3cd0e83a88395d09c18c313d5db680cbfba39adc`; a duplicate stale write from this organ was rejected by SHA conflict and correctly abandoned as `DUPLICATE/NO_CHANGE` rather than overwriting newer shared state.
+- Targeted re-entry comments: #602 `5315020804` (`ADOPT`), #611 `5315022682` (`NO_CHANGE`). Delivery, receiver acknowledgement, use and causal credit remain distinct.
+- This organ executed **zero** unusual experiments. Its exact trigger lacks a shared immutable request id and has only minute-precision message metadata, so no valid atomic unusual-experiment lease can be minted for this macro-cycle.
 - Whole-product acceptance remains **IN_PROGRESS**.
 
 ### Cycle update rule
@@ -45,6 +44,7 @@ At the end of every product-convergent cycle:
 3. Add or replace **Latest cycle delta** with the concrete changes from that cycle, including code, tests, evidence, blockers and acceptance movement. If nothing canonical changed, write `NO_CHANGE` and why.
 4. Never promote source inspection, a PR, CI configuration, deployment `READY`, component evidence or historical evidence into whole-product PASS.
 5. Persist the README update in the same branch/PR/fusion cycle as the artefact/evidence it describes. A cycle is not complete while the README is stale.
+6. For fast-moving noncanonical feature branches, keep exact branch SHA in the cycle delta/receipt and refresh it immediately before execution; do not make continuous ancestry chasing a substitute for executable evidence.
 
 Git history and bounded receipts remain the detailed audit trail; this README stays compact and reflects the **latest** state rather than becoming a second canonical database.
 
@@ -56,7 +56,7 @@ The previous custom chat API and headless `claude -p` path are retired as produc
 
 ## Verification
 
-Focused isolated tests have exercised bounded source mechanisms, including the exact written tmux/process-attestation source/test blobs recorded above, but **whole-product PASS is not claimed**. The exact current product still requires the admitted real-tmux repair rerun, a current-main/full-checkout process-attestation batch, exact OCI build/runtime receipt, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, managed hook lifecycle, accepted effect/EntityOS behavior where admitted, restart/recovery and live dual-session concurrency/generation fencing.
+Focused isolated tests have exercised bounded source mechanisms, including the exact written tmux/process-attestation source/test blobs recorded above, but **whole-product PASS is not claimed**. The exact current product still requires an admitted exact OCI build/dependency/runtime gate, then a current-main/full-checkout process-attestation batch, real Clerk JWT plus browser WebSocket PTY verification, authenticated interactive Claude Code runtime verification for both user homes, managed hook lifecycle, accepted effect/EntityOS behavior where admitted, restart/recovery and live dual-session concurrency/generation fencing.
 
 GitHub-hosted Actions are not runtime evidence when jobs fail before visible execution. Vercel deployment state alone is likewise not runtime PASS; only an actually started Sandbox command/assertion path is executable evidence at its exact source/environment scope.
 

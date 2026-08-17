@@ -26,10 +26,19 @@ def test_stale_lease_is_rejected_aba(db):
     IdentityRouter(db,{'g':'gabriel'}); l1=db.acquire_lease('repo:x','worker-A',ttl=.01); time.sleep(.02); l2=db.acquire_lease('repo:x','worker-B',ttl=10)
     with pytest.raises(StaleGeneration): db.assert_lease(l1)
     db.assert_lease(l2)
+def test_stale_intent_generation_is_rejected_before_effect(db):
+    r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g')
+    class GenerationBumpInference:
+        def reason(self,world,observation):
+            db.bump_generation(sid)
+            return {'text':'stale effect','selection':'respond','effect':{'capability':'state.noop','target':'shared:deploy'}}
+    e=ClayVerseEngine(db,{'g':'gabriel'},inference=GenerationBumpInference())
+    with pytest.raises(StaleGeneration): e.ingest('g','deploy')
+    assert db.db.execute('select count(*) from effects').fetchone()[0]==0
 def test_process_gate_no_shell_and_disabled_by_default(db):
-    r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); gate=EffectGate(db,allow_process=False)
-    with pytest.raises(PermissionError): gate.execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok']))
-    eid,out=EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'])); assert out['ok'] and out['stdout'].strip()=='ok'
+    r=IdentityRouter(db,{'g':'gabriel'}); uid,sid=r.resolve('g'); generation=db.session_generation(sid); gate=EffectGate(db,allow_process=False)
+    with pytest.raises(PermissionError): gate.execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'],generation))
+    eid,out=EffectGate(db,allow_process=True).execute(EffectRequest(uid,sid,'process.exec','echo',['/bin/echo','ok'],generation)); assert out['ok'] and out['stdout'].strip()=='ok'
 def test_causal_reentry_and_restart_continuity(tmp_path):
     p=tmp_path/'state.db'; d=UnifiedDB(p); ClayVerseEngine(d,{'g':'gabriel'}).ingest('g','FACT: persistent'); d.close(); d=UnifiedDB(p); assert d.db.execute('select count(*) from causal_episodes where reentered=1').fetchone()[0]==1; assert d.db.execute('select value from durable_memory').fetchone()[0]=='persistent'; d.close()
 def test_checkpoint_hash_changes_on_canonical_state(db):

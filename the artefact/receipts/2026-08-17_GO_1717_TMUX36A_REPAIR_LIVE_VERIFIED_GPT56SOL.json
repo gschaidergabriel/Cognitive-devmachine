@@ -1,0 +1,64 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "timestamp_local": "2026-08-17T17:17:37+07:00",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "classification": "EXACT_COMPONENT_LIVE_RUNTIME_PASS",
+  "whole_product_acceptance": "IN_PROGRESS",
+  "canonical_main_at_rejoin": "4d7fd30e8b226dea51c1e7ce3e34ca4a3359e505",
+  "rejoined_branch": "go/tmux-reapply-liveverified-current-main-20260817-1717-sol",
+  "candidate": {
+    "source_pr": 603,
+    "source_pr_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "terminal_sessions_git_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_git_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc",
+    "managed_tmux_git_blob": "fd3a0a3b5f0b595c0e15d9f36991148eed67df7d"
+  },
+  "execution_bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "branch": "chatgpt/go-clayverse-tmux-live-f9e403-20260817",
+    "bridge_commit": "fff4b86192e15368b58584f1a026f3eb0d23aad6",
+    "vercel_deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+    "deployment_state_after_build": "READY",
+    "bridge_parser": "PASS",
+    "candidate_head_binding": "ef61bfb85ab59291c3b0b33d024aa098b1f29089"
+  },
+  "isolated_runtime": {
+    "provider": "Vercel Sandbox",
+    "os_family": "Amazon Linux 2023",
+    "tmux": "3.6a-1.amzn2023.0.1",
+    "python": "3.13.13-1.amzn2023.0.2",
+    "sqlite": "3.40.0",
+    "network_during_product_test": "DENY_ALL",
+    "steps": {
+      "provision_real_tmux_sqlite_python": 0,
+      "install_exact_candidate_fixture": 0,
+      "seed_prepolicy_server_and_verify_sqlite": 0,
+      "candidate_live_tmux36a_idempotency": 0
+    },
+    "markers": [
+      "PREPOLICY_UPGRADE_REAPPLY=PASS",
+      "ALREADY_HARDENED_REAPPLY_IDEMPOTENT=PASS",
+      "NEW_SERVER_SECOND_SOURCE_IDEMPOTENT=PASS",
+      "DIRECT_MULTI_ARGV_FAKE_CLAUDE_LAUNCH=PASS",
+      "NETWORK_DURING_TEST=DENY_ALL"
+    ],
+    "prepolicy_upgrade_elapsed_seconds": 0.015353,
+    "unknown_mixed_diagnostic_fail_closed": true,
+    "empty_diagnostic_fail_closed": true,
+    "duplicate_build_invocation": "SKIP_ALREADY_FINISHED"
+  },
+  "scope_limits": {
+    "native_claude": "NOT_TESTED_FAKE_EXECUTABLE_ONLY",
+    "oci_product_image": "NOT_TESTED",
+    "identity_dependency": "STUB_ONLY",
+    "clerk_browser_websocket": "NOT_TESTED",
+    "restart_recovery": "NOT_TESTED",
+    "dual_session_concurrency": "NOT_TESTED"
+  },
+  "promotion_state": "REJOINED_TO_CURRENT_MAIN_BRANCH_PENDING_ADJACENT_REGRESSION_AND_REVIEW",
+  "unusual_experiment_count_added": 0,
+  "unusual_experiment_note": "Regression-only execution of the already-defined real-tmux falsifier; no new unusual experiment was consumed.",
+  "next_gate": "Run focused plus adjacent deterministic source regressions on the rejoined current-main candidate, then promote only if they pass; next whole-product frontier is managed native-Claude process attestation followed by exact OCI/runtime acceptance.",
+  "evidence_law": "This exact component runtime PASS does not imply whole ClayVerse container PASS."
+}

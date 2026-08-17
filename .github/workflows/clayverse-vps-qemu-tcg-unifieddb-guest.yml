@@ -1,0 +1,333 @@
+name: ClayVerse VPS QEMU TCG UnifiedDB guest runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/clayverse-vps-qemu-tcg-unifieddb-guest.yml'
+      - 'the artefact/clayverse/store.py'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clayverse-vps-qemu-tcg-unifieddb-guest
+  cancel-in-progress: false
+
+jobs:
+  unifieddb-in-independent-guest:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 25
+    steps:
+      - name: Checkout exact product bytes for immutable guest input only
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Resolve rootless QEMU and ISO tooling without host product execution
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          root="/tmp/clayverse-unifieddb-vmm-${GITHUB_RUN_ID}"
+          debs="$root/debs"
+          fsroot="$root/rootfs"
+          seedroot="$root/seedroot"
+          mkdir -p "$debs" "$fsroot" "$seedroot"
+          test "$(id -u)" -ne 0
+
+          python3 - "$root/packages.txt" <<'PY'
+          import re, subprocess, sys
+          out=sys.argv[1]
+          seeds=['qemu-system-x86','qemu-system-data','seabios']
+          seen=set(); queue=list(seeds); needed=[]
+          def installed(pkg):
+              p=subprocess.run(['dpkg-query','-W','-f=${Status}',pkg],text=True,capture_output=True)
+              return p.returncode==0 and p.stdout.strip()=='install ok installed'
+          while queue:
+              pkg=queue.pop(0).split(':',1)[0]
+              if not re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',pkg) or pkg in seen:
+                  continue
+              seen.add(pkg)
+              if pkg not in seeds and installed(pkg):
+                  continue
+              policy=subprocess.run(['apt-cache','policy',pkg],text=True,capture_output=True)
+              if policy.returncode!=0 or 'Candidate: (none)' in policy.stdout:
+                  continue
+              needed.append(pkg)
+              deps=subprocess.run(['apt-cache','depends','--no-recommends','--no-suggests','--no-conflicts','--no-breaks','--no-replaces','--no-enhances',pkg],text=True,capture_output=True,check=True).stdout
+              for line in deps.splitlines():
+                  m=re.match(r'\s*(?:Pre)?Depends:\s+([^\s]+)',line)
+                  if not m: continue
+                  dep=m.group(1).strip('<>').split(':',1)[0]
+                  if re.fullmatch(r'[a-z0-9][a-z0-9+.-]+',dep): queue.append(dep)
+          if not all(seed in needed or installed(seed) for seed in seeds):
+              raise SystemExit('ROOTLESS_QEMU_PACKAGE_RESOLUTION_INCOMPLETE')
+          open(out,'w').write('\n'.join(needed)+'\n')
+          PY
+
+          (
+            cd "$debs"
+            while IFS= read -r pkg; do apt-get download "$pkg" >/dev/null; done < "$root/packages.txt"
+            apt-get download genisoimage >/dev/null
+          )
+          shopt -s nullglob
+          for deb in "$debs"/*.deb; do
+            name=$(dpkg-deb -f "$deb" Package)
+            if [ "$name" = genisoimage ]; then dpkg-deb -x "$deb" "$seedroot"; else dpkg-deb -x "$deb" "$fsroot"; fi
+          done
+
+          qemu="$fsroot/usr/bin/qemu-system-x86_64"
+          geniso="$seedroot/usr/bin/genisoimage"
+          datadir="$fsroot/usr/share/qemu"
+          bios="$(find "$fsroot/usr/share" -type f \( -name 'bios-256k.bin' -o -name 'bios.bin' \) -print -quit)"
+          libpath="$fsroot/usr/lib/x86_64-linux-gnu:$fsroot/lib/x86_64-linux-gnu:$fsroot/usr/lib64:$fsroot/lib64"
+          test -x "$qemu"; test -x "$geniso"; test -r "$bios"
+          LD_LIBRARY_PATH="$libpath${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" QEMU_MODULE_DIR="$fsroot/usr/lib/x86_64-linux-gnu/qemu" "$qemu" --version | head -n1
+          "$geniso" --version 2>&1 | head -n1 || true
+          {
+            printf 'CLAYVERSE_QEMU_BIN=%s\n' "$qemu"
+            printf 'CLAYVERSE_QEMU_DATADIR=%s\n' "$datadir"
+            printf 'CLAYVERSE_QEMU_LIBPATH=%s\n' "$libpath"
+            printf 'CLAYVERSE_QEMU_BIOS=%s\n' "$bios"
+            printf 'CLAYVERSE_GENISOIMAGE=%s\n' "$geniso"
+          } >> "$GITHUB_ENV"
+
+      - name: Build declared read-only guest seed without executing product on host
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          payload="/tmp/clayverse-unifieddb-payload-${GITHUB_RUN_ID}"
+          mkdir -p "$payload"
+          store='the artefact/clayverse/store.py'
+          test -s "$store"
+          research_sha=$(git rev-parse HEAD)
+          test "$research_sha" = "$GITHUB_SHA"
+          store_blob=$(git hash-object "$store")
+          store_sha=$(sha256sum "$store" | awk '{print $1}')
+          store_b64=$(base64 -w0 "$store")
+
+          cat > "$payload/test_unifieddb.py" <<'PY'
+          import hashlib, importlib.util, json, pathlib, sqlite3, sys
+
+          store_path=pathlib.Path('/opt/clayverse/store.py')
+          expected_sha='__STORE_SHA256__'
+          research_sha='__RESEARCH_SHA__'
+          actual_sha=hashlib.sha256(store_path.read_bytes()).hexdigest()
+          if actual_sha != expected_sha:
+              raise SystemExit(f'PRODUCT_SOURCE_SHA_MISMATCH:{actual_sha}:{expected_sha}')
+          spec=importlib.util.spec_from_file_location('clayverse_store_exact',store_path)
+          mod=importlib.util.module_from_spec(spec); spec.loader.exec_module(mod)
+          db_path='/var/lib/clayverse-smoke/unified.db'
+          pathlib.Path(db_path).parent.mkdir(parents=True,exist_ok=True)
+          db=mod.UnifiedDB(db_path)
+          try:
+              db.ensure_user('gabriel','Gabriel','guest-clerk-gabriel')
+              db.ensure_user('andreas','Andreas','guest-clerk-andreas')
+              sg=db.ensure_session('gabriel','tmux:gabriel')
+              sa=db.ensure_session('andreas','tmux:andreas')
+              assert sg=='session:gabriel' and sa=='session:andreas'
+              users=[tuple(r) for r in db.db.execute("SELECT user_id,rights FROM users ORDER BY user_id")]
+              assert users==[('andreas','equal'),('gabriel','equal')]
+              g1=db.entity_generation(); assert g1==1
+              assert db.session_generation(sg)==1 and db.session_generation(sa)==1
+              tg=db.append_turn(sg,'gabriel','user','guest-global-generation-check',provenance={'scope':'qemu_tcg_guest'})
+              ta=db.append_turn(sa,'andreas','user','guest-equal-perspective-check',provenance={'scope':'qemu_tcg_guest'})
+              g2=db.advance_entity_generation(); assert g2==2
+              assert db.session_generation(sg)==2 and db.session_generation(sa)==2
+              assert db.assert_live_generation(sg,2) is True and db.assert_live_generation(sa,2) is True
+              stale=[]
+              for sid in (sg,sa):
+                  try: db.assert_live_generation(sid,1)
+                  except mod.StaleGeneration: stale.append(sid)
+              assert stale==[sg,sa]
+              checkpoint_id,state_hash=db.checkpoint('qemu-tcg-independent-guest')
+              assert len(state_hash)==64
+          finally:
+              db.close()
+
+          reopened=mod.UnifiedDB(db_path)
+          try:
+              assert reopened.entity_generation()==2
+              assert reopened.session_generation('session:gabriel')==2
+              assert reopened.session_generation('session:andreas')==2
+              assert len(reopened.recent_turns('session:gabriel'))==1
+              assert len(reopened.recent_turns('session:andreas'))==1
+              rights={r['user_id']:r['rights'] for r in reopened.db.execute('SELECT user_id,rights FROM users')}
+              assert rights=={'gabriel':'equal','andreas':'equal'}
+              checkpoints=int(reopened.db.execute('SELECT COUNT(*) FROM checkpoints').fetchone()[0]); assert checkpoints==1
+              result={
+                  'schema':'ClayVerseQemuGuestUnifiedDBCore/v1',
+                  'status':'CLAYVERSE_GUEST_UNIFIEDDB_PASS',
+                  'research_sha':research_sha,
+                  'store_sha256':actual_sha,
+                  'entity_generation':reopened.entity_generation(),
+                  'canonical_users':['andreas','gabriel'],
+                  'equal_rights':True,
+                  'shared_generation':True,
+                  'stale_generation_rejected_for_both':True,
+                  'sqlite_reopen_persistence':True,
+                  'checkpoint_count':checkpoints,
+                  'whole_product_pass':False,
+              }
+              print('CLAYVERSE_GUEST_UNIFIEDDB_PASS '+json.dumps(result,sort_keys=True),flush=True)
+          finally:
+              reopened.close()
+          PY
+          sed -i "s/__STORE_SHA256__/$store_sha/g; s/__RESEARCH_SHA__/$research_sha/g" "$payload/test_unifieddb.py"
+          test_sha=$(sha256sum "$payload/test_unifieddb.py" | awk '{print $1}')
+          test_b64=$(base64 -w0 "$payload/test_unifieddb.py")
+
+          cat > "$payload/meta-data" <<EOF
+          instance-id: clayverse-unifieddb-${GITHUB_RUN_ID}
+          local-hostname: clayverse-unifieddb-guest
+          EOF
+          cat > "$payload/network-config" <<'EOF'
+          version: 2
+          ethernets: {}
+          EOF
+          cat > "$payload/user-data" <<EOF
+          #cloud-config
+          output: {all: '| tee -a /var/log/cloud-init-output.log /dev/ttyS0'}
+          write_files:
+            - path: /opt/clayverse/store.py
+              permissions: '0444'
+              encoding: b64
+              content: $store_b64
+            - path: /opt/clayverse/test_unifieddb.py
+              permissions: '0444'
+              encoding: b64
+              content: $test_b64
+          runcmd:
+            - [bash, -lc, "python3 /opt/clayverse/test_unifieddb.py >/dev/ttyS0 2>&1; rc=\$?; echo CLAYVERSE_GUEST_UNIFIEDDB_EXIT=\$rc >/dev/ttyS0; poweroff; exit \$rc"]
+          final_message: 'CLAYVERSE_CLOUD_INIT_FINAL'
+          EOF
+
+          seed="/tmp/clayverse-unifieddb-seed-${GITHUB_RUN_ID}.iso"
+          "$CLAYVERSE_GENISOIMAGE" -quiet -output "$seed" -volid cidata -joliet -rock \
+            "$payload/user-data" "$payload/meta-data" "$payload/network-config"
+          seed_sha=$(sha256sum "$seed" | awk '{print $1}')
+          {
+            printf 'CLAYVERSE_RESEARCH_SHA=%s\n' "$research_sha"
+            printf 'CLAYVERSE_STORE_BLOB=%s\n' "$store_blob"
+            printf 'CLAYVERSE_STORE_SHA256=%s\n' "$store_sha"
+            printf 'CLAYVERSE_TEST_SHA256=%s\n' "$test_sha"
+            printf 'CLAYVERSE_SEED_ISO=%s\n' "$seed"
+            printf 'CLAYVERSE_SEED_SHA256=%s\n' "$seed_sha"
+          } >> "$GITHUB_ENV"
+          printf 'BOUND_PRODUCT_BYTES research=%s store_blob=%s store_sha256=%s seed_sha256=%s\n' "$research_sha" "$store_blob" "$store_sha" "$seed_sha"
+
+      - name: Execute exact UnifiedDB core inside fresh networkless independent guest
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          umask 077
+          work="/tmp/clayverse-unifieddb-guest-${GITHUB_RUN_ID}"
+          receipt="/tmp/clayverse-unifieddb-guest-${GITHUB_RUN_ID}.json"
+          serial="$work/serial.log"
+          base="$work/ubuntu.base.img"
+          guest="$work/ubuntu.guest.img"
+          base_url='https://cloud-images.ubuntu.com/releases/noble/release-20260725'
+          image_name='ubuntu-24.04-server-cloudimg-amd64.img'
+          image_sha='d1940f7d69d343355e183dff1e08a59852d32e7309baa7a4bad8365b11b005ac'
+          mkdir -p "$work"
+          curl --fail --silent --show-error --location --proto '=https' --tlsv1.2 "$base_url/$image_name" -o "$base"
+          printf '%s  %s\n' "$image_sha" "$base" | sha256sum -c -
+          chmod 0444 "$base" "$CLAYVERSE_SEED_ISO"
+          cp --reflink=auto "$base" "$guest"; chmod 0600 "$guest"
+
+          qemu="$CLAYVERSE_QEMU_BIN"
+          export LD_LIBRARY_PATH="$CLAYVERSE_QEMU_LIBPATH${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          export QEMU_MODULE_DIR="/tmp/clayverse-unifieddb-vmm-${GITHUB_RUN_ID}/rootfs/usr/lib/x86_64-linux-gnu/qemu"
+          qemu_pid=''
+          cleanup() {
+            rc=$?
+            if [ -n "$qemu_pid" ]; then kill -TERM "$qemu_pid" 2>/dev/null || true; sleep 1; kill -KILL "$qemu_pid" 2>/dev/null || true; fi
+            rm -rf "$work" "/tmp/clayverse-unifieddb-vmm-${GITHUB_RUN_ID}" "/tmp/clayverse-unifieddb-payload-${GITHUB_RUN_ID}" "$CLAYVERSE_SEED_ISO"
+            exit "$rc"
+          }
+          trap cleanup EXIT INT TERM
+
+          "$qemu" -L "$CLAYVERSE_QEMU_DATADIR" -bios "$CLAYVERSE_QEMU_BIOS" \
+            -accel tcg,thread=multi -machine q35 -cpu max -smp 2 -m 2048 \
+            -drive "file=$guest,if=virtio,format=qcow2,cache=unsafe" \
+            -drive "file=$CLAYVERSE_SEED_ISO,if=virtio,format=raw,readonly=on" \
+            -net none -vga none -display none -monitor none -serial "file:$serial" -no-reboot \
+            -sandbox on,obsolete=deny,elevateprivileges=deny,spawn=deny,resourcecontrol=deny &
+          qemu_pid=$!
+
+          marker=''; kernel=''; deadline=$((SECONDS+480))
+          while kill -0 "$qemu_pid" 2>/dev/null && [ "$SECONDS" -lt "$deadline" ]; do
+            if [ -f "$serial" ]; then
+              kernel=$(grep -aE 'Linux version [^ ]+' "$serial" | head -n1 || true)
+              marker=$(grep -aE '^CLAYVERSE_GUEST_UNIFIEDDB_PASS ' "$serial" | tail -n1 || true)
+              if [ -n "$marker" ]; then break; fi
+            fi
+            sleep 2
+          done
+          passed=false; qemu_rc=0
+          if [ -n "$marker" ]; then
+            passed=true
+            kill -TERM "$qemu_pid" 2>/dev/null || true
+            for _ in $(seq 1 10); do kill -0 "$qemu_pid" 2>/dev/null || break; sleep 1; done
+            kill -KILL "$qemu_pid" 2>/dev/null || true
+            wait "$qemu_pid" 2>/dev/null || qemu_rc=$?
+          else
+            if kill -0 "$qemu_pid" 2>/dev/null; then qemu_rc=124; kill -TERM "$qemu_pid" 2>/dev/null || true; sleep 2; kill -KILL "$qemu_pid" 2>/dev/null || true; else wait "$qemu_pid" || qemu_rc=$?; fi
+            tail -c 65536 "$serial" >&2 || true
+          fi
+          qemu_pid=''
+          test -f "$serial"
+          serial_sha=$(sha256sum "$serial" | awk '{print $1}')
+          kernel=$(printf '%s' "$kernel" | tr -d '\r' | tail -c 1000)
+          marker=$(printf '%s' "$marker" | tr -d '\r' | tail -c 4096)
+
+          python3 - "$receipt" "$passed" "$qemu_rc" "$serial_sha" "$kernel" "$marker" "$image_sha" <<'PY'
+          import json, os, pathlib, sys
+          out,passed,qemu_rc,serial_sha,kernel,marker,image_sha=sys.argv[1:]
+          payload={
+            'schema':'ClayVerseVpsQemuTcgUnifiedDBGuestRuntime/v1',
+            'github_sha':os.environ['GITHUB_SHA'],
+            'research_sha':os.environ['CLAYVERSE_RESEARCH_SHA'],
+            'store_git_blob':os.environ['CLAYVERSE_STORE_BLOB'],
+            'store_sha256':os.environ['CLAYVERSE_STORE_SHA256'],
+            'guest_harness_sha256':os.environ['CLAYVERSE_TEST_SHA256'],
+            'seed_iso_sha256':os.environ['CLAYVERSE_SEED_SHA256'],
+            'guest_base_sha256':image_sha,
+            'guest_kernel_marker':kernel or None,
+            'guest_result_marker':marker or None,
+            'serial_log_sha256':serial_sha,
+            'executor_type':'QEMU_TCG_FULL_SYSTEM',
+            'independent_guest_kernel_observed':bool(kernel),
+            'canonical_product_source_executed_in_guest':passed=='true',
+            'verified_component':'UnifiedDB/store.py global-generation core',
+            'guest_network_mode':'NONE',
+            'host_filesystem_share':False,
+            'host_product_execution':False,
+            'host_docker_used':False,
+            'privileged_host_mutation_used':False,
+            'guest_runtime_pass':passed=='true',
+            'qemu_exit_status_after_bounded_termination':int(qemu_rc),
+            'product_runtime_credit_scope':'UNIFIEDDB_STORE_CORE_ONLY' if passed=='true' else 'NONE',
+            'whole_product_credit':0,
+            'final_hardware_microvm_credit':0,
+            'unusual_experiment_count_added':0,
+          }
+          pathlib.Path(out).write_text(json.dumps(payload,indent=2,sort_keys=True)+'\n')
+          print(json.dumps(payload,sort_keys=True))
+          if not payload['guest_runtime_pass']:
+              raise SystemExit(61)
+          PY
+
+      - name: Upload bounded guest product receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: clayverse-vps-qemu-unifieddb-guest-${{ github.run_id }}
+          path: /tmp/clayverse-unifieddb-guest-${{ github.run_id }}.json
+          if-no-files-found: warn
+          retention-days: 7

@@ -1,0 +1,83 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_at": "2026-08-17T13:59:35+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_main_observed_before_receipt": "4fc3d2cf79dc69aaa4c4452461dd559b51aba1e3",
+  "go_experiment_accounting": {
+    "classification": "EXPERIMENT_BUDGET_RACE_VIOLATION",
+    "new_unusual_experiment_started_by_this_organ": false,
+    "finding": "The 13:35 macro-cycle already contained semantically duplicate create-only claims under different trigger-key encodings, so the unusual slot was closed rather than consuming a third experiment.",
+    "coordination_repairs_on_main": [
+      "11e1a61706241aed6c66e6c68e3aea84f4977b95",
+      "a333cd624c06b8b8a3a9c70b021529f511812662"
+    ],
+    "repair_contract": "one canonical request-id/hash encoding; timestamp fallback requires reproducible >= whole-second immutable user-message time; minute-only identity fails closed; legacy semantic duplicate claims close the slot"
+  },
+  "execution_evidence": {
+    "github_actions_rerun": {
+      "job_id": 95305009218,
+      "observed": "workflow job terminated before visible test steps",
+      "steps": [],
+      "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL"
+    },
+    "vercel_sandbox_bridge": {
+      "capability": "CONFIRMED_BY_PRIOR_OBSERVED_GIT_PREVIEW_AT_VERCEL_SANDBOX_EXECUTION",
+      "current_staging_repository": "gschaidergabriel/Dr.-Unterweger",
+      "current_staging_pr": 820,
+      "staging_head": "fb8d5e22f99176445452cdd32a9702fca64b571a",
+      "target_clay_auth_blob": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+      "target_clay_test_blob": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+      "observed_status": "Deployment rate limited — retry in 24 hours.",
+      "classification": "EXECUTION_ADMISSION_BLOCKED_BY_VERCEL_BUILD_RATE_LIMIT",
+      "sandbox_started": false,
+      "test_executed": false,
+      "staging_pr_closed_without_merge": true
+    },
+    "openai_isolated_source_slice": {
+      "scope": "exact current Clerk authority source/test blobs only",
+      "clerk_auth_blob": "92e1b42ca186eb129f89f0e338313e5f49a0804e",
+      "test_blob": "b4a36469f0cbb6dbd4139c7cace5bfc89a91d89e",
+      "pytest": "6 passed",
+      "py_compile": "PASS",
+      "classification": "EXACT_BLOB_FOCUSED_MECHANISM_SUPPORTED_NOT_FULL_HEAD_RUNTIME"
+    }
+  },
+  "product_convergence": {
+    "clerk": {
+      "result": "CONVERGED_ON_MAIN",
+      "observed_main_contract": [
+        "sts must equal active",
+        "act impersonation claim rejected",
+        "finite JWKS-set cache with disabled per-key LRU",
+        "5 second JWKS fetch timeout",
+        "initial verification and reauth off WebSocket event loop",
+        "adapters re-export canonical clerk_auth authority"
+      ],
+      "closed_duplicate_or_donor_prs": [424, 428, 437]
+    },
+    "effects": {
+      "result": "ONE_RETAINED_OPEN_CANDIDATE",
+      "retained_pr": 430,
+      "closed_duplicate_pr": 433,
+      "reason": "PR430 preserves post-launch EntityOS timeout as UNKNOWN without simultaneously asserting ok=false; current main did not yet contain UNKNOWN_OUTCOME at receipt time."
+    },
+    "meta_learning": {
+      "retained_lane": 411,
+      "status": "DRAFT_HOLD",
+      "highest_priority_blocker": 425,
+      "reason": "reentered causal continuity is not success/reward; caller-supplied support/success/calibration cannot authorize routable method promotion without durable method-use/held-out utility evidence",
+      "truth_invariant": "FACT_UNKNOWN + METHOD_PRESENT != FACT_PRESENT"
+    }
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "current_frontier": "Actually-started exact-current isolated execution remains admission-sensitive; then fuse retained EffectGate UNKNOWN semantics and execute full Clerk/browser/PTY, lifecycle, UnifiedDB/recovery, OCI and concurrency gates.",
+  "forbidden_paths_used": {
+    "vps_self_hosted_production_testing": false,
+    "together": false,
+    "paid_final_training": false
+  }
+}

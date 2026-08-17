@@ -1,0 +1,38 @@
+{
+  "schema": "clayverse.microclay-credit-savepoint-candidate/v1",
+  "trigger": "go",
+  "trigger_metadata": "2026-08-17T15:02+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "fusion_target_pr": 484,
+  "base_head": "6b2a5626c234283b9767394e423c68411a948634",
+  "source_commit": "ee98df913da73efc04f443b276e59f60b5ddcd33",
+  "regression_commit": "354ed6e708b3f91356509e492ab19b953da723b9",
+  "classification": "SOURCE_CANDIDATE_RUNTIME_UNOBSERVED",
+  "defect": "MicroClayRetrieval._credit_tx joined an already-open UnifiedDB transaction without an inner rollback boundary. A later feedback-receipt insertion failure caught by the outer caller could allow earlier policy-capital mutations to survive when the outer transaction commits.",
+  "repair": "Standalone credit keeps UnifiedDB.tx(). Credit inside an existing transaction now opens a unique SQLite SAVEPOINT, rolls back/releases it on any exception, and releases it on success.",
+  "regression": "test_caught_inner_credit_failure_rolls_back_its_savepoint_only injects a retrieval_feedback insert ABORT, catches it inside a live outer transaction, requires zero policy/feedback leakage while an unrelated outer write still commits, then verifies one clean retry and duplicate idempotency.",
+  "diff_scope": {
+    "product_files_modified": ["the artefact/clayverse/microclay_retrieval.py"],
+    "tests_added": ["the artefact/tests/test_microclay_credit_nested_tx_atomicity.py"],
+    "compare": "+14/-4 product source; one focused regression"
+  },
+  "execution": {
+    "authorized_exact_runtime_started_for_this_candidate": false,
+    "reason": "Current Vercel free daily preview/deployment admission cap is already observed active; no duplicate blocked preview was spent.",
+    "runtime_credit": "ZERO"
+  },
+  "authority_boundary": {
+    "unifieddb_canonical": true,
+    "microclay_truth_authority": false,
+    "microclay_effect_authority": false,
+    "serving_mode_changed": false,
+    "active_promotion": false
+  },
+  "unusual_experiment_added": false,
+  "vps_used": false,
+  "together_used": false,
+  "whole_product_pass": false,
+  "next_gate": "On the next actually-started authorized SQLite-capable Vercel Sandbox, bind the then-current retained #484 line plus this delta and execute the nested-credit regression together with adjacent credit-authority, crash-atomicity, replay, restart-learning, user-scope and Schema-8 gates before any fusion/runtime promotion."
+}

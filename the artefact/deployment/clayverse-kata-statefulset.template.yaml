@@ -8,11 +8,17 @@
 # add a separate deployment-specific, reviewed allow policy for only the exact
 # admitted ingress/egress surfaces and bind that policy into acceptance
 # evidence. hostNetwork: false alone is NOT a network-isolation policy.
+# Acceptance MUST also verify that the selected CNI actually enforces
+# networking.k8s.io/v1 NetworkPolicy. Standard Kubernetes NetworkPolicy has
+# node-local traffic exceptions, so node/control-plane/metadata reachability
+# must be separately fenced and tested by the admitted platform + microVM
+# boundary rather than inferred from this resource.
 apiVersion: v1
 kind: Service
 metadata:
   name: clayverse
 spec:
+  type: ClusterIP
   selector:
     app: clayverse
   ports:
@@ -177,10 +183,11 @@ spec:
           requests:
             storage: 20Gi
 ---
-# Fail-closed baseline. This deliberately denies every network flow to/from the
-# ClayVerse pod until a deployment-specific allow policy is supplied. The allow
-# policy is deployment material because exact ingress controller, DNS resolver,
-# Clerk/Claude/GLM destinations and cluster CIDRs vary by admitted platform.
+# Fail-closed baseline. This denies policy-governed traffic to/from the ClayVerse
+# pod until a deployment-specific allow policy is supplied. It does NOT prove
+# CNI enforcement or fence Kubernetes' node-local NetworkPolicy exceptions.
+# The allow policy is deployment material because exact ingress controller, DNS
+# resolver, Clerk/Claude/GLM destinations and cluster CIDRs vary by platform.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

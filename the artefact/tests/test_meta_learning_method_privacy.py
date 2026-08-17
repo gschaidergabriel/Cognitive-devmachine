@@ -73,7 +73,7 @@ def test_cross_user_support_memory_is_rejected(tmp_path):
     _episode(db, gs, "g:two")
     own = db.add_memory("fact", "gabriel", "support-own", None, "gabriel", {"source": "test"})
     other = db.add_memory("fact", "andreas", "support-other", None, "andreas", {"source": "test"})
-    with pytest.raises(MethodRecordError, match="cross-user referenced memory denied"):
+    with pytest.raises(MethodRecordError, match="exact user scope"):
         MethodMemory(db).admit(
             kind="framework_candidate",
             subject="privacy framework candidate",

@@ -1,0 +1,96 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_time_local": "2026-08-17T15:24+07:00",
+  "organ": "GPT-5.6 Sol / current ChatGPT project worker",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "go/tmux-control-timeout-stack-20260817-gpt56sol",
+  "stacked_on_pr": 528,
+  "stacked_parent_head": "7cc727ba2e9eba3a209c65cbd380957f982d920a",
+  "main_observed_before_branch_work": "b86260e10b198619fb1521c10f6ad4a52d55e282",
+  "main_observed_before_receipt_write": "2a3f0646e38c5e275ce99bcdac77c4ddbc74e2b5",
+  "source_head_before_receipt": "6eb634c9ca5bfbe0e18f6087758a2cd887a2b157",
+  "frontier": "The canonical authenticated terminal attach path could block indefinitely if a per-user tmux control operation wedges: PR #528's has-session, source-file policy reapply, and new-session subprocess calls had no timeout even though policy attestation elsewhere was already bounded.",
+  "repair": [
+    "Add one shared 2.0 second TMUX_CONTROL_TIMEOUT_SECONDS bound for attach-path tmux control operations.",
+    "Fail closed with TerminalRuntimeError when has-session cannot complete because of OSError or TimeoutExpired.",
+    "Fail closed with TerminalRuntimeError when managed tmux policy reapplication cannot complete.",
+    "Fail closed when new-session cannot complete and do not continue to policy/attach admission after the timeout.",
+    "Remain stacked on PR #528 rather than creating a competing terminal/runtime architecture."
+  ],
+  "exact_source_blobs": {
+    "parent_pr528_terminal_sessions": "9a902ebd898606ba94cd760c51252fe0b1bf8c8c",
+    "candidate_terminal_sessions": "1ab8a604185aa5d5175baae10bc6d2a1e3a0a695",
+    "candidate_timeout_test": "e49c1bcd9c3d228a926dc08902b41e490034b599",
+    "adjacent_pr528_test": "840c48dffca1ee21f6c3c1c2671891705b89d056",
+    "managed_tmux_policy": "1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+    "parent_pr528_dockerfile": "bb37882e5d9b98b95ccdcde6bddf5893ffb1a949"
+  },
+  "ordinary_isolated_source_regression": {
+    "surface": "OpenAI isolated non-production container reconstructed source slice",
+    "environment": {
+      "python": "3.13.5",
+      "pytest": "9.0.2",
+      "kernel": "Linux 6.18.35 x86_64"
+    },
+    "identity_checks": [
+      "candidate terminal_sessions.py git hash-object == 1ab8a604185aa5d5175baae10bc6d2a1e3a0a695",
+      "candidate timeout test git hash-object == e49c1bcd9c3d228a926dc08902b41e490034b599",
+      "reconstructed parent terminal_sessions.py git hash-object == 9a902ebd898606ba94cd760c51252fe0b1bf8c8c",
+      "adjacent PR #528 test git hash-object == 840c48dffca1ee21f6c3c1c2671891705b89d056",
+      "managed tmux policy git hash-object == 1130ff0ab6db7c608ce33819ad97256eb4afbfbb",
+      "parent PR #528 Dockerfile git hash-object == bb37882e5d9b98b95ccdcde6bddf5893ffb1a949"
+    ],
+    "red_gate": {
+      "target": "exact PR #528 parent terminal_sessions.py blob",
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_terminal_tmux_control_timeouts.py",
+      "exit_code": 1,
+      "observed": "4 failed in 0.08s",
+      "meaning": "The new falsifier rejects the exact parent implementation because the relevant control operations lack a timeout/fail-closed translation."
+    },
+    "green_gate": {
+      "target": "exact candidate terminal_sessions.py + exact candidate test blob",
+      "commands": [
+        "python -m py_compile clayverse/terminal_sessions.py",
+        "PYTHONPATH=. python -m pytest -q tests/test_terminal_tmux_control_timeouts.py"
+      ],
+      "observed": [
+        "py_compile PASS",
+        "4 passed in 0.05s"
+      ]
+    },
+    "adjacent_regression": {
+      "command": "PYTHONPATH=. python -m pytest -q tests/test_tmux_command_surface_fence.py tests/test_terminal_tmux_control_timeouts.py",
+      "observed": "11 passed in 0.05s"
+    },
+    "scope_note": "IdentityRouter was replaced only by a minimal CANONICAL_TERMINAL_NAMES import stub. No live tmux process, real Claude Code process, browser, Clerk JWT, WebSocket PTY, OCI image, persistence or restart behavior was exercised.",
+    "evidence_class": "EXACT_TARGET_BLOB_SOURCE_MECHANISM_SUPPORTED_NOT_TMUX_RUNTIME_NOT_OCI_PASS"
+  },
+  "counterhypothesis": "A 2-second subprocess timeout may still be too short or too long for the exact packaged tmux/runtime under resource pressure, and bounding the control subprocess does not prove that a forked attach client itself cannot wedge after admission.",
+  "next_runtime_falsifier": "In the next actually-started authorized Vercel or Daytona isolated runtime with exact current source, use real tmux to make has-session/source-file/new-session unresponsive or otherwise exceed the bound, require the authenticated attach path to fail closed without creating a second session or proceeding to PTY admission, then verify normal healthy attach still succeeds within the bound.",
+  "execution_admission": {
+    "vercel": "CURRENT_FREE_PREVIEW_DAILY_CAP_BLOCKED_BEFORE_NEW_SANDBOX_START",
+    "daytona": "AUTHORIZED_FALLBACK_BUT_CURRENT_ORCHESTRATION_DNS_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "product_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "executed": false,
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Only minute-precision trigger metadata is shared for this user go and no immutable request/turn identifier is exposed; the atomic GO lease protocol therefore forbids minting the unusual-experiment lease."
+  },
+  "security": {
+    "vps_testing": false,
+    "self_hosted_testing": false,
+    "production_host_testing": false,
+    "together_api": false,
+    "secret_value_recorded": false
+  },
+  "non_claims": [
+    "No live tmux runtime PASS is claimed.",
+    "No Clerk/browser/WebSocket PTY PASS is claimed.",
+    "No exact OCI image build/startup/restart PASS is claimed.",
+    "No whole ClayVerse PASS is claimed."
+  ]
+}

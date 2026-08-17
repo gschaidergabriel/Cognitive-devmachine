@@ -41,6 +41,7 @@ class TerminalSessionManager:
     MANAGED_TMUX = Path("/etc/clayverse/managed-tmux.conf")
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
     TMUX_SOCKET_PREFIX = "clayverse"
+    TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
 
     def __init__(self, state_root: str | Path, workspace: str | Path = "/workspace"):
         self.state_root = Path(state_root)
@@ -133,12 +134,18 @@ class TerminalSessionManager:
         os.replace(tmp, binding.mcp_config)
 
     def _has_session(self, binding: TerminalBinding) -> bool:
-        cp = subprocess.run(
-            self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-            check=False,
-        )
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(binding, "has-session", "-t", binding.tmux_name),
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError(
+                f"tmux session liveness probe unavailable for {binding.tmux_name}"
+            ) from exc
         return cp.returncode == 0
 
     def _enforce_tmux_policy(self, binding: TerminalBinding) -> None:
@@ -149,12 +156,18 @@ class TerminalSessionManager:
         ClayVerse policy upgrade. Source the root-owned policy before every admitted
         attach path and fail closed if the running server cannot accept it.
         """
-        cp = subprocess.run(
-            self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(binding, "source-file", str(self.MANAGED_TMUX)),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError(
+                f"tmux policy enforcement unavailable for {binding.tmux_name}"
+            ) from exc
         if cp.returncode != 0:
             raise TerminalRuntimeError(
                 f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
@@ -211,16 +224,22 @@ class TerminalSessionManager:
             *claude_argv,
         ]
         command = shlex.join(env_argv)
-        cp = subprocess.run(
-            self._tmux_argv(
-                binding,
-                "new-session", "-d", "-s", binding.tmux_name,
-                "-c", str(self.workspace), command,
-            ),
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+        try:
+            cp = subprocess.run(
+                self._tmux_argv(
+                    binding,
+                    "new-session", "-d", "-s", binding.tmux_name,
+                    "-c", str(self.workspace), command,
+                ),
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=self.TMUX_CONTROL_TIMEOUT_SECONDS,
+            )
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            raise TerminalRuntimeError(
+                f"tmux session creation unavailable for {binding.tmux_name}"
+            ) from exc
         if cp.returncode != 0:
             raise TerminalRuntimeError(f"failed to create {binding.tmux_name}: {cp.stderr[-1000:]}")
         self._enforce_tmux_policy(binding)

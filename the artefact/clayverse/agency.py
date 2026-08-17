@@ -41,7 +41,8 @@ CREATE TABLE IF NOT EXISTS agency_goals(
     created_at REAL NOT NULL,
     updated_at REAL NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_agency_goals_status_priority ON agency_goals(status,priority DESC,created_at);
+CREATE INDEX IF NOT EXISTS idx_agency_goals_status_priority
+ON agency_goals(status,priority DESC,created_at);
 CREATE TABLE IF NOT EXISTS agency_milestones(
     milestone_id TEXT PRIMARY KEY,
     goal_id TEXT NOT NULL REFERENCES agency_goals(goal_id) ON DELETE CASCADE,
@@ -52,7 +53,8 @@ CREATE TABLE IF NOT EXISTS agency_milestones(
     created_at REAL NOT NULL,
     updated_at REAL NOT NULL
 );
-CREATE INDEX IF NOT EXISTS idx_agency_milestones_goal_status ON agency_milestones(goal_id,status,phase);
+CREATE INDEX IF NOT EXISTS idx_agency_milestones_goal_status
+ON agency_milestones(goal_id,status,phase);
 CREATE TABLE IF NOT EXISTS agency_cycles(
     cycle_id TEXT PRIMARY KEY,
     started_at REAL NOT NULL,
@@ -128,21 +130,22 @@ class ClaimedWork:
 class AgencyState:
     """Deterministic goal/autonomy state inside the canonical UnifiedDB.
 
-    The model proposes the next move. This state machine owns identity mode, goals,
+    The model proposes a move. This state machine owns identity mode, goals,
     milestone transitions, retry/cycle limits and review status. EffectGate remains
-    the only authority for real/state-changing execution. Model text alone never
-    changes completion state.
+    the only authority for real/state-changing execution. Model text and caller-
+    supplied outcome objects alone never change completion state.
     """
 
     PHASE_RANK = {"CONCEPT": 0, "PROTOTYPE": 1, "FINAL": 2}
+    NON_REWARDING_CAPABILITIES = {"state.noop"}
 
     def __init__(self, db: UnifiedDB):
         self.db = db
-        # sqlite3.executescript may implicitly end an existing transaction, so schema
-        # creation is deliberately outside UnifiedDB.tx(). State bootstrap is atomic.
+        # sqlite3.executescript may end an existing transaction, so schema setup is
+        # outside UnifiedDB.tx(). The state bootstrap itself is atomic below.
         self.db.db.executescript(AGENCY_SCHEMA)
         now = time.time()
-        with db.tx() as tx:
+        with self.db.tx() as tx:
             tx.execute(
                 """INSERT OR IGNORE INTO entity_agency_profile
                 (singleton,entity_id,display_name,identity_mode,substrate_anchor,behavior_mode,state_version,updated_at)
@@ -170,12 +173,18 @@ class AgencyState:
 
     def _refresh_hash(self, tx) -> str:
         tables = (
-            "entity_agency_profile","agency_policy","agency_goals","agency_milestones",
-            "agency_cycles","agency_attempts","agency_reviews","agency_events",
+            "entity_agency_profile",
+            "agency_policy",
+            "agency_goals",
+            "agency_milestones",
+            "agency_cycles",
+            "agency_attempts",
+            "agency_reviews",
+            "agency_events",
         )
         payload = [(table, self._rows(tx, table)) for table in tables]
         digest = hashlib.sha256(
-            json.dumps(payload, sort_keys=True, separators=(",",":"), ensure_ascii=False).encode()
+            json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode()
         ).hexdigest()
         tx.execute(
             "INSERT INTO meta(key,value) VALUES('agency_state_hash',?) "
@@ -184,113 +193,257 @@ class AgencyState:
         )
         return digest
 
-    def _event(self, tx, event_type: str, source_kind: str, source_ref: str, payload: dict[str, Any]) -> None:
+    def _event(
+        self,
+        tx,
+        event_type: str,
+        source_kind: str,
+        source_ref: str,
+        payload: dict[str, Any],
+    ) -> None:
         tx.execute(
             "INSERT OR IGNORE INTO agency_events VALUES(?,?,?,?,?,?,?)",
             (
-                str(uuid.uuid4()),event_type,source_kind,source_ref,
-                json.dumps(payload,sort_keys=True,ensure_ascii=False),
-                self.db.entity_generation(),time.time(),
+                str(uuid.uuid4()),
+                event_type,
+                source_kind,
+                source_ref,
+                json.dumps(payload, sort_keys=True, ensure_ascii=False),
+                self.db.entity_generation(),
+                time.time(),
             ),
         )
 
     def policy(self) -> dict[str, Any]:
-        row = self.db.db.execute("SELECT * FROM agency_policy WHERE singleton=1").fetchone()
+        row = self.db.db.execute(
+            "SELECT * FROM agency_policy WHERE singleton=1"
+        ).fetchone()
         if not row:
             raise AgencyPolicyError("agency policy missing")
         return dict(row)
 
     def set_autonomy_mode(self, mode: str) -> None:
-        if mode not in {"PAUSED","BOUNDED"}:
+        if mode not in {"PAUSED", "BOUNDED"}:
             raise AgencyPolicyError("invalid autonomy mode")
         with self.db.tx() as tx:
-            tx.execute("UPDATE agency_policy SET autonomy_mode=?,updated_at=? WHERE singleton=1", (mode,time.time()))
-            ref = "mode:" + uuid.uuid4().hex
-            self._event(tx,"autonomy.mode_changed","policy",ref,{"mode":mode})
+            tx.execute(
+                "UPDATE agency_policy SET autonomy_mode=?,updated_at=? WHERE singleton=1",
+                (mode, time.time()),
+            )
+            self._event(
+                tx,
+                "autonomy.mode_changed",
+                "policy",
+                "mode:" + uuid.uuid4().hex,
+                {"mode": mode},
+            )
             self._refresh_hash(tx)
 
-    def create_goal(self, user_id: str, title: str, objective: str, success_criteria: str, *, priority: int = 0) -> str:
-        if not self.db.db.execute("SELECT 1 FROM users WHERE user_id=?", (user_id,)).fetchone():
+    def create_goal(
+        self,
+        user_id: str,
+        title: str,
+        objective: str,
+        success_criteria: str,
+        *,
+        priority: int = 0,
+    ) -> str:
+        if not self.db.db.execute(
+            "SELECT 1 FROM users WHERE user_id=?", (user_id,)
+        ).fetchone():
             raise AgencyPolicyError("unknown canonical user")
-        if any(not isinstance(v,str) or not v.strip() for v in (title,objective,success_criteria)):
+        if any(
+            not isinstance(value, str) or not value.strip()
+            for value in (title, objective, success_criteria)
+        ):
             raise AgencyPolicyError("goal fields must be non-empty strings")
-        goal_id = str(uuid.uuid4()); now = time.time()
+        goal_id = str(uuid.uuid4())
+        now = time.time()
         with self.db.tx() as tx:
             tx.execute(
                 "INSERT INTO agency_goals VALUES(?,?,?,?,?,?,'ACTIVE',?,?)",
-                (goal_id,user_id,title.strip(),objective.strip(),success_criteria.strip(),int(priority),now,now),
+                (
+                    goal_id,
+                    user_id,
+                    title.strip(),
+                    objective.strip(),
+                    success_criteria.strip(),
+                    int(priority),
+                    now,
+                    now,
+                ),
             )
-            self._event(tx,"goal.created","goal",goal_id,{"user_id":user_id,"title":title.strip()})
+            self._event(
+                tx,
+                "goal.created",
+                "goal",
+                goal_id,
+                {"user_id": user_id, "title": title.strip()},
+            )
             self._refresh_hash(tx)
         return goal_id
 
     def set_goal_status(self, user_id: str, goal_id: str, status: str) -> None:
-        if status not in {"ACTIVE","PAUSED","CANCELLED"}:
-            raise AgencyPolicyError("goal status may only be ACTIVE, PAUSED or CANCELLED")
-        row = self.db.db.execute("SELECT user_id,status FROM agency_goals WHERE goal_id=?", (goal_id,)).fetchone()
+        if status not in {"ACTIVE", "PAUSED", "CANCELLED"}:
+            raise AgencyPolicyError(
+                "goal status may only be ACTIVE, PAUSED or CANCELLED"
+            )
+        row = self.db.db.execute(
+            "SELECT user_id,status FROM agency_goals WHERE goal_id=?", (goal_id,)
+        ).fetchone()
         if not row or row["user_id"] != user_id:
             raise AgencyPolicyError("goal owner mismatch")
-        if row["status"] in {"COMPLETE","CANCELLED"}:
+        if row["status"] in {"COMPLETE", "CANCELLED"}:
             raise AgencyPolicyError("terminal goal cannot be resumed")
         with self.db.tx() as tx:
-            tx.execute("UPDATE agency_goals SET status=?,updated_at=? WHERE goal_id=?", (status,time.time(),goal_id))
-            ref = goal_id + ":" + uuid.uuid4().hex
-            self._event(tx,"goal.status_changed","goal",ref,{"goal_id":goal_id,"status":status})
+            tx.execute(
+                "UPDATE agency_goals SET status=?,updated_at=? WHERE goal_id=?",
+                (status, time.time(), goal_id),
+            )
+            self._event(
+                tx,
+                "goal.status_changed",
+                "goal",
+                goal_id + ":" + uuid.uuid4().hex,
+                {"goal_id": goal_id, "status": status},
+            )
             self._refresh_hash(tx)
 
-    def add_milestone(self, goal_id: str, phase: str, title: str, acceptance_criteria: str) -> str:
+    def add_milestone(
+        self,
+        goal_id: str,
+        phase: str,
+        title: str,
+        acceptance_criteria: str,
+    ) -> str:
         if phase not in self.PHASE_RANK:
             raise AgencyPolicyError("invalid milestone phase")
-        if any(not isinstance(v,str) or not v.strip() for v in (title,acceptance_criteria)):
+        if any(
+            not isinstance(value, str) or not value.strip()
+            for value in (title, acceptance_criteria)
+        ):
             raise AgencyPolicyError("milestone fields must be non-empty strings")
-        if not self.db.db.execute("SELECT 1 FROM agency_goals WHERE goal_id=? AND status='ACTIVE'", (goal_id,)).fetchone():
+        if not self.db.db.execute(
+            "SELECT 1 FROM agency_goals WHERE goal_id=? AND status='ACTIVE'",
+            (goal_id,),
+        ).fetchone():
             raise AgencyPolicyError("active goal not found")
-        milestone_id = str(uuid.uuid4()); now = time.time()
+        milestone_id = str(uuid.uuid4())
+        now = time.time()
         with self.db.tx() as tx:
             tx.execute(
                 "INSERT INTO agency_milestones VALUES(?,?,?,?,?,'PENDING',?,?)",
-                (milestone_id,goal_id,phase,title.strip(),acceptance_criteria.strip(),now,now),
+                (
+                    milestone_id,
+                    goal_id,
+                    phase,
+                    title.strip(),
+                    acceptance_criteria.strip(),
+                    now,
+                    now,
+                ),
             )
-            self._event(tx,"milestone.created","milestone",milestone_id,{"goal_id":goal_id,"phase":phase})
+            self._event(
+                tx,
+                "milestone.created",
+                "milestone",
+                milestone_id,
+                {"goal_id": goal_id, "phase": phase},
+            )
             self._refresh_hash(tx)
         return milestone_id
 
-    def metrics(self, user_id: str | None = None) -> dict[str, Any]:
-        where = ""
-        args: tuple[Any,...] = ()
-        if user_id is not None:
-            where = " WHERE g.user_id=?"
-            args = (user_id,)
-        verified_ok = int(self.db.db.execute(
-            "SELECT COUNT(*) FROM agency_attempts a JOIN agency_milestones m ON m.milestone_id=a.milestone_id "
-            "JOIN agency_goals g ON g.goal_id=m.goal_id" + where + (" AND" if where else " WHERE") + " a.effect_id IS NOT NULL AND a.status='SUCCEEDED'",
-            args,
-        ).fetchone()[0])
-        failed = int(self.db.db.execute(
-            "SELECT COUNT(*) FROM agency_attempts a JOIN agency_milestones m ON m.milestone_id=a.milestone_id "
-            "JOIN agency_goals g ON g.goal_id=m.goal_id" + where + (" AND" if where else " WHERE") + " a.status='FAILED'",
-            args,
-        ).fetchone()[0])
+    def _scope_clause(self, user_id: str | None) -> tuple[str, tuple[Any, ...]]:
         if user_id is None:
-            reviews_passed = int(self.db.db.execute("SELECT COUNT(*) FROM agency_reviews WHERE decision='PASS'").fetchone()[0])
-            completed_goals = int(self.db.db.execute("SELECT COUNT(*) FROM agency_goals WHERE status='COMPLETE'").fetchone()[0])
+            return "", ()
+        return " AND g.user_id=?", (user_id,)
+
+    def metrics(self, user_id: str | None = None) -> dict[str, Any]:
+        scope, args = self._scope_clause(user_id)
+        non_rewarding = tuple(sorted(self.NON_REWARDING_CAPABILITIES))
+        capability_placeholders = ",".join("?" for _ in non_rewarding)
+
+        verified_effect_steps = int(
+            self.db.db.execute(
+                """SELECT COUNT(*)
+                   FROM agency_attempts a
+                   JOIN agency_milestones m ON m.milestone_id=a.milestone_id
+                   JOIN agency_goals g ON g.goal_id=m.goal_id
+                   JOIN effects e ON e.effect_id=a.effect_id
+                   WHERE a.status='SUCCEEDED'
+                     AND e.status='VERIFIED'
+                     AND e.capability NOT IN ("""
+                + capability_placeholders
+                + ")"
+                + scope,
+                (*non_rewarding, *args),
+            ).fetchone()[0]
+        )
+        failed_effect_steps = int(
+            self.db.db.execute(
+                """SELECT COUNT(*)
+                   FROM agency_attempts a
+                   JOIN agency_milestones m ON m.milestone_id=a.milestone_id
+                   JOIN agency_goals g ON g.goal_id=m.goal_id
+                   JOIN effects e ON e.effect_id=a.effect_id
+                   WHERE e.capability NOT IN ("""
+                + capability_placeholders
+                + ") AND (a.status='FAILED' OR e.status!='VERIFIED')"
+                + scope,
+                (*non_rewarding, *args),
+            ).fetchone()[0]
+        )
+        failed_steps = int(
+            self.db.db.execute(
+                """SELECT COUNT(*)
+                   FROM agency_attempts a
+                   JOIN agency_milestones m ON m.milestone_id=a.milestone_id
+                   JOIN agency_goals g ON g.goal_id=m.goal_id
+                   WHERE a.status='FAILED'"""
+                + scope,
+                args,
+            ).fetchone()[0]
+        )
+
+        if user_id is None:
+            passed_reviews = int(
+                self.db.db.execute(
+                    "SELECT COUNT(*) FROM agency_reviews WHERE decision='PASS'"
+                ).fetchone()[0]
+            )
+            completed_goals = int(
+                self.db.db.execute(
+                    "SELECT COUNT(*) FROM agency_goals WHERE status='COMPLETE'"
+                ).fetchone()[0]
+            )
         else:
-            reviews_passed = int(self.db.db.execute(
-                "SELECT COUNT(*) FROM agency_reviews r JOIN agency_milestones m ON m.milestone_id=r.milestone_id "
-                "JOIN agency_goals g ON g.goal_id=m.goal_id WHERE g.user_id=? AND r.decision='PASS'", (user_id,)
-            ).fetchone()[0])
-            completed_goals = int(self.db.db.execute(
-                "SELECT COUNT(*) FROM agency_goals WHERE user_id=? AND status='COMPLETE'", (user_id,)
-            ).fetchone()[0])
-        denom = verified_ok + failed
-        ers = round(verified_ok / denom, 4) if denom else 0.0
+            passed_reviews = int(
+                self.db.db.execute(
+                    """SELECT COUNT(*)
+                       FROM agency_reviews r
+                       JOIN agency_milestones m ON m.milestone_id=r.milestone_id
+                       JOIN agency_goals g ON g.goal_id=m.goal_id
+                       WHERE r.decision='PASS' AND g.user_id=?""",
+                    (user_id,),
+                ).fetchone()[0]
+            )
+            completed_goals = int(
+                self.db.db.execute(
+                    "SELECT COUNT(*) FROM agency_goals WHERE status='COMPLETE' AND user_id=?",
+                    (user_id,),
+                ).fetchone()[0]
+            )
+
+        denominator = verified_effect_steps + failed_effect_steps
+        ers = round(verified_effect_steps / denominator, 4) if denominator else 0.0
         return {
-            "verified_effect_steps":verified_ok,
-            "failed_steps":failed,
-            "passed_reviews":reviews_passed,
-            "completed_goals":completed_goals,
-            "ers":ers,
-            "ers_role":"telemetry_only_not_authority",
+            "verified_effect_steps": verified_effect_steps,
+            "failed_effect_steps": failed_effect_steps,
+            "failed_steps": failed_steps,
+            "passed_reviews": passed_reviews,
+            "completed_goals": completed_goals,
+            "ers": ers,
+            "ers_role": "telemetry_only_not_authority",
         }
 
     def snapshot(
@@ -300,217 +453,447 @@ class AgencyState:
         max_goals: int = 8,
         max_attempts_per_milestone: int = 5,
     ) -> dict[str, Any]:
-        profile_row = self.db.db.execute("SELECT * FROM entity_agency_profile WHERE singleton=1").fetchone()
+        profile_row = self.db.db.execute(
+            "SELECT * FROM entity_agency_profile WHERE singleton=1"
+        ).fetchone()
         if not profile_row:
             raise AgencyPolicyError("agency profile missing")
+
         if user_id is None:
-            rows = self.db.db.execute(
-                "SELECT * FROM agency_goals WHERE status IN ('ACTIVE','PAUSED') ORDER BY priority DESC,created_at LIMIT ?",
+            goals_rows = self.db.db.execute(
+                """SELECT * FROM agency_goals
+                   WHERE status IN ('ACTIVE','PAUSED')
+                   ORDER BY priority DESC,created_at
+                   LIMIT ?""",
                 (max_goals,),
             ).fetchall()
         else:
-            rows = self.db.db.execute(
-                "SELECT * FROM agency_goals WHERE user_id=? AND status IN ('ACTIVE','PAUSED') ORDER BY priority DESC,created_at LIMIT ?",
-                (user_id,max_goals),
+            goals_rows = self.db.db.execute(
+                """SELECT * FROM agency_goals
+                   WHERE user_id=? AND status IN ('ACTIVE','PAUSED')
+                   ORDER BY priority DESC,created_at
+                   LIMIT ?""",
+                (user_id, max_goals),
             ).fetchall()
+
         goals = []
-        for row in rows:
-            goal = dict(row); milestones = []
+        for goal_row in goals_rows:
+            goal = dict(goal_row)
+            milestones = []
             for milestone_row in self.db.db.execute(
-                "SELECT * FROM agency_milestones WHERE goal_id=? ORDER BY created_at", (row["goal_id"],)
+                "SELECT * FROM agency_milestones WHERE goal_id=? ORDER BY created_at",
+                (goal_row["goal_id"],),
             ).fetchall():
                 milestone = dict(milestone_row)
                 attempts = self.db.db.execute(
                     """SELECT ordinal,status,effect_id,outcome,proposal,completed_at
-                       FROM agency_attempts WHERE milestone_id=? ORDER BY ordinal DESC LIMIT ?""",
-                    (milestone_row["milestone_id"],max_attempts_per_milestone),
+                       FROM agency_attempts
+                       WHERE milestone_id=?
+                       ORDER BY ordinal DESC
+                       LIMIT ?""",
+                    (milestone_row["milestone_id"], max_attempts_per_milestone),
                 ).fetchall()
-                recent = []
+                recent_attempts = []
                 for attempt_row in reversed(attempts):
                     attempt = dict(attempt_row)
                     attempt["proposal"] = self._bounded_text(attempt.get("proposal"))
                     attempt["outcome"] = self._bounded_text(attempt.get("outcome"))
-                    recent.append(attempt)
-                milestone["recent_attempts"] = recent
+                    recent_attempts.append(attempt)
+                milestone["recent_attempts"] = recent_attempts
                 milestones.append(milestone)
-            goal["milestones"] = milestones; goals.append(goal)
-        state_hash = self.db.db.execute("SELECT value FROM meta WHERE key='agency_state_hash'").fetchone()
+            goal["milestones"] = milestones
+            goals.append(goal)
+
+        state_hash = self.db.db.execute(
+            "SELECT value FROM meta WHERE key='agency_state_hash'"
+        ).fetchone()
         return {
-            "authority":"UnifiedDB",
-            "profile":dict(profile_row),
-            "policy":self.policy(),
-            "metrics":self.metrics(user_id),
-            "active_goals":goals,
-            "state_hash":state_hash[0] if state_hash else None,
-            "grounding_laws":[
+            "authority": "UnifiedDB",
+            "profile": dict(profile_row),
+            "policy": self.policy(),
+            "metrics": self.metrics(user_id),
+            "active_goals": goals,
+            "state_hash": state_hash[0] if state_hash else None,
+            "grounding_laws": [
                 "Identity and goal state are database state, not model assertions.",
                 "Runtime capabilities come from EffectGate availability, never from self-description.",
-                "Plans are proposals until observed; external/state-changing actions are facts only after verified EffectGate outcomes.",
+                "Plans are proposals until observed; external/state-changing actions are facts only after verified EffectGate outcomes persisted in UnifiedDB.",
                 "A model may decide the next attempt, but it cannot mark a milestone PASSED or a goal COMPLETE.",
             ],
         }
 
+    def _earlier_phase_unpassed(self, goal_id: str, phase: str) -> bool:
+        rank = self.PHASE_RANK[phase]
+        rows = self.db.db.execute(
+            "SELECT phase,status FROM agency_milestones WHERE goal_id=?",
+            (goal_id,),
+        ).fetchall()
+        return any(
+            self.PHASE_RANK[row["phase"]] < rank and row["status"] != "PASSED"
+            for row in rows
+        )
+
     def has_runnable_work(self) -> bool:
         if self.policy()["autonomy_mode"] != "BOUNDED":
             return False
-        return self.db.db.execute(
-            """SELECT 1 FROM agency_milestones m JOIN agency_goals g ON g.goal_id=m.goal_id
-               WHERE g.status='ACTIVE' AND m.status IN ('PENDING','ACTIVE') LIMIT 1"""
-        ).fetchone() is not None
+        row = self.db.db.execute(
+            """SELECT m.goal_id,m.phase
+               FROM agency_milestones m
+               JOIN agency_goals g ON g.goal_id=m.goal_id
+               WHERE g.status='ACTIVE'
+                 AND m.status IN ('PENDING','ACTIVE')
+               ORDER BY g.priority DESC,m.created_at"""
+        ).fetchall()
+        return any(
+            not self._earlier_phase_unpassed(candidate["goal_id"], candidate["phase"])
+            for candidate in row
+        )
 
     def begin_cycle(self) -> str | None:
         if not self.has_runnable_work():
             return None
         cycle_id = str(uuid.uuid4())
         with self.db.tx() as tx:
-            tx.execute("INSERT INTO agency_cycles(cycle_id,started_at,status) VALUES(?,?,'OPEN')", (cycle_id,time.time()))
-            self._event(tx,"cycle.opened","cycle",cycle_id,{})
+            tx.execute(
+                "INSERT INTO agency_cycles(cycle_id,started_at,status) VALUES(?,?,'OPEN')",
+                (cycle_id, time.time()),
+            )
+            self._event(tx, "cycle.opened", "cycle", cycle_id, {})
             self._refresh_hash(tx)
         return cycle_id
 
-    def cycle_counts(self, cycle_id: str) -> tuple[int,int]:
-        row = self.db.db.execute("SELECT step_count,effect_count FROM agency_cycles WHERE cycle_id=?", (cycle_id,)).fetchone()
+    def cycle_counts(self, cycle_id: str) -> tuple[int, int]:
+        row = self.db.db.execute(
+            "SELECT step_count,effect_count FROM agency_cycles WHERE cycle_id=?",
+            (cycle_id,),
+        ).fetchone()
         if not row:
             raise AgencyPolicyError("cycle not found")
-        return int(row["step_count"]),int(row["effect_count"])
-
-    def _earlier_phase_unpassed(self, goal_id: str, phase: str) -> bool:
-        rank = self.PHASE_RANK[phase]
-        rows = self.db.db.execute(
-            "SELECT phase,status FROM agency_milestones WHERE goal_id=?", (goal_id,)
-        ).fetchall()
-        return any(self.PHASE_RANK[row["phase"]] < rank and row["status"] != "PASSED" for row in rows)
+        return int(row["step_count"]), int(row["effect_count"])
 
     def claim_next(self, cycle_id: str) -> ClaimedWork | None:
         policy = self.policy()
-        cycle = self.db.db.execute("SELECT * FROM agency_cycles WHERE cycle_id=?", (cycle_id,)).fetchone()
+        cycle = self.db.db.execute(
+            "SELECT * FROM agency_cycles WHERE cycle_id=?", (cycle_id,)
+        ).fetchone()
         if not cycle or cycle["status"] != "OPEN":
             raise AgencyPolicyError("cycle is not open")
         if int(cycle["step_count"]) >= int(policy["max_steps_per_cycle"]):
-            self.close_cycle(cycle_id,"step_limit"); return None
+            self.close_cycle(cycle_id, "step_limit")
+            return None
         if int(cycle["effect_count"]) >= int(policy["max_effects_per_cycle"]):
-            self.close_cycle(cycle_id,"effect_limit"); return None
+            self.close_cycle(cycle_id, "effect_limit")
+            return None
 
         candidates = self.db.db.execute(
-            """SELECT m.*,g.user_id,g.title AS goal_title,g.objective,g.success_criteria,g.priority
-               FROM agency_milestones m JOIN agency_goals g ON g.goal_id=m.goal_id
-               WHERE g.status='ACTIVE' AND m.status IN ('PENDING','ACTIVE')
+            """SELECT m.*,g.user_id,g.title AS goal_title,g.objective,
+                      g.success_criteria,g.priority
+               FROM agency_milestones m
+               JOIN agency_goals g ON g.goal_id=m.goal_id
+               WHERE g.status='ACTIVE'
+                 AND m.status IN ('PENDING','ACTIVE')
                ORDER BY g.priority DESC,m.created_at"""
         ).fetchall()
+
         for row in candidates:
-            if self._earlier_phase_unpassed(row["goal_id"],row["phase"]):
+            if self._earlier_phase_unpassed(row["goal_id"], row["phase"]):
                 continue
-            failed = int(self.db.db.execute(
-                "SELECT COUNT(*) FROM agency_attempts WHERE milestone_id=? AND status='FAILED'",
-                (row["milestone_id"],),
-            ).fetchone()[0])
+            failed = int(
+                self.db.db.execute(
+                    """SELECT COUNT(*) FROM agency_attempts
+                       WHERE milestone_id=? AND status='FAILED'""",
+                    (row["milestone_id"],),
+                ).fetchone()[0]
+            )
             if failed >= int(policy["max_failed_retries_per_milestone"]):
                 with self.db.tx() as tx:
-                    tx.execute("UPDATE agency_milestones SET status='BLOCKED',updated_at=? WHERE milestone_id=?", (time.time(),row["milestone_id"]))
-                    self._event(tx,"milestone.retry_exhausted","milestone",row["milestone_id"],{"failed_attempts":failed})
+                    tx.execute(
+                        """UPDATE agency_milestones
+                           SET status='BLOCKED',updated_at=?
+                           WHERE milestone_id=?""",
+                        (time.time(), row["milestone_id"]),
+                    )
+                    self._event(
+                        tx,
+                        "milestone.retry_exhausted",
+                        "milestone",
+                        row["milestone_id"],
+                        {"failed_attempts": failed},
+                    )
                     self._refresh_hash(tx)
                 continue
-            ordinal = int(self.db.db.execute(
-                "SELECT COALESCE(MAX(ordinal),0)+1 FROM agency_attempts WHERE milestone_id=?",
-                (row["milestone_id"],),
-            ).fetchone()[0])
-            attempt_id = str(uuid.uuid4()); now = time.time()
+
+            ordinal = int(
+                self.db.db.execute(
+                    """SELECT COALESCE(MAX(ordinal),0)+1
+                       FROM agency_attempts WHERE milestone_id=?""",
+                    (row["milestone_id"],),
+                ).fetchone()[0]
+            )
+            attempt_id = str(uuid.uuid4())
+            now = time.time()
             with self.db.tx() as tx:
-                tx.execute("UPDATE agency_milestones SET status='ACTIVE',updated_at=? WHERE milestone_id=?", (now,row["milestone_id"]))
                 tx.execute(
-                    "INSERT INTO agency_attempts(attempt_id,cycle_id,milestone_id,ordinal,status,created_at) VALUES(?,?,?,?,'CLAIMED',?)",
-                    (attempt_id,cycle_id,row["milestone_id"],ordinal,now),
+                    """UPDATE agency_milestones
+                       SET status='ACTIVE',updated_at=?
+                       WHERE milestone_id=?""",
+                    (now, row["milestone_id"]),
                 )
-                tx.execute("UPDATE agency_cycles SET step_count=step_count+1 WHERE cycle_id=?", (cycle_id,))
-                self._event(tx,"attempt.claimed","attempt",attempt_id,{"milestone_id":row["milestone_id"],"ordinal":ordinal})
+                tx.execute(
+                    """INSERT INTO agency_attempts
+                       (attempt_id,cycle_id,milestone_id,ordinal,status,created_at)
+                       VALUES(?,?,?,?,'CLAIMED',?)""",
+                    (attempt_id, cycle_id, row["milestone_id"], ordinal, now),
+                )
+                tx.execute(
+                    "UPDATE agency_cycles SET step_count=step_count+1 WHERE cycle_id=?",
+                    (cycle_id,),
+                )
+                self._event(
+                    tx,
+                    "attempt.claimed",
+                    "attempt",
+                    attempt_id,
+                    {"milestone_id": row["milestone_id"], "ordinal": ordinal},
+                )
                 self._refresh_hash(tx)
             return ClaimedWork(
-                cycle_id,attempt_id,row["goal_id"],row["milestone_id"],row["user_id"],row["phase"],
-                row["goal_title"],row["title"],row["objective"],row["success_criteria"],row["acceptance_criteria"],ordinal,
+                cycle_id=cycle_id,
+                attempt_id=attempt_id,
+                goal_id=row["goal_id"],
+                milestone_id=row["milestone_id"],
+                user_id=row["user_id"],
+                phase=row["phase"],
+                goal_title=row["goal_title"],
+                milestone_title=row["title"],
+                objective=row["objective"],
+                success_criteria=row["success_criteria"],
+                acceptance_criteria=row["acceptance_criteria"],
+                attempt_ordinal=ordinal,
             )
-        self.close_cycle(cycle_id,"no_runnable_work"); return None
 
-    def complete_attempt(self, attempt_id: str, proposal: dict[str, Any], effect_id: str | None, outcome: dict[str, Any] | None) -> str:
-        row = self.db.db.execute("SELECT * FROM agency_attempts WHERE attempt_id=?", (attempt_id,)).fetchone()
+        self.close_cycle(cycle_id, "no_runnable_work")
+        return None
+
+    def _effect_truth(self, effect_id: str, expected_user_id: str) -> tuple[bool, str | None]:
+        row = self.db.db.execute(
+            "SELECT user_id,capability,status,outcome FROM effects WHERE effect_id=?",
+            (effect_id,),
+        ).fetchone()
+        if not row:
+            raise AgencyPolicyError("effect evidence missing from UnifiedDB")
+        if row["user_id"] != expected_user_id:
+            raise AgencyPolicyError("effect owner mismatch")
+        try:
+            persisted_outcome = json.loads(row["outcome"]) if row["outcome"] else {}
+        except json.JSONDecodeError as exc:
+            raise AgencyPolicyError("persisted effect outcome is invalid") from exc
+        verified_ok = bool(
+            row["status"] == "VERIFIED"
+            and isinstance(persisted_outcome, dict)
+            and persisted_outcome.get("ok") is True
+        )
+        return verified_ok, str(row["capability"])
+
+    def complete_attempt(
+        self,
+        attempt_id: str,
+        proposal: dict[str, Any],
+        effect_id: str | None,
+        outcome: dict[str, Any] | None,
+    ) -> str:
+        row = self.db.db.execute(
+            """SELECT a.*,g.user_id
+               FROM agency_attempts a
+               JOIN agency_milestones m ON m.milestone_id=a.milestone_id
+               JOIN agency_goals g ON g.goal_id=m.goal_id
+               WHERE a.attempt_id=?""",
+            (attempt_id,),
+        ).fetchone()
         if not row or row["status"] != "CLAIMED":
             raise AgencyPolicyError("attempt is not claimable")
-        verified_ok = bool(
-            effect_id and isinstance(outcome,dict) and outcome.get("ok") is True and outcome.get("denied") is not True
-        )
+
+        verified_ok = False
+        capability = None
+        if effect_id is not None:
+            verified_ok, capability = self._effect_truth(effect_id, row["user_id"])
         no_effect_proposed = effect_id is None and outcome is None
         status = "SUCCEEDED" if (verified_ok or no_effect_proposed) else "FAILED"
         now = time.time()
+
         with self.db.tx() as tx:
             tx.execute(
-                "UPDATE agency_attempts SET proposal=?,effect_id=?,outcome=?,status=?,completed_at=? WHERE attempt_id=?",
+                """UPDATE agency_attempts
+                   SET proposal=?,effect_id=?,outcome=?,status=?,completed_at=?
+                   WHERE attempt_id=?""",
                 (
-                    json.dumps(proposal,sort_keys=True,ensure_ascii=False),effect_id,
-                    json.dumps(outcome,sort_keys=True,ensure_ascii=False) if outcome is not None else None,
-                    status,now,attempt_id,
+                    json.dumps(proposal, sort_keys=True, ensure_ascii=False),
+                    effect_id,
+                    json.dumps(outcome, sort_keys=True, ensure_ascii=False)
+                    if outcome is not None
+                    else None,
+                    status,
+                    now,
+                    attempt_id,
                 ),
             )
-            if effect_id:
-                tx.execute("UPDATE agency_cycles SET effect_count=effect_count+1 WHERE cycle_id=?", (row["cycle_id"],))
+            if effect_id is not None:
+                tx.execute(
+                    "UPDATE agency_cycles SET effect_count=effect_count+1 WHERE cycle_id=?",
+                    (row["cycle_id"],),
+                )
             if no_effect_proposed:
-                tx.execute("UPDATE agency_milestones SET status='READY_FOR_REVIEW',updated_at=? WHERE milestone_id=?", (now,row["milestone_id"]))
+                tx.execute(
+                    """UPDATE agency_milestones
+                       SET status='READY_FOR_REVIEW',updated_at=?
+                       WHERE milestone_id=?""",
+                    (now, row["milestone_id"]),
+                )
             else:
-                tx.execute("UPDATE agency_milestones SET status='ACTIVE',updated_at=? WHERE milestone_id=?", (now,row["milestone_id"]))
-            self._event(tx,"attempt.completed","attempt",attempt_id,{
-                "status":status,"effect_id":effect_id,"verified_ok":verified_ok,"ready_for_review":no_effect_proposed,
-            })
+                tx.execute(
+                    """UPDATE agency_milestones
+                       SET status='ACTIVE',updated_at=?
+                       WHERE milestone_id=?""",
+                    (now, row["milestone_id"]),
+                )
+            self._event(
+                tx,
+                "attempt.completed",
+                "attempt",
+                attempt_id,
+                {
+                    "status": status,
+                    "effect_id": effect_id,
+                    "capability": capability,
+                    "verified_ok": verified_ok,
+                    "ready_for_review": no_effect_proposed,
+                },
+            )
             self._refresh_hash(tx)
         return status
 
     def abort_attempt(self, attempt_id: str, reason: str) -> None:
-        row = self.db.db.execute("SELECT milestone_id,status FROM agency_attempts WHERE attempt_id=?", (attempt_id,)).fetchone()
+        row = self.db.db.execute(
+            "SELECT milestone_id,status FROM agency_attempts WHERE attempt_id=?",
+            (attempt_id,),
+        ).fetchone()
         if not row or row["status"] != "CLAIMED":
             return
         with self.db.tx() as tx:
             tx.execute(
-                "UPDATE agency_attempts SET status='ABORTED',outcome=?,completed_at=? WHERE attempt_id=?",
-                (json.dumps({"reason":reason[:500]},sort_keys=True),time.time(),attempt_id),
+                """UPDATE agency_attempts
+                   SET status='ABORTED',outcome=?,completed_at=?
+                   WHERE attempt_id=?""",
+                (
+                    json.dumps({"reason": reason[:500]}, sort_keys=True),
+                    time.time(),
+                    attempt_id,
+                ),
             )
-            tx.execute("UPDATE agency_milestones SET status='ACTIVE',updated_at=? WHERE milestone_id=?", (time.time(),row["milestone_id"]))
-            self._event(tx,"attempt.aborted","attempt",attempt_id,{"reason":reason[:500]})
+            tx.execute(
+                """UPDATE agency_milestones
+                   SET status='ACTIVE',updated_at=?
+                   WHERE milestone_id=?""",
+                (time.time(), row["milestone_id"]),
+            )
+            self._event(
+                tx,
+                "attempt.aborted",
+                "attempt",
+                attempt_id,
+                {"reason": reason[:500]},
+            )
             self._refresh_hash(tx)
 
-    def review_milestone(self, milestone_id: str, user_id: str, decision: str, note: str = "") -> None:
-        if decision not in {"PASS","REOPEN","BLOCK"}:
+    def review_milestone(
+        self,
+        milestone_id: str,
+        user_id: str,
+        decision: str,
+        note: str = "",
+    ) -> None:
+        if decision not in {"PASS", "REOPEN", "BLOCK"}:
             raise AgencyPolicyError("invalid review decision")
         row = self.db.db.execute(
-            "SELECT m.*,g.user_id AS owner FROM agency_milestones m JOIN agency_goals g ON g.goal_id=m.goal_id WHERE m.milestone_id=?",
+            """SELECT m.*,g.user_id AS owner
+               FROM agency_milestones m
+               JOIN agency_goals g ON g.goal_id=m.goal_id
+               WHERE m.milestone_id=?""",
             (milestone_id,),
         ).fetchone()
         if not row or row["owner"] != user_id:
             raise AgencyPolicyError("milestone owner mismatch")
-        if row["status"] != "READY_FOR_REVIEW" and decision == "PASS":
+        if decision == "PASS" and row["status"] != "READY_FOR_REVIEW":
             raise AgencyPolicyError("only READY_FOR_REVIEW milestones can pass")
-        new_status = {"PASS":"PASSED","REOPEN":"ACTIVE","BLOCK":"BLOCKED"}[decision]
-        now = time.time(); review_id = str(uuid.uuid4())
+
+        new_status = {
+            "PASS": "PASSED",
+            "REOPEN": "ACTIVE",
+            "BLOCK": "BLOCKED",
+        }[decision]
+        now = time.time()
+        review_id = str(uuid.uuid4())
         with self.db.tx() as tx:
             tx.execute(
                 "INSERT INTO agency_reviews VALUES(?,?,?,?,?,?,?)",
-                (review_id,milestone_id,user_id,self.db.entity_generation(),decision,note[:2000],now),
+                (
+                    review_id,
+                    milestone_id,
+                    user_id,
+                    self.db.entity_generation(),
+                    decision,
+                    note[:2000],
+                    now,
+                ),
             )
-            tx.execute("UPDATE agency_milestones SET status=?,updated_at=? WHERE milestone_id=?", (new_status,now,milestone_id))
+            tx.execute(
+                """UPDATE agency_milestones
+                   SET status=?,updated_at=?
+                   WHERE milestone_id=?""",
+                (new_status, now, milestone_id),
+            )
             if decision == "PASS":
-                remaining = int(tx.execute(
-                    "SELECT COUNT(*) FROM agency_milestones WHERE goal_id=? AND status!='PASSED'",
-                    (row["goal_id"],),
-                ).fetchone()[0])
+                remaining = int(
+                    tx.execute(
+                        """SELECT COUNT(*) FROM agency_milestones
+                           WHERE goal_id=? AND status!='PASSED'""",
+                        (row["goal_id"],),
+                    ).fetchone()[0]
+                )
                 if remaining == 0:
-                    tx.execute("UPDATE agency_goals SET status='COMPLETE',updated_at=? WHERE goal_id=?", (now,row["goal_id"]))
-            self._event(tx,"milestone.reviewed","review",review_id,{"milestone_id":milestone_id,"decision":decision})
+                    tx.execute(
+                        """UPDATE agency_goals
+                           SET status='COMPLETE',updated_at=?
+                           WHERE goal_id=?""",
+                        (now, row["goal_id"]),
+                    )
+            self._event(
+                tx,
+                "milestone.reviewed",
+                "review",
+                review_id,
+                {"milestone_id": milestone_id, "decision": decision},
+            )
             self._refresh_hash(tx)
 
     def close_cycle(self, cycle_id: str, reason: str = "") -> None:
         with self.db.tx() as tx:
-            row = tx.execute("SELECT status FROM agency_cycles WHERE cycle_id=?", (cycle_id,)).fetchone()
+            row = tx.execute(
+                "SELECT status FROM agency_cycles WHERE cycle_id=?", (cycle_id,)
+            ).fetchone()
             if not row or row["status"] != "OPEN":
                 return
             tx.execute(
-                "UPDATE agency_cycles SET status='CLOSED',finished_at=?,reason=? WHERE cycle_id=?",
-                (time.time(),reason[:500],cycle_id),
+                """UPDATE agency_cycles
+                   SET status='CLOSED',finished_at=?,reason=?
+                   WHERE cycle_id=?""",
+                (time.time(), reason[:500], cycle_id),
             )
-            self._event(tx,"cycle.closed","cycle",cycle_id,{"reason":reason[:500]})
+            self._event(
+                tx,
+                "cycle.closed",
+                "cycle",
+                cycle_id,
+                {"reason": reason[:500]},
+            )
             self._refresh_hash(tx)

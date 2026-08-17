@@ -45,6 +45,7 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
         "ANTHROPIC_AUTH_TOKEN=",
         "CLAUDE_API_KEY=",
         "GLM_API_TOKEN=",
+        "MISTRAL_API_KEY=",
         "CLERK_ISSUER=",
         "CLERK_JWKS_URL=",
         "CLERK_AUDIENCE=",
@@ -62,6 +63,7 @@ def test_tmux_server_and_control_clients_do_not_inherit_supervisor_environment(t
     monkeypatch.setattr(manager, "_require_programs", lambda: None)
     monkeypatch.setenv("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0")
     monkeypatch.setenv("GLM_API_TOKEN", "should-never-reach-tmux")
+    monkeypatch.setenv("MISTRAL_API_KEY", "should-never-reach-tmux")
     monkeypatch.setenv("GITHUB_READ_TOKEN", "should-never-reach-tmux")
     monkeypatch.setenv("CLERK_ISSUER", "should-never-reach-tmux")
     monkeypatch.setenv("UNRELATED_SUPERVISOR_SECRET", "should-never-reach-tmux")
@@ -107,6 +109,7 @@ def test_tmux_server_and_control_clients_do_not_inherit_supervisor_environment(t
         assert argv[0] == "tmux"
         assert kwargs["env"] == expected_env
         assert "GLM_API_TOKEN" not in kwargs["env"]
+        assert "MISTRAL_API_KEY" not in kwargs["env"]
         assert "GITHUB_READ_TOKEN" not in kwargs["env"]
         assert "CLERK_ISSUER" not in kwargs["env"]
         assert "UNRELATED_SUPERVISOR_SECRET" not in kwargs["env"]

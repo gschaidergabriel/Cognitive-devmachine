@@ -135,12 +135,20 @@ class PermanentTerminal:
 
 
 class TerminalSupervisor:
-    """Two authenticated user perspectives; never two ClayVerse entities."""
+    """Two authenticated user perspectives; never two ClayVerse entities.
+
+    The production default is the normal interactive Claude Code CLI with every
+    built-in tool removed and MCP restricted to the system-managed config. The
+    managed config starts empty, so the terminal is deliberately tool-dark until
+    the canonical ClayVerse MCP -> EffectGate -> EntityOS bridge is installed.
+    """
 
     USERS = ("gabriel", "andreas")
+    MANAGED_MCP_CONFIG = "/etc/claude-code/managed-mcp.json"
+    DEFAULT_COMMAND = f"claude --tools '' --strict-mcp-config --mcp-config {MANAGED_MCP_CONFIG}"
 
-    def __init__(self, command: str = "claude"):
-        argv = shlex.split(command)
+    def __init__(self, command: str | None = None):
+        argv = shlex.split(self.DEFAULT_COMMAND if command is None else command)
         if not argv:
             raise TerminalError("terminal command is empty")
         self.terminals = {user: PermanentTerminal(user, list(argv)) for user in self.USERS}

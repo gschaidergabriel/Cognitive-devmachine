@@ -81,6 +81,11 @@ def test_kata_persistent_volumes_are_single_pod_writer_fenced():
     assert 'accessModes: ["ReadWriteOnce"]' not in claims
     assert "single-writer appliance" in claims
 
+    contract = CONTRACT.read_text()
+    assert "ordinary `ReadWriteOnce` is node-scoped" in contract
+    assert "single-Pod writer fencing is `BLOCKED`" in contract
+    assert "overlapping stale/replacement Pod" in contract
+
 
 def test_kata_template_network_is_fail_closed_until_explicit_allow_policy():
     text = TEMPLATE.read_text()
@@ -156,9 +161,11 @@ def test_manifest_microvm_security_and_tier2_gates_match_the_contract():
     assert "THEN_CURRENT_UPSTREAM_SUPPORTED_KATA_RELEASE" in outer["runtime_security_support"]
     assert "UNREVIEWED_IO_KATACONTAINERS_RUNTIME_MUTATING_ANNOTATIONS" in outer["runtime_annotation_policy"]
     assert "FULL_POD_KATA_SANDBOX_VM_REPLACEMENT_REQUIRED" in outer["tier2_replacement"]
+    assert "READWRITEONCEPOD_REQUIRED" in outer["persistent_volume_writer_fence"]
     assert any("then-current upstream-supported security release" in item for item in required)
     assert any("io.katacontainers.* workload annotations" in item for item in required)
     assert any("new Pod UID and new Kata sandbox/VM identity" in item for item in required)
+    assert any("both persistent claims use ReadWriteOncePod" in item for item in required)
 
 
 def test_tier2_requires_full_kata_sandbox_replacement_not_container_restart():

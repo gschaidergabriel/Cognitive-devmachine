@@ -1,0 +1,89 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "ClayVerse single-container",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
+  "working_branch": "gpt56sol/go-kata-admission-enforcement-20260817-2304",
+  "observed_base_commit": "219044cf25d97a924b862e82c8e1b437ad3d2773",
+  "frontier": "Kata runtime-annotation rejection existed as mandatory contract semantics but no repository ValidatingAdmissionPolicy implementation was found before this delta",
+  "non_duplication": {
+    "repository_search_before_write": "no ValidatingAdmissionPolicy/admissionregistration.k8s.io implementation matching io.katacontainers was found",
+    "retained_parallel_lanes_not_duplicated": [
+      "PR611 tmux reapply",
+      "PR622 Python hash lock",
+      "PR623 identity/readiness drift",
+      "PR630 PVC fsGroup",
+      "PR484 MicroClay schema-8 fusion"
+    ]
+  },
+  "delta": {
+    "policy_path": "the artefact/deployment/clayverse-kata-admission-policy.template.yaml",
+    "policy_blob": "9fda4a959f4b9c153d1e958777f6eb318ef54fd0",
+    "test_path": "the artefact/tests/test_kata_admission_policy.py",
+    "test_blob": "c983d8a4e3f756e58b2b4e4b3cb90eb18c97090c",
+    "readme_path": "the artefact/README.md",
+    "readme_blob_after_cycle_write": "51fb8a0204f366397190c10ae4fb38b280427c40",
+    "policy_contract": [
+      "admissionregistration.k8s.io/v1 ValidatingAdmissionPolicy",
+      "failurePolicy Fail",
+      "Pod CREATE and UPDATE",
+      "binding validationActions Deny",
+      "binding objectSelector app=clayverse",
+      "reject all unreviewed io.katacontainers.* annotation keys",
+      "require runtimeClassName kata-qemu-runtime-rs"
+    ]
+  },
+  "supporting_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "network_or_kubernetes_api": false,
+    "exact_new_file_git_blob_match": true,
+    "yaml_parse": "PASS",
+    "structural_assertions": "PASS",
+    "intended_policy_proxy": "5/5 PASS",
+    "test_py_compile": "PASS",
+    "classification": "SUPPORTING_EXACT_NEW_FILE_SOURCE_MECHANISM_EVIDENCE_ONLY",
+    "warning": "The five-case proxy models the intended predicate only; it is not CEL compilation or Kubernetes API-server admission execution."
+  },
+  "external_primary_basis": {
+    "kubernetes": "ValidatingAdmissionPolicy v1 supports fail-closed failurePolicy and Deny bindings; validating admission observes the object after mutating admission",
+    "kata": "Kata workload annotations can change runtime/hypervisor behavior and security-sensitive runtime annotation surfaces require explicit control",
+    "classification": "external dependency/security contract evidence only"
+  },
+  "execution_surface_refresh": {
+    "vercel_connector": "documentation search only for Sandbox; no direct Sandbox lifecycle or environment-secret mutation action exposed to this organ",
+    "retained_blocker": "host-side Vercel Preview GITHUB_READ_TOKEN required for private Research/EntityOS staging; must not be forwarded into Sandbox",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "kubernetes_runtime_credit": 0,
+    "kata_runtime_credit": 0,
+    "cni_runtime_credit": 0,
+    "tier2_runtime_credit": 0
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed": 0,
+    "reason": "no shared immutable request/turn identity; only minute-precision trigger metadata is available"
+  },
+  "counterhypotheses": [
+    "The CEL expression may fail compile/evaluation on the admitted Kubernetes API server despite source coherence.",
+    "A deployment mutation path may alter labels or runtimeClass outside the policy's intended selector boundary.",
+    "The target runtime may require a narrowly admitted Kata annotation; blanket deny is safe by default but would then need an exact reviewed key/value exception.",
+    "Static admission success would still not prove the executing Kata runtime/configuration or guest-kernel isolation."
+  ],
+  "next_exact_gate": [
+    "refresh and rejoin exact current main without overwriting newer parallel work",
+    "apply/dry-run exact ValidatingAdmissionPolicy and binding on an admitted Kubernetes API server",
+    "prove clean ClayVerse Pod is admitted",
+    "prove io.katacontainers.* injected after mutation is denied",
+    "prove RuntimeClass drift/missing RuntimeClass is denied",
+    "attest the final admitted Pod annotations/runtimeClass",
+    "continue exact final OCI digest through Kata guest-kernel, CNI, Tier-2 replacement and recovery gates"
+  ],
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "together_api": "FORBIDDEN",
+  "paid_or_final_training": "NOT_AUTHORIZED_NOT_RUN"
+}

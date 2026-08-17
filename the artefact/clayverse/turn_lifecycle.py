@@ -189,6 +189,10 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
                 )
+            db.execute(
+                "UPDATE workspace_episodes SET state='COMPLETED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+                (row["episode_id"],),
+            )
             db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?", (self.session_id, row["causal_id"]))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?", (now, self.session_id))
         self.memory.compact(self.session_id)
@@ -227,6 +231,10 @@ class TurnLifecycle:
                     "INSERT INTO causal_episodes VALUES(?,?,?,?,?,?,?,?)",
                     (row["causal_id"], row["episode_id"], None, row["turn_id"], None, 0.0, 1, now),
                 )
+            db.execute(
+                "UPDATE workspace_episodes SET state='FAILED' WHERE episode_id=? AND state IN ('OPEN','SELECTED')",
+                (row["episode_id"],),
+            )
             db.execute("DELETE FROM active_turns WHERE session_id=?", (self.session_id,))
         self.memory.compact(self.session_id)
         self.graph.rebuild()

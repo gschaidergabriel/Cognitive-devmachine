@@ -157,7 +157,16 @@ class GLMInferenceClient:
             },
         )
 
-        status, response_body = self._transport(request, self.timeout_seconds, _MAX_RESPONSE_BYTES)
+        result = self._transport(request, self.timeout_seconds, _MAX_RESPONSE_BYTES)
+        if not isinstance(result, tuple) or len(result) != 2:
+            raise GLMInferenceError("invalid GLM transport result")
+        status, response_body = result
+        if not isinstance(status, int) or isinstance(status, bool):
+            raise GLMInferenceError("invalid GLM HTTP status")
+        if not isinstance(response_body, bytes):
+            raise GLMInferenceError("invalid GLM response bytes")
+        if len(response_body) > _MAX_RESPONSE_BYTES:
+            raise GLMInferenceError("GLM response exceeds bounded envelope")
         if not 200 <= status < 300:
             digest = hashlib.sha256(response_body).hexdigest()
             raise GLMInferenceError(f"GLM HTTP failure status={status} body_sha256={digest} body_bytes={len(response_body)}")

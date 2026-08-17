@@ -1,0 +1,44 @@
+{
+  "schema": "clayverse-go-source-hardening-receipt/v1",
+  "recorded_at": "2026-08-17T14:06+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "base_main": "4428331c192d523a20cf3923d4caeac9167b1baf",
+  "branch": "go/mcp-tool-admission-4428331-20260817",
+  "source_commit": "dfb529498d977879071a5b785c35b542c7a2b77d",
+  "test_commit": "f70fe48bf1eb7adaab3d015d2b857c6026d4c776",
+  "source_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+  "finding": "Canonical Claude launch auto-approved mcp__clayverse__* although the admitted MCP baseline currently exposes only session_state and request_effect. Exact tool admission is a narrower fail-closed permission surface.",
+  "preserved_parallel_work": [
+    "per-user tmux server isolation",
+    "root-owned managed tmux command-surface configuration",
+    "current managed Claude settings and environment sanitization"
+  ],
+  "repair": {
+    "allowed_tools": ["mcp__clayverse__session_state", "mcp__clayverse__request_effect"],
+    "wildcard_removed": true,
+    "authority_added": false
+  },
+  "primary_dependency_evidence": "Current Claude Code docs distinguish built-in availability from MCP permission, state that tools=[] removes built-ins without removing MCP tools, and support exact mcp__server__tool allowedTools entries.",
+  "execution": {
+    "equivalent_argv_probe": "PASS",
+    "exact_vercel_staging_branch": "chatgpt/go-mcp-tool-surface-vercel-20260817-1356",
+    "exact_vercel_staging_head": "fc964f3343d7ee34fe5ed22723602501cffb375f",
+    "staged_source_blob": "12eba1e581f9b928e3c6c228cbe943b6a53d0c0b",
+    "sandbox_runner_contract": "Python 3.13 Sandbox -> exact blob bind -> deny-all -> two-user allowedTools/tmux policy probe -> stop",
+    "vercel_status": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false,
+    "test_started": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAILURE",
+    "vps_used": false
+  },
+  "go_experiment_accounting": {
+    "unusual_experiment_executed_by_this_organ": false,
+    "canonical_13_42_state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "Available immutable trigger time has minute precision only."
+  },
+  "acceptance": "SOURCE_CANDIDATE_MECHANISM_SUPPORTED_EXECUTION_ADMISSION_BLOCKED",
+  "next_gate": "Execute the already-staged exact-blob Vercel Sandbox regression when preview admission returns; then inspect packaged Claude permission behavior before merge/promotion."
+}

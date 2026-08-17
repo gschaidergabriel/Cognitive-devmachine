@@ -1,18 +1,19 @@
 {
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
-  "observed_at_local": "2026-08-18T00:32:00+07:00",
+  "observed_at_local": "2026-08-18T00:33:30+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
-  "canonical_main_before_write": "9580103d3e2c289a62bd601855699669fee8c91b",
-  "classification": "DETACHED_EXACT_CONTROLLER_READY_FINAL_RUNTIME_GATES_OPEN",
+  "classification": "DETACHED_CONTROLLER_MECHANISM_SUPPORTED_CURRENT_HEAD_DEPLOYMENT_PENDING_FINAL_RUNTIME_GATES_OPEN",
   "retained_controller": {
     "repository": "gschaidergabriel/Dr.-Unterweger",
     "pull_request": 810,
-    "head": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
-    "deployment_id": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
-    "deployment_state": "READY",
+    "current_head": "edf6c1c5d466988d306530f966846264b686813d",
+    "latest_observed_ready_deployment_id": "dpl_37KaiTaCCj2hFVSHYcCqWCpskfde",
+    "latest_observed_ready_deployment_commit": "5986dcbfe290f3c2f444aaa0a1cfdca3c7fcfc10",
+    "current_head_has_exact_ready_deployment_observed": false,
+    "current_head_delta_from_latest_ready": "controller source-guard/status hardening and local-adapter removal; no Mistral/Tier2 implementation added",
     "function_max_duration_seconds": 300,
     "bound_research_product_commit": "66b767d41217945f4ba293b5d0d65b5f0da1e748",
     "bound_research_product_tree": "5f30fc57bb5ff18e450750d327168a3b4f4f1e27",
@@ -27,7 +28,7 @@
       "whole_product_pass": false,
       "unusual_experiment_count_added": 0
     },
-    "sdk_contract_check": "@vercel/sandbox v2 primary documentation explicitly supports named persistent sandboxes and runCommand({detached:true}); controller dependency is @vercel/sandbox 2.9.2"
+    "sdk_contract_check": "Official Vercel Sandbox v2 documentation supports named persistent sandboxes and runCommand({detached:true}); controller dependency is @vercel/sandbox 2.9.2."
   },
   "detached_batch_scope": {
     "implemented": [
@@ -65,10 +66,11 @@
     "whole_product_runtime_credit_added": 0
   },
   "adjudication": {
-    "supersedes_blocker": "The Vercel 300-second Function wall-clock is no longer the primary structural blocker because the retained controller is now phase-split around a named persistent Sandbox and detached command.",
-    "current_frontier": "Run the exact READY detached controller only when the owner-held scoped GitHub token is available, then inspect bounded Source/OCI runtime evidence. In the same retained lane, implement the approved Vault/Mistral -> canonical --mistral-once -> EffectGate/EntityOS -> Tier-1 -> full same-digest Tier-2 recreation -> Vault reacquisition -> second Mistral sequence before any final-test or whole-product credit.",
+    "superseded_blocker": "The Vercel 300-second Function wall-clock is no longer the primary structural blocker because the retained controller is phase-split around a named persistent Sandbox and detached command.",
+    "current_frontier": "First obtain an exact READY deployment for the current PR810 controller head. Then, when the owner-held scoped GitHub token is available, execute the detached source/OCI lane and evaluate its bounded runtime evidence. In the same retained lane, add approved Vault/Mistral -> canonical --mistral-once -> EffectGate/EntityOS -> Tier-1 -> full same-digest Tier-2 recreation -> Vault reacquisition -> second Mistral before any final-test or whole-product credit.",
+    "vault_runtime_configuration_visibility": "UNRESOLVED_FROM_AVAILABLE_VERCEL_CONNECTOR; no secret value was requested, exposed or invented.",
     "do_not_infer": [
-      "READY is not product runtime PASS",
+      "READY on an ancestor controller is not exact-current controller runtime admission",
       "detached batch PASS is not final Mistral PASS",
       "component OCI PASS is not whole ClayVerse PASS"
     ]

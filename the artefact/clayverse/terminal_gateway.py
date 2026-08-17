@@ -67,13 +67,7 @@ def _auth_expiry_deadline(claims: dict, *, now: float | None = None) -> float:
     return deadline
 
 
-def _reauthenticated_expiry(
-    claims: dict,
-    *,
-    expected_subject: str,
-    expected_clerk_session_id: str,
-    now: float | None = None,
-) -> float:
+def _reauthenticated_expiry(claims: dict, *, expected_subject: str, expected_clerk_session_id: str, now: float | None = None) -> float:
     """Fence a refreshed token to the already-authenticated Clerk identity/session."""
     if str(claims.get("sub", "")) != expected_subject:
         raise AuthenticationError("Clerk refresh changed subject")
@@ -101,7 +95,6 @@ def _bounded_pty_input(payload: bytes) -> bytes:
 
 
 def _write_pty_all(fd: int, payload: bytes) -> None:
-    """Write one terminal-input frame completely or fail closed."""
     remaining = memoryview(payload)
     while remaining:
         written = os.write(fd, remaining)
@@ -111,28 +104,20 @@ def _write_pty_all(fd: int, payload: bytes) -> None:
 
 
 def _runtime_ready(db: UnifiedDB) -> bool:
-    """Read-only readiness check for the canonical UnifiedDB spine."""
     try:
         schema = db.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()
         generation = db.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
-        users = db.db.execute(
-            "SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')"
-        ).fetchone()
-        session_rows = db.db.execute(
-            "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
-        ).fetchall()
+        users = db.db.execute("SELECT COUNT(*) FROM users WHERE user_id IN ('gabriel','andreas')").fetchone()
+        session_rows = db.db.execute("SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id").fetchall()
         sessions = {row["user_id"]: row for row in session_rows}
         entity_generation = int(generation[0]) if generation else -1
         return bool(
-            schema and schema[0] == "6"
+            schema and schema[0] == "8"
             and entity_generation >= 1
             and users and int(users[0]) == 2
             and set(sessions) == {"gabriel", "andreas"}
-            and all(
-                sessions[user_id]["terminal_name"] == terminal_name
-                and int(sessions[user_id]["generation"]) == entity_generation
-                for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
-            )
+            and all(sessions[user_id]["terminal_name"] == terminal_name and int(sessions[user_id]["generation"]) == entity_generation
+                    for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items())
         )
     except Exception:
         return False
@@ -143,7 +128,6 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     from fastapi import FastAPI
     from fastapi.responses import HTMLResponse, JSONResponse
     from fastapi.staticfiles import StaticFiles
-
     identity = IdentityRouter(db, clerk_map)
     terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="ClayVerse", docs_url=None, redoc_url=None)
@@ -152,30 +136,20 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     @app.get("/healthz")
     async def healthz():
-        return JSONResponse({
-            "status": "ok",
-            "scope": "liveness",
-            "surface": "permanent-claude-code-terminal",
-            "users": ["gabriel", "andreas"],
-            "consciousness_daemon": False,
-        })
+        return JSONResponse({"status": "ok", "scope": "liveness", "surface": "permanent-claude-code-terminal",
+                             "users": ["gabriel", "andreas"], "consciousness_daemon": False})
 
     @app.get("/readyz")
     async def readyz():
         ready = _runtime_ready(db)
-        return JSONResponse({
-            "status": "ready" if ready else "not_ready",
-            "scope": "runtime",
-            "canonical_state": "unifieddb",
-            "surface": "permanent-claude-code-terminal",
-        }, status_code=200 if ready else 503)
+        return JSONResponse({"status": "ready" if ready else "not_ready", "scope": "runtime",
+                             "canonical_state": "unifieddb", "surface": "permanent-claude-code-terminal"},
+                            status_code=200 if ready else 503)
 
     @app.get("/", response_class=HTMLResponse)
     async def index():
-        key = html.escape(publishable_key, quote=True)
-        api = html.escape(frontend_api_url, quote=True)
-        if not key or not api:
-            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        key = html.escape(publishable_key, quote=True); api = html.escape(frontend_api_url, quote=True)
+        if not key or not api: return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
         return HTMLResponse(f'''<!doctype html><html><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1"><title>ClayVerse</title>
 <link rel="stylesheet" href="/vendor/xterm/css/xterm.css">
@@ -197,130 +171,72 @@ window.addEventListener('load', async () => {{
     if(authRefreshTimer) clearTimeout(authRefreshTimer);
     const delay=Math.max(1000,Number(expiresAt)*1000-Date.now()-{_AUTH_REFRESH_HEADROOM_SECONDS * 1000});
     authRefreshTimer=setTimeout(async()=>{{
-      try{{
-        const token=await Clerk.session.getToken({{skipCache:true}});
-        if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'reauth',token}}));
-      }}catch{{ws.close();}}
+      try{{ const token=await Clerk.session.getToken({{skipCache:true}}); if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'reauth',token}})); }}catch{{ws.close();}}
     }},delay);
   }};
   ws.onopen=async()=>{{ const token=await Clerk.session.getToken({{skipCache:true}}); ws.send(JSON.stringify({{type:'auth',token,rows:term.rows,cols:term.cols}})); }};
   ws.onmessage=(ev)=>{{
     if(typeof ev.data==='string'){{
-      try{{
-        const m=JSON.parse(ev.data);
-        if(m.type==='ready'){{scheduleAuthRefresh(m.auth_expires_at);}}
-        if(m.type==='ready'){{terminalReady=true;term.focus();return;}}
-        if(m.type==='reauthenticated'){{scheduleAuthRefresh(m.auth_expires_at);return;}}
-        if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[ClayVerse] '+m.message);return;}}
-      }}catch{{if(terminalReady)term.write(ev.data);}}
+      try{{ const m=JSON.parse(ev.data); if(m.type==='ready'){{scheduleAuthRefresh(m.auth_expires_at);}} if(m.type==='ready'){{terminalReady=true;term.focus();return;}}
+        if(m.type==='reauthenticated'){{scheduleAuthRefresh(m.auth_expires_at);return;}} if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[ClayVerse] '+m.message);return;}} }}
+      catch{{if(terminalReady)term.write(ev.data);}}
     }}else if(terminalReady) term.write(new Uint8Array(ev.data));
   }};
-  term.onData(data=>{{
-    if(!terminalReady||ws.readyState!==1)return;
-    const encoded=new TextEncoder().encode(data);
-    for(let offset=0;offset<encoded.length;offset+=maxInputFrameBytes){{
-      ws.send(encoded.slice(offset,offset+maxInputFrameBytes));
-    }}
-  }});
+  term.onData(data=>{{ if(!terminalReady||ws.readyState!==1)return; const encoded=new TextEncoder().encode(data);
+    for(let offset=0;offset<encoded.length;offset+=maxInputFrameBytes){{ ws.send(encoded.slice(offset,offset+maxInputFrameBytes)); }} }});
   const resize=()=>{{ if(terminalReady&&ws.readyState===1) ws.send(JSON.stringify({{type:'resize',rows:term.rows,cols:term.cols}})); }};
-  ws.onclose=()=>{{terminalReady=false;}};
-  ws.addEventListener('close',()=>{{if(authRefreshTimer)clearTimeout(authRefreshTimer);}});
-  window.addEventListener('resize',resize);
+  ws.onclose=()=>{{terminalReady=false;}}; ws.addEventListener('close',()=>{{if(authRefreshTimer)clearTimeout(authRefreshTimer);}}); window.addEventListener('resize',resize);
 }});
 </script></body></html>''')
 
     @app.websocket("/ws/terminal")
     async def terminal_ws(ws: WebSocket):
-        await ws.accept()
-        attach_pid = attach_fd = None
-        send_lock = asyncio.Lock()
-
+        await ws.accept(); attach_pid = attach_fd = None; send_lock = asyncio.Lock()
         async def send_json(payload: dict) -> None:
-            async with send_lock:
-                await ws.send_text(json.dumps(payload))
-
+            async with send_lock: await ws.send_text(json.dumps(payload))
         try:
             first = await asyncio.wait_for(ws.receive_text(), timeout=10)
             hello = _decode_json_object(first, name="auth", max_chars=_AUTH_MESSAGE_MAX_CHARS)
-            if hello.get("type") != "auth":
-                raise AuthenticationError("authentication must be first message")
-            token = _auth_token(hello)
-            rows, cols = _terminal_dimensions(hello)
-            claims = await asyncio.to_thread(verifier.verify, token)
-            auth_expires_at = _auth_expiry_deadline(claims)
-            clerk_subject = str(claims["sub"])
-            clerk_session_id = str(claims["sid"])
-            user_id, session_id = identity.resolve(clerk_subject)
+            if hello.get("type") != "auth": raise AuthenticationError("authentication must be first message")
+            token = _auth_token(hello); rows, cols = _terminal_dimensions(hello)
+            claims = await asyncio.to_thread(verifier.verify, token); auth_expires_at = _auth_expiry_deadline(claims)
+            clerk_subject = str(claims["sub"]); clerk_session_id = str(claims["sid"]); user_id, session_id = identity.resolve(clerk_subject)
             attach_pid, attach_fd, binding = await asyncio.to_thread(terminals.attach_pty, user_id)
-            if binding.session_id != session_id:
-                raise PermissionError("terminal/session identity mismatch")
+            if binding.session_id != session_id: raise PermissionError("terminal/session identity mismatch")
             terminals.resize(attach_fd, rows, cols)
-            await send_json({
-                "type": "ready",
-                "user_id": user_id,
-                "session_id": session_id,
-                "auth_expires_at": int(auth_expires_at),
-            })
-
+            await send_json({"type": "ready", "user_id": user_id, "session_id": session_id, "auth_expires_at": int(auth_expires_at)})
             async def pump_out():
                 while True:
                     data = await asyncio.to_thread(os.read, attach_fd, _PTY_OUTPUT_CHUNK_MAX_BYTES)
-                    if not data:
-                        return
-                    async with send_lock:
-                        await ws.send_bytes(data)
-
+                    if not data: return
+                    async with send_lock: await ws.send_bytes(data)
             async def pump_in():
                 nonlocal auth_expires_at
                 while True:
                     remaining = auth_expires_at - time.time()
-                    if remaining <= 0:
-                        raise AuthenticationError("Clerk session token expired")
-                    try:
-                        message = await asyncio.wait_for(ws.receive(), timeout=remaining)
-                    except asyncio.TimeoutError as exc:
-                        raise AuthenticationError("Clerk session token expired") from exc
-                    if message.get("type") == "websocket.disconnect":
-                        return
+                    if remaining <= 0: raise AuthenticationError("Clerk session token expired")
+                    try: message = await asyncio.wait_for(ws.receive(), timeout=remaining)
+                    except asyncio.TimeoutError as exc: raise AuthenticationError("Clerk session token expired") from exc
+                    if message.get("type") == "websocket.disconnect": return
                     if message.get("bytes") is not None:
-                        _bounded_pty_input(message["bytes"])
-                        await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
+                        _bounded_pty_input(message["bytes"]); await asyncio.to_thread(_write_pty_all, attach_fd, message["bytes"])
                     elif message.get("text") is not None:
                         control = _decode_terminal_control(message["text"])
                         if control.get("type") == "reauth":
                             refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))
-                            auth_expires_at = _reauthenticated_expiry(
-                                refreshed,
-                                expected_subject=clerk_subject,
-                                expected_clerk_session_id=clerk_session_id,
-                            )
-                            await send_json({
-                                "type": "reauthenticated",
-                                "auth_expires_at": int(auth_expires_at),
-                            })
-                            continue
-                        if control.get("type") != "resize":
-                            raise ValueError("unsupported terminal control message")
-                        rows, cols = _terminal_dimensions(control)
-                        terminals.resize(attach_fd, rows, cols)
-                    else:
-                        raise ValueError("unsupported WebSocket terminal frame")
-
+                            auth_expires_at = _reauthenticated_expiry(refreshed, expected_subject=clerk_subject, expected_clerk_session_id=clerk_session_id)
+                            await send_json({"type": "reauthenticated", "auth_expires_at": int(auth_expires_at)}); continue
+                        if control.get("type") != "resize": raise ValueError("unsupported terminal control message")
+                        rows, cols = _terminal_dimensions(control); terminals.resize(attach_fd, rows, cols)
+                    else: raise ValueError("unsupported WebSocket terminal frame")
             tasks = [asyncio.create_task(pump_out()), asyncio.create_task(pump_in())]
             done, pending = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-            for task in pending:
-                task.cancel()
-            for task in done:
-                task.result()
-        except (WebSocketDisconnect, asyncio.CancelledError):
-            pass
+            for task in pending: task.cancel()
+            for task in done: task.result()
+        except (WebSocketDisconnect, asyncio.CancelledError): pass
         except Exception as exc:
-            try:
-                await send_json({"type": "error", "message": str(exc)})
-            except Exception:
-                pass
+            try: await send_json({"type": "error", "message": str(exc)})
+            except Exception: pass
         finally:
-            if attach_pid is not None and attach_fd is not None:
-                await asyncio.to_thread(terminals.close_attach, attach_pid, attach_fd)
-
+            if attach_pid is not None and attach_fd is not None: await asyncio.to_thread(terminals.close_attach, attach_pid, attach_fd)
     return app

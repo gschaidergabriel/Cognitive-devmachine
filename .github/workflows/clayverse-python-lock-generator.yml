@@ -35,10 +35,6 @@ jobs:
           test -f "$PRODUCT_REQUIREMENTS"
           test -f "$PRODUCT_SOURCE_LOCK"
 
-          # Bind the resolver environment to the actual first product FROM image.
-          # Current ClayVerse uses a direct digest-pinned Python image rather than an
-          # ARG BASE_IMAGE indirection; deriving from any parallel hardcoded value
-          # would allow the generator to resolve a lock for different runtime bytes.
           BASE_IMAGE="$(sed -n -E 's/^[[:space:]]*[Ff][Rr][Oo][Mm][[:space:]]+([^[:space:]]+).*/\1/p' "$PRODUCT_DOCKERFILE" | head -n1)"
           if ! printf '%s\n' "$BASE_IMAGE" | grep -Eq '^python:[^[:space:]]+@sha256:[0-9a-f]{64}$'; then
             echo "Product first FROM is not an exact digest-pinned Python image: $BASE_IMAGE" >&2
@@ -58,10 +54,8 @@ jobs:
           set -euo pipefail
           PRODUCT_REQUIREMENTS='/workspace/the artefact/requirements.txt'
           PRODUCT_SOURCE_LOCK='/workspace/the artefact/SOURCE_LOCK.json'
-          actual_sha="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
-          test "$actual_sha" = "$EXPECTED_REQUIREMENTS_SHA256"
-          actual_source_lock_sha="$(sha256sum "$PRODUCT_SOURCE_LOCK" | awk '{print $1}')"
-          test "$actual_source_lock_sha" = "$EXPECTED_SOURCE_LOCK_SHA256"
+          test "$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')" = "$EXPECTED_REQUIREMENTS_SHA256"
+          test "$(sha256sum "$PRODUCT_SOURCE_LOCK" | awk '{print $1}')" = "$EXPECTED_SOURCE_LOCK_SHA256"
           cp "$PRODUCT_REQUIREMENTS" /tmp/requirements.in
 
           python --version
@@ -72,97 +66,78 @@ jobs:
           cat /tmp/generator.base.freeze
           echo 'GENERATOR_BASE_ENVIRONMENT_END'
 
-          # The resolver executable itself is part of the lock-generation trust root.
-          # Bind the pip-tools wheel bytes before installation. Its transitive bootstrap
-          # dependencies remain an explicitly open supply-chain gate until a complete
-          # generator-environment hash lock is admitted in authorized isolated execution.
-          python - <<'PY' > /tmp/pip-tools-source-lock.values
+          # Source-lock the complete Linux/Python-3.13 pip-tools bootstrap set.
+          # Hash-checking mode rejects any undeclared transitive package; the install
+          # then runs offline from exactly the verified wheelhouse.
+          python - <<'PY'
           import json
           import re
           from pathlib import Path
 
           lock = json.loads(Path('/workspace/the artefact/SOURCE_LOCK.json').read_text(encoding='utf-8'))
-          pip_tools = lock['python_lock_generator']['pip_tools']
-          version = pip_tools['version']
-          wheel = pip_tools['wheel']
-          sha256 = pip_tools['sha256']
-          if wheel != f'pip_tools-{version}-py3-none-any.whl':
-              raise SystemExit(f'PIP_TOOLS_WHEEL_IDENTITY_MISMATCH:{wheel}:{version}')
-          if re.fullmatch(r'[0-9a-f]{64}', sha256) is None:
-              raise SystemExit(f'PIP_TOOLS_SHA256_INVALID:{sha256}')
-          print(version)
-          print(wheel)
-          print(sha256)
+          generator = lock['python_lock_generator']
+          pip_tools = generator['pip_tools']
+          entries = [{
+              'requirement': f"pip-tools=={pip_tools['version']}",
+              'wheel': pip_tools['wheel'],
+              'sha256': pip_tools['sha256'],
+          }, *generator['bootstrap_dependencies']]
+
+          expected_names = {
+              'build', 'click', 'packaging', 'pip', 'pip-tools',
+              'pyproject-hooks', 'setuptools', 'wheel',
+          }
+          seen = []
+          for entry in entries:
+              requirement = entry['requirement']
+              match = re.fullmatch(r'([A-Za-z0-9_.-]+)==([^\s]+)', requirement)
+              if match is None:
+                  raise SystemExit(f'GENERATOR_REQUIREMENT_INVALID:{requirement}')
+              seen.append(match.group(1).lower().replace('_', '-'))
+              wheel = entry['wheel']
+              sha256 = entry['sha256']
+              if not wheel.endswith('.whl') or '/' in wheel or '\\' in wheel:
+                  raise SystemExit(f'GENERATOR_WHEEL_INVALID:{requirement}:{wheel}')
+              if re.fullmatch(r'[0-9a-f]{64}', sha256) is None:
+                  raise SystemExit(f'GENERATOR_SHA256_INVALID:{requirement}:{sha256}')
+          if set(seen) != expected_names or len(seen) != len(expected_names):
+              raise SystemExit(f'GENERATOR_BOOTSTRAP_CLOSURE_MISMATCH:{sorted(seen)}')
+
+          Path('/tmp/generator-bootstrap.requirements').write_text(
+              ''.join(f"{entry['requirement']} --hash=sha256:{entry['sha256']}\n" for entry in entries),
+              encoding='utf-8',
+          )
+          Path('/tmp/generator-bootstrap.expected').write_text(
+              ''.join(
+                  f"{entry['sha256']}  {entry['wheel']}\n"
+                  for entry in sorted(entries, key=lambda item: item['wheel'])
+              ),
+              encoding='utf-8',
+          )
+          print(f'GENERATOR_BOOTSTRAP_EXPECTED_COUNT={len(entries)}')
           PY
-          mapfile -t PIP_TOOLS_LOCK < /tmp/pip-tools-source-lock.values
-          test "${#PIP_TOOLS_LOCK[@]}" -eq 3
-          PIP_TOOLS_VERSION="${PIP_TOOLS_LOCK[0]}"
-          PIP_TOOLS_WHEEL="${PIP_TOOLS_LOCK[1]}"
-          PIP_TOOLS_SHA256="${PIP_TOOLS_LOCK[2]}"
+
           rm -rf /tmp/pip-tools-bootstrap && mkdir -p /tmp/pip-tools-bootstrap
           python -m pip download --disable-pip-version-check --no-cache-dir \
-            --only-binary=:all: --no-deps \
-            "pip-tools==$PIP_TOOLS_VERSION" -d /tmp/pip-tools-bootstrap
-          test "$(find /tmp/pip-tools-bootstrap -maxdepth 1 -type f | wc -l)" -eq 1
-          PIP_TOOLS_WHEEL_PATH="/tmp/pip-tools-bootstrap/$PIP_TOOLS_WHEEL"
-          test -f "$PIP_TOOLS_WHEEL_PATH"
-          printf '%s  %s\n' "$PIP_TOOLS_SHA256" "$PIP_TOOLS_WHEEL_PATH" | sha256sum -c -
-          echo "PIP_TOOLS_WHEEL_SHA256=$PIP_TOOLS_SHA256"
+            --only-binary=:all: --require-hashes \
+            -r /tmp/generator-bootstrap.requirements \
+            -d /tmp/pip-tools-bootstrap
+
+          test "$(find /tmp/pip-tools-bootstrap -maxdepth 1 -type f | wc -l)" -eq "$(wc -l < /tmp/generator-bootstrap.expected)"
+          (
+            cd /tmp/pip-tools-bootstrap
+            sha256sum -c /tmp/generator-bootstrap.expected
+          )
+          echo 'GENERATOR_BOOTSTRAP_SHA256_BEGIN'
+          cat /tmp/generator-bootstrap.expected
+          echo 'GENERATOR_BOOTSTRAP_SHA256_END'
+
           python -m pip install --disable-pip-version-check --no-cache-dir \
-            --only-binary=:all: --report /tmp/generator-install-report.json \
-            "$PIP_TOOLS_WHEEL_PATH"
-          pip-compile --version | grep -F "version $PIP_TOOLS_VERSION"
-
-          # pip's stable installation-report v1 exposes the exact downloaded archive
-          # hashes selected for newly installed transitive bootstrap dependencies. This
-          # is evidence for the next local-hash closure, not itself a trusted lock.
-          python - <<'PY' > /tmp/generator.download-provenance
-          import json
-          import re
-          from pathlib import Path
-          from urllib.parse import unquote, urlparse
-
-          source_lock = json.loads(Path('/workspace/the artefact/SOURCE_LOCK.json').read_text(encoding='utf-8'))
-          pip_tools_lock = source_lock['python_lock_generator']['pip_tools']
-          report = json.loads(Path('/tmp/generator-install-report.json').read_text(encoding='utf-8'))
-          if report.get('version') != '1':
-              raise SystemExit(f"PIP_INSTALL_REPORT_VERSION_UNSUPPORTED:{report.get('version')}")
-          rows = []
-          for item in report.get('install', []):
-              metadata = item.get('metadata') or {}
-              name = str(metadata.get('name') or '').strip()
-              version = str(metadata.get('version') or '').strip()
-              if not name or not version:
-                  raise SystemExit('PIP_INSTALL_REPORT_METADATA_MISSING')
-              normalized_name = name.lower().replace('_', '-')
-              download_info = item.get('download_info') or {}
-              url = str(download_info.get('url') or '')
-              parsed = urlparse(url)
-              filename = Path(unquote(parsed.path)).name
-              hashes = (download_info.get('archive_info') or {}).get('hashes') or {}
-              sha256 = hashes.get('sha256')
-
-              if normalized_name == 'pip-tools':
-                  if filename != pip_tools_lock['wheel']:
-                      raise SystemExit(f'PIP_TOOLS_REPORT_WHEEL_MISMATCH:{filename}')
-                  sha256 = pip_tools_lock['sha256']
-                  source = 'SOURCE_LOCK'
-              else:
-                  if parsed.scheme != 'https':
-                      raise SystemExit(f'GENERATOR_DEPENDENCY_NON_HTTPS_SOURCE:{name}:{url}')
-                  if re.fullmatch(r'[0-9a-f]{64}', str(sha256 or '')) is None:
-                      raise SystemExit(f'GENERATOR_DEPENDENCY_SHA256_MISSING:{name}:{version}')
-                  source = parsed.netloc
-
-              rows.append(f'{normalized_name}=={version}\t{filename}\t{sha256}\t{source}')
-
-          for row in sorted(rows):
-              print(row)
-          PY
-          echo -n 'GENERATOR_DOWNLOAD_PROVENANCE_SHA256='; sha256sum /tmp/generator.download-provenance | awk '{print $1}'
-          echo 'GENERATOR_DOWNLOAD_PROVENANCE_BEGIN'
-          cat /tmp/generator.download-provenance
-          echo 'GENERATOR_DOWNLOAD_PROVENANCE_END'
+            --no-index --find-links=/tmp/pip-tools-bootstrap \
+            --only-binary=:all: --require-hashes \
+            -r /tmp/generator-bootstrap.requirements
+          python -m pip --version | grep -F 'pip 26.1.2 '
+          pip-compile --version | grep -F 'version 7.5.3'
 
           python -m pip freeze --all | LC_ALL=C sort > /tmp/generator.freeze
           echo -n 'GENERATOR_FREEZE_SHA256='; sha256sum /tmp/generator.freeze | awk '{print $1}'

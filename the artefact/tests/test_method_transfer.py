@@ -1,4 +1,5 @@
 import json
+import time
 
 from clayverse.identity import IdentityRouter
 from clayverse.method_transfer import MethodTransfer
@@ -10,18 +11,24 @@ def promoted(signature, steps):
     return {
         "status": "PROMOTED",
         "problem_signature": signature,
+        "goal_shape": signature["goal_shape"],
         "preconditions": ["failure observed"],
         "method_steps": steps,
         "invariants": ["evidence remains evidence"],
+        "expected_observations": ["discriminator changes the hypothesis ranking"],
         "falsifiers": ["discriminator contradicts method"],
         "failure_modes": ["wrong structural class"],
         "scope_limits": ["bounded diagnosis"],
         "source_episode_ids": ["episode:source"],
+        "supporting_memory_ids": ["memory:support"],
+        "counterexample_memory_ids": [],
+        "provenance": {"source": "validated-transfer-test"},
         "support_count": 3,
         "success_count": 2,
         "failure_count": 1,
         "calibration": 0.8,
         "abstraction_version": "v1",
+        "last_validated_at": time.time(),
     }
 
 
@@ -37,11 +44,38 @@ def test_structural_transfer_preserves_unknown(tmp_path):
         wrong = {"goal_shape": "plan", "facets": ["open_problem"], "resource_shapes": ["file"]}
         correct_id = add_method(db, "framework", "causal aperture triage", promoted(correct, ["partition observations", "run discriminator"]))
         wrong_id = add_method(db, "framework", "matching words", promoted(wrong, ["diagnose repair file failure"]))
-        result = MethodTransfer(db).retrieve(query="diagnose file failure", signature=correct, evidence_status="UNKNOWN", user_id="gabriel", session_id="session:gabriel", turn_id="turn:new", generation=db.entity_generation())
+        result = MethodTransfer(db).retrieve(
+            query="diagnose file failure",
+            signature=correct,
+            evidence_status="UNKNOWN",
+            user_id="gabriel",
+            session_id="session:gabriel",
+            turn_id="turn:new",
+            episode_id="episode:new",
+            causal_id="causal:new",
+            generation=db.entity_generation(),
+        )
         assert result["fact_status"] == "UNKNOWN"
         assert result["receipt"]["fact_status_unchanged"] is True
+        assert result["receipt"]["turn_id"] == "turn:new"
+        assert result["receipt"]["episode_id"] == "episode:new"
+        assert result["receipt"]["causal_id"] == "causal:new"
         assert result["items"][0]["memory_id"] == correct_id
         assert wrong_id not in {item["memory_id"] for item in result["items"]}
+        first_receipt_id = result["receipt"]["use_receipt_memory_id"]
+        replay = MethodTransfer(db).retrieve(
+            query="diagnose file failure",
+            signature=correct,
+            evidence_status="UNKNOWN",
+            user_id="gabriel",
+            session_id="session:gabriel",
+            turn_id="turn:new",
+            episode_id="episode:new",
+            causal_id="causal:new",
+            generation=db.entity_generation(),
+        )
+        assert replay["receipt"]["use_receipt_memory_id"] == first_receipt_id
+        assert db.db.execute("SELECT COUNT(*) FROM durable_memory WHERE kind='method_receipt'").fetchone()[0] == 1
     finally:
         db.close()
 
@@ -58,10 +92,17 @@ def test_real_turn_context_keeps_method_memory_out_of_evidence(tmp_path):
         assert context["retrieval_receipt"]["status"] == "UNKNOWN"
         assert context["method_retrieval_receipt"]["fact_status"] == "UNKNOWN"
         assert context["method_retrieval_receipt"]["method_status"] == "PRESENT"
+        assert context["method_retrieval_receipt"]["causal_id"] == result["causal_id"]
+        assert context["method_retrieval_receipt"]["generation"] == result["generation"]
+        assert context["method_retrieval_receipt"]["learned_routing_active"] is False
         assert context["durable_memory"] == context["evidence_context"] == []
         assert [item["memory_id"] for item in context["method_context"]] == [method_id]
         assert context["method_context"][0]["truth_authority"] is False
         assert context["method_context"][0]["effect_authority"] is False
+        receipt_id = context["method_retrieval_receipt"]["use_receipt_memory_id"]
+        persisted = db.db.execute("SELECT kind,source_turn_id FROM durable_memory WHERE memory_id=?", (receipt_id,)).fetchone()
+        assert persisted["kind"] == "method_receipt"
+        assert persisted["source_turn_id"] == result["turn_id"]
         life.abort("test-end")
     finally:
         db.close()

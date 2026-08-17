@@ -7,12 +7,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     CLAYVERSE_STATE_ROOT=/var/lib/clayverse \
     CLAYVERSE_WORKSPACE=/workspace \
     CLAYVERSE_REQUIRE_CLAUDE=1 \
-    CLAYVERSE_REQUIRE_ENTITYOS=0 \
+    CLAYVERSE_REQUIRE_ENTITYOS=1 \
+    CLAYVERSE_ENTITYOS_PATH=/opt/entityos/EntityOS \
+    CLAYVERSE_ENTITYOS_SHA256=${ENTITYOS_SHA256} \
     PORT=3000 \
-    DISABLE_AUTOUPDATER=1
+    DISABLE_AUTOUPDATER=1 \
+    CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1
 
 RUN apt-get update \
- && apt-get install -y --no-install-recommends ca-certificates nodejs npm \
+ && apt-get install -y --no-install-recommends ca-certificates nodejs npm tmux \
  && npm install --global "${CLAUDE_CODE_SPEC}" \
  && npm cache clean --force \
  && rm -rf /var/lib/apt/lists/*
@@ -20,15 +23,17 @@ RUN apt-get update \
 WORKDIR /opt/clayverse
 COPY requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-RUN mkdir -p /etc/claude-code /opt/entityos
+RUN mkdir -p /etc/claude-code /opt/entityos /opt/clayverse/runtime
 COPY --chown=root:root policy/managed-mcp.json /etc/claude-code/managed-mcp.json
 RUN chmod 0444 /etc/claude-code/managed-mcp.json
 COPY clayverse ./clayverse
+COPY --chown=root:root runtime_CLAUDE.md /opt/clayverse/runtime/CLAUDE.md
 COPY --chown=root:root EntityOS /opt/entityos/EntityOS
 RUN test -n "${ENTITYOS_SHA256}" \
  && printf '%s  %s\n' "${ENTITYOS_SHA256}" /opt/entityos/EntityOS | sha256sum -c - \
- && chmod 0555 /opt/entityos/EntityOS
-RUN useradd --system --uid 10001 --create-home clayverse \
+ && chmod 0555 /opt/entityos/EntityOS \
+ && chmod 0444 /opt/clayverse/runtime/CLAUDE.md
+RUN useradd --system --uid 10001 --create-home --shell /bin/bash clayverse \
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R clayverse:clayverse /opt/clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown root:root /opt/entityos /opt/entityos/EntityOS \
@@ -36,7 +41,7 @@ RUN useradd --system --uid 10001 --create-home clayverse \
  && chmod 0555 /opt/entityos/EntityOS
 
 USER clayverse
-VOLUME ["/var/lib/clayverse"]
+VOLUME ["/var/lib/clayverse", "/workspace"]
 EXPOSE 3000
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/healthz',timeout=3).read()"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 CMD ["python","-c","import os,urllib.request; urllib.request.urlopen('http://127.0.0.1:'+os.environ.get('PORT','3000')+'/healthz',timeout=3).read()"]
 ENTRYPOINT ["python","-m","clayverse.service"]

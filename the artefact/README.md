@@ -22,25 +22,25 @@ This is the canonical product workspace for the current ClayVerse endpoint: **on
 
 - **#611** — single retained tmux idempotent-reapply repair. Promotion still requires the actual tmux resolved inside the exact ClayVerse OCI image.
 - **#622** — single retained Python hash-lock generator lane at `44ec5e109d40304b152c2fa05ba3e42e690f2820`; source-defined eight-package pip-tools bootstrap candidate remains **UNEXECUTED**. No canonical accepted `requirements.lock.txt` exists yet and Docker is not promoted to product `--require-hashes`.
-- **#623** — single retained auth/identity/readiness drift lane, latest observed head `3c6c4d98605d72d902ea36ceabf47a73eab11a54`. The same lane source-fences canonical users/equal rights, canonical permanent session IDs, session cardinality, terminal identity and global generation; `_runtime_ready()` now calls the same read-only canonical-user-state validator used by authenticated resolution before any tmux probe. A bounded exact-source-slice reconstruction exercised canonical control, extra-user drift, rights drift, canonical-session-id drift and duplicate-session drift **5/5 PASS**. Classification is **MECHANISM_SUPPORTED / SOURCE CANDIDATE** only; no full PR-head, OCI, Clerk/tmux/Claude runtime or whole-product PASS is claimed. Adversarial review also identified one adjacent unresolved extension boundary: WebSocket `reauth` currently extends the verified Clerk lease after same-`sub`/`sid` checks without re-running the current read-only UnifiedDB identity/session/generation contract; #623 should close that gap on the same lane before promotion.
+- **#623** — single retained auth/identity/readiness drift lane. Semantic product source is `3c6c4d98605d72d902ea36ceabf47a73eab11a54`; latest observed branch head is `0310afaba5543e3dbe76fd9eae83e43ffa1e994b`, carrying the concurrently fused healthcheck-test/receipt state. The same lane fences canonical users/equal rights, canonical permanent session IDs, session cardinality, terminal identity and global generation; `_runtime_ready()` now calls the same read-only canonical-user-state validator used by authenticated resolution before any tmux probe. A bounded exact-source-slice reconstruction exercised canonical control, extra-user drift, rights drift, canonical-session-id drift and duplicate-session drift **5/5 PASS**. Classification is **MECHANISM_SUPPORTED / SOURCE CANDIDATE** only; no full PR-head, OCI, Clerk/tmux/Claude runtime or whole-product PASS is claimed. Adversarial review identified one adjacent unresolved extension boundary: WebSocket `reauth` can extend a verified Clerk lease after same-`sub`/`sid` checks without re-running the current read-only UnifiedDB identity/session/generation contract; #623 should close that gap on the same retained lane before promotion.
 - **#602** — downstream managed native-Claude process attestation after successful in-image #611 validation.
-- Dr.-Unterweger **#810** — the single retained Vercel OCI controller; no parallel OCI controller or second source-staging authority is admitted. The retained branch was re-observed at `a86f4355d02dc34331a3746128b6c3b959977439` after the latest bounded deployment descendant.
+- Dr.-Unterweger **#810** — the single retained Vercel OCI controller. Its retained branch has been restored by non-force fast-forward to semantic v6 head `78d92753d9442c66c3ffcff127c31faa98ffd622`. No parallel OCI controller or second source-staging authority is admitted.
 
 ### Current OCI execution evidence
 
-The strongest actually-started product-boundary evidence includes Vercel deployment **`dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8`** from Dr.-Unterweger commit **`a341eb107f8499f301e730de12680fd2df580fd8`**.
+The strongest actually-started product-boundary evidence includes Vercel deployment **`dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8`** from trigger-only Dr.-Unterweger commit **`a341eb107f8499f301e730de12680fd2df580fd8`**, whose parent is retained semantic controller `78d92753…`.
 
 Observed in that build:
 
 1. Vercel cloned the private Dr.-Unterweger controller and entered the retained ClayVerse build wrapper.
-2. The exact retained-runner guard admitted the bound controller source.
+2. The exact retained-runner guard admitted the bound controller source and TargetPatch **v6** was active.
 3. `Sandbox.create` succeeded.
 4. The v2 provider-identity hardening emitted both real Sandbox name **`peach-traditional-sparrow-J4uLFC`** and current Sandbox session ID **`sbx_ZBNVvNkCkxdZFs1FmwAIFJcgkoyb`**.
 5. Execution then failed closed before any private Research/EntityOS source fetch because host-side Preview variable `GITHUB_READ_TOKEN` was absent: `PRIVATE_SOURCE_STAGE_BLOCKED:GITHUB_READ_TOKEN_MISSING`.
 6. The disposable Sandbox stopped successfully.
 7. `source_runtime_credit=0`; `oci_runtime_credit=0`; this is **not** ClayVerse TEST_FAIL.
 
-The executed deployment commit is bounded execution provenance only. It was observed three commits ahead of retained `a86f4355…`, while the retained branch was subsequently observed back at `a86f4355…`; therefore the descendant must not be treated as current branch truth or silently promoted.
+The trigger-only `a341eb…` child is bounded execution provenance, not retained branch truth. During this cycle the single retained #810 branch was observed drifted back to ancestor `a86f4355…` while its durable controller contract identified `78d92753…` as the semantic v6 head. The existing branch was repaired by a **non-force fast-forward** through `c40a5099…` to `78d92753…`. No force rewrite, duplicate controller or second source-staging path was created, and the PR body was refreshed to distinguish retained source from transient execution provenance.
 
 ### Primary current blocker
 
@@ -54,7 +54,7 @@ Security contract:
 - only verified archive bytes cross into the Sandbox;
 - unknown source identity fails closed.
 
-The connected Vercel tools available in the current cycle expose deployment/project/log inspection but do **not** expose environment-secret mutation or secret-value recovery. Re-triggering the same lane without the credential would only reproduce the known infrastructure blocker and earns no product runtime credit.
+The connected Vercel tools available in the current cycle expose deployment/project/log inspection but do **not** expose environment-secret mutation or secret-value recovery; a plugin search found no installable Vercel secret-management alternative. Re-triggering the same lane without the credential would only reproduce the known infrastructure blocker and earns no product runtime credit.
 
 ### Next exact execution sequence
 
@@ -70,15 +70,13 @@ The final container still has open acceptance gates until exact isolated OCI evi
 
 ### Latest cycle delta
 
-**2026-08-17 20:20 +07:00 — `NO_CHANGE` canonical merged ClayVerse product/runtime bytes; current #623 readiness/auth alignment is retained as mechanism-supported, and the next fail-closed source frontier is reauthentication against current UnifiedDB identity state. The Vercel private-source credential blocker remains unchanged.**
+**2026-08-17 20:19 +07:00 — `NO_CHANGE` canonical merged ClayVerse product/runtime bytes; #810 retained-controller ref drift repaired and live #623 re-entry preserved, while the Vercel private-source credential blocker remains unchanged.**
 
-- Shared current evidence from this macro-cycle includes a fresh Vercel run that created a real Sandbox and observed both provider Sandbox name and VM-session ID before private-source staging; durable receipt: `the artefact/receipts/2026-08-17_GO_2013_VERCEL_V6_PROVIDER_IDENTITY_CREDENTIAL_BLOCK_GPT56SOL.json`.
-- That run again stopped at missing host-side `GITHUB_READ_TOKEN` before private Research/EntityOS bytes crossed the boundary; source/OCI runtime credit remains zero and this is not ClayVerse TEST_FAIL.
-- The retained #623 lane advanced concurrently to `3c6c4d98605d72d902ea36ceabf47a73eab11a54`; `_runtime_ready()` now reuses `assert_canonical_user_state(db)` before session/tmux probing, and a bounded source-slice execution covered canonical control, extra user, rights drift, canonical session-id drift and duplicate session **5/5 PASS**. Durable receipt: `the artefact/receipts/2026-08-17_GO_2018_PR623_READINESS_CANONICAL_USER_FENCE_GPT56SOL.json`.
-- The supporting 5/5 execution is bounded mechanism evidence only. #623 still has zero observed workflow runs on `3c6c4d…` and lacks exact full-PR/OCI/Clerk/tmux/Claude runtime acceptance.
-- New adversarial review found that the same WebSocket can currently extend `auth_expires_at` via `reauth` after fresh Clerk verification and same Clerk `sub`/`sid` checks without revalidating the current UnifiedDB canonical-user/session/terminal/generation contract. A socket admitted before canonical state drift can therefore extend a lease that a fresh `IdentityRouter.resolve(clerk_subject)` would reject.
-- Smallest retained-lane repair: after refreshed JWT + same-`sub`/`sid` validation, re-run the existing read-only `IdentityRouter.resolve(clerk_subject)`, require the same already-attached `user_id/session_id`, and only then publish the new expiry. This reuses UnifiedDB authority and creates no second identity registry. Durable PR review: `4952022776`; durable receipt: `the artefact/receipts/2026-08-17_GO_2013_PR623_REAUTH_IDENTITY_EXTENSION_FUSION_GPT56SOL.json`.
-- No duplicate code path was written while another organ was actively advancing #623; stale/overlapping writes were avoided rather than forced.
+- Shared current evidence from this macro-cycle includes Vercel deployment `dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8`, which created a real Sandbox and observed both provider Sandbox name and VM-session ID before private-source staging; durable receipt: `the artefact/receipts/2026-08-17_GO_2013_VERCEL_V6_PROVIDER_IDENTITY_CREDENTIAL_BLOCK_GPT56SOL.json`.
+- That run stopped at missing host-side `GITHUB_READ_TOKEN` before private Research/EntityOS bytes crossed the boundary; source/OCI runtime credit remains zero and this is not ClayVerse TEST_FAIL.
+- A later coordination check found #810 actually at ancestor `a86f4355…` while its retained contract described semantic v6 head `78d92753…`. The existing branch was repaired **without force** to `78d92753…`; no duplicate controller was created. Append-only correction receipt: `the artefact/receipts/2026-08-17_GO_2019_PR810_REF_REPAIR_LIVE_REENTRY_GPT56SOL.json`.
+- #623 concurrently advanced on the same retained lane: semantic readiness/auth user-contract source `3c6c4d98…`, latest observed receipt/test branch head `0310afab…`; bounded readiness/user-contract mechanism evidence remains **5/5 PASS**, not full PR/OCI acceptance.
+- The next #623 adversarial source frontier is reauthentication: after refreshed JWT and same Clerk `sub`/`sid`, re-run the existing read-only `IdentityRouter.resolve(clerk_subject)`, require the same already-attached `user_id/session_id`, and only then publish the extended expiry. This reuses UnifiedDB authority and creates no second identity registry.
 - No valid unusual experiment was executed because no shared immutable request/turn identity is exposed for the atomic experiment lease.
 - No VPS, self-hosted/production test, Together API, paid/final training or secret exposure was used.
 - Whole-product acceptance remains **IN_PROGRESS**.
@@ -100,7 +98,7 @@ The retired custom chat API/headless `claude -p` path and a separate `consciousn
 
 ## Verification
 
-Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The current OCI path is empirically capable of starting a disposable Vercel Sandbox and records its provider/VM-session identity correctly, but private product source still cannot be staged until the sensitive Preview read credential exists. The #623 canonical-user readiness alignment has bounded 5/5 source-slice mechanism support, not full PR/OCI runtime acceptance, and its reauthentication lease-extension path still needs current UnifiedDB identity revalidation plus exact regression evidence. The next accepted runtime claim must bind freshly refreshed product bytes and continue beyond the credential gate.
+Authorized isolated evidence exists for bounded components, but **whole-product PASS is not claimed**. The current OCI path can start a disposable Vercel Sandbox and records its provider/VM-session identity correctly, but private product source still cannot be staged until the sensitive Preview read credential exists. The #623 canonical-user readiness alignment has bounded source-slice mechanism support, not full PR/OCI runtime acceptance, and its reauthentication lease-extension path still needs current UnifiedDB identity revalidation plus exact regression evidence. The next accepted runtime claim must bind freshly refreshed product bytes and continue beyond the credential gate.
 
 ## Container source
 

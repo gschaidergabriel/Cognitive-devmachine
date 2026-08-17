@@ -1,0 +1,33 @@
+# Deployment-infrastructure RBAC for the external Tier-2 replacement controller.
+# This credential MUST NOT be mounted into the ClayVerse application Pod.
+# The controller polls exactly clayverse-0, so it needs no list/watch/create/update rights.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    resourceNames: ["clayverse-0"]
+    verbs: ["get", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: clayverse-tier2-controller
+  namespace: clayverse
+subjects:
+  - kind: ServiceAccount
+    name: clayverse-tier2-controller
+    namespace: clayverse
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: clayverse-tier2-controller

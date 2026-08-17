@@ -1,0 +1,122 @@
+name: ClayVerse OCI Hosted Sandbox Gate
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-clayverse-oci-hosted-sandbox-20260817
+
+permissions:
+  contents: read
+
+jobs:
+  clayverse-oci:
+    # Owner policy forbids self-hosted/VPS/production execution. This job is deliberately
+    # bound to GitHub's ephemeral hosted Linux runner as an isolated fallback while the
+    # preferred Vercel Sandbox surface is provider-rate-limited.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Bind exact source identity
+        id: source
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf 'commit=%s\n' "$GITHUB_SHA"
+          TREE="$(git rev-parse "$GITHUB_SHA:the artefact")"
+          printf 'artefact_tree=%s\n' "$TREE"
+          printf 'tree=%s\n' "$TREE" >> "$GITHUB_OUTPUT"
+          git diff --exit-code
+
+      - name: Validate artifact lock and build exact OCI candidate
+        id: build
+        working-directory: the artefact
+        shell: bash
+        run: |
+          set -euo pipefail
+          LOCK_SHA="$(python3 -c 'import json; print(json.load(open("entityos.lock.json", encoding="utf-8"))["sha256"])')"
+          LOCK_SIZE="$(python3 -c 'import json; print(json.load(open("entityos.lock.json", encoding="utf-8"))["size_bytes"])')"
+          test "$(sha256sum EntityOS | awk '{print $1}')" = "$LOCK_SHA"
+          test "$(stat -c %s EntityOS)" = "$LOCK_SIZE"
+          docker build --pull --build-arg "ENTITYOS_SHA256=$LOCK_SHA" -t clayverse-go:"$GITHUB_SHA" .
+          IMAGE_ID="$(docker image inspect clayverse-go:"$GITHUB_SHA" --format '{{.Id}}')"
+          USER_SPEC="$(docker image inspect clayverse-go:"$GITHUB_SHA" --format '{{.Config.User}}')"
+          printf 'image_id=%s\nuser=%s\n' "$IMAGE_ID" "$USER_SPEC"
+          test "$USER_SPEC" = 'clayverse'
+          printf 'image_id=%s\n' "$IMAGE_ID" >> "$GITHUB_OUTPUT"
+
+      - name: Verify immutable runtime and direct-shell rejection inside exact image
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE=clayverse-go:"$GITHUB_SHA"
+          docker run --rm --entrypoint /bin/sh "$IMAGE" -ec '
+            test "$(id -u)" = 10001
+            test -x /opt/clayverse/runtime/deny-shell
+            test ! -w /opt/clayverse
+            test ! -w /opt/clayverse/runtime/deny-shell
+            test ! -w /etc/claude-code/managed-settings.json
+            python - <<"PY"
+import json
+p=json.load(open("/etc/claude-code/managed-settings.json", encoding="utf-8"))
+assert p["allowManagedHooksOnly"] is True
+assert p["allowManagedPermissionRulesOnly"] is True
+assert p["allowManagedMcpServersOnly"] is True
+assert p["allowedMcpServers"] == [{"serverName":"clayverse"}]
+assert p["permissions"]["deny"] == ["Bash"]
+assert p["permissions"]["disableBypassPermissionsMode"] == "disable"
+assert p["disableSkillShellExecution"] is True
+assert p["env"]["CLAUDE_CODE_DISABLE_BACKGROUND_TASKS"] == "1"
+assert p["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
+PY
+            marker=/tmp/clayverse-shell-bypass-marker
+            rm -f "$marker"
+            set +e
+            /opt/clayverse/runtime/deny-shell "touch $marker" >/tmp/guard.out 2>/tmp/guard.err
+            rc=$?
+            set -e
+            test "$rc" = 126
+            test ! -e "$marker"
+            grep -q "direct shell execution is disabled" /tmp/guard.err
+            claude --version
+            tmux -V
+          '
+
+      - name: Start exact OCI candidate and probe health
+        shell: bash
+        run: |
+          set -euo pipefail
+          IMAGE=clayverse-go:"$GITHUB_SHA"
+          CID="$(docker run -d --rm -p 127.0.0.1:3000:3000 "$IMAGE")"
+          cleanup(){ docker rm -f "$CID" >/dev/null 2>&1 || true; }
+          trap cleanup EXIT
+          ok=0
+          for _ in $(seq 1 30); do
+            if curl --fail --silent --show-error http://127.0.0.1:3000/healthz > /tmp/health.json; then
+              ok=1
+              break
+            fi
+            sleep 1
+          done
+          if test "$ok" != 1; then
+            docker logs "$CID" || true
+            exit 1
+          fi
+          cat /tmp/health.json
+          docker inspect "$CID" --format 'running={{.State.Running}} user={{.Config.User}} image={{.Image}}'
+
+      - name: Emit bounded evidence summary
+        if: always()
+        shell: bash
+        run: |
+          printf '%s\n' \
+            "CLAYVERSE_HOSTED_SANDBOX_COMMIT=$GITHUB_SHA" \
+            "CLAYVERSE_ARTEFACT_TREE=${{ steps.source.outputs.tree }}" \
+            "CLAYVERSE_IMAGE_ID=${{ steps.build.outputs.image_id }}" \
+            "CLAYVERSE_EXECUTION_SURFACE=GITHUB_HOSTED_UBUNTU_24_04_EPHEMERAL" \
+            "CLAYVERSE_SELF_HOSTED=false" \
+            "CLAYVERSE_VPS=false" \
+            "CLAYVERSE_UNUSUAL_EXPERIMENT_ADDED=0"

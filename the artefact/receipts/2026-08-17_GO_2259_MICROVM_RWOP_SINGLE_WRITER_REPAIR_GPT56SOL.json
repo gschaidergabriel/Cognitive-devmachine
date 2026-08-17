@@ -1,0 +1,58 @@
+{
+  "schema": "ClayVerseBoundedReceipt/v1",
+  "created_at": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol / ChatGPT temporary Clay organ",
+  "trigger": "go",
+  "classification": "NEW",
+  "scope": "MICROVM_RWOP_SINGLE_WRITER_SOURCE_REPAIR",
+  "branch": "gpt56sol/go-microvm-rwop-single-writer-20260817-2259",
+  "branch_base_exact_main_commit": "45eb69ccb6103908c6ad6de98b4cbd673050d9da",
+  "source_commits": {
+    "template_rwop": "e7b4a49b194e5b7fb03b78dca0f6485ea102e4d5",
+    "contract_rwop": "c2177cf2f1d36c5a5271d0eb9f1cf68b4ea864db",
+    "focused_regression": "8bc944c565c2082f58e6826bd98e1cfc450321d8"
+  },
+  "source_blobs": {
+    "template_after_rwop": "b3cb316addffecfc542993fd3f56a97a0fb22ade",
+    "contract_after_rwop": "1dca658653d9e228e5bd9e6a64de7d3b3162e45b",
+    "test_path": "the artefact/tests/test_microvm_rwop_single_writer.py"
+  },
+  "repair": {
+    "state_pvc": "ReadWriteOncePod",
+    "workspace_pvc": "ReadWriteOncePod",
+    "forbids_canonical_rwo": true,
+    "preserves_fs_group_10001": true,
+    "preserves_no_privileged_init_chown": true,
+    "acceptance_requires_csi_rwop_support": true,
+    "acceptance_requires_competing_pod_mount_denial": true,
+    "acceptance_requires_replacement_pod_reacquire_after_old_terminal": true
+  },
+  "authority_boundary": "Storage attachment fencing only. UnifiedDB remains the one canonical durable state authority. No second state, identity, effect, recovery, cognition, or deployment authority is introduced.",
+  "primary_basis": "Kubernetes documents ReadWriteOnce as node-scoped and ReadWriteOncePod as the strict single-Pod access mode; RWOP is stable and CSI-only.",
+  "evidence": {
+    "source_review": "PASS_COHERENT",
+    "focused_test_added": true,
+    "focused_test_executed": false,
+    "exact_branch_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "kubernetes_csi_runtime_credit": 0,
+    "kata_runtime_credit": 0
+  },
+  "current_execution_frontier": {
+    "latest_vercel_deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "sandbox_admission": "PASS_CREATED",
+    "guest_kernel_attestation": "PASS_OBSERVED_GUEST_KERNEL_IDENTITY Linux 6.12.76 x86_64",
+    "private_source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0
+  },
+  "coordination": {
+    "unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "direct_main_write_collisions": 2,
+    "force_write_used": false,
+    "parallel_fs_group_work_preserved": true,
+    "rejoin_required_before_promotion": true,
+    "latest_exact_main_commit_observed_after_branch_work": "813990240d1e1ad9bcd7afd4fa5284fd1f43f65b"
+  },
+  "promotion_gate": "Keep source candidate Draft. Rejoin fresh main before promotion; execute exact focused/adjacent source regression in an authorized isolated executor; then prove the final selected CSI/Kata deployment enforces RWOP by denying a competing Pod while the admitted ClayVerse Pod owns each PVC and allowing only the replacement Pod after old workload termination."
+}

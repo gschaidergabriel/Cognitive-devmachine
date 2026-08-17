@@ -1,0 +1,76 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "observed_at": "2026-08-17T22:59+07:00",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CANONICAL_SOURCE_FUSION_WITH_LIVE_EXECUTION_ADMISSION_RECHECK",
+  "canonical_writes": [
+    {
+      "commit": "ac73b699469a3333ff8a064a00eb3aaa56315bf7",
+      "path": "the artefact/deployment/MICROVM_DEPLOYMENT_CONTRACT.md",
+      "delta": "fuse GHSA-fgm4-mv68-h344 Dragonball guest-to-host escape into current Kata rolling-security contract; selected hypervisor becomes explicit acceptance identity"
+    },
+    {
+      "commit": "adb74b4c6f166c27e3ca089e819983ec9a3b1375",
+      "path": "the artefact/tests/test_microvm_deployment_contract.py",
+      "delta": "regression fence for Dragonball advisory and selected-hypervisor identity"
+    },
+    {
+      "commit": "c5354adbd816ca8eb5e99732f166cb48419fdf96",
+      "path": "the artefact/Dockerfile",
+      "delta": "change image HEALTHCHECK from runtime readiness /readyz to liveness /healthz while preserving /readyz as separate runtime admission surface"
+    },
+    {
+      "commit": "f50b47ac29d769319e335c6760a0f948d8a2fd6c",
+      "path": "the artefact/tests/test_container_healthcheck_semantics.py",
+      "delta": "cross-surface regression fence for OCI healthz, FastAPI healthz/readyz, and Kata liveness/readiness separation"
+    }
+  ],
+  "upstream_security_observation": {
+    "kata_latest_observed": "4.0.0",
+    "rolling_support_rule": "latest monthly/security-supported release must be refreshed again immediately before final acceptance",
+    "advisories": [
+      "GHSA-mp2j-xm59-qfgw",
+      "GHSA-7fhf-v3p3-rp56",
+      "GHSA-fgm4-mv68-h344"
+    ],
+    "dragonball_boundary": "GHSA-fgm4-mv68-h344 affects the Dragonball path from >=3.0.0 and is patched in 4.0.0; runtime/hypervisor configuration remains part of acceptance identity"
+  },
+  "live_execution_admission_recheck": {
+    "deployment": "dpl_G5m2brg1e29g5QysdZxye7Dgkysi",
+    "controller_repo": "gschaidergabriel/Dr.-Unterweger",
+    "controller_commit": "d01d6218491edf468573c17f9d8c01f3803fa210",
+    "execution_surface": "VERCEL_SANDBOX_DOCKER_IN_FIRECRACKER",
+    "sandbox_admission": "PASS_CREATED",
+    "guest_kernel": "Linux 6.12.76 x86_64",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "EXECUTION_ADMISSION_PASS_THEN_PRE_SOURCE_CREDENTIAL_BLOCK; NOT_CLAYVERSE_TEST_FAIL"
+  },
+  "coordination": {
+    "closed_duplicate_pr": 639,
+    "reason": "PR 639 carried two competing admission-policy implementations for one responsibility while PR 637 already retained that semantic lane; closed to preserve one canonical path",
+    "retained_admission_lane": 637
+  },
+  "test_execution": {
+    "focused_new_regressions_executed": false,
+    "reason": "isolated container DNS could not resolve raw.githubusercontent.com and GitHub Actions workflow-run endpoint returned integration 403; no false TEST_FAIL or PASS inferred",
+    "source_bytes_rechecked_on_main_after_parallel_fusion": true
+  },
+  "go_unusual_experiment": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+  "go_unusual_experiment_reason": "The exact user trigger exposes only minute-precision immutable message time and no shared immutable request/turn identifier; atomic lease protocol forbids an unusual experiment claim.",
+  "forbidden_surfaces_used": {
+    "vps": false,
+    "self_hosted": false,
+    "production_host": false,
+    "together": false,
+    "paid_final_training": false
+  },
+  "current_primary_blocker": "Provision approved sensitive host-side Vercel Preview GITHUB_READ_TOKEN without forwarding it into Sandbox env/logs; then rebind exact current Research + EntityOS bytes and run exact OCI build/runtime gates.",
+  "whole_product_pass": false,
+  "acceptance": "IN_PROGRESS"
+}

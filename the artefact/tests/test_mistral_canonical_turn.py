@@ -13,11 +13,12 @@ MODEL = "mistral-small-latest"
 
 
 class FakeMistral:
-    def __init__(self, text="bounded answer", *, effect=None, provider="mistral", model=MODEL):
+    def __init__(self, text="bounded answer", *, effect=None, provider="mistral", model=MODEL, response_model=None):
         self.text = text
         self.effect = effect
         self.provider = provider
         self.model = model
+        self.response_model = response_model or model
         self.calls = []
 
     def reason(self, world, observation):
@@ -27,7 +28,7 @@ class FakeMistral:
             "selection": "respond",
             "effect": self.effect,
             "provider": self.provider,
-            "model": self.model,
+            "model": self.response_model,
         }
 
 
@@ -219,9 +220,8 @@ def test_model_output_cannot_supply_effect_authority_and_failed_turn_is_aborted(
 def test_model_identity_mismatch_is_rejected_and_turn_aborted(tmp_path):
     db = make_db(tmp_path)
     try:
-        fake = FakeMistral(model="mistral-small-latest")
+        fake = FakeMistral(model=MODEL, response_model="mistral-large-latest")
         runtime = MistralCanonicalTurn(db, "gabriel", fake)
-        fake.model = "mistral-large-latest"
         with pytest.raises(MistralCanonicalTurnError, match="model identity changed"):
             runtime.run("test")
         assert db.db.execute("SELECT 1 FROM active_turns WHERE session_id='session:gabriel'").fetchone() is None

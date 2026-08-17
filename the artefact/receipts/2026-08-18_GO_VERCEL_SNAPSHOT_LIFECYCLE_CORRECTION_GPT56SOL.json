@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at_local": "2026-08-18T01:36:00+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "CORRECTS_VERCEL_SNAPSHOT_LIFECYCLE_CLAIM_NARROWS_TIER2_BLOCKER",
+  "canonical_main_observed_before_write": "05b482ecfb93ce5e1f13f6139e325dd647274932",
+  "immutable_runtime_freeze": {
+    "pull_request": 686,
+    "head": "9dd7da1c7f1d2acf29142a74effd2b51282661f7",
+    "tree": "47c09ff6d661b3da02743435dd8a343ddef85efd",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "corrected_external_fact": {
+    "superseded_receipt": "the artefact/receipts/2026-08-18_GO_PR686_RECEIPT_IDENTITY_SUPERSESSION_GPT56SOL.json",
+    "superseded_claim": "Vercel snapshots are tied to named-sandbox lifecycle such that deleting the sandbox deletes its snapshots.",
+    "current_primary_documentation": "Vercel persistent-sandbox documentation states sandbox.delete permanently removes the sandbox and sessions while snapshots survive deletion; snapshots remain until expiry or explicit snapshot deletion. Vercel also exposes snapshot retrieval and deletion as separate project-scoped operations.",
+    "result": "VERCEL_SANDBOX_SNAPSHOT_IS_AN_INDEPENDENT_POST_DELETE_DURABLE_CARRIER_CANDIDATE_AT_THE_PLATFORM_LIFECYCLE_LEVEL"
+  },
+  "current_controller_source_candidate": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 810,
+    "head_observed": "15e81df2e0a6fa5d83539d26f0cbfcc0c717557c",
+    "sequence_observed": "run-tier2-prepare sanitizes /vercel/sandbox to tier2-transfer -> source.snapshot -> source.delete -> Sandbox.create from snapshot with persistent:false -> restore/remeasure -> fresh HCP-WIF secret reacquisition",
+    "source_only": true,
+    "runtime_credit": 0
+  },
+  "remaining_tier2_discriminators": [
+    "prove the exact Vercel snapshot survives source sandbox deletion and can instantiate the replacement in an actually-started authorized isolated run",
+    "prove the sanitized carrier does not preserve an undeclared competing ClayVerse state, secret, source checkout or old live-process authority",
+    "remeasure transfer manifest, logical UnifiedDB snapshot, workspace archive and exact OCI image identity after replacement creation",
+    "prove replacement sandbox/session identity is distinct and old source is deleted before replacement creation",
+    "prove recovery advances global generation, rejects stale writers and does not blindly replay unknown effects",
+    "reacquire Mistral through fresh Vercel OIDC -> HCP WIF and execute the second canonical cognition turn"
+  ],
+  "epistemic_status": {
+    "durable_carrier_availability_blocker": "REMOVED_AT_PLATFORM_LIFECYCLE_LEVEL",
+    "snapshot_carrier_mechanism": "SOURCE_CANDIDATE_REQUIRES_EXACT_RUNTIME_FALSIFICATION",
+    "exact_runtime_verified": false,
+    "whole_product_accepted": false
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_count": 0,
+    "global_go_slot_already_consumed": true
+  },
+  "next_exact_step": "Run the retained PR810 source guards against the current snapshot-carrier handler; if source guards pass, execute the exact PR686 Vercel Sandbox Tier-2 delete/recreate path and retain zero acceptance credit unless post-delete snapshot restore, exact declared transfer identities, generation fencing and fresh provider reacquisition are all observed."
+}

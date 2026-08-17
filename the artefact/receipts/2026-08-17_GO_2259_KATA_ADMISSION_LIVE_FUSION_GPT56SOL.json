@@ -1,0 +1,62 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "scope": "Live non-duplication fusion of parallel Kata admission candidates #640/#642 into one retained #640 path",
+  "coordination": {
+    "duplicate_pr_640": "security(clayverse): fail closed on unreviewed Kata workload annotations",
+    "duplicate_pr_642": "microvm: fail closed on Kata runtime annotation mutation",
+    "retained_pr": 640,
+    "closed_donor_pr": 642,
+    "classification": "DUPLICATE_FUSED_ONE_RETAINED_ADMISSION_POLICY_PATH"
+  },
+  "adversarial_findings": [
+    "The original #640 selection inferred ClayVerse identity from mutable app=clayverse labels. oldObject fences UPDATE label removal but CREATE has no oldObject, so an earlier mutation could remove/change the label before validating admission and make the policy skip the canonical workload.",
+    "The #642 donor correctly identified that runtimeClassName must be a Deny validation rather than a match condition, otherwise a mutation to a host-kernel/default runtime could make the policy skip validation."
+  ],
+  "fused_repair": {
+    "branch": "gpt56sol/go-kata-annotation-admission-fence-20260817-2259",
+    "policy_commit": "8ea9725540f7bc7bcfa9335a3ae3879dbd6c9d2e",
+    "test_commit": "002468239cb4bcc9861b364b85a3fa8b8282324c",
+    "policy_blob": "e90829e36c61b7b05193843f7cb66c1636f27a55",
+    "test_blob": "097aa663aa7b8907e4cefe3415e0c7bde5c28011",
+    "selection": "match canonical reserved Pod name prefix clayverse-* only",
+    "post_mutation_validations": [
+      "app label must remain clayverse",
+      "runtimeClassName must remain kata-qemu-runtime-rs",
+      "all io.katacontainers.* annotations are denied by baseline"
+    ],
+    "failure_policy": "Fail",
+    "binding_action": "Deny",
+    "second_runtime_or_state_authority": false
+  },
+  "bounded_verification": {
+    "execution_surface": "isolated non-production OpenAI container",
+    "git_blob_match": "2/2",
+    "policy_blob_observed": "e90829e36c61b7b05193843f7cb66c1636f27a55",
+    "test_blob_observed": "097aa663aa7b8907e4cefe3415e0c7bde5c28011",
+    "python_compile": "PASS",
+    "pytest": "4 passed in 0.07s",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "strongest_counterhypothesis": "Static source assertions may still accept CEL/YAML that the real target API server rejects or evaluates differently, and the assumed canonical Pod-name path/effective post-mutation object must be proven on the admitted cluster.",
+  "next_falsifier": "Apply the exact fused policy+binding on the admitted Kubernetes/Kata target and bind API-server status/type-checking. Require clean canonical StatefulSet Pod admission; Deny CREATE/UPDATE after app-label mutation/removal; Deny RuntimeClass mutation away from kata-qemu-runtime-rs; Deny representative io.katacontainers.config_path and runtime.sandbox_bind_mounts annotations; inspect final effective Pod before Kata sandbox creation.",
+  "execution_frontier": "Exact ClayVerse OCI execution remains blocked before private Research/EntityOS source staging by missing host-side sensitive Vercel Preview GITHUB_READ_TOKEN. The newer retained PR810 boundary has independently observed a real Vercel guest kernel but source_runtime_credit and oci_runtime_credit remain zero.",
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "reason": "No shared immutable request/turn id is exposed and the available trigger identity is minute-precision only."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_or_production_testing": false,
+    "together_api_used": false,
+    "secret_exposed": false,
+    "paid_or_final_training_started": false
+  },
+  "acceptance": "IN_PROGRESS",
+  "claim_boundary": "SOURCE_MECHANISM_SUPPORTED_ONLY; no Kubernetes API-server, CEL, Kata/microVM, CNI, exact OCI or whole-product runtime PASS is claimed."
+}

@@ -9,8 +9,6 @@ from .microclay_methods import METHOD_KINDS
 from .microclay_retrieval import MicroClayRetrieval, _CONTROL_KINDS
 from .store import StaleGeneration
 
-_HEX16 = frozenset("0123456789abcdef")
-
 
 def _parse_memory_ids(raw: str) -> list[str]:
     try:
@@ -80,14 +78,16 @@ def apply_explicit_retrieval_miss(
     cannot substitute a different query when teaching the route.
 
     Only hashed query->subject route capital changes. Durable memory, provenance,
-    factual status, user rights and effect authority are never changed here.
+    factual status, user rights and effect authority are never changed here. The write
+    joins an existing canonical turn transaction when one is active; standalone calls
+    receive one atomic transaction through the retained MicroClay transaction helper.
     """
     if not all(isinstance(value, str) and value for value in (
         retrieval_id, source_turn_id, memory_id, user_id, session_id
     )):
         raise ValueError("explicit retrieval miss requires non-empty identities")
 
-    with organ.db.tx() as db:
+    with organ._credit_tx() as db:
         row = db.execute(
             "SELECT * FROM retrieval_episodes WHERE retrieval_id=?",
             (retrieval_id,),

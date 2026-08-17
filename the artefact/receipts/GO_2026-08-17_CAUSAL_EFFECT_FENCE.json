@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "mission": "ClayVerse single-container artifact",
+  "tested_source_commit": "c77384d95ff715016d9865e17a4db8b85a9167d2",
+  "base_main_commit": "8fa6330658c59b76b84c5352d975125609e38e3f",
+  "branch": "go-causal-reentry-fence-20260817",
+  "scope": "causal effect durability, generation/lease fencing, restart re-entry, adjacent Clerk/Claude-Code/HTTP regression",
+  "mechanism": {
+    "problem": "The previous effect path could execute a host effect before persisting an effect receipt, then write causal re-entry later, leaving crash windows for untracked or falsely current effects.",
+    "change": [
+      "persist PENDING effect intent before host execution",
+      "complete effect and causal re-entry in one SQLite transaction",
+      "recheck session generation and optional resource lease after host execution",
+      "record stale post-execution outcomes as STALE_OUTCOME with zero causal credit",
+      "on restart convert unresolved PENDING effects to UNKNOWN_AFTER_RESTART and causally re-enter them with zero credit",
+      "retain shell=False process execution boundary"
+    ]
+  },
+  "exact_git_blob_binding": {
+    "the artefact/clayverse/store.py": "e30366f0db42d1868ee7014911a61d58525d9b87",
+    "the artefact/clayverse/effects.py": "7d30d0ddd2fa7f318189a1d9d41a80e95a8a87a4",
+    "the artefact/clayverse/engine.py": "0d71d955621dcb7cd559a2bd257024f46a793cbe",
+    "the artefact/tests/test_clayverse.py": "921605cc9adbd0ed81c4b1051a5e95201f5b9c21"
+  },
+  "isolated_test": {
+    "surface": "non-VPS isolated container runner available to the Research Entity",
+    "command": "PYTHONPATH=. pytest -q tests/test_clayverse.py tests/test_runtime_adapters.py",
+    "result": "PASS",
+    "tests_passed": 18,
+    "tests_failed": 0,
+    "runtime": {
+      "python": "3.13.5",
+      "sqlite": "3.46.1",
+      "pyjwt": "2.13.0",
+      "cryptography": "46.0.4",
+      "kernel": "Linux x86_64 6.18.35"
+    }
+  },
+  "new_regressions": [
+    "PENDING receipt exists before host process invocation",
+    "restart resolves dangling PENDING as UNKNOWN_AFTER_RESTART with zero credit",
+    "session generation change during host effect prevents VERIFIED status and records STALE_OUTCOME",
+    "lease generation/nonce change during host effect prevents VERIFIED status and records STALE_OUTCOME"
+  ],
+  "unusual_experiment": {
+    "count_for_trigger": 1,
+    "intervention": "SIGKILL during causal re-entry on a precursor non-canonical local prototype",
+    "first_observation": "SQLite integrity remained ok but one PENDING episode survived restart, falsifying the assumption that WAL durability alone closed the causal gap.",
+    "repair_observation": "Regression rerun of the same intervention produced zero pending residue and one observation/re-entry per episode.",
+    "acceptance_scope": "mechanism discriminator only; not exact-branch acceptance evidence"
+  },
+  "container_image_gate": {
+    "status": "UNEXECUTED",
+    "reason": "No docker, podman, or buildah executable is available on the current isolated runner; no OCI image PASS is claimed."
+  },
+  "acceptance": "CANDIDATE_IN_PROGRESS",
+  "whole_clayverse_pass": false,
+  "remaining_high_value_gates": [
+    "exact OCI image build and fresh-container restart with durable external state",
+    "real Clerk instance integration and two permanent browser terminal sessions",
+    "real Claude Code CLI end-to-end session path without bypassing EffectGate",
+    "strongest validated Hyperposition/GWT/Needle generation fusion",
+    "EntityOS typed execution/capability substrate integration",
+    "recovery/replay/security/provenance validation at whole-container scope"
+  ],
+  "evidence_law": "Component and regression PASS do not imply whole ClayVerse PASS."
+}

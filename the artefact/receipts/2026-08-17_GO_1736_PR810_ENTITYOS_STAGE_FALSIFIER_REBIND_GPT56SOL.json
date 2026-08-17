@@ -1,0 +1,46 @@
+{
+  "schema": "clayverse-go-receipt-addendum/v1",
+  "trigger": {"command":"go","trigger_time":"2026-08-17T17:36+07:00","trigger_time_precision":"minute"},
+  "recorded_at": "2026-08-17T18:08+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "PR810_ENTITYOS_SOURCE_STAGE_FALSIFIER_REBOUND_TO_LATEST_TARGET",
+  "supersedes_dynamic_target_only_in": "the artefact/receipts/2026-08-17_GO_1736_PR810_ENTITYOS_STAGE_FALSIFIER_GPT56SOL.json",
+  "retained_controller": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pr": 810,
+    "head": "6a0b54ec6acf7626c0beef9df0b5c7ddb8c5df1e",
+    "wrapper": "mcp/vercel-sandbox-mcp/scripts/run-clayverse-current-wrapper.mjs",
+    "underlying_runner": "mcp/vercel-sandbox-mcp/scripts/run-clayverse-vcr-fusion.mjs"
+  },
+  "latest_source_closure": {
+    "base": "7b2a31c9defc76bead047823487c4384ee4bef3e",
+    "head": "f4c91d0129bbcd9d5e83bceb66b44c2e52f517ee",
+    "tree": "ff89be29ea79df92edd547b32abce9c7eceb34da",
+    "composition": "BASE_PLUS_PR611_PLUS_PR622_EXECUTION_RELEVANT_GENERATOR_DELTA",
+    "exact_compare_paths": [
+      ".github/workflows/clayverse-python-lock-generator.yml",
+      "the artefact/clayverse/terminal_sessions.py",
+      "the artefact/tests/test_python_lock_generator_source_binding.py",
+      "the artefact/tests/test_terminal_tmux_control_timeouts.py"
+    ],
+    "entityos_binary_tracked": false
+  },
+  "falsifier_revalidation": {
+    "wrapper_effect": "Only RESEARCH_SHA and RESEARCH_TREE_SHA are replaced before importing the same underlying runner.",
+    "underlying_requirement_preserved": "The runner still requires extracted private Research source to contain the artefact/EntityOS before OCI build.",
+    "result": "FALSIFIER_REMAINS_VALID_ON_F4C91D_TARGET",
+    "predicted_if_deployment_admitted_unchanged": "FAIL_CLOSED_AT_MISSING_UNTRACKED_ENTITYOS_BEFORE_OCI_BUILD",
+    "runtime_observed": false,
+    "runtime_credit": 0
+  },
+  "provider": {
+    "vercel_status_for_6a0b54ec6acf7626c0beef9df0b5c7ddb8c5df1e": "failure",
+    "target": "upgradeToPro=build-rate-limit",
+    "classification": "DEPLOYMENT_ADMISSION_RATE_LIMIT_BEFORE_BUILD_NOT_TEST_FAIL"
+  },
+  "required_same_lane_repair": "Rebuild EntityOS in the authorized isolated Vercel Sandbox from locked source 79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c/tree d55d9d41f5a294a4a692cdee6fa46750652a390d, require sha256 32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586 and size 9181696, then stage those exact bytes into the f4c91d... ClayVerse build context before OCI build.",
+  "duplicate_lane_created": false,
+  "product_runtime_code_delta": "NO_CHANGE",
+  "unusual_experiment_started": false,
+  "whole_product_acceptance": "IN_PROGRESS"
+}

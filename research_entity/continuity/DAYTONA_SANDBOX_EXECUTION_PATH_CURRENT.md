@@ -1,6 +1,6 @@
 # Daytona Sandbox execution path — CURRENT
 
-Status: AUTHORIZED FALLBACK / API MECHANISM CONFIRMED BY PRIMARY DOCS / EXACT CLAYVERSE RUNTIME UNOBSERVED
+Status: AUTHORIZED FALLBACK / API MECHANISM CONFIRMED BY PRIMARY DOCS / BOUNDED RUNNER CONTROL-FLOW SUPPORTED / EXACT CLAYVERSE DAYTONA RUNTIME UNOBSERVED
 Observed: 2026-08-17
 
 ## Current truth
@@ -22,7 +22,8 @@ Current Daytona primary documentation exposes:
 - `sandbox.process.exec(...)` / equivalent command execution;
 - file upload/staging into the sandbox;
 - bounded execution timeouts;
-- sandbox lifecycle operations.
+- sandbox lifecycle operations;
+- runtime network-policy mutation including outbound blocking.
 
 This confirms that Daytona has a suitable candidate isolated-execution API surface. It does NOT by itself establish account admission, exact ClayVerse source execution or product PASS.
 
@@ -31,6 +32,30 @@ Primary documentation refreshed 2026-08-17:
 - `https://www.daytona.io/docs/en/python-sdk/`
 - `https://www.daytona.io/docs/en/process-code-execution/`
 - `https://www.daytona.io/docs/en/python-sdk/sync/file-system/`
+
+## Bounded research runner
+
+Canonical research tooling now includes:
+
+`research_entity/execution/daytona_sandbox_batch.py`
+
+Current runner contract:
+- locally verifies the exact staged bundle SHA-256;
+- reads Daytona credentials only from environment/provider configuration and never emits their values;
+- creates one bounded sandbox and applies a TTL;
+- uploads the bundle and re-verifies its SHA-256 inside the sandbox before extraction;
+- can request outbound network blocking after staging and fails closed if that requested tightening cannot be applied;
+- records target command identity by SHA-256 rather than writing the raw command into structured receipt events;
+- bounds stdout volume;
+- stops and deletes the sandbox in `finally` where provider lifecycle calls are available.
+
+A deterministic fake-provider control-flow regression of this exact runner path passed after one corrected harness-only shell-cwd mistake. The passing regression exercised local+remote bundle-hash agreement, requested network block, two successful target commands including a SQLite import/version probe, PASS emission, stop, delete, and absence of the test credential value from output.
+
+Classification:
+
+`BOUNDED_RUNNER_CONTROL_FLOW_SUPPORTED_FAKE_PROVIDER_NOT_DAYTONA_RUNTIME_PASS`
+
+This evidence supports the orchestration mechanism only. No Daytona sandbox/provider runtime was contacted by that regression and it contributes zero ClayVerse runtime acceptance credit.
 
 ## Current session execution observation
 
@@ -57,10 +82,11 @@ The next actually-connected worker should run one bounded admission/capability b
 4. establish required base capabilities for ClayVerse (`python`, `_sqlite3`, `git`; container/OCI tooling only if needed by the selected gate);
 5. stage exact source bytes without embedding repository/API credentials inside the sandbox when avoidable;
 6. re-hash staged bytes against GitHub identities;
-7. execute a focused deterministic regression batch;
-8. capture exit code + bounded stdout/stderr;
-9. stop/delete the Sandbox;
-10. persist a bounded receipt to GitHub.
+7. tighten network policy after staging when the selected gate permits it;
+8. execute a focused deterministic regression batch;
+9. capture exit code + bounded stdout/stderr;
+10. stop/delete the Sandbox;
+11. persist a bounded receipt to GitHub.
 
 If base capability is missing before product assertions, classify it as provider/runtime substrate evidence and choose a Daytona snapshot/image/runtime that supplies the required dependency rather than weakening ClayVerse.
 

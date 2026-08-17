@@ -1,0 +1,73 @@
+{
+  "schema": "clayverse-go-adjudication-receipt/v1",
+  "recorded_at": "2026-08-17T14:12:04+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "scope": "MicroClay explicit feedback adjudication plus isolated-execution admission truth",
+  "supersedes_claims": [
+    "Any interpretation of 2026-08-17_GO_1353_MICROCLAY_EXPLICIT_RETRIEVAL_MISS_GPT56SOL.json that Vercel Sandbox itself is unavailable. The direct Vercel MCP lacks Sandbox.start/exec, but an executable Git-preview build bridge using @vercel/sandbox is confirmed."
+  ],
+  "microclay_adjudication": {
+    "retained_implementation_candidate_pr": 501,
+    "retired_duplicate_pr": 490,
+    "red_gate_pr": 522,
+    "retired_duplicate_policy": "PR490 closed donor-only to preserve one canonical feedback implementation path",
+    "blocking_falsifiers": [
+      {
+        "id": "HINDSIGHT_LEAKAGE",
+        "claim": "A miss target created after the original retrieval can currently train query-to-subject capital backward in time in PR501 because target.ts is not fenced to retrieval_episode.ts.",
+        "required_gate": "Reject target.ts > retrieval_episode.ts before policy or feedback mutation."
+      },
+      {
+        "id": "DEFAULT_MINTED_USER_EXPLICIT",
+        "claim": "PR501 currently defaults the source argument to USER_EXPLICIT, so trusted feedback provenance can be manufactured by omission at the low-level call boundary.",
+        "required_gate": "No USER_EXPLICIT default; product ingress must provide trusted explicit provenance, eventually bound to an authenticated canonical user action/receipt."
+      }
+    ],
+    "red_gate_kind": "tests-only stacked donor; no second implementation",
+    "truth_authority_changed": false,
+    "effect_authority_changed": false,
+    "serving_mode": "SHADOW"
+  },
+  "vercel_bridge_observation": {
+    "team_id": "team_hwPBWKuCJxkfVhCx3WLdcTRx",
+    "project_id": "prj_ifIgM9X7jqIQS8mNIGllImziePPG",
+    "project_name": "dr-unterweger",
+    "direct_mcp_sandbox_start_exec_exposed": false,
+    "git_preview_build_bridge_confirmed": true,
+    "bridge_mechanism": "Vercel Git preview build -> mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs -> @vercel/sandbox Sandbox.create(runtime=python3.13,persistent=false) with VERCEL_OIDC_TOKEN",
+    "bridge_source_evidence": {
+      "stage_script": "mcp/vercel-sandbox-mcp/scripts/stage-go-source.mjs",
+      "source_binding": "exact committed Git tree materialized from raw Git blobs plus hash-bound Git bundle",
+      "runner_expected_ref_is_explicit": true,
+      "runner_requires_vercel_oidc": true,
+      "runner_sets_network_deny_all_before accepted test matrix": true
+    },
+    "recent_ready_control": {
+      "deployment_id": "dpl_Aec3M9HJf5twtQRg4is8htSjDq16",
+      "created_at_utc": "2026-08-17T07:02:16.601Z",
+      "state": "READY",
+      "commit": "5d277203c5b58eddbe0f196d4574c3039a183653",
+      "observed_build_auth_preflight": "vercel_oidc_present=true",
+      "observed_runner_result": "SKIP_NON_TARGET_PREVIEW",
+      "runtime_evidence_for_microclay_feedback": false
+    },
+    "current_admission_blocker_evidence": {
+      "orchestration_pr": 819,
+      "bridge_head": "1bfef8c0d6ea916009641025cb43bf31c12df36d",
+      "reported_vercel_status": "failure",
+      "reported_reason": "upgradeToPro=build-rate-limit",
+      "sandbox_started_for_that_exact_head": false,
+      "classification": "EXECUTION_ADMISSION_BLOCKED_BEFORE_SANDBOX_CREATE"
+    },
+    "conclusion": "The Vercel Sandbox path exists and works as an execution architecture. Current fresh exact-run admission is blocked by Vercel preview build-rate limiting, not by absence of the Sandbox mechanism. READY/SKIP controls are not ClayVerse runtime PASS."
+  },
+  "unusual_experiment": {
+    "count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "reason": "No shared immutable trigger request identity was available to safely acquire the global per-go experiment lease."
+  },
+  "acceptance": "IN_PROGRESS",
+  "whole_clayverse_pass": false,
+  "next_exact_step": "When Vercel preview admission is available, stage the then-current retained PR501 plus red-gate obligations onto the confirmed Git-preview @vercel/sandbox bridge, bind exact blobs/heads, run focused feedback plus adjacent Stage-A replay/credit/privacy/collision regressions, then stop the sandbox and persist the exact receipt."
+}

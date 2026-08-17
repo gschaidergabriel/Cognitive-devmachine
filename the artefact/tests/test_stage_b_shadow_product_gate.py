@@ -32,6 +32,7 @@ class _MethodBomb:
 
 class _ShadowMethod:
     def retrieve(self, **kwargs):
+        assert kwargs["problem_signature"] == ["novel unresolved causal structure"]
         return {
             "items": [{
                 "memory_id": "method-shadow-1",
@@ -43,7 +44,8 @@ class _ShadowMethod:
             }],
             "receipt": {
                 "route": "method",
-                "matcher": "signature_token_v2_strict_promoted",
+                "matcher": "explicit_signature_token_v1_shadow",
+                "signature_source": "EXPLICIT_SHADOW_INPUT",
                 "status": "METHOD_PRESENT",
                 "causal_id": kwargs["causal_id"],
                 "generation": kwargs["generation"],
@@ -111,7 +113,7 @@ def test_canonical_active_turn_does_not_invoke_raw_query_stage_b(tmp_path):
         db.close()
 
 
-def test_explicit_internal_method_evaluation_is_marked_shadow_not_served(tmp_path):
+def test_explicit_internal_method_evaluation_requires_signature_and_is_not_served(tmp_path):
     db = UnifiedDB(tmp_path / "u.db")
     try:
         session_id, generation, _, _, causal_id = _active_unknown_turn(db)
@@ -123,6 +125,7 @@ def test_explicit_internal_method_evaluation_is_marked_shadow_not_served(tmp_pat
             session_id,
             (),
             query="novel unresolved problem",
+            problem_signature=["novel unresolved causal structure"],
             generation=generation,
         )
 

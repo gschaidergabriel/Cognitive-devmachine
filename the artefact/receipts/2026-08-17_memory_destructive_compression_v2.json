@@ -1,0 +1,50 @@
+{
+  "schema": "ClayVerseArtifactReceipt/v1",
+  "date": "2026-08-17",
+  "mission": "CLAYVERSE_CANONICAL_DIRECTIVE.md",
+  "scope": "progressive conversation compression and collision retrieval",
+  "finding": {
+    "previous_memory_blob": "402962aacd4d49735f806f3d88c117a6a653ff17",
+    "previous_retrieval_blob": "66e4bf62e933243f148cecbde0bcacce9dbea773",
+    "failure": "old compressed turns were losslessly duplicated as durable_memory kind=source_archive and resurrected in full during cross-session collision retrieval",
+    "directive_conflict": "the old conversation stream must progressively age to a 1-2 word trace while durable semantic facts/decisions/tasks survive separately"
+  },
+  "repair_commits": {
+    "memory": "e5beff9923846f143b9b53cc023112b092b60fc6",
+    "retrieval": "f5fb4cfcdd409adcc59c0aad430b3c91f46496fe",
+    "regression_tests": "387cc908e60d6524006f2c89964cb9774904fffa",
+    "graph_semantic_fence": "bf7d2a4a3d799e5094e396fec9af5816b6b1ea6a"
+  },
+  "new_contract": [
+    "newest 20 turns remain full fidelity",
+    "old turns can age to compression generation 5 with at most 1-2 words",
+    "before destructive compression explicit FACT/DECISION/TASK/COMMITMENT/PREFERENCE/OPEN markers are idempotently extracted",
+    "the original source is represented after compression only by a non-reversible SHA-256/size receipt, not a hidden full transcript",
+    "legacy source_archive duplicates are removed when that session is compacted",
+    "cross-session collision retrieval never resurrects raw archived text; it returns the compressed trace plus bounded extracted semantic fragments",
+    "compression_receipt is provenance metadata and is excluded from ClayGraph semantic nodes"
+  ],
+  "isolated_targeted_test": {
+    "environment": "OpenAI isolated local execution, non-VPS",
+    "command": "python /mnt/data/current-memory-patch/test_patch.py",
+    "result": "PASS",
+    "assertions": [
+      "generation 5 trace contains at most 2 words",
+      "private non-semantic source token is absent after compression",
+      "no source_archive exists",
+      "compression_receipt exists",
+      "FACT durable extraction survives",
+      "collision retrieval uses compressed_with_extracted_fragments",
+      "recompression does not duplicate extracted fact memory"
+    ]
+  },
+  "limitations": [
+    "this receipt is a targeted deterministic falsifier/regression, not an exact-current-head full pytest receipt",
+    "general unmarked semantic extraction remains a separate open quality gate",
+    "OCI build and live Clerk/Claude/EntityOS E2E are not claimed"
+  ],
+  "vps_mutated": false,
+  "claude_code_used_as_builder": false,
+  "whole_system_pass": false,
+  "acceptance": "IN_PROGRESS"
+}

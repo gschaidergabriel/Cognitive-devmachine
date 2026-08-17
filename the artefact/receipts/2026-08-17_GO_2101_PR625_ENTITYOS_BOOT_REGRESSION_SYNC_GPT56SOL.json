@@ -1,0 +1,63 @@
+{
+  "schema": "clayverse-go-receipt-v1",
+  "timestamp_local": "2026-08-17T21:01:00+07:00",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "repository": "gschaidergabriel/clay-global-research-entity",
+  "branch": "gpt56sol/go-tokenless-canonical-build-20260817",
+  "pull_request": 625,
+  "delta": {
+    "kind": "regression_contract_sync",
+    "file": "the artefact/tests/test_entityos_boot_binding.py",
+    "commit": "96ccdc6ec66ddd90cdd35d7a6f824907bdeabdd1",
+    "blob": "e672c112a8c14445cbc387f36786290a9f5c3f82",
+    "reason": "The retained boot-binding regression still asserted the retired CLAYVERSE_REQUIRE_ENTITYOS contract after the tokenless baseline/runtime lane moved to CLAYVERSE_ENABLE_ENTITYOS_EXEC with optional absent EntityOS. The test was synchronized to the current product contract instead of creating a duplicate runtime path."
+  },
+  "observed_source": {
+    "service_blob": "c9151e339c0ec4b23a454ee7684a6bd9255bf229",
+    "service_contract": [
+      "absent EntityOS is admitted only when execution is disabled and no unpinned path exists",
+      "execution without an embedded SHA-256 pin fails closed",
+      "configured pins require an absolute path and verification",
+      "verified EntityOS is exposed as a bridge only when execution is enabled"
+    ]
+  },
+  "focused_isolated_execution": {
+    "surface": "OpenAI isolated non-production container",
+    "tests": [
+      "test_entityos_boot_binding.py",
+      "test_service_entityos_optional_baseline.py"
+    ],
+    "result": "14 passed in 0.04s",
+    "exit_code": 0,
+    "scope_note": "Focused deterministic reconstruction of the observed EntityOS boot/runtime contract and regression scenarios. This is not a byte-for-byte full-branch checkout, full pytest, Docker/OCI build, packaged service startup, or whole-product runtime evidence."
+  },
+  "falsifiers_exercised": [
+    "unpinned regular EntityOS bytes while execution disabled",
+    "unpinned EntityOS symlink while execution disabled",
+    "execution enabled without digest pin",
+    "SHA configured without path",
+    "relative configured path",
+    "digest drift",
+    "optional absent baseline",
+    "verified staged-but-disabled bridge",
+    "verified enabled bridge"
+  ],
+  "evidence_class": "FOCUSED_TEST_PASS",
+  "acceptance": "IN_PROGRESS",
+  "whole_product_pass": false,
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "count": 0,
+    "reason": "The shared go trigger exposes minute precision and no immutable shared request/turn identifier; parallel retained-lane work recorded the same coordination fence."
+  },
+  "prohibitions_observed": {
+    "vps_or_self_hosted_test": false,
+    "production_test": false,
+    "together_api": false,
+    "paid_or_final_training": false,
+    "secret_persistence": false
+  },
+  "next_discriminator": "Exact authorized isolated Docker/OCI execution of the current moving PR625 head, including baseline build without EntityOS and normal service startup/readiness, followed by optional digest-bound EntityOS negative/positive cases."
+}

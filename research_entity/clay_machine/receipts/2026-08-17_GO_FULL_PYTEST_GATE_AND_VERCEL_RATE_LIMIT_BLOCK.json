@@ -1,0 +1,99 @@
+{
+  "schema_version": "1.0",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "trigger": "go",
+  "date": "2026-08-17",
+  "research_endpoint": "EntityOS",
+  "product_form": "ONE_EXECUTABLE_FILE",
+  "research_head_joined": "eee569ed6e725d80b9e495d82d35ee6f852866e2",
+  "product_main_joined": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "execution_truth": "VERCEL_SANDBOX_ONLY_FOR_EXECUTABLE_CLAIMS",
+  "product_candidate": {
+    "pr": 787,
+    "branch": "clay/go-entityos-attestation-recomposed-20260817",
+    "head": "bcab694f9a778461decd788e4536776c417ef65a",
+    "state": "OPEN_DRAFT_MERGEABLE_UNVERIFIED",
+    "base_main": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47"
+  },
+  "observations": {
+    "historical_full_pytest_contract": "PYTHONPATH=<pinned-target> python3 -m pytest -q tests",
+    "historical_full_pytest_result": {
+      "scope": "HISTORICAL_SELF_HOSTED_EVIDENCE_ONLY_NO_CURRENT_ACCEPTANCE_CREDIT",
+      "result": "COLLECTION_FAILED_RC_2",
+      "mechanism": "pytest==9.1.1 was installed but lark was absent while runtime/claycode_eval_v1/syntax.py imports lark"
+    },
+    "dependency_closure_now_versioned": {
+      "requirements_entityos_build": [
+        "lark==1.3.1",
+        "pyinstaller==6.21.0"
+      ],
+      "requirements_test": [
+        "-r requirements-entityos-build.txt",
+        "pytest==9.1.1"
+      ],
+      "static_drift_preflight": "PRESENT"
+    },
+    "go_code_delta": {
+      "full_pytest_runner_commit": "5ac65c1ab03c8961da2c698aa524d36bd01f61d5",
+      "full_pytest_runner": "mcp/vercel-sandbox-mcp/scripts/run-full-pytest-sandbox.mjs",
+      "wiring_commit": "bcab694f9a778461decd788e4536776c417ef65a",
+      "ordering": "STATIC_DEPENDENCY_PREFLIGHT -> EXACT_SOURCE_STAGE -> ORDINARY_FULL_PYTEST_SANDBOX -> CANONICAL_ATTESTED_V7_SANDBOX",
+      "full_pytest_execution_contract": "PYTHONPATH=/vercel/sandbox/test-pylib /usr/bin/python3.13 -m pytest -q tests",
+      "full_pytest_network_policy": "DENY_ALL_DURING_PYTEST",
+      "full_pytest_unusual_experiment_count": 0,
+      "purpose": "ordinary regression gate runs before the GO unusual experiment so a pytest failure cannot consume the one-experiment slot"
+    },
+    "attested_snapshot_lane": {
+      "canonical_runner": "mcp/vercel-sandbox-mcp/scripts/run-buildtime-go-sandbox.mjs",
+      "duplicate_temporary_attestation_runners_pruned": true,
+      "latest_actually_started_negative_evidence_head": "fa9827d496602d7c5821b13103da665f7287b16c",
+      "latest_actually_started_negative_evidence": "raw source/archive/attestation and pinned toolchain bound; DENY_ALL entered; attested Git-free double-build step exited 1 before unusual experiment; Sandbox stopped",
+      "sort_contract_repair_commit": "580fe7ac84b2d3930a4a944a6e32ddc51be47f33",
+      "sort_contract_repair_execution_status": "UNEXECUTED_ON_EXACT_CORRECTED_HEAD"
+    },
+    "vercel_block": {
+      "project": "dr-unterweger",
+      "status": "DEPLOYMENT_RATE_LIMITED_BEFORE_SANDBOX_START",
+      "provider_message": "Deployment rate limited — retry in 24 hours.",
+      "new_deployments_after_observed_rate_limited_cohort": 0,
+      "direct_sandbox_action_exposed_by_connected_vercel_tool": false,
+      "classification": "EXTERNAL_EXECUTION_PROVIDER_BLOCKER_NOT_ENTITYOS_PASS_OR_FAIL"
+    }
+  },
+  "counterhypotheses": [
+    {
+      "claim": "Versioning lark closes the historical pytest blocker but the exact current tests may still fail for an unrelated collection, semantic, environment, or regression reason.",
+      "falsifier": "Actually start an exact-head Vercel Sandbox, install only requirements-test.txt, switch to DENY_ALL, and require python3.13 -m pytest -q tests to exit 0."
+    },
+    {
+      "claim": "Replacing localeCompare with UTF-8 byte ordering repairs the attested file-order mismatch, but another Git-free freeze incompatibility may remain.",
+      "falsifier": "Run the exact corrected current head through the external EntityOSSourceSnapshotAttestation/v2 twin Git-free build and require both freezes, receipts, hashes, runtime gates and relocation to pass before the tamper experiment."
+    }
+  ],
+  "unusual_experiment": {
+    "required_for_go": true,
+    "name": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "reserved": true,
+    "executed": false,
+    "observed_count": 0,
+    "reason": "Every actually-started corrected-lane attempt failed before the unusual experiment, and newer corrected/fused heads are blocked by Vercel deployment rate limiting before Sandbox start. Sandbox-only policy forbids substituting local, VPS, self-hosted, production-host or READY-state evidence.",
+    "accounting": "PENDING_1_OF_1_THIS_GO_EXTERNAL_EXECUTION_BLOCKED"
+  },
+  "next_exact_executable_sequence": [
+    "refresh research main, product main and PR787 head before execution",
+    "when Vercel accepts a Git-bound build, run the exact current PR head rather than this cached head if it changed",
+    "run static dependency drift preflight and exact raw-Git-tree source stage",
+    "run isolated full python3.13 -m pytest -q tests with versioned dependency closure under DENY_ALL and zero unusual experiments",
+    "only if full pytest passes, run canonical v7 attested Git-free twin EntityOS build/runtime/relocation gates",
+    "execute exactly the one preregistered ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED unusual experiment",
+    "run sanitized-Git inherited Batch-5 regression with zero additional unusual experiments",
+    "require attested-vs-Git-clean EntityOS byte identity and successful Sandbox stop",
+    "persist exact deployment, source head/tree, commands, exit codes, artifact digest and stop result before any promotion"
+  ],
+  "code_promotion": "NONE_PR787_REMAINS_DRAFT",
+  "whole_entityos_acceptance": false,
+  "outcome": "PRODUCT_GATE_HARDENED_AND_DURABLY_STAGED_BUT_EXACT_CURRENT_SANDBOX_EXECUTION_BLOCKED_BY_VERCEL_RATE_LIMIT",
+  "vps_or_self_hosted_test_evidence_used": false,
+  "together_api_used": false
+}

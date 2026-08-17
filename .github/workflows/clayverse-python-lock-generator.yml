@@ -17,57 +17,54 @@ jobs:
   generate-lock:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate, verify, and falsify exact Python hash lock
+      - name: Check out exact PR source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Generate and verify exact Python hash lock
         shell: bash
         run: |
           set -euo pipefail
-          docker run --rm -i python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91 bash -s <<'INNER'
+          PRODUCT_DOCKERFILE='the artefact/Dockerfile'
+          PRODUCT_REQUIREMENTS='the artefact/requirements.txt'
+          test -f "$PRODUCT_DOCKERFILE"
+          test -f "$PRODUCT_REQUIREMENTS"
+
+          BASE_IMAGE="$(sed -n 's/^ARG BASE_IMAGE=//p' "$PRODUCT_DOCKERFILE" | head -n1)"
+          case "$BASE_IMAGE" in
+            python:*@sha256:*) ;;
+            *) echo "Product BASE_IMAGE is missing an exact Python digest" >&2; exit 1 ;;
+          esac
+          REQUIREMENTS_SHA256="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
+          echo "PRODUCT_BASE_IMAGE=$BASE_IMAGE"
+          echo "PRODUCT_REQUIREMENTS_SHA256=$REQUIREMENTS_SHA256"
+
+          docker run --rm -i \
+            -v "$GITHUB_WORKSPACE:/workspace:ro" \
+            -e EXPECTED_REQUIREMENTS_SHA256="$REQUIREMENTS_SHA256" \
+            "$BASE_IMAGE" bash -s <<'INNER'
           set -euo pipefail
-          cat >/tmp/requirements.in <<'EOF'
-          PyJWT[crypto]==2.13.0
-          fastapi==0.139.2
-          uvicorn[standard]==0.51.0
-          mcp==2.0.0
-          EOF
+          PRODUCT_REQUIREMENTS='/workspace/the artefact/requirements.txt'
+          actual_sha="$(sha256sum "$PRODUCT_REQUIREMENTS" | awk '{print $1}')"
+          test "$actual_sha" = "$EXPECTED_REQUIREMENTS_SHA256"
+          cp "$PRODUCT_REQUIREMENTS" /tmp/requirements.in
+
           python --version
+          python -m pip --version
           python -m pip install --disable-pip-version-check --no-cache-dir 'pip-tools==7.5.0'
-          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking -o /tmp/requirements.lock.1 /tmp/requirements.in
-          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking -o /tmp/requirements.lock.2 /tmp/requirements.in
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
+            -o /tmp/requirements.lock.1 /tmp/requirements.in
+          pip-compile --generate-hashes --strip-extras --allow-unsafe --resolver=backtracking \
+            -o /tmp/requirements.lock.2 /tmp/requirements.in
           diff -u /tmp/requirements.lock.1 /tmp/requirements.lock.2
+
           echo -n 'LOCK_SHA256='; sha256sum /tmp/requirements.lock.1 | awk '{print $1}'
           rm -rf /tmp/wheelhouse && mkdir /tmp/wheelhouse
-          python -m pip download --disable-pip-version-check --no-cache-dir --only-binary=:all: --require-hashes -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
+          python -m pip download --disable-pip-version-check --no-cache-dir \
+            --only-binary=:all: --require-hashes \
+            -r /tmp/requirements.lock.1 -d /tmp/wheelhouse
           echo -n 'WHEELHOUSE_FILE_COUNT='; find /tmp/wheelhouse -maxdepth 1 -type f | wc -l
           printf 'LOCK_GZIP_B64='; gzip -n -c /tmp/requirements.lock.1 | base64 -w0; printf '\n'
-          python - <<'PY'
-          from pathlib import Path
-          p=Path('/tmp/requirements.lock.1')
-          lines=p.read_text().splitlines()
-          out=[]
-          in_first=False
-          seen_requirement=False
-          changed=0
-          for line in lines:
-              is_req = bool(line) and not line[0].isspace() and not line.startswith(('#','--'))
-              if is_req:
-                  in_first = not seen_requirement
-                  seen_requirement = True
-              if in_first and '--hash=sha256:' in line:
-                  prefix=line.split('--hash=sha256:',1)[0]
-                  suffix=' \\' if line.rstrip().endswith('\\') else ''
-                  line=prefix+'--hash=sha256:'+'0'*64+suffix
-                  changed += 1
-              out.append(line)
-          assert changed > 0
-          Path('/tmp/requirements.lock.lesion').write_text('\n'.join(out)+'\n')
-          print('PYTHON_LOCK_HASH_LESION hashes_replaced=', changed)
-          PY
-          rm -rf /tmp/lesion-wheelhouse && mkdir /tmp/lesion-wheelhouse
-          set +e
-          python -m pip download --disable-pip-version-check --no-cache-dir --only-binary=:all: --require-hashes -r /tmp/requirements.lock.lesion -d /tmp/lesion-wheelhouse >/tmp/lesion.out 2>&1
-          rc=$?
-          set -e
-          cat /tmp/lesion.out
-          test "$rc" -ne 0
-          echo "PYTHON_LOCK_HASH_LESION_REJECTED rc=$rc"
           INNER

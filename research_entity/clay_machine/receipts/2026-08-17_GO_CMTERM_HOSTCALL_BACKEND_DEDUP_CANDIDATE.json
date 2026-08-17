@@ -1,0 +1,89 @@
+{
+  "schema": "ClayEntityOSGoCandidateReceipt/v1",
+  "date": "2026-08-17",
+  "trigger": "go",
+  "program": "CLAYVERSE_CLAY_MACHINE_ONLY",
+  "stage": "CLAY_MACHINE",
+  "product_boundary": "exactly one executable file named EntityOS",
+  "research_head_observed_before_write": "5097f893be9f075d00cb81bd6264e93095a8c16a",
+  "product_main_observed": "6012d2cf4125e65d3a0c2df8d3b37119ae4f7b47",
+  "canonical_product_pr": 787,
+  "canonical_branch": "clay/go-entityos-attestation-recomposed-20260817",
+  "canonical_branch_head_observed_via_candidate_base": "a29dd6299d3d4e48cbc3238339abaceefc2ad87e",
+  "candidate_pr": 809,
+  "candidate_head": "6432626095f9472a9859cbf7d03d6c5c0ab0cfb5",
+  "candidate_base_ancestry": "df5946375809631d2a12f2e3af5984cc6eb54361",
+  "execution_classification": "SOURCE_INSPECTION_AND_DRAFT_PRODUCT_CANDIDATE_ONLY",
+  "observed_source_diff": {
+    "files": [
+      "claymachine/host_process_vm.py",
+      "tests/test_hostcall_abi_registry.py"
+    ],
+    "host_process_vm": "removes HostProcessVMHost.invoke process-specific ABI argument/return/capability semantic duplication; retains registry drift assertions and concrete spawn/stdout handler binding",
+    "tests": "moves wrong spawn/stdout host-return expectations to serialized ClayVM execution, while generic ClayHost implementation-capability drift remains fail-closed",
+    "stderr_lane": "NOT_REINTRODUCED; follows canonical rollback present before candidate rebase"
+  },
+  "mechanism": {
+    "semantic_authority": "ClayHostcallABI/v1 plus canonical ClayVM contract_for_vm(format_version, call_id) load/runtime enforcement",
+    "host_role": "concrete capability-gated implementation binding only",
+    "adapter_role": "CM-13 request/receipt mapping only; no second Clay argument/return semantic authority",
+    "reason": "deleting backend-local semantic duplication reduces drift risk and strengthens the single canonical VM path carried toward one-file EntityOS"
+  },
+  "counterhypotheses": [
+    {
+      "counterhypothesis": "removing HostProcessVMHost.invoke weakens wrong return rejection",
+      "required_discriminator": "wrong spawn Bytes-for-Int and stdout Int-for-Bytes results must trap at canonical ClayVM return normalization before Clay re-entry"
+    },
+    {
+      "counterhypothesis": "removing adapter-local checks permits capability rebinding",
+      "required_discriminator": "ClayHost implementation capability mismatch must fail before handler invocation"
+    },
+    {
+      "counterhypothesis": "candidate accidentally restores rolled-back stderr semantics",
+      "source_observation": "PR 809 diff contains no stderr hostcall/contract/gate additions"
+    }
+  ],
+  "provider_status": {
+    "commit": "6432626095f9472a9859cbf7d03d6c5c0ab0cfb5",
+    "context": "Vercel",
+    "state": "failure",
+    "provider_target": "upgradeToPro=build-rate-limit",
+    "sandbox_execution_evidence_observed": false,
+    "interpretation": "no executable PASS/FAIL is promoted from this provider admission state"
+  },
+  "last_bounded_verified_entityos_scope": {
+    "head": "92b629566452d8f45fd208fba943b823ddd37e8c",
+    "entityos_sha256": "a68eb0cc2ac343d88421c9173e0d877f0f758b0ebd2e5918fd3e7a3c154b0c00",
+    "size_bytes": 9176080,
+    "transfers_to_candidate": false
+  },
+  "unusual_experiment_accounting": {
+    "limit": 1,
+    "consumed": 1,
+    "consumed_by": "ATTESTED_SNAPSHOT_CONTENT_TAMPER_FAIL_CLOSED",
+    "new_unusual_experiment_count": 0,
+    "mode": "REGRESSION_ONLY"
+  },
+  "required_promotion_gate": [
+    "refresh current PR 787 and PR 809 heads before execution",
+    "actually start an exact-head isolated Vercel Sandbox",
+    "run hostcall ABI registry and VM-format admission regressions",
+    "run real stdout Bytes binary regression including NUL/non-UTF8, capability denial and unknown receipt",
+    "run wrong host-return regressions through canonical ClayVM",
+    "run canonical full ordinary pytest with nonzero tests and zero skips at admitted scope",
+    "if fused into EntityOS, run exact-head one-file twin build/digest/runtime/self-test/no-host-Python/relocation/provenance sequence",
+    "stop the Sandbox successfully",
+    "keep new_unusual_experiment_count=0"
+  ],
+  "claims": {
+    "source_candidate_written": true,
+    "draft_pr_opened": true,
+    "candidate_tests_executed": false,
+    "candidate_sandbox_pass": false,
+    "candidate_entityos_artifact_built": false,
+    "whole_entityos_pass": false,
+    "whole_clay_machine_pass": false,
+    "vps_or_self_hosted_acceptance_used": false,
+    "together_used": false
+  }
+}

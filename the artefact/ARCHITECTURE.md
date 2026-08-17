@@ -12,6 +12,28 @@ There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-
 
 The retired headless `claude -p`/custom chat API path is not the product runtime.
 
+## Grounded autonomy / Autonomous Goal Kernel
+
+ClayVerse high agency is an architectural state-machine property, not a model persona claim. The persistent identity/mission used for operation is stored as typed state in the same canonical UnifiedDB and is injected as bounded context when relevant. It does **not** assert consciousness, AGI status, hidden capabilities, root access, successful actions, or facts absent from canonical evidence.
+
+The target autonomous loop is:
+
+`human-admitted goal -> canonical goal state -> deterministic claim/lease -> bounded goal cycle -> UnifiedDB/retrieval context -> selected LLM proposes next step -> proposal re-ingested -> EffectGate/EntityOS when an effect is admitted -> verified outcome/validator evidence -> deterministic success-contract evaluation -> COMPLETE | next bounded cycle | BLOCKED/PAUSED`
+
+Hard invariants:
+
+- A model output is a proposal, never goal authority, progress evidence, or a completion receipt.
+- A top-level goal can be created only from an actual persisted `role=user` turn owned by the canonical session. The model cannot mint its own top-level goals.
+- The objective is copied from that canonical user turn rather than silently rewritten by the model.
+- Goal status, priority, cycle/failure budgets, success contract and evidence live in UnifiedDB; an `autonomy_state_hash` is folded into canonical checkpoint state through `meta`.
+- Every worker/cycle is lease- and global-generation-fenced. Stale workers fail closed.
+- Every goal has hard `max_cycles` and `max_failures`; exhaustion produces `BLOCKED`, never an unbounded retry loop.
+- The first automatic completion contract is intentionally narrow: an exact target-bound `entityos.exec` must be `VERIFIED`, belong to the same user/session/generation, and have causal re-entry with a positive redacted receipt. Text such as "done" or a model self-score has zero completion authority.
+- Goals that cannot be deterministically validated use explicit human confirmation rather than a guessed success predicate.
+- No separate consciousness process, second identity, second database or second effect path is introduced. A future wake/scheduling mechanism must drive this same Goal Kernel inside the one ClayVerse service/runtime boundary.
+
+Current source candidate: `clayverse/autonomy.py` implements the persistent entity profile, goal state, leases, bounded cycles, proposal receipts, hard budgets, exact verified-effect completion and human confirmation. `tests/test_autonomous_goal_kernel.py` contains authority-drift and runaway-loop falsifiers. Continuous wake-up / Claude Stop-hook continuation / provider-supervisor wiring is deliberately not promoted yet; it must reuse this kernel and pass exact isolated lifecycle/recovery/concurrency tests before autonomy is enabled by default.
+
 ## Canonical state and memory invariants
 
 - UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
@@ -87,6 +109,7 @@ The current source candidate implements the persistent receipt/policy spine, que
 - Real Clerk browser/JWT/WebSocket behavior.
 - Real authenticated normal interactive Claude Code sessions for both durable user homes.
 - Exact hook lifecycle: prompt ingestion -> MicroClay retrieval/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Autonomous Goal Kernel exact isolated regression, migration/restart, concurrency/lease, Stop-hook continuation and provider-supervisor integration; no default-on autonomous wake loop is claimed by source alone.
 - MicroClay shadow-vs-baseline replay/held-out benchmark, user-correction feedback and ACTIVE promotion gate.
 - Full exact/FTS/vector/ClayGraph entry-point fusion and bounded graph activation.
 - Live dual-session collision/concurrency/stale-generation controls.

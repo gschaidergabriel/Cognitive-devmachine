@@ -132,8 +132,9 @@ class TerminalSessionManager:
         if self._has_session(binding):
             return binding
 
-        # Built-in Claude tools are absent. Explicit MCP remains available even with
-        # --tools ""; the system managed MCP file has exclusive server authority.
+        # Built-in Claude tools are absent. The server-level MCP permission name
+        # mcp__clayverse admits all tools from exactly that server. Claude Code does
+        # not support glob MCP permission names such as mcp__clayverse__*.
         # Filesystem setting sources are disabled so project/user hooks cannot compete
         # with the fixed managed lifecycle hooks.
         claude_argv = [
@@ -143,7 +144,7 @@ class TerminalSessionManager:
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",
-            "--allowedTools", "mcp__clayverse__*",
+            "--allowedTools", "mcp__clayverse",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", str(self.runtime_prompt),
         ]

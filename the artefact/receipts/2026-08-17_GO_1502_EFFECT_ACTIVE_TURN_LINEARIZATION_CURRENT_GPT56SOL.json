@@ -1,0 +1,111 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "recorded_date": "2026-08-17",
+  "organ": "chatgpt-secondary / OpenAI / GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "issue": 446,
+  "canonical_main_at_rejoin": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+  "repair_branch": "go/effect-active-turn-linearization-current-v2-20260817-1502-sol",
+  "repair_code_head_before_receipt": "0ee2a0db455f0bc1caecad9211797ea8bf441a37",
+  "finding": {
+    "class": "EFFECT_ACTIVE_TURN_TOCTOU",
+    "source_observation": "TurnLifecycle.request_effect commits SELECTED/request_effect plus active_turns.workspace_selected before leaving its UnifiedDB transaction; EffectGate.execute then reaches EffectJournal.begin in a later transaction. A successor prompt can retire the predecessor in that gap without advancing the global entity generation.",
+    "pre_repair_consequence": "Current main EffectJournal.begin validates session/global generation, lease and per-episode duplicate state but not exact current active-turn/workspace authority. A retired predecessor can therefore journal PENDING and reach the external EntityOS boundary before later causal reconciliation detects divergence.",
+    "affected_contract": "explicit causal turn lifecycle + fail-closed EffectGate external execution boundary"
+  },
+  "repair": {
+    "mechanism": "Treat the PENDING journal insertion as the linearization point. In the same BEGIN IMMEDIATE transaction, require exact active episode/session/user/generation identity, workspace_selected=1, no already-bound active effect, and workspace state SELECTED with selected=request_effect before inserting PENDING.",
+    "new_state_authority": false,
+    "new_effect_authority": false,
+    "new_capability": false,
+    "preserved_current_main_fences": [
+      "complete_verified effect user_id ownership binding",
+      "complete_verified requested_generation binding",
+      "global/session generation validation",
+      "EntityOS lease validation",
+      "state.noop non-rewarding causal credit"
+    ]
+  },
+  "coordination": {
+    "stale_donor_pr": 456,
+    "stale_donor_branch": "go/effect-active-turn-linearization-20260817-sol",
+    "stale_donor_mergeable_at_refresh": false,
+    "stale_donor_was_not_merged_or_cherry_picked_wholesale": true,
+    "reason": "The donor was far behind main and its old completion path predated newer completion-identity fences. Only the still-applicable active-turn linearization mechanism/regression was rejoined onto current main.",
+    "first_current_branch_parent": "83c171c6881c7790904f1af955850341e69127f4",
+    "parallel_main_advanced_during_go_to": "3e5e80864f8c7e946966d8139dd16815068bd3e8",
+    "parallel_changes_between_parents_touched_effect_journal": false,
+    "current_v2_branch_parent": "3e5e80864f8c7e946966d8139dd16815068bd3e8"
+  },
+  "exact_source_identity": {
+    "baseline_current_main_effect_journal_git_blob": "19b248eb9e04fdf4af6cc678b6faefd3c78a2d23",
+    "candidate_effect_journal_git_blob": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "candidate_test_git_blob": "e873769fe77526a7c9df4127f15a50d18cccd400",
+    "effect_journal_delta": "+13/-0",
+    "test_path": "the artefact/tests/test_effect_active_turn_linearization_current.py"
+  },
+  "isolated_source_regression": {
+    "surface": "authorized isolated non-production OpenAI container",
+    "candidate_git_blob_verified_before_execution": "09c41aaa78b96b27d2ba1570f18c72a7d30afde8",
+    "git_blob_match": true,
+    "python": "3.13.5",
+    "pytest": "9.0.2",
+    "sqlite": "3.46.1",
+    "kernel": "Linux 6.18.35 x86_64",
+    "network_required": false,
+    "harness_boundary": "minimal SQLite/store compatibility harness reproducing the canonical active_turns/workspace_episodes/effects and BEGIN IMMEDIATE contracts; not a full ClayVerse checkout or OCI runtime",
+    "cases": [
+      "legitimate selected active turn can journal PENDING",
+      "retired predecessor fails with StaleGeneration(effect_active_turn) before effect insertion",
+      "workspace_selected and SELECTED/request_effect are both required fail-closed"
+    ],
+    "result": "3 passed in 0.25s",
+    "exit_code": 0,
+    "classification": "MECHANISM_SUPPORTED_AT_EXACT_CANDIDATE_EFFECT_JOURNAL_BLOB"
+  },
+  "branch_regression_obligations": [
+    "predecessor retirement commits first -> stale active effect rejected before bridge invocation and zero effect rows",
+    "PENDING insert commits first -> successor admission cannot retire predecessor while effect outcome is pending"
+  ],
+  "execution_surface": {
+    "preferred": "Vercel Sandbox",
+    "platform_capability": "SUPPORTED_AND_RECENTLY_EXECUTED",
+    "connected_chatgpt_direct_sandbox_lifecycle": "NOT_EXPORTED",
+    "current_program_state": "NEXT_RUN_ADMISSION_AND_ACCOUNT_REMAINING_INCLUDED_ALLOWANCE_UNVERIFIED",
+    "vercel_run_for_this_repair": "NOT_STARTED",
+    "runtime_credit": "ZERO"
+  },
+  "unusual_experiment_accounting": {
+    "trigger_key": "ts_20260817T080200000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33",
+    "global_experiment_already_consumed": true,
+    "experiment_name": "recovery_receipt_semantic_forgery_discriminator",
+    "global_result": "FAIL_COUNTEREXAMPLE_FOUND",
+    "this_lane_added_another_unusual_experiment": false,
+    "note": "This effect linearization work is ordinary deterministic regression/fusion and does not consume a second unusual-experiment slot."
+  },
+  "acceptance": {
+    "source_candidate": true,
+    "mechanism_supported_exact_blob": true,
+    "full_branch_pytest": "UNOBSERVED",
+    "vercel_sandbox_exact_branch": "UNOBSERVED",
+    "exact_oci_build_runtime": "UNOBSERVED",
+    "live_entityos_roundtrip": "UNOBSERVED",
+    "whole_clayverse_pass": false,
+    "merge_authorized_by_this_receipt": false
+  },
+  "next_exact_step": [
+    "Refresh main immediately before execution and rejoin if the relevant effect/lifecycle bytes changed.",
+    "When an admitted zero-cost Vercel Sandbox run is available, execute the exact then-current branch test plus adjacent EffectJournal/EffectGate/TurnLifecycle/recovery regressions in one bounded batch.",
+    "Require zero external bridge calls for the retired-predecessor ordering and retained PENDING blocking for the opposite ordering.",
+    "Then continue the whole-product exact OCI build/start/readiness/restart/concurrency path; component evidence must not be promoted to whole-product PASS."
+  ],
+  "forbidden_or_not_used": {
+    "vps_testing": true,
+    "self_hosted_vps_testing": true,
+    "production_host_testing": true,
+    "together_api": true,
+    "paid_or_final_model_training": true
+  }
+}

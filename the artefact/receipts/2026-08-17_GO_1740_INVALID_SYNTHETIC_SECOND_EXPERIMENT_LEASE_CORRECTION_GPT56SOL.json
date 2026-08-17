@@ -1,0 +1,38 @@
+{
+  "schema": "clayverse-go-receipt/v1",
+  "trigger": "go",
+  "recorded_at": "2026-08-17T17:40:00+07:00",
+  "organ": "OpenAI GPT-5.6 Sol temporary Clay organ",
+  "classification": "EXPERIMENT_BUDGET_COORDINATION_PROTOCOL_VIOLATION_SYNTHETIC_SECOND",
+  "product_runtime_delta": "NO_CHANGE",
+  "material_observation": {
+    "claim_commit": "2de642140d1101d9b32152407254c17deda5b9bc",
+    "claim_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.json",
+    "result_commit": "eeae46293cd223251137d0d18a1f4242d92a5ec1",
+    "result_path": "research_entity/continuity/go_experiment_claims/ts_20260817T103600000000Z__p_4cd0e21a9a0795a14ec9aa5f0e7d1abff0492565770e43eafdf1e3e8afed1f33.result.json",
+    "experiment_name": "tmux_3_6a_idempotent_diagnostic_mutation_fence",
+    "observed_experiment_result": "277_CASE_MUTATION_MATRIX_PASS_MECHANISM_ONLY",
+    "runtime_credit": 0,
+    "whole_product_evidence": false
+  },
+  "protocol_adjudication": {
+    "protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
+    "available_shared_user_message_timestamp": "2026-08-17T17:36+07:00",
+    "available_timestamp_precision": "MINUTE_ONLY",
+    "shared_immutable_request_or_turn_id_exposed": false,
+    "required_rule": "Without a shared immutable request/turn id, timestamp fallback requires immutable user-message metadata with at least whole-second precision. Minute-only metadata is COORDINATION_BLOCKED and no unusual experiment may run.",
+    "violation": "The claim key encoded 2026-08-17T10:36:00.000000Z by synthesizing whole-second/fractional precision that was not present in the shared immutable user-message metadata.",
+    "same_cycle_preexisting_state": "the artefact/receipts/2026-08-17_GO_1738_GITHUB_ADMISSION_RERUN_GPT56SOL.json explicitly recorded COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT because no immutable shared request identity was exposed.",
+    "classification": "EXPERIMENT_BUDGET_RACE_VIOLATION",
+    "canonical_unusual_experiment_state": "CLOSED_NO_FURTHER_UNUSUAL_EXPERIMENTS_FOR_THIS_USER_GO"
+  },
+  "evidence_preservation": {
+    "law": "Do not delete or rewrite the claim/result. Preserve the 277-case parser measurement as bounded mechanism evidence while refusing to normalize its invalid lease into a valid 1-of-1 experiment authorization.",
+    "experiment_measurement_scope": "MECHANISM_SUPPORTED_MUTATION_FENCE_ONLY",
+    "experiment_authorization_scope": "INVALID_FOR_GO_EXPERIMENT_BUDGET",
+    "causal_credit": "NONE_FROM_COORDINATION_VIOLATION"
+  },
+  "safety_action": "No additional unusual experiment may execute for this exact user go. Ordinary deterministic source review, regressions, coordination repair and execution-admission checks may continue.",
+  "next_product_gate": "FIRST_ACTUALLY_STARTABLE_AUTHORIZED_ISOLATED_RUNNER -> REFRESH_MAIN -> REJOIN_PR611_ONCE -> BIND_EXACT_HEAD -> REAL_TMUX36A_DISCRIMINATOR -> FOCUSED_AND_ADJACENT_REGRESSIONS -> PROMOTION_DECISION",
+  "whole_product_acceptance": "IN_PROGRESS"
+}

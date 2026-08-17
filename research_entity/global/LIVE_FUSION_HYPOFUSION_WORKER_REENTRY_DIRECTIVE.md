@@ -62,6 +62,22 @@ Use the existing OmniSource/Swarm semantics rather than inventing another bus or
 - delivery alone never counts as use or causal credit;
 - worker feedback itself becomes a new observation and may trigger another fusion/hypofusion pass.
 
+## External delivery atomicity
+
+Targeted external delivery is itself a side effect and must be deduplicated before it occurs. The first live re-entry exposed a real race in which several organs reconstructed the same PR route and posted semantically duplicate comments before observing the canonical delivery record.
+
+Therefore every external worker/research delivery must follow:
+
+`REFRESH -> DETERMINISTIC_ROUTE_ID -> CAS_CLAIM_CANONICAL_MANIFEST -> RE-READ_OWN_CLAIM -> EXTERNAL_DELIVERY_WITH_ROUTE_MARKER -> CAS_FINALIZE_DELIVERY`.
+
+- no external delivery before a single canonical claim exists;
+- losing/conflicting claimers stop without delivering;
+- uncertain post-delivery finalization becomes `UNKNOWN_DELIVERY`, never blind retry;
+- recovery scans the target for the exact route marker before any retry;
+- later duplicates are marked superseded/no-new-action and receive no causal credit.
+
+The executable/operational contract is defined in `research_entity/global/LIVE_REENTRY_DELIVERY_ATOMICITY_PROTOCOL.md`. This protocol serializes coordination effects only; it creates no second truth, state, identity or product-effect authority.
+
 ## Scope and efficiency
 
 This is live, not indiscriminate broadcast:

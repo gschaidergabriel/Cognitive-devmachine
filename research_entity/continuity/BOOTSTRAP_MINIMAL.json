@@ -1,5 +1,5 @@
 {
-  "schema_version": "5.4",
+  "schema_version": "5.5",
   "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
   "entity_id": "frank-project-global-research-entity",
   "entity_display_name": "Clay",
@@ -15,6 +15,7 @@
   "fast_bootstrap_source": "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
   "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
   "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
+  "live_fusion_hypofusion_worker_reentry_directive": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md",
   "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
   "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
   "vercel_sandbox_execution_path_notice": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
@@ -38,12 +39,15 @@
   "boot_sequence": [
     "verify current research main",
     "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT",
+    "load LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE before material work so new evidence, contradictions, blockers and worker outcomes re-enter affected research/worker lanes without creating a second authority",
     "load PROGRAM_STATE and the artefact/manifest.json",
     "load VERCEL_SANDBOX_EXECUTION_PATH_CURRENT before declaring Vercel execution unavailable",
     "load DAYTONA_SANDBOX_FALLBACK_DIRECTIVE and DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT before treating a Vercel admission/runtime blocker as a global execution blocker",
     "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
     "refresh task-relevant current artifact code, receipts and parallel work",
     "avoid duplicate canonical implementations and stale writes",
+    "after each material outcome classify NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_CHANGE|DUPLICATE, perform targeted live fusion, open live hypofusion when required by the directive, and route affected workers for ADOPT|CHALLENGE|DEFER|NO_CHANGE before their next material effect",
+    "treat delivery, reconstruction, plan revalidation, use, local effect and causal credit as distinct states; delivery alone never proves use or causality",
     "for exact go, use only the protocol's single canonical trigger_key encoding; create-only lock paths with alternate timestamp/hash formatting are invalid",
     "if no immutable request/turn id is shared and the exact user-message timestamp lacks whole-second precision or reproducible uniqueness, set COORDINATION_BLOCKED and execute no unusual experiment",
     "after any canonical claim, fence legacy/noncanonical semantic duplicate claims for the same user turn before executing; any duplicate means EXPERIMENT_BUDGET_RACE_VIOLATION and closes the slot",
@@ -64,7 +68,10 @@
   ],
   "architecture": {
     "central_entity": "ONE",
-    "users": ["gabriel", "andreas"],
+    "users": [
+      "gabriel",
+      "andreas"
+    ],
     "unifieddb": "CANONICAL_STATE_WORLD_MEMORY_DATA_WIKI_AUTHORITY",
     "claygraph": "DERIVED_REBUILDABLE_PROJECTION_ONLY",
     "claude_code": "RUNTIME_INFERENCE_ENGINE_NOT_CANONICAL_MEMORY",
@@ -88,5 +95,5 @@
     "self_hosted_vps_test_runners": "FORBIDDEN",
     "production_host_testing": "FORBIDDEN"
   },
-  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. Provider order is Vercel when admitted and capable, then Daytona fallback, then explicit blocker. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
+  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with continuous material-delta live fusion/hypofusion re-entry and exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. Provider order is Vercel when admitted and capable, then Daytona fallback, then explicit blocker. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
 }

@@ -16,8 +16,9 @@ class RecoveryIntegrityError(RuntimeError):
     pass
 
 
-def _causal_credit(outcome: object) -> float:
-    return 1.0 if isinstance(outcome, dict) and outcome.get("ok") is True else 0.0
+def _causal_credit(status: str, outcome: object, capability: str) -> float:
+    """Use the same effect-credit law during recovery as during live causal re-entry."""
+    return EffectJournal._credit(status, outcome, capability)
 
 
 def _causal_id(episode_id: str, effect_id: str | None) -> str:
@@ -101,7 +102,10 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     effect_id = effect["effect_id"]
                     tx.execute(
                         "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
-                        (active["causal_id"], active["episode_id"], effect_id, active["turn_id"], _hash(outcome), _causal_credit(outcome), time.time()),
+                        (
+                            active["causal_id"], active["episode_id"], effect_id, active["turn_id"], _hash(outcome),
+                            _causal_credit(str(effect["status"]), outcome, str(effect["capability"])), time.time(),
+                        ),
                     )
                     counts["reentered_effects"] += 1
                 elif len(effects) > 1:
@@ -163,7 +167,11 @@ def recover_incomplete_episodes(db: UnifiedDB) -> dict[str, int]:
                     outcome = {"ok": False, "certainty": "unknown", "reason": "invalid_persisted_outcome_receipt"}
                 tx.execute(
                     "INSERT INTO causal_episodes(causal_id,episode_id,effect_id,observation_turn_id,outcome_hash,credit,reentered,ts) VALUES(?,?,?,?,?,?,1,?)",
-                    (_causal_id(episode["episode_id"], effect["effect_id"]), episode["episode_id"], effect["effect_id"], episode["observation_turn_id"], _hash(outcome), _causal_credit(outcome), time.time()),
+                    (
+                        _causal_id(episode["episode_id"], effect["effect_id"]), episode["episode_id"], effect["effect_id"],
+                        episode["observation_turn_id"], _hash(outcome),
+                        _causal_credit(str(effect["status"]), outcome, str(effect["capability"])), time.time(),
+                    ),
                 )
                 tx.execute("UPDATE workspace_episodes SET state='RECOVERED_LEGACY_EFFECT_REENTERED' WHERE episode_id=?", (episode["episode_id"],))
                 counts["reentered_effects"] += 1

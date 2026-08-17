@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .adapters import MistralInference
@@ -8,6 +9,18 @@ from .turn_lifecycle import TurnLifecycle, TurnLifecycleError
 
 class MistralTurnError(RuntimeError):
     pass
+
+
+_RECEIPT_KEYS = {
+    "provider",
+    "model_requested",
+    "model_returned",
+    "response_id",
+    "finish_reason",
+    "request_sha256",
+    "response_sha256",
+}
+_SHA256 = re.compile(r"^[0-9a-f]{64}$")
 
 
 class MistralTurnRunner:
@@ -22,11 +35,35 @@ class MistralTurnRunner:
         self.inference = inference
 
     @staticmethod
-    def _receipt(decision: dict[str, Any]) -> dict[str, Any]:
+    def _bounded_text(value: Any, field: str, maximum: int) -> str:
+        if (
+            not isinstance(value, str)
+            or not value
+            or len(value) > maximum
+            or "\x00" in value
+            or "\r" in value
+            or "\n" in value
+        ):
+            raise MistralTurnError(f"Mistral receipt {field} is invalid")
+        return value
+
+    @classmethod
+    def _receipt(cls, decision: dict[str, Any]) -> dict[str, Any]:
         receipt = decision.get("inference_receipt")
-        if not isinstance(receipt, dict) or receipt.get("provider") != "mistral":
+        if not isinstance(receipt, dict) or set(receipt) != _RECEIPT_KEYS:
             raise MistralTurnError("Mistral inference receipt is missing or invalid")
-        return receipt
+        if receipt.get("provider") != "mistral":
+            raise MistralTurnError("Mistral inference receipt provider is invalid")
+        cls._bounded_text(receipt.get("model_requested"), "model_requested", 256)
+        cls._bounded_text(receipt.get("model_returned"), "model_returned", 256)
+        cls._bounded_text(receipt.get("response_id"), "response_id", 512)
+        if receipt.get("finish_reason") != "stop":
+            raise MistralTurnError("Mistral receipt finish_reason is invalid")
+        for field in ("request_sha256", "response_sha256"):
+            value = receipt.get(field)
+            if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
+                raise MistralTurnError(f"Mistral receipt {field} is invalid")
+        return dict(receipt)
 
     def run(
         self,

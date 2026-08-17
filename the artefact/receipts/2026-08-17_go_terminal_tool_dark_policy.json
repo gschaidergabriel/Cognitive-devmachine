@@ -1,0 +1,58 @@
+{
+  "schema": "clayverse.go.terminal-policy-receipt.v1",
+  "date": "2026-08-17",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "trigger": "go",
+  "mission_authority": "CLAYVERSE_CANONICAL_DIRECTIVE.md",
+  "canonical_workspace": "the artefact/",
+  "product_boundary": "ClayVerse single OCI/container product; EntityOS internal controlled effect substrate",
+  "observed_pre_delta": {
+    "research_head": "0c9606b6e906a6c16a00d8b67f452bf99ef8f0bd",
+    "terminal_default": "claude",
+    "risk": "If activated as the product terminal unchanged, normal Claude Code built-in tools and user-configured MCP could bypass the canonical ClayVerse EffectGate -> EntityOS effect boundary."
+  },
+  "delta": {
+    "terminal_commit": "48e80f2f9c998adfe241f2a4a8ec70cee18362f7",
+    "managed_mcp_commit": "4a6c1b10ec5b094de289c634b2115a78e321b390",
+    "container_binding_commit": "df2f2d0b60a75e9ebfbee8c8321c49e39ec5dc01",
+    "regression_test_commit": "bee12a72635f9ac80f52ca7bda5a019045f7a887",
+    "terminal_policy": "interactive claude; built-in tool availability disabled with --tools empty; --strict-mcp-config bound to /etc/claude-code/managed-mcp.json",
+    "managed_mcp_baseline": {"mcpServers": {}},
+    "container_policy": "managed-mcp.json copied root-owned and mode 0444 before USER clayverse"
+  },
+  "isolated_validation": {
+    "surface": "OpenAI isolated non-VPS container workspace",
+    "test": "default terminal argv remains interactive, excludes -p/--print, disables built-ins, requires strict managed MCP path; managed MCP baseline is empty",
+    "result": "PASS",
+    "count": "2/2",
+    "runtime_claude_process_executed": false,
+    "oci_image_built": false
+  },
+  "source_basis": {
+    "upstream": "Official Anthropic Claude Code documentation",
+    "verified_semantics": [
+      "claude without -p is interactive",
+      "--tools empty disables all built-in tools",
+      "--strict-mcp-config limits MCP sources to the supplied configuration",
+      "system managed MCP/settings paths on Linux live under /etc/claude-code"
+    ]
+  },
+  "security_state": {
+    "terminal_activation": "SAFE_DARK_CANDIDATE",
+    "built_in_tool_effects": "UNAVAILABLE_BY_DEFAULT",
+    "unmanaged_mcp": "UNAVAILABLE_BY_DEFAULT",
+    "canonical_clayverse_mcp": "NOT_YET_IMPLEMENTED",
+    "whole_system_pass": false
+  },
+  "unusual_experiment": "NO_NEW_CANONICAL_EXPERIMENT; this cycle retains the already-consumed canonical unusual experiment and treats later checks as regression work only.",
+  "external_execution": {
+    "github_actions": "ACCOUNT_BILLING_OR_SPENDING_LIMIT_BLOCKS_RUNNER_START; no code execution evidence claimed",
+    "vercel_sandbox": "NO_EXECUTABLE_SANDBOX_ACTION AVAILABLE TO THIS ORGAN; no run claimed",
+    "vps_used_for_testing": false
+  },
+  "next_frontier": [
+    "implement exactly one managed ClayVerse MCP server/transport whose tools express admitted typed intents and route only through ClayVerse EffectGate -> EntityOS",
+    "bind authenticated browser PTY sessions for Gabriel and Andreas to the two permanent TerminalSupervisor perspectives without creating two entities",
+    "run exact-current-head full suite and OCI build in an authorized isolated external sandbox and capture image digest, non-root boot, persistent restart/recovery, real Clerk, Claude runtime and EntityOS effect receipts"
+  ]
+}

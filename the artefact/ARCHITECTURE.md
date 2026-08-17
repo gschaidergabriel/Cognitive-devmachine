@@ -2,45 +2,67 @@
 
 ## Product boundary
 
-ClayVerse is the product endpoint. The canonical release target is one OCI/Docker-compatible image built from `the artefact/`. EntityOS may sit inside/below this image as an execution/security/runtime substrate; it is not the top-level release endpoint.
+ClayVerse is the product endpoint. The canonical release target is one OCI/Docker-compatible image built from `the artefact/`. EntityOS is an internal execution/security/runtime substrate carried inside that image; it is not the top-level release endpoint.
 
-There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-rights authenticated perspectives into that same entity, not separate agents or separate canonical state stores.
+There is one persistent central ClayVerse entity. Gabriel and Andreas are equal-rights authenticated perspectives into that same entity, with separate durable conversation/Claude Code homes but one canonical UnifiedDB authority.
 
-## Canonical runtime path
+## Canonical product runtime path
 
-`Clerk browser session -> verified Clerk JWT -> IdentityRouter -> permanent user session -> observation turn -> UnifiedDB -> WorldAssembler -> bounded workspace alternatives -> tool-less ephemeral Claude Code cognition -> fail-closed structured decision/effect intent -> workspace selection -> capability/effect gate -> internal EntityOS execution substrate when admitted -> verified outcome -> causal re-entry -> UnifiedDB -> rebuilt ClayGraph`
+`browser -> Clerk sign-in/session -> verified Clerk JWT -> authenticated WebSocket PTY -> IdentityRouter -> user-bound persistent tmux -> normal interactive Claude Code CLI -> managed UserPromptSubmit hook -> UnifiedDB observation + memory + workspace + bounded canonical-context injection -> Claude reasoning -> effect-only local ClayVerse MCP when an admitted action is needed -> EffectGate -> internal EntityOS only when explicitly admitted -> verified/denied outcome -> managed Stop/StopFailure hook -> assistant turn + causal re-entry -> UnifiedDB -> rebuilt ClayGraph`
 
-## Invariants implemented in source
+The retired headless `claude -p`/custom chat API path is not the product runtime.
 
-- UnifiedDB (SQLite/WAL candidate) is the canonical persistent state/world/data/memory authority.
+## Canonical state and memory invariants
+
+- UnifiedDB (SQLite/WAL candidate) is the persistent state/world/data/memory authority.
 - ClayGraph is derived and rebuildable; it is not a competing source of truth.
-- Gabriel and Andreas route into one entity/database with separate permanent user sessions.
+- Exactly two canonical users (`gabriel`, `andreas`) map to one entity/database and separate permanent sessions.
 - Each session preserves its newest 20 turns at full fidelity.
-- Older history degrades by explicit generations; destructive compression promotes only explicitly typed durable lines (`FACT:`, `DECISION:`, `TASK:`, `COMMITMENT:`, `PREFERENCE:`), so unknown meaning fails closed rather than being guessed.
-- Cross-session retrieval is collision-triggered by explicit shared resource references instead of being injected routinely.
-- Workspace alternatives remain explicit and single-selection fenced.
-- Claude Code cognition is launched as an ephemeral one-turn, tool-less process with no Claude session persistence; canonical durable context is supplied from ClayVerse state.
-- Claude output is parsed by a fail-closed intent protocol. Runtime inference may request only `entityos.exec` or `state.noop`; malformed/unknown capabilities are rejected. Generic host `process.exec` is forbidden.
-- Effect execution validates exact session ownership and reasoning generation before action; stale generation/ABA resource writers are fenced.
-- The current EntityOS bridge verifies an exact SHA-256-pinned executable object before invoking it and records boundary identity in the outcome. This remains an internal substrate candidate until its semantic/artifact contract is accepted.
-- Outcomes are hashed and causally re-entered into UnifiedDB.
-- `consciousness_daemon` is excluded; continuity comes from explicit persisted state and causal/recovery contracts.
-- Container state is externalized to explicit persistent volumes while the supplied Compose profile is non-root, read-only, drops all capabilities and uses `no-new-privileges`.
+- Older history ages through explicit compression generations. The first destructive boundary is fail-closed until complete semantic coverage is established by explicit typed lines or a digest-bound stronger-extractor clearance.
+- After destructive compression there is no hidden lossless transcript authority. Provenance retains non-reversible source digest/size metadata plus admitted durable semantic extraction.
+- Cross-session retrieval is collision-triggered and bounded rather than routinely injecting another user's full session.
+- Workspace episodes are explicit, selection-fenced, and connected to causal re-entry.
 
-## Clerk/web boundary implemented in source
+## Permanent Claude Code boundary
 
-The server verifies Clerk session JWTs using an explicit issuer plus a pinned public key or JWKS retrieval, requires an approved `azp`/authorized party, and maps the verified Clerk subject through the canonical identity router. The homepage loads ClerkJS from the configured Clerk frontend endpoint, mounts sign-in/user UI and sends the current session token to `/api/chat`.
+- The image carries normal interactive Claude Code plus `tmux`; browser detach does not intentionally terminate the underlying user session.
+- Each canonical user has a durable HOME below `/var/lib/clayverse/users/<user>/home`; subscription/OAuth/session state therefore follows the persistent ClayVerse state volume rather than container-secret inheritance.
+- Claude starts from an environment allowlist, with built-in tools disabled and strict MCP configuration.
+- Managed Claude settings are installed at `/etc/claude-code/managed-settings.json`; `UserPromptSubmit`, `Stop`, and `StopFailure` hooks bind interactive conversation lifecycle to UnifiedDB automatically.
+- The local stdio MCP is effect-only: `request_effect` and read-only session state. It cannot replace the automatic turn hooks as a second state authority.
+- The admitted effect protocol is limited to `state.noop` and `entityos.exec`; generic host `process.exec` remains forbidden.
 
-This is source implementation, not yet a real-instance runtime PASS.
+## Web/auth boundary
+
+- The server verifies Clerk session JWTs using configured issuer/key material and authorized-party checks, then resolves the subject through the persisted canonical identity binding.
+- The browser surface is an authenticated WebSocket PTY, not `/api/chat`.
+- xterm JavaScript/CSS are vendored into the ClayVerse image and served by the container; they are not fetched from a public CDN at runtime.
+- Clerk remains the intended external authentication service and its real-instance browser/JWT/key-rotation behavior is still an executable acceptance gate.
+
+## EntityOS/effect boundary
+
+- EntityOS bytes are staged into the image from a verified source lock and build-time SHA-256/size contract.
+- The service verifies the embedded artifact identity at startup.
+- `CLAYVERSE_ENABLE_ENTITYOS_EXEC=0` is the default admission state. The service and per-user MCP both remain non-executing until the exact embedded EntityOS artifact has accepted isolated runtime evidence and execution is explicitly enabled.
+- Effect intent is journaled/fenced before external execution and outcome is causally re-entered; stale generation/lease writers fail closed at the admitted contract.
+
+## Container boundary
+
+- Build context is default-deny/allowlisted.
+- The supplied Compose profile runs one ClayVerse service as non-root with read-only rootfs, dropped Linux capabilities, `no-new-privileges`, bounded tmpfs, one persistent state volume and one workspace volume.
+- Runtime-generated state is external to the immutable image; no companion application container is part of the release contract.
+- `consciousness_daemon` is excluded; continuity comes from persistent interactive sessions plus explicit state, hooks, causal/recovery contracts and checkpoints.
 
 ## Deliberately unclaimed / still external
 
 - Exact-current-head full regression suite on an authorized isolated executor.
-- Exact OCI image build plus packaged Python/Node/Claude Code/runtime checks on an authorized isolated container executor.
-- Real Clerk-instance browser/JWT/key-rotation behavior.
-- Real authenticated Claude Code inference against Anthropic from inside the candidate image.
-- Accepted external-effect substrate contract and exact embedded/mounted artifact binding for production actions.
+- Exact OCI image build and runtime checks for the packaged Python/Node/tmux/Claude Code/xterm/managed-hook stack.
+- Real Clerk browser/JWT/WebSocket behavior.
+- Real authenticated normal interactive Claude Code sessions for both durable user homes.
+- Exact hook lifecycle: prompt ingestion/context injection -> optional effect MCP -> Stop/StopFailure persistence under live Claude Code.
+- Live dual-session collision/concurrency/stale-generation controls.
+- Accepted exact embedded EntityOS runtime/effect contract.
 - Restart/crash/recovery and persistent-volume continuity at exact image identity.
 - Deployment readiness and later explicitly authorized VPS deployment/migration.
 
-The first GitHub-hosted OCI gate was rejected before any job step because the account runner could not start due billing/spending state. That infrastructure failure is preserved as negative evidence and is not interpreted as a code failure or a PASS.
+GitHub-hosted OCI jobs observed during this GO were rejected before visible job steps by runner/control-plane admission and receive no test credit. Vercel Sandbox execution is not exposed by the currently available connector surface. These are infrastructure limitations, not product PASS evidence.

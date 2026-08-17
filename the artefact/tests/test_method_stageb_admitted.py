@@ -38,6 +38,26 @@ def _episode(db, session_id, label, *, terminal=False):
     return turn_id, episode_id
 
 
+def _activate(db, session_id, turn_id, episode_id, causal_id):
+    db.db.execute(
+        "INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,effect_id,outcome,workspace_selected,started_at) "
+        "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+        (
+            session_id,
+            "gabriel",
+            turn_id,
+            episode_id,
+            causal_id,
+            db.entity_generation(),
+            "[]",
+            None,
+            None,
+            0,
+            time.time(),
+        ),
+    )
+
+
 def _record(*, signature, goal_shape, episodes, counterexample_ids=(), status="CANDIDATE"):
     return {
         "problem_signature": signature,
@@ -119,6 +139,23 @@ def test_raw_prompt_is_not_an_admitted_stageb_query():
         admit_problem_query({
             "schema": QUERY_SCHEMA,
             "problem_signature": {"task_shape": ["why did the server crash hard"]},
+            "goal_shape": "identify_mechanism",
+            "provenance": {
+                "source": "structural_analyzer_v1",
+                "turn_id": "t",
+                "episode_id": "e",
+                "causal_id": "c",
+                "generation": 1,
+                "admission_version": 1,
+            },
+        })
+
+
+def test_signature_key_must_match_method_memory_snake_case_schema():
+    with pytest.raises(ProblemSignatureAdmissionError, match="snake_case"):
+        admit_problem_query({
+            "schema": QUERY_SCHEMA,
+            "problem_signature": {"task-shape": ["diagnose"]},
             "goal_shape": "identify_mechanism",
             "provenance": {
                 "source": "structural_analyzer_v1",
@@ -304,13 +341,67 @@ def test_world_assembler_never_calls_raw_query_stageb_without_admitted_signature
         db.close()
 
 
+def test_world_assembler_stageb_requires_live_active_identity(tmp_path):
+    db, session_id = _db(tmp_path)
+    try:
+        turn_id, episode_id = _episode(db, session_id, "target")
+        causal_id = str(uuid.uuid4())
+        generation = db.entity_generation()
+        with pytest.raises(RuntimeError, match="requires active causal identity"):
+            WorldAssembler(db).assemble(
+                session_id,
+                [],
+                query="target",
+                turn_id=turn_id,
+                episode_id=episode_id,
+                causal_id=causal_id,
+                generation=generation,
+                method_query=_query(
+                    turn_id=turn_id,
+                    episode_id=episode_id,
+                    causal_id=causal_id,
+                    generation=generation,
+                ),
+            )
+    finally:
+        db.close()
+
+
+def test_world_assembler_stageb_rejects_explicit_identity_diverging_from_active(tmp_path):
+    db, session_id = _db(tmp_path)
+    try:
+        turn_id, episode_id = _episode(db, session_id, "canonical target")
+        causal_id = str(uuid.uuid4())
+        generation = db.entity_generation()
+        _activate(db, session_id, turn_id, episode_id, causal_id)
+        with pytest.raises(RuntimeError, match="explicit retrieval identity mismatch"):
+            WorldAssembler(db).assemble(
+                session_id,
+                [],
+                query="tampered target",
+                turn_id=turn_id,
+                episode_id=episode_id,
+                causal_id=causal_id,
+                generation=generation,
+                method_query=_query(
+                    turn_id=turn_id,
+                    episode_id=episode_id,
+                    causal_id=causal_id,
+                    generation=generation,
+                ),
+            )
+    finally:
+        db.close()
+
+
 def test_world_assembler_accepts_only_admitted_structural_stageb(tmp_path):
     db, session_id = _db(tmp_path)
     try:
         promoted_id = _promoted_method(db, session_id)
-        turn_id, episode_id = _episode(db, session_id, "target")
+        turn_id, episode_id = _episode(db, session_id, "opaque raw text is Stage A only")
         causal_id = str(uuid.uuid4())
         generation = db.entity_generation()
+        _activate(db, session_id, turn_id, episode_id, causal_id)
         query = _query(
             turn_id=turn_id,
             episode_id=episode_id,

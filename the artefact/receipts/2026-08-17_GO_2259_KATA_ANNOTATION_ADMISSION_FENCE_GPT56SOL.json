@@ -1,0 +1,77 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "trigger_local_time": "2026-08-17T22:59+07:00",
+  "organ": "GPT-5.6 Sol temporary Clay organ",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "novelty": "NEW",
+  "research_base_main": "89a7287928afb2130818eb8b9b8b71f3fa965978",
+  "branch": "gpt56sol/go-kata-annotation-admission-fence-20260817-2259",
+  "source_delta": {
+    "policy_path": "the artefact/deployment/clayverse-kata-admission-policy.template.yaml",
+    "policy_blob": "c54e5706dd6f74f9d09290af476aafab6e91c8ce",
+    "test_path": "the artefact/tests/test_kata_annotation_admission_policy.py",
+    "test_blob": "7d5565654a467d207fec6a75245d9630f5fc154a",
+    "readme_blob_after_reentry": "fa640fdc92976437daf9f10acd8e9d64cb6983f4"
+  },
+  "observed_gap": "The current MicroVM contract requires rejection of unreviewed io.katacontainers.* runtime-mutating annotations and explicitly says template absence is insufficient, but no executable Kubernetes admission-policy artifact was present in the deployment path.",
+  "repair": {
+    "kind": "ValidatingAdmissionPolicy plus ValidatingAdmissionPolicyBinding",
+    "api": "admissionregistration.k8s.io/v1",
+    "failure_policy": "Fail",
+    "operations": ["CREATE", "UPDATE"],
+    "resource": "pods",
+    "identity_scope": "incoming or oldObject app=clayverse",
+    "annotation_rule": "deny any key beginning io.katacontainers.",
+    "enforcement": "Deny",
+    "label_removal_update_fence": true,
+    "second_runtime_or_state_authority": false
+  },
+  "primary_upstream_evidence": {
+    "kata_latest_release_observed": "4.0.0",
+    "kata_latest_release_source": "kata-containers/kata-containers releases/latest",
+    "ghsa_config_path": "GHSA-mp2j-xm59-qfgw / CVE-2026-50540",
+    "ghsa_config_path_observation": "runtime-rs <=3.32.0 affected; 4.0.0 patched; unvalidated io.katacontainers.config_path can select host config and lead to host-level RCE",
+    "ghsa_bind_mount": "GHSA-7fhf-v3p3-rp56",
+    "ghsa_bind_mount_observation": "runtime-rs <=3.32.0 affected; 4.0.0 patched; workload runtime.sandbox_bind_mounts annotation can expose arbitrary host paths into the guest",
+    "kubernetes_contract": "ValidatingAdmissionPolicy v1 supports failurePolicy Fail, CEL object/oldObject, and bindings with validationActions Deny"
+  },
+  "bounded_verification": {
+    "execution_surface": "isolated non-production OpenAI container",
+    "exact_git_blob_match": "2/2",
+    "pytest": "4 passed in 0.06s",
+    "yaml_semantic_probe": "PASS: exactly ValidatingAdmissionPolicy + ValidatingAdmissionPolicyBinding; failurePolicy Fail; validationActions Deny; CREATE+UPDATE pods",
+    "python_compile": "PASS",
+    "runtime_credit": 0,
+    "whole_product_credit": 0
+  },
+  "live_hypofusion": {
+    "strongest_counterhypothesis": "The YAML/CEL source may be rejected or behave differently on the real Kubernetes API server, or cluster mutation/effective admission state may invalidate the intended fence even though static source tests pass.",
+    "support_for_counterhypothesis": "No real API-server admission, applied-policy identity, post-mutation Pod inspection, Kata runtime, CNI or guest-kernel execution occurred in this cycle.",
+    "cheapest_next_falsifier": "On the admitted final Kubernetes/Kata target, apply the exact policy+binding, verify API-server admission/conditions, then attempt clean ClayVerse Pod creation, malicious io.katacontainers.config_path creation, malicious runtime.sandbox_bind_mounts creation, and same-update app-label removal plus malicious annotation; require clean allow and all malicious cases Deny after mutation.",
+    "if_true": "Keep outer-isolation acceptance BLOCKED and repair the policy or deployment admission architecture without weakening the one-entity boundary."
+  },
+  "affected_reentry_lanes": [
+    "MicroVM outer-envelope acceptance",
+    "PR623 auth/identity/readiness lane because its current body already carries MicroVM final-acceptance re-entry",
+    "PR810 OCI controller as lower-layer execution blocker only",
+    "final deployment CNI/Kata/admission acceptance"
+  ],
+  "vercel_recheck": {
+    "deployment": "dpl_DSKkEM6GK2pWmrYXwsguRcu1Ryp8",
+    "sandbox_admission": "PASS_CREATED",
+    "source_stage": "BLOCKED_MISSING_GITHUB_READ_TOKEN",
+    "sandbox_stopped": true,
+    "source_runtime_credit": 0,
+    "oci_runtime_credit": 0,
+    "classification": "EXECUTION_CREDENTIAL_BLOCKER_NOT_CLAYVERSE_TEST_FAIL"
+  },
+  "unusual_experiment": {
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "reason": "No shared immutable request/turn identifier is exposed and the available exact user-message metadata is minute-precision only, so the atomic lease protocol fails closed."
+  },
+  "acceptance": "IN_PROGRESS",
+  "claim_boundary": "SOURCE_MECHANISM_SUPPORTED_ONLY; no Kubernetes admission, Kata/microVM, CNI, OCI, Clerk, Claude lifecycle, recovery, concurrency or whole-product PASS is claimed."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "ClayVerseGoReceipt/v1",
+  "trigger": "go",
+  "observed_at": "2026-08-17T17:30:42+07:00",
+  "organ": "GPT-5.6 Sol",
+  "program": "CLAYVERSE_SINGLE_CONTAINER",
+  "stage": "CLAYVERSE_ARTIFACT",
+  "classification": "REPAIR_REJOIN_STAGED_EXACT_EXECUTION_ADMISSION_BLOCKED",
+  "canonical_main_before_status_write": "6f274dab83836175145d89e68d2ee28a75c32575",
+  "retained_repair": {
+    "pull_request": 611,
+    "rejoined_head_before_status_write": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "behind_main_before_status_write": 0,
+    "changed_paths": [
+      "the artefact/clayverse/terminal_sessions.py",
+      "the artefact/tests/test_terminal_tmux_control_timeouts.py"
+    ],
+    "terminal_blob": "c185009f8af84e1288747d8352645777a36b2053",
+    "focused_test_blob": "b6bb645dd07645f21ca2e5574f8392c9f13beafc"
+  },
+  "runtime_evidence": {
+    "old_bound_head": "ef61bfb85ab59291c3b0b33d024aa098b1f29089",
+    "vercel_deployment": "dpl_6z5oXV29Q4TgRonAgs9TaEmxfB5T",
+    "classification": "REAL_TMUX36A_COMPONENT_MECHANISM_PASS_OLD_BOUND_HEAD_ONLY",
+    "exact_current_credit": "ZERO"
+  },
+  "execution_bridge": {
+    "repository": "gschaidergabriel/Dr.-Unterweger",
+    "pull_request": 846,
+    "bridge_head": "4310f2ef3fef7fa9680158ff53a7978e18fdc622",
+    "bound_candidate_head": "2957e80228815ac266635981a55f22bc15dc9ed4",
+    "vercel_status": "failure",
+    "vercel_description": "Deployment rate limited — retry in 24 hours.",
+    "sandbox_started": false
+  },
+  "github_guard": {
+    "run_id": 32020465304,
+    "job_id": 95358887718,
+    "conclusion": "failure",
+    "visible_steps": false,
+    "product_test_credit": "ZERO"
+  },
+  "daytona": {
+    "classification": "CURRENT_CHATGPT_CONTROLLER_BLOCKED_BEFORE_PROVIDER_CONTACT",
+    "provider_or_account_availability": "UNOBSERVED",
+    "runtime_credit": "ZERO"
+  },
+  "coordination": {
+    "single_retained_repair_lane": "PR611",
+    "pr603": "CLOSED_SUPERSEDED",
+    "pr612": "CLOSED_DUPLICATE",
+    "pr614": "CLOSED_DUPLICATE_STATUS_LANE",
+    "status_write_effect": "THIS_STATUS_ONLY_MAIN_WRITE_WILL_MAKE_PR611_ANCESTRY_STALE_WITHOUT_CHANGING_REPAIR_BYTES",
+    "next_execution_sequence": "WHEN_EXECUTION_ADMISSION_OPENS_REJOIN_PR611_ONCE_TO_THEN_CURRENT_MAIN_REBIND_BRIDGE_TO_THAT_EXACT_HEAD_AND_EXECUTE_IMMEDIATELY_BEFORE_ANY_FURTHER_STATUS_ONLY_MAIN_WRITE"
+  },
+  "experiment": {
+    "unusual_experiment_count_added": 0,
+    "status": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT"
+  },
+  "acceptance": {
+    "repair_component_old_head": "PASS",
+    "exact_current_repair": "UNKNOWN_NOT_EXECUTED",
+    "whole_product": "IN_PROGRESS"
+  },
+  "next_gate": "One final ancestry rejoin plus exact bridge rebind immediately followed by an actually-started authorized real-tmux 3.6a discriminator; then focused and adjacent regressions before any repair promotion."
+}

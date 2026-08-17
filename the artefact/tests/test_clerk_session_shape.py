@@ -36,6 +36,8 @@ def _claims(now, *, sid="sess_1"):
         "nbf": now - 1,
         "exp": now + 60,
         "jti": "jwt_1",
+        "v": 2,
+        "sts": "active",
     }
     return claims
 
@@ -79,12 +81,20 @@ def test_clerk_boundary_rejects_impersonated_session_actor_claim():
         verifier.verify(jwt.encode(impersonated, private, algorithm="RS256"))
 
 
-def test_clerk_boundary_rejects_pending_session_status():
+def test_clerk_boundary_rejects_non_active_session_status():
     private, public_pem = _keypair()
     verifier = _verifier(public_pem)
     now = int(time.time())
-    pending = _claims(now)
-    pending["sts"] = "pending"
 
-    with pytest.raises(AuthenticationError, match="pending Clerk session"):
+    pending = {**_claims(now), "sts": "pending"}
+    with pytest.raises(AuthenticationError, match="not active"):
         verifier.verify(jwt.encode(pending, private, algorithm="RS256"))
+
+    missing_status = _claims(now)
+    missing_status.pop("sts")
+    with pytest.raises(AuthenticationError, match="not active"):
+        verifier.verify(jwt.encode(missing_status, private, algorithm="RS256"))
+
+    unknown_status = {**_claims(now), "sts": "unknown"}
+    with pytest.raises(AuthenticationError, match="not active"):
+        verifier.verify(jwt.encode(unknown_status, private, algorithm="RS256"))

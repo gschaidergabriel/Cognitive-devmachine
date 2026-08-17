@@ -2,7 +2,7 @@
   "schema": "ClayVerseGoReceipt/v1",
   "trigger": "go",
   "observed_at_local": "2026-08-18T01:34:23+07:00",
-  "updated_at_local": "2026-08-18T01:41:11+07:00",
+  "updated_at_local": "2026-08-18T01:42:05+07:00",
   "organ": "GPT-5.6 Sol temporary Clay organ",
   "program": "CLAYVERSE_SINGLE_CONTAINER",
   "stage": "CLAYVERSE_ARTIFACT",
@@ -45,7 +45,10 @@
     "last_observed_failure": "CURRENT_OCI_RETAINED_RUNNER_SOURCE_BINDING_UNRECOGNIZED_FAIL_CLOSED on malformed retained RESEARCH_SHA marker",
     "v11_preview_trigger_commit": "4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4",
     "v11_preview_trigger_created_at_utc": "2026-08-17T18:41:11Z",
+    "v11_preview_git_status": "FAILURE_BUILD_RATE_LIMIT",
+    "v11_preview_status_target": "VERCEL_BUILD_RATE_LIMIT",
     "post_v11_deployment_observed_in_this_turn": false,
+    "classification": "EXECUTION_ADMISSION_BLOCKER_NOT_PRODUCT_TEST_FAILURE",
     "product_runtime_executed": false,
     "exact_oci_runtime_credit": 0,
     "live_provider_credit": 0,
@@ -61,8 +64,10 @@
   "tier2_carrier_adjudication": {
     "direct_snapshot_delete_then_restore": "REJECTED_FAIL_CLOSED",
     "sandbox_fork": "REJECTED_FOR_FULL_APPLIANCE_REPLACEMENT_CREDIT",
-    "current_source_candidate": "two-stage carrier sandbox snapshot transfer with source deletion before replacement creation and carrier deletion only after replacement exists",
+    "current_source_candidate": "distinct empty carrier sandbox receives only chunked declared tier2-transfer bytes, is snapshotted, source is deleted before replacement creation, and a distinct persistent:false replacement is created from the carrier snapshot",
     "source_guard_binds_sanitized_transfer": true,
+    "snapshot_survival_across_source_delete": "UNKNOWN_DIRECT_PROVIDER_DISCRIMINATOR_REQUIRED",
+    "snapshot_cleanup_after_success": "EXPLICIT_DELETE_REQUIRED_IF_PROVIDER_LIFECYCLE_DISCRIMINATOR_SUPPORTS_CARRIER_MECHANISM",
     "tier2_independent_carrier_verified": false,
     "runtime_credit": 0
   },
@@ -72,7 +77,9 @@
     "research_product_bytes_changed_by_this_organ": false,
     "controller_infrastructure_changed_by_this_organ": true,
     "owner_secrets_or_credentials_used": false,
-    "pr810_coordination_comment_id": 5318673462
+    "pr810_coordination_comment_id": 5318673462,
+    "superseded_donor_pr": 854,
+    "superseded_donor_closed": true
   },
   "unusual_experiment": {
     "new_experiment_count": 0,
@@ -87,5 +94,5 @@
     "exact_runtime_verified": false,
     "whole_product_accepted": false
   },
-  "next_exact_step": "Observe the Vercel preview caused by commit 4f77bdfbb75feda92e6e6a7dcf1c0d718a0855d4. If all build guards pass on the exact retained PR810 head, perform the explicit owner-credential-bearing POST to /api/go-cycle-v2 and evaluate private-source identity, Sandbox.create, exact OCI build/digest, provider, EntityOS effect, Tier1/Tier2 recovery, auth/PTY and whole-product gates without transferring any credit from source inspection."
+  "next_exact_step": "Restore authorized isolated execution admission (Vercel build capacity or an admitted zero-cost fallback), run the exact retained PR810 source guards, then execute the bounded direct snapshot lifecycle discriminator required by current fail-closed research state. Only after those gates pass may the credential-bearing PR686 private-source/OCI/provider/EntityOS/recovery/auth-PTY sequence receive runtime credit."
 }

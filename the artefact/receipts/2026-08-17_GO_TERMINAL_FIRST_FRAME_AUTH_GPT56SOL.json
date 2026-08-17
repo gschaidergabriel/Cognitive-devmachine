@@ -34,14 +34,16 @@
   },
   "scoped_regression": {
     "surface": "isolated non-production local execution container",
-    "kind": "mechanism regression, not Vercel Sandbox and not OCI acceptance",
+    "kind": "mechanism/source regression, not Vercel Sandbox and not OCI acceptance",
     "result": "PASS",
     "observed": {
       "pre_ready_terminal_frames_sent": 0,
       "post_ready_terminal_frames_sent": 1,
-      "post_error_terminal_frames_sent": 0
+      "post_error_terminal_frames_sent": 0,
+      "gateway_python_compile": "PASS",
+      "corrected_static_regression_needles": "PASS"
     },
-    "limitations": "This validates the repaired handshake mechanism only. It does not establish exact-current-head ClayVerse container runtime behavior. The canonical static regression source was corrected in 64ef128b3d675be4bfc3fefadd724a494d983293."
+    "limitations": "This validates the repaired handshake mechanism and Python/source invariants only. It does not establish exact-current-head ClayVerse container runtime behavior. The canonical static regression source was corrected in 64ef128b3d675be4bfc3fefadd724a494d983293."
   },
   "coordination": {
     "conflict_observed": "First attempt to update test_permanent_terminal_surface.py returned GitHub 409 because a parallel worker had changed the same file.",

@@ -1,0 +1,60 @@
+{
+  "kind": "CLAYVERSE_GO_STALE_INTENT_GENERATION_FENCE_RECEIPT",
+  "timestamp_utc": "2026-08-17T04:42:06Z",
+  "base_research_main": "2bd28667fcbb821903a2d37cfc392eb5765e0bf2",
+  "branch": "go/stale-intent-generation-fence-20260817",
+  "branch_head_before_receipt": "824da2f389d891a30d2546899c9119d0902384be",
+  "execution_surface": "OpenAI isolated container workspace (non-VPS)",
+  "vercel_sandbox_execution": "BLOCKED: installed Vercel connector exposes Sandbox documentation search but no Sandbox start/exec action",
+  "oci_build": "BLOCKED: isolated execution surface has no docker, podman, buildah, or nerdctl",
+  "falsifier": {
+    "mechanism": "session generation changes after world assembly begins and during inference, before an effect is dispatched",
+    "pre_fix_risk": "EffectGate read only the current generation at dispatch and EffectRequest carried no expected generation, so a stale intent could be treated as current",
+    "post_fix_contract": "Engine binds expected_generation before inference; EffectGate rejects mismatches with StaleGeneration before any effect record or dispatch",
+    "regression_assertion": "generation bump inside inference raises StaleGeneration and effects row count remains zero"
+  },
+  "tests": {
+    "command": "python3 -m pytest -q",
+    "count": 12,
+    "result": "PASS"
+  },
+  "service_smoke": {
+    "command": "PYTHONPATH=. CLAYVERSE_STATE_ROOT=.state python3 -m clayverse.service --once",
+    "result": "PASS"
+  },
+  "source_binding": {
+    "method": "executed files reconstructed from GitHub content and verified against Git blob SHA before execution",
+    "verified_git_blobs": {
+      "clayverse/__init__.py": "d67024a036acfc8761d6dbd7c068fe99601df8e2",
+      "clayverse/store.py": "dad2ad9555c38143616d8af348bff021c244c6bc",
+      "clayverse/identity.py": "bceb73eb44e759cdefa3bad5a7be231d77ebf539",
+      "clayverse/memory.py": "3bb49c90cf5a8da5d86f08c064adbc83b3729118",
+      "clayverse/retrieval.py": "fd4ff3f938da66db8cc619c127290135d22f8ee1",
+      "clayverse/workspace.py": "80e38729aa37e60cfbde52d672c5667404bd2fc3",
+      "clayverse/graph.py": "e701ec4178568f7352f36b4f1cded00417cc8e13",
+      "clayverse/effects.py": "94f1beee84cf3972f476e40529eb1a12964ac37a",
+      "clayverse/engine.py": "173dff42b5a9e3f1a6d6bf60eb54dfaa63ef6ac1",
+      "clayverse/service.py": "5a5af99c244e8ec3696aef3e069034b673622324",
+      "tests/test_clayverse.py": "f9b3ddcd4d4f2c924cc7434beddbd7a8ed2af9ac",
+      "tests/test_unusual_experiment.py": "61210612314993fc2d7ca719ee58e071392f795e"
+    }
+  },
+  "provenance_negative_evidence": {
+    "finding": "the pre-existing receipts/source-sha256.txt does not match multiple unchanged committed Python/test files at base main",
+    "action": "regenerate source-sha256.txt from Git-blob-bound bytes before merge"
+  },
+  "unusual_experiment": {
+    "status": "ALREADY_CONSUMED_IN_SAME_TRIGGER_BASE_CANDIDATE",
+    "name": "cross-user crash/reopen ABA lease fencing",
+    "note": "No second unusual experiment was introduced; this cycle added a targeted regression falsifier."
+  },
+  "open_gates": [
+    "actual OCI image build on an authorized isolated builder",
+    "real Clerk JWT verification",
+    "browser terminal adapter",
+    "authenticated Claude Code CLI",
+    "selected EntityOS integration",
+    "VPS deployment readiness"
+  ],
+  "whole_system_pass": false
+}

@@ -451,6 +451,34 @@ def testlaeufe(manifest: dict) -> None:
                                 "hinweis": "waechst -- eine Zeile je Lauf, damit die Kurve sichtbar bleibt"})
 
 
+
+_QUELL_MUSTER = (
+    r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",     # Mailadressen
+    r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b",                  # IP-Adressen
+    r"\b(?:sk|gsk|hf)_[A-Za-z0-9]{16,}",                    # Schluessel
+)
+
+
+def _quelltext_pruefen(text: str) -> list[str]:
+    """Was in einer Quelldatei steht, das dort nicht hingehoert.
+
+    ⭐ MELDEN, NICHT SCHWAERZEN. Ein Codearchiv, das anders ist als der Code,
+    ist schlimmer als keines -- es sieht wiederverwendbar aus und baut nicht.
+    Der richtige Ort fuer die Reparatur ist die Quelldatei selbst.
+    Gefunden am 18.08.: zwei echte Mailadressen als Literale in profile.py,
+    waehrend derselbe Export sie aus PROFILE.md schwaerzte. Eine Schwaerzung,
+    die nur eine von zwei Auslieferungen kennt, ist ein Ritual.
+    """
+    import re as _re
+    treffer = []
+    for muster in _QUELL_MUSTER:
+        for m in _re.findall(muster, text):
+            if m.endswith((".py", ".md", ".json")) or m.startswith(("0.0.0.0", "127.0.0.1")):
+                continue
+            treffer.append(m)
+    return sorted(set(treffer))[:12]
+
+
 def quelltext(manifest: dict) -> None:
     """Aller ausfuehrbare Code rund um EntityOS -- versioniert, mit Pruefsummen."""
     import shutil

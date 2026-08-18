@@ -1,0 +1,21 @@
+{
+  "commit": "94218cedf",
+  "erzeugt": "2026-08-18T04:26:54Z",
+  "gruen": 480,
+  "hinweis": "Rote Tests werden NICHT durch Abschwaechen gruen gemacht. Wo ein Test auf etwas Echtes zeigt, bleibt er rot, bis die Sache behoben ist.",
+  "rot": 12,
+  "rote_tests": [
+    "tests/test_autonomy_activation_gate.py::test_exact_same_terminal_manager_is_activation_ready",
+    "tests/test_causal_credit.py::test_failed_effect_reenters_without_positive_credit",
+    "tests/test_causal_credit.py::test_successful_effect_gets_positive_credit",
+    "tests/test_entityos_artifact_authority.py::test_entityos_lock_binds_verified_substrate_candidate",
+    "tests/test_final_acceptance_probe.py::test_probe_can_require_verified_effect_through_effectgate",
+    "tests/test_inference_effect_route.py::test_inference_intent_reaches_effect_gate_without_direct_process",
+    "tests/test_inference_effect_route.py::test_unavailable_entityos_is_denied_and_causally_reentered",
+    "tests/test_inference_reingest_before_effect.py::test_model_proposal_is_in_unifieddb_before_entityos_can_run",
+    "tests/test_inference_reingest_before_effect.py::test_denied_effect_notice_reenters_after_original_model_proposal",
+    "tests/test_service_serial_server.py::test_service_runs_current_uvicorn_terminal_app_and_closes_db",
+    "tests/test_state_authority.py::test_schema2_hidden_raw_ledger_is_retired_on_open",
+    "tests/test_terminal_tmux_control_timeouts.py::test_policy_reapply_timeout_fails_closed"
+  ]
+}

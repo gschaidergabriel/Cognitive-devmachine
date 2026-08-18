@@ -110,16 +110,16 @@
     },
     {
       "bytes": 882,
-      "datei": "agentZero/karten/2026-08-18T041853Z.json",
-      "sha256": "8bf2f00f3f1f77c5",
+      "datei": "agentZero/karten/2026-08-18T042641Z.json",
+      "sha256": "abb07db22ac8bf9d",
       "zeilen": 6
     },
     {
-      "bytes": 153217,
+      "bytes": 153213,
       "datei": "agentZero/puls/puls-letzte500.jsonl",
-      "hinweis": "nur die letzten 500 von 4572 Zeilen -- Vollexport wuerde das Repo aufblaehen",
-      "quelle_zeilen_gesamt": 4572,
-      "sha256": "45f558756427c740",
+      "hinweis": "nur die letzten 500 von 4580 Zeilen -- Vollexport wuerde das Repo aufblaehen",
+      "quelle_zeilen_gesamt": 4580,
+      "sha256": "3f00ad7697592875",
       "zeilen": 500
     },
     {
@@ -171,19 +171,47 @@
       "eintraege": 466
     },
     {
+      "bytes": 326472,
+      "datei": "agentZero/bauverlauf/bauverlauf.jsonl",
+      "sha256": "06298d35495db5ab",
+      "zeilen": 700
+    },
+    {
+      "commits": 700,
+      "datei": "agentZero/bauverlauf/BAUVERLAUF.md",
+      "mit_begruendung": 198
+    },
+    {
+      "bytes": 1479,
+      "datei": "agentZero/tests/letzter-lauf.json",
+      "sha256": "d02d3dbc763763c6",
+      "zeilen": 6
+    },
+    {
+      "datei": "agentZero/tests/verlauf.jsonl",
+      "hinweis": "waechst -- eine Zeile je Lauf, damit die Kurve sichtbar bleibt"
+    },
+    {
+      "datei": "agentZero/ZIELE.md",
+      "erfuellt": 22,
+      "offen": 6,
+      "zeilen": 29,
+      "zurueckgestellt": 1
+    },
+    {
       "datei": "agentZero/analysen/INDEX.md",
       "eintraege": 0
     }
   ],
-  "dauer_sekunden": 1.62,
+  "dauer_sekunden": 28.29,
   "entity_generation": 31,
-  "erzeugt": "2026-08-18T04:18:53Z",
-  "geschwaerzte_fundstellen": 0,
+  "erzeugt": "2026-08-18T04:26:41Z",
+  "geschwaerzte_fundstellen": 1,
   "hinweis": "Automatisch erzeugt von /opt/agentzero-export/agentzero_export.py auf frank-api. Nicht von Hand bearbeiten -- jeder Lauf ueberschreibt. Ausnahme: karten/ waechst, jede Aufnahme bleibt stehen, weil der Zeitstrahl genau daraus besteht.",
   "quelle": "/var/lib/clay/wiki.db",
   "zaehler": {
     "_tabellen": 109,
-    "anreicherung": 12485,
+    "anreicherung": 12490,
     "artikel": 14284,
     "causal_episodes": 5,
     "checkpoints": 39,
@@ -193,12 +221,18 @@
     "fundort": 458937,
     "graph_kante": 14235,
     "graph_knoten": 11640,
-    "kante": 95284,
+    "kante": 95378,
     "retrieval_entrypoint_policy": 0,
     "retrieval_episodes": 5,
     "retrieval_feedback": 0,
     "turns": 10,
     "wm_lesart": 22567,
     "workspace_episodes": 5
+  },
+  "ziele": {
+    "erfuellt": 22,
+    "offen": 6,
+    "zeilen": 29,
+    "zurueckgestellt": 1
   }
 }

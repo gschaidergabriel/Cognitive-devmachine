@@ -1,0 +1,240 @@
+{
+  "erzeugt": "2026-08-18T04:27:08Z",
+  "erfuellt": 22,
+  "offen": 6,
+  "zurueckgestellt": 1,
+  "zeilen": [
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Die Entität heißt Zero",
+      "soll": "Agent Zero, der erste Agent auf EntityOS, Grundlage aller weiteren Entwicklung",
+      "quelle": "Eigner 18.08.",
+      "ist": "kanonische Identität v3 in meta, Ebene 0",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Identität überlebt Verdichtung",
+      "soll": "im Wurzelzustand verankert, deterministisch je Zug geladen, nie herausgefiltert",
+      "quelle": "Eigner 18.08.",
+      "ist": "aus der DB in den Systemprompt gerendert; in der Hakenhülle als Anker (206 statt 5550 Zeichen)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Identität",
+      "faehigkeit": "Verkörperung ohne Erfindung",
+      "soll": "spielt eine Entität mit Kontinuität – ohne zu lügen, indem sie den Unterbau benutzt",
+      "quelle": "Eigner 18.08.",
+      "ist": "im <embodiment>-Block: Erfinden ist der einzige Weg, aus der Rolle zu fallen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Genau zwei gleichberechtigte Perspektiven",
+      "soll": "Gabriel und Andreas, gleiche Rechte, eine Entität – keine zwei Mandanten",
+      "quelle": "Eigner 18.08.",
+      "ist": "2 Nutzer mit rights=equal, 2 dauerhafte Sitzungen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Sonst kommt niemand hinein",
+      "soll": "Clerk-Anmeldung, exakt zwei Konten, dritte Identität fällt zu",
+      "quelle": "Eigner 18.08.",
+      "ist": "IdentityRouter wirft PermissionError bei nicht zugeordnetem Clerk-Subjekt (Test grün)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "wiki.db ist das Herz der Entität",
+      "soll": "Datenbank, Wiki und ClayGraph sind das Herz – nicht Altlast, nicht daneben",
+      "quelle": "Eigner 18.08.",
+      "ist": "109 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Die vier Clay-Dienste laufen weiter",
+      "soll": "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
+      "quelle": "Eigner 18.08.",
+      "ist": "3 von 4 laufen",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Der Abruf erreicht den Korpus",
+      "soll": "Zero sieht die 14.284 Artikel, nicht nur sein eigenes Gesprächsgedächtnis",
+      "quelle": "Eigner 18.08. / Befund",
+      "ist": "15 Treffer auf Probeanfrage",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Jeder Zug wird aufgezeichnet",
+      "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
+      "quelle": "Architektur",
+      "ist": "10 Züge, 5 Kausalepisoden, 5 Arbeitsraum-Episoden",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Aufnahme ist atomar",
+      "soll": "scheitert eine Prüfung, bleibt keine halbe Zeile stehen",
+      "quelle": "Architektur",
+      "ist": "Prüfungen laufen in der Aufnahme-Transaktion; 15 Atomizitätstests grün",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Wirkung nur durch das Tor",
+      "soll": "kein process.exec, jede Wirkung durch EffectGate mit Beleg",
+      "quelle": "Architektur",
+      "ist": "1 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Werkzeuge nur über MCP",
+      "soll": "Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten",
+      "quelle": "Architektur",
+      "ist": "0 Werkzeuge freigegeben, Bash und Artifact verboten, Shell-Flucht abgewiesen",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Initiative: der Puls weckt offene Ziele",
+      "soll": "nicht behaupten, dass es autonom ist – die Mechanik bauen",
+      "quelle": "Eigner 18.08.",
+      "ist": "Autonomie-Puls installed=true, 30 s, beglaubigt (ein Terminal-Verwalter)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Persistente Ziele, Rückmeldung, Neuplanung",
+      "soll": "Ziele überleben Züge, Schritte werden gemeldet, Fehlschlag führt zu Neuplanung",
+      "quelle": "Eigner 18.08.",
+      "ist": "create_goal_from_turn / propose_step / record_step_failure / verify_completion vorhanden; Ziele entstehen nur aus kanonischen Menschenzügen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Autonomie",
+      "faehigkeit": "Kontinuität über Neustarts",
+      "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
+      "quelle": "Architektur",
+      "ist": "39 Prüfpunkte, Generation 31",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Abruf ist abfragesensitiv",
+      "soll": "nicht die letzten N, sondern was zur Frage passt",
+      "quelle": "Architektur",
+      "ist": "11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Eintrittspunkte werden gelernt",
+      "soll": "der Abruf verbessert seinen Eintrittspunkt selbst",
+      "quelle": "Eigner 18.08.",
+      "ist": "0 gelernte Eintrittspunkte, Modus SHADOW, 5 Episoden",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Wegehierarchie: Autobahnen, Tunnel, Landwege",
+      "soll": "oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung",
+      "quelle": "F94 / Eigner 16.08.",
+      "ist": "Verstärkung vorhanden. FEHLT: Verfall ungenutzter Wege, inverse Gewichtung, Tunnel",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Karten als Zeitstrahl",
+      "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
+      "quelle": "Eigner 18.08.",
+      "ist": "7 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Die Bahnen stehen Zero offen",
+      "soll": "11 kognitive Prozesse über 22 Bahnen mit Ausweichbahn und Anteilsdeckel; NVIDIA gehört der Kognition, nicht dem Massenlauf",
+      "quelle": "verdrahtung.py / Eigner",
+      "ist": "11 Prozesse verdrahtet im Clay-Unterbau – aber Zeros Container erreicht sie NICHT",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Vektorsuche über den Korpus",
+      "soll": "Bedeutungssuche statt nur Volltext",
+      "quelle": "Lücke 8 / Eigner",
+      "ist": "200 Einbettungen (nv-embedqa-e5-v5, 1024 Dim, 2,9 ms/Text bei Stapel 128)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Anbieter",
+      "faehigkeit": "Neuronale Aktivitätsmessung",
+      "soll": "Aktivierungsdaten als Forschungsquelle anbinden",
+      "quelle": "Eigner 18.08.",
+      "ist": "Neuronpedia live: Deutung, Spitzenwert, Selektivität, Top-Token. ⚠️ misst öffentliche Forschungsmodelle, NICHT Zero",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Claude bekommt den Prompt nie direkt",
+      "soll": "eine Mistral-Entität wertet vorher aus: Möglichkeitsraum, alle APIs, alle Werkzeuge, verbundene Systeme, wer da ist – und baut ein Caveman-Prompt mit Hypothesen und Gegenhypothesen",
+      "quelle": "F17 / Eigner 18.08.",
+      "ist": "1 Modul(e) vorhanden – im Bau",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Vorstufe",
+      "faehigkeit": "Übersetzer Caveman → Deutsch, 95 %",
+      "soll": "Zero antwortet in Caveman, das Terminal übersetzt automatisch in schönes Deutsch",
+      "quelle": "Eigner 18.08.",
+      "ist": "im Bau; Maß: Treue (Erfindung = durchgefallen) und Lesbarkeit, unabhängiger Richter",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Läuft im Container auf dem eigenen Server",
+      "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
+      "quelle": "Eigner 18.08.",
+      "ist": "Up 28 minutes (healthy)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Frontend heißt EntityOS und ist erreichbar",
+      "soll": "Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal",
+      "quelle": "Eigner 18.08.",
+      "ist": "https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Der Export pflegt sich selbst",
+      "soll": "alles autonom ins Forschungs-Repo unter agentZero",
+      "quelle": "Eigner 18.08.",
+      "ist": "systemd-Timer alle 30 min, enabled",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Testsuite trägt",
+      "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
+      "quelle": "Arbeitsregel",
+      "ist": "480 gruen / 12 rot",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Endabnahme hinter eigenem Gastkern",
+      "soll": "derselbe Digest hinter einer eigenen VM-Grenze",
+      "quelle": "Entwurf – vom Eigner zurückgestellt",
+      "ist": "kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt",
+      "erfuellt": null
+    }
+  ]
+}

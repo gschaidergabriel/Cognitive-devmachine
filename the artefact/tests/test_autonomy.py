@@ -134,6 +134,7 @@ def test_verified_effect_receipt_is_required_and_exact_autonomous_step_bound(tmp
         controller,
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="autonomy-test",
     )
     step = controller.propose_step(
         goal["goal_id"],
@@ -190,6 +191,7 @@ def test_same_capability_wrong_target_receipt_cannot_be_rebound(tmp_path):
         controller,
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="expected-target",
     )
     step = controller.propose_step(
         goal["goal_id"],
@@ -226,6 +228,7 @@ def test_same_target_wrong_argv_receipt_cannot_be_rebound(tmp_path):
         controller,
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="entityos-target",
     )
     step = controller.propose_step(
         goal["goal_id"],
@@ -263,6 +266,7 @@ def test_identical_intent_from_different_autonomous_episode_cannot_be_rebound(tm
         objective="Expected goal",
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="same-target",
     )
     expected_step = controller.propose_step(
         expected["goal_id"],
@@ -336,6 +340,7 @@ def test_wrong_effect_capability_cannot_satisfy_completion(tmp_path):
         controller,
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="x",
     )
     step = controller.propose_step(
         goal["goal_id"],

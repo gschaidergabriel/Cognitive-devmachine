@@ -62,6 +62,13 @@
    - keine Promotion aus widerspruechlichen Testzaehlern
    - naechstes hoechstwertiges Instrument: atomarer `TEST_RECEIPT_LEDGER/v1` mit Run-ID, Source-SHA, Suite-/Result-Digest und Fail-Liste
 
+8. `analysen/2026-08-18T074200Z_CLAUDE_TOKEN_ERSPARNIS.md`
+   - Kostenlinse explizit auf Claude-Code-Tokens eingeschraenkt; Mistral unter der Eignerannahme kostenlos
+   - Quellcode bestaetigt: voller World-/Recent-Kontext geht an Mistral, nur der verdichtete `caveman_prompt` an `claude -p`; Toolauswahl separat
+   - Headless Claude deaktiviert Prompt-History, Auto-Memory, CLAUDE.md-Autoloading, Background Tasks und Session-Persistenz
+   - aktuelle Planungs-Schaetzung: normale Turns ca. 50-70 % weniger Claude-Tokens, schwere Build-/Toolturns ca. 35-55 %; Arbeitswert ~60 % bzw. ~2,5x Arbeit je Claude-Tokenbudget
+   - Gesamtquote bleibt INFERENCE bis `CLAUDE_TOKEN_LEDGER` + Direct-vs-Pipeline-A/B vorliegt; `outsourced`-Feld allein wird nicht als realisierte Ersparnis gezaehlt
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;

@@ -163,13 +163,18 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
 
 
 def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: ClerkTokenVerifier,
-                        state_root: str | Path, publishable_key: str, frontend_api_url: str):
+                        state_root: str | Path, publishable_key: str, frontend_api_url: str,
+                        terminals: TerminalSessionManager | None = None):
     from fastapi import FastAPI
     from fastapi.responses import HTMLResponse, JSONResponse
     from fastapi.staticfiles import StaticFiles
 
     identity = IdentityRouter(db, clerk_map)
-    terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
+    # One arbiter, not two. The autonomy pulse attestation requires the browser
+            # attach path and the pulse to hold the SAME TerminalSessionManager, so
+            # autonomy can never drive a terminal the human side does not see.
+            # Creating a second one here silently made that attestation impossible.
+    terminals = terminals or TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
     app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     frontend_api_url = frontend_api_url.rstrip("/")

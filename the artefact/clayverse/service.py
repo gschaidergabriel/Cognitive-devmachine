@@ -13,6 +13,8 @@ from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
+from .autonomy_activation import AutonomyActivationError, install_attested_autonomy_pulse
+from .autonomy_pulse import AutonomyPulse
 from .recovery import recover_incomplete_episodes
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
@@ -147,52 +149,6 @@ def _acceptance_bool(name: str, default: str = "0") -> bool:
     return raw == "1"
 
 
-def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
-    """Run the internal canonical Mistral turn used by the final sandbox controller.
-
-    This mode intentionally receives no Clerk auth credit. It proves the cognition /
-    re-ingest / EffectGate causal spine inside the exact product image; the final
-    browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
-
-    `final_acceptance_probe` (and the `adapters` module it needs) is a retired
-    alternate-runtime diagnostic that the image build deliberately excludes from
-    the live surface (see .dockerignore). Import it lazily, only when this mode is
-    actually invoked, so a normal `python -m clayverse.service` boot of the shipped
-    image never fails on a module that was never meant to be in it.
-    """
-    from .final_acceptance_probe import run_mistral_acceptance_probe
-
-    recovery = recover_incomplete_episodes(db)
-    ClayGraphProjection(db).rebuild()
-    clerk_map = _clerk_map()
-    clerk_subject = os.environ.get("CLAYVERSE_ACCEPTANCE_CLERK_SUBJECT", "")
-    prompt = os.environ.get("CLAYVERSE_ACCEPTANCE_PROMPT", "")
-    require_effect = _acceptance_bool("CLAYVERSE_ACCEPTANCE_REQUIRE_EFFECT")
-    entityos_bridge, entityos_status = _entityos_config()
-
-    payload = run_mistral_acceptance_probe(
-        db,
-        clerk_map,
-        clerk_subject,
-        prompt,
-        entityos_bridge=entityos_bridge,
-        require_effect=require_effect,
-    )
-    checkpoint_id, state_hash = db.checkpoint("mistral-final-sandbox-probe")
-    payload.update(
-        {
-            "checkpoint": checkpoint_id,
-            "state_hash": state_hash,
-            "recovery": recovery,
-            "entityos": {
-                "verified": bool(entityos_status.get("verified")),
-                "bound": bool(entityos_status.get("bound")),
-                "sha256": entityos_status.get("sha256"),
-            },
-        }
-    )
-    return payload
-
 
 STATIC_RUNTIME_CONTRACT = "/opt/clayverse/runtime/CLAUDE.md"
 
@@ -239,14 +195,6 @@ def main():
         db.close()
         return 0
 
-    if "--mistral-once" in sys.argv:
-        try:
-            payload = _run_mistral_once(db)
-            print(json.dumps(payload, ensure_ascii=False, sort_keys=True), flush=True)
-        finally:
-            db.close()
-        return 0
-
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()
     cid, digest = db.checkpoint("boot")
@@ -287,7 +235,37 @@ def main():
         state_root=state_root,
         publishable_key=publishable_key,
         frontend_api_url=frontend_api,
+        terminals=terminals,
     )
+
+    # ── Initiative ────────────────────────────────────────────────────────
+    # Persistent goals, intermediate steps, feedback, replanning and continuity
+    # were all already built. Initiative was the one property with no wire:
+    # nothing ever woke next_runnable(). This is that wire.
+    #
+    # It is inert until a goal exists, and a durable goal can only originate
+    # from a canonical human turn -- so switching it on does not by itself make
+    # anything happen. It also may not preempt a live human turn; the pulse
+    # checks the terminal arbiter for that, which is why it must share the very
+    # same TerminalSessionManager the browser attaches through.
+    autonomy_pulse_status = {"installed": False, "reason": "disabled"}
+    if os.environ.get("CLAYVERSE_AUTONOMY_PULSE", "1") == "1":
+        try:
+            interval = float(os.environ.get("CLAYVERSE_AUTONOMY_PULSE_SECONDS", "30"))
+            pulse = AutonomyPulse(state_root, terminals, interval_seconds=interval)
+            install_attested_autonomy_pulse(app, web_terminals=terminals, pulse=pulse)
+            attestation = app.state.autonomy_activation
+            autonomy_pulse_status = {
+                "installed": True,
+                "interval_seconds": interval,
+                "shared_arbiter": attestation.pulse_uses_web_terminal_manager,
+                "shared_activity_registry": attestation.shared_activity_registry,
+                "shared_state_root": attestation.shared_state_root,
+            }
+        except AutonomyActivationError as exc:
+            # Fail loud, not silent. An autonomy pulse that quietly did not start
+            # is worse than none: the system would look autonomous and never act.
+            autonomy_pulse_status = {"installed": False, "reason": f"attestation_denied: {exc}"}
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "3000"))
     print(json.dumps({
@@ -306,6 +284,7 @@ def main():
         "recovery": recovery,
         "entityos": entityos_status,
         "consciousness_daemon": False,
+        "autonomy_pulse": autonomy_pulse_status,
         "port": port,
     }), flush=True)
 

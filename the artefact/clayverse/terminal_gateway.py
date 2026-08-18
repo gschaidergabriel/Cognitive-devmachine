@@ -640,6 +640,12 @@ window.addEventListener('load', async () => {{
                         await send_json({"type": "error", "message": "no such session slot"})
                         continue
                     platz = control["platz"]
+                    # ⚠️ Die Kennung MUSS mit dem Platz neu aufgeloest werden.
+                    # Vorher wurde nur `platz` gesetzt und die alte session_id
+                    # weitergemeldet: der Verlauf lud dann die Zuege der
+                    # FALSCHEN Sitzung -- mit Status 200, also unauffaellig.
+                    # Eine falsche Antwort sieht aus wie eine richtige.
+                    user_id, session_id = identity.resolve(clerk_subject, platz=platz)
                     _require_auth_lease_live(auth_expires_at)
                     await send_json({
                         "type": "ready", "user_id": user_id, "session_id": session_id,

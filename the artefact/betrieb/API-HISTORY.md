@@ -13,9 +13,14 @@ keinen Weg zurueck ins Fenster. Ein Speicher, den niemand liest.
 
 ## Aufruf
 
-    GET /api/history?session=<session_id>&limit=50[&before=<ordinal>]
+    GET /api/history?session_id=<session_id>&limit=50[&before=<ordinal>]
 
-    session   Pflicht. `session:<mensch>` oder `session:<mensch>:2`.
+    session_id  Pflicht. `session:<mensch>` oder `session:<mensch>:2`.
+                ⚠️ Der Parameter heisst `session_id`, NICHT `session`. In einer
+                frueheren Fassung dieser Anleitung stand `session` -- und das
+                Frontend, das danach gebaut wurde, bekam 403, weil beim Server
+                eine leere Kennung ankam. Eine Anleitung, die von der Umsetzung
+                abweicht, erzeugt Fehler in allem, was sich auf sie stuetzt.
     limit     Vorgabe 50, Hoechstwert 200.
     before    Blaettert aelter: der `ordinal` der aeltesten schon geladenen Zeile.
 

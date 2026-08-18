@@ -378,7 +378,10 @@ window.addEventListener('load', async () => {
     let token;
     try { token=await Clerk.session.getToken(); }
     catch(e){ zeigeLadefehler('Anmeldung abgelaufen'); return; }
-    const p=new URLSearchParams({session:sessionId, limit:'50'});
+    // Der Server liest `session_id`, nicht `session`. Mit dem falschen Namen
+    // kommt "" an, die Sitzungspruefung schlaegt fehl und die Antwort ist 403 --
+    // die Sperre tut dann genau das Richtige aus dem falschen Grund.
+    const p=new URLSearchParams({session_id:sessionId, limit:'50'});
     if(aelter && aeltesterOrdinal!=null) p.set('before', String(aeltesterOrdinal));
     let d;
     try {

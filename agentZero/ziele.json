@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-18T15:41:53Z",
-  "erfuellt": 36,
-  "offen": 7,
+  "erzeugt": "2026-08-18T16:12:18Z",
+  "erfuellt": 37,
+  "offen": 6,
   "zurueckgestellt": 1,
   "zeilen": [
     {
@@ -49,7 +49,7 @@
       "faehigkeit": "wiki.db ist das Herz der Entität",
       "soll": "Datenbank, Wiki und ClayGraph sind das Herz – nicht Altlast, nicht daneben",
       "quelle": "Eigner 18.08.",
-      "ist": "130 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
+      "ist": "131 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
       "erfuellt": true
     },
     {
@@ -57,15 +57,15 @@
       "faehigkeit": "Die vier Clay-Dienste laufen weiter",
       "soll": "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
       "quelle": "Eigner 18.08.",
-      "ist": "3 von 4 laufen",
-      "erfuellt": false
+      "ist": "4 von 4 Pflichtdiensten: kern läuft, puls läuft, wikiarbeit läuft, verdichtung getaktet; keine weiteren",
+      "erfuellt": true
     },
     {
       "bereich": "Gedächtnis",
       "faehigkeit": "Der Abruf erreicht den Korpus",
       "soll": "Zero sieht die 14.284 Artikel, nicht nur sein eigenes Gesprächsgedächtnis",
       "quelle": "Eigner 18.08. / Befund",
-      "ist": "15 Treffer auf Probeanfrage",
+      "ist": "50 Treffer auf Probeanfrage",
       "erfuellt": true
     },
     {
@@ -97,7 +97,7 @@
       "faehigkeit": "Werkzeuge nur über MCP",
       "soll": "Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten",
       "quelle": "Architektur",
-      "ist": "27 Werkzeuge in der Erlaubnisliste, verboten: Bash, Artifact; Shell-Flucht im Test abgewiesen",
+      "ist": "30 Werkzeuge in der Erlaubnisliste, verboten: Bash, Artifact; Shell-Flucht im Test abgewiesen",
       "erfuellt": true
     },
     {
@@ -129,7 +129,7 @@
       "faehigkeit": "Kontinuität über Neustarts",
       "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "quelle": "Architektur",
-      "ist": "143 Prüfpunkte, Generation 100",
+      "ist": "151 Prüfpunkte, Generation 104",
       "erfuellt": true
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "73 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "75 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -209,7 +209,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 3 minutes (healthy)",
+      "ist": "Up About a minute (healthy)",
       "erfuellt": true
     },
     {
@@ -233,8 +233,8 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "569 gruen / 10 rot",
-      "erfuellt": true
+      "ist": "nicht gemessen",
+      "erfuellt": false
     },
     {
       "bereich": "Betrieb",
@@ -257,7 +257,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "16849 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "17621 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -281,8 +281,8 @@
       "faehigkeit": "Alles Gebaute landet im Wiki",
       "soll": "jeder Bauschritt wird Wiki-Artikel, mit Metadaten, nach dem üblichen Protokoll",
       "quelle": "Eigner 18.08.",
-      "ist": "15 Bau- und Wissensartikel im Korpus, volltextsuchbar. ⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — in der Datenbank und trotzdem für niemanden da",
-      "erfuellt": false
+      "ist": "782 Bau- und Wissensartikel im Korpus, volltextsuchbar. ⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — in der Datenbank und trotzdem für niemanden da",
+      "erfuellt": true
     },
     {
       "bereich": "Betrieb",
@@ -313,7 +313,7 @@
       "faehigkeit": "Arbeitspakete statt Alleingang",
       "soll": "was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt",
       "quelle": "Eigner 18.08.",
-      "ist": "6 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis'",
+      "ist": "7 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis'",
       "erfuellt": true
     },
     {

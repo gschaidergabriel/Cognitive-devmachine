@@ -122,11 +122,73 @@ def zeilen(c) -> list[dict]:
       "Eigner 18.08.",
       f"{tabellen} Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
       tabellen >= 100)
+    # ── Die vier Clay-Dienste: benannt statt gezaehlt ──────────────────────
+    # Frueher zaehlte diese Zeile nur `systemctl list-units 'clayverse-*'` und
+    # verglich das Ergebnis mit der Zahl 4. Eine Zahl ohne Namen ist hier aus
+    # drei Gruenden das falsche Messgeraet:
+    #
+    #   1. Eine Zahl sagt nicht, WELCHER Dienst fehlt. Steht da "3 von 4",
+    #      muss sich ein Mensch erst per Hand einloggen, um herauszufinden, ob
+    #      der Kern oder die Wikiarbeit gestorben ist. Ein Messwert, der zur
+    #      Nachforschung zwingt, hat nichts gemessen.
+    #   2. Das Muster 'clayverse-*' trifft auch die TIMER. Der Zeitgeber
+    #      clayverse-verdichtung.timer laeuft dauerhaft mit und wurde
+    #      mitgezaehlt -- daher die Meldung "5 von 4". Der gefaehrlichere Fall
+    #      ist der umgekehrte: waere der Kern tot, meldete die Zeile trotzdem
+    #      "4 von 4" = gruen, weil der Timer die Luecke auffuellt. Ein Zaehler
+    #      kann Falsches gegen Fehlendes aufrechnen -- eine Namensliste nicht.
+    #   3. Mehr laufende Dienste als erwartet ist ueberhaupt kein Fehler.
+    #      Erfuellt heisst: die vier Genannten leben. Alles darueber wird
+    #      aufgezaehlt, damit es niemanden ueberrascht, aber nicht bestraft.
+    #
+    # Ausserdem haben die vier NICHT dieselbe Betriebsform: kern, puls und
+    # wikiarbeit sind Dauerlaeufer und muessen laufen. verdichtung ist ein
+    # Taktdienst -- der Timer weckt ihn alle 10 min, er prueft die Schwelle
+    # und legt sich wieder hin. "dead" ist bei ihm der NORMALZUSTAND; sein
+    # Lebenszeichen ist der stehende Zeitgeber. Wer ihn auf "running" prueft,
+    # misst nur, ob er ihn zufaellig im Arbeitsfenster erwischt hat.
+    #
+    # Quelle der Namen (nicht geraten): die Soll-Zeile des Eigners vom 18.08.
+    # und agentZero/code/produkt/mistral_prestage/eval_set.json ("keep them,
+    # not negotiable").
+    CLAY_DAUERLAEUFER = ["kern", "puls", "wikiarbeit"]   # muessen aktiv sein
+    CLAY_TAKTDIENSTE = ["verdichtung"]                   # leben ueber ihren .timer
+    CLAY_PFLICHT = CLAY_DAUERLAEUFER + CLAY_TAKTDIENSTE
+
+    def _einheit_aktiv(einheit: str) -> bool:
+        return _sh(f"systemctl is-active {einheit} 2>/dev/null") in ("active", "activating")
+
+    def _clay_dienste() -> tuple[str, bool]:
+        befund, tot = [], []
+        for name in CLAY_DAUERLAEUFER:
+            lebt = _einheit_aktiv(f"clayverse-{name}.service")
+            befund.append(f"{name} {'läuft' if lebt else 'TOT'}")
+            if not lebt:
+                tot.append(name)
+        for name in CLAY_TAKTDIENSTE:
+            # Taktdienst: der Zeitgeber ist das Lebenszeichen, nicht der Lauf.
+            lebt = _einheit_aktiv(f"clayverse-{name}.timer")
+            befund.append(f"{name} {'getaktet' if lebt else 'TOT (Zeitgeber steht still)'}")
+            if not lebt:
+                tot.append(name)
+        # Laufende clayverse-Dienste ausserhalb der Pflicht: nennen, nicht werten.
+        roh = _sh("systemctl list-units 'clayverse-*.service' --state=running "
+                  "--no-legend --no-pager | awk '{print $1}'")
+        zusatz = sorted({e.removesuffix(".service").removeprefix("clayverse-")
+                         for e in roh.split() if e.endswith(".service")} - set(CLAY_PFLICHT))
+        text = (f"{len(CLAY_PFLICHT) - len(tot)} von {len(CLAY_PFLICHT)} Pflichtdiensten: "
+                + ", ".join(befund))
+        if tot:
+            text = "TOT: " + ", ".join(tot) + " — " + text
+        text += ("; zusätzlich läuft: " + ", ".join(zusatz)) if zusatz else "; keine weiteren"
+        return text, not tot
+
+    _clay_text, _clay_ok = _clay_dienste()
     z("Gedächtnis", "Die vier Clay-Dienste laufen weiter",
       "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
       "Eigner 18.08.",
-      (_sh("systemctl list-units 'clayverse-*' --state=running --no-legend --no-pager | wc -l") or "0") + " von 4 laufen",
-      (_sh("systemctl list-units 'clayverse-*' --state=running --no-legend --no-pager | wc -l") or "0") == "4")
+      _clay_text,
+      _clay_ok)
     z("Gedächtnis", "Der Abruf erreicht den Korpus",
       "Zero sieht die 14.284 Artikel, nicht nur sein eigenes Gesprächsgedächtnis",
       "Eigner 18.08. / Befund",

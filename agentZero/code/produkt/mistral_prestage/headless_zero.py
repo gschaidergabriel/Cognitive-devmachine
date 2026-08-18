@@ -57,6 +57,13 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__werkbank_aendern",
     "mcp__clayverse__werkbank_stand",
     "mcp__clayverse__werkbank_veroeffentlichen",
+    # Zero haelt selbst Platz auf dem Wirt -- Auftrag des Eigners 18.08.
+    "mcp__clayverse__speicher_lage",
+    "mcp__clayverse__speicher_aufraeumen",
+    # Ohne dieses Werkzeug gibt es keinen Weg vom Urteil eines Menschen zum
+    # Lernen des Abrufs -- die Belohnungsfunktion haette dann nur eine Quelle
+    # (verifizierte Wirkungen), und die springt fast nie an.
+    "mcp__clayverse__abruf_rueckmeldung",
 )
 
 MAX_PROMPT_CHARS = 20_000

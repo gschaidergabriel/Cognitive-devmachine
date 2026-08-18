@@ -483,6 +483,31 @@ class ClayVerseEffectBridge:
                         "aus dem Titel zu schliessen, was drinstehen koennte."),
         }
 
+    # ── Rueckmeldung auf den Abruf: das Urteil erreicht das Lernen ────────
+    #
+    # ⭐ Ohne diese Tuer lernt der Abruf ausschliesslich aus verifizierten
+    # Wirkungen. Ein Gespraech ohne Wirkung -- also fast jedes -- hinterlaesst
+    # dann nichts, egal wie deutlich gesagt wird, dass die hervorgeholte
+    # Erinnerung daneben lag. Gemessen: 0 Rueckmeldungen, 0 gelernte Wegpunkte.
+
+    def abruf_rueckmeldung(self, bewertung: str, zuege: int = 1) -> dict:
+        """Bewertet die letzten Abrufe DIESER Sitzung.
+
+        ⚠️ Die Kennung des Menschen kommt aus ``self.user_id`` (geprueft ueber
+        Clerk), nie aus einem Argument. Ein Argument koennte ein Modell setzen --
+        damit waere fremdes Lernen aus einem Satz Text heraus ausloesbar.
+        """
+        from .microclay_retrieval import MicroClayRetrieval
+        try:
+            return MicroClayRetrieval(self.db).menschliche_rueckmeldung(
+                session_id=self.session_id,
+                user_id=self.user_id,
+                bewertung=str(bewertung).strip().lower(),
+                zuege=int(zuege),
+            )
+        except ValueError as e:
+            return {"abgewiesen": str(e)}
+
     # ── Werkbank: lesen, suchen, aendern, veroeffentlichen ────────────────
     #
     # ⭐ Handlungsfaehig OHNE Schale. Nicht Bash geben, sondern genau die
@@ -508,6 +533,16 @@ class ClayVerseEffectBridge:
     def werkbank_aendern(self, pfad: str, alt: str, neu: str) -> dict:
         from . import werkbank as _w
         try: return _w.schreiben(pfad, alt, neu)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_lage(self) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_lage()
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_aufraeumen(self, nur_zeigen: bool = True) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_aufraeumen(nur_zeigen)
         except Exception as e: return {"abgewiesen": str(e)}
 
     def werkbank_stand(self, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
@@ -692,13 +727,23 @@ def main() -> None:
 
     @mcp.tool(annotations=udb_ro)
     def werkbank_suchen(muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> dict:
-        """Regulaerer Ausdruck ueber alle Dateien, wie grep -rn. Findet ALLE Fundstellen. ⚠️ Nutze das, BEVOR du etwas aenderst: wer nur die erste Stelle sieht, haelt die Sache fuer erledigt und laesst sie anderswo stehen."""
+        """Regulaerer Ausdruck ueber alle Dateien, wie grep -rn. `anzahl_gesamt` ist IMMER vollstaendig, auch wenn nur die ersten 60 Zeilen aufgefuehrt sind -- `je_datei` nennt dann jede betroffene Datei mit ihrer Zahl; fuer die Einzelzeilen einer Datei setze `pfad` auf die Datei. ⚠️ Nutze das, BEVOR du etwas aenderst: wer nur die erste Stelle sieht, haelt die Sache fuer erledigt und laesst sie anderswo stehen."""
         return bridge.werkbank_suchen(muster, pfad, nur)
 
     @mcp.tool(annotations=udb_write)
     def werkbank_aendern(pfad: str, alt: str, neu: str) -> dict:
         """Ersetzt EINE eindeutige Stelle in einer Datei. `alt` muss genau einmal vorkommen -- kommt es mehrfach vor, wird abgewiesen statt geraten. Nur in der Arbeitskopie, nie in der ausgelieferten Fassung."""
         return bridge.werkbank_aendern(pfad, alt, neu)
+
+    @mcp.tool(annotations=udb_ro)
+    def speicher_lage() -> dict:
+        """Wie voll ist die Platte des Wirts, wieviel waere wegwerfbar. ⚠️ Sieh hier nach, BEVOR du etwas Grosses kopierst -- die haeufigste Ursache einer vollen Platte auf diesem Wirt sind liegengebliebene Kopien der 3,8-GB-Datenbank."""
+        return bridge.speicher_lage()
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_aufraeumen(nur_zeigen: bool = True) -> dict:
+        """Wegwerfkopien und Bau-Zwischenlager entfernen lassen. Vorgabe ist ZEIGEN -- sieh erst, was verschwaende, dann setze nur_zeigen=false. ⚠️ Du bestimmst NICHT, was Muell ist: Muster, Mindestalter und die namentliche Liste des Unantastbaren (wiki.db, unifieddb, die Repos, die ausgelieferten Seiten) stehen auf dem Wirt und sind von hier nicht zu beeinflussen."""
+        return bridge.speicher_aufraeumen(nur_zeigen)
 
     @mcp.tool(annotations=udb_ro)
     def werkbank_stand(repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
@@ -709,6 +754,23 @@ def main() -> None:
     def werkbank_veroeffentlichen(nachricht: str, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
         """Committen und pushen -- der EINZIGE Weg nach draussen. ⚠️ Bei SeiMensch geht ein Push auf main SOFORT oeffentlich. Die Nachricht muss sagen WARUM, nicht nur WAS. Pruefe danach die Seite, statt Erfolg zu behaupten."""
         return bridge.werkbank_veroeffentlichen(nachricht, repo)
+
+    @mcp.tool(annotations=udb_write)
+    def abruf_rueckmeldung(bewertung: str, zuege: int = 1) -> dict:
+        """Sag dem Abruf, ob die zuletzt hervorgeholten Erinnerungen getaugt haben.
+
+        bewertung: `geholfen` oder `daneben`.
+        zuege: wie viele der letzten Abrufe gemeint sind (1-10, Vorgabe 1).
+
+        Wirkt NUR auf die Wegpunkt-Prioren -- kein Gedaechtnisinhalt, keine
+        Wahrheit, keine Befugnis wird dadurch geaendert. Wer bewertet, steht
+        fest (angemeldete Sitzung); fremde Abrufe sind nicht erreichbar.
+
+        ⚠️ Benutze das, wenn ein Mensch dir sagt, die Erinnerung sei falsch oder
+        hilfreich gewesen. Ohne diese Rueckmeldung lernt der Abruf nur aus
+        verifizierten Wirkungen -- also fast nie.
+        """
+        return bridge.abruf_rueckmeldung(bewertung, zuege)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

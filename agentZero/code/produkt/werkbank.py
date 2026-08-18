@@ -69,6 +69,19 @@ def _pruefe(pfad: str, *, schreiben: bool = False) -> Path:
     if not p.is_absolute():
         p = WURZELN[0][0] / p
     p = p.resolve()
+    # ⚠️⚠️ .git ist fuer Zero unsichtbar -- lesen UND schreiben.
+    # Ein beschreibbares .git/config ist ein Weg, dem Wirt Befehle
+    # unterzuschieben (core.fsmonitor, core.pager, core.sshCommand, alias.*).
+    # Nachgewiesen: damit lief Fremdcode als root. Eine Liste der gefaehrlichen
+    # Schluessel zu pflegen hiesse, sich auf die eigene Vollstaendigkeit zu
+    # verlassen -- der ganze Ordner ist die ehrlichere Sperre. Zero arbeitet an
+    # der Arbeitskopie, nicht an ihrer Verwaltung.
+    if ".git" in p.parts:
+        raise ZaunFehler(
+            f"{p} liegt in .git -- die Verwaltung der Arbeitskopie ist nicht dein "
+            "Arbeitsplatz. Ein beschreibbares .git/config koennte dem Wirt Befehle "
+            "unterschieben. Aendere Dateien, nicht das Repo.")
+
     for wurzel, schreibbar in WURZELN:
         try:
             p.relative_to(wurzel.resolve())
@@ -90,11 +103,17 @@ def liste(pfad: str = "/var/lib/clay/arbeit", tiefe: int = 1) -> dict:
     p = _pruefe(pfad)
     if not p.is_dir():
         return {"pfad": str(p), "fehler": "kein Verzeichnis"}
-    eintraege = []
-    for kind in sorted(p.iterdir())[:200]:
-        eintraege.append({"name": kind.name, "art": "ordner" if kind.is_dir() else "datei",
-                          "bytes": kind.stat().st_size if kind.is_file() else None})
-    return {"pfad": str(p), "eintraege": eintraege, "anzahl": len(eintraege)}
+    alle = sorted(p.iterdir())
+    eintraege = [{"name": k.name, "art": "ordner" if k.is_dir() else "datei",
+                  "bytes": k.stat().st_size if k.is_file() else None}
+                 for k in alle[:200]]
+    erg = {"pfad": str(p), "eintraege": eintraege,
+           "anzahl_geliefert": len(eintraege), "anzahl_gesamt": len(alle)}
+    if len(alle) > len(eintraege):
+        erg["abgeschnitten"] = True
+        erg["hinweis"] = (f"{len(alle)} Einträge insgesamt, {len(eintraege)} aufgeführt. "
+                          "Wer 200 sieht und 234 hat, hält 200 für alles.")
+    return erg
 
 
 def lesen(pfad: str, von: int = 1, zeilen: int = 400) -> dict:
@@ -125,7 +144,8 @@ def suchen(muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> di
         r = re.compile(muster, re.IGNORECASE)
     except re.error as e:
         return {"fehler": f"ungueltiges Muster: {e}"}
-    treffer, geprueft = [], 0
+    treffer, geprueft, gesamt = [], 0, 0
+    je_datei: dict[str, int] = {}
     dateien = [p] if p.is_file() else sorted(p.rglob(nur or "*"))
     for f in dateien:
         if not f.is_file() or ".git" in f.parts:
@@ -139,16 +159,28 @@ def suchen(muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> di
         geprueft += 1
         for nr, zeile in enumerate(text.splitlines(), 1):
             if r.search(zeile):
-                treffer.append({"datei": str(f), "zeile": nr, "text": zeile.strip()[:220]})
-                if len(treffer) >= MAX_TREFFER:
-                    return {"muster": muster, "treffer": treffer, "anzahl": len(treffer),
-                            "dateien_geprueft": geprueft, "abgeschnitten": True,
-                            "hinweis": f"bei {MAX_TREFFER} Treffern abgebrochen -- es gibt "
-                                       "moeglicherweise mehr. Das ist eine Kappung, kein Ende."}
-    return {"muster": muster, "treffer": treffer, "anzahl": len(treffer),
-            "dateien_geprueft": geprueft,
-            "hinweis": "Alle Fundstellen im erlaubten Bereich. Steht hier nichts, gibt es "
-                       "dort nichts -- das ist ein Befund."}
+                gesamt += 1
+                je_datei[str(f)] = je_datei.get(str(f), 0) + 1
+                # Weitergezaehlt wird IMMER, ausgeliefert nur bis zur Kappung.
+                if len(treffer) < MAX_TREFFER:
+                    treffer.append({"datei": str(f), "zeile": nr,
+                                    "text": zeile.strip()[:220]})
+
+    erg = {"muster": muster, "treffer": treffer, "anzahl_geliefert": len(treffer),
+           "anzahl_gesamt": gesamt, "dateien_mit_treffern": len(je_datei),
+           "je_datei": dict(sorted(je_datei.items(), key=lambda x: -x[1])[:120]),
+           "dateien_geprueft": geprueft}
+    if gesamt > len(treffer):
+        erg["abgeschnitten"] = True
+        erg["hinweis"] = (
+            f"{gesamt} Fundstellen insgesamt, {len(treffer)} davon einzeln aufgefuehrt. "
+            "Die ZAHL ist vollstaendig, die Liste nicht -- `je_datei` nennt jede "
+            "betroffene Datei mit ihrer Trefferzahl. Fuer die Einzelzeilen einer "
+            "Datei nimm `pfad=<die Datei>`.")
+    else:
+        erg["hinweis"] = ("Alle Fundstellen im erlaubten Bereich. Steht hier nichts, "
+                          "gibt es dort nichts -- das ist ein Befund.")
+    return erg
 
 
 def schreiben(pfad: str, alt: str, neu: str) -> dict:
@@ -248,3 +280,24 @@ def veroeffentlichen(nachricht: str, repo: str = "/var/lib/clay/arbeit/seimensch
         return {"fehler": "ohne Nachricht wird nicht veroeffentlicht -- wer spaeter liest, "
                           "muss erfahren WARUM, nicht nur WAS"}
     return _auftrag("veroeffentlichen", repo=str(p), nachricht=str(nachricht).strip())
+
+
+def speicher_lage() -> dict:
+    """Wie voll ist die Platte des Wirts, und was waere wegwerfbar?"""
+    return _auftrag("speicher_lage")
+
+
+def speicher_aufraeumen(nur_zeigen: bool = True) -> dict:
+    """Aufraeumen lassen. Vorgabe ist ZEIGEN, nicht loeschen.
+
+    ⭐ Die Vorgabe steht bewusst auf `nur_zeigen=True`. Wer aufraeumt, soll
+    vorher gesehen haben, was verschwindet -- und Loeschen ist der eine
+    Handgriff, den man nicht zurueckholt.
+
+    ⚠️ Du bestimmst NICHT, was Muell ist. Muster, Mindestalter und die
+    namentliche Liste des Unantastbaren stehen auf dem Wirt. wiki.db,
+    /opt/unifieddb, /etc/entityos, die Repos und die ausgelieferten Seiten
+    stehen darauf -- an die kommt dieser Weg nicht heran, auch nicht auf
+    deine Anweisung.
+    """
+    return _auftrag("speicher_aufraeumen", nur_zeigen=bool(nur_zeigen))

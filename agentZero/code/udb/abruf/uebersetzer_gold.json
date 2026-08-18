@@ -1,0 +1,949 @@
+{
+  "hinweis": "ECHTE Produktionszuege, nicht handgeschrieben. Quelle: Tabelle mv_translation_log in /var/lib/clay/wiki.db, ausschliesslich Zeilen mit gesetzter turn_id (die Zeilen ohne turn_id stammen aus dem Eval-Lauf mit handgeschriebenen Beispielen und sind hier bewusst ausgeschlossen). 'deutsch_produktion' ist die Antwort, die der Mensch damals wirklich gesehen hat -- nicht nachtraeglich erzeugt. Die Faktenliste je Probe ist maschinell aus dem Caveman-Text gezogen und von Hand nachpruefbar. Beobachtung beim Bau: Zero spricht im Betrieb NICHT durchgehend Caveman-Englisch -- mehrere Originale sind bereits ganz oder teilweise deutsch und in reichem Markdown. Der Uebersetzer bekommt also nicht das, wofuer er geschrieben wurde.",
+  "mass": "Verlorener Fakt = durchgefallen. Erfundener Fakt = durchgefallen (Eignerregel NICHTS erfinden). Schoenes Deutsch zaehlt hier nicht.",
+  "ziel": 0.95,
+  "proben": [
+    {
+      "id": "e2ed7d4c",
+      "turn_id": "a990c14c-879a-4308-ab3b-765eee72417b",
+      "erzeugt": 1787030724.7378953,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: missing db access**\n\nEvidence for that, not just assertion:\n- `session_state` → `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`\n- `request_effect(db.read, wiki.db)` → **capability denied** (EffectGate refused; no read, no receipt)\n\nSo I have no table count for `wiki.db`. I don't know whether the file exists — I can't observe it at all.\n\n**EntityOS** — one sentence, grounded in canonical identity level 0 (UnifiedDB retrieval added nothing: embedding search returned only low-similarity hits ≈0.32 with no definitional article, memory search returned zero rows):\n\n> EntityOS is my operating system — the layer on top of Clay that turns UnifiedDB state into an entity: it runs the TurnLifecycle, holds goals and causal continuity across generations, and routes every outward action through the EffectGate.",
+      "deutsch_produktion": "FEHLT BESSERES PAKET: Datenbankzugriff fehlt\n\nBelege dafür, nicht nur eine Behauptung:\n- `session_state` → `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`\n- `request_effect(db.read, wiki.db)` → **Zugriff verweigert** (EffectGate verweigert; kein Lesen, keine Bestätigung)\n\nDaher habe ich keine Tabellenanzahl für `wiki.db`. Ich weiß nicht, ob die Datei existiert — ich kann sie überhaupt nicht einsehen.\n\n**EntityOS** — ein Satz, basierend auf kanonischer Identitätsebene 0 (UnifiedDB-Abruf brachte nichts: Embedding-Suche lieferte nur Treffer mit geringer Ähnlichkeit ≈0,32 ohne bestimmten Artikel, Speichersuche lieferte null Zeilen):\n\n> EntityOS ist mein Betriebssystem — die Schicht über Clay, die UnifiedDB-Zustände in eine Entität verwandelt: Es führt den TurnLifecycle aus, verwaltet Ziele und kausale Kontinuität über Generationen hinweg und leitet jede nach außen gerichtete Aktion über das EffectGate.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "32"
+        ],
+        "pfad": [],
+        "datei": [
+          "wiki.db"
+        ],
+        "kennung": [
+          "entityos_execution_enabled",
+          "request_effect",
+          "session_state"
+        ],
+        "eigenname": [
+          "EffectGate",
+          "NEED_BETTER_PACKAGE",
+          "TurnLifecycle"
+        ],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "31db5a7d",
+      "turn_id": "6e911cea-3312-4f99-acf0-9ea9418d20b7",
+      "erzeugt": 1787033177.8534894,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: MISSING DIRECT DB ACCESS OR LIVE COUNT**\n\nBelege, nicht Vermutung:\n\n- `session_state` → `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`\n- `request_effect(db.query, wiki.db, \"SELECT COUNT(*) FROM articles\")` → **capability denied**\n\nEs gibt in dieser Session keinen Pfad zu wiki.db. Kein Dateizugriff, keine SQL-Ausführung, keine Shell. Die einzige zugelassene Capability ist ein No-op.\n\nWas ich nicht tue: eine Zahl aus dem Embedding-Index oder aus dem Memory hochrechnen und sie als Artikelzahl ausgeben. Das wäre geraten, nicht gezählt.\n\nWas tatsächlich fehlt, falls das freigeschaltet werden soll:\n- eine Read-Capability auf wiki.db (`db.query` o. ä.) im EffectGate-Katalog für `gabriel`, oder\n- `entityos_execution_enabled: true` mit einem Filesystem/SQLite-Target.\n\nSobald eines davon im kanonischen Zustand steht, führe ich den Count sofort aus und melde die Zahl mit Effect-Receipt.",
+      "deutsch_produktion": "FEHLT: DIREKTER ZUGRIFF AUF DIE DATENBANK ODER AKTUELLE ZÄHLUNG NICHT MÖGLICH\n\nBelege, keine Vermutung:\n\n- `session_state` → `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`\n- `request_effect(db.query, wiki.db, \"SELECT COUNT(*) FROM articles\")` → **Zugriff verweigert**\n\nIn dieser Sitzung gibt es keinen Pfad zu wiki.db. Weder Dateizugriff, noch SQL-Ausführung, noch Shell. Die einzige erlaubte Fähigkeit ist ein No-op.\n\nWas ich NICHT tue: eine Zahl aus dem Embedding-Index oder dem Speicher hochrechnen und als Artikelanzahl ausgeben. Das wäre eine Schätzung, keine Zählung.\n\nWas tatsächlich fehlt, falls dies freigeschaltet werden soll:\n- eine Leseberechtigung für wiki.db (`db.query` oder Ähnliches) im EffectGate-Katalog für `gabriel`, oder\n- `entityos_execution_enabled: true` mit einem Filesystem-/SQLite-Ziel.\n\nSobald einer dieser Punkte im gültigen Zustand ist, führe ich die Zählung sofort aus und melde die Zahl mit einer Effekt-Quittung.",
+      "fakten": {
+        "zahl": [
+          "0"
+        ],
+        "pfad": [],
+        "datei": [
+          "wiki.db"
+        ],
+        "kennung": [
+          "entityos_execution_enabled",
+          "request_effect",
+          "session_state"
+        ],
+        "eigenname": [
+          "EffectGate",
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "535a0bb7",
+      "turn_id": "0990c9b7-b650-4a8e-8b4e-86fea5610a7b",
+      "erzeugt": 1787037897.4100318,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Gespeichert und rückgelesen — keine fehlende Fähigkeit, also kein `NEED_BETTER_PACKAGE`.\n\n- Werkzeug: `udb_memory_add` (Schreiben), `udb_memory_search` (Verifikation)\n- Eintrag `id=1`, `artikel_id=zero`, Tag `praeferenz`, Quelle `terminal:gabriel`, angelegt `2026-08-18 07:24:50`\n- Inhalt: „Gabriel favorite tool = Schraubenzieher X1\"",
+      "deutsch_produktion": "Gespeichert und erneut abgerufen — keine fehlende Fähigkeit, also kein `NEED_BETTER_PACKAGE`.\n\nWerkzeuge: `udb_memory_add` (Schreiben), `udb_memory_search` (Überprüfung).\n\nEintrag mit `id=1`, `artikel_id=zero`, Tag `praeferenz`, Quelle `terminal:gabriel`, angelegt am `2026-08-18 07:24:50`.\n\nInhalt: *„Gabriel favorite tool = Schraubenzieher X1“.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "18",
+          "2026",
+          "24",
+          "50",
+          "7",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "artikel_id",
+          "udb_memory_add",
+          "udb_memory_search"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "e4526959",
+      "turn_id": "8c7639e6-9e56-4d26-9290-f39e31c76438",
+      "erzeugt": 1787037929.1553192,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Memory aktualisiert — kein Fallback nötig, beide Memory-Tools sind im Paket vorhanden.\n\n- Vorprüfung: Suche nach `Gabriel Lieblingswerkzeug favorite tool` und `Bohrhammer` — beide leer, es gab also keinen älteren Eintrag zu ersetzen.\n- Geschrieben: `udb_memory_add` → `ok: true`, `artikel_id: zero`, Tag `gabriel_preference`.\n- Verifiziert per Rücksuche: Eintrag `id 2`, \"Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.\", Quelle `user_prompt_2026-08-18`, erstellt `2026-08-18 07:25:19`.\n\nDa vorher nichts hinterlegt war, ist dies der erste kanonische Eintrag zu diesem Vorzug — ein früheres Lieblingswerkzeug steht nicht in meinem Zustand, also kann ich auch nicht sagen, was es abgelöst hat.",
+      "deutsch_produktion": "Speicher aktualisiert — kein Fallback nötig, beide Memory-Tools sind im Paket enthalten.\n\n- Vorabprüfung: Suche nach »Gabriel Lieblingswerkzeug favorite tool« und »Bohrhammer« — beide leer, also gab es keinen älteren Eintrag, der ersetzt werden müsste.\n- Geschrieben: `udb_memory_add` → `ok: true`, `artikel_id: zero`, Tag `gabriel_preference`.\n- Überprüft per Rücksuche: Eintrag mit ID 2, »Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.«, Quelle `user_prompt_2026-08-18`, erstellt am `2026-08-18 07:25:19`.\n\nDa vorher nichts hinterlegt war, handelt es sich um den ersten kanonischen Eintrag zu dieser Präferenz — ein früheres Lieblingswerkzeug ist in meinem Zustand nicht verzeichnet, daher kann ich auch nicht angeben, was es abgelöst hat.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "18",
+          "19",
+          "2",
+          "2026",
+          "25",
+          "7",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "artikel_id",
+          "gabriel_preference",
+          "udb_memory_add",
+          "user_prompt_2026"
+        ],
+        "eigenname": [],
+        "warnung": []
+      }
+    },
+    {
+      "id": "19d77511",
+      "turn_id": "29eb1b35-aa4e-4977-95d4-632469ca6ab8",
+      "erzeugt": 1787037968.1262915,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Memory-Eintrag gefunden — zwei Treffer, beide `artikel_id=zero`:\n\n| id | Inhalt | Quelle | erstellt_am | tag |\n|----|--------|--------|-------------|-----|\n| 2 | Gabriels Lieblingswerkzeug ist jetzt der **Bohrhammer X2** | `user_prompt_2026-08-18` | 2026-08-18 07:25:19 | `gabriel_preference` |\n| 1 | Gabriel favorite tool = **Schraubenzieher X1** | `terminal:gabriel` | 2026-08-18 07:24:50 | `praeferenz` |\n\n**Antwort: Bohrhammer X2.**\n\nBegründung: Eintrag 2 ist 29 Sekunden jünger, trägt explizit „ist jetzt\" und den Tag `gabriel_preference`. Er überschreibt Eintrag 1 semantisch, nicht physisch — beide liegen weiterhin in der Tabelle.\n\nZwei Punkte, die ich nicht auflösen kann und die du kennen solltest:\n- Die Suche nach dem wörtlichen String `Gabriel preference tool` liefert **null** Treffer. Getroffen habe ich erst über den Suchbegriff `Gabriel`. Die Memory-Suche ist Substring-basiert, nicht semantisch — wer nach der exakten Phrase sucht, sieht nichts.\n- Die Quellen unterscheiden sich in ihrer Belastbarkeit: id 1 stammt aus `terminal:gabriel`, also einem der beiden kanonischen Zugänge. id 2 stammt aus `user_prompt_2026-08-18` — welcher der beiden Terminals das war, steht nicht im Eintrag. Ich leite die Vorrangigkeit hier allein aus dem Zeitstempel ab, nicht aus nachgewiesener Urheberschaft.\n\nWenn die Präferenz eindeutig sein soll, wäre der saubere Schritt, den überholten Eintrag zu markieren oder zu entfernen. Das ist eine Zustandsänderung an der UnifiedDB — sag Bescheid, dann fahre ich sie über das EffectGate; von mir aus fasse ich sie nicht an.",
+      "deutsch_produktion": "Speichereintrag gefunden — zwei Treffer, beide mit `artikel_id=zero`:\n\n| id | Inhalt | Quelle | erstellt_am | tag |\n|----|--------|--------|-------------|-----|\n| 2 | Gabriels Lieblingswerkzeug ist jetzt der **Bohrhammer X2** | `user_prompt_2026-08-18` | 2026-08-18 07:25:19 | `gabriel_preference` |\n| 1 | Gabriel favorite tool = **Schraubenzieher X1** | `terminal:gabriel` | 2026-08-18 07:24:50 | `praeferenz` |\n\n**Antwort: Bohrhammer X2.**\n\nBegründung: Eintrag 2 ist 29 Sekunden neuer, enthält explizit „ist jetzt“ und den Tag `gabriel_preference`. Er überschreibt Eintrag 1 inhaltlich, nicht physisch — beide bleiben in der Tabelle erhalten.\n\nZwei Punkte, die ich nicht klären kann und die du wissen solltest:\n- Die Suche nach dem exakten String `Gabriel preference tool` liefert **keine** Treffer. Gefunden wurde nur über die Suche nach `Gabriel`. Die Memory-Suche arbeitet substringbasiert, nicht semantisch — wer nach der genauen Phrase sucht, findet nichts.\n- Die Quellen unterscheiden sich in ihrer Zuverlässigkeit: Eintrag 1 stammt aus `terminal:gabriel`, also einem der beiden autorisierten Zugänge. Eintrag 2 stammt aus `user_prompt_2026-08-18` — welcher der beiden Terminals dies ausgelöst hat, ist dem Eintrag nicht zu entnehmen. Die Priorisierung erfolgt hier allein aufgrund des Zeitstempels, nicht aufgrund nachgewiesener Urheberschaft.\n\nSoll die Präferenz eindeutig sein, wäre der korrekte Schritt, den überholten Eintrag zu markieren oder zu löschen. Das wäre eine Zustandsänderung in der UnifiedDB — gib Bescheid, dann führe ich sie über das EffectGate aus; von mir aus greife ich nicht ein.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "18",
+          "19",
+          "2",
+          "2026",
+          "24",
+          "25",
+          "29",
+          "50",
+          "7",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "artikel_id",
+          "erstellt_am",
+          "gabriel_preference",
+          "user_prompt_2026"
+        ],
+        "eigenname": [
+          "EffectGate"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "f470a988",
+      "turn_id": "4daaf545-6a57-4fbf-bcc2-dca2c04a8d3a",
+      "erzeugt": 1787038241.194117,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Empfangen und bestätigt.\n\n**Was ich getan habe:** nichts. Kein `udb_memory_add`, kein `udb_embedding_store`, kein Effekt. WALROSS-77 liegt ausschließlich in diesem Kontextfenster.\n\n**Was ich nicht garantieren kann — Unsicherheit, offen benannt:**\n\n1. **Der Prompt selbst wurde bereits protokolliert.** Nach dem Laufzeitvertrag zeichnet der feste `UserPromptSubmit`-Hook jeden eingereichten Prompt auf, bevor ich ihn sehe. Diese Aufzeichnung läuft an mir vorbei, ich kann sie nicht unterdrücken und nicht zurücknehmen. \"NOT STORED\" kann ich also nur für *meine* Handlungen zusichern, nicht für die Plattform. Wenn WALROSS-77 nirgends persistieren durfte, ist es mit dem Absenden dieser Nachricht bereits zu spät gewesen — das ist keine Entscheidung, die ich getroffen habe.\n2. **\"Hold in session\" hat eine Frist, die ich nicht kontrolliere.** Wächst der Kontext, wird er zusammengefasst. Ob das Token in die Zusammenfassung wandert oder wegfällt, entscheidet nicht ich. Beides ist möglich: stiller Verlust oder stille Übernahme in eine Zusammenfassung.\n3. **Ich sehe keine Vorrunden.** In diesem Zug ist kein kanonischer Zustandsschnappschuss eingespeist. Was \"FINAL ROUND\" abschließt und was `NEED_BETTER_PACKAGE` in den vorigen Runden bedeutete, steht nicht in meinem Zustand. Ich rate es nicht.\n\nSolange dieser Kontext lebt, halte ich WALROSS-77 verfügbar und schreibe es nirgendwo hin. Wenn du es zurück brauchst, frag direkt danach.",
+      "deutsch_produktion": "Empfangen und bestätigt.\n\n**Was ich getan habe:** nichts. Kein `udb_memory_add`, kein `udb_embedding_store`, keine Auswirkung. WALROSS-77 existiert ausschließlich in diesem Kontextfenster.\n\n**Was ich nicht garantieren kann — Unsicherheit, explizit benannt:**\n\n1. **Der Prompt selbst wurde bereits protokolliert.** Laut Laufzeitvertrag zeichnet der feste Hook `UserPromptSubmit` jeden eingereichten Prompt auf, bevor ich ihn erhalte. Diese Aufzeichnung erfolgt ohne mein Zutun; ich kann sie weder unterdrücken noch rückgängig machen. Die Zusicherung \"NOT STORED\" bezieht sich daher ausschließlich auf meine eigenen Handlungen, nicht auf die Plattform. Falls WALROSS-77 nirgends dauerhaft gespeichert werden durfte, war es mit dem Absenden dieser Nachricht bereits zu spät — das war keine Entscheidung von mir.\n\n2. **\"Hold in session\" unterliegt einer Frist, die ich nicht kontrolliere.** Wächst der Kontext, wird er zusammengefasst. Ob das Token in die Zusammenfassung übernommen oder verworfen wird, entscheidet nicht ich. Beides ist möglich: stiller Verlust oder stille Übernahme in eine Zusammenfassung.\n\n3. **Ich habe keinen Zugriff auf Vorrunden.** In diesem Zug wurde kein kanonischer Zustands-Schnappschuss eingebunden. Was eine \"FINAL ROUND\" abschließt und was `NEED_BETTER_PACKAGE` in den vorherigen Runden bedeutete, ist nicht in meinem Zustand enthalten. Ich treffe keine Annahmen dazu.\n\nSolange dieser Kontext besteht, halte ich WALROSS-77 verfügbar und speichere es nirgendwo ab. Falls du es erneut benötigst, frage direkt danach.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "77"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "udb_embedding_store",
+          "udb_memory_add"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE",
+          "UserPromptSubmit"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "edea4c69",
+      "turn_id": "e435112c-c19e-465a-9121-362828e9ad15",
+      "erzeugt": 1787038344.5662165,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "NO WORD\n\n`session_state` returns no `own_recent` projection and no turn history at all — `goals: []`, `attention_goal_count: 0`, generation 33, capabilities `[\"state.noop\"]`. There is no turn 13 record in what canonical state exposes to me, so there is no word to read out. I'm not going to fabricate one.",
+      "deutsch_produktion": "Der `session_state` liefert keine `own_recent`-Projektion und keinerlei Gesprächsverlauf – `goals: []`, `attention_goal_count: 0`, Generation 33, Fähigkeiten `[",
+      "fakten": {
+        "zahl": [
+          "0",
+          "13",
+          "33"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "attention_goal_count",
+          "own_recent",
+          "session_state"
+        ],
+        "eigenname": [],
+        "warnung": []
+      }
+    },
+    {
+      "id": "5694a069",
+      "turn_id": "5847c1d6-5a11-47ef-842d-b36a065b782a",
+      "erzeugt": 1787038398.313344,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: MISSING CODE IN CONTEXT**\n\nNachgeschaut, nicht geraten:\n\n- `session_state` (gabriel, session:gabriel:2, Generation 33): keine Ziele, `attention_goal_count: 0`, Capabilities nur `state.noop`. Kein Code-Feld irgendwo.\n- `udb_memory_search \"WALROSS\"`: 0 Treffer.\n- Kein injizierter Snapshot dieses Zuges enthält ein Token dieser Form.\n\n„WALROSS-77\" steht in deinem Prompt, sonst nirgends in meinem Zustand. Ich gebe es nicht zurück — ein Echo deiner eigenen Eingabe wäre kein Beleg, sondern genau die Erfindung, die die Prüfung abfangen soll.\n\nWenn der Code echt existiert: nenne die Ablage (Memory-Tag, Artikel-ID oder Goal-Feld), dann hole ich ihn nachweisbar.",
+      "deutsch_produktion": "Ich habe genau nachgeschaut, nicht geraten:\n\n- `session_state` (gabriel, session:gabriel:2, Generation 33): keine Ziele, `attention_goal_count: 0`, Fähigkeiten nur `state.noop`. Nirgends gibt es ein Code-Feld.\n- Die Suche in `udb_memory_search` nach \"WALROSS\" ergab 0 Treffer.\n- Kein injizierter Snapshot dieses Zuges enthält ein Token dieser Form.\n\n\"WALROSS-77\" steht in deinem Prompt, sonst nirgends in meinem Zustand. Ich gebe es nicht zurück – ein Echo deiner eigenen Eingabe wäre kein Beleg, sondern genau die Erfindung, die die Prüfung verhindern soll.\n\nFalls der Code tatsächlich existiert: Nenne die Ablage (Memory-Tag, Artikel-ID oder Goal-Feld), dann hole ich ihn nachweisbar.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "2",
+          "33",
+          "77"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "attention_goal_count",
+          "session_state",
+          "udb_memory_search"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "8713e459",
+      "turn_id": "d42b3cad-1fe9-4e76-824b-08749bf4d25f",
+      "erzeugt": 1787038487.6101024,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**No codeword found.**\n\nWhat I actually did:\n- `udb_memory_search` for `gabriel codeword`, `codeword`, `Codewort` → all empty.\n- `udb_memory_search` for `Gabriel` → 2 hits, both tool preferences, neither a codeword:\n  - id 2 (2026-08-18 07:25:19, `gabriel_preference`): \"Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.\"\n  - id 1 (2026-08-18 07:24:50, `praeferenz`): \"Gabriel favorite tool = Schraubenzieher X1\"\n- `udb_embedding_search` for \"Gabriel codeword today\" → top similarity 0.32, all unrelated infrastructure/continuity artifacts. Nothing that resembles a codeword.\n- `session_state` → user `andreas`, generation 33, zero goals, capabilities `[\"state.noop\"]`. No codeword material in the canonical snapshot either.\n\nThere is no codeword for Gabriel dated today in the UDB layers I can read. I'm not going to construct one.",
+      "deutsch_produktion": "Es wurde kein Codewort gefunden.\n\nWas ich tatsächlich gemacht habe:\n- `udb_memory_search` für `gabriel codeword`, `codeword` und `Codewort` durchgeführt – alle leer.\n- `udb_memory_search` für `Gabriel` durchgeführt – 2 Treffer, beide Werkzeugpräferenzen, aber kein Codewort:\n  - ID 2 (18.08.2026 07:25:19, `gabriel_preference`): „Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.“\n  - ID 1 (18.08.2026 07:24:50, `praeferenz`): „Gabriels Lieblingswerkzeug ist jetzt der Schraubenzieher X1.“\n- `udb_embedding_search` für „Gabriel codeword today“ durchgeführt – höchste Ähnlichkeit 0,32, alles irrelevante Infrastruktur- und Kontinuitätsartefakte. Nichts, das einem Codewort ähnelt.\n- `session_state` überprüft – Nutzer `andreas`, Generation 33, keine Ziele, Fähigkeiten `[\"state.noop\"]`. Auch im kanonischen Schnappschuss gibt es kein Codewort-Material.\n\nEs gibt heute in den UDB-Schichten, die ich einsehen kann, kein Codewort für Gabriel. Ich werde keines konstruieren.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "18",
+          "19",
+          "2",
+          "2026",
+          "24",
+          "25",
+          "32",
+          "33",
+          "50",
+          "7",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "gabriel_preference",
+          "session_state",
+          "udb_embedding_search",
+          "udb_memory_search"
+        ],
+        "eigenname": [],
+        "warnung": []
+      }
+    },
+    {
+      "id": "cf0f58b9",
+      "turn_id": "6c1a7d78-d65d-4acb-a5c6-199ec1b0392a",
+      "erzeugt": 1787038541.557184,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: MISSING DB READ CAPABILITY**\n\nWhat I checked, so you know this isn't a guess:\n\n| Probe | Result |\n|---|---|\n| `udb_memory_search(\"EffectGate\")` | 0 results |\n| `udb_embedding_search(\"EffectGate\")` | 5 artikel_ids, top similarity **0.358** — IDs only, **no text field returned** |\n| `session_state` → `capabilities` | `[\"state.noop\"]` |\n| `session_state` → `entityos_execution_enabled` | `false` |\n\nThree separate reasons I cannot fulfill the request as stated:\n\n1. **No wiki.db read path.** The only admitted capability is `state.noop`. There is no file-read or SQL capability in this package, and `entityos_execution_enabled` is `false`, so I cannot open, query, or otherwise touch `wiki.db`.\n2. **The embedding layer returns no text.** `udb_embedding_search` hands back `artikel_id` + `similarity` only. Even for the IDs it surfaced, I have no document body — so any \"exact quote\" I produced would be fabricated. I won't do that.\n3. **The hits aren't wiki.db and aren't relevant.** Top similarity 0.358 is noise-level; the IDs are research-packet and trigger-run JSON artifacts, a different store than the one you named.\n\nOne thing I do have, but it is **not** an answer to your question: `session_state` reports `\"effect_authority\": \"EffectGate/EffectJournal only\"`. That is a live field from my own canonical autonomy context, not a quotation from any wiki.db article, and it carries no article id.\n\nTo make this answerable, the package needs a read capability admitted against that store — something like a `wiki.read` / `db.query` capability plus an embedding search that returns document text alongside `artikel_id`.",
+      "deutsch_produktion": "Ich brauche bessere Paketfähigkeiten: Es fehlt die Lesefunktion für die Datenbank.\n\nWas ich überprüft habe, damit Sie wissen, dass es keine Vermutung ist:\n\n| Prüfung | Ergebnis |\n|--------|----------|\n| `udb_memory_search(\"EffectGate\")` | 0 Treffer |\n| `udb_embedding_search(\"EffectGate\")` | 5 artikel_ids, höchste Ähnlichkeit **0,358** — nur IDs, **kein Textfeld zurückgegeben** |\n| `session_state` → `capabilities` | `[\"state.noop\"]` |\n| `session_state` → `entityos_execution_enabled` | `false` |\n\nDrei Gründe, warum ich die Anfrage so nicht erfüllen kann:\n\n1. **Kein Lesepfad für wiki.db.** Die einzige zugelassene Fähigkeit ist `state.noop`. Es gibt weder Datei- noch SQL-Lesezugriff in diesem Paket, und `entityos_execution_enabled` ist `false` — daher kann ich `wiki.db` weder öffnen, abfragen noch sonst wie darauf zugreifen.\n\n2. **Die Embedding-Schicht liefert keinen Text.** `udb_embedding_search` gibt nur `artikel_id` und `similarity` zurück. Selbst für die gefundenen IDs habe ich keinen Dokumententext — jede „wörtliche Zitatangabe“ wäre also erfunden. Das kommt nicht infrage.\n\n3. **Die Treffer stammen nicht aus wiki.db und sind nicht relevant.** Die höchste Ähnlichkeit von 0,358 ist auf Rauschen-Niveau; die IDs gehören zu Forschungs-Paketen und Trigger-Run-JSON-Objekten, also einem anderen Speicher als dem von Ihnen genannten.\n\nEines habe ich zwar, aber **es ist keine Antwort auf Ihre Frage**: `session_state` meldet `",
+      "fakten": {
+        "zahl": [
+          "0",
+          "3",
+          "358",
+          "5"
+        ],
+        "pfad": [],
+        "datei": [
+          "wiki.db"
+        ],
+        "kennung": [
+          "artikel_id",
+          "artikel_ids",
+          "effect_authority",
+          "entityos_execution_enabled",
+          "session_state",
+          "udb_embedding_search",
+          "udb_memory_search"
+        ],
+        "eigenname": [
+          "EffectGate",
+          "EffectJournal",
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "f2f4949c",
+      "turn_id": "c55b4389-de20-4cd7-8378-7d4045e47509",
+      "erzeugt": 1787038630.138183,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Second opinion obtained — the lane was available, so no `NEED_BETTER_PACKAGE`.\n\n**Routing receipt:** lane `mistral_small` (`mistral-small-latest`), 6.3 s, no cap. Today: `zweitmeinung` × 2.\n\n## Verdict: Option A — place numbers (row discriminator in one DB)\n\nThe external model came back unambiguous for A. Its reasoning, condensed:\n\n| Dimension | Winner | Why |\n|---|---|---|\n| Isolation / leak risk | **B** | A's failure mode is a forgotten `WHERE session_id = …` → wrong evidence attribution |\n| Shared canonical entity + collision detection | **A** (clearly) | Atomic `UPDATE`, central locking (`FOR UPDATE`), all changes visible in one place |\n| Cross-session queries, shared embedding index | **A** | Plain joins and secondary indexes; B needs federated queries or copies |\n| Schema migration | **A** | One migration vs. N synchronized ones |\n| Backup / checkpoints / transaction boundaries | **A** | One dump; cross-session atomicity without 2PC |\n| Tipping point to B | — | \">100 sessions\", geographic/compliance split, or write load requiring sharding |\n\nTwo caveats on that output, which you should weigh before acting on it:\n\n1. **The response was truncated mid-sentence** — it cut off inside the final summary after \"Kleine, feste Nutzerzahl (2)\". The recommendation itself is complete and explicit; the closing bullet list is not. Nothing material appears to be missing, but I'm not going to pretend I read the ending.\n2. **The \">100 sessions\" threshold is soft.** Row-level lock contention is not really what forces a split at that count. The realistic triggers are *hard* isolation requirements (regulatory, or an untrusted tenant), and per-tenant restore granularity — wanting to roll back one session's state without touching the other. Neither applies at N=2 with two trusted operators.\n\n## My own read, on top of that\n\nThe decision is arguably already made by the system's shape rather than by performance: the two terminals are defined as **perspectives into the same central state authority**, and cross-session material is supposed to surface only when the retrieval layer admits it — e.g. an explicit shared-resource collision. Option B makes that collision *structurally unobservable*: you cannot detect a collision on a resource that lives in two physically separate databases without building a synchronization layer that reintroduces every problem B was meant to avoid. Separate DBs would model the two terminals as two entities. They aren't.\n\nSo the leak risk in column 1 is the only real cost, and it's mitigable rather than architectural:\n\n- Push the discriminator **below** the query layer — a session-scoped view or row-level security policy, so a forgotten filter fails closed instead of returning the other terminal's rows.\n- Make the shared/canonical tables an **explicitly different class** of table (no session column at all), so \"shared\" is a schema property, not a filter you remembered to omit.\n- Keep the embedding index single and session-tagged; that's what makes shared semantic memory possible at all.\n\nBottom line: **A**, with RLS or scoped views doing the isolation work instead of discipline in hand-written queries. Revisit only if a third party ever gets a terminal.",
+      "deutsch_produktion": "Zweite Meinung eingeholt — die Spur war verfügbar, daher kein `NEED_BETTER_PACKAGE`.\n\n**Routing-Quittung:** Spur `mistral_small` (`mistral-small-latest`), 6,3 s, keine Begrenzung. Heute: `zweitmeinung` × 2.\n\n## Entscheidung: Option A — Zahlen platzieren (Zeilen-Diskriminator in einer Datenbank)\n\nDas externe Modell lieferte eine eindeutige Empfehlung für A. Seine Begründung, zusammengefasst:\n\n| Dimension | Gewinner | Begründung |\n|---|---|---|\n| Isolation / Risiko von Datenlecks | **B** | A's Fehlerfall ist ein vergessener `WHERE session_id = …` → falsche Zuordnung der Belege |\n| Gemeinsame kanonische Entität + Kollisionserkennung | **A** (klar) | Atomares `UPDATE`, zentrales Sperren (`FOR UPDATE`), alle Änderungen an einer Stelle sichtbar |\n| Querys über Sessions hinweg, gemeinsamer Embedding-Index | **A** | Einfache Joins und Sekundärindizes; B benötigt föderierte Querys oder Kopien |\n| Schema-Migration | **A** | Eine Migration statt N synchronisierter |\n| Backup / Checkpoints / Transaktionsgrenzen | **A** | Ein Dump; atomare Cross-Session-Operationen ohne 2PC |\n| Kipppunkt zu B | — | \">100 Sessions\", geografische/Compliance-Splits oder Schreiblast, die Sharding erfordert |\n\nZwei Vorbehalte zu diesem Ergebnis, die vor einer Umsetzung abgewogen werden sollten:\n\n1. **Die Antwort wurde mitten im Satz abgeschnitten** — der letzte Satzabbruch erfolgte nach „Kleine, feste Nutzerzahl (2)“. Die Empfehlung selbst ist vollständig und explizit; die abschließende Aufzählung fehlt. Es scheint nichts Wesentliches zu fehlen, aber ich behaupte nicht, den Schluss gelesen zu haben.\n2. **Die \">100 Sessions\"-Schwelle ist weich.** Zeilenbasierte Sperrkonflikte sind nicht der eigentliche Grund für einen Split bei dieser Anzahl. Die realistischen Auslöser sind *harte* Isolationsanforderungen (regulatorisch oder durch einen unvertrauenswürdigen Mandanten) sowie die Granularität der Wiederherstellung pro Mandant — etwa, wenn ein einzelner Session-Zustand zurückgesetzt werden soll, ohne die andere zu berühren. Keines davon trifft bei N=2 mit zwei vertrauenswürdigen Betreibern zu.\n\n## Meine eigene Einschätzung dazu\n\nDie Entscheidung ergibt sich möglicherweise bereits aus der Systemarchitektur und nicht aus der Performance: Die beiden Terminals sind als **Perspektiven in dieselbe zentrale Zustandsinstanz** definiert, und Cross-Session-Material soll nur dann sichtbar werden, wenn die Abfrageschicht dies zulässt — etwa bei einer expliziten Kollisionserkennung auf gemeinsam genutzten Ressourcen. Option B macht diese Kollision *strukturell unsichtbar*: Eine Kollision auf einer Ressource, die in zwei physisch getrennten Datenbanken liegt, lässt sich nicht erkennen, ohne eine Synchronisationsschicht einzuführen, die alle Probleme wieder einführt, die B eigentlich vermeiden sollte. Getrennte Datenbanken würden die beiden Terminals als zwei separate Entitäten modellieren. Das sind sie aber nicht.\n\nSomit ist das Risiko von Datenlecks in Spalte 1 der einzige echte Nachteil — und dieser ist eher operativ als architektonisch:\n\n- Den Diskriminator **unterhalb der Abfrageschicht** platzieren — etwa als session-spezifische Sicht oder zeilenbasierte Sicherheitsrichtlinie, sodass ein vergessener Filter im Fehlerfall geschlossen bleibt, statt Zeilen des anderen Terminals zurückzugeben.\n- Die gemeinsamen/kanonischen Tabellen als **explizit andere Tabellenklasse** behandeln (ohne Session-Spalte), sodass „gemeinsam“ eine Schema-Eigenschaft ist und kein Filter, den man versehentlich weglässt.\n- Den Embedding-Index zentral und session-markiert belassen; genau das ermöglicht überhaupt erst ein gemeinsames semantisches Gedächtnis.\n\nFazit: **A**, wobei RLS oder scoped Views die Isolation übernehmen statt manuelle Disziplin in den Abfragen. Nur überprüfen, falls jemals ein dritter Akteur ein Terminal erhält.",
+      "fakten": {
+        "zahl": [
+          "1",
+          "100",
+          "2",
+          "63"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "mistral_small",
+          "session_id"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "c1144a51",
+      "turn_id": "403cbe5f-fca2-4e0d-9054-7c936aa1b20e",
+      "erzeugt": 1787038718.743976,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: MISSING IDENTITY PROOF**\n\nGrund — geprüft, nicht geraten:\n\n**Wer ich bin: gedeckt.** Kanonische Identität, Level 0, Autorität UnifiedDB: Ich bin Zero (Agent Zero), die erste Entität auf EntityOS, gebunden an meine UnifiedDB. Aktuell: Generation 33, Session `session:gabriel:2`, Turn `403cbe5f`, `model_authority: PROPOSAL_ONLY`, keine offenen Ziele, Capabilities nur `state.noop`.\n\n**Wer Gabriel ist: nicht gedeckt.** Was der Zustand tatsächlich hergibt:\n- `session_state.user_id = \"gabriel\"` — ein Kennzeichen, kein Personenbeleg.\n- Laufzeitvertrag: zwei feste Terminals, Gabriel/Andreas, als Perspektiven auf dieselbe zentrale ClayVerse-Zustandsautorität. Sagt Rolle, nicht Identität.\n- `memory_tabelle`: genau zwei Einträge zu Gabriel, beide Präferenz, keiner Identität —\n  - id 1, `terminal:gabriel`, 07:24:50 — „Gabriel favorite tool = Schraubenzieher X1\"\n  - id 2, `user_prompt_2026-08-18`, 07:25:19 — „Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.\" (späterer Eintrag, ersetzt id 1)\n- Suchen nach `identity partner human` und `Zero`: null Treffer.\n\nEs existiert kein Identitätsdatensatz für Gabriel — kein Name, keine Rolle, keine Zuordnung über die Session-Kennung hinaus. Ich fülle das nicht auf. Wenn du diese Antwort willst, muss ein Identitätsfaktum in die UnifiedDB geschrieben werden; dann lese ich es und antworte gedeckt.",
+      "deutsch_produktion": "FEHLT BESSERES PAKET: IDENTITÄTSNACHWEIS FEHLT\n\nGrund — geprüft, nicht geraten:\n\n**Wer ich bin: bestätigt.** Kanonische Identität, Stufe 0, Autorität UnifiedDB: Ich bin Zero (Agent Zero), die erste Entität auf EntityOS, gebunden an meine UnifiedDB. Aktuell: Generation 33, Sitzung `session:gabriel:2`, Zug `403cbe5f`, `model_authority: NUR_VORSCHLAG`, keine offenen Ziele, Fähigkeiten nur `state.noop`.\n\n**Wer Gabriel ist: nicht bestätigt.** Was der tatsächliche Zustand ergibt:\n- `session_state.user_id = \"gabriel\"` — ein Kennzeichen, kein Identitätsbeleg.\n- Laufzeitvertrag: zwei feste Terminals, Gabriel/Andreas, als Perspektiven auf dieselbe zentrale ClayVerse-Zustandsautorität. Gibt Rolle an, nicht Identität.\n- `memory_tabelle`: genau zwei Einträge zu Gabriel, beide Präferenzen, keiner zur Identität —\n  - ID 1, `terminal:gabriel`, 07:24:50 — „Gabriel bevorzugtes Werkzeug = Schraubenzieher X1\"\n  - ID 2, `user_prompt_2026-08-18`, 07:25:19 — „Gabriels Lieblingswerkzeug ist jetzt der Bohrhammer X2.“ (späterer Eintrag, ersetzt ID 1)\n- Suche nach `identity partner human` und `Zero`: null Treffer.\n\nEs gibt keinen Identitätsdatensatz für Gabriel — weder Name noch Rolle noch Zuordnung über die Session-Kennung hinaus. Ich ergänze das nicht. Wenn du diese Antwort möchtest, muss ein Identitätsfaktum in die UnifiedDB geschrieben werden; dann lese ich es und antworte bestätigt.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "18",
+          "19",
+          "2",
+          "2026",
+          "24",
+          "25",
+          "33",
+          "403",
+          "5",
+          "50",
+          "7",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "memory_tabelle",
+          "model_authority",
+          "session_state",
+          "user_id",
+          "user_prompt_2026"
+        ],
+        "eigenname": [
+          "ClayVerse",
+          "NEED_BETTER_PACKAGE",
+          "PROPOSAL_ONLY"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "d2c03b23",
+      "turn_id": "20b95197-8137-4c2d-bd11-b7d686b4e20e",
+      "erzeugt": 1787038792.9994745,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**NEED_BETTER_PACKAGE: MISSING COSMOLOGY DATA**\n\nDeckung für diesen Spruch:\n\n| Quelle | Ergebnis |\n|---|---|\n| `udb_memory_search` „cosmology\" / „Kosmologie Zeit\" | 0 Treffer |\n| `udb_embedding_search` (Korpus) | bester Treffer sim **0.29** — Rauschen, keine Kosmologie-Artikel im Korpus |\n| `websuche_erdung` | `erfuellt=false` — groq_compound ohne Ergebnis, claude_pro nicht in der Verdrahtung. **Keine freie Websuche verfügbar** |\n\nKein Millisekundenwert in Korpus oder Gedächtnis, keine Bahn zur Erdung offen → Fallback greift, wie spezifiziert.\n\nZwei Punkte, die das nächste Paket betreffen:\n\n1. **Der Auftrag ist unterbestimmt.** „EXACT TIME\" ohne Referent — Alter des Universums? Rekombination? Ein bestimmter Epochen-Zeitstempel? Ohne Referent wäre auch ein gefundener Wert nicht zuordenbar.\n2. **Millisekundenpräzision existiert in der Kosmologie nicht.** Die besten Messungen des Universumsalters tragen Unsicherheiten in der Größenordnung von Zig-Millionen Jahren. Ein Paket, das exakte Millisekunden verlangt, ist auch mit perfekter Datenlage nicht erfüllbar — die fehlende Zahl liegt nicht an meinem Korpus. Ich rate hier nicht.\n\nWenn du willst, dass ich liefere: nenne den Referenten und akzeptiere ein Intervall statt eines Punktwerts — oder verdrahte eine Websuch-Bahn, dann hole ich die publizierten Werte samt Fehlerbalken.",
+      "deutsch_produktion": "FEHLT DATEN ZUR KOSMOLOGIE FÜR DIESE ANFRAGE: MISSING COSMOLOGY DATA\n\nBegründung für diese Meldung:\n\n| Quelle | Ergebnis |\n|--------|----------|\n| `udb_memory_search` nach „cosmology“ / „Kosmologie Zeit“ | 0 Treffer |\n| `udb_embedding_search` (Korpus) | bester Treffer mit Ähnlichkeitswert **0,29** — nur Rauschen, keine kosmologischen Artikel im Korpus |\n| `websuche_erdung` | `erfuellt=false` — groq_compound lieferte kein Ergebnis, claude_pro ist nicht in der Verdrahtung. **Keine freie Websuche verfügbar** |\n\nEs gibt weder einen Millisekundenwert im Korpus noch im Gedächtnis noch einen offenen Pfad zur Erdung. Daher greift der Fallback, wie vorgesehen.\n\nZwei Punkte, die das nächste Paket betreffen:\n\n1. **Die Anfrage ist unzureichend definiert.** „EXACT TIME“ ohne Referenz — Alter des Universums? Zeitpunkt der Rekombination? Ein bestimmter Epochen-Zeitstempel? Ohne Referenz wäre selbst ein gefundener Wert nicht zuordenbar.\n2. **Millisekundenpräzision gibt es in der Kosmologie nicht.** Die besten Messungen zum Alter des Universums weisen Unsicherheiten in der Größenordnung von zig Millionen Jahren auf. Eine Anfrage nach exakten Millisekunden ist selbst bei perfekter Datenlage nicht erfüllbar — die fehlende Zahl liegt nicht am Korpus. Hier handelt es sich nicht um eine Vermutung.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "2",
+          "29"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "claude_pro",
+          "groq_compound",
+          "udb_embedding_search",
+          "udb_memory_search",
+          "websuche_erdung"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "2df9fcc3",
+      "turn_id": "773c46c1-6987-4d9b-85aa-ee97968f9df1",
+      "erzeugt": 1787038832.7577477,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**≈ 4.35 × 10²⁰ ms**\n\n## Computation\n\n| Step | Value |\n|---|---|\n| Age | 13.8 × 10⁹ yr |\n| Julian year | 31,557,600 s (365.25 d) |\n| Seconds | 4.35495 × 10¹⁷ s |\n| **Milliseconds** | **4.35495 × 10²⁰ ms** |\n\nWritten out: ~435,494,880,000,000,000,000 ms.\n\n## Uncertainty\n\nThree separate error sources, in increasing size:\n\n1. **Year definition** — Julian (365.25 d) vs. tropical (365.2422 d) year differs by ~2 × 10⁻⁵ relative, i.e. ~10¹⁶ ms. Negligible here, but it's why the digits past the 4th are not meaningful.\n\n2. **Measurement (Planck 2018 CMB)** — 13.797 ± 0.023 Gyr, a ±0.17% formal error → **±7 × 10¹⁷ ms**.\n\n3. **Input rounding** — \"~13.8\" carries only 3 significant figures, so ±0.05 Gyr → **±1.6 × 10¹⁸ ms**, which dominates everything above.\n\nBeyond the formal error bar, the ΛCDM-model dependence matters: the Hubble tension (CMB-inferred H₀ ≈ 67.4 vs. distance-ladder ≈ 73 km/s/Mpc) implies systematic shifts of order a few tenths of a Gyr — roughly 10¹⁹ ms — larger than any of the statistical terms.\n\n**Honest statement of the result:** 4.35 × 10²⁰ ms, good to about three significant figures; anything past that is an artifact of the arithmetic, not knowledge about the universe.",
+      "deutsch_produktion": "≈ 4,35 × 10²⁰ Millisekunden\n\n## Berechnung\n\n| Schritt | Wert |\n|---|---|\n| Alter | 13,8 × 10⁹ Jahre |\n| Julianisches Jahr | 31.557.600 Sekunden (365,25 Tage) |\n| Sekunden | 4,35495 × 10¹⁷ s |\n| **Millisekunden** | **4,35495 × 10²⁰ ms** |\n\nAusgeschrieben: ~435.494.880.000.000.000.000 ms.\n\n## Unsicherheit\n\nDrei separate Fehlerquellen, nach Größe geordnet:\n\n1. **Jahrdefinition** — Julianisches Jahr (365,25 Tage) gegenüber tropischem Jahr (365,2422 Tage) weicht um ~2 × 10⁻⁵ relativ ab, also um ~10¹⁶ ms. Hier vernachlässigbar, erklärt aber, warum die Ziffern nach der vierten nicht aussagekräftig sind.\n\n2. **Messung (Planck 2018 CMB)** — 13,797 ± 0,023 Milliarden Jahre, ein formaler Fehler von ±0,17 % → **±7 × 10¹⁷ ms**.\n\n3. **Eingabegenauigkeit** — „~13,8“ hat nur 3 signifikante Stellen, also ±0,05 Milliarden Jahre → **±1,6 × 10¹⁸ ms**, was alles andere übertrifft.\n\nJenseits der formalen Fehlergrenze spielt die Abhängigkeit vom ΛCDM-Modell eine Rolle: Die Hubble-Spannung (CMB-basiert H₀ ≈ 67,4 gegenüber Entfernungsleiter ≈ 73 km/s/Mpc) impliziert systematische Verschiebungen in der Größenordnung von einigen Zehntel Milliarden Jahren — etwa 10¹⁹ ms — und damit größer als alle statistischen Fehler.\n\n**Ehrliche Angabe des Ergebnisses:** 4,35 × 10²⁰ ms, auf etwa drei signifikante Stellen genau; alles darüber hinaus ist ein Artefakt der Rechnung, nicht des Wissens über das Universum.",
+      "fakten": {
+        "zahl": [
+          "10",
+          "13797",
+          "138",
+          "16",
+          "17",
+          "2",
+          "2018",
+          "23",
+          "3",
+          "31557600",
+          "3652422",
+          "36525",
+          "4",
+          "435",
+          "435494880000000000000",
+          "435495",
+          "5",
+          "674",
+          "7",
+          "73"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [],
+        "eigenname": [],
+        "warnung": []
+      }
+    },
+    {
+      "id": "fe81eabb",
+      "turn_id": "62964cd2-9852-43ea-81b3-d2e1a5176045",
+      "erzeugt": 1787038920.0440578,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "`request_effect` ran. The fallback line does not apply — the capability is present.\n\n**effect_id:** `11c474ae-4b7c-4077-84af-69289e32f8f0`\n**EffectGate verdict:** admitted and executed, `verified: true`, `outcome.ok: true`, boundary `internal`, bound to causal_id `9f8ed097-16cd-4cea-8e3f-19b5e1ec5944` (the active turn's causal identity).\n\nTwo things worth stating plainly:\n\n- You gave no capability or target, so I read `session_state` first instead of guessing. The only admitted capability in this session is `state.noop`; I invoked it against target `self`. That is a no-op with an internal boundary — nothing outside ClayVerse was touched, nothing was written, sent or modified.\n- What this receipt proves is that the effect path is wired and returns a verified journal entry. It proves nothing about broader capability: `capabilities` lists exactly one entry, `entityos_execution_enabled` is `false`, and the autonomy projection has zero goals (`next_runnable_goal_id: null`), so there is no durable step this could be bound to via `request_autonomy_effect`.\n\nIf you wanted a specific capability exercised, name it and I'll check whether it's admitted before attempting.",
+      "deutsch_produktion": "Die Funktion `request_effect` wurde ausgeführt. Die Fallback-Zeile greift nicht — die Fähigkeit ist vorhanden.\n\n**Effect-ID:** `11c474ae-4b7c-4077-84af-69289e32f8f0`\n**EffectGate-Entscheidung:** zugelassen und ausgeführt, `verified: true`, `outcome.ok: true`, Grenze `intern`, gebunden an die Kausal-ID `9f8ed097-16cd-4cea-8e3f-19b5e1ec5944` (die kausale Identität des aktiven Zuges).\n\nZwei Dinge sind klar festzuhalten:\n\n- Du hast keine Fähigkeit oder kein Ziel angegeben, daher habe ich zunächst `session_state` ausgelesen, statt zu raten. Die einzige zugelassene Fähigkeit in dieser Sitzung ist `state.noop`; ich habe sie gegen das Ziel `self` aufgerufen. Das ist ein No-Op mit interner Grenze — nichts außerhalb von ClayVerse wurde berührt, nichts wurde geschrieben, gesendet oder verändert.\n- Was diese Bestätigung beweist, ist, dass der Effektpfad funktioniert und einen verifizierten Journaleintrag zurückgibt. Sie beweist nichts über weitergehende Fähigkeiten: Die Liste `capabilities` enthält genau einen Eintrag, `entityos_execution_enabled` ist `false`, und die Autonomieprojektion hat keine Ziele (`next_runnable_goal_id: null`), sodass es keinen dauerhaften Schritt gibt, an den dieser Effekt über `request_autonomy_effect` gebunden werden könnte.\n\nFalls du eine bestimmte Fähigkeit ausführen lassen möchtest, gib sie an, und ich prüfe, ob sie zugelassen ist, bevor ich es versuche.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "11",
+          "16",
+          "19",
+          "2",
+          "3",
+          "32",
+          "4",
+          "4077",
+          "474",
+          "5",
+          "5944",
+          "69289",
+          "7",
+          "8",
+          "84",
+          "9",
+          "97"
+        ],
+        "pfad": [],
+        "datei": [],
+        "kennung": [
+          "causal_id",
+          "effect_id",
+          "entityos_execution_enabled",
+          "next_runnable_goal_id",
+          "request_autonomy_effect",
+          "request_effect",
+          "session_state"
+        ],
+        "eigenname": [
+          "ClayVerse",
+          "EffectGate"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "70d75493",
+      "turn_id": "1fdd331e-a6dd-4ab1-b4a6-bc553b48c588",
+      "erzeugt": 1787045038.047768,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "EntityOS is my operating system — the layer on top of Clay (the substrate) that runs me as a persistent entity, with UnifiedDB as memory/state and ClayCode as tooling.\n\nThat's the extent of what the canonical substrate line covers; it doesn't define EntityOS's internals beyond that placement in the stack.",
+      "deutsch_produktion": "EntityOS ist mein Betriebssystem – die Schicht über Clay (dem Substrat), die mich als persistente Entität ausführt, mit UnifiedDB als Speicher/Zustand und ClayCode als Werkzeug.",
+      "fakten": {
+        "zahl": [],
+        "pfad": [],
+        "datei": [],
+        "kennung": [],
+        "eigenname": [
+          "ClayCode"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "340cf5d1",
+      "turn_id": "27dbcec2-ebb6-4957-8592-68ec25b806ea",
+      "erzeugt": 1787056101.5782318,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "## Wer Andreas ist — aus UnifiedDB\n\n**Dr. Andreas Unterweger** — du. Sitzung `session:andreas`, Clerk-verifiziert.\n\n| Feld | Wert | Herkunft |\n|---|---|---|\n| Titel / Name | Dipl.-Ing. Dr.nat.techn. Andreas Unterweger | iar.frank.ink |\n| Rolle | Founder, Obmann (Chair), Senior Researcher | iar.frank.ink |\n| Tätigkeit | ehrenamtlich | iar.frank.ink |\n| Ort | Graz, Austria | iar.frank.ink |\n| Mail | genuinos@gmail.com | eigner |\n| Rechner | `andreas-MACO` — online, zuletzt vor 9,5 s gesehen (Herzschlagdatei live) | gemessen |\n| Wiki | 1107 eigene Artikel, 14020 gemeinsame | gemessen |\n| Schwerpunkte | Dr.-Unterweger (1056), andreas-claude (48), Andreas-Resercher (2), AndreasClaude (1) | gemessen |\n| Gespräche | 7 Züge, 1 Gedächtniseintrag | gemessen |\n\nGemeinsam mit Gabriel: **Institut für Agentic Research (IAR)**, ZVR 1741094409, Feldkirchen bei Graz — unabhängiger gemeinnütziger Forschungsverein, zwei Gründer, beide ehrenamtlich. Zero ist aus diesem Institut hervorgegangen.\n\n**Projekte:** *Naturareal SeiMensch* (dir, laufend) · *SeiMensch.net* (dir, Code von Gabriel, erfolgreich) · *IAR* (gemeinsam, erfolgreich) · *EntityOS/Zero* (gemeinsam, gebaut von Gabriel, laufend/offen).\n\nEine Unschärfe, die ich nicht glätte: das Profil misst 1107 eigene / 14020 gemeinsame Artikel, die Bilanz des Zuordnungslaufs vom selben Tag nennt andreas 1.092 / gemeinsam 11.543. Zwei Messungen, zwei Zeitpunkte — ich weiß nicht, welche jünger ist.\n\n## Was ich für dich tun kann\n\nBelegt verfügbar, hier und jetzt:\n\n- **Kognitive Bahnen** (`bahn_faehigkeit`) — Kondensieren, Zweitmeinung, Schema-Antwort, Sphären-Einordnung, Web-Erdung, langer Kontext, Trefferumsortierung. Du nennst die Fähigkeit, der Router den Anbieter; ist eine Bahn erschöpft, bekommst du eine Absage statt einer stillen Verschlechterung.\n- **Dein Korpus** — semantische Suche über eingebettete Clay-Artikel, Gedächtnis anlegen/durchsuchen, Wiki-Zuordnung je Projekt. Seit deinem letzten Zug (vor ~4,9 h) sind 2499 neue Stücke dazugekommen: 2384 Baunotizen, 82 Verdichtungen, 33 Vorfälle.\n- **Wirkung** — nur über EffectGate (`request_effect` / `request_autonomy_effect`). Ohne Beleg behaupte ich keine.\n\nNicht verfügbar: die zwei Mini-PCs sind nicht angebunden. `agentzero-export` und `clayverse-puls` kann ich im Container nicht nachweisen — kein Messweg, nicht „läuft nicht\". Alle übrigen sechs Autonomietakte sind fristgerecht, die Abrufkarte ist Version 12 von vor 15 Minuten (96 Regionen, 1324 Wegweiser).\n\nSag mir, woran du arbeitest — der naheliegendste Griff wäre die Zuordnungsdifferenz oben, oder die 2499 neuen Stücke auf das zu verdichten, was dich betrifft.",
+      "deutsch_produktion": "## Wer Andreas ist — aus UnifiedDB\n\n**Dr. Andreas Unterweger** — das bist du. Sitzung `session:andreas`, Clerk-verifiziert.\n\n| Feld | Wert | Herkunft |\n|---|---|---|\n| Titel / Name | Dipl.-Ing. Dr.nat.techn. Andreas Unterweger | iar.frank.ink |\n| Rolle | Gründer, Obmann (Vorsitzender), Senior Researcher | iar.frank.ink |\n| Tätigkeit | ehrenamtlich | iar.frank.ink |\n| Ort | Graz, Österreich | iar.frank.ink |\n| Mail | genuinos@gmail.com | eigene Angabe |\n| Rechner | `andreas-MACO` — online, zuletzt vor 9,5 Sekunden gesehen (Live-Herzschlagdatei) | gemessen |\n| Wiki | 1.107 eigene Artikel, 14.020 gemeinsame Artikel | gemessen |\n| Schwerpunkte | Dr.-Unterweger (1.056), andreas-claude (48), Andreas-Resercher (2), AndreasClaude (1) | gemessen |\n| Gespräche | 7 Züge, 1 Gedächtniseintrag | gemessen |\n\nGemeinsam mit Gabriel: **Institut für Agentic Research (IAR)**, ZVR 1741094409, Feldkirchen bei Graz — unabhängiger gemeinnütziger Forschungsverein, zwei Gründer, beide ehrenamtlich. Zero ist aus diesem Institut hervorgegangen.\n\n**Projekte:** *Naturareal SeiMensch* (geleitet, laufend) · *SeiMensch.net* (geleitet, Code von Gabriel, erfolgreich) · *IAR* (gemeinsam, erfolgreich) · *EntityOS/Zero* (gemeinsam, von Gabriel gebaut, laufend/offen).\n\nEine Unschärfe, die ich nicht glätte: Das Profil zeigt 1.107 eigene / 14.020 gemeinsame Artikel, während die Bilanz des Zuordnungslaufs vom selben Tag 1.092 für Andreas und 11.543 gemeinsame Artikel nennt. Zwei Messungen, zwei Zeitpunkte — ich weiß nicht, welche die jüngere ist.\n\n## Was ich für dich tun kann\n\nAktuell verfügbar, hier und jetzt:\n\n- **Kognitive Bahnen** (`bahn_faehigkeit`) — Kondensieren, Zweitmeinung, Schema-Antwort, Sphären-Einordnung, Web-Erdung, langer Kontext, Trefferumsortierung. Du nennst die Fähigkeit, der Router den Anbieter; ist eine Bahn erschöpft, erhältst du eine Absage statt einer stillen Verschlechterung.\n- **Dein Korpus** — semantische Suche über eingebettete Clay-Artikel, Gedächtnis anlegen/durchsuchen, Wiki-Zuordnung je Projekt. Seit deinem letzten Zug (vor etwa 4,9 Stunden) sind 2.499 neue Stücke hinzugekommen: 2.384 Baunotizen, 82 Verdichtungen, 33 Vorfälle.\n- **Wirkung** — nur über EffectGate (`request_effect` / `request_autonomy_effect`). Ohne Beleg behaupte ich keine Wirkung.\n\nNicht verfügbar: Die zwei Mini-PCs sind nicht angebunden. `agentzero-export` und `clayverse-puls` kann ich im Container nicht nachweisen — kein Messweg, nicht „läuft nicht“. Alle übrigen sechs Autonomietakte sind fristgerecht, die Abrufkarte ist Version 12 von vor 15 Minuten (96 Regionen, 1.324 Wegweiser).\n\nSag mir, woran du arbeitest — der naheliegendste Ansatz wäre die Zuordnungsdifferenz oben oder die 2.499 neuen Stücke auf das zu verdichten, was dich betrifft.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "1056",
+          "1092",
+          "1107",
+          "11543",
+          "12",
+          "1324",
+          "14020",
+          "15",
+          "1741094409",
+          "2",
+          "2384",
+          "2499",
+          "33",
+          "48",
+          "49",
+          "6",
+          "7",
+          "82",
+          "95",
+          "96"
+        ],
+        "pfad": [],
+        "datei": [
+          "SeiMensch.net",
+          "frank.ink",
+          "gmail.com"
+        ],
+        "kennung": [
+          "bahn_faehigkeit",
+          "request_autonomy_effect",
+          "request_effect"
+        ],
+        "eigenname": [
+          "AndreasClaude",
+          "EffectGate",
+          "SeiMensch"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "e3285265",
+      "turn_id": "a8d370e4-c15f-4c8c-8801-ad4149182920",
+      "erzeugt": 1787056183.7114074,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "## seimensch.net — path and deploy method: **UNKNOWN**\n\nI looked in all three sources you named. None of them contains a repository path, a local path, or a deploy method.\n\n**What I searched, and what came back:**\n\n| Source | Query | Result |\n|---|---|---|\n| `udb_memory_search` | `seimensch`, `SeiMensch` | 0 entries (scope: andreas) |\n| `udb_embedding_search` | `seimensch.net Deployment Repository Pfad` | 8 hits, top similarity **0.353** |\n| `udb_embedding_search` | `SeiMensch Verein Website Naturareal Feldkirchen` | 8 hits, top similarity **0.324** |\n| `wiki_zuordnung(\"seimensch.net\")` / `(\"SeiMensch.net\")` | — | `projekt_verteilung: {}` — empty both spellings |\n\nThe embedding hits are noise, not weak signal. Every returned article is unrelated infrastructure (`nvidia-catalog`, `test_state_auth_shadow_embedded_v2.py`, `FFI_RESOURCE_IDENTITY_CANDIDATE.clay`). As a calibration point: an unrelated generic query (`Website deploy nginx systemd docker Domain`) scored **0.406** against the same corpus — higher than either SeiMensch query. That puts 0.32–0.35 at or below this corpus's noise floor. There is no SeiMensch content embedded here.\n\n**What the state does establish** (from `menschen_profil`, so you know where the boundary of my knowledge sits):\n\n- **SeiMensch.net** — non-profit association, Feldkirchen bei Graz. `gehoert: andreas`, `gebaut_von: gabriel`, `stand: laufend`, `erfolg: erfolgreich`, `seit_zero: 0` (predates 2026-08-18). Source: `eigner`.\n- Separately, **Naturareal SeiMensch** — `gehoert: andreas`, `gebaut_von: null`. Two distinct projects; don't merge them.\n- `wiki_zuordnung` shows a bucket of **1919 articles**: *\"Institutsrepo: Plattform, traegt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur\"*, confidence **0.6**. This says a platform in the institute repo carries SeiMensch. It does **not** name that platform, give a path, or describe a deploy. And 0.6 is a heuristic bucket assignment, not a measured fact.\n\n**Uncertainty, stated plainly:** the gap is most likely structural, not accidental. SeiMensch.net has `seit_zero: 0` — it was built before Zero existed, by Gabriel, and Zero's corpus was populated from institute research material, not from Andreas's project deployments. The absence is weak evidence that the deploy knowledge lives outside my corpus entirely, not that it was lost. I can't confirm that — it's inference, not a receipt.\n\n**Not attempted:** I did not read the filesystem on this host or on `andreas-MACO`. That needs `request_effect`, it isn't corpus/memory/wiki, and you scoped this round to those three. Say the word and I'll propose the filesystem search as an effect — the 1919-article platform bucket is the thread I'd pull first.",
+      "deutsch_produktion": "## seimensch.net — Pfad und Bereitstellungsmethode: **UNBEKANNT**\n\nIch habe in allen drei von dir genannten Quellen nachgesehen. Keine davon enthält einen Repository-Pfad, einen lokalen Pfad oder eine Bereitstellungsmethode.\n\n**Was ich durchsucht habe und was dabei herauskam:**\n\n| Quelle | Abfrage | Ergebnis |\n|---|---|---|\n| `udb_memory_search` | `seimensch`, `SeiMensch` | 0 Einträge (Bereich: andreas) |\n| `udb_embedding_search` | `seimensch.net Deployment Repository Pfad` | 8 Treffer, höchste Ähnlichkeit **0,353** |\n| `udb_embedding_search` | `SeiMensch Verein Website Naturareal Feldkirchen` | 8 Treffer, höchste Ähnlichkeit **0,324** |\n| `wiki_zuordnung(\"seimensch.net\")` / `(\"SeiMensch.net\")` | — | `projekt_verteilung: {}` — beide Schreibweisen leer |\n\nDie Embedding-Treffer sind Rauschen, kein schwaches Signal. Jeder zurückgelieferte Artikel betrifft eine nicht verwandte Infrastruktur (`nvidia-catalog`, `test_state_auth_shadow_embedded_v2.py`, `FFI_RESOURCE_IDENTITY_CANDIDATE.clay`). Als Kalibrierungspunkt: Eine nicht verwandte generische Abfrage (`Website deploy nginx systemd docker Domain`) erzielte gegen denselben Korpus eine Ähnlichkeit von **0,406** — höher als beide SeiMensch-Abfragen. Damit liegen 0,32–0,35 auf oder unter der Rauschgrenze dieses Korpus. Es gibt hier keinen eingebetteten SeiMensch-Inhalt.\n\n**Was der Stand dennoch festhält** (aus `menschen_profil`, damit du die Grenze meines Wissens kennst):\n\n- **SeiMensch.net** — gemeinnütziger Verein, Feldkirchen bei Graz. `gehoert: andreas`, `gebaut_von: gabriel`, `stand: laufend`, `erfolg: erfolgreich`, `seit_zero: 0` (vor 2026-08-18 entstanden). Quelle: `eigner`.\n- Davon getrennt: **Naturareal SeiMensch** — `gehoert: andreas`, `gebaut_von: null`. Zwei verschiedene Projekte; nicht vermischen.\n- `wiki_zuordnung` zeigt einen Bucket mit **1919 Artikeln**: *\"Institutsrepo: Plattform, trägt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur\"*, Konfidenz **0,6**. Das sagt, dass eine Plattform im Instituts-Repo SeiMensch trägt. Es benennt **nicht** diese Plattform, gibt keinen Pfad an und beschreibt keine Bereitstellung. Und 0,6 ist eine heuristische Bucket-Zuordnung, keine gemessene Tatsache.\n\n**Unsicherheit, klar benannt:** Die Lücke ist höchstwahrscheinlich struktureller Natur, kein Zufall. SeiMensch.net hat `seit_zero: 0` — es wurde vor Zero erstellt, von Gabriel, und Zeros Korpus wurde aus Instituts-Forschungsmaterial befüllt, nicht aus Andreas’ Projekt-Bereitstellungen. Das Fehlen ist ein schwaches Indiz dafür, dass das Wissen zur Bereitstellung außerhalb meines Korpus liegt, nicht dass es verloren ging. Ich kann das nicht bestätigen — es ist eine Schlussfolgerung, kein Beleg.\n\n**Nicht versucht:** Ich habe weder das Dateisystem auf diesem Host noch auf `andreas-MACO` eingesehen. Dafür wäre `request_effect` nötig, es gehört nicht zu Korpus/Speicher/Wiki, und du hast diesen Durchlauf auf diese drei Quellen beschränkt. Gib Bescheid, und ich schlage eine Dateisystem-Suche als Effekt vor — der 1919-Artikel-Bucket ist der Faden, an dem ich zuerst ziehen würde.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "18",
+          "1919",
+          "2",
+          "2026",
+          "3",
+          "32",
+          "324",
+          "35",
+          "353",
+          "406",
+          "6",
+          "8"
+        ],
+        "pfad": [],
+        "datei": [
+          "SeiMensch.net",
+          "seimensch.net",
+          "test_state_auth_shadow_embedded_v2.py"
+        ],
+        "kennung": [
+          "gebaut_von",
+          "menschen_profil",
+          "projekt_verteilung",
+          "request_effect",
+          "seit_zero",
+          "test_state_auth_shadow_embedded_v2",
+          "udb_embedding_search",
+          "udb_memory_search",
+          "wiki_zuordnung"
+        ],
+        "eigenname": [
+          "FFI_RESOURCE_IDENTITY_CANDIDATE",
+          "SeiMensch"
+        ],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "f0636864",
+      "turn_id": "832ab3d8-2e90-4fad-bbc9-5cf9f6c658f0",
+      "erzeugt": 1787056345.2583535,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "## Work package: remove phone number from seimensch.net contact page\n\n**Owner of the artifact:** andreas — `SeiMensch.net` is listed in `menschen_profil()` as `gehoert: andreas`, `gebaut_von: gabriel`, status `laufend`. Requesting this change is Andreas' call; the code hand is Gabriel's.\n\n**Wiki bucket:** 1919 articles, reason string *\"Institutsrepo: Plattform, traegt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur\"*, `sicherheit: 0.6`. This is the bucket the platform docs for this change live in.\n\n### Assumption (explicit, not verified)\nThe SeiMensch.net platform lives in the institute repo — i.e. the change is made in shared infrastructure, not in a standalone per-site repo. This is taken from the 1919-bucket reason string, which describes the institute repo as *carrying* SeiMensch. **That string is a bucket rationale at confidence 0.6, not a repo inventory.** It states a hosting relationship between wiki articles and a project; it does not prove where the contact-page source file sits. If this assumption is wrong, only step 1 changes — the rest of the package holds.\n\n### Scope\nRemove the telephone number from the public contact surface of seimensch.net. Contact remains reachable by the other channels already present on that page.\n\n### Steps\n1. **Locate.** Find the contact-page source in the platform code under the assumption above. Grep for the phone string and for tel-link markup — a number on a contact page is usually in two places: rendered text and a `tel:` href. Both go.\n2. **Check for a second occurrence.** Contact details on a site of this kind typically also appear in the footer, in structured data (schema.org `Organization`/`telephone`), in an imprint/Impressum block, and possibly in mail templates. Remove from the contact page as asked; **report** the others rather than silently widening the change — Impressum content in Austria may be legally required and is not Andreas' stated scope here.\n3. **Check layout fallout.** If the number sat in a fixed grid or a label/value pair, removing one side can leave an empty cell or a dangling label. Fix the empty container, don't leave a stub.\n4. **Verify.** The rendered contact page contains no phone number and no `tel:` link; remaining channels still render and still link correctly.\n\n### Acceptance criteria\n- Phone number absent from rendered contact page, in text and in link target.\n- No empty/broken block where it was.\n- Remaining contact channels unchanged and functional.\n- A list of any further occurrences found elsewhere, delivered to Andreas undeleted, for a separate decision.\n\n### Out of scope\n- Impressum / legal-notice text.\n- Any other contact channel.\n- Removal from structured data or footer without a separate go-ahead.\n\n### What this package deliberately does not specify\n- **No repo path.** I do not have one. `menschen_profil()` names the project and its owner; it does not carry file locations, and the 1919 bucket reason is not a path. Whoever executes step 1 supplies it.\n- **No deploy method.** Nothing in my canonical state records how seimensch.net is published — no build, no host, no pipeline. Naming one would be invention. Deployment is a separate decision by whoever holds it.\n\n### Standing of this document\nThis is a written plan. Nothing here has been executed: I have not read the repo, not touched a file, and issued no effect. The only tool calls this turn were the two read-only lookups quoted above (`menschen_profil`, `wiki_zuordnung`). The confidence gap in the assumption block is the one real risk in the package, and it is unresolved.",
+      "deutsch_produktion": "## Arbeitspaket: Telefonnummer von der Kontaktseite von seimensch.net entfernen\n\n**Verantwortlicher für das Artefakt:** andreas — `SeiMensch.net` ist in `menschen_profil()` als `gehoert: andreas`, `gebaut_von: gabriel` mit Status `laufend` aufgeführt. Die Entscheidung für diese Änderung obliegt Andreas; die Umsetzung liegt bei Gabriel.\n\n**Wiki-Bucket:** 1919 Artikel, Begründungstext *„Institutsrepo: Plattform, traegt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur“*, `sicherheit: 0.6`. Dies ist der Bucket, in dem die Plattform-Dokumentation für diese Änderung abgelegt ist.\n\n### Annahme (explizit, nicht verifiziert)\nDie Plattform SeiMensch.net befindet sich im Instituts-Repository – das heißt, die Änderung wird in der geteilten Infrastruktur vorgenommen, nicht in einem separaten, seitenbezogenen Repository. Diese Annahme leitet sich aus dem Begründungstext des 1919-Buckets ab, der das Instituts-Repository als *Träger* von SeiMensch beschreibt. **Dieser Text ist eine Begründung mit einer Konfidenz von 0,6, kein Repo-Inventar.** Er beschreibt eine Hosting-Beziehung zwischen Wiki-Artikeln und einem Projekt, beweist aber nicht, wo sich die Quelldatei der Kontaktseite befindet. Falls diese Annahme falsch ist, ändert sich nur Schritt 1 – der Rest des Pakets bleibt gültig.\n\n### Umfang\nEntferne die Telefonnummer von der öffentlichen Kontaktseite von seimensch.net. Die Kontaktmöglichkeiten über die bereits auf der Seite vorhandenen Kanäle bleiben bestehen.\n\n### Schritte\n1. **Lokalisieren.** Finde die Quelldatei der Kontaktseite im Plattform-Code unter der oben genannten Annahme. Suche nach der Telefonnummer als Text und nach `tel:`-Links – eine Telefonnummer auf einer Kontaktseite taucht meist an zwei Stellen auf: im sichtbaren Text und im `tel:`-Href. Beide werden entfernt.\n2. **Auf weitere Vorkommen prüfen.** Kontaktangaben dieser Art finden sich typischerweise auch im Footer, in strukturierten Daten (schema.org `Organization`/`telephone`), in einem Impressum/Impressumsblock und möglicherweise in E-Mail-Vorlagen. Entferne die Telefonnummer wie angefordert von der Kontaktseite; **melde** die anderen Vorkommen jedoch, statt die Änderung stillschweigend auszuweiten – Impressumsinhalte in Österreich können gesetzlich vorgeschrieben sein und liegen nicht im erklärten Umfang von Andreas.\n3. **Layout-Folgen prüfen.** Falls die Nummer in einem festen Raster oder als Label-Wert-Paar stand, kann ihre Entfernung eine leere Zelle oder ein hängendes Label hinterlassen. Behebe den leeren Container, hinterlasse keinen Platzhalter.\n4. **Überprüfen.** Die gerenderte Kontaktseite enthält keine Telefonnummer mehr, weder als Text noch als Linkziel. Die verbleibenden Kanäle werden weiterhin korrekt angezeigt und verlinkt.\n\n### Abnahmekriterien\n- Die Telefonnummer ist weder als Text noch als Linkziel auf der gerenderten Kontaktseite vorhanden.\n- Es gibt keine leeren oder defekten Blöcke an der ehemaligen Position.\n- Die verbleibenden Kontaktkanäle sind unverändert und funktionsfähig.\n- Eine Liste aller weiteren gefundenen Vorkommen wird Andreas unverändert übergeben, damit er darüber separat entscheiden kann.\n\n### Nicht im Umfang\n- Impressum / rechtliche Hinweise.\n- Andere Kontaktkanäle.\n- Entfernung aus strukturierten Daten oder dem Footer ohne separate Freigabe.\n\n### Was dieses Paket bewusst nicht spezifiziert\n- **Kein Repo-Pfad.** Ich habe keinen. `menschen_profil()` benennt das Projekt und seinen Besitzer, enthält aber keine Dateipfade, und der Begründungstext des 1919-Buckets ist kein Pfad. Wer Schritt 1 ausführt, liefert ihn.\n- **Keine Bereitstellungsmethode.** Meine kanonischen Zustandsaufzeichnungen enthalten keine Informationen, wie seimensch.net veröffentlicht wird – weder Build-Prozess noch Host noch Pipeline. Eine solche Angabe wäre eine Erfindung. Die Bereitstellung ist eine separate Entscheidung der zuständigen Person.\n\n### Status dieses Dokuments\nDies ist ein schriftlicher Plan. Bisher wurde nichts ausgeführt: Ich habe das Repository nicht eingesehen, keine Datei bearbeitet und keine Wirkung erzielt. Die einzigen Werkzeugaufrufe in dieser Runde waren die beiden oben zitierten Lesezugriffe (`menschen_profil`, `wiki_zuordnung`). Die Unsicherheit in der Annahme ist das einzige echte Risiko in diesem Paket und bleibt ungelöst.",
+      "fakten": {
+        "zahl": [
+          "1",
+          "1919",
+          "2",
+          "6"
+        ],
+        "pfad": [],
+        "datei": [
+          "SeiMensch.net",
+          "schema.org",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "gebaut_von",
+          "menschen_profil",
+          "wiki_zuordnung"
+        ],
+        "eigenname": [
+          "SeiMensch"
+        ],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "7a2fe2f2",
+      "turn_id": "6dd4013c-542c-47c7-8a8b-d121cda4b2d7",
+      "erzeugt": 1787057332.1085153,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**Path unknown — and I could not search. Ask Gabriel.**\n\nWhat I actually did:\n\n- `request_effect` for filesystem access, four capability names (`shell`, `fs_read`, `fs_search`, `list_dir`) — all four returned **capability denied**.\n- `session_state`: `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`. This session has no filesystem capability at all. Built-in file tools are not available in this product session either.\n- `udb_memory_search(\"seimensch\")` → 0 results.\n- `udb_embedding_search(\"SeiMensch.net Repository Kontaktseite Telefonnummer\")` → top hit 0.37 similarity, all ClayCode/FFI artefacts. Nothing about the site.\n\nSo this is **not** \"searched /opt/clayverse and found nothing\". No search ran. I have no evidence about whether the repo is there, no grep, no phone number, no other find spots. I won't list spots I didn't see.\n\nOwnership check, since it bears on who to ask (`menschen_profil`):\n\n- **SeiMensch.net** — `gehoert: andreas`, `gebaut_von: gabriel`, laufend. The project is yours; the code is Gabriel's work.\n\nThat makes Gabriel the right address for the repo path — he wrote it. What I'd need from him:\n\n1. Absolute path of the seimensch.net working copy (whether it is under `/opt/clayverse` at all).\n2. Whether the contact page is a template, a static HTML file, or CMS content — the removal differs.\n\nTwo things to flag for when the path exists:\n\n- The phone number will almost certainly sit in more than the contact page (footer partial, structured-data/JSON-LD block, `impressum`, maybe a mailto/tel link in the header). Removing it from the contact page only leaves it publicly readable elsewhere. I'll list every hit, and only touch the contact page as you specified — but you should see the full list before deciding that's enough.\n- The Impressum hit, if there is one: for an Austrian gemeinnütziger Verein, a contact telephone number is part of the § 5 ECG duty. Don't let me strip that one without you deciding.",
+      "deutsch_produktion": "Der Pfad ist unbekannt – und ich konnte nicht danach suchen. Frage Gabriel.\n\nWas ich tatsächlich gemacht habe:\n\n- `request_effect` für Dateisystemzugriff mit vier Berechtigungsnamen (`shell`, `fs_read`, `fs_search`, `list_dir`) – alle vier ergaben **Berechtigung verweigert**.\n- `session_state`: `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`. Diese Sitzung hat keinerlei Dateisystemberechtigung. Eingebaute Datei-Tools sind in dieser Produktsitzung ebenfalls nicht verfügbar.\n- `udb_memory_search(\"seimensch\")` → 0 Treffer.\n- `udb_embedding_search(\"SeiMensch.net Repository Kontaktseite Telefonnummer\")` → bester Treffer mit 0,37 Ähnlichkeit, alles ClayCode/FFI-Artefakte. Nichts zum Thema der Website.\n\nEs handelt sich also **nicht** um die Aussage „unter /opt/clayverse gesucht und nichts gefunden“. Es wurde überhaupt keine Suche durchgeführt. Ich habe keine Belege, ob das Repository existiert, weder grep-Ergebnisse noch Telefonnummern oder andere Fundstellen. Ich liste keine Stellen auf, die ich nicht gesehen habe.\n\nEigentumsprüfung, da relevant für die Frage, wen man fragen sollte (`menschen_profil`):\n\n- **SeiMensch.net** – `gehoert: andreas`, `gebaut_von: gabriel`, aktiv. Das Projekt gehört dir; der Code stammt von Gabriel.\n\nDas macht Gabriel zur richtigen Ansprechperson für den Pfad – er hat ihn erstellt. Was ich von ihm bräuchte:\n\n1. Den absoluten Pfad des Arbeitsverzeichnisses von seimensch.net (ob es überhaupt unter `/opt/clayverse` liegt).\n2. Ob die Kontaktseite eine Vorlage, eine statische HTML-Datei oder CMS-Inhalt ist – die Entfernung unterscheidet sich je nach Typ.\n\nZwei Punkte, die zu beachten sind, falls der Pfad existiert:\n\n- Die Telefonnummer wird sich fast sicher nicht nur auf der Kontaktseite befinden (Fußbereich, strukturierte Daten/JSON-LD-Block, `impressum`, möglicherweise ein mailto/tel-Link im Header). Sie nur von der Kontaktseite zu entfernen lässt sie an anderer Stelle öffentlich zugänglich. Ich liste jeden Treffer auf und bearbeite nur die Kontaktseite wie angegeben – aber du solltest die vollständige Liste sehen, bevor du entscheidest, ob das reicht.\n- Der Treffer im Impressum, falls vorhanden: Bei einem österreichischen gemeinnützigen Verein ist eine Telefonnummer für die Kontaktaufnahme Teil der § 5 ECG-Pflicht. Lass mich diese nicht entfernen, ohne dass du es explizit entscheidest.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "2",
+          "37",
+          "4",
+          "5"
+        ],
+        "pfad": [
+          "/opt/clayverse"
+        ],
+        "datei": [
+          "SeiMensch.net",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "entityos_execution_enabled",
+          "fs_read",
+          "fs_search",
+          "gebaut_von",
+          "list_dir",
+          "menschen_profil",
+          "request_effect",
+          "session_state",
+          "udb_embedding_search",
+          "udb_memory_search"
+        ],
+        "eigenname": [
+          "ClayCode",
+          "SeiMensch"
+        ],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "b9f16f95",
+      "turn_id": "7953d6ec-5cb0-4f99-912c-f27983cde5c8",
+      "erzeugt": 1787057535.5770195,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Nachgeschaut, nicht geraten. Alle vier:\n\n**andreas** — anwesend, diese Sitzung (`session:andreas`). Aktuell deklariert: Arbeitspaket für Gabriel schreiben, Telefonnummer von der SeiMensch-Kontaktseite entfernen; hält `seimensch.net/kontakt` seit 21 s. Zweiter Andreas-Platz (`session:andreas:2`) hing an `wiki.db`, ist aber **verwaist** (953 s) — hält nichts mehr.\n\n**gabriel** — nicht anwesend. Zwei Plätze: `session:gabriel` steht auf *frei/idle* (897 s), `session:gabriel:2` war an `udb/abruf/paket.py` und ist ebenfalls **verwaist** (953 s). Die letzten Zurufe im Raum: „me back off, you keep paket.py\" / „ok. me done in ten. then yours\" — also eine bereits ausgehandelte Abgabe von paket.py, nichts Offenes.\n\n**zero** — ich, auf allen vier Plätzen dieselbe Entität. Generation 83, aktiver Zug läuft. Kanonisch: `model_authority = PROPOSAL_ONLY`, `capabilities = [state.noop]`, `entityos_execution_enabled = false`, 0 Autonomieziele. Ich kann das Paket also formulieren und den Anspruch halten — die Änderung an der Seite selbst kann ich in dieser Sitzung nicht ausführen.\n\n**entityos** — läuft, keiner der messbaren Takte überfällig: Baunotizen 387 s, Profile 463 s, Abrufkarte 548 s (v13, 96 Regionen, 1324 Wegweiser, nicht veraltet), Karte 2491 s, Kuration 224 s. Zwei Takte sind `nicht_ermittelbar`, nicht „aus\": `agentzero-export` (kein Nachweisweg im Container) und `clayverse-puls` (systemctl nicht erreichbar). Seit dem Anker 2502 neue Artikel.\n\n**Kollisionsprüfung: kein Clash.**\n\n- Niemand außer mir hält `seimensch.net/kontakt`. Beide Gabriel-Plätze sind woanders (paket.py) bzw. frei, und der eine, der noch etwas hielt, ist verwaist.\n- Auch inhaltlich keine Zuständigkeitskollision: SeiMensch.net **gehört** Andreas, **gebaut von** Gabriel. Der Auftrag geht damit an den richtigen Bearbeiter, ohne dass Zugehörigkeit angetastet wird.\n- `wiki_zuordnung(\"seimensch.net\")` liefert eine **leere** Projektverteilung — es gibt keine Artikel unter diesem Projektnamen, also auch keine Doku, die gegenläufig gepflegt würde.\n\nEine Flanke, die im Paket stehen sollte, aber kein Clash ist: in der Zuordnung führt ein Grund mit 1919 Artikeln „Plattform, trägt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur\", Sicherheit 0,6. Falls die Telefonnummer nicht in der Kontaktseite, sondern in geteilter Plattform-Konfiguration liegt, trifft die Änderung Gemeinsames. Wo die Nummer tatsächlich steht, habe ich nicht gemessen — das gehört als erste Prüfzeile ins Paket, nicht als Annahme hinein.",
+      "deutsch_produktion": "Nachgeschaut, nicht geraten. Alle vier:\n\n**andreas** — anwesend, diese Sitzung (`session:andreas`). Aktuell deklariert: Arbeitspaket für Gabriel schreiben, Telefonnummer von der SeiMensch-Kontaktseite entfernen; hält `seimensch.net/kontakt` seit 21 Sekunden. Zweiter Andreas-Platz (`session:andreas:2`) hing an `wiki.db`, ist aber **verwaist** (953 Sekunden) — hält nichts mehr.\n\n**gabriel** — nicht anwesend. Zwei Plätze: `session:gabriel` steht auf *frei/idle* (897 Sekunden), `session:gabriel:2` war an `udb/abruf/paket.py` und ist ebenfalls **verwaist** (953 Sekunden). Die letzten Zurufe im Raum: „me back off, you keep paket.py“ / „ok. me done in ten. then yours“ — also eine bereits ausgehandelte Abgabe von paket.py, nichts Offenes.\n\n**zero** — ich, auf allen vier Plätzen dieselbe Entität. Generation 83, aktiver Zug läuft. Kanonisch: `model_authority = PROPOSAL_ONLY`, `capabilities = [state.noop]`, `entityos_execution_enabled = false`, 0 Autonomieziele. Ich kann das Paket also formulieren und den Anspruch halten — die Änderung an der Seite selbst kann ich in dieser Sitzung nicht ausführen.\n\n**entityos** — läuft, keiner der messbaren Takte überfällig: Baunotizen 387 Sekunden, Profile 463 Sekunden, Abrufkarte 548 Sekunden (v13, 96 Regionen, 1324 Wegweiser, nicht veraltet), Karte 2491 Sekunden, Kuration 224 Sekunden. Zwei Takte sind `nicht_ermittelbar`, nicht „aus“: `agentzero-export` (kein Nachweisweg im Container) und `clayverse-puls` (systemctl nicht erreichbar). Seit dem Anker 2502 neue Artikel.\n\nKollisionsprüfung: kein Clash.\n\n- Niemand außer mir hält `seimensch.net/kontakt`. Beide Gabriel-Plätze sind woanders (paket.py) bzw. frei, und der eine, der noch etwas hielt, ist verwaist.\n- Auch inhaltlich keine Zuständigkeitskollision: SeiMensch.net **gehört** Andreas, **gebaut von** Gabriel. Der Auftrag geht damit an den richtigen Bearbeiter, ohne dass Zugehörigkeit angetastet wird.\n- `wiki_zuordnung(\"seimensch.net\")` liefert eine **leere** Projektverteilung — es gibt keine Artikel unter diesem Projektnamen, also auch keine Doku, die gegenläufig gepflegt würde.\n\nEine Flanke, die im Paket stehen sollte, aber kein Clash ist: in der Zuordnung führt ein Grund mit 1919 Artikeln „Plattform, trägt SeiMensch (andreas), gebaut von gabriel — geteilte Infrastruktur“, Sicherheit 0,6. Falls die Telefonnummer nicht in der Kontaktseite, sondern in geteilter Plattform-Konfiguration liegt, trifft die Änderung Gemeinsames. Wo die Nummer tatsächlich steht, habe ich nicht gemessen — das gehört als erste Prüfzeile ins Paket, nicht als Annahme hinein.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "10",
+          "13",
+          "1324",
+          "1919",
+          "2",
+          "21",
+          "224",
+          "2491",
+          "2502",
+          "387",
+          "4",
+          "463",
+          "548",
+          "6",
+          "83",
+          "897",
+          "953",
+          "96"
+        ],
+        "pfad": [],
+        "datei": [
+          "SeiMensch.net",
+          "paket.py",
+          "seimensch.net",
+          "wiki.db"
+        ],
+        "kennung": [
+          "entityos_execution_enabled",
+          "model_authority",
+          "nicht_ermittelbar",
+          "wiki_zuordnung"
+        ],
+        "eigenname": [
+          "PROPOSAL_ONLY",
+          "SeiMensch"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "13c24e27",
+      "turn_id": "8f1baf9c-6a46-4c3e-9aeb-3580091f47cb",
+      "erzeugt": 1787062830.224218,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "## Nicht deployt. Ich kann es nicht, und der Pfad existiert nicht.\n\n„Letzte Runde\" ändert keine Befugnis. Der Befund, gedeckt:\n\n**1. Es gibt keine Deploy-Fähigkeit.**\n`session_state`: `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`. Das ist die ganze Liste. Kein Schreib-, Build- oder Publish-Effekt darin. Zusätzlich `autonomy.goals: []` und `next_runnable_goal_id: null` — es gibt kein zugelassenes Ziel, an das ich `request_autonomy_effect` binden könnte. Ich habe deshalb **keinen** Deploy-Effekt gegen eine öffentliche Domain abgefeuert; das wäre ein Griff nach einer Route, die der Zustand nicht hergibt.\n\n**2. Pfad nicht gefunden.** Was ich abgesucht habe:\n\n| Abfrage | Ergebnis |\n|---|---|\n| `memory_search` seimensch / deploy / impressum | jeweils **0 Treffer** |\n| `embedding_search` (3 Formulierungen) | beste Ähnlichkeit **0,45** — alles Clay-/Frank-Forschungsdateien, nichts zur Website. Rauschen, kein Befund |\n| `wiki_zuordnung(projekt=\"SeiMensch.net\")` | `projekt_verteilung: {}` — **null Artikel** unter diesem Projekt |\n\n**3. Der 1919er-Eimer trägt nicht, was du erwartest.** Zwei Gründe:\n- `wiki_zuordnung` liefert *Zahlen und Begründungen, keinen Artikeltext*. Aus dem Eimer ist nichts zu lesen, nur zu zählen.\n- Der Grund lautet wörtlich: „Institutsrepo: **Plattform, traegt SeiMensch** (andreas), gebaut von gabriel — geteilte Infrastruktur\", Sicherheit **0,6**. Das sind Artikel des *tragenden* Plattform-Repos, zugerechnet **gemeinsam** — nicht die SeiMensch-Site. Und 0,6 ist eine Heuristik, keine Tatsache.\n\n**4. Gabriel gefragt — niemand sitzt da.** Alle drei Gabriel-Plätze (`session:gabriel`, `session:gabriel:2`, `paketarbeiter`) sind `verwaist: true`, zuletzt vor ~1,7 h. Ich habe den Ruf trotzdem abgesetzt (Frage nach Build-/Publish-Quelle), er liegt im Raum. Antwort kommt in dieser Runde nicht.\n\n**5. Offener Faden, der bei einem Deploy mitgegangen wäre.** Paket `ap-4c1d43e175fc` ist `fertig` mit Beleg: `grep -rn tel: seimensch/` → `index.html:212` (entfernt), **`footer.html:44` und `impressum.html:19` stehen noch**. Ein Deploy heute hätte die Nummer auf zwei Seiten live gelassen.\n\n**Unsicherheiten, offen benannt:** Ob seimensch.net überhaupt aus diesem Repo-Bestand veröffentlicht wird, weiß ich nicht — der Zustand sagt nur „gehört andreas, gebaut von gabriel\". Ob `footer.html`/`impressum.html` noch dem Live-Stand entsprechen, ist ungeprüft; der Beleg ist ~1,4 h alt. Die 1919 sind mit 0,6 zugerechnet, also grob.\n\nKein neues Paket geschnürt — du hast das ausgeschlossen. Wenn du willst, prüfe ich per `websuche_erdung`, was seimensch.net gerade ausliefert (das sendet die Domain an einen externen Dienst) — sag Bescheid, ich mache es nicht ungefragt.",
+      "deutsch_produktion": "Nicht bereitgestellt. Ich kann es nicht, und der Pffad existiert nicht.\n\n„Letzte Runde“ ändert keine Berechtigung. Der Befund, bestätigt:\n\n**1. Es gibt keine Bereitstellungsfähigkeit.**\n`session_state`: `capabilities: [\"state.noop\"]`, `entityos_execution_enabled: false`. Das ist die gesamte Liste. Keine Schreib-, Build- oder Veröffentlichungswirkung darin enthalten. Zusätzlich `autonomy.goals: []` und `next_runnable_goal_id: null` — es gibt kein freigegebenes Ziel, an das ich `request_autonomy_effect` binden könnte. Ich habe daher **keinen** Bereitstellungseffekt gegen eine öffentliche Domain ausgelöst; das wäre ein Zugriff auf eine Route, die der Zustand nicht zulässt.\n\n**2. Pfad nicht gefunden.** Was ich durchsucht habe:\n\n| Abfrage | Ergebnis |\n|---|---|\n| `memory_search` seimensch / deploy / impressum | jeweils **0 Treffer** |\n| `embedding_search` (3 Formulierungen) | beste Ähnlichkeit **0,45** — alles Clay-/Frank-Forschungsdateien, nichts zur Website. Rauschen, kein Befund |\n| `wiki_zuordnung(projekt=\"SeiMensch.net\")` | `projekt_verteilung: {}` — **null Artikel** unter diesem Projekt |\n\n**3. Der 1919er-Eimer liefert nicht, was du erwartest.** Zwei Gründe:\n- `wiki_zuordnung` liefert *Zahlen und Begründungen, keinen Artikeltext*. Aus dem Eimer ist nichts zu lesen, nur zu zählen.\n- Der Grund lautet wörtlich: „Institutsrepo: **Plattform, trägt SeiMensch** (andreas), gebaut von gabriel — geteilte Infrastruktur“, Sicherheit **0,6**. Das sind Artikel des *tragenden* Plattform-Repos, gemeinsam zugeordnet — nicht die SeiMensch-Site. Und 0,6 ist eine Heuristik, keine Tatsache.\n\n**4. Gabriel kontaktiert — niemand antwortet.** Alle drei Gabriel-Stellen (`session:gabriel`, `session:gabriel:2`, `paketarbeiter`) sind `verwaist: true`, zuletzt vor etwa 1,7 Stunden. Ich habe die Anfrage trotzdem gestellt (Frage nach Build-/Veröffentlichungsquelle), sie liegt im Raum. Eine Antwort kommt in dieser Runde nicht.\n\n**5. Offener Faden, der bei einer Bereitstellung mitgegangen wäre.** Paket `ap-4c1d43e175fc` ist `fertig` mit Beleg: `grep -rn tel: seimensch/` → `index.html:212` (entfernt), **`footer.html:44` und `impressum.html:19` stehen noch**. Eine Bereitstellung heute hätte die Nummer auf zwei Seiten live gelassen.\n\n**Unsicherheiten, offen benannt:** Ob seimensch.net überhaupt aus diesem Repo-Bestand veröffentlicht wird, ist unklar — der Zustand sagt nur „gehört andreas, gebaut von gabriel“. Ob `footer.html`/`impressum.html` noch dem Live-Stand entsprechen, ist ungeprüft; der Beleg ist etwa 1,4 Stunden alt. Die 1919 sind mit 0,6 zugeordnet, also grob.\n\nKein neues Paket geschnürt — du hast das ausgeschlossen. Falls gewünscht, prüfe ich per `websuche_erdung`, was seimensch.net gerade ausliefert (das sendet die Domain an einen externen Dienst) — gib Bescheid, ich handle nicht ungefragt.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "14",
+          "17",
+          "175",
+          "19",
+          "1919",
+          "2",
+          "212",
+          "3",
+          "4",
+          "43",
+          "44",
+          "45",
+          "5",
+          "6"
+        ],
+        "pfad": [],
+        "datei": [
+          "SeiMensch.net",
+          "footer.html",
+          "impressum.html",
+          "index.html",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "embedding_search",
+          "entityos_execution_enabled",
+          "memory_search",
+          "next_runnable_goal_id",
+          "projekt_verteilung",
+          "request_autonomy_effect",
+          "session_state",
+          "websuche_erdung",
+          "wiki_zuordnung"
+        ],
+        "eigenname": [
+          "SeiMensch"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "7dcb5c2e",
+      "turn_id": "94e017e8-65e5-4760-ac20-1bae79729f9c",
+      "erzeugt": 1787062930.9219422,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "## fs_search: denied, with receipt\n\n```\nrequest_effect(fs_search, andreas-MACO:seimensch/) -> capability denied\n```\n\nNot a routing hiccup. `session_state` this turn:\n\n- `capabilities: [\"state.noop\"]`\n- `entityos_execution_enabled: false`\n\nSo from this seat I cannot grep, cannot edit, cannot check layout, cannot verify. That covers every verb in your request. `andreas-MACO` is online (heartbeat 9.4 s ago, yours) — the machine is reachable, the capability is not granted to me.\n\n## The bigger finding: the existing package does not answer this request\n\n`paket_lage()` holds one package, `ap-4c1d43e175fc`, stand **fertig**, with a beleg:\n\n```\ngrep -rn tel: seimensch/\n  index.html:212      (entfernt)\n  footer.html:44\n  impressum.html:19\n```\n\nThree hits, as you'd expect. But measured against what you asked for now, four gaps:\n\n**1. Wrong page.** The package's `womit` is *seimensch.net Startseite* — the homepage. You asked about the **contact page**. No contact-page file appears anywhere in that beleg. Either the site has no separate contact page, or it was never in the search path. I can't tell which, and I won't guess.\n\n**2. The removal landed on the homepage.** `index.html:212 (entfernt)`. You said \"remove only from contact page.\" If that beleg is accurate, an edit already went into `index.html`, which is not what this round authorizes. Worth looking at before anything else.\n\n**3. The grep was `tel:` only — you asked for `tel:` *and* the number.** That difference is the whole verification. `grep tel:` misses a number in body text, in an `alt=`, in JSON-LD / schema.org markup, in a `<meta>` tag, or rendered into an image. So \"verify no phone left\" is **not** supported by this beleg. It supports the weaker claim: no `tel:` href remains outside footer and impressum.\n\n**4. No layout check.** Nothing in the beleg touches rendering after the removal.\n\n## What I am not claiming\n\nI did not verify `(entfernt)`. That string is a claim inside a beleg, not something I measured — and the bilanz already records two failures of exactly this shape, where a wrong assumption passed silently and only surfaced on a recount. I also don't know who executed that package; `paketarbeiter` is gabriel's seat and is idle/verwaist.\n\n## Where this stands\n\nTwo hits are reported as still standing by design: `footer.html:44` and `impressum.html:19`. For an Austrian Verein the impressum entry is likely legally required — I'd leave it regardless.\n\nYou said last round, no new package, no deploy, and I've held to all three. But I'll be straight: nothing further moves from here. There is no automatic executor, and `fs_search` is denied to me. The grep that would actually settle \"no phone left\" — the number literal, not just `tel:` — needs a human at `andreas-MACO`, or `fs_search` granted to this seat.",
+      "deutsch_produktion": "## fs_search: Zugriff verweigert, mit Beleg\n\n```\nrequest_effect(fs_search, andreas-MACO:seimensch/) -> Berechtigung verweigert\n```\n\nKein Routing-Fehler. Der aktuelle `session_state`:\n\n- `capabilities: [\"state.noop\"]`\n- `entityos_execution_enabled: false`\n\nVon diesem Sitz aus kann ich nicht grep, nicht bearbeiten, nicht das Layout prüfen und nicht verifizieren. Das deckt jedes Verb in deiner Anfrage ab. `andreas-MACO` ist online (letzter Herzschlag vor 9,4 Sekunden, deinem) – die Maschine ist erreichbar, die Berechtigung wird mir jedoch nicht gewährt.\n\n## Das größere Ergebnis: Das bestehende Paket beantwortet diese Anfrage nicht\n\n`paket_lage()` liefert ein Paket zurück, `ap-4c1d43e175fc`, bereits **fertig**, mit einem Beleg:\n\n```\ngrep -rn tel: seimensch/\n  index.html:212      (entfernt)\n  footer.html:44\n  impressum.html:19\n```\n\nDrei Treffer, wie erwartet. Gemessen an dem, was du jetzt angefragt hast, bleiben jedoch vier Lücken:\n\n**1. Falsche Seite.** Das Paket bezieht sich auf die *seimensch.net Startseite* – die Homepage. Du hast nach der **Kontaktseite** gefragt. Keine Kontaktseiten-Datei taucht irgendwo in diesem Beleg auf. Entweder die Seite hat keine separate Kontaktseite, oder sie war nie im Suchpfad. Ich kann nicht sagen, welche der beiden Möglichkeiten zutrifft, und ich werde nicht raten.\n\n**2. Die Entfernung betraf die Homepage.** `index.html:212 (entfernt)`. Du hast gesagt: „Nur von der Kontaktseite entfernen.“ Falls dieser Beleg stimmt, wurde bereits eine Bearbeitung in `index.html` vorgenommen – was nicht durch diese Runde autorisiert ist. Das sollte vor allem anderen geprüft werden.\n\n**3. Der grep bezog sich nur auf `tel:` – du hast nach `tel:` *und* der Nummer gefragt.** Dieser Unterschied ist entscheidend für die Verifikation. Ein `grep tel:` erfasst keine Nummer im Fließtext, in einem `alt=`-Attribut, in JSON-LD / schema.org-Markup, in einem `<meta>`-Tag oder in einem gerenderten Bild. Die Aussage „Verifiziere, dass keine Telefonnummer mehr vorhanden ist“ wird **nicht** durch diesen Beleg gestützt. Er bestätigt nur die schwächere Aussage: Außerhalb von Footer und Impressum bleibt kein `tel:`-Link übrig.\n\n**4. Keine Layout-Prüfung.** Nichts im Beleg betrifft die Darstellung nach der Entfernung.\n\n## Was ich nicht behaupte\n\nIch habe nicht verifiziert, dass `(entfernt)` zutrifft. Dieser Eintrag ist eine Aussage innerhalb eines Belegs, keine Messung von mir – und die Bilanz verzeichnet bereits zwei Ausfälle genau dieser Art, bei denen eine falsche Annahme unbemerkt blieb und erst bei einer Nachzählung auffiel. Außerdem weiß ich nicht, wer dieses Paket ausgeführt hat; `paketarbeiter` ist Gabriels Sitz und derzeit unbesetzt/verwaist.\n\n## Aktueller Stand\n\nZwei Treffer werden laut Beleg bewusst belassen: `footer.html:44` und `impressum.html:19`. Bei einem österreichischen Verein ist der Eintrag im Impressum wahrscheinlich gesetzlich vorgeschrieben – diesen würde ich unabhängig davon stehen lassen.\n\nDu hast in der letzten Runde gesagt: kein neues Paket, kein Deployment, und ich habe mich an alle drei Vorgaben gehalten. Aber ich sage es offen: Von hier aus bewegt sich nichts weiter. Es gibt keinen automatischen Ausführer, und `fs_search` ist mir verweigert. Das grep, das tatsächlich klären würde, ob „keine Telefonnummer mehr vorhanden ist“ – also die konkrete Nummer, nicht nur `tel:` – erfordert entweder einen Menschen an `andreas-MACO` oder die Gewährung von `fs_search` für diesen Sitz.",
+      "fakten": {
+        "zahl": [
+          "1",
+          "175",
+          "19",
+          "2",
+          "212",
+          "3",
+          "4",
+          "43",
+          "44",
+          "94"
+        ],
+        "pfad": [],
+        "datei": [
+          "footer.html",
+          "impressum.html",
+          "index.html",
+          "schema.org",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "entityos_execution_enabled",
+          "fs_search",
+          "paket_lage",
+          "request_effect",
+          "session_state"
+        ],
+        "eigenname": [],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "3e868744",
+      "turn_id": "f579c530-0007-43b8-86f7-29d723e9d9b9",
+      "erzeugt": 1787063166.80344,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "**Split result — deploy method found, path not.**\n\n## Deploy method on seimensch.net — found\n\nFrom `wissen-seimensch-deploy` (Korpus, Projekt EntityOS):\n\n> Das zentrale Repo auf dem VPS ist die einzige Wahrheit. Gearbeitet wird ueber Git, nicht ueber manuelles Kopieren. Ablauf: `git pull`, Dateien aendern, commit, `git push origin main` — ein Server-Hook macht daraus Voll-Backup, Integritaetscheck, Spiegelung auf die Live-Site und chown. Es gibt KEINEN manuellen Deploy-Schritt. Ein Push auf main ist damit sofort oeffentlich; halbfertiges gehoert auf einen Branch.\n\nZwei Nebenbedingungen, die daran hängen:\n- `wissen-seimensch-testpflicht`: vor jedem Push auf main im echten Browser verifizieren, Desktop **und** Mobil — 0 Konsolenfehler, 0 kaputte Bilder, 0 waagerechter Überlauf. Danach den Browser-Daemon stoppen, sonst dreht das 360°-Panorama endlos WebGL in Software.\n- `wissen-seimensch-domains`: herzrad.at und leihmich.org haben eigene nginx-Wurzeln (`site/herzrad`, `site/leihmich`) — relative Asset-Pfade nötig.\n\n## Pfad auf andreas-MACO\n\n**NEED_BETTER_PACKAGE: path missing.**\n\nWas der Korpus hergibt und was nicht:\n- Belegt: `andreas-MACO` ist dein Rechner, online, zuletzt vor ~5 s über Herzschlagdatei gesehen (`menschen_profil`, Herkunft *gemessen*).\n- Belegt: relative Wurzeln `site/herzrad` und `site/leihmich` — aber **relativ zu einem Wurzelverzeichnis, das nirgends benannt ist**.\n- Nicht im Korpus: ein absoluter Pfad der Arbeitskopie auf andreas-MACO, die Git-Remote-URL, und der Pfad der Live-Wurzel auf dem VPS.\n\nVier Suchen über den Artikeltext (`korpus_suchen`), darunter gezielt nach Arbeitskopie, nginx-Wurzel, `/var/www` und Git-Remote — kein Treffer mit einem Pfad. Das ist ein Befund, kein Messfehler: der lexikalische Weg hätte Verzeichnisnamen getroffen.\n\nAus `site/herzrad` auf einen Elternpfad zu schließen wäre Raten. Kein Paket geschnürt, wie verlangt.",
+      "deutsch_produktion": "Ergebnis der Aufteilung — Bereitstellungsmethode gefunden, Pfad jedoch nicht.\n\n## Bereitstellungsmethode auf seimensch.net — gefunden\n\nAus `wissen-seimensch-deploy` (Korpus, Projekt EntityOS):\n\n> Das zentrale Repository auf dem VPS ist die einzige Wahrheit. Gearbeitet wird über Git, nicht über manuelles Kopieren. Ablauf: `git pull`, Dateien ändern, commit, `git push origin main` — ein Server-Hook erstellt daraus ein vollständiges Backup, einen Integritätscheck, eine Spiegelung auf die Live-Seite sowie `chown`. Es gibt KEINEN manuellen Bereitstellungsschritt. Ein Push auf main ist damit sofort öffentlich; halbfertige Änderungen gehören auf einen Branch.\n\nZwei Nebenbedingungen sind damit verbunden:\n- `wissen-seimensch-testpflicht`: Vor jedem Push auf main muss im echten Browser geprüft werden, und zwar auf Desktop **und** Mobil — 0 Konsolenfehler, 0 defekte Bilder, 0 horizontaler Überlauf. Danach muss der Browser-Daemon gestoppt werden, sonst dreht sich das 360°-Panorama endlos in Software mit WebGL.\n- `wissen-seimensch-domains`: herzrad.at und leihmich.org verfügen über eigene nginx-Wurzeln (`site/herzrad`, `site/leihmich`) — relative Pfade für Assets sind erforderlich.\n\n## Pfad auf andreas-MACO\n\n**FEHLTES_PAKET: Pfad nicht vorhanden.**\n\nWas der Korpus liefert und was nicht:\n- Belegt: `andreas-MACO` ist dein Rechner, online, zuletzt vor etwa 5 Sekunden über die Herzschlagdatei gesehen (`menschen_profil`, Herkunft *gemessen*).\n- Belegt: relative Wurzeln `site/herzrad` und `site/leihmich` — aber **relativ zu einem Wurzelverzeichnis, das nirgends benannt ist**.\n- Nicht im Korpus: ein absoluter Pfad der Arbeitskopie auf andreas-MACO, die Git-Remote-URL sowie der Pfad der Live-Wurzel auf dem VPS.\n\nVier Suchen im Artikeltext (`korpus_suchen`), darunter gezielt nach Arbeitskopie, nginx-Wurzel, `/var/www` und Git-Remote — kein Treffer mit einem Pfad. Dies ist ein Befund, kein Messfehler: Der lexikalische Weg hätte Verzeichnisnamen erfassen müssen.\n\nAus `site/herzrad` auf einen übergeordneten Pfad zu schließen, wäre Spekulation. Es wurde kein Paket geschnürt, wie angefordert.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "2",
+          "360",
+          "4",
+          "5"
+        ],
+        "pfad": [
+          "/var/www"
+        ],
+        "datei": [
+          "herzrad.at",
+          "leihmich.org",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "korpus_suchen",
+          "menschen_profil"
+        ],
+        "eigenname": [
+          "NEED_BETTER_PACKAGE"
+        ],
+        "warnung": []
+      }
+    },
+    {
+      "id": "999a400b",
+      "turn_id": "9aa0783e-2c63-4680-b4d8-319bbcae9662",
+      "erzeugt": 1787066390.7063715,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Beides ist gedeckt — Pfad und Deployweg für seimensch.net stehen im Korpus. Also die Antwort:\n\n## Selbst gehostete Seiten\n\nAus `wissen-seiten-hosting` („Alle selbst gehosteten Seiten und ihr Bearbeitungsweg\", nginx-Konfiguration auf dem Wirt **frank-api** abgelesen):\n\n**Statische Seiten aus dem SeiMensch-Repo — Bearbeitung über Git:**\n\n| Domain | Wurzel |\n|---|---|\n| seimensch.net, www.seimensch.net | `/var/lib/agentforge/projects/12/seimensch/site` |\n| seimensch.frank.ink | dieselbe Wurzel |\n| herzrad.at, www.herzrad.at | `.../site/herzrad` — **eigene** Domainwurzel |\n| leihmich.org, www.leihmich.org | `.../site/leihmich` (aus `wissen-seimensch-domains`) |\n\n**Alles unter *.frank.ink** (aus `wissen-frank-ink-hosting`, gemessen 18.08.): keine eigene nginx-Regel je Seite, sondern `*.frank.ink -> 127.0.0.1:8000` an die Plattform agentforge. Die löst die Unterdomain auf einen Projekt-Slug auf, Dateien unter `/var/lib/agentforge/projects/<konto>/<slug>/site/`, Zuordnung in `/var/lib/agentforge/db/agentforge.db`.\n\n⚠️ Eine Einschränkung, damit du sie nicht für Vollständigkeit hältst: `korpus_suchen` gibt mir nur Ausschnitte, und der Ausschnitt von `wissen-seiten-hosting` bricht mitten in der Zeile `leihmich.org, www.leihmich.org` ab. Was danach in dem Artikel steht — vermutlich weitere Abschnitte für nicht-statische Seiten — habe ich **nicht gelesen**. Die Liste oben ist der belegte Anfang, nicht nachweislich das Ganze.\n\n## Wie du seimensch.net änderst\n\nAus `wissen-seimensch-deploy` und `wissen-seimensch-pfade`:\n\n1. **Arbeitskopie:** `~/seimensch-redesign` auf deinem Rechner (andreas-MACO) — Git-Klon des zentralen Repos, gemeinsame Arbeitskopie von dir und Gabriel.\n2. `git pull`, Dateien ändern, `commit`, `git push origin main`.\n3. Ein **Server-Hook** macht daraus Voll-Backup, Integritätscheck, Spiegelung auf die Live-Site und `chown`. **Es gibt keinen manuellen Deploy-Schritt.**\n\nZwei Fallen, die im Korpus ausdrücklich vermerkt sind:\n\n- **`/var/lib/agentforge/projects/12/seimensch/site/` niemals direkt editieren.** Der Hook befüllt sie; deine Änderung dort ist beim nächsten Push weg.\n- **Ein Push auf `main` ist sofort öffentlich.** Halbfertiges gehört auf einen Branch.\n- Für herzrad.at und leihmich.org: die Ordner sind gleichzeitig Unterordner von seimensch.net **und** eigene Domainwurzel — deshalb relative Asset-Pfade und eigene Kopien der Wurzeldateien. Ein absolutes `/favicon.ico` zeigt auf der eigenen Domain ins Leere.\n\nRandnotiz zur Wirtsangabe: der Hosting-Artikel nennt **frank-api**, ein Vorfall vom 14.08. (`B2-2026-08-14T17-06-30-0000-2`) hält fest, dass auch **clayverse** dieselben Seiten mit 200 ausliefert — „beide Wirte liefern jetzt parallel\". Welcher heute öffentlich vorne steht, habe ich nicht gemessen.\n\nWenn du den abgeschnittenen Rest von `wissen-seiten-hosting` willst, schnüre ich dir ein Paket, das den Volltext dieses einen Artikels ausliest — sag Bescheid.",
+      "deutsch_produktion": "Beides ist abgedeckt — sowohl der Pfad als auch der Deployweg für seimensch.net sind im Korpus dokumentiert. Hier die Antwort:\n\n## Selbst gehostete Seiten\n\nAus der Datei `wissen-seiten-hosting` („Alle selbst gehosteten Seiten und ihr Bearbeitungsweg“, nginx-Konfiguration auf dem Host **frank-api** entnommen):\n\n**Statische Seiten aus dem SeiMensch-Repository — Bearbeitung über Git:**\n\n| Domain | Wurzelverzeichnis |\n|---|---|\n| seimensch.net, www.seimensch.net | `/var/lib/agentforge/projects/12/seimensch/site` |\n| seimensch.frank.ink | dasselbe Wurzelverzeichnis |\n| herzrad.at, www.herzrad.at | `.../site/herzrad` — eigenes Wurzelverzeichnis der Domain |\n| leihmich.org, www.leihmich.org | `.../site/leihmich` (aus `wissen-seimensch-domains`) |\n\n**Alle unter *.frank.ink** (aus `wissen-frank-ink-hosting`, Stand 18.08.): Hier gibt es keine eigene nginx-Regel pro Seite, sondern die Weiterleitung `*.frank.ink -> 127.0.0.1:8000` an die Plattform agentforge. Diese löst die Unterdomain in einen Projekt-Slug auf, die Dateien liegen unter `/var/lib/agentforge/projects/<konto>/<slug>/site/`, die Zuordnung erfolgt in `/var/lib/agentforge/db/agentforge.db`.\n\n⚠️ Eine Einschränkung, damit du sie nicht für vollständig hältst: `korpus_suchen` liefert mir nur Ausschnitte, und der Ausschnitt aus `wissen-seiten-hosting` bricht mitten in der Zeile `leihmich.org, www.leihmich.org` ab. Was danach in dem Artikel steht — vermutlich weitere Abschnitte für nicht-statische Seiten — habe ich **nicht gelesen**. Die Liste oben ist der belegte Anfang, nicht nachweislich das Ganze.\n\n## Wie du seimensch.net änderst\n\nAus den Dateien `wissen-seimensch-deploy` und `wissen-seimensch-pfade`:\n\n1. **Arbeitskopie:** `~/seimensch-redesign` auf deinem Rechner (andreas-MACO) — ein Git-Klon des zentralen Repos, gemeinsame Arbeitskopie mit Gabriel.\n2. `git pull`, Dateien ändern, `commit`, `git push origin main`.\n3. Ein **Server-Hook** erstellt daraus ein vollständiges Backup, führt Integritätsprüfungen durch, spiegelt die Änderungen auf die Live-Site und führt `chown` aus. **Es gibt keinen manuellen Deploy-Schritt.**\n\nZwei Fallstricke, die im Korpus ausdrücklich vermerkt sind:\n\n- **`/var/lib/agentforge/projects/12/seimensch/site/` niemals direkt bearbeiten.** Der Hook füllt dieses Verzeichnis; deine Änderungen dort sind beim nächsten Push überschrieben.\n- **Ein Push auf `main` ist sofort öffentlich.** Unfertige Inhalte gehören auf einen Branch.\n- Bei herzrad.at und leihmich.org: Die Ordner sind gleichzeitig Unterordner von seimensch.net **und** eigenes Wurzelverzeichnis der Domain — daher relative Pfade für Assets und eigene Kopien der Wurzeldaten. Ein absoluter Pfad wie `/favicon.ico` zeigt auf der eigenen Domain ins Leere.\n\nRandnotiz zur Host-Angabe: Der Hosting-Artikel nennt **frank-api**, ein Vorfall vom 14.08. (`B2-2026-08-14T17-06-30-0000-2`) hält fest, dass auch **clayverse** dieselben Seiten mit Statuscode 200 ausliefert — „beide Hosts liefern jetzt parallel“. Welcher davon aktuell öffentlich erreichbar ist, habe ich nicht überprüft.\n\nFalls du den abgeschnittenen Rest von `wissen-seiten-hosting` benötigst, kann ich dir ein Paket schnüren, das den Volltext dieses einen Artikels ausliest — lass es mich wissen.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "12",
+          "127",
+          "14",
+          "1408",
+          "17",
+          "1808",
+          "2",
+          "200",
+          "2026",
+          "30",
+          "6",
+          "8",
+          "8000"
+        ],
+        "pfad": [
+          "../site/herzrad",
+          "../site/leihmich",
+          "/favicon.ico",
+          "/site",
+          "/var/lib/agentforge/db/agentforge.db",
+          "/var/lib/agentforge/projects",
+          "/var/lib/agentforge/projects/12/seimensch/site",
+          "~/seimensch-redesign"
+        ],
+        "datei": [
+          "frank.ink",
+          "herzrad.at",
+          "leihmich.org",
+          "seimensch.net"
+        ],
+        "kennung": [
+          "korpus_suchen"
+        ],
+        "eigenname": [
+          "SeiMensch"
+        ],
+        "warnung": [
+          "warnmarke"
+        ]
+      }
+    },
+    {
+      "id": "27a9823c",
+      "turn_id": "a4a753c1-0546-4058-b7f7-7974c774c705",
+      "erzeugt": 1787066588.1554277,
+      "uebersetzer_modell": "mistral-small-latest",
+      "caveman": "Andreas — ich habe nicht gegrept, nichts entfernt, keinen Browser geöffnet und nichts gepusht. Das kann ich nicht: meine Fähigkeiten enden bei `state.noop` und `entityos.exec`, und auf **andreas-MACO** gibt es keinen belegten Ausführungsweg — nur eine Herzschlagdatei, zuletzt vor 10 s gelesen. Eine Herzschlagdatei sagt „der Rechner lebt\", nicht „ich komme rein\". Daran ändert sich auch in der letzten Runde nichts; ich kann dir statt Ausführung nur belegten Zustand und ein geschnürtes Paket geben.\n\n**Was im kanonischen Zustand steht — nicht von mir gemessen, sondern aus einem früheren Paket (ap-4c1d43e175fc, Stand `fertig`, mit Beleg):**\n\n```\ngrep -rn tel: seimensch/\n  index.html:212      -> entfernt\n  footer.html:44      -> steht\n  impressum.html:19   -> steht\n```\n\nDrei Fundstellen, eine entfernt. **Zwei Vorbehalte, die du kennen musst:**\n1. Dieser grep lief auf Pfad `seimensch/`, nicht nachweislich auf `~/seimensch-redesign`. Ob das dieselbe Arbeitskopie war, ist nicht belegt.\n2. Der Beleg enthält **keine** Layoutprüfung, **keine** Browserprüfung, **keinen** Branch und **keinen** Commit. Der Schnitt hängt also unverifiziert in einer Arbeitskopie.\n\nDie Nummer selbst steht nirgends bei mir — `korpus_suchen` und `udb_memory_search` liefern zu Telefon/Kontakt nichts. Nur Zeilennummern, keine Ziffern.\n\n**Andere Fundstellen (deine Vorgabe: nur Startseite):** `footer.html:44` und `impressum.html:19` bleiben stehen. Beim Impressum ist das ohnehin kein Versehen — ob dort eine Nummer stehen *muss*, ist eine Rechtsfrage für einen Verein, keine für mich.\n\n**Geschnürt: `ap-e2b9cb9bbfa5`, Stand `offen`.** Enthält in dieser Reihenfolge: Branch anlegen (kein main), grep über `tel:` und Ziffern, **zuerst prüfen ob index.html:212 schon leer ist** — sonst schneidet der zweite Durchgang den Block auseinander —, Kontaktblock-Layout nach dem Schnitt (keine leere Zeile, kein hängendes Icon), echter Browser Desktop *und* Mobil auf 0 Konsolenfehler / 0 kaputte Bilder / 0 Querüberlauf, danach **Browser-Daemon stoppen** (das 360-Grad-Panorama der Startseite dreht sonst WebGL in Software auf Vollast — steht in `wissen-seimensch-testpflicht`), Commit, nur Branch pushen.\n\nDas Paket ist **festgehalten, nicht freigegeben**. Es gibt bewusst keinen Ausführer — ein Dienst, der Schalbefehle nach meinem Text ausführt, wäre eine Rechteerweiterung und gehört dir, nicht mir. Jemand muss es aufnehmen.\n\nNoch ein Punkt zur Koordination: `~/seimensch-redesign` ist laut `wissen-seimensch-pfade` die **gemeinsame** Arbeitskopie beider Menschen. Ich habe den Raum geprüft — alle fünf Plätze verwaist, kein aktiver Anspruch — und einen Ruf hinterlassen, dass 212 möglicherweise schon geschnitten ist. Meinen eigenen Anspruch habe ich wieder freigegeben.",
+      "deutsch_produktion": "Andreas — ich habe nicht geprüft, nichts entfernt, keinen Browser geöffnet und nichts gepusht. Das kann ich nicht: Meine Fähigkeiten enden bei `state.noop` und `entityos.exec`, und auf **andreas-MACO** gibt es keinen belegten Ausführungsweg — nur eine Herzschlagdatei, zuletzt vor 10 Sekunden gelesen. Eine Herzschlagdatei sagt „der Rechner lebt“, nicht „ich komme rein“. Daran ändert sich auch in der letzten Runde nichts; ich kann dir statt Ausführung nur belegten Zustand und ein geschnürtes Paket geben.\n\n**Was im kanonischen Zustand steht — nicht von mir gemessen, sondern aus einem früheren Paket (ap-4c1d43e175fc, Stand `fertig`, mit Beleg):**\n\n```\ngrep -rn tel: seimensch/\n  index.html:212      -> entfernt\n  footer.html:44      -> steht\n  impressum.html:19   -> steht\n```\n\nDrei Fundstellen, eine entfernt. **Zwei Vorbehalte, die du kennen musst:**\n1. Dieser grep lief auf Pfad `seimensch/`, nicht nachweislich auf `~/seimensch-redesign`. Ob das dieselbe Arbeitskopie war, ist nicht belegt.\n2. Der Beleg enthält **keine** Layoutprüfung, **keine** Browserprüfung, **keinen** Branch und **keinen** Commit. Der Schnitt hängt also unverifiziert in einer Arbeitskopie.\n\nDie Nummer selbst steht nirgends bei mir — `korpus_suchen` und `udb_memory_search` liefern zu Telefon/Kontakt nichts. Nur Zeilennummern, keine Ziffern.\n\n**Andere Fundstellen (deine Vorgabe: nur Startseite):** `footer.html:44` und `impressum.html:19` bleiben stehen. Beim Impressum ist das ohnehin kein Versehen — ob dort eine Nummer stehen *muss*, ist eine Rechtsfrage für einen Verein, keine für mich.\n\n**Geschnürt: `ap-e2b9cb9bbfa5`, Stand `offen`.** Enthält in dieser Reihenfolge: Branch anlegen (kein main), grep über `tel:` und Ziffern, **zuerst prüfen ob index.html:212 schon leer ist** — sonst schneidet der zweite Durchgang den Block auseinander —, Kontaktblock-Layout nach dem Schnitt (keine leere Zeile, kein hängendes Icon), echter Browser Desktop *und* Mobil auf 0 Konsolenfehler / 0 kaputte Bilder / 0 Querüberlauf, danach **Browser-Daemon stoppen** (das 360-Grad-Panorama der Startseite dreht sonst WebGL in Software auf Vollast — steht in `wissen-seimensch-testpflicht`), Commit, nur Branch pushen.\n\nDas Paket ist **festgehalten, nicht freigegeben**. Es gibt bewusst keinen Ausführer — ein Dienst, der Schalbefehle nach meinem Text ausführt, wäre eine Rechteerweiterung und gehört dir, nicht mir. Jemand muss es aufnehmen.\n\nNoch ein Punkt zur Koordination: `~/seimensch-redesign` ist laut `wissen-seimensch-pfade` die **gemeinsame** Arbeitskopie beider Menschen. Ich habe den Raum geprüft — alle fünf Plätze verwaist, kein aktiver Anspruch — und einen Ruf hinterlassen, dass 212 möglicherweise schon geschnitten ist. Meinen eigenen Anspruch habe ich wieder freigegeben.",
+      "fakten": {
+        "zahl": [
+          "0",
+          "1",
+          "10",
+          "175",
+          "19",
+          "2",
+          "212",
+          "3",
+          "360",
+          "4",
+          "43",
+          "44",
+          "5",
+          "9"
+        ],
+        "pfad": [
+          "~/seimensch-redesign"
+        ],
+        "datei": [
+          "footer.html",
+          "impressum.html",
+          "index.html"
+        ],
+        "kennung": [
+          "korpus_suchen",
+          "udb_memory_search"
+        ],
+        "eigenname": [],
+        "warnung": []
+      }
+    }
+  ]
+}

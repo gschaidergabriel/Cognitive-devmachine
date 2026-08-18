@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T15:41:08Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T16:11:10Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -489,6 +489,7 @@ CREATE TABLE schluessel_lauf (
         http INTEGER, ms REAL, einordnung TEXT, fehlertext TEXT
     , sonde TEXT, rest_kontingent TEXT);
 CREATE TABLE sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(user_id),created_at REAL NOT NULL,updated_at REAL NOT NULL,generation INTEGER NOT NULL DEFAULT 1,terminal_name TEXT NOT NULL UNIQUE);
+CREATE TABLE speicherwacht_log(id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, belegt_prozent REAL, frei_gb REAL, stufe TEXT, gehandelt INTEGER NOT NULL, befreit_gb REAL, bericht TEXT);
 CREATE TABLE taetigkeit (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     wirt TEXT,

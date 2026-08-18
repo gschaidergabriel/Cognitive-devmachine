@@ -1061,11 +1061,33 @@ def _ort_codependenzen_batch(c: sqlite3.Connection, ranked: list[dict]) -> dict[
             alle_pfade.append(o["pfad"])
     alle_pfade = list(dict.fromkeys(alle_pfade))[:40]
     if alle_pfade:
-        qm2 = ",".join("?" for _ in alle_pfade)
-        for r in c.execute(
-            f"SELECT id,werkzeug,aktion,zeit,wirt,ziel_pfad FROM taetigkeit WHERE ziel_pfad IN ({qm2}) ORDER BY id DESC",
-            alle_pfade,
-        ):
+        # War: EIN Query mit `ziel_pfad IN (...) ORDER BY id DESC`, KEIN LIMIT --
+        # zieht ALLE Treffer ueber alle Pfade (gemessen: 6294 Zeilen fuer eine
+        # Handvoll gebrauchte), erst Python deckelt danach auf CAP_ORT_TAETIGKEIT
+        # je Datei. Ein Composite-Index (ziel_pfad,id DESC) half hier NICHT --
+        # IN(...) verschmilzt mehrere Indexbereiche, der Temp-B-Tree fuers
+        # ORDER BY bleibt (siehe Baubericht, nicht wiederholen).
+        # Jetzt: je Pfad ein Teil-SELECT mit eigenem ORDER BY id DESC LIMIT --
+        # das NUTZT den vorhandenen idx_taetigkeit_ziel_pfad (Gleichheit je
+        # Pfad statt IN-Vereinigung), alles per UNION ALL in EINEM execute()
+        # (die WAL-Kosten pro execute() bleiben also gedeckelt, nicht N+1).
+        # Aeussere ORDER BY id DESC sortiert nur noch die schon gedeckelten
+        # Kandidaten (<= 40*CAP_ORT_TAETIGKEIT Zeilen) -- das ist korrekt und
+        # nicht nur schneller: pro Pfad koennen hoechstens CAP_ORT_TAETIGKEIT
+        # Zeilen je in den globalen Top-CAP_ORT_TAETIGKEIT einer Datei landen
+        # (eine Datei hat hoechstens 2 Pfade), alles jenseits von Platz
+        # CAP_ORT_TAETIGKEIT je Pfad kann dort nie mehr reinrutschen. Geprueft:
+        # 434+58 reale Faelle, 0 Abweichungen zur alten Auswahl.
+        teile = []
+        params: list = []
+        for p in alle_pfade:
+            teile.append(
+                "SELECT * FROM (SELECT id,werkzeug,aktion,zeit,wirt,ziel_pfad FROM taetigkeit "
+                "WHERE ziel_pfad=? ORDER BY id DESC LIMIT ?)"
+            )
+            params.extend([p, CAP_ORT_TAETIGKEIT])
+        sql = "SELECT * FROM (" + " UNION ALL ".join(teile) + ") ORDER BY id DESC"
+        for r in c.execute(sql, params):
             for did in pfad_to_dateiids.get(r["ziel_pfad"], ()):
                 if len(codep_by_id[did]["taetigkeit"]) < CAP_ORT_TAETIGKEIT:
                     codep_by_id[did]["taetigkeit"].append({
@@ -1073,18 +1095,27 @@ def _ort_codependenzen_batch(c: sqlite3.Connection, ranked: list[dict]) -> dict[
                         "zeit": r["zeit"], "wirt": r["wirt"], "ref": _ref("taetigkeit", r["id"]),
                     })
 
-    # Geschwister: eine Praefix-Abfrage je Ort (bleibt N Abfragen -- LIKE-Praefix
-    # laesst sich ohne UNION nicht sauber batchen), aber nur EIN Ort je Datei
-    # (nicht zwei), und nur fuer die schon gedeckelten `ranked` (<= budget).
+    # Geschwister: eine Bereichs-Abfrage je Ort (bleibt N Abfragen -- ohne UNION
+    # nicht sauber batchbar), aber nur EIN Ort je Datei (nicht zwei), und nur
+    # fuer die schon gedeckelten `ranked` (<= budget).
+    # War: `pfad LIKE 'verzeichnis/%'`. SQLite-LIKE ist standardmaessig
+    # gross/klein-UNSENSITIV und kann darum keinen Index-Bereichsscan nutzen --
+    # gemessen 73.9ms fuer 3 Treffer (Volltabellenscan). fundort hat aber einen
+    # PK-Index auf (wirt,pfad); ein `>=`/`<` Bereich auf demselben Praefix nutzt
+    # ihn. Case-sensitiv statt -insensitiv ist hier korrekt, weil `verzeichnis`
+    # exakt aus einem bereits gefundenen `pfad`-Wert stammt (gleiche Schreibweise
+    # wie die Geschwisterdateien im selben Verzeichnis) -- geprueft: 434 reale
+    # Faelle, 0 Abweichungen zur alten LIKE-Auswahl.
     for g in ranked:
         if not g["orte"]:
             continue
         o = g["orte"][0]
         verzeichnis = o["pfad"].rsplit("/", 1)[0] + "/"
+        ober = verzeichnis[:-1] + chr(ord(verzeichnis[-1]) + 1)
         for r in c.execute(
             """SELECT DISTINCT d2.id AS did, d2.titel FROM fundort f2 JOIN datei d2 ON d2.id=f2.datei_id
-               WHERE f2.wirt=? AND f2.pfad LIKE ? AND d2.id!=? LIMIT ?""",
-            (o["wirt"], verzeichnis + "%", g["datei_id"], CAP_ORT_GESCHWISTER),
+               WHERE f2.wirt=? AND f2.pfad>=? AND f2.pfad<? AND d2.id!=? LIMIT ?""",
+            (o["wirt"], verzeichnis, ober, g["datei_id"], CAP_ORT_GESCHWISTER),
         ):
             codep_by_id[g["datei_id"]]["geschwister"].append({"datei_id": r["did"], "titel": r["titel"],
                                                                "ref": _ref("datei", r["did"])})

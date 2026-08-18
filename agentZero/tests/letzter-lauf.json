@@ -1,14 +1,12 @@
 {
-  "commit": "ff48d389b",
-  "erzeugt": "2026-08-18T12:19:29Z",
-  "gruen": 564,
+  "commit": "8887a49d3",
+  "erzeugt": "2026-08-18T12:49:27Z",
+  "gruen": 569,
   "hinweis": "Rote Tests werden NICHT durch Abschwaechen gruen gemacht. Wo ein Test auf etwas Echtes zeigt, bleibt er rot, bis die Sache behoben ist.",
-  "rot": 15,
+  "rot": 10,
   "rote_tests": [
-    "tests/test_autonomy_activation_gate.py::test_exact_same_terminal_manager_is_activation_ready",
     "tests/test_causal_credit.py::test_failed_effect_reenters_without_positive_credit",
     "tests/test_causal_credit.py::test_successful_effect_gets_positive_credit",
-    "tests/test_entityos_artifact_authority.py::test_entityos_lock_binds_verified_substrate_candidate",
     "tests/test_final_acceptance_probe.py::test_probe_can_require_verified_effect_through_effectgate",
     "tests/test_inference_effect_route.py::test_inference_intent_reaches_effect_gate_without_direct_process",
     "tests/test_inference_effect_route.py::test_unavailable_entityos_is_denied_and_causally_reentered",
@@ -16,9 +14,6 @@
     "tests/test_inference_reingest_before_effect.py::test_denied_effect_notice_reenters_after_original_model_proposal",
     "tests/test_memory_privacy.py::test_mixed_old_turn_defers_until_complete_semantic_clearance_then_collision_uses_fragments",
     "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
-    "tests/test_service_serial_server.py::test_service_runs_current_uvicorn_terminal_app_and_closes_db",
-    "tests/test_state_authority.py::test_compression_has_no_hidden_lossless_turn_ledger",
-    "tests/test_state_authority.py::test_schema2_hidden_raw_ledger_is_retired_on_open",
-    "tests/test_terminal_tmux_control_timeouts.py::test_policy_reapply_timeout_fails_closed"
+    "tests/test_state_authority.py::test_compression_has_no_hidden_lossless_turn_ledger"
   ]
 }

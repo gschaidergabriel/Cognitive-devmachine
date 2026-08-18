@@ -384,6 +384,36 @@ class ClayVerseEffectBridge:
         from . import lagebild as _lagebild
         return _lagebild.erheben(self.db, self.user_id, self.session_id)
 
+    # ── Der Raum: vier Plaetze, eine Entitaet ─────────────────────────────
+    #
+    # Alle vier Sitzungen sind DASSELBE Wesen und sitzen im selben Raum. Sie
+    # sehen einander bei der Arbeit und weichen einander aus. Der Mensch und
+    # der Platz kommen aus dem verifizierten Zustand -- nie aus einem Argument,
+    # sonst koennte sich ein Platz als ein anderer ausgeben.
+
+    def _mein_platz(self) -> int:
+        rest = str(self.session_id).split(":")
+        return int(rest[2]) if len(rest) > 2 and rest[2].isdigit() else 1
+
+    def raum_sehen(self) -> dict:
+        from . import raum as _raum
+        return _raum.sehen(self.db, ich=self.session_id)
+
+    def raum_sagen(self, was: str, womit: str = "", zustand: str = "arbeitet") -> dict:
+        from . import raum as _raum
+        # Die Kollisionspruefung sitzt in raum.sagen() selbst -- hier waere sie
+        # nur fuer Zero wirksam gewesen, nicht fuer Takte und Skripte.
+        return _raum.sagen(self.db, session_id=self.session_id, mensch=self.user_id,
+                           platz=self._mein_platz(), was=was, womit=womit, zustand=zustand)
+
+    def raum_rufen(self, text: str) -> dict:
+        from . import raum as _raum
+        return _raum.rufen(self.db, session_id=self.session_id, text=text)
+
+    def raum_frei(self) -> dict:
+        from . import raum as _raum
+        return _raum.frei(self.db, session_id=self.session_id)
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -502,6 +532,26 @@ def main() -> None:
     def lagebild() -> dict:
         """Standlage des eigenen Hauses: die eigene andere Sitzung (Zuege, zuletzt aktiv, Thema), ob die sieben Autonomietakte liefen oder ueberfaellig sind, neue Wiki-Artikel seit dem letzten Blick, ob die Abrufkarte frisch ist, und die juengsten Fehlschlaege. Fehlende Nachweise heissen 'nicht_ermittelbar', nie still Null."""
         return bridge.lagebild()
+
+    @mcp.tool(annotations=udb_ro)
+    def raum_sehen() -> dict:
+        """Wer von den vier Plaetzen sitzt gerade im Raum und tut was. Alle vier sind DIESELBE Entitaet -- sieh nach, bevor du etwas anfasst, das schon jemand haelt."""
+        return bridge.raum_sehen()
+
+    @mcp.tool(annotations=udb_write)
+    def raum_sagen(was: str, womit: str = "", zustand: str = "arbeitet") -> dict:
+        """Sag den anderen drei Plaetzen in CAVEMAN ENGLISH, was du gerade tust. `womit` = die angefasste Sache (Datei, Tabelle, Dienst); meldet sofort zurueck, wenn ein anderer Platz sie schon haelt. zustand: arbeitet|wartet|frei."""
+        return bridge.raum_sagen(was, womit, zustand)
+
+    @mcp.tool(annotations=udb_write)
+    def raum_rufen(text: str) -> dict:
+        """Kurzer Zuruf an die anderen drei Plaetze, CAVEMAN ENGLISH. Fuer Absprachen, nicht fuer Gespraechsinhalte."""
+        return bridge.raum_rufen(text)
+
+    @mcp.tool(annotations=udb_write)
+    def raum_frei() -> dict:
+        """Anspruch zurueckgeben, wenn du mit einer Sache fertig bist. Wer nicht freigibt, blockiert die anderen drei."""
+        return bridge.raum_frei()
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

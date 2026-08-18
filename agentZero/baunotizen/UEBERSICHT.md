@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T12:18:58Z. **2480 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T12:49:00Z. **2483 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T18:44:14+07:00`.
 
@@ -8,21 +8,21 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T18:44:14+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2384 |
+| baunotiz | 2387 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1581 |
-| baunotiz | bauverlauf.jsonl | 759 |
+| baunotiz | git-commit | 1583 |
+| baunotiz | bauverlauf.jsonl | 760 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2480 · Gegenhypothese: 0 von 2480
+## Hypothese: 0 von 2483 · Gegenhypothese: 0 von 2483
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 

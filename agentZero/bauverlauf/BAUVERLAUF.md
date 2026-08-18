@@ -1,12 +1,147 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T12:18:58Z. 750 Commits aus vier Repos, davon 226 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T12:48:59Z. 752 Commits aus vier Repos, davon 228 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden
+
+`8887a49d32c0` · entityos · 12:46 UTC · EntityOS
+
+```
+Vier Defekte, die den ganzen Tag offen lagen. Drei davon hat ein Vorgaenger
+begonnen und ist am Kontingent des Kontos gestorben; die halbfertigen Diffs
+wurden gelesen und zu Ende gefuehrt statt weggeworfen.
+
+1. EINE BAHN MIT 87,5 % AUSFALL GALT ALS NUTZBAR (bahnen.py)
+   Eine Eichung von vorgestern ist kein Betriebszustand -- zwei Groq-Modelle
+   waren am 15. gemessen in Ordnung und lieferten am 18. nur noch 404.
+   Jetzt: drei Fehlschlaege in Folge sperren die Bahn, 300 s Abkuehlung, danach
+   EIN Versuch (halb offen), ob sie wieder lebt. Eine dauerhafte Sperre wegen
+   einer voruebergehenden Stoerung waere ihr eigener Fehler.
+   Die Sperre wird vermerkt, nie stillschweigend gezogen.
+
+2. entityos_wirte WAR EIN BOOT-SCHNAPPSCHUSS, GELESEN WIE EIN LIVE-KANAL
+   aufnehmen() lief einmal beim Start, verbundene_systeme() wurde bei jedem Zug
+   gelesen -- und meldete online true/false aus einer Zeile, die nach dem Start
+   niemand mehr auffrischte. Jetzt werden die Herzschlagdateien bei der Abfrage
+   gelesen, und das Feld `beleg` sagt IMMER, wie alt der Beweis ist. Nie ein
+   nacktes true/false: ein alter Beweis und ein frischer duerfen nicht gleich
+   aussehen.
+
+3. UEBERSETZUNG BRICHT AM BACKTICK AB -- URSACHE GEFUNDEN, NICHT GERATEN
+   Mistrals JSON-Modus bricht den Inhalt exakt nach einem oeffnenden Backtick
+   ab, wenn der Caveman-Text einen Codespan mit eingebetteten
+   Anfuehrungszeichen traegt. finish_reason bleibt "stop", das JSON bleibt
+   GUELTIG -- nur der Satz endet mitten drin. transport.py kann das gar nicht
+   sehen. Die Unterschrift ist eine ungerade Zahl Backticks.
+   3x reproduziert. Jetzt drei Versuche, dann LAUT scheitern statt
+   abgeschnittenen Text auszuliefern.
+   (Der Rueckfall auf den Originalton, damit dabei nicht der ganze Zug
+   verlorengeht, steckt im vorigen Commit.)
+
+4. DIE 14 ROTEN TESTS -- 14 -> 9, mit Verdikt statt Ausrede
+
+   Eine Suite mit dauerhaft roten Tests erzieht jeden dazu, Rot zu ignorieren.
+   Das ist der Schaden, nicht die Tests.
+
+   FUENF GEFIXT:
+   - test_policy_reapply_timeout_fails_closed: ECHTER Defekt. Ein geteilter
+     _run_tmux-Helfer schluckte die spezifische Meldung "policy enforcement
+     unavailable" -- alle drei Fehlerphasen sahen im Log gleich aus. Genau die
+     Sorte Fehler, die man erst bemerkt, wenn man sie sucht.
+   - test_entityos_lock_binds_verified_substrate_candidate: die Sperrdatei war
+     legitim neu verankert (eigener Commit, ehrlich dokumentiert, ungepruefte
+     Felder auf null statt erfunden). Testkonstanten nachgezogen.
+   - zwei Tests zu autonomy_app: der Code wechselte von add_event_handler auf
+     router.on_startup/on_shutdown (FastAPI 0.139), die Attrappen im Test waren
+     veraltet.
+   - test_schema2_hidden_raw_ledger_is_retired_on_open: Test pinnte
+     schema_version 5, der Store schreibt 6 (spaetere, unabhaengige Migration).
+
+   NEUN BLEIBEN ROT, MIT BEFUND -- nicht mit Achselzucken:
+   - SIEBEN nutzen ClayVerseEngine.ingest() (engine.py), das nie eine
+     active_turns-Zeile anlegt; das tut nur TurnLifecycle. service.py, der
+     Live-Einstieg, importiert engine.py/api.py NIRGENDS. Verdikt: toter
+     Nebenpfad, kein Live-Fehler. Nicht angefasst -- ob dieser Pfad bleibt oder
+     faellt, ist eine Architekturentscheidung und keine Testreparatur.
+   - ZWEI erwarten, dass compact() Rohinhalt nach der Klaerung physisch kuerzt.
+     Der Code sagt in seinem eigenen Kommentar "never rewritten by compact()".
+     Das ist eine POLITIKENTSCHEIDUNG (Rohdaten fuer immer behalten oder
+     loeschen), kein stiller Fehler. Gehoert einem Menschen, nicht einem Agenten.
+
+Suite: 565 gruen / 14 rot  ->  570 gruen / 9 rot. Container healthy.
+```
+
+### Der Raum: vier Plaetze, eine Entitaet - und die Zuege gehen nicht mehr verloren
+
+`584c0282121c` · entityos · 12:37 UTC · EntityOS
+
+```
+Gabriels Entwurf, woertlich: "die 4 sessions haben alle getrennte id sind aber
+alle teil der selben entitaet agent zero und wie bei der reserch entitaet sitzen
+sie aber alle 4 im selben raum und sehen was der andere macht und koordinieren
+sich danach ... kommunizieren in caveman englisch ... greifen alle auf die selbe
+source of truth zu." Und ausdruecklich: kein kompliziertes Abgleichen von
+Zeitstempeln, "das ist simpel und funktional".
+
+⭐ DESHALB IST DER RAUM SO KLEIN
+Kein Nachrichtenbus, keine Sperrverwaltung, kein Anfuehrer. Eine Tafel mit vier
+Zeilen -- je Sitzung eine, die ueberschrieben wird -- und ein kurzer
+Zuruf-Faden (letzte 60). Wer etwas tut, schreibt seine Zeile. Wer etwas tun
+will, liest zuerst. Das ist alles.
+Die Robustheit kommt aus der Kleinheit, nicht aus Mechanik: EIN Ort (dieselbe
+wiki.db wie alles andere), je Sitzung EINE Zeile, kein Verlauf zu pflegen.
+
+Vier Werkzeuge: raum_sehen, raum_sagen(was, womit), raum_rufen, raum_frei.
+`womit` ist die angefasste Sache und meldet SOFORT zurueck, wenn ein anderer
+Platz sie schon haelt. Dazu Punkt 9d im Laufzeitvertrag: erst sehen, dann sagen,
+bei Kollision nicht anfassen sondern rufen, am Ende freigeben.
+
+⚠️⚠️ DIE EINE GRENZE: DER RAUM TRAEGT, WAS GETAN WIRD -- NIE, WAS EIN MENSCH
+GESAGT HAT. Alle vier Plaetze sind dieselbe Entitaet und duerfen sich bei der
+Arbeit sehen. Aber zwei gehoeren Gabriel und zwei Andreas, und deren Gespraeche
+sind getrennt. Stuende in `was` der Wortlaut einer Frage, waere der Raum ein
+Leck -- ein besonders unauffaelliges, weil er ja dafuer gebaut ist, dass alle
+hineinsehen. Genau dieser Fehler ist heute schon einmal passiert (eine Tabelle
+ohne Nutzerspalte zeigte Andreas Gabriels private Eintraege). Deshalb kappt
+_geprueft() hart auf 160/120 Zeichen: was nicht hineinpasst, kann auch nicht
+versehentlich hineingeraten.
+
+⚠️ ZUM ALTER, weil "keine Zeitstempel" hier falsch verstanden werden koennte:
+es wird nichts abgeglichen und keine Reihenfolge ermittelt. Aber jede Zeile
+traegt, wann sie geschrieben wurde, und der Raum zeigt daraus ein schlichtes
+Alter. Ohne das haelt eine abgestuerzte Sitzung ihren Anspruch fuer immer, und
+die anderen weichen ewig einem Arbeiter aus, den es nicht mehr gibt. Das ist
+keine Komplexitaet, sondern die Voraussetzung dafuer, dass das Einfache traegt.
+
+⚠️ EIGENER KONSTRUKTIONSFEHLER, beim Testen aufgefallen: die
+Kollisionspruefung sass zuerst in der MCP-Bruecke. Damit bekam sie nur, wer
+ueber Zero geht -- jeder direkte Aufruf (Takt, Skript, kuenftiger Dienst) lief
+blind daran vorbei. Eine Sicherungseigenschaft, die von der Hoeflichkeit des
+Aufrufers abhaengt, ist keine. Sie sitzt jetzt in raum.sagen() selbst, und zwar
+VOR dem Eintrag -- andersherum meldet man die eigene, gerade geschriebene Zeile
+als Kollision mit sich selbst.
+
+═══ UND: EINE GESCHEITERTE UEBERSETZUNG VERNICHTET NICHT MEHR DIE ANTWORT ═══
+
+Gemessen im Durchlauf als Andreas: zwei von vier Zuegen endeten mit
+    TransportError: Mistral response did not finish cleanly
+in translate_to_german -- also NACHDEM Zero die Antwort fertig erarbeitet hatte.
+Der Mensch bekam eine Ausnahme. Die Arbeit war getan und wurde weggeworfen.
+
+⭐ Das Verhaeltnis stimmte nicht: die Uebersetzung ist ein KOMFORT, die Antwort
+ist die Leistung. Ein Komfort, der bei Ausfall die Leistung mitreisst, ist
+falsch verdrahtet. Jetzt wird bei endgueltigem Ausfall Zeros Caveman-Text mit
+einem ehrlichen Vermerk ausgeliefert: unschoen und verstaendlich, statt weg.
+Jeder Rueckfall schreibt eine Zeile in mv_uebersetzung_ausfall -- ein stiller
+Rueckfall waere hier heimtueckisch: die Seite funktioniert, der Text sieht nur
+roh aus, und niemand merkt, dass der Uebersetzer seit Tagen tot ist.
+```
 
 ### Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen
 
@@ -4089,65 +4224,6 @@ Genau die Cloudflare-Falle aus F14, deshalb als UNBEKANNT gefuehrt.
 
 FOLGE FUER LEANN: 1024 statt 4096 Dimensionen ist VIERTEL Speicher, und der
 Index liegt auf unseren Rechnern.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F17 Kognitive Aufwertung: vier Zugaenge, Zwillingsmodule, Forschungsimport
-
-`e50384080601` · clay · 05:33 UTC · ClayVerse
-
-```
-Alles Freischwebende aufgezeichnet, bevor es verloren geht - derselbe Fehler
-hat uns in der Nacht auf den 15.08. schon nach_text.py gekostet.
-
-Jede Zeile traegt eine Kennung: [E] Eignerentscheidung, [B] Behauptung eines
-Organs (ChatGPT GPT-5.6 Sol) die zu pruefen ist, [M] von mir gemessen.
-Der groesste Teil ist [B] und ausdruecklich NICHT gemessen.
-
-DIE TRENNUNGSREGEL, aus unserer eigenen Hausregel abgeleitet:
-Was die UnifiedDB nicht rekonstruieren kann, bleibt auf dem Wirt.
-Was sie rekonstruieren kann, darf zu den Zwillings-PCs.
-Daraus faellt die Zuordnung von selbst - Tabellen kanonisch auf den Wirt,
-LEANN-Index und Modelle und Simulationen zu uns.
-
-Zugaenge: NVIDIA allein der Kognition (voll, alle Werkzeuge/Modelle),
-Mistral als Auswerter VOR jedem Prompt aus fuenf benannten Quellen,
-Groq und OpenRouter helfen direkt in der UnifiedDB.
-
-LEANN als ANN-Topologie VOR dem Graph-Walk, ausdruecklich NICHT als Wahrheit
-und ausdruecklich NICHT mit ClayGraph zusammengeworfen. Zwei abgeleitete
-Tabellen, Index rekonstruierbar, am Puls statt zweiter Waechter.
-EHRLICH: die 97 Prozent gelten gegen einen klassischen Vektorindex, NICHT
-gegen unseren Stand - fuer uns kostet LEANN zusaetzlichen Speicher.
-
-LIZENZSPERRE: HIMA ist AGPL-3.0. Kein Code nach Clay kopieren, nur Architektur
-als Forschungsreferenz und Clay-eigene Nachbauten.
-
-WARNUNG: Gabriels PC ist zurzeit kein verlaesslicher Wirt (3 Totalstillstaende
-in 4 Tagen). Der Zwilling muss genau dafuer gebaut sein.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### README zeigt jetzt die Zielarchitektur und was schon steht
-
-`c3bac076c404` · unifieddb · 02:30 UTC · ClayVerse
-
-```
-Der Satz nach oben gezogen, wo er gelesen wird: die Datenbank IST das System,
-ClayVerse ist ein Modul darauf. Zustand und Zustandsautomat loesen sich darin
-auf, damit udb als EINZELNES Modul die gesamte ClayVerse-Entitaet enthaelt.
-Eignerentscheidung vom 2026-08-15.
-
-Hyperposition als eingeloest belegt statt behauptet: frank_hyperposition.clay
-mit vier Topologien, 402 Dateien der Forschungsentitaet, woertlich im
-Meisterquell, und 1.388 Fakten mit 2+ Lesarten im Bestand.
-
-Beides benannt - was steht (Vordertuer udb.verbindung(), 7 umgezogene
-Werkzeuge, Zustandsabruf, Paket ohne Modellaufruf) UND die Luecken:
-paket.py traegt Hyperposition nur bei AMBIGUOUS, 26 Werkzeuge oeffnen noch
-selbst sqlite3, der Zustandsautomat ist entschieden und nicht gebaut.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

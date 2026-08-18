@@ -233,8 +233,17 @@ class TerminalSessionManager:
         caller is the actual, state-based fail-closed gate (marker, prefix, prefix2,
         status, mouse, default-shell, and an empty effective keymap all checked
         directly against the live server).
+
+        `_run_tmux` raises a generic "tmux control operation unavailable" message on
+        timeout -- fine for one-shot probes, but here it hid WHICH phase of ensure()
+        failed (session probe vs policy reapply vs attestation all looked identical
+        in logs/alerts). Re-raise with a phase-specific message so a fail-closed exit
+        says what broke, not just that something did.
         """
-        self._run_tmux(binding, "source-file", "-q", str(self.MANAGED_TMUX))
+        try:
+            self._run_tmux(binding, "source-file", "-q", str(self.MANAGED_TMUX))
+        except TerminalRuntimeError as exc:
+            raise TerminalRuntimeError("tmux policy enforcement unavailable") from exc
 
     def _link_shared_credentials(self, binding: TerminalBinding) -> None:
         """Symlink ONLY the OAuth credential file into this user's Claude home.

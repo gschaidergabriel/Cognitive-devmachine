@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T12:18:58Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T12:49:00Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -772,6 +772,21 @@ CREATE TABLE wm_topologie_name (
         offen      INTEGER NOT NULL DEFAULT 1
     );
 CREATE TABLE workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
+CREATE TABLE zero_raum (
+  session_id TEXT PRIMARY KEY,          -- eine Zeile je Sitzung, wird ueberschrieben
+  mensch     TEXT NOT NULL,             -- gabriel | andreas
+  platz      INTEGER NOT NULL,
+  was        TEXT NOT NULL,             -- Caveman: was ich gerade tue
+  womit      TEXT,                      -- die angefasste Sache: Datei, Tabelle, Dienst
+  zustand    TEXT NOT NULL,             -- arbeitet | wartet | frei
+  seit       REAL NOT NULL
+);
+CREATE TABLE zero_raum_ruf (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ts REAL NOT NULL,
+  von TEXT NOT NULL,
+  text TEXT NOT NULL
+);
 CREATE INDEX idx_artikel_art ON artikel(art);
 CREATE INDEX idx_artikel_baunotiz_lookup ON artikel(art, von_quelle, datum);
 CREATE INDEX idx_artikel_epistemic_class ON artikel(epistemic_class);

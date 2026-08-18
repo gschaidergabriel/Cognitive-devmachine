@@ -79,6 +79,50 @@ def _ohne_paketurteil(text: str) -> tuple[str, str | None]:
     return rest.lstrip(), kopf
 
 
+
+_ROH_VERMERK = (
+    "⚠️ Die Uebersetzung ins Deutsche ist ausgefallen. Darunter steht Zeros "
+    "Antwort im Originalton (Caveman-Englisch) -- unuebersetzt, aber "
+    "vollstaendig. Lieber roh als verloren.\n\n"
+)
+
+
+def _uebersetzung_mit_rueckfall(own_store, turn_id, session_id, caveman: str) -> tuple[dict, bool]:
+    """Uebersetzen; bei endgueltigem Ausfall den Originalton ausliefern.
+
+    Die Uebersetzung ist ein Komfort, die Antwort ist die Leistung. Ein
+    Komfort, der bei Ausfall die Leistung mitreisst, ist falsch verdrahtet.
+    Gemessen: zwei von vier Zuegen gingen so verloren, NACHDEM Zero fertig war.
+    """
+    try:
+        return translator.translate_to_german(caveman), False
+    except Exception as fehler:
+        _log_uebersetzungsausfall(own_store, turn_id, session_id, fehler)
+        return ({"german_translation": _ROH_VERMERK + caveman,
+                 "translation_id": None,
+                 "_ausfall": f"{type(fehler).__name__}: {fehler}"}, True)
+
+
+def _log_uebersetzungsausfall(store, turn_id, session_id, fehler) -> None:
+    """Mitschreiben, nicht schweigen.
+
+    Ein stiller Rueckfall waere hier besonders heimtueckisch: die Seite
+    funktioniert, der Text sieht nur roh aus, und niemand merkt, dass der
+    Uebersetzer seit Tagen tot ist.
+    """
+    try:
+        store.db.executescript(
+            "CREATE TABLE IF NOT EXISTS mv_uebersetzung_ausfall("
+            "  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,"
+            "  turn_id TEXT, session_id TEXT, fehler TEXT);")
+        store.db.execute(
+            "INSERT INTO mv_uebersetzung_ausfall(ts,turn_id,session_id,fehler) VALUES(?,?,?,?)",
+            (time.time(), turn_id, session_id, f"{type(fehler).__name__}: {fehler}"[:300]))
+        store.db.commit()
+    except Exception:
+        pass  # Buchfuehrung darf einen Zug nie kippen
+
+
 def _profil_safe(db, user_id: str) -> dict | None:
     """Profil, Rechnerbesitz und Wiki-Bestand des anwesenden Menschen.
 
@@ -272,7 +316,8 @@ def run_chat_turn(
             log_paketurteil(own_store, turn_id, session_id, paketurteil_entfernt)
 
         t0 = time.perf_counter()
-        german = translator.translate_to_german(_sauber)
+        german, roh_ausgeliefert = _uebersetzung_mit_rueckfall(
+            own_store, turn_id, session_id, _sauber)
         translate_ms = (time.perf_counter() - t0) * 1000.0
 
         prestage_id = own_store.record_prestage_turn(

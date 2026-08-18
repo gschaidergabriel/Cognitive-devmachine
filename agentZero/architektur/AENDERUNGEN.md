@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T12:18:58Z aus drei Repos. 470 Eintraege.
+Automatisch erzeugt 2026-08-18T12:48:59Z aus drei Repos. 470 Eintraege.
 
 ## architektur (15)
 
@@ -87,10 +87,11 @@ Automatisch erzeugt 2026-08-18T12:18:58Z aus drei Repos. 470 Eintraege.
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 | 2026-08-15T16:46 | unifieddb | `7817f79f4b2c` | F72 aufgenommen |
 
-## reparatur (48)
+## reparatur (49)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-18T10:29 | entityos | `7432769daa72` | Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root s |
 | 2026-08-18T10:19 | entityos | `3cca3460bbb1` | Fix real S7-adjacent blocker: CLAUDE_CODE_SHELL_PREFIX was silently eating every hook AND the MCP server start |
 | 2026-08-18T09:58 | entityos | `8e3d5fb7a313` | Update 3 tests to match deliberate behavior/config changes: source-file -q argv (my tmux fix), Dockerfile chow |
@@ -196,10 +197,11 @@ Automatisch erzeugt 2026-08-18T12:18:58Z aus drei Repos. 470 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (231)
+## bau (230)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T12:37 | entityos | `584c0282121c` | Der Raum: vier Plaetze, eine Entitaet - und die Zuege gehen nicht mehr verloren |
 | 2026-08-18T10:59 | entityos | `ff48d389b4ac` | Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen |
 | 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
 | 2026-08-18T10:42 | entityos | `2b2f7219ab05` | Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch |
@@ -259,5 +261,4 @@ Automatisch erzeugt 2026-08-18T12:18:58Z aus drei Repos. 470 Eintraege.
 | 2026-08-18T03:36 | entityos | `62b9d707dca8` | docs(runtime): require exact autonomy effect dispatch |
 | 2026-08-18T03:35 | entityos | `78e65603a949` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
 | 2026-08-18T03:35 | entityos | `1ebb891e47d8` | Merge PR #713: adopt explicit goals from canonical hook turns |
-| 2026-08-18T03:33 | entityos | `9419795944de` | feat(clayverse): adopt explicit goals after canonical prompt admission |
 

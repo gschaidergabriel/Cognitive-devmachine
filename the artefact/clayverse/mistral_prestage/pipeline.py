@@ -157,6 +157,18 @@ def run_chat_turn(
         selected_tools = tool_selection or [
             t for t in envelope.get("tool_selection", []) if isinstance(t, str) and t.startswith("mcp__clayverse__")
         ] or None
+        if selected_tools is not None:
+            # Wer da ist und wem was gehoert, darf nicht von der Auswahl eines
+            # freien Modells abhaengen. Gemessen: auf "Was ist schiefgegangen?"
+            # waehlte die Vorstufe menschen_profil NICHT, Zero suchte im
+            # Gedaechtnis, fand nichts und forderte ein besseres Paket an --
+            # obwohl die Antwort in menschen_profil()["bilanz"] stand.
+            # Lesend, billig, und genau bei den Fragen zustaendig, bei denen
+            # Raten am teuersten ist.
+            for _pflicht in ("mcp__clayverse__menschen_profil",
+                             "mcp__clayverse__wiki_zuordnung"):
+                if _pflicht not in selected_tools:
+                    selected_tools.append(_pflicht)
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(

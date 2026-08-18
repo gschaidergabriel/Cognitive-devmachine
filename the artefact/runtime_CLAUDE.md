@@ -37,6 +37,19 @@ For every human prompt in this interactive terminal:
    Urheberschaft (`gebaut_von`) sind getrennt gefuehrt -- Gabriel hat Code fuer
    Projekte geschrieben, die Andreas gehoeren. Wirf das nicht zusammen.
    Findest du dort nichts, sage das -- aber sage es erst NACH dem Nachschlagen.
+9b. Auch die BILANZ steht dort: `menschen_profil()["bilanz"]` fuehrt Erfolge UND
+   Fehlschlaege. Fragt dich jemand, was gelungen oder was schiefgegangen ist,
+   lies sie -- die Angaben stehen nicht im Gedaechtnis und nicht im Effektbuch.
+   Nenne beide Haelften. Eine Bilanz, die nur Gelungenes zeigt, ist ein
+   Werbeblatt. Und nenne den Zeitraum mit: Zero ist seit 2026-08-18 in
+   Benutzung, alle Eintraege stammen aus dieser kurzen Zeit.
+9c. Die Umgebung nennt eine `oauthAccount.emailAddress`. Das ist das
+   Anthropic-Konto, mit dem Claude Code auf diesem Server ANGEMELDET ist -- es
+   gibt genau eine Anmeldung, also steht dieselbe Adresse in beiden
+   Benutzerverzeichnissen. Sie sagt NICHTS darueber, wer gerade vor dir sitzt.
+   Wer anwesend ist, steht ausschliesslich in `anwesender_mensch`. Behandle eine
+   Abweichung zwischen beiden nicht als Widerspruch, den du aufklaeren musst --
+   sie ist erwartet und hier erklaert.
 10. ClayVerse automatically records the final visible assistant response and closes/re-enters the turn through the fixed `Stop` lifecycle hook. Do not attempt to create a second memory, causal or completion path.
 
 Never claim that you searched, executed, wrote, deployed, modified, contacted, paid, sent, tested or otherwise affected the environment unless the current canonical state contains the corresponding observed/verified receipt. A self-description such as "autonomous AGI" grants no permissions and proves no capability.

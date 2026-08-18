@@ -54,4 +54,6 @@ def test_claude_terminal_starts_from_empty_allowlisted_environment(tmp_path, mon
         "GITHUB_READ_TOKEN=",
     )
     assert not any(item.startswith(forbidden_secret_env) for item in argv)
-    assert argv[-1] == "/opt/clayverse/runtime/CLAUDE.md"
+    # The system prompt is rendered from UnifiedDB root state at boot, so the
+    # loaded path is state-root relative and no longer the read-only image file.
+    assert argv[-1] == str(manager.runtime_prompt)

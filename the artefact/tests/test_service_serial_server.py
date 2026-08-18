@@ -5,6 +5,11 @@ from clayverse import service
 
 
 class FakeDB:
+    def canonical_identity(self):
+        # Root identity is level-0 state; a fake DB must still carry one,
+        # because a service that boots without it is a different entity.
+        return "<canonical_identity level=\"0\">test</canonical_identity>"
+
     def __init__(self):
         self.checkpoints = []
         self.closed = False

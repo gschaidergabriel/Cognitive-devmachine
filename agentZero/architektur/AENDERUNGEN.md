@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T08:54:34Z aus drei Repos. 467 Eintraege.
+Automatisch erzeugt 2026-08-18T08:58:06Z aus drei Repos. 467 Eintraege.
 
 ## architektur (14)
 
@@ -203,6 +203,7 @@ Automatisch erzeugt 2026-08-18T08:54:34Z aus drei Repos. 467 Eintraege.
 | 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
 | 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
 | 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
+| 2026-08-18T08:55 | entityos | `5f5df7cad329` | Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz |
 | 2026-08-18T08:44 | entityos | `be1359046d41` | Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging |
 | 2026-08-18T08:03 | entityos | `9de2b8a9e7a0` | Zero weiss jetzt, mit WEM es spricht - und wem was gehoert |
 | 2026-08-18T07:49 | entityos | `2e3a9cd5a2db` | KRITISCH: Cross-user-Leck geschlossen. Und die Notbremse wird endlich erkannt. |
@@ -258,5 +259,4 @@ Automatisch erzeugt 2026-08-18T08:54:34Z aus drei Repos. 467 Eintraege.
 | 2026-08-18T03:24 | entityos | `c3c685e8b02b` | feat(clayverse): add bounded autonomy context projection |
 | 2026-08-18T03:22 | entityos | `831870a48b13` | feat(clayverse): add non-preempting autonomous turn gate |
 | 2026-08-18T03:19 | entityos | `6eb85707b546` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
-| 2026-08-18T03:13 | entityos | `a896a05284b8` | EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet |
 

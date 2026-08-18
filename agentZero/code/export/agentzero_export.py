@@ -838,7 +838,10 @@ def profile_und_zuordnung(manifest: dict) -> None:
            "(wer es gebaut hat) als GETRENNTE Spalten -- ein Projekt kann dem einen gehoeren "
            "und vom anderen gebaut sein (Beispiel: SeiMensch.net gehoert Andreas, Code von "
            "Gabriel). Siehe `PROJEKTE.md`.", ""]
-    (ordner / "PROFILE.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    # Ueber schreibe_markdown(), damit auch diese Datei ihre Beipackdatei bekommt.
+    # Sie war eine von genau zwei ohne -- ein Vertrag mit zwei Ausnahmen ist keiner.
+    schreibe_markdown(ordner / "PROFILE.md", "\n".join(md) + "\n",
+                      herkunft="entityos_profil + iar.frank.ink, redigiert fuer ein oeffentliches Repo")
     manifest["dateien"].append({"datei": "agentZero/menschen/PROFILE.md",
                                 "freigegeben": len(freigegeben), "zurueckgehalten": len(zurueckgehalten)})
 
@@ -862,7 +865,8 @@ def profile_und_zuordnung(manifest: dict) -> None:
         md2.append(f"| {p['projekt']} | {p['gehoert'] or '?'} | {p['gebaut_von'] or '?'} | "
                    f"{p['stand']} | {p['erfolg'] or '?'} | {'ja' if p['seit_zero'] else 'nein'} | "
                    f"{(p['beschreibung'] or '').replace('|', '/')} |")
-    (ordner / "PROJEKTE.md").write_text("\n".join(md2) + "\n", encoding="utf-8")
+    schreibe_markdown(ordner / "PROJEKTE.md", "\n".join(md2) + "\n",
+                      herkunft="entityos_projekte -- Zugehoerigkeit und Urheberschaft getrennt gefuehrt")
     manifest["dateien"].append({"datei": "agentZero/menschen/PROJEKTE.md", "projekte": len(projekte)})
 
     # ── Zuordnung: NUR Aggregat -- 14284 Einzelzeilen dumpen waere kein Aggregat ──

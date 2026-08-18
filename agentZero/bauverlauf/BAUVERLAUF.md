@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T08:54:34Z. 736 Commits aus vier Repos, davon 214 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T08:58:06Z. 737 Commits aus vier Repos, davon 215 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,56 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz
+
+`5f5df7cad329` · entityos · 08:55 UTC · EntityOS
+
+```
+NACH DEM NEUBAU GEMESSEN:
+
+Bilanz (Befund B): vollstaendig. Auf "Was ist schiefgegangen?" nennt Zero jetzt
+alle sieben Fehlschlaege mit Beleg, dazu den Zeitraum ("seit einem Tag") und von
+selbst das Muster: "Fuenf von sieben wurden beim Nachmessen entdeckt, nicht
+durch eine Fehlermeldung -- das ist das Muster, kein Zufall."
+
+Betreiberkonto (Befund A): taucht nicht mehr als Unstimmigkeit auf. Punkt 9c
+erklaert sie, statt sie zu verstecken.
+
+BEFUND C HIELT SICH -- UND DER GRUND IST LEHRREICH.
+
+Drei von drei Antworten begannen weiter mit einem Urteil ueber das Paket:
+  "Alle sieben Fehlschlaege sind im Profil vermerkt ... kein NEED_BETTER_PACKAGE."
+  "Ein Identitaetsnachweis liegt vor ... Es besteht KEIN BEDARF fuer ein besseres Paket."
+  "Das Paket reicht."
+
+Mein erster Versuch stand in _BASE_RULES. _ROUND1_ADDENDUM kommt DANACH und
+schaerft die Notbremse noch einmal ein -- die letzte Anweisung gewinnt. Eine
+Regel gegen ein Verhalten muss dort stehen, wo das Verhalten angefordert wird,
+nicht davor. Die Gegenregel steht jetzt im selben Absatz wie die Notbremse.
+
+DAZU EIN NETZ IM CODE, UND ZWAR EIN MESSENDES.
+
+_ohne_paketurteil() entfernt einen kurzen ersten Absatz, der ueber das Paket
+urteilt -- und SCHREIBT MIT, dass es das getan hat (Tabelle mv_paketurteil).
+
+Ein stiller Filter waere hier das Falsche: er beseitigt das Symptom und laesst
+mich glauben, die Anweisung an das Modell wirke. Solange der Zaehler steigt,
+wirkt sie nicht. Das ist der Unterschied zwischen einem Filter und einem
+Messgeraet, und heute ist genau diese Sorte Selbsttaeuschung schon dreimal
+teuer geworden.
+
+Eng gefasst mit Absicht: nur der erste Absatz, nur unter 300 Zeichen, nur mit
+Paket-Wort, und NIE wenn die Notbremse selbst gesetzt ist. Angewendet erst nach
+BEIDEN Notbremsen-Pruefungen -- sonst koennte das Netz eine echte Nachforderung
+verstuemmeln und aus einer berechtigten Zurueckweisung eine halbe Antwort
+machen.
+
+Fuenf Faelle geprueft, fuenf richtig: greift bei "Das Paket reicht." und bei
+"... kein NEED_BETTER_PACKAGE.", greift NICHT bei einer echten Antwort, NICHT
+bei der Notbremse selbst, NICHT bei einem langen ersten Absatz, in dem das Wort
+nur beilaeufig vorkommt.
 ```
 
 ### Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt
@@ -3607,13 +3657,5 @@ wiki.py behoben: beide kante-Stellen auf INSERT ... ON CONFLICT(von,nach,art) DO
 
 ```
 fehler.py und Tabelle fehler live. 17 Zeilen, jede mit Regex-Ausloeser, Beleg, Herkunft und Bestaetigung, 0 ohne Beleg. Geerntet aus protokoll.jsonl (61 Zeilen vollstaendig gelesen), MESSFEHLER.md, CLAUDE.md und Code-Gegenpruefungen. NACHWEIS: 7 von 7 echten Taetigkeiten trafen genau ihre eigene Zeile, je ein Treffer, keine Kreuzkontamination, 73 bis 1776 Mikrosekunden. UND ENTSCHEIDEND: 3 von 3 unverdaechtigen Taetigkeiten (git status, ls, ein einfaches SELECT) lieferten NULL Treffer. Ein Warner, der immer warnt, waere Rauschen - und Rauschen ist, wie eine echte Warnung ignoriert wird. Wiederholungsfest: zweiter Erntelauf 0 neu.
-```
-
-### B27 geprueft: Verfall und kontrolliertes Vergessen von Titan uebernommen
-
-`d27d89a6829d` · clay · 22:17 UTC · ClayVerse
-
-```
-verfall.py live. Formel new_confidence = base mal 2 hoch minus alter_tage durch 7, bei jedem Lauf FRISCH aus fester Basis und echtem Alter gerechnet, nicht aufgezinst. 19.267 von 19.267 Kanten verfallen, 179 von 179 Artikeln mit echter Vorkonfidenz - fuer die uebrigen 14.089 wurde KEINE erfunden. folgerung inert, weil 0 von 8 Zeilen eine echte Basiskonfidenz tragen. SCHUTZ BEWIESEN statt behauptet: selftest kopiert die Datenbank in eine Wegwerfdatei, setzt die geschuetzten Klassen auf maximalen Verfall, laesst die volle Kette laufen und prueft, dass sie ueberleben, dass eine Markierung ruecknehmbar ist und dass die Zeilenzahl vorher wie nachher gleich bleibt - also nirgends geloescht wurde. Live BESTANDEN: 117 geschuetzte Artikel, 40 geschuetzte Kanten (widerspricht und attacks), 3 widerlegte Folgerungen, 124 offene Probleme, alle unangetastet.
 ```
 

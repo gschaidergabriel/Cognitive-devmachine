@@ -1,3 +1,4 @@
+import json
 import pytest
 
 from clayverse.terminal_hooks import (
@@ -46,7 +47,30 @@ def test_envelope_counts_prefix_not_only_json_payload():
     assert rendered.endswith("}")
 
 
-def test_uncompactable_context_fails_closed_instead_of_spilling_to_file():
+def test_uncompactable_context_never_spills_to_file_and_declares_what_it_dropped():
+    """Die geschuetzte Eigenschaft ist: NICHTS wird in eine Datei ausgelagert.
+
+    Frueher war der Mechanismus dafuer ein harter Abbruch. Der hat aber den
+    Menschen ausgesperrt: bei gewachsenem Kontext kam kein Prompt mehr durch,
+    und die Sitzung war tot. Zwischen "unbegrenzt ausliefern" und "gar nichts"
+    liegt "weniger, und es steht dabei".
+
+    Der Test prueft deshalb die Eigenschaft, nicht mehr den Mechanismus:
+    es bleibt inline, es bleibt in der Huelle, und was fehlt, ist BENANNT --
+    stille Kuerzung waere schlimmer als die Sperre, weil das Modell dann mit
+    einem Loch arbeitet, von dem es nichts weiss.
+    """
     huge_resource = "resource:" + ("r" * 12_000)
-    with pytest.raises(TerminalHookError, match="safe inline hook envelope"):
-        _bounded_hook_context(_result("short", resources=[huge_resource]))
+    text = _bounded_hook_context(_result("short", resources=[huge_resource]))
+
+    assert len(text) <= HOOK_CONTEXT_MAX_CHARS
+    nutzlast = json.loads(text[text.index("{"):])
+    assert nutzlast["gekuerzt"]["entfernt"], "was entfernt wurde, muss benannt sein"
+    assert "r" * 500 not in text, "der riesige Verweis darf nicht ungekuerzt mitfahren"
+
+
+def test_minimal_envelope_still_fails_closed_when_the_budget_itself_is_wrong():
+    """Wenn selbst die Notfassung nicht passt, ist die Grenze falsch gesetzt --
+    das ist ein echter Fehler und muss weiterhin hart abbrechen."""
+    with pytest.raises(TerminalHookError, match="budget is wrong"):
+        _bounded_hook_context(_result("short"), limit=10)

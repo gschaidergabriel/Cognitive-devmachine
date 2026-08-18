@@ -8,6 +8,7 @@ import time
 import uuid
 
 from .effects import EffectGate, EffectRequest
+from .identity import CANONICAL_USER_IDS, ist_kanonische_sitzung, sitzungen_von
 from .graph import ClayGraphProjection
 from .hyperposition import HyperpositionProjector
 from .memory import MemoryManager
@@ -37,7 +38,7 @@ class TurnLifecycle:
     """Deterministic per-turn lifecycle shared by Claude hooks and MCP effects."""
     AUTONOMY_SOURCE="clayverse-autonomy:goal-step"
     def __init__(self, db: UnifiedDB, user_id: str, session_id: str, entityos_bridge=None):
-        if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}": raise PermissionError("invalid terminal/session binding")
+        if user_id not in CANONICAL_USER_IDS or not ist_kanonische_sitzung(session_id, user_id): raise PermissionError("invalid terminal/session binding")
         db.assert_session_owner(session_id, user_id)
         self.db=db; self.user_id=user_id; self.session_id=session_id
         self.memory=MemoryManager(db); self.world=WorldAssembler(db); self.workspace=Workspace(db)

@@ -40,6 +40,7 @@ COPY --chown=root:root policy/managed-settings.json /etc/claude-code/managed-set
 COPY --chown=root:root policy/managed-tmux.conf /etc/clayverse/managed-tmux.conf
 RUN chmod 0444 /etc/claude-code/managed-mcp.json /etc/claude-code/managed-settings.json /etc/clayverse/managed-tmux.conf
 COPY clayverse ./clayverse
+COPY web ./web
 COPY --chown=root:root runtime_CLAUDE.md /opt/clayverse/runtime/CLAUDE.md
 COPY --chown=root:root policy/deny-shell /opt/clayverse/runtime/deny-shell
 COPY --chown=root:root entityos.lock.json /opt/entityos/entityos.lock.json

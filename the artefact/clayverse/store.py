@@ -199,10 +199,12 @@ class UnifiedDB:
     def ensure_user(self,user_id,display_name,clerk_subject=None):
         self.db.execute("INSERT OR IGNORE INTO users(user_id,display_name,clerk_subject) VALUES(?,?,?)",(user_id,display_name,clerk_subject))
         if clerk_subject: self.db.execute("UPDATE users SET clerk_subject=? WHERE user_id=?",(clerk_subject,user_id))
-    def ensure_session(self,user_id,terminal_name):
-        row=self.db.execute("SELECT session_id FROM sessions WHERE user_id=?",(user_id,)).fetchone()
+    def ensure_session(self,user_id,terminal_name,*,platz:int=1):
+        # Platz 1 behaelt die alte Kennung, damit vorhandene Zuege haengen bleiben.
+        sid=f"session:{user_id}" if platz==1 else f"session:{user_id}:{platz}"
+        row=self.db.execute("SELECT session_id FROM sessions WHERE session_id=?",(sid,)).fetchone()
         if row: return row[0]
-        sid=f"session:{user_id}"; now=time.time(); generation=self.entity_generation()
+        now=time.time(); generation=self.entity_generation()
         self.db.execute("INSERT INTO sessions(session_id,user_id,created_at,updated_at,generation,terminal_name) VALUES(?,?,?,?,?,?)",(sid,user_id,now,now,generation,terminal_name)); return sid
     def assert_session_owner(self,session_id,user_id):
         row=self.db.execute("SELECT user_id FROM sessions WHERE session_id=?",(session_id,)).fetchone()

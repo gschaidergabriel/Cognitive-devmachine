@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from .effect_journal import EffectJournal
+from .identity import CANONICAL_USER_IDS, ist_kanonische_sitzung, sitzungen_von
 from .store import StaleGeneration, UnifiedDB
 
 STATE_KEY = "autonomy_state_v1"
@@ -124,7 +125,7 @@ class AutonomyController:
         if not isinstance(goal, dict) or set(goal) != required or goal.get("goal_id") != goal_id:
             raise AutonomyStateError("invalid goal fields")
         uid = goal["user_id"]
-        if uid not in {"gabriel", "andreas"} or goal["session_id"] != f"session:{uid}":
+        if uid not in CANONICAL_USER_IDS or not ist_kanonische_sitzung(goal["session_id"], uid):
             raise AutonomyStateError("invalid goal identity")
         if not isinstance(goal["generation"], int) or goal["generation"] < 1:
             raise AutonomyStateError("invalid goal generation")

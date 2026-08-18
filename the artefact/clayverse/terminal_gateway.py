@@ -11,7 +11,7 @@ from pathlib import Path
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import CANONICAL_TERMINAL_NAMES, IdentityRouter
+from .identity import SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, IdentityRouter
 from .store import UnifiedDB
 from .terminal_sessions import TerminalSessionManager
 
@@ -134,17 +134,28 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         session_rows = db.db.execute(
             "SELECT user_id,terminal_name,generation FROM sessions ORDER BY user_id"
         ).fetchall()
-        sessions = {row["user_id"]: row for row in session_rows}
+        # Jeder Mensch hat mehrere gleichzeitige Sitzungen. Eine Abbildung
+        # {user_id: row} wuerde sie zu einer zusammenfalten und die zuletzt
+        # gelesene gewinnen lassen -- deren Terminalname passt dann nicht zum
+        # erwarteten und die Bereitschaft steht dauerhaft auf nein, obwohl
+        # alles laeuft. Also sammeln statt ueberschreiben.
+        je_mensch: dict[str, list] = {}
+        for row in session_rows:
+            je_mensch.setdefault(row["user_id"], []).append(row)
         entity_generation = int(generation[0]) if generation else -1
+        erwartet = {
+            uid: {terminal_von(uid, platz) for platz in range(1, SITZUNGEN_JE_MENSCH + 1)}
+            for uid in CANONICAL_USER_IDS
+        }
         state_ready = bool(
             schema and schema[0] == "6"
             and entity_generation >= 1
             and users and int(users[0]) == 2
-            and set(sessions) == {"gabriel", "andreas"}
+            and set(je_mensch) == CANONICAL_USER_IDS
             and all(
-                sessions[user_id]["terminal_name"] == terminal_name
-                and int(sessions[user_id]["generation"]) == entity_generation
-                for user_id, terminal_name in CANONICAL_TERMINAL_NAMES.items()
+                {r["terminal_name"] for r in je_mensch[uid]} == erwartet[uid]
+                and all(int(r["generation"]) == entity_generation for r in je_mensch[uid])
+                for uid in CANONICAL_USER_IDS
             )
         )
         if not state_ready:

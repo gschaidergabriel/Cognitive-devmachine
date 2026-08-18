@@ -5,7 +5,7 @@ import uuid
 from typing import Any
 
 from .autonomy import AutonomyController, AutonomyStateError
-from .identity import CANONICAL_USER_IDS
+from .identity import CANONICAL_USER_IDS, ist_kanonische_sitzung, sitzungen_von
 from .store import UnifiedDB
 
 AUTONOMY_CONTEXT_SCHEMA = "ClayVerseAutonomyContext/v2"
@@ -80,7 +80,7 @@ def _canonical_command_turn(
     source_turn_id: str,
     prompt: str,
 ):
-    if user_id not in CANONICAL_USER_IDS or session_id != f"session:{user_id}":
+    if user_id not in CANONICAL_USER_IDS or not ist_kanonische_sitzung(session_id, user_id):
         raise PermissionError("autonomy command requires canonical owner session")
     db.assert_session_owner(session_id, user_id)
     live_generation = db.entity_generation()

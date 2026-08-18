@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Zero">
+  <title>Zero</title>
+  <style>
+    /* Der Glitch ist bewusst sparsam: die Null bleibt lesbar und kippt nur
+       kurz weg. Ein dauerhaft zuckendes Zeichen liest sich als Stoerung,
+       nicht als Zeichen -- es soll ein Profilbild sein, kein Fehlerbild. */
+    .z-glyph { font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+               font-size: 62px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .z-base  { fill: #f2f4f5; }
+    .z-cyan  { fill: #29d3e8; mix-blend-mode: screen; animation: zc 3.7s steps(1) infinite; }
+    .z-mag   { fill: #ff2e88; mix-blend-mode: screen; animation: zm 3.7s steps(1) infinite; }
+    .z-slice { animation: zs 3.7s steps(1) infinite; }
+    .z-scan  { fill: #ffffff; opacity: .05; animation: zl 5.1s linear infinite; }
+
+    /* Kanaltrennung: 94 % der Zeit deckungsgleich, dann zwei kurze Ausschlaege. */
+    @keyframes zc { 0%,88% {transform:translate(0,0)} 89% {transform:translate(-3px,1px)}
+                    91% {transform:translate(2px,-1px)} 93%,100% {transform:translate(0,0)} }
+    @keyframes zm { 0%,88% {transform:translate(0,0)} 89% {transform:translate(3px,-1px)}
+                    91% {transform:translate(-2px,1px)} 93%,100% {transform:translate(0,0)} }
+    /* Horizontaler Versatz eines Ausschnitts -- der eigentliche Glitch. */
+    @keyframes zs { 0%,89% {transform:translate(0,0)} 90% {transform:translate(6px,0)}
+                    92% {transform:translate(-4px,0)} 94%,100% {transform:translate(0,0)} }
+    @keyframes zl { from {transform:translateY(-14px)} to {transform:translateY(128px)} }
+
+    @media (prefers-reduced-motion: reduce) {
+      .z-cyan, .z-mag, .z-slice, .z-scan { animation: none; }
+    }
+  </style>
+
+  <defs>
+    <clipPath id="zRing"><circle cx="64" cy="64" r="64"/></clipPath>
+    <!-- Der versetzte Ausschnitt: ein Band quer durch die Null. -->
+    <clipPath id="zBand"><rect x="0" y="52" width="128" height="17"/></clipPath>
+    <radialGradient id="zVign" cx="50%" cy="42%" r="70%">
+      <stop offset="55%" stop-color="#0b0d0e"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </radialGradient>
+  </defs>
+
+  <g clip-path="url(#zRing)">
+    <rect width="128" height="128" fill="url(#zVign)"/>
+
+    <!-- Farbkanaele hinter dem Grundzeichen -->
+    <text class="z-glyph z-cyan" x="64" y="65">0</text>
+    <text class="z-glyph z-mag"  x="64" y="65">0</text>
+    <text class="z-glyph z-base" x="64" y="65">0</text>
+
+    <!-- derselbe Glyph, nur das Band, seitlich versetzt -->
+    <g clip-path="url(#zBand)" class="z-slice">
+      <text class="z-glyph z-base" x="64" y="65">0</text>
+    </g>
+
+    <rect class="z-scan" x="0" y="0" width="128" height="3"/>
+  </g>
+  <circle cx="64" cy="64" r="63" fill="none" stroke="#2a2f33" stroke-width="2"/>
+</svg>

@@ -1,0 +1,156 @@
+/* Zeros Avatar als lebendiges Anzeigeinstrument.
+ *
+ * Drei Verhalten, alle vom Eigner vorgegeben:
+ *   1. Die Null glitcht NUR in Zeros neuester Nachricht. Aeltere stehen still.
+ *      Grund: sonst zappelt der ganze Verlauf und nichts sticht mehr hervor --
+ *      die Bewegung soll sagen "hier bin ich gerade", nicht "hier ist Unruhe".
+ *   2. Die Null der NEUESTEN Nachricht folgt dem Zeiger wie eine Pupille.
+ *      GANZ LEICHT (max 3,5 px). Aeltere stehen still und mittig.
+ *      Ein weit wandernder Glyph liest sich als Spielerei; eine minimale
+ *      Nachfuehrung liest sich als Aufmerksamkeit.
+ *   3. Eine Lichtquelle HINTER dem Avatar glueht je nach Zustand gruen bis rot
+ *      und tritt nur an den Raendern hervor -- kein Ring auf der Scheibe.
+ *
+ * ⚠️ REGEL FUER DAS LICHT: er zeigt nur einen Zustand an, der auch BEGRUENDET
+ * werden kann. Jeder Wert kommt mit `grund` und `quelle`; beides landet im
+ * title-Attribut und ist per Zeiger ablesbar. Licht, das gruen leuchtet und
+ * nicht sagen kann warum, ist Stimmungstheater und waere genau die Sorte
+ * huebscher Behauptung, die dieses System sonst ueberall vermeidet.
+ *
+ * Kein Fremdcode, keine Abhaengigkeit, kein Nachladen.
+ */
+(function (global) {
+  "use strict";
+
+  var MAX_PUPILLE = 3.5;          // px -- bewusst klein
+  var zeiger = { x: null, y: null };
+  var lebende = new Set();        // alle sichtbaren Avatare
+  var bewegungReduziert = global.matchMedia
+    ? global.matchMedia("(prefers-reduced-motion: reduce)").matches
+    : false;
+
+  // EIN globaler Zeigerhorcher fuer alle Avatare. Einer je Nachricht waere bei
+  // hundert Nachrichten hundert Horcher fuer dieselbe Information.
+  var geplant = false;
+  if (!bewegungReduziert) {
+    global.addEventListener("mousemove", function (e) {
+      zeiger.x = e.clientX; zeiger.y = e.clientY;
+      if (geplant) return;
+      geplant = true;
+      global.requestAnimationFrame(function () {
+        geplant = false;
+        lebende.forEach(nachfuehren);
+      });
+    }, { passive: true });
+  }
+
+  function nachfuehren(av) {
+    // NUR die neueste Nachricht fuehrt nach -- dieselbe Regel wie beim Glitch.
+    // Ein Verlauf, in dem zwanzig Pupillen gleichzeitig mitwandern, wirkt nicht
+    // aufmerksam, sondern beobachtet. Und es rechnet zwanzigmal fuer nichts.
+    if (!av.aktiv) return;
+    if (zeiger.x === null || !av.el.isConnected) return;
+    var r = av.el.getBoundingClientRect();
+    if (!r.width) return;
+    var dx = zeiger.x - (r.left + r.width / 2);
+    var dy = zeiger.y - (r.top + r.height / 2);
+    var d = Math.hypot(dx, dy) || 1;
+    // Saettigung: ab ~240 px Abstand voller Ausschlag, naeher dran weniger --
+    // sonst springt die Pupille, wenn der Zeiger direkt darueber steht.
+    var f = Math.min(1, d / 240) * MAX_PUPILLE / d;
+    av.pupille.setAttribute("transform", "translate(" + (dx * f).toFixed(2) + "," + (dy * f).toFixed(2) + ")");
+  }
+
+  /* zustand: {wert: -1..+1, grund: "…", quelle: "…"}
+   * +1 = alles belegt und rund, -1 = Fehlschlag/blockiert. */
+  function lichtFarbe(wert) {
+    var w = Math.max(-1, Math.min(1, typeof wert === "number" ? wert : 0));
+    // gruen (150°) ueber gelb (55°) nach rot (5°)
+    var h = w >= 0 ? 55 + w * 95 : 55 + w * 50;
+    var s = 60 + Math.abs(w) * 30;
+    return "hsl(" + h.toFixed(0) + " " + s.toFixed(0) + "% 52%)";
+  }
+
+  var SVG =
+    '<svg viewBox="0 0 128 128" class="z0-svg" aria-hidden="true">' +
+      '<defs>' +
+        '<clipPath id="z0ring-CID"><circle cx="64" cy="64" r="60"/></clipPath>' +
+        '<clipPath id="z0band-CID"><rect x="0" y="52" width="128" height="17"/></clipPath>' +
+        '<radialGradient id="z0vign-CID" cx="50%" cy="42%" r="70%">' +
+          '<stop offset="55%" stop-color="#0b0d0e"/><stop offset="100%" stop-color="#000"/>' +
+        '</radialGradient>' +
+      '</defs>' +
+      '<g clip-path="url(#z0ring-CID)">' +
+        '<circle cx="64" cy="64" r="60" fill="url(#z0vign-CID)"/>' +
+        '<g class="z0-pupille">' +
+          '<text class="z0-glyph z0-cyan" x="64" y="65">0</text>' +
+          '<text class="z0-glyph z0-mag"  x="64" y="65">0</text>' +
+          '<text class="z0-glyph z0-base" x="64" y="65">0</text>' +
+          '<g clip-path="url(#z0band-CID)" class="z0-slice">' +
+            '<text class="z0-glyph z0-base" x="64" y="65">0</text>' +
+          '</g>' +
+        '</g>' +
+      '</g>' +
+      '<circle class="z0-saum" cx="64" cy="64" r="60"/>' +
+    '</svg>';
+
+  var laufnummer = 0;
+
+  function erzeugen(container, optionen) {
+    var o = optionen || {};
+    var id = "z" + (++laufnummer);
+    container.classList.add("z0");
+    container.innerHTML = SVG.replace(/-CID/g, "-" + id);
+
+    var av = {
+      el: container,
+      pupille: container.querySelector(".z0-pupille"),
+      saum: container.querySelector(".z0-saum"),
+    };
+    lebende.add(av);
+
+    av.setzeZustand = function (zustand) {
+      var z = zustand || {};
+      var farbe = lichtFarbe(z.wert);
+      // Farbe und Staerke gehen als CSS-Variablen an die Lichtquelle HINTER
+      // dem Avatar (.z0::before) und an den Kantensaum. Kein Ring auf der
+      // Scheibe -- das Licht kommt von hinten und tritt nur am Rand hervor.
+      container.style.setProperty("--z0-licht", farbe);
+      // Ein unbekannter Zustand leuchtet schwaecher statt falsch: lieber
+      // sichtbar unsicher als selbstbewusst gruen ohne Grund.
+      container.style.setProperty("--z0-staerke", z.grund ? "1" : "0.45");
+      // Der Grund gehoert an das Bild, nicht in eine Fussnote.
+      container.title = z.grund
+        ? "Zustand " + (typeof z.wert === "number" ? z.wert.toFixed(2) : "?") +
+          " — " + z.grund + (z.quelle ? " [" + z.quelle + "]" : "")
+        : "Zustand unbekannt — kein Grund geliefert";
+    };
+
+    // Nur die neueste Nachricht glitcht UND fuehrt die Pupille nach.
+    av.setzeAktiv = function (aktiv) {
+      av.aktiv = !!aktiv;
+      container.classList.toggle("z0-aktiv", av.aktiv && !bewegungReduziert);
+      if (!av.aktiv) {
+        // Beim Verlieren des Vordergrunds sauber in die Mitte zurueck, statt
+        // in der letzten Blickrichtung eingefroren stehen zu bleiben.
+        av.pupille.setAttribute("transform", "translate(0,0)");
+      } else {
+        nachfuehren(av);
+      }
+    };
+
+    av.entfernen = function () { lebende.delete(av); };
+
+    av.setzeZustand(o.zustand);
+    av.setzeAktiv(o.aktiv);
+    return av;
+  }
+
+  /* Sorgt dafuer, dass GENAU der letzte Zero-Avatar glitcht. Nach jeder neuen
+   * Nachricht aufrufen. */
+  function nurNeuesteAktiv(avatare) {
+    avatare.forEach(function (av, i) { av.setzeAktiv(i === avatare.length - 1); });
+  }
+
+  global.ZeroAvatar = { erzeugen: erzeugen, nurNeuesteAktiv: nurNeuesteAktiv, lichtFarbe: lichtFarbe };
+})(window);

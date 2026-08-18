@@ -5,12 +5,47 @@ CANONICAL_USERS=(('gabriel','Gabriel','clayverse-gabriel'),('andreas','Andreas',
 CANONICAL_USER_IDS={uid for uid,_,_ in CANONICAL_USERS}
 CANONICAL_TERMINAL_NAMES={uid:terminal for uid,_,terminal in CANONICAL_USERS}
 
+# ── Wie viele gleichzeitige Sitzungen ein Mensch hat ───────────────────────
+# Eignerentscheidung: zwei, umschaltbar. Diese Zahl ist der EINZIGE Ort, an dem
+# das steht -- vorher war dieselbe Regel als Stringvergleich ueber acht Dateien
+# verteilt, und genau deshalb war sie nicht aenderbar.
+SITZUNGEN_JE_MENSCH = 2
+
+def sitzungen_von(user_id: str) -> list[str]:
+    """Die kanonischen Sitzungskennungen eines Menschen, Platz 1 zuerst.
+
+    Platz 1 behaelt bewusst die alte Kennung `session:<user>` ohne Zusatz: an ihr
+    haengen bereits Zuege, Episoden und Kausalketten. Umbenennen haette bedeutet,
+    vier Fremdschluesseltabellen nachzuziehen -- fuer nichts.
+    """
+    if user_id not in CANONICAL_USER_IDS:
+        return []
+    return [f"session:{user_id}"] + [
+        f"session:{user_id}:{n}" for n in range(2, SITZUNGEN_JE_MENSCH + 1)
+    ]
+
+def terminal_von(user_id: str, platz: int) -> str:
+    grund = CANONICAL_TERMINAL_NAMES[user_id]
+    return grund if platz == 1 else f"{grund}-{platz}"
+
+def ist_kanonische_sitzung(session_id: str, user_id: str) -> bool:
+    """Faellt zu, sobald etwas nicht exakt eine erlaubte Kennung ist."""
+    return session_id in sitzungen_von(user_id)
+
+def platz_von(session_id: str) -> int | None:
+    for uid in CANONICAL_USER_IDS:
+        ids = sitzungen_von(uid)
+        if session_id in ids:
+            return ids.index(session_id) + 1
+    return None
+
 class IdentityRouter:
     def __init__(self,db:UnifiedDB,clerk_map=None):
         self.db=db; self.clerk_map=clerk_map or {}
         self._bootstrap_or_assert_canonical_users()
-        for uid,_,term in CANONICAL_USERS:
-            db.ensure_session(uid,term)
+        for uid,_,_ in CANONICAL_USERS:
+            for platz in range(1, SITZUNGEN_JE_MENSCH+1):
+                db.ensure_session(uid, terminal_von(uid, platz), platz=platz)
         self._normalize_terminal_sessions()
         self._bind_clerk_subjects()
 
@@ -35,8 +70,8 @@ class IdentityRouter:
         with self.db.tx() as sql:
             for uid,_,term in CANONICAL_USERS:
                 rows=sql.execute('SELECT session_id,terminal_name FROM sessions WHERE user_id=? ORDER BY created_at,session_id',(uid,)).fetchall()
-                if len(rows)!=1:
-                    raise PermissionError(f'canonical user must own exactly one permanent session: {uid}')
+                if len(rows)!=SITZUNGEN_JE_MENSCH:
+                    raise PermissionError(f'canonical user must own exactly {SITZUNGEN_JE_MENSCH} permanent sessions: {uid}')
                 collision=sql.execute('SELECT user_id FROM sessions WHERE terminal_name=? AND user_id<>?',(term,uid)).fetchone()
                 if collision:
                     raise PermissionError(f'canonical terminal name already belongs to another user: {term}')

@@ -7,6 +7,7 @@ import uuid
 from dataclasses import dataclass
 
 from .autonomy import AutonomyController, AutonomyStateError
+from .identity import CANONICAL_USER_IDS, ist_kanonische_sitzung, sitzungen_von
 from .store import LeaseConflict, StaleGeneration, UnifiedDB
 
 DISPATCH_SCHEMA = "ClayVerseAutonomyDispatch/v1"
@@ -145,7 +146,7 @@ def consume_dispatch_prompt(
     nonce = prompt[len(DISPATCH_PREFIX) :]
     if not _NONCE.fullmatch(nonce):
         return None
-    if user_id not in {"gabriel", "andreas"} or session_id != f"session:{user_id}":
+    if user_id not in CANONICAL_USER_IDS or not ist_kanonische_sitzung(session_id, user_id):
         raise PermissionError("dispatch identity mismatch")
 
     resource = _resource(session_id)

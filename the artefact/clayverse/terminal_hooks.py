@@ -294,8 +294,76 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
             for hp in compact["hyperpositions"] if isinstance(hp, dict)
         ]
         text = render()
+    # ── Stufenweise kuerzen statt aussperren ─────────────────────────────
+    # Ein geworfener Fehler hier blockiert den Prompt: der Mensch kann nichts
+    # mehr sagen. Das ist die teuerste denkbare Reaktion auf "Kontext zu gross".
+    # Also kuerzen -- aber sichtbar. Was faellt, steht in `gekuerzt`, und das
+    # liest das Modell mit.
+    gekuerzt: list[str] = []
+
+    def stufe(name: str, wirkung) -> str:
+        wirkung()
+        gekuerzt.append(name)
+        compact["gekuerzt"] = {
+            "hinweis": "Kontext ueberschritt die Huelle und wurde gekuerzt. Was hier steht, FEHLT dir.",
+            "entfernt": list(gekuerzt),
+        }
+        return render()
+
     if len(text) > limit:
-        raise TerminalHookError("canonical context exceeds safe inline hook envelope")
+        text = stufe("korpus", lambda: context.__setitem__("corpus", []))
+    if len(text) > limit:
+        # Ressourcenverweise waren bisher an KEINER Stelle begrenzt -- ein
+        # einzelner langer Verweis konnte die Huelle allein sprengen. Gekuerzt
+        # wird auf die Kennung, nicht geloescht: Zero soll wissen, WORAUF sich
+        # der Mensch bezog, auch wenn der Verweis nicht ganz mitfaehrt.
+        def _res():
+            compact["resources"] = [
+                (r[:120] + "…[verweis-gekuerzt]") if isinstance(r, str) and len(r) > 120 else r
+                for r in list(compact.get("resources", []))[:12]
+            ]
+        text = stufe("ressourcenverweise", _res)
+    if len(text) > limit:
+        text = stufe("hyperpositionen", lambda: compact.__setitem__("hyperpositions", []))
+    if len(text) > limit:
+        text = stufe("fremdsitzungs_kollisionen",
+                     lambda: context.__setitem__("cross_session_collision", []))
+    if len(text) > limit:
+        text = stufe("dauerhaftes_gedaechtnis", lambda: context.__setitem__("durable_memory", []))
+    if len(text) > limit:
+        def _knapp():
+            letzte = context.get("own_recent", [])[-3:]
+            for it in letzte:
+                if len(str(it.get("content", ""))) > 300:
+                    it["content"] = str(it["content"])[:300] + "…"
+            context["own_recent"] = letzte
+        text = stufe("eigener_verlauf_auf_3", _knapp)
+    if len(text) > limit:
+        # Notfassung. Alles, was nicht Identitaet, Kausalitaet oder Wirkgesetz
+        # ist, faellt. Damit bleibt der Zug fuehrbar und kausal sauber gebunden,
+        # auch wenn Zero in diesem einen Zug fast blind arbeitet.
+        behalten = {
+            "authority": compact["authority"],
+            "identity": compact["identity"],
+            "causal": compact["causal"],
+            "effect_law": compact["effect_law"],
+            "context": {"canonical_identity": context.get("canonical_identity")},
+            "gekuerzt": {
+                "hinweis": "NOTFASSUNG. Der Kontext passte auch gekuerzt nicht in die Huelle. "
+                           "Du arbeitest in diesem Zug ohne Verlauf, Gedaechtnis und Korpus. "
+                           "Sag das, statt zu raten.",
+                "entfernt": list(gekuerzt) + ["alles_uebrige"],
+            },
+        }
+        compact.clear()
+        compact.update(behalten)
+        text = render()
+    if len(text) > limit:
+        # Selbst die Notfassung passt nicht -- dann ist die Grenze falsch
+        # gesetzt und nicht der Inhalt zu gross. Das ist ein echter Fehler.
+        raise TerminalHookError(
+            f"even the minimal hook envelope exceeds the limit ({len(text)} > {limit}) -- "
+            "the budget is wrong, not the content")
     return text
 
 

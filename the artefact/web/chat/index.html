@@ -1,0 +1,189 @@
+<!doctype html><html><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EntityOS</title>
+<!-- __CLERK_API__ / __CLERK_PUBLISHABLE_KEY__ are server-substituted (html.escape'd)
+     placeholders -- filled in by the route the same way key/api are filled into the
+     terminal page today. Do not hardcode real values into this file. -->
+<script defer crossorigin="anonymous" src="__CLERK_API__/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+<script defer crossorigin="anonymous" data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__" src="__CLERK_API__/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#0b0b0c;--panel:#141416;--bubble-user:#1f6feb22;--bubble-user-b:#1f6feb;--bubble-zero:#17181c;--bubble-zero-b:#2a2b30;--text:#e8e8ea;--muted:#8b8d94;--err:#ff5c5c}
+html,body{width:100%;height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+#auth{height:100%;display:grid;place-items:center}
+#authError{position:fixed;top:0;left:0;right:0;padding:10px 16px;background:#3a1414;color:var(--err);font-size:13px;display:none;z-index:10;text-align:center}
+#chat{display:none;height:100%;flex-direction:column}
+header{flex:0 0 auto;padding:14px 18px;border-bottom:1px solid #232428;display:flex;align-items:center;gap:10px}
+header .title{font-weight:600}
+header .note{color:var(--muted);font-size:12px}
+#messages{flex:1 1 auto;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:10px;max-width:78%}
+.msg-user{align-self:flex-end;flex-direction:row-reverse;max-width:78%}
+.msg-zero{align-self:flex-start}
+.avatar{width:34px;height:34px;flex:0 0 auto;border-radius:50%}
+.bubble{background:var(--bubble-zero);border:1px solid var(--bubble-zero-b);border-radius:14px;padding:10px 13px;white-space:pre-wrap;word-break:break-word}
+.msg-user .bubble{background:var(--bubble-user);border-color:var(--bubble-user-b)}
+.msg-error .bubble{background:#3a1414;border-color:#6b1f1f;color:var(--err)}
+.toggle-original{margin-top:8px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline}
+.toggle-original:hover{color:var(--text)}
+.original{margin-top:8px;border-top:1px dashed var(--bubble-zero-b);padding-top:8px;font-size:13px;color:var(--muted)}
+.original .caveman{color:#c7c8cc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap}
+.original .receipt{margin-top:6px;font-size:11px;opacity:.75;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.msg-pending .bubble{color:var(--muted)}
+.pending-note{display:block;margin-top:4px;font-size:12px;opacity:.8}
+#composer{flex:0 0 auto;border-top:1px solid #232428;padding:12px 14px;display:flex;gap:10px;align-items:flex-end}
+#text{flex:1 1 auto;resize:none;max-height:140px;min-height:22px;background:var(--panel);color:var(--text);border:1px solid #2a2b30;border-radius:10px;padding:10px 12px;font:inherit}
+#text:focus{outline:1px solid var(--bubble-user-b)}
+#send{flex:0 0 auto;background:var(--bubble-user-b);color:#fff;border:none;border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}
+#send:disabled{opacity:.5;cursor:default}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+</style></head>
+<body>
+<div id="authError"></div>
+<div id="auth"></div>
+<div id="chat">
+  <header>
+    <img class="avatar" src="/web/avatare/zero.svg" alt="">
+    <div><div class="title">Zero</div>
+    <div class="note">Antworten kommen vollständig, nicht Wort für Wort — Zero und der Übersetzer brauchen die ganze Antwort, bevor du sie siehst.</div></div>
+  </header>
+  <div id="messages"></div>
+  <div id="composer">
+    <textarea id="text" rows="1" placeholder="Nachricht an Zero…"></textarea>
+    <button id="send">Senden</button>
+  </div>
+</div>
+<script>
+window.addEventListener('load', async () => {
+  await Clerk.load({ui:{ClerkUI:window.__internal_ClerkUICtor}});
+  const auth=document.getElementById('auth'); const chat=document.getElementById('chat');
+  const authError=document.getElementById('authError');
+  if (!Clerk.isSignedIn) { Clerk.mountSignIn(auth); return; }
+  auth.style.display='none'; chat.style.display='flex';
+
+  const messages=document.getElementById('messages');
+  const textEl=document.getElementById('text');
+  const sendBtn=document.getElementById('send');
+  const maxChatChars=8000;
+
+  function scrollDown(){ messages.scrollTop=messages.scrollHeight; }
+
+  function addUserMessage(text){
+    const row=document.createElement('div'); row.className='msg msg-user';
+    row.innerHTML='<img class="avatar" src="/web/avatare/user.svg" alt="">'+
+      '<div class="bubble"></div>';
+    row.querySelector('.bubble').textContent=text;
+    messages.appendChild(row); scrollDown();
+  }
+
+  function addPending(){
+    const row=document.createElement('div'); row.className='msg msg-zero msg-pending';
+    row.innerHTML='<img class="avatar" src="/web/avatare/zero.svg" alt="">'+
+      '<div class="bubble">Zero antwortet noch nicht.'+
+      '<span class="pending-note">Kein Live-Text — die Antwort erscheint erst vollständig übersetzt.</span></div>';
+    messages.appendChild(row); scrollDown();
+    return row;
+  }
+
+  function replaceWithReply(pendingRow, payload){
+    pendingRow.className='msg msg-zero';
+    const bubble=pendingRow.querySelector('.bubble');
+    bubble.textContent='';
+    const germanLine=document.createElement('div');
+    germanLine.textContent=payload.text||'';
+    bubble.appendChild(germanLine);
+    if (payload.caveman) {
+      const toggle=document.createElement('button');
+      toggle.className='toggle-original'; toggle.type='button';
+      toggle.textContent='Original anzeigen';
+      const original=document.createElement('div');
+      original.className='original'; original.hidden=true;
+      const caveman=document.createElement('div');
+      caveman.className='caveman'; caveman.textContent=payload.caveman;
+      original.appendChild(caveman);
+      if (payload.translator_receipt) {
+        const receipt=document.createElement('div');
+        receipt.className='receipt';
+        receipt.textContent='Übersetzungs-ID: '+payload.translator_receipt;
+        original.appendChild(receipt);
+      }
+      toggle.addEventListener('click', ()=>{
+        original.hidden=!original.hidden;
+        toggle.textContent=original.hidden?'Original anzeigen':'Original verbergen';
+      });
+      bubble.appendChild(toggle); bubble.appendChild(original);
+    }
+    scrollDown();
+  }
+
+  function replaceWithError(pendingRow, message){
+    pendingRow.className='msg msg-zero msg-error';
+    pendingRow.querySelector('.bubble').textContent='Fehler: '+message;
+    scrollDown();
+  }
+
+  function addStandaloneError(message){
+    const row=document.createElement('div'); row.className='msg msg-zero msg-error';
+    row.innerHTML='<img class="avatar" src="/web/avatare/zero.svg" alt="">'+
+      '<div class="bubble"></div>';
+    row.querySelector('.bubble').textContent='Fehler: '+message;
+    messages.appendChild(row); scrollDown();
+  }
+
+  const proto=location.protocol==='https:'?'wss':'ws';
+  const ws=new WebSocket(`${proto}://${location.host}/ws/chat`);
+  let chatReady=false; let authRefreshTimer=null; let pendingRow=null;
+
+  const scheduleAuthRefresh=(expiresAt)=>{
+    if(authRefreshTimer) clearTimeout(authRefreshTimer);
+    const delay=Math.max(1000,Number(expiresAt)*1000-Date.now()-10000);
+    authRefreshTimer=setTimeout(async()=>{
+      try{
+        const token=await Clerk.session.getToken({skipCache:true});
+        if(chatReady&&ws.readyState===1) ws.send(JSON.stringify({type:'reauth',token}));
+      }catch{ws.close();}
+    },delay);
+  };
+
+  function setComposerEnabled(enabled){
+    sendBtn.disabled=!enabled; textEl.disabled=!enabled;
+  }
+
+  ws.onopen=async()=>{ const token=await Clerk.session.getToken({skipCache:true}); ws.send(JSON.stringify({type:'auth',token})); };
+  ws.onmessage=(ev)=>{
+    let m; try{ m=JSON.parse(ev.data); }catch{ return; }
+    if(m.type==='ready'){ chatReady=true; scheduleAuthRefresh(m.auth_expires_at); setComposerEnabled(true); textEl.focus(); return; }
+    if(m.type==='reauthenticated'){ scheduleAuthRefresh(m.auth_expires_at); return; }
+    if(m.type==='pending'){ setComposerEnabled(false); pendingRow=addPending(); return; }
+    if(m.type==='reply'){
+      setComposerEnabled(true);
+      if(pendingRow){ replaceWithReply(pendingRow, m); pendingRow=null; }
+      return;
+    }
+    if(m.type==='error'){
+      if(!chatReady){ authError.textContent='EntityOS: '+m.message; authError.style.display='block'; return; }
+      setComposerEnabled(true);
+      if(pendingRow){ replaceWithError(pendingRow, m.message); pendingRow=null; }
+      else { addStandaloneError(m.message); }
+      return;
+    }
+  };
+  ws.onclose=()=>{ chatReady=false; setComposerEnabled(false); };
+  ws.addEventListener('close',()=>{ if(authRefreshTimer) clearTimeout(authRefreshTimer); });
+
+  function send(){
+    const value=textEl.value.trim();
+    if(!value || !chatReady || ws.readyState!==1) return;
+    if(value.length>maxChatChars){ addStandaloneError('Nachricht zu lang ('+value.length+' > '+maxChatChars+' Zeichen).'); return; }
+    addUserMessage(value);
+    ws.send(JSON.stringify({type:'message', text:value}));
+    textEl.value=''; textEl.style.height='auto';
+  }
+  sendBtn.addEventListener('click', send);
+  textEl.addEventListener('keydown', (ev)=>{
+    if(ev.key==='Enter' && !ev.shiftKey){ ev.preventDefault(); send(); }
+  });
+  textEl.addEventListener('input', ()=>{
+    textEl.style.height='auto'; textEl.style.height=Math.min(140, textEl.scrollHeight)+'px';
+  });
+  setComposerEnabled(false);
+});
+</script></body></html>

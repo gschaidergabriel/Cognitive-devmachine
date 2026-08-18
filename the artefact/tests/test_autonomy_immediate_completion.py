@@ -44,6 +44,7 @@ def test_verified_entityos_effect_completes_before_any_replanning(db):
         _source(db, "Execute one verified bounded EntityOS action."),
         completion_mode="verified_effect",
         required_capability="entityos.exec",
+        required_target="autonomy-immediate-completion",
     )
     step = controller.propose_step(
         goal["goal_id"],
@@ -91,7 +92,7 @@ def test_verified_entityos_effect_completes_before_any_replanning(db):
 def test_state_noop_never_auto_completes_verified_effect_contract(db):
     controller = AutonomyController(db)
     # The controller itself rejects state.noop as an automatic completion capability.
-    with pytest.raises(ValueError, match="independent capability"):
+    with pytest.raises(ValueError, match="independently verifiable effect capability"):
         controller.create_goal_from_turn(
             "gabriel",
             "session:gabriel",

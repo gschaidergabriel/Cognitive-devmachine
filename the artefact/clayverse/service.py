@@ -20,6 +20,7 @@ from .wirte import aufnehmen as wirte_aufnehmen
 from .profile import grundstock as profil_grundstock
 from .baunotizen import sicherstellen as baunotizen_sicherstellen
 from .erfolge import grundstock as erfolge_grundstock
+from .raum import sicherstellen as raum_sicherstellen
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -212,6 +213,22 @@ def main():
         baunotizen_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
     else:
         baunotizen_stand = {"index": "sichergestellt"}
+    try:
+        # Der Raum der vier Plaetze. Schemaanlage gehoert an den Start --
+        # executescript committet implizit und hat heute schon zweimal eine
+        # laufende Transaktion aufgerissen.
+        raum_sicherstellen(db)
+    except Exception as exc:
+        print(f"  Raum: {type(exc).__name__}: {exc}")
+    try:
+        # Die Ausbeutetabelle der Gedaechtnisextraktion. Sie entstand frueher
+        # in der Extraktion selbst -- mitten in der Zug-Transaktion, per
+        # executescript, das implizit committet. Das legte den Chat lahm.
+        # Schemaanlage ist eine Startaufgabe, keine Leseaufgabe.
+        from .gedaechtnis import AUSBEUTE_SCHEMA
+        db.db.executescript(AUSBEUTE_SCHEMA)
+    except Exception as exc:
+        print(f"  Ausbeutetabelle: {type(exc).__name__}: {exc}")
     try:
         # Erfolge UND Fehlschlaege. Beide Haelften oder keine -- eine Bilanz,
         # die nur Gelungenes fuehrt, ist ein Werbeblatt, und hier waere sie

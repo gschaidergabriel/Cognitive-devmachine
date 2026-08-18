@@ -32,6 +32,12 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__menschen_profil",
     "mcp__clayverse__wiki_zuordnung",
     "mcp__clayverse__lagebild",
+    # Der Raum: ohne diese vier sitzt jeder Platz allein und faehrt den anderen
+    # in die Arbeit hinein.
+    "mcp__clayverse__raum_sehen",
+    "mcp__clayverse__raum_sagen",
+    "mcp__clayverse__raum_rufen",
+    "mcp__clayverse__raum_frei",
 )
 
 MAX_PROMPT_CHARS = 20_000

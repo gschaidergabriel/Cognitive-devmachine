@@ -194,16 +194,19 @@ class TurnLifecycle:
             if autonomy_identity is None: self.memory.extract_explicit(turn_id,self.user_id,prompt)
             self.memory.compact(self.session_id)
             if predecessor["aborted"]: self.graph.rebuild_in_tx()
-            if autonomy_identity is None and os.environ.get("CLAYVERSE_MEMORY_EXTRACT","0")=="1":
-                # Fakten stehen in dem, was der MENSCH sagt -- nicht nur in der
-                # Antwort. Nur die Antwort zu lesen war der Grund, warum acht
-                # Bahnaufrufe null Eintraege ergaben.
-                try:
-                    from .gedaechtnis import extrahiere as _extr
-                    _extr(self.db, turn_id=turn_id, user_id=self.user_id,
-                          content=prompt, rolle="user")
-                except Exception:
-                    pass  # Gedaechtnis darf eine Aufnahme nie kippen
+            # ⚠️ HIER STAND FRUEHER DIE EXTRAKTION AUS DEM MENSCHENZUG -- also
+            # innerhalb dieser Transaktion, die auch den `yield` umschliesst.
+            # Sie ruft ein Sprachmodell ueber das Netz UND legte eine Tabelle
+            # an; letzteres committet implizit und riss den Zug auf:
+            #   OperationalError: cannot commit - no transaction is active
+            # Gemessen als Andreas: vier von vier Fragen scheiterten. Und zwar
+            # NUR wenn die Extraktion erfolgreich bis zum Tabellenanlegen kam --
+            # ein Defekt, der ausschliesslich bei Erfolg zuschlaegt und in
+            # kurzen Tests wie Zufall aussieht.
+            # Jetzt wird der Menschenzug nur GEMERKT (Zuweisung, kein
+            # Datenbankzugriff) und in complete() nach der Transaktion
+            # ausgewertet, zusammen mit der Antwort.
+            self._menschenzug = (turn_id, prompt) if autonomy_identity is None else None
             world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
             yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
@@ -303,6 +306,15 @@ class TurnLifecycle:
                     self.db,
                     turn_id=ergebnis.get("assistant_turn_id") or ergebnis.get("turn_id") or "",
                     user_id=self.user_id, content=str(response), rolle="assistant")
+                # Und die Frage des Menschen. Fakten stehen in dem, was der
+                # MENSCH sagt -- nur die Antwort zu lesen war der Grund, warum
+                # acht Bahnaufrufe null Eintraege ergaben.
+                menschenzug = getattr(self, "_menschenzug", None)
+                if menschenzug:
+                    self._menschenzug = None
+                    ergebnis["gedaechtnis_frage"] = extrahiere(
+                        self.db, turn_id=menschenzug[0], user_id=self.user_id,
+                        content=menschenzug[1], rolle="user")
             except Exception as fehler:
                 ergebnis["gedaechtnis"] = {"_fehler": type(fehler).__name__ + ": " + str(fehler)}
         return ergebnis

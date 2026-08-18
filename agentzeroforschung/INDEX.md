@@ -48,11 +48,19 @@
    - Messwerk 8 direkt GEMESSEN; Causal Credit Horizon erstmals ueber Verkehrsschwelle
    - Restblocker: MCP-Werkzeuge, Retrieval-Lernen/Wegehierarchie, Provider-Erreichbarkeit, 4. Clay-Dienst, Uebersetzer und 15 rote Kerninvarianten
 
+6. `analysen/2026-08-18T072700Z_TOKEN_EFFIZIENZ_PIPELINE.md`
+   - Mistral-Vorstufe -> Zero/Caveman -> Mistral-Small-Uebersetzer als aktueller Headless-Pfad bewertet
+   - harte Befunde: Hook-/Identitaetsanker 5550 -> 206 Zeichen = 96,29 % Reduktion dieses Bestandteils; Retrieval-Paket ca. 21 % weniger Tokens je gleicher Faktenmenge
+   - Uebersetzer-Eval: 96-98 % Pass, 99,1-99,6 Faithfulness, 0 Fabrications im 50er-Set
+   - ordinary Claude/Zero-Tokenlast vorsichtig als ca. 35-60 % niedriger INFERIERT; globale Pipeline-Tokenersparnis bleibt ohne provider-native Usage-Zaehlung UNRESOLVED
+   - vorgeschlagenes hoechstwertiges Messgeraet: TOKEN_LEDGER + kontrollierter Direct-vs-Pipeline-Shadow-Vergleich
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
 - Andreas- und Gabriel-Verhalten als Cross-user-Replikation untersuchen, ohne private Inhalte zu vermischen;
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
+- provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
 - rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;
 - Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;

@@ -331,7 +331,11 @@ def wiki(c, manifest: dict) -> None:
 
     umfeld = []
     for r in hole(UMFELD, False, 3000):
-        d = schwaerzen(dict(r))
+        # ⚠️ schwaerzen() kennt Zugangsdaten, keine Adressen. Zeros eigene
+        # Antworten sind Prosa und koennen alles enthalten, was im Kontext
+        # stand -- gemessen: eine Profiltabelle mit Mailadresse.
+        d = schwaerzen({k: (_prosa_schwaerzen(v) if isinstance(v, str) else v)
+                        for k, v in dict(r).items()})
         if d["artikel_id"] in kern_ids:
             continue
         d["stufe"] = "umfeld"
@@ -621,6 +625,9 @@ def _prosa_schwaerzen(text: str) -> str:
     """
     import re as _re
     t = _re.sub(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", "<adresse>", text)
+    # Auch OHNE Domain: `genuinos@` ist nicht nutzbar, aber identifizierend --
+    # und stand genau so in einem Commit-Text, der den Adressenstreit erklaerte.
+    t = _re.sub(r"\b[A-Za-z0-9._%+-]{3,}@(?=[\s`,;)\]]|$)", "<adresse>", t)
     t = _re.sub(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", "<adresse>", t)
     return t
 

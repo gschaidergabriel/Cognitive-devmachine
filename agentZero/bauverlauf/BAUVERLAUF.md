@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T14:37:53Z. 762 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T14:41:03Z. 763 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -995,8 +995,8 @@ GEPRUEFT, NICHT NUR UEBERNOMMEN
 
 Die Postfachzuordnung laeuft ueber clerk_subject -> clerk_map -> user_id ->
 Postfach, ausdruecklich NICHT ueber die Mailadresse. Am selben Tag war strittig,
-welche Gmail-Adresse Andreas' Clerk-Konto traegt (`herzradgraz@` im
-Auftragsdokument, `genuinos@` laut Eigner; Eignerentscheid: <adresse>).
+welche Gmail-Adresse Andreas' Clerk-Konto traegt (`<adresse>` im
+Auftragsdokument, `<adresse>` laut Eigner; Eignerentscheid: <adresse>).
 Weil die Zuordnung an der Clerk-Kennung haengt, war die Postfachvergabe davon zu
 KEINEM Zeitpunkt betroffen. Der Kommentar im Modul nannte die strittige Adresse
 als Tatsache -- das ist berichtigt, die Mechanik blieb unangetastet.

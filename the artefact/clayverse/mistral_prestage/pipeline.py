@@ -3,6 +3,7 @@ from __future__ import annotations
 import time
 from typing import Any
 
+from .. import identity  # coordinator-owned, imported not edited
 from . import headless_zero, prestage, translator
 from .prestage import MAX_ROUNDS, NEGOTIATION_SENTINEL
 from .store import PrestageStore
@@ -60,7 +61,7 @@ def run_chat_turn(
     Returns the interface contract (see report): turn_id, causal_id, reply,
     rounds_used, self_adapted, elapsed_ms, tool_selection.
     """
-    if user_id not in CANONICAL_USERS or session_id != f"session:{user_id}":
+    if user_id not in CANONICAL_USERS or not identity.ist_kanonische_sitzung(session_id, user_id):
         raise PipelineError("invalid canonical user/session")
     if not isinstance(message, str) or not message.strip():
         raise PipelineError("empty message")
@@ -154,7 +155,7 @@ def run_chat_turn(
             prestage_model=envelope.get("prestage_model"),
             prestage_receipt=envelope.get("prestage_receipt", {}),
         )
-        own_store.record_translation(
+        translation_id = own_store.record_translation(
             turn_id=turn_id, prestage_id=prestage_id,
             caveman_original=zero["caveman_answer"], german_translation=german["german_translation"],
             translator_model=german["translator_model"], translator_receipt=german["translator_receipt"],
@@ -168,7 +169,9 @@ def run_chat_turn(
             "turn_id": turn_id,
             "causal_id": causal_id,
             "prestage_id": prestage_id,
+            "translation_id": translation_id,
             "reply": german["german_translation"],
+            "caveman": zero["caveman_answer"],
             "rounds_used": rounds_used,
             "self_adapted": self_adapted,
             "tool_selection": selected_tools or [],

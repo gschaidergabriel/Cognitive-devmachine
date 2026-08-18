@@ -583,6 +583,18 @@ def _main() -> int:
     if len(sys.argv) != 2 or sys.argv[1] not in {"user_prompt", "stop", "stop_failure"}:
         print("invalid terminal hook invocation", file=sys.stderr)
         return 2
+    # ── Von der Pipeline gefuehrte Aufrufe schreiben keinen eigenen Zug ────
+    # Beim headless Weg (Mistral-Vorstufe -> claude -p -> Uebersetzer) besitzt
+    # die Pipeline den Zug und nimmt ihn selbst auf. Die Haken feuern trotzdem,
+    # weil  sie genauso ausloest wie eine Tastatureingabe -- und
+    # wuerden den Caveman-Prompt ein ZWEITES Mal als Menschenzug zulassen.
+    # Zwei Aufnehmer auf einer Sitzung ist genau die Bauart, aus der heute Nacht
+    # schon einmal eine unbemerkte Schatten-Datenbank entstanden ist.
+    # Bewusst ganz vorne, vor jedem Datenbankzugriff: der guenstigste Weg,
+    # nichts zu tun, ist gar nicht erst anzufangen.
+    if os.environ.get("CLAYVERSE_PIPELINE_MANAGED", "").strip() == "1":
+        sys.stdout.write(json.dumps({"suppressOutput": True}) + "\n")
+        return 0
     payload: Any = None
     try:
         payload = json.load(sys.stdin)

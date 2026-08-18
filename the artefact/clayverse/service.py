@@ -16,6 +16,7 @@ from .readiness import claude_readiness
 from .autonomy_activation import AutonomyActivationError, install_attested_autonomy_pulse
 from .autonomy_pulse import AutonomyPulse
 from .recovery import recover_incomplete_episodes
+from .wirte import aufnehmen as wirte_aufnehmen
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -187,6 +188,12 @@ def main():
     db = UnifiedDB(resolve_db_path(state_root))
     IdentityRouter(db, {})
     rendered_prompt = render_runtime_prompt(db, state_root)
+    # Verbundene Rechner beim Start einlesen. Der Herzschlag kommt ohnehin an --
+    # bisher landete er nur in einer Datei, die niemand liest.
+    try:
+        wirte_stand = wirte_aufnehmen(db)
+    except Exception as exc:
+        wirte_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()
@@ -285,6 +292,7 @@ def main():
         "entityos": entityos_status,
         "consciousness_daemon": False,
         "autonomy_pulse": autonomy_pulse_status,
+        "wirte": wirte_stand,
         "port": port,
     }), flush=True)
 

@@ -95,9 +95,31 @@ class IdentityRouter:
             for subject,uid in sorted(self.clerk_map.items()):
                 sql.execute('UPDATE users SET clerk_subject=? WHERE user_id=?',(subject,uid))
 
-    def resolve(self,clerk_subject):
-        uid=self.clerk_map.get(clerk_subject)
-        if uid not in CANONICAL_USER_IDS: raise PermissionError('unmapped Clerk subject')
-        persisted=self.db.db.execute('SELECT user_id FROM users WHERE clerk_subject=?',(clerk_subject,)).fetchone()
-        if not persisted or persisted[0] != uid: raise PermissionError('Clerk subject binding mismatch')
-        return uid,self.db.ensure_session(uid,CANONICAL_TERMINAL_NAMES[uid])
+    def resolve(self, clerk_subject, platz: int = 1):
+        """Clerk-Subjekt -> (Mensch, Sitzungskennung) fuer einen bestimmten Platz.
+
+        Jeder Mensch hat SITZUNGEN_JE_MENSCH gleichzeitige Sitzungen. Ohne den
+        Platz band resolve() alles an Platz 1 -- die zweite Sitzung existierte
+        dann in der Datenbank, aber niemand kam hinein, und zwei Oberflaechen
+        haetten sich um dieselbe active_turns-Zeile gestritten.
+
+        Vorgabe 1, damit jeder bestehende Aufrufer unveraendert weiterlaeuft.
+        """
+        uid = self.clerk_map.get(clerk_subject)
+        if uid not in CANONICAL_USER_IDS:
+            raise PermissionError('unmapped Clerk subject')
+        persisted = self.db.db.execute(
+            'SELECT user_id FROM users WHERE clerk_subject=?', (clerk_subject,)).fetchone()
+        if not persisted or persisted[0] != uid:
+            raise PermissionError('Clerk subject binding mismatch')
+        if not isinstance(platz, int) or not 1 <= platz <= SITZUNGEN_JE_MENSCH:
+            raise PermissionError(f'invalid session slot: {platz!r}')
+        return uid, self.db.ensure_session(uid, terminal_von(uid, platz), platz=platz)
+
+    def plaetze(self, clerk_subject) -> list[dict]:
+        """Alle Plaetze eines Menschen -- die Umschaltliste fuer die Oberflaeche."""
+        uid = self.clerk_map.get(clerk_subject)
+        if uid not in CANONICAL_USER_IDS:
+            raise PermissionError('unmapped Clerk subject')
+        return [{"platz": n, "session_id": sid, "terminal": terminal_von(uid, n)}
+                for n, sid in enumerate(sitzungen_von(uid), start=1)]

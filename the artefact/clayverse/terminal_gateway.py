@@ -5,19 +5,34 @@ import html
 import json
 import math
 import os
+import sys
 import time
 from pathlib import Path
 
 from fastapi import WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, IdentityRouter
+from .identity import SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, CANONICAL_USER_IDS, IdentityRouter
 from .store import UnifiedDB
+
+try:  # Die Vorstufe ist im Bau. Fehlt sie, soll /ws/chat scheitern -- nicht der Dienst.
+    from .mistral_prestage.pipeline import run_chat_turn
+except Exception as _prestage_fehlt:  # pragma: no cover
+    _PRESTAGE_FEHLER = _prestage_fehlt
+    def run_chat_turn(**_kw):
+        raise RuntimeError(f"chat pipeline unavailable: {_PRESTAGE_FEHLER}")
 from .terminal_sessions import TerminalSessionManager
 
 _AUTH_MESSAGE_MAX_CHARS = 32_768
 _AUTH_TOKEN_MAX_CHARS = 16_384
 _CONTROL_MESSAGE_MAX_CHARS = 4_096
+# Unter der Rohprompt-Grenze der Vorstufe (100_000) und der Caveman-Grenze des
+# Uebersetzers (20_000) -- die knappste Grenze gewinnt, sonst faellt eine
+# Nachricht erst tief in der Kette durch.
+_CHAT_MESSAGE_MAX_CHARS = 8_000
+# Das Terminal haelt Platz 1. Der Chat kommt auf Platz 2, damit die beiden
+# Oberflaechen nie um dieselbe active_turns-Zeile streiten.
+_CHAT_DEFAULT_PLATZ = 2
 _PTY_INPUT_FRAME_MAX_BYTES = 65_536
 _PTY_OUTPUT_CHUNK_MAX_BYTES = 65_536
 _AUTH_REFRESH_HEADROOM_SECONDS = 10
@@ -42,6 +57,26 @@ def _decode_terminal_control(payload: str) -> dict:
     """Allow a bounded auth refresh envelope without widening ordinary controls."""
     control = _decode_json_object(payload, name="control", max_chars=_AUTH_MESSAGE_MAX_CHARS)
     if control.get("type") != "reauth" and len(payload) > _CONTROL_MESSAGE_MAX_CHARS:
+        raise ValueError("control message exceeds bound")
+    return control
+
+
+def _decode_chat_control(payload: str) -> dict:
+    """Begrenztes Entschluesseln der Chat-Steuerrahmen: message | reauth | switch_platz."""
+    control = _decode_json_object(payload, name="control", max_chars=_AUTH_MESSAGE_MAX_CHARS)
+    ctype = control.get("type")
+    if ctype == "message":
+        text = control.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("message text must be non-empty")
+        if len(text) > _CHAT_MESSAGE_MAX_CHARS:
+            raise ValueError("message text exceeds bound")
+    elif ctype == "switch_platz":
+        platz = control.get("platz")
+        # bool ist in Python ein int -- ohne die Abfrage waere True == Platz 1.
+        if isinstance(platz, bool) or not isinstance(platz, int) or platz < 1:
+            raise ValueError("switch_platz requires a positive integer platz")
+    elif ctype != "reauth" and len(payload) > _CONTROL_MESSAGE_MAX_CHARS:
         raise ValueError("control message exceeds bound")
     return control
 
@@ -169,7 +204,11 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
             # admitted by the real attach path.
             terminals._assert_tmux_server_policy(binding)
         return True
-    except Exception:
+    except Exception as exc:
+        # Bereitschaft darf den Dienst nie reissen -- aber ein stilles False hat
+        # hier schon zweimal einen eigenen Fehler als "System nicht bereit"
+        # getarnt. Fangen ja, verschweigen nein.
+        print(f"readiness probe failed: {type(exc).__name__}: {exc}", file=sys.stderr)
         return False
 
 
@@ -188,6 +227,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     terminals = terminals or TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
     app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
+    app.mount("/web", StaticFiles(directory="/opt/clayverse/web", check_dir=False), name="web")
     frontend_api_url = frontend_api_url.rstrip("/")
 
     @app.get("/healthz")
@@ -210,7 +250,25 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             "surface": "permanent-claude-code-terminal",
         }, status_code=200 if ready else 503)
 
+    _CHAT_PAGE = Path("/opt/clayverse/web/chat/index.html")
+
     @app.get("/", response_class=HTMLResponse)
+    async def chat_index():
+        key = html.escape(publishable_key, quote=True)
+        api = html.escape(frontend_api_url, quote=True)
+        if not key or not api:
+            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        if not _CHAT_PAGE.is_file():
+            # Kein stiller Rueckfall auf das Terminal: eine fehlende Chatseite ist
+            # ein Bauproblem und soll als solches sichtbar sein, nicht als
+            # "sieht heute halt anders aus".
+            return HTMLResponse("chat surface missing from image", status_code=503)
+        page = _CHAT_PAGE.read_text(encoding="utf-8")
+        page = page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key)
+        return HTMLResponse(page)
+
+    # Das alte Terminal bleibt erreichbar, bis der neue Weg einmal getragen hat.
+    @app.get("/terminal", response_class=HTMLResponse)
     async def index():
         key = html.escape(publishable_key, quote=True)
         api = html.escape(frontend_api_url, quote=True)
@@ -268,6 +326,129 @@ window.addEventListener('load', async () => {{
   window.addEventListener('resize',resize);
 }});
 </script></body></html>''')
+
+    @app.websocket("/ws/chat")
+    async def chat_ws(ws: WebSocket):
+        await ws.accept()
+        send_lock = asyncio.Lock()
+        # Waechter gegen eine kuenftige Nebenlaeufigkeit. Heute gibt es nur diese
+        # eine Schleife, also kann er nie greifen -- er steht hier, damit ein
+        # spaeterer Umbau auf nebenlaeufige Pumpen nicht still zwei Zuege startet.
+        busy = False
+
+        async def send_json(payload: dict) -> None:
+            async with send_lock:
+                await ws.send_text(json.dumps(payload))
+
+        try:
+            first = await asyncio.wait_for(ws.receive_text(), timeout=10)
+            hello = _decode_json_object(first, name="auth", max_chars=_AUTH_MESSAGE_MAX_CHARS)
+            if hello.get("type") != "auth":
+                raise AuthenticationError("authentication must be first message")
+            claims = await asyncio.to_thread(verifier.verify, _auth_token(hello))
+            auth_expires_at = _auth_expiry_deadline(claims)
+            clerk_subject = str(claims["sub"])
+            clerk_session_id = str(claims["sid"])
+
+            platz = _CHAT_DEFAULT_PLATZ
+            user_id, session_id = identity.resolve(clerk_subject, platz=platz)
+            await send_json({
+                "type": "ready", "user_id": user_id, "session_id": session_id,
+                "platz": platz, "plaetze": identity.plaetze(clerk_subject),
+                "auth_expires_at": int(auth_expires_at),
+            })
+
+            while True:
+                remaining = auth_expires_at - time.time()
+                if remaining <= 0:
+                    raise AuthenticationError("Clerk session token expired")
+                message = await asyncio.wait_for(ws.receive(), timeout=remaining)
+                if auth_expires_at <= time.time():
+                    raise AuthenticationError("Clerk session token expired")
+                if message.get("type") == "websocket.disconnect":
+                    return
+                if message.get("bytes") is not None:
+                    raise ValueError("chat surface does not accept binary frames")
+                if message.get("text") is None:
+                    raise ValueError("unsupported WebSocket chat frame")
+
+                control = _decode_chat_control(message["text"])
+                ctype = control.get("type")
+
+                if ctype == "reauth":
+                    refreshed = await asyncio.to_thread(verifier.verify, _auth_token(control))
+                    auth_expires_at = _reauthenticated_expiry(
+                        refreshed, expected_subject=clerk_subject,
+                        expected_clerk_session_id=clerk_session_id)
+                    await send_json({"type": "reauthenticated", "auth_expires_at": int(auth_expires_at)})
+                    continue
+
+                if ctype == "switch_platz":
+                    if busy:
+                        await send_json({"type": "error", "message": "cannot switch session while a reply is in flight"})
+                        continue
+                    try:
+                        user_id, session_id = identity.resolve(clerk_subject, platz=control["platz"])
+                    except PermissionError:
+                        await send_json({"type": "error", "message": "no such session slot"})
+                        continue
+                    platz = control["platz"]
+                    _require_auth_lease_live(auth_expires_at)
+                    await send_json({
+                        "type": "ready", "user_id": user_id, "session_id": session_id,
+                        "platz": platz, "plaetze": identity.plaetze(clerk_subject),
+                        "auth_expires_at": int(auth_expires_at),
+                    })
+                    continue
+
+                if ctype != "message":
+                    raise ValueError("unsupported chat control message")
+                if busy:
+                    await send_json({"type": "error", "message": "a reply is already in flight"})
+                    continue
+
+                _require_auth_lease_live(auth_expires_at)
+                busy = True
+                await send_json({"type": "pending"})
+                try:
+                    result = await asyncio.to_thread(
+                        run_chat_turn, db=db, user_id=user_id, session_id=session_id,
+                        message=control["text"], record_via_turnlifecycle=True)
+                except Exception as exc:
+                    await send_json({"type": "error", "message": str(exc)})
+                    continue
+                finally:
+                    busy = False
+
+                _require_auth_lease_live(auth_expires_at)
+                await send_json({
+                    "type": "reply",
+                    "text": result["reply"],
+                    # Der Mensch sieht nie, was Zero wirklich sagte. Rohfassung und
+                    # ein Beleg, der auf eine DB-Zeile zeigt, fahren deshalb mit --
+                    # eine Uebersetzung, die niemand pruefen kann, ist schlechter
+                    # als keine.
+                    "caveman": result.get("caveman"),
+                    "turn_id": result.get("turn_id"),
+                    "translator_receipt": result.get("translation_id"),
+                    "auth_expires_at": int(auth_expires_at),
+                })
+
+        except (WebSocketDisconnect, asyncio.CancelledError):
+            pass
+        except Exception as exc:
+            try:
+                await send_json({"type": "error", "message": str(exc)})
+            except Exception:
+                pass
+        finally:
+            # Ein nach der Abweisung offen bleibender Socket ist nicht nur ein Leck:
+            # er schenkt einem Angreifer einen Wiederholungskanal ohne neuen
+            # TLS-Handschlag. Billig zu halten, billig zu haemmern.
+            try:
+                await ws.close()
+            except Exception:
+                pass
 
     @app.websocket("/ws/terminal")
     async def terminal_ws(ws: WebSocket):

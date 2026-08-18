@@ -160,6 +160,9 @@ class TerminalSessionManager:
             "CLAYVERSE_SESSION_ID": binding.session_id,
             "CLAYVERSE_ENABLE_ENTITYOS_EXEC": "1" if enable_entityos else "0",
         }
+        db_path_override = os.environ.get("CLAYVERSE_DB_PATH", "").strip()
+        if db_path_override:
+            env["CLAYVERSE_DB_PATH"] = db_path_override
         if enable_entityos:
             for key in ("CLAYVERSE_ENTITYOS_PATH", "CLAYVERSE_ENTITYOS_SHA256"):
                 value = os.environ.get(key, "").strip()
@@ -294,6 +297,11 @@ class TerminalSessionManager:
             f"CLAYVERSE_STATE_ROOT={self.state_root}",
             f"CLAYVERSE_USER_ID={binding.user_id}",
             f"CLAYVERSE_SESSION_ID={binding.session_id}",
+            *(
+                [f"CLAYVERSE_DB_PATH={mcp_env.get('CLAYVERSE_DB_PATH')}"]
+                if "CLAYVERSE_DB_PATH" in mcp_env
+                else []
+            ),
             *effect_env,
             "DISABLE_UPDATES=1",
             "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1",

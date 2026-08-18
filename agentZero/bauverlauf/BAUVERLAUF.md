@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T04:48:55Z. 706 Commits aus vier Repos, davon 200 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T05:18:58Z. 709 Commits aus vier Repos, davon 203 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,86 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### chat page: session switcher wired to plaetze(), no hardcoded ids
+
+`76f70eccfb58` · entityos · 05:13 UTC · BACK agent
+
+```
+Renders from the plaetze list the ready frame will carry (server-owned,
+IdentityRouter.plaetze()) -- never hardcodes session ids/labels. Sends
+switch_platz on click, disabled while pending or already mid-switch so
+a switch cannot race an in-flight message. Composer and switcher share
+one enabled/disabled state.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+```
+
+### chat page: use the real ZeroAvatar component instead of a static SVG img
+
+`d8eedd7f7dd0` · entityos · 05:09 UTC · BACK agent
+
+```
+Wires web/avatare/zero-avatar.{css,js} (owner-built, committed in
+a07abaea1) into the chat page. Header avatar is static/inactive; each
+Zero message row gets its own ZeroAvatar instance, and
+ZeroAvatar.nurNeuesteAktiv() is called after every new one so only the
+newest glitches, per that module own rule. Reply/error outcomes feed
+setzeZustand() with a real, justified state (+1/-1, grund = the actual
+outcome or error text) -- never a fabricated confidence score; while
+pending, the avatar stays in its honest unknown/neutral look.
+
+Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+```
+
+### Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare
+
+`a07abaea17cc` · entityos · 05:07 UTC · EntityOS
+
+```
+1) ZWEI GLEICHZEITIGE SITZUNGEN je Mensch, umschaltbar (Eigner 18.08.).
+   Die eigentliche Arbeit war nicht "zwei statt eins": die Regel stand ACHTMAL
+   im Code, jedes Mal als derselbe Stringvergleich auf session:<user>, verteilt
+   ueber autonomy, autonomy_context, autonomy_dispatch, turn_lifecycle. Deshalb
+   war sie nicht aenderbar. Jetzt steht sie an EINER Stelle
+   (identity.sitzungen_von / ist_kanonische_sitzung / SITZUNGEN_JE_MENSCH).
+   Wer drei will, aendert eine Zahl, statt acht Vergleiche zu suchen.
+   Wanderung ohne Datenverlust: Platz 1 BEHAELT die alte Kennung session:<user>,
+   weil daran Zuege, Episoden und Kausalketten haengen. Umbenennen haette vier
+   Fremdschluesseltabellen nachgezogen, fuer nichts.
+
+2) BEREITSCHAFT zaehlte falsch: eine Abbildung user_id -> row faltete beide
+   Sitzungen zu einer zusammen, die zuletzt gelesene gewann, ihr Terminalname
+   passte nicht zum erwarteten -> dauerhaft not_ready, obwohl alles lief.
+
+3) DIE HUELLE SPERRTE DEN MENSCHEN AUS. Gabriels gewachsener Kontext sprengte
+   die 9000 Zeichen, der Haken warf, und es kam KEIN Prompt mehr durch. Andreas'
+   kleinere Sitzung lief weiter, was den Fehler wie einen Zufall aussehen liess.
+   Fail-closed war fuer den richtigen Fall gedacht - nie etwas Unbegrenztes
+   ausliefern. Der falsche Schluss daraus ist "dann gar nichts". Zwischen
+   unbegrenzt und gar nicht liegt WENIGER, UND ES STEHT DABEI.
+   Sechs Stufen: Korpus, Ressourcenverweise, Hyperpositionen, Fremdkollisionen,
+   Gedaechtnis, Verlauf auf drei - dann eine Notfassung aus Identitaet,
+   Kausalitaet und Wirkgesetz. Jede Stufe traegt sich in gekuerzt ein, und das
+   steht IM Kontext: Zero erfaehrt, dass es weniger sieht, und was fehlt.
+   Stille Kuerzung waere schlimmer als die Sperre - dann arbeitet das Modell
+   mit einem Loch, von dem es nichts weiss. Hart abgebrochen wird nur noch,
+   wenn selbst die Notfassung nicht passt: dann ist die Grenze falsch gesetzt,
+   nicht der Inhalt zu gross.
+   Nebenbefund: resources war an KEINER Stelle begrenzt - ein einzelner langer
+   Verweis konnte die Huelle allein sprengen.
+
+4) Der Test test_uncompactable_context prueft jetzt die EIGENSCHAFT (nichts
+   wird in eine Datei ausgelagert, jede Kuerzung ist benannt) statt den
+   MECHANISMUS (harter Abbruch). Der harte Abbruch bleibt als eigener Test fuer
+   den Fall, dass die Grenze selbst falsch gesetzt ist.
+
+5) Avatare: Zero rund schwarz mit glitchender Null, Licht von HINTER der
+   Scheibe, das nur am Rand hervortritt (Zustand gruen bis rot, mit
+   Pflichtbegruendung - ein Leuchten ohne nennbaren Grund waere
+   Stimmungstheater). Glitch und Pupille laufen nur bei der NEUESTEN Nachricht.
+   Selbstenthaltend, kein CDN, respektiert prefers-reduced-motion.
 ```
 
 ### eval_set.json: attach hand-authored-not-production disclosure to the data itself
@@ -3067,29 +3147,5 @@ Needle am Code vermessen: 26,3 Mio. Parameter (d_model 512, 8 Koepfe, 12 Encoder
 
 ```
 Gemessen: select wirt, count(*) from fundort liefert genau einen Wirt - clayverse mit 92.715 Fundorten. Gabriels Rechner 0, andreas-MACO 0. Aufgefallen ist es an einer Frage des Auftraggebers nach dem Ort der Needle-Gewichte: sie brauchte vier Suchlaeufe von Hand und blieb trotzdem unbeantwortet, weil es nichts abzufragen gab. Gefunden wurden dabei auf Gabriels Rechner Trainingsdaten mini_train.jsonl 1,87 MB, mini_val.jsonl 208 KB und registry.json 21,5 KB unter aicore/opt/aicore/needle - aber keine Gewichte, weder dort noch auf andreas-MACO.
-```
-
-### B27 geprueft: 22 Baeume aufgenommen - Vorhersage widerlegt, Ursache gefunden
-
-`309ee770bfd3` · clay · 20:37 UTC · ClayVerse
-
-```
-4957 neue Artikel aus 20 Repos plus clayverse-bau und clayverse-strom, Gesamtbestand 14268. Zeitraum jetzt 2025-12-29 bis 2026-08-14, also rund 7,5 Monate statt 7 Tage. Verschiedene Bearbeiter 88 statt 25. projekt_art zu 100 Prozent eigen, per Remote und Urheberschaft belegt. sphaere sauber entschieden fuer Project-Frankenstein 867 auf frank_v0_1, gabriel-claude 286 auf gabriel, andreas-claude plus Dr.-Unterweger plus Andreas-Resercher 1092 auf andreas. Laufzeit 3,9 s, Datenbank praktisch unveraendert, weil Binaeres und Uebergrosses nur als Metadatenstumpf gespeichert wird.
-```
-
-### B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler
-
-`a16d027e6d27` · clay · 20:37 UTC · ClayVerse
-
-```
-Beide Haelften behoben: herkunft steht jetzt in den Spaltenlisten von cmd_bauen und cmd_iar_einlesen und wird aus einem Schnappschuss vor dem Neuaufbau fortgetragen; zusaetzlich setzt reapply_owner_edits nach jedem maschinellen Durchlauf die von Hand gesetzten Feldwerte aus bearbeitung wieder ein, ueber eine dynamisch aus echten Spalten gebaute Weissliste. In isolierter Datenbank mit echter DDL bewiesen: Titel VON HAND GESETZT und herkunft=nutzer ueberleben einen vollen zweiten bauen-Lauf unveraendert. ZWILLINGSFEHLER vom Agenten selbst gefunden: projekt, projekt_art und sphaere hatten denselben Defekt, jeder Neuaufbau haette sie geloescht - mit demselben Mechanismus behoben und ebenso bewiesen.
-```
-
-### B27 geprueft: Messung: unbefangene Sitzung ohne Mechanismus
-
-`86498ee88661` · clay · 20:34 UTC · ClayVerse
-
-```
-Frische claude-p-Sitzung als Benutzer clay, Minimalprompt (Frage plus Datenbankpfad, kein Schema, keine Hinweise). Ergebnis: 206,9 s Wanduhr, 35 Runden, 1,09 USD, 14.156 Ausgabe-Token, 1,86 Mio. Token aus dem Zwischenspeicher gelesen. Sie fand 4 Zeilen in der Tabelle folgerung und antwortete 1 von 4 widerlegt. Nicht gefunden: 26 Artikel mit status REFUTED, 4 SUPERSEDED, 272 Gegenhypothesen, 1645 Hypothesen, 116 negative_result-Knoten im Graphen. VERGLEICH derselben Fragen ueber die Wege: grep 432,54 ms / 194.114 Bytes / 0 belegte Fakten; FTS allein 2,78 ms / 10.902 Bytes / 95 Fakten; voller Abruf 2,18 ms / 25.977 Bytes / 472 Fakten. Dichte an der EffectGate-Frage mit echtem Tokenizer: grep 0,0 - FTS 22,5 - voll 56,7 belegte Fakten je 1000 Token.
 ```
 

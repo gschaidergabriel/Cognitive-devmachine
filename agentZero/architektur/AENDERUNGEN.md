@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
+Automatisch erzeugt 2026-08-18T05:18:57Z aus drei Repos. 466 Eintraege.
 
 ## architektur (14)
 
@@ -86,7 +86,7 @@ Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 | 2026-08-15T16:46 | unifieddb | `7817f79f4b2c` | F72 aufgenommen |
 
-## reparatur (47)
+## reparatur (48)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -97,6 +97,7 @@ Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T09:51 | entityos | `fe26577ed5aa` | Fix: container boots as uid 5001 (compose override for the /var/lib/clay bind mount) but /var/lib/clayverse, / |
 | 2026-08-18T09:45 | entityos | `0c37bf7e6e13` | Fix: service.py crashed on boot -- final_acceptance_probe imports adapters, which .dockerignore deliberately e |
 | 2026-08-18T09:28 | entityos | `f307559b870f` | S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wired for /va |
+| 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
 | 2026-08-18T04:11 | entityos | `759e0d25b399` | fix(clayverse): arbitrate browser attach against autonomy injection |
 | 2026-08-18T04:09 | entityos | `4e5da25db612` | Merge pull request #719 from gschaidergabriel/fix/autonomy-completion-target-bound-20260818 |
 | 2026-08-18T04:01 | entityos | `8b7368efdd20` | fix(clayverse): bind verified-effect completion to an explicit target |
@@ -193,7 +194,7 @@ Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (230)
+## bau (229)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -205,6 +206,8 @@ Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T06:48 | entityos | `03b3f877558a` | claycode control: sync disposable guest execution boundary |
 | 2026-08-18T05:39 | entityos | `0941b84640c0` | claycode inbox: steer to admitted disposable guest lane and autonomy arbiter blocker |
 | 2026-08-18T05:38 | entityos | `096f335a7a37` | claycode supervisor: admit VPS guest lane and fence autonomy pulse source-only drift |
+| 2026-08-18T05:13 | entityos | `76f70eccfb58` | chat page: session switcher wired to plaetze(), no hardcoded ids |
+| 2026-08-18T05:09 | entityos | `d8eedd7f7dd0` | chat page: use the real ZeroAvatar component instead of a static SVG img |
 | 2026-08-18T04:40 | entityos | `27a5e9bffa0e` | eval_set.json: attach hand-authored-not-production disclosure to the data itself |
 | 2026-08-18T04:37 | entityos | `dcc0f97a4eb3` | Add Mistral pre-stage + caveman-German translator module (mv_* tables) |
 | 2026-08-18T04:27 | entityos | `9145cd9e9949` | receipt(go): bind autonomy pulse activation gate addendum |
@@ -255,6 +258,4 @@ Automatisch erzeugt 2026-08-18T04:48:55Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T02:57 | entityos | `92ec3c4f6766` | docs(clayverse): specify deterministic autonomy without self-authorization |
 | 2026-08-18T02:56 | entityos | `20f6cda1ea8a` | feat(clayverse): add deterministic goal-state autonomy controller |
 | 2026-08-18T02:41 | entityos | `83d102ed33dd` | receipt(go): bind Tier2 source fusion and QEMU guest frontier |
-| 2026-08-18T02:36 | entityos | `2c44f567c235` | receipt(go): classify UnifiedDB pre-product guest failure and KVM gate |
-| 2026-08-18T02:31 | entityos | `9450351da4ba` | receipt(go): bind KVM admission and guest-source frontier |
 

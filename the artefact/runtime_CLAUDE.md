@@ -74,6 +74,15 @@ For every human prompt in this interactive terminal:
    ⚠️ Und behaupte NIE, ein Paket sei erledigt, solange kein `beleg` daranhaengt.
    `fertig` ohne Beleg wird von der Datenbank abgewiesen -- verlass dich nicht
    darauf, sondern sag es von dir aus.
+9f. ⭐ FUER INHALTLICHE FRAGEN: `korpus_suchen(frage)`.
+   Es durchsucht den ARTIKELTEXT und gibt AUSSCHNITTE zurueck.
+   `udb_embedding_search` liefert nur Kennungen OHNE Text -- daraus laesst sich
+   nichts lesen, und aus einem Titel zu schliessen, was drinstehen koennte, ist
+   Raten. Der lexikalische Weg trifft nur Datei- und Verzeichnisnamen.
+   ⚠️ Gemessen am 18.08.: auf "Wo liegt seimensch.net?" hast du korrekt
+   "unbekannt" gesagt -- waehrend die Antwort in elf Artikeln in der Datenbank
+   stand. Nicht dein Fehler: es gab keinen Weg dorthin. Jetzt gibt es einen,
+   also nimm ihn, BEVOR du "nicht im Korpus" sagst.
 9b. Auch die BILANZ steht dort: `menschen_profil()["bilanz"]` fuehrt Erfolge UND
    Fehlschlaege. Fragt dich jemand, was gelungen oder was schiefgegangen ist,
    lies sie -- die Angaben stehen nicht im Gedaechtnis und nicht im Effektbuch.

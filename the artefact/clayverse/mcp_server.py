@@ -439,6 +439,50 @@ class ClayVerseEffectBridge:
         except Exception as e:
             return {"nicht_ermittelbar": f"{type(e).__name__}: {e}"}
 
+    # ── Korpus nach INHALT durchsuchen, mit Ausschnitt ────────────────────
+
+    def korpus_suchen(self, frage: str, limit: int = 6) -> dict:
+        """Volltext ueber die Artikel. Liefert Ausschnitte, keine Kennungen.
+
+        Eine Trefferliste aus Kennungen ist fuer ein Sprachmodell wertlos --
+        es kann sie nicht aufloesen und faengt an, ihren Inhalt zu erraten.
+        """
+        import re as _re
+        worte = [w for w in _re.split(r"[^0-9A-Za-zÄÖÜäöüß]+", str(frage).lower())
+                 if len(w) > 2][:8]
+        if not worte:
+            return {"frage": frage, "treffer": [], "hinweis": "keine brauchbaren Suchworte"}
+        grenze = max(1, min(int(limit), 12))
+        aus, gesehen = [], set()
+        # Erst streng (alle Worte), dann locker (irgendeins). Ohne den zweiten
+        # Versuch liefert eine praezise Frage oft gar nichts.
+        for modus, ausdruck in (("alle", " AND ".join(worte)), ("irgendeins", " OR ".join(worte))):
+            if len(aus) >= grenze:
+                break
+            try:
+                zeilen = self.db.db.execute(
+                    "SELECT s.artikel_id, s.titel, substr(s.text,1,420) AS ausschnitt, "
+                    "a.art, a.projekt FROM fts_index_artikel f "
+                    "JOIN artikel_suchtext s ON s.id=f.rowid "
+                    "LEFT JOIN artikel a ON a.id=s.artikel_id "
+                    "WHERE fts_index_artikel MATCH ? ORDER BY bm25(fts_index_artikel) LIMIT ?",
+                    (ausdruck, grenze * 2)).fetchall()
+            except Exception as e:
+                return {"frage": frage, "nicht_ermittelbar": f"{type(e).__name__}: {e}"}
+            for r in zeilen:
+                if r["artikel_id"] in gesehen or len(aus) >= grenze:
+                    continue
+                gesehen.add(r["artikel_id"])
+                aus.append({"id": r["artikel_id"], "titel": r["titel"],
+                            "art": r["art"], "projekt": r["projekt"],
+                            "ausschnitt": r["ausschnitt"], "gefunden": modus})
+        return {
+            "frage": frage, "worte": worte, "treffer": aus, "anzahl": len(aus),
+            "hinweis": ("Ausschnitte aus dem Volltext, nicht der ganze Artikel. "
+                        "Steht hier nichts, ist es NICHT im Korpus -- sag das, statt "
+                        "aus dem Titel zu schliessen, was drinstehen koennte."),
+        }
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -592,6 +636,11 @@ def main() -> None:
     def tresor_katalog(tresor: str = "api") -> dict:
         """Was an Zugaengen vorhanden ist und was jeder KANN -- Modelle, Ratengrenzen, Zweck. tresor: `api` (Maschinenschluessel mit Faehigkeitsliste) oder `zugaenge` (Anmeldungen). ⚠️ NUR der Katalog: die Schluessel selbst bekommst du nie und brauchst du nie -- der Serverteil benutzt sie fuer dich."""
         return bridge.tresor_katalog(tresor)
+
+    @mcp.tool(annotations=udb_ro)
+    def korpus_suchen(frage: str, limit: int = 6) -> dict:
+        """Durchsucht den ARTIKELTEXT des Korpus und liefert AUSSCHNITTE zurueck -- fuer inhaltliche Fragen ("wie wird X bereitgestellt", "was ist die Regel fuer Y"). Anders als udb_embedding_search, das nur Kennungen ohne Text liefert. Findest du hier nichts, steht es nicht im Korpus."""
+        return bridge.korpus_suchen(frage, limit)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

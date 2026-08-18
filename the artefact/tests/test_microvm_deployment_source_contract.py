@@ -25,7 +25,7 @@ def test_microvm_contract_fences_known_vulnerable_kata_runtime_rs() -> None:
     assert "CVE-2026-47243" in text
     assert "runtime-rs <= 3.30.0" in text
     assert "3.31.0" in text
-    assert "fresh upstream advisory review" in text
+    assert "fresh upstream advisory/release review" in text
 
 
 def test_microvm_contract_requires_effective_network_policy_enforcement() -> None:

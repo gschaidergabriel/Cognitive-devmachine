@@ -1,12 +1,162 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T13:18:58Z. 754 Commits aus vier Repos, davon 231 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T13:48:59Z. 757 Commits aus vier Repos, davon 233 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot
+
+`19d5dd87472e` · unifieddb · 13:34 UTC · EntityOS
+
+```
+Gabriel: "mach das fuer alle mechaniken durch."
+
+═══ WIE GEMESSEN WURDE, UND ZWEI KORREKTUREN AM MESSGERAET SELBST ═══
+
+Erst ein Importgraph von den Einstiegspunkten aus: 162 Module, 64 erreichbar.
+KORREKTUR 1: die Wirtswerkzeuge starten nicht per Import aus dem Container,
+sondern direkt ueber systemd. Wer nur den Importgraph verfolgt, erklaert genau
+die Mechaniken fuer tot, die TAEGLICH laufen. Aus den .service-Dateien
+ausgelesen statt angenommen -> 74 erreichbar.
+KORREKTUR 2: auch das reicht nicht -- terminal_hooks etwa laeuft als Programm,
+nicht als Import. Ein Graph sagt, was erreichbar WAERE, nicht was laeuft.
+
+Deshalb die ehrlichere Frage: HINTERLAESST DER MECHANISMUS EINE SPUR?
+Fuer jeden benannten Mechanismus die Tabelle, die er schreiben muesste, und
+wann dort zuletzt etwas ankam. Kein Schreiben = laeuft nicht, egal wie fertig
+der Code aussieht.
+
+  lebendig 20 | still 4
+
+Lebendig u.a.: Abrufkarte (17 min), Kantenlernen (6 min), Plan-Cache (38 min),
+Raum (15 min), Arbeitspakete (15 min), Menschenprofile (6 min), Bilanz,
+Artikelzuordnung (16.795), Vorstufe, Uebersetzer, Kuration, Fehlergedaechtnis,
+Wirte-Herzschlag, Schnappschuesse.
+
+Still: Erfolgsmarke (LEER), Uebersetzungsausfaelle und Paketurteil-Filter
+(Tabelle fehlt -- die sind aber ABSICHTLICH leer: beide entstehen erst beim
+ersten Rueckfall, und der ist bisher nicht eingetreten), Kontingentbuch.
+
+⚠️ EINE FALSCHE BESCHRIFTUNG VON MIR: ich hatte die Tabelle `weg` als
+"Wegehierarchie (F94)" gefuehrt. Sie ist es nicht -- sie haelt SSH-Routen
+zwischen Rechnern. F94 (Highways/Tunnel/Langwege im Graphen) ist weiterhin
+ungebaut, und meine Messung hat das kurzzeitig verdeckt.
+
+═══ DER BEFUND: F92b WAR TOTER CODE ═══
+
+vp_erfolgsmarke: 0 Zeilen. Die Funktion _erfolgsmarke() stand seit heute frueh
+in paket.py und wurde von NIRGENDWO aufgerufen -- ich hatte sie im
+Erkundungs-Patch geschrieben und den Aufruf vergessen.
+
+Das ist nicht irgendeine Luecke. Die Dokumentation nennt F92b ausdruecklich eine
+VORAUSSETZUNG der Kaskade, nicht ihr Ergebnis:
+
+    F92b Erfolgsmarke -> Karte -> besserer Eintritt -> bessere Erfolgsmarke
+         (was trug?)      (F93b)   (F93)                (schliesst den Kreis)
+
+Ohne sie dreht sich der Kreis nicht. Die Karte wurde alle 30 Minuten neu
+gezeichnet -- aus Regionen und Wortstatistik, aber ohne ein einziges Signal
+darueber, welcher Eintritt tatsaechlich getragen hat. Sie konnte dadurch nicht
+BESSER werden, nur aktueller.
+
+⚠️ UND DER EINBAU SCHEITERTE ERST NOCH EINMAL, STILL: mein Block stand 83
+Zeilen zu frueh und griff auf `result` zu, das dort noch nicht existierte.
+NameError -- und mein `except Exception: pass` machte daraus Schweigen: 15
+Abrufe, 0 Marken, kein Hinweis. Das ist HEUTE DAS DRITTE MAL, dass ein
+`except: pass` von mir einen echten Fehler in ein leeres Ergebnis verwandelt
+hat. Buchfuehrung darf einen Abruf nicht kippen -- aber sie darf auch nicht so
+tun, als haette sie stattgefunden. Der Fehler geht jetzt auf stderr.
+
+ERGEBNIS nach 20 Abrufen, 8 Marken:
+    erkundung:gegenhypothese   getragen=1   5x
+    EVIDENCE_ALIAS             getragen=1   2x
+    EVIDENCE_ALIAS             getragen=0   1x
+
+⭐ Erster echter Hinweis, dass die Erkundung etwas bringt: die gegen die Karte
+gewaehlten Eintritte in Gegenhypothesen-Gegenden haben 5 von 5 Mal beigetragen.
+⚠️ Ehrlich dazu: "getragen" heisst hier "hat mindestens einen Treffer ins
+ausgelieferte Paket gebracht", und die Erkundung kommt ZUSAETZLICH dazu -- sie
+hat es damit leichter beizutragen als der Haupteintritt. Die Zahl ist ein
+Anfang, kein Beweis. Erst ueber viele Abrufe wird daraus ein Signal, und genau
+dafuer wird sie jetzt ueberhaupt erst gesammelt.
+```
+
+### Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig
+
+`d6cc4ad2001e` · entityos · 13:24 UTC · EntityOS
+
+```
+Gabriel: "im moeglichkeitsraum sollte auch alles emergent abgebildet sein, schau
+was da das ziel ist" -- und: "es ist noch immer weit weg von den mechaniken die
+wir gebaut/erforscht haben, die musst du fertigstellen, dann greift alles
+besser ineinander."
+
+Er hat recht, und der Befund ist deutlicher als erwartet.
+
+═══ BEFUND 1: NIEMAND RIEF IHN AUF ═══
+
+udb/abruf/moeglichkeitsraum.py wurde von KEINER Stelle aufgerufen. Gebaut,
+erforscht, dokumentiert -- und nie im Betrieb. Dasselbe Muster wie bei der
+Abrufkarte: ein fertiger Mechanismus, an den kein Draht fuehrt.
+
+SEIN ZIEL, aus seinem eigenen Kopf:
+    "EIN RAUM MIT NUR EINER LESART IST KEIN RAUM."
+    Hypothese UND Gegenhypothese, verdichtet, als ERWARTUNGSFELD -- nie als
+    Antwort. Das Modell muss DISKRIMINIEREN, nicht BESTAETIGEN. Die
+    Gegenhypothese ist der Falsifikator, IM Prompt.
+
+═══ BEFUND 2: DIE VORSTUFE BEHAUPTETE, IHN ZU BEKOMMEN ═══
+
+In _BASE_RULES stand woertlich "You are given, in CONTEXT: the possibility space
+(memory artefacts, corpus hits)". Das war eine Umdeutung: Gedaechtnis und
+Korpustreffer sind MATERIAL, kein Erwartungsfeld. Eine Regel, die etwas
+beschreibt, das nicht geliefert wird, erzeugt genau die Hypothesen, die dieser
+Mechanismus abbauen soll. Ab jetzt stimmt der Satz -- das Feld wird wirklich
+mitgegeben, und die Regel nennt `einseitig` ausdruecklich: fehlt eine Seite,
+gehoert das in watch_out und nicht als gesicherte Lesart behandelt.
+
+═══ BEFUND 3, der eigentliche: ER WAR IM CONTAINER NIE LAUFFAEHIG ═══
+
+Drei Fehlschlaege hintereinander, jeder praezise, keiner geraten:
+  ModuleNotFoundError: No module named 'udb'
+  ModuleNotFoundError: No module named 'verdichtung'
+  ImportError: Quelle fehlt: /opt/clayverse/werkzeug/weltmodell.py
+              (erwartet fuer udb._wz.weltmodell)
+
+Der Reihe nach: /opt/unifieddb stand nicht im Suchpfad. Der Erfindungsmelder
+verdichtung.py liegt auf dem WIRT und war im Container gar nicht vorhanden. Und
+udb._wz laedt seine Werkzeuge ueber einen FEST EINGETRAGENEN Wirtspfad -- ein
+eigener Einhaengename half deshalb nicht, es musste genau
+/opt/clayverse/werkzeug sein.
+
+⭐ Das ist der Grund, warum "fertig gebaut" und "greift ineinander" zwei
+verschiedene Dinge sind. Der Mechanismus war ausserhalb seiner urspruenglichen
+Wirtsanordnung nie startfaehig, und niemand hat es gemerkt, weil ihn niemand
+aufrief.
+
+⭐ UND JEDER FEHLSCHLAG HAT SICH SELBST ERKLAERT: das Feld meldete
+   {"status": "NICHT_GEBAUT", "grund": "..."} statt still leer zu bleiben.
+Drei Schritte, drei Gruende, kein Raten. Haette ich dort ein leeres Feld
+zurueckgegeben, saehe ein Pfadfehler aus wie ein Korpus ohne Gegenseite.
+
+ERGEBNIS, im Container gemessen:
+    0,4 s | einseitig=True | dafuer=0 dagegen=5
+    warnung: "Hypothesenseite fehlt -- nur Gegenseite vorhanden,
+              KEIN vollstaendiger Raum"
+
+Der Mechanismus tut also genau das, wofuer er gebaut wurde: er liefert die
+Gegenseite MIT und sagt von sich aus, wenn der Raum unvollstaendig ist -- statt
+die eine vorhandene Seite als Befund auszugeben.
+
+Der wiederverwendete Erfindungsmelder bleibt dabei scharf: er prueft, dass jede
+Zahl im Erwartungsfeld in mindestens einer Quelle DIESER Anfrage steht. Ohne ihn
+waere der Raum genau der Kanal, durch den erfundene Zahlen als Erwartung ins
+Modell wandern.
+```
 
 ### Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE
 
@@ -4242,81 +4392,6 @@ melden Gesundheit statt Stimmrecht. Rang 3 der Schlange entsprechend geaendert.
 
 LEHRE: ich habe einen Zahlenfehler mit mehr Mechanismus repariert, statt zu
 fragen, ob der Mechanismus dort hingehoert. Eleganz ist kein Beleg.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F21 Zielvorstellung + Baugesetz, F22 die Liste ausgewertet, WEITERMACHEN.md als Einstieg
-
-`3957195efb2c` · clay · 05:54 UTC · ClayVerse
-
-```
-WEITERMACHEN.md ist neu und der Uebergabepunkt fuer die naechste Sitzung:
-Lage, Arbeitsschlange in Reihenfolge, Fallen, offene Fragen, alle Pfade und
-Commits. CLAUDE.md zeigt jetzt oben darauf.
-
-F21 - die Zielvorstellung (Quelle GPT-5.6 Sol, als [B] gefuehrt): ClayVerse als
-persistente Agenten-Infrastruktur, auf der LLMs nur wechselnde Motoren sind.
-Frank waere ein Clay darin, nicht ClayVerse selbst.
-EIGNERENTSCHEIDUNG: KEIN Training, KEINE Trainingsdaten. Lernen heisst
-wachsender Evidenzbestand, nicht wachsende Gewichte.
-DAS BAUGESETZ, aus dem Entwurf selbst erhoben: kein Bauteil ohne vorher
-benannte einfache Grundlinie und ohne nachher gemessenes Ergebnis.
-MEINE UMSTELLUNG: der Ablations-Rahmen ist dort das Ergebnis, hier die
-Voraussetzung. Der Massstab kommt vor dem Gemessenen.
-
-F22 - die Auswertung. Von 16 Projekten bleiben 4 als Muster, von 11 lokalen
-Modulen bleiben 4.
-GEMESSEN und entscheidend: beide Zwillinge koennen nicht trainieren. Gabriels
-torch 2.5.0+cu124 meldet cuda=False und hip=None - eine CUDA-Fassung ohne
-NVIDIA-Karte. Andreas hat gar kein torch. Die Eignerentscheidung kostet uns
-also nichts, was wir haetten haben koennen.
-
-KONSTRUKTIONSFEHLER GEFUNDEN: rqlite mit ZWEI Knoten bricht die
-Kernanforderung - Raft braucht Mehrheit, bei zwei Stimmen ist die Mehrheit
-zwei, faellt ein Zwilling aus blockiert Schreiben. Die Empfehlung war falsch.
-Ausweg: DRITTER KNOTEN AUF DEM WIRT. Dann faellt die Wartesperre aus F20 als
-Nebenprodukt der Architektur an statt als extra gebautes Tor.
-
-PageIndex ist kein Zusatz zu LEANN sondern sein Konkurrent - sie treten
-gegeneinander an, nur eines bleibt.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden
-
-`5d87d90a593d` · clay · 05:45 UTC · ClayVerse
-
-```
-ANTWORT 1: 15 Prozent heisst GESAMTSYSTEMAUSLASTUNG, und die Zahl wird JE
-MASCHINE gerechnet statt abgeschrieben. Module spiegelgleich, Deckel nicht -
-beide Kisten haben 16 Threads, aber unterschiedlich viel RAM.
-  ai-core-node   16 Threads, 23,2 GiB -> CPUQuota=240%, MemoryMax=3571M
-  andreas-MACO   16 Threads, 20,8 GiB -> CPUQuota=240%, MemoryMax=3191M
-
-GEBAUT auf BEIDEN Rechnern: /etc/systemd/system/clay-kognition.slice, erzwungen
-ueber cgroup v2. CPUWeight/IOWeight 20, damit die Module bei Streit nachgeben -
-der Mensch hat Vorrang.
-
-GEMESSEN unter 16 Brennern bei Volllast:
-  ai-core-node   15,00 / 15,01 / 15,01 Prozent Gesamtsystem
-  andreas-MACO   14,99 / 15,01 Prozent Gesamtsystem
-Die Zusage ist damit keine Absicht mehr, sondern eine Schranke.
-
-FALLE NOTIERT: systemd haengt sie unter clay.slice/clay-kognition.slice, weil
-der Bindestrich Hierarchie bedeutet. Die Elternscheibe ist UNGEDECKELT - wer
-dort statt darunter einhaengt, umgeht die Grenze.
-
-ANTWORT 2: die harte Lesart gilt. Ist kein Zwilling online, arbeitet ClayVerse
-NICHT und sagt bitte warten bis kognitive Module online. Lieber ehrlich warten
-als still schlechter antworten.
-
-NOCH NICHT GEBAUT: Herzschlag je Zwilling, EIN Tor vor der Kognition statt
-zwanzig verstreuter Abfragen, der Satz als Antwort an den Menschen - und die
-Abgrenzung: die Sperre gilt fuer Kognitives, NICHT fuer Seitenauslieferung und
-Mailbox. Sonst nehmen zwei ausgeschaltete Arbeitsrechner drei oeffentliche
-Seiten mit.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

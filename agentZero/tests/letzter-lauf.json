@@ -1,9 +1,9 @@
 {
-  "commit": "4588d6f20",
-  "erzeugt": "2026-08-18T13:19:23Z",
-  "gruen": 563,
+  "commit": "d6cc4ad20",
+  "erzeugt": "2026-08-18T13:50:31Z",
+  "gruen": 562,
   "hinweis": "Rote Tests werden NICHT durch Abschwaechen gruen gemacht. Wo ein Test auf etwas Echtes zeigt, bleibt er rot, bis die Sache behoben ist.",
-  "rot": 16,
+  "rot": 17,
   "rote_tests": [
     "tests/test_causal_credit.py::test_failed_effect_reenters_without_positive_credit",
     "tests/test_causal_credit.py::test_successful_effect_gets_positive_credit",
@@ -20,6 +20,7 @@
     "tests/test_mistral_prestage_build_context.py::test_build_context_recent_turns_wird_auf_letzte_drei_gekappt",
     "tests/test_mistral_prestage_build_context.py::test_build_context_ist_gueltiges_json_ohne_ascii_flucht",
     "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
-    "tests/test_state_authority.py::test_compression_has_no_hidden_lossless_turn_ledger"
+    "tests/test_state_authority.py::test_compression_has_no_hidden_lossless_turn_ledger",
+    "tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input"
   ]
 }

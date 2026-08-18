@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T13:18:58Z aus drei Repos. 471 Eintraege.
+Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
 
 ## architektur (15)
 
@@ -197,10 +197,12 @@ Automatisch erzeugt 2026-08-18T13:18:58Z aus drei Repos. 471 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (231)
+## bau (232)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T13:34 | unifieddb | `19d5dd87472e` | Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot |
+| 2026-08-18T13:24 | entityos | `d6cc4ad2001e` | Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig |
 | 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
 | 2026-08-18T12:59 | entityos | `d42ec66eda5d` | Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT |
 | 2026-08-18T12:52 | unifieddb | `b4c856add34b` | Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR |
@@ -259,6 +261,4 @@ Automatisch erzeugt 2026-08-18T13:18:58Z aus drei Repos. 471 Eintraege.
 | 2026-08-18T03:49 | entityos | `e617b42e9ef7` | Merge PR #717: fence cross-attempt autonomous effect replay |
 | 2026-08-18T03:48 | entityos | `ec733c768880` | docs(artefact): refresh living autonomy frontier |
 | 2026-08-18T03:46 | entityos | `96a797fc57fd` | docs(clayverse): bind autonomy dispatch and human-preemption laws |
-| 2026-08-18T03:43 | entityos | `afc2e532d02f` | ci(clayverse): extend autonomy guard to preemption reentry |
-| 2026-08-18T03:36 | entityos | `0772d2e29522` | ci(clayverse): add exact autonomy focused guard |
 

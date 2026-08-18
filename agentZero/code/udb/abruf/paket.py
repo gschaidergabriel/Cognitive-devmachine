@@ -1874,6 +1874,7 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
         (paket_id, _now(), time.time(), text[:200], json.dumps(orte_refs)),
     )
 
+
     # Hyperposition: bei AMBIGUOUS/LOW_CONFIDENCE werden die Kandidaten NICHT
     # stillschweigend auf einen zusammengeklappt (Phase 7 des Pulse-Zyklus:
     # "Preservation/reopening of unresolved alternatives"). Sie stehen als
@@ -1977,6 +1978,70 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
     c.commit()
     if own:
         c.close()
+
+    # ── F92b: Marke setzen -- was hat getragen? ──────────────────────────
+    #
+    # HIER, nicht frueher: `result` entsteht erst an dieser Stelle. Mein erster
+    # Versuch stand 83 Zeilen davor, griff auf einen Namen zu, den es dort noch
+    # nicht gab, und mein `except: pass` machte aus dem NameError ein
+    # stillschweigendes Nichts -- 15 Abrufe, 0 Marken, kein Hinweis.
+    #
+    # Ohne diese Marke dreht sich die Kaskade nicht:
+    #   Erfolgsmarke -> Karte -> besserer Eintritt -> bessere Erfolgsmarke
+    # Die Karte wuerde alle 30 min neu gezeichnet, aber nie BESSER -- nur
+    # aktueller, weil ihr jedes Signal fehlt, welcher Eintritt wirklich trug.
+    #
+    # "Getragen" heisst eng und messbar: hat der Walk von diesem Anker
+    # mindestens einen Treffer ins ausgelieferte Paket gebracht? Ob der Mensch
+    # zufrieden war, weiss diese Funktion nicht -- und darf es nicht raten.
+    try:
+        _geliefert = {t.get("id") for t in (result.get("treffer") or []) if isinstance(t, dict)}
+        _aus_erkundung = {w["id"] for w in walk_rows if w.get("erkundung")}
+        _aus_eintritt = {w["id"] for w in walk_rows if not w.get("erkundung")}
+        if anchors:
+            _erfolgsmarke(c, frage=text, region=None, anker=anchors[0],
+                          getragen=bool(_geliefert & _aus_eintritt),
+                          quelle=resolution.resolution_class)
+        if erkundung:
+            _erfolgsmarke(c, frage=text, region=erkundung.get("region"),
+                          anker=erkundung.get("anker"),
+                          getragen=bool(_geliefert & _aus_erkundung),
+                          quelle="erkundung:" + str(erkundung.get("grund")))
+
+        # F94: die Wege verstaerken, die getragen haben. Kein eigener Messpfad
+        # -- der Verkehr faellt hier ohnehin an, und die Hierarchie IST die
+        # Aufzeichnung statt ihres Stellvertreters.
+        # Verkehr OHNE Ertrag verstaerkt nichts, sonst baute sich auch das
+        # Irrfahren aus.
+        from .wegehierarchie import befahren as _befahren, sicherstellen as _weg_schema
+        _weg_schema_gebaut = False
+        _wege = [(w.get("via"), w["id"], w.get("edge_art"))
+                 for w in walk_rows
+                 if w["id"] in _geliefert and w.get("via")]
+        if _wege:
+            class _H:            # duennes Gefaess: befahren() erwartet db.tx()/db.db
+                def __init__(self, conn): self.db = conn
+                def tx(self):
+                    import contextlib
+                    @contextlib.contextmanager
+                    def _t():
+                        yield self.db
+                    return _t()
+            _h = _H(c)
+            try:
+                _befahren(_h, _wege, sitzung=str(wirt or "unbekannt"))
+            except Exception:
+                _weg_schema(_h)          # Tabelle fehlt noch -> anlegen, dann erneut
+                _befahren(_h, _wege, sitzung=str(wirt or "unbekannt"))
+    except Exception as _fehler:
+        # NICHT verschweigen. Ein stiller Buchfuehrungsfehler sieht aus wie
+        # "es gab nichts zu buchen" -- genau so blieb diese Tabelle einen
+        # halben Tag leer, ohne dass es jemandem auffiel.
+        import sys as _s
+        print(f"paket: Erfolgsmarke nicht gesetzt ({type(_fehler).__name__}: {_fehler})",
+              file=_s.stderr)
+
+
     return result
 
 

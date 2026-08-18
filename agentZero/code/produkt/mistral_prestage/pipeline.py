@@ -132,6 +132,15 @@ def _moeglichkeitsraum_safe(text: str) -> dict | None:
     Vorstufe den GRUND zu sehen: ein fehlender Raum darf nicht wie ein leerer
     aussehen.
     """
+    # /opt/unifieddb ist schreibgeschuetzt eingehaengt, steht aber nicht im
+    # Suchpfad -- dort liegt das Paket `udb`. Ohne diese Zeile meldet das Feld
+    # dauerhaft NICHT_GEBAUT, und zwar mit korrektem Grund.
+    import sys as _sys
+    for _pfad in ("/opt/unifieddb",            # das Paket udb
+                  "/opt/clay-werkzeug",         # der Erfindungsmelder verdichtung.py (eingehaengt)
+                  "/opt/clayverse/werkzeug"):  # derselbe Pfad ausserhalb des Containers
+        if _pfad not in _sys.path:
+            _sys.path.append(_pfad)
     try:
         from udb.abruf.moeglichkeitsraum import moeglichkeitsraum as _mr
         r = _mr(text, budget=6)

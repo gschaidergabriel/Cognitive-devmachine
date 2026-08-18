@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T13:18:59Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T13:49:00Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -677,6 +677,19 @@ CREATE TABLE vp_snapshot (
       normals_score TEXT, normals_bestanden INTEGER,
       beobachtungen_gesamt INTEGER, edge_lern_snapshot TEXT
     , source_epoch INTEGER, graph_epoch INTEGER);
+CREATE TABLE vp_weg (
+  von TEXT NOT NULL,
+  nach TEXT NOT NULL,
+  art TEXT,                          -- Kantenart, aus der der Weg entstand
+  nutzung INTEGER NOT NULL DEFAULT 0,
+  getragen INTEGER NOT NULL DEFAULT 0,
+  guete REAL NOT NULL DEFAULT 0.0,   -- 0 = langsame Strasse, 1 = Autobahn
+  sitzungen TEXT,                    -- verschiedene Sitzungen, die ihn trugen (JSON-Liste)
+  tunnel INTEGER NOT NULL DEFAULT 0,
+  erste_nutzung REAL NOT NULL,
+  letzte_nutzung REAL NOT NULL,
+  PRIMARY KEY(von, nach)
+);
 CREATE TABLE wa_ereignis (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         zeit TEXT, art TEXT, ziel TEXT, detail TEXT, quelle TEXT
@@ -852,6 +865,7 @@ CREATE INDEX idx_turns_session_ord ON turns(session_id, ordinal DESC);
 CREATE INDEX idx_vd_aufnahme_strom ON vd_aufnahme(strom, zeit);
 CREATE INDEX idx_vd_lauf_strom ON vd_lauf(strom, zeit);
 CREATE INDEX idx_vp_alias_df_df ON vp_alias_df(df);
+CREATE INDEX idx_vp_weg_guete ON vp_weg(guete DESC);
 CREATE INDEX idx_weg_ursprung_ziel ON weg(ursprung, ziel_wirt);
 CREATE INDEX idx_weg_ziel ON weg(ziel_wirt);
 CREATE INDEX idx_wk_aufgabe_art ON wk_aufgabe(art, zustand);

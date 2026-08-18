@@ -55,12 +55,20 @@
    - ordinary Claude/Zero-Tokenlast vorsichtig als ca. 35-60 % niedriger INFERIERT; globale Pipeline-Tokenersparnis bleibt ohne provider-native Usage-Zaehlung UNRESOLVED
    - vorgeschlagenes hoechstwertiges Messgeraet: TOKEN_LEDGER + kontrollierter Direct-vs-Pipeline-Shadow-Vergleich
 
+7. `analysen/2026-08-18T074540Z_GENERATION33_MESSINTEGRITAET.md`
+   - Generation 33; UnifiedDB-Schemaexport erstmals vollstaendig 87/87
+   - Laufzeitzaehler steigen auf 45 Turns / 22 Causal / 23 Retrieval / 23 Workspace Episodes
+   - harte Messinkonsistenz: `letzter-lauf.json` 478/15 vs `ZIELE.md` 479/14 am selben Export-Head
+   - keine Promotion aus widerspruechlichen Testzaehlern
+   - naechstes hoechstwertiges Instrument: atomarer `TEST_RECEIPT_LEDGER/v1` mit Run-ID, Source-SHA, Suite-/Result-Digest und Fail-Liste
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
 - Andreas- und Gabriel-Verhalten als Cross-user-Replikation untersuchen, ohne private Inhalte zu vermischen;
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
+- `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
 - rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;
 - Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;

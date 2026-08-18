@@ -46,6 +46,15 @@ services:
       # -wikiarbeit) are writing. Container process must run as host uid:gid 5001:5001
       # (the "clay" user) or it cannot even enter /var/lib/clay (host mode 700).
       - /var/lib/clay:/var/lib/clay
+      # UnifiedDB (udb/abruf/*): NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet.
+      # Read-only, lebt ausserhalb des Images (/opt/unifieddb ist ein eigenes
+      # Git-Repo) -- Aenderungen dort brauchen keinen Image-Rebuild.
+      - /opt/unifieddb:/opt/unifieddb:ro
+      # Provider-Zugaenge (u.a. NVIDIA_NIM_API_KEY). Read-only, 640 root:clay --
+      # der Container-Prozess laeuft als uid 5001 (clay) und kann damit lesen,
+      # aber nicht schreiben. Werte duerfen NIE in UnifiedDB-Zeilen, Snapshots,
+      # Quittungen oder Logs landen (Produktgesetz).
+      - /etc/clayverse/freie-zugaenge.env:/etc/clayverse/freie-zugaenge.env:ro
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev

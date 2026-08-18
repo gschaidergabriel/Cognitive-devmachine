@@ -2,10 +2,20 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from pathlib import Path
 
 from .autonomy import AUTONOMY_TURN_SOURCE, AutonomyController, CompletionNotVerified
 from .autonomy_context import bounded_autonomy_context
+
+# UnifiedDB (udb/abruf/*: NVIDIA embeddings, Neuronpedia, memory-entity) lives
+# outside this image at /opt/unifieddb (own git repo, read-only bind mount --
+# see compose.yaml). Guarded: absent in unit-test/dev contexts that don't
+# mount it, in which case udb_* tools below fail closed with a clear error
+# instead of raising at import time and taking the whole MCP server down.
+_UDB_ROOT = os.environ.get("UDB_ROOT", "/opt/unifieddb")
+if _UDB_ROOT not in sys.path and os.path.isdir(_UDB_ROOT):
+    sys.path.insert(0, _UDB_ROOT)
 
 
 class BridgeStateError(RuntimeError):
@@ -226,6 +236,64 @@ class ClayVerseEffectBridge:
         )
         return result
 
+    # ── UnifiedDB (N7): embeddings / neuronpedia / memory ──────────────────
+    # Deliberately NOT routed through AutonomyController/EffectJournal --
+    # these write only to their own new tables (udb_nvidia_embedding,
+    # forschung_neuropedia, memory_tabelle), never to the turn/effect ledger,
+    # so they stay outside clayverse/store.py + turn_lifecycle.py ownership.
+    def udb_embedding_search(self, query: str, limit: int = 5) -> dict:
+        from udb.abruf.nvidia_embedding import vektor_suche
+        from udb.abruf.zustand import verbindung
+        if not isinstance(query, str) or not query.strip():
+            raise ValueError("query darf nicht leer sein")
+        limit = max(1, min(int(limit), 50))
+        c = verbindung(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+        try:
+            ergebnisse = vektor_suche(query, c, limit=limit)
+        finally:
+            c.close()
+        return {"query": query, "ergebnisse": ergebnisse}
+
+    def udb_embedding_store(self, artikel_id: str, text: str) -> dict:
+        from udb.abruf.nvidia_embedding import embed_text, in_unifieddb_speichern, EMBEDDING_MODEL
+        from udb.abruf.zustand import schreib_verbindung
+        if not isinstance(artikel_id, str) or not artikel_id.strip():
+            raise ValueError("artikel_id darf nicht leer sein")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("text darf nicht leer sein")
+        emb = embed_text(text, input_type="passage")
+        c = schreib_verbindung(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+        try:
+            in_unifieddb_speichern(artikel_id, emb, c, modell=EMBEDDING_MODEL)
+        finally:
+            c.close()
+        return {"artikel_id": artikel_id, "dimension": len(emb), "modell": EMBEDDING_MODEL}
+
+    def udb_neuropedia_activation(self, modell: str, source: str, index: str) -> dict:
+        from udb.abruf.neuropedia import aktivierung_abrufen, fehlt_schluessel
+        if fehlt_schluessel():
+            return {"error": "NEUROPEDIA_API_KEY fehlt in der Tresordatei -- Aufruf nicht moeglich"}
+        a = aktivierung_abrufen(modell, source, str(index))
+        return {
+            "modell": a.model_id, "source": a.layer, "index": a.index,
+            "tokens": a.tokens, "aktivierungen": a.activations,
+            "max_aktivierung": a.max_value,
+            "was_gemessen": f"oeffentliches Forschungsmodell {a.model_id} (Neuronpedia) -- NICHT Zero selbst",
+        }
+
+    def udb_memory_add(self, artikel_id: str, text: str, tag: str = "", quelle: str = "") -> dict:
+        from udb.abruf.memory_entitaet import MemoryEntitaet
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("text darf nicht leer sein")
+        me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+        ok = me.memory_hinzufuegen(artikel_id or "zero", text, quelle=quelle or None, tag=tag or None)
+        return {"ok": ok, "artikel_id": artikel_id or "zero", "tag": tag or None}
+
+    def udb_memory_search(self, suchbegriff: str, limit: int = 10) -> dict:
+        from udb.abruf.memory_entitaet import MemoryEntitaet
+        me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+        return {"suchbegriff": suchbegriff, "ergebnisse": me.memory_suche(suchbegriff, limit=max(1, min(int(limit), 50)))}
+
     def session_state(self) -> dict:
         active = self.lifecycle.active()
         return {
@@ -276,6 +344,34 @@ def main() -> None:
     @mcp.tool(annotations=ro)
     def session_state() -> dict:
         return bridge.session_state()
+
+    udb_ro = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotentHint=True, openWorldHint=True)
+    udb_write = ToolAnnotations(readOnlyHint=False, destructiveHint=False, idempotentHint=True, openWorldHint=True)
+
+    @mcp.tool(annotations=udb_ro)
+    def udb_embedding_search(query: str, limit: int = 5) -> dict:
+        """Semantische Suche ueber bereits eingebettete Clay-Artikel (NVIDIA nv-embedqa-e5-v5, 1024 dim)."""
+        return bridge.udb_embedding_search(query, limit)
+
+    @mcp.tool(annotations=udb_write)
+    def udb_embedding_store(artikel_id: str, text: str) -> dict:
+        """Erstellt ein NVIDIA-Embedding fuer einen Text und speichert es unter artikel_id (neue Tabelle udb_nvidia_embedding)."""
+        return bridge.udb_embedding_store(artikel_id, text)
+
+    @mcp.tool(annotations=udb_ro)
+    def udb_neuropedia_activation(modell: str, source: str, index: str) -> dict:
+        """Live-Aktivierung eines OEFFENTLICHEN Forschungsmodells (z.B. gpt2-small) ueber Neuronpedia -- NICHT Zeros eigene Neuronen."""
+        return bridge.udb_neuropedia_activation(modell, source, index)
+
+    @mcp.tool(annotations=udb_write)
+    def udb_memory_add(text: str, artikel_id: str = "", tag: str = "", quelle: str = "") -> dict:
+        """Fuegt einen Memory-Eintrag hinzu (neue Tabelle memory_tabelle)."""
+        return bridge.udb_memory_add(artikel_id, text, tag, quelle)
+
+    @mcp.tool(annotations=udb_ro)
+    def udb_memory_search(suchbegriff: str, limit: int = 10) -> dict:
+        """Durchsucht gespeicherte Memory-Eintraege nach Inhalt."""
+        return bridge.udb_memory_search(suchbegriff, limit)
 
     try:
         mcp.run(transport="stdio")

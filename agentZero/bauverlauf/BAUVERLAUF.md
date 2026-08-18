@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T05:18:58Z. 709 Commits aus vier Repos, davon 203 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T05:48:59Z. 713 Commits aus vier Repos, davon 206 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,139 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### prestage: upgrade governor model to mistral-medium, fix slot-2 session check
+
+`2339aea31bf2` · entityos · 05:27 UTC · BACK agent
+
+```
+Measured 2026-08-18 during the P5 live proof: mistral-small-latest collapsed
+the 8-key F74 envelope into one field and produced degenerate repetitive
+text under the combined round-1 negotiation + hypothesis-correlation
+instructions. F74s own economics argue for the opposite of the translator
+here -- the prestage is meant to be the one EXPENSIVE call. Moved
+PRESTAGE_MODEL to mistral-medium-latest and added an explicit
+"eight top-level keys, do not collapse them" instruction. Re-tested: all
+eight keys returned correctly. translator.py stays on mistral-small
+(proven 96-98% on the simpler caveman-to-German task, no change needed).
+
+headless_zero.py and pipeline.py both still had the pre-slot-2
+single-session check (session_id != f"session:{user_id}"), left over from
+before identity.ist_kanonische_sitzung()/platz existed. Both now import
+clayverse.identity (read-only) and use ist_kanonische_sitzung() instead,
+so session:andreas:2 / session:gabriel:2 are accepted like slot 1.
+
+Real P5 proof, session:andreas:2, record_via_turnlifecycle=True:
+German in -> German out, turn_id a990c14c.../5e01602e... (user/assistant),
+causal_id 0b677019..., workspace_episode 04b31f84... COMPLETED,
+mv_prestage_turns bd50e912..., mv_translation_log e2ed7d4c...
+elapsed_ms: prestage 4148 / zero 24275 / translate 2237 / total 30689.
+Three earlier failed attempts (session-check bug, credential-permission
+bug, missing-keys bug) each began and cleanly ABORTED via
+lifecycle.abort() -- no dangling active_turns, confirms the atomicity
+path works under real failure, not just the happy path.
+```
+
+### Zeros Chat-Vorderseite, und die Zwillinge werden sichtbar
+
+`eb37ffde24ab` · entityos · 05:23 UTC · EntityOS
+
+```
+1) CHAT AUF /, TERMINAL AUF /terminal. Zero laeuft headless (Vorstufe -> claude -p
+   -> Uebersetzer), also muss die Oberflaeche kein Terminal mehr sein.
+   Das alte Terminal wird NICHT geloescht, sondern verschoben: es ist der einzige
+   heute bewiesene Weg zu Zero. Ihn wegzunehmen, bevor der neue einmal getragen
+   hat, waere ein Umbau ohne Vergleichsmoeglichkeit.
+   /ws/chat uebernimmt den Clerk-Handschlag unveraendert - die am besten
+   bewiesene Stelle im ganzen System wird nicht angefasst, nur wiederverwendet.
+   Der Chat bindet Platz 2, das Terminal behaelt Platz 1: so streiten die beiden
+   Oberflaechen nie um dieselbe active_turns-Zeile.
+   Rueckfassung und Uebersetzungsbeleg fahren im Antwortrahmen mit. Der Mensch
+   sieht nie, was Zero wirklich sagte - eine Uebersetzung, die niemand pruefen
+   kann, ist schlechter als keine.
+   Der Socket wird jetzt in finally geschlossen. Ein nach der Abweisung offener
+   Socket ist nicht nur ein Leck: er schenkt einen Wiederholungskanal ohne neuen
+   TLS-Handschlag.
+
+2) DIE ZWILLINGE WERDEN SICHTBAR. Neue Tabelle entityos_wirte plus
+   clayverse/wirte.py.
+   Befund davor: der Herzschlag beider Rechner kommt seit Tagen an (Generation
+   14.533 bzw. 14.451, alle 16 s ueber Tailscale) - und landete als EINE
+   JSON-Datei je Zwilling, die bei jedem Takt ueberschrieben wird. Keine Tabelle,
+   keine Historie. Was nicht in der UnifiedDB steht, existiert fuer die Entitaet
+   nicht: Zero konnte seine eigenen Zwillinge nicht sehen. Damit war auch die
+   Angabe connected_systems der Mistral-Vorstufe dauerhaft NOT_WIRED, obwohl die
+   Daten die ganze Zeit ankamen.
+   Zugehoerigkeit ist DEKLARIERT, nicht geraten: ein Wirt, den niemand zugeordnet
+   hat, steht als gehoert_zu = None in der Tabelle. Sichtbar unbekannt ist besser
+   als per Namensaehnlichkeit falsch zugewiesen - der Name eines Rechners ist kein
+   Eigentumsnachweis.
+   Und Zugehoerigkeit ist NICHT Arbeitsort. Steht so im Code: sie sagt, WEM ein
+   Rechner gehoert, nicht wo gearbeitet werden darf.
+   kognitive_module wird bewusst mitgeliefert und ist bei beiden LEER. Ein Wirt
+   kann online und gesund sein und trotzdem nichts koennen - diesen Unterschied
+   muss die Vorstufe sehen, sonst plant sie Arbeit auf einem Rechner, der nur winkt.
+
+3) HAKEN ERKENNT PIPELINE-GEFUEHRTE AUFRUFE. Bei CLAYVERSE_PIPELINE_MANAGED=1
+   kehrt _main() sofort zurueck, vor jedem Datenbankzugriff. claude -p loest die
+   Haken genauso aus wie eine Tastatureingabe; ohne diese Abfrage wuerde der
+   Caveman-Prompt ein zweites Mal als Menschenzug zugelassen. Zwei Aufnehmer auf
+   einer Sitzung ist genau die Bauart, aus der heute Nacht schon eine unbemerkte
+   Schatten-Datenbank entstanden ist.
+
+4) resolve() nimmt einen Platz entgegen, plaetze() liefert die Umschaltliste.
+   Ohne den Platz band resolve() alles an Platz 1 - die zweite Sitzung existierte
+   in der Datenbank, aber niemand kam hinein.
+
+5) ZWEIMAL DERSELBE FEHLER, BEIDE MEINE: ein fehlender Import (CANONICAL_USER_IDS)
+   liess die Bereitschaftspruefung still auf "nicht bereit" fallen, weil ein
+   blankes except Exception den NameError verschluckte. Das except faengt jetzt
+   weiterhin alles - Bereitschaft darf den Dienst nie reissen - sagt aber, was es
+   gefangen hat. Fangen ja, verschweigen nein.
+
+Suite 476 -> 479 gruen, 14 rot.
+```
+
+### memory.py: stop compact() from overwriting turns.content
+
+`2767390f9048` · entityos · 05:22 UTC · BACK agent
+
+```
+turns is an append-only causal ledger -- effects, causal episodes, and
+provenance chains point into it. compact() was running UPDATE turns SET
+content=... on every compression pass, silently destroying the only copy
+of the original the moment a turn aged past full_window. Nothing has
+compressed in prod yet (Gabriel: 10/20 turns), so this was caught in the
+one window where it was free to catch.
+
+Fix: compression is now additive only. Each pass appends a row to a new
+turn_compressions table (turn_id x level, naming its source turn id,
+source sha256, extractor, prompt_version, created_at) instead of
+mutating the original. turns.fidelity / turns.compression_generation
+still get updated as a live bookkeeping pointer (same mutability class
+as sessions.updated_at elsewhere in this schema) -- turns.content itself
+is never touched again after append_turn().
+
+Also fixes a receipt bug this uncovered: compression_receipt provenance
+carried lossless_source_retained: False under the old design -- but at
+the time that receipt was written the source was still present (compact
+had not rewritten it yet), so the receipt was false-in-fact and
+true-in-writing: a signed claim that would read as safe/checked to
+anyone auditing later, for exactly the property that was not actually
+true. That is the same shape of failure this build keeps finding
+elsewhere tonight. Now True, and it is true: the source lives
+permanently at turns.content.
+
+Ladder targets (80/40/20/8/2 words), the extract-before-compress gate,
+and the compression_clearance sha256-binding are untouched -- only
+where the result gets written changed, per instruction.
+
+Proven against /var/lib/clay-probe/wiki.db with a real turn read
+(read-only) from session:gabriel: content byte-identical before/after
+across two compact() calls, one new turn_compressions row created after
+semantic clearance, second call idempotent (no duplicate row, no
+content touch).
 ```
 
 ### chat page: session switcher wired to plaetze(), no hardcoded ids
@@ -3123,29 +3256,5 @@ vorprozessor.py, 1780 Zeilen, null Modellaufrufe strukturell (kein LLM- oder HTT
 
 ```
 Thalamus: regelbasierte Formel, 0 Parameter, kein torch, kein Gradient. GWT/Arbeitsbuehne: feste Zuendschwelle 0,55 mit handgesetzten Gewichten, 0 Parameter. Gedaechtnis: Anhaeufung plus Volltext, kein Lernen - die Lernhaken titan.rwl_feedback und chat_memory.consolidation_tracker existieren im Schema mit NULL Zeilen. Das EINZIGE echte trainierte Netz im ganzen Bestand ist der LoRA-Adapter mit 42.467.328 Parametern auf einem fremden 4B-Grundmodell, direkt aus dem safetensors-Kopf gerechnet - und das ist das Hirn, kein Organ. ⭐ vp_edge_lern EXISTIERT BEREITS in wiki.db, gebaut vom Vorprozessor-Agenten: lernen(), verfall() mit HOP_DECAY 0,58, heilen() mit Ruecknahme auf den letzten Stand der die Eichnormale bestand, eingehaengt in den Live-Abrufpfad. 0 Zeilen - gebaut, verdrahtet, nie benutzt.
-```
-
-### B27 geprueft: Grundlagen der UnifiedDB ausgewertet - die fehlende Voraussetzung gefunden
-
-`9b693a0334c4` · clay · 20:50 UTC · ClayVerse
-
-```
-13 Mechanismen einzeln benannt, belegt und nach Wirkung je Aufwand geordnet. ENTSCHEIDEND: U12 Entitaetsaufloesung mit Belegbindung - Graphlauf OHNE Aliasaufloesung erreicht top1 = 0,0 bei 1200 Abfragen ohne interne Kennung, MIT Aliasaufloesung top1 = 1,0. Nicht 60 gegen 100, sondern null gegen eins. In wiki.db existiert keine Alias- oder Aufloesungstabelle. Weitere gemessene Mechanismen: epistemisches Ausbreitungstor hebt Genauigkeit@2 von 0,5 auf 1,0 gegen einen Konflikt-Koeder; U11 gestufte Generationen heben Treffer@1 von 0,893 auf 1,0 und senken p50 von 89,98 auf 8,17 Mikrosekunden ueber 11.200 Vorgaenge; die Aktivierungsschicht selbst ist mit 100 gegen 60 gegen 0,83 Prozent der bestgemessene Teil des ganzen Bestands.
-```
-
-### B21 geprueft: Needle als Vorprozessor-Hirn geprueft - vorerst nein
-
-`5a207004b794` · clay · 20:46 UTC · ClayVerse
-
-```
-Needle am Code vermessen: 26,3 Mio. Parameter (d_model 512, 8 Koepfe, 12 Encoder- und 8 Decoder-Lagen, KEIN FFN, Vokabular 8192), Kontext 1024 Encoder / 512 Decoder. constrained.py beschraenkt NUR die Struktur (Werkzeugnamen und Argumentschluessel), nicht die Werte. generate() dekodiert Token fuer Token in einer Python-Schleife um jax.jit - die Bauform ist bei Einzelanfragen langsam. Die Herstellerangabe 6000 Token/s laeuft auf einer separaten C++-Laufzeit namens Cactus, die in diesem JAX-Repo gar nicht liegt.
-```
-
-### B6 geprueft: Abdeckungsluecke: das Gehirn kennt nur den Server
-
-`3103b3c14030` · clay · 20:43 UTC · ClayVerse
-
-```
-Gemessen: select wirt, count(*) from fundort liefert genau einen Wirt - clayverse mit 92.715 Fundorten. Gabriels Rechner 0, andreas-MACO 0. Aufgefallen ist es an einer Frage des Auftraggebers nach dem Ort der Needle-Gewichte: sie brauchte vier Suchlaeufe von Hand und blieb trotzdem unbeantwortet, weil es nichts abzufragen gab. Gefunden wurden dabei auf Gabriels Rechner Trainingsdaten mini_train.jsonl 1,87 MB, mini_val.jsonl 208 KB und registry.json 21,5 KB unter aicore/opt/aicore/needle - aber keine Gewichte, weder dort noch auf andreas-MACO.
 ```
 

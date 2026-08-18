@@ -39,14 +39,22 @@
    - Zero-Verkehr 10 -> 14 Turns; erstmals 4 Andreas-Turns; Kausal-/Workspace-/Retrieval-Episoden 5 -> 7
    - Retrieval-Lernen weiterhin 0 Entry-Points / 0 Feedback / 0 durable memory
 
+5. `analysen/2026-08-18T071856Z_ENTITYOS_NEUBEWERTUNG.md`
+   - Snapshot 07:18:56Z / Generation 32
+   - aktive Zielmatrix 22/28 = 78,6 %
+   - funktionaler Systemkern geschaetzt ca. 84–88 %, finale Acceptance-Reife ca. 62–70 %
+   - Tests vom Tief 475/18 auf 478/15 verbessert und ueber mehrere Laeufe stabil
+   - Zero-Verkehr 14 -> 24 Turns; Kausal-/Workspace-/Retrieval-Episoden 7 -> 12; Checkpoints 39 -> 41
+   - Messwerk 8 direkt GEMESSEN; Causal Credit Horizon erstmals ueber Verkehrsschwelle
+   - Restblocker: MCP-Werkzeuge, Retrieval-Lernen/Wegehierarchie, Provider-Erreichbarkeit, 4. Clay-Dienst, Uebersetzer und 15 rote Kerninvarianten
+
 ## Offene Forschungsfront
 
-- Gen-31-Turns gegen Gen 29 vergleichen;
-- Andreas-Turns als Cross-user-Replikation gegen Gabriel binden;
+- Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
+- Andreas- und Gabriel-Verhalten als Cross-user-Replikation untersuchen, ohne private Inhalte zu vermischen;
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
-- Snapshot-Zaehler gegen `.meta.json`-Sidecars pruefen;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
-- rote Tests als Zeitreihe gegen reale Zero-Episoden korrelieren;
+- rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;
 - Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;
 - Graph-Teilprojektion gegen Vollgraph-Samplingregel spezifizieren;
 - Baucommits als Interventionen mit nachfolgenden Messwerten zeitlich verbinden;

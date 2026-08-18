@@ -1,7 +1,7 @@
 # agentZero
 
 Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
-Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T04:17:16Z.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T04:18:30Z.
 
 | Ordner | Inhalt |
 |---|---|
@@ -20,7 +20,7 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T04:
 
 Jeder Wert laeuft durch einen Filter, **bevor** er geschrieben wird: API-Schluessel,
 Token und JWTs werden durch `<GESCHWAERZT>` ersetzt. Beim letzten Lauf griff der
-Filter **1x**. Der Grund ist einfach: was einmal in der Git-Historie
+Filter **0x**. Der Grund ist einfach: was einmal in der Git-Historie
 steht, bekommt man nicht mehr heraus -- auch aus einem privaten Repo nicht.
 
 ## Warum `karten/` waechst und alles andere nicht

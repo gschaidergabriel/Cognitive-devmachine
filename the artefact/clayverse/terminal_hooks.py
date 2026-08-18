@@ -269,6 +269,7 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
     context["durable_memory"] = context.get("durable_memory", [])[:12]
     context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
     context["own_recent"] = context.get("own_recent", [])[-8:]
+    context["corpus"] = context.get("corpus", [])[:3]
     if identity is not None:
         context["canonical_identity"] = identity
     for item in context["own_recent"]:

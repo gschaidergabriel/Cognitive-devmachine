@@ -56,7 +56,12 @@ class TurnLifecycle:
         # identity is not what gets dropped -- dropping it would let the entity
         # forget what it is exactly when it is under the most pressure.
         if world.get("canonical_identity") is not None: packed["canonical_identity"]=world["canonical_identity"]
+        packed["corpus"]=list(world.get("corpus",[]))
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
+        # Corpus is trimmed FIRST when space runs out: it is the most re-fetchable
+        # thing in the context. Anything else we drop is gone; a corpus hit can
+        # simply be looked up again next turn.
+        while size()>max_chars and packed["corpus"]: packed["corpus"].pop()
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)
         while size()>max_chars and packed["cross_session_collision"]: packed["cross_session_collision"].pop()

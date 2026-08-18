@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T15:11:04Z aus drei Repos. 473 Eintraege.
+Automatisch erzeugt 2026-08-18T15:41:07Z aus drei Repos. 473 Eintraege.
 
 ## architektur (15)
 
@@ -201,6 +201,7 @@ Automatisch erzeugt 2026-08-18T15:11:04Z aus drei Repos. 473 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T15:17 | entityos | `1a09c75938d9` | Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden |
 | 2026-08-18T14:54 | entityos | `4bc81f8e52c3` | Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt |
 | 2026-08-18T14:25 | entityos | `26e9cb087a6d` | Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin |
 | 2026-08-18T14:11 | entityos | `eca8c30854d7` | Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB |
@@ -260,5 +261,4 @@ Automatisch erzeugt 2026-08-18T15:11:04Z aus drei Repos. 473 Eintraege.
 | 2026-08-18T03:58 | entityos | `263882a44abb` | feat(clayverse): compile autonomy planning into typed steps |
 | 2026-08-18T03:54 | entityos | `ca5149c807cb` | clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store, udb_neur |
 | 2026-08-18T03:54 | unifieddb | `cb23edf55759` | udb: NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet aus Zulauf uebernommen und lauffaehig gemacht |
-| 2026-08-18T03:51 | entityos | `8b794b2d1799` | ci(clayverse): cover autonomy terminal wiring and replay guard |
 

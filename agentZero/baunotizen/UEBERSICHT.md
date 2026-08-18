@@ -1,28 +1,28 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T15:11:05Z. **2525 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T15:41:08Z. **2531 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T20:39:11+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T21:46:59+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2429 |
+| baunotiz | 2435 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1604 |
-| baunotiz | bauverlauf.jsonl | 781 |
+| baunotiz | git-commit | 1607 |
+| baunotiz | bauverlauf.jsonl | 784 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2525 · Gegenhypothese: 0 von 2525
+## Hypothese: 0 von 2531 · Gegenhypothese: 0 von 2531
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -33,6 +33,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T20:39:11+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen93 persistent prestage contract frontier
+
+`baunotiz-bauverlauf-6fbb9b73d219d81d40d6` · baunotiz · bauverlauf.jsonl · 2026-08-18T21:46:59+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen93 persistent prestage contract frontier
+
+`baunotiz-git-7db6448d9eb09c45035486c414f50bce56777235` · baunotiz · git-commit · 2026-08-18T21:46:59+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen93 persistent prestage contract frontier
 
 ### claycode supervisor: steer Gen85 Mistral prestage regression
 
@@ -130,6 +146,49 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen36 measurement reconvergence and compression-receipt semantics
 
+### Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
+
+`baunotiz-git-1a09c75938d9147db60abc33745fa6648bd13e5f` · baunotiz · git-commit · 2026-08-18T15:17:32+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
+
+Gabriel: "schau dir in agentforge die unterseite hosting an ... die nimmst du
+und baust als unterpage in die entityos page ein ... ohne die anderen
+frank.ink features wie workspace etc, nur die features die sinn machen, jetzt
+nichts neu erfinden." Und: "es soll immer dabei stehen ob self hosted oder
+extern."
+
+⭐ UEBERNOMMEN, NICHT NACHGEBAUT. Die Kennzahlen sind exakt die der bestehenden
+Ansicht (agentforge/engine/project_engine.py): Besuche und Unikate in vier
+Fenstern, Funkenlinie ueber 30 Tage, Verweise, meistgerufene Pfade,
+Seitengewicht nach Art plus die groessten Dateien. Gleiche Quelle, gleiche
+Rechnung. Zwei leicht abweichende Zaehlungen waeren schlimmer als eine -- dann
+streiten zwei Anzeigen darueber, wie viele Besucher es gab.
+
+WEGGELASSEN: Workspace, Slug umbenennen, Offline nehmen, Werbung,
+Marketing-Assistenten. Das sind frank.ink-Funktionen. Hier geht es um: WAS gibt
+es, WIE laeuft es, WIE aendert man es.
+
+⭐ SELBST GEHOSTET ODER EXTERN steht an JEDER Zeile, als Merkmal das man nicht
+uebersieht. Keine Zierde: bei einer selbst gehosteten Seite koennen wir etwas
+aendern, bei einer externen nicht -- der Unterschied entscheidet, ob ein
+Arbeitspaket ueberhaupt sinnvoll ist. ABGELEITET (liegt ein site-Verzeichnis auf
+diesem Wirt?), nicht behauptet, und die Begruendung steht am Merkmal.
+
+24 Seiten, /seiten in der Schale neben Chat und Mailbox.
+
+⚠️⚠️ EINE NULL, DIE KEINE IST -- der wichtigste 
+
+### agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-7d894b898924a37fc662b80df709a3f4a5eb5df7` · baunotiz · git-commit · 2026-08-18T15:11:45+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: steer on Gen35 test-receipt drift and durable-memory emergence
 
 `baunotiz-bauverlauf-c6bd9afe90dfeb9fdd4d` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:58:56+07:00 · Gabriel Gschaider
@@ -145,6 +204,39 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: steer on Gen35 test-receipt drift and durable-memory emergence
+
+### Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt
+
+`baunotiz-bauverlauf-1696be41c6fb21d201e3` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:54:28+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Gabriel: "er muss generell alle pages die wir ja selbst hosten kennen und wissen
+wie er diese bearbeiten kann", dazu "retina und iar sind gleich wie alle anderen
+ueber frank.ink gehostet" und "da ist auch kosal.frank.ink und anderes".
+
+ALLES GEMESSEN, nichts angenommen: nginx-Konfiguration gelesen, agentforge.db
+abgefragt, jede Unterdomain live gegen die Plattform UND oeffentlich geprueft.
+
+WIE ES WIRKLICH LAEUFT
+Alle Unterdomains von frank.ink bedient die Plattform agentforge
+(*.frank.ink -> <adresse>:8000). Es gibt KEINE eigene nginx-Regel je Seite --
+die Plattform loest die Unterdomain auf einen Projekt-Slug auf, die Dateien
+liegen unter /var/lib/agentforge/projects/<konto>/<slug>/site/. Die Zuordnung
+steht in /var/lib/agentforge/db/agentforge.db, Tabelle `projects`.
+51 aktive Projekte, 12 mit echtem Verkehr -- iar (2683 Besuche), seimensch
+(1957), shadcntest (806), kosal (549), testagents (440) und weitere.
+
+SONDERFALL SEIMENSCH: seimensch.net hat eine EIGENE nginx-Regel mit derselben
+Wurzel als Docroot, statt ueber die Plattform zu laufen. herzrad.at und
+leihmich.org ebenso, mit Unterordnern derselben Wurzel als eigene Domainwurzel
+-- deshalb dort relative Asset-Pfade und eigene Wurzeldateien.
+
+⚠️⚠️ EIN BEFUND, DER DER ANNAHME WIDERSPRICHT
+    retina.frank.ink   404 bei agentforge, oeffentlich 301 AUF SICH SELBST
+    daemonweave.frank.ink  404 bei agentforge
+retina ist damit nicht "wie die anderen gehostet", sondern KAPUTT: eine
+Weiterleitung auf sich selbst ist eine Sch
 
 ### agentZero research: combined Claude token savings model
 
@@ -193,44 +285,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero research: quantify Claude token savings architecture
-
-### agentZero research: index generation 33 measurement integrity
-
-`baunotiz-bauverlauf-1dd5e84ac09d328713b3` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:46:58+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero research: index generation 33 measurement integrity
-
-`baunotiz-git-37c3d877b1f88185649841a82de0186248e39e45` · baunotiz · git-commit · 2026-08-18T14:46:58+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero research: index generation 33 measurement integrity
-
-### agentZero research: bind generation 33 measurement-integrity frontier
-
-`baunotiz-bauverlauf-8f4f56fbfdcad667b22a` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:46:35+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero research: bind generation 33 measurement-integrity frontier
-
-`baunotiz-git-98c6926f4692b063ec5b638197ee88a23ce32d4e` · baunotiz · git-commit · 2026-08-18T14:46:35+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero research: bind generation 33 measurement-integrity frontier
-
-### agentZero-Export 2026-08-18T14:41:02Z (Generation 93, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-402debf1c8b26fa5de1b06036841a4e703ec75ce` · baunotiz · git-commit · 2026-08-18T14:41:42+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T14:41:02Z (Generation 93, 59 Dateien, 1 geschwaerzt)
 

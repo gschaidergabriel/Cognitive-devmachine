@@ -483,6 +483,44 @@ class ClayVerseEffectBridge:
                         "aus dem Titel zu schliessen, was drinstehen koennte."),
         }
 
+    # ── Werkbank: lesen, suchen, aendern, veroeffentlichen ────────────────
+    #
+    # ⭐ Handlungsfaehig OHNE Schale. Nicht Bash geben, sondern genau die
+    # Faehigkeiten, die zum Arbeiten noetig sind -- jede benannt, jede
+    # eingezaeunt. Eine Schale gaebe alles auf einmal und liesse sich nicht
+    # einzaeunen; vier benannte Faehigkeiten schon.
+
+    def werkbank_liste(self, pfad: str = "/var/lib/clay/arbeit", tiefe: int = 1) -> dict:
+        from . import werkbank as _w
+        try: return _w.liste(pfad, tiefe)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_lesen(self, pfad: str, von: int = 1, zeilen: int = 400) -> dict:
+        from . import werkbank as _w
+        try: return _w.lesen(pfad, von, zeilen)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_suchen(self, muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> dict:
+        from . import werkbank as _w
+        try: return _w.suchen(muster, pfad, nur)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_aendern(self, pfad: str, alt: str, neu: str) -> dict:
+        from . import werkbank as _w
+        try: return _w.schreiben(pfad, alt, neu)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_stand(self, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        from . import werkbank as _w
+        try: return _w.stand(repo)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_veroeffentlichen(self, nachricht: str,
+                                  repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        from . import werkbank as _w
+        try: return _w.veroeffentlichen(nachricht, repo)
+        except Exception as e: return {"abgewiesen": str(e)}
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -641,6 +679,36 @@ def main() -> None:
     def korpus_suchen(frage: str, limit: int = 6) -> dict:
         """Durchsucht den ARTIKELTEXT des Korpus und liefert AUSSCHNITTE zurueck -- fuer inhaltliche Fragen ("wie wird X bereitgestellt", "was ist die Regel fuer Y"). Anders als udb_embedding_search, das nur Kennungen ohne Text liefert. Findest du hier nichts, steht es nicht im Korpus."""
         return bridge.korpus_suchen(frage, limit)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_liste(pfad: str = "/var/lib/clay/arbeit", tiefe: int = 1) -> dict:
+        """Was liegt in einem erlaubten Verzeichnis. Startpunkt fuer jede Arbeit an Dateien."""
+        return bridge.werkbank_liste(pfad, tiefe)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_lesen(pfad: str, von: int = 1, zeilen: int = 400) -> dict:
+        """Eine Datei lesen, MIT Zeilennummern -- damit dein Beleg praezise sein kann."""
+        return bridge.werkbank_lesen(pfad, von, zeilen)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_suchen(muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> dict:
+        """Regulaerer Ausdruck ueber alle Dateien, wie grep -rn. Findet ALLE Fundstellen. ⚠️ Nutze das, BEVOR du etwas aenderst: wer nur die erste Stelle sieht, haelt die Sache fuer erledigt und laesst sie anderswo stehen."""
+        return bridge.werkbank_suchen(muster, pfad, nur)
+
+    @mcp.tool(annotations=udb_write)
+    def werkbank_aendern(pfad: str, alt: str, neu: str) -> dict:
+        """Ersetzt EINE eindeutige Stelle in einer Datei. `alt` muss genau einmal vorkommen -- kommt es mehrfach vor, wird abgewiesen statt geraten. Nur in der Arbeitskopie, nie in der ausgelieferten Fassung."""
+        return bridge.werkbank_aendern(pfad, alt, neu)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_stand(repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        """Was ist in der Arbeitskopie geaendert und noch nicht veroeffentlicht."""
+        return bridge.werkbank_stand(repo)
+
+    @mcp.tool(annotations=udb_write)
+    def werkbank_veroeffentlichen(nachricht: str, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        """Committen und pushen -- der EINZIGE Weg nach draussen. ⚠️ Bei SeiMensch geht ein Push auf main SOFORT oeffentlich. Die Nachricht muss sagen WARUM, nicht nur WAS. Pruefe danach die Seite, statt Erfolg zu behaupten."""
+        return bridge.werkbank_veroeffentlichen(nachricht, repo)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

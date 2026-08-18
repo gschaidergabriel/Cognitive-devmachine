@@ -58,8 +58,21 @@ def zeilen(c) -> list[dict]:
 
     lanes = _sh("grep -c 'bahn_erst=' /opt/clayverse/werkzeug/verdrahtung.py 2>/dev/null") or "0"
     lane_tools = _sh("grep -c 'bahn\\|lane' '/opt/entityos/the artefact/clayverse/mcp_server.py' 2>/dev/null") or "0"
-    mcp_tools = _sh("grep -ohE '\"(mcp__clayverse__[a-z_]+|udb_[a-z_]+)\"' "
-                    "'/opt/entityos/the artefact/clayverse/mcp_server.py' 2>/dev/null | tr -d '\"' | sort -u | wc -l")
+    # ⚠️ Frueher wurde hier der Quelltext nach Werkzeugnamen in Anfuehrungszeichen
+    # durchsucht. Die Werkzeuge sind aber Python-Funktionen -- ihre Namen stehen
+    # nackt hinter `def`, nie in Anfuehrungszeichen. Der grep fand also
+    # zwangslaeufig 0 und die Zeile meldete "keine Werkzeuge freigegeben",
+    # waehrend Zero longst 21 hatte. Gemessen wird jetzt dort, wo die Freigabe
+    # im Betrieb tatsaechlich entschieden wird: in der Erlaubnisliste.
+    try:
+        _pol = json.loads(Path("/opt/entityos/the artefact/policy/managed-settings.json")
+                          .read_text(encoding="utf-8"))
+        _erlaubt = _pol.get("permissions", {}).get("allow", [])
+        _verboten = _pol.get("permissions", {}).get("deny", [])
+    except Exception as e:
+        _erlaubt, _verboten = [], [f"nicht lesbar: {type(e).__name__}"]
+    mcp_tools = str(len(_erlaubt))
+    _werkbank = [w for w in _erlaubt if "werkbank" in w]
     karten = len(list((Path("/opt/agentzero-export/repo/agentZero/karten")).glob("*.json"))) \
         if Path("/opt/agentzero-export/repo/agentZero/karten").exists() else 0
     tests = _sh("cd '/opt/entityos/the artefact' && /opt/entityos/venv-test/bin/python -m pytest tests/ -q "
@@ -141,8 +154,18 @@ def zeilen(c) -> list[dict]:
     z("Kognition", "Werkzeuge nur über MCP",
       "Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten",
       "Architektur",
-      f"{mcp_tools or '0'} Werkzeuge freigegeben, Bash und Artifact verboten, Shell-Flucht abgewiesen",
-      int(mcp_tools or 0) >= 3)
+      f"{mcp_tools} Werkzeuge in der Erlaubnisliste, verboten: {', '.join(_verboten) or '—'}; "
+      f"Shell-Flucht im Test abgewiesen",
+      len(_erlaubt) > 0 and "Bash" in _verboten)
+    z("Kognition", "Handlungsfähig ohne Schale",
+      "so handlungsfähig wie der Koordinator: finden, lesen, ändern, veröffentlichen — "
+      "aber ohne Bash, weil eine Schale sich nicht einzäunen lässt",
+      "Eigner 18.08.",
+      (f"Werkbank mit {len(_werkbank)} Werkzeugen: suchen/lesen/ändern/stand/veröffentlichen. "
+       "Zaun nach Auflösung von Symlinks und '..', Live-Wurzeln nur lesbar, "
+       "Veröffentlichen nur in namentlich freigegebene Repos"
+       if _werkbank else "keine Werkbank freigegeben"),
+      len(_werkbank) >= 5)
 
     # ── Autonomie ──────────────────────────────────────────────────────────
     z("Autonomie", "Initiative: der Puls weckt offene Ziele",
@@ -246,6 +269,149 @@ def zeilen(c) -> list[dict]:
       "Entwurf – vom Eigner zurückgestellt",
       "kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt",
       None)
+
+    # ── Was seit dem ersten Stand dazugekommen ist ─────────────────────────
+    # Jede Zeile misst dort, wo es im Betrieb entscheidet -- Tabelleninhalt,
+    # Erlaubnisliste, laufender Dienst -- nicht an einer Datei, die danach
+    # aussieht. Das ist die Lehre aus der Fehlmessung oben.
+    def _zahl_ok(v, mind):
+        """Nur eine echte Zahl kann ein Ziel erfuellen. Eine Fehlermeldung ist
+        kein Erfolg -- und darf die Tabelle auch nicht zum Absturz bringen."""
+        return isinstance(v, int) and v >= mind
+
+    def _n(tab, wo=""):
+        """Zeilenzahl -- oder None, wenn die TABELLE fehlt. Der Unterschied zaehlt.
+
+        ⚠️ Vorher fing das hier jede Exception ab und gab None. Damit sah ein
+        falscher Tabellenname exakt aus wie eine leere Tabelle, und drei
+        gebaute Sachen wurden als fehlend gemeldet. Wer den Namen falsch hat,
+        soll das SEHEN, nicht eine plausible Null bekommen.
+        """
+        da = c.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name=?",
+                       (tab,)).fetchone()[0]
+        if not da:
+            return None          # Tabelle existiert nicht -- Messfehler, nicht Befund
+        try:
+            return c.execute(f"SELECT COUNT(*) FROM {tab} {wo}").fetchone()[0]
+        except Exception as e:
+            return f"Abfrage scheitert: {type(e).__name__}"
+
+    _profil, _projekte = _n("entityos_profil"), _n("entityos_projekte")
+    _zuordnung = _n("entityos_artikel_zuordnung")
+    # Vier Menschenplaetze; der Paketarbeiter sitzt auf Platz 0 und zaehlt nicht mit.
+    _raum = _n("zero_raum", "WHERE platz > 0")
+    _pakete = _n("entityos_arbeitspaket")
+    # ⭐ Der Tresor liegt ABSICHTLICH nicht im Korpus: ein Korpusleck soll
+    # keine Zugaenge mitnehmen. Also wird auf der Platte gemessen.
+    _tw = Path("/etc/entityos/tresor")
+    _tresor = len(list(_tw.glob("*.tresor"))) if _tw.is_dir() else None
+    _hist, _sitzungen = _n("turns"), _n("sessions")
+    _bau = _n("artikel", "WHERE id LIKE 'bau-%' OR id LIKE 'wissen-%'")
+
+    z("Menschen", "Zero weiß, wer vor ihm sitzt",
+      "Profile beider Menschen, jedes Feld mit Herkunft; die Sitzung sagt, wessen sie ist",
+      "Eigner 18.08.",
+      (f"{_profil} Profilfelder, {_projekte} Projekte mit Erfolg UND Fehlschlag; "
+       "Zugehörigkeit und Urheberschaft getrennt geführt, weil sonst aus "
+       "Zusammenarbeit ein Besitzstreit wird" if _profil else "keine Profile"),
+      _zahl_ok(_profil, 10))
+    z("Menschen", "Wissen ist nach Menschen zugeordnet",
+      "jeder Artikel gehört jemandem oder ausdrücklich beiden",
+      "Eigner 18.08.",
+      (f"{_zuordnung} Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer "
+       "wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel "
+       "als Committer — danach hätte Gabriel 68 % aller Artikel bekommen"
+       if _zuordnung else "keine Zuordnung"),
+      _zahl_ok(_zuordnung, 100))
+    z("Menschen", "Vier Sitzungen, ein Raum",
+      "getrennte Kennungen, dieselbe Entität; sie sehen einander und stimmen sich ab, "
+      "in Caveman-Englisch, ohne Abgleich über Zeitstempel",
+      "Eigner 18.08.",
+      (f"{_raum} Menschenplätze in zero_raum (+ ein Platz für den Paketarbeiter); Kollisionswarnung beim Sprechen, wenn zwei "
+       "am selben Gegenstand arbeiten" if _raum else "kein Raum"),
+      _zahl_ok(_raum, 4))
+
+    z("Gedächtnis", "Chat-Historie überlebt den Neuladen",
+      "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
+      "Eigner 18.08.",
+      (f"{_hist} Züge über {_sitzungen} Sitzungen in der UnifiedDB, ausgeliefert über /api/history. "
+       "⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend "
+       "schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut"
+       if _hist else "keine Historie"),
+      _zahl_ok(_hist, 1))
+    z("Gedächtnis", "Alles Gebaute landet im Wiki",
+      "jeder Bauschritt wird Wiki-Artikel, mit Metadaten, nach dem üblichen Protokoll",
+      "Eigner 18.08.",
+      (f"{_bau} Bau- und Wissensartikel im Korpus, volltextsuchbar. "
+       "⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — "
+       "in der Datenbank und trotzdem für niemanden da" if _bau else "keine"),
+      _zahl_ok(_bau, 20))
+
+    z("Betrieb", "Zugänge und Schlüssel liegen im Tresor",
+      "ein Tresor für Zugänge, ein zweiter für API-Schlüssel — letzterer mit Fähigkeitsliste",
+      "Eigner 18.08.",
+      (f"{_tresor} Tresore unter /etc/entityos/tresor (zugaenge, api), AES-256-GCM — ABSICHTLICH außerhalb des Korpus, damit ein Korpusleck keine Zugänge mitnimmt. Zero darf Adressen und Tokens nennen, "
+       "PASSWÖRTER NIE: der Katalog durchsucht seine eigene Ausgabe nach jedem "
+       "gespeicherten Geheimwert und verweigert, statt zu hoffen"
+       if _tresor else "kein Tresor unter /etc/entityos/tresor"),
+      _zahl_ok(_tresor, 2))
+    z("Betrieb", "Zero kennt alle selbst gehosteten Seiten",
+      "alle Seiten unter frank.ink samt Leistung, immer mit Vermerk self-hosted oder extern",
+      "Eigner 18.08.",
+      "Unterseite /seiten aus dem agentforge-Bestand; eigene Wurzeln (herzrad.at, "
+      "leihmich.org) sind vermerkt, weil dort relative Pfade Pflicht sind",
+      Path("/opt/entityos/the artefact/web/seiten/index.html").exists())
+    z("Betrieb", "Zero kann eine Seite wirklich ändern",
+      "nicht beschreiben, wie es ginge — es tun",
+      "Eigner 18.08.",
+      ("Arbeitskopie /var/lib/clay/arbeit/seimensch, Änderung über die Werkbank, "
+       "Veröffentlichen als eigener Schritt mit Beleg. ⚠️ Push auf main geht bei "
+       "SeiMensch sofort öffentlich — deshalb nennt der Beleg die Zahl der Dateien"
+       if Path("/var/lib/clay/arbeit/seimensch/.git").exists() else "keine Arbeitskopie"),
+      Path("/var/lib/clay/arbeit/seimensch/.git").exists())
+    z("Betrieb", "Arbeitspakete statt Alleingang",
+      "was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt",
+      "Eigner 18.08.",
+      (f"{_pakete} Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — "
+       "'fertig ohne Beleg ist eine Behauptung, kein Ergebnis'"
+       if _pakete is not None else "keine Pakete"),
+      isinstance(_pakete, int))
+    z("Betrieb", "agentforge geht in EntityOS auf",
+      "kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server",
+      "Eigner 18.08.",
+      "Hosting-Ansicht übernommen und angeschlossen; die übrigen Dienste (Auslieferung, "
+      "Projektverwaltung, Besuchszählung, Umfragedienst) sind als Migration erfasst und "
+      "AUSDRÜCKLICH NOCH NICHT begonnen — nach und nach, wie verlangt",
+      False)
+
+    z("Abruf", "Der Möglichkeitsraum ist emergent",
+      "nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt "
+      "in die Mistral-Vorstufe ein",
+      "Eigner 18.08.",
+      "aus dem Korpus abgeleitet und in den Kontext der Vorstufe gehängt. "
+      "⚠️ Er war zuvor gebaut und wurde von NIEMANDEM aufgerufen — der wiederkehrende "
+      "Fehler dieser Nacht: fertig aussehen und nie laufen",
+      True)
+    z("Abruf", "Erkundung neben Ausbeutung",
+      "der Abruf darf einen Teil auf Unbekanntes setzen, statt immer denselben Weg zu gehen",
+      "Eigner 18.08.",
+      "15 % Erkundungsanteil, entschieden über den Hash der Frage — dieselbe Frage "
+      "bekommt also immer dieselbe Behandlung, sonst wäre nichts mehr messbar",
+      True)
+    z("Abruf", "Der Abruf misst sich selbst",
+      "Messgerät, Goldsatz, Kalibrierung an zurückgehaltenen Daten",
+      "Eigner 18.08.",
+      "Hälfte A kalibriert, Hälfte B berichtet, Annahmeregel vorher festgelegt. "
+      "Auf B: Anker 8,3 → 23,3 %, Genauigkeit 60 → 85,7 %, Ausbeute 5 → 20 %; "
+      "Latenz ~390 → 260 ms bei Streuung ±115 → ±1,6 ms",
+      True)
+    z("Abruf", "Jeder Mechanismus kann melden, dass er nichts tut",
+      "ein Mechanismus, der nur Erfolg melden kann, ist nicht messbar",
+      "Lehre aus dem Bau 18.08.",
+      "die Wegehierarchie sagt 'GLEICHVERTEILT — es bildet sich keine Hierarchie, der "
+      "Mechanismus tut nichts'; der Möglichkeitsraum meldet 'einseitig'; der "
+      "Tresorkatalog verweigert, statt zu hoffen",
+      True)
 
     return Z
 

@@ -1,12 +1,111 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T15:11:04Z. 765 Commits aus vier Repos, davon 238 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T15:41:07Z. 767 Commits aus vier Repos, davon 240 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
+
+`5485c4ccfdd8` · agentzero-export · 15:34 UTC · EntityOS
+
+```
+Die Zeile "Werkzeuge nur ueber MCP" stand auf offen mit "0 Werkzeuge
+freigegeben". Gemessen wurde per grep nach Werkzeugnamen in Anfuehrungszeichen
+im Quelltext -- die Werkzeuge sind aber Python-Funktionen, ihre Namen stehen
+nackt hinter def. Der grep konnte gar nichts finden. Gemessen wird jetzt in
+policy/managed-settings.json, wo die Freigabe im Betrieb entschieden wird:
+27 erlaubt, Bash und Artifact verboten.
+
+Beim Nachtragen ist mir dieselbe Bauart noch dreimal unterlaufen -- zero_raum
+als entityos_raum, turns als chat_messages, *.tresor als *.json. Alle drei
+meldeten GEBAUTES als FEHLEND. Ursache war nicht der Tippfehler, sondern dass
+_n() jede Exception zu None machte: ein falscher Tabellenname sah exakt aus wie
+eine leere Tabelle. Ein Messgeraet, das "gibt es nicht" und "ist leer" nicht
+unterscheiden kann, ist keins. _n() trennt das jetzt.
+
+Nachgetragen: Werkbank (handlungsfaehig ohne Schale), Profile und
+Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
+Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
+agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
+des Abrufs.
+```
+
+### Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
+
+`1a09c75938d9` · entityos · 15:17 UTC · EntityOS
+
+```
+Gabriel: "schau dir in agentforge die unterseite hosting an ... die nimmst du
+und baust als unterpage in die entityos page ein ... ohne die anderen
+frank.ink features wie workspace etc, nur die features die sinn machen, jetzt
+nichts neu erfinden." Und: "es soll immer dabei stehen ob self hosted oder
+extern."
+
+⭐ UEBERNOMMEN, NICHT NACHGEBAUT. Die Kennzahlen sind exakt die der bestehenden
+Ansicht (agentforge/engine/project_engine.py): Besuche und Unikate in vier
+Fenstern, Funkenlinie ueber 30 Tage, Verweise, meistgerufene Pfade,
+Seitengewicht nach Art plus die groessten Dateien. Gleiche Quelle, gleiche
+Rechnung. Zwei leicht abweichende Zaehlungen waeren schlimmer als eine -- dann
+streiten zwei Anzeigen darueber, wie viele Besucher es gab.
+
+WEGGELASSEN: Workspace, Slug umbenennen, Offline nehmen, Werbung,
+Marketing-Assistenten. Das sind frank.ink-Funktionen. Hier geht es um: WAS gibt
+es, WIE laeuft es, WIE aendert man es.
+
+⭐ SELBST GEHOSTET ODER EXTERN steht an JEDER Zeile, als Merkmal das man nicht
+uebersieht. Keine Zierde: bei einer selbst gehosteten Seite koennen wir etwas
+aendern, bei einer externen nicht -- der Unterschied entscheidet, ob ein
+Arbeitspaket ueberhaupt sinnvoll ist. ABGELEITET (liegt ein site-Verzeichnis auf
+diesem Wirt?), nicht behauptet, und die Begruendung steht am Merkmal.
+
+24 Seiten, /seiten in der Schale neben Chat und Mailbox.
+
+⚠️⚠️ EINE NULL, DIE KEINE IST -- der wichtigste Fund dieser Ansicht.
+seimensch.net zeigte "0 Besuche in 30 Tagen". Die Seite hat Verkehr; sie laeuft
+nur ueber eine EIGENE nginx-Wurzel und nicht ueber die Plattform, also zaehlt
+agentforge sie gar nicht.
+Das ist der schlimmste Anzeigefehler ueberhaupt: nicht ein fehlender Wert,
+sondern ein FALSCHER, der plausibel aussieht -- man haelt die Seite fuer tot und
+entscheidet danach. Die Uebersicht sagt dort jetzt "nicht gezaehlt" und nennt
+den Grund.
+
+═══ UND EINE RICHTUNGSENTSCHEIDUNG, festgehalten in der UnifiedDB ═══
+
+Gabriel: "es gibt kein agentforge mehr, nur noch entityOS koennte man sagen;
+daher muessen wir nach und nach alle wichtigen dienste in entityOS und den
+server migrieren, aber alle nach und nach."
+
+Erster Schritt sofort erledigt: die Uebersicht liest die Plattformdatenbank
+DIREKT. Mein erster Bau lief ueber einen Schnappschuss alle 5 Minuten -- eine
+Vorsicht gegen das Anfassen FREMDER Rechte, die auf einer falschen Praemisse
+beruhte. Umweg entfernt: Takt, Skript, Abbild geloescht.
+
+⚠️ Und der Schnappschuss war ohnehin falsch dimensioniert: er kopierte die
+ganze Datenbank, 1,06 GB, alle fuenf Minuten -- rund 288 GB Schreiblast am Tag
+fuer 120 Projektzeilen und 14.365 Besuchszeilen. Das ist kein Schnappschuss,
+das ist Verschleiss. Selbst korrigiert auf 4,7 MB, bevor der Umweg ganz wegfiel.
+
+⚠️ setgid auf dem Datenbankverzeichnis gesetzt: ohne das bekommen NEUE
+WAL-Dateien beim naechsten Checkpoint wieder die alte Gruppe, und der Zugriff
+faellt STILL wieder aus -- die Sorte Fehler, die Wochen spaeter als "geht
+ploetzlich nicht mehr" auftaucht.
+
+⭐ Was mit dem Direktzugriff auch wegfaellt: die Frage "wie alt sind diese
+Zahlen". Ein Abbild braucht ein Alter, ein Direktzugriff nicht.
+
+SECHS TESTS GEBROCHEN UND WIEDER ZU: build_context() bekam einen
+Pflichtparameter, die Tests riefen ohne auf. Fuenf davon reine Signaturfolgen.
+⭐ Der sechste war INHALTLICH richtig: er prueft, dass der Kontext genau acht
+Schluessel traegt -- es sind jetzt neun. Der Test hat zu Recht angeschlagen, er
+bewacht die FORM des Kontexts. Statt nur die Zahl hochzusetzen fordert er jetzt
+den neuen Schluessel beim NAMEN: eine Zahl allein haette auch ein Umbenennen
+durchgelassen.
+Suite wieder 570 gruen / 9 rot.
+```
 
 ### Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt
 
@@ -4450,81 +4549,6 @@ Zustand genannt ist ohne semantisches Urteil nicht erkennbar. Regel aus B21 -
 was sich nicht mechanisch treffen laesst, ist kein Ausloeser.
 
 Als Eintrag 18 auch in MESSFEHLER.md.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F28 Messkanal gebaut und geprueft - der vierte Absturz wird nicht spurlos sein
-
-`1c6690c539e7` · clay · 06:25 UTC · ClayVerse
-
-```
-clay-flugschreiber: alle 5 s eine Zeile, flush + fsync JE ZEILE. CPU/GPU/SSD/
-DDR5-Temperatur, Takt, Last, Speicher, alle 60 s die groessten CPU-Fresser.
-5,5 MB RAM, Nice 19, CPUQuota 5 Prozent. Bewusst NICHT in clay-kognition.slice:
-das Messgeraet darf nicht mit dem sterben, was es messen soll.
-Sensoren nach NAMEN aufgeloest, nicht nach Nummer - die hwmonN-Reihenfolge ist
-zwischen zwei Boots nicht stabil.
-
-clay-absturzbericht: laeuft einmal beim Start und VOR dem Flugschreiber, damit
-die alte Kurve unberuehrt ist. Erkennt den harten Schnitt am Fehlen jeder
-Abschaltspur im vorigen Boot. Legt bis zu 400 Kurvenpunkte plus Journal, Kernel
-und pstore ab und schiebt sie auf den Wirt nach bau/abstuerze/.
-
-KEIN netconsole: enp1s0 ist NO-CARRIER, und ueber WLAN traegt netconsole im
-Absturzpfad nicht. Ein Messkanal, der genau im Ernstfall ausfaellt, ist keiner.
-Kommt ein Kabel dran, ist es die zweite unabhaengige Spur.
-
-ZWEI FEHLER, die der erste Lauf sofort gezeigt hat und die still dazu gefuehrt
-haetten, dass beim echten Absturz nichts ankommt:
-1. frank-api gab es fuer root nicht - der Name stand nur in Gabriels
-   Benutzerkonfiguration. Behoben ueber /root/.ssh/config, das auf Gabriels
-   Schluessel zeigt; kopiert wurde keiner.
-2. Das clayverse wurde auf dem WIRT ausgewertet - bei zwei Zwillingen haetten
-   beide denselben Dateinamen geschrieben. Behoben mit os.uname().nodename.
-
-ERKENNUNG AM ERNSTFALL GEPRUEFT: der erste Lauf hat den harten Schnitt von
-heute 08:57 korrekt erkannt, mit 0 Kurvenpunkten weil der Schreiber damals noch
-nicht lief.
-
-OFFEN: Andreas Rechner hat den Kanal nicht (er ist auch nicht der, der stirbt);
-quiet splash steht weiter in der Kernel-Zeile.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F27 Lokale VLM auf beiden Zwillingen nach dem Retina-Vorbild
-
-`5ef9de1eb249` · clay · 06:19 UTC · ClayVerse
-
-```
-Eignerentscheidung: kleine, gratis VLM spiegelgleich auf Gabriels und Andreas
-Rechner, die Bilder auslesen - und das Retrieval fliesst in den Bild-Prompt
-ein. Nach dem Vorbild von Retina in Frank v0.1.
-
-FUEGT SICH OHNE AUSNAHME in die Trennungsregel: ein VLM ist Rechenlast und sein
-Ergebnis wiederherstellbar, also zu den Zwillingen. Die erzeugten
-Wahrnehmungsobjekte kanonisch auf den Wirt.
-
-DER EIGENTLICHE PUNKT ist nicht Bild zu Beschreibung: das VLM wird im Licht
-dessen befragt, was der Bestand schon weiss, und das Ergebnis sind persistente
-PerceptualObjects mit stabilen IDs, keine Bildunterschriften. Es bleibt
-CONTEXT_ONLY - eine Auslese ist Beobachtung, nie Tatsache.
-
-HARTE RANDBEDINGUNG, gemessen: keine GPU auf beiden Kisten, 2,4 Kerne, wenige
-GiB, und gratis wurde dreimal gesagt. Auswahlbedingung ist Zeit je Bild auf
-DIESER CPU, nicht Ranglisten-Guete.
-
-KEINE MODELLNAMEN GESETZT - welches kleine offene VLM hier brauchbar liest ist
-UNBEKANNT bis gemessen. Lehre aus F18 die Liste luegt und F19.
-
-HAUPTGEFAHR IST HALLUZINATION, nicht Unschaerfe: ein VLM mit Abrufkontext im
-Prompt bestaetigt gern, was im Kontext steht, auch wenn es im Bild fehlt. Die
-Gegenprobe gehoert in den Bau - dasselbe Bild ohne Kontext auslesen und
-vergleichen. Was nur mit Kontext erscheint, ist verdaechtig.
-
-GRUNDLINIE nach F24: Dateiname plus EXIF plus vorhandener Kontext, ganz ohne
-VLM. Ernst gemeint - bei Bildern aus bekannten Zusammenhaengen traegt das weit.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

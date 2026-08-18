@@ -49,6 +49,14 @@ DEFAULT_ALLOWED_TOOLS = (
     # nur Dateinamen. Gemessen: die Antwort stand in der Datenbank und Zero
     # sagte korrekt "unbekannt".
     "mcp__clayverse__korpus_suchen",
+    # ⭐ Handlungsfaehigkeit ohne Schale: lesen, suchen, aendern,
+    # veroeffentlichen -- jede Faehigkeit benannt und eingezaeunt, statt Bash.
+    "mcp__clayverse__werkbank_liste",
+    "mcp__clayverse__werkbank_lesen",
+    "mcp__clayverse__werkbank_suchen",
+    "mcp__clayverse__werkbank_aendern",
+    "mcp__clayverse__werkbank_stand",
+    "mcp__clayverse__werkbank_veroeffentlichen",
 )
 
 MAX_PROMPT_CHARS = 20_000

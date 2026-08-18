@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-18T15:11:04Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-18T15:41:07Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 1473 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2635 Artikel, 1748 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 1474 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2634 Artikel, 1747 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -24,11 +24,15 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Wirt: clayverse** — `clayverse` · wirt
 - **Wirt: clayverse-alt** — `clayverse-alt` · wirt
 
+## Kern / entityos (1)
+
+- **Richtungsentscheidung: agentforge geht in EntityOS auf** — `wissen-migration-entityos` · wissen
+
 ## Kern / frank_v0_1 (1)
 
 - **20260813T0951p0700_hosted_actions_zero_step_billing_artifact.json** — `frank_v0_1-evidence-20260813T0951p0700_hoste` · bereich_frank_v0_1
 
-## Kern / ohne Sphaere (786)
+## Kern / ohne Sphaere (785)
 
 - **SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay** — `global-SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AN` · bereich_global
 - **NaN, infinities and signed zero require explicit ClayCode semantic and wire policies rather than acc** — `H-CC-F64SPECIAL-20260809-03` · hypothese

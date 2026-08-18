@@ -48,6 +48,10 @@ class TurnLifecycle:
     @staticmethod
     def _bound_world(world: dict, max_chars: int = 350_000) -> dict:
         packed={"own_recent":list(world.get("own_recent",[])),"cross_session_collision":list(world.get("cross_session_collision",[])),"durable_memory":list(world.get("durable_memory",[]))}
+        # The retrieval receipt is the audit record of WHY these memories were chosen.
+        # It is bounded and small, and it is never trimmed: dropping it would make
+        # adaptive retrieval unauditable and SHADOW->ACTIVE promotion unprovable.
+        if world.get("retrieval_receipt") is not None: packed["retrieval_receipt"]=world["retrieval_receipt"]
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)

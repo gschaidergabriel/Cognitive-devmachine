@@ -31,6 +31,7 @@ DEFAULT_ALLOWED_TOOLS = (
     # memory_search und embedding_search keinen Weg haben.
     "mcp__clayverse__menschen_profil",
     "mcp__clayverse__wiki_zuordnung",
+    "mcp__clayverse__lagebild",
 )
 
 MAX_PROMPT_CHARS = 20_000

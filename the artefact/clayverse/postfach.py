@@ -16,8 +16,9 @@ an drei Stellen bewusst anders:
   ist der Fehler, den man erst bemerkt, wenn eine Mail fehlt.
   ⚠️ Diese Bauart ist der Grund, warum eine offene Frage hier NICHTS kaputt
   macht: welche Gmail-Adresse Andreas' Clerk-Konto traegt, war am 18.08.
-  strittig (`herzradgraz@` im Auftragsdokument, `genuinos@` laut Eigner --
-  Eignerentscheid: `genuinos@gmail.com`). Weil die Zuordnung ueber die
+  strittig (Auftragsdokument und Eigner nannten verschiedene Adressen; der
+  Eignerentscheid vom 18.08. steht im Tresor, nicht hier). Weil die Zuordnung
+  ueber die
   Clerk-Kennung laeuft, war die Postfachvergabe davon zu keinem Zeitpunkt
   betroffen. Genau dafuer ist sie so gebaut.
 * **Senden ist eine Wirkung.** Es geht durch das EffectGate und bekommt dort

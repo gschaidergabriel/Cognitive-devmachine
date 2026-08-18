@@ -65,12 +65,18 @@ ERKLAERT = [
     ("andreas", "titel", "Dipl.-Ing. Dr.nat.techn.", "iar.frank.ink", "Teamseite"),
     ("andreas", "name", "Dr. Andreas Unterweger", "iar.frank.ink", "Teamseite"),
     ("andreas", "ort", "Graz, Austria", "iar.frank.ink", "Teamseite"),
-    ("andreas", "mail", "genuinos@gmail.com", "eigner", "Eignerbestaetigung 18.08., gegen Clerk geprueft"),
+    # ⚠️ KEINE MAILADRESSEN HIER. Sie standen als Literale im Quelltext und
+    # wurden damit in den Codeexport mitgeliefert -- waehrend derselbe Export
+    # sie aus PROFILE.md sorgfaeltig schwaerzte. Eine Schwaerzung, die nur eine
+    # von zwei Auslieferungen kennt, ist ein Ritual.
+    # Gebraucht werden sie hier nicht: die Postfachzuordnung laeuft ueber die
+    # Clerk-Kennung, nicht ueber die Adresse. Wer eine Adresse braucht, ist ein
+    # Serverteil und holt sie aus dem Tresor `zugaenge`.
     ("andreas", "taetigkeit", "ehrenamtlich", "iar.frank.ink", "Zwei Gruender. Beide ehrenamtlich."),
     ("gabriel", "rolle_institut", "Co-founder, Vizeobmann (Deputy Chair), Lead Researcher", "iar.frank.ink", "Teamseite"),
     ("gabriel", "name", "Gabriel Gschaider", "iar.frank.ink", "Teamseite"),
     ("gabriel", "ort", "Knittelfeld -> Graz -> Siem Reap", "iar.frank.ink", "Teamseite"),
-    ("gabriel", "mail", "structured.thinking.gschaider@gmail.com", "eigner", "gegen Clerk geprueft"),
+
     ("gabriel", "taetigkeit", "ehrenamtlich", "iar.frank.ink", "Zwei Gruender. Beide ehrenamtlich."),
     ("gabriel", "rolle_technisch", "schreibt den Code", "eigner",
      "Eigner 18.08.: 'seimensch ist das projekt von andreas aber allen code habe ich gemacht'"),

@@ -84,7 +84,12 @@ package genuinely is not enough to answer (missing a fact only a human or a tool
 not just "I'd prefer more"), Zero may reply with exactly:
 {NEGOTIATION_SENTINEL} <short caveman reason and what specifically is missing>
 instead of a real answer. This is a one-time escape hatch, not a hedge -- tell Zero not to use \
-it merely because the answer requires judgment."""
+it merely because the answer requires judgment.
+AND IN THE SAME BREATH, tell Zero: if the package IS enough, JUST ANSWER. Do not open with a \
+verdict on the package. "sufficient for this question", "no NEED_BETTER_PACKAGE", "the package \
+is enough" -- none of that may appear. The human reads this text and did not ask about the \
+package. Measured: three of three replies opened with exactly such a line, because the escape \
+hatch was described without saying what silence about it looks like."""
 
 _ROUND2_ADDENDUM = f"""
 

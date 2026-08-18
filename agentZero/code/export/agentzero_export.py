@@ -943,6 +943,15 @@ def bilanz_erfolge(manifest: dict) -> None:
                                     "hinweis": "entityos_erfolge noch nicht befuellt -- nichts exportiert"})
         return
 
+    # entityos_erfolge ist Eigner-Text, nicht erfunden -- aber Eigner-Text kann
+    # trotzdem einen privaten Rechnernamen nennen (f-blind zitiert woertlich eine
+    # Testfrage "wem gehoert andreas-MACO?"). Das Repo ist OEFFENTLICH: derselbe
+    # Rechnername-Schutz wie fuer die Baunotizen greift hier genauso, bevor
+    # irgendetwas geschrieben wird.
+    b = schwaerzen(_RECHNERNAME.sub("<GESCHWAERZT: Rechnername>", json.dumps(
+        b, ensure_ascii=False, sort_keys=True)))
+    b = json.loads(b)
+
     eb = schreibe(ordner / "bilanz.json", b, jsonl=False,
                  herkunft="entityos_erfolge in UnifiedDB, ueber clayverse/erfolge.py:bilanz()")
     manifest["dateien"].append(eb)
@@ -973,6 +982,10 @@ def bilanz_erfolge(manifest: dict) -> None:
                            herkunft="entityos_erfolge in UnifiedDB, ueber clayverse/erfolge.py:bilanz()")
     manifest["dateien"].append({**em, "erfolge": len(b["erfolge"]), "fehlschlaege": len(b["fehlschlaege"])})
     manifest["bilanz"] = {"erfolge": len(b["erfolge"]), "fehlschlaege": len(b["fehlschlaege"])}
+
+
+# ── Rechnernamen der zwei privaten Maschinen -- oeffentliches Repo, private Kisten ─
+_RECHNERNAME = re.compile(r"andreas-MACO|ai-core-node(?:-[A-Za-z0-9]+)*", re.IGNORECASE)
 
 
 # ── Leck-Muster fuer die Baunotizen-Stichprobe -- dasselbe Muster, mit dem   ─

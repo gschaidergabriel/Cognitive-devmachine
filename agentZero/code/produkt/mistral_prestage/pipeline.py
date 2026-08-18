@@ -34,6 +34,35 @@ def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
 
 
 
+
+_PAKET_WORTE = ("need_better_package", "besseres paket", "das paket", "the package",
+                "paket reicht", "package is enough", "kein bedarf")
+
+
+def _ohne_paketurteil(text: str) -> tuple[str, str | None]:
+    """Entfernt einen kurzen ersten Absatz, der ueber das Vorstufen-Paket urteilt.
+
+    Gibt (text, entfernt_oder_None) zurueck -- der zweite Wert wird MITGESCHRIEBEN.
+    Ein stiller Filter waere hier falsch: er beseitigt das Symptom und laesst
+    mich glauben, die Anweisung an das Modell wirke. Solange etwas entfernt
+    wird, wirkt sie nicht.
+
+    Eng gefasst mit Absicht: nur der erste Absatz, nur unter 300 Zeichen, nur
+    mit Paket-Wort. Ein breiter Filter wuerde irgendwann echten Inhalt fressen.
+    """
+    if not text:
+        return text, None
+    teile = text.split("\n\n", 1)
+    if len(teile) != 2:
+        return text, None
+    kopf, rest = teile[0].strip(), teile[1]
+    if len(kopf) > 300 or not rest.strip():
+        return text, None
+    if not any(w in kopf.lower() for w in _PAKET_WORTE):
+        return text, None
+    return rest.lstrip(), kopf
+
+
 def _profil_safe(db, user_id: str) -> dict | None:
     """Profil, Rechnerbesitz und Wiki-Bestand des anwesenden Menschen.
 
@@ -178,6 +207,7 @@ def run_chat_turn(
         zero_ms = (time.perf_counter() - t0) * 1000.0
         rounds_used = 1
         self_adapted = False
+        paketurteil_entfernt = None
 
         # Markdown-fest: das Modell setzt die Notbremse fett, jedes Mal.
         # Gemessen an fuenf echten Beispielen, alle in ** gewickelt.

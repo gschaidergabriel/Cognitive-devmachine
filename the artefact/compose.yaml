@@ -1,14 +1,24 @@
 services:
   clayverse:
+    image: entityos:latest
+    container_name: entityos
     build:
       context: .
       args:
         ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
     restart: unless-stopped
+    # Must match host uid:gid 5001:5001 ("clay") to read/write the /var/lib/clay
+    # bind mount below. Overrides the image's baked-in USER clayverse (10001).
+    user: "5001:5001"
     ports:
       - "${CLAYVERSE_PORT:-3000}:3000"
     environment:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
+      # The real heart DB. Owner decision 2026-08-18: EntityOS/UnifiedDB does NOT get
+      # a fresh empty database. It opens the existing 87-table wiki.db (corpus/graph/
+      # retrieval material) and adds its own 19 runtime-spine objects on top of it.
+      # Requires the /var/lib/clay bind mount below (NOT the named state volume).
+      CLAYVERSE_DB_PATH: /var/lib/clay/wiki.db
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
       # EntityOS bytes are digest-bound into the one ClayVerse image. External
@@ -26,10 +36,16 @@ services:
       CLERK_PUBLISHABLE_KEY: "${CLERK_PUBLISHABLE_KEY:?required}"
       CLERK_FRONTEND_API_URL: "${CLERK_FRONTEND_API_URL:?required}"
     volumes:
-      # UnifiedDB, per-user Claude Code HOME/auth/session state, and terminal
-      # continuity all live under the one canonical persistent ClayVerse state root.
+      # Per-user Claude Code HOME/auth/session state and terminal continuity live
+      # under the ClayVerse state root (named volume, container-managed, disposable).
       - clayverse-state:/var/lib/clayverse
       - clayverse-workspace:/workspace
+      # The real heart DB and its 4 always-on writer services live on the HOST at
+      # /var/lib/clay. Bind mount, deliberately NOT a named volume, so the container
+      # sees the exact same file the host services (clayverse-kern/-puls/-verdichtung/
+      # -wikiarbeit) are writing. Container process must run as host uid:gid 5001:5001
+      # (the "clay" user) or it cannot even enter /var/lib/clay (host mode 700).
+      - /var/lib/clay:/var/lib/clay
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev

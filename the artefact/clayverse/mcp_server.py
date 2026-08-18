@@ -252,7 +252,7 @@ def main() -> None:
 
     bridge = ClayVerseEffectBridge.from_env()
     mcp = MCPServer(
-        "ClayVerse",
+        "EntityOS",
         instructions=(
             "UserPromptSubmit and Stop hooks own interactive turn ingestion/context/completion automatically. "
             "Use request_effect only for ordinary real/state-changing actions. "

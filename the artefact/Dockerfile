@@ -1,4 +1,6 @@
 FROM python:3.13.14-slim-trixie@sha256:6771159cd4fa5d9bba1258caf0b82e6b73458c694d178ad97c5e925c2d0e1a91
+LABEL org.opencontainers.image.title="EntityOS" \
+      org.opencontainers.image.description="EntityOS — the one entity: Clay substrate (clayverse/) + ClayCode + real heart DB, one web terminal"
 
 ARG TARGETARCH
 ARG ENTITYOS_SHA256

@@ -170,7 +170,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     identity = IdentityRouter(db, clerk_map)
     terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
-    app = FastAPI(title="ClayVerse", docs_url=None, redoc_url=None)
+    app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
     app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     frontend_api_url = frontend_api_url.rstrip("/")
 
@@ -201,7 +201,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         if not key or not api:
             return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
         return HTMLResponse(f'''<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>ClayVerse</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>EntityOS</title>
 <link rel="stylesheet" href="/vendor/xterm/css/xterm.css">
 <style>html,body,#terminal{{width:100%;height:100%;margin:0;background:#000;overflow:hidden}}#auth{{height:100%;display:grid;place-items:center}}</style>
 <script defer crossorigin="anonymous" src="{api}/npm/@clerk/ui@1/dist/ui.browser.js"></script>
@@ -235,7 +235,7 @@ window.addEventListener('load', async () => {{
         if(m.type==='ready'){{scheduleAuthRefresh(m.auth_expires_at);}}
         if(m.type==='ready'){{terminalReady=true;term.focus();return;}}
         if(m.type==='reauthenticated'){{scheduleAuthRefresh(m.auth_expires_at);return;}}
-        if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[ClayVerse] '+m.message);return;}}
+        if(m.type==='error'){{terminalReady=false;term.writeln('\\r\\n[EntityOS] '+m.message);return;}}
       }}catch{{if(terminalReady)term.write(ev.data);}}
     }}else if(terminalReady) term.write(new Uint8Array(ev.data));
   }};

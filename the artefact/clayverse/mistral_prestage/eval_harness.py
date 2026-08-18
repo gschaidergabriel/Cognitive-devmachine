@@ -51,7 +51,14 @@ READABILITY_MIN = 70
 
 
 def load_eval_set() -> list[str]:
-    return json.loads(EVAL_SET_PATH.read_text(encoding="utf-8"))
+    """Load the fixed eval set. The file is {"note": ..., "items": [...]} --
+    the note is the hand-authored-not-production disclosure and must stay
+    attached to the data, not just live in a commit message or a report.
+    """
+    data = json.loads(EVAL_SET_PATH.read_text(encoding="utf-8"))
+    if not isinstance(data, dict) or "items" not in data or "note" not in data:
+        raise RuntimeError("eval_set.json missing required note/items shape")
+    return data["items"]
 
 
 def run_eval(

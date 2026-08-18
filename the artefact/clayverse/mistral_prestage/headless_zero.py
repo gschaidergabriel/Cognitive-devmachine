@@ -38,10 +38,19 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__raum_sagen",
     "mcp__clayverse__raum_rufen",
     "mcp__clayverse__raum_frei",
+    # Zero handelt nicht selbst -- es schnuert. Ohne diese zwei bleibt die
+    # Regel eine Absichtserklaerung.
+    "mcp__clayverse__paket_schnueren",
+    "mcp__clayverse__paket_lage",
 )
 
 MAX_PROMPT_CHARS = 20_000
-DEFAULT_TIMEOUT_SECONDS = 90
+# Gemessen 2026-08-18 als Andreas: eine normale, belegte Antwort brauchte 102 s,
+# eine zweite lief bei 90 s in die Frist und war verloren. Zero schlaegt mehrere
+# Werkzeuge nach, bevor es antwortet -- genau das wollen wir.
+# Eine zu knappe Frist ist die teuerste Art zu scheitern: die Arbeit wird
+# vollstaendig geleistet, bezahlt und dann weggeworfen.
+DEFAULT_TIMEOUT_SECONDS = 240
 _BLOCKED_PREFIX = "UserPromptSubmit operation blocked by hook"
 
 

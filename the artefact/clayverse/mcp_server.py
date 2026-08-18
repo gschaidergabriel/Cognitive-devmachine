@@ -414,6 +414,17 @@ class ClayVerseEffectBridge:
         from . import raum as _raum
         return _raum.frei(self.db, session_id=self.session_id)
 
+    # ── Arbeitspakete: Zero denkt und schnuert, es fuehrt nicht aus ───────
+
+    def paket_schnueren(self, auftrag: str, womit: str = "", warum: str = "") -> dict:
+        from . import arbeitspaket as _ap
+        return _ap.schnueren(self.db, besteller=self.user_id, session_id=self.session_id,
+                             auftrag=auftrag, womit=womit, warum=warum)
+
+    def paket_lage(self) -> dict:
+        from . import arbeitspaket as _ap
+        return _ap.lage(self.db, besteller=self.user_id)
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -552,6 +563,16 @@ def main() -> None:
     def raum_frei() -> dict:
         """Anspruch zurueckgeben, wenn du mit einer Sache fertig bist. Wer nicht freigibt, blockiert die anderen drei."""
         return bridge.raum_frei()
+
+    @mcp.tool(annotations=udb_write)
+    def paket_schnueren(auftrag: str, womit: str = "", warum: str = "") -> dict:
+        """Schnuer ein Arbeitspaket, wenn du etwas nicht selbst tun kannst. CAVEMAN ENGLISH im auftrag. `womit` = die anzufassende Sache, `warum` = die Begruendung, damit ein Mensch sie pruefen kann. Das Paket ist damit FESTGEHALTEN, nicht freigegeben -- es gibt keinen automatischen Ausfuehrer."""
+        return bridge.paket_schnueren(auftrag, womit, warum)
+
+    @mcp.tool(annotations=udb_ro)
+    def paket_lage() -> dict:
+        """Deine Arbeitspakete und ihr Stand. `offen` heisst: wartet auf einen Menschen. Behaupte NIE, ein Paket sei erledigt, solange kein Beleg daranhaengt."""
+        return bridge.paket_lage()
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

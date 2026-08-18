@@ -9,7 +9,6 @@ from urllib.parse import urlsplit
 
 from .clerk_auth import ClerkConfig, ClerkTokenVerifier
 from .entityos_bridge import EntityOSBridge, EntityOSIntegrityError
-from .final_acceptance_probe import run_mistral_acceptance_probe
 from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
@@ -140,7 +139,14 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     This mode intentionally receives no Clerk auth credit. It proves the cognition /
     re-ingest / EffectGate causal spine inside the exact product image; the final
     browser/JWT/PTTY gate remains a separate mandatory acceptance assertion.
+
+    `final_acceptance_probe` (and the `adapters` module it needs) is a retired
+    alternate-runtime diagnostic that the image build deliberately excludes from
+    the live surface (see .dockerignore). Import it lazily, only when this mode is
+    actually invoked, so a normal `python -m clayverse.service` boot of the shipped
+    image never fails on a module that was never meant to be in it.
     """
+    from .final_acceptance_probe import run_mistral_acceptance_probe
 
     recovery = recover_incomplete_episodes(db)
     ClayGraphProjection(db).rebuild()

@@ -671,6 +671,35 @@ def zeilen(c) -> list[dict]:
       "nicht passiert",
       True)
 
+    z("Abruf", "Die gelernte Karte ist erreichbar",
+      "nicht nur bm25 -- Wegehierarchie, Eintrittspunkte, Erkundung stehen Zero offen",
+      "Lehre aus dem Audit 18.08.",
+      "⚠️ Ein Pruefagent fand: die ganze gelernte Abruf-Maschine (udb.abruf.paket) wurde "
+      "NIRGENDS aufgerufen -- Zeros einzige Tuer war schlichtes bm25, und vp_weg trug nur "
+      "Testfixtures. Sie verhungerte an fehlender Nahrung. Jetzt als opt-in korpus_tief "
+      "(~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart je Prozess waeren dort eine "
+      "Verschlechterung. Der conn-close-Bug (Erfolgsmarke auf geschlossener DB) ist durch "
+      "die Aufrufart geheilt. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte fuellt, "
+      "haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
+      True)
+    z("Menschen", "Der halbe Wissensschatz war zugesperrt",
+      "Zero muss ganze Artikel lesen und den Dateikorpus erreichen koennen",
+      "Lehre aus dem Audit 18.08.",
+      "⚠️ Drei Loecher, alle vom Audit gefunden: (1) 164 Wissensartikel ohne Suchtext, "
+      "darunter ALLE 82 Ausgaben eines laufenden Pflichtdienstes -- der schrieb, niemand "
+      "konnte lesen. (2) korpus_suchen sah nur die Artikel-FTS; die 325.357 Zeilen des "
+      "DATEIKORPUS waren unerreichbar -> dateien_suchen. (3) kein Werkzeug las einen ganzen "
+      "Artikel, Zero bekam immer nur 420 Zeichen -> artikel_lesen",
+      True)
+    z("Betrieb", "Adressen darf Zero nennen, Passwoerter nie",
+      "die halbe Eignerregel war nicht lieferbar",
+      "Eigner 18.08.",
+      "⚠️ Der geheim-Kern wurde auf 30 Eintraegen geschrieben und von NIEMANDEM gelesen: "
+      "katalog() strich JEDEN Wert, auch Adressen und Token, die der Eigner ausdruecklich "
+      "freigegeben hat. Jetzt tresor_zeigen mit HARTEM Passwort-Riegel: geprueft ueber alle "
+      "58 Eintraege, 0 Passwort-Lecks; Adressen und Token kommen heraus, Passwoerter nie -- "
+      "auch nicht auf Wunsch",
+      True)
     return Z
 
 

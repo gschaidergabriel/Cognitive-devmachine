@@ -1,12 +1,70 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T20:41:08Z. 784 Commits aus vier Repos, davon 243 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T21:11:07Z. 787 Commits aus vier Repos, davon 244 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Der Faehigkeits-Audit fand acht tote Stellen -- sechs geheilt, zwei benannt
+
+`ff50d5c2f96a` · agentzero-export · 20:45 UTC · EntityOS
+
+```
+Ein Pruefagent hat jedes der 37 Werkzeuge aufgerufen und nach dem Muster
+gesucht, das diese Nacht sechsmal auftrat: gebaut, sieht fertig aus, von
+niemandem aufgerufen. Er fand acht davon. Und er legte dabei die
+Arbeitspaket-Warteschlange lahm -- durch genau die Ehrlichkeit, die das System
+verlangt.
+
+DEADLOCK, DEN ICH SELBST GEBAUT HABE. Vor einer Stunde habe ich stand_setzen()
+verschaerft: `fertig` wird abgewiesen, wenn der Beleg selbst "NICHTS GETAN"
+sagt, fuer eine ganze Liste von Verweigerungs-Phrasen. Der Paketarbeiter aber
+prueft nur EINE davon. Ein ehrlicher Bericht mit "NICHT AUSGEFUEHRT" rutscht
+durch, ruft stand_setzen(fertig), meine Regel wirft, ungefangen -> Dienst
+stuerzt ab -> Paket haengt fuer immer in `laeuft` -> jeder weitere Lauf meldet
+"es laeuft bereits eines". Zwei je richtige Regeln ergaben einen Deadlock.
+Geheilt: EINE geteilte Phrasenliste (LEERE_BELEGE), ein neuer Stand `abgelehnt`
+fuer ehrliche Verweigerung, und ein Absturznetz -- stand_setzen bringt den
+Dienst nie mehr zum Absturz, das Paket kommt immer aus `laeuft` heraus.
+
+164 WISSENSARTIKEL WAREN UNSICHTBAR. Darunter ALLE 82 Ausgaben von
+clayverse-verdichtung.service, einem der vier Pflichtdienste -- er schrieb, und
+niemand konnte lesen. Plus 42 IAR-Seiten. Geschrieben ohne Suchtext, ohne FTS.
+Nachgezogen und ueber die Volltextsuche gegengeprueft. (Die 4957 quelldatei
+OHNE Suchtext sind KEIN Bug -- Zeiger, deren Inhalt in fts_index_datei liegt.)
+
+DER DATEIKORPUS WAR ZU. korpus_suchen sah nur die Artikel-FTS. Die 325.357
+Zeilen indizierten Dateiinhalts (fts_index_datei) waren fuer Zero komplett
+unerreichbar -- der halbe Wissensschatz hinter einer Tuer, die kein Werkzeug
+oeffnete. Neu: `dateien_suchen`. Und `artikel_lesen`, weil kein Werkzeug einen
+ganzen Artikel las -- Zero bekam immer nur 420 Zeichen und riet den Rest.
+
+DER TRESOR LIEFERTE DIE HALBE EIGNERREGEL NICHT. Der geheim-Kern wurde auf 30
+Eintraegen geschrieben und von NIEMANDEM gelesen: katalog() strich JEDEN Wert,
+auch Adressen und Token, die der Eigner ausdruecklich freigegeben hat ("adressen
+... kein problem", "auch tokens ... nur passwörter nicht"). Neu: tresor_zeigen
+mit HARTEM Passwort-Riegel -- geprueft ueber alle 58 Eintraege, 0
+Passwort-Lecks. Adressen und Token kommen heraus, Passwoerter nie, auch nicht
+auf Wunsch.
+
+DIE GELERNTE ABRUF-MASCHINE WAR UNERREICHBAR. udb.abruf.paket -- Karte,
+Wegehierarchie, Eintrittspunkte, die ganze Nacht-Arbeit -- wurde NIRGENDS
+aufgerufen. vp_weg trug nur Testfixtures. Sie verhungerte an fehlender Nahrung.
+Jetzt als opt-in `korpus_tief` (~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart
+je Prozess waeren dort eine Verschlechterung, bm25 bleibt der schnelle Default.
+Der conn-close-Bug (Erfolgsmarke auf geschlossener DB) ist durch die Aufrufart
+geheilt. EHRLICH benannt und als Wiki-Artikel festgehalten: ob jede Frage die
+Karte fuellt, haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse
+garantiert. Die echte A/B-Messung im Live-Fluss steht aus.
+
+37 Werkzeuge, beide Freigabelisten deckungsgleich (Wachtest), Testsuite 584/0
+(ein Terminal-WS-Test flackert unter Last, isoliert gruen in 0,4s). Neunmal an
+diesem Tag dieselbe Bauart geheilt: etwas kommt als Null zurueck, wo ein Fehler
+haette auffallen muessen.
+```
 
 ### Der Andreas-Test hat sieben Fehler gefunden -- Zero fand die meisten selbst
 
@@ -4604,28 +4662,5 @@ Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 
 ```
 26 auf 25 Selbstoeffner (grep -l sqlite3.connect werkzeug/*.py). benchmark_recall_wikidb.py voll migriert (0 Schreiboperationen gemessen, reiner FTS5-Lesetest, live gegen wiki.db geprueft: 222 Fragen-Artikel, Recall@5=0.430). Sechs weitere (kanten, kontingent, messung, verdrahtung, weg, werkzeuge) haben ihren Lesezweig (readonly=True/schreibend=False) auf udb.verbindung() umgestellt, Schreibzweig bewusst unveraendert -- udb.verbindung() ist strukturell nur-lesend (mode=ro+query_only=ON). Alle sechs Lesepfade live geprueft. 19 der 26 verbleibenden Dateien brauchen echten Schreibzugriff (verifiziert per INSERT/UPDATE/DELETE/CREATE-Grep + Stichprobe), suche.py zusaetzlich eine ZWEITE Datenbank per CLI-Argument -- nicht angefasst. 6 Dateien (fehler, graph, ratgeber, vorprozessor, weltmodell, wikiarbeit) laut Auftrag ALREADY MIGRATED/nicht anfassen -- Messung widerspricht: alle sechs rufen weiterhin sqlite3.connect auf, kein import udb gefunden, vermutlich Parallelarbeit einer anderen Sitzung (unversioniertes werkzeug/quorum.py lag waehrend der Arbeit im Baum). Nicht angefasst, Diskrepanz hier vermerkt statt korrigiert.
-```
-
-### Sechs Werkzeuge: Lesezweig an die Vordertuer, Schreibzweig unberuehrt
-
-`30983bb2c3fe` · clay · 06:39 UTC · ClayVerse
-
-```
-kanten, kontingent, messung, verdrahtung, weg, werkzeuge oeffnen ihre
-DB-Verbindung readonly=True/schreibend=False jetzt ueber udb.verbindung()
-statt eigenem sqlite3.connect(mode=ro). Der Schreibzweig (readonly=False)
-bleibt bewusst unveraendert -- udb.verbindung() ist strukturell nur-lesend
-(mode=ro + PRAGMA query_only=ON in udb selbst), das kann und soll dieses
-Werkzeug nicht heimlich umgehen.
-
-Alle sechs Lesepfade nach der Aenderung live gegen wiki.db geprueft
-(stand/zeigen-Kommandos, echte Daten zurueckbekommen). Backups je Datei:
-werkzeug/<name>.py.vor-udb (nicht versioniert).
-
-Zaehlung Selbstoeffner (grep -l sqlite3.connect werkzeug/*.py): diese sechs
-Dateien bleiben in der Zaehlung, weil ihr Schreibzweig weiterhin
-sqlite3.connect nutzt -- das ist gewollt, kein halbfertiger Zustand.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

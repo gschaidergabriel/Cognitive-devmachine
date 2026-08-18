@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T20:41:08Z. **2569 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T21:11:08Z. **2575 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T02:44:48+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T03:41:31+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2471 |
+| baunotiz | 2477 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1625 |
-| baunotiz | bauverlauf.jsonl | 802 |
+| baunotiz | git-commit | 1629 |
+| baunotiz | bauverlauf.jsonl | 804 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2569 · Gegenhypothese: 0 von 2569
+## Hypothese: 0 von 2575 · Gegenhypothese: 0 von 2575
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -31,9 +31,17 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T02:44:48+07:00`.
 
 ## Privatsphaere-Filter
 
-Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
+Von **400** gepruefte juengste Kandidaten wurden **2** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
+
+`baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f37f9034977` · baunotiz · git-commit · 2026-08-19T03:41:31+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
 
 ### claycode supervisor: bind Gen107 583/1 and stale security acceptance
 
@@ -115,6 +123,22 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen93 persistent prestage contract frontier
 
+### agentZero-Export 2026-08-18T20:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-8b95ed5bdf5e9f9b3c41491b81818ebf578059b4` · baunotiz · git-commit · 2026-08-18T20:41:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T20:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T20:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-1d2ddef9a7197d79585cbbc0aead34c57151d537` · baunotiz · git-commit · 2026-08-18T20:41:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T20:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: steer Gen85 Mistral prestage regression
 
 `baunotiz-bauverlauf-a058ed244d15c3dd5eb7` · baunotiz · bauverlauf.jsonl · 2026-08-18T20:39:11+07:00 · Gabriel Gschaider
@@ -138,6 +162,43 @@ claycode supervisor: steer Gen85 Mistral prestage regression
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-74f03764f987c6a65b77` · baunotiz · bauverlauf.jsonl · 2026-08-18T20:13:49+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### Der Andreas-Test hat sieben Fehler gefunden -- Zero fand die meisten selbst
+
+`baunotiz-bauverlauf-b5178707681a5372c5af` · baunotiz · bauverlauf.jsonl · 2026-08-18T20:13:13+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Zweiter Durchlauf des Andreas-Tests, jetzt mit funktionierender Anmeldung. Zero
+hat dabei mehr eigene Fehler des Systems aufgedeckt als jeder Pruefagent -- und
+zwar ungefragt, mitten in seinen Antworten.
+
+WAS ZERO FAND:
+1. "Die ZVR-Korrektur ist still local, still not live" -- sie war live, aber er
+   konnte es nicht pruefen: kein HTTP. Mein Fehler: sein Handbuch sagte "pruefe
+   die Seite", ohne Mittel dazu. Jetzt hat er `seite_pruefen` (HTTP an die
+   echten Domains, Erlaubnisliste auf dem Wirt). Im Nachtest baute er die volle
+   Kette und sagte selbst: "diesmal ein gepruefter Abgleich, nicht der
+   Deploy-Beleg des Spiegels -- die 200 kam von der ausliefernden Maschine."
+2. Der GROESSERE Befund dahinter: /srv/git/seimensch.git auf diesem Wirt ist ein
+   SPIEGEL. Ein Push meldet vollen Deploy-Erfolg samt Beleg, waehrend
+   seimensch.net von <adresse> ausgeliefert wird. Ins Handbuch als 9i.
+3. Zwei Pakete standen auf `fertig`, ihr Beleg begann mit "NICHTS GETAN". Meine
+   Regel prueft, OB ein Beleg da ist -- nicht, ob er `fertig` traegt. Ein
+   Arbeiter, der sauber verweigert, schreibt einen ehrlichen Bericht, und der
+   ging durch. Die Regel bestrafte die Ehrlichkeit. Neuer Stand `abgelehnt`.
+4. "Ich habe den Korpus nach einem Vorfallsartikel durchsucht, nichts gefunden
+   -- behandle meine Darstellung nicht als korpusbelegt." Er hatte recht: die
+   Geschichte stand nur in Commit-Texten. Beide Vorfaelle des Tages (Platte
+   voll, root-Ausbruch) sind jetzt volltextsuchbare W
 
 ### Neun rote Tests aufgeloest -- zwei davon wurden dabei strenger
 
@@ -245,44 +306,4 @@ claycode supervisor: classify Gen80 PTY lease as reproducibility flake candidate
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-8d5baefc96fed2024c31` · baunotiz · bauverlauf.jsonl · 2026-08-18T19:11:48+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
-
-`baunotiz-bauverlauf-ab8f8081d673cd7185e7` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:44:14+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
-
-`baunotiz-git-9fc1f3ccee7c2dc4f54fd5b7e89c31a8106ed7e0` · baunotiz · git-commit · 2026-08-18T18:44:14+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
-
-### agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-ed2da57901096a55a716400a51cef245794c161e` · baunotiz · git-commit · 2026-08-18T18:41:44+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-5b2057e1a9c2f3a7e7c0` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:41:44+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

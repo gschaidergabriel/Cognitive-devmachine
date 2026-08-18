@@ -1,6 +1,6 @@
 # Messwerk
 
-Automatisch erzeugt 2026-08-18T10:19:55Z.
+Automatisch erzeugt 2026-08-18T10:49:57Z.
 
 Die Forschungsentität hat rund 55 Messwerte vorgeschlagen. Der Filter, nach dem hier
 gebaut wurde, ist ihr eigener Schlusssatz:
@@ -61,9 +61,9 @@ Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziel
 
 **Unterscheidet:** Waechst der Zustand pro nuetzlichem Fakt oder pro Muell? Trennt Wissen von Ablagerung.
 
-**Wert:** `3924680704`
+**Wert:** `3925172224`
 
-3.92 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts.
+3.93 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts.
 
 ### Queue Pressure  ·  _Haushalt_
 
@@ -189,7 +189,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Braucht:** ein Vergleichslauf: identischer Zustand vor und nach Neustart, gleiche Eingabe, Antworten gegenueberstellen. Es gibt heute keinen Wiederholungsmechanismus.
 
-Generationen im Umlauf: [62]. Prueffpunkte: 80.
+Generationen im Umlauf: [77]. Prueffpunkte: 98.
 
 ### Prediction + Calibration Ledger  ·  _Selbstwissen_
 

@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T10:18:57Z aus drei Repos. 470 Eintraege.
+Automatisch erzeugt 2026-08-18T10:48:59Z aus drei Repos. 470 Eintraege.
 
-## architektur (14)
+## architektur (15)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
 | 2026-08-18T09:43 | entityos | `0ff9ac9f66f7` | Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal |
 | 2026-08-18T03:39 | entityos | `e413f4f8adc3` | Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden |
 | 2026-08-18T03:25 | entityos | `6b46462b72f2` | Identitaet v3: Eigner-Spezifikation eingewoben, Verkoerperung ohne Erfindung |
@@ -195,11 +196,13 @@ Automatisch erzeugt 2026-08-18T10:18:57Z aus drei Repos. 470 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (232)
+## bau (231)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T10:42 | entityos | `2b2f7219ab05` | Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch |
 | 2026-08-18T10:35 | entityos | `8e37f4a64a81` | Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate |
+| 2026-08-18T10:31 | entityos | `a28d05094773` | Der Verlauf haengt jetzt in der NEUEN Oberflaeche - und zwei Fallen, die den Dienst umlegten |
 | 2026-08-18T10:14 | entityos | `2e7c0a80f66b` | Dauerhafter Chatverlauf: /api/history - und die Kollision, die das Frontend gekostet hat |
 | 2026-08-18T10:07 | entityos | `12dbe95c5521` | Zero sieht jetzt sein eigenes Haus - und Stillstand sieht nicht mehr wie Ruhe aus |
 | 2026-08-18T10:06 | unifieddb | `830605735d81` | Erkundungsanteil gegen die eigene Karte - das Gegenmittel zum Echoproblem |
@@ -257,6 +260,4 @@ Automatisch erzeugt 2026-08-18T10:18:57Z aus drei Repos. 470 Eintraege.
 | 2026-08-18T03:33 | entityos | `9419795944de` | feat(clayverse): adopt explicit goals after canonical prompt admission |
 | 2026-08-18T03:32 | entityos | `5da497fee465` | feat(clayverse): add explicit goal adoption to hardened autonomy context |
 | 2026-08-18T03:31 | entityos | `441c2ca3d64d` | Merge PR #712: harden fused autonomy context |
-| 2026-08-18T03:29 | entityos | `488f20a9e75f` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
-| 2026-08-18T03:29 | entityos | `f63779ad5f53` | Merge PR #693: bind autonomy completion to exact autonomous causal evidence |
 

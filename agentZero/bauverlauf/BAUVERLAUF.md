@@ -1,12 +1,66 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T10:18:57Z. 744 Commits aus vier Repos, davon 221 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T10:49:00Z. 746 Commits aus vier Repos, davon 224 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch
+
+`2b2f7219ab05` · entityos · 10:42 UTC · EntityOS
+
+```
+Nach Gabriels Vorlage (gruenes Textfeld aus entityOS in Latein und Japanisch,
+Bildroehren-Zeilen, Farbversatz).
+
+⭐ GEZEICHNET, NICHT ALS BILD EINGEBUNDEN. Drei Gruende, der dritte ist der
+eigentliche:
+  - ein Vollbild-JPEG kostet ueber ein Megabyte, das VOR der Anmeldung laedt
+  - eine feste Aufloesung sieht auf einem 4K-Schirm matschig aus
+  - ein Bild kann nicht glitchen. Das Glitchen ist hier aber die Aussage.
+
+⚠️⚠️ DIE DREI BREMSEN SIND PFLICHT, KEINE POLITUR
+
+Ein Anmeldebildschirm steht oft minutenlang unbeaufsichtigt offen -- genau dort
+faellt eine heisse Schleife niemandem auf. In diesem Projekt hat eine
+Dauer-Animation im Hintergrund schon einmal die CPU auf Vollast gefahren.
+Deshalb:
+  - feste ~18 Bilder/s statt so schnell wie moeglich
+  - Stillstand, sobald der Reiter in den Hintergrund geht (visibilitychange)
+  - nach der Anmeldung wird das Feld angehalten UND aus dem Baum entfernt --
+    ein Hintergrund, der hinter dem Chat weiterrechnet, ist reine Heizung
+  - bei prefers-reduced-motion wird EINMAL gezeichnet und nie wieder. Nicht
+    ausgeblendet: die Marke soll auch dann dastehen.
+
+EIGENE DATEIEN, web/anmeldung/{anmeldung.css,anmeldung.js}, eingehaengt mit drei
+Zeilen. Nicht in chat/index.html hineingeschrieben -- heute wurde diese Datei
+schon einmal von einer anderen Instanz ueberschrieben, und eine fertige, im
+Browser gepruefte Arbeit ging dabei verloren. Was in eigenen Dateien liegt,
+ueberlebt das naechste Neueinkleiden.
+
+KEIN ZWEITES FARBSYSTEM. Alle Farben kommen aus den Marken-Merkmalen der Schale
+(--signal, --geist-cyan, --geist-mag, --grund). Die Anmeldung ist dieselbe Marke
+wie alles dahinter, nur lauter.
+
+GLITCH MIT MASS: der Farbversatz der Wortmarke feuert bei 89-97 % des Zyklus,
+sonst ist er auf null. Ein Dauerglitch liest sich als kaputte Seite; ein
+seltener liest sich als Maschine, die kurz stolpert.
+
+⚠️ "Sign in to F.R.A.N.K." -- der Kopf der Clerk-Box trug den Namen der alten
+Anwendung. Der steht im Clerk-Konto und ist von hier aus nicht aenderbar; er war
+ausserdem doppelt, denn zwei Zeilen darueber steht bereits die Wortmarke mit
+"Zugang zur Entitaet Zero". Clerks eigener Kopf ist deshalb ausgeblendet -- das
+loest die Marke und raeumt die Dopplung auf.
+DER NAME GEHOERT TROTZDEM IM CLERK-KONTO BERICHTIGT: er erscheint sonst in Mails
+und auf Zwischenseiten, wo dieses CSS nicht hinreicht. Steht als Warnung im Code.
+
+Im echten Browser geprueft, Desktop 1440x900 und Handy 390x844:
+0 Konsolenfehler, 0 waagerechter Ueberlauf, Feld in 2x Aufloesung, Clerk-Box
+mittig und in unseren Farben.
+```
 
 ### Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate
 
@@ -24,6 +78,113 @@ Only addition: permissions.allow with the three managed MCP tool names
 (session_state, request_effect, request_autonomy_effect) -- the same three
 --allowedTools was already trying and failing to grant, since that CLI flag
 is ignored entirely under allowManagedPermissionRulesOnly.
+```
+
+### Der Verlauf haengt jetzt in der NEUEN Oberflaeche - und zwei Fallen, die den Dienst umlegten
+
+`a28d05094773` · entityos · 10:31 UTC · EntityOS
+
+```
+Der Endpunkt /api/history stand fertig und geprueft im Gateway. Die neue
+Chatseite entstand parallel und wusste nichts davon -- ihr Leerzustand sagte
+sogar ausdruecklich "Fruehere Nachrichten werden hier nicht nachgeladen -- was
+du siehst, ist dieser Besuch". Das war ehrlich, solange es stimmte. Jetzt
+stimmt es nicht mehr, also ist der Satz weg.
+
+EINGEHAENGT, mit den vier Punkten aus betrieb/API-HISTORY.md:
+
+1. NACH dem `ready`-Ereignis geladen, nicht beim Seitenstart. `ready` feuert
+   beim Verbinden UND beim Sitzungswechsel -- damit laedt jede Sitzung ihren
+   eigenen Verlauf ohne zweiten Ausloeser. Und es traegt die `session_id` mit
+   sich, die sonst im Frontend zusammengebaut werden muesste; der bestehende
+   Code warnt ausdruecklich davor.
+2. LEER IST EIN ZUSTAND: "Noch keine Nachrichten in dieser Sitzung." Sonst
+   sieht eine leere Sitzung exakt aus wie ein fehlgeschlagener Ladevorgang --
+   genau die Zweideutigkeit, wegen der der Endpunkt gebaut wurde.
+3. SICHTBARE TRENNLINIE "ab hier dieser Besuch" zwischen geladenem Verlauf und
+   dem Neuen. Ohne sie ist nicht unterscheidbar, was Zero gerade gesagt hat und
+   was von gestern stammt.
+4. LADEFEHLER WERDEN ANGEZEIGT, nicht verschluckt -- ein stiller Fehlschlag
+   saehe wieder aus wie eine leere Sitzung, der Fehler waere zurueck, nur eine
+   Ebene tiefer.
+
+Dazu: beim Sitzungswechsel wird das Fenster geleert, sonst mischen sich die
+Verlaeufe zweier Sitzungen zu einem Gespraech, das nie stattgefunden hat.
+Und der Blasenaufbau ist aus replaceWithReply herausgeloest, damit geladener
+Verlauf und Live-Antwort GENAU dieselbe Blase bauen -- zwei Darstellungswege
+fuer dieselbe Sache laufen unweigerlich auseinander, und dann sieht Geschichte
+anders aus als Gegenwart. Die Avatar-Regel bleibt unangetastet:
+ZeroAvatar.nurNeuesteAktiv() haelt einen langen Verlauf ruhig.
+
+⚠️ ZWEI FALLEN, DIE ICH MIT EINEM NEUBAU AUSGELOEST HABE (betrieb/BAUEN.md)
+
+Das Auftragsdokument nennt als Baubefehl:
+    set -a; . entityos-deploy.env; . entityos-clerk.env; set +a; docker compose up -d --build
+Damit lag der Dienst in einer Neustartschleife, alle Seiten tot. Zwei Gruende:
+
+1. DIE ANFUEHRUNGSZEICHEN VERSCHWINDEN. CLAYVERSE_CLERK_MAP_JSON enthaelt JSON.
+   Beim Einlesen mit `.` interpretiert bash die Zeile und entfernt die Quotes.
+   Im Container kam {user_...:gabriel,...} an statt {"user_...":"gabriel",...}.
+   -> RuntimeError: CLAYVERSE_CLERK_MAP_JSON is invalid JSON.
+   `--env-file` reicht den Wert unveraendert durch und hat das Problem nicht.
+
+2. DIE ZWEITE DATEI UEBERSCHREIBT DIE ERSTE -- und traegt eine ANDERE
+   Clerk-Kennung fuer Andreas:
+     entityos-deploy.env  ..."user_3C5R4TCSv9yow0b8GhBlQTRlHFm":"andreas"}  live
+     entityos-clerk.env   ..."user_3C6kpF9WdVfp5uL1NbUD3uDVsf7":"andreas"}  veraltet
+   Wer clerk.env zuletzt einliest, faehrt mit der veralteten Kennung. Das wirft
+   NICHTS -- es aendert nur, wer Andreas ist.
+   Die veraltete Datei wurde NICHT geloescht: sie ist Konfiguration, und ob sie
+   anderswo gelesen wird, ist ungeprueft. Gehoert aufgeraeumt, aber bewusst und
+   nicht nebenbei beim Debuggen.
+
+Wiederhergestellt mit --env-file; danach: alle Seiten 200, /api/history ohne
+Token 401 (faellt geschlossen), Verlaufscode im ausgelieferten HTML.
+
+Ausserdem berichtigt: der Kommentar in postfach.py nannte `herzradgraz@gmail.com`
+als Andreas' Clerk-Konto. Eignerentscheid am 18.08.: `genuinos@gmail.com`.
+Die Mechanik war nie betroffen -- die Zuordnung laeuft ueber die Clerk-Kennung,
+nicht ueber die Adresse. Genau dafuer ist sie so gebaut, und das steht jetzt
+auch dort.
+```
+
+### Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz)
+
+`f94e90ad841a` · entityos · 10:30 UTC · EntityOS
+
+```
+Nicht von mir gebaut. Eine zweite Instanz hat das nach eigenem Auftrag
+(AUFTRAG-OBERFLAECHE.md, 2026-08-18 09:36) umgesetzt und unversioniert im
+Arbeitsbaum liegen lassen -- rund 100 KB Frontend und drei neue Testdateien,
+alles nur auf der Platte. Auf Gabriels Bitte hier festgehalten, bevor es einem
+Neubau oder einem falschen Griff zum Opfer faellt.
+
+WAS DRIN IST
+
+  web/schale/          gemeinsame Kopfleiste ueber allen Seiten
+  web/postfach/        Mailbox-Oberflaeche (index.html + css + js)
+  web/chat/index.html  Chat im neuen Designsystem, Schale statt eigenem Header
+  clayverse/postfach.py  IMAP/SMTP-Schicht, Senden geht durch das EffectGate
+  clayverse/zustand.py   Zustandsanzeige
+  clayverse/effects.py   erweitert
+  compose.yaml           Zugangsdatei /etc/entityos/postfach.env eingehaengt
+  tests/test_postfach_{wege,wirkung,zuordnung}.py
+
+GEPRUEFT, NICHT NUR UEBERNOMMEN
+
+  Testlauf     552 gruen / 14 rot -- dieselben 14 Altlasten wie den ganzen Tag
+  Seiten       / /postfach /terminal /healthz alle 200
+  Syntax       postfach.py, zustand.py, effects.py sauber
+
+⭐ EINE ENTWURFSENTSCHEIDUNG, DIE SICH HEUTE BEZAHLT GEMACHT HAT
+
+Die Postfachzuordnung laeuft ueber clerk_subject -> clerk_map -> user_id ->
+Postfach, ausdruecklich NICHT ueber die Mailadresse. Am selben Tag war strittig,
+welche Gmail-Adresse Andreas' Clerk-Konto traegt (`herzradgraz@` im
+Auftragsdokument, `genuinos@` laut Eigner; Eignerentscheid: genuinos@gmail.com).
+Weil die Zuordnung an der Clerk-Kennung haengt, war die Postfachvergabe davon zu
+KEINEM Zeitpunkt betroffen. Der Kommentar im Modul nannte die strittige Adresse
+als Tatsache -- das ist berichtigt, die Mechanik blieb unangetastet.
 ```
 
 ### Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root shadow DB, not the real heart
@@ -3934,48 +4095,5 @@ selbst sqlite3, statt udb.verbindung() zu benutzen. Die Vordertuer steht,
 der Umzug ist nicht fertig.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### Nacht-Arbeit gesichert: sechs Werkzeuge waren unversioniert
-
-`76b49bb7ea25` · clay · 02:24 UTC · ClayVerse
-
-```
-Beim Absturz von Gabriels Rechner am 15.08. um 01:58 UTC riss die Sitzung
-mitten im Schreiben von ratgeber.py ab. Der letzte Commit lag da 44 Minuten
-zurueck, der letzte Bauprotokoll-Eintrag 74 Minuten.
-
-Unversioniert waren, alle syntaktisch heil geprueft:
-  verdrahtung.py 73 KB, weltmodell.py 59 KB, schluesselwacht.py 51 KB,
-  wikiarbeit.py 47 KB, ratgeber.py 38 KB, bahn.py 15 KB
-Dazu werkzeuge.py, verdichtung.py, nim_probe.py, ratgeber_hook.py,
-die wm_proben-Messreihen und vier systemd-Einheiten.
-
-Zwei Dienste liefen bereits produktiv aus diesem unversionierten Code:
-clayverse-wikiarbeit und clayverse-puls (beide enabled + active).
-
-.gitignore ergaenzt um Laufzeit und Erzeugtes (__pycache__, venv, *.db).
-Die 26 MB venv-ratgeber bleiben draussen, ebenso die Datenbanken.
-
-OFFEN: das Bauprotokoll hat weiterhin die Luecke 00:44 bis 01:58 UTC -
-bau.py stand meldet deshalb zu wenig. Muss nachgetragen werden.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### B27 geprueft: Zeilenhash fuer anhaengende Stroeme - die Flut ist weg
-
-`a9d2a5dc1c5d` · clay · 00:44 UTC · ClayVerse
-
-```
-kuration.py prueft Artikel aus anhaengenden Stroemen (protokoll.jsonl, ereignisse.jsonl, tor.jsonl, eichung.jsonl) jetzt ZEILENWEISE statt dateiweise. Die Zeile wird ueber die Schluesselfelder der Artikelmetadaten gefunden (zeit, bauteil, event_id, id); findet sich keine, ist das ein Fund und kein stilles Durchwinken. Faellt die Zeilensuche aus, greift der alte Dateiweg. ENTSCHEIDENDER NACHWEIS: nach dem Patch einen NEUEN Protokolleintrag geschrieben und danach geprueft - neu_eingefuegt 0, aktualisiert 0, no_ops 14.284. Null Aenderungen. Vorher haette derselbe Eintrag alle 34 vorfall-Artikel markiert. Nebenbei sind 13.762 Artikel erstmals unter Beobachtung gekommen, die bisher gar keine Kurationszeile hatten - der Bestand ist damit vollstaendig erfasst: 14.284 Zeilen, davon 486 unveraendert, 35 quelle_geaendert, 1 quelle_fehlt.
-```
-
-### B27 geprueft: Pruefreiz fuer den Zeilenhash
-
-`dbd877779d98` · clay · 00:43 UTC · ClayVerse
-
-```
-Ein Eintrag, um zu pruefen ob die Kuration danach alle vorfall-Artikel als geaendert meldet oder nur diesen einen.
 ```
 

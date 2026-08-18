@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T18:41:07Z. **2554 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T19:11:07Z. **2556 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
 
@@ -8,21 +8,21 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2458 |
+| baunotiz | 2460 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1618 |
-| baunotiz | bauverlauf.jsonl | 796 |
+| baunotiz | git-commit | 1619 |
+| baunotiz | bauverlauf.jsonl | 797 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2554 · Gegenhypothese: 0 von 2554
+## Hypothese: 0 von 2556 · Gegenhypothese: 0 von 2556
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -146,6 +146,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 
+### agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-ed2da57901096a55a716400a51cef245794c161e` · baunotiz · git-commit · 2026-08-18T18:41:44+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
 ### agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-dd57045d635dc17839b3c8fa35cc0c5265d8b742` · baunotiz · git-commit · 2026-08-18T18:11:56+00:00 · agentZero
@@ -153,6 +161,14 @@ claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-bc66dba04c3fa8515045` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:11:56+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
 
@@ -264,20 +280,4 @@ DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
 lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
 Schalbefehl ausfuehren, git laeuft auf dem Wirt als root. Nachgewiesen mit `id`
 -> uid
-
-### agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-c710c5747d46afa5672d9906254b186699f9c7c1` · baunotiz · git-commit · 2026-08-18T16:41:48+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-4ba71efd8e86a862483f` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:41:48+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

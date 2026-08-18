@@ -191,6 +191,16 @@ class TurnLifecycle:
             if autonomy_identity is None: self.memory.extract_explicit(turn_id,self.user_id,prompt)
             self.memory.compact(self.session_id)
             if predecessor["aborted"]: self.graph.rebuild_in_tx()
+            if autonomy_identity is None and os.environ.get("CLAYVERSE_MEMORY_EXTRACT","0")=="1":
+                # Fakten stehen in dem, was der MENSCH sagt -- nicht nur in der
+                # Antwort. Nur die Antwort zu lesen war der Grund, warum acht
+                # Bahnaufrufe null Eintraege ergaben.
+                try:
+                    from .gedaechtnis import extrahiere as _extr
+                    _extr(self.db, turn_id=turn_id, user_id=self.user_id,
+                          content=prompt, rolle="user")
+                except Exception:
+                    pass  # Gedaechtnis darf eine Aufnahme nie kippen
             world=self._bound_world(self.world.assemble(self.session_id,resource_refs)); hyperpositions=HyperpositionProjector.from_world(world); needle=NeedleRouter.analyze(prompt,world,hyperpositions,resource_refs)
             yield {"user_id":self.user_id,"session_id":self.session_id,"turn_id":turn_id,"episode_id":episode_id,"causal_id":causal_id,"generation":generation,"resources":resource_refs,"workspace":{"salience":salience,"alternatives":alternatives},"hyperpositions":hyperpositions,"needle":needle,"context":world}
 
@@ -282,9 +292,14 @@ class TurnLifecycle:
         if os.environ.get("CLAYVERSE_MEMORY_EXTRACT", "0") == "1":
             try:
                 from .gedaechtnis import extrahiere
+                # complete() liefert `assistant_turn_id`, nicht `turn_id`. Der
+                # falsche Schluessel gab still "" -- leerer Fremdschluessel,
+                # kein Rueckweg zum Gespraech, und die Entdopplung haette
+                # verschiedene Fakten zusammengeworfen.
                 ergebnis["gedaechtnis"] = extrahiere(
-                    self.db, turn_id=ergebnis.get("turn_id") or "", user_id=self.user_id,
-                    content=str(response), rolle="assistant")
+                    self.db,
+                    turn_id=ergebnis.get("assistant_turn_id") or ergebnis.get("turn_id") or "",
+                    user_id=self.user_id, content=str(response), rolle="assistant")
             except Exception as fehler:
                 ergebnis["gedaechtnis"] = {"_fehler": type(fehler).__name__ + ": " + str(fehler)}
         return ergebnis

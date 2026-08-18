@@ -1,8 +1,8 @@
 # Was Agent Zero können soll — und was davon steht
 
-**Automatisch erzeugt 2026-08-18T15:11:45Z.** Nicht von Hand pflegen.
+**Automatisch erzeugt 2026-08-18T15:34:08Z.** Nicht von Hand pflegen.
 
-**22 erfüllt · 6 offen · 1 zurückgestellt** von 29 Zeilen.
+**36 erfüllt · 7 offen · 1 zurückgestellt** von 44 Zeilen.
 
 Die Spalte **Soll** ist deklariert und ändert sich nur, wenn der Eigner etwas
 entscheidet. Die Spalte **Ist** wird bei jedem Lauf neu **gemessen** — durch einen
@@ -23,23 +23,29 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 |---|---|---|---|---|
 | **Genau zwei gleichberechtigte Perspektiven** | Gabriel und Andreas, gleiche Rechte, eine Entität – keine zwei Mandanten | 2 Nutzer mit rights=equal, 4 dauerhafte Sitzungen | ✅ erfüllt | Eigner 18.08. |
 | **Sonst kommt niemand hinein** | Clerk-Anmeldung, exakt zwei Konten, dritte Identität fällt zu | IdentityRouter wirft PermissionError bei nicht zugeordnetem Clerk-Subjekt (Test grün) | ✅ erfüllt | Eigner 18.08. |
+| **Zero weiß, wer vor ihm sitzt** | Profile beider Menschen, jedes Feld mit Herkunft; die Sitzung sagt, wessen sie ist | 25 Profilfelder, 6 Projekte mit Erfolg UND Fehlschlag; Zugehörigkeit und Urheberschaft getrennt geführt, weil sonst aus Zusammenarbeit ein Besitzstreit wird | ✅ erfüllt | Eigner 18.08. |
+| **Wissen ist nach Menschen zugeordnet** | jeder Artikel gehört jemandem oder ausdrücklich beiden | 16849 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen | ✅ erfüllt | Eigner 18.08. |
+| **Vier Sitzungen, ein Raum** | getrennte Kennungen, dieselbe Entität; sie sehen einander und stimmen sich ab, in Caveman-Englisch, ohne Abgleich über Zeitstempel | 4 Menschenplätze in zero_raum (+ ein Platz für den Paketarbeiter); Kollisionswarnung beim Sprechen, wenn zwei am selben Gegenstand arbeiten | ✅ erfüllt | Eigner 18.08. |
 
 ## Gedächtnis
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
 | **wiki.db ist das Herz der Entität** | Datenbank, Wiki und ClayGraph sind das Herz – nicht Altlast, nicht daneben | 130 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei | ✅ erfüllt | Eigner 18.08. |
-| **Die vier Clay-Dienste laufen weiter** | kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich | 3 von 4 laufen | 🔧 offen | Eigner 18.08. |
+| **Die vier Clay-Dienste laufen weiter** | kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich | 5 von 4 laufen | 🔧 offen | Eigner 18.08. |
 | **Der Abruf erreicht den Korpus** | Zero sieht die 14.284 Artikel, nicht nur sein eigenes Gesprächsgedächtnis | 15 Treffer auf Probeanfrage | ✅ erfüllt | Eigner 18.08. / Befund |
+| **Chat-Historie überlebt den Neuladen** | Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser | 114 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut | ✅ erfüllt | Eigner 18.08. |
+| **Alles Gebaute landet im Wiki** | jeder Bauschritt wird Wiki-Artikel, mit Metadaten, nach dem üblichen Protokoll | 15 Bau- und Wissensartikel im Korpus, volltextsuchbar. ⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — in der Datenbank und trotzdem für niemanden da | 🔧 offen | Eigner 18.08. |
 
 ## Kognition
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
-| **Jeder Zug wird aufgezeichnet** | Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette | 108 Züge, 54 Kausalepisoden, 54 Arbeitsraum-Episoden | ✅ erfüllt | Architektur |
+| **Jeder Zug wird aufgezeichnet** | Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette | 114 Züge, 57 Kausalepisoden, 57 Arbeitsraum-Episoden | ✅ erfüllt | Architektur |
 | **Aufnahme ist atomar** | scheitert eine Prüfung, bleibt keine halbe Zeile stehen | Prüfungen laufen in der Aufnahme-Transaktion; 15 Atomizitätstests grün | ✅ erfüllt | Architektur |
-| **Wirkung nur durch das Tor** | kein process.exec, jede Wirkung durch EffectGate mit Beleg | 2 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert | ✅ erfüllt | Architektur |
-| **Werkzeuge nur über MCP** | Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten | 0 Werkzeuge freigegeben, Bash und Artifact verboten, Shell-Flucht abgewiesen | 🔧 offen | Architektur |
+| **Wirkung nur durch das Tor** | kein process.exec, jede Wirkung durch EffectGate mit Beleg | 3 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert | ✅ erfüllt | Architektur |
+| **Werkzeuge nur über MCP** | Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten | 27 Werkzeuge in der Erlaubnisliste, verboten: Bash, Artifact; Shell-Flucht im Test abgewiesen | ✅ erfüllt | Architektur |
+| **Handlungsfähig ohne Schale** | so handlungsfähig wie der Koordinator: finden, lesen, ändern, veröffentlichen — aber ohne Bash, weil eine Schale sich nicht einzäunen lässt | Werkbank mit 6 Werkzeugen: suchen/lesen/ändern/stand/veröffentlichen. Zaun nach Auflösung von Symlinks und '..', Live-Wurzeln nur lesbar, Veröffentlichen nur in namentlich freigegebene Repos | ✅ erfüllt | Eigner 18.08. |
 
 ## Autonomie
 
@@ -54,9 +60,13 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
 | **Abruf ist abfragesensitiv** | nicht die letzten N, sondern was zur Frage passt | 11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren) | ✅ erfüllt | Architektur |
-| **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst | 0 gelernte Eintrittspunkte, Modus SHADOW, 54 Episoden | 🔧 offen | Eigner 18.08. |
+| **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst | 0 gelernte Eintrittspunkte, Modus SHADOW, 57 Episoden | 🔧 offen | Eigner 18.08. |
 | **Wegehierarchie: Autobahnen, Tunnel, Landwege** | oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung | Verstärkung vorhanden. FEHLT: Verfall ungenutzter Wege, inverse Gewichtung, Tunnel | 🔧 offen | F94 / Eigner 16.08. |
 | **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 71 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
+| **Der Möglichkeitsraum ist emergent** | nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt in die Mistral-Vorstufe ein | aus dem Korpus abgeleitet und in den Kontext der Vorstufe gehängt. ⚠️ Er war zuvor gebaut und wurde von NIEMANDEM aufgerufen — der wiederkehrende Fehler dieser Nacht: fertig aussehen und nie laufen | ✅ erfüllt | Eigner 18.08. |
+| **Erkundung neben Ausbeutung** | der Abruf darf einen Teil auf Unbekanntes setzen, statt immer denselben Weg zu gehen | 15 % Erkundungsanteil, entschieden über den Hash der Frage — dieselbe Frage bekommt also immer dieselbe Behandlung, sonst wäre nichts mehr messbar | ✅ erfüllt | Eigner 18.08. |
+| **Der Abruf misst sich selbst** | Messgerät, Goldsatz, Kalibrierung an zurückgehaltenen Daten | Hälfte A kalibriert, Hälfte B berichtet, Annahmeregel vorher festgelegt. Auf B: Anker 8,3 → 23,3 %, Genauigkeit 60 → 85,7 %, Ausbeute 5 → 20 %; Latenz ~390 → 260 ms bei Streuung ±115 → ±1,6 ms | ✅ erfüllt | Eigner 18.08. |
+| **Jeder Mechanismus kann melden, dass er nichts tut** | ein Mechanismus, der nur Erfolg melden kann, ist nicht messbar | die Wegehierarchie sagt 'GLEICHVERTEILT — es bildet sich keine Hierarchie, der Mechanismus tut nichts'; der Möglichkeitsraum meldet 'einseitig'; der Tresorkatalog verweigert, statt zu hoffen | ✅ erfüllt | Lehre aus dem Bau 18.08. |
 
 ## Anbieter
 
@@ -77,11 +87,16 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
-| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 48 seconds (healthy) | ✅ erfüllt | Eigner 18.08. |
+| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 23 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
 | **Frontend heißt EntityOS und ist erreichbar** | Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal | https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen | ✅ erfüllt | Eigner 18.08. |
 | **Der Export pflegt sich selbst** | alles autonom ins Forschungs-Repo unter agentZero | systemd-Timer alle 30 min, enabled | ✅ erfüllt | Eigner 18.08. |
-| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 563 gruen / 16 rot | ✅ erfüllt | Arbeitsregel |
+| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 570 gruen / 9 rot | ✅ erfüllt | Arbeitsregel |
 | **Endabnahme hinter eigenem Gastkern** | derselbe Digest hinter einer eigenen VM-Grenze | kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt | ⏸ zurückgestellt | Entwurf – vom Eigner zurückgestellt |
+| **Zugänge und Schlüssel liegen im Tresor** | ein Tresor für Zugänge, ein zweiter für API-Schlüssel — letzterer mit Fähigkeitsliste | 2 Tresore unter /etc/entityos/tresor (zugaenge, api), AES-256-GCM — ABSICHTLICH außerhalb des Korpus, damit ein Korpusleck keine Zugänge mitnimmt. Zero darf Adressen und Tokens nennen, PASSWÖRTER NIE: der Katalog durchsucht seine eigene Ausgabe nach jedem gespeicherten Geheimwert und verweigert, statt zu hoffen | ✅ erfüllt | Eigner 18.08. |
+| **Zero kennt alle selbst gehosteten Seiten** | alle Seiten unter frank.ink samt Leistung, immer mit Vermerk self-hosted oder extern | Unterseite /seiten aus dem agentforge-Bestand; eigene Wurzeln (herzrad.at, leihmich.org) sind vermerkt, weil dort relative Pfade Pflicht sind | ✅ erfüllt | Eigner 18.08. |
+| **Zero kann eine Seite wirklich ändern** | nicht beschreiben, wie es ginge — es tun | Arbeitskopie /var/lib/clay/arbeit/seimensch, Änderung über die Werkbank, Veröffentlichen als eigener Schritt mit Beleg. ⚠️ Push auf main geht bei SeiMensch sofort öffentlich — deshalb nennt der Beleg die Zahl der Dateien | ✅ erfüllt | Eigner 18.08. |
+| **Arbeitspakete statt Alleingang** | was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt | 6 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis' | ✅ erfüllt | Eigner 18.08. |
+| **agentforge geht in EntityOS auf** | kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server | Hosting-Ansicht übernommen und angeschlossen; die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) sind als Migration erfasst und AUSDRÜCKLICH NOCH NICHT begonnen — nach und nach, wie verlangt | 🔧 offen | Eigner 18.08. |
 
 ---
 

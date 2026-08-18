@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-18T15:11:45Z",
-  "erfuellt": 22,
-  "offen": 6,
+  "erzeugt": "2026-08-18T15:34:08Z",
+  "erfuellt": 36,
+  "offen": 7,
   "zurueckgestellt": 1,
   "zeilen": [
     {
@@ -57,7 +57,7 @@
       "faehigkeit": "Die vier Clay-Dienste laufen weiter",
       "soll": "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
       "quelle": "Eigner 18.08.",
-      "ist": "3 von 4 laufen",
+      "ist": "5 von 4 laufen",
       "erfuellt": false
     },
     {
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "108 Züge, 54 Kausalepisoden, 54 Arbeitsraum-Episoden",
+      "ist": "114 Züge, 57 Kausalepisoden, 57 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -89,7 +89,7 @@
       "faehigkeit": "Wirkung nur durch das Tor",
       "soll": "kein process.exec, jede Wirkung durch EffectGate mit Beleg",
       "quelle": "Architektur",
-      "ist": "2 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert",
+      "ist": "3 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert",
       "erfuellt": true
     },
     {
@@ -97,8 +97,16 @@
       "faehigkeit": "Werkzeuge nur über MCP",
       "soll": "Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten",
       "quelle": "Architektur",
-      "ist": "0 Werkzeuge freigegeben, Bash und Artifact verboten, Shell-Flucht abgewiesen",
-      "erfuellt": false
+      "ist": "27 Werkzeuge in der Erlaubnisliste, verboten: Bash, Artifact; Shell-Flucht im Test abgewiesen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Handlungsfähig ohne Schale",
+      "soll": "so handlungsfähig wie der Koordinator: finden, lesen, ändern, veröffentlichen — aber ohne Bash, weil eine Schale sich nicht einzäunen lässt",
+      "quelle": "Eigner 18.08.",
+      "ist": "Werkbank mit 6 Werkzeugen: suchen/lesen/ändern/stand/veröffentlichen. Zaun nach Auflösung von Symlinks und '..', Live-Wurzeln nur lesbar, Veröffentlichen nur in namentlich freigegebene Repos",
+      "erfuellt": true
     },
     {
       "bereich": "Autonomie",
@@ -137,7 +145,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst",
       "quelle": "Eigner 18.08.",
-      "ist": "0 gelernte Eintrittspunkte, Modus SHADOW, 54 Episoden",
+      "ist": "0 gelernte Eintrittspunkte, Modus SHADOW, 57 Episoden",
       "erfuellt": false
     },
     {
@@ -201,7 +209,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 48 seconds (healthy)",
+      "ist": "Up 23 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -225,7 +233,7 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "563 gruen / 16 rot",
+      "ist": "570 gruen / 9 rot",
       "erfuellt": true
     },
     {
@@ -235,6 +243,118 @@
       "quelle": "Entwurf – vom Eigner zurückgestellt",
       "ist": "kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt",
       "erfuellt": null
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Zero weiß, wer vor ihm sitzt",
+      "soll": "Profile beider Menschen, jedes Feld mit Herkunft; die Sitzung sagt, wessen sie ist",
+      "quelle": "Eigner 18.08.",
+      "ist": "25 Profilfelder, 6 Projekte mit Erfolg UND Fehlschlag; Zugehörigkeit und Urheberschaft getrennt geführt, weil sonst aus Zusammenarbeit ein Besitzstreit wird",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Wissen ist nach Menschen zugeordnet",
+      "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
+      "quelle": "Eigner 18.08.",
+      "ist": "16849 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Vier Sitzungen, ein Raum",
+      "soll": "getrennte Kennungen, dieselbe Entität; sie sehen einander und stimmen sich ab, in Caveman-Englisch, ohne Abgleich über Zeitstempel",
+      "quelle": "Eigner 18.08.",
+      "ist": "4 Menschenplätze in zero_raum (+ ein Platz für den Paketarbeiter); Kollisionswarnung beim Sprechen, wenn zwei am selben Gegenstand arbeiten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Chat-Historie überlebt den Neuladen",
+      "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
+      "quelle": "Eigner 18.08.",
+      "ist": "114 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Alles Gebaute landet im Wiki",
+      "soll": "jeder Bauschritt wird Wiki-Artikel, mit Metadaten, nach dem üblichen Protokoll",
+      "quelle": "Eigner 18.08.",
+      "ist": "15 Bau- und Wissensartikel im Korpus, volltextsuchbar. ⚠️ Sie waren zuerst unauffindbar: geschrieben ohne Suchtext und ohne FTS-Eintrag — in der Datenbank und trotzdem für niemanden da",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zugänge und Schlüssel liegen im Tresor",
+      "soll": "ein Tresor für Zugänge, ein zweiter für API-Schlüssel — letzterer mit Fähigkeitsliste",
+      "quelle": "Eigner 18.08.",
+      "ist": "2 Tresore unter /etc/entityos/tresor (zugaenge, api), AES-256-GCM — ABSICHTLICH außerhalb des Korpus, damit ein Korpusleck keine Zugänge mitnimmt. Zero darf Adressen und Tokens nennen, PASSWÖRTER NIE: der Katalog durchsucht seine eigene Ausgabe nach jedem gespeicherten Geheimwert und verweigert, statt zu hoffen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero kennt alle selbst gehosteten Seiten",
+      "soll": "alle Seiten unter frank.ink samt Leistung, immer mit Vermerk self-hosted oder extern",
+      "quelle": "Eigner 18.08.",
+      "ist": "Unterseite /seiten aus dem agentforge-Bestand; eigene Wurzeln (herzrad.at, leihmich.org) sind vermerkt, weil dort relative Pfade Pflicht sind",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero kann eine Seite wirklich ändern",
+      "soll": "nicht beschreiben, wie es ginge — es tun",
+      "quelle": "Eigner 18.08.",
+      "ist": "Arbeitskopie /var/lib/clay/arbeit/seimensch, Änderung über die Werkbank, Veröffentlichen als eigener Schritt mit Beleg. ⚠️ Push auf main geht bei SeiMensch sofort öffentlich — deshalb nennt der Beleg die Zahl der Dateien",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Arbeitspakete statt Alleingang",
+      "soll": "was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt",
+      "quelle": "Eigner 18.08.",
+      "ist": "6 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis'",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "agentforge geht in EntityOS auf",
+      "soll": "kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server",
+      "quelle": "Eigner 18.08.",
+      "ist": "Hosting-Ansicht übernommen und angeschlossen; die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) sind als Migration erfasst und AUSDRÜCKLICH NOCH NICHT begonnen — nach und nach, wie verlangt",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Der Möglichkeitsraum ist emergent",
+      "soll": "nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt in die Mistral-Vorstufe ein",
+      "quelle": "Eigner 18.08.",
+      "ist": "aus dem Korpus abgeleitet und in den Kontext der Vorstufe gehängt. ⚠️ Er war zuvor gebaut und wurde von NIEMANDEM aufgerufen — der wiederkehrende Fehler dieser Nacht: fertig aussehen und nie laufen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Erkundung neben Ausbeutung",
+      "soll": "der Abruf darf einen Teil auf Unbekanntes setzen, statt immer denselben Weg zu gehen",
+      "quelle": "Eigner 18.08.",
+      "ist": "15 % Erkundungsanteil, entschieden über den Hash der Frage — dieselbe Frage bekommt also immer dieselbe Behandlung, sonst wäre nichts mehr messbar",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Der Abruf misst sich selbst",
+      "soll": "Messgerät, Goldsatz, Kalibrierung an zurückgehaltenen Daten",
+      "quelle": "Eigner 18.08.",
+      "ist": "Hälfte A kalibriert, Hälfte B berichtet, Annahmeregel vorher festgelegt. Auf B: Anker 8,3 → 23,3 %, Genauigkeit 60 → 85,7 %, Ausbeute 5 → 20 %; Latenz ~390 → 260 ms bei Streuung ±115 → ±1,6 ms",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Jeder Mechanismus kann melden, dass er nichts tut",
+      "soll": "ein Mechanismus, der nur Erfolg melden kann, ist nicht messbar",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "die Wegehierarchie sagt 'GLEICHVERTEILT — es bildet sich keine Hierarchie, der Mechanismus tut nichts'; der Möglichkeitsraum meldet 'einseitig'; der Tresorkatalog verweigert, statt zu hoffen",
+      "erfuellt": true
     }
   ]
 }

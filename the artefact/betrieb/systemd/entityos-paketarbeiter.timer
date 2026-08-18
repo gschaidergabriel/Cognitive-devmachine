@@ -1,0 +1,14 @@
+[Unit]
+Description=EntityOS: Arbeitspakete alle 5 Minuten pruefen
+
+# Nicht schneller: es laeuft immer nur EIN Paket, und das Konto ist eine
+# geteilte, endliche Ressource -- heute sind daran zwei Agenten gestorben.
+# Ein Takt, der oefter anklopft als Arbeit da ist, verbrennt nur Kontingent.
+
+[Timer]
+OnBootSec=12min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

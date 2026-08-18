@@ -1,0 +1,11 @@
+[Unit]
+Description=EntityOS: ein offenes Arbeitspaket abarbeiten (eng eingezaeunt, keine Schale)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/entityos/the artefact
+# root nur, um den Arbeitsordner dem Arbeiter zu uebergeben. Der Arbeiter
+# selbst laeuft als clay, in einem eigenen Kernzaun (siehe paketarbeiter.py).
+ExecStart=/usr/bin/python3 -c "import sys;sys.path.insert(0,\"/opt/entityos/the artefact\");from clayverse.store import UnifiedDB;from clayverse import paketarbeiter as pa;import json;print(json.dumps(pa.arbeite(UnifiedDB(\"/var/lib/clay/wiki.db\")),ensure_ascii=False))"

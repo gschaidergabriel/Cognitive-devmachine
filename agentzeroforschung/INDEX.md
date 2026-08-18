@@ -31,10 +31,18 @@
    - kritischer Restpfad: Effect/Causal/Re-ingest/State-Authority/Fail-closed, MCP-Werkzeugpfad, reale Autonomie, Retrieval-Lernen
    - neues `messwerk/` als Forschungsinstrument beruecksichtigt
 
+4. `analysen/2026-08-18T051855Z_ENTITYOS_FERTIGSTELLUNG_UPDATE.md`
+   - Snapshot 05:18:55Z / Generation 31
+   - aktive Zielmatrix unveraendert 21/28 = 75 %
+   - funktionaler Systemkern weiter ca. 80–85 %, finale Acceptance-Reife vorsichtiger ca. 55–65 %
+   - Tests 475 gruen / 18 rot
+   - Zero-Verkehr 10 -> 14 Turns; erstmals 4 Andreas-Turns; Kausal-/Workspace-/Retrieval-Episoden 5 -> 7
+   - Retrieval-Lernen weiterhin 0 Entry-Points / 0 Feedback / 0 durable memory
+
 ## Offene Forschungsfront
 
-- ersten echten Gen-31-Turn gegen Gen 29 vergleichen;
-- ersten Andreas-Turn als Cross-user-Replikation binden;
+- Gen-31-Turns gegen Gen 29 vergleichen;
+- Andreas-Turns als Cross-user-Replikation gegen Gabriel binden;
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
 - Snapshot-Zaehler gegen `.meta.json`-Sidecars pruefen;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;

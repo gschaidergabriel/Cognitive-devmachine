@@ -128,7 +128,7 @@ def test_existing_tmux_server_reapplies_policy_before_attestation(tmp_path, monk
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     manager.ensure("gabriel")
-    assert calls[0][5:] == ["source-file", "/etc/clayverse/managed-tmux.conf"]
+    assert calls[0][5:] == ["source-file", "-q", "/etc/clayverse/managed-tmux.conf"]
     assert calls[1][5:] == ["show-options", "-sqv", "@clayverse_managed_policy"]
 
 
@@ -199,7 +199,7 @@ def test_tmux_session_creation_is_pinned_reapplied_and_attested(tmp_path, monkey
     assert len(creation) == 1
     _assert_managed_tmux_argv(creation[0], user_id="andreas")
     assert creation[0][5:9] == ["new-session", "-d", "-s", "clayverse-andreas"]
-    source_index = next(i for i, call in enumerate(calls) if call[5:] == ["source-file", "/etc/clayverse/managed-tmux.conf"])
+    source_index = next(i for i, call in enumerate(calls) if call[5:] == ["source-file", "-q", "/etc/clayverse/managed-tmux.conf"])
     attest_index = next(i for i, call in enumerate(calls) if call[5:] == ["show-options", "-sqv", "@clayverse_managed_policy"])
     assert source_index < attest_index
 

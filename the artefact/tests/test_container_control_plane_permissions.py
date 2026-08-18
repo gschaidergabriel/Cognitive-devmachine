@@ -15,7 +15,7 @@ def test_runtime_writable_paths_remain_explicitly_separate():
     dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
 
     assert (
-        "chown -R clayverse:clayverse /var/lib/clayverse /workspace /home/clayverse/.claude"
+        "chown -R 5001:5001 /var/lib/clayverse /workspace /home/clayverse/.claude"
         in dockerfile
     )
     assert 'VOLUME ["/var/lib/clayverse", "/workspace"]' in dockerfile

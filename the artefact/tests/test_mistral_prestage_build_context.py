@@ -58,7 +58,7 @@ def test_build_context_leeres_profil_dict_ist_kein_fehlendes_profil():
     assert kontext["current_user_profile"]["status"] == "NO_PROFILE"
 
 
-def test_build_context_alle_acht_schluessel_vorhanden():
+def test_build_context_alle_neun_schluessel_vorhanden():
     kontext = _kontext()
     for schluessel in (
         "current_user",
@@ -70,6 +70,12 @@ def test_build_context_alle_acht_schluessel_vorhanden():
         "zero_round1_suggestion",
     ):
         assert schluessel in kontext
+    # ⭐ Der Moeglichkeitsraum ist der neunte Schluessel. Der Test hat beim
+    # Hinzufuegen zu Recht angeschlagen -- er bewacht die FORM des Kontexts.
+    # Deshalb hier nicht nur die Zahl hochsetzen, sondern den Schluessel
+    # benennen: eine Zahl allein haette auch ein Umbenennen durchgelassen.
+    assert "moeglichkeitsraum" in kontext
+
 
 
 def test_build_context_recent_turns_wird_auf_letzte_drei_gekappt():

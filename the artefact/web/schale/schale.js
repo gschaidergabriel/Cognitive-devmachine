@@ -44,7 +44,8 @@
 
   var WEGE = [
     { pfad: "/",         wort: "Chat",    kurz: "Chat", symbol: "blase" },
-    { pfad: "/postfach", wort: "Mailbox", kurz: "Mail", symbol: "brief" }
+    { pfad: "/postfach", wort: "Mailbox", kurz: "Mail", symbol: "brief" },
+    { pfad: "/seiten",   wort: "Seiten",  kurz: "Seiten", symbol: "globus" }
   ];
 
   /* Symbole als Inline-SVG statt als Zeichen oder Bilddatei: ein Zeichen aus
@@ -53,7 +54,11 @@
    * die die Abnahme zaehlt. Ein Pfad im Dokument kann nicht fehlen. */
   var SYMBOLE = {
     blase: '<path d="M2 3.5h12v8H7l-3.5 3v-3H2z"/>',
-    brief: '<rect x="2" y="3.5" width="12" height="9"/><path d="m2 4.5 6 4.5 6-4.5"/>'
+    brief: '<rect x="2" y="3.5" width="12" height="9"/><path d="m2 4.5 6 4.5 6-4.5"/>',
+    // Ein Globus: Seiten, die nach aussen gehen. Gleiche Strichstaerke und
+    // gleiches Raster wie die beiden anderen -- ein Symbol, das aus der Reihe
+    // faellt, liest sich als Fremdkoerper.
+    globus: '<circle cx="8" cy="8" r="6"/><path d="M2 8h12"/><path d="M8 2a9 9 0 0 1 0 12a9 9 0 0 1 0-12"/>'
   };
 
   // ── Farbe aus dem Messwert ─────────────────────────────────────────────

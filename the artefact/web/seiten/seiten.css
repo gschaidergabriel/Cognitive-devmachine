@@ -1,0 +1,64 @@
+/* Die Seitenuebersicht. Farben und Schriften kommen aus der Schale --
+   hier steht nur, was diese Ansicht zusaetzlich braucht. */
+
+#sn-wurzel { max-width: 1080px; margin: 0 auto; padding: calc(var(--schale-h) + 24px) 20px 60px; }
+
+.sn-kopf h1 { font-family: var(--schrift-marke); font-weight: 600;
+  font-size: var(--s-24); margin: 0 0 4px; color: var(--text); }
+.sn-unter { margin: 0 0 10px; color: var(--matt); font-size: var(--s-13); }
+.sn-lage { font-family: var(--schrift-mono); font-size: var(--s-13); color: var(--matt); }
+.sn-fehler { margin: calc(var(--schale-h) + 12px) 20px 0; padding: 10px 14px;
+  background: #3a1414; border: 1px solid #6b1f1f; color: var(--warn);
+  border-radius: var(--rundung); font-size: var(--s-13); }
+.sn-leer { margin-top: 28px; padding: 22px; border: 1px solid var(--linie);
+  border-radius: var(--rundung); background: var(--flaeche); }
+.sn-leer p { margin: 0 0 6px; }
+.sn-matt { color: var(--matt); font-size: var(--s-13); }
+
+.sn-karte { margin-top: 14px; border: 1px solid var(--linie); border-radius: var(--rundung);
+  background: var(--flaeche); overflow: hidden; }
+.sn-zeile { display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+  cursor: pointer; }
+.sn-zeile:hover { background: var(--flaeche-hoch); }
+.sn-name { font-weight: 600; color: var(--text); }
+.sn-slug { font-family: var(--schrift-mono); font-size: var(--s-13); color: var(--matt); }
+.sn-adresse { font-family: var(--schrift-mono); font-size: var(--s-13);
+  color: var(--kalt); text-decoration: none; }
+.sn-adresse:hover { text-decoration: underline; }
+
+/* ⭐ Selbst gehostet oder extern steht an JEDER Zeile -- der Unterschied
+   entscheidet, ob wir etwas aendern koennen. Deshalb ein Merkmal, das man
+   nicht uebersieht, und nicht nur ein Wort im Fliesstext. */
+.sn-marke { font-family: var(--schrift-mono); font-size: 11px; letter-spacing: .06em;
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.sn-selbst { background: hsl(var(--zustand-h) var(--zustand-s) 52% / .16);
+  color: var(--signal); border: 1px solid hsl(var(--zustand-h) var(--zustand-s) 52% / .4); }
+.sn-extern { background: rgba(125,131,142,.12); color: var(--matt);
+  border: 1px solid var(--linie); }
+
+.sn-zahl { margin-left: auto; text-align: right; }
+.sn-zahl b { font-family: var(--schrift-mono); color: var(--text);
+  font-variant-numeric: tabular-nums; }
+.sn-zahl span { display: block; font-size: 11px; color: var(--matt); }
+
+.sn-funken { display: flex; align-items: flex-end; gap: 1px; height: 30px; min-width: 92px; }
+.sn-balken { width: 2px; background: var(--matt); opacity: .55; }
+.sn-balken.heute { background: var(--signal); opacity: 1; }
+
+.sn-tief { border-top: 1px solid var(--linie); padding: 14px 16px;
+  display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.sn-block h3 { margin: 0 0 6px; font-size: var(--s-13); color: var(--matt);
+  font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+.sn-block ul { margin: 0; padding: 0; list-style: none; font-size: var(--s-13); }
+.sn-block li { display: flex; justify-content: space-between; gap: 10px;
+  padding: 2px 0; color: var(--text); }
+.sn-block li span:last-child { font-family: var(--schrift-mono); color: var(--matt);
+  font-variant-numeric: tabular-nums; }
+.sn-weg { font-size: var(--s-13); color: var(--text); line-height: 1.5; }
+.sn-warn { color: var(--warn); }
+
+@media (max-width: 640px) {
+  .sn-zeile { flex-wrap: wrap; }
+  .sn-funken { order: 5; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

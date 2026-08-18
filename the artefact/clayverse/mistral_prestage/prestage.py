@@ -115,7 +115,10 @@ def build_context(
     connected_systems: dict[str, Any] | None,
     current_user: str,
     current_user_profile: dict[str, Any] | None,
-    moeglichkeitsraum: dict[str, Any] | None,
+    # Vorgabe None: ein fehlender Raum ist ein zulaessiger Zustand -- das Feld
+    # meldet dann selbst NICHT_GEBAUT. Ein Pflichtparameter haette bedeutet,
+    # dass jeder Aufrufer ein Erwartungsfeld bauen MUSS, auch ohne eines.
+    moeglichkeitsraum: dict[str, Any] | None = None,
     recent_turns: list[dict[str, Any]] | None,
     zero_suggestion: str | None,
 ) -> str:

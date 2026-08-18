@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Seiten — EntityOS</title>
+
+<!-- __CLERK_API__ / __CLERK_PUBLISHABLE_KEY__ werden server-seitig ersetzt,
+     genau wie auf Chat- und Postfachseite. Echte Schluessel gehoeren NIE in
+     diese Datei -- sie liegt im Git und wird ins Image gebacken. -->
+<script defer crossorigin="anonymous" src="__CLERK_API__/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+<script defer crossorigin="anonymous" data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__" src="__CLERK_API__/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+
+<!-- Farben, Schriften und Bewegungsgrundlage kommen aus der Schale. Hier wird
+     nichts davon ein zweites Mal definiert. -->
+<link rel="stylesheet" href="/web/schale/schale.css">
+<link rel="stylesheet" href="/web/seiten/seiten.css">
+<script src="/web/schale/schale.js" defer></script>
+<script src="/web/seiten/seiten.js" defer></script>
+</head>
+<body>
+<header id="entityos-schale"></header>
+
+<p id="sn-anmeldefehler" class="sn-fehler" role="alert" hidden></p>
+
+<main id="sn-wurzel">
+  <div class="sn-kopf">
+    <h1>Seiten</h1>
+    <p class="sn-unter">Alles, was wir ausliefern &mdash; mit Herkunft, Zahlen und dem Weg, es zu &auml;ndern.</p>
+    <div class="sn-lage" id="sn-lage" aria-live="polite">wird geladen &hellip;</div>
+  </div>
+
+  <!-- Leer ist ein ZUSTAND, keine leere Seite: sonst sieht "nichts da" aus wie
+       ein fehlgeschlagener Ladevorgang. Derselbe Fehler wie im Chatverlauf. -->
+  <div id="sn-leer" class="sn-leer" hidden>
+    <p>Keine Seiten gefunden.</p>
+    <p class="sn-matt">Das hei&szlig;t: die Plattformdatenbank ist erreichbar und enth&auml;lt keine
+       aktiven Projekte &mdash; nicht, dass das Laden fehlgeschlagen ist.</p>
+  </div>
+
+  <div id="sn-liste"></div>
+</main>
+</body>
+</html>

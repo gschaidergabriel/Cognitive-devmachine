@@ -65,6 +65,12 @@ services:
       # Ein Dienst, der seinen eigenen Tresor umschreiben kann, ist kein Tresor.
       - /etc/entityos/tresor:/etc/entityos/tresor:ro
       - /etc/entityos/tresor.key:/etc/entityos/tresor.key:ro
+      # Die Plattformdatenbank und die Projektverzeichnisse -- NUR LESEN.
+      # Daraus kommen Besucherzahlen und Seitengewicht; geschrieben wird dort
+      # von agentforge, nicht von uns.
+      - /var/lib/clay:/var/lib/clay
+      - /var/lib/agentforge/db:/var/lib/agentforge/db:ro
+      - /var/lib/agentforge/projects:/var/lib/agentforge/projects:ro
       # Provider-Zugaenge (u.a. NVIDIA_NIM_API_KEY). Read-only, 640 root:clay --
       # der Container-Prozess laeuft als uid 5001 (clay) und kann damit lesen,
       # aber nicht schreiben. Werte duerfen NIE in UnifiedDB-Zeilen, Snapshots,

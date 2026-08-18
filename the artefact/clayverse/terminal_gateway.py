@@ -425,6 +425,35 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     # ── Die Mailbox ───────────────────────────────────────────────────────
     # Eignerentscheidung 2026-08-18: es gibt nur den Chat und die Mailbox.
     # Keine Startseite -- "/" bleibt unveraendert der Chat.
+    # ── Seitenuebersicht: was wir hosten, wie es laeuft, wie man es aendert ──
+    _SEITEN_PAGE = Path("/opt/clayverse/web/seiten/index.html")
+
+    @app.get("/api/seiten")
+    async def seiten_api(request: Request):
+        # Dieselbe Anmeldepruefung wie /api/history. Die Uebersicht nennt
+        # Verzeichnisse und Besucherzahlen -- das gehoert hinter die Anmeldung,
+        # auch wenn es keine Geheimnisse sind.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        if identity.clerk_map.get(str(claims.get("sub", ""))) not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        from . import seiten as _seiten
+        return JSONResponse(await asyncio.to_thread(_seiten.uebersicht))
+
+    @app.get("/seiten", response_class=HTMLResponse)
+    async def seiten_index():
+        key = html.escape(publishable_key, quote=True)
+        api = html.escape(frontend_api_url, quote=True)
+        if not key or not api:
+            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        if not _SEITEN_PAGE.is_file():
+            return HTMLResponse("seiten surface missing from image", status_code=503)
+        page = _SEITEN_PAGE.read_text(encoding="utf-8")
+        return HTMLResponse(page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key))
+
     @app.get("/postfach", response_class=HTMLResponse)
     async def postfach_index():
         key = html.escape(publishable_key, quote=True)

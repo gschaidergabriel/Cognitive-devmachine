@@ -33,6 +33,46 @@ def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
     return assembler.assemble(session_id, resource_refs=[])
 
 
+
+def _profil_safe(db, user_id: str) -> dict | None:
+    """Profil, Rechnerbesitz und Wiki-Bestand des anwesenden Menschen.
+
+    Ausfallsicher, weil ein fehlendes Profil einen Zug nicht kippen darf: die
+    Vorstufe bekommt dann NO_PROFILE und sagt das, statt zu raten. Ein Fehler
+    hier wuerde sonst die ganze Anfrage verlieren -- fuer Beiwerk.
+
+    ⚠️ Der Schluessel heisst `gehoert_zu`, nicht `gehoert`. Mit dem falschen
+    Namen liefert .get() klaglos None, und die Vorstufe liest fuer JEDEN Rechner
+    "gehoert niemandem, nicht deiner" -- kein Fehler, nur die Unwahrheit, und
+    zwar genau bei der Angabe, die der Eigner ausdruecklich bestellt hat.
+    """
+    try:
+        from .. import profile as _profile
+        from .. import wirte as _wirte
+        from .. import artikel_zuordnung as _az
+        p = _profile.profil(db, user_id)
+        try:
+            p["rechner"] = [
+                {"wirt": w.get("wirt"), "gehoert_zu": w.get("gehoert_zu"),
+                 "meiner": w.get("gehoert_zu") == user_id, "online": w.get("online")}
+                for w in _wirte.verbundene_systeme(db)
+            ]
+        except Exception:
+            p["rechner"] = []
+        try:
+            p["wiki_bestand"] = _az.bestand(db, user_id)
+        except Exception:
+            pass
+        try:
+            from .. import erfolge as _erfolge
+            p["bilanz"] = _erfolge.bilanz(db, user_id)
+        except Exception:
+            pass
+        return p
+    except Exception:
+        return None
+
+
 def run_chat_turn(
     *,
     db,
@@ -45,20 +85,28 @@ def run_chat_turn(
 ) -> dict[str, Any]:
     """The one interface: German message in, German reply out.
 
-    record_via_turnlifecycle=False (default, SAFE): does not touch
-    turns/active_turns at all. Records the exchange only in this module's own
-    mv_prestage_turns/mv_translation_log tables. Use this until
-    terminal_hooks.py is patched to recognize CLAYVERSE_PIPELINE_MANAGED and
-    stop independently admitting its own colliding turn on every headless call.
+    record_via_turnlifecycle=False (default): does not touch turns/
+    active_turns at all. Records the exchange only in this module's own
+    mv_prestage_turns/mv_translation_log tables.
 
-    record_via_turnlifecycle=True (P4 TARGET, NOT YET SAFE TO ENABLE): uses
-    TurnLifecycle.begin_admission()/.complete() -- the product's own atomic
-    admission primitives, reused rather than reimplemented, exactly as asked.
-    Do not enable this against a real canonical session until the hook
-    collision described in headless_zero.py's docstring is fixed -- two
-    independent admitters (this function AND the managed UserPromptSubmit/Stop
-    hooks firing on the same claude -p call) will both try to own the same
-    session's active_turns row.
+    record_via_turnlifecycle=True: uses TurnLifecycle.begin_admission()/
+    .complete() -- the product's own atomic admission primitives, reused
+    rather than reimplemented, exactly as asked. HISTORY: this was genuinely
+    unsafe when first written -- the managed UserPromptSubmit hook fires on
+    every `claude -p` call just like an interactive keystroke, and as measured
+    2026-08-18 it independently called begin_admission() on the same session,
+    a second admitter racing this one. THAT IS FIXED: clayverse/
+    terminal_hooks.py's _main() now checks CLAYVERSE_PIPELINE_MANAGED first,
+    before any stdin/DB access, and short-circuits to
+    {"suppressOutput": true} instead of reaching user_prompt()'s
+    begin_admission() -- see headless_zero.py's run_headless() docstring for
+    the full account and the live-DB re-verification (active_turns empty).
+    headless_zero.run_headless()'s pipeline_managed defaults to True and sets
+    that env var, so calls through the normal headless path are covered.
+    The collision is only guaranteed again if a caller sets
+    pipeline_managed=False on that call (or otherwise disables the managed
+    hook) -- do not enable record_via_turnlifecycle=True against a real
+    canonical session in that situation, for the reasons above.
 
     Returns the interface contract (see report): turn_id, causal_id, reply,
     rounds_used, self_adapted, elapsed_ms, tool_selection.
@@ -92,10 +140,16 @@ def run_chat_turn(
             for t in (world.get("own_recent") or [])[-3:]
         ]
 
+        # Das Profil des ANWESENDEN Menschen -- dynamisch, je Zug neu gelesen.
+        # Nicht zwischengespeichert: es wird autonom verdichtet, ein Cache
+        # wuerde die Vorstufe mit einem veralteten Menschenbild fuettern.
+        nutzerprofil = _profil_safe(db, user_id)
+
         # --- round 1 ---
         t0 = time.perf_counter()
         envelope = prestage.run_prestage(
             raw_prompt=message, world=world, current_user=user_id,
+            current_user_profile=nutzerprofil,
             recent_turns=recent_turns, round_no=1,
         )
         prestage_ms = (time.perf_counter() - t0) * 1000.0
@@ -128,6 +182,7 @@ def run_chat_turn(
             t0 = time.perf_counter()
             envelope2 = prestage.run_prestage(
                 raw_prompt=message, world=world, current_user=user_id,
+                current_user_profile=nutzerprofil,
                 recent_turns=recent_turns, round_no=2, zero_suggestion=suggestion,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0

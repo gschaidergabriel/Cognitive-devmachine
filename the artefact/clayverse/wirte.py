@@ -86,8 +86,20 @@ def verbundene_systeme(db: UnifiedDB) -> list[dict]:
     eine LEERE Liste. Ein Wirt kann also online und gesund sein und trotzdem
     nichts koennen -- das ist ein Unterschied, den die Vorstufe sehen muss,
     sonst plant sie Arbeit auf einem Rechner, der nur winkt.
+
+    ⚠️ Legt KEINE Tabellen an (bewusst, wie profile.profil()). _sicherstellen()
+    ruft executescript(), und das committet implizit -- aus einem laufenden
+    Zug heraus aufgerufen reisst es dessen Transaktion auseinander (heute so
+    gemessen: 77 rote Tests, an genau dieser Stelle in diesem Lesepfad).
+    Schemaanlage ist eine Startaufgabe (service.main() -> wirte.aufnehmen()),
+    keine Leseaufgabe. Eine Lesefunktion, die nebenbei Tabellen anlegt, ist
+    eine Schreiboperation im Tarnanzug -- deshalb hier nur eine Sondierung,
+    die bei fehlender Tabelle leer zurueckgibt statt zu bauen.
     """
-    _sicherstellen(db)
+    try:
+        db.db.execute("SELECT 1 FROM entityos_wirte LIMIT 1")
+    except Exception:
+        return []
     jetzt = time.time()
     aus = []
     for r in db.db.execute(

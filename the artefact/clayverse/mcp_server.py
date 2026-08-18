@@ -297,6 +297,78 @@ class ClayVerseEffectBridge:
         return {"suchbegriff": suchbegriff, "gehoert_zu": self.user_id,
                 "ergebnisse": me.memory_suche(self.user_id, suchbegriff, limit=max(1, min(int(limit), 50)))}
 
+    # ── Menschen: wer ist da, wem gehoert was ─────────────────────────────
+
+    def menschen_profil(self) -> dict:
+        """Profil des ANWESENDEN Menschen. Kein Argument -- der Mensch ist kein Parameter.
+
+        Ein user_id-Argument waere ein Feld, das das Modell fuellt. Dann waere
+        die Trennung der beiden Menschen eine Bitte statt einer Eigenschaft.
+        """
+        from . import profile as _profile
+        from . import wirte as _wirte
+        from . import artikel_zuordnung as _az
+        p = _profile.profil(self.db, self.user_id)
+        try:
+            p["rechner"] = [
+                {"wirt": w.get("wirt"), "gehoert_zu": w.get("gehoert_zu"),
+                 "meiner": w.get("gehoert_zu") == self.user_id,
+                 "online": w.get("online")}
+                for w in _wirte.verbundene_systeme(self.db)
+            ]
+        except Exception as e:
+            p["rechner_fehler"] = f"{type(e).__name__}: {e}"
+        try:
+            p["wiki_bestand"] = _az.bestand(self.db, self.user_id)
+        except Exception as e:
+            p["wiki_bestand_fehler"] = f"{type(e).__name__}: {e}"
+        try:
+            from . import erfolge as _erfolge
+            # Beide Haelften oder keine: eine Bilanz, die nur Gelungenes fuehrt,
+            # ist ein Werbeblatt -- und hier waere sie ausserdem ein falsches Bild
+            # davon, wie dieses System kaputtgeht.
+            p["bilanz"] = _erfolge.bilanz(self.db, self.user_id)
+        except Exception as e:
+            p["bilanz_fehler"] = f"{type(e).__name__}: {e}"
+        p["gelesen_fuer"] = self.user_id
+        return p
+
+    def wiki_zuordnung(self, projekt: str = "") -> dict:
+        """Welcher Teil des Wikis wem zugerechnet wird. Zahlen und Zugehoerigkeit, nie Text.
+
+        Fuer beide Menschen einsehbar: das ist eine Aussage ueber das gemeinsame
+        Archiv, kein Blick in fremde Inhalte.
+        """
+        try:
+            self.db.db.execute("SELECT 1 FROM entityos_artikel_zuordnung LIMIT 1")
+        except Exception:
+            return {"stand": "NOCH_NICHT_ZUGEORDNET",
+                    "hinweis": "Tabelle entityos_artikel_zuordnung existiert nicht. "
+                               "Sage das, statt zu schaetzen."}
+        verteilung = {r["gehoert"]: r["n"] for r in self.db.db.execute(
+            "SELECT gehoert, COUNT(*) n FROM entityos_artikel_zuordnung GROUP BY gehoert")}
+        gruende = [{"grund": r["grund"], "anzahl": r["n"], "sicherheit": r["s"]}
+                   for r in self.db.db.execute(
+                       "SELECT grund, COUNT(*) n, MAX(sicherheit) s FROM entityos_artikel_zuordnung "
+                       "GROUP BY grund ORDER BY n DESC LIMIT 12")]
+        antwort = {
+            "artikel_gesamt": sum(verteilung.values()),
+            "verteilung": verteilung,
+            "gruende": gruende,
+            "anwesender_mensch": self.user_id,
+            "regel": ("Zugehoerigkeit kommt aus projekt/sphaere, NIE aus dem Bearbeiter. "
+                      "501 Artikel aus Andreas' Bestand tragen Gabriel als Bearbeiter -- "
+                      "Urheberschaft ist nicht Zugehoerigkeit. 'unbekannt' heisst: kein "
+                      "Signal vorhanden, es wurde bewusst nicht geraten."),
+        }
+        if projekt:
+            antwort["projekt"] = projekt
+            antwort["projekt_verteilung"] = {r["gehoert"]: r["n"] for r in self.db.db.execute(
+                "SELECT z.gehoert, COUNT(*) n FROM entityos_artikel_zuordnung z "
+                "JOIN artikel a ON a.id=z.artikel_id WHERE a.projekt=? GROUP BY z.gehoert",
+                (projekt,))}
+        return antwort
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -400,6 +472,16 @@ def main() -> None:
     def udb_memory_search(suchbegriff: str, limit: int = 10) -> dict:
         """Durchsucht gespeicherte Memory-Eintraege nach Inhalt."""
         return bridge.udb_memory_search(suchbegriff, limit)
+
+    @mcp.tool(annotations=udb_ro)
+    def menschen_profil() -> dict:
+        """Profil des gerade anwesenden Menschen: Rolle, Projekte, welche Rechner ihm gehoeren, welcher Teil des Wikis. Jedes Feld traegt seine Herkunft (eigner | iar.frank.ink | abgeleitet | gemessen) -- gewichte Abgeleitetes nicht wie Erklaertes."""
+        return bridge.menschen_profil()
+
+    @mcp.tool(annotations=udb_ro)
+    def wiki_zuordnung(projekt: str = "") -> dict:
+        """Welcher Teil des Wikis gabriel, andreas oder beiden gemeinsam zugerechnet wird -- Zahlen und Begruendungen, kein Artikeltext. Optional auf ein Projekt eingeschraenkt."""
+        return bridge.wiki_zuordnung(projekt)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

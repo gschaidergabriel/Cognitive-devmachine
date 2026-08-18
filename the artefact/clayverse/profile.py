@@ -206,6 +206,14 @@ def sitzungsvorspann(db, user_id: str, session_id: str, platz: int | None = None
         "  geprüfter Clerk-Anmeldung. Du darfst diesen Menschen beim Namen nennen.",
         f"  Der andere Mensch ist {andere} und ist hier NICHT anwesend. Nichts aus dieser",
         "  Sitzung gehoert in seine.",
+        "",
+        "  NACHSCHLAGEN statt schaetzen -- diese Angaben stehen NICHT in memory_search",
+        "  oder embedding_search, sondern in eigenen Tabellen:",
+        "    menschen_profil()          Rolle, Projekte, welche Rechner ihm gehoeren,",
+        "                               welcher Teil des Wikis. Jedes Feld mit Herkunft.",
+        "    wiki_zuordnung(projekt)    welcher Teil des Wikis wem zugerechnet wird.",
+        "  Wenn du nach Zugehoerigkeit gefragt wirst, RUF SIE AUF. Findest du dort",
+        "  nichts, sage das -- aber sage es erst danach.",
         "</anwesender_mensch>",
     ]
     return "\n".join(z for z in zeilen if z)

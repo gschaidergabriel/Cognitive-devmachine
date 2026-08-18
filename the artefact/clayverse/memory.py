@@ -2,6 +2,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import time
+import uuid
 from .store import UnifiedDB
 
 EXPLICIT = re.compile(r"(?im)^\s*(FACT|DECISION|TASK|COMMITMENT|PREFERENCE|OPEN|OPEN_QUESTION)\s*:\s*(.+?)\s*$")
@@ -9,15 +11,47 @@ EXPLICIT_LINE = re.compile(r"(?i)^\s*(FACT|DECISION|TASK|COMMITMENT|PREFERENCE|O
 SEMANTIC_KINDS = {"fact", "decision", "task", "commitment", "preference", "open", "open_question"}
 CONTROL_KINDS = {"source_archive", "compression_receipt", "compression_clearance"}
 
+# Additive-only compression layer. `turns.content` is the append-only causal ledger and
+# is NEVER rewritten by this module (see compact()) -- every effect, causal episode, and
+# provenance chain points into turns, so a rewritten row would silently change a past
+# other rows still reference. Each compression pass writes a NEW, separate row here
+# instead, one per (turn_id, level), each naming its source turn id, its source digest,
+# and what produced it. The original always remains reconstructable at turns.content.
+# Name checked free against the 110 existing wiki.db tables before use (2026-08-18).
+COMPRESSION_SCHEMA = """
+CREATE TABLE IF NOT EXISTS turn_compressions(
+    compression_id TEXT PRIMARY KEY,
+    turn_id TEXT NOT NULL REFERENCES turns(turn_id),
+    session_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    level INTEGER NOT NULL,
+    level_name TEXT NOT NULL,
+    content TEXT NOT NULL,
+    source_sha256 TEXT NOT NULL,
+    derived_from_turn_ids TEXT NOT NULL,
+    extractor TEXT NOT NULL,
+    prompt_version TEXT,
+    created_at REAL NOT NULL,
+    UNIQUE(turn_id, level)
+);
+CREATE INDEX IF NOT EXISTS idx_turn_compressions_turn ON turn_compressions(turn_id, level);
+"""
+
 
 class MemoryManager:
     """Progressive conversation compression with an extract-or-defer safety gate.
 
     The newest 20 turns remain full fidelity. A full-fidelity turn crosses the first
-    destructive compression boundary only when semantic coverage is demonstrably
-    complete: either every non-empty line is an explicit durable marker, or a stronger
-    extractor has issued a hash-bound compression clearance. Partial extraction is not
-    enough. Once a turn has crossed that boundary it may age through later trace levels.
+    compression boundary only when semantic coverage is demonstrably complete: either
+    every non-empty line is an explicit durable marker, or a stronger extractor has
+    issued a hash-bound compression clearance. Partial extraction is not enough. Once a
+    turn has crossed that boundary it may age through later trace levels.
+
+    Compression is additive, never destructive: turns.content is the append-only causal
+    ledger and this class never rewrites it. Each pass appends a row to
+    turn_compressions (one per turn_id x level, each naming its source turn id, source
+    sha256, extractor, and timestamp); only the bookkeeping columns turns.fidelity and
+    turns.compression_generation are updated to point at the current effective level.
     """
 
     LEVELS = (
@@ -32,6 +66,36 @@ class MemoryManager:
     def __init__(self, db: UnifiedDB, full_window=20):
         self.db = db
         self.full_window = full_window
+        self.db.db.executescript(COMPRESSION_SCHEMA)
+
+    def _write_compression_layer(self, row, level, text, *, extractor="ladder-v1", prompt_version="ladder-2026-08-18"):
+        """Append a compression layer. Never touches turns.content; INSERT (or idempotent
+        re-run) into turn_compressions only, keyed one row per (turn_id, level)."""
+        compression_id = str(uuid.uuid4())
+        self.db.db.execute(
+            "INSERT INTO turn_compressions("
+            "compression_id,turn_id,session_id,user_id,level,level_name,content,"
+            "source_sha256,derived_from_turn_ids,extractor,prompt_version,created_at) "
+            "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) "
+            "ON CONFLICT(turn_id,level) DO UPDATE SET "
+            "content=excluded.content,source_sha256=excluded.source_sha256,"
+            "extractor=excluded.extractor,prompt_version=excluded.prompt_version,created_at=excluded.created_at",
+            (
+                compression_id,
+                row["turn_id"],
+                row["session_id"],
+                row["user_id"],
+                level,
+                self.LEVELS[level],
+                text,
+                self._source_digest(row["content"]),
+                json.dumps([row["turn_id"]]),
+                extractor,
+                prompt_version,
+                time.time(),
+            ),
+        )
+        return compression_id
 
     def _add_memory_once(self, kind, subject, value, source_turn_id, user_id, provenance):
         row = self.db.db.execute(
@@ -126,8 +190,9 @@ class MemoryManager:
             (row["turn_id"],),
         ).fetchone()
         provenance_update = {
-            "archive": "sha256-precompression-v4",
-            "lossless_source_retained": False,
+            "archive": "sha256-precompression-v5-append-only",
+            "lossless_source_retained": True,
+            "lossless_source_location": "turns.content (never rewritten by compact())",
             "source_sha256": digest,
             "source_bytes": len(row["content"].encode("utf-8")),
             "source_words": len(row["content"].split()),
@@ -188,15 +253,25 @@ class MemoryManager:
                 self._record_precompression_once(row, clearance=clearance, clearance_mode=clearance_mode)
                 if not clearance:
                     continue
+            # Additive only: the compressed text becomes a NEW row in turn_compressions,
+            # derived fresh from row["content"] -- which is always the pristine original,
+            # because this method no longer ever rewrites it. fidelity/compression_generation
+            # on `turns` are a live "how compressed is the current view" pointer (the same
+            # kind of mutable bookkeeping sessions.updated_at already is elsewhere in this
+            # schema) -- turns.content itself is untouched.
+            self._write_compression_layer(row, level, self._compress(row["content"], level))
             self.db.db.execute(
-                "UPDATE turns SET content=?, fidelity=?, compression_generation=? WHERE turn_id=?",
-                (self._compress(row["content"], level), self.LEVELS[level], level, row["turn_id"]),
+                "UPDATE turns SET fidelity=?, compression_generation=? WHERE turn_id=?",
+                (self.LEVELS[level], level, row["turn_id"]),
             )
             compressed_turn_ids.append(row["turn_id"])
             changed += 1
 
         # Legacy full source archives are retired only after that exact turn crossed the
         # semantic-clearance gate. A deferred turn never loses its only recoverable source.
+        # (In practice no code path in this repo ever writes a 'source_archive' durable_memory
+        # row -- grepped 2026-08-18 -- so this DELETE is presently a no-op; left as-is, it is
+        # not what step 1 was asked to touch.)
         if compressed_turn_ids:
             placeholders = ",".join("?" for _ in compressed_turn_ids)
             self.db.db.execute(

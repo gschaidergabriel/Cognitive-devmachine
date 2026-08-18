@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T07:33:33Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T07:38:09Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -130,15 +130,7 @@ CREATE TABLE folgerung_beleg (
             PRIMARY KEY (folgerung_id, beleg_art, beleg_id)
         );
 CREATE VIRTUAL TABLE fts_index_artikel USING fts5(titel, text, content='artikel_suchtext', content_rowid='id');
-CREATE TABLE 'fts_index_artikel_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-CREATE TABLE 'fts_index_artikel_data'(id INTEGER PRIMARY KEY, block BLOB);
-CREATE TABLE 'fts_index_artikel_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-CREATE TABLE 'fts_index_artikel_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
 CREATE VIRTUAL TABLE fts_index_datei USING fts5(titel, text, content='datei', content_rowid='id');
-CREATE TABLE 'fts_index_datei_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-CREATE TABLE 'fts_index_datei_data'(id INTEGER PRIMARY KEY, block BLOB);
-CREATE TABLE 'fts_index_datei_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-CREATE TABLE 'fts_index_datei_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
 CREATE TABLE fundort (
                 datei_id INTEGER NOT NULL,  -- FK auf datei.id (robuster Join)
                 pruefsumme TEXT NOT NULL,   -- wie vom Eigentuemer verlangt, zur Anzeige/Direktabfrage
@@ -543,23 +535,9 @@ CREATE TABLE vp_alias (
       alias_class TEXT, confidence REAL, source_epoch INTEGER
     );
 CREATE VIRTUAL TABLE vp_alias_fts USING fts5(alias_norm, content='vp_alias', content_rowid='alias_id');
-CREATE TABLE 'vp_alias_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-CREATE TABLE 'vp_alias_fts_data'(id INTEGER PRIMARY KEY, block BLOB);
-CREATE TABLE 'vp_alias_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-CREATE TABLE 'vp_alias_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
 CREATE TABLE vp_alias_meta (key TEXT PRIMARY KEY, value TEXT);
 CREATE VIRTUAL TABLE vp_datei_fts USING fts5(titel, datei_id UNINDEXED);
-CREATE TABLE 'vp_datei_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-CREATE TABLE 'vp_datei_fts_content'(id INTEGER PRIMARY KEY, c0, c1);
-CREATE TABLE 'vp_datei_fts_data'(id INTEGER PRIMARY KEY, block BLOB);
-CREATE TABLE 'vp_datei_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-CREATE TABLE 'vp_datei_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
 CREATE VIRTUAL TABLE vp_dir_fts USING fts5(verzeichnisname, datei_id UNINDEXED);
-CREATE TABLE 'vp_dir_fts_config'(k PRIMARY KEY, v) WITHOUT ROWID;
-CREATE TABLE 'vp_dir_fts_content'(id INTEGER PRIMARY KEY, c0, c1);
-CREATE TABLE 'vp_dir_fts_data'(id INTEGER PRIMARY KEY, block BLOB);
-CREATE TABLE 'vp_dir_fts_docsize'(id INTEGER PRIMARY KEY, sz BLOB);
-CREATE TABLE 'vp_dir_fts_idx'(segid, term, pgno, PRIMARY KEY(segid, term)) WITHOUT ROWID;
 CREATE TABLE vp_edge_lern (
       query_class TEXT, edge_art TEXT,
       gewicht REAL DEFAULT 0, beobachtungen INTEGER DEFAULT 0,

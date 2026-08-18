@@ -428,13 +428,27 @@ def unifieddb_leer(manifest: dict) -> None:
     ziel.mkdir(parents=True, exist_ok=True)
 
     c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
-    zeilen = [r[0] for r in c.execute(
-        "SELECT sql FROM sqlite_master WHERE sql IS NOT NULL "
-        "AND name NOT LIKE 'sqlite_%' ORDER BY CASE type "
-        "WHEN 'table' THEN 1 WHEN 'index' THEN 2 WHEN 'trigger' THEN 3 ELSE 4 END, name")]
+    # FTS5 legt zu jeder virtuellen Tabelle Schattentabellen an (_data, _idx,
+    # _content, _docsize, _config). Sie stehen in sqlite_master, gehoeren aber
+    # NICHT in den Abzug: beim Wiederaufbau erzeugt die virtuelle Tabelle sie
+    # selbst, und die Kopie kollidiert. Ein Abzug, der daran scheitert, sieht
+    # aus wie eine Sicherung und ist keine.
+    virtuelle = [r[0] for r in c.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND sql LIKE '%VIRTUAL TABLE%'")]
+    SUFFIXE = ("_data", "_idx", "_content", "_docsize", "_config")
+    schatten = {f"{v}{sfx}" for v in virtuelle for sfx in SUFFIXE}
+
+    zeilen = []
+    for name, sql_ in c.execute(
+            "SELECT name, sql FROM sqlite_master WHERE sql IS NOT NULL "
+            "AND name NOT LIKE 'sqlite_%' ORDER BY CASE type "
+            "WHEN 'table' THEN 1 WHEN 'index' THEN 2 WHEN 'trigger' THEN 3 ELSE 4 END, name"):
+        if name in schatten:
+            continue
+        zeilen.append(sql_)
     tabellen_original = c.execute(
         "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
-    ).fetchone()[0]
+    ).fetchone()[0] - len(schatten)
     c.close()
 
     sql = ("-- UnifiedDB: vollstaendiges Schema, KEINE Daten.\n"
@@ -456,7 +470,7 @@ def unifieddb_leer(manifest: dict) -> None:
             p.executescript(sql)
             gebaut = p.execute(
                 "SELECT COUNT(*) FROM sqlite_master WHERE type='table' "
-                "AND name NOT LIKE 'sqlite_%'").fetchone()[0]
+                "AND name NOT LIKE 'sqlite_%'").fetchone()[0] - len(schatten)
             p.close()
             pruefung = {"gebaut": True, "tabellen_erzeugt": gebaut,
                         "tabellen_original": tabellen_original,

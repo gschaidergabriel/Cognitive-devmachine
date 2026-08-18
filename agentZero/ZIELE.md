@@ -1,8 +1,8 @@
 # Was Agent Zero können soll — und was davon steht
 
-**Automatisch erzeugt 2026-08-18T11:20:50Z.** Nicht von Hand pflegen.
+**Automatisch erzeugt 2026-08-18T11:50:14Z.** Nicht von Hand pflegen.
 
-**22 erfüllt · 6 offen · 1 zurückgestellt** von 29 Zeilen.
+**21 erfüllt · 7 offen · 1 zurückgestellt** von 29 Zeilen.
 
 Die Spalte **Soll** ist deklariert und ändert sich nur, wenn der Eigner etwas
 entscheidet. Die Spalte **Ist** wird bei jedem Lauf neu **gemessen** — durch einen
@@ -56,7 +56,7 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | **Abruf ist abfragesensitiv** | nicht die letzten N, sondern was zur Frage passt | 11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren) | ✅ erfüllt | Architektur |
 | **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst | 0 gelernte Eintrittspunkte, Modus SHADOW, 41 Episoden | 🔧 offen | Eigner 18.08. |
 | **Wegehierarchie: Autobahnen, Tunnel, Landwege** | oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung | Verstärkung vorhanden. FEHLT: Verfall ungenutzter Wege, inverse Gewichtung, Tunnel | 🔧 offen | F94 / Eigner 16.08. |
-| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 49 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
+| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 51 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
 
 ## Anbieter
 
@@ -77,10 +77,10 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
-| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 11 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
+| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 40 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
 | **Frontend heißt EntityOS und ist erreichbar** | Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal | https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen | ✅ erfüllt | Eigner 18.08. |
 | **Der Export pflegt sich selbst** | alles autonom ins Forschungs-Repo unter agentZero | systemd-Timer alle 30 min, enabled | ✅ erfüllt | Eigner 18.08. |
-| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 564 gruen / 15 rot | ✅ erfüllt | Arbeitsregel |
+| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | nicht gemessen | 🔧 offen | Arbeitsregel |
 | **Endabnahme hinter eigenem Gastkern** | derselbe Digest hinter einer eigenen VM-Grenze | kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt | ⏸ zurückgestellt | Entwurf – vom Eigner zurückgestellt |
 
 ---

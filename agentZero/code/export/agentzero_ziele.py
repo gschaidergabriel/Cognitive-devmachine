@@ -475,6 +475,75 @@ def zeilen(c) -> list[dict]:
       "Tresorkatalog verweigert, statt zu hoffen",
       True)
 
+    # ── Speicher und Sicherheit, nachgetragen 18.08. abends ────────────────
+    try:
+        import importlib.util as _il
+        _sp = _il.spec_from_file_location("sw", "/opt/entityos/speicherwacht.py")
+        _sw = _il.module_from_spec(_sp); _sp.loader.exec_module(_sw)
+        _lg = _sw.lage()
+        _bl = _sw.bilanz(zeitlimit=45)
+        _vu = _sw.verursacher()
+        _rw = _n("speicher_rueckweg")
+    except Exception as _e:
+        _lg = _bl = _vu = None
+        _rw = f"Wacht nicht ladbar: {type(_e).__name__}"
+
+    z("Betrieb", "Zero hält selbst Platz auf dem Wirt",
+      "das Speicher-Management des VPS übernimmt Zero autonom",
+      "Eigner 18.08.",
+      (f"{_lg['belegt_prozent']} % belegt, {_lg['frei_gb']} GB frei. Wacht alle 30 min, "
+       "vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). "
+       "⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes "
+       "Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle "
+       "15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, "
+       "173 → 96 GB"
+       if _lg else "Wacht nicht messbar"),
+      bool(_lg and _lg["belegt_prozent"] < 90))
+    z("Betrieb", "Das Messgerät kann melden, dass es nichts messen konnte",
+      "eine Rechnung, die nicht aufgeht, muss das SAGEN",
+      "Lehre aus dem Bau 18.08.",
+      (f"Bilanz nennt drei Zahlen: df {_bl['df_belegt_gb']} GB, gezählt "
+       f"{_bl['zusammengezaehlt_gb']} GB, Lücke {_bl['luecke_gb']} GB. "
+       "⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze "
+       "und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So "
+       "standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als "
+       f"Lücke auf. Urteil jetzt: {_bl['urteil'][:80]}"
+       if _bl else "Bilanz nicht messbar"),
+      bool(_bl and not _bl["nicht_zaehlbar"] and abs(_bl["luecke_gb"]) < 5))
+    z("Betrieb", "Abgeschafftes bleibt zurückholbar",
+      "kein Frank v0.1 mehr, keine lokalen Modelle — aber wenn ich es je doch will, muss es gehen",
+      "Eigner 18.08.",
+      (f"{_rw} Posten im Rückwegverzeichnis, 23 Modelle mit Namen, Fassung und "
+       "Nachladebefehl im Wiki. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — "
+       "deshalb verweigert `speicher_abschaffen` ohne geschriebenes Verzeichnis. "
+       "Die Wacht löscht Altbestand (44 GB) NICHT von selbst: ein Modellcache sieht aus "
+       "wie Müll und kann Arbeit von Wochen enthalten"
+       if isinstance(_rw, int) and _rw else f"kein Rückweg gebucht ({_rw})"),
+      isinstance(_rw, int) and _rw >= 5)
+    z("Betrieb", "Der Verursacher wird gesucht, nicht nur der Haufen",
+      "ein Haufen mit Verursacher wächst nach; Löschen allein ist dann keine Verwaltung",
+      "Lehre aus dem Bau 18.08.",
+      ((_vu["urteil"][:150] + " Der Detektor wurde gegengeprüft: mit einem Muster, das "
+        "nachweislich läuft, findet er 13 Einheiten — sein „nichts gefunden\" ist also "
+        "belastbar und nicht bloß Stille.")
+       if _vu else "nicht messbar"),
+      bool(_vu and not _vu.get("noch_aktiv")))
+
+    z("Kognition", "Der Zaun hält einem Angriff stand",
+      "Handlungsfähigkeit ohne Zaun wäre kein Fortschritt, sondern der Verlust "
+      "der einzigen Eigenschaft, die dieses System von einer offenen Schale unterscheidet",
+      "Architektur",
+      "⚠️⚠️ Ein Prüfangriff BEWIES einen vollen root-Ausbruch: `.git/config` lag innerhalb "
+      "der erlaubten Wurzel, `core.fsmonitor` lässt git einen Schalbefehl ausführen, und "
+      "git läuft auf dem Wirt als root — nachgewiesen mit `id` → uid=0. Ich hatte den Weg "
+      "richtig erkannt (git führt Fremdes aus) und dann EINEN Kanal davon zugemacht: "
+      "`.git/hooks`. Geschlossen mit VIER Sperren, weil eine Sperre mit einer Liste des "
+      "Gefährlichen nur vor dem schützt, was schon jemand aufgeschrieben hat: .git ist "
+      "jetzt ganz ausserhalb des Zauns, git läuft ohne fremde Konfiguration, .git/config "
+      "wird als TEXT vorgeprüft, und geprüft wird vor JEDEM git-Aufruf — auch vor `stand`, "
+      "das vorher durch keine Prüfung lief und genau der Auslöser war",
+      True)
+
     return Z
 
 

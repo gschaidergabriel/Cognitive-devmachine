@@ -1,12 +1,54 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T16:41:09Z. 770 Commits aus vier Repos, davon 240 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T17:11:06Z. 773 Commits aus vier Repos, davon 241 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
+
+`ff68c38f9703` · agentzero-export · 16:48 UTC · EntityOS
+
+```
+SPEICHER. Die Platte lief zweimal auf 100 %. Die Ursache war nicht fehlendes
+Aufraeumen, sondern `frank-laeufer-rae.timer` -- ein Zeitgeber eines
+ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief und Wegwerfordner in /tmp
+anlegte. 6.606 Ordner, 41 GB, unter fuenf verschiedenen Namensmustern; die erste
+Raeumung fand nur die Haelfte. Insgesamt 77 GB befreit, 173 -> 96 GB.
+
+WARUM ES NIEMANDEM AUFFIEL, und das ist der wichtigere Teil: `du -xsh /tmp` lief
+bei 15.236 Eintraegen in die Zeitgrenze und gab NICHTS aus. Ein leeres Ergebnis
+liest sich wie "da ist nichts". So stand die Summe aller Ordner (77 GB) neben dem
+tatsaechlichen Verbrauch (173 GB), und die Luecke fiel niemandem als Luecke auf.
+Die Bilanz nennt jetzt DREI Zahlen: was df sagt, was sie zaehlen konnte, und was
+sie NICHT konnte.
+
+ZURUECKHOLBAR. Der Eigner hat Frank v0.1 und alle lokalen Modelle abgeschafft,
+aber verlangt: "wenn ich jemals doch will muss das auch gehen." Gewichte sind
+nachladbar, die LISTE war es nicht -- deshalb stehen 23 Modelle mit Namen,
+Fassung und Nachladebefehl im Wiki, und `speicher_abschaffen` verweigert ohne
+geschriebenes Verzeichnis. Altbestand (44 GB) loescht die Wacht NICHT von selbst:
+ein Modellcache sieht aus wie Muell und kann Arbeit von Wochen sein.
+
+DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
+lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
+Schalbefehl ausfuehren, git laeuft auf dem Wirt als root. Nachgewiesen mit `id`
+-> uid=0. Ich hatte den Weg richtig erkannt -- git fuehrt Fremdes aus -- und dann
+EINEN Kanal davon zugemacht, `.git/hooks`. Eine Sperre, die eine Liste des
+Gefaehrlichen fuehrt, schuetzt nur vor dem, was schon jemand aufgeschrieben hat.
+Vier Sperren statt einer besseren: .git ist ganz ausserhalb des Zauns, git laeuft
+ohne fremde Konfiguration, .git/config wird als TEXT vorgeprueft, und geprueft
+wird vor JEDEM git-Aufruf -- auch vor `stand`, das vorher durch keine Pruefung
+lief und genau der Ausloeser war.
+
+Ausserdem: Zeros erste eigene Veroeffentlichung ist live. Er fand auf der
+Startseite von seimensch.net den Platzhalter `ZVR ___`, prueft 61 Fundstellen,
+sortierte 51 Binaer-Fehltreffer aus, liess den Demo-Baustein bewusst stehen und
+aenderte genau eine Zeile. Commit 1bfe2e21.
+```
 
 ### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
 
@@ -4511,44 +4553,6 @@ exakt zur nur-lesenden Standardverbindung des Hauses. busy_timeout, query_only
 und Wiederholung kommen jetzt von der einen Stelle statt lokal dupliziert.
 Backup vor der Aenderung: werkzeug/benchmark_recall_wikidb.py.vor-udb (nicht
 versioniert, wie beim messstand.py-Vorbild).
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F29 Messfehler: das eigene Messgeraet nicht benutzt
-
-`a8cb01d764e0` · clay · 06:28 UTC · ClayVerse
-
-```
-Ein Bildschirmfoto nannte 92 Prozent. Ich habe daraufhin geschaetzt und meine
-Arbeit danach eingeteilt - obwohl claude-limits periodisch den echten Stand ins
-Journal schreibt, mit Quelle claude-api, Rueckstellzeit, Aufteilung nach
-Sitzung/alle Modelle/Fable UND einem Feld namens geraten. Ich hatte das
-Werkzeug selbst gebaut.
-
-Gemessen nachgeholt: alle_modelle 92 Prozent, session 12, fable 28,
-geraten false, Quelle claude-api.
-
-KLASSE: nicht Information fehlte, sondern lag gebrauchsfertig vor und wurde
-nicht abgerufen. Derselbe Typ wie stilles Stehen und Wolfsruf - das Messgeraet
-laeuft, sein Urteil wird nicht gelesen. Und wie F26 am selben Tag: eine
-notierte Luecke weitergeschrieben statt sie am Code nachzumessen.
-
-UND CLAYVERSE DARF IHN ERST RECHT NICHT MACHEN: es ist ein System, das seine
-eigenen Zustaende misst und zentral fuehrt - Kontingentbuch, Schluesselwacht,
-Puls, Flugschreiber. Wer Messgeraete betreibt und dann nach Gefuehl
-entscheidet, hat sie umsonst.
-
-BEHEBUNG IST ZUSTELLUNG, NICHT DISZIPLIN. Sich vorzunehmen oefter nachzusehen
-hat heute nachweislich nicht funktioniert. Der Stand muss dort liegen wo
-ohnehin gelesen wird, mit Zeitstempel damit Veralten sichtbar ist. Dieselbe
-Lehre wie Schub statt Anzeige bei den SynthEq-Kugeln.
-
-KEIN mechanischer Ausloeser erfunden: gleich wird eine Zahl ueber den eigenen
-Zustand genannt ist ohne semantisches Urteil nicht erkennbar. Regel aus B21 -
-was sich nicht mechanisch treffen laesst, ist kein Ausloeser.
-
-Als Eintrag 18 auch in MESSFEHLER.md.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

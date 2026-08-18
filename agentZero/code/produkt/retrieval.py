@@ -189,8 +189,26 @@ class WorldAssembler:
                 if wanted.intersection(json.loads(r["resource_refs"])):
                     item = dict(r)
                     if int(r["compression_generation"]) > 0:
+                        # ⚠️⚠️ DER ROHTEXT DARF HIER NICHT MIT HINAUS.
+                        # Das ist die Zeile eines ANDEREN Menschen, ausgeliefert
+                        # nur weil eine gemeinsame Ressource kollidiert. Ist der
+                        # Zug verdichtet, ist die Absicht: nur die extrahierten
+                        # Fragmente gehen hinaus, nicht das Original.
+                        #
+                        # Vorher stand hier `item = dict(r)` und blieb dabei --
+                        # das Etikett sagte "verdichtet", der Inhalt war
+                        # vollstaendig. Die alte, zerstoerende Verdichtung hatte
+                        # den Rohtext zufaellig schon ueberschrieben; seit sie
+                        # additiv ist, steht er noch da. Eine Zusicherung, die
+                        # an einer Nebenwirkung hing, ist beim Umbau nicht
+                        # mitgewandert.
                         item["retrieval_fidelity"] = "compressed_with_extracted_fragments"
                         item["extracted_fragments"] = self._extracted_fragments(r["turn_id"])
+                        item["content"] = (
+                            f"[verdichtet auf Stufe {int(r['compression_generation'])} -- "
+                            "Original bleibt im Kausalbuch, wird aber nicht sitzungsuebergreifend "
+                            "ausgeliefert. Nur die extrahierten Fragmente stehen hier.]")
+                        item["quelle_zurueckgehalten"] = True
                     other.append(item)
                     if len(other) >= 10:
                         break

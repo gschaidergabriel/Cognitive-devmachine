@@ -76,11 +76,27 @@ def _pruefe(pfad: str, *, schreiben: bool = False) -> Path:
     # Schluessel zu pflegen hiesse, sich auf die eigene Vollstaendigkeit zu
     # verlassen -- der ganze Ordner ist die ehrlichere Sperre. Zero arbeitet an
     # der Arbeitskopie, nicht an ihrer Verwaltung.
-    if ".git" in p.parts:
+    # ⚠️ Kleinschreibung vergleichen, nicht woertlich. Auf ext4 ist `.GIT` ein
+    # anderer, nicht existierender Ordner -- aber sich darauf zu verlassen heisst,
+    # eine Sicherheitseigenschaft an eine Dateisystem-Einstellung zu haengen.
+    # Auf einem Dateisystem ohne Gross-/Kleinschreibung waere derselbe Zaun offen.
+    teile = {t.lower() for t in p.parts}
+    if ".git" in teile:
         raise ZaunFehler(
             f"{p} liegt in .git -- die Verwaltung der Arbeitskopie ist nicht dein "
             "Arbeitsplatz. Ein beschreibbares .git/config koennte dem Wirt Befehle "
             "unterschieben. Aendere Dateien, nicht das Repo.")
+    # ⚠️ Diese zwei liegen im Arbeitsbaum, steuern aber, WIE git Dateien
+    # verarbeitet -- .gitattributes kann Filter und Zeilenenden umstellen und
+    # damit aus einer Ein-Zeilen-Aenderung einen Commit machen, der JEDE Datei
+    # anfasst. Das ist keine Codeausfuehrung, aber ein Weg, unbemerkt viel zu
+    # veroeffentlichen. .gitmodules zieht fremde Repos herein.
+    # .gitignore bleibt erlaubt: das ist eine gewoehnliche Projektdatei.
+    if p.name.lower() in (".gitattributes", ".gitmodules"):
+        raise ZaunFehler(
+            f"{p.name} steuert, WIE git Dateien verarbeitet -- damit liesse sich aus einer "
+            "kleinen Aenderung ein Commit ueber den ganzen Baum machen. Nicht dein "
+            "Arbeitsplatz. (.gitignore darfst du anfassen.)")
 
     for wurzel, schreibbar in WURZELN:
         try:

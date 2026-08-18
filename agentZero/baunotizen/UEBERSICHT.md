@@ -1,28 +1,28 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T16:41:10Z. **2540 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T17:11:06Z. **2544 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T22:46:49+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T23:47:20+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2444 |
+| baunotiz | 2448 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1611 |
-| baunotiz | bauverlauf.jsonl | 789 |
+| baunotiz | git-commit | 1614 |
+| baunotiz | bauverlauf.jsonl | 790 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2540 · Gegenhypothese: 0 von 2540
+## Hypothese: 0 von 2544 · Gegenhypothese: 0 von 2544
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -33,6 +33,14 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T22:46:49+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen105 service and MCP capability closure
+
+`baunotiz-git-857c60ef4f5a420eae316e03032278b5672f463a` · baunotiz · git-commit · 2026-08-18T23:47:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen105 service and MCP capability closure
 
 ### claycode supervisor: bind Gen100 prestage repair and remaining action-spine reds
 
@@ -130,6 +138,46 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen62 persistent adapter counterevidence
 
+### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
+
+`baunotiz-git-ff68c38f9703d7068c478298297c61ca13e4814d` · baunotiz · git-commit · 2026-08-18T16:48:24+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
+
+SPEICHER. Die Platte lief zweimal auf 100 %. Die Ursache war nicht fehlendes
+Aufraeumen, sondern `frank-laeufer-rae.timer` -- ein Zeitgeber eines
+ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief und Wegwerfordner in /tmp
+anlegte. 6.606 Ordner, 41 GB, unter fuenf verschiedenen Namensmustern; die erste
+Raeumung fand nur die Haelfte. Insgesamt 77 GB befreit, 173 -> 96 GB.
+
+WARUM ES NIEMANDEM AUFFIEL, und das ist der wichtigere Teil: `du -xsh /tmp` lief
+bei 15.236 Eintraegen in die Zeitgrenze und gab NICHTS aus. Ein leeres Ergebnis
+liest sich wie "da ist nichts". So stand die Summe aller Ordner (77 GB) neben dem
+tatsaechlichen Verbrauch (173 GB), und die Luecke fiel niemandem als Luecke auf.
+Die Bilanz nennt jetzt DREI Zahlen: was df sagt, was sie zaehlen konnte, und was
+sie NICHT konnte.
+
+ZURUECKHOLBAR. Der Eigner hat Frank v0.1 und alle lokalen Modelle abgeschafft,
+aber verlangt: "wenn ich jemals doch will muss das auch gehen." Gewichte sind
+nachladbar, die LISTE war es nicht -- deshalb stehen 23 Modelle mit Namen,
+Fassung und Nachladebefehl im Wiki, und `speicher_abschaffen` verweigert ohne
+geschriebenes Verzeichnis. Altbestand (44 GB) loescht die Wacht NICHT von selbst:
+ein Modellcache sieht aus wie Muell und kann Arbeit von Wochen sein.
+
+DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
+lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
+Schalbefehl a
+
+### agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-c710c5747d46afa5672d9906254b186699f9c7c1` · baunotiz · git-commit · 2026-08-18T16:41:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: steer on Gen39 runtime-adapter regression
 
 `baunotiz-bauverlauf-7c0f7c63d6e00a5cdf9a` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:40:39+07:00 · Gabriel Gschaider
@@ -153,6 +201,14 @@ claycode supervisor: steer on Gen39 runtime-adapter regression
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:12:18+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: bind Gen36 measurement reconvergence and compression-receipt semantics
 
@@ -239,89 +295,4 @@ Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
 Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
 agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
 des Abrufs.
-
-### Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
-
-`baunotiz-git-1a09c75938d9147db60abc33745fa6648bd13e5f` · baunotiz · git-commit · 2026-08-18T15:17:32+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
-
-Gabriel: "schau dir in agentforge die unterseite hosting an ... die nimmst du
-und baust als unterpage in die entityos page ein ... ohne die anderen
-frank.ink features wie workspace etc, nur die features die sinn machen, jetzt
-nichts neu erfinden." Und: "es soll immer dabei stehen ob self hosted oder
-extern."
-
-⭐ UEBERNOMMEN, NICHT NACHGEBAUT. Die Kennzahlen sind exakt die der bestehenden
-Ansicht (agentforge/engine/project_engine.py): Besuche und Unikate in vier
-Fenstern, Funkenlinie ueber 30 Tage, Verweise, meistgerufene Pfade,
-Seitengewicht nach Art plus die groessten Dateien. Gleiche Quelle, gleiche
-Rechnung. Zwei leicht abweichende Zaehlungen waeren schlimmer als eine -- dann
-streiten zwei Anzeigen darueber, wie viele Besucher es gab.
-
-WEGGELASSEN: Workspace, Slug umbenennen, Offline nehmen, Werbung,
-Marketing-Assistenten. Das sind frank.ink-Funktionen. Hier geht es um: WAS gibt
-es, WIE laeuft es, WIE aendert man es.
-
-⭐ SELBST GEHOSTET ODER EXTERN steht an JEDER Zeile, als Merkmal das man nicht
-uebersieht. Keine Zierde: bei einer selbst gehosteten Seite koennen wir etwas
-aendern, bei einer externen nicht -- der Unterschied entscheidet, ob ein
-Arbeitspaket ueberhaupt sinnvoll ist. ABGELEITET (liegt ein site-Verzeichnis auf
-diesem Wirt?), nicht behauptet, und die Begruendung steht am Merkmal.
-
-24 Seiten, /seiten in der Schale neben Chat und Mailbox.
-
-⚠️⚠️ EINE NULL, DIE KEINE IST -- der wichtigste 
-
-### Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
-
-`baunotiz-bauverlauf-7d53e27468c326f89457` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:17:32+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Gabriel: "schau dir in agentforge die unterseite hosting an ... die nimmst du
-und baust als unterpage in die entityos page ein ... ohne die anderen
-frank.ink features wie workspace etc, nur die features die sinn machen, jetzt
-nichts neu erfinden." Und: "es soll immer dabei stehen ob self hosted oder
-extern."
-
-⭐ UEBERNOMMEN, NICHT NACHGEBAUT. Die Kennzahlen sind exakt die der bestehenden
-Ansicht (agentforge/engine/project_engine.py): Besuche und Unikate in vier
-Fenstern, Funkenlinie ueber 30 Tage, Verweise, meistgerufene Pfade,
-Seitengewicht nach Art plus die groessten Dateien. Gleiche Quelle, gleiche
-Rechnung. Zwei leicht abweichende Zaehlungen waeren schlimmer als eine -- dann
-streiten zwei Anzeigen darueber, wie viele Besucher es gab.
-
-WEGGELASSEN: Workspace, Slug umbenennen, Offline nehmen, Werbung,
-Marketing-Assistenten. Das sind frank.ink-Funktionen. Hier geht es um: WAS gibt
-es, WIE laeuft es, WIE aendert man es.
-
-⭐ SELBST GEHOSTET ODER EXTERN steht an JEDER Zeile, als Merkmal das man nicht
-uebersieht. Keine Zierde: bei einer selbst gehosteten Seite koennen wir etwas
-aendern, bei einer externen nicht -- der Unterschied entscheidet, ob ein
-Arbeitspaket ueberhaupt sinnvoll ist. ABGELEITET (liegt ein site-Verzeichnis auf
-diesem Wirt?), nicht behauptet, und die Begruendung steht am Merkmal.
-
-24 Seiten, /seiten in der Schale neben Chat und Mailbox.
-
-⚠️⚠️ EINE NULL, DIE KEINE IST -- der wichtigste Fund dieser Ansicht.
-seimensch.net zeigte "0 Besuche in 30 Tagen". Die Seite ha
-
-### agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-7d894b898924a37fc662b80df709a3f4a5eb5df7` · baunotiz · git-commit · 2026-08-18T15:11:45+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-71c3437136209c2a6ff7` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:11:45+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

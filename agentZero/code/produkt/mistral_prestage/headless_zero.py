@@ -62,6 +62,10 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__speicher_aufraeumen",
     "mcp__clayverse__speicher_rueckweg",
     "mcp__clayverse__speicher_abschaffen",
+    # Nachgereicht 18.08.: beide standen in policy/managed-settings.json, fehlten
+    # aber hier -- die engere Liste gewinnt, also war die Freigabe wirkungslos.
+    "mcp__clayverse__bahn_faehigkeit",
+    "mcp__clayverse__bahn_lage",
     # Ohne dieses Werkzeug gibt es keinen Weg vom Urteil eines Menschen zum
     # Lernen des Abrufs -- die Belohnungsfunktion haette dann nur eine Quelle
     # (verifizierte Wirkungen), und die springt fast nie an.

@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T07:38:08Z aus drei Repos. 466 Eintraege.
+Automatisch erzeugt 2026-08-18T07:48:58Z aus drei Repos. 466 Eintraege.
 
 ## architektur (14)
 
@@ -202,6 +202,7 @@ Automatisch erzeugt 2026-08-18T07:38:08Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
 | 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
 | 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
+| 2026-08-18T07:43 | entityos | `df1585faf395` | Drei Fehler in der Gedaechtnisextraktion - alle heute gebaut, alle gemessen gefunden |
 | 2026-08-18T07:29 | entityos | `003602800f48` | Das Gedaechtnis fuellt sich endlich - aus Gespraech, nicht aus Markersyntax |
 | 2026-08-18T06:49 | entityos | `b9715815686b` | claycode inbox: bind control sync and Vercel guard falsifier |
 | 2026-08-18T06:48 | entityos | `03b3f877558a` | claycode control: sync disposable guest execution boundary |
@@ -257,5 +258,4 @@ Automatisch erzeugt 2026-08-18T07:38:08Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T03:02 | entityos | `4235e90e5569` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
 | 2026-08-18T03:00 | entityos | `507c3416f123` | Retrieval-Quittung ging verloren: _bound_world packte nur 3 von 4 Schluesseln um |
 | 2026-08-18T03:00 | entityos | `2ceb83edba40` | receipt(clayverse): bind deterministic autonomy source evidence |
-| 2026-08-18T03:00 | entityos | `ccaf04ebe64b` | docs(artefact): surface deterministic autonomy lane |
 

@@ -42,16 +42,16 @@ class MemoryEntitaet:
         finally:
             c.close()
 
-    def memory_hinzufuegen(self, artikel_id: str, memory_text: str,
+    def memory_hinzufuegen(self, user_id, artikel_id: str, memory_text: str,
                             quelle: str = None, priority: float = 1.0,
                             tag: str = None) -> bool:
         try:
             c = schreib_verbindung(self.db_pfad)
             try:
                 c.execute("""
-                    INSERT INTO memory_tabelle (artikel_id, memory_text, quelle, priority, tag)
-                    VALUES (?, ?, ?, ?, ?)
-                """, (artikel_id, memory_text, quelle, priority, tag))
+                    INSERT INTO memory_tabelle (artikel_id, memory_text, quelle, priority, tag, user_id)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (artikel_id, memory_text, quelle, priority, tag, user_id))
                 c.commit()
             finally:
                 c.close()
@@ -74,7 +74,7 @@ class MemoryEntitaet:
             try:
                 if artikel_id and tag:
                     rows = c.execute(
-                        "SELECT * FROM memory_tabelle WHERE artikel_id = ? AND tag = ? "
+                        "SELECT * FROM memory_tabelle WHERE user_id = ? AND artikel_id = ? AND tag = ? "
                         "ORDER BY priority DESC, erstellt_am DESC LIMIT ?",
                         (artikel_id, tag, limit)).fetchall()
                 elif artikel_id:
@@ -98,14 +98,18 @@ class MemoryEntitaet:
             print(f"FEHLER Memory abrufen: {e}")
             return []
 
-    def memory_suche(self, suchbegriff: str, limit: int = 10) -> List[Dict]:
+    def memory_suche(self, user_id, suchbegriff: str, limit: int = 10) -> List[Dict]:
         try:
             c = verbindung(self.db_pfad)
             try:
+                # user_id ZUERST in der Bedingung. Ohne sie sah jede Suche
+                # alles -- gemessen: Andreas bekam Gabriels private Eintraege
+                # woertlich zurueck. Die Tabelle konnte strukturell nicht
+                # trennen, weil ihr die Spalte fehlte.
                 rows = c.execute(
-                    "SELECT * FROM memory_tabelle WHERE memory_text LIKE ? "
+                    "SELECT * FROM memory_tabelle WHERE user_id = ? AND memory_text LIKE ? "
                     "ORDER BY priority DESC, erstellt_am DESC LIMIT ?",
-                    (f"%{suchbegriff}%", limit)).fetchall()
+                    (user_id, f"%{suchbegriff}%", limit)).fetchall()
             finally:
                 c.close()
             return self._zeilen_zu_dicts(rows)
@@ -113,11 +117,14 @@ class MemoryEntitaet:
             print(f"FEHLER Memory suche: {e}")
             return []
 
-    def memory_loeschen(self, memory_id: int) -> bool:
+    def memory_loeschen(self, user_id, memory_id: int) -> bool:
         try:
             c = schreib_verbindung(self.db_pfad)
             try:
-                c.execute("DELETE FROM memory_tabelle WHERE id = ?", (memory_id,))
+                # Auch hier user_id: eine blosse Nummer waere sonst ein
+                # Loeschrecht auf fremde Erinnerungen, wenn man sie erraet.
+                c.execute("DELETE FROM memory_tabelle WHERE id = ? AND user_id = ?",
+                          (memory_id, user_id))
                 c.commit()
             finally:
                 c.close()

@@ -1,6 +1,6 @@
 # Messwerk
 
-Automatisch erzeugt 2026-08-18T07:39:39Z.
+Automatisch erzeugt 2026-08-18T07:50:37Z.
 
 Die Forschungsentität hat rund 55 Messwerte vorgeschlagen. Der Filter, nach dem hier
 gebaut wurde, ist ihr eigener Schlusssatz:
@@ -29,7 +29,7 @@ Datengrundlage, der trotzdem eine Zahl zeigt, ist eine Lüge mit Nachkommastelle
 
 **Wert:** `1.0`
 
-24 von 24 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort.
+27 von 27 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort.
 
 ### Context Utilization  ·  _Abruf_
 
@@ -37,7 +37,7 @@ Datengrundlage, der trotzdem eine Zahl zeigt, ist eine Lüge mit Nachkommastelle
 
 **Wert:** `0.0`
 
-Anteil des Budgets, der belegt wurde. 24 Episoden.
+Anteil des Budgets, der belegt wurde. 27 Episoden.
 
 ### Effect Verification Latency  ·  _Handlung_
 
@@ -45,15 +45,15 @@ Anteil des Budgets, der belegt wurde. 24 Episoden.
 
 **Wert:** `0.001`
 
-Sekunden, Mittel ueber 1 verifizierte Wirkungen.
+Sekunden, Mittel ueber 2 verifizierte Wirkungen.
 
 ### Causal Credit Horizon  ·  _Kausalitaet_
 
 **Unterscheidet:** Wie viele Schritte zwischen Handlung und messbarer Wirkung? Trennt kurze von langen Wirkketten.
 
-**Wert:** `23`
+**Wert:** `27`
 
-**Braucht:** mindestens 10 Kausalepisoden mit Wirkung, aktuell 23
+**Braucht:** mindestens 10 Kausalepisoden mit Wirkung, aktuell 27
 
 Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziele.
 
@@ -61,7 +61,7 @@ Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziel
 
 **Unterscheidet:** Waechst der Zustand pro nuetzlichem Fakt oder pro Muell? Trennt Wissen von Ablagerung.
 
-**Wert:** `3833745408`
+**Wert:** `3833835520`
 
 3.83 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts.
 
@@ -69,9 +69,9 @@ Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziel
 
 **Unterscheidet:** Stauen sich Aufgaben? Frueherkennung von Ueberlast gegen Leerlauf.
 
-**Wert:** `1`
+**Wert:** `0`
 
-1 offene Zuege, 0 Pachten.
+0 offene Zuege, 0 Pachten.
 
 ### Identity Invariance  ·  _Identitaet_
 
@@ -97,15 +97,15 @@ Ein angebotenes, nicht freigegebenes Werkzeug sieht im Modell aus wie ein vorhan
 
 **Wert:** `1.0`
 
-**Braucht:** mindestens 10 Wirkungen, aktuell 1
+**Braucht:** mindestens 10 Wirkungen, aktuell 2
 
-1 von 1 verifiziert.
+2 von 2 verifiziert.
 
 ### Decision Entropy  ·  _Entscheidung_
 
 **Unterscheidet:** Konkurrieren mehrere Optionen echt, oder ist die Wahl trivial? Trennt Entscheidungspunkte von Ablauf.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -113,7 +113,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Aendert Zero Annahmen bei neuer Evidenz? Trennt epistemische Flexibilitaet von Sturheit.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -121,7 +121,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Weicht das Ergebnis von der Erwartung ab? Grundlage jeder Anpassung.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -129,7 +129,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Gab es Passendes, das nicht geholt wurde? Trennt schlechten Abruf von leerem Bestand.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -137,7 +137,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Waren autonom gestartete Schritte sinnvoll? Trennt Initiative von Betriebsamkeit.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -145,7 +145,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** War Nichtstun die richtige Wahl? Trennt Ruhe von Versaeumnis -- Autonomie heisst nicht dauernd handeln.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -153,7 +153,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Tritt derselbe mechanistische Fehler wieder auf? Der haerteste Lernindikator, den es gibt.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -161,7 +161,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Hat eine Erinnerung das Ergebnis verbessert? Trennt 'wurde erinnert' von 'war nuetzlich'.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -169,7 +169,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Wie lange bleibt Gespeichertes nuetzlich? Grundlage fuer automatischen Verfall.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -177,7 +177,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Wird ein wiederholt gegangener Weg wirklich schneller? Der Test der geplanten Autobahnen.
 
-**Braucht:** Bestand zu duenn: 47 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 24 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 54 Zuege, 2 Wirkungen, 6 Gedaechtniseinheiten, 27 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -189,7 +189,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Braucht:** ein Vergleichslauf: identischer Zustand vor und nach Neustart, gleiche Eingabe, Antworten gegenueberstellen. Es gibt heute keinen Wiederholungsmechanismus.
 
-Generationen im Umlauf: [33]. Prueffpunkte: 43.
+Generationen im Umlauf: [35]. Prueffpunkte: 47.
 
 ### Prediction + Calibration Ledger  ·  _Selbstwissen_
 

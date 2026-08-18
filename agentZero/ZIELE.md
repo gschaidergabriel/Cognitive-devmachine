@@ -1,6 +1,6 @@
 # Was Agent Zero können soll — und was davon steht
 
-**Automatisch erzeugt 2026-08-18T07:39:39Z.** Nicht von Hand pflegen.
+**Automatisch erzeugt 2026-08-18T07:50:37Z.** Nicht von Hand pflegen.
 
 **22 erfüllt · 6 offen · 1 zurückgestellt** von 29 Zeilen.
 
@@ -36,9 +36,9 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
-| **Jeder Zug wird aufgezeichnet** | Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette | 47 Züge, 23 Kausalepisoden, 24 Arbeitsraum-Episoden | ✅ erfüllt | Architektur |
+| **Jeder Zug wird aufgezeichnet** | Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette | 54 Züge, 27 Kausalepisoden, 27 Arbeitsraum-Episoden | ✅ erfüllt | Architektur |
 | **Aufnahme ist atomar** | scheitert eine Prüfung, bleibt keine halbe Zeile stehen | Prüfungen laufen in der Aufnahme-Transaktion; 15 Atomizitätstests grün | ✅ erfüllt | Architektur |
-| **Wirkung nur durch das Tor** | kein process.exec, jede Wirkung durch EffectGate mit Beleg | 1 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert | ✅ erfüllt | Architektur |
+| **Wirkung nur durch das Tor** | kein process.exec, jede Wirkung durch EffectGate mit Beleg | 2 Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, Ziel/Ergebnis als Prüfsumme gespeichert | ✅ erfüllt | Architektur |
 | **Werkzeuge nur über MCP** | Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten | 0 Werkzeuge freigegeben, Bash und Artifact verboten, Shell-Flucht abgewiesen | 🔧 offen | Architektur |
 
 ## Autonomie
@@ -47,16 +47,16 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 |---|---|---|---|---|
 | **Initiative: der Puls weckt offene Ziele** | nicht behaupten, dass es autonom ist – die Mechanik bauen | Autonomie-Puls installed=true, 30 s, beglaubigt (ein Terminal-Verwalter) | ✅ erfüllt | Eigner 18.08. |
 | **Persistente Ziele, Rückmeldung, Neuplanung** | Ziele überleben Züge, Schritte werden gemeldet, Fehlschlag führt zu Neuplanung | create_goal_from_turn / propose_step / record_step_failure / verify_completion vorhanden; Ziele entstehen nur aus kanonischen Menschenzügen | ✅ erfüllt | Eigner 18.08. |
-| **Kontinuität über Neustarts** | Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen | 43 Prüfpunkte, Generation 33 | ✅ erfüllt | Architektur |
+| **Kontinuität über Neustarts** | Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen | 47 Prüfpunkte, Generation 35 | ✅ erfüllt | Architektur |
 
 ## Abruf
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
 | **Abruf ist abfragesensitiv** | nicht die letzten N, sondern was zur Frage passt | 11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren) | ✅ erfüllt | Architektur |
-| **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst | 0 gelernte Eintrittspunkte, Modus SHADOW, 24 Episoden | 🔧 offen | Eigner 18.08. |
+| **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst | 0 gelernte Eintrittspunkte, Modus SHADOW, 27 Episoden | 🔧 offen | Eigner 18.08. |
 | **Wegehierarchie: Autobahnen, Tunnel, Landwege** | oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung | Verstärkung vorhanden. FEHLT: Verfall ungenutzter Wege, inverse Gewichtung, Tunnel | 🔧 offen | F94 / Eigner 16.08. |
-| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 27 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
+| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 29 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
 
 ## Anbieter
 
@@ -77,10 +77,10 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 
 | Fähigkeit | Soll | Ist (gemessen) | Stand | Quelle |
 |---|---|---|---|---|
-| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 10 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
+| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 6 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
 | **Frontend heißt EntityOS und ist erreichbar** | Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal | https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen | ✅ erfüllt | Eigner 18.08. |
 | **Der Export pflegt sich selbst** | alles autonom ins Forschungs-Repo unter agentZero | systemd-Timer alle 30 min, enabled | ✅ erfüllt | Eigner 18.08. |
-| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 479 gruen / 14 rot | ✅ erfüllt | Arbeitsregel |
+| **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 478 gruen / 15 rot | ✅ erfüllt | Arbeitsregel |
 | **Endabnahme hinter eigenem Gastkern** | derselbe Digest hinter einer eigenen VM-Grenze | kein /dev/kvm auf dem Wirt; per Entscheidung 18.08. zurückgestellt | ⏸ zurückgestellt | Entwurf – vom Eigner zurückgestellt |
 
 ---

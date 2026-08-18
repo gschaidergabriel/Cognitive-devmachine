@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 
 from .bahnen import BahnErschoepft, Bahnrouter
 
@@ -103,5 +104,24 @@ def extrahiere(db, *, turn_id: str, user_id: str, content: str,
             },
         )
         genommen += 1
+    # Die Verwurfszahl IST das Qualitaetssignal: sie zaehlt, wie oft der
+    # Extraktor etwas erfinden wollte und gestoppt wurde. Nur an den Aufrufer
+    # zurueckgeben hiess, sie faellt auf den Boden -- und dann sieht ein
+    # halluzinierender Extraktor genauso aus wie ein ruhiger.
+    try:
+        db.db.executescript(
+            "CREATE TABLE IF NOT EXISTS gedaechtnis_ausbeute("
+            "  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,"
+            "  turn_id TEXT, rolle TEXT, bahn TEXT, modell TEXT,"
+            "  genommen INTEGER NOT NULL, verworfen INTEGER NOT NULL, gruende TEXT);")
+        with db.tx() as sql:
+            sql.execute(
+                "INSERT INTO gedaechtnis_ausbeute(ts,turn_id,rolle,bahn,modell,genommen,verworfen,gruende)"
+                " VALUES(?,?,?,?,?,?,?,?)",
+                (time.time(), turn_id, rolle, antwort.get("bahn"), antwort.get("modell"),
+                 genommen, verworfen, json.dumps(gruende, ensure_ascii=False)))
+    except Exception:
+        pass  # Buchfuehrung darf den Zug nie kippen
+
     return {"eintraege": genommen, "verworfen": verworfen, "gruende": gruende,
             "bahn": antwort.get("bahn"), "ms": antwort.get("ms")}

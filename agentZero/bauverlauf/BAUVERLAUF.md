@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T07:38:08Z. 723 Commits aus vier Repos, davon 208 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T07:48:59Z. 728 Commits aus vier Repos, davon 209 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,48 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Drei Fehler in der Gedaechtnisextraktion - alle heute gebaut, alle gemessen gefunden
+
+`df1585faf395` · entityos · 07:43 UTC · EntityOS
+
+```
+Die Extraktion lief seit dem Ausrollen: 8 erfolgreiche Bahnaufrufe, 0 Eintraege.
+Kein Fehler, keine Ausnahme, keine Logzeile. Genau die Fehlerform, gegen die der
+Fehlerjaeger angesetzt wurde - und er hat sie in meinem eigenen frischen Code
+gefunden, keine Stunde alt.
+
+1) FALSCHER SCHLUESSEL. complete() liefert `assistant_turn_id`, ich las
+   `turn_id`. Also ging bei JEDEM Aufruf turn_id="" hinein.
+   Was das gekostet haette, wenn es geblieben waere:
+     - jede Gedaechtniszeile mit leerem Fremdschluessel, kein Rueckweg zum Gespraech
+     - _add_memory_once entdoppelt auf (kind,value,source_turn_id,user_id) -- bei
+       konstant leerem source_turn_id waeren zwei voellig verschiedene Fakten aus
+       verschiedenen Zuegen faelschlich als derselbe behandelt worden
+     - retrieval, Verdichtungs-Freigabe und Hyperposition schlagen alle auf
+       source_turn_id nach und haetten still ins Leere gegriffen
+   Nichts davon haette je geworfen. Der Rueckgabewert eintraege=N haette wie ein
+   Lebenszeichen ausgesehen.
+
+2) NUR DIE ANTWORT, NIE DIE FRAGE. Extrahiert wurde ausschliesslich aus Zeros
+   eigener Antwort. Fakten stehen aber in dem, was der MENSCH sagt. Zusammen mit
+   der strengen Woertlichkeitspruefung heisst das: wiederholt Zero eine Angabe
+   nicht zeichengenau, wird nie etwas gefunden. Das erklaert die 8:0 exakt.
+   Jetzt laeuft die Extraktion ueber beide Seiten - die Frage bei der Aufnahme,
+   die Antwort beim Abschluss.
+
+3) VERWUERFE VERSCHWANDEN. `verworfen` wurde berechnet und an den Aufrufer
+   zurueckgegeben, der sie wegwarf. Genau diese Zahl ist das Qualitaetssignal:
+   sie zaehlt, wie oft der Extraktor etwas erfinden wollte und gestoppt wurde.
+   Ohne sie sieht ein halluzinierender Extraktor genauso aus wie ein ruhiger.
+   Neue Tabelle gedaechtnis_ausbeute haelt Zug, Rolle, Bahn, Modell, genommen,
+   verworfen und die Verwurfsgruende fest.
+
+Alle drei Zweige kippen den Zug nie: Gedaechtnis ist wertvoll, ein verlorener
+Zug waere teurer.
+
+Suite unveraendert 479 gruen / 14 rot.
 ```
 
 ### Das Gedaechtnis fuellt sich endlich - aus Gespraech, nicht aus Markersyntax
@@ -3352,13 +3394,5 @@ kontingent.py live, vier Tabellen in wiki.db: kb_konto 4 Zeilen (master_clay, cl
 
 ```
 microclay und unifieddb ueber die GitHub-API privat angelegt (HTTP 201), geschoben, per API gegengeprueft: gschaidergabriel/microclay und gschaidergabriel/unifieddb, beide private=True. Vorgabezweig von unifieddb auf master gerichtet, weil der Inhalt dort liegt. Danach baeume.py holen: 2 neu, 21 aktualisiert, krita weiterhin als Verweis statt Kopie (9.088,9 MB gespart), Baumbestand 638 MB.
-```
-
-### B21 geprueft: Needle gemessen - passt nirgends in den Abrufpfad
-
-`f696d518b488` · clay · 21:19 UTC · ClayVerse
-
-```
-Herstellerstand geholt und auf CPU vermessen, n=60, jax-Backend cpu. Voller generate-Aufruf: kalt 4130,95 ms, warm p50 2819,18 ms, p95 3133,53 ms. Nur-Einbettung ohne Dekodierschleife: 24 Kandidaten 205,3 ms p50, 98 Kandidaten 477,1 ms, alle 2374 Graphknoten 10.225,2 ms. Skalierung linear mit 4,3 bis 8,6 ms je Stueck plus 150-200 ms fester Boden aus der JIT-Verteilung. Parameter bestaetigt: 26.315.421.
 ```
 

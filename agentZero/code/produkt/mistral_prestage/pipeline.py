@@ -5,6 +5,8 @@ from typing import Any
 
 from .. import identity  # coordinator-owned, imported not edited
 from . import headless_zero, prestage, translator
+import re
+
 from .prestage import MAX_ROUNDS, NEGOTIATION_SENTINEL
 from .store import PrestageStore
 
@@ -111,8 +113,18 @@ def run_chat_turn(
         rounds_used = 1
         self_adapted = False
 
-        if zero["caveman_answer"].strip().startswith(NEGOTIATION_SENTINEL):
-            suggestion = zero["caveman_answer"].split(NEGOTIATION_SENTINEL, 1)[1].strip()
+        # Markdown-fest: das Modell setzt die Notbremse fett, jedes Mal.
+        # Gemessen an fuenf echten Beispielen, alle in ** gewickelt.
+        # startswith() prueft Position 0 und traf deshalb nie -- die Zuege liefen
+        # als Runde 1 durch, obwohl sie Zurueckweisungen waren, und der Zaehler
+        # der Verhandlungsschleife war falsch.
+        _bremse = re.match(r"^\s*[*_`#>\s]{0,6}" + re.escape(NEGOTIATION_SENTINEL),
+                           zero["caveman_answer"])
+        if _bremse:
+            suggestion = zero["caveman_answer"][_bremse.end():].strip()
+            # Fette Auszeichnung am Ende ebenfalls abstreifen, sonst steht sie
+            # im Verbesserungsvorschlag und geht so in die naechste Runde.
+            suggestion = re.sub(r"[*_`\s]+$", "", suggestion)
             t0 = time.perf_counter()
             envelope2 = prestage.run_prestage(
                 raw_prompt=message, world=world, current_user=user_id,

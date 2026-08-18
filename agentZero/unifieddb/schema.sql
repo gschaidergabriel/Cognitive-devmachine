@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T07:38:09Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T07:48:59Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -307,7 +307,7 @@ CREATE TABLE memory_tabelle (
                     erstellt_am TEXT NOT NULL DEFAULT (datetime('now')),
                     priority REAL DEFAULT 1.0,
                     tag TEXT
-                );
+                , user_id TEXT);
 CREATE TABLE messung(
             id TEXT PRIMARY KEY,
             bauteil TEXT NOT NULL,
@@ -719,6 +719,7 @@ CREATE INDEX idx_kommentar_artikel ON kommentar(artikel_id);
 CREATE INDEX idx_kommentar_status ON kommentar(status);
 CREATE INDEX idx_memory_artikel ON memory_tabelle(artikel_id);
 CREATE INDEX idx_memory_tag ON memory_tabelle(tag);
+CREATE INDEX idx_memory_user ON memory_tabelle(user_id);
 CREATE INDEX idx_messung_bauteil ON messung(bauteil);
 CREATE INDEX idx_messung_einheit ON messung(einheit);
 CREATE INDEX idx_messung_zeile ON messung(zeile_hash);

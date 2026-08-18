@@ -11,7 +11,7 @@ services:
     # bind mount below. Overrides the image's baked-in USER clayverse (10001).
     user: "5001:5001"
     ports:
-      - "${CLAYVERSE_PORT:-3000}:3000"
+      - "127.0.0.1:${CLAYVERSE_PORT:-3000}:3000"
     environment:
       CLAYVERSE_STATE_ROOT: /var/lib/clayverse
       # The real heart DB. Owner decision 2026-08-18: EntityOS/UnifiedDB does NOT get

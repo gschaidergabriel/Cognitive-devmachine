@@ -33,7 +33,7 @@ def _worte(t: str) -> list[str]:
     return [w for w in re.split(r"[^0-9A-Za-zÄÖÜäöüß]+", t.lower()) if len(w) > 3 and w not in STOPP]
 
 
-def baue(n: int = 60) -> list[dict]:
+def baue(n: int = 120) -> list[dict]:
     c = P._ro()
     rows = c.execute(
         "SELECT id, titel FROM artikel WHERE titel IS NOT NULL AND length(titel) BETWEEN 18 AND 100"
@@ -69,7 +69,7 @@ def baue(n: int = 60) -> list[dict]:
 
 
 if __name__ == "__main__":
-    satz = baue(60)
+    satz = baue(120)
     ziel = "/opt/unifieddb/udb/abruf/goldsatz.json"
     json.dump(satz, open(ziel, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     verteilung = collections.Counter(e["seltenheit"] for e in satz)

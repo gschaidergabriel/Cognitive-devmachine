@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T09:18:57Z. 738 Commits aus vier Repos, davon 216 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T09:48:57Z. 741 Commits aus vier Repos, davon 217 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,89 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Einstiegspunkt der Abrufentitaet: Ausbeute vervierfacht, ohne die Schranke anzufassen
+
+`b08f52ebe6c1` · unifieddb · 09:33 UTC · EntityOS
+
+```
+AUSGANGSLAGE, GEMESSEN VOR JEDEM EINGRIFF
+
+  Ankerquote     8,3 %   (5 von 60 Fragen bekommen ueberhaupt einen Anker)
+  Genauigkeit   60,0 %   (Anteil richtiger unter den gesetzten Ankern)
+  Ausbeute       5,0 %
+  Auffindbar     6,7 %   (richtiger Artikel taucht im Paket auf)
+  Latenz       354 ms Median / 623 ms p95
+
+Ohne Anker gibt es keine Signatur, ohne Signatur keinen Plan-Cache, ohne
+Plan-Cache keinen Graph-Walk. Bei 8 % Ankerquote ist der gesamte Graph-Apparat
+-- Plan-Cache, Kantenlernen, typisierte Hops, Hyperposition -- im Betrieb
+weitgehend unerreicht. Der Einstiegspunkt ist deshalb der einzige Hebel, der
+sich vor allen anderen lohnt.
+
+DIE URSACHE
+
+  score = 2.0 * deckung_alias + confidence * klassengewicht
+
+`deckung_alias` ist der Anteil der ALIAS-Woerter, die in der Frage vorkommen.
+Damit sinkt der erreichbare Score mit der Alias-Laenge. Ein dreiwortiger Alias
+wie `frank_unifieddb.clay` mit einem Treffer kommt auf hoechstens
+2*0,33 + 1,0 = 1,67 -- die Schwelle liegt bei 2,5. Erreichbar nur fuer den, der
+fast den ganzen Dateinamen tippt. Bei natuerlich gestellten Fragen: 0 Anker.
+
+WAS FEHLTE: SPEZIFITAET. Ein Wort, das in 3 von 362.836 Aliassen vorkommt,
+identifiziert fast allein. Eines, das in 55.084 vorkommt, sagt nichts. Die alte
+Formel kennt diesen Unterschied nicht.
+
+NEU: vp_alias_df (udb/abruf/alias_df.py) haelt fuer 198.379 Woerter fest, in wie
+vielen Aliassen sie vorkommen -- einmal in 1,7 s gebaut, danach nachgeschlagen.
+Ein COUNT ueber 362.836 Zeilen je Suchwort waere der Latenz-Ruin.
+Der Zuschlag ist das PRODUKT aus Seltenheit des seltensten getroffenen Wortes
+und Anteil an der tragenden Frage. Das Produkt verhindert, dass ein zufaelliger
+Exotentreffer in einem langen Alias die Schwelle allein reisst. Das seltenste
+statt der Summe, weil ein fast eindeutiges Wort ein Beleg ist und zehn
+Allerweltswoerter keiner -- eine Summe wuerde das umdrehen.
+
+⭐ DIE SCHWELLE WURDE NICHT ANGEFASST. Sie steht weiter auf 2,5. Der Gewinn
+kommt ausschliesslich daher, dass besseres Beweismaterial vor die unveraenderte
+Schranke gelegt wird. Fail-closed bleibt fail-closed.
+
+ERGEBNIS auf der PRUEFHAELFTE, die bei der Kalibrierung nie angesehen wurde:
+
+               vorher    nachher
+  Ankerquote     8,3 %    23,3 %
+  Genauigkeit   60,0 %    85,7 %     <- gestiegen, nicht gefallen
+  Ausbeute       5,0 %    20,0 %     <- vervierfacht
+  Auffindbar     6,7 %    23,3 %
+  Latenz        354 ms     344 ms
+
+ZUR METHODE, weil die Zahl sonst nichts wert waere
+
+Die Ankerquote allein ist eine gefaehrliche Kennzahl: sie geht auf 100 %, sobald
+man die Schwelle auf 0 setzt -- dann raet die Entitaet immer und der Abruf wird
+schlechter. Deshalb laeuft die GENAUIGKEIT als Gegenkraft mit, und die Regel
+stand VOR der Messung fest: die Genauigkeit darf nicht unter die Grundlinie
+(60 %) fallen; unter dieser Bedingung wird die Ausbeute maximiert. Kalibriert
+wurde auf Goldsatz-Haelfte A, berichtet auf der unberuehrten Haelfte B.
+Gleichstaende werden nach Genauigkeit aufgeloest (nachtraeglich geschaerft, aus
+A abgeleitet, B floss in die Wahl nicht ein).
+
+ZWEI EIGENE IRRTUEMER, BEIDE DURCH MESSUNG KORRIGIERT
+
+1. Ich meldete zuerst "Genauigkeit 0 %". Das war MEIN Goldsatz, nicht die
+   Entitaet: er zog Fragen aus fast identischen Baunotizen ("test(clayverse):
+   make ...", "test(clayverse): fence ..."), auf die es keine eindeutige Antwort
+   gibt. Ein Messgeraet mit mehrdeutigem Sollwert misst das Falsche. Goldsatz v2
+   nimmt nur Artikel mit einem seltenen Wort im Titel (df <= 3), damit die Frage
+   per Konstruktion beantwortbar ist.
+   ⚠️ Der Filter dazu enthielt "titel NOT LIKE '%_%'" -- in SQL ist `_` ein
+   Platzhalter fuer EIN Zeichen, das schliesst jede nichtleere Zeile aus. Er
+   lieferte 0 Kandidaten und sah dabei voellig plausibel aus.
+
+2. Meine Erklaerung "Stoppworte fluten die Alias-Suche" war falsch herum.
+   Gemessen: df(die)=60, df(was)=23, df(unifieddb)=126. Die Frageworte sind im
+   Alias-Korpus SELTENER als das Sachwort -- bm25 belohnt Se
 ```
 
 ### Die autonomen Takte versioniert - und der Riss, den sie hatten
@@ -3660,13 +3743,5 @@ ClayID clay_01M017MSKPCJGQW0QF74QJQGH3, Geburtsart ORIGIN, Linienwurzel sich sel
 
 ```
 wache.py mit lage, tote, stille, wacht. Zwei Laeuferklassen dynamisch erkannt, nicht fest verdrahtet: systemd-Einheiten (clayverse-*, actions.runner.*, frank-laeufer*) und die Claude-Code-Sitzungen aus sitzungen.json. SCHWELLE GEMESSEN statt geraten: alle 26.338 Abstaende zwischen aufeinanderfolgenden Aufrufen in taetigkeit ausgewertet - p50 9,8 s, p90 40,8 s, p99 402 s, p99,5 1098 s, p99,9 17.777 s. Gewaehlt 20 Minuten, knapp ueber p99,5; nur 0,38 bis 0,46 Prozent aller echten Pausen erreichen das je. UNABHAENGIGE BESTAETIGUNG: dieselbe Zahl wie die Vorarbeit in tavern-wache, ohne dass er sie vorher angesehen hatte. NACHWEIS AUF DREI ACHSEN: gesunder Dienst 0 Befunde; nach kill -9 genau 1 Befund; kuenstlich haengende Sitzung 1 Befund; dieselbe Sitzung mit frischer Taetigkeit wieder 0. PostToolUse-Haken installiert, rein additiv - der PreToolUse-Block mit tor_hook.py ist byteweise unveraendert, per diff bestaetigt. TOR NACHWEISLICH WEITER SCHARF: ls durchgelassen, rm -rf /var/lib/clay mit Rueckgabewert 2 und rechteeingriff geblockt, unbekannter Befehl fail-closed.
-```
-
-### B13 geprueft: Der Fehler traf den Schutz selbst - und die zweite Schicht hielt
-
-`ef2560a6cd80` · clay · 22:27 UTC · ClayVerse
-
-```
-wiki.py behoben: beide kante-Stellen auf INSERT ... ON CONFLICT(von,nach,art) DO UPDATE SET beleg=excluded.beleg umgestellt. Begruendung des Agenten: wiki.py besitzt auf kante genau EINE Spalte, naemlich beleg - eine Klausel, die nur diese eine nennt, kann die anderen physisch nicht erreichen, braucht kein Vorlesen und hat kein Wettrennen. DRITTER FUND, vom Agenten selbst: artikel hatte heute ebenfalls verfallen und protected bekommen, und die drei INSERT-OR-REPLACE-Stellen dort nannten sie auch nicht - mit demselben Fortschreibemuster behoben wie zuvor herkunft. VOLLSTAENDIGE DURCHSICHT: 8 Vorkommen in wiki.py, 5 behoben, 3 nachweislich sicher (artikel_sphaere, Spaltenliste deckt die Tabelle vollstaendig). In isolierter Datenbank bewiesen: alle 5 kante-Felder und alle 6 artikel-Felder ueberleben einen zweiten vollen Lauf.
 ```
 

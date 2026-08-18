@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T09:18:57Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T09:48:58Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -179,6 +179,7 @@ CREATE TABLE fundort (
                 geaendert TEXT,
                 PRIMARY KEY (wirt, pfad)
             );
+CREATE TABLE gedaechtnis_ausbeute(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, rolle TEXT, bahn TEXT, modell TEXT,  genommen INTEGER NOT NULL, verworfen INTEGER NOT NULL, gruende TEXT);
 CREATE TABLE grabstein (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         was TEXT NOT NULL,
@@ -585,16 +586,50 @@ CREATE VIRTUAL TABLE vp_dir_fts USING fts5(verzeichnisname, datei_id UNINDEXED);
 CREATE TABLE vp_edge_lern (
       query_class TEXT, edge_art TEXT,
       gewicht REAL DEFAULT 0, beobachtungen INTEGER DEFAULT 0,
-      zuletzt_gelernt TEXT,
+      zuletzt_gelernt TEXT, gesehen INTEGER DEFAULT 0, genutzt INTEGER DEFAULT 0,
       PRIMARY KEY(query_class, edge_art)
     );
+CREATE TABLE vp_edge_lern_backup_preflift(
+  query_class TEXT,
+  edge_art TEXT,
+  gewicht REAL,
+  beobachtungen INT,
+  zuletzt_gelernt TEXT
+);
 CREATE TABLE vp_ereignis (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       zeit TEXT, art TEXT, detail TEXT
     );
+CREATE TABLE vp_erfolgsmarke (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ts REAL NOT NULL, frage TEXT, region TEXT, anker TEXT,
+  getragen INTEGER,              -- 1 = der Eintritt hat zur Antwort gefuehrt
+  quelle TEXT                    -- wer die Marke gesetzt hat
+);
 CREATE TABLE vp_gesehen (
       lauf TEXT, record_id TEXT, zeit TEXT
     );
+CREATE TABLE vp_karte_region (
+  version INTEGER NOT NULL, region TEXT NOT NULL,
+  projekt TEXT, art TEXT, artikel_n INTEGER,
+  landmarken TEXT,               -- JSON: die am staerksten vernetzten Artikel
+  PRIMARY KEY(version, region)
+);
+CREATE TABLE vp_karte_version (
+  version INTEGER PRIMARY KEY AUTOINCREMENT,
+  gebaut_am TEXT NOT NULL,
+  anlass TEXT,
+  regionen INTEGER, landmarken INTEGER, wegweiser INTEGER,
+  korpus_artikel INTEGER, korpus_kanten INTEGER,
+  verhaeltnis REAL,              -- Kartenzeilen / Korpuszeilen. Muss klein bleiben.
+  erkundungsanteil REAL DEFAULT 0.0,   -- 0.0 = Gegenmittel gegen das Echo NICHT aktiv
+  dauer_s REAL
+);
+CREATE TABLE vp_karte_wegweiser (
+  version INTEGER NOT NULL, wort TEXT NOT NULL, region TEXT NOT NULL,
+  staerke REAL NOT NULL,         -- Lift: wie stark zeigt dieses Wort auf die Region
+  PRIMARY KEY(version, wort, region)
+);
 CREATE TABLE vp_lese_log (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       zeit TEXT, ort_id TEXT, paket_id TEXT, bytes INTEGER, erlaubt INTEGER, grund TEXT
@@ -742,6 +777,7 @@ CREATE INDEX idx_artikel_status ON artikel(status);
 CREATE INDEX idx_asuchtext_blase ON artikel_suchtext(blase);
 CREATE INDEX idx_bahn_lauf_art_zeit ON bahn_lauf(art, zeit);
 CREATE INDEX idx_bearbeitung_artikel ON bearbeitung(artikel_id);
+CREATE INDEX idx_erfolgsmarke_region ON vp_erfolgsmarke(region, ts);
 CREATE INDEX idx_fehler_art ON fehler(art);
 CREATE INDEX idx_fehler_schwere ON fehler(schwere);
 CREATE INDEX idx_folgerung_beleg_fid ON folgerung_beleg(folgerung_id);
@@ -760,6 +796,7 @@ CREATE INDEX idx_graph_knoten_type
             ON graph_knoten(node_type);
 CREATE INDEX idx_kante_nach ON kante(nach);
 CREATE INDEX idx_kante_von ON kante(von);
+CREATE INDEX idx_karte_wegweiser_wort ON vp_karte_wegweiser(wort);
 CREATE INDEX idx_kommentar_artikel ON kommentar(artikel_id);
 CREATE INDEX idx_kommentar_status ON kommentar(status);
 CREATE INDEX idx_memory_artikel ON memory_tabelle(artikel_id);

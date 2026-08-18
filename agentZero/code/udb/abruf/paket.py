@@ -193,6 +193,31 @@ def _ensure_vp_tables(c: sqlite3.Connection) -> None:
         c.execute("ALTER TABLE vp_snapshot ADD COLUMN source_epoch INTEGER")
     if "graph_epoch" not in cols:
         c.execute("ALTER TABLE vp_snapshot ADD COLUMN graph_epoch INTEGER")
+    # Lift-Umbau (Befund: 15/22 Kantenarten bei gedeckelt 3.0, n=35..14733, alle
+    # gleich gewichtet -- Ubiquitaet wurde mit Nuetzlichkeit verwechselt). Zwei neue
+    # Zaehler statt nur der einen additiven 'beobachtungen': 'gesehen' = wie oft
+    # diese Kantenart ueberhaupt in einem Paket auftauchte (JEDER paket()-Aufruf,
+    # nicht nur Treffer), 'genutzt' = wie oft davon in einem Cache-Treffer. gewicht
+    # wird daraus als gedaempftes Lift-Mass abgeleitet (siehe lernen()/_lift_gewicht),
+    # nicht mehr additiv hochgezaehlt.
+    ecols = {r[1] for r in c.execute("PRAGMA table_info(vp_edge_lern)")}
+    if "gesehen" not in ecols:
+        c.execute("ALTER TABLE vp_edge_lern ADD COLUMN gesehen INTEGER DEFAULT 0")
+    if "genutzt" not in ecols:
+        c.execute("ALTER TABLE vp_edge_lern ADD COLUMN genutzt INTEGER DEFAULT 0")
+    # Ehrlicher Rueckfuell statt erfundener Trennung: die alte 'beobachtungen'-Zahl
+    # wurde NUR bei einem Cache-Treffer erhoeht (lernen() lief bisher NIE bei einem
+    # Miss) -- historisch also aequivalent zu 'genutzt'. Wie oft eine Kantenart
+    # VORHER gesehen, aber NICHT genutzt wurde, ist aus dem Altbestand nicht
+    # rekonstruierbar. gesehen=genutzt=beobachtungen ist die einzige belegte
+    # Untergrenze (genutzt<=gesehen muss gelten) -- ergibt Lift=1.0 (neutral) fuer
+    # den kompletten Altbestand, bis echte neue Beobachtungen (ab jetzt bei JEDEM
+    # Paket-Aufruf) die Kantenarten auseinanderziehen. Guard (gesehen=0 AND
+    # genutzt=0) macht das Backfill idempotent -- laeuft nur einmal an.
+    c.execute(
+        "UPDATE vp_edge_lern SET gesehen=beobachtungen, genutzt=beobachtungen "
+        "WHERE gesehen=0 AND genutzt=0 AND beobachtungen>0"
+    )
     c.commit()
 
 
@@ -366,6 +391,47 @@ def _tragende(tokens) -> list[str]:
     return kern or [t for t in tokens if len(t) > 1]
 
 
+# ── Spezifitaet: wie aussagekraeftig ist ein getroffenes Wort? ───────────
+#
+# Gebaut von udb/abruf/alias_df.py in Tabelle vp_alias_df (Wort -> in wie
+# vielen Aliassen es vorkommt). Einmal berechnet, danach nachgeschlagen: ein
+# COUNT ueber 362.836 Zeilen je Suchwort waere der Latenz-Ruin.
+_SPEZ_BONUS = 3.0          # Obergrenze des Zuschlags. Kalibriert auf Goldsatz-Haelfte A,
+                           # Gleichstand nach Genauigkeit aufgeloest; auf der unberuehrten
+                           # Haelfte B geprueft. Auf 0 setzen baut den Zuschlag komplett zurueck.
+_spez_cache: dict[str, float] = {}
+_spez_gesamt: list[int] = []
+
+
+def _spezifitaet(c: sqlite3.Connection, woerter) -> float:
+    """log(N/df)/log(N) des SELTENSTEN getroffenen Wortes, in [0,1].
+
+    Das seltenste statt der Summe: ein einziges fast eindeutiges Wort ist ein
+    Beleg, zehn Allerweltswoerter sind keiner. Eine Summe wuerde das umdrehen.
+    """
+    if not woerter:
+        return 0.0
+    if not _spez_gesamt:
+        try:
+            n = c.execute("SELECT COUNT(*) FROM vp_alias").fetchone()[0] or 1
+        except Exception:
+            n = 1
+        _spez_gesamt.append(max(2, n))
+    N = _spez_gesamt[0]
+    import math
+    beste = 0.0
+    for w in woerter:
+        if w not in _spez_cache:
+            try:
+                r = c.execute("SELECT df FROM vp_alias_df WHERE wort=?", (w,)).fetchone()
+            except Exception:
+                r = None
+            df = int(r[0]) if r and r[0] else N   # unbekannt = wertlos, nicht = einzigartig
+            _spez_cache[w] = max(0.0, math.log(N / max(1, df)) / math.log(N))
+        beste = max(beste, _spez_cache[w])
+    return beste
+
+
 def resolve_entities(c: sqlite3.Connection, tokens: list[str], raw_text: str) -> Resolution:
     """Fail-closed, SHAPE aus SemanticEntityResolverV12: nur EXACT/EVIDENCE_ALIAS
     duerfen einen Walk anstossen. AMBIGUOUS/LOW_CONFIDENCE/MISS raten NIE."""
@@ -403,11 +469,22 @@ def resolve_entities(c: sqlite3.Connection, tokens: list[str], raw_text: str) ->
         (expr,),
     ).fetchall()
     by: dict[str, float] = {}
+    kern = set(_tragende(sorted(qt)))
     for r in rows:
         at = set(_tokens(r["alias_norm"]))
-        coverage = len(at & qt) / max(1, len(at))
+        getroffen = at & qt
+        coverage = len(getroffen) / max(1, len(at))
         weight = _ALIAS_CLASS_WEIGHT.get(r["alias_class"], 0.5)
+        # Unveraenderte Grundbewertung -- der Zuschlag kommt OBEN DRAUF, damit
+        # ein Rueckbau nur eine Zahl auf 0 setzen muss.
         score = 2.0 * coverage + float(r["confidence"]) * weight
+        # Zuschlag: seltenes Wort MAL Anteil an der tragenden Frage. Das
+        # Produkt verhindert, dass ein zufaelliger Exotentreffer in einem
+        # langen Alias die Schwelle allein reisst.
+        treffer_kern = getroffen & kern
+        if treffer_kern:
+            deckung_frage = len(treffer_kern) / max(1, len(kern))
+            score += _SPEZ_BONUS * _spezifitaet(c, treffer_kern) * deckung_frage
         by[r["target_id"]] = max(by.get(r["target_id"], 0.0), score)
     ranked = sorted(by.items(), key=lambda kv: (-kv[1], kv[0]))
     cands = tuple(x[0] for x in ranked[:8])
@@ -1665,10 +1742,13 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
     if lauf_id:
         for t in treffer:
             c.execute("INSERT INTO vp_gesehen(lauf,record_id,zeit) VALUES (?,?,?)", (lauf_id, t["id"], _now()))
-    # Echtes Lernsignal: NUR aus einem Cache-Treffer (eine Signatur, die schon
-    # einmal echt gebraucht wurde) -- nie aus der eigenen Ausgabe dieses Laufs.
-    if cache_hit:
-        lernen(c, result, war_treffer=True)
+    # Lernsignal jetzt aus JEDEM Paket-Aufruf (traegt zu 'gesehen' bei, egal ob
+    # Treffer), Belohnung weiterhin nur bei echtem Cache-Treffer ('genutzt' --
+    # eine Signatur, die schon einmal echt gebraucht wurde, nie die eigene
+    # Ausgabe dieses Laufs). Vorher lief lernen() NUR bei einem Treffer, wodurch
+    # 'wie oft ueberhaupt gesehen' nie erfasst wurde -- ohne das ist keine
+    # Lift-Berechnung moeglich, nur additives Hochzaehlen bis zum Deckel.
+    lernen(c, result, war_treffer=cache_hit)
     c.commit()
     if own:
         c.close()
@@ -1676,35 +1756,116 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
 
 
 # ── Lernen (beschraenkt, rueckgaengig zu machen) ────────────────────────
+#
+# Befund (gemessen, vor diesem Umbau): additives Schema (+0.1 je Treffer,
+# gedeckelt bei 3.0) trieb 15 von 22 Kantenarten auf exakt den Deckel, n=35 bis
+# 14733 -- eine 420-fache Spanne, alle gleich gewichtet. Ubiquitaet wurde mit
+# Nuetzlichkeit verwechselt: eine Kantenart, die in fast jedem Paket auftaucht
+# (z.B. geschwister_verzeichnis, blosse Pfad-Nachbarschaft), traegt wenig
+# Unterscheidungskraft -- sie ist das "und" des Graphen, nicht sein Signal.
+#
+# Ersatz: LIFT-MASS statt additivem Zaehler. Zwei Rohzahlen je Kantenart:
+#   gesehen = wie oft sie in IRGENDEINEM Paket vorkam (jeder paket()-Aufruf)
+#   genutzt = wie oft davon in einem Paket, das ein Cache-Treffer war
+# lift = (genutzt/gesehen) relativ zur globalen Basisrate -- eine Kantenart
+# ohne Information hat lift=1.0 (trifft genau die Basisrate), nicht 0 und
+# nicht automatisch den Deckel. Kleine n werden Richtung neutral (1.0)
+# gedaempft (_LIFT_DAEMPFUNG_K Pseudo-Beobachtungen), damit eine 2-Beobachtungen-
+# Kantenart nicht durch Zufall eine 2000-Beobachtungen-Kantenart aussticht --
+# das daempft NICHT ubiquitaere Kantenarten selbst, die werden allein durch
+# ihr eigenes (meist ~1 oder darunter liegendes) Lift-Verhaeltnis abgewertet.
+# Deckel bei 3.0 bleibt (nichts darf davonlaufen).
+
+_LIFT_DAEMPFUNG_K = 15.0   # Pseudo-Beobachtungen fuer die Bayes-Schrumpfung Richtung
+                           # lift=1.0 bei kleinem n -- kein gemessener, sondern ein
+                           # plausibler Startwert (Kalibrierung/Nachmessen offen).
+
+
+def _lift_basisrate(c: sqlite3.Connection) -> float:
+    """Globale Basisrate: Anteil 'genutzt' an 'gesehen' ueber ALLE Kantenarten.
+    Das ist der Nenner des Lift-Masses -- der Punkt, an dem eine Kantenart
+    weder ueber- noch unterdurchschnittlich mit einem Cache-Treffer korreliert."""
+    row = c.execute(
+        "SELECT SUM(gesehen) AS g, SUM(genutzt) AS n FROM vp_edge_lern WHERE query_class='global'"
+    ).fetchone()
+    g, n = (row["g"] or 0), (row["n"] or 0)
+    return (n / g) if g > 0 else 0.0
+
+
+def _lift_gewicht(gesehen: int, genutzt: int, basisrate: float) -> float:
+    """gewicht = gedaempftes Lift-Mass, gedeckelt auf [0,3] (dieselbe Skala wie
+    zuvor: _walk() liest gewicht als 0.5+0.5*gewicht, also Multiplikator
+    0.5..2.0). gesehen=0 -> 0.0 (nie beobachtet, wie der alte Startwert)."""
+    if gesehen <= 0:
+        return 0.0
+    if basisrate <= 0:
+        lift = 1.0   # keine globale Information vorhanden -- neutral, nicht erfunden
+    else:
+        lift = (genutzt / gesehen) / basisrate
+    konfidenz = gesehen / (gesehen + _LIFT_DAEMPFUNG_K)
+    gedaempft = 1.0 + konfidenz * (lift - 1.0)
+    return max(0.0, min(3.0, gedaempft))
+
 
 def lernen(c: sqlite3.Connection, package: dict, war_treffer: bool) -> None:
-    """Lernt NUR aus Cache-Treffern (also aus bereits verifizierten Signaturen),
-    NIE aus dem eigenen Ausgabetext. gewicht wird gedeckelt, nie unbegrenzt."""
-    if not war_treffer:
-        return
+    """Lernt aus JEDEM Paket-Aufruf (nicht mehr nur aus Treffern): 'gesehen'
+    zaehlt jede Kantenart, die im Paket vorkam, 'genutzt' nur wenn dieser Aufruf
+    ein Cache-Treffer war (also aus einer bereits verifizierten Signatur, nie
+    aus dem eigenen Ausgabetext dieses Laufs). gewicht wird aus beiden Zaehlern
+    als Lift-Mass NEU abgeleitet, nicht mehr additiv hochgezaehlt -- siehe
+    _lift_gewicht(). Bleibt gedeckelt, nie unbegrenzt."""
     edge_arts = {e["art"] for e in package.get("codependenzen", [])}
+    if not edge_arts:
+        return
+    basisrate = _lift_basisrate(c)
     for art in edge_arts:
         row = c.execute(
-            "SELECT gewicht,beobachtungen FROM vp_edge_lern WHERE query_class='global' AND edge_art=?",
+            "SELECT gesehen,genutzt FROM vp_edge_lern WHERE query_class='global' AND edge_art=?",
             (art,),
         ).fetchone()
-        g, n = (row["gewicht"], row["beobachtungen"]) if row else (0.0, 0)
-        g = min(3.0, g + 0.1)
-        n += 1
+        gesehen, genutzt = (row["gesehen"] or 0, row["genutzt"] or 0) if row else (0, 0)
+        gesehen += 1
+        if war_treffer:
+            genutzt += 1
+        gewicht = _lift_gewicht(gesehen, genutzt, basisrate)
         c.execute(
-            "INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
-            "VALUES ('global',?,?,?,?)", (art, g, n, _now()),
+            "INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,gesehen,genutzt,zuletzt_gelernt) "
+            "VALUES ('global',?,?,?,?,?,?)", (art, gewicht, gesehen, gesehen, genutzt, _now()),
         )
     c.commit()
 
 
 def verfall(c: sqlite3.Connection) -> int:
-    """Verfall: multiplikativ mit HOP_DECAY. Alte Treffer duerfen nicht fuer immer
-    dominieren. Zahl wiederverwendet aus dem ClayGraph-Kandidaten, nicht neu erfunden."""
-    c.execute("UPDATE vp_edge_lern SET gewicht = gewicht * ?", (HOP_DECAY,))
-    n = c.execute("SELECT changes()").fetchone()[0]
+    """Verfall: multiplikativ mit HOP_DECAY auf 'gesehen' UND 'genutzt' (gleicher
+    Faktor auf beide -- das Lift-VERHAELTNIS selbst bleibt dadurch unveraendert,
+    aber die KONFIDENZ sinkt, weil gesehen kleiner wird). Alte Beobachtungen
+    duerfen nicht auf ewig mit derselben Sicherheit gelten wie frische -- eine
+    Kantenart, die lange nicht mehr beobachtet wurde, driftet so Richtung
+    neutral (lift=1.0), statt ihren alten Stand fuer immer zu halten. gewicht
+    ist abgeleiteter Zustand (siehe _lift_gewicht), kein eigener -- wird hier
+    direkt im selben Schritt aus den zerfallenen Zaehlern neu berechnet, statt
+    separat zu zerfallen (sonst wuerde der naechste lernen()-Aufruf die
+    Zerfalls-Wirkung auf gewicht sofort wieder ueberschreiben).
+    Zahl (0.58) wiederverwendet aus dem ClayGraph-Kandidaten, nicht neu erfunden."""
+    rows = c.execute("SELECT query_class,edge_art,gesehen,genutzt FROM vp_edge_lern").fetchall()
+    if not rows:
+        return 0
+    for r in rows:
+        c.execute(
+            "UPDATE vp_edge_lern SET gesehen=?, genutzt=? WHERE query_class=? AND edge_art=?",
+            ((r["gesehen"] or 0) * HOP_DECAY, (r["genutzt"] or 0) * HOP_DECAY,
+             r["query_class"], r["edge_art"]),
+        )
+    basisrate = _lift_basisrate(c)   # Zaehler haben sich global verschoben -- neu ziehen
+    for r in c.execute("SELECT query_class,edge_art,gesehen,genutzt FROM vp_edge_lern").fetchall():
+        gesehen, genutzt = (r["gesehen"] or 0), (r["genutzt"] or 0)
+        gewicht = _lift_gewicht(gesehen, genutzt, basisrate)
+        c.execute(
+            "UPDATE vp_edge_lern SET gewicht=?, beobachtungen=? WHERE query_class=? AND edge_art=?",
+            (gewicht, int(round(gesehen)), r["query_class"], r["edge_art"]),
+        )
     c.commit()
-    return n
+    return len(rows)
 
 
 # ── Eichung: eigene Normale bewerten (misst gegen den Massstab, baut ihn nicht) ──
@@ -1728,14 +1889,14 @@ def normalen_score() -> tuple[str, bool]:
 # ── Snapshot + Heilung ───────────────────────────────────────────────────
 
 def _state_hash(c: sqlite3.Connection) -> str:
-    rows = c.execute("SELECT query_class,edge_art,gewicht,beobachtungen FROM vp_edge_lern ORDER BY query_class,edge_art").fetchall()
+    rows = c.execute("SELECT query_class,edge_art,gewicht,beobachtungen,gesehen,genutzt FROM vp_edge_lern ORDER BY query_class,edge_art").fetchall()
     blob = json.dumps([tuple(r) for r in rows], sort_keys=True)
     return hashlib.sha256(blob.encode()).hexdigest()[:16]
 
 
 def schnappschuss(c: sqlite3.Connection, *, mit_normalen: bool = True) -> dict:
     score, bestanden = normalen_score() if mit_normalen else ("UEBERSPRUNGEN", True)
-    rows = c.execute("SELECT query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt FROM vp_edge_lern").fetchall()
+    rows = c.execute("SELECT query_class,edge_art,gewicht,beobachtungen,gesehen,genutzt,zuletzt_gelernt FROM vp_edge_lern").fetchall()
     dump = json.dumps([dict(r) for r in rows])
     total_obs = sum(r["beobachtungen"] for r in rows)
     sh = _state_hash(c)
@@ -1769,8 +1930,16 @@ def heilen(c: sqlite3.Connection) -> dict:
     daten = json.loads(row["edge_lern_snapshot"])
     c.execute("DELETE FROM vp_edge_lern")
     for e in daten:
-        c.execute("INSERT INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) VALUES (?,?,?,?,?)",
-                  (e["query_class"], e["edge_art"], e["gewicht"], e["beobachtungen"], e["zuletzt_gelernt"]))
+        # .get()-Fallback: ein Schnappschuss von VOR dem Lift-Umbau kennt
+        # gesehen/genutzt noch nicht -- dieselbe ehrliche Rueckfuell-Regel wie
+        # beim Spaltenzuwachs (gesehen=genutzt=beobachtungen, Lift=1.0 neutral).
+        c.execute(
+            "INSERT INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,gesehen,genutzt,zuletzt_gelernt) "
+            "VALUES (?,?,?,?,?,?,?)",
+            (e["query_class"], e["edge_art"], e["gewicht"], e["beobachtungen"],
+             e.get("gesehen", e["beobachtungen"]), e.get("genutzt", e["beobachtungen"]),
+             e["zuletzt_gelernt"]),
+        )
     nachher = _state_hash(c)
     detail = {"zurueck_zu_snapshot": row["snapshot_id"], "state_hash_vorher": vorher,
               "state_hash_nachher": nachher, "normals_score_des_ziels": row["normals_score"]}
@@ -2137,12 +2306,22 @@ def puls(c: sqlite3.Connection) -> dict:
     for k in c.execute(f"SELECT art FROM kante WHERE von IN ({qm}) OR nach IN ({qm})", ids * 2):
         betroffene[k["art"]] += 1
     for art, n in betroffene.items():
-        row = c.execute("SELECT gewicht,beobachtungen FROM vp_edge_lern WHERE query_class='global' AND edge_art=?", (art,)).fetchone()
-        g, b = (row["gewicht"], row["beobachtungen"]) if row else (0.0, 0)
+        # gesehen/genutzt (Lift-Zaehler aus lernen(), s.o.) hier NUR mitschleifen,
+        # nicht antasten -- puls() ist ein anderes Signal (Graph-Struktur-Delta,
+        # kein Cache-Treffer). INSERT OR REPLACE ohne diese Spalten wuerde sie
+        # sonst still auf 0 zuruecksetzen (Spaltendefault), weil REPLACE die
+        # ganze Zeile ersetzt statt nur die genannten Felder zu aktualisieren.
+        row = c.execute(
+            "SELECT gewicht,beobachtungen,gesehen,genutzt FROM vp_edge_lern WHERE query_class='global' AND edge_art=?",
+            (art,),
+        ).fetchone()
+        g, b, gs, gn = (row["gewicht"], row["beobachtungen"], row["gesehen"] or 0, row["genutzt"] or 0) if row else (0.0, 0, 0, 0)
         g = min(3.0, g + 0.02 * n)
         b += n
-        c.execute("INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
-                  "VALUES ('global',?,?,?,?)", (art, g, b, _now()))
+        c.execute(
+            "INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,gesehen,genutzt,zuletzt_gelernt) "
+            "VALUES ('global',?,?,?,?,?,?)", (art, g, b, gs, gn, _now()),
+        )
     letzte_rowid = max(r["rowid"] for r in neu)
     c.execute("INSERT OR REPLACE INTO vp_alias_meta(key,value) VALUES ('puls_letzte_kuration_rowid',?)", (str(letzte_rowid),))
     us = (time.perf_counter() - t0) * 1e6

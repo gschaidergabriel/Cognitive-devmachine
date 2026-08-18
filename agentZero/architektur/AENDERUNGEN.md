@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T09:18:57Z aus drei Repos. 467 Eintraege.
+Automatisch erzeugt 2026-08-18T09:48:57Z aus drei Repos. 468 Eintraege.
 
 ## architektur (14)
 
@@ -195,13 +195,14 @@ Automatisch erzeugt 2026-08-18T09:18:57Z aus drei Repos. 467 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (229)
+## bau (230)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T10:35 | entityos | `8e37f4a64a81` | Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate |
 | 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
 | 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
+| 2026-08-18T09:33 | unifieddb | `b08f52ebe6c1` | Einstiegspunkt der Abrufentitaet: Ausbeute vervierfacht, ohne die Schranke anzufassen |
 | 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
 | 2026-08-18T09:00 | entityos | `70fe17a64cb5` | Die autonomen Takte versioniert - und der Riss, den sie hatten |
 | 2026-08-18T08:55 | entityos | `5f5df7cad329` | Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz |
@@ -258,5 +259,4 @@ Automatisch erzeugt 2026-08-18T09:18:57Z aus drei Repos. 467 Eintraege.
 | 2026-08-18T03:24 | entityos | `adc96f0f906d` | feat(clayverse): expose bounded autonomy in read state |
 | 2026-08-18T03:24 | entityos | `8abb73a7b992` | feat(clayverse): inject bounded autonomy into hook context |
 | 2026-08-18T03:24 | entityos | `c3c685e8b02b` | feat(clayverse): add bounded autonomy context projection |
-| 2026-08-18T03:22 | entityos | `831870a48b13` | feat(clayverse): add non-preempting autonomous turn gate |
 

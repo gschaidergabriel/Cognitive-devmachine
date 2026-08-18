@@ -58,6 +58,9 @@ class TurnLifecycle:
         # identity is not what gets dropped -- dropping it would let the entity
         # forget what it is exactly when it is under the most pressure.
         if world.get("canonical_identity") is not None: packed["canonical_identity"]=world["canonical_identity"]
+        # Wer gerade da ist, faellt nie. Ohne diesen Block weiss Zero nicht, mit
+        # WEM es spricht -- und kann folgerichtig nichts Persoenliches zuordnen.
+        if world.get("anwesender_mensch") is not None: packed["anwesender_mensch"]=world["anwesender_mensch"]
         packed["corpus"]=list(world.get("corpus",[]))
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
         # Corpus is trimmed FIRST when space runs out: it is the most re-fetchable

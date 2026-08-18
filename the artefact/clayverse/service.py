@@ -17,6 +17,7 @@ from .autonomy_activation import AutonomyActivationError, install_attested_auton
 from .autonomy_pulse import AutonomyPulse
 from .recovery import recover_incomplete_episodes
 from .wirte import aufnehmen as wirte_aufnehmen
+from .profile import grundstock as profil_grundstock
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -191,6 +192,11 @@ def main():
     # Verbundene Rechner beim Start einlesen. Der Herzschlag kommt ohnehin an --
     # bisher landete er nur in einer Datei, die niemand liest.
     try:
+        # Schemaanlage gehoert hierher, an den Start -- nicht in eine Lesefunktion.
+        profil_stand = profil_grundstock(db)
+    except Exception as exc:
+        profil_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
+    try:
         wirte_stand = wirte_aufnehmen(db)
     except Exception as exc:
         wirte_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
@@ -293,6 +299,7 @@ def main():
         "consciousness_daemon": False,
         "autonomy_pulse": autonomy_pulse_status,
         "wirte": wirte_stand,
+        "profile": profil_stand,
         "port": port,
     }), flush=True)
 

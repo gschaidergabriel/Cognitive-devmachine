@@ -34,6 +34,14 @@ from .bahnen import BahnErschoepft, Bahnrouter
 
 ARTEN = ("fact", "decision", "task", "commitment", "preference", "open_question")
 
+AUSBEUTE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS gedaechtnis_ausbeute(
+  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,
+  turn_id TEXT, rolle TEXT, bahn TEXT, modell TEXT,
+  genommen INTEGER NOT NULL, verworfen INTEGER NOT NULL, gruende TEXT);
+"""
+
+
 ANWEISUNG = """Du bist ein Extraktor. Lies den Text und gib NUR JSON zurueck, kein Markdown.
 
 {"eintraege":[{"art":"fact|decision|task|commitment|preference|open_question",
@@ -108,12 +116,12 @@ def extrahiere(db, *, turn_id: str, user_id: str, content: str,
     # Extraktor etwas erfinden wollte und gestoppt wurde. Nur an den Aufrufer
     # zurueckgeben hiess, sie faellt auf den Boden -- und dann sieht ein
     # halluzinierender Extraktor genauso aus wie ein ruhiger.
+    # ⚠️ KEIN executescript mehr hier. Es committet implizit, und dieser Code
+    # lief aus einer offenen Zug-Transaktion heraus -- damit war der Zug tot,
+    # und zwar NUR wenn die Extraktion erfolgreich bis hierher kam. Ein
+    # Defekt, der ausschliesslich bei Erfolg zuschlaegt.
+    # Die Tabelle entsteht jetzt am Start, in service.main().
     try:
-        db.db.executescript(
-            "CREATE TABLE IF NOT EXISTS gedaechtnis_ausbeute("
-            "  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,"
-            "  turn_id TEXT, rolle TEXT, bahn TEXT, modell TEXT,"
-            "  genommen INTEGER NOT NULL, verworfen INTEGER NOT NULL, gruende TEXT);")
         with db.tx() as sql:
             sql.execute(
                 "INSERT INTO gedaechtnis_ausbeute(ts,turn_id,rolle,bahn,modell,genommen,verworfen,gruende)"

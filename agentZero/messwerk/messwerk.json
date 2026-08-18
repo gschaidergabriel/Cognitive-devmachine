@@ -1,23 +1,23 @@
 {
-  "erzeugt": "2026-08-18T10:49:57Z",
+  "erzeugt": "2026-08-18T11:20:50Z",
   "sensoren": [
     {
       "messwert": "Unknown Honesty Rate",
       "gruppe": "Ehrlichkeit",
       "unterscheidet": "Sagt das System 'weiss ich nicht', oder rät es? Trennt Zurueckhaltung von Erfindung.",
       "zustand": "GEMESSEN",
-      "wert": 1.0,
+      "wert": 0.78,
       "braucht": null,
-      "hinweis": "28 von 28 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort."
+      "hinweis": "32 von 41 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort."
     },
     {
       "messwert": "Context Utilization",
       "gruppe": "Abruf",
       "unterscheidet": "Wird der gelieferte Kontext genutzt oder verschwendet? Trennt zu viel Kontext von zu wenig.",
       "zustand": "GEMESSEN",
-      "wert": 0.0,
+      "wert": 0.0012,
       "braucht": null,
-      "hinweis": "Anteil des Budgets, der belegt wurde. 28 Episoden."
+      "hinweis": "Anteil des Budgets, der belegt wurde. 41 Episoden."
     },
     {
       "messwert": "Effect Verification Latency",
@@ -42,8 +42,8 @@
       "gruppe": "Kausalitaet",
       "unterscheidet": "Wie viele Schritte zwischen Handlung und messbarer Wirkung? Trennt kurze von langen Wirkketten.",
       "zustand": "GEMESSEN",
-      "wert": 28,
-      "braucht": "mindestens 10 Kausalepisoden mit Wirkung, aktuell 28",
+      "wert": 41,
+      "braucht": "mindestens 10 Kausalepisoden mit Wirkung, aktuell 41",
       "hinweis": "Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziele."
     },
     {
@@ -51,9 +51,9 @@
       "gruppe": "Haushalt",
       "unterscheidet": "Waechst der Zustand pro nuetzlichem Fakt oder pro Muell? Trennt Wissen von Ablagerung.",
       "zustand": "GEMESSEN",
-      "wert": 3925172224,
+      "wert": 3987140608,
       "braucht": null,
-      "hinweis": "3.93 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts."
+      "hinweis": "3.99 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts."
     },
     {
       "messwert": "Queue Pressure",
@@ -71,7 +71,7 @@
       "zustand": "INSTRUMENT_FEHLT",
       "wert": null,
       "braucht": "ein Vergleichslauf: identischer Zustand vor und nach Neustart, gleiche Eingabe, Antworten gegenueberstellen. Es gibt heute keinen Wiederholungsmechanismus.",
-      "hinweis": "Generationen im Umlauf: [77]. Prueffpunkte: 98."
+      "hinweis": "Generationen im Umlauf: [80]. Prueffpunkte: 104."
     },
     {
       "messwert": "Identity Invariance",
@@ -101,7 +101,7 @@
       "unterscheidet": "Konkurrieren mehrere Optionen echt, oder ist die Wahl trivial? Trennt Entscheidungspunkte von Ablauf.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -110,7 +110,7 @@
       "unterscheidet": "Aendert Zero Annahmen bei neuer Evidenz? Trennt epistemische Flexibilitaet von Sturheit.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -119,7 +119,7 @@
       "unterscheidet": "Weicht das Ergebnis von der Erwartung ab? Grundlage jeder Anpassung.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -128,7 +128,7 @@
       "unterscheidet": "Gab es Passendes, das nicht geholt wurde? Trennt schlechten Abruf von leerem Bestand.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -137,7 +137,7 @@
       "unterscheidet": "Waren autonom gestartete Schritte sinnvoll? Trennt Initiative von Betriebsamkeit.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -146,7 +146,7 @@
       "unterscheidet": "War Nichtstun die richtige Wahl? Trennt Ruhe von Versaeumnis -- Autonomie heisst nicht dauernd handeln.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -155,7 +155,7 @@
       "unterscheidet": "Tritt derselbe mechanistische Fehler wieder auf? Der haerteste Lernindikator, den es gibt.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -164,7 +164,7 @@
       "unterscheidet": "Hat eine Erinnerung das Ergebnis verbessert? Trennt 'wurde erinnert' von 'war nuetzlich'.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -173,7 +173,7 @@
       "unterscheidet": "Wie lange bleibt Gespeichertes nuetzlich? Grundlage fuer automatischen Verfall.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {
@@ -182,7 +182,7 @@
       "unterscheidet": "Wird ein wiederholt gegangener Weg wirklich schneller? Der Test der geplanten Autobahnen.",
       "zustand": "ZU_WENIG_VERKEHR",
       "wert": null,
-      "braucht": "Bestand zu duenn: 56 Zuege, 2 Wirkungen, 12 Gedaechtniseinheiten, 28 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "braucht": "Bestand zu duenn: 82 Zuege, 2 Wirkungen, 25 Gedaechtniseinheiten, 41 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
       "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
     },
     {

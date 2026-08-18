@@ -255,13 +255,15 @@ Notizen stehen -- eine Zusammenfassung, die nur Erfolge nennt, ist falsch.
 Gib NUR JSON zurueck, kein Markdown:
 {"titel": "<kurzer, konkreter Titel auf Deutsch>",
  "claims": [{"text": "<kurze, eigenstaendige Aussage auf Deutsch>",
-             "beleg": "<WOERTLICHER Ausschnitt aus GENAU DER Notiz unten, zeichengenau>",
+             "beleg": "<KURZER woertlicher Ausschnitt aus GENAU DER Notiz unten, zeichengenau, unter 150 Zeichen>",
              "quelle_id": "<Kennung der Notiz, aus der der Beleg stammt>"}]}
 
 Regeln:
 - beleg MUSS zeichengenau in der bei quelle_id genannten Notiz vorkommen. Nicht
   paraphrasieren, nichts erfinden, keinen Beleg aus einer anderen Notiz nehmen.
-- Hoechstens 10 Aussagen. Nichts Brauchbares gefunden ist gueltig: {"titel":"...","claims":[]}
+- beleg so KURZ wie moeglich waehlen (ein Satz oder Zahlenbeleg reicht) --
+  lang zitieren kostet Platz, der einer weiteren Aussage fehlt.
+- Hoechstens 6 Aussagen. Nichts Brauchbares gefunden ist gueltig: {"titel":"...","claims":[]}
 - Keine Hoeflichkeiten, keine blosse Wiederholung der Kennungen als Aussage."""
 
 
@@ -274,13 +276,25 @@ def _prompt(notizen: list[dict]) -> str:
 
 
 def _parse_antwort(roh: str) -> dict | None:
+    """JSON aus der Modellantwort lesen -- mit EINEM mechanischen
+    Reparaturversuch bei abgeschnittener Antwort (Token-Deckel getroffen,
+    mitten in einem claims-Objekt abgerissen): beim letzten vollstaendigen
+    Eintrag kappen und die Klammern syntaktisch schliessen. Das erfindet
+    keinen Inhalt -- es entfernt nur einen unvollstaendigen letzten Eintrag,
+    den json.loads sonst komplett verwerfen wuerde."""
     roh = (roh or "").strip()
     if roh.startswith("```"):
         roh = re.sub(r"^```[a-zA-Z]*\s*|\s*```$", "", roh).strip()
-    try:
-        return json.loads(roh[roh.index("{"):roh.rindex("}") + 1])
-    except Exception:
-        return None
+    kandidaten = [roh]
+    schnitt = roh.rfind("},")
+    if schnitt > 0:
+        kandidaten.append(roh[:schnitt + 1] + "]}")
+    for k in kandidaten:
+        try:
+            return json.loads(k[k.index("{"):k.rindex("}") + 1])
+        except Exception:
+            continue
+    return None
 
 
 def _narrativer_artikel(router: Bahnrouter, tag: str, thema: str, gruppe: list[dict]) -> dict | None:
@@ -294,15 +308,23 @@ def _narrativer_artikel(router: Bahnrouter, tag: str, thema: str, gruppe: list[d
         z["id"]: _normalisieren(z["titel"] + " " + z["wieso"]) for z in gruppe
     }
 
-    try:
-        antwort = router.rufe("kondensieren", _prompt(gelesen), system=_SYS_PROMPT, max_token=1600)
-    except BahnErschoepft:
-        # Regel 3 aus bahnen.py: erschoepft heisst Ablehnung, nicht Abstieg auf
-        # eine selbst geschriebene Vorlage. Gruppe bleibt fuer den naechsten
-        # Lauf liegen (kein Eintrag in `vorhandene`, quell_hash unveraendert).
-        return None
+    # Bis zu 2 Versuche derselben Bahn -- kein Abstieg, keine selbst
+    # geschriebene Vorlage (Regel 3, bahnen.py), nur ein zweiter Wurf, wenn
+    # der erste syntaktisch kaputtes JSON zurueckgab (bei freien Modellen
+    # gemessen: nicht selten, meist bei laengeren Antworten).
+    antwort, daten_json = None, None
+    for versuch in range(2):
+        try:
+            antwort = router.rufe("kondensieren", _prompt(gelesen), system=_SYS_PROMPT, max_token=2600)
+        except BahnErschoepft:
+            # Regel 3 aus bahnen.py: erschoepft heisst Ablehnung, nicht Abstieg
+            # auf eine selbst geschriebene Vorlage. Gruppe bleibt fuer den
+            # naechsten Lauf liegen (kein Eintrag in `vorhandene`).
+            return None
+        daten_json = _parse_antwort(antwort.get("text", ""))
+        if daten_json is not None:
+            break
 
-    daten_json = _parse_antwort(antwort.get("text", ""))
     if daten_json is None:
         return {
             "titel": f"{tag}: {thema} ({len(gruppe)} Notizen, Modellantwort kein JSON)",
@@ -317,7 +339,7 @@ def _narrativer_artikel(router: Bahnrouter, tag: str, thema: str, gruppe: list[d
             "gelesene_notizen": [z["id"] for z in gelesen],
         }
 
-    aussagen = (daten_json.get("claims") or [])[:10]
+    aussagen = (daten_json.get("claims") or [])[:6]
     behalten, gruende = [], []
     verworfen = 0
     for c in aussagen:

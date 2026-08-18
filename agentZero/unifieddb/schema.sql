@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T10:49:01Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T11:18:59Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -53,6 +53,12 @@ CREATE TABLE bahn_lauf (
         pruefung TEXT,                 -- warum verworfen
         antwort TEXT
     );
+CREATE TABLE bahn_livestreak(
+  bahn TEXT PRIMARY KEY,
+  serie INTEGER NOT NULL DEFAULT 0,
+  zuletzt_fehler REAL,
+  zuletzt_ergebnis TEXT
+);
 CREATE TABLE bahn_nutzung(
   bahn TEXT NOT NULL,
   prozess TEXT NOT NULL,
@@ -774,6 +780,7 @@ CREATE INDEX idx_artikel_projekt ON artikel(projekt);
 CREATE INDEX idx_artikel_quelle ON artikel(quelle);
 CREATE INDEX idx_artikel_sphaere ON artikel(sphaere);
 CREATE INDEX idx_artikel_status ON artikel(status);
+CREATE INDEX idx_artikel_verdichtung_lookup ON artikel(art, von_quelle, datum);
 CREATE INDEX idx_asuchtext_blase ON artikel_suchtext(blase);
 CREATE INDEX idx_bahn_lauf_art_zeit ON bahn_lauf(art, zeit);
 CREATE INDEX idx_bearbeitung_artikel ON bearbeitung(artikel_id);

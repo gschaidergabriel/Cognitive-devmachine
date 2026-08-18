@@ -313,7 +313,12 @@ class ClayVerseEffectBridge:
             p["rechner"] = [
                 {"wirt": w.get("wirt"), "gehoert_zu": w.get("gehoert_zu"),
                  "meiner": w.get("gehoert_zu") == self.user_id,
-                 "online": w.get("online")}
+                 "online": w.get("online"),
+                 # Nie nur true/false: wie alt der Befund ist und woher er kommt.
+                 # Ohne das behauptet "online" eine Gegenwart, die die DB-Zeile
+                 # allein (Stand seit Dienststart) nicht mehr belegen kann.
+                 "zuletzt_gesehen_vor_s": w.get("zuletzt_gesehen_vor_s"),
+                 "beleg": w.get("beleg")}
                 for w in _wirte.verbundene_systeme(self.db)
             ]
         except Exception as e:

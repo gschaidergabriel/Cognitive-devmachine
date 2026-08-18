@@ -44,6 +44,24 @@ Return exactly one JSON object with a single key: german (string, the German tra
 only, nothing else)."""
 
 
+# Gemessen 2026-08-18 (zweimal live aufgetreten, dreimal live reproduziert):
+# enthaelt der caveman-Text einen Markdown-Codespan, der selbst ein zitiertes
+# JSON-Fragment mit doppelten Anfuehrungszeichen traegt (z.B. `"feld": "wert"`),
+# bricht Mistrals JSON-Modus zuverlaessig genau nach dem oeffnenden Backtick
+# ab. finish_reason bleibt dabei "stop" (kein Token-Budget-Abriss --
+# completion_tokens lag weit unter max_tokens=1200) und das JSON selbst bleibt
+# GUELTIG -- nur der Inhalt endet mitten im Satz. transport.py kann das nicht
+# sehen: es bekommt gueltiges JSON und liefert es klaglos aus. Die Unterschrift
+# ist eine ungerade Zahl Backticks im Ergebnis (ein Codespan wurde geoeffnet,
+# nie geschlossen).
+MAX_UEBERSETZUNGSVERSUCHE = 3
+
+
+def _wirkt_abgeschnitten(text: str) -> bool:
+    """Traegt das gemessene Abbruchmuster: ein ungeschlossener Inline-Codespan."""
+    return text.count("`") % 2 == 1
+
+
 def translate_to_german(
     caveman_text: str,
     *,
@@ -55,20 +73,36 @@ def translate_to_german(
         raise RuntimeError("MISTRAL_API_KEY not available")
     if not caveman_text or len(caveman_text) > 20_000:
         raise ValueError("invalid caveman text")
-    result = transport.mistral_chat_json(
-        api_key=key,
-        model=model,
-        system=TRANSLATOR_SYSTEM,
-        user=f"CAVEMAN TEXT:\n{caveman_text}",
-        temperature=0.1,
-        max_tokens=1200,
+    for versuch in range(1, MAX_UEBERSETZUNGSVERSUCHE + 1):
+        result = transport.mistral_chat_json(
+            api_key=key,
+            model=model,
+            system=TRANSLATOR_SYSTEM,
+            user=f"CAVEMAN TEXT:\n{caveman_text}",
+            temperature=0.1,
+            max_tokens=1200,
+        )
+        payload = result["payload"]
+        if not isinstance(payload, dict) or not isinstance(payload.get("german"), str) or not payload["german"]:
+            raise RuntimeError("translator envelope missing 'german'")
+        german = payload["german"]
+        if not _wirkt_abgeschnitten(german):
+            return {
+                "caveman_original": caveman_text,
+                "german_translation": german,
+                "translator_model": model,
+                "translator_receipt": result["receipt"],
+            }
+        # Nicht still weiterreichen: ein Satz, der mitten im Wort endet, ist
+        # keine Uebersetzung. Naechster Versuch -- eine neue Anfrage, nicht
+        # dieselbe Antwort nochmal.
+    # Alle Versuche mit demselben Abbruchmuster: fuer bestimmte Quelltexte
+    # (verschachtelte Anfuehrungszeichen in einem Codespan) ist das kein
+    # Zufallsausfall, der ein Retry allein loest -- gemessen dreimal in Folge.
+    # Laut scheitern statt eine abgeschnittene Antwort als Uebersetzung
+    # durchzureichen.
+    raise RuntimeError(
+        f"translator: {MAX_UEBERSETZUNGSVERSUCHE} Versuche, jedesmal ein "
+        "ungeschlossener Codespan (Abbruch nach Backtick, finish_reason='stop') "
+        "-- abgeschnittene Ausgabe verworfen statt als Uebersetzung durchgereicht"
     )
-    payload = result["payload"]
-    if not isinstance(payload, dict) or not isinstance(payload.get("german"), str) or not payload["german"]:
-        raise RuntimeError("translator envelope missing 'german'")
-    return {
-        "caveman_original": caveman_text,
-        "german_translation": payload["german"],
-        "translator_model": model,
-        "translator_receipt": result["receipt"],
-    }

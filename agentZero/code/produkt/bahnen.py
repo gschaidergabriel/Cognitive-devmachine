@@ -57,7 +57,25 @@ CREATE TABLE IF NOT EXISTS bahn_nutzung(
   zuletzt REAL NOT NULL,
   PRIMARY KEY(bahn, prozess, tag)
 );
+CREATE TABLE IF NOT EXISTS bahn_livestreak(
+  bahn TEXT PRIMARY KEY,
+  serie INTEGER NOT NULL DEFAULT 0,
+  zuletzt_fehler REAL,
+  zuletzt_ergebnis TEXT
+);
 """
+
+# Eine Kalibrierung ("zustand": "nutzbar" in bahnen.json) ist eine Momentaufnahme
+# von einem bestimmten Tag -- kein Betriebszustand. Provider schalten Modelle ab,
+# ohne die Datei zu aktualisieren (siehe bahnen.json-Hinweis: Groq hat zwischen
+# dem 15. und 18.08. Modelle abgeschaltet, die dort als "nutzbar" standen). Live-
+# Fehlschlaege muessen das stechen koennen. LEBEND_SCHWELLE ist bewusst klein --
+# ein einzelner Ausrutscher soll keine Bahn sperren, eine kleine Serie schon.
+LEBEND_SCHWELLE = 3
+# Nach der Abkuehlung darf die Bahn wieder ran (halb offen: ein Versuch zeigt,
+# ob sie sich erholt hat). Sonst wird aus einer voruebergehenden Stoerung eine
+# Dauersperre -- das ist selbst ein Bug.
+LEBEND_ABKUEHLUNG_SEK = 300
 
 
 class BahnErschoepft(RuntimeError):
@@ -112,14 +130,50 @@ class Bahnrouter:
         return int(r[0]) if r else 0
 
     def _buchen(self, bahn: str, prozess: str, *, token: int = 0, fehler: bool = False) -> None:
+        jetzt = time.time()
         with self.db.tx() as sql:
             sql.execute(
                 "INSERT INTO bahn_nutzung(bahn,prozess,tag,anfragen,token,fehler,zuletzt) "
                 "VALUES(?,?,?,1,?,?,?) ON CONFLICT(bahn,prozess,tag) DO UPDATE SET "
                 "anfragen=anfragen+1, token=token+excluded.token, "
                 "fehler=fehler+excluded.fehler, zuletzt=excluded.zuletzt",
-                (bahn, prozess, _heute(), token, 1 if fehler else 0, time.time()),
+                (bahn, prozess, _heute(), token, 1 if fehler else 0, jetzt),
             )
+            # Livestreak ist je Bahn (nicht je Prozess) gefuehrt: die Bahn selbst
+            # ist tot oder nicht, unabhaengig davon, welcher Prozess gerade fragt.
+            if fehler:
+                sql.execute(
+                    "INSERT INTO bahn_livestreak(bahn,serie,zuletzt_fehler,zuletzt_ergebnis) "
+                    "VALUES(?,1,?,'fehler') ON CONFLICT(bahn) DO UPDATE SET "
+                    "serie=serie+1, zuletzt_fehler=excluded.zuletzt_fehler, zuletzt_ergebnis='fehler'",
+                    (bahn, jetzt),
+                )
+            else:
+                sql.execute(
+                    "INSERT INTO bahn_livestreak(bahn,serie,zuletzt_fehler,zuletzt_ergebnis) "
+                    "VALUES(?,0,NULL,'erfolg') ON CONFLICT(bahn) DO UPDATE SET "
+                    "serie=0, zuletzt_ergebnis='erfolg'",
+                    (bahn,),
+                )
+
+    def _lebend_gesperrt(self, bahn: str) -> tuple[bool, str | None]:
+        """Ist diese Bahn wegen einer LIVE-Fehlschlagserie gerade gesperrt?
+
+        Sticht eine stehende 'nutzbar'-Kalibrierung -- die kann Tage alt sein.
+        Erholt sich die Bahn (Erfolg -> serie=0 in _buchen, oder Abkuehlung
+        verstrichen -> ein Versuch darf's zeigen), ist sie sofort wieder dran.
+        """
+        r = self.db.db.execute(
+            "SELECT serie, zuletzt_fehler FROM bahn_livestreak WHERE bahn=?", (bahn,),
+        ).fetchone()
+        if not r or r[0] < LEBEND_SCHWELLE:
+            return False, None
+        serie, zuletzt_fehler = r[0], r[1] or 0.0
+        seit = time.time() - zuletzt_fehler
+        if seit >= LEBEND_ABKUEHLUNG_SEK:
+            return False, None  # Abkuehlung um -- naechster Versuch darf Erholung zeigen
+        return True, (f"{serie} Fehlschlaege in Folge (live), Kalibrierung ignoriert; "
+                      f"naechster Versuch in {int(LEBEND_ABKUEHLUNG_SEK - seit)}s")
 
     def _deckel(self, bahn: str, prozess: str) -> int | None:
         """Wie viele Anfragen dieser Prozess heute auf dieser Bahn noch darf."""
@@ -149,6 +203,10 @@ class Bahnrouter:
                 continue
             if z.get("zustand") not in (None, "nutzbar"):
                 abgelehnt.append((bahn, f"Zustand {z.get('zustand')}"))
+                continue
+            gesperrt, grund = self._lebend_gesperrt(bahn)
+            if gesperrt:
+                abgelehnt.append((bahn, grund))
                 continue
             familie = self._familie(bahn)
             if familie is None:

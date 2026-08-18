@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T10:48:59Z aus drei Repos. 470 Eintraege.
+Automatisch erzeugt 2026-08-18T11:18:58Z aus drei Repos. 470 Eintraege.
 
 ## architektur (15)
 
@@ -200,6 +200,8 @@ Automatisch erzeugt 2026-08-18T10:48:59Z aus drei Repos. 470 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T10:59 | entityos | `ff48d389b4ac` | Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen |
+| 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
 | 2026-08-18T10:42 | entityos | `2b2f7219ab05` | Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch |
 | 2026-08-18T10:35 | entityos | `8e37f4a64a81` | Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate |
 | 2026-08-18T10:31 | entityos | `a28d05094773` | Der Verlauf haengt jetzt in der NEUEN Oberflaeche - und zwei Fallen, die den Dienst umlegten |
@@ -258,6 +260,4 @@ Automatisch erzeugt 2026-08-18T10:48:59Z aus drei Repos. 470 Eintraege.
 | 2026-08-18T03:35 | entityos | `78e65603a949` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
 | 2026-08-18T03:35 | entityos | `1ebb891e47d8` | Merge PR #713: adopt explicit goals from canonical hook turns |
 | 2026-08-18T03:33 | entityos | `9419795944de` | feat(clayverse): adopt explicit goals after canonical prompt admission |
-| 2026-08-18T03:32 | entityos | `5da497fee465` | feat(clayverse): add explicit goal adoption to hardened autonomy context |
-| 2026-08-18T03:31 | entityos | `441c2ca3d64d` | Merge PR #712: harden fused autonomy context |
 

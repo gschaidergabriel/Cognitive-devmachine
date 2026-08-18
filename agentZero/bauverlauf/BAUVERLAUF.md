@@ -1,12 +1,115 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T10:49:00Z. 746 Commits aus vier Repos, davon 224 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T11:18:58Z. 747 Commits aus vier Repos, davon 226 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen
+
+`ff48d389b4ac` · entityos · 10:59 UTC · EntityOS
+
+```
+Eignerauftrag: "alles was passiert muss in das zentrale wiki auf dem vps auch
+rein ... mit metadaten alles nach dem ueblichen protokoll".
+
+Der bestehende Eingang (baunotizen.py) kannte drei Quellen und nur EIN Repo.
+Verbreitert, nicht neu gebaut -- dieselben Zeilenbauer, dieselbe
+Idempotenz ueber quell_hash, dieselbe Metadatenform.
+
+NEU DAZU
+
+1. WEITERE GIT-REPOS. Bisher nur "the artefact". Gefunden ueber
+   `find /opt -name .git`, jedes auf eigene Historie geprueft (nicht bloss ein
+   Symlink oder Duplikat): /opt/agentzero-export/repo, /opt/unifieddb,
+   /opt/clayverse, /opt/microclay.
+   ⚠️ Dabei ein echter Fehler im Bestand behoben: `_git_seit` fuehrte EIN
+   gemeinsames Zeitfenster fuer alle Repos. Ein schnelles Repo haette das
+   Fenster ueber ein langsames hinausgeschoben und dessen Commits fuer immer
+   uebersprungen -- still. Das Fenster ist jetzt je Repo.
+
+2. GITHUB-KONTOEREIGNISSE. Sie werden seit langem stuendlich von
+   clayverse-github.service nach /var/lib/clay/ereignisse.jsonl geholt -- und
+   haben das Wiki NIE erreicht. Jetzt schon.
+   ⚠️ Zum Zugang, weil das eine Falle ist: der Schluessel unter
+   /root/.ssh/agentzero_export ist ein DEPLOY-KEY fuer genau EIN Repo, er kann
+   keine Kontoliste lesen. Der nutzerweite GH_TOKEN aus dem bestehenden Dienst
+   kann es. Beides zu verwechseln haette "GitHub ist angebunden" bedeutet,
+   waehrend 15 Repos unsichtbar bleiben.
+   Repos, die ohnehin lokal geklont sind, werden uebersprungen (keine Dopplung).
+   Dr.-Unterweger mit 2107 Ereignissen in vier Tagen wird je Tag verdichtet --
+   2107 Einzelzeilen waeren kein Wissen, sondern Rauschen.
+
+3. FEHLGESCHLAGENE SYSTEMD-LAEUFE der entityos-*/clayverse-*-Dienste als
+   `art='vorfall'`, mit dem echten Fehlertext aus einem zweiten, engeren
+   journalctl-Aufruf. Gemessen: 6 in 30 Tagen. Ein Takt, der scheitert, war
+   bisher nirgends nachlesbar -- und ein stehender Takt sieht von aussen aus
+   wie ein ruhiger.
+
+ZAHLEN, gemessen
+  git-commit         1518 -> 1577   (+59 aus den drei neuen Repos)
+  github-ereignis       0 ->   39
+  github-ereignis-tag   0 ->    5   (verdichtete Tage)
+  journal               0 ->    6
+  artikel gesamt    16574 -> 16692
+
+Zuordnung danach: gemeinsam 13929 | gabriel 1639 | andreas 1107 | unbekannt 17.
+Das sind 0,1 % ohne Signal -- und die bleiben bewusst unbekannt statt geraten.
+Die Leiter wurde um microclay/unifieddb (gemeinsam, 0.60) und AndreasClaude
+(andreas, 0.90) erweitert; `zuletzt_von` bleibt in KEINER Stufe zugelassen.
+
+IDEMPOTENZ: jede der vier Quellen einzeln zweimal gelaufen -- neu=0,
+aktualisiert=0. Im Gesamtlauf bleibt `aktualisiert=2` stehen; das ist der
+bekannte Bestandsfehler in _bauverlauf() (zwei Quellzeilen teilen sich
+commit+zeit bei verschiedenem Inhalt und pendeln gegeneinander), nicht neu.
+
+NICHT AUFGENOMMEN, und zwar mit Absicht:
+  - ~180 interne Telemetriezeilen aus ereignisse.jsonl (karte/sitzung/messung):
+    kein "was ist passiert", sondern Betriebsrauschen
+  - ~1000 /tmp/*/.git und Nachstell-Verzeichnisse: fluechtige Testklone
+Beides genannt statt stillschweigend weggelassen.
+
+Suite unveraendert 552 gruen / 14 rot.
+```
+
+### 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben
+
+`0010a0ef104d` · entityos · 10:52 UTC · EntityOS
+
+```
+FEHLER 1, laut: der Server liest query_params["session_id"], mein Frontend
+schickte ?session=. Also kam eine leere Kennung an, ist_kanonische_sitzung("")
+ist falsch, und die Antwort war korrekt 403. Die Sperre hat genau das getan,
+wofuer sie gebaut ist.
+
+⚠️ WIE ES DAZU KAM, und das ist der eigentliche Befund: ich habe das Frontend
+gegen betrieb/API-HISTORY.md geschrieben -- eine Anleitung, die ich selbst
+verfasst hatte und in der der Parameter faelschlich `session` heisst. Ich habe
+gegen meine eigene, falsche Dokumentation programmiert.
+
+Derselbe Mechanismus, den ich heute schon einmal als echten Defekt gemeldet
+habe: ein veralteter Docstring kostete einen Pruefer einen kompletten
+Fehlalarm. Dokumentation, die von der Umsetzung abweicht, ist kein
+Schoenheitsfehler -- sie erzeugt Fehler in allem, was sich auf sie stuetzt.
+Die Anleitung ist deshalb mitkorrigiert, nicht nur der Aufruf.
+
+FEHLER 2, still, beim Suchen gefunden: im Zweig `switch_platz` wurde `platz`
+gesetzt, die `session_id` aber NICHT neu aufgeloest. Nach dem Wechsel auf
+Sitzung 2 meldete der Server also Platz 2 mit der Kennung von Platz 1.
+
+Folge: der Verlauf laedt die Zuege der FALSCHEN Sitzung -- mit Status 200, also
+voellig unauffaellig, waehrend die Umschaltleiste Sitzung 2 als aktiv anzeigt.
+
+Ohne den lauten 403 waere das vermutlich lange unbemerkt geblieben: eine falsche
+Antwort sieht aus wie eine richtige. Der laute Fehler hat den stillen mit
+aufgedeckt -- das ist heute nicht das erste Mal.
+
+Geprueft: Parametername im ausgelieferten HTML, Seite im echten Browser
+(Desktop + Handy) ohne Konsolenfehler und ohne waagerechten Ueberlauf.
+```
 
 ### Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch
 
@@ -4045,54 +4148,6 @@ Beides benannt - was steht (Vordertuer udb.verbindung(), 7 umgezogene
 Werkzeuge, Zustandsabruf, Paket ohne Modellaufruf) UND die Luecken:
 paket.py traegt Hyperposition nur bei AMBIGUOUS, 26 Werkzeuge oeffnen noch
 selbst sqlite3, der Zustandsautomat ist entschieden und nicht gebaut.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F15 Oberflaeche neu, F16 Hyperposition und UnifiedDB als die Entitaet
-
-`b0a75a20fdc9` · clay · 02:29 UTC · ClayVerse
-
-```
-F15: Chat behaelt sein Gesicht im Clay-Stil, dahinter native Claude Code CLI +
-Clay Launcher + native Haken. Hoechstens 3 Sitzungen, eine DB, gegenseitiges
-Gewahrsein. Drei Avatare: ClayVerse mit Krone, Gabriel, Andreas.
-Mein Fehler darin benannt: ich hatte zuerst die Chat-Oberflaeche zum Abriss
-freigegeben; berichtigt, bevor eine Datei bewegt war.
-
-F16: Weltmodell auf der semantischen Hyperposition, die bereits in ClayCode
-(frank_hyperposition.clay, vier Topologien) und im Bestand liegt - 1.388 Fakten
-mit 2+ Lesarten. Zustandsautomat loest sich in der UnifiedDB auf, damit das eine
-Modul die ganze Entitaet ist. Gemessene Sperre: 26 Werkzeuge oeffnen noch selbst
-sqlite3 statt udb.verbindung().
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### Zielarchitektur und Zustandsabruf gesichert - lagen unversioniert
-
-`88494d1c68d7` · unifieddb · 02:28 UTC · ClayVerse
-
-```
-Zweites Repo mit demselben Befund wie /opt/clayverse: der Absturz von Gabriels
-Rechner am 15.08. um 01:58 UTC riss die Sitzung ab, der letzte Commit lag vom
-14.08. 23:03 - also fast drei Stunden Arbeit ohne Sicherung.
-
-Unversioniert war unter anderem:
-  ZIELARCHITEKTUR.md         der Satz "die Datenbank ist das System,
-                             ClayVerse ist ein Modul darauf", die vier
-                             Hyperposition-Topologien und die gemessenen Luecken
-  udb/abruf/zustand.py       der Zustandsabruf, 01:46 geschrieben
-  udb/abruf/zustand_mess.py  dessen Messung
-  udb/pflege/klonwacht.py    Klonwache
-  udb/_quelle.py             sowie 11 geaenderte Module
-
-Alle .kopie-backup-20260815 und die leer-backup-Fassung sind mitgesichert,
-weil sie die Vorzustaende der Umstellung sind.
-
-GEMESSEN, offen: 26 Werkzeuge in /opt/clayverse/werkzeug oeffnen weiterhin
-selbst sqlite3, statt udb.verbindung() zu benutzen. Die Vordertuer steht,
-der Umzug ist nicht fertig.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

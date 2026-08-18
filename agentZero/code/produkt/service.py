@@ -213,6 +213,15 @@ def main():
     else:
         baunotizen_stand = {"index": "sichergestellt"}
     try:
+        # Die Ausbeutetabelle der Gedaechtnisextraktion. Sie entstand frueher
+        # in der Extraktion selbst -- mitten in der Zug-Transaktion, per
+        # executescript, das implizit committet. Das legte den Chat lahm.
+        # Schemaanlage ist eine Startaufgabe, keine Leseaufgabe.
+        from .gedaechtnis import AUSBEUTE_SCHEMA
+        db.db.executescript(AUSBEUTE_SCHEMA)
+    except Exception as exc:
+        print(f"  Ausbeutetabelle: {type(exc).__name__}: {exc}")
+    try:
         # Erfolge UND Fehlschlaege. Beide Haelften oder keine -- eine Bilanz,
         # die nur Gelungenes fuehrt, ist ein Werbeblatt, und hier waere sie
         # ausserdem ein falsches Bild davon, wie dieses System kaputtgeht.

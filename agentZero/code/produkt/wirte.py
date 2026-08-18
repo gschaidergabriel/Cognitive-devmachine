@@ -79,6 +79,38 @@ def aufnehmen(db: UnifiedDB) -> dict:
     return {"eingelesen": gesehen, "verzeichnis": str(ZWILLING_DIR)}
 
 
+def _live_herzschlagzeiten() -> dict[str, float]:
+    """Frische Herzschlagzeiten direkt aus den Dateien lesen -- ohne DB-Schreibzugriff.
+
+    aufnehmen() schreibt `zuletzt_gesehen` nur einmal, beim Dienststart (siehe
+    service.main() -> wirte.aufnehmen()). Ein eigener Timer wie bei baunotizen.py
+    fehlt hier. Die Herzschlagdateien selbst werden aber laufend neu geschrieben
+    (~alle 16s, gemessen). Ohne diese Funktion liest jeder Wirt spaetestens
+    OFFLINE_NACH_SEKUNDEN nach dem Dienststart dauerhaft als offline -- auch
+    einer, der seither ununterbrochen da war. Gemessen am 2026-08-18: beide
+    Wirte zeigten 521s/529s Stille, obwohl ihre Dateien Sekunden alt waren.
+
+    Liest nur, legt nichts an, schreibt nichts -- unbedenklich in einem
+    Lesepfad.
+    """
+    aus: dict[str, float] = {}
+    if not ZWILLING_DIR.is_dir():
+        return aus
+    for datei in ZWILLING_DIR.glob("*.json"):
+        try:
+            mtime = datei.stat().st_mtime
+        except OSError:
+            continue
+        wirt = datei.stem
+        try:
+            d = json.loads(datei.read_text(encoding="utf-8"))
+            wirt = str(d.get("zwilling") or wirt)
+        except Exception:
+            pass  # Name notfalls vom Dateinamen -- die Zeit stimmt trotzdem
+        aus[wirt] = mtime
+    return aus
+
+
 def verbundene_systeme(db: UnifiedDB) -> list[dict]:
     """Was die Mistral-Vorstufe braucht: wer ist verbunden, wem gehoert er, ist er online.
 
@@ -86,6 +118,11 @@ def verbundene_systeme(db: UnifiedDB) -> list[dict]:
     eine LEERE Liste. Ein Wirt kann also online und gesund sein und trotzdem
     nichts koennen -- das ist ein Unterschied, den die Vorstufe sehen muss,
     sonst plant sie Arbeit auf einem Rechner, der nur winkt.
+
+    `online` wird gegen die LIVE-Herzschlagdatei berechnet, nicht gegen die
+    DB-Zeile (die steht seit dem Dienststart still, siehe _live_herzschlagzeiten()).
+    Fehlt eine Datei (Wirt abgebaut, nicht nur gerade still), faellt es auf die
+    DB-Zeile zurueck -- dann steht `beleg` das auch dazu, nie nur true/false.
 
     ⚠️ Legt KEINE Tabellen an (bewusst, wie profile.profil()). _sicherstellen()
     ruft executescript(), und das committet implizit -- aus einem laufenden
@@ -101,22 +138,33 @@ def verbundene_systeme(db: UnifiedDB) -> list[dict]:
     except Exception:
         return []
     jetzt = time.time()
+    live = _live_herzschlagzeiten()
     aus = []
     for r in db.db.execute(
         "SELECT wirt,gehoert_zu,zuletzt_gesehen,generation,gesund,module "
         "FROM entityos_wirte ORDER BY wirt"
     ):
-        alter = jetzt - float(r["zuletzt_gesehen"])
+        wirt = r["wirt"]
+        live_zeit = live.get(wirt)
+        if live_zeit is not None:
+            zuletzt = live_zeit
+            beleg = "herzschlagdatei live gelesen"
+        else:
+            zuletzt = float(r["zuletzt_gesehen"])
+            beleg = ("keine Herzschlagdatei mehr gefunden -- Zeitstand aus der DB-Zeile "
+                     "(seit Dienststart oder aelter, nicht laufend aktualisiert)")
+        alter = jetzt - zuletzt
         module = {}
         try:
             module = json.loads(r["module"] or "{}")
         except Exception:
             pass
         aus.append({
-            "wirt": r["wirt"],
+            "wirt": wirt,
             "gehoert_zu": r["gehoert_zu"],          # None = bewusst nicht zugeordnet
             "online": alter <= OFFLINE_NACH_SEKUNDEN,
             "zuletzt_gesehen_vor_s": round(alter, 1),
+            "beleg": beleg,
             "generation": r["generation"],
             "gesund": bool(r["gesund"]),
             "kognitive_module": module.get("kognitive_module_gebaut", []),

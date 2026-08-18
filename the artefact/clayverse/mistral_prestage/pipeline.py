@@ -123,6 +123,34 @@ def _log_uebersetzungsausfall(store, turn_id, session_id, fehler) -> None:
         pass  # Buchfuehrung darf einen Zug nie kippen
 
 
+
+def _moeglichkeitsraum_safe(text: str) -> dict | None:
+    """Das Erwartungsfeld zur Frage. Ausfallsicher, aber nie stillschweigend.
+
+    "Ein Raum mit nur einer Lesart ist kein Raum" -- das Feld meldet
+    Einseitigkeit selbst (`einseitig: true`). Scheitert der Bau, bekommt die
+    Vorstufe den GRUND zu sehen: ein fehlender Raum darf nicht wie ein leerer
+    aussehen.
+    """
+    # /opt/unifieddb ist schreibgeschuetzt eingehaengt, steht aber nicht im
+    # Suchpfad -- dort liegt das Paket `udb`. Ohne diese Zeile meldet das Feld
+    # dauerhaft NICHT_GEBAUT, und zwar mit korrektem Grund.
+    import sys as _sys
+    for _pfad in ("/opt/unifieddb",            # das Paket udb
+                  "/opt/clay-werkzeug",         # der Erfindungsmelder verdichtung.py (eingehaengt)
+                  "/opt/clayverse/werkzeug"):  # derselbe Pfad ausserhalb des Containers
+        if _pfad not in _sys.path:
+            _sys.path.append(_pfad)
+    try:
+        from udb.abruf.moeglichkeitsraum import moeglichkeitsraum as _mr
+        r = _mr(text, budget=6)
+        return {"raum": r.get("raum"), "einseitig": r.get("einseitig"),
+                "quelle_hypothesen": r.get("quelle_hypothesen"),
+                "quelle_gegenseite": r.get("quelle_gegenseite")}
+    except Exception as e:
+        return {"status": "NICHT_GEBAUT", "grund": f"{type(e).__name__}: {e}"[:200]}
+
+
 def _profil_safe(db, user_id: str) -> dict | None:
     """Profil, Rechnerbesitz und Wiki-Bestand des anwesenden Menschen.
 
@@ -233,12 +261,13 @@ def run_chat_turn(
         # Nicht zwischengespeichert: es wird autonom verdichtet, ein Cache
         # wuerde die Vorstufe mit einem veralteten Menschenbild fuettern.
         nutzerprofil = _profil_safe(db, user_id)
+        erwartungsfeld = _moeglichkeitsraum_safe(message)
 
         # --- round 1 ---
         t0 = time.perf_counter()
         envelope = prestage.run_prestage(
             raw_prompt=message, world=world, current_user=user_id,
-            current_user_profile=nutzerprofil,
+            current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
             recent_turns=recent_turns, round_no=1,
         )
         prestage_ms = (time.perf_counter() - t0) * 1000.0
@@ -284,7 +313,7 @@ def run_chat_turn(
             t0 = time.perf_counter()
             envelope2 = prestage.run_prestage(
                 raw_prompt=message, world=world, current_user=user_id,
-                current_user_profile=nutzerprofil,
+                current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
                 recent_turns=recent_turns, round_no=2, zero_suggestion=suggestion,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0

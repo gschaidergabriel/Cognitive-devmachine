@@ -54,6 +54,12 @@ services:
       # Read-only, lebt ausserhalb des Images (/opt/unifieddb ist ein eigenes
       # Git-Repo) -- Aenderungen dort brauchen keinen Image-Rebuild.
       - /opt/unifieddb:/opt/unifieddb:ro
+      # Der Erfindungsmelder verdichtung.py, den der Moeglichkeitsraum
+      # wiederverwendet statt nachzubauen. EIGENER Name: /opt/clayverse ist im
+      # Container das Anwendungspaket, ein Ueberhaengen haette es verdeckt.
+      # ⚠️ GENAU dieser Pfad: udb._wz sucht wortwoertlich unter
+      # /opt/clayverse/werkzeug. Ein eigener Name half deshalb nicht.
+      - /opt/clayverse/werkzeug:/opt/clayverse/werkzeug:ro
       # Provider-Zugaenge (u.a. NVIDIA_NIM_API_KEY). Read-only, 640 root:clay --
       # der Container-Prozess laeuft als uid 5001 (clay) und kann damit lesen,
       # aber nicht schreiben. Werte duerfen NIE in UnifiedDB-Zeilen, Snapshots,

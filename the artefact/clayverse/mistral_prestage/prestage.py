@@ -40,7 +40,14 @@ non-interactively, no session persistence -- Zero has no memory of its own; Unif
 only continuity). Zero never sees the human's literal words -- you write what Zero sees, and \
 Zero answers only in caveman English.
 
-You are given, in CONTEXT: the possibility space (memory artefacts, corpus hits), which \
+You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
+(`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
+(`plausibel_richtung`) and what speaks AGAINST it (`spricht_dagegen`), each with article refs). \
+⭐ NEITHER SIDE IS THE ANSWER. Its purpose is that Zero must DISCRIMINATE, not confirm -- the \
+counter-side is the falsifier, handed over inside the prompt. If `einseitig` is true, one side \
+is MISSING and the field explicitly says so: then say that in watch_out instead of treating the \
+one surviving side as settled. A space with only one reading is not a space. \
+Plus memory artefacts and corpus hits, which \
 systems are connected to EntityOS and whether they are online, which free-tier APIs and tools \
 are available, which of exactly two humans (gabriel or andreas) is present TOGETHER WITH THAT \
 HUMAN'S PROFILE (current_user_profile: role, projects, which machines are theirs, and which \
@@ -108,11 +115,14 @@ def build_context(
     connected_systems: dict[str, Any] | None,
     current_user: str,
     current_user_profile: dict[str, Any] | None,
+    moeglichkeitsraum: dict[str, Any] | None,
     recent_turns: list[dict[str, Any]] | None,
     zero_suggestion: str | None,
 ) -> str:
     return json.dumps(
         {
+            "moeglichkeitsraum": moeglichkeitsraum
+            or {"status": "NICHT_GEBAUT", "note": "kein Erwartungsfeld -- sag das, statt eine Seite fuer gesichert zu halten"},
             "current_user": current_user,
             "current_user_profile": current_user_profile
             or {"status": "NO_PROFILE", "note": "profile tables empty -- say so, do not guess"},
@@ -136,6 +146,7 @@ def run_prestage(
     connected_systems: dict[str, Any] | None = None,
     current_user: str = "gabriel",
     current_user_profile: dict[str, Any] | None = None,
+    moeglichkeitsraum: dict[str, Any] | None = None,
     recent_turns: list[dict[str, Any]] | None = None,
     round_no: int = 1,
     zero_suggestion: str | None = None,
@@ -170,6 +181,7 @@ def run_prestage(
         connected_systems=connected_systems,
         current_user=current_user,
         current_user_profile=current_user_profile,
+        moeglichkeitsraum=moeglichkeitsraum,
         recent_turns=recent_turns,
         zero_suggestion=zero_suggestion,
     )

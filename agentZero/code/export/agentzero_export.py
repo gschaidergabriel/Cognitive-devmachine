@@ -151,6 +151,42 @@ BEDEUTUNG = {
                        "Eintraege koennen einen unrepraesentativen Ausschnitt zeigen. Zeilen mit einem "
                        "Lecktreffer fehlen komplett, nicht redigiert -- die Stichprobe ist dadurch kleiner "
                        "als 25, wenn viele juengste Zeilen Adressen/IPs enthalten."),
+    "wissen": dict(
+        wieso="Eigner-Auftrag 18.08.: Betriebs- und Personenwissen lag nur in der gitignorierten "
+              "CLAUDE.md auf einem Arbeitsrechner, vermischt mit Geheimnissen -- nirgends teilbar. "
+              "clayverse/wissen.py hat es geheimnisfrei herausgeloest; hier die oeffentliche Seite.",
+        gehoert_zu="artikel(art='wissen', projekt='EntityOS') in der UnifiedDB, gefuellt von "
+                  "clayverse/wissen.py aus der Eigner-CLAUDE.md.",
+        hypothese="Elf Artikel mit metadaten.geheimnisfrei=true genuegen, um Betriebswissen (Deploy, "
+                  "Domains, Testpflicht) und Personenwissen (Rollen, Entscheidungsrecht) oeffentlich "
+                  "nachvollziehbar zu machen.",
+        gegenhypothese="geheimnisfrei=true ist eine Selbstauskunft des Quellprozesses, keine "
+                       "unabhaengige Pruefung. Dieser Export schwaerzt zusaetzlich wie jede andere "
+                       "Ablage, aber ein Fehler in wissen.py selbst wuerde hier nicht auffallen."),
+    "verdichtungen": dict(
+        wieso="82 Verdichtungen faszen Baunotizen-Gruppen zu Kurzartikeln zusammen -- ohne die "
+              "Kompressionszahl daneben ist nicht pruefbar, ob eine 'Verdichtung' wirklich kuerzt "
+              "oder nur umformuliert.",
+        gehoert_zu="artikel(art='verdichtung') in der UnifiedDB, gefuellt von "
+                  "clayverse/wikiverdichtung.py aus Baunotiz-Gruppen (metadaten.quellnotizen).",
+        hypothese="Das gemessene Verhaeltnis zeichen_quellen/zeichen_artikel je Zeile zeigt ehrlich, "
+                  "wie stark verdichtet wurde -- eine Zahl, keine Behauptung.",
+        gegenhypothese="Ein Verhaeltnis < 1 heisst: der Artikel ist LAENGER als die Summe seiner "
+                       "Quellen -- keine Verdichtung, eine Ausweitung. Das kommt in diesem Bestand "
+                       "vor (siehe VERDICHTUNGEN.md) und ist kein Darstellungsfehler dieses Exports, "
+                       "sondern ein Befund ueber den Mechanismus selbst."),
+    "tresor": dict(
+        wieso="Eigner-Auftrag: Zero soll wissen, WELCHE Bahnen und Zugaenge es gibt und was sie "
+              "koennen (Modell, Limits, Zweck), ohne je einen Schluessel zu sehen.",
+        gehoert_zu="clayverse/tresor.py, zwei AES-256-GCM-Tresore ('api', 'zugaenge') unter "
+                  "/etc/entityos/tresor.",
+        hypothese="katalog() wird mechanisch gegen jeden gelagerten Wert geprueft, bevor es "
+                  "herausgeht -- eine Sicherung, keine Gewohnheit -- deshalb kann der Katalog "
+                  "gefahrlos exportiert werden.",
+        gegenhypothese="Die eingebaute Pruefung faengt nur, was WOERTLICH im gelagerten Wert steht. "
+                       "Ein Geheimnis, das an anderer Stelle unverschluesselt zitiert wuerde, faellt "
+                       "nicht automatisch darunter -- deshalb prueft dieser Export den Katalogtext "
+                       "zusaetzlich von aussen, bevor er ihn schreibt."),
 }
 
 
@@ -1143,6 +1179,365 @@ def baunotizen_export(manifest: dict) -> None:
     manifest["baunotizen"] = {"gesamt": gesamt, "stichprobe": len(stichprobe), "verworfen": verworfen}
 
 
+def wissensartikel(manifest: dict) -> None:
+    """Wissensartikel -- Betriebs- und Personenwissen, geheimnisfrei aus der Eigner-CLAUDE.md.
+
+    Quelle: artikel(art='wissen', projekt='EntityOS') in der UnifiedDB, gefuellt von
+    clayverse/wissen.py. Jede Zeile traegt metadaten.geheimnisfrei=true als Selbstauskunft
+    des Quellprozesses -- diese Funktion verlaesst sich NICHT allein darauf, sondern
+    schwaerzt zusaetzlich wie jeder andere Export, und laesst jede Zeile OHNE das Feld
+    einfach draussen (Zurueckhalten ist umkehrbar, ein veroeffentlichter Satz nicht).
+
+    ⚠️ Personenwissen nennt zwei echte Menschen -- deshalb laeuft jeder Text zusaetzlich
+    durch _RECHNERNAME (dieselbe Sperre, die menschen/BILANZ.md schon schuetzt): 'geheimnisfrei'
+    heisst kein API-Schluessel, sagt aber nichts ueber Rechnernamen der zwei privaten Maschinen.
+    """
+    ordner = ZIEL / "wissen"
+    ordner.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+    rows = c.execute(
+        "SELECT id, titel, projekt, sphaere, datum, quelle, metadaten FROM artikel "
+        "WHERE art='wissen' ORDER BY id").fetchall()
+    c.close()
+
+    def saeubern(txt):
+        return schwaerzen(_RECHNERNAME.sub("<GESCHWAERZT: Rechnername>", txt or ""))
+
+    zeilen, ohne_freigabe = [], 0
+    for r in rows:
+        try:
+            m = json.loads(r["metadaten"]) if r["metadaten"] else {}
+        except Exception:
+            m = {}
+        if not m.get("geheimnisfrei"):
+            ohne_freigabe += 1
+            continue
+        zeilen.append({
+            "id": r["id"], "titel": saeubern(r["titel"]),
+            "projekt": r["projekt"], "sphaere": r["sphaere"], "datum": r["datum"],
+            "quelle": saeubern(r["quelle"]),
+            "herkunft": m.get("herkunft"), "wieso": saeubern(m.get("wieso")),
+            "gehoert_zu": saeubern(m.get("gehoert_zu")),
+            "hypothese": m.get("hypothese"), "gegenhypothese": m.get("gegenhypothese"),
+            "text": saeubern(m.get("text")),
+        })
+
+    ej = schreibe(ordner / "artikel.jsonl", zeilen, jsonl=True,
+                 herkunft="artikel(art='wissen') in UnifiedDB, gefuellt von clayverse/wissen.py")
+    manifest["dateien"].append(ej)
+
+    md = ["# Wissensartikel", "",
+          f"Automatisch erzeugt {jetzt()}. {len(zeilen)} Artikel -- Betriebswissen "
+          "(wie deployt wird, Domains, Testpflicht) und Personenwissen (Rollen, wer "
+          "entscheidet, wo Geheimnisse liegen) aus der gitignorierten Eigner-CLAUDE.md, "
+          "geheimnisfrei uebertragen durch `clayverse/wissen.py`.", ""]
+    if ohne_freigabe:
+        md += [f"> ⚠️ {ohne_freigabe} Zeile(n) ohne `geheimnisfrei=true` -- zurueckgehalten, "
+              "nicht exportiert.", ""]
+    for z in zeilen:
+        md += [f"## {z['titel']}", "",
+              f"`{z['id']}` · {z['projekt']}/{z['sphaere']} · {z['datum']}", "",
+              f"**Wieso:** {z['wieso']}", "",
+              f"**Gehoert zu:** {z['gehoert_zu']}", "",
+              z["text"], ""]
+    em = schreibe_markdown(ordner / "WISSEN.md", "\n".join(md) + "\n",
+                           herkunft="artikel(art='wissen') in UnifiedDB")
+    manifest["dateien"].append({**em, "artikel": len(zeilen), "ohne_freigabe": ohne_freigabe})
+    manifest["wissen"] = {"artikel": len(zeilen), "ohne_freigabe": ohne_freigabe}
+
+
+def verdichtungen(manifest: dict) -> None:
+    """Verdichtungen -- Bauverlauf komprimiert zu Kurzartikeln, MIT Kompressionszahl.
+
+    Quelle: artikel(art='verdichtung') in der UnifiedDB, gefuellt von
+    clayverse/wikiverdichtung.py aus Gruppen von Baunotizen (metadaten.quellnotizen).
+
+    ⚠️ 'Verdichtung' ist eine Behauptung, kein Etikett. Jede Zeile traegt
+    metadaten.kompression = {zeichen_artikel, zeichen_quellen, verhaeltnis}. Ein
+    Verhaeltnis < 1 heisst: der Artikel ist LAENGER als die Summe seiner Quellen --
+    keine Verdichtung, eine Ausweitung. Dieser Export zeigt beide Faelle nebeneinander,
+    denn eine Kompression, die ihren Input nicht schrumpft, ist eine Kopie.
+    """
+    ordner = ZIEL / "verdichtungen"
+    ordner.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+    rows = c.execute(
+        "SELECT id, titel, datum, metadaten FROM artikel WHERE art='verdichtung' "
+        "ORDER BY datum DESC").fetchall()
+    c.close()
+
+    gesamt = len(rows)
+    if not gesamt:
+        manifest["dateien"].append({"datei": "agentZero/verdichtungen/",
+                                    "hinweis": "keine Verdichtungen in der artikel-Tabelle"})
+        return
+
+    geparst = []
+    for r in rows:
+        try:
+            m = json.loads(r["metadaten"]) if r["metadaten"] else {}
+        except Exception:
+            m = {}
+        geparst.append((r, m))
+
+    za_summe = zq_summe = expansion = 0
+    verhaeltnisse = []
+    nach_erzeuger: dict = {}
+    for r, m in geparst:
+        k = m.get("kompression") or {}
+        za, zq = k.get("zeichen_artikel"), k.get("zeichen_quellen")
+        if isinstance(za, int) and isinstance(zq, int) and za > 0:
+            za_summe += za
+            zq_summe += zq
+            verh = zq / za
+            verhaeltnisse.append(verh)
+            if verh < 1.0:
+                expansion += 1
+        erz = m.get("erzeugt_von") or "?"
+        nach_erzeuger[erz] = nach_erzeuger.get(erz, 0) + 1
+    verhaeltnisse.sort()
+
+    aggregat = {
+        "gesamt": gesamt,
+        "zeichen_artikel_summe": za_summe,
+        "zeichen_quellen_summe": zq_summe,
+        "gesamtverhaeltnis_quellen_je_artikel": round(zq_summe / za_summe, 3) if za_summe else None,
+        "mittleres_verhaeltnis_je_zeile": (round(sum(verhaeltnisse) / len(verhaeltnisse), 3)
+                                           if verhaeltnisse else None),
+        "min_verhaeltnis": round(verhaeltnisse[0], 3) if verhaeltnisse else None,
+        "max_verhaeltnis": round(verhaeltnisse[-1], 3) if verhaeltnisse else None,
+        "zeilen_ausgeweitet_statt_verdichtet": expansion,
+        "nach_erzeuger": nach_erzeuger,
+        "hinweis": ("verhaeltnis = zeichen_quellen / zeichen_artikel. > 1 heisst echte "
+                    "Verdichtung (Quellen groesser als Artikel). < 1 heisst Ausweitung: "
+                    f"{expansion} von {gesamt} Zeilen "
+                    f"({round(100 * expansion / gesamt) if gesamt else 0} %) sind laenger "
+                    "als ihre eigenen Quellen."),
+    }
+    ea = schreibe(ordner / "aggregat.json", aggregat, jsonl=False,
+                 herkunft="artikel(art='verdichtung') in UnifiedDB, AGGREGIERT")
+    manifest["dateien"].append(ea)
+
+    # Verdichtungstexte fassen Baunotizen zusammen -- dieselbe Rechnername-Sperre wie bei
+    # menschen/ und baunotizen/, denn eine Verdichtung kann woertlich zitieren.
+    def saeubern(txt):
+        return schwaerzen(_RECHNERNAME.sub("<GESCHWAERZT: Rechnername>", txt or ""))
+
+    juengste = []
+    for r, m in geparst[:15]:
+        juengste.append({
+            "id": r["id"], "titel": saeubern(r["titel"]), "datum": r["datum"],
+            "thema": m.get("thema"), "tag": m.get("tag"),
+            "erzeugt_von": m.get("erzeugt_von"), "modell": m.get("modell"),
+            "notizen_in_gruppe": m.get("notizen_in_gruppe"),
+            "quellnotizen": m.get("quellnotizen") or [],
+            "kompression": m.get("kompression"),
+            "hypothese": m.get("hypothese"), "gegenhypothese": m.get("gegenhypothese"),
+            "text": saeubern(m.get("text")),
+        })
+    ej = schreibe(ordner / "juengste15.jsonl", juengste, jsonl=True,
+                 herkunft="artikel(art='verdichtung') in UnifiedDB, 15 juengste nach datum")
+    manifest["dateien"].append(ej)
+
+    md = ["# Verdichtungen", "",
+          f"Automatisch erzeugt {jetzt()}. **{gesamt} Verdichtungen** fassen Baunotizen-Gruppen "
+          "zu Kurzartikeln zusammen (`clayverse/wikiverdichtung.py`). Jede Zeile traegt ihre "
+          "eigene Kompressionszahl -- eine gemessene, keine geschaetzte.", "",
+          "## Kompression, gesamt", "",
+          f"- Quellenzeichen gesamt: **{zq_summe}** · Artikelzeichen gesamt: **{za_summe}**",
+          f"- **Gesamtverhaeltnis: {aggregat['gesamtverhaeltnis_quellen_je_artikel']}x** "
+          "(Quellen je Artikelzeichen, ueber den ganzen Bestand)",
+          f"- Mittleres Verhaeltnis je Zeile: {aggregat['mittleres_verhaeltnis_je_zeile']}x "
+          f"(min {aggregat['min_verhaeltnis']}x, max {aggregat['max_verhaeltnis']}x)",
+          f"- Nach Erzeuger: " + ", ".join(f"{k}={v}" for k, v in nach_erzeuger.items()), "",
+          f"> ⚠️ **{expansion} von {gesamt} Zeilen ({round(100 * expansion / gesamt) if gesamt else 0} %) "
+          "sind LAENGER als ihre eigenen Quellen** -- Verhaeltnis < 1, also Ausweitung statt "
+          "Verdichtung. Das ist kein Darstellungsfehler dieses Exports, sondern ein Befund ueber "
+          "den Mechanismus: mechanisch erzeugte Gruppentexte (Beispieltitel-Aufzaehlung) koennen "
+          "laenger geraten als sehr kurze Rohnotizen.", "",
+          f"## Die {len(juengste)} juengsten Verdichtungen (voller Text)", ""]
+    for j in juengste:
+        k = j["kompression"] or {}
+        md += [f"### {j['titel'] or j['id']}", "",
+              f"`{j['id']}` · {j['tag']} · {j['thema']} · {j['erzeugt_von']}"
+              + (f" ({j['modell']})" if j.get("modell") else ""), "",
+              f"Verhaeltnis: **{k.get('verhaeltnis')}x** "
+              f"({k.get('zeichen_quellen')} Quellenzeichen -> {k.get('zeichen_artikel')} "
+              "Artikelzeichen) · "
+              f"{j['notizen_in_gruppe']} Quellnotizen: "
+              + ", ".join(f"`{q}`" for q in j["quellnotizen"][:12]), "",
+              (j["text"] or "_(kein Text)_"), ""]
+    em = schreibe_markdown(ordner / "VERDICHTUNGEN.md", "\n".join(md) + "\n",
+                           herkunft="artikel(art='verdichtung') in UnifiedDB")
+    manifest["dateien"].append({**em, "gesamt": gesamt, "juengste_voll": len(juengste),
+                                "gesamtverhaeltnis": aggregat["gesamtverhaeltnis_quellen_je_artikel"],
+                                "ausgeweitet": expansion})
+    manifest["verdichtungen"] = {"gesamt": gesamt,
+                                 "gesamtverhaeltnis": aggregat["gesamtverhaeltnis_quellen_je_artikel"],
+                                 "ausgeweitet": expansion}
+
+
+def tresor_kataloge(manifest: dict) -> None:
+    """Tresor-Kataloge -- WAS es an Zugaengen gibt und was sie koennen, NIE der Wert.
+
+    Quelle: clayverse/tresor.py:katalog() fuer die zwei Tresore 'api' und 'zugaenge'.
+    katalog() ist die EINZIGE Funktion dieses Moduls, die dieser Export je aufruft --
+    oeffnen()/wert() liefern Klartext und werden hier NIE aufgerufen. katalog() prueft
+    sein eigenes Ergebnis mechanisch gegen jeden gelagerten Wert, bevor es ihn
+    herausgibt; dieser Export prueft zusaetzlich von aussen (Notbremse), weil eine
+    einzelne Sicherung keine ist.
+    """
+    ordner = ZIEL / "tresor"
+    ordner.mkdir(parents=True, exist_ok=True)
+    try:
+        sys.path.insert(0, "/opt/entityos/the artefact")
+        import importlib
+        from clayverse import tresor
+        importlib.reload(tresor)
+    except Exception as e:
+        manifest["dateien"].append({"datei": "agentZero/tresor/", "_fehler": f"{type(e).__name__}: {e}"})
+        return
+
+    # Notbremse von aussen -- unabhaengig von katalog()s eigener Pruefung.
+    AUSSEN_MUSTER = re.compile(
+        r"sk-[A-Za-z0-9]{10,}|gsk_[A-Za-z0-9]{6,}|hf_[A-Za-z0-9]{10,}|Bearer\s|"
+        r"AIza[A-Za-z0-9_-]{20,}|eyJ[A-Za-z0-9_-]{20,}|[A-Za-z0-9]{28,}")
+
+    kataloge, verworfen = {}, []
+    for name in ("api", "zugaenge"):
+        try:
+            k = tresor.katalog(name)
+        except Exception as e:
+            kataloge[name] = {"_fehler": f"{type(e).__name__}: {e}"}
+            continue
+        text = json.dumps(k, ensure_ascii=False)
+        if AUSSEN_MUSTER.search(text):
+            verworfen.append(name)
+            continue
+        kataloge[name] = k
+
+    ej = schreibe(ordner / "kataloge.json", kataloge, jsonl=False,
+                 herkunft="clayverse/tresor.py:katalog('api'|'zugaenge') -- NIE oeffnen()/wert()",
+                 felder=["api", "zugaenge"])
+    manifest["dateien"].append(ej)
+
+    md = ["# Tresor-Kataloge", "",
+          f"Automatisch erzeugt {jetzt()}. Zwei AES-256-GCM-Tresore unter "
+          "`/etc/entityos/tresor` -- `katalog()` zeigt WAS es gibt und WAS es KANN "
+          "(Modell, Limits je Minute/Tag, Zweck), nie den Wert selbst. `oeffnen()`/`wert()` "
+          "liefern den Klartext und werden von diesem Export nie aufgerufen.", ""]
+    if verworfen:
+        md += [f"> ⚠️ {len(verworfen)} Tresor(e) verworfen -- Katalogtext bestand die Notbremse "
+              f"nicht: {', '.join(verworfen)}.", ""]
+    for name, k in kataloge.items():
+        if "_fehler" in k:
+            md += [f"## {name}", "", f"_Fehler: {k['_fehler']}_", ""]
+            continue
+        md += [f"## {name} ({k['anzahl']} Eintraege)", "",
+              "| Kennung | Art/Anbieter | Zweck | Quelle | Sonstiges |",
+              "|---|---|---|---|---|"]
+        for e in k["eintraege"]:
+            fae = e.get("faehigkeiten")
+            if isinstance(fae, list):
+                sonstiges = "; ".join(
+                    f"{f.get('zugang', '?')}: {f.get('modell') or '-'} "
+                    f"({f.get('minute_limit') or '-'}/min, {f.get('tag_limit') or '-'}/Tag)"
+                    for f in fae)
+            elif fae:
+                sonstiges = str(fae)
+            else:
+                flags = []
+                if "geheim" in e:
+                    flags.append("geheim" if e["geheim"] else "nicht geheim")
+                if "oeffentlich" in e:
+                    flags.append("oeffentlich" if e["oeffentlich"] else "nicht oeffentlich")
+                sonstiges = ", ".join(flags)
+            md.append(f"| {e.get('kennung', '?')} | {e.get('anbieter') or e.get('art', '?')} | "
+                      f"{e.get('zweck') or ''} | {e.get('quelle') or ''} | {sonstiges[:200]} |")
+        md.append("")
+    em = schreibe_markdown(ordner / "TRESOR.md", "\n".join(md) + "\n",
+                           herkunft="clayverse/tresor.py:katalog()")
+    manifest["dateien"].append({**em, "tresore": list(kataloge.keys()), "verworfen": verworfen})
+    manifest["tresor"] = {"tresore": len(kataloge), "verworfen": len(verworfen)}
+
+
+def wegehierarchie_export(manifest: dict) -> None:
+    """F94 Wegehierarchie -- Verdikt und Verteilung, WOERTLICH auch wenn es 'zu wenig' sagt.
+
+    Quelle: udb/abruf/wegehierarchie.py:pruefung()/lage() gegen dieselbe UnifiedDB.
+    Bei weniger als zehn Wegen liefert pruefung() bewusst KEIN Urteil ueber
+    Hierarchiebildung -- das ist die im Modulkopf selbst genannte Falsifikationspruefung:
+    ein Mechanismus, der seine eigene Datenknappheit nicht anzeigen kann, ist nicht
+    pruefbar. Dieser Export wartet NICHT auf eine groessere Zahl.
+    """
+    ordner = ZIEL / "abruf"
+    ordner.mkdir(parents=True, exist_ok=True)
+    try:
+        sys.path.insert(0, "/opt/unifieddb")
+        import importlib
+        from udb.abruf import wegehierarchie as wh
+        importlib.reload(wh)
+    except Exception as e:
+        manifest["dateien"].append({"datei": "agentZero/abruf/wegehierarchie.json",
+                                    "_fehler": f"{type(e).__name__}: {e}"})
+        return
+
+    class _NurLeseHuelle:
+        pass
+
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+    huelle = _NurLeseHuelle()
+    huelle.db = c
+    try:
+        pruefung = wh.pruefung(huelle)
+        lage = wh.lage(huelle)
+    except Exception as e:
+        c.close()
+        manifest["dateien"].append({"datei": "agentZero/abruf/wegehierarchie.json",
+                                    "_fehler": f"{type(e).__name__}: {e}"})
+        return
+    c.close()
+
+    ausgabe = {"erzeugt": jetzt(), "pruefung": pruefung, "lage": lage}
+    ej = schreibe(ordner / "wegehierarchie.json", ausgabe, jsonl=False,
+                 herkunft="udb/abruf/wegehierarchie.py:pruefung()+lage() gegen vp_weg in UnifiedDB")
+    manifest["dateien"].append(ej)
+
+    md = ["# Wegehierarchie (F94)", "",
+          f"Automatisch erzeugt {jetzt()} aus `udb/abruf/wegehierarchie.py`.", "",
+          "## Verdikt", "",
+          f"> **{pruefung.get('urteil')}**", "",
+          pruefung.get("hinweis", ""), "",
+          f"Wege gesamt: **{pruefung.get('wege')}**", ""]
+    if "raenge" in pruefung:
+        md += ["## Verteilung nach Rang", "", "| Rang | Anzahl |", "|---|---|"]
+        for rang_, n in pruefung["raenge"].items():
+            md.append(f"| {rang_} | {n} |")
+        md += ["", f"Oberes Zehntel haelt {pruefung.get('oberes_zehntel_haelt')} der Gesamtguete "
+              f"(bei Gleichverteilung waeren es {pruefung.get('bei_gleichverteilung')}).", ""]
+    if lage.get("wege"):
+        md += ["## Staerkste Wege", "",
+              "| von | nach | Art | Rang | Guete | Nutzung | getragen |",
+              "|---|---|---|---|---|---|---|"]
+        for w in lage["wege"]:
+            md.append(f"| {w['von']} | {w['nach']} | {w['art']} | {w['rang']} | "
+                      f"{w['guete']} | {w['nutzung']} | {w['getragen']} |")
+        md.append("")
+    md += ["## Warum das Verdikt so bleibt, wie es ist", "",
+          "`pruefung()` liefert bei weniger als zehn Wegen bewusst KEIN Urteil ueber "
+          "Hierarchiebildung -- das ist die im Modulkopf selbst genannte Falsifikationspruefung: "
+          "ein Mechanismus, der seine eigene Datenknappheit nicht anzeigen kann, ist nicht "
+          "pruefbar. Dieser Export wartet nicht auf eine groessere Zahl, sondern zeigt den "
+          "aktuellen Stand so, wie er ist.", ""]
+    em = schreibe_markdown(ordner / "WEGEHIERARCHIE.md", "\n".join(md) + "\n",
+                           herkunft="udb/abruf/wegehierarchie.py")
+    manifest["dateien"].append({**em, "wege": pruefung.get("wege"), "urteil": pruefung.get("urteil")})
+    manifest["wegehierarchie"] = {"wege": pruefung.get("wege"), "urteil": pruefung.get("urteil")}
+
+
 def main() -> int:
     t0 = time.time()
     # Stand des Remote ZUERST holen, sonst wirft ein spaeteres reset die
@@ -1243,6 +1638,10 @@ def main() -> int:
     profile_und_zuordnung(manifest)
     bilanz_erfolge(manifest)
     baunotizen_export(manifest)
+    wissensartikel(manifest)
+    verdichtungen(manifest)
+    tresor_kataloge(manifest)
+    wegehierarchie_export(manifest)
     testlaeufe(manifest)
     ziele_tabelle(manifest)
     messwerk(manifest)
@@ -1268,7 +1667,7 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt {manifest['erz
 |---|---|
 | `chat/` | die Gespraeche, je Mensch eine Datei, mit vollstaendigen Metadaten (Generation, Provenienz, Kausalkette) |
 | `kognition/` | Kausalepisoden, Arbeitsraum-Episoden, Wirkungen samt EffectGate-Urteil, Pruefpunkte |
-| `abruf/` | was die Abruf-Entitaet tut: Episoden, gelernte Eintrittspunkte, Rueckmeldungen |
+| `abruf/` | was die Abruf-Entitaet tut: Episoden, gelernte Eintrittspunkte, Rueckmeldungen, plus **F94-Wegehierarchie** (`wegehierarchie.json`/`WEGEHIERARCHIE.md`) -- Verdikt und Verteilung, auch wenn das Verdikt "zu wenige Wege" heisst |
 | `karten/` | **eine Momentaufnahme je Lauf.** Mehrere hintereinander ergeben den Zeitstrahl, aus dem sich die Vernetzung ablesen laesst |
 | `zustand/` | Menschen, Sitzungen, Wurzelzustand, Graphprojektion |
 | `puls/` | begrenztes Ende der Clay-Protokolle (letzte {LOG_TAIL} Zeilen je Datei) |
@@ -1283,6 +1682,9 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt {manifest['erz
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
 | `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat, **Bilanz** (`BILANZ.md`) mit Erfolgen UND Fehlschlaegen seit Zero, gleichrangig -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
 | `baunotizen/` | **Aggregat der Bauaufzeichnungen** aus dem Wiki (art baunotiz/vorfall), plus eine lecksuche-gepruefte Stichprobe der juengsten -- kein Volldump von 2330+ Zeilen |
+| `wissen/` | **Betriebs- und Personenwissen** aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen (`clayverse/wissen.py`) -- nur Zeilen mit `geheimnisfrei=true` |
+| `verdichtungen/` | **Bauverlauf, verdichtet zu Kurzartikeln** (`clayverse/wikiverdichtung.py`), MIT gemessenem Kompressionsverhaeltnis je Zeile und im Aggregat -- inklusive der Zeilen, die ihren Input NICHT geschrumpft haben |
+| `tresor/` | **Zwei Tresor-Kataloge** (`clayverse/tresor.py:katalog()`): WAS es an API-Zugaengen/Anmeldungen gibt und was sie koennen (Modell, Limits, Zweck) -- NIE ein Wert |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
 
 ## Schwaerzung

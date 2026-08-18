@@ -1,13 +1,13 @@
 # agentZero
 
 Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
-Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T14:18:57Z.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T14:27:25Z.
 
 | Ordner | Inhalt |
 |---|---|
 | `chat/` | die Gespraeche, je Mensch eine Datei, mit vollstaendigen Metadaten (Generation, Provenienz, Kausalkette) |
 | `kognition/` | Kausalepisoden, Arbeitsraum-Episoden, Wirkungen samt EffectGate-Urteil, Pruefpunkte |
-| `abruf/` | was die Abruf-Entitaet tut: Episoden, gelernte Eintrittspunkte, Rueckmeldungen |
+| `abruf/` | was die Abruf-Entitaet tut: Episoden, gelernte Eintrittspunkte, Rueckmeldungen, plus **F94-Wegehierarchie** (`wegehierarchie.json`/`WEGEHIERARCHIE.md`) -- Verdikt und Verteilung, auch wenn das Verdikt "zu wenige Wege" heisst |
 | `karten/` | **eine Momentaufnahme je Lauf.** Mehrere hintereinander ergeben den Zeitstrahl, aus dem sich die Vernetzung ablesen laesst |
 | `zustand/` | Menschen, Sitzungen, Wurzelzustand, Graphprojektion |
 | `puls/` | begrenztes Ende der Clay-Protokolle (letzte 500 Zeilen je Datei) |
@@ -22,6 +22,9 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T14:
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
 | `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat, **Bilanz** (`BILANZ.md`) mit Erfolgen UND Fehlschlaegen seit Zero, gleichrangig -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
 | `baunotizen/` | **Aggregat der Bauaufzeichnungen** aus dem Wiki (art baunotiz/vorfall), plus eine lecksuche-gepruefte Stichprobe der juengsten -- kein Volldump von 2330+ Zeilen |
+| `wissen/` | **Betriebs- und Personenwissen** aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen (`clayverse/wissen.py`) -- nur Zeilen mit `geheimnisfrei=true` |
+| `verdichtungen/` | **Bauverlauf, verdichtet zu Kurzartikeln** (`clayverse/wikiverdichtung.py`), MIT gemessenem Kompressionsverhaeltnis je Zeile und im Aggregat -- inklusive der Zeilen, die ihren Input NICHT geschrumpft haben |
+| `tresor/` | **Zwei Tresor-Kataloge** (`clayverse/tresor.py:katalog()`): WAS es an API-Zugaengen/Anmeldungen gibt und was sie koennen (Modell, Limits, Zweck) -- NIE ein Wert |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
 
 ## Schwaerzung

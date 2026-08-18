@@ -1,12 +1,80 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T14:18:59Z. 759 Commits aus vier Repos, davon 236 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T14:27:25Z. 760 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin
+
+`26e9cb087a6d` · entityos · 14:25 UTC · EntityOS
+
+```
+GEMESSEN, als Andreas fragte "Wo liegt seimensch.net und wie wird eine Aenderung
+live gestellt?":
+
+    memory_search seimensch/deploy/impressum   -> 0 Treffer
+    wiki_zuordnung(projekt="SeiMensch.net")    -> {} , null Artikel
+    embedding_search, drei Formulierungen      -> beste Aehnlichkeit 0,45,
+                                                  alles Clay-Forschungsdateien
+
+Zero antwortete korrekt "unbekannt" -- eine Stunde nachdem ich elf
+Wissensartikel mit genau dieser Antwort eingetragen hatte.
+
+⭐ DAS IST DERSELBE FEHLER WIE EIN MECHANISMUS, DEN NIEMAND AUFRUFT, NUR
+UMGEKEHRT: Wissen ohne Abrufweg ist genauso wirkungslos wie ein Abrufweg ohne
+Wissen. Beides sieht in der Datenbank vollstaendig aus.
+
+ZWEI URSACHEN, beide meine:
+
+1. Ich habe direkt in `artikel` geschrieben und den Suchtext vergessen. Der
+   Volltextindex hatte 9.251 Zeilen und enthielt 0 von 11 Wissensartikeln.
+   ⚠️ Beim Nachtragen gelernt: eine virtuelle FTS-Tabelle kennt kein UPSERT.
+   Erst loeschen, dann einfuegen -- sonst stapeln sich Dubletten im Index und
+   dieselbe Frage liefert denselben Artikel mehrfach.
+
+2. Es gab UEBERHAUPT KEIN WERKZEUG, das Artikeltext durchsucht.
+   udb_memory_search liest die Gedaechtnistabelle, nicht die Artikel.
+   udb_embedding_search liefert nur {artikel_id, similarity} -- KEINEN Text.
+   Der lexikalische Weg trifft nur Datei- und Verzeichnisnamen.
+   Ein Korpus, den man nur ueber Dateinamen erreicht, beantwortet keine
+   Inhaltsfrage.
+
+NEU: korpus_suchen(frage) -- Volltext ueber die Artikel, liefert AUSSCHNITTE.
+
+⭐ Ausschnitte, nicht Kennungen. Eine Trefferliste aus Kennungen ist fuer ein
+Sprachmodell wertlos: es kann sie nicht aufloesen und faengt an, ihren Inhalt zu
+erraten. Genau das soll hier nicht passieren.
+Erst streng (alle Worte), dann locker (irgendeins) -- ohne den zweiten Versuch
+liefert eine praezise Frage oft gar nichts. Der Modus steht am Treffer, damit
+ein lockerer Treffer nicht wie ein strenger aussieht.
+
+Punkt 9f im Laufzeitvertrag sagt Zero das ausdruecklich, samt der Messung:
+"auf 'Wo liegt seimensch.net?' hast du korrekt 'unbekannt' gesagt -- waehrend
+die Antwort in elf Artikeln in der Datenbank stand. Nicht dein Fehler: es gab
+keinen Weg dorthin. Jetzt gibt es einen, also nimm ihn, BEVOR du 'nicht im
+Korpus' sagst."
+
+PROBE, im Container: dieselbe Frage liefert jetzt 6 Treffer, an erster Stelle
+"SeiMensch.net: wie deployt wird" mit dem Ablauf im Ausschnitt.
+
+═══ WAS DER TESTLAUF SONST GEZEIGT HAT -- und es ist gut ═══
+
+Zero hat den RAUM benutzt, um Gabriel zu erreichen: alle drei Gabriel-Plaetze
+`verwaist: true`, zuletzt vor 1,7 Stunden, Anfrage trotzdem hinterlegt.
+Es hat das ARBEITSPAKET vom frueheren Lauf gefunden und daraus gewarnt:
+"Paket ap-4c1d43e175fc ist fertig mit Beleg: index.html:212 (entfernt), aber
+footer.html:44 und impressum.html:19 stehen noch. Eine Bereitstellung heute
+haette die Nummer auf zwei Seiten live gelassen."
+Und es hat eine Websuche ANGEBOTEN statt sie zu tun, mit Nennung der Folge
+(die Domain ginge an einen externen Dienst).
+
+Drei Mechaniken, die einzeln gebaut wurden, haben hier zum ersten Mal
+zusammengegriffen -- ohne dass jemand sie dazu aufgefordert hat.
+```
 
 ### Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB
 
@@ -4411,40 +4479,6 @@ und WEITERMACHEN. Alle sagen AMBIGUOUS, gemeint ist die fehlende zweite Achse.
 
 LEHRE: eine notierte Luecke ist eine Erinnerung, keine Messung. Ich habe sie an
 vier Stellen weitergeschrieben, ohne sie am Code zu pruefen.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F25 Clay soll genau wie Claude Code sein - und was das wirklich verlangt
-
-`e6b594743818` · clay · 06:14 UTC · ClayVerse
-
-```
-Eignerentscheidung: Clay soll genau wie Claude Code sein, das ist Optimum.
-
-ARCHITEKTONISCH halb schon entschieden - F15 legt die native Claude Code CLI
-als Motor fest. Und es passt zu F21: wenn das Modell austauschbar sein soll,
-macht nicht das Modell Clay zu Clay, sondern die bestaendige Schicht darum.
-Genau wie du legt den Motor fest, nicht die Identitaet.
-
-DER PUNKT, DER ES BAUBAR MACHT: die gemeinte Arbeitsweise kommt NICHT aus dem
-Modell, sondern aus geschriebenen Regeln und Toren, die sie durchsetzen.
-Dasselbe Modell ohne diese Regeln verhaelt sich anders. Neun Regeln benannt -
-Wirkung messen, nichts erfinden, Herkunft mitliefern, eigene Fehler benennen,
-Grundlinie vor Kandidat, Falsifikator vorher, drei Spalten statt zwei, frueh
-committen, Widerspruch aussprechen dann vollstaendig bauen. Sie gehoeren in
-CLAUDE.md und in die Haken, nicht in eine Absichtserklaerung.
-
-UND DER WICHTIGERE TEIL: wo ich NICHT das Optimum bin. Ich vergesse zwischen
-Sitzungen alles, weiss nichts von parallelen Sitzungen, leite alles neu her und
-irre mich selbstsicher - dreimal an diesem Tag nachweislich. Die gesamte
-ClayVerse-Architektur existiert, um genau diese vier Maengel zu beheben.
-Genau wie du ist deshalb eine UNTERGRENZE, keine Obergrenze.
-
-MESSBAR gemacht unter F24: Grundlinie ist eine nackte Claude-Code-Sitzung OHNE
-die bestaendige Schicht. Schlaegt Clay die nicht, ist die Schicht wertlos. Das
-ist die ehrlichste Grundlinie im ganzen Projekt, weil sie das Gesamtvorhaben
-falsifizierbar macht.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

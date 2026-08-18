@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T14:18:59Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T14:27:26Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -438,6 +438,7 @@ CREATE TABLE mv_translation_log (
     fabrication_flag INTEGER NOT NULL DEFAULT 0,
     created_at REAL NOT NULL
 );
+CREATE TABLE mv_uebersetzung_ausfall(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, session_id TEXT, fehler TEXT);
 CREATE TABLE problem (
             id TEXT PRIMARY KEY,
             bauteil TEXT,

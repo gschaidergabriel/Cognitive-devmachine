@@ -67,6 +67,20 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 #leer .name { font-family: var(--schrift-marke); font-weight: 600;
               font-size: var(--s-24); letter-spacing: .12em; color: var(--text); }
 #leer p { margin: 0; color: var(--matt); font-size: var(--s-13); line-height: 1.55; }
+/* Trennlinie zwischen geladenem Verlauf und dem, was in diesem Besuch dazukommt.
+   Ohne sie ist nicht unterscheidbar, was Zero gerade gesagt hat und was von
+   gestern stammt. */
+.verlaufsgrenze { display: flex; align-items: center; gap: 12px; margin: 18px 4px 6px;
+  color: var(--matt); font-size: var(--s-13); }
+.verlaufsgrenze::before, .verlaufsgrenze::after { content: ""; flex: 1;
+  border-top: 1px solid var(--linie); }
+.aelter { align-self: center; margin: 6px 0 2px; padding: 6px 14px;
+  background: transparent; border: 1px solid var(--linie); border-radius: 999px;
+  color: var(--matt); font: inherit; font-size: var(--s-13); cursor: pointer; }
+.aelter:hover { color: var(--text); border-color: var(--matt); }
+.aelter[disabled] { opacity: .5; cursor: default; }
+.ladefehler { margin: 10px 4px; padding: 8px 12px; border: 1px solid #6b1f1f;
+  background: #3a1414; color: var(--warn); border-radius: 8px; font-size: var(--s-13); }
 
 .msg { display: flex; gap: 12px; max-width: 78%; }
 .msg-user { align-self: flex-end; flex-direction: row-reverse; max-width: 78%; }
@@ -166,7 +180,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
     <div id="leer">
       <div class="z0feld" id="leerAvatar"></div>
       <div class="name">Zero</div>
-      <p>Dieses Fenster ist leer. Frühere Nachrichten werden hier nicht nachgeladen — was du siehst, ist dieser Besuch.</p>
+      <p id="leerText">Verlauf wird geladen …</p>
     </div>
   </div>
   <div id="composer">
@@ -246,9 +260,10 @@ window.addEventListener('load', async () => {
     return row;
   }
 
-  function replaceWithReply(pendingRow, payload){
-    pendingRow.className='msg msg-zero';
-    const bubble=pendingRow.querySelector('.bubble');
+  // Herausgeloest, damit geladener Verlauf und Live-Antwort GENAU dieselbe
+  // Blase bauen. Zwei Darstellungswege fuer dieselbe Sache laufen unweigerlich
+  // auseinander, und dann sieht Geschichte anders aus als Gegenwart.
+  function fuelleZeroBlase(bubble, payload){
     bubble.textContent='';
     const germanLine=document.createElement('div');
     germanLine.textContent=payload.text||'';
@@ -274,6 +289,12 @@ window.addEventListener('load', async () => {
       });
       bubble.appendChild(toggle); bubble.appendChild(original);
     }
+  }
+
+  function replaceWithReply(pendingRow, payload){
+    pendingRow.className='msg msg-zero';
+    const bubble=pendingRow.querySelector('.bubble');
+    fuelleZeroBlase(bubble, payload);
     if (pendingRow.__zeroAv) {
       pendingRow.__zeroAv.setzeZustand({wert:1, grund:'Antwort vollständig erhalten und übersetzt', quelle:'pipeline'});
     }
@@ -299,6 +320,102 @@ window.addEventListener('load', async () => {
     bubble.textContent='Fehler: '+message;
     row.appendChild(bubble);
     messages.appendChild(row); scrollDown();
+  }
+
+  // ── Dauerhafter Verlauf ────────────────────────────────────────────
+  const leerEl=document.getElementById('leer');
+  const leerText=document.getElementById('leerText');
+  let aeltesterOrdinal=null; let aelterKnopf=null; let grenzeGesetzt=false;
+
+  function addZeroMessage(payload){
+    const row=document.createElement('div'); row.className='msg msg-zero';
+    const {el,av}=makeZeroAvatarEl();
+    row.__zeroAv=av; row.appendChild(el);
+    const bubble=document.createElement('div'); bubble.className='bubble';
+    fuelleZeroBlase(bubble, payload);
+    row.appendChild(bubble);
+    return row;
+  }
+
+  function zeigeLadefehler(text){
+    // Sichtbar, nicht verschluckt: ein stiller Fehlschlag sieht aus wie eine
+    // leere Sitzung -- und damit waere der Fehler zurueck, eine Ebene tiefer.
+    const d=document.createElement('div'); d.className='ladefehler';
+    d.textContent='Verlauf konnte nicht geladen werden: '+text;
+    messages.insertBefore(d, messages.firstChild);
+  }
+
+  function setzeGrenze(){
+    if(grenzeGesetzt) return;
+    grenzeGesetzt=true;
+    const d=document.createElement('div'); d.className='verlaufsgrenze';
+    d.textContent='ab hier dieser Besuch';
+    messages.appendChild(d);
+  }
+
+  async function ladeVerlauf(sessionId, {aelter=false}={}){
+    let token;
+    try { token=await Clerk.session.getToken(); }
+    catch(e){ zeigeLadefehler('Anmeldung abgelaufen'); return; }
+    const p=new URLSearchParams({session:sessionId, limit:'50'});
+    if(aelter && aeltesterOrdinal!=null) p.set('before', String(aeltesterOrdinal));
+    let d;
+    try {
+      const r=await fetch('/api/history?'+p.toString(), {headers:{Authorization:'Bearer '+token}});
+      if(!r.ok){ zeigeLadefehler('Server antwortete '+r.status); return; }
+      d=await r.json();
+    } catch(e){ zeigeLadefehler(String(e && e.message || e)); return; }
+
+    const zuege=Array.isArray(d.turns)?d.turns:[];
+    if(zuege.length){
+      aeltesterOrdinal=zuege[0].ordinal;
+      // Aelteres kommt VOR alles Bestehende, Neues ans Ende -- sonst steht der
+      // nachgeladene Block hinter der Gegenwart.
+      const anker=aelter?messages.firstChild:null;
+      const reihe=aelter?zuege.slice().reverse():zuege;
+      reihe.forEach((t)=>{
+        const row=(t.role==='user')
+          ? (()=>{ const r2=document.createElement('div'); r2.className='msg msg-user';
+                   r2.innerHTML='<img class="avatar" src="/web/avatare/user.svg" alt="">'+
+                     '<div class="bubble"></div>';
+                   r2.querySelector('.bubble').textContent=t.text||''; return r2; })()
+          : addZeroMessage(t);
+        if(aelter) messages.insertBefore(row, anker); else messages.appendChild(row);
+      });
+    }
+
+    if(!aelter){
+      if(zuege.length){
+        // Leer ist ein ZUSTAND: nur ausblenden, wenn wirklich etwas da ist.
+        if(leerEl) leerEl.style.display='none';
+        setzeGrenze();
+      } else if(leerText){
+        leerText.textContent='Noch keine Nachrichten in dieser Sitzung.';
+      }
+    }
+
+    if(aelterKnopf){ aelterKnopf.remove(); aelterKnopf=null; }
+    if(d.has_more){
+      aelterKnopf=document.createElement('button');
+      aelterKnopf.type='button'; aelterKnopf.className='aelter';
+      aelterKnopf.textContent='Ältere Nachrichten laden';
+      aelterKnopf.addEventListener('click', ()=>{
+        aelterKnopf.disabled=true; aelterKnopf.textContent='lädt …';
+        ladeVerlauf(sessionId, {aelter:true});
+      });
+      messages.insertBefore(aelterKnopf, messages.firstChild);
+    }
+    if(!aelter) scrollDown();
+  }
+
+  function verlaufZuruecksetzen(){
+    // Beim Sitzungswechsel muss das Fenster leer sein, sonst mischen sich die
+    // Verlaeufe zweier Sitzungen zu einem Gespraech, das nie stattgefunden hat.
+    Array.from(messages.children).forEach((k)=>{ if(k!==leerEl) k.remove(); });
+    if(leerEl) leerEl.style.display='';
+    if(leerText) leerText.textContent='Verlauf wird geladen …';
+    aeltesterOrdinal=null; aelterKnopf=null; grenzeGesetzt=false;
+    zeroAvatars.length=0;
   }
 
   const proto=location.protocol==='https:'?'wss':'ws';
@@ -351,6 +468,10 @@ window.addEventListener('load', async () => {
       if(Array.isArray(m.plaetze)) lastPlaetze=m.plaetze;
       scheduleAuthRefresh(m.auth_expires_at);
       setComposerEnabled(true); textEl.focus();
+      // `ready` feuert beim Verbinden UND beim Sitzungswechsel -- deshalb hier
+      // und nicht beim Seitenstart. Die session_id kommt vom Server mit; im
+      // Frontend darf sie nie zusammengebaut werden.
+      if(m.session_id){ verlaufZuruecksetzen(); ladeVerlauf(m.session_id); }
       return;
     }
     if(m.type==='reauthenticated'){ scheduleAuthRefresh(m.auth_expires_at); return; }

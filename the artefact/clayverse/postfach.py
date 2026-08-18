@@ -9,11 +9,17 @@ an drei Stellen bewusst anders:
   Die `mailctl`-Selbstheilung des Vorbilds faellt damit weg: sie ruft ein
   lokales Programm auf dem Mailwirt, das es hier nicht gibt. Ein Aufruf, der
   garantiert scheitert, ist keine Heilung, sondern eine verdeckte Fehlerquelle.
-* **Zuordnung ueber die Clerk-Karte, nicht ueber die Mailadresse.** Andreas'
-  Clerk-Konto laeuft auf `herzradgraz@gmail.com`, sein Postfach ist
-  `andreas@frank.ink`. Ein Abgleich ueber die Adresse haette ihm still kein
-  Postfach gegeben -- und "still kein" ist der Fehler, den man erst bemerkt,
-  wenn eine Mail fehlt.
+* **Zuordnung ueber die Clerk-Karte, nicht ueber die Mailadresse.** Sein
+  Postfach ist `andreas@frank.ink`, und das haengt an KEINER Gmail-Adresse:
+  der Weg ist clerk_subject -> clerk_map -> user_id -> Postfach. Ein Abgleich
+  ueber die Adresse haette ihm still kein Postfach gegeben -- und "still kein"
+  ist der Fehler, den man erst bemerkt, wenn eine Mail fehlt.
+  ⚠️ Diese Bauart ist der Grund, warum eine offene Frage hier NICHTS kaputt
+  macht: welche Gmail-Adresse Andreas' Clerk-Konto traegt, war am 18.08.
+  strittig (`herzradgraz@` im Auftragsdokument, `genuinos@` laut Eigner --
+  Eignerentscheid: `genuinos@gmail.com`). Weil die Zuordnung ueber die
+  Clerk-Kennung laeuft, war die Postfachvergabe davon zu keinem Zeitpunkt
+  betroffen. Genau dafuer ist sie so gebaut.
 * **Senden ist eine Wirkung.** Es geht durch das EffectGate und bekommt dort
   sein Urteil, wie jede andere Wirkung auch.
 

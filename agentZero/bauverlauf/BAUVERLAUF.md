@@ -1,12 +1,77 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T19:41:07Z. 779 Commits aus vier Repos, davon 241 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T20:11:08Z. 782 Commits aus vier Repos, davon 242 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Neun rote Tests aufgeloest -- zwei davon wurden dabei strenger
+
+`c43a3fefccdc` · agentzero-export · 19:47 UTC · EntityOS
+
+```
+584 gruen, 0 rot (vorher 570 gruen, 9 rot). Keiner durch Loeschen, Ueberspringen
+oder abgeschwaechte Behauptungen.
+
+SIEBEN VON NEUN HATTEN EINE URSACHE. Alle scheiterten mit
+`StaleGeneration: effect_active_turn`: `ClayVerseEngine._ingest_locked` legte
+keine Zeile in `active_turns` an, die das Wirkungstor verlangt. Das Tor kam mit
+dem Zug-Lebenszyklus; der aeltere Weg hat es nie gelernt, und im Betrieb fiel
+das nicht auf, weil ihn dort niemand mehr aufruft -- ausser einem:
+final_acceptance_probe, der ENDABNAHME. Genau das Instrument, das beweisen
+soll, dass Wirkungen funktionieren, konnte selbst nicht messen. Es meldete
+nicht "Wirkung fehlgeschlagen", sondern scheiterte VOR der Wirkung.
+
+Die Reparatur lockert das Tor NICHT. Ein `if episode_id is None`-Zweig haette
+alle sieben gruen gemacht und die Pruefung genau fuer den Weg abgeschaltet,
+dessen Zweck das Pruefen ist. Stattdessen meldet engine.py den lebenden Zug
+jetzt an und wieder ab, wie der Betriebsweg.
+
+EIN ECHTES LECK, gefunden ueber einen Test, der aus dem FALSCHEN Grund rot war.
+test_memory_privacy forderte, dass die Verdichtung den Rohtext ueberschreibt.
+Am 18.08. wurde compact() bewusst auf additiv umgebaut -- turns ist ein
+fortschreibendes Kausalbuch, das Ueberschreiben vernichtete die einzige Kopie
+des Originals. Die alte Zusicherung hing damit an einer NEBENWIRKUNG, und beim
+Umbau ist sie niemandem mitgewandert.
+
+Sie war verletzt: in WorldAssembler.assemble wurde bei einer
+Ressourcen-Kollision `item = dict(r)` gebildet -- die ganze Zeile, content
+inklusive. Der Code setzte brav das Etikett
+"compressed_with_extracted_fragments", legte die Fragmente daneben und liess
+den Rohtext drin. Der andere Mensch bekam den vollen Originaltext mit einem
+Etikett, auf dem "verdichtet" stand. Geschlossen; die Zusicherung sitzt jetzt
+in der Abrufschicht, wo sie eine Absicht ist und keine Nebenwirkung.
+
+ZWEI TESTS WURDEN STRENGER statt angepasst:
+- Der Quittungstest forderte `lossless_source_retained is False`. Zum
+  Zeitpunkt, an dem die Quittung geschrieben wird, WAR die Quelle aber noch da
+  -- die Quittung war falsch-in-der-Sache und wahr-im-Wortlaut. Jetzt muss sie
+  `True` sagen: eine Quittung, die Sicherheit behauptet, die nicht besteht,
+  beendet das Nachfragen.
+- Der Ablehnungstest forderte den Hinweis IM Assistenzzug -- also dessen
+  nachtraegliche Aenderung. Das verbietet die Regel darueber im Code: die
+  Modellantwort wird festgeschrieben, BEVOR eine Wirkung das Tor erreicht.
+  Jetzt wird das Gegenteil geprueft: der Assistenzzug muss UNBERUEHRT sein,
+  der Hinweis kommt als eigener Systemzug mit der Wirkung im Kausalbezug.
+
+DAZU DREI MESSGERAETE REPARIERT, alle mit demselben Fehler: ein Abbruch kam als
+Null zurueck. _sh() machte aus einem Zeitablauf eine leere Zeichenkette (die
+Suite wuchs ueber die 45s-Grenze, die Tabelle meldete "nicht gemessen"), und
+die Testauswertung suchte "X failed, Y passed" -- bei NULL Fehlern schreibt
+pytest kein "failed", also fiel die Messung genau dann aus, wenn alles gruen
+ist. Vierter Fall dieser Bauart an einem Tag. Ein Fehler, der als Null
+zurueckkommt, ist schlimmer als eine Ausnahme: eine Ausnahme faellt auf, eine
+Null wird gerechnet.
+
+Ausserdem: bahn_faehigkeit und bahn_lage standen in policy/managed-settings.json
+und fehlten in DEFAULT_ALLOWED_TOOLS. Die engere Liste gewinnt, also war die
+Freigabe wirkungslos -- ein Werkzeug, das gewaehrt aussieht und nicht angeboten
+wird. Beide Listen stehen jetzt bei 32, und drei neue Tests halten sie
+deckungsgleich.
+```
 
 ### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
 
@@ -4539,20 +4604,6 @@ diesem Gesetz waere all das an Agenten gegangen.
 
 SCHAERFT F25: Clay soll wie Claude Code als KOORDINATOR sein, nicht als
 Bauarbeiter. Steht jetzt auch oben in CLAUDE.md auf dem Wirt.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### Werkzeug an die Vordertuer: benchmark_recall_wikidb liest jetzt ueber udb.verbindung()
-
-`44419fc4c837` · clay · 06:37 UTC · ClayVerse
-
-```
-Reiner Lesezugriff (FTS5-Retrieval, 0 Schreiboperationen gemessen) -- passt
-exakt zur nur-lesenden Standardverbindung des Hauses. busy_timeout, query_only
-und Wiederholung kommen jetzt von der einen Stelle statt lokal dupliziert.
-Backup vor der Aenderung: werkzeug/benchmark_recall_wikidb.py.vor-udb (nicht
-versioniert, wie beim messstand.py-Vorbild).
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

@@ -338,3 +338,19 @@ def speicher_abschaffen(pfad: str) -> dict:
     abgewiesen -- auch wenn es nach Muell aussieht.
     """
     return _auftrag("speicher_abschaffen", pfad=str(pfad))
+
+
+def seite_pruefen(url: str, suche: str = "") -> dict:
+    """Nachsehen, was auf einer EIGENEN Seite wirklich steht.
+
+    ⭐ Nutze das nach jedem Veroeffentlichen. Vorher stand in deiner Anleitung
+    "pruefe die Seite, statt den Erfolg zu behaupten" -- ohne dass es ein
+    Mittel dazu gab. Eine Pflicht ohne Werkzeug erzieht nicht zur Sorgfalt.
+
+    ⚠️⚠️ UND SIE IST NOETIG: `/srv/git/seimensch.git` auf diesem Wirt ist ein
+    SPIEGEL. Ein Push dorthin durchlaeuft den vollstaendigen Deploy-Haken --
+    Sicherung, Integritaetspruefung, Spiegelung, chown -- und meldet Erfolg,
+    waehrend seimensch.net von 72.61.19.188 ausgeliefert wird. Das ist die
+    gefaehrlichste Sorte Erfolg: einer mit vollstaendigem Beleg.
+    """
+    return _auftrag("seite_pruefen", url=str(url), suche=str(suche or ""))

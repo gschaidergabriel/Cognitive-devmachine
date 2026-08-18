@@ -20,11 +20,27 @@ DB = os.environ.get("AGENTZERO_DB", "/var/lib/clay/wiki.db")
 ARTEFAKT = Path("/opt/entityos/the artefact")
 
 
-def _sh(cmd: str) -> str:
+def _sh(cmd: str, timeout: int = 45) -> str:
+    """Einen Befehl ausfuehren -- und einen Abbruch NICHT als Leere ausgeben.
+
+    ⚠️ Vorher stand hier `except Exception: return ""`. Damit sah ein Zeitablauf
+    exakt aus wie ein Befehl, der nichts zu sagen hatte. Konkret: die Testsuite
+    wuchs auf ueber 45 Sekunden, die Messung lief in die Grenze, und die
+    Zieltabelle meldete "nicht gemessen" -- ohne einen Hinweis darauf, dass
+    ueberhaupt etwas schiefging.
+
+    ⭐ Das ist HEUTE DER VIERTE Fall derselben Bauart (du -xsh /tmp, _n() auf
+    fehlende Tabellen, die Werkzeugzaehlung per grep, und dieser). Ein Fehler,
+    der als Null zurueckkommt, ist schlimmer als eine Ausnahme: eine Ausnahme
+    faellt auf, eine Null wird gerechnet.
+    """
     try:
-        return subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=45).stdout.strip()
-    except Exception:
-        return ""
+        return subprocess.run(cmd, shell=True, capture_output=True, text=True,
+                              timeout=timeout).stdout.strip()
+    except subprocess.TimeoutExpired:
+        return f"__ABBRUCH__ nach {timeout}s"
+    except Exception as e:
+        return f"__FEHLER__ {type(e).__name__}: {e}"
 
 
 def _zahl(c, tabelle: str, wo: str = "") -> int:
@@ -75,8 +91,11 @@ def zeilen(c) -> list[dict]:
     _werkbank = [w for w in _erlaubt if "werkbank" in w]
     karten = len(list((Path("/opt/agentzero-export/repo/agentZero/karten")).glob("*.json"))) \
         if Path("/opt/agentzero-export/repo/agentZero/karten").exists() else 0
+    # ⚠️ 240s statt 45: die Suite braucht ~18s im Leerlauf, unter Last (z.B.
+    # waehrend ein Container gebaut wird) aber ueber 80. Eine zu knappe Grenze
+    # misst dann nicht die Tests, sondern die Auslastung der Kiste.
     tests = _sh("cd '/opt/entityos/the artefact' && /opt/entityos/venv-test/bin/python -m pytest tests/ -q "
-                "--timeout=60 -p no:cacheprovider 2>/dev/null | tail -1")
+                "--timeout=120 -p no:cacheprovider 2>/dev/null | tail -1", timeout=240)
     # ⚠️ Vorher stand hier nur ein Muster fuer "X failed, Y passed". Bei NULL
     # Fehlern schreibt pytest aber "584 passed in 17s" -- ohne das Wort
     # "failed". Die Messung meldete deshalb "nicht gemessen", und zwar genau
@@ -86,6 +105,8 @@ def zeilen(c) -> list[dict]:
     _gruen = re.search(r"(\d+) passed", tests or "")
     if _gruen:
         testlage = f"{_gruen.group(1)} gruen / {_rot.group(1) if _rot else '0'} rot"
+    elif str(tests).startswith("__ABBRUCH__") or str(tests).startswith("__FEHLER__"):
+        testlage = f"NICHT GEMESSEN -- {tests}. Das ist ein Messfehler, kein Ergebnis."
     else:
         testlage = f"nicht gemessen (Ausgabe: {(tests or '')[:60]!r})"
 
@@ -334,7 +355,7 @@ def zeilen(c) -> list[dict]:
     z("Betrieb", "Die Testsuite trägt",
       "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "Arbeitsregel",
-      testlage, bool(treffer))
+      testlage, bool(_gruen) and not _rot)
     z("Betrieb", "Endabnahme hinter eigenem Gastkern",
       "derselbe Digest hinter einer eigenen VM-Grenze",
       "Entwurf – vom Eigner zurückgestellt",
@@ -563,7 +584,7 @@ def zeilen(c) -> list[dict]:
        "kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt "
        "Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das "
        "sagen, statt Sicherheit zu behaupten, die nicht besteht"),
-      "0 rot" in testlage or ("gruen" in testlage and "/ 0 rot" in testlage))
+      bool(_gruen) and not _rot)
     z("Kognition", "Die Endabnahme kann überhaupt messen",
       "das Instrument, das beweisen soll, dass Wirkungen funktionieren, muss selbst funktionieren",
       "Lehre aus dem Bau 18.08.",
@@ -590,6 +611,64 @@ def zeilen(c) -> list[dict]:
       "der aus dem FALSCHEN Grund rot war: die alte Zusicherung hing an einer "
       "Nebenwirkung der zerstörenden Verdichtung. Wer so einen Test nur an die neue "
       "Wirklichkeit anpasst, verliert den Hinweis",
+      True)
+
+    try:
+        import importlib.util as _il2
+        _sp2 = _il2.spec_from_file_location("aw", "/opt/entityos/anmeldewacht.py")
+        _aw = _il2.module_from_spec(_sp2); _sp2.loader.exec_module(_aw)
+        _anm = _aw.pruefe(_aw.LEBEND)
+    except Exception as _e2:
+        _anm = {"zustand": f"nicht pruefbar: {type(_e2).__name__}"}
+
+    z("Betrieb", "Zero verstummt nicht wortlos",
+      "wenn er nicht antworten kann, muss man ERFAHREN warum",
+      "Lehre aus dem Bau 18.08.",
+      (f"Anmeldung {_anm['zustand']}"
+       + (f", noch {_anm.get('gueltig_stunden')} Stunden gültig" if _anm.get("gueltig_stunden") else "")
+       + ". Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. "
+       "⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, "
+       "alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende "
+       "Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede "
+       "oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang "
+       "war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session "
+       "expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. "
+       "⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit "
+       "als eines, das kommentarlos abstürzt: man sucht am falschen Ende"),
+      _anm.get("zustand") == "GUT")
+
+    z("Betrieb", "Zero kann nachsehen, statt zu hoffen",
+      "nach jedem Veröffentlichen prüfen, was WIRKLICH auf der öffentlichen Seite steht",
+      "Lehre aus dem Andreas-Test 18.08.",
+      "⚠️ Gefunden von Zero SELBST: er berichtete, die ZVR-Korrektur sei „still local, "
+      "still not live\" — und schrieb dazu ehrlich „ich habe kein HTTP hier, ich kann "
+      "seimensch.net nicht abrufen\". Sie WAR live. Sein Schluss war richtig gezogen aus "
+      "dem, was er sehen konnte. ⭐ Mein Fehler: in seinem Handbuch stand „prüfe die "
+      "Seite\" — ohne Mittel dazu. Jetzt hat er `seite_pruefen`: HTTP an die echten "
+      "Domains, nur lesend, Erlaubnisliste auf dem Wirt. ⚠️⚠️ Und der eigentliche Befund "
+      "dahinter: /srv/git/seimensch.git auf diesem Wirt ist ein SPIEGEL — ein Push meldet "
+      "vollen Deploy-Erfolg, während seimensch.net von 72.61.19.188 ausgeliefert wird",
+      True)
+    z("Betrieb", "Ehrliches „nichts getan\" gilt nicht als fertig",
+      "wer korrekt verweigert, wird nicht als erledigt gebucht — aber auch nicht bestraft",
+      "Lehre aus dem Andreas-Test 18.08.",
+      "⚠️ Von Zero gefunden: zwei Pakete standen auf `fertig`, ihr Beleg begann mit "
+      "„NICHTS GETAN\". Meine Regel prüfte, OB ein Beleg da ist — nicht, ob er `fertig` "
+      "trägt. Ein Arbeiter, der sauber verweigert, schreibt einen ehrlichen Bericht, und "
+      "der ging als Beleg durch. Damit bestrafte die Regel genau die Ehrlichkeit, die sie "
+      "fördern sollte. Neuer Stand `abgelehnt`: kein Fehlschlag des Arbeiters, aber auch "
+      "keine Erledigung — die Arbeit wartet weiter",
+      True)
+    z("Gedächtnis", "Vorfälle stehen im Wiki, nicht nur im Commit",
+      "was passiert ist, muss die Entität finden können — nicht nur der, der den Commit las",
+      "Lehre aus dem Andreas-Test 18.08.",
+      "⚠️ Zero suchte im Korpus nach einem Vorfallsartikel zu den vollen Platten, fand "
+      "NICHTS und warnte ausdrücklich: „behandle meine Darstellung nicht als "
+      "korpusbelegt\". Er hatte recht — die Geschichte stand nur in Commit-Texten. Jetzt "
+      "sind beide Vorfälle des Tages (Platte voll, root-Ausbruch) als volltextsuchbare "
+      "Artikel im Wiki, gegengeprüft über die Suche. ⭐ „alle deine baunotizen werden "
+      "auch teil des wiki\" — ein Vorfall, der nur im Commit steht, ist für die Entität "
+      "nicht passiert",
       True)
 
     return Z

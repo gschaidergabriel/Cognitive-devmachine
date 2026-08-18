@@ -58,6 +58,7 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__werkbank_stand",
     "mcp__clayverse__werkbank_veroeffentlichen",
     # Zero haelt selbst Platz auf dem Wirt -- Auftrag des Eigners 18.08.
+    "mcp__clayverse__seite_pruefen",
     "mcp__clayverse__speicher_lage",
     "mcp__clayverse__speicher_aufraeumen",
     "mcp__clayverse__speicher_rueckweg",
@@ -256,7 +257,13 @@ def run_headless(
     wall_ms = (time.perf_counter() - started) * 1000.0
 
     if cp.returncode != 0:
-        raise HeadlessZeroError(f"headless Zero exited rc={cp.returncode} stderr={cp.stderr[:500]!r}")
+        # ⚠️ stdout MUSS mit in die Meldung. Die Claude-CLI schreibt ihre
+        # Fehler ueberwiegend nach stdout, nicht nach stderr -- die alte
+        # Fassung zeigte deshalb `stderr=''` und sah aus, als sei der Prozess
+        # wortlos gestorben. Vier Testlaeufe lang war das die einzige Auskunft.
+        raise HeadlessZeroError(
+            f"headless Zero exited rc={cp.returncode} "
+            f"stderr={(cp.stderr or '')[:400]!r} stdout={(cp.stdout or '')[:900]!r}")
     try:
         envelope = json.loads(cp.stdout)
     except json.JSONDecodeError as exc:

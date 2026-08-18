@@ -1,28 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T19:41:07Z. **2558 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T20:11:08Z. **2564 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T02:44:48+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2462 |
-| vorfall | 96 |
+| baunotiz | 2466 |
+| vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1620 |
-| baunotiz | bauverlauf.jsonl | 798 |
+| baunotiz | git-commit | 1623 |
+| baunotiz | bauverlauf.jsonl | 799 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
+| vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2558 · Gegenhypothese: 0 von 2558
+## Hypothese: 0 von 2564 · Gegenhypothese: 0 von 2564
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -33,6 +34,14 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen107 583/1 and stale security acceptance
+
+`baunotiz-git-3beb76ffb6f05a43aa192b568956fd4626bead06` · baunotiz · git-commit · 2026-08-19T02:44:48+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen107 583/1 and stale security acceptance
 
 ### claycode supervisor: prioritize Gen106 root-escape boundary and 582/2 provenance
 
@@ -114,6 +123,48 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: steer Gen85 Mistral prestage regression
 
+### Neun rote Tests aufgeloest -- zwei davon wurden dabei strenger
+
+`baunotiz-git-c43a3fefccdc018d19f0a1aff2d147b4c44daf6b` · baunotiz · git-commit · 2026-08-18T19:47:36+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Neun rote Tests aufgeloest -- zwei davon wurden dabei strenger
+
+584 gruen, 0 rot (vorher 570 gruen, 9 rot). Keiner durch Loeschen, Ueberspringen
+oder abgeschwaechte Behauptungen.
+
+SIEBEN VON NEUN HATTEN EINE URSACHE. Alle scheiterten mit
+`StaleGeneration: effect_active_turn`: `ClayVerseEngine._ingest_locked` legte
+keine Zeile in `active_turns` an, die das Wirkungstor verlangt. Das Tor kam mit
+dem Zug-Lebenszyklus; der aeltere Weg hat es nie gelernt, und im Betrieb fiel
+das nicht auf, weil ihn dort niemand mehr aufruft -- ausser einem:
+final_acceptance_probe, der ENDABNAHME. Genau das Instrument, das beweisen
+soll, dass Wirkungen funktionieren, konnte selbst nicht messen. Es meldete
+nicht "Wirkung fehlgeschlagen", sondern scheiterte VOR der Wirkung.
+
+Die Reparatur lockert das Tor NICHT. Ein `if episode_id is None`-Zweig haette
+alle sieben gruen gemacht und die Pruefung genau fuer den Weg abgeschaltet,
+dessen Zweck das Pruefen ist. Stattdessen meldet engine.py den lebenden Zug
+jetzt an und wieder ab, wie der Betriebsweg.
+
+EIN ECHTES LECK, gefunden ueber einen Test, der aus dem FALSCHEN Grund rot war.
+test_memory_privacy forderte, dass die Verdichtung den Rohtext ueberschreibt.
+Am 18.08. wurde compact() bewusst auf additiv umgebaut -- turns ist ein
+fortschreibendes Kausalbuch, das Ueberschreiben vernichtete die einzige Kopie
+des Originals. Die alte Zusicherung hing damit an einer NEBENWIRKUNG, und beim
+Umbau ist sie niemandem mitgewandert.
+
+Sie war verletzt: in WorldAssembler.as
+
+### agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-86d356687bd843594dd3715c7503968ad13be1dd` · baunotiz · git-commit · 2026-08-18T19:41:49+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: classify Gen80 PTY lease as reproducibility flake candidate
 
 `baunotiz-bauverlauf-d29252642b0d6565e56a` · baunotiz · bauverlauf.jsonl · 2026-08-18T19:39:12+07:00 · Gabriel Gschaider
@@ -137,6 +188,14 @@ claycode supervisor: classify Gen80 PTY lease as reproducibility flake candidate
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-8d5baefc96fed2024c31` · baunotiz · bauverlauf.jsonl · 2026-08-18T19:11:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 
@@ -197,38 +256,6 @@ agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt
 ### agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-bauverlauf-94c09645610ea18ae79d` · baunotiz · bauverlauf.jsonl · 2026-08-18T17:41:49+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen62 persistent adapter counterevidence
-
-`baunotiz-bauverlauf-9fc58bc90caa8e7721d7` · baunotiz · bauverlauf.jsonl · 2026-08-18T17:41:45+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen62 persistent adapter counterevidence
-
-`baunotiz-git-f95beb3101ae357808054c30953241515d585e4b` · baunotiz · git-commit · 2026-08-18T17:41:45+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen62 persistent adapter counterevidence
-
-### agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-7e89a22950fe01ac8121c91d259d65adea6de6d1` · baunotiz · git-commit · 2026-08-18T17:12:13+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-89328a4db9346d95c681` · baunotiz · bauverlauf.jsonl · 2026-08-18T17:12:13+00:00 · agentZero
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

@@ -535,6 +535,11 @@ class ClayVerseEffectBridge:
         try: return _w.schreiben(pfad, alt, neu)
         except Exception as e: return {"abgewiesen": str(e)}
 
+    def seite_pruefen(self, url: str, suche: str = "") -> dict:
+        from . import werkbank as _w
+        try: return _w.seite_pruefen(url, suche)
+        except Exception as e: return {"abgewiesen": str(e)}
+
     def speicher_lage(self) -> dict:
         from . import werkbank as _w
         try: return _w.speicher_lage()
@@ -744,6 +749,11 @@ def main() -> None:
     def werkbank_aendern(pfad: str, alt: str, neu: str) -> dict:
         """Ersetzt EINE eindeutige Stelle in einer Datei. `alt` muss genau einmal vorkommen -- kommt es mehrfach vor, wird abgewiesen statt geraten. Nur in der Arbeitskopie, nie in der ausgelieferten Fassung."""
         return bridge.werkbank_aendern(pfad, alt, neu)
+
+    @mcp.tool(annotations=udb_ro)
+    def seite_pruefen(url: str, suche: str = "") -> dict:
+        """Nachsehen, was auf einer EIGENEN Seite wirklich steht (seimensch.net, leihmich.org, herzrad.at, *.frank.ink). `suche` ist ein regulaerer Ausdruck; steht er drin, ist die Aenderung oeffentlich angekommen. ⭐ Nutze das nach JEDEM Veroeffentlichen. ⚠️ /srv/git/seimensch.git auf diesem Wirt ist ein SPIEGEL — ein Push dorthin meldet vollen Erfolg samt Deploy-Beleg, waehrend seimensch.net von 72.61.19.188 ausgeliefert wird. Nur dieser Abruf sagt dir, was oeffentlich sichtbar ist."""
+        return bridge.seite_pruefen(url, suche)
 
     @mcp.tool(annotations=udb_ro)
     def speicher_lage() -> dict:

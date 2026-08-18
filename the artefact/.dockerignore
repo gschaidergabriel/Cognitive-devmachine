@@ -19,6 +19,11 @@ clayverse/inference_protocol.py
 clayverse/terminal.py
 !policy/
 !policy/**
+# Die Chat-Oberflaeche und die Avatare. Der Bau-Kontext ist bewusst
+# fail-closed (alles aus, Einzelnes an) -- ohne diese zwei Zeilen scheitert
+# COPY web ./web, und zwar erst im Bau, nicht beim Schreiben.
+!web/
+!web/**
 !runtime_CLAUDE.md
 !entityos.lock.json
 !EntityOS

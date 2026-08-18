@@ -294,6 +294,31 @@ class ClayVerseEffectBridge:
         me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
         return {"suchbegriff": suchbegriff, "ergebnisse": me.memory_suche(suchbegriff, limit=max(1, min(int(limit), 50)))}
 
+    # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
+    def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
+        from .bahnen import Bahnrouter, BahnErschoepft
+        erlaubt = {"kondensieren", "zweitmeinung", "schema_antwort", "sphaere_einordnung",
+                   "websuche_erdung", "langer_kontext", "umsortieren_treffer"}
+        if faehigkeit not in erlaubt:
+            raise ValueError(f"unbekannte Faehigkeit. erlaubt: {sorted(erlaubt)}")
+        if not isinstance(auftrag, str) or not auftrag.strip():
+            raise ValueError("auftrag darf nicht leer sein")
+        r = Bahnrouter(self.db)
+        try:
+            e = r.rufe(faehigkeit, auftrag[:20000], system=system or None)
+        except BahnErschoepft as ex:
+            # Ablehnung mit Grund, kein stiller Abstieg. Zero soll wissen, dass
+            # es die Faehigkeit heute NICHT hat, statt eine schlechtere Antwort
+            # fuer die bestellte zu halten.
+            return {"erfuellt": False, "grund": str(ex), "faehigkeit": faehigkeit}
+        return {"erfuellt": True, "faehigkeit": faehigkeit, "text": e["text"],
+                "bahn": e["bahn"], "modell": e["modell"], "ms": e["ms"],
+                "heute_benutzt": e["benutzt_heute"], "deckel": e["deckel"]}
+
+    def bahn_lage(self) -> dict:
+        from .bahnen import Bahnrouter
+        return {"verbrauch_heute": Bahnrouter(self.db).lage()}
+
     def session_state(self) -> dict:
         active = self.lifecycle.active()
         return {
@@ -372,6 +397,25 @@ def main() -> None:
     def udb_memory_search(suchbegriff: str, limit: int = 10) -> dict:
         """Durchsucht gespeicherte Memory-Eintraege nach Inhalt."""
         return bridge.udb_memory_search(suchbegriff, limit)
+
+    @mcp.tool(annotations=udb_write)
+    def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:
+        """Nutzt eine kognitive Faehigkeit ueber die Bahnen des Hauses.
+
+        faehigkeit: kondensieren | zweitmeinung | schema_antwort |
+                    sphaere_einordnung | websuche_erdung | langer_kontext |
+                    umsortieren_treffer
+
+        Du waehlst KEINEN Anbieter -- der Router waehlt, nach Verdrahtung,
+        gemessenem Zustand und Tagesdeckel. Ist jede Bahn erschoepft, bekommst du
+        erfuellt=false mit Grund, statt heimlich eine schlechtere Antwort.
+        """
+        return bridge.bahn_faehigkeit(faehigkeit, auftrag, system)
+
+    @mcp.tool(annotations=udb_ro)
+    def bahn_lage() -> dict:
+        """Zeigt, was heute auf welcher Bahn verbraucht wurde."""
+        return bridge.bahn_lage()
 
     try:
         mcp.run(transport="stdio")

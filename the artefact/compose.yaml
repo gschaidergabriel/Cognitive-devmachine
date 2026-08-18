@@ -21,6 +21,10 @@ services:
       CLAYVERSE_DB_PATH: /var/lib/clay/wiki.db
       CLAYVERSE_WORKSPACE: /workspace
       CLAYVERSE_REQUIRE_CLAUDE: "1"
+      # Gedaechtnis aus normalem Gespraech ziehen. Ohne das bleibt
+      # durable_memory leer -- gemessen trugen 0 von 24 Zuegen einen
+      # Marker -- und die ganze Lernkette steht still.
+      CLAYVERSE_MEMORY_EXTRACT: "1"
       # EntityOS bytes are digest-bound into the one ClayVerse image. External
       # execution remains disabled until the exact embedded artifact has accepted
       # isolated-sandbox runtime evidence.

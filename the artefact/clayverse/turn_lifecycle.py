@@ -3,6 +3,7 @@ from __future__ import annotations
 import contextlib
 import hashlib
 import json
+import os
 import re
 import time
 import uuid
@@ -271,7 +272,22 @@ class TurnLifecycle:
             if cur.rowcount!=1: raise TurnLifecycleError("active turn changed during Stop")
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
             result={"completed":True,"assistant_turn_id":assistant_id,"causal_id":row["causal_id"],"effect_id":effect_id,"credit":credit}
-        return result
+        ergebnis = result
+        # ── Gedaechtnis aus normalem Gespraech ────────────────────────────
+        # AUSSERHALB der Transaktion: ein Netzaufruf in einer offenen Transaktion
+        # sperrt andere Schreiber fuer Sekunden.
+        # Ein Fehler hier darf den Zug NIE kippen -- kein Gedaechtnis ist
+        # schlechter als eines, aber unendlich viel besser als ein verlorener Zug.
+        # Schalter mit Vorgabe AUS, sonst telefonieren Tests ins Netz.
+        if os.environ.get("CLAYVERSE_MEMORY_EXTRACT", "0") == "1":
+            try:
+                from .gedaechtnis import extrahiere
+                ergebnis["gedaechtnis"] = extrahiere(
+                    self.db, turn_id=ergebnis.get("turn_id") or "", user_id=self.user_id,
+                    content=str(response), rolle="assistant")
+            except Exception as fehler:
+                ergebnis["gedaechtnis"] = {"_fehler": type(fehler).__name__ + ": " + str(fehler)}
+        return ergebnis
 
     def complete_autonomous(self,response:str,goal_id:str,step_id:str)->dict:
         return self.complete(response,_autonomy_goal_id=goal_id,_autonomy_step_id=step_id)

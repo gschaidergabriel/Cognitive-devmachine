@@ -64,6 +64,13 @@ class BahnErschoepft(RuntimeError):
     """Alle verdrahteten Bahnen eines Prozesses sind aufgebraucht."""
 
 
+class _BahnLieferteNichts(RuntimeError):
+    """Diese eine Bahn hat nichts geliefert -- die naechste ist dran."""
+    def __init__(self, bahn: str, grund: str):
+        super().__init__(f"{bahn}: {grund}")
+        self.bahn, self.grund = bahn, grund
+
+
 class KeinZugang(RuntimeError):
     """Fuer diese Bahn liegt kein Schluessel vor."""
 
@@ -125,13 +132,17 @@ class Bahnrouter:
         return int(tag * float(p.get("hoechstanteil") or 1.0))
 
     # ── Auswahl ───────────────────────────────────────────────────────────
-    def waehle(self, prozess: str) -> dict:
+    def waehle(self, prozess: str, *, ueberspringen: set | None = None) -> dict:
         """Erste brauchbare Bahn samt Begruendung -- oder Ablehnung."""
         p = self.prozesse.get(prozess)
         if not p:
             raise KeyError(f"unbekannter Prozess: {prozess}")
+        ueberspringen = ueberspringen or set()
         abgelehnt = []
         for bahn in p["bahnen"]:
+            if bahn in ueberspringen:
+                abgelehnt.append((bahn, "in diesem Aufruf bereits ohne Ergebnis"))
+                continue
             z = self.zugaenge.get(bahn)
             if not z:
                 abgelehnt.append((bahn, "nicht in der Verdrahtung"))
@@ -167,7 +178,25 @@ class Bahnrouter:
     # ── Aufruf ────────────────────────────────────────────────────────────
     def rufe(self, prozess: str, auftrag: str, *, system: str | None = None,
              max_token: int = 800, timeout: int = 60) -> dict:
-        wahl = self.waehle(prozess)
+        """Ruft die erste brauchbare Bahn. Liefert eine Bahn nichts, kommt die naechste."""
+        ausgefallen: list[tuple[str, str]] = []
+        letzter = None
+        for _ in range(4):  # hoechstens so viele Bahnen wie ein Prozess hat
+            try:
+                return self._ein_versuch(prozess, auftrag, system=system, max_token=max_token,
+                                         timeout=timeout, ueberspringen=set(b for b, _ in ausgefallen),
+                                         bisher=ausgefallen)
+            except _BahnLieferteNichts as e:
+                ausgefallen.append((e.bahn, e.grund))
+                letzter = e
+                continue
+        raise BahnErschoepft(
+            f"Prozess '{prozess}': alle Bahnen ohne Ergebnis. " +
+            "; ".join(f"{b}: {g}" for b, g in ausgefallen))
+
+    def _ein_versuch(self, prozess: str, auftrag: str, *, system, max_token, timeout,
+                     ueberspringen: set, bisher: list) -> dict:
+        wahl = self.waehle(prozess, ueberspringen=ueberspringen)
         familie, bahn = wahl["familie"], wahl["bahn"]
         url, keyname = ENDPUNKTE[familie]
         schluessel = _schluessel(keyname)
@@ -190,19 +219,28 @@ class Bahnrouter:
                 d = json.loads(r.read().decode())
         except urllib.error.HTTPError as e:
             self._buchen(bahn, prozess, fehler=True)
-            # Fehler wird gebucht und weitergereicht. KEIN stiller Abstieg auf die
-            # naechste Bahn: ein Ausweichen, das niemand sieht, verwandelt einen
-            # Ausfall in eine schleichende Verschlechterung.
-            raise RuntimeError(f"Bahn {bahn} antwortete {e.code}: {e.read().decode()[:200]}") from None
+            raise _BahnLieferteNichts(bahn, f"HTTP {e.code}: {e.read().decode()[:120]}") from None
+        except Exception as e:
+            self._buchen(bahn, prozess, fehler=True)
+            raise _BahnLieferteNichts(bahn, f"{type(e).__name__}") from None
         ms = (time.time() - t) * 1000
         token = int((d.get("usage") or {}).get("total_tokens") or 0)
+        inhalt = (d.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
+        if not inhalt.strip():
+            # 200, Token verbraucht, nichts gesagt. Reasoning-Modelle tun das,
+            # wenn das Budget im Denkkanal aufgeht. Als Ausfall behandeln --
+            # sonst gibt der Router eine leere Antwort als Ergebnis aus.
+            self._buchen(bahn, prozess, token=token, fehler=True)
+            raise _BahnLieferteNichts(
+                bahn, f"HTTP 200 aber leerer Inhalt bei {token} Token "
+                      "(Reasoning-Modell? max_token zu klein?)")
         self._buchen(bahn, prozess, token=token)
         return {
             "prozess": prozess, "bahn": bahn, "modell": wahl["modell"],
-            "text": (d.get("choices") or [{}])[0].get("message", {}).get("content", ""),
+            "text": inhalt,
             "ms": round(ms, 1), "token": token,
             "benutzt_heute": wahl["benutzt_heute"] + 1, "deckel": wahl["deckel"],
-            "verworfene_bahnen": wahl["verworfen"],
+            "verworfene_bahnen": wahl["verworfen"] + list(bisher),
         }
 
     def lage(self) -> list[dict]:

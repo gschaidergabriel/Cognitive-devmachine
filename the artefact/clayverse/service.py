@@ -213,7 +213,14 @@ def main():
     verifier = ClerkTokenVerifier(clerk_config)
     require_claude = os.environ.get("CLAYVERSE_REQUIRE_CLAUDE", "1") == "1"
     try:
-        claude_status = claude_readiness(required=require_claude)
+        # Both canonical users' Claude Code CLI share one OAuth credential
+        # (TerminalSessionManager._link_shared_credentials symlinks it into each
+        # user's home on ensure()). Checking the shared source file directly here
+        # does not depend on ensure() having run yet.
+        claude_status = claude_readiness(
+            required=require_claude,
+            credentials_path=TerminalSessionManager.CREDENTIALS_SOURCE,
+        )
         _, entityos_status = _entityos_config()
         terminals = TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
         terminal_status = {}

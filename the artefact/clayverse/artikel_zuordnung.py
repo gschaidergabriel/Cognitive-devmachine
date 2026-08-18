@@ -44,6 +44,10 @@ SPHAERE = {"andreas": "andreas", "gabriel": "gabriel"}
 PERSOENLICH = {
     "Dr.-Unterweger": "andreas", "andreas-claude": "andreas", "Andreas-Resercher": "andreas",
     "Project-Frankenstein": "gabriel", "gabriel-claude": "gabriel",
+    # "AndreasClaude" != "andreas-claude" (andere Gross-/Kleinschreibung, anderes
+    # Repo laut GitHub-Kontoereignissen, 18.08. gemessen) -- selbes Namensmuster,
+    # dieselbe Zuordnungslogik wie die Zeile darueber.
+    "AndreasClaude": "andreas",
 }
 
 # Stufe 3: Frank-Familie -- Project Frankenstein ist Gabriels Projekt (Eigner 18.08.),
@@ -69,6 +73,13 @@ INSTITUT = {
     "agentforge": "Plattform, traegt SeiMensch (andreas), gebaut von gabriel -- geteilte Infrastruktur",
     "EntityOS": "Institutsrepo, beide Gruender -- die Baunotizen (clayverse/baunotizen.py: "
                 "protokoll.jsonl/bauverlauf.jsonl/git-commits) setzen projekt='EntityOS'.",
+    "microclay": "wiederverwendbare kybernetische Mikroentitaet (README 18.08. gelesen: "
+                 "\"ClayVerse ist ihr erster Benutzer, nicht ihr Zweck\") -- kein Personenbezug.",
+    # GitHub-Kontoereignisse (clayverse/baunotizen.py Quelle 5) nennen dieses Repo
+    # unter dem Namen "unifieddb" -- separat vom lokalen Klon /opt/unifieddb, dessen
+    # github-Remote auf "clay-machine" zeigt (18.08. per `git remote -v` geprueft).
+    # Gleiche Infrastruktur, nur ein anderer Name im Ereignisstrom.
+    "unifieddb": "UnifiedDB -- Institutsinfrastruktur, siehe clay-machine/EntityOS.",
 }
 INSTITUT_SPHAEREN = {"clayverse": "Aufbau", "iar": "das Institut selbst"}
 

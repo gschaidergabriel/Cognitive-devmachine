@@ -65,6 +65,54 @@ SHA zu bekommen, darum bei git realistisch nie "aktualisiert", nur "neu" oder
 separat aus der Rohzeile fuer echte Aenderungserkennung; protokoll: das
 fremde slugify-Schema, insert-only). Zweiter Lauf mit unveraendertem Quelltext
 = neu 0 ueberall.
+
+ERWEITERT 18.08. -- Eigner woertlich: "alles was passiert muss in das
+zentrale wiki auf dem vps auch rein". Drei weitere Quellen, gleiche Disziplin:
+
+4. Git-Commits in WEITEREN Repos auf diesem VPS (_WEITERE_GIT_REPOS), nicht
+   nur "the artefact". Gemessen 18.08. per `find /opt -maxdepth 5 -name .git`:
+   /opt/agentzero-export/repo, /opt/unifieddb, /opt/clayverse, /opt/microclay
+   sind eigene Repos mit eigener Historie (kein Symlink, keine Kopie -- per
+   `git log -1` verglichen, unterschiedliche HEADs). Alle klein genug (3-222
+   Commits total, siehe Kommentar bei _WEITERE_GIT_REPOS) um denselben
+   GIT_CUTOFF wie Quelle 3 zu benutzen, statt eine neue Cutoff-Politik zu
+   erfinden. _git_commits_fuer() ist die Verallgemeinerung von Quelle 3 auf
+   pfad/toplevel/projekt/sphaere als Parameter; Quelle 3 selbst ruft sie nur
+   noch mit den alten Konstanten auf -- keine Verhaltensaenderung fuer den
+   Bestand.
+
+5. GitHub-Konto-Ereignisse aus /var/lib/clay/ereignisse.jsonl. Diese Datei
+   wird schon stuendlich von clayverse-github.service (eigener Dienst, GH_TOKEN
+   mit echtem User-Scope -- geprueft: authentifiziert als gschaidergabriel,
+   scopes gist/read:org/repo/workflow/write:packages, nicht der auf EIN Repo
+   beschraenkte Deploy-Key unter /root/.ssh/agentzero_export) befuellt, aber
+   NIE ins Wiki gehoben -- gemessen: kein von_quelle='github-ereignis*' im
+   Bestand. Zwei Fallen umgangen:
+     a) Doppelt zu Quelle 3/4: 5495 von 5676 Zeilen sind wirt='github', und
+        86 % davon (3058+288+3 von 5676) betreffen Repos, die schon als
+        lokaler Git-Klon ueber Quelle 3/4 laufen (clay-global-research-entity,
+        clay-machine, microclay -- per `git remote -v` verifiziert, nicht
+        geraten). _GITHUB_SKIP_REPOS filtert die raus, sonst stuenden dieselben
+        Commits doppelt und duenner (nur SHA+erste Zeile) im Wiki.
+     b) Drownen: nach dem Filter bleibt u.a. Dr.-Unterweger mit 2107
+        Ereignissen/4 Tagen uebrig -- fast nur {repo,sha} ohne Text. Repos
+        mit mehr als _GITHUB_AGGREGAT_SCHWELLE Ereignissen in der Datei werden
+        DESHALB pro Tag aggregiert (Zaehlung je art-Wert + bis zu 10 Titel),
+        nicht einzeln geschrieben. Repos darunter (die meisten: 1-12 Ereignisse)
+        werden einzeln geschrieben, insert-only per Zeilen-Hash.
+     projekt=Repo-Name direkt -- landet ohne neue Regeln in artikel_zuordnung.py
+     in der bestehenden Leiter (Dr.-Unterweger/andreas-claude/... sind schon
+     in PERSOENLICH gelistet).
+
+6. Fehlgeschlagene Laeufe der eigenen Timer (systemd-Journal, entityos-*/
+   clayverse-*, Prioritaet err). art='vorfall' -- das IST ein Vorfall im
+   woertlichen Sinn, nicht bloss eine weitere Baunotiz. Gemessen 18.08. ueber
+   30 Tage Journal: nur 6 Fehlschlaege total (GH_TOKEN fehlte einmalig,
+   kaputtes JSON von der GitHub-API, HTTP 503, "database is locked" x2,
+   ein fehlender Pfad) -- klein genug fuer 1:1, keine Aggregation noetig.
+   id = Hash aus (Einheit, Zeitstempel, echter Fehlertext aus dem zweiten,
+   engeren journalctl-Aufruf um die vom ersten gefundene Fehlerzeile) --
+   insert-only, dasselbe Fenster beim naechsten Lauf ergibt denselben Hash.
 """
 from __future__ import annotations
 
@@ -83,6 +131,44 @@ BAUVERLAUF = Path("/opt/agentzero-export/repo/agentZero/bauverlauf/bauverlauf.js
 GIT_REPO = Path("/opt/entityos/the artefact")
 GIT_TOPLEVEL = "/opt/entityos"  # tatsaechliche Repo-Wurzel; "the artefact" ist ein Unterordner darin
 GIT_CUTOFF = "2026-08-17T00:00:00+00:00"  # Eigner-Vorgabe: ab hier zaehlt's
+
+# Quelle 4: weitere Repos auf dem VPS, per `find /opt -maxdepth 5 -name .git`
+# gefunden und einzeln per `git remote -v`/`git log -1` geprueft (kein
+# Symlink, kein Duplikat von GIT_REPO). Alle klein genug fuer denselben
+# GIT_CUTOFF (Gesamthistorie 18.08. gemessen): agentzero-export/repo 53,
+# unifieddb 70, clayverse 222, microclay 3 Commits total -- keins davon in
+# der Groessenordnung, die einen eigenen Cutoff rechtfertigen wuerde.
+# projekt/sphaere sind keine neuen Kategorien: EntityOS/entityos ist die
+# bestehende Konvention aus Quelle 2/3, clayverse-bau/clayverse steht schon
+# im Bestand (Quelle-1-Zeilen), microclay hat noch keinen INSTITUT-Eintrag
+# und wird deshalb in artikel_zuordnung.py ergaenzt (README gelesen, nicht
+# geraten: "ClayVerse ist ihr erster Benutzer, nicht ihr Zweck").
+_WEITERE_GIT_REPOS = [
+    {"pfad": Path("/opt/agentzero-export/repo"), "toplevel": "/opt/agentzero-export/repo",
+     "projekt": "EntityOS", "sphaere": "entityos"},
+    {"pfad": Path("/opt/unifieddb"), "toplevel": "/opt/unifieddb",
+     "projekt": "EntityOS", "sphaere": "entityos"},
+    {"pfad": Path("/opt/clayverse"), "toplevel": "/opt/clayverse",
+     "projekt": "clayverse-bau", "sphaere": "clayverse"},
+    {"pfad": Path("/opt/microclay"), "toplevel": "/opt/microclay",
+     "projekt": "microclay", "sphaere": None},
+]
+
+# Quelle 5: GitHub-Konto-Ereignisse -- von clayverse-github.service schon
+# stuendlich mit echtem GH_TOKEN (User-Scope, siehe Modulkopf) gesammelt,
+# bisher nirgends ins Wiki gehoben.
+GITHUB_STROM = Path("/var/lib/clay/ereignisse.jsonl")
+# Repos, die schon als lokaler Klon ueber Quelle 3/4 laufen -- per
+# `git remote -v` verifiziert (nicht geraten), sonst doppelt und duenner.
+_GITHUB_SKIP_REPOS = {"clay-global-research-entity", "clay-machine", "microclay"}
+# Ab wie vielen Ereignissen IN DER DATEI wird ein Repo pro Tag aggregiert
+# statt einzeln geschrieben (gemessen 18.08.: Dr.-Unterweger 2107, alle
+# anderen ungefilterten Repos <=12 -- 30 trennt die beiden Gruppen klar).
+_GITHUB_AGGREGAT_SCHWELLE = 30
+
+# Quelle 6: fehlgeschlagene Laeufe der eigenen Timer, aus dem systemd-Journal.
+_JOURNAL_EINHEITEN = ["entityos-*", "clayverse-*"]
+_JOURNAL_FENSTER_TAGE = 30  # gemessen 18.08.: 6 Fehlschlaege in 30 Tagen -- klein, insert-only reicht
 
 _HYP_RE = re.compile(r"(?im)^[ \t]*Hypothese[ \t]*:[ \t]*(.+?)[ \t]*$")
 _GEGENHYP_RE = re.compile(r"(?im)^[ \t]*Gegenhypothese[ \t]*:[ \t]*(.+?)[ \t]*$")
@@ -341,14 +427,18 @@ def _bauverlauf(db, zaehler: dict) -> None:
 # neue SHA zu werden).
 # ---------------------------------------------------------------------------
 
-def _git_seit(db) -> str:
+def _git_seit(db, quelle: str) -> str:
     """Fensterstart: fixer Eigner-Cutoff, oder (falls spaeter) letzter
-    verarbeiteter Commit minus 1 Tag Puffer. Ohne Fenster wuerde jeder Lauf
-    das komplette, staendig wachsende Since-Fenster neu scannen -- mit
-    Fenster bleibt der `git log`-Aufruf auf die letzten Tage begrenzt."""
+    verarbeiteter Commit DIESES Repos minus 1 Tag Puffer. Ohne Fenster wuerde
+    jeder Lauf das komplette, staendig wachsende Since-Fenster neu scannen --
+    mit Fenster bleibt der `git log`-Aufruf auf die letzten Tage begrenzt.
+    Nach quelle (Repo-Pfad) gefiltert, sonst wuerde ein schnell laufendes
+    Repo das Fenster fuer ein langsameres mitverschieben und Commits
+    ueberspringen, die dort noch nie gelaufen sind."""
     seit = GIT_CUTOFF
     row = db.db.execute(
-        "SELECT MAX(datum) FROM artikel WHERE art='baunotiz' AND von_quelle='git-commit'"
+        "SELECT MAX(datum) FROM artikel WHERE art='baunotiz' AND von_quelle='git-commit' AND quelle=?",
+        (quelle,),
     ).fetchone()
     if row and row[0]:
         try:
@@ -361,20 +451,26 @@ def _git_seit(db) -> str:
     return seit
 
 
-def _git_commits(db, zaehler: dict) -> None:
-    if not GIT_REPO.is_dir():
+def _git_commits_fuer(db, zaehler: dict, *, pfad: Path, toplevel: str,
+                       projekt: str, sphaere: str | None) -> None:
+    """Verallgemeinerung von Quelle 3 auf ein beliebiges Repo -- gleiche
+    Logik (SHA ist die id, seit-Fenster, Upsert), nur pfad/toplevel/
+    projekt/sphaere als Parameter statt Modulkonstanten."""
+    if not pfad.is_dir():
+        zaehler.setdefault("_fehler", []).append(f"git-repo fehlt: {pfad}")
         return
-    seit = _git_seit(db)
+    quelle = str(pfad)
+    seit = _git_seit(db, quelle)
     RS, FS = "\x1e", "\x1f"
     fmt = f"%H{FS}%an{FS}%ae{FS}%aI{FS}%B{RS}"
     try:
         proc = subprocess.run(
-            ["git", "-c", f"safe.directory={GIT_TOPLEVEL}", "log",
+            ["git", "-c", f"safe.directory={toplevel}", "log",
              f"--since={seit}", f"--format={fmt}"],
-            cwd=str(GIT_REPO), capture_output=True, text=True, timeout=180, check=True,
+            cwd=quelle, capture_output=True, text=True, timeout=180, check=True,
         )
     except Exception as exc:
-        zaehler.setdefault("_fehler", []).append(f"git log seit={seit}: {type(exc).__name__}: {exc}")
+        zaehler.setdefault("_fehler", []).append(f"git log {quelle} seit={seit}: {type(exc).__name__}: {exc}")
         return
 
     saetze = [r for r in proc.stdout.split(RS) if r.strip("\n")]
@@ -404,7 +500,7 @@ def _git_commits(db, zaehler: dict) -> None:
         meta = {
             "herkunft": "git-commit",
             "wieso": nachricht or None,
-            "wo_dazugehoert": str(GIT_REPO),
+            "wo_dazugehoert": quelle,
             "hypothese": hyp,
             "gegenhypothese": gegenhyp,
             "timestamp": datum,
@@ -414,15 +510,252 @@ def _git_commits(db, zaehler: dict) -> None:
             "betreff": betreff,
         }
         _schreibe(db, _UPSERT_BAUNOTIZ, _zeile_baunotiz(
-            id=id_, art="baunotiz", titel=betreff, quelle=str(GIT_REPO),
+            id=id_, art="baunotiz", titel=betreff, quelle=quelle,
             quell_hash=sha, datum=datum,
             metadaten=json.dumps(meta, ensure_ascii=False, sort_keys=True),
             belegt=1, erzeugt_am=jetzt, wirt="clayverse", zuletzt_von=autor,
             von_quelle="git-commit", status=None, konfidenz=None,
-            projekt="EntityOS", projekt_art="eigen", sphaere="entityos",
+            projekt=projekt, projekt_art="eigen", sphaere=sphaere,
             herkunft="gemessen",
         ))
         vorhandene[id_] = sha
+        zaehler["neu"] += 1
+
+
+def _git_commits(db, zaehler: dict) -> None:
+    """Quelle 3 (unveraendertes Verhalten fuer den Bestand) + Quelle 4
+    (_WEITERE_GIT_REPOS) -- dieselbe Funktion, andere Parameter."""
+    _git_commits_fuer(db, zaehler, pfad=GIT_REPO, toplevel=GIT_TOPLEVEL,
+                       projekt="EntityOS", sphaere="entityos")
+    for repo in _WEITERE_GIT_REPOS:
+        _git_commits_fuer(db, zaehler, pfad=repo["pfad"], toplevel=repo["toplevel"],
+                           projekt=repo["projekt"], sphaere=repo["sphaere"])
+
+
+# ---------------------------------------------------------------------------
+# Quelle 5: GitHub-Konto-Ereignisse aus ereignisse.jsonl -- kleine Repos
+# einzeln (insert-only, Zeilen-Hash als id), grosse Repos (> Schwelle)
+# pro Tag aggregiert (Upsert, quell_hash aus der Zaehlung).
+# ---------------------------------------------------------------------------
+
+def _github_ereignisse(db, zaehler: dict) -> None:
+    if not GITHUB_STROM.is_file():
+        return
+    zeilen: list[tuple[str, dict]] = []
+    for rohzeile in GITHUB_STROM.read_text(encoding="utf-8").splitlines():
+        rohzeile = rohzeile.strip()
+        if not rohzeile:
+            continue
+        try:
+            e = json.loads(rohzeile)
+        except Exception:
+            continue
+        if e.get("wirt") != "github":
+            continue  # ereignisse.jsonl traegt auch clayverse-interne Zeilen -- nicht diese Quelle
+        repo = e.get("repo")
+        if not repo or repo in _GITHUB_SKIP_REPOS:
+            continue  # schon als lokaler Git-Klon ueber Quelle 3/4 drin -- siehe Modulkopf
+        zeilen.append((rohzeile, e))
+
+    zaehlung_je_repo: dict[str, int] = {}
+    for _, e in zeilen:
+        zaehlung_je_repo[e["repo"]] = zaehlung_je_repo.get(e["repo"], 0) + 1
+
+    einzeln = [(r, e) for r, e in zeilen if zaehlung_je_repo[e["repo"]] <= _GITHUB_AGGREGAT_SCHWELLE]
+    aggregiert = [(r, e) for r, e in zeilen if zaehlung_je_repo[e["repo"]] > _GITHUB_AGGREGAT_SCHWELLE]
+
+    _github_einzeln(db, zaehler, einzeln)
+    _github_aggregiert(db, zaehler, aggregiert)
+
+
+def _github_einzeln(db, zaehler: dict, zeilen: list) -> None:
+    if not zeilen:
+        return
+    vorhandene_ids = {
+        r[0] for r in db.db.execute(
+            "SELECT id FROM artikel WHERE art='baunotiz' AND von_quelle='github-ereignis'"
+        )
+    }
+    jetzt = _jetzt_iso()
+    for rohzeile, e in zeilen:
+        id_ = "baunotiz-github-" + _sha256(rohzeile)[:20]
+        if id_ in vorhandene_ids:
+            zaehler["uebersprungen"] += 1
+            continue
+        titel = e.get("titel") or f"{e.get('art')}: {e.get('repo')}"
+        hyp, gegenhyp = _extrahiere_hypothesen(titel)
+        if hyp is None and gegenhyp is None:
+            zaehler["ohne_hypothese"] += 1
+        meta = {
+            "herkunft": "github-ereignis", "wieso": titel or None,
+            "wo_dazugehoert": e.get("repo"), "hypothese": hyp, "gegenhypothese": gegenhyp,
+            "timestamp": e.get("zeit"), "github_art": e.get("art"), "sha": e.get("sha"),
+            "nummer": e.get("nummer"), "ref_typ": e.get("ref_typ"),
+            "rohzeile_sha256": _sha256(rohzeile),
+        }
+        # _UPSERT_BAUNOTIZ statt eigenem INSERT-ONLY: id traegt schon den
+        # Zeilen-Hash, ein Konflikt kann nur bei identischem Inhalt
+        # entstehen -- der wird oben schon per vorhandene_ids uebersprungen.
+        _schreibe(db, _UPSERT_BAUNOTIZ, _zeile_baunotiz(
+            id=id_, art="baunotiz", titel=titel, quelle=str(GITHUB_STROM),
+            quell_hash=_sha256(rohzeile), datum=e.get("zeit"),
+            metadaten=json.dumps(meta, ensure_ascii=False, sort_keys=True),
+            belegt=1, erzeugt_am=jetzt, wirt="github", zuletzt_von=None,
+            von_quelle="github-ereignis", status=None, konfidenz=None,
+            projekt=e.get("repo"), projekt_art="fremd", sphaere=None,
+            herkunft="gemessen",
+        ))
+        vorhandene_ids.add(id_)
+        zaehler["neu"] += 1
+
+
+def _github_aggregiert(db, zaehler: dict, zeilen: list) -> None:
+    if not zeilen:
+        return
+    eimer: dict[tuple[str, str], dict] = {}
+    for rohzeile, e in zeilen:
+        repo = e["repo"]
+        tag = (e.get("zeit") or "")[:10] or "unbekannt"
+        b = eimer.setdefault((repo, tag), {"arten": {}, "titel": [], "shas": []})
+        b["arten"][e.get("art")] = b["arten"].get(e.get("art"), 0) + 1
+        if e.get("titel") and len(b["titel"]) < 10:
+            b["titel"].append(e["titel"])
+        if e.get("sha"):
+            b["shas"].append(e["sha"])
+
+    vorhandene = _vorhandene(db, "baunotiz", "github-ereignis-tag")
+    jetzt = _jetzt_iso()
+    for (repo, tag), b in sorted(eimer.items()):
+        id_ = "baunotiz-github-tag-" + _slugify(repo) + "-" + tag
+        gesamt = sum(b["arten"].values())
+        arten_sortiert = dict(sorted(b["arten"].items(), key=lambda x: -x[1]))
+        payload = {"arten": arten_sortiert, "titel": b["titel"],
+                   "anzahl_shas": len(b["shas"]), "gesamt": gesamt}
+        quell_hash = _sha256(json.dumps(payload, sort_keys=True))
+        bisher = vorhandene.get(id_)
+        if bisher == quell_hash:
+            zaehler["uebersprungen"] += 1
+            continue
+        kurz = ", ".join(f"{v}x{k}" for k, v in arten_sortiert.items())
+        titel = f"{repo}: {gesamt} GitHub-Ereignisse am {tag} ({kurz})"
+        meta = {
+            "herkunft": "github-ereignis-tag",
+            "wieso": f"aggregiert -- {gesamt} Ereignisse an diesem Tag, ueber der "
+                     f"Schwelle von {_GITHUB_AGGREGAT_SCHWELLE}/Datei (siehe Modulkopf, "
+                     f"Falle b: einzeln geschrieben haette das Wiki geflutet)",
+            "wo_dazugehoert": repo, "hypothese": None, "gegenhypothese": None,
+            "timestamp": tag, "arten": arten_sortiert, "beispiel_titel": b["titel"],
+        }
+        _schreibe(db, _UPSERT_BAUNOTIZ, _zeile_baunotiz(
+            id=id_, art="baunotiz", titel=titel, quelle=str(GITHUB_STROM),
+            quell_hash=quell_hash, datum=f"{tag}T00:00:00+00:00",
+            metadaten=json.dumps(meta, ensure_ascii=False, sort_keys=True),
+            belegt=1, erzeugt_am=jetzt, wirt="github", zuletzt_von=None,
+            von_quelle="github-ereignis-tag", status=None, konfidenz=None,
+            projekt=repo, projekt_art="fremd", sphaere=None, herkunft="gemessen",
+        ))
+        vorhandene[id_] = quell_hash
+        zaehler["ohne_hypothese"] += 1  # aggregiert -- nie mechanisch aus Titeln extrahiert
+        if bisher is None:
+            zaehler["neu"] += 1
+        else:
+            zaehler["aktualisiert"] += 1
+
+
+# ---------------------------------------------------------------------------
+# Quelle 6: fehlgeschlagene Timer-Laeufe aus dem systemd-Journal -- art='vorfall',
+# insert-only. VPS-Zeitzone ist Etc/UTC (gemessen, timedatectl) -- die
+# --since/--until-Strings unten sind deshalb absichtlich naiv-UTC.
+# ---------------------------------------------------------------------------
+
+_JOURNAL_FAIL_RE = re.compile(r"^Failed to start (\S+) - (.*)\.$")
+
+
+def _journal_kontext(einheit: str, ts_usec: int) -> str:
+    """Zweiter, engerer journalctl-Aufruf um die Fehlerzeile herum: die
+    echten Fehlermeldungen der Anwendung (ihr eigenes stdout/stderr), nicht
+    nur die von systemd selbst erzeugte 'Failed to start'-Zeile."""
+    ts_s = ts_usec / 1_000_000
+    seit = datetime.fromtimestamp(ts_s - 5, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    bis = datetime.fromtimestamp(ts_s + 1, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+    try:
+        proc = subprocess.run(
+            ["journalctl", "-u", einheit, "--since", seit, "--until", bis,
+             "-o", "cat", "--no-pager"],
+            capture_output=True, text=True, timeout=30, check=False,
+        )
+    except Exception as exc:
+        return f"(Kontext nicht lesbar: {type(exc).__name__}: {exc})"
+    return "\n".join(z for z in proc.stdout.splitlines() if z.strip())
+
+
+def _journal_vorfaelle(db, zaehler: dict) -> None:
+    einheiten_args: list[str] = []
+    for muster in _JOURNAL_EINHEITEN:
+        einheiten_args += ["-u", muster]
+    try:
+        proc = subprocess.run(
+            ["journalctl", *einheiten_args, "-p", "err",
+             "--since", f"-{_JOURNAL_FENSTER_TAGE} days", "-o", "json", "--no-pager"],
+            capture_output=True, text=True, timeout=60, check=False,
+        )
+    except Exception as exc:
+        zaehler.setdefault("_fehler", []).append(f"journalctl: {type(exc).__name__}: {exc}")
+        return
+
+    vorhandene_ids = {
+        r[0] for r in db.db.execute(
+            "SELECT id FROM artikel WHERE art='vorfall' AND von_quelle='journal'"
+        )
+    }
+    jetzt = _jetzt_iso()
+    for zeile in proc.stdout.splitlines():
+        zeile = zeile.strip()
+        if not zeile:
+            continue
+        try:
+            e = json.loads(zeile)
+        except Exception:
+            continue
+        nachricht = (e.get("MESSAGE") or "").strip()
+        treffer = _JOURNAL_FAIL_RE.match(nachricht)
+        if not treffer:
+            continue  # nur die "Failed to start"-Zeile ist der verlaessliche Anker (siehe Modulkopf)
+        einheit, beschreibung = treffer.group(1), treffer.group(2)
+        try:
+            ts_usec = int(e.get("__REALTIME_TIMESTAMP") or 0)
+        except (TypeError, ValueError):
+            ts_usec = 0
+        if not ts_usec:
+            continue
+        datum = datetime.fromtimestamp(ts_usec / 1_000_000, tz=timezone.utc).isoformat()
+        kontext = _journal_kontext(einheit, ts_usec)
+
+        id_ = "vorfall-journal-" + _sha256(einheit + "|" + datum + "|" + kontext)[:20]
+        if id_ in vorhandene_ids:
+            zaehler["uebersprungen"] += 1
+            continue
+
+        hyp, gegenhyp = _extrahiere_hypothesen(kontext)
+        if hyp is None and gegenhyp is None:
+            zaehler["ohne_hypothese"] += 1
+
+        meta = {
+            "herkunft": "journal", "wieso": kontext or nachricht,
+            "wo_dazugehoert": einheit, "hypothese": hyp, "gegenhypothese": gegenhyp,
+            "timestamp": datum, "einheit": einheit, "beschreibung": beschreibung,
+            "journal_kontext": kontext,
+        }
+        _schreibe(db, _INSERT_ONLY_VORFALL, _zeile_vorfall(
+            id=id_, art="vorfall", titel=f"{einheit}: Fehlschlag {datum}",
+            quelle="systemd-journal", quell_hash=_sha256(kontext), datum=datum,
+            metadaten=json.dumps(meta, ensure_ascii=False, sort_keys=True),
+            offene_fragen=None, belegt=1, erzeugt_am=jetzt, wirt="clayverse",
+            zuletzt_von="systemd", von_quelle="journal", status="failed",
+            projekt="clayverse-bau", projekt_art="eigen", sphaere="clayverse",
+            herkunft="gemessen",
+        ))
+        vorhandene_ids.add(id_)
         zaehler["neu"] += 1
 
 
@@ -431,10 +764,12 @@ def _git_commits(db, zaehler: dict) -> None:
 # ---------------------------------------------------------------------------
 
 def aufnehmen(db, quelle: str | None = None) -> dict:
-    """Baunotizen aus bis zu drei Quellen ins Wiki heben.
+    """Baunotizen aus bis zu sechs Quellen ins Wiki heben.
 
-    quelle=None laeuft alle drei; sonst genau eine ('protokoll'|'bauverlauf'|
-    'git') -- fuer gezieltes Nachziehen/Testen einer einzelnen Quelle.
+    quelle=None laeuft alle; sonst genau eine ('protokoll'|'bauverlauf'|'git'|
+    'github'|'journal') -- fuer gezieltes Nachziehen/Testen einer einzelnen
+    Quelle. 'git' deckt sowohl Quelle 3 (GIT_REPO) als auch Quelle 4
+    (_WEITERE_GIT_REPOS) ab -- eine Funktion, mehrere Repos als Parameter.
     Idempotent: unveraenderter Quelltext -> zweiter Lauf liefert neu=0.
     """
     sicherstellen(db)
@@ -449,4 +784,8 @@ def aufnehmen(db, quelle: str | None = None) -> dict:
         _bauverlauf(db, zaehler)
     if quelle in (None, "git"):
         _git_commits(db, zaehler)
+    if quelle in (None, "github"):
+        _github_ereignisse(db, zaehler)
+    if quelle in (None, "journal"):
+        _journal_vorfaelle(db, zaehler)
     return zaehler

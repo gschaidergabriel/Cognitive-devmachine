@@ -1,180 +1,183 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-18T04:15:25Z. 2000 Artikel, ueber den Volltextindex des Clay-Korpus gefunden -- die Auswahl waechst mit, sie ist keine gepflegte Liste.
+Automatisch erzeugt 2026-08-18T04:17:16Z aus dem Clay-Korpus.
 
-## clayverse (40)
+- **kern** (800 Artikel, 1473 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2635 Artikel, 3343 KB): Begriff kommt im Text vor. Nur Ausschnitt.
 
-- **EffectGate als Wand, nicht als Bibliothek** — `B7-2026-08-14T18-13-05-0000` · vorfall
-- **Sicherungsweg alter VPS → ClayVerse** — `B0-2026-08-14T16-19-03-0000` · vorfall
+Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
+4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
+
+## Kern / clayverse (13)
+
 - **Tailscale auf ClayVerse installiert** — `B12-2026-08-14T16-19-04-0000` · vorfall
+- **Daten und Dienste auf ClayVerse** — `B2-2026-08-14T17-06-30-0000-1` · vorfall
+- **Claude Code auf ClayVerse installiert** — `B5-2026-08-14T16-12-30-0000` · vorfall
+- **ClayVerse denkt — erste Sitzung geprüft** — `B5-2026-08-14T17-11-25-0000` · vorfall
+- **EffectGate als Wand, nicht als Bibliothek** — `B7-2026-08-14T18-13-05-0000` · vorfall
+- **ClayVerse-Kern gebaut** — `B5-2026-08-14T17-06-30-0000` · vorfall
+- **Sicherungsweg alter VPS → ClayVerse** — `B0-2026-08-14T16-19-03-0000` · vorfall
+- **ClayVerse liefert alle Seiten** — `B2-2026-08-14T17-06-30-0000-2` · vorfall
 - **Namensgleichung digital-retina = clayverse** — `B12-2026-08-14T18-03-11-0000` · vorfall
 - **Wirt umbenannt: digital-retina → clayverse** — `B12-2026-08-14T16-56-13-0000` · vorfall
-- **ClayVerse denkt — erste Sitzung geprüft** — `B5-2026-08-14T17-11-25-0000` · vorfall
-- **Daten und Dienste auf ClayVerse** — `B2-2026-08-14T17-06-30-0000-1` · vorfall
-- **ClayVerse-Kern gebaut** — `B5-2026-08-14T17-06-30-0000` · vorfall
-- **Kartographie: Bestandsaufnahme + Vergleich** — `B6-2026-08-14T18-13-31-0000` · vorfall
-- **Claude Code auf ClayVerse installiert** — `B5-2026-08-14T16-12-30-0000` · vorfall
-- **ClayVerse liefert alle Seiten** — `B2-2026-08-14T17-06-30-0000-2` · vorfall
-- **Methode statt Fehlerdatenbank** — `B5-2026-08-14T17-44-45-0000` · vorfall
-- **Zweite Tür: Tailscale auf dem alten VPS** — `B0-2026-08-14T16-12-30-0000` · vorfall
-- **Vollsicherung des alten VPS** — `B0-2026-08-14T16-23-34-0000` · vorfall
 - **Handlungsfaehigkeit von ClayVerse gemessen statt gezaehlt** — `B5-2026-08-14T18-50-41-0000` · vorfall
-- **GitHub-Token hinterlegt, Ereignisstrom laeuft** — `B4-2026-08-14T18-48-55-0000` · vorfall
-- **CLAUDE.md: geteilte Wahrheit zusammengefuehrt, Kapitel 9 ergaenzt** — `B5-2026-08-14T18-53-40-0000` · vorfall
-- **Zwangskuration laeuft - Quellaenderung wird erkannt** — `B27-2026-08-14T19-28-50-0000` · vorfall
-- **digital-retina abgeschaltet und archiviert** — `B2-2026-08-14T17-06-30-0000` · vorfall
-- **fail2ban auf dem Mailserver** — `B1-2026-08-14T16-29-58-0000-1` · vorfall
-- **iptables-flush.timer entfernt** — `B1-2026-08-14T16-29-58-0000` · vorfall
-- **Eichnormale gegen das Verbiegen des Messgeraets** — `B21-2026-08-14T18-03-11-0000` · vorfall
-- **nftables-Grundregel auf beiden Maschinen** — `B8-2026-08-14T16-29-58-0000` · vorfall
-- **Tresor und verschlüsselte Zugangsdatei** — `B26-2026-08-14T16-12-30-0000` · vorfall
-- **Beleg: aufgeschriebene Regeln greifen nicht** — `B5-2026-08-14T17-44-46-0000` · vorfall
-- **herzrad.at-Postfächer angelegt** — `B10-2026-08-14T16-29-58-0000` · vorfall
-- **Das GitHub-Konto als Bäume im Zentralrepo** — `B4-2026-08-14T17-21-51-0000` · vorfall
-- **Freigabe als echte Wand im Kern** — `B13-2026-08-14T18-03-11-0000` · vorfall
-- **Eichung greift jetzt auch auf Tor und Freigabe** — `B21-2026-08-14T18-13-05-0000` · vorfall
-- **SSH gehärtet auf beiden Maschinen** — `B1-2026-08-14T16-29-57-0000` · vorfall
-- **Alle 22 Repos privat** — `B3-2026-08-14T17-15-11-0000` · vorfall
-- **lcme wieder oeffentlich — Sterne sind verloren** — `B3-2026-08-14T17-16-48-0000` · vorfall
-- **Abrufentwurf der Forschungsentitaet ausgewertet - gemessen, nicht geraten** — `B27-2026-08-14T19-34-36-0000` · vorfall
-- **Sechs Repos auf privat** — `B3-2026-08-14T17-13-32-0000` · vorfall
 - **Wirt: clayverse** — `clayverse` · wirt
-- **Tor als Systemebene - Loch geschlossen** — `B7-2026-08-14T19-04-56-0000` · vorfall
-- **Wiki Stufe 1 gebaut - Gedaechtnisabruf in Millisekunden** — `B27-2026-08-14T19-22-32-0000` · vorfall
-- **Das Tor ist umgehbar - Haken ist keine Sicherheitsgrenze** — `B7-2026-08-14T19-00-28-0000` · vorfall
 - **Wirt: clayverse-alt** — `clayverse-alt` · wirt
-- **ClayGraph Generation 1 aus dem Wiki materialisiert** — `B6-2026-08-14T19-49-23-0000` · vorfall
 
-## frank_v0_1 (7)
+## Kern / frank_v0_1 (1)
 
-- **FRANK_V0_1_WORKSPACE.json** — `frank_v0_1-FRANK_V0_1_WORKSPACE.json` · bereich_frank_v0_1
-- **20260814T1231z+0700_pilotlauf_commit_status.json** — `frank_v0_1-work_events-20260814T1231z-07` · bereich_frank_v0_1
-- **20260811T1450p0700_loop_core_causal_slice.json** — `frank_v0_1-work_events-20260811T1450p070` · bereich_frank_v0_1
-- **20260811T1502p0700_loopcore_l0_reentry_lesion_sandbox.json** — `frank_v0_1-work_events-20260811T1502p070` · bereich_frank_v0_1
-- **20260810T2052p0700_unifieddb_temporal_entity_pulse_gwt_mcp_vps.json** — `frank_v0_1-work_events-20260810T2052p070` · bereich_frank_v0_1
-- **20260814T1231z+0700_187_drafts_sortieren.json** — `frank_v0_1-work_events-20260814T1231z-07` · bereich_frank_v0_1
-- **20260811T1516p0700_loopcore_l1_l2_misinformation_cost.json** — `frank_v0_1-work_events-20260811T1516p070` · bereich_frank_v0_1
+- **20260813T0951p0700_hosted_actions_zero_step_billing_artifact.json** — `frank_v0_1-evidence-20260813T0951p0700_hoste` · bereich_frank_v0_1
 
-## ohne Sphaere (1953)
+## Kern / ohne Sphaere (786)
 
-- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
-- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
-- **q23-par-visual-seed-eap-differential-20260810T1752p0700** — `state-work-events-20260810T1752p0700_q23` · bereich_state
-- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
-- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
-- **harness-20260810T2024p0700-chatgpt-secondary-hwp10-effect-authority** — `trigger_runs-harness-harness-20260810T20` · bereich_trigger_runs
-- **STEERING_20260810T1948P0700.json** — `claycode-supervisor-STEERING_20260810T19` · bereich_claycode
-- **go-20260810T2020p0700-chatgpt-secondary-call-negative-space** — `trigger_runs-go-20260810T2020p0700-chatg` · bereich_trigger_runs
-- **clay-live-fusion-20260810T1954p0700** — `mesh_feedback-20260810T1954p0700-clay-li` · bereich_mesh_feedback
-- **chatgpt-secondary-qwen-native-retina-fusion-benchmark-20260810T1716p0700** — `state-work-events-20260810T1716p0700_cha` · bereich_state
-- **target-vps-runtime-acceptance-baseline-20260810T1842p0700** — `state-work-events-20260810T1842p0700_tar` · bereich_state
-- **clay-live-fusion-20260810T1954p0700** — `mesh_feedback-20260810T1954p0700-clay-li` · bereich_mesh_feedback
-- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **hyperposition-20260809T0129p0700-chatgpt-secondary-r4** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **fusion-20260808T2114p0700-chatgpt-secondary-r2** — `trigger_runs-fusion-fusion-20260808T2114` · bereich_trigger_runs
-- **claycode-20260810T2350p0700-chatgpt-secondary-hp-wp03-binding** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
-- **fusion-20260808T2214p0700-chatgpt-secondary-r3** — `trigger_runs-fusion-fusion-20260808T2214` · bereich_trigger_runs
-- **claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
-- **claycode_20260809T1606p0700_chatgpt_semhash_typedcanon** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **fusion-20260808T2322p0700-chatgpt-secondary-r4** — `trigger_runs-fusion-fusion-20260808T2322` · bereich_trigger_runs
-- **claycode-20260808T1934p0200-chatgpt-secondary-r4** — `trigger_runs-claycode-claycode-20260808T` · bereich_trigger_runs
-- **20260809T1505p0700-chatgpt-secondary** — `trigger_runs-claycode-20260809T1505p0700` · bereich_trigger_runs
-- **Hyperposition Emergence & Coupling Readout Contract** — `global-HYPERPOSITION_EMERGENCE_READOUT_C` · bereich_global
-- **Clay Semantic Coupling Fabric Directive** — `global-CLAY_SEMANTIC_COUPLING_FABRIC_DIR` · bereich_global
-- **claycode-20260809T1539p0700-chatgpt-parser-compat** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **android-20260808T2338p0700-chatgpt-secondary-r1** — `android-runs-android-20260808T2338p0700-` · bereich_android
-- **Hyperposition firebreaks should declare identity comparison axis** — `KMP-G11-IDENTITY-AXES` · begriff
-- **evt-20260814T071016513317Z-3326771d** — `rooms-rooms-harness-events-evt-20260814T` · bereich_rooms
-- **clayresearch-20260810T2317p0700-chatgpt-secondary-comparative-agent-systems-fusion** — `trigger_runs-clayresearch-clayresearch-2` · bereich_trigger_runs
-- **claycode-20260808T2104p0700-chatgpt-secondary-r3** — `trigger_runs-claycode-claycode-20260808T` · bereich_trigger_runs
-- **claycode_20260809T160924p0700_ffi_abi** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **claycode_20260809T1705p0700_chatgpt_numcanon** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **20260811T0007p0700-hyperposition-claycode-topology-scope-reentry** — `mesh_feedback-20260811T0007p0700-hyperpo` · bereich_mesh_feedback
-- **harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze** — `trigger_runs-harness-harness-20260809T17` · bereich_trigger_runs
-- **HYPERPOSITION RESEARCH RUN — H5 Context-Gated Multi-Topology Hyperposition** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **claycode-20260809T0130p0700-chatgpt-secondary-r5** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **unifieddb-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-unifieddb-unifieddb-2026080` · bereich_trigger_runs
-- **claycode_20260809T1607p0700_chatgpt_http_app02** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **MANDATORY_ACTIVE_KNOWLEDGE.json** — `global-MANDATORY_ACTIVE_KNOWLEDGE.json` · bereich_global
-- **clay-20260808T2033p0700-chatgpt-secondary-r3** — `trigger_runs-clay-clay-20260808T2033p070` · bereich_trigger_runs
-- **claycode-20260809T1726p0700-loop-schedule-effect-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **claycode-20260809T1603p0700-chatgpt-semantic-publication** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **claycode_20260809T1654p0700_chatgpt_loop_scheduler_identity** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **20260808T2051p0700-chatgpt-secondary-r3** — `trigger_runs-frank-20260808T2051p0700-ch` · bereich_trigger_runs
-- **claycode-20260810T2358p0700-chatgpt-secondary-topology-scope** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
-- **center-claycode-native-20260809T1307+0700** — `rooms-center_events-20260809T1307_CLAYCO` · bereich_rooms
-- **20260810T2014p0700-chatgpt-secondary-wp03-irnorm** — `trigger_runs-claycode-20260810T2014p0700` · bereich_trigger_runs
+- **SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay** — `global-SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AN` · bereich_global
+- **NaN, infinities and signed zero require explicit ClayCode semantic and wire policies rather than acc** — `H-CC-F64SPECIAL-20260809-03` · hypothese
+- **ClayCode protocol addendum — eight-branch mesh / UnifiedDB** — `triggers-CLAYCODE_EIGHT_BRANCH_UNIFIEDDB_ADD` · bereich_triggers
+- **RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE_RESEARCH.sql** — `runtime-RAE_UNIFIEDDB_V5_CLAYCODE_EXPERIENCE` · bereich_runtime
+- **RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNITION.sql** — `runtime-RAE_UNIFIEDDB_V6_CLAYCODE_META_COGNI` · bereich_runtime
+- **ClayCode Trigger Run — Semantic Publication Barrier / UnifiedDB↔ClayGraph Authority Boundary** — `trigger_runs-claycode-claycode-20260809T1603` · bereich_trigger_runs
+- **Q23 fusion — scope-bound zero-copy, durable compact descriptor** — `trigger_runs-q23-q23-20260810T2242p0700-chat` · bereich_trigger_runs
+- **ZERO_COPY_PROXY_RESULTS.csv** — `trigger_runs-q23-q23-20260810T2242p0700-chat` · bereich_trigger_runs
+- **Hot Clay payloads should use typed shared-buffer/zero-copy carriers where target profiling proves be** — `F2-G11-010` · hypothese
+- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
+- **Zero-copy/shared-buffer handles can remove a material serialization boundary on hot Clay paths.** — `H-G11-019` · hypothese
+- **Ownership/version synchronization costs dominate and erase zero-copy gains.** — `U1-H10` · hypothese
+- **Consistency should be operation-adaptive: critical exact reads can require zero lag while explorator** — `H-U2-F2-007` · hypothese
+- **A backend's disabled/armed state must be empirically classified; logging-off cannot be assumed zero-** — `H-SPAWN-EM-PROBE-04` · hypothese
+- **A truthful latent memory field can improve candidate availability without explicit retrieval if shuf** — `H-C7-016` · hypothese
+- **The current libmtmd encode-to-decode gap can host a synchronous zero-copy MVC/open-set gate that mat** — `H-Q23-ZC-001` · hypothese
+- **Selector/plan identity is a semantic dependency: a selector_hash/plan change must invalidate affecte** — `H-SPAWN-DELTA-005` · hypothese
+- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
+- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
+- **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
+- **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
+- **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
+- **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
+- **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
+- **Closed PF tree segment02a modified endpoint tail m062..m067 at immutable ref 0fd27f. 6/6 resolved, z** — `rooms-center_events-20260809T1434p0700_666_p` · bereich_rooms
+- **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
+- **Truthful provenance-bound outcome re-entry causally improves downstream adaptive behavior; the causa** — `C-LOOPCORE-L0-001` · behauptung
+- **Segment01 modified_paths m064..m095 closed exactly: 32/32 immutable-head Git blob identities, zero m** — `rooms-center_events-20260809T1417p0700_666_p` · bereich_rooms
+- **UnifiedDB Research Trigger Protocol** — `triggers-UNIFIED_DATABASE_RESEARCH_PROTOCOL.` · bereich_triggers
+- **UnifiedDB Research Foundation — Unified Cognitive Database/Substrate** — `global-UNIFIED_DATABASE_RESEARCH_FOUNDATION.` · bereich_global
+- **UnifiedDB U2 — External Evidence Ledger** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
+- **Zero-copy removes copies but not synchronization and coherence cost** — `KMP-HYP-ZEROCOPY-BOUNDARY-COST` · hypothese
+- **FUSION F6 -> UnifiedDB** — `KMP-FUS-F6-POSTWORKER-dup7` · begriff
+- **UnifiedDB — Authoritative Projection Outbox V1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **Separating visual state into four lifetimes prevents state amplification and stale-feature errors wh** — `H-Q23-CACHE-LIFETIME-01` · hypothese
+- **UnifiedDB Emergence Lab v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
+- **UnifiedDB — Lease-Fenced Projection Worker V1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
+- **KMP — Android R1 -> UnifiedDB feedback** — `KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB` · begriff
+- **KMP — Founding User Personal UnifiedDB** — `KMP-FOUNDING-USER-PERSONAL-UDB` · begriff
+- **UnifiedDB Segmented Pulse Maintenance S1 (SPM-S1)** — `runtime-UNIFIEDDB_SEGMENTED_PULSE_MAINTENANC` · bereich_runtime
+- **Clay G11 Evidence Ledger — MOSAIC / UnifiedDB / MRSC** — `trigger_runs-clay-clay-20260808T2033p0700-ch` · bereich_trigger_runs
+- **UnifiedDB — Deeper Delta Run, Target-Executed Extension** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **unifieddb_claygraph_assembly.py** — `harness-reference-unifieddb_claygraph_assemb` · bereich_harness
+- **unifieddb_emergent_cascade.py** — `harness-reference-unifieddb_emergent_cascade` · bereich_harness
+- **unifieddb_emergent_compact.py** — `harness-reference-unifieddb_emergent_compact` · bereich_harness
+- **unifieddb_emergent_incremental.py** — `harness-reference-unifieddb_emergent_increme` · bereich_harness
+- **unifieddb_emergent_preprocessor.py** — `harness-reference-unifieddb_emergent_preproc` · bereich_harness
+- **unifieddb_query_plane.py** — `harness-reference-unifieddb_query_plane.py` · bereich_harness
+- **RAE_UNIFIEDDB_SCHEMA.sql** — `runtime-RAE_UNIFIEDDB_SCHEMA.sql` · bereich_runtime
+- **UnifiedDB Emergence Meter v0.3 — Adversarial Concordance Gate** — `trigger_runs-emergenz-20260809T204545p0700_u` · bereich_trigger_runs
+- **UnifiedDB — V4 Fixed-SQLite Process-Crash Composition** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **unifieddb_claygraph_retrieval_candidate.py** — `experiments-unifieddb_claygraph_retrieval-un` · bereich_experiments
+- **benchmark_unifieddb_claygraph_hotpaths.py** — `harness-reference-benchmark_unifieddb_claygr` · bereich_harness
+- **benchmark_unifieddb_compact_cache.py** — `harness-reference-benchmark_unifieddb_compac` · bereich_harness
+- **benchmark_unifieddb_emergent_assembly.py** — `harness-reference-benchmark_unifieddb_emerge` · bereich_harness
+- **benchmark_unifieddb_emergent_cascade.py** — `harness-reference-benchmark_unifieddb_emerge` · bereich_harness
+- **benchmark_unifieddb_exact_topk.py** — `harness-reference-benchmark_unifieddb_exact_` · bereich_harness
+- **benchmark_unifieddb_incremental_updates.py** — `harness-reference-benchmark_unifieddb_increm` · bereich_harness
+- **test_unifieddb_claygraph_assembly.py** — `harness-reference-test_unifieddb_claygraph_a` · bereich_harness
+- **test_unifieddb_emergent_assembly.py** — `harness-reference-test_unifieddb_emergent_as` · bereich_harness
+- **test_unifieddb_emergent_cascade.py** — `harness-reference-test_unifieddb_emergent_ca` · bereich_harness
+- **test_unifieddb_emergent_compact.py** — `harness-reference-test_unifieddb_emergent_co` · bereich_harness
+- **test_unifieddb_emergent_incremental.py** — `harness-reference-test_unifieddb_emergent_in` · bereich_harness
+- **test_unifieddb_query_plane.py** — `harness-reference-test_unifieddb_query_plane` · bereich_harness
+- **unifieddb_emergent_exact_topk.py** — `harness-reference-unifieddb_emergent_exact_t` · bereich_harness
+- **RAE_UNIFIEDDB_V4_HIVEMIND.sql** — `runtime-RAE_UNIFIEDDB_V4_HIVEMIND.sql` · bereich_runtime
+- **H6 CARTS -> UnifiedDB** — `KMP-HYP-H6-CARTS-dup7` · hypothese
+- **UNIFIEDDB_CLAYGRAPH_RETRIEVAL_PROJECTION_CANDIDATE.sql** — `experiments-unifieddb_claygraph_retrieval-UN` · bereich_experiments
+- **test_unifieddb_claygraph_retrieval_candidate.py** — `experiments-unifieddb_claygraph_retrieval-te` · bereich_experiments
+- **test_unifieddb_emergent_exact_topk.py** — `harness-reference-test_unifieddb_emergent_ex` · bereich_harness
+- **RAE_UNIFIEDDB_V10_POSSIBILITY_COMPILER.sql** — `runtime-RAE_UNIFIEDDB_V10_POSSIBILITY_COMPIL` · bereich_runtime
+- **RAE_UNIFIEDDB_V12_DATABASE_PULSE.sql** — `runtime-RAE_UNIFIEDDB_V12_DATABASE_PULSE.sql` · bereich_runtime
+- **RAE_UNIFIEDDB_V12_ENTITY_RESOLUTION.sql** — `runtime-RAE_UNIFIEDDB_V12_ENTITY_RESOLUTION.` · bereich_runtime
+- **RAE_UNIFIEDDB_V2_INTERACTION_PERSONA.sql** — `runtime-RAE_UNIFIEDDB_V2_INTERACTION_PERSONA` · bereich_runtime
+- **RAE_UNIFIEDDB_V3_USECASE_IMPORTANCE.sql** — `runtime-RAE_UNIFIEDDB_V3_USECASE_IMPORTANCE.` · bereich_runtime
+- **RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR.sql** — `runtime-RAE_UNIFIEDDB_V7_COGNITIVE_PROCESSOR` · bereich_runtime
+- **RAE_UNIFIEDDB_V8_CHATGPT_DELEGATION.sql** — `runtime-RAE_UNIFIEDDB_V8_CHATGPT_DELEGATION.` · bereich_runtime
+- **UnifiedDB U10 — Epoch-Versioned State Continuity Candidate** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **benchmark_unifieddb_incremental_end_to_end.py** — `harness-reference-benchmark_unifieddb_increm` · bereich_harness
+- **RAE_UNIFIEDDB_V10_FRANK_BUG_FEEDBACK.sql** — `runtime-RAE_UNIFIEDDB_V10_FRANK_BUG_FEEDBACK` · bereich_runtime
+- **RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FUSION.sql** — `runtime-RAE_UNIFIEDDB_V10_OMNISOURCE_LIVE_FU` · bereich_runtime
+- **RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FABRIC.sql** — `runtime-RAE_UNIFIEDDB_V10_SEMANTIC_ACCESS_FA` · bereich_runtime
+- **RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GENERATIONS.sql** — `runtime-RAE_UNIFIEDDB_V11_COHERENT_ACCESS_GE` · bereich_runtime
+- **RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GENERATIONS.sql** — `runtime-RAE_UNIFIEDDB_V12_SEGMENTED_PULSE_GE` · bereich_runtime
+- **RAE_UNIFIEDDB_V16_LIVE_FUSION_RECEIPTS.sql** — `runtime-RAE_UNIFIEDDB_V16_LIVE_FUSION_RECEIP` · bereich_runtime
+- **RAE_UNIFIEDDB_V3_ANDREAS_TRAINING_PIPELINE.sql** — `runtime-RAE_UNIFIEDDB_V3_ANDREAS_TRAINING_PI` · bereich_runtime
+- **RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql** — `runtime-RAE_UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC` · bereich_runtime
+- **UNIFIEDDB_V10_STATE_CONTINUITY_FENCING_CANDIDATE.sql** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **UnifiedDB + ClayGraph hotpath iteration — 2026-08-10 07:11 +07:00** — `20260810T0711p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
+- **UnifiedDB + ClayGraph deep fusion — 2026-08-10 07:50 +07:00** — `20260810T0750p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
+- **RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_ACCESS.sql** — `runtime-RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_` · bereich_runtime
+- **UnifiedDB + ClayGraph Cross-Engine Benchmark Contract** — `unifieddb-UNIFIEDDB_CLAYGRAPH_CROSS_ENGINE_B` · bereich_unifieddb
+- **STORE ROLE MATRIX — deeper UnifiedDB delta run** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **UnifiedDB + ClayGraph semantic-safety benchmark — 2026-08-10 07:18 +07:00** — `20260810T0718p0700_CHATGPT_UDB_GRAPH_SEMANTI` · forschungsergebnis
+- **Hyperposition — HyperMath Thin-Net / UnifiedDB Algebraic Preprocessor** — `trigger_runs-hyperposition-hyperposition-202` · bereich_trigger_runs
+- **UnifiedDB / Database Pulse — V3/V4 Swarm Delta** — `20260810T0745p0700_UNIFIEDDB_PULSE_V3_V4_SWA` · forschungsergebnis
+- **UnifiedDB + ClayGraph Retrieval Fusion — 2026-08-10** — `experiments-unifieddb_claygraph_retrieval-FU` · bereich_experiments
+- **UnifiedDB + ClayGraph -> Possibility Preprocessor Fusion Handoff** — `20260810T0730p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
+- **Misattributed outcome feedback is behaviorally worse than no feedback (-4.9pp, sign test p=0.016, 30** — `C-LOOPCORE-L2-001` · behauptung
+- **UnifiedDB U11 — Proof-Carrying Associative Memory Fabric (PCAMF)** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **UnifiedDB / Database Pulse — Adaptive Preprocessor + Maintenance Fusion** — `20260810T0740p0700_UNIFIEDDB_DATABASE_PULSE_` · forschungsergebnis
+- **UnifiedDB Emergence Meter v0.2 Research Delta — OOD Robustness and Abstention** — `trigger_runs-emergenz-20260809T213500p0700_u` · bereich_trigger_runs
+- **UnifiedDB — Effect/Re-entry/Terminal Continuity Run** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **UnifiedDB Research Run U1 — Clay Unified Semantic Persistence Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T20` · bereich_trigger_runs
+- **UnifiedDB / Database Pulse — V1→V4 Iterative Build, Falsification and Fusion** — `20260810T0745p0700_CHATGPT_UNIFIEDDB_DATABAS` · forschungsergebnis
+- **Linux and Android can share the same UnifiedDB semantics while using different physical placements a** — `H-U2-019` · hypothese
+- **666-20260809T0458+0700-chatgpt-secondary-drive-frank-demo-zero-credit** — `archive_assimilation-receipts-666_20260809T0` · bereich_archive_assimilation
+- **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
+- **UnifiedDB / Database Pulse — V5 lifecycle, model identity, integrity use-boundary delta** — `20260810T0750p0700_UNIFIEDDB_PULSE_V5_IDENTI` · forschungsergebnis
+- **UnifiedDB U2: CORF should model placement as independent runtime axes** — `KMP-U2-CPPF-FRANK` · begriff
+- **UnifiedDB should initially be one typed logical query/transaction plane compiled onto specialized ph** — `F2-G11-004` · hypothese
+- **GWT experiments require UnifiedDB/COVE snapshot identity so control and lesion arms share compatible** — `H-G11-043` · hypothese
 - **UnifiedDB results require explicit admissibility class** — `KMP-U2-RESULT-ADMISSIBILITY` · begriff
-- **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p07` · bereich_trigger_runs
-- **claycode_20260809T1655p0700_chatgpt_lexical_closure** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **claycode_20260809T1615p0700_chatgpt_nsd_namespace** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **20260808T2217p0700-chatgpt-secondary-r4** — `trigger_runs-frank-20260808T2217p0700-ch` · bereich_trigger_runs
-- **emergenz-20260809T1714p0700** — `trigger_runs-emergenz-emergenz-20260809T` · bereich_trigger_runs
-- **claycode-20260809T1602p0700-chatgpt-controlflow-precedence-v1** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **Hyperposition — HyperMath Thin-Net / UnifiedDB Algebraic Preprocessor** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **20260809T1724p0700-chatgpt-secondary-parser-closure** — `trigger_runs-claycode-20260809T1724p0700` · bereich_trigger_runs
-- **20260809_chatgpt_secondary_surface_canon_wasi03_v1** — `trigger_runs-claycode-20260809_chatgpt_s` · bereich_trigger_runs
-- **INTERCONNECT_MANIFEST.json** — `atomic-runs-20260810T2136p0700-chatgpt-s` · bereich_atomic
-- **claycode-20260809T155134p0700-chatgpt-58f84b** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **clay-live-fusion-20260810T1700p0700** — `mesh_feedback-20260810T1700p0700-clay-li` · bereich_mesh_feedback
-- **hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier** — `mesh_feedback-hyperposition-20260810T233` · bereich_mesh_feedback
-- **claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
-- **claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **spawn-20260809T1741p0700-emergenz-d79-m4** — `trigger_runs-spawn-spawn-20260809T1741p0` · bereich_trigger_runs
-- **clayresearch-20260809T1655p0700-loop-txn-effect-envelope** — `trigger_runs-clayresearch-clayresearch-2` · bereich_trigger_runs
-- **Current generic record/tensor/rule constructs can represent loop-of-loops, GWT, Hyperposition and Em** — `H-CC-G9-005` · hypothese
-- **WP03 can consume the receipt-bound V18 FrontendArtifact and form typed semantic/state identities wit** — `H-GO-WP03-NOREPARSE-01` · gegenhypothese
-- **spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0** — `trigger_runs-spawn-spawn_20260809T1835p0` · bereich_trigger_runs
-- **20260809T204500p0700_udb_emergence_meter_v01** — `trigger_runs-emergenz-20260809T204500p07` · bereich_trigger_runs
-- **claycode-20260809T155804p0700-chatgpt-declared-relations** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **claycode_20260809T090220Z_chatgpt_local** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **fusion-20260808T2114p0700-chatgpt-secondary-r2** — `trigger_runs-fusion-fusion-20260808T2114` · bereich_trigger_runs
-- **hypofusion-20260810T1223p0700-chatgpt-secondary-r4** — `trigger_runs-hypofusion-hypofusion-20260` · bereich_trigger_runs
-- **delta-666-20260809T1507p0700-pf-native-vision-transition** — `rooms-rooms-center-events-delta-666-2026` · bereich_rooms
-- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **fusion-20260809T1530p0700-chatgpt-secondary** — `trigger_runs-fusion-fusion-20260809T1530` · bereich_trigger_runs
-- **cc-mesh-20260808T1836Z-chatgpt-secondary** — `trigger_runs-claycode-cc-mesh-20260808T1` · bereich_trigger_runs
-- **20260809T0130p0700-chatgpt-secondary-r5** — `trigger_runs-frank-20260809T0130p0700-ch` · bereich_trigger_runs
-- **20260810T2126p0700-chatgpt-secondary-ect-contract-tomography** — `atomic-runs-20260810T2126p0700-chatgpt-s` · bereich_atomic
-- **claygraph-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-claygraph-claygraph-2026080` · bereich_trigger_runs
-- **claycode-20260809T1728p0700-effect-closure-lowering** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **claygraph-20260809T0149p0700-chatgpt-secondary-sol-04** — `trigger_runs-claygraph-claygraph-2026080` · bereich_trigger_runs
-- **fusion-20260810T1624p0700** — `trigger_runs-fusion-fusion-20260810T1624` · bereich_trigger_runs
-- **20260809T1607p0700_chatgpt** — `trigger_runs-claycode-20260809T1607p0700` · bereich_trigger_runs
-- **FRANK Architecture Archaeology & Originality Protocol** — `global-FRANK_ARCHITECTURE_ARCHAEOLOGY_PR` · bereich_global
-- **FRANK First-Principles & Emergent-Coupling Analysis Lens** — `global-FRANK_FIRST_PRINCIPLES_EMERGENT_C` · bereich_global
-- **claycode-20260809T1709p0700-chatgpt-secondary** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **One factorized AnyOf/AllOf provenance circuit spanning GWT use, Hyperposition alternatives and outco** — `H2-dup4` · hypothese
-- **hypofusion-20260808T2152p0700-chatgpt-secondary-r1** — `trigger_runs-hypofusion-hypofusion-20260` · bereich_trigger_runs
-- **gwt-20260809T0129p0700-chatgpt-secondary-r6-deep** — `trigger_runs-gwt-gwt-20260809T0129p0700-` · bereich_trigger_runs
-- **Fusion F5: semantic firebreaks contain invalid ancestry but not authentic misleading relevance** — `KMP-FUS-F5-C3F-HYPERPOSITION` · begriff
-- **hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **hyperposition-20260809T0129p0700-chatgpt-secondary-r4** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **center-frank-harness-repo-first-gate-20260809T2102p0700** — `rooms-center_events-20260809T2102p0700_f` · bereich_rooms
-- **20260809T1713p0700-chatgpt-secondary** — `trigger_runs-clay-20260809T1713p0700-cha` · bereich_trigger_runs
-- **claycode_20260809T1720p0700_chatgpt_app03_db_adapter** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **666-20260809T0500+0700-chatgpt-secondary-drive-hyperposition-datafusion** — `archive_assimilation-receipts-666_202608` · bereich_archive_assimilation
-- **FRANK Recurrent Closure Synthesis — Research Backflow** — `notes-FRANK_RECURRENT_CLOSURE_SYNTHESIS_` · bereich_notes
-- **H-FUS-F5-004** — `H-FUS-F5-004` · hypothese
-- **claycode-20260809T1711p0700-chatgpt-secondary-fn-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **Fusion Research Run — 2026-08-09 15:30 +07** — `trigger_runs-fusion-fusion-20260809T1530` · bereich_trigger_runs
-- **claycode-20260809T1717p0700-all-workers-production-parser** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
-- **20260809T0500p0700-666-hyperposition-datafusion-crossroom-delta** — `rooms-center_events-20260809T0500p0700_6` · bereich_rooms
-- **spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd** — `trigger_runs-spawn-spawn-20260809T1918p0` · bereich_trigger_runs
-- **20260810T2103p0700-chatgpt-secondary-v18-contract-mesh** — `trigger_runs-claycode-20260810T2103p0700` · bereich_trigger_runs
-- **clay-20260808T2132p0700-chatgpt-secondary-r4** — `trigger_runs-clay-clay-20260808T2132p070` · bereich_trigger_runs
-- **unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity** — `trigger_runs-unifieddb-unifieddb-2026081` · bereich_trigger_runs
-- **hyperposition-20260810-hypermath-thin-net** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
-- **claycode_20260809T1553p0700_center_federation** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **FRANK Self-Observation & Proposal-Only Harness Boundary** — `global-FRANK_SELF_OBSERVATION_PROPOSAL_B` · bereich_global
-- **PREFLIGHT_GOVERNANCE_DRIFT_RECEIPT.json** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate** — `trigger_runs-gwt-gwt-20260809T1720p0700-` · bereich_trigger_runs
-- **claycode_20260809T1650p0700_chatgpt_loopdynamics_runtime** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
-- **clay-live-fusion-20260810T0557p0700** — `mesh_feedback-20260810T0557p0700-clay-li` · bereich_mesh_feedback
-- **INTERCONNECT_MANIFEST.json** — `trigger_runs-unifieddb-unifieddb-2026081` · bereich_trigger_runs
-- **Clay GWT Emergence Observability & Control Directive** — `global-CLAY_GWT_EMERGENCE_OBSERVABILITY_` · bereich_global
-- **H-FUS-F5-008** — `H-FUS-F5-008` · hypothese
+- **Edge deployments may keep vector/graph indexes physically separate while exposing the same UnifiedDB** — `H-G11-062` · hypothese
+- **Capability issuer/gateway, secret stores and high-blast-radius external effects remain physically is** — `F2-G11-016` · hypothese
+- **FRANK should consume operation-specific identity capsules over logical UnifiedDB** — `KMP-G11-MOSAIC-FRANK` · begriff
+- **ClayGraph is a specialized derived memory view inside logical UnifiedDB** — `KMP-G11-UNIFIEDDB-ROUTING` · begriff
+- **UnifiedDB physical placement is multi-axis, not monolith-vs-polystore** — `KMP-U2-PLACEMENT-LATTICE` · begriff
+- **UnifiedDB Research Run U2 — Causal Polyglot Placement Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
+- **C7 keeps ClayGraph as specialized associative memory inside UnifiedDB** — `KMP-FRANK-C7-CLAYGRAPH-SPECIALIZED-ORGAN` · begriff
+- **Named-field lowering plus schema preflight reduces silent schema-drift corruption at evolving Unifie** — `H_CC_NAMED_20260809` · hypothese
+- **CACC utility adaptation should consume durable outcome/evaluation receipts through UnifiedDB but onl** — `H-U2-F2-008` · hypothese
+- **UnifiedDB U2: TCQS query IR needs admission and physical-plan receipts** — `KMP-U2-QUERY-ADMISSION-CLAYCODE` · begriff
+- **UnifiedDB should unify semantics and planning before physical storage** — `KMP-G11-LOGICAL-PHYSICAL` · begriff
+- **The UnifiedDB planner should choose graph traversal only when relation evidence is needed rather tha** — `H-G11-040` · hypothese
+- **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_requests-c6-groq-claylearn-zero` · bereich_runtime
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_requests-c6-groq-claylearn-zero` · bereich_runtime
+- **unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **GWT causal attribution should bind UnifiedDB/MOSAIC basis and reader handoff** — `KMP-G11-WORKSPACE-BASIS` · begriff
+- **FRANK C7 consumes UnifiedDB as logical fabric, not mandatory physical monolith** — `KMP-FRANK-C7-LOGICAL-FABRIC` · begriff
+- **UnifiedDB U2: ClayGraph selection integrity and graph placement are separate from record truth** — `KMP-U2-SELECTION-PLACEMENT-CLAYGRAPH` · begriff
+- **Typed collection semantics can serve as a shared canonical contract across heterogeneous UnifiedDB b** — `H-CC12-012` · hypothese
+- **Fusion F5: UnifiedDB preserves collection algebra and canonical re-entry across adaptive placement** — `KMP-FUS-F5-C3F-UNIFIEDDB` · begriff
+- **FRANK_UNIFIEDDB_FEEDBACK.json** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **UnifiedDB default is canonical event spine plus replayable derived planes** — `KMP-UDB-U1-CANONICAL-SPINE` · begriff
+- **UnifiedDB should be a logical typed query/transaction fabric over specialized physical engines, not ** — `H-C7-011` · hypothese
+- **GWT experiments must independently pin or randomize UnifiedDB plan, ClayGraph activation, candidate ** — `H-C7-017` · hypothese
+- **MOSAIC capsule identity should become the per-operation execution identity connecting UnifiedDB, Cla** — `H-C7-007` · hypothese
+- **unifieddb-20260811T0441p0700-chatgpt-secondary-deeper-deltas** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **FRANK_UNIFIEDDB_FEEDBACK.json** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **The same UnifiedDB/EAP possibility compiler can serve visual perception, textual queries and action/** — `H-Q23-014` · hypothese
+- **One logical UnifiedDB can preserve FRANK semantic identity while physical placement/checkpointing re** — `FRANK-UDB-PHYS-01` · hypothese
+- **Wrong or stale visual memory anchors can be made fail-closed if perceptual seed receipts bind frame/** — `H-Q23-015` · hypothese
+- **unifieddb-20260811-chatgpt-secondary-projection-worker-v1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
+- **unifieddb-20260811-chatgpt-secondary-projection-worker-v1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
 

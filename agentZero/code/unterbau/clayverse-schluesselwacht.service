@@ -1,0 +1,23 @@
+[Unit]
+Description=ClayVerse-Schluesselwacht: taegliche Pruefung aller 9 freien Zugaenge (mechanisch, Modell nur fuer den Rest)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+# KEIN EnvironmentFile=/etc/clayverse/freie-zugaenge.env. Das Skript liest die
+# Datei selbst und nur so lange, wie es laeuft. Ueber EnvironmentFile stuenden
+# alle 9 Schluessel in der Prozessumgebung (/proc/<pid>/environ) und in
+# 'systemctl show' - sie wuerden also die Unit-Konfiguration verlassen.
+User=root
+ExecStart=/usr/bin/python3 /opt/clayverse/werkzeug/schluesselwacht.py taeglich
+TimeoutStartSec=600
+# Bewusst KEIN Restart=always: das hier ist ein Oneshot mit Tagesrhythmus.
+# Ein Neustartzwang wuerde bei einem Netzausfall gegen fremde Anbieter
+# hammern und das Kontingent verbrennen. Faellt ein Lauf aus, holt der Timer
+# ihn per Persistent=true beim naechsten Mal nach.
+Restart=no
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

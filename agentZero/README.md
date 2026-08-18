@@ -1,7 +1,7 @@
 # agentZero
 
 Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
-Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T07:18:56Z.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T07:33:30Z.
 
 | Ordner | Inhalt |
 |---|---|
@@ -16,6 +16,8 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T07:
 | `analysen/` | Auswertungen, die beim Bauen anfallen, mit selbstgeschriebenem Index |
 | `messwerk/` | **jeder Sensor mit der Hypothese, die er unterscheidet** — gemessen, oder ehrlich warum nicht |
 | `ZIELE.md` | **was Zero koennen soll und was davon gemessen steht** -- Soll deklariert, Ist gemessen |
+| `code/` | **aller ausfuehrbare Code** rund um EntityOS: Produkt, Clay-Unterbau, udb, der Export selbst |
+| `unifieddb/` | **das vollstaendige Schema und eine leere Datenbank daraus** -- Wiederaufbau ohne einen Datensatz |
 | `bauverlauf/` | **jeder Commit mit voller Begruendung** -- Befund, Messung, Grund. Entsteht beim Bauen, nicht nebenher |
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |

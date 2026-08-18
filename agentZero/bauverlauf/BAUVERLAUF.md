@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T07:18:57Z. 717 Commits aus vier Repos, davon 207 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T07:33:33Z. 722 Commits aus vier Repos, davon 208 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,64 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Das Gedaechtnis fuellt sich endlich - aus Gespraech, nicht aus Markersyntax
+
+`003602800f48` · entityos · 07:29 UTC · EntityOS
+
+```
+BEFUND, beziffert: 0 von 24 Zuegen enthalten einen Marker. Die vorhandene
+Extraktion greift nur, wenn jemand woertlich "FACT:" an einen Zeilenanfang
+schreibt. Kein Mensch tut das, Zero auch nicht.
+
+EINE URSACHE, FUENF STILLSTEHENDE SYSTEME:
+  durable_memory 0  ->  nichts abzurufen
+                    ->  alle 12 Abrufepisoden UNKNOWN
+                    ->  0 gelernte Eintrittspunkte
+                    ->  keine Wegehierarchie moeglich (F94)
+                    ->  Verdichtung kommt nie durch ihr Extraktionstor
+Das erklaert rueckwirkend jede Null, die heute Nacht in der Lernkette stand.
+
+GEBAUT: clayverse/gedaechtnis.py. Extraktion ueber den Bahnrouter, nicht ueber
+Zero selbst - wer den Zug geschrieben hat, soll nicht auch entscheiden, was davon
+erinnernswert ist.
+
+DIE GEFAHR UND DIE ABWEHR
+Ein Modell, das Fakten extrahiert, erfindet Fakten. Und ein erfundener Fakt im
+dauerhaften Gedaechtnis ist schlimmer als gar keiner: er wird spaeter abgerufen
+und dann geglaubt, mit Provenienz und allem.
+Deshalb lautet die Regel nicht "extrahiere gut", sondern WOERTLICHKEIT: jeder
+Eintrag muss eine Belegstelle mitliefern, und die muss zeichengenau im Quelltext
+vorkommen. Was das nicht erfuellt, wird verworfen - auch wenn es klug klingt.
+Die Verwuerfe werden gezaehlt; steigt die Zahl, ist das ein Befund ueber das
+Modell, nicht ueber den Text.
+
+BEWIESEN mit einem Extraktor, der absichtlich luegt:
+  drei Eintraege angeboten, einer davon woertlich belegt
+  -> 1 genommen, 2 verworfen ("Beleg steht nicht im Text")
+  -> "Kubernetes" und "12 Server" sind NICHT ins Gedaechtnis gelangt
+An echtem Text: 4 Eintraege, 0 verworfen, je mit Belegstelle
+  decision  Zero headless, Oberflaeche wird Chat
+  fact      Uebersetzer 0,98
+  fact      Andreas ist genuinos@gmail.com
+  open_question  ob die Wegehierarchie Tunnel bekommt
+
+DAZU EIN ECHTER ROUTERFEHLER, gefunden weil die Extraktion nichts bekam:
+groq_gptoss_20b liefert HTTP 200, verbraucht 973 Token und gibt content="" --
+ein Reasoning-Modell, dessen Budget im Denkkanal aufgeht. Der Router buchte das
+als Erfolg und befragte die Ausweichbahn nie. Also: EINE LEERE ANTWORT IST EIN
+FEHLSCHLAG, DER WIE EIN ERFOLG AUSSIEHT. Wird jetzt wie jeder Ausfall behandelt -
+gebucht und weiter zur naechsten Bahn, mit der Ursache im Ergebnis unter
+verworfene_bahnen. Danach lief die Extraktion ueber mistral_small durch.
+
+VERDRAHTET an EINER Stelle: turn_lifecycle.complete(), nach der Transaktion
+(ein Netzaufruf gehoert nicht in eine offene Transaktion), Fehler kippen den Zug
+nie, Schalter CLAYVERSE_MEMORY_EXTRACT mit Vorgabe AUS - sonst telefonieren Tests
+ins Netz, und ein Testlauf, der Kontingent verbraucht, wird bald nicht mehr
+ausgefuehrt. In compose fuer die Produktion eingeschaltet.
+
+Suite unveraendert 479 gruen / 14 rot.
 ```
 
 ### Bahnrouter: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter
@@ -3302,13 +3360,5 @@ microclay und unifieddb ueber die GitHub-API privat angelegt (HTTP 201), geschob
 
 ```
 Herstellerstand geholt und auf CPU vermessen, n=60, jax-Backend cpu. Voller generate-Aufruf: kalt 4130,95 ms, warm p50 2819,18 ms, p95 3133,53 ms. Nur-Einbettung ohne Dekodierschleife: 24 Kandidaten 205,3 ms p50, 98 Kandidaten 477,1 ms, alle 2374 Graphknoten 10.225,2 ms. Skalierung linear mit 4,3 bis 8,6 ms je Stueck plus 150-200 ms fester Boden aus der JIT-Verteilung. Parameter bestaetigt: 26.315.421.
-```
-
-### B27 geprueft: Vorprozessor gebaut - der Mechanismus steht
-
-`5c0802dba655` · clay · 21:16 UTC · ClayVerse
-
-```
-vorprozessor.py, 1780 Zeilen, null Modellaufrufe strukturell (kein LLM- oder HTTP-Klient im Code). Paket traegt: treffer, hyperposition, orte, systeme, codependenzen, hypothesen, gegenseite, kuration, weiter, politik, beobachtungen, resolution, basis. DICHTE gemessen mit tiktoken ueber 5 Fragen: grep 0,00 - fts 1,65 - voll 3,91 - PAKET 4,95 Fakten je 1000 Token, und das Paket schlaegt voll bei JEDER einzelnen Frage, nicht nur im Mittel. Aliasaufloesung vp_alias 92.043 Zeilen, v12-Bewertungsform woertlich uebernommen: exakte Kennung -> EXACT_ID 1,0; vager Text -> MISS 0,0; nie geraten. SCHLEIFE bewiesen: drei Schritte hintereinander, jeder nimmt die Kennung aus dem weiter des vorigen, keiner braucht eine neue Suche. GESPERRTES LESEN bewiesen: unbekannte Paketkennung abgewiesen, nicht genannte Ortskennung abgewiesen, Binaeres abgewiesen. 3 von 5 Fragen ohne jeden Lesevorgang beantwortet. PULSKOSTEN gemessen: Leerlauftakt 68,6 Mikrosekunden, Arbeitstakt 4,07 ms. Schnappschuss und Heilung bewiesen: Zustand absichtlich verdorben, heilen() zurueckgerollt, Zustandshash stimmt exakt mit Schnappschuss 9.
 ```
 

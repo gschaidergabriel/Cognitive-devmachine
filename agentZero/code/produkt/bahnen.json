@@ -1,0 +1,475 @@
+{
+ "quelle": "/opt/clayverse/werkzeug/verdrahtung.py",
+ "hinweis": "Ausgeleitet, nicht abgeschrieben. Die Wahrheit bleibt im Clay-Unterbau; diese Datei ist eine wiederholbare Ableitung davon.",
+ "zugaenge": [
+  {
+   "zugang": "groq_llama31_8b",
+   "anzeige": "Groq llama-3.1-8b-instant",
+   "modell": "llama-3.1-8b-instant",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 28800,
+   "token_minute_limit": 12000,
+   "token_tag_limit": 1000000,
+   "zustand": "nicht_nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 404 am 2026-08-18: {\"error\":{\"message\":\"The model `llama-3.1-8b-instant` does not exist or you do n"
+  },
+  {
+   "zugang": "groq_gptoss_20b",
+   "anzeige": "Groq openai/gpt-oss-20b",
+   "modell": "openai/gpt-oss-20b",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 2000,
+   "token_minute_limit": 16000,
+   "token_tag_limit": 400000,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 260 ms, gemessen 2026-08-18"
+  },
+  {
+   "zugang": "groq_gptoss_120b",
+   "anzeige": "Groq openai/gpt-oss-120b",
+   "modell": "openai/gpt-oss-120b",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 2000,
+   "token_minute_limit": 16000,
+   "token_tag_limit": 400000,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 261 ms, gemessen 2026-08-18"
+  },
+  {
+   "zugang": "groq_llama33_70b",
+   "anzeige": "Groq llama-3.3-70b-versatile",
+   "modell": "llama-3.3-70b-versatile",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 2000,
+   "token_minute_limit": 24000,
+   "token_tag_limit": 200000,
+   "zustand": "nicht_nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 404 am 2026-08-18: {\"error\":{\"message\":\"The model `llama-3.3-70b-versatile` does not exist or you d"
+  },
+  {
+   "zugang": "groq_qwen3_6_27b",
+   "anzeige": "Groq qwen/qwen3.6-27b",
+   "modell": "qwen/qwen3.6-27b",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 2000,
+   "token_minute_limit": 16000,
+   "token_tag_limit": 400000,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 217 ms, gemessen 2026-08-18"
+  },
+  {
+   "zugang": "groq_compound",
+   "anzeige": "Groq compound (mit Websuche)",
+   "modell": "groq/compound",
+   "einheit": "anfragen",
+   "minute_limit": 60,
+   "tag_limit": 500,
+   "token_minute_limit": 140000,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": null,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 375 ms, gemessen 2026-08-18"
+  },
+  {
+   "zugang": "groq_whisper_v3",
+   "anzeige": "Groq whisper-large-v3",
+   "modell": "whisper-large-v3",
+   "einheit": "anfragen",
+   "minute_limit": 40,
+   "tag_limit": 4000,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nicht_nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": "GROQ_API_KEY,GROQ2_API_KEY,GROQ3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 400 am 2026-08-18: {\"error\":{\"message\":\"The model `whisper-large-v3` does not support chat completi"
+  },
+  {
+   "zugang": "cloudflare_workers_ai",
+   "anzeige": "Cloudflare Workers AI",
+   "modell": null,
+   "einheit": "neuronen",
+   "minute_limit": 3000,
+   "tag_limit": 10000,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 1,
+   "kann_schema": null,
+   "schluessel_namen": "CLOUDFLARE_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "gemini_flash_lite_latest",
+   "anzeige": "Gemini Flash Lite (Alias)",
+   "modell": "gemini-flash-lite-latest",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GEMINI_API_KEY,GEMINI2_API_KEY",
+   "konten_anzahl": 2,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "gemini_flash_latest",
+   "anzeige": "Gemini Flash (Alias, 1M Kontext)",
+   "modell": "gemini-flash-latest",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GEMINI_API_KEY,GEMINI2_API_KEY",
+   "konten_anzahl": 2,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "gemini_embedding_001",
+   "anzeige": "Gemini gemini-embedding-001",
+   "modell": "gemini-embedding-001",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": 1500,
+   "token_minute_limit": 10000000,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 1,
+   "kann_schema": 0,
+   "schluessel_namen": "GEMINI_API_KEY,GEMINI2_API_KEY",
+   "konten_anzahl": 2,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "nvidia_nim",
+   "anzeige": "NVIDIA NIM",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": 40,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 1,
+   "kann_schema": 1,
+   "schluessel_namen": "NVIDIA_NIM_API_KEY,NVIDIA2_API_KEY,NVIDIA3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "mistral_small",
+   "anzeige": "Mistral small (frei)",
+   "modell": "mistral-small-latest",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "MISTRAL_API_KEY,MISTRAL2_API_KEY,MISTRAL3_API_KEY",
+   "konten_anzahl": 3,
+   "zustand_gemessen": "HTTP 200 in 325 ms, gemessen 2026-08-18"
+  },
+  {
+   "zugang": "openrouter_frei",
+   "anzeige": "OpenRouter :free-Modelle",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": 40,
+   "tag_limit": 100,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 1,
+   "kann_schema": null,
+   "schluessel_namen": "OPENROUTER_API_KEY,OPENROUTER2_API_KEY",
+   "konten_anzahl": 2,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "deepseek_chat",
+   "anzeige": "DeepSeek (Guthaben)",
+   "modell": "deepseek-chat",
+   "einheit": "euro",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nicht_nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": null,
+   "konten_anzahl": null,
+   "zustand_gemessen": "HTTP 402 am 2026-08-18: {\"error\":{\"message\":\"Insufficient Balance\",\"type\":\"unknown_error\",\"param\":null,\""
+  },
+  {
+   "zugang": "hf_inference",
+   "anzeige": "Hugging Face Inference",
+   "modell": null,
+   "einheit": "euro",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "unbrauchbar",
+   "kann_embedding": 1,
+   "kann_schema": null,
+   "schluessel_namen": null,
+   "konten_anzahl": null,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "together_ai",
+   "anzeige": "Together AI",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "schluessel_tot",
+   "kann_embedding": null,
+   "kann_schema": null,
+   "schluessel_namen": null,
+   "konten_anzahl": 0,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "tavily",
+   "anzeige": "Tavily (Websuche)",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": "TAVILY_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "exa",
+   "anzeige": "Exa (Websuche)",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": "EXA_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "openalex",
+   "anzeige": "OpenAlex (Literatur)",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": "OPENALEX_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "e2b",
+   "anzeige": "E2B (Sandkasten)",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 0,
+   "schluessel_namen": "E2B_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  },
+  {
+   "zugang": "rapidapi",
+   "anzeige": "RapidAPI (Sammelzugang)",
+   "modell": null,
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": null,
+   "kann_schema": null,
+   "schluessel_namen": "RAPIDAPI_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "kein OpenAI-kompatibler Aufrufer"
+  }
+ ],
+ "prozesse": [
+  {
+   "prozess": "einbettung_bestand",
+   "bahnen": [
+    "cloudflare_workers_ai",
+    "gemini_embedding_001"
+   ],
+   "hoechstanteil": 0.45,
+   "max_je_lauf": 200,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "einbettung_anfrage",
+   "bahnen": [
+    "nvidia_nim",
+    "cloudflare_workers_ai"
+   ],
+   "hoechstanteil": 1.0,
+   "max_je_lauf": 40,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "umsortieren_treffer",
+   "bahnen": [
+    "cloudflare_workers_ai",
+    "nvidia_nim",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.2,
+   "max_je_lauf": 50,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "sphaere_einordnung",
+   "bahnen": [
+    "groq_llama31_8b",
+    "gemini_flash_lite_latest",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.4,
+   "max_je_lauf": 200,
+   "schema_pflicht": 1
+  },
+  {
+   "prozess": "schema_antwort",
+   "bahnen": [
+    "groq_gptoss_20b",
+    "mistral_small",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.5,
+   "max_je_lauf": 50,
+   "schema_pflicht": 1
+  },
+  {
+   "prozess": "kondensieren",
+   "bahnen": [
+    "groq_llama31_8b",
+    "mistral_small",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.2,
+   "max_je_lauf": 100,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "langer_kontext",
+   "bahnen": [
+    "gemini_flash_latest",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.4,
+   "max_je_lauf": 5,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "zweitmeinung",
+   "bahnen": [
+    "mistral_small",
+    "groq_gptoss_120b",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.3,
+   "max_je_lauf": 20,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "websuche_erdung",
+   "bahnen": [
+    "groq_compound",
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.6,
+   "max_je_lauf": 10,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "transkription",
+   "bahnen": [
+    "groq_whisper_v3"
+   ],
+   "hoechstanteil": 0.7,
+   "max_je_lauf": 20,
+   "schema_pflicht": 0
+  },
+  {
+   "prozess": "rueckfall_allgemein",
+   "bahnen": [
+    "claude_pro"
+   ],
+   "hoechstanteil": 0.99,
+   "max_je_lauf": 10,
+   "schema_pflicht": 0
+  }
+ ],
+ "gemessen_am": "2026-08-18",
+ "messhinweis": "zustand_gemessen traegt Datum und Beleg. Ein Modellname aus einer Liste ist keine Zusage -- Groq hat zwischen dem 15. und dem 18.08. Modelle abgeschaltet, die der Unterbau als nutzbar gemessen hatte."
+}

@@ -1,0 +1,10 @@
+[Unit]
+Description=ClayVerse: Kuration alle 10 Minuten -- fortlaufende Quellenpruefung, kein Modell-Aufruf
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=10min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

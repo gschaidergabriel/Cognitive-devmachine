@@ -1,0 +1,10 @@
+[Unit]
+Description=ClayVerse-Wache alle 5 Minuten -- Tode werden sofort gemeldet, stilles Stehen gededuped
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

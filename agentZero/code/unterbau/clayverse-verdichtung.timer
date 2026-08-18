@@ -1,0 +1,12 @@
+[Unit]
+Description=Zeitgeber der ClayVerse-Verdichtung (schaut alle 10 min nach der Schwelle)
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=10min
+AccuracySec=1min
+Persistent=true
+Unit=clayverse-verdichtung.service
+
+[Install]
+WantedBy=timers.target

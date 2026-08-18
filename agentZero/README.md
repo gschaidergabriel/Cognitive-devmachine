@@ -1,0 +1,30 @@
+# agentZero
+
+Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T04:15:21Z.
+
+| Ordner | Inhalt |
+|---|---|
+| `chat/` | die Gespraeche, je Mensch eine Datei, mit vollstaendigen Metadaten (Generation, Provenienz, Kausalkette) |
+| `kognition/` | Kausalepisoden, Arbeitsraum-Episoden, Wirkungen samt EffectGate-Urteil, Pruefpunkte |
+| `abruf/` | was die Abruf-Entitaet tut: Episoden, gelernte Eintrittspunkte, Rueckmeldungen |
+| `karten/` | **eine Momentaufnahme je Lauf.** Mehrere hintereinander ergeben den Zeitstrahl, aus dem sich die Vernetzung ablesen laesst |
+| `zustand/` | Menschen, Sitzungen, Wurzelzustand, Graphprojektion |
+| `puls/` | begrenztes Ende der Clay-Protokolle (letzte 500 Zeilen je Datei) |
+| `wiki/` | alle Korpusartikel, die direkt mit Zero/EntityOS zu tun haben, plus lesbares Verzeichnis |
+| `architektur/` | Aenderungshistorie aller drei Repos, kategorisiert, und die abgeleitete Skizze |
+| `analysen/` | Auswertungen, die beim Bauen anfallen, mit selbstgeschriebenem Index |
+| `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
+
+## Schwaerzung
+
+Jeder Wert laeuft durch einen Filter, **bevor** er geschrieben wird: API-Schluessel,
+Token und JWTs werden durch `<GESCHWAERZT>` ersetzt. Beim letzten Lauf griff der
+Filter **1x**. Der Grund ist einfach: was einmal in der Git-Historie
+steht, bekommt man nicht mehr heraus -- auch aus einem privaten Repo nicht.
+
+## Warum `karten/` waechst und alles andere nicht
+
+Die uebrigen Ordner sind Abbilder des aktuellen Zustands und werden bei jedem Lauf
+ueberschrieben. `karten/` ist das Gegenteil: dort bleibt jede Aufnahme stehen, denn
+die Veraenderung ueber die Zeit **ist** der Inhalt.

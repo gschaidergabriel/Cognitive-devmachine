@@ -1,0 +1,180 @@
+# Wiki-Eintraege zu Zero und EntityOS
+
+Automatisch erzeugt 2026-08-18T04:15:25Z. 2000 Artikel, ueber den Volltextindex des Clay-Korpus gefunden -- die Auswahl waechst mit, sie ist keine gepflegte Liste.
+
+## clayverse (40)
+
+- **EffectGate als Wand, nicht als Bibliothek** — `B7-2026-08-14T18-13-05-0000` · vorfall
+- **Sicherungsweg alter VPS → ClayVerse** — `B0-2026-08-14T16-19-03-0000` · vorfall
+- **Tailscale auf ClayVerse installiert** — `B12-2026-08-14T16-19-04-0000` · vorfall
+- **Namensgleichung digital-retina = clayverse** — `B12-2026-08-14T18-03-11-0000` · vorfall
+- **Wirt umbenannt: digital-retina → clayverse** — `B12-2026-08-14T16-56-13-0000` · vorfall
+- **ClayVerse denkt — erste Sitzung geprüft** — `B5-2026-08-14T17-11-25-0000` · vorfall
+- **Daten und Dienste auf ClayVerse** — `B2-2026-08-14T17-06-30-0000-1` · vorfall
+- **ClayVerse-Kern gebaut** — `B5-2026-08-14T17-06-30-0000` · vorfall
+- **Kartographie: Bestandsaufnahme + Vergleich** — `B6-2026-08-14T18-13-31-0000` · vorfall
+- **Claude Code auf ClayVerse installiert** — `B5-2026-08-14T16-12-30-0000` · vorfall
+- **ClayVerse liefert alle Seiten** — `B2-2026-08-14T17-06-30-0000-2` · vorfall
+- **Methode statt Fehlerdatenbank** — `B5-2026-08-14T17-44-45-0000` · vorfall
+- **Zweite Tür: Tailscale auf dem alten VPS** — `B0-2026-08-14T16-12-30-0000` · vorfall
+- **Vollsicherung des alten VPS** — `B0-2026-08-14T16-23-34-0000` · vorfall
+- **Handlungsfaehigkeit von ClayVerse gemessen statt gezaehlt** — `B5-2026-08-14T18-50-41-0000` · vorfall
+- **GitHub-Token hinterlegt, Ereignisstrom laeuft** — `B4-2026-08-14T18-48-55-0000` · vorfall
+- **CLAUDE.md: geteilte Wahrheit zusammengefuehrt, Kapitel 9 ergaenzt** — `B5-2026-08-14T18-53-40-0000` · vorfall
+- **Zwangskuration laeuft - Quellaenderung wird erkannt** — `B27-2026-08-14T19-28-50-0000` · vorfall
+- **digital-retina abgeschaltet und archiviert** — `B2-2026-08-14T17-06-30-0000` · vorfall
+- **fail2ban auf dem Mailserver** — `B1-2026-08-14T16-29-58-0000-1` · vorfall
+- **iptables-flush.timer entfernt** — `B1-2026-08-14T16-29-58-0000` · vorfall
+- **Eichnormale gegen das Verbiegen des Messgeraets** — `B21-2026-08-14T18-03-11-0000` · vorfall
+- **nftables-Grundregel auf beiden Maschinen** — `B8-2026-08-14T16-29-58-0000` · vorfall
+- **Tresor und verschlüsselte Zugangsdatei** — `B26-2026-08-14T16-12-30-0000` · vorfall
+- **Beleg: aufgeschriebene Regeln greifen nicht** — `B5-2026-08-14T17-44-46-0000` · vorfall
+- **herzrad.at-Postfächer angelegt** — `B10-2026-08-14T16-29-58-0000` · vorfall
+- **Das GitHub-Konto als Bäume im Zentralrepo** — `B4-2026-08-14T17-21-51-0000` · vorfall
+- **Freigabe als echte Wand im Kern** — `B13-2026-08-14T18-03-11-0000` · vorfall
+- **Eichung greift jetzt auch auf Tor und Freigabe** — `B21-2026-08-14T18-13-05-0000` · vorfall
+- **SSH gehärtet auf beiden Maschinen** — `B1-2026-08-14T16-29-57-0000` · vorfall
+- **Alle 22 Repos privat** — `B3-2026-08-14T17-15-11-0000` · vorfall
+- **lcme wieder oeffentlich — Sterne sind verloren** — `B3-2026-08-14T17-16-48-0000` · vorfall
+- **Abrufentwurf der Forschungsentitaet ausgewertet - gemessen, nicht geraten** — `B27-2026-08-14T19-34-36-0000` · vorfall
+- **Sechs Repos auf privat** — `B3-2026-08-14T17-13-32-0000` · vorfall
+- **Wirt: clayverse** — `clayverse` · wirt
+- **Tor als Systemebene - Loch geschlossen** — `B7-2026-08-14T19-04-56-0000` · vorfall
+- **Wiki Stufe 1 gebaut - Gedaechtnisabruf in Millisekunden** — `B27-2026-08-14T19-22-32-0000` · vorfall
+- **Das Tor ist umgehbar - Haken ist keine Sicherheitsgrenze** — `B7-2026-08-14T19-00-28-0000` · vorfall
+- **Wirt: clayverse-alt** — `clayverse-alt` · wirt
+- **ClayGraph Generation 1 aus dem Wiki materialisiert** — `B6-2026-08-14T19-49-23-0000` · vorfall
+
+## frank_v0_1 (7)
+
+- **FRANK_V0_1_WORKSPACE.json** — `frank_v0_1-FRANK_V0_1_WORKSPACE.json` · bereich_frank_v0_1
+- **20260814T1231z+0700_pilotlauf_commit_status.json** — `frank_v0_1-work_events-20260814T1231z-07` · bereich_frank_v0_1
+- **20260811T1450p0700_loop_core_causal_slice.json** — `frank_v0_1-work_events-20260811T1450p070` · bereich_frank_v0_1
+- **20260811T1502p0700_loopcore_l0_reentry_lesion_sandbox.json** — `frank_v0_1-work_events-20260811T1502p070` · bereich_frank_v0_1
+- **20260810T2052p0700_unifieddb_temporal_entity_pulse_gwt_mcp_vps.json** — `frank_v0_1-work_events-20260810T2052p070` · bereich_frank_v0_1
+- **20260814T1231z+0700_187_drafts_sortieren.json** — `frank_v0_1-work_events-20260814T1231z-07` · bereich_frank_v0_1
+- **20260811T1516p0700_loopcore_l1_l2_misinformation_cost.json** — `frank_v0_1-work_events-20260811T1516p070` · bereich_frank_v0_1
+
+## ohne Sphaere (1953)
+
+- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
+- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
+- **q23-par-visual-seed-eap-differential-20260810T1752p0700** — `state-work-events-20260810T1752p0700_q23` · bereich_state
+- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
+- **clay-live-fusion-20260810T1908p0700** — `mesh_feedback-20260810T1908p0700-clay-li` · bereich_mesh_feedback
+- **harness-20260810T2024p0700-chatgpt-secondary-hwp10-effect-authority** — `trigger_runs-harness-harness-20260810T20` · bereich_trigger_runs
+- **STEERING_20260810T1948P0700.json** — `claycode-supervisor-STEERING_20260810T19` · bereich_claycode
+- **go-20260810T2020p0700-chatgpt-secondary-call-negative-space** — `trigger_runs-go-20260810T2020p0700-chatg` · bereich_trigger_runs
+- **clay-live-fusion-20260810T1954p0700** — `mesh_feedback-20260810T1954p0700-clay-li` · bereich_mesh_feedback
+- **chatgpt-secondary-qwen-native-retina-fusion-benchmark-20260810T1716p0700** — `state-work-events-20260810T1716p0700_cha` · bereich_state
+- **target-vps-runtime-acceptance-baseline-20260810T1842p0700** — `state-work-events-20260810T1842p0700_tar` · bereich_state
+- **clay-live-fusion-20260810T1954p0700** — `mesh_feedback-20260810T1954p0700-clay-li` · bereich_mesh_feedback
+- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **hyperposition-20260809T0129p0700-chatgpt-secondary-r4** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **fusion-20260808T2114p0700-chatgpt-secondary-r2** — `trigger_runs-fusion-fusion-20260808T2114` · bereich_trigger_runs
+- **claycode-20260810T2350p0700-chatgpt-secondary-hp-wp03-binding** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
+- **fusion-20260808T2214p0700-chatgpt-secondary-r3** — `trigger_runs-fusion-fusion-20260808T2214` · bereich_trigger_runs
+- **claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
+- **claycode_20260809T1606p0700_chatgpt_semhash_typedcanon** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **fusion-20260808T2322p0700-chatgpt-secondary-r4** — `trigger_runs-fusion-fusion-20260808T2322` · bereich_trigger_runs
+- **claycode-20260808T1934p0200-chatgpt-secondary-r4** — `trigger_runs-claycode-claycode-20260808T` · bereich_trigger_runs
+- **20260809T1505p0700-chatgpt-secondary** — `trigger_runs-claycode-20260809T1505p0700` · bereich_trigger_runs
+- **Hyperposition Emergence & Coupling Readout Contract** — `global-HYPERPOSITION_EMERGENCE_READOUT_C` · bereich_global
+- **Clay Semantic Coupling Fabric Directive** — `global-CLAY_SEMANTIC_COUPLING_FABRIC_DIR` · bereich_global
+- **claycode-20260809T1539p0700-chatgpt-parser-compat** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **android-20260808T2338p0700-chatgpt-secondary-r1** — `android-runs-android-20260808T2338p0700-` · bereich_android
+- **Hyperposition firebreaks should declare identity comparison axis** — `KMP-G11-IDENTITY-AXES` · begriff
+- **evt-20260814T071016513317Z-3326771d** — `rooms-rooms-harness-events-evt-20260814T` · bereich_rooms
+- **clayresearch-20260810T2317p0700-chatgpt-secondary-comparative-agent-systems-fusion** — `trigger_runs-clayresearch-clayresearch-2` · bereich_trigger_runs
+- **claycode-20260808T2104p0700-chatgpt-secondary-r3** — `trigger_runs-claycode-claycode-20260808T` · bereich_trigger_runs
+- **claycode_20260809T160924p0700_ffi_abi** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **claycode_20260809T1705p0700_chatgpt_numcanon** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **20260811T0007p0700-hyperposition-claycode-topology-scope-reentry** — `mesh_feedback-20260811T0007p0700-hyperpo` · bereich_mesh_feedback
+- **harness-20260809T1745p0700-chatgpt-secondary-hwp01-freeze** — `trigger_runs-harness-harness-20260809T17` · bereich_trigger_runs
+- **HYPERPOSITION RESEARCH RUN — H5 Context-Gated Multi-Topology Hyperposition** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **claycode_20260809T1547p0700_chatgpt_secondary_strict_syntax_gate** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **claycode-20260809T0130p0700-chatgpt-secondary-r5** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **unifieddb-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-unifieddb-unifieddb-2026080` · bereich_trigger_runs
+- **claycode_20260809T1607p0700_chatgpt_http_app02** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **MANDATORY_ACTIVE_KNOWLEDGE.json** — `global-MANDATORY_ACTIVE_KNOWLEDGE.json` · bereich_global
+- **clay-20260808T2033p0700-chatgpt-secondary-r3** — `trigger_runs-clay-clay-20260808T2033p070` · bereich_trigger_runs
+- **claycode-20260809T1726p0700-loop-schedule-effect-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **claycode-20260809T1603p0700-chatgpt-semantic-publication** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **claycode_20260809T1654p0700_chatgpt_loop_scheduler_identity** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **20260808T2051p0700-chatgpt-secondary-r3** — `trigger_runs-frank-20260808T2051p0700-ch` · bereich_trigger_runs
+- **claycode-20260810T2358p0700-chatgpt-secondary-topology-scope** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
+- **center-claycode-native-20260809T1307+0700** — `rooms-center_events-20260809T1307_CLAYCO` · bereich_rooms
+- **20260810T2014p0700-chatgpt-secondary-wp03-irnorm** — `trigger_runs-claycode-20260810T2014p0700` · bereich_trigger_runs
+- **UnifiedDB results require explicit admissibility class** — `KMP-U2-RESULT-ADMISSIBILITY` · begriff
+- **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p07` · bereich_trigger_runs
+- **claycode_20260809T1655p0700_chatgpt_lexical_closure** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **claycode_20260809T1615p0700_chatgpt_nsd_namespace** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **20260808T2217p0700-chatgpt-secondary-r4** — `trigger_runs-frank-20260808T2217p0700-ch` · bereich_trigger_runs
+- **emergenz-20260809T1714p0700** — `trigger_runs-emergenz-emergenz-20260809T` · bereich_trigger_runs
+- **claycode-20260809T1602p0700-chatgpt-controlflow-precedence-v1** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **Hyperposition — HyperMath Thin-Net / UnifiedDB Algebraic Preprocessor** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **20260809T1724p0700-chatgpt-secondary-parser-closure** — `trigger_runs-claycode-20260809T1724p0700` · bereich_trigger_runs
+- **20260809_chatgpt_secondary_surface_canon_wasi03_v1** — `trigger_runs-claycode-20260809_chatgpt_s` · bereich_trigger_runs
+- **INTERCONNECT_MANIFEST.json** — `atomic-runs-20260810T2136p0700-chatgpt-s` · bereich_atomic
+- **claycode-20260809T155134p0700-chatgpt-58f84b** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **clay-live-fusion-20260810T1700p0700** — `mesh_feedback-20260810T1700p0700-clay-li` · bereich_mesh_feedback
+- **hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier** — `mesh_feedback-hyperposition-20260810T233` · bereich_mesh_feedback
+- **claycode-20260810T2347p0700-chatgpt-secondary-hyperposition-lowering** — `trigger_runs-claycode-claycode-20260810T` · bereich_trigger_runs
+- **claycode-20260809T1727p0700-chatgpt-secondary-fn-parser-integration** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **claycode-20260809T1724p0700-chatgpt-secondary-control-effect-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **spawn-20260809T1741p0700-emergenz-d79-m4** — `trigger_runs-spawn-spawn-20260809T1741p0` · bereich_trigger_runs
+- **clayresearch-20260809T1655p0700-loop-txn-effect-envelope** — `trigger_runs-clayresearch-clayresearch-2` · bereich_trigger_runs
+- **Current generic record/tensor/rule constructs can represent loop-of-loops, GWT, Hyperposition and Em** — `H-CC-G9-005` · hypothese
+- **WP03 can consume the receipt-bound V18 FrontendArtifact and form typed semantic/state identities wit** — `H-GO-WP03-NOREPARSE-01` · gegenhypothese
+- **spawn_20260809T1835p0700_claycode_package_lock_provenance_f2d5d0** — `trigger_runs-spawn-spawn_20260809T1835p0` · bereich_trigger_runs
+- **20260809T204500p0700_udb_emergence_meter_v01** — `trigger_runs-emergenz-20260809T204500p07` · bereich_trigger_runs
+- **claycode-20260809T155804p0700-chatgpt-declared-relations** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **claycode_20260809T090220Z_chatgpt_local** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **fusion-20260808T2114p0700-chatgpt-secondary-r2** — `trigger_runs-fusion-fusion-20260808T2114` · bereich_trigger_runs
+- **hypofusion-20260810T1223p0700-chatgpt-secondary-r4** — `trigger_runs-hypofusion-hypofusion-20260` · bereich_trigger_runs
+- **delta-666-20260809T1507p0700-pf-native-vision-transition** — `rooms-rooms-center-events-delta-666-2026` · bereich_rooms
+- **hyperposition-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **fusion-20260809T1530p0700-chatgpt-secondary** — `trigger_runs-fusion-fusion-20260809T1530` · bereich_trigger_runs
+- **cc-mesh-20260808T1836Z-chatgpt-secondary** — `trigger_runs-claycode-cc-mesh-20260808T1` · bereich_trigger_runs
+- **20260809T0130p0700-chatgpt-secondary-r5** — `trigger_runs-frank-20260809T0130p0700-ch` · bereich_trigger_runs
+- **20260810T2126p0700-chatgpt-secondary-ect-contract-tomography** — `atomic-runs-20260810T2126p0700-chatgpt-s` · bereich_atomic
+- **claygraph-20260808T2212p0700-chatgpt-secondary-r3** — `trigger_runs-claygraph-claygraph-2026080` · bereich_trigger_runs
+- **claycode-20260809T1728p0700-effect-closure-lowering** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **claygraph-20260809T0149p0700-chatgpt-secondary-sol-04** — `trigger_runs-claygraph-claygraph-2026080` · bereich_trigger_runs
+- **fusion-20260810T1624p0700** — `trigger_runs-fusion-fusion-20260810T1624` · bereich_trigger_runs
+- **20260809T1607p0700_chatgpt** — `trigger_runs-claycode-20260809T1607p0700` · bereich_trigger_runs
+- **FRANK Architecture Archaeology & Originality Protocol** — `global-FRANK_ARCHITECTURE_ARCHAEOLOGY_PR` · bereich_global
+- **FRANK First-Principles & Emergent-Coupling Analysis Lens** — `global-FRANK_FIRST_PRINCIPLES_EMERGENT_C` · bereich_global
+- **claycode-20260809T1709p0700-chatgpt-secondary** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **One factorized AnyOf/AllOf provenance circuit spanning GWT use, Hyperposition alternatives and outco** — `H2-dup4` · hypothese
+- **hypofusion-20260808T2152p0700-chatgpt-secondary-r1** — `trigger_runs-hypofusion-hypofusion-20260` · bereich_trigger_runs
+- **gwt-20260809T0129p0700-chatgpt-secondary-r6-deep** — `trigger_runs-gwt-gwt-20260809T0129p0700-` · bereich_trigger_runs
+- **Fusion F5: semantic firebreaks contain invalid ancestry but not authentic misleading relevance** — `KMP-FUS-F5-C3F-HYPERPOSITION` · begriff
+- **hyperposition-20260810T2338p0700-chatgpt-secondary-lawcert-falsifier** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **hyperposition-20260809T0129p0700-chatgpt-secondary-r4** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **center-frank-harness-repo-first-gate-20260809T2102p0700** — `rooms-center_events-20260809T2102p0700_f` · bereich_rooms
+- **20260809T1713p0700-chatgpt-secondary** — `trigger_runs-clay-20260809T1713p0700-cha` · bereich_trigger_runs
+- **claycode_20260809T1720p0700_chatgpt_app03_db_adapter** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **666-20260809T0500+0700-chatgpt-secondary-drive-hyperposition-datafusion** — `archive_assimilation-receipts-666_202608` · bereich_archive_assimilation
+- **FRANK Recurrent Closure Synthesis — Research Backflow** — `notes-FRANK_RECURRENT_CLOSURE_SYNTHESIS_` · bereich_notes
+- **H-FUS-F5-004** — `H-FUS-F5-004` · hypothese
+- **claycode-20260809T1711p0700-chatgpt-secondary-fn-closure** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **Fusion Research Run — 2026-08-09 15:30 +07** — `trigger_runs-fusion-fusion-20260809T1530` · bereich_trigger_runs
+- **claycode-20260809T1717p0700-all-workers-production-parser** — `trigger_runs-claycode-claycode-20260809T` · bereich_trigger_runs
+- **20260809T0500p0700-666-hyperposition-datafusion-crossroom-delta** — `rooms-center_events-20260809T0500p0700_6` · bereich_rooms
+- **spawn-20260809T1918p0700-chatgpt-secondary-harness-rsd** — `trigger_runs-spawn-spawn-20260809T1918p0` · bereich_trigger_runs
+- **20260810T2103p0700-chatgpt-secondary-v18-contract-mesh** — `trigger_runs-claycode-20260810T2103p0700` · bereich_trigger_runs
+- **clay-20260808T2132p0700-chatgpt-secondary-r4** — `trigger_runs-clay-clay-20260808T2132p070` · bereich_trigger_runs
+- **unifieddb-20260810T2303p0700-chatgpt-secondary-effect-reentry-continuity** — `trigger_runs-unifieddb-unifieddb-2026081` · bereich_trigger_runs
+- **hyperposition-20260810-hypermath-thin-net** — `trigger_runs-hyperposition-hyperposition` · bereich_trigger_runs
+- **claycode_20260809T1553p0700_center_federation** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **FRANK Self-Observation & Proposal-Only Harness Boundary** — `global-FRANK_SELF_OBSERVATION_PROPOSAL_B` · bereich_global
+- **PREFLIGHT_GOVERNANCE_DRIFT_RECEIPT.json** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **gwt-20260809T1720p0700-chatgpt-secondary-r7-dual-gate** — `trigger_runs-gwt-gwt-20260809T1720p0700-` · bereich_trigger_runs
+- **claycode_20260809T1650p0700_chatgpt_loopdynamics_runtime** — `trigger_runs-claycode-claycode_20260809T` · bereich_trigger_runs
+- **clay-live-fusion-20260810T0557p0700** — `mesh_feedback-20260810T0557p0700-clay-li` · bereich_mesh_feedback
+- **INTERCONNECT_MANIFEST.json** — `trigger_runs-unifieddb-unifieddb-2026081` · bereich_trigger_runs
+- **Clay GWT Emergence Observability & Control Directive** — `global-CLAY_GWT_EMERGENCE_OBSERVABILITY_` · bereich_global
+- **H-FUS-F5-008** — `H-FUS-F5-008` · hypothese
+

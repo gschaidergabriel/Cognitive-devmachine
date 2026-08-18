@@ -42,6 +42,8 @@ DEFAULT_ALLOWED_TOOLS = (
     # Regel eine Absichtserklaerung.
     "mcp__clayverse__paket_schnueren",
     "mcp__clayverse__paket_lage",
+    # Faehigkeiten kennen, ohne Schluessel zu sehen.
+    "mcp__clayverse__tresor_katalog",
 )
 
 MAX_PROMPT_CHARS = 20_000

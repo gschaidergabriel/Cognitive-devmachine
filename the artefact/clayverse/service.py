@@ -22,6 +22,7 @@ from .baunotizen import sicherstellen as baunotizen_sicherstellen
 from .erfolge import grundstock as erfolge_grundstock
 from .raum import sicherstellen as raum_sicherstellen
 from .arbeitspaket import sicherstellen as arbeitspaket_sicherstellen
+from .tresor import stand as tresor_stand
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -220,6 +221,12 @@ def main():
         # laufende Transaktion aufgerissen.
         raum_sicherstellen(db)
         arbeitspaket_sicherstellen(db)
+    except Exception as exc:
+        print(f"  Raum/Pakete: {type(exc).__name__}: {exc}")
+    try:
+        # Kein Anlegen, nur melden: ein fehlender Tresorschluessel soll beim
+        # Start auffallen und nicht erst, wenn ein Dienst einen Wert braucht.
+        tresor_lage = tresor_stand()
     except Exception as exc:
         print(f"  Raum: {type(exc).__name__}: {exc}")
     try:

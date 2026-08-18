@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T21:41:08Z. **2579 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T22:11:08Z. **2581 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T03:41:31+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T03:41:31+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2481 |
+| baunotiz | 2483 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1630 |
-| baunotiz | bauverlauf.jsonl | 807 |
+| baunotiz | git-commit | 1631 |
+| baunotiz | bauverlauf.jsonl | 808 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2579 · Gegenhypothese: 0 von 2579
+## Hypothese: 0 von 2581 · Gegenhypothese: 0 von 2581
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -131,6 +131,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen93 persistent prestage contract frontier
 
+### agentZero-Export 2026-08-18T21:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-95234c15716795cc5787bc231b6edbe00a51e5c1` · baunotiz · git-commit · 2026-08-18T21:41:54+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T21:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
 ### agentZero-Export 2026-08-18T21:11:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-74b91f6cfa87475a59b7f57e02ac4c6ea9c5e103` · baunotiz · git-commit · 2026-08-18T21:11:46+00:00 · agentZero
@@ -138,6 +146,14 @@ claycode supervisor: bind Gen93 persistent prestage contract frontier
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T21:11:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T21:11:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-346252b256b67666ccb2` · baunotiz · bauverlauf.jsonl · 2026-08-18T21:11:46+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentZero-Export 2026-08-18T20:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
 
@@ -290,20 +306,4 @@ Umbau ist sie niemandem mitgewandert.
 
 Sie war verletzt: in WorldAssembler.assemble wurde bei einer
 Ressourcen-Kollision `item = dict(r)` geb
-
-### agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-86d356687bd843594dd3715c7503968ad13be1dd` · baunotiz · git-commit · 2026-08-18T19:41:49+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-090197f6c642f834f828` · baunotiz · bauverlauf.jsonl · 2026-08-18T19:41:49+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

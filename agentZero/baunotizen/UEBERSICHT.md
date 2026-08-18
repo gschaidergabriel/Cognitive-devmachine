@@ -1,28 +1,28 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T16:11:10Z. **2536 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T16:41:10Z. **2540 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T21:46:59+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T22:46:49+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2440 |
+| baunotiz | 2444 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1609 |
-| baunotiz | bauverlauf.jsonl | 787 |
+| baunotiz | git-commit | 1611 |
+| baunotiz | bauverlauf.jsonl | 789 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2536 · Gegenhypothese: 0 von 2536
+## Hypothese: 0 von 2540 · Gegenhypothese: 0 von 2540
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -30,9 +30,25 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T21:46:59+07:00`.
 
 ## Privatsphaere-Filter
 
-Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
+Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen100 prestage repair and remaining action-spine reds
+
+`baunotiz-bauverlauf-34e908f208bfe694901b` · baunotiz · bauverlauf.jsonl · 2026-08-18T22:46:49+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen100 prestage repair and remaining action-spine reds
+
+`baunotiz-git-3ae0af7050c00a45117bfb6eb062d79b246463f8` · baunotiz · git-commit · 2026-08-18T22:46:49+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen100 prestage repair and remaining action-spine reds
 
 ### claycode supervisor: bind Gen93 persistent prestage contract frontier
 
@@ -130,6 +146,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: steer on Gen39 runtime-adapter regression
 
+### agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-b3caf4337fcee8c154f39bec1e0b770f72e74fc1` · baunotiz · git-commit · 2026-08-18T16:12:18+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: bind Gen36 measurement reconvergence and compression-receipt semantics
 
 `baunotiz-bauverlauf-0683e06a6325fcf05690` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:49:46+07:00 · Gabriel Gschaider
@@ -153,6 +177,14 @@ claycode supervisor: bind Gen36 measurement reconvergence and compression-receip
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:41:53+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
 
@@ -288,63 +320,6 @@ agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
 ### agentZero-Export 2026-08-18T15:11:03Z (Generation 98, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-bauverlauf-71c3437136209c2a6ff7` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:11:45+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer on Gen35 test-receipt drift and durable-memory emergence
-
-`baunotiz-bauverlauf-c6bd9afe90dfeb9fdd4d` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:58:56+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer on Gen35 test-receipt drift and durable-memory emergence
-
-`baunotiz-git-d20a090a25f2b8c65bf7bc4a41aa76ec460e8851` · baunotiz · git-commit · 2026-08-18T14:58:56+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: steer on Gen35 test-receipt drift and durable-memory emergence
-
-### Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt
-
-`baunotiz-bauverlauf-1696be41c6fb21d201e3` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:54:28+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Gabriel: "er muss generell alle pages die wir ja selbst hosten kennen und wissen
-wie er diese bearbeiten kann", dazu "retina und iar sind gleich wie alle anderen
-ueber frank.ink gehostet" und "da ist auch kosal.frank.ink und anderes".
-
-ALLES GEMESSEN, nichts angenommen: nginx-Konfiguration gelesen, agentforge.db
-abgefragt, jede Unterdomain live gegen die Plattform UND oeffentlich geprueft.
-
-WIE ES WIRKLICH LAEUFT
-Alle Unterdomains von frank.ink bedient die Plattform agentforge
-(*.frank.ink -> <adresse>:8000). Es gibt KEINE eigene nginx-Regel je Seite --
-die Plattform loest die Unterdomain auf einen Projekt-Slug auf, die Dateien
-liegen unter /var/lib/agentforge/projects/<konto>/<slug>/site/. Die Zuordnung
-steht in /var/lib/agentforge/db/agentforge.db, Tabelle `projects`.
-51 aktive Projekte, 12 mit echtem Verkehr -- iar (2683 Besuche), seimensch
-(1957), shadcntest (806), kosal (549), testagents (440) und weitere.
-
-SONDERFALL SEIMENSCH: seimensch.net hat eine EIGENE nginx-Regel mit derselben
-Wurzel als Docroot, statt ueber die Plattform zu laufen. herzrad.at und
-leihmich.org ebenso, mit Unterordnern derselben Wurzel als eigene Domainwurzel
--- deshalb dort relative Asset-Pfade und eigene Wurzeldateien.
-
-⚠️⚠️ EIN BEFUND, DER DER ANNAHME WIDERSPRICHT
-    retina.frank.ink   404 bei agentforge, oeffentlich 301 AUF SICH SELBST
-    daemonweave.frank.ink  404 bei agentforge
-retina ist damit nicht "wie die anderen gehostet", sondern KAPUTT: eine
-Weiterleitung auf sich selbst ist eine Sch
-
-### agentZero research: combined Claude token savings model
-
-`baunotiz-bauverlauf-90c73358f7b4cd4ec191` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:51:21+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

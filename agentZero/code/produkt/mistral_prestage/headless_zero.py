@@ -60,6 +60,8 @@ DEFAULT_ALLOWED_TOOLS = (
     # Zero haelt selbst Platz auf dem Wirt -- Auftrag des Eigners 18.08.
     "mcp__clayverse__speicher_lage",
     "mcp__clayverse__speicher_aufraeumen",
+    "mcp__clayverse__speicher_rueckweg",
+    "mcp__clayverse__speicher_abschaffen",
     # Ohne dieses Werkzeug gibt es keinen Weg vom Urteil eines Menschen zum
     # Lernen des Abrufs -- die Belohnungsfunktion haette dann nur eine Quelle
     # (verifizierte Wirkungen), und die springt fast nie an.

@@ -540,6 +540,16 @@ class ClayVerseEffectBridge:
         try: return _w.speicher_lage()
         except Exception as e: return {"abgewiesen": str(e)}
 
+    def speicher_rueckweg(self) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_rueckweg()
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_abschaffen(self, pfad: str) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_abschaffen(pfad)
+        except Exception as e: return {"abgewiesen": str(e)}
+
     def speicher_aufraeumen(self, nur_zeigen: bool = True) -> dict:
         from . import werkbank as _w
         try: return _w.speicher_aufraeumen(nur_zeigen)
@@ -739,6 +749,16 @@ def main() -> None:
     def speicher_lage() -> dict:
         """Wie voll ist die Platte des Wirts, wieviel waere wegwerfbar. ⚠️ Sieh hier nach, BEVOR du etwas Grosses kopierst -- die haeufigste Ursache einer vollen Platte auf diesem Wirt sind liegengebliebene Kopien der 3,8-GB-Datenbank."""
         return bridge.speicher_lage()
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_rueckweg() -> dict:
+        """Verzeichnis des Altbestands ins Wiki schreiben: welche Modelle liegen da, in welcher Fassung, mit Nachladebefehl. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — deshalb ist dieses Verzeichnis die Bedingung dafuer, dass etwas entfernt werden darf. Ruf das auf, BEVOR du speicher_abschaffen benutzt."""
+        return bridge.speicher_rueckweg()
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_abschaffen(pfad: str) -> dict:
+        """Einen Altbestandsposten entfernen (abgeschaffte Modelle, Frank-Reste). ⚠️ Nur Pfade, die WOERTLICH in der handgepflegten Liste auf dem Wirt stehen — alles andere wird abgewiesen, auch wenn es nach Muell aussieht. Und nur, wenn der Rueckweg schon geschrieben ist. Frag den Menschen, bevor du das benutzt: Altbestand ist nicht Muell."""
+        return bridge.speicher_abschaffen(pfad)
 
     @mcp.tool(annotations=udb_write)
     def speicher_aufraeumen(nur_zeigen: bool = True) -> dict:

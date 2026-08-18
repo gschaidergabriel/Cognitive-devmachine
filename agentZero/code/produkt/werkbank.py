@@ -301,3 +301,24 @@ def speicher_aufraeumen(nur_zeigen: bool = True) -> dict:
     deine Anweisung.
     """
     return _auftrag("speicher_aufraeumen", nur_zeigen=bool(nur_zeigen))
+
+
+def speicher_rueckweg() -> dict:
+    """Verzeichnis des Altbestands schreiben -- WAS da liegt, damit es zurueckkommen kann.
+
+    ⭐ Gewichte sind nachladbar, die Liste war es nicht. Diese Funktion schreibt
+    jedes Modell mit Namen, Fassung und Nachladebefehl ins Wiki. Erst danach
+    darf ein Posten ueberhaupt entfernt werden -- ohne Verzeichnis waere das
+    Loeschen unumkehrbar, und genau das ist ausgeschlossen.
+    """
+    return _auftrag("speicher_rueckweg")
+
+
+def speicher_abschaffen(pfad: str) -> dict:
+    """Einen Altbestandsposten entfernen. Nur nach geschriebenem Rueckweg.
+
+    ⚠️ Du kannst hier keinen beliebigen Pfad nennen: er muss woertlich in der
+    von Hand gepflegten ALTBESTAND-Liste auf dem Wirt stehen. Alles andere wird
+    abgewiesen -- auch wenn es nach Muell aussieht.
+    """
+    return _auftrag("speicher_abschaffen", pfad=str(pfad))

@@ -1,28 +1,28 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T11:49:01Z. **2476 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T12:18:58Z. **2480 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T17:41:45+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T18:44:14+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2380 |
+| baunotiz | 2384 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1579 |
-| baunotiz | bauverlauf.jsonl | 757 |
+| baunotiz | git-commit | 1581 |
+| baunotiz | bauverlauf.jsonl | 759 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2476 · Gegenhypothese: 0 von 2476
+## Hypothese: 0 von 2480 · Gegenhypothese: 0 von 2480
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -33,6 +33,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T17:41:45+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
+
+`baunotiz-bauverlauf-ab8f8081d673cd7185e7` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:44:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
+
+`baunotiz-git-9fc1f3ccee7c2dc4f54fd5b7e89c31a8106ed7e0` · baunotiz · git-commit · 2026-08-18T18:44:14+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 
 ### claycode supervisor: bind Gen62 persistent adapter counterevidence
 
@@ -213,22 +229,6 @@ agentZero research: assess token efficiency pipeline
 ### agentZero research: index generation 32 re-evaluation
 
 `baunotiz-bauverlauf-31d9b7a1333cc82778e5` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:24:44+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero research: index generation 32 re-evaluation
-
-`baunotiz-git-af4ff153c6d61ad5927ccc0fa2a2bed60762ef1a` · baunotiz · git-commit · 2026-08-18T14:24:44+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero research: index generation 32 re-evaluation
-
-### agentZero research: EntityOS re-evaluation generation 32
-
-`baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:24:26+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

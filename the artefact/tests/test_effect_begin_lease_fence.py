@@ -35,9 +35,13 @@ def test_lease_rechecked_transactionally_before_pending_and_external_execution(t
 
     monkeypatch.setattr(db, "assert_lease", assert_then_replace)
 
+    # entityos.exec no longer accepts a caller-supplied lease at all (EffectGate
+    # auto-leases it internally, see effects.py commit 18041d730 "forbid caller
+    # EntityOS lease bypass"). state.noop still accepts one and exercises the
+    # exact same transactional-recheck path this test is about.
     with pytest.raises(StaleGeneration):
         gate.execute(
-            EffectRequest(uid, sid, "entityos.exec", "transport", ["hello"]),
+            EffectRequest(uid, sid, "state.noop", "transport", None),
             lease=lease,
         )
 

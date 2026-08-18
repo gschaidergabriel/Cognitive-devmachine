@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T17:11:06Z. **2544 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T17:41:07Z. **2548 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T23:47:20+07:00`.
 
@@ -8,21 +8,21 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T23:47:20+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2448 |
+| baunotiz | 2452 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1614 |
-| baunotiz | bauverlauf.jsonl | 790 |
+| baunotiz | git-commit | 1615 |
+| baunotiz | bauverlauf.jsonl | 793 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2544 · Gegenhypothese: 0 von 2544
+## Hypothese: 0 von 2548 · Gegenhypothese: 0 von 2548
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -41,6 +41,14 @@ Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im L
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen105 service and MCP capability closure
+
+### claycode supervisor: bind Gen105 service and MCP capability closure
+
+`baunotiz-bauverlauf-b75edfdc09e274685bde` · baunotiz · bauverlauf.jsonl · 2026-08-18T23:47:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: bind Gen100 prestage repair and remaining action-spine reds
 
@@ -138,6 +146,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen62 persistent adapter counterevidence
 
+### agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-7e89a22950fe01ac8121c91d259d65adea6de6d1` · baunotiz · git-commit · 2026-08-18T17:12:13+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
 ### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
 
 `baunotiz-git-ff68c38f9703d7068c478298297c61ca13e4814d` · baunotiz · git-commit · 2026-08-18T16:48:24+00:00 · EntityOS
@@ -170,6 +186,37 @@ DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
 lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
 Schalbefehl a
 
+### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
+
+`baunotiz-bauverlauf-036b27a2ef3adff18d0f` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:48:24+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+SPEICHER. Die Platte lief zweimal auf 100 %. Die Ursache war nicht fehlendes
+Aufraeumen, sondern `frank-laeufer-rae.timer` -- ein Zeitgeber eines
+ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief und Wegwerfordner in /tmp
+anlegte. 6.606 Ordner, 41 GB, unter fuenf verschiedenen Namensmustern; die erste
+Raeumung fand nur die Haelfte. Insgesamt 77 GB befreit, 173 -> 96 GB.
+
+WARUM ES NIEMANDEM AUFFIEL, und das ist der wichtigere Teil: `du -xsh /tmp` lief
+bei 15.236 Eintraegen in die Zeitgrenze und gab NICHTS aus. Ein leeres Ergebnis
+liest sich wie "da ist nichts". So stand die Summe aller Ordner (77 GB) neben dem
+tatsaechlichen Verbrauch (173 GB), und die Luecke fiel niemandem als Luecke auf.
+Die Bilanz nennt jetzt DREI Zahlen: was df sagt, was sie zaehlen konnte, und was
+sie NICHT konnte.
+
+ZURUECKHOLBAR. Der Eigner hat Frank v0.1 und alle lokalen Modelle abgeschafft,
+aber verlangt: "wenn ich jemals doch will muss das auch gehen." Gewichte sind
+nachladbar, die LISTE war es nicht -- deshalb stehen 23 Modelle mit Namen,
+Fassung und Nachladebefehl im Wiki, und `speicher_abschaffen` verweigert ohne
+geschriebenes Verzeichnis. Altbestand (44 GB) loescht die Wacht NICHT von selbst:
+ein Modellcache sieht aus wie Muell und kann Arbeit von Wochen sein.
+
+DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
+lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
+Schalbefehl ausfuehren, git laeuft auf dem Wirt als root. Nachgewiesen mit `id`
+-> uid
+
 ### agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-c710c5747d46afa5672d9906254b186699f9c7c1` · baunotiz · git-commit · 2026-08-18T16:41:48+00:00 · agentZero
@@ -177,6 +224,14 @@ Schalbefehl a
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-4ba71efd8e86a862483f` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:41:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: steer on Gen39 runtime-adapter regression
 
@@ -225,74 +280,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen36 measurement reconvergence and compression-receipt semantics
-
-### agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-4d59810eb368b002f38f378b3794276679207e80` · baunotiz · git-commit · 2026-08-18T15:41:53+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:41:53+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
-
-`baunotiz-bauverlauf-0bb8bb63e176aadd31e7` · baunotiz · bauverlauf.jsonl · 2026-08-18T15:34:36+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Die Zeile "Werkzeuge nur ueber MCP" stand auf offen mit "0 Werkzeuge
-freigegeben". Gemessen wurde per grep nach Werkzeugnamen in Anfuehrungszeichen
-im Quelltext -- die Werkzeuge sind aber Python-Funktionen, ihre Namen stehen
-nackt hinter def. Der grep konnte gar nichts finden. Gemessen wird jetzt in
-policy/managed-settings.json, wo die Freigabe im Betrieb entschieden wird:
-27 erlaubt, Bash und Artifact verboten.
-
-Beim Nachtragen ist mir dieselbe Bauart noch dreimal unterlaufen -- zero_raum
-als entityos_raum, turns als chat_messages, *.tresor als *.json. Alle drei
-meldeten GEBAUTES als FEHLEND. Ursache war nicht der Tippfehler, sondern dass
-_n() jede Exception zu None machte: ein falscher Tabellenname sah exakt aus wie
-eine leere Tabelle. Ein Messgeraet, das "gibt es nicht" und "ist leer" nicht
-unterscheiden kann, ist keins. _n() trennt das jetzt.
-
-Nachgetragen: Werkbank (handlungsfaehig ohne Schale), Profile und
-Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
-Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
-agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
-des Abrufs.
-
-### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
-
-`baunotiz-git-5485c4ccfdd8c583823a2adba9d0099543a93330` · baunotiz · git-commit · 2026-08-18T15:34:36+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
-
-Die Zeile "Werkzeuge nur ueber MCP" stand auf offen mit "0 Werkzeuge
-freigegeben". Gemessen wurde per grep nach Werkzeugnamen in Anfuehrungszeichen
-im Quelltext -- die Werkzeuge sind aber Python-Funktionen, ihre Namen stehen
-nackt hinter def. Der grep konnte gar nichts finden. Gemessen wird jetzt in
-policy/managed-settings.json, wo die Freigabe im Betrieb entschieden wird:
-27 erlaubt, Bash und Artifact verboten.
-
-Beim Nachtragen ist mir dieselbe Bauart noch dreimal unterlaufen -- zero_raum
-als entityos_raum, turns als chat_messages, *.tresor als *.json. Alle drei
-meldeten GEBAUTES als FEHLEND. Ursache war nicht der Tippfehler, sondern dass
-_n() jede Exception zu None machte: ein falscher Tabellenname sah exakt aus wie
-eine leere Tabelle. Ein Messgeraet, das "gibt es nicht" und "ist leer" nicht
-unterscheiden kann, ist keins. _n() trennt das jetzt.
-
-Nachgetragen: Werkbank (handlungsfaehig ohne Schale), Profile und
-Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
-Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
-agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
-des Abrufs.
 

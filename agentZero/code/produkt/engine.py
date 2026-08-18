@@ -73,6 +73,41 @@ class ClayVerseEngine:
         with self._turn_lock:
             return self._ingest_locked(clerk_subject, content, resources=resources)
 
+    def _register_active_turn(self, sid, uid, tid, episode_id, generation, resources):
+        """Den laufenden Zug anmelden. Spiegelt `TurnLifecycle.begin_admission`.
+
+        ⚠️ `active_turns` hat `session_id` als Primaerschluessel: eine Sitzung
+        hat genau EINEN lebenden Zug. Ein Rest aus einem abgebrochenen Lauf
+        wuerde jeden weiteren blockieren, deshalb wird er hier abgeraeumt --
+        aber ausdruecklich VOR dem Anmelden und nicht irgendwann spaeter, damit
+        nie zwei Zuege gleichzeitig als lebend gelten.
+        """
+        import uuid as _uuid
+        causal_id = str(_uuid.uuid4())
+        with self.db.tx() as db:
+            db.execute("DELETE FROM active_turns WHERE session_id=?", (sid,))
+            db.execute(
+                "INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,"
+                "generation,resource_refs,effect_id,outcome,workspace_selected,started_at) "
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                (sid, uid, tid, episode_id, causal_id, int(generation),
+                 json.dumps(sorted(set(resources or []))), None, None, 0, time.time()))
+        return causal_id
+
+    def _retire_active_turn(self, sid, causal_id, effect_id=None, outcome=None):
+        """Den Zug abmelden. Ein nicht abgemeldeter Zug blockiert den naechsten.
+
+        ⚠️ Das muss auch dann laufen, wenn die Wirkung gescheitert ist. Ein
+        Fehlschlag ist ein Ergebnis, kein Grund, die Sitzung zu verstopfen.
+        """
+        with self.db.tx() as db:
+            if effect_id is not None:
+                db.execute("UPDATE active_turns SET effect_id=?,outcome=? "
+                           "WHERE session_id=? AND causal_id=?",
+                           (effect_id, outcome, sid, causal_id))
+            db.execute("DELETE FROM active_turns WHERE session_id=? AND causal_id=?",
+                       (sid, causal_id))
+
     def _ingest_locked(self, clerk_subject, content, *, resources=None):
         resources = resources or []
         uid, sid = self.identity.resolve(clerk_subject)
@@ -91,8 +126,27 @@ class ClayVerseEngine:
         world["runtime_capabilities"] = list(self.effects.available_capabilities())
         ws = self.workspace.open(sid, tid, content, resources)
         reasoning_generation = self.db.session_generation(sid)
+
+        # ⚠️ DIESER ZUG MUSS ANGEMELDET WERDEN, sonst kann er keine Wirkung
+        # ausloesen. Das Wirkungstor verlangt eine Zeile in `active_turns` --
+        # sie ist der Nachweis, dass ein LEBENDER Zug die Wirkung will, und
+        # nicht irgendein Aufrufer mit einer Episodenkennung in der Hand.
+        # `engine.py` hat das nie getan; darum scheiterten sieben Tests mit
+        # `StaleGeneration: effect_active_turn`, darunter die Endabnahme selbst.
+        zug_causal_id = self._register_active_turn(sid, uid, tid, ws["episode_id"],
+                                                  reasoning_generation, resources)
+
         decision = self.inference.reason(world, content)
-        self.workspace.select(ws["episode_id"], decision.get("selection", "respond"))
+        auswahl = decision.get("selection", "respond")
+        self.workspace.select(ws["episode_id"], auswahl)
+        if auswahl == "request_effect":
+            # Die Absicht wurde gewaehlt -- das gehoert auf der Zug-Zeile
+            # vermerkt, genau wie es der Betriebsweg in
+            # `TurnLifecycle.request_effect` tut. Ohne diesen Vermerk weist das
+            # Tor mit "effect workspace intent not selected" ab.
+            with self.db.tx() as db:
+                db.execute("UPDATE active_turns SET workspace_selected=1 "
+                           "WHERE session_id=? AND causal_id=?", (sid, zug_causal_id))
 
         # SECURITY / CAUSALITY LAW:
         # The model/provider response is canonicalized into UnifiedDB before any
@@ -127,6 +181,13 @@ class ClayVerseEngine:
                 ),
                 ws["episode_id"],
             )
+
+        # ⚠️ Abmelden, sobald die Wirkung durch ist -- Erfolg ODER Fehlschlag.
+        # `active_turns` hat `session_id` als Primaerschluessel: bleibt die Zeile
+        # stehen, ist die Sitzung fuer jeden weiteren Zug blockiert. Und ein
+        # Fehlschlag ist ein Ergebnis, kein Grund zu verstopfen.
+        self._retire_active_turn(sid, zug_causal_id, effect_id, 
+                                 json.dumps(outcome, sort_keys=True) if outcome is not None else None)
 
         if isinstance(outcome, dict) and outcome.get("denied") is True:
             decision = dict(decision)

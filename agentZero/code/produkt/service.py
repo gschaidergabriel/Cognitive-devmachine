@@ -18,6 +18,8 @@ from .autonomy_pulse import AutonomyPulse
 from .recovery import recover_incomplete_episodes
 from .wirte import aufnehmen as wirte_aufnehmen
 from .profile import grundstock as profil_grundstock
+from .baunotizen import sicherstellen as baunotizen_sicherstellen
+from .erfolge import grundstock as erfolge_grundstock
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -200,6 +202,23 @@ def main():
         wirte_stand = wirte_aufnehmen(db)
     except Exception as exc:
         wirte_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
+    try:
+        # Auch hier nur Schema/Index -- die eigentliche Aufnahme (aufnehmen())
+        # laeuft eigenstaendig ueber den entityos-baunotizen.timer, nicht im
+        # Bootpfad. Gleiche Regel wie bei profil_grundstock: Schemaanlage ist
+        # eine Startaufgabe, keine Leseaufgabe.
+        baunotizen_sicherstellen(db)
+    except Exception as exc:
+        baunotizen_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
+    else:
+        baunotizen_stand = {"index": "sichergestellt"}
+    try:
+        # Erfolge UND Fehlschlaege. Beide Haelften oder keine -- eine Bilanz,
+        # die nur Gelungenes fuehrt, ist ein Werbeblatt, und hier waere sie
+        # ausserdem ein falsches Bild davon, wie dieses System kaputtgeht.
+        erfolge_stand = erfolge_grundstock(db)
+    except Exception as exc:
+        erfolge_stand = {"_fehler": f"{type(exc).__name__}: {exc}"}
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -25,6 +26,11 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__udb_neuropedia_activation",
     "mcp__clayverse__udb_memory_add",
     "mcp__clayverse__udb_memory_search",
+    # Ohne diese zwei ist Zero blind fuer die Menschen: gemessen antwortete es
+    # "UNBEKANNT -- fuer beide", weil die Angaben in Tabellen stehen, zu denen
+    # memory_search und embedding_search keinen Weg haben.
+    "mcp__clayverse__menschen_profil",
+    "mcp__clayverse__wiki_zuordnung",
 )
 
 MAX_PROMPT_CHARS = 20_000
@@ -34,6 +40,37 @@ _BLOCKED_PREFIX = "UserPromptSubmit operation blocked by hook"
 
 class HeadlessZeroError(RuntimeError):
     pass
+
+
+
+# ── Der anwesende Mensch, deterministisch an die Systemanweisung ───────────
+
+_ANWESEND_UNBEKANNT = """<anwesender_mensch status="NICHT_ERMITTELBAR">
+  Es wurde nachgesehen. Der kanonische Zustand liefert fuer diese Sitzung keinen
+  Menschen. Sage, dass du nicht weisst, mit wem du sprichst -- und leite es NICHT
+  aus einer Kennung, einer Mailadresse oder dem Gespraechstext ab.
+</anwesender_mensch>"""
+
+
+def _anwesenheitsblock(db_path: str, user_id: str, session_id: str) -> str:
+    """Kanonischer Anwesenheitsbeleg, aus der Datenbank, ohne Modell dazwischen.
+
+    Faellt auf einen ausdruecklichen NICHT_ERMITTELBAR-Block zurueck. Nie auf
+    Schweigen: ein fehlender Block und ein leerer Block sehen fuer Zero gleich
+    aus, aber nur beim zweiten weiss es, dass nachgesehen wurde.
+    """
+    try:
+        from ..store import UnifiedDB
+        from .. import profile as _profile
+        return _profile.sitzungsvorspann(UnifiedDB(db_path), user_id, session_id)
+    except Exception:
+        return _ANWESEND_UNBEKANNT
+
+
+def _systemanweisung(db_path: str, user_id: str, session_id: str) -> str:
+    """Laufzeitidentitaet + Anwesenheit in EINER Datei, weil das Flag nur eine nimmt."""
+    grund = Path(RUNTIME_PROMPT).read_text(encoding="utf-8")
+    return grund.rstrip() + "\n\n" + _anwesenheitsblock(db_path, user_id, session_id) + "\n"
 
 
 def run_headless(
@@ -60,7 +97,8 @@ def run_headless(
     law: Claude Code is runtime cognition, never durable identity/memory --
     UnifiedDB is; a stateless one-shot call is what forces that).
 
-    ⚠️ MEASURED 2026-08-18, READ BEFORE CALLING WITH A REAL user_id/session_id:
+    ⚠️ READ BEFORE CALLING WITH A REAL user_id/session_id -- history and
+    current state, in that order:
     the managed UserPromptSubmit/Stop/StopFailure hooks (/etc/claude-code/
     managed-settings.json, allowManagedHooksOnly=true) fire on `claude -p`
     exactly as they do interactively -- there is no CLI flag that skips them
@@ -70,16 +108,36 @@ def run_headless(
     hook independently calls TurnLifecycle.begin_admission()/complete() using
     the raw CAVEMAN prompt as if a human had typed it -- a second, colliding
     admission path, on top of whatever this module's caller does with
-    TurnLifecycle itself. pipeline_managed=True sets CLAYVERSE_PIPELINE_MANAGED=1
-    in the subprocess env for exactly this reason, but as of 2026-08-18 that
-    flag has NO EFFECT -- terminal_hooks.py does not check it yet (proposed
-    patch is in the report, not applied; terminal_hooks.py is coordinator-owned).
-    Until that patch lands, do not call this with user_id/session_id pointing at
-    a real canonical session -- it WILL write permanent turns into that
-    session's history. Two such turns already exist in session:andreas from
-    this module's own measurement runs; disclosed in the report, not cleaned up
-    (turns are an append-only causal ledger by design -- raw deletion would be
-    more destructive than the noise it removes).
+    TurnLifecycle itself.
+
+    pipeline_managed=True (the default here) sets CLAYVERSE_PIPELINE_MANAGED=1
+    in the subprocess env for exactly this reason. MEASURED 2026-08-18: at
+    that point the flag genuinely had NO EFFECT -- terminal_hooks.py did not
+    check it yet, and two colliding turns landed in session:andreas from this
+    module's own measurement runs (disclosed in the report, not cleaned up;
+    turns are an append-only causal ledger by design -- raw deletion would be
+    more destructive than the noise it removes). THAT WAS A REAL BUG.
+
+    IT IS NOW FIXED: clayverse/terminal_hooks.py's _main() checks
+    CLAYVERSE_PIPELINE_MANAGED as the very first thing it does, before
+    touching stdin or the DB, and returns {"suppressOutput": true} right
+    there. It is positioned deliberately ahead of user_prompt()'s
+    begin_admission() call so a pipeline-managed invocation never reaches
+    admission at all -- the cheapest way to not double-admit is to never
+    start. Re-verified against the live DB: active_turns is empty (no turn
+    stuck mid-admission), and the leftover session:andreas turns from the
+    2026-08-18 measurement runs sit 49s-8min apart -- repeated manual test
+    calls, not a real collision (a genuine double-admission would land
+    milliseconds apart).
+
+    The danger below is still real if you override the default:
+    pipeline_managed=False omits CLAYVERSE_PIPELINE_MANAGED from the env, so
+    terminal_hooks.py's hook takes its normal path and calls
+    TurnLifecycle.begin_admission()/complete() on the raw CAVEMAN prompt as if
+    a human had typed it -- the exact second-admitter collision described
+    above, now guaranteed rather than theoretical. Only pass
+    pipeline_managed=False if the hook path is disabled some other way (e.g.
+    a non-managed settings file) and you know that for a fact.
     """
     if user_id not in {"gabriel", "andreas"}:
         raise HeadlessZeroError("headless Zero requires a canonical user id")
@@ -97,6 +155,14 @@ def run_headless(
     if not Path(RUNTIME_PROMPT).is_file():
         raise HeadlessZeroError("runtime identity file missing -- cannot call headless without it")
 
+    # Eine Wegwerfdatei je Aufruf: --append-system-prompt-file nimmt genau eine,
+    # und der Anwesenheitsblock ist je Sitzung verschieden. Eindeutiger Name,
+    # damit zwei gleichzeitige Sitzungen sich nicht gegenseitig ueberschreiben.
+    import tempfile
+    _fd, _sysdatei = tempfile.mkstemp(prefix="zero-sys-", suffix=".md", dir="/tmp")
+    with os.fdopen(_fd, "w", encoding="utf-8") as _f:
+        _f.write(_systemanweisung(db_path, user_id, session_id))
+
     argv = [
         "claude", "-p", caveman_prompt,
         "--settings", MANAGED_SETTINGS,
@@ -104,7 +170,7 @@ def run_headless(
         "--tools", "",
         "--allowedTools", *tools,
         "--permission-mode", "dontAsk",
-        "--append-system-prompt-file", RUNTIME_PROMPT,
+        "--append-system-prompt-file", _sysdatei,
         "--output-format", "json",
         "--no-session-persistence",
         "--max-turns", str(max_turns),
@@ -135,6 +201,14 @@ def run_headless(
         )
     except subprocess.TimeoutExpired as exc:
         raise HeadlessZeroError("headless Zero call timed out") from exc
+    finally:
+        # Die Datei nennt einen Menschen beim Namen. Sie liegt in einem tmpfs,
+        # aber liegenbleiben darf sie trotzdem nicht -- auch nicht nach einem
+        # Zeitueberlauf, gerade dann nicht.
+        try:
+            os.unlink(_sysdatei)
+        except OSError:
+            pass
     wall_ms = (time.perf_counter() - started) * 1000.0
 
     if cp.returncode != 0:

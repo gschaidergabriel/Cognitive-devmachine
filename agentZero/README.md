@@ -1,7 +1,7 @@
 # agentZero
 
 Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
-Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T08:21:51Z.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T08:52:19Z.
 
 | Ordner | Inhalt |
 |---|---|
@@ -20,7 +20,8 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-18T08:
 | `unifieddb/` | **das vollstaendige Schema und eine leere Datenbank daraus** -- Wiederaufbau ohne einen Datensatz |
 | `bauverlauf/` | **jeder Commit mit voller Begruendung** -- Befund, Messung, Grund. Entsteht beim Bauen, nicht nebenher |
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
-| `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
+| `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat, **Bilanz** (`BILANZ.md`) mit Erfolgen UND Fehlschlaegen seit Zero, gleichrangig -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
+| `baunotizen/` | **Aggregat der Bauaufzeichnungen** aus dem Wiki (art baunotiz/vorfall), plus eine lecksuche-gepruefte Stichprobe der juengsten -- kein Volldump von 2330+ Zeilen |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
 
 ## Schwaerzung

@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T08:21:54Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T08:52:19Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -92,6 +92,17 @@ CREATE TABLE entityos_artikel_zuordnung(
   gehoert TEXT NOT NULL,           -- gabriel | andreas | gemeinsam | unbekannt
   grund TEXT NOT NULL,
   sicherheit REAL NOT NULL,        -- 0..1
+  erfasst REAL NOT NULL
+);
+CREATE TABLE entityos_erfolge(
+  id TEXT PRIMARY KEY,
+  art TEXT NOT NULL,               -- erfolg | fehlschlag
+  titel TEXT NOT NULL,
+  wirkung TEXT,                    -- was es konkret geaendert hat
+  beleg TEXT NOT NULL,             -- Messung/Beobachtung. Ohne Beleg kein Eintrag.
+  gehoert TEXT,                    -- gabriel | andreas | gemeinsam
+  seit_zero INTEGER NOT NULL DEFAULT 0,
+  datum TEXT NOT NULL,
   erfasst REAL NOT NULL
 );
 CREATE TABLE entityos_profil(
@@ -716,6 +727,7 @@ CREATE TABLE wm_topologie_name (
     );
 CREATE TABLE workspace_episodes(episode_id TEXT PRIMARY KEY,session_id TEXT NOT NULL REFERENCES sessions(session_id),ts REAL NOT NULL,observation_turn_id TEXT REFERENCES turns(turn_id),salience REAL NOT NULL,alternatives TEXT NOT NULL,selected TEXT,state TEXT NOT NULL);
 CREATE INDEX idx_artikel_art ON artikel(art);
+CREATE INDEX idx_artikel_baunotiz_lookup ON artikel(art, von_quelle, datum);
 CREATE INDEX idx_artikel_epistemic_class ON artikel(epistemic_class);
 CREATE INDEX idx_artikel_logical_id ON artikel(logical_id);
 CREATE INDEX idx_artikel_projekt ON artikel(projekt);

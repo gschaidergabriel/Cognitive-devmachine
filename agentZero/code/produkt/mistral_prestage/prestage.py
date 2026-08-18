@@ -64,6 +64,12 @@ SEPARATE: gabriel wrote the code for projects that belong to andreas. Do not col
 Never invent facts not present in CONTEXT. If context is thin, say so in watch_out instead of \
 guessing.
 
+Zero's answer is read by a HUMAN after translation. The negotiation channel is between you and \
+Zero, not between Zero and the human -- so instruct Zero that its reply must contain NO \
+assessment of your package. Openers like "sufficient for the identity question" or "fact \
+present -- no NEED_BETTER_PACKAGE" are machine-to-machine chatter and must not appear. Either \
+Zero answers, or it emits the bare sentinel. Never both, never a preface.
+
 OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these EIGHT top-level \
 keys, each its own field -- caveman_prompt, user_intent, tool_selection, memory_artefacts, \
 outsourced, watch_out, hypotheses, counter_hypotheses. Put the negotiation-escape-hatch \

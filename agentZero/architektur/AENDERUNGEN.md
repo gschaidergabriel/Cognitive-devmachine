@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T08:21:53Z aus drei Repos. 467 Eintraege.
+Automatisch erzeugt 2026-08-18T08:52:19Z aus drei Repos. 467 Eintraege.
 
 ## architektur (14)
 
@@ -139,11 +139,12 @@ Automatisch erzeugt 2026-08-18T08:21:53Z aus drei Repos. 467 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (50)
+## pruefung (51)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T09:28 | entityos | `9532cd296428` | S6 prep: EntityOS naming also in legacy (test-only, unwired) api.py HTML strings |
+| 2026-08-18T08:50 | entityos | `26a6861b88b0` | Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt |
 | 2026-08-18T06:48 | entityos | `ac5224698ec5` | claycode supervisor: sync control boundary and bind latest Vercel guard evidence |
 | 2026-08-18T04:27 | entityos | `984da7ebe451` | test(clayverse): pin split-arbiter pulse activation denial |
 | 2026-08-18T04:20 | entityos | `80ef3ebf7a9a` | test(clayverse): falsify bounded in-process autonomy pulse |
@@ -194,7 +195,7 @@ Automatisch erzeugt 2026-08-18T08:21:53Z aus drei Repos. 467 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (230)
+## bau (229)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -202,6 +203,7 @@ Automatisch erzeugt 2026-08-18T08:21:53Z aus drei Repos. 467 Eintraege.
 | 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
 | 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
 | 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
+| 2026-08-18T08:44 | entityos | `be1359046d41` | Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging |
 | 2026-08-18T08:03 | entityos | `9de2b8a9e7a0` | Zero weiss jetzt, mit WEM es spricht - und wem was gehoert |
 | 2026-08-18T07:49 | entityos | `2e3a9cd5a2db` | KRITISCH: Cross-user-Leck geschlossen. Und die Notbremse wird endlich erkannt. |
 | 2026-08-18T07:49 | unifieddb | `2e8fd4d1127a` | memory_tabelle trennt nach Mensch - Cross-user-Leck geschlossen |
@@ -257,5 +259,4 @@ Automatisch erzeugt 2026-08-18T08:21:53Z aus drei Repos. 467 Eintraege.
 | 2026-08-18T03:22 | entityos | `831870a48b13` | feat(clayverse): add non-preempting autonomous turn gate |
 | 2026-08-18T03:19 | entityos | `6eb85707b546` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
 | 2026-08-18T03:13 | entityos | `a896a05284b8` | EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet |
-| 2026-08-18T03:12 | entityos | `523fbdd9a9a2` | receipt(clayverse): bind autonomy budget source evidence |
 

@@ -63,6 +63,11 @@ def _profil_safe(db, user_id: str) -> dict | None:
             p["wiki_bestand"] = _az.bestand(db, user_id)
         except Exception:
             pass
+        try:
+            from .. import erfolge as _erfolge
+            p["bilanz"] = _erfolge.bilanz(db, user_id)
+        except Exception:
+            pass
         return p
     except Exception:
         return None
@@ -80,20 +85,28 @@ def run_chat_turn(
 ) -> dict[str, Any]:
     """The one interface: German message in, German reply out.
 
-    record_via_turnlifecycle=False (default, SAFE): does not touch
-    turns/active_turns at all. Records the exchange only in this module's own
-    mv_prestage_turns/mv_translation_log tables. Use this until
-    terminal_hooks.py is patched to recognize CLAYVERSE_PIPELINE_MANAGED and
-    stop independently admitting its own colliding turn on every headless call.
+    record_via_turnlifecycle=False (default): does not touch turns/
+    active_turns at all. Records the exchange only in this module's own
+    mv_prestage_turns/mv_translation_log tables.
 
-    record_via_turnlifecycle=True (P4 TARGET, NOT YET SAFE TO ENABLE): uses
-    TurnLifecycle.begin_admission()/.complete() -- the product's own atomic
-    admission primitives, reused rather than reimplemented, exactly as asked.
-    Do not enable this against a real canonical session until the hook
-    collision described in headless_zero.py's docstring is fixed -- two
-    independent admitters (this function AND the managed UserPromptSubmit/Stop
-    hooks firing on the same claude -p call) will both try to own the same
-    session's active_turns row.
+    record_via_turnlifecycle=True: uses TurnLifecycle.begin_admission()/
+    .complete() -- the product's own atomic admission primitives, reused
+    rather than reimplemented, exactly as asked. HISTORY: this was genuinely
+    unsafe when first written -- the managed UserPromptSubmit hook fires on
+    every `claude -p` call just like an interactive keystroke, and as measured
+    2026-08-18 it independently called begin_admission() on the same session,
+    a second admitter racing this one. THAT IS FIXED: clayverse/
+    terminal_hooks.py's _main() now checks CLAYVERSE_PIPELINE_MANAGED first,
+    before any stdin/DB access, and short-circuits to
+    {"suppressOutput": true} instead of reaching user_prompt()'s
+    begin_admission() -- see headless_zero.py's run_headless() docstring for
+    the full account and the live-DB re-verification (active_turns empty).
+    headless_zero.run_headless()'s pipeline_managed defaults to True and sets
+    that env var, so calls through the normal headless path are covered.
+    The collision is only guaranteed again if a caller sets
+    pipeline_managed=False on that call (or otherwise disables the managed
+    hook) -- do not enable record_via_turnlifecycle=True against a real
+    canonical session in that situation, for the reasons above.
 
     Returns the interface contract (see report): turn_id, causal_id, reply,
     rounds_used, self_adapted, elapsed_ms, tool_selection.
@@ -144,6 +157,18 @@ def run_chat_turn(
         selected_tools = tool_selection or [
             t for t in envelope.get("tool_selection", []) if isinstance(t, str) and t.startswith("mcp__clayverse__")
         ] or None
+        if selected_tools is not None:
+            # Wer da ist und wem was gehoert, darf nicht von der Auswahl eines
+            # freien Modells abhaengen. Gemessen: auf "Was ist schiefgegangen?"
+            # waehlte die Vorstufe menschen_profil NICHT, Zero suchte im
+            # Gedaechtnis, fand nichts und forderte ein besseres Paket an --
+            # obwohl die Antwort in menschen_profil()["bilanz"] stand.
+            # Lesend, billig, und genau bei den Fragen zustaendig, bei denen
+            # Raten am teuersten ist.
+            for _pflicht in ("mcp__clayverse__menschen_profil",
+                             "mcp__clayverse__wiki_zuordnung"):
+                if _pflicht not in selected_tools:
+                    selected_tools.append(_pflicht)
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(

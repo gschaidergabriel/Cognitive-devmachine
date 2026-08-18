@@ -138,6 +138,19 @@ BEDEUTUNG = {
         gegenhypothese="Die Eigner-Ausnahmen sind von Hand einzeln entschieden, nicht automatisch aus "
                        "einer Regel ableitbar. Ein neues privates Eigner-Feld faellt nur dann korrekt "
                        "raus, wenn niemand es versehentlich in die Ausnahmeliste eintraegt."),
+    "baunotizen": dict(
+        wieso="Eigner-Auftrag 18.08. woertlich: 'alle deine baunotizen werden auch teil des wiki "
+              "und mit alle meine ich alle mit metadaten und alles' -- hier die oeffentliche Seite "
+              "davon: Aggregat statt 2330-Zeilen-Dump, plus eine lecksuche-gepruefte Stichprobe.",
+        gehoert_zu="artikel(art IN ('baunotiz','vorfall')) in der UnifiedDB, gefuellt von "
+                  "clayverse/baunotizen.py aus drei Quellen (git-commit, bauverlauf.jsonl, protokoll.jsonl).",
+        hypothese="Aggregatzahlen plus eine geprueft-oeffentliche Stichprobe der juengsten Eintraege "
+                  "zeigen Umfang, Herkunftsmischung und Charakter des Bauverlaufs verlaesslich, ohne "
+                  "den ganzen Bestand roh zu veroeffentlichen.",
+        gegenhypothese="Die Stichprobe ist nach Datum sortiert, nicht nach Bedeutung -- die juengsten "
+                       "Eintraege koennen einen unrepraesentativen Ausschnitt zeigen. Zeilen mit einem "
+                       "Lecktreffer fehlen komplett, nicht redigiert -- die Stichprobe ist dadurch kleiner "
+                       "als 25, wenn viele juengste Zeilen Adressen/IPs enthalten."),
 }
 
 
@@ -186,6 +199,37 @@ def schreibe(pfad: Path, zeilen: list, *, jsonl: bool, herkunft: str = "", felde
         "format": "jsonl" if jsonl else "json",
         "herkunft": herkunft or "UnifiedDB /var/lib/clay/wiki.db",
         "felder": felder or [],
+        "erzeuger": "/opt/agentzero-export/agentzero_export.py auf frank-api",
+        "geschwaerzt": "Zugangsdaten wurden vor dem Schreiben ersetzt",
+        "entity_generation": _GENERATION[0],
+        **_bedeutung(pfad),
+    }
+    pfad.with_suffix(pfad.suffix + ".meta.json").write_text(
+        json.dumps(meta, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    return eintrag
+
+
+def schreibe_markdown(pfad: Path, text: str, *, herkunft: str = "") -> dict:
+    """Wie schreibe(), aber fuer Fliesstext/Markdown -- gleiche Beipackdatei-Pflicht.
+
+    Der Vertrag gilt fuer JEDE Datei, nicht nur JSON: herkunft, wieso, gehoert_zu,
+    hypothese, gegenhypothese, Zeitstempel, Generation, Pruefsumme. Ohne Beipackdatei
+    ist eine Markdown-Datei in einem halben Jahr genauso undeutbar wie eine JSON-Zeile
+    ohne Herkunft.
+    """
+    pfad.parent.mkdir(parents=True, exist_ok=True)
+    pfad.write_text(text, encoding="utf-8")
+    eintrag = {
+        "datei": str(pfad.relative_to(REPO)),
+        "zeilen": text.count("\n") + 1,
+        "bytes": len(text.encode("utf-8")),
+        "sha256": hashlib.sha256(text.encode("utf-8")).hexdigest()[:16],
+    }
+    meta = {
+        **eintrag,
+        "erzeugt": jetzt(),
+        "format": "markdown",
+        "herkunft": herkunft or "UnifiedDB /var/lib/clay/wiki.db",
         "erzeuger": "/opt/agentzero-export/agentzero_export.py auf frank-api",
         "geschwaerzt": "Zugangsdaten wurden vor dem Schreiben ersetzt",
         "entity_generation": _GENERATION[0],
@@ -853,6 +897,235 @@ def profile_und_zuordnung(manifest: dict) -> None:
     c.close()
 
 
+def bilanz_erfolge(manifest: dict) -> None:
+    """Erfolge UND Fehlschlaege seit Zero -- BEIDE Haelften oder keine.
+
+    Eigner-Auftrag: eine Tabelle, die nur Gelungenes fuehrt, ist ein Werbeblatt.
+    Quelle: entityos_erfolge, ueber clayverse/erfolge.py:bilanz() -- dieselbe
+    Funktion, die auch Zero selbst befragt, nicht eine zweite Ableitung.
+
+    ⚠️ Zero laeuft seit 2026-08-18 -- EINEM Tag. Jede seit_zero=1-Zeile stammt aus
+    diesem einen Tag. Das steht hier oben in Fettschrift, nicht klein gedruckt unten --
+    sonst liest sich eine Ein-Tage-Liste wie eine lange Erfolgsgeschichte.
+    """
+    ordner = ZIEL / "menschen"
+    ordner.mkdir(parents=True, exist_ok=True)
+    try:
+        sys.path.insert(0, "/opt/entityos/the artefact")
+        import importlib
+        from clayverse import erfolge
+        importlib.reload(erfolge)
+    except Exception as e:
+        manifest["dateien"].append({"datei": "agentZero/menschen/BILANZ.md",
+                                    "_fehler": f"{type(e).__name__}: {e}"})
+        return
+
+    class _NurLeseHuelle:
+        """bilanz() will nur ein Objekt mit .db.execute() -- mehr braucht es nicht,
+        und diese Huelle kann nichts schreiben (verbindet sich read-only)."""
+        pass
+
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+    huelle = _NurLeseHuelle()
+    huelle.db = c
+    try:
+        b = erfolge.bilanz(huelle)
+    except Exception as e:
+        c.close()
+        manifest["dateien"].append({"datei": "agentZero/menschen/BILANZ.md",
+                                    "_fehler": f"{type(e).__name__}: {e}"})
+        return
+    c.close()
+
+    if b.get("stand") == "NOCH_NICHT_ERFASST":
+        manifest["dateien"].append({"datei": "agentZero/menschen/BILANZ.md",
+                                    "hinweis": "entityos_erfolge noch nicht befuellt -- nichts exportiert"})
+        return
+
+    eb = schreibe(ordner / "bilanz.json", b, jsonl=False,
+                 herkunft="entityos_erfolge in UnifiedDB, ueber clayverse/erfolge.py:bilanz()")
+    manifest["dateien"].append(eb)
+
+    def zeile(e):
+        return (f"| {e['datum']} | {e['titel']} | {(e['wirkung'] or '').replace('|', '/')} | "
+               f"{e['beleg'].replace('|', '/')} | {e['gehoert'] or '?'} | "
+               f"{'ja' if e['seit_zero'] else 'nein'} |")
+
+    md = ["# Bilanz -- Erfolge UND Fehlschlaege seit Zero", "",
+          f"Automatisch erzeugt {jetzt()} aus `entityos_erfolge`.", "",
+          f"> ⚠️ {b['zeitraum']}", "",
+          f"> ⚠️ {b['warum_fehlschlaege']}", "",
+          "Beide Haelften stehen hier gleichrangig: gleiche Tabellenform, gleiche Spalten, "
+          "Erfolge zuerst nur weil das Alphabet so will -- keine Haelfte ist Fussnote der "
+          "anderen. Eigner-Auftrag woertlich: eine Tabelle mit nur Gelungenem ist ein "
+          "Werbeblatt.", "",
+          f"## Erfolge ({len(b['erfolge'])})", "",
+          "| Datum | Titel | Wirkung | Beleg | gehoert | seit Zero |",
+          "|---|---|---|---|---|---|"]
+    md += [zeile(e) for e in b["erfolge"]]
+    md += ["", f"## Fehlschlaege ({len(b['fehlschlaege'])})", "",
+          "| Datum | Titel | Wirkung | Beleg | gehoert | seit Zero |",
+          "|---|---|---|---|---|---|"]
+    md += [zeile(e) for e in b["fehlschlaege"]]
+    md.append("")
+    em = schreibe_markdown(ordner / "BILANZ.md", "\n".join(md) + "\n",
+                           herkunft="entityos_erfolge in UnifiedDB, ueber clayverse/erfolge.py:bilanz()")
+    manifest["dateien"].append({**em, "erfolge": len(b["erfolge"]), "fehlschlaege": len(b["fehlschlaege"])})
+    manifest["bilanz"] = {"erfolge": len(b["erfolge"]), "fehlschlaege": len(b["fehlschlaege"])}
+
+
+# ── Leck-Muster fuer die Baunotizen-Stichprobe -- dasselbe Muster, mit dem   ─
+# hinterher verifiziert wird. Ein Treffer wirft die GANZE Zeile aus der       │
+# Stichprobe, nicht nur das Feld -- Zurueckhalten ist umkehrbar, eine         │
+# veroeffentlichte Adresse nicht.                                            │
+_BAUNOTIZ_LECK = re.compile(
+    r"@gmail|@frank\.ink|andreas-MACO|ai-core-node|password|passwort|api[_-]?key"
+    r"|[0-9]{1,3}(?:\.[0-9]{1,3}){3}"
+    r"|[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
+    re.IGNORECASE,
+)
+
+
+def baunotizen_export(manifest: dict) -> None:
+    """Baunotizen aus dem Wiki -- AGGREGAT + gepruefte Stichprobe, kein 2330-Zeilen-Dump.
+
+    Quelle: artikel(art IN ('baunotiz','vorfall')), gefuellt von clayverse/baunotizen.py.
+
+    ⚠️ Kein einziger Commit traegt eine 'Hypothese:'-Zeile -- hypothese/gegenhypothese
+    werden NUR mechanisch aus einer Zeile im Muster '^Hypothese:' extrahiert, nie
+    erfunden. Praktisch alle Zeilen haben deshalb hypothese=null. Das ist der Befund
+    ueber den Bestand, kein Fehler in diesem Export -- siehe Modulkopf von baunotizen.py.
+
+    ⚠️ artikel.herkunft ist CHECK-constrained auf ('gemessen','nutzer'). Alle Zeilen
+    hier stehen mit herkunft=gemessen -- korrekt, das sind aufgezeichnete Fakten, keine
+    Behauptung -- aber das sagt NICHTS ueber die Quellenart aus. Die steht stattdessen
+    in von_quelle (git-commit | bauverlauf.jsonl | strom) und zusaetzlich, mit dem
+    woertlichen Feldnamen, in metadaten.herkunft (JSON).
+
+    ⚠️ PRIVATSPHAERE. Dieses Repo ist OEFFENTLICH. Commit-Texte koennen Zugangsdaten,
+    IP-Adressen, Mailadressen oder Rechnernamen der zwei privaten Maschinen enthalten --
+    zusaetzlich zur allgemeinen schwaerzen()-Schwaerzung wird jede Stichprobenzeile vor
+    dem Schreiben gegen _BAUNOTIZ_LECK geprueft. Ein Treffer wirft die ganze Zeile raus.
+    """
+    ordner = ZIEL / "baunotizen"
+    ordner.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+
+    gesamt = c.execute(
+        "SELECT COUNT(*) FROM artikel WHERE art IN ('baunotiz','vorfall')").fetchone()[0]
+    if not gesamt:
+        c.close()
+        manifest["dateien"].append({"datei": "agentZero/baunotizen/",
+                                    "hinweis": "keine Baunotizen in der artikel-Tabelle"})
+        return
+
+    nach_art = [dict(r) for r in c.execute(
+        "SELECT art, COUNT(*) AS anzahl FROM artikel WHERE art IN ('baunotiz','vorfall') "
+        "GROUP BY art ORDER BY anzahl DESC")]
+    nach_quelle = [dict(r) for r in c.execute(
+        "SELECT art, von_quelle, COUNT(*) AS anzahl FROM artikel "
+        "WHERE art IN ('baunotiz','vorfall') GROUP BY art, von_quelle ORDER BY art, anzahl DESC")]
+    zeitraum = dict(c.execute(
+        "SELECT MIN(datum) AS von, MAX(datum) AS bis FROM artikel "
+        "WHERE art IN ('baunotiz','vorfall')").fetchone())
+
+    alle = c.execute(
+        "SELECT metadaten FROM artikel WHERE art IN ('baunotiz','vorfall')").fetchall()
+    mit_hyp = mit_gegenhyp = 0
+    for r in alle:
+        try:
+            m = json.loads(r["metadaten"]) if r["metadaten"] else {}
+        except Exception:
+            m = {}
+        if m.get("hypothese"):
+            mit_hyp += 1
+        if m.get("gegenhypothese"):
+            mit_gegenhyp += 1
+
+    # Stichprobe: juengste zuerst, aber nur was die Lecksuche uebersteht.
+    kandidaten = c.execute(
+        "SELECT id, art, titel, datum, metadaten, von_quelle FROM artikel "
+        "WHERE art IN ('baunotiz','vorfall') ORDER BY datum DESC LIMIT 400").fetchall()
+    c.close()
+
+    stichprobe, verworfen = [], 0
+    for r in kandidaten:
+        if len(stichprobe) >= 25:
+            break
+        try:
+            m = json.loads(r["metadaten"]) if r["metadaten"] else {}
+        except Exception:
+            m = {}
+        titel = schwaerzen(r["titel"] or "")
+        wieso = schwaerzen(m.get("wieso") or "")
+        autor = schwaerzen(m.get("autor") or "")
+        pruefblock = json.dumps([titel, wieso, autor, r["von_quelle"], r["id"]], ensure_ascii=False)
+        if _BAUNOTIZ_LECK.search(pruefblock):
+            verworfen += 1
+            continue
+        stichprobe.append({
+            "id": r["id"], "art": r["art"], "datum": r["datum"], "von_quelle": r["von_quelle"],
+            "titel": titel, "autor": autor, "wieso": wieso[:1500],
+            "hypothese": m.get("hypothese"), "gegenhypothese": m.get("gegenhypothese"),
+        })
+
+    ej = schreibe(ordner / "aggregat.json", {
+        "gesamt": gesamt, "nach_art": nach_art, "nach_von_quelle": nach_quelle,
+        "zeitraum": zeitraum, "mit_hypothese": mit_hyp, "mit_gegenhypothese": mit_gegenhyp,
+        "ohne_hypothese": gesamt - mit_hyp,
+        "stichprobe_kandidaten_geprueft": len(kandidaten),
+        "stichprobe_verworfen_wegen_privatsphaere": verworfen,
+    }, jsonl=False, herkunft="artikel(art IN ('baunotiz','vorfall')) in UnifiedDB, AGGREGIERT")
+    manifest["dateien"].append(ej)
+
+    es = schreibe(ordner / "stichprobe-juengste25.jsonl", stichprobe, jsonl=True,
+                 herkunft="artikel(art IN ('baunotiz','vorfall')), juengste zuerst, lecksuche-geprueft")
+    manifest["dateien"].append(es)
+
+    md = ["# Baunotizen -- Aggregat und Stichprobe", "",
+          f"Automatisch erzeugt {jetzt()}. **{gesamt} Zeilen** insgesamt in `artikel` "
+          "(art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die "
+          "juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.", "",
+          f"Zeitraum: `{zeitraum['von']}` bis `{zeitraum['bis']}`.", "",
+          "## Nach Art", "", "| Art | Anzahl |", "|---|---|"]
+    md += [f"| {r['art']} | {r['anzahl']} |" for r in nach_art]
+    md += ["", "## Nach Quelle (`von_quelle`)", "", "| Art | von_quelle | Anzahl |", "|---|---|---|"]
+    md += [f"| {r['art']} | {r['von_quelle']} | {r['anzahl']} |" for r in nach_quelle]
+    md += ["",
+          f"## Hypothese: {mit_hyp} von {gesamt} · Gegenhypothese: {mit_gegenhyp} von {gesamt}", "",
+          "> ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** "
+          "`hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` "
+          "bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben "
+          "sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler "
+          "im Export.", "",
+          "> ⚠️ **`artikel.herkunft` ist CHECK-constrained auf `('gemessen','nutzer')`.** "
+          "Alle Zeilen hier stehen mit `herkunft=gemessen` -- korrekt, es sind aufgezeichnete "
+          "Fakten aus Log/Git, keine Behauptung -- aber das sagt nichts ueber die QUELLENART "
+          "aus. Die steht in `von_quelle` (`git-commit` | `bauverlauf.jsonl` | `strom`) und "
+          "zusaetzlich in `metadaten.herkunft` im JSON.", "",
+          "## Privatsphaere-Filter", "",
+          f"Von **{len(kandidaten)}** gepruefte juengste Kandidaten wurden **{verworfen}** "
+          "verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, "
+          "Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). "
+          "Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das "
+          "betroffene Feld. Das Repo ist OEFFENTLICH.", "",
+          f"## Die {len(stichprobe)} juengsten (gepruefte) Baunotizen", ""]
+    for s in stichprobe:
+        md += [f"### {s['titel'] or s['id']}", "",
+              f"`{s['id']}` · {s['art']} · {s['von_quelle']} · {s['datum']}"
+              + (f" · {s['autor']}" if s['autor'] else ""), "",
+              f"Hypothese: {s['hypothese'] or '_(keine -- s.o.)_'} · "
+              f"Gegenhypothese: {s['gegenhypothese'] or '_(keine -- s.o.)_'}", "",
+              (s['wieso'] or '_(kein Text)_'), ""]
+    em = schreibe_markdown(ordner / "UEBERSICHT.md", "\n".join(md) + "\n",
+                           herkunft="artikel(art IN ('baunotiz','vorfall')) in UnifiedDB")
+    manifest["dateien"].append({**em, "gesamt": gesamt, "stichprobe": len(stichprobe),
+                                "verworfen": verworfen})
+    manifest["baunotizen"] = {"gesamt": gesamt, "stichprobe": len(stichprobe), "verworfen": verworfen}
+
+
 def main() -> int:
     t0 = time.time()
     # Stand des Remote ZUERST holen, sonst wirft ein spaeteres reset die
@@ -951,6 +1224,8 @@ def main() -> int:
     quelltext(manifest)
     unifieddb_leer(manifest)
     profile_und_zuordnung(manifest)
+    bilanz_erfolge(manifest)
+    baunotizen_export(manifest)
     testlaeufe(manifest)
     ziele_tabelle(manifest)
     messwerk(manifest)
@@ -989,7 +1264,8 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt {manifest['erz
 | `unifieddb/` | **das vollstaendige Schema und eine leere Datenbank daraus** -- Wiederaufbau ohne einen Datensatz |
 | `bauverlauf/` | **jeder Commit mit voller Begruendung** -- Befund, Messung, Grund. Entsteht beim Bauen, nicht nebenher |
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
-| `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
+| `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat, **Bilanz** (`BILANZ.md`) mit Erfolgen UND Fehlschlaegen seit Zero, gleichrangig -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
+| `baunotizen/` | **Aggregat der Bauaufzeichnungen** aus dem Wiki (art baunotiz/vorfall), plus eine lecksuche-gepruefte Stichprobe der juengsten -- kein Volldump von 2330+ Zeilen |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
 
 ## Schwaerzung

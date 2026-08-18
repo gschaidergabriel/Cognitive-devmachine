@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T08:21:53Z. 733 Commits aus vier Repos, davon 212 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T08:52:19Z. 735 Commits aus vier Repos, davon 214 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,142 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt
+
+`26a6861b88b0` · entityos · 08:50 UTC · EntityOS
+
+```
+Nach dem Neubau nennt Zero den anwesenden Menschen aus dem kanonischen Zustand:
+28 s statt 68 s, EINE Runde statt zwei mit Selbstanpassung. Auf "Hat Gabriel
+Code fuer Projekte geschrieben, die mir gehoeren?" liefert es zwei UNABHAENGIGE
+Belege (Projekttabelle + Wiki-Zuordnung) und weist die Belastbarkeit jedes
+einzelnen getrennt aus: Projektzeile aus Eignerangabe, Wiki-Zahl gemessen, deren
+Zuordnungsgrund aber nur Sicherheit 0,6 -- "stuetzt den Fakt, begruendet ihn
+aber nicht allein". Das ist das Zielverhalten.
+
+Drei Dinge stimmten trotzdem nicht. Bemerkenswert: Zero hat alle drei selbst
+gemeldet, keines davon ist durch eine Fehlermeldung aufgefallen.
+
+A: EINE FREMDE MAILADRESSE IN ANDREAS' SITZUNG
+
+Zero, woertlich, in Andreas' Sitzung:
+  Die eingespeiste Umgebungsangabe nennt als E-Mail-Adresse
+  structured.thinking.gschaider@gmail.com, dein Profilfeld mail gibt
+  genuinos@gmail.com an. Fuer die Sitzungsidentitaet ist der vom Clerk
+  bestaetigte Zustand massgeblich, und der lautet: andreas.
+
+Es hat richtig entschieden und trotzdem Arbeit an eine Unstimmigkeit gehaengt,
+die es nicht aufloesen konnte. Gefunden: .oauthAccount.emailAddress steht in
+BEIDEN Benutzerverzeichnissen -- das Anthropic-Konto, mit dem Claude Code auf
+diesem Server angemeldet ist. Es gibt genau EINE Anmeldung.
+
+Kein Leck aus der Profilschicht, sondern eine wahre Angabe ueber den BETREIBER.
+Loeschen waere falsch (es ist die Anmeldung). Verstecken waere schlimmer: Zero
+saehe die Abweichung trotzdem und haette dann keine Erklaerung. Also wird sie
+BENANNT -- Punkt 9c im Vertrag. Aus einer unaufloesbaren Unstimmigkeit wird eine
+bekannte Tatsache.
+
+B: DIE BILANZ WAR DA, DAS WERKZEUG WAR NICHT AUSGEWAEHLT
+
+Auf "Was ist schiefgegangen? Nenne die Fehlschlaege" suchte Zero in
+udb_memory_search und udb_embedding_search, fand nichts und forderte
+sauber begruendet ein besseres Paket an -- obwohl die Antwort in
+menschen_profil()["bilanz"] stand. Die Vorstufe waehlt die Werkzeuge, und fuer
+diese Frage hatte sie menschen_profil nicht gewaehlt.
+
+Werkzeuge, die sagen WER da ist und WEM was gehoert, duerfen nicht von der
+Auswahl eines freien Modells abhaengen. Sie sind lesend, billig und genau bei
+den Fragen zustaendig, bei denen Raten am teuersten ist. Sie werden jetzt IMMER
+mitgegeben, egal was die Vorstufe waehlt. Dazu Punkt 9b: die Bilanz hat zwei
+Haelften, und der Zeitraum (ein Tag) gehoert dazugesagt.
+
+C: VERHANDLUNGSGEPLAUDER IM SICHTBAREN TEXT
+
+Antworten begannen mit "Ausreichend fuer die Identitaetsfrage" und "Fakt
+vorhanden -- kein NEED_BETTER_PACKAGE." Das ist Zeros Antwort an die VORSTUFE.
+Die Verhandlung ist ein Kanal zwischen zwei Maschinen; sie gehoert nicht in den
+Text, den ein Mensch liest. Entweder Zero antwortet, oder es setzt die nackte
+Notbremse -- nie beides, nie als Vorspann.
+```
+
+### Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging
+
+`be1359046d41` · entityos · 08:44 UTC · EntityOS
+
+```
+Zero antwortete im Testlauf auf "Wem gehoert der Rechner andreas-MACO, und wem
+gehoert SeiMensch.net?" woertlich:
+
+  UNBEKANNT -- fuer beide. Keiner der beiden Namen existiert in meinem
+  aktuellen Zustand. Ich treffe keine Vermutung.
+
+Und es hatte in jedem Punkt recht. Es suchte in udb_memory_search und
+udb_embedding_search, fand nichts und weigerte sich zu raten. Die Antwort stand
+in Tabellen, zu denen es keinen Weg gab. DIE WEIGERUNG WAR KORREKT, DIE
+BLINDHEIT WAR DER BAUFEHLER. Zwei Ursachen, beide hier behoben.
+
+URSACHE 1: DER ANWESENHEITSBLOCK ERREICHTE MISTRAL, ABER NIE ZERO.
+
+Im Pipeline-Pfad setzt headless_zero CLAYVERSE_PIPELINE_MANAGED=1, und
+terminal_hooks steigt daraufhin sofort aus -- absichtlich, damit nicht zwei
+Stellen denselben Zug aufnehmen. Damit faellt aber der GESAMTE Hook-Kontext weg,
+in dem `anwesender_mensch` als ungekuerztes Feld verankert war. Zero sieht dort
+genau zwei Dinge: die Systemanweisung und den Caveman-Prompt.
+
+Der Block haengt jetzt DETERMINISTISCH an der Systemanweisung (headless_zero
+_systemanweisung/_anwesenheitsblock, Wegwerfdatei je Aufruf, im finally
+geloescht). Nicht ueber Mistral: dann haenge die Identitaet eines Menschen an
+der Formulierungslaune eines freien Modells, und laesst es den Satz weg, weiss
+Zero wieder nichts, ohne dass es jemand merkt. Die Regel dafuer stammt vom
+Eigner: nicht dem Modell sagen, es sei etwas -- dem System die Eigenschaft geben
+und CODE entscheiden lassen, was wirklich passiert ist.
+Fehlt der Block, steht dort ausdruecklich status="NICHT_ERMITTELBAR". Ein
+fehlendes und ein leeres Feld sehen sonst gleich aus -- nur beim zweiten weiss
+Zero, dass nachgesehen wurde.
+
+URSACHE 2: KEIN WERKZEUG FUEHRTE ZU DEN ANGABEN.
+
+Neu: menschen_profil() und wiki_zuordnung(projekt). Beide nehmen KEIN
+user_id-Argument -- der Mensch ist kein Parameter. Ein Argument waere ein Feld,
+das das Modell fuellt, und die Trennung der beiden Menschen waere eine Bitte an
+ein Sprachmodell statt einer Eigenschaft des Systems. Genau dieser Unterschied
+hat heute schon einmal Andreas Gabriels private Eintraege sehen lassen.
+
+Dazu Punkt 9a im Laufzeitvertrag. Punkt 9 schliesst session_state als
+Wahrheitsquelle aus -- richtig, und Zero hat sich daran gehalten. Nur stand
+nirgends, WO die Wahrheit dann steht. Ein Vertrag, der jede falsche Quelle
+ausschliesst und keine richtige nennt, erzeugt genau diese Antwort.
+
+ARTIKELZUORDNUNG: 16.551 Artikel, aus den Metadaten.
+  gemeinsam 13.810 | gabriel 1.633 | andreas 1.092 | unbekannt 16
+
+Die Falle war das naheliegendste Feld. Gemessen:
+  8880 Artikel  zuletzt_von="Gabriel Gschaider"  projekt=clay-global-research-entity
+   501 Artikel  zuletzt_von="Gabriel Gschaider"  projekt=Dr.-Unterweger
+Die zweite Zeile ist der Beweis: 501 Artikel aus ANDREAS' Material tragen
+GABRIELS Namen als Bearbeiter. Nach Bearbeiter zugeordnet waeren 68 % aller
+Artikel an Gabriel gegangen, samt Andreas' gesamtem Bestand. Urheberschaft ist
+nicht Zugehoerigkeit -- die Regel stammt vom Eigner selbst ("seimensch ist das
+projekt von andreas aber allen code habe ich gemacht"). zuletzt_von wird in
+KEINER Stufe verwendet. Stufe 5 ist die wichtigste: ohne Signal bleibt ein
+Artikel `unbekannt` statt an den wahrscheinlicheren Menschen zu fallen.
+
+BAUNOTIZEN IM WIKI: alle, mit Metadaten.
+  vorfall 63 -> 90 (27 Luecken gefuellt, fremde Zeilen NICHT angefasst)
+  baunotiz 0 -> 2240 (732 bauverlauf.jsonl + 1508 Git-Commits)
+Jede mit herkunft, timestamp, sha256, hypothese/gegenhypothese. Die Hypothesen
+werden mechanisch aus `^Hypothese:`-Zeilen gelesen und sonst auf null gesetzt --
+NIE erfunden. Befund dabei: kein einziger Commit hat so eine Zeile. Das ist der
+Befund, kein Fehler.
+CHECK-Constraint entdeckt statt dagegen gelaufen: artikel.herkunft erlaubt nur
+('gemessen','nutzer'). Die Quellenart steht deshalb in von_quelle und zusaetzlich
+in metadaten.herkunft.
+
+BILANZ: 6 Erfolge, 7 Fehlschlaege, gleichrangig.
+Nicht aus Bescheidenheit. Jeder Fehlschlag hat im Betrieb NICHTS geworfen -- sie
+wurd
 ```
 
 ### Zero weiss jetzt, mit WEM es spricht - und wem was gehoert
@@ -3479,21 +3615,5 @@ fehler.py und Tabelle fehler live. 17 Zeilen, jede mit Regex-Ausloeser, Beleg, H
 
 ```
 verfall.py live. Formel new_confidence = base mal 2 hoch minus alter_tage durch 7, bei jedem Lauf FRISCH aus fester Basis und echtem Alter gerechnet, nicht aufgezinst. 19.267 von 19.267 Kanten verfallen, 179 von 179 Artikeln mit echter Vorkonfidenz - fuer die uebrigen 14.089 wurde KEINE erfunden. folgerung inert, weil 0 von 8 Zeilen eine echte Basiskonfidenz tragen. SCHUTZ BEWIESEN statt behauptet: selftest kopiert die Datenbank in eine Wegwerfdatei, setzt die geschuetzten Klassen auf maximalen Verfall, laesst die volle Kette laufen und prueft, dass sie ueberleben, dass eine Markierung ruecknehmbar ist und dass die Zeilenzahl vorher wie nachher gleich bleibt - also nirgends geloescht wurde. Live BESTANDEN: 117 geschuetzte Artikel, 40 geschuetzte Kanten (widerspricht und attacks), 3 widerlegte Folgerungen, 124 offene Probleme, alle unangetastet.
-```
-
-### B6 geprueft: Beide Arbeitsrechner indiziert - das Gehirn kennt jetzt die Maschinen
-
-`6a9b3e8841a4` · clay · 22:04 UTC · ClayVerse
-
-```
-Inhalte 86.713 auf 325.357, Fundorte 152.997 auf 458.937. Aufteilung: ai-core-node 356.983, clayverse 92.715, andreas-MACO 9.239. INHALTE AUF MEHR ALS EINEM WIRT: 16.673 byteidentisch. Datenbank 1605 auf 3446,81 MB - die Vorhersage lautete 1,5 bis 2,2 GB Zuwachs, tatsaechlich 1,84 GB, also innerhalb. Platte 44 GB frei. Wiederholungsfest im Grossen bewiesen: zweiter Import derselben 254.032 Inhalte ergab 0 neu, die Datei wuchs um 5 Seiten Buchhaltung. Mechanismus strukturell, nicht per Sonderfall: UNIQUE auf pruefsumme plus INSERT OR IGNORE auf (wirt,pfad). NEEDLE-FRAGE per Abfrage beantwortet und byte-genau gegen meine Handsuche geprueft: mini_train.jsonl 1.867.423 B, mini_val.jsonl 207.943 B, registry.json 21.522 B - alle bestaetigt. Verteilung 240 Fundorte auf clayverse, 139 auf ai-core-node, 0 auf andreas-MACO. Filter ueber alle Gewichtsendungen: NULL Treffer. Keine Needle-Gewichte auf irgendeinem indizierten Wirt.
-```
-
-### B27 geprueft: Ahnenreihe geprueft - Titan am Code, nicht am Docstring
-
-`82b5784864c3` · clay · 21:51 UTC · ClayVerse
-
-```
-TriHybridStorage BESTAETIGT: SQLite plus VectorStore plus KnowledgeGraph, verschmolzen per Reciprocal Rank Fusion k=60. Die Vektoren sind echt - titan_vectors.npz von Hand gelesen, Form (105, 384), MiniLM all-MiniLM-L6-v2. Unser System hat GAR KEINE Vektorschicht, per grep bestaetigt. ZEITGEWICHTETER VERFALL BESTAETIGT: maintenance.py rechnet new_confidence = base * 2 hoch minus alter_tage durch 7, Halbwertszeit 7 Tage, reines SQL, stuendlich. KONTROLLIERTES VERGESSEN BESTAETIGT: Waisen und Konfidenz unter 0,2 bei Alter ueber 7 Tagen werden geloescht, Kanten verfallen 5 Prozent je Zyklus - und Knoten mit 3 Zugriffen in 14 Tagen bei Nutzen ueber 0,6 werden dauerhaft geschuetzt. Alles deterministisch, kein Netz noetig.
 ```
 

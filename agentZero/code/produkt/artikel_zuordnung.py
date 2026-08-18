@@ -67,6 +67,8 @@ INSTITUT = {
     "Identity-Collapse-Detection-Engine": "Institutsforschung",
     "video-launch-page": "Aussendarstellung",
     "agentforge": "Plattform, traegt SeiMensch (andreas), gebaut von gabriel -- geteilte Infrastruktur",
+    "EntityOS": "Institutsrepo, beide Gruender -- die Baunotizen (clayverse/baunotizen.py: "
+                "protokoll.jsonl/bauverlauf.jsonl/git-commits) setzen projekt='EntityOS'.",
 }
 INSTITUT_SPHAEREN = {"clayverse": "Aufbau", "iar": "das Institut selbst"}
 

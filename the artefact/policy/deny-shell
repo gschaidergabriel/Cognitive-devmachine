@@ -1,7 +1,37 @@
 #!/bin/sh
 # ClayVerse product terminals expose Claude Code as a conversational UI, not as a
-# second process-execution authority. Claude Code's interactive ! shell path and any
-# Bash command wrapped by CLAUDE_CODE_SHELL_PREFIX terminate here. Effects must enter
-# through the managed ClayVerse MCP boundary instead.
+# second process-execution authority. This script is CLAUDE_CODE_SHELL_PREFIX.
+#
+# Measured empirically (2026-08-18, real container, real product tmux launch, a
+# logging stand-in in this exact slot): Claude Code substitutes this program for the
+# shell it would otherwise use for the interactive `!`-escape, Bash tool calls,
+# lifecycle hook command dispatch, AND stdio MCP server startup. Every one of those
+# arrives here the same way -- argc=1, and that one argument is the full original
+# command as a single string (e.g. "/usr/local/bin/python -m clayverse.mcp_server").
+# There is no "-c" flag, no argv split on the command's own words.
+#
+# So the door is an EXACT, literal match against the finitely many managed dispatches
+# this product actually wires up (3 lifecycle hooks + 1 MCP server start, see
+# policy/managed-settings.json and policy/managed-mcp.json). No globs, no prefix
+# match, no regex -- `case` patterns below are plain literal strings. On a match we
+# exec OUR OWN fixed argv, never the string we were handed: the incoming text is
+# compared, never evaluated. Anything else -- including the interactive shell escape,
+# which has no entry here -- keeps the unconditional refusal and exit 126.
+if [ "$#" -eq 1 ]; then
+  case "$1" in
+    '/usr/local/bin/python -m clayverse.terminal_hooks user_prompt')
+      exec /usr/local/bin/python -m clayverse.terminal_hooks user_prompt
+      ;;
+    '/usr/local/bin/python -m clayverse.terminal_hooks stop')
+      exec /usr/local/bin/python -m clayverse.terminal_hooks stop
+      ;;
+    '/usr/local/bin/python -m clayverse.terminal_hooks stop_failure')
+      exec /usr/local/bin/python -m clayverse.terminal_hooks stop_failure
+      ;;
+    '/usr/local/bin/python -m clayverse.mcp_server')
+      exec /usr/local/bin/python -m clayverse.mcp_server
+      ;;
+  esac
+fi
 printf '%s\n' 'ClayVerse: direct shell execution is disabled; use the managed ClayVerse MCP effect path.' >&2
 exit 126

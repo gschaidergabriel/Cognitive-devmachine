@@ -13,14 +13,17 @@ from clayverse.terminal_sessions import TerminalSessionManager
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_close_attach_reaps_transient_pty_child():
+def test_close_attach_reaps_transient_pty_child(tmp_path):
+    # close_attach is an instance method (it touches self._attach_lock /
+    # self._attach_users), not a staticmethod -- needs a real instance.
+    manager = TerminalSessionManager(tmp_path / "state", tmp_path / "workspace")
     pid, fd = pty.fork()
     if pid == 0:
         signal.pause()
         os._exit(0)
 
     try:
-        TerminalSessionManager.close_attach(pid, fd)
+        manager.close_attach(pid, fd)
         # A child already reaped by close_attach is no longer waitable by its parent.
         with pytest.raises(ChildProcessError):
             os.waitpid(pid, os.WNOHANG)

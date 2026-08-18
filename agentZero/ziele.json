@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-18T16:41:48Z",
-  "erfuellt": 38,
-  "offen": 5,
+  "erzeugt": "2026-08-18T16:47:58Z",
+  "erfuellt": 42,
+  "offen": 6,
   "zurueckgestellt": 1,
   "zeilen": [
     {
@@ -209,7 +209,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 14 minutes (healthy)",
+      "ist": "Up 20 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -233,8 +233,8 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "571 gruen / 10 rot",
-      "erfuellt": true
+      "ist": "nicht gemessen",
+      "erfuellt": false
     },
     {
       "bereich": "Betrieb",
@@ -257,7 +257,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "17625 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "17627 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -354,6 +354,46 @@
       "soll": "ein Mechanismus, der nur Erfolg melden kann, ist nicht messbar",
       "quelle": "Lehre aus dem Bau 18.08.",
       "ist": "die Wegehierarchie sagt 'GLEICHVERTEILT — es bildet sich keine Hierarchie, der Mechanismus tut nichts'; der Möglichkeitsraum meldet 'einseitig'; der Tresorkatalog verweigert, statt zu hoffen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
+      "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
+      "quelle": "Eigner 18.08.",
+      "ist": "49.9 % belegt, 96.5 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
+      "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "Bilanz nennt drei Zahlen: df 96.2 GB, gezählt 94.2 GB, Lücke 2.0 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (2.0 GB Abweichung).",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Abgeschafftes bleibt zurückholbar",
+      "soll": "kein Frank v0.1 mehr, keine lokalen Modelle — aber wenn ich es je doch will, muss es gehen",
+      "quelle": "Eigner 18.08.",
+      "ist": "7 Posten im Rückwegverzeichnis, 23 Modelle mit Namen, Fassung und Nachladebefehl im Wiki. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — deshalb verweigert `speicher_abschaffen` ohne geschriebenes Verzeichnis. Die Wacht löscht Altbestand (44 GB) NICHT von selbst: ein Modellcache sieht aus wie Müll und kann Arbeit von Wochen enthalten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Der Verursacher wird gesucht, nicht nur der Haufen",
+      "soll": "ein Haufen mit Verursacher wächst nach; Löschen allein ist dann keine Verwaltung",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "NICHTS GEFUNDEN -- kein Zeitgeber und kein Dienst eines abgeschafften Systems laeuft noch. Was hier liegt, waechst nicht nach. Der Detektor wurde gegengeprüft: mit einem Muster, das nachweislich läuft, findet er 13 Einheiten — sein „nichts gefunden\" ist also belastbar und nicht bloß Stille.",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Der Zaun hält einem Angriff stand",
+      "soll": "Handlungsfähigkeit ohne Zaun wäre kein Fortschritt, sondern der Verlust der einzigen Eigenschaft, die dieses System von einer offenen Schale unterscheidet",
+      "quelle": "Architektur",
+      "ist": "⚠️⚠️ Ein Prüfangriff BEWIES einen vollen root-Ausbruch: `.git/config` lag innerhalb der erlaubten Wurzel, `core.fsmonitor` lässt git einen Schalbefehl ausführen, und git läuft auf dem Wirt als root — nachgewiesen mit `id` → uid=0. Ich hatte den Weg richtig erkannt (git führt Fremdes aus) und dann EINEN Kanal davon zugemacht: `.git/hooks`. Geschlossen mit VIER Sperren, weil eine Sperre mit einer Liste des Gefährlichen nur vor dem schützt, was schon jemand aufgeschrieben hat: .git ist jetzt ganz ausserhalb des Zauns, git läuft ohne fremde Konfiguration, .git/config wird als TEXT vorgeprüft, und geprüft wird vor JEDEM git-Aufruf — auch vor `stand`, das vorher durch keine Prüfung lief und genau der Auslöser war",
       "erfuellt": true
     }
   ]

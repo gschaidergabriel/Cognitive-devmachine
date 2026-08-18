@@ -14,7 +14,7 @@ from .graph import ClayGraphProjection
 from .identity import IdentityRouter
 from .readiness import claude_readiness
 from .recovery import recover_incomplete_episodes
-from .store import UnifiedDB
+from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
 
@@ -179,7 +179,7 @@ def main():
 
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
     os.makedirs(state_root, exist_ok=True)
-    db = UnifiedDB(os.path.join(state_root, "unified.db"))
+    db = UnifiedDB(resolve_db_path(state_root))
     IdentityRouter(db, {})
 
     if "--once" in sys.argv:

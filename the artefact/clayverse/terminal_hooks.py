@@ -11,7 +11,7 @@ from .autonomy_context import apply_explicit_goal_command, bounded_autonomy_cont
 from .autonomy_dispatch import AutonomyDispatch, consume_dispatch_prompt
 from .autonomy_planner import AutonomyDecisionError, AutonomyPlanner
 from .identity import CANONICAL_USER_IDS, IdentityRouter
-from .store import UnifiedDB
+from .store import UnifiedDB, resolve_db_path
 from .turn_lifecycle import TurnLifecycle
 
 
@@ -29,7 +29,7 @@ def _runtime() -> tuple[UnifiedDB, str, str, TurnLifecycle]:
     if user_id not in CANONICAL_USER_IDS:
         raise TerminalHookError("terminal user identity is missing or invalid")
     state_root = os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse")
-    db = UnifiedDB(os.path.join(state_root, "unified.db"))
+    db = UnifiedDB(resolve_db_path(state_root))
     IdentityRouter(db, {})
     session_id = db.ensure_session(user_id, f"terminal-{user_id}")
     if expected_session and expected_session != session_id:

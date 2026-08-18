@@ -9,7 +9,7 @@ from pathlib import Path
 from .autonomy_dispatch import AutonomyDispatch, reserve_dispatch
 from .autonomy_planner import AutonomyPlanner
 from .identity import IdentityRouter
-from .store import LeaseConflict, UnifiedDB
+from .store import LeaseConflict, UnifiedDB, resolve_db_path
 from .terminal_sessions import TerminalRuntimeError, TerminalSessionManager
 
 
@@ -134,7 +134,7 @@ class AutonomyPulse:
         db: UnifiedDB | None = None
         try:
             process_start = self._pane_process_start(user_id)
-            db = UnifiedDB(self.state_root / "unified.db")
+            db = UnifiedDB(resolve_db_path(self.state_root))
             IdentityRouter(db, {})
             session_id = f"session:{user_id}"
             active = db.db.execute(
@@ -182,7 +182,7 @@ class AutonomyPulse:
             if db is not None:
                 db.close()
             if dispatch is not None and not dispatched:
-                cleanup = UnifiedDB(self.state_root / "unified.db")
+                cleanup = UnifiedDB(resolve_db_path(self.state_root))
                 try:
                     self._cancel_dispatch(cleanup, dispatch)
                 finally:

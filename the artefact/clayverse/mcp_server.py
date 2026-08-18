@@ -26,11 +26,11 @@ class ClayVerseEffectBridge:
     def from_env(cls):
         from .entityos_bridge import EntityOSBridge
         from .identity import IdentityRouter
-        from .store import UnifiedDB
+        from .store import UnifiedDB, resolve_db_path
         from .turn_lifecycle import TurnLifecycle
 
         root = Path(os.environ.get("CLAYVERSE_STATE_ROOT", "/var/lib/clayverse"))
-        db = UnifiedDB(root / "unified.db")
+        db = UnifiedDB(resolve_db_path(root))
         IdentityRouter(db, {})
         user_id = os.environ.get("CLAYVERSE_USER_ID", "").strip()
         session_id = os.environ.get("CLAYVERSE_SESSION_ID", "").strip()

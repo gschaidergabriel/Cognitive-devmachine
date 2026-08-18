@@ -1,7 +1,23 @@
 from __future__ import annotations
-import contextlib, hashlib, json, sqlite3, time, uuid
+import contextlib, hashlib, json, os, sqlite3, time, uuid
 from dataclasses import dataclass
 from pathlib import Path
+
+
+def resolve_db_path(state_root) -> Path:
+    """Single choke point for the UnifiedDB file path.
+
+    CLAYVERSE_DB_PATH, if set, wins outright and points at the exact database
+    file to open (e.g. /var/lib/clay/wiki.db, the real heart DB with its 87
+    pre-existing tables). Falls back to <state_root>/unified.db, unchanged
+    default behaviour for tests and any environment that never sets it.
+    state_root keeps its other job (terminal home dirs etc.) untouched.
+    """
+    override = os.environ.get("CLAYVERSE_DB_PATH", "").strip()
+    if override:
+        return Path(override)
+    return Path(state_root) / "unified.db"
+
 
 SCHEMA = r'''
 PRAGMA journal_mode=WAL;

@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T12:48:59Z aus drei Repos. 470 Eintraege.
+Automatisch erzeugt 2026-08-18T13:18:58Z aus drei Repos. 471 Eintraege.
 
 ## architektur (15)
 
@@ -197,10 +197,13 @@ Automatisch erzeugt 2026-08-18T12:48:59Z aus drei Repos. 470 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (230)
+## bau (231)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
+| 2026-08-18T12:59 | entityos | `d42ec66eda5d` | Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT |
+| 2026-08-18T12:52 | unifieddb | `b4c856add34b` | Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR |
 | 2026-08-18T12:37 | entityos | `584c0282121c` | Der Raum: vier Plaetze, eine Entitaet - und die Zuege gehen nicht mehr verloren |
 | 2026-08-18T10:59 | entityos | `ff48d389b4ac` | Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen |
 | 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
@@ -258,7 +261,4 @@ Automatisch erzeugt 2026-08-18T12:48:59Z aus drei Repos. 470 Eintraege.
 | 2026-08-18T03:46 | entityos | `96a797fc57fd` | docs(clayverse): bind autonomy dispatch and human-preemption laws |
 | 2026-08-18T03:43 | entityos | `afc2e532d02f` | ci(clayverse): extend autonomy guard to preemption reentry |
 | 2026-08-18T03:36 | entityos | `0772d2e29522` | ci(clayverse): add exact autonomy focused guard |
-| 2026-08-18T03:36 | entityos | `62b9d707dca8` | docs(runtime): require exact autonomy effect dispatch |
-| 2026-08-18T03:35 | entityos | `78e65603a949` | Merge remote-tracking branch 'origin/retina-deploy' into retina-deploy |
-| 2026-08-18T03:35 | entityos | `1ebb891e47d8` | Merge PR #713: adopt explicit goals from canonical hook turns |
 

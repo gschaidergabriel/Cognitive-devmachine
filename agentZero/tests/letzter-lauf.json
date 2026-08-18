@@ -1,9 +1,9 @@
 {
-  "commit": "8887a49d3",
-  "erzeugt": "2026-08-18T12:49:27Z",
-  "gruen": 569,
+  "commit": "4588d6f20",
+  "erzeugt": "2026-08-18T13:19:23Z",
+  "gruen": 563,
   "hinweis": "Rote Tests werden NICHT durch Abschwaechen gruen gemacht. Wo ein Test auf etwas Echtes zeigt, bleibt er rot, bis die Sache behoben ist.",
-  "rot": 10,
+  "rot": 16,
   "rote_tests": [
     "tests/test_causal_credit.py::test_failed_effect_reenters_without_positive_credit",
     "tests/test_causal_credit.py::test_successful_effect_gets_positive_credit",
@@ -13,6 +13,12 @@
     "tests/test_inference_reingest_before_effect.py::test_model_proposal_is_in_unifieddb_before_entityos_can_run",
     "tests/test_inference_reingest_before_effect.py::test_denied_effect_notice_reenters_after_original_model_proposal",
     "tests/test_memory_privacy.py::test_mixed_old_turn_defers_until_complete_semantic_clearance_then_collision_uses_fragments",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_traegt_das_profil_unter_current_user_profile",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_ohne_profil_zeigt_sichtbaren_no_profile_marker",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_leeres_profil_dict_ist_kein_fehlendes_profil",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_alle_acht_schluessel_vorhanden",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_recent_turns_wird_auf_letzte_drei_gekappt",
+    "tests/test_mistral_prestage_build_context.py::test_build_context_ist_gueltiges_json_ohne_ascii_flucht",
     "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
     "tests/test_state_authority.py::test_compression_has_no_hidden_lossless_turn_ledger"
   ]

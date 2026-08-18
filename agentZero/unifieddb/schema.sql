@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T12:49:00Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T13:18:59Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -93,6 +93,19 @@ CREATE TABLE datei (
             );
 CREATE TABLE durable_memory(memory_id TEXT PRIMARY KEY,kind TEXT NOT NULL,subject TEXT NOT NULL,value TEXT NOT NULL,source_turn_id TEXT REFERENCES turns(turn_id),user_id TEXT,ts REAL NOT NULL,provenance TEXT NOT NULL);
 CREATE TABLE effects(effect_id TEXT PRIMARY KEY,episode_id TEXT REFERENCES workspace_episodes(episode_id),user_id TEXT NOT NULL,capability TEXT NOT NULL,target TEXT NOT NULL,argv TEXT,requested_generation INTEGER NOT NULL,status TEXT NOT NULL,outcome TEXT,ts REAL NOT NULL,verified_at REAL);
+CREATE TABLE entityos_arbeitspaket (
+  paket_id   TEXT PRIMARY KEY,
+  besteller  TEXT NOT NULL,          -- gabriel | andreas, aus dem gepruefsten Zustand
+  session_id TEXT NOT NULL,
+  auftrag    TEXT NOT NULL,          -- Caveman: was zu tun ist
+  womit      TEXT,                   -- die Sache: Datei, Dienst, Tabelle
+  warum      TEXT,                   -- die Begruendung, damit ein Mensch pruefen kann
+  stand      TEXT NOT NULL,          -- offen | laeuft | fertig | gescheitert | abgelehnt
+  ergebnis   TEXT,
+  beleg      TEXT,                   -- WOMIT belegt der Ausfuehrer, dass es getan ist
+  erstellt   REAL NOT NULL,
+  geaendert  REAL NOT NULL
+);
 CREATE TABLE entityos_artikel_zuordnung(
   artikel_id TEXT PRIMARY KEY,
   gehoert TEXT NOT NULL,           -- gabriel | andreas | gemeinsam | unbekannt
@@ -787,6 +800,7 @@ CREATE TABLE zero_raum_ruf (
   von TEXT NOT NULL,
   text TEXT NOT NULL
 );
+CREATE INDEX idx_arbeitspaket_stand ON entityos_arbeitspaket(stand, erstellt);
 CREATE INDEX idx_artikel_art ON artikel(art);
 CREATE INDEX idx_artikel_baunotiz_lookup ON artikel(art, von_quelle, datum);
 CREATE INDEX idx_artikel_epistemic_class ON artikel(epistemic_class);

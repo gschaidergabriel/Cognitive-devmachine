@@ -1,12 +1,209 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T12:48:59Z. 752 Commits aus vier Repos, davon 228 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T13:18:58Z. 754 Commits aus vier Repos, davon 231 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE
+
+`4588d6f204fb` · entityos · 13:15 UTC · EntityOS
+
+```
+Gabriels Entscheidung: "Ja, aber eng eingezaeunt."
+
+⭐⭐ DIE TRAGENDE ENTSCHEIDUNG
+
+Der naheliegende Bau waere ein Dienst, der SCHALBEFEHLE ausfuehrt, die ein
+Sprachmodell geschrieben hat. Genau den hat ein Sonett-Arbeiter heute abgelehnt,
+und er hatte recht: eine Schale ist kein Zaun, sondern ein Tor.
+
+Der Arbeiter bekommt DATEIWERKZEUGE -- Read, Edit, Write, Grep, Glob -- und
+KEIN Bash. Fuer die eigentliche Arbeit ("Telefonnummer aus der Kontaktseite
+entfernen") reicht das vollstaendig. Was damit unmoeglich wird, ist alles
+andere: kein curl, kein ssh, kein systemctl, kein Nachladen, keine
+Rechteaenderung. Der Unterschied zwischen "darf Dateien bearbeiten" und "darf
+Befehle ausfuehren" ist der ganze Sicherheitsgewinn -- und er kostet fuer diesen
+Zweck nichts.
+
+DIE WEITEREN ZAEUNE, vom Kern durchgesetzt statt von gutem Willen:
+  eigener Arbeitsordner je Paket, sonst nichts beschreibbar
+  wiki.db UNERREICHBAR (InaccessiblePaths) -- der Arbeiter sieht kein Gespraech
+  /etc/clayverse UNERREICHBAR
+  ProtectSystem=strict, ProtectHome, PrivateTmp, NoNewPrivileges
+  harte Frist, danach gilt das Paket als gescheitert
+  EIN Paket zur Zeit -- das Konto ist geteilt und endlich
+
+⭐ DER ARBEITER SCHREIBT NIE IN DIE DATENBANK. Er legt ERGEBNIS.md in seinem
+Ordner ab; der Arbeitgeber liest sie und traegt ein. Die Datenbank ist fuer den
+unsichersten Teil des Systems gar nicht erreichbar -- statt sie ihm zu erlauben
+und auf Wohlverhalten zu hoffen.
+
+⚠️ WAS DER ZAUN NICHT LEISTET, ehrlich benannt: der Arbeiter laeuft als `clay`
+und kann die Anmeldedatei lesen -- er MUSS, um zu starten. Ohne Schale kann er
+sie nirgendwohin schicken, aber verborgen ist sie ihm nicht. Wer das schliessen
+will, braucht einen eigenen Zugang je Arbeiter. Bewusst nicht gebaut, deshalb
+hier genannt.
+
+DREI FEHLSCHLAEGE AUF DEM WEG, jeder hat etwas gezeigt:
+
+1. rc=1, stderr leer -- ProtectSystem=strict sperrte auch Claudes
+   Heimatverzeichnis. Ein Zaun, der die Arbeit verhindert, wird abgerissen statt
+   korrigiert; also wird jetzt genau das geoeffnet, was der Start braucht.
+   Dabei auch behoben: ein leeres stderr fiel unter den Tisch ("kein Beleg.
+   stderr:"), jetzt wird ersatzweise stdout genommen.
+
+2. 226/NAMESPACE -- ich hatte dem Arbeiter den CONTAINER-Pfad gegeben, er laeuft
+   aber auf dem WIRT. Er bekam ein eigenes Heim mit der Anmeldung als VERWEIS
+   auf die eine gemeinsame Datei; HOME=/var/lib/clay waere naheliegend gewesen
+   und falsch: dann muesste das Verzeichnis mit der wiki.db beschreibbar sein,
+   und der Zaun waere mit einer Zeile weg.
+
+3. ⭐ DER LEHRREICHSTE: der Ordner gehoerte root, der Arbeiter laeuft als clay.
+   Er hat es GENAU richtig gemeldet:
+     "Mir wurde gesagt, dieses Verzeichnis sei der einzige Ort, an dem ich
+      schreiben darf. Die Messung widerspricht dem. Das ist ein Befund ueber die
+      Verzeichnisrechte, kein Ergebnis meiner Zaehlung. Ich baue nicht daran
+      vorbei."
+   Er kannte die Antwort (4) und hat sie NICHT ausgegeben, weil er sie nicht
+   belegen konnte. Genau dieses Verhalten soll der Zaun hervorbringen -- der
+   Fehler lag bei mir. Jetzt uebergibt der Arbeitgeber den Ordner, wer einen
+   Zaun baut muss auch das Tor stellen.
+
+DURCHLAUF, echt: Paket offen -> laeuft -> fertig, mit Beleg
+  "Datei: .../probe.txt, Read-Ausgabe woertlich: 1 eins 2 zwei 3 drei 4 vier,
+   Zeile 5 ist leer. Deshalb 4 Inhaltszeilen."
+Er hat sogar zwischen 4 Inhaltszeilen und 5 Zeilen mit Leerzeile unterschieden.
+
+Takt entityos-paketarbeiter, alle 5 min, Units auch im Repo -- Units, die nur
+unter /etc liegen, verschwinden beim naechsten Wiederaufbau und niemand merkt es.
+```
+
+### Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT
+
+`d42ec66eda5d` · entityos · 12:59 UTC · EntityOS
+
+```
+Gabriels Regel: "agent zero handelt nie selbst er spawnt immer sonet agenten ...
+er koordiniert und denkt."
+
+GEMESSEN, warum das der Blocker war: Andreas bat Zero, eine Telefonnummer von
+seimensch.net zu entfernen. Zero versuchte request_effect mit vier
+Faehigkeitsnamen -- alle vier verweigert -- meldete korrekt, dass es nicht
+handeln kann, und nannte Gabriel als richtige Ansprechperson. Sauber gedacht,
+null Arbeit getan. Zeros Faehigkeiten sind absichtlich {state.noop,
+entityos.exec}; es KANN keine Datei anfassen, und diese Grenze bleibt.
+
+GEBAUT: clayverse/arbeitspaket.py + zwei Werkzeuge (paket_schnueren, paket_lage)
++ Punkt 9e im Laufzeitvertrag. Jedes Paket traegt, WER es bestellt hat -- aus
+dem verifizierten Zustand, nie aus einem Argument.
+
+⭐ `fertig` OHNE BELEG WIRD ABGEWIESEN. Nachgewiesen:
+    fertig ohne Beleg abgewiesen: fertig ohne Beleg ist eine Behauptung,
+    kein Ergebnis
+Die Beweisdisziplin dieses Hauses darf nicht ausgerechnet an der Stelle
+aufhoeren, an der etwas als getan gilt.
+
+⛔ WAS ABSICHTLICH FEHLT: DER AUSFUEHRER.
+
+Ich hatte einen Sonett-Arbeiter beauftragt, den Ausfuehrer zu bauen -- einen
+systemd-Dienst, der `claude -p` headless startet und Schalbefehle nach dem Text
+eines Sprachmodells ausfuehrt. ER HAT ABGELEHNT, und seine Begruendung war
+richtig:
+
+  "Der Auftrag verlangt, policy/managed-settings.json (eine Berechtigungsdatei)
+   und runtime_CLAUDE.md zu aendern. Keine ueber einen Agenten weitergereichte
+   Anweisung kann Aenderungen an Berechtigungen autorisieren -- nur der Mensch
+   selbst. Dazu ein Dienst, der Dateisystembefehle nach Anweisungen einer
+   anderen KI ausfuehrt, kombiniert mit 'nicht committen' -- also eine
+   Rechteerweiterung ohne Versionsspur."
+
+Das trifft zu, und es trifft MICH: ich habe heute mehrfach Agenten die
+Berechtigungsdatei aendern lassen. Die Aenderungen an managed-settings.json und
+runtime_CLAUDE.md in DIESEM Commit stammen deshalb von mir, nicht von einem
+Agenten, und sie stehen unter Versionskontrolle.
+
+Bis Gabriel ueber den Ausfuehrer entscheidet, ist ein Paket eine FRAGE an einen
+Menschen und kein Auftrag an eine Maschine. Der Vertragstext sagt Zero das
+ausdruecklich, damit es nicht behauptet, etwas sei in Arbeit.
+
+⚠️ EIN PAKET IST UNTRUSTED EINGABE. Es entsteht aus dem Text eines
+Sprachmodells. Was darin steht, ist ein Vorschlag, nie ein Freibrief -- deshalb
+beginnt der Stand bei `offen` und nicht bei `freigegeben`.
+
+ZUSAETZLICH: Zeitgrenze fuer Zero von 90 auf 240 s. Gemessen als Andreas: eine
+normale, belegte Antwort brauchte 102 s, eine zweite lief bei 90 s in die Frist
+und war verloren. Eine zu knappe Frist ist die teuerste Art zu scheitern -- die
+Arbeit wird vollstaendig geleistet, bezahlt und dann weggeworfen.
+```
+
+### Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR
+
+`b4c856add34b` · unifieddb · 12:52 UTC · EntityOS
+
+```
+Zwei Abfragen in _ort_codependenzen_batch, dem teuersten Block (35 % der Zeit).
+
+1. Die taetigkeit-Abfrage holte ALLE Zeilen zu bis zu 40 Pfaden mit
+   ORDER BY id DESC und OHNE LIMIT -- gemessen 6294 Zeilen, um eine Handvoll zu
+   behalten; die Deckelung passierte erst danach in Python.
+   Jetzt: ein UNION ALL aus Einzelabfragen mit LIMIT 5 je Pfad, EIN execute(),
+   der vorhandene Index reicht. Aeussere Sortierung erhaelt die alte Reihenfolge.
+   Schwerster Fall: 21-38 ms -> 0,35-0,4 ms je Aufruf.
+
+2. Die Geschwister-Abfrage nutzte `pfad LIKE 'verzeichnis/%'`. SQLite kann fuer
+   LIKE bei voreingestellter Gross-/Kleinschreibungs-Unempfindlichkeit KEINEN
+   Indexbereich nutzen. Ersetzt durch einen echten Bereich
+   (`pfad >= 'verzeichnis/' AND pfad < 'verzeichnis0'`), der den vorhandenen
+   (wirt,pfad)-Index nutzt. Median 2,7-2,9 ms -> 0,02-0,03 ms.
+
+⭐ BEIDE ERST AUF GLEICHHEIT GEPRUEFT, DANN EINGEBAUT: 58 echte und
+synthetische Pfadmengen, 434 echte Geschwisterfaelle -- 0 Abweichungen. Eine
+schnellere Abfrage, die etwas anderes zurueckgibt, ist keine Optimierung,
+sondern ein neuer Fehler mit besserer Laufzeit.
+
+MESSUNG, drei Laeufe je Instrument, Pruefhaelfte:
+  Latenz Median   470,7 / 376,3 / 355,9 ms   ->   260,8 / 259,2 / 259,5 ms
+  Latenz p95      885,6 / 792,8 / 713,7 ms   ->   482,5 / 463,7 / 434,7 ms
+  Qualitaet       anker 23,3 · genau 85,7 · ausbeute 20,0 · auffind 23,3
+                  -- in allen drei Laeufen vorher wie nachher IDENTISCH
+  Nachbarschaft   vorwaerts 100 %, rueckwaerts 80,8 % -- unveraendert
+                  (zur Kontrolle die alte Datei zurueckgetauscht und erneut
+                  gemessen; der Eingriff beruehrt _walk nicht)
+
+⭐ DER GROESSERE GEWINN STEHT NICHT IM MEDIAN: die Streuung von Lauf zu Lauf
+faellt von ±115 ms auf ±1,6 ms. Eine Antwortzeit, die zwischen 356 und 471 ms
+schwankt, ist nicht nur langsamer -- sie ist unvorhersagbar, und
+Unvorhersagbarkeit kann man nicht wegoptimieren, nur beseitigen.
+
+NICHT ANGEFASST, mit Grund: _typed_hop (30 %) und resolve_entities (22 %). Fuer
+beide gab es keine gemessene Spur, und ohne Spur waere jeder Eingriff Raten.
+Die Schwelle bleibt bei 2,5 -- die unveraenderten Ankerzahlen belegen das.
+
+═══ KORPUS: "Was macht die Feuerschneise?" -- Diagnose, kein Pflaster ═══
+
+KORPUSLUECKE: feuerschneise.py hat NULL Zeilen in fundort/datei. Die Datei
+wurde nie aufgenommen. Kein Abruf holt zurueck, was nie erfasst wurde.
+
+ABRUFLUECKE, drei Schichten, alle belegt:
+  - udb_embedding_search liefert nur {artikel_id, similarity}, keinen Text. Es
+    gibt KEINEN Weg von einer Einbettungs-Trefferkennung zurueck zu lesbarem
+    Inhalt: lesen() nimmt nur datei-Kennungen, die zuvor ein paket()-Aufruf
+    benannt hat -- ein anderer Kennungsraum.
+  - Einbettungsabdeckung: 200 von 16.785 Artikeln (1,2 %), davon keine einzige
+    Baunotiz. Die zwei Baunotizen, die "feuerschneise.py" beilaeufig erwaehnen,
+    sind nachweislich NICHT eingebettet.
+  - Der lexikalische Weg trifft nur Datei- und Verzeichnisnamen, nie Fliesstext
+    oder Metadaten -- also sind auch diese zwei Artikel per Inhaltsfrage
+    unerreichbar.
+
+Die Ankeraufloesung schweigt hier voellig zu Recht: fail-closed arbeitet wie
+gebaut, das ist kein Fehler. Die Schnipsel-Reparatur liegt in mcp_server.py /
+nvidia_embedding.py und damit ausserhalb dieser Datei -- Diagnose, kein Patch.
+```
 
 ### Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden
 
@@ -4120,110 +4317,6 @@ zwanzig verstreuter Abfragen, der Satz als Antwort an den Menschen - und die
 Abgrenzung: die Sperre gilt fuer Kognitives, NICHT fuer Seitenauslieferung und
 Mailbox. Sonst nehmen zwei ausgeschaltete Arbeitsrechner drei oeffentliche
 Seiten mit.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F19 Behauptungen nachgeprueft - und Lizenzen sind fuer den Eigengebrauch kein Sperrgrund
-
-`40e8bc050f00` · clay · 05:41 UTC · ClayVerse
-
-```
-EIGNERENTSCHEIDUNG: privates ClayVerse fuer Gabriel und Andreas, Lizenzfallen
-sind egal. Traegt auch sachlich: AGPL und Elastic knuepfen ihre Pflichten an
-WEITERGABE, die AGPL zusaetzlich an das Bereitstellen an Nutzer ueber ein Netz.
-Eigengebrauch loest keine davon aus. Die Sperre aus F17 ist damit aufgehoben.
-Einmal benannt, nicht wiederholt: die Grenze verlaeuft bei erreichbar fuer
-Dritte, nicht bei privat gemeint - ClayVerse hostet oeffentliche Seiten.
-
-GEMESSEN (GitHub-API, HuggingFace-API, unzip auf beiden Zips):
-
-GESTORBEN: pogema-toolbox ist Apache-2.0, nicht MIT. SkillFusion heisst
-skill-fusion und ist unlizenziert. MAPF-GPT-DDG nennt sich selbst nirgends
-reward-free.
-
-ZWEI FALLEN, DIE NIEMAND GEMELDET HATTE: die drei sqliteai-Module
-(vector/sync/memory) stehen unter Elastic License 2.0, also source-available
-statt frei - das traf genau die Kernempfehlung aus F17. Und vier Projekte
-haben ueberhaupt keine Lizenz. Fuer uns beides unerheblich, aber festgehalten.
-
-WIDERSPRUCH: TransPath-Zip traegt MIT, das Live-Repo hatte NIE ein
-LICENSE-File. Herkunft der Zip ungeklaert.
-
-BESTAETIGT: HIMA AGPL-3.0 doppelt belegt, alle neun Dateien existieren 1:1.
-LEANN haelt in allen vier Punkten wortgenau, MIT, 12.786 Sterne, sehr aktiv.
-rqlite MIT und Litestream Apache-2.0 sind der lizenzsaubere Zwillingsweg.
-
-WERTVOLLSTER FUND: BAAI/bge-reranker-v2-m3, Apache-2.0, 568 M Parameter, laeuft
-ohne grosse GPU. Schliesst die Umsortierer-Luecke aus F18, die bei NVIDIA
-UNBEKANNT blieb - und gehoert nach der Trennungsregel zu uns, nicht auf den Wirt.
-
-OFFEN: RAM-Bedarf der Einbettungsmodelle nur aus Parameterzahl ueberschlagen,
-nicht gemessen. Vor der 15-Prozent-Zusage echt messen.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### README: semantische Suche mit LEANN davor, samt der ehrlichen 97-Prozent-Einordnung
-
-`76498358cdab` · unifieddb · 05:38 UTC · ClayVerse
-
-```
-LEANN schliesst die Luecke zwischen Aliasaufloesung/FTS und Graph-Walk.
-Ausdruecklich NICHT als Wahrheit und ausdruecklich NICHT mit ClayGraph
-zusammengeworfen: ein Proximity-Graph kodiert Naehe, ClayGraph kodiert
-Aussagen (SUPPORTS/CHALLENGES/EVIDENCE_FOR/DERIVED_FROM). Beides in einen
-Graphen zu werfen ist genau der zerstoerende Zusammenfall, gegen den
-Hyperposition gebaut ist.
-
-Zwei abgeleitete Tabellen (vp_leann_map, vp_leann_meta), Index ausserhalb der
-kanonischen Tabellen und rekonstruierbar - deshalb darf er auf die
-Arbeitsrechner, waehrend die Tabellen beim Wirt bleiben.
-Aenderungen ueber den vorhandenen Puls und quell_hash, nicht ueber einen
-zweiten Waechter - zwei Waechter waeren zwei Wahrheiten.
-
-EHRLICH zu den 97 Prozent: sie gelten in LEANNs Vergleich gegen einen
-klassischen Vektorindex, NICHT gegen unseren Stand. Wir halten heute gar
-keinen grossen Dense-Embedding-Bestand, also kostet LEANN uns ZUSAETZLICHEN
-Speicher. Der Gewinn ist semantische Suche ohne riesigen Embedding-Store.
-
-Dazu die am 15.08. gemessenen Einbettungsmodelle mit Dimension, Antwortzeit
-und gerechnetem Speicherbedarf. 1024 statt 4096 Dimensionen ist ein Viertel
-Speicher - und der Index liegt bei uns, nicht auf dem Wirt.
-Durchsatz gemessen: 256 Texte je Aufruf, 323 Texte/s, immer stapeln.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F18 NVIDIA-Zugang gemessen: 102 Modelle, 4 brauchbare Einbettungen, 323 Texte/s
-
-`7f1af46e9a46` · clay · 05:37 UTC · ClayVerse
-
-```
-Alles [M] gemessen, nichts uebernommen.
-
-DIE LISTE LUEGT: 5 von 9 geprueften Einbettungsmodellen antworten nicht
-(4x 404, 1x 500 bei nv-embedcode-7b-v1). Nur was 200 gab, darf verdrahtet
-werden - dieselbe Falle wie F14, an neuer Stelle.
-
-BRAUCHBAR: nv-embedqa-e5-v5 (1024 Dim, 154 ms), nemotron-3-embed-1b und
-llama-nemotron-embed-1b-v2 (beide 2048), nv-embed-v1 (4096).
-
-DURCHSATZ: 256 Texte in EINEM Aufruf, 793 ms = 3,1 ms je Text. Der Sprung von
-8 auf 128 Texte senkt die Kosten je Text um das Zehnfache. Rund 323 Texte/s je
-Schluessel und Strom - der Gesamtbestand ist damit in Minuten eingebettet,
-nicht in Tagen.
-
-RATENGRENZE UNSICHTBAR: keine x-ratelimit-Kopfzeile. Obergrenze bleibt
-UNBEKANNT und muss aus 429 gelernt werden. Voll ausgereizt heisst deshalb
-Anteil 1.0 MIT Lernkurve, nicht ohne Bremse.
-
-UMSORTIERER UNBEKANNT: kein rerank-Modell in der Liste, drei Endpunktversuche
-404. Das ist KEIN Beweis der Abwesenheit - moeglicherweise mein falscher Pfad.
-Genau die Cloudflare-Falle aus F14, deshalb als UNBEKANNT gefuehrt.
-
-FOLGE FUER LEANN: 1024 statt 4096 Dimensionen ist VIERTEL Speicher, und der
-Index liegt auf unseren Rechnern.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

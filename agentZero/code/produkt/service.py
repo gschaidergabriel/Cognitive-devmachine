@@ -21,6 +21,7 @@ from .profile import grundstock as profil_grundstock
 from .baunotizen import sicherstellen as baunotizen_sicherstellen
 from .erfolge import grundstock as erfolge_grundstock
 from .raum import sicherstellen as raum_sicherstellen
+from .arbeitspaket import sicherstellen as arbeitspaket_sicherstellen
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
 from .terminal_sessions import TerminalSessionManager
@@ -218,6 +219,7 @@ def main():
         # executescript committet implizit und hat heute schon zweimal eine
         # laufende Transaktion aufgerissen.
         raum_sicherstellen(db)
+        arbeitspaket_sicherstellen(db)
     except Exception as exc:
         print(f"  Raum: {type(exc).__name__}: {exc}")
     try:

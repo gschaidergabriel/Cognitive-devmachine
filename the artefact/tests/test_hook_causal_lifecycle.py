@@ -69,6 +69,18 @@ def test_restart_closes_pending_effect_without_replay_and_advances_both_sessions
     try:
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
         opened = life.begin("resource:machine-x do one effect")
+        # Declare effect intent on the workspace first -- effect_journal now requires
+        # workspace_selected=1 before any effect begins (commit 2ccb3866d "rejoin
+        # active-turn linearization fence onto recovery main"). This mirrors exactly
+        # what TurnLifecycle.request_effect() does before it calls journal.begin(),
+        # without going through request_effect() itself (which would run the effect
+        # to completion instead of leaving it PENDING for this crash simulation).
+        with db.tx() as tx:
+            life.workspace.select_in_tx(opened["episode_id"], "request_effect")
+            tx.execute(
+                "UPDATE active_turns SET workspace_selected=1 WHERE session_id=? AND causal_id=?",
+                ("session:gabriel", opened["causal_id"]),
+            )
         # Persist PENDING exactly as if the process died after admission but before
         # receiving/verifying the external outcome.
         effect_id = life.effects.journal.begin(

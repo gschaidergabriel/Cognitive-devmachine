@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T04:27:42Z. 701 Commits aus vier Repos, davon 198 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T04:42:12Z. 705 Commits aus vier Repos, davon 200 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,50 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### eval_set.json: attach hand-authored-not-production disclosure to the data itself
+
+`27a5e9bffa0e` · entityos · 04:40 UTC · BACK agent
+
+```
+Coordinator decision 2026-08-18: the 0.96/0.98 pass_rate numbers must not be
+readable later as measured against production Zero traffic. Wrapped
+eval_set.json as {note, items} instead of a bare array so the disclosure
+travels with the file itself, not just the commit message / report.
+load_eval_set() now enforces the note key is present -- fails closed if
+someone strips it back to a bare list.
+```
+
+### Add Mistral pre-stage + caveman-German translator module (mv_* tables)
+
+`dcc0f97a4eb3` · entityos · 04:37 UTC · BACK agent
+
+```
+- clayverse/mistral_prestage/: self-contained new package, does not touch
+  terminal_hooks.py, retrieval.py, turn_lifecycle.py, store.py, service.py,
+  terminal_sessions.py (coordinator-owned).
+- store.py: own sqlite3 connection to the shared wiki.db, 4 new tables only
+  (mv_prestage_state, mv_prestage_turns, mv_translation_log, mv_eval_runs),
+  proven first against /var/lib/clay-probe/wiki.db, then applied to the
+  real db (schema-only, no existing rows touched: artikel still 14284).
+- prestage.py: draft single-call Mistral governor per F17 brief. NOTE per
+  coordinator 2026-08-18: needs revision against F74/F67/F68 (GRF ground
+  rules + ClayCode manual + last-3-turn hypothesis correlation as inputs,
+  negotiation loop, engine-as-config-value) before wiring in. Not wired
+  into terminal_hooks.py -- that stays the coordinators call.
+- translator.py + judge.py + eval_harness.py: caveman-English -> German
+  translator (mistral-small-latest) with an independent judge
+  (gemini-3.5-flash-lite, different provider family) scoring faithfulness
+  + readability on a fixed 50-item eval set. Measured, real API calls:
+    iteration 1 (v3 prompt): pass_rate 0.92, avg_faithfulness 95.4
+    iteration 2 (v4 prompt): pass_rate 0.96, avg_faithfulness 99.1, 0 fabrications
+    iteration 3 (v4 repeat):  pass_rate 0.98, avg_faithfulness 99.6, 0 fabrications
+  Metric defined before optimising: pass = no fabrication AND faithfulness>=90
+  AND readability>=70. Target 0.95 met and held on repeat.
+  Caveman original is retained in mv_translation_log on every row (never
+  translation-only) so every translation stays checkable per the owners
+  worse-than-none rule.
 ```
 
 ### Merge pull request #719 from gschaidergabriel/fix/autonomy-completion-target-bound-20260818
@@ -3047,21 +3091,5 @@ Beide Haelften behoben: herkunft steht jetzt in den Spaltenlisten von cmd_bauen 
 
 ```
 Frische claude-p-Sitzung als Benutzer clay, Minimalprompt (Frage plus Datenbankpfad, kein Schema, keine Hinweise). Ergebnis: 206,9 s Wanduhr, 35 Runden, 1,09 USD, 14.156 Ausgabe-Token, 1,86 Mio. Token aus dem Zwischenspeicher gelesen. Sie fand 4 Zeilen in der Tabelle folgerung und antwortete 1 von 4 widerlegt. Nicht gefunden: 26 Artikel mit status REFUTED, 4 SUPERSEDED, 272 Gegenhypothesen, 1645 Hypothesen, 116 negative_result-Knoten im Graphen. VERGLEICH derselben Fragen ueber die Wege: grep 432,54 ms / 194.114 Bytes / 0 belegte Fakten; FTS allein 2,78 ms / 10.902 Bytes / 95 Fakten; voller Abruf 2,18 ms / 25.977 Bytes / 472 Fakten. Dichte an der EffectGate-Frage mit echtem Tokenizer: grep 0,0 - FTS 22,5 - voll 56,7 belegte Fakten je 1000 Token.
-```
-
-### B13 geprueft: Nutzerebene gebaut - Kommentar, Bearbeitung, Grabstein
-
-`02434e12f9a9` · clay · 20:18 UTC · ClayVerse
-
-```
-Drei Tabellen live und wiederholungsfest. bearbeitung.herkunft ist per CHECK-Bedingung auf nutzer festgenagelt, nicht per Konvention. Antwortweg ruft folgerung.neu DIREKT auf, kein Parallelweg - die Belegpflicht wird also geerbt, nicht nachgebaut: Antwort ohne Beleg wirft REJECTED mit dem Originaltext aus folgerung.py, Kommentarzeile bleibt unveraendert, keine Teilaenderung. Ausgang unentscheidbar von Ende zu Ende bewiesen. Grabstein live geprueft: Zeile physisch weg, was/wer/wann plus sha256 des Entfernten bleiben. Zeiten: Artikel mit Kommentaren 1,08 ms, offene Kommentare 0,86 ms, anlegen 4,56 ms, antworten 3,41 ms. kern.py NICHT angefasst, Einbauzeile und Wachen benannt.
-```
-
-### B6 geprueft: ClayGraph Generation 3 - Schema erweitert, Bestand abgedeckt
-
-`a831e6583b09` · clay · 20:16 UTC · ClayVerse
-
-```
-Genau EINE Knotenart ergaenzt: micro_packet, mit schriftlicher Begruendung im Kandidatenschema; CLAYGRAPH_LATEST generation 0 unangetastet. gegenhypothese dreifach nach Herkunft aufgeteilt statt zusammengeworfen: NEGATIVE_RESULT 118 -> negative_result, Matrix-Eintraege 124 -> hypothesis, CLAIMS 30 -> claim (alle 30 tragen REFUTED oder SUPERSEDED, 100 % geprueft). Knoten 146 -> 2374 (hypothesis 1771, micro_packet 342, negative_result 116, artifact 69, claim 38, event 38), Kanten 26 -> 184. Abdeckung der kuratierten Systematik 2374 von 2378 = 99,83 %. Bauzeit 133,7 ms, nachbarn 1 Sprung 1,03 ms, 2 Spruenge 1,19 ms. Wiederholungsfestigkeit unter laufenden Fremdschreibern bewiesen: node_set_hash und edge_set_hash ueber drei Laeufe byteidentisch.
 ```
 

@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T04:27:42Z aus drei Repos. 466 Eintraege.
+Automatisch erzeugt 2026-08-18T04:42:12Z aus drei Repos. 466 Eintraege.
 
 ## architektur (14)
 
@@ -205,6 +205,8 @@ Automatisch erzeugt 2026-08-18T04:27:42Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T06:48 | entityos | `03b3f877558a` | claycode control: sync disposable guest execution boundary |
 | 2026-08-18T05:39 | entityos | `0941b84640c0` | claycode inbox: steer to admitted disposable guest lane and autonomy arbiter blocker |
 | 2026-08-18T05:38 | entityos | `096f335a7a37` | claycode supervisor: admit VPS guest lane and fence autonomy pulse source-only drift |
+| 2026-08-18T04:40 | entityos | `27a5e9bffa0e` | eval_set.json: attach hand-authored-not-production disclosure to the data itself |
+| 2026-08-18T04:37 | entityos | `dcc0f97a4eb3` | Add Mistral pre-stage + caveman-German translator module (mv_* tables) |
 | 2026-08-18T04:27 | entityos | `9145cd9e9949` | receipt(go): bind autonomy pulse activation gate addendum |
 | 2026-08-18T04:27 | entityos | `242b0e6d78a0` | security(clayverse): fail closed autonomy pulse activation on split arbiter |
 | 2026-08-18T04:23 | entityos | `62f228f6f988` | receipt(go): bind autonomy supervisor loop source convergence |
@@ -255,6 +257,4 @@ Automatisch erzeugt 2026-08-18T04:27:42Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T02:41 | entityos | `83d102ed33dd` | receipt(go): bind Tier2 source fusion and QEMU guest frontier |
 | 2026-08-18T02:36 | entityos | `2c44f567c235` | receipt(go): classify UnifiedDB pre-product guest failure and KVM gate |
 | 2026-08-18T02:31 | entityos | `9450351da4ba` | receipt(go): bind KVM admission and guest-source frontier |
-| 2026-08-18T02:28 | entityos | `e367b588e207` | chore(clayverse): remove redundant guest source-binding lane |
-| 2026-08-18T02:27 | entityos | `aa6c1f283e88` | infra(clayverse): add runner-independent disposable VPS KVM lab |
 

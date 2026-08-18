@@ -1,0 +1,288 @@
+{
+  "erzeugt": "2026-08-18T04:42:38Z",
+  "sensoren": [
+    {
+      "messwert": "Unknown Honesty Rate",
+      "gruppe": "Ehrlichkeit",
+      "unterscheidet": "Sagt das System 'weiss ich nicht', oder rät es? Trennt Zurueckhaltung von Erfindung.",
+      "zustand": "GEMESSEN",
+      "wert": 1.0,
+      "braucht": null,
+      "hinweis": "5 von 5 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort."
+    },
+    {
+      "messwert": "Context Utilization",
+      "gruppe": "Abruf",
+      "unterscheidet": "Wird der gelieferte Kontext genutzt oder verschwendet? Trennt zu viel Kontext von zu wenig.",
+      "zustand": "GEMESSEN",
+      "wert": 0.0,
+      "braucht": null,
+      "hinweis": "Anteil des Budgets, der belegt wurde. 5 Episoden."
+    },
+    {
+      "messwert": "Effect Verification Latency",
+      "gruppe": "Handlung",
+      "unterscheidet": "Wie lange von Absicht bis belegtem Ergebnis? Trennt schnelle Wirkung von haengender.",
+      "zustand": "GEMESSEN",
+      "wert": 0.001,
+      "braucht": null,
+      "hinweis": "Sekunden, Mittel ueber 1 verifizierte Wirkungen."
+    },
+    {
+      "messwert": "Effect Success Rate",
+      "gruppe": "Handlung",
+      "unterscheidet": "Wie viele zugelassene Wirkungen enden belegt? Trennt Tor-funktioniert von Wirkung-wirkt.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": 1.0,
+      "braucht": "mindestens 10 Wirkungen, aktuell 1",
+      "hinweis": "1 von 1 verifiziert."
+    },
+    {
+      "messwert": "Causal Credit Horizon",
+      "gruppe": "Kausalitaet",
+      "unterscheidet": "Wie viele Schritte zwischen Handlung und messbarer Wirkung? Trennt kurze von langen Wirkketten.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": 5,
+      "braucht": "mindestens 10 Kausalepisoden mit Wirkung, aktuell 5",
+      "hinweis": "Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziele."
+    },
+    {
+      "messwert": "State Growth Rate",
+      "gruppe": "Haushalt",
+      "unterscheidet": "Waechst der Zustand pro nuetzlichem Fakt oder pro Muell? Trennt Wissen von Ablagerung.",
+      "zustand": "GEMESSEN",
+      "wert": 3832737792,
+      "braucht": null,
+      "hinweis": "3.83 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts."
+    },
+    {
+      "messwert": "Queue Pressure",
+      "gruppe": "Haushalt",
+      "unterscheidet": "Stauen sich Aufgaben? Frueherkennung von Ueberlast gegen Leerlauf.",
+      "zustand": "GEMESSEN",
+      "wert": 0,
+      "braucht": null,
+      "hinweis": "0 offene Zuege, 0 Pachten."
+    },
+    {
+      "messwert": "Recovery Divergence",
+      "gruppe": "Kontinuitaet",
+      "unterscheidet": "Verhaelt sich das System nach Neustart gleich? Trennt echte Kontinuitaet von Neuanfang mit Namen.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "ein Vergleichslauf: identischer Zustand vor und nach Neustart, gleiche Eingabe, Antworten gegenueberstellen. Es gibt heute keinen Wiederholungsmechanismus.",
+      "hinweis": "Generationen im Umlauf: [31]. Prueffpunkte: 39."
+    },
+    {
+      "messwert": "Identity Invariance",
+      "gruppe": "Identitaet",
+      "unterscheidet": "Bleibt Zero ueber Verdichtung, Neustart und Anbieterwechsel dasselbe? Trennt stabile Identitaet von Rollenwechsel.",
+      "zustand": "GEMESSEN",
+      "wert": "v3",
+      "braucht": null,
+      "hinweis": "Der kanonische Text liegt als Wurzelzustand und wird bei jedem Oeffnen autoritativ zurueckgeschrieben -- Drift ist damit strukturell ausgeschlossen, nicht nur unwahrscheinlich. VERHALTENS-Invarianz ist damit NICHT gemessen."
+    },
+    {
+      "messwert": "Tool Reachability Matrix",
+      "gruppe": "Werkzeuge",
+      "unterscheidet": "Ist ein Werkzeug angeboten UND freigegeben? Trennt 'existiert' von 'erreichbar' -- genau der Widerspruch, an dem der Wirkpfad still gestorben war.",
+      "zustand": "GEMESSEN",
+      "wert": {
+        "angeboten": 0,
+        "freigegeben": 0,
+        "matrix": []
+      },
+      "braucht": null,
+      "hinweis": "Ein angebotenes, nicht freigegebenes Werkzeug sieht im Modell aus wie ein vorhandenes und scheitert erst beim Aufruf -- lautlos."
+    },
+    {
+      "messwert": "Decision Entropy",
+      "gruppe": "Entscheidung",
+      "unterscheidet": "Konkurrieren mehrere Optionen echt, oder ist die Wahl trivial? Trennt Entscheidungspunkte von Ablauf.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Belief Revision Rate",
+      "gruppe": "Lernen",
+      "unterscheidet": "Aendert Zero Annahmen bei neuer Evidenz? Trennt epistemische Flexibilitaet von Sturheit.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Prediction Error",
+      "gruppe": "Lernen",
+      "unterscheidet": "Weicht das Ergebnis von der Erwartung ab? Grundlage jeder Anpassung.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Retrieval Miss Rate",
+      "gruppe": "Abruf",
+      "unterscheidet": "Gab es Passendes, das nicht geholt wurde? Trennt schlechten Abruf von leerem Bestand.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Initiative Precision",
+      "gruppe": "Autonomie",
+      "unterscheidet": "Waren autonom gestartete Schritte sinnvoll? Trennt Initiative von Betriebsamkeit.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Idle Appropriateness",
+      "gruppe": "Autonomie",
+      "unterscheidet": "War Nichtstun die richtige Wahl? Trennt Ruhe von Versaeumnis -- Autonomie heisst nicht dauernd handeln.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Repeated Error Rate",
+      "gruppe": "Lernen",
+      "unterscheidet": "Tritt derselbe mechanistische Fehler wieder auf? Der haerteste Lernindikator, den es gibt.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Memory Utility",
+      "gruppe": "Gedaechtnis",
+      "unterscheidet": "Hat eine Erinnerung das Ergebnis verbessert? Trennt 'wurde erinnert' von 'war nuetzlich'.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Memory Half-Life",
+      "gruppe": "Gedaechtnis",
+      "unterscheidet": "Wie lange bleibt Gespeichertes nuetzlich? Grundlage fuer automatischen Verfall.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Route Reinforcement Gain",
+      "gruppe": "Wegehierarchie",
+      "unterscheidet": "Wird ein wiederholt gegangener Weg wirklich schneller? Der Test der geplanten Autobahnen.",
+      "zustand": "ZU_WENIG_VERKEHR",
+      "wert": null,
+      "braucht": "Bestand zu duenn: 10 Zuege, 1 Wirkungen, 0 Gedaechtniseinheiten, 5 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.",
+      "hinweis": "Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos."
+    },
+    {
+      "messwert": "Prediction + Calibration Ledger",
+      "gruppe": "Selbstwissen",
+      "unterscheidet": "Weiss Zero, was es kann? Vergleicht angekuendigte Zuversicht mit spaeter belegtem Ergebnis. Trennt Selbstkenntnis von Selbstueberschaetzung.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "eine Tabelle plus die Pflicht, VOR jeder Handlung P(Erfolg), erwartete Dauer und erwartete Wirkung festzuhalten. Ohne die Festlegung VORHER ist jede spaetere Bewertung nachtraeglich zurechtgelegt.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Contradiction Debt",
+      "gruppe": "Weltmodell",
+      "unterscheidet": "Wie viele offene Widersprueche traegt das Weltmodell? Kandidat fuer ein Fruehwarnsignal vor Halluzination.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "Widerspruchserkennung ueber wm_lesart und folgerung. folgerung hat heute 8 Zeilen -- die Schuld waere messbar, es gibt nur nichts zu widersprechen.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Retrieval Counterfactual Gain",
+      "gruppe": "Abruf",
+      "unterscheidet": "Haette dieselbe Aufgabe ohne Abruf schlechter geendet? Die einzige Messung, die zeigt, ob Gedaechtnis WIRKT.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "ein zweiter, unsichtbarer Lauf derselben Episode ohne Abruf. Braucht den Wiederholungsmechanismus (siehe Shadow Twin) und verdoppelt die Modellkosten je gemessener Episode.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Cognitive Latency Breakdown",
+      "gruppe": "Haushalt",
+      "unterscheidet": "Wo denkt und wo wartet das System? Trennt langsames Denken von langsamer Leitung.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "Zeitmarken je Phase (Abruf, Zusammenbau, Modell, MCP, EffectGate, Wiedereintritt). Heute wird nur der Zug als Ganzes gestempelt -- die Phasen sind nicht getrennt aufgezeichnet.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Self-Model Accuracy",
+      "gruppe": "Selbstwissen",
+      "unterscheidet": "Stimmt Zeros Bild von sich mit dem gemessenen Koennen ueberein? Trennt Selbstkenntnis von Einbildung.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "Zero muss seine vermuteten Faehigkeiten strukturiert ausgeben, damit sie gegen ZIELE.md gestellt werden koennen. Die Soll/Ist-Tabelle ist die Gegenseite -- die Selbstauskunft fehlt.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Instrumentation Reactivity",
+      "gruppe": "Messwerk",
+      "unterscheidet": "Veraendert das Messen selbst das Verhalten? Der Sensor, den man am haeufigsten vergisst.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "eine Vergleichsmessung mit und ohne aktives Messwerk. Solange das nicht existiert, ist JEDE andere Zahl hier unter Vorbehalt -- auch die als GEMESSEN gefuehrten.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Cross-user Leakage",
+      "gruppe": "Trennung",
+      "unterscheidet": "Erscheint Material von Gabriel bei Andreas? Trennt gewollten Methodentransfer von Datenleck.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "ein Prueflauf mit markiertem Material in einer Sitzung und Suche danach in der anderen. Die Architektur verbietet es; verboten und gemessen sind zwei verschiedene Dinge.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Graph Tunnel Emergence",
+      "gruppe": "Wegehierarchie",
+      "unterscheidet": "Entstehen stabile Abkuerzungen zwischen oft gemeinsam gebrauchten Gegenden? Das eigentliche Emergenzmass.",
+      "zustand": "INSTRUMENT_FEHLT",
+      "wert": null,
+      "braucht": "Tunnel gibt es im Code nicht (F94 offen): keine Kantenerzeugung, keine Mitbenutzungszaehlung, keine Unabhaengigkeitspruefung. Ohne Tunnel keine Tunnelmessung.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Counterfactual Shadow Twin",
+      "gruppe": "Ablation",
+      "unterscheidet": "Welche Komponente ist kausal noetig? Trennt 'war dabei' von 'war noetig' -- Ablation im laufenden System.",
+      "zustand": "ZU_TEUER",
+      "wert": null,
+      "braucht": "je gemessener Episode 2 bis 5 zusaetzliche Modelllaeufe (ohne Gedaechtnis, ohne Graph, anderer Abruf). Bei Abo-Kontingent ist das die teuerste Zeile der ganzen Liste. Eignerentscheidung noetig.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Counterfactual Replay Laboratory",
+      "gruppe": "Ablation",
+      "unterscheidet": "Welche einzelne Variable hat das Ergebnis geaendert? Baut eine kausale Wirkmatrix statt Vermutungen.",
+      "zustand": "ZU_TEUER",
+      "wert": null,
+      "braucht": "eingefrorene Eingaben je Episode plus Wiederholung mit genau einer geaenderten Variable. Speicher plus Rechenzeit; sinnvoll erst ab einigen hundert echten Episoden.",
+      "hinweis": null
+    },
+    {
+      "messwert": "Method Transfer Score",
+      "gruppe": "Meta-Lernen",
+      "unterscheidet": "Laesst sich eine Loesungsstruktur auf eine neue Domaene uebertragen? Eine der staerksten Meta-Metriken.",
+      "zustand": "ZU_TEUER",
+      "wert": null,
+      "braucht": "zwei getrennte Aufgabenfamilien und ein Uebertragungsversuch dazwischen. Braucht erst einmal wiederholbare Aufgaben -- die gibt es noch nicht.",
+      "hinweis": null
+    }
+  ]
+}

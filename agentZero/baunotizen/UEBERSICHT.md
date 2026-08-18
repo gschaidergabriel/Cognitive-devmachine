@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T19:11:07Z. **2556 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T19:41:07Z. **2558 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
 
@@ -8,21 +8,21 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T00:56:16+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2460 |
+| baunotiz | 2462 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1619 |
-| baunotiz | bauverlauf.jsonl | 797 |
+| baunotiz | git-commit | 1620 |
+| baunotiz | bauverlauf.jsonl | 798 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2556 · Gegenhypothese: 0 von 2556
+## Hypothese: 0 von 2558 · Gegenhypothese: 0 von 2558
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -130,6 +130,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: classify Gen80 PTY lease as reproducibility flake candidate
 
+### agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-5691ee2588d50fe21b3963b155e34227a49695ea` · baunotiz · git-commit · 2026-08-18T19:11:48+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 
 `baunotiz-bauverlauf-ab8f8081d673cd7185e7` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:44:14+07:00 · Gabriel Gschaider
@@ -153,6 +161,14 @@ claycode supervisor: steer Gen80 semantic-memory emergence and receipt drift
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-5b2057e1a9c2f3a7e7c0` · baunotiz · bauverlauf.jsonl · 2026-08-18T18:41:44+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)
 
@@ -217,67 +233,4 @@ agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
-
-### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
-
-`baunotiz-git-ff68c38f9703d7068c478298297c61ca13e4814d` · baunotiz · git-commit · 2026-08-18T16:48:24+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
-
-SPEICHER. Die Platte lief zweimal auf 100 %. Die Ursache war nicht fehlendes
-Aufraeumen, sondern `frank-laeufer-rae.timer` -- ein Zeitgeber eines
-ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief und Wegwerfordner in /tmp
-anlegte. 6.606 Ordner, 41 GB, unter fuenf verschiedenen Namensmustern; die erste
-Raeumung fand nur die Haelfte. Insgesamt 77 GB befreit, 173 -> 96 GB.
-
-WARUM ES NIEMANDEM AUFFIEL, und das ist der wichtigere Teil: `du -xsh /tmp` lief
-bei 15.236 Eintraegen in die Zeitgrenze und gab NICHTS aus. Ein leeres Ergebnis
-liest sich wie "da ist nichts". So stand die Summe aller Ordner (77 GB) neben dem
-tatsaechlichen Verbrauch (173 GB), und die Luecke fiel niemandem als Luecke auf.
-Die Bilanz nennt jetzt DREI Zahlen: was df sagt, was sie zaehlen konnte, und was
-sie NICHT konnte.
-
-ZURUECKHOLBAR. Der Eigner hat Frank v0.1 und alle lokalen Modelle abgeschafft,
-aber verlangt: "wenn ich jemals doch will muss das auch gehen." Gewichte sind
-nachladbar, die LISTE war es nicht -- deshalb stehen 23 Modelle mit Namen,
-Fassung und Nachladebefehl im Wiki, und `speicher_abschaffen` verweigert ohne
-geschriebenes Verzeichnis. Altbestand (44 GB) loescht die Wacht NICHT von selbst:
-ein Modellcache sieht aus wie Muell und kann Arbeit von Wochen sein.
-
-DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
-lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
-Schalbefehl a
-
-### Speicherverwaltung, ein bewiesener root-Ausbruch und seine vier Sperren
-
-`baunotiz-bauverlauf-036b27a2ef3adff18d0f` · baunotiz · bauverlauf.jsonl · 2026-08-18T16:48:24+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-SPEICHER. Die Platte lief zweimal auf 100 %. Die Ursache war nicht fehlendes
-Aufraeumen, sondern `frank-laeufer-rae.timer` -- ein Zeitgeber eines
-ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief und Wegwerfordner in /tmp
-anlegte. 6.606 Ordner, 41 GB, unter fuenf verschiedenen Namensmustern; die erste
-Raeumung fand nur die Haelfte. Insgesamt 77 GB befreit, 173 -> 96 GB.
-
-WARUM ES NIEMANDEM AUFFIEL, und das ist der wichtigere Teil: `du -xsh /tmp` lief
-bei 15.236 Eintraegen in die Zeitgrenze und gab NICHTS aus. Ein leeres Ergebnis
-liest sich wie "da ist nichts". So stand die Summe aller Ordner (77 GB) neben dem
-tatsaechlichen Verbrauch (173 GB), und die Luecke fiel niemandem als Luecke auf.
-Die Bilanz nennt jetzt DREI Zahlen: was df sagt, was sie zaehlen konnte, und was
-sie NICHT konnte.
-
-ZURUECKHOLBAR. Der Eigner hat Frank v0.1 und alle lokalen Modelle abgeschafft,
-aber verlangt: "wenn ich jemals doch will muss das auch gehen." Gewichte sind
-nachladbar, die LISTE war es nicht -- deshalb stehen 23 Modelle mit Namen,
-Fassung und Nachladebefehl im Wiki, und `speicher_abschaffen` verweigert ohne
-geschriebenes Verzeichnis. Altbestand (44 GB) loescht die Wacht NICHT von selbst:
-ein Modellcache sieht aus wie Muell und kann Arbeit von Wochen sein.
-
-DER AUSBRUCH. Ein Pruefangriff bewies einen vollen root-Ausbruch: `.git/config`
-lag innerhalb der erlaubten Wurzel, `core.fsmonitor` laesst git einen
-Schalbefehl ausfuehren, git laeuft auf dem Wirt als root. Nachgewiesen mit `id`
--> uid
 

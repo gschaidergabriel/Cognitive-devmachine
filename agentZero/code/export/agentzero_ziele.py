@@ -77,8 +77,17 @@ def zeilen(c) -> list[dict]:
         if Path("/opt/agentzero-export/repo/agentZero/karten").exists() else 0
     tests = _sh("cd '/opt/entityos/the artefact' && /opt/entityos/venv-test/bin/python -m pytest tests/ -q "
                 "--timeout=60 -p no:cacheprovider 2>/dev/null | tail -1")
-    treffer = re.search(r"(\d+) failed, (\d+) passed", tests or "")
-    testlage = f"{treffer.group(2)} gruen / {treffer.group(1)} rot" if treffer else "nicht gemessen"
+    # ⚠️ Vorher stand hier nur ein Muster fuer "X failed, Y passed". Bei NULL
+    # Fehlern schreibt pytest aber "584 passed in 17s" -- ohne das Wort
+    # "failed". Die Messung meldete deshalb "nicht gemessen", und zwar genau
+    # dann, wenn alles gruen ist: ein Messgeraet, das beim besten Ergebnis
+    # ausfaellt, hat den einen Fall nicht abgedeckt, auf den man hinarbeitet.
+    _rot = re.search(r"(\d+) failed", tests or "")
+    _gruen = re.search(r"(\d+) passed", tests or "")
+    if _gruen:
+        testlage = f"{_gruen.group(1)} gruen / {_rot.group(1) if _rot else '0'} rot"
+    else:
+        testlage = f"nicht gemessen (Ausgabe: {(tests or '')[:60]!r})"
 
     Z = []
 
@@ -542,6 +551,45 @@ def zeilen(c) -> list[dict]:
       "jetzt ganz ausserhalb des Zauns, git läuft ohne fremde Konfiguration, .git/config "
       "wird als TEXT vorgeprüft, und geprüft wird vor JEDEM git-Aufruf — auch vor `stand`, "
       "das vorher durch keine Prüfung lief und genau der Auslöser war",
+      True)
+
+    z("Betrieb", "Die Testsuite ist ehrlich grün",
+      "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
+      "Lehre aus dem Bau 18.08.",
+      (f"{testlage}. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: "
+       "der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze "
+       "überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der "
+       "zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei "
+       "kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt "
+       "Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das "
+       "sagen, statt Sicherheit zu behaupten, die nicht besteht"),
+      "0 rot" in testlage or ("gruen" in testlage and "/ 0 rot" in testlage))
+    z("Kognition", "Die Endabnahme kann überhaupt messen",
+      "das Instrument, das beweisen soll, dass Wirkungen funktionieren, muss selbst funktionieren",
+      "Lehre aus dem Bau 18.08.",
+      "⚠️ Sieben rote Tests, EINE Ursache: `ClayVerseEngine` legte keine Zeile in "
+      "`active_turns` an, die das Wirkungstor verlangt. Das Tor kam mit dem "
+      "Zug-Lebenszyklus; der ältere Weg hat es nie gelernt — und im Betrieb fiel das "
+      "nicht auf, weil ihn dort niemand mehr aufruft. Ausser einem: der Endabnahme. "
+      "Sie meldete deshalb nicht „Wirkung fehlgeschlagen\", sondern scheiterte VOR der "
+      "Wirkung — und ein Instrument, das gar nicht messen kann, sieht in einer "
+      "Testliste aus wie eines, das etwas Schlechtes gemessen hat. ⭐ Die Reparatur "
+      "lockert das Tor NICHT: engine.py meldet den lebenden Zug jetzt an und wieder ab, "
+      "wie der Betriebsweg. Ein `if episode_id is None`-Zweig im Tor hätte alle sieben "
+      "grün gemacht und die Prüfung genau für den Weg abgeschaltet, dessen Zweck das "
+      "Prüfen ist",
+      True)
+    z("Menschen", "Kein Rohtext über die Sitzungsgrenze",
+      "kollidiert eine gemeinsame Ressource, sieht der andere Fragmente — nicht das Original",
+      "Architektur",
+      "⚠️ HIER LAG EIN ECHTES LECK. Bei einer Kollision wurde die ganze Zeile "
+      "ausgeliefert (`item = dict(r)`), inklusive `content`. Der Code setzte brav das "
+      "Etikett „compressed_with_extracted_fragments\" und legte die Fragmente daneben — "
+      "und liess den Rohtext drin. Der andere Mensch bekam den vollen Originaltext mit "
+      "einem Etikett, auf dem „verdichtet\" stand. ⭐ Gefunden über einen roten Test, "
+      "der aus dem FALSCHEN Grund rot war: die alte Zusicherung hing an einer "
+      "Nebenwirkung der zerstörenden Verdichtung. Wer so einen Test nur an die neue "
+      "Wirklichkeit anpasst, verliert den Hinweis",
       True)
 
     return Z

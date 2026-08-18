@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T08:58:06Z. 737 Commits aus vier Repos, davon 215 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T09:18:57Z. 738 Commits aus vier Repos, davon 216 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,25 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Die autonomen Takte versioniert - und der Riss, den sie hatten
+
+`70fe17a64cb5` · entityos · 09:00 UTC · EntityOS
+
+```
+Gemessen bei der Abschlusspruefung: 16.558 Artikel, aber nur 16.551 in der
+Zuordnungstabelle. Der Baunotizen-Takt lief alle 15 Minuten und nahm neue
+Notizen auf; das Zuordnen lief ueberhaupt nicht im Takt. Also blieb jede neue
+Baunotiz unzugeordnet liegen, und die Luecke waechst still mit jedem Durchlauf.
+
+Zwei getrennte Zeitplaene fuer zwei Schritte DERSELBEN Kette laufen unweigerlich
+auseinander. Das Zuordnen haengt deshalb jetzt als ExecStartPost am Aufnehmen
+statt an einem eigenen Timer. Nach dem Fix: 16.561 Artikel, 16.561 zugeordnet.
+
+Und die Units lagen nur unter /etc/systemd/system/ -- nirgends versioniert. Beim
+naechsten Wiederaufbau waeren sie weg gewesen, und niemand haette es gemerkt:
+ein stehender Takt sieht von aussen aus wie ein ruhiger.
 ```
 
 ### Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz
@@ -3649,13 +3668,5 @@ wache.py mit lage, tote, stille, wacht. Zwei Laeuferklassen dynamisch erkannt, n
 
 ```
 wiki.py behoben: beide kante-Stellen auf INSERT ... ON CONFLICT(von,nach,art) DO UPDATE SET beleg=excluded.beleg umgestellt. Begruendung des Agenten: wiki.py besitzt auf kante genau EINE Spalte, naemlich beleg - eine Klausel, die nur diese eine nennt, kann die anderen physisch nicht erreichen, braucht kein Vorlesen und hat kein Wettrennen. DRITTER FUND, vom Agenten selbst: artikel hatte heute ebenfalls verfallen und protected bekommen, und die drei INSERT-OR-REPLACE-Stellen dort nannten sie auch nicht - mit demselben Fortschreibemuster behoben wie zuvor herkunft. VOLLSTAENDIGE DURCHSICHT: 8 Vorkommen in wiki.py, 5 behoben, 3 nachweislich sicher (artikel_sphaere, Spaltenliste deckt die Tabelle vollstaendig). In isolierter Datenbank bewiesen: alle 5 kante-Felder und alle 6 artikel-Felder ueberleben einen zweiten vollen Lauf.
-```
-
-### B21 geprueft: Fehlergedaechtnis lebt - 17 Fehler mit mechanischem Ausloeser
-
-`6d615888ce74` · clay · 22:23 UTC · ClayVerse
-
-```
-fehler.py und Tabelle fehler live. 17 Zeilen, jede mit Regex-Ausloeser, Beleg, Herkunft und Bestaetigung, 0 ohne Beleg. Geerntet aus protokoll.jsonl (61 Zeilen vollstaendig gelesen), MESSFEHLER.md, CLAUDE.md und Code-Gegenpruefungen. NACHWEIS: 7 von 7 echten Taetigkeiten trafen genau ihre eigene Zeile, je ein Treffer, keine Kreuzkontamination, 73 bis 1776 Mikrosekunden. UND ENTSCHEIDEND: 3 von 3 unverdaechtigen Taetigkeiten (git status, ls, ein einfaches SELECT) lieferten NULL Treffer. Ein Warner, der immer warnt, waere Rauschen - und Rauschen ist, wie eine echte Warnung ignoriert wird. Wiederholungsfest: zweiter Erntelauf 0 neu.
 ```
 

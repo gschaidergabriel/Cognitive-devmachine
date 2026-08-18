@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-18T08:58:07Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-18T09:18:57Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -573,6 +573,11 @@ CREATE TABLE vp_alias (
       target_kind TEXT, target_id TEXT, alias_norm TEXT,
       alias_class TEXT, confidence REAL, source_epoch INTEGER
     );
+CREATE TABLE vp_alias_df (
+  wort TEXT PRIMARY KEY,
+  df INTEGER NOT NULL,          -- in wie vielen Aliassen kommt das Wort vor
+  gebaut_am TEXT
+);
 CREATE VIRTUAL TABLE vp_alias_fts USING fts5(alias_norm, content='vp_alias', content_rowid='alias_id');
 CREATE TABLE vp_alias_meta (key TEXT PRIMARY KEY, value TEXT);
 CREATE VIRTUAL TABLE vp_datei_fts USING fts5(titel, datei_id UNINDEXED);
@@ -773,6 +778,7 @@ CREATE INDEX idx_turn_compressions_turn ON turn_compressions(turn_id, level);
 CREATE INDEX idx_turns_session_ord ON turns(session_id, ordinal DESC);
 CREATE INDEX idx_vd_aufnahme_strom ON vd_aufnahme(strom, zeit);
 CREATE INDEX idx_vd_lauf_strom ON vd_lauf(strom, zeit);
+CREATE INDEX idx_vp_alias_df_df ON vp_alias_df(df);
 CREATE INDEX idx_weg_ursprung_ziel ON weg(ursprung, ziel_wirt);
 CREATE INDEX idx_weg_ziel ON weg(ziel_wirt);
 CREATE INDEX idx_wk_aufgabe_art ON wk_aufgabe(art, zustand);

@@ -335,6 +335,37 @@ def alias_index_aufbauen(c: sqlite3.Connection, *, erzwingen: bool = False) -> d
             "sekunden": round(time.perf_counter() - t0, 3), "alias_epoch": aktuell}
 
 
+# ── Frageworte: tragen keine Bedeutung, fluten aber die Alias-Suche ──────
+#
+# Gemessen: der Ausdruck "was" OR "ist" OR "die" OR "unifieddb" liefert acht
+# Treffer auf die drei Frageworte und keinen auf das eine tragende Wort. Bei
+# 358.280 Aliassen gewinnt immer das haeufige Wort. Deshalb werden Frageworte
+# aus dem SUCHAUSDRUCK entfernt -- aus dem Deckungsmassstab NICHT (siehe
+# resolve_entities).
+_FRAGEWORTE = frozenset("""
+der die das dem den des ein eine einer eines einem und oder aber auch als am an auf aus
+bei bin bis bist dann dass dazu dein dich dir doch dort durch eben eher er es euch fuer
+gegen hab habe haben hat hatte hier hin ich ihm ihn ihr ihre im in ins ist ja jede jeden
+jeder jedes jetzt kann kein keine man mehr mein mit muss nach nicht noch nun nur ob oben
+ohne schon sehr sein seine sich sie sind so soll ueber um uns unser unter viel vom von vor
+waehrend war waren warum was weg weil weiter welche welcher welches wenn wer werden wie
+wieder will wir wird wo woher wohin zu zum zur zwar zwischen
+the and for with from this that what how does why not are were has have been will can may
+into out its it is a an of on at by be as or if then than there their them
+""".split())
+
+
+def _tragende(tokens) -> list[str]:
+    """Nur die Woerter, die eine Frage von einer anderen unterscheiden.
+
+    Faellt auf die Originalliste zurueck, wenn danach nichts uebrig bleibt --
+    eine Frage, die NUR aus Frageworten besteht, soll nicht schlechter
+    behandelt werden als vorher, sondern gleich.
+    """
+    kern = [t for t in tokens if t not in _FRAGEWORTE and len(t) > 1]
+    return kern or [t for t in tokens if len(t) > 1]
+
+
 def resolve_entities(c: sqlite3.Connection, tokens: list[str], raw_text: str) -> Resolution:
     """Fail-closed, SHAPE aus SemanticEntityResolverV12: nur EXACT/EVIDENCE_ALIAS
     duerfen einen Walk anstossen. AMBIGUOUS/LOW_CONFIDENCE/MISS raten NIE."""
@@ -357,7 +388,12 @@ def resolve_entities(c: sqlite3.Connection, tokens: list[str], raw_text: str) ->
         anchors = tuple(sorted(set(artikel_exact)))[:CAP_ANCHORS]
         return Resolution("EXACT_ID", 1.0, anchors, tuple(sorted(set(artikel_exact))))
 
-    expr = " OR ".join('"' + t.replace('"', '') + '"' for t in qt if len(t) > 1)
+    # NUR der Suchausdruck wird gefiltert. `qt` bleibt vollstaendig und dient
+    # weiter als Deckungsmassstab -- ein Alias, der "die" enthaelt, soll dafuer
+    # Deckung bekommen. Beides zu filtern hiesse, an einer Stelle zu helfen und
+    # an der anderen zu schaden.
+    such = _tragende(sorted(qt))
+    expr = " OR ".join('"' + t.replace('"', '') + '"' for t in such)
     if not expr:
         return Resolution("MISS", 0.0, (), ())
     rows = c.execute(

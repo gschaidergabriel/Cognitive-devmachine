@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T05:48:59Z. 713 Commits aus vier Repos, davon 206 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T06:18:59Z. 714 Commits aus vier Repos, davon 207 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,68 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Bahnrouter: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter
+
+`23e9b61c6aae` · entityos · 06:06 UTC · EntityOS
+
+```
+Der Clay-Unterbau haelt eine durchdachte Verdrahtung - 22 Zugaenge, 11 kognitive
+Prozesse, je mit Erst-, Zweit- und Drittbahn und Anteilsdeckel. Sie war aber reine
+Dokumentation: nichts erzwang die Deckel, sie hatte genau einen Verbraucher, und
+Zeros Container erreichte keine einzige Bahn.
+
+WAS GEBAUT IST
+- bahnen.json wird aus verdrahtung.py AUSGELEITET, nicht abgeschrieben. Die
+  Wahrheit bleibt im Unterbau (/opt/clayverse ist fuer das Produkt nur lesbar),
+  der Export ist wiederholbar.
+- bahnen.py: Auswahl nach Verdrahtung, Tagesbuchfuehrung je Bahn und Prozess,
+  erzwungene Anteilsdeckel, Ablehnung statt stillem Abstieg.
+- MCP-Werkzeuge bahn_faehigkeit und bahn_lage, beide in permissions.allow. Zero
+  ruft eine FAEHIGKEIT ("kondensieren", "zweitmeinung"), nie einen Anbieter.
+  Sonst waehlt auf Dauer die Formulierung des Prompts den Anbieter, und niemand
+  kann sagen, warum eine Rechnung gestiegen ist.
+
+DREI REGELN, DIE DAS VON EINER ANBIETERLISTE UNTERSCHEIDEN
+1. Das Modell waehlt nicht. Code waehlt.
+2. Deckel werden gezaehlt, nicht erklaert. Ein Deckel, den niemand zaehlt, ist
+   ein Vorsatz. Bewiesen: kuenstlich auf 1 gesetzt, zweiter Aufruf abgelehnt.
+3. Erschoepft heisst Ablehnung. Kein heimliches Ausweichen auf etwas
+   Schlechteres - das liefert weiter Antworten, nur schlechtere, und faellt erst
+   auf, wenn niemand mehr weiss warum.
+
+GEMESSEN, NICHT ANGENOMMEN
+Jede Bahn einmal wirklich angerufen. Der Unterbau fuehrte Zustaende vom 15.08.;
+seither hat Groq zwei Modelle abgeschaltet:
+  groq_llama31_8b   llama-3.1-8b-instant     404, Modell entfallen
+  groq_llama33_70b  llama-3.3-70b-versatile  404, Modell entfallen
+  groq_gptoss_20b   200 in 260 ms
+  groq_gptoss_120b  200 in 261 ms
+  groq_qwen3_6_27b  200 in 217 ms
+  groq_compound     200 in 375 ms
+  mistral_small     200 in 325 ms
+  deepseek_chat     402 Insufficient Balance
+"Ein Modellname aus einer Liste ist keine Zusage" steht so im Entscheidungs-
+katalog des Hauses. Hier ist der Beleg dazu, drei Tage spaeter.
+
+AUSWEICHBAHN BEWIESEN, nicht behauptet:
+  kondensieren -> groq_llama31_8b (nicht_nutzbar) -> mistral_small, 555 ms, deutsch
+  zweitmeinung -> mistral_small, 1742 ms, deutsch
+
+EIN EIGENER IRRTUM, KORRIGIERT
+Ich hatte gemeldet, der Clerk-Geheimschluessel sei ungueltig. Falsch. HTTP 403
+mit "error code: 1010" ist Cloudflares Browser-Integritaetspruefung, die
+Python-urllib am User-Agent abweist - kein Anmeldeproblem. Mit eigenem
+User-Agent: Clerk 200 mit echten Daten, Groq antwortet im Klartext, dass das
+MODELL fehlt. Der Router setzt jetzt einen User-Agent, und der Grund steht als
+Kommentar daneben.
+Damit war endlich auch die Zuordnung gegen Clerk selbst pruefbar:
+  gabriel  user_3C1pnXkHAaS...  structured.thinking.gschaider@gmail.com
+  andreas  user_3C5R4TCSv9y...  genuinos@gmail.com, Dr. Andreas Unterweger
+Beide bestaetigt.
+
+Suite unveraendert 479 gruen / 14 rot.
 ```
 
 ### prestage: upgrade governor model to mistral-medium, fix slot-2 session check
@@ -3248,13 +3310,5 @@ Herstellerstand geholt und auf CPU vermessen, n=60, jax-Backend cpu. Voller gene
 
 ```
 vorprozessor.py, 1780 Zeilen, null Modellaufrufe strukturell (kein LLM- oder HTTP-Klient im Code). Paket traegt: treffer, hyperposition, orte, systeme, codependenzen, hypothesen, gegenseite, kuration, weiter, politik, beobachtungen, resolution, basis. DICHTE gemessen mit tiktoken ueber 5 Fragen: grep 0,00 - fts 1,65 - voll 3,91 - PAKET 4,95 Fakten je 1000 Token, und das Paket schlaegt voll bei JEDER einzelnen Frage, nicht nur im Mittel. Aliasaufloesung vp_alias 92.043 Zeilen, v12-Bewertungsform woertlich uebernommen: exakte Kennung -> EXACT_ID 1,0; vager Text -> MISS 0,0; nie geraten. SCHLEIFE bewiesen: drei Schritte hintereinander, jeder nimmt die Kennung aus dem weiter des vorigen, keiner braucht eine neue Suche. GESPERRTES LESEN bewiesen: unbekannte Paketkennung abgewiesen, nicht genannte Ortskennung abgewiesen, Binaeres abgewiesen. 3 von 5 Fragen ohne jeden Lesevorgang beantwortet. PULSKOSTEN gemessen: Leerlauftakt 68,6 Mikrosekunden, Arbeitstakt 4,07 ms. Schnappschuss und Heilung bewiesen: Zustand absichtlich verdorben, heilen() zurueckgerollt, Zustandshash stimmt exakt mit Schnappschuss 9.
-```
-
-### B9 geprueft: Organe vermessen - fast nichts davon ist neural
-
-`7f6e692439fc` · clay · 21:00 UTC · ClayVerse
-
-```
-Thalamus: regelbasierte Formel, 0 Parameter, kein torch, kein Gradient. GWT/Arbeitsbuehne: feste Zuendschwelle 0,55 mit handgesetzten Gewichten, 0 Parameter. Gedaechtnis: Anhaeufung plus Volltext, kein Lernen - die Lernhaken titan.rwl_feedback und chat_memory.consolidation_tracker existieren im Schema mit NULL Zeilen. Das EINZIGE echte trainierte Netz im ganzen Bestand ist der LoRA-Adapter mit 42.467.328 Parametern auf einem fremden 4B-Grundmodell, direkt aus dem safetensors-Kopf gerechnet - und das ist das Hirn, kein Organ. ⭐ vp_edge_lern EXISTIERT BEREITS in wiki.db, gebaut vom Vorprozessor-Agenten: lernen(), verfall() mit HOP_DECAY 0,58, heilen() mit Ruecknahme auf den letzten Stand der die Eichnormale bestand, eingehaengt in den Live-Abrufpfad. 0 Zeilen - gebaut, verdrahtet, nie benutzt.
 ```
 

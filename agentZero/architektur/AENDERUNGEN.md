@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
+Automatisch erzeugt 2026-08-18T06:18:59Z aus drei Repos. 466 Eintraege.
 
 ## architektur (14)
 
@@ -86,7 +86,7 @@ Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 | 2026-08-15T16:46 | unifieddb | `7817f79f4b2c` | F72 aufgenommen |
 
-## reparatur (49)
+## reparatur (48)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -130,7 +130,6 @@ Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T02:14 | entityos | `b31a1bf82688` | fix(clayverse): bind rootless SeaBIOS path |
 | 2026-08-18T02:13 | entityos | `5ad6e69196a5` | fix(clayverse): bind rootless QEMU firmware data directory |
 | 2026-08-18T02:10 | entityos | `6f6fd1b01a23` | fix(clayverse): fail closed on QEMU tooling admission |
-| 2026-08-18T01:40 | entityos | `967f5310e96f` | receipt(go): reject snapshot-derived Tier2 and bind controller fixes |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -195,7 +194,7 @@ Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (228)
+## bau (229)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -205,6 +204,7 @@ Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
 | 2026-08-18T06:49 | entityos | `b9715815686b` | claycode inbox: bind control sync and Vercel guard falsifier |
 | 2026-08-18T06:48 | entityos | `03b3f877558a` | claycode control: sync disposable guest execution boundary |
+| 2026-08-18T06:06 | entityos | `23e9b61c6aae` | Bahnrouter: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter |
 | 2026-08-18T05:39 | entityos | `0941b84640c0` | claycode inbox: steer to admitted disposable guest lane and autonomy arbiter blocker |
 | 2026-08-18T05:38 | entityos | `096f335a7a37` | claycode supervisor: admit VPS guest lane and fence autonomy pulse source-only drift |
 | 2026-08-18T05:23 | entityos | `eb37ffde24ab` | Zeros Chat-Vorderseite, und die Zwillinge werden sichtbar |
@@ -258,5 +258,4 @@ Automatisch erzeugt 2026-08-18T05:48:59Z aus drei Repos. 466 Eintraege.
 | 2026-08-18T03:00 | entityos | `2ceb83edba40` | receipt(clayverse): bind deterministic autonomy source evidence |
 | 2026-08-18T03:00 | entityos | `ccaf04ebe64b` | docs(artefact): surface deterministic autonomy lane |
 | 2026-08-18T02:58 | entityos | `02273cc8bc5e` | docs(runtime): bind proactive autonomy to canonical evidence |
-| 2026-08-18T02:57 | entityos | `92ec3c4f6766` | docs(clayverse): specify deterministic autonomy without self-authorization |
 

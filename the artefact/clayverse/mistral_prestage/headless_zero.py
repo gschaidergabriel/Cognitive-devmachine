@@ -5,6 +5,8 @@ import subprocess
 import time
 from pathlib import Path
 
+from .. import identity  # coordinator-owned, imported not edited
+
 MANAGED_SETTINGS = "/etc/claude-code/managed-settings.json"
 # Dynamically rendered identity -- the SAME file the interactive tmux terminal
 # points --append-system-prompt-file at (clayverse.terminal_sessions). NOT the
@@ -81,8 +83,8 @@ def run_headless(
     """
     if user_id not in {"gabriel", "andreas"}:
         raise HeadlessZeroError("headless Zero requires a canonical user id")
-    if session_id != f"session:{user_id}":
-        raise HeadlessZeroError("session id must match the canonical per-user session")
+    if not identity.ist_kanonische_sitzung(session_id, user_id):
+        raise HeadlessZeroError("session id must be one of the user's canonical session slots")
     if not isinstance(caveman_prompt, str) or not caveman_prompt or len(caveman_prompt) > MAX_PROMPT_CHARS:
         raise HeadlessZeroError("invalid caveman prompt")
 

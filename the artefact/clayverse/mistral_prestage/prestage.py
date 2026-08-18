@@ -5,7 +5,15 @@ from typing import Any
 
 from . import secrets, transport
 
-PRESTAGE_MODEL = "mistral-small-latest"
+# MEASURED 2026-08-18: mistral-small-latest collapsed the 8-key envelope into
+# a single field, dumping everything (watch_out, hypotheses, the negotiation
+# instruction) as run-on text inside caveman_prompt, and produced degenerate
+# repetitive text under the load. F74 argues for the OPPOSITE economics of the
+# translator anyway -- the prestage is meant to be the one EXPENSIVE call,
+# reasoning broadly so the rest of the pipeline can be cheap. mistral-medium
+# is the right tier for this job; mistral-small stays right for the cheap
+# translator (translator.py, unchanged).
+PRESTAGE_MODEL = "mistral-medium-latest"
 
 # F74's negotiation loop, hard-countered: Zero may ask for a better package
 # exactly once (round 1). If round 2's revised package still doesn't work,
@@ -47,7 +55,14 @@ instead of Zero doing it itself, the human's actual intent, what to watch out fo
 hypothesis and a counter-hypothesis grounded in the supplied recent turns and context.
 
 Never invent facts not present in CONTEXT. If context is thin, say so in watch_out instead of \
-guessing."""
+guessing.
+
+OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these EIGHT top-level \
+keys, each its own field -- caveman_prompt, user_intent, tool_selection, memory_artefacts, \
+outsourced, watch_out, hypotheses, counter_hypotheses. Put the negotiation-escape-hatch \
+instruction, the watch_out text, and the hypotheses INSIDE THEIR OWN keys, not folded into \
+caveman_prompt as run-on text. caveman_prompt itself should be short -- the actual directive \
+Zero acts on, nothing else."""
 
 _ROUND1_ADDENDUM = f"""
 

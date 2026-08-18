@@ -44,11 +44,15 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__paket_lage",
     # Faehigkeiten kennen, ohne Schluessel zu sehen.
     "mcp__clayverse__tresor_katalog",
+    "mcp__clayverse__tresor_zeigen",
     # Ohne dieses Werkzeug ist der Korpus per Inhaltsfrage unerreichbar:
     # embedding_search liefert nur Kennungen ohne Text, der lexikalische Weg
     # nur Dateinamen. Gemessen: die Antwort stand in der Datenbank und Zero
     # sagte korrekt "unbekannt".
     "mcp__clayverse__korpus_suchen",
+    "mcp__clayverse__artikel_lesen",
+    "mcp__clayverse__dateien_suchen",
+    "mcp__clayverse__korpus_tief",
     # ⭐ Handlungsfaehigkeit ohne Schale: lesen, suchen, aendern,
     # veroeffentlichen -- jede Faehigkeit benannt und eingezaeunt, statt Bash.
     "mcp__clayverse__werkbank_liste",

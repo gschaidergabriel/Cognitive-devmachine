@@ -50,7 +50,9 @@ ZUSATZREGELN (gemessen am 2026-08-19 an 26 echten Produktionszuegen):
    ZEICHENGENAU und GENAU SO OFT, wie sie im Quelltext steht -- an der inhaltlich passenden \
    Stelle im deutschen Satz. Uebersetze eine Maske nicht, erklaere sie nicht, lass keine weg \
    und erfinde keine neue. Der deutsche Satz wird um die Maske herum gebaut, die Maske selbst \
-   bleibt unangetastet.
+   bleibt unangetastet. Eine Maske wird NIE ausgelassen -- auch nicht in einer \
+   Ueberschrift, einer Tabellenzelle oder einer Aufzaehlung, und auch dann nicht, wenn sie \
+   dir wie technischer Ballast vorkommt.
 8. MASCHINENMARKEN. Woerter in GROSSBUCHSTABEN_MIT_UNTERSTRICH (z. B. NEED_BETTER_PACKAGE, \
    PROPOSAL_ONLY) sind Signale, die eine MASCHINE liest, keine Woerter. Sie werden nie \
    uebersetzt, nie eingedeutscht, nie umschrieben. "FEHLT BESSERES PAKET" ist keine \
@@ -109,6 +111,7 @@ RE_DATEI = re.compile(
 # ausgeschrieben ("die vierte Ziffer" fuer "the 4th digit"), das gaebe
 # Fehlalarm statt Messung.
 RE_ZIFFERNGRUPPE = re.compile(r"\d{2,}")
+RE_TAUSENDERTRENNER = re.compile(r"(?<=\d)[.,](?=\d{3}\b)")
 
 MAX_UEBERSETZUNGSVERSUCHE = 3
 
@@ -173,12 +176,32 @@ def _bezeichner(text: str) -> set[str]:
     return gefunden
 
 
+def _zahlgruppen(text: str) -> set[str]:
+    """Zahlen beider Sprachen auf eine Form bringen.
+
+    Deutsch und Englisch tauschen Punkt und Komma (31,557,600 gegen
+    31.557.600). Ohne dieses Zusammenziehen meldet die Pruefung Unterschiede,
+    die keine sind, und schickt das Modell in sinnlose Wiederholungen.
+    """
+    zusammen = RE_TAUSENDERTRENNER.sub("", text)
+    return {g.lstrip("0") or "0" for g in RE_ZIFFERNGRUPPE.findall(zusammen)}
+
+
 def _fehlende_bezeichner(quelle: str, deutsch: str) -> list[str]:
+    """Was aus der Quelle fehlt UND was im Deutschen dazugekommen ist.
+
+    Die zweite Haelfte ist die Eignerregel "NICHTS erfinden" als Pruefung:
+    gemessen 2026-08-19 tippte das Modell in einem von 78 Laeufen eine
+    Jahreszahl falsch ab (206 statt 2026) -- eine Zahl, die es in der Quelle
+    nicht gibt. Ein zusaetzlicher Versuch kostet wenig, eine erfundene Zahl im
+    Text des Menschen kostet viel.
+    """
     unten = deutsch.lower()
     fehlt = [b for b in _bezeichner(quelle) if b.lower() not in unten]
-    quellzahlen = {z.lstrip("0") or "0" for z in RE_ZIFFERNGRUPPE.findall(quelle)}
-    zielzahlen = {z.lstrip("0") or "0" for z in RE_ZIFFERNGRUPPE.findall(deutsch)}
+    quellzahlen = _zahlgruppen(quelle)
+    zielzahlen = _zahlgruppen(deutsch)
     fehlt += sorted(quellzahlen - zielzahlen)
+    fehlt += sorted(zielzahlen - quellzahlen)
     return sorted(fehlt)
 
 
@@ -197,15 +220,32 @@ def _wirkt_unfertig(text: str) -> bool:
     return schwanz[-1] not in _SCHLUSSZEICHEN and not schwanz[-1].isdigit()
 
 
+def _als_masken(teile: list[str], karte: dict[str, str]) -> list[str]:
+    """Fehlende Originalteile in die Masken uebersetzen, die das Modell SIEHT.
+
+    Gemessen 2026-08-19: ein Hinweis, der den Rohtext nennt ("uebernimm
+    NEED_BETTER_PACKAGE"), verlangt vom Modell etwas, das in seiner Eingabe gar
+    nicht vorkommt -- dort steht die Maske. Der Hinweis machte es dadurch
+    schlechter statt besser. Ein Korrekturhinweis muss in derselben Sprache
+    reden wie die Eingabe.
+    """
+    raus: list[str] = []
+    for teil in teile:
+        treffer = [m for m, roh in karte.items() if teil in roh]
+        raus.extend(treffer or [teil])
+    return raus
+
+
 def _hinweis(fehlt: list[str], grund: str) -> str:
     """Korrekturhinweis fuer den naechsten Versuch -- konkret, nicht allgemein.
 
-    Es wird NICHTS vorgesagt, was nicht schon im Quelltext steht: die Liste
-    besteht ausschliesslich aus Zeichenketten des Originals.
+    Es wird NICHTS vorgesagt, was nicht schon in der Eingabe steht: die Liste
+    besteht ausschliesslich aus Zeichenketten bzw. Masken des Originals.
     """
     liste = ", ".join(sorted(set(fehlt))[:25])
-    return (f"\n\nKORREKTUR ({grund}). Diese Zeichenketten stehen im Quelltext und fehlten "
-            f"in deiner letzten Fassung. Uebernimm sie unveraendert: {liste}")
+    return (f"\n\nKORREKTUR ({grund}). Das hier steht in der Eingabe und fehlte oder "
+            f"stimmte nicht in deiner letzten Fassung. Uebernimm es unveraendert und "
+            f"genau so oft, wie es in der Eingabe steht: {liste}")
 
 
 def translate_to_german(
@@ -246,22 +286,18 @@ def translate_to_german(
             zusatz = "\n\nKORREKTUR: die letzte Fassung brach mitten im Text ab. Gib den GANZEN Text."
             continue
 
-        # 2a. Eine Maske OEFTER als in der Quelle: beim Zuruecksetzen wuerde ein
-        #     Maschinenteil doppelt im Text stehen, das es nur einmal gab. Das
-        #     ist eine Erfindung und geht nie durch -- Eignerregel.
-        zuviel = [m for m in karte if roh.count(m) > maskiert.count(m)]
-        if zuviel:
-            grund = "maske_doppelt"
-            zusatz = _hinweis(zuviel, "Masken standen oefter da als im Quelltext")
-            continue
-
-        # 2b. Eine Maske SELTENER: ein Maschinenteil ging verloren. Zuerst ein
-        #     neuer Versuch; taugt am Ende keiner, ist die Fassung mit dem
-        #     Verlust immer noch besser als der englische Rohtext, den der
-        #     Rueckfall in pipeline.py sonst ausliefert -- der Verlust wird in
-        #     der Quittung vermerkt, nicht verschwiegen. Ausnahme unten
-        #     (Maschinenmarke, unfertiger Text): die werden nie behalten.
-        zuwenig = [m for m in karte if roh.count(m) < maskiert.count(m)]
+        # 2. Maskenzaehlung. Weicht sie ab, ist etwas schiefgegangen: eine
+        #    fehlende Maske ist ein verlorenes Maschinenteil, eine doppelte ein
+        #    zweimal gesetztes. Beides loest zuerst einen neuen Versuch aus.
+        #    Bleibt es dabei, wird die beste Fassung trotzdem ausgeliefert und
+        #    der Mangel in der Quittung vermerkt -- sie ist immer noch besser
+        #    als der englische Rohtext, den der Rueckfall in pipeline.py sonst
+        #    ausliefert. NICHT ausgeliefert wird eine Fassung, der eine
+        #    Maschinenmarke fehlt (Schritt 3) oder die unfertig aussieht.
+        #    Eine doppelte Maske ist KEINE Erfindung im Sinne der Eignerregel:
+        #    zurueckgesetzt steht dort dieselbe Zeichenkette aus der Quelle,
+        #    kein neuer Fakt -- nur eine Wiederholung, die die Quelle nicht hat.
+        maskenfehler = [m for m in karte if roh.count(m) != maskiert.count(m)]
         deutsch = _entmaskiere(roh, karte)
         if RE_MASKE.search(deutsch):
             # Eine erfundene Maske, die es in der Karte nie gab.
@@ -274,25 +310,15 @@ def translate_to_german(
         marken_weg = _fehlende_marken(caveman_text, deutsch)
         if marken_weg:
             grund = "maschinenmarke"
-            zusatz = _hinweis(marken_weg, "Maschinenmarken wurden uebersetzt")
+            zusatz = _hinweis(_als_masken(marken_weg, karte),
+                              "Maschinenmarken fehlten oder wurden uebersetzt")
             continue
 
         # 4. Weiche Pruefung: Bezeichner und Zahlen. Fehlt etwas, wird ein
         #    neuer Versuch unternommen -- aber die beste Fassung wird behalten
         #    statt verworfen. Eine Uebersetzung, der ein Bezeichner fehlt, ist
         #    schlechter als eine vollstaendige und besser als gar keine.
-        fehlt = _fehlende_bezeichner(caveman_text, deutsch)
-        if zuwenig:
-            grund = "maske"
-            zusatz = _hinweis([karte[m] for m in zuwenig], "Masken fehlten")
-            if _wirkt_unfertig(roh):
-                # Nicht als Fassung merken: eine Antwort, die mitten im Text
-                # aufhoert, ist keine Uebersetzung, auch wenn sie sonst sauber
-                # aussieht.
-                continue
-            if bester is None or len(fehlt) < bester[0]:
-                bester = (len(fehlt), deutsch, result, fehlt)
-            continue
+        fehlt = _fehlende_bezeichner(caveman_text, deutsch) + maskenfehler
         if not fehlt:
             return {
                 "caveman_original": caveman_text,
@@ -300,10 +326,14 @@ def translate_to_german(
                 "translator_model": model,
                 "translator_receipt": result["receipt"],
             }
+        # Nur eine Fassung merken, die nicht mitten im Text aufhoert.
         if not _wirkt_unfertig(roh) and (bester is None or len(fehlt) < bester[0]):
             bester = (len(fehlt), deutsch, result, fehlt)
-        grund = "bezeichner"
-        zusatz = _hinweis(fehlt, "Bezeichner oder Zahlen fehlten")
+        grund = "maske" if maskenfehler else "bezeichner"
+        zusatz = _hinweis(_als_masken(fehlt, karte),
+                          "Masken, Bezeichner oder Zahlen stimmten nicht -- "
+                          "was hier nicht in der Eingabe steht, gehoert geloescht, "
+                          "nicht ergaenzt")
 
     if bester is not None:
         _, deutsch, result, fehlt = bester

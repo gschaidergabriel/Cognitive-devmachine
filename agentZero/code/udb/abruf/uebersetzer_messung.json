@@ -23,5 +23,31 @@
  "sentinel": "NEED_BETTER_PACKAGE in 10 Texten, nur 3x im Deutschen erhalten",
  "geraet": "uebersetzer_messen.py",
  "goldsatz": "uebersetzer_gold.json",
- "datum": "2026-08-18"
+ "datum": "2026-08-18",
+ "nachher_2026-08-19": {
+  "hinweis": "Gleiches Geraet, gleicher Goldsatz, beide unveraendert (md5 geprueft). Geaendert wurde nur der Uebersetzer: translator.py Prompt v4 -> v5, Maskierung der Maschinenteile plus Nachpruefung.",
+  "aenderung": [
+   "Maschinenmarken (GROSS_MIT_UNTERSTRICH, NEGOTIATION_SENTINEL aus prestage.py), Codespannen und Codezaeune werden vor der Anfrage durch [[C<n>]] ersetzt und danach zeichengenau zurueckgesetzt -- das Modell sieht sie nie.",
+   "Harte Sperre: fehlt eine Maschinenmarke im Deutschen, faellt der Versuch durch; faellt jeder Versuch durch, scheitert die Uebersetzung laut (Rueckfall auf Rohtext).",
+   "Weiche Pruefung mit Korrekturhinweis: fehlende/doppelte Masken, fehlende Bezeichner und fehlende ODER zusaetzliche Zahlen loesen einen neuen Versuch aus; am Ende wird die beste Fassung ausgeliefert und der Mangel in der Quittung vermerkt.",
+   "Abbruchsperre vergleicht die Backtick-Unwucht jetzt mit der QUELLE, statt jede ungerade Zahl als Abbruch zu lesen."
+  ],
+  "befund_abschnitt": "Die zwei abgeschnittenen Proben waren KEIN Fehlalarm der Sperre. Je zweimal unabhaengig nachgemessen: derselbe Abbruch an derselben Stelle, immer an einem Codespan mit Anfuehrungszeichen darin. Wiederholen half nicht (gleicher request_sha256). Erst die Maskierung, die den Codespan gar nicht erst zum Modell laesst, hat beide geloest.",
+  "live": {
+   "proben": 26,
+   "bestanden": 26,
+   "quote": 1.0,
+   "faktentreue": 1.0,
+   "verloren": 0,
+   "erfindungen": 0,
+   "abgeschnitten": 0,
+   "laeufe": "dreimal hintereinander gemessen, dreimal 26/26"
+  },
+  "vorher_live": {
+   "quote_aktenkundig": 0.6923,
+   "quote_nachgemessen": 0.6538,
+   "hinweis": "Der Nachlauf traf 17/26 statt 18/26 -- eine Probe kippte durch Modellstreuung. Die Grundlinie ist also 65-69 %, nicht exakt 69,2 %."
+  },
+  "tests": "584 passed, 0 failed"
+ }
 }

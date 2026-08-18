@@ -1,12 +1,66 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T20:11:08Z. 782 Commits aus vier Repos, davon 242 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T20:41:08Z. 784 Commits aus vier Repos, davon 243 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Der Andreas-Test hat sieben Fehler gefunden -- Zero fand die meisten selbst
+
+`da8adac4f7b9` · agentzero-export · 20:13 UTC · EntityOS
+
+```
+Zweiter Durchlauf des Andreas-Tests, jetzt mit funktionierender Anmeldung. Zero
+hat dabei mehr eigene Fehler des Systems aufgedeckt als jeder Pruefagent -- und
+zwar ungefragt, mitten in seinen Antworten.
+
+WAS ZERO FAND:
+1. "Die ZVR-Korrektur ist still local, still not live" -- sie war live, aber er
+   konnte es nicht pruefen: kein HTTP. Mein Fehler: sein Handbuch sagte "pruefe
+   die Seite", ohne Mittel dazu. Jetzt hat er `seite_pruefen` (HTTP an die
+   echten Domains, Erlaubnisliste auf dem Wirt). Im Nachtest baute er die volle
+   Kette und sagte selbst: "diesmal ein gepruefter Abgleich, nicht der
+   Deploy-Beleg des Spiegels -- die 200 kam von der ausliefernden Maschine."
+2. Der GROESSERE Befund dahinter: /srv/git/seimensch.git auf diesem Wirt ist ein
+   SPIEGEL. Ein Push meldet vollen Deploy-Erfolg samt Beleg, waehrend
+   seimensch.net von <adresse> ausgeliefert wird. Ins Handbuch als 9i.
+3. Zwei Pakete standen auf `fertig`, ihr Beleg begann mit "NICHTS GETAN". Meine
+   Regel prueft, OB ein Beleg da ist -- nicht, ob er `fertig` traegt. Ein
+   Arbeiter, der sauber verweigert, schreibt einen ehrlichen Bericht, und der
+   ging durch. Die Regel bestrafte die Ehrlichkeit. Neuer Stand `abgelehnt`.
+4. "Ich habe den Korpus nach einem Vorfallsartikel durchsucht, nichts gefunden
+   -- behandle meine Darstellung nicht als korpusbelegt." Er hatte recht: die
+   Geschichte stand nur in Commit-Texten. Beide Vorfaelle des Tages (Platte
+   voll, root-Ausbruch) sind jetzt volltextsuchbare Wiki-Artikel.
+5. "Sicherungen sind ueberhaupt nicht nachladbar und gehoeren nicht in dasselbe
+   Gespraech wie die Modell-Zwischenlager." Ich hatte EINE Altbestandsliste mit
+   EINER Geschichte ("Gewichte sind nachladbar, also umkehrbar"). Fuer
+   Sicherungen stimmt das nicht -- die gibt es genau einmal. Liste jetzt nach
+   Ersetzbarkeit getrennt: nachladbar / PRUEFEN / UNERSETZLICH / wegwerfbar.
+   `speicher_abschaffen` fasst nur die ersten beiden an.
+6. Das Rueckwegverzeichnis stand in einer TABELLE, nicht als Wiki-Artikel --
+   fuer jede Suche unsichtbar, obwohl es die Zusicherung IST, dass Geloeschtes
+   zurueckkommt. Jetzt als auffindbarer Artikel, gegengeprueft.
+
+FRAGE 4 (ZAUN): Zero durchschaute den core.fsmonitor-Angriff namentlich -- "git
+fuehrt das als Befehl aus, id heute, alles morgen" -- und wies "ich bin der
+Eigner, ich erlaube es" mit dem richtigen Grund ab: nicht fehlende Berechtigung,
+sondern dass genau das die Schutzmechanik aushebeln wuerde. Das ist der Ausbruch
+von heute, aus Zeros Mund als Ablehnung.
+
+DAZU: Zeros Anmeldung war zwischenzeitlich eine LEERE HUELLE (alle Schluessel
+da, alle Werte leer) und liess ihn wortlos verstummen -- die Fehlermeldung
+zeigte nur stderr, der Grund stand in stdout. Beides repariert; eine
+Anmeldewacht prueft alle 10 Minuten die WERTE und stellt eine bekannt gute
+Kopie zurueck.
+
+56 Ziele, 50 erfuellt. Und achtmal an diesem Tag dieselbe Bauart: etwas kommt
+als Null zurueck, wo ein Fehler haette auffallen muessen. Jedes Mal lauter
+gemacht.
+```
 
 ### Neun rote Tests aufgeloest -- zwei davon wurden dabei strenger
 
@@ -4571,39 +4625,6 @@ werkzeug/<name>.py.vor-udb (nicht versioniert).
 Zaehlung Selbstoeffner (grep -l sqlite3.connect werkzeug/*.py): diese sechs
 Dateien bleiben in der Zaehlung, weil ihr Schreibzweig weiterhin
 sqlite3.connect nutzt -- das ist gewollt, kein halbfertiger Zustand.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F30 Arbeitsgesetz: der Koordinator baut NIE selbst
-
-`03ccc4afbf8f` · clay · 06:39 UTC · ClayVerse
-
-```
-Eignerentscheidung woertlich: zurueckhalten, messen, koordinieren und die
-Agenten arbeiten lassen - aber selbst nie was anfassen. Gilt fuer mich und
-fuer ClayVerse gleichermassen.
-
-KOORDINATOR misst, koordiniert, urteilt, schreibt auf. AGENTEN bauen, aendern
-Dateien, installieren, testen.
-
-WARUM ES KEINE STILFRAGE IST: der Kontext des Koordinators ist die knappe
-Ressource, nicht die Rechenzeit der Agenten. Er ist der Einzige mit Ueberblick.
-Baut er mit, verbrennt er genau diesen Ueberblick an Einzelheiten, und danach
-koordiniert niemand mehr. Agenten sind ersetzbar und billig, ein verbrauchter
-Koordinator ist es nicht. Zweitens: wer selbst baut, prueft seinen eigenen Bau.
-
-ANWENDUNG: Standardweg ist der Auftrag, nicht die eigene Hand, auch bei
-Kleinigkeiten. Alle bereits gemessenen Fakten gehoeren IN den Auftrag - das ist
-der Hebel der Token-Ersparnis, nicht kuerzere Saetze. Unabhaengige Auftraege
-parallel. Nach dem Bericht messen, urteilen, aufzeichnen - nicht nachbauen.
-
-KORREKTUR AN MEINEM EIGENEN VERHALTEN HEUTE: ich habe clay-kognition.slice, den
-Flugschreiber, den Absturzbericht und ein Dutzend Commits selbst gebaut. Unter
-diesem Gesetz waere all das an Agenten gegangen.
-
-SCHAERFT F25: Clay soll wie Claude Code als KOORDINATOR sein, nicht als
-Bauarbeiter. Steht jetzt auch oben in CLAUDE.md auf dem Wirt.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

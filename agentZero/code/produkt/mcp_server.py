@@ -432,6 +432,13 @@ class ClayVerseEffectBridge:
     # Fehlermeldung -- es ist dann keines mehr. Die Schluessel selbst holt sich
     # der Serverteil (Bahnenrouter, Postfach) direkt aus dem Tresor.
 
+    def tresor_zeigen(self, tresor: str, kennung: str) -> dict:
+        from . import tresor as _t
+        try:
+            return _t.zeigen(str(tresor), str(kennung))
+        except Exception as e:
+            return {"abgewiesen": str(e)}
+
     def tresor_katalog(self, tresor: str = "api") -> dict:
         from . import tresor as _t
         try:
@@ -440,6 +447,116 @@ class ClayVerseEffectBridge:
             return {"nicht_ermittelbar": f"{type(e).__name__}: {e}"}
 
     # ── Korpus nach INHALT durchsuchen, mit Ausschnitt ────────────────────
+
+    def artikel_lesen(self, artikel_id: str) -> dict:
+        """Einen ganzen Artikel lesen -- nicht nur den 420-Zeichen-Ausschnitt.
+
+        Ohne das kann Zero nur den Anfang sehen und muss den Rest erraten.
+        Erraten ist genau das, was hier verboten ist.
+        """
+        aid = str(artikel_id or "").strip()
+        if not aid:
+            return {"fehler": "keine Artikelkennung"}
+        r = self.db.db.execute(
+            "SELECT a.id,a.titel,a.art,a.projekt,a.datum,a.herkunft,s.text "
+            "FROM artikel a LEFT JOIN artikel_suchtext s ON s.artikel_id=a.id "
+            "WHERE a.id=?", (aid,)).fetchone()
+        if r is None:
+            return {"artikel_id": aid, "nicht_gefunden": True,
+                    "hinweis": "kein Artikel mit dieser Kennung -- pruefe sie mit korpus_suchen"}
+        text = r["text"]
+        if not text:
+            import json as _j
+            md = self.db.db.execute("SELECT metadaten FROM artikel WHERE id=?", (aid,)).fetchone()
+            try:
+                mm = _j.loads(md["metadaten"] or "{}")
+                text = mm.get("text") or mm.get("inhalt") or ""
+            except Exception:
+                text = ""
+        return {"id": r["id"], "titel": r["titel"], "art": r["art"],
+                "projekt": r["projekt"], "datum": r["datum"], "herkunft": r["herkunft"],
+                "text": text or "",
+                "zeichen": len(text or ""),
+                "hinweis": ("Der volle Artikeltext. Steht hier nichts, ist der Artikel ein "
+                            "reiner Zeiger (z.B. auf eine Datei) -- dann nimm dateien_suchen.")}
+
+    def korpus_tief(self, frage: str, budget: int = 6) -> dict:
+        """Die gelernte Abruf-Maschine: Karte, Wegehierarchie, Eintrittspunkte.
+
+        Langsamer als korpus_suchen (~2s kalt, ~300ms warm), dafuer mit
+        Kartenwissen -- und JEDER Aufruf speist die Karte mit echtem Verkehr.
+        """
+        import time as _t
+        try:
+            from udb.abruf import paket as _paket
+        except Exception as e:
+            return {"nicht_verfuegbar": f"{type(e).__name__}: {e}"}
+        t0 = _t.time()
+        try:
+            # conn=self.db.db: own=False -> paket schliesst die geteilte
+            # Verbindung NICHT und die Erfolgsmarke (Kartenlernen) gelingt.
+            p = _paket.paket(str(frage), budget=max(1, min(int(budget), 12)),
+                             conn=self.db.db)
+            # ⚠️ paket() committet nur den lernen()-Schritt (Zeile 365), NICHT die
+            # Erfolgsmarken danach (Zeile 389 ff.) -- bei uebergebener Verbindung
+            # bleibt das dem Aufrufer. Ohne dieses commit() faellt der ganze
+            # Kartenlern-Ertrag beim naechsten Schliessen auf den Boden: +0 Marken.
+            try:
+                self.db.db.commit()
+            except Exception:
+                pass
+        except Exception as e:
+            return {"frage": frage, "nicht_ermittelbar": f"{type(e).__name__}: {e}",
+                    "hinweis": "die Tiefensuche scheiterte -- nimm korpus_suchen"}
+        treffer = []
+        for t in (p.get("treffer") or []):
+            if not isinstance(t, dict):
+                continue
+            treffer.append({"id": t.get("id"), "titel": t.get("titel"),
+                            "art": t.get("art"), "projekt": t.get("projekt"),
+                            "ausschnitt": (t.get("ausschnitt") or t.get("text") or "")[:420]})
+        return {"frage": frage, "treffer": treffer, "anzahl": len(treffer),
+                "ms": round((_t.time() - t0) * 1000),
+                "pulse_phase": p.get("pulse_phase"),
+                "hinweis": ("Aus der gelernten Karte, nicht aus schlichtem bm25. Fuer den "
+                            "ganzen Text eines Treffers nutze artikel_lesen mit seiner id. "
+                            "Dieser Aufruf hat die Karte mit echtem Verkehr gespeist.")}
+
+    def dateien_suchen(self, frage: str, limit: int = 6) -> dict:
+        """Volltext ueber den DATEIKORPUS (fts_index_datei, ~325k Zeilen).
+
+        ⚠️ Das ist ein anderer Korpus als korpus_suchen: dort stehen die
+        Wissensartikel, HIER der Inhalt der indizierten Dateien. Vorher war
+        dieser ganze Korpus fuer Zero unerreichbar -- kein Werkzeug oeffnete ihn.
+        """
+        import re as _re
+        worte = [w for w in _re.split(r"[^0-9A-Za-zÄÖÜäöüß]+", str(frage).lower())
+                 if len(w) > 2][:8]
+        if not worte:
+            return {"frage": frage, "treffer": [], "hinweis": "keine brauchbaren Suchworte"}
+        grenze = max(1, min(int(limit), 12))
+        aus, gesehen = [], set()
+        for modus, ausdruck in (("alle", " AND ".join(worte)), ("irgendeins", " OR ".join(worte))):
+            if len(aus) >= grenze:
+                break
+            try:
+                zeilen = self.db.db.execute(
+                    "SELECT d.id, d.titel, substr(d.text,1,420) AS ausschnitt, d.art, d.groesse "
+                    "FROM fts_index_datei f JOIN datei d ON d.id=f.rowid "
+                    "WHERE fts_index_datei MATCH ? ORDER BY bm25(fts_index_datei) LIMIT ?",
+                    (ausdruck, grenze * 2)).fetchall()
+            except Exception as e:
+                return {"frage": frage, "nicht_ermittelbar": f"{type(e).__name__}: {e}"}
+            for r in zeilen:
+                if r["id"] in gesehen or len(aus) >= grenze:
+                    continue
+                gesehen.add(r["id"])
+                aus.append({"datei": r["titel"], "art": r["art"], "bytes": r["groesse"],
+                            "ausschnitt": r["ausschnitt"], "gefunden": modus})
+        return {"frage": frage, "worte": worte, "treffer": aus, "anzahl": len(aus),
+                "hinweis": ("Ausschnitte aus dem Dateikorpus, nicht die ganze Datei. "
+                            "Fuer den vollen Text nutze werkbank_lesen mit dem Dateipfad, "
+                            "sofern er im erlaubten Bereich liegt.")}
 
     def korpus_suchen(self, frage: str, limit: int = 6) -> dict:
         """Volltext ueber die Artikel. Liefert Ausschnitte, keine Kennungen.
@@ -721,9 +838,29 @@ def main() -> None:
         return bridge.paket_lage()
 
     @mcp.tool(annotations=udb_ro)
+    def tresor_zeigen(tresor: str, kennung: str) -> dict:
+        """Einen einzelnen Wert aus einem Tresor NENNEN -- aber nur, wenn er eine Adresse oder ein Token ist (IMAP-Host, SMTP-Port, API-Token). ⚠️ PASSWOERTER kommen hier NIE heraus, auch nicht auf Wunsch: das ist die Regel, die der Eigner selbst gezogen hat. Fuer die Liste, was es gibt, nutze tresor_katalog."""
+        return bridge.tresor_zeigen(tresor, kennung)
+
+    @mcp.tool(annotations=udb_ro)
     def tresor_katalog(tresor: str = "api") -> dict:
         """Was an Zugaengen vorhanden ist und was jeder KANN -- Modelle, Ratengrenzen, Zweck. tresor: `api` (Maschinenschluessel mit Faehigkeitsliste) oder `zugaenge` (Anmeldungen). ⚠️ NUR der Katalog: die Schluessel selbst bekommst du nie und brauchst du nie -- der Serverteil benutzt sie fuer dich."""
         return bridge.tresor_katalog(tresor)
+
+    @mcp.tool(annotations=udb_ro)
+    def artikel_lesen(artikel_id: str) -> dict:
+        """Einen GANZEN Wiki-Artikel lesen, nicht nur den Ausschnitt aus korpus_suchen. Gib die id, die korpus_suchen geliefert hat. ⭐ Nutze das, statt aus dem Anfang zu schliessen, was im Rest steht."""
+        return bridge.artikel_lesen(artikel_id)
+
+    @mcp.tool(annotations=udb_ro)
+    def korpus_tief(frage: str, budget: int = 6) -> dict:
+        """Tiefensuche ueber die GELERNTE Abruf-Karte (Wegehierarchie, Eintrittspunkte, Erkundung) statt schlichtem bm25. Langsamer (~2s kalt, ~300ms warm) -- nimm sie, wenn korpus_suchen zu wenig findet oder die Frage in die Tiefe geht. ⭐ Jeder Aufruf verbessert ausserdem die Karte, weil er sie mit echtem Verkehr speist."""
+        return bridge.korpus_tief(frage, budget)
+
+    @mcp.tool(annotations=udb_ro)
+    def dateien_suchen(frage: str, limit: int = 6) -> dict:
+        """Volltext ueber den DATEIKORPUS (~325k Zeilen indizierten Dateiinhalts) -- ein ANDERER Korpus als korpus_suchen. korpus_suchen findet Wissensartikel, dateien_suchen den Inhalt der Quelldateien. Findest du in einem nichts, versuche den anderen."""
+        return bridge.dateien_suchen(frage, limit)
 
     @mcp.tool(annotations=udb_ro)
     def korpus_suchen(frage: str, limit: int = 6) -> dict:

@@ -51,6 +51,19 @@ CREATE INDEX IF NOT EXISTS idx_arbeitspaket_stand ON entityos_arbeitspaket(stand
 """
 
 STAENDE = ("offen", "laeuft", "fertig", "gescheitert", "abgelehnt")
+# EINE Liste, von stand_setzen UND vom Paketarbeiter benutzt. Vorher pruefte
+# der Arbeiter nur "NICHTS GETAN", stand_setzen die ganze Liste -- ein Bericht
+# mit "NICHT AUSGEFUEHRT" rutschte durch und liess den Dienst abstuerzen.
+# Zwei Kopien einer Liste sind zwei Listen, die auseinanderlaufen.
+LEERE_BELEGE = ("NICHTS GETAN", "NICHT AUSGEFUEHRT", "NICHT AUSGEFÜHRT",
+                "KEINE WIRKUNG", "NOTHING DONE", "NICHT MOEGLICH",
+                "NICHT MÖGLICH", "KEIN ZUGRIFF")
+
+
+def ist_leerer_beleg(*texte):
+    """Sagt der Beleg selbst, dass nichts geschah?"""
+    z = " ".join(str(t or "") for t in texte).upper()
+    return any(p in z for p in LEERE_BELEGE)
 # ⭐ `abgelehnt` ist bewusst KEIN Fehlschlag: der Arbeiter hat erkannt, dass die
 # Aufgabe mit seinen Mitteln nicht machbar ist, und das sauber aufgeschrieben.
 # Das in `gescheitert` zu pressen verwischt den Unterschied zwischen "hat
@@ -138,9 +151,7 @@ def stand_setzen(db, *, paket_id: str, stand: str,
         # schreibt einen ehrlichen Bericht darueber. Der ging als Beleg durch.
         # Damit bestrafte die Regel genau das Verhalten, das sie foerdern soll.
         _zeugnis = f"{ergebnis} {beleg}".upper()
-        for _leer in ("NICHTS GETAN", "NICHT AUSGEFUEHRT", "NICHT AUSGEFÜHRT",
-                      "KEINE WIRKUNG", "NOTHING DONE", "NICHT MOEGLICH",
-                      "NICHT MÖGLICH", "KEIN ZUGRIFF"):
+        for _leer in LEERE_BELEGE:
             if _leer in _zeugnis:
                 raise ValueError(
                     f"der Beleg sagt selbst {_leer!r} -- dann ist das Paket nicht fertig. "

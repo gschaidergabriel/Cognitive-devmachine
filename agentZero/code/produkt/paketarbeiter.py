@@ -213,15 +213,32 @@ def arbeite(db, *, frist: int = FRIST_S) -> dict:
     rc, fehler = _fuehre_aus(paket, ordner, frist)
     erg, beleg = _lies_ergebnis(ordner)
 
-    if erg and beleg and "NICHTS GETAN" not in beleg.upper():
-        ap.stand_setzen(db, paket_id=paket["paket_id"], stand="fertig",
-                        ergebnis=erg, beleg=beleg)
-        stand = "fertig"
+    # stand_setzen DARF DIESEN DIENST NIE ZUM ABSTURZ BRINGEN. Ein Absturz
+    # hier laesst das Paket in `laeuft` haengen, und jeder weitere Lauf meldet
+    # "es laeuft bereits eines" -- die Warteschlange ist tot. Deshalb bestimmen
+    # wir den Stand SELBST (mit derselben Liste, die stand_setzen prueft) und
+    # fangen jeden Fehler ab.
+    if not (erg or beleg):
+        ziel = "gescheitert"
+        e2 = f"kein Ergebnis (rc={rc})"
+        b2 = f"kein Beleg. stderr: {fehler[:200]}"
+    elif ap.ist_leerer_beleg(erg, beleg):
+        # Ein ehrlicher Verweigerungsbericht ist KEIN Fehlschlag des Arbeiters.
+        ziel, e2, b2 = "abgelehnt", erg, beleg
     else:
-        # Kein Beleg heisst gescheitert -- nicht "wahrscheinlich schon gemacht".
-        ap.stand_setzen(db, paket_id=paket["paket_id"], stand="gescheitert",
-                        ergebnis=erg or f"kein Ergebnis (rc={rc})",
-                        beleg=beleg or f"kein Beleg. stderr: {fehler[:200]}")
+        ziel, e2, b2 = "fertig", erg, beleg
+    try:
+        ap.stand_setzen(db, paket_id=paket["paket_id"], stand=ziel, ergebnis=e2, beleg=b2)
+        stand = ziel
+    except Exception as ex:
+        # Selbst wenn die Beweisregel den Uebergang ablehnt: das Paket muss aus
+        # `laeuft` heraus, sonst blockiert es die Warteschlange fuer immer.
+        grund = "Stand " + str(ziel) + " abgelehnt: " + str(ex)
+        try:
+            ap.stand_setzen(db, paket_id=paket["paket_id"], stand="gescheitert",
+                            ergebnis=(e2 or "")[:400], beleg=grund[:400])
+        except Exception:
+            pass
         stand = "gescheitert"
     try:
         raum.frei(db, session_id="paketarbeiter")

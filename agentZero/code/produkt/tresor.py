@@ -134,6 +134,46 @@ def wert(name: str, kennung: str) -> str:
 GEHEIM = {"wert", "passwort", "token", "secret", "key"}
 
 
+# Arten, deren Wert eine ADRESSE oder ein TOKEN ist -- die darf Zero nennen.
+# Der Eigner 18.08.: "adressen ... kein problem", "auch tokens ... nur
+# passwörter nicht". Alles, was hier NICHT steht, wird wie ein Passwort
+# behandelt: im Zweifel verweigern, nicht zeigen.
+ZEIGBARE_ARTEN = {"api-token", "postfach", "betrieb", "zugangsroute"}
+
+
+def zeigen(name: str, kennung: str) -> dict:
+    """Einen NICHT-Passwort-Wert gezielt herausgeben. Passwoerter nie.
+
+    ⚠️ Der Passwort-Riegel ist eine harte Invariante, keine Abwaegung:
+    ein Eintrag mit geheim=True ist ein Passwort und verlaesst den
+    Serverteil NIE -- auch nicht auf ausdruecklichen Wunsch, auch nicht
+    vom Eigner. Das ist die eine Regel, die der Eigner selbst gezogen hat.
+    """
+    inhalt = oeffnen(name)
+    for e in inhalt["eintraege"]:
+        if e.get("kennung") != kennung:
+            continue
+        art = e.get("art", "")
+        # 1. Der explizite Geheim-Kern schlaegt alles: geheim=True = Passwort.
+        if e.get("geheim") is True:
+            return {"tresor": name, "kennung": kennung, "gezeigt": False,
+                    "grund": "als geheim markiert -- das ist ein Passwort und wird NIE "
+                             "gezeigt. Diese Regel hat der Eigner selbst gezogen: "
+                             "Adressen und Token ja, Passwoerter nie."}
+        # 2. Nur ausdruecklich zeigbare Arten. Unbekanntes gilt als Passwort.
+        if art not in ZEIGBARE_ARTEN:
+            return {"tresor": name, "kennung": kennung, "gezeigt": False,
+                    "grund": f"Art {art!r} ist nicht als zeigbar eingestuft. Im Zweifel "
+                             "wird nicht gezeigt -- lieber eine Verweigerung zu viel als "
+                             "ein Passwort zu wenig geschuetzt."}
+        return {"tresor": name, "kennung": kennung, "art": art, "gezeigt": True,
+                "wert": e.get("wert", ""),
+                "hinweis": ("Adresse oder Token -- darf im Chat genannt werden. "
+                            "Ein PASSWORT haettest du hier nie bekommen.")}
+    return {"tresor": name, "kennung": kennung, "gezeigt": False,
+            "grund": "keine solche Kennung -- nutze tresor_katalog fuer die Liste"}
+
+
 def katalog(name: str) -> dict:
     """Was es gibt und was es kann -- OHNE ein einziges Geheimnis.
 

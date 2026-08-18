@@ -4,7 +4,13 @@
   "allowManagedMcpServersOnly": true,
   "allowedChannelPlugins": [],
   "allowedMcpServers": [
-    {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
+    {
+      "serverCommand": [
+        "/usr/local/bin/python",
+        "-m",
+        "clayverse.mcp_server"
+      ]
+    }
   ],
   "autoMemoryEnabled": false,
   "channelsEnabled": false,
@@ -31,6 +37,11 @@
     "CLAUDE_CODE_SHELL_PREFIX": "/opt/clayverse/runtime/deny-shell"
   },
   "permissions": {
+    "allow": [
+      "mcp__clayverse__session_state",
+      "mcp__clayverse__request_effect",
+      "mcp__clayverse__request_autonomy_effect"
+    ],
     "deny": [
       "Bash",
       "Artifact"

@@ -55,7 +55,11 @@ def test_real_turn_path_emits_only_relation_bound_hyperposition_and_needle(tmp_p
         db.add_memory("fact", "project:x", "candidate-b", None, "gabriel", {"source": "b", "relation_key": "project:x::branch"})
         db.add_memory("fact", "gabriel", "unrelated fact", None, "gabriel", {"source": "c"})
         life = TurnLifecycle(db, "gabriel", "session:gabriel")
-        result = life.begin("inspect file:shared.py")
+        # Retrieval is query-sensitive (MicroClayRetrieval matches durable_memory
+        # against the prompt, not a bare latest-N feed), so the prompt has to
+        # actually mention the related subject for it to surface -- a prompt with
+        # no semantic link to project:x legitimately retrieves nothing.
+        result = life.begin("inspect project:x branch status in file:shared.py")
         assert len(result["hyperpositions"]) == 1
         assert result["hyperpositions"][0]["relation_key"] == "project:x::branch"
         assert result["hyperpositions"][0]["truth_promoted"] is False

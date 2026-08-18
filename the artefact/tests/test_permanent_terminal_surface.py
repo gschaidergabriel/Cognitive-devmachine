@@ -54,19 +54,23 @@ def test_product_claude_process_is_interactive_and_uses_only_managed_mcp(tmp_pat
 
     monkeypatch.setattr(terminal_sessions.subprocess, "run", fake_run)
     manager.ensure("gabriel")
-    command = calls[-1][-1]
-    assert "claude" in command
-    assert " -p " not in f" {command} "
-    assert "--no-session-persistence" not in command
-    assert "--mcp-config" not in command
-    assert "--strict-mcp-config" not in command
-    assert "clayverse-mcp.json" not in command
-    assert "--tools ''" in command or '--tools ""' in command
-    assert "mcp__clayverse__session_state" in command
-    assert "mcp__clayverse__request_effect" in command
-    assert "mcp__clayverse__*" not in command
-    assert "--append-system-prompt-file" in command
-    assert "/etc/claude-code/managed-settings.json" in command
+    # The claude launch is embedded as a flat argv list inside the tmux
+    # new-session call, not a single joined shell string -- match the list
+    # membership pattern used by the sibling test in
+    # test_terminal_managed_authority.py::test_enabled_entityos_authority_*.
+    creation = next(argv for argv in calls if "new-session" in argv)
+    assert "claude" in creation
+    assert "-p" not in creation
+    assert "--no-session-persistence" not in creation
+    assert "--mcp-config" not in creation
+    assert "--strict-mcp-config" not in creation
+    assert not any("clayverse-mcp.json" in item for item in creation)
+    assert "--tools" in creation and creation[creation.index("--tools") + 1] == ""
+    assert "mcp__clayverse__session_state" in creation
+    assert "mcp__clayverse__request_effect" in creation
+    assert "mcp__clayverse__*" not in creation
+    assert "--append-system-prompt-file" in creation
+    assert any("/etc/claude-code/managed-settings.json" in item for item in creation)
 
 
 def test_managed_mcp_is_exclusive_and_command_bound():

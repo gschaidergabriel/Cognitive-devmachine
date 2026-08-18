@@ -1,4 +1,5 @@
 import sys
+from types import SimpleNamespace
 
 from clayverse import service
 
@@ -65,16 +66,20 @@ def test_service_runs_current_uvicorn_terminal_app_and_closes_db(monkeypatch, tm
     )
     monkeypatch.setattr(service, "recover_incomplete_episodes", lambda _db: recovery)
     monkeypatch.setattr(service, "_clerk_map", lambda: {"subject-g": "gabriel", "subject-a": "andreas"})
-    monkeypatch.setattr(service, "_web_config", lambda: ("pk_test_example", "https://clerk.example"))
-    monkeypatch.setattr(service.ClerkConfig, "from_env", lambda: object())
+    monkeypatch.setattr(service, "_web_config", lambda issuer: ("pk_test_example", "https://clerk.example"))
+    monkeypatch.setattr(service.ClerkConfig, "from_env", lambda: SimpleNamespace(issuer="https://clerk.example"))
     monkeypatch.setattr(service, "ClerkTokenVerifier", lambda _cfg: verifier)
-    monkeypatch.setattr(service, "claude_readiness", lambda required: FakeClaudeStatus())
+    monkeypatch.setattr(service, "claude_readiness", lambda required, credentials_path=None: FakeClaudeStatus())
     monkeypatch.setattr(
         service,
         "_entityos_config",
         lambda: (None, {"staged": True, "verified": True, "execution_enabled": False}),
     )
-    monkeypatch.setattr(service, "TerminalSessionManager", lambda *_args, **_kwargs: terminal_manager)
+    def fake_terminal_manager_factory(*_args, **_kwargs):
+        return terminal_manager
+
+    fake_terminal_manager_factory.CREDENTIALS_SOURCE = service.TerminalSessionManager.CREDENTIALS_SOURCE
+    monkeypatch.setattr(service, "TerminalSessionManager", fake_terminal_manager_factory)
 
     def fake_create_terminal_app(**kwargs):
         app_calls.append(kwargs)

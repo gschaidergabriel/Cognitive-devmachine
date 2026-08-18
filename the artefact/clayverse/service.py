@@ -93,11 +93,23 @@ def _web_config(issuer: str) -> tuple[str, str]:
 
 
 def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
-    enable_exec = os.environ.get("CLAYVERSE_ENABLE_ENTITYOS_EXEC", "0") == "1"
+    required = os.environ.get("CLAYVERSE_REQUIRE_ENTITYOS", "0") == "1"
     path = os.environ.get("CLAYVERSE_ENTITYOS_PATH", "").strip()
     sha256 = os.environ.get("CLAYVERSE_ENTITYOS_SHA256", "").strip()
+
+    if not path and not sha256:
+        if required:
+            raise RuntimeError(
+                "EntityOS is required (CLAYVERSE_REQUIRE_ENTITYOS=1) but "
+                "CLAYVERSE_ENTITYOS_PATH/CLAYVERSE_ENTITYOS_SHA256 are not set"
+            )
+        return None, {"required": False, "bound": False}
+
     if not path or not sha256:
-        raise RuntimeError("embedded EntityOS path and SHA-256 are required")
+        raise RuntimeError(
+            "EntityOS binding is incomplete: both CLAYVERSE_ENTITYOS_PATH and "
+            "CLAYVERSE_ENTITYOS_SHA256 must be set together"
+        )
     if not os.path.isabs(path):
         raise RuntimeError("CLAYVERSE_ENTITYOS_PATH must be absolute")
 
@@ -107,12 +119,13 @@ def _entityos_config() -> tuple[EntityOSBridge | None, dict[str, object]]:
     except (EntityOSIntegrityError, OSError, ValueError) as exc:
         raise RuntimeError(f"EntityOS verification failed: {exc}") from exc
     status = {
+        "required": required,
+        "bound": required,
         "staged": True,
         "verified": True,
-        "execution_enabled": enable_exec,
         **verified,
     }
-    return (candidate if enable_exec else None), status
+    return (candidate if required else None), status
 
 
 def _state_probe_payload(checkpoint: str, state_hash: str) -> dict[str, object]:
@@ -172,7 +185,7 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
             "recovery": recovery,
             "entityos": {
                 "verified": bool(entityos_status.get("verified")),
-                "execution_enabled": bool(entityos_status.get("execution_enabled")),
+                "bound": bool(entityos_status.get("bound")),
                 "sha256": entityos_status.get("sha256"),
             },
         }

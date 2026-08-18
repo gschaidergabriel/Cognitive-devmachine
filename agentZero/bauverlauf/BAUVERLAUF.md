@@ -1,12 +1,87 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T14:41:03Z. 763 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T15:11:04Z. 765 Commits aus vier Repos, davon 238 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt
+
+`4bc81f8e52c3` · entityos · 14:54 UTC · EntityOS
+
+```
+Gabriel: "er muss generell alle pages die wir ja selbst hosten kennen und wissen
+wie er diese bearbeiten kann", dazu "retina und iar sind gleich wie alle anderen
+ueber frank.ink gehostet" und "da ist auch kosal.frank.ink und anderes".
+
+ALLES GEMESSEN, nichts angenommen: nginx-Konfiguration gelesen, agentforge.db
+abgefragt, jede Unterdomain live gegen die Plattform UND oeffentlich geprueft.
+
+WIE ES WIRKLICH LAEUFT
+Alle Unterdomains von frank.ink bedient die Plattform agentforge
+(*.frank.ink -> <adresse>:8000). Es gibt KEINE eigene nginx-Regel je Seite --
+die Plattform loest die Unterdomain auf einen Projekt-Slug auf, die Dateien
+liegen unter /var/lib/agentforge/projects/<konto>/<slug>/site/. Die Zuordnung
+steht in /var/lib/agentforge/db/agentforge.db, Tabelle `projects`.
+51 aktive Projekte, 12 mit echtem Verkehr -- iar (2683 Besuche), seimensch
+(1957), shadcntest (806), kosal (549), testagents (440) und weitere.
+
+SONDERFALL SEIMENSCH: seimensch.net hat eine EIGENE nginx-Regel mit derselben
+Wurzel als Docroot, statt ueber die Plattform zu laufen. herzrad.at und
+leihmich.org ebenso, mit Unterordnern derselben Wurzel als eigene Domainwurzel
+-- deshalb dort relative Asset-Pfade und eigene Wurzeldateien.
+
+⚠️⚠️ EIN BEFUND, DER DER ANNAHME WIDERSPRICHT
+    retina.frank.ink   404 bei agentforge, oeffentlich 301 AUF SICH SELBST
+    daemonweave.frank.ink  404 bei agentforge
+retina ist damit nicht "wie die anderen gehostet", sondern KAPUTT: eine
+Weiterleitung auf sich selbst ist eine Schleife. In agentforge existiert kein
+Projekt `retina`, auch kein archiviertes -- nur alte Sicherungsordner
+projects/6/iar.bak-pre-retina-*.
+
+⭐ Haette ich die Annahme uebernommen, waere der Fehler zugedeckt worden und
+haette als "laeuft" im Wiki gestanden. Der Artikel fuehrt ihn als
+Gegenhypothese mit, damit sichtbar bleibt, dass hier Messung und Annahme
+auseinandergingen.
+
+⚠️ AUCH EINE ALTE NOTIZ WIDERLEGT: die Projektnotiz nennt <adresse> als
+Produktionsserver von SeiMensch. Die Seiten laufen auf DIESEM Wirt, und das
+zentrale Repo liegt hier unter /srv/git/seimensch.git mit post-receive-Hook.
+
+BEARBEITUNGSWEGE, so weit belegt:
+  seimensch/herzrad/leihmich  ueber den Git-Klon, commit, push origin main --
+                              der Hook macht Sicherung, Pruefung, Spiegelung.
+                              Die Live-Wurzel ist KEIN Arbeitsverzeichnis; eine
+                              Aenderung dort wird beim naechsten Push
+                              ueberschrieben.
+  entityos.frank.ink          Repo /opt/entityos/the artefact, danach
+                              docker compose --env-file ... (NICHT mit set -a,
+                              siehe betrieb/BAUEN.md)
+  uebrige agentforge-Projekte ⚠️ die Dateien unter projects/<konto>/<slug>/site/
+                              sind die ausgelieferten. OB ein Projekt aus einem
+                              Repo befuellt wird, wurde je Projekt NICHT
+                              geprueft -- nachsehen, bevor man dort editiert,
+                              sonst ist die Aenderung beim naechsten Lauf weg.
+
+Eine erfundene Bearbeitungsanleitung ist schlimmer als keine, weil ihr jemand
+folgt. Deshalb steht der ungepruefte Teil als ungeprueft da.
+
+═══ AUSSERDEM: GRENZE NEU GEZOGEN, auf Eignerentscheid ═══
+"es kann im chat ruhig adressen ausgeben ... auch tokens kann er ausgeben nur
+passwoerter nicht." Meine Schwaerzung war strenger als gewollt -- sie war MEINE
+Entscheidung, nicht seine. Zurueckgenommen: Adressen bleiben im Chatexport
+stehen, die Mailfelder sind wieder im Profil.
+⚠️ Eine Folge, einmal genannt: ein Token, das Zero im Chat ausgibt, steht danach
+dauerhaft in der Zugtabelle und im exportierten Verlauf. Ein Adressleck ist
+unangenehm, ein Tokenleck ist benutzbar. Die Abwaegung ist getroffen.
+
+Nicht angefasst: code/unterbau/werkzeuge.py traegt eine Mailadresse als Kontakt
+fuer die Hoeflichkeits-Pools wissenschaftlicher APIs. Fremder Substratcode mit
+legitimem Zweck -- eine Aenderung koennte den Zugang 
+```
 
 ### Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin
 
@@ -4450,35 +4525,6 @@ vergleichen. Was nur mit Kontext erscheint, ist verdaechtig.
 
 GRUNDLINIE nach F24: Dateiname plus EXIF plus vorhandener Kontext, ganz ohne
 VLM. Ernst gemeint - bei Bildern aus bekannten Zusammenhaengen traegt das weit.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F26 Berichtigung: die dokumentierte Sperre war falsch beschrieben
-
-`b562326ec808` · clay · 06:17 UTC · ClayVerse
-
-```
-Bei der Arbeit an der Sperre am Code gemessen: der AMBIGUOUS-Zwang in paket.py
-ist BEREITS repariert (Z. 1256 baut den Block immer, wenn es Kandidaten gibt;
-Befund im Kommentar Z. 829: 88 von 120 Abfragen, 520 verworfene Kandidaten).
-
-DIE ECHTE LUECKE IST EINE ANDERE: paket() kennt Hyperposition nur als
-IDENTITAETSACHSE - welchen Artikel meinst du. Die 1.388 sind aber Fakten mit
-mehreren LESARTEN, und diese zweite Achse fehlt vollstaendig.
-
-Alles fuer den Bau liegt gemessen bereit: Tabelle wm_lesart mit 10.145 Lesarten
-ueber 6.688 Artikel, Schnittstelle weltmodell.lesen() in weltmodell.py:576,
-Kosten 0,030 ms im Mittel. paket() ruft sie an keiner Stelle auf - Grundlinie 0.
-
-NICHT GEBAUT, bewusst: das Wochenpensum stand bei 92 Prozent, und eine halb
-geaenderte paket.py waere genau der Fehler dieses Tages gewesen.
-
-VIER FUNDSTELLEN gehoeren berichtigt - ZIELARCHITEKTUR Luecke 2, README, F16
-und WEITERMACHEN. Alle sagen AMBIGUOUS, gemeint ist die fehlende zweite Achse.
-
-LEHRE: eine notierte Luecke ist eine Erinnerung, keine Messung. Ich habe sie an
-vier Stellen weitergeschrieben, ohne sie am Code zu pruefen.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

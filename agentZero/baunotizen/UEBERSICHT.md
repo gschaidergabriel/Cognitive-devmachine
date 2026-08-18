@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-18T14:41:03Z. **2518 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-18T15:11:05Z. **2525 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T20:39:11+07:00`.
 
@@ -8,21 +8,21 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T20:39:11+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2422 |
+| baunotiz | 2429 |
 | vorfall | 96 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1600 |
-| baunotiz | bauverlauf.jsonl | 778 |
+| baunotiz | git-commit | 1604 |
+| baunotiz | bauverlauf.jsonl | 781 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 
-## Hypothese: 0 von 2518 · Gegenhypothese: 0 von 2518
+## Hypothese: 0 von 2525 · Gegenhypothese: 0 von 2525
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -30,7 +30,7 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-18T20:39:11+07:00`.
 
 ## Privatsphaere-Filter
 
-Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
+Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
 
@@ -226,11 +226,11 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero research: bind generation 33 measurement-integrity frontier
 
-### agentZero research: index token efficiency analysis
+### agentZero-Export 2026-08-18T14:41:02Z (Generation 93, 59 Dateien, 1 geschwaerzt)
 
-`baunotiz-bauverlauf-5a6f6aa8fd02daac3929` · baunotiz · bauverlauf.jsonl · 2026-08-18T14:32:05+07:00 · Gabriel Gschaider
+`baunotiz-git-402debf1c8b26fa5de1b06036841a4e703ec75ce` · baunotiz · git-commit · 2026-08-18T14:41:42+00:00 · agentZero
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+agentZero-Export 2026-08-18T14:41:02Z (Generation 93, 59 Dateien, 1 geschwaerzt)
 

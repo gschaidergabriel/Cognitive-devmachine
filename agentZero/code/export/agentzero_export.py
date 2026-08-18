@@ -331,11 +331,10 @@ def wiki(c, manifest: dict) -> None:
 
     umfeld = []
     for r in hole(UMFELD, False, 3000):
-        # ⚠️ schwaerzen() kennt Zugangsdaten, keine Adressen. Zeros eigene
-        # Antworten sind Prosa und koennen alles enthalten, was im Kontext
-        # stand -- gemessen: eine Profiltabelle mit Mailadresse.
-        d = schwaerzen({k: (_prosa_schwaerzen(v) if isinstance(v, str) else v)
-                        for k, v in dict(r).items()})
+        # Eignerentscheid 18.08.: Adressen und Tokens duerfen im Gespraech
+        # stehen, Passwoerter nicht. schwaerzen() faengt Zugangsdaten;
+        # Adressen bleiben absichtlich stehen.
+        d = schwaerzen(dict(r))
         if d["artikel_id"] in kern_ids:
             continue
         d["stufe"] = "umfeld"

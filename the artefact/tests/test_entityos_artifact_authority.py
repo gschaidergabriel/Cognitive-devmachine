@@ -4,20 +4,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parent
-LOCK_SHA256 = "32cd4587adbb45292c964b45f5efd4c38873ccd578792557fbf909f1953e1586"
-LOCK_SIZE = 9181696
+# Synced 2026-08-18 to the S2 relock commit (322f6b1a7): source repo head had
+# advanced past the prior lock (79dc06e -> 36979a3). That relock is a real,
+# separately-committed, self-documented rebuild (see entityos.lock.json's own
+# "build_note") -- not something invented here. It honestly nulls fields it
+# could not re-verify (tests_passed, full_pytest, archive/attestation digests)
+# instead of carrying forward the old lock's unverified claims.
+LOCK_SHA256 = "3ef1a9e082c195fc6908047333d9c01a51e71bbbe2bd24fde7378bd3187c60f7"
+LOCK_SIZE = 8942304
 
 
 def test_entityos_lock_binds_verified_substrate_candidate():
     doc = json.loads((ROOT / "entityos.lock.json").read_text(encoding="utf-8"))
     assert doc["schema"] == "ClayVerseEntityOSArtifactLock/v1"
     assert doc["source_repository"] == "gschaidergabriel/Dr.-Unterweger"
-    assert doc["source_head"] == "79dc06eb4cba7aa3e3f4d1944bf3c2609ca0d21c"
-    assert doc["source_tree"] == "d55d9d41f5a294a4a692cdee6fa46750652a390d"
+    assert doc["source_head"] == "36979a30c0f83c21bb59140bb4903be80f381bab"
+    assert doc["source_tree"] == "25ae6c7363c789b712040802860a4449391134f5"
     assert doc["sha256"] == LOCK_SHA256
     assert doc["size_bytes"] == LOCK_SIZE
-    assert doc["tests_passed"] == 207
-    assert doc["full_pytest"] == "PASS_ZERO_SKIPS"
+    # NOT carried forward from the pre-relock lock -- honestly null/unverified now.
+    assert doc["tests_passed"] is None
+    assert doc["full_pytest"] == "NOT_RUN_FOR_THIS_LOCK"
     assert doc["double_build"] == "BYTE_IDENTICAL"
     assert doc["runtime_gates"] == "PASS"
     assert doc["sandbox_stopped"] is True

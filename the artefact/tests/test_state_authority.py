@@ -68,7 +68,11 @@ def test_schema2_hidden_raw_ledger_is_retired_on_open(tmp_path):
 
     reopened = UnifiedDB(path)
     assert not _table_exists(reopened, "turn_ledger")
-    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "5"
+    # store.py unconditionally rewrites meta.schema_version to the CURRENT
+    # constant on every open (see UnifiedDB.__init__); it has since moved to
+    # 6 for unrelated reasons. This assertion only needs to prove the value
+    # moved PAST the old schema-2 marker, not pin the exact number forever.
+    assert reopened.db.execute("SELECT value FROM meta WHERE key='schema_version'").fetchone()[0] == "6"
     assert reopened.db.execute("SELECT content FROM turns WHERE turn_id=?", (turn_id,)).fetchone()[0] == "ordinary full turn"
     reopened.close()
 

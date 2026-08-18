@@ -43,9 +43,15 @@ class FakeBinding:
 
 class FakeTerminals:
     def __init__(self, state_root, workspace):
-        self.state_root = state_root
+        self.state_root = __import__("pathlib").Path(state_root)
         self.workspace = workspace
         self.ensure_calls = []
+        # attest_autonomy_activation() (clayverse/autonomy_activation.py) reads
+        # .activity off the terminal manager to prove the web attach path and
+        # the autonomy pulse share one registry. A real TerminalSessionManager
+        # always has this; a fake missing it makes every boot crash on
+        # AttributeError before autonomy activation is even attempted.
+        self.activity = object()
 
     def ensure(self, user_id):
         self.ensure_calls.append(user_id)
@@ -56,7 +62,12 @@ def test_service_runs_current_uvicorn_terminal_app_and_closes_db(monkeypatch, tm
     db = FakeDB()
     graph_rebuilds = []
     recovery = {"generation": 7, "active_turns_closed": 0}
-    app = object()
+    # A plain object() was enough back when create_terminal_app's return value
+    # only had to be handed to uvicorn.run and asserted identical (app_calls).
+    # install_attested_autonomy_pulse() now also runs against it inside
+    # service.main() and needs the FastAPI shape (.router.on_startup/
+    # on_shutdown, .state) -- see clayverse/autonomy_app.py.
+    app = SimpleNamespace(router=SimpleNamespace(on_startup=[], on_shutdown=[]), state=SimpleNamespace())
     verifier = object()
     terminal_manager = FakeTerminals(str(tmp_path / "state"), str(tmp_path / "workspace"))
     app_calls = []

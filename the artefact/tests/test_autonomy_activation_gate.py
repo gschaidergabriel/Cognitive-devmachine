@@ -15,12 +15,15 @@ from clayverse.terminal_sessions import TerminalSessionManager
 
 
 class _App:
+    # install_autonomy_pulse (clayverse/autonomy_app.py) moved from
+    # add_event_handler(...) to app.router.on_startup/on_shutdown.append(...)
+    # -- "FastAPI removed add_event_handler in favour of lifespan" (see that
+    # file's comment). This fake must carry the same shape a real FastAPI
+    # app exposes, or every install_attested_autonomy_pulse() call blows up
+    # on AttributeError before the attestation gate is even reached.
     def __init__(self):
-        self.handlers = []
+        self.router = SimpleNamespace(on_startup=[], on_shutdown=[])
         self.state = SimpleNamespace()
-
-    def add_event_handler(self, event, handler):
-        self.handlers.append((event, handler))
 
 
 def test_split_terminal_managers_fail_activation_even_on_same_state_root(tmp_path):
@@ -38,7 +41,7 @@ def test_split_terminal_managers_fail_activation_even_on_same_state_root(tmp_pat
     app = _App()
     with pytest.raises(AutonomyActivationError, match="exact TerminalSessionManager"):
         install_attested_autonomy_pulse(app, web_terminals=web, pulse=pulse)
-    assert app.handlers == []
+    assert app.router.on_startup == [] and app.router.on_shutdown == []
     assert not hasattr(app.state, "autonomy_pulse_lifecycle")
 
 
@@ -66,4 +69,5 @@ def test_exact_same_terminal_manager_is_activation_ready(tmp_path):
     )
     assert lifecycle is app.state.autonomy_pulse_lifecycle
     assert app.state.autonomy_activation.ready is True
-    assert [event for event, _ in app.handlers] == ["startup", "shutdown"]
+    assert app.router.on_startup == [lifecycle.startup]
+    assert app.router.on_shutdown == [lifecycle.shutdown]

@@ -1678,8 +1678,11 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
                     if r["record_id"] in seen_ids:
                         continue
                     seen_ids.add(r["record_id"])
+                    # `via` MUSS mit: ohne den Vorgaenger gibt es keine Kante,
+                    # und ohne Kante keinen Weg. Er fehlte hier, und die
+                    # Wegehierarchie buchte hunderte Male ins Nichts.
                     walked.append({"id": r["record_id"], "depth": r["depth"], "score": r["score"],
-                                    "edge_art": r["edge_art"], "anchor": a})
+                                    "edge_art": r["edge_art"], "anchor": a, "via": r["via"]})
             walked.sort(key=lambda w: (w["depth"], -w["score"]))
             plan = {"anchors": list(anchors), "walked": walked[:CAP_WALK]}
             c.execute(
@@ -1708,7 +1711,7 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
                 bekannt.add(r["record_id"])
                 walk_rows.append({"id": r["record_id"], "depth": r["depth"], "score": r["score"],
                                   "edge_art": r["edge_art"], "anchor": erkundung["anker"],
-                                  "erkundung": True})
+                                  "via": r["via"], "erkundung": True})
 
     # lexikalisch (immer, als Grundrauschen + Fallback wenn kein Anker)
     lex_rows = c.execute(

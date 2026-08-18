@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
+Automatisch erzeugt 2026-08-18T14:18:59Z aus drei Repos. 473 Eintraege.
 
 ## architektur (15)
 
@@ -22,10 +22,11 @@ Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
 | 2026-08-14T22:58 | clay | `1d842278135e` | B9 geprueft: GEBURT: ClayVerse hat eine Identitaet und einen Herzschlag |
 | 2026-08-14T19:10 | clay | `da7779e12248` | Entscheidungen vom 15.08.: Token-Hoheit, Identitaet, Blasen, Wiki-Erweiterung (B27 F1 hebt die Bereichsgrenze  |
 
-## entscheidung (125)
+## entscheidung (126)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T13:55 | unifieddb | `3881a15e1ec5` | F94 gebaut: Autobahnen, Tunnel, langsame Strassen - und sie sagt selbst, wenn sie nichts tut |
 | 2026-08-15T19:39 | unifieddb | `43079e49acd4` | F94 |
 | 2026-08-15T19:39 | clay | `a38d5445956f` | F94 Wegehierarchie: Autobahn verstaerkt, Tunnel erzeugt Struktur (Hyperposition); Kopplung wird als Nebenprodu |
 | 2026-08-15T19:36 | unifieddb | `86d7e499d48c` | F93d |
@@ -85,7 +86,6 @@ Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
 | 2026-08-15T16:55 | clay | `3b078ee7d5a7` | F74 Ablauf je Request: EIN grosser Aufruf am Anfang, teuer vorne billig hinten, Verhandlung endet nach zwei Ru |
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
-| 2026-08-15T16:46 | unifieddb | `7817f79f4b2c` | F72 aufgenommen |
 
 ## reparatur (49)
 
@@ -201,6 +201,8 @@ Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-18T14:11 | entityos | `eca8c30854d7` | Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB |
+| 2026-08-18T13:55 | entityos | `d7543729563b` | Verfall der Wegehierarchie am bestehenden Takt (F94) |
 | 2026-08-18T13:34 | unifieddb | `19d5dd87472e` | Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot |
 | 2026-08-18T13:24 | entityos | `d6cc4ad2001e` | Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig |
 | 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
@@ -259,6 +261,4 @@ Automatisch erzeugt 2026-08-18T13:48:59Z aus drei Repos. 472 Eintraege.
 | 2026-08-18T03:51 | entityos | `8b794b2d1799` | ci(clayverse): cover autonomy terminal wiring and replay guard |
 | 2026-08-18T03:50 | entityos | `2aa406cca8a4` | chore(clayverse): restore terminal policy commentary |
 | 2026-08-18T03:49 | entityos | `e617b42e9ef7` | Merge PR #717: fence cross-attempt autonomous effect replay |
-| 2026-08-18T03:48 | entityos | `ec733c768880` | docs(artefact): refresh living autonomy frontier |
-| 2026-08-18T03:46 | entityos | `96a797fc57fd` | docs(clayverse): bind autonomy dispatch and human-preemption laws |
 

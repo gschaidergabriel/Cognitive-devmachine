@@ -425,6 +425,20 @@ class ClayVerseEffectBridge:
         from . import arbeitspaket as _ap
         return _ap.lage(self.db, besteller=self.user_id)
 
+    # ── Tresorkatalog: was es gibt und was es kann ────────────────────────
+    #
+    # ⭐ Bewusst NUR der Katalog. Ein Geheimnis, das durch ein Sprachmodell
+    # laeuft, steht danach im Kontextfenster, im Protokoll und in jeder
+    # Fehlermeldung -- es ist dann keines mehr. Die Schluessel selbst holt sich
+    # der Serverteil (Bahnenrouter, Postfach) direkt aus dem Tresor.
+
+    def tresor_katalog(self, tresor: str = "api") -> dict:
+        from . import tresor as _t
+        try:
+            return _t.katalog(tresor)
+        except Exception as e:
+            return {"nicht_ermittelbar": f"{type(e).__name__}: {e}"}
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -573,6 +587,11 @@ def main() -> None:
     def paket_lage() -> dict:
         """Deine Arbeitspakete und ihr Stand. `offen` heisst: wartet auf einen Menschen. Behaupte NIE, ein Paket sei erledigt, solange kein Beleg daranhaengt."""
         return bridge.paket_lage()
+
+    @mcp.tool(annotations=udb_ro)
+    def tresor_katalog(tresor: str = "api") -> dict:
+        """Was an Zugaengen vorhanden ist und was jeder KANN -- Modelle, Ratengrenzen, Zweck. tresor: `api` (Maschinenschluessel mit Faehigkeitsliste) oder `zugaenge` (Anmeldungen). ⚠️ NUR der Katalog: die Schluessel selbst bekommst du nie und brauchst du nie -- der Serverteil benutzt sie fuer dich."""
+        return bridge.tresor_katalog(tresor)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

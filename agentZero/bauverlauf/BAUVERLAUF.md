@@ -1,12 +1,174 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T13:48:59Z. 757 Commits aus vier Repos, davon 233 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T14:18:59Z. 759 Commits aus vier Repos, davon 236 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-18
+
+### Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB
+
+`eca8c30854d7` · entityos · 14:11 UTC · EntityOS
+
+```
+Gabriel: "agent zero braucht einen vault mit allen credentials und einen extra
+vault mit allen api tokens; der vault mit den api tokens muss aber auch eine
+liste mit capabilitys etc haben." Und: "das seimensch betriebswissen auch alles
+wissen ueber andreas und ueber gabriel in die unified db."
+
+⭐⭐ DIE TRAGENDE TRENNUNG: KATALOG UND INHALT
+
+    KATALOG   was es gibt, was es kann, wie es steht   -> Zero darf ihn sehen
+    INHALT    der Schluessel selbst                    -> Zero sieht ihn NIE
+
+Zero soll wissen, DASS es eine Bahn mit 60 Anfragen je Minute gibt und wofuer
+sie taugt. Den Schluessel braucht es dafuer nicht -- und kennte es ihn, stuende
+er in jedem Kontextfenster, jeder Protokollzeile, jeder Fehlermeldung. Ein
+Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.
+Werkzeug `tresor_katalog()` fuer Zero; `wert()` nur fuer den Serverteil.
+
+⭐ UND DIE SPERRE IST MECHANISCH, NICHT SORGFALT: katalog() prueft sein eigenes
+Ergebnis gegen JEDEN gelagerten Wert, bevor es ihn herausgibt, und verweigert
+die Ausgabe bei einem Treffer. "Ich habe die geheimen Felder weggelassen" ist
+eine Absicht. Das hier ist eine Zusicherung.
+
+ZWEI TRESORE, NICHT EINER, weil sie verschiedene Fragen beantworten:
+    zugaenge  29 Anmeldungen, Passwoerter, Betriebsdaten -- selten gebraucht,
+              fast immer von einem Menschen
+    api       28 Maschinenschluessel MIT Faehigkeitsliste -- staendig
+              gebraucht, fast immer von einem Dienst
+Ein gemeinsamer Tresor haette bedeutet, dass jeder Dienst, der eine API braucht,
+auch die Registrar-Passwoerter aufmacht.
+
+FAEHIGKEITEN ABGELEITET, NICHT ERFUNDEN: die Liste je Zugang (Modell,
+Minutengrenze, Tagesgrenze, Tokengrenzen) kommt aus bahnen.json, das seinerseits
+aus dem Clay-Unterbau abgeleitet ist. Wo keine Angabe vorliegt, steht
+"unbekannt -- nicht geraten" statt einer plausiblen Zahl. Eine erfundene
+Ratengrenze ist schlimmer als keine, weil man sich darauf verlaesst.
+
+AES-256-GCM, authentifiziert: eine veraenderte Tresordatei faellt beim Oeffnen
+auf, statt stillschweigend Unsinn zu liefern. Der Schluessel liegt ausserhalb
+der Datenbank -- ein Tresor, dessen Schluessel danebenliegt, ist eine Schublade.
+Im Container SCHREIBGESCHUETZT eingehaengt: ein Dienst, der seinen eigenen
+Tresor umschreiben kann, ist keiner.
+
+⚠️ KORREKTUR AN MIR: ich hatte vorhin gemeldet, es gebe keinen CLERK_SECRET_KEY
+auf dieser Maschine. Falsch -- ich hatte in entityos-clerk.env gesucht, er liegt
+in freie-zugaenge.env. Er ist jetzt im Tresor, als "Anmeldung serverseitig --
+KEIN Modellzugang" gekennzeichnet.
+
+═══ 11 WISSENSARTIKEL IN DER UNIFIEDDB ═══
+
+Das Betriebswissen stand bisher in einer gitignorierten CLAUDE.md auf einem
+Arbeitsrechner -- Betriebsfakten UND Passwoerter im selben Dokument. GENAU DIESE
+VERMISCHUNG ist der Grund, warum es nirgends sonst liegen konnte. Jetzt getrennt:
+Fakten ins Wiki, Geheimnisse in den Tresor.
+
+Betrieb: wie SeiMensch deployt wird (Push auf main ist sofort oeffentlich, kein
+manueller Schritt), die drei Domains mit EIGENEN nginx-Wurzeln (deshalb relative
+Pfade), die Testpflicht vor jedem Push samt der Warnung zum Browser-Daemon, die
+LeihMich-Besonderheit (neuer Slug MUSS in die Allowlist, sonst 400) samt der
+Bau-Lehre zu global-replace, und die Grundregel des Kunden: NICHTS ERFINDEN.
+
+Personen: Rolle und Zustaendigkeit beider, ausdruecklich mit der Trennung
+Zugehoerigkeit/Urheberschaft (SeiMensch gehoert Andreas, den Code schrieb
+Gabriel), Gabriels Arbeitsweise samt ihrer Begruendung -- eine kurze Frage ist
+billig zu pruefen, ein langer Text ist es nicht -- und wer was entscheidet.
+Dazu ein Artikel, der Zero sagt, wo die Geheimnisse liegen und warum es sie
+nicht sieht.
+
+Gegenprobe gelaufen: kein Passwort, keine Kundennummer, kein Schluessel in den
+Artikeln. Verdachtsmuster geprueft, Treffer: keiner.
+```
+
+### Verfall der Wegehierarchie am bestehenden Takt (F94)
+
+`d7543729563b` · entityos · 13:55 UTC · EntityOS
+
+```
+Zwei Verfallstakte fuer zwei Lernzustaende wuerden auseinanderlaufen. Ein Netz,
+in dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
+altert: es sieht gepflegt aus und ist schief.
+
+⚠️ Der Aufruf steht als eigenes Skript, nicht als python -c in der Unit: der
+Einzeiler scheiterte an verschachtelten Anfuehrungszeichen und machte die GANZE
+Unit ungueltig -- damit waere auch der Schnappschuss davor nicht mehr gelaufen.
+```
+
+### F94 gebaut: Autobahnen, Tunnel, langsame Strassen - und sie sagt selbst, wenn sie nichts tut
+
+`3881a15e1ec5` · unifieddb · 13:55 UTC · EntityOS
+
+```
+Gabriel, 16.08.: "umso oefter ein Weg verwendet wird, umso besser wird er
+ausgebaut -- so entstehen emergent Highways, Schnellstrassen, Tunnel
+(Hyperposition) und langsame Strassen, was die neurale Aktivitaet, Emergenz und
+Kopplung sichtbar macht, und das als Nebenprodukt."
+
+⭐ DER NEBENPRODUKT-PUNKT IST DER WERTVOLLSTE, und er bestimmt den Bau:
+normalerweise kostet es eigenes Messwerk, Kopplung sichtbar zu machen -- und
+Messwerk verzerrt, was es misst. Hier faellt sie ohne Zusatzaufwand an: es wird
+GENAU der Weg verstaerkt, der ohnehin schon als "getragen" erkannt wird (F92b).
+Die Hierarchie IST die Aufzeichnung, nicht ihr Stellvertreter.
+Verkehr OHNE Ertrag verstaerkt nichts -- sonst baute sich auch das Irrfahren aus.
+
+DIE DREI BEDINGUNGEN AUS DER DOKU, alle umgesetzt:
+
+1 WEGE VERFALLEN. Wer nur verstaerkt, macht die zuerst gegangenen Wege dauerhaft
+  zu Autobahnen und das Netz erstarrt zum Abdruck des fruehen Verkehrs.
+  verfallen() haengt am BESTEHENDEN Takt entityos-abrufverfall -- zwei
+  Verfallstakte fuer zwei Lernzustaende wuerden auseinanderlaufen, und ein Netz,
+  in dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
+  altert: es sieht gepflegt aus und ist schief.
+
+2 ⭐ VERSTAERKUNG UMGEKEHRT ZUR GUETE:  zuwachs = GRUND * (1 - guete)
+  Autobahnen erzeugen ihren eigenen Verkehr -- ist eine erst da, bevorzugt die
+  Eintrittswahl sie, WEIL sie billig ist. Ohne die Umkehrung kann ein neuer Weg
+  nie genug ansammeln, um zu konkurrieren, und die Hierarchie friert nach der
+  ersten Phase ein.
+
+3 ⚠️ TUNNEL STRENGER ALS AUTOBAHNEN. Verlangt wird UNABHAENGIGE Mitbenutzung aus
+  mindestens drei VERSCHIEDENEN Sitzungen -- nicht eine starke Korrelation, und
+  nach F84 zaehlt Mitbenutzung aus derselben Sitzung nicht als unabhaengig.
+  Grund: eine falsche Autobahn kostet Zeit, ein falscher Tunnel BEHAUPTET eine
+  Verbindung, die es semantisch nicht gibt, und alles Spaetere erbt sie.
+
+⭐ UND DIE FAELSCHUNGSPRUEFUNG, die die Doku selbst vorschlaegt, ist eingebaut:
+pruefung() traegt die Verkehrsverteilung auf und sagt geradeheraus
+"GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts".
+Ein Mechanismus, der seine eigene Wirkungslosigkeit nicht anzeigen kann, ist
+nicht pruefbar.
+
+ZWEI STILLE FEHLSCHLAEGE AUF DEM WEG:
+
+a) 0 Wege nach 60 Abrufen. Statt zu raten gemessen: von 185 ausgelieferten
+   Treffern kommen 46 aus dem Walk UND haben einen Vorgaenger -- der Verkehr
+   existiert also, die Buchung war kaputt.
+   Ursache: _walk() liefert `via`, aber beim Verdichten des Plans wurde nur ein
+   verkuerztes Woerterbuch abgelegt (id, depth, score, edge_art, anchor) --
+   `via` fiel weg. Ohne Vorgaenger keine Kante, ohne Kante kein Weg. Die Buchung
+   lief hunderte Male ins Nichts, ohne Ausnahme, ohne Hinweis.
+
+b) Der Verfall stand als python -c direkt in der systemd-Unit und scheiterte an
+   verschachtelten Anfuehrungszeichen. Die Unit war dadurch KOMPLETT ungueltig
+   -- also waere auch der Schnappschuss davor nicht mehr gelaufen. Ein zu
+   cleverer Einzeiler kann einen funktionierenden Takt mitreissen. Jetzt ein
+   eigenes Skript (udb/abruf/wegverfall.py).
+
+STAND, ehrlich: 9 Wege nach drei vollen Goldsatz-Durchlaeufen, ueber alle drei
+stabil. Die Pruefung VERWEIGERT das Urteil ("zu wenige Wege fuer ein Urteil --
+eine Hierarchie aus weniger als zehn Wegen ist Rauschen"), und das ist richtig
+so. Der Grund ist bekannt und gemessen: die Ankerquote liegt bei 23 %, der Walk
+steuert 46 von 185 Treffern bei -- daraus entstehen ueber 120 Fragen eben nur
+neun getragene Kanten.
+
+⚠️ Die Schwelle wurde NICHT gesenkt, um ein Urteil zu erzwingen. Das waere das
+Anpassen des Messgeraets an das gewuenschte Ergebnis. F94 ist gebaut, verdrahtet
+und zeichnet auf; ob sich eine Hierarchie bildet, entscheidet echter Verkehr --
+und die Pruefung wird es sagen, in beide Richtungen.
+```
 
 ### Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot
 
@@ -4283,115 +4445,6 @@ MESSBAR gemacht unter F24: Grundlinie ist eine nackte Claude-Code-Sitzung OHNE
 die bestaendige Schicht. Schlaegt Clay die nicht, ist die Schicht wertlos. Das
 ist die ehrlichste Grundlinie im ganzen Projekt, weil sie das Gesamtvorhaben
 falsifizierbar macht.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### Gesamtarchitektur von ClayVerse aufgenommen - Repo und README
-
-`837e4fbf7769` · unifieddb · 06:12 UTC · ClayVerse
-
-```
-ZIELARCHITEKTUR.md bekommt TEIL II: die Gesamtarchitektur. Teil I beschreibt
-die Datenbank, Teil II das System, dessen Modul sie ist.
-
-DIE ZWEI TRAGENDEN SAETZE:
-  Die Datenbank ist das System, ClayVerse ist ein Modul darauf - zu Ende
-  gedacht loest sich der Zustandsautomat in udb auf.
-  Das Modell wird austauschbar - Qwen, Claude, GPT oder ein lokales 4B sind
-  kognitive Rechenorgane innerhalb einer persistenten Architektur.
-  Frank ist ein Clay INNERHALB des Systems, nicht ClayVerse selbst.
-
-SIEBEN SCHICHTEN: Wirte, Bestand, Abruf, Kognition, Sitzungen, Oberflaeche,
-Messung. Die Messung liegt QUER, nicht oben - sie ist die Bedingung dafuer,
-dass alles darunter falsifizierbar ist, keine Auswertung am Ende.
-
-DIE TRENNUNGSREGEL: was die UnifiedDB nicht rekonstruieren kann bleibt auf dem
-Wirt, was sie rekonstruieren kann darf zu den Zwillingen. Die Zwillinge halten
-nur Abgeleitetes und brauchen deshalb KEINEN Konsens - Konsens ist ein
-Mechanismus, Autoritaet eine Rolle.
-
-DAS BAUGESETZ mit Zielmetrik, Schattenmetriken, harten Invarianten und dem
-Fuenf-Schritt-Verfahren. Kein Training, keine Trainingsdaten.
-
-README traegt jetzt denselben Ueberblick oben, mit dem gemessenen Stand
-(14.268 Artikel, 2.374 Graphknoten, 0,46 ms Abruf, 60 auf 100 Prozent durch
-den Graphen, 1.388 mehrdeutige Fakten, 323 Texte/s, 15-Prozent-Deckel bei
-15,00 und 14,99 gemessen) und den sechs benannten Luecken.
-Vorfassung als README.md.vor-gesamtarchitektur gesichert.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F24 Baugesetz verschaerft: Zielmetrik, Schattenmetriken, harte Invarianten
-
-`7c13a6df49c7` · clay · 06:05 UTC · ClayVerse
-
-```
-Die Fassung aus F21 war zu weich. So formuliert gewinnt ein Modul auf seiner
-eigenen Metrik, indem es anderswo etwas kaputtmacht.
-
-VERBINDLICH: ein Modul bleibt nur, wenn es die Grundlinie auf mindestens EINER
-Zielmetrik SIGNIFIKANT schlaegt, ohne eine harte Invariante oder eine
-wichtigere Schattenmetrik zu verschlechtern.
-
-DREI VERFAHRENSREGELN: Schattenmetriken und Invarianten VOR der Messung
-benennen. Signifikant braucht eine Zahl - Baseline mehrfach laufen lassen,
-Streuung messen, Verbesserung muss groesser sein. Faellt es durch, kommt es
-RAUS, nicht spaeter nochmal.
-
-DAS VERFAHREN: Kandidat -> billige Baseline -> Ablation -> Messung ->
-behalten/fusionieren/verwerfen. Die Baseline wird ZUERST gebaut, sonst baut man
-sie hinterher so, dass sie verliert. Manchmal reicht sie und der Kandidat ist
-erledigt, bevor eine Zeile fuer ihn geschrieben wurde.
-
-FUSIONIEREN ist der dritte Ausgang und das Gegenmittel gegen den Zoo: der
-wirksame Mechanismus wird herausgeloest und in ein bestehendes Bauteil
-eingearbeitet, der Kandidat bleibt nicht als eigenes Modul. Rang 4, 5 und 6
-werden meist hier landen.
-
-ABNAHMEKRITERIEN je Bauteil vorab festgelegt. Fuer die Routenwahl vom Eigner
-woertlich: Kosten runter, aber gleichzeitig Aufgabenerfolg gleich oder besser,
-Latenz runter, Fehlrouting begrenzt, Recovery nicht schlechter. Recovery ist
-die schaerfste davon - 90 Prozent richtig mit teurem Scheitern ist schlechter
-als 80 Prozent mit billiger Korrektur.
-
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
-```
-
-### F23 Berichtigung: Quorum ist Datenbankkonsens, nicht Clay-Autoritaet
-
-`bbede249ace4` · clay · 06:03 UTC · ClayVerse
-
-```
-Zwei Einwaende gegen meinen Dreiknoten-Entwurf aus F22, beide zutreffend.
-Ich hatte den Zweiknoten-Fehler gefunden und dann NICHT geprueft, was der
-dritte Knoten semantisch aendert. Ein Mechanismus, der die Zahl repariert,
-kann die Bedeutung kaputt machen.
-
-1. RAFT ERSETZT DIE WARTESPERRE NICHT. rqlite verhindert ohne Quorum
-zuverlaessig Writes, weiss aber nichts ueber die GESUNDHEIT eines kognitiven
-Moduls. Erreichbar ist nicht gesund - derselbe Fehler wie stilles Stehen beim
-tAvern-Wachhund. Der Aufrufer bekommt no leader/Redirect/Timeout statt einer
-Antwort fuer einen Menschen. Die Clay-Schicht muss daraus ausdruecklich
-COGNITIVE_QUORUM_UNAVAILABLE -> WAIT machen. Punkt 3 der Arbeitsschlange
-bleibt vollstaendig bestehen.
-
-2. BEI DREI STIMMEN SIND AUCH A+B EINE MEHRHEIT und koennten ohne den Wirt
-kanonisch schreiben. Der Wirt hat aber eine Sonderrolle. Quorum ist
-Datenbankkonsens, NICHT Clay-Autoritaet - dieselbe Unterscheidung wie
-model confidence cannot mint authority in Paragraph 9 der Abnahmeurkunde.
-
-WAS BEIDE ZUSAMMEN ZEIGEN: die Zwillinge brauchen ueberhaupt keinen Konsens.
-Sie halten nach der Trennungsregel nur Abgeleitetes, und Rekonstruierbares
-braucht keine Einigung, sondern Wiederaufbaubarkeit. Spiegelgleichheit ist ein
-Auslieferungsproblem, kein Konsensproblem.
-
-BERICHTIGT: Litestream auf dem Wirt statt Raft ueber drei Knoten. Zwillinge
-melden Gesundheit statt Stimmrecht. Rang 3 der Schlange entsprechend geaendert.
-
-LEHRE: ich habe einen Zahlenfehler mit mehr Mechanismus repariert, statt zu
-fragen, ob der Mechanismus dort hingehoert. Eleganz ist kein Beleg.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 ```

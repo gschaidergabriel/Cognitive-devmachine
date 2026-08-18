@@ -69,6 +69,14 @@
    - aktuelle Planungs-Schaetzung: normale Turns ca. 50-70 % weniger Claude-Tokens, schwere Build-/Toolturns ca. 35-55 %; Arbeitswert ~60 % bzw. ~2,5x Arbeit je Claude-Tokenbudget
    - Gesamtquote bleibt INFERENCE bis `CLAUDE_TOKEN_LEDGER` + Direct-vs-Pipeline-A/B vorliegt; `outsourced`-Feld allein wird nicht als realisierte Ersparnis gezaehlt
 
+9. `analysen/2026-08-18T214455Z_GENERATION116_ADAPTER_EVIDENZKORREKTUR.md`
+   - Generation 116 auf Snapshot `95234c157...`
+   - durable Testreceipt ist repliziert `583 gruen / 1 rot`, nicht 584/0
+   - einziger roter Invariant bleibt die Claude-Code-Runtime-Adapter-Isolation
+   - Commit-Narrativ `584/0` wird mangels dauerhaftem Receipt zu `UNVERIFIED_TRANSIENT` herabgestuft
+   - hoechster Informationsgewinn: Exact-Source-/Environment-Bindung plus atomarer `TEST_RECEIPT_LEDGER/v1` und kontrollierte Wiederholung dieses einen Tests
+   - Retrieval-Lernen bleibt unbelegt: `retrieval_entrypoint_policy=0`, `retrieval_feedback=0`
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -76,6 +84,7 @@
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
+- Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
 - rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;
 - Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;

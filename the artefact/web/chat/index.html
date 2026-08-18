@@ -36,6 +36,10 @@ header .note{color:var(--muted);font-size:12px}
 #text:focus{outline:1px solid var(--bubble-user-b)}
 #send{flex:0 0 auto;background:var(--bubble-user-b);color:#fff;border:none;border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}
 #send:disabled{opacity:.5;cursor:default}
+#switcher{display:flex;gap:6px;margin-left:auto}
+.slot-btn{background:var(--panel);color:var(--muted);border:1px solid #2a2b30;border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
+.slot-btn.active{color:var(--text);border-color:var(--bubble-user-b);background:#132132}
+.slot-btn:disabled{opacity:.5;cursor:default}
 @media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
 </style></head>
 <body>
@@ -46,6 +50,7 @@ header .note{color:var(--muted);font-size:12px}
     <div class="avatar" id="headerAvatar"></div>
     <div><div class="title">Zero</div>
     <div class="note">Antworten kommen vollständig, nicht Wort für Wort — Zero und der Übersetzer brauchen die ganze Antwort, bevor du sie siehst.</div></div>
+    <div id="switcher"></div>
   </header>
   <div id="messages"></div>
   <div id="composer">
@@ -68,7 +73,9 @@ window.addEventListener('load', async () => {
   const messages=document.getElementById('messages');
   const textEl=document.getElementById('text');
   const sendBtn=document.getElementById('send');
+  const switcherEl=document.getElementById('switcher');
   const maxChatChars=8000;
+  let currentPlatz=null; let lastPlaetze=[]; let switching=false; let composerEnabled=false;
   // Every glitching/tracking Zero avatar ever created in this session, oldest
   // first. ZeroAvatar.nurNeuesteAktiv() keeps only the last one glitching --
   // per zero-avatar.js's own rule, so a long history stays calm.
@@ -179,13 +186,42 @@ window.addEventListener('load', async () => {
   };
 
   function setComposerEnabled(enabled){
+    composerEnabled=enabled;
     sendBtn.disabled=!enabled; textEl.disabled=!enabled;
+    renderSwitcher(lastPlaetze);
+  }
+
+  // Slot list comes from the server (IdentityRouter.plaetze()) -- never
+  // hardcode session ids/labels here, the owner may add a third slot later.
+  function renderSwitcher(plaetze){
+    lastPlaetze=plaetze||[];
+    switcherEl.innerHTML='';
+    lastPlaetze.forEach((p)=>{
+      const btn=document.createElement('button');
+      btn.type='button'; btn.className='slot-btn'+(p.platz===currentPlatz?' active':'');
+      btn.textContent='Sitzung '+p.platz;
+      btn.title=p.terminal||('session '+p.platz);
+      btn.disabled=(p.platz===currentPlatz)||switching||!chatReady||!composerEnabled;
+      btn.addEventListener('click', ()=>{
+        if(switching||!chatReady||p.platz===currentPlatz||ws.readyState!==1) return;
+        switching=true; setComposerEnabled(false); renderSwitcher(lastPlaetze);
+        ws.send(JSON.stringify({type:'switch_platz', platz:p.platz}));
+      });
+      switcherEl.appendChild(btn);
+    });
   }
 
   ws.onopen=async()=>{ const token=await Clerk.session.getToken({skipCache:true}); ws.send(JSON.stringify({type:'auth',token})); };
   ws.onmessage=(ev)=>{
     let m; try{ m=JSON.parse(ev.data); }catch{ return; }
-    if(m.type==='ready'){ chatReady=true; scheduleAuthRefresh(m.auth_expires_at); setComposerEnabled(true); textEl.focus(); return; }
+    if(m.type==='ready'){
+      chatReady=true; switching=false;
+      if(typeof m.platz==='number') currentPlatz=m.platz;
+      if(Array.isArray(m.plaetze)) lastPlaetze=m.plaetze;
+      scheduleAuthRefresh(m.auth_expires_at);
+      setComposerEnabled(true); textEl.focus();
+      return;
+    }
     if(m.type==='reauthenticated'){ scheduleAuthRefresh(m.auth_expires_at); return; }
     if(m.type==='pending'){ setComposerEnabled(false); pendingRow=addPending(); return; }
     if(m.type==='reply'){

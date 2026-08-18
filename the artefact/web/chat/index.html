@@ -6,7 +6,9 @@
 <script defer crossorigin="anonymous" src="__CLERK_API__/npm/@clerk/ui@1/dist/ui.browser.js"></script>
 <script defer crossorigin="anonymous" data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__" src="__CLERK_API__/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
 <link rel="stylesheet" href="/web/schale/schale.css">
+<link rel="stylesheet" href="/web/anmeldung/anmeldung.css">
 <script defer src="/web/schale/schale.js"></script>
+<script src="/web/anmeldung/anmeldung.js"></script>
 <link rel="stylesheet" href="/web/avatare/zero-avatar.css">
 <script src="/web/avatare/zero-avatar.js"></script>
 <style>
@@ -165,8 +167,10 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 <body>
 <header id="entityos-schale"></header>
 <div id="authError"></div>
+<div id="anmelde-grund" aria-hidden="true"></div>
 <div id="anmeldung">
-  <div class="anmelde-marke">entity<span class="eos-marke-os">OS</span></div>
+  <div class="anmelde-marke" data-marke="entityOS">entity<span class="eos-marke-os">OS</span></div>
+  <div class="anmelde-zeile">Zugang zur Entität <b>Zero</b></div>
   <div id="auth"></div>
 </div>
 <div id="chat">
@@ -193,7 +197,24 @@ window.addEventListener('load', async () => {
   await Clerk.load({ui:{ClerkUI:window.__internal_ClerkUICtor}});
   const auth=document.getElementById('auth'); const chat=document.getElementById('chat');
   const authError=document.getElementById('authError');
-  if (!Clerk.isSignedIn) { Clerk.mountSignIn(auth); return; }
+  const anmeldeGrund=document.getElementById('anmelde-grund');
+  let grundFeld=null;
+  if (window.EntityOSAnmeldung && anmeldeGrund) {
+    grundFeld=EntityOSAnmeldung.grund(anmeldeGrund);
+  }
+  if (!Clerk.isSignedIn) {
+    // Aussehen aus denselben Marken-Merkmalen wie der Rest -- kein zweites
+    // Farbsystem nur fuer das Anmeldeformular.
+    const aussehen=(window.EntityOSAnmeldung && EntityOSAnmeldung.clerkAussehen)
+      ? {appearance: EntityOSAnmeldung.clerkAussehen()} : undefined;
+    try { Clerk.mountSignIn(auth, aussehen); }
+    catch(e){ Clerk.mountSignIn(auth); }   // lieber schlicht als gar nicht
+    return;
+  }
+  // Angemeldet: das Feld hat seinen Zweck erfuellt und hoert auf zu rechnen.
+  // Ein Hintergrund, der hinter dem Chat weiterlaeuft, waere reine Heizung.
+  if (grundFeld) grundFeld.halt();
+  if (anmeldeGrund) anmeldeGrund.remove();
   document.getElementById('anmeldung').style.display='none'; chat.style.display='flex';
 
   // Die Schale misst den Zustand fuer beide Seiten und braucht dafuer ein Token.

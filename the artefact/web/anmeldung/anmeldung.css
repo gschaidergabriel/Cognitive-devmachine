@@ -1,0 +1,111 @@
+/* Die Anmeldung -- das erste, was ein Mensch von entityOS sieht.
+ *
+ * Der Hintergrund ist NICHT als Bild eingebunden, sondern gezeichnet. Drei
+ * Gruende, und der dritte ist der eigentliche:
+ *   - ein Vollbild-JPEG kostet ueber ein Megabyte, das vor der Anmeldung laedt
+ *   - eine feste Aufloesung sieht auf einem 4K-Schirm matschig aus
+ *   - ein Bild kann nicht glitchen. Ein gezeichnetes Feld schon.
+ *
+ * Alle Farben kommen aus den Marken-Merkmalen der Schale (--signal, --geist-*,
+ * --grund). Kein zweites Farbsystem: die Anmeldung ist dieselbe Marke wie alles
+ * dahinter, nur lauter.
+ */
+
+#anmelde-grund {
+  position: fixed; inset: 0; z-index: 0;
+  background: var(--grund);
+}
+#anmelde-grund canvas { display: block; width: 100%; height: 100%; }
+
+/* Vignette: zieht den Blick in die Mitte, auf die Anmeldebox. Ohne sie
+   konkurriert das Textfeld ueberall gleich stark mit dem Formular. */
+#anmelde-grund::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 48%,
+      transparent 0%, rgba(7,8,10,.55) 55%, rgba(7,8,10,.9) 100%),
+    repeating-linear-gradient(0deg,
+      rgba(0,0,0,.22) 0 1px, transparent 1px 3px);   /* Bildroehren-Zeilen */
+}
+
+#anmeldung { position: relative; z-index: 1; }
+
+/* ── Die Wortmarke, mit Farbversatz wie ein schlecht justierter Monitor ── */
+.anmelde-marke {
+  position: relative;
+  text-shadow: 0 0 24px hsl(var(--zustand-h) var(--zustand-s) 52% / .35);
+}
+.anmelde-marke::before,
+.anmelde-marke::after {
+  content: attr(data-marke);
+  position: absolute; inset: 0;
+  pointer-events: none;
+  clip-path: inset(0 0 0 0);
+}
+.anmelde-marke::before { color: var(--geist-cyan); animation: marke-geist-a 4.2s infinite steps(1); }
+.anmelde-marke::after  { color: var(--geist-mag);  animation: marke-geist-b 5.7s infinite steps(1); }
+
+/* Die Versaetze sind FAST immer null. Ein Dauerglitch liest sich als kaputte
+   Seite; ein seltener liest sich als Maschine, die kurz stolpert. */
+@keyframes marke-geist-a {
+  0%, 92%   { transform: none; opacity: 0; }
+  93%       { transform: translate(-2px,1px); opacity: .8; clip-path: inset(10% 0 55% 0); }
+  95%       { transform: translate(3px,-1px); opacity: .6; clip-path: inset(60% 0 12% 0); }
+  97%, 100% { transform: none; opacity: 0; }
+}
+@keyframes marke-geist-b {
+  0%, 88%   { transform: none; opacity: 0; }
+  89%       { transform: translate(2px,-1px); opacity: .7; clip-path: inset(35% 0 40% 0); }
+  92%       { transform: translate(-3px,2px); opacity: .5; clip-path: inset(5% 0 70% 0); }
+  94%, 100% { transform: none; opacity: 0; }
+}
+
+.anmelde-marke .eos-marke-os { color: var(--signal); }
+
+/* Eine Zeile unter der Marke: sagt, wo man ist, ohne zu werben. */
+.anmelde-zeile {
+  font-family: var(--schrift-mono); font-size: var(--s-13);
+  color: var(--matt); letter-spacing: .18em; text-transform: uppercase;
+  margin-top: -12px;
+}
+.anmelde-zeile b { color: var(--signal); font-weight: 500; }
+
+/* ── Die Clerk-Box: gerahmt, geerdet, mit leichtem Eigenleuchten ── */
+#auth {
+  position: relative;
+  padding: 2px; border-radius: calc(var(--rundung) + 4px);
+  background: linear-gradient(160deg,
+    hsl(var(--zustand-h) var(--zustand-s) 52% / .45),
+    var(--linie) 40%, var(--linie) 60%,
+    hsl(var(--zustand-h) var(--zustand-s) 52% / .25));
+  box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 24px 70px rgba(0,0,0,.75),
+              0 0 60px hsl(var(--zustand-h) var(--zustand-s) 52% / .12);
+}
+#auth::before {
+  /* Ein Lichtsaum, der ganz langsam atmet -- dasselbe Prinzip wie hinter
+     Zeros Scheibe: die Quelle liegt HINTER dem Ding und scheint am Rand
+     hervor, statt vorne aufgesetzt zu leuchten. */
+  content: ""; position: absolute; inset: -18px; z-index: -1;
+  border-radius: inherit; pointer-events: none;
+  background: radial-gradient(closest-side,
+    hsl(var(--zustand-h) var(--zustand-s) 52% / .22), transparent 75%);
+  animation: auth-atmen 7s ease-in-out infinite;
+}
+@keyframes auth-atmen {
+  0%, 100% { opacity: .55; transform: scale(.98); }
+  50%      { opacity: 1;   transform: scale(1.02); }
+}
+
+/* ⚠️ Bewegung ist ein Angebot, keine Pflicht. Wer sie abbestellt hat,
+   bekommt dieselbe Seite -- nur still. Das Feld wird dann EINMAL gezeichnet
+   (siehe anmeldung.js), nicht etwa ausgeblendet: die Marke soll auch dann
+   dastehen. */
+@media (prefers-reduced-motion: reduce) {
+  .anmelde-marke::before, .anmelde-marke::after,
+  #auth::before { animation: none; }
+  .anmelde-marke::before, .anmelde-marke::after { opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .anmelde-zeile { font-size: 11px; letter-spacing: .12em; }
+}

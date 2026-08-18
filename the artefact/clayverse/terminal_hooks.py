@@ -205,6 +205,25 @@ def _reconcile_preempted_autonomy(db: UnifiedDB, user_id: str, captured: dict[st
     }
 
 
+def _identity_anchor(identity: str | None) -> dict[str, str] | None:
+    """Compact, constant-size stand-in for the level-0 identity."""
+    if not identity:
+        return None
+    def _tag(name: str) -> str:
+        open_tag, close_tag = f"<{name}>", f"</{name}>"
+        if open_tag not in identity or close_tag not in identity:
+            return ""
+        return identity.split(open_tag, 1)[1].split(close_tag, 1)[0].strip()
+    return {
+        "name": _tag("name") or "Zero",
+        "designation": _tag("designation") or "Agent Zero",
+        "authority": "unifieddb:meta.canonical_identity",
+        "level": "0",
+        "sha256": hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16],
+        "full_text": "delivered via system prompt, not via this envelope",
+    }
+
+
 def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_CHARS) -> str:
     compact = {
         "authority": "UnifiedDB",
@@ -240,7 +259,13 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         return text
 
     context = compact["context"]
-    identity = context.get("canonical_identity")
+    # Only an anchor rides in the hook envelope. The full identity reaches the
+            # model through --append-system-prompt-file, which this 9000-char budget
+            # does not apply to. Carrying the full 5.4 KB text here consumed 60% of the
+            # envelope on every single turn and hard-blocked all prompts.
+            # The anchor still lets the entity verify WHICH identity is canonical and
+            # detect drift, which was the whole reason it travels with the turn.
+    identity = _identity_anchor(context.get("canonical_identity"))
     context["durable_memory"] = context.get("durable_memory", [])[:12]
     context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
     context["own_recent"] = context.get("own_recent", [])[-8:]
@@ -349,9 +374,17 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             }
 
         preempted = _active_autonomy_preemption(db, session_id, user_id)
+        # Everything that can still reject this turn now happens INSIDE the admission
+        # transaction. begin_admission() yields from within db.tx(), so a raise in here
+        # rolls the whole admission back instead of leaving turns / workspace_episodes /
+        # durable_memory rows behind for a turn that never happened.
+        #
+        # The previous shape exited the with-block immediately (committing) and then
+        # compensated with lifecycle.abort(). That was wrong twice: it could not remove
+        # the already-written rows, and abort() retires whichever active turn it finds --
+        # on a second prompt that is the PRIOR, successful one. The compensation reached
+        # into the wrong turn.
         with lifecycle.begin_admission(prompt, claude_session_id=claude_session_id) as result:
-            pass
-        try:
             _reconcile_preempted_autonomy(db, user_id, preempted)
             result["autonomy_command"] = apply_explicit_goal_command(
                 db,
@@ -362,10 +395,6 @@ def user_prompt(payload: dict[str, Any]) -> dict[str, Any]:
             )
             result["autonomy"] = bounded_autonomy_context(db, user_id)
             additional_context = _bounded_hook_context(result)
-        except Exception:
-            if lifecycle.active() is not None:
-                lifecycle.abort("user_prompt_post_admission_failure")
-            raise
         return {
             "hookSpecificOutput": {
                 "hookEventName": "UserPromptSubmit",

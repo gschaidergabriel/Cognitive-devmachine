@@ -15,3 +15,17 @@ ExecStart=/usr/bin/python3 -m udb.abruf.paket schnappschuss
 # auseinanderlaufen (siehe entityos-baunotizen: derselbe Fehler, dieselbe Lehre) --
 # deshalb hier in einem Lauf, wie bei entityos-baunotizen/-zuordnung.
 ExecStartPost=/usr/bin/python3 -m udb.abruf.paket verfall
+
+# F94: die Wegehierarchie zerfaellt im SELBEN Takt. Zwei Verfallstakte fuer
+# zwei Lernzustaende wuerden unweigerlich auseinanderlaufen -- und ein Netz,
+# in dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
+# altert: es sieht gepflegt aus und ist schief.
+
+# F94: die Wegehierarchie zerfaellt im SELBEN Takt. Zwei Verfallstakte fuer
+# zwei Lernzustaende wuerden unweigerlich auseinanderlaufen -- und ein Netz, in
+# dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
+# altert: es sieht gepflegt aus und ist schief.
+# ⚠️ Als eigenes Skript, nicht als python -c: der Einzeiler scheiterte an
+# verschachtelten Anfuehrungszeichen und machte die GANZE Unit ungueltig --
+# damit waere auch der Schnappschuss davor nicht mehr gelaufen.
+ExecStartPost=/usr/bin/python3 /opt/unifieddb/udb/abruf/wegverfall.py

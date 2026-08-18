@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T14:33:50Z. 761 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T14:37:53Z. 762 Commits aus vier Repos, davon 237 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -956,8 +956,8 @@ Damit lag der Dienst in einer Neustartschleife, alle Seiten tot. Zwei Gruende:
 Wiederhergestellt mit --env-file; danach: alle Seiten 200, /api/history ohne
 Token 401 (faellt geschlossen), Verlaufscode im ausgelieferten HTML.
 
-Ausserdem berichtigt: der Kommentar in postfach.py nannte `herzradgraz@gmail.com`
-als Andreas' Clerk-Konto. Eignerentscheid am 18.08.: `genuinos@gmail.com`.
+Ausserdem berichtigt: der Kommentar in postfach.py nannte `<adresse>`
+als Andreas' Clerk-Konto. Eignerentscheid am 18.08.: `<adresse>`.
 Die Mechanik war nie betroffen -- die Zuordnung laeuft ueber die Clerk-Kennung,
 nicht ueber die Adresse. Genau dafuer ist sie so gebaut, und das steht jetzt
 auch dort.
@@ -996,7 +996,7 @@ GEPRUEFT, NICHT NUR UEBERNOMMEN
 Die Postfachzuordnung laeuft ueber clerk_subject -> clerk_map -> user_id ->
 Postfach, ausdruecklich NICHT ueber die Mailadresse. Am selben Tag war strittig,
 welche Gmail-Adresse Andreas' Clerk-Konto traegt (`herzradgraz@` im
-Auftragsdokument, `genuinos@` laut Eigner; Eignerentscheid: genuinos@gmail.com).
+Auftragsdokument, `genuinos@` laut Eigner; Eignerentscheid: <adresse>).
 Weil die Zuordnung an der Clerk-Kennung haengt, war die Postfachvergabe davon zu
 KEINEM Zeitpunkt betroffen. Der Kommentar im Modul nannte die strittige Adresse
 als Tatsache -- das ist berichtigt, die Mechanik blieb unangetastet.
@@ -1349,10 +1349,10 @@ man heben kann, ohne irgendetwas besser zu machen. Abgeschaltet.
 `06771bdb1720` · entityos · 09:52 UTC · Video Launch Page
 
 ```
-Docker's own iptables rules bypass ufw; 0.0.0.0:3000 would have put the
+Docker's own iptables rules bypass ufw; <adresse>:3000 would have put the
 Clerk-gated terminal directly on the public internet, unauthenticated, next
-to the nginx front door that already reaches it correctly on 127.0.0.1.
-nginx->tunnel->127.0.0.1:3000 is the only intended path in.
+to the nginx front door that already reaches it correctly on <adresse>.
+nginx->tunnel-><adresse>:3000 is the only intended path in.
 ```
 
 ### Fix: container boots as uid 5001 (compose override for the /var/lib/clay bind mount) but /var/lib/clayverse, /workspace, /home/clayverse/.claude were chowned to uid 10001 -- state root was write-denied on every boot
@@ -1564,8 +1564,8 @@ A: EINE FREMDE MAILADRESSE IN ANDREAS' SITZUNG
 
 Zero, woertlich, in Andreas' Sitzung:
   Die eingespeiste Umgebungsangabe nennt als E-Mail-Adresse
-  structured.thinking.gschaider@gmail.com, dein Profilfeld mail gibt
-  genuinos@gmail.com an. Fuer die Sitzungsidentitaet ist der vom Clerk
+  <adresse>, dein Profilfeld mail gibt
+  <adresse> an. Fuer die Sitzungsidentitaet ist der vom Clerk
   bestaetigte Zustand massgeblich, und der lautet: andreas.
 
 Es hat richtig entschieden und trotzdem Arbeit an eine Unstimmigkeit gehaengt,
@@ -1885,7 +1885,7 @@ BEWIESEN mit einem Extraktor, der absichtlich luegt:
 An echtem Text: 4 Eintraege, 0 verworfen, je mit Belegstelle
   decision  Zero headless, Oberflaeche wird Chat
   fact      Uebersetzer 0,98
-  fact      Andreas ist genuinos@gmail.com
+  fact      Andreas ist <adresse>
   open_question  ob die Wegehierarchie Tunnel bekommt
 
 DAZU EIN ECHTER ROUTERFEHLER, gefunden weil die Extraktion nichts bekam:
@@ -1960,8 +1960,8 @@ User-Agent: Clerk 200 mit echten Daten, Groq antwortet im Klartext, dass das
 MODELL fehlt. Der Router setzt jetzt einen User-Agent, und der Grund steht als
 Kommentar daneben.
 Damit war endlich auch die Zuordnung gegen Clerk selbst pruefbar:
-  gabriel  user_3C1pnXkHAaS...  structured.thinking.gschaider@gmail.com
-  andreas  user_3C5R4TCSv9y...  genuinos@gmail.com, Dr. Andreas Unterweger
+  gabriel  user_3C1pnXkHAaS...  <adresse>
+  andreas  user_3C5R4TCSv9y...  <adresse>, Dr. Andreas Unterweger
 Beide bestaetigt.
 
 Suite unveraendert 479 gruen / 14 rot.
@@ -2111,7 +2111,7 @@ switch_platz on click, disabled while pending or already mid-switch so
 a switch cannot race an in-flight message. Composer and switcher share
 one enabled/disabled state.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### chat page: use the real ZeroAvatar component instead of a static SVG img
@@ -2128,7 +2128,7 @@ setzeZustand() with a real, justified state (+1/-1, grund = the actual
 outcome or error text) -- never a fabricated confidence score; while
 pending, the avatar stays in its honest unknown/neutral look.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare
@@ -2312,7 +2312,7 @@ alle 8 Werkzeuge und ruft udb_memory_add/search, udb_embedding_search
 erfolgreich auf (echter NVIDIA-API-Call, 200 OK). udb_neuropedia_activation
 faellt korrekt mit einer klaren Fehlermeldung aus (Schluessel fehlt noch).
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### udb: NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet aus Zulauf uebernommen und lauffaehig gemacht
@@ -2338,7 +2338,7 @@ geschwaerzt). Gegen echte APIs verifiziert, nicht nur gelesen:
 - Schluessel kommen bei jedem Aufruf frisch aus /etc/clayverse/freie-zugaenge.env
   (Hauskonvention aus werkzeuge.py:schluessel()), nie geloggt, nie committet.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### Merge PR #717: fence cross-attempt autonomous effect replay
@@ -2753,7 +2753,7 @@ Nächste Schritte:
 2. Parallele Vision-Stage implementieren
 3. Performance-Test: NVIDIA vs. Z.AI vs. Parallel
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: Claude <<adresse>>
 ```
 
 ### AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung
@@ -2772,7 +2772,7 @@ Issues:
 
 Empfehlung: Kaskade ohne Gemini deployen
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: Claude <<adresse>>
 ```
 
 ### AP11: Vision Cascade implementiert
@@ -2788,7 +2788,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 Offen: Echte Tests mit API-Keys laufen lassen
 
-Co-Authored-By: Claude <noreply@anthropic.com>
+Co-Authored-By: Claude <<adresse>>
 ```
 
 ### README: Kostenmodell F86, Auslieferungsform F87/F87b, Existenzbedingung F87c
@@ -2805,7 +2805,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - Widerlegt-Block und Lueckenliste ergaenzt, F1-F66 -> F1-F87c
 - Widerspruch behoben: 0,46 ms stand in Stand der Messungen noch nackt
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B17 geprueft: Anbietersuche 7-EUR-Vorgabe -> Fest-Plan-Ergebnis
@@ -2973,7 +2973,7 @@ widerlegt, sondern UNGEPRUEFT.
 Und: 8 von 27 Raeumen sind zweiseitig, 19 einseitig. Zwei Drittel sind keine
 Raeume. Das ist der naechste Hebel, nicht die Kaskade.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B27 geprueft: moeglichkeitsraum: Erwartungsfeld aus paket() hypothesen/gegenseite (F56/F62)
@@ -3009,7 +3009,7 @@ vs c=2.53 -- kein Vorteil messbar. Entwurf NICHT bestaetigt, auch nicht
 widerlegt: Mechanismus korrekt, Metrik/Domaene brauchen Nacharbeit. Kein
 ClayVerse-Bildkorpus vorhanden (F58, blockiert) -- Test lief auf Text.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### README: hypothesen-Zeile auf den Endstand 11/20 nachgezogen
@@ -3024,7 +3024,7 @@ AMBIGUOUS-Sperre unangetastet blieb (identische resolution_class-Verteilung).
 Achte Korrektur einer veralteten Zahl an diesem Tag. Genau deshalb steht jetzt in
 dokumente/clayverse/README.md, dass im Zweifel bau/LIVE-STAND.md gilt.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### README: hypothesen auf 11/20 nachgezogen, doppelte Dateinamen und Alterung benannt
@@ -3043,7 +3043,7 @@ Zwei Befunde aus dem Doku-Lauf, beide sofort korrigiert statt liegengelassen:
    denen F48 warnt. Als bekannt und unaufgeraeumt gekennzeichnet, mit Angabe
    welche gilt - nicht still gelassen.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15
@@ -3147,7 +3147,7 @@ Bewusst NICHT enthalten: die generelle schreiben()-Funktion (welche
 Tabellen/Felder versioniert werden) -- das ist Formentscheidung nach
 F44 P2, gehoert vor AP3/AP5 abgeglichen, nicht im Alleingang gebaut.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F35-Auflage: Lesart-Nutzlast im Paket gekuerzt (+73,8% -> +7,2%, Ziel <30%)
@@ -3182,7 +3182,7 @@ nie, F24 Baugesetz, F42 Schwellen als Tore, F48/F49 Abgleichpflicht), den
 GRF-Verweis, die Sparsamkeitsregeln inklusive Caching, und AP1 bis AP14 mit je
 Ziel, Schatten, Invariante und Einstiegspunkt.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F54b Metadaten tragen die Korrelationen mit, und muessen trotzdem schrumpfen
@@ -3220,7 +3220,7 @@ von dort: eine Zahl im Verdichtat, die in keiner Quelle steht, wird verworfen.
 ABNAHME: Ziel ist Zeit bis zur Weiterarbeit runter. SCHATTEN ist die GROESSE
 der Sicht in Token, sie darf NICHT wachsen - das ist die harte Zahl.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F53 Schranke darf den Bau nicht aufhalten + F54 dynamische Gespraechsdatenbank
@@ -3262,7 +3262,7 @@ nur auf gezielten Abruf. Rechte 600, nie in ein Repo.
 GRUNDLINIE: die handgeschriebene Uebergabe von heute - sie hat funktioniert,
 also ist sie die zu schlagende Latte.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F52 DIE ZIELMETRIK: es muss fuer KI-Agenten etwas besser machen
@@ -3304,7 +3304,7 @@ Offen: pruefen ob der research-identity-guard F16s Formulierung wirklich abweist
 
 Steht auch oben in CLAUDE.md und in WEITERMACHEN.md.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B21 geprueft: F15-F49 gegen Bauplan abgeglichen
@@ -3350,7 +3350,7 @@ nur eine Ebene hoeher, und bestaetigt F44 Paragraph 2 im Feld.
 FOLGE: parallele Agenten duerfen nicht breit stagen - git add mit genau den
 eigenen Dateien, nie git add -A.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B7 geprueft: Schranke Luecke B behoben: sudo/doas/env vor FERN_ZERSTOEREND+FERN_HART (+ANFANG/NIE/DB_WERKZEUG) wird jetzt verschluckt
@@ -3422,7 +3422,7 @@ beides nicht.
 Launcher /usr/local/bin/clay-glm gebaut und echt getestet, chmod +x von der
 Schranke blockiert, braucht Gabriels Freigabe.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B17 fertig: GLM_API_KEY in freie-zugaenge.env aufgenommen
@@ -3461,7 +3461,7 @@ Der letzte Fall ist der verdaechtigste: ist wirklich neu stimmt selten. Wenn
 etwas nach fuenf Monaten Arbeit noch nie gedacht wurde, ist die wahrscheinlichere
 Erklaerung, dass man den Vorgaenger nicht gefunden hat.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F48 ABGLEICHPFLICHT: erst im Plan nachsehen, dann entscheiden
@@ -3496,7 +3496,7 @@ Nach F42 gehoert auch das in ein Tor: eine Entscheidung ohne Bauteil-Bezug
 sollte gar nicht annehmbar sein. bau.py nimmt schon heute keinen Schritt ohne
 Messung an, dieselbe Form.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F47b Berichtigung: an Frank v0.1 forschen heisst es auf dem VPS BAUEN
@@ -3522,7 +3522,7 @@ Ist-Stand bleibt [B] und nachzumessen: /etc/frank-v0.1/ existierte nicht, kein
 self.root-, ClayCode- oder UnifiedDB-Dienst, keine API. Der Zielkoerper ist
 definiert und leer. Erste Handlung ist also eine MESSUNG, kein Entwurf.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F47 Wofuer die 50 Prozent da sind: autonome Frank-v0.1-Forschung
@@ -3562,7 +3562,7 @@ PRUEFSATZ: nicht sind 50 Prozent verbraucht, sondern sind 50 Prozent verbraucht
 UND ist das Ergebnis gedeckt. Verbrauch ohne Deckung ist kein Fortschritt,
 sondern teurer Text.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B26 fertig: Clerk-Zugangsdaten in freie-zugaenge.env aufgenommen
@@ -3608,7 +3608,7 @@ Claude landet, traegt die Aufteilung. Werden sie nur erreicht WEIL Claude Dinge
 tut die GLM koennte, ist die Quote erfuellt und der Zweck verfehlt. Die Quote
 allein ist kein Erfolgsmass.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### CLAUDE.md: kurz fragen statt lang erklaeren ist ab jetzt fix, in jeder Sitzung
@@ -3625,7 +3625,7 @@ eingreifen, lange Texte halten ihn ab. Kein Stil, sondern ein
 Pruefmechanismus: eine kurze Frage ist billig zu pruefen, ein langer
 kohaerenter Text nicht - und genau das ist der oberste Fehler F43.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F45 Zu wenig ist reparierbar, zu viel ist IRREVERSIBEL
@@ -3665,7 +3665,7 @@ eine kurze Antwort OHNE Hinweis auf das Vorhandene ist nicht sparsam, sondern
 lueckenhaft. Gilt NICHT fuer die Aufzeichnungen: lang gehoert ins Archiv, kurz
 in die Antwort.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F44 Vier Architekturentscheidungen: Binary/DB-Trennung, Ausleger, Engineering-Gesetz, historische Baseline
@@ -3705,7 +3705,7 @@ fuer den Nutzen des Zustandssystems haben.
 DIE LERNINGS ALS REGELN R1 bis R4, und sie gehoeren nach F42 selbst ins Modul.
 Eine Regel, die nur im Text steht, ist noch nicht gebaut.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F43 DER OBERSTE ZU LOESENDE FEHLER: Kohaerenz ohne Deckung
@@ -3753,7 +3753,7 @@ klingt richtig, ist sie es nicht.
 Dieser Abschnitt selbst ist [B] - eine Auswertung von acht Faellen an EINEM
 Tag, kein Nachweis ueber Zeit. Falsifikator mitgeliefert.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F42 VORRANG: gemessener Wert ohne Bindung an die Handlung
@@ -3800,7 +3800,7 @@ Satz heisst noch nicht gebaut.
 Vierter Tagesbefund mit demselben Schluss (F29, F31, F37, F42): Struktur statt
 Vorsatz. Diesmal an einer ausdruecklich vereinbarten Schwelle.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F41 Bergungsbefund: Praemisse falsch, und es gibt eine METHODISCH SAUBERE MESSUNG
@@ -3845,7 +3845,7 @@ freie-zugaenge.env, gemessen 12. Und der webd-Dienst, vor dem ich warnte,
 existiert unter dem Namen gar nicht. F26, F34, F35, F38b und jetzt F41 - die
 Regel aus F35 kam einen Auftrag zu spaet.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F39 Urteil Kognitionstor BEHALTEN plus Sicherheitsfund, F40 intelligente Praeprozessoren
@@ -3886,7 +3886,7 @@ anbieten. INVARIANTE: ein Praeprozessor darf keinen Weg unerreichbar machen,
 nur unwahrscheinlicher - verengen ist nicht sperren. FALSIFIKATOR: mitlaufen
 lassen, wie oft die richtige Antwort AUSSERHALB des Ausschnitts lag.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F38b Berichtigung: F38 ist GABRIELS HYPOTHESE, nicht die Diagnose
@@ -3921,7 +3921,7 @@ vorgelegt? Zehn erklaeren nichts, Hunderte erklaeren alles.
 
 Bis zum Befund gilt F38 als [E] Hypothese, nicht als Befund.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F38 Die eigentliche Diagnose: 1000 Wege, keine Vorauswahl
@@ -3969,7 +3969,7 @@ Zugaenge, Module. Genau so fing Frank an.
 F37 ist nicht falsch, aber nachrangig: F38 erklaert warum es scheiterte, F37
 warum es niemand sah.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B25 fertig: Herzschlag + Kognitionstor (F20/F23, Punkt 3 der Arbeitsschlange)
@@ -4021,7 +4021,7 @@ sonst ist er kein Rueckfall sondern eine Vertuschung.
 
 H1 bis H4 gehen als PRUEFFRAGEN an die Bergungs-Instanz, nicht als Ergebnis.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F36 Franks Diagnose: die Mechanismen trugen, das Harness nicht
@@ -4066,7 +4066,7 @@ altes Harness stabil, waehrend er es vorher nicht tat, traegt die Diagnose.
 Reisst er weiter an derselben Stelle ab, lag es am Mechanismus. Fall fuer den
 Ablations-Rahmen.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F35 URTEIL Lesart-Achse BEHALTEN mit Auflage, und ein Muster in meinen Fehlern
@@ -4109,7 +4109,7 @@ widersprochen. Die Trennung Koordinator/Agent aus F30 ist damit nicht nur eine
 Kontextfrage, sondern auch eine Pruefschicht. Wer selbst baut, haette diese
 drei Fehler mitgebaut.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B27 fertig: paket() bekommt zweite Hyperpositions-Achse: LESART (wm_lesart)
@@ -4179,7 +4179,7 @@ ZWEI EIGENE FEHLER: ich habe eine veraltete Liste in den Auftrag geschrieben
 Fehler aus F26, zum zweiten Mal am selben Tag. Und ich habe eine Zielzahl
 gesetzt, ohne die Vordertuer vorher gelesen zu haben.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F32 Der Mistral-Auswerter liefert das So-NICHT mit
@@ -4219,7 +4219,7 @@ Wiederholung entfernt. Damit ist jeder Eintrag falsifizierbar.
 INVARIANTE: beratend, nie sperrend. Sperren ist Sache des EffectGate. Ein
 Auswerter, der verhindern kann, waere eine Autoritaet.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F31 Was ich zu viel getan habe, und was ClayVerse daraus lernt
@@ -4260,7 +4260,7 @@ gebaut. Vorschlag: die Kern-Rolle bekommt schreibende Werkzeuge gar nicht.
 Grundlinie dagegen ist ein blosser Hinweis im Systemtext; ob der genuegt, ist
 zu messen. Ausnahme: Messen und Aufschreiben muessen moeglich bleiben.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### B27 geprueft: Selbstoeffner an die Vordertuer, Runde 2
@@ -4291,7 +4291,7 @@ Zaehlung Selbstoeffner (grep -l sqlite3.connect werkzeug/*.py): diese sechs
 Dateien bleiben in der Zaehlung, weil ihr Schreibzweig weiterhin
 sqlite3.connect nutzt -- das ist gewollt, kein halbfertiger Zustand.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F30 Arbeitsgesetz: der Koordinator baut NIE selbst
@@ -4324,7 +4324,7 @@ diesem Gesetz waere all das an Agenten gegangen.
 SCHAERFT F25: Clay soll wie Claude Code als KOORDINATOR sein, nicht als
 Bauarbeiter. Steht jetzt auch oben in CLAUDE.md auf dem Wirt.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### Werkzeug an die Vordertuer: benchmark_recall_wikidb liest jetzt ueber udb.verbindung()
@@ -4338,7 +4338,7 @@ und Wiederholung kommen jetzt von der einen Stelle statt lokal dupliziert.
 Backup vor der Aenderung: werkzeug/benchmark_recall_wikidb.py.vor-udb (nicht
 versioniert, wie beim messstand.py-Vorbild).
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F29 Messfehler: das eigene Messgeraet nicht benutzt
@@ -4376,7 +4376,7 @@ was sich nicht mechanisch treffen laesst, ist kein Ausloeser.
 
 Als Eintrag 18 auch in MESSFEHLER.md.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F28 Messkanal gebaut und geprueft - der vierte Absturz wird nicht spurlos sein
@@ -4415,7 +4415,7 @@ nicht lief.
 OFFEN: Andreas Rechner hat den Kanal nicht (er ist auch nicht der, der stirbt);
 quiet splash steht weiter in der Kernel-Zeile.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F27 Lokale VLM auf beiden Zwillingen nach dem Retina-Vorbild
@@ -4451,7 +4451,7 @@ vergleichen. Was nur mit Kontext erscheint, ist verdaechtig.
 GRUNDLINIE nach F24: Dateiname plus EXIF plus vorhandener Kontext, ganz ohne
 VLM. Ernst gemeint - bei Bildern aus bekannten Zusammenhaengen traegt das weit.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 
 ### F26 Berichtigung: die dokumentierte Sperre war falsch beschrieben
@@ -4480,6 +4480,6 @@ und WEITERMACHEN. Alle sagen AMBIGUOUS, gemeint ist die fehlende zweite Achse.
 LEHRE: eine notierte Luecke ist eine Erinnerung, keine Messung. Ich habe sie an
 vier Stellen weitergeschrieben, ohne sie am Code zu pruefen.
 
-Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

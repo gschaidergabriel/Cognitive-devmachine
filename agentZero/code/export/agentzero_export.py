@@ -607,6 +607,24 @@ def unifieddb_leer(manifest: dict) -> None:
     manifest["unifieddb"] = pruefung
 
 
+
+def _prosa_schwaerzen(text: str) -> str:
+    """Mailadressen und IPs aus PROSA entfernen (Commit-Texte, Berichte).
+
+    ⭐ Nur bei Prosa, nie bei Quelltext: eine geschwaerzte Begruendung bleibt
+    lesbar, eine geschwaerzte Quelldatei baut nicht. Deshalb wird Quelltext nur
+    GEMELDET (_quelltext_pruefen), Prosa aber geschwaerzt.
+
+    Anlass: eine Commit-Begruendung, in der erklaert wurde, dass eine Adresse
+    strittig sei, trug diese Adresse woertlich -- und wanderte so in den Export.
+    Die Dokumentation des Lecks war das Leck.
+    """
+    import re as _re
+    t = _re.sub(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", "<adresse>", text)
+    t = _re.sub(r"\b(?:[0-9]{1,3}\.){3}[0-9]{1,3}\b", "<adresse>", t)
+    return t
+
+
 def bauverlauf(manifest: dict) -> None:
     """Der Bauverlauf, vollstaendig -- inklusive Begruendungen, nicht nur Betreffzeilen.
 
@@ -632,7 +650,12 @@ def bauverlauf(manifest: dict) -> None:
             koerper = teile[4] if len(teile) > 4 else ""
             eintraege.append({
                 "repo": repo, "commit": h[:12], "zeit": datum, "autor": autor,
-                "betreff": schwaerzen(betreff), "begruendung": schwaerzen(koerper.strip()),
+                # schwaerzen() kennt Zugangsdaten, aber keine Mailadressen -- gefunden,
+                # weil MEIN eigener Commit-Text, der den Adressenstreit erklaert,
+                # die Adresse woertlich trug und so in den Export wanderte.
+                # Die Dokumentation des Lecks war das Leck.
+                "betreff": schwaerzen(_prosa_schwaerzen(betreff)),
+                "begruendung": schwaerzen(_prosa_schwaerzen(koerper.strip())),
                 "hat_begruendung": bool(koerper.strip()),
             })
     eintraege.sort(key=lambda x: x["zeit"], reverse=True)
@@ -698,7 +721,7 @@ def architektur(manifest: dict) -> None:
             else:
                 kat = "bau"
             zeilen.append({"repo": repo, "commit": h[:12], "zeit": datum,
-                           "autor": autor, "kategorie": kat, "betreff": schwaerzen(betreff)})
+                           "autor": autor, "kategorie": kat, "betreff": schwaerzen(_prosa_schwaerzen(betreff))})
     zeilen.sort(key=lambda x: x["zeit"], reverse=True)
     manifest["dateien"].append(schreibe(art / "aenderungen.jsonl", zeilen, jsonl=True))
 

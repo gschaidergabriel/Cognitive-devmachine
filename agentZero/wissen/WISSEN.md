@@ -1,6 +1,6 @@
 # Wissensartikel
 
-Automatisch erzeugt 2026-08-18T14:33:51Z. 11 Artikel -- Betriebswissen (wie deployt wird, Domains, Testpflicht) und Personenwissen (Rollen, wer entscheidet, wo Geheimnisse liegen) aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen durch `clayverse/wissen.py`.
+Automatisch erzeugt 2026-08-18T14:37:54Z. 12 Artikel -- Betriebswissen (wie deployt wird, Domains, Testpflicht) und Personenwissen (Rollen, wer entscheidet, wo Geheimnisse liegen) aus der gitignorierten Eigner-CLAUDE.md, geheimnisfrei uebertragen durch `clayverse/wissen.py`.
 
 ## Andreas: Rolle und Zustaendigkeit
 
@@ -91,6 +91,16 @@ NICHTS ERFINDEN. Keine ausgedachten Preise, Spezifikationen oder Merkmale. Bei U
 **Gehoert zu:** EntityOS / SeiMensch
 
 Die Artikeldaten stehen inline in leihmich/index.html (ITEMS-Array, CC-Map, CATS). ⚠️ Ein neuer Item-Slug MUSS zusaetzlich in LEIHMICH_SLUGS im Umfrage-Dienst eingetragen werden, sonst antwortet die Klickzaehlung mit 400. Bau-Lehre: nie json.dumps(CATS) global ersetzen -- das zieht Kommas in Kategorienamen zusammen und zerlegt die Filter. Index-Slicing nutzen und die JS-Datenbloecke vor dem Commit syntaktisch pruefen.
+
+## SeiMensch: wo alles liegt
+
+`wissen-seimensch-pfade` · EntityOS/entityos · 2026-08-18T14:36:11+0000
+
+**Wieso:** Zero fand den Deploy-Weg, aber keinen Pfad -- der Wissensartikel beantwortete die Frage nicht, fuer die er geschrieben wurde
+
+**Gehoert zu:** EntityOS / SeiMensch
+
+Arbeitskopie auf den Arbeitsrechnern: ~/seimensch-redesign -- ein Git-Klon des zentralen Repos, gemeinsame Arbeitskopie beider Menschen. Live-Wurzel auf dem VPS: /var/lib/agentforge/projects/12/seimensch/site/ -- vom Deploy-Hook befuellt und NICHT direkt zu editieren; eine Aenderung dort wird beim naechsten Push ueberschrieben. Darunter die eigenen Domainwurzeln: site/herzrad fuer herzrad.at, site/leihmich fuer leihmich.org. nginx-Konfiguration fuer seimensch.net: /etc/nginx/conf.d/seimensch-net.conf, statisch von der Platte, kein Neustart noetig. Deploy-Protokoll: /var/log/seimensch-deploy.log. Sicherungen vor jedem Deploy: /root/seimensch-backups/site-predeploy-*.tgz, die letzten 15. Rueckbau sauber ueber git revert und einen erneuten Push -- der Hook deployt dann den vorherigen Stand. ⚠️ Die ZUGANGSROUTE zum Repo (Benutzer und Adresse) steht NICHT hier, sondern im Tresor `zugaenge` unter SEIMENSCH_REPO_REMOTE. Wer den Pfad kennt, kann noch nichts; wer die Route kennt, kommt hin.
 
 ## SeiMensch: Pflicht vor jedem Push auf main
 

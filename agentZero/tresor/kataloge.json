@@ -441,12 +441,12 @@
         "zweck": "GitHub nutzerweit -- kann Repos auflisten, anders als der Deploy-Key"
       }
     ],
-    "geschrieben_vor_s": 1611,
+    "geschrieben_vor_s": 1854,
     "hinweis": "Katalog, kein Inhalt: hier steht, WAS es gibt und was es kann. Die Schluessel selbst verlassen den Serverteil nie -- ein Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.",
     "tresor": "api"
   },
   "zugaenge": {
-    "anzahl": 29,
+    "anzahl": 30,
     "eintraege": [
       {
         "art": "postfach",
@@ -621,9 +621,16 @@
         "geheim": true,
         "kennung": "OPENROUTER_API_KEY",
         "quelle": "/etc/clayverse/keys.env"
+      },
+      {
+        "art": "zugangsroute",
+        "geheim": true,
+        "kennung": "SEIMENSCH_REPO_REMOTE",
+        "quelle": "eigner:CLAUDE.md",
+        "zweck": "Git-Remote des SeiMensch-Repos; keyless SSH ist eingerichtet"
       }
     ],
-    "geschrieben_vor_s": 1611,
+    "geschrieben_vor_s": 102,
     "hinweis": "Katalog, kein Inhalt: hier steht, WAS es gibt und was es kann. Die Schluessel selbst verlassen den Serverteil nie -- ein Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.",
     "tresor": "zugaenge"
   }

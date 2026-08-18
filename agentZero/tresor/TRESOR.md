@@ -1,6 +1,6 @@
 # Tresor-Kataloge
 
-Automatisch erzeugt 2026-08-18T14:33:51Z. Zwei AES-256-GCM-Tresore unter `/etc/entityos/tresor` -- `katalog()` zeigt WAS es gibt und WAS es KANN (Modell, Limits je Minute/Tag, Zweck), nie den Wert selbst. `oeffnen()`/`wert()` liefern den Klartext und werden von diesem Export nie aufgerufen.
+Automatisch erzeugt 2026-08-18T14:37:54Z. Zwei AES-256-GCM-Tresore unter `/etc/entityos/tresor` -- `katalog()` zeigt WAS es gibt und WAS es KANN (Modell, Limits je Minute/Tag, Zweck), nie den Wert selbst. `oeffnen()`/`wert()` liefern den Klartext und werden von diesem Export nie aufgerufen.
 
 ## api (28 Eintraege)
 
@@ -35,7 +35,7 @@ Automatisch erzeugt 2026-08-18T14:33:51Z. Zwei AES-256-GCM-Tresore unter `/etc/e
 | NEUROPEDIA_API_KEY | NEUROPEDIA | oeffentliche Forschungsmodelle | /etc/clayverse/freie-zugaenge.env | keine Bahnangabe vorhanden |
 | GH_TOKEN | GITHUB | GitHub nutzerweit -- kann Repos auflisten, anders als der Deploy-Key | /etc/clayverse/github-token.env | github-api: - (-/min, -/Tag) |
 
-## zugaenge (29 Eintraege)
+## zugaenge (30 Eintraege)
 
 | Kennung | Art/Anbieter | Zweck | Quelle | Sonstiges |
 |---|---|---|---|---|
@@ -68,4 +68,5 @@ Automatisch erzeugt 2026-08-18T14:33:51Z. Zwei AES-256-GCM-Tresore unter `/etc/e
 | MISTRAL_API_KEY | betrieb |  | /etc/clayverse/keys.env | geheim |
 | NVIDIA_NIM_API_KEY | betrieb |  | /etc/clayverse/keys.env | geheim |
 | OPENROUTER_API_KEY | betrieb |  | /etc/clayverse/keys.env | geheim |
+| SEIMENSCH_REPO_REMOTE | zugangsroute | Git-Remote des SeiMensch-Repos; keyless SSH ist eingerichtet | eigner:CLAUDE.md | geheim |
 

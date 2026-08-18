@@ -1,58 +1,174 @@
-<!doctype html><html><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1"><title>EntityOS</title>
+<!doctype html><html lang="de"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>entityOS</title>
 <!-- __CLERK_API__ / __CLERK_PUBLISHABLE_KEY__ are server-substituted (html.escape'd)
      placeholders -- filled in by the route the same way key/api are filled into the
      terminal page today. Do not hardcode real values into this file. -->
 <script defer crossorigin="anonymous" src="__CLERK_API__/npm/@clerk/ui@1/dist/ui.browser.js"></script>
 <script defer crossorigin="anonymous" data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__" src="__CLERK_API__/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+<link rel="stylesheet" href="/web/schale/schale.css">
+<script defer src="/web/schale/schale.js"></script>
 <link rel="stylesheet" href="/web/avatare/zero-avatar.css">
 <script src="/web/avatare/zero-avatar.js"></script>
 <style>
-:root{color-scheme:dark;--bg:#0b0b0c;--panel:#141416;--bubble-user:#1f6feb22;--bubble-user-b:#1f6feb;--bubble-zero:#17181c;--bubble-zero-b:#2a2b30;--text:#e8e8ea;--muted:#8b8d94;--err:#ff5c5c}
-html,body{width:100%;height:100%;margin:0;background:var(--bg);color:var(--text);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow:hidden}
-#auth{height:100%;display:grid;place-items:center}
-#authError{position:fixed;top:0;left:0;right:0;padding:10px 16px;background:#3a1414;color:var(--err);font-size:13px;display:none;z-index:10;text-align:center}
-#chat{display:none;height:100%;flex-direction:column}
-header{flex:0 0 auto;padding:14px 22px;border-bottom:1px solid #232428;display:flex;align-items:center;gap:12px}
-header .title{font-weight:600}
-header .note{color:var(--muted);font-size:12px}
-#messages{flex:1 1 auto;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:16px}
-.msg{display:flex;gap:12px;max-width:78%}
-.msg-user{align-self:flex-end;flex-direction:row-reverse;max-width:78%}
-.msg-zero{align-self:flex-start}
-.avatar{width:34px;height:34px;flex:0 0 auto;border-radius:50%}
-.bubble{background:var(--bubble-zero);border:1px solid var(--bubble-zero-b);border-radius:14px;padding:10px 13px;white-space:pre-wrap;word-break:break-word}
-.msg-user .bubble{background:var(--bubble-user);border-color:var(--bubble-user-b)}
-.msg-error .bubble{background:#3a1414;border-color:#6b1f1f;color:var(--err)}
-.toggle-original{margin-top:8px;background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:0;text-decoration:underline}
-.toggle-original:hover{color:var(--text)}
-.original{margin-top:8px;border-top:1px dashed var(--bubble-zero-b);padding-top:8px;font-size:13px;color:var(--muted)}
-.original .caveman{color:#c7c8cc;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;white-space:pre-wrap}
-.original .receipt{margin-top:6px;font-size:11px;opacity:.75;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-.msg-pending .bubble{color:var(--muted)}
-.pending-note{display:block;margin-top:4px;font-size:12px;opacity:.8}
-#composer{flex:0 0 auto;border-top:1px solid #232428;padding:12px 14px;display:flex;gap:10px;align-items:flex-end}
-#text{flex:1 1 auto;resize:none;max-height:140px;min-height:22px;background:var(--panel);color:var(--text);border:1px solid #2a2b30;border-radius:10px;padding:10px 12px;font:inherit}
-#text:focus{outline:1px solid var(--bubble-user-b)}
-#send{flex:0 0 auto;background:var(--bubble-user-b);color:#fff;border:none;border-radius:10px;padding:10px 16px;font:inherit;cursor:pointer}
-#send:disabled{opacity:.5;cursor:default}
-#switcher{display:flex;gap:6px;margin-left:auto}
-.slot-btn{background:var(--panel);color:var(--muted);border:1px solid #2a2b30;border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
-.slot-btn.active{color:var(--text);border-color:var(--bubble-user-b);background:#132132}
-.slot-btn:disabled{opacity:.5;cursor:default}
-@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important}}
+/* Die Chatseite traegt keine eigene Farbtafel mehr -- sie lebt aus schale.css.
+   Was hier steht, ist nur noch das, was NUR der Chat hat. Eigene Farbwerte an
+   dieser Stelle waeren der zweite Dialekt. */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+
+/* Alles Lesbare haengt an EINEM Rand. Vorher lief auf 1440 px jede Nachricht
+   bis an die Bildschirmkante und die Eingabezeile klebte quer darunter -- zwei
+   Bruchstellen mit derselben Ursache: es gab keine Spalte, nur eine Flaeche.
+   Kopfzeile, Verlauf und Eingabe teilen sich jetzt dieselbe Kante. */
+#chat { --rand: max(16px, calc((100% - var(--spalte)) / 2)); }
+
+/* ── Anmeldung ───────────────────────────────────────────────────────── */
+#anmeldung { height: calc(100dvh - var(--schale-h)); margin-top: var(--schale-h);
+             display: flex; flex-direction: column; align-items: center;
+             justify-content: center; gap: 22px; }
+/* Auch hier steht der Name in seiner einen Schreibweise: entityOS. */
+.anmelde-marke { font-family: var(--schrift-marke); font-weight: 600;
+                 font-size: var(--s-34); letter-spacing: .01em; color: var(--text); }
+#authError { position: fixed; top: var(--schale-h); left: 0; right: 0; padding: 10px 16px;
+             background: #3a1414; color: var(--warn); font-size: var(--s-13);
+             display: none; z-index: 30; text-align: center; }
+
+#chat { display: none; height: 100dvh; padding-top: var(--schale-h); flex-direction: column; }
+
+/* ── Kopfzeile des Gespraechs ────────────────────────────────────────── */
+/* Knapp gehalten: sie nennt den Gespraechspartner und sagt einmal, warum die
+   Antwort am Stueck kommt. Der Satz bleibt woertlich stehen -- er ist die
+   ehrliche Ansage, dass es kein Wort-fuer-Wort gibt, und keine Verzierung. */
+.unterzeile { flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+              padding: 8px var(--rand); border-bottom: 1px solid var(--linie);
+              background: color-mix(in srgb, var(--flaeche) 70%, transparent); }
+.unterzeile .avatar { width: 26px; height: 26px; }
+.unterzeile .titel { font-family: var(--schrift-marke); font-weight: 600;
+                     font-size: var(--s-15); letter-spacing: .06em; }
+.unterzeile .note { flex: 1 1 240px; min-width: 0; color: var(--matt);
+                    font-size: var(--s-12); line-height: 1.3; }
+
+/* ── Verlauf ─────────────────────────────────────────────────────────── */
+#messages { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden;
+            padding: 24px var(--rand) 8px;
+            display: flex; flex-direction: column; gap: 16px; }
+
+/* Der leere Zustand. Vorher klaffte hier eine schwarze Flaeche, die aussah wie
+   ein Ladefehler. Jetzt steht in der Mitte, wer hier wartet und was dieses
+   Fenster ist -- KEINE Beispielnachrichten: ein erfundener Verlauf waere die
+   schlimmste Sorte Platzhalter, weil er sich wie Gedaechtnis liest.
+   Er verschwindet ohne eine Zeile Steuerlogik: sobald eine echte Nachricht im
+   Verlauf steht, ist er nicht mehr das einzige Kind. */
+#leer { margin: auto; display: flex; flex-direction: column; align-items: center;
+        gap: 14px; text-align: center; max-width: 440px; padding: 20px 0; }
+#messages > #leer:not(:only-child) { display: none; }
+#leer .z0feld { width: 72px; height: 72px; }
+#leer .name { font-family: var(--schrift-marke); font-weight: 600;
+              font-size: var(--s-24); letter-spacing: .12em; color: var(--text); }
+#leer p { margin: 0; color: var(--matt); font-size: var(--s-13); line-height: 1.55; }
+
+.msg { display: flex; gap: 12px; max-width: 78%; }
+.msg-user { align-self: flex-end; flex-direction: row-reverse; max-width: 78%; }
+.msg-zero { align-self: flex-start; }
+.avatar { width: 34px; height: 34px; flex: 0 0 auto; border-radius: 50%; }
+.bubble { background: var(--flaeche); border: 1px solid var(--linie);
+          border-radius: 14px; padding: 10px 13px;
+          white-space: pre-wrap; word-break: break-word; }
+/* Der Mensch traegt die kalte Kante. Das ist die einzige Stelle im ganzen Haus,
+   an der --kalt vorkommt: eigene Eingaben, eigene Nachrichten. */
+.msg-user .bubble { background: color-mix(in srgb, var(--kalt) 12%, var(--flaeche));
+                    border-color: color-mix(in srgb, var(--kalt) 65%, var(--linie)); }
+.msg-error .bubble { background: #3a1414; border-color: #6b1f1f; color: var(--warn); }
+.toggle-original { margin-top: 8px; background: none; border: none; color: var(--matt);
+                   font-size: var(--s-12); cursor: pointer; padding: 0; text-decoration: underline;
+                   font-family: inherit; }
+.toggle-original:hover { color: var(--text); }
+.original { margin-top: 8px; border-top: 1px dashed var(--linie); padding-top: 8px;
+            font-size: var(--s-13); color: var(--matt); }
+.original .caveman { color: #c7c8cc; font-family: var(--schrift-mono); font-size: var(--s-12);
+                     white-space: pre-wrap; }
+.original .receipt { margin-top: 6px; font-size: 11px; opacity: .75;
+                     font-family: var(--schrift-mono); }
+
+.msg-pending .bubble { color: var(--matt); }
+.pending-note { display: block; margin-top: 4px; font-size: var(--s-12); opacity: .8; }
+
+/* ── Verfassen ───────────────────────────────────────────────────────── */
+/* Gebunden statt angeklebt: dieselbe Spaltenkante wie die Nachrichten, eine
+   Trennlinie, die genau so breit ist wie sie, und darueber ein weicher Verlauf
+   statt einer harten Kante -- der Verlauf laeuft unter den letzten Nachrichten
+   aus, damit die Eingabe aus der Seite herauswaechst und nicht davorliegt. */
+#composer { position: relative; z-index: 1; flex: 0 0 auto;
+            padding: 12px var(--rand) 16px; background: var(--grund);
+            display: flex; gap: 10px; align-items: flex-end; }
+#composer::before { content: ""; position: absolute; left: 0; right: 0; top: -34px;
+                    height: 34px; pointer-events: none;
+                    background: linear-gradient(to top, var(--grund), transparent); }
+#composer::after { content: ""; position: absolute; top: 0; height: 1px;
+                   left: var(--rand); right: var(--rand); pointer-events: none;
+                   background: linear-gradient(90deg, transparent, var(--linie) 12%,
+                                               var(--linie) 88%, transparent); }
+#text { flex: 1 1 auto; resize: none; max-height: 140px; min-height: 22px;
+        background: var(--flaeche-hoch); color: var(--text); border: 1px solid var(--linie);
+        border-radius: var(--rundung); padding: 11px 13px;
+        font: var(--s-15)/1.45 var(--schrift-text); }
+#text::placeholder { color: var(--matt); }
+#text:focus { outline: none; border-color: color-mix(in srgb, var(--signal) 60%, var(--linie));
+              background: var(--flaeche); }
+#text:focus-visible { outline: none; }
+/* Senden ist die Wirkung dieser Seite -- also traegt der Knopf die Signalfarbe
+   und nicht das kalte Blau. Kalt gehoert dem, was der Mensch SAGT; das Signal
+   gehoert dem, was das System TUT. */
+#send { flex: 0 0 auto; background: var(--signal); color: #06120b; border: none;
+        border-radius: var(--rundung); padding: 11px 20px; cursor: pointer;
+        font-family: var(--schrift-marke); font-weight: 600; font-size: var(--s-13);
+        letter-spacing: .08em; text-transform: uppercase;
+        transition: filter 160ms ease, opacity 160ms ease; }
+#send:hover:not(:disabled) { filter: brightness(1.12); }
+#send:disabled { opacity: .35; cursor: default; }
+
+#switcher { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.slot-btn { background: transparent; color: var(--matt); border: 1px solid var(--linie);
+            border-radius: 4px; padding: 5px 9px; cursor: pointer;
+            font-family: var(--schrift-mono); font-size: var(--s-12); }
+.slot-btn.active { color: var(--text); border-color: var(--signal);
+                   background: color-mix(in srgb, var(--signal) 12%, transparent); }
+.slot-btn:disabled { opacity: .5; cursor: default; }
+
+@media (max-width: 640px) {
+  #chat { --rand: 12px; }
+  .unterzeile { flex-wrap: wrap; gap: 8px; padding: 8px 12px; }
+  .unterzeile .note { font-size: 11px; flex-basis: 100%; order: 3; }
+  #switcher { margin-left: auto; }
+  #messages { padding-top: 16px; }
+  .msg, .msg-user { max-width: 92%; }
+  #leer .z0feld { width: 58px; height: 58px; }
+  .anmelde-marke { font-size: var(--s-24); }
+}
+@media (prefers-reduced-motion: reduce){ * { scroll-behavior: auto !important; } }
 </style></head>
 <body>
+<header id="entityos-schale"></header>
 <div id="authError"></div>
-<div id="auth"></div>
+<div id="anmeldung">
+  <div class="anmelde-marke">entity<span class="eos-marke-os">OS</span></div>
+  <div id="auth"></div>
+</div>
 <div id="chat">
-  <header>
+  <div class="unterzeile">
     <div class="avatar" id="headerAvatar"></div>
-    <div><div class="title">Zero</div>
-    <div class="note">Antworten kommen vollständig, nicht Wort für Wort — Zero und der Übersetzer brauchen die ganze Antwort, bevor du sie siehst.</div></div>
+    <div class="titel">Zero</div>
+    <div class="note">Antworten kommen vollständig, nicht Wort für Wort — Zero und der Übersetzer brauchen die ganze Antwort, bevor du sie siehst.</div>
     <div id="switcher"></div>
-  </header>
-  <div id="messages"></div>
+  </div>
+  <div id="messages">
+    <div id="leer">
+      <div class="z0feld" id="leerAvatar"></div>
+      <div class="name">Zero</div>
+      <p>Dieses Fenster ist leer. Frühere Nachrichten werden hier nicht nachgeladen — was du siehst, ist dieser Besuch.</p>
+    </div>
+  </div>
   <div id="composer">
     <textarea id="text" rows="1" placeholder="Nachricht an Zero…"></textarea>
     <button id="send">Senden</button>
@@ -64,10 +180,17 @@ window.addEventListener('load', async () => {
   const auth=document.getElementById('auth'); const chat=document.getElementById('chat');
   const authError=document.getElementById('authError');
   if (!Clerk.isSignedIn) { Clerk.mountSignIn(auth); return; }
-  auth.style.display='none'; chat.style.display='flex';
+  document.getElementById('anmeldung').style.display='none'; chat.style.display='flex';
+
+  // Die Schale misst den Zustand fuer beide Seiten und braucht dafuer ein Token.
+  // Erst hier ist sicher, dass jemand angemeldet ist.
+  if (window.EntityOS) EntityOS.anmeldungBereit(() => Clerk.session.getToken());
 
   if (window.ZeroAvatar) {
     ZeroAvatar.erzeugen(document.getElementById('headerAvatar'), {aktiv:false});
+    // Der Avatar im leeren Zustand glitcht: er ist das Einzige, was hier steht,
+    // also darf er der aktive sein.
+    ZeroAvatar.erzeugen(document.getElementById('leerAvatar'), {aktiv:true});
   }
 
   const messages=document.getElementById('messages');
@@ -111,6 +234,12 @@ window.addEventListener('load', async () => {
     bubble.textContent='Zero antwortet noch nicht.';
     const note=document.createElement('span'); note.className='pending-note';
     note.textContent='Kein Live-Text — die Antwort erscheint erst vollständig übersetzt.';
+    // Ein Blockcursor am Satzende, sonst nichts. Warten sieht sonst genauso aus
+    // wie Haengen -- aber der Cursor behauptet auch keinen Fortschritt, denn
+    // diese Seite weiss nicht, wie weit Zero ist.
+    const cursor=document.createElement('span');
+    cursor.className='eos-cursor'; cursor.setAttribute('aria-hidden','true');
+    note.appendChild(cursor);
     bubble.appendChild(note);
     row.appendChild(bubble);
     messages.appendChild(row); scrollDown();
@@ -148,6 +277,8 @@ window.addEventListener('load', async () => {
     if (pendingRow.__zeroAv) {
       pendingRow.__zeroAv.setzeZustand({wert:1, grund:'Antwort vollständig erhalten und übersetzt', quelle:'pipeline'});
     }
+    // Warten -> Antwort ist ein echter Wechsel, und Wechsel duerfen reissen.
+    if (window.EntityOS) EntityOS.riss(bubble);
     scrollDown();
   }
 
@@ -230,7 +361,7 @@ window.addEventListener('load', async () => {
       return;
     }
     if(m.type==='error'){
-      if(!chatReady){ authError.textContent='EntityOS: '+m.message; authError.style.display='block'; return; }
+      if(!chatReady){ authError.textContent='entityOS: '+m.message; authError.style.display='block'; return; }
       setComposerEnabled(true);
       if(pendingRow){ replaceWithError(pendingRow, m.message); pendingRow=null; }
       else { addStandaloneError(m.message); }

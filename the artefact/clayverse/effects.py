@@ -20,7 +20,13 @@ class EffectRequest:
 
 
 class EffectGate:
-    ALLOWED = {"entityos.exec", "process.exec", "state.noop"}
+    # "postfach.senden" ist seit 2026-08-18 dabei: eine hinausgehende Mail ist
+    # eine Wirkung wie jede andere und bekommt hier ihr Urteil. Sie steht
+    # bewusst NICHT in den engeren Listen der Modellwege
+    # (mcp_server.request_effect, inference_protocol.ALLOWED_INFERENCE_EFFECTS,
+    # autonomy.EFFECT_CAPABILITIES) -- Mail ist ein Weg fuer den Menschen an
+    # der Oberflaeche, nicht fuer Zero.
+    ALLOWED = {"entityos.exec", "process.exec", "state.noop", "postfach.senden"}
     AUTO_LEASE_TTL = 300.0
     ENTITYOS_EFFECT_RESOURCE = "effect:entityos.exec"
     AUTONOMY_SOURCE = "clayverse-autonomy:goal-step"
@@ -30,16 +36,25 @@ class EffectGate:
         db: UnifiedDB,
         allow_process: bool = False,
         entityos_bridge: EntityOSBridge | None = None,
+        postfach_sender=None,
     ):
         self.db = db
         self.allow_process = allow_process
         self.entityos_bridge = entityos_bridge
+        # Derselbe Bau wie entityos_bridge: das Tor faellt das Urteil, der
+        # angeschlossene Wirker fuehrt aus. Ohne Wirker gibt es kein Ergebnis,
+        # sondern ein begruendetes DENIED.
+        self.postfach_sender = postfach_sender
         self.journal = EffectJournal(db)
 
     def available_capabilities(self):
         capabilities = {"state.noop"}
         if self.entityos_bridge is not None:
             capabilities.add("entityos.exec")
+        # postfach.senden erscheint hier absichtlich nicht: diese Liste geht in
+        # den Weltzustand, den Zero liest. Eine Faehigkeit anzuzeigen, die es
+        # ueber keinen seiner Wege anfordern kann, waere eine Einladung, sie zu
+        # behaupten.
         return tuple(sorted(capabilities))
 
     def causal_for_effect(self, effect_id):
@@ -194,6 +209,38 @@ class EffectGate:
                     "target": req.target,
                     "boundary": "internal",
                 }
+                self.journal.complete_verified(
+                    effect_id,
+                    outcome,
+                    req.session_id,
+                    req.user_id,
+                    generation,
+                    lease,
+                )
+                return effect_id, outcome
+            if req.capability == "postfach.senden":
+                if self.postfach_sender is None:
+                    outcome = {
+                        "ok": False,
+                        "denied": True,
+                        "reason": "postfach_unavailable",
+                        "target": req.target,
+                        "boundary": "Postfach",
+                    }
+                    self.journal.complete(effect_id, outcome, "DENIED")
+                    return effect_id, outcome
+                try:
+                    outcome = dict(self.postfach_sender(req))
+                    outcome["boundary"] = "Postfach"
+                except Exception as exc:
+                    # Nur der Ausnahmetyp, nie der Text: eine SMTP-Antwort kann
+                    # Zugangsdaten tragen, und der Beleg ist dauerhaft.
+                    self.journal.complete(
+                        effect_id,
+                        {"ok": False, "error": type(exc).__name__, "boundary": "Postfach"},
+                        "FAILED",
+                    )
+                    raise
                 self.journal.complete_verified(
                     effect_id,
                     outcome,

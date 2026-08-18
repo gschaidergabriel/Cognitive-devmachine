@@ -59,6 +59,16 @@ services:
       # aber nicht schreiben. Werte duerfen NIE in UnifiedDB-Zeilen, Snapshots,
       # Quittungen oder Logs landen (Produktgesetz).
       - /etc/clayverse/freie-zugaenge.env:/etc/clayverse/freie-zugaenge.env:ro
+      # Postfachzugaenge der zwei Menschen (Adresse + Passwort) und der
+      # IMAP/SMTP-Wirt. Read-only, 640 root:clay -- derselbe Weg wie die Zeile
+      # darueber: uid 5001 liest, schreiben kann sie nicht. Bewusst eine Datei
+      # und keine Umgebungsvariablen: ein Passwort in der Prozessumgebung
+      # stuende in jedem Absturzbericht des Dienstes.
+      # Die Werte duerfen NIE in UnifiedDB-Zeilen, Snapshots, Quittungen oder
+      # Logs landen (Produktgesetz). Im Beleg einer gesendeten Mail stehen
+      # deshalb nur Empfaenger, Betreff, Zeit, Urteil und eine Pruefsumme --
+      # nicht der Mailtext und unter keinen Umstaenden ein Zugang.
+      - /etc/entityos/postfach.env:/etc/entityos/postfach.env:ro
     read_only: true
     tmpfs:
       - /tmp:size=64m,noexec,nosuid,nodev

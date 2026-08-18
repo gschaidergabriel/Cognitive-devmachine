@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Postfach — EntityOS</title>
+
+<!-- __CLERK_API__ / __CLERK_PUBLISHABLE_KEY__ werden server-seitig ersetzt
+     (html.escape), genau wie auf der Chatseite. Echte Schluessel gehoeren NIE
+     in diese Datei -- sie liegt im Git und wird ins Image gebacken. -->
+<script defer crossorigin="anonymous" src="__CLERK_API__/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+<script defer crossorigin="anonymous" data-clerk-publishable-key="__CLERK_PUBLISHABLE_KEY__" src="__CLERK_API__/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+
+<!-- Farbtafel, Schriften und Bewegungsgrundlage kommen aus der Schale.
+     Hier wird nichts davon ein zweites Mal definiert -- ein zweiter Dialekt
+     waere genau der Fehler, den das Designsystem verhindern soll. -->
+<link rel="stylesheet" href="/web/schale/schale.css">
+<link rel="stylesheet" href="/web/postfach/postfach.css">
+<script src="/web/schale/schale.js" defer></script>
+<script src="/web/postfach/postfach.js" defer></script>
+</head>
+<body>
+<header id="entityos-schale"></header>
+
+<!-- Die Anmeldung haengt vor allem anderen: ohne geprueftes Clerk-Token gibt es
+     kein Postfach, und eine Oberflaeche ohne Daten waere nur eine Attrappe. -->
+<div id="pf-anmeldung" hidden></div>
+
+<!-- Ein Ausfall der Anmeldung selbst ist etwas anderes als ein Ausfall des
+     Postfachs: er trifft die ganze Seite und steht deshalb ganz oben. -->
+<p id="pf-anmeldefehler" class="pf-anmeldefehler" role="alert" hidden></p>
+
+<main id="pf" class="pf" data-ansicht="liste" hidden>
+
+  <nav class="pf-ordner" id="pf-ordnerspalte" aria-label="Ordner">
+    <button type="button" class="pf-neu" id="pf-neu">Verfassen</button>
+
+    <ul class="pf-ordnerliste" id="pf-ordnerliste">
+      <li class="pf-hinweis">Ordner werden geladen …</li>
+    </ul>
+
+    <!-- Erscheint erst, wenn der Server tatsaechlich System-Postfaecher
+         herausgibt. Kein clientseitiges "ich bin wohl Admin" -- das waere
+         geraten, und geraten ist in diesem Projekt verboten. -->
+    <button type="button" class="pf-systemknopf" id="pf-systemknopf" hidden>
+      System-Postfächer
+    </button>
+
+    <button type="button" class="pf-tastenknopf" id="pf-tastenknopf">Tastenkürzel</button>
+  </nav>
+
+  <section class="pf-liste" aria-label="Mailliste">
+    <div class="pf-listenkopf">
+      <button type="button" class="pf-schmalknopf" id="pf-ordner-auf" aria-label="Ordner zeigen">Ordner</button>
+      <h1 class="pf-titel" id="pf-titel">Posteingang</h1>
+      <span class="pf-anzahl" id="pf-anzahl" role="status"></span>
+      <span class="pf-fueller"></span>
+      <button type="button" class="pf-kopfknopf" id="pf-alle-gelesen">Alle als gelesen</button>
+      <button type="button" class="pf-kopfknopf" id="pf-neuladen">Neu laden</button>
+    </div>
+
+    <form class="pf-suchzeile" id="pf-suchform" role="search">
+      <input type="search" id="pf-suchfeld" class="pf-suchfeld"
+             placeholder="Suchen" aria-label="Im Ordner suchen" autocomplete="off">
+      <button type="submit" class="pf-kopfknopf">Suchen</button>
+    </form>
+
+    <div class="pf-mails" id="pf-mails"></div>
+
+    <div class="pf-blaettern" id="pf-blaettern" hidden>
+      <button type="button" class="pf-kopfknopf" id="pf-seite-zurueck">Zurück</button>
+      <span class="pf-seiteninfo" id="pf-seiteninfo"></span>
+      <button type="button" class="pf-kopfknopf" id="pf-seite-vor">Weiter</button>
+    </div>
+  </section>
+
+  <section class="pf-lese" id="pf-lese" aria-label="Lesefeld" tabindex="-1"></section>
+</main>
+
+<!-- Meldungen sagen, was passiert IST -- gleiche Wortwahl wie der Knopf,
+     der es ausgeloest hat ("Senden" -> "Gesendet"). -->
+<div class="pf-meldung" id="pf-meldung" role="status" aria-live="polite" hidden></div>
+
+<!-- Zerstoerendes fragt vorher. <dialog> statt eigenem Overlay: der Browser
+     bringt Fokusfalle, Escape und Hintergrund-Sperre selbst mit. -->
+<dialog class="pf-dialog" id="pf-frage">
+  <form method="dialog">
+    <h2 class="pf-dialogtitel" id="pf-fragetitel"></h2>
+    <p class="pf-dialogtext" id="pf-fragetext"></p>
+    <div class="pf-dialogknoepfe">
+      <button type="submit" value="nein" class="pf-kopfknopf" id="pf-frage-nein">Abbrechen</button>
+      <button type="submit" value="ja" class="pf-warnknopf" id="pf-frage-ja"></button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="pf-dialog" id="pf-tastendialog">
+  <form method="dialog">
+    <h2 class="pf-dialogtitel">Tastenkürzel</h2>
+    <dl class="pf-tastenliste">
+      <dt>j · ↓</dt><dd>eine Mail weiter</dd>
+      <dt>k · ↑</dt><dd>eine Mail zurück</dd>
+      <dt>Enter</dt><dd>Mail öffnen</dd>
+      <dt>n</dt><dd>Verfassen</dd>
+      <dt>a</dt><dd>Antworten</dd>
+      <dt>w</dt><dd>Weiterleiten</dd>
+      <dt>u</dt><dd>gelesen / ungelesen umschalten</dd>
+      <dt>Entf · ⌫</dt><dd>Löschen (fragt nach)</dd>
+      <dt>s</dt><dd>Als Spam (fragt nach)</dd>
+      <dt>/</dt><dd>in die Suche springen</dd>
+      <dt>Esc</dt><dd>zurück zur Liste</dd>
+      <dt>Strg + Enter</dt><dd>im Verfassen: Senden</dd>
+      <dt>?</dt><dd>diese Liste</dd>
+    </dl>
+    <div class="pf-dialogknoepfe">
+      <button type="submit" class="pf-kopfknopf">Schließen</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Der Admin-Postfachbetrachter aus dem Vorbild: Reiter je System-Postfach,
+     Liste, Lesen, Verfassen. Bleibt ausdruecklich erhalten. -->
+<dialog class="pf-dialog pf-sysdialog" id="pf-sysdialog" aria-label="System-Postfächer">
+  <div class="pf-syskopf">
+    <div>
+      <h2 class="pf-dialogtitel">System-Postfächer</h2>
+      <p class="pf-dialogtext" id="pf-syserklaerung">
+        Postfächer, die keinem Menschen gehören. Lesen, Antworten und Verfassen aus der jeweiligen Adresse.
+      </p>
+    </div>
+    <div class="pf-dialogknoepfe">
+      <button type="button" class="pf-kopfknopf" id="pf-sys-verfassen">Verfassen</button>
+      <button type="button" class="pf-kopfknopf" id="pf-sys-schliessen">Schließen</button>
+    </div>
+  </div>
+  <div class="pf-sysreiter" id="pf-sysreiter" role="tablist"></div>
+  <div class="pf-syskoerper">
+    <div class="pf-sysliste" id="pf-sysliste"></div>
+    <div class="pf-syslese" id="pf-syslese"></div>
+  </div>
+</dialog>
+
+</body>
+</html>

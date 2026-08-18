@@ -1,0 +1,672 @@
+/* Postfach. Gehoert zu postfach.js -- eines ohne das andere ist nutzlos.
+   ═══════════════════════════════════════════════════════════════════════
+   Farbtafel (--grund, --flaeche, --linie, --text, --matt, --signal, --kalt,
+   --warn) und die drei Schriftfamilien kommen aus web/schale/schale.css.
+   Hier wird KEINE davon neu gesetzt: zwei Definitionen derselben Farbe sind
+   zwei Wahrheiten, und eine davon veraltet garantiert. --signal lebt (es
+   haengt am gemessenen Zustand) -- deshalb steht es hier ueberall dort, wo
+   die Seite "das ist frisch/wichtig" meint, und nie eine feste Farbe. */
+
+/* ── Grundgeruest ────────────────────────────────────────────────────────
+   Die Schale ist 56 px hoch und steht fest. Das Postfach bekommt exakt den
+   Rest -- 100dvh statt 100vh, weil die Adressleiste am Handy sonst die
+   Fusszeile der Liste verschluckt. */
+/* Rand, Grund, Textfarbe und Grundschrift stehen bereits in schale.css.
+   Hier kommt nur dazu, was diese Seite braucht: gescrollt wird in den
+   Spalten, nicht im Dokument. */
+body { overflow: hidden; }
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Muss stehen, BEVOR eigene display-Regeln kommen: das hidden-Attribut ist
+   nur eine UA-Regel mit schwacher Spezifitaet -- jedes spaetere display:grid
+   oder display:flex schaltet ein verstecktes Element wieder sichtbar. Genau
+   so entstehen Oberflaechen, die vor der Anmeldung schon alles zeigen. */
+[hidden] { display: none !important; }
+
+/* Die Anmeldung bekommt die volle Restflaeche: Clerk montiert seine eigene
+   Karte hinein und braucht Platz und eine Mitte. */
+#pf-anmeldung {
+  display: grid;
+  place-items: center;
+  margin-top: var(--schale-h, 56px);
+  min-height: calc(100dvh - var(--schale-h, 56px));
+  overflow-y: auto;
+}
+
+.pf {
+  display: grid;
+  grid-template-columns: 200px minmax(280px, 1fr) minmax(340px, 1.5fr);
+  /* Die Schale liegt fest ueber der Seite. Ohne diesen Abstand steckt die
+     erste Mailzeile hinter der Leiste -- und zwar unsichtbar, weil die
+     Leiste einen Weichzeichner traegt. */
+  margin-top: var(--schale-h, 56px);
+  height: calc(100dvh - var(--schale-h, 56px));
+  min-height: 0;
+}
+/* min-width:0 auf allen Spalten: ohne das sprengt eine lange Betreffzeile
+   das Raster nach rechts auf -- die haeufigste Ursache fuer waagrechtes
+   Scrollen in dreispaltigen Oberflaechen. */
+.pf > * { min-width: 0; min-height: 0; }
+
+.pf-anmeldefehler {
+  position: fixed;
+  top: var(--schale-h, 56px);
+  left: 0;
+  right: 0;
+  z-index: 39;
+  margin: 0;
+  padding: 10px 16px;
+  background: color-mix(in srgb, var(--warn) 16%, var(--grund));
+  color: var(--warn);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ── Ordnerspalte ────────────────────────────────────────────────────── */
+.pf-ordner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 10px;
+  border-right: 1px solid var(--linie);
+  background: var(--flaeche);
+  overflow-y: auto;
+}
+
+.pf-neu {
+  font-family: var(--schrift-marke);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 9px 12px;
+  color: var(--grund);
+  background: var(--signal);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.pf-neu:hover { filter: brightness(1.12); }
+
+.pf-ordnerliste { list-style: none; margin: 0; padding: 0; flex: 1 1 auto; }
+
+.pf-ordnerknopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 9px;
+  border: 0;
+  border-left: 2px solid transparent;
+  background: none;
+  color: var(--matt);
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+.pf-ordnerknopf:hover { color: var(--text); background: var(--flaeche-hoch); }
+.pf-ordnerknopf[aria-current="true"] {
+  color: var(--text);
+  background: var(--flaeche-hoch);
+  border-left-color: var(--signal);
+}
+.pf-ordnername { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Der Zaehler ist eine Zahl, also Mono -- und er steht nur da, wenn er
+   wirklich gezaehlt wurde. Eine 0 wird nicht angezeigt, ein unbekannter
+   Wert erst recht nicht. */
+.pf-ordnerzahl {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--signal);
+}
+
+.pf-systemknopf, .pf-tastenknopf {
+  padding: 7px 9px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: none;
+  color: var(--matt);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.pf-systemknopf:hover, .pf-tastenknopf:hover { color: var(--text); border-color: var(--signal); }
+
+.pf-hinweis { color: var(--matt); font-size: 13px; padding: 8px 9px; margin: 0; }
+
+/* ── Mittelspalte: Liste ─────────────────────────────────────────────── */
+.pf-liste {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--linie);
+  background: var(--grund);
+}
+
+.pf-listenkopf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--linie);
+  flex: 0 0 auto;
+}
+.pf-titel {
+  font-family: var(--schrift-marke);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-anzahl {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+  white-space: nowrap;
+}
+.pf-fueller { flex: 1 1 auto; }
+
+.pf-kopfknopf, .pf-warnknopf, .pf-schmalknopf {
+  padding: 5px 10px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: var(--flaeche);
+  color: var(--matt);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pf-kopfknopf:hover, .pf-schmalknopf:hover { color: var(--text); border-color: var(--signal); }
+.pf-kopfknopf[disabled] { opacity: .45; cursor: default; }
+.pf-warnknopf { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 45%, var(--linie)); }
+.pf-warnknopf:hover { background: color-mix(in srgb, var(--warn) 14%, var(--flaeche)); }
+
+.pf-schmalknopf { display: none; }   /* nur im gestapelten Zustand sichtbar */
+
+.pf-suchzeile {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--linie);
+  flex: 0 0 auto;
+}
+.pf-suchfeld {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 9px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: var(--flaeche);
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+.pf-suchfeld::placeholder { color: var(--matt); }
+
+.pf-mails { flex: 1 1 auto; overflow-y: auto; overflow-x: hidden; }
+
+.pf-mail {
+  display: block;
+  width: 100%;
+  padding: 9px 12px 9px 9px;
+  border: 0;
+  border-bottom: 1px solid var(--linie);
+  border-left: 3px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.pf-mail:hover { background: var(--flaeche); }
+/* Die gewaehlte Zeile wird mit der lebenden Signalfarbe getoent statt mit
+   einer eigenen Auswahlfarbe -- eine zweite Buntheit waere ein zweiter
+   Dialekt, und die Farbtafel kennt nur eine. */
+.pf-mail[aria-current="true"] { background: color-mix(in srgb, var(--signal) 9%, var(--flaeche-hoch)); }
+
+/* Ungelesen traegt die Signalfarbe als linke Kante -- das ist die eine
+   Stelle, an der die Liste bunt wird. Fett allein reicht nicht: in einer
+   langen Liste sieht man Gewicht schlechter als eine Kante. */
+.pf-mail.pf-ungelesen { border-left-color: var(--signal); }
+.pf-mail.pf-ungelesen .pf-mail-von,
+.pf-mail.pf-ungelesen .pf-mail-betreff { color: var(--text); font-weight: 600; }
+
+.pf-mail-zeile { display: flex; gap: 8px; align-items: baseline; }
+/* Absender und Datum sind Mailkopf-Daten -> Mono. Das ist der Grund, warum
+   eine Mailliste im Terminalkleid ueberhaupt lesbar wirkt: gleiche
+   Zeichenbreite, die Spalte steht. */
+.pf-mail-von {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-mail-datum {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+  flex: 0 0 auto;
+}
+.pf-mail-betreff {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--matt);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-mail-auszug {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--matt);
+  opacity: .75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.pf-mail-klammer {
+  font-family: var(--schrift-mono);
+  font-size: 11px;
+  color: var(--matt);
+}
+
+.pf-blaettern {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--linie);
+  flex: 0 0 auto;
+}
+.pf-seiteninfo {
+  flex: 1 1 auto;
+  text-align: center;
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+}
+
+/* ── Rechte Spalte: Lesen / Verfassen ────────────────────────────────── */
+.pf-lese { overflow-y: auto; overflow-x: hidden; padding: 16px 18px 28px; }
+
+.pf-zurueck {
+  display: none;                     /* nur im gestapelten Zustand */
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: var(--flaeche);
+  color: var(--matt);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.pf-betreff {
+  font-family: var(--schrift-marke);
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  overflow-wrap: anywhere;           /* eine Betreffzeile ohne Leerzeichen darf die Spalte nicht sprengen */
+}
+
+/* Der Mailkopf ist ein Beleg, kein Fliesstext -> durchgehend Mono. */
+.pf-kopf {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--linie);
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+}
+.pf-kopf dt { color: var(--matt); }
+.pf-kopf dd { margin: 0; color: var(--text); overflow-wrap: anywhere; }
+
+.pf-adresse {
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: var(--kalt);
+  cursor: pointer;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.pf-adresse:hover { text-decoration: underline; }
+
+.pf-anhaenge { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.pf-anhang {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 9px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: var(--flaeche);
+  color: var(--text);
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  cursor: pointer;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: left;                  /* Knoepfe zentrieren von Haus aus -- ein umgebrochener Dateiname sieht sonst verrutscht aus */
+}
+.pf-anhang:hover { border-color: var(--signal); }
+.pf-anhang-groesse { color: var(--matt); }
+
+.pf-werkzeuge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--linie);
+}
+
+.pf-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  margin: 0;
+  font-family: inherit;
+}
+
+/* HTML-Mail laeuft in einem abgeriegelten Rahmen: kein Skript, kein Zugriff
+   auf diese Seite, und fremde Bilder erst nach ausdruecklichem Klick. Eine
+   HTML-Mail ist fremder Code -- sie wird angezeigt, nicht ausgefuehrt. */
+.pf-htmlrahmen {
+  width: 100%;
+  height: 62vh;
+  min-height: 300px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: #fff;                  /* HTML-Mails sind fuer hellen Grund gebaut */
+  resize: vertical;
+}
+.pf-htmlnotiz { font-size: 12px; color: var(--matt); margin: 8px 0 0; }
+
+/* ── Verfassen ───────────────────────────────────────────────────────── */
+.pf-feldgruppe { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; position: relative; }
+.pf-feldreihe { display: flex; gap: 10px; flex-wrap: wrap; }
+.pf-feldreihe > .pf-feldgruppe { flex: 1 1 160px; }
+.pf-feldname {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+  letter-spacing: .04em;
+}
+.pf-feld, .pf-textfeld {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--linie);
+  border-radius: 4px;
+  background: var(--flaeche);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.pf-feld { font-family: var(--schrift-mono); font-size: 13px; }
+.pf-textfeld { min-height: 240px; resize: vertical; line-height: 1.55; }
+
+.pf-vorschlaege {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  border: 1px solid var(--linie);
+  border-top: none;
+  background: var(--flaeche-hoch);
+  max-height: 180px;
+  overflow-y: auto;
+}
+.pf-vorschlag {
+  display: block;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.pf-vorschlag:hover { background: var(--flaeche); }
+
+.pf-sendknopf {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background: var(--signal);
+  color: var(--grund);
+  font-family: var(--schrift-marke);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.pf-sendknopf[disabled] { opacity: .5; cursor: default; }
+
+.pf-zitat {
+  margin-top: 12px;
+  padding: 8px 10px;
+  border-left: 2px solid var(--linie);
+  color: var(--matt);
+  font-size: 13px;
+}
+
+/* ── Leer- und Fehlerzustaende ───────────────────────────────────────────
+   Beide sind Wegweiser, keine Stimmung: WAS ist los, und WAS kann man tun.
+   Kein Entschuldigen, keine Attrappen-Mails -- lieber eine leere Flaeche
+   mit einem klaren Satz als eine gefuellte mit erfundenen Daten. */
+.pf-zustand { padding: 28px 18px; max-width: 46ch; }
+.pf-zustand-titel {
+  font-family: var(--schrift-marke);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.pf-zustand-text { color: var(--matt); font-size: 13px; margin: 0 0 6px; }
+.pf-zustand-grund {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--matt);
+  overflow-wrap: anywhere;
+  margin: 0 0 12px;
+}
+.pf-fehler .pf-zustand-titel { color: var(--warn); }
+
+/* ── Meldung ─────────────────────────────────────────────────────────── */
+.pf-meldung {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 40;
+  max-width: min(92vw, 480px);
+  padding: 9px 16px;
+  border: 1px solid var(--linie);
+  border-left: 3px solid var(--signal);
+  border-radius: 4px;
+  background: var(--flaeche-hoch);
+  color: var(--text);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.pf-meldung.pf-meldung-warn { border-left-color: var(--warn); color: var(--warn); }
+
+/* ── Dialoge ─────────────────────────────────────────────────────────── */
+.pf-dialog {
+  border: 1px solid var(--linie);
+  border-radius: 6px;
+  background: var(--flaeche);
+  color: var(--text);
+  padding: 18px 20px;
+  max-width: min(94vw, 520px);
+}
+.pf-dialog::backdrop { background: rgba(0, 0, 0, .68); }
+.pf-dialogtitel {
+  font-family: var(--schrift-marke);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+.pf-dialogtext { color: var(--matt); font-size: 13px; margin: 0 0 14px; overflow-wrap: anywhere; }
+.pf-dialogknoepfe { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+
+.pf-tastenliste {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 14px;
+  margin: 0 0 16px;
+  font-size: 13px;
+}
+.pf-tastenliste dt {
+  font-family: var(--schrift-mono);
+  font-size: 12px;
+  color: var(--signal);
+  white-space: nowrap;
+}
+.pf-tastenliste dd { margin: 0; color: var(--matt); }
+
+/* System-Postfaecher: derselbe Betrachter wie im Vorbild, nur im neuen Kleid. */
+.pf-sysdialog {
+  max-width: min(96vw, 980px);
+  width: 980px;
+  height: min(86dvh, 760px);
+  padding: 0;
+  flex-direction: column;
+}
+/* display NUR am offenen Dialog: stuende es an der Grundregel, waere der
+   geschlossene Dialog sichtbar -- display schlaegt dort die UA-Regel
+   dialog:not([open]){display:none}. */
+.pf-sysdialog[open] { display: flex; }
+.pf-syskopf {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+  border-bottom: 1px solid var(--linie);
+  flex-wrap: wrap;
+}
+.pf-syskopf .pf-dialogtext { margin: 0; max-width: 60ch; }
+.pf-sysreiter {
+  display: flex;
+  gap: 2px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--linie);
+  overflow-x: auto;
+  flex: 0 0 auto;
+}
+.pf-sysreiter-knopf {
+  padding: 9px 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--matt);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.pf-sysreiter-knopf[aria-selected="true"] { color: var(--text); border-bottom-color: var(--signal); }
+.pf-sysreiter-adresse {
+  display: block;
+  font-family: var(--schrift-mono);
+  font-size: 11px;
+  opacity: .7;
+}
+.pf-syskoerper { flex: 1 1 auto; display: grid; grid-template-columns: 320px 1fr; min-height: 0; }
+.pf-syskoerper > * { min-width: 0; }
+.pf-sysliste { overflow-y: auto; border-right: 1px solid var(--linie); }
+.pf-syslese { overflow-y: auto; padding: 16px 18px; }
+
+/* ── Der Riss: NUR bei einem echten Ereignis ─────────────────────────────
+   Er laeuft, wenn nachweislich neue Mails in der offenen Liste auftauchen.
+   Ein Dauerglitch ohne Anlass waere Kostuem; dieser hier ist eine Meldung. */
+@keyframes pf-riss {
+  0%   { transform: translateX(0);    filter: none; }
+  18%  { transform: translateX(-3px) skewX(-1.4deg);
+         filter: drop-shadow(2px 0 0 var(--kalt)) drop-shadow(-2px 0 0 var(--signal)); }
+  42%  { transform: translateX(4px) skewX(1.1deg);
+         filter: drop-shadow(-3px 0 0 var(--kalt)) drop-shadow(3px 0 0 var(--signal)); }
+  70%  { transform: translateX(-2px) skewX(-.5deg); filter: none; }
+  100% { transform: translateX(0);    filter: none; }
+}
+.pf-mails.pf-riss { animation: pf-riss 180ms steps(4) 1; }
+
+/* ── Gestapelt ───────────────────────────────────────────────────────────
+   Zwei Stufen. Erst wandert die Ordnerspalte weg (sie ist die am leichtesten
+   ersetzbare), dann bleibt genau eine Spalte uebrig. Umgeschaltet wird ueber
+   data-ansicht auf .pf -- kein Router, kein zweiter Zustand im JS. */
+@media (max-width: 1080px) {
+  .pf { grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.4fr); }
+  .pf-ordner {
+    position: fixed;
+    top: var(--schale-h, 56px);
+    left: 0;
+    bottom: 0;
+    width: 232px;
+    z-index: 30;
+    transform: translateX(-102%);
+    transition: transform 160ms ease;
+    box-shadow: 0 0 40px rgba(0, 0, 0, .6);
+  }
+  .pf[data-ansicht="ordner"] .pf-ordner { transform: translateX(0); }
+  .pf-schmalknopf { display: inline-block; }
+}
+
+@media (max-width: 760px) {
+  .pf { grid-template-columns: 1fr; }
+  .pf-liste, .pf-lese { grid-column: 1; grid-row: 1; }
+  .pf[data-ansicht="lese"] .pf-liste { display: none; }
+  .pf:not([data-ansicht="lese"]) .pf-lese { display: none; }
+  .pf-zurueck { display: inline-flex; }
+  .pf-lese { padding: 12px 14px 24px; }
+  .pf-htmlrahmen { height: 56vh; }
+  .pf-syskoerper { grid-template-columns: 1fr; grid-template-rows: 40% 60%; }
+  .pf-sysliste { border-right: none; border-bottom: 1px solid var(--linie); }
+}
+
+/* Ab 360 px ohne waagrechtes Scrollen: bei dieser Breite ist die
+   Werkzeugleiste der Engpass, deshalb duerfen ihre Knoepfe hier umbrechen
+   statt zu schieben. */
+@media (max-width: 400px) {
+  .pf-listenkopf { flex-wrap: wrap; }
+  .pf-titel { font-size: 13px; }
+  .pf-werkzeuge > * { flex: 1 1 auto; text-align: center; }
+  .pf-kopf { grid-template-columns: 1fr; gap: 0 0; }
+  .pf-kopf dt { margin-top: 4px; }
+}
+
+/* ── Untergrenze: alles Bewegte aus ──────────────────────────────────────
+   Nicht "weniger", sondern aus. Die Seite bleibt dabei vollstaendig
+   benutzbar -- der Riss war nie Information, nur Betonung. */
+@media (prefers-reduced-motion: reduce) {
+  .pf-mails.pf-riss { animation: none; }
+  .pf-ordner { transition: none; }
+  * { scroll-behavior: auto !important; }
+}

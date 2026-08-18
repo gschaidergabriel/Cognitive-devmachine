@@ -1,0 +1,310 @@
+@import url("https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&display=swap");
+
+/* Die Schale: gemeinsame Kopfleiste UND gemeinsame Grundlage aller Seiten.
+ *
+ * Sie steht bewusst in EINER Datei mit der Farbtafel und der Schriftbindung.
+ * Seiten, die ihre Farben je selbst definieren, driften auseinander -- das ist
+ * genau der zweite Dialekt, den es hier nicht geben soll. Wer eine Farbe
+ * braucht, nimmt eine Variable von hier oder er braucht sie nicht.
+ *
+ * ⚠️ BEWEGUNGSGESETZ (Gabriel, nachdem er die erste Fassung live gesehen hat):
+ *   Es gibt genau EINEN Effekt in diesem Haus -- den Glitch. Hart, sauber,
+ *   150-200 ms, dann sofort still. Keine Wellenlinien, kein Dauerzappeln,
+ *   keine Herzschlag-Metaphorik. Ruhe ist der Normalzustand; Bewegung ist ein
+ *   Ereignis. Was sich ohne Anlass bewegt, ist Kostuem.
+ *
+ * Gehoert zu schale.js. Das CSS allein baut keine Leiste, das JS allein hat
+ * keine Gestalt -- so wie zero-avatar.{css,js} auch nur als Paar taugen.
+ */
+
+:root {
+  color-scheme: dark;
+
+  /* ── Farbtafel ─────────────────────────────────────────────────────── */
+  --grund:        #07080a;   /* blau-schwarz, nicht neutralgrau: Grau wirkt tot,
+                                ein Stich ins Blaue wirkt beleuchtet */
+  --flaeche:      #0f1114;
+  --flaeche-hoch: #15181d;
+  --linie:        #1e2228;
+  --text:         #e6e8ec;
+  --matt:         #7d838e;
+  --kalt:         #4aa8ff;   /* der Mensch: eigene Eingaben, eigene Nachrichten */
+  --warn:         #ff5c5c;
+
+  /* Die eine Buntheit der Oberflaeche -- und sie LEBT: --zustand-h wird von
+     schale.js aus der Messung gesetzt, auf derselben Skala wie das Avatarlicht
+     (gruen 150 -> gelb 55 -> rot 5). Der Vorgabewert 150 gilt nur, solange noch
+     nichts gemessen wurde; --signal-staerke steht dann auf .45, damit eine
+     ungemessene Seite sichtbar schwach leuchtet statt selbstbewusst gruen. */
+  --zustand-h:      150;
+  --zustand-s:      70%;
+  --signal-staerke: .45;
+  --signal:      hsl(var(--zustand-h) var(--zustand-s) 52%);
+  --signal-matt: hsl(var(--zustand-h) var(--zustand-s) 52% / .28);
+
+  /* Die zwei Geisterfarben des Glitches. Sie sind KEIN zweiter Akzent -- sie
+     erscheinen nur waehrend der 170 ms und stammen aus zero-avatar.css, wo die
+     Null seit jeher in genau diesen beiden Kanaelen auseinanderfaellt. */
+  --geist-cyan: #29d3e8;
+  --geist-mag:  #ff2e88;
+
+  /* ── Schrift ───────────────────────────────────────────────────────── */
+  --schrift-marke: "Chakra Petch", ui-sans-serif, system-ui, sans-serif;
+  --schrift-text:  "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --schrift-mono:  "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Skala. Wer eine Groesse dazwischen braucht, braucht meist eine andere
+     Gliederung -- nicht eine neunte Stufe. */
+  --s-12: 12px; --s-13: 13px; --s-15: 15px; --s-18: 18px;
+  --s-24: 24px; --s-34: 34px; --s-56: 56px;
+
+  --schale-h: 56px;
+  --rundung: 10px;
+  /* Eine Textspalte, keine Bildschirmbreite: ab etwa 820 px hoert Lesen auf und
+     Absuchen faengt an. Alles, was gelesen wird, bindet sich hieran. */
+  --spalte: 820px;
+}
+
+/* ── Grundlage ───────────────────────────────────────────────────────── */
+body {
+  margin: 0;
+  background: var(--grund);
+  color: var(--text);
+  font: var(--s-15)/1.5 var(--schrift-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tastaturfokus ist eine Zusage, keine Verzierung: er gilt ueberall gleich und
+   wird nirgends weggeschaltet. Die Signalfarbe ist der Ring, weil sie die
+   einzige Buntheit ist -- ein zweiter Fokusfarbton waere ein zweiter Akzent. */
+:focus-visible {
+  outline: 2px solid var(--signal);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ── Die Leiste ──────────────────────────────────────────────────────── */
+#entityos-schale {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  height: var(--schale-h);
+  display: flex;
+  align-items: stretch;
+  gap: 18px;
+  padding: 0 16px;
+  background: color-mix(in srgb, var(--grund) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--linie);
+  font-family: var(--schrift-marke);
+}
+/* Ein hauchduenner Signalfaden auf der Unterkante. Er ist die einzige Stelle,
+   an der die Zustandsfarbe die ganze Breite beruehrt -- dadurch faerbt sich die
+   Seite spuerbar um, ohne dass irgendwo Text seine Lesbarkeit verliert. */
+#entityos-schale::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -1px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--signal), transparent);
+  opacity: calc(.7 * var(--signal-staerke));
+  transition: opacity 700ms ease, background 700ms ease;
+  pointer-events: none;
+}
+
+/* Die Wortmarke wird "entityOS" geschrieben -- kleines e, grosses OS. Sie wird
+   NIRGENDS in Versalien gesetzt: das ist die Schreibweise des Namens und keine
+   Satzentscheidung, die sich je Ort neu treffen liesse. Deshalb steht hier auch
+   bewusst kein text-transform, an keiner Stelle im Haus. */
+.eos-marke {
+  display: flex; align-items: center; gap: 9px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: .01em;
+  font-size: var(--s-18);
+  white-space: nowrap;
+}
+/* Nur das OS traegt die Signalfarbe: der Name sagt damit selbst, welcher Teil
+   die Maschine ist -- ohne dass irgendwo ein Untertitel das erklaeren muss. */
+.eos-marke-os { color: var(--signal); transition: color 700ms ease; }
+.eos-marke-zeichen { color: var(--signal); font-size: var(--s-18); line-height: 1; transition: color 700ms ease; }
+.eos-marke:hover { color: #fff; }
+
+/* ── Die zwei Punkte ─────────────────────────────────────────────────── */
+/* Zwei Punkte fuellen keine Leiste -- also fuellen sie sie auch nicht. Die
+   Luecke rechts ist Absicht: eine schlanke Leiste ist ruhiger als eine, die
+   sich mit Punkten vollstellt, die niemand braucht. */
+.eos-nav { display: flex; align-items: stretch; gap: 6px; margin-left: 12px; }
+.eos-punkt {
+  position: relative;
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 20px;
+  color: var(--matt);
+  text-decoration: none;
+  font-size: var(--s-13);
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: color 160ms ease, background 160ms ease;
+}
+.eos-punkt:hover, .eos-punkt:focus-visible { color: var(--text); }
+.eos-punkt-symbol { flex: 0 0 auto; display: none; }
+.eos-punkt-kurz   { display: none; }
+
+/* Die aktive Markierung: eine harte, gerade Unterkante in der Signalfarbe, dazu
+   ein knapper Farbverlauf darueber. Sie steht STILL. Wo man ist, ist keine
+   Nachricht, die sich staendig wiederholen muss -- die Bewegung gehoert dem
+   Wechsel, nicht dem Zustand. */
+.eos-punkt::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+  background: var(--signal);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 180ms cubic-bezier(.22,.61,.36,1);
+}
+.eos-punkt[aria-current="page"] {
+  color: var(--text);
+  background: linear-gradient(180deg, transparent 40%, color-mix(in srgb, var(--signal) 13%, transparent));
+}
+.eos-punkt[aria-current="page"]::after { transform: scaleX(1); }
+/* Beim Zeigen faehrt die Kante halb aus -- eine Ankuendigung, kein Zustand. */
+.eos-punkt:hover::after, .eos-punkt:focus-visible::after { transform: scaleX(.55); }
+
+/* Die Zahl an der Mailbox erscheint NUR, wenn wirklich ungelesene Mails
+   gezaehlt wurden. Kein Weg, keine Antwort, keine Zahl -- lieber gar nichts als
+   eine geratene Null, die aussieht wie eine Messung. */
+.eos-zahl {
+  min-width: 17px; height: 17px; padding: 0 5px;
+  border-radius: 3px;
+  background: var(--signal);
+  color: #06120b;
+  font-family: var(--schrift-mono);
+  font-size: 11px; font-weight: 600; line-height: 17px;
+  text-align: center;
+}
+
+/* ── Rechte Seite: Statuspunkt und Nutzerknopf ───────────────────────── */
+.eos-rechts { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+/* Derselbe Gedanke wie beim Avatarlicht: eine Lichtquelle HINTER der Scheibe,
+   nicht ein Ring darauf. Und der Grund haengt am Bild (title/aria-label), nicht
+   in einer Fussnote -- ein Punkt, der leuchtet und nicht sagen kann warum,
+   waere genau die huebsche Behauptung, die dieses System sonst vermeidet.
+   Er atmet NICHT: eine dauerhaft pulsierende Anzeige war genau die Sorte
+   Lebenslinie, die rausfliegt. Er steht und faerbt sich um. */
+.eos-status {
+  position: relative;
+  width: 9px; height: 9px; border-radius: 2px;
+  background: var(--signal);
+  opacity: calc(.35 + .65 * var(--signal-staerke));
+  transition: background 700ms ease, opacity 700ms ease;
+  flex: 0 0 auto;
+}
+.eos-status::before {
+  content: "";
+  position: absolute; inset: -5px; border-radius: 4px;
+  background: radial-gradient(closest-side, var(--signal), transparent 72%);
+  filter: blur(4px);
+  opacity: calc(.5 * var(--signal-staerke));
+  transition: opacity 700ms ease;
+  pointer-events: none;
+}
+.eos-nutzer { display: flex; align-items: center; min-width: 28px; min-height: 28px; }
+
+/* ── Bootsequenz ─────────────────────────────────────────────────────── */
+/* Einmalig, ~700 ms. Eine Scanline wischt durch und die Wortmarke rastet aus
+   Zeichenrauschen ein. Sie laeuft genau einmal je Seitenaufruf; alles Weitere
+   an Bewegung braucht danach einen echten Anlass. */
+.eos-scanline {
+  position: fixed; inset: 0 0 auto 0; height: 140px;
+  z-index: 60; pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--signal-matt) 62%, transparent);
+  mix-blend-mode: screen;
+  animation: eos-wisch 700ms cubic-bezier(.3,.0,.2,1) forwards;
+}
+@keyframes eos-wisch {
+  from { transform: translateY(-140px); opacity: 0; }
+  15%  { opacity: .9; }
+  to   { transform: translateY(105vh);  opacity: 0; }
+}
+.eos-rauschen { color: var(--signal); }
+
+/* ── Der Glitch: der einzige Effekt des Hauses ───────────────────────── */
+/* Drei Dinge gleichzeitig, damit er hart wirkt und nicht weich:
+ *   1. RGB-Kanalversatz  -- die zwei Geisterfarben treten seitlich heraus
+ *   2. waagrechte Scherung + Versatz
+ *   3. kurzes Zeilenrauschen ueber der Flaeche (::before)
+ * steps(1) statt Interpolation: ein Glitch, der sanft hinueberblendet, ist ein
+ * Uebergang. Er soll SCHNAPPEN. Nach 170 ms ist er restlos weg -- deshalb nimmt
+ * schale.js die Klasse auch wieder ab, statt sie liegen zu lassen. */
+.eos-riss { position: relative; animation: eos-riss 170ms steps(1) 1; }
+@keyframes eos-riss {
+  0%   { transform: none; filter: none; }
+  14%  { transform: translateX(-4px) skewX(-9deg);
+         filter: drop-shadow(3px 0 0 var(--geist-mag)) drop-shadow(-3px 0 0 var(--geist-cyan)); }
+  28%  { transform: translateX(3px) skewX(6deg);
+         filter: drop-shadow(-4px 0 0 var(--geist-mag)) drop-shadow(4px 0 0 var(--geist-cyan)); }
+  42%  { transform: none; filter: none; }
+  56%  { transform: translateX(2px) skewX(-3deg);
+         filter: drop-shadow(-2px 0 0 var(--geist-cyan)) drop-shadow(2px 0 0 var(--geist-mag)); }
+  70%  { transform: translateX(-1px) skewX(2deg); filter: none; }
+  100% { transform: none; filter: none; }
+}
+.eos-riss::before {
+  content: "";
+  position: absolute; inset: -2px; z-index: 3; pointer-events: none;
+  background: repeating-linear-gradient(180deg,
+              rgba(255,255,255,.16) 0 1px, transparent 1px 3px);
+  mix-blend-mode: screen;
+  animation: eos-rausch 170ms steps(1) 1;
+}
+@keyframes eos-rausch {
+  0%, 100% { opacity: 0; }
+  14% { opacity: 1; }
+  28% { opacity: 0; }
+  56% { opacity: .75; }
+  70% { opacity: 0; }
+}
+
+/* ── Der Wartepunkt ──────────────────────────────────────────────────── */
+/* Der Ersatz fuer die rausgeflogene Wellenlinie. Ein Blockcursor, der im
+   Sekundentakt umschaltet -- die knappste ehrliche Aussage fuer "laeuft noch":
+   er behauptet keinen Fortschritt, er zeigt keine Kurve, er zappelt nicht.
+   Bei reduzierter Bewegung steht er einfach da und bleibt dieselbe Aussage. */
+.eos-cursor {
+  display: inline-block; width: .55em; height: 1.05em;
+  vertical-align: -.18em; margin-left: .35em;
+  background: var(--signal);
+  animation: eos-blink 1.05s steps(2, jump-none) infinite;
+}
+@keyframes eos-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: .18; } }
+
+/* ── Schmal: unter 640 px ────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  #entityos-schale { gap: 8px; padding: 0 10px; }
+  .eos-marke-wort { display: none; }          /* Wortmarke schrumpft auf ▚ */
+  .eos-marke-zeichen { font-size: var(--s-24); }
+  .eos-punkt { padding: 0 9px; gap: 5px; font-size: var(--s-12); letter-spacing: .03em; }
+  .eos-punkt-symbol { display: block; }
+  .eos-punkt-wort { display: none; }
+  .eos-punkt-kurz { display: inline; }
+  .eos-rechts { gap: 8px; }
+}
+@media (max-width: 380px) {
+  #entityos-schale { gap: 4px; padding: 0 7px; }
+  .eos-punkt { padding: 0 6px; font-size: 11px; }
+}
+
+/* ── Untergrenze ─────────────────────────────────────────────────────── */
+/* Nicht verhandelbar: hier hoert JEDE Bewegung auf. Die Seite bleibt dabei
+   vollstaendig benutzbar -- nichts hier drin blendet etwas aus, es steht nur
+   alles still. Was Bewegung TRANSPORTIERT (Farbe, Grund, Zahl), steht deshalb
+   auch immer als Text oder Farbe da und nie nur in der Animation. */
+@media (prefers-reduced-motion: reduce) {
+  .eos-scanline { display: none; }
+  .eos-riss, .eos-riss::before, .eos-cursor { animation: none !important; }
+  .eos-riss::before { display: none; }
+  .eos-punkt::after { transition: none; }
+  * { scroll-behavior: auto !important; }
+}

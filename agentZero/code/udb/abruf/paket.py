@@ -432,6 +432,124 @@ def _spezifitaet(c: sqlite3.Connection, woerter) -> float:
     return beste
 
 
+# ── Die Karte als zweiter Eintrittsweg (F93b) ───────────────────────────
+#
+# Die Alias-Aufloesung sagt bei rund drei Viertel der Fragen LOW_CONFIDENCE.
+# Dann faellt der Abruf auf rein lexikalisch zurueck -- obwohl die Karte einen
+# Wegweiser haette. Sie wird deshalb als ZWEITER Weg gefragt, nie als erster:
+# ein exakter Namenstreffer ist der bessere Beleg als eine Regionsvermutung.
+_KARTEN_MIN_STAERKE = 8.0     # darunter raet die Karte nur
+_KARTEN_MIN_VORSPRUNG = 1.5   # beste Region muss klar vor der zweiten liegen
+
+
+def _karten_eintritt(c: sqlite3.Connection, tokens: list[str]):
+    """(anker, region, staerke) oder None. Fail-closed wie alles hier."""
+    try:
+        from .karte_abruf import wohin
+    except Exception:
+        return None
+    try:
+        ziele = wohin(c, tokens)
+    except Exception:
+        return None
+    if not ziele:
+        return None
+    beste = ziele[0]
+    if beste["staerke"] < _KARTEN_MIN_STAERKE:
+        return None
+    if len(ziele) > 1 and beste["staerke"] < ziele[1]["staerke"] * _KARTEN_MIN_VORSPRUNG:
+        # Zwei Regionen gleich stark heisst: die Karte weiss es nicht. Dann
+        # schweigt sie, statt eine von beiden zu behaupten.
+        return None
+    lm = beste.get("landmarken") or []
+    if not lm:
+        return None
+    return lm[0]["id"], beste["region"], beste["staerke"]
+
+
+# ── F93b-Gegenmittel: Erkundung gegen die eigene Karte ──────────────────
+#
+# Eine Karte aus vergangenen Erfolgen lenkt nur dorthin, wo es schon einmal
+# getragen hat. Gegenden, die nie betreten werden, erzeugen nie eine
+# Erfolgsmarke und bestaetigen so ihre eigene Nutzlosigkeit -- ein sich selbst
+# verstaerkender blinder Fleck. Deshalb geht ein fester Anteil der Eintritte
+# ABSICHTLICH woanders hin.
+_ERKUNDUNGSANTEIL = 0.15      # 0.0 schaltet die Erkundung vollstaendig ab
+
+
+def _erkundet_diese_frage(text: str) -> bool:
+    """Fest je Frage, nicht je Aufruf.
+
+    Ein Wuerfel je Aufruf waere die naheliegende Lesart -- und hier falsch:
+    dieselbe Frage bekaeme mal Erkundung, mal nicht, der Plan-Cache waere
+    wertlos und jede Messung verrauscht. Der Hash macht die Entscheidung an der
+    FRAGE fest: dieselbe Frage verhaelt sich immer gleich, ueber viele Fragen
+    ergibt sich trotzdem genau der Anteil.
+    """
+    if _ERKUNDUNGSANTEIL <= 0:
+        return False
+    h = int(hashlib.sha256(text.strip().lower().encode()).hexdigest()[:8], 16)
+    return (h % 10000) < int(_ERKUNDUNGSANTEIL * 10000)
+
+
+def _ferner_eintritt(c: sqlite3.Connection, tokens: list[str]) -> dict | None:
+    """Ein Startpunkt, wohin die Karte gerade NICHT zeigt.
+
+    Gerichtet statt blind: zuerst eine Gegenhypothesen-Gegend (die
+    Dokumentation nennt das den Weg, auf dem sich die 6:1-Schieflage
+    korrigieren laesst), sonst die Region mit der schwaechsten Wegweiserstaerke.
+    """
+    try:
+        from .karte_abruf import wohin, neueste_version
+    except Exception:
+        return None
+    try:
+        version = neueste_version(c)
+        if not version:
+            return None
+        nah = {r["region"] for r in wohin(c, tokens, version=version)}
+        # 1. Wahl: Gegenhypothesen, aber nur solche, die die Karte NICHT nennt.
+        zeile = c.execute(
+            "SELECT region, landmarken FROM vp_karte_region "
+            "WHERE version=? AND art IN ('gegenhypothese','hypothese') AND landmarken<>'[]' "
+            "ORDER BY (art='gegenhypothese') DESC, artikel_n DESC LIMIT 8", (version,)).fetchall()
+        for r in zeile:
+            if r["region"] not in nah:
+                lm = json.loads(r["landmarken"] or "[]")
+                if lm:
+                    return {"region": r["region"], "anker": lm[0]["id"], "grund": "gegenhypothese"}
+        # 2. Wahl: irgendeine Region mit Landmarke, die die Karte nicht nennt.
+        for r in c.execute("SELECT region, landmarken FROM vp_karte_region "
+                           "WHERE version=? AND landmarken<>'[]' ORDER BY artikel_n DESC LIMIT 20",
+                           (version,)):
+            if r["region"] not in nah:
+                lm = json.loads(r["landmarken"] or "[]")
+                if lm:
+                    return {"region": r["region"], "anker": lm[0]["id"], "grund": "fern"}
+    except Exception:
+        return None
+    return None
+
+
+def _erfolgsmarke(c: sqlite3.Connection, *, frage: str, region: str | None,
+                  anker: str | None, getragen: bool, quelle: str) -> None:
+    """F92b. Ohne diese Zeile ist Erkundung nur Mehrarbeit.
+
+    Darf einen Abruf NIE kippen -- Buchfuehrung ist nachgeordnet.
+    """
+    try:
+        c.execute(
+            "CREATE TABLE IF NOT EXISTS vp_erfolgsmarke ("
+            " id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, frage TEXT,"
+            " region TEXT, anker TEXT, getragen INTEGER, quelle TEXT)")
+        c.execute("INSERT INTO vp_erfolgsmarke(ts,frage,region,anker,getragen,quelle) "
+                  "VALUES(?,?,?,?,?,?)",
+                  (time.time(), frage[:300], region, anker, 1 if getragen else 0, quelle))
+        c.commit()
+    except Exception:
+        pass
+
+
 def resolve_entities(c: sqlite3.Connection, tokens: list[str], raw_text: str) -> Resolution:
     """Fail-closed, SHAPE aus SemanticEntityResolverV12: nur EXACT/EVIDENCE_ALIAS
     duerfen einen Walk anstossen. AMBIGUOUS/LOW_CONFIDENCE/MISS raten NIE."""
@@ -538,6 +656,27 @@ def build_signature(*, source_epoch: int, graph_epoch: int, anchors: tuple[str, 
 
 # ── 2c · begrenzter Walk mit Zyklenschutz ────────────────────────────────
 
+# ── Welche Kantenarten sind wechselseitig? ──────────────────────────────
+#
+# Nur diese werden im Walk auch RUECKWAERTS begangen. Die Symmetrie ist eine
+# Eigenschaft der Art, kein fehlender Datensatz -- deshalb steht sie in der
+# Abfrage und nicht als zweite Zeile in der Tabelle. Verdoppeln wuerde 12.600
+# Zeilen duplizieren und die Zaehler in vp_edge_lern mitverfaelschen.
+#
+# ⚠️ Was hier NICHT hineingehoert: nachfolge_version (loest ab), verdichtet_aus,
+# stuetzt, evidence, source_refs, eltern_hypothese. Ihre Richtung IST die
+# Aussage. Rueckwaerts begangen wuerde aus "A stuetzt B" ein "B stuetzt A" --
+# eine Faelschung, kein Abrufgewinn.
+_SYMMETRISCHE_ARTEN = (
+    "geschwister_verzeichnis",   # im selben Verzeichnis liegen ist gegenseitig
+    "geschwister_datei",
+    "gleicher_inhalt",           # Gleichheit ist symmetrisch
+    "sprachpaar",
+    "widerspricht",              # sich widersprechen ist gegenseitig
+    "attacks",
+)
+
+
 def _walk(c: sqlite3.Connection, anchor: str, edge_bias: dict[str, float],
           max_depth: int = CAP_WALK_HOPS, limit: int = CAP_WALK):
     """Rekursiver Walk ueber `kante` (artikel<->artikel). Zyklenschutz per
@@ -552,8 +691,11 @@ def _walk(c: sqlite3.Connection, anchor: str, edge_bias: dict[str, float],
     negativ ist -- fehlender Status blockiert nichts (keine Erfindung von Evidenz)."""
     neg_names = [f"neg{i}" for i in range(len(_NEGATIV_STATUS))]
     neg_marks = ",".join(f":{n}" for n in neg_names)
+    sym_names = [f"sym{i}" for i in range(len(_SYMMETRISCHE_ARTEN))]
+    sym_marks = ",".join(f":{n}" for n in sym_names)
     params = {"anchor": anchor, "max_depth": max_depth, "limit": limit, "decay": HOP_DECAY,
-              **{n: v for n, v in zip(neg_names, _NEGATIV_STATUS)}}
+              **{n: v for n, v in zip(neg_names, _NEGATIV_STATUS)},
+              **{n: v for n, v in zip(sym_names, _SYMMETRISCHE_ARTEN)}}
     rows = c.execute(
         f"""
         WITH RECURSIVE walk(node, depth, art, score, path, via) AS (
@@ -569,10 +711,25 @@ def _walk(c: sqlite3.Connection, anchor: str, edge_bias: dict[str, float],
           JOIN kante k ON k.von = w.node
           WHERE w.depth < :max_depth AND instr(w.path, '|'||k.nach||'|') = 0
             AND (w.depth = 0 OR av.status IS NULL OR av.status NOT IN ({neg_marks}))
+          UNION ALL
+          -- Gegenrichtung, aber NUR fuer wechselseitige Arten. Ohne diesen Zweig
+          -- sind 29,7 % der Graph-Artikel unerreichbar: wer nur eingehende
+          -- Kanten hat, wird vom Walk nie besucht, egal wie nah er liegt.
+          SELECT k.von, w.depth+1, k.art,
+                 w.score * (0.5 + 0.5*COALESCE(
+                    (SELECT gewicht FROM vp_edge_lern WHERE edge_art=k.art AND query_class='global'),
+                    0.0)) * (:decay),
+                 w.path || k.von || '|', w.node
+          FROM walk w
+          JOIN artikel av ON av.id = w.node
+          JOIN kante k ON k.nach = w.node AND k.art IN ({sym_marks})
+          WHERE w.depth < :max_depth AND instr(w.path, '|'||k.von||'|') = 0
+            AND (w.depth = 0 OR av.status IS NULL OR av.status NOT IN ({neg_marks}))
         )
         SELECT a.id AS record_id, a.art AS record_kind, a.epistemic_class, a.status,
                a.projekt, MIN(w.depth) AS depth, MAX(w.score) AS score,
-               (SELECT k2.art FROM kante k2 WHERE k2.von=:anchor AND k2.nach=a.id LIMIT 1) AS edge_art,
+               (SELECT k2.art FROM kante k2 WHERE (k2.von=:anchor AND k2.nach=a.id)
+                   OR (k2.nach=:anchor AND k2.von=a.id AND k2.art IN ({sym_marks})) LIMIT 1) AS edge_art,
                (SELECT w2.via FROM walk w2 WHERE w2.node=a.id ORDER BY w2.depth LIMIT 1) AS via
         FROM walk w JOIN artikel a ON a.id = w.node
         WHERE w.depth > 0
@@ -1443,6 +1600,23 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
     anchors = resolution.anchors
     terms = gap_terms(tokens, anchors)
 
+    # ⛔ KARTENANKER ABGESCHALTET, gemessen am 18.08.
+    #
+    #   ohne Karte   anker=23,3 %  genau=85,7 %  ausbeute=20,0 %
+    #   mit  Karte   anker=68,3 %  genau=29,3 %  ausbeute=20,0 %
+    #
+    # Die vorab festgelegte Regel lautet: eine Verbesserung muss BEIDE Zahlen
+    # heben. Hier verdreifacht sich die Ankerquote, die Genauigkeit bricht auf
+    # ein Drittel ein und der Ertrag bewegt sich um keinen Punkt -- das ist
+    # eine aufgeweichte Schranke, keine Verbesserung.
+    #
+    # _karten_eintritt() bleibt bewusst im Code: widerlegt ist nicht die Karte,
+    # sondern ihre Verwendung als ANKER. Eine Region-Landmarke ist nicht das
+    # gesuchte Dokument, sondern ein Ort in seiner Naehe -- gemessen an
+    # "erwartet in anker" wird von ihr etwas verlangt, das sie nie versprochen
+    # hat. Wieder einschalten, sobald ein Messgeraet da ist, das Spruenge
+    # sehen kann.
+
     plan_source = "NO_ANCHOR_LEXICAL_ONLY"
     cache_hit = False
     sig_hash = None
@@ -1484,6 +1658,26 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
                  json.dumps(sorted(terms)), json.dumps(plan), _now(), _now()),
             )
         walk_rows = plan["walked"]
+
+    # Erkundung: ZUSAETZLICH zum besten Eintritt, nicht statt seiner. Die
+    # strengste Lesart waere, den guten Startpunkt bei jedem N-ten Zug
+    # wegzuwerfen -- das kostet echte Antwortqualitaet. Der Lernwert entsteht
+    # aber schon, wenn der ferne Eintritt DAZUKOMMT und die Erfolgsmarke
+    # festhaelt, welcher der beiden getragen hat.
+    erkundung = None
+    if _erkundet_diese_frage(text):
+        erkundung = _ferner_eintritt(c, tokens)
+        if erkundung:
+            edge_bias_e = {r["edge_art"]: r["gewicht"] for r in
+                           c.execute("SELECT edge_art,gewicht FROM vp_edge_lern WHERE query_class='global'")}
+            bekannt = {w["id"] for w in walk_rows}
+            for r in _walk(c, erkundung["anker"], edge_bias_e):
+                if r["record_id"] in bekannt:
+                    continue
+                bekannt.add(r["record_id"])
+                walk_rows.append({"id": r["record_id"], "depth": r["depth"], "score": r["score"],
+                                  "edge_art": r["edge_art"], "anchor": erkundung["anker"],
+                                  "erkundung": True})
 
     # lexikalisch (immer, als Grundrauschen + Fallback wenn kein Anker)
     lex_rows = c.execute(

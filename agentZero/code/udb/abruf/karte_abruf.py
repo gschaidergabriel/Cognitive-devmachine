@@ -124,6 +124,43 @@ def sicherstellen(c: sqlite3.Connection) -> None:
     c.executescript(SCHEMA)
 
 
+
+def _erkundungsanteil() -> float:
+    """Wie viel der Eintritte GEGEN die Karte gewaehlt werden (F93b-Gegenmittel).
+
+    Wird aus paket.py gelesen, nicht hier festgelegt -- eine zweite Kopie
+    derselben Zahl waere die naechste Stelle, die auseinanderlaeuft. Ist der
+    Wert nicht lesbar, wird 0.0 eingetragen: dann laeuft die Karte
+    nachweislich ohne Gegenmittel, und das soll man der Version ansehen.
+    """
+    # Beim Skriptstart liegt sys.path[0] auf .../udb/abruf, die Wurzel fehlt --
+    # und paket.py liest auf Modulebene selbst aus `udb`. Wurzel aus dem
+    # eigenen Dateipfad ableiten, nicht fest eintragen: ein fester Pfad ist die
+    # naechste Stelle, die beim Verschieben bricht.
+    import sys as _sys, pathlib as _pl
+    _wurzel = str(_pl.Path(__file__).resolve().parents[2])
+    if _wurzel not in _sys.path:
+        _sys.path.insert(0, _wurzel)
+
+    for holen in (
+        lambda: __import__("udb.abruf.paket", fromlist=["_ERKUNDUNGSANTEIL"])._ERKUNDUNGSANTEIL,
+        lambda: __import__("paket", fromlist=["_ERKUNDUNGSANTEIL"])._ERKUNDUNGSANTEIL,
+    ):
+        try:
+            return float(holen())
+        except Exception as e:
+            # Auf stderr, nicht verschluckt: sonst sucht der naechste Leser
+            # denselben Grund noch einmal von vorn.
+            import sys as _s
+            print(f"karte_abruf: Erkundungsanteil nicht lesbar ({type(e).__name__}: {e})",
+                  file=_s.stderr)
+            continue
+    # ⚠️ -1.0, NICHT 0.0. 0.0 heisst "Erkundung bewusst abgeschaltet" und ist
+    # eine gueltige Einstellung. Beides auf denselben Wert abzubilden macht
+    # genau den Unterschied unsichtbar, um dessentwillen das Feld existiert.
+    return -1.0
+
+
 def bauen(c: sqlite3.Connection | None = None, *, anlass: str = "takt") -> dict:
     """Volle Neuberechnung, versioniert. Verweigert eine Karte, die zu gross ist."""
     eigen = c is None
@@ -223,7 +260,7 @@ def bauen(c: sqlite3.Connection | None = None, *, anlass: str = "takt") -> dict:
         (time.strftime("%Y-%m-%dT%H:%M:%S+0000", time.gmtime()), anlass,
          len(version_zeilen_region), landmarken_gesamt,
          len(version_zeilen_weg), korpus_artikel, korpus_kanten,
-         round(verhaeltnis, 5), 0.0, round(dauer, 2)))
+         round(verhaeltnis, 5), _erkundungsanteil(), round(dauer, 2)))
     version = cur.lastrowid
     c.executemany("INSERT INTO vp_karte_region(version,region,projekt,art,artikel_n,landmarken) "
                   "VALUES(?,?,?,?,?,?)", [(version, *z) for z in version_zeilen_region])

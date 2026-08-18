@@ -369,6 +369,16 @@ class ClayVerseEffectBridge:
                 (projekt,))}
         return antwort
 
+    def lagebild(self) -> dict:
+        """Zeros Blick auf sein eigenes Haus: die eigene andere Sitzung, ob die
+        Autonomietakte liefen, ob der Korpus gewachsen ist, ob die Abrufkarte
+        frisch ist, und was zuletzt fehlgeschlagen ist. Kein Argument -- wie
+        menschen_profil() ist der anwesende Mensch kein Parameter, sonst waere
+        die Grenze zwischen den zwei Menschen eine Bitte statt einer Eigenschaft.
+        """
+        from . import lagebild as _lagebild
+        return _lagebild.erheben(self.db, self.user_id, self.session_id)
+
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
         from .bahnen import Bahnrouter, BahnErschoepft
@@ -482,6 +492,11 @@ def main() -> None:
     def wiki_zuordnung(projekt: str = "") -> dict:
         """Welcher Teil des Wikis gabriel, andreas oder beiden gemeinsam zugerechnet wird -- Zahlen und Begruendungen, kein Artikeltext. Optional auf ein Projekt eingeschraenkt."""
         return bridge.wiki_zuordnung(projekt)
+
+    @mcp.tool(annotations=udb_ro)
+    def lagebild() -> dict:
+        """Standlage des eigenen Hauses: die eigene andere Sitzung (Zuege, zuletzt aktiv, Thema), ob die sieben Autonomietakte liefen oder ueberfaellig sind, neue Wiki-Artikel seit dem letzten Blick, ob die Abrufkarte frisch ist, und die juengsten Fehlschlaege. Fehlende Nachweise heissen 'nicht_ermittelbar', nie still Null."""
+        return bridge.lagebild()
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

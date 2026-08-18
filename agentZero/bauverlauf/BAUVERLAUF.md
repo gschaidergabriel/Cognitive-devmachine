@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T09:48:57Z. 741 Commits aus vier Repos, davon 217 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T10:18:57Z. 744 Commits aus vier Repos, davon 221 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -75,6 +75,186 @@ other input (arbitrary command, injection-shaped string, wrong argc) refuses wit
 the original message and exit 126.
 ```
 
+### Dauerhafter Chatverlauf: /api/history - und die Kollision, die das Frontend gekostet hat
+
+`2e7c0a80f66b` · entityos · 10:14 UTC · EntityOS
+
+```
+Gabriel hat neu geladen und sein ganzer Chat war weg. Die Daten waren NIE
+verloren: turns hielt 56 Zeilen, korrekt nach Sitzung getrennt
+(session:gabriel:2 28, session:gabriel 14, session:andreas:2 10,
+session:andreas 4). Es gab nur keinen Weg zurueck ins Fenster -- eine
+Suche nach verlauf/history/historie in web/ und im Gateway ergab NULL Treffer.
+Ein Speicher, den niemand liest.
+
+GEBAUT: GET /api/history?session=&limit=&before= im terminal_gateway.
+Zuege aeltestes-zuerst, geblaettert, mit der deutschen Uebersetzung aus
+mv_translation_log (dieselbe, die live im Chat steht), Rohtext als Rueckfall.
+
+BERECHTIGUNG, mit echten Clerk-Tokens gegen den laufenden Container geprueft:
+  kein/falsches Token          401
+  gabriel -> eigene Sitzungen  200
+  gabriel -> session:andreas   403
+  gabriel -> session:andreas:2 403
+  gabriel -> session:andreas:99 403   (faellt auch bei Unsinn geschlossen)
+  andreas -> eigene Sitzung    200
+  andreas -> session:gabriel:2 403
+Die Sitzungs-ID aus der Adresszeile wird nie geglaubt; geprueft wird ueber
+identity.ist_kanonische_sitzung mit einer user_id, die ausschliesslich aus dem
+verifizierten Token stammt. Am 18.08. hat dieses System schon einmal einem
+Menschen die privaten Eintraege des anderen gezeigt, weil einer Tabelle die
+Nutzerspalte fehlte. Diese Tuer bleibt zu.
+
+⚠️ DAS FRONTEND IST WEG, UND ZWAR DURCH EINE KOLLISION, DIE ICH ZU SPAET SAH
+
+Eine zweite Instanz kleidet die Oberflaeche nach einem eigenen Auftrag neu ein
+(AUFTRAG-OBERFLAECHE.md, 09:36) -- auf DEMSELBEN Branch retina-deploy. Mein
+Agent hatte web/chat/index.html um die Verlaufsanzeige erweitert und im echten
+Browser mit echter Clerk-Anmeldung geprueft. Um 10:07:44 hat die andere Instanz
+die Datei ueberschrieben: 7 Verweise auf ihre neue Schale, 0 auf die Historie.
+Aus dem Container-Abbild nicht mehr zu retten (nur ein Abbild vorhanden,
+gebaut 10:12, ohne die Aenderung).
+
+Das Backend hat ueberlebt und ist vollstaendig. Damit die Arbeit nicht zweimal
+verloren geht, liegt in betrieb/API-HISTORY.md die Anleitung zum Einhaengen --
+samt der vier Punkte, die dabei nicht verlorengehen duerfen (nach dem ready-Ereignis
+laden statt beim DOM-Start; leer ist ein ZUSTAND und keine leere Seite; sichtbare
+Trennlinie zwischen geladenem Verlauf und Live; Ladefehler anzeigen statt
+verschlucken).
+
+Ab hier eigener Branch, auf Gabriels Entscheidung. Was schon auf retina-deploy
+liegt, bleibt dort.
+
+Nebenbefund, ungeprueft weitergegeben: /etc/clayverse/entityos-clerk.env
+enthaelt eine veraltete Clerk-Kennung fuer Andreas, die nicht zu
+CLAYVERSE_CLERK_MAP_JSON im laufenden Container passt.
+```
+
+### Zero sieht jetzt sein eigenes Haus - und Stillstand sieht nicht mehr wie Ruhe aus
+
+`12dbe95c5521` · entityos · 10:07 UTC · EntityOS
+
+```
+Eignerauftrag: "agent zero der im hintergrund alles im auge hat".
+
+Bisher war Zero reines Frage-Antwort: ein claude -p je Nachricht, kein eigenes
+Gedaechtnis, UnifiedDB als einzige Kontinuitaet. Es sah den Prompt und was es
+selbst abrief. Es hatte KEINEN Weg zu bemerken, dass ein Takt ausgefallen ist,
+dass der Korpus gewachsen ist, dass seine andere Sitzung etwas getan hat oder
+dass ein Anbieter gestorben ist.
+
+NEU: clayverse/lagebild.py + Werkzeug lagebild(). Ein billiger Lesezugriff auf
+die Frage "was ist passiert, waehrend ich nicht hingesehen habe":
+eigene andere Sitzung, Zustand der sieben Takte, Korpuszuwachs nach Art,
+Frische der Abrufkarte, letzte Fehlschlaege, Gedaechtnis-Ausbeute. 2,1 KB.
+
+⭐ DIE REGEL, DIE DAS DING BRAUCHBAR MACHT: STILLE IST NICHT GESUNDHEIT.
+
+Ein stehender Takt sieht von aussen aus wie ein ruhiger. Das hat dieses Projekt
+heute ZWEIMAL gekostet: verfall() hatte ueberhaupt keinen Zeitplan, und die
+Abrufkarte hatte gar keinen Takt. Beide Male sah alles friedlich aus.
+Deshalb meldet lagebild nicht "letzter Lauf", sondern rechnet gegen das
+erwartete Intervall und wird bei Ueberschreitung laut (`ueberfaellig: true`).
+Nachgewiesen: mit einem kuenstlich auf 1 s gesetzten Intervall kippt das Feld
+sofort.
+
+⭐ UND: KEINE ERFUNDENE ENTWARNUNG.
+
+Wo kein Nachweisweg existiert, steht das da -- nicht eine Null, die wie Ruhe
+aussieht. Zwei echte Faelle, beide vom Agenten durch Nachsehen ermittelt statt
+geraten:
+  agentzero-export  schreibt nicht in wiki.db, /opt/agentzero-export ist nicht
+                    in den Container gemountet
+  clayverse-puls    ist GAR KEIN periodischer Takt, sondern ein Dauerdienst
+                    (nur .service, keine .timer -- geprueft mit
+                    systemctl list-unit-files)
+Ein systemctl gibt es im Container nicht; die Nachweise kommen deshalb aus der
+Datenbank und dem Dateisystem, und woher jeweils, steht als `quelle` dabei.
+
+GRENZE, unabhaengig nachgeprueft: die zwei Sitzungen EINES Menschen gehoeren
+diesem Menschen, dahin darf Zero sehen. Die Sitzung des anderen Menschen taucht
+nirgends auf -- fuer gabriel wie fuer andreas gegengeprueft, in beiden
+Richtungen kein Treffer. lagebild() nimmt KEIN Argument; Mensch und Sitzung
+kommen aus dem verifizierten Zustand, wie schon bei menschen_profil().
+
+Suite unveraendert 528 gruen / 14 rot.
+```
+
+### Erkundungsanteil gegen die eigene Karte - das Gegenmittel zum Echoproblem
+
+`830605735d81` · unifieddb · 10:06 UTC · EntityOS
+
+```
+Die Dokumentation nennt es die groesste Gefahr von allen Stellen:
+
+  "Eine selbstgeschriebene Karte ist die reinste Form des Echoproblems. Sie
+   wird aus dem gebaut, was vorher funktioniert hat. Also lenkt sie in
+   Gegenden, die schon einmal getragen haben -- und nicht in Gegenden, die nie
+   betreten wurden. Die werden dadurch nie betreten, erzeugen nie eine
+   Erfolgsmarke, und bestaetigen so ihre eigene Nutzlosigkeit.
+   Das System wird schneller -- auf einem SCHRUMPFENDEN Fragenkorridor."
+
+  Gegenmittel: "Ein FESTER ANTEIL der Eintritte wird GEGEN die Karte gewaehlt."
+
+Eingebaut: _ERKUNDUNGSANTEIL = 0.15. Gemessen 12 von 60 Fragen (20 %, bei n=60
+im Rauschen). Kosten auf Haelfte B: KEINE -- anker/genau/ausbeute/auffind
+identisch mit und ohne (23,3 / 85,7 / 20,0 / 23,3).
+
+DREI ENTSCHEIDUNGEN, DIE NICHT AUS DER DOKUMENTATION KOMMEN
+
+1. ⭐ FEST JE FRAGE, NICHT ZUFAELLIG JE AUFRUF.
+   Ein Wuerfel je Aufruf ist die naheliegende Lesart von "fester Anteil" -- und
+   hier falsch: dieselbe Frage bekaeme mal Erkundung, mal nicht. Damit ist der
+   Plan-Cache wertlos (jede Wiederholung ein anderer Weg) und jede Messung
+   verrauscht. Ein Hash der Frage gibt denselben Anteil ueber viele Fragen, aber
+   reproduzierbar je einzelner. Zufall und Reproduzierbarkeit schliessen sich
+   nicht aus -- man muss den Zufall nur an der Frage festmachen statt an der Uhr.
+
+2. ⭐ ZUSAETZLICH, NICHT ERSETZEND.
+   Streng gelesen muesste jeder siebte Eintritt den GUTEN Startpunkt wegwerfen.
+   Das kostet echte Antwortqualitaet. Der Lernwert entsteht aber schon, wenn der
+   ferne Eintritt DAZUKOMMT und die Erfolgsmarke festhaelt, WELCHER der beiden
+   getragen hat. Bewusste Abweichung von der striktesten Lesart, hier notiert,
+   damit man ihr widersprechen kann.
+
+3. ⭐ GERICHTET, NICHT BLIND.
+   Die Dokumentation sagt es selbst: der Anteil ist der Weg, auf dem sich die
+   6:1-Schieflage korrigieren laesst, "wenn die Erkundung gezielt auf
+   Gegenhypothesen-Gegenden gerichtet wird, statt zufaellig zu streuen". Also
+   zuerst eine Gegenhypothesen-Region, sonst die Region mit der schwaechsten
+   Wegweiserstaerke -- dorthin, wo die Karte gerade NICHT zeigt.
+
+Dazu vp_erfolgsmarke (F92b): welche Region, welcher Anker, aus Karte oder
+Erkundung, hat es getragen. Ohne diese Zeile ist Erkundung nur Mehrarbeit.
+
+⚠️ EIN AUSFALL, DER WIE EINE EINSTELLUNG AUSSAH
+
+Der Anteil soll in jeder Kartenversion stehen, damit man einer alten Version
+ansieht, ob sie mit Gegenmittel entstand. Meine erste Fassung las ihn per
+`from .paket import _ERKUNDUNGSANTEIL` und fing jeden Fehler mit `return 0.0`.
+Beim Direktstart des Skripts scheitert der relative Import -- und in die
+Kartenversion wurde 0.0 geschrieben, waehrend die Erkundung mit 0.15 lief.
+DIE VERSION LOG UEBER IHREN EIGENEN ZUSTAND.
+
+Zwei Korrekturen, die zweite ist die wichtigere:
+  - beide Importwege, und die Wurzel aus dem EIGENEN Dateipfad statt fest
+    eingetragen (der wahre Grund: paket.py liest auf Modulebene selbst aus
+    `udb`, also scheitert auch der scheinbar harmlose `import paket`)
+  - ⭐ "nicht lesbar" bekommt einen EIGENEN Wert: -1.0. Denn 0.0 heisst
+    "Erkundung bewusst abgeschaltet" und ist eine gueltige Einstellung. Beides
+    auf denselben Wert abzubilden macht genau den Unterschied unsichtbar, um
+    dessentwillen das Feld existiert. Ein Ausfall, der wie eine Einstellung
+    aussieht, ist schlimmer als ein Ausfall.
+  - und der Fehlschlag nennt jetzt seinen Grund auf stderr, statt ihn zu
+    verschlucken. Genau das hat die Ursache in einem Schritt geliefert, nachdem
+    ich vorher zweimal daneben geraten hatte.
+
+Die Versionsreihe zeigt die Reparatur an sich selbst:
+    v4  Erkundung= 0.0    (falsch -- Ausfall als Einstellung getarnt)
+    v6  Erkundung=-1.0    (Ausfall sichtbar)
+    v7  Erkundung= 0.15   (richtig)
+```
+
 ### Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verified for real
 
 `3fa502e8f710` · entityos · 10:01 UTC · Video Launch Page
@@ -98,6 +278,94 @@ Verified locally: symlink create/idempotent/no-clobber-real-file/missing-source
 all pass; _credentials_verified valid/expired/empty-token/missing/malformed all
 pass; claude_readiness wiring end-to-end passes. Full suite: same pre-existing
 failure set before and after (confirmed via git stash), zero new failures.
+```
+
+### Der Walk ging nur vorwaerts - ein Drittel des Graphen lag hinter ihm
+
+`e1bc60fa6773` · unifieddb · 10:00 UTC · EntityOS
+
+```
+GEFUNDEN BEIM VERSUCH, ETWAS ANDERES ZU BAUEN
+
+Ich wollte die Abrufkarte als Eintrittspunkt einhaengen und pruefte vorher, ob
+der Walk vom Kartenpunkt aus wenigstens IN DIE NAEHE kommt. Ergebnis:
+
+    27 Fragen bekamen einen Kartenanker
+      Ziel im begangenen Plan          0
+      Ziel EINE Kante vom Landepunkt   4
+      Ziel im Ergebnis                 1
+
+Vier Ziele lagen eine einzige Kante entfernt und der Walk fand kein einziges.
+Der Einzelfall zeigte warum: alle Kanten des Ankers zeigten AUF IHN ZU, und
+_walk traversiert `JOIN kante k ON k.von = w.node` -- ausschliesslich ausgehend.
+Der Walk lieferte 0 Knoten.
+
+KORPUSWEIT NACHGEMESSEN
+
+    Artikel im Graphen                                        13.713
+      nur EINGEHENDE Kanten -- vom Walk NIE erreichbar         4.075 = 29,7 %
+      nur ausgehende                                           4.338
+      beides                                                   5.300
+
+    Beidseitig gespeicherte Kanten, ueber ALLE 12 Arten:         0,0 %
+
+⭐ DIE HALBE WAHRHEIT IM DATENMODELL
+
+`geschwister_verzeichnis` heisst "liegt im selben Verzeichnis" -- wenn A neben B
+liegt, liegt B neben A. Gespeichert ist es 9.258 mal in eine Richtung und kein
+einziges Mal zurueck. Dasselbe bei `gleicher_inhalt` (1.759) und
+`geschwister_datei` (1.556). Rund 12.600 Kanten behaupten eine GEGENSEITIGE
+Beziehung und sind nur einseitig begehbar.
+
+REPARATUR: _walk begeht wechselseitige Kantenarten in beide Richtungen.
+
+NICHT durch Verdoppeln der Zeilen. Das haette 12.600 Kanten dupliziert, die
+Zaehler in vp_edge_lern mitverfaelscht (das Lernsignal wurde heute gerade erst
+repariert) und sich bei jedem Graph-Neuaufbau wiederholt. Die Symmetrie ist eine
+EIGENSCHAFT DER KANTENART, kein fehlender Datensatz -- also gehoert sie in die
+Abfrage, nicht in die Ablage.
+
+⚠️ NUR die Arten, die es wirklich sind: geschwister_verzeichnis,
+geschwister_datei, gleicher_inhalt, sprachpaar, widerspricht, attacks.
+AUSDRUECKLICH NICHT: nachfolge_version (loest ab), verdichtet_aus (78.052
+Kanten!), stuetzt, evidence, source_refs. Ihre Richtung IST die Aussage --
+rueckwaerts begangen wuerde aus "A stuetzt B" ein "B stuetzt A". Das waere kein
+Abrufgewinn, sondern eine Faelschung.
+
+⭐⭐ DAS MESSGERAET WAR DAS EIGENTLICHE HINDERNIS
+
+Auf dem Goldsatz zeigte die Reparatur exakt 0,0 Punkte Veraenderung. Genau wie
+die Kantengewichts-Reparatur vorher. ZWEI echte Walk-Fixes an einem Tag, beide
+"wirkungslos" -- das war kein Befund ueber die Fixes, sondern ueber das Geraet:
+der Goldsatz misst Frage -> Dokument und wird auf Tiefe 0 entschieden. Der
+richtige Artikel wird ueber den Namen gefunden oder gar nicht. Der Walk traegt
+zum Ergebnis nichts bei, also kann keine Walk-Reparatur dort sichtbar werden.
+
+NEU: udb/abruf/nachbarschaft.py misst den Walk direkt, ohne Umweg ueber eine
+Frage -- "steht B im Walk von A aus, wenn A und B eine Kante teilen?". Keine
+Formulierung, kein Modell, keine Mehrdeutigkeit. Eine Kante ist eine Kante.
+
+    OHNE Symmetrie   vorwaerts 100,0 %   rueckwaerts   2,5 %   66 leere Walks
+    MIT  Symmetrie   vorwaerts 100,0 %   rueckwaerts  80,8 %    0 leere Walks
+                                                      +78,3
+
+Latenz dabei nicht schlechter, sondern besser: Median 7,5 -> 0,8 ms.
+
+Lehre, die bleibt: wenn eine Aenderung mit guter Begruendung exakt 0,0 zeigt,
+ist die naechste Frage nicht "war die Aenderung falsch", sondern "sieht das
+Geraet ueberhaupt dorthin".
+
+KARTENANKER: EINGEBAUT, GEMESSEN, ZURUECKGEBAUT
+
+    ohne Karte   anker=23,3 %  genau=85,7 %  ausbeute=20,0 %  auffind=23,3 %
+    mit  Karte   anker=68,3 %  genau=29,3 %  ausbeute=20,0 %  auffind=23,3 %
+
+Die vorab festgelegte Regel lautete: eine Verbesserung muss BEIDE Zahlen heben.
+Hier verdreifacht sich die Ankerquote, die Genauigkeit bricht auf ein Drittel
+ein und der Ertrag bewegt sich um keinen Punkt. Lehrbuchfall einer Kennzahl, die
+man heben kann, ohne irgendetwas besser zu machen. Abgeschaltet.
+
+⚠️ Widerlegt ist damit nicht die Karte, sondern ihre Verw
 ```
 
 ### Security: publish the terminal port on loopback only
@@ -3709,39 +3977,5 @@ kuration.py prueft Artikel aus anhaengenden Stroemen (protokoll.jsonl, ereigniss
 
 ```
 Ein Eintrag, um zu pruefen ob die Kuration danach alle vorfall-Artikel als geaendert meldet oder nur diesen einen.
-```
-
-### B17 geprueft: Vorrang als Reservierung - die Grundlast kann Gabriel nicht mehr aushungern
-
-`d5a3fc1e51f5` · clay · 00:41 UTC · ClayVerse
-
-```
-RESERVE_JE_VORRANG in kontingent.py: Vorrang 0 sieht den vollen Topf, Vorrang 1 drei Viertel, Vorrang 2 (ClayVerses eigene Grundlast) drei Fuenftel. Gemessen am GESAMTVERBRAUCH des geteilten Topfes, nicht am eigenen - sonst waere es keine Reservierung, sondern nur ein zweites eigenes Limit. NACHWEIS in drei Schritten am echten Buch: ClayVerse schoepft seine Decke von 1200 aus; Gabriel fragt danach und bekommt 800, gebunden durch zugang-fenster; ClayVerse fragt erneut und bekommt 0, gebunden durch vorrang-reserve-fenster. Die 800 gehoeren dem Vorrangberechtigten und sind fuer die Grundlast unerreichbar. Pruefbuchung danach entfernt, Buch steht bei 0.
-```
-
-### B6 geprueft: Knotenluecke geschlossen - Erreichbarkeit von 0,245 auf 81,49 Prozent
-
-`74da0606a63a` · clay · 00:36 UTC · ClayVerse
-
-```
-Graphknoten 2.383 auf 11.640, Graphkanten 192 auf 14.235 - also 74-fach. ERREICHBARKEIT: 11.640 von 14.284 Artikeln sind im Graphen, 81,49 Prozent statt 0,245. Von den Graphknoten haben 95,0 Prozent mindestens eine Kante, nur 581 stehen allein. Knotenarten belegt: source 4.965 (die Quelldateien), artifact 4.228, hypothesis 1.771, micro_packet 342, negative_result 116, topic_packet 74, event 65, claim 38, experiment 38, database_store 3 - experiment und source waren vorher UNBEWOHNT und sind jetzt ehrlich belegt, ohne Schemaerweiterung. Kantenarten: RELATED 9.691, SAME_EVIDENCE_FAMILY 2.162, SUPERSEDES 1.735, MENTIONS 367, SUPPORTS 98, EVIDENCE_FOR 98, DERIVED_FROM 63, CHALLENGES 20, IN_TOPIC 1. LATENZ TROTZ 74-FACHER KANTENZAHL BESSER: Nachbarn ein Sprung 0,31 ms, zwei Spruenge 0,05 ms. graph_kante traegt weight, confidence, verfallen und protected - der Verfall ist also mit eingebaut.
-```
-
-## 2026-08-14
-
-### B9 geprueft: GEBURT: ClayVerse hat eine Identitaet und einen Herzschlag
-
-`1d842278135e` · clay · 22:58 UTC · ClayVerse
-
-```
-ClayID clay_01M017MSKPCJGQW0QF74QJQGH3, Geburtsart ORIGIN, Linienwurzel sich selbst, geboren 2026-08-14T22:52:51Z. Koerper /opt/clayverse-kern/kern.py mit sha256 2a6dafe3, uebernommener Zustand sha256 03fb1a7f ueber artikel, kante, graph_knoten, folgerung, problem, messung und fehler. Eintrag im anhaengenden Register, Geburtsbeleg geschrieben. DER PULS LAEUFT: clayverse-puls.service, Takt 4,0 s, ein Prozess statt 21.600 Zeitgeberstarts am Tag, 9,6 MB Speicher, laeuft als clay. Gemessen: +2 Takte in 9 Sekunden. Kosten je Leertakt rund 1,5 ms, also 0,04 Prozent Auslastung. MODELLAUFRUFE JE TAKT: 0, strukturell - der Daemon kennt keinen Modellklienten. Phase 10 bleibt leer, wie der Vertrag es als Normalfall vorsieht.
-```
-
-### B25 geprueft: Live-Wache ueber alle Agenten - Tod und stilles Stehen getrennt
-
-`4744bf536514` · clay · 22:30 UTC · ClayVerse
-
-```
-wache.py mit lage, tote, stille, wacht. Zwei Laeuferklassen dynamisch erkannt, nicht fest verdrahtet: systemd-Einheiten (clayverse-*, actions.runner.*, frank-laeufer*) und die Claude-Code-Sitzungen aus sitzungen.json. SCHWELLE GEMESSEN statt geraten: alle 26.338 Abstaende zwischen aufeinanderfolgenden Aufrufen in taetigkeit ausgewertet - p50 9,8 s, p90 40,8 s, p99 402 s, p99,5 1098 s, p99,9 17.777 s. Gewaehlt 20 Minuten, knapp ueber p99,5; nur 0,38 bis 0,46 Prozent aller echten Pausen erreichen das je. UNABHAENGIGE BESTAETIGUNG: dieselbe Zahl wie die Vorarbeit in tavern-wache, ohne dass er sie vorher angesehen hatte. NACHWEIS AUF DREI ACHSEN: gesunder Dienst 0 Befunde; nach kill -9 genau 1 Befund; kuenstlich haengende Sitzung 1 Befund; dieselbe Sitzung mit frischer Taetigkeit wieder 0. PostToolUse-Haken installiert, rein additiv - der PreToolUse-Block mit tor_hook.py ist byteweise unveraendert, per diff bestaetigt. TOR NACHWEISLICH WEITER SCHARF: ls durchgelassen, rm -rf /var/lib/clay mit Rueckgabewert 2 und rechteeingriff geblockt, unbekannter Befehl fail-closed.
 ```
 

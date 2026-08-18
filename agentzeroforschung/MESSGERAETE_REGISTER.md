@@ -26,13 +26,18 @@ Dieses Register wird bei jedem relevanten `go` gegen den neuesten `agentZero/MAN
 | `zustand/graph_nodes.json` | Graphprojektion Knoten | Snapshot | Export ist Teilprojektion, nicht Vollgraph |
 | `zustand/graph_edges.json` | Graphprojektion Kanten | Snapshot | initial leer trotz DB-Kanten; Projektion/Filter erklaeren |
 | `karten/*.json` | persistente Snapshot-Karte | Zeitreihe | zentral fuer Laengsschnitt; Clock/Intervalle pruefen |
+| `karten/*.meta.json` | Provenienz/Metadaten eines Snapshot-Artefakts | Sidecar | kann von naiven `*.json`-Zaehlern als Snapshot mitgezaehlt werden; Zweck/Zuordnung teils noch unbekannt |
 | `puls/puls-letzte500.jsonl` | Autonomie-Puls | Rolling Tail | nur letzte 500; Langzeitstatistik braucht Aggregate |
 | `puls/ereignisse-letzte500.jsonl` | Ereignisse | Rolling Tail | nur letzte 500; Zensierung beachten |
-| `puls/tor-letzte500.jsonl` | Torentscheidungen | Rolling Tail | Dateiname sagt 500, Quelle kann kleiner sein |
+| `puls/tor-letzte500.jsonl` | Torentscheidungen | Rolling Tail | Dateiname sagt 500, Quelle kann kleiner sein; nicht automatisch aktuelles EffectGate |
 | `wiki/kern.jsonl` | Zero-/EntityOS-Kernkorpus | Snapshot | 800 Artikel; Auswahlregel/Drift messen |
 | `wiki/umfeld.jsonl` | semantisches Umfeld | Snapshot | 2635 Artikel; Grenzziehung/Leakage messen |
 | `architektur/aenderungen.jsonl` | Code-/Architekturhistorie | kumulativ/exportiert | Systemaenderung ist Confounder fuer Verhaltenszeitreihen |
-| `architektur/SKIZZE.md` | abgeleitete Laufzeitarchitektur | Snapshot | abgeleitete Beschreibung, kein unabhaengiges Instrument |
+| `architektur/SKIZZE.md` | abgeleitete Laufzeitarchitektur | Snapshot | abgeleitete Beschreibung, kein unabhaengiges Instrument; Tool-Erreichbarkeit derzeit widerspruechlich zu Chatbeobachtung |
+| `bauverlauf/bauverlauf.jsonl` / `BAUVERLAUF.md` | Bauinterventionen, Befunde, Reparaturgruende | kumulativ/exportiert | 700 Commits/4 Repos; Commit ist Interventionsevidenz, aber kein automatischer Wirksamkeitsbeweis |
+| `tests/letzter-lauf.json` | aktueller deterministischer Teststatus | je Testlauf | 480 gruen/12 rot am gebundenen Stand; Test-PASS != beobachtetes Zero-Verhalten |
+| `tests/verlauf.jsonl` | Teststatus ueber Zeit | wachsend, eine Zeile je Lauf | aktuell erst 1 Punkt; spaeter Change-Point-/Regression-Zeitreihe |
+| `ZIELE.md` | Soll/Ist-Faehigkeitsinventar mit Messpruefern | Snapshot | Status ist capability-spezifisch, kein globaler Health-Score; Zaehler selbst auf Messfehler pruefen |
 | `MANIFEST.json` | Export-Metrologie | Snapshot | zentrale Quelle fuer Zaehler, Hashes, Truncation |
 
 ## Automatische Aufnahme neuer Instrumente

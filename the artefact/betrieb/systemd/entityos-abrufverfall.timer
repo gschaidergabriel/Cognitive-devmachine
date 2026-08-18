@@ -1,0 +1,17 @@
+# /etc/systemd/system/entityos-abrufverfall.timer
+[Unit]
+Description=EntityOS: Abruf-Lernzustand taeglich schnappschiessen + zerfallen lassen
+# Vorher lief verfall() aus KEINER Unit (nur simulation()/CLI von Hand) -- ein
+# Ratsch, der nur in eine Richtung lief. vp_snapshot war 4 Tage still. Taeglich,
+# nicht alle 15/30min wie die anderen Takte hier: HOP_DECAY=0.58 ist multiplikativ
+# auf gesehen/genutzt -- bei 15-30min-Takt waere jede Beobachtung binnen Stunden
+# auf nahe 0 gezerrt. Ein Tageszyklus laesst echten Verkehr sich erst ansammeln,
+# bevor alt gegen neu abgewogen wird.
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=1d
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=EntityOS: Abrufkarte alle 30 Minuten
+
+# WARUM NICHT "bei jedem Puls", wie es in der Doku steht: der Puls schlaegt
+# alle 4 Sekunden. Eine volle Karte je Takt waere alle 4 s ueber tausend neue
+# Zeilen -- das ist kein Wegweiser mehr, sondern ein Datenleck. Gemeint ist in
+# der Doku die PFLEGE (Erfolgsmarken einfalten), nicht die Neuzeichnung.
+# Der Bau kostet 0,3 s; alle 30 Minuten ist reichlich und bleibt ablesbar.
+
+[Timer]
+OnBootSec=8min
+OnUnitActiveSec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

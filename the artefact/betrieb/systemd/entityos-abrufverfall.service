@@ -1,0 +1,17 @@
+# /etc/systemd/system/entityos-abrufverfall.service
+[Unit]
+Description=EntityOS: Abruf-Lernzustand (vp_edge_lern) schnappschieben, dann zerfallen lassen
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=clay
+WorkingDirectory=/opt/unifieddb
+ExecStart=/usr/bin/python3 -m udb.abruf.paket schnappschuss
+# Schnappschuss ZUERST (ExecStart), Zerfall DANACH (ExecStartPost) -- der gelernte
+# Zustand muss versioniert sein, BEVOR verfall() ihn veraendert, sonst ist ein
+# Lernsystem ohne Rueckweg (heilen() braucht einen Schnappschuss zum Zurueckrollen).
+# Zwei getrennte Timer fuer Schnappschuss und Zerfall wuerden unweigerlich
+# auseinanderlaufen (siehe entityos-baunotizen: derselbe Fehler, dieselbe Lehre) --
+# deshalb hier in einem Lauf, wie bei entityos-baunotizen/-zuordnung.
+ExecStartPost=/usr/bin/python3 -m udb.abruf.paket verfall

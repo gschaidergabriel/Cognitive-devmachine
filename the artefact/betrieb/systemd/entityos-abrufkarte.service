@@ -1,0 +1,9 @@
+[Unit]
+Description=EntityOS: Abrufkarte neu zeichnen (F93b -- Wegweiser, nicht Abbild)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=clay
+WorkingDirectory=/opt/unifieddb
+ExecStart=/usr/bin/python3 /opt/unifieddb/udb/abruf/karte_abruf.py bauen

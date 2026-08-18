@@ -5,15 +5,28 @@ import html
 import json
 import math
 import os
+import sqlite3
 import sys
 import time
 from pathlib import Path
 
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import Request, WebSocket, WebSocketDisconnect
 
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
-from .identity import SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, CANONICAL_USER_IDS, IdentityRouter
+from .identity import (
+    SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, CANONICAL_USER_IDS,
+    IdentityRouter, ist_kanonische_sitzung,
+)
+from .postfach import (
+    Postfach,
+    PostfachFehler,
+    PostfachNichtEingerichtet,
+    postfach_fuer_menschen,
+    registriere_postfach_wege,
+)
+from .postfach import zugaenge_laden as postfach_zugaenge_laden
 from .store import UnifiedDB
+from .zustand import zustand as zustand_lesen
 
 try:  # Die Vorstufe ist im Bau. Fehlt sie, soll /ws/chat scheitern -- nicht der Dienst.
     from .mistral_prestage.pipeline import run_chat_turn
@@ -36,6 +49,27 @@ _CHAT_DEFAULT_PLATZ = 2
 _PTY_INPUT_FRAME_MAX_BYTES = 65_536
 _PTY_OUTPUT_CHUNK_MAX_BYTES = 65_536
 _AUTH_REFRESH_HEADROOM_SECONDS = 10
+# /api/history Blaettergroesse: genug fuer einen Bildschirm voll Verlauf ohne
+# bei jedem Reload Dutzende Zuege auf einmal zu ziehen; der Bogen bleibt bei
+# _HISTORY_MAX_LIMIT, damit ein manipulierter ?limit= nicht die ganze Sitzung
+# in einer Antwort zieht.
+_HISTORY_DEFAULT_LIMIT = 50
+_HISTORY_MAX_LIMIT = 200
+
+# Wo die Menschenseiten liegen. Im Bild unter /opt/clayverse/web (per
+# `COPY web ./web`). Die Umgebungsvariable gibt es nur, damit die Testsuite
+# ohne Container gegen echte Dateien laufen kann -- der Vorgabewert ist
+# derselbe feste Pfad wie vorher, der Betrieb aendert sich dadurch nicht.
+_WEB_ROOT_DEFAULT = "/opt/clayverse/web"
+
+# Die HTTP-Wege loesen den Menschen auf Platz 1 auf. Sie lesen und schreiben
+# Mail; sie sollen keinen zweiten Sitzungsplatz belegen, um den sich der Chat
+# und das Terminal dann streiten.
+_HTTP_PLATZ = 1
+
+
+def _web_root() -> Path:
+    return Path(os.environ.get("ENTITYOS_WEB_ROOT", "").strip() or _WEB_ROOT_DEFAULT)
 
 
 def _decode_json_object(payload: str, *, name: str, max_chars: int) -> dict:
@@ -212,6 +246,71 @@ def _runtime_ready(db: UnifiedDB, terminals: TerminalSessionManager) -> bool:
         return False
 
 
+def _history_page(db: UnifiedDB, session_id: str, *, before_ordinal: int | None, limit: int) -> tuple[list[dict], bool]:
+    """One page of durable turns for an already-authorised session, oldest-first.
+
+    Reads `turns` -- the canonical per-session record -- newest-last within the
+    page. `before_ordinal` walks backward (older) from that cursor when set.
+    Fetches one row past `limit` to learn whether an older page exists without
+    a second round-trip.
+    """
+    fetch_limit = limit + 1
+    if before_ordinal is None:
+        rows = db.db.execute(
+            "SELECT turn_id,ordinal,ts,role,content FROM turns WHERE session_id=? "
+            "ORDER BY ordinal DESC LIMIT ?",
+            (session_id, fetch_limit),
+        ).fetchall()
+    else:
+        rows = db.db.execute(
+            "SELECT turn_id,ordinal,ts,role,content FROM turns WHERE session_id=? AND ordinal<? "
+            "ORDER BY ordinal DESC LIMIT ?",
+            (session_id, before_ordinal, fetch_limit),
+        ).fetchall()
+    has_more = len(rows) > limit
+    rows = list(reversed(rows[:limit]))
+
+    # Assistant turns store Zero's caveman voice as their canonical `content`
+    # (see turn_lifecycle.complete()/mistral_prestage.pipeline.run_chat_turn) --
+    # the human is never shown that directly on the live path either. Join the
+    # pre-stage's own translation log (same wiki.db file, separate connection,
+    # WAL-safe) to recover the German text shown live; a turn with no matching
+    # row (e.g. a terminal/CLI turn, which was never caveman in the first
+    # place) falls back to its own content unchanged.
+    translations: dict[str, dict] = {}
+    assistant_turn_ids = [r["turn_id"] for r in rows if r["role"] == "assistant"]
+    if assistant_turn_ids:
+        placeholders = ",".join("?" * len(assistant_turn_ids))
+        try:
+            for r in db.db.execute(
+                f"SELECT turn_id,translation_id,caveman_original,german_translation "
+                f"FROM mv_translation_log WHERE turn_id IN ({placeholders})",
+                assistant_turn_ids,
+            ):
+                translations[r["turn_id"]] = dict(r)
+        except sqlite3.OperationalError:
+            pass  # translation log not created yet (no chat turn has ever run) -- not an error
+
+    turns = []
+    for r in rows:
+        entry = {
+            "turn_id": r["turn_id"],
+            "ordinal": r["ordinal"],
+            "ts": r["ts"],
+            "role": r["role"],
+            "text": r["content"],
+            "caveman": None,
+            "translator_receipt": None,
+        }
+        tr = translations.get(r["turn_id"])
+        if tr is not None:
+            entry["text"] = tr["german_translation"]
+            entry["caveman"] = tr["caveman_original"]
+            entry["translator_receipt"] = tr["translation_id"]
+        turns.append(entry)
+    return turns, has_more
+
+
 def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: ClerkTokenVerifier,
                         state_root: str | Path, publishable_key: str, frontend_api_url: str,
                         terminals: TerminalSessionManager | None = None):
@@ -250,6 +349,62 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             "surface": "permanent-claude-code-terminal",
         }, status_code=200 if ready else 503)
 
+    @app.get("/api/history")
+    async def history(request: Request):
+        # Same authentication as /ws/chat's first frame: a verified Clerk
+        # session token, here carried as a normal Authorization bearer header
+        # because this is a plain GET, not a socket handshake. Nothing here
+        # trusts the query string for identity -- only the verified subject
+        # does, exactly as required.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        clerk_subject = str(claims.get("sub", ""))
+        user_id = identity.clerk_map.get(clerk_subject)
+        if user_id not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        # The session id comes from the query string and is UNTRUSTED. It is
+        # never used to look anything up until it has been checked against the
+        # canonical session list of the user the verified token names -- this
+        # is the exact check that was missing the one time this system leaked
+        # one user's memory into the other's session.
+        session_id = request.query_params.get("session_id", "")
+        if not ist_kanonische_sitzung(session_id, user_id):
+            return JSONResponse({"error": "forbidden"}, status_code=403)
+
+        before_raw = request.query_params.get("before")
+        before_ordinal: int | None = None
+        if before_raw is not None:
+            try:
+                before_ordinal = int(before_raw)
+            except ValueError:
+                return JSONResponse({"error": "invalid before parameter"}, status_code=400)
+            if before_ordinal < 1:
+                return JSONResponse({"error": "invalid before parameter"}, status_code=400)
+
+        limit_raw = request.query_params.get("limit")
+        limit = _HISTORY_DEFAULT_LIMIT
+        if limit_raw is not None:
+            try:
+                limit = int(limit_raw)
+            except ValueError:
+                return JSONResponse({"error": "invalid limit parameter"}, status_code=400)
+            if limit < 1 or limit > _HISTORY_MAX_LIMIT:
+                return JSONResponse({"error": "invalid limit parameter"}, status_code=400)
+
+        turns, has_more = await asyncio.to_thread(
+            _history_page, db, session_id, before_ordinal=before_ordinal, limit=limit)
+        return JSONResponse({
+            "session_id": session_id,
+            "user_id": user_id,
+            "turns": turns,
+            "has_more": has_more,
+        })
+
     _CHAT_PAGE = Path("/opt/clayverse/web/chat/index.html")
 
     @app.get("/", response_class=HTMLResponse)
@@ -266,6 +421,98 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         page = _CHAT_PAGE.read_text(encoding="utf-8")
         page = page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key)
         return HTMLResponse(page)
+
+    # ── Die Mailbox ───────────────────────────────────────────────────────
+    # Eignerentscheidung 2026-08-18: es gibt nur den Chat und die Mailbox.
+    # Keine Startseite -- "/" bleibt unveraendert der Chat.
+    @app.get("/postfach", response_class=HTMLResponse)
+    async def postfach_index():
+        key = html.escape(publishable_key, quote=True)
+        api = html.escape(frontend_api_url, quote=True)
+        if not key or not api:
+            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        seite = _web_root() / "postfach" / "index.html"
+        if not seite.is_file():
+            # Gleiche Begruendung wie beim Chat: kein stiller Rueckfall auf eine
+            # andere Seite. Eine fehlende Oberflaeche ist ein Bauproblem und
+            # soll als solches sichtbar sein, nicht als "sieht heute halt
+            # anders aus".
+            return HTMLResponse("postfach surface missing from image", status_code=503)
+        page = seite.read_text(encoding="utf-8")
+        page = page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key)
+        return HTMLResponse(page)
+
+    # ── Der HTTP-Zweig fuer Zustand und Mail ──────────────────────────────
+    async def _angemeldeter_mensch(request) -> tuple[str, str]:
+        """Bearer-Token -> (Mensch, Sitzung).
+
+        Dieselbe Kette wie bei /api/history und beim WebSocket-Handschlag:
+        Clerk pruefen, den Ablaufzeitpunkt erzwingen, dann ueber den
+        IdentityRouter aufloesen. `verifier.verify` kann ins Netz gehen (JWKS)
+        und gehoert deshalb nicht in die Ereignisschleife.
+        """
+        token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+        claims = await asyncio.to_thread(verifier.verify, token)
+        _auth_expiry_deadline(claims)
+        return identity.resolve(str(claims["sub"]), platz=_HTTP_PLATZ)
+
+    def _antwort_auf_fehler(exc: Exception) -> JSONResponse:
+        """Ausnahmen -> Statuscodes, an genau einer Stelle.
+
+        AuthenticationError erbt von PermissionError -- die Reihenfolge ist
+        deshalb keine Geschmacksfrage: umgekehrt bekaeme ein abgelaufenes Token
+        403 statt 401, und der Browser wuerde nicht erneuern, sondern aufgeben.
+        Fremde Fehlertexte gehen nie roh nach aussen; sie koennen eine
+        Serverantwort mit Zugangsdaten tragen.
+        """
+        if isinstance(exc, AuthenticationError):
+            return JSONResponse({"ok": False, "error": "unauthorized"}, status_code=401)
+        if isinstance(exc, PermissionError):
+            return JSONResponse({"ok": False, "error": "forbidden"}, status_code=403)
+        if isinstance(exc, PostfachNichtEingerichtet):
+            return JSONResponse({"ok": False, "error": "postfach_not_configured"}, status_code=503)
+        if isinstance(exc, PostfachFehler):
+            return JSONResponse({"ok": False, "error": str(exc)}, status_code=502)
+        if isinstance(exc, (ValueError, KeyError, TypeError)):
+            return JSONResponse({"ok": False, "error": str(exc)}, status_code=400)
+        print(f"api failed: {type(exc).__name__}", file=sys.stderr)
+        return JSONResponse({"ok": False, "error": "internal_error"}, status_code=500)
+
+    @app.get("/api/zustand")
+    async def api_zustand(request: Request):
+        """Nur lesend, Clerk-geschuetzt.
+
+        Schlank gehalten (Eignerentscheidung 2026-08-18): die Oberflaeche liest
+        daraus die Zahl am Mailbox-Punkt und die Bereitschaft. Die uebrigen
+        Zaehlwerte kommen aus denselben Tabellen wie ueberall sonst und kosten
+        nichts.
+
+        ⭐ Was nicht messbar ist, kommt als null zurueck. Eine 0 waere hier eine
+        Behauptung ("es gibt keine"), null ist eine Auskunft ("ich weiss es
+        nicht") -- und "Postfach nicht erreichbar" ist etwas anderes als "keine
+        ungelesene Mail".
+        """
+        try:
+            user_id, _session_id = await _angemeldeter_mensch(request)
+        except Exception as exc:
+            return _antwort_auf_fehler(exc)
+
+        def _ungelesen() -> int:
+            zugaenge = postfach_zugaenge_laden()
+            return Postfach(
+                zugaenge, postfach_fuer_menschen(zugaenge, user_id)
+            ).ungelesen_im_posteingang()
+
+        return JSONResponse(await asyncio.to_thread(
+            zustand_lesen, db, user_id=user_id,
+            ungelesen=_ungelesen,
+            bereit=lambda: _runtime_ready(db, terminals),
+        ))
+
+    registriere_postfach_wege(
+        app, db=db, mensch_aufloesen=_angemeldeter_mensch,
+        antwort_auf_fehler=_antwort_auf_fehler,
+    )
 
     # Das alte Terminal bleibt erreichbar, bis der neue Weg einmal getragen hat.
     @app.get("/terminal", response_class=HTMLResponse)

@@ -31,8 +31,12 @@ def test_container_healthcheck_is_read_only_runtime_readiness_probe():
     dockerfile=(Path(__file__).resolve().parents[1]/'Dockerfile').read_text()
     health=next(line for line in dockerfile.splitlines() if line.startswith('HEALTHCHECK '))
     assert '--once' not in health
-    assert '/readyz' in health
-    assert '/healthz' not in health
+    # Deliberate split (see Dockerfile comment right above HEALTHCHECK): the
+    # container-level check is liveness-only. Runtime readiness (canonical
+    # state + managed tmux/Claude admission) is intentionally a separate
+    # endpoint, /readyz, not wired into HEALTHCHECK.
+    assert '/healthz' in health
+    assert '/readyz' not in health
     assert 'urllib.request' in health
     assert 'clayverse.service' not in health
 

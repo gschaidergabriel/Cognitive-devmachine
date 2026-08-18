@@ -286,13 +286,16 @@ class ClayVerseEffectBridge:
         if not isinstance(text, str) or not text.strip():
             raise ValueError("text darf nicht leer sein")
         me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
-        ok = me.memory_hinzufuegen(artikel_id or "zero", text, quelle=quelle or None, tag=tag or None)
+        # self.user_id kommt aus dem verifizierten Clerk-Zustand, NICHT aus einem
+        # Feld, das das Modell fuellen koennte. Sonst waere die Trennung eine Bitte.
+        ok = me.memory_hinzufuegen(self.user_id, artikel_id or "zero", text, quelle=quelle or None, tag=tag or None)
         return {"ok": ok, "artikel_id": artikel_id or "zero", "tag": tag or None}
 
     def udb_memory_search(self, suchbegriff: str, limit: int = 10) -> dict:
         from udb.abruf.memory_entitaet import MemoryEntitaet
         me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
-        return {"suchbegriff": suchbegriff, "ergebnisse": me.memory_suche(suchbegriff, limit=max(1, min(int(limit), 50)))}
+        return {"suchbegriff": suchbegriff, "gehoert_zu": self.user_id,
+                "ergebnisse": me.memory_suche(self.user_id, suchbegriff, limit=max(1, min(int(limit), 50)))}
 
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:

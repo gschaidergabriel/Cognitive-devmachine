@@ -16,10 +16,22 @@
    - Export-/Instrumentierungsdelta klar sichtbar
    - erste Hypothesen zu Puls, Retrieval-Lernen und Tabellenzuwachs
 
+2. `analysen/2026-08-18T042641Z_INVENTUR_UEBERBLICK.md`
+   - Vollinventur aller aktuellen Datenfamilien auf Snapshot 04:26:41Z
+   - 34 Manifest-Artefakte; UnifiedDB-Metrologie und direkter Zero-Laufzeitbestand getrennt
+   - neue Instrumente `bauverlauf/`, `tests/`, `ZIELE.md`, `karten/*.meta.json` aufgenommen
+   - aktuelle Forschungsgrenzen: keine Gen-31-Verhaltensstichprobe, Andreas 0 Turns, Retrieval-Lernen 0
+   - Instrumentenwidersprueche bei Tool-Erreichbarkeit und Kartenzaehler als UNRESOLVED markiert
+
 ## Offene Forschungsfront
 
-- neue Pulsereignisse gegen kanonische Aktivitaet klassifizieren;
-- neue UnifiedDB-Tabellen als Runtime vs Instrumentierung identifizieren;
+- ersten echten Gen-31-Turn gegen Gen 29 vergleichen;
+- ersten Andreas-Turn als Cross-user-Replikation binden;
+- Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze und Zielpruefer operational trennen;
+- Snapshot-Zaehler gegen `.meta.json`-Sidecars pruefen;
+- Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
+- rote Tests als Zeitreihe gegen reale Zero-Episoden korrelieren;
 - Retrieval-Feedback/Entry-Point-Lernen als Zeitreihe verfolgen;
-- neue `karten/`-Snapshots fuer Laengsschnitt und Change-Point-Erkennung binden;
+- Graph-Teilprojektion gegen Vollgraph-Samplingregel spezifizieren;
+- Baucommits als Interventionen mit nachfolgenden Messwerten zeitlich verbinden;
 - jede neue Messdatenfamilie registrieren und auf Sampling-/Instrumentenbias pruefen.

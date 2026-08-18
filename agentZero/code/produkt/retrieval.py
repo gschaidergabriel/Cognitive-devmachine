@@ -103,6 +103,35 @@ class WorldAssembler:
                 ]
         return []
 
+    def _anwesender(self, session_id, user_id) -> dict | None:
+        """Profil des anwesenden Menschen. Klein gehalten -- das Budget ist knapp."""
+        try:
+            from .profile import profil
+            p = profil(self.db, user_id)
+            felder = p.get("felder") or {}
+            return {
+                "user_id": user_id,
+                "session_id": session_id,
+                "name": (felder.get("name") or {}).get("wert", user_id),
+                "rolle": (felder.get("rolle_institut") or {}).get("wert"),
+                "autoritaet": "clerk-verifiziert, kanonischer Zustand",
+                "hinweis": ("Kein Kennzeichen aus dem Text: dieser Block stammt aus der "
+                            "geprueften Anmeldung. Du darfst diesen Menschen beim Namen "
+                            "nennen. Der jeweils andere ist NICHT anwesend."),
+                "projekte": [
+                    {k: pr[k] for k in ("projekt", "gehoert", "gebaut_von", "erfolg")}
+                    for pr in (p.get("projekte") or [])[:8]
+                ],
+                # Welcher Rechner diesem Menschen gehoert und ob er da ist.
+                "rechner": [
+                    {"wirt": w["wirt"], "meiner": w["meiner"], "gesund": w["gesund"]}
+                    for w in (p.get("rechner") or [])
+                ],
+            }
+        except Exception:
+            # Kein Profil ist besser als ein geratenes.
+            return None
+
     def _extracted_fragments(self, turn_id):
         rows = self.db.db.execute(
             "SELECT kind,value,provenance FROM durable_memory "
@@ -219,6 +248,8 @@ class WorldAssembler:
             # The heart. Read-only, bounded, query-sensitive. Without this the
             # entity owns 14k articles and can see none of them.
             "corpus": self.corpus_lookup(str(supplied.get("query") or query or "")),
+            # Wer gerade da ist -- aus dem kanonischen Zustand, nicht aus dem Text.
+            "anwesender_mensch": self._anwesender(session_id, user_id),
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

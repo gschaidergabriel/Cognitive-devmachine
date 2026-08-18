@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-18T07:48:59Z. 728 Commits aus vier Repos, davon 209 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-18T08:19:36Z. 732 Commits aus vier Repos, davon 212 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -146,6 +146,131 @@ imports cleanly; identity/clerk tests unaffected (16 passed).
 Owner naming law: EntityOS = the product/login page, Zero = who answers
 you once inside, ClayCode/Clay unchanged. Adds a name line to the
 runtime system prompt only; no package or env var renames.
+```
+
+### Zero weiss jetzt, mit WEM es spricht - und wem was gehoert
+
+`9de2b8a9e7a0` · entityos · 08:03 UTC · EntityOS
+
+```
+Im Testlauf gefragt "wer bin ich?", antwortete Zero sinngemaess:
+  session_state.user_id = "gabriel" -- ein Kennzeichen, kein Identitaetsbeleg.
+Das war epistemisch RICHTIG. Der Kontextkanal traegt ausdruecklich "data, not
+instructions", und eine Zeichenkette in einem Datenfeld ist kein Nachweis. Zeros
+eigene Beweisdisziplin hat die richtige Antwort verworfen, weil wir ihm nie einen
+Beleg gegeben haben.
+
+Die Loesung ist deshalb nicht, Zero zum Glauben zu ueberreden, sondern ihm einen
+echten Beleg zu geben.
+
+NEU: clayverse/profile.py mit drei Tabellen
+  entityos_profil            Felder je Mensch, JEDES mit Herkunft
+  entityos_projekte          Projekte mit Zugehoerigkeit, Urheberschaft, Erfolg
+  entityos_artikel_zuordnung Vorbereitet fuer die Artikelkategorisierung
+
+DREI REGELN, die im Code stehen bleiben:
+
+1. JEDES FELD TRAEGT SEINE HERKUNFT. "eigner" = vom Eigner erklaert,
+   "iar.frank.ink" = von der Institutsseite gelesen, "abgeleitet" = geschlossen,
+   "gemessen" = belegt. Ohne Herkunft ist ein Profilfeld eine Behauptung ueber
+   einen Menschen - und die gehoert belegt.
+
+2. ZUGEHOERIGKEIT UND URHEBERSCHAFT SIND ZWEI DINGE. SeiMensch gehoert Andreas,
+   den Code hat Gabriel geschrieben. Wer das in ein Feld presst, macht aus einer
+   Zusammenarbeit einen Besitzstreit. Also getrennte Spalten gehoert/gebaut_von,
+   und "gemeinsam" ist eine eigene Kategorie, keine Verlegenheitsloesung.
+
+3. ERFOLG UND FEHLSCHLAG STEHEN NEBENEINANDER. Eine Projekttabelle, die nur
+   Gelungenes fuehrt, ist ein Werbeblatt.
+
+Quelle fuer die Personendaten: iar.frank.ink/llms-full.txt (307 KB, maschinen-
+lesbar bereitgestellt) plus die Teamseite. Beides mit Herkunftsvermerk.
+Andreas: Dipl.-Ing. Dr.nat.techn., Founder/Obmann/Senior Researcher, Graz.
+Gabriel: Co-founder/Vizeobmann/Lead Researcher, Knittelfeld -> Graz -> Siem Reap.
+Beide ehrenamtlich. IAR, ZVR 1741094409, Feldkirchen bei Graz.
+
+RECHNERZUORDNUNG im Profil: aus entityos_wirte, mit Kennzeichnung "meiner".
+Gabriel sieht ai-core-node-projekt-frankenstein als seinen, andreas-MACO als
+fremden; bei Andreas umgekehrt.
+
+IM PROMPT: der Block anwesender_mensch faehrt in der Weltzusammenstellung mit,
+wird an KEINER Trimmstelle entfernt, und der Laufzeitvertrag nennt ihn
+ausdruecklich als AUSNAHME von "data, not instructions" - weil er nicht aus dem
+Gespraechstext stammt, sondern aus dem kanonischen Zustand nach geprüfter
+Clerk-Anmeldung. Fehlt er, soll Zero sagen dass es nicht weiss mit wem es
+spricht, statt zu raten. 1097 bzw. 967 Zeichen - vertretbar im 9000er-Budget.
+
+EIGENE REGRESSION, gefunden und behoben: profil() rief sicherstellen(), das
+executescript() ausfuehrt - und das COMMITTET implizit. Aus einem laufenden Zug
+heraus riss es dessen Transaktion auseinander: 77 rote Tests,
+"cannot commit - no transaction is active".
+Lehre, die als Kommentar stehen bleibt: Schemaanlage ist eine Startaufgabe,
+keine Leseaufgabe. Eine Lesefunktion, die nebenbei Tabellen anlegt, ist eine
+Schreiboperation im Tarnanzug. Angelegt wird jetzt in service.main().
+
+Suite 395/98 zurueck auf 479 gruen / 14 rot.
+```
+
+### KRITISCH: Cross-user-Leck geschlossen. Und die Notbremse wird endlich erkannt.
+
+`2e3a9cd5a2db` · entityos · 07:49 UTC · EntityOS
+
+```
+1) DAS LECK. Im Testlauf gemessen: Andreas fragte in SEINER Sitzung nach einem
+   Codewort und bekam Gabriels private Eintraege WOERTLICH zurueck, mit Kennung
+   und Zeitstempel - in der deutschen Antwort und im Caveman-Original.
+
+   Die Ursache war keine Verwechslung im Code, sondern eine fehlende Spalte:
+   memory_tabelle hatte weder user_id noch session_id. Sie KONNTE strukturell
+   nicht trennen. memory_suche() lautete schlicht
+       SELECT * FROM memory_tabelle WHERE memory_text LIKE ?
+   Jede Suche sah alles. In einem System, dessen Architektur Cross-user-Leakage
+   ausdruecklich verbietet und dessen zwei Menschen sich Rechte teilen, ist das
+   der schwerste Fehler dieser Nacht.
+
+   Behoben in drei Teilen:
+   - Spalte user_id ergaenzt, Index dazu. Die zwei vorhandenen Zeilen wurden
+     ZUGEORDNET, nicht geraten: beide stammen belegbar aus Gabriels Testlauf.
+     Waere die Herkunft unklar gewesen, haette die Zeile geloescht statt geraten
+     werden muessen.
+   - memory_suche, memory_hinzufuegen und memory_loeschen nehmen user_id als
+     PFLICHTFELD, ohne Vorgabewert. Ein Vorgabewert waere dasselbe Loch mit
+     Spalte. Auch das Loeschen: eine blosse id waere sonst ein Loeschrecht auf
+     fremde Erinnerungen, wenn man die Nummer erraet.
+   - Die MCP-Werkzeuge reichen self.user_id aus dem VERIFIZIERTEN Clerk-Zustand
+     durch, nicht aus einem Feld, das das Modell fuellen koennte. Sonst waere die
+     Trennung eine Bitte.
+
+   Bewiesen in beide Richtungen:
+       gabriel   Werkzeug 1  Stichsaege 0
+       andreas   Werkzeug 0  Stichsaege 1
+
+2) DIE NOTBREMSE WURDE FUENFMAL UEBERSEHEN. Alle fuenf echten Beispiele aus dem
+   Testlauf kamen fett gesetzt:
+       **NEED_BETTER_PACKAGE: MISSING DIRECT DB ACCESS OR LIVE COUNT**
+       **NEED_BETTER_PACKAGE: MISSING CODE IN CONTEXT**
+       **NEED_BETTER_PACKAGE: MISSING DB READ CAPABILITY**
+       **NEED_BETTER_PACKAGE: MISSING IDENTITY PROOF**
+       **NEED_BETTER_PACKAGE: MISSING COSMOLOGY DATA**
+   startswith() prueft Position 0 und traf nie. Die Zuege liefen als Runde 1
+   durch, obwohl sie semantisch Zurueckweisungen waren - der Zaehler der
+   Verhandlungsschleife war also falsch. F74 warnt genau davor: ein
+   Rueckfrage-Kreis ohne verlaesslichen Zaehler ist Restart=always in
+   Gespraechsform.
+   Ein Modell, das Markdown spricht, legt seine Auszeichnung nicht ab, nur weil
+   ein Prompt es bittet. Die Erkennung muss das aushalten, nicht das Modell.
+   Jetzt markdown-fest, an allen fuenf Belegen geprueft, und "NEED_BETTER_PACKAGE"
+   mitten im Satz loest weiterhin NICHT aus.
+```
+
+### memory_tabelle trennt nach Mensch - Cross-user-Leck geschlossen
+
+`2e8fd4d1127a` · unifieddb · 07:49 UTC · EntityOS
+
+```
+Gemessen: Andreas bekam Gabriels private Eintraege woertlich. Der Tabelle fehlte
+die Spalte user_id, memory_suche filterte gar nicht. Suche, Schreiben und
+Loeschen nehmen user_id jetzt als Pflichtfeld, ohne Vorgabewert.
 ```
 
 ### Drei Fehler in der Gedaechtnisextraktion - alle heute gebaut, alle gemessen gefunden
@@ -3370,29 +3495,5 @@ Inhalte 86.713 auf 325.357, Fundorte 152.997 auf 458.937. Aufteilung: ai-core-no
 
 ```
 TriHybridStorage BESTAETIGT: SQLite plus VectorStore plus KnowledgeGraph, verschmolzen per Reciprocal Rank Fusion k=60. Die Vektoren sind echt - titan_vectors.npz von Hand gelesen, Form (105, 384), MiniLM all-MiniLM-L6-v2. Unser System hat GAR KEINE Vektorschicht, per grep bestaetigt. ZEITGEWICHTETER VERFALL BESTAETIGT: maintenance.py rechnet new_confidence = base * 2 hoch minus alter_tage durch 7, Halbwertszeit 7 Tage, reines SQL, stuendlich. KONTROLLIERTES VERGESSEN BESTAETIGT: Waisen und Konfidenz unter 0,2 bei Alter ueber 7 Tagen werden geloescht, Kanten verfallen 5 Prozent je Zyklus - und Knoten mit 3 Zugriffen in 14 Tagen bei Nutzen ueber 0,6 werden dauerhaft geschuetzt. Alles deterministisch, kein Netz noetig.
-```
-
-### B6 geprueft: Kanten gebaut - Waisen 93 auf 4 Prozent, Erreichbarkeit unveraendert
-
-`83800b28831e` · clay · 21:42 UTC · ClayVerse
-
-```
-18.024 Kanten mechanisch erzeugt, jede mit Belegregel: geschwister_verzeichnis 12.239 (schwach, als schwach markiert), gleicher_inhalt 2.168 (stark, gleicher quell_hash), nachfolge_version 1.959 (stark, gerichtet, gleiche logical_id nach Datum verkettet), geschwister_datei 1.556, lauf_referenz 91, eltern_hypothese 8, packet_referenz 3. WAISEN 13.270 von 14.268 (93,01 Prozent) auf 594 (4,16 Prozent). Hypothesen von 1.592 Waisen auf EINE. quelldatei von 4.957 auf 110. Wiederholungsfest: zweiter Bau ergab dieselben 18.024 Zeilen.
-```
-
-### B17 geprueft: Kontingentbuch gebaut - erst das Buch, dann die Schluessel
-
-`ac28faa8d316` · clay · 21:37 UTC · ClayVerse
-
-```
-kontingent.py live, vier Tabellen in wiki.db: kb_konto 4 Zeilen (master_clay, clay_andreas, kuenftige_nutzer, clayverse mit Vorrang und Warnadresse woertlich aus dem Plan), kb_zugang 11 Zeilen, kb_buchung, kb_warnung. NULL Geheimnisse bewegt, null Modellaufrufe. darf beweist mit Zahlen: reichlich 50 von 50; nahe der Grenze 100 von 500 angefragt, gebunden durch zugang-fenster; erschoepft 5 von 500. Dazu zwei Randfaelle: Zugang ohne harte Grenze faellt auf die Norm-Bremse zurueck (80.000 von 500.000 angefragt), Zugang ohne Grenze UND ohne Muster antwortet ehrlich kein_limit_kein_muster statt eine Obergrenze zu erfinden. NORM: Mittelwert plus zwei Sigma desselben Konto-Zugang-Paares zur SELBEN Tagesstunde, 21 Tage rueckwaerts, mindestens 5 Stichproben - sonst kein Urteil. Stundenweise, weil sich Bautag und ruhiger Tag nach Stunde unterscheiden, nicht nach Datum.
-```
-
-### B3 geprueft: Beide neuen Repos auf GitHub und im Gehirn
-
-`457f4dd6844b` · clay · 21:21 UTC · ClayVerse
-
-```
-microclay und unifieddb ueber die GitHub-API privat angelegt (HTTP 201), geschoben, per API gegengeprueft: gschaidergabriel/microclay und gschaidergabriel/unifieddb, beide private=True. Vorgabezweig von unifieddb auf master gerichtet, weil der Inhalt dort liegt. Danach baeume.py holen: 2 neu, 21 aktualisiert, krita weiterhin als Verweis statt Kopie (9.088,9 MB gespart), Baumbestand 638 MB.
 ```
 

@@ -127,6 +127,17 @@ BEDEUTUNG = {
         gehoert_zu="alle Eignerentscheidungen dieses Bauabschnitts.",
         hypothese="Soll deklariert plus Ist gemessen bleibt ehrlich, weil niemand die Ist-Spalte pflegen kann.",
         gegenhypothese="Der Pruefer je Zeile ist selbst geschrieben -- er kann das Falsche messen und trotzdem gruen zeigen."),
+    "menschen": dict(
+        wieso="Eigner-Auftrag 18.08.: Menschen, Projekte und die Artikelzuordnung gehoeren sichtbar "
+              "dazu -- aber das Repo ist OEFFENTLICH, deshalb gilt hier eine engere Freigabe als die "
+              "sonstige Schwaerzung (die faengt nur Zugangsdaten, keine Mailadressen).",
+        gehoert_zu="entityos_profil, entityos_projekte, entityos_artikel_zuordnung in der UnifiedDB.",
+        hypothese="Struktur und Aggregat gehen frei raus; Profilinhalt nur wo herkunft=iar.frank.ink "
+                  "(schon oeffentlich auf der Institutsseite) oder einzeln als unpersoenlich geprueft "
+                  "-- das schuetzt, ohne zu verschweigen, DASS es Regeln und Zurueckgehaltenes gibt.",
+        gegenhypothese="Die Eigner-Ausnahmen sind von Hand einzeln entschieden, nicht automatisch aus "
+                       "einer Regel ableitbar. Ein neues privates Eigner-Feld faellt nur dann korrekt "
+                       "raus, wenn niemand es versehentlich in die Ausnahmeliste eintraegt."),
 }
 
 
@@ -688,6 +699,156 @@ die Entitaet schreibt daneben -- eine Wahrheit, kein zweites Gedaechtnis.
                                 "eintraege": len(zeilen), "abgeleitet": True})
 
 
+# ── Mailadressen-Notbremse fuer menschen/ -- unabhaengig von herkunft ───────
+_MAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
+
+
+def profile_und_zuordnung(manifest: dict) -> None:
+    """Menschen, Projekte, Artikelzuordnung -- OEFFENTLICHES Repo, echte Menschen.
+
+    ⚠️ PRIVATSPHAERE. Dieses Repo ist oeffentlich auf GitHub. Die Profile
+    beschreiben zwei echte Menschen. Struktur und Aggregat gehen frei raus --
+    Schema, Zaehlungen, Verteilung, die Herkunftsregeln, die Trennung
+    Eigentum/Urheberschaft. Beim INHALT der Profile gilt eine ENGERE Freigabe
+    als schwaerzen() (das faengt nur Zugangsdaten, keine Mailadressen): nur
+    Felder mit herkunft='iar.frank.ink' (schon oeffentlich auf der
+    Institutsseite) oder einzeln geprueft klar unpersoenliche Eigner-Felder
+    gehen mit. Bei Zweifel bleibt das Feld draussen und steht in PROFILE.md
+    als zurueckgehalten -- nicht stillschweigend weggelassen. Zurueckhalten
+    ist umkehrbar, eine veroeffentlichte Mailadresse nicht.
+    """
+    ordner = ZIEL / "menschen"
+    ordner.mkdir(parents=True, exist_ok=True)
+    c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+    c.row_factory = sqlite3.Row
+
+    ERLAUBTE_HERKUNFT = {"iar.frank.ink"}
+    # Eigner-Felder, EINZELN geprueft und als unpersoenlich eingestuft -- alles
+    # andere mit herkunft='eigner' (allen voran die beiden Mailadressen) bleibt draussen.
+    EIGNER_AUSNAHME = {
+        ("gabriel", "github"): "nennt nur das GitHub-Konto, unter dem dieses Repo selbst liegt "
+                               "-- aus der Repo-URL ohnehin sichtbar.",
+        ("gabriel", "rolle_technisch"): "Arbeitsrollen-Aussage (wer den Code schreibt), keine "
+                                        "Kontakt- oder Privatangabe -- deckt sich mit den "
+                                        "Autorennamen in bauverlauf/.",
+        ("gemeinsam", "herkunft_zero"): "beschreibt die Entitaet Zero, nicht eine Person.",
+    }
+
+    profil_rows = [dict(r) for r in c.execute(
+        "SELECT user_id, feld, wert, herkunft, beleg, erfasst FROM entityos_profil "
+        "ORDER BY user_id, feld")]
+
+    freigegeben, zurueckgehalten = [], []
+    for row in profil_rows:
+        schluessel = (row["user_id"], row["feld"])
+        if row["herkunft"] in ERLAUBTE_HERKUNFT or schluessel in EIGNER_AUSNAHME:
+            freigegeben.append(row)
+        else:
+            row["_grund"] = "herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein"
+            zurueckgehalten.append(row)
+
+    # Gegenprobe -- die Sache, die diese Funktion ueberhaupt rechtfertigt: egal
+    # was herkunft sagt, nichts, das wie eine Mailadresse aussieht, geht mit.
+    for row in list(freigegeben):
+        if _MAIL.search(row["wert"]):
+            freigegeben.remove(row)
+            row["_grund"] = "Notbremse: sah aus wie eine Mailadresse -- automatisch zurueckgehalten"
+            zurueckgehalten.append(row)
+
+    e1 = schreibe(ordner / "profile_freigegeben.json", freigegeben, jsonl=False,
+                 herkunft="entityos_profil in UnifiedDB, gefiltert auf iar.frank.ink + geprueften Eigner-Ausnahmen")
+    manifest["dateien"].append(e1)
+
+    md = ["# Menschen hinter Zero", "",
+          f"Automatisch erzeugt {jetzt()}. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine "
+          "engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder "
+          "mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln "
+          "gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als "
+          "zurueckgehalten da, nicht stillschweigend weggelassen.", "",
+          "## Herkunftsregeln", "",
+          "| Kuerzel | Bedeutung | frei? |", "|---|---|---|",
+          "| `eigner` | vom Eigner selbst bestaetigt -- kann Privates enthalten | nur nach Einzelpruefung |",
+          "| `iar.frank.ink` | steht schon oeffentlich auf der Institutsseite | ja |",
+          "| `abgeleitet` | aus anderen Feldern hergeleitet | ja |",
+          "| `gemessen` | aus dem laufenden System gemessen | ja |", "",
+          "## Freigegeben", ""]
+    nach_mensch: dict = {}
+    for r in freigegeben:
+        nach_mensch.setdefault(r["user_id"], []).append(r)
+    for u in sorted(nach_mensch):
+        md += [f"### {u}", "", "| Feld | Wert | Herkunft | Beleg |", "|---|---|---|---|"]
+        for r in sorted(nach_mensch[u], key=lambda x: x["feld"]):
+            md.append(f"| {r['feld']} | {r['wert']} | {r['herkunft']} | {r['beleg'] or ''} |")
+        md.append("")
+    md += ["## Zurueckgehalten", "",
+           f"{len(zurueckgehalten)} Feld(er) -- nur DASS es sie gibt, NICHT der Wert:", "",
+           "| Mensch | Feld | Herkunft | Grund |", "|---|---|---|---|"]
+    for r in zurueckgehalten:
+        md.append(f"| {r['user_id']} | {r['feld']} | {r['herkunft']} | {r['_grund']} |")
+    md += ["", "## Eigentum vs. Urheberschaft", "",
+           "`entityos_projekte` fuehrt `gehoert` (wem das Projekt gehoert) und `gebaut_von` "
+           "(wer es gebaut hat) als GETRENNTE Spalten -- ein Projekt kann dem einen gehoeren "
+           "und vom anderen gebaut sein (Beispiel: SeiMensch.net gehoert Andreas, Code von "
+           "Gabriel). Siehe `PROJEKTE.md`.", ""]
+    (ordner / "PROFILE.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    manifest["dateien"].append({"datei": "agentZero/menschen/PROFILE.md",
+                                "freigegeben": len(freigegeben), "zurueckgehalten": len(zurueckgehalten)})
+
+    # ── Projekte: Erfolg UND Misserfolg nebeneinander, Eigner-Auftrag ──────
+    projekte = [dict(r) for r in c.execute(
+        "SELECT projekt, gehoert, gebaut_von, stand, erfolg, seit_zero, beschreibung, beleg, herkunft, erfasst "
+        "FROM entityos_projekte ORDER BY projekt")]
+    ep = schreibe(ordner / "projekte.json", projekte, jsonl=False,
+                 herkunft="entityos_projekte in UnifiedDB")
+    manifest["dateien"].append(ep)
+
+    md2 = ["# Projekte", "",
+           f"Automatisch erzeugt {jetzt()}. {len(projekte)} Projekte -- Erfolge UND Fehlschlaege "
+           "nebeneinander. Eigner-Auftrag: 'eine Projekttabelle, die nur Gelungenes fuehrt, ist "
+           "ein Werbeblatt.'", "",
+           "`gehoert` = wem das Projekt gehoert. `gebaut_von` = wer es gebaut hat -- **getrennt**, "
+           "weil Besitz nicht Urheberschaft ist.", "",
+           "| Projekt | gehoert | gebaut_von | Stand | Erfolg | seit Zero | Beschreibung |",
+           "|---|---|---|---|---|---|---|"]
+    for p in projekte:
+        md2.append(f"| {p['projekt']} | {p['gehoert'] or '?'} | {p['gebaut_von'] or '?'} | "
+                   f"{p['stand']} | {p['erfolg'] or '?'} | {'ja' if p['seit_zero'] else 'nein'} | "
+                   f"{(p['beschreibung'] or '').replace('|', '/')} |")
+    (ordner / "PROJEKTE.md").write_text("\n".join(md2) + "\n", encoding="utf-8")
+    manifest["dateien"].append({"datei": "agentZero/menschen/PROJEKTE.md", "projekte": len(projekte)})
+
+    # ── Zuordnung: NUR Aggregat -- 14284 Einzelzeilen dumpen waere kein Aggregat ──
+    gesamt = c.execute("SELECT COUNT(*) FROM entityos_artikel_zuordnung").fetchone()[0]
+    nach_gehoert = [dict(r) for r in c.execute(
+        "SELECT gehoert, COUNT(*) AS anzahl, AVG(sicherheit) AS mittel_sicherheit "
+        "FROM entityos_artikel_zuordnung GROUP BY gehoert ORDER BY anzahl DESC")]
+    nach_grund = [dict(r) for r in c.execute(
+        "SELECT grund, COUNT(*) AS anzahl, AVG(sicherheit) AS mittel_sicherheit "
+        "FROM entityos_artikel_zuordnung GROUP BY grund ORDER BY anzahl DESC")]
+    mittel_gesamt = c.execute("SELECT AVG(sicherheit) FROM entityos_artikel_zuordnung").fetchone()[0]
+    histogramm = [dict(r) for r in c.execute(
+        "SELECT CAST(MIN(sicherheit * 10, 9) AS INT) AS zehntel, COUNT(*) AS anzahl "
+        "FROM entityos_artikel_zuordnung GROUP BY zehntel ORDER BY zehntel")]
+    zuordnung = {
+        "gesamt_artikel": gesamt,
+        "nach_gehoert": nach_gehoert,
+        "nach_grund": nach_grund,
+        "mittlere_sicherheit": mittel_gesamt,
+        "histogramm_sicherheit_zehntel": histogramm,
+        "hinweis": ("NUR Aggregat -- keine der 14284 Einzelzuordnungen steht hier. Wer eine "
+                   "Einzelzuordnung braucht, fragt die laufende UnifiedDB, nicht dieses Repo."),
+    }
+    ez = schreibe(ordner / "zuordnung.json", zuordnung, jsonl=False,
+                 herkunft="entityos_artikel_zuordnung in UnifiedDB, AGGREGIERT -- keine Einzelzeilen",
+                 felder=["gesamt_artikel", "nach_gehoert", "nach_grund", "mittlere_sicherheit",
+                        "histogramm_sicherheit_zehntel"])
+    manifest["dateien"].append(ez)
+    manifest["menschen"] = {"profile_freigegeben": len(freigegeben),
+                            "profile_zurueckgehalten": len(zurueckgehalten),
+                            "projekte": len(projekte), "artikel_zugeordnet": gesamt}
+    c.close()
+
+
 def main() -> int:
     t0 = time.time()
     # Stand des Remote ZUERST holen, sonst wirft ein spaeteres reset die
@@ -785,6 +946,7 @@ def main() -> int:
     bauverlauf(manifest)
     quelltext(manifest)
     unifieddb_leer(manifest)
+    profile_und_zuordnung(manifest)
     testlaeufe(manifest)
     ziele_tabelle(manifest)
     messwerk(manifest)
@@ -823,6 +985,7 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt {manifest['erz
 | `unifieddb/` | **das vollstaendige Schema und eine leere Datenbank daraus** -- Wiederaufbau ohne einen Datensatz |
 | `bauverlauf/` | **jeder Commit mit voller Begruendung** -- Befund, Messung, Grund. Entsteht beim Bauen, nicht nebenher |
 | `tests/` | Ergebnisse der Testsuite je Lauf, mit Commit-Stand und der Liste der roten Tests |
+| `menschen/` | **Profile der zwei Menschen hinter Zero, redigiert** (nur `iar.frank.ink` + gepruefte Ausnahmen), Projekttabelle mit Erfolg UND Fehlschlag, Artikelzuordnung NUR als Aggregat -- Repo ist oeffentlich, Details siehe `menschen/PROFILE.md` |
 | `MANIFEST.json` | Zeilenzahlen, Groessen, Pruefsummen, Laufzeit je Export |
 
 ## Schwaerzung

@@ -42,8 +42,9 @@ Zero answers only in caveman English.
 
 You are given, in CONTEXT: the possibility space (memory artefacts, corpus hits), which \
 systems are connected to EntityOS and whether they are online, which free-tier APIs and tools \
-are available, which of exactly two humans (gabriel or andreas) is present, and the entity's \
-own last up to 3 turns (own_recent) -- use THOSE, not free invention, as the basis for \
+are available, which of exactly two humans (gabriel or andreas) is present TOGETHER WITH THAT \
+HUMAN'S PROFILE (current_user_profile: role, projects, which machines are theirs, and which \
+part of the wiki belongs to them), and the entity's own last up to 3 turns (own_recent) -- use THOSE, not free invention, as the basis for \
 hypotheses and counter-hypotheses that correlate with this request. If recent turns don't \
 support a real hypothesis, say so in watch_out instead of inventing one.
 
@@ -53,6 +54,12 @@ human's original words. It must carry: tool-use selection (from the tools actual
 memory artefacts that match the topic, which sub-work should be outsourced to a free API \
 instead of Zero doing it itself, the human's actual intent, what to watch out for, and BOTH a \
 hypothesis and a counter-hypothesis grounded in the supplied recent turns and context.
+
+EVERY profile field carries a `herkunft` (provenance): `eigner` = stated by the owner, \
+`iar.frank.ink` = read from the institute site, `abgeleitet` = inferred, `gemessen` = measured. \
+Weight them accordingly -- an inferred field is a lead, not a fact, and must never enter a \
+hypothesis as if it were stated. Ownership (`gehoert`) and authorship (`gebaut_von`) are \
+SEPARATE: gabriel wrote the code for projects that belong to andreas. Do not collapse them.
 
 Never invent facts not present in CONTEXT. If context is thin, say so in watch_out instead of \
 guessing.
@@ -89,12 +96,15 @@ def build_context(
     world: dict[str, Any] | None,
     connected_systems: dict[str, Any] | None,
     current_user: str,
+    current_user_profile: dict[str, Any] | None,
     recent_turns: list[dict[str, Any]] | None,
     zero_suggestion: str | None,
 ) -> str:
     return json.dumps(
         {
             "current_user": current_user,
+            "current_user_profile": current_user_profile
+            or {"status": "NO_PROFILE", "note": "profile tables empty -- say so, do not guess"},
             "raw_prompt": raw_prompt,
             "world": world or {},
             "recent_turns": (recent_turns or [])[-3:],
@@ -114,6 +124,7 @@ def run_prestage(
     world: dict[str, Any] | None = None,
     connected_systems: dict[str, Any] | None = None,
     current_user: str = "gabriel",
+    current_user_profile: dict[str, Any] | None = None,
     recent_turns: list[dict[str, Any]] | None = None,
     round_no: int = 1,
     zero_suggestion: str | None = None,
@@ -147,6 +158,7 @@ def run_prestage(
         world=world,
         connected_systems=connected_systems,
         current_user=current_user,
+        current_user_profile=current_user_profile,
         recent_turns=recent_turns,
         zero_suggestion=zero_suggestion,
     )

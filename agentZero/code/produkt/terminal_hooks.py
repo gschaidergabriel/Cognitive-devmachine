@@ -266,12 +266,15 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
             # The anchor still lets the entity verify WHICH identity is canonical and
             # detect drift, which was the whole reason it travels with the turn.
     identity = _identity_anchor(context.get("canonical_identity"))
+    anwesend = context.get("anwesender_mensch")
     context["durable_memory"] = context.get("durable_memory", [])[:12]
     context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
     context["own_recent"] = context.get("own_recent", [])[-8:]
     context["corpus"] = context.get("corpus", [])[:3]
     if identity is not None:
         context["canonical_identity"] = identity
+    if anwesend is not None:
+        context["anwesender_mensch"] = anwesend
     for item in context["own_recent"]:
         if len(str(item.get("content", ""))) > 700:
             item["content"] = str(item["content"])[:700] + "…"

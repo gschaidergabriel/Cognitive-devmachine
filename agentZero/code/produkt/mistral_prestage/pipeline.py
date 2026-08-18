@@ -92,10 +92,16 @@ def run_chat_turn(
             for t in (world.get("own_recent") or [])[-3:]
         ]
 
+        # Das Profil des ANWESENDEN Menschen -- dynamisch, je Zug neu gelesen.
+        # Nicht zwischengespeichert: es wird autonom verdichtet, ein Cache
+        # wuerde die Vorstufe mit einem veralteten Menschenbild fuettern.
+        nutzerprofil = _profil_safe(db, user_id)
+
         # --- round 1 ---
         t0 = time.perf_counter()
         envelope = prestage.run_prestage(
             raw_prompt=message, world=world, current_user=user_id,
+            current_user_profile=nutzerprofil,
             recent_turns=recent_turns, round_no=1,
         )
         prestage_ms = (time.perf_counter() - t0) * 1000.0
@@ -128,6 +134,7 @@ def run_chat_turn(
             t0 = time.perf_counter()
             envelope2 = prestage.run_prestage(
                 raw_prompt=message, world=world, current_user=user_id,
+                current_user_profile=nutzerprofil,
                 recent_turns=recent_turns, round_no=2, zero_suggestion=suggestion,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0

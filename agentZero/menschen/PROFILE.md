@@ -1,6 +1,6 @@
 # Menschen hinter Zero
 
-Automatisch erzeugt 2026-08-18T08:19:37Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
+Automatisch erzeugt 2026-08-18T08:21:54Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
 
 ## Herkunftsregeln
 
@@ -8,8 +8,8 @@ Automatisch erzeugt 2026-08-18T08:19:37Z. Dieses Repo ist OEFFENTLICH -- deshalb
 |---|---|---|
 | `eigner` | vom Eigner selbst bestaetigt -- kann Privates enthalten | nur nach Einzelpruefung |
 | `iar.frank.ink` | steht schon oeffentlich auf der Institutsseite | ja |
-| `abgeleitet` | aus anderen Feldern hergeleitet | ja |
-| `gemessen` | aus dem laufenden System gemessen | ja |
+| `abgeleitet` | aus anderen Feldern hergeleitet | nur nach Einzelpruefung |
+| `gemessen` | aus dem laufenden System gemessen (z.B. Zugriffszahlen, Rechnername) | nur nach Einzelpruefung |
 
 ## Freigegeben
 
@@ -43,19 +43,21 @@ Automatisch erzeugt 2026-08-18T08:19:37Z. Dieses Repo ist OEFFENTLICH -- deshalb
 
 ## Zurueckgehalten
 
-10 Feld(er) -- nur DASS es sie gibt, NICHT der Wert:
+12 Feld(er) -- nur DASS es sie gibt, NICHT der Wert:
 
 | Mensch | Feld | Herkunft | Grund |
 |---|---|---|---|
-| andreas | gemessen_gedaechtniseintraege | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| andreas | gemessen_gespraeche | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| andreas | gemessen_schwerpunkte | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| andreas | gemessen_wiki_bestand | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
+| andreas | gemessen_gedaechtniseintraege | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| andreas | gemessen_gespraeche | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| andreas | gemessen_rechner | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| andreas | gemessen_schwerpunkte | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| andreas | gemessen_wiki_bestand | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
 | andreas | mail | eigner | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| gabriel | gemessen_gedaechtniseintraege | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| gabriel | gemessen_gespraeche | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| gabriel | gemessen_schwerpunkte | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
-| gabriel | gemessen_wiki_bestand | gemessen | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
+| gabriel | gemessen_gedaechtniseintraege | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| gabriel | gemessen_gespraeche | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| gabriel | gemessen_rechner | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| gabriel | gemessen_schwerpunkte | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
+| gabriel | gemessen_wiki_bestand | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
 | gabriel | mail | eigner | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
 
 ## Eigentum vs. Urheberschaft

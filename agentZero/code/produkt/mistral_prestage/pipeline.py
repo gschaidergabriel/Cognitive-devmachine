@@ -33,6 +33,41 @@ def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
     return assembler.assemble(session_id, resource_refs=[])
 
 
+
+def _profil_safe(db, user_id: str) -> dict | None:
+    """Profil, Rechnerbesitz und Wiki-Bestand des anwesenden Menschen.
+
+    Ausfallsicher, weil ein fehlendes Profil einen Zug nicht kippen darf: die
+    Vorstufe bekommt dann NO_PROFILE und sagt das, statt zu raten. Ein Fehler
+    hier wuerde sonst die ganze Anfrage verlieren -- fuer Beiwerk.
+
+    ⚠️ Der Schluessel heisst `gehoert_zu`, nicht `gehoert`. Mit dem falschen
+    Namen liefert .get() klaglos None, und die Vorstufe liest fuer JEDEN Rechner
+    "gehoert niemandem, nicht deiner" -- kein Fehler, nur die Unwahrheit, und
+    zwar genau bei der Angabe, die der Eigner ausdruecklich bestellt hat.
+    """
+    try:
+        from .. import profile as _profile
+        from .. import wirte as _wirte
+        from .. import artikel_zuordnung as _az
+        p = _profile.profil(db, user_id)
+        try:
+            p["rechner"] = [
+                {"wirt": w.get("wirt"), "gehoert_zu": w.get("gehoert_zu"),
+                 "meiner": w.get("gehoert_zu") == user_id, "online": w.get("online")}
+                for w in _wirte.verbundene_systeme(db)
+            ]
+        except Exception:
+            p["rechner"] = []
+        try:
+            p["wiki_bestand"] = _az.bestand(db, user_id)
+        except Exception:
+            pass
+        return p
+    except Exception:
+        return None
+
+
 def run_chat_turn(
     *,
     db,

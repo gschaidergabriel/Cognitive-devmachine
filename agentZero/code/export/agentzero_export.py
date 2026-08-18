@@ -743,8 +743,12 @@ def profile_und_zuordnung(manifest: dict) -> None:
         schluessel = (row["user_id"], row["feld"])
         if row["herkunft"] in ERLAUBTE_HERKUNFT or schluessel in EIGNER_AUSNAHME:
             freigegeben.append(row)
-        else:
+        elif row["herkunft"] == "eigner":
             row["_grund"] = "herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein"
+            zurueckgehalten.append(row)
+        else:
+            row["_grund"] = (f"herkunft={row['herkunft']}, nicht in ERLAUBTE_HERKUNFT -- "
+                             "noch nicht einzeln geprueft, konservativ zurueckgehalten")
             zurueckgehalten.append(row)
 
     # Gegenprobe -- die Sache, die diese Funktion ueberhaupt rechtfertigt: egal
@@ -769,8 +773,8 @@ def profile_und_zuordnung(manifest: dict) -> None:
           "| Kuerzel | Bedeutung | frei? |", "|---|---|---|",
           "| `eigner` | vom Eigner selbst bestaetigt -- kann Privates enthalten | nur nach Einzelpruefung |",
           "| `iar.frank.ink` | steht schon oeffentlich auf der Institutsseite | ja |",
-          "| `abgeleitet` | aus anderen Feldern hergeleitet | ja |",
-          "| `gemessen` | aus dem laufenden System gemessen | ja |", "",
+          "| `abgeleitet` | aus anderen Feldern hergeleitet | nur nach Einzelpruefung |",
+          "| `gemessen` | aus dem laufenden System gemessen (z.B. Zugriffszahlen, Rechnername) | nur nach Einzelpruefung |", "",
           "## Freigegeben", ""]
     nach_mensch: dict = {}
     for r in freigegeben:

@@ -42,6 +42,11 @@ class TerminalSessionManager:
     MANAGED_TMUX = Path("/etc/clayverse/managed-tmux.conf")
     MANAGED_TMUX_POLICY_ID = "clayverse-browser-transport-v3"
     DIRECT_SHELL_GUARD = Path("/opt/clayverse/runtime/deny-shell")
+    # Both canonical users share ONE Claude Code OAuth login (owner decision:
+    # "we are already logged in on the server"). Only this one file is shared --
+    # never the surrounding .claude directory -- so sessions/history/project state
+    # stay per-user and the two perspectives are not braided together.
+    CREDENTIALS_SOURCE = Path("/var/lib/clay/.claude/.credentials.json")
     TMUX_SOCKET_PREFIX = "clayverse"
     TMUX_CONTROL_TIMEOUT_SECONDS = 2.0
     AUTONOMY_PROMPT_MAX_CHARS = 256
@@ -222,10 +227,35 @@ class TerminalSessionManager:
         """
         self._run_tmux(binding, "source-file", "-q", str(self.MANAGED_TMUX))
 
+    def _link_shared_credentials(self, binding: TerminalBinding) -> None:
+        """Symlink ONLY the OAuth credential file into this user's Claude home.
+
+        A missing source is not fatal -- it just leaves this user's Claude Code CLI
+        unauthenticated, exactly as before this method existed. Never raises, never
+        writes to CREDENTIALS_SOURCE itself (read-only relationship to that mount).
+        """
+        source = self.CREDENTIALS_SOURCE
+        if not source.is_file():
+            return
+        target_dir = binding.home / ".claude"
+        target = target_dir / ".credentials.json"
+        try:
+            target_dir.mkdir(parents=True, exist_ok=True)
+            if target.is_symlink():
+                if os.readlink(target) == str(source):
+                    return
+                target.unlink()
+            elif target.exists():
+                return  # a real (non-symlink) file here is deliberate -- do not clobber it
+            target.symlink_to(source)
+        except OSError:
+            return
+
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()
         binding = self.binding(user_id)
         binding.home.mkdir(parents=True, exist_ok=True)
+        self._link_shared_credentials(binding)
         self.workspace.mkdir(parents=True, exist_ok=True)
         if self._has_session(binding):
             self._enforce_tmux_policy(binding)

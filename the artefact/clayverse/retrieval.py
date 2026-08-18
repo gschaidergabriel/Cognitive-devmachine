@@ -123,6 +123,9 @@ class WorldAssembler:
             "cross_session_collision": other,
             "durable_memory": memories,
             "retrieval_receipt": retrieval_receipt,
+            # Level-0 identity travels with every assembled world. It is small,
+            # constant, and must reach the turn even after compaction.
+            "canonical_identity": self.db.canonical_identity(),
         }
 
     def credit(self, *, causal_id, generation, credit, signal_class):

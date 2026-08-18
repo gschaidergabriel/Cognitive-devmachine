@@ -240,9 +240,12 @@ def _bounded_hook_context(result: dict[str, Any], limit: int = HOOK_CONTEXT_MAX_
         return text
 
     context = compact["context"]
+    identity = context.get("canonical_identity")
     context["durable_memory"] = context.get("durable_memory", [])[:12]
     context["cross_session_collision"] = context.get("cross_session_collision", [])[:3]
     context["own_recent"] = context.get("own_recent", [])[-8:]
+    if identity is not None:
+        context["canonical_identity"] = identity
     for item in context["own_recent"]:
         if len(str(item.get("content", ""))) > 700:
             item["content"] = str(item["content"])[:700] + "…"

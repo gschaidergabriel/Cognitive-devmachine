@@ -60,7 +60,10 @@ class TerminalSessionManager:
     ):
         self.state_root = Path(state_root)
         self.workspace = Path(workspace)
-        self.runtime_prompt = Path("/opt/clayverse/runtime/CLAUDE.md")
+        # Rendered from UnifiedDB root state at boot (see service.py
+            # render_runtime_prompt). The image file is only the static contract
+            # half; the identity half comes from canonical state.
+        self.runtime_prompt = Path(self.state_root) / "runtime" / "CLAUDE.md"
         self.activity = activity or TerminalActivityRegistry()
         self._attach_lock = threading.RLock()
         self._attach_users: dict[int, str] = {}
@@ -70,7 +73,10 @@ class TerminalSessionManager:
             if shutil.which(program) is None:
                 raise TerminalRuntimeError(f"required program unavailable: {program}")
         if not self.runtime_prompt.is_file():
-            raise TerminalRuntimeError("runtime Claude contract unavailable")
+            # Deliberately no fallback to the image file: a terminal that starts
+            # without the canonical identity would be a different entity wearing
+            # the same name.
+            raise TerminalRuntimeError("rendered runtime contract unavailable -- canonical identity not materialised")
         if not self.MANAGED_SETTINGS.is_file():
             raise TerminalRuntimeError("managed Claude lifecycle settings unavailable")
         if not self.MANAGED_MCP.is_file():

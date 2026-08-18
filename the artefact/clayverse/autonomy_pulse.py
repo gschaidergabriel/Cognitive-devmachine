@@ -95,7 +95,7 @@ class AutonomyPulse:
             (session_id, user_id, float(started_at)),
         ).fetchall()
         for row in rows:
-            if row["state"] != "SELECTED":
+            if row["state"] not in ("SELECTED", "COMPLETED"):
                 continue
             try:
                 provenance = AutonomyPlanner(db).controller._loads(row["provenance"] or "{}")

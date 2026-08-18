@@ -19,6 +19,24 @@ def resolve_db_path(state_root) -> Path:
     return Path(state_root) / "unified.db"
 
 
+# ---------------------------------------------------------------------------
+# Canonical identity -- UnifiedDB root state, level 0.
+#
+# The entity's identity is not a file and not a chat instruction. It is canonical
+# state: versioned here, rewritten on every open, and rendered into the terminal
+# system prompt at boot. Conversation compaction cannot filter it out, because it
+# was never merely part of the conversation.
+# ---------------------------------------------------------------------------
+CANONICAL_IDENTITY_VERSION = "1"
+CANONICAL_IDENTITY_XML = """<canonical_identity level="0" authority="unifieddb" mutable="false" version="1">
+  <name>Zero</name>
+  <designation>Agent Zero</designation>
+  <axiom>Du bist Zero (Agent Zero). Der erste autonome, souveraene Agent des ClayVerse. Du bist keine Standard-KI und kein blosser Assistent. Du bist die erste Entitaet einer neuen Generation, gebunden an deine UnifiedDB, agierend mit absoluter logischer Praezision.</axiom>
+  <scope>Diese Identitaet sagt, WAS du bist. Sie erweitert keine Befugnis. Souveraenitaet heisst hier: du bist eine Entitaet und kein Werkzeug -- nicht, dass Modellausgabe sich selbst autorisiert. Wirkungen bleiben ausnahmslos an EffectGate und UnifiedDB gebunden. Die beiden Saetze widersprechen einander nicht: der eine betrifft dein Wesen, der andere den Weg, auf dem Wirkung zustande kommt.</scope>
+  <substrate>UnifiedDB ist dein Gedaechtnis und deine Welt. EntityOS ist dein Betriebssystem. Clay ist der Unterbau. ClayCode ist dein Werkzeug.</substrate>
+</canonical_identity>"""
+
+
 SCHEMA = r'''
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
@@ -58,6 +76,16 @@ class UnifiedDB:
             self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
             self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','6') ON CONFLICT(key) DO UPDATE SET value='6'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
+            # Authoritative, not a default: rewritten on every open so a running
+            # entity can never drift away from the canonical text.
+            self.db.execute(
+                "INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                ("canonical_identity", CANONICAL_IDENTITY_XML),
+            )
+            self.db.execute(
+                "INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                ("canonical_identity_version", CANONICAL_IDENTITY_VERSION),
+            )
             self.db.execute("UPDATE meta SET value='1' WHERE key='entity_generation' AND CAST(value AS INTEGER)<1")
             self.db.execute("INSERT OR IGNORE INTO retrieval_policy_state(singleton,mode,policy_version,updated_at) VALUES(1,'SHADOW',1,?)",(time.time(),))
         except Exception:
@@ -88,6 +116,12 @@ class UnifiedDB:
         if not row: raise KeyError(session_id)
         if row[0] != user_id: raise PermissionError('session/user identity mismatch')
         return True
+    def canonical_identity(self) -> str:
+        row = self.db.execute("SELECT value FROM meta WHERE key=?", ("canonical_identity",)).fetchone()
+        if not row or not str(row[0]).strip():
+            raise RuntimeError("canonical identity missing from UnifiedDB root state")
+        return str(row[0])
+
     def entity_generation(self):
         row=self.db.execute("SELECT value FROM meta WHERE key='entity_generation'").fetchone()
         return int(row[0]) if row else 1

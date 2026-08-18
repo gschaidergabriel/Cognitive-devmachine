@@ -1,4 +1,5 @@
 from __future__ import annotations
+import pathlib
 
 import base64
 import binascii
@@ -193,6 +194,35 @@ def _run_mistral_once(db: UnifiedDB) -> dict[str, object]:
     return payload
 
 
+STATIC_RUNTIME_CONTRACT = "/opt/clayverse/runtime/CLAUDE.md"
+
+
+def render_runtime_prompt(db, state_root: str) -> str:
+    """Write identity(from DB) + contract(from image) to the loaded prompt file.
+
+    The order matters: identity first. It is what the entity IS; everything after
+    it describes how it must operate.
+    """
+    identity = db.canonical_identity()
+    static = pathlib.Path(STATIC_RUNTIME_CONTRACT).read_text(encoding="utf-8")
+    target_dir = pathlib.Path(state_root) / "runtime"
+    target_dir.mkdir(parents=True, exist_ok=True)
+    target = target_dir / "CLAUDE.md"
+    body = (
+        "# Canonical identity (UnifiedDB root state, level 0)\n\n"
+        "This block is not conversation. It is loaded from canonical state on every\n"
+        "boot and cannot be compacted away.\n\n"
+        f"{identity}\n\n"
+        "---\n\n"
+        f"{static}"
+    )
+    tmp = target.with_suffix(".md.tmp")
+    tmp.write_text(body, encoding="utf-8")
+    tmp.replace(target)
+    target.chmod(0o444)
+    return str(target)
+
+
 def main():
     import uvicorn
 
@@ -200,6 +230,7 @@ def main():
     os.makedirs(state_root, exist_ok=True)
     db = UnifiedDB(resolve_db_path(state_root))
     IdentityRouter(db, {})
+    rendered_prompt = render_runtime_prompt(db, state_root)
 
     if "--once" in sys.argv:
         ClayGraphProjection(db).rebuild()

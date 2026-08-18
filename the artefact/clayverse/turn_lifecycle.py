@@ -52,6 +52,10 @@ class TurnLifecycle:
         # It is bounded and small, and it is never trimmed: dropping it would make
         # adaptive retrieval unauditable and SHADOW->ACTIVE promotion unprovable.
         if world.get("retrieval_receipt") is not None: packed["retrieval_receipt"]=world["retrieval_receipt"]
+        # Never trimmed. If the context no longer fits WITH the identity, the
+        # identity is not what gets dropped -- dropping it would let the entity
+        # forget what it is exactly when it is under the most pressure.
+        if world.get("canonical_identity") is not None: packed["canonical_identity"]=world["canonical_identity"]
         def size(): return len(json.dumps(packed,ensure_ascii=False,sort_keys=True,default=str))
         while size()>max_chars and packed["durable_memory"]: packed["durable_memory"].pop()
         while size()>max_chars and len(packed["own_recent"])>4: packed["own_recent"].pop(0)

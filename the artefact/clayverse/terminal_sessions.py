@@ -205,13 +205,22 @@ class TerminalSessionManager:
         tmux configuration is loaded when a server starts, not whenever a new session
         or client is created. A persistent per-user server may therefore predate a
         ClayVerse policy upgrade. Source the root-owned policy before every admitted
-        attach path and fail closed if the running server cannot accept it.
+        attach path.
+
+        `unbind-key -a -T <table>` is not idempotent: once a table has zero bindings,
+        tmux (observed on both 3.4 and 3.5a) drops the table object and a later
+        `unbind-key -a -T <table>` on the same running server returns nonzero and
+        prints "table <name> doesn't exist" even though the table remains correctly
+        empty. This is expected on the very first `ensure()` for a session, because
+        `new-session -f <policy>` already applied the policy once immediately before
+        this reapply runs. A `source-file` returncode alone is therefore not trusted
+        here; `-q` quiets the resulting per-line warnings and the unconditional
+        `_assert_tmux_server_policy` call that follows this method in every `ensure()`
+        caller is the actual, state-based fail-closed gate (marker, prefix, prefix2,
+        status, mouse, default-shell, and an empty effective keymap all checked
+        directly against the live server).
         """
-        cp = self._run_tmux(binding, "source-file", str(self.MANAGED_TMUX))
-        if cp.returncode != 0:
-            raise TerminalRuntimeError(
-                f"failed to enforce tmux policy for {binding.tmux_name}: {cp.stderr[-1000:]}"
-            )
+        self._run_tmux(binding, "source-file", "-q", str(self.MANAGED_TMUX))
 
     def ensure(self, user_id: str) -> TerminalBinding:
         self._require_programs()

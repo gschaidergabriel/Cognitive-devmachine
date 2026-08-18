@@ -1,0 +1,9 @@
+[Unit]
+Description=EntityOS: Menschenprofile autonom verdichten (Sonden, jede mit Beleg)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=clay
+WorkingDirectory=/opt/entityos/the artefact
+ExecStart=/usr/bin/python3 -c "import sys;sys.path.insert(0,\"/opt/entityos/the artefact\");from clayverse.store import UnifiedDB;from clayverse import profil_verdichtung as pv;import json;print(json.dumps(pv.verdichten(UnifiedDB(\"/var/lib/clay/wiki.db\")),ensure_ascii=False))"

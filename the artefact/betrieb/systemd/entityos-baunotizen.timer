@@ -1,0 +1,11 @@
+# /etc/systemd/system/entityos-baunotizen.timer
+[Unit]
+Description=EntityOS: Baunotizen alle 15 Minuten -- alle drei Quellen (protokoll.jsonl/bauverlauf.jsonl/git-commits) autonom nachziehen
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=15min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

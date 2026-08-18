@@ -1,0 +1,14 @@
+# /etc/systemd/system/entityos-baunotizen.service
+[Unit]
+Description=EntityOS: Baunotizen autonom aufnehmen (protokoll/bauverlauf/git-commits, alle mit Metadaten)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=clay
+WorkingDirectory=/opt/entityos/the artefact
+ExecStart=/usr/bin/python3 -c "import sys;sys.path.insert(0,\"/opt/entityos/the artefact\");from clayverse.store import UnifiedDB;from clayverse import baunotizen as bn;import json;print(json.dumps(bn.aufnehmen(UnifiedDB(\"/var/lib/clay/wiki.db\")),ensure_ascii=False))"
+# Aufnehmen OHNE Zuordnen laesst neue Baunotizen unzugeordnet liegen: gemessen
+# 16.558 Artikel, aber nur 16.551 in der Zuordnungstabelle. Die Luecke waechst
+# still mit jedem Takt. Deshalb gehoert das Zuordnen an dieselbe Aufgabe.
+ExecStartPost=/usr/bin/python3 -c "import sys;sys.path.insert(0,\"/opt/entityos/the artefact\");from clayverse.store import UnifiedDB;from clayverse import artikel_zuordnung as az;import json;print(json.dumps(az.zuordnen(UnifiedDB(\"/var/lib/clay/wiki.db\")),ensure_ascii=False))"

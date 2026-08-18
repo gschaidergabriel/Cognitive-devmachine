@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-18T19:11:47Z",
-  "erfuellt": 42,
-  "offen": 6,
+  "erzeugt": "2026-08-18T19:47:35Z",
+  "erfuellt": 46,
+  "offen": 5,
   "zurueckgestellt": 1,
   "zeilen": [
     {
@@ -129,7 +129,7 @@
       "faehigkeit": "Kontinuität über Neustarts",
       "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "quelle": "Architektur",
-      "ist": "155 Prüfpunkte, Generation 106",
+      "ist": "157 Prüfpunkte, Generation 107",
       "erfuellt": true
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "87 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "89 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -209,7 +209,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 2 hours (healthy)",
+      "ist": "Up 8 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -233,7 +233,7 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "582 gruen / 2 rot",
+      "ist": "584 gruen / 0 rot",
       "erfuellt": true
     },
     {
@@ -257,7 +257,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "17641 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "17645 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -361,7 +361,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "49.9 % belegt, 96.5 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "50.0 % belegt, 96.4 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -369,8 +369,8 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 96.2 GB, gezählt 76.8 GB, Lücke 19.4 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 19.4 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
-      "erfuellt": false
+      "ist": "Bilanz nennt drei Zahlen: df 96.3 GB, gezählt 94.3 GB, Lücke 2.0 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (2.0 GB Abweichung).",
+      "erfuellt": true
     },
     {
       "bereich": "Betrieb",
@@ -394,6 +394,30 @@
       "soll": "Handlungsfähigkeit ohne Zaun wäre kein Fortschritt, sondern der Verlust der einzigen Eigenschaft, die dieses System von einer offenen Schale unterscheidet",
       "quelle": "Architektur",
       "ist": "⚠️⚠️ Ein Prüfangriff BEWIES einen vollen root-Ausbruch: `.git/config` lag innerhalb der erlaubten Wurzel, `core.fsmonitor` lässt git einen Schalbefehl ausführen, und git läuft auf dem Wirt als root — nachgewiesen mit `id` → uid=0. Ich hatte den Weg richtig erkannt (git führt Fremdes aus) und dann EINEN Kanal davon zugemacht: `.git/hooks`. Geschlossen mit VIER Sperren, weil eine Sperre mit einer Liste des Gefährlichen nur vor dem schützt, was schon jemand aufgeschrieben hat: .git ist jetzt ganz ausserhalb des Zauns, git läuft ohne fremde Konfiguration, .git/config wird als TEXT vorgeprüft, und geprüft wird vor JEDEM git-Aufruf — auch vor `stand`, das vorher durch keine Prüfung lief und genau der Auslöser war",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Testsuite ist ehrlich grün",
+      "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "584 gruen / 0 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Die Endabnahme kann überhaupt messen",
+      "soll": "das Instrument, das beweisen soll, dass Wirkungen funktionieren, muss selbst funktionieren",
+      "quelle": "Lehre aus dem Bau 18.08.",
+      "ist": "⚠️ Sieben rote Tests, EINE Ursache: `ClayVerseEngine` legte keine Zeile in `active_turns` an, die das Wirkungstor verlangt. Das Tor kam mit dem Zug-Lebenszyklus; der ältere Weg hat es nie gelernt — und im Betrieb fiel das nicht auf, weil ihn dort niemand mehr aufruft. Ausser einem: der Endabnahme. Sie meldete deshalb nicht „Wirkung fehlgeschlagen\", sondern scheiterte VOR der Wirkung — und ein Instrument, das gar nicht messen kann, sieht in einer Testliste aus wie eines, das etwas Schlechtes gemessen hat. ⭐ Die Reparatur lockert das Tor NICHT: engine.py meldet den lebenden Zug jetzt an und wieder ab, wie der Betriebsweg. Ein `if episode_id is None`-Zweig im Tor hätte alle sieben grün gemacht und die Prüfung genau für den Weg abgeschaltet, dessen Zweck das Prüfen ist",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Menschen",
+      "faehigkeit": "Kein Rohtext über die Sitzungsgrenze",
+      "soll": "kollidiert eine gemeinsame Ressource, sieht der andere Fragmente — nicht das Original",
+      "quelle": "Architektur",
+      "ist": "⚠️ HIER LAG EIN ECHTES LECK. Bei einer Kollision wurde die ganze Zeile ausgeliefert (`item = dict(r)`), inklusive `content`. Der Code setzte brav das Etikett „compressed_with_extracted_fragments\" und legte die Fragmente daneben — und liess den Rohtext drin. Der andere Mensch bekam den vollen Originaltext mit einem Etikett, auf dem „verdichtet\" stand. ⭐ Gefunden über einen roten Test, der aus dem FALSCHEN Grund rot war: die alte Zusicherung hing an einer Nebenwirkung der zerstörenden Verdichtung. Wer so einen Test nur an die neue Wirklichkeit anpasst, verliert den Hinweis",
       "erfuellt": true
     }
   ]

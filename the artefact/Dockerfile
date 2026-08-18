@@ -60,7 +60,12 @@ RUN useradd --system --uid 10001 --create-home --shell /opt/clayverse/runtime/de
  && mkdir -p /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown -R root:root /opt/clayverse \
  && chmod -R a-w /opt/clayverse \
- && chown -R clayverse:clayverse /var/lib/clayverse /workspace /home/clayverse/.claude \
+ # Runtime user is forced to host uid:gid 5001:5001 by compose (to also read/write
+ # the /var/lib/clay bind mount, which is host mode 700 for uid 5001 "clay").
+ # The "clayverse" OS account above is uid 10001 and effectively decorative at
+ # runtime; chown the actual writable state paths to the numeric runtime uid so
+ # TerminalSessionManager can create per-user homes under /var/lib/clayverse.
+ && chown -R 5001:5001 /var/lib/clayverse /workspace /home/clayverse/.claude \
  && chown root:root /opt/entityos /opt/entityos/EntityOS /opt/entityos/entityos.lock.json \
  && chmod 0755 /opt/entityos \
  && chmod 0555 /opt/entityos/EntityOS \

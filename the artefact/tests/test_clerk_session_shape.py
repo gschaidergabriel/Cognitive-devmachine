@@ -90,10 +90,12 @@ def test_clerk_boundary_rejects_non_active_session_status():
     with pytest.raises(AuthenticationError, match="not active"):
         verifier.verify(jwt.encode(pending, private, algorithm="RS256"))
 
+    # A missing sts claim is deliberately accepted -- see ClerkTokenVerifier
+    # docstring: sts is optional for ordinary authenticated sessions, only an
+    # EXPLICIT non-active status is rejected.
     missing_status = _claims(now)
     missing_status.pop("sts")
-    with pytest.raises(AuthenticationError, match="not active"):
-        verifier.verify(jwt.encode(missing_status, private, algorithm="RS256"))
+    assert verifier.verify(jwt.encode(missing_status, private, algorithm="RS256"))["sid"] == "sess_1"
 
     unknown_status = {**_claims(now), "sts": "unknown"}
     with pytest.raises(AuthenticationError, match="not active"):

@@ -1,6 +1,6 @@
 # Ausfuehrbarer Code
 
-Automatisch kopiert 2026-08-19T17:11:11Z vom laufenden Wirt. Nur Quelltext -- keine Datenbanken, keine Zugangsdaten, keine Sammlungen. Die Auswahl ist eine Erlaubnisliste, keine Verbotsliste.
+Automatisch kopiert 2026-08-19T17:41:11Z vom laufenden Wirt. Nur Quelltext -- keine Datenbanken, keine Zugangsdaten, keine Sammlungen. Die Auswahl ist eine Erlaubnisliste, keine Verbotsliste.
 
 | Bereich | Dateien | Groesse | Quelle | Warum |
 |---|---|---|---|---|

@@ -1,6 +1,6 @@
 # Menschen hinter Zero
 
-Automatisch erzeugt 2026-08-19T06:41:54Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
+Automatisch erzeugt 2026-08-19T06:58:41Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
 
 ## Herkunftsregeln
 
@@ -43,7 +43,7 @@ Automatisch erzeugt 2026-08-19T06:41:54Z. Dieses Repo ist OEFFENTLICH -- deshalb
 
 ## Zurueckgehalten
 
-12 Feld(er) -- nur DASS es sie gibt, NICHT der Wert:
+13 Feld(er) -- nur DASS es sie gibt, NICHT der Wert:
 
 | Mensch | Feld | Herkunft | Grund |
 |---|---|---|---|
@@ -59,6 +59,7 @@ Automatisch erzeugt 2026-08-19T06:41:54Z. Dieses Repo ist OEFFENTLICH -- deshalb
 | gabriel | gemessen_schwerpunkte | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
 | gabriel | gemessen_wiki_bestand | gemessen | herkunft=gemessen, nicht in ERLAUBTE_HERKUNFT -- noch nicht einzeln geprueft, konservativ zurueckgehalten |
 | gabriel | mail | eigner | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
+| gabriel | rechner_art | eigner | herkunft=eigner, keine gepruefte Ausnahme -- koennte privat sein |
 
 ## Eigentum vs. Urheberschaft
 

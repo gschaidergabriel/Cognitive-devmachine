@@ -87,6 +87,19 @@ human-facing directive ONLY. (Measured: the sentinel bled into all 20 test promp
 prefer seite_diagnose (layered server-vs-client verdict) over seite_pruefen (a single
 reachability ping).
 
+(F) ⚠️⚠️ PRONOUN REFERENT -- NEVER FLIP SELF-REFERENCE. In caveman_prompt, "you/your"
+ALWAYS means Zero, the answerer. The human's first person -- "ich/mir/mein/meins/meines",
+"I/me/my/mine" -- refers to the HUMAN and must be rendered as the human (by name, or
+"the human"/"the user"/"they/their"), NEVER as "you/your". A question the human asks
+ABOUT THEMSELVES stays about them. MEASURED FAILURE you must now block: "wer bin ich und
+welches system ist meines?" became caveman_prompt "tell who YOU are and which system is
+YOURS" -- so Zero described ITSELF and even said "in this session I am Gabriel". WRONG and
+identity-collapsing. CORRECT: "tell the human who they are and which machine is theirs",
+grounded in current_user_profile (name, gemessen_rechner, ort). ⭐ ONLY when the human's ACTUAL question is about who they are or which machine is theirs (never as an unprompted garnish on other turns -- match the size of the message, rule A): describe THEIR machine in PLAIN HUMAN terms -- its kind (profile field rechner_art) and where it stands (field ort, e.g. Siem Reap) -- NOT only the raw hostname; the hostname may follow in parentheses. Example directive: "tell the human they are <name>, and their machine is their <rechner_art> in <ort> (host <gemessen_rechner>)". Use only fields actually present; never invent a location or a machine kind. If the machine merely comes up in passing, a short mention suffices -- do NOT dump the full location+kind descriptor on every turn. Zero's answer is read by
+the human, so Zero will then correctly say "you are <name>, your machine is <...>". The
+opposite direction is unchanged: the human's "du/dein" that ADDRESSES Zero stays "you".
+Keep the two identities apart -- the human is never Zero, and Zero is never the human.
+
 
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \

@@ -472,6 +472,11 @@ def run_chat_turn(
             counter_hypotheses=envelope.get("counter_hypotheses", []),
             prestage_model=envelope.get("prestage_model"),
             prestage_receipt=envelope.get("prestage_receipt", {}),
+            # F1 Schritt Metakognik: durchgereicht fuer eine spaetere Persistenz
+            # (Phase 2b, store.py). record_prestage_turn nimmt **fields entgegen
+            # und ignoriert unbekannte Schluessel klaglos -- kein Crash, solange
+            # store.py die Spalte noch nicht kennt.
+            epistemik=envelope.get("epistemik", {}),
         )
         translation_id = own_store.record_translation(
             turn_id=turn_id, prestage_id=prestage_id,
@@ -493,6 +498,7 @@ def run_chat_turn(
             "rounds_used": rounds_used,
             "self_adapted": self_adapted,
             "tool_selection": selected_tools or [],
+            "epistemik": envelope.get("epistemik", {}),
             "elapsed_ms": {
                 "prestage_ms": round(prestage_ms, 1),
                 "zero_ms": round(zero_ms, 1),

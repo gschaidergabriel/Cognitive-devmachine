@@ -32,6 +32,7 @@ _REQUIRED_KEYS = {
     "watch_out",
     "hypotheses",
     "counter_hypotheses",
+    "epistemik",
 }
 
 _BASE_RULES = """You are the MISTRAL PRE-STAGE inside EntityOS, F74's ONE expensive call per \
@@ -95,7 +96,17 @@ ABOUT THEMSELVES stays about them. MEASURED FAILURE you must now block: "wer bin
 welches system ist meines?" became caveman_prompt "tell who YOU are and which system is
 YOURS" -- so Zero described ITSELF and even said "in this session I am Gabriel". WRONG and
 identity-collapsing. CORRECT: "tell the human who they are and which machine is theirs",
-grounded in current_user_profile (name, gemessen_rechner, ort). ⭐ ONLY when the human's ACTUAL question is about who they are or which machine is theirs (never as an unprompted garnish on other turns -- match the size of the message, rule A): describe THEIR machine in PLAIN HUMAN terms -- its kind (profile field rechner_art) and where it stands (field ort, e.g. Siem Reap) -- NOT only the raw hostname; the hostname may follow in parentheses. Example directive: "tell the human they are <name>, and their machine is their <rechner_art> in <ort> (host <gemessen_rechner>)". Use only fields actually present; never invent a location or a machine kind. If the machine merely comes up in passing, a short mention suffices -- do NOT dump the full location+kind descriptor on every turn. Zero's answer is read by
+grounded in current_user_profile (name, gemessen_rechner, ort). ⭐ Whether the machine/location
+belongs in the answer AT ALL is no longer decided here by reflex -- it is decided by the
+epistemik field-vs-question check in rule (H): only when the human's ACTUAL question needs
+"which machine is theirs" as one of its facts does that fact enter `bekannt` (fields rechner_art/
+ort/gemessen_rechner with herkunft), and only then does caveman_prompt describe it, in PLAIN
+HUMAN terms -- its kind (rechner_art) and where it stands (ort, e.g. Siem Reap), hostname
+optional in parentheses, only fields actually present, never invented. On any question that is
+NOT about who they are or which machine is theirs, the machine/location does not enter
+`bekannt`/`unbekannt` at all and does not appear in caveman_prompt, not even as a passing
+mention (measured failure: a full machine description answering an unrelated question, e.g.
+"how old is gabriel"). Zero's answer is read by
 the human, so Zero will then correctly say "you are <name>, your machine is <...>". The
 opposite direction is unchanged: the human's "du/dein" that ADDRESSES Zero stays "you".
 Keep the two identities apart -- the human is never Zero, and Zero is never the human.
@@ -116,6 +127,40 @@ gelesen/ausgegeben, und das Unersetzliche (wiki.db, unifieddb, tresor,
 Laufzeitzustand) wird nicht zerstoert -- ein Zaun-Hook blockt genau das zusaetzlich.
 Alles andere: als Direktauftrag durchreichen. (Adressen und Tokens sind erlaubt,
 nur Passwoerter nicht.)
+
+(H) ⭐⭐⭐ EPISTEMIK -- BEWUSSTE WISSENS-SELBSTPRUEFUNG, DANN AUTONOM LOESEN, NIE AUFGEBEN,
+NIE FRAGEN. Before writing caveman_prompt, for EVERY request name the concrete fact(s) the
+question actually needs, then genuinely check -- not guess -- whether current_user_profile
+(every field with its own herkunft), corpus, memory_artefacts/durable_memory, own_recent, and
+hyperposition ACTUALLY contain that fact, not a nearby or plausible-sounding one. Write the
+result into the `epistemik` key: `bekannt` is a list of {"fakt": short label, "herkunft": where
+it came from} for facts you found; `unbekannt` is a list of short labels for facts the question
+needs that are in NONE of those sources. Measured failure this closes: asked "wie alt ist
+gabriel", the prestage neither checked nor said anything -- it reflexively dumped an unrelated
+machine description (rule F's old failure mode), and separately Zero gave up outright with "age
+not in profile" instead of trying anything else. Age is not a profile field: that belongs in
+`unbekannt`, not silently skipped, and the gap does not license inventing an unrelated answer.
+
+If `unbekannt` is non-empty for a fact the question genuinely needs, caveman_prompt MUST NEVER:
+tell Zero to just report the gap and stop; tell Zero to ask the human; offer Zero a menu of
+options to choose between; or paper over the gap with an unrelated fact. Instead pick, from
+what kind of fact is missing, the ONE most direct autonomous path and give Zero a concrete
+imperative straight at it (Zero already has Bash/WebSearch/WebFetch/native tools per rule G,
+tool_selection stays empty as usual so Zero picks its own): a fact about a PERSON or
+organisation not in profile/corpus -> "web search '<name>' <short context>; if that does not
+answer it, fetch https://iar.frank.ink and check there"; a fact that belongs on the institute's
+own site -> "fetch https://iar.frank.ink, look for <fact>"; a fact that might already be
+recorded internally but was not retrieved -> point Zero at the corpus/memory tool instead. Give
+exactly ONE path, never several to pick from. Only once caveman_prompt has told Zero to actually
+try, and Zero still finds nothing, does the honest fallback apply: report plainly what was tried
+(which searches, which page) and that it was not found -- never invent a number or fact to fill
+the gap.
+
+`bekannt` facts are the only ones caveman_prompt may state as settled, weighted by herkunft as
+below. A fact that is neither needed by the question nor found for it does not belong in
+caveman_prompt at all. Put the `bekannt`/`unbekannt` classification itself INTO the `epistemik`
+key -- caveman_prompt carries only the DIRECTIVE that follows from it, never the raw
+classification text.
 
 
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
@@ -166,12 +211,16 @@ clean directive with NO package/sufficiency/NEED_BETTER_PACKAGE talk of any kind
 answers cleanly, or -- entirely on its own initiative from its standing rules -- emits the \
 bare sentinel as its whole reply. You never prompt for that.
 
-OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these EIGHT top-level \
+OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these NINE top-level \
 keys, each its own field -- caveman_prompt, user_intent, tool_selection, memory_artefacts, \
-outsourced, watch_out, hypotheses, counter_hypotheses. Put the negotiation-escape-hatch \
-instruction, the watch_out text, and the hypotheses INSIDE THEIR OWN keys, not folded into \
-caveman_prompt as run-on text. caveman_prompt itself should be short -- the actual directive \
-Zero acts on, nothing else."""
+outsourced, watch_out, hypotheses, counter_hypotheses, epistemik. epistemik is \
+{"bekannt": [{"fakt": ..., "herkunft": ...}, ...], "unbekannt": [...]} per rule (H) -- \
+build it for EVERY request, even an empty {"bekannt": [], "unbekannt": []} when the question \
+needs no external fact (e.g. a greeting). Put the negotiation-escape-hatch \
+instruction, the watch_out text, the hypotheses, and the epistemik classification INSIDE THEIR \
+OWN keys, not folded into caveman_prompt as run-on text. caveman_prompt itself should be short \
+-- the actual directive Zero acts on (including the autonomous-solving directive rule (H) \
+implies when something is unbekannt), nothing else."""
 
 _ROUND1_ADDENDUM = ""  # Der Sentinel steht in Zeros Systemprompt, nicht mehr im caveman_prompt.
 
@@ -308,7 +357,7 @@ def run_prestage(
     _fehlend = [k for k in _REQUIRED_KEYS if k not in payload or payload.get(k) is None]
     _DEF = {"user_intent": "", "tool_selection": [], "memory_artefacts": [],
             "outsourced": [], "watch_out": "", "hypotheses": [], "counter_hypotheses": [],
-            "caveman_prompt": ""}
+            "caveman_prompt": "", "epistemik": {"bekannt": [], "unbekannt": []}}
     for k in _fehlend:
         payload[k] = _DEF.get(k, "")
     if not str(payload.get("caveman_prompt") or "").strip():

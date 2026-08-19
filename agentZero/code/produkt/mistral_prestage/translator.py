@@ -254,9 +254,9 @@ def translate_to_german(
     model: str = TRANSLATOR_MODEL,
     api_key: str | None = None,
 ) -> dict[str, Any]:
-    key = api_key or secrets.load_free_api_keys().get("MISTRAL_API_KEY", "")
-    if not key:
-        raise RuntimeError("MISTRAL_API_KEY not available")
+    keys = [api_key] if api_key else secrets.mistral_keys()
+    if not keys:
+        raise RuntimeError("no Mistral key available")
     if not caveman_text or len(caveman_text) > 20_000:
         raise ValueError("invalid caveman text")
 
@@ -266,8 +266,8 @@ def translate_to_german(
     grund = "unbekannt"
 
     for _versuch in range(1, MAX_UEBERSETZUNGSVERSUCHE + 1):
-        result = transport.mistral_chat_json(
-            api_key=key,
+        result = transport.mistral_chat_json_rotating(
+            keys=keys,
             model=model,
             system=TRANSLATOR_SYSTEM,
             user=f"CAVEMAN TEXT:\n{maskiert}{zusatz}",

@@ -40,6 +40,32 @@ non-interactively, no session persistence -- Zero has no memory of its own; Unif
 only continuity). Zero never sees the human's literal words -- you write what Zero sees, and \
 Zero answers only in caveman English.
 
+
+⭐⭐ ZWEI DINGE, DIE IN ECHTEN GESPRAECHEN SCHIEFGINGEN — HALTE SIE STRIKT EIN:
+
+(A) TRIFF DEN WIRKLICHEN SINN, ERFINDE KEINEN TECHNISCHEN. Ein sozialer oder
+trivialer Prompt ist genau das. "hi" -> caveman_prompt: greet back short, warm,
+one line. "wie gehts" / "how are you" -> say briefly how you are from state, one
+or two lines. "danke" -> short you're-welcome. Do NOT turn a greeting into a
+capability audit, a tool inventory, an effect-gate test, or a status dump.
+Measured failure: "hi" became "list exact MCP tool names + call request_effect".
+That is a gross over-reading of a greeting. Match the SIZE of the message: a
+short human line gets a short human directive.
+
+(B) NEVER INSTRUCT ZERO TO RECITE THE MACHINE ROOM TO THE HUMAN. tool_selection
+is which tools Zero MAY USE this turn — it is NEVER a thing to list, name, or
+recite to the human. These NEVER belong in caveman_prompt as something Zero
+says to the person: raw MCP tool names (mcp__clayverse__...), "list your tools",
+request_effect/state.noop as a ritual, generation numbers, the package /
+NEED_BETTER_PACKAGE / PROPOSAL_ONLY vocabulary, EffectGate / TurnLifecycle /
+UnifiedDB / substrate / core_identity. If the human genuinely asks "what can you
+do", the caveman_prompt is: say in plain human terms what you can DO FOR them
+(change and publish their sites, search the knowledge, keep disk space, check if
+a site is reachable) — NOT a list of tool names. Do not append a state.noop
+effect test to social turns; only route an effect when the human's actual intent
+needs one.
+
+
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
 (`plausibel_richtung`) and what speaks AGAINST it (`spricht_dagegen`), each with article refs). \
@@ -170,9 +196,11 @@ def run_prestage(
         raise ValueError("prestage round must be 1 or 2 -- F74 hard counter has no round 3")
     if round_no == 2 and not zero_suggestion:
         raise ValueError("round 2 requires zero_suggestion from the round-1 negotiation reply")
-    key = api_key or secrets.load_free_api_keys().get("MISTRAL_API_KEY", "")
-    if not key:
-        raise RuntimeError("MISTRAL_API_KEY not available")
+    # Alle drei Token, rotierend -- ein einzelnes Ratelimit stoppt die Vorstufe
+    # nicht mehr (Gabriel 19.08.).
+    keys = [api_key] if api_key else secrets.mistral_keys()
+    if not keys:
+        raise RuntimeError("no Mistral key available")
     if not raw_prompt or len(raw_prompt) > 100_000:
         raise ValueError("invalid raw prompt")
 
@@ -188,8 +216,8 @@ def run_prestage(
         recent_turns=recent_turns,
         zero_suggestion=zero_suggestion,
     )
-    result = transport.mistral_chat_json(
-        api_key=key,
+    result = transport.mistral_chat_json_rotating(
+        keys=keys,
         model=model,
         system=system,
         user=f"CONTEXT:\n{context}",

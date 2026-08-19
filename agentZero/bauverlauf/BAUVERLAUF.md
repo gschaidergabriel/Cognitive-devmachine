@@ -1,10 +1,59 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T03:41:08Z. 806 Commits aus vier Repos, davon 244 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-19T04:11:08Z. 809 Commits aus vier Repos, davon 245 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
+
+## 2026-08-19
+
+### seite_diagnose: Zero trennt server-seitig von client-seitig
+
+`78c527f14323` · agentzero-export · 03:45 UTC · EntityOS
+
+```
+ANLASS (Gabriel 19.08.): "weder seimensch.net noch leihmich ist erreichbar" ...
+"sowas muss zero auch checken".
+
+DER AUSFALL, geschichtet diagnostiziert: der Server war KERNGESUND -- HTTP 200
+in 0,07s, echter Inhalt, oeffentliches DNS korrekt auf <adresse>. Die
+Ursache lag auf Gabriels Kiste: eine Zeile in /etc/hosts leitete seimensch.net,
+leihmich.org und herzrad.at auf <adresse> (localhost) um -- Rest eines toten
+SSH-Tunnels vom 11.08., als der Direktweg zum VPS gesperrt war. Der Direktweg
+ging inzwischen wieder (HTTPS 200 direkt geprueft), der Tunnel war tot, die
+Umleitung schickte ins Leere. Fix: die hosts-Zeile auskommentieren (braucht
+Gabriels Schranke-Freigabe, weil Systempfad -- die Schranke griff korrekt).
+
+DIE LEHRE, jetzt fest verdrahtet: "erreichbar" ist kein Ja/Nein, sondern ein
+VON WO. Eine Seite kann vom Server aus leben und von einem Rechner aus tot
+sein. Die haeufigste falsche Erstreaktion ist "Server neu starten" -- meistens
+ist der Server gesund und das Problem sitzt zwischen Mensch und Server.
+`seite_pruefen` blickte nur von einem Standpunkt; das reichte nicht.
+
+GEBAUT: seite_diagnose(url). Prueft geschichtet und TRENNT server-seitig von
+client-seitig: oeffentliches DNS -> erwartete IP -> Port 443 -> HTTPS-Status ->
+echter Inhalt (Titel, Groesse, nicht 200-Fehlerseite). Urteil-Logik:
+- Server gruen + DNS richtig -> es liegt am MENSCHEN. Namentlich genannt: (1)
+  /etc/hosts-Umleitung auf 127.0.0.x, `getent hosts <domain>` MUSS die echte IP
+  zeigen; (2) Provider-DNS mit NXDOMAIN, DNS auf <adresse> stellen; (3) VPN/Cache.
+- Server gruen + DNS falsch -> ein hosts-Eintrag oder DNS-Satz zeigt woanders.
+- Port zu -> echtes Server-Problem (nginx unten / Firewall), DANN am Server.
+- Kein glatter 200 mit Inhalt -> am Server nachsehen.
+
+GEGENPROBE: Zero mit genau Gabriels Frage getestet. Seine Antwort: "Server side
+is fine. Both sites are up. The problem is on your side." -- mit der
+entscheidenden Einsicht, dass beide Domains auf demselben Host liegen und beide
+gleichzeitig ausfallen (eine Ursache zwischen Mensch und IP), und der exakten
+Pruef-Reihenfolge ab `getent hosts`. 22s.
+
+Playbook als auffindbarer Wiki-Artikel (wissen-seite-nicht-erreichbar-diagnose):
+"zuerst seite_diagnose, dann reden -- sag, VON WO du geprueft hast".
+
+38 Werkzeuge, beide Freigabelisten deckungsgleich (Wachtest gruen), Testsuite
+583/1 (der eine ist der Terminal-WS-Test, der unter Last flackert und isoliert
+in 0,7s gruen ist).
+```
 
 ## 2026-08-18
 
@@ -4654,13 +4703,5 @@ Grundlinie dagegen ist ein blosser Hinweis im Systemtext; ob der genuegt, ist
 zu messen. Ausnahme: Messen und Aufschreiben muessen moeglich bleiben.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B27 geprueft: Selbstoeffner an die Vordertuer, Runde 2
-
-`a68bdd565a99` · clay · 06:40 UTC · ClayVerse
-
-```
-26 auf 25 Selbstoeffner (grep -l sqlite3.connect werkzeug/*.py). benchmark_recall_wikidb.py voll migriert (0 Schreiboperationen gemessen, reiner FTS5-Lesetest, live gegen wiki.db geprueft: 222 Fragen-Artikel, Recall@5=0.430). Sechs weitere (kanten, kontingent, messung, verdrahtung, weg, werkzeuge) haben ihren Lesezweig (readonly=True/schreibend=False) auf udb.verbindung() umgestellt, Schreibzweig bewusst unveraendert -- udb.verbindung() ist strukturell nur-lesend (mode=ro+query_only=ON). Alle sechs Lesepfade live geprueft. 19 der 26 verbleibenden Dateien brauchen echten Schreibzugriff (verifiziert per INSERT/UPDATE/DELETE/CREATE-Grep + Stichprobe), suche.py zusaetzlich eine ZWEITE Datenbank per CLI-Argument -- nicht angefasst. 6 Dateien (fehler, graph, ratgeber, vorprozessor, weltmodell, wikiarbeit) laut Auftrag ALREADY MIGRATED/nicht anfassen -- Messung widerspricht: alle sechs rufen weiterhin sqlite3.connect auf, kein import udb gefunden, vermutlich Parallelarbeit einer anderen Sitzung (unversioniertes werkzeug/quorum.py lag waehrend der Arbeit im Baum). Nicht angefasst, Diskrepanz hier vermerkt statt korrigiert.
 ```
 

@@ -32,7 +32,12 @@ sys.path.insert(0, "/opt/unifieddb")
 sys.path.insert(0, "/opt/entityos/the artefact")
 
 from udb.abruf import paket as P  # noqa: E402  -- _connect (rw, paket()s dok. Nebeneffekt), _ro (read-only)
-from clayverse.retrieval import ASSOZIATIVE_BEGRIFFE, _ist_assoziative_frage  # noqa: E402 -- Modul-Ebene, keine DB
+from clayverse.retrieval import ASSOZIATIVE_BEGRIFFE, _ist_assoziative_frage, WorldAssembler  # noqa: E402
+
+# EINE Quelle fuer den reservierten-Slots-Wert: WorldAssembler._ENRICH_RESERVED_V2_SLOTS
+# ist ein Klassenattribut (kein DB-Zugriff noetig, keine Instanziierung noetig) --
+# derselbe Wert wie in Produktion, nicht hier zum zweiten Mal fest verdrahtet.
+RESERVED_V2_SLOTS = WorldAssembler._ENRICH_RESERVED_V2_SLOTS
 
 # Aus retrieval_fair_eval.py 1:1 wiederverwendet (gleiche Datei, gleiche Pfade,
 # additiv importiert -- KEINE Aenderung an der Originaldatei).
@@ -55,13 +60,18 @@ ERGEBNIS = "/opt/entityos/eval/retrieval_fair_eval_enrich_ergebnis.json"
 
 
 def enrich_lookup(c_rw, c_ro, query: str, budget_paket: int, k_alt: int = MATCH_K):
-    """1:1-Nachbildung von WorldAssembler.corpus_lookup_enrich(): FTS zuerst,
-    paket() nur dazu, wenn FTS leer war ODER die Frage assoziativ heisst.
-    Merge: FTS zuerst, paket() fuellt Luecken (dedupe per id), Budget=k_alt
-    (== CORPUS_MAX_HITS in Produktion). Gibt (ids, feuerte_paket, grund) zurueck
-    -- ids ist die einzige fuer Recall/Praezision relevante Groesse hier, die
-    Zusatz-Hypothesen/Gegenseite-Eintraege aus corpus_lookup_enrich sind reiner
-    Text-Kontext ohne artikel_id und wuerden die Metrik nicht veraendern."""
+    """1:1-Nachbildung von WorldAssembler.corpus_lookup_enrich() NACH DEM FIX
+    2026-08-19 (siehe dortiger Kommentar): FTS zuerst, paket() nur dazu, wenn
+    FTS leer war ODER die Frage assoziativ heisst. FIX: bei Ausloesung wird
+    FTS auf (k_alt - RESERVED_V2_SLOTS) GEDECKELT statt paket() nur die
+    uebrig gebliebenen Slots anzubieten -- sonst kommt paket() bei NL-Fragen
+    (FTS liefert dort fast immer >= k_alt Treffer) NIE zum Zug. paket()
+    bekommt die reservierten Slots garantiert (dedupe per id); reicht paket()
+    nicht, fuellen die abgeschnittenen FTS-Resttreffer nach. Gibt (ids,
+    feuerte_paket, grund) zurueck -- ids ist die einzige fuer Recall/
+    Praezision relevante Groesse hier, die Zusatz-Hypothesen/Gegenseite-
+    Eintraege aus corpus_lookup_enrich sind reiner Text-Kontext ohne
+    artikel_id und wuerden die Metrik nicht veraendern."""
     fts_rows = alt_lookup(c_ro, query, max_hits=k_alt)
     fts_ids = [r["artikel_id"] for r in fts_rows]
 
@@ -74,12 +84,23 @@ def enrich_lookup(c_rw, c_ro, query: str, budget_paket: int, k_alt: int = MATCH_
     if grund is None:
         return fts_ids, False, None
 
+    fts_cap_n = max(0, k_alt - RESERVED_V2_SLOTS)
+    fts_kept = fts_ids[:fts_cap_n]
+    fts_rest = fts_ids[fts_cap_n:]
+
     pk = P.paket(query, budget=budget_paket, conn=c_rw)
     v2_ids = [t.get("id") for t in pk.get("treffer", []) if isinstance(t, dict)]
 
-    merged = list(fts_ids)
+    merged = list(fts_kept)
     gesehen = set(merged)
     for aid in v2_ids:
+        if len(merged) >= k_alt:
+            break
+        if aid in gesehen:
+            continue
+        gesehen.add(aid)
+        merged.append(aid)
+    for aid in fts_rest:
         if len(merged) >= k_alt:
             break
         if aid in gesehen:

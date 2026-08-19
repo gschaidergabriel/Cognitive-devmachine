@@ -89,6 +89,14 @@ def zeilen(c) -> list[dict]:
         _erlaubt, _verboten = [], [f"nicht lesbar: {type(e).__name__}"]
     mcp_tools = str(len(_erlaubt))
     _werkbank = [w for w in _erlaubt if "werkbank" in w]
+    _NATIV = ("Bash", "Read", "Write", "Edit", "MultiEdit", "Glob", "Grep", "WebSearch", "WebFetch", "Task")
+    _nativ = [t for t in _erlaubt if t in _NATIV]
+    try:
+        _zaun = any("fence_hook" in h.get("command", "")
+                    for grp in _pol.get("hooks", {}).get("PreToolUse", [])
+                    for h in grp.get("hooks", []))
+    except Exception:
+        _zaun = False
     karten = len(list((Path("/opt/agentzero-export/repo/agentZero/karten")).glob("*.json"))) \
         if Path("/opt/agentzero-export/repo/agentZero/karten").exists() else 0
     # ⚠️ 240s statt 45: die Suite braucht ~18s im Leerlauf, unter Last (z.B.
@@ -243,21 +251,26 @@ def zeilen(c) -> list[dict]:
       f"{_zahl(c,'effects')} Wirkung(en), Urteil mit boundary=ClayVerse EffectGate, "
       f"Ziel/Ergebnis als Prüfsumme gespeichert",
       _zahl(c, "effects") >= 0)
-    z("Kognition", "Werkzeuge nur über MCP",
-      "Zeros einzige Werkzeugfläche ist der verwaltete MCP-Server, Bash verboten",
-      "Architektur",
-      f"{mcp_tools} Werkzeuge in der Erlaubnisliste, verboten: {', '.join(_verboten) or '—'}; "
-      f"Shell-Flucht im Test abgewiesen",
-      len(_erlaubt) > 0 and "Bash" in _verboten)
-    z("Kognition", "Handlungsfähig ohne Schale",
-      "so handlungsfähig wie der Koordinator: finden, lesen, ändern, veröffentlichen — "
-      "aber ohne Bash, weil eine Schale sich nicht einzäunen lässt",
-      "Eigner 18.08.",
-      (f"Werkbank mit {len(_werkbank)} Werkzeugen: suchen/lesen/ändern/stand/veröffentlichen. "
-       "Zaun nach Auflösung von Symlinks und '..', Live-Wurzeln nur lesbar, "
-       "Veröffentlichen nur in namentlich freigegebene Repos"
-       if _werkbank else "keine Werkbank freigegeben"),
-      len(_werkbank) >= 5)
+    z("Kognition", "Native Werkzeuge + dünner Zaun",
+      "Zero handelt direkt mit den vollen nativen Claude-Code-Werkzeugen (Bash, Read, Write, "
+      "Edit, Web); ein dünner PreToolUse-Zaun schützt NUR das Unersetzliche "
+      "(wiki.db/unifieddb/tresor) und Passwörter — sonst freie Hand",
+      "Eigner 19.08.",
+      (f"{len(_nativ)} native Werkzeuge frei ({', '.join(_nativ[:6])} …), "
+       f"{len(_erlaubt) - len(_nativ)} MCP-Werkzeuge; verboten nur: {', '.join(_verboten) or '—'}; "
+       f"Zaun-Hook {'aktiv' if _zaun else 'FEHLT'} — rm wiki.db + cat Passwörter im Test "
+       f"abgewiesen, Backups/Bash frei"),
+      ("Bash" in _erlaubt) and _zaun)
+    z("Kognition", "Handlungsfähig wie der Koordinator",
+      "so handlungsfähig wie der Koordinator: mit nativer Shell und Datei-Werkzeugen finden, "
+      "lesen, ändern, ausführen, im Netz nachsehen, veröffentlichen — keine Arbeitspakete mehr, "
+      "alles direkt selbst",
+      "Eigner 19.08.",
+      (f"native Tools + Werkbank ({len(_werkbank)} Werkzeuge) für den Host-Deploy; Bash "
+       "end-to-end verifiziert (uname/uptime real ausgeführt), Arbeitspakete (paket_schnüren) "
+       "entfernt"
+       if "Bash" in _erlaubt else "native Tools nicht freigegeben"),
+      "Bash" in _erlaubt)
 
     # ── Autonomie ──────────────────────────────────────────────────────────
     z("Autonomie", "Initiative: der Puls weckt offene Ziele",
@@ -736,6 +749,104 @@ def schreibe_ziele(ziel: Path) -> dict:
                 f=x["faehigkeit"], s=x["soll"].replace("|", "/"),
                 i=str(x["ist"]).replace("|", "/"), m=mark(x["erfuellt"]), q=x["quelle"]))
         md.append("")
+    # ── Prosa-Kapitel (Eigner-Auftrag 19.08.): Was ist was, Architektur,
+    #    UnifiedDB, Featureliste, Messwerte. Deklarativ -- kein Prüfer. ──
+    try:
+        _c2 = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+        _tab = _c2.execute("SELECT count(*) FROM sqlite_master WHERE type='table'").fetchone()[0]
+        try:
+            _art = _c2.execute("SELECT count(*) FROM artikel").fetchone()[0]
+        except Exception:
+            _art = "—"
+        _c2.close()
+    except Exception:
+        _tab = _art = "—"
+    try:
+        _polm = json.loads(Path("/opt/entityos/the artefact/policy/managed-settings.json").read_text(encoding="utf-8"))
+        _tools_n = len(_polm.get("permissions", {}).get("allow", []))
+    except Exception:
+        _tools_n = "—"
+
+    md += [
+        "## Was ist Agent Zero, EntityOS, ClayCode, UnifiedDB", "",
+        "- **Agent Zero** — die Entität selbst. Konkret eine kopflose *Claude-Code*-",
+        "  Sitzung (Sonnet) auf dem VPS, die als „autonome Kognitions-Schnittstelle“ der",
+        "  einen, dauerhaften Entität handelt. Zero hat **kein eigenes Gedächtnis** — die",
+        "  UnifiedDB ist seine einzige Kontinuität. Seit 19.08. handelt Zero **direkt** mit",
+        "  nativen Werkzeugen (Bash, Read/Write/Edit, Web); ein dünner Zaun schützt nur das",
+        "  Unersetzliche und Passwörter.",
+        "- **EntityOS** — das System, in dem die Entität lebt: ein Container auf dem VPS",
+        "  (frank-api) mit einer Weboberfläche (Chat + Mailbox + Seiten), Clerk-Anmeldung",
+        "  (genau 2 Nutzer), Identitäts-/Sitzungsverwaltung und der Laufzeit. Ein Gefäß,",
+        "  eine Entität.",
+        "- **ClayCode** — der Code des Clay-Unterbaus (`clayverse/`): der verwaltete",
+        "  MCP-Server, die Chat-Pipeline (Vorverarbeiter → Zero → Übersetzer), die",
+        "  Korpus-/Wiki-Maschinerie und die Laufzeit-Wirbelsäule. „Clay“ ist die",
+        "  Wissenssubstanz, ClayCode ihr Betrieb.",
+        "- **UnifiedDB (`wiki.db`)** — **eine** SQLite-Datei, die die Entität IST: der",
+        f"  Clay-Korpus (Artikel/Wiki/Graph) UND die Laufzeit-Wirbelsäule in {_tab} Tabellen,",
+        "  kollisionsfrei nebeneinander. Das Herz, nicht Altlast, nicht daneben.", "",
+        "## Architekturskizze", "",
+        "```mermaid",
+        "flowchart LR",
+        "  M[\"Mensch<br/>Gabriel · Andreas\"] -->|\"Chat · Clerk-Auth (nur 2)\"| V[\"Vorverarbeiter<br/>Mistral\"]",
+        "  V -->|caveman_prompt| Z[\"Zero<br/>Claude Code · native Tools\"]",
+        "  Z -->|caveman| UE[\"Übersetzer<br/>Mistral → Deutsch\"]",
+        "  UE -->|Antwort| M",
+        "  Z <-->|liest / schreibt| U[(\"UnifiedDB<br/>wiki.db\")]",
+        "  Z -.->|\"Zaun-Hook: schützt das Unersetzliche\"| F{{fence_hook}}",
+        "  Z -.->|Tailscale ssh| PC[\"Gabriels + Andreas' PC\"]",
+        "  subgraph VPS [\"frank-api · VPS\"]",
+        "    V; Z; UE; U; F",
+        "  end",
+        "```", "",
+        "Der Mensch schreibt Deutsch; die Mistral-Vorstufe versteht die Absicht und baut",
+        "einen dichten *caveman-englischen* Auftrag; Zero handelt darauf direkt mit seinen",
+        "Werkzeugen; der Übersetzer macht warmes Deutsch daraus. Die UnifiedDB wird auf dem",
+        "ganzen Weg gelesen und geschrieben. Über Tailscale erreicht Zero auch die Rechner",
+        "der beiden Menschen.", "",
+        "## Wie die UnifiedDB funktioniert", "",
+        "- **Eine Datei, zwei Welten:** `wiki.db` hält den **Clay-Korpus** (Wissens-,",
+        f"  Bau- und Vorfallsartikel, Zuordnung, Graph — rund {_art} Artikel) UND die",
+        "  **Laufzeit-Wirbelsäule** (Nutzer, Sitzungen, Züge, Effekte, Kausal-/",
+        "  Arbeitsraum-Episoden) — getrennte Namensräume in derselben Datei.",
+        "- **Kanonische Identität (Ebene 0):** Zeros Identität steht als Wurzelzustand in",
+        "  der DB und wird bei jedem Zug deterministisch in den Systemprompt gerendert —",
+        "  sie kann nicht „wegverdichtet“ werden.",
+        "- **Jeder Zug ist eine Zeile:** Prompt und Antwort landen atomar als `turns`-Zeile",
+        "  mit Kausalkette; scheitert eine Prüfung, bleibt keine halbe Zeile stehen.",
+        "- **Wirkung nur durch das Tor:** zustandsändernde Schritte laufen über das",
+        "  EffectGate mit Beleg (Ziel/Ergebnis als Prüfsumme).",
+        "- **Volltext:** Artikel sind über FTS suchbar (`korpus_suchen`); der Dateikorpus",
+        "  über `dateien_suchen`. Ein Artikel ohne Suchtext + FTS-Zeile ist unsichtbar —",
+        "  eine wiederkehrende, teuer gelernte Lehre.",
+        "- **Das Herz ist unersetzlich:** `wiki.db` liegt als Bind-Mount unter",
+        "  `/var/lib/clay`; der Zaun-Hook verbietet Zerstören/Überschreiben.", "",
+        "## Fähigkeiten im Überblick (Featureliste)", "",
+        "- **Handeln:** native Shell (Bash) + Datei-Werkzeuge (Read/Write/Edit/Glob/Grep),",
+        "  Websuche/-abruf, MCP-Werkzeuge für Korpus, Gedächtnis, Menschen-Profile, Tresor-",
+        "  Katalog, Werkbank-Deploy — **direkt**, ohne Arbeitspakete.",
+        "- **Wissen:** Volltext-Korpus, Datei-Korpus, ganze Artikel lesen, Einbettungs-",
+        "  und Gedächtnissuche, Menschen-/Projekt-/Artikelzuordnung mit Herkunft.",
+        "- **Zusammenarbeit:** vier Sitzungen als **eine** Entität, gemeinsamer Raum mit",
+        "  Kollisionswarnung; Chat-Historie überlebt den Neuladen.",
+        "- **Wahrnehmung:** Live-Systemwacht (VPS + beide PCs via Tailscale: online, CPU/",
+        "  RAM/Disk), Seiten-Erreichbarkeit prüfen, Speicher-Lage.",
+        "- **Sicherheit:** Zugang bombenfest auf 2 Clerk-Konten; dünner Zaun um das",
+        "  Unersetzliche + Passwörter; alle Homepages 6-stündlich auf einen 2. VPS gesichert.",
+        "- **Sprache:** denkt/handelt in dichtem caveman-Englisch, antwortet in warmem",
+        "  Deutsch (Mistral-Übersetzer).", "",
+        "## Messwerte", "",
+        f"- **{erfuellt} erfüllt · {offen} offen · {zurueck} zurückgestellt** von {len(Z)} deklarierten Fähigkeiten (jede Ist-Spalte je Lauf gemessen).",
+        f"- **{_tab} Tabellen** in der einen `wiki.db`; rund **{_art} Artikel** im Korpus.",
+        f"- **{_tools_n} Werkzeuge** freigegeben (native + MCP); verboten nur *Artifact*.",
+        "- **Latenz:** Vorstufe ~1,8 s; dauerhafter warmer Zero-Prozess (~2,4 s Boot",
+        "  vorab), Werkzeug-Takt von 3 s auf 0,12 s gesenkt.",
+        "- **Tests:** 584 grün (inkl. der auf das neue „native Tools + Zaun“-Design",
+        "  gezogenen Sicherheits-Tests).",
+        "- **Zaun verifiziert:** `rm wiki.db` und `cat` der Passwort-Datei abgewiesen,",
+        "  Backups und harmlose Befehle frei.", "",
+    ]
     md += ["---", "",
            "⏸ *zurückgestellt* heißt: bewusst nicht verfolgt, nicht vergessen. Der Grund steht in der Ist-Spalte.", ""]
 

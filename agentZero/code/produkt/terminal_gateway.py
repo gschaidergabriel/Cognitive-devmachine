@@ -790,7 +790,13 @@ window.addEventListener('load', async () => {{
                 finally:
                     busy = False
 
-                _require_auth_lease_live(auth_expires_at)
+                # KEINE Lease-Nachkontrolle hier: der Zug war bei Beginn
+                # autorisiert (Pruefung oben) UND ist via TurnLifecycle bereits
+                # in der DB. Laeuft das kurzlebige Clerk-Token waehrend eines
+                # langen Zugs ab, darf die fertige Antwort NICHT verworfen werden
+                # -- das war der Bug 'Fehler im Chat, Antwort erst nach Reload'.
+                # Die Lease-Grenze erzwingt der Schleifenkopf beim naechsten
+                # Empfang weiter (getestetes Verhalten bleibt).
                 await send_json({
                     "type": "reply",
                     "text": result["reply"],

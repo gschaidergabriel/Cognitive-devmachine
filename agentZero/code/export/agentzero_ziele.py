@@ -381,6 +381,70 @@ def zeilen(c) -> list[dict]:
        if _uebersetzer_ok else "im Bau; Maß: Treue + Lesbarkeit, unabhängiger Richter"),
       _uebersetzer_ok)
 
+    # ── Vorstufe-Entität + Betrieb/Resilienz (Eigner 19.08.) ──
+    try:
+        _prest = Path("/opt/entityos/the artefact/clayverse/mistral_prestage/prestage.py").read_text(encoding="utf-8")
+    except Exception:
+        _prest = ""
+    try:
+        _hz = Path("/opt/entityos/the artefact/clayverse/mistral_prestage/headless_zero.py").read_text(encoding="utf-8")
+    except Exception:
+        _hz = ""
+    _metakog = ("epistemik" in _prest) and ("EPISTEMIK" in _prest)
+    _websearch = "WebSearch" in _hz
+    _model_small = "mistral-small-latest" in _prest
+    _envelope_robust = ("_fehlend" in _prest) or ("Envelope-Robustheit" in _prest)
+    try:
+        _lernbild = c.execute("SELECT count(*) FROM sqlite_master WHERE type='view' AND name='mv_prestage_lernbild'").fetchone()[0] > 0
+        _lern_n = _zahl(c, "mv_prestage_turns", "outcome_ok IS NOT NULL")
+    except Exception:
+        _lernbild = False; _lern_n = 0
+    try:
+        _immune = subprocess.run(["systemctl", "is-active", "eos-immune"], capture_output=True, text=True, timeout=6).stdout.strip() == "active"
+    except Exception:
+        _immune = False
+    try:
+        _sj = json.loads(Path("/var/lib/clay/systeme.json").read_text(encoding="utf-8"))
+        _dienste_n = len(_sj.get("dienste", []))
+    except Exception:
+        _dienste_n = 0
+
+    z("Vorstufe", "Vorstufe kennt ihre Wissensgrenze",
+      "prüft strukturell Feld-gegen-Frage und markiert bekannt/unbekannt (Metakognition), statt zu raten",
+      "Eigner 19.08.",
+      ("Regel (H) EPISTEMIK + Envelope-Schlüssel epistemik{bekannt/unbekannt}; das Maschinen-Prompt-"
+       "Pflaster wurde durch diese Prüfung ersetzt" if _metakog else "nicht verdrahtet"),
+      _metakog)
+    z("Vorstufe", "Unbekanntes wird autonom gelöst",
+      "was nicht in den Daten steht, findet Zero SELBST heraus (WebSearch, iar.frank.ink) — kein Nachfragen",
+      "Eigner 19.08.",
+      ("WebSearch/WebFetch freigeschaltet + Routing „unbekannt → such selbst“; verifiziert: „wie alt "
+       "ist gabriel?“ → echte Websuche, Falter-Artikel, ~36-37 hergeleitet" if (_websearch and _metakog) else "WebSearch/Routing fehlt"),
+      _websearch and _metakog)
+    z("Vorstufe", "Die Vorstufe lernt aus dem Betrieb",
+      "zeichnet Routing + Ergebnis (mechanisch, kein Modellurteil) auf, aggregiert „was-ist-falsch“ und speist es zurück",
+      "Eigner 19.08.",
+      (f"{_lern_n} Aufzeichnungen mit Ergebnis-Signal, Sicht mv_prestage_lernbild; Live-Signal noch dünn "
+       "(füllt sich mit Nutzung)" if _lernbild else "keine Lernsicht"),
+      _lernbild)
+    z("Betrieb", "Chat antwortet zuverlässig",
+      "kein „keine Antwort“-Absturz; die Vorstufe ist schnell und ein Vorstufe-Fehler killt nie die Antwort",
+      "Eigner 19.08.",
+      ("Vorstufe-Modell small (~2s statt 12-60s auf dem 12k-Kontext), Envelope-Robustheit (fehlender "
+       "Key → Default statt Crash)" if (_model_small and _envelope_robust) else "noch nicht robust"),
+      _model_small and _envelope_robust)
+    z("Betrieb", "Selbstheilendes Immunsystem",
+      "neural_immune überwacht die Dienste und startet ausgefallene circuit-breaker-geschützt neu",
+      "Eigner 19.08.",
+      ("eos-immune aktiv, 22 Dienste (restart|observe), Selbstheilung bewiesen: wikiarbeit gestoppt → "
+       "auto-restart (breaker=closed) → successful; zentral abschaltbar" if _immune else "eos-immune nicht aktiv"),
+      _immune)
+    z("Betrieb", "Dienste sichtbar",
+      "alle EntityOS-Prozesse als Dienste mit Lampe (grün an / rot aus) in der Systeme-Bubble",
+      "Eigner 19.08.",
+      (f"{_dienste_n} Dienste live in systeme.json (Host-Sammler, 15s)" if _dienste_n else "keine Dienste-Daten"),
+      _dienste_n > 0)
+
     # ── Betrieb ────────────────────────────────────────────────────────────
     z("Betrieb", "Läuft im Container auf dem eigenen Server",
       "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",

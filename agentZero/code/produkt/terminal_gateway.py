@@ -8,6 +8,7 @@ import os
 import sqlite3
 import sys
 import time
+import uuid
 from pathlib import Path
 
 from fastapi import Request, WebSocket, WebSocketDisconnect
@@ -530,6 +531,87 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return JSONResponse({"stand": 0, "systeme": [], "alter_s": None})
         d["alter_s"] = max(0, int(_time.time()) - int(d.get("stand", 0)))
         return JSONResponse(d)
+
+    _STEUER_SPOOL = Path("/var/lib/clay/steuer-spool")
+    _STEUER_AKTIONEN = {"start", "stop", "restart"}
+
+    @app.post("/api/dienst-steuern")
+    async def dienst_steuern(request: Request):
+        # Dieselbe Anmeldepruefung wie /api/systeme -- EXAKT dieselbe, kein
+        # eigener Weg. Dieser Container fuehrt NICHTS selbst aus (kein
+        # systemctl/docker hier drin, kein Host-Zugriff): er validiert die
+        # Anfrage nur so weit, dass offensichtlicher Unsinn sofort 400
+        # bekommt, und legt eine Anfrage in den Spool. Die einzige echte
+        # Sicherheitsgrenze ist der Host-Ausfuehrer (dienststeuerung.py) mit
+        # seiner eigenen, unabhaengigen Whitelist -- was hier steht, ist eine
+        # zusaetzliche fruehe Ablehnung, kein Ersatz dafuer.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            body = await request.json()
+        except Exception:
+            return JSONResponse({"error": "invalid json"}, status_code=400)
+        if not isinstance(body, dict):
+            return JSONResponse({"error": "invalid body"}, status_code=400)
+
+        dienst_wunsch = str(body.get("dienst", "")).strip()
+        aktion = str(body.get("aktion", "")).strip().lower()
+        if aktion not in _STEUER_AKTIONEN:
+            return JSONResponse({"error": "invalid aktion"}, status_code=400)
+        if not dienst_wunsch:
+            return JSONResponse({"error": "invalid dienst"}, status_code=400)
+
+        # Der Immunsystem-Schalter ist ein Sonderfall (kein Dienste-Zeilen-
+        # eintrag, siehe systemwacht.IMMUNSYSTEM_UNIT) -- alles andere muss
+        # ein Name ODER eine Unit aus der AKTUELLEN, host-geschriebenen
+        # Dienste-Liste sein, UND dort "steuerbar": true tragen. Beides kommt
+        # ausschliesslich aus vom Host geschriebenen Dateien, nie aus der
+        # Anfrage selbst -- die Anfrage liefert nur den gewuenschten Namen.
+        unit = None
+        if dienst_wunsch.lower() in ("immunsystem", "eos-immune", "eos-immune.service"):
+            unit = "eos-immune.service"
+        else:
+            try:
+                with open("/var/lib/clay/systeme.json", encoding="utf-8") as f:
+                    stand = json.load(f)
+            except Exception:
+                stand = {}
+            for eintrag in (stand.get("dienste") or []):
+                if not eintrag.get("steuerbar"):
+                    continue
+                if dienst_wunsch in (eintrag.get("name"), eintrag.get("unit")):
+                    unit = eintrag.get("unit")
+                    break
+
+        if not unit:
+            return JSONResponse(
+                {"error": "unknown or non-controllable dienst"}, status_code=400)
+
+        anfrage = {
+            "id": uuid.uuid4().hex,
+            "zeit": time.time(),
+            "wer": uid,
+            "dienst": dienst_wunsch,
+            "unit": unit,
+            "aktion": aktion,
+        }
+        try:
+            _STEUER_SPOOL.mkdir(parents=True, exist_ok=True)
+            zieldatei = _STEUER_SPOOL / f"{int(anfrage['zeit'] * 1000)}-{anfrage['id']}.json"
+            tmp = _STEUER_SPOOL / f".{zieldatei.name}.tmp"
+            tmp.write_text(json.dumps(anfrage, ensure_ascii=False), encoding="utf-8")
+            os.replace(tmp, zieldatei)
+        except Exception:
+            return JSONResponse({"error": "spool write failed"}, status_code=500)
+
+        return JSONResponse({"ok": True, "angenommen": {"unit": unit, "aktion": aktion}})
 
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():

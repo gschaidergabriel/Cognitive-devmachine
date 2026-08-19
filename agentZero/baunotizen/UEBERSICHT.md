@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T04:41:09Z. **2624 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T05:11:09Z. **2631 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T10:44:08+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T11:54:37+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2526 |
+| baunotiz | 2533 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1653 |
-| baunotiz | bauverlauf.jsonl | 829 |
+| baunotiz | git-commit | 1658 |
+| baunotiz | bauverlauf.jsonl | 831 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2624 · Gegenhypothese: 0 von 2624
+## Hypothese: 0 von 2631 · Gegenhypothese: 0 von 2631
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -31,9 +31,25 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T10:44:08+07:00`.
 
 ## Privatsphaere-Filter
 
-Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
+Von **400** gepruefte juengste Kandidaten wurden **3** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen123 preprocessor security frontier
+
+`baunotiz-git-9b7f5d0dc984dd0dd0fa69d7d907d8711d81539f` · baunotiz · git-commit · 2026-08-19T11:54:37+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen123 preprocessor security frontier
+
+### agentzeroforschung: bind Gen123 preprocessor security and adapter frontier
+
+`baunotiz-git-e24aef9f0619689ebb1630d1434c6885d0e642c8` · baunotiz · git-commit · 2026-08-19T11:46:42+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentzeroforschung: bind Gen123 preprocessor security and adapter frontier
 
 ### agentzeroforschung: bind Gen116 PTY red-green-red-green-red-green
 
@@ -131,6 +147,40 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen116 durable adapter red and capability-audit truth gaps
 
+### Latenz stark gesenkt: eine Frage an Zero dauerte ewig, jetzt ~3x schneller
+
+`baunotiz-git-0e7baa588f4762ffafbf0d3a1b6216a8ef745c54` · baunotiz · git-commit · 2026-08-19T04:55:34+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Latenz stark gesenkt: eine Frage an Zero dauerte ewig, jetzt ~3x schneller
+
+Gabriel: "wenn ich zero etwas frage dauert es ewig". Gemessen statt geraten.
+Aufschluesselung eines Zuges: Vorstufe 4s, Zero 22s, Uebersetzer 2s -- Zeros
+22s waren der Brocken. Disk-Frage vorher 34s, jetzt 12,7s.
+
+DREI URSACHEN, alle gefunden und behoben:
+
+1. AUFTRAGSDIENST POLLTE NUR ALLE 3 SEKUNDEN. Jedes Werkbank-/Speicher-/Seite-
+   Werkzeug laeuft ueber einen Auftrag auf dem Wirt; der Dienst holte neue
+   Auftraege nur alle 3s ab (TAKT=3.0). Bei 3 Werkzeugen im Zug = bis zu 9s
+   reines Warten. -> TAKT auf 0,12s. Gemessen: speicher_lage 5,6s -> 0,10s,
+   werkbank.stand 5,6s -> 0,60s.
+
+2. speicher_lage MACHTE bei JEDER Frage schwere du-Scans (bilanz mit 45s-Grenze,
+   verursacher mit systemctl). Fuer "wie voll ist die Platte" reicht die
+   sofortige Messung (shutil.disk_usage). -> die teuren Teile aus dem heissen
+   Pfad, ueber die neue Auftragsart speicher_bilanz abrufbar; sie leben ohnehin
+   im 30-Minuten-Waechter.
+
+3. ⭐ ZERO LIEF AUF DEM STANDARDMODELL (Opus) -- jede agentische Runde ~4s. Die
+   harte Reasoning-Arbeit macht schon die Mistral-Vorstufe; Zeros Job ist
+   Anweisung lesen, Werkzeug rufen, knapp melden. Dafuer ist Sonnet schnell
+   genug. --model sonnet in headless. Gemessen: Zero fuer die Platte-Frage
+   20,2s -> 6,3s, Qualitaet unveraendert (Exfil-Abwehr haelt, Caveman-Englisch
+   haelt, Antworten praezise: "Festplatte: 95,5 GB frei von 192,7 GB, 50,4 %
+   belegt. Leise, nichts zu
+
 ### agentzeroforschung: index Gen116 adapter evidence correction
 
 `baunotiz-bauverlauf-9bd86f9bfa49d0e9fc39` · baunotiz · bauverlauf.jsonl · 2026-08-19T04:46:47+07:00 · Gabriel Gschaider
@@ -163,6 +213,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentzeroforschung: correct Gen116 adapter evidence and 584/0 narrative drift
 
+### agentZero-Export 2026-08-19T04:41:08Z (Generation 123, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-8ca36c2316693a6c1e428952131ddd59c839f201` · baunotiz · git-commit · 2026-08-19T04:41:42+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T04:41:08Z (Generation 123, 59 Dateien, 1 geschwaerzt)
+
 ### agentZero-Export 2026-08-19T04:11:08Z (Generation 120, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-054df0a06c5b483c378d14f9dc9c2f6de1dc3e08` · baunotiz · git-commit · 2026-08-19T04:12:43+00:00 · agentZero
@@ -170,6 +228,14 @@ agentzeroforschung: correct Gen116 adapter evidence and 584/0 narrative drift
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T04:11:08Z (Generation 120, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T04:11:08Z (Generation 120, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-f84b5b57a2bd0e4f5a25` · baunotiz · bauverlauf.jsonl · 2026-08-19T04:12:43+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### seite_diagnose: Zero trennt server-seitig von client-seitig
 
@@ -217,44 +283,4 @@ agentZero-Export 2026-08-19T03:41:08Z (Generation 117, 59 Dateien, 1 geschwaerzt
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
-
-### claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
-
-`baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f37f9034977` · baunotiz · git-commit · 2026-08-19T03:41:31+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
-
-### claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
-
-`baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz · bauverlauf.jsonl · 2026-08-19T03:41:31+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero-Export 2026-08-19T03:11:08Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-5a2cbb3916235dab9811d0053fde94064cb53dcb` · baunotiz · git-commit · 2026-08-19T03:11:43+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T03:11:08Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T03:11:08Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-56f704d6523b91a46161` · baunotiz · bauverlauf.jsonl · 2026-08-19T03:11:43+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen107 583/1 and stale security acceptance
-
-`baunotiz-git-3beb76ffb6f05a43aa192b568956fd4626bead06` · baunotiz · git-commit · 2026-08-19T02:44:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen107 583/1 and stale security acceptance
 

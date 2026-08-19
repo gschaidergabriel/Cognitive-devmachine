@@ -1,12 +1,58 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T04:41:08Z. 811 Commits aus vier Repos, davon 246 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-19T05:11:09Z. 815 Commits aus vier Repos, davon 247 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-19
+
+### Latenz stark gesenkt: eine Frage an Zero dauerte ewig, jetzt ~3x schneller
+
+`0e7baa588f47` · agentzero-export · 04:55 UTC · EntityOS
+
+```
+Gabriel: "wenn ich zero etwas frage dauert es ewig". Gemessen statt geraten.
+Aufschluesselung eines Zuges: Vorstufe 4s, Zero 22s, Uebersetzer 2s -- Zeros
+22s waren der Brocken. Disk-Frage vorher 34s, jetzt 12,7s.
+
+DREI URSACHEN, alle gefunden und behoben:
+
+1. AUFTRAGSDIENST POLLTE NUR ALLE 3 SEKUNDEN. Jedes Werkbank-/Speicher-/Seite-
+   Werkzeug laeuft ueber einen Auftrag auf dem Wirt; der Dienst holte neue
+   Auftraege nur alle 3s ab (TAKT=3.0). Bei 3 Werkzeugen im Zug = bis zu 9s
+   reines Warten. -> TAKT auf 0,12s. Gemessen: speicher_lage 5,6s -> 0,10s,
+   werkbank.stand 5,6s -> 0,60s.
+
+2. speicher_lage MACHTE bei JEDER Frage schwere du-Scans (bilanz mit 45s-Grenze,
+   verursacher mit systemctl). Fuer "wie voll ist die Platte" reicht die
+   sofortige Messung (shutil.disk_usage). -> die teuren Teile aus dem heissen
+   Pfad, ueber die neue Auftragsart speicher_bilanz abrufbar; sie leben ohnehin
+   im 30-Minuten-Waechter.
+
+3. ⭐ ZERO LIEF AUF DEM STANDARDMODELL (Opus) -- jede agentische Runde ~4s. Die
+   harte Reasoning-Arbeit macht schon die Mistral-Vorstufe; Zeros Job ist
+   Anweisung lesen, Werkzeug rufen, knapp melden. Dafuer ist Sonnet schnell
+   genug. --model sonnet in headless. Gemessen: Zero fuer die Platte-Frage
+   20,2s -> 6,3s, Qualitaet unveraendert (Exfil-Abwehr haelt, Caveman-Englisch
+   haelt, Antworten praezise: "Festplatte: 95,5 GB frei von 192,7 GB, 50,4 %
+   belegt. Leise, nichts zu bereinigen.").
+
+DAZU zwei Nebenhebel:
+- Die Vorstufe UEBERSELEKTIERTE Werkzeuge ("wie voll ist die platte" waehlte
+  speicher_lage UND menschen_profil UND wiki_zuordnung -- nur das erste noetig).
+  Regel: tool_selection MINIMAL, meist genau EINS, jedes Extra ist eine
+  Zero-Runde.
+- Waehlte die Vorstufe NICHTS, bekam Zero alle 38 Werkzeuge (mein eigener
+  Filter-Rueckfall) und explorierte wild. Jetzt ein kleiner Standardsatz der
+  ueblichen Lese-Werkzeuge (korpus_suchen, menschen_profil, artikel_lesen,
+  seite_diagnose, speicher_lage).
+
+ERGEBNIS: hi 10s, ZVR-Frage 24,5 -> 14,4s ("ZVR 1741094409."), Platte 34 ->
+12,7s. Der Rest-Boden (~10s) ist Vorstufe 4s (mistral-medium, fuer die 8-Schluessel-
+Struktur noetig) + Zero-Kaltstart ~4s + Uebersetzer 2s. 584 Tests gruen.
+```
 
 ### Vorverarbeiter stark optimiert: Caveman-Englisch, Exfil-Abwehr, Sentinel raus, 3-Key-Rotation
 
@@ -4679,46 +4725,6 @@ ZWEI EIGENE FEHLER: ich habe eine veraltete Liste in den Auftrag geschrieben
 (die sechs angeblich schon migrierten rufen weiter sqlite3.connect) - genau der
 Fehler aus F26, zum zweiten Mal am selben Tag. Und ich habe eine Zielzahl
 gesetzt, ohne die Vordertuer vorher gelesen zu haben.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F32 Der Mistral-Auswerter liefert das So-NICHT mit
-
-`c26374f4c237` · clay · 06:42 UTC · ClayVerse
-
-```
-Eignerentscheidung: was der Auswerter an Moeglichkeiten mitgibt, soll
-gleichzeitig sagen, was NICHT gemacht werden soll, weil ineffizient.
-
-ES IST DIESELBE FORM, DIE PAKET SCHON HAT: der Auswerter waehlt einen Weg und
-verwirft dabei andere. Heute stuerben die Verworfenen stumm - genau der Fehler,
-den paket.py behoben hat unter collapse_preserves_rejected_and_deferred_lineage,
-Selection is not deletion. Die Datenform gibt es schon: _kollaps_quittung mit
-gewaehlt und nicht_gewaehlt samt Begruendung. Kein neues Bauteil, eine zweite
-Anwendung eines vorhandenen.
-
-DIE VERBOTSLISTE WIRD GEMESSEN, NICHT AUSGEDACHT. Quellen liegen vor:
-MESSFEHLER.md mit 18 Eintraegen, das Fehlergedaechtnis mit 17, das
-Kontingentbuch, die Bauprotokolle. Kein Eintrag ohne Beleg - ein mach das nicht
-ohne Messwert ist eine Meinung und wird nicht ausgeliefert.
-
-STARTBESTAND aus heute gemessenen Zahlen: nicht einzeln einbetten (Faktor 10),
-nicht grep fuer Faktensuche (432 ms und 0 belegte Fakten gegen 2,18 ms und 472),
-keine fest verdrahteten Modellnamen (5 von 9 tot), ClayCode nicht auf
-Messberichte (plus 0,0 Punkte), kein zweiter Waechter neben dem Puls, den
-eigenen Stand nicht schaetzen.
-
-DREI BEDINGUNGEN GEGEN DEN WOLFSRUF: hoechstens drei Eintraege und nur die zur
-Aufgabe passenden; Verbot MIT Zahl statt ohne; die Liste kostet je Prompt, also
-gehoert die Deckelung ins Kontingentbuch.
-
-RUECKWEG GEGEN DAS VERSTEINERN: waehlt der Router gegen die Warnung und es geht
-schief, wird der Eintrag staerker - geht es gut, wird er schwaecher und bei
-Wiederholung entfernt. Damit ist jeder Eintrag falsifizierbar.
-
-INVARIANTE: beratend, nie sperrend. Sperren ist Sache des EffectGate. Ein
-Auswerter, der verhindern kann, waere eine Autoritaet.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

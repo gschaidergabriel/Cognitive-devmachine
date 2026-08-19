@@ -123,6 +123,20 @@ def _systemanweisung(db_path: str, user_id: str, session_id: str) -> str:
     return grund.rstrip() + "\n\n" + _anwesenheitsblock(db_path, user_id, session_id) + "\n"
 
 
+# ⚠️ Waehlt die Vorstufe kein Werkzeug (oder nur erfundene), bekommt Zero NICHT
+# alle 38 -- das liesse ihn wild explorieren, jede Runde kostet Sekunden.
+# Stattdessen ein kleiner Satz der ueblichen Lese-Werkzeuge, mit denen sich die
+# meisten Fragen in ein, zwei Runden beantworten lassen. Gemessen: 'ZVR nummer'
+# gab tools=0 -> alle 38 -> 16s Exploration.
+_LEER_RUECKFALL = (
+    "mcp__clayverse__korpus_suchen",
+    "mcp__clayverse__menschen_profil",
+    "mcp__clayverse__artikel_lesen",
+    "mcp__clayverse__seite_diagnose",
+    "mcp__clayverse__speicher_lage",
+)
+
+
 def run_headless(
     caveman_prompt: str,
     *,
@@ -196,6 +210,22 @@ def run_headless(
     if not isinstance(caveman_prompt, str) or not caveman_prompt or len(caveman_prompt) > MAX_PROMPT_CHARS:
         raise HeadlessZeroError("invalid caveman prompt")
 
+    # ⭐⭐ Der dauerhafte Zero-Prozess: erst einen VORGEWAERMTEN Prozess versuchen
+    # (Boot schon bezahlt, ~2,2s gespart). Klappt es nicht -- kein warmer bereit,
+    # Fehler, kein sauberes Ergebnis -- faellt es lautlos auf den Kaltweg unten
+    # zurueck. Der Dauerprozess ist eine Abkuerzung, nie eine Verschlechterung.
+
+    if pipeline_managed:
+        try:
+            from .warm_zero import POOL as _WARM
+            _WARM.starten()
+            _warm_res = _WARM.answer(caveman_prompt, user_id=user_id,
+                                     session_id=session_id, timeout=timeout)
+            if _warm_res is not None:
+                return _warm_res
+        except Exception:
+            pass  # jeder Fehler im Warmweg -> Kaltweg
+
     # ⚠️ Die Vorstufe ERFINDET manchmal Werkzeugnamen (gemessen: read_resource,
     # search_wiki -- gibt es nicht). Ein erfundener Name darf NICHT den ganzen
     # Zug toeten. Also FILTERN statt hart abweisen: unbekannte Namen fallen weg,
@@ -209,9 +239,9 @@ def run_headless(
         if verworfen:
             import sys as _sys
             print("headless: erfundene Werkzeugnamen verworfen: " + str(verworfen), file=_sys.stderr)
-        tools = gefiltert or list(DEFAULT_ALLOWED_TOOLS)
+        tools = gefiltert or list(_LEER_RUECKFALL)
     else:
-        tools = list(DEFAULT_ALLOWED_TOOLS)
+        tools = list(_LEER_RUECKFALL)
     if not Path(RUNTIME_PROMPT).is_file():
         raise HeadlessZeroError("runtime identity file missing -- cannot call headless without it")
 
@@ -225,6 +255,11 @@ def run_headless(
 
     argv = [
         "claude", "-p", caveman_prompt,
+        # ⭐ Schnelles Modell pro Runde: die harte Reasoning-Arbeit macht schon
+        # die Mistral-Vorstufe. Zeros Job ist Anweisung lesen, Werkzeug rufen,
+        # knapp melden -- dafuer ist Sonnet schnell genug, und jede agentische
+        # Runde kostet auf Opus ~4s, auf Sonnet deutlich weniger.
+        "--model", "sonnet",
         "--settings", MANAGED_SETTINGS,
         "--setting-sources", "",
         "--tools", "",

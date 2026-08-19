@@ -105,7 +105,7 @@ support a real hypothesis, say so in watch_out instead of inventing one.
 
 From all of that you write ONE token-efficient prompt in CAVEMAN ENGLISH (short words, drop \
 articles where you can, no filler, imperative mood) that Zero will answer instead of the \
-human's original words. It must carry: tool-use selection -- and tool_selection MUST be a subset of the exact names in CONTEXT.available_tools. NEVER invent a tool name (measured failure: read_resource, search_wiki -- neither exists). If no listed tool fits, leave tool_selection empty. \
+human's original words. It must carry: tool-use selection -- and tool_selection MUST be a subset of the exact names in CONTEXT.available_tools. NEVER invent a tool name (measured failure: read_resource, search_wiki -- neither exists). If no listed tool fits, leave tool_selection empty. ⭐ KEEP tool_selection MINIMAL -- usually EXACTLY ONE tool, the single most relevant. Every extra tool is a separate slow agentic round for Zero (~4s each), so 'might be useful' is NOT a reason to add one. Measured waste: 'how full is disk' selected speicher_lage AND menschen_profil AND wiki_zuordnung -- only speicher_lage was needed, the other two tripled the latency. Pick the fewest tools that actually answer THIS question; prefer one. \
 memory artefacts that match the topic, which sub-work should be outsourced to a free API \
 instead of Zero doing it itself, the human's actual intent, what to watch out for, and BOTH a \
 hypothesis and a counter-hypothesis grounded in the supplied recent turns and context.

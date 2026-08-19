@@ -254,7 +254,7 @@ def _auftrag(art: str, **daten) -> dict:
                 erg = {"veroeffentlicht": False, "fehler": f"Ergebnis unlesbar: {e}"}
             ergebnis.unlink(missing_ok=True)
             return erg
-        time.sleep(0.4)
+        time.sleep(0.1)
     return {"veroeffentlicht": False,
             "fehler": f"der Veroeffentlicher hat in {WARTEN_MAX}s nicht geantwortet. "
                       "Das heisst NICHT, dass nichts passiert ist -- pruefe mit "

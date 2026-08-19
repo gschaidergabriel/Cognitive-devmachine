@@ -196,12 +196,22 @@ def run_headless(
     if not isinstance(caveman_prompt, str) or not caveman_prompt or len(caveman_prompt) > MAX_PROMPT_CHARS:
         raise HeadlessZeroError("invalid caveman prompt")
 
-    tools = list(tool_selection) if tool_selection else list(DEFAULT_ALLOWED_TOOLS)
-    if not tools:
-        raise HeadlessZeroError("tool selection must not be empty")
-    unknown = set(tools) - set(DEFAULT_ALLOWED_TOOLS)
-    if unknown:
-        raise HeadlessZeroError(f"tool selection outside managed policy: {sorted(unknown)}")
+    # ⚠️ Die Vorstufe ERFINDET manchmal Werkzeugnamen (gemessen: read_resource,
+    # search_wiki -- gibt es nicht). Ein erfundener Name darf NICHT den ganzen
+    # Zug toeten. Also FILTERN statt hart abweisen: unbekannte Namen fallen weg,
+    # die gueltigen bleiben. Sicher, weil ein Name, den es nicht gibt, ohnehin
+    # kein Werkzeug freischaltet -- und --allowedTools setzt die echte Grenze.
+    # Bleibt nach dem Filtern nichts, nimm die volle erlaubte Liste (Zero waehlt
+    # dann selbst), statt mit leerer Auswahl abzubrechen.
+    if tool_selection:
+        gefiltert = [t for t in tool_selection if t in DEFAULT_ALLOWED_TOOLS]
+        verworfen = sorted(set(tool_selection) - set(DEFAULT_ALLOWED_TOOLS))
+        if verworfen:
+            import sys as _sys
+            print("headless: erfundene Werkzeugnamen verworfen: " + str(verworfen), file=_sys.stderr)
+        tools = gefiltert or list(DEFAULT_ALLOWED_TOOLS)
+    else:
+        tools = list(DEFAULT_ALLOWED_TOOLS)
     if not Path(RUNTIME_PROMPT).is_file():
         raise HeadlessZeroError("runtime identity file missing -- cannot call headless without it")
 

@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T04:11:09Z. **2620 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T04:41:09Z. **2624 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T10:44:08+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T10:44:08+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2522 |
+| baunotiz | 2526 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1652 |
-| baunotiz | bauverlauf.jsonl | 826 |
+| baunotiz | git-commit | 1653 |
+| baunotiz | bauverlauf.jsonl | 829 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2620 · Gegenhypothese: 0 von 2620
+## Hypothese: 0 von 2624 · Gegenhypothese: 0 von 2624
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -42,6 +42,14 @@ Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im L
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentzeroforschung: bind Gen116 PTY red-green-red-green-red-green
+
+### agentzeroforschung: bind Gen116 PTY red-green-red-green-red-green
+
+`baunotiz-bauverlauf-ebf28f9445b1d173e720` · baunotiz · bauverlauf.jsonl · 2026-08-19T10:44:08+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentzeroforschung: classify Gen116 PTY lease oscillation
 
@@ -155,6 +163,45 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentzeroforschung: correct Gen116 adapter evidence and 584/0 narrative drift
 
+### agentZero-Export 2026-08-19T04:11:08Z (Generation 120, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-054df0a06c5b483c378d14f9dc9c2f6de1dc3e08` · baunotiz · git-commit · 2026-08-19T04:12:43+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T04:11:08Z (Generation 120, 59 Dateien, 1 geschwaerzt)
+
+### seite_diagnose: Zero trennt server-seitig von client-seitig
+
+`baunotiz-bauverlauf-faa4882fb4f6d610cb91` · baunotiz · bauverlauf.jsonl · 2026-08-19T03:45:59+00:00 · EntityOS
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+ANLASS (Gabriel 19.08.): "weder seimensch.net noch leihmich ist erreichbar" ...
+"sowas muss zero auch checken".
+
+DER AUSFALL, geschichtet diagnostiziert: der Server war KERNGESUND -- HTTP 200
+in 0,07s, echter Inhalt, oeffentliches DNS korrekt auf <adresse>. Die
+Ursache lag auf Gabriels Kiste: eine Zeile in /etc/hosts leitete seimensch.net,
+leihmich.org und herzrad.at auf <adresse> (localhost) um -- Rest eines toten
+SSH-Tunnels vom 11.08., als der Direktweg zum VPS gesperrt war. Der Direktweg
+ging inzwischen wieder (HTTPS 200 direkt geprueft), der Tunnel war tot, die
+Umleitung schickte ins Leere. Fix: die hosts-Zeile auskommentieren (braucht
+Gabriels Schranke-Freigabe, weil Systempfad -- die Schranke griff korrekt).
+
+DIE LEHRE, jetzt fest verdrahtet: "erreichbar" ist kein Ja/Nein, sondern ein
+VON WO. Eine Seite kann vom Server aus leben und von einem Rechner aus tot
+sein. Die haeufigste falsche Erstreaktion ist "Server neu starten" -- meistens
+ist der Server gesund und das Problem sitzt zwischen Mensch und Server.
+`seite_pruefen` blickte nur von einem Standpunkt; das reichte nicht.
+
+GEBAUT: seite_diagnose(url). Prueft geschichtet und TRENNT server-seitig von
+client-seitig: oeffentliches DNS -> erwartete IP -> Port 443 -> HTTPS-Status ->
+echter Inhalt (Titel, Groesse, nicht 200-Fehlerseite). Urteil-Logik:
+- Server gruen + DNS richtig -> es liegt am MENSCHEN. Namentlich genannt: (1)
+  /etc/hosts-Umleitung auf 127.0.0.x, `getent hosts <domain>` MUSS die echte IP
+  zeigen; (2) Pro
+
 ### agentZero-Export 2026-08-19T03:41:08Z (Generation 117, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-4c7b410f2704367f6179d3c4a62507a9fa262d35` · baunotiz · git-commit · 2026-08-19T03:43:46+00:00 · agentZero
@@ -162,6 +209,14 @@ agentzeroforschung: correct Gen116 adapter evidence and 584/0 narrative drift
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T03:41:08Z (Generation 117, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T03:41:08Z (Generation 117, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-36557502c1b1cb923af2` · baunotiz · bauverlauf.jsonl · 2026-08-19T03:43:46+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures
 
@@ -202,36 +257,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen107 583/1 and stale security acceptance
-
-### claycode supervisor: bind Gen107 583/1 and stale security acceptance
-
-`baunotiz-bauverlauf-0d84e4a40038c22ed240` · baunotiz · bauverlauf.jsonl · 2026-08-19T02:44:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero-Export 2026-08-19T02:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-68d8c7b1224496ff76acbd8121e9da0d7b74cf7a` · baunotiz · git-commit · 2026-08-19T02:44:42+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T02:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T02:41:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-71ad087e8d276960dd97` · baunotiz · bauverlauf.jsonl · 2026-08-19T02:44:42+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentZero-Export 2026-08-19T02:11:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-a5c68d5e14f70193362c3b0dbbf9fca77a10f1bd` · baunotiz · git-commit · 2026-08-19T02:11:46+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T02:11:07Z (Generation 116, 59 Dateien, 1 geschwaerzt)
 

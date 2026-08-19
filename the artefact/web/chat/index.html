@@ -118,6 +118,26 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
 .original .receipt { margin-top: 6px; font-size: 11px; opacity: .75;
                      font-family: var(--schrift-mono); }
 
+/* ── Bild-Nachricht: kleine tippbare Miniatur, oeffnet gross auf Antippen ──
+   Zero zeigt manchmal ein Bild (z.B. einen Seiten-Screenshot) statt nur Text.
+   Die Blase bleibt die Blase -- das Bild ist nur ein zusaetzliches Element
+   darin, kein eigener Nachrichtentyp mit eigenem Layout. */
+.bild-mini { display: block; margin-top: 8px; max-width: 220px; max-height: 160px;
+             border-radius: 10px; border: 1px solid var(--linie); cursor: zoom-in;
+             object-fit: cover; transition: filter 140ms ease, transform 140ms ease; }
+.bild-mini:hover { filter: brightness(1.08); transform: scale(1.01); }
+.bild-mini-label { display: block; margin-top: 4px; font-size: var(--s-12); color: var(--matt); }
+.lightbox { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center;
+            justify-content: center; background: rgba(8,9,12,.86); backdrop-filter: blur(2px);
+            cursor: zoom-out; animation: lightbox-ein .16s ease both; padding: 24px; box-sizing: border-box; }
+@keyframes lightbox-ein { from { opacity: 0; } to { opacity: 1; } }
+.lightbox img { max-width: min(94vw, 1400px); max-height: 90vh; border-radius: 10px;
+                 box-shadow: 0 12px 60px rgba(0,0,0,.6); border: 1px solid var(--linie); }
+.lightbox-schliessen { position: absolute; top: 18px; right: 22px; background: none; border: none;
+                        color: var(--text); font-size: 28px; line-height: 1; cursor: pointer;
+                        opacity: .8; font-family: inherit; }
+.lightbox-schliessen:hover { opacity: 1; }
+
 .msg-pending .bubble { color: var(--matt); }
 .pending-note { display: block; margin-top: 4px; font-size: var(--s-12); opacity: .8; }
 
@@ -797,6 +817,29 @@ window.addEventListener('load', async () => {
     return row;
   }
 
+  // Ein Bild-Anhang oeffnet gross in einer Lightbox -- eine pro Klick, die
+  // vorherige (falls noch offen) verschwindet zuerst. Schliessen per Klick
+  // irgendwo, per X, oder per Escape.
+  let offeneLightbox=null;
+  function zeigeLightbox(url, alt){
+    if (offeneLightbox) { offeneLightbox.remove(); offeneLightbox=null; }
+    const box=document.createElement('div'); box.className='lightbox';
+    const img=document.createElement('img'); img.src=url; img.alt=alt||'';
+    const zu=document.createElement('button');
+    zu.className='lightbox-schliessen'; zu.type='button'; zu.textContent='×';
+    zu.setAttribute('aria-label','Bild schliessen');
+    const schliessen=()=>{ box.remove(); if(offeneLightbox===box) offeneLightbox=null;
+      document.removeEventListener('keydown', aufEscape); };
+    const aufEscape=(ev)=>{ if(ev.key==='Escape') schliessen(); };
+    box.addEventListener('click', schliessen);
+    img.addEventListener('click', (ev)=>ev.stopPropagation());
+    zu.addEventListener('click', schliessen);
+    document.addEventListener('keydown', aufEscape);
+    box.appendChild(img); box.appendChild(zu);
+    document.body.appendChild(box);
+    offeneLightbox=box;
+  }
+
   // Herausgeloest, damit geladener Verlauf und Live-Antwort GENAU dieselbe
   // Blase bauen. Zwei Darstellungswege fuer dieselbe Sache laufen unweigerlich
   // auseinander, und dann sieht Geschichte anders aus als Gegenwart.
@@ -806,6 +849,22 @@ window.addEventListener('load', async () => {
     const germanLine=document.createElement('div');
     germanLine.textContent=german;
     bubble.appendChild(germanLine);
+
+    // Bild-Anhang (z.B. ein Seiten-Screenshot): Miniatur in der Blase, tippen
+    // oeffnet gross. payload.image = {url, alt}. Kein eigener Nachrichtentyp --
+    // die Blase traegt einfach zusaetzlich ein Bild.
+    if (payload.image && payload.image.url) {
+      const mini=document.createElement('img');
+      mini.className='bild-mini'; mini.loading='lazy';
+      mini.src=payload.image.url; mini.alt=payload.image.alt||'Bild';
+      mini.addEventListener('click', ()=>zeigeLightbox(payload.image.url, payload.image.alt));
+      bubble.appendChild(mini);
+      if (payload.image.label) {
+        const label=document.createElement('span'); label.className='bild-mini-label';
+        label.textContent=payload.image.label;
+        bubble.appendChild(label);
+      }
+    }
 
     // Unter "Original" gehoert Zeros ROHE Caveman-Stimme -- das, was das Modell
     // wirklich gesagt hat, BEVOR die Vorstufe schoenes Deutsch daraus baut.

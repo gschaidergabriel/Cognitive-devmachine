@@ -7,6 +7,7 @@ from typing import Any
 from .. import identity  # coordinator-owned, imported not edited
 from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
 from . import headless_zero, prestage, translator
+from . import reality_layer  # additive anti-confabulation check, default OFF -- see module docstring
 import re
 
 from .prestage import MAX_ROUNDS, NEGOTIATION_SENTINEL
@@ -474,6 +475,25 @@ def run_chat_turn(
         german, roh_ausgeliefert = _uebersetzung_mit_rueckfall(
             own_store, turn_id, session_id, _sauber)
         translate_ms = (time.perf_counter() - t0) * 1000.0
+
+        # Reality Layer (additive, default OFF -- CLAYVERSE_REALITY_CHECK=1):
+        # scans the DELIVERED German reply for claims that contradict
+        # canonical_identity's own non-LIVE status tags (compute nodes,
+        # reputation/ERS -- the only closed, authoritative truth set this
+        # pipeline has, see reality_layer.py's module docstring for the full
+        # argument on why a general corpus-grounding checker was rejected).
+        # Never touches the reply on any internal failure -- same fallback
+        # ethic as every other _safe helper in this file.
+        if reality_layer.reality_check_enabled():
+            try:
+                _realitaet_verdict = reality_layer.check_reply(
+                    german.get('german_translation', ''), world.get('canonical_identity'))
+                if not _realitaet_verdict.get('ok', True):
+                    german['german_translation'] = reality_layer.annotate_if_violated(
+                        german.get('german_translation', ''), _realitaet_verdict)
+                    reality_layer.log_realitaetscheck(own_store, turn_id, session_id, _realitaet_verdict)
+            except Exception:
+                pass  # Realitaetspruefung darf einen Zug nie kippen
 
         prestage_id = own_store.record_prestage_turn(
             turn_id=turn_id, session_id=session_id, user_id=user_id,

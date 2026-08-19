@@ -103,14 +103,40 @@ SECRET_PATTERNS = [
 ]
 
 
-def _looks_like_real_secret(match: re.Match) -> bool:
-    """Zusatzfilter fuer das Passwort-Literal-Pattern: verwirft die
-    offensichtlichsten Code-/Platzhalter-Treffer (Variablenverweise,
-    Typannotationen)."""
+# Weltweit bekannte, offiziell in AWS-eigener Dokumentation verwendete
+# Platzhalter-Zugangsschluessel-ID -- kein echtes Geheimnis, wird auch von
+# gitleaks/truffleHog standardmaessig ignoriert.
+_KNOWN_PLACEHOLDER_VALUES = {"AKIAIOSFODNN7EXAMPLE"}
+
+# Zeilen mit diesen Markern sind (fast) immer Test-/Beispielcode fuer
+# Secret-Scanner selbst -- die `datei`-Tabelle enthaelt u.a. die komplette
+# Testsuite eines selbst gebauten Scanners (`scanner-*.test.ts` etc), die
+# absichtlich Fake-Secrets als Testfaelle einbettet, um zu pruefen, ob der
+# Scanner sie erkennt. Das ist der Sinn des Tests, kein echtes Leck.
+_TEST_FIXTURE_MARKERS = re.compile(
+    r"\b(it\(|test\(|describe\(|expect\(|scanCode\(|scanIssues\(|assert|"
+    r"EXAMPLE|dummy|fixture|placeholder|hardcoded)",
+    re.IGNORECASE,
+)
+
+
+def _looks_like_real_secret(match: re.Match, line: str) -> bool:
+    """Zusatzfilter: verwirft die offensichtlichsten Code-/Platzhalter-
+    Treffer (Variablenverweise, Typannotationen, bekannte Dummy-Werte,
+    Zeilen aus Scanner-Testsuiten, die absichtlich Fake-Secrets testen)."""
     if match.lastindex and match.group(1) is not None:
         rhs = match.group(1)
         if _NON_SECRET_RHS.match(rhs):
             return False
+        if rhs in _KNOWN_PLACEHOLDER_VALUES:
+            return False
+    else:
+        matched_text = match.group(0)
+        for val in _KNOWN_PLACEHOLDER_VALUES:
+            if val in matched_text:
+                return False
+    if _TEST_FIXTURE_MARKERS.search(line):
+        return False
     return True
 
 FTS_SUFFIXES = ("_data", "_idx", "_docsize", "_config", "_content")
@@ -330,7 +356,7 @@ def secret_scan(files: list[Path]) -> list[str]:
             for lineno, line in enumerate(fh, 1):
                 for pat in SECRET_PATTERNS:
                     m = pat.search(line)
-                    if m and _looks_like_real_secret(m):
+                    if m and _looks_like_real_secret(m, line):
                         findings.append(f"{path.name}:{lineno}: Muster '{pat.pattern}' getroffen")
                         break
     return findings

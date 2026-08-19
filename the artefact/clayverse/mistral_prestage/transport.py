@@ -209,20 +209,67 @@ def gemini_chat_json(
 
 import re as _re
 import threading as _threading
+import time as _time
 
 _ROT_LOCK = _threading.Lock()
 _ROT_INDEX = 0
 
-# Statuslagen, bei denen ein ANDERER Schluessel helfen kann: Ratelimit und
-# voruebergehende Serverfehler. Bei 401/403 (Token kaputt) oder 4xx-Client-
-# fehlern hilft Rotation NICHT -- dann sofort durchreichen, nicht drei Tokens
-# an derselben kaputten Anfrage verbrennen.
+# Statuslagen, bei denen ein ANDERER Schluessel helfen kann.
+#
+# KORREKTUR 2026-08-20 (gemessen, nicht vermutet): die alte Regel liess nur
+# 429/5xx rotieren mit der Begruendung "bei 401/403 ist der Token kaputt, da
+# hilft Rotation nicht". Das ist genau verkehrt herum -- ein kaputter Token ist
+# eine PRO-SCHLUESSEL-Lage, und dafuer gibt es die anderen Schluessel. Der Beleg:
+# MISTRAL_API_KEY -> HTTP 402 {"detail":"Check your subscription"},
+# MISTRAL2_API_KEY/MISTRAL3_API_KEY -> 200 OK, dieselbe Anfrage, dieselbe Minute.
+# Weil das Round-Robin jeden dritten Zug auf den toten Schluessel legte und 402
+# nicht rotierte, fiel jeder dritte Chat-Zug komplett aus.
+#
+# NICHT rotierbar bleiben die Lagen, die an der ANFRAGE haengen (400/404/413/
+# 422 ...) -- die faellt mit jedem Schluessel gleich aus, da waere Rotation nur
+# das dreifache Verbrennen derselben kaputten Anfrage.
+_PRO_SCHLUESSEL = (401, 402, 403)
+
+
 def _rotierbar(fehler: "TransportError") -> bool:
     m = _re.search(r"status=(\d{3})", str(fehler))
     if not m:
         return True  # Netz-/Verbindungsfehler ohne Status: anderer Schluessel kann gehen
     code = int(m.group(1))
-    return code == 429 or 500 <= code <= 599
+    return code in _PRO_SCHLUESSEL or code == 429 or 500 <= code <= 599
+
+
+# ── Quarantaene fuer tote Schluessel ──────────────────────────────────────
+# Rotation allein reicht nicht: ohne Gedaechtnis zahlt jeder dritte Zug erst
+# die volle Latenz des toten Schluessels (gemessen 2026-08-20: ~44 s bis zum
+# 402), bevor der lebende drankommt. Ein Schluessel, der eine PRO-SCHLUESSEL-
+# Lage lieferte, wird deshalb uebersprungen -- aber nur befristet, und nur im
+# Prozessgedaechtnis: ein wieder bezahltes Abo heilt sich nach spaetestens
+# QUARANTAENE_S von selbst, ohne Neustart und ohne Datei, die jemand pflegen
+# muesste. Wenn ALLE Schluessel in Quarantaene sitzen, wird die Quarantaene
+# ignoriert statt aufzugeben -- lieber ein langsamer Versuch als keiner.
+QUARANTAENE_S = 1800.0
+_QUARANTAENE: dict[str, float] = {}
+
+
+def _sperren(key: str) -> None:
+    with _ROT_LOCK:
+        _QUARANTAENE[key] = _time.monotonic() + QUARANTAENE_S
+
+
+def _gesperrt(key: str) -> bool:
+    bis = _QUARANTAENE.get(key)
+    if bis is None:
+        return False
+    if _time.monotonic() >= bis:
+        _QUARANTAENE.pop(key, None)
+        return False
+    return True
+
+
+def _pro_schluessel_lage(fehler: "TransportError") -> bool:
+    m = _re.search(r"status=(\d{3})", str(fehler))
+    return bool(m) and int(m.group(1)) in _PRO_SCHLUESSEL
 
 
 def mistral_chat_json_rotating(*, keys, **kw):
@@ -236,6 +283,12 @@ def mistral_chat_json_rotating(*, keys, **kw):
     keys = [k for k in (keys or []) if k]
     if not keys:
         raise RuntimeError("no Mistral key available")
+    # Quarantaene zuerst: tote Schluessel gar nicht erst anfassen. Sind alle
+    # gesperrt, wird die Sperre verworfen -- ein langsamer Versuch schlaegt
+    # "gar kein Versuch".
+    frisch = [k for k in keys if not _gesperrt(k)]
+    if frisch:
+        keys = frisch
     n = len(keys)
     with _ROT_LOCK:
         start = _ROT_INDEX % n
@@ -247,6 +300,8 @@ def mistral_chat_json_rotating(*, keys, **kw):
             return mistral_chat_json(api_key=key, **kw)
         except TransportError as e:
             letzter = e
+            if _pro_schluessel_lage(e):
+                _sperren(key)
             if _rotierbar(e) and off < n - 1:
                 continue  # naechsten Schluessel probieren
             raise

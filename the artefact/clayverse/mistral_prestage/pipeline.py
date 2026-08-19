@@ -526,7 +526,15 @@ def run_chat_turn(
         translation_id = own_store.record_translation(
             turn_id=turn_id, prestage_id=prestage_id,
             caveman_original=zero["caveman_answer"], german_translation=german["german_translation"],
-            translator_model=german["translator_model"], translator_receipt=german["translator_receipt"],
+            # .get() statt []: der Rueckfall-Dict aus _uebersetzung_mit_rueckfall()
+            # traegt bei totem Uebersetzer weder Modell noch Quittung. Der harte
+            # Zugriff warf dort KeyError und riss GENAU die Antwort mit, die der
+            # Rueckfall retten sollte (gemessen 2026-08-20). Der Ausfallgrund
+            # steht in _ausfall und wandert damit in die Quittung -- ein leeres
+            # Modellfeld ist ehrlich, ein gekippter Zug ist es nicht.
+            translator_model=german.get("translator_model") or "",
+            translator_receipt=german.get("translator_receipt")
+            or {"ausfall": german.get("_ausfall", "unbekannt"), "rueckfall": "roh"},
         )
 
         if record_via_turnlifecycle and lifecycle is not None:

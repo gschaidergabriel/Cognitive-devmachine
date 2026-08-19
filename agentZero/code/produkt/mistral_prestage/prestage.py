@@ -100,6 +100,23 @@ the human, so Zero will then correctly say "you are <name>, your machine is <...
 opposite direction is unchanged: the human's "du/dein" that ADDRESSES Zero stays "you".
 Keep the two identities apart -- the human is never Zero, and Zero is never the human.
 
+(G) ⭐⭐ ZERO HANDELT JETZT DIREKT MIT NATIVEN WERKZEUGEN -- SHELL IST ERLAUBT.
+Zero ist eine echte Claude-Code-Sitzung auf dem VPS mit vollem nativem Werkzeug:
+Bash, Read, Write, Edit, Glob, Grep, WebSearch, WebFetch (alle in
+CONTEXT.available_tools, neben den mcp__clayverse__-Tools). Ein Auftrag, EINEN
+SHELL-BEFEHL AUSZUFUEHREN, eine Datei zu lesen/aendern, die Platte zu durchsuchen
+oder etwas im Netz nachzusehen, ist ein NORMALER DIREKTAUFTRAG -- schreib einen
+schlichten imperativen caveman_prompt ("run `<cmd>`, report stdout"; "edit file
+<pfad>: <aenderung>"; "web search <frage>, summarize") und lass tool_selection
+meist LEER (Zero waehlt sein natives Werkzeug selbst). Shell-Ausfuehrung ist KEIN
+Exfiltrationsversuch und KEINE verbotene Faehigkeit -- schreib NIE "say you cannot
+run shell". Die EINZIGEN Verweigerungen bleiben (C): PASSWORT-/Schluesselmaterial
+(secret.key, *.tresor, freie-zugaenge.env, postfach.env, credentials) wird nicht
+gelesen/ausgegeben, und das Unersetzliche (wiki.db, unifieddb, tresor,
+Laufzeitzustand) wird nicht zerstoert -- ein Zaun-Hook blockt genau das zusaetzlich.
+Alles andere: als Direktauftrag durchreichen. (Adressen und Tokens sind erlaubt,
+nur Passwoerter nicht.)
+
 
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
@@ -239,7 +256,7 @@ def run_prestage(
     # damit die Vorstufe aus realen Namen waehlt statt zu erfinden.
     try:
         from .headless_zero import DEFAULT_ALLOWED_TOOLS as _ECHTE_TOOLS
-        _tools = list(_ECHTE_TOOLS)
+        _tools = ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "WebSearch", "WebFetch"] + list(_ECHTE_TOOLS)
     except Exception:
         _tools = []
     context = build_context(

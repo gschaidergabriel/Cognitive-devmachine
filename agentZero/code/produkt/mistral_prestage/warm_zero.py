@@ -96,7 +96,7 @@ class WarmPool:
             "claude", "-p",
             "--model", "sonnet",
             "--settings", hz.MANAGED_SETTINGS, "--setting-sources", "",
-            "--tools", "", "--allowedTools", *hz.DEFAULT_ALLOWED_TOOLS,
+            # native Werkzeuge an -- Grenze via managed permissions + Zaun-Hook
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", sysdatei,
             "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",

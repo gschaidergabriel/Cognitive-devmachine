@@ -38,10 +38,7 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__raum_sagen",
     "mcp__clayverse__raum_rufen",
     "mcp__clayverse__raum_frei",
-    # Zero handelt nicht selbst -- es schnuert. Ohne diese zwei bleibt die
-    # Regel eine Absichtserklaerung.
-    "mcp__clayverse__paket_schnueren",
-    "mcp__clayverse__paket_lage",
+    # (Arbeitspakete entfernt 19.08.: Zero handelt jetzt direkt mit nativen Tools.)
     # Faehigkeiten kennen, ohne Schluessel zu sehen.
     "mcp__clayverse__tresor_katalog",
     "mcp__clayverse__tresor_zeigen",
@@ -262,8 +259,11 @@ def run_headless(
         "--model", "sonnet",
         "--settings", MANAGED_SETTINGS,
         "--setting-sources", "",
-        "--tools", "",
-        "--allowedTools", *tools,
+        # ⭐ Native Werkzeuge AN (kein --tools ""): Zero handelt direkt wie
+        # eine echte Claude-Code-Sitzung. Die Grenze setzt die managed
+        # permissions.allow (native + MCP) plus der PreToolUse-Zaun-Hook --
+        # NICHT mehr eine enge --allowedTools-Liste. tool_selection der
+        # Vorstufe ist jetzt nur noch Hinweis; Zero waehlt selbst.
         "--permission-mode", "dontAsk",
         "--append-system-prompt-file", _sysdatei,
         "--output-format", "json",

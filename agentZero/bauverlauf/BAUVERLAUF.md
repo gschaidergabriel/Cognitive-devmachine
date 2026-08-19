@@ -1,12 +1,61 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T05:11:09Z. 815 Commits aus vier Repos, davon 247 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-19T05:32:20Z. 817 Commits aus vier Repos, davon 248 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-19
+
+### Der dauerhafte Zero-Prozess: vorgewaermte Prozesse ohne Kaltstart je Zug
+
+`229c778eb09b` · agentzero-export · 05:20 UTC · EntityOS
+
+```
+Gabriel: "mach den dauerhaften zero-prozess." Gebaut, gemessen, mit Rueckfall.
+
+DAS PROBLEM, gemessen: ein frisches `claude -p` braucht ~2,4s allein fuer den
+Boot (Node, MCP, Konfiguration), bevor ueberhaupt gedacht wird. Bei jedem Zug.
+
+DER TRICK, gemessen bewiesen: `claude -p --input-format stream-json` bootet im
+LEERLAUF, waehrend es auf stdin wartet. A/B: sofort senden -> send->result
+4,7s; nach 5s Leerlauf senden -> 2,5s (init nur 0,3s, Boot war vorgezogen).
+Also halte ich pro Mensch ein paar Prozesse WARM bereit; kommt ein Zug, bekommt
+er einen warmen -- der Boot ist schon bezahlt.
+
+⚠️⚠️ ZUSTANDSLOSIGKEIT BLEIBT. Zeros Gesetz: kein eigenes Gedaechtnis, UnifiedDB
+ist die einzige Kontinuitaet. Ein Prozess, der mehrere Zuege sieht, wuerde das
+brechen. Deshalb: JEDER warme Prozess nimmt GENAU EINEN Prompt, dann stirbt er.
+Der Hintergrund fuellt den Pool nach. Jeder Zug ist frisch -- nur der Boot ist
+vorgezogen, nicht der Zustand.
+
+⚠️ RUECKFALL: ist kein warmer Prozess bereit (Pool leer, Prozess tot, Fehler),
+gibt der Warmweg None zurueck und run_headless nimmt den bewaehrten Kaltweg.
+Der Dauerprozess ist eine Abkuerzung, nie eine Verschlechterung. Nur fuer
+interaktive Zuege (pipeline_managed), nicht fuer autonome.
+
+GEMESSEN, eingeschwungen (Warmweg aktiv bestaetigt, warm=True):
+  "danke"       6,9s (zero 2,9s, war kalt ~4,9)
+  "wie gehts"   8,2s (zero 2,9s)
+  "wie voll ist die platte" 9,0s (zero 4,2s, war kalt 6,3)
+  "herzrad erreichbar" 11,6s (zero 6,4s)
+Zero faellt von ~5-6s kalt auf 2,9-4,2s warm -- der ~2s-Boot ist eingespart.
+
+DETAILS: warm_zero.py (WarmPool, POOL_SIZE=2 pro Mensch, WARMUP 5,5s, ein
+Prompt je Prozess, Hintergrund-Nachfuellung, tote/alte werden ersetzt). Feste
+Werkzeuge bei Boot (alle 38 -- die Sicherheitsgrenze ist managed-settings, nicht
+diese Auswahl; die Vorstufe lenkt die Wahl im caveman_prompt). Per-Mensch
+stabile Systemprompt-Datei mit Anwesenheit. Vorgewaermt schon beim
+Container-Start (Gateway-Startup-Hook), damit der erste Zug nach Neustart nicht
+kalt ist. Qualitaet unveraendert: Caveman-Englisch und Exfil-Abwehr halten auf
+dem Warmweg ("Disk 50,5% full..."; "I can't share credentials...").
+
+Der Rest-Boden ist jetzt die Vorstufe (mistral-medium ~3,5s, fuer die
+8-Schluessel-Struktur noetig) + Zero warm ~3s + Uebersetzer ~1s. 584 Tests
+gruen. (Ein Warmup-Artefakt: die ersten 1-2 Zuege nach einem Neustart sind
+langsamer, weil die Mistral-Vorstufe erst warm wird; danach eingeschwungen.)
+```
 
 ### Latenz stark gesenkt: eine Frage an Zero dauerte ewig, jetzt ~3x schneller
 
@@ -4690,42 +4739,5 @@ niemals in Kandidaten/Verworfen/Gewaehlt sichtbar. UNBESTIMMT-Fall
 Herkunft erhalten, kein Kollaps.
 
 Backup vor Aenderung: udb/abruf/paket.py.vor-lesartachse
-```
-
-### F33 Analysen ueber freie Modelle + F34 BERICHTIGUNG udb kann nicht schreiben
-
-`e23f553b1602` · clay · 06:43 UTC · ClayVerse
-
-```
-F33: Analysen gehen an freie Modelle ueber die vermessenen Zugaenge, Ausnahme
-nur wenn der Gesamtueberblick noetig ist. Setzt F30/F31 fort - dort ging Bauen
-an Agenten, hier Analysieren an die Bahnen. GRENZE SCHARF: Analysieren ist
-delegierbar, URTEILEN nicht. Grundlinie, Zielmetrik, Invarianten und Urteil
-bleiben beim Koordinator. Die Pruefung bleibt mechanisch - in F14 gemessen:
-16 Auftraege ueber Groq, 3 verworfen.
-
-F34 BERICHTIGUNG, von einer Bau-Instanz gemessen: udb.verbindung() oeffnet
-mode=ro plus PRAGMA query_only=ON. Die Vordertuer ist NUR-LESEND.
-
-DAMIT WAREN ZWEI MEINER BEHAUPTUNGEN FALSCH: die 26 Selbstoeffner koennen nicht
-auf 0 fallen, solange 19 Werkzeuge echt schreiben muessen. Und ein busy_timeout
-auf einer nur-lesenden Verbindung schuetzt gleichzeitige SCHREIBER ueberhaupt
-nicht. Das Drei-Sitzungen-Schreibproblem ist also weiter ungeschuetzt, genau da
-wo ich es fuer erledigt erklaert hatte.
-
-ERGEBNIS DES UMZUGS: 26 auf 25. Eine Datei voll migriert, sechs teilmigriert
-(Lesezweig auf udb, Schreibzweig unangetastet), 19 brauchen echtes Schreiben,
-suche.py oeffnet zusaetzlich eine andere Datenbank und wurde nicht erzwungen.
-
-FOLGE: die Zielzahl heisst nicht mehr 26 auf 0, sondern jeder LESEPFAD ueber
-udb. Fuer das Schreiben fehlt eine zweite Vordertuer, etwa udb.schreiben() mit
-WAL, busy_timeout und Wiederholung an EINER Stelle.
-
-ZWEI EIGENE FEHLER: ich habe eine veraltete Liste in den Auftrag geschrieben
-(die sechs angeblich schon migrierten rufen weiter sqlite3.connect) - genau der
-Fehler aus F26, zum zweiten Mal am selben Tag. Und ich habe eine Zielzahl
-gesetzt, ohne die Vordertuer vorher gelesen zu haben.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

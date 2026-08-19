@@ -325,6 +325,17 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             # Creating a second one here silently made that attestation impossible.
     terminals = terminals or TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
+
+    @app.on_event("startup")
+    def _zero_vorwaermen():
+        # ⭐ Den dauerhaften Zero-Prozess-Pool schon beim Container-Start
+        # anwerfen, damit der ERSTE Zug nach einem Neustart nicht kalt ist.
+        try:
+            from .mistral_prestage.warm_zero import POOL
+            POOL.starten()
+        except Exception:
+            pass  # Vorwaermen darf den Start nie blockieren
+
     app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     app.mount("/web", StaticFiles(directory="/opt/clayverse/web", check_dir=False), name="web")
     frontend_api_url = frontend_api_url.rstrip("/")

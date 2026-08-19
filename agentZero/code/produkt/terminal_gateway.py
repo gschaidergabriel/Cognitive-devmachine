@@ -350,6 +350,19 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
     terminals = terminals or TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
 
+    @app.middleware("http")
+    async def _statik_immer_frisch(request, call_next):
+        # ⭐ Statische Assets (schale.js/css, zero-avatar.js, emergenz.js,
+        # ...) NIE blind aus dem Browser-Cache: "no-cache" heisst NICHT
+        # "nicht cachen", sondern "vor Gebrauch revalidieren" -> 304 wenn
+        # unveraendert (billig), frisch bei jeder Aenderung. Ohne das zeigte
+        # der Browser trotz Deploy altes UI (altes Logo, alte Animation).
+        resp = await call_next(request)
+        pfad = request.url.path
+        if pfad.startswith("/web/") or pfad.startswith("/vendor/"):
+            resp.headers["Cache-Control"] = "no-cache"
+        return resp
+
     @app.on_event("startup")
     def _zero_vorwaermen():
         # ⭐ Den dauerhaften Zero-Prozess-Pool schon beim Container-Start

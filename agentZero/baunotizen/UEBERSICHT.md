@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T06:11:09Z. **2646 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T06:17:23Z. **2650 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T12:44:43+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T12:44:43+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2548 |
+| baunotiz | 2552 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1664 |
-| baunotiz | bauverlauf.jsonl | 840 |
+| baunotiz | git-commit | 1666 |
+| baunotiz | bauverlauf.jsonl | 842 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2646 · Gegenhypothese: 0 von 2646
+## Hypothese: 0 von 2650 · Gegenhypothese: 0 von 2650
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -147,6 +147,30 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen116 recurring PTY lease red
 
+### agentZero-Export 2026-08-19T06:11:08Z (Generation 134, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-c19f4714f0f4c82782e2ee15f47eec238f161987` · baunotiz · git-commit · 2026-08-19T06:12:46+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T06:11:08Z (Generation 134, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T06:07:33Z (Generation 134, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-fac93966289f30701767` · baunotiz · bauverlauf.jsonl · 2026-08-19T06:09:24+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### agentZero-Export 2026-08-19T06:07:33Z (Generation 134, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-b179bec5f5ea8d0e8487e1bebff3cc4326953fd1` · baunotiz · git-commit · 2026-08-19T06:09:24+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T06:07:33Z (Generation 134, 59 Dateien, 1 geschwaerzt)
+
 ### agentZero-Export 2026-08-19T05:53:20Z (Generation 132, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-95c9da90bb573fa7f1c2ecbda09bdbfa7f4360a3` · baunotiz · git-commit · 2026-08-19T05:54:02+00:00 · agentZero
@@ -154,6 +178,14 @@ claycode supervisor: bind Gen116 recurring PTY lease red
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T05:53:20Z (Generation 132, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T05:53:20Z (Generation 132, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-0045013a8655753bdbc3` · baunotiz · bauverlauf.jsonl · 2026-08-19T05:54:02+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentzeroforschung: bind Gen116 stable 583/1 growth frontier
 
@@ -202,90 +234,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T05:32:20Z (Generation 130, 59 Dateien, 1 geschwaerzt)
-
-### Der dauerhafte Zero-Prozess: vorgewaermte Prozesse ohne Kaltstart je Zug
-
-`baunotiz-git-229c778eb09b79b5e6ad7d01349296ee5558b3e7` · baunotiz · git-commit · 2026-08-19T05:20:00+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Der dauerhafte Zero-Prozess: vorgewaermte Prozesse ohne Kaltstart je Zug
-
-Gabriel: "mach den dauerhaften zero-prozess." Gebaut, gemessen, mit Rueckfall.
-
-DAS PROBLEM, gemessen: ein frisches `claude -p` braucht ~2,4s allein fuer den
-Boot (Node, MCP, Konfiguration), bevor ueberhaupt gedacht wird. Bei jedem Zug.
-
-DER TRICK, gemessen bewiesen: `claude -p --input-format stream-json` bootet im
-LEERLAUF, waehrend es auf stdin wartet. A/B: sofort senden -> send->result
-4,7s; nach 5s Leerlauf senden -> 2,5s (init nur 0,3s, Boot war vorgezogen).
-Also halte ich pro Mensch ein paar Prozesse WARM bereit; kommt ein Zug, bekommt
-er einen warmen -- der Boot ist schon bezahlt.
-
-⚠️⚠️ ZUSTANDSLOSIGKEIT BLEIBT. Zeros Gesetz: kein eigenes Gedaechtnis, UnifiedDB
-ist die einzige Kontinuitaet. Ein Prozess, der mehrere Zuege sieht, wuerde das
-brechen. Deshalb: JEDER warme Prozess nimmt GENAU EINEN Prompt, dann stirbt er.
-Der Hintergrund fuellt den Pool nach. Jeder Zug ist frisch -- nur der Boot ist
-vorgezogen, nicht der Zustand.
-
-⚠️ RUECKFALL: ist kein warmer Prozess bereit (Pool leer, Prozess tot, Fehler),
-gibt der Warmweg None zurueck und run_headless nimmt den bewaehrten Kaltweg.
-Der Dauerprozess ist eine Abkuerzung, nie eine Verschlechterung. Nur fuer
-interaktive Zuege (pipeline_managed), nicht fuer autonome.
-
-GEMESSEN, eingeschwungen (Warmweg aktiv bestaetigt, warm=True):
-  "danke"       6,9s (zero 2,9s, war kalt ~4,9)
-  "wie gehts"   8,2s (zero 2,9s)
-  "wie voll ist die platte" 9,0s (zero 4,2s,
-
-### Der dauerhafte Zero-Prozess: vorgewaermte Prozesse ohne Kaltstart je Zug
-
-`baunotiz-bauverlauf-2469c4745595757929ca` · baunotiz · bauverlauf.jsonl · 2026-08-19T05:20:00+00:00 · EntityOS
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Gabriel: "mach den dauerhaften zero-prozess." Gebaut, gemessen, mit Rueckfall.
-
-DAS PROBLEM, gemessen: ein frisches `claude -p` braucht ~2,4s allein fuer den
-Boot (Node, MCP, Konfiguration), bevor ueberhaupt gedacht wird. Bei jedem Zug.
-
-DER TRICK, gemessen bewiesen: `claude -p --input-format stream-json` bootet im
-LEERLAUF, waehrend es auf stdin wartet. A/B: sofort senden -> send->result
-4,7s; nach 5s Leerlauf senden -> 2,5s (init nur 0,3s, Boot war vorgezogen).
-Also halte ich pro Mensch ein paar Prozesse WARM bereit; kommt ein Zug, bekommt
-er einen warmen -- der Boot ist schon bezahlt.
-
-⚠️⚠️ ZUSTANDSLOSIGKEIT BLEIBT. Zeros Gesetz: kein eigenes Gedaechtnis, UnifiedDB
-ist die einzige Kontinuitaet. Ein Prozess, der mehrere Zuege sieht, wuerde das
-brechen. Deshalb: JEDER warme Prozess nimmt GENAU EINEN Prompt, dann stirbt er.
-Der Hintergrund fuellt den Pool nach. Jeder Zug ist frisch -- nur der Boot ist
-vorgezogen, nicht der Zustand.
-
-⚠️ RUECKFALL: ist kein warmer Prozess bereit (Pool leer, Prozess tot, Fehler),
-gibt der Warmweg None zurueck und run_headless nimmt den bewaehrten Kaltweg.
-Der Dauerprozess ist eine Abkuerzung, nie eine Verschlechterung. Nur fuer
-interaktive Zuege (pipeline_managed), nicht fuer autonome.
-
-GEMESSEN, eingeschwungen (Warmweg aktiv bestaetigt, warm=True):
-  "danke"       6,9s (zero 2,9s, war kalt ~4,9)
-  "wie gehts"   8,2s (zero 2,9s)
-  "wie voll ist die platte" 9,0s (zero 4,2s, war kalt 6,3)
-  "herzrad erreichbar" 11,6s (zero 6,4s)
-Zero faellt von ~5
-
-### agentZero-Export 2026-08-19T05:11:08Z (Generation 128, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-c23b208a0ab8e07bb303f09e6eb788092a41b606` · baunotiz · git-commit · 2026-08-19T05:11:47+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T05:11:08Z (Generation 128, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T05:11:08Z (Generation 128, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-d10c25d0ed62c29e7ed1` · baunotiz · bauverlauf.jsonl · 2026-08-19T05:11:47+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

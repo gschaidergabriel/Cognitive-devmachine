@@ -491,6 +491,23 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         from . import seiten as _seiten
         return JSONResponse(await asyncio.to_thread(_seiten.uebersicht))
 
+    @app.get("/api/me")
+    async def me_api(request: Request):
+        # Der Ausweis-Endpunkt: NUR die zwei kanonischen Konten bekommen hier ein
+        # 200 mit ihrer user_id. Jedes andere angemeldete Clerk-Konto -- und seit
+        # die Instanz offen stand, gibt es solche -- bekommt 401. Das Frontend
+        # fragt das direkt nach der Anmeldung ab und zeigt einem Fremdkonto gar
+        # keine Oberflaeche. Reine Bestaetigung, keine Geheimnisse.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        return JSONResponse({"user_id": uid})
+
     @app.get("/api/systeme")
     async def systeme_api(request: Request):
         # Dieselbe Anmeldepruefung wie /api/seiten. Zeigt den Live-Zustand der

@@ -333,6 +333,11 @@ def run_chat_turn(
 
     own_store = store or PrestageStore()
     t_start = time.perf_counter()
+    # Wandzeit (time.time(), nicht perf_counter) zusaetzlich zu t_start:
+    # effects/causal_episodes in wiki.db tragen Unix-Zeitstempel -- nur damit
+    # laesst sich das Zeitfenster fuer die Lernschleife (Phase 2b, store.py
+    # _effects_evidence) ueberhaupt bilden.
+    turn_started_at = time.time()
     lifecycle = None
     admission = None
 
@@ -371,13 +376,24 @@ def run_chat_turn(
         # WorldAssembler-Quelle sind davon so oder so nicht betroffen).
         vorstufe_world = _vorstufen_world(world)
 
+        # Phase 2b Schritt 3 (Rueckspeisung): das gelernte "was-ist-falsch"
+        # als schlanker Text in den Vorstufe-Kontext, BEVOR Runde 1 laeuft --
+        # nur so kann es die Routing-Entscheidung noch beeinflussen. Darf nie
+        # einen Zug kippen: own_store.gelernter_block() ist bereits intern
+        # ausfallsicher (leerer String bei jedem Fehler), hier zusaetzlich
+        # defensiv, falls store selbst die Methode (aeltere Version) nicht hat.
+        try:
+            gelernt_block = own_store.gelernter_block()
+        except Exception:
+            gelernt_block = ""
+
         # --- round 1 ---
         t0 = time.perf_counter()
         envelope = prestage.run_prestage(
             raw_prompt=message, world=vorstufe_world, current_user=user_id,
             current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
             recent_turns=recent_turns, round_no=1,
-            hyperposition=hyperposition_readout,
+            hyperposition=hyperposition_readout, gelernt=gelernt_block,
         )
         prestage_ms = (time.perf_counter() - t0) * 1000.0
 
@@ -424,7 +440,7 @@ def run_chat_turn(
                 raw_prompt=message, world=vorstufe_world, current_user=user_id,
                 current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
                 recent_turns=recent_turns, round_no=2, zero_suggestion=suggestion,
-                hyperposition=hyperposition_readout,
+                hyperposition=hyperposition_readout, gelernt=gelernt_block,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0
             t0 = time.perf_counter()
@@ -477,6 +493,15 @@ def run_chat_turn(
             # und ignoriert unbekannte Schluessel klaglos -- kein Crash, solange
             # store.py die Spalte noch nicht kennt.
             epistemik=envelope.get("epistemik", {}),
+            # Phase 2b Schritt 1 (Ergebnis-Signal): self_adapted/roh_ausgeliefert
+            # sind bereits berechnete Strukturmerkmale dieses Zuges (siehe oben);
+            # reply_text ist die tatsaechlich ausgelieferte deutsche Antwort (fuer
+            # den mechanischen Luecke-Marker-Scan in store.py); turn_started_at
+            # setzt das Zeitfenster fuer den effects/causal_episodes-Best-Effort-Blick.
+            self_adapted=self_adapted,
+            translation_raw_fallback=roh_ausgeliefert,
+            reply_text=german.get("german_translation", ""),
+            turn_started_at=turn_started_at,
         )
         translation_id = own_store.record_translation(
             turn_id=turn_id, prestage_id=prestage_id,

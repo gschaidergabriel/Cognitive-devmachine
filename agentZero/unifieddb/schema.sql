@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-19T10:41:10Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-19T11:11:10Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -422,7 +422,7 @@ CREATE TABLE mv_prestage_turns (
     prestage_model TEXT,
     prestage_receipt_json TEXT,
     created_at REAL NOT NULL
-);
+, epistemik_json TEXT, epistemik_bekannt_n INTEGER, epistemik_unbekannt_n INTEGER, routing_key TEXT, self_adapted INTEGER, translation_raw_fallback INTEGER, self_reported_gap INTEGER, self_reported_gap_marker TEXT, outcome_ok INTEGER, korpus_treffer_n INTEGER, effects_evidence_json TEXT);
 CREATE TABLE mv_translation_log (
     translation_id TEXT PRIMARY KEY,
     turn_id TEXT,
@@ -883,6 +883,8 @@ CREATE INDEX kb_buchung_batch
 CREATE INDEX kb_buchung_kz_zeit
             ON kb_buchung(konto, zugang, zeit);
 CREATE INDEX kb_warnung_zeit ON kb_warnung(zeit);
+CREATE INDEX mv_prestage_turns_routing_idx
+    ON mv_prestage_turns(routing_key, epistemik_unbekannt_n);
 CREATE INDEX mv_prestage_turns_session_idx
     ON mv_prestage_turns(session_id, created_at);
 CREATE INDEX wm_guss_log_ix1 ON wm_guss_log(ergebnis, zeit);
@@ -951,4 +953,16 @@ CREATE VIEW messung_kompakt AS
             quelle  AS quelle
         FROM messung
         ORDER BY zeit DESC, bauteil;
+CREATE VIEW mv_prestage_lernbild AS
+SELECT
+    routing_key,
+    CASE WHEN epistemik_unbekannt_n > 0 THEN 1 ELSE 0 END AS hatte_luecke,
+    COUNT(*) AS n,
+    SUM(COALESCE(self_adapted, 0)) AS n_self_adapted,
+    SUM(COALESCE(translation_raw_fallback, 0)) AS n_uebersetzung_ausgefallen,
+    SUM(COALESCE(self_reported_gap, 0)) AS n_selbst_gemeldete_luecke,
+    SUM(CASE WHEN outcome_ok = 0 THEN 1 ELSE 0 END) AS n_nicht_ok
+FROM mv_prestage_turns
+WHERE routing_key IS NOT NULL AND routing_key != ''
+GROUP BY routing_key, CASE WHEN epistemik_unbekannt_n > 0 THEN 1 ELSE 0 END;
 COMMIT;

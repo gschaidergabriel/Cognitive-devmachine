@@ -162,6 +162,15 @@ caveman_prompt at all. Put the `bekannt`/`unbekannt` classification itself INTO 
 key -- caveman_prompt carries only the DIRECTIVE that follows from it, never the raw
 classification text.
 
+(I) ⭐ GELERNT -- MECHANISCH GEMESSENE FEHLERQUOTEN FRUEHERER ZUEGE, KEIN URTEIL. If CONTEXT
+carries a non-empty `gelernt` key, it lists routing patterns (which tools were selected) from
+PAST turns together with RAW counts of how often that pattern needed a second negotiation round
+or lost its translation -- measured facts about this pre-stage's own history, not a rule and not
+a guarantee about THIS turn. Use it only to lean tool_selection away from a pattern shown there
+with a high failure count, when the current request plausibly matches that pattern. Never restate
+`gelernt`'s numbers or wording anywhere in caveman_prompt -- it is background for YOUR routing
+decision, never something Zero or the human sees.
+
 
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
@@ -251,9 +260,13 @@ def build_context(
     # computed by the caller over the FULL (untrimmed) world -- see pipeline.py.
     # None/[] is a legitimate state (no explicit relation found), not a fault.
     hyperposition: list[dict[str, Any]] | None = None,
+    # Phase 2b Rueckspeisung (F1 Schritt 3): PrestageStore.gelernter_block()'s
+    # short text, or "" when nothing has been learned yet -- see rule (I).
+    # Omitted from the JSON entirely when empty, so an early-life store with
+    # no history yet does not clutter every call with an empty key.
+    gelernt: str | None = None,
 ) -> str:
-    return json.dumps(
-        {
+    kontext = {
             # ⚠️ Die EXAKTEN Werkzeugnamen, aus denen tool_selection waehlen darf.
             # Ohne diese Liste erfindet die Vorstufe plausible Namen, die es nicht
             # gibt (gemessen: read_resource, search_wiki) -- und Zero bekommt eine
@@ -272,7 +285,11 @@ def build_context(
             "connected_systems": connected_systems
             or {"status": "NOT_WIRED", "note": "no connected-systems registry exists yet -- see M5/gap report"},
             "zero_round1_suggestion": zero_suggestion,
-        },
+    }
+    if gelernt:
+        kontext["gelernt"] = gelernt
+    return json.dumps(
+        kontext,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -293,6 +310,11 @@ def run_prestage(
     model: str = PRESTAGE_MODEL,
     api_key: str | None = None,
     hyperposition: list[dict[str, Any]] | None = None,
+    # Phase 2b Rueckspeisung: PrestageStore.gelernter_block()'s text, threaded
+    # through unchanged. Caller-computed (this module has no DB access by
+    # design) -- "" or None both mean "nothing learned yet", both are dropped
+    # from the outgoing context by build_context.
+    gelernt: str | None = None,
 ) -> dict[str, Any]:
     """Run the pre-stage for one round. Returns the caveman-English directive envelope.
 
@@ -336,6 +358,7 @@ def run_prestage(
         zero_suggestion=zero_suggestion,
         available_tools=_tools,
         hyperposition=hyperposition,
+        gelernt=gelernt,
     )
     result = transport.mistral_chat_json_rotating(
         keys=keys,

@@ -11,7 +11,9 @@ TRANSLATOR_MODEL = "mistral-small-latest"
 # prompt_version tag persisted with every eval run, bumped on any system-prompt
 # change so mv_eval_runs stays comparable across iterations.
 # v5 (2026-08-19): Maskierung der Maschinenteile + Nachpruefung, siehe unten.
-PROMPT_VERSION = "v5"
+# v6 (2026-08-19): Eignerauftrag "Zero soll menschlich klingen" -- Regel 10
+#   (Menschlichkeit) ergaenzt, siehe die Begruendung unter Regel 10.
+PROMPT_VERSION = "v6"
 
 TRANSLATOR_SYSTEM = """You translate short caveman-English text (written by an AI entity \
 called Zero) into fluent, natural German for a human reader. The human never sees the \
@@ -62,6 +64,24 @@ ZUSATZREGELN (gemessen am 2026-08-19 an 26 echten Produktionszuegen):
    in `Backticks` werden buchstabengetreu uebernommen -- keine deutsche Fassung, keine \
    Bindestrich-Version. Aus effect_id wird nie "Effekt-ID", aus causal_id nie "Kausal-ID". \
    Ein erklaerendes deutsches Wort darf DANEBEN stehen, ersetzen darf es den Bezeichner nie.
+10. MENSCHLICHKEIT. Der Mensch soll eine Person hoeren, keine Maschine. Schreib, wie ein \
+    kompetenter Mensch es dir gegenueber sagen wuerde -- warm, direkt, im aktiven Satzbau, \
+    NIE wie eine woertliche Eins-zu-eins-Krücke aus dem Englischen. Konkret:
+    a) Aktiv statt Passiv, wo Deutsch das natuerlich hergibt ("ich habe X geprueft" statt \
+       "X wurde von mir geprueft"), aber erfinde dafuer kein Subjekt, das im Original fehlt.
+    b) Keine Amtsdeutsch-Fuellwoerter, die im caveman-Original nicht einmal sinngemaess \
+       vorkommen: "es ist zu beachten, dass", "im Hinblick auf", "in Bezug auf", "es laesst \
+       sich feststellen, dass", "seitens", "diesbezueglich". Sag es direkt.
+    c) Kurze, klare Saetze bleiben kurz. Ein caveman-Satz mit drei Woertern wird nicht zu \
+       einem geschraubten deutschen Schachtelsatz aufgeblasen, nur weil "vollstaendiger" \
+       gelehrter klingt -- Kuerze ist hier kein Stilfehler, Aufblaehen schon.
+    d) Natuerliche deutsche Konnektoren statt hoelzerner Bindeglieder: "also", "trotzdem", \
+       "dafuer", "heisst" duerfen stehen, wenn sie im Deutschen so ein Mensch spricht -- \
+       aber ohne neue Kausalitaet zu behaupten, die Regel 5 verbietet (Ambiguitaet bleibt \
+       Ambiguitaet).
+    e) Diese Regel aendert NIE, was gesagt wird, nur WIE es klingt -- sie steht unter jeder \
+       Regel oben und darf keine von ihnen aufweichen. Eine holprige, aber vollstaendig \
+       treue Uebersetzung ist immer besser als eine warme, der ein Fakt fehlt.
 
 Return exactly one JSON object with a single key: german (string, the German translation \
 only, nothing else)."""
@@ -91,6 +111,19 @@ only, nothing else)."""
 # danach werden die Originalteile Zeichen fuer Zeichen wieder eingesetzt. Damit
 # kann ein Bezeichner nicht mehr eingedeutscht werden, und das
 # Anfuehrungszeichen im Codespan erreicht das Modell nie.
+
+# ── Warum Regel 10 (Menschlichkeit) dazukam ─────────────────────────────────
+# Eignerauftrag 2026-08-19: Zero soll moeglichst MENSCHLICH klingen -- warm,
+# natuerlich, nicht steif oder woertlich-uebersetzt -- ohne die Treue-Regeln
+# 1-9 aufzuweichen. Stichprobe der bisherigen Produktionsantworten
+# (uebersetzer_gold.json) zeigt: der Ton war schon ueberwiegend natuerlich
+# ("Gespeichert und erneut abgerufen -- keine fehlende Faehigkeit, also kein
+# NEED_BETTER_PACKAGE."), aber ohne explizite Regel gibt es keine Garantie
+# gegen Amtsdeutsch-Drift, wenn das Modell wechselt oder das Original
+# foermlicher wird. Regel 10 macht das bisherige gute Verhalten verbindlich,
+# statt sich auf Zufall zu verlassen. Gemessen mit einer dritten Achse im
+# unabhaengigen Richter (judge.py: menschlichkeit 0-100, GEMINI-Modell,
+# eigenes Providerfamilie -- nie derselbe Anbieter wie der Uebersetzer).
 RE_CODEZAUN = re.compile(r"```.*?```", re.DOTALL)
 RE_CODESPANNE = re.compile(r"`[^`\n]*`")
 # Dieselbe Form wie NEGOTIATION_SENTINEL in prestage.py und wie

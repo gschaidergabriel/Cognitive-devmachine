@@ -49,6 +49,18 @@ EVAL_SET_PATH = Path(__file__).with_name("eval_set.json")
 FAITHFULNESS_MIN = 90
 READABILITY_MIN = 70
 
+# --- Added 2026-08-19, owner request: Zero should sound human/warm ---
+#
+# This axis was defined AFTER faithfulness/readability were already locked in
+# and measured (M4's "before any optimisation" applies to the original two
+# only -- said so plainly here rather than silently folding a new bar into an
+# old claim). MENSCHLICHKEIT_MIN mirrors READABILITY_MIN's looser bar for the
+# same reason: a translation that is faithful but merely middling-warm is a
+# nuisance, not a trust problem, so it does not gate `passed`. It is tracked
+# and reported as its own `passed_menschlich` / `passed_alle_drei` so the
+# owner sees the real number, not one folded silently into the old metric.
+MENSCHLICHKEIT_MIN = 70
+
 
 def load_eval_set() -> list[str]:
     """Load the fixed eval set. The file is {"note": ..., "items": [...]} --
@@ -82,11 +94,13 @@ def run_eval(
             fabrication = bool(verdict.get("fabrication"))
             faithfulness = 0 if fabrication else int(verdict.get("faithfulness", 0))
             readability = int(verdict.get("readability", 0))
+            menschlichkeit = int(verdict.get("menschlichkeit", 0))
             passed = (
                 not fabrication
                 and faithfulness >= FAITHFULNESS_MIN
                 and readability >= READABILITY_MIN
             )
+            passed_menschlich = menschlichkeit >= MENSCHLICHKEIT_MIN
             store.record_translation(
                 caveman_original=caveman,
                 german_translation=translation["german_translation"],
@@ -105,8 +119,11 @@ def run_eval(
                     "german": translation["german_translation"],
                     "faithfulness": faithfulness,
                     "readability": readability,
+                    "menschlichkeit": menschlichkeit,
                     "fabrication": fabrication,
                     "passed": passed,
+                    "passed_menschlich": passed_menschlich,
+                    "passed_alle_drei": passed and passed_menschlich,
                     "reason": verdict.get("reason", ""),
                 }
             )
@@ -115,8 +132,10 @@ def run_eval(
 
         n = len(results)
         pass_rate = sum(r["passed"] for r in results) / n
+        pass_rate_alle_drei = sum(r["passed_alle_drei"] for r in results) / n
         avg_f = statistics.mean(r["faithfulness"] for r in results)
         avg_r = statistics.mean(r["readability"] for r in results)
+        avg_m = statistics.mean(r["menschlichkeit"] for r in results)
         fab_count = sum(r["fabrication"] for r in results)
         store.record_eval_run(
             iteration=iteration,
@@ -126,7 +145,8 @@ def run_eval(
             avg_faithfulness=avg_f,
             avg_readability=avg_r,
             fabrication_count=fab_count,
-            notes=f"translate_model={translate_model} judge_model={judge_model}",
+            notes=(f"translate_model={translate_model} judge_model={judge_model} "
+                   f"avg_menschlichkeit={avg_m:.1f} pass_rate_alle_drei={pass_rate_alle_drei:.4f}"),
         )
     finally:
         store.close()
@@ -136,8 +156,10 @@ def run_eval(
         "prompt_version": prompt_version,
         "eval_set_size": len(results),
         "pass_rate": pass_rate,
+        "pass_rate_alle_drei": pass_rate_alle_drei,
         "avg_faithfulness": avg_f,
         "avg_readability": avg_r,
+        "avg_menschlichkeit": avg_m,
         "fabrication_count": fab_count,
         "results": results,
     }
@@ -165,5 +187,6 @@ if __name__ == "__main__":
                 print("---")
                 print("caveman:", r["caveman"])
                 print("german: ", r["german"])
-                print(f"faithfulness={r['faithfulness']} readability={r['readability']} fabrication={r['fabrication']}")
+                print(f"faithfulness={r['faithfulness']} readability={r['readability']} "
+                      f"menschlichkeit={r['menschlichkeit']} fabrication={r['fabrication']}")
                 print("reason: ", r["reason"])

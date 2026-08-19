@@ -282,6 +282,79 @@ class MicroClayRetrieval:
             ),
         }
 
+    # ── Befoerderung: SHADOW -> ACTIVE ─────────────────────────────────────
+    #
+    # ⭐ Bis hierher schrieb NICHTS ausser der Tabellenerzeugung selbst in
+    # ``retrieval_policy_state`` -- der Modus blieb fuer immer SHADOW, egal wie
+    # viel geprueftes Lernsignal in ``retrieval_entrypoint_policy`` ankam. Die
+    # Klassendoku sagt "bis eine explizit extern validierte Befoerderung den
+    # Modus aendert" -- diese Befoerderung existierte nirgends im Code. Reine
+    # Beobachtung ohne einen Uebergang ist keine SHADOW-Politik, sondern eine
+    # Sackgasse, die wie eine Politik aussieht.
+    #
+    # "Extern validiert" wird hier NICHT selbst behauptet, sondern an zwei
+    # mechanische, im Store bereits vorhandene Tatsachen gebunden:
+    #   (a) mindestens MIN_SCHLUESSEL gelernte Eintrittspunkte mit >=1 Pull --
+    #       roher Beweis, dass ueberhaupt etwas gelernt wurde, kein leerer Start.
+    #   (b) mindestens MIN_QUITTUNGEN VERSCHIEDENE Rueckmeldungs-Quittungen in
+    #       ``retrieval_feedback`` -- nicht dieselbe Buchung, die zufaellig
+    #       mehrere Eintrittspunkte trifft. Eine Quittung ist entweder ein
+    #       verifizierter aeusserer Wirkungsnachweis (``effect_outcome:*``) oder
+    #       ein ausdrueckliches menschliches Urteil (``mensch:*``) -- niemals
+    #       die eigene Ausgabe des Retrievers selbst (kein Echo-Kreislauf).
+    #
+    # Nur EIN Weg, absichtlich: SHADOW->ACTIVE. Ein automatischer Rueckfall
+    # ACTIVE->SHADOW waere eine Notbremse und gehoert dort hin, nicht hierher
+    # als Nebenwirkung einer Zaehlfunktion.
+
+    MIN_SCHLUESSEL_FUER_AKTIV = 3
+    MIN_QUITTUNGEN_FUER_AKTIV = 2
+
+    def befoerderung_pruefen(self) -> dict[str, Any]:
+        """Prueft das validierte Lernsignal und hebt SHADOW auf ACTIVE, wenn genug da ist.
+
+        Rein mechanisch, kein Modellaufruf, keine Behauptung ohne Beleg -- die
+        Rueckgabe traegt immer die Rohzahlen, gegen die geprueft wurde.
+        """
+        vorher = self.mode()
+        schluessel = int(
+            self.db.db.execute(
+                "SELECT COUNT(*) FROM retrieval_entrypoint_policy WHERE pulls>=1"
+            ).fetchone()[0]
+        )
+        quittungen = int(
+            self.db.db.execute(
+                "SELECT COUNT(DISTINCT receipt_id) FROM retrieval_feedback"
+            ).fetchone()[0]
+        )
+        ergebnis: dict[str, Any] = {
+            "modus_vorher": vorher,
+            "gelernte_schluessel": schluessel,
+            "schwelle_schluessel": self.MIN_SCHLUESSEL_FUER_AKTIV,
+            "quittungen": quittungen,
+            "schwelle_quittungen": self.MIN_QUITTUNGEN_FUER_AKTIV,
+        }
+        if vorher == "ACTIVE":
+            ergebnis["befoerdert"] = False
+            ergebnis["modus_nachher"] = "ACTIVE"
+            ergebnis["grund"] = "bereits ACTIVE"
+            return ergebnis
+        if schluessel < self.MIN_SCHLUESSEL_FUER_AKTIV or quittungen < self.MIN_QUITTUNGEN_FUER_AKTIV:
+            ergebnis["befoerdert"] = False
+            ergebnis["modus_nachher"] = "SHADOW"
+            ergebnis["grund"] = "noch nicht genug validiertes Lernsignal"
+            return ergebnis
+        now = time.time()
+        self.db.db.execute(
+            "UPDATE retrieval_policy_state SET mode='ACTIVE', "
+            "policy_version=policy_version+1, updated_at=? WHERE singleton=1",
+            (now,),
+        )
+        ergebnis["befoerdert"] = True
+        ergebnis["modus_nachher"] = "ACTIVE"
+        ergebnis["grund"] = "Schwellen erreicht: gelernte Eintrittspunkte + unabhaengige Quittungen"
+        return ergebnis
+
     def retrieve(
         self,
         *,

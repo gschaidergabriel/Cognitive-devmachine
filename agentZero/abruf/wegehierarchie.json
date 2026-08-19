@@ -1,59 +1,75 @@
 {
-  "erzeugt": "2026-08-19T08:25:06Z",
+  "erzeugt": "2026-08-19T09:11:10Z",
   "lage": {
-    "urteil": "zu wenige Wege fuer ein Urteil",
+    "oberes_zehntel_haelt": 0.413,
+    "raenge": {
+      "autobahn": 2,
+      "langsame strasse": 66,
+      "schnellstrasse": 1,
+      "tunnel": 6
+    },
+    "urteil": "Hierarchie bildet sich",
     "wege": [
       {
         "art": "geschwister_datei",
-        "getragen": 80,
+        "getragen": 125,
         "guete": 1.0,
         "nach": "C-AUDIT-002",
-        "nutzung": 80,
-        "rang": "autobahn",
+        "nutzung": 125,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 80,
+        "getragen": 125,
         "guete": 1.0,
         "nach": "C-AUDIT-003",
-        "nutzung": 80,
-        "rang": "autobahn",
+        "nutzung": 125,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 77,
+        "getragen": 120,
         "guete": 1.0,
         "nach": "C-AUDIT-004",
-        "nutzung": 77,
-        "rang": "autobahn",
+        "nutzung": 120,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 74,
+        "getragen": 115,
         "guete": 1.0,
         "nach": "C-AUDIT-005",
-        "nutzung": 74,
-        "rang": "autobahn",
-        "von": "C-AUDIT-001"
-      },
-      {
-        "art": "geschwister_datei",
-        "getragen": 65,
-        "guete": 1.0,
-        "nach": "C-AUDIT-007",
-        "nutzung": 65,
-        "rang": "autobahn",
+        "nutzung": 115,
+        "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_verzeichnis",
-        "getragen": 60,
+        "getragen": 105,
         "guete": 1.0,
         "nach": "ledgers-NEGATIVE_RESULTS.jsonl",
-        "nutzung": 60,
+        "nutzung": 105,
+        "rang": "tunnel",
+        "von": "C-AUDIT-001"
+      },
+      {
+        "art": "geschwister_datei",
+        "getragen": 98,
+        "guete": 1.0,
+        "nach": "C-AUDIT-007",
+        "nutzung": 98,
+        "rang": "tunnel",
+        "von": "C-AUDIT-001"
+      },
+      {
+        "art": "geschwister_datei",
+        "getragen": 12,
+        "guete": 0.784,
+        "nach": "C-LOOP-003",
+        "nutzung": 12,
         "rang": "autobahn",
         "von": "C-AUDIT-001"
       },
@@ -68,27 +84,53 @@
       },
       {
         "art": "geschwister_datei",
-        "getragen": 8,
-        "guete": 0.64,
-        "nach": "C-LOOP-003",
-        "nutzung": 8,
+        "getragen": 6,
+        "guete": 0.536,
+        "nach": "C-CLAYCODE-008",
+        "nutzung": 6,
         "rang": "schnellstrasse",
         "von": "C-AUDIT-001"
       },
       {
-        "art": "geschwister_datei",
-        "getragen": 4,
-        "guete": 0.4,
-        "nach": "C-CLAYCODE-008",
-        "nutzung": 4,
-        "rang": "schnellstrasse",
-        "von": "C-AUDIT-001"
+        "art": "geschwister_verzeichnis",
+        "getragen": 2,
+        "guete": 0.226,
+        "nach": "runtime-tool_requests-c6-claynative-arxiv-20260808T1750.json",
+        "nutzung": 2,
+        "rang": "langsame strasse",
+        "von": "runtime-tool_requests-bridge-smoke-openalex.json"
+      },
+      {
+        "art": "geschwister_verzeichnis",
+        "getragen": 2,
+        "guete": 0.226,
+        "nach": "runtime-tool_requests-c6-claynative-exa-20260808T1750.json",
+        "nutzung": 2,
+        "rang": "langsame strasse",
+        "von": "runtime-tool_requests-bridge-smoke-openalex.json"
+      },
+      {
+        "art": "geschwister_verzeichnis",
+        "getragen": 2,
+        "guete": 0.226,
+        "nach": "runtime-tool_requests-c6-claynative-openalex-20260808T1750.json",
+        "nutzung": 2,
+        "rang": "langsame strasse",
+        "von": "runtime-tool_requests-bridge-smoke-openalex.json"
       }
     ]
   },
   "pruefung": {
-    "hinweis": "Eine Hierarchie aus weniger als zehn Wegen ist Rauschen.",
-    "urteil": "zu wenige Wege fuer ein Urteil",
-    "wege": 9
+    "bei_gleichverteilung": 0.093,
+    "hinweis": "Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.",
+    "oberes_zehntel_haelt": 0.413,
+    "raenge": {
+      "autobahn": 2,
+      "langsame strasse": 66,
+      "schnellstrasse": 1,
+      "tunnel": 6
+    },
+    "urteil": "Hierarchie bildet sich",
+    "wege": 75
   }
 }

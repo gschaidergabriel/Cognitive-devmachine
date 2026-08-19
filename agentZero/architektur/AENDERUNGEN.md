@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-19T14:11:10Z aus drei Repos. 473 Eintraege.
+Automatisch erzeugt 2026-08-19T14:41:12Z aus drei Repos. 473 Eintraege.
 
 ## architektur (15)
 
@@ -141,7 +141,7 @@ Automatisch erzeugt 2026-08-19T14:11:10Z aus drei Repos. 473 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (51)
+## pruefung (50)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -192,15 +192,16 @@ Automatisch erzeugt 2026-08-19T14:11:10Z aus drei Repos. 473 Eintraege.
 | 2026-08-18T02:08 | entityos | `5145dd86f588` | test(clayverse): boot bounded disposable QEMU TCG guest |
 | 2026-08-18T02:05 | entityos | `2e89f166d156` | test(clayverse): add VPS disposable-guest orchestration preflight |
 | 2026-08-18T02:02 | entityos | `6849845d4772` | directive: authorize VPS-hosted disposable guest testing |
-| 2026-08-18T01:49 | entityos | `aa6a8e3cdb26` | receipt(go): bind PR810 sandbox SDK regressions |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (232)
+## bau (233)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-19T14:29 | entityos | `faa947ce4c30` | Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben) |
+| 2026-08-19T14:29 | entityos | `1834b4bda6f7` | Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module |
 | 2026-08-18T15:17 | entityos | `1a09c75938d9` | Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden |
 | 2026-08-18T14:54 | entityos | `4bc81f8e52c3` | Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt |
 | 2026-08-18T14:25 | entityos | `26e9cb087a6d` | Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin |
@@ -259,6 +260,4 @@ Automatisch erzeugt 2026-08-19T14:11:10Z aus drei Repos. 473 Eintraege.
 | 2026-08-18T04:00 | entityos | `52ba9087dd8f` | feat(clayverse): add one-shot autonomy dispatch lease |
 | 2026-08-18T03:58 | entityos | `94218cedfb93` | Zeros Abruf erreicht endlich das Herz |
 | 2026-08-18T03:58 | entityos | `263882a44abb` | feat(clayverse): compile autonomy planning into typed steps |
-| 2026-08-18T03:54 | entityos | `ca5149c807cb` | clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store, udb_neur |
-| 2026-08-18T03:54 | unifieddb | `cb23edf55759` | udb: NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet aus Zulauf uebernommen und lauffaehig gemacht |
 

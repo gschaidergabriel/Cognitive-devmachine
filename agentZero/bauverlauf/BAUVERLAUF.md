@@ -1,12 +1,39 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T14:11:10Z. 858 Commits aus vier Repos, davon 248 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-19T14:41:12Z. 860 Commits aus vier Repos, davon 250 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-19
+
+### Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben)
+
+`faa947ce4c30` · entityos · 14:29 UTC · BACK agent
+
+```
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
+
+### Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module
+
+`1834b4bda6f7` · entityos · 14:29 UTC · BACK agent
+
+```
+Kohärente Arbeitsstränge dieser Session (additiv, mit Fallbacks, Tests mitgezogen):
+- Retrieval-enrich: corpus_lookup_v2/_enrich über udb/paket() hinter Flag VORSTUFE_RETRIEVAL (Default alt); Privacy-Fix (Rohtext-Leak sitzungsübergreifend)
+- Vorstufe/Lernschleife: prestage small-Modell (Latenz 12-60s→~1s), Epistemik-Feld, Envelope-Robustheit, Key-Rotation, store-Lernbild, Übersetzer-Menschlichkeit/Betriebston
+- Zero handlungsfähig: werkbank.py (Pfad-Zaun), fence_hook.py (dünner Zaun, Eigner-Entscheidung), native Tools, warm_zero-Pool, mcp_server-Werkzeuge
+- Systeme/Dienste-Bubble + Mobile-Redesign (web/, live via web-Bind-Mount) + terminal_gateway /api/me,/api/systeme,/api/dienst-steuern (Clerk-Allowlist)
+- Frank-Module: eos-invariants (dry-run), eos-dream (an paket()-Fehltreffer), eos-hypothesen (LLM-freie Hypothesen aus Nulltreffern)
+- Betrieb: Clobber-Fix vp_edge_lern (UPSERT), Deploy-Env, web-Bind-Mount in compose
+
+Messwerkzeuge: eval/ (fair + NL Retrieval-Eval, read-only).
+Nicht committet: venvs, Laufzeit-DBs, Key-Pool-Zustand, Backups (jetzt in .gitignore).
+
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
 
 ### Der dauerhafte Zero-Prozess: vorgewaermte Prozesse ohne Kaltstart je Zug
 
@@ -4706,38 +4733,5 @@ Kontextfrage, sondern auch eine Pruefschicht. Wer selbst baut, haette diese
 drei Fehler mitgebaut.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B27 fertig: paket() bekommt zweite Hyperpositions-Achse: LESART (wm_lesart)
-
-`272fa8f3b1be` · clay · 06:44 UTC · ClayVerse
-
-```
-Baseline gemessen 0/57 (Anteil Pakete mit exponierten Lesarten fuer Treffer mit echter wm_lesart-Zeile) -> nach dem Bau 57/57 = 100% (allg. Stichprobe UND gezielte Multi-Lesart-Stichprobe, je n=60, 57 betroffen). Latenzdelta ALT vs NEU im Rauschen (~210-255ms beide Richtungen). Paketgroesse +85% im Schnitt (39938 -> 73550 Zeichen/60er-Schnitt), weil 4793/14284 = 33,5% der Artikel echte wm_lesart-Zeilen tragen -- Vorfilter auf echte Zeilen eingebaut (ohne ihn waere JEDER Treffer betroffen gewesen, auch ohne echte Lesart, nur wegen der synthetischen identitaet-Achse aus artikel.sphaere/status/epistemik). Expired-Ausschluss und UNBESTIMMT-Nichtkollaps (gewaehlt=null, beide Werte mit Herkunft) mit synthetischen Testzeilen in isolierter DB-Kopie verifiziert.
-```
-
-### paket(): LESART-Achse als zweite, eigenstaendige Hyperpositions-Achse
-
-`b97ad96c225e` · unifieddb · 06:43 UTC · ClayVerse
-
-```
-Baseline gemessen 0 -- paket() rief weltmodell.lesen() nie auf, 1.388+
-Artikel mit 2+ gleichzeitig gueltigen Lesarten (wm_lesart) erreichten
-keinen Aufrufer. Neuer Zweig hyperposition["lesart"], strikt getrennt
-von der Identitaetsachse (Gesetz 2, keine Vermischung in eine Liste).
-
-Vorfilter auf Treffer mit ECHTER wm_lesart-Zeile (nicht die synthetische
-identitaet-Achse aus artikel.sphaere/status/epistemik) -- ohne den waere
-JEDER Treffer betroffen und die Paketgroesse blaeht sich mit Rauschen
-(gemessen +85% ohne Vorfilter). Nach dem Bau: 100/100 (57/57 und 57/57)
-Pakete mit betroffenen Treffern zeigen die Lesarten, vorher 0/57.
-
-Expired (gueltig_bis gesetzt) strukturell ausgeschlossen -- verifiziert
-mit synthetischer expired+valid-Zeile in einer isolierten DB-Kopie,
-niemals in Kandidaten/Verworfen/Gewaehlt sichtbar. UNBESTIMMT-Fall
-(2 gleichzeitig gueltige Werte) verifiziert: gewaehlt=null, beide mit
-Herkunft erhalten, kein Kollaps.
-
-Backup vor Aenderung: udb/abruf/paket.py.vor-lesartachse
 ```
 

@@ -33,6 +33,7 @@ ASSOZIATIVE_BEGRIFFE = frozenset("""
     verbunden verbindung bezug bezieht bezogen
     widerspricht widerspruch widersprechen widerspruechlich wiederspricht
     gegenteil gegensatz gegenhypothese gegenposition gegenargument
+    gegen spricht einwand einwaende einwendung
     stuetzt stuetzung unterstuetzt unterstuetzung beleg belegt belegen begruendet begruendung
     hypothese hypothesen elternhypothese ableitung folgt folgert impliziert
     ursache ursaechlich wirkung folge auswirkung fuehrt konsequenz
@@ -294,25 +295,45 @@ class WorldAssembler:
     # ── Parallelpfad ENRICH (Eigner-Entscheidung 2026-08-19, auf Basis des
     # fairen Evals unter /opt/entityos/eval/retrieval_fair_eval.py) ──────────
     #
-    # Messung (93 assoziative Anker, graph-abgeleitet): FTS 75,8%/2ms woertlich,
-    # aber nur 4,8% assoziativ und 72% davon LEER (deckung_nichtleer=28,0%).
-    # paket() (Budget 8) 32,3% assoziativ, deckung=100%, aber ~500ms. Komplementaer,
-    # nicht ersetzend: FTS bleibt der schnelle Standardpfad, paket() wird NUR
-    # dazugeschaltet, wenn FTS mechanisch leer blieb ODER die Frage erkennbar
-    # assoziativ ist -- nie stattdessen, nie faecherweise verdraengend.
+    # Messung (93 assoziative Anker, graph-abgeleitet, TITEL-VERBATIM-Fragen):
+    # FTS 75,8%/2ms woertlich, aber nur 4,8% assoziativ und 72% davon LEER
+    # (deckung_nichtleer=28,0%). paket() (Budget 8) 32,3% assoziativ, deckung=
+    # 100%, aber ~500ms. Komplementaer, nicht ersetzend: FTS bleibt der
+    # schnelle Standardpfad, paket() wird NUR dazugeschaltet, wenn FTS
+    # mechanisch leer blieb ODER die Frage erkennbar assoziativ ist -- nie
+    # stattdessen.
+    #
+    # ⚠️⚠️ FIX 2026-08-19 (NL-Eval fand den entscheidenden Fehler, siehe
+    # /opt/entityos/eval/retrieval_nl_eval.py): auf NATUERLICHSPRACHIGEN Fragen
+    # (statt Titel-verbatim) liefert FTS im lockeren OR-Modus so gut wie IMMER
+    # >= CORPUS_MAX_HITS Treffer (gemessen: deckung_nichtleer=100,0% auf allen
+    # 93 NL-Fragen, kein_treffer_pct=0,0%) -- das alte "FTS zuerst, paket()
+    # fuellt nur den Rest" liess paket() dadurch NIE zum Zug kommen, obwohl der
+    # Trigger bei 62,4% der NL-Fragen korrekt feuerte: enrich_budget5 war
+    # bitgenau IDENTISCH zu alt_fts (17,4% recall_macro, beide Arme). Praezision
+    # ohne Gewinn, Latenz umsonst. Fix: wenn ausgeloest, werden feste Slots fuer
+    # paket() RESERVIERT statt ihm nur uebrig gebliebene Slots anzubieten --
+    # FTS wird auf (Budget - reserviert) gedeckelt (die stehen bleibenden
+    # FTS-Slots behalten ihre Reihenfolge/Praezision unangetastet), paket()
+    # bekommt die reservierten Slots garantiert. Reicht paket() nicht (weniger
+    # neue, nicht schon vorhandene Treffer als reserviert), fuellen die
+    # ABGESCHNITTENEN FTS-Resttreffer nach -- kein Slot wird verschenkt. Bei
+    # NICHT ausgeloesten (woertlichen) Fragen aendert sich NICHTS: grund bleibt
+    # None, sofortige Rueckgabe von fts, exakt wie vorher (0 Regression).
     last_enrich_meta: dict | None = None  # rein diagnostisch, siehe last_v2_meta
+    _ENRICH_RESERVED_V2_SLOTS = 2  # von CORPUS_MAX_HITS=5, siehe FIX-Kommentar oben
 
     def corpus_lookup_enrich(self, query: str) -> list[dict]:
-        """FTS zuerst (immer, schnell, praezise). paket() wird DAZUGESCHALTET
-        bei (a) FTS-Leerstand (die mechanische 72%-Luecke, kein Intent-Erkennen
-        noetig) oder (b) erkennbar assoziativer Frage (Stichwortheuristik, siehe
-        ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-/Routing-Signal
-        existiert zur Retrieval-Zeit, siehe Modul-Docstring dort). Merge: FTS-
-        Treffer ZUERST (Praezision unangetastet), dann paket()-Treffer als
-        Lueckenfueller (dedupe per artikel_id), danach -- falls im Budget noch
-        Platz ist -- bis zu 2 kompakte Hypothesen/Gegenseite-Aussagen aus
-        paket()s eigenem Ergebnis als Zusatz-Kontext, klar als 'anreicherung'
-        gekennzeichnet. Nie mehr als CORPUS_MAX_HITS insgesamt."""
+        """FTS zuerst (immer, schnell). paket() wird DAZUGESCHALTET bei (a)
+        FTS-Leerstand oder (b) erkennbar assoziativer Frage (Stichwort-
+        heuristik, ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-
+        Signal existiert zur Retrieval-Zeit, siehe Modul-Docstring). Merge
+        NACH DEM FIX: bei Ausloesung wird FTS auf (CORPUS_MAX_HITS -
+        _ENRICH_RESERVED_V2_SLOTS) gedeckelt, paket() bekommt die reservierten
+        Slots GARANTIERT (dedupe per artikel_id), Rest-FTS-Treffer fuellen
+        nach, falls paket() die reservierten Slots nicht ausschoepft. Danach,
+        falls noch Budget frei ist, bis zu 2 kompakte Hypothesen/Gegenseite-
+        Aussagen als Zusatz-Kontext. Nie mehr als CORPUS_MAX_HITS insgesamt."""
         t0 = time.perf_counter()
         fts = self.corpus_lookup(query)
         fts_ms = (time.perf_counter() - t0) * 1000
@@ -330,13 +351,22 @@ class WorldAssembler:
             }
             return fts
 
+        # FIX: FTS auf die NICHT-reservierten Slots deckeln, BEVOR paket()
+        # gemischt wird -- sonst fuellt FTS im NL-Normalfall (fast immer
+        # >= budget Treffer) das Budget alleine und paket() findet nie Platz.
+        reserved = self._ENRICH_RESERVED_V2_SLOTS
+        fts_cap_n = max(0, self.CORPUS_MAX_HITS - reserved)
+        fts_kept = fts[:fts_cap_n]
+        fts_rest = fts[fts_cap_n:]  # abgeschnitten, aber als Nachfueller aufgehoben
+
         t1 = time.perf_counter()
         v2 = self.corpus_lookup_v2(query)
         v2_ms = (time.perf_counter() - t1) * 1000
         v2_meta = dict(self.last_v2_meta or {})
 
-        merged = list(fts)
+        merged = list(fts_kept)
         gesehen = {r.get("artikel_id") for r in merged if r.get("artikel_id")}
+        v2_hinzugefuegt = 0
         for item in v2:
             if len(merged) >= self.CORPUS_MAX_HITS:
                 break
@@ -347,6 +377,20 @@ class WorldAssembler:
                 gesehen.add(aid)
             item = dict(item)
             item["quelle"] = "clay-korpus-v2-anreicherung"
+            merged.append(item)
+            v2_hinzugefuegt += 1
+
+        # Nachfueller: reservierte Slots, die paket() nicht (mit NEUEN ids)
+        # ausschoepfen konnte, bekommen die abgeschnittenen FTS-Resttreffer
+        # zurueck -- kein Slot bleibt wegen der Reservierung ungenutzt leer.
+        for item in fts_rest:
+            if len(merged) >= self.CORPUS_MAX_HITS:
+                break
+            aid = item.get("artikel_id")
+            if aid and aid in gesehen:
+                continue
+            if aid:
+                gesehen.add(aid)
             merged.append(item)
 
         # Zusatz-Kontext: Hypothesen/Gegenseite aus paket()s eigenem Ergebnis --
@@ -361,9 +405,10 @@ class WorldAssembler:
         self.last_enrich_meta = {
             "paket_aufgerufen": True, "grund": grund,
             "fts_treffer": len(fts), "fts_latenz_ms": round(fts_ms, 3),
+            "fts_reserviert_abgeschnitten": len(fts_rest),
             "v2_latenz_ms": round(v2_ms, 3),
             "gesamt_latenz_ms": round(fts_ms + v2_ms, 3),
-            "v2_hinzugefuegt": len(merged) - len(fts),
+            "v2_hinzugefuegt": v2_hinzugefuegt,
             **{f"v2_{k}": v for k, v in v2_meta.items() if k != "status"},
         }
         return merged

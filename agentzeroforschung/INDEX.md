@@ -77,6 +77,14 @@
    - hoechster Informationsgewinn: Exact-Source-/Environment-Bindung plus atomarer `TEST_RECEIPT_LEDGER/v1` und kontrollierte Wiederholung dieses einen Tests
    - Retrieval-Lernen bleibt unbelegt: `retrieval_entrypoint_policy=0`, `retrieval_feedback=0`
 
+10. `analysen/2026-08-19T174204Z_GEN159_AGGREGATIONSFEHLER_HIERARCHIE.md`
+   - Generation 159 auf Snapshot `0ece040dec22750b9c7e14c050ade5ee96afaca4`
+   - Roh-Receipt ist intern konsistent: 352 Wege = 244 Autobahn + 40 Schnellstrasse + 62 langsame Strasse + 6 Tunnel
+   - Zielaggregator meldet fuer denselben Stand unmoegliche `-1 Tunnel` und zugleich ein anderes Hierarchie-Verdikt
+   - Fehlerlokalisierung verschiebt sich auf Aggregations-/Messpfad; Rohdaten selbst zeigen keinen negativen Count
+   - vorgeschlagen: atomarer `HIERARCHY_RECEIPT/v1` mit typisierten ERROR/UNMEASURED-Zustaenden und mechanischer Verdict-Regel
+   - Tests bleiben 583/1; persistenter Adapter-Red getrennt behandeln
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -84,6 +92,7 @@
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
+- `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Verdict; negative numerische Sentinels verbieten;
 - Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
 - rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;

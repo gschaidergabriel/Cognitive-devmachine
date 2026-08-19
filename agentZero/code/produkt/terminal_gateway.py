@@ -277,19 +277,43 @@ def _history_page(db: UnifiedDB, session_id: str, *, before_ordinal: int | None,
     # WAL-safe) to recover the German text shown live; a turn with no matching
     # row (e.g. a terminal/CLI turn, which was never caveman in the first
     # place) falls back to its own content unchanged.
-    translations: dict[str, dict] = {}
-    assistant_turn_ids = [r["turn_id"] for r in rows if r["role"] == "assistant"]
-    if assistant_turn_ids:
-        placeholders = ",".join("?" * len(assistant_turn_ids))
+    # ⭐ Achtung Fallstrick auf der Aufnahmeseite: mistral_prestage.pipeline.run_chat_turn
+    # loggt die Uebersetzung in mv_translation_log unter der ID des BENUTZER-Zugs
+    # (admission["turn_id"]), waehrend turn_lifecycle.complete() den ASSISTENTEN-Zug
+    # mit einer ANDEREN turn_id anlegt. Ein Join mv_translation_log.turn_id ==
+    # turns.turn_id (Assistent) traf darum NIE -> die History fiel still auf Zeros
+    # englischen Caveman-Rohtext (turns.content) zurueck, obwohl der Live-Pfad Deutsch
+    # zeigt. Wir stellen die Zuordnung inhaltsbasiert wieder her: m.caveman_original
+    # IST identisch mit turns.content des Assistenten (beides = zero["caveman_answer"]).
+    # Innerhalb der Sitzung bekommt jede Assistenten-Zeile die inhaltsgleiche
+    # Uebersetzung; bei mehrdeutigen Kurzantworten (z.B. zweimal "Ack.") bricht die
+    # Naehe des Benutzer-Ordinals zu (Assistent-Ordinal - 1) den Gleichstand, denn
+    # der Benutzer-Zug steht bei der Aufnahme direkt vor dem Assistenten-Zug.
+    # Ein echter Terminal/CLI-Zug ohne Uebersetzung faellt unveraendert auf seinen
+    # content zurueck.
+    translations_by_ordinal: dict[int, dict] = {}
+    assistant_rows = [r for r in rows if r["role"] == "assistant"]
+    if assistant_rows:
+        contents = list({r["content"] for r in assistant_rows})
+        placeholders = ",".join("?" * len(contents))
+        candidates: list[dict] = []
         try:
-            for r in db.db.execute(
-                f"SELECT turn_id,translation_id,caveman_original,german_translation "
-                f"FROM mv_translation_log WHERE turn_id IN ({placeholders})",
-                assistant_turn_ids,
+            for m in db.db.execute(
+                f"SELECT m.translation_id, m.caveman_original, m.german_translation, "
+                f"t.ordinal AS user_ordinal "
+                f"FROM mv_translation_log m JOIN turns t ON t.turn_id = m.turn_id "
+                f"WHERE t.session_id=? AND m.caveman_original IN ({placeholders})",
+                (session_id, *contents),
             ):
-                translations[r["turn_id"]] = dict(r)
+                candidates.append(dict(m))
         except sqlite3.OperationalError:
             pass  # translation log not created yet (no chat turn has ever run) -- not an error
+        for a in assistant_rows:
+            passend = [c for c in candidates if c["caveman_original"] == a["content"]]
+            if not passend:
+                continue
+            best = min(passend, key=lambda c: abs((c["user_ordinal"] or 0) - (a["ordinal"] - 1)))
+            translations_by_ordinal[a["ordinal"]] = best  # Ordinal ist je Sitzung eindeutig
 
     turns = []
     for r in rows:
@@ -302,7 +326,7 @@ def _history_page(db: UnifiedDB, session_id: str, *, before_ordinal: int | None,
             "caveman": None,
             "translator_receipt": None,
         }
-        tr = translations.get(r["turn_id"])
+        tr = translations_by_ordinal.get(r["ordinal"]) if r["role"] == "assistant" else None
         if tr is not None:
             entry["text"] = tr["german_translation"]
             entry["caveman"] = tr["caveman_original"]

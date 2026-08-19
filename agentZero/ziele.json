@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-19T07:15:32Z",
-  "erfuellt": 50,
-  "offen": 8,
+  "erzeugt": "2026-08-19T07:18:33Z",
+  "erfuellt": 53,
+  "offen": 5,
   "zurueckgestellt": 1,
   "zeilen": [
     {
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "154 Züge, 77 Kausalepisoden, 77 Arbeitsraum-Episoden",
+      "ist": "156 Züge, 78 Kausalepisoden, 78 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -145,7 +145,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst",
       "quelle": "Eigner 18.08.",
-      "ist": "0 gelernte Eintrittspunkte, Modus SHADOW, 77 Episoden",
+      "ist": "0 gelernte Eintrittspunkte, Modus SHADOW, 78 Episoden",
       "erfuellt": false
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "149 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "151 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -209,7 +209,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 21 seconds (healthy)",
+      "ist": "Up 3 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -233,8 +233,8 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "NICHT GEMESSEN -- __ABBRUCH__ nach 240s. Das ist ein Messfehler, kein Ergebnis.",
-      "erfuellt": false
+      "ist": "584 gruen / 0 rot",
+      "erfuellt": true
     },
     {
       "bereich": "Betrieb",
@@ -273,7 +273,7 @@
       "faehigkeit": "Chat-Historie überlebt den Neuladen",
       "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
       "quelle": "Eigner 18.08.",
-      "ist": "154 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "ist": "156 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
       "erfuellt": true
     },
     {
@@ -361,7 +361,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "50.9 % belegt, 94.6 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "50.9 % belegt, 94.7 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -369,8 +369,8 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 98.0 GB, gezählt 78.5 GB, Lücke 19.5 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 19.5 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
-      "erfuellt": false
+      "ist": "Bilanz nennt drei Zahlen: df 98.0 GB, gezählt 96.1 GB, Lücke 1.9 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (1.9 GB Abweichung).",
+      "erfuellt": true
     },
     {
       "bereich": "Betrieb",
@@ -401,8 +401,8 @@
       "faehigkeit": "Die Testsuite ist ehrlich grün",
       "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "NICHT GEMESSEN -- __ABBRUCH__ nach 240s. Das ist ein Messfehler, kein Ergebnis.. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
-      "erfuellt": false
+      "ist": "584 gruen / 0 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "erfuellt": true
     },
     {
       "bereich": "Kognition",

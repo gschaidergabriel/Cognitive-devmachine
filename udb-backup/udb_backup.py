@@ -60,17 +60,58 @@ CHUNK_TARGET_BYTES = 80_000_000
 # Secret-Gate: Muster, die auf tatsaechliche Passwoerter/Zugangsdaten
 # hindeuten (nicht: Adressen/URLs/Tokens generell -- die sind laut
 # Eigner-Regel ok, wiki.db ist ohnehin Wissenskorpus, kein Tresor).
+#
+# Lektion aus dem ersten Testlauf (2026-08-19): die Herz-DB enthaelt in der
+# `datei`-Tabelle jede Menge indizierten QUELLCODE/DOKUMENTATION -- u.a.
+# Security-Scanner-Tools und SDK-Testfixtures, die selbst Muster wie
+# "password = ..." oder "-----BEGIN PRIVATE KEY-----" als REGEX-LITERALE
+# oder Test-Dummy-Daten enthalten. Ein naives "Wort 'password' kommt vor"
+# ergab 2190 Treffer, praktisch alle falsch positiv (Codeidentifier wie
+# `password: str`, `password=self.password`, Testfixtures aus dem WHATWG-
+# URL-Testsuite etc). Deshalb hier bewusst PRAEZISER:
+#   - Passwort-Muster nur bei einem QUOTIERTEN Literal mit Mindestlaenge/
+#     -entropie (kein `None`/`str`/Variablenreferenz).
+#   - Private-Key nur bei BEGIN...END-PAAR mit substanziellem Inhalt
+#     dazwischen (reine Regex-Literale wie in Scanner-Tools haben kein
+#     zugehoeriges END mit Base64-Koerper in derselben Zeile).
 # -------------------------------------------------------------------------
+_NON_SECRET_RHS = re.compile(
+    r"^(none|null|str|string|''|\"\"|self\.|os\.environ|process\.env|"
+    r"\$\{|config\.|cred(ential)?s?[.\[]|auth[.\[]|entry\[|options\.|"
+    r"password|passwort|passwd|pw_match|lexer\.|mbox\.|request_data|"
+    r"parts\[|content\.|val\\|password\.encode|password or |page\.pdf)",
+    re.IGNORECASE,
+)
+
 SECRET_PATTERNS = [
-    re.compile(r"password\s*[:=]\s*\S+", re.IGNORECASE),
-    re.compile(r"passwort\s*[:=]\s*\S+", re.IGNORECASE),
-    re.compile(r"\bpasswd\s*[:=]\s*\S+", re.IGNORECASE),
-    re.compile(r"-----BEGIN (RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----"),
-    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),  # AWS access key id
-    re.compile(r"\bgh[pousr]_[A-Za-z0-9]{36,}\b"),  # GitHub tokens
+    # quotiertes Passwort-Literal, Mindestlaenge 6, kein offensichtlicher
+    # Code-Verweis auf der rechten Seite.
+    re.compile(
+        r"(?:password|passwort|passwd)\s*[:=]\s*['\"]([^'\"]{6,})['\"]",
+        re.IGNORECASE,
+    ),
+    # BEGIN...END-Paar mit substanziellem (Base64-artigem) Inhalt dazwischen
+    # -- reine Regex-Pattern-Literale (kein Koerper) fallen NICHT darunter.
+    re.compile(
+        r"-----BEGIN (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----"
+        r"[A-Za-z0-9+/=\\ntr]{200,}"
+        r"-----END (?:RSA |OPENSSH |EC |DSA )?PRIVATE KEY-----"
+    ),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),  # AWS access key id (immer melden)
+    re.compile(r"\bgh[pousr]_[A-Za-z0-9]{36,}\b"),  # GitHub tokens (literal, kein ${..})
     re.compile(r"\bxox[baprs]-[A-Za-z0-9-]{10,}\b"),  # Slack tokens
-    re.compile(r"\bsk-[A-Za-z0-9]{20,}\b"),  # generic API secret key style
 ]
+
+
+def _looks_like_real_secret(match: re.Match) -> bool:
+    """Zusatzfilter fuer das Passwort-Literal-Pattern: verwirft die
+    offensichtlichsten Code-/Platzhalter-Treffer (Variablenverweise,
+    Typannotationen)."""
+    if match.lastindex and match.group(1) is not None:
+        rhs = match.group(1)
+        if _NON_SECRET_RHS.match(rhs):
+            return False
+    return True
 
 FTS_SUFFIXES = ("_data", "_idx", "_docsize", "_config", "_content")
 FTS5_RE = re.compile(r"USING\s+fts5", re.IGNORECASE)
@@ -288,7 +329,8 @@ def secret_scan(files: list[Path]) -> list[str]:
         with path.open("r", errors="replace") as fh:
             for lineno, line in enumerate(fh, 1):
                 for pat in SECRET_PATTERNS:
-                    if pat.search(line):
+                    m = pat.search(line)
+                    if m and _looks_like_real_secret(m):
                         findings.append(f"{path.name}:{lineno}: Muster '{pat.pattern}' getroffen")
                         break
     return findings

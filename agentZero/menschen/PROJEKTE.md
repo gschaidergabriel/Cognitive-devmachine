@@ -1,6 +1,6 @@
 # Projekte
 
-Automatisch erzeugt 2026-08-19T16:41:12Z. 6 Projekte -- Erfolge UND Fehlschlaege nebeneinander. Eigner-Auftrag: 'eine Projekttabelle, die nur Gelungenes fuehrt, ist ein Werbeblatt.'
+Automatisch erzeugt 2026-08-19T17:11:11Z. 6 Projekte -- Erfolge UND Fehlschlaege nebeneinander. Eigner-Auftrag: 'eine Projekttabelle, die nur Gelungenes fuehrt, ist ein Werbeblatt.'
 
 `gehoert` = wem das Projekt gehoert. `gebaut_von` = wer es gebaut hat -- **getrennt**, weil Besitz nicht Urheberschaft ist.
 

@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T16:41:12Z. **2760 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T17:11:11Z. **2762 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T22:44:47+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T22:44:47+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2662 |
+| baunotiz | 2664 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1721 |
-| baunotiz | bauverlauf.jsonl | 896 |
+| baunotiz | git-commit | 1722 |
+| baunotiz | bauverlauf.jsonl | 897 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2760 · Gegenhypothese: 0 von 2760
+## Hypothese: 0 von 2762 · Gegenhypothese: 0 von 2762
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -147,6 +147,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen149 retrieval ACTIVE and reauth regression
 
+### agentZero-Export 2026-08-19T16:41:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-4237788fbb9f4dff5efed37c19a5a446a725a486` · baunotiz · git-commit · 2026-08-19T16:42:21+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T16:41:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
 ### agentZero-Export 2026-08-19T16:11:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-a98ed11ec52afa91fd595073a40cfd99178e17a4` · baunotiz · git-commit · 2026-08-19T16:12:09+00:00 · agentZero
@@ -154,6 +162,14 @@ claycode supervisor: bind Gen149 retrieval ACTIVE and reauth regression
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T16:11:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T16:11:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-51cb1d8d84a52f168aa6` · baunotiz · bauverlauf.jsonl · 2026-08-19T16:12:09+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: bind Gen145 metrology and adapter-scope distinction
 
@@ -241,43 +257,5 @@ Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-
-### EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen
-
-`baunotiz-bauverlauf-364ea03a7bf3ca6001cb` · baunotiz · bauverlauf.jsonl · 2026-08-19T15:09:35+00:00 · ClayVerse
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Anlass: Wache: Aenderung beobachtet
-
-  system/frank-api-vps/etc/clayverse/freie-zugaenge.env.vorlage
-
-Zeit: 2026-08-19T15:09:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: unifieddb (/opt/unifieddb)
-Dateien: 1
-Fern: origin -> /srv/git/unifieddb.git
-Werkzeug: eos-chronik.py v1
-
-### EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen
-
-`baunotiz-git-dabe10f24aec7a0f174a0bbcc422460252ee1f3c` · baunotiz · git-commit · 2026-08-19T15:09:35+00:00 · ClayVerse
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen
-
-Anlass: Wache: Aenderung beobachtet
-
-  system/frank-api-vps/etc/clayverse/freie-zugaenge.env.vorlage
-
-Zeit: 2026-08-19T15:09:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: unifieddb (/opt/unifieddb)
-Dateien: 1
-Fern: origin -> /srv/git/unifieddb.git
 Werkzeug: eos-chronik.py v1
 

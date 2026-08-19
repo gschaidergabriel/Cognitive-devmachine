@@ -491,6 +491,29 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         from . import seiten as _seiten
         return JSONResponse(await asyncio.to_thread(_seiten.uebersicht))
 
+    @app.get("/api/systeme")
+    async def systeme_api(request: Request):
+        # Dieselbe Anmeldepruefung wie /api/seiten. Zeigt den Live-Zustand der
+        # drei Tailscale-Maschinen (online, CPU/RAM/Disk) -- keine Geheimnisse,
+        # aber hinter die Anmeldung. Der Host-Sammler (systemwacht) schreibt die
+        # Datei; wir liefern sie nur aus und haengen das Alter in Sekunden an,
+        # damit das Frontend "veraltet" erkennen kann.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        if identity.clerk_map.get(str(claims.get("sub", ""))) not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        import json as _json, time as _time
+        try:
+            with open("/var/lib/clay/systeme.json", encoding="utf-8") as f:
+                d = _json.load(f)
+        except Exception:
+            return JSONResponse({"stand": 0, "systeme": [], "alter_s": None})
+        d["alter_s"] = max(0, int(_time.time()) - int(d.get("stand", 0)))
+        return JSONResponse(d)
+
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():
         key = html.escape(publishable_key, quote=True)

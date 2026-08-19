@@ -1,5 +1,7 @@
 from __future__ import annotations
 import json
+import os
+import time
 from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
@@ -102,6 +104,132 @@ class WorldAssembler:
                     for r in rows
                 ]
         return []
+
+    # ── Parallelpfad V2 (F-Vorstufe-Retrieval-Karte, 2026-08-19) ────────────
+    #
+    # corpus_lookup() oben ist ein eigenes, flaches FTS-only Doppel-Retrieval:
+    # es kennt die entwickelte, LEBENDE Karte in udb/abruf/paket.py (Lift-
+    # Lernen, Wegehierarchie, Karten-Eintritt, Erkundung, Erfolgsmarken) gar
+    # nicht. corpus_lookup_v2() ruft STATTDESSEN paket() auf -- Modul 2 wird
+    # nur AUFGERUFEN, nicht angefasst (die Datei gehoert einer anderen
+    # Instanz). Additiv: der alte Pfad bleibt vollstaendig erhalten, dies ist
+    # ein PARALLELER Pfad hinter einem Flag (VORSTUFE_RETRIEVAL=v2 env, Default
+    # bleibt der alte Pfad -- siehe _corpus_lookup_routed unten). Erst nach
+    # A/B-Freigabe durch den Eigner wird der Default umgestellt.
+    #
+    # Format-Bruch, offen ausgewiesen statt versteckt: paket()'s treffer
+    # tragen laut seinem eigenen Entwurf "ids + felder, keine volltexte"
+    # (kein titel/ausschnitt -- siehe paket.py-Modul-Docstring). corpus_lookup()
+    # hier liefert aber titel+ausschnitt (fuer die Vorstufe lesbarer Text).
+    # Diese Adapter-Methode schliesst die Luecke NICHT durch eigene Such-
+    # /Ranking-Logik (die bleibt vollstaendig bei paket()), sondern durch
+    # GENAU EINEN zusaetzlichen, rein lesenden PK-Lookup in artikel_suchtext
+    # fuer exakt die IDs, die paket() bereits gewaehlt hat -- dieselbe Tabelle,
+    # dieselben Spalten wie oben, nur ohne FTS MATCH. Manche paket()-Treffer
+    # haben KEINE Zeile in artikel_suchtext (12702 von 17805 Artikeln sind
+    # ueberhaupt im FTS-Suchtext-Index, Stand 2026-08-19) -- in dem Fall bleibt
+    # titel/ausschnitt leer, das ist ehrlich ausgewiesen, nicht erfunden.
+    _V2_SYS_PATHS = ("/opt/unifieddb", "/opt/clayverse/werkzeug")
+    last_v2_meta: dict | None = None  # rein diagnostisch, kein Konsument in Prod
+
+    def _snippets_fuer(self, ids: list) -> dict:
+        """Read-only PK-Lookup, KEINE eigene Ranking-/Suchlogik -- die traegt
+        allein paket(). Liefert nur Anzeigetext fuer bereits gewaehlte IDs."""
+        ids = [i for i in ids if i]
+        if not ids:
+            return {}
+        qmarks = ",".join("?" for _ in ids)
+        rows = self.db.db.execute(
+            f"SELECT artikel_id AS artikel_id, titel AS titel, "
+            f"substr(text,1,?) AS ausschnitt FROM artikel_suchtext "
+            f"WHERE artikel_id IN ({qmarks})",
+            [self.CORPUS_SNIPPET_CHARS] + ids,
+        ).fetchall()
+        return {r["artikel_id"]: {"titel": r["titel"], "ausschnitt": (r["ausschnitt"] or "").strip()}
+                for r in rows}
+
+    def corpus_lookup_v2(self, query: str) -> list[dict]:
+        """Bounded, read-only, query-sensitive lookup -- ueber paket(), nicht
+        ueber eigenes FTS. Diagnose-Metadaten (Latenz, cache_hit, Plan,
+        Resolution-Klasse) landen in self.last_v2_meta, NICHT im Rueckgabewert
+        -- die Form bleibt kompatibel mit corpus_lookup()'s Konsumenten."""
+        self.last_v2_meta = None
+        if not query or not self._corpus_ready():
+            self.last_v2_meta = {"status": "leer_oder_kein_korpus"}
+            return []
+        import sys as _sys
+        for _p in self._V2_SYS_PATHS:
+            if _p not in _sys.path:
+                _sys.path.append(_p)
+        try:
+            from udb.abruf.paket import paket as _paket
+        except Exception as e:
+            self.last_v2_meta = {"status": "IMPORT_FEHLGESCHLAGEN",
+                                  "grund": f"{type(e).__name__}: {e}"[:200]}
+            return []
+        t0 = time.perf_counter()
+        try:
+            pkt = _paket(query, budget=self.CORPUS_MAX_HITS, conn=self.db.db)
+        except Exception as e:
+            self.last_v2_meta = {"status": "PAKET_FEHLGESCHLAGEN",
+                                  "grund": f"{type(e).__name__}: {e}"[:200]}
+            return []
+        adapter_latenz_ms = (time.perf_counter() - t0) * 1000
+
+        treffer = pkt.get("treffer") or []
+        ids = [t.get("id") for t in treffer if isinstance(t, dict)]
+        snippets = self._snippets_fuer(ids)
+        basis = pkt.get("resolution") or {}
+        out = []
+        for t in treffer:
+            if not isinstance(t, dict):
+                continue
+            rid = t.get("id")
+            sn = snippets.get(rid, {})
+            out.append({
+                "artikel_id": rid,
+                "titel": sn.get("titel"),
+                "ausschnitt": sn.get("ausschnitt", ""),
+                "sphaere": t.get("sphaere"),
+                "art": t.get("art"),
+                "quelle": "clay-korpus-v2",
+                # Analog zu corpus_lookup()'s AND/OR-Kennzeichnung, aber aus
+                # paket()'s eigener Herkunftsangabe -- nicht dasselbe Konzept,
+                # deshalb hier ausdruecklich benannt statt AND/OR vorgetaeuscht.
+                "treffer_art": basis.get("klasse"),
+                # zusaetzlich, verlustfrei mitgetragen statt verworfen:
+                "score": t.get("score"),
+                "epistemic_class": t.get("epistemic_class"),
+                "status": t.get("status"),
+                "ref": t.get("ref"),
+            })
+        self.last_v2_meta = {
+            "status": "OK",
+            "paket_id": pkt.get("paket_id"),
+            "paket_latenz_us": pkt.get("latenz_us"),
+            "adapter_latenz_ms": round(adapter_latenz_ms, 3),
+            "cache_hit": (pkt.get("basis") or {}).get("cache_hit"),
+            "plan": (pkt.get("politik") or {}).get("plan"),
+            "resolution_klasse": basis.get("klasse"),
+        }
+        return out
+
+    def _corpus_lookup_routed(self, query: str) -> list[dict]:
+        """Einziger Umschaltpunkt: VORSTUFE_RETRIEVAL=v2 env schaltet auf den
+        paket()-Pfad um. Default (unset oder jeder andere Wert) bleibt der
+        alte corpus_lookup() -- NICHT ungetestet live, das entscheidet der
+        Eigner nach den A/B-Zahlen. Jeder Fehler im v2-Pfad faellt sofort
+        und sicher auf den alten Pfad zurueck (Live-Pfad-Vorsicht: pipeline.py
+        bedient JEDE Zero-Antwort)."""
+        modus = os.environ.get("VORSTUFE_RETRIEVAL", "v1").strip().lower()
+        if modus == "v2":
+            try:
+                return self.corpus_lookup_v2(query)
+            except Exception as e:
+                self.last_v2_meta = {"status": "UNERWARTETER_FEHLER_FALLBACK_V1",
+                                      "grund": f"{type(e).__name__}: {e}"[:200]}
+                return self.corpus_lookup(query)
+        return self.corpus_lookup(query)
 
     def _anwesender(self, session_id, user_id) -> dict | None:
         """Profil des anwesenden Menschen. Klein gehalten -- das Budget ist knapp."""
@@ -264,8 +392,10 @@ class WorldAssembler:
             # constant, and must reach the turn even after compaction.
             "canonical_identity": self.db.canonical_identity(),
             # The heart. Read-only, bounded, query-sensitive. Without this the
-            # entity owns 14k articles and can see none of them.
-            "corpus": self.corpus_lookup(str(supplied.get("query") or query or "")),
+            # entity owns 14k articles and can see none of them. Routed:
+            # VORSTUFE_RETRIEVAL=v2 env switches to the paket()-backed path
+            # (corpus_lookup_v2), default stays the original FTS-only path.
+            "corpus": self._corpus_lookup_routed(str(supplied.get("query") or query or "")),
             # Wer gerade da ist -- aus dem kanonischen Zustand, nicht aus dem Text.
             "anwesender_mensch": self._anwesender(session_id, user_id),
         }

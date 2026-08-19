@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-19T12:41:10Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-19T13:11:11Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -19,21 +19,21 @@ Wege gesamt: **75**
 | schnellstrasse | 1 |
 | langsame strasse | 66 |
 
-Oberes Zehntel haelt 0.413 der Gesamtguete (bei Gleichverteilung waeren es 0.093).
+Oberes Zehntel haelt 0.414 der Gesamtguete (bei Gleichverteilung waeren es 0.093).
 
 ## Staerkste Wege
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 125 | 125 |
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 125 | 125 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 142 | 142 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 137 | 137 |
+| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 126 | 126 |
 | C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 120 | 120 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 115 | 115 |
-| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 105 | 105 |
-| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 98 | 98 |
-| C-AUDIT-001 | C-LOOP-003 | geschwister_datei | autobahn | 0.784 | 12 | 12 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 117 | 117 |
+| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 103 | 103 |
+| C-AUDIT-001 | C-LOOP-003 | geschwister_datei | autobahn | 0.871 | 16 | 16 |
 | C-AUDIT-001 | C-CLAYCODE-001 | geschwister_datei | autobahn | 0.784 | 12 | 12 |
-| C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | schnellstrasse | 0.536 | 6 | 6 |
+| C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | schnellstrasse | 0.591 | 7 | 7 |
 | runtime-tool_requests-bridge-smoke-openalex.json | runtime-tool_requests-c6-claynative-arxiv-20260808T1750.json | geschwister_verzeichnis | langsame strasse | 0.226 | 2 | 2 |
 | runtime-tool_requests-bridge-smoke-openalex.json | runtime-tool_requests-c6-claynative-exa-20260808T1750.json | geschwister_verzeichnis | langsame strasse | 0.226 | 2 | 2 |
 | runtime-tool_requests-bridge-smoke-openalex.json | runtime-tool_requests-c6-claynative-openalex-20260808T1750.json | geschwister_verzeichnis | langsame strasse | 0.226 | 2 | 2 |

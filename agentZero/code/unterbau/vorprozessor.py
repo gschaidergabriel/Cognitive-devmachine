@@ -1093,8 +1093,8 @@ def lernen(c: sqlite3.Connection, package: dict, war_treffer: bool) -> None:
         g = min(3.0, g + 0.1)
         n += 1
         c.execute(
-            "INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
-            "VALUES ('global',?,?,?,?)", (art, g, n, _now()),
+            "INSERT INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
+            "VALUES ('global',?,?,?,?) " "ON CONFLICT(query_class,edge_art) DO UPDATE SET gewicht=excluded.gewicht, beobachtungen=excluded.beobachtungen, zuletzt_gelernt=excluded.zuletzt_gelernt", (art, g, n, _now()),
         )
     c.commit()
 
@@ -1542,8 +1542,8 @@ def puls(c: sqlite3.Connection) -> dict:
         g, b = (row["gewicht"], row["beobachtungen"]) if row else (0.0, 0)
         g = min(3.0, g + 0.02 * n)
         b += n
-        c.execute("INSERT OR REPLACE INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
-                  "VALUES ('global',?,?,?,?)", (art, g, b, _now()))
+        c.execute("INSERT INTO vp_edge_lern(query_class,edge_art,gewicht,beobachtungen,zuletzt_gelernt) "
+                  "VALUES ('global',?,?,?,?) " "ON CONFLICT(query_class,edge_art) DO UPDATE SET gewicht=excluded.gewicht, beobachtungen=excluded.beobachtungen, zuletzt_gelernt=excluded.zuletzt_gelernt", (art, g, b, _now()))
     letzte_rowid = max(r["rowid"] for r in neu)
     c.execute("INSERT OR REPLACE INTO vp_alias_meta(key,value) VALUES ('puls_letzte_kuration_rowid',?)", (str(letzte_rowid),))
     us = (time.perf_counter() - t0) * 1e6

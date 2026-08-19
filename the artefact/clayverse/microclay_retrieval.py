@@ -165,30 +165,195 @@ class MicroClayRetrieval:
         accepts only verified outcomes with non-zero canonical credit; uncertain/stale,
         denied/failed, and verified zero-credit outcomes remain evidence-neutral here.
         Explicit correction/miss feedback may still use ``credit()`` directly.
+
+        ⭐ KEIN Generationszaun auf den Episoden. Eine Belohnung entsteht bei der
+        Wirkung, gebucht wird sie erst beim naechsten Abruf. Zaehlte die Generation
+        dazwischen hoch -- und sie zaehlt bei jedem Neustart hoch --, fiel die
+        Belohnung durch den Rost und war fuer immer weg: gemessen Generation 101
+        gegen juengste Episode 98, also alles. Gegen doppeltes Lernen schuetzt die
+        Quittung in ``retrieval_feedback`` (NOT EXISTS oben), nicht die Generation.
         """
         self.db.assert_live_generation(session_id, generation)
         rows = self.db.db.execute(
-            "SELECT r.causal_id,r.generation,c.credit,e.status "
+            "SELECT r.*,c.credit AS outcome_credit,e.status AS effect_status "
             "FROM retrieval_episodes r "
             "JOIN causal_episodes c ON c.causal_id=r.causal_id "
             "JOIN effects e ON e.effect_id=c.effect_id "
-            "WHERE r.session_id=? AND r.generation=? AND c.reentered=1 "
+            "WHERE r.session_id=? AND c.reentered=1 "
             "AND e.status='VERIFIED' AND c.credit != 0.0 "
             "AND NOT EXISTS(SELECT 1 FROM retrieval_feedback f "
             "WHERE f.retrieval_id=r.retrieval_id AND f.signal_class LIKE 'effect_outcome:%') "
             "ORDER BY r.ts LIMIT 100",
-            (session_id, int(generation)),
+            (session_id,),
         ).fetchall()
         applied = 0
         for row in rows:
-            result = self.credit(
-                causal_id=row["causal_id"],
-                generation=int(row["generation"]),
-                credit=float(row["credit"]),
-                signal_class=f"effect_outcome:{row['status']}",
+            result = self._apply_credit(
+                row,
+                credit=float(row["outcome_credit"]),
+                signal_class=f"effect_outcome:{row['effect_status']}",
             )
             applied += int(bool(result.get("applied")))
         return {"eligible": len(rows), "applied": applied}
+
+    # ── Die Tuer fuer das Urteil eines Menschen ───────────────────────────
+    #
+    # ⭐ Der automatische Weg oben lernt NUR aus einer verifizierten aeusseren
+    # Wirkung. Ein Mensch, der sagt "das war falsch", erzeugt keine Wirkung --
+    # ohne diese Tuer erreicht sein Urteil das Lernen nie, egal wie deutlich er
+    # es sagt. Genau das war der Befund: credit() existierte, aber kein einziger
+    # Aufrufer fuehrte von einem Menschen dorthin.
+
+    GEWICHTE = {"geholfen": 1.0, "daneben": -1.0}
+    MAX_RUECKMELDUNG_ZUEGE = 10
+
+    def menschliche_rueckmeldung(
+        self,
+        *,
+        session_id: str,
+        user_id: str,
+        bewertung: str,
+        zuege: int = 1,
+    ) -> dict[str, Any]:
+        """Ausdrueckliche Rueckmeldung eines Menschen auf die letzten Abrufe buchen.
+
+        ``user_id`` grenzt die Episoden mit ein: niemand bewertet fremde Abrufe.
+        Die Kennung ist die geprueften Anmeldung des Aufrufers, nie ein Argument.
+
+        Aendert nur Wegpunkt-Prioren -- kein Gedaechtnisinhalt, keine Wahrheit,
+        keine Befugnis. Zweimal dieselbe Rueckmeldung bucht genau einmal, weil
+        die Quittungskennung aus Episode, Generation, Klasse und Wert entsteht.
+        """
+        if bewertung not in self.GEWICHTE:
+            raise ValueError(
+                f"unbekannte bewertung. erlaubt: {sorted(self.GEWICHTE)}"
+            )
+        anzahl = max(1, min(int(zuege), self.MAX_RUECKMELDUNG_ZUEGE))
+        rows = self.db.db.execute(
+            "SELECT * FROM retrieval_episodes WHERE session_id=? AND user_id=? "
+            "ORDER BY ts DESC LIMIT ?",
+            (session_id, user_id, anzahl),
+        ).fetchall()
+
+        wegpunkte_vorher = int(
+            self.db.db.execute(
+                "SELECT COUNT(*) FROM retrieval_entrypoint_policy"
+            ).fetchone()[0]
+        )
+        gewicht = self.GEWICHTE[bewertung]
+        signal_class = f"mensch:{bewertung}"
+        gebucht, schon_bekannt = [], []
+        for row in rows:
+            ergebnis = self._apply_credit(
+                row, credit=gewicht, signal_class=signal_class
+            )
+            eintrag = {
+                "abruf_id": str(row["retrieval_id"]),
+                "causal_id": str(row["causal_id"]),
+                "generation": int(row["generation"]),
+                "wegpunkte": len(json.loads(row["entry_keys"])),
+            }
+            if ergebnis.get("applied"):
+                eintrag["quittung"] = ergebnis["receipt_id"]
+                gebucht.append(eintrag)
+            else:
+                eintrag["grund"] = ergebnis.get("reason", "unbekannt")
+                schon_bekannt.append(eintrag)
+        wegpunkte_nachher = int(
+            self.db.db.execute(
+                "SELECT COUNT(*) FROM retrieval_entrypoint_policy"
+            ).fetchone()[0]
+        )
+        return {
+            "bewertung": bewertung,
+            "gewicht": gewicht,
+            "gefundene_abrufe": len(rows),
+            "gebucht": gebucht,
+            "folgenlos": schon_bekannt,
+            "angewandt": len(gebucht),
+            "wegpunkte_vorher": wegpunkte_vorher,
+            "wegpunkte_nachher": wegpunkte_nachher,
+            # Ohne diesen Satz liest ein Modell "angewandt: 0" als Fehler. Es ist
+            # keiner -- es heisst, die Rueckmeldung lag schon vor.
+            "hinweis": (
+                "keine Abrufe in dieser Sitzung -- nichts zu bewerten"
+                if not rows
+                else "angewandt=0 heisst: dieselbe Rueckmeldung lag bereits vor"
+            ),
+        }
+
+    # ── Befoerderung: SHADOW -> ACTIVE ─────────────────────────────────────
+    #
+    # ⭐ Bis hierher schrieb NICHTS ausser der Tabellenerzeugung selbst in
+    # ``retrieval_policy_state`` -- der Modus blieb fuer immer SHADOW, egal wie
+    # viel geprueftes Lernsignal in ``retrieval_entrypoint_policy`` ankam. Die
+    # Klassendoku sagt "bis eine explizit extern validierte Befoerderung den
+    # Modus aendert" -- diese Befoerderung existierte nirgends im Code. Reine
+    # Beobachtung ohne einen Uebergang ist keine SHADOW-Politik, sondern eine
+    # Sackgasse, die wie eine Politik aussieht.
+    #
+    # "Extern validiert" wird hier NICHT selbst behauptet, sondern an zwei
+    # mechanische, im Store bereits vorhandene Tatsachen gebunden:
+    #   (a) mindestens MIN_SCHLUESSEL gelernte Eintrittspunkte mit >=1 Pull --
+    #       roher Beweis, dass ueberhaupt etwas gelernt wurde, kein leerer Start.
+    #   (b) mindestens MIN_QUITTUNGEN VERSCHIEDENE Rueckmeldungs-Quittungen in
+    #       ``retrieval_feedback`` -- nicht dieselbe Buchung, die zufaellig
+    #       mehrere Eintrittspunkte trifft. Eine Quittung ist entweder ein
+    #       verifizierter aeusserer Wirkungsnachweis (``effect_outcome:*``) oder
+    #       ein ausdrueckliches menschliches Urteil (``mensch:*``) -- niemals
+    #       die eigene Ausgabe des Retrievers selbst (kein Echo-Kreislauf).
+    #
+    # Nur EIN Weg, absichtlich: SHADOW->ACTIVE. Ein automatischer Rueckfall
+    # ACTIVE->SHADOW waere eine Notbremse und gehoert dort hin, nicht hierher
+    # als Nebenwirkung einer Zaehlfunktion.
+
+    MIN_SCHLUESSEL_FUER_AKTIV = 3
+    MIN_QUITTUNGEN_FUER_AKTIV = 2
+
+    def befoerderung_pruefen(self) -> dict[str, Any]:
+        """Prueft das validierte Lernsignal und hebt SHADOW auf ACTIVE, wenn genug da ist.
+
+        Rein mechanisch, kein Modellaufruf, keine Behauptung ohne Beleg -- die
+        Rueckgabe traegt immer die Rohzahlen, gegen die geprueft wurde.
+        """
+        vorher = self.mode()
+        schluessel = int(
+            self.db.db.execute(
+                "SELECT COUNT(*) FROM retrieval_entrypoint_policy WHERE pulls>=1"
+            ).fetchone()[0]
+        )
+        quittungen = int(
+            self.db.db.execute(
+                "SELECT COUNT(DISTINCT receipt_id) FROM retrieval_feedback"
+            ).fetchone()[0]
+        )
+        ergebnis: dict[str, Any] = {
+            "modus_vorher": vorher,
+            "gelernte_schluessel": schluessel,
+            "schwelle_schluessel": self.MIN_SCHLUESSEL_FUER_AKTIV,
+            "quittungen": quittungen,
+            "schwelle_quittungen": self.MIN_QUITTUNGEN_FUER_AKTIV,
+        }
+        if vorher == "ACTIVE":
+            ergebnis["befoerdert"] = False
+            ergebnis["modus_nachher"] = "ACTIVE"
+            ergebnis["grund"] = "bereits ACTIVE"
+            return ergebnis
+        if schluessel < self.MIN_SCHLUESSEL_FUER_AKTIV or quittungen < self.MIN_QUITTUNGEN_FUER_AKTIV:
+            ergebnis["befoerdert"] = False
+            ergebnis["modus_nachher"] = "SHADOW"
+            ergebnis["grund"] = "noch nicht genug validiertes Lernsignal"
+            return ergebnis
+        now = time.time()
+        self.db.db.execute(
+            "UPDATE retrieval_policy_state SET mode='ACTIVE', "
+            "policy_version=policy_version+1, updated_at=? WHERE singleton=1",
+            (now,),
+        )
+        ergebnis["befoerdert"] = True
+        ergebnis["modus_nachher"] = "ACTIVE"
+        ergebnis["grund"] = "Schwellen erreicht: gelernte Eintrittspunkte + unabhaengige Quittungen"
+        return ergebnis
 
     def retrieve(
         self,
@@ -359,7 +524,6 @@ class MicroClayRetrieval:
         Replaying the same receipt is idempotent; stale generations are rejected.
         No durable-memory row is changed.
         """
-        value = max(-1.0, min(1.0, float(credit)))
         row = self.db.db.execute(
             "SELECT * FROM retrieval_episodes WHERE causal_id=? ORDER BY ts DESC LIMIT 1",
             (causal_id,),
@@ -369,6 +533,39 @@ class MicroClayRetrieval:
         if int(row["generation"]) != int(generation):
             raise StaleGeneration("retrieval_generation")
         self.db.assert_live_generation(row["session_id"], generation)
+        return self._apply_credit(
+            row, credit=credit, signal_class=signal_class, receipt_id=receipt_id
+        )
+
+    def _apply_credit(
+        self,
+        row: Any,
+        *,
+        credit: float,
+        signal_class: str,
+        receipt_id: str | None = None,
+    ) -> dict[str, Any]:
+        """Die Buchung selbst, ohne Generationszaun. Nur fuer Aufrufer im Haus.
+
+        WARUM ohne Zaun: gebucht werden ausschliesslich
+        ``retrieval_entrypoint_policy`` und ``retrieval_feedback``. Beide sind
+        generationsfrei -- es gibt hier keinen Weltzustand, in den eine veraltete
+        Annahme hineinschreiben koennte. Der Zaun in ``credit()`` schuetzt einen
+        AUFRUFER davor, mit einer ueberholten Generationsannahme zu buchen. Wer die
+        Generation direkt aus der Episodenzeile nimmt, kann sich darin gar nicht
+        irren -- fuer den ist der Zaun kein Schutz, sondern ein Vernichter: jede
+        Belohnung, deren Generation zwischen Wirkung und Buchung hochzaehlt, waere
+        endgueltig verloren.
+
+        Die Generation der Episode wandert unveraendert in die Quittungskennung,
+        damit dieselbe Rueckmeldung dieselbe Kennung ergibt und ein zweites Mal
+        folgenlos bleibt.
+        """
+        value = max(-1.0, min(1.0, float(credit)))
+        # Beides aus der Episodenzeile, nicht aus Argumenten: so kann die
+        # Quittungskennung gar nicht von der Wirklichkeit abweichen.
+        generation = int(row["generation"])
+        causal_id = str(row["causal_id"])
 
         rid = receipt_id or hashlib.sha256(
             f"{row['retrieval_id']}\x1f{causal_id}\x1f{generation}\x1f{signal_class}\x1f{value:.9f}".encode()

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import json
 import time
 from typing import Any
 
 from .. import identity  # coordinator-owned, imported not edited
+from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
 from . import headless_zero, prestage, translator
 import re
 
@@ -33,6 +35,102 @@ def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
     return assembler.assemble(session_id, resource_refs=[])
 
 
+def _hyperposition_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
+    """Set-valued world-model readout over world['durable_memory'] (F1 Schritt A).
+
+    Ausfallsicher wie die anderen *_safe-Helfer hier: ein Fehler in der
+    Projektion darf den Zug nie kippen -- die Vorstufe bekommt dann einfach
+    keinen Readout (leere Liste) statt eines abgebrochenen Zuges. MUSS auf dem
+    VOLLEN world laufen, VOR jeder Kuerzung von durable_memory (siehe
+    _vorstufen_world) -- sonst verliert das Weltmodell Belege, die die
+    Kuerzung bereits entfernt hat.
+    """
+    try:
+        return hyperposition.HyperpositionProjector.from_world(world)
+    except Exception:
+        return []
+
+
+# Zeichen-/Mengendeckel NUR fuer den Vorstufe-Pfad (F1 Schritt B). Gemessen
+# 18.08.: world liegt bei ~27k Zeichen (own_recent 12,8k, durable_memory 7,7k,
+# canonical_identity 5,5k, anwesender_mensch 1,1k, Rest winzig) und
+# bremst/verwaesst die Vorstufe. Ziel: der an die Vorstufe gegebene Kontext
+# unter ~10k Zeichen.
+_VORSTUFE_MAX_CHARS = 10_000
+_VORSTUFE_OWN_RECENT_N = 3
+_VORSTUFE_DURABLE_MEMORY_N = 12
+_VORSTUFE_OWN_RECENT_FELD_DECKEL = 800
+_VORSTUFE_DURABLE_MEMORY_FELD_DECKEL = 300
+
+
+def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
+    """Schlanke Kopie von world NUR fuer den Vorstufe-Aufruf (F1 Schritt B).
+
+    _gather_world_safe/WorldAssembler.assemble bleiben UNVERAENDERT -- andere
+    Verbraucher (TurnLifecycle, engine.py) bekommen weiterhin das volle world.
+    Diese Funktion baut nur die Kopie, die in prestage.run_prestage(world=...)
+    geht: own_recent auf die letzten drei Zuege, durable_memory auf die
+    juengsten Eintraege (WorldAssembler liefert sie bereits ts DESC sortiert),
+    beide zusaetzlich mit einem Zeichen-Deckel je Feld. canonical_identity und
+    anwesender_mensch bleiben unangetastet (klein und Pflicht laut Auftrag).
+    corpus/cross_session_collision/retrieval_receipt sind laut Messung ohnehin
+    winzig und bleiben unveraendert, ausser das Gesamtbudget greift noch.
+
+    Baut ausschliesslich NEUE dicts/Listen -- veraendert world oder seine
+    verschachtelten Objekte nicht, damit nichts anderes (z.B. ein spaeterer
+    Aufrufer derselben world-Referenz) beschaedigt wird.
+    """
+
+    def _kurz(wert: Any, deckel: int) -> Any:
+        if isinstance(wert, str) and len(wert) > deckel:
+            return wert[:deckel] + "…[gekuerzt]"
+        return wert
+
+    own_recent = [
+        {"role": t.get("role"), "content": _kurz(t.get("content"), _VORSTUFE_OWN_RECENT_FELD_DECKEL),
+         "ts": t.get("ts")}
+        for t in (world.get("own_recent") or [])[-_VORSTUFE_OWN_RECENT_N:]
+        if isinstance(t, dict)
+    ]
+    durable_memory = [
+        {"kind": m.get("kind"), "subject": m.get("subject"),
+         "value": _kurz(m.get("value"), _VORSTUFE_DURABLE_MEMORY_FELD_DECKEL), "ts": m.get("ts")}
+        for m in (world.get("durable_memory") or [])[:_VORSTUFE_DURABLE_MEMORY_N]
+        if isinstance(m, dict)
+    ]
+
+    packed: dict[str, Any] = {
+        "own_recent": own_recent,
+        "durable_memory": durable_memory,
+        "cross_session_collision": list(world.get("cross_session_collision") or []),
+        "corpus": list(world.get("corpus") or []),
+    }
+    if world.get("retrieval_receipt") is not None:
+        packed["retrieval_receipt"] = world["retrieval_receipt"]
+    # Nie gekuerzt: ohne canonical_identity weiss die Vorstufe nicht, was Zero
+    # ist; ohne anwesender_mensch nicht, mit wem gesprochen wird.
+    if world.get("canonical_identity") is not None:
+        packed["canonical_identity"] = world["canonical_identity"]
+    if world.get("anwesender_mensch") is not None:
+        packed["anwesender_mensch"] = world["anwesender_mensch"]
+
+    def _groesse() -> int:
+        return len(json.dumps(packed, ensure_ascii=False, default=str))
+
+    # Sicherheitsnetz, falls die Feld-Deckel oben trotzdem nicht reichen (z.B.
+    # eine sehr lange canonical_identity): erst das billigste weg -- corpus ist
+    # naechste Runde neu abrufbar, cross_session_collision ist im
+    # Vorstufe-Pfad wegen resource_refs=[] ohnehin fast immer leer.
+    while _groesse() > _VORSTUFE_MAX_CHARS and packed["corpus"]:
+        packed["corpus"] = packed["corpus"][:-1]
+    while _groesse() > _VORSTUFE_MAX_CHARS and packed["cross_session_collision"]:
+        packed["cross_session_collision"] = packed["cross_session_collision"][:-1]
+    while _groesse() > _VORSTUFE_MAX_CHARS and packed["durable_memory"]:
+        packed["durable_memory"] = packed["durable_memory"][:-1]
+    while _groesse() > _VORSTUFE_MAX_CHARS and len(packed["own_recent"]) > 1:
+        packed["own_recent"] = packed["own_recent"][1:]
+
+    return packed
 
 
 _PAKET_WORTE = ("need_better_package", "besseres paket", "das paket", "the package",
@@ -235,6 +333,11 @@ def run_chat_turn(
 
     own_store = store or PrestageStore()
     t_start = time.perf_counter()
+    # Wandzeit (time.time(), nicht perf_counter) zusaetzlich zu t_start:
+    # effects/causal_episodes in wiki.db tragen Unix-Zeitstempel -- nur damit
+    # laesst sich das Zeitfenster fuer die Lernschleife (Phase 2b, store.py
+    # _effects_evidence) ueberhaupt bilden.
+    turn_started_at = time.time()
     lifecycle = None
     admission = None
 
@@ -263,12 +366,34 @@ def run_chat_turn(
         nutzerprofil = _profil_safe(db, user_id)
         erwartungsfeld = _moeglichkeitsraum_safe(message)
 
+        # F1 Schritt A: Hyperposition-Weltmodell -- MUSS auf dem VOLLEN world
+        # laufen, bevor Schritt B durable_memory kuerzt (siehe _vorstufen_world),
+        # sonst verliert das Weltmodell Belege.
+        hyperposition_readout = _hyperposition_safe(world)
+        # F1 Schritt B: schlanke world-Kopie NUR fuer die Vorstufe -- world
+        # selbst bleibt unveraendert (record_via_turnlifecycle=True liest
+        # spaeter u.U. noch daraus, und andere Verbraucher der geteilten
+        # WorldAssembler-Quelle sind davon so oder so nicht betroffen).
+        vorstufe_world = _vorstufen_world(world)
+
+        # Phase 2b Schritt 3 (Rueckspeisung): das gelernte "was-ist-falsch"
+        # als schlanker Text in den Vorstufe-Kontext, BEVOR Runde 1 laeuft --
+        # nur so kann es die Routing-Entscheidung noch beeinflussen. Darf nie
+        # einen Zug kippen: own_store.gelernter_block() ist bereits intern
+        # ausfallsicher (leerer String bei jedem Fehler), hier zusaetzlich
+        # defensiv, falls store selbst die Methode (aeltere Version) nicht hat.
+        try:
+            gelernt_block = own_store.gelernter_block()
+        except Exception:
+            gelernt_block = ""
+
         # --- round 1 ---
         t0 = time.perf_counter()
         envelope = prestage.run_prestage(
-            raw_prompt=message, world=world, current_user=user_id,
+            raw_prompt=message, world=vorstufe_world, current_user=user_id,
             current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
             recent_turns=recent_turns, round_no=1,
+            hyperposition=hyperposition_readout, gelernt=gelernt_block,
         )
         prestage_ms = (time.perf_counter() - t0) * 1000.0
 
@@ -312,9 +437,10 @@ def run_chat_turn(
             suggestion = re.sub(r"[*_`\s]+$", "", suggestion)
             t0 = time.perf_counter()
             envelope2 = prestage.run_prestage(
-                raw_prompt=message, world=world, current_user=user_id,
+                raw_prompt=message, world=vorstufe_world, current_user=user_id,
                 current_user_profile=nutzerprofil, moeglichkeitsraum=erwartungsfeld,
                 recent_turns=recent_turns, round_no=2, zero_suggestion=suggestion,
+                hyperposition=hyperposition_readout, gelernt=gelernt_block,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0
             t0 = time.perf_counter()
@@ -362,6 +488,20 @@ def run_chat_turn(
             counter_hypotheses=envelope.get("counter_hypotheses", []),
             prestage_model=envelope.get("prestage_model"),
             prestage_receipt=envelope.get("prestage_receipt", {}),
+            # F1 Schritt Metakognik: durchgereicht fuer eine spaetere Persistenz
+            # (Phase 2b, store.py). record_prestage_turn nimmt **fields entgegen
+            # und ignoriert unbekannte Schluessel klaglos -- kein Crash, solange
+            # store.py die Spalte noch nicht kennt.
+            epistemik=envelope.get("epistemik", {}),
+            # Phase 2b Schritt 1 (Ergebnis-Signal): self_adapted/roh_ausgeliefert
+            # sind bereits berechnete Strukturmerkmale dieses Zuges (siehe oben);
+            # reply_text ist die tatsaechlich ausgelieferte deutsche Antwort (fuer
+            # den mechanischen Luecke-Marker-Scan in store.py); turn_started_at
+            # setzt das Zeitfenster fuer den effects/causal_episodes-Best-Effort-Blick.
+            self_adapted=self_adapted,
+            translation_raw_fallback=roh_ausgeliefert,
+            reply_text=german.get("german_translation", ""),
+            turn_started_at=turn_started_at,
         )
         translation_id = own_store.record_translation(
             turn_id=turn_id, prestage_id=prestage_id,
@@ -383,6 +523,7 @@ def run_chat_turn(
             "rounds_used": rounds_used,
             "self_adapted": self_adapted,
             "tool_selection": selected_tools or [],
+            "epistemik": envelope.get("epistemik", {}),
             "elapsed_ms": {
                 "prestage_ms": round(prestage_ms, 1),
                 "zero_ms": round(zero_ms, 1),

@@ -38,17 +38,41 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__raum_sagen",
     "mcp__clayverse__raum_rufen",
     "mcp__clayverse__raum_frei",
-    # Zero handelt nicht selbst -- es schnuert. Ohne diese zwei bleibt die
-    # Regel eine Absichtserklaerung.
-    "mcp__clayverse__paket_schnueren",
-    "mcp__clayverse__paket_lage",
+    # (Arbeitspakete entfernt 19.08.: Zero handelt jetzt direkt mit nativen Tools.)
     # Faehigkeiten kennen, ohne Schluessel zu sehen.
     "mcp__clayverse__tresor_katalog",
+    "mcp__clayverse__tresor_zeigen",
     # Ohne dieses Werkzeug ist der Korpus per Inhaltsfrage unerreichbar:
     # embedding_search liefert nur Kennungen ohne Text, der lexikalische Weg
     # nur Dateinamen. Gemessen: die Antwort stand in der Datenbank und Zero
     # sagte korrekt "unbekannt".
     "mcp__clayverse__korpus_suchen",
+    "mcp__clayverse__artikel_lesen",
+    "mcp__clayverse__dateien_suchen",
+    "mcp__clayverse__korpus_tief",
+    # ⭐ Handlungsfaehigkeit ohne Schale: lesen, suchen, aendern,
+    # veroeffentlichen -- jede Faehigkeit benannt und eingezaeunt, statt Bash.
+    "mcp__clayverse__werkbank_liste",
+    "mcp__clayverse__werkbank_lesen",
+    "mcp__clayverse__werkbank_suchen",
+    "mcp__clayverse__werkbank_aendern",
+    "mcp__clayverse__werkbank_stand",
+    "mcp__clayverse__werkbank_veroeffentlichen",
+    # Zero haelt selbst Platz auf dem Wirt -- Auftrag des Eigners 18.08.
+    "mcp__clayverse__seite_pruefen",
+    "mcp__clayverse__seite_diagnose",
+    "mcp__clayverse__speicher_lage",
+    "mcp__clayverse__speicher_aufraeumen",
+    "mcp__clayverse__speicher_rueckweg",
+    "mcp__clayverse__speicher_abschaffen",
+    # Nachgereicht 18.08.: beide standen in policy/managed-settings.json, fehlten
+    # aber hier -- die engere Liste gewinnt, also war die Freigabe wirkungslos.
+    "mcp__clayverse__bahn_faehigkeit",
+    "mcp__clayverse__bahn_lage",
+    # Ohne dieses Werkzeug gibt es keinen Weg vom Urteil eines Menschen zum
+    # Lernen des Abrufs -- die Belohnungsfunktion haette dann nur eine Quelle
+    # (verifizierte Wirkungen), und die springt fast nie an.
+    "mcp__clayverse__abruf_rueckmeldung",
 )
 
 MAX_PROMPT_CHARS = 20_000
@@ -94,6 +118,20 @@ def _systemanweisung(db_path: str, user_id: str, session_id: str) -> str:
     """Laufzeitidentitaet + Anwesenheit in EINER Datei, weil das Flag nur eine nimmt."""
     grund = Path(RUNTIME_PROMPT).read_text(encoding="utf-8")
     return grund.rstrip() + "\n\n" + _anwesenheitsblock(db_path, user_id, session_id) + "\n"
+
+
+# ⚠️ Waehlt die Vorstufe kein Werkzeug (oder nur erfundene), bekommt Zero NICHT
+# alle 38 -- das liesse ihn wild explorieren, jede Runde kostet Sekunden.
+# Stattdessen ein kleiner Satz der ueblichen Lese-Werkzeuge, mit denen sich die
+# meisten Fragen in ein, zwei Runden beantworten lassen. Gemessen: 'ZVR nummer'
+# gab tools=0 -> alle 38 -> 16s Exploration.
+_LEER_RUECKFALL = (
+    "mcp__clayverse__korpus_suchen",
+    "mcp__clayverse__menschen_profil",
+    "mcp__clayverse__artikel_lesen",
+    "mcp__clayverse__seite_diagnose",
+    "mcp__clayverse__speicher_lage",
+)
 
 
 def run_headless(
@@ -169,12 +207,38 @@ def run_headless(
     if not isinstance(caveman_prompt, str) or not caveman_prompt or len(caveman_prompt) > MAX_PROMPT_CHARS:
         raise HeadlessZeroError("invalid caveman prompt")
 
-    tools = list(tool_selection) if tool_selection else list(DEFAULT_ALLOWED_TOOLS)
-    if not tools:
-        raise HeadlessZeroError("tool selection must not be empty")
-    unknown = set(tools) - set(DEFAULT_ALLOWED_TOOLS)
-    if unknown:
-        raise HeadlessZeroError(f"tool selection outside managed policy: {sorted(unknown)}")
+    # ⭐⭐ Der dauerhafte Zero-Prozess: erst einen VORGEWAERMTEN Prozess versuchen
+    # (Boot schon bezahlt, ~2,2s gespart). Klappt es nicht -- kein warmer bereit,
+    # Fehler, kein sauberes Ergebnis -- faellt es lautlos auf den Kaltweg unten
+    # zurueck. Der Dauerprozess ist eine Abkuerzung, nie eine Verschlechterung.
+
+    if pipeline_managed:
+        try:
+            from .warm_zero import POOL as _WARM
+            _WARM.starten()
+            _warm_res = _WARM.answer(caveman_prompt, user_id=user_id,
+                                     session_id=session_id, timeout=timeout)
+            if _warm_res is not None:
+                return _warm_res
+        except Exception:
+            pass  # jeder Fehler im Warmweg -> Kaltweg
+
+    # ⚠️ Die Vorstufe ERFINDET manchmal Werkzeugnamen (gemessen: read_resource,
+    # search_wiki -- gibt es nicht). Ein erfundener Name darf NICHT den ganzen
+    # Zug toeten. Also FILTERN statt hart abweisen: unbekannte Namen fallen weg,
+    # die gueltigen bleiben. Sicher, weil ein Name, den es nicht gibt, ohnehin
+    # kein Werkzeug freischaltet -- und --allowedTools setzt die echte Grenze.
+    # Bleibt nach dem Filtern nichts, nimm die volle erlaubte Liste (Zero waehlt
+    # dann selbst), statt mit leerer Auswahl abzubrechen.
+    if tool_selection:
+        gefiltert = [t for t in tool_selection if t in DEFAULT_ALLOWED_TOOLS]
+        verworfen = sorted(set(tool_selection) - set(DEFAULT_ALLOWED_TOOLS))
+        if verworfen:
+            import sys as _sys
+            print("headless: erfundene Werkzeugnamen verworfen: " + str(verworfen), file=_sys.stderr)
+        tools = gefiltert or list(_LEER_RUECKFALL)
+    else:
+        tools = list(_LEER_RUECKFALL)
     if not Path(RUNTIME_PROMPT).is_file():
         raise HeadlessZeroError("runtime identity file missing -- cannot call headless without it")
 
@@ -188,10 +252,21 @@ def run_headless(
 
     argv = [
         "claude", "-p", caveman_prompt,
+        # ⭐ Schnelles Modell pro Runde: die harte Reasoning-Arbeit macht schon
+        # die Mistral-Vorstufe. Zeros Job ist Anweisung lesen, Werkzeug rufen,
+        # knapp melden -- dafuer ist Sonnet schnell genug, und jede agentische
+        # Runde kostet auf Opus ~4s, auf Sonnet deutlich weniger.
+        "--model", "sonnet",
         "--settings", MANAGED_SETTINGS,
         "--setting-sources", "",
-        "--tools", "",
-        "--allowedTools", *tools,
+        # ⭐ Native Werkzeuge EXPLIZIT (inkl. WebSearch/WebFetch): ohne die Liste
+        # lud der Default-Satz zwar Bash/Read, aber NICHT die Web-Tools (gemessen
+        # 19.08.: Zero sagte "kein Web-Such-Tool"). Zero handelt direkt wie
+        "--tools", "Bash,BashOutput,KillShell,Read,Write,Edit,MultiEdit,NotebookEdit,Glob,Grep,WebSearch,WebFetch,TodoWrite,Task",
+        # eine echte Claude-Code-Sitzung. Die Grenze setzt die managed
+        # permissions.allow (native + MCP) plus der PreToolUse-Zaun-Hook --
+        # NICHT mehr eine enge --allowedTools-Liste. tool_selection der
+        # Vorstufe ist jetzt nur noch Hinweis; Zero waehlt selbst.
         "--permission-mode", "dontAsk",
         "--append-system-prompt-file", _sysdatei,
         "--output-format", "json",
@@ -235,7 +310,13 @@ def run_headless(
     wall_ms = (time.perf_counter() - started) * 1000.0
 
     if cp.returncode != 0:
-        raise HeadlessZeroError(f"headless Zero exited rc={cp.returncode} stderr={cp.stderr[:500]!r}")
+        # ⚠️ stdout MUSS mit in die Meldung. Die Claude-CLI schreibt ihre
+        # Fehler ueberwiegend nach stdout, nicht nach stderr -- die alte
+        # Fassung zeigte deshalb `stderr=''` und sah aus, als sei der Prozess
+        # wortlos gestorben. Vier Testlaeufe lang war das die einzige Auskunft.
+        raise HeadlessZeroError(
+            f"headless Zero exited rc={cp.returncode} "
+            f"stderr={(cp.stderr or '')[:400]!r} stdout={(cp.stdout or '')[:900]!r}")
     try:
         envelope = json.loads(cp.stdout)
     except json.JSONDecodeError as exc:

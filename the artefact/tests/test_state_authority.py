@@ -37,7 +37,21 @@ def test_compression_has_no_hidden_lossless_turn_ledger(tmp_path):
         (first["turn_id"],),
     ).fetchone()
     provenance = json.loads(receipt["provenance"])
-    assert provenance["lossless_source_retained"] is False
+    # ⭐ Umgedreht am 18.08., und die Umkehrung ist die STRENGERE Forderung.
+    #
+    # Vorher forderte dieser Test `is False` -- also die Behauptung, die Quelle
+    # sei nicht mehr da. Zum Zeitpunkt, an dem die Quittung geschrieben wird,
+    # WAR sie aber noch da (compact hatte noch nicht ueberschrieben). Die
+    # Quittung war damit falsch-in-der-Sache und wahr-im-Wortlaut: eine
+    # unterschriebene Aussage, die jedem spaeteren Pruefer als "geprueft und
+    # sicher" gelesen haette -- fuer genau die Eigenschaft, die nicht galt.
+    #
+    # Seit die Verdichtung additiv ist, bleibt die Quelle absichtlich erhalten.
+    # Die Quittung muss das SAGEN. Eine Quittung, die Sicherheit behauptet, die
+    # nicht besteht, ist schlimmer als keine -- sie beendet das Nachfragen.
+    assert provenance["lossless_source_retained"] is True, (
+        "die Quelle bleibt absichtlich erhalten (Kausalbuch) -- die Quittung muss das "
+        "ehrlich ausweisen, statt Sicherheit zu behaupten, die nicht besteht")
     assert len(provenance["source_sha256"]) == 64
     assert provenance["source_bytes"] > 0
     db.close()

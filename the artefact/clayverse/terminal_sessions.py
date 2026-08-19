@@ -285,6 +285,10 @@ class TerminalSessionManager:
         # managed stdio server only through this sanitized process environment.
         claude_argv = [
             "claude",
+            # ⭐ Global Sonnet (Gabriel 19.08.): auch der rohe tmux-Terminal laeuft
+            # jetzt auf Sonnet, wie die Chat-Pipeline -- ein Modell ueberall,
+            # schneller pro Runde. Die harte Vorstufen-Arbeit macht ohnehin Mistral.
+            "--model", "sonnet",
             "--settings", str(self.MANAGED_SETTINGS),
             "--setting-sources", "",
             "--tools", "",

@@ -1,0 +1,56 @@
+{
+  "stand": "2026-08-19",
+  "trigger": {
+    "beschreibung": "paket() feuert, wenn FTS 0 Treffer lieferte ODER die Frage gegen ASSOZIATIVE_BEGRIFFE (clayverse.retrieval, Modul-Ebene) trifft.",
+    "begriffe_anzahl": 80
+  },
+  "achse_a_woertlich_enrich": {
+    "beschreibung": "goldsatz.json (120 Fragen), enrich-Pfad, Budget=MATCH_K(5)",
+    "n": 120,
+    "feuerrate_pct": 0.0,
+    "latenz_median_ms": 2.33,
+    "latenz_p95_ms": 14.21,
+    "latenz_mean_ms": 3.97,
+    "recall_pct": 75.8,
+    "praezision_macro": 0.1517
+  },
+  "achse_b_assoziativ_enrich": {
+    "beschreibung": "gold_assoc.json (93 Anker), enrich-Pfad, Budget=MATCH_K(5)",
+    "n": 93,
+    "feuerrate_pct": 18.3,
+    "latenz_median_ms": 1.28,
+    "latenz_p95_ms": 867.38,
+    "latenz_mean_ms": 128.52,
+    "recall_macro_pct": 7.0,
+    "any_hit_rate_pct": 7.5,
+    "full_hit_rate_pct": 6.5,
+    "praezision_macro": 0.0833,
+    "deckung_nichtleer_pct": 41.9,
+    "anker_selbstfund_pct": 98.9
+  },
+  "achse_b_assoziativ_enrich_paket_budget8": {
+    "beschreibung": "wie oben, aber paket() wird mit seinem eigenen Default-Budget (8) aufgerufen, wenn es feuert -- Realbetrieb-Referenz wie im Originalskript.",
+    "n": 93,
+    "feuerrate_pct": 18.3,
+    "latenz_median_ms": 1.54,
+    "latenz_p95_ms": 908.39,
+    "latenz_mean_ms": 140.05,
+    "recall_macro_pct": 7.9,
+    "any_hit_rate_pct": 9.7,
+    "full_hit_rate_pct": 6.5,
+    "praezision_macro": 0.0962,
+    "deckung_nichtleer_pct": 41.9,
+    "anker_selbstfund_pct": 98.9
+  },
+  "realistische_mischung": {
+    "beschreibung": "Alle 120 woertlichen + 93 assoziativen Fragen zusammen (213 gesamt) durch denselben enrich-Pfad -- das ist der Latenz-Aufschlag, den ein Normalbetrieb mit gemischten Fragen tatsaechlich traegt, nicht der Bestfall (nur woertlich) oder der Worstfall (nur assoziativ). NUR Feuerrate/Latenz (siehe _feuerrate_latenz-Docstring, warum keine Recall-Zahl).",
+    "n": 213,
+    "feuerrate_pct": 8.0,
+    "feuergruende": {
+      "assoziative_absicht": 17
+    },
+    "latenz_median_ms": 1.54,
+    "latenz_p95_ms": 587.59,
+    "latenz_mean_ms": 54.31
+  }
+}

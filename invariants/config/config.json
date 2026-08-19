@@ -1,0 +1,7 @@
+{
+  "mode": "dry_run",
+  "_comment_mode": "Only 'dry_run' is implemented by dry_run_report.py. There is no enforcing/write code path in this deployment at all -- changing this value to anything else makes the service refuse to start. Building an enforcing mode is a deliberate future decision for the owner, not a flag flip.",
+  "wiki_db_path": "/var/lib/clay/wiki.db",
+  "check_interval_seconds": 300,
+  "_comment_interval": "300s = one measurement cycle every 5 minutes. Each cycle is a handful of read-only SELECTs against wiki.db plus a couple of small writes to invariants.db's own tables."
+}

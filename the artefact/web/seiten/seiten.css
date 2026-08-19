@@ -1,7 +1,15 @@
 /* Die Seitenuebersicht. Farben und Schriften kommen aus der Schale --
-   hier steht nur, was diese Ansicht zusaetzlich braucht. */
+   hier steht nur, was diese Ansicht zusaetzlich braucht.
 
-#sn-wurzel { max-width: 1080px; margin: 0 auto; padding: calc(var(--schale-h) + 24px) 20px 60px; }
+   ⭐ Umbau 2026-08-19 (Eigner): von der endlosen aufgeklappten Liste zu
+   kompakten Bubbles in einem Raster -- viele auf einen Blick, Details klappen
+   auf Wunsch auf. Bewegung folgt dem Hausgesetz aus schale.css: Ruhe ist der
+   Normalzustand, der Riss (EntityOS.riss) ist der EINE Effekt und feuert nur
+   bei einem echten Wechsel (Hover, Auf-/Zuklappen, Kopieren) -- hier nicht neu
+   erfunden, sondern wiederverwendet. Alles andere (Eintritt, Hover-Lift,
+   Auf-/Zuklappen) ist eine stille, kurze Übergangs-Animation, keine Dauerbewegung. */
+
+#sn-wurzel { max-width: 1200px; margin: 0 auto; padding: calc(var(--schale-h) + 24px) 20px 60px; }
 
 .sn-kopf h1 { font-family: var(--schrift-marke); font-weight: 600;
   font-size: var(--s-24); margin: 0 0 4px; color: var(--text); }
@@ -14,51 +22,124 @@
   border-radius: var(--rundung); background: var(--flaeche); }
 .sn-leer p { margin: 0 0 6px; }
 .sn-matt { color: var(--matt); font-size: var(--s-13); }
+.sn-warn { color: var(--warn); }
 
-.sn-karte { margin-top: 14px; border: 1px solid var(--linie); border-radius: var(--rundung);
-  background: var(--flaeche); overflow: hidden; }
-.sn-zeile { display: flex; align-items: center; gap: 12px; padding: 14px 16px;
+/* Nur zur Barrierefreiheit sichtbar -- meldet die Kopiert-Bestaetigung auch
+   Screenreadern, ohne eine zweite sichtbare Flaeche zu brauchen. */
+.sn-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* ── Das Raster ──────────────────────────────────────────────────────── */
+.sn-liste { display: grid; grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  gap: 14px; margin-top: 18px; align-items: start; }
+
+/* ── Die Bubble ──────────────────────────────────────────────────────── */
+.sn-karte { border: 1px solid var(--linie); border-radius: var(--rundung);
+  background: var(--flaeche); overflow: hidden; opacity: 1; transform: none;
+  transition: border-color .18s ease, box-shadow .18s ease; }
+@media (prefers-reduced-motion: no-preference) {
+  .sn-karte { opacity: 0; transform: translateY(10px) scale(.97);
+    animation: sn-eintritt .42s cubic-bezier(.22,.61,.36,1) forwards;
+    animation-delay: var(--sn-verzoegerung, 0ms); }
+  .sn-karte { transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease; }
+}
+@keyframes sn-eintritt { to { opacity: 1; transform: none; } }
+
+.sn-karte:hover, .sn-karte:focus-within {
+  border-color: color-mix(in srgb, var(--signal) 38%, var(--linie));
+  box-shadow: 0 10px 26px rgba(0,0,0,.35), 0 0 0 1px color-mix(in srgb, var(--signal) 12%, transparent);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .sn-karte:hover, .sn-karte:focus-within { transform: translateY(-2px); }
+}
+
+.sn-kachel { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px;
   cursor: pointer; }
-.sn-zeile:hover { background: var(--flaeche-hoch); }
-.sn-name { font-weight: 600; color: var(--text); }
-.sn-slug { font-family: var(--schrift-mono); font-size: var(--s-13); color: var(--matt); }
-.sn-adresse { font-family: var(--schrift-mono); font-size: var(--s-13);
-  color: var(--kalt); text-decoration: none; }
-.sn-adresse:hover { text-decoration: underline; }
+.sn-kachel-kopf { display: flex; align-items: center; gap: 8px; }
+.sn-name { font-weight: 600; color: var(--text); font-size: var(--s-15);
+  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 auto; }
+.sn-pfeil { flex: 0 0 auto; color: var(--matt); display: flex; }
+.sn-pfeil svg { width: 13px; height: 13px; }
+@media (prefers-reduced-motion: no-preference) {
+  .sn-pfeil { transition: transform .22s cubic-bezier(.22,.61,.36,1); }
+}
+.sn-kachel[aria-expanded="true"] .sn-pfeil { transform: rotate(180deg); color: var(--signal); }
 
-/* ⭐ Selbst gehostet oder extern steht an JEDER Zeile -- der Unterschied
+.sn-slug { font-family: var(--schrift-mono); font-size: 12px; color: var(--matt);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sn-adresse { font-family: var(--schrift-mono); font-size: 12px; color: var(--kalt);
+  text-decoration: none; display: block; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; }
+.sn-adresse:hover, .sn-adresse:focus-visible { text-decoration: underline; }
+
+/* ⭐ Selbst gehostet oder extern steht an JEDER Bubble -- der Unterschied
    entscheidet, ob wir etwas aendern koennen. Deshalb ein Merkmal, das man
    nicht uebersieht, und nicht nur ein Wort im Fliesstext. */
 .sn-marke { font-family: var(--schrift-mono); font-size: 11px; letter-spacing: .06em;
-  padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  padding: 3px 9px; border-radius: 999px; white-space: nowrap; flex: 0 0 auto; }
 .sn-selbst { background: hsl(var(--zustand-h) var(--zustand-s) 52% / .16);
   color: var(--signal); border: 1px solid hsl(var(--zustand-h) var(--zustand-s) 52% / .4); }
 .sn-extern { background: rgba(125,131,142,.12); color: var(--matt);
   border: 1px solid var(--linie); }
 
-.sn-zahl { margin-left: auto; text-align: right; }
-.sn-zahl b { font-family: var(--schrift-mono); color: var(--text);
-  font-variant-numeric: tabular-nums; }
-.sn-zahl span { display: block; font-size: 11px; color: var(--matt); }
+.sn-kachel-fuss { display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 10px; margin-top: 2px; }
 
-.sn-funken { display: flex; align-items: flex-end; gap: 1px; height: 30px; min-width: 92px; }
-.sn-balken { width: 2px; background: var(--matt); opacity: .55; }
+.sn-funken { display: flex; align-items: flex-end; gap: 1px; height: 26px; min-width: 70px; }
+.sn-balken { width: 2px; background: var(--matt); opacity: .55; border-radius: 1px 1px 0 0; }
 .sn-balken.heute { background: var(--signal); opacity: 1; }
 
+.sn-zahl { text-align: right; flex: 0 0 auto; }
+.sn-zahl b { font-family: var(--schrift-mono); color: var(--text);
+  font-variant-numeric: tabular-nums; font-size: var(--s-15); }
+.sn-zahl span { display: block; font-size: 11px; color: var(--matt); }
+
+/* ── Das Ausklappen ──────────────────────────────────────────────────── */
+/* CSS-Grid-Kniff statt fester Hoehe oder JS-Messung: 0fr -> 1fr laesst den
+   Inhalt sein eigenes Mass mitbringen und bleibt trotzdem weich animierbar. */
+.sn-akkordeon { display: grid; grid-template-rows: 0fr; }
+@media (prefers-reduced-motion: no-preference) {
+  .sn-akkordeon { transition: grid-template-rows .32s cubic-bezier(.22,.61,.36,1); }
+}
+.sn-akkordeon.sn-offen { grid-template-rows: 1fr; }
+.sn-akkordeon-innen { overflow: hidden; min-height: 0; }
+
 .sn-tief { border-top: 1px solid var(--linie); padding: 14px 16px;
-  display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-.sn-block h3 { margin: 0 0 6px; font-size: var(--s-13); color: var(--matt);
+  display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  overflow-x: auto; }
+.sn-block { min-width: 0; }
+.sn-block h3 { margin: 0 0 6px; font-size: 12px; color: var(--matt);
   font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
 .sn-block ul { margin: 0; padding: 0; list-style: none; font-size: var(--s-13); }
-.sn-block li { display: flex; justify-content: space-between; gap: 10px;
-  padding: 2px 0; color: var(--text); }
-.sn-block li span:last-child { font-family: var(--schrift-mono); color: var(--matt);
-  font-variant-numeric: tabular-nums; }
-.sn-weg { font-size: var(--s-13); color: var(--text); line-height: 1.5; }
-.sn-warn { color: var(--warn); }
+.sn-block li { display: flex; justify-content: space-between; flex-wrap: wrap;
+  gap: 4px 10px; padding: 2px 0; color: var(--text); }
+.sn-block li span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.sn-block li span:last-child { flex: 0 0 auto; font-family: var(--schrift-mono);
+  color: var(--matt); font-variant-numeric: tabular-nums; }
+.sn-weg { font-size: var(--s-13); color: var(--text); line-height: 1.5; margin: 0; }
 
-@media (max-width: 640px) {
-  .sn-zeile { flex-wrap: wrap; }
-  .sn-funken { order: 5; }
+/* ── Die zwei Knoepfe ────────────────────────────────────────────────── */
+.sn-aktionen { grid-column: 1 / -1; order: -1; display: flex; flex-wrap: wrap;
+  gap: 8px; margin-bottom: 2px; }
+.sn-btn { font-family: var(--schrift-mono); font-size: 12px; letter-spacing: .02em;
+  padding: 7px 12px; border-radius: 8px; border: 1px solid var(--linie);
+  background: var(--flaeche-hoch); color: var(--text); text-decoration: none;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 6px; line-height: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .sn-btn { transition: background .15s ease, border-color .15s ease, color .15s ease; }
 }
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+.sn-btn svg { width: 13px; height: 13px; flex: 0 0 auto; }
+.sn-btn:hover, .sn-btn:focus-visible {
+  border-color: color-mix(in srgb, var(--signal) 50%, var(--linie));
+  color: var(--signal);
+  background: color-mix(in srgb, var(--signal) 10%, var(--flaeche-hoch));
+}
+.sn-btn-kopieren.sn-ok { color: #06120b; background: var(--signal); border-color: var(--signal); }
+
+@media (max-width: 480px) {
+  .sn-liste { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; }
+  .sn-akkordeon { transition: none; }
+}

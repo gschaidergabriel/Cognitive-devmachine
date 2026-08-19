@@ -32,6 +32,17 @@
     const ruhig = window.matchMedia &&
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // ⭐ Handy-/Schwachgeraet-Bremse (2026-08-19), dieselbe Heuristik wie in
+    // emergenz.js: ein kleiner Schirm oder wenig Kerne/RAM bekommen ein
+    // duenneres Feld. Die Anmeldung laeuft oft minutenlang unbeaufsichtigt --
+    // genau dort darf ein Handy nicht warm werden, nur weil niemand hinsieht.
+    let schwach = false;
+    try {
+      schwach = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) ||
+                (navigator.deviceMemory && navigator.deviceMemory <= 4) ||
+                Math.min(window.innerWidth, window.innerHeight) < 480;
+    } catch (e) {}
+
     let breite = 0, hoehe = 0, zellen = [], streifen = [];
 
     // Die Marken-Merkmale einmal auslesen statt Farben zu erfinden -- die
@@ -48,7 +59,7 @@
       `hsl(${ton} ${saettigung} ${helligkeit}% / ${deckung})`;
 
     function neuAufbauen() {
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const dpr = Math.min(schwach ? 1 : 2, window.devicePixelRatio || 1);
       breite = wurzel.clientWidth; hoehe = wurzel.clientHeight;
       leinwand.width = Math.max(1, Math.floor(breite * dpr));
       leinwand.height = Math.max(1, Math.floor(hoehe * dpr));
@@ -58,7 +69,7 @@
       // einem grossen Schirm sonst eine leere Wand.
       // Dichter als der erste Wurf: die Vorlage lebt davon, dass es WIMMELT
       // und einzelne Worte daraus hervorstechen.
-      const anzahl = Math.round((breite * hoehe) / 2100);
+      const anzahl = Math.round((breite * hoehe) / (schwach ? 2900 : 2100));
       zellen = [];
       for (let i = 0; i < anzahl; i++) {
         const gross = Math.random() < 0.09;
@@ -162,7 +173,7 @@
     }
 
     let laeuft = false, letzte = 0, kennung = 0;
-    const ABSTAND = 1000 / 18;   // ~18 Bilder/s. Reicht voellig und heizt nicht.
+    const ABSTAND = 1000 / (schwach ? 12 : 18);   // schwach: ~12, sonst ~18 Bilder/s. Reicht voellig und heizt nicht.
 
     function schleife(jetzt) {
       if (!laeuft) return;

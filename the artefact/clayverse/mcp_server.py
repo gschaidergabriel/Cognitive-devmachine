@@ -432,6 +432,13 @@ class ClayVerseEffectBridge:
     # Fehlermeldung -- es ist dann keines mehr. Die Schluessel selbst holt sich
     # der Serverteil (Bahnenrouter, Postfach) direkt aus dem Tresor.
 
+    def tresor_zeigen(self, tresor: str, kennung: str) -> dict:
+        from . import tresor as _t
+        try:
+            return _t.zeigen(str(tresor), str(kennung))
+        except Exception as e:
+            return {"abgewiesen": str(e)}
+
     def tresor_katalog(self, tresor: str = "api") -> dict:
         from . import tresor as _t
         try:
@@ -440,6 +447,116 @@ class ClayVerseEffectBridge:
             return {"nicht_ermittelbar": f"{type(e).__name__}: {e}"}
 
     # ── Korpus nach INHALT durchsuchen, mit Ausschnitt ────────────────────
+
+    def artikel_lesen(self, artikel_id: str) -> dict:
+        """Einen ganzen Artikel lesen -- nicht nur den 420-Zeichen-Ausschnitt.
+
+        Ohne das kann Zero nur den Anfang sehen und muss den Rest erraten.
+        Erraten ist genau das, was hier verboten ist.
+        """
+        aid = str(artikel_id or "").strip()
+        if not aid:
+            return {"fehler": "keine Artikelkennung"}
+        r = self.db.db.execute(
+            "SELECT a.id,a.titel,a.art,a.projekt,a.datum,a.herkunft,s.text "
+            "FROM artikel a LEFT JOIN artikel_suchtext s ON s.artikel_id=a.id "
+            "WHERE a.id=?", (aid,)).fetchone()
+        if r is None:
+            return {"artikel_id": aid, "nicht_gefunden": True,
+                    "hinweis": "kein Artikel mit dieser Kennung -- pruefe sie mit korpus_suchen"}
+        text = r["text"]
+        if not text:
+            import json as _j
+            md = self.db.db.execute("SELECT metadaten FROM artikel WHERE id=?", (aid,)).fetchone()
+            try:
+                mm = _j.loads(md["metadaten"] or "{}")
+                text = mm.get("text") or mm.get("inhalt") or ""
+            except Exception:
+                text = ""
+        return {"id": r["id"], "titel": r["titel"], "art": r["art"],
+                "projekt": r["projekt"], "datum": r["datum"], "herkunft": r["herkunft"],
+                "text": text or "",
+                "zeichen": len(text or ""),
+                "hinweis": ("Der volle Artikeltext. Steht hier nichts, ist der Artikel ein "
+                            "reiner Zeiger (z.B. auf eine Datei) -- dann nimm dateien_suchen.")}
+
+    def korpus_tief(self, frage: str, budget: int = 6) -> dict:
+        """Die gelernte Abruf-Maschine: Karte, Wegehierarchie, Eintrittspunkte.
+
+        Langsamer als korpus_suchen (~2s kalt, ~300ms warm), dafuer mit
+        Kartenwissen -- und JEDER Aufruf speist die Karte mit echtem Verkehr.
+        """
+        import time as _t
+        try:
+            from udb.abruf import paket as _paket
+        except Exception as e:
+            return {"nicht_verfuegbar": f"{type(e).__name__}: {e}"}
+        t0 = _t.time()
+        try:
+            # conn=self.db.db: own=False -> paket schliesst die geteilte
+            # Verbindung NICHT und die Erfolgsmarke (Kartenlernen) gelingt.
+            p = _paket.paket(str(frage), budget=max(1, min(int(budget), 12)),
+                             conn=self.db.db)
+            # ⚠️ paket() committet nur den lernen()-Schritt (Zeile 365), NICHT die
+            # Erfolgsmarken danach (Zeile 389 ff.) -- bei uebergebener Verbindung
+            # bleibt das dem Aufrufer. Ohne dieses commit() faellt der ganze
+            # Kartenlern-Ertrag beim naechsten Schliessen auf den Boden: +0 Marken.
+            try:
+                self.db.db.commit()
+            except Exception:
+                pass
+        except Exception as e:
+            return {"frage": frage, "nicht_ermittelbar": f"{type(e).__name__}: {e}",
+                    "hinweis": "die Tiefensuche scheiterte -- nimm korpus_suchen"}
+        treffer = []
+        for t in (p.get("treffer") or []):
+            if not isinstance(t, dict):
+                continue
+            treffer.append({"id": t.get("id"), "titel": t.get("titel"),
+                            "art": t.get("art"), "projekt": t.get("projekt"),
+                            "ausschnitt": (t.get("ausschnitt") or t.get("text") or "")[:420]})
+        return {"frage": frage, "treffer": treffer, "anzahl": len(treffer),
+                "ms": round((_t.time() - t0) * 1000),
+                "pulse_phase": p.get("pulse_phase"),
+                "hinweis": ("Aus der gelernten Karte, nicht aus schlichtem bm25. Fuer den "
+                            "ganzen Text eines Treffers nutze artikel_lesen mit seiner id. "
+                            "Dieser Aufruf hat die Karte mit echtem Verkehr gespeist.")}
+
+    def dateien_suchen(self, frage: str, limit: int = 6) -> dict:
+        """Volltext ueber den DATEIKORPUS (fts_index_datei, ~325k Zeilen).
+
+        ⚠️ Das ist ein anderer Korpus als korpus_suchen: dort stehen die
+        Wissensartikel, HIER der Inhalt der indizierten Dateien. Vorher war
+        dieser ganze Korpus fuer Zero unerreichbar -- kein Werkzeug oeffnete ihn.
+        """
+        import re as _re
+        worte = [w for w in _re.split(r"[^0-9A-Za-zÄÖÜäöüß]+", str(frage).lower())
+                 if len(w) > 2][:8]
+        if not worte:
+            return {"frage": frage, "treffer": [], "hinweis": "keine brauchbaren Suchworte"}
+        grenze = max(1, min(int(limit), 12))
+        aus, gesehen = [], set()
+        for modus, ausdruck in (("alle", " AND ".join(worte)), ("irgendeins", " OR ".join(worte))):
+            if len(aus) >= grenze:
+                break
+            try:
+                zeilen = self.db.db.execute(
+                    "SELECT d.id, d.titel, substr(d.text,1,420) AS ausschnitt, d.art, d.groesse "
+                    "FROM fts_index_datei f JOIN datei d ON d.id=f.rowid "
+                    "WHERE fts_index_datei MATCH ? ORDER BY bm25(fts_index_datei) LIMIT ?",
+                    (ausdruck, grenze * 2)).fetchall()
+            except Exception as e:
+                return {"frage": frage, "nicht_ermittelbar": f"{type(e).__name__}: {e}"}
+            for r in zeilen:
+                if r["id"] in gesehen or len(aus) >= grenze:
+                    continue
+                gesehen.add(r["id"])
+                aus.append({"datei": r["titel"], "art": r["art"], "bytes": r["groesse"],
+                            "ausschnitt": r["ausschnitt"], "gefunden": modus})
+        return {"frage": frage, "worte": worte, "treffer": aus, "anzahl": len(aus),
+                "hinweis": ("Ausschnitte aus dem Dateikorpus, nicht die ganze Datei. "
+                            "Fuer den vollen Text nutze werkbank_lesen mit dem Dateipfad, "
+                            "sofern er im erlaubten Bereich liegt.")}
 
     def korpus_suchen(self, frage: str, limit: int = 6) -> dict:
         """Volltext ueber die Artikel. Liefert Ausschnitte, keine Kennungen.
@@ -482,6 +599,101 @@ class ClayVerseEffectBridge:
                         "Steht hier nichts, ist es NICHT im Korpus -- sag das, statt "
                         "aus dem Titel zu schliessen, was drinstehen koennte."),
         }
+
+    # ── Rueckmeldung auf den Abruf: das Urteil erreicht das Lernen ────────
+    #
+    # ⭐ Ohne diese Tuer lernt der Abruf ausschliesslich aus verifizierten
+    # Wirkungen. Ein Gespraech ohne Wirkung -- also fast jedes -- hinterlaesst
+    # dann nichts, egal wie deutlich gesagt wird, dass die hervorgeholte
+    # Erinnerung daneben lag. Gemessen: 0 Rueckmeldungen, 0 gelernte Wegpunkte.
+
+    def abruf_rueckmeldung(self, bewertung: str, zuege: int = 1) -> dict:
+        """Bewertet die letzten Abrufe DIESER Sitzung.
+
+        ⚠️ Die Kennung des Menschen kommt aus ``self.user_id`` (geprueft ueber
+        Clerk), nie aus einem Argument. Ein Argument koennte ein Modell setzen --
+        damit waere fremdes Lernen aus einem Satz Text heraus ausloesbar.
+        """
+        from .microclay_retrieval import MicroClayRetrieval
+        try:
+            return MicroClayRetrieval(self.db).menschliche_rueckmeldung(
+                session_id=self.session_id,
+                user_id=self.user_id,
+                bewertung=str(bewertung).strip().lower(),
+                zuege=int(zuege),
+            )
+        except ValueError as e:
+            return {"abgewiesen": str(e)}
+
+    # ── Werkbank: lesen, suchen, aendern, veroeffentlichen ────────────────
+    #
+    # ⭐ Handlungsfaehig OHNE Schale. Nicht Bash geben, sondern genau die
+    # Faehigkeiten, die zum Arbeiten noetig sind -- jede benannt, jede
+    # eingezaeunt. Eine Schale gaebe alles auf einmal und liesse sich nicht
+    # einzaeunen; vier benannte Faehigkeiten schon.
+
+    def werkbank_liste(self, pfad: str = "/var/lib/clay/arbeit", tiefe: int = 1) -> dict:
+        from . import werkbank as _w
+        try: return _w.liste(pfad, tiefe)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_lesen(self, pfad: str, von: int = 1, zeilen: int = 400) -> dict:
+        from . import werkbank as _w
+        try: return _w.lesen(pfad, von, zeilen)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_suchen(self, muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> dict:
+        from . import werkbank as _w
+        try: return _w.suchen(muster, pfad, nur)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_aendern(self, pfad: str, alt: str, neu: str) -> dict:
+        from . import werkbank as _w
+        try: return _w.schreiben(pfad, alt, neu)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def seite_diagnose(self, url: str) -> dict:
+        from . import werkbank as _w
+        try:
+            return _w.seite_diagnose(url)
+        except Exception as e:
+            return {"abgewiesen": str(e)}
+
+    def seite_pruefen(self, url: str, suche: str = "") -> dict:
+        from . import werkbank as _w
+        try: return _w.seite_pruefen(url, suche)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_lage(self) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_lage()
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_rueckweg(self) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_rueckweg()
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_abschaffen(self, pfad: str) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_abschaffen(pfad)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def speicher_aufraeumen(self, nur_zeigen: bool = True) -> dict:
+        from . import werkbank as _w
+        try: return _w.speicher_aufraeumen(nur_zeigen)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_stand(self, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        from . import werkbank as _w
+        try: return _w.stand(repo)
+        except Exception as e: return {"abgewiesen": str(e)}
+
+    def werkbank_veroeffentlichen(self, nachricht: str,
+                                  repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        from . import werkbank as _w
+        try: return _w.veroeffentlichen(nachricht, repo)
+        except Exception as e: return {"abgewiesen": str(e)}
 
     # ── Bahnen: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter ──
     def bahn_faehigkeit(self, faehigkeit: str, auftrag: str, system: str = "") -> dict:
@@ -633,14 +845,111 @@ def main() -> None:
         return bridge.paket_lage()
 
     @mcp.tool(annotations=udb_ro)
+    def tresor_zeigen(tresor: str, kennung: str) -> dict:
+        """Einen einzelnen Wert aus einem Tresor NENNEN -- aber nur, wenn er eine Adresse oder ein Token ist (IMAP-Host, SMTP-Port, API-Token). ⚠️ PASSWOERTER kommen hier NIE heraus, auch nicht auf Wunsch: das ist die Regel, die der Eigner selbst gezogen hat. Fuer die Liste, was es gibt, nutze tresor_katalog."""
+        return bridge.tresor_zeigen(tresor, kennung)
+
+    @mcp.tool(annotations=udb_ro)
     def tresor_katalog(tresor: str = "api") -> dict:
         """Was an Zugaengen vorhanden ist und was jeder KANN -- Modelle, Ratengrenzen, Zweck. tresor: `api` (Maschinenschluessel mit Faehigkeitsliste) oder `zugaenge` (Anmeldungen). ⚠️ NUR der Katalog: die Schluessel selbst bekommst du nie und brauchst du nie -- der Serverteil benutzt sie fuer dich."""
         return bridge.tresor_katalog(tresor)
 
     @mcp.tool(annotations=udb_ro)
+    def artikel_lesen(artikel_id: str) -> dict:
+        """Einen GANZEN Wiki-Artikel lesen, nicht nur den Ausschnitt aus korpus_suchen. Gib die id, die korpus_suchen geliefert hat. ⭐ Nutze das, statt aus dem Anfang zu schliessen, was im Rest steht."""
+        return bridge.artikel_lesen(artikel_id)
+
+    @mcp.tool(annotations=udb_ro)
+    def korpus_tief(frage: str, budget: int = 6) -> dict:
+        """Tiefensuche ueber die GELERNTE Abruf-Karte (Wegehierarchie, Eintrittspunkte, Erkundung) statt schlichtem bm25. Langsamer (~2s kalt, ~300ms warm) -- nimm sie, wenn korpus_suchen zu wenig findet oder die Frage in die Tiefe geht. ⭐ Jeder Aufruf verbessert ausserdem die Karte, weil er sie mit echtem Verkehr speist."""
+        return bridge.korpus_tief(frage, budget)
+
+    @mcp.tool(annotations=udb_ro)
+    def dateien_suchen(frage: str, limit: int = 6) -> dict:
+        """Volltext ueber den DATEIKORPUS (~325k Zeilen indizierten Dateiinhalts) -- ein ANDERER Korpus als korpus_suchen. korpus_suchen findet Wissensartikel, dateien_suchen den Inhalt der Quelldateien. Findest du in einem nichts, versuche den anderen."""
+        return bridge.dateien_suchen(frage, limit)
+
+    @mcp.tool(annotations=udb_ro)
     def korpus_suchen(frage: str, limit: int = 6) -> dict:
         """Durchsucht den ARTIKELTEXT des Korpus und liefert AUSSCHNITTE zurueck -- fuer inhaltliche Fragen ("wie wird X bereitgestellt", "was ist die Regel fuer Y"). Anders als udb_embedding_search, das nur Kennungen ohne Text liefert. Findest du hier nichts, steht es nicht im Korpus."""
         return bridge.korpus_suchen(frage, limit)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_liste(pfad: str = "/var/lib/clay/arbeit", tiefe: int = 1) -> dict:
+        """Was liegt in einem erlaubten Verzeichnis. Startpunkt fuer jede Arbeit an Dateien."""
+        return bridge.werkbank_liste(pfad, tiefe)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_lesen(pfad: str, von: int = 1, zeilen: int = 400) -> dict:
+        """Eine Datei lesen, MIT Zeilennummern -- damit dein Beleg praezise sein kann."""
+        return bridge.werkbank_lesen(pfad, von, zeilen)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_suchen(muster: str, pfad: str = "/var/lib/clay/arbeit", nur: str = "") -> dict:
+        """Regulaerer Ausdruck ueber alle Dateien, wie grep -rn. `anzahl_gesamt` ist IMMER vollstaendig, auch wenn nur die ersten 60 Zeilen aufgefuehrt sind -- `je_datei` nennt dann jede betroffene Datei mit ihrer Zahl; fuer die Einzelzeilen einer Datei setze `pfad` auf die Datei. ⚠️ Nutze das, BEVOR du etwas aenderst: wer nur die erste Stelle sieht, haelt die Sache fuer erledigt und laesst sie anderswo stehen."""
+        return bridge.werkbank_suchen(muster, pfad, nur)
+
+    @mcp.tool(annotations=udb_write)
+    def werkbank_aendern(pfad: str, alt: str, neu: str) -> dict:
+        """Ersetzt EINE eindeutige Stelle in einer Datei. `alt` muss genau einmal vorkommen -- kommt es mehrfach vor, wird abgewiesen statt geraten. Nur in der Arbeitskopie, nie in der ausgelieferten Fassung."""
+        return bridge.werkbank_aendern(pfad, alt, neu)
+
+    @mcp.tool(annotations=udb_ro)
+    def seite_diagnose(url: str) -> dict:
+        """Warum eine eigene Seite NICHT erreichbar ist -- geschichtet (DNS -> erwartete IP -> Port 443 -> HTTPS -> echter Inhalt). ⭐ Trennt SERVER-seitig von CLIENT-seitig: ist server-seitig alles gruen und ein Mensch kommt trotzdem nicht durch, sagt das Urteil WO es liegt (Umleitung in /etc/hosts auf 127.0.0.x, Provider-DNS mit NXDOMAIN, VPN). Nutze das bei jeder Meldung \"Seite ist weg\" -- BEVOR du \"Server neu starten\" sagst."""
+        return bridge.seite_diagnose(url)
+
+    @mcp.tool(annotations=udb_ro)
+    def seite_pruefen(url: str, suche: str = "") -> dict:
+        """Nachsehen, was auf einer EIGENEN Seite wirklich steht (seimensch.net, leihmich.org, herzrad.at, *.frank.ink). `suche` ist ein regulaerer Ausdruck; steht er drin, ist die Aenderung oeffentlich angekommen. ⭐ Nutze das nach JEDEM Veroeffentlichen. ⚠️ /srv/git/seimensch.git auf diesem Wirt ist ein SPIEGEL — ein Push dorthin meldet vollen Erfolg samt Deploy-Beleg, waehrend seimensch.net von 72.61.19.188 ausgeliefert wird. Nur dieser Abruf sagt dir, was oeffentlich sichtbar ist."""
+        return bridge.seite_pruefen(url, suche)
+
+    @mcp.tool(annotations=udb_ro)
+    def speicher_lage() -> dict:
+        """Wie voll ist die Platte des Wirts, wieviel waere wegwerfbar. ⚠️ Sieh hier nach, BEVOR du etwas Grosses kopierst -- die haeufigste Ursache einer vollen Platte auf diesem Wirt sind liegengebliebene Kopien der 3,8-GB-Datenbank."""
+        return bridge.speicher_lage()
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_rueckweg() -> dict:
+        """Verzeichnis des Altbestands ins Wiki schreiben: welche Modelle liegen da, in welcher Fassung, mit Nachladebefehl. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — deshalb ist dieses Verzeichnis die Bedingung dafuer, dass etwas entfernt werden darf. Ruf das auf, BEVOR du speicher_abschaffen benutzt."""
+        return bridge.speicher_rueckweg()
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_abschaffen(pfad: str) -> dict:
+        """Einen Altbestandsposten entfernen (abgeschaffte Modelle, Frank-Reste). ⚠️ Nur Pfade, die WOERTLICH in der handgepflegten Liste auf dem Wirt stehen — alles andere wird abgewiesen, auch wenn es nach Muell aussieht. Und nur, wenn der Rueckweg schon geschrieben ist. Frag den Menschen, bevor du das benutzt: Altbestand ist nicht Muell."""
+        return bridge.speicher_abschaffen(pfad)
+
+    @mcp.tool(annotations=udb_write)
+    def speicher_aufraeumen(nur_zeigen: bool = True) -> dict:
+        """Wegwerfkopien und Bau-Zwischenlager entfernen lassen. Vorgabe ist ZEIGEN -- sieh erst, was verschwaende, dann setze nur_zeigen=false. ⚠️ Du bestimmst NICHT, was Muell ist: Muster, Mindestalter und die namentliche Liste des Unantastbaren (wiki.db, unifieddb, die Repos, die ausgelieferten Seiten) stehen auf dem Wirt und sind von hier nicht zu beeinflussen."""
+        return bridge.speicher_aufraeumen(nur_zeigen)
+
+    @mcp.tool(annotations=udb_ro)
+    def werkbank_stand(repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        """Was ist in der Arbeitskopie geaendert und noch nicht veroeffentlicht."""
+        return bridge.werkbank_stand(repo)
+
+    @mcp.tool(annotations=udb_write)
+    def werkbank_veroeffentlichen(nachricht: str, repo: str = "/var/lib/clay/arbeit/seimensch") -> dict:
+        """Committen und pushen -- der EINZIGE Weg nach draussen. ⚠️ Bei SeiMensch geht ein Push auf main SOFORT oeffentlich. Die Nachricht muss sagen WARUM, nicht nur WAS. Pruefe danach die Seite, statt Erfolg zu behaupten."""
+        return bridge.werkbank_veroeffentlichen(nachricht, repo)
+
+    @mcp.tool(annotations=udb_write)
+    def abruf_rueckmeldung(bewertung: str, zuege: int = 1) -> dict:
+        """Sag dem Abruf, ob die zuletzt hervorgeholten Erinnerungen getaugt haben.
+
+        bewertung: `geholfen` oder `daneben`.
+        zuege: wie viele der letzten Abrufe gemeint sind (1-10, Vorgabe 1).
+
+        Wirkt NUR auf die Wegpunkt-Prioren -- kein Gedaechtnisinhalt, keine
+        Wahrheit, keine Befugnis wird dadurch geaendert. Wer bewertet, steht
+        fest (angemeldete Sitzung); fremde Abrufe sind nicht erreichbar.
+
+        ⚠️ Benutze das, wenn ein Mensch dir sagt, die Erinnerung sei falsch oder
+        hilfreich gewesen. Ohne diese Rueckmeldung lernt der Abruf nur aus
+        verifizierten Wirkungen -- also fast nie.
+        """
+        return bridge.abruf_rueckmeldung(bewertung, zuege)
 
     @mcp.tool(annotations=udb_write)
     def bahn_faehigkeit(faehigkeit: str, auftrag: str, system: str = "") -> dict:

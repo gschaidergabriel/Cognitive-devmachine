@@ -118,5 +118,5 @@ def test_run_prestage_ohne_api_key_raised(monkeypatch):
     from clayverse.mistral_prestage import secrets
 
     monkeypatch.setattr(secrets, "load_free_api_keys", lambda *a, **k: {})
-    with pytest.raises(RuntimeError, match="MISTRAL_API_KEY"):
+    with pytest.raises(RuntimeError, match="no Mistral key available"):
         prestage.run_prestage(raw_prompt="hallo", round_no=1, api_key="")

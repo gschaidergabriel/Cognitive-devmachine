@@ -1,3 +1,4 @@
+import json
 from clayverse.engine import ClayVerseEngine
 from clayverse.store import UnifiedDB
 
@@ -76,12 +77,44 @@ def test_unavailable_entityos_is_denied_and_causally_reentered(tmp_path):
         assert effect["capability"] == "entityos.exec"
         assert effect["status"] == "DENIED"
 
+        # ⭐ UMGESCHRIEBEN 18.08. -- und die neue Fassung ist die STRENGERE.
+        #
+        # Vorher forderte dieser Test, dass der Ablehnungshinweis IM
+        # Assistenzzug steht. Das hiesse: der Assistenzzug wird nachtraeglich
+        # veraendert. Genau das verbietet die Regel, die in engine.py ueber
+        # diesem Weg steht ("SECURITY / CAUSALITY LAW"): die Modellantwort wird
+        # in die UnifiedDB festgeschrieben, BEVOR eine Wirkung das Tor
+        # erreichen darf -- damit ein Anbieter keine unmittelbare
+        # Handlungsvollmacht bekommt und der genaue Vorschlag beobachtbar
+        # bleibt, auch wenn die Wirkung danach abgelehnt wird oder abstuerzt.
+        #
+        # ⚠️ Ein Assistenzzug, der nachtraeglich einen Behoerdenhinweis
+        # eingesetzt bekommt, ist als Beweismittel wertlos: man kann ihm dann
+        # nicht mehr ansehen, was das Modell WIRKLICH vorgeschlagen hat.
+        # Deshalb wird hier jetzt das Gegenteil geprueft -- der Assistenzzug
+        # muss UNBERUEHRT sein -- und der Hinweis in seinem eigenen Systemzug.
         assistant = db.db.execute(
-            "SELECT content,causal_refs FROM turns WHERE turn_id=?",
+            "SELECT role,content,causal_refs FROM turns WHERE turn_id=?",
             (result["assistant_turn_id"],),
         ).fetchone()
-        assert "Requested action was not executed (entityos_unavailable)." in assistant["content"]
-        assert result["effect_id"] in assistant["causal_refs"]
+        assert assistant["role"] == "assistant"
+        assert "Requested action was not executed" not in assistant["content"], (
+            "der Assistenzzug haelt fest, was das Modell vorgeschlagen hat, und wird "
+            "nicht nachtraeglich veraendert -- sonst ist er als Beweismittel wertlos")
+        assert assistant["causal_refs"] == "[]", (
+            "er wurde geschrieben, bevor die Wirkung ueberhaupt bestand")
+
+        # Der Hinweis kommt als eigener Systemzug -- und er traegt die Wirkung,
+        # damit die Ablehnung an der Kausalkette haengt und nicht nur im Text.
+        notice = db.db.execute(
+            "SELECT role,content,causal_refs,provenance FROM turns WHERE turn_id=?",
+            (result["effect_notice_turn_id"],),
+        ).fetchone()
+        assert notice is not None, "eine abgelehnte Wirkung muss einen Hinweiszug erzeugen"
+        assert notice["role"] == "system"
+        assert "Requested action was not executed (entityos_unavailable)." in notice["content"]
+        assert result["effect_id"] in notice["causal_refs"]
+        assert json.loads(notice["provenance"])["source"] == "effect-gate"
 
         causal = db.db.execute(
             "SELECT credit,reentered,outcome_hash FROM causal_episodes WHERE causal_id=?",

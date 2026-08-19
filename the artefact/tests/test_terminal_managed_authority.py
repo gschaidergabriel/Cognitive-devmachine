@@ -26,7 +26,7 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
         {"serverCommand": ["/usr/local/bin/python", "-m", "clayverse.mcp_server"]}
     ]
     assert settings["permissions"]["disableBypassPermissionsMode"] == "disable"
-    assert settings["permissions"]["deny"] == ["Bash", "Artifact"]
+    assert settings["permissions"]["deny"] == ["Artifact"]  # Bash jetzt erlaubt; Zaun-Hook schuetzt
     assert settings["autoMemoryEnabled"] is False
     assert settings["channelsEnabled"] is False
     assert settings["crossSessionInbound"] == "refuse"
@@ -47,7 +47,7 @@ def test_managed_policy_excludes_unmanaged_hooks_permissions_and_auto_memory():
     assert settings["env"]["CLAUDE_CODE_DISABLE_CRON"] == "1"
     assert settings["env"]["CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS"] == "1"
     assert settings["env"]["CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL"] == "1"
-    assert settings["env"]["CLAUDE_CODE_SHELL_PREFIX"] == "/opt/clayverse/runtime/deny-shell"
+    assert "CLAUDE_CODE_SHELL_PREFIX" not in settings["env"]  # deny-shell-Prefix entfernt: native Tools an
     assert tuple(int(part) for part in source_lock["claude_code"]["version"].split(".")) >= (2, 1, 224)
     assert list(managed_mcp["mcpServers"]) == ["clayverse"]
     server = managed_mcp["mcpServers"]["clayverse"]

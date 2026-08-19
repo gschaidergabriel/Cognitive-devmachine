@@ -1,0 +1,51 @@
+{
+  "_comment": "EntityOS service registry for neural_immune on frank-api (systemctl SYSTEM scope, not --user). policy=restart: circuit-breaker-guarded auto-restart allowed. policy=observe: NEVER restarted automatically, only logged/tracked (for oneshot jobs that are normally inactive between timer runs, and for clayverse-verdichtung which is intentionally idle most of the time). Adjust here, not in code -- collector.py loads this file at startup (env IMMUNE_SERVICES_CONFIG overrides the path).",
+
+  "services": {
+    "clayverse-kern":       { "policy": "restart", "critical": true,  "delay": 3, "max_restarts": 20, "reset_after": 300, "tier": 0, "note": "ClayVerse-Kern -- Schicht zwischen Oberflaeche und Claude Code. Must stay running." },
+    "clayverse-puls":       { "policy": "restart", "critical": true,  "delay": 3, "max_restarts": 20, "reset_after": 300, "tier": 0, "note": "Endogener Zustands-/Kognitionszyklus. Must stay running." },
+    "clayverse-wikiarbeit": { "policy": "restart", "critical": true,  "delay": 5, "max_restarts": 10, "reset_after": 600, "tier": 0, "note": "Dauerarbeit an der Wissensbasis, Type=simple/Restart=always -- meant to run continuously, so critical=true (an 'inactive' reading here IS a real outage, not idle-by-design). Chosen as the unkritische SELF-HEALING TEST TARGET precisely because losing it briefly does not hurt EntityOS's user-facing function -- unlike clayverse-kern/puls/eos-publish." },
+    "eos-publish":          { "policy": "restart", "critical": true,  "delay": 3, "max_restarts": 20, "reset_after": 300, "tier": 0, "note": "Zeros einziger Weg nach draussen. Must stay running." },
+
+    "clayverse-verdichtung":     { "policy": "observe", "critical": false, "note": "Intentionally idle most of the time -- only works past a threshold. Do NOT restart on 'inactive'." },
+    "clayverse-eichung":         { "policy": "observe", "critical": false, "note": "Oneshot via timer, wöchentlich." },
+    "clayverse-github":          { "policy": "observe", "critical": false, "note": "Oneshot via timer, stündlich." },
+    "clayverse-karte":           { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 6h." },
+    "clayverse-kuration":        { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 10min." },
+    "clayverse-schluesselwacht": { "policy": "observe", "critical": false, "note": "Oneshot via timer, täglich." },
+    "clayverse-wache":           { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 5min." },
+    "clayverse-wirte":           { "policy": "observe", "critical": false, "note": "Oneshot via timer, täglich." },
+    "entityos-abrufkarte":       { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 30min." },
+    "entityos-abrufpolitik":     { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 15min." },
+    "entityos-abrufverfall":     { "policy": "observe", "critical": false, "note": "Oneshot via timer, täglich." },
+    "entityos-baunotizen":       { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 15min." },
+    "entityos-paketarbeiter":    { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 5min." },
+    "entityos-profile":          { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 30min." },
+    "eos-anmeldung":             { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 10min." },
+    "eos-homepage-backup":       { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 6h." },
+    "eos-speicher":              { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 30min." },
+    "eos-systeme":               { "policy": "observe", "critical": false, "note": "Oneshot via timer, alle 15s -- very frequent, expect it inactive most snapshots." }
+  },
+
+  "timers": [
+    "clayverse-eichung.timer", "clayverse-github.timer", "clayverse-karte.timer",
+    "clayverse-kuration.timer", "clayverse-schluesselwacht.timer", "clayverse-verdichtung.timer",
+    "clayverse-wache.timer", "clayverse-wirte.timer",
+    "entityos-abrufkarte.timer", "entityos-abrufpolitik.timer", "entityos-abrufverfall.timer",
+    "entityos-baunotizen.timer", "entityos-paketarbeiter.timer", "entityos-profile.timer",
+    "eos-anmeldung.timer", "eos-homepage-backup.timer", "eos-speicher.timer", "eos-systeme.timer"
+  ],
+
+  "extras": {
+    "docker_container": {
+      "name": "entityos",
+      "policy": "observe",
+      "note": "Docker RestartPolicy=unless-stopped already self-heals this. neural_immune only logs health via 'docker inspect', never restarts it (out of scope: could interrupt entityos.frank.ink)."
+    },
+    "warm_pool": {
+      "policy": "observe",
+      "process_match": "claude -p.*zero-warm-sys",
+      "note": "Not a systemd unit -- plain 'claude -p' CLI processes. neural_immune only counts and logs, never restarts (spawning is the warm-pool manager's job, not the immune system's)."
+    }
+  }
+}

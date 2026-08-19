@@ -33,11 +33,24 @@
     "CLAUDE_CODE_DISABLE_BACKGROUND_TASKS": "1",
     "CLAUDE_CODE_DISABLE_CRON": "1",
     "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "1",
-    "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL": "1",
-    "CLAUDE_CODE_SHELL_PREFIX": "/opt/clayverse/runtime/deny-shell"
+    "CLAUDE_CODE_DISABLE_OFFICIAL_MARKETPLACE_AUTOINSTALL": "1"
   },
   "permissions": {
     "allow": [
+      "Bash",
+      "BashOutput",
+      "KillShell",
+      "Read",
+      "Write",
+      "Edit",
+      "MultiEdit",
+      "NotebookEdit",
+      "Glob",
+      "Grep",
+      "WebSearch",
+      "WebFetch",
+      "TodoWrite",
+      "Task",
       "mcp__clayverse__session_state",
       "mcp__clayverse__request_effect",
       "mcp__clayverse__request_autonomy_effect",
@@ -55,18 +68,43 @@
       "mcp__clayverse__raum_sagen",
       "mcp__clayverse__raum_rufen",
       "mcp__clayverse__raum_frei",
-      "mcp__clayverse__paket_schnueren",
-      "mcp__clayverse__paket_lage",
       "mcp__clayverse__tresor_katalog",
-      "mcp__clayverse__korpus_suchen"
+      "mcp__clayverse__korpus_suchen",
+      "mcp__clayverse__werkbank_liste",
+      "mcp__clayverse__werkbank_lesen",
+      "mcp__clayverse__werkbank_suchen",
+      "mcp__clayverse__werkbank_aendern",
+      "mcp__clayverse__werkbank_stand",
+      "mcp__clayverse__werkbank_veroeffentlichen",
+      "mcp__clayverse__abruf_rueckmeldung",
+      "mcp__clayverse__speicher_lage",
+      "mcp__clayverse__speicher_aufraeumen",
+      "mcp__clayverse__speicher_rueckweg",
+      "mcp__clayverse__speicher_abschaffen",
+      "mcp__clayverse__seite_pruefen",
+      "mcp__clayverse__artikel_lesen",
+      "mcp__clayverse__dateien_suchen",
+      "mcp__clayverse__tresor_zeigen",
+      "mcp__clayverse__korpus_tief",
+      "mcp__clayverse__seite_diagnose"
     ],
     "deny": [
-      "Bash",
       "Artifact"
     ],
     "disableBypassPermissionsMode": "disable"
   },
   "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/local/bin/python -m clayverse.fence_hook",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [

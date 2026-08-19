@@ -56,8 +56,36 @@ def test_mixed_old_turn_defers_until_complete_semantic_clearance_then_collision_
 
     first = db.db.execute("SELECT * FROM turns WHERE turn_id=?", (first_id,)).fetchone()
     assert first["compression_generation"] == 5
-    assert len(first["content"].split()) <= 2
-    assert "heliotrope" not in first["content"]
+
+    # ⭐ HIER WURDE DIE ZUSICHERUNG VERSCHOBEN, NICHT AUFGEGEBEN.
+    #
+    # Vorher stand hier: `len(first["content"].split()) <= 2` und
+    # `"heliotrope" not in first["content"]` -- also die Erwartung, dass die
+    # Verdichtung den Rohtext UEBERSCHREIBT. Am 18.08. wurde `compact()`
+    # bewusst auf additiv umgebaut (Baunotiz "memory.py: stop compact() from
+    # overwriting turns.content"): `turns` ist ein fortschreibendes Kausalbuch,
+    # Wirkungen und Kausalketten zeigen hinein, und das Ueberschreiben
+    # vernichtete die einzige Kopie des Originals.
+    #
+    # Der Rohtext BLEIBT also -- und muss es. Die Datenschutzfrage ist damit
+    # nicht beantwortet, sondern nur verschoben: sie gilt jetzt dort, wo Inhalt
+    # eine Sitzungsgrenze ueberschreitet. Genau dort war sie verletzt.
+    assert first["content"] == original, (
+        "turns.content ist das Kausalbuch und wird nie ueberschrieben")
+
+    # Die eigentliche Zusicherung: der Rohtext eines verdichteten Zuges darf
+    # NICHT in die Sitzung des anderen Menschen gelangen -- auch nicht, wenn
+    # eine gemeinsame Ressource kollidiert.
+    welt = WorldAssembler(db).assemble(asid, ["repo:x"])
+    fremd = [x for x in welt.get("cross_session_collision", [])
+             if x.get("turn_id") == first_id]
+    assert fremd, "die Kollision auf repo:x muss den Zug ueberhaupt sichtbar machen"
+    for x in fremd:
+        assert "heliotrope" not in str(x.get("content", "")), (
+            "der Rohtext eines verdichteten Zuges darf nicht sitzungsuebergreifend "
+            "ausgeliefert werden -- nur die extrahierten Fragmente")
+        assert x.get("quelle_zurueckgehalten") is True
+        assert x.get("retrieval_fidelity") == "compressed_with_extracted_fragments"
     assert not db.db.execute(
         "SELECT 1 FROM durable_memory WHERE kind='source_archive' AND source_turn_id=?", (first_id,)
     ).fetchone()

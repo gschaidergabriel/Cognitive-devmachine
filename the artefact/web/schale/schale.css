@@ -58,7 +58,7 @@
   --s-12: 12px; --s-13: 13px; --s-15: 15px; --s-18: 18px;
   --s-24: 24px; --s-34: 34px; --s-56: 56px;
 
-  --schale-h: 56px;
+  --schale-h: 58px;
   --rundung: 10px;
   /* Eine Textspalte, keine Bildschirmbreite: ab etwa 820 px hoert Lesen auf und
      Absuchen faengt an. Alles, was gelesen wird, bindet sich hieran. */
@@ -127,6 +127,27 @@ body {
    die Maschine ist -- ohne dass irgendwo ein Untertitel das erklaeren muss. */
 .eos-marke-os { color: var(--signal); transition: color 700ms ease; }
 .eos-marke-zeichen { color: var(--signal); font-size: var(--s-18); line-height: 1; transition: color 700ms ease; }
+
+/* ── Das morphende Phi: das Logo. Signalgruen mit chromatischem Glitch wie der
+   Avatar, und die Ellipse ATMET -- das ist das Morphen. Ruhig, premium. ── */
+.eos-marke-phi { display: inline-flex; width: 1.05em; height: 1.28em; line-height: 1;
+                 filter: drop-shadow(0 0 5px color-mix(in srgb, var(--signal) 35%, transparent)); }
+.eos-phi { width: 100%; height: 100%; overflow: visible; }
+.eos-phi-g { fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.eos-phi-b { stroke: var(--signal); }
+.eos-phi-c { stroke: #28e6ff; mix-blend-mode: screen; opacity: .8; }
+.eos-phi-m { stroke: #ff36c0; mix-blend-mode: screen; opacity: .75; }
+.eos-phi-g ellipse { transform-box: fill-box; transform-origin: center;
+                     animation: eos-phi-atem 4.4s ease-in-out infinite; }
+.eos-phi-c { animation: eos-phi-drift-c 3.6s ease-in-out infinite; }
+.eos-phi-m { animation: eos-phi-drift-m 3.6s ease-in-out infinite; }
+@keyframes eos-phi-atem   { 0%,100% { transform: scale(1,1); } 50% { transform: scale(.9,1.06); } }
+@keyframes eos-phi-drift-c { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-.7px,.5px); } }
+@keyframes eos-phi-drift-m { 0%,100% { transform: translate(0,0); } 50% { transform: translate(.7px,-.5px); } }
+.eos-marke:hover .eos-phi-b { stroke: #fff; }
+@media (prefers-reduced-motion: reduce) {
+  .eos-phi-g, .eos-phi-c, .eos-phi-m, .eos-phi-g ellipse { animation: none !important; }
+}
 .eos-marke:hover { color: #fff; }
 
 /* ── Die zwei Punkte ─────────────────────────────────────────────────── */
@@ -282,18 +303,36 @@ body {
 
 /* ── Schmal: unter 640 px ────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  #entityos-schale { gap: 8px; padding: 0 10px; }
+  /* ⭐ Handy-Optimierung 2026-08-19 (Gabriel/Andreas): Notch/Home-Indicator ─
+     die Leiste ist "position:fixed;inset:0 0 auto 0" -- ohne Safe-Area-Zuschlag
+     sitzt sie unter der Notch, und --schale-h (das JEDE andere Seite als
+     Versatz nimmt: #chat padding-top, #anmeldung margin-top, #systeme-panel
+     top, #authError top) stimmt dann nicht mehr mit der wirklichen Hoehe
+     ueberein. Deshalb steckt der Zuschlag IN --schale-h selbst -- jede Stelle,
+     die daran haengt, zieht automatisch mit statt an zehn Stellen einzeln
+     nachzurechnen. */
+  :root { --schale-h: calc(58px + env(safe-area-inset-top, 0px)); }
+  #entityos-schale {
+    gap: 8px; padding: 0 max(10px, env(safe-area-inset-right, 0px)) 0 max(10px, env(safe-area-inset-left, 0px));
+    padding-top: env(safe-area-inset-top, 0px);
+    box-sizing: border-box;
+  }
   .eos-marke-wort { display: none; }          /* Wortmarke schrumpft auf ▚ */
-  .eos-marke-zeichen { font-size: var(--s-24); }
-  .eos-punkt { padding: 0 9px; gap: 5px; font-size: var(--s-12); letter-spacing: .03em; }
+  .eos-marke-phi { width: 1.3em; height: 1.5em; }
+  /* Tastziele: ein Daumen trifft 9x18px auf einem Handy nicht zuverlaessig.
+     44px Mindesthoehe (Apple-HIG/WCAG), ohne dass die Leiste optisch waechst --
+     der Ausgleich kommt aus weniger Aussenabstand, nicht aus mehr Hoehe. */
+  .eos-punkt { padding: 0 10px; margin: 7px 0; gap: 5px; font-size: var(--s-12);
+    letter-spacing: .03em; min-height: 44px; display: inline-flex; align-items: center; }
   .eos-punkt-symbol { display: block; }
   .eos-punkt-wort { display: none; }
   .eos-punkt-kurz { display: inline; }
   .eos-rechts { gap: 8px; }
+  .eos-nutzer { min-width: 40px; min-height: 40px; }
 }
 @media (max-width: 380px) {
-  #entityos-schale { gap: 4px; padding: 0 7px; }
-  .eos-punkt { padding: 0 6px; font-size: 11px; }
+  #entityos-schale { gap: 4px; }
+  .eos-punkt { padding: 0 7px; font-size: 11px; }
 }
 
 /* ── Untergrenze ─────────────────────────────────────────────────────── */
@@ -308,3 +347,34 @@ body {
   .eos-punkt::after { transition: none; }
   * { scroll-behavior: auto !important; }
 }
+
+
+/* ── Modern-Lift der Leiste (2026-08-19) ─────────────────────────────────
+   Gleiche Grammatik, modernere Anmutung: gerundete Pillen, weicher Hover,
+   mehr Tiefe. Als Override am Ende, damit der Ursprung erhalten und der Lift
+   in einem Stueck ruecknehmbar bleibt. */
+#entityos-schale {
+  padding: 0 20px; gap: 22px;
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--flaeche) 55%, transparent),
+    color-mix(in srgb, var(--grund) 92%, transparent));
+  backdrop-filter: blur(14px) saturate(1.12);
+  -webkit-backdrop-filter: blur(14px) saturate(1.12);
+}
+.eos-marke { gap: 10px; }
+.eos-nav { gap: 3px; margin-left: 16px; }
+/* Pille statt Unterkante: der modernere Ausdruck fuer "hier bist du". */
+.eos-punkt { padding: 0 15px; margin: 9px 0; border-radius: 10px;
+  transition: color .16s ease, background .18s ease; }
+.eos-punkt::after { display: none; }
+.eos-punkt:hover, .eos-punkt:focus-visible {
+  background: color-mix(in srgb, var(--text) 8%, transparent); }
+.eos-punkt[aria-current="page"] {
+  color: var(--text);
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--signal) 8%, transparent),
+    color-mix(in srgb, var(--signal) 20%, transparent));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--signal) 28%, transparent); }
+.eos-rechts { gap: 14px; }
+.eos-nutzer { border-radius: 50%; transition: box-shadow .2s ease; }
+.eos-nutzer:hover { box-shadow: 0 0 0 2px color-mix(in srgb, var(--signal) 42%, transparent); }

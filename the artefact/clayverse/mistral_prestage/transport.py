@@ -205,3 +205,51 @@ def gemini_chat_json(
         "response_sha256": hashlib.sha256(raw).hexdigest(),
     }
     return {"payload": payload, "receipt": receipt}
+
+
+import re as _re
+import threading as _threading
+
+_ROT_LOCK = _threading.Lock()
+_ROT_INDEX = 0
+
+# Statuslagen, bei denen ein ANDERER Schluessel helfen kann: Ratelimit und
+# voruebergehende Serverfehler. Bei 401/403 (Token kaputt) oder 4xx-Client-
+# fehlern hilft Rotation NICHT -- dann sofort durchreichen, nicht drei Tokens
+# an derselben kaputten Anfrage verbrennen.
+def _rotierbar(fehler: "TransportError") -> bool:
+    m = _re.search(r"status=(\d{3})", str(fehler))
+    if not m:
+        return True  # Netz-/Verbindungsfehler ohne Status: anderer Schluessel kann gehen
+    code = int(m.group(1))
+    return code == 429 or 500 <= code <= 599
+
+
+def mistral_chat_json_rotating(*, keys, **kw):
+    """mistral_chat_json ueber mehrere Token: Round-Robin + Failover bei 429/5xx.
+
+    keys: Liste der Mistral-Token. Jeder Aufruf startet beim naechsten (streut
+    die Last); schlaegt einer rotierbar fehl, wird der naechste probiert, bis
+    alle durch sind. Erst wenn ALLE fehlschlagen, fliegt der letzte Fehler.
+    """
+    global _ROT_INDEX
+    keys = [k for k in (keys or []) if k]
+    if not keys:
+        raise RuntimeError("no Mistral key available")
+    n = len(keys)
+    with _ROT_LOCK:
+        start = _ROT_INDEX % n
+        _ROT_INDEX = (_ROT_INDEX + 1) % n
+    letzter = None
+    for off in range(n):
+        key = keys[(start + off) % n]
+        try:
+            return mistral_chat_json(api_key=key, **kw)
+        except TransportError as e:
+            letzter = e
+            if _rotierbar(e) and off < n - 1:
+                continue  # naechsten Schluessel probieren
+            raise
+    if letzter:
+        raise letzter
+    raise RuntimeError("no Mistral key available")

@@ -60,6 +60,7 @@ services:
       # ⚠️ GENAU dieser Pfad: udb._wz sucht wortwoertlich unter
       # /opt/clayverse/werkzeug. Ein eigener Name half deshalb nicht.
       - /opt/clayverse/werkzeug:/opt/clayverse/werkzeug:ro
+      - /opt/entityos/the artefact/web:/opt/clayverse/web:ro
       # Die zwei Tresore und ihr Schluessel. SCHREIBGESCHUETZT: der Container
       # liest Katalog und Werte, angelegt und geaendert wird nur auf dem Wirt.
       # Ein Dienst, der seinen eigenen Tresor umschreiben kann, ist kein Tresor.

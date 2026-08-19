@@ -265,3 +265,77 @@ def test_feedback_is_idempotent_generation_bound_and_never_rewrites_memory(tmp_p
             )
     finally:
         db.close()
+
+
+def test_verified_outcome_survives_generation_bump(tmp_path):
+    """Die Belohnung entsteht bei der Wirkung, gebucht wird sie erst danach.
+
+    Zaehlt die Generation dazwischen hoch -- und das tut sie bei jedem Neustart --,
+    darf die Belohnung nicht verfallen. Vorher tat sie das lautlos und fuer immer.
+    """
+    db = _db(tmp_path)
+    try:
+        _add(db, "m1", "orchid procedure", subject="procedure:orchid")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel", entityos_bridge=_VerifiedEffectBridge())
+        first = life.begin("orchid procedure")
+        assert life.request_effect("entityos.exec", "retrieval-test", ["verified-outcome"])["verified"] is True
+        life.complete("done")
+
+        db.db.execute("DELETE FROM active_turns WHERE session_id='session:gabriel'")
+        db.advance_entity_generation()
+        live = db.session_generation("session:gabriel")
+        assert live != int(first["generation"])
+
+        organ = MicroClayRetrieval(db)
+        assert organ.learn_from_verified_outcomes(
+            session_id="session:gabriel", generation=live
+        ) == {"eligible": 1, "applied": 1}
+        # Die Quittung, nicht die Generation, ist der Schutz gegen doppeltes Lernen.
+        assert organ.learn_from_verified_outcomes(
+            session_id="session:gabriel", generation=live
+        ) == {"eligible": 0, "applied": 0}
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 1
+        policy = db.db.execute(
+            "SELECT capital FROM retrieval_entrypoint_policy WHERE entry_key='subject:procedure:orchid'"
+        ).fetchone()
+        assert policy is not None
+        assert float(policy["capital"]) > 0.0
+    finally:
+        db.close()
+
+
+def test_human_feedback_reaches_learning_idempotently_and_only_for_own_retrievals(tmp_path):
+    """Die Tuer fuer das Urteil eines Menschen -- vorher gab es keinen Aufrufer."""
+    db = _db(tmp_path)
+    try:
+        _add(db, "m1", "orchid procedure", subject="procedure:orchid")
+        life = TurnLifecycle(db, "gabriel", "session:gabriel")
+        life.begin("orchid procedure")
+        organ = MicroClayRetrieval(db)
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_entrypoint_policy").fetchone()[0] == 0
+
+        erst = organ.menschliche_rueckmeldung(
+            session_id="session:gabriel", user_id="gabriel", bewertung="geholfen")
+        assert erst["angewandt"] == 1
+        assert erst["wegpunkte_vorher"] == 0
+        assert erst["wegpunkte_nachher"] > 0
+
+        wieder = organ.menschliche_rueckmeldung(
+            session_id="session:gabriel", user_id="gabriel", bewertung="geholfen")
+        assert wieder["angewandt"] == 0
+        assert wieder["folgenlos"][0]["grund"] == "duplicate_receipt"
+        assert wieder["wegpunkte_nachher"] == erst["wegpunkte_nachher"]
+        assert db.db.execute("SELECT COUNT(*) FROM retrieval_feedback").fetchone()[0] == 1
+
+        # Fremde Abrufe sind unerreichbar -- die Kennung grenzt die Zeilen ein.
+        fremd = organ.menschliche_rueckmeldung(
+            session_id="session:gabriel", user_id="andreas", bewertung="daneben")
+        assert fremd["gefundene_abrufe"] == 0
+        assert fremd["angewandt"] == 0
+
+        with pytest.raises(ValueError):
+            organ.menschliche_rueckmeldung(
+                session_id="session:gabriel", user_id="gabriel", bewertung="vielleicht")
+        life.abort("test-end")
+    finally:
+        db.close()

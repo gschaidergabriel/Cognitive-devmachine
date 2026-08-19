@@ -8,6 +8,7 @@ import os
 import sqlite3
 import sys
 import time
+import uuid
 from pathlib import Path
 
 from fastapi import Request, WebSocket, WebSocketDisconnect
@@ -277,19 +278,43 @@ def _history_page(db: UnifiedDB, session_id: str, *, before_ordinal: int | None,
     # WAL-safe) to recover the German text shown live; a turn with no matching
     # row (e.g. a terminal/CLI turn, which was never caveman in the first
     # place) falls back to its own content unchanged.
-    translations: dict[str, dict] = {}
-    assistant_turn_ids = [r["turn_id"] for r in rows if r["role"] == "assistant"]
-    if assistant_turn_ids:
-        placeholders = ",".join("?" * len(assistant_turn_ids))
+    # ⭐ Achtung Fallstrick auf der Aufnahmeseite: mistral_prestage.pipeline.run_chat_turn
+    # loggt die Uebersetzung in mv_translation_log unter der ID des BENUTZER-Zugs
+    # (admission["turn_id"]), waehrend turn_lifecycle.complete() den ASSISTENTEN-Zug
+    # mit einer ANDEREN turn_id anlegt. Ein Join mv_translation_log.turn_id ==
+    # turns.turn_id (Assistent) traf darum NIE -> die History fiel still auf Zeros
+    # englischen Caveman-Rohtext (turns.content) zurueck, obwohl der Live-Pfad Deutsch
+    # zeigt. Wir stellen die Zuordnung inhaltsbasiert wieder her: m.caveman_original
+    # IST identisch mit turns.content des Assistenten (beides = zero["caveman_answer"]).
+    # Innerhalb der Sitzung bekommt jede Assistenten-Zeile die inhaltsgleiche
+    # Uebersetzung; bei mehrdeutigen Kurzantworten (z.B. zweimal "Ack.") bricht die
+    # Naehe des Benutzer-Ordinals zu (Assistent-Ordinal - 1) den Gleichstand, denn
+    # der Benutzer-Zug steht bei der Aufnahme direkt vor dem Assistenten-Zug.
+    # Ein echter Terminal/CLI-Zug ohne Uebersetzung faellt unveraendert auf seinen
+    # content zurueck.
+    translations_by_ordinal: dict[int, dict] = {}
+    assistant_rows = [r for r in rows if r["role"] == "assistant"]
+    if assistant_rows:
+        contents = list({r["content"] for r in assistant_rows})
+        placeholders = ",".join("?" * len(contents))
+        candidates: list[dict] = []
         try:
-            for r in db.db.execute(
-                f"SELECT turn_id,translation_id,caveman_original,german_translation "
-                f"FROM mv_translation_log WHERE turn_id IN ({placeholders})",
-                assistant_turn_ids,
+            for m in db.db.execute(
+                f"SELECT m.translation_id, m.caveman_original, m.german_translation, "
+                f"t.ordinal AS user_ordinal "
+                f"FROM mv_translation_log m JOIN turns t ON t.turn_id = m.turn_id "
+                f"WHERE t.session_id=? AND m.caveman_original IN ({placeholders})",
+                (session_id, *contents),
             ):
-                translations[r["turn_id"]] = dict(r)
+                candidates.append(dict(m))
         except sqlite3.OperationalError:
             pass  # translation log not created yet (no chat turn has ever run) -- not an error
+        for a in assistant_rows:
+            passend = [c for c in candidates if c["caveman_original"] == a["content"]]
+            if not passend:
+                continue
+            best = min(passend, key=lambda c: abs((c["user_ordinal"] or 0) - (a["ordinal"] - 1)))
+            translations_by_ordinal[a["ordinal"]] = best  # Ordinal ist je Sitzung eindeutig
 
     turns = []
     for r in rows:
@@ -302,7 +327,7 @@ def _history_page(db: UnifiedDB, session_id: str, *, before_ordinal: int | None,
             "caveman": None,
             "translator_receipt": None,
         }
-        tr = translations.get(r["turn_id"])
+        tr = translations_by_ordinal.get(r["ordinal"]) if r["role"] == "assistant" else None
         if tr is not None:
             entry["text"] = tr["german_translation"]
             entry["caveman"] = tr["caveman_original"]
@@ -325,6 +350,30 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             # Creating a second one here silently made that attestation impossible.
     terminals = terminals or TerminalSessionManager(state_root, os.environ.get("CLAYVERSE_WORKSPACE", "/workspace"))
     app = FastAPI(title="EntityOS", docs_url=None, redoc_url=None)
+
+    @app.middleware("http")
+    async def _statik_immer_frisch(request, call_next):
+        # ⭐ Statische Assets (schale.js/css, zero-avatar.js, emergenz.js,
+        # ...) NIE blind aus dem Browser-Cache: "no-cache" heisst NICHT
+        # "nicht cachen", sondern "vor Gebrauch revalidieren" -> 304 wenn
+        # unveraendert (billig), frisch bei jeder Aenderung. Ohne das zeigte
+        # der Browser trotz Deploy altes UI (altes Logo, alte Animation).
+        resp = await call_next(request)
+        pfad = request.url.path
+        if pfad.startswith("/web/") or pfad.startswith("/vendor/"):
+            resp.headers["Cache-Control"] = "no-cache"
+        return resp
+
+    @app.on_event("startup")
+    def _zero_vorwaermen():
+        # ⭐ Den dauerhaften Zero-Prozess-Pool schon beim Container-Start
+        # anwerfen, damit der ERSTE Zug nach einem Neustart nicht kalt ist.
+        try:
+            from .mistral_prestage.warm_zero import POOL
+            POOL.starten()
+        except Exception:
+            pass  # Vorwaermen darf den Start nie blockieren
+
     app.mount("/vendor/xterm", StaticFiles(directory="/opt/clayverse/vendor/xterm", check_dir=False), name="xterm")
     app.mount("/web", StaticFiles(directory="/opt/clayverse/web", check_dir=False), name="web")
     frontend_api_url = frontend_api_url.rstrip("/")
@@ -442,6 +491,127 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return JSONResponse({"error": "unauthorized"}, status_code=401)
         from . import seiten as _seiten
         return JSONResponse(await asyncio.to_thread(_seiten.uebersicht))
+
+    @app.get("/api/me")
+    async def me_api(request: Request):
+        # Der Ausweis-Endpunkt: NUR die zwei kanonischen Konten bekommen hier ein
+        # 200 mit ihrer user_id. Jedes andere angemeldete Clerk-Konto -- und seit
+        # die Instanz offen stand, gibt es solche -- bekommt 401. Das Frontend
+        # fragt das direkt nach der Anmeldung ab und zeigt einem Fremdkonto gar
+        # keine Oberflaeche. Reine Bestaetigung, keine Geheimnisse.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        return JSONResponse({"user_id": uid})
+
+    @app.get("/api/systeme")
+    async def systeme_api(request: Request):
+        # Dieselbe Anmeldepruefung wie /api/seiten. Zeigt den Live-Zustand der
+        # drei Tailscale-Maschinen (online, CPU/RAM/Disk) -- keine Geheimnisse,
+        # aber hinter die Anmeldung. Der Host-Sammler (systemwacht) schreibt die
+        # Datei; wir liefern sie nur aus und haengen das Alter in Sekunden an,
+        # damit das Frontend "veraltet" erkennen kann.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        if identity.clerk_map.get(str(claims.get("sub", ""))) not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        import json as _json, time as _time
+        try:
+            with open("/var/lib/clay/systeme.json", encoding="utf-8") as f:
+                d = _json.load(f)
+        except Exception:
+            return JSONResponse({"stand": 0, "systeme": [], "alter_s": None})
+        d["alter_s"] = max(0, int(_time.time()) - int(d.get("stand", 0)))
+        return JSONResponse(d)
+
+    _STEUER_SPOOL = Path("/var/lib/clay/steuer-spool")
+    _STEUER_AKTIONEN = {"start", "stop", "restart"}
+
+    @app.post("/api/dienst-steuern")
+    async def dienst_steuern(request: Request):
+        # Dieselbe Anmeldepruefung wie /api/systeme -- EXAKT dieselbe, kein
+        # eigener Weg. Dieser Container fuehrt NICHTS selbst aus (kein
+        # systemctl/docker hier drin, kein Host-Zugriff): er validiert die
+        # Anfrage nur so weit, dass offensichtlicher Unsinn sofort 400
+        # bekommt, und legt eine Anfrage in den Spool. Die einzige echte
+        # Sicherheitsgrenze ist der Host-Ausfuehrer (dienststeuerung.py) mit
+        # seiner eigenen, unabhaengigen Whitelist -- was hier steht, ist eine
+        # zusaetzliche fruehe Ablehnung, kein Ersatz dafuer.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            body = await request.json()
+        except Exception:
+            return JSONResponse({"error": "invalid json"}, status_code=400)
+        if not isinstance(body, dict):
+            return JSONResponse({"error": "invalid body"}, status_code=400)
+
+        dienst_wunsch = str(body.get("dienst", "")).strip()
+        aktion = str(body.get("aktion", "")).strip().lower()
+        if aktion not in _STEUER_AKTIONEN:
+            return JSONResponse({"error": "invalid aktion"}, status_code=400)
+        if not dienst_wunsch:
+            return JSONResponse({"error": "invalid dienst"}, status_code=400)
+
+        # Der Immunsystem-Schalter ist ein Sonderfall (kein Dienste-Zeilen-
+        # eintrag, siehe systemwacht.IMMUNSYSTEM_UNIT) -- alles andere muss
+        # ein Name ODER eine Unit aus der AKTUELLEN, host-geschriebenen
+        # Dienste-Liste sein, UND dort "steuerbar": true tragen. Beides kommt
+        # ausschliesslich aus vom Host geschriebenen Dateien, nie aus der
+        # Anfrage selbst -- die Anfrage liefert nur den gewuenschten Namen.
+        unit = None
+        if dienst_wunsch.lower() in ("immunsystem", "eos-immune", "eos-immune.service"):
+            unit = "eos-immune.service"
+        else:
+            try:
+                with open("/var/lib/clay/systeme.json", encoding="utf-8") as f:
+                    stand = json.load(f)
+            except Exception:
+                stand = {}
+            for eintrag in (stand.get("dienste") or []):
+                if not eintrag.get("steuerbar"):
+                    continue
+                if dienst_wunsch in (eintrag.get("name"), eintrag.get("unit")):
+                    unit = eintrag.get("unit")
+                    break
+
+        if not unit:
+            return JSONResponse(
+                {"error": "unknown or non-controllable dienst"}, status_code=400)
+
+        anfrage = {
+            "id": uuid.uuid4().hex,
+            "zeit": time.time(),
+            "wer": uid,
+            "dienst": dienst_wunsch,
+            "unit": unit,
+            "aktion": aktion,
+        }
+        try:
+            _STEUER_SPOOL.mkdir(parents=True, exist_ok=True)
+            zieldatei = _STEUER_SPOOL / f"{int(anfrage['zeit'] * 1000)}-{anfrage['id']}.json"
+            tmp = _STEUER_SPOOL / f".{zieldatei.name}.tmp"
+            tmp.write_text(json.dumps(anfrage, ensure_ascii=False), encoding="utf-8")
+            os.replace(tmp, zieldatei)
+        except Exception:
+            return JSONResponse({"error": "spool write failed"}, status_code=500)
+
+        return JSONResponse({"ok": True, "angenommen": {"unit": unit, "aktion": aktion}})
 
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():
@@ -702,7 +872,13 @@ window.addEventListener('load', async () => {{
                 finally:
                     busy = False
 
-                _require_auth_lease_live(auth_expires_at)
+                # KEINE Lease-Nachkontrolle hier: der Zug war bei Beginn
+                # autorisiert (Pruefung oben) UND ist via TurnLifecycle bereits
+                # in der DB. Laeuft das kurzlebige Clerk-Token waehrend eines
+                # langen Zugs ab, darf die fertige Antwort NICHT verworfen werden
+                # -- das war der Bug 'Fehler im Chat, Antwort erst nach Reload'.
+                # Die Lease-Grenze erzwingt der Schleifenkopf beim naechsten
+                # Empfang weiter (getestetes Verhalten bleibt).
                 await send_json({
                     "type": "reply",
                     "text": result["reply"],

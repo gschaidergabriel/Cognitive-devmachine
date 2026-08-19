@@ -204,9 +204,31 @@
     var marke = doc.createElement("a");
     marke.className = "eos-marke";
     marke.href = "/";
-    marke.innerHTML = '<span class="eos-marke-zeichen" aria-hidden="true">▚</span>' +
-                      '<span class="eos-marke-wort">entity<span class="eos-marke-os">OS</span></span>';
+    marke.innerHTML =
+      '<span class="eos-marke-phi" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 26" class="eos-phi">' +
+          '<g class="eos-phi-g eos-phi-c"><ellipse cx="12" cy="13" rx="6.5" ry="8.4"/><line x1="12" y1="2.4" x2="12" y2="23.6"/></g>' +
+          '<g class="eos-phi-g eos-phi-m"><ellipse cx="12" cy="13" rx="6.5" ry="8.4"/><line x1="12" y1="2.4" x2="12" y2="23.6"/></g>' +
+          '<g class="eos-phi-g eos-phi-b"><ellipse cx="12" cy="13" rx="6.5" ry="8.4"/><line x1="12" y1="2.4" x2="12" y2="23.6"/></g>' +
+        '</svg></span>' +
+      '<span class="eos-marke-wort">entity<span class="eos-marke-os">OS</span></span>';
     kopf.appendChild(marke);
+
+    // Phi-Favicon fuer den Tab -- EINE Stelle fuer alle Seiten, statt in
+    // jeder HTML-Datei ein <link>. Ein klares Phi auf dunklem, rundem Feld,
+    // lesbar bis 16px.
+    (function () {
+      var svg = "<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\'>"
+        + "<rect width=\'32\' height=\'32\' rx=\'7\' fill=\'#0b0d0e\'/>"
+        + "<g fill=\'none\' stroke=\'#2fe38a\' stroke-width=\'2.7\' stroke-linecap=\'round\'>"
+        + "<ellipse cx=\'16\' cy=\'16.5\' rx=\'7.4\' ry=\'9.6\'/>"
+        + "<line x1=\'16\' y1=\'3.4\' x2=\'16\' y2=\'29.6\'/></g></svg>";
+      var link = doc.querySelector("link[rel=\'icon\']") || doc.createElement("link");
+      link.setAttribute("rel", "icon");
+      link.setAttribute("type", "image/svg+xml");
+      link.setAttribute("href", "data:image/svg+xml," + encodeURIComponent(svg));
+      if (doc.head) doc.head.appendChild(link);
+    })();
 
     var nav = doc.createElement("nav");
     nav.className = "eos-nav";

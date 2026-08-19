@@ -1,0 +1,79 @@
+{
+  "stand": "2026-08-19",
+  "achse_a_woertlich": {
+    "beschreibung": "goldsatz.json (120 Fragen, aus seltenen Titelwoertern gebaut, unveraendert)",
+    "matched_k5": {
+      "alt_fts": {
+        "n": 120,
+        "recall_pct": 75.8,
+        "praezision_macro": 0.1517,
+        "latenz_median_ms": 2.11,
+        "latenz_p95_ms": 12.84
+      },
+      "paket": {
+        "n": 120,
+        "recall_pct": 23.3,
+        "praezision_macro": 0.0676,
+        "latenz_median_ms": 284.89,
+        "latenz_p95_ms": 906.87
+      }
+    },
+    "paket_eigener_default_budget8": {
+      "n": 120,
+      "recall_pct": 24.2,
+      "praezision_macro": 0.0374,
+      "latenz_median_ms": 286.16,
+      "latenz_p95_ms": 1011.47
+    }
+  },
+  "achse_b_assoziativ": {
+    "beschreibung": "gold_assoc.json (93 Anker, graph-abgeleitet ueber ('widerspricht', 'attacks', 'eltern_hypothese', 'stuetzt', 'related_claim_ids'))",
+    "matched_k5": {
+      "alt_fts": {
+        "n": 93,
+        "recall_macro_pct": 4.8,
+        "any_hit_rate_pct": 5.4,
+        "full_hit_rate_pct": 4.3,
+        "praezision_macro": 0.1058,
+        "deckung_nichtleer_pct": 28.0,
+        "anker_selbstfund_pct": 98.9,
+        "latenz_median_ms": 1.38,
+        "latenz_p95_ms": 1.96
+      },
+      "paket": {
+        "n": 93,
+        "recall_macro_pct": 10.6,
+        "any_hit_rate_pct": 11.8,
+        "full_hit_rate_pct": 9.7,
+        "praezision_macro": 0.0591,
+        "deckung_nichtleer_pct": 100.0,
+        "anker_selbstfund_pct": 96.8,
+        "latenz_median_ms": 499.17,
+        "latenz_p95_ms": 1225.96
+      }
+    },
+    "paket_eigener_default_budget8": {
+      "n": 93,
+      "recall_macro_pct": 32.3,
+      "any_hit_rate_pct": 34.4,
+      "full_hit_rate_pct": 29.0,
+      "praezision_macro": 0.0857,
+      "deckung_nichtleer_pct": 100.0,
+      "anker_selbstfund_pct": 96.8,
+      "latenz_median_ms": 527.47,
+      "latenz_p95_ms": 1274.48
+    },
+    "alt_fts_bei_k8_diagnostisch": {
+      "hinweis": "CORPUS_MAX_HITS ist in retrieval.py auf 5 hartcodiert -- k=8 ist hier NUR eine Diagnose, ob mehr Treffer allein die Luecke schliessen wuerde, kein realer Produktionspfad.",
+      "n": 93,
+      "recall_macro_pct": 4.8,
+      "any_hit_rate_pct": 5.4,
+      "full_hit_rate_pct": 4.3,
+      "praezision_macro": 0.0978,
+      "deckung_nichtleer_pct": 28.0,
+      "anker_selbstfund_pct": 98.9,
+      "latenz_median_ms": 1.36,
+      "latenz_p95_ms": 2.03
+    }
+  }
+}

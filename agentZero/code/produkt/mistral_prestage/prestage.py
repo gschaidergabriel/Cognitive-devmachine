@@ -13,7 +13,7 @@ from . import secrets, transport
 # reasoning broadly so the rest of the pipeline can be cheap. mistral-medium
 # is the right tier for this job; mistral-small stays right for the cheap
 # translator (translator.py, unchanged).
-PRESTAGE_MODEL = "mistral-medium-latest"
+PRESTAGE_MODEL = "mistral-small-latest"  # 19.08.: medium war 12-60s auf dem 12k-Kontext, small ~1s
 
 # F74's negotiation loop, hard-countered: Zero may ask for a better package
 # exactly once (round 1). If round 2's revised package still doesn't work,
@@ -133,6 +133,17 @@ part of the wiki belongs to them), and the entity's own last up to 3 turns (own_
 hypotheses and counter-hypotheses that correlate with this request. If recent turns don't \
 support a real hypothesis, say so in watch_out instead of inventing one.
 
+You are also given `hyperposition` in CONTEXT: a CONSERVATIVE, SET-VALUED world-model readout, \
+computed only over durable_memory entries that are EXPLICITLY linked by a shared relation \
+(relation_key/predicate) -- each entry is one relation together with an ARRAY of coexisting \
+alternative facets (each facet has its own value and herkunft/provenance), never a single \
+settled fact. Use it as a world model to sharpen intent and hypotheses: if it names a relation \
+with 2+ facets, that IS a live ambiguity in the world -- surface it in watch_out and let it \
+inform hypotheses/counter_hypotheses, do NOT silently pick one facet as the answer. It never \
+carries truth or effect authority (`truth_promoted`/`effect_authority` are always false), so \
+treat every facet as one POSSIBLE state, never as fact, whenever more than one is present. An \
+empty `hyperposition` means no explicit relation was found -- do not invent one.
+
 From all of that you write ONE token-efficient prompt in CAVEMAN ENGLISH (short words, drop \
 articles where you can, no filler, imperative mood) that Zero will answer instead of the \
 human's original words. It must carry: tool-use selection -- and tool_selection MUST be a subset of the exact names in CONTEXT.available_tools. NEVER invent a tool name (measured failure: read_resource, search_wiki -- neither exists). If no listed tool fits, leave tool_selection empty. ⭐ KEEP tool_selection MINIMAL -- usually EXACTLY ONE tool, the single most relevant. Every extra tool is a separate slow agentic round for Zero (~4s each), so 'might be useful' is NOT a reason to add one. Measured waste: 'how full is disk' selected speicher_lage AND menschen_profil AND wiki_zuordnung -- only speicher_lage was needed, the other two tripled the latency. Pick the fewest tools that actually answer THIS question; prefer one. \
@@ -187,6 +198,10 @@ def build_context(
     recent_turns: list[dict[str, Any]] | None,
     zero_suggestion: str | None,
     available_tools: list[str] | None = None,
+    # Set-valued world-model readout from HyperpositionProjector.from_world(),
+    # computed by the caller over the FULL (untrimmed) world -- see pipeline.py.
+    # None/[] is a legitimate state (no explicit relation found), not a fault.
+    hyperposition: list[dict[str, Any]] | None = None,
 ) -> str:
     return json.dumps(
         {
@@ -203,6 +218,7 @@ def build_context(
             or {"status": "NO_PROFILE", "note": "profile tables empty -- say so, do not guess"},
             "raw_prompt": raw_prompt,
             "world": world or {},
+            "hyperposition": hyperposition or [],
             "recent_turns": (recent_turns or [])[-3:],
             "connected_systems": connected_systems
             or {"status": "NOT_WIRED", "note": "no connected-systems registry exists yet -- see M5/gap report"},
@@ -227,6 +243,7 @@ def run_prestage(
     zero_suggestion: str | None = None,
     model: str = PRESTAGE_MODEL,
     api_key: str | None = None,
+    hyperposition: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Run the pre-stage for one round. Returns the caveman-English directive envelope.
 
@@ -269,6 +286,7 @@ def run_prestage(
         recent_turns=recent_turns,
         zero_suggestion=zero_suggestion,
         available_tools=_tools,
+        hyperposition=hyperposition,
     )
     result = transport.mistral_chat_json_rotating(
         keys=keys,

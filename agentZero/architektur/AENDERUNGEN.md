@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-19T14:41:12Z aus drei Repos. 473 Eintraege.
+Automatisch erzeugt 2026-08-19T15:11:11Z aus drei Repos. 477 Eintraege.
 
 ## architektur (15)
 
@@ -196,10 +196,20 @@ Automatisch erzeugt 2026-08-19T14:41:12Z aus drei Repos. 473 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (233)
+## bau (237)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-19T15:09 | entityos | `b1c7e038398b` | EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen |
+| 2026-08-19T15:09 | unifieddb | `dabe10f24aec` | EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen |
+| 2026-08-19T15:08 | unifieddb | `50e521e78d3f` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
+| 2026-08-19T15:08 | entityos | `280c628447ed` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
+| 2026-08-19T15:08 | clay | `7edb9faf4713` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
+| 2026-08-19T15:01 | entityos | `cb8987d383d5` | EOS-Chronik 2026-08-19 15:01:57 +0000 — entityos: 1 Aenderungen |
+| 2026-08-19T15:01 | unifieddb | `6e92b7a1c079` | EOS-Chronik 2026-08-19 15:01:53 +0000 — unifieddb: 1 Aenderungen |
+| 2026-08-19T14:59 | entityos | `9da3ae0a3874` | EOS-Chronik 2026-08-19 14:59:39 +0000 — entityos: 12 Aenderungen |
+| 2026-08-19T14:59 | clay | `d0ea59aabbaa` | EOS-Chronik 2026-08-19 14:59:35 +0000 — clayverse: 4 Aenderungen |
+| 2026-08-19T14:59 | unifieddb | `999c886bfec7` | EOS-Chronik 2026-08-19 14:59:31 +0000 — unifieddb: 16 Aenderungen |
 | 2026-08-19T14:29 | entityos | `faa947ce4c30` | Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben) |
 | 2026-08-19T14:29 | entityos | `1834b4bda6f7` | Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module |
 | 2026-08-18T15:17 | entityos | `1a09c75938d9` | Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden |
@@ -250,14 +260,4 @@ Automatisch erzeugt 2026-08-19T14:41:12Z aus drei Repos. 473 Eintraege.
 | 2026-08-18T04:23 | entityos | `62f228f6f988` | receipt(go): bind autonomy supervisor loop source convergence |
 | 2026-08-18T04:22 | entityos | `2056309a90a4` | docs(clayverse): specify bounded autonomy supervisor activation gate |
 | 2026-08-18T04:21 | entityos | `7b2201d7e146` | feat(clayverse): add same-process autonomy pulse lifecycle |
-| 2026-08-18T04:20 | entityos | `e0b711c7294c` | ci(clayverse): add autonomy pulse integration guard |
-| 2026-08-18T04:15 | entityos | `2b1b44902535` | feat(clayverse): add in-process bounded autonomy pulse |
-| 2026-08-18T04:12 | entityos | `44509accc612` | feat(clayverse): inject autonomy only into detached idle Claude pane |
-| 2026-08-18T04:07 | entityos | `45a6e219fe92` | feat(clayverse): add transient terminal activity arbiter |
-| 2026-08-18T04:05 | entityos | `e7db712b051d` | feat(clayverse): route typed goal commands through human hook |
-| 2026-08-18T04:04 | entityos | `a5c7a30da957` | feat(clayverse): add explicit owner goal ack and cancel commands |
-| 2026-08-18T04:02 | entityos | `38a48ba31db6` | feat(clayverse): bind one-shot autonomy dispatch into terminal hooks |
-| 2026-08-18T04:00 | entityos | `52ba9087dd8f` | feat(clayverse): add one-shot autonomy dispatch lease |
-| 2026-08-18T03:58 | entityos | `94218cedfb93` | Zeros Abruf erreicht endlich das Herz |
-| 2026-08-18T03:58 | entityos | `263882a44abb` | feat(clayverse): compile autonomy planning into typed steps |
 

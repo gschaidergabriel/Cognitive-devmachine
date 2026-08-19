@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-19T14:41:13Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-19T15:11:12Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -15,28 +15,28 @@ Wege gesamt: **352**
 | Rang | Anzahl |
 |---|---|
 | tunnel | 6 |
-| autobahn | 209 |
-| langsame strasse | 74 |
-| schnellstrasse | 63 |
+| autobahn | 244 |
+| langsame strasse | 62 |
+| schnellstrasse | 40 |
 
-Oberes Zehntel haelt 0.149 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
+Oberes Zehntel haelt 0.136 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
 
 ## Staerkste Wege
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 525 | 525 |
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 458 | 458 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 348 | 348 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 328 | 328 |
-| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 383 | 383 |
-| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 271 | 271 |
-| 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 1.0 | 187 | 187 |
-| trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 1.0 | 96 | 96 |
-| 20260810T2024p0700-chatgpt-secondary-grt-commutator | H1-ALIEN-SYMPLECTIC | None | autobahn | 1.0 | 74 | 74 |
-| trigger_runs-q23-q23-20260810T224100p0700-chatgpt-secondary-RUN_MANIFEST.json | CH-Q23-DUPLICATE-ENCODER-WINS-01 | None | autobahn | 1.0 | 60 | 60 |
-| C-AUDIT-001 | C-LOOP-003 | geschwister_datei | autobahn | 0.999 | 56 | 56 |
-| 20260811T1405p0700_CLAYCODE_FIRST_EXECUTABLE_SUBSTRATE_AND_MEASURED_ROADMAP | C-CLAYCODE-001 | None | autobahn | 0.999 | 54 | 54 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 601 | 601 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 538 | 538 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 396 | 396 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 364 | 364 |
+| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 303 | 303 |
+| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 391 | 391 |
+| 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 1.0 | 249 | 249 |
+| trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 1.0 | 140 | 140 |
+| 20260810T2024p0700-chatgpt-secondary-grt-commutator | H1-ALIEN-SYMPLECTIC | None | autobahn | 1.0 | 96 | 96 |
+| H-Q23-PAR-004 | CH-Q23-PAR-004 | attacks | autobahn | 1.0 | 90 | 90 |
+| trigger_runs-q23-q23-20260810T224100p0700-chatgpt-secondary-RUN_MANIFEST.json | CH-Q23-DUPLICATE-ENCODER-WINS-01 | None | autobahn | 1.0 | 86 | 86 |
+| CH-Q23-DUPLICATE-ENCODER-WINS-01 | CH-Q23-MERGER-LOSS-01 | geschwister_datei | autobahn | 1.0 | 80 | 80 |
 
 ## Warum das Verdikt so bleibt, wie es ist
 

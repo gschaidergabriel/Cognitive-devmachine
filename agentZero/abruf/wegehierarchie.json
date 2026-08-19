@@ -1,133 +1,133 @@
 {
-  "erzeugt": "2026-08-19T14:41:13Z",
+  "erzeugt": "2026-08-19T15:11:12Z",
   "lage": {
-    "oberes_zehntel_haelt": 0.149,
+    "oberes_zehntel_haelt": 0.136,
     "raenge": {
-      "autobahn": 209,
-      "langsame strasse": 74,
-      "schnellstrasse": 63,
+      "autobahn": 244,
+      "langsame strasse": 62,
+      "schnellstrasse": 40,
       "tunnel": 6
     },
     "urteil": "GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts",
     "wege": [
       {
         "art": "geschwister_datei",
-        "getragen": 525,
+        "getragen": 601,
         "guete": 1.0,
         "nach": "C-AUDIT-002",
-        "nutzung": 525,
+        "nutzung": 601,
         "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 458,
+        "getragen": 538,
         "guete": 1.0,
         "nach": "C-AUDIT-003",
-        "nutzung": 458,
+        "nutzung": 538,
         "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 348,
+        "getragen": 396,
         "guete": 1.0,
         "nach": "C-AUDIT-004",
-        "nutzung": 348,
+        "nutzung": 396,
         "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 328,
+        "getragen": 364,
         "guete": 1.0,
         "nach": "C-AUDIT-005",
-        "nutzung": 328,
+        "nutzung": 364,
+        "rang": "tunnel",
+        "von": "C-AUDIT-001"
+      },
+      {
+        "art": "geschwister_datei",
+        "getragen": 303,
+        "guete": 1.0,
+        "nach": "C-AUDIT-007",
+        "nutzung": 303,
         "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": "geschwister_verzeichnis",
-        "getragen": 383,
+        "getragen": 391,
         "guete": 1.0,
         "nach": "ledgers-NEGATIVE_RESULTS.jsonl",
-        "nutzung": 383,
-        "rang": "tunnel",
-        "von": "C-AUDIT-001"
-      },
-      {
-        "art": "geschwister_datei",
-        "getragen": 271,
-        "guete": 1.0,
-        "nach": "C-AUDIT-007",
-        "nutzung": 271,
+        "nutzung": 391,
         "rang": "tunnel",
         "von": "C-AUDIT-001"
       },
       {
         "art": null,
-        "getragen": 187,
+        "getragen": 249,
         "guete": 1.0,
         "nach": "atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json",
-        "nutzung": 187,
+        "nutzung": 249,
         "rang": "autobahn",
         "von": "20260810T2024p0700-chatgpt-secondary-grt-commutator"
       },
       {
         "art": null,
-        "getragen": 96,
+        "getragen": 140,
         "guete": 1.0,
         "nach": "trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md",
-        "nutzung": 96,
+        "nutzung": 140,
         "rang": "autobahn",
         "von": "trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json"
       },
       {
         "art": null,
-        "getragen": 74,
+        "getragen": 96,
         "guete": 1.0,
         "nach": "H1-ALIEN-SYMPLECTIC",
-        "nutzung": 74,
+        "nutzung": 96,
         "rang": "autobahn",
         "von": "20260810T2024p0700-chatgpt-secondary-grt-commutator"
       },
       {
+        "art": "attacks",
+        "getragen": 90,
+        "guete": 1.0,
+        "nach": "CH-Q23-PAR-004",
+        "nutzung": 90,
+        "rang": "autobahn",
+        "von": "H-Q23-PAR-004"
+      },
+      {
         "art": null,
-        "getragen": 60,
+        "getragen": 86,
         "guete": 1.0,
         "nach": "CH-Q23-DUPLICATE-ENCODER-WINS-01",
-        "nutzung": 60,
+        "nutzung": 86,
         "rang": "autobahn",
         "von": "trigger_runs-q23-q23-20260810T224100p0700-chatgpt-secondary-RUN_MANIFEST.json"
       },
       {
         "art": "geschwister_datei",
-        "getragen": 56,
-        "guete": 0.999,
-        "nach": "C-LOOP-003",
-        "nutzung": 56,
+        "getragen": 80,
+        "guete": 1.0,
+        "nach": "CH-Q23-MERGER-LOSS-01",
+        "nutzung": 80,
         "rang": "autobahn",
-        "von": "C-AUDIT-001"
-      },
-      {
-        "art": null,
-        "getragen": 54,
-        "guete": 0.999,
-        "nach": "C-CLAYCODE-001",
-        "nutzung": 54,
-        "rang": "autobahn",
-        "von": "20260811T1405p0700_CLAYCODE_FIRST_EXECUTABLE_SUBSTRATE_AND_MEASURED_ROADMAP"
+        "von": "CH-Q23-DUPLICATE-ENCODER-WINS-01"
       }
     ]
   },
   "pruefung": {
     "bei_gleichverteilung": 0.099,
     "hinweis": "Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.",
-    "oberes_zehntel_haelt": 0.149,
+    "oberes_zehntel_haelt": 0.136,
     "raenge": {
-      "autobahn": 209,
-      "langsame strasse": 74,
-      "schnellstrasse": 63,
+      "autobahn": 244,
+      "langsame strasse": 62,
+      "schnellstrasse": 40,
       "tunnel": 6
     },
     "urteil": "GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts",

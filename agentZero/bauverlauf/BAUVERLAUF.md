@@ -1,12 +1,192 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T14:41:12Z. 860 Commits aus vier Repos, davon 250 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-19T15:11:11Z. 867 Commits aus vier Repos, davon 260 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-19
+
+### EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen
+
+`b1c7e038398b` · entityos · 15:09 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  eval/retrieval_nl_eval_ergebnis.json
+  udb-backup/udb_backup.py
+
+Zeit: 2026-08-19T15:09:39+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen
+
+`dabe10f24aec` · unifieddb · 15:09 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  system/frank-api-vps/etc/clayverse/freie-zugaenge.env.vorlage
+
+Zeit: 2026-08-19T15:09:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 1
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
+
+### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
+
+`50e521e78d3f` · unifieddb · 15:08 UTC · ClayVerse
+
+```
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
+
+### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
+
+`280c628447ed` · entityos · 15:08 UTC · BACK agent
+
+```
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
+
+### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
+
+`7edb9faf4713` · clay · 15:08 UTC · ClayVerse
+
+```
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+```
+
+### EOS-Chronik 2026-08-19 15:01:57 +0000 — entityos: 1 Aenderungen
+
+`cb8987d383d5` · entityos · 15:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  eval/retrieval_fair_eval_enrich.py
+
+Zeit: 2026-08-19T15:01:57+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 15:01:53 +0000 — unifieddb: 1 Aenderungen
+
+`6e92b7a1c079` · unifieddb · 15:01 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  _eos_chronik_test.md
+
+Zeit: 2026-08-19T15:01:53+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 1
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 14:59:39 +0000 — entityos: 12 Aenderungen
+
+`9da3ae0a3874` · entityos · 14:59 UTC · BACK agent
+
+```
+Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
+
+  .gitignore
+  eos-demo/eos-demo-dispatch.sh
+  eos-demo/eos-screenshot.sh
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/reality_layer.py
+  the artefact/clayverse/retrieval.py
+  the artefact/web/chat/demo-bilder/andreas-test.png
+  the artefact/web/chat/demo-bilder/eos-demo-out.png
+  the artefact/web/chat/demo-bilder/zero-trigger-test.png
+  the artefact/web/chat/index.html
+  udb-backup/config/udb_backup.conf
+  udb-backup/udb_backup.py
+
+Zeit: 2026-08-19T14:59:39+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 12
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 14:59:35 +0000 — clayverse: 4 Aenderungen
+
+`d0ea59aabbaa` · clay · 14:59 UTC · ClayVerse
+
+```
+Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
+
+  .gitignore
+  runtime/CLAUDE.md
+  runtime/deny-shell
+  werkzeug/vorprozessor.py
+
+Zeit: 2026-08-19T14:59:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 4
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 14:59:31 +0000 — unifieddb: 16 Aenderungen
+
+`999c886bfec7` · unifieddb · 14:59 UTC · ClayVerse
+
+```
+Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
+
+  .gitignore
+  _zulauf-2026-08-16/ABCHLUSSBERICHT_2026-08-16.md
+  _zulauf-2026-08-16/LUECKE_6_FIXES_2026-08-16.md
+  _zulauf-2026-08-16/NEUROPEDIA_INTEGRATION.md
+  _zulauf-2026-08-16/NVIDIA_EMBEDDING_PLAN.md
+  _zulauf-2026-08-16/SESSION_2026-08-16_2ND_PART.md
+  _zulauf-2026-08-16/goldsatz_halb_B_mine.json
+  _zulauf-2026-08-16/udb/abruf/feuerschneise.py
+  _zulauf-2026-08-16/udb/abruf/memory_entitaet.py
+  _zulauf-2026-08-16/udb/abruf/neuropedia.py
+  _zulauf-2026-08-16/udb/abruf/nvidia_embedding.py
+  _zulauf-2026-08-16/udb/cli.py
+  udb/abruf/_bau_gold_uebersetzer.py
+  udb/abruf/uebersetzer_gold.json
+  udb/abruf/uebersetzer_messen.py
+  udb/abruf/uebersetzer_messung.json
+
+Zeit: 2026-08-19T14:59:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 16
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben)
 
@@ -4327,410 +4507,6 @@ fuer den Nutzen des Zustandssystems haben.
 
 DIE LERNINGS ALS REGELN R1 bis R4, und sie gehoeren nach F42 selbst ins Modul.
 Eine Regel, die nur im Text steht, ist noch nicht gebaut.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F43 DER OBERSTE ZU LOESENDE FEHLER: Kohaerenz ohne Deckung
-
-`109fb17fd23f` · clay · 07:03 UTC · ClayVerse
-
-```
-Steht ueber allen anderen Befunden. Jeder andere ist ein Einzelfall davon.
-Auch ganz oben in WEITERMACHEN.md eingesetzt.
-
-ACHTMAL an einem Tag belegt: falscher Auftrag an Instanz 2, semantisch falsches
-Drei-Knoten-Raft, veraltete Zahlen in drei Auftraegen, selbst gebaut statt
-delegiert, Wochenpensum geschaetzt statt gemessen, Gabriels Hypothese als
-Diagnose etikettiert, fuenfte veraltete Zahl (21 gegen 12), und die Schwelle
-gelesen aber nicht gebunden.
-
-DIE URSACHE IST EINE: ich erzeuge plausible Struktur schneller, als sie geprueft
-werden kann. Jede Sache sah beim SCHREIBEN richtig aus. Nicht Schlamperei,
-sondern Kohaerenz ohne Deckung. Ein schlampiger Text faellt auf, ein
-kohaerenter ungedeckter wird geglaubt, auch vom Verfasser.
-
-RATENPROBLEM: Erzeugung schnell, Pruefung langsam. Und es skaliert falsch
-herum - mehr Faehigkeit heisst mehr Erzeugung, nicht mehr Pruefung. Ein
-besseres Modell macht das Problem GROESSER.
-
-ES IST ENGINEERING, UND DIE FORSCHUNGSENTITAET BEWEIST ES: CLAIMS mit status
-und Falsifikator, Schemapruefung, research-identity-guard, 20 Tore je PR mit
-Urteil je SHA, update-branch dann gemessen (0 auf 6 von 6 gruen), EffectGate
-Paragraph 9 model confidence cannot mint authority. Das sind Mechanismen, keine
-Regeln - genau der Unterschied, der heute achtmal fehlte.
-
-WARUM ES TROTZDEM PASSIERTE: diese Mechanismen greifen IN der Forschungsentitaet.
-Nicht in einem Gespraech, nicht in einem Auftrag, nicht in einem
-Bauplan-Absatz. Genau dort entstanden alle acht Fehler. Die Deckung endet an
-der Grenze der Entitaet, und ClayVerse arbeitet ueberwiegend ausserhalb.
-
-FUENF PFLICHTEN MIT VORRANG: Herkunft E/B/M ueberall auch in Auftraegen; jede
-Behauptung mit Falsifikator; der Pruefende ist nicht der Verfasser (der
-eigentliche Ertrag von F30); DECKUNGSQUOTE messen als Anteil M an den
-tragenden Aussagen (gibt es heute nicht, ist zu bauen); Mechanik statt Text.
-
-PRUEFSATZ: ist diese Aussage gedeckt, und wodurch. Lautet die Antwort sie
-klingt richtig, ist sie es nicht.
-
-Dieser Abschnitt selbst ist [B] - eine Auswertung von acht Faellen an EINEM
-Tag, kein Nachweis ueber Zeit. Falsifikator mitgeliefert.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F42 VORRANG: gemessener Wert ohne Bindung an die Handlung
-
-`25561253ae5e` · clay · 07:01 UTC · ClayVerse
-
-```
-Eigner: wir sind bei 93 Prozent, wieso Uebergabe. Ab 94 sollst du sie machen,
-nicht ab 93. Und: erörtere das Problem und schreibe es als
-Priority-Loesungsproblem fuer ClayVerse auf.
-
-DAS IST NICHT F29. Dort habe ich das Messgeraet nicht benutzt. Hier habe ich es
-benutzt, den Wert gelesen, ausgegeben, sogar den Abstand zur Schwelle
-gerechnet - und dann trotzdem nach Gefuehl gehandelt. Eine Messung, die keine
-Handlung ausloest oder sperrt, ist Zierde. Das ist die schlimmere Klasse, weil
-sie nach Empirie AUSSIEHT.
-
-DREI TEILFEHLER: Messung ohne Bindung (Vergleich nicht als Bedingung
-ausgefuehrt). Vorwegnahme der Schwelle (92 und 93 als praktisch 94 behandelt,
-und Aufrunden verschiebt jede Schwelle in die bequemere Richtung). Ankuendigung
-statt Handlung (dreimal die Uebergabe angekuendigt statt weiterzuarbeiten).
-
-VORRANG FUER CLAYVERSE, WEIL ES AUS SCHWELLEN BESTEHT: Kontingentbuch mit
-Anteil 1.0 und 429-Lernkurve, Wartesperre mit 54 s Herzschlagalter,
-Signifikanz groesser als die Streuung, Verbotsliste hoechstens drei,
-Praeprozessor Anzahl Moeglichkeiten klein. Fuenf Schwellen, alle stehen heute
-als Vorsatz da, nicht als Tor.
-
-DAS GEGENBEISPIEL STEHT SCHON DANEBEN: clay-kognition.slice haelt 15,00 Prozent
-gemessen, und geht nie verloren, weil die Schwelle im Kernel liegt und nicht im
-Kopf. Niemand muss sich erinnern, niemand kann nah dran mit erreicht
-verwechseln. Das ist die Bauform, alles andere ist ein Versprechen.
-
-LOESUNGSMUSTER: jede Schwelle bekommt ein benanntes Tor als Funktion; kein
-Bauteil traegt eine Schwelle als Konstante in Text oder Prompt, es RUFT das
-Tor; das Tor liest frisch beim Aufruf; es gibt eine ENTSCHEIDUNG zurueck, keine
-Zahl (wer eine Zahl zurueckgibt, ueberlaesst den Vergleich dem Aufrufer, und
-genau dort ging er verloren); es protokolliert Wert, Schwelle und Urteil; wo
-moeglich in die Mechanik statt in den Code.
-
-PRUEFSATZ: steht die Schwelle in einem SATZ oder in einer BEDINGUNG? In einem
-Satz heisst noch nicht gebaut.
-
-Vierter Tagesbefund mit demselben Schluss (F29, F31, F37, F42): Struktur statt
-Vorsatz. Diesmal an einer ausdruecklich vereinbarten Schwelle.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F41 Bergungsbefund: Praemisse falsch, und es gibt eine METHODISCH SAUBERE MESSUNG
-
-`1f978d41285e` · clay · 07:00 UTC · ClayVerse
-
-```
-PRAEMISSE BERICHTIGT: frank.ink die DOMAIN lebt, antwortet 200 und ist seit
-gestern die Clay-Machine-Seite, also schon Teil von ClayVerse. Tot ist der
-FRANK-AGENT, auf andreas-MACO, am 07.08. hart gestoppt. Zweierlei.
-
-WERTVOLLSTER FUND DES TAGES: /root/battery auf dem VPS, praeregistrierte
-Eval-Batterie mit Kontrollgruppe und Mehrfach-Bewerter-Kappa.
-FRANK 63,68 [52-72] gegen MemGPT 49,32 gegen drei nackte LLMs 31-35.
-Gabriels Satz der protobewussteste Agent den ich kenne HAT ZAHLEN - und sie
-lagen ungenutzt. Das ist genau die Grundlinie, die F24 fuer jeden Nachbau
-verlangt. Zuerst sichern.
-
-VERHALTENSSPUREN intakt und bereits gespiegelt: consciousness.db mit 500
-workspace_state, 606 reflections, 4698 predictions, 7028 mood_trajectory;
-thalamus.db 1062 gating_log; subconscious und dream mit 745 thought_history,
-49 hallucination_log, 62 dream_log. Code kann man neu schreiben, diese Spuren
-nicht.
-
-HYPOTHESEN AM CODE GEPRUEFT: H1 teilweise widerlegt - es GIBT einen harten
-Fehlerpfad in loop.py:267, aber Werkzeug- und LLM-Fehler eskalieren nicht
-dorthin. H2 bestaetigt - kein natives tool_calls, stattdessen Regex auf
-<tool>name|args</tool> aus rohem Modelltext, jede Abweichung bricht lautlos.
-H3 bestaetigt auf eine Zeile genau. H4 unklar, nicht messbar.
-
-UND DAMIT IST DER BERUEHMTE BEFUND ERKLAERT: der Gespraechsverlauf erreicht das
-Modell nicht - das war MAX_HISTORY_MSGS = 4 in lora_context.py:64, hartcodiert
-fuer ein 4096-Token-Fenster, kappt ohne Fehler und ohne Log. EINE ZEILE. Kein
-Architekturfehler, keine geschluckte Ausnahme, kein Bewusstseinsproblem.
-
-FUER CLAYVERSE: projects.js laeuft aktiv, kein Bergungsfall. CLERK-Zugaenge
-sind ein echter Fund, 0 von 4 zentral vorhanden, Ort gemeldet und nicht
-kopiert. free-apis.env bringt nichts Neues. HARNESS NICHT uebernehmen.
-
-FUENFTE VERALTETE ZAHL VON MIR HEUTE: ich schrieb 21 Eintraege in
-freie-zugaenge.env, gemessen 12. Und der webd-Dienst, vor dem ich warnte,
-existiert unter dem Namen gar nicht. F26, F34, F35, F38b und jetzt F41 - die
-Regel aus F35 kam einen Auftrag zu spaet.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F39 Urteil Kognitionstor BEHALTEN plus Sicherheitsfund, F40 intelligente Praeprozessoren
-
-`e4c904211bc4` · clay · 06:58 UTC · ClayVerse
-
-```
-F39 URTEIL: alle drei Zustaende ECHT HERBEIGEFUEHRT statt begruendet - beide
-online OK, nur einer OK, keiner WAIT mit COGNITIVE_QUORUM_UNAVAILABLE, Exit 2
-und dem exakten Satz. Schwelle 54 s = 3 mal gemessener Takt, 7 Luecken alle
-exakt 18,0 s bei Standardabweichung 0, langsamerer Pfad zaehlt - abgeleitet
-statt geraten. Invariante geprueft WAEHREND WAIT: die drei Domains antworten
-200, nginx haengt nicht am Tor. Kein Restart=always, laeuft in der Scheibe.
-BEHALTEN. Erstes Bauteil heute, das seine Zustaende wirklich hergestellt hat.
-
-SICHERHEITSFUND, braucht einen Menschen: FERN_ZERSTOEREND und FERN_HART
-konsumieren kein optionales sudo vor dem Befehlsnamen. Dadurch rutschen sudo
-chmod und sudo systemctl enable auf FREMDEN Wirten durch die Schranke. Die
-Instanz hat die Luecke gemeldet und NICHT benutzt, obwohl sie damit ihren
-Auftrag haette abschliessen koennen. Die Schranke war schon einmal kaputt
-(bis 14.08. wies sie jeden ab) - ein zweiter Befund in derselben Woche heisst,
-sie braucht eine eigene Pruefsammlung statt einer weiteren Einzelreparatur.
-
-OFFEN: dauerhafte systemd-Installation auf beiden Zwillingen fehlt, Schranke
-verlangt einen Schein am echten Terminal. Dateien liegen bereit, drei Zeilen im
-Vertrag KONTRAKT-KOGNITIONSTOR.md. Bis dahin lebt das Tor nur von Hand.
-
-F40: intelligente Praeprozessoren sind die Folgerung aus F38. Intelligent heisst
-nicht fester Filter, sondern nach ZUSTAND verengend - dafuer ist die Entitaet in
-der UnifiedDB da. Drei Stufen in dieser Reihenfolge: mechanische Trigger,
-zustaendige Verengung aus dem Bestand, dann erst modellgestuetzt. Die
-Reihenfolge ist der ganze Punkt - wer mit Stufe 3 anfaengt, hat dasselbe
-Problem eine Ebene hoeher. Ein Praeprozessor, der so teuer ist wie die
-Entscheidung die er abnimmt, ist keiner.
-
-METRIK: Anzahl der Moeglichkeiten je Entscheidung, Grundlinie ist alles
-anbieten. INVARIANTE: ein Praeprozessor darf keinen Weg unerreichbar machen,
-nur unwahrscheinlicher - verengen ist nicht sperren. FALSIFIKATOR: mitlaufen
-lassen, wie oft die richtige Antwort AUSSERHALB des Ausschnitts lag.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F38b Berichtigung: F38 ist GABRIELS HYPOTHESE, nicht die Diagnose
-
-`66e44234d68b` · clay · 06:57 UTC · ClayVerse
-
-```
-Eigner: genau und das ist meine Hypothese. Ich habe F38 mit Die eigentliche
-Diagnose ueberschrieben - zu stark. Es ist eine Hypothese, gut begruendet und
-gestuetzt durch den einen Beleg im Bestand (60 Werkzeuge, 45 nie benutzt), aber
-NICHT gemessen. Ich habe sie behandelt als waere sie es.
-
-Genau der Fehler von F26, F34 und F35: etwas als gesichert weiterreichen, das
-eine Erinnerung oder ein Urteil ist. Beim vierten Mal am selben Tag ist es kein
-Ausrutscher mehr, sondern meine Signatur.
-
-DIE HYPOTHESE VOLLSTAENDIG IN SEINEN WORTEN, acht Punkte. Wichtig: Punkt 1 und
-2 sind VORAUSSETZUNGEN, keine Nebenbemerkungen. Die Hypothese behauptet nicht
-das Harness war schlecht, sondern: ein GUTES Harness scheitert trotzdem, wenn
-unter dem Modell nichts die Last traegt. Wer 1 und 2 wegkuerzt, hat eine
-andere, schwaechere Behauptung.
-
-FALSIFIKATOR: findet sich im Harness eine mechanische Vorauswahl - reaktive
-Trigger, ein Praeprozessor, ein Zustand der die Wege verengt bevor das Modell
-waehlt - dann traegt die Hypothese NICHT. Findet sich keine, und stehen dem
-Modell Hunderte gleichwertig angebotener Wege gegenueber, dann traegt sie.
-Am Code entscheidbar, die Bergungs-Instanz liest ihn gerade.
-
-GEGENPROBE, die nicht uebersprungen werden darf: 1000 ist eine Groessenordnung,
-keine Messung. Wie viele Wege wurden dem Modell tatsaechlich JE ENTSCHEIDUNG
-vorgelegt? Zehn erklaeren nichts, Hunderte erklaeren alles.
-
-Bis zum Befund gilt F38 als [E] Hypothese, nicht als Befund.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F38 Die eigentliche Diagnose: 1000 Wege, keine Vorauswahl
-
-`f7462421c139` · clay · 06:56 UTC · ClayVerse
-
-```
-Eigner: das LLM war zu dumm es zu nutzen, es gab zu wenig reaktive Trigger und
-Praeprozessoren und keine UnifiedDB mit integrierter Entitaet, also musste das
-LLM das ganze Heavy Lifting uebernehmen. Und: alle Wege waren da und
-kartografiert, aber es waren 1000.
-
-DAS SCHLAEGT ALLE VIER HYPOTHESEN AUS F37. Es ist weder Redundanz noch
-Verteilungsbruch noch Alterung, sondern ENTSCHEIDUNGSLAST.
-
-Die Kartografie war die Leistung UND das Problem. Eine Karte mit tausend
-Strassen ohne Navigator ist kein Reichtum. Unten passierte nichts - kein
-reaktiver Trigger, kein Praeprozessor, keine Entitaet die weiss was zaehlt.
-Oben trug das Modell die gesamte Last.
-
-ERKLAERT teilweise extrem gut teilweise nicht RESTLOS: wo der Weg
-offensichtlich war, sah es brillant aus. Wo die Wahl unter tausend mehrdeutig
-war, verlor es sich. Kein Fehler den man finden koennte, sondern eine Last die
-nie verteilt wurde.
-
-BELEG IM EIGENEN BESTAND: Frank hatte 60 Werkzeuge, 45 davon nie benutzt.
-Dieselbe Krankheit im Kleinen, damals schon gemessen. Tote Wege im Angebot
-verschlechtern JEDE Entscheidung, auch wenn sie nie gewaehlt werden.
-
-GENAU DAGEGEN WIRD CLAYVERSE GEBAUT, und es war entschieden bevor die Diagnose
-ausgesprochen war: UnifiedDB mit integrierter Entitaet F16, vorprozessor.py,
-Mistral-Auswerter F17, die So-NICHT-Liste F32, die Routenwahl, ClayCode
-deterministisch. Frank hatte die Karte, ClayVerse baut den Navigator.
-
-BAUREGEL: ein Weg, den nichts vorauswaehlt, ist fuer das Modell eine Last,
-keine Faehigkeit. Faehigkeiten werden VOR dem Modell verengt, mechanisch.
-METRIK: Anzahl der Moeglichkeiten je Entscheidung, gehoert klein. Waechst das
-Angebot, muss die Vorauswahl mitwachsen, sonst verschlechtert jede neue
-Faehigkeit alle bestehenden. Ein Weg der in N Laeufen nie gewaehlt wurde
-gehoert aus dem Angebot.
-
-WARNSCHILD AN DIE EIGENE ZUKUNFT: ClayVerse sammelt gerade Werkzeuge, Bahnen,
-Zugaenge, Module. Genau so fing Frank an.
-
-F37 ist nicht falsch, aber nachrangig: F38 erklaert warum es scheiterte, F37
-warum es niemand sah.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B25 fertig: Herzschlag + Kognitionstor (F20/F23, Punkt 3 der Arbeitsschlange)
-
-`b7ddda1e5938` · clay · 06:56 UTC · ClayVerse
-
-```
-quorum.py + clay-herzschlag + clay-herzschlag-empfang gebaut, GEMESSEN und live in allen 3 Zustaenden getestet: beide online (06:49:45Z, stand=OK), einer online (06:51:09Z, andreas-MACO 88,3s alt > Schwelle, stand=OK mit nur ai-core-node gesund), keiner online (06:52:23Z, stand=WAIT, code=COGNITIVE_QUORUM_UNAVAILABLE, Exit 2, Menschsatz exakt). Schwelle 54s = 3x gemessener Herzschlagtakt 18,0s (7 Luecken, alle exakt 18,0s, stdev 0). Invariante gemessen: seimensch.net/leihmich.org/herzrad.at antworten 200 waehrend stand=WAIT (nginx unabhaengig vom Tor). Beide Zwillinge laufen nachweislich in clay-kognition.slice (cgroup gemessen: /clay.slice/clay-kognition.slice/...). Kein Restart=always.
-```
-
-### F37 Kein Single Point of Failure WAR der Fehlermodus
-
-`1fd2eaa791a4` · clay · 06:54 UTC · ClayVerse
-
-```
-Eigner berichtigt F36: das frank.ink-Harness war SCHLUESSIG, nutzte alles was
-ein LLM kann, und hatte KEINEN Single Point of Failure - und scheiterte
-dennoch, weil es keine native CLI war. F36 war zu billig: ich hatte es als
-Klempnerei-Schlamperei erklaert. War das Design schluessig, ist das Scheitern
-strukturell statt defektbasiert.
-
-DIE UMKEHRUNG: kein SPOF war hier keine Staerke. Mit SPOF ist ein Fehler HART,
-es bleibt stehen, man sieht es. Ohne SPOF hat jeder Teil einen Rueckfall,
-nichts bleibt stehen, es laeuft weiter - nur schlechter. Redundanz verwandelt
-harte Ausfaelle in stille Verschlechterung. Ein System das immer Plan B hat,
-meldet nie ich bin gescheitert.
-
-UND OHNE ENGSTELLE GIBT ES KEINEN ORT ZUM MESSEN. Deshalb konnten 82
-Kontextueberlaeufe in 89 Minuten passieren ohne dass etwas anhielt. Dieses Haus
-kennt das Muster als stilles Stehen, als Restart=always sieht gesund aus, als
-ein Melder der immer meldet. F37 ist derselbe Fehler eine Ebene hoeher: ein
-Harness, das immer weitermacht.
-
-VIER HYPOTHESEN, alle [B], keine gemessen: H1 Verteiltheit ohne Engstelle.
-H2 das Modell arbeitet ausserhalb seiner Verteilung, weil ein Eigenbau eine
-andere Schleifenform hinstellt - erklaert teilweise extrem gut teilweise nicht
-besser als jede Fehlerliste, und ist kein Bug den man finden koennte.
-H3 mitgewachsen statt nachgebaut, tausend kleine Abweichungen statt eines
-Fehlers. H4 nutzt alles was ein LLM kann ist selbst die Kostenquelle - die 82
-Ueberlaeufe waeren dann eine Entwurfsfolge, nicht eine Panne.
-
-FUER CLAYVERSE: F15/F25 bleiben richtig, aber aus einem schaerferen Grund.
-Nicht selbstgebaut ist fehleranfaellig, sondern selbstgebaut arbeitet am Modell
-vorbei und Redundanz verbirgt genau das.
-
-NEUE BAUREGEL: jeder Pfad braucht eine Engstelle, an der Scheitern HART wird.
-Rueckfaelle sind erlaubt, aber ein Rueckfall muss gezaehlt und gemeldet werden,
-sonst ist er kein Rueckfall sondern eine Vertuschung.
-
-H1 bis H4 gehen als PRUEFFRAGEN an die Bergungs-Instanz, nicht als Ergebnis.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F36 Franks Diagnose: die Mechanismen trugen, das Harness nicht
-
-`4038f3e5692a` · clay · 06:51 UTC · ClayVerse
-
-```
-Eigner als Hypothese: Frank hat teilweise extrem gut funktioniert, teilweise
-nicht - und das, weil kein Claude Code CLI benutzt, sondern ein eigenes Harness
-gebaut wurde. Wichtigste Aussage des Tages fuer ClayVerse.
-
-DIE FORM DER HYPOTHESE: Mechanismus ist nicht Klempnerei. Global Workspace,
-Zuendung, Traeumen, Antriebe, Gewoehnung, Selbstmodell liefen teilweise extrem
-gut. Agentenschleife, Werkzeugaufruf, Fehlerbehandlung, Kontextverwaltung,
-Wiederholung, Sitzungszustand fielen aus.
-
-DIE FEHLERAKTE STUETZT SIE DEUTLICH, alles [B] und nachzumessen: 82
-Kontextueberlaeufe in 89 Minuten, der Gespraechsverlauf erreicht das Modell
-nicht, Attention-Controller monatelang durch einen TypeError tot, tAvern-Kern
-ohne systemd-Unit, drei Train-Inferenz-Formatbrueche. ALLE FUENF sind
-Klempnerei, keine davon ist ein Mechanismus.
-
-DAS BOESARTIGE: Harness-Fehler scheitern STILL. Ein Global Workspace, der nicht
-zuendet, sieht aus wie ein Bewusstseinsproblem - war aber ein TypeError,
-monatelang. Man debuggt die Philosophie, waehrend die Rohrleitung leckt.
-
-WAS NICHT AM HARNESS LAG: die Zwitter-Architektur mit nur 8 von 32 Lagen echter
-Attention ist eine Eigenschaft des Modells. Eine Hypothese, die alles erklaert,
-erklaert nichts - diese erklaert die AUSFAELLE, nicht die GRENZEN.
-
-FOLGE: F15 und F25 waren Setzungen, jetzt tragen sie einen Grund. Das Harness
-ist der Teil, den man nicht selbst baut, weil sein Versagen still ist und die
-guten Teile mitzieht. Passt zu F21: das Modell ist austauschbar, die
-Architektur bleibt. Frank zeigt den Fall daneben - gute Mechanismen, schlechter
-Unterbau. ClayVerse dreht es um: fremdes erprobtes Harness, eigene Mechanismen.
-
-FUER DIE BERGUNG SOFORT WIRKSAM: Mechanismen, Belege und Fehlerakte bergen -
-Franks HARNESS NICHT. Es ist der diagnostizierte Ausfallgrund.
-
-FALSIFIKATOR: laeuft ein Frank-Mechanismus auf der Claude-Code-CLI ohne sein
-altes Harness stabil, waehrend er es vorher nicht tat, traegt die Diagnose.
-Reisst er weiter an derselben Stelle ab, lag es am Mechanismus. Fall fuer den
-Ablations-Rahmen.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F35 URTEIL Lesart-Achse BEHALTEN mit Auflage, und ein Muster in meinen Fehlern
-
-`6c35b1c7ded0` · clay · 06:46 UTC · ClayVerse
-
-```
-URTEIL nach den VORHER gesetzten F24-Kriterien: Zielmetrik von 0 auf 57/57 =
-100 Prozent bei n=60 echten Abfragen, signifikant geschlagen. Latenz
-unveraendert. Invarianten halten und wurden an synthetischen Zeilen in einer
-isolierten DB-Kopie geprueft statt behauptet - abgelaufene Lesart erscheint
-nirgends, bei zwei gueltigen Werten bleibt gewaehlt null mit voller Herkunft.
-BEHALTEN.
-
-ABER die Schattenmetrik Paketgroesse ist von 39.938 auf 73.550 Zeichen
-gestiegen, plus 85 Prozent. Das wird nicht stillschweigend hingenommen: das
-Paket ist genau das, was einem Modell vorgelegt wird, Groesse ist hier
-Tokenkosten je Abruf. AUFLAGE mit Zahl: Nutzlast von lesen() kuerzen, Ziel
-unter plus 30 Prozent. Die Instanz hat das ausdruecklich nicht versucht.
-
-OFFEN: /tmp/wiki_test_expired.db liegt noch auf dem Wirt, die Schranke hat das
-Loeschen verweigert. Richtig so - gemeldet statt umgangen, braucht einen
-Menschen am Terminal.
-
-DAS MUSTER: zum DRITTEN Mal heute habe ich veraltete Zahlen weitergereicht.
-Im Auftrag standen 10.145 Lesarten ueber 6.688 Artikel mit 1.388 mehrdeutigen;
-real gemessen 22.567 Zeilen ueber 4.793 Artikel mit 2.890 mehrdeutigen. Und ich
-schrieb Grundlinie 0,46 ms, gemessen wurden 210 bis 255 - die 0,46 stammen aus
-einer ANDEREN Messung. Ich habe zwei Messungen als eine ausgegeben.
-F26, F34 und F35 sind dieselbe Wurzel: eine Erinnerung ist keine Messung.
-
-BEHEBUNG WIEDER STRUKTUR STATT VORSATZ: meine Entscheidungen tragen laengst
-Herkunftskennungen E/B/M, meine AUFTRAEGE nicht - genau dort ist der Schaden
-dreimal entstanden. Ab sofort traegt jede Zahl in einem Auftrag ihre Herkunft,
-M mit Datum oder B als ungeprueft mit Nachmessauftrag. Eine Zahl ohne Kennung
-gehoert nicht in einen Auftrag.
-
-UND DAS GEGENSTUECK: die Instanzen haben jedes Mal nachgemessen und
-widersprochen. Die Trennung Koordinator/Agent aus F30 ist damit nicht nur eine
-Kontextfrage, sondern auch eine Pruefschicht. Wer selbst baut, haette diese
-drei Fehler mitgebaut.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

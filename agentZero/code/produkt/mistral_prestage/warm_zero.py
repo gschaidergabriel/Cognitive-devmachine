@@ -96,7 +96,8 @@ class WarmPool:
             "claude", "-p",
             "--model", "sonnet",
             "--settings", hz.MANAGED_SETTINGS, "--setting-sources", "",
-            # native Werkzeuge an -- Grenze via managed permissions + Zaun-Hook
+            # native Werkzeuge EXPLIZIT inkl. WebSearch/WebFetch (Default lud sie nicht)
+            "--tools", "Bash,BashOutput,KillShell,Read,Write,Edit,MultiEdit,NotebookEdit,Glob,Grep,WebSearch,WebFetch,TodoWrite,Task",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", sysdatei,
             "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",

@@ -259,7 +259,10 @@ def run_headless(
         "--model", "sonnet",
         "--settings", MANAGED_SETTINGS,
         "--setting-sources", "",
-        # ⭐ Native Werkzeuge AN (kein --tools ""): Zero handelt direkt wie
+        # ⭐ Native Werkzeuge EXPLIZIT (inkl. WebSearch/WebFetch): ohne die Liste
+        # lud der Default-Satz zwar Bash/Read, aber NICHT die Web-Tools (gemessen
+        # 19.08.: Zero sagte "kein Web-Such-Tool"). Zero handelt direkt wie
+        "--tools", "Bash,BashOutput,KillShell,Read,Write,Edit,MultiEdit,NotebookEdit,Glob,Grep,WebSearch,WebFetch,TodoWrite,Task",
         # eine echte Claude-Code-Sitzung. Die Grenze setzt die managed
         # permissions.allow (native + MCP) plus der PreToolUse-Zaun-Hook --
         # NICHT mehr eine enge --allowedTools-Liste. tool_selection der

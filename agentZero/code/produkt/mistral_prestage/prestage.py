@@ -297,9 +297,28 @@ def run_prestage(
         max_tokens=900,
     )
     payload = result["payload"]
-    if not isinstance(payload, dict) or not _REQUIRED_KEYS.issubset(payload):
-        raise RuntimeError("prestage envelope missing required keys")
+    if not isinstance(payload, dict):
+        payload = {}
     payload = dict(payload)
+    # ⭐ Robustheit (19.08.): ein fehlender Envelope-Key darf NIE den Zug killen.
+    # Das small-Modell liefert gelegentlich kein vollstaendiges 8-Key-JSON --
+    # frueher warf das hier RuntimeError und die ganze Antwort war weg ("keine
+    # Antwort", strukturell). Fehlende Keys mit sicheren Defaults fuellen; fehlt
+    # der eigentliche Direktauftrag, ein EHRLICHER Rueckfall statt Absturz.
+    _fehlend = [k for k in _REQUIRED_KEYS if k not in payload or payload.get(k) is None]
+    _DEF = {"user_intent": "", "tool_selection": [], "memory_artefacts": [],
+            "outsourced": [], "watch_out": "", "hypotheses": [], "counter_hypotheses": [],
+            "caveman_prompt": ""}
+    for k in _fehlend:
+        payload[k] = _DEF.get(k, "")
+    if not str(payload.get("caveman_prompt") or "").strip():
+        payload["caveman_prompt"] = (
+            "answer the human's request honestly and directly; if you do not have "
+            "the info, say so plainly and find it out with your tools -- never guess")
+    if _fehlend:
+        import sys as _sys
+        print("prestage: unvollstaendiger Envelope, Defaults gefuellt: " + str(sorted(_fehlend)),
+              file=_sys.stderr)
     payload["round_no"] = round_no
     payload["prestage_model"] = model
     payload["prestage_receipt"] = result["receipt"]

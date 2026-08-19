@@ -63,6 +63,7 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__werkbank_veroeffentlichen",
     # Zero haelt selbst Platz auf dem Wirt -- Auftrag des Eigners 18.08.
     "mcp__clayverse__seite_pruefen",
+    "mcp__clayverse__seite_diagnose",
     "mcp__clayverse__speicher_lage",
     "mcp__clayverse__speicher_aufraeumen",
     "mcp__clayverse__speicher_rueckweg",

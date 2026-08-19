@@ -652,6 +652,13 @@ class ClayVerseEffectBridge:
         try: return _w.schreiben(pfad, alt, neu)
         except Exception as e: return {"abgewiesen": str(e)}
 
+    def seite_diagnose(self, url: str) -> dict:
+        from . import werkbank as _w
+        try:
+            return _w.seite_diagnose(url)
+        except Exception as e:
+            return {"abgewiesen": str(e)}
+
     def seite_pruefen(self, url: str, suche: str = "") -> dict:
         from . import werkbank as _w
         try: return _w.seite_pruefen(url, suche)
@@ -886,6 +893,11 @@ def main() -> None:
     def werkbank_aendern(pfad: str, alt: str, neu: str) -> dict:
         """Ersetzt EINE eindeutige Stelle in einer Datei. `alt` muss genau einmal vorkommen -- kommt es mehrfach vor, wird abgewiesen statt geraten. Nur in der Arbeitskopie, nie in der ausgelieferten Fassung."""
         return bridge.werkbank_aendern(pfad, alt, neu)
+
+    @mcp.tool(annotations=udb_ro)
+    def seite_diagnose(url: str) -> dict:
+        """Warum eine eigene Seite NICHT erreichbar ist -- geschichtet (DNS -> erwartete IP -> Port 443 -> HTTPS -> echter Inhalt). ⭐ Trennt SERVER-seitig von CLIENT-seitig: ist server-seitig alles gruen und ein Mensch kommt trotzdem nicht durch, sagt das Urteil WO es liegt (Umleitung in /etc/hosts auf 127.0.0.x, Provider-DNS mit NXDOMAIN, VPN). Nutze das bei jeder Meldung \"Seite ist weg\" -- BEVOR du \"Server neu starten\" sagst."""
+        return bridge.seite_diagnose(url)
 
     @mcp.tool(annotations=udb_ro)
     def seite_pruefen(url: str, suche: str = "") -> dict:

@@ -354,3 +354,16 @@ def seite_pruefen(url: str, suche: str = "") -> dict:
     gefaehrlichste Sorte Erfolg: einer mit vollstaendigem Beleg.
     """
     return _auftrag("seite_pruefen", url=str(url), suche=str(suche or ""))
+
+
+def seite_diagnose(url: str) -> dict:
+    """Warum eine eigene Seite NICHT erreichbar ist -- geschichtet.
+
+    ⭐ Anders als seite_pruefen (ein Blick von einem Standpunkt) trennt das
+    hier SERVER-seitig von CLIENT-seitig: DNS -> erwartete IP -> Port 443 ->
+    HTTPS -> echter Inhalt. Wenn alles server-seitig gruen ist und ein Mensch
+    trotzdem nicht durchkommt, sagt das Urteil WO es dann liegt (Umleitung in
+    /etc/hosts, Provider-DNS, VPN) -- statt den Menschen mit "Server ok" allein
+    zu lassen.
+    """
+    return _auftrag("seite_diagnose", url=str(url))

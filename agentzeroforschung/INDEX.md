@@ -85,6 +85,13 @@
    - vorgeschlagen: atomarer `HIERARCHY_RECEIPT/v1` mit typisierten ERROR/UNMEASURED-Zustaenden und mechanischer Verdict-Regel
    - Tests bleiben 583/1; persistenter Adapter-Red getrennt behandeln
 
+11. `analysen/2026-08-19T224111Z_GEN159_EXPORT_LATENZ_SPIKE.md`
+   - Generation 159 auf Snapshot `150c3766dcdeae16df711cd306d4f21ab4d07f0e`
+   - Exportdauer springt `52.47 s -> 168.79 s` = Faktor 3.217 bei nur kleinem 30-Minuten-Datenzuwachs
+   - funktionaler Frontier bleibt stabil `583 gruen / 1 rot`; kein Produktregressions-Credit aus der Exportlatenz
+   - Haupt-Hypothese: I/O-/Lock-/Concurrent-Load-Spike; Gegenhypothese: datenabhaengiger superlinearer Export-Hotspot
+   - vorgeschlagen: `EXPORT_RECEIPT/v1` mit Phasenzeiten, SQLite-Waits, CPU/RSS/I/O und COMPLETE/INCOMPLETE-Semantik ueber mehrere regulaere Exporte
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -93,6 +100,7 @@
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
 - `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Verdict; negative numerische Sentinels verbieten;
+- `EXPORT_RECEIPT/v1` ueber mindestens sechs regulaere Exporte binden, um I/O-/Lock-Jitter gegen einen datenabhaengigen Hotspot zu trennen;
 - Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;
 - rote Tests als Zeitreihe gegen reale Zero-Episoden und Bauinterventionen korrelieren;

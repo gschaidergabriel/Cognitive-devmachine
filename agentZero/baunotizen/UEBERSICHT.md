@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T11:11:10Z. **2697 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T11:41:10Z. **2702 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T16:55:25+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T17:53:20+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2599 |
+| baunotiz | 2604 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1690 |
-| baunotiz | bauverlauf.jsonl | 865 |
+| baunotiz | git-commit | 1693 |
+| baunotiz | bauverlauf.jsonl | 867 |
 | baunotiz | github-ereignis | 39 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2697 · Gegenhypothese: 0 von 2697
+## Hypothese: 0 von 2702 · Gegenhypothese: 0 von 2702
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-19T16:55:25+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen154 provider reachability and 583/1 frontier
+
+`baunotiz-bauverlauf-eca57b0f6168c45bae75` · baunotiz · bauverlauf.jsonl · 2026-08-19T17:53:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen154 provider reachability and 583/1 frontier
+
+`baunotiz-git-ffb3ade4276496e79b213d4a0fbe39ce25fdf846` · baunotiz · git-commit · 2026-08-19T17:53:20+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen154 provider reachability and 583/1 frontier
 
 ### claycode supervisor: bind Gen149 retrieval ACTIVE and reauth regression
 
@@ -147,6 +163,22 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
+### agentZero-Export 2026-08-19T11:11:09Z (Generation 156, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-6654b00d8bd0ceffffaf62d2b8a173d24be2a0f3` · baunotiz · git-commit · 2026-08-19T11:13:07+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T11:11:09Z (Generation 156, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T11:10:09Z (Generation 156, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-3650bc042662dfa5e52a45426a714abd1885e514` · baunotiz · git-commit · 2026-08-19T11:11:11+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T11:10:09Z (Generation 156, 59 Dateien, 1 geschwaerzt)
+
 ### agentzeroforschung: bind Gen116 PTY red-green-red-green-red-green
 
 `baunotiz-git-9ab0fcf3405d4dee92fa3b8804ecd351054e50a0` · baunotiz · git-commit · 2026-08-19T10:44:08+07:00 · Gabriel Gschaider
@@ -171,6 +203,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T10:41:09Z (Generation 154, 59 Dateien, 1 geschwaerzt)
 
+### agentZero-Export 2026-08-19T10:41:09Z (Generation 154, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-a6f7a93edf451f5a70cf` · baunotiz · bauverlauf.jsonl · 2026-08-19T10:41:54+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
 ### agentZero-Export 2026-08-19T10:20:42Z (Generation 153, 59 Dateien, 1 geschwaerzt)
 
 `baunotiz-git-cff97ba3d46a368b870e830949f9de539df3386d` · baunotiz · git-commit · 2026-08-19T10:22:30+00:00 · agentZero
@@ -194,44 +234,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T10:11:09Z (Generation 151, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T10:11:09Z (Generation 151, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-b540cc9809df8bb41117` · baunotiz · bauverlauf.jsonl · 2026-08-19T10:11:49+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentzeroforschung: classify Gen116 PTY lease oscillation
-
-`baunotiz-bauverlauf-6fca3a9e7dd2507c7521` · baunotiz · bauverlauf.jsonl · 2026-08-19T09:47:43+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### agentzeroforschung: classify Gen116 PTY lease oscillation
-
-`baunotiz-git-b643704e7245d1e9cb3302c5ef1db2bd5e5d6b52` · baunotiz · git-commit · 2026-08-19T09:47:43+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentzeroforschung: classify Gen116 PTY lease oscillation
-
-### agentZero-Export 2026-08-19T09:41:10Z (Generation 149, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-8e4f78f6dbb595ae5dcc82fbc37a0f80345be3fa` · baunotiz · git-commit · 2026-08-19T09:42:56+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T09:41:10Z (Generation 149, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T09:41:10Z (Generation 149, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-ab8889e43fc1621e7ac0` · baunotiz · bauverlauf.jsonl · 2026-08-19T09:42:56+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

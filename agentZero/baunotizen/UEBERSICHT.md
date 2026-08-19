@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-19T19:11:12Z. **2778 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-19T19:41:12Z. **2780 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T01:39:21+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T01:39:21+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2680 |
+| baunotiz | 2682 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1730 |
-| baunotiz | bauverlauf.jsonl | 905 |
+| baunotiz | git-commit | 1731 |
+| baunotiz | bauverlauf.jsonl | 906 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2778 · Gegenhypothese: 0 von 2778
+## Hypothese: 0 von 2780 · Gegenhypothese: 0 von 2780
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -163,6 +163,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen158 service-control boundary and honest goal regression
 
+### agentZero-Export 2026-08-19T19:11:11Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-e5b52d5525ceeffafe7a8225aeef843991e1c115` · baunotiz · git-commit · 2026-08-19T19:12:50+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-19T19:11:11Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: bind Gen157 prestage learning instrumentation frontier
 
 `baunotiz-bauverlauf-4b45013a1e48e73e9140` · baunotiz · bauverlauf.jsonl · 2026-08-19T18:49:34+07:00 · Gabriel Gschaider
@@ -186,6 +194,14 @@ claycode supervisor: bind Gen157 prestage learning instrumentation frontier
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-19T18:41:11Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-19T18:41:11Z (Generation 159, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-3c93ada3190c7a8cd9c2` · baunotiz · bauverlauf.jsonl · 2026-08-19T18:42:51+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### agentZero-Export 2026-08-19T18:11:11Z (Generation 159, 59 Dateien, 1 geschwaerzt)
 
@@ -218,20 +234,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen154 provider reachability and 583/1 frontier
-
-### agentZero-Export 2026-08-19T17:41:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-0ece040dec22750b9c7e14c050ade5ee96afaca4` · baunotiz · git-commit · 2026-08-19T17:42:04+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-19T17:41:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-19T17:41:10Z (Generation 159, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-71727ad86520b6cd200d` · baunotiz · bauverlauf.jsonl · 2026-08-19T17:42:04+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

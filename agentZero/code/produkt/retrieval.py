@@ -6,6 +6,51 @@ from .microclay_retrieval import MicroClayRetrieval
 from .store import UnifiedDB
 
 
+# ── Assoziative-Absicht-Heuristik (F-Vorstufe-Retrieval-Enrich, 2026-08-19) ──
+#
+# Modul-Ebene, nicht Klassen-Attribut: so ist sie ohne UnifiedDB/WorldAssembler
+# importierbar (der faire Eval unter /opt/entityos/eval/ darf die Live-DB nicht
+# oeffnen, siehe dessen eigene Begruendung -- UnifiedDB.__init__ schreibt beim
+# Oeffnen in die meta-Tabelle). EINE Quelle fuer das Woerterset, von Produktion
+# UND Eval gleichermassen benutzt, damit beide dieselbe Regel pruefen.
+#
+# GEPRUEFT (nicht erfunden): zur Retrieval-Zeit gibt es KEIN vorhandenes
+# Intent-/Routing-Signal aus der Pipeline. _gather_world_safe() (pipeline.py)
+# laeuft VOR prestage.run_prestage() -- user_intent/tool_selection/routing_key
+# sind AUSGABEN dieses spaeteren Modellaufrufs (envelope.get("user_intent"),
+# store.py routing_key aus tool_selection), existieren zum Zeitpunkt des
+# corpus_lookup()-Aufrufs fuer DIESEN Zug also schlicht noch nicht. Deshalb:
+# billige, deterministische Stichwortheuristik statt eines Signals, das es
+# (noch) nicht gibt -- kein Modellaufruf, keine neue Latenz.
+#
+# Begriffe: Widerspruch/Stuetzung/Elternhypothese/Ursache-Wirkung/"warum" --
+# dieselbe semantische Achse wie SEM_EDGE_ARTS in retrieval_fair_eval.py
+# (widerspricht/attacks/eltern_hypothese/stuetzt/related_claim_ids), plus die
+# natuersprachlichen Fragewoerter, die nach genau dieser Verknuepfung fragen.
+ASSOZIATIVE_BEGRIFFE = frozenset("""
+    warum wieso weshalb weswegen wozu wodurch
+    zusammenhang zusammenhaengt zusammenhaengen verknuepft verknuepfung
+    verbunden verbindung bezug bezieht bezogen
+    widerspricht widerspruch widersprechen widerspruechlich wiederspricht
+    gegenteil gegensatz gegenhypothese gegenposition gegenargument
+    stuetzt stuetzung unterstuetzt unterstuetzung beleg belegt belegen begruendet begruendung
+    hypothese hypothesen elternhypothese ableitung folgt folgert impliziert
+    ursache ursaechlich wirkung folge auswirkung fuehrt konsequenz
+    uebergeordnet abgeleitet abhaengig abhaengt
+    because why contradicts contradicting contradiction conflicts conflicting
+    supports supporting supported evidence evidences
+    hypothesis hypotheses implies relationship connection connected related linked
+    cause causes caused effect consequence stems stemming
+""".split())
+
+
+def _ist_assoziative_frage(text: str) -> bool:
+    """Cheap, deterministisch, dokumentiert -- kein Modellaufruf. Wortweiser
+    Abgleich (nicht Substring), damit z.B. 'Wieland' nicht ueber 'wie' triggert."""
+    woerter = set("".join(ch if ch.isalnum() else " " for ch in (text or "").lower()).split())
+    return bool(woerter & ASSOZIATIVE_BEGRIFFE)
+
+
 class WorldAssembler:
     """Bounded world assembly with MicroClay retrieval and collision-only cross-session context."""
 
@@ -211,16 +256,151 @@ class WorldAssembler:
             "cache_hit": (pkt.get("basis") or {}).get("cache_hit"),
             "plan": (pkt.get("politik") or {}).get("plan"),
             "resolution_klasse": basis.get("klasse"),
+            # Fuer corpus_lookup_enrich()s Zusatz-Kontext: KEIN zweiter
+            # paket()-Aufruf noetig, derselbe pkt traegt hypothesen/gegenseite
+            # schon mit. Kompakt (Text+Ref), nichts erfunden -- leer, wenn
+            # paket() fuer diese Frage keine Aussagen lieferte.
+            "hypothesen_kurz": self._kurzaussagen(pkt.get("hypothesen") or []),
+            "gegenseite_kurz": self._kurzaussagen(pkt.get("gegenseite") or []),
         }
         return out
 
+    @staticmethod
+    def _kurzaussagen(eintraege: list, cap: int = 3, zeichen: int = 200) -> list[dict]:
+        """paket()s hypothesen/gegenseite sind HETEROGEN: manche Eintraege
+        tragen 'aussage' woertlich, kante-foermige Gegenseite-Eintraege
+        (_gegenseite_ids() in paket.py) tragen stattdessen von/art/nach --
+        dort IST die Kante die Behauptung. Beide Formen vorkommen lassen,
+        keine annehmen (dieselbe Unterscheidung wie udb/abruf/
+        moeglichkeitsraum.py:_aussage_text(), hier read-only nachgebaut,
+        NICHT von dort importiert -- diese Datei bleibt frei von einer
+        zusaetzlichen Abhaengigkeit auf udb.abruf.moeglichkeitsraum)."""
+        out = []
+        for e in eintraege:
+            if not isinstance(e, dict):
+                continue
+            text = e.get("aussage")
+            if not text:
+                von, nach, art = e.get("von"), e.get("nach"), e.get("art")
+                if von and nach and art:
+                    text = f"{von} {art} {nach}"
+            if not text:
+                continue
+            out.append({"text": str(text)[:zeichen], "ref": e.get("ref"), "art": e.get("art")})
+            if len(out) >= cap:
+                break
+        return out
+
+    # ── Parallelpfad ENRICH (Eigner-Entscheidung 2026-08-19, auf Basis des
+    # fairen Evals unter /opt/entityos/eval/retrieval_fair_eval.py) ──────────
+    #
+    # Messung (93 assoziative Anker, graph-abgeleitet): FTS 75,8%/2ms woertlich,
+    # aber nur 4,8% assoziativ und 72% davon LEER (deckung_nichtleer=28,0%).
+    # paket() (Budget 8) 32,3% assoziativ, deckung=100%, aber ~500ms. Komplementaer,
+    # nicht ersetzend: FTS bleibt der schnelle Standardpfad, paket() wird NUR
+    # dazugeschaltet, wenn FTS mechanisch leer blieb ODER die Frage erkennbar
+    # assoziativ ist -- nie stattdessen, nie faecherweise verdraengend.
+    last_enrich_meta: dict | None = None  # rein diagnostisch, siehe last_v2_meta
+
+    def corpus_lookup_enrich(self, query: str) -> list[dict]:
+        """FTS zuerst (immer, schnell, praezise). paket() wird DAZUGESCHALTET
+        bei (a) FTS-Leerstand (die mechanische 72%-Luecke, kein Intent-Erkennen
+        noetig) oder (b) erkennbar assoziativer Frage (Stichwortheuristik, siehe
+        ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-/Routing-Signal
+        existiert zur Retrieval-Zeit, siehe Modul-Docstring dort). Merge: FTS-
+        Treffer ZUERST (Praezision unangetastet), dann paket()-Treffer als
+        Lueckenfueller (dedupe per artikel_id), danach -- falls im Budget noch
+        Platz ist -- bis zu 2 kompakte Hypothesen/Gegenseite-Aussagen aus
+        paket()s eigenem Ergebnis als Zusatz-Kontext, klar als 'anreicherung'
+        gekennzeichnet. Nie mehr als CORPUS_MAX_HITS insgesamt."""
+        t0 = time.perf_counter()
+        fts = self.corpus_lookup(query)
+        fts_ms = (time.perf_counter() - t0) * 1000
+
+        grund = None
+        if not fts:
+            grund = "fts_leer"
+        elif _ist_assoziative_frage(query):
+            grund = "assoziative_absicht"
+
+        if grund is None:
+            self.last_enrich_meta = {
+                "paket_aufgerufen": False, "grund": None,
+                "fts_treffer": len(fts), "fts_latenz_ms": round(fts_ms, 3),
+            }
+            return fts
+
+        t1 = time.perf_counter()
+        v2 = self.corpus_lookup_v2(query)
+        v2_ms = (time.perf_counter() - t1) * 1000
+        v2_meta = dict(self.last_v2_meta or {})
+
+        merged = list(fts)
+        gesehen = {r.get("artikel_id") for r in merged if r.get("artikel_id")}
+        for item in v2:
+            if len(merged) >= self.CORPUS_MAX_HITS:
+                break
+            aid = item.get("artikel_id")
+            if aid and aid in gesehen:
+                continue
+            if aid:
+                gesehen.add(aid)
+            item = dict(item)
+            item["quelle"] = "clay-korpus-v2-anreicherung"
+            merged.append(item)
+
+        # Zusatz-Kontext: Hypothesen/Gegenseite aus paket()s eigenem Ergebnis --
+        # genau das assoziative Wissen, das eine reine Artikel-ID-Liste nicht
+        # traegt. Nur angehaengt, wenn im selben Budget noch Platz ist -- der
+        # Auftrag verlangt "auf Budget kappen", keine zweite, unbegrenzte Liste.
+        if len(merged) < self.CORPUS_MAX_HITS and v2_meta.get("status") == "OK":
+            zusatz = self._hypothesen_gegenseite_zusatz(
+                v2_meta.get("paket_id"), budget=self.CORPUS_MAX_HITS - len(merged))
+            merged.extend(zusatz)
+
+        self.last_enrich_meta = {
+            "paket_aufgerufen": True, "grund": grund,
+            "fts_treffer": len(fts), "fts_latenz_ms": round(fts_ms, 3),
+            "v2_latenz_ms": round(v2_ms, 3),
+            "gesamt_latenz_ms": round(fts_ms + v2_ms, 3),
+            "v2_hinzugefuegt": len(merged) - len(fts),
+            **{f"v2_{k}": v for k, v in v2_meta.items() if k != "status"},
+        }
+        return merged
+
+    def _hypothesen_gegenseite_zusatz(self, paket_id, budget: int) -> list[dict]:
+        """Baut Zusatz-Kontext-Eintraege (corpus-foermig, damit sie ohne
+        pipeline.py-Aenderung durch den bestehenden Whitelist-Filter in
+        _vorstufen_world() durchgehen) aus self.last_v2_meta['hypothesen_kurz'
+        /'gegenseite_kurz'] -- vom selben paket()-Aufruf dieser Anreicherung,
+        kein Zweitaufruf, kein Zusatz-Lesepfad. Budget-respektierend: hoechstens
+        `budget` Eintraege insgesamt, Hypothesen vor Gegenseite."""
+        meta = self.last_v2_meta or {}
+        quelle = ([("hypothese", t) for t in (meta.get("hypothesen_kurz") or [])] +
+                  [("gegenseite", t) for t in (meta.get("gegenseite_kurz") or [])])
+        zusatz = []
+        for art, t in quelle:
+            if len(zusatz) >= budget:
+                break
+            zusatz.append({
+                "artikel_id": None,
+                "titel": None,
+                "ausschnitt": t.get("text", ""),
+                "sphaere": None,
+                "art": art,
+                "quelle": "clay-assoziativ-kontext",
+                "treffer_art": "anreicherung",
+                "ref": t.get("ref"),
+            })
+        return zusatz
+
     def _corpus_lookup_routed(self, query: str) -> list[dict]:
-        """Einziger Umschaltpunkt: VORSTUFE_RETRIEVAL=v2 env schaltet auf den
-        paket()-Pfad um. Default (unset oder jeder andere Wert) bleibt der
-        alte corpus_lookup() -- NICHT ungetestet live, das entscheidet der
-        Eigner nach den A/B-Zahlen. Jeder Fehler im v2-Pfad faellt sofort
-        und sicher auf den alten Pfad zurueck (Live-Pfad-Vorsicht: pipeline.py
-        bedient JEDE Zero-Antwort)."""
+        """Einziger Umschaltpunkt: VORSTUFE_RETRIEVAL=v2|enrich env schaltet um.
+        Default (unset oder jeder andere Wert) bleibt der alte corpus_lookup()
+        -- NICHT ungetestet live, das entscheidet der Eigner nach den A/B-
+        Zahlen. Jeder Fehler in v2/enrich faellt sofort und sicher auf den
+        alten Pfad zurueck (Live-Pfad-Vorsicht: pipeline.py bedient JEDE
+        Zero-Antwort)."""
         modus = os.environ.get("VORSTUFE_RETRIEVAL", "v1").strip().lower()
         if modus == "v2":
             try:
@@ -228,6 +408,14 @@ class WorldAssembler:
             except Exception as e:
                 self.last_v2_meta = {"status": "UNERWARTETER_FEHLER_FALLBACK_V1",
                                       "grund": f"{type(e).__name__}: {e}"[:200]}
+                return self.corpus_lookup(query)
+        if modus == "enrich":
+            try:
+                return self.corpus_lookup_enrich(query)
+            except Exception as e:
+                self.last_enrich_meta = {"paket_aufgerufen": False,
+                                          "status": "UNERWARTETER_FEHLER_FALLBACK_V1",
+                                          "grund": f"{type(e).__name__}: {e}"[:200]}
                 return self.corpus_lookup(query)
         return self.corpus_lookup(query)
 

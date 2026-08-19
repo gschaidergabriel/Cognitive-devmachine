@@ -1,11 +1,11 @@
 {
-  "schema_version": "7.64",
-  "latest_cycle": "automation-20260819-agentzero-gen116-recurring-pty-lease-red",
+  "schema_version": "7.65",
+  "latest_cycle": "automation-20260819-agentzero-gen116-pty-red-green-nondeterminism",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "AGENTZERO_EXECUTABLE_TRUTH_SECURITY_AND_ACCEPTANCE_FRONTIER",
   "control_sync_required_before_research_spend": false,
-  "next_focus": "Supervisor State 9.9 remains policy authority with Control 4.1 + execution-boundary addendum 4.2. Latest durable AgentZero export 69f402a137575f8a8a7c1c7cbc371a1a46db93f9 is Generation 116 and records 582 green / 2 red from abbreviated unresolved receipt source 1a09c7593. The durable reds are tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated and tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input. This falsifies the prior 7.63 wording that repeatedly exported 583/1 was the durable bound state: the Clerk/PTTY lease invariant has reappeared after previous red/green transitions without a bound source change, so classify it as a recurring reproducibility/runtime-boundary failure, not as fixed and not as a one-off flake. The 584/0 claim remains UNVERIFIED_TRANSIENT. Same-family Generation 116 exports are not independent Goodman replications. Exact-source credit remains zero until full commit+tree behind 1a09c7593 is resolved and TEST_RECEIPT_LEDGER/v1 binds source tree, suite digest, ordered failures, executor identity, controlled-environment fingerprint and result digest. Highest-information next work is repeated exact-checkout Ubuntu execution of BOTH remaining invariants under controlled load and identical environment, with PTY timing/session/lease telemetry sufficient to distinguish product race, environment sensitivity and instrument flake before changing code. Preserve the Generation 116 capability-audit findings as mechanism evidence only: package refusal/liveness, searchable knowledge, file-corpus reachability, full-article read, vault policy and opt-in korpus_tief still require executable end-to-end follow-up. Retrieval-learning PASS remains forbidden because learned entrypoints remain 0 in SHADOW and live A/B influence is unproved. Prior root-escape security acceptance remains open pending isolated pre-fix escape/post-fix denial and adjacent Git-config probes. Deploy-origin truth, no-op evidence rejection, empty-credential fail-loud behavior and provider reachability remain acceptance gaps. Preserve FREE_ONLY, no paid fallback/Together, executable evidence over model consensus, Goodman ancestry collapse, Ubuntu-only Frank v0.1 final acceptance, no BASE/canonical promotion from same-family exports, and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 9.9 remains policy authority with Control 4.1 + execution-boundary addendum 4.2. Latest durable AgentZero export 337f913db70d3e9ae75f3afc8705ff640453817b is Generation 116 and records 583 green / 1 red from abbreviated unresolved receipt source 1a09c7593. The sole currently red invariant is tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated. However the Clerk/PTTY lease invariant has now toggled red->green again: prior durable export 69f402a137575f8a8a7c1c7cbc371a1a46db93f9 recorded 582/2 with tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input red, while compare 69f402a..337f913 shows no agentZero/code/produkt changes between those receipts; only export/measurement/state artifacts plus this supervisor file changed. Therefore do not grant PTY fix credit. Upgrade its classification from a simple recurring red to a demonstrated nondeterministic red/green runtime-or-instrument boundary under same exported product code. The 584/0 claim remains UNVERIFIED_TRANSIENT. Same-family Generation 116 exports are not independent Goodman replications. Exact-source credit remains zero until full commit+tree behind 1a09c7593 is resolved and TEST_RECEIPT_LEDGER/v1 binds source tree, suite digest, ordered failures, executor identity, controlled-environment fingerprint and result digest. Highest-information next work is repeated exact-checkout Ubuntu execution with fixed source/environment: always run the persistent Claude-Code adapter invariant; run the Clerk/PTTY lease invariant as a repetition series under controlled load, recording session identity, lease issue/refresh timestamps, websocket lifecycle, tmux manager identity, scheduler/load and timeout telemetry. Do not change PTY code until the series distinguishes product race, environment sensitivity and instrument flake. Preserve Generation 116 capability-audit findings as mechanism evidence only: package refusal/liveness, searchable knowledge, file-corpus reachability, full-article read, vault policy and opt-in korpus_tief still require executable end-to-end follow-up. Retrieval-learning PASS remains forbidden because learned entrypoints remain 0 in SHADOW and live A/B influence is unproved. Prior root-escape security acceptance remains open pending isolated pre-fix escape/post-fix denial and adjacent Git-config probes. Deploy-origin truth, no-op evidence rejection, empty-credential fail-loud behavior and provider reachability remain acceptance gaps. Preserve FREE_ONLY, no paid fallback/Together, executable evidence over model consensus, Goodman ancestry collapse, Ubuntu-only Frank v0.1 final acceptance, no BASE/canonical promotion from same-family exports, and never modify Frank's Harness.",
   "verified_updates": {
     "supervisor_state_version": "9.9",
     "autonomous_control_version": "4.1+4.2-execution-boundary-addendum",
@@ -17,17 +17,19 @@
     "vercel_provider_order": "PRIMARY",
     "daytona_provider_order": "PREASSERTION_FALLBACK_ONLY",
     "daytona_live_runtime_credit": 0,
-    "agentzero_gen116_export_head": "69f402a137575f8a8a7c1c7cbc371a1a46db93f9",
+    "agentzero_gen116_export_head": "337f913db70d3e9ae75f3afc8705ff640453817b",
+    "agentzero_gen116_previous_export_head": "69f402a137575f8a8a7c1c7cbc371a1a46db93f9",
     "agentzero_gen116_receipt_source_commit_unresolved": "1a09c7593",
-    "agentzero_gen116_tests_green_receipt": 582,
-    "agentzero_gen116_tests_red_receipt": 2,
-    "agentzero_gen116_remaining_reds": [
-      "CLAUDE_CODE_RUNTIME_ADAPTER_ISOLATION",
-      "CLERK_PTY_LEASE_REFRESH_CONTINUITY"
+    "agentzero_gen116_tests_green_receipt": 583,
+    "agentzero_gen116_tests_red_receipt": 1,
+    "agentzero_gen116_current_remaining_reds": [
+      "CLAUDE_CODE_RUNTIME_ADAPTER_ISOLATION"
     ],
     "agentzero_584_0_claim_status": "UNVERIFIED_TRANSIENT",
     "agentzero_adapter_red_same_family_replicated": true,
     "agentzero_pty_lease_red_recurrence_observed": true,
+    "agentzero_pty_lease_red_green_without_exported_product_code_change": true,
+    "agentzero_pty_lease_classification": "NONDETERMINISTIC_RUNTIME_OR_INSTRUMENT_BOUNDARY_PENDING_CONTROLLED_REPETITION",
     "agentzero_pty_lease_fix_credit": false,
     "agentzero_package_worker_refusal_deadlock_observed": true,
     "agentzero_unsearchable_knowledge_articles_observed": 164,
@@ -49,15 +51,16 @@
     "frank_harness_modified": false
   },
   "remaining_red_frontier": {
-    "runtime_adapter_isolation": 1,
-    "clerk_pty_lease_refresh_continuity": 1,
-    "total": 2
+    "runtime_adapter_isolation_current_red": 1,
+    "clerk_pty_lease_refresh_continuity_current_red": 0,
+    "clerk_pty_lease_refresh_continuity_reproducibility_open": 1,
+    "current_red_total": 1
   },
   "receipt_gaps": {
     "agentzero_gen116_exact_source_identity": "OPEN_RECEIPT_SOURCE_COMMIT_1A09C7593_NOT_RESOLVED",
     "agentzero_gen116_atomic_test_receipt": "OPEN_NEEDS_IMMUTABLE_SOURCE_TREE_SUITE_EXECUTOR_RESULT_BINDING",
     "agentzero_claude_code_adapter_exact_ubuntu_reproduction": "OPEN_PERSISTENT_DURABLE_RED_INVARIANT",
-    "agentzero_clerk_pty_lease_exact_ubuntu_reproduction": "OPEN_RECURRING_RED_GREEN_RED_REPRODUCIBILITY_FAILURE",
+    "agentzero_clerk_pty_lease_exact_ubuntu_reproduction": "OPEN_RED_GREEN_RED_GREEN_WITHOUT_EXPORTED_PRODUCT_CODE_CHANGE_REQUIRES_CONTROLLED_REPETITION",
     "agentzero_capability_audit_package_refusal_liveness": "OPEN_END_TO_END_EXECUTABLE_REPRODUCTION",
     "agentzero_capability_audit_searchable_knowledge": "OPEN_PROVE_ZERO_CAN_RETRIEVE_BACKFILLED_OUTPUTS",
     "agentzero_capability_audit_file_corpus_access": "OPEN_PROVE_DATEIEN_SUCHEN_REACHES_INDEXED_CONTENT",
@@ -74,5 +77,5 @@
     "autonomy_pulse_exact_runtime": "OPEN_ZERO_ASSERTION_REACHING_CREDIT",
     "canonical_entityos_release_authority": "OPEN"
   },
-  "instruction": "Proceed only with high-information FREE_ONLY work. First resolve full commit+tree behind current receipt source 1a09c7593 and emit TEST_RECEIPT_LEDGER/v1 with source commit+tree, run id, suite digest, ordered failures, executor identity, controlled-environment fingerprint and result digest. Durable current state is 582/2, not 583/1 and not transient 584/0. Reproduce both remaining invariants repeatedly on admitted exact-checkout Ubuntu before changing code. For Clerk/PTTY lease, keep source/environment fixed and capture session identity, lease issue/refresh timestamps, websocket lifecycle, tmux manager identity, load and timeout telemetry so red/green/red behavior can be classified as product race, environment sensitivity or instrument flake. For the Claude-Code adapter, continue tool/state/output/environment isolation falsification. Then execute capability-audit falsifiers for refusal/liveness, searchable knowledge, file-corpus reachability, full-article access, vault password non-leakage and live korpus_tief retrieval influence. Preserve stronger EffectGate, immutable-turn, privacy and evidence-truth tests. Security remains independently unaccepted until root-escape pre/post evidence and adjacent Git-config probes are bound in isolated Ubuntu. Continue provider-reachability and retrieval-learning falsifiers separately. Keep Vercel primary, Daytona only pre-assertion FREE_ONLY fallback with fresh no-paid-use admission, no paid fallback/Together, executable evidence over model consensus, Goodman ancestry collapse, Ubuntu-only final Frank v0.1 acceptance, no BASE/canonical promotion from same-family exports, and never modify Frank's Harness."
+  "instruction": "Proceed only with high-information FREE_ONLY work. First resolve full commit+tree behind current receipt source 1a09c7593 and emit TEST_RECEIPT_LEDGER/v1 with source commit+tree, run id, suite digest, ordered failures, executor identity, controlled-environment fingerprint and result digest. Current durable receipt is 583/1, but do not interpret the Clerk/PTTY green as a fix: it has toggled red/green without exported product-code change. Reproduce the persistent Claude-Code adapter isolation invariant repeatedly on admitted exact-checkout Ubuntu. In the same fixed-source/fixed-environment campaign, repeat the Clerk/PTTY lease test enough times under controlled load to estimate whether failures correlate with timing/load, capturing session identity, lease issue/refresh timestamps, websocket lifecycle, tmux manager identity, scheduler/load and timeout telemetry. Do not patch PTY logic until the failure class is identified. Then execute capability-audit falsifiers for refusal/liveness, searchable knowledge, file-corpus reachability, full-article access, vault password non-leakage and live korpus_tief retrieval influence. Preserve stronger EffectGate, immutable-turn, privacy and evidence-truth tests. Security remains independently unaccepted until root-escape pre/post evidence and adjacent Git-config probes are bound in isolated Ubuntu. Continue provider-reachability and retrieval-learning falsifiers separately. Keep Vercel primary, Daytona only pre-assertion FREE_ONLY fallback with fresh no-paid-use admission, no paid fallback/Together, executable evidence over model consensus, Goodman ancestry collapse, Ubuntu-only final Frank v0.1 acceptance, no BASE/canonical promotion from same-family exports, and never modify Frank's Harness."
 }

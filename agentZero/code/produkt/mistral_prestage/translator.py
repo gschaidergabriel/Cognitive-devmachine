@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import calendar
+import os
 import re
+import sqlite3
+import time
 from typing import Any
 
 from . import secrets, transport
@@ -13,7 +17,11 @@ TRANSLATOR_MODEL = "mistral-small-latest"
 # v5 (2026-08-19): Maskierung der Maschinenteile + Nachpruefung, siehe unten.
 # v6 (2026-08-19): Eignerauftrag "Zero soll menschlich klingen" -- Regel 10
 #   (Menschlichkeit) ergaenzt, siehe die Begruendung unter Regel 10.
-PROMPT_VERSION = "v6"
+# v7 (2026-08-19): Eignerauftrag "Uebersetzung soll den Zustand der Entitaet
+#   spueren lassen" -- Regel 11 (Betriebston) ergaenzt, siehe
+#   _lese_betriebszustand() und die Begruendung direkt darunter fuer die
+#   Recherche, WARUM das der Puls-Herzschlag ist und keine Stimmung/Valenz.
+PROMPT_VERSION = "v7"
 
 TRANSLATOR_SYSTEM = """You translate short caveman-English text (written by an AI entity \
 called Zero) into fluent, natural German for a human reader. The human never sees the \
@@ -82,6 +90,18 @@ ZUSATZREGELN (gemessen am 2026-08-19 an 26 echten Produktionszuegen):
     e) Diese Regel aendert NIE, was gesagt wird, nur WIE es klingt -- sie steht unter jeder \
        Regel oben und darf keine von ihnen aufweichen. Eine holprige, aber vollstaendig \
        treue Uebersetzung ist immer besser als eine warme, der ein Fakt fehlt.
+11. BETRIEBSTON. Vor dem CAVEMAN TEXT kann eine Zeile "BETRIEBSTON: ..." stehen -- eine \
+    ECHTE, gemessene Angabe zum Herzschlag der Entitaet gerade jetzt (ruhig / angespannt / \
+    neutral), keine Erfindung von dir. Nutze sie NUR fuer Wortwahl und Waerme, genau wie \
+    Regel 10, niemals fuer Inhalt:
+    a) "ruhig": etwas gelassener, entspannter Ton erlaubt -- nicht mehr sagen, nur gelassener \
+       sagen.
+    b) "angespannt": etwas knapper, vorsichtiger Ton erlaubt -- nicht mehr Sorge behaupten, \
+       als das caveman-Original zeigt; keine Warnung erfinden, die dort nicht steht.
+    c) "neutral" oder keine BETRIEBSTON-Zeile: keinen bestimmten Ton erzwingen, einfach Regel \
+       10 folgen.
+    Diese Zeile ist NIEMALS Teil des zu uebersetzenden Inhalts -- sie darf im Deutschen nicht \
+    als Satz auftauchen, nicht erwaehnt, nicht erklaert werden. Bei jedem Zweifel: neutral.
 
 Return exactly one JSON object with a single key: german (string, the German translation \
 only, nothing else)."""
@@ -147,6 +167,106 @@ RE_ZIFFERNGRUPPE = re.compile(r"\d{2,}")
 RE_TAUSENDERTRENNER = re.compile(r"(?<=\d)[.,](?=\d{3}\b)")
 
 MAX_UEBERSETZUNGSVERSUCHE = 3
+
+
+# ── Betriebston: warum das der Puls-Herzschlag ist und keine Stimmung ──────
+# Eignerauftrag 2026-08-19: die Uebersetzung soll den ZUSTAND der Entitaet
+# spueren lassen (Stimmung/Valenz/Arousal wurden als Beispiele genannt).
+# Erst gesucht, dann gebaut -- nicht erfunden:
+#
+#   * clayverse-puls.service ("endogener Zustands- und Kognitionszyklus") ist
+#     der einzige laufende Dienst mit diesem Anspruch. Seine tatsaechliche
+#     Arbeit (vorprozessor.py:puls()) ist Kanten-Gewichtslernen aus
+#     Kurations-Deltas -- die eigene Doku sagt es selbst: "NICHT gebaut: der
+#     volle 12-Phasen-Zyklus... Gebaut: EIN aufrufbarer Schritt". Kein
+#     Stimmungs-/Valenzfeld darin.
+#   * pu_lage (die Tabelle, in die der Puls schreibt) live gelesen (2026-08-19):
+#     ausschliesslich Betriebsdaten -- boot_id, takte_gesamt, stau,
+#     letzter_takt, zone, sommerzeit. Keine Stimmung, keine Valenz, kein
+#     Arousal, kein mood-Feld.
+#   * session_state (mcp_server.py) und /api/zustand (zustand.py) ebenso
+#     geprueft: Faehigkeiten/Zaehlwerte/Bereitschaft, keine Emotion.
+#   * --zustand-h/--zustand-s (web/schale/schale.js) faerbt sich aus /readyz
+#     (bereit: 1 | -1), nicht aus einer Stimmung -- Eignerentscheidung
+#     2026-08-18, im Code selbst so benannt ("schlank gehalten"). Die
+#     Avatar-"Stimmung" in zero-avatar.js (sauer/ernst/nachdenklich/lustig)
+#     ist rein client-seitiger Zufall, keine Datenbankquelle.
+#
+# Es gibt also KEIN echtes Valenz-/Arousal-Feld in diesem System -- und ein
+# Feld zu erfinden waere genau die Faelschung, die Regel 1 dem Modell
+# verbietet. Der ehrlichste vorhandene Naeherungswert ist der PULS SELBST:
+# schlaegt er gerade frisch und ohne Stau, oder ist er gestaut/gestoert? Das
+# ist ein echter, gemessener Betriebszustand -- kein Gefuehl, aber real.
+PULS_DB_PATH = os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db")
+# Beobachtet 2026-08-19: pu_takt-Zeilen laufen im Betrieb ca. alle 60s auf
+# (gebuendelt, nicht die volle 4s-Taktrate). 90s deckt eine verpasste Runde,
+# ohne bei jedem kleinen Jitter faelschlich "neutral" zu melden.
+PULS_FRISCHE_S = 90.0
+
+
+def _lese_betriebszustand(db_path: str | None = None) -> tuple[str, str]:
+    """(ton, grund) aus dem echten Puls-Herzschlag -- oder ehrlich neutral.
+
+    Darf NIE werfen und NIE blockieren: eine eigene, kurzlebige Nur-Lese-
+    Verbindung, kein Anfassen von Schema oder anderen Tabellen. Scheitert
+    irgendetwas -- keine Datei, Tabelle fehlt, Zeile fehlt, Zeit unlesbar --
+    ist das Ergebnis "neutral", nie eine geratene Stimmung.
+    """
+    try:
+        conn = sqlite3.connect(f"file:{db_path or PULS_DB_PATH}?mode=ro", uri=True, timeout=2)
+        try:
+            zeile = conn.execute(
+                "SELECT wert FROM pu_lage WHERE schluessel='letzter_takt'"
+            ).fetchone()
+            stau_zeile = conn.execute(
+                "SELECT wert FROM pu_lage WHERE schluessel='stau'"
+            ).fetchone()
+            art_zeile = conn.execute(
+                "SELECT art FROM pu_takt ORDER BY folge DESC LIMIT 1"
+            ).fetchone()
+        finally:
+            conn.close()
+    except Exception:
+        return "neutral", "Puls-Datenbank nicht erreichbar"
+
+    if not zeile or not zeile[0]:
+        return "neutral", "kein Puls-Zeitstempel vorhanden"
+    try:
+        # pu_lage speichert ISO mit "+00:00" (UTC) -- calendar.timegm() liest
+        # das struct_time als UTC, unabhaengig von der lokalen Zone des
+        # Prozesses (der Container laeuft zwar TZ=UTC, aber das soll diese
+        # Funktion nicht voraussetzen muessen).
+        letzter = time.strptime(zeile[0][:19], "%Y-%m-%dT%H:%M:%S")
+        luecke_s = time.time() - calendar.timegm(letzter)
+    except Exception:
+        return "neutral", "Puls-Zeitstempel unlesbar"
+
+    if luecke_s > PULS_FRISCHE_S or luecke_s < -PULS_FRISCHE_S:
+        return "neutral", f"kein aktueller Puls-Kontakt ({luecke_s:.0f}s Luecke)"
+
+    stau = 0
+    try:
+        stau = int(stau_zeile[0]) if stau_zeile and stau_zeile[0] else 0
+    except (TypeError, ValueError):
+        stau = 0
+    art = art_zeile[0] if art_zeile else None
+
+    if stau > 0 or art in ("notlauf", "fehler"):
+        return "angespannt", f"Puls gestaut/gestoert (stau={stau}, art={art})"
+    return "ruhig", "Puls laeuft frisch und ohne Stau"
+
+
+def _betriebston_zeile(db_path: str | None = None) -> str:
+    """Die eine Zeile, die vor CAVEMAN TEXT steht -- oder leer bei neutral.
+
+    Leer statt "BETRIEBSTON: neutral" bei echtem Nichtwissen ("Datenbank
+    nicht erreichbar"), damit das Modell nicht faelschlich liest, es gaebe
+    eine gemessene neutrale Lage -- es gibt schlicht keine Angabe.
+    """
+    ton, grund = _lese_betriebszustand(db_path)
+    if ton == "neutral":
+        return ""
+    return f"BETRIEBSTON: {ton} ({grund})\n\n"
 
 
 def _wirkt_abgeschnitten(text: str, quelle: str = "") -> bool:
@@ -286,6 +406,7 @@ def translate_to_german(
     *,
     model: str = TRANSLATOR_MODEL,
     api_key: str | None = None,
+    puls_db_path: str | None = None,
 ) -> dict[str, Any]:
     keys = [api_key] if api_key else secrets.mistral_keys()
     if not keys:
@@ -294,6 +415,11 @@ def translate_to_german(
         raise ValueError("invalid caveman text")
 
     maskiert, karte = _maskiere(caveman_text)
+    # Einmal gelesen, nicht je Versuch: derselbe Uebersetzungsauftrag soll
+    # nicht mitten in seinen eigenen Korrekturversuchen den Ton wechseln, nur
+    # weil zwei Sekunden vergingen. `puls_db_path` existiert nur fuer Tests --
+    # im Betrieb liest _betriebston_zeile() immer den echten Pfad.
+    betriebston = _betriebston_zeile(puls_db_path)
     zusatz = ""
     bester: tuple[int, str, dict, list[str]] | None = None
     grund = "unbekannt"
@@ -303,7 +429,7 @@ def translate_to_german(
             keys=keys,
             model=model,
             system=TRANSLATOR_SYSTEM,
-            user=f"CAVEMAN TEXT:\n{maskiert}{zusatz}",
+            user=f"{betriebston}CAVEMAN TEXT:\n{maskiert}{zusatz}",
             temperature=0.1,
             max_tokens=1200,
         )
@@ -353,11 +479,13 @@ def translate_to_german(
         #    schlechter als eine vollstaendige und besser als gar keine.
         fehlt = _fehlende_bezeichner(caveman_text, deutsch) + maskenfehler
         if not fehlt:
+            quittung = dict(result["receipt"])
+            quittung["betriebston"] = betriebston.split("\n", 1)[0] or "neutral (keine Zeile)"
             return {
                 "caveman_original": caveman_text,
                 "german_translation": deutsch,
                 "translator_model": model,
-                "translator_receipt": result["receipt"],
+                "translator_receipt": quittung,
             }
         # Nur eine Fassung merken, die nicht mitten im Text aufhoert.
         if not _wirkt_unfertig(roh) and (bester is None or len(fehlt) < bester[0]):
@@ -374,6 +502,7 @@ def translate_to_german(
         quittung = dict(result["receipt"])
         quittung["maengel"] = fehlt[:25]
         quittung["versuche"] = MAX_UEBERSETZUNGSVERSUCHE
+        quittung["betriebston"] = betriebston.split("\n", 1)[0] or "neutral (keine Zeile)"
         return {
             "caveman_original": caveman_text,
             "german_translation": deutsch,

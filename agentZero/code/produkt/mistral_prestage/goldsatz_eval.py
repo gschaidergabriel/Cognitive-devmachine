@@ -86,9 +86,11 @@ def laufen(*, grenze: int | None = None, prompt_version: str | None = None) -> d
     for p in proben:
         caveman = p["caveman"]
         ausfall = None
+        betriebston_angewandt = None
         try:
             out = _mit_wiederholung(translator_mod.translate_to_german, caveman)
             deutsch = out["german_translation"]
+            betriebston_angewandt = out.get("translator_receipt", {}).get("betriebston")
         except Exception as exc:  # noqa: BLE001
             ausfall = f"{type(exc).__name__}: {exc}"[:200]
             deutsch = ""
@@ -100,11 +102,20 @@ def laufen(*, grenze: int | None = None, prompt_version: str | None = None) -> d
         if ausfall:
             mech["bestanden"] = False
 
+        # Derselbe Ton, den der Uebersetzer wirklich sah (aus der Quittung),
+        # geht auch an den Richter -- nie ein neu geratener. "neutral (keine
+        # Zeile)" ist die Quittung fuer "keine BETRIEBSTON-Zeile war da"; das
+        # ist kein Ton, der Richter bekommt dafuer gar keinen ton_hint.
+        ton_hint = None
+        if betriebston_angewandt and not betriebston_angewandt.startswith("neutral"):
+            ton_hint = betriebston_angewandt
+
         if deutsch:
-            verdict = _mit_wiederholung(judge_mod.judge_translation, caveman, deutsch)
+            verdict = _mit_wiederholung(judge_mod.judge_translation, caveman, deutsch, ton_hint=ton_hint)
         else:
             verdict = {"faithfulness": 0, "readability": 0, "menschlichkeit": 0,
-                       "fabrication": True, "reason": f"Uebersetzung ausgefallen: {ausfall}"}
+                       "fabrication": True, "reason": f"Uebersetzung ausgefallen: {ausfall}",
+                       "ton_passend": None}
 
         fabrication = bool(verdict.get("fabrication"))
         faithfulness = 0 if fabrication else int(verdict.get("faithfulness", 0))
@@ -119,10 +130,13 @@ def laufen(*, grenze: int | None = None, prompt_version: str | None = None) -> d
         menschlich_bestanden = menschlichkeit >= MENSCHLICHKEIT_MIN
         gesamt_bestanden = bool(mech["bestanden"]) and richter_bestanden and menschlich_bestanden
 
+        ton_passend_wert = verdict.get("ton_passend")
+
         ergebnisse.append({
             "id": p["id"],
             "ausfall": ausfall,
             "deutsch": deutsch,
+            "betriebston_angewandt": betriebston_angewandt,
             "mech_treue": mech["treue"],
             "mech_bestanden": bool(mech["bestanden"]),
             "mech_verloren": mech.get("verloren", []),
@@ -130,6 +144,7 @@ def laufen(*, grenze: int | None = None, prompt_version: str | None = None) -> d
             "richter_faithfulness": faithfulness,
             "richter_readability": readability,
             "richter_menschlichkeit": menschlichkeit,
+            "richter_ton_passend": ton_passend_wert,
             "richter_fabrication": fabrication,
             "richter_reason": verdict.get("reason", ""),
             "richter_bestanden": richter_bestanden,
@@ -157,6 +172,16 @@ def laufen(*, grenze: int | None = None, prompt_version: str | None = None) -> d
             sum(r["richter_bestanden"] for r in ergebnisse) / n, 4) if n else 0.0,
         "menschlich_bestehensquote": round(
             sum(r["menschlich_bestanden"] for r in ergebnisse) / n, 4) if n else 0.0,
+        # Nur ueber Proben gemittelt, bei denen ueberhaupt ein Ton angewandt
+        # wurde (echter Puls-Kontakt zum Zeitpunkt der Uebersetzung) -- eine
+        # neutrale Probe hat keinen ton_passend-Wert und ginge sonst als
+        # Nullwert faelschlich in den Schnitt ein.
+        "proben_mit_betriebston": sum(
+            1 for r in ergebnisse if r["richter_ton_passend"] is not None),
+        "avg_richter_ton_passend": round(statistics.mean(
+            r["richter_ton_passend"] for r in ergebnisse
+            if r["richter_ton_passend"] is not None), 2) if any(
+            r["richter_ton_passend"] is not None for r in ergebnisse) else None,
         "ausfaelle": sum(1 for r in ergebnisse if r["ausfall"]),
         "ziel": ZIEL,
         "ergebnisse": ergebnisse,

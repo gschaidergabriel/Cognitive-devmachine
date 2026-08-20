@@ -1,5 +1,5 @@
 {
-  "erzeugt": "2026-08-20T02:11:54Z",
+  "erzeugt": "2026-08-20T02:41:51Z",
   "erfuellt": 59,
   "offen": 5,
   "zurueckgestellt": 1,
@@ -97,7 +97,7 @@
       "faehigkeit": "Native Werkzeuge + dünner Zaun",
       "soll": "Zero handelt direkt mit den vollen nativen Claude-Code-Werkzeugen (Bash, Read, Write, Edit, Web); ein dünner PreToolUse-Zaun schützt NUR das Unersetzliche (wiki.db/unifieddb/tresor) und Passwörter — sonst freie Hand",
       "quelle": "Eigner 19.08.",
-      "ist": "10 native Werkzeuge frei (Bash, Read, Write, Edit, MultiEdit, Glob …), 40 MCP-Werkzeuge; verboten nur: Artifact; Zaun-Hook aktiv — rm wiki.db + cat Passwörter im Test abgewiesen, Backups/Bash frei",
+      "ist": "10 native Werkzeuge frei (Bash, Read, Write, Edit, MultiEdit, Glob …), 41 MCP-Werkzeuge; verboten nur: Artifact; Zaun-Hook aktiv — rm wiki.db + cat Passwörter im Test abgewiesen, Backups/Bash frei",
       "erfuellt": true
     },
     {
@@ -129,7 +129,7 @@
       "faehigkeit": "Kontinuität über Neustarts",
       "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "quelle": "Architektur",
-      "ist": "284 Prüfpunkte, Generation 171",
+      "ist": "290 Prüfpunkte, Generation 174",
       "erfuellt": true
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "245 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "247 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -257,7 +257,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 34 minutes (healthy)",
+      "ist": "Up About a minute (healthy)",
       "erfuellt": true
     },
     {
@@ -305,7 +305,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "17973 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "17983 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -409,7 +409,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "57.7 % belegt, 81.5 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "57.8 % belegt, 81.3 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -417,7 +417,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 111.2 GB, gezählt 84.1 GB, Lücke 27.1 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 27.1 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 111.3 GB, gezählt 84.3 GB, Lücke 27.0 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 27.0 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -473,7 +473,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 1.6 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 1.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {

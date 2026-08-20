@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -87,7 +87,7 @@ Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (47)
+## reparatur (44)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -127,9 +127,6 @@ Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T02:37 | entityos | `65b62e2cda72` | fix(clayverse): register exact store module before dataclass load |
 | 2026-08-18T02:24 | entityos | `38840ad5d896` | fix(clayverse): separate staged source archive from seed payload copy |
 | 2026-08-18T02:20 | entityos | `c68f3d087e05` | fix(clayverse): fail closed on missing QEMU guest receipt |
-| 2026-08-18T02:17 | entityos | `4e65e6179780` | fix(clayverse): disable unused VGA in QEMU guest smoke |
-| 2026-08-18T02:16 | entityos | `572e799fe9bb` | fix(clayverse): bind extracted SeaBIOS for rootless guest |
-| 2026-08-18T02:14 | entityos | `b31a1bf82688` | fix(clayverse): bind rootless SeaBIOS path |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -187,10 +184,15 @@ Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (247)
+## bau (250)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T02:41 | entityos | `2b096801f85e` | EOS-Chronik 2026-08-20 02:41:10 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:38 | entityos | `ae5fe886aba2` | EOS-Chronik 2026-08-20 02:38:55 +0000 — entityos: 5 Aenderungen |
+| 2026-08-20T02:30 | entityos | `74c2f23b46c0` | EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:28 | entityos | `494abf18d1d1` | EOS-Chronik 2026-08-20 02:28:37 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:26 | entityos | `c7f66349c025` | EOS-Chronik 2026-08-20 02:26:33 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T01:44 | entityos | `f05471d8447d` | Eichung: fehlendes Arbeitsverzeichnis nachgeruestet (Drop-in mitgesichert) |
 | 2026-08-20T01:40 | entityos | `f681ca215c9e` | Die systemd-Einheiten des Vorsatz-Pruefers mitsichern |
 | 2026-08-20T01:40 | entityos | `f9ed8898ba18` | Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises |
@@ -246,9 +248,4 @@ Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
 | 2026-08-18T10:00 | unifieddb | `e1bc60fa6773` | Der Walk ging nur vorwaerts - ein Drittel des Graphen lag hinter ihm |
 | 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
-| 2026-08-18T09:33 | unifieddb | `b08f52ebe6c1` | Einstiegspunkt der Abrufentitaet: Ausbeute vervierfacht, ohne die Schranke anzufassen |
-| 2026-08-18T09:19 | entityos | `372397141f5d` | S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites |
-| 2026-08-18T09:00 | entityos | `70fe17a64cb5` | Die autonomen Takte versioniert - und der Riss, den sie hatten |
-| 2026-08-18T08:55 | entityos | `5f5df7cad329` | Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz |
-| 2026-08-18T08:44 | entityos | `be1359046d41` | Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging |
 

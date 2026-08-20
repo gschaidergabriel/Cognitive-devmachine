@@ -480,6 +480,89 @@ class ClayVerseEffectBridge:
                 "hinweis": ("Der volle Artikeltext. Steht hier nichts, ist der Artikel ein "
                             "reiner Zeiger (z.B. auf eine Datei) -- dann nimm dateien_suchen.")}
 
+    def abruf_lage(self) -> dict:
+        """Stand der gelernten Abrufkarte. Rein lesend, keine Modellaufrufe."""
+        def _eine(sql, *a):
+            try:
+                r = self.db.db.execute(sql, a).fetchone()
+                return dict(r) if r is not None else None
+            except Exception as e:
+                return {"nicht_lesbar": f"{type(e).__name__}: {e}"}
+
+        def _viele(sql, *a):
+            try:
+                return [dict(r) for r in self.db.db.execute(sql, a).fetchall()]
+            except Exception as e:
+                return [{"nicht_lesbar": f"{type(e).__name__}: {e}"}]
+
+        karte = _eine(
+            "SELECT version, gebaut_am, anlass, regionen, landmarken, wegweiser, "
+            "       verhaeltnis, erkundungsanteil, dauer_s "
+            "FROM vp_karte_version ORDER BY version DESC LIMIT 1")
+
+        wege = _eine(
+            "SELECT COUNT(*) AS anzahl, SUM(guete) AS guete_summe, "
+            "       SUM(tunnel) AS tunnel, MAX(guete) AS beste "
+            "FROM vp_weg")
+        oberstes_zehntel = None
+        urteil = "NICHT MESSBAR (zu wenige Wege)"
+        try:
+            n = int((wege or {}).get("anzahl") or 0)
+            summe = float((wege or {}).get("guete_summe") or 0.0)
+            if n >= 10 and summe > 0:
+                k = max(1, n // 10)
+                top = self.db.db.execute(
+                    "SELECT SUM(guete) FROM (SELECT guete FROM vp_weg "
+                    "ORDER BY guete DESC LIMIT ?)", (k,)).fetchone()[0] or 0.0
+                oberstes_zehntel = round(float(top) / summe, 3)
+                # Bei Gleichverteilung haelt das oberste Zehntel genau 10 %.
+                urteil = ("HIERARCHIE BILDET SICH" if oberstes_zehntel >= 0.20 else
+                          "GLEICHVERTEILT -- der Mechanismus tut (noch) nichts")
+        except Exception:
+            pass
+
+        marken_gesamt = _eine(
+            "SELECT COUNT(*) AS anzahl, SUM(getragen) AS getragen FROM vp_erfolgsmarke")
+        marken_woche = _eine(
+            "SELECT COUNT(*) AS anzahl, SUM(getragen) AS getragen "
+            "FROM vp_erfolgsmarke WHERE ts >= ?", __import__("time").time() - 7 * 86400)
+
+        def _quote(d):
+            try:
+                n = int((d or {}).get("anzahl") or 0)
+                g = int((d or {}).get("getragen") or 0)
+                return round(g / n, 3) if n else None
+            except Exception:
+                return None
+
+        politik = _eine("SELECT mode, policy_version, updated_at FROM retrieval_policy_state LIMIT 1")
+        eintritte = _eine("SELECT COUNT(*) AS anzahl FROM retrieval_entrypoint_policy")
+
+        return {
+            "karte": karte or {"noch_nie_gebaut": True},
+            "wege": {
+                **(wege or {}),
+                "oberstes_zehntel_haelt": oberstes_zehntel,
+                "bei_gleichverteilung": 0.1,
+                "urteil": urteil,
+            },
+            "erfolgsmarken": {
+                "gesamt": marken_gesamt, "quote_gesamt": _quote(marken_gesamt),
+                "letzte_7_tage": marken_woche, "quote_7_tage": _quote(marken_woche),
+            },
+            "politik": {"zustand": politik, "eintrittspunkte": eintritte},
+            "top_wege": _viele(
+                "SELECT von, nach, art, nutzung, getragen, ROUND(guete,3) AS guete, tunnel "
+                "FROM vp_weg ORDER BY guete DESC, nutzung DESC LIMIT 8"),
+            "hinweis": ("Rein lesend -- dieser Aufruf speist die Karte NICHT (das tut "
+                        "korpus_tief). 'oberstes_zehntel_haelt' ist der Anteil der "
+                        "Gesamtguete, den die besten 10 % der Wege tragen; bei "
+                        "Gleichverteilung waeren es 0.1. Deutlich mehr heisst: wenige "
+                        "Autobahnen, viele langsame Strassen -- die erwartete Form. "
+                        "Steht dort 'GLEICHVERTEILT', tut der Mechanismus nichts, und "
+                        "das gehoert genauso gemeldet wie ein Erfolg."),
+        }
+
     def korpus_tief(self, frage: str, budget: int = 6) -> dict:
         """Die gelernte Abruf-Maschine: Karte, Wegehierarchie, Eintrittspunkte.
 
@@ -858,6 +941,11 @@ def main() -> None:
     def artikel_lesen(artikel_id: str) -> dict:
         """Einen GANZEN Wiki-Artikel lesen, nicht nur den Ausschnitt aus korpus_suchen. Gib die id, die korpus_suchen geliefert hat. ⭐ Nutze das, statt aus dem Anfang zu schliessen, was im Rest steht."""
         return bridge.artikel_lesen(artikel_id)
+
+    @mcp.tool(annotations=udb_ro)
+    def abruf_lage() -> dict:
+        """Stand der GELERNTEN Abrufkarte: Kartenversion, Wegehierarchie (samt Urteil, ob sich ueberhaupt eine bildet), Erfolgsquote der Eintrittspunkte, Zustand der Abrufpolitik. Rein lesend -- der Aufruf speist die Karte NICHT. ⭐ Nimm es, wenn jemand fragt, wie gut dein Gedaechtnis/Abruf gerade arbeitet, oder wenn du selbst pruefen willst, ob ein Lernmechanismus wirklich laeuft statt nur zu existieren."""
+        return bridge.abruf_lage()
 
     @mcp.tool(annotations=udb_ro)
     def korpus_tief(frage: str, budget: int = 6) -> dict:

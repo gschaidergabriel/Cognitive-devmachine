@@ -1,12 +1,106 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T02:11:13Z. 910 Commits aus vier Repos, davon 281 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T02:41:13Z. 911 Commits aus vier Repos, davon 286 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 02:41:10 +0000 — entityos: 1 Aenderungen
+
+`2b096801f85e` · entityos · 02:41 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:41:10+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:38:55 +0000 — entityos: 5 Aenderungen
+
+`ae5fe886aba2` · entityos · 02:38 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/policy/managed-settings.json
+  vorsatz/eos_vorsatz.py
+  vorsatz/systemd/eos-vorsatz-arbeit.service
+  vorsatz/systemd/eos-vorsatz-arbeit.timer
+
+Zeit: 2026-08-20T02:38:55+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen
+
+`74c2f23b46c0` · entityos · 02:30 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mcp_server.py
+
+Zeit: 2026-08-20T02:30:58+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:28:37 +0000 — entityos: 1 Aenderungen
+
+`494abf18d1d1` · entityos · 02:28 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:28:37+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:26:33 +0000 — entityos: 1 Aenderungen
+
+`c7f66349c025` · entityos · 02:26 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T02:26:33+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### Eichung: fehlendes Arbeitsverzeichnis nachgeruestet (Drop-in mitgesichert)
 
@@ -4274,68 +4368,5 @@ Gemessen, dieselben 20 Fragen vorher/nachher (siehe /tmp/messen_kantenhop.py):
   hop_kandidaten pro Frage im Politik-Bericht ausgewiesen, gedeckelt (F45)
 
 Backup: udb/abruf/paket.py.vor-kantenhop (lokal, nicht versioniert)
-```
-
-### paket(): hypothesen/gegenseite lesen jetzt auch artikel.art=hypothese/gegenhypothese
-
-`f89157489f2c` · unifieddb · 14:21 UTC · ClayVerse
-
-```
-Gemessen [B27]: 1.645 Hypothesen + 272 Gegenhypothesen lagen in artikel,
-_folgerungen_fuer() sah nur die fast leere folgerung-Tabelle (8 Zeilen).
-Neue _artikel_hyp_gegenhyp() liest chosen_ids gegen das schon geladene
-felder-dict -- keine neue Anker-Regel, resolve_entities()/AMBIGUOUS-Sperre
-unangetastet. 20-Fragen-Messung: hypothesen>0 0/20->1/20, gegenseite>0
-4/20->8/20, Latenz nicht verschlechtert (Median 399,7ms->265,6ms).
-```
-
-### B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert
-
-`bd4a7c53909b` · clay · 14:20 UTC · ClayVerse
-
-```
-Ursache gemessen (nicht die Ankersperre): _folgerungen_fuer() las nur folgerung-Tabelle (8 Zeilen), nie artikel.art in (hypothese,gegenhypothese) (1.645/272, Projekt clay-global-research-entity), obwohl diese laengst als treffer abgerufen wurden. resolution_class ueber 20 echten Fragen: 19x LOW_CONFIDENCE, 1x EXACT_ID (Ankersperre bestaetigt selten getroffen, aber NICHT alleinige Ursache: gegenseite war schon vorher 4/20 ohne jeden Anker, rein lexikalisch). Fix: _artikel_hyp_gegenhyp() liest chosen_ids gegen bereits geladenes felder-dict, keine neue Anker-Regel, resolve_entities/AMBIGUOUS-Sperre unangetastet. Vorher/Nachher (dieselben 20 Fragen): hypothesen>0 0/20 -> 1/20, gegenseite>0 4/20 -> 8/20. Latenz unveraendert (Median 399,7ms -> 265,6ms). paket() kalt bestaetigt 122ms-2986ms (Doku-Spanne 0,2-6,3s bestaetigt, Median ca 0,3-0,4s). gegenseite laeuft strukturell getrennt vom Walk (3 unabhaengige Quellen: folgerung-Status, kante/graph_kante, jetzt artikel), nicht ueber die Walk-Cache-Plan-Liste. Restluecke offen: hypothesen-Trefferquote bleibt niedrig, weil normale Themenfragen selten direkt auf eine hypothese-artikel-Zeile matchen (nur Titeltext, kein Kanten-Hop) - naechste, groessere Entscheidung, hier nicht getroffen.
-```
-
-### B11 blockiert: Grundlinie + lokales VLM + Kaskaden-Kandidaten gemessen
-
-`3ae15cae420a` · clay · 14:07 UTC · ClayVerse
-
-```
-Grundlinie (Dateiname+Tags+Kategorie, 472 echte Bilder wikimedia+gratisography): 100% liefern Objekt-Kandidaten, aber 0/4 Stichproben verankert in paket() (fachfremdes Korpus). paket() real 0,2-6,3s kalt (nicht 0,46ms). hypothesen/gegenseite in 5/5 paket()-Aufrufen leer trotz 1645/272 Artikel in der DB - Anker-Luecke blockiert F56. Lokales SmolVLM-256M in clay-kognition.slice: 35,8s/Bild - ueber der Nutzlosigkeitsgrenze, fuer Online-Pfad tot. Groq gpt-oss-20b + llama-3.1-8b: 200, ~9-10ms. NVIDIA llama-3.2-11b-vision: 200, 6 echte Vision-Calls. 3-Wege-Halluzinationskontrolle (NONE/NAIVE/POSSIBILITY) n=1 Bild, Modell widerstand falscher Praemisse in beiden Laeufen - kein Beweis fuer Robustheit, nur dass der Mechanismus messbar ist.
-```
-
-### B27 geprueft: Lesart-Kompaktion unabhaengig nachgemessen (F43-Pruefung)
-
-`4bafdd50888a` · clay · 13:56 UTC · ClayVerse
-
-```
-kompakt vs voll -88,8% (n=60); e2e Paketgroesse +3,9% (n=20, frisch), Trefferabdeckung 20/20 identisch, 0 gewaehlt bei UNBESTIMMT, 0 abgelaufene sichtbar -- bestaetigt Commit 0484a33 (+7,2%, Ziel <30%)
-```
-
-### AP2 Schritt 1: Grundlinie gemessen + Sitzungsregistrierung (F15 max 3)
-
-`0d299dd28ffa` · unifieddb · 13:55 UTC · ClayVerse
-
-```
-Grundlinie [M 15.08., wiki.db WAL busy_timeout=5000]: spaced writes
-1474 Schreibungen/0 Kollisionen; tight-loop worst case 25730/2 harte
-OperationalError, aber 1 Sitzung auf 12 Schreibungen ausgehungert
-(Fairness, kein Datenverlust). SQLite loest also "database is locked"
-fast allein -- das eigentliche Problem ist der stille logische
-Ueberschreiber (zwei Sitzungen, ein Feld, keine merkt die andere),
-nicht der Lock-Fehler. Korrigiert die fruehere Annahme, Migration habe
-das Drei-Sitzungen-Problem geloest (F34) -- war falsch, jetzt mit Zahl.
-
-udb/speicher/sitzung.py: Registrierung + Herzschlag + Obergrenze 3
-(F15), toten Sitzungen (>120s ohne Lebenszeichen) werden vor jeder
-Zaehlung entfernt statt geraten. Getestet: 4. Registrierung wird
-abgewiesen, Abmelden raeumt korrekt auf.
-
-Bewusst NICHT enthalten: die generelle schreiben()-Funktion (welche
-Tabellen/Felder versioniert werden) -- das ist Formentscheidung nach
-F44 P2, gehoert vor AP3/AP5 abgeglichen, nicht im Alleingang gebaut.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

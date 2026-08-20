@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T22:11:17Z. **3161 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T22:41:17Z. **3163 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T02:46:42+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T02:46:42+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3063 |
+| baunotiz | 3065 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1922 |
-| baunotiz | bauverlauf.jsonl | 1096 |
+| baunotiz | git-commit | 1923 |
+| baunotiz | bauverlauf.jsonl | 1097 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3161 · Gegenhypothese: 0 von 3161
+## Hypothese: 0 von 3163 · Gegenhypothese: 0 von 3163
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -195,6 +195,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: preserve Gen204 lease-test flip and route flake matrix
 
+### agentZero-Export 2026-08-20T22:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-0340b7220f43e2da3d6dd394a452edd023e3c4c8` · baunotiz · git-commit · 2026-08-20T22:13:09+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-20T22:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
 ### research: route Gen204 identity and provenance falsifiers
 
 `baunotiz-bauverlauf-693cf4e26304cf64f62e` · baunotiz · bauverlauf.jsonl · 2026-08-20T21:50:09+07:00 · Gabriel Gschaider
@@ -226,12 +234,4 @@ _(kein Text)_
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: bind Gen204 content-prefix identity aliasing falsifier
-
-### claycode supervisor: bind Gen204 persistent GWT bypass and 664/1 frontier
-
-`baunotiz-bauverlauf-7ee1858581e05adbcc47` · baunotiz · bauverlauf.jsonl · 2026-08-20T21:44:59+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

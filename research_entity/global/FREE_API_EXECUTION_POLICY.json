@@ -408,6 +408,16 @@
     "executable_evidence": "test_environment_snapshot_rejects_active_string_subclasses",
     "counterhypothesis": "isinstance(value, str) proves that an environment value is passive text; falsified locally because a str subclass passed that check, its overridden split method executed after the snapshot and leaked credential-like exception text before network access."
   },
+  "passive_text_request_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Model identifiers, message roles and message content must be exact built-in strings before validation or JSON serialization; string subclasses are active objects and are rejected before any overridden method, credential lookup or network operation can run.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/library/json.html#encoders-and-decoders"
+    ],
+    "executable_evidence": "test_text_request_rejects_active_string_subclasses",
+    "counterhypothesis": "String subclasses are equivalent to passive JSON text because isinstance(value, str) succeeds; falsified locally for model, role and content because each accepted subclass executed its overridden strip method and leaked exception text before routing."
+  },
   "response_context_cleanup_boundary": {
     "checked_at": "2026-08-20",
     "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
@@ -460,6 +470,7 @@
     "Provider endpoint URLs containing userinfo are rejected before request construction or network access.",
     "Authenticated provider requests must not follow HTTP redirects; redirects fail closed before credentials can cross an origin boundary.",
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
+    "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",
     "The text-chat adapter accepts only system, user and assistant roles; arbitrary and tool/function roles are rejected before routing, credential use or network access.",
     "The text-chat conversation optionally starts with one system message, then alternates user and assistant roles beginning and ending with user; invalid sequences are rejected before routing, credential use or network access.",

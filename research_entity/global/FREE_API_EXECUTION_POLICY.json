@@ -101,6 +101,16 @@
     "executable_evidence": "test_extreme_monotonic_values_cannot_suppress_or_bloat_receipt",
     "counterhypothesis": "Validating each injected monotonic reading as a finite built-in number is sufficient; falsified locally because two finite floats produced an infinite difference and OverflowError after successful execution, while two exact integers produced unbounded receipt metadata."
   },
+  "bounded_attempt_identity_clock_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "Attempt identity is derived from the stable request ID and a fresh 128-bit nonce, never from decimal formatting of an unbounded injected clock integer. Clock values remain duration telemetry and cannot suppress the mandatory post-execution receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#integer-string-conversion-length-limitation",
+      "https://docs.python.org/3/library/secrets.html#secrets.token_hex"
+    ],
+    "executable_evidence": "test_extreme_integer_clock_cannot_suppress_attempt_receipt",
+    "counterhypothesis": "Including the monotonic start value in the attempt-ID preimage adds harmless uniqueness; falsified locally because an exact passive integer exceeded Python's decimal-conversion limit only after successful provider execution and prevented the receipt, while the mandatory nonce already supplies attempt uniqueness."
+  },
   "passive_wall_clock_boundary": {
     "checked_at": "2026-08-21",
     "claim": "An injected wall clock used for absolute Retry-After arithmetic must return an exact built-in finite float or integer. Invalid and polymorphic values use the conservative 60-second fallback without executing arithmetic methods, reclassifying HTTP 429 or suppressing its receipt.",
@@ -568,6 +578,7 @@
     "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
+    "Attempt-ID construction never decimal-formats injected clock values; request ID plus the fresh 128-bit nonce supply bounded identity material so extreme passive integers cannot suppress a post-execution receipt.",
     "Attempt nonces are exact built-in nonempty strings before authenticated execution; polymorphic nonce formatting cannot run after the provider request or suppress its mandatory receipt.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",

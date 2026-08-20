@@ -825,7 +825,10 @@ def _execute_chat_locked(
         "budget_epoch_id": _budget_epoch_id(env),
         "request_id": request_id,
         "attempt_id": _safe_attempt_id(
-            f"{request_id}:{started}:{attempt_nonce}"
+            # The nonce supplies attempt uniqueness.  Keeping an unbounded
+            # injected integer clock out of string formatting prevents a
+            # successful execution from losing its mandatory receipt.
+            f"{request_id}:{attempt_nonce}"
         ),
         "status": status,
         "outcome": outcome,

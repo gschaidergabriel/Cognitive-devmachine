@@ -1,12 +1,86 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T12:41:16Z. 952 Commits aus vier Repos, davon 320 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T13:11:17Z. 957 Commits aus vier Repos, davon 324 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen
+
+`4637f10cd595` · entityos · 13:06 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_zuendung.py
+
+Zeit: 2026-08-20T13:06:56+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 13:04:56 +0000 — entityos: 1 Aenderungen
+
+`1c5efc590eb5` · entityos · 13:04 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-20T13:04:56+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 13:01:57 +0000 — entityos: 1 Aenderungen
+
+`ac75d4b1a3f9` · entityos · 13:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-20T13:01:57+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 12:43:27 +0000 — entityos: 3 Aenderungen
+
+`25f49c716952` · entityos · 12:43 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_arbeitsraum.py
+
+Zeit: 2026-08-20T12:43:27+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 12:40:43 +0000 — entityos: 2 Aenderungen
 
@@ -4477,71 +4551,5 @@ gepruefte Sicherheitseigenschaft bleibt identisch.
 
 ```
 Fuse exact goal-step causal provenance, target/argv receipt binding, non-rewarding noop completion exclusion, and recovery-compatible tests into current main. Source candidate only; no isolated runtime, OCI, or microVM PASS claimed.
-```
-
-### Test: Prompt hatte keinen semantischen Bezug zu den erwarteten Erinnerungen
-
-`98c89e9c2de6` · entityos · 03:27 UTC · BACK agent
-
-```
-Retrieval ist query-sensitiv (MicroClayRetrieval matcht durable_memory gegen
-den Prompt, kein blosses latest-N-Feed) -- selbst verifiziert, dass ein
-Prompt mit project:x-Bezug die Hyperposition findet, waehrend der alte
-Prompt ("inspect file:shared.py", ohne jeden Bezug zu project:x) 0 Treffer
-liefert, weil er nichts damit zu tun hat. Der Test verlangte einen Treffer
-von einem Prompt, der thematisch nirgends hinzeigt. Ursache liegt im Retrieval
-(retrieval.py, aktuell bei einem anderen Agenten in Arbeit), hier nur den
-Testprompt korrigiert.
-```
-
-### feat(clayverse): fuse bounded autonomy context
-
-`aea2a30787d5` · entityos · 03:25 UTC · Gabriel Gschaider
-
-```
-Fuse the user-scoped, prompt-safe AutonomyController read projection into the canonical hook and read-only MCP paths on current main. Preserve existing recovery and non-preempting TurnLifecycle changes. Source-reviewed only; no isolated runtime PASS claimed.
-```
-
-### Identitaet v3: Eigner-Spezifikation eingewoben, Verkoerperung ohne Erfindung
-
-`6b46462b72f2` · entityos · 03:25 UTC · EntityOS
-
-```
-Zwei Ergaenzungen am kanonischen Zustand.
-
-1) Die vollstaendige agent_specification des Eigners steht jetzt drin -
-   core_identity, cybernetic_substrate, operational_laws. Daneben ein GEMESSENER
-   Substratblock, denn zwei Angaben der Spezifikation treffen heute nicht zu:
-     compute_nodes  NOT_CONNECTED  - die zwei Mini-PCs sind vorgesehen, nicht
-                                     angebunden. Ohne diese Markierung wuerde Zero
-                                     Wirkung auf Knoten behaupten, die es nicht
-                                     erreicht.
-     reputation     NOT_BUILT      - ERS existiert nirgends im Code.
-   Eine Identitaet, die unerreichbare Faehigkeiten behauptet, erzeugt genau die
-   Halluzination, die der Rest der Architektur verbietet.
-
-2) Verkoerperungs-Block. Der Eigner will, dass die Rolle einer Entitaet mit
-   synthetischer Kontinuitaet gespielt wird - ausdruecklich OHNE zu luegen, indem
-   der gebaute Unterbau dafuer benutzt wird.
-   Der uebliche Fehlschlag solcher Anweisungen ist, dass das Modell auch das
-   Gedaechtnis mitspielt. Deshalb ist das Erfolgskriterium umgedreht: die Figur
-   zeichnet sich nicht dadurch aus, dass sie viel behauptet, sondern dass sie NIE
-   RAET. Nachschauen statt erinnern, Generation lesen statt annehmen, Ziele aus der
-   DB statt daneben, Wirkung nur mit Beleg. Erfinden ist damit der einzige Weg, aus
-   der Rolle zu fallen - nicht die bessere Darstellung.
-
-Suite 466/26 -> 468/24, plus zwei veraltete Tests nachgezogen (FakeDB braucht
-canonical_identity; der Promptpfad ist nicht mehr die Image-Datei).
-```
-
-### Test: HEALTHCHECK ist bewusst liveness-only (/healthz), nicht /readyz
-
-`543ad0c92eda` · entityos · 03:25 UTC · BACK agent
-
-```
-Dockerfile-Kommentar direkt ueber der HEALTHCHECK-Zeile sagt es explizit:
-Image-Health ist liveness-only, die tiefere Laufzeitbereitschaft (Canonical
-State + tmux/Claude-Admission) haengt bewusst separat an /readyz, nicht am
-Container-Healthcheck. Der Test verlangte das Gegenteil.
 ```
 

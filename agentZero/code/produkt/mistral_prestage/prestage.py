@@ -36,6 +36,49 @@ _REQUIRED_KEYS = {
     "broadcast_ids",
 }
 
+_WEITER_ARBEITSRAUM = """
+
+⭐⭐⭐ IN DIESEM ZUG IST DER ARBEITSRAUM WEIT. Lies das, es aendert deine Aufgabe.
+
+`CONTEXT.world.corpus` ist keine Artikelliste mehr, sondern die Liste ALLER \
+Bewerber um die wenigen Plaetze der Ausstrahlung. Jeder Eintrag traegt \
+`gw_quelle`:
+
+  korpus       eine Wissensstelle aus dem Bestand
+  gedaechtnis  etwas, das ueber diesen Menschen dauerhaft notiert wurde
+  verlauf      ein frueherer Zug dieses Gespraechs
+  kollision    eine andere Sitzung arbeitet gerade am selben Gegenstand
+  lesart       mehrere gleichzeitig gueltige Deutungen aus dem Weltmodell
+
+Deshalb stehen `own_recent`, `durable_memory` und `cross_session_collision` \
+LEER da: ihr Inhalt ist hier, als Bewerber. Sie sind nicht verschwunden, sie \
+konkurrieren. Wenn du eine Gedaechtnis- oder Verlaufsstelle brauchst, dann \
+WAEHLE SIE -- schreib ihre Kennung in `broadcast_ids`, so wie bei jeder anderen. \
+Nur das Gewaehlte wird Zero im Volltext gereicht.
+
+Die Herkunft ist kein Rang. Eine Gedaechtnisnotiz darf einen Korpusartikel \
+schlagen, wenn sie die Frage besser trifft, und umgekehrt. Entschieden wird \
+nach Passung zur FRAGE, nicht danach, wer der Bewerber ist.
+
+Du hast weiterhin hoechstens DREI Plaetze. Sie sind jetzt knapper als vorher, \
+weil mehr um sie konkurriert -- das ist der Sinn. Waehle das, ohne das die \
+Frage nicht zu beantworten ist, nicht das, was auch noch interessant waere.
+"""
+
+
+def _arbeitsraum_regel() -> str:
+    """Die Zusatzregel fuer den weiten Arbeitsraum -- nur wenn er an ist.
+
+    Der Schalter steht in der Pipeline (`CLAYVERSE_ARBEITSRAUM`). Die Regel
+    hier haengt an derselben Umgebungsvariablen, weil eine Regel, die etwas
+    anderes beschreibt als der Kontext zeigt, schlimmer ist als keine Regel.
+    """
+    import os as _os
+    if _os.environ.get("CLAYVERSE_ARBEITSRAUM", "korpus").strip().lower() == "alles":
+        return _WEITER_ARBEITSRAUM
+    return ""
+
+
 _BASE_RULES = """You are the MISTRAL PRE-STAGE inside EntityOS, F74's ONE expensive call per \
 request. You stand between the human and Zero (headless Claude Code, invoked once, \
 non-interactively, no session persistence -- Zero has no memory of its own; UnifiedDB is the \
@@ -578,7 +621,7 @@ def run_prestage(
         raise ValueError("invalid raw prompt")
 
     addendum = _ROUND1_ADDENDUM if round_no == 1 else _ROUND2_ADDENDUM.format(zero_suggestion=zero_suggestion)
-    system = _BASE_RULES + addendum
+    system = _BASE_RULES + addendum + _arbeitsraum_regel()
     # Die echten Werkzeugnamen aus der einen Wahrheit (DEFAULT_ALLOWED_TOOLS),
     # damit die Vorstufe aus realen Namen waehlt statt zu erfinden.
     try:

@@ -32,15 +32,23 @@ Mass ausgeschlossen hat.
              ueber ein Fenster echter Ausstrahlungen statt ueber Gewinner-IDs
              eines Freilauf-Taktes.
 
-DIE SCHWELLE IST HART UND ZWEITEILIG
-------------------------------------
-Zugelassen ist nur, wer BEIDE Huerden nimmt:
-  * relevanz > 0 -- eine Stelle, die kein einziges Wort mit der Frage teilt,
-    ist kein Beleg FUER diese Frage, egal wie hoch der Abruf sie rankt.
-  * wert >= SCHWELLE.
+DIE ZUENDUNG HAT DREI HUERDEN -- ZWEI ABSOLUTE, EINE RELATIVE
+-------------------------------------------------------------
+  1. relevanz > 0 und mindestens MIN_GEDECKT gedeckte Woerter -- eine Stelle,
+     die nur ein Allerweltswort mit der Frage teilt, ist kein Beleg FUER diese
+     Frage, egal wie hoch der Abruf sie rankt. Hier scheitern fachfremde
+     Fragen und blosse Hoeflichkeit (gemessen 3/3 bzw. 3/3 ohne Zuendung).
+  2. wert >= BODEN -- gegen Zufallstreffer knapp ueber null.
+  3. wert >= SCHWELLE_RELATIV * bester Wert -- die eigentliche Konkurrenz.
+
 Damit ist "nichts wird ausgestrahlt" ein erreichbarer Zustand. Genau das
 fehlt LIDAs `compete()` (argmax, auch bei Score 0) -- und ohne diesen
 Zustand gibt es keine Zuendung, nur eine Umverteilung.
+⚠️ Eine FESTE Latte auf `wert` hatten wir zuerst, und sie war falsch: `relevanz`
+ist der Anteil der GANZEN Frage, den eine Stelle deckt, und eine praezise
+gestellte Frage kann von ihrer richtigen Antwort gar nicht zur Haelfte gedeckt
+werden. Gemessen: bei vier von acht Sonden zuendete nichts mehr, obwohl die
+Antwort im Korpus stand. Die Latte bestrafte genau die genauesten Fragen.
 
 DER RUECKKANAL (seit 2026-08-20)
 -------------------------------
@@ -104,6 +112,39 @@ GEWICHT_RELEVANZ = 0.70
 # mitzuschleppen, wird das Gewicht dann auf relevanz umgelegt (siehe
 # _gewichte()) -- die Formel sagt damit die Wahrheit ueber das, was rechnet.
 GEWICHT_NEUHEIT = 0.10
+# ⚠️⚠️ UMGEBAUT 2026-08-20 abends, nachdem die absolute Schwelle bei VIER von
+# acht Sonden NICHTS mehr zuliess, obwohl die Antwort nachweislich im Korpus
+# stand. Ursache: `relevanz` ist der Anteil der GESAMTEN Frage, den eine Stelle
+# deckt. Eine lange, praezise Frage ("welches verzeichnis auf dem vps darf man
+# nicht direkt editieren, weil der naechste push es ueberschreibt", sieben
+# Inhaltswoerter) kann von einer richtigen Stelle gar nicht zu einem Viertel
+# gedeckt werden -- die Stelle beantwortet die Frage, wiederholt sie aber nicht.
+# Gemessen: bester Wert 0,197 bei einer Frage, deren Antwort dastand.
+# Eine feste Latte bestraft damit genau die Fragen, die am genauesten gestellt
+# sind. Das ist ein Messfehler, kein Vorsichtsprinzip.
+#
+# ⭐ DIE ZUENDUNG IST RELATIV, NICHT ABSOLUT -- und das ist naeher an dem, was
+# GWT beschreibt: ein Inhalt wird bewusst, weil er die anderen SCHLAEGT, nicht
+# weil er eine von aussen gesetzte Marke reisst. Drei Huerden, jede mit einem
+# eigenen Zweck:
+#   1. relevanz > 0 und MIN_GEDECKT gedeckte Woerter -- es muss ueberhaupt ein
+#      Beleg FUER DIESE Frage sein. Das ist die Huerde, an der fachfremde
+#      Fragen und blosse Hoeflichkeit scheitern (gemessen 3/3 bzw. 3/3 null),
+#      und sie bleibt absolut.
+#   2. wert >= BODEN -- gegen Zufallstreffer knapp ueber null.
+#   3. wert >= RELATIV * bester Wert -- die eigentliche Konkurrenz. Wer weit
+#      hinter dem Sieger liegt, faellt heraus, ganz gleich wie das Feld liegt.
+# ⭐ ABGELESEN, nicht gewaehlt: Sweep 0,30..1,00 in Schritten von 0,05 ueber
+# dieselben drei Fragesorten. Der Traeger kommt bei JEDEM Wert durch (8/8, kein
+# Nullzug), fachfremd und Hoeflichkeit zuenden bei jedem Wert nichts (3/3) --
+# die absolute Huerde erledigt beides allein. Der relative Abstand regelt
+# ausschliesslich die BEGLEITUNG: 1,38 Stellen bei 0,30-0,40 · 1,25 bei
+# 0,45-0,50 · 1,00 ab 0,55 (reiner Sieger, keine Koalition mehr).
+# 0,50 heisst in einem Satz: "mindestens halb so gut wie der Sieger". Das ist
+# eine Aussage, die man pruefen kann, und sie laesst eine kleine Koalition zu,
+# ohne Fuellmaterial hereinzulassen.
+SCHWELLE_RELATIV = 0.50
+BODEN = 0.08
 # ⭐ NICHT GERATEN, SONDERN ABGELESEN. Schwellensweep 0,10..0,40 in Schritten
 # von 0,02 ueber drei Fragesorten (A: Beleg im Korpus, B: fachfremd,
 # C: blosse Hoeflichkeit). Bis 0,28 kommt in A der Traeger 8/8 durch und kein
@@ -112,7 +153,12 @@ GEWICHT_NEUHEIT = 0.10
 # Fragen strahlen nichts aus). Die Mitte des Plateaus ist 0,25 -- dort ist der
 # Abstand zwischen "Beleg da" und "fachfremd" am groessten, ohne dass die
 # Trennung an der zweiten Nachkommastelle haengt.
-SCHWELLE = 0.25
+# ⚠️ NICHT MEHR DIE ZULASSUNG -- die entscheiden BODEN und SCHWELLE_RELATIV
+# (siehe oben). Der Wert bleibt als abgelesene Kennzahl stehen, weil er die
+# Kalibrierung des absoluten Sweeps festhaelt: bis 0,28 kam der Traeger 8/8
+# durch, ab 0,30 fiel der erste heraus. Er beschreibt also, wo eine feste Latte
+# haette liegen muessen -- und dass sie selbst dort nicht getaugt hat.
+SCHWELLE_ABGELESEN_2026_08_20 = 0.25
 # Eine EINZELNE gedeckte Wortuebereinstimmung ist keine Passung. Ohne diese
 # Regel strahlte "danke, das war hilfreich" eine Stelle aus (ein gedecktes Wort
 # von zweien = relevanz 0,5) -- eine Zuendung ohne Sachfrage, also genau das
@@ -269,7 +315,10 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
         k["gw_neuheit"] = round(neu, 3)
         k["gw_gelernt"] = round(ler, 3)
         k["gw_wert"] = round(wert, 3)
-        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= SCHWELLE)
+        # Vorlaeufig: nur die absoluten Huerden. Die relative faellt erst,
+        # wenn das ganze Feld bewertet ist -- eine Konkurrenz laesst sich nicht
+        # Kandidat fuer Kandidat entscheiden.
+        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= BODEN)
         raus.append(k)
     # Bei Gleichstand entscheidet die Abrufreihenfolge -- als STICHENTSCHEID,
     # nicht als Anteil am Wert (siehe Kopf).
@@ -280,6 +329,14 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
         k.pop("_i", None)
     for rang, k in enumerate(raus, 1):
         k["gw_rang"] = rang
+    # Jetzt die Konkurrenz: gemessen am Besten, der die absoluten Huerden
+    # genommen hat. Nimmt sie keiner, zuendet nichts -- und das ist dann eine
+    # Aussage ueber die Frage, nicht ueber die Latte.
+    bester = max((k["gw_wert"] for k in raus if k["gw_zugelassen"]), default=0.0)
+    for k in raus:
+        if k["gw_zugelassen"] and k["gw_wert"] < SCHWELLE_RELATIV * bester:
+            k["gw_zugelassen"] = False
+        k["gw_abstand"] = round(k["gw_wert"] / bester, 3) if bester else 0.0
     return raus
 
 
@@ -288,7 +345,7 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
 # Arbeitsraum, nachdem gewaehlt wurde.
 _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
                    "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
-                   "gw_gelernt", "gw_zugelassen", "gw_quelle")
+                   "gw_gelernt", "gw_zugelassen", "gw_quelle", "gw_abstand")
 
 
 # ── EIN Arbeitsraum fuer alle Quellen ────────────────────────────────────

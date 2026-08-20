@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T08:41:14Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-20T08:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (41)
+## reparatur (40)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -124,7 +124,6 @@ Automatisch erzeugt 2026-08-20T08:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:14 | entityos | `b4e98995b88e` | fix(clayverse): reject autonomy self-ack completion |
 | 2026-08-18T03:12 | entityos | `e97a47181e95` | fix(clayverse): separate effect budget and require later owner acknowledgement |
 | 2026-08-18T03:10 | entityos | `f5007745b0d6` | fix(clayverse): decouple reasoning from effect budget |
-| 2026-08-18T03:08 | entityos | `ae5cc353559c` | fix(clayverse): bind autonomy success evidence to exact effect intent |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -176,10 +175,12 @@ Automatisch erzeugt 2026-08-20T08:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (258)
+## bau (259)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T09:01 | entityos | `43ddbd4b0464` | EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T08:46 | entityos | `093edbe9c7ed` | EOS-Chronik 2026-08-20 08:46:04 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T08:01 | entityos | `a61f1bd67095` | EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T07:59 | entityos | `0e4f89d44a11` | EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T07:51 | entityos | `53cea036ddd9` | CSWT-Z Teil 3: gueltiger Versuch -- der Engpass ist die Vorstufe, nicht der Arbeitsraum |
@@ -238,6 +239,4 @@ Automatisch erzeugt 2026-08-20T08:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-19T14:29 | entityos | `1834b4bda6f7` | Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module |
 | 2026-08-18T15:17 | entityos | `1a09c75938d9` | Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden |
 | 2026-08-18T14:54 | entityos | `4bc81f8e52c3` | Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt |
-| 2026-08-18T14:25 | entityos | `26e9cb087a6d` | Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin |
-| 2026-08-18T14:11 | entityos | `eca8c30854d7` | Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB |
 

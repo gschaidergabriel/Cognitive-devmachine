@@ -291,9 +291,34 @@ _KORPUS_IM_PROMPT_MAX_CHARS = 1400
 _KORPUS_IM_PROMPT_N = 3
 
 
-def _korpus_zeile(world: dict[str, Any]) -> str:
-    """Die abgerufenen Stellen, kurz und mit Quelle -- oder "" wenn keine da sind."""
+def _gewaehlte_treffer(world: dict[str, Any], broadcast_ids) -> list:
+    """Die von der Vorstufe GEWAEHLTEN Korpustreffer -- siehe Modul-Historie.
+
+    Erfundene Kennungen fallen weg: was nicht im Korpus dieses Zuges steht, war
+    keine Auswahl. Der Ausfall wird gemeldet, nicht verschwiegen -- eine
+    Auswahlstufe, die Kennungen erfindet, waere sonst nicht von einer
+    funktionierenden zu unterscheiden.
+    """
     treffer = [t for t in ((world or {}).get("corpus") or []) if isinstance(t, dict)]
+    nach_id = {str(t.get("artikel_id") or ""): t for t in treffer}
+    gewaehlt, erfunden = [], []
+    for kennung in (broadcast_ids or [])[:3]:
+        k = str(kennung).strip()
+        if k in nach_id:
+            gewaehlt.append(nach_id[k])
+        elif k:
+            erfunden.append(k)
+    if erfunden:
+        import sys as _sys
+        print("prestage: broadcast_ids nennt Kennungen, die nicht im Korpus dieses "
+              f"Zuges stehen -- verworfen: {erfunden}", file=_sys.stderr)
+    return gewaehlt
+
+
+def _korpus_zeile(world: dict[str, Any], treffer: list | None = None) -> str:
+    """Die ausgestrahlten Stellen, kurz und mit Quelle -- oder "" wenn keine."""
+    if treffer is None:
+        treffer = [t for t in ((world or {}).get("corpus") or []) if isinstance(t, dict)]
     if not treffer:
         return ""
     zeilen = []
@@ -307,17 +332,32 @@ def _korpus_zeile(world: dict[str, Any]) -> str:
     if not zeilen:
         return ""
     kopf = ("CORPUS (already retrieved for THIS question -- the answer is often "
-            "already in here; use it and name the source, do NOT send yourself to "
-            "read or fetch it again):")
+            "already in here; use it, do NOT send yourself to read or fetch it "
+            "again). ⭐ When you answer from one of these, name its id in the "
+            "answer like (Quelle: <id>) -- that is the only part of an "
+            "answer a refusal cannot fake:")
     return (kopf + "\n" + "\n".join(zeilen))[:_KORPUS_IM_PROMPT_MAX_CHARS]
 
 
-def _mit_arbeitsraum(caveman: str, world: dict[str, Any]) -> str:
-    """Den abgerufenen Korpus an den Auftrag haengen -- siehe Modul-Historie."""
+def _mit_arbeitsraum(caveman: str, world: dict[str, Any], broadcast_ids=None) -> str:
+    """Den GEWAEHLTEN Korpus an den Auftrag haengen -- siehe Modul-Historie.
+
+    Drei Stellungen von CLAYVERSE_KORPUS_IM_PROMPT:
+      auswahl (Vorgabe) nur die Kennungen aus broadcast_ids -- Inhalt DURCH die
+                        Auswahlstufe. Waehlt sie nichts, geht nichts hinaus:
+                        das ist die Schwelle.
+      alle              der alte, unbedingte Bau (Top-3 ohne Auswahl). Nur noch
+                        als Vergleichsarm -- er umgeht GWT-2.
+      0                 gar nichts.
+    """
     import os as _os
-    if _os.environ.get("CLAYVERSE_KORPUS_IM_PROMPT", "1") != "1":
+    stellung = _os.environ.get("CLAYVERSE_KORPUS_IM_PROMPT", "auswahl").strip().lower()
+    if stellung in ("0", "aus", "off"):
         return caveman
-    zeile = _korpus_zeile(world)
+    if stellung in ("alle", "all", "1"):
+        zeile = _korpus_zeile(world)
+    else:
+        zeile = _korpus_zeile(world, _gewaehlte_treffer(world, broadcast_ids))
     return f"{caveman}\n\n{zeile}" if zeile else caveman
 
 
@@ -706,7 +746,7 @@ def run_chat_turn(
         zero = headless_zero.run_headless(
             _mit_arbeitsraum(
                 _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
-                vorstufe_world),
+                vorstufe_world, envelope.get("broadcast_ids")),
             user_id=user_id, session_id=session_id,
             tool_selection=selected_tools,
         )
@@ -739,7 +779,7 @@ def run_chat_turn(
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(
                     _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
-                    vorstufe_world),
+                    vorstufe_world, envelope2.get("broadcast_ids")),
                 user_id=user_id, session_id=session_id,
                 tool_selection=selected_tools,
             )
@@ -846,6 +886,11 @@ def run_chat_turn(
             "self_adapted": self_adapted,
             "tool_selection": selected_tools or [],
             "epistemik": envelope.get("epistemik", {}),
+            # Die Auswahl der Ausstrahlung -- die Groesse, an der sich GWT-2/4
+            # ueberhaupt erst messen laesst (wie viele, welche, wann null).
+            "broadcast_ids": list(envelope.get("broadcast_ids") or []),
+            "broadcast_n": len(_gewaehlte_treffer(vorstufe_world,
+                                                  envelope.get("broadcast_ids"))),
             "elapsed_ms": {
                 "prestage_ms": round(prestage_ms, 1),
                 "zero_ms": round(zero_ms, 1),

@@ -1,12 +1,50 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T08:41:14Z. 936 Commits aus vier Repos, davon 305 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T09:11:14Z. 939 Commits aus vier Repos, davon 307 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen
+
+`43ddbd4b0464` · entityos · 09:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T09:01:21+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 08:46:04 +0000 — entityos: 2 Aenderungen
+
+`093edbe9c7ed` · entityos · 08:46 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T08:46:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen
 
@@ -4431,38 +4469,5 @@ Issues:
 Empfehlung: Kaskade ohne Gemini deployen
 
 Co-Authored-By: Claude <<adresse>>
-```
-
-### AP11: Vision Cascade implementiert
-
-`f6c6d8f26614` · clay · 20:29 UTC · ClayVerse
-
-```
-- Drei-Stufen-Kaskade (Groq -> NVIDIA -> Gemini)
-- F57/F27-konform
-- Resource Budget eingehalten (2.4 cores, 3.4GB RAM)
-- API-Timings gemessen (Groq: 271-423ms, NVIDIA: 1851ms, Gemini: 274-1414ms)
-- Fast Path: ~3168ms, Slow Path: ~2161ms, Minimal: ~73ms
-
-Offen: Echte Tests mit API-Keys laufen lassen
-
-Co-Authored-By: Claude <<adresse>>
-```
-
-### README: Kostenmodell F86, Auslieferungsform F87/F87b, Existenzbedingung F87c
-
-`042ebeabb0ae` · unifieddb · 18:09 UTC · Gabriel
-
-```
-- Kostenformel und Multiplikatoren aus der z.ai-Doku [M 16.08.], Grenzen,
-  Off-Peak-Fenster, der 14x-Satz (Ausgabe vs. zwischengespeicherte Eingabe)
-- Vier-Dateien-Auslieferung (clayd / clay.db / config.toml / clayctl),
-  Agent spricht nur mit der API; Binary als Topologie statt Versprechen
-- Ehrliche Standzeile prominent nach oben: Forschungsaufbau mit einer
-  Systemarchitektur, nicht weniger und nicht mehr
-- Widerlegt-Block und Lueckenliste ergaenzt, F1-F66 -> F1-F87c
-- Widerspruch behoben: 0,46 ms stand in Stand der Messungen noch nackt
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

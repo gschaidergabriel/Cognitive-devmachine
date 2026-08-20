@@ -33,6 +33,7 @@ _REQUIRED_KEYS = {
     "hypotheses",
     "counter_hypotheses",
     "epistemik",
+    "broadcast_ids",
 }
 
 _BASE_RULES = """You are the MISTRAL PRE-STAGE inside EntityOS, F74's ONE expensive call per \
@@ -323,8 +324,13 @@ answers "I can't reach that". A path you have not seen in CONTEXT is a guess wit
 If you don't have a path, don't write one. \
 ⭐⭐⭐ THE CORPUS IN CONTEXT IS ALREADY RETRIEVED -- QUOTE IT, DON'T SEND ZERO TO FETCH IT AGAIN. \
 `CONTEXT.world.corpus` holds text that the retrieval layer ALREADY pulled for THIS question. If \
-it answers the question, the caveman_prompt STATES the answer and names the article id as its \
-source -- e.g. `say to human: "die Arbeitskopie liegt in ~/seimensch-redesign" (source: \
+it answers the question, the caveman_prompt STATES the answer and MUST make Zero name the \
+article id as its source -- write it as an explicit instruction, e.g. `say: "<answer> (Quelle: \
+<artikel_id>)"`. ⭐⭐ THE SOURCE IS NOT DECORATION: it is the only thing in an answer that a \
+refusal cannot fake. "I can't reach that" never carries an article id, so naming the id is the \
+one hard evidence that the workspace actually carried the answer. Measured 2026-08-20: only 18 \
+of 88 answers named any source at all. Every corpus-derived claim gets its id, every time. \
+The article id is also the source -- e.g. `say to human: "die Arbeitskopie liegt in ~/seimensch-redesign" (source: \
 wissen-seimensch-pfade)`. It does NOT say "read <file>", "search the corpus", or "fetch <url>": \
 that work is already done, and repeating it costs a full agentic round for nothing. Measured over \
 eight questions whose answer was verifiably among the corpus hits: the answer reached the \
@@ -341,7 +347,16 @@ bare sentinel as its whole reply. You never prompt for that.
 
 OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these NINE top-level \
 keys, each its own field -- caveman_prompt, user_intent, tool_selection, memory_artefacts, \
-outsourced, watch_out, hypotheses, counter_hypotheses, epistemik. \
+outsourced, watch_out, hypotheses, counter_hypotheses, epistemik, broadcast_ids. \
+⭐⭐ broadcast_ids IS THE WORKSPACE SELECTION, and it is the one field whose effect you can \
+watch: a list of AT MOST THREE `artikel_id` values, taken verbatim from CONTEXT.world.corpus, \
+naming the hits that actually bear on THIS question. Those -- and only those -- get their text \
+handed to Zero. Choose FEWER when fewer are relevant: two is better than three if the third is \
+padding, and an EMPTY LIST is the right answer when the corpus holds nothing that helps. An \
+empty list is not a failure, it is a decision, and it means nothing from the corpus is \
+broadcast this turn. Never write an id that is not in CONTEXT.world.corpus -- an id you did not \
+read there is not a selection, it is a guess (the same failure as the invented tool names \
+read_resource and search_wiki, both measured). \
 ⭐⭐ memory_artefacts is the SELECTION FROM CONTEXT.world.durable_memory that actually bears on \
 THIS request: a list of {"wert": the remembered value verbatim, "subjekt": whom/what it is \
 about, "herkunft": where it came from -- who said it, in which turn}. Take them from \
@@ -567,6 +582,7 @@ def run_prestage(
     # der eigentliche Direktauftrag, ein EHRLICHER Rueckfall statt Absturz.
     _fehlend = [k for k in _REQUIRED_KEYS if k not in payload or payload.get(k) is None]
     _DEF = {"user_intent": "", "tool_selection": [], "memory_artefacts": [],
+            "broadcast_ids": [],
             "outsourced": [], "watch_out": "", "hypotheses": [], "counter_hypotheses": [],
             "caveman_prompt": "", "epistemik": {"bekannt": [], "unbekannt": []}}
     for k in _fehlend:

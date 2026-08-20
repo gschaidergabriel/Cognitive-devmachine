@@ -398,6 +398,16 @@
     "executable_evidence": "test_environment_snapshot_failure_is_redacted_and_fail_closed",
     "counterhypothesis": "Catching only common mapping failures or chaining the original exception is safe; falsified because LookupError escaped verbatim with credential-like text before network access, while raising inside the handler would retain the original as exception context."
   },
+  "passive_environment_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Runtime capability inputs must be exact built-in strings before entering the environment snapshot; string subclasses are active objects whose overridden methods must never execute during routing, attestation or credential processing.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#customizing-attribute-access"
+    ],
+    "executable_evidence": "test_environment_snapshot_rejects_active_string_subclasses",
+    "counterhypothesis": "isinstance(value, str) proves that an environment value is passive text; falsified locally because a str subclass passed that check, its overridden split method executed after the snapshot and leaked credential-like exception text before network access."
+  },
   "response_context_cleanup_boundary": {
     "checked_at": "2026-08-20",
     "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
@@ -457,6 +467,7 @@
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
     "Runtime-environment adapter failures collapse to one constant error outside the active handler; arbitrary adapter exception text is not displayed or retained, and no credential or network boundary is crossed.",
+    "Recognized runtime-environment values are exact built-in strings; polymorphic string subclasses fail closed before their methods can execute in capability inventory, routing, attestation or credential handling.",
     "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
     "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",

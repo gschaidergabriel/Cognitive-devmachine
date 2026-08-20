@@ -1334,6 +1334,57 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_active_retry_after_value_preserves_rate_limit_receipt(self):
+        method_calls = []
+
+        class ActiveRetryAfter(str):
+            def strip(self):
+                method_calls.append("strip")
+                raise LookupError("retry-after-value-method-must-not-run")
+
+        class Headers:
+            def get(self, name, default=None):
+                return ActiveRetryAfter("137")
+
+        class Response:
+            status = 429
+            headers = Headers()
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("non-200 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response()
+                else:
+                    def opener(request, timeout):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 429, "Too Many Requests",
+                            Headers(), None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((100.0, 100.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertEqual(receipt["status"], 429)
+                self.assertEqual(receipt["outcome"], "rate_limited")
+                self.assertEqual(receipt["cooldown_seconds"], 60)
+                self.assertFalse(receipt["retryable"])
+                self.assertIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertEqual(method_calls, [])
+
     def test_header_property_failure_preserves_received_429_receipt(self):
         class Response:
             status = 429

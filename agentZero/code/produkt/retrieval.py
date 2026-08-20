@@ -109,6 +109,14 @@ class WorldAssembler:
                 break
         return out
 
+    # Artikelarten/-klassen, die AUFZEICHNUNGEN DES NICHTWISSENS sind, nicht
+    # Wissen: sie entstehen genau dann, wenn eine Frage unbeantwortet blieb, und
+    # tragen den Fragetext im Titel. Als Korpustreffer waeren sie eine
+    # Rueckkopplung (siehe Modul-Historie 2026-08-20). Sie bleiben in der
+    # Datenbank und in ihren eigenen Auswertungen -- nur nicht hier.
+    KEIN_WISSEN_ART = ("zero_luecke",)
+    KEIN_WISSEN_KLASSE = ("MECHANICAL_GAP_HYPOTHESIS",)
+
     def corpus_lookup(self, query: str) -> list[dict]:
         """Bounded, read-only, query-sensitive lookup into the Clay corpus."""
         if not query or not self._corpus_ready():
@@ -129,8 +137,15 @@ class WorldAssembler:
                     "JOIN artikel_suchtext s ON s.id = f.rowid "
                     "LEFT JOIN artikel a ON a.id = s.artikel_id "
                     "WHERE fts_index_artikel MATCH ? "
-                    "ORDER BY bm25(fts_index_artikel) LIMIT ?",
-                    (self.CORPUS_SNIPPET_CHARS, match, self.CORPUS_MAX_HITS),
+                    # Aufzeichnungen des Nichtwissens raus -- siehe KEIN_WISSEN_*.
+                    "  AND (a.art IS NULL OR a.art NOT IN (%s)) "
+                    "  AND (a.epistemic_class IS NULL OR a.epistemic_class NOT IN (%s)) "
+                    "ORDER BY bm25(fts_index_artikel) LIMIT ?"
+                    % (",".join("?" * len(self.KEIN_WISSEN_ART)),
+                       ",".join("?" * len(self.KEIN_WISSEN_KLASSE))),
+                    (self.CORPUS_SNIPPET_CHARS, match,
+                     *self.KEIN_WISSEN_ART, *self.KEIN_WISSEN_KLASSE,
+                     self.CORPUS_MAX_HITS),
                 ).fetchall()
             except Exception:
                 # A corpus that cannot be searched must not take the turn down with

@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-20T00:11:13Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-20T00:41:13Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 705 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2433 Artikel, 1405 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2433 Artikel, 1404 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -41,8 +41,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: EntityOS re-evaluation generation 32** — `bau-agentzero-export-4d6d0bada8a8` · bau
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **claycode inbox: bind PR787 dependency closure and zero-step blocker** — `baunotiz-git-14041fb6b046008b81d671c4cd2c789` · baunotiz
-- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
+- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
 - **docs(clayverse): refresh living state after EntityOS bridge component run** — `baunotiz-git-aabfc8a02ad8c3735bb5b7a8f3d7fc3` · baunotiz
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-bauverlauf-281c3bfdd4152f32e51b` · baunotiz
@@ -67,8 +67,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `baunotiz-bauverlauf-2b9ce136f87d757f15d0` · baunotiz
 - **B7 geprueft: EffectGate als Wand, nicht als Bibliothek** — `bau-clay-032503afba2b` · bau
 - **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `baunotiz-git-8e37f4a64a8138840755970a93ba396` · baunotiz
-- **evidence(go): bind PR787 zero-skip pytest head** — `baunotiz-git-3c602564fd42405e812c2d825e5e466` · baunotiz
 - **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `bau-entityos-8e37f4a64a81` · bau
+- **evidence(go): bind PR787 zero-skip pytest head** — `baunotiz-git-3c602564fd42405e812c2d825e5e466` · baunotiz
 - **receipt(go): record crash-safe Tier2 carrier donor and zero runtime credit** — `baunotiz-bauverlauf-621f632bbc168231221f` · baunotiz
 - **receipt: strengthen recovery zero-credit exact source-slice evidence** — `baunotiz-git-7ba2a384ac3710a568b6f3165e938b5` · baunotiz
 - **receipt: bind merged recovery zero-credit exact-blob execution** — `baunotiz-git-2c8bf61e89d22183cfdf80c4649c2c9` · baunotiz
@@ -191,17 +191,17 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB Research Foundation — Unified Cognitive Database/Substrate** — `global-UNIFIED_DATABASE_RESEARCH_FOUNDATION.` · bereich_global
 - **UnifiedDB U2 — External Evidence Ledger** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
 - **FUSION F6 -> UnifiedDB** — `KMP-FUS-F6-POSTWORKER-dup7` · begriff
-- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB — Authoritative Projection Outbox V1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
 - **UnifiedDB Emergence Lab v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Lease-Fenced Projection Worker V1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
-- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **KMP — Android R1 -> UnifiedDB feedback** — `KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB` · begriff
 - **KMP — Founding User Personal UnifiedDB** — `KMP-FOUNDING-USER-PERSONAL-UDB` · begriff
 - **UnifiedDB Segmented Pulse Maintenance S1 (SPM-S1)** — `runtime-UNIFIEDDB_SEGMENTED_PULSE_MAINTENANC` · bereich_runtime
 - **Clay G11 Evidence Ledger — MOSAIC / UnifiedDB / MRSC** — `trigger_runs-clay-clay-20260808T2033p0700-ch` · bereich_trigger_runs
 - **UnifiedDB — Deeper Delta Run, Target-Executed Extension** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **unifieddb_claygraph_assembly.py** — `harness-reference-unifieddb_claygraph_assemb` · bereich_harness
 - **unifieddb_emergent_cascade.py** — `harness-reference-unifieddb_emergent_cascade` · bereich_harness
 - **unifieddb_emergent_compact.py** — `harness-reference-unifieddb_emergent_compact` · bereich_harness
@@ -269,28 +269,28 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB / Database Pulse — V3/V4 Swarm Delta** — `20260810T0745p0700_UNIFIEDDB_PULSE_V3_V4_SWA` · forschungsergebnis
 - **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
 - **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
-- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB + ClayGraph Retrieval Fusion — 2026-08-10** — `experiments-unifieddb_claygraph_retrieval-FU` · bereich_experiments
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB + ClayGraph -> Possibility Preprocessor Fusion Handoff** — `20260810T0730p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **UnifiedDB U11 — Proof-Carrying Associative Memory Fabric (PCAMF)** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **UnifiedDB / Database Pulse — Adaptive Preprocessor + Maintenance Fusion** — `20260810T0740p0700_UNIFIEDDB_DATABASE_PULSE_` · forschungsergebnis
 - **UnifiedDB Emergence Meter v0.2 Research Delta — OOD Robustness and Abstention** — `trigger_runs-emergenz-20260809T213500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Effect/Re-entry/Terminal Continuity Run** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
-- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB Research Run U1 — Clay Unified Semantic Persistence Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T20` · bereich_trigger_runs
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
 - **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **UnifiedDB / Database Pulse — V1→V4 Iterative Build, Falsification and Fusion** — `20260810T0745p0700_CHATGPT_UNIFIEDDB_DATABAS` · forschungsergebnis
 - **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
-- **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
 - **Linux and Android can share the same UnifiedDB semantics while using different physical placements a** — `H-U2-019` · hypothese
+- **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
 - **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
 - **Closed PF tree segment02a modified endpoint tail m062..m067 at immutable ref 0fd27f. 6/6 resolved, z** — `rooms-center_events-20260809T1434p0700_666_p` · bereich_rooms
 - **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
 - **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
 - **Truthful provenance-bound outcome re-entry causally improves downstream adaptive behavior; the causa** — `C-LOOPCORE-L0-001` · behauptung
-- **Segment01 modified_paths m064..m095 closed exactly: 32/32 immutable-head Git blob identities, zero m** — `rooms-center_events-20260809T1417p0700_666_p` · bereich_rooms
 - **UnifiedDB / Database Pulse — V5 lifecycle, model identity, integrity use-boundary delta** — `20260810T0750p0700_UNIFIEDDB_PULSE_V5_IDENTI` · forschungsergebnis
+- **Segment01 modified_paths m064..m095 closed exactly: 32/32 immutable-head Git blob identities, zero m** — `rooms-center_events-20260809T1417p0700_666_p` · bereich_rooms
 - **UnifiedDB U2: CORF should model placement as independent runtime axes** — `KMP-U2-CPPF-FRANK` · begriff
 - **UnifiedDB should initially be one typed logical query/transaction plane compiled onto specialized ph** — `F2-G11-004` · hypothese
 - **GWT experiments require UnifiedDB/COVE snapshot identity so control and lesion arms share compatible** — `H-G11-043` · hypothese

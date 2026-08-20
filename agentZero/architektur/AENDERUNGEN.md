@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T00:11:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T00:41:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -141,7 +141,7 @@ Automatisch erzeugt 2026-08-20T00:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (50)
+## pruefung (48)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -190,16 +190,22 @@ Automatisch erzeugt 2026-08-20T00:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T02:12 | entityos | `ecce7e5b86d6` | test(clayverse): make QEMU TCG guest smoke rootless |
 | 2026-08-18T02:10 | entityos | `3d15bc18f7d0` | test(clayverse): add rootless disposable QEMU TCG guest smoke |
 | 2026-08-18T02:08 | entityos | `5145dd86f588` | test(clayverse): boot bounded disposable QEMU TCG guest |
-| 2026-08-18T02:05 | entityos | `2e89f166d156` | test(clayverse): add VPS disposable-guest orchestration preflight |
-| 2026-08-18T02:02 | entityos | `6849845d4772` | directive: authorize VPS-hosted disposable guest testing |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (238)
+## bau (240)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T00:37 | entityos | `df75f511466f` | EOS-Chronik 2026-08-20 00:37:50 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T00:32 | entityos | `485950fa1aeb` | EOS-Chronik 2026-08-20 00:32:35 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T00:25 | entityos | `06329d636a51` | EOS-Chronik 2026-08-20 00:25:38 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T00:23 | entityos | `00580769dba2` | EOS-Chronik 2026-08-20 00:23:12 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T00:21 | entityos | `e912b2e4daaf` | EOS-Chronik 2026-08-20 00:21:11 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T00:18 | entityos | `e784e7f381a9` | EOS-Chronik 2026-08-20 00:18:27 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T00:15 | entityos | `e3d1727959ac` | EOS-Chronik 2026-08-20 00:15:09 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T00:12 | entityos | `74492ce84e90` | EOS-Chronik 2026-08-20 00:12:12 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:09 | entityos | `97b55ff5fa8c` | EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen |
 | 2026-08-20T00:00 | clay | `5221a340b570` | EOS-Chronik 2026-08-20 00:00:04 +0000 — clayverse: 1 Aenderungen |
 | 2026-08-19T23:58 | clay | `8c3fc4427f2f` | EOS-Chronik 2026-08-19 23:58:03 +0000 — clayverse: 1 Aenderungen |
@@ -252,12 +258,4 @@ Automatisch erzeugt 2026-08-20T00:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T06:49 | entityos | `b9715815686b` | claycode inbox: bind control sync and Vercel guard falsifier |
 | 2026-08-18T06:48 | entityos | `03b3f877558a` | claycode control: sync disposable guest execution boundary |
 | 2026-08-18T06:06 | entityos | `23e9b61c6aae` | Bahnrouter: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter |
-| 2026-08-18T05:39 | entityos | `0941b84640c0` | claycode inbox: steer to admitted disposable guest lane and autonomy arbiter blocker |
-| 2026-08-18T05:38 | entityos | `096f335a7a37` | claycode supervisor: admit VPS guest lane and fence autonomy pulse source-only drift |
-| 2026-08-18T05:23 | entityos | `eb37ffde24ab` | Zeros Chat-Vorderseite, und die Zwillinge werden sichtbar |
-| 2026-08-18T05:22 | entityos | `2767390f9048` | memory.py: stop compact() from overwriting turns.content |
-| 2026-08-18T05:13 | entityos | `76f70eccfb58` | chat page: session switcher wired to plaetze(), no hardcoded ids |
-| 2026-08-18T05:09 | entityos | `d8eedd7f7dd0` | chat page: use the real ZeroAvatar component instead of a static SVG img |
-| 2026-08-18T04:40 | entityos | `27a5e9bffa0e` | eval_set.json: attach hand-authored-not-production disclosure to the data itself |
-| 2026-08-18T04:37 | entityos | `dcc0f97a4eb3` | Add Mistral pre-stage + caveman-German translator module (mv_* tables) |
 

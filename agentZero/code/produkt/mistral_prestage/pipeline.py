@@ -20,8 +20,13 @@ class PipelineError(RuntimeError):
     pass
 
 
-def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
+def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]:
     """Read-only world assembly, no turn admission.
+
+    `message` ist die Frage des Menschen und geht als `query` in assemble() --
+    OHNE sie baut assemble den Korpus mit dem leeren Text und liefert immer
+    []. Vorgabewert "" nur, damit alte Aufrufer nicht brechen; der Produktions-
+    pfad gibt die Nachricht IMMER mit (siehe Modul-Historie 2026-08-20).
 
     Uses clayverse.retrieval.WorldAssembler directly instead of
     TurnLifecycle.begin_admission() so context can be gathered WITHOUT writing
@@ -33,7 +38,7 @@ def _gather_world_safe(db, session_id: str) -> dict[str, Any]:
     from .. import retrieval  # coordinator-owned module, imported not edited
 
     assembler = retrieval.WorldAssembler(db)
-    return assembler.assemble(session_id, resource_refs=[])
+    return assembler.assemble(session_id, resource_refs=[], query=message or "")
 
 
 def _hyperposition_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
@@ -352,7 +357,7 @@ def run_chat_turn(
             turn_id = admission["turn_id"]
             causal_id = admission["causal_id"]
         else:
-            world = _gather_world_safe(db, session_id)
+            world = _gather_world_safe(db, session_id, message)
             turn_id = None
             causal_id = None
 

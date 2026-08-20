@@ -1,12 +1,158 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T00:11:13Z. 900 Commits aus vier Repos, davon 265 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T00:41:14Z. 901 Commits aus vier Repos, davon 273 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 00:37:50 +0000 — entityos: 2 Aenderungen
+
+`df75f511466f` · entityos · 00:37 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/runtime_CLAUDE.md
+
+Zeit: 2026-08-20T00:37:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:32:35 +0000 — entityos: 1 Aenderungen
+
+`485950fa1aeb` · entityos · 00:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/retrieval.py
+
+Zeit: 2026-08-20T00:32:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:25:38 +0000 — entityos: 1 Aenderungen
+
+`06329d636a51` · entityos · 00:25 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T00:25:38+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:23:12 +0000 — entityos: 1 Aenderungen
+
+`00580769dba2` · entityos · 00:23 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T00:23:12+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:21:11 +0000 — entityos: 2 Aenderungen
+
+`e912b2e4daaf` · entityos · 00:21 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/web/chat/demo-bilder/welcome-andreas.png
+
+Zeit: 2026-08-20T00:21:11+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:18:27 +0000 — entityos: 1 Aenderungen
+
+`e784e7f381a9` · entityos · 00:18 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/fence_hook.py
+
+Zeit: 2026-08-20T00:18:27+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:15:09 +0000 — entityos: 1 Aenderungen
+
+`e3d1727959ac` · entityos · 00:15 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T00:15:09+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:12:12 +0000 — entityos: 1 Aenderungen
+
+`74492ce84e90` · entityos · 00:12 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+
+Zeit: 2026-08-20T00:12:12+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen
 
@@ -4249,218 +4395,6 @@ Das ist dasselbe Problem wie das gleichzeitige Schreiben der drei Sitzungen,
 nur eine Ebene hoeher, und bestaetigt F44 Paragraph 2 im Feld.
 FOLGE: parallele Agenten duerfen nicht breit stagen - git add mit genau den
 eigenen Dateien, nie git add -A.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B7 geprueft: Schranke Luecke B behoben: sudo/doas/env vor FERN_ZERSTOEREND+FERN_HART (+ANFANG/NIE/DB_WERKZEUG) wird jetzt verschluckt
-
-`d6848caa4411` · clay · 07:26 UTC · ClayVerse
-
-```
-test_schranke.py: vorher 31/49 (18 Luecken, alle in FAENGT-Faellen), nachher 49/49 (0 Regressionen in den 20 LAESST_DURCH-Faellen)
-```
-
-### Nachtrag zu 1be4c69: Schranke Luecke B (sudo/doas/env vor FERN_ZERSTOEREND+FERN_HART)
-
-`5557b2883666` · clay · 07:25 UTC · ClayVerse
-
-```
-1be4c69 landete unter fremdem Titel (GLM_API_KEY), enthaelt aber zusaetzlich
-ungewollt meinen Schranke-Fix — ein anderer, gleichzeitig laufender Agent hat
-offenbar breit (git add -A o.ae.) committet und meine bereits gestagten
-Dateien mitgezogen. Dieser Commit ist reine Nachdokumentation, KEIN Diff.
-
-Betroffen in 1be4c69:
-  baeume/clay/tools/schranke/wache-koenig.py          (+47/-7)
-  baeume/clay/tools/schranke/test_schranke.py         (neu, 141 Zeilen)
-  baeume/clay/tools/schranke/wache-koenig.py.vor-sudoluecke  (Backup, neu)
-
-Befund: FERN_ZERSTOEREND/FERN_HART verschluckten kein optionales sudo vor dem
-Befehlswort. "ssh host sudo chmod -R 777 /" ging durch, "ssh host chmod -R 777 /"
-(ohne sudo) verlangte zurecht einen Schein. Gemessen mit test_schranke.py: vorher
-31/49, davon alle 18 Fehlschlaege in FAENGT-Faellen (nie in LAESST_DURCH) —
-nachher 49/49.
-
-Fix: neue gemeinsame VORSILBE (sudo inkl. Flags/-n/-u X, doas, nohup, timeout,
-env-Zuweisungen, beliebig gestapelt) vor FERN_ZERSTOEREND, FERN_HART, ANFANG
-(lokale SCHEIN-Klasse), NIE (mkfs/dd) und DB_WERKZEUG.
-
-Bewusst nicht angefasst (Kommentar in wache-koenig.py):
-  - sudo VOR ssh/bash -c selbst bricht den UNTERSCHALE-Anker und verhindert
-    das Herausloesen der inneren Zeichenkette komplett — "sudo ssh host ..."
-    und "sudo bash -c ..." werden gar nicht erst als Unterschale erkannt.
-  - bash -c Inhalte werden nur gegen FERN_ZERSTOEREND/FERN_HART geprueft,
-    NICHT gegen die SCHEIN-Liste (rm, chown/chmod -R, git push --force, …).
-Beides ausserhalb des gemeldeten Rahmens, nicht repariert, um keine neuen
-Fehlalarme zu riskieren.
-
-Testset: baeume/clay/tools/schranke/test_schranke.py (erneut lauffaehig mit
-  python3 test_schranke.py wache-koenig.py)
-```
-
-### F50 GLM vermessen: Coding-Plan, keine Einbettungen, kein Sehen
-
-`dc98fd64efe0` · clay · 07:24 UTC · ClayVerse
-
-```
-Baut auf F46. Gemessen: der Schluessel ist ein CODING-PLAN, kein Guthabenkonto.
-/api/paas/v4/chat/completions gibt 429 insufficient balance bei ALLEN 8
-Modellen, nur /api/coding/paas/v4/ und /api/anthropic/v1/messages tragen.
-Wer die normale Chat-Route nimmt, haelt den Schluessel fuer tot - exakt die
-Falle aus F14.
-
-Katalog 4.5, 4.5-air, 4.6, 4.7, 5, 5-turbo, 5.1, 5.2, alle reasoning-faehig,
-Latenz 0,9 bis 16 s. Einbettungen 400 unknown model, kein Vision-Modell.
-Ratengrenzen unbekannt, kein 429 auf der Coding-Route erreicht.
-
-VERTEILUNG: Routine und Agentenarbeit auf glm-4.6 und glm-5-turbo,
-reasoning-lastige Analysen auf glm-5.2, Gesamtueberblick und Urteil bleiben bei
-Claude. EINBETTUNGEN bleiben bei NVIDIA und SEHEN beim lokalen VLM - GLM kann
-beides nicht.
-
-Launcher /usr/local/bin/clay-glm gebaut und echt getestet, chmod +x von der
-Schranke blockiert, braucht Gabriels Freigabe.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B17 fertig: GLM_API_KEY in freie-zugaenge.env aufgenommen
-
-`1be4c69671da` · clay · 07:23 UTC · ClayVerse
-
-```
-z.ai/GLM Coding-Plan-Schluessel vom Owner (Chat 15.08., NIE geloggt) in /etc/clayverse/freie-zugaenge.env, Modus 600 root:root, Backup .vor-glm. Gemessen: /api/paas/v4/models 200 (8 Modelle: glm-4.5, glm-4.5-air, glm-4.6, glm-4.7, glm-5, glm-5-turbo, glm-5.1, glm-5.2), aber /api/paas/v4/chat/completions 429 insufficient-balance fuer alle 8 - Pay-per-Use-Kontingent ist LEER. /api/coding/paas/v4/chat/completions 200 fuer alle 8 (Coding-Plan-Route). /api/anthropic/v1/messages 200, echter claude -p Aufruf gegen den Launcher lief (Antwort OK, 6s). glm-4.5-air routet intern auf glm-4.7, glm-5.2 auf glm-5.3 (Auto-Routing des Plans, per Doku bestaetigt). Embeddings: kein einziges Modell (embedding-2/3) erreichbar, 400 unknown-model - nicht im Plan enthalten. Kein Vision-Modell im Katalog. Keine Ratelimit-Header in 5 Bursts - unbekannt bis echter 429 auftritt.
-```
-
-### F49 Das Fundament: alles fusst auf iterativer Entwicklung
-
-`96e5b08971f1` · clay · 07:21 UTC · ClayVerse
-
-```
-Eigner: alles was wir machen fusst immer auf zugrundeliegender iterativer
-Entwicklung. Das ist der GRUND unter F48, nicht ein Zusatz - die Abgleichpflicht
-folgt daraus, dass hier nie auf leerem Blatt begonnen wird.
-
-EINE ENTSCHEIDUNG OHNE IHREN VORGAENGER IST KEINE ENTSCHEIDUNG, SONDERN EIN
-NEUSTART. Und ein Neustart wirft die angesammelten Belege weg, genau wovor F43
-warnt.
-
-DREI UMDEUTUNGEN: Franks viele Iterationen und nie ganz funktioniert ist keine
-Fehlerbilanz, sondern eine Beschreibung der METHODE - der Zwischenstand ist der
-Normalfall. Der Bauplan B0-B28 ist ein Iterationsstand, keine feste
-Spezifikation. F15 bis F49 sind Iterationen AUF dem Bestehenden, keine
-Abloesung - wer sie als neues Werk liest, hat die Kette zerschnitten.
-
-MECHANISCHE FOLGE: jede Entscheidung nennt ihren VORGAENGER - baut auf, ersetzt,
-widerspricht, oder ist wirklich neu. Dieselbe Form wie die Herkunftskennung
-E/B/M, nur fuer Struktur statt fuer Zahlen. Beides zusammen ergibt die Kette:
-woher kommt die Aussage und worauf baut sie auf.
-
-Der letzte Fall ist der verdaechtigste: ist wirklich neu stimmt selten. Wenn
-etwas nach fuenf Monaten Arbeit noch nie gedacht wurde, ist die wahrscheinlichere
-Erklaerung, dass man den Vorgaenger nicht gefunden hat.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F48 ABGLEICHPFLICHT: erst im Plan nachsehen, dann entscheiden
-
-`06038a889a78` · clay · 07:21 UTC · ClayVerse
-
-```
-Eigner: schau im Plan und gleiche ab. Generell musst du das tun.
-
-MEIN FEHLER: ich habe F15 bis F47 geschrieben, als laege kein Plan vor. Es gibt
-B0 bis B28 im Bauplan und ein Bauprotokoll mit Stand je Bauteil. Viele neue
-Entscheidungen beruehren vorhandene Bauteile - ohne Abgleich entstehen ZWEI
-WAHRHEITEN nebeneinander. Dieselbe Wurzel wie F26, F34, F41 und die
-21-gegen-12-Zahl: etwas weiterschreiben statt an der Quelle nachzusehen, nur
-diesmal bei der Struktur statt bei einer Zahl.
-
-DIE PFLICHT: vor jeder Entscheidung und jeder Aufzeichnung im Plan nachsehen,
-ob es das Bauteil schon gibt, und die Entscheidung DORT verankern statt daneben.
-Nachsehen in Bauplan (Soll), bau.py stand (Ist), ZIELARCHITEKTUR, Abnahmeurkunde
-Frank v0.1, und den heutigen Entscheidungen.
-
-ERGEBNIS je Entscheidung genau eines: gehoert zu B-n, ersetzt B-n, widerspricht
-B-n, oder ist neu. DER DRITTE FALL IST DER WICHTIGSTE - ein stillschweigend
-aufgeloester Widerspruch sieht aus wie Fortschritt und ist eine verlorene
-Entscheidung. Widersprueche werden ausgesprochen, nicht aufgeloest.
-
-WARUM MEHR ALS ORDNUNG: ein Plan, an dem niemand abgleicht, veraltet unbemerkt
-und sieht weiter gueltig aus. Heute schon passiert - bau.py stand meldet zu
-wenig, weil die Protokoll-Luecke 00:44 bis 01:58 UTC nie nachgetragen wurde.
-
-Nach F42 gehoert auch das in ein Tor: eine Entscheidung ohne Bauteil-Bezug
-sollte gar nicht annehmbar sein. bau.py nimmt schon heute keinen Schritt ohne
-Messung an, dieselbe Form.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F47b Berichtigung: an Frank v0.1 forschen heisst es auf dem VPS BAUEN
-
-`587a127d17e5` · clay · 07:20 UTC · ClayVerse
-
-```
-Eigner: und an Frank v0.1 zu forschen meine ich es auf dem VPS zu bauen, das
-steht aber eh alles im Konzept, ich habe nur gerade das Kontingent fuer den
-Prozess definiert.
-
-Ich hatte F47 als offene Forschung gelesen. Falsch. Gemeint ist BAUEN, das
-Zielbild steht bereits im Konzept (Abnahmeurkunde: NATIVE_SELF self.root,
-HUMAN_SURFACE_NAME Frank, COGNITION ClayCode only, token-authentifizierte API).
-Neu ist nur das Kontingent von mindestens 50 Prozent der Subscription.
-
-Das vereinfacht F47 erheblich: die Abnahmekriterien muessen nicht erfunden
-werden, sie liegen. Damit entfaellt ein Teil der Hauptgefahr - wo ein Zielbild
-geschrieben steht, kann autonomes Arbeiten weniger in Fiktion driften. Es
-bleibt die Deckungspflicht fuer den WEG dorthin.
-
-Ist-Stand bleibt [B] und nachzumessen: /etc/frank-v0.1/ existierte nicht, kein
-self.root-, ClayCode- oder UnifiedDB-Dienst, keine API. Der Zielkoerper ist
-definiert und leer. Erste Handlung ist also eine MESSUNG, kein Entwurf.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F47 Wofuer die 50 Prozent da sind: autonome Frank-v0.1-Forschung
-
-`fdc10d1485e8` · clay · 07:19 UTC · ClayVerse
-
-```
-Eigner: die 50 Prozent werden verwendet um autonom an Frank v0.1 zu forschen,
-unter Zuhilfenahme von allem und Tokens zu sparen, und fuer alle kognitiven
-Prozesse zur Unterstuetzung. Oder eine voellig andere hochintensive Anwendung -
-da gibt es sicher was. ZWECK 3 ist ausdruecklich ein PLATZHALTER, keine
-Entscheidung, und darf nicht als Auftrag weitergereicht werden.
-
-UNTER ZUHILFENAHME VON ALLEM UND TOKENS SPAREN ist kein Widerspruch, sondern
-F44 R3 plus F46 in einem Satz: die teure Instanz entscheidet, die billigen
-Mittel fuehren aus. Sie forscht nicht indem sie selbst alles liest, sondern
-richtet GLM, Engineering und die freien Bahnen darauf aus und urteilt ueber das
-was zurueckkommt.
-
-AUTONOMIE ERHOEHT DIE DECKUNGSPFLICHT, SIE SENKT SIE NICHT. Das ist der
-gefaehrliche Teil. F43: plausible Struktur entsteht schneller als sie geprueft
-wird. Eine autonom forschende Instanz ohne aeusseren Pruefer ist genau dieser
-Fehler bei voller Geschwindigkeit und ohne Bremse. Heute wurde ich achtmal
-korrigiert - autonom waere keine dieser acht Korrekturen passiert.
-
-DIE LOESUNG LIEGT SCHON VOR: die Deckung endet an der Grenze der
-Forschungsentitaet, dort greifen CLAIMS mit Status und Falsifikator,
-Schemapruefung, research-identity-guard, die Tore. Also gehoert die autonome
-Frank-Forschung NACH INNEN - nicht als Ablageort, sondern weil dort das Pruefen
-mechanisch ist. Eine Behauptung, die nicht in die Entitaet passt, ist noch
-keine. Autonom heisst ohne GABRIEL, nicht ohne Pruefung.
-
-Der Rueckschreibpfad rae_rueckschreiben.py ist gebaut, aber fuer diesen Zweck
-ungenutzt.
-
-PRUEFSATZ: nicht sind 50 Prozent verbraucht, sondern sind 50 Prozent verbraucht
-UND ist das Ergebnis gedeckt. Verbrauch ohne Deckung ist kein Fortschritt,
-sondern teurer Text.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

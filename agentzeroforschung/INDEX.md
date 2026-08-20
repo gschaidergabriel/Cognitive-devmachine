@@ -100,6 +100,14 @@
    - `ZIELE.md` verwendet dagegen weiterhin eine andere Semantik (`0.136` vs ~`0.10` bereits als Hierarchiebildung) und meldet `-1 Tunnel`; Root Cause verschiebt sich auf doppelte Urteilregeln + Sentinel-Aggregation
    - `abruf_lage()` ist positiver Observability-Delta: Retrieval-Lernzustand kann gelesen werden, ohne die Karte durch die Beobachtung zu speisen
 
+13. `analysen/2026-08-20T125000Z_GEN197_GWT_RUECKKANAL_ALIASING.md`
+   - Generation 197 auf Export `2b969fdfdc60f3830eb2d19218520670665967b1`
+   - Tests `631/1`; Source-Prefix `6b9048c7a` im Bauverlauf auf `6b9048c7ab2b` (pipeline.py + wettbewerb.py) abgebildet
+   - GWT besitzt jetzt persistenten Rueckkanal Broadcast -> Zitierung -> `gw_lernen` -> spaetere Rangfolge, inklusive Verfall und negativem Update
+   - harter neuer Gegenbefund: Nicht-Korpus-Quellen verwenden positionsabhaengige IDs (`gedaechtnis:0`, `verlauf:0`, ...); persistentes Lernen kann dadurch Boosts zwischen unterschiedlichen Objekten aliasen
+   - zweiter Gegenbefund: Artikel-ID-Zitierung ist ein brauchbares lokales Proxy-Signal, aber kein unabhaengiger Outcome-Nachweis; falsche zitierte Evidenz kann sich selbst bestaetigen
+   - vorgeschlagen: stabile provenance-/content-gebundene Kandidaten-IDs plus Falsifikatoren fuer Slot-Permutation und korrekter Beleg vs. plausibler Distraktor
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -108,7 +116,9 @@
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
 - `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Schwelle/Verdict; negative numerische Sentinels verbieten und alle Verbraucher auf dieselbe Regel zwingen;
-- vollen Commit+Tree hinter lokal gebundenem EntityOS-Prefix `2b096801f85e...` exportieren;
+- vollen Commit+Tree hinter lokal gebundenem EntityOS-Prefix `6b9048c7ab2b...` exportieren;
+- GWT-Lernidentitaeten fuer Nicht-Korpus-Quellen stabilisieren: keine positionsabhaengigen IDs als persistente Lernschluessel;
+- GWT-Reward kausal testen: korrekter Beleg vs. plausibler zitierter Distraktor; Citation nur als Proxy, unabhaengiges Outcome-Signal bevorzugen;
 - `EXPORT_RECEIPT/v1` ueber mindestens sechs regulaere Exporte binden, um I/O-/Lock-Jitter gegen einen datenabhaengigen Hotspot zu trennen;
 - Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;

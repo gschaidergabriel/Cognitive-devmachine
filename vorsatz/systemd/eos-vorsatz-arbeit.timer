@@ -1,0 +1,11 @@
+[Unit]
+Description=EntityOS Vorsatz-Arbeit 2x taeglich -- budgetiert wie eos-dream, nicht im Dauerlauf
+
+[Timer]
+OnBootSec=45min
+OnUnitActiveSec=12h
+Persistent=true
+RandomizedDelaySec=20min
+
+[Install]
+WantedBy=timers.target

@@ -50,6 +50,9 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__artikel_lesen",
     "mcp__clayverse__dateien_suchen",
     "mcp__clayverse__korpus_tief",
+    # Das Messgeraet fuer den eigenen Abruf: Kartenversion, Wegehierarchie
+    # samt Urteil, Erfolgsquote. Rein lesend, speist die Karte NICHT.
+    "mcp__clayverse__abruf_lage",
     # ⭐ Handlungsfaehigkeit ohne Schale: lesen, suchen, aendern,
     # veroeffentlichen -- jede Faehigkeit benannt und eingezaeunt, statt Bash.
     "mcp__clayverse__werkbank_liste",

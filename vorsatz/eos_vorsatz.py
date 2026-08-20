@@ -84,6 +84,23 @@ def connect():
     return con
 
 
+_FORMULIERUNGEN = re.compile(r"Formulierungen:\s*(.+?)\)", re.S)
+
+
+def _formulierungen(aussage: str) -> list:
+    """Die echten Luecken-Etiketten aus der Aussage der Folgerung.
+
+    Der Hypothesen-Generator schreibt sie dort als "(Formulierungen: a; b; c)".
+    Fehlt der Teil (aeltere Folgerung), bleibt die Liste leer -- dann faellt
+    die Arbeit auf die Signaturwoerter zurueck, was schlechter, aber nicht
+    falsch ist.
+    """
+    m = _FORMULIERUNGEN.search(aussage or "")
+    if not m:
+        return []
+    return [t.strip() for t in m.group(1).split(";") if t.strip()][:4]
+
+
 def zerlegen(gilt_fuer: str):
     """(art, woerter) aus dem gilt_fuer-Feld. None, wenn es nicht vom Generator stammt."""
     m = _GILT_FUER.search(gilt_fuer or "")
@@ -201,6 +218,7 @@ def pruefen(dry_run: bool = False) -> dict:
             if not artikel and not erinnert:
                 offen.append({"folgerung_id": r["id"], "art": quelle_art,
                               "woerter": woerter, "aussage": r["aussage"][:300],
+                              "formulierungen": _formulierungen(r["aussage"]),
                               "seit": r["zeit"]})
                 continue
 
@@ -211,6 +229,9 @@ def pruefen(dry_run: bool = False) -> dict:
                 offen.append({
                     "folgerung_id": r["id"], "art": quelle_art,
                     "woerter": woerter, "aussage": r["aussage"][:300],
+                    # Was WIRKLICH fehlt, im Wortlaut -- die Signaturwoerter
+                    # sind nur das Ordnungsmerkmal. Siehe Modul-Historie.
+                    "formulierungen": _formulierungen(r["aussage"]),
                     "seit": r["zeit"],
                     "kandidaten": {
                         "artikel": [a["artikel_id"] for a in artikel],
@@ -271,6 +292,176 @@ def pruefen(dry_run: bool = False) -> dict:
         con.close()
 
 
+ARBEIT_MAX_PRO_LAUF = 2
+ARBEIT_MAX_KANDIDATEN = 3
+ARBEIT_MODELL = "mistral-small-latest"
+ZUGAENGE = "/etc/clayverse/freie-zugaenge.env"
+
+
+def _schluessel() -> str:
+    """Erster lebender Mistral-Schluessel. Wert wird nie geloggt.
+
+    Reihenfolge wie in clayverse/mistral_prestage/secrets.py. Dass Schluessel 1
+    ein totes Abo hat, faellt hier nicht auf -- die Antwort ist dann einfach
+    ein Fehler und der Vorsatz bleibt offen. Das ist der richtige Ausgang:
+    lieber nichts schliessen als falsch schliessen.
+    """
+    try:
+        werte = {}
+        with open(ZUGAENGE, encoding="utf-8") as f:
+            for zeile in f:
+                zeile = zeile.strip()
+                if not zeile or zeile.startswith("#") or "=" not in zeile:
+                    continue
+                k, v = zeile.split("=", 1)
+                werte[k.strip()] = v.strip().strip('"').strip("'")
+        for name in ("MISTRAL2_API_KEY", "MISTRAL3_API_KEY", "MISTRAL_API_KEY"):
+            if werte.get(name):
+                return werte[name]
+        LOG.warning("Zugangsdatei gelesen, aber kein MISTRAL*_API_KEY darin")
+    except Exception as fehler:
+        # NICHT verschweigen: ein stiller Fehler hier sieht exakt aus wie
+        # "es ist kein Schluessel hinterlegt". Genau so verschluckte ein
+        # NameError (io nicht importiert) drei vorhandene Schluessel.
+        LOG.warning("Zugangsdatei nicht lesbar (%s: %s)", type(fehler).__name__, fehler)
+    return ""
+
+
+def _normal(t: str) -> str:
+    """Fuer den Beleg-Abgleich: Kleinschreibung, nur Buchstaben und Ziffern."""
+    return "".join(c for c in (t or "").lower() if c.isalnum())
+
+
+def _fragt_modell(frage: str, quelltext: str, schluessel: str) -> dict:
+    """Ein Aufruf, JSON zurueck. Kein Kontext, kein Gedaechtnis."""
+    import json as _j
+    import urllib.request, urllib.error
+    system = (
+        "Du bekommst EINEN Quelltext und EINE gesuchte Angabe. Antworte NUR mit JSON: "
+        '{"gefunden": true|false, "fakt": "<die Angabe, woertlich aus dem Quelltext>", '
+        '"beleg": "<der Satz aus dem Quelltext, in dem sie steht>"}. '
+        "Steht die Angabe nicht im Quelltext, ist gefunden=false und fakt/beleg sind leer. "
+        "Rate NIE, ergaenze NIE eigenes Wissen -- nur was woertlich dasteht zaehlt."
+    )
+    koerper = _j.dumps({
+        "model": ARBEIT_MODELL,
+        "temperature": 0.0,
+        "max_tokens": 400,
+        "response_format": {"type": "json_object"},
+        "messages": [
+            {"role": "system", "content": system},
+            {"role": "user", "content": f"GESUCHTE ANGABE: {frage}\n\nQUELLTEXT:\n{quelltext[:6000]}"},
+        ],
+    }).encode("utf-8")
+    anfrage = urllib.request.Request(
+        "https://api.mistral.ai/v1/chat/completions", data=koerper,
+        headers={"Authorization": f"Bearer {schluessel}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(anfrage, timeout=60) as antwort:
+        umschlag = _j.loads(antwort.read(200000))
+    return _j.loads(umschlag["choices"][0]["message"]["content"])
+
+
+def _kandidatentexte(con, kandidaten: dict) -> list:
+    """(kennung, art, text) je Kandidat -- Artikel wie Gedaechtnis."""
+    raus = []
+    for aid in (kandidaten.get("artikel") or [])[:ARBEIT_MAX_KANDIDATEN]:
+        try:
+            r = con.execute("SELECT titel, text FROM artikel_suchtext WHERE artikel_id=?",
+                            (aid,)).fetchone()
+        except sqlite3.Error:
+            r = None
+        if r:
+            raus.append((aid, "artikel", f"{r['titel'] or ''}\n{r['text'] or ''}"))
+    for g in (kandidaten.get("gedaechtnis") or [])[:ARBEIT_MAX_KANDIDATEN]:
+        if isinstance(g, dict) and g.get("wert"):
+            raus.append((g.get("id") or "", "protokoll", g["wert"]))
+    return raus[:ARBEIT_MAX_KANDIDATEN]
+
+
+def arbeiten(dry_run: bool = False) -> dict:
+    """Offene Selbstpruefungs-Vorsaetze mit Kandidaten wirklich nachlesen."""
+    if not VORSATZ_DATEI.exists():
+        return {"fehler": "kein Vorsatzzettel -- erst 'pruefen' laufen lassen"}
+    zettel = json.loads(VORSATZ_DATEI.read_text(encoding="utf-8"))
+    kandidaten_vorsaetze = [v for v in (zettel.get("vorsaetze") or [])
+                            if v.get("art") == "Selbstpruefung" and v.get("kandidaten")]
+    if not kandidaten_vorsaetze:
+        return {"geprueft": 0, "geschlossen": 0, "hinweis": "kein Vorsatz mit Kandidaten"}
+
+    schluessel = _schluessel()
+    if not schluessel:
+        return {"fehler": "kein Mistral-Schluessel hinterlegt -- nichts getan"}
+
+    con = connect()
+    now = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+0000")
+    geschlossen, verworfen, gelesen = [], [], 0
+    try:
+        for v in kandidaten_vorsaetze[:ARBEIT_MAX_PRO_LAUF]:
+            # Die echten Etiketten, nicht die Signatur -- siehe Modul-Historie.
+            etiketten = v.get("formulierungen") or []
+            frage = "; ".join(etiketten) if etiketten else " ".join(v.get("woerter") or [])
+            for kennung, art, text in _kandidatentexte(con, v["kandidaten"]):
+                gelesen += 1
+                try:
+                    antwort = _fragt_modell(frage, text, schluessel)
+                except Exception as fehler:
+                    LOG.warning("Modellaufruf fehlgeschlagen: %s: %s",
+                                type(fehler).__name__, fehler)
+                    continue
+                if not antwort.get("gefunden"):
+                    continue
+                fakt = str(antwort.get("fakt") or "").strip()
+                beleg = str(antwort.get("beleg") or "").strip()
+                # ⭐ DIE SPERRE: was nicht im Quelltext steht, zaehlt nicht.
+                if not fakt or _normal(fakt) not in _normal(text):
+                    verworfen.append({"folgerung_id": v["folgerung_id"], "kennung": kennung,
+                                      "grund": "Angabe steht so nicht im Quelltext",
+                                      "behauptet": fakt[:120]})
+                    LOG.warning("#%s: Antwort verworfen -- '%s' steht nicht in %s",
+                                v["folgerung_id"], fakt[:60], kennung)
+                    continue
+                vermerk = (f" [{now} vom {PRUEFER} geschlossen: die gesuchte Angabe zu "
+                           f"[{frage}] steht in {art} {kennung}: \"{fakt[:160]}\". "
+                           f"Beleg: \"{beleg[:200]}\". Zeichenweise gegen den Quelltext "
+                           f"geprueft -- eine Angabe, die dort nicht steht, wird verworfen.]")
+                if dry_run:
+                    LOG.info("[DRY-RUN] #%s wuerde schliessen: %s", v["folgerung_id"], fakt[:80])
+                else:
+                    con.execute(
+                        "UPDATE folgerung SET status='widerlegt', "
+                        "begruendung = COALESCE(begruendung,'') || ? "
+                        "WHERE id=? AND status='offen'", (vermerk, v["folgerung_id"]))
+                    beleg_anhaengen(con, v["folgerung_id"], art, kennung)
+                    con.commit()
+                    LOG.info("#%s geschlossen: %s (aus %s)", v["folgerung_id"],
+                             fakt[:80], kennung)
+                geschlossen.append({"folgerung_id": v["folgerung_id"], "fakt": fakt[:160],
+                                    "quelle": f"{art}:{kennung}"})
+                break   # dieser Vorsatz ist erledigt
+        if geschlossen and not dry_run:
+            # Den Zettel sofort neu schreiben. Ohne das liest Zero weiter die
+            # alte Liste und nennt eine soeben belegte Angabe "ungeprueft"
+            # (gemessen 2026-08-20). Der Prueflauf ist billig und rein lesend.
+            try:
+                con.close()
+                pruefen(dry_run=False)
+            except Exception as fehler:
+                LOG.warning("Zettel nicht erneuert (%s: %s) -- er ist jetzt veraltet",
+                            type(fehler).__name__, fehler)
+            finally:
+                con = connect()
+        return {"geprueft": len(kandidaten_vorsaetze[:ARBEIT_MAX_PRO_LAUF]),
+                "kandidaten_gelesen": gelesen,
+                "geschlossen": len(geschlossen), "details": geschlossen,
+                "verworfen": verworfen,
+                "hinweis": ("Ein Modell liest EINEN Kandidatentext und sagt, ob die "
+                            "gesuchte Angabe darin steht. Was es behauptet, wird gegen "
+                            "den Quelltext geprueft -- steht es dort nicht, wird es "
+                            "verworfen und der Vorsatz bleibt offen.")}
+    finally:
+        con.close()
+
+
 def cmd_stand() -> dict:
     con = connect()
     try:
@@ -285,11 +476,15 @@ def cmd_stand() -> dict:
 
 def main() -> int:
     p = argparse.ArgumentParser(description="EntityOS Vorsatz-Pruefer")
-    p.add_argument("befehl", nargs="?", default="pruefen", choices=["pruefen", "stand"])
+    p.add_argument("befehl", nargs="?", default="pruefen",
+                   choices=["pruefen", "stand", "arbeit"])
     p.add_argument("--dry-run", action="store_true")
     a = p.parse_args()
     if a.befehl == "stand":
         print(json.dumps(cmd_stand(), ensure_ascii=False, indent=2))
+        return 0
+    if a.befehl == "arbeit":
+        print(json.dumps(arbeiten(dry_run=a.dry_run), ensure_ascii=False, indent=2))
         return 0
     ergebnis = pruefen(dry_run=a.dry_run)
     print(json.dumps({k: v for k, v in ergebnis.items() if k != "vorsaetze"},

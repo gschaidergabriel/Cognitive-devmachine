@@ -1,0 +1,11 @@
+[Unit]
+Description=EntityOS Vorsatz-Arbeit -- liest Kandidaten wirklich nach und schliesst Vorsaetze (budgetiert, ein kleines freies Modell)
+Documentation=file:///opt/entityos/vorsatz/eos_vorsatz.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/entityos/vorsatz/eos_vorsatz.py arbeit
+Nice=10
+IOSchedulingClass=idle

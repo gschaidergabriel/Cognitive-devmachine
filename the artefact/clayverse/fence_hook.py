@@ -14,6 +14,7 @@ Vertrag: liest das PreToolUse-Payload von stdin ({tool_name, tool_input}).
 Blockt mit permissionDecision=deny; sonst kein Output = durchlassen.
 """
 import json
+import os
 import re
 import sys
 
@@ -41,8 +42,29 @@ LESE = re.compile(
     r"nl|tac|awk|sed|cut|printenv|env)\b|\$\(<")
 
 
+# Auftragskoerbe: liegen UNTER dem Unersetzlichen, sind aber genau der Weg, den
+# Zero benutzen soll (Bild-Demo, Dienststeuerung). Ausnahme vom Schreibverbot --
+# siehe Modul-Kopf. Mit Schraegstrich am Ende, damit "/var/lib/clay/eos-demo-
+# requests-boese" nicht mitgemeint ist.
+KOERBE = (
+    "/var/lib/clay/eos-demo-requests/",
+    "/var/lib/clay/steuer-spool/",
+)
+
+
 def _trifft(text, pfade):
     return any(p in text for p in pfade)
+
+
+def _im_korb(pfad):
+    """Liegt dieser Pfad in einem Auftragskorb? Normalisiert, damit ein
+    '..' im Pfad nicht als Schluepfloch dient."""
+    if not pfad:
+        return False
+    norm = os.path.normpath(pfad)
+    if not norm.endswith("/"):
+        norm += "/"
+    return any(norm.startswith(k) for k in KOERBE)
 
 
 def deny(grund):
@@ -64,6 +86,8 @@ def main():
 
     if tool in ("Write", "Edit", "MultiEdit", "NotebookEdit"):
         pfad = str(ti.get("file_path") or ti.get("notebook_path") or "")
+        if _im_korb(pfad) and not GEHEIM_NAME.search(pfad):
+            sys.exit(0)   # Auftragskorb -- vorgesehener Weg, siehe KOERBE
         if _trifft(pfad, UNERSETZLICH) or GEHEIM_NAME.search(pfad):
             deny("Zaun: das Unersetzliche/Geheime wird nicht ueberschrieben (" + pfad + ").")
 
@@ -83,6 +107,8 @@ def main():
         # (c) Umleitung, die ein geschuetztes Ziel ueberschreibt?
         for m in re.finditer(r">>?\s*([^\s;&|>]+)", cmd):
             ziel = m.group(1)
+            if _im_korb(ziel) and not GEHEIM_NAME.search(ziel):
+                continue   # Auftragskorb, siehe KOERBE
             if _trifft(ziel, UNERSETZLICH) or GEHEIM_NAME.search(ziel):
                 deny("Zaun: kein Ueberschreiben des Unersetzlichen/Geheimen per Umleitung.")
         # (d) zerstoerende DB-Operationen auf dem Herzen

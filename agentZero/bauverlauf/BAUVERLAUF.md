@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T19:11:16Z. 988 Commits aus vier Repos, davon 338 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T19:41:16Z. 989 Commits aus vier Repos, davon 338 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T19:11:17Z. **3142 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T19:41:17Z. **3147 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T00:49:28+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T01:47:45+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3044 |
+| baunotiz | 3049 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1912 |
-| baunotiz | bauverlauf.jsonl | 1087 |
+| baunotiz | git-commit | 1915 |
+| baunotiz | bauverlauf.jsonl | 1089 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3142 · Gegenhypothese: 0 von 3142
+## Hypothese: 0 von 3147 · Gegenhypothese: 0 von 3147
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T00:49:28+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### research: bind Gen211 system-prompt last-writer alias
+
+`baunotiz-bauverlauf-e153cd74f380e90ff037` · baunotiz · bauverlauf.jsonl · 2026-08-21T01:47:45+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind Gen211 system-prompt last-writer alias
+
+`baunotiz-git-539a6c1cf4f9051be12333398bb68359bdd39eb1` · baunotiz · git-commit · 2026-08-21T01:47:45+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind Gen211 system-prompt last-writer alias
+
+### claycode supervisor: bind Gen211 identity isolation and work-debt frontier
+
+`baunotiz-bauverlauf-e5140e6f9e8ea22585f5` · baunotiz · bauverlauf.jsonl · 2026-08-21T01:42:55+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen211 identity isolation and work-debt frontier
+
+`baunotiz-git-18f5a8a446bc194c38b70414bd19a44dcd977db6` · baunotiz · git-commit · 2026-08-21T01:42:55+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen211 identity isolation and work-debt frontier
 
 ### research: route Gen211 null-evidence and isolation falsifiers
 
@@ -198,38 +230,6 @@ claycode supervisor: bind Gen201 GWT globality bypass frontier
 ### research: route Gen201 morphology and possibility-filter falsifiers
 
 `baunotiz-bauverlauf-4a2a638296b3bbded801` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:54:19+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen201 morphology and possibility-filter falsifiers
-
-`baunotiz-git-bbc11c0403889d24e7b825c93289f7d1f95318dc` · baunotiz · git-commit · 2026-08-20T20:54:19+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen201 morphology and possibility-filter falsifiers
-
-### research: route Gen199 workspace sidechannel falsifiers
-
-`baunotiz-bauverlauf-00e62e33901e275f31a3` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:47:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen199 workspace sidechannel falsifiers
-
-`baunotiz-git-62125a1d303107ac215eb7034703fffa4b908a73` · baunotiz · git-commit · 2026-08-20T20:47:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen199 workspace sidechannel falsifiers
-
-### gwt: open global channel audit and hyperposition-bypass task
-
-`baunotiz-bauverlauf-a68cd13a35706966f679` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:37:11+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-20T04:11:13Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-20T04:41:13Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -8,27 +8,27 @@ Automatisch erzeugt 2026-08-20T04:11:13Z aus `udb/abruf/wegehierarchie.py`.
 
 Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.
 
-Wege gesamt: **353**
+Wege gesamt: **355**
 
 ## Verteilung nach Rang
 
 | Rang | Anzahl |
 |---|---|
 | tunnel | 6 |
-| autobahn | 244 |
+| autobahn | 246 |
 | langsame strasse | 63 |
 | schnellstrasse | 40 |
 
-Oberes Zehntel haelt 0.136 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
+Oberes Zehntel haelt 0.135 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
 
 ## Staerkste Wege
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 621 | 621 |
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 558 | 558 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 416 | 416 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 384 | 384 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 628 | 628 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 573 | 573 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 431 | 431 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 391 | 391 |
 | C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 303 | 303 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 391 | 391 |
 | 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 1.0 | 249 | 249 |

@@ -87,6 +87,16 @@
     "executable_evidence": "test_model_name_with_surrounding_whitespace_is_blocked_before_network",
     "counterhypothesis": "Any nonblank model string can be delegated to provider-side validation or trimmed locally; falsified because leading, trailing and newline whitespace all reached the authenticated opener, while silent normalization would change request identity rather than validate the caller's exact identifier."
   },
+  "bearer_credential_syntax": {
+    "checked_at": "2026-08-20",
+    "claim": "A configured provider credential is routable only when it matches the RFC 6750 b64token grammar before Authorization-header construction; whitespace, CR/LF, non-ASCII and other separators fail closed before network access.",
+    "sources": [
+      "https://www.rfc-editor.org/rfc/rfc6750.html#section-2.1",
+      "https://docs.nvidia.com/nim/large-language-models/latest/get-started/quickstart.html"
+    ],
+    "executable_evidence": "test_invalid_bearer_credential_is_blocked_before_network",
+    "counterhypothesis": "A nonblank environment value is sufficient credential evidence and the HTTP stack can validate it later; falsified because leading/trailing whitespace, CRLF injection text, non-ASCII and colon values were all selected for authenticated routing and reached request construction."
+  },
   "incomplete_body_errors": {
     "checked_at": "2026-08-11",
     "claim": "http.client.IncompleteRead after a received response is an incomplete provider response, not an unhandled process exception.",
@@ -423,6 +433,7 @@
     "Never access Together, including discovery, probes, routing and fallback.",
     "Never make a paid request unless the project owner separately authorizes a nonzero budget.",
     "A configured key is capability evidence, not proof of quota or health.",
+    "A provider credential must match RFC 6750 b64token syntax before it can become configured capability evidence or enter an Authorization header; whitespace, control characters, non-ASCII and separators fail closed before network access.",
     "Except for an officially documented free developer endpoint, a configured key requires explicit host-side zero-cost attestation before routing.",
     "A provider credential may only be sent to that provider's canonical host; a global multi-provider host allowlist is forbidden.",
     "Credential binding compares the full remote origin boundary, including the effective HTTPS port; hostname equality alone is insufficient.",

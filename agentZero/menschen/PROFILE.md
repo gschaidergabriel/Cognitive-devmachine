@@ -1,6 +1,6 @@
 # Menschen hinter Zero
 
-Automatisch erzeugt 2026-08-20T04:41:13Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
+Automatisch erzeugt 2026-08-20T05:11:14Z. Dieses Repo ist OEFFENTLICH -- deshalb gilt hier eine engere Freigabe als die sonstige Schwaerzung (die faengt nur Zugangsdaten). Nur Felder mit `herkunft=iar.frank.ink` (schon oeffentlich auf der Institutsseite) oder einzeln gepruefte, klar unpersoenliche Eigner-Felder stehen unten. Alles andere steht als zurueckgehalten da, nicht stillschweigend weggelassen.
 
 ## Herkunftsregeln
 

@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-20T04:41:13Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-20T05:11:14Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -15,9 +15,9 @@ Wege gesamt: **355**
 | Rang | Anzahl |
 |---|---|
 | tunnel | 6 |
-| autobahn | 246 |
+| autobahn | 248 |
 | langsame strasse | 63 |
-| schnellstrasse | 40 |
+| schnellstrasse | 38 |
 
 Oberes Zehntel haelt 0.135 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
 
@@ -25,10 +25,10 @@ Oberes Zehntel haelt 0.135 der Gesamtguete (bei Gleichverteilung waeren es 0.099
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 628 | 628 |
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 573 | 573 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 431 | 431 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 391 | 391 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 633 | 633 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 583 | 583 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 441 | 441 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 396 | 396 |
 | C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 303 | 303 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 391 | 391 |
 | 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 1.0 | 249 | 249 |

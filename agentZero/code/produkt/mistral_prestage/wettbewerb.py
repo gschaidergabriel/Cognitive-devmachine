@@ -42,12 +42,37 @@ Damit ist "nichts wird ausgestrahlt" ein erreichbarer Zustand. Genau das
 fehlt LIDAs `compete()` (argmax, auch bei Score 0) -- und ohne diesen
 Zustand gibt es keine Zuendung, nur eine Umverteilung.
 
-WAS DIESES MODUL NICHT TUT
---------------------------
-Es lernt nicht. Der Rueckkanal (Erfolg einer Ausstrahlung veraendert
-kuenftige Gewichte) ist bewusst NICHT hier -- er wuerde waehrend einer
-Messreihe aus den Versuchszuegen selbst ein Signal wachsen lassen. Was
-geschrieben wird, ist eine Buchung (`gw_ausstrahlung`), keine Rueckkopplung.
+DER RUECKKANAL (seit 2026-08-20)
+-------------------------------
+Bis hierher war die Auswahl gedaechtnislos: dieselbe Frage ergab immer dieselbe
+Rangfolge, ganz gleich, ob eine ausgestrahlte Stelle jemals etwas genuetzt hat.
+Damit war ein Zombie ohne Arbeitsraum von der vollen Anlage nicht zu
+unterscheiden -- beide laufen deterministisch dieselbe Bahn. Ein Arbeitsraum,
+dessen Inhalt die Zukunft nicht beruehrt, ist eine Anzeige, kein Kreislauf.
+
+Jetzt gibt es zwei Rueckwege, und sie ziehen in verschiedene Richtungen:
+
+  neuheit   daempft, was zuletzt schon dran war        (Abschlag, gegen Erstarrung)
+  gelernt   hebt, was bei DIESEN Woertern schon getragen hat  (Bonus, fuer Passung)
+
+DAS BELOHNUNGSSIGNAL IST NICHT ERFUNDEN, SONDERN GEMESSEN. Belohnt wird eine
+Ausstrahlung genau dann, wenn Zero die Artikelkennung in seiner Antwort NENNT.
+Das ist derselbe Nachweis, der schon die Sonden traegt: eine Verweigerung kann
+keine Kennung nennen (belegt an 88 Antworten). Ein Modell, das nach seiner
+eigenen Zufriedenheit gefragt wird, waere hier das falsche Messgeraet.
+
+GRENZEN, ABSICHTLICH ENG GEZOGEN
+  * Gelerntes kann eine Stelle INNERHALB der passenden Menge nach vorn holen,
+    aber niemals eine unpassende hereinlassen: die harte Huerde `relevanz > 0`
+    bleibt davor. Sonst wuerde ein einmal belohnter Artikel irgendwann auf
+    jede Frage antworten -- der klassische Selbstlaeufer.
+  * Gelernt wird nur an SELTENEN Woertern (idf >= IDF_LERN_MIN). An "lauf"
+    (steckt in 43 % aller Zeilen) zu lernen hiesse, Allerweltssprache zu lernen.
+  * Alles verfaellt (VERFALL je Buchung). Was nicht wieder bestaetigt wird,
+    verschwindet -- ein Bonus ohne Verfall ist eine Behauptung ueber die
+    Zukunft, die nie ueberprueft wird.
+  * Geschrieben wird NUR bei `record_via_turnlifecycle=True`. Eine Messreihe
+    darf sich ihr eigenes Signal nicht anfuettern.
 """
 from __future__ import annotations
 
@@ -66,7 +91,11 @@ from typing import Any
 # Position gehangen. Der Rang bleibt -- aber nur als Stichentscheid bei
 # Gleichstand, nicht als Anteil am Wert.
 GEWICHT_SALIENZ = 0.0
-GEWICHT_RELEVANZ = 0.90
+# ⚠️ Die drei Gewichte muessen sich zu 1,0 summieren, sonst bedeutet die
+# Schwelle nicht mehr, was sie sagt (siehe _gewichte). Im frischen Zustand --
+# keine Ausstrahlungsgeschichte, keine Erfahrung -- faellt ohnehin alles an
+# relevanz zurueck, dort gilt weiter genau die kalibrierte 0,25.
+GEWICHT_RELEVANZ = 0.70
 # Der Neuheits-Abschlag wirkt NUR, wenn es eine Ausstrahlungsgeschichte gibt.
 # Ohne sie ist neuheit fuer jeden Kandidaten 1,0, also eine Konstante, also
 # rangneutral -- gemessen in 100 % der Versuchszuege, weil die Apparaturen
@@ -88,6 +117,15 @@ SCHWELLE = 0.25
 # von zweien = relevanz 0,5) -- eine Zuendung ohne Sachfrage, also genau das
 # falsch-positive Feuern, das die Schwelle verhindern soll.
 MIN_GEDECKT = 2
+
+# ── Rueckkanal ───────────────────────────────────────────────────────────
+GEWICHT_LERNEN = 0.20
+ALPHA_HOCH = 0.30        # Schritt bei Belohnung, saettigend gegen 1,0
+ALPHA_RUNTER = 0.15      # Schritt bei ausgebliebener Belohnung
+VERFALL = 0.98           # je Buchung, auf ALLES -- nach LIDA (learning.py: 0.995,
+                         # dort aber je Takt bei 8 Hz; hier ist ein Takt ein ZUG)
+IDF_LERN_MIN = 0.40      # nur seltene Woerter tragen eine Lehre
+LERN_MIN = 0.02          # darunter loeschen statt mitschleppen
 NEUHEIT_K = 0.6
 NEUHEIT_FENSTER = 50
 ANGEBOT_MAX = 3          # so viele Stellen duerfen hoechstens ausgestrahlt werden
@@ -174,39 +212,61 @@ def neuheit(artikel_id: Any, haeufigkeiten: dict) -> float:
     return 1.0 / (1.0 + NEUHEIT_K * n)
 
 
-def _gewichte(haeufigkeiten: dict | None) -> tuple[float, float]:
-    """(relevanz, neuheit) -- ohne Ausstrahlungsgeschichte traegt relevanz alles.
+def _gewichte(haeufigkeiten: dict | None,
+              gelernte: dict | None = None) -> tuple[float, float, float]:
+    """(relevanz, neuheit, gelernt) -- ungenutzte Anteile fallen an relevanz.
 
-    Eine Konstante im Summanden ist keine Bewertung. Wenn `haeufigkeiten` leer
-    ist, hat JEDER Kandidat neuheit=1,0; das Gewicht wuerde dann nur den
-    Absolutwert anheben und die Schwelle heimlich absenken (aus 0,32 wuerde
-    faktisch 0,22). Also wird es umgelegt statt mitgeschleppt.
+    Eine Konstante im Summanden ist keine Bewertung. Ist `haeufigkeiten` leer,
+    hat JEDER Kandidat neuheit=1,0; das Gewicht wuerde dann nur den Absolutwert
+    anheben und die Schwelle heimlich absenken (aus 0,32 waere faktisch 0,22
+    geworden -- gemessen). Ist nichts gelernt, gilt dasselbe fuer den
+    Lernanteil, nur mit 0 statt 1. Beides wird umgelegt statt mitgeschleppt,
+    damit die Summe immer 1,0 ist und die Schwelle bedeutet, was sie sagt.
     """
-    if haeufigkeiten:
-        return GEWICHT_RELEVANZ, GEWICHT_NEUHEIT
-    return GEWICHT_RELEVANZ + GEWICHT_NEUHEIT, 0.0
+    rel, neu, lern = GEWICHT_RELEVANZ, GEWICHT_NEUHEIT, GEWICHT_LERNEN
+    if not haeufigkeiten:
+        rel += neu; neu = 0.0
+    if not gelernte:
+        rel += lern; lern = 0.0
+    return rel, neu, lern
+
+
+def gelernt(artikel_id: Any, frage_worte: list, gelernte: dict | None) -> float:
+    """Wie gut hat DIESE Stelle bei DIESEN Woertern bisher getragen? 0..1.
+
+    Gemittelt ueber die Fragewoerter, fuer die es ueberhaupt eine Erfahrung
+    gibt -- nicht ueber alle. Sonst verduennt jedes neue Wort das Gelernte,
+    und eine lange Frage koennte nie von Erfahrung profitieren.
+    """
+    if not gelernte or not frage_worte:
+        return 0.0
+    aid = str(artikel_id or "")
+    werte = [gelernte[(w, aid)] for w in frage_worte if (w, aid) in gelernte]
+    return sum(werte) / len(werte) if werte else 0.0
 
 
 def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
-             idf: dict | None = None) -> list[dict[str, Any]]:
+             idf: dict | None = None, gelernte: dict | None = None) -> list[dict[str, Any]]:
     """Alle Korpustreffer mit Zahl versehen, absteigend sortiert.
 
     Liefert NEUE dicts -- der uebergebene Korpus bleibt unangetastet, damit
     andere Verbraucher derselben world-Referenz nichts Veraendertes sehen.
     """
     fw = _worte(frage)
-    g_rel, g_neu = _gewichte(haeufigkeiten)
+    g_rel, g_neu, g_lern = _gewichte(haeufigkeiten, gelernte)
     raus: list[dict[str, Any]] = []
     echte = [t for t in (korpus or []) if isinstance(t, dict)]
     for i, t in enumerate(echte):
         sal = 1.0 / (1.0 + i)
         rel = relevanz(t, fw, idf)
         neu = neuheit(t.get("artikel_id"), haeufigkeiten or {})
-        wert = GEWICHT_SALIENZ * sal + g_rel * rel + g_neu * neu
+        ler = gelernt(t.get("artikel_id"), fw, gelernte)
+        wert = GEWICHT_SALIENZ * sal + g_rel * rel + g_neu * neu + g_lern * ler
         k = dict(t)
         k["gw_salienz"] = round(sal, 3)
         k["gw_relevanz"] = round(rel, 3)
         k["gw_neuheit"] = round(neu, 3)
+        k["gw_gelernt"] = round(ler, 3)
         k["gw_wert"] = round(wert, 3)
         k["gw_zugelassen"] = bool(rel > 0.0 and wert >= SCHWELLE)
         raus.append(k)
@@ -227,7 +287,7 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
 # Arbeitsraum, nachdem gewaehlt wurde.
 _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
                    "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
-                   "gw_zugelassen")
+                   "gw_gelernt", "gw_zugelassen")
 
 
 def nur_kennung(bewertet: list) -> list[dict[str, Any]]:
@@ -337,9 +397,9 @@ def idf_gewichte(db, frage: str) -> dict[str, float]:
             break
         try:
             if gesamt is None:
-                gesamt = float(db.execute(
+                gesamt = float(_verbindung(db).execute(
                     "SELECT COUNT(*) FROM fts_index_artikel").fetchone()[0]) or 1.0
-            n = float(db.execute(
+            n = float(_verbindung(db).execute(
                 "SELECT COUNT(*) FROM fts_index_artikel WHERE fts_index_artikel MATCH ?",
                 (f'"{w}"*',)).fetchone()[0])
         except Exception:
@@ -352,6 +412,112 @@ def idf_gewichte(db, frage: str) -> dict[str, float]:
     return raus
 
 
+def _verbindung(db):
+    """Die sqlite-Verbindung, egal ob eine UnifiedDB oder eine rohe kommt.
+
+    ⚠️ HIER LAG EIN STILLER AUSFALL, gefunden 2026-08-20 beim ersten
+    Rueckkanal-Lauf: `UnifiedDB` hat KEIN `.execute`, nur `.db`. Die Lesefunktionen
+    riefen `db.execute(...)`, bekamen einen AttributeError -- und ihr eigener
+    Ausfallschutz machte daraus ein leeres Ergebnis. Kein Fehler, keine Meldung.
+    Der Neuheits-Abschlag war damit seit dem Bau wirkungslos, und das Gelernte
+    waere es geblieben. Genau die Sorte Defekt, die eine Anlage gebaut aussehen
+    laesst, ohne dass irgendetwas rechnet.
+    """
+    return getattr(db, "db", db)
+
+
+_LERN_TABELLE = (
+    "CREATE TABLE IF NOT EXISTS gw_lernen("
+    "  merkmal TEXT NOT NULL, artikel_id TEXT NOT NULL,"
+    "  boost REAL NOT NULL DEFAULT 0, n INTEGER NOT NULL DEFAULT 0,"
+    "  belohnt INTEGER NOT NULL DEFAULT 0, ts REAL NOT NULL,"
+    "  PRIMARY KEY(merkmal, artikel_id));")
+
+
+def gelernte_boosts(db, frage: str, idf: dict | None = None) -> dict:
+    """Was bei den Woertern DIESER Frage bisher getragen hat.
+
+    Liefert {(wort, artikel_id): boost}. Fehlt die Tabelle (frische Anlage,
+    Sandkasten), ist die Antwort leer -- dann gibt es nichts zu erinnern, und
+    `_gewichte` legt den Lernanteil auf relevanz um. Kein Bonus aus dem Nichts.
+    """
+    worte = [w for w in _worte(frage)
+             if (idf or {}).get(w, 1.0) >= IDF_LERN_MIN]
+    if not worte:
+        return {}
+    marken = ",".join("?" for _ in worte)
+    try:
+        rows = _verbindung(db).execute(
+            f"SELECT merkmal, artikel_id, boost FROM gw_lernen "
+            f"WHERE merkmal IN ({marken}) AND boost >= ?",
+            worte + [LERN_MIN]).fetchall()
+    except Exception:
+        return {}
+    raus = {}
+    for r in rows:
+        try:
+            raus[(r["merkmal"], r["artikel_id"])] = float(r["boost"])
+        except Exception:
+            raus[(r[0], r[1])] = float(r[2])
+    return raus
+
+
+def lernen(store, frage: str, idf: dict | None, gewaehlt: list, antwort: str) -> dict:
+    """Der Rueckkanal. Darf einen Zug NIE kippen.
+
+    BELOHNUNG = Zero hat die Kennung in seiner Antwort GENANNT. Kein Modell
+    wird nach seiner Zufriedenheit gefragt, kein Mensch muss klicken: die
+    Quellenangabe ist der einzige Teil einer Antwort, den eine Verweigerung
+    nicht faelschen kann. Wurde eine Stelle ausgestrahlt und nicht zitiert,
+    hat sie fuer diese Art Frage nichts getragen -- das ist die Gegenprobe,
+    und ohne sie waere jede Ausstrahlung eine Bestaetigung ihrer selbst.
+
+    Geprueft wird gegen Zeros ROHE Antwort, nicht gegen die deutsche Fassung:
+    der Uebersetzer koennte eine Kennung umformulieren oder weglassen, und dann
+    haenge das Lernsignal an einer dritten Stufe.
+    """
+    ergebnis = {"belohnt": [], "leer": [], "worte": 0}
+    try:
+        worte = [w for w in _worte(frage) if (idf or {}).get(w, 1.0) >= IDF_LERN_MIN]
+        ids = [str(a) for a in (gewaehlt or []) if str(a or "").strip()]
+        if not worte or not ids:
+            return ergebnis
+        ergebnis["worte"] = len(worte)
+        text = (antwort or "").lower()
+        jetzt = time.time()
+        store.db.executescript(_LERN_TABELLE)
+        # Verfall auf ALLES -- auch auf das, was heute nicht drankam. Sonst
+        # bliebe eine einmal gelernte Verbindung ewig stehen.
+        store.db.execute("UPDATE gw_lernen SET boost = boost * ?", (VERFALL,))
+        for aid in ids:
+            belohnt = aid.lower() in text
+            (ergebnis["belohnt"] if belohnt else ergebnis["leer"]).append(aid)
+            for w in worte:
+                row = store.db.execute(
+                    "SELECT boost, n, belohnt FROM gw_lernen "
+                    "WHERE merkmal=? AND artikel_id=?", (w, aid)).fetchone()
+                try:
+                    alt_b, alt_n, alt_bel = (float(row["boost"]), int(row["n"]),
+                                             int(row["belohnt"])) if row else (0.0, 0, 0)
+                except Exception:
+                    alt_b, alt_n, alt_bel = (float(row[0]), int(row[1]), int(row[2])) if row else (0.0, 0, 0)
+                if belohnt:
+                    neu_b = alt_b + ALPHA_HOCH * (1.0 - alt_b)      # saettigt gegen 1
+                else:
+                    neu_b = alt_b - ALPHA_RUNTER * alt_b            # faellt gegen 0
+                neu_b = max(0.0, min(1.0, neu_b))
+                store.db.execute(
+                    "INSERT INTO gw_lernen(merkmal,artikel_id,boost,n,belohnt,ts) "
+                    "VALUES(?,?,?,?,?,?) ON CONFLICT(merkmal,artikel_id) DO UPDATE SET "
+                    "boost=excluded.boost, n=excluded.n, belohnt=excluded.belohnt, ts=excluded.ts",
+                    (w, aid, neu_b, alt_n + 1, alt_bel + int(belohnt), jetzt))
+        store.db.execute("DELETE FROM gw_lernen WHERE boost < ?", (LERN_MIN,))
+        store.db.commit()
+    except Exception:
+        pass
+    return ergebnis
+
+
 def haeufigkeiten(db, fenster: int = NEUHEIT_FENSTER) -> dict[str, int]:
     """Wie oft kam jede Stelle in den letzten `fenster` Ausstrahlungen vor.
 
@@ -359,7 +525,7 @@ def haeufigkeiten(db, fenster: int = NEUHEIT_FENSTER) -> dict[str, int]:
     dann ist alles neu, und das ist auch richtig so.
     """
     try:
-        rows = db.execute(
+        rows = _verbindung(db).execute(
             "SELECT artikel_id FROM gw_ausstrahlung ORDER BY id DESC LIMIT ?",
             (int(fenster),)).fetchall()
     except Exception:

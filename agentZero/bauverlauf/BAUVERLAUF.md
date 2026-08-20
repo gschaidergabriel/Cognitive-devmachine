@@ -1,12 +1,69 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T11:41:16Z. 948 Commits aus vier Repos, davon 316 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T12:11:17Z. 951 Commits aus vier Repos, davon 318 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 12:09:37 +0000 — entityos: 2 Aenderungen
+
+`eb4ee3ee2788` · entityos · 12:09 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T12:09:37+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 12:05:35 +0000 — entityos: 21 Aenderungen
+
+`99d529e3b1c1` · entityos · 12:05 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/BEFUND-5-6.md
+  forschung/cswt-z-pilot/cswt-arm-0.jsonl
+  forschung/cswt-z-pilot/cswt-arm-alle.jsonl
+  forschung/cswt-z-pilot/cswt-arm-auswahl.jsonl
+  forschung/cswt-z-pilot/cswt-arm-zombie.jsonl
+  forschung/cswt-z-pilot/cswt-kont.jsonl
+  forschung/cswt-z-pilot/cswt-wette2.jsonl
+  forschung/cswt-z-pilot/cswt-zwang3.jsonl
+  forschung/cswt-z-pilot/cswt_bewerter.py
+  forschung/cswt-z-pilot/cswt_exakt.py
+  forschung/cswt-z-pilot/cswt_kontinuitaet.py
+  forschung/cswt-z-pilot/cswt_tafel.py
+  forschung/cswt-z-pilot/cswt_wette.py
+  forschung/cswt-z-pilot/cswt_wette_aus.py
+  forschung/cswt-z-pilot/cswt_zwang.py
+  forschung/cswt-z-pilot/cswt_zwang_tafel.py
+  forschung/cswt-z-pilot/kont_aus.py
+  forschung/cswt-z-pilot/mk_leer.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T12:05:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 21
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 10:27:10 +0000 — entityos: 1 Aenderungen
 
@@ -4468,42 +4525,5 @@ Gleiche Ursache wie de1ffd051: verified_effect braucht seit 8b7368efd ein
 required_target. Zusaetzlich matchte der zweite Test von Anfang an nie
 richtig -- die Meldung heisst "independently verifiable effect capability",
 nicht "independent capability"; der Test hat das wohl nie gruen gesehen.
-```
-
-### Zeros Identitaet wird kanonischer Zustand statt Bau-Artefakt
-
-`76ced08c5bb0` · entityos · 03:20 UTC · EntityOS
-
-```
-Vorher stand die Identitaet in einer Datei im Image und erreichte das Modell
-ueber --append-system-prompt-file. Der Kanal war richtig, die Quelle nicht:
-eine Datei aus dem Bauvorgang ist kein kanonischer Zustand, und sie kann von
-dem abweichen, was in der Datenbank steht.
-
-Jetzt:
-- meta.canonical_identity (Ebene 0) haelt den XML-Wortlaut. Bei JEDEM Oeffnen
-  autoritativ zurueckgeschrieben, nicht nur angelegt - eine laufende Entitaet
-  kann nicht wegdriften.
-- service.py rendert beim Start Identitaet+Vertrag nach STATE_ROOT/runtime/
-  CLAUDE.md, terminal_sessions laedt DAS. Kein Rueckfall auf die Image-Datei:
-  ein Terminal ohne kanonische Identitaet waere eine andere Entitaet unter
-  demselben Namen, also startet es lieber nicht.
-- canonical_identity faehrt im Weltkontext mit und wird an allen drei
-  Trimmstellen ausgenommen (_bound_world, _bounded_hook_context). Verdichtung
-  darf nicht ausgerechnet das wegnehmen, was die Entitaet ist.
-
-Ein Vorbehalt ist im <scope> festgehalten statt weggelassen: souveraen meint
-Entitaet-statt-Werkzeug, nicht Selbstautorisierung. Ohne diesen Satz stuenden
-zwei widerspruechliche Anweisungen im selben Systemprompt.
-
-Suite 461/31 -> 466/26, keine Regression.
-```
-
-### test(clayverse): repair autonomy recovery EffectJournal fixture
-
-`8d3f078ff98e` · entityos · 03:20 UTC · Gabriel Gschaider
-
-```
-Bind the recovery regression fixture to the exact canonical EffectJournal receipt encoding and admitted target. Test-only source consistency repair; no runtime PASS claimed.
 ```
 

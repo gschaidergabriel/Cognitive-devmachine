@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T11:41:16Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T12:11:17Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -171,6 +171,8 @@ Automatisch erzeugt 2026-08-20T11:41:16Z aus drei Repos. 478 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T12:09 | entityos | `eb4ee3ee2788` | EOS-Chronik 2026-08-20 12:09:37 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T12:05 | entityos | `99d529e3b1c1` | EOS-Chronik 2026-08-20 12:05:35 +0000 — entityos: 21 Aenderungen |
 | 2026-08-20T10:27 | entityos | `3ed9e1f291e1` | EOS-Chronik 2026-08-20 10:27:10 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T10:02 | entityos | `4694b4089d88` | EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen |
 | 2026-08-20T09:55 | entityos | `00ab2d848de2` | EOS-Chronik 2026-08-20 09:55:48 +0000 — entityos: 2 Aenderungen |
@@ -229,6 +231,4 @@ Automatisch erzeugt 2026-08-20T11:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-19T15:09 | entityos | `b1c7e038398b` | EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen |
 | 2026-08-19T15:09 | unifieddb | `dabe10f24aec` | EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen |
 | 2026-08-19T15:08 | unifieddb | `50e521e78d3f` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
-| 2026-08-19T15:08 | entityos | `280c628447ed` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
-| 2026-08-19T15:08 | clay | `7edb9faf4713` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
 

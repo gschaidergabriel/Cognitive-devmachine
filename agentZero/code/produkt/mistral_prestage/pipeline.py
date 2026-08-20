@@ -61,6 +61,12 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
     # Treffer in den Vorstufenkontext mussten; seit die Vorstufe gar keinen
     # Text mehr sieht, ist das Budget frei. Ausgestrahlt werden hoechstens drei
     # Stellen -- die duerfen dafuer vollstaendig genug sein, um zu antworten.
+    # Der Rueckkanal, Leserichtung: was bei diesen Woertern schon getragen hat.
+    try:
+        world["_gw_gelernte"] = wettbewerb.gelernte_boosts(
+            db, message or "", world.get("_gw_idf") or {})
+    except Exception:
+        world["_gw_gelernte"] = {}
     try:
         world["_gw_lang"] = _langtext(db, [t.get("artikel_id")
                                            for t in (world.get("corpus") or [])
@@ -536,7 +542,8 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     frage = str(frage or (world.get("retrieval_receipt") or {}).get("query") or "")
     bewerteter_korpus = wettbewerb.bewerten(
         list(world.get("corpus") or []), frage,
-        world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {})
+        world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {},
+        world.get("_gw_gelernte") or {})
 
     # ⭐⭐ DER ENGPASS. `kennung` (Vorgabe): die Vorstufe sieht Kennung, Titel und
     # Wert, aber KEINEN Volltext -- sie kann waehlen, nicht weitererzaehlen.
@@ -969,11 +976,16 @@ def run_chat_turn(
         # ⭐ Wettbewerbsbuch. NUR bei echter Aufzeichnung: eine Messreihe darf
         # sich ihren eigenen Neuheits-Abschlag nicht selbst anfuettern, sonst
         # misst der zweite Lauf die Spuren des ersten.
+        _lernbericht = None
         if record_via_turnlifecycle:
             _raus = _gewaehlte_treffer(vorstufe_world, envelope.get("broadcast_ids"))
+            _raus_ids = [t.get("artikel_id") for t in _raus]
             wettbewerb.buchen(own_store, session_id, turn_id,
-                              vorstufe_world.get("corpus") or [],
-                              [t.get("artikel_id") for t in _raus])
+                              vorstufe_world.get("corpus") or [], _raus_ids)
+            # ⭐ RUECKKANAL. Gegen Zeros ROHE Antwort, nicht gegen die deutsche
+            # Fassung -- sonst haengt das Lernsignal am Uebersetzer.
+            _lernbericht = wettbewerb.lernen(
+                own_store, message, world.get("_gw_idf") or {}, _raus_ids, _sauber)
 
         t0 = time.perf_counter()
         german, roh_ausgeliefert = _uebersetzung_mit_rueckfall(
@@ -1067,6 +1079,9 @@ def run_chat_turn(
             # modell / mechanisch / verzicht -- ohne diese Unterscheidung
             # sieht eine nachgezogene Auswahl aus wie eine getroffene.
             "broadcast_herkunft": _auswahl_herkunft,
+            # Was der Rueckkanal aus diesem Zug gelernt hat (None = nicht
+            # aufgezeichnet, also auch nicht gelernt).
+            "rueckkanal": _lernbericht,
             "broadcast_angeboten": len(wettbewerb.zugelassene_ids(
                 vorstufe_world.get("corpus") or [])),
             "elapsed_ms": {

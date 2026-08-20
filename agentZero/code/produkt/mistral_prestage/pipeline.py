@@ -151,6 +151,11 @@ _VORSTUFE_OWN_RECENT_N = 3
 _VORSTUFE_DURABLE_MEMORY_N = 12
 _VORSTUFE_OWN_RECENT_FELD_DECKEL = 800
 _VORSTUFE_DURABLE_MEMORY_FELD_DECKEL = 300
+# Wie viele Korpustreffer und Gedaechtniseintraege auf jeden Fall bleiben,
+# bevor der Deckel sie ueberhaupt anfasst. Drei, weil ein einzelner Treffer
+# die Frage haeufig nur streift -- gemessen trug in mehreren Faellen erst
+# der zweite oder dritte Treffer die Antwort.
+_KORPUS_BODEN = 3
 
 
 # ── Der WIRKLICHE Deckel (CSWT-Z-Befund 2026-08-20) ──────────────────────
@@ -282,6 +287,40 @@ def _epistemik_zeile(epistemik: Any) -> str:
     return zeile[:_EPISTEMIK_MAX_CHARS]
 
 
+_KORPUS_IM_PROMPT_MAX_CHARS = 1400
+_KORPUS_IM_PROMPT_N = 3
+
+
+def _korpus_zeile(world: dict[str, Any]) -> str:
+    """Die abgerufenen Stellen, kurz und mit Quelle -- oder "" wenn keine da sind."""
+    treffer = [t for t in ((world or {}).get("corpus") or []) if isinstance(t, dict)]
+    if not treffer:
+        return ""
+    zeilen = []
+    for t in treffer[:_KORPUS_IM_PROMPT_N]:
+        titel = str(t.get("titel") or "").strip()
+        aus = " ".join(str(t.get("ausschnitt") or "").split())
+        kennung = str(t.get("artikel_id") or "").strip()
+        if not aus:
+            continue
+        zeilen.append(f"- [{kennung}] {titel}: {aus}")
+    if not zeilen:
+        return ""
+    kopf = ("CORPUS (already retrieved for THIS question -- the answer is often "
+            "already in here; use it and name the source, do NOT send yourself to "
+            "read or fetch it again):")
+    return (kopf + "\n" + "\n".join(zeilen))[:_KORPUS_IM_PROMPT_MAX_CHARS]
+
+
+def _mit_arbeitsraum(caveman: str, world: dict[str, Any]) -> str:
+    """Den abgerufenen Korpus an den Auftrag haengen -- siehe Modul-Historie."""
+    import os as _os
+    if _os.environ.get("CLAYVERSE_KORPUS_IM_PROMPT", "1") != "1":
+        return caveman
+    zeile = _korpus_zeile(world)
+    return f"{caveman}\n\n{zeile}" if zeile else caveman
+
+
 def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
     import os as _os
@@ -345,18 +384,27 @@ def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
     def _groesse() -> int:
         return len(json.dumps(packed, ensure_ascii=False, default=str))
 
-    # Sicherheitsnetz, falls die Feld-Deckel oben trotzdem nicht reichen (z.B.
-    # eine sehr lange canonical_identity): erst das billigste weg -- corpus ist
-    # naechste Runde neu abrufbar, cross_session_collision ist im
-    # Vorstufe-Pfad wegen resource_refs=[] ohnehin fast immer leer.
-    while _groesse() > _VORSTUFE_MAX_CHARS and packed["corpus"]:
-        packed["corpus"] = packed["corpus"][:-1]
+    # ⭐⭐ Sicherheitsnetz -- nach FRAGE-NAEHE, nicht nach Wiederbeschaffbarkeit.
+    # Bis 2026-08-20 flog hier der Korpus ZUERST, mit der Begruendung "ist
+    # naechste Runde neu abrufbar". Gemessen: von fuenf Treffern kam EINER an,
+    # die Antwort erreichte den Auftrag in 2 von 8 Faellen, und ein Zombie ohne
+    # jeden Arbeitsraum lag gleichauf mit dem vollen System. Der Korpus ist der
+    # einzige Block, der zur GESTELLTEN Frage gehoert; alles andere ist bei
+    # jeder Frage dasselbe. Wer ihn zuerst wirft, behaelt die Kulisse.
     while _groesse() > _VORSTUFE_MAX_CHARS and packed["cross_session_collision"]:
         packed["cross_session_collision"] = packed["cross_session_collision"][:-1]
-    while _groesse() > _VORSTUFE_MAX_CHARS and packed["durable_memory"]:
-        packed["durable_memory"] = packed["durable_memory"][:-1]
     while _groesse() > _VORSTUFE_MAX_CHARS and len(packed["own_recent"]) > 1:
         packed["own_recent"] = packed["own_recent"][1:]
+    while _groesse() > _VORSTUFE_MAX_CHARS and len(packed["durable_memory"]) > _KORPUS_BODEN:
+        packed["durable_memory"] = packed["durable_memory"][:-1]
+    # Korpus zuletzt, und nicht unter den Boden -- darunter erst, wenn sonst
+    # nichts mehr zu holen ist.
+    while _groesse() > _VORSTUFE_MAX_CHARS and len(packed["corpus"]) > _KORPUS_BODEN:
+        packed["corpus"] = packed["corpus"][:-1]
+    while _groesse() > _VORSTUFE_MAX_CHARS and packed["durable_memory"]:
+        packed["durable_memory"] = packed["durable_memory"][:-1]
+    while _groesse() > _VORSTUFE_MAX_CHARS and packed["corpus"]:
+        packed["corpus"] = packed["corpus"][:-1]
 
     return packed
 
@@ -656,7 +704,9 @@ def run_chat_turn(
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(
-            _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
+            _mit_arbeitsraum(
+                _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
+                vorstufe_world),
             user_id=user_id, session_id=session_id,
             tool_selection=selected_tools,
         )
@@ -687,7 +737,9 @@ def run_chat_turn(
             prestage_ms += (time.perf_counter() - t0) * 1000.0
             t0 = time.perf_counter()
             zero = headless_zero.run_headless(
-                _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
+                _mit_arbeitsraum(
+                    _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
+                    vorstufe_world),
                 user_id=user_id, session_id=session_id,
                 tool_selection=selected_tools,
             )

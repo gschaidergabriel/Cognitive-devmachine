@@ -1,10 +1,10 @@
 # Ausfuehrbarer Code
 
-Automatisch kopiert 2026-08-20T07:41:14Z vom laufenden Wirt. Nur Quelltext -- keine Datenbanken, keine Zugangsdaten, keine Sammlungen. Die Auswahl ist eine Erlaubnisliste, keine Verbotsliste.
+Automatisch kopiert 2026-08-20T08:11:15Z vom laufenden Wirt. Nur Quelltext -- keine Datenbanken, keine Zugangsdaten, keine Sammlungen. Die Auswahl ist eine Erlaubnisliste, keine Verbotsliste.
 
 | Bereich | Dateien | Groesse | Quelle | Warum |
 |---|---|---|---|---|
-| produkt | 72 | 976 KB | `/opt/entityos/the artefact/clayverse` | Das EntityOS-Produkt selbst. |
+| produkt | 72 | 978 KB | `/opt/entityos/the artefact/clayverse` | Das EntityOS-Produkt selbst. |
 | unterbau | 69 | 1416 KB | `/opt/clayverse/werkzeug` | Die 46 Clay-Werkzeuge. Steht NIRGENDS sonst in Git, obwohl vier laufende Dienste daran haengen -- der eigentliche Grund fuer diesen Ordner. |
 | udb | 60 | 621 KB | `/opt/unifieddb/udb` | Die udb-Schicht: Abruf, Speicher, Pflege, Karte. |
 | export | 4 | 208 KB | `/opt/agentzero-export` | Dieser Export selbst. Ein Werkzeug, das sich nicht mitexportiert, ist beim naechsten Wiederaufbau verschwunden. |

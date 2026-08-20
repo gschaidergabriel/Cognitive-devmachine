@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T07:41:14Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T08:11:15Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -180,6 +180,9 @@ Automatisch erzeugt 2026-08-20T07:41:14Z aus drei Repos. 478 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T08:01 | entityos | `a61f1bd67095` | EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T07:59 | entityos | `0e4f89d44a11` | EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T07:51 | entityos | `53cea036ddd9` | CSWT-Z Teil 3: gueltiger Versuch -- der Engpass ist die Vorstufe, nicht der Arbeitsraum |
 | 2026-08-20T07:22 | entityos | `301b676ef5b3` | EOS-Chronik 2026-08-20 07:22:03 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T07:18 | entityos | `f9f33a4ca45e` | EOS-Chronik 2026-08-20 07:18:04 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T06:22 | entityos | `d8074a08fdfa` | EOS-Chronik 2026-08-20 06:22:04 +0000 — entityos: 1 Aenderungen |
@@ -237,7 +240,4 @@ Automatisch erzeugt 2026-08-20T07:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T14:54 | entityos | `4bc81f8e52c3` | Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt |
 | 2026-08-18T14:25 | entityos | `26e9cb087a6d` | Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin |
 | 2026-08-18T14:11 | entityos | `eca8c30854d7` | Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB |
-| 2026-08-18T13:55 | entityos | `d7543729563b` | Verfall der Wegehierarchie am bestehenden Takt (F94) |
-| 2026-08-18T13:34 | unifieddb | `19d5dd87472e` | Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot |
-| 2026-08-18T13:24 | entityos | `d6cc4ad2001e` | Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig |
 

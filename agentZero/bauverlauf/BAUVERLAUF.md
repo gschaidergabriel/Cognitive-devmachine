@@ -1,12 +1,81 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T07:41:14Z. 932 Commits aus vier Repos, davon 302 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T08:11:15Z. 935 Commits aus vier Repos, davon 305 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen
+
+`a61f1bd67095` · entityos · 08:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T08:01:00+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen
+
+`0e4f89d44a11` · entityos · 07:59 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T07:58:59+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### CSWT-Z Teil 3: gueltiger Versuch -- der Engpass ist die Vorstufe, nicht der Arbeitsraum
+
+`53cea036ddd9` · entityos · 07:51 UTC · EOS-Chronik
+
+```
+Privater Sondensatz gebaut und dreifach geprueft (im Korpus, nicht im Profil,
+nicht im Netz) -- und nachgemessen, dass der Arbeitsraum ihn traegt: 8/8.
+
+⭐⭐⭐ ZWISCHENMESSUNG, DIE ALLES ERKLAERT: Antwort im Arbeitsraum 7/8, Antwort im
+Auftrag an Zero 2/8. Die Vorstufe HAT den Text und benutzt ihn nicht -- sie
+schickt Zero auf erfundene Pfade (/var/lib/clay/ci/testpflicht.json existiert
+nicht). Regel gesetzt: Korpus im Kontext ist schon abgerufen, wird zitiert statt
+neu geholt, und nie einen Pfad erfinden. Durchreichquote 2/8 -> 4/8.
+
+BATTERIE (108 Zuege, Werkzeugweg gesperrt): Zombie-Zero, der den Arbeitsraum
+vollstaendig ignoriert, liegt GLEICHAUF mit der Grundlinie (50,0 % gegen 50,0 %,
+p=1,000). Das Eichungstor des Pruefplans ist damit ZU -- kein Punktwert wird
+ausgewiesen. Zusammen mit der Durchreichquote heisst das: der Arbeitsraum ist
+heute nicht tragend, weil die Vorstufe ihn nicht weiterreicht.
+
+ZWEI REGRESSIONEN unterwegs behoben:
+* Anreicherung 40,3 s in einem Abruf (enrich heute scharfgeschaltet) -> hartes
+  Zeitbudget 2,5 s mit FTS-Rueckfall, gemessen 40,3 s -> 556 ms.
+* WAL 5,9 GB groesser als die DB -> PASSIVE-Checkpoint, 1,47 Mio Seiten zurueck.
+  Nebenbefund: UnifiedDB.__init__ SCHREIBT, jedes Diagnosewerkzeug konkurriert
+  um das Schreibschloss der laufenden Entitaet.
+
+Apparatur fuer ALLE Schichten bereit (cswt_mess.py: kapazitaet/feld/fuellung/
+schein/tausch/zombie, Sandkasten-DB fuer Schicht 5+6).
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
 
 ### EOS-Chronik 2026-08-20 07:22:03 +0000 — entityos: 1 Aenderungen
 
@@ -4395,29 +4464,5 @@ Co-Authored-By: Claude <<adresse>>
 - Widerspruch behoben: 0,46 ms stand in Stand der Messungen noch nackt
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B17 geprueft: Anbietersuche 7-EUR-Vorgabe -> Fest-Plan-Ergebnis
-
-`60859ba8251a` · clay · 17:05 UTC · ClayVerse
-
-```
-Gemessen: kein durables Fest-Abo unter 7 EUR/Monat (z.ai Lite 18 USD, Kimi Andante ~19 USD, beide [B]). z.ai-Coding-Route live 200 (16.08., glm-4.6, 1,17s, keine Rate-Limit-Kopfzeilen), Chat-Route 429 auf allen 8 Modellen bestaetigt Coding-Plan-statt-Guthaben (F50). 3 von 9 Gratis-Bahnen heute tot/eingestellt (Together 401, DeepSeek 402, z.ai Chat 429) -> Gratis-Kontingente auf Extra-Status zurueckgestuft, z.ai Lite bleibt einziges Rueckgrat mit Vertrag. schluesselwacht.py prueft taeglich 05:40, aber greift laut eigenem Gesetz nicht ein, kein Push-Alarm im Code gefunden.
-```
-
-### B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen
-
-`b47b44c11189` · clay · 16:27 UTC · ClayVerse
-
-```
-werkzeug/governor.py: IN=moeglichkeitsraum()/paket() (ClayMachine-Realitaet), OUT=dichtes ClayCode-Paket (hypothesen/gegenhypothesen/codependenzen/organe/ausfuehrungsreihenfolge/erfolgskriterium/konfidenz), response_format=json_schema strict [M 15.08. live: HTTP 200, syntaktisch gueltig]. Modell IST Konfigwert (ENGINES-Dict, GOVERNOR_ENGINE env) -- mechanisch bewiesen: GOVERNOR_ENGINE=cerebras liefert sauberen Fehlbefund statt Absturz, kein Codeumbau noetig. Kein Hard-Cap auf max_tokens (3000, ueber dem Deckel) um zu MESSEN ob das Modell sich selbst haelt, nicht zu erzwingen: n=12 echte Fragen (messungen/zweiseitig_30fragen.json, erste 12, wiederverwendet aus F66) -> 12/12 parseable, 12/12 innerhalb 300-1500 Token (Mittel 566,4), 0 Fehler. GRUNDLINIE ZUERST gemessen (moeglichkeitsraum() allein, /bin/bash, deterministisch): 3/12 zweiseitig (deckt sich mit F66s ~21-23%). Governor: 12/12 zweiseitig -- schliesst die F66-Luecke (1645:272-Schieflage) auf DIESER Stichprobe vollstaendig. Gegenhypothesen gesamt: Grundlinie 17, Governor 52 (Schnitt 4,33/Lauf) -- aber UNVERIFIZIERT, LLM-generiert, nicht retrieval-belegt: genau deshalb Kandidat, nicht Wahrheit. SCHATTEN: Zusatzlatenz Governor ~3,95s/Anfrage (Mistral-Aufruf) + moeglichkeitsraum()-Anteil, Gesamt ~4,43s/Anfrage im Schnitt -- die Grundlinie ist hier um Groessenordnungen schneller UND billiger (0 US-Dollar); Governor kostenlos_hier=true (freie Mistral-Bahn), Preis nur als [B]-Referenz fuer spaeteren Cerebras-Vergleich hinterlegt (aipricing.guru, nicht selbst verhandelt). INVARIANTE MECHANISCH GEHALTEN: kein einziger Schreibzugriff auf wiki.db/UnifiedDB-Kanontabellen im Code -- Ausgabe geht ausschliesslich nach bau/governor-kandidaten.jsonl (candidate delta + provenance + evidenz je Zeile, status=KANDIDAT). Kontingentbuch/bahn.py-Schluesselverwaltung wiederverwendet (umgebung()/darf()/buchen()), bahn.py selbst NICHT angefasst.
-```
-
-### B15 blockiert: RAE-Forschungswissen zu ClayVerse verdichtet
-
-`686064575965` · clay · 15:54 UTC · ClayVerse
-
-```
-43 Claims aus research_entity/ledgers/CLAIMS.jsonl gelesen: 8 CURRENT, 5 OPEN, 4 SUPERSEDED, 26 REFUTED; H1-H6 Hyperposition-Entwuerfe alle OPEN bestaetigt; QUALIFIED/SUPPORTED je Zeile gelesen statt pauschal gemappt; Secrets-Scan sauber (2 echte Treffer in private/*.env gefunden, nicht kopiert); dokumente/clayverse/FORSCHUNGSWISSEN.md (284 Zeilen) + README-Verweis; Commit 3e11e59 auf origin (/srv/git/unifieddb.git) gepusht
 ```
 

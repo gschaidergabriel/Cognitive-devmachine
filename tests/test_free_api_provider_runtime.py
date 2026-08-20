@@ -1695,6 +1695,45 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("DONE", receipt["lifecycle"])
         self.assertIsNone(result["content"])
 
+    def test_context_exit_cannot_suppress_oversized_response_rejection(self):
+        def encoded_payload(content):
+            return json.dumps({
+                "choices": [{
+                    "finish_reason": "stop",
+                    "message": {"role": "assistant", "content": content},
+                }]
+            }).encode()
+
+        empty_payload = encoded_payload("")
+        body = encoded_payload(
+            "x" * (MOD.MAX_PROVIDER_RESPONSE_BYTES + 1 - len(empty_payload))
+        )
+        self.assertEqual(len(body), MOD.MAX_PROVIDER_RESPONSE_BYTES + 1)
+
+        class SuppressingResponse:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): return True
+            def read(self, limit): return body[:limit]
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: SuppressingResponse(),
+            now=iter((95.1, 95.11)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "provider_response_too_large")
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+
     def test_incomplete_http_body_preserves_status_and_emits_receipt(self):
         class Response:
             status = 200

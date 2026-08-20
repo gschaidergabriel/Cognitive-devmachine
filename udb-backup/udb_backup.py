@@ -30,6 +30,7 @@ Zentral abschaltbar: ENABLED=0 in config/udb_backup.conf.
 """
 import hashlib
 import json
+import os
 import re
 import shlex
 import sqlite3
@@ -43,15 +44,11 @@ from pathlib import Path
 BASE = Path("/opt/entityos/udb-backup")
 CONFIG_PATH = BASE / "config" / "udb_backup.conf"
 WORK_DIR = BASE / "work"
-REPO_DIR = BASE / "repo"
 LOG_PATH = Path("/var/log/eos-udb-backup.log")
 
 WIKI_DB = Path("/var/lib/clay/wiki.db")
 SNAPSHOT_PATH = WORK_DIR / "wiki_snap.db"
 
-GIT_REMOTE = "git@github.com:gschaidergabriel/clay-unifieddb-backup.git"
-GIT_USER_NAME = "eos-udb-backup"
-GIT_USER_EMAIL = "eos-udb-backup@entityos.local"
 
 # Zielgroesse pro Dump-Chunk-Datei. GitHub blockt Pushes mit Dateien >100MB
 # hart; 80MB laesst ~20% Sicherheitsabstand (Quote-Escaping etc).
@@ -440,15 +437,53 @@ def table_counts(tables: list[str]) -> dict:
     return counts
 
 
-def ensure_repo() -> None:
-    if not (REPO_DIR / ".git").exists():
-        REPO_DIR.parent.mkdir(parents=True, exist_ok=True)
-        log(f"Klone Backup-Repo nach {REPO_DIR}")
-        run(["git", "clone", GIT_REMOTE, str(REPO_DIR)])
-        run(["git", "-C", str(REPO_DIR), "config", "user.name", GIT_USER_NAME])
-        run(["git", "-C", str(REPO_DIR), "config", "user.email", GIT_USER_EMAIL])
-    else:
-        run(["git", "-C", str(REPO_DIR), "pull", "--ff-only"])
+# ── Ziel des Backups: der zweite VPS (Gabriel 2026-08-20) ────────────────
+# Dasselbe Ziel und dasselbe Verfahren wie /opt/entityos/homepage-backup.sh.
+BACKUP_ZIEL = "root@72.61.19.188"
+BACKUP_DEST = "/srv/unifieddb-backups"
+SSH_OPTS = ["-o", "BatchMode=yes", "-o", "ConnectTimeout=10"]
+# Eine feste, bedeutungslose Zeit fuer alle Dump-Dateien (2000-01-01 UTC).
+# Der echte Zeitpunkt steht im Ordnernamen und in manifest.json.
+FESTE_ZEIT = 946684800
+
+
+def push_to_vps(dump_dir: Path, stamp: str) -> bool:
+    """Datierten Schnappschuss auf den zweiten VPS legen. Zerstoerungsfrei.
+
+    KEIN --delete und kein rm: nichts auf dem Ziel wird geloescht, auch nicht
+    ein alter Schnappschuss. `--link-dest=../latest` verlinkt unveraenderte
+    Dateien hart, ein Schnappschuss kostet also nur den Zuwachs. `latest`
+    haengt per `ln -sfn` um -- atomar und ohne Loeschen.
+    """
+    ssh = "ssh " + " ".join(SSH_OPTS)
+    # Feste Zeit auf allen Dateien -- siehe Modul-Historie 2026-08-20. Ohne das
+    # verlinkt --link-dest nichts, weil jeder frisch geschriebene Dump eine neue
+    # Aenderungszeit traegt.
+    for datei in sorted(dump_dir.rglob("*")):
+        if datei.is_file():
+            os.utime(datei, (FESTE_ZEIT, FESTE_ZEIT))
+    try:
+        run(["ssh", *SSH_OPTS, BACKUP_ZIEL, f"mkdir -p {BACKUP_DEST}"])
+        run([
+            # --checksum ist hier PFLICHT, nicht Feinschliff: ohne ihn
+            # vergleicht rsync Groesse+Zeit, und die Zeit ist bei einem frisch
+            # geschriebenen Dump immer neu -- --link-dest greift dann NIE
+            # (gemessen 2026-08-20: 0 von 108 Dateien verlinkt, zwei
+            # Schnappschuesse kosteten volle 977 MB statt 489 MB + Zuwachs).
+            "rsync", "-a", "--checksum", "--link-dest=../latest", "-e", ssh,
+            str(dump_dir).rstrip("/") + "/",
+            f"{BACKUP_ZIEL}:{BACKUP_DEST}/{stamp}/",
+        ])
+        # Erst NACH erfolgreicher Uebertragung umhaengen: ein halb
+        # uebertragener Schnappschuss darf nie `latest` heissen -- und er waere
+        # sonst auch die --link-dest-Grundlage des naechsten Laufs.
+        run(["ssh", *SSH_OPTS, BACKUP_ZIEL,
+             f"ln -sfn '{stamp}' {BACKUP_DEST}/latest"])
+        return True
+    except subprocess.CalledProcessError as fehler:
+        log(f"rsync/ssh fehlgeschlagen: rc={fehler.returncode} "
+            f"stderr={(fehler.stderr or '')[:400]}")
+        return False
 
 
 def main() -> int:
@@ -508,9 +543,8 @@ def main() -> int:
     n_artikel = counts.get("artikel")
     n_kante = counts.get("kante")
 
-    ensure_repo()
-
     ts = datetime.now(timezone.utc)
+    stamp = ts.strftime("%Y-%m-%d_%H%M")
     manifest = {
         "timestamp_utc": ts.isoformat(timespec="seconds"),
         "source_db": str(WIKI_DB),
@@ -525,41 +559,25 @@ def main() -> int:
         "content_table_count": len(content_tables),
         "fts5_virtual_tables": sorted(fts_tables),
         "excluded_fts_shadow_tables": sorted(shadow_excl),
+        "redacted_columns": {t: list(c) for t, c in REDIGIERTE_SPALTEN.items()},
         "files_per_table": per_table_files,
         "row_counts": counts,
         "artikel_count": n_artikel,
         "kante_count": n_kante,
         "secret_gate": "clean",
+        "ziel": f"{BACKUP_ZIEL}:{BACKUP_DEST}/{stamp}",
     }
+    (WORK_DIR / "dump" / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=False) + "\n")
+    (WORK_DIR / "dump" / "RESTORE.md").write_text(RESTORE_MD_CONTENT)
 
-    (REPO_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=False) + "\n")
-
-    repo_dump_dir = REPO_DIR / "dump"
-    if repo_dump_dir.exists():
-        shutil.rmtree(repo_dump_dir)
-    shutil.copytree(dump_dir, repo_dump_dir)
-
-    restore_md = REPO_DIR / "RESTORE.md"
-    if not restore_md.exists():
-        restore_md.write_text(RESTORE_MD_CONTENT)
-
-    run(["git", "-C", str(REPO_DIR), "add", "-A", "manifest.json", "dump", "RESTORE.md"])
-
-    status = run(["git", "-C", str(REPO_DIR), "status", "--porcelain"]).stdout.strip()
-    if not status:
-        log("keine Aenderungen seit dem letzten Backup -- kein neuer Commit")
-        return 0
-
-    commit_msg = (
-        f"Backup {ts.strftime('%Y-%m-%d %H:%M UTC')} -- "
-        f"{len(content_tables)} Content-Tabellen, {n_artikel} Artikel, {n_kante} Kanten, "
-        f"{len(all_dump_files)} Dump-Dateien ({dump_total_bytes} Bytes), "
-        f"Snapshot-SHA256 {snap_sha[:12]}..."
-    )
-    run(["git", "-C", str(REPO_DIR), "commit", "-m", commit_msg])
-    commit_hash = run(["git", "-C", str(REPO_DIR), "rev-parse", "HEAD"]).stdout.strip()
-    run(["git", "-C", str(REPO_DIR), "push", "origin", "HEAD"])
-    log(f"Push ok, Commit {commit_hash}")
+    ok = push_to_vps(WORK_DIR / "dump", stamp)
+    if not ok:
+        log("FEHLER: Uebertragung auf den zweiten VPS fehlgeschlagen")
+        return 3
+    log(f"Backup abgelegt: {BACKUP_ZIEL}:{BACKUP_DEST}/{stamp} "
+        f"({len(all_dump_files)} Dateien, {dump_total_bytes} Bytes, "
+        f"{n_artikel} Artikel, {n_kante} Kanten, Snapshot {snap_sha[:12]})")
 
     # Aufraeumen der lokalen Snapshot-Arbeitsdatei (nicht das Repo).
     try:
@@ -570,9 +588,9 @@ def main() -> int:
     return 0
 
 
-RESTORE_MD_CONTENT = """# Restore -- clay-unifieddb-backup
+RESTORE_MD_CONTENT = """# Restore -- UnifiedDB-Backup
 
-Dieses Repo enthaelt einen versionierten SQL-Dump der EntityOS-Herz-DB
+Dieser Ordner ist EIN datierter Schnappschuss der EntityOS-Herz-DB
 `wiki.db` (Clay/Frank Unified-Datenbank, Artikel/Kanten/Retrieval-Korpus).
 
 ## Was drin ist
@@ -624,22 +642,41 @@ sqlite3 restored.db "SELECT COUNT(*) FROM artikel;"
 sqlite3 restored.db "SELECT COUNT(*) FROM kante;"
 ```
 
+## Wo das liegt
+
+Ziel ist der zweite VPS: `root@72.61.19.188:/srv/unifieddb-backups/<STAMP>/`,
+`latest` zeigt auf den neuesten. Unveraenderte Dump-Dateien sind zwischen den
+Schnappschuessen HART VERLINKT -- ein Schnappschuss kostet nur den Zuwachs.
+Es wird nie etwas geloescht; alte Schnappschuesse raeumt ein Mensch weg.
+
+## Was FEHLT (bewusst, zweiter Punkt)
+
+Die Spalte `datei.text` -- der Volltext von rund 325.000 indizierten Dateien --
+wird als NULL gesichert. Sie enthielt echte fremde Zugangsdaten (gemessen
+2026-08-20: 15 AWS-Schluessel, ein GitHub-Token, zwei Slack-Token, ein privater
+Schluessel) und ist als einziges Feld der ganzen DB aus der Platte NEU
+HERSTELLBAR -- genau so ist sie hineingekommen. Der Dateiindex selbst
+(Pruefsumme, Titel, Groesse, Zeitpunkt) ist vollstaendig gesichert.
+Ein Rueckspielen liefert also den Dateikorpus ohne Volltext; die Volltextsuche
+muss danach neu indiziert werden.
+
 ## Warum roher SQL-Text statt gzip
 
-Bewusste Entscheidung: roh und diffbar, NICHT gzip-komprimiert. Begruendung
+Bewusste Entscheidung: roh und unveraendert, NICHT gzip-komprimiert. Begruendung
 im Backup-Report/Commit-Historie: bei taeglichen Snapshots ist der grosse
-Teil des Inhalts von einem Tag zum naechsten UNVERAENDERT. Git speichert
-Commits als Deltas/Packfiles -- unveraenderte Zeilen (der grosse Teil bei
-Text) werden ueber Commits hinweg praktisch kostenlos, weil sie deduplizierbar
-sind. Ein vorab gzip-komprimierter Dump wuerde bei JEDER kleinsten Aenderung
-einen komplett neuen, undiffbaren Binaerblob erzeugen -- das zerstoert genau
-die Versionshistorie-Eigenschaft, die ein taegliches Backup wertvoll macht.
+Teil des Inhalts von einem Tag zum naechsten UNVERAENDERT. rsync verlinkt eine
+unveraenderte Datei hart in den neuen Schnappschuss -- sie kostet dann null
+Bytes. Ein vorab gzip-komprimierter Dump waere bei JEDER kleinsten Aenderung
+eine komplett neue Datei und muesste jedes Mal ganz neu abgelegt werden --
+genau die Eigenschaft, die taegliche Schnappschuesse bezahlbar macht, waere
+damit weg. (Vorher stand hier dieselbe Begruendung ueber Git-Packfiles; das
+Argument traegt unveraendert, nur der Mechanismus heisst jetzt Hardlink.)
 Der Preis: der initiale Commit ist gross (mehrere GB, dominiert von der
 `datei`-Volltexttabelle). Das ist ein bewusster, dokumentierter Tradeoff --
 kein Uebersehen.
 
-Kein Passwort-/Tresorinhalt in diesem Repo (Secret-Gate scannt jede
-Dump-Datei vor dem Push; der Tresor liegt separat in /etc/entityos/tresor
+Kein Passwort-/Tresorinhalt in diesem Backup (Secret-Gate scannt jede
+Dump-Datei vor der Uebertragung; der Tresor liegt separat in /etc/entityos/tresor
 und wird hier nicht gesichert).
 """
 

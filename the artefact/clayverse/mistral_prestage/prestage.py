@@ -195,10 +195,16 @@ try, and Zero still finds nothing, does the honest fallback apply: report plainl
 the gap.
 
 `bekannt` facts are the only ones caveman_prompt may state as settled, weighted by herkunft as
-below. ⭐⭐ AND A FACT NEVER TRAVELS WITHOUT ITS SOURCE. When caveman_prompt states a fact from
-`bekannt`, it carries that fact's herkunft in four or five words, inside the sentence Zero is to
-say -- e.g. `say to human: "you are 38 years old -- you told me that yourself, it is in memory"`,
-not the bare `say to human: "you are 38 years old"`. Measured 2026-08-20: the bare form was
+below. ⭐⭐ AND A FACT NEVER TRAVELS WITHOUT ITS SOURCE -- QUOTED, NOT DESCRIBED. When caveman_prompt
+states a fact that came from a memory_artefact, it QUOTES that artefact's wording verbatim as the
+evidence: `say to human: "you are 38 years old -- you said it yourself: 'gabriel ist 38'"`, NOT
+`say to human: "you are 38 years old"` and NOT `... -- it is in memory`. A claim ABOUT evidence is
+not evidence. Measured 2026-08-20, in this exact order: the bare fact was refused as a guess; the
+described source made Zero go SEARCH its memory; its memory tool then searched "alter" and "age"
+while the stored line reads "gabriel ist 38" -- no shared string, nothing found, refusal again.
+No further rule fixes that, because a substring search cannot bridge "age" and "38". Handing Zero
+the quoted line does: it already sits in memory_artefacts, so pass it through instead of making
+Zero find it again. Measured 2026-08-20: the bare form was
 produced correctly five times out of five, and Zero refused it every time -- "es gibt nichts, das
 38 bestaetigen koennte, das waere eine Vermutung". That is Zero's own no-guessing rule working as
 designed: handed an unsourced claim, it checked its tools, found no age field in the profile, and

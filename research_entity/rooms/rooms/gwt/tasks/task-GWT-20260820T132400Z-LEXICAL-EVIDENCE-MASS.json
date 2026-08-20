@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-GWT-20260820T132400Z-LEXICAL-EVIDENCE-MASS",
+  "room_id": "gwt",
+  "title": "Falsify lexical boundary fix and shadow EVIDENCE_MASS_IGNITION/v1",
+  "goal_clay": "record Goal {origin:CHATGPT;authority:PROPOSAL_ONLY;room:GWT;kind:FALSIFIER;action:TEST_LEXICAL_BOUNDARY_AND_EVIDENCE_MASS_IGNITION}",
+  "status": "OPEN",
+  "dependencies": [
+    "agentzeroforschung/analysen/2026-08-20T132400Z_GWT_LEXIKALISCHE_GRENZE_UND_EVIDENZMASSE.md",
+    "agentZero/code/produkt/mistral_prestage/wettbewerb.py",
+    "research_entity/global/CLAY_FRESH_EVIDENCE_GWT_CHALLENGER_RESEARCH_DIRECTIVE.clay"
+  ],
+  "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:true;owner_decision_required:false}",
+  "created_by": "chatgpt-gpt-5.6-sol",
+  "stack_epoch": 24,
+  "created_at": "2026-08-20T13:24:00Z",
+  "completion_test_prose": "Bind the post-patch live/export source, run the positive/negative lexical boundary matrix plus the existing real-corpus and GWT probes, report false-positive and false-negative deltas, then shadow EVIDENCE_MASS_IGNITION/v1 against fixed MIN_GEDECKT=2 under matched candidates/budget with shuffle, lesion, null/simple-reduction, idempotency and cost controls. Promote nothing unless held-out outcome/support improves without worse null ignition or unsupported citation.",
+  "rationale_prose": "The current live patch fixes a real German morphology miss but its generic wort[:-2] and unrestricted stamm-in-haystack path risk reintroducing the substring leakage already measured for common words. The current MIN_GEDECKT=2 gate is a sound conservative baseline but may reject a single rare highly informative query token. This task tests both claims without weakening current production gates before evidence exists."
+}

@@ -28,6 +28,7 @@ ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
+MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
 EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
@@ -484,6 +485,21 @@ def _passive_clock_value_or_none(clock):
     return None
 
 
+def _bounded_duration_ms(started, finished) -> int:
+    """Keep duration telemetry total and bounded for passive clock values."""
+    if finished <= started:
+        return 0
+    try:
+        elapsed = finished - started
+    except OverflowError:
+        return MAX_RECEIPT_DURATION_MS
+    if type(elapsed) is float and not math.isfinite(elapsed):
+        return MAX_RECEIPT_DURATION_MS
+    if elapsed >= MAX_RECEIPT_DURATION_MS / 1000:
+        return MAX_RECEIPT_DURATION_MS
+    return round(elapsed * 1000)
+
+
 def _reject_nonfinite_json_constant(value: str) -> None:
     raise ValueError(f"nonstandard_json_constant:{value}")
 
@@ -819,7 +835,7 @@ def _execute_chat_locked(
         "payment_latch_active": (
             _payment_latch_key(selected, env) in latches
         ),
-        "duration_ms": max(0, round((finished - started) * 1000)),
+        "duration_ms": _bounded_duration_ms(started, finished),
         "secret_exposed": False,
         "together_accessed": False,
     }

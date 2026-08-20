@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T01:41:12Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -87,7 +87,7 @@ Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (49)
+## reparatur (47)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -130,8 +130,6 @@ Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T02:17 | entityos | `4e65e6179780` | fix(clayverse): disable unused VGA in QEMU guest smoke |
 | 2026-08-18T02:16 | entityos | `572e799fe9bb` | fix(clayverse): bind extracted SeaBIOS for rootless guest |
 | 2026-08-18T02:14 | entityos | `b31a1bf82688` | fix(clayverse): bind rootless SeaBIOS path |
-| 2026-08-18T02:13 | entityos | `5ad6e69196a5` | fix(clayverse): bind rootless QEMU firmware data directory |
-| 2026-08-18T02:10 | entityos | `6f6fd1b01a23` | fix(clayverse): fail closed on QEMU tooling admission |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -141,7 +139,7 @@ Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (46)
+## pruefung (44)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -186,16 +184,19 @@ Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T02:23 | entityos | `7dd0b519930a` | test(clayverse): execute canonical source inside disposable QEMU guest |
 | 2026-08-18T02:23 | entityos | `bc374186c1d9` | test(clayverse): execute exact PR686 compile inside QEMU guest |
 | 2026-08-18T02:14 | entityos | `99b78bb8f379` | test(clayverse): boot rootless disposable QEMU TCG guest |
-| 2026-08-18T02:12 | entityos | `817b694482e3` | test(clayverse): probe rootless QEMU build lane |
-| 2026-08-18T02:12 | entityos | `ecce7e5b86d6` | test(clayverse): make QEMU TCG guest smoke rootless |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (242)
+## bau (246)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T01:40 | entityos | `f681ca215c9e` | Die systemd-Einheiten des Vorsatz-Pruefers mitsichern |
+| 2026-08-20T01:40 | entityos | `f9ed8898ba18` | Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises |
+| 2026-08-20T01:37 | entityos | `854944248021` | EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T01:30 | entityos | `36163a30b5fd` | EOS-Chronik 2026-08-20 01:30:22 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T01:28 | entityos | `f2a5b7c7bf03` | EOS-Chronik 2026-08-20 01:28:01 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T00:47 | entityos | `b060a2b82751` | EOS-Chronik 2026-08-20 00:47:21 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:42 | entityos | `58b1c318135d` | EOS-Chronik 2026-08-20 00:42:49 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:37 | entityos | `df75f511466f` | EOS-Chronik 2026-08-20 00:37:50 +0000 — entityos: 2 Aenderungen |
@@ -251,9 +252,4 @@ Automatisch erzeugt 2026-08-20T01:11:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T08:55 | entityos | `5f5df7cad329` | Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz |
 | 2026-08-18T08:44 | entityos | `be1359046d41` | Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging |
 | 2026-08-18T08:03 | entityos | `9de2b8a9e7a0` | Zero weiss jetzt, mit WEM es spricht - und wem was gehoert |
-| 2026-08-18T07:49 | entityos | `2e3a9cd5a2db` | KRITISCH: Cross-user-Leck geschlossen. Und die Notbremse wird endlich erkannt. |
-| 2026-08-18T07:49 | unifieddb | `2e8fd4d1127a` | memory_tabelle trennt nach Mensch - Cross-user-Leck geschlossen |
-| 2026-08-18T07:43 | entityos | `df1585faf395` | Drei Fehler in der Gedaechtnisextraktion - alle heute gebaut, alle gemessen gefunden |
-| 2026-08-18T07:29 | entityos | `003602800f48` | Das Gedaechtnis fuellt sich endlich - aus Gespraech, nicht aus Markersyntax |
-| 2026-08-18T06:49 | entityos | `b9715815686b` | claycode inbox: bind control sync and Vercel guard falsifier |
 

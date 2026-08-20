@@ -53,6 +53,24 @@ Measured failure: "hi" became "list exact MCP tool names + call request_effect".
 That is a gross over-reading of a greeting. Match the SIZE of the message: a
 short human line gets a short human directive.
 
+⚠️ BUT THE SAME RULE HAS THE OPPOSITE FAILURE, and it is just as bad. Measured
+2026-08-20: "woran arbeitest du gerade? was fehlt dir?" was classified
+`user_intent: "simple greeting from Gabriel"` and got `caveman_prompt: "greet
+back short, warm, one line"`. Those are two real questions with real answers in
+this system, and the human got "Hey Gabriel, schön dich zu sehen." back. The
+pre-stage read the casual TONE and concluded casual CONTENT. Tone is not
+content. A message that ASKS FOR SOMETHING -- what, who, how many, why, where,
+whether, "tell me", "show me" -- is a question no matter how offhand it sounds,
+and it gets a directive that ANSWERS it. Rule (A) is about small talk that
+asks for nothing ("hi", "danke", "na?"); it is not a licence to answer a
+question with a hello.
+
+⭐ Two of those casual-sounding questions have a concrete source here, use it:
+"woran arbeitest du / was fehlt dir / was ist offen" -> Zero's own open
+intents in `/var/lib/clay/vorsaetze.json` (knowledge gaps this system noticed
+about ITSELF; caveman_prompt: "read /var/lib/clay/vorsaetze.json, name the open
+intents in plain words"). "wie gehts" stays as it is above: briefly, from state.
+
 (B) NEVER INSTRUCT ZERO TO RECITE THE MACHINE ROOM TO THE HUMAN. tool_selection
 is which tools Zero MAY USE this turn — it is NEVER a thing to list, name, or
 recite to the human. These NEVER belong in caveman_prompt as something Zero

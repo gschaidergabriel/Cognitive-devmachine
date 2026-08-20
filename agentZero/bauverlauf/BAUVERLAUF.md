@@ -1,12 +1,104 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T01:11:13Z. 905 Commits aus vier Repos, davon 275 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T01:41:13Z. 906 Commits aus vier Repos, davon 280 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### Die systemd-Einheiten des Vorsatz-Pruefers mitsichern
+
+`f681ca215c9e` · entityos · 01:40 UTC · EOS-Chronik
+
+```
+Sie lagen nur unter /etc/systemd/system und waren damit nirgends versioniert --
+bei einem Neuaufsetzen haette der Zeitgeber gefehlt und der Kreis waere still
+stehengeblieben, ohne dass etwas fehlerhaft ausgesehen haette.
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
+
+### Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises
+
+`f9ed8898ba18` · entityos · 01:40 UTC · EOS-Chronik
+
+```
+Hypothesen wurden erzeugt und nie nachgemessen -- 11 offene Folgerungen, kein
+Weg nach gestuetzt/widerlegt. eos_vorsatz.py misst jede offene Behauptung nach
+und trennt dabei die zwei Behauptungsarten: eine Wiki-Luecke ("es fehlt ein
+Artikel") ist durch einen gefundenen Artikel vollstaendig widerlegt; eine
+Selbstpruefung ("es fehlt eine belegte Angabe") wird NIE automatisch
+geschlossen, weil Wortueberlappung kein Wissen ist -- dort entstehen Kandidaten.
+gestuetzt wird nie vergeben: eine Suche ohne Treffer beweist nichts.
+
+Offene Vorsaetze stehen in /var/lib/clay/vorsaetze.json; runtime_CLAUDE.md 9l
+gibt Zero den Weg dorthin.
+
+UnifiedDB-Backup: Ziel ist der zweite VPS statt eines GitHub-Repos, das es nie
+gab. Feste Aenderungszeit + --checksum, sonst greift --link-dest nie
+(gemessen: 0 von 108 verlinkt); jetzt 103 von 108, ein Schnappschuss kostet
+13 MB statt 489 MB.
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
+
+### EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen
+
+`854944248021` · entityos · 01:37 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T01:37:58+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 01:30:22 +0000 — entityos: 2 Aenderungen
+
+`36163a30b5fd` · entityos · 01:30 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+  vorsatz/eos_vorsatz.py
+
+Zeit: 2026-08-20T01:30:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 01:28:01 +0000 — entityos: 2 Aenderungen
+
+`f2a5b7c7bf03` · entityos · 01:28 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  udb-backup/udb_backup.py
+  vorsatz/eos_vorsatz.py
+
+Zeit: 2026-08-20T01:28:01+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 00:47:21 +0000 — entityos: 1 Aenderungen
 
@@ -4242,150 +4334,5 @@ _lesart_kompakt -- identitaet-Achse raus (steht schon im Treffer, 75% der
 Nutzlast), je Zeile lesart_id/wert/quelle/fehlender_kontext. Abdeckung
 54/54 unveraendert, Invarianten 0 Verstoesse (188 UNBESTIMMT geprueft).
 weltmodell.lesen() unangetastet, volle Form bleibt dort.
-```
-
-### B27 geprueft: F35-Auflage eingeloest: Lesart-Nutzlast im Paket gekuerzt +73,8% -> +7,2%
-
-`c2a449d3b8f4` · clay · 08:22 UTC · ClayVerse
-
-```
-Grundlinie zuerst reproduziert [M 15.08., n=60 letzte DISTINCT Abfragen aus vp_paket_log]: ohne Lesart 35.712 / mit Lesart 62.055 Zeichen Mittel = +73,8% (F35s +85% auf anderer Stichprobe reproduziert). Kuerzung in paket.py/_lesart_kompakt: identitaet-Achse gestrichen (Werte sphaere/status/epistemic_class stehen schon im Treffer; 75% der Nutzlast), je Zeile nur lesart_id/wert/quelle/fehlender_kontext. Nach dem Bau: 38.271 Mittel = +7,2% (Ziel < +30%). Abdeckung 54/54 Pakete zeigen Lesarten (unveraendert). Invarianten: 188 UNBESTIMMT-Achsen, 0 gewaehlt-/quelle-Verstoesse, 0 abgelaufene sichtbar (jede lesart_id gegen wm_lesart geprueft). weltmodell.lesen() unangetastet.
-```
-
-### Uebergabe fuer die GLM-Arbeitsinstanz mit 14 Arbeitspaketen
-
-`b577076461cb` · clay · 07:48 UTC · ClayVerse
-
-```
-Kopie von ~/UEBERGABE-CLAYVERSE.md auf Gabriels Rechner, damit sie auch auf dem
-Wirt liegt und versioniert ist. Enthaelt die acht Gesetze (F52 Zielmetrik, F43
-Deckung, F45 Irreversibilitaet, F44 R3 Engineering zuerst, F30 Koordinator baut
-nie, F24 Baugesetz, F42 Schwellen als Tore, F48/F49 Abgleichpflicht), den
-GRF-Verweis, die Sparsamkeitsregeln inklusive Caching, und AP1 bis AP14 mit je
-Ziel, Schatten, Invariante und Einstiegspunkt.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F54b Metadaten tragen die Korrelationen mit, und muessen trotzdem schrumpfen
-
-`b696f89f7be2` · clay · 07:47 UTC · ClayVerse
-
-```
-Eigner: in den Metadaten sollen auch automatisch Korrelationen aus dem
-Praeprozessor mit dran sein, also aus der UnifiedDB wenn man das Thema da sucht,
-als Additiv. Und es soll insgesamt sehr tokeneffizient komprimiert und
-verdichtet sein.
-
-MECHANISCH bleibt: Sitzungs-ID, Rechner, cwd, Zeiten, sauber beendet, beruehrte
-Dateien, Befehle, Commits, offene Auftraege. ADDITIV dazu: was die UnifiedDB zum
-Thema weiss - Korrelationen, verbundene Artikel, Hypothesen, Gegenseite,
-Kurationsstand. Herkunft ist ein paket()-Aufruf, KEIN Modellaufruf, 0,46 ms.
-Das ist der Praeprozessor aus F40 an einer zweiten Stelle, kein neues Bauteil.
-
-DER ZIELKONFLIKT, der mitgebaut werden muss: Anreicherung fuegt hinzu,
-Verdichtung nimmt weg. Beides zugleich geht nur, wenn die Anreicherung VERENGT
-statt zu verbreitern. Die Wiederaufnahme-Sicht muss SCHMALER sein als das rohe
-Protokoll, nicht breiter - sonst hat man den Verlauf durch etwas Laengeres
-ersetzt.
-
-WARNUNG AUS DER MESSUNG: die Lesart-Achse machte das Paket +85 Prozent groesser
-(F35). Derselbe Fehler droht hier, nur schlimmer, weil die Wiederaufnahme das
-ERSTE ist, was eine neue Instanz liest. Deckelung wie in F32: hoechstens N
-Korrelationen, nur die zum aktuellen Thema.
-
-VERDICHTEN MIT DEM WAS DA IST: verdichtung.py laeuft schon auf Schwelle statt
-auf Uhr und erzeugt Verdichtungsartikel mit Kanten zu jeder Quelle. Die
-Wiederaufnahme-Sicht sollte ein Verdichtat sein, kein Auszug - samt der Pruefung
-von dort: eine Zahl im Verdichtat, die in keiner Quelle steht, wird verworfen.
-
-ABNAHME: Ziel ist Zeit bis zur Weiterarbeit runter. SCHATTEN ist die GROESSE
-der Sicht in Token, sie darf NICHT wachsen - das ist die harte Zahl.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F53 Schranke darf den Bau nicht aufhalten + F54 dynamische Gespraechsdatenbank
-
-`de1f833fb0bd` · clay · 07:46 UTC · ClayVerse
-
-```
-F53: Eigner berichtigt meine Haltung - sie nicht zu umgehen ist die falsche
-Entscheidung, wenn es uns vom Bau von Frank abhaelt. Vorrang hat der BAU, dann
-die Schranke. ABER eine Bedingung, damit sie nicht wertlos wird: heute hat
-genau sie die sudo-Luecke aufgedeckt, weil sie einen Agenten blockierte der es
-MELDETE statt zu umgehen. Also: umgehen ja, STILL umgehen nein. Jede Umgehung
-wird protokolliert. Blockiert sie wiederholt dieselbe legitime Sache, gehoert
-die REGEL nachgezogen. Unveraendert bleibt was wirklich zerstoerend ist.
-
-F54: dynamische Datenbank, die autonom den Chatverlauf jeder Terminalinstanz
-speichert, auf jedem Rechner mit Clay-Instanz, und nach Absturz zur schnellen
-Wiederaufnahme dient - tokeneffizient chirurgisch ueber Metadaten ausgelesen.
-
-ERST MESSEN, und das aendert den Bau grundlegend: die Verlaeufe EXISTIEREN
-schon. Claude Code schreibt je Sitzung ein JSONL unter ~/.claude/projects/.
-Nach F44 R3 also KEIN neuer Rekorder, sondern ein INDEX ueber das Vorhandene -
-Unterschied zwischen einem Tagesprojekt und einer Woche Arbeit.
-
-Gebaut wird: Index mit Metadaten je Sitzung (ID, Rechner, cwd, Start, letzte
-Regung, sauber beendet ja/nein, beruehrte Dateien, Befehle, Commits, offene
-Auftraege). Abruf NUR ueber Metadaten, nie das ganze Protokoll. Nach Absturz:
-finde die Sitzung ohne sauberes Ende und zeige woran sie war. Ueberall
-gespiegelt nach der Trennungsregel.
-
-ANKNUEPFPUNKT: clay-absturzbericht erkennt den harten Schnitt bereits am
-fehlenden Abschaltprotokoll und schiebt auf den Wirt (F28) - dort gehoert es
-angehaengt, nicht daneben gebaut.
-
-INVARIANTE: Verlaeufe enthalten SECRETS - heute stand ein API-Schluessel im
-Klartext im Verlauf. Der Index darf Werte NIE ausliefern, Metadaten ja, Inhalte
-nur auf gezielten Abruf. Rechte 600, nie in ein Repo.
-
-GRUNDLINIE: die handgeschriebene Uebergabe von heute - sie hat funktioniert,
-also ist sie die zu schlagende Latte.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F52 DIE ZIELMETRIK: es muss fuer KI-Agenten etwas besser machen
-
-`94038b74d34a` · clay · 07:44 UTC · ClayVerse
-
-```
-Gilt fuer ALLES im Zusammenhang mit ClayVerse. Loest den Widerspruch aus dem
-Abgleich nicht durch Wahl, sondern durch eine neue Zielgroesse.
-
-Eigner: es muss fuer Menschen nicht verstaendlich oder nachvollziehbar sein oder
-bekannten Regeln entsprechen. Es muss funktionieren und fuer AI-Agents etwas
-besser machen. Fuer Verstaendnis gibt es die Dokumentation. Ausserdem ist alles
-ok, was innerhalb des Generative Reality Framework denkbar und messbar besser
-ist, aber INSGESAMT, nicht nur in einer Hinsicht.
-
-DAMIT FAELLT EINE GANZE KLASSE VON EINWAENDEN WEG: das ist unueblich, so macht
-man das nicht, das versteht spaeter niemand sind keine Argumente mehr, solange
-gemessen besser herauskommt.
-
-DIE SCHRANKE DANEBEN ist F24s Schattenmetrik-Regel, nur schaerfer: ein Gewinn
-auf einer Achse, der woanders verliert, ist kein Gewinn. F24s STRUKTUR bleibt,
-was sich aendert ist die ZIELGROESSE - nicht menschliche Lesbarkeit, sondern
-Nutzen fuer Agenten. B21s drei Groessen sind damit nicht abgeschafft, sondern
-eingeordnet: Schattenmetriken unter der neuen Zielgroesse.
-
-DIE FOLGE, DIE MITGEBAUT WERDEN MUSS: wenn Menschen es nicht nachvollziehen
-muessen, muss die Pruefung MECHANISCH sein, sonst gibt es gar keine.
-Menschliche Nachvollziehbarkeit war bisher die stille Rueckfallpruefung - was
-niemand versteht, faellt irgendwann jemandem auf. Diese Pruefung entfaellt hier
-bewusst, damit steigt die Last auf F43 erheblich.
-
-Im GRF denkbar ist eine echte Schranke, keine Floskel: was ausserhalb des
-Rahmens liegt, ist nicht erlaubt, nur weil es misst.
-
-ZWEITER WIDERSPRUCH ENTSCHIEDEN: F16 bleibt, B18 wird praezisiert. B18s Warnung
-Wirt ungleich Ziel zielt auf Wirt/Zielsystem, nicht auf Datenbank/Entitaet.
-Offen: pruefen ob der research-identity-guard F16s Formulierung wirklich abweist.
-
-Steht auch oben in CLAUDE.md und in WEITERMACHEN.md.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

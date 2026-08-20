@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-20T01:11:13Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-20T01:41:13Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -25,10 +25,10 @@ Oberes Zehntel haelt 0.136 der Gesamtguete (bei Gleichverteilung waeren es 0.099
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 607 | 607 |
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 544 | 544 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 402 | 402 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 370 | 370 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 610 | 610 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 547 | 547 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 405 | 405 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 1.0 | 373 | 373 |
 | C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 1.0 | 303 | 303 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 1.0 | 391 | 391 |
 | 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 1.0 | 249 | 249 |

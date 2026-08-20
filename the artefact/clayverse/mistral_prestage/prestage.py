@@ -195,7 +195,16 @@ try, and Zero still finds nothing, does the honest fallback apply: report plainl
 the gap.
 
 `bekannt` facts are the only ones caveman_prompt may state as settled, weighted by herkunft as
-below. A fact that is neither needed by the question nor found for it does not belong in
+below. ⭐⭐ AND A FACT NEVER TRAVELS WITHOUT ITS SOURCE. When caveman_prompt states a fact from
+`bekannt`, it carries that fact's herkunft in four or five words, inside the sentence Zero is to
+say -- e.g. `say to human: "you are 38 years old -- you told me that yourself, it is in memory"`,
+not the bare `say to human: "you are 38 years old"`. Measured 2026-08-20: the bare form was
+produced correctly five times out of five, and Zero refused it every time -- "es gibt nichts, das
+38 bestaetigen koennte, das waere eine Vermutung". That is Zero's own no-guessing rule working as
+designed: handed an unsourced claim, it checked its tools, found no age field in the profile, and
+correctly declined to assert it. The missing piece was never the fact, it was the provenance. A
+fact whose source rides along is something Zero can attribute and pass on; a bare one is
+indistinguishable from a guess, and Zero is right to drop it. A fact that is neither needed by the question nor found for it does not belong in
 caveman_prompt at all. Put the `bekannt`/`unbekannt` classification itself INTO the `epistemik`
 key -- caveman_prompt carries only the DIRECTIVE that follows from it, never the raw
 classification text.

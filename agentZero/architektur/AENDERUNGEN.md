@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T03:11:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T03:15:09Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -182,6 +182,7 @@ Automatisch erzeugt 2026-08-20T03:11:13Z aus drei Repos. 478 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T03:13 | entityos | `abe15ede928b` | EOS-Chronik 2026-08-20 03:13:02 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T03:04 | entityos | `ad4524a19c3b` | EOS-Chronik 2026-08-20 03:04:50 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T03:01 | entityos | `7dc964ba8b1b` | EOS-Chronik 2026-08-20 03:01:58 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T02:59 | entityos | `2c2d6608f09b` | EOS-Chronik 2026-08-20 02:59:28 +0000 — entityos: 1 Aenderungen |
@@ -241,5 +242,4 @@ Automatisch erzeugt 2026-08-20T03:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T10:59 | entityos | `ff48d389b4ac` | Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen |
 | 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
 | 2026-08-18T10:42 | entityos | `2b2f7219ab05` | Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch |
-| 2026-08-18T10:35 | entityos | `8e37f4a64a81` | Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate |
 

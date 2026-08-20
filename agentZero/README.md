@@ -1,7 +1,7 @@
 # agentZero
 
 Die vollstaendige Spur von **Zero** (Agent Zero), der Entitaet auf EntityOS.
-Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-20T00:48:09Z.
+Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt 2026-08-20T01:11:12Z.
 
 | Ordner | Inhalt |
 |---|---|

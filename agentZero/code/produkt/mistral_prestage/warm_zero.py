@@ -34,7 +34,20 @@ from pathlib import Path
 
 from . import headless_zero as hz
 
-POOL_SIZE = int(os.environ.get("CLAYVERSE_WARM_POOL", "2"))
+# Je SITZUNG, nicht je Mensch. Mit vier kanonischen Sitzungen ergibt 1 genau
+# so viele wartende Prozesse wie vorher 2 bei zwei Sitzungen -- gleicher
+# Speicher, aber jetzt an den Stellen, an denen wirklich getippt wird. Ein
+# verbrauchter Prozess wird binnen ~1 s nachgefuellt (Nachfuellschleife).
+POOL_SIZE = int(os.environ.get("CLAYVERSE_WARM_POOL", "1"))
+# ⭐ WIE VIELE PROZESSE INSGESAMT WARTEN DUERFEN -- ueber alle Sitzungen.
+# Gemessen 2026-08-20: mit vier vorgewaermten Sitzungen traf der Pool zwar
+# 10 von 12 Zuegen und drueckte Zeros Zeit von 6,1 s auf 3,4 s -- aber
+# Uebersetzer (+0,6 s) und Rest (+1,5 s) stiegen zugleich an. Jeder verbrauchte
+# Prozess wird sofort nachgebootet, und ein Boot ist ein ganzer Node-Prozess:
+# das Nachfuellen konkurriert mit dem laufenden Zug um dieselbe CPU.
+# Also ein Gesamtdeckel statt "je Sitzung ohne Ende" -- und die knappen Plaetze
+# gehen dorthin, wo zuletzt wirklich getippt wurde.
+WARM_BUDGET = int(os.environ.get("CLAYVERSE_WARM_BUDGET", "2"))
 
 # ⭐⭐⭐ GEMESSENER PRODUKTIONSAUSFALL, 2026-08-20. Die Antwortschleife unten
 # lautete:
@@ -65,7 +78,37 @@ WARMUP_S = 5.5           # so lange braucht der Boot im Leerlauf (gemessen ~5s)
 # Abgefedert wird die Schaetzung stattdessen von ERSTE_ZEILE_S: war sie zu
 # optimistisch, kostet das eine Frist und einen Kaltrueckfall, keinen Haenger.
 MAX_ALTER_S = 900        # ein warmer Prozess, der 15 min nie drankam, wird ersetzt
-_KANONISCH = (("gabriel", "session:gabriel"), ("andreas", "session:andreas"))
+def _kanonische_sitzungen() -> tuple:
+    """ALLE Sitzungen jedes Menschen -- nicht nur Platz 1.
+
+    ⭐⭐⭐ GEMESSEN 2026-08-20, und es ist der ganze Grund, warum die
+    Vorwaermung nie etwas gebracht hat: hier stand fest verdrahtet
+        (("gabriel", "session:gabriel"), ("andreas", "session:andreas"))
+    -- also **Platz 1**. Der Chat laeuft aber auf **Platz 2**
+    (`terminal_gateway._CHAT_DEFAULT_PLATZ = 2`), und seit es zwei Plaetze je
+    Mensch gibt (`identity.SITZUNGEN_JE_MENSCH = 2`), zeigte diese Liste ins
+    Leere. Gemessen: **0 Warmtreffer in 12 Zuegen**, waehrend vier warme
+    Prozesse dauerhaft liefen und nie abgerufen wurden.
+    Die Vorwaermung hat damit **nie einen einzigen echten Chatzug beschleunigt**
+    -- sie hat nur Prozesse gehalten. Aufgefallen ist es erst, als die
+    Trefferquote ueberhaupt gemessen wurde; der Warmweg faellt bei jedem
+    Misserfolg LAUTLOS auf den Kaltweg zurueck, und still bleibt still.
+
+    Deshalb wird die Liste jetzt aus der einen Wahrheit abgeleitet, statt sie
+    zu wiederholen. Wer kuenftig einen dritten Platz einrichtet, bekommt ihn
+    hier automatisch mit.
+    """
+    try:
+        from .. import identity
+        return tuple((uid, sid) for uid, *_ in identity.CANONICAL_USERS
+                     for sid in identity.sitzungen_von(uid))
+    except Exception:
+        # Nie den Dienst am Boot scheitern lassen -- ohne Liste gibt es eben
+        # keine Vorwaermung, und der Kaltweg traegt (das tut er ohnehin).
+        return ()
+
+
+_KANONISCH = _kanonische_sitzungen()
 
 
 class _Warm:
@@ -155,9 +198,45 @@ class WarmPool:
         except Exception:
             return None
 
+    def _vorrang(self) -> list:
+        """Welche Sitzungen die knappen Plaetze bekommen.
+
+        Zuletzt benutzte zuerst -- eine Vorwaermung ist eine Wette darauf, wo
+        als Naechstes getippt wird, und die beste verfuegbare Auskunft darueber
+        ist, wo zuletzt getippt wurde. Solange noch niemand getippt hat, gilt
+        der Platz, auf dem der Chat standardmaessig laeuft; nur so ist der
+        allererste Zug nach einem Neustart auch schon warm.
+        """
+        zuletzt = getattr(self, "_zuletzt", {})
+        if zuletzt:
+            gereiht = sorted(_KANONISCH, key=lambda k: -zuletzt.get(k, 0.0))
+        else:
+            try:
+                from ..terminal_gateway import _CHAT_DEFAULT_PLATZ as _p
+            except Exception:
+                _p = 1
+            gereiht = sorted(_KANONISCH,
+                             key=lambda k: 0 if k[1].endswith(f":{_p}")
+                             or (_p == 1 and ":" not in k[1].split("session:")[-1]) else 1)
+        return gereiht[:max(1, WARM_BUDGET)]
+
     def _nachfuell_schleife(self) -> None:
         while True:
+            vorrang = self._vorrang()
             for key in _KANONISCH:
+                if key not in vorrang:
+                    # Nicht bevorrechtigt: vorhandene Prozesse laufen aus,
+                    # neue werden nicht gebootet.
+                    with self._lock:
+                        alt_pool = self._pools[key]
+                        lebende = collections.deque(
+                            w for w in alt_pool if w.lebt() and not w.zu_alt())
+                        for w in alt_pool:
+                            if w not in lebende:
+                                try: w.proc.terminate()
+                                except Exception: pass
+                        self._pools[key] = lebende
+                    continue
                 pool = self._pools[key]
                 with self._lock:
                     # tote/alte raus
@@ -185,6 +264,11 @@ class WarmPool:
         if time.time() < getattr(self, "_gesperrt_bis", 0.0):
             return None
         key = (user_id, session_id)
+        # Immer vermerken, auch wenn gleich der Kaltweg kommt: der Vermerk
+        # sagt, WO getippt wird, nicht ob es diesmal geklappt hat.
+        if not hasattr(self, "_zuletzt"):
+            self._zuletzt = {}
+        self._zuletzt[key] = time.time()
         if key not in self._pools:
             return None
         with self._lock:

@@ -1,12 +1,68 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T17:11:16Z. 980 Commits aus vier Repos, davon 334 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T17:41:16Z. 981 Commits aus vier Repos, davon 337 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 17:35:44 +0000 — entityos: 2 Aenderungen
+
+`9e45b0c97f28` · entityos · 17:35 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_warmpool.py
+
+Zeit: 2026-08-20T17:35:44+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 17:28:03 +0000 — entityos: 2 Aenderungen
+
+`3ca313a39d6e` · entityos · 17:28 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_warmpool.py
+
+Zeit: 2026-08-20T17:28:03+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 17:21:42 +0000 — entityos: 1 Aenderungen
+
+`28bd6611775b` · entityos · 17:21 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T17:21:42+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 16:58:22 +0000 — entityos: 2 Aenderungen
 
@@ -4533,73 +4589,5 @@ Suite unveraendert 479/13 - der Anschluss kostet keine Regression.
 
 ```
 fix(clayverse): make goal source adoption atomic
-```
-
-### clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store, udb_neuropedia_activation, udb_memory_add/search)
-
-`ca5149c807cb` · entityos · 03:54 UTC · BACK agent
-
-```
-UnifiedDB (udb/abruf/*: NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet) lag
-bisher als Code ohne Erreichbarkeit -- Zero hat keine eingebauten Tools, nur
-den verwalteten MCP-Server. Diese Aenderung schliesst den Weg, ohne einen
-zweiten Tool-Kanal zu eroeffnen:
-
-- mcp_server.py: 5 neue @mcp.tool()-Funktionen, bewusst NICHT ueber
-  AutonomyController/EffectJournal geroutet -- sie schreiben nur in eigene,
-  neue Tabellen (udb_nvidia_embedding, forschung_neuropedia, memory_tabelle),
-  nie in den Turn-/Effect-Ledger. store.py/turn_lifecycle.py/retrieval.py/
-  service.py/terminal_sessions.py/terminal_hooks.py bleiben unberuehrt.
-- compose.yaml: zwei read-only Bind-Mounts -- /opt/unifieddb (eigenes
-  Git-Repo, kein Image-Rebuild noetig fuer udb-Aenderungen) und
-  /etc/clayverse/freie-zugaenge.env (Schluessel, 640 root:clay -- Container
-  laeuft als uid 5001/clay und kann lesen, nicht schreiben). Schluesselwerte
-  verlassen damit nie den Prozessspeicher, landen nie in DB/Snapshot/Log.
-- policy/managed-settings.json: die 5 neuen Werkzeugnamen zur
-  permissions.allow-Liste hinzugefuegt -- ohne das laesst der verwaltete
-  Modus Zero die Werkzeuge sehen, aber nicht aufrufen.
-
-GEPRUEFT (isolierter Testcontainer, nicht der laufende entityos-Dienst --
-der crasht Stand jetzt an einem unabhaengigen FastAPI/Starlette-Fehler in
-service.py/autonomy_app.py, siehe Bericht): echter MCP-stdio-Client sieht
-alle 8 Werkzeuge und ruft udb_memory_add/search, udb_embedding_search
-erfolgreich auf (echter NVIDIA-API-Call, 200 OK). udb_neuropedia_activation
-faellt korrekt mit einer klaren Fehlermeldung aus (Schluessel fehlt noch).
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### udb: NVIDIA-Embeddings, Neuronpedia, Memory-Entitaet aus Zulauf uebernommen und lauffaehig gemacht
-
-`cb23edf55759` · unifieddb · 03:54 UTC · ClayVerse
-
-```
-Quelle: _zulauf-2026-08-16/ (Dateien ohne Git-Historie, Schluessel drin war
-geschwaerzt). Gegen echte APIs verifiziert, nicht nur gelesen:
-
-- nvidia_embedding.py: echte Batching-Faehigkeit nachgeruestet (Zulauf-Fassung
-  rief pro Text einen eigenen HTTP-Call auf). GEMESSEN 2026-08-18: 1024 dim,
-  Einzelaufruf ~199ms, Batch 8 = 27.8ms/Text, Batch 128 = 2.9ms/Text (9.7x).
-  Neue Tabelle udb_nvidia_embedding (kollisionsfrei gegen die bestehenden 104).
-- neuropedia.py: Docstring/Rueckgabe macht jetzt explizit, dass gemessen wird
-  AUF EINEM OEFFENTLICHEN FORSCHUNGSMODELL (Standard gpt2-small), NICHT auf
-  Zero. NEUROPEDIA_API_KEY fehlt noch in freie-zugaenge.env -- Modul faellt
-  dann kontrolliert mit klarer Fehlermeldung aus statt still zu scheitern.
-- memory_entitaet.py: nutzt jetzt die schreibende/lesende Standardverbindung
-  des Hauses (neue schreib_verbindung() in zustand.py, war importiert aber
-  nie definiert) statt eigener sqlite3.connect()-Aufrufe.
-- feuerschneise.py: unveraendert uebernommen, Import war bereits stimmig.
-- Schluessel kommen bei jedem Aufruf frisch aus /etc/clayverse/freie-zugaenge.env
-  (Hauskonvention aus werkzeuge.py:schluessel()), nie geloggt, nie committet.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### Merge PR #717: fence cross-attempt autonomous effect replay
-
-`e617b42e9ef7` · entityos · 03:49 UTC · Gabriel Gschaider
-
-```
-Reconcile exact prior goal-step effect receipts before retry dispatch and add an EffectGate fail-closed fallback so lost controller handoff cannot duplicate a real effect across episodes. No second replay ledger or state authority. Source-reviewed only; workflow failed pre-step and grants no runtime/OCI/microVM credit.
 ```
 

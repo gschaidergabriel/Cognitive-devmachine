@@ -1304,6 +1304,11 @@ def run_chat_turn(
             # senden gehabt" zu unterscheiden -- der Unterschied IST GWT-4.
             # modell / mechanisch / verzicht -- ohne diese Unterscheidung
             # sieht eine nachgezogene Auswahl aus wie eine getroffene.
+            # ⭐ Traf die Vorwaermung? Ohne diese Zahl laesst sich nicht sagen,
+            # ob der Warmweg etwas bringt -- er faellt bei jedem Fehler
+            # LAUTLOS auf den Kaltweg zurueck, und genau deshalb hat niemand
+            # gemerkt, dass er monatelang haengen konnte.
+            "warm": bool(zero.get("warm")),
             "broadcast_herkunft": _auswahl_herkunft,
             # Was der Rueckkanal aus diesem Zug gelernt hat (None = nicht
             # aufgezeichnet, also auch nicht gelernt).

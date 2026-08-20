@@ -143,6 +143,23 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertEqual(method_calls, [])
                 self.assertNotIn(leaked_text, repr(caught.exception))
 
+    def test_text_request_rejects_active_list_subclass_before_iteration(self):
+        leaked_text = "request-list-iterator-must-not-run"
+        iterator_calls = []
+
+        class ActiveMessages(list):
+            def __iter__(self):
+                iterator_calls.append("iter")
+                raise LookupError(leaked_text)
+
+        messages = ActiveMessages([{"role": "user", "content": "hello"}])
+        with self.assertRaisesRegex(ValueError, "messages_must_be_list") as caught:
+            MOD.execute_chat(messages, model="mock", environ={})
+        self.assertEqual(iterator_calls, [])
+        self.assertNotIn(leaked_text, repr(caught.exception))
+        self.assertIsNone(caught.exception.__context__)
+        self.assertIsNone(caught.exception.__cause__)
+
     def test_together_is_hard_denied_even_if_key_exists(self):
         env = {"TOGETHER_API_KEY": "must-not-be-touched"}
         self.assertIn("together", MOD.DENIED_PROVIDERS)

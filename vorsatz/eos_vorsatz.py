@@ -122,6 +122,15 @@ def echte_artikel(con, woerter: list) -> list:
     return [dict(r) for r in rows]
 
 
+_NUR_HEX = re.compile(r"^[0-9a-f]{32,}$")
+
+
+def _unlesbar(wert: str) -> bool:
+    """Ein Wert, der nur eine Pruefsumme ist, taugt nicht als Kandidat."""
+    w = (wert or "").strip()
+    return bool(w) and " " not in w and bool(_NUR_HEX.match(w.lower()))
+
+
 def gedaechtnis(con, woerter: list) -> list:
     """Eintraege im dauerhaften Gedaechtnis, die ALLE Woerter enthalten.
 
@@ -137,14 +146,27 @@ def gedaechtnis(con, woerter: list) -> list:
     except sqlite3.Error as fehler:
         LOG.warning("Gedaechtnis nicht lesbar: %s", fehler)
         return []
-    treffer = []
+    klein = [w.lower() for w in woerter]
+    genau, subjekt_exakt, subjekt_teil = [], [], []
     for r in rows:
-        text = f"{r['subject'] or ''} {r['value'] or ''}".lower()
-        if all(w.lower() in text for w in woerter):
-            treffer.append({"memory_id": r["memory_id"], "value": (r["value"] or "")[:200]})
-        if len(treffer) >= MAX_TREFFER:
-            break
-    return treffer
+        wert = (r["value"] or "")
+        if _unlesbar(wert):
+            continue   # nackte Pruefsumme -- belegt einen Platz und sagt nichts
+        subjekt = (r["subject"] or "").lower()
+        text = f"{subjekt} {wert}".lower()
+        eintrag = {"memory_id": r["memory_id"], "value": wert[:200]}
+        if all(w in text for w in klein):
+            genau.append({**eintrag, "warum": "alle Woerter kommen vor"})
+        elif subjekt and any(w == subjekt for w in klein):
+            # Ueber das SUBJEKT -- siehe Modul-Historie 2026-08-20. Zwischen
+            # "age" und "gabriel ist 38" liegen zwei Sprachen und ein Zahlwort;
+            # Wortabgleich ueberbrueckt das nie, ein gemeinsames Subjekt schon.
+            subjekt_exakt.append({**eintrag,
+                                  "warum": f"betrifft dasselbe Subjekt ({r['subject']})"})
+        elif subjekt and any(w in subjekt for w in klein):
+            subjekt_teil.append({**eintrag,
+                                 "warum": f"Subjekt enthaelt das Wort ({r['subject']})"})
+    return (genau + subjekt_exakt + subjekt_teil)[:MAX_TREFFER]
 
 
 def beleg_anhaengen(con, folgerung_id: int, art: str, beleg_id: str) -> None:
@@ -192,7 +214,8 @@ def pruefen(dry_run: bool = False) -> dict:
                     "seit": r["zeit"],
                     "kandidaten": {
                         "artikel": [a["artikel_id"] for a in artikel],
-                        "gedaechtnis": [m["memory_id"] for m in erinnert],
+                        "gedaechtnis": [{"id": m["memory_id"], "wert": m["value"],
+                                          "warum": m["warum"]} for m in erinnert],
                         "hinweis": ("Wortueberlappung, kein Beweis. Nachsehen, ob die "
                                     "gesuchte Angabe dort WIRKLICH steht -- dann schliessen."),
                     },
@@ -220,7 +243,7 @@ def pruefen(dry_run: bool = False) -> dict:
                     "WHERE id=? AND status='offen'", (vermerk, r["id"]))
                 for a in artikel:
                     beleg_anhaengen(con, r["id"], "artikel", a["artikel_id"])
-                for m in erinnert:
+                for m in erinnert:   # bei Wiki-Luecken immer leer, siehe oben
                     beleg_anhaengen(con, r["id"], "protokoll", m["memory_id"])
                 con.commit()
                 LOG.info("#%d widerlegt (Luecke geschlossen): %s", r["id"], " und ".join(wo))

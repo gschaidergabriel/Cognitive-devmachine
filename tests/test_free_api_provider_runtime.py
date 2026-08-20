@@ -222,6 +222,64 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("never-serialize-this", repr(result))
         self.assertNotIn("together", captured["url"])
 
+    def test_active_monotonic_values_cannot_suppress_execution_receipt(self):
+        method_calls = []
+
+        class ActiveTime(float):
+            def __format__(self, spec):
+                method_calls.append("format")
+                raise LookupError("clock-format-must-not-run")
+
+            def __sub__(self, other):
+                method_calls.append("sub")
+                raise LookupError("clock-subtraction-must-not-run")
+
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {
+                            "role": "assistant", "content": "mock-ok"
+                        },
+                    }]
+                }).encode()
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        opener_calls = []
+
+        def opener(*args, **kwargs):
+            opener_calls.append("open")
+            return Response()
+
+        with self.assertRaisesRegex(
+            RuntimeError, "monotonic_clock_unavailable"
+        ):
+            MOD.execute_chat(
+                VALID_MESSAGES, model="mock", environ=env,
+                opener=opener,
+                now=iter((ActiveTime(100.0), 100.01)).__next__,
+            )
+        self.assertEqual(opener_calls, [])
+
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=opener,
+            now=iter((100.0, ActiveTime(100.01))).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(result["receipt"]["duration_ms"], 0)
+        self.assertEqual(opener_calls, ["open"])
+        self.assertEqual(method_calls, [])
+
     def test_credential_cannot_change_between_authorization_and_request(self):
         class Response:
             status = 200

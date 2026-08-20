@@ -338,6 +338,31 @@ class WorldAssembler:
     last_enrich_meta: dict | None = None  # rein diagnostisch, siehe last_v2_meta
     _ENRICH_RESERVED_V2_SLOTS = 2  # von CORPUS_MAX_HITS=5, siehe FIX-Kommentar oben
 
+    # Zeitbudget fuer die Anreicherung. Siehe Modul-Historie 2026-08-20:
+    # gemessene 40,3 s in einem einzelnen paket()-Aufruf. Der Zusatz darf den
+    # Zug nicht dominieren -- 2,5 s ist grosszuegig gegenueber dem Median von
+    # 0,3-0,6 s und unauffaellig gegenueber einem Zug von 10-30 s.
+    ENRICH_ZEITBUDGET_S = 2.5
+
+    def _paket_mit_budget(self, aufruf):
+        """paket() mit hartem Zeitlimit; bei Ueberschreitung None.
+
+        Arbeitsfaden statt signal.alarm: der Wecker gilt nur im Hauptfaden,
+        dieser Code laeuft aber auch in Dienst-Arbeitsfaeden. Der abgehaengte
+        Faden laeuft im Hintergrund aus.
+        """
+        import concurrent.futures as _cf
+        try:
+            with _cf.ThreadPoolExecutor(max_workers=1) as pool:
+                return pool.submit(aufruf).result(timeout=self.ENRICH_ZEITBUDGET_S)
+        except _cf.TimeoutError:
+            import sys as _sys
+            print(f"retrieval: Anreicherung ueber {self.ENRICH_ZEITBUDGET_S}s abgebrochen, "
+                  "FTS-Ergebnis gilt", file=_sys.stderr)
+            return None
+        except Exception:
+            return None
+
     def corpus_lookup_enrich(self, query: str) -> list[dict]:
         """FTS zuerst (immer, schnell). paket() wird DAZUGESCHALTET bei (a)
         FTS-Leerstand oder (b) erkennbar assoziativer Frage (Stichwort-
@@ -375,7 +400,7 @@ class WorldAssembler:
         fts_rest = fts[fts_cap_n:]  # abgeschnitten, aber als Nachfueller aufgehoben
 
         t1 = time.perf_counter()
-        v2 = self.corpus_lookup_v2(query)
+        v2 = self._paket_mit_budget(lambda: self.corpus_lookup_v2(query)) or []
         v2_ms = (time.perf_counter() - t1) * 1000
         v2_meta = dict(self.last_v2_meta or {})
 

@@ -605,6 +605,44 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("attempt-a", repr(first))
         self.assertNotIn("attempt-b", repr(concurrent))
 
+    def test_active_attempt_nonce_is_rejected_before_network(self):
+        leaked_text = "attempt-nonce-format-must-not-run"
+        network_calls = []
+        format_calls = []
+
+        class ActiveNonce(str):
+            def __format__(self, format_spec):
+                format_calls.append(format_spec)
+                raise LookupError(leaked_text)
+
+        class Response:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        def opener(*args, **kwargs):
+            network_calls.append("open")
+            return Response()
+
+        with self.assertRaisesRegex(
+            ValueError, "attempt_nonce_must_be_nonempty_string"
+        ) as caught:
+            MOD.execute_chat(
+                VALID_MESSAGES, model="mock", environ=env, opener=opener,
+                nonce_factory=lambda: ActiveNonce("active-nonce"),
+            )
+        self.assertEqual(network_calls, [])
+        self.assertEqual(format_calls, [])
+        self.assertNotIn(leaked_text, repr(caught.exception))
+
     def test_different_equal_length_payloads_have_distinct_request_ids(self):
         class Response:
             status = 200

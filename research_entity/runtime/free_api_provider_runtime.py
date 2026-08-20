@@ -559,7 +559,7 @@ def _execute_chat_locked(
     attempt_nonce = (
         secrets.token_hex(16) if nonce_factory is None else nonce_factory()
     )
-    if not isinstance(attempt_nonce, str) or not attempt_nonce:
+    if type(attempt_nonce) is not str or not attempt_nonce:
         raise ValueError("attempt_nonce_must_be_nonempty_string")
 
     started = now()

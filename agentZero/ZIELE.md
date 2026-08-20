@@ -1,6 +1,6 @@
 # Was Agent Zero können soll — und was davon steht
 
-**Automatisch erzeugt 2026-08-20T03:42:36Z.** Nicht von Hand pflegen.
+**Automatisch erzeugt 2026-08-20T03:53:13Z.** Nicht von Hand pflegen.
 
 **75 erfüllt · 1 offen · 2 zurückgestellt** von 78 Zeilen.
 
@@ -24,7 +24,7 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | **Genau zwei gleichberechtigte Perspektiven** | Gabriel und Andreas, gleiche Rechte, eine Entität – keine zwei Mandanten | 2 Nutzer mit rights=equal, 4 dauerhafte Sitzungen | ✅ erfüllt | Eigner 18.08. |
 | **Sonst kommt niemand hinein** | Clerk-Anmeldung, exakt zwei Konten, dritte Identität fällt zu | IdentityRouter wirft PermissionError bei nicht zugeordnetem Clerk-Subjekt (Test grün) | ✅ erfüllt | Eigner 18.08. |
 | **Zero weiß, wer vor ihm sitzt** | Profile beider Menschen, jedes Feld mit Herkunft; die Sitzung sagt, wessen sie ist | 26 Profilfelder, 6 Projekte mit Erfolg UND Fehlschlag; Zugehörigkeit und Urheberschaft getrennt geführt, weil sonst aus Zusammenarbeit ein Besitzstreit wird | ✅ erfüllt | Eigner 18.08. |
-| **Wissen ist nach Menschen zugeordnet** | jeder Artikel gehört jemandem oder ausdrücklich beiden | 18017 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen | ✅ erfüllt | Eigner 18.08. |
+| **Wissen ist nach Menschen zugeordnet** | jeder Artikel gehört jemandem oder ausdrücklich beiden | 18019 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen | ✅ erfüllt | Eigner 18.08. |
 | **Vier Sitzungen, ein Raum** | getrennte Kennungen, dieselbe Entität; sie sehen einander und stimmen sich ab, in Caveman-Englisch, ohne Abgleich über Zeitstempel | 4 Menschenplätze in zero_raum (+ ein Platz für den Paketarbeiter); Kollisionswarnung beim Sprechen, wenn zwei am selben Gegenstand arbeiten | ✅ erfüllt | Eigner 18.08. |
 | **Kein Rohtext über die Sitzungsgrenze** | kollidiert eine gemeinsame Ressource, sieht der andere Fragmente — nicht das Original | ⚠️ HIER LAG EIN ECHTES LECK. Bei einer Kollision wurde die ganze Zeile ausgeliefert (`item = dict(r)`), inklusive `content`. Der Code setzte brav das Etikett „compressed_with_extracted_fragments" und legte die Fragmente daneben — und liess den Rohtext drin. Der andere Mensch bekam den vollen Originaltext mit einem Etikett, auf dem „verdichtet" stand. ⭐ Gefunden über einen roten Test, der aus dem FALSCHEN Grund rot war: die alte Zusicherung hing an einer Nebenwirkung der zerstörenden Verdichtung. Wer so einen Test nur an die neue Wirklichkeit anpasst, verliert den Hinweis | ✅ erfüllt | Architektur |
 | **Der halbe Wissensschatz war zugesperrt** | Zero muss ganze Artikel lesen und den Dateikorpus erreichen koennen | ⚠️ Drei Loecher, alle vom Audit gefunden: (1) 164 Wissensartikel ohne Suchtext, darunter ALLE 82 Ausgaben eines laufenden Pflichtdienstes -- der schrieb, niemand konnte lesen. (2) korpus_suchen sah nur die Artikel-FTS; die 325.357 Zeilen des DATEIKORPUS waren unerreichbar -> dateien_suchen. (3) kein Werkzeug las einen ganzen Artikel, Zero bekam immer nur 420 Zeichen -> artikel_lesen | ✅ erfüllt | Lehre aus dem Audit 18.08. |
@@ -69,7 +69,7 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | **Abruf ist abfragesensitiv** | nicht die letzten N, sondern was zur Frage passt | 11/11 Tests grün; Quittung wird durchgereicht (war vorher still verloren) | ✅ erfüllt | Architektur |
 | **Eintrittspunkte werden gelernt** | der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal | 27 gelernte Eintrittspunkte, Modus ACTIVE, 90 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung | ✅ erfüllt | Eigner 18./19.08. |
 | **Wegehierarchie: Autobahnen, Tunnel, Landwege** | oft gegangene Wege werden ausgebaut; Verfall, inverse Gewichtung, Tunnel mit strengerer Schwelle und unabhängiger Mitbenutzung | 353 Wege, -1 Tunnel; oberstes Zehntel hält 14% der Güte (Gleichverteilung wäre ~10%) → Hierarchie bildet sich. Verfall + inverse Gewichtung + Tunnel gebaut (F94) und getaktet (wegverfall.py / abrufverfall.timer) | 🔧 offen | F94 / Eigner 16.08. |
-| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 253 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
+| **Karten als Zeitstrahl** | die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann | 255 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue | ✅ erfüllt | Eigner 18.08. |
 | **Der Möglichkeitsraum ist emergent** | nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt in die Mistral-Vorstufe ein | aus dem Korpus abgeleitet und in den Kontext der Vorstufe gehängt. ⚠️ Er war zuvor gebaut und wurde von NIEMANDEM aufgerufen — der wiederkehrende Fehler dieser Nacht: fertig aussehen und nie laufen | ✅ erfüllt | Eigner 18.08. |
 | **Erkundung neben Ausbeutung** | der Abruf darf einen Teil auf Unbekanntes setzen, statt immer denselben Weg zu gehen | 15 % Erkundungsanteil, entschieden über den Hash der Frage — dieselbe Frage bekommt also immer dieselbe Behandlung, sonst wäre nichts mehr messbar | ✅ erfüllt | Eigner 18.08. |
 | **Der Abruf misst sich selbst** | Messgerät, Goldsatz, Kalibrierung an zurückgehaltenen Daten | Hälfte A kalibriert, Hälfte B berichtet, Annahmeregel vorher festgelegt. Auf B: Anker 8,3 → 23,3 %, Genauigkeit 60 → 85,7 %, Ausbeute 5 → 20 %; Latenz ~390 → 260 ms bei Streuung ±115 → ±1,6 ms | ✅ erfüllt | Eigner 18.08. |
@@ -104,7 +104,7 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | **Chat antwortet zuverlässig** | kein „keine Antwort“-Absturz; die Vorstufe ist schnell und ein Vorstufe-Fehler killt nie die Antwort | Vorstufe-Modell small (~2s statt 12-60s auf dem 12k-Kontext), Envelope-Robustheit (fehlender Key → Default statt Crash) | ✅ erfüllt | Eigner 19.08. |
 | **Selbstheilendes Immunsystem** | neural_immune überwacht die Dienste und startet ausgefallene circuit-breaker-geschützt neu | eos-immune aktiv, 22 Dienste (restart/observe), Selbstheilung bewiesen: wikiarbeit gestoppt → auto-restart (breaker=closed) → successful; zentral abschaltbar | ✅ erfüllt | Eigner 19.08. |
 | **Dienste sichtbar** | alle EntityOS-Prozesse als Dienste mit Lampe (grün an / rot aus) in der Systeme-Bubble | 25 Dienste live in systeme.json (Host-Sammler, 15s) | ✅ erfüllt | Eigner 19.08. |
-| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 30 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
+| **Läuft im Container auf dem eigenen Server** | ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung | Up 41 minutes (healthy) | ✅ erfüllt | Eigner 18.08. |
 | **Frontend heißt EntityOS und ist erreichbar** | Clerk-Login für genau zwei Profile, dann Claude-Code-Terminal | https://entityos.frank.ink → 200, WSS durch nginx und Tunnel bewiesen | ✅ erfüllt | Eigner 18.08. |
 | **Der Export pflegt sich selbst** | alles autonom ins Forschungs-Repo unter agentZero | systemd-Timer alle 30 min, enabled | ✅ erfüllt | Eigner 18.08. |
 | **Die Testsuite trägt** | kein grüner Wert, der durch Abschwächen erkauft wurde | 584 gruen / 0 rot | ✅ erfüllt | Arbeitsregel |
@@ -115,11 +115,11 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 | **Arbeitspakete statt Alleingang** | was Zero nicht selbst darf, schnürt er als Paket; ein Arbeiter erledigt es eingezäunt | 9 Pakete. Ein Paket gilt erst als fertig, wenn ein BELEG dranhängt — 'fertig ohne Beleg ist eine Behauptung, kein Ergebnis' | ✅ erfüllt | Eigner 18.08. |
 | **agentforge geht in EntityOS auf** | kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server | Hosting-Ansicht übernommen und angeschlossen. Die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) waren als schrittweise Migration erfasst. ⏸ VOM EIGNER AM 19.08. GESTRICHEN — ausdrücklich nicht weiter verfolgen. Stand bis 20.08. weiter als 🔧 offen und las sich wie eine liegengebliebene Aufgabe; das ist derselbe Fehler wie andersherum, nur mit umgekehrtem Vorzeichen | ⏸ zurückgestellt | Eigner 18.08. |
 | **Zero hält selbst Platz auf dem Wirt** | das Speicher-Management des VPS übernimmt Zero autonom | 57.9 % belegt, 81.0 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB | ✅ erfüllt | Eigner 18.08. |
-| **Das Messgerät kann melden, dass es nichts messen konnte** | eine Rechnung, die nicht aufgeht, muss das SAGEN | Bilanz nennt drei Zahlen: df 111.6 GB, gezählt 109.8 GB, Lücke 1.8 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (1.8 GB Abweichung). | ✅ erfüllt | Lehre aus dem Bau 18.08. |
+| **Das Messgerät kann melden, dass es nichts messen konnte** | eine Rechnung, die nicht aufgeht, muss das SAGEN | Bilanz nennt drei Zahlen: df 111.7 GB, gezählt 109.8 GB, Lücke 1.9 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (1.9 GB Abweichung). | ✅ erfüllt | Lehre aus dem Bau 18.08. |
 | **Abgeschafftes bleibt zurückholbar** | kein Frank v0.1 mehr, keine lokalen Modelle — aber wenn ich es je doch will, muss es gehen | 7 Posten im Rückwegverzeichnis, 23 Modelle mit Namen, Fassung und Nachladebefehl im Wiki. ⭐ Gewichte sind nachladbar, die LISTE war es nicht — deshalb verweigert `speicher_abschaffen` ohne geschriebenes Verzeichnis. Die Wacht löscht Altbestand (44 GB) NICHT von selbst: ein Modellcache sieht aus wie Müll und kann Arbeit von Wochen enthalten | ✅ erfüllt | Eigner 18.08. |
 | **Der Verursacher wird gesucht, nicht nur der Haufen** | ein Haufen mit Verursacher wächst nach; Löschen allein ist dann keine Verwaltung | NICHTS GEFUNDEN -- kein Zeitgeber und kein Dienst eines abgeschafften Systems laeuft noch. Was hier liegt, waechst nicht nach. Der Detektor wurde gegengeprüft: mit einem Muster, das nachweislich läuft, findet er 13 Einheiten — sein „nichts gefunden" ist also belastbar und nicht bloß Stille. | ✅ erfüllt | Lehre aus dem Bau 18.08. |
 | **Die Testsuite ist ehrlich grün** | grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen | 584 gruen / 0 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht | ✅ erfüllt | Lehre aus dem Bau 18.08. |
-| **Zero verstummt nicht wortlos** | wenn er nicht antworten kann, muss man ERFAHREN warum | Anmeldung GUT, noch 0.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt" sagen kann, aber nicht „warum", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende | ✅ erfüllt | Lehre aus dem Bau 18.08. |
+| **Zero verstummt nicht wortlos** | wenn er nicht antworten kann, muss man ERFAHREN warum | Anmeldung GUT, noch -0.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt" sagen kann, aber nicht „warum", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende | ✅ erfüllt | Lehre aus dem Bau 18.08. |
 | **Zero kann nachsehen, statt zu hoffen** | nach jedem Veröffentlichen prüfen, was WIRKLICH auf der öffentlichen Seite steht | ⚠️ Gefunden von Zero SELBST: er berichtete, die ZVR-Korrektur sei „still local, still not live" — und schrieb dazu ehrlich „ich habe kein HTTP hier, ich kann seimensch.net nicht abrufen". Sie WAR live. Sein Schluss war richtig gezogen aus dem, was er sehen konnte. ⭐ Mein Fehler: in seinem Handbuch stand „prüfe die Seite" — ohne Mittel dazu. Jetzt hat er `seite_pruefen`: HTTP an die echten Domains, nur lesend, Erlaubnisliste auf dem Wirt. ⚠️⚠️ Und der eigentliche Befund dahinter: /srv/git/seimensch.git auf diesem Wirt ist ein SPIEGEL — ein Push meldet vollen Deploy-Erfolg, während seimensch.net von 72.61.19.188 ausgeliefert wird | ✅ erfüllt | Lehre aus dem Andreas-Test 18.08. |
 | **Ehrliches „nichts getan" gilt nicht als fertig** | wer korrekt verweigert, wird nicht als erledigt gebucht — aber auch nicht bestraft | ⚠️ Von Zero gefunden: zwei Pakete standen auf `fertig`, ihr Beleg begann mit „NICHTS GETAN". Meine Regel prüfte, OB ein Beleg da ist — nicht, ob er `fertig` trägt. Ein Arbeiter, der sauber verweigert, schreibt einen ehrlichen Bericht, und der ging als Beleg durch. Damit bestrafte die Regel genau die Ehrlichkeit, die sie fördern sollte. Neuer Stand `abgelehnt`: kein Fehlschlag des Arbeiters, aber auch keine Erledigung — die Arbeit wartet weiter | ✅ erfüllt | Lehre aus dem Andreas-Test 18.08. |
 | **Adressen darf Zero nennen, Passwoerter nie** | die halbe Eignerregel war nicht lieferbar | ⚠️ Der geheim-Kern wurde auf 30 Eintraegen geschrieben und von NIEMANDEM gelesen: katalog() strich JEDEN Wert, auch Adressen und Token, die der Eigner ausdruecklich freigegeben hat. Jetzt tresor_zeigen mit HARTEM Passwort-Riegel: geprueft ueber alle 58 Eintraege, 0 Passwort-Lecks; Adressen und Token kommen heraus, Passwoerter nie -- auch nicht auf Wunsch | ✅ erfüllt | Eigner 18.08. |
@@ -180,29 +180,84 @@ steht nach einer Woche auf grün, weil niemand sie zurückstellt. Diese kann das
 ## Architekturskizze
 
 ```mermaid
-flowchart LR
-  M["Mensch<br/>Gabriel · Andreas"] -->|"Chat · Clerk-Auth (nur 2)"| V["Vorverarbeiter<br/>Mistral"]
-  V -->|caveman_prompt| Z["Zero<br/>Claude Code · native Tools"]
-  Z -->|caveman| UE["Übersetzer<br/>Mistral → Deutsch"]
-  UE -->|Antwort| M
-  Z <-->|liest / schreibt| U[("UnifiedDB<br/>wiki.db")]
-  Z -.->|"Zaun-Hook: schützt das Unersetzliche"| F{{fence_hook}}
-  Z -.->|Tailscale ssh| PC["Gabriels + Andreas' PC"]
-  subgraph VPS ["frank-api · VPS"]
-    V; Z; UE; U; F
+flowchart TD
+  M(["Mensch -- Gabriel · Andreas<br/>schreibt Deutsch"])
+
+  subgraph ZUG ["Ein Zug"]
+    direction TB
+    V["Vorstufe (Mistral)<br/>baut den Auftrag"]
+    Z["Zero -- Claude Code<br/>native Werkzeuge, kopflos"]
+    UE["Übersetzer (Mistral)<br/>caveman -> warmes Deutsch"]
+    V -->|caveman_prompt + Beleg| Z
+    Z -->|caveman| UE
   end
+
+  subgraph KONTEXT ["Woraus die Vorstufe den Auftrag baut"]
+    direction TB
+    K["Korpus<br/>FTS, angereichert durch paket()"]
+    W["Weltmodell wm_lesart<br/>mehrere Lesarten nebeneinander"]
+    G["Gedächtnis<br/>gemerkt + aus dem Gespräch"]
+    P["Profile · Möglichkeitsraum · Vorsätze"]
+  end
+
+  subgraph AUTONOM ["Was ohne Menschen läuft (Zeitgeber)"]
+    direction TB
+    H["eos-hypothesen<br/>Lücken -> offene Folgerung"]
+    PR["eos-vorsatz<br/>misst Folgerungen nach"]
+    AR["eos-vorsatz-arbeit<br/>liest Kandidaten, schließt Vorsätze"]
+    KA["Karte · Verfall · Wegehierarchie"]
+    IM["Immunsystem · Backup · Wachten"]
+    H --> PR --> AR --> H
+  end
+
+  U[("UnifiedDB -- wiki.db<br/>Korpus + Laufzeit, EINE Datei")]
+  F{{"Zaun (fence_hook)<br/>schützt das Unersetzliche + Passwörter"}}
+  KO[/"Auftragskörbe<br/>/var/lib/clay/*-spool"/]
+  WIRT["Wirt-Dienste auf dem VPS<br/>führen aus, gegen feste Whitelist"]
+  PC["Gabriels + Andreas' PC<br/>über Tailscale -- vom WIRT, nicht von Zero"]
+
+  M -->|"Chat · Clerk (genau 2 Konten)"| V
+  UE -->|Antwort| M
+  KONTEXT --> V
+  U --- KONTEXT
+  Z <-->|liest / schreibt| U
+  Z -.->|jeder Werkzeugaufruf| F
+  Z -->|"legt Auftrag ab (kein ssh im Container)"| KO
+  KO --> WIRT --> PC
+  WIRT -->|"Bild zurück in den Chat"| M
+  AUTONOM --- U
 ```
 
-Der Mensch schreibt Deutsch; die Mistral-Vorstufe versteht die Absicht und baut
-einen dichten *caveman-englischen* Auftrag; Zero handelt darauf direkt mit seinen
-Werkzeugen; der Übersetzer macht warmes Deutsch daraus. Die UnifiedDB wird auf dem
-ganzen Weg gelesen und geschrieben. Über Tailscale erreicht Zero auch die Rechner
-der beiden Menschen.
+**Der Zug.** Der Mensch schreibt Deutsch. Die Vorstufe baut daraus EINEN dichten
+*caveman-englischen* Auftrag — und legt jeden Fakt mit seinem **wörtlichen Beleg**
+hinein, denn eine Behauptung ÜBER einen Beleg ist keiner: ohne Zitat prüft Zero
+selbst nach, findet mit anderen Wörtern nichts und lehnt die eigene Erinnerung als
+Vermutung ab (gemessen). Zero handelt direkt mit seinen Werkzeugen; der Übersetzer
+macht warmes Deutsch daraus — und darf dabei die **Person** nicht vertauschen
+(„you are X“ heißt „Du bist X“, nie „Ich bin X“; eigene Prüfung mit Wiederholung).
+
+**Zeros Reichweite endet am Container.** Darin gibt es **kein** `ssh`, `scp`,
+`rsync`, `git`, `curl`, `wget` (gemessen 2026-08-20 — hier stand bis dahin das
+Gegenteil, und Zero hat daraufhin über Erreichbarkeit spekuliert statt zu handeln).
+Ins Netz kommt es über `WebSearch`/`WebFetch`. Auf die Rechner der Menschen kommt es
+**gar nicht direkt**: es legt einen Auftrag in einen Korb, ein Dienst auf dem Wirt
+führt ihn aus — gegen eine feste Whitelist. So läuft die Dienststeuerung, und so
+entsteht ein Bild: Seite auf Andreas' Rechner schreiben, dort headless
+fotografieren, Bild zurück in den Chat.
+
+**Der Kreis, der ohne Menschen läuft.** Vor jeder Antwort prüft die Vorstufe
+Feld-gegen-Frage und schreibt auf, was sie NICHT weiß. Was mehrfach fehlt, wird zu
+einer offenen Folgerung; ein Prüfer misst sie alle 6 h nach; zweimal täglich liest
+ein kleines freies Modell die Kandidaten wirklich nach und schließt, was belegt ist.
+⭐ Zwei Grundsätze sind eingebaut, nicht bloß beschrieben: **`gestützt` wird nie
+vergeben** (dass eine Suche nichts findet, beweist nicht, dass etwas fehlt), und was
+das Modell als Fakt zurückgibt, wird **zeichenweise gegen den Quelltext geprüft** —
+steht es dort nicht, wird es verworfen.
 
 ## Wie die UnifiedDB funktioniert
 
 - **Eine Datei, zwei Welten:** `wiki.db` hält den **Clay-Korpus** (Wissens-,
-  Bau- und Vorfallsartikel, Zuordnung, Graph — rund 18013 Artikel) UND die
+  Bau- und Vorfallsartikel, Zuordnung, Graph — rund 18015 Artikel) UND die
   **Laufzeit-Wirbelsäule** (Nutzer, Sitzungen, Züge, Effekte, Kausal-/
   Arbeitsraum-Episoden) — getrennte Namensräume in derselben Datei.
 - **Kanonische Identität (Ebene 0):** Zeros Identität steht als Wurzelzustand in
@@ -212,37 +267,63 @@ der beiden Menschen.
   mit Kausalkette; scheitert eine Prüfung, bleibt keine halbe Zeile stehen.
 - **Wirkung nur durch das Tor:** zustandsändernde Schritte laufen über das
   EffectGate mit Beleg (Ziel/Ergebnis als Prüfsumme).
+- **Zwei Gedächtnisse, ein Zugang:** `memory_tabelle` ist das ausdrücklich Gemerkte,
+  `durable_memory` das aus echten Gesprächen Extrahierte — darauf beruft sich die
+  Vorstufe. ⚠️ Zeros Werkzeug las bis 20.08. nur das erste und widersprach der
+  Vorstufe deshalb systematisch; jetzt liest es beide und nennt zu jedem Treffer
+  den Speicher.
+- **Weltmodell daneben:** `wm_lesart` hält mehrere gleichzeitig gültige Lesarten je
+  Artikel und Achse (z. B. `status` = CURRENT *und* SUPERSEDED). Es löst nichts auf
+  — es zeigt der Vorstufe, wo der Korpus sich selbst widerspricht.
 - **Volltext:** Artikel sind über FTS suchbar (`korpus_suchen`); der Dateikorpus
   über `dateien_suchen`. Ein Artikel ohne Suchtext + FTS-Zeile ist unsichtbar —
-  eine wiederkehrende, teuer gelernte Lehre.
+  eine wiederkehrende, teuer gelernte Lehre. Selbst geschriebene *Wissenslücke*-
+  Notizen sind von den Treffern ausgeschlossen: sie tragen den Fragetext im Titel
+  und würden sonst den echten Inhalt verdrängen.
 - **Das Herz ist unersetzlich:** `wiki.db` liegt als Bind-Mount unter
-  `/var/lib/clay`; der Zaun-Hook verbietet Zerstören/Überschreiben.
+  `/var/lib/clay`; der Zaun-Hook verbietet Zerstören/Überschreiben — **außer** in
+  den Auftragskörben darunter, die ausdrücklich der vorgesehene Weg sind.
+  Täglich gesichert auf einen zweiten Rechner (Hardlink-Schnappschüsse).
 
 ## Fähigkeiten im Überblick (Featureliste)
 
 - **Handeln:** native Shell (Bash) + Datei-Werkzeuge (Read/Write/Edit/Glob/Grep),
   Websuche/-abruf, MCP-Werkzeuge für Korpus, Gedächtnis, Menschen-Profile, Tresor-
-  Katalog, Werkbank-Deploy — **direkt**, ohne Arbeitspakete.
-- **Wissen:** Volltext-Korpus, Datei-Korpus, ganze Artikel lesen, Einbettungs-
-  und Gedächtnissuche, Menschen-/Projekt-/Artikelzuordnung mit Herkunft.
+  Katalog, Werkbank-Deploy — **direkt**, ohne Arbeitspakete. Außerhalb des
+  Containers wirkt Zero über die Auftragskörbe, nicht über ssh.
+- **Wissen:** Volltext-Korpus (zur FRAGE gebaut, nicht zur leeren Zeichenkette),
+  Datei-Korpus, ganze Artikel lesen, Einbettungs- und Gedächtnissuche über **beide**
+  Speicher, Weltmodell-Mehrdeutigkeiten, Zuordnung mit Herkunft.
+- **Selbstprüfung:** vor jeder Antwort Feld-gegen-Frage (`epistemik`); was fehlt,
+  wird zum Vorsatz, wird nachgemessen und — wenn belegbar — selbst geschlossen.
+  `abruf_lage` zeigt den Zustand der gelernten Karte, **einschließlich des Urteils,
+  dass sich gerade keine Hierarchie bildet**.
 - **Zusammenarbeit:** vier Sitzungen als **eine** Entität, gemeinsamer Raum mit
   Kollisionswarnung; Chat-Historie überlebt den Neuladen.
 - **Wahrnehmung:** Live-Systemwacht (VPS + beide PCs via Tailscale: online, CPU/
-  RAM/Disk), Seiten-Erreichbarkeit prüfen, Speicher-Lage.
-- **Sicherheit:** Zugang bombenfest auf 2 Clerk-Konten; dünner Zaun um das
-  Unersetzliche + Passwörter; alle Homepages 6-stündlich auf einen 2. VPS gesichert.
+  RAM/Disk), Dienste-Ansicht mit An/Aus/Neustart, Seiten-Erreichbarkeit, Speicher-Lage.
+- **Zeigen:** Zero kann eine Seite auf einem fremden Rechner bauen, sie dort
+  fotografieren lassen und das Bild im Chat als Miniatur ausgeben.
+- **Sicherheit:** Zugang auf 2 Clerk-Konten; dünner Zaun um das Unersetzliche +
+  Passwörter; Homepages 6-stündlich und die Herz-DB täglich auf einen 2. VPS;
+  Immunsystem heilt tote Dienste; Schlüsselwacht misst den Endpunkt, den der
+  Betrieb wirklich benutzt.
 - **Sprache:** denkt/handelt in dichtem caveman-Englisch, antwortet in warmem
-  Deutsch (Mistral-Übersetzer).
+  Deutsch — mit Personenprüfung, und Artefakte für Menschen (Seiten, Dateien)
+  entstehen ebenfalls auf Deutsch.
 
 ## Messwerte
 
 - **75 erfüllt · 1 offen · 2 zurückgestellt** von 78 deklarierten Fähigkeiten (jede Ist-Spalte je Lauf gemessen).
-- **132 Tabellen** in der einen `wiki.db`; rund **18013 Artikel** im Korpus.
+- **132 Tabellen** in der einen `wiki.db`; rund **18015 Artikel** im Korpus.
 - **51 Werkzeuge** freigegeben (native + MCP); verboten nur *Artifact*.
-- **Latenz:** Vorstufe ~1,8 s; dauerhafter warmer Zero-Prozess (~2,4 s Boot
-  vorab), Werkzeug-Takt von 3 s auf 0,12 s gesenkt.
-- **Tests:** 584 grün (inkl. der auf das neue „native Tools + Zaun“-Design
-  gezogenen Sicherheits-Tests).
+- **Latenz (gemessen 20.08.):** ein ganzer Zug 5–30 s, je nachdem wie viele
+  Werkzeuge Zero anfasst; Korpusabruf 1–13 ms; Weltmodell-Readout 2–7 ms;
+  Vorstufe auf `mistral-small` ~1–2 s (auf `medium` waren es 12–60 s und damit
+  regelmäßig ein Timeout — das war der „keine Antwort“-Fehler).
+- **Tests:** 584 gruen / 0 rot — gemessen VOR dem Öffnen der DB-Verbindung; mit offener
+  Verbindung dauert die Suite 136 s statt 17 s und ein Test fällt um, das wäre ein
+  Befund über dieses Skript statt über die Tests.
 - **Zaun verifiziert:** `rm wiki.db` und `cat` der Passwort-Datei abgewiesen,
   Backups und harmlose Befehle frei.
 

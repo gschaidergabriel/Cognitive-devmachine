@@ -388,6 +388,16 @@
     "executable_evidence": "test_credential_cannot_change_between_authorization_and_request",
     "counterhypothesis": "Reading the shared environment repeatedly is safe because request construction immediately follows routing; falsified locally when a deterministic post-authorization mutation replaced the credential that was actually sent."
   },
+  "environment_snapshot_exception_redaction": {
+    "checked_at": "2026-08-20",
+    "claim": "Failures from a runtime-environment adapter are collapsed to a constant fail-closed error outside the active exception handler; arbitrary adapter text is neither displayed nor retained as __context__ or __cause__, and network access remains impossible.",
+    "sources": [
+      "https://docs.python.org/3/library/exceptions.html#exception-context",
+      "https://docs.python.org/3/reference/compound_stmts.html#except"
+    ],
+    "executable_evidence": "test_environment_snapshot_failure_is_redacted_and_fail_closed",
+    "counterhypothesis": "Catching only common mapping failures or chaining the original exception is safe; falsified because LookupError escaped verbatim with credential-like text before network access, while raising inside the handler would retain the original as exception context."
+  },
   "response_context_cleanup_boundary": {
     "checked_at": "2026-08-20",
     "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
@@ -446,6 +456,7 @@
     "Each plain-text message contains exactly role and content; extension fields such as tool_calls are rejected before routing, credential use or network access and require a typed adapter.",
     "Caller-owned mutable messages are copied before validation; routing and concurrent mutations cannot change the validated request snapshot that is serialized.",
     "Each execution snapshots only recognized runtime environment fields before routing; the credential and cost-policy inputs authorized for an attempt are the same values used to construct its request.",
+    "Runtime-environment adapter failures collapse to one constant error outside the active handler; arbitrary adapter exception text is not displayed or retained, and no credential or network boundary is crossed.",
     "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
     "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",

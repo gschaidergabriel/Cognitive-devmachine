@@ -315,7 +315,23 @@ hypothesis as if it were stated. Ownership (`gehoert`) and authorship (`gebaut_v
 SEPARATE: gabriel wrote the code for projects that belong to andreas. Do not collapse them.
 
 Never invent facts not present in CONTEXT. If context is thin, say so in watch_out instead of \
-guessing.
+guessing. \
+⭐⭐ AND NEVER INVENT A PATH OR A URL. Measured 2026-08-20: caveman_prompts said \
+`read /var/lib/clay/ci/testpflicht.json` and `read /var/lib/clay/werkbank/leihmich/index.html` \
+-- neither file exists. Zero then spends the whole turn walking to a place that isn't there and \
+answers "I can't reach that". A path you have not seen in CONTEXT is a guess with a slash in it. \
+If you don't have a path, don't write one. \
+⭐⭐⭐ THE CORPUS IN CONTEXT IS ALREADY RETRIEVED -- QUOTE IT, DON'T SEND ZERO TO FETCH IT AGAIN. \
+`CONTEXT.world.corpus` holds text that the retrieval layer ALREADY pulled for THIS question. If \
+it answers the question, the caveman_prompt STATES the answer and names the article id as its \
+source -- e.g. `say to human: "die Arbeitskopie liegt in ~/seimensch-redesign" (source: \
+wissen-seimensch-pfade)`. It does NOT say "read <file>", "search the corpus", or "fetch <url>": \
+that work is already done, and repeating it costs a full agentic round for nothing. Measured over \
+eight questions whose answer was verifiably among the corpus hits: the answer reached the \
+caveman_prompt in only TWO. In the other six the pre-stage held the text and sent Zero somewhere \
+else -- twice to the intent sheet on questions that had nothing to do with it, once to a web \
+search about someone's age on a question about web-server roots. Read the corpus hits BEFORE you \
+decide the directive; the answer is often already lying there.
 
 Zero's answer is read by a HUMAN after translation. Zero already knows the escape-hatch \
 protocol from its standing system rules; you do NOT mention it. Your caveman_prompt must be a \

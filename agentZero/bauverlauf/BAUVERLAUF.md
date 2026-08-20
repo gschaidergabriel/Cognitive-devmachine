@@ -1,12 +1,48 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T07:11:15Z. 931 Commits aus vier Repos, davon 300 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T07:41:14Z. 932 Commits aus vier Repos, davon 302 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 07:22:03 +0000 — entityos: 1 Aenderungen
+
+`301b676ef5b3` · entityos · 07:22 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T07:22:03+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 07:18:04 +0000 — entityos: 1 Aenderungen
+
+`f9f33a4ca45e` · entityos · 07:18 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/retrieval.py
+
+Zeit: 2026-08-20T07:18:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren
 
@@ -4383,27 +4419,5 @@ werkzeug/governor.py: IN=moeglichkeitsraum()/paket() (ClayMachine-Realitaet), OU
 
 ```
 43 Claims aus research_entity/ledgers/CLAIMS.jsonl gelesen: 8 CURRENT, 5 OPEN, 4 SUPERSEDED, 26 REFUTED; H1-H6 Hyperposition-Entwuerfe alle OPEN bestaetigt; QUALIFIED/SUPPORTED je Zeile gelesen statt pauschal gemappt; Secrets-Scan sauber (2 echte Treffer in private/*.env gefunden, nicht kopiert); dokumente/clayverse/FORSCHUNGSWISSEN.md (284 Zeilen) + README-Verweis; Commit 3e11e59 auf origin (/srv/git/unifieddb.git) gepusht
-```
-
-### B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul
-
-`6ca42541fc47` · clay · 15:53 UTC · ClayVerse
-
-```
-README.md + dokumente/clayverse/README.md gepatcht, commit b96f413, push origin+github verifiziert
-```
-
-### RAE-Forschungswissen zu ClayVerse verdichtet: dokumente/clayverse/FORSCHUNGSWISSEN.md + README-Verweis
-
-`3e11e59a5806` · unifieddb · 15:53 UTC · ClayVerse
-
-```
-43 Claims aus research_entity/ledgers/CLAIMS.jsonl gelesen (8 CURRENT, 5 OPEN, 4 SUPERSEDED,
-26 REFUTED), H1-H6 Hyperposition-Entwuerfe alle OPEN bestaetigt, QUALIFIED/SUPPORTED je Zeile
-gelesen statt pauschal gemappt (Original in first_status_original erhalten). Secrets-Scan
-sauber (private/*.env gefunden, nicht geoeffnet/kopiert). COVERAGE-Abschnitt oben in der Datei
-listet explizit was NICHT gelesen wurde (atomic/runs, mesh_feedback, knowledge_micro_packets,
-frank_v0_1 u.a.) - Aufgabe aus Tokenbudget-Gruenden gestoppt, bewusst als unvollstaendig
-markiert statt vollstaendig wirkend.
 ```
 

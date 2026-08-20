@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T07:11:15Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T07:41:14Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -134,7 +134,7 @@ Automatisch erzeugt 2026-08-20T07:11:15Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (38)
+## pruefung (37)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -172,15 +172,16 @@ Automatisch erzeugt 2026-08-20T07:11:15Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:16 | entityos | `de1ffd0513f9` | Tests: verified_effect braucht jetzt required_target (Commit 8b7368efd) -- 5 Tests nachgezogen |
 | 2026-08-18T03:13 | entityos | `0e862557cf6d` | test(clayverse): fence autonomy effect budget and self-ack |
 | 2026-08-18T03:11 | entityos | `ca4ad90f452b` | test(clayverse): fence effect budget without blocking reasoning |
-| 2026-08-18T02:57 | entityos | `977b16f53b56` | test(clayverse): fence autonomous goal truth and runaway loops |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (257)
+## bau (258)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T07:22 | entityos | `301b676ef5b3` | EOS-Chronik 2026-08-20 07:22:03 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T07:18 | entityos | `f9f33a4ca45e` | EOS-Chronik 2026-08-20 07:18:04 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T06:22 | entityos | `d8074a08fdfa` | EOS-Chronik 2026-08-20 06:22:04 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T05:38 | entityos | `2adcf9a58b0b` | EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T05:35 | entityos | `2727aac03f16` | EOS-Chronik 2026-08-20 05:35:55 +0000 — entityos: 1 Aenderungen |
@@ -239,6 +240,4 @@ Automatisch erzeugt 2026-08-20T07:11:15Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T13:55 | entityos | `d7543729563b` | Verfall der Wegehierarchie am bestehenden Takt (F94) |
 | 2026-08-18T13:34 | unifieddb | `19d5dd87472e` | Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot |
 | 2026-08-18T13:24 | entityos | `d6cc4ad2001e` | Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig |
-| 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
-| 2026-08-18T12:59 | entityos | `d42ec66eda5d` | Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT |
 

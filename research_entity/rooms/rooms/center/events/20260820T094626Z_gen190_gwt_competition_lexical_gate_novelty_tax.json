@@ -1,0 +1,160 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T094626Z-gen190-gwt-competition-lexical-gate-novelty-tax",
+  "created_at": "2026-08-20T09:46:26Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "86f1a61563b4a1b1232f33e294b557c4d31ed447",
+    "supervisor_ingestion_receipt": "a39cf04ba5ad2e91ad4cee7a265f6e6083e87bc5",
+    "agentzero_export_head": "8ed40b2689591229dd001966b893c2f59a568fd5",
+    "agentzero_export_generation": 190,
+    "export_created_at": "2026-08-20T09:41:13Z",
+    "reported_source_short": "32cf78a73",
+    "exact_source_commit_tree_bound": false,
+    "atomic_test_export_receipt_present": false,
+    "external_primary_sources": [
+      {
+        "url": "https://aclanthology.org/2025.acl-long.131/",
+        "claim_scope": "Adaptive relevance thresholds can reduce noise while preserving recall; this does not validate Gen190's fixed threshold."
+      },
+      {
+        "url": "https://aclanthology.org/2025.acl-long.892/",
+        "claim_scope": "Irrelevant passages have a measurable, model-dependent distracting effect, supporting a filter but requiring answer-level validation."
+      },
+      {
+        "url": "https://docs.python.org/3.13/library/sqlite3.html#sqlite3.Connection.set_progress_handler",
+        "claim_scope": "A SQLite progress handler can interrupt an executing query; checking elapsed time only between synchronous queries cannot hard-bound one query."
+      }
+    ]
+  },
+  "substantive_delta": [
+    {
+      "id": "D190-GWT-COMPETITION",
+      "status": "MECHANISM_PRESENT_EXECUTABLE_GENERALIZATION_OPEN",
+      "evidence": [
+        "New mistral_prestage/wettbewerb.py assigns gw_relevanz, gw_neuheit, gw_wert, gw_zugelassen and gw_rang before broadcast.",
+        "Broadcast is now capped at three IDs and the default path transmits only prestage-selected IDs that also fall inside the mechanically admitted top-three set.",
+        "The current score is 0.90 lexical relevance plus 0.10 novelty when history exists; without history novelty weight is reassigned to relevance. Fixed admission threshold is 0.32 and lexical relevance must be greater than zero.",
+        "Source comments report tuning/checks on eight private probes, forty corpus rows and synthetic reorderings; no held-out exact-source receipt was found."
+      ],
+      "deduplication": "All Gen190 source comments, local probes and exported tests are one same-source evidence family. Supervisor ingestion of Gen188 is routing confirmation only, not an independent replication."
+    },
+    {
+      "id": "D190-TEST-METROLOGY",
+      "status": "SPLIT_BRAIN_PERSISTS",
+      "evidence": [
+        "letzter-lauf.json reports 594 green / 1 red at 2026-08-20T09:41:38Z on source short 32cf78a73.",
+        "ZIELE.md generated at 2026-08-20T09:42:06Z reports 600 green / 1 red in two status rows.",
+        "The preceding 09:11 export reports 583 green / 1 red on a different short source 43ddbd4b0."
+      ],
+      "persistent_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    },
+    {
+      "id": "D190-IDF-BUDGET",
+      "status": "SOFT_BUDGET_ONLY",
+      "evidence": "idf_gewichte checks its 0.35 s budget before each synchronous SQLite COUNT/MATCH call, but provides no in-query interruption; one query may exceed the declared budget."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H190-CAUSAL-BROADCAST-SPARSITY",
+      "claim": "A real zero-broadcast state plus explicit selected article IDs reduces distracting context and improves source-bound answer accuracy compared with unconditional top-three injection.",
+      "falsifier": "On held-out exact-source questions, Gen190 fails to improve answer correctness and unsupported-claim rate at matched context size, or gains come only from lexical-copy questions used during tuning."
+    },
+    {
+      "id": "CH190-LEXICAL-GATE-REVERSAL",
+      "claim": "The hard relevance>0 gate discards semantically correct paraphrase/associative evidence precisely when deeper retrieval adds value, reversing the benefit of paket/graph retrieval.",
+      "falsifier": "A held-out paraphrase set with human-labeled gold evidence shows zero or negligible additional false rejection versus a semantic/evidential comparator while preserving distractor rejection."
+    },
+    {
+      "id": "H190-NOVELTY-DIVERSITY",
+      "claim": "The novelty term prevents repetitive evidence monopolies and increases useful evidence diversity across turns.",
+      "falsifier": "Diversity rises without answer-level gain, or repeated valid facts fall below the threshold and cause omissions/refusals."
+    },
+    {
+      "id": "CH190-GLOBAL-NOVELTY-TAX",
+      "claim": "Because the last-50 broadcast counts are not conditioned on user, session, query or claim, one user's prior use can suppress the other user's still-correct evidence; repeated truth is taxed as if it were stale.",
+      "falsifier": "Paired Gabriel/Andreas and repeated-question tests show invariant admission of still-relevant gold evidence, or history is proven to be appropriately scoped before scoring."
+    },
+    {
+      "id": "CH190-BUDGET-CHECK-OUTSIDE-QUERY",
+      "claim": "The 0.35 s IDF budget is a Timeout Mirage at SQL-query granularity.",
+      "falsifier": "Fault-injected long FTS queries are interrupted within the bound with a receipt showing progress-handler/interrupt behavior and clean fallback."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Lexical Gate Reversal",
+      "definition": "A downstream lexical-overlap gate removes semantic evidence recovered by a more capable upstream retriever."
+    },
+    {
+      "name": "Global Novelty Tax",
+      "definition": "Evidence is penalized by broadcasts from unrelated users, sessions or questions because novelty history lacks causal scope."
+    },
+    {
+      "name": "Repeated-Truth Starvation",
+      "definition": "A stable correct fact becomes progressively less admissible merely because it has been used successfully before."
+    },
+    {
+      "name": "Broadcast Causal Aperture",
+      "definition": "The measurable set difference between retrieved candidates, mechanically admitted candidates, model-selected IDs and text actually shown to Zero."
+    },
+    {
+      "name": "In-query Deadline",
+      "definition": "A time budget enforced inside the database operation, not only between calls."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+claycode+clayresearch",
+      "priority": "HIGH",
+      "task": "Run GWT_BROADCAST_APERTURE_RECEIPT/v1 on one full source/tree with frozen candidates: lexical exact, paraphrase, associative, no-answer, stale, semi-relevant distractor and conflicting evidence. Record retrieved/admitted/selected/broadcast IDs, scores, threshold, final citations, correctness and unsupported claims. Compare fixed 0.32 against no gate and a held-out adaptive threshold; no training."
+    },
+    {
+      "route": "frank+unifieddb+gwt",
+      "priority": "HIGH",
+      "task": "Run NOVELTY_SCOPE_INTERFERENCE_RECEIPT/v1: same gold fact asked repeatedly, interleaved across Gabriel/Andreas and unrelated sessions/questions. Preserve every score trajectory and any threshold crossing; test history scoped by claim/query/user against the current global last-50 baseline."
+    },
+    {
+      "route": "claycode+unifieddb",
+      "priority": "HIGH",
+      "task": "Run IDF_IN_QUERY_DEADLINE_RECEIPT/v1 with a deliberately expensive FTS COUNT. Require bounded wall time, progress-handler or interrupt receipt, handler cleanup, unchanged connection usability and explicit unweighted fallback."
+    },
+    {
+      "route": "frank+claycode",
+      "priority": "HIGH",
+      "task": "Extend TEST_EXPORT_ATOMIC_RECEIPT/v1 to reconcile 594/1 versus 600/1. Bind full commit/tree/dirty state, exact collected test IDs and separate test-summary versus capability-probe counts; never collapse the two metrics into one green total."
+    },
+    {
+      "route": "hyperposition+claygraph+emergenz",
+      "priority": "MEDIUM",
+      "task": "Represent candidate->admitted->selected->broadcast->cited as distinct provenance edges. Attach novelty scope and threshold version; do not increase truth confidence merely because an item won competition."
+    },
+    {
+      "route": "harness",
+      "priority": "GUARD",
+      "task": "Receipt inspection only. Do not modify Frank's Harness and do not promote BASE."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The Gen188 research impulse was ingested by the supervisor, but no requested factorial, PTY-50, wall-clock or atomic receipt has executed.",
+    "The Gen190 competition mechanism has no independent held-out or cross-model causal credit.",
+    "The test summary remains non-atomic and internally inconsistent at 594/1 versus 600/1.",
+    "The persistent ClaudeCodeInference adapter red remains open.",
+    "The hierarchy remains without established causal retrieval benefit; no new hierarchy credit is granted.",
+    "Target main and PR810 head are unchanged; no new target runtime evidence was found.",
+    "No training, Harness mutation, release promotion or canonical PASS occurred."
+  ],
+  "admission_rule": "Do not promote GWT competition from eight private probes or same-family exported tests. Require exact-source held-out answer-level receipts, explicit false-rejection accounting, scoped novelty controls and atomic metrology."
+}

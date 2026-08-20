@@ -57,6 +57,90 @@ def _hyperposition_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
         return []
 
 
+# ── Weltmodell-Fusion (2026-08-20) ────────────────────────────────────────
+# Deckel: der Vorstufe-Kontext soll unter ~10k Zeichen bleiben (siehe unten).
+_WM_MAX_ARTIKEL = 3      # nur die besten Korpustreffer
+_WM_MAX_ACHSEN = 3       # je Artikel
+_WM_MAX_WERTE = 4        # je Achse
+# Achsen, die KEINE Lesart des Inhalts sind -- siehe Modul-Historie:
+# `identitaet` traegt Artikelkennungen aus der Dublettenerkennung.
+_WM_ACHSEN_AUS = ("identitaet",)
+
+
+def _weltmodell_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
+    """Mehrdeutigkeiten aus wm_lesart zu den Korpustreffern dieses Zuges.
+
+    Liefert Eintraege in der Form, die der `hyperposition`-Schluessel schon
+    beschreibt: eine Relation mit einem ARRAY gleichzeitig gueltiger Lesarten,
+    nie ein einzelner gesetzter Wert. Nur echte Mehrdeutigkeit (>= 2
+    verschiedene Werte nach Entdopplung) wird gemeldet.
+    """
+    treffer = [t for t in (world.get("corpus") or []) if isinstance(t, dict)]
+    if not treffer:
+        return []
+    import sys as _sys
+    for _pfad in ("/opt/unifieddb", "/opt/clay-werkzeug", "/opt/clayverse/werkzeug"):
+        if _pfad not in _sys.path:
+            _sys.path.append(_pfad)
+    try:
+        import weltmodell as _wm
+    except Exception:
+        return []   # Werkzeug nicht eingehaengt -- kein Grund, den Zug zu kippen
+
+    raus: list[dict[str, Any]] = []
+    verbindung = None
+    try:
+        verbindung = _wm.verbinden(schreibend=False)
+        for t in treffer[:_WM_MAX_ARTIKEL]:
+            artikel_id = t.get("artikel_id")
+            if not artikel_id:
+                continue
+            try:
+                gelesen = _wm.lesen(verbindung, artikel_id, {})
+            except Exception:
+                continue
+            achsen = 0
+            for achse, lage in (gelesen.get("achsen") or {}).items():
+                if achse in _WM_ACHSEN_AUS or achsen >= _WM_MAX_ACHSEN:
+                    continue
+                # gewaehlt UND kandidaten: eine vom Kontext gewaehlte Lesart
+                # bleibt eine Lesart neben den anderen (GESETZ 1 des Moduls).
+                roh = list(lage.get("kandidaten") or [])
+                if isinstance(lage.get("gewaehlt"), dict):
+                    roh.insert(0, lage["gewaehlt"])
+                gesehen, facetten = set(), []
+                for k in roh:
+                    if not isinstance(k, dict):
+                        continue
+                    wert = k.get("wert")
+                    if wert is None or wert in gesehen:
+                        continue   # Entdopplung nach WERT -- siehe Modul-Historie
+                    gesehen.add(wert)
+                    facetten.append({"value": wert, "herkunft": k.get("quelle") or "wm_lesart"})
+                    if len(facetten) >= _WM_MAX_WERTE:
+                        break
+                if len(facetten) < 2:
+                    continue   # eine Lesart ist keine Mehrdeutigkeit
+                raus.append({
+                    "relation": f"{achse} von {artikel_id}",
+                    "quelle": "wm_lesart",
+                    "status": lage.get("status"),
+                    "facets": facetten,
+                    "truth_promoted": False,
+                    "effect_authority": False,
+                })
+                achsen += 1
+    except Exception:
+        return raus
+    finally:
+        try:
+            if verbindung is not None:
+                verbindung.close()
+        except Exception:
+            pass
+    return raus
+
+
 # Zeichen-/Mengendeckel NUR fuer den Vorstufe-Pfad (F1 Schritt B). Gemessen
 # 18.08.: world liegt bei ~27k Zeichen (own_recent 12,8k, durable_memory 7,7k,
 # canonical_identity 5,5k, anwesender_mensch 1,1k, Rest winzig) und
@@ -375,7 +459,9 @@ def run_chat_turn(
         # F1 Schritt A: Hyperposition-Weltmodell -- MUSS auf dem VOLLEN world
         # laufen, bevor Schritt B durable_memory kuerzt (siehe _vorstufen_world),
         # sonst verliert das Weltmodell Belege.
-        hyperposition_readout = _hyperposition_safe(world)
+        # Zwei Quellen, EIN Kanal: die Projektion ueber durable_memory (bislang
+        # live immer leer) und das gebaute wm_-Weltmodell zu den Korpustreffern.
+        hyperposition_readout = _hyperposition_safe(world) + _weltmodell_safe(world)
         # F1 Schritt B: schlanke world-Kopie NUR fuer die Vorstufe -- world
         # selbst bleibt unveraendert (record_via_turnlifecycle=True liest
         # spaeter u.U. noch daraus, und andere Verbraucher der geteilten

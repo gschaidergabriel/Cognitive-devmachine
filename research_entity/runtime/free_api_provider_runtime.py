@@ -307,13 +307,15 @@ def _validate_text_chat_request(messages, model) -> None:
         raise ValueError("model_must_be_unicode_scalar_string")
     if model != model.strip():
         raise ValueError("model_must_match_served_identifier_exactly")
-    if not isinstance(messages, list):
+    if type(messages) is not list:
         raise ValueError("messages_must_be_list")
     if not messages:
         raise ValueError("messages_must_be_nonempty")
     for message in messages:
-        if not isinstance(message, dict):
+        if type(message) is not dict:
             raise ValueError("message_must_be_object")
+        if any(type(field) is not str for field in message):
+            raise ValueError("message_fields_must_be_strings")
         if set(message) != TEXT_CHAT_MESSAGE_FIELDS:
             raise ValueError("message_fields_not_supported_by_text_adapter")
         if type(message.get("role")) is not str or not message["role"].strip():
@@ -347,15 +349,18 @@ def _validate_text_chat_request(messages, model) -> None:
 
 def _snapshot_text_chat_request(messages, model) -> list[dict[str, str]]:
     """Copy mutable caller input once, then validate and use only that copy."""
-    if not isinstance(messages, list):
+    if type(messages) is not list:
         _validate_text_chat_request(messages, model)
+    snapshot_failed = False
     try:
         snapshot = [
-            dict(message) if isinstance(message, dict) else message
+            dict(message) if type(message) is dict else message
             for message in tuple(messages)
         ]
-    except (RuntimeError, TypeError, ValueError) as exc:
-        raise ValueError("messages_could_not_be_snapshotted") from exc
+    except Exception:
+        snapshot_failed = True
+    if snapshot_failed:
+        raise ValueError("messages_could_not_be_snapshotted")
     _validate_text_chat_request(snapshot, model)
     return snapshot
 

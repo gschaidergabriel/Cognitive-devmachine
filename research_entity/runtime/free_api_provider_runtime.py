@@ -553,6 +553,7 @@ def _execute_chat_locked(
     response_started = False
     response_headers = None
     response_classified = False
+    response_too_large = False
     retryable = False
     finished = None
 
@@ -571,7 +572,7 @@ def _execute_chat_locked(
                     if not isinstance(response_body, bytes):
                         raise TypeError("response_body_must_be_bytes")
                     if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
-                        raise ProviderResponseTooLarge
+                        response_too_large = True
                 else:
                     finished = now()
                     content = None
@@ -600,8 +601,10 @@ def _execute_chat_locked(
                         retryable = False
                     response_classified = True
         except Exception:
-            if not response_classified:
+            if not response_classified and not response_too_large:
                 raise
+        if response_too_large:
+            raise ProviderResponseTooLarge
         if status == 200:
             payload = json.loads(
                 response_body.decode("utf-8"),

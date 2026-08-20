@@ -79,6 +79,17 @@
     "executable_evidence": "test_duration_and_http_date_retry_after_use_distinct_clocks",
     "counterhypothesis": "One wall clock is sufficient for both elapsed duration and absolute HTTP-date arithmetic; falsified because system-clock correction can make receipt duration move backwards or collapse to zero, while a monotonic clock has no UTC epoch for interpreting HTTP-date."
   },
+  "passive_monotonic_clock_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "An injected monotonic clock must return an exact built-in finite float or integer before authenticated execution. Invalid start values fail before network access; invalid end values use zero duration and cannot suppress an execution receipt or run overloaded formatting and arithmetic methods.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.monotonic",
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#object.__format__"
+    ],
+    "executable_evidence": "test_active_monotonic_values_cannot_suppress_execution_receipt",
+    "counterhypothesis": "Any float-like value returned by an injected monotonic clock is passive duration metadata; falsified locally because a float subclass reached authenticated execution and then ran overridden __format__ during attempt-ID construction, preventing the mandatory receipt."
+  },
   "text_message_roles": {
     "allowed": ["system", "user", "assistant"],
     "checked_at": "2026-08-11",
@@ -571,6 +582,7 @@
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Receipt duration is measured on a monotonic clock, while absolute Retry-After HTTP-date cooldown uses the wall-clock UTC instant at response receipt.",
+    "Injected monotonic-clock readings are exact built-in finite numbers before use; an invalid start fails before network and an invalid post-response reading falls back to zero duration without suppressing the receipt.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
     "Failure to access Retry-After metadata uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
     "Retry-After values returned by transport adapters are exact built-in strings before parsing; polymorphic values use the 60-second fallback without executing methods or reclassifying an already received HTTP 429.",

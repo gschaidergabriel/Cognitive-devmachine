@@ -1,12 +1,71 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T16:41:16Z. 978 Commits aus vier Repos, davon 331 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T17:11:16Z. 980 Commits aus vier Repos, davon 334 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 16:58:22 +0000 — entityos: 2 Aenderungen
+
+`16a996260e3d` · entityos · 16:58 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_kuerze.py
+
+Zeit: 2026-08-20T16:58:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 16:56:22 +0000 — entityos: 2 Aenderungen
+
+`8ad2197766c0` · entityos · 16:56 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_erwartung_budget.py
+
+Zeit: 2026-08-20T16:56:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 16:43:33 +0000 — entityos: 4 Aenderungen
+
+`af7c6da83c07` · entityos · 16:43 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_leermeldung.py
+  the artefact/tests/test_warmpool.py
+
+Zeit: 2026-08-20T16:43:33+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 16:30:03 +0000 — entityos: 2 Aenderungen
 
@@ -4542,92 +4601,5 @@ Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 
 ```
 Reconcile exact prior goal-step effect receipts before retry dispatch and add an EffectGate fail-closed fallback so lost controller handoff cannot duplicate a real effect across episodes. No second replay ledger or state authority. Source-reviewed only; workflow failed pre-step and grants no runtime/OCI/microVM credit.
-```
-
-### Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar
-
-`b3b2a0e36b0a` · entityos · 03:45 UTC · EntityOS
-
-```
-1) TOTALSPERRE. Ich liess die volle Identitaet (5416 Zeichen) ungetrimmt in die
-   Haken-Huelle mitfahren. Die Huelle erlaubt 9000. 60 Prozent fuer einen Text, der
-   bei JEDEM Zug identisch ist - das Ventil machte korrekt zu und kein Prompt kam
-   mehr durch, fuer beide Menschen.
-   Die Huelle hochzudrehen waere die falsche Reparatur gewesen: sie hat genau das
-   getan, wofuer sie da ist. Falsch war, WAS ich hineinlegte.
-   Jetzt faehrt nur ein Anker mit (Name, Fassung, Fingerabdruck): 206 statt 5550
-   Zeichen. Die Identitaet als ANWEISUNG kommt ohnehin ueber
-   --append-system-prompt-file, den diese Huelle gar nicht betrifft. Der Anker
-   erhaelt trotzdem, wozu die Mitnahme da war: die Entitaet kann pruefen, welche
-   Identitaet kanonisch ist und ob sie sich unter ihr veraendert hat.
-
-2) ATOMIZITAET. begin_admission() liefert INNERHALB von db.tx() - wer im with-Block
-   scheitert, dessen Aufnahme rollt zurueck. Die Atomizitaet war gebaut, die
-   Aufrufstelle warf sie weg: sie verliess den Block sofort mit pass (COMMIT) und
-   kompensierte spaeter mit abort().
-   Das war zweifach falsch. Erstens konnte abort() die geschriebenen Zeilen nicht
-   mehr entfernen - ein gescheiterter Zug hinterliess Geisterzeilen in turns,
-   workspace_episodes und durable_memory. Zweitens raeumt abort() den aktiven Zug
-   ab, den es GERADE findet: beim zweiten Prompt ist das der vorherige,
-   erfolgreiche. Die Kompensation griff in den falschen Zug.
-   Die Pruefungen stehen jetzt im with-Block. Kein neuer Mechanismus - die ohnehin
-   offene Transaktion tut ihre Arbeit.
-
-Suite 473/19 -> 479/13. Die 15 Atomizitaetstests sind alle gruen.
-```
-
-### Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden
-
-`e413f4f8adc3` · entityos · 03:39 UTC · EntityOS
-
-```
-Von den sechs Eigenschaften, die Autonomie ausmachen, waren fuenf laengst als Code
-da: persistente Ziele, Zwischenschritte, Rueckmeldung, Neuplanung, Kontinuitaet.
-Nur Initiative hatte keinen Draht - nichts weckte je next_runnable().
-
-Warum es niemandem auffiel: es wurde nie VERSUCHT, also stand auch nichts im
-Bootbericht. Zwei unabhaengige Sperren lagen uebereinander.
-
-1) Die Beglaubigung verlangt web_terminals IS pulse_terminals - derselbe
-   Terminal-Verwalter fuer Browser und Puls, damit Autonomie kein Terminal
-   bespielen kann, von dem die Menschenseite nichts weiss. Unmoeglich zu
-   erfuellen: create_terminal_app legte sich intern einen ZWEITEN Verwalter an.
-   Die Wache war richtig, die Verdrahtung darunter falsch. Jetzt ein Verwalter.
-
-2) Selbst dann waere die Installation gestorben: autonomy_app.py ruft
-   app.add_event_handler("startup", ...) - in FastAPI 0.139 / Starlette 1.6
-   entfernt. Auf router.on_startup/on_shutdown umgestellt: dieselben Haken, die
-   der lifespan-Kontext fahrt, kein zweiter Server, keine zweite Schleife.
-
-Gemessen nach dem Neubau:
-  autonomy_pulse: installed true, interval 30 s,
-  shared_arbiter true, shared_activity_registry true, shared_state_root true
-
-Der Puls ist untaetig, solange kein Ziel existiert, und ein dauerhaftes Ziel
-entsteht nur aus einem kanonischen Menschenzug. Einschalten allein bewirkt also
-nichts - es macht nur moeglich, dass ueberhaupt etwas von selbst weitergeht.
-Abschaltbar ueber CLAYVERSE_AUTONOMY_PULSE=0. Scheitert die Beglaubigung, wird das
-laut im Bootbericht vermerkt statt still verschluckt.
-
-Ausserdem: toter --mistral-once-Zweig entfernt. Er importierte engine/adapters,
-die .dockerignore bewusst aus dem Image wirft - im ausgelieferten Image waere er
-mit ImportError gestorben. Ein Modus, der nur deshalb nicht abstuerzt, weil ihn
-niemand aufruft, ist kein Modus.
-
-Suite 468/24 -> 473/19.
-```
-
-### Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden
-
-`6d44f9e389cb` · entityos · 03:37 UTC · BACK agent
-
-```
-close_attach(self,pid,fd) braucht self._attach_lock/self._attach_users
-(bestaetigt durch den Blick in terminal_sessions.py und durch die
-Schwester-Assertion im selben File, die terminals.close_attach(...) auf
-einer Instanz erwartet). Der Test rief TerminalSessionManager.close_attach(pid,fd)
-ungebunden auf -- daher der TypeError ueber das fehlende Argument, bevor er
-ueberhaupt bei self ankam. Jetzt eine echte Instanz gebaut (tmp_path) und
-close_attach darauf aufgerufen.
 ```
 

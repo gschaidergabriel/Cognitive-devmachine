@@ -56,6 +56,14 @@ ERSTE_ZEILE_S = float(os.environ.get("CLAYVERSE_WARM_ERSTE_ZEILE", "25"))
 AUSFAELLE_BIS_SPERRE = 3
 SPERRE_S = 600.0
 WARMUP_S = 5.5           # so lange braucht der Boot im Leerlauf (gemessen ~5s)
+# ⚠️ WARUM DAS EINE SCHAETZUNG BLEIBEN MUSS: es liegt nahe, statt der Uhr auf
+# ein echtes Bereit-Signal des Prozesses zu warten (`{"type":"system",
+# "subtype":"init"}`). Nachgemessen 2026-08-20: ein `claude -p` im
+# stream-json-Modus sendet VOR der ersten Eingabe **gar nichts**. Die erste
+# Zeile kam 0,35 s NACH dem Absenden des Auftrags. Es gibt also kein Signal,
+# auf das man warten koennte -- wer darauf wartet, wartet ewig.
+# Abgefedert wird die Schaetzung stattdessen von ERSTE_ZEILE_S: war sie zu
+# optimistisch, kostet das eine Frist und einen Kaltrueckfall, keinen Haenger.
 MAX_ALTER_S = 900        # ein warmer Prozess, der 15 min nie drankam, wird ersetzt
 _KANONISCH = (("gabriel", "session:gabriel"), ("andreas", "session:andreas"))
 
@@ -182,16 +190,20 @@ class WarmPool:
         with self._lock:
             pool = self._pools[key]
             warm = None
-            while pool:
-                kandidat = pool.popleft()
-                if kandidat.bereit():
-                    warm = kandidat
-                    break
-                elif kandidat.lebt() and not kandidat.zu_alt():
-                    pool.append(kandidat)  # noch nicht warm -- hinten anstellen
-                    break                   # nichts Bereites gefunden
+            # ⚠️ Vorher brach diese Schleife ab, sobald der VORDERSTE Prozess
+            # noch nicht warm war -- auch wenn direkt dahinter ein fertiger lag.
+            # Nach jedem Nachfuellen steht aber genau so einer vorn. Ergebnis:
+            # unnoetige Kaltrueckfaelle, und zwar ausgerechnet dann, wenn der
+            # Pool gerade gefuellt wurde. Jetzt wird der ganze Pool angesehen.
+            kandidaten = list(pool)
+            pool.clear()
+            for k in kandidaten:
+                if warm is None and k.bereit():
+                    warm = k
+                elif k.lebt() and not k.zu_alt():
+                    pool.append(k)          # noch nicht warm -- bleibt liegen
                 else:
-                    try: kandidat.proc.terminate()
+                    try: k.proc.terminate()
                     except Exception: pass
             if warm is None:
                 return None

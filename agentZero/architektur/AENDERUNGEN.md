@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T16:41:16Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T17:11:16Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -124,7 +124,7 @@ Automatisch erzeugt 2026-08-20T16:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (31)
+## pruefung (30)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -148,7 +148,6 @@ Automatisch erzeugt 2026-08-20T16:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:36 | entityos | `619430da2f29` | test(clayverse): fence autonomy effect intent before dispatch |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
-| 2026-08-18T03:33 | entityos | `5f93db80d59f` | test(clayverse): guard explicit canonical goal adoption |
 | 2026-08-18T03:33 | entityos | `b55d57bd410e` | Test: Vertrag sagt advisory/release review, nicht nur advisory review |
 | 2026-08-18T03:29 | entityos | `eae74c278bbf` | Test: entityos.exec nimmt seit 18041d730 keinen Caller-Lease mehr an |
 | 2026-08-18T03:27 | entityos | `98c89e9c2de6` | Test: Prompt hatte keinen semantischen Bezug zu den erwarteten Erinnerungen |
@@ -160,10 +159,13 @@ Automatisch erzeugt 2026-08-20T16:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (274)
+## bau (275)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T16:58 | entityos | `16a996260e3d` | EOS-Chronik 2026-08-20 16:58:22 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T16:56 | entityos | `8ad2197766c0` | EOS-Chronik 2026-08-20 16:56:22 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T16:43 | entityos | `af7c6da83c07` | EOS-Chronik 2026-08-20 16:43:33 +0000 — entityos: 4 Aenderungen |
 | 2026-08-20T16:30 | entityos | `0f6526f6944c` | EOS-Chronik 2026-08-20 16:30:03 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T16:18 | entityos | `56a9fda0e581` | EOS-Chronik 2026-08-20 16:18:47 +0000 — entityos: 15 Aenderungen |
 | 2026-08-20T14:32 | entityos | `cd5593ee8770` | EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen |
@@ -221,7 +223,4 @@ Automatisch erzeugt 2026-08-20T16:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T01:28 | entityos | `f2a5b7c7bf03` | EOS-Chronik 2026-08-20 01:28:01 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T00:47 | entityos | `b060a2b82751` | EOS-Chronik 2026-08-20 00:47:21 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:42 | entityos | `58b1c318135d` | EOS-Chronik 2026-08-20 00:42:49 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T00:37 | entityos | `df75f511466f` | EOS-Chronik 2026-08-20 00:37:50 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T00:32 | entityos | `485950fa1aeb` | EOS-Chronik 2026-08-20 00:32:35 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T00:25 | entityos | `06329d636a51` | EOS-Chronik 2026-08-20 00:25:38 +0000 — entityos: 1 Aenderungen |
 

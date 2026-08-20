@@ -521,6 +521,66 @@ def _mit_arbeitsraum(caveman: str, world: dict[str, Any], broadcast_ids=None,
     return f"{caveman}\n\n{zeile}" if zeile else caveman
 
 
+_LEERZEILE = (
+    "ARBEITSRAUM LEER. The competition ran and admitted NOTHING: no place in the "
+    "entity's own stores bears on this question. That is a measured result, not "
+    "a gap in the attempt -- the retrieval ran, scored every candidate against "
+    "this question, and none cleared the threshold. So do NOT search the stores "
+    "again; you would be repeating work that already came back empty. Answer "
+    "from your own general knowledge if you have it, say plainly that the entity "
+    "does not hold this if you do not, and reach outside only if the human "
+    "actually asked for a fact from out there.")
+
+
+def _mit_leermeldung(caveman: str, angeboten: int, gesendet: int) -> str:
+    """Sagt Zero, wenn die Zuendung ausgeblieben ist -- und warum das etwas heisst.
+
+    ⭐ GEMESSEN 2026-08-20: eine fachfremde Frage ("Einwohnerzahl von Reykjavik")
+    kostete **40,8 Sekunden Zero-Zeit**. Der Wettbewerb hatte korrekt NICHTS
+    zugelassen -- diese Information blieb aber im Apparat stecken. Zero sah
+    einen Auftrag ohne Arbeitsraum, konnte nicht wissen, ob gar nicht gesucht
+    wurde oder ergebnislos gesucht wurde, und suchte selbst nach.
+
+    Damit war die Schwelle nur nach innen wirksam. Eine Nicht-Zuendung ist aber
+    ein Befund: "in meinem Bestand steht dazu nichts." Wer ihn weitergibt,
+    spart dem Empfaenger den Weg, den der Apparat schon gegangen ist.
+    """
+    if angeboten or gesendet:
+        return caveman
+    return f"{caveman}\n\n{_LEERZEILE}"
+
+
+_KUERZE = (
+    "ANSWER FORM (the human's own standing instruction, held in this entity's "
+    "knowledge as `wissen-mensch-arbeitsweise-gabriel`): short and to the point. "
+    "Lead with the answer, not with a restatement of the question and not with "
+    "an account of how you looked. Three sentences is usually plenty; go longer "
+    "only where the human asked for detail or where leaving something out would "
+    "mislead. Brevity is NOT the same as incompleteness: when there is more, say "
+    "in one clause that there is more and where it sits -- that clause is part "
+    "of the rule, not an exception to it. Offer options instead of open "
+    "questions. Keep the source id.")
+
+
+def _mit_kuerze(caveman: str) -> str:
+    """Haengt die Antwortform an -- abschaltbar ueber CLAYVERSE_KUERZE=0.
+
+    ⭐ WARUM DAS KEIN TEMPO-GEGEN-QUALITAET-TAUSCH IST: die Anweisung steht
+    woertlich im Bestand der Anlage (`wissen-mensch-arbeitsweise-gabriel`) und
+    lautet "kurz und praegnant, Frage statt Lage, Optionen anbieten, immer
+    sagen dass es mehr gibt und wo". Zero antwortete gemessen mit 1824 Zeichen
+    auf eine Selbstfrage -- das ist zugleich langsam UND gegen die Hausregel.
+    Kuerze ist hier also die Zielvorgabe, und die gesparte Zeit faellt nebenbei ab.
+
+    ⚠️ Der zweite Halbsatz der Regel ist der wichtigere: "immer sagen, dass es
+    mehr gibt und wo". Ohne ihn wird aus kurz nicht sparsam, sondern lueckenhaft.
+    """
+    import os as _os
+    if _os.environ.get("CLAYVERSE_KUERZE", "1") != "1":
+        return caveman
+    return f"{caveman}\n\n{_KUERZE}"
+
+
 def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
     import os as _os
@@ -754,6 +814,57 @@ def _log_uebersetzungsausfall(store, turn_id, session_id, fehler) -> None:
 
 
 
+# ⭐⭐ DER TEUERSTE EINZELPOSTEN DES ZUGES, und er stand an der falschen Stelle.
+# Gemessen 2026-08-20: ein Zug brauchte 26,2 s ausserhalb der drei
+# Modellaufrufe. Zerlegt man den Rest, bleibt genau ein Kandidat uebrig:
+# `_moeglichkeitsraum_safe` ruft `paket()` -- und ist die EINZIGE Stelle der
+# Pipeline, die das ohne Zeitdeckel tut. `retrieval.py` haelt zum Zwilling
+# desselben Aufrufs fest: "gemessene 40,3 s in einem einzelnen paket()-Aufruf".
+# Normalfall 215-587 ms, aber der Schwanz frisst den ganzen Zug.
+#
+# Zwei Dinge in einem Griff:
+#   * DECKEL -- laenger als _ERWARTUNG_BUDGET_S wird nicht gewartet.
+#   * NEBENHER -- das Erwartungsfeld haengt nur an der Frage, nicht an der
+#     Weltmontage. Es kann also laufen, waehrend Abruf und Profil laufen.
+#     Das ist reines Weglassen von Wartezeit, ohne Wirkung auf die Antwort.
+_ERWARTUNG_BUDGET_S = 2.5
+_NEBENHER = None
+
+
+def _erwartung_starten(text: str):
+    """Startet das Erwartungsfeld im Hintergrund. Faellt es aus, ist es keins."""
+    global _NEBENHER
+    try:
+        from concurrent.futures import ThreadPoolExecutor
+        if _NEBENHER is None:
+            # Zwei Faeden reichen: mehr als ein Zug gleichzeitig laeuft in
+            # diesem Prozess ohnehin nicht, der zweite ist Reserve.
+            _NEBENHER = ThreadPoolExecutor(max_workers=2,
+                                           thread_name_prefix="erwartung")
+        return _NEBENHER.submit(_moeglichkeitsraum_safe, text)
+    except Exception:
+        return None
+
+
+def _erwartung_holen(auftrag, text: str) -> dict | None:
+    """Holt das Ergebnis -- oder gibt nach dem Deckel auf und sagt das auch.
+
+    Ein ausgelaufener Faden wird NICHT abgebrochen (das kann man einem
+    laufenden `paket()` nicht antun); er laeuft ins Leere und wird verworfen.
+    Der Zug wartet nicht auf ihn.
+    """
+    if auftrag is None:
+        return _moeglichkeitsraum_safe(text)
+    try:
+        return auftrag.result(timeout=_ERWARTUNG_BUDGET_S)
+    except Exception as e:
+        import sys as _sys
+        print(f"pipeline: Erwartungsfeld ueber {_ERWARTUNG_BUDGET_S}s "
+              f"({type(e).__name__}) -- der Zug laeuft ohne weiter", file=_sys.stderr)
+        return {"status": "NICHT_GEBAUT",
+                "grund": f"Zeitdeckel {_ERWARTUNG_BUDGET_S}s ueberschritten"}
+
+
 def _moeglichkeitsraum_safe(text: str) -> dict | None:
     """Das Erwartungsfeld zur Frage. Ausfallsicher, aber nie stillschweigend.
 
@@ -901,6 +1012,8 @@ def run_chat_turn(
     if not isinstance(message, str) or not message.strip():
         raise PipelineError("empty message")
 
+    # ⭐ So frueh wie moeglich anwerfen -- es haengt nur an der Frage.
+    _erwartung_auftrag = _erwartung_starten(message)
     own_store = store or PrestageStore()
     t_start = time.perf_counter()
     # Wandzeit (time.time(), nicht perf_counter) zusaetzlich zu t_start:
@@ -934,7 +1047,7 @@ def run_chat_turn(
         # Nicht zwischengespeichert: es wird autonom verdichtet, ein Cache
         # wuerde die Vorstufe mit einem veralteten Menschenbild fuettern.
         nutzerprofil = _profil_safe(db, user_id)
-        erwartungsfeld = _moeglichkeitsraum_safe(message)
+        erwartungsfeld = _erwartung_holen(_erwartung_auftrag, message)
 
         # F1 Schritt A: Hyperposition-Weltmodell -- MUSS auf dem VOLLEN world
         # laufen, bevor Schritt B durable_memory kuerzt (siehe _vorstufen_world),
@@ -1005,6 +1118,9 @@ def run_chat_turn(
             print("prestage: broadcast_ids war leer, obwohl der Wettbewerb "
                   f"{_ids} zugelassen hat -- mechanisch nachgezogen", file=sys.stderr)
         envelope["broadcast_ids"] = _ids
+        _angeboten = len(wettbewerb.zugelassene_ids(vorstufe_world.get("corpus") or []))
+        envelope["caveman_prompt"] = _mit_leermeldung(
+            envelope.get("caveman_prompt") or "", _angeboten, len(_ids))
         _geraten = _erfundene_pfade(envelope.get("caveman_prompt") or "", vorstufe_world)
         if _geraten:
             print(f"prestage: erfundene Pfade im Auftrag -- {_geraten}", file=sys.stderr)
@@ -1019,7 +1135,8 @@ def run_chat_turn(
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(
             _mit_arbeitsraum(
-                _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
+                _mit_kuerze(
+                    _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik"))),
                 vorstufe_world, envelope.get("broadcast_ids"),
                 volltext_world=world),
             user_id=user_id, session_id=session_id,
@@ -1053,7 +1170,8 @@ def run_chat_turn(
             t0 = time.perf_counter()
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(
-                    _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
+                    _mit_kuerze(
+                        _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik"))),
                     vorstufe_world, envelope2.get("broadcast_ids"),
                     volltext_world=world),
                 user_id=user_id, session_id=session_id,

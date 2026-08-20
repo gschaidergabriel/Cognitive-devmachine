@@ -280,6 +280,42 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(opener_calls, ["open"])
         self.assertEqual(method_calls, [])
 
+    def test_extreme_monotonic_values_cannot_suppress_or_bloat_receipt(self):
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return json.dumps({
+                    "choices": [{
+                        "finish_reason": "stop",
+                        "message": {
+                            "role": "assistant", "content": "mock-ok"
+                        },
+                    }]
+                }).encode()
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+
+        for readings in (
+            (-1e308, 1e308),
+            (-10**1000, 1.0),
+            (0, 10**100),
+        ):
+            with self.subTest(readings=readings):
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=lambda *args, **kwargs: Response(),
+                    now=iter(readings).__next__,
+                )
+                self.assertEqual(result["receipt"]["outcome"], "success")
+                self.assertEqual(result["receipt"]["duration_ms"], 86_400_000)
+
     def test_credential_cannot_change_between_authorization_and_request(self):
         class Response:
             status = 200

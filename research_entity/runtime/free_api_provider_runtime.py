@@ -274,6 +274,10 @@ def _transport_metadata_or_none(response, attribute):
 
 def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     """Parse RFC Retry-After delay-seconds or HTTP-date, else use default."""
+    if type(received_at) not in (int, float):
+        return default
+    if type(received_at) is float and not math.isfinite(received_at):
+        return default
     try:
         value = headers.get("Retry-After") if headers is not None else None
     # Header containers cross the transport-adapter boundary.  Their lookup
@@ -646,7 +650,8 @@ def _execute_chat_locked(
                         elif status == 429:
                             outcome = "rate_limited"
                             cooldown_seconds = _retry_after_seconds(
-                                response_headers, wall_time()
+                                response_headers,
+                                _passive_clock_value_or_none(wall_time),
                             )
                             retryable = False
                         else:
@@ -726,7 +731,8 @@ def _execute_chat_locked(
             lifecycle.append("EXECUTED")
             outcome = "rate_limited"
             cooldown_seconds = _retry_after_seconds(
-                _transport_metadata_or_none(exc, "headers"), wall_time()
+                _transport_metadata_or_none(exc, "headers"),
+                _passive_clock_value_or_none(wall_time),
             )
             retryable = False
         else:

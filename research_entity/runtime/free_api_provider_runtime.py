@@ -467,6 +467,19 @@ def _is_valid_http_status(value: object) -> bool:
     return type(value) is int and 100 <= value <= 599
 
 
+def _passive_clock_value_or_none(clock):
+    """Read an injected clock without retaining active numeric objects."""
+    try:
+        value = clock()
+    except Exception:
+        return None
+    if type(value) is int:
+        return value
+    if type(value) is float and math.isfinite(value):
+        return value
+    return None
+
+
 def _reject_nonfinite_json_constant(value: str) -> None:
     raise ValueError(f"nonstandard_json_constant:{value}")
 
@@ -562,7 +575,9 @@ def _execute_chat_locked(
     if type(attempt_nonce) is not str or not attempt_nonce:
         raise ValueError("attempt_nonce_must_be_nonempty_string")
 
-    started = now()
+    started = _passive_clock_value_or_none(now)
+    if started is None:
+        raise RuntimeError("monotonic_clock_unavailable")
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
     body = json.dumps(
         {"model": model, "messages": request_messages, "stream": False}
@@ -613,7 +628,7 @@ def _execute_chat_locked(
                         if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                             response_too_large = True
                     else:
-                        finished = now()
+                        finished = _passive_clock_value_or_none(now)
                         content = None
                         if status == 202:
                             outcome = "provider_result_pending"
@@ -692,7 +707,7 @@ def _execute_chat_locked(
             retryable = False
     except urllib.error.HTTPError as exc:
         content = None
-        finished = now()
+        finished = _passive_clock_value_or_none(now)
         candidate_status = _transport_metadata_or_none(exc, "code")
         if not _is_valid_http_status(candidate_status):
             status = None
@@ -768,7 +783,11 @@ def _execute_chat_locked(
         retryable = False
 
     if finished is None:
-        finished = now()
+        finished = _passive_clock_value_or_none(now)
+    if finished is None:
+        # Execution evidence is more important than duration telemetry.  A
+        # failed post-response clock read must not suppress the receipt.
+        finished = started
     body_digest = hashlib.sha256(body).hexdigest()
     request_id = _safe_request_id(
         f"{selected}:{endpoint_capability_id}:"

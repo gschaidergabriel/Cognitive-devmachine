@@ -96,6 +96,7 @@ def _snapshot_runtime_environment(
     """Capture only recognized runtime inputs before authorization begins."""
     source = os.environ if environ is None else environ
     snapshot: dict[str, str] = {}
+    snapshot_failed = False
     try:
         for name in sorted(RUNTIME_ENVIRONMENT_KEYS):
             value = source.get(name)
@@ -104,8 +105,13 @@ def _snapshot_runtime_environment(
             if not isinstance(value, str):
                 raise ValueError("runtime_environment_values_must_be_strings")
             snapshot[name] = value
-    except (AttributeError, RuntimeError, TypeError) as exc:
-        raise ValueError("runtime_environment_could_not_be_snapshotted") from exc
+    except Exception:
+        # Environment adapters may include secret material in exception text.
+        # Raise only after leaving the handler so no sensitive exception is
+        # retained as __context__ or __cause__.
+        snapshot_failed = True
+    if snapshot_failed:
+        raise ValueError("runtime_environment_could_not_be_snapshotted")
     return snapshot
 
 

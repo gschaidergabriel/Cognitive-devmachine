@@ -1,0 +1,9 @@
+[Unit]
+Description=EntityOS Vorsatz-Pruefer -- misst offene Hypothesen nach und schreibt ihren Stand fort (LLM-frei, oneshot)
+Documentation=file:///opt/entityos/vorsatz/eos_vorsatz.py
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/entityos/vorsatz/eos_vorsatz.py pruefen
+Nice=10
+IOSchedulingClass=idle

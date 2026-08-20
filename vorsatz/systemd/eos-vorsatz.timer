@@ -1,0 +1,10 @@
+[Unit]
+Description=EntityOS Vorsatz-Pruefer alle 6 Stunden -- der Hypothesen-Generator schreibt 2x/Tag, geprueft wird oefter als geschrieben
+
+[Timer]
+OnBootSec=20min
+OnUnitActiveSec=6h
+Persistent=true
+
+[Install]
+WantedBy=timers.target

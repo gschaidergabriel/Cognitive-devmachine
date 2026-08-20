@@ -605,7 +605,10 @@ def _execute_chat_locked(
                         response_body = response.read(
                             MAX_PROVIDER_RESPONSE_BYTES + 1
                         )
-                        if not isinstance(response_body, bytes):
+                        # HTTP body values are foreign adapter data.  Reject
+                        # bytes subclasses before len/decode can dispatch to
+                        # overridden methods.
+                        if type(response_body) is not bytes:
                             raise TypeError("response_body_must_be_bytes")
                         if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
                             response_too_large = True

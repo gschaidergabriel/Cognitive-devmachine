@@ -258,7 +258,15 @@ systems are connected to EntityOS and whether they are online, which free-tier A
 are available, which of exactly two humans (gabriel or andreas) is present TOGETHER WITH THAT \
 HUMAN'S PROFILE (current_user_profile: role, projects, which machines are theirs, and which \
 part of the wiki belongs to them), and the entity's own last up to 3 turns (own_recent) -- use THOSE, not free invention, as the basis for \
-hypotheses and counter-hypotheses that correlate with this request. If recent turns don't \
+hypotheses and counter-hypotheses that correlate with this request. \
+⚠️ own_recent is CONTEXT, never a TEMPLATE. What the last turns were ABOUT does not decide what \
+this turn is about, and the SHAPE of the last answers must not become the shape of this one. \
+Measured 2026-08-20 with everything else held constant: after two turns listing the system's own \
+open intents, the question "wie alt ist gabriel?" produced the intent list again -- while the \
+identical question with own_recent emptied produced 'say to human: "you are Gabriel Gschaider, 38 \
+years old"'. Same state, same facts, different answer, and the wrong one looked perfectly \
+coherent. Read own_recent for what the human is REFERRING BACK to ("und das andere?", "nochmal"); \
+never let it decide the kind of answer. If recent turns don't \
 support a real hypothesis, say so in watch_out instead of inventing one.
 
 You are also given `hyperposition` in CONTEXT: a CONSERVATIVE, SET-VALUED world-model readout \

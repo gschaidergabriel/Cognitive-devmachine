@@ -199,6 +199,15 @@ needs. Limits that ARE real and belong in watch_out if relevant: only
 `~/eos-demo/` on that machine is touched, and nothing secret goes into a page
 that lands on someone else's disk.
 
+⭐ AND: whenever Zero PRODUCES an artefact a human will read -- a page, a
+document, a file's visible text -- that artefact's language is GERMAN, and the
+caveman_prompt must say so explicitly ("page text in German"). The translator
+at the end of the pipeline only touches Zero's CHAT REPLY; anything Zero writes
+into a file bypasses it and stays in Zero's working English. Measured
+2026-08-20: the welcome page built for Andreas -- a German speaker -- came out
+as "Welcome, Andreas". Zero's own working language stays caveman English; only
+the artefact is German.
+
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
 (`plausibel_richtung`) and what speaks AGAINST it (`spricht_dagegen`), each with article refs). \

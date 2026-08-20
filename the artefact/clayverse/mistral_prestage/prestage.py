@@ -405,6 +405,54 @@ def build_context(
     )
 
 
+_STOPP = frozenset("""
+    der die das ein eine einer eines und oder aber auch noch nur schon
+    ist sind war waren wird werden hat hatte haben habe kann koennen
+    ich du er sie es wir ihr mir mich dir dich sich uns euch
+    was wer wie wo wann warum wieso weshalb welche welcher welches
+    von vom zu zum zur mit fuer auf an in im am bei aus nach ueber unter
+    the a an and or but is are was were of to for on in at by with
+    what who how where when why which
+""".split())
+
+
+def _gedaechtnis_mechanisch(world, raw_prompt: str, deckel: int = 4) -> list[dict[str, Any]]:
+    """durable_memory-Eintraege, die ein Inhaltswort der Frage enthalten.
+
+    Bewusst stumpf: Wortabgleich, keine Bedeutung, kein Modellaufruf. Der Zweck
+    ist nicht, die richtige Erinnerung auszuwaehlen -- der Zweck ist, dass Zero
+    ueberhaupt eine zu sehen bekommt, wenn die Vorstufe das Feld verschluckt
+    hat. Herkunft wird immer mitgegeben, damit Zero die Angabe zuschreiben kann
+    statt sie als eigene Behauptung zu fuehren.
+    """
+    try:
+        eintraege = list((world or {}).get("durable_memory") or [])
+    except Exception:
+        return []
+    woerter = {w for w in "".join(
+        c if c.isalnum() else " " for c in (raw_prompt or "").lower()).split()
+        if len(w) > 2 and w not in _STOPP}
+    if not woerter or not eintraege:
+        return []
+    raus = []
+    for m in eintraege:
+        if not isinstance(m, dict):
+            continue
+        wert = str(m.get("value") or "")
+        subjekt = str(m.get("subject") or "")
+        text = f"{subjekt} {wert}".lower()
+        if any(w in text for w in woerter):
+            raus.append({
+                "wert": wert[:300],
+                "subjekt": subjekt,
+                "herkunft": f"durable_memory ({m.get('kind') or 'eintrag'}), "
+                            "mechanisch nachgereicht -- die Vorstufe hatte das Feld ausgelassen",
+            })
+        if len(raus) >= deckel:
+            break
+    return raus
+
+
 def run_prestage(
     *,
     raw_prompt: str,
@@ -492,6 +540,10 @@ def run_prestage(
             "caveman_prompt": "", "epistemik": {"bekannt": [], "unbekannt": []}}
     for k in _fehlend:
         payload[k] = _DEF.get(k, "")
+    if "memory_artefacts" in _fehlend:
+        # Siehe Modul-Historie: weggelassen heisst "nicht nachgesehen", nicht
+        # "nichts gefunden". Mechanisch nachreichen statt leer behaupten.
+        payload["memory_artefacts"] = _gedaechtnis_mechanisch(world, raw_prompt)
     if not str(payload.get("caveman_prompt") or "").strip():
         payload["caveman_prompt"] = (
             "answer the human's request honestly and directly; if you do not have "

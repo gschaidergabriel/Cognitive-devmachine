@@ -263,6 +263,7 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "model": "mock",
             "messages": [{"role": "user", "content": ""}],
             "stream": False,
+            "max_tokens": MOD.MAX_PROVIDER_OUTPUT_TOKENS,
         }).encode())
         captured_sizes = []
 
@@ -512,6 +513,34 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             captured["body"]["messages"],
             [{"role": "user", "content": "validated-text"}],
         )
+
+    def test_provider_request_has_explicit_output_token_budget(self):
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+
+        captured = {}
+
+        def opener(request, timeout):
+            captured.update(json.loads(request.data))
+            return Response()
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env, opener=opener,
+            now=iter((22.0, 22.01)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(captured["max_tokens"], 4096)
+        self.assertEqual(captured["max_tokens"], MOD.MAX_PROVIDER_OUTPUT_TOKENS)
 
     def test_model_name_with_surrounding_whitespace_is_blocked_before_network(self):
         called = False

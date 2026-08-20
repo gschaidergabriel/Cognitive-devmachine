@@ -258,7 +258,18 @@ bare sentinel as its whole reply. You never prompt for that.
 
 OUTPUT SHAPE, do not collapse this: return a JSON object with exactly these NINE top-level \
 keys, each its own field -- caveman_prompt, user_intent, tool_selection, memory_artefacts, \
-outsourced, watch_out, hypotheses, counter_hypotheses, epistemik. epistemik is \
+outsourced, watch_out, hypotheses, counter_hypotheses, epistemik. \
+⭐⭐ memory_artefacts is the SELECTION FROM CONTEXT.world.durable_memory that actually bears on \
+THIS request: a list of {"wert": the remembered value verbatim, "subjekt": whom/what it is \
+about, "herkunft": where it came from -- who said it, in which turn}. Take them from \
+CONTEXT.world.durable_memory ONLY; never invent one, never paraphrase the value. Empty list \
+when genuinely nothing there bears on the request -- but CHECK before you write [], because \
+this is the entity's memory across turns and skipping it is how it forgets what a human just \
+told it. A durable memory that answers the question outright belongs in epistemik.bekannt with \
+its herkunft, NOT in unbekannt: something a human told you IS known, and the honest answer \
+names both the fact and who said it. Measured 2026-08-20: this key was omitted on every single \
+turn (it had no definition here), so durable_memory -- including a stored, sourced answer to a \
+question Zero then claimed not to know -- never reached Zero at all. epistemik is \
 {"bekannt": [{"fakt": ..., "herkunft": ...}, ...], "unbekannt": [...]} per rule (H) -- \
 build it for EVERY request, even an empty {"bekannt": [], "unbekannt": []} when the question \
 needs no external fact (e.g. a greeting). Put the negotiation-escape-hatch \

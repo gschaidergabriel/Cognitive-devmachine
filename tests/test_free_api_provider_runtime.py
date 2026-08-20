@@ -282,6 +282,30 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertEqual(result["receipt"]["outcome"], "success")
         self.assertEqual(captured_sizes, [MOD.MAX_PROVIDER_REQUEST_BYTES])
 
+    def test_oversized_request_is_rejected_before_json_materialization(self):
+        serialization_calls = []
+        original_dumps = MOD.json.dumps
+
+        def tracking_dumps(*args, **kwargs):
+            serialization_calls.append("serialize")
+            return original_dumps(*args, **kwargs)
+
+        MOD.json.dumps = tracking_dumps
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(
+                    [{
+                        "role": "user",
+                        "content": "x" * MOD.MAX_PROVIDER_REQUEST_BYTES,
+                    }],
+                    model="mock",
+                    environ={},
+                )
+        finally:
+            MOD.json.dumps = original_dumps
+
+        self.assertEqual(serialization_calls, [])
+
     def test_active_monotonic_values_cannot_suppress_execution_receipt(self):
         method_calls = []
 

@@ -214,28 +214,39 @@ def _bilanz_schlank(profil: dict[str, Any], stufe: int) -> dict[str, Any]:
     return p2
 
 
-def _kontext_im_budget(bauen, profil: dict[str, Any] | None) -> dict[str, Any] | None:
+def _kontext_im_budget(bauen, profil: dict[str, Any] | None,
+                       hyperposition: list | None = None,
+                       raum: dict[str, Any] | None = None):
     """Profil so weit kuerzen, dass der GESAMTE Kontext ins Budget passt.
 
     `bauen(profil)` liefert den fertigen Kontexttext -- so wird gemessen, was
     die Vorstufe wirklich sieht, statt eines Teils davon.
     """
-    if profil is None:
-        return None
-    if len(bauen(profil)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
-        return profil
+    hyp = list(hyperposition or [])
+    rm = raum
+    if len(bauen(profil, hyp, rm)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+        return profil, hyp, rm
+    profil_kandidat = profil
     for stufe in (1, 2, 3):
-        kandidat = _bilanz_schlank(profil, stufe)
-        if len(bauen(kandidat)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
-            return kandidat
-        profil_kandidat = kandidat
+        if profil is not None:
+            profil_kandidat = _bilanz_schlank(profil, stufe)
+        if len(bauen(profil_kandidat, hyp, rm)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+            return profil_kandidat, hyp, rm
+    # Stufe 4: Hyperposition halbieren, dann leeren -- ein Zusatzsignal, kein Fakt.
+    for hyp in (hyp[: max(1, len(hyp) // 2)], []):
+        if len(bauen(profil_kandidat, hyp, rm)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+            return profil_kandidat, hyp, rm
+    # Stufe 5: Moeglichkeitsraum -- das Erwartungsfeld ist naechste Runde neu baubar.
+    rm = None
+    if len(bauen(profil_kandidat, hyp, rm)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+        return profil_kandidat, hyp, rm
     # Nicht still hinnehmen: ein ueberschrittenes Budget ist eine Aussage.
     import sys as _sys
     print(f"prestage: Kontext bleibt ueber Budget "
-          f"({len(bauen(profil_kandidat))} > {_VORSTUFE_KONTEXT_MAX_CHARS}) -- "
-          "auch nach Stufe 3. Dann liegt es nicht mehr am Profil; "
+          f"({len(bauen(profil_kandidat, hyp, rm))} > {_VORSTUFE_KONTEXT_MAX_CHARS}) -- "
+          "auch nach allen fuenf Stufen. Dann liegt es an world oder am Rahmen; "
           "nachsehen, welcher Block gewachsen ist", file=_sys.stderr)
-    return profil_kandidat
+    return profil_kandidat, hyp, rm
 
 
 # ── epistemik in die Ausstrahlung (CSWT-Z-Befund 2026-08-20) ─────────────
@@ -597,14 +608,14 @@ def run_chat_turn(
 
         # Der Gesamtdeckel greift NACH world -- gemessen wird der fertige
         # Kontext, nicht ein Teil davon (CSWT-Z-Befund, siehe oben).
-        def _bauen(_p):
+        def _bauen(_p, _h, _r):
             return prestage.build_context(
                 raw_prompt=message, world=vorstufe_world, connected_systems=None,
                 current_user=user_id, current_user_profile=_p,
-                moeglichkeitsraum=erwartungsfeld, recent_turns=[],
-                zero_suggestion=None, available_tools=[],
-                hyperposition=hyperposition_readout)
-        nutzerprofil = _kontext_im_budget(_bauen, nutzerprofil)
+                moeglichkeitsraum=_r, recent_turns=[],
+                zero_suggestion=None, available_tools=[], hyperposition=_h)
+        nutzerprofil, hyperposition_readout, erwartungsfeld = _kontext_im_budget(
+            _bauen, nutzerprofil, hyperposition_readout, erwartungsfeld)
 
         # Phase 2b Schritt 3 (Rueckspeisung): das gelernte "was-ist-falsch"
         # als schlanker Text in den Vorstufe-Kontext, BEVOR Runde 1 laeuft --

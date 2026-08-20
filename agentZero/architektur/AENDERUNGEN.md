@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T06:11:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T06:41:14Z aus drei Repos. 478 Eintraege.
 
-## architektur (15)
+## architektur (16)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
 | 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
 | 2026-08-18T09:43 | entityos | `0ff9ac9f66f7` | Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal |
 | 2026-08-18T03:39 | entityos | `e413f4f8adc3` | Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden |
@@ -87,7 +88,7 @@ Automatisch erzeugt 2026-08-20T06:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (42)
+## reparatur (41)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -124,7 +125,6 @@ Automatisch erzeugt 2026-08-20T06:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:12 | entityos | `e97a47181e95` | fix(clayverse): separate effect budget and require later owner acknowledgement |
 | 2026-08-18T03:10 | entityos | `f5007745b0d6` | fix(clayverse): decouple reasoning from effect budget |
 | 2026-08-18T03:08 | entityos | `ae5cc353559c` | fix(clayverse): bind autonomy success evidence to exact effect intent |
-| 2026-08-18T02:37 | entityos | `65b62e2cda72` | fix(clayverse): register exact store module before dataclass load |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -181,6 +181,7 @@ Automatisch erzeugt 2026-08-20T06:11:13Z aus drei Repos. 478 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T06:22 | entityos | `d8074a08fdfa` | EOS-Chronik 2026-08-20 06:22:04 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T05:38 | entityos | `2adcf9a58b0b` | EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T05:35 | entityos | `2727aac03f16` | EOS-Chronik 2026-08-20 05:35:55 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T05:29 | entityos | `b6dca3a0169f` | CSWT-Z Pilotlauf: Schicht 1 und 4, 270 Zuege, Rohdaten und Befund |
@@ -240,5 +241,4 @@ Automatisch erzeugt 2026-08-20T06:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T13:24 | entityos | `d6cc4ad2001e` | Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig |
 | 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
 | 2026-08-18T12:59 | entityos | `d42ec66eda5d` | Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT |
-| 2026-08-18T12:52 | unifieddb | `b4c856add34b` | Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR |
 

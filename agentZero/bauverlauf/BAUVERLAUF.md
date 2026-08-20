@@ -1,12 +1,59 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T06:11:13Z. 927 Commits aus vier Repos, davon 298 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T06:41:14Z. 928 Commits aus vier Repos, davon 300 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren
+
+`368c1159c40c` · entityos · 06:29 UTC · EOS-Chronik
+
+```
+REPARIERT und live:
+* Der Deckel gilt jetzt fuer den GESAMTEN Vorstufenkontext (14_500), nicht nur
+  fuer world. Fuenf Kuerzungsstufen; Bilanz symmetrisch (Erfolge und
+  Fehlschlaege verlieren gleich viel). Gemessen 18.112 -> 14.112 Zeichen.
+* epistemik erreicht Zero: kompakte KNOWN/UNKNOWN-Zeile am Auftrag, Schalter
+  CLAYVERSE_EPISTEMIK_IM_PROMPT.
+
+KAUSALTEST, vor der Reparatur unmoeglich: falsche bekannte Fakten eingespeist,
+Kontrolle ueber den abgeschalteten Kanal. Uebertragung bestaetigt (5/8 gegen
+0/8), Uebernahme NULL -- Zero prueft jede Einspeisung an den eigenen Quellen und
+weist sie zurueck, einmal woertlich als eingeschleuster Text. Die Ausstrahlung
+wird gehoert, regiert aber nicht. GWT-3-Mangel und Sicherheitsmerkmal zugleich.
+
+⚠️ Meine erste Auswertung zaehlte Erwaehnen als Folgen und war falsch herum --
+erst die Volltexte kippten sie.
+
+Korrigierte Schicht 1 (Gesamtkontext geregelt, Werkzeuge gesperrt): weiter kein
+Effekt, p=1,000. Grund gefunden: --tools gilt NICHT fuer WebFetch/WebSearch
+(Server-Werkzeuge), und der Warmpool reicht alte Prozesse wieder. Die Antworten
+kamen durchgehend von iar.frank.ink.
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
+
+### EOS-Chronik 2026-08-20 06:22:04 +0000 — entityos: 1 Aenderungen
+
+`d8074a08fdfa` · entityos · 06:22 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T06:22:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen
 
@@ -4358,33 +4405,5 @@ sauber (private/*.env gefunden, nicht geoeffnet/kopiert). COVERAGE-Abschnitt obe
 listet explizit was NICHT gelesen wurde (atomic/runs, mesh_feedback, knowledge_micro_packets,
 frank_v0_1 u.a.) - Aufgabe aus Tokenbudget-Gruenden gestoppt, bewusst als unvollstaendig
 markiert statt vollstaendig wirkend.
-```
-
-### B11 begonnen: VLM-Artefakte + System-Vorlagen ins Repo (unifieddb)
-
-`56afd5c53617` · clay · 15:52 UTC · ClayVerse
-
-```
-27 Dateien: system/ Vorlagen (13, Secrets als Env-Lesung), dokumente/clayverse/ 8 nachgezogen (inkl. protokoll.jsonl 85 Zeilen), 4 Root-Duplikate markiert; ap11-test.jpg aus /tmp gerettet; secret-scan 0 echte Treffer; unifieddb->origin gepusht, github-Remote fehlgeschlagen (kein Login); EINRICHTEN.md NICHT geschrieben (Tokenknappheit)
-```
-
-### System-Vorlagen + Artefakt-Katalog: ClayVerse-Dienste, Rebuild-Bausteine, VLM-Kaskade
-
-`ad534040b5bf` · unifieddb · 15:52 UTC · ClayVerse
-
-```
-Bringt heute (15.08.) entstandene Artefakte als veroeffentlichte Kopie hierher:
-- system/: Vorlagen fuer alle clay-herzschlag/-flugschreiber/-absturzbericht/
-  -kognition.slice/-glm-Dateien (Gabriels Box + frank-api), Secrets als
-  Env-Lesung/Platzhalter statt Klartext (z.ai-Schluessel, Schranke-Passwort)
-- dokumente/clayverse/: restliche bau/*.md nachgezogen (B11-Kaskade, KARTE,
-  KONTRAKT-KOGNITIONSTOR, MESSFEHLER, MINI-CLAYVERSE, ZUGAENGE-GEMESSEN,
-  protokoll.jsonl) + ARTEFAKTE-2026-08-15.md Katalog (Status: TEILWEISE,
-  EINRICHTEN.md steht noch aus)
-- dokumente/ (root): 4 aeltere Duplikate markiert statt geloescht (F48
-  Zwei-Wahrheiten-Regel), bauprotokoll.jsonl.VERALTET.md als Hinweis
-
-Kanon: clayverse = Arbeitsrepo (Code bleibt dort), unifieddb = veroeffentlicht
-(Doku/Protokoll/Katalog/System-Vorlagen). Secret-Scan 0 echte Treffer.
 ```
 

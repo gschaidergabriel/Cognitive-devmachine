@@ -32,6 +32,9 @@ EXECUTION_LOCK_TIMEOUT_SECONDS = 35
 TEXT_CHAT_ROLES = frozenset({"system", "user", "assistant"})
 TEXT_CHAT_MESSAGE_FIELDS = frozenset({"role", "content"})
 TEXT_RESPONSE_MESSAGE_FIELDS = frozenset({"role", "content"})
+BEARER_TOKEN_CHARACTERS = frozenset(
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~+/"
+)
 PROCESS_PAYMENT_LATCHES: set[str] = set()
 PROCESS_EXECUTION_LOCK = threading.Lock()
 
@@ -121,8 +124,22 @@ def _configured_key_name(
     spec: ProviderSpec, environ: dict[str, str]
 ) -> str | None:
     return next(
-        (name for name in spec.key_names if environ.get(name, "").strip()),
+        (
+            name
+            for name in spec.key_names
+            if _is_valid_bearer_token(environ.get(name, ""))
+        ),
         None,
+    )
+
+
+def _is_valid_bearer_token(value) -> bool:
+    """Validate RFC 6750 b64token syntax before header construction."""
+    if not isinstance(value, str):
+        return False
+    token = value.rstrip("=")
+    return bool(token) and all(
+        character in BEARER_TOKEN_CHARACTERS for character in token
     )
 
 

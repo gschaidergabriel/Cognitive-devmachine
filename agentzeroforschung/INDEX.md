@@ -92,6 +92,14 @@
    - Haupt-Hypothese: I/O-/Lock-/Concurrent-Load-Spike; Gegenhypothese: datenabhaengiger superlinearer Export-Hotspot
    - vorgeschlagen: `EXPORT_RECEIPT/v1` mit Phasenzeiten, SQLite-Waits, CPU/RSS/I/O und COMPLETE/INCOMPLETE-Semantik ueber mehrere regulaere Exporte
 
+12. `analysen/2026-08-20T0247Z_GEN174_QUELLBINDUNG_UND_HIERARCHIE_SCHWELLE.md`
+   - Generation 174 auf Export `af005559ea94be333a19e693c8dec2a0c6d9ca8e`
+   - Tests stabil `583/1`; Source-Identifier `2b096801f` im Bauverlauf auf lokale EntityOS-Chronik `2b096801f85e` abgebildet — Source-Provenienz erstmals teilweise aufgeloest
+   - Hierarchie-Rohdaten intern konsistent: 353 Wege = 6 Tunnel + 244 Autobahn + 40 Schnellstrasse + 63 langsame Strasse
+   - eigentliche Verdikt-Schwelle im neuen read-only `abruf_lage()` sichtbar: `top_decile >= 0.20`; aktueller Wert `0.136` ist danach korrekt GLEICHVERTEILT
+   - `ZIELE.md` verwendet dagegen weiterhin eine andere Semantik (`0.136` vs ~`0.10` bereits als Hierarchiebildung) und meldet `-1 Tunnel`; Root Cause verschiebt sich auf doppelte Urteilregeln + Sentinel-Aggregation
+   - `abruf_lage()` ist positiver Observability-Delta: Retrieval-Lernzustand kann gelesen werden, ohne die Karte durch die Beobachtung zu speisen
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -99,7 +107,8 @@
 - Tool-Erreichbarkeit zwischen Chat, Laufzeitskizze, Messwerk und Zielpruefer operational trennen;
 - provider-native TOKEN_LEDGER je Pipeline-Stufe bauen/messen und Direct-vs-Pipeline-Shadow-Baseline etablieren;
 - `TEST_RECEIPT_LEDGER/v1` als atomare Quelle fuer `letzter-lauf.json`, `ZIELE.md` und Acceptance-Zaehler etablieren;
-- `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Verdict; negative numerische Sentinels verbieten;
+- `HIERARCHY_RECEIPT/v1` bauen: ein Raw-Receipt fuer Wege/Raenge/Tunnel/Top-Decile/Schwelle/Verdict; negative numerische Sentinels verbieten und alle Verbraucher auf dieselbe Regel zwingen;
+- vollen Commit+Tree hinter lokal gebundenem EntityOS-Prefix `2b096801f85e...` exportieren;
 - `EXPORT_RECEIPT/v1` ueber mindestens sechs regulaere Exporte binden, um I/O-/Lock-Jitter gegen einen datenabhaengigen Hotspot zu trennen;
 - Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;

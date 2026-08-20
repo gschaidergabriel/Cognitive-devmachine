@@ -102,7 +102,7 @@ def _snapshot_runtime_environment(
             value = source.get(name)
             if value is None:
                 continue
-            if not isinstance(value, str):
+            if type(value) is not str:
                 raise ValueError("runtime_environment_values_must_be_strings")
             snapshot[name] = value
     except Exception:
@@ -169,7 +169,7 @@ def inventory(
     *,
     payment_latches: set[str] | None = None,
 ) -> list[dict]:
-    env = os.environ if environ is None else environ
+    env = _snapshot_runtime_environment(environ)
     latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
     attested = _attested_zero_cost_providers(env)
     rows = []

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T16:11:16Z. **3100 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T16:41:16Z. **3108 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T21:50:09+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T22:49:01+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3002 |
+| baunotiz | 3010 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1891 |
-| baunotiz | bauverlauf.jsonl | 1066 |
+| baunotiz | git-commit | 1896 |
+| baunotiz | bauverlauf.jsonl | 1069 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3100 · Gegenhypothese: 0 von 3100
+## Hypothese: 0 von 3108 · Gegenhypothese: 0 von 3108
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T21:50:09+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen204 candidate identity aliasing frontier
+
+`baunotiz-bauverlauf-11c30fe3183dc83380d9` · baunotiz · bauverlauf.jsonl · 2026-08-20T22:49:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen204 candidate identity aliasing frontier
+
+`baunotiz-git-a829699e440f03ea258c56e3cd6748a6f0ed3ba9` · baunotiz · git-commit · 2026-08-20T22:49:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen204 candidate identity aliasing frontier
+
+### research: preserve Gen204 lease-test flip and route flake matrix
+
+`baunotiz-bauverlauf-c51d8a37a4b09890fed1` · baunotiz · bauverlauf.jsonl · 2026-08-20T22:48:26+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: preserve Gen204 lease-test flip and route flake matrix
+
+`baunotiz-git-5507b05e1bfa2846e9cd329e9587be127e3d76ce` · baunotiz · git-commit · 2026-08-20T22:48:26+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: preserve Gen204 lease-test flip and route flake matrix
 
 ### research: route Gen204 identity and provenance falsifiers
 
@@ -198,38 +230,6 @@ research: derive stable GWT identities and split uptake from outcome credit
 ### gwt: open lexical-boundary and evidence-mass falsifier task
 
 `baunotiz-bauverlauf-cf33821bdfe94a53a55e` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:31:17+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### gwt: open lexical-boundary and evidence-mass falsifier task
-
-`baunotiz-git-7f5e42bcbc3acd36e6ebdc5e856e0bef9a6014b8` · baunotiz · git-commit · 2026-08-20T20:31:17+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-gwt: open lexical-boundary and evidence-mass falsifier task
-
-### research: bind GWT lexical-boundary falsifier and evidence-mass challenger
-
-`baunotiz-bauverlauf-c866c6bf9c9d09f56eea` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:30:15+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind GWT lexical-boundary falsifier and evidence-mass challenger
-
-`baunotiz-git-20d221f94a7f928df80a89198fdb43955b8488bd` · baunotiz · git-commit · 2026-08-20T20:30:15+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind GWT lexical-boundary falsifier and evidence-mass challenger
-
-### research: route Gen197 feedback-channel path split
-
-`baunotiz-bauverlauf-1c2621ed76cb057d9a1e` · baunotiz · bauverlauf.jsonl · 2026-08-20T19:52:22+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

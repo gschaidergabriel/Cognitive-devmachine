@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-20T16:11:16Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-20T16:41:16Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -238,6 +238,9 @@ CREATE TABLE graph_meta(
             value TEXT NOT NULL
         );
 CREATE TABLE graph_nodes(node_id TEXT PRIMARY KEY,kind TEXT NOT NULL,label TEXT NOT NULL,source_table TEXT NOT NULL,source_id TEXT NOT NULL);
+CREATE TABLE gw_ausstrahlung(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, session_id TEXT, artikel_id TEXT, wert REAL);
+CREATE TABLE gw_lernen(  merkmal TEXT NOT NULL, artikel_id TEXT NOT NULL,  boost REAL NOT NULL DEFAULT 0, n INTEGER NOT NULL DEFAULT 0,  belohnt INTEGER NOT NULL DEFAULT 0, ts REAL NOT NULL,  PRIMARY KEY(merkmal, artikel_id));
+CREATE TABLE gw_wettbewerb(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, session_id TEXT, artikel_id TEXT, rang INTEGER,  salienz REAL, relevanz REAL, neuheit REAL, wert REAL,  zugelassen INTEGER, gewaehlt INTEGER);
 CREATE TABLE kante (
             von TEXT NOT NULL,
             nach TEXT NOT NULL,
@@ -816,6 +819,7 @@ CREATE TABLE zero_raum_ruf (
   von TEXT NOT NULL,
   text TEXT NOT NULL
 );
+CREATE INDEX gw_ausstrahlung_ts ON gw_ausstrahlung(ts);
 CREATE INDEX idx_arbeitspaket_stand ON entityos_arbeitspaket(stand, erstellt);
 CREATE INDEX idx_artikel_art ON artikel(art);
 CREATE INDEX idx_artikel_baunotiz_lookup ON artikel(art, von_quelle, datum);

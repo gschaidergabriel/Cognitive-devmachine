@@ -26,6 +26,7 @@ from __future__ import annotations
 import collections
 import json
 import os
+import select
 import subprocess
 import threading
 import time
@@ -34,6 +35,26 @@ from pathlib import Path
 from . import headless_zero as hz
 
 POOL_SIZE = int(os.environ.get("CLAYVERSE_WARM_POOL", "2"))
+
+# ⭐⭐⭐ GEMESSENER PRODUKTIONSAUSFALL, 2026-08-20. Die Antwortschleife unten
+# lautete:
+#     frist = time.time() + timeout
+#     while time.time() < frist:
+#         line = warm.proc.stdout.readline()
+# `readline()` auf einer Roehre blockiert OHNE Zeitgrenze. Die Frist wurde nur
+# ZWISCHEN zwei Zeilen geprueft -- kommt keine einzige, wird sie nie erreicht.
+# Die Zeitgrenze war Zierrat.
+# Gemessen: ein Abnahmezug auf "hallo" stand 13 Minuten, vier warme Prozesse
+# lagen daneben und schwiegen. Fuer einen Menschen im Browser heisst das: der
+# Chat antwortet nie, ohne Fehler, ohne Meldung. Aufgefallen ist es nur, weil
+# alle Messreihen des Tages den Warmpool ausdruecklich abgeschaltet hatten --
+# der Kaltweg funktionierte die ganze Zeit.
+ERSTE_ZEILE_S = float(os.environ.get("CLAYVERSE_WARM_ERSTE_ZEILE", "25"))
+# Ein warmer Prozess, der den Auftrag hat, meldet sich binnen Sekunden mit
+# seinem ersten Ereignis. Bleibt das aus, ist der Prozess kaputt und nicht
+# beschaeftigt -- dann sofort auf den Kaltweg, statt die volle Frist zu warten.
+AUSFAELLE_BIS_SPERRE = 3
+SPERRE_S = 600.0
 WARMUP_S = 5.5           # so lange braucht der Boot im Leerlauf (gemessen ~5s)
 MAX_ALTER_S = 900        # ein warmer Prozess, der 15 min nie drankam, wird ersetzt
 _KANONISCH = (("gabriel", "session:gabriel"), ("andreas", "session:andreas"))
@@ -150,6 +171,11 @@ class WarmPool:
     # ── Der Zug: einen warmen Prozess nehmen, EINEN Prompt, dann sterben ──
     def answer(self, caveman_prompt: str, *, user_id: str, session_id: str,
                timeout: int = 240) -> dict | None:
+        # ⭐ Sicherung: haben die letzten Versuche nur geschwiegen, ist der Pool
+        # kaputt und nicht langsam. Dann gar nicht erst hineingehen -- sonst
+        # kostet jeder Zug die volle Frist, bevor er den Kaltweg findet.
+        if time.time() < getattr(self, "_gesperrt_bis", 0.0):
+            return None
         key = (user_id, session_id)
         if key not in self._pools:
             return None
@@ -183,11 +209,23 @@ class WarmPool:
 
         result_ev = None
         frist = time.time() + timeout
+        erste_frist = time.time() + ERSTE_ZEILE_S
+        stumm = False
         try:
-            while time.time() < frist:
+            while True:
+                # Die Frist gilt fuer das WARTEN, nicht nur fuer die Pausen
+                # zwischen zwei Zeilen -- das war der Fehler.
+                rest = min(frist, erste_frist) - time.time()
+                if rest <= 0:
+                    stumm = True
+                    break
+                bereit, _, _ = select.select([warm.proc.stdout], [], [], min(rest, 1.0))
+                if not bereit:
+                    continue
                 line = warm.proc.stdout.readline()
                 if not line:
                     break
+                erste_frist = frist      # er lebt -- ab jetzt gilt die volle Frist
                 try:
                     ev = json.loads(line)
                 except Exception:
@@ -197,6 +235,16 @@ class WarmPool:
                     break
         finally:
             self._toete(warm)
+
+        if stumm:
+            self._ausfaelle = getattr(self, "_ausfaelle", 0) + 1
+            if self._ausfaelle >= AUSFAELLE_BIS_SPERRE:
+                self._gesperrt_bis = time.time() + SPERRE_S
+                print(f"warm_zero: {self._ausfaelle} stumme Prozesse hintereinander -- "
+                      f"Pool fuer {int(SPERRE_S)}s gesperrt, es geht ueber den Kaltweg",
+                      file=__import__("sys").stderr)
+            return None
+        self._ausfaelle = 0
 
         if not isinstance(result_ev, dict):
             return None

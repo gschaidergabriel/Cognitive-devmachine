@@ -192,10 +192,44 @@ class UnifiedDB:
     def close(self): self.db.close()
     @contextlib.contextmanager
     def tx(self):
+        """Schreibklammer -- und sie darf einen fertigen Zug nicht mehr toeten.
+
+        ⚠️ GEMESSEN AM 2026-08-20 im Abnahmetest: zwei von fuenf echten Zuegen
+        starben mit `cannot commit - no transaction is active`. Der Mensch sah
+        keine Antwort, obwohl die Arbeit getan war -- der Zug fiel erst beim
+        SCHLIESSEN der Klammer um. Dieselbe Bauart hat schon einmal 77 Tests
+        eingerissen (siehe erfolge.py, Eintrag `f-77`): irgendwo tief drinnen
+        ruft jemand `executescript()`, das committet implizit, und diese
+        Klammer findet danach nichts mehr zum Festschreiben.
+        ⚠️ Die `begin_admission`-Klammer umschliesst den GANZEN Zug, den
+        `yield` eingeschlossen -- die Angriffsflaeche ist also alles, was
+        waehrend eines Zuges auf DIESER Verbindung laeuft.
+
+        Zwei Entscheidungen, beide bewusst:
+        1. Ist die Transaktion beim Verlassen nicht mehr offen, wird NICHT
+           geworfen. Die Daten sind dann bereits festgeschrieben -- ein Fehler
+           an dieser Stelle wirft die fertige Antwort weg und aendert an der
+           Datenlage nichts. Stattdessen eine laute Meldung.
+        2. Auch der Rollback prueft erst. Sonst wirft der Fehlerpfad selbst
+           und verdeckt den urspruenglichen Fehler (genau der Befund aus `f-77`).
+        """
         self.db.execute("BEGIN IMMEDIATE")
-        try: yield self.db
-        except Exception: self.db.execute("ROLLBACK"); raise
-        else: self.db.execute("COMMIT")
+        try:
+            yield self.db
+        except Exception:
+            if self.db.in_transaction:
+                self.db.execute("ROLLBACK")
+            raise
+        else:
+            if self.db.in_transaction:
+                self.db.execute("COMMIT")
+            else:
+                import sys as _sys, traceback as _tb
+                print("store.tx: die Transaktion war beim Verlassen schon "
+                      "geschlossen -- jemand hat von innen committet "
+                      "(meist executescript()). Die Daten stehen, der Zug "
+                      "laeuft weiter. Aufrufer:\n"
+                      + "".join(_tb.format_stack()[-6:-1]), file=_sys.stderr)
     def ensure_user(self,user_id,display_name,clerk_subject=None):
         self.db.execute("INSERT OR IGNORE INTO users(user_id,display_name,clerk_subject) VALUES(?,?,?)",(user_id,display_name,clerk_subject))
         if clerk_subject: self.db.execute("UPDATE users SET clerk_subject=? WHERE user_id=?",(clerk_subject,user_id))

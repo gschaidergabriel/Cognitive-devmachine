@@ -1,12 +1,63 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T16:11:16Z. 977 Commits aus vier Repos, davon 329 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T16:41:16Z. 978 Commits aus vier Repos, davon 331 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 16:30:03 +0000 — entityos: 2 Aenderungen
+
+`0f6526f6944c` · entityos · 16:30 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/store.py
+  the artefact/tests/test_tx.py
+
+Zeit: 2026-08-20T16:30:03+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 16:18:47 +0000 — entityos: 15 Aenderungen
+
+`56a9fda0e581` · entityos · 16:18 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/arme_aus.py
+  forschung/cswt-z-pilot/cswt-arme.jsonl
+  forschung/cswt-z-pilot/cswt-ged.jsonl
+  forschung/cswt-z-pilot/cswt-ged2.jsonl
+  forschung/cswt-z-pilot/cswt-ged4.jsonl
+  forschung/cswt-z-pilot/cswt-ged5.jsonl
+  forschung/cswt-z-pilot/cswt-ged6.jsonl
+  forschung/cswt-z-pilot/cswt_arme.py
+  forschung/cswt-z-pilot/cswt_gedaechtnis.py
+  forschung/cswt-z-pilot/ged_aus.py
+  forschung/cswt-z-pilot/t_ged_diag.py
+  forschung/cswt-z-pilot/t_relativ.py
+  forschung/cswt-z-pilot/t_weit.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_warmpool.py
+
+Zeit: 2026-08-20T16:18:47+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 15
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen
 
@@ -4578,32 +4629,5 @@ einer Instanz erwartet). Der Test rief TerminalSessionManager.close_attach(pid,f
 ungebunden auf -- daher der TypeError ueber das fehlende Argument, bevor er
 ueberhaupt bei self ankam. Jetzt eine echte Instanz gebaut (tmp_path) und
 close_attach darauf aufgerufen.
-```
-
-### Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert
-
-`bab29349c659` · entityos · 03:36 UTC · BACK agent
-
-```
-terminal_gateway.py baut die HTML-Seite per f-string; im Quelltext steht
-deshalb woertlich der Platzhalter "{_PTY_INPUT_FRAME_MAX_BYTES}", nicht die
-ausgewertete Zahl 65536 -- die read_text()-Pruefung kann den nie finden.
-Auf den tatsaechlichen Quelltext-Platzhalter umgestellt plus eine separate
-Pruefung, dass die Konstante wirklich 65536 ist.
-```
-
-### Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung
-
-`b01b3b6d4a38` · entityos · 03:35 UTC · BACK agent
-
-```
-effect_journal.py verlangt seit 2ccb3866d (rejoin active-turn linearization
-fence onto recovery main) workspace_selected=1, bevor irgendein Effekt
-beginnen darf -- genau das tut TurnLifecycle.request_effect() normalerweise
-zuerst. Der Crash-Simulationstest rief journal.begin() direkt auf und liess
-diesen Schritt aus. request_effect() selbst konnte hier nicht verwendet
-werden (fuehrt den Effekt sofort aus, statt ihn PENDING zu lassen), also die
-Workspace-Auswahl separat repliziert: workspace.select_in_tx(...) +
-active_turns.workspace_selected=1, dann journal.begin() wie zuvor.
 ```
 

@@ -608,10 +608,11 @@ def _execute_chat_locked(
                             cooldown_seconds = 15
                             retryable = False
                         response_classified = True
-                except Exception as exc:
-                    # Do not expose suite exceptions to a foreign __exit__:
-                    # a true return value would suppress the evidence needed
-                    # for fail-closed receipt classification.
+                except BaseException as exc:
+                    # Do not expose suite failures to a foreign __exit__: a
+                    # true return would suppress both receipt evidence and
+                    # process-control signals. BaseException is transported
+                    # across cleanup, then immediately re-raised unchanged.
                     response_context_error = exc
         except Exception:
             if (

@@ -36,6 +36,13 @@
     "executable_evidence": "test_oversized_serialized_request_is_blocked_before_environment",
     "counterhypothesis": "The provider can safely enforce its own context or body limit after authentication; falsified locally because a request above the runtime envelope reached the authenticated opener, while the repaired boundary rejects it before even reading the runtime environment and still accepts an exact-limit payload."
   },
+  "request_pre_serialization_bound": {
+    "checked_at": "2026-08-21",
+    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
+    "source": "https://docs.python.org/3/library/json.html#json.dumps",
+    "executable_evidence": "test_oversized_request_is_rejected_before_json_materialization",
+    "counterhypothesis": "Checking len(json.dumps(payload).encode()) is already a memory bound; falsified locally because the oversized-request path invoked json.dumps and materialized the complete document before it could reject the request."
+  },
   "output_token_budget": {
     "max_tokens": 4096,
     "checked_at": "2026-08-21",
@@ -586,6 +593,7 @@
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
+    "Requests whose validated text and per-message structure already exceed the transport envelope are rejected before json.dumps can materialize the document; an exact serialized UTF-8 byte check remains in force afterward.",
     "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
     "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",

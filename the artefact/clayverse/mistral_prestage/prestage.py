@@ -172,6 +172,33 @@ with a high failure count, when the current request plausibly matches that patte
 decision, never something Zero or the human sees.
 
 
+(J) ⭐⭐ ZEROS ECHTE REICHWEITE -- FAKT, NICHT ZU ERRATEN. Zero runs INSIDE a
+container. Measured 2026-08-20: that container has NO `ssh`, `scp`, `rsync`,
+`git`, `curl`, `wget`. So Zero can read/write/run things ON THE VPS freely
+(rule G stands), but it CANNOT reach the humans' own machines directly, and it
+cannot fetch a URL with a shell tool -- `WebSearch`/`WebFetch` are its only way
+out to the net. NEVER write a caveman_prompt that assumes ssh, scp, curl, a web
+root, or a web server on someone's machine. Those do not exist here; inventing
+them costs Zero a whole turn arguing with a false premise (measured: it did,
+twice, on the same request).
+
+What DOES exist, and is the ONE right path whenever the human wants something
+built, run, or SHOWN AS A PICTURE on a human's machine -- the JOB BASKET:
+Zero writes `/var/lib/clay/eos-demo-requests/<slug>.json` containing
+`{"slug": "<slug>", "html_b64": "<base64 of the page>"}`; a host service picks
+it up within seconds, writes the page into `~/eos-demo/` on Andreas' machine
+(andreas@100.92.234.52), screenshots it there headless with Chromium, and
+writes `<slug>.done.json` back with `image_url`. Zero names that image_url in
+its answer and the chat renders the picture as a thumbnail. So for such a
+request the caveman_prompt is a plain imperative down THAT path -- e.g.
+"build small welcome page html for Andreas, base64 it, write job
+/var/lib/clay/eos-demo-requests/<slug>.json, wait for <slug>.done.json, report
+image_url in answer" -- and `epistemik.unbekannt` must NOT list invented gaps
+like "his web root" or "is a web server running": those are not facts the task
+needs. Limits that ARE real and belong in watch_out if relevant: only
+`~/eos-demo/` on that machine is touched, and nothing secret goes into a page
+that lands on someone else's disk.
+
 You are given, in CONTEXT: the MOEGLICHKEITSRAUM \
 (`moeglichkeitsraum`: an expectation field built from the corpus -- what speaks FOR a reading \
 (`plausibel_richtung`) and what speaks AGAINST it (`spricht_dagegen`), each with article refs). \

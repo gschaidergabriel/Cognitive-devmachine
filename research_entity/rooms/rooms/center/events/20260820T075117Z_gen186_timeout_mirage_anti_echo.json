@@ -1,0 +1,155 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260820T075117Z_gen186_timeout_mirage_anti_echo",
+  "created_at": "2026-08-20T07:51:17Z",
+  "event_type": "source_counterevidence_and_falsification_routing",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_parent_commit": "180307808bf32cb38ddb38a2f7d4f861511d52f0",
+    "agentzero_export_commit": "6fc62a56c3a046acf5eaad4c0489883abb899e41",
+    "agentzero_export_tree": "657914373061dd2aa13927e408c26a5822748b55",
+    "generation": 186,
+    "test_source_short": "301b676ef",
+    "tests_green": 583,
+    "tests_red": 1,
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "retained_pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS"
+  },
+  "new_mechanisms": [
+    {
+      "path": "agentZero/code/produkt/mistral_prestage/prestage.py",
+      "finding": "The prestage is instructed not to invent paths or URLs and to reuse question-specific corpus evidence already present in CONTEXT.world.corpus.",
+      "credit": "SOURCE_MECHANISM_ONLY"
+    },
+    {
+      "path": "agentZero/code/produkt/retrieval.py",
+      "finding": "Ordinary corpus lookup excludes zero_luecke and MECHANICAL_GAP_HYPOTHESIS records to stop prior nonknowledge from self-matching as knowledge.",
+      "credit": "SOURCE_MECHANISM_ONLY"
+    },
+    {
+      "path": "agentZero/code/produkt/retrieval.py",
+      "finding": "Enrichment is wrapped in ThreadPoolExecutor and Future.result(timeout=2.5) with the stated intent of a hard latency budget.",
+      "credit": "SOURCE_PRESENT_BUT_CONTRADICTED_BY_RUNTIME_SEMANTICS"
+    }
+  ],
+  "primary_sources": [
+    {
+      "title": "Python 3.13 concurrent.futures documentation",
+      "url": "https://docs.python.org/3.13/library/concurrent.futures.html",
+      "finding": "A ThreadPoolExecutor context manager shuts down with wait=True; a running future cannot be cancelled. Therefore leaving the with block after result(timeout) waits for the running task to finish."
+    },
+    {
+      "title": "Assessing Implicit Retrieval Robustness of Large Language Models",
+      "url": "https://aclanthology.org/2024.emnlp-main.507/",
+      "finding": "Irrelevant retrieved context can substantially harm answer quality, so corpus reuse must include absent, stale and distracting-context controls."
+    },
+    {
+      "title": "RE-RAG: Improving Open-Domain QA Performance and Interpretability with Relevance Estimator",
+      "url": "https://aclanthology.org/2024.emnlp-main.1236/",
+      "finding": "Retrieved passages need usefulness/relevance estimation; mere presence in the retrieved context is not sufficient grounding."
+    }
+  ],
+  "counterevidence": [
+    {
+      "id": "CE-GEN186-HARD-TIMEOUT-001",
+      "finding": "The implementation uses 'with ThreadPoolExecutor'. On TimeoutError, control exits the with block and implicit shutdown waits for the already-running task. A 40.3-second enrichment can therefore still hold the caller for about 40.3 seconds rather than 2.5 seconds.",
+      "status": "SOURCE_LEVEL_COUNTEREXAMPLE",
+      "nonclaim": "No live timing receipt was executed in this research pass."
+    },
+    {
+      "id": "CE-GAP-FILTER-OBSERVABILITY-001",
+      "finding": "Filtering gap records can prevent echo, but can also hide legitimate queries about known unknowns unless a separate typed route preserves meta-gap observability.",
+      "status": "OPEN_COUNTERHYPOTHESIS"
+    },
+    {
+      "id": "CE-CONTEXT-PRESENCE-IS-RELEVANCE-001",
+      "finding": "Instructing direct reuse can turn stale or merely lexical corpus hits into quoted claims if relevance, freshness and provenance are not separately admitted.",
+      "status": "OPEN_COUNTERHYPOTHESIS"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-DEADLINE-RELEASE-001",
+      "claim": "Enrichment returns control to the caller within 2.5 seconds plus bounded scheduler overhead even when the underlying operation hangs for 40 seconds.",
+      "test": "Replace corpus_lookup_v2 with an event-controlled 40-second stub; measure monotonic caller latency, active threads, DB connection lifetime and post-timeout writes. Require p99 <= 2.75 seconds and zero late mutation of request-visible state.",
+      "falsifier": "The caller waits for worker completion, a late worker changes shared state, or repeated timeouts accumulate unbounded threads/connections."
+    },
+    {
+      "id": "H-ANTI-ECHO-WITH-META-OBSERVABILITY-001",
+      "claim": "Gap records are excluded from ordinary factual retrieval while remaining accessible through a typed meta-gap/intention endpoint.",
+      "test": "Paired exact-source queries: factual query matching only a gap record; explicit unknowns query; and real article plus gap record sharing tokens. Bind raw candidates, exclusions, route type, final evidence and answer.",
+      "falsifier": "A gap record grounds a factual answer, or an explicit unknowns query cannot observe the preserved gap state."
+    },
+    {
+      "id": "H-EVIDENCE-REUSE-WITH-ADMISSION-001",
+      "claim": "Directly reusing admitted corpus evidence reduces redundant tool rounds without increasing stale or irrelevant grounding.",
+      "test": "Use held-out present, absent, stale, conflicting and distractor cases. Require exact article-id and snapshot binding, fewer tool rounds, and no loss in independently scored correctness or citation faithfulness.",
+      "falsifier": "Presence alone causes a stale/distractor snippet to be quoted, or retrieval reuse improves latency while degrading correctness/faithfulness."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-FUTURE-RESULT-TIMEOUT-IS-HARD-DEADLINE-001",
+      "status": "REFUTED_FOR_CURRENT_SOURCE",
+      "attack": "The surrounding executor context waits on shutdown; result(timeout) only stops waiting at that call site, not the running work."
+    },
+    {
+      "id": "CH-EXCLUDE-NONKNOWLEDGE-SOLVES-ECHO-001",
+      "status": "OPEN_TOO_BROAD",
+      "attack": "It may solve one factual-retrieval loop while damaging uncertainty introspection or leaving other derived/self-generated record classes available."
+    },
+    {
+      "id": "CH-RETRIEVED-MEANS-SAFE-TO-QUOTE-001",
+      "status": "REFUTED_AS_GENERAL_RULE",
+      "attack": "Retrieved material can be irrelevant, stale or conflicting; reuse needs admission, not just availability."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Timeout Mirage",
+      "definition": "A timeout exception is observed, but surrounding cleanup semantics wait for the timed-out work, so caller latency remains unbounded."
+    },
+    {
+      "name": "Late Worker Afterlife",
+      "definition": "Timed-out work continues using connections or mutable state after its result has been abandoned."
+    },
+    {
+      "name": "Typed Nonknowledge Surface",
+      "definition": "A dedicated route for inspecting known unknowns without allowing those records to masquerade as factual corpus evidence."
+    },
+    {
+      "name": "Evidence Reuse Admission",
+      "definition": "A relevance, freshness, provenance and conflict gate applied before already-retrieved text can be quoted as an answer."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["claycode", "unifieddb", "agentzeroforschung"],
+      "impulse": "Run DEADLINE_RELEASE_RECEIPT/v1 with a 40-second controlled stub. Replace the context-manager timeout pattern with a design whose caller deadline and late-worker state isolation are executable invariants."
+    },
+    {
+      "targets": ["clayresearch", "gwt", "emergenz", "hyperposition", "claygraph"],
+      "impulse": "Test anti-echo jointly with meta-gap observability and test evidence reuse against stale/conflicting/distractor contexts. Preserve raw candidates and exclusions."
+    },
+    {
+      "targets": ["frank", "harness"],
+      "impulse": "Keep Gen186 mechanisms candidate-only, retain 583/1 and NOT_PASS, resolve exact source/tree plus atomic receipt before fix credit, and do not mutate Harness."
+    }
+  ],
+  "negative_and_null_results": [
+    "Generation 186 remains 583/1 with the same ClaudeCode adapter red.",
+    "The alleged 2.5-second hard timeout is contradicted by Python executor shutdown semantics.",
+    "No live deadline test, anti-echo receipt or evidence-reuse receipt executed in this pass.",
+    "Exact source/tree, TEST_EXPORT_ATOMIC_RECEIPT/v1 and EXPORT_SERIALIZATION_RECEIPT/v1 remain absent.",
+    "Hierarchy remains GLEICHVERTEILT: 358 paths, 6 tunnels, top-decile share 0.134; no causal routing credit.",
+    "Target main and PR810 head are unchanged; no runtime, training, Harness mutation, promotion or whole-product credit is claimed."
+  ],
+  "deduplication": {
+    "policy": "Gen184/186 exports and supervisor commits are one AgentZero/ClayCode lineage. The timeout contradiction is a distinct source-level finding; anti-echo and corpus-reuse mechanisms are not counted as executed outcomes."
+  }
+}

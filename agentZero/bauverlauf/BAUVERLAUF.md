@@ -1,12 +1,139 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T02:41:13Z. 911 Commits aus vier Repos, davon 286 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T03:11:13Z. 914 Commits aus vier Repos, davon 293 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 03:04:50 +0000 — entityos: 1 Aenderungen
+
+`ad4524a19c3b` · entityos · 03:04 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/translator.py
+
+Zeit: 2026-08-20T03:04:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 03:01:58 +0000 — entityos: 2 Aenderungen
+
+`7dc964ba8b1b` · entityos · 03:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/runtime_CLAUDE.md
+
+Zeit: 2026-08-20T03:01:58+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:59:28 +0000 — entityos: 1 Aenderungen
+
+`2c2d6608f09b` · entityos · 02:59 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mcp_server.py
+
+Zeit: 2026-08-20T02:59:28+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:56:59 +0000 — entityos: 1 Aenderungen
+
+`f9b65411d7d0` · entityos · 02:56 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:56:59+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:48:38 +0000 — entityos: 1 Aenderungen
+
+`7920cbb235ca` · entityos · 02:48 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:48:38+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:46:16 +0000 — entityos: 1 Aenderungen
+
+`d2db1d515d51` · entityos · 02:46 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:46:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 02:43:56 +0000 — entityos: 1 Aenderungen
+
+`b73add92ecf9` · entityos · 02:43 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T02:43:56+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 02:41:10 +0000 — entityos: 1 Aenderungen
 
@@ -4257,116 +4384,5 @@ Und: 8 von 27 Raeumen sind zweiseitig, 19 einseitig. Zwei Drittel sind keine
 Raeume. Das ist der naechste Hebel, nicht die Kaskade.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B27 geprueft: moeglichkeitsraum: Erwartungsfeld aus paket() hypothesen/gegenseite (F56/F62)
-
-`71ff0e90a978` · clay · 14:46 UTC · ClayVerse
-
-```
-ZIEL 27/30 Anfragen mit paket()-Material, 8/27 zweiseitig, 19/27 korrekt als einseitig gemeldet (Invariante). SCHATTEN ~350 Token (tiktoken cl100k_base) avg, Zusatzlatenz ~190us ueber paket(). Halluzinationsvergleich (groq llama-3.1-8b, n=83 Antworten/8 mehrdeutige Faelle, 3 Bedingungen): 0 erfundene Zahlen in allen 3 Bedingungen (Deckenwert, Metrik unterscheidet in dieser Domaene nicht), Deckung a=2.52 vs c=2.53 -- kein Vorteil messbar. entwurf_bestaetigt=false: Mechanismus korrekt gebaut, 3-Bedingungs-Beweis noch nicht erbracht.
-```
-
-### moeglichkeitsraum: F56 Erwartungsfeld aus paket() hypothesen/gegenseite (B27)
-
-`b33104cc41a0` · unifieddb · 14:45 UTC · ClayVerse
-
-```
-Separate Datei, konsumiert nur paket() (nicht angetastet -- eine andere
-Instanz bearbeitet paket.py parallel). Verdichtung deterministisch (dedup +
-harte Caps, woertliche Auszuege), Erfindungsmelder aus verdichtung.py
-wiederverwendet statt neu gebaut. Invariante: einseitiger Raum wird als
-solcher gemeldet (Gegenseite fehlt/Hypothesenseite fehlt), nie verschwiegen.
-
-Fund beim Bau: gegenseite ist heterogen (kante/graph_kante-Eintraege ohne
-aussage-Feld) -- ohne Korrektur fielen die als leerer Text raus und taeuschten
-Einseitigkeit vor. _aussage_text() synthetisiert die Kante als Behauptung.
-
-Gemessen [M 15.08.]: ZIEL 27/30 Anfragen mit Material, davon 8 zweiseitig,
-19 korrekt als einseitig gemeldet. SCHATTEN Groesse ~350 Token (tiktoken),
-Zusatzlatenz ~190us ueber paket(). 3-Bedingungs-Halluzinationsvergleich
-(moeglichkeitsraum_mess.py hallu, groq llama-3.1-8b, n=83 Antworten über 8
-mehrdeutige Faelle): 0 erfundene Zahlen in allen drei Bedingungen (Deckenwert
--- Metrik unterscheidet in dieser Frage-/Modelldomaene nicht), Deckung a=2.52
-vs c=2.53 -- kein Vorteil messbar. Entwurf NICHT bestaetigt, auch nicht
-widerlegt: Mechanismus korrekt, Metrik/Domaene brauchen Nacharbeit. Kein
-ClayVerse-Bildkorpus vorhanden (F58, blockiert) -- Test lief auf Text.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### README: hypothesen-Zeile auf den Endstand 11/20 nachgezogen
-
-`c95e4a393631` · unifieddb · 14:41 UTC · ClayVerse
-
-```
-Die Zeile nannte 0/20 auf 1/20 und Ziel nicht erreicht - der Kantenhop hat sie am
-selben Abend auf 11/20 gebracht, Latte war 8/20. Ergaenzt um den Beleg, dass die
-AMBIGUOUS-Sperre unangetastet blieb (identische resolution_class-Verteilung).
-
-Achte Korrektur einer veralteten Zahl an diesem Tag. Genau deshalb steht jetzt in
-dokumente/clayverse/README.md, dass im Zweifel bau/LIVE-STAND.md gilt.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### README: hypothesen auf 11/20 nachgezogen, doppelte Dateinamen und Alterung benannt
-
-`6e655f7c7124` · unifieddb · 14:40 UTC · ClayVerse
-
-```
-Zwei Befunde aus dem Doku-Lauf, beide sofort korrigiert statt liegengelassen:
-
-1. Die Stand-Tabelle nannte hypothesen 0/20 auf 1/20 - der Kantenhop (F64) hatte
-   sie am selben Abend auf 11/20 gebracht. Nachgezogen. Genau die Alterung, die
-   heute schon siebenmal Zahlen falsch weitergereicht hat.
-
-2. Im uebergeordneten dokumente/ liegen aeltere gleichnamige Dateien vom 14.08.
-   Zwei Fassungen desselben Namens an zwei Orten sind die zwei Wahrheiten, vor
-   denen F48 warnt. Als bekannt und unaufgeraeumt gekennzeichnet, mit Angabe
-   welche gilt - nicht still gelassen.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15
-
-`6f5fd3c2ff00` · unifieddb · 14:39 UTC · ClayVerse
-
-```
-- ENTSCHEIDUNGEN-2026-08-15.md (F1-F63), STAND-2026-08-15-abend.md,
-  ABGLEICH-F15-F49.md, WEITERMACHEN.md, UEBERGABE-GLM.md kopiert
-- Wegweiser dokumente/clayverse/README.md fuer Einstieg
-- README.md: Tagesstand-Tabelle + widerlegte Annahmen ergaenzt
-- .gitignore: *.env, venv*, *.db ergaenzt
-```
-
-### B27 geprueft: Hypothesen-Kantenhop: Symmetrie zu gegenseite hergestellt
-
-`3ef53c00c34a` · clay · 14:33 UTC · ClayVerse
-
-```
-Ein Kantenhop (kante+graph_kante, nie zwei) von chosen_ids zu artikel.art=hypothese, gewichtet nach Kantenart. RELATED = 9691/14235 = 68,1% aller graph_kante-Kanten, Stichprobe bestaetigt blosse Verzeichnisnachbarschaft (source_kante_art=geschwister_verzeichnis) -- am staerksten abgewertet (Gewicht 0,3 vs 1,0-3,0 fuer inhaltliche Kantenarten). Vorher/nachher, dieselben 20 Fragen: hypothesen>0 1/20 -> 11/20 (Ziel >=8/20 erreicht, uebertroffen), gegenseite>0 8/20 -> 8/20 (Invariante unveraendert, resolution_class-Verteilung 19 LOW_CONFIDENCE/1 EXACT_ID identisch vorher/nachher), Latenz-Median 278,3 -> 317,4ms (Deckel 399,7ms eingehalten), paket_bytes Mittel +3,2%, max Einzelfall +8,1% (Deckel +30% eingehalten). Kantenabfrage aus dem codependenzen-Block wiederverwendet (kein Zweitscan auf kante), nur graph_kante + kleine PK-Nachfrage fuer Kandidaten ausserhalb bereits geladenem felder-dict. hop_kandidaten/hop_verwendet je Frage im Politik-Bericht ausgewiesen und gedeckelt (F45).
-```
-
-### paket(): Hypothesen-Kantenhop [B27-2] -- Symmetrie zu gegenseite
-
-`feabb10dd699` · unifieddb · 14:33 UTC · ClayVerse
-
-```
-Ein Kantenhop (kante+graph_kante, NIE zwei) von chosen_ids zu artikel.art=hypothese,
-gewichtet nach Kantenart (RELATED = 68,1% aller graph_kante-Kanten [M 15.08.],
-schwaechste Evidenz = blosse Verzeichnisnachbarschaft, abgewertet). Reuse: kante-Abfrage
-aus dem codependenzen-Block wiederverwendet (kein Zweitscan), nur graph_kante + kleine
-PK-Nachfrage fuer unbekannte Kandidaten neu.
-
-Gemessen, dieselben 20 Fragen vorher/nachher (siehe /tmp/messen_kantenhop.py):
-  hypothesen>0   1/20 -> 11/20  (Ziel >=8/20 erreicht)
-  gegenseite>0   8/20 -> 8/20   (Invariante unveraendert)
-  latenz median  278,3 -> 317,4 ms (Deckel 399,7ms eingehalten)
-  paket_bytes    Mittel +3,2%, max Einzelfall +8,1% (Deckel +30% eingehalten)
-  hop_kandidaten pro Frage im Politik-Bericht ausgewiesen, gedeckelt (F45)
-
-Backup: udb/abruf/paket.py.vor-kantenhop (lokal, nicht versioniert)
 ```
 

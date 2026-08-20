@@ -292,10 +292,46 @@ class ClayVerseEffectBridge:
         return {"ok": ok, "artikel_id": artikel_id or "zero", "tag": tag or None}
 
     def udb_memory_search(self, suchbegriff: str, limit: int = 10) -> dict:
-        from udb.abruf.memory_entitaet import MemoryEntitaet
-        me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+        """Beide Gedaechtnisse -- siehe Modul-Historie 2026-08-20.
+
+        `memory_tabelle` ist das ausdruecklich gemerkte (udb_memory_add).
+        `durable_memory` ist das aus echten Gespraechen extrahierte -- und
+        genau das, worauf sich die Vorstufe beruft. Wer nur das erste
+        durchsucht, widerspricht der Vorstufe systematisch und haelt eine
+        belegte Angabe fuer unbelegt.
+        """
+        n = max(1, min(int(limit), 50))
+        ergebnisse = []
+        try:
+            from udb.abruf.memory_entitaet import MemoryEntitaet
+            me = MemoryEntitaet(os.environ.get("CLAYVERSE_DB_PATH", "/var/lib/clay/wiki.db"))
+            for r in me.memory_suche(self.user_id, suchbegriff, limit=n):
+                r = dict(r)
+                r["speicher"] = "gemerkt (memory_tabelle)"
+                ergebnisse.append(r)
+        except Exception as fehler:
+            ergebnisse.append({"speicher": "gemerkt (memory_tabelle)",
+                               "nicht_lesbar": f"{type(fehler).__name__}: {fehler}"})
+        try:
+            muster = f"%{suchbegriff}%"
+            for r in self.db.db.execute(
+                    "SELECT memory_id, kind, subject, value, ts FROM durable_memory "
+                    "WHERE user_id = ? AND (value LIKE ? OR subject LIKE ?) "
+                    "ORDER BY ts DESC LIMIT ?",
+                    (self.user_id, muster, muster, n)).fetchall():
+                d = dict(r)
+                d["speicher"] = "aus dem Gespraech (durable_memory)"
+                ergebnisse.append(d)
+        except Exception as fehler:
+            ergebnisse.append({"speicher": "aus dem Gespraech (durable_memory)",
+                               "nicht_lesbar": f"{type(fehler).__name__}: {fehler}"})
         return {"suchbegriff": suchbegriff, "gehoert_zu": self.user_id,
-                "ergebnisse": me.memory_suche(self.user_id, suchbegriff, limit=max(1, min(int(limit), 50)))}
+                "ergebnisse": ergebnisse,
+                "hinweis": ("Zwei Speicher: 'gemerkt' ist, was ausdruecklich abgelegt wurde; "
+                            "'aus dem Gespraech' ist, was aus echten Zuegen extrahiert wurde -- "
+                            "darauf beruft sich die Vorstufe. Ein Treffer dort ist ein BELEG, "
+                            "keine Vermutung; nenne den Menschen als Quelle, wenn er es "
+                            "selbst gesagt hat.")}
 
     # ── Menschen: wer ist da, wem gehoert was ─────────────────────────────
 
@@ -879,7 +915,7 @@ def main() -> None:
 
     @mcp.tool(annotations=udb_ro)
     def udb_memory_search(suchbegriff: str, limit: int = 10) -> dict:
-        """Durchsucht gespeicherte Memory-Eintraege nach Inhalt."""
+        """Durchsucht BEIDE Gedaechtnisse nach Inhalt: das ausdruecklich Gemerkte und das aus echten Gespraechen Extrahierte (darauf beruft sich die Vorstufe). ⭐ Findest du dort etwas, ist es ein BELEG -- sag es weiter und nenne die Quelle, statt es als unbestaetigt abzutun."""
         return bridge.udb_memory_search(suchbegriff, limit)
 
     @mcp.tool(annotations=udb_ro)

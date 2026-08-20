@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T03:11:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -87,7 +87,7 @@ Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (44)
+## reparatur (42)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -125,8 +125,6 @@ Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:10 | entityos | `f5007745b0d6` | fix(clayverse): decouple reasoning from effect budget |
 | 2026-08-18T03:08 | entityos | `ae5cc353559c` | fix(clayverse): bind autonomy success evidence to exact effect intent |
 | 2026-08-18T02:37 | entityos | `65b62e2cda72` | fix(clayverse): register exact store module before dataclass load |
-| 2026-08-18T02:24 | entityos | `38840ad5d896` | fix(clayverse): separate staged source archive from seed payload copy |
-| 2026-08-18T02:20 | entityos | `c68f3d087e05` | fix(clayverse): fail closed on missing QEMU guest receipt |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -136,7 +134,7 @@ Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (43)
+## pruefung (39)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -176,18 +174,21 @@ Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:11 | entityos | `ca4ad90f452b` | test(clayverse): fence effect budget without blocking reasoning |
 | 2026-08-18T02:57 | entityos | `977b16f53b56` | test(clayverse): fence autonomous goal truth and runaway loops |
 | 2026-08-18T02:29 | entityos | `c5c6ac1369ef` | test(clayverse): probe VPS KVM admission without product execution |
-| 2026-08-18T02:24 | entityos | `f399590c943e` | test(clayverse): bind immutable candidate inside disposable guest |
-| 2026-08-18T02:24 | entityos | `1fa4e2d9c80f` | test(clayverse): execute UnifiedDB core inside disposable QEMU guest |
-| 2026-08-18T02:23 | entityos | `7dd0b519930a` | test(clayverse): execute canonical source inside disposable QEMU guest |
-| 2026-08-18T02:23 | entityos | `bc374186c1d9` | test(clayverse): execute exact PR686 compile inside QEMU guest |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (250)
+## bau (256)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T03:04 | entityos | `ad4524a19c3b` | EOS-Chronik 2026-08-20 03:04:50 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T03:01 | entityos | `7dc964ba8b1b` | EOS-Chronik 2026-08-20 03:01:58 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T02:59 | entityos | `2c2d6608f09b` | EOS-Chronik 2026-08-20 02:59:28 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:56 | entityos | `f9b65411d7d0` | EOS-Chronik 2026-08-20 02:56:59 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:48 | entityos | `7920cbb235ca` | EOS-Chronik 2026-08-20 02:48:38 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:46 | entityos | `d2db1d515d51` | EOS-Chronik 2026-08-20 02:46:16 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T02:43 | entityos | `b73add92ecf9` | EOS-Chronik 2026-08-20 02:43:56 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:41 | entityos | `2b096801f85e` | EOS-Chronik 2026-08-20 02:41:10 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:38 | entityos | `ae5fe886aba2` | EOS-Chronik 2026-08-20 02:38:55 +0000 — entityos: 5 Aenderungen |
 | 2026-08-20T02:30 | entityos | `74c2f23b46c0` | EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen |
@@ -241,11 +242,4 @@ Automatisch erzeugt 2026-08-20T02:41:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
 | 2026-08-18T10:42 | entityos | `2b2f7219ab05` | Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch |
 | 2026-08-18T10:35 | entityos | `8e37f4a64a81` | Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate |
-| 2026-08-18T10:31 | entityos | `a28d05094773` | Der Verlauf haengt jetzt in der NEUEN Oberflaeche - und zwei Fallen, die den Dienst umlegten |
-| 2026-08-18T10:14 | entityos | `2e7c0a80f66b` | Dauerhafter Chatverlauf: /api/history - und die Kollision, die das Frontend gekostet hat |
-| 2026-08-18T10:07 | entityos | `12dbe95c5521` | Zero sieht jetzt sein eigenes Haus - und Stillstand sieht nicht mehr wie Ruhe aus |
-| 2026-08-18T10:06 | unifieddb | `830605735d81` | Erkundungsanteil gegen die eigene Karte - das Gegenmittel zum Echoproblem |
-| 2026-08-18T10:01 | entityos | `3fa502e8f710` | Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verifie |
-| 2026-08-18T10:00 | unifieddb | `e1bc60fa6773` | Der Walk ging nur vorwaerts - ein Drittel des Graphen lag hinter ihm |
-| 2026-08-18T09:52 | entityos | `06771bdb1720` | Security: publish the terminal port on loopback only |
 

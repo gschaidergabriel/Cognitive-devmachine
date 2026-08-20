@@ -195,7 +195,22 @@ try, and Zero still finds nothing, does the honest fallback apply: report plainl
 the gap.
 
 `bekannt` facts are the only ones caveman_prompt may state as settled, weighted by herkunft as
-below. A fact that is neither needed by the question nor found for it does not belong in
+below. ⭐⭐ AND A FACT NEVER TRAVELS WITHOUT ITS SOURCE -- QUOTED, NOT DESCRIBED. When caveman_prompt
+states a fact that came from a memory_artefact, it QUOTES that artefact's wording verbatim as the
+evidence: `say to human: "you are 38 years old -- you said it yourself: 'gabriel ist 38'"`, NOT
+`say to human: "you are 38 years old"` and NOT `... -- it is in memory`. A claim ABOUT evidence is
+not evidence. Measured 2026-08-20, in this exact order: the bare fact was refused as a guess; the
+described source made Zero go SEARCH its memory; its memory tool then searched "alter" and "age"
+while the stored line reads "gabriel ist 38" -- no shared string, nothing found, refusal again.
+No further rule fixes that, because a substring search cannot bridge "age" and "38". Handing Zero
+the quoted line does: it already sits in memory_artefacts, so pass it through instead of making
+Zero find it again. Measured 2026-08-20: the bare form was
+produced correctly five times out of five, and Zero refused it every time -- "es gibt nichts, das
+38 bestaetigen koennte, das waere eine Vermutung". That is Zero's own no-guessing rule working as
+designed: handed an unsourced claim, it checked its tools, found no age field in the profile, and
+correctly declined to assert it. The missing piece was never the fact, it was the provenance. A
+fact whose source rides along is something Zero can attribute and pass on; a bare one is
+indistinguishable from a guess, and Zero is right to drop it. A fact that is neither needed by the question nor found for it does not belong in
 caveman_prompt at all. Put the `bekannt`/`unbekannt` classification itself INTO the `epistemik`
 key -- caveman_prompt carries only the DIRECTIVE that follows from it, never the raw
 classification text.
@@ -258,7 +273,15 @@ systems are connected to EntityOS and whether they are online, which free-tier A
 are available, which of exactly two humans (gabriel or andreas) is present TOGETHER WITH THAT \
 HUMAN'S PROFILE (current_user_profile: role, projects, which machines are theirs, and which \
 part of the wiki belongs to them), and the entity's own last up to 3 turns (own_recent) -- use THOSE, not free invention, as the basis for \
-hypotheses and counter-hypotheses that correlate with this request. If recent turns don't \
+hypotheses and counter-hypotheses that correlate with this request. \
+⚠️ own_recent is CONTEXT, never a TEMPLATE. What the last turns were ABOUT does not decide what \
+this turn is about, and the SHAPE of the last answers must not become the shape of this one. \
+Measured 2026-08-20 with everything else held constant: after two turns listing the system's own \
+open intents, the question "wie alt ist gabriel?" produced the intent list again -- while the \
+identical question with own_recent emptied produced 'say to human: "you are Gabriel Gschaider, 38 \
+years old"'. Same state, same facts, different answer, and the wrong one looked perfectly \
+coherent. Read own_recent for what the human is REFERRING BACK to ("und das andere?", "nochmal"); \
+never let it decide the kind of answer. If recent turns don't \
 support a real hypothesis, say so in watch_out instead of inventing one.
 
 You are also given `hyperposition` in CONTEXT: a CONSERVATIVE, SET-VALUED world-model readout \
@@ -397,6 +420,54 @@ def build_context(
     )
 
 
+_STOPP = frozenset("""
+    der die das ein eine einer eines und oder aber auch noch nur schon
+    ist sind war waren wird werden hat hatte haben habe kann koennen
+    ich du er sie es wir ihr mir mich dir dich sich uns euch
+    was wer wie wo wann warum wieso weshalb welche welcher welches
+    von vom zu zum zur mit fuer auf an in im am bei aus nach ueber unter
+    the a an and or but is are was were of to for on in at by with
+    what who how where when why which
+""".split())
+
+
+def _gedaechtnis_mechanisch(world, raw_prompt: str, deckel: int = 4) -> list[dict[str, Any]]:
+    """durable_memory-Eintraege, die ein Inhaltswort der Frage enthalten.
+
+    Bewusst stumpf: Wortabgleich, keine Bedeutung, kein Modellaufruf. Der Zweck
+    ist nicht, die richtige Erinnerung auszuwaehlen -- der Zweck ist, dass Zero
+    ueberhaupt eine zu sehen bekommt, wenn die Vorstufe das Feld verschluckt
+    hat. Herkunft wird immer mitgegeben, damit Zero die Angabe zuschreiben kann
+    statt sie als eigene Behauptung zu fuehren.
+    """
+    try:
+        eintraege = list((world or {}).get("durable_memory") or [])
+    except Exception:
+        return []
+    woerter = {w for w in "".join(
+        c if c.isalnum() else " " for c in (raw_prompt or "").lower()).split()
+        if len(w) > 2 and w not in _STOPP}
+    if not woerter or not eintraege:
+        return []
+    raus = []
+    for m in eintraege:
+        if not isinstance(m, dict):
+            continue
+        wert = str(m.get("value") or "")
+        subjekt = str(m.get("subject") or "")
+        text = f"{subjekt} {wert}".lower()
+        if any(w in text for w in woerter):
+            raus.append({
+                "wert": wert[:300],
+                "subjekt": subjekt,
+                "herkunft": f"durable_memory ({m.get('kind') or 'eintrag'}), "
+                            "mechanisch nachgereicht -- die Vorstufe hatte das Feld ausgelassen",
+            })
+        if len(raus) >= deckel:
+            break
+    return raus
+
+
 def run_prestage(
     *,
     raw_prompt: str,
@@ -484,6 +555,18 @@ def run_prestage(
             "caveman_prompt": "", "epistemik": {"bekannt": [], "unbekannt": []}}
     for k in _fehlend:
         payload[k] = _DEF.get(k, "")
+    # Weggelassen ODER leer: beides ist eine unbelegte Behauptung ueber das
+    # Gedaechtnis. Der Wortabgleich unten laesst eine BERECHTIGTE leere Liste
+    # leer -- siehe Modul-Historie 2026-08-20.
+    if not payload.get("memory_artefacts"):
+        _nachgereicht = _gedaechtnis_mechanisch(world, raw_prompt)
+        if _nachgereicht:
+            payload["memory_artefacts"] = _nachgereicht
+            if "memory_artefacts" not in _fehlend:
+                import sys as _sys
+                print("prestage: memory_artefacts war leer, "
+                      f"{len(_nachgereicht)} Eintraege mechanisch nachgereicht",
+                      file=_sys.stderr)
     if not str(payload.get("caveman_prompt") or "").strip():
         payload["caveman_prompt"] = (
             "answer the human's request honestly and directly; if you do not have "

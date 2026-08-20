@@ -90,6 +90,15 @@ ZUSATZREGELN (gemessen am 2026-08-19 an 26 echten Produktionszuegen):
     e) Diese Regel aendert NIE, was gesagt wird, nur WIE es klingt -- sie steht unter jeder \
        Regel oben und darf keine von ihnen aufweichen. Eine holprige, aber vollstaendig \
        treue Uebersetzung ist immer besser als eine warme, der ein Fakt fehlt.
+12. ⭐⭐ PERSON. "you/your" im caveman-Text meint IMMER den Menschen, der liest -- \
+    niemals den Sprecher. "you are Gabriel Gschaider" heisst "Du bist Gabriel Gschaider" \
+    (oder "Sie sind ..."), NIE "Ich bin Gabriel Gschaider". "your machine" ist "deine \
+    Maschine", nie "meine". Ein "I/me/my" im Original ist die Entitaet selbst und bleibt \
+    "ich" -- die Richtung wird nie getauscht, in keine der beiden Richtungen. \
+    Gemessen: aus "you are Gabriel Gschaider, 38 years old" wurde "Ich bin Gabriel \
+    Gschaider, 38 Jahre alt". Das ist keine Stilfrage -- danach ist im Gespraech nicht \
+    mehr zu unterscheiden, wer der Mensch ist und wer die Entitaet. Diese Regel steht \
+    ueber Regel 10: lieber steif und mit richtiger Person als warm und mit falscher.
 11. BETRIEBSTON. Vor dem CAVEMAN TEXT kann eine Zeile "BETRIEBSTON: ..." stehen -- eine \
     ECHTE, gemessene Angabe zum Herzschlag der Entitaet gerade jetzt (ruhig / angespannt / \
     neutral), keine Erfindung von dir. Nutze sie NUR fuer Wortwahl und Waerme, genau wie \
@@ -317,6 +326,25 @@ def _maschinenmarken(text: str) -> list[str]:
     return sorted(marken)
 
 
+RE_ANREDE = re.compile(r"\byou(?:'re| are)\b", re.I)
+RE_ICH_BIN = re.compile(r"\b(ich bin|ich heisse|ich heiße|mein name ist)\b", re.I)
+
+
+def _person_vertauscht(quelle: str, deutsch: str) -> bool:
+    """Redet die Quelle den Menschen an, und das Deutsche macht eine Ich-Aussage daraus?
+
+    Bewusst eng: nur die Richtung "you are ..." -> "ich bin ...". Ein "ich" im
+    Deutschen ist voellig in Ordnung, wenn die Quelle selbst "I" sagt -- deshalb
+    schlaegt die Pruefung nur an, wenn die Quelle KEIN eigenes "I am" traegt.
+    Siehe Modul-Historie 2026-08-20.
+    """
+    if not RE_ANREDE.search(quelle or ""):
+        return False
+    if re.search(r"\bI(?:'m| am)\b", quelle or ""):
+        return False   # die Quelle spricht selbst in der Ich-Form
+    return bool(RE_ICH_BIN.search(deutsch or ""))
+
+
 def _fehlende_marken(quelle: str, deutsch: str) -> list[str]:
     unten = deutsch.lower()
     return [m for m in _maschinenmarken(quelle) if m.lower() not in unten]
@@ -473,6 +501,18 @@ def translate_to_german(
                               "Maschinenmarken fehlten oder wurden uebersetzt")
             continue
 
+        # 3b. Harte Sperre: die PERSON wurde vertauscht.
+        #     Steht hier bewusst als HARTE Sperre neben den Maschinenmarken und
+        #     nicht bei den weichen Pruefungen: eine Uebersetzung, die den
+        #     Sprecher tauscht, ist nicht "etwas schlechter", sie sagt etwas
+        #     anderes. Siehe Modul-Historie 2026-08-20.
+        if _person_vertauscht(caveman_text, deutsch):
+            grund = "person"
+            zusatz = ("\n\nKORREKTUR: 'you are ...' im Original redet den MENSCHEN an. "
+                      "Schreib 'Du bist ...' bzw. 'Sie sind ...', NIEMALS 'Ich bin ...'. "
+                      "Die Entitaet ist nicht der Mensch.")
+            continue
+
         # 4. Weiche Pruefung: Bezeichner und Zahlen. Fehlt etwas, wird ein
         #    neuer Versuch unternommen -- aber die beste Fassung wird behalten
         #    statt verworfen. Eine Uebersetzung, der ein Bezeichner fehlt, ist
@@ -488,7 +528,8 @@ def translate_to_german(
                 "translator_receipt": quittung,
             }
         # Nur eine Fassung merken, die nicht mitten im Text aufhoert.
-        if not _wirkt_unfertig(roh) and (bester is None or len(fehlt) < bester[0]):
+        if (not _wirkt_unfertig(roh) and not _person_vertauscht(caveman_text, deutsch)
+                and (bester is None or len(fehlt) < bester[0])):
             bester = (len(fehlt), deutsch, result, fehlt)
         grund = "maske" if maskenfehler else "bezeichner"
         zusatz = _hinweis(_als_masken(fehlt, karte),

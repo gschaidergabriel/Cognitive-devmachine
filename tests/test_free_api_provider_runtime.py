@@ -306,6 +306,29 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(serialization_calls, [])
 
+    def test_structurally_oversized_request_is_rejected_before_snapshot(self):
+        snapshot_calls = []
+        original_snapshot = MOD._snapshot_text_chat_request
+
+        def tracking_snapshot(*args, **kwargs):
+            snapshot_calls.append("snapshot")
+            return original_snapshot(*args, **kwargs)
+
+        user = {"role": "user", "content": "x"}
+        assistant = {"role": "assistant", "content": "x"}
+        max_messages = MOD.MAX_PROVIDER_REQUEST_BYTES // 32
+        messages = [user, assistant] * (max_messages // 2)
+        messages.append(user)
+
+        MOD._snapshot_text_chat_request = tracking_snapshot
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(messages, model="mock", environ={})
+        finally:
+            MOD._snapshot_text_chat_request = original_snapshot
+
+        self.assertEqual(snapshot_calls, [])
+
     def test_active_monotonic_values_cannot_suppress_execution_receipt(self):
         method_calls = []
 

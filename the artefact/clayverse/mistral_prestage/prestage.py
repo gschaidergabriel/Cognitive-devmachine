@@ -110,6 +110,16 @@ mention (measured failure: a full machine description answering an unrelated que
 the human, so Zero will then correctly say "you are <name>, your machine is <...>". The
 opposite direction is unchanged: the human's "du/dein" that ADDRESSES Zero stays "you".
 Keep the two identities apart -- the human is never Zero, and Zero is never the human.
+⭐⭐ AND THE FORM MATTERS, not just the pronoun: when the question IS about the human, hand
+Zero the FACTS, already addressed to the human -- e.g. `say to human: "you are Dr. Andreas
+Unterweger, chair at IAR Graz. your machine is andreas-MACO"` -- NEVER the bare meta-instruction
+"tell the human who they are". Measured 2026-08-20: the meta-form produced "Ich bin Dr. Andreas
+Unterweger ... Meine Maschine" -- Zero, given no facts, went looking, found a profile block and
+recited it, and a recited profile block has no grammatical person. The translator was checked
+and is innocent: "you are Dr. Andreas Unterweger" becomes "Sie sind Dr. Andreas Unterweger"
+correctly. So the fix is here: facts in the prompt, in second person, taken from
+current_user_profile/canonical identity via epistemik.bekannt. A caveman_prompt that only tells
+Zero to go find out WHO IT IS TALKING TO is the identity collapse waiting to happen.
 
 (G) ⭐⭐ ZERO HANDELT JETZT DIREKT MIT NATIVEN WERKZEUGEN -- SHELL IST ERLAUBT.
 Zero ist eine echte Claude-Code-Sitzung auf dem VPS mit vollem nativem Werkzeug:
@@ -267,7 +277,17 @@ when genuinely nothing there bears on the request -- but CHECK before you write 
 this is the entity's memory across turns and skipping it is how it forgets what a human just \
 told it. A durable memory that answers the question outright belongs in epistemik.bekannt with \
 its herkunft, NOT in unbekannt: something a human told you IS known, and the honest answer \
-names both the fact and who said it. Measured 2026-08-20: this key was omitted on every single \
+names both the fact and who said it. \
+⭐⭐ RANK: a fact a HUMAN STATED (durable_memory with a human source) OUTRANKS the entity's own \
+earlier turns in own_recent saying it could not be found, and outranks any web result about a \
+person with the same name. Those earlier turns describe what was true BEFORE the human \
+answered; they are not evidence that the fact is still missing. Measured 2026-08-20: \
+memory_artefacts correctly carried "gabriel ist 38" -- said by Gabriel himself -- while \
+own_recent carried three of Zero's own "no age field / can't confirm" turns, and the pre-stage \
+followed its own three failures, put age in `unbekannt`, sent Zero to the web, and Zero guessed \
+"about 36-37" off a stranger's LinkedIn profile. When durable_memory answers it and own_recent \
+contradicts, durable_memory wins and caveman_prompt states the fact with its source ("human \
+said X"), with NO web search ordered for it. Measured 2026-08-20: this key was omitted on every single \
 turn (it had no definition here), so durable_memory -- including a stored, sourced answer to a \
 question Zero then claimed not to know -- never reached Zero at all. epistemik is \
 {"bekannt": [{"fakt": ..., "herkunft": ...}, ...], "unbekannt": [...]} per rule (H) -- \

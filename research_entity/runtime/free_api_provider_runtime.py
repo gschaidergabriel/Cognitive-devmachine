@@ -554,55 +554,74 @@ def _execute_chat_locked(
     response_headers = None
     response_classified = False
     response_too_large = False
+    response_context_error = None
     retryable = False
     finished = None
 
     try:
         try:
             with request_opener(request, timeout=30) as response:
-                candidate_status = _transport_metadata_or_none(response, "status")
-                if not _is_valid_http_status(candidate_status):
-                    raise ValueError("response_status_must_be_http_integer")
-                status = candidate_status
-                response_started = True
-                response_headers = _transport_metadata_or_none(response, "headers")
-                lifecycle.append("EXECUTED")
-                if status == 200:
-                    response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
-                    if not isinstance(response_body, bytes):
-                        raise TypeError("response_body_must_be_bytes")
-                    if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
-                        response_too_large = True
-                else:
-                    finished = now()
-                    content = None
-                    if status == 202:
-                        outcome = "provider_result_pending"
-                        cooldown_seconds = 0
-                        retryable = False
-                    elif 200 <= status <= 299:
-                        outcome = "unexpected_success_status"
-                        cooldown_seconds = 0
-                        retryable = False
-                    elif status == PAYMENT_REQUIRED_STATUS:
-                        latches.add(_payment_latch_key(selected, env))
-                        outcome = "payment_required_hard_stop"
-                        cooldown_seconds = 0
-                        retryable = False
-                    elif status == 429:
-                        outcome = "rate_limited"
-                        cooldown_seconds = _retry_after_seconds(
-                            response_headers, wall_time()
+                try:
+                    candidate_status = _transport_metadata_or_none(
+                        response, "status"
+                    )
+                    if not _is_valid_http_status(candidate_status):
+                        raise ValueError("response_status_must_be_http_integer")
+                    status = candidate_status
+                    response_started = True
+                    response_headers = _transport_metadata_or_none(
+                        response, "headers"
+                    )
+                    lifecycle.append("EXECUTED")
+                    if status == 200:
+                        response_body = response.read(
+                            MAX_PROVIDER_RESPONSE_BYTES + 1
                         )
-                        retryable = False
+                        if not isinstance(response_body, bytes):
+                            raise TypeError("response_body_must_be_bytes")
+                        if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
+                            response_too_large = True
                     else:
-                        outcome = "provider_error"
-                        cooldown_seconds = 15
-                        retryable = False
-                    response_classified = True
+                        finished = now()
+                        content = None
+                        if status == 202:
+                            outcome = "provider_result_pending"
+                            cooldown_seconds = 0
+                            retryable = False
+                        elif 200 <= status <= 299:
+                            outcome = "unexpected_success_status"
+                            cooldown_seconds = 0
+                            retryable = False
+                        elif status == PAYMENT_REQUIRED_STATUS:
+                            latches.add(_payment_latch_key(selected, env))
+                            outcome = "payment_required_hard_stop"
+                            cooldown_seconds = 0
+                            retryable = False
+                        elif status == 429:
+                            outcome = "rate_limited"
+                            cooldown_seconds = _retry_after_seconds(
+                                response_headers, wall_time()
+                            )
+                            retryable = False
+                        else:
+                            outcome = "provider_error"
+                            cooldown_seconds = 15
+                            retryable = False
+                        response_classified = True
+                except Exception as exc:
+                    # Do not expose suite exceptions to a foreign __exit__:
+                    # a true return value would suppress the evidence needed
+                    # for fail-closed receipt classification.
+                    response_context_error = exc
         except Exception:
-            if not response_classified and not response_too_large:
+            if (
+                not response_classified
+                and not response_too_large
+                and response_context_error is None
+            ):
                 raise
+        if response_context_error is not None:
+            raise response_context_error
         if response_too_large:
             raise ProviderResponseTooLarge
         if status == 200:

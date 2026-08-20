@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import os
+import sys
 import time
 from typing import Any
 
@@ -328,7 +330,7 @@ def _gewaehlte_treffer(world: dict[str, Any], broadcast_ids) -> list:
         # auf ANGEBOT_MAX deckelte -- in einem von acht Zuegen liess das Tor
         # vier Stellen durch, waehrend die Zuendungsgroesse drei meldete. Eine
         # gemeldete Zahl, die nicht die durchgesetzte ist, ist keine Messung.
-        elif "gw_zugelassen" in t and k not in set(zugelassene_ids(treffer)):
+        elif "gw_zugelassen" in t and k not in set(wettbewerb.zugelassene_ids(treffer)):
             gesperrt.append(k)
         else:
             gewaehlt.append(t)
@@ -343,17 +345,68 @@ def _gewaehlte_treffer(world: dict[str, Any], broadcast_ids) -> list:
     return gewaehlt
 
 
-def _korpus_zeile(world: dict[str, Any], treffer: list | None = None) -> str:
-    """Die ausgestrahlten Stellen, kurz und mit Quelle -- oder "" wenn keine."""
+_PFAD = re.compile(r"(?<![\w/])(?:/(?:var|opt|etc|srv|home|usr|tmp)/[\w./-]{4,})")
+
+
+def _erfundene_pfade(caveman: str, vorstufe_world: dict[str, Any]) -> list[str]:
+    """Absolute Pfade im Auftrag, die NIRGENDS im Kontext der Vorstufe stehen.
+
+    ⭐ Gemessen 2026-08-20: `read file /var/lib/clay/werkbank/leihmich/
+    arbeitskopie.json` -- frei erfunden, existiert nicht, hat nie existiert.
+    Zero verbringt darauf eine volle Runde und meldet dann eine Absage; der
+    Mensch bekommt "geht nicht" statt der Antwort, die im Korpus lag.
+
+    Geprueft wird gegen den Kontext, den die Vorstufe WIRKLICH gesehen hat --
+    ein Pfad, der nur im ungekuerzten world steht, war fuer sie ebenso wenig
+    lesbar und ist damit genauso geraten.
+    """
+    heu = json.dumps(vorstufe_world or {}, ensure_ascii=False, default=str)
+    return sorted(p for p in set(_PFAD.findall(caveman or "")) if p not in heu)
+
+
+def _auswahl_nachziehen(broadcast_ids, vorstufe_world: dict[str, Any]) -> tuple[list, str]:
+    """Leere Auswahl trotz zugelassener Kandidaten -> mechanisch nachziehen.
+
+    Dieselbe Begruendung wie bei `_gedaechtnis_mechanisch` in prestage.py:
+    etwas WEGZULASSEN ist auch eine Behauptung ueber den Korpus, und eine
+    unbelegte. Gemessen 2026-08-20: bei einem zugelassenen Kandidaten mit Wert
+    0,8 waehlte die Vorstufe [] und schickte Zero eine erfundene Datei lesen.
+
+    Ein Verzicht bleibt moeglich -- aber nur, wenn der Wettbewerb gar nichts
+    zugelassen hat. Die Herkunft wird mitgefuehrt (`modell`/`mechanisch`/
+    `verzicht`), damit eine Messung beides auseinanderhalten kann: sonst saehe
+    eine nachgezogene Auswahl aus wie eine getroffene.
+    """
+    ids = [str(k).strip() for k in (broadcast_ids or []) if str(k).strip()]
+    if ids:
+        return ids, "modell"
+    zugelassen = wettbewerb.zugelassene_ids(vorstufe_world.get("corpus") or [])
+    if not zugelassen:
+        return [], "verzicht"
+    return zugelassen, "mechanisch"
+
+
+def _korpus_zeile(world: dict[str, Any], treffer: list | None = None,
+                  volltext: dict[str, Any] | None = None) -> str:
+    """Die ausgestrahlten Stellen, kurz und mit Quelle -- oder "" wenn keine.
+
+    `volltext` ist das UNGEKUERZTE world. Es wird gebraucht, seit die Vorstufe
+    den Korpus nur noch als Kennung sieht (wettbewerb.nur_kennung): der
+    Ausschnitt existiert dann ausserhalb ihres Blickfelds, und genau das ist
+    der Sinn -- MATERIALISIERT wird hier, nach der Wahl, nicht davor.
+    """
     if treffer is None:
         treffer = [t for t in ((world or {}).get("corpus") or []) if isinstance(t, dict)]
     if not treffer:
         return ""
+    voll = {str(t.get("artikel_id") or ""): t
+            for t in ((volltext or {}).get("corpus") or []) if isinstance(t, dict)}
     zeilen = []
     for t in treffer[:_KORPUS_IM_PROMPT_N]:
-        titel = str(t.get("titel") or "").strip()
-        aus = " ".join(str(t.get("ausschnitt") or "").split())
         kennung = str(t.get("artikel_id") or "").strip()
+        quelle = voll.get(kennung) or t
+        titel = str(t.get("titel") or quelle.get("titel") or "").strip()
+        aus = " ".join(str(quelle.get("ausschnitt") or t.get("ausschnitt") or "").split())
         if not aus:
             continue
         zeilen.append(f"- [{kennung}] {titel}: {aus}")
@@ -367,7 +420,8 @@ def _korpus_zeile(world: dict[str, Any], treffer: list | None = None) -> str:
     return (kopf + "\n" + "\n".join(zeilen))[:_KORPUS_IM_PROMPT_MAX_CHARS]
 
 
-def _mit_arbeitsraum(caveman: str, world: dict[str, Any], broadcast_ids=None) -> str:
+def _mit_arbeitsraum(caveman: str, world: dict[str, Any], broadcast_ids=None,
+                     volltext_world: dict[str, Any] | None = None) -> str:
     """Den GEWAEHLTEN Korpus an den Auftrag haengen -- siehe Modul-Historie.
 
     Drei Stellungen von CLAYVERSE_KORPUS_IM_PROMPT:
@@ -383,9 +437,10 @@ def _mit_arbeitsraum(caveman: str, world: dict[str, Any], broadcast_ids=None) ->
     if stellung in ("0", "aus", "off"):
         return caveman
     if stellung in ("alle", "all", "1"):
-        zeile = _korpus_zeile(world)
+        zeile = _korpus_zeile(world, volltext=volltext_world)
     else:
-        zeile = _korpus_zeile(world, _gewaehlte_treffer(world, broadcast_ids))
+        zeile = _korpus_zeile(world, _gewaehlte_treffer(world, broadcast_ids),
+                              volltext=volltext_world)
     return f"{caveman}\n\n{zeile}" if zeile else caveman
 
 
@@ -442,6 +497,13 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     bewerteter_korpus = wettbewerb.bewerten(
         list(world.get("corpus") or []), frage,
         world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {})
+
+    # ⭐⭐ DER ENGPASS. `kennung` (Vorgabe): die Vorstufe sieht Kennung, Titel und
+    # Wert, aber KEINEN Volltext -- sie kann waehlen, nicht weitererzaehlen.
+    # `inhalt`: der alte Zustand, als Vergleichsarm erhalten, damit der
+    # Unterschied gemessen statt behauptet wird. Siehe wettbewerb.nur_kennung.
+    if os.environ.get("CLAYVERSE_KORPUS_SICHT", "kennung").strip().lower() == "kennung":
+        bewerteter_korpus = wettbewerb.nur_kennung(bewerteter_korpus)
 
     packed: dict[str, Any] = {
         "own_recent": own_recent,
@@ -779,11 +841,32 @@ def run_chat_turn(
                 if _pflicht not in selected_tools:
                     selected_tools.append(_pflicht)
 
+        # ⭐ Zwei mechanische Sicherungen zwischen Wahl und Auftrag. Beide
+        # ergaenzen nur und loeschen nichts -- eine Sicherung, die den Auftrag
+        # umschreibt, waere von einer zweiten Vorstufe nicht zu unterscheiden.
+        _ids, _auswahl_herkunft = _auswahl_nachziehen(
+            envelope.get("broadcast_ids"), vorstufe_world)
+        if _auswahl_herkunft == "mechanisch":
+            print("prestage: broadcast_ids war leer, obwohl der Wettbewerb "
+                  f"{_ids} zugelassen hat -- mechanisch nachgezogen", file=sys.stderr)
+        envelope["broadcast_ids"] = _ids
+        _geraten = _erfundene_pfade(envelope.get("caveman_prompt") or "", vorstufe_world)
+        if _geraten:
+            print(f"prestage: erfundene Pfade im Auftrag -- {_geraten}", file=sys.stderr)
+            envelope["caveman_prompt"] = (
+                (envelope.get("caveman_prompt") or "")
+                + "\n\nTHESE PATHS DO NOT EXIST in this turn's context: "
+                + ", ".join(_geraten)
+                + ". Do NOT try to read them -- they were guessed, not seen. "
+                  "Answer from the CORPUS block below and name the article id "
+                  "as your source.")
+
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(
             _mit_arbeitsraum(
                 _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
-                vorstufe_world, envelope.get("broadcast_ids")),
+                vorstufe_world, envelope.get("broadcast_ids"),
+                volltext_world=world),
             user_id=user_id, session_id=session_id,
             tool_selection=selected_tools,
         )
@@ -816,7 +899,8 @@ def run_chat_turn(
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(
                     _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
-                    vorstufe_world, envelope2.get("broadcast_ids")),
+                    vorstufe_world, envelope2.get("broadcast_ids"),
+                    volltext_world=world),
                 user_id=user_id, session_id=session_id,
                 tool_selection=selected_tools,
             )
@@ -940,6 +1024,9 @@ def run_chat_turn(
             # Wie viele Stellen der Wettbewerb ueberhaupt zugelassen hat. Ohne
             # diese Zahl ist "nichts ausgestrahlt" nicht von "nichts zu
             # senden gehabt" zu unterscheiden -- der Unterschied IST GWT-4.
+            # modell / mechanisch / verzicht -- ohne diese Unterscheidung
+            # sieht eine nachgezogene Auswahl aus wie eine getroffene.
+            "broadcast_herkunft": _auswahl_herkunft,
             "broadcast_angeboten": len(wettbewerb.zugelassene_ids(
                 vorstufe_world.get("corpus") or [])),
             "elapsed_ms": {

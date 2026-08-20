@@ -74,7 +74,20 @@ GEWICHT_RELEVANZ = 0.90
 # mitzuschleppen, wird das Gewicht dann auf relevanz umgelegt (siehe
 # _gewichte()) -- die Formel sagt damit die Wahrheit ueber das, was rechnet.
 GEWICHT_NEUHEIT = 0.10
-SCHWELLE = 0.32
+# ⭐ NICHT GERATEN, SONDERN ABGELESEN. Schwellensweep 0,10..0,40 in Schritten
+# von 0,02 ueber drei Fragesorten (A: Beleg im Korpus, B: fachfremd,
+# C: blosse Hoeflichkeit). Bis 0,28 kommt in A der Traeger 8/8 durch und kein
+# Zug faellt auf null; ab 0,30 faellt der erste Traeger raus (7/8), ab 0,34
+# nur noch 5/8. B faellt bereits ab 0,22 auf 0,33 angebotene Stellen (2/3 der
+# Fragen strahlen nichts aus). Die Mitte des Plateaus ist 0,25 -- dort ist der
+# Abstand zwischen "Beleg da" und "fachfremd" am groessten, ohne dass die
+# Trennung an der zweiten Nachkommastelle haengt.
+SCHWELLE = 0.25
+# Eine EINZELNE gedeckte Wortuebereinstimmung ist keine Passung. Ohne diese
+# Regel strahlte "danke, das war hilfreich" eine Stelle aus (ein gedecktes Wort
+# von zweien = relevanz 0,5) -- eine Zuendung ohne Sachfrage, also genau das
+# falsch-positive Feuern, das die Schwelle verhindern soll.
+MIN_GEDECKT = 2
 NEUHEIT_K = 0.6
 NEUHEIT_FENSTER = 50
 ANGEBOT_MAX = 3          # so viele Stellen duerfen hoechstens ausgestrahlt werden
@@ -149,8 +162,10 @@ def relevanz(treffer: dict[str, Any], frage_worte: list[str],
         return 0.0
     g = gewichte or {}
     summe = sum(g.get(w, 1.0) for w in frage_worte) or 1.0
-    getroffen = sum(g.get(w, 1.0) for w in frage_worte if _deckt(w, heu))
-    return getroffen / float(summe)
+    gedeckt = [w for w in frage_worte if _deckt(w, heu)]
+    if len(frage_worte) >= MIN_GEDECKT and len(gedeckt) < MIN_GEDECKT:
+        return 0.0
+    return sum(g.get(w, 1.0) for w in gedeckt) / float(summe)
 
 
 def neuheit(artikel_id: Any, haeufigkeiten: dict) -> float:
@@ -204,6 +219,44 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
         k.pop("_i", None)
     for rang, k in enumerate(raus, 1):
         k["gw_rang"] = rang
+    return raus
+
+
+# Felder, die eine Kandidatenzeile im PRAEBEWUSSTEN VORRAT tragen darf.
+# Alles andere -- vor allem `ausschnitt` -- ist INHALT und gehoert erst in den
+# Arbeitsraum, nachdem gewaehlt wurde.
+_KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
+                   "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
+                   "gw_zugelassen")
+
+
+def nur_kennung(bewertet: list) -> list[dict[str, Any]]:
+    """Kandidaten ohne Inhalt -- der eigentliche Engpass.
+
+    ⭐ GEMESSEN 2026-08-20, und es war der wichtigste Befund des Tages: mit
+    erzwungen LEEREM Arbeitsraum antwortete die Anlage trotzdem richtig, MIT
+    Quellenangabe. Der Grund ist keine Zauberei, sondern Bauart: die Vorstufe
+    WAEHLT nicht nur, sie SCHREIBT auch den Auftrag an Zero -- und sie sah den
+    vollen `ausschnitt` jedes Korpustreffers. Sie konnte den Inhalt also selbst
+    weitererzaehlen, an der Auswahl vorbei. Ein Engpass, den der Waehler
+    umgehen kann, ist keiner; jede Messung an `broadcast_ids` haette dann nur
+    gezeigt, wie gut die Vorstufe erzaehlt.
+
+    Deshalb sieht sie hier nur noch: Kennung, Titel, Art -- und die ZAHL, die
+    der Wettbewerb vergeben hat. Genug, um zu waehlen. Zu wenig, um zu
+    antworten. Der Volltext kommt ausschliesslich ueber die Materialisierung
+    der gewaehlten Kennungen (siehe pipeline._mit_arbeitsraum) und liegt bis
+    dahin ausserhalb des Arbeitsraums.
+
+    Der Wert selbst ist auf dem VOLLEN Treffer gerechnet worden, bevor hier
+    gekuerzt wird -- die Auswahl verliert also keine Grundlage, nur die
+    Moeglichkeit, sie zu umgehen.
+    """
+    raus = []
+    for k in (bewertet or []):
+        if not isinstance(k, dict):
+            continue
+        raus.append({f: k[f] for f in _KENNUNGSFELDER if f in k})
     return raus
 
 

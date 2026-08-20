@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T10:11:14Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (39)
+## reparatur (35)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -119,10 +119,6 @@ Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:28 | entityos | `24dccea1195f` | fix(clayverse): harden autonomy context generation and privacy |
 | 2026-08-18T03:26 | entityos | `3a3483999468` | fix(clayverse): bind autonomy evidence to exact autonomous causal episode |
 | 2026-08-18T03:20 | entityos | `8d3f078ff98e` | test(clayverse): repair autonomy recovery EffectJournal fixture |
-| 2026-08-18T03:19 | entityos | `75ac026eae14` | test(clayverse): bind autonomy recovery fixture to EffectJournal receipts |
-| 2026-08-18T03:17 | entityos | `1d8bec2a13a0` | fix(clayverse): re-enter autonomous goals without effect replay |
-| 2026-08-18T03:14 | entityos | `b4e98995b88e` | fix(clayverse): reject autonomy self-ack completion |
-| 2026-08-18T03:12 | entityos | `e97a47181e95` | fix(clayverse): separate effect budget and require later owner acknowledgement |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -132,7 +128,7 @@ Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (36)
+## pruefung (35)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -168,15 +164,20 @@ Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:24 | entityos | `cfe2f0cf2e99` | Test: fehlender sts-Claim ist laut Docstring ok, nicht abzulehnen |
 | 2026-08-18T03:21 | entityos | `2e7577660632` | Test: required_target nachgezogen + Regex-Tippfehler in Fehlermeldungs-Match korrigiert |
 | 2026-08-18T03:16 | entityos | `de1ffd0513f9` | Tests: verified_effect braucht jetzt required_target (Commit 8b7368efd) -- 5 Tests nachgezogen |
-| 2026-08-18T03:13 | entityos | `0e862557cf6d` | test(clayverse): fence autonomy effect budget and self-ack |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (261)
+## bau (266)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T10:02 | entityos | `4694b4089d88` | EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen |
+| 2026-08-20T09:55 | entityos | `00ab2d848de2` | EOS-Chronik 2026-08-20 09:55:48 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T09:51 | entityos | `b957d1e8faaf` | EOS-Chronik 2026-08-20 09:51:15 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T09:49 | entityos | `e2b0bdcc3d6c` | EOS-Chronik 2026-08-20 09:49:14 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T09:44 | entityos | `e607cedf8e69` | EOS-Chronik 2026-08-20 09:44:29 +0000 — entityos: 2 Aenderungen |
+| 2026-08-20T09:42 | entityos | `4284660be863` | EOS-Chronik 2026-08-20 09:42:23 +0000 — entityos: 4 Aenderungen |
 | 2026-08-20T09:27 | entityos | `32cf78a73248` | EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T09:18 | entityos | `8dad66fecbca` | EOS-Chronik 2026-08-20 09:18:31 +0000 — entityos: 5 Aenderungen |
 | 2026-08-20T09:01 | entityos | `43ddbd4b0464` | EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen |
@@ -231,10 +232,4 @@ Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-19T15:08 | entityos | `280c628447ed` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
 | 2026-08-19T15:08 | clay | `7edb9faf4713` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
 | 2026-08-19T15:01 | entityos | `cb8987d383d5` | EOS-Chronik 2026-08-19 15:01:57 +0000 — entityos: 1 Aenderungen |
-| 2026-08-19T15:01 | unifieddb | `6e92b7a1c079` | EOS-Chronik 2026-08-19 15:01:53 +0000 — unifieddb: 1 Aenderungen |
-| 2026-08-19T14:59 | entityos | `9da3ae0a3874` | EOS-Chronik 2026-08-19 14:59:39 +0000 — entityos: 12 Aenderungen |
-| 2026-08-19T14:59 | clay | `d0ea59aabbaa` | EOS-Chronik 2026-08-19 14:59:35 +0000 — clayverse: 4 Aenderungen |
-| 2026-08-19T14:59 | unifieddb | `999c886bfec7` | EOS-Chronik 2026-08-19 14:59:31 +0000 — unifieddb: 16 Aenderungen |
-| 2026-08-19T14:29 | entityos | `faa947ce4c30` | Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben) |
-| 2026-08-19T14:29 | entityos | `1834b4bda6f7` | Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module |
 

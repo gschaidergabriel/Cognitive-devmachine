@@ -1,12 +1,128 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T09:41:14Z. 940 Commits aus vier Repos, davon 309 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T10:11:15Z. 943 Commits aus vier Repos, davon 315 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen
+
+`4694b4089d88` · entityos · 10:02 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_gw_sicherungen.py
+  the artefact/tests/test_gw_tor.py
+
+Zeit: 2026-08-20T10:02:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:55:48 +0000 — entityos: 2 Aenderungen
+
+`00ab2d848de2` · entityos · 09:55 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T09:55:48+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:51:15 +0000 — entityos: 1 Aenderungen
+
+`b957d1e8faaf` · entityos · 09:51 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/prestage.py
+
+Zeit: 2026-08-20T09:51:15+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:49:14 +0000 — entityos: 2 Aenderungen
+
+`e2b0bdcc3d6c` · entityos · 09:49 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-20T09:49:14+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:44:29 +0000 — entityos: 2 Aenderungen
+
+`e607cedf8e69` · entityos · 09:44 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T09:44:29+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:42:23 +0000 — entityos: 4 Aenderungen
+
+`4284660be863` · entityos · 09:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T09:42:23+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen
 
@@ -4385,75 +4501,5 @@ haette erfuellen koennen). Der Fix selbst kam ohne Test-Update. Fuenf Tests
 in test_autonomy.py riefen _goal() ohne required_target und liefen alle in
 denselben ValueError. required_target jeweils auf den Ziel-String gesetzt,
 den der Testschritt sowieso schon im propose_step()-Effekt verwendet.
-```
-
-### fix(clayverse): reject autonomy self-ack completion
-
-`b4e98995b88e` · entityos · 03:14 UTC · Gabriel Gschaider
-
-```
-Fuse schema-neutral acknowledgement hardening into the canonical AutonomyController. Preserve exact effect-intent binding and the already-landed budget semantics. Source-reviewed only; no exact isolated runtime PASS claimed.
-```
-
-### EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet
-
-`a896a05284b8` · entityos · 03:13 UTC · BACK agent
-
-```
-_entityos_config() ignorierte das Require-Flag komplett und verlangte
-Pfad+SHA256 immer, ohne required/bound im Status zurueckzugeben. Jetzt:
-fail-closed nur wenn required=1 und nichts gesetzt ist, klare
-incomplete/absolute-Fehler bei Teilkonfiguration, bound=required im
-Status. _run_mistral_once folgt (execution_enabled -> bound).
-
-Zwei Tests waren veraltet, nicht der Code:
-- test_service_serial_server: _web_config(issuer) + CREDENTIALS_SOURCE
-  kamen durch spaetere Commits dazu, Fakes noch auf altem Signaturstand.
-- test_permanent_terminal_surface: pruefte Teilstrings gegen eine
-  angeblich gejointe Kommandozeile, die es nie gab (argv ist immer eine
-  flache Liste) -- auf denselben Listen-Match-Stil wie die
-  Schwester-Assertion in test_terminal_managed_authority.py umgestellt.
-```
-
-### fix(clayverse): bind autonomy success evidence to exact effect intent
-
-`ae5cc353559c` · entityos · 03:08 UTC · Gabriel Gschaider
-
-```
-Harden AutonomyController effect evidence admission by binding EffectJournal receipts to the exact admitted target/argv intent. Preserve existing owner, capability and generation fences. No exact isolated runtime PASS claimed.
-```
-
-### Retrieval-Quittung ging verloren: _bound_world packte nur 3 von 4 Schluesseln um
-
-`507c3416f123` · entityos · 03:00 UTC · EntityOS
-
-```
-WorldAssembler.assemble() liefert retrieval_receipt, TurnLifecycle._bound_world
-baute den Kontext aber aus nur drei Schluesseln neu zusammen. Die Quittung fiel
-still heraus. Folge: adaptives Retrieval war nicht pruefbar und die Befoerderung
-SHADOW->ACTIVE grundsaetzlich unbelegbar, weil der Beleg nie beim Aufrufer ankam.
-
-Das Abrufen selbst war korrekt (abfragesensitiv, nicht letzte-N) - nur der
-Nachweis darueber fehlte. Quittung wird jetzt durchgereicht und nie getrimmt.
-
-tests/test_microclay_retrieval.py: 4 rot -> 11 gruen
-```
-
-### infra(clayverse): add runner-independent disposable VPS KVM lab
-
-`aa6c1f283e88` · entityos · 02:27 UTC · Gabriel Gschaider
-
-```
-Authorize and add a direct VPS KVM guest lab for destructive ClayVerse testing without requiring GitHub Actions/runners. KVM is mandatory for the unrestricted lane; host execution remains forbidden.
-```
-
-## 2026-08-17
-
-### microvm: require strict supplemental-group identity
-
-`c35effd1b2cf` · entityos · 23:25 UTC · Gabriel Gschaider
-
-```
-Fuse the fresh-current Strict supplemental-group fence and focused regression. Exact source blobs were hash-bound and the fused 2-test source regression passed in the authorized isolated source-test container. Runtime enforcement remains an acceptance gate.
 ```
 

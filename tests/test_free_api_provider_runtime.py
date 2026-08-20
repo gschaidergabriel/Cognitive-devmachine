@@ -904,6 +904,46 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("DONE", receipt["lifecycle"])
                 self.assertIsNone(result["content"])
 
+    def test_active_bytes_response_body_cannot_execute_methods(self):
+        method_calls = []
+
+        class ActiveBytes(bytes):
+            def __len__(self):
+                method_calls.append("len")
+                raise LookupError("response-body-len-must-not-run")
+
+            def decode(self, *args, **kwargs):
+                method_calls.append("decode")
+                raise LookupError("response-body-decode-must-not-run")
+
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return ActiveBytes(b'{"choices":[]}')
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        result = MOD.execute_chat(
+            VALID_MESSAGES, model="mock", environ=env,
+            opener=lambda *args, **kwargs: Response(),
+            now=iter((55.0, 55.01)).__next__,
+        )
+        receipt = result["receipt"]
+        self.assertEqual(receipt["status"], 200)
+        self.assertEqual(receipt["outcome"], "invalid_provider_response")
+        self.assertFalse(receipt["retryable"])
+        self.assertIn("EXECUTED", receipt["lifecycle"])
+        self.assertNotIn("VERIFIED", receipt["lifecycle"])
+        self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertIsNone(result["content"])
+        self.assertEqual(method_calls, [])
+
     def test_non_utf8_network_json_cannot_reach_verified_state(self):
         class Response:
             status = 200

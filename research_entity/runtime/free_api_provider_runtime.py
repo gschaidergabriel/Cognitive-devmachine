@@ -552,51 +552,57 @@ def _execute_chat_locked(
     status = None
     response_started = False
     response_headers = None
+    response_classified = False
     retryable = False
     finished = None
 
     try:
-        with request_opener(request, timeout=30) as response:
-            candidate_status = _transport_metadata_or_none(response, "status")
-            if not _is_valid_http_status(candidate_status):
-                raise ValueError("response_status_must_be_http_integer")
-            status = candidate_status
-            response_started = True
-            response_headers = _transport_metadata_or_none(response, "headers")
-            lifecycle.append("EXECUTED")
-            if status == 200:
-                response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
-                if not isinstance(response_body, bytes):
-                    raise TypeError("response_body_must_be_bytes")
-                if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
-                    raise ProviderResponseTooLarge
-        if status != 200:
-            finished = now()
-            content = None
-            if status == 202:
-                outcome = "provider_result_pending"
-                cooldown_seconds = 0
-                retryable = False
-            elif 200 <= status <= 299:
-                outcome = "unexpected_success_status"
-                cooldown_seconds = 0
-                retryable = False
-            elif status == PAYMENT_REQUIRED_STATUS:
-                latches.add(_payment_latch_key(selected, env))
-                outcome = "payment_required_hard_stop"
-                cooldown_seconds = 0
-                retryable = False
-            elif status == 429:
-                outcome = "rate_limited"
-                cooldown_seconds = _retry_after_seconds(
-                    response_headers, wall_time()
-                )
-                retryable = False
-            else:
-                outcome = "provider_error"
-                cooldown_seconds = 15
-                retryable = False
-        else:
+        try:
+            with request_opener(request, timeout=30) as response:
+                candidate_status = _transport_metadata_or_none(response, "status")
+                if not _is_valid_http_status(candidate_status):
+                    raise ValueError("response_status_must_be_http_integer")
+                status = candidate_status
+                response_started = True
+                response_headers = _transport_metadata_or_none(response, "headers")
+                lifecycle.append("EXECUTED")
+                if status == 200:
+                    response_body = response.read(MAX_PROVIDER_RESPONSE_BYTES + 1)
+                    if not isinstance(response_body, bytes):
+                        raise TypeError("response_body_must_be_bytes")
+                    if len(response_body) > MAX_PROVIDER_RESPONSE_BYTES:
+                        raise ProviderResponseTooLarge
+                else:
+                    finished = now()
+                    content = None
+                    if status == 202:
+                        outcome = "provider_result_pending"
+                        cooldown_seconds = 0
+                        retryable = False
+                    elif 200 <= status <= 299:
+                        outcome = "unexpected_success_status"
+                        cooldown_seconds = 0
+                        retryable = False
+                    elif status == PAYMENT_REQUIRED_STATUS:
+                        latches.add(_payment_latch_key(selected, env))
+                        outcome = "payment_required_hard_stop"
+                        cooldown_seconds = 0
+                        retryable = False
+                    elif status == 429:
+                        outcome = "rate_limited"
+                        cooldown_seconds = _retry_after_seconds(
+                            response_headers, wall_time()
+                        )
+                        retryable = False
+                    else:
+                        outcome = "provider_error"
+                        cooldown_seconds = 15
+                        retryable = False
+                    response_classified = True
+        except Exception:
+            if not response_classified:
+                raise
+        if status == 200:
             payload = json.loads(
                 response_body.decode("utf-8"),
                 parse_constant=_reject_nonfinite_json_constant,

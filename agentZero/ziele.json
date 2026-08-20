@@ -1,8 +1,8 @@
 {
-  "erzeugt": "2026-08-20T03:15:49Z",
-  "erfuellt": 62,
-  "offen": 2,
-  "zurueckgestellt": 1,
+  "erzeugt": "2026-08-20T03:42:36Z",
+  "erfuellt": 75,
+  "offen": 1,
+  "zurueckgestellt": 2,
   "zeilen": [
     {
       "bereich": "Identität",
@@ -161,7 +161,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "251 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "253 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -257,7 +257,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 3 minutes (healthy)",
+      "ist": "Up 30 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -305,7 +305,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "18016 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "18017 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -369,8 +369,8 @@
       "faehigkeit": "agentforge geht in EntityOS auf",
       "soll": "kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server",
       "quelle": "Eigner 18.08.",
-      "ist": "Hosting-Ansicht übernommen und angeschlossen; die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) sind als Migration erfasst und AUSDRÜCKLICH NOCH NICHT begonnen — nach und nach, wie verlangt",
-      "erfuellt": false
+      "ist": "Hosting-Ansicht übernommen und angeschlossen. Die übrigen Dienste (Auslieferung, Projektverwaltung, Besuchszählung, Umfragedienst) waren als schrittweise Migration erfasst. ⏸ VOM EIGNER AM 19.08. GESTRICHEN — ausdrücklich nicht weiter verfolgen. Stand bis 20.08. weiter als 🔧 offen und las sich wie eine liegengebliebene Aufgabe; das ist derselbe Fehler wie andersherum, nur mit umgekehrtem Vorzeichen",
+      "erfuellt": null
     },
     {
       "bereich": "Abruf",
@@ -473,7 +473,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 0.5 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 0.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -505,7 +505,7 @@
       "faehigkeit": "Die gelernte Karte ist erreichbar",
       "soll": "nicht nur bm25 -- Wegehierarchie, Eintrittspunkte, Erkundung stehen Zero offen",
       "quelle": "Lehre aus dem Audit 18.08.",
-      "ist": "⚠️ Ein Pruefagent fand: die ganze gelernte Abruf-Maschine (udb.abruf.paket) wurde NIRGENDS aufgerufen -- Zeros einzige Tuer war schlichtes bm25, und vp_weg trug nur Testfixtures. Sie verhungerte an fehlender Nahrung. Jetzt als opt-in korpus_tief (~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart je Prozess waeren dort eine Verschlechterung. Der conn-close-Bug (Erfolgsmarke auf geschlossener DB) ist durch die Aufrufart geheilt. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte fuellt, haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
+      "ist": "⚠️ Ein Pruefagent fand: die ganze gelernte Abruf-Maschine (udb.abruf.paket) wurde NIRGENDS aufgerufen -- Zeros einzige Tuer war schlichtes bm25, und vp_weg trug nur Testfixtures. Sie verhungerte an fehlender Nahrung. Jetzt als opt-in korpus_tief (~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart je Prozess waeren dort eine Verschlechterung. ⚠️⚠️ RICHTIGSTELLUNG 20.08.: hier stand, der conn-close-Bug sei 'durch die Aufrufart geheilt'. Das war falsch. Er lebte -- paket() schloss die eigene Verbindung ACHT ZEILEN vor dem Block, der sie braucht, und auf jedem Pfad OHNE uebergebene Verbindung (Zeros eigener) fiel damit die ganze F92b/F94-Lernkaskade aus: keine Erfolgsmarke, keine Wegehierarchie, jeder Zug eine stderr-Zeile, die wie eine Restwarnung aussah. Behoben (schliessen im finally), gemessen: vp_erfolgsmarke +2 und vp_weg +1 auf drei Abrufe. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte fuellt, haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
       "erfuellt": true
     },
     {
@@ -522,6 +522,110 @@
       "soll": "die halbe Eignerregel war nicht lieferbar",
       "quelle": "Eigner 18.08.",
       "ist": "⚠️ Der geheim-Kern wurde auf 30 Eintraegen geschrieben und von NIEMANDEM gelesen: katalog() strich JEDEN Wert, auch Adressen und Token, die der Eigner ausdruecklich freigegeben hat. Jetzt tresor_zeigen mit HARTEM Passwort-Riegel: geprueft ueber alle 58 Eintraege, 0 Passwort-Lecks; Adressen und Token kommen heraus, Passwoerter nie -- auch nicht auf Wunsch",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Die Frage erreicht die Weltmontage",
+      "soll": "der Korpus wird zur FRAGE gebaut, nicht zur leeren Zeichenkette",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Bis 20.08. rief run_chat_turn `_gather_world_safe(db, session_id)` -- OHNE die Nachricht. assemble() baute den Korpus mit `query or \"\"`, also war world['corpus'] in JEDEM Zug LEER, bei damals 17.900 Artikeln. Die Vorstufe schrieb deshalb staendig 'no local info' und schickte Zero ins Netz nach Dingen aus der eigenen Datenbank; dass trotzdem Antworten kamen, lag daran, dass Zero sich danach per MCP selbst durch den Korpus arbeitete -- ein zweiter, langsamer Weg, der den ersten verdeckte. Damit wirkte auch die gesamte Abrufarbeit (corpus_lookup/enrich, Eval-Recall 75,8 %) nur im Eval, nie im Betrieb. Jetzt wird die Nachricht durchgereicht: gemessen 5 Treffer in 1-13 ms.",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Die Anlage serviert sich nicht ihr eigenes Nichtwissen",
+      "soll": "selbst geschriebene Luecken-Notizen duerfen keine Korpustreffer sein",
+      "quelle": "Befund 20.08.",
+      "ist": "Kaum war der Korpus angeschlossen, waren die BESTEN Treffer auf 'was ist iar?' zwei selbst geschriebene Notizen 'Wissensluecke: was ist iar?' -- sie tragen den Fragetext im Titel und gewinnen jedes BM25-Ranking. Das ist eine Rueckkopplung: je oefter etwas unbeantwortet bleibt, desto weiter draengen die Luecken-Notizen den echten Inhalt aus den fuenf Treffern. art='zero_luecke' und epistemic_class='MECHANICAL_GAP_HYPOTHESIS' sind jetzt von den Korpustreffern ausgeschlossen; die Notizen bleiben und behalten ihren Zweck, sie sind nur kein Wissen mehr",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
+      "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 144 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Gedächtnis",
+      "faehigkeit": "Ein Fakt reist mit seinem Beleg — wörtlich",
+      "soll": "eine Behauptung ÜBER einen Beleg ist kein Beleg",
+      "quelle": "Befund 20.08.",
+      "ist": "In dieser Reihenfolge gemessen: (1) der nackte Fakt wurde von Zero als Vermutung abgelehnt -- seine Nie-raten-Regel arbeitete korrekt gegen eine unbelegte Behauptung; (2) die BESCHRIEBENE Quelle ('steht im Speicher') schickte Zero suchen; (3) es suchte nach 'alter' und 'age', gespeichert war 'gabriel ist 38' -- keine gemeinsame Zeichenkette, also null Treffer und erneute Ablehnung. Eine Teilzeichenketten-Suche kann diese Bruecke nicht schlagen, und keine weitere Regel aendert das. Jetzt wird der Beleg WOERTLICH mitgegeben, statt ihn zu beschreiben. Ergebnis im Betrieb: 'Du bist 38 Jahre alt -- du hast es selbst gesagt: \"Gabriel ist 38\"'",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Sprache",
+      "faehigkeit": "Der Übersetzer vertauscht nie die Person",
+      "soll": "'you are X' heisst 'Du bist X' -- nie 'Ich bin X'",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Am Uebersetzer isoliert, ohne Zero dazwischen: 'you are Gabriel Gschaider, 38 years old' wurde zu 'Ich bin Gabriel Gschaider, 38 Jahre alt'. Die Entitaet uebernahm die Identitaet des Menschen. Warum es nicht auffiel: der Uebersetzer prueft Masken, Maschinenmarken, Bezeichner und Zahlen -- alles Abzaehlbare. Die PERSON war das eine Grosse ohne Pruefung, und eine wortgetreue Uebersetzung mit vertauschtem Sprecher besteht jede vorhandene Pruefung. Jetzt Regel 12 (PERSON) plus mechanische Sperre mit Wiederholung, eng gefasst (greift nicht, wenn die Quelle selbst 'I am' sagt): 5/5 korrekt in beide Richtungen",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Metakognition",
+      "faehigkeit": "Der Kreis schließt sich: Hypothese → Prüfung → Revision",
+      "soll": "ein Kreis mit nur der ersten Hälfte ist keine Metakognition, sondern eine Liste",
+      "quelle": "Eigner 20.08.",
+      "ist": "Vorher: Beobachten ✅, Hypothese ✅, PRUEFEN ❌, REVIDIEREN ❌ -- elf offene Folgerungen, keine je nachgemessen, kein Weg nach gestuetzt/widerlegt. Jetzt misst eos-vorsatz alle 6 h nach (Timer aktiv). Stand: {'abgeloest': 1, 'offen': 8, 'widerlegt': 2}. ⭐ Die zwei Behauptungsarten vertragen NICHT dieselbe Pruefung: eine Wiki-Luecke ('es fehlt ein ARTIKEL') widerlegt ein gefundener Artikel vollstaendig; eine Selbstpruefung ('es fehlt eine belegte ANGABE') wird NIE automatisch geschlossen, weil Wortueberlappung kein Wissen ist -- sonst haette ein Artikel ueber Gabriels Rolle die Luecke 'document root path' fuer erledigt erklaert. 'gestuetzt' wird nie vergeben: dass eine Suche nichts findet, beweist nicht, dass etwas fehlt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Metakognition",
+      "faehigkeit": "Die Anlage schließt eigene Vorsätze — ohne zu erfinden",
+      "soll": "selbst nachsehen und urteilen, nicht nur auflisten",
+      "quelle": "Eigner 20.08.",
+      "ist": "eos-vorsatz-arbeit (2x taeglich, Timer aktiv): ein kleines freies Modell liest EINEN Kandidatentext und sagt, ob die gesuchte Angabe darin steht. KEIN Zero-Zug -- run_chat_turn verlangt eine der vier kanonischen Sitzungen, autonome Arbeit dort hinein zu schreiben hiesse, sie in ein Menschengespraech zu schreiben; die Identitaetsgrenze wurde nicht aufgebohrt. ⭐⭐ DIE SPERRE: was das Modell als Fakt zurueckgibt, wird ZEICHENWEISE gegen den Quelltext geprueft -- steht es dort nicht, wird es verworfen und der Vorsatz bleibt offen. Hat beim ersten Lauf sofort gegriffen. ⚠️ Und die Sperre schuetzt vor Erfindung, NICHT vor einer falschen Frage: zuerst gingen die Signaturwoerter des Buendels hinein statt der echten Luecke, das Modell fand wahrheitsgemaess den Maschinennamen, gefragt war der document root. Jetzt gehen die echten Formulierungen hinein. Live geschlossen: Vorsatz #13 (Gabriels Alter) mit Beleg '38', Status widerlegt",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Abruf",
+      "faehigkeit": "Zero kann seinen eigenen Abruf messen",
+      "soll": "ein Lernmechanismus, in den niemand hineinsehen kann, sieht auch dann gruen aus, wenn er nichts tut",
+      "quelle": "Eigner 20.08.",
+      "ist": "`abruf_lage` (rein lesend, speist die Karte NICHT): Kartenversion, Wegehierarchie MIT eigenem Urteil, Erfolgsquote, Zustand der Politik, Top-Wege. Meldet ausdruecklich auch das NICHTS -- live: 'GLEICHVERTEILT, der Mechanismus tut (noch) nichts', oberstes Zehntel 13,6 % gegen 10 % bei Gleichverteilung, Erfolgsquote 84,8 %. ⚠️ Ein neues MCP-Werkzeug braucht DREI Eintraege -- Server, managed-settings UND headless_zeros Freigabeliste; sonst verwirft headless_zero den Namen als 'erfunden'. Zwei davon fehlten zuerst",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Weltmodell",
+      "faehigkeit": "Das gebaute Weltmodell erreicht die Vorstufe",
+      "soll": "Mehrdeutigkeit im Korpus soll die Vorstufe SEHEN, statt sie aufzuloesen",
+      "quelle": "Eigner 20.08.",
+      "ist": "`hyperposition` war im Betrieb IMMER leer -- es baut auf durable_memory, und dort fehlt die relation_key-Provenienz, an der die Projektion haengt. Daneben lag ungenutzt `wm_lesart` mit 22.567 Lesarten; 628 Artikel/Achsen-Paare tragen zwei oder mehr verschiedene Lesarten. Jetzt angeschlossen fuer die Korpustreffer des Zuges (2-7 ms). Drei gemessene Grenzen: die Achse `identitaet` bleibt draussen (bis zu 71 Werte je Artikel, und das sind Artikelkennungen aus der Dublettenerkennung, keine Lesarten); entdoppelt wird nach WERT (sphaere lieferte 18x 'frank_v0_1' und 1x 'gabriel' -- ohne Entdopplung sieht Einigkeit wie Streit aus); gemeldet wird nur echte Mehrdeutigkeit. ⚠️ Ehrlich: nur rund 5 % der durchsuchbaren Artikel tragen so eine Mehrdeutigkeit -- das Signal ist echt, aber selten",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Herz-DB liegt gesichert auf einem zweiten Rechner",
+      "soll": "ein Backup, das seit dem Bau jedes Mal abbricht, ist kein Backup",
+      "quelle": "Eigner 20.08.",
+      "ist": "⚠️ Der Dienst lief seit dem Bau NIE durch: erst stoppte das Secret-Gate den Push mit 297 Treffern -- zu Recht, alle in der Tabelle `datei` (Volltext von 325k indizierten Dateien: 15 AWS-Schluessel, ein GitHub-Token, zwei Slack-Token, ein privater Schluessel) -- und dahinter wartete ein GitHub-Repo, das gar nicht existierte. Jetzt: `datei.text` faehrt als NULL mit (der Dateiindex bleibt vollstaendig, der Volltext ist als einziges Feld aus der Platte neu herstellbar; Dump 2,90 GB -> 511 MB), Ziel ist der zweite VPS statt GitHub. ⭐ Die Falle, die zwei Anlaeufe kostete: --link-dest verlinkt nur bei uebereinstimmender AENDERUNGSZEIT, und ein frisch geschriebener Dump hat immer eine neue -- 0 von 108 Dateien verlinkt. Mit fester Zeit PLUS --checksum: 103 von 108, ein Schnappschuss kostet 13 MB statt 489 MB",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Betrieb",
+      "faehigkeit": "Die Schlüsselwacht misst den Endpunkt, den der Betrieb benutzt",
+      "soll": "ein Instrument, das für den falschen Endpunkt grün zeigt, misst nichts",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ MISTRAL_API_KEY lieferte an /v1/models HTTP 200 und an /v1/chat/completions HTTP 402 ('Check your subscription'). Die Wacht meldete fuenf Tage lang '✓ MISTRAL GESUND': das Urteil kam allein aus der /models-Sonde, waehrend rest_per_chat() den Chat-Endpunkt zwar aufrief, aber nur die Ratelimit-Kopfzeilen las und den Status verschluckte. Jetzt entscheidet bei 401/402/403 die Chat-Antwort, und 'check your subscription' steht mechanisch in den Abo-Woertern -- MISTRAL steht korrekt auf ABO_FEHLT. Zusaetzlich rotiert der Transport jetzt bei 401/402/403 (vorher galt 'bei kaputtem Token hilft Rotation nicht' -- genau verkehrt herum, ein kaputter Token ist eine Pro-Schluessel-Lage) und sperrt tote Schluessel 30 min",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Sicherheit",
+      "faehigkeit": "Der Zaun sperrt nicht den vorgesehenen Weg",
+      "soll": "ein Zaun, der die eigene Brücke mitsperrt, macht die Fähigkeit unbenutzbar",
+      "quelle": "Befund 20.08.",
+      "ist": "⚠️ Der Zaun wies jeden Write nach /var/lib/clay ab -- richtig fuer wiki.db, aber dort liegen auch die beiden AUFTRAGSKOERBE, die einzige Bruecke, ueber die Zero aus dem Container heraus etwas bewirken kann. Gemessen: 'permission_denials: Write' mitten in der Bildkette, und es sah aus wie 'Zero kann das halt nicht'. Jetzt Ausnahme fuer die Koerbe, mit normalisierten Pfaden (ein '..' greift nicht) -- 16/16 Zaunproben korrekt in beide Richtungen. Ausserdem gehoerte der Korb root, der Container laeuft als 5001",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Oberfläche",
+      "faehigkeit": "Zero kann ein Bild zeigen — und es auf einem fremden Rechner erzeugen",
+      "soll": "der Chat konnte nur Text; und Zero hat weder ssh noch Browser",
+      "quelle": "Eigner 19.08.",
+      "ist": "Zero legt einen Auftrag in /var/lib/clay/eos-demo-requests ab, der Wirt schreibt die Seite nach ~/eos-demo/ auf andreas-MACO, fotografiert sie dort headless und gibt eine Bildadresse zurueck; der Chat rendert die Miniatur. Mit einem echten Zug verifiziert (4 Bilder abgelegt). ⚠️ Voraussetzung war, Zeros WIRKLICHE Reichweite in den Regeltext zu schreiben: der Container hat KEIN ssh/scp/rsync/git/curl/wget (gemessen) -- vorher stand dort das Gegenteil, und die Vorstufe erfand daraufhin einen 'web root' auf einem Mac",
       "erfuellt": true
     }
   ]

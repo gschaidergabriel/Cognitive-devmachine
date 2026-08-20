@@ -56,7 +56,32 @@ def _bootfeld(feld: str) -> str:
 
 
 # ── Die Zeilen. SOLL ist Text, IST ist eine Funktion. ──────────────────────
-def zeilen(c) -> list[dict]:
+def _testlage_messen() -> str:
+    """Die Suite messen -- OHNE offene Verbindung auf wiki.db.
+
+    ⚠️ Muss VOR sqlite3.connect() laufen. Gemessen 2026-08-20: mit einer offenen
+    ro-Verbindung auf wiki.db dauert die Suite 136s statt 17s und EIN Test
+    faellt um (test_same_clerk_session_can_refresh_and_continue_pty_input).
+    Genau so lief es bisher -- schreibe_ziele() oeffnete die Verbindung und rief
+    dann zeilen(), mitten darin startete pytest. Die Zieltabelle meldete
+    daraufhin "583 gruen / 1 rot" und stellte beide Testzeilen auf offen: ein
+    Befund ueber das Messgeraet, nicht ueber die Tests.
+    """
+    tests = _sh("cd '/opt/entityos/the artefact' && /opt/entityos/venv-test/bin/python -m pytest tests/ -q "
+                "--timeout=120 -p no:cacheprovider 2>/dev/null | tail -1", timeout=240)
+    # ⚠️ Bei NULL Fehlern schreibt pytest "584 passed in 17s" -- ohne das Wort
+    # "failed". Ein Muster nur fuer "X failed, Y passed" meldete deshalb
+    # "nicht gemessen", und zwar genau dann, wenn alles gruen ist.
+    _rot = re.search(r"(\d+) failed", tests or "")
+    _gruen = re.search(r"(\d+) passed", tests or "")
+    if _gruen:
+        return f"{_gruen.group(1)} gruen / {_rot.group(1) if _rot else '0'} rot"
+    if str(tests).startswith("__ABBRUCH__") or str(tests).startswith("__FEHLER__"):
+        return f"NICHT GEMESSEN -- {tests}. Das ist ein Messfehler, kein Ergebnis."
+    return f"nicht gemessen (Ausgabe: {(tests or '')[:60]!r})"
+
+
+def zeilen(c, testlage: str = "") -> list[dict]:
     tabellen = _zahl(c, "sqlite_master", "WHERE type='table'")
     kern = {r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table'")}
     puls = _bootfeld("installed")
@@ -102,21 +127,16 @@ def zeilen(c) -> list[dict]:
     # ⚠️ 240s statt 45: die Suite braucht ~18s im Leerlauf, unter Last (z.B.
     # waehrend ein Container gebaut wird) aber ueber 80. Eine zu knappe Grenze
     # misst dann nicht die Tests, sondern die Auslastung der Kiste.
-    tests = _sh("cd '/opt/entityos/the artefact' && /opt/entityos/venv-test/bin/python -m pytest tests/ -q "
-                "--timeout=120 -p no:cacheprovider 2>/dev/null | tail -1", timeout=240)
-    # ⚠️ Vorher stand hier nur ein Muster fuer "X failed, Y passed". Bei NULL
-    # Fehlern schreibt pytest aber "584 passed in 17s" -- ohne das Wort
-    # "failed". Die Messung meldete deshalb "nicht gemessen", und zwar genau
-    # dann, wenn alles gruen ist: ein Messgeraet, das beim besten Ergebnis
-    # ausfaellt, hat den einen Fall nicht abgedeckt, auf den man hinarbeitet.
-    _rot = re.search(r"(\d+) failed", tests or "")
-    _gruen = re.search(r"(\d+) passed", tests or "")
-    if _gruen:
-        testlage = f"{_gruen.group(1)} gruen / {_rot.group(1) if _rot else '0'} rot"
-    elif str(tests).startswith("__ABBRUCH__") or str(tests).startswith("__FEHLER__"):
-        testlage = f"NICHT GEMESSEN -- {tests}. Das ist ein Messfehler, kein Ergebnis."
-    else:
-        testlage = f"nicht gemessen (Ausgabe: {(tests or '')[:60]!r})"
+    # Aus dem gemessenen Text abgeleitet statt aus Variablen, die jetzt in
+    # _testlage_messen() leben. "584 gruen / 0 rot" ist der einzige gruene Fall.
+    if not testlage:
+        # Rueckfall fuer Aufrufer, die nichts mitgeben: dann wird hier gemessen
+        # und die Verzerrung ausdruecklich benannt statt verschwiegen.
+        testlage = (_testlage_messen()
+                    + " [mit offener DB-Verbindung gemessen -- verzerrt,"
+                      " siehe _testlage_messen()]")
+
+    alles_gruen = bool(re.match(r"^\d+ gruen / 0 rot$", (testlage or "").strip()))
 
     Z = []
 
@@ -464,7 +484,7 @@ def zeilen(c) -> list[dict]:
     z("Betrieb", "Die Testsuite trägt",
       "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "Arbeitsregel",
-      testlage, bool(_gruen) and not _rot)
+      testlage, alles_gruen)
     z("Betrieb", "Endabnahme hinter eigenem Gastkern",
       "derselbe Digest hinter einer eigenen VM-Grenze",
       "Entwurf – vom Eigner zurückgestellt",
@@ -580,10 +600,12 @@ def zeilen(c) -> list[dict]:
     z("Betrieb", "agentforge geht in EntityOS auf",
       "kein Umweg mehr: Hosting und Dienste laufen direkt über den EntityOS-Server",
       "Eigner 18.08.",
-      "Hosting-Ansicht übernommen und angeschlossen; die übrigen Dienste (Auslieferung, "
-      "Projektverwaltung, Besuchszählung, Umfragedienst) sind als Migration erfasst und "
-      "AUSDRÜCKLICH NOCH NICHT begonnen — nach und nach, wie verlangt",
-      False)
+      "Hosting-Ansicht übernommen und angeschlossen. Die übrigen Dienste (Auslieferung, "
+      "Projektverwaltung, Besuchszählung, Umfragedienst) waren als schrittweise Migration "
+      "erfasst. ⏸ VOM EIGNER AM 19.08. GESTRICHEN — ausdrücklich nicht weiter verfolgen. "
+      "Stand bis 20.08. weiter als 🔧 offen und las sich wie eine liegengebliebene Aufgabe; "
+      "das ist derselbe Fehler wie andersherum, nur mit umgekehrtem Vorzeichen",
+      None)
 
     z("Abruf", "Der Möglichkeitsraum ist emergent",
       "nicht gepflegte Liste, sondern was sich aus dem Bestand ergibt — und er fließt "
@@ -693,7 +715,7 @@ def zeilen(c) -> list[dict]:
        "kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt "
        "Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das "
        "sagen, statt Sicherheit zu behaupten, die nicht besteht"),
-      bool(_gruen) and not _rot)
+      alles_gruen)
     z("Kognition", "Die Endabnahme kann überhaupt messen",
       "das Instrument, das beweisen soll, dass Wirkungen funktionieren, muss selbst funktionieren",
       "Lehre aus dem Bau 18.08.",
@@ -787,9 +809,14 @@ def zeilen(c) -> list[dict]:
       "NIRGENDS aufgerufen -- Zeros einzige Tuer war schlichtes bm25, und vp_weg trug nur "
       "Testfixtures. Sie verhungerte an fehlender Nahrung. Jetzt als opt-in korpus_tief "
       "(~250ms warm), NICHT im Zug-Pfad: 2,2s Kaltstart je Prozess waeren dort eine "
-      "Verschlechterung. Der conn-close-Bug (Erfolgsmarke auf geschlossener DB) ist durch "
-      "die Aufrufart geheilt. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte fuellt, "
-      "haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
+      "Verschlechterung. ⚠️⚠️ RICHTIGSTELLUNG 20.08.: hier stand, der conn-close-Bug sei "
+      "'durch die Aufrufart geheilt'. Das war falsch. Er lebte -- paket() schloss die eigene "
+      "Verbindung ACHT ZEILEN vor dem Block, der sie braucht, und auf jedem Pfad OHNE "
+      "uebergebene Verbindung (Zeros eigener) fiel damit die ganze F92b/F94-Lernkaskade aus: "
+      "keine Erfolgsmarke, keine Wegehierarchie, jeder Zug eine stderr-Zeile, die wie eine "
+      "Restwarnung aussah. Behoben (schliessen im finally), gemessen: vp_erfolgsmarke +2 und "
+      "vp_weg +1 auf drei Abrufe. ⭐ Offen und ehrlich benannt: ob jede Frage die Karte "
+      "fuellt, haengt an paket()s Anker-Logik -- nicht behauptet, sie wachse garantiert",
       True)
     z("Menschen", "Der halbe Wissensschatz war zugesperrt",
       "Zero muss ganze Artikel lesen und den Dateikorpus erreichen koennen",
@@ -809,12 +836,262 @@ def zeilen(c) -> list[dict]:
       "58 Eintraege, 0 Passwort-Lecks; Adressen und Token kommen heraus, Passwoerter nie -- "
       "auch nicht auf Wunsch",
       True)
+    # ══ Was am 19./20.08. dazukam ═════════════════════════════════════════
+    # Jede dieser Zeilen misst ihren eigenen Gegenstand. Dass eine Datei da ist,
+    # ist keine Messung -- gemessen wird, was im Betrieb entscheidet.
+    A = "/opt/entityos/the artefact/"
+
+    def _hat(datei: str, text: str) -> bool:
+        try:
+            return text in Path(datei).read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            return False
+
+    def _timer_an(unit: str) -> bool:
+        return _sh(f"systemctl is-active {unit} 2>/dev/null").strip() == "active"
+
+    # -- Abruf: erreicht die Frage ueberhaupt die Weltmontage?
+    frage_kommt_an = _hat(A + "clayverse/mistral_prestage/pipeline.py",
+                          "_gather_world_safe(db, session_id, message)")
+    z("Abruf", "Die Frage erreicht die Weltmontage",
+      "der Korpus wird zur FRAGE gebaut, nicht zur leeren Zeichenkette",
+      "Befund 20.08.",
+      ("⚠️ Bis 20.08. rief run_chat_turn `_gather_world_safe(db, session_id)` -- OHNE die "
+       "Nachricht. assemble() baute den Korpus mit `query or \"\"`, also war world['corpus'] "
+       "in JEDEM Zug LEER, bei damals 17.900 Artikeln. Die Vorstufe schrieb deshalb staendig "
+       "'no local info' und schickte Zero ins Netz nach Dingen aus der eigenen Datenbank; dass "
+       "trotzdem Antworten kamen, lag daran, dass Zero sich danach per MCP selbst durch den "
+       "Korpus arbeitete -- ein zweiter, langsamer Weg, der den ersten verdeckte. Damit wirkte "
+       "auch die gesamte Abrufarbeit (corpus_lookup/enrich, Eval-Recall 75,8 %) nur im Eval, "
+       "nie im Betrieb. Jetzt wird die Nachricht durchgereicht: gemessen 5 Treffer in 1-13 ms."
+       if frage_kommt_an else
+       "🔧 Die Nachricht wird NICHT an die Weltmontage durchgereicht -- corpus bleibt leer."),
+      frage_kommt_an)
+
+    # -- Abruf: Aufzeichnungen des Nichtwissens sind kein Wissen
+    kreisel_zu = _hat(A + "clayverse/retrieval.py", "KEIN_WISSEN_ART")
+    z("Abruf", "Die Anlage serviert sich nicht ihr eigenes Nichtwissen",
+      "selbst geschriebene Luecken-Notizen duerfen keine Korpustreffer sein",
+      "Befund 20.08.",
+      ("Kaum war der Korpus angeschlossen, waren die BESTEN Treffer auf 'was ist iar?' zwei "
+       "selbst geschriebene Notizen 'Wissensluecke: was ist iar?' -- sie tragen den Fragetext "
+       "im Titel und gewinnen jedes BM25-Ranking. Das ist eine Rueckkopplung: je oefter etwas "
+       "unbeantwortet bleibt, desto weiter draengen die Luecken-Notizen den echten Inhalt aus "
+       "den fuenf Treffern. art='zero_luecke' und epistemic_class='MECHANICAL_GAP_HYPOTHESIS' "
+       "sind jetzt von den Korpustreffern ausgeschlossen; die Notizen bleiben und behalten "
+       "ihren Zweck, sie sind nur kein Wissen mehr"
+       if kreisel_zu else "🔧 Luecken-Notizen erscheinen weiter als Korpustreffer"),
+      kreisel_zu)
+
+    # -- Gedaechtnis: EIN Gedaechtnis, nicht zwei
+    ein_gedaechtnis = _hat(A + "clayverse/mcp_server.py",
+                           "aus dem Gespraech (durable_memory)")
+    dm = _zahl(c, "durable_memory")
+    z("Gedächtnis", "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
+      "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
+      "Befund 20.08.",
+      (f"⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, "
+       f"2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` {dm} Zeilen fuehrt, "
+       "darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben "
+       "Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero "
+       "hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig "
+       "richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und "
+       "nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich "
+       "Gemerkte"
+       if ein_gedaechtnis else "🔧 Zeros Werkzeug liest weiter nur einen der beiden Speicher"),
+      ein_gedaechtnis)
+
+    # -- Gedaechtnis: ein Fakt reist mit seinem Beleg
+    beleg_woertlich = _hat(A + "clayverse/mistral_prestage/prestage.py",
+                           "QUOTED, NOT DESCRIBED")
+    z("Gedächtnis", "Ein Fakt reist mit seinem Beleg — wörtlich",
+      "eine Behauptung ÜBER einen Beleg ist kein Beleg",
+      "Befund 20.08.",
+      ("In dieser Reihenfolge gemessen: (1) der nackte Fakt wurde von Zero als Vermutung "
+       "abgelehnt -- seine Nie-raten-Regel arbeitete korrekt gegen eine unbelegte Behauptung; "
+       "(2) die BESCHRIEBENE Quelle ('steht im Speicher') schickte Zero suchen; (3) es suchte "
+       "nach 'alter' und 'age', gespeichert war 'gabriel ist 38' -- keine gemeinsame "
+       "Zeichenkette, also null Treffer und erneute Ablehnung. Eine Teilzeichenketten-Suche "
+       "kann diese Bruecke nicht schlagen, und keine weitere Regel aendert das. Jetzt wird der "
+       "Beleg WOERTLICH mitgegeben, statt ihn zu beschreiben. Ergebnis im Betrieb: 'Du bist 38 "
+       "Jahre alt -- du hast es selbst gesagt: \"Gabriel ist 38\"'"
+       if beleg_woertlich else "🔧 Fakten reisen weiter ohne zitierten Beleg"),
+      beleg_woertlich)
+
+    # -- Sprache: die Person wird nie vertauscht
+    person_sperre = _hat(A + "clayverse/mistral_prestage/translator.py", "_person_vertauscht")
+    z("Sprache", "Der Übersetzer vertauscht nie die Person",
+      "'you are X' heisst 'Du bist X' -- nie 'Ich bin X'",
+      "Befund 20.08.",
+      ("⚠️ Am Uebersetzer isoliert, ohne Zero dazwischen: 'you are Gabriel Gschaider, 38 years "
+       "old' wurde zu 'Ich bin Gabriel Gschaider, 38 Jahre alt'. Die Entitaet uebernahm die "
+       "Identitaet des Menschen. Warum es nicht auffiel: der Uebersetzer prueft Masken, "
+       "Maschinenmarken, Bezeichner und Zahlen -- alles Abzaehlbare. Die PERSON war das eine "
+       "Grosse ohne Pruefung, und eine wortgetreue Uebersetzung mit vertauschtem Sprecher "
+       "besteht jede vorhandene Pruefung. Jetzt Regel 12 (PERSON) plus mechanische Sperre mit "
+       "Wiederholung, eng gefasst (greift nicht, wenn die Quelle selbst 'I am' sagt): 5/5 "
+       "korrekt in beide Richtungen"
+       if person_sperre else "🔧 keine Personenpruefung im Uebersetzer"),
+      person_sperre)
+
+    # -- Metakognition: der Kreis hat eine zweite Haelfte
+    pruefer = _timer_an("eos-vorsatz.timer")
+    fs = {r[0]: r[1] for r in c.execute(
+        "SELECT status, COUNT(*) FROM folgerung WHERE autor='eos-hypothesen-generator' "
+        "GROUP BY status")} if "folgerung" in kern else {}
+    z("Metakognition", "Der Kreis schließt sich: Hypothese → Prüfung → Revision",
+      "ein Kreis mit nur der ersten Hälfte ist keine Metakognition, sondern eine Liste",
+      "Eigner 20.08.",
+      (f"Vorher: Beobachten ✅, Hypothese ✅, PRUEFEN ❌, REVIDIEREN ❌ -- elf offene "
+       f"Folgerungen, keine je nachgemessen, kein Weg nach gestuetzt/widerlegt. Jetzt misst "
+       f"eos-vorsatz alle 6 h nach (Timer {'aktiv' if pruefer else 'INAKTIV'}). Stand: "
+       f"{fs}. ⭐ Die zwei Behauptungsarten vertragen NICHT dieselbe Pruefung: eine "
+       "Wiki-Luecke ('es fehlt ein ARTIKEL') widerlegt ein gefundener Artikel vollstaendig; "
+       "eine Selbstpruefung ('es fehlt eine belegte ANGABE') wird NIE automatisch geschlossen, "
+       "weil Wortueberlappung kein Wissen ist -- sonst haette ein Artikel ueber Gabriels Rolle "
+       "die Luecke 'document root path' fuer erledigt erklaert. 'gestuetzt' wird nie vergeben: "
+       "dass eine Suche nichts findet, beweist nicht, dass etwas fehlt"),
+      bool(pruefer))
+
+    # -- Metakognition: die Anlage schliesst eigene Vorsaetze
+    arbeit = _timer_an("eos-vorsatz-arbeit.timer")
+    z("Metakognition", "Die Anlage schließt eigene Vorsätze — ohne zu erfinden",
+      "selbst nachsehen und urteilen, nicht nur auflisten",
+      "Eigner 20.08.",
+      (f"eos-vorsatz-arbeit (2x taeglich, Timer {'aktiv' if arbeit else 'INAKTIV'}): ein "
+       "kleines freies Modell liest EINEN Kandidatentext und sagt, ob die gesuchte Angabe "
+       "darin steht. KEIN Zero-Zug -- run_chat_turn verlangt eine der vier kanonischen "
+       "Sitzungen, autonome Arbeit dort hinein zu schreiben hiesse, sie in ein "
+       "Menschengespraech zu schreiben; die Identitaetsgrenze wurde nicht aufgebohrt. "
+       "⭐⭐ DIE SPERRE: was das Modell als Fakt zurueckgibt, wird ZEICHENWEISE gegen den "
+       "Quelltext geprueft -- steht es dort nicht, wird es verworfen und der Vorsatz bleibt "
+       "offen. Hat beim ersten Lauf sofort gegriffen. ⚠️ Und die Sperre schuetzt vor "
+       "Erfindung, NICHT vor einer falschen Frage: zuerst gingen die Signaturwoerter des "
+       "Buendels hinein statt der echten Luecke, das Modell fand wahrheitsgemaess den "
+       "Maschinennamen, gefragt war der document root. Jetzt gehen die echten Formulierungen "
+       "hinein. Live geschlossen: Vorsatz #13 (Gabriels Alter) mit Beleg '38', Status "
+       "widerlegt"),
+      bool(arbeit))
+
+    # -- Abruf: das Messgeraet fuer die eigene Karte
+    lage_da = (_hat(A + "clayverse/mcp_server.py", "def abruf_lage")
+               and _hat(A + "policy/managed-settings.json", "abruf_lage")
+               and _hat(A + "clayverse/mistral_prestage/headless_zero.py", "abruf_lage"))
+    z("Abruf", "Zero kann seinen eigenen Abruf messen",
+      "ein Lernmechanismus, in den niemand hineinsehen kann, sieht auch dann gruen aus, wenn er nichts tut",
+      "Eigner 20.08.",
+      ("`abruf_lage` (rein lesend, speist die Karte NICHT): Kartenversion, Wegehierarchie MIT "
+       "eigenem Urteil, Erfolgsquote, Zustand der Politik, Top-Wege. Meldet ausdruecklich auch "
+       "das NICHTS -- live: 'GLEICHVERTEILT, der Mechanismus tut (noch) nichts', oberstes "
+       "Zehntel 13,6 % gegen 10 % bei Gleichverteilung, Erfolgsquote 84,8 %. ⚠️ Ein neues "
+       "MCP-Werkzeug braucht DREI Eintraege -- Server, managed-settings UND headless_zeros "
+       "Freigabeliste; sonst verwirft headless_zero den Namen als 'erfunden'. Zwei davon "
+       "fehlten zuerst"
+       if lage_da else "🔧 abruf_lage fehlt oder ist nicht an allen drei Stellen eingetragen"),
+      lage_da)
+
+    # -- Weltmodell: das gebaute Modell erreicht die Vorstufe
+    fusion = _hat(A + "clayverse/mistral_prestage/pipeline.py", "_weltmodell_safe")
+    try:
+        wm_mehrdeutig = c.execute(
+            "SELECT COUNT(*) FROM (SELECT artikel_id, achse FROM wm_lesart "
+            "WHERE gueltig_bis IS NULL AND achse <> 'identitaet' "
+            "GROUP BY artikel_id, achse HAVING COUNT(DISTINCT wert) >= 2)").fetchone()[0]
+    except Exception:
+        wm_mehrdeutig = 0
+    z("Weltmodell", "Das gebaute Weltmodell erreicht die Vorstufe",
+      "Mehrdeutigkeit im Korpus soll die Vorstufe SEHEN, statt sie aufzuloesen",
+      "Eigner 20.08.",
+      (f"`hyperposition` war im Betrieb IMMER leer -- es baut auf durable_memory, und dort "
+       f"fehlt die relation_key-Provenienz, an der die Projektion haengt. Daneben lag "
+       f"ungenutzt `wm_lesart` mit 22.567 Lesarten; {wm_mehrdeutig} Artikel/Achsen-Paare "
+       "tragen zwei oder mehr verschiedene Lesarten. Jetzt angeschlossen fuer die "
+       "Korpustreffer des Zuges (2-7 ms). Drei gemessene Grenzen: die Achse `identitaet` "
+       "bleibt draussen (bis zu 71 Werte je Artikel, und das sind Artikelkennungen aus der "
+       "Dublettenerkennung, keine Lesarten); entdoppelt wird nach WERT (sphaere lieferte 18x "
+       "'frank_v0_1' und 1x 'gabriel' -- ohne Entdopplung sieht Einigkeit wie Streit aus); "
+       "gemeldet wird nur echte Mehrdeutigkeit. ⚠️ Ehrlich: nur rund 5 % der durchsuchbaren "
+       "Artikel tragen so eine Mehrdeutigkeit -- das Signal ist echt, aber selten"
+       if fusion else "🔧 wm_* erreicht die Vorstufe nicht"),
+      fusion)
+
+    # -- Betrieb: die Herz-DB liegt gesichert auf einem zweiten Rechner
+    backup = (_hat("/opt/entityos/udb-backup/udb_backup.py", "BACKUP_ZIEL")
+              and _timer_an("eos-udb-backup.timer"))
+    z("Betrieb", "Die Herz-DB liegt gesichert auf einem zweiten Rechner",
+      "ein Backup, das seit dem Bau jedes Mal abbricht, ist kein Backup",
+      "Eigner 20.08.",
+      ("⚠️ Der Dienst lief seit dem Bau NIE durch: erst stoppte das Secret-Gate den Push mit "
+       "297 Treffern -- zu Recht, alle in der Tabelle `datei` (Volltext von 325k indizierten "
+       "Dateien: 15 AWS-Schluessel, ein GitHub-Token, zwei Slack-Token, ein privater "
+       "Schluessel) -- und dahinter wartete ein GitHub-Repo, das gar nicht existierte. Jetzt: "
+       "`datei.text` faehrt als NULL mit (der Dateiindex bleibt vollstaendig, der Volltext ist "
+       "als einziges Feld aus der Platte neu herstellbar; Dump 2,90 GB -> 511 MB), Ziel ist "
+       "der zweite VPS statt GitHub. ⭐ Die Falle, die zwei Anlaeufe kostete: --link-dest "
+       "verlinkt nur bei uebereinstimmender AENDERUNGSZEIT, und ein frisch geschriebener Dump "
+       "hat immer eine neue -- 0 von 108 Dateien verlinkt. Mit fester Zeit PLUS --checksum: "
+       "103 von 108, ein Schnappschuss kostet 13 MB statt 489 MB"
+       if backup else "🔧 kein laufendes Backup der Herz-DB auf einem zweiten Rechner"),
+      backup)
+
+    # -- Betrieb: die Schluesselwacht misst den Endpunkt des Betriebs
+    wacht = _hat("/opt/clayverse/werkzeug/schluesselwacht.py", "_chat_http")
+    z("Betrieb", "Die Schlüsselwacht misst den Endpunkt, den der Betrieb benutzt",
+      "ein Instrument, das für den falschen Endpunkt grün zeigt, misst nichts",
+      "Befund 20.08.",
+      ("⚠️ MISTRAL_API_KEY lieferte an /v1/models HTTP 200 und an /v1/chat/completions "
+       "HTTP 402 ('Check your subscription'). Die Wacht meldete fuenf Tage lang '✓ MISTRAL "
+       "GESUND': das Urteil kam allein aus der /models-Sonde, waehrend rest_per_chat() den "
+       "Chat-Endpunkt zwar aufrief, aber nur die Ratelimit-Kopfzeilen las und den Status "
+       "verschluckte. Jetzt entscheidet bei 401/402/403 die Chat-Antwort, und 'check your "
+       "subscription' steht mechanisch in den Abo-Woertern -- MISTRAL steht korrekt auf "
+       "ABO_FEHLT. Zusaetzlich rotiert der Transport jetzt bei 401/402/403 (vorher galt "
+       "'bei kaputtem Token hilft Rotation nicht' -- genau verkehrt herum, ein kaputter Token "
+       "ist eine Pro-Schluessel-Lage) und sperrt tote Schluessel 30 min"
+       if wacht else "🔧 die Wacht urteilt weiter allein aus der /models-Sonde"),
+      wacht)
+
+    # -- Zaun: sperrt nicht den vorgesehenen Weg
+    koerbe = _hat(A + "clayverse/fence_hook.py", "KOERBE")
+    z("Sicherheit", "Der Zaun sperrt nicht den vorgesehenen Weg",
+      "ein Zaun, der die eigene Brücke mitsperrt, macht die Fähigkeit unbenutzbar",
+      "Befund 20.08.",
+      ("⚠️ Der Zaun wies jeden Write nach /var/lib/clay ab -- richtig fuer wiki.db, aber dort "
+       "liegen auch die beiden AUFTRAGSKOERBE, die einzige Bruecke, ueber die Zero aus dem "
+       "Container heraus etwas bewirken kann. Gemessen: 'permission_denials: Write' mitten in "
+       "der Bildkette, und es sah aus wie 'Zero kann das halt nicht'. Jetzt Ausnahme fuer die "
+       "Koerbe, mit normalisierten Pfaden (ein '..' greift nicht) -- 16/16 Zaunproben korrekt "
+       "in beide Richtungen. Ausserdem gehoerte der Korb root, der Container laeuft als 5001"
+       if koerbe else "🔧 der Zaun sperrt die Auftragskoerbe weiterhin mit"),
+      koerbe)
+
+    # -- Bild: Zero kann etwas zeigen
+    bilder = int(_sh("ls -1 '/opt/entityos/the artefact/web/chat/demo-bilder/'*.png "
+                     "2>/dev/null | wc -l") or 0)
+    bildweg = _hat(A + "web/chat/index.html", "bild-mini") and _hat(A + "runtime_CLAUDE.md", "9j.")
+    z("Oberfläche", "Zero kann ein Bild zeigen — und es auf einem fremden Rechner erzeugen",
+      "der Chat konnte nur Text; und Zero hat weder ssh noch Browser",
+      "Eigner 19.08.",
+      (f"Zero legt einen Auftrag in /var/lib/clay/eos-demo-requests ab, der Wirt schreibt die "
+       f"Seite nach ~/eos-demo/ auf andreas-MACO, fotografiert sie dort headless und gibt eine "
+       f"Bildadresse zurueck; der Chat rendert die Miniatur. Mit einem echten Zug verifiziert "
+       f"({bilder} Bilder abgelegt). ⚠️ Voraussetzung war, Zeros WIRKLICHE Reichweite in den "
+       "Regeltext zu schreiben: der Container hat KEIN ssh/scp/rsync/git/curl/wget (gemessen) "
+       "-- vorher stand dort das Gegenteil, und die Vorstufe erfand daraufhin einen 'web root' "
+       "auf einem Mac"
+       if bildweg else "🔧 Bildweg oder Anzeige fehlt"),
+      bildweg)
+
     return Z
 
 
 def schreibe_ziele(ziel: Path) -> dict:
+    # ⚠️ ZUERST die Tests, DANN die Verbindung -- nicht umgekehrt. Siehe
+    # _testlage_messen(): eine offene Verbindung erzeugt den roten Test, den
+    # die Tabelle sonst meldet.
+    testlage = _testlage_messen()
     c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
-    Z = zeilen(c)
+    Z = zeilen(c, testlage)
     c.close()
 
     def mark(e):

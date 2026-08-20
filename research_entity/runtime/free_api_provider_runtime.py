@@ -26,6 +26,7 @@ from urllib.parse import urlparse
 DENIED_PROVIDERS = frozenset({"together"})
 ZERO_COST_ONLY = True
 PAYMENT_REQUIRED_STATUS = 402
+MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
 MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
@@ -567,6 +568,11 @@ def _execute_chat_locked(
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt."""
     request_messages = _snapshot_text_chat_request(messages, model)
+    body = json.dumps(
+        {"model": model, "messages": request_messages, "stream": False}
+    ).encode()
+    if len(body) > MAX_PROVIDER_REQUEST_BYTES:
+        raise ValueError("provider_request_too_large")
     env = _snapshot_runtime_environment(environ)
     latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
     route_state = route(env, payment_latches=latches)
@@ -599,9 +605,6 @@ def _execute_chat_locked(
     if started is None:
         raise RuntimeError("monotonic_clock_unavailable")
     lifecycle = ["REQUESTED", "AUTHORIZED", "CLAIMED"]
-    body = json.dumps(
-        {"model": model, "messages": request_messages, "stream": False}
-    ).encode()
     request = urllib.request.Request(
         request_url,
         data=body,

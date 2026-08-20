@@ -27,10 +27,18 @@ wird genau danach noch einmal gesucht:
   * Selbstpruefung -> gibt es inzwischen einen Artikel ODER einen Eintrag im
                       dauerhaften Gedaechtnis dazu?
 
-Findet sich etwas, ist die Behauptung "es fehlt" WIDERLEGT -- die Luecke ist
-geschlossen, der Vorsatz erledigt, mit Beleg. Findet sich weiterhin nichts,
-bleibt sie offen und steht als VORSATZ in /var/lib/clay/vorsaetze.json, wo
-Zero sie lesen und daran arbeiten kann.
+Bei einer WIKI-LUECKE ("es fehlt ein Artikel") widerlegt ein gefundener Artikel
+die Behauptung vollstaendig -- genau darueber war sie. Der Vorsatz ist erledigt,
+mit Beleg.
+
+Bei einer SELBSTPRUEFUNG ("es fehlt eine belegte Angabe") wird NICHTS
+automatisch geschlossen: ein Artikel mit denselben Woertern beweist nicht, dass
+die gesuchte Angabe darin steht. Der Fund wird als KANDIDAT festgehalten, der
+Vorsatz bleibt offen. (Gemessen 2026-08-20: sonst haette ein Artikel ueber
+Gabriels Rolle die Luecke "document root path" fuer geschlossen erklaert.)
+
+Alles Offene steht in /var/lib/clay/vorsaetze.json, wo Zero es lesen und daran
+arbeiten kann -- Kandidaten inklusive, als Hinweis, wo zu suchen ist.
 
 ⚠️ ZWEI FALLEN, beide bewusst behandelt:
 1. Die Luecken-Notizen der Anlage tragen den Suchtext im Titel und wuerden
@@ -174,16 +182,36 @@ def pruefen(dry_run: bool = False) -> dict:
                               "seit": r["zeit"]})
                 continue
 
-            # Gefunden -> die Behauptung "es fehlt" ist widerlegt.
+            if quelle_art == "Selbstpruefung":
+                # KEIN automatisches Urteil -- siehe Modul-Historie 2026-08-20.
+                # Die Behauptung ist ueber eine TATSACHE, gemessen wird nur
+                # Wortueberlappung. Der Fund ist ein Hinweis, wo zu suchen ist.
+                offen.append({
+                    "folgerung_id": r["id"], "art": quelle_art,
+                    "woerter": woerter, "aussage": r["aussage"][:300],
+                    "seit": r["zeit"],
+                    "kandidaten": {
+                        "artikel": [a["artikel_id"] for a in artikel],
+                        "gedaechtnis": [m["memory_id"] for m in erinnert],
+                        "hinweis": ("Wortueberlappung, kein Beweis. Nachsehen, ob die "
+                                    "gesuchte Angabe dort WIRKLICH steht -- dann schliessen."),
+                    },
+                })
+                LOG.info("#%d bleibt offen, %d Artikel- und %d Gedaechtnis-Kandidat(en)",
+                         r["id"], len(artikel), len(erinnert))
+                continue
+
+            # Wiki-Luecke: die Behauptung war "es fehlt ein ARTIKEL" -- genau das
+            # ist gemessen worden, also ist sie widerlegt.
             wo = []
             if artikel:
                 wo.append(f"{len(artikel)} Artikel (z.B. {artikel[0]['artikel_id']})")
             if erinnert:
                 wo.append(f"{len(erinnert)} Gedaechtniseintrag/-eintraege")
             vermerk = (f" [{now} vom {PRUEFER} nachgemessen: zu [{' '.join(woerter)}] "
-                       f"gibt es inzwischen {' und '.join(wo)} -- die Behauptung 'es fehlt' "
-                       f"ist damit widerlegt, die Luecke geschlossen. Selbst geschriebene "
-                       f"Luecken-Notizen waren von der Suche ausgeschlossen.]")
+                       f"gibt es inzwischen {' und '.join(wo)} -- die Behauptung 'es fehlt "
+                       f"ein Artikel' ist damit widerlegt, die Luecke geschlossen. Selbst "
+                       f"geschriebene Luecken-Notizen waren von der Suche ausgeschlossen.]")
             if dry_run:
                 LOG.info("[DRY-RUN] #%d wuerde widerlegt: %s", r["id"], " und ".join(wo))
             else:

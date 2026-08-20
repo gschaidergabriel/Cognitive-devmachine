@@ -62,6 +62,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
             "nvidia",
         )
 
+    def test_environment_snapshot_failure_is_redacted_and_fail_closed(self):
+        leaked_text = "credential-value-must-not-escape"
+
+        class FailingEnvironment(dict):
+            def get(self, name, default=None):
+                raise LookupError(leaked_text)
+
+        called = False
+
+        def opener(*args, **kwargs):
+            nonlocal called
+            called = True
+            raise AssertionError("network must not be reached")
+
+        with self.assertRaisesRegex(
+            ValueError, "runtime_environment_could_not_be_snapshotted"
+        ) as caught:
+            MOD.execute_chat(
+                VALID_MESSAGES, model="mock",
+                environ=FailingEnvironment(), opener=opener,
+            )
+        self.assertNotIn(leaked_text, repr(caught.exception))
+        self.assertIsNone(caught.exception.__context__)
+        self.assertIsNone(caught.exception.__cause__)
+        self.assertFalse(called)
+
     def test_together_is_hard_denied_even_if_key_exists(self):
         env = {"TOGETHER_API_KEY": "must-not-be-touched"}
         self.assertIn("together", MOD.DENIED_PROVIDERS)

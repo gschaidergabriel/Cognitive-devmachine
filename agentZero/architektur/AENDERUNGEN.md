@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T05:11:13Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T05:41:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -134,7 +134,7 @@ Automatisch erzeugt 2026-08-20T05:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (39)
+## pruefung (38)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -173,15 +173,17 @@ Automatisch erzeugt 2026-08-20T05:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:13 | entityos | `0e862557cf6d` | test(clayverse): fence autonomy effect budget and self-ack |
 | 2026-08-18T03:11 | entityos | `ca4ad90f452b` | test(clayverse): fence effect budget without blocking reasoning |
 | 2026-08-18T02:57 | entityos | `977b16f53b56` | test(clayverse): fence autonomous goal truth and runaway loops |
-| 2026-08-18T02:29 | entityos | `c5c6ac1369ef` | test(clayverse): probe VPS KVM admission without product execution |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (256)
+## bau (257)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T05:38 | entityos | `2adcf9a58b0b` | EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T05:35 | entityos | `2727aac03f16` | EOS-Chronik 2026-08-20 05:35:55 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T05:29 | entityos | `b6dca3a0169f` | CSWT-Z Pilotlauf: Schicht 1 und 4, 270 Zuege, Rohdaten und Befund |
 | 2026-08-20T04:05 | entityos | `d5cf6d524cc5` | CSWT-Z: kausaler Pruefplan fuer Zeros Arbeitsraum |
 | 2026-08-20T03:13 | entityos | `abe15ede928b` | EOS-Chronik 2026-08-20 03:13:02 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T03:04 | entityos | `ad4524a19c3b` | EOS-Chronik 2026-08-20 03:04:50 +0000 — entityos: 1 Aenderungen |
@@ -239,7 +241,4 @@ Automatisch erzeugt 2026-08-20T05:11:13Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T13:15 | entityos | `4588d6f204fb` | Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE |
 | 2026-08-18T12:59 | entityos | `d42ec66eda5d` | Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT |
 | 2026-08-18T12:52 | unifieddb | `b4c856add34b` | Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR |
-| 2026-08-18T12:37 | entityos | `584c0282121c` | Der Raum: vier Plaetze, eine Entitaet - und die Zuege gehen nicht mehr verloren |
-| 2026-08-18T10:59 | entityos | `ff48d389b4ac` | Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen |
-| 2026-08-18T10:52 | entityos | `0010a0ef104d` | 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben |
 

@@ -1,12 +1,71 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T05:11:13Z. 923 Commits aus vier Repos, davon 295 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T05:41:13Z. 924 Commits aus vier Repos, davon 298 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen
+
+`2adcf9a58b0b` · entityos · 05:38 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T05:38:37+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 05:35:55 +0000 — entityos: 1 Aenderungen
+
+`2727aac03f16` · entityos · 05:35 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T05:35:55+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### CSWT-Z Pilotlauf: Schicht 1 und 4, 270 Zuege, Rohdaten und Befund
+
+`b6dca3a0169f` · entityos · 05:29 UTC · EOS-Chronik
+
+```
+Schicht 1 hat NICHT gemessen, was sie messen sollte -- und der Grund ist der
+wertvollste Befund: der Kapazitaetsregler hat einen Boden bei 6895 Zeichen
+(Identitaet und Anwesenheitsblock sind ausgenommen), und das Nutzerprofil mit
+8480 Zeichen laeuft komplett an ihm vorbei. Bei Kappung 0 steuert der Regler
+noch 3 % des Kontexts; der deklarierte 10k-Engpass begrenzt real 17.878 Zeichen.
+Dazu belohnte die Zeichenkettenbewertung Profil-Rezitation.
+
+Schicht 4 traegt: epistemik erreicht Zero architektonisch nicht (nur der
+caveman_prompt wird uebertragen), Typ-2-AUROC 0,465 auf Zufallsniveau, und ein
+externer Beobachter, der NUR die Frage sieht, sagt den Erfolg besser voraus als
+das System selbst (0,745/0,624 gegen 0,465).
+
+Rauschboden aus fuenf identischen Wiederholungen: noetig waeren 179-247 Sonden
+je Stufe statt 18.
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
 
 ### CSWT-Z: kausaler Pruefplan fuer Zeros Arbeitsraum
 
@@ -4327,72 +4386,5 @@ Bringt heute (15.08.) entstandene Artefakte als veroeffentlichte Kopie hierher:
 
 Kanon: clayverse = Arbeitsrepo (Code bleibt dort), unifieddb = veroeffentlicht
 (Doku/Protokoll/Katalog/System-Vorlagen). Secret-Scan 0 echte Treffer.
-```
-
-### B21 geprueft: Messungen aus /tmp gerettet, messungen/ als einziger Ort
-
-`5576e6f2846b` · clay · 15:21 UTC · ClayVerse
-
-```
-17 Skripte aus /tmp nach messungen/ gerettet (vor Rebootverlust, Maschine 3x in 4 Tagen abgestuerzt) + README.md als Index ueber alle 15 geforderten Kennzahlen von heute, je Zeile [M]/[B] markiert und F-Nr verwiesen. Unterschieden: reproduzierbares Skript vorhanden vs. einmalige Ad-hoc-Messung ohne Skript (5 der 15: 15-Prozent-Deckel, NVIDIA 4-von-9-Modelltest, z.ai-Routen, Korpuszahl 1645-zu-272, paket-Kaltlatenz). Secret-Scan auf allen 19 neuen Dateien: 0 Treffer. Bereits versionierte Skripte (test_schranke.py, moeglichkeitsraum_mess.py, ap11_*.py, zustand_mess.py) nicht dupliziert, nur referenziert.
-```
-
-### README: ClayMachine-Vision als Kopf, Modul=Entitaet explizit an F16/F21/F44/F52 angebunden, Vision-gegen-Messung-Tabelle (F65/F66), Abruf-Zahl korrigiert
-
-`01d9f7b8b4db` · unifieddb · 15:16 UTC · ClayVerse
-
-```
-Docs only. F66 (Zweiseitigkeit scheitert am Korpus, nicht am Abruf) aus /opt/clayverse/bau/ nachgezogen, damit die README-Referenz aufloest.
-```
-
-### paket(): Gegenseite-Kantenhop [B27-3] -- Symmetrie zu hypothesen_hop, Zahl unveraendert (Korpus-Befund)
-
-`fdd9718bec10` · unifieddb · 15:06 UTC · ClayVerse
-
-```
-_hypothesen_hop() zu generischem _typed_hop(c, chosen_ids, felder, kante_rows,
-ziel_art, cap) refaktoriert. _hypothesen_hop()/_gegenseite_hop() sind jetzt
-duenne Wrapper (ziel_art=hypothese/gegenhypothese, CAP_HYPOTHESE_HOP/
-CAP_GEGENSEITE_HOP=6). Macht die Gegenseite kantentyp-agnostisch wie die
-Hypothesenseite es schon war -- vorher lief gegenseite NUR ueber die fuenf
-semantisch vorgepraegten Kantenarten (widerspricht/attacks/CHALLENGES/
-CONTRADICTS/SUPERSEDES) ohne jede Zieltyp-Pruefung, waehrend hypothesen_hop
-JEDE Kantenart nahm, aber zielgebunden war (artikel.art=hypothese). gegen_hop
-ergaenzt die drei bestehenden Gegenseite-Quellen (folgerung/kante+graph_kante/
-artikel), ersetzt keine; dedupliziert ueber ref. Politik-Bericht um
-gegenseite_hop_kandidaten/verwendet + caps.gegenseite_hop erweitert, gleiche
-Transparenz wie bei hypothesen_hop.
-
-DIAGNOSE ZUERST (Auftrag F56/B27-3), fixe seeded 30-Fragen-Stichprobe (seed
-20260815, /tmp/zweiseitig_30fragen.json auf frank-api, aus allen 1588
-hypothese/gegenhypothese-Titeln): 28/30 mit Material, 6/28 zweiseitig, 22/28
-einseitig -- ALLE 22 fehlten auf der Gegenseite, nie auf der Hypothesenseite.
-Verteilung der 22 (Grund gemessen, nicht geraten):
-  13x kein gegenhypothese-Artikel im Umfeld -- weder lexikalisch noch per
-      1-/2-Hop ueber JEDE Kantenart erreichbar. Material fehlt schlicht.
-   9x Artikel existiert irgendwo im 272-teiligen gegenhypothese-Bestand
-      (lexikalischer Treffer), aber KEIN 1-Hop-Pfad dorthin (2 davon nur bei
-      2 Hops erreichbar -- Invariante "ein Hop, nie zwei" verbietet das).
-
-GEMESSEN, dieselben 30 Fragen vorher/nachher: zweiseitig 6/28 -> 6/28,
-UNVERAENDERT. Kein Bug im Fix: 661 Hop-Kandidaten insgesamt ueber die 30
-Fragen, aber nur 2/661 (0,3%) vom Zieltyp gegenhypothese -- die anderen
-1-Hop-Nachbarn sind ueberwiegend quelldatei/bereich_*/hypothese-Artikel.
-Unabhaengiger Cross-Check (moeglichkeitsraum_mess.py ziel, echt-zufaellig
-n=30): 6/26 zweiseitig, deckt sich (~23%) -- kein Stichprobenartefakt.
-
-ZIEL (>=15/27 zweiseitig, aus [M 15.08.] 8/27) NICHT erreicht. Befund: die
-Ursache ist der KORPUS (272 gegenhypothese-Artikel, duenn vernetzt zu den
-ueblichen Chosen-Ids), nicht die Retrieval-Logik -- der naechste Hebel liegt
-im Corpus/Graph-Aufbau, nicht in weiterer Retrieval-Mechanik. Zahl nicht
-erzwungen (Auftrag), hier gestoppt.
-
-Schatten eingehalten: Latenz-Median 337,4 -> 372,0 ms (Deckel 399,7 ms),
-Moeglichkeitsraum-Token median 242 / avg 325,9 (Ziel <=400, vorher ~350).
-Invarianten: AMBIGUOUS/resolve_entities nicht angefasst, ein Hop (nie zwei),
-keine erfundene Gegenseite (nur reale artikel.art=gegenhypothese-Zeilen),
-gegenseite bleibt nie zuerst gekappt.
-
-Backup: udb/abruf/paket.py.vor-zweiseitig (lokal, nicht versioniert)
 ```
 

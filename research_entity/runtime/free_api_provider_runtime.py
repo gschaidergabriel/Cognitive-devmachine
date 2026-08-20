@@ -29,6 +29,10 @@ PAYMENT_REQUIRED_STATUS = 402
 MAX_PROVIDER_REQUEST_BYTES = 2_000_000
 MAX_PROVIDER_RESPONSE_BYTES = 2_000_000
 MAX_PROVIDER_OUTPUT_TOKENS = 4_096
+# The smallest valid message under the current default JSON representation is
+# {"role": "user", "content": "x"}, which occupies 32 bytes even before its
+# array separator or the outer request envelope.
+MAX_TEXT_CHAT_MESSAGES = MAX_PROVIDER_REQUEST_BYTES // 32
 MAX_PROVIDER_COOLDOWN_SECONDS = 86_400
 MAX_RECEIPT_DURATION_MS = MAX_PROVIDER_COOLDOWN_SECONDS * 1000
 EXECUTION_LOCK_TIMEOUT_SECONDS = 35
@@ -278,6 +282,14 @@ def _enforce_pre_serialization_request_bound(
         lower_bound += len(message["role"]) + len(message["content"]) + 2
         if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
             raise ValueError("provider_request_too_large")
+
+
+def _enforce_pre_snapshot_message_bound(messages) -> None:
+    """Reject structurally impossible requests before copying caller data."""
+    # Only exact lists have passive built-in len behavior at this boundary.
+    # Other types retain the existing fail-closed schema validation path.
+    if type(messages) is list and len(messages) > MAX_TEXT_CHAT_MESSAGES:
+        raise ValueError("provider_request_too_large")
 
 
 def _transport_metadata_or_none(response, attribute):
@@ -549,6 +561,7 @@ def execute_chat(
     payment_latches: set[str] | None = None,
 ) -> dict:
     """Serialize authorization through receipt so payment latches are atomic."""
+    _enforce_pre_snapshot_message_bound(messages)
     acquired = PROCESS_EXECUTION_LOCK.acquire(
         timeout=EXECUTION_LOCK_TIMEOUT_SECONDS
     )

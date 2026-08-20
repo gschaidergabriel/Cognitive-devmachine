@@ -159,7 +159,14 @@ _VORSTUFE_DURABLE_MEMORY_FELD_DECKEL = 300
 # regelte 53 % davon. Dieser Deckel gilt fuer das, was die Vorstufe WIRKLICH
 # sieht. Bewusst grosszuegig gesetzt: er soll den Wildwuchs stoppen, nicht den
 # Normalbetrieb beschneiden.
-_VORSTUFE_KONTEXT_MAX_CHARS = 14_000
+# 14_500, nicht 14_000: der world-Deckel oben laesst bis zu 10_000 zu, und mit
+# raw_prompt, Werkzeugliste und Rahmen bleibt fuer das Profil rund 4_300. Bei
+# 14_000 lag Gabriels Kontext nach allen drei Kuerzungsstufen 112 Zeichen
+# darueber -- und haette bei JEDEM Zug gewarnt. Ein Budget, das nie erreicht
+# wird, erzeugt eine Dauerwarnung, und Dauerwarnungen werden ignoriert (die
+# -Zeile lief so monatelang mit, waehrend die Lernkaskade ausfiel).
+# Der Zweck ist, das Wachstum zu stoppen: 18_112 -> 14_112 gemessen.
+_VORSTUFE_KONTEXT_MAX_CHARS = 14_500
 _BILANZ_MIN_JE_SEITE = 2
 
 
@@ -192,6 +199,18 @@ def _bilanz_schlank(profil: dict[str, Any], stufe: int) -> dict[str, Any]:
         "Belege entfernt, aelteste Eintraege beidseitig gekuerzt")
     p2 = dict(profil)
     p2["bilanz"] = neu_bilanz
+    if stufe >= 3:
+        # Namen behalten, Beschreibungen fallen -- die stehen im Korpus.
+        projekte = p2.get("projekte")
+        if isinstance(projekte, list):
+            p2["projekte"] = [
+                (e.get("name") or e.get("titel") or e.get("projekt") or e)
+                if isinstance(e, dict) else e for e in projekte]
+        elif isinstance(projekte, dict):
+            p2["projekte"] = sorted(projekte.keys())
+        neu_bilanz["hinweis_kuerzung"] = (
+            "Belege entfernt, aelteste Eintraege beidseitig gekuerzt, "
+            "Projekte auf Namen reduziert")
     return p2
 
 
@@ -205,7 +224,7 @@ def _kontext_im_budget(bauen, profil: dict[str, Any] | None) -> dict[str, Any] |
         return None
     if len(bauen(profil)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
         return profil
-    for stufe in (1, 2):
+    for stufe in (1, 2, 3):
         kandidat = _bilanz_schlank(profil, stufe)
         if len(bauen(kandidat)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
             return kandidat
@@ -214,8 +233,51 @@ def _kontext_im_budget(bauen, profil: dict[str, Any] | None) -> dict[str, Any] |
     import sys as _sys
     print(f"prestage: Kontext bleibt ueber Budget "
           f"({len(bauen(profil_kandidat))} > {_VORSTUFE_KONTEXT_MAX_CHARS}) -- "
-          "die Bilanz war nicht der einzige Grund", file=_sys.stderr)
+          "auch nach Stufe 3. Dann liegt es nicht mehr am Profil; "
+          "nachsehen, welcher Block gewachsen ist", file=_sys.stderr)
     return profil_kandidat
+
+
+# ── epistemik in die Ausstrahlung (CSWT-Z-Befund 2026-08-20) ─────────────
+_EPISTEMIK_MAX_CHARS = 420
+
+
+def _epistemik_zeile(epistemik: Any) -> str:
+    """Eine kompakte Zeile aus dem Selbstwissen -- oder "" wenn nichts da ist.
+
+    Bewusst knapp und strukturiert: Regel (B) verbietet der Vorstufe zu Recht,
+    den Maschinenraum in den Auftrag zu kippen. Eine Aufzaehlung "was belegt
+    ist, woher, und was fehlt" ist kein Maschinenraum, sondern die Grundlage,
+    auf der Zero ueberhaupt zwischen Beleg und Vermutung unterscheiden kann.
+    """
+    if not isinstance(epistemik, dict):
+        return ""
+    bekannt = [b for b in (epistemik.get("bekannt") or []) if isinstance(b, dict)]
+    unbekannt = [str(u) for u in (epistemik.get("unbekannt") or []) if u]
+    teile = []
+    for b in bekannt[:4]:
+        fakt = str(b.get("fakt") or "").strip()
+        her = str(b.get("herkunft") or "").strip()
+        if fakt:
+            teile.append(f"{fakt} <- {her}" if her else fakt)
+    zeile = ""
+    if teile:
+        zeile += "KNOWN (say these as facts, name the source): " + " | ".join(teile)
+    if unbekannt:
+        if zeile:
+            zeile += "\n"
+        zeile += ("UNKNOWN (do not guess these; find out or say plainly you lack them): "
+                  + " | ".join(unbekannt[:4]))
+    return zeile[:_EPISTEMIK_MAX_CHARS]
+
+
+def _mit_epistemik(caveman: str, epistemik: Any) -> str:
+    """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
+    import os as _os
+    if _os.environ.get("CLAYVERSE_EPISTEMIK_IM_PROMPT", "1") != "1":
+        return caveman
+    zeile = _epistemik_zeile(epistemik)
+    return f"{caveman}\n\n{zeile}" if zeile else caveman
 
 
 def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
@@ -583,7 +645,8 @@ def run_chat_turn(
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(
-            envelope["caveman_prompt"], user_id=user_id, session_id=session_id,
+            _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik")),
+            user_id=user_id, session_id=session_id,
             tool_selection=selected_tools,
         )
         zero_ms = (time.perf_counter() - t0) * 1000.0
@@ -613,7 +676,8 @@ def run_chat_turn(
             prestage_ms += (time.perf_counter() - t0) * 1000.0
             t0 = time.perf_counter()
             zero = headless_zero.run_headless(
-                envelope2["caveman_prompt"], user_id=user_id, session_id=session_id,
+                _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik")),
+                user_id=user_id, session_id=session_id,
                 tool_selection=selected_tools,
             )
             zero_ms += (time.perf_counter() - t0) * 1000.0

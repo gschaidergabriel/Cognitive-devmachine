@@ -1,12 +1,30 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T10:11:15Z. 943 Commits aus vier Repos, davon 315 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T10:41:15Z. 944 Commits aus vier Repos, davon 316 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 10:27:10 +0000 — entityos: 1 Aenderungen
+
+`3ed9e1f291e1` · entityos · 10:27 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-20T10:27:10+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen
 
@@ -4487,19 +4505,5 @@ Suite 461/31 -> 466/26, keine Regression.
 
 ```
 Bind the recovery regression fixture to the exact canonical EffectJournal receipt encoding and admitted target. Test-only source consistency repair; no runtime PASS claimed.
-```
-
-### Tests: verified_effect braucht jetzt required_target (Commit 8b7368efd) -- 5 Tests nachgezogen
-
-`de1ffd0513f9` · entityos · 03:16 UTC · BACK agent
-
-```
-create_goal_from_turn() verlangt seit dem Ziel-Bindungs-Fix einen expliziten
-required_target fuer completion_mode=verified_effect (schliesst die Luecke,
-dass jeder Effekt mit passender capability irgendwo die Vervollstaendigung
-haette erfuellen koennen). Der Fix selbst kam ohne Test-Update. Fuenf Tests
-in test_autonomy.py riefen _goal() ohne required_target und liefen alle in
-denselben ValueError. required_target jeweils auf den Ziel-String gesetzt,
-den der Testschritt sowieso schon im propose_step()-Effekt verwendet.
 ```
 

@@ -54,7 +54,42 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
         world["_gw_idf"] = wettbewerb.idf_gewichte(db, message or "")
     except Exception:
         world["_gw_idf"] = {}
+    # ⭐ LANGTEXT FUER DEN ARBEITSRAUM. Der Abruf schneidet jeden Ausschnitt auf
+    # 260 Zeichen -- gemessen 2026-08-20 brach der Text genau dort ab, wo die
+    # Antwort anfing ("der Text bricht mitten im Satz ab -- genau dort, wo der
+    # eigentliche Grund beginnen wuerde"). 260 war richtig, solange ALLE
+    # Treffer in den Vorstufenkontext mussten; seit die Vorstufe gar keinen
+    # Text mehr sieht, ist das Budget frei. Ausgestrahlt werden hoechstens drei
+    # Stellen -- die duerfen dafuer vollstaendig genug sein, um zu antworten.
+    try:
+        world["_gw_lang"] = _langtext(db, [t.get("artikel_id")
+                                           for t in (world.get("corpus") or [])
+                                           if isinstance(t, dict)])
+    except Exception:
+        world["_gw_lang"] = {}
     return world
+
+
+_ARBEITSRAUM_AUSSCHNITT_CHARS = 1400
+
+
+def _langtext(db, ids) -> dict[str, str]:
+    """Laengere Ausschnitte fuer die Kandidaten dieses Zuges. Nie werfend."""
+    ids = [str(i) for i in (ids or []) if i][:8]
+    if not ids:
+        return {}
+    marken = ",".join("?" for _ in ids)
+    rows = db.db.execute(
+        f"SELECT artikel_id, substr(text,1,?) AS lang FROM artikel_suchtext "
+        f"WHERE artikel_id IN ({marken})",
+        [_ARBEITSRAUM_AUSSCHNITT_CHARS] + ids).fetchall()
+    raus = {}
+    for r in rows:
+        try:
+            raus[r["artikel_id"]] = (r["lang"] or "").strip()
+        except Exception:
+            raus[r[0]] = (r[1] or "").strip()
+    return raus
 
 
 def _hyperposition_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
@@ -303,7 +338,10 @@ def _epistemik_zeile(epistemik: Any) -> str:
     return zeile[:_EPISTEMIK_MAX_CHARS]
 
 
-_KORPUS_IM_PROMPT_MAX_CHARS = 1400
+# Drei Stellen a ~1400 Zeichen plus Kopfzeile. Vorher 1400 fuer den GANZEN
+# Block -- damit passte nicht einmal EINE vollstaendige Stelle hinein, und der
+# Deckel schnitt ab, was der laengere Ausschnitt gerade gewonnen hatte.
+_KORPUS_IM_PROMPT_MAX_CHARS = 4800
 _KORPUS_IM_PROMPT_N = 3
 
 
@@ -401,12 +439,14 @@ def _korpus_zeile(world: dict[str, Any], treffer: list | None = None,
         return ""
     voll = {str(t.get("artikel_id") or ""): t
             for t in ((volltext or {}).get("corpus") or []) if isinstance(t, dict)}
+    lang = (volltext or {}).get("_gw_lang") or {}
     zeilen = []
     for t in treffer[:_KORPUS_IM_PROMPT_N]:
         kennung = str(t.get("artikel_id") or "").strip()
         quelle = voll.get(kennung) or t
         titel = str(t.get("titel") or quelle.get("titel") or "").strip()
-        aus = " ".join(str(quelle.get("ausschnitt") or t.get("ausschnitt") or "").split())
+        aus = " ".join(str(lang.get(kennung) or quelle.get("ausschnitt")
+                            or t.get("ausschnitt") or "").split())
         if not aus:
             continue
         zeilen.append(f"- [{kennung}] {titel}: {aus}")

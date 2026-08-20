@@ -280,7 +280,9 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
     # must not suppress a status receipt that was already received.
     except Exception:
         return default
-    if not isinstance(value, str):
+    # Header values are foreign adapter data.  A str subclass can override
+    # strip() and must not run code after an HTTP status was already received.
+    if type(value) is not str:
         return default
     value = value.strip()
     if value and all("0" <= character <= "9" for character in value):

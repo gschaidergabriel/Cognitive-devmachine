@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T08:11:15Z. **2964 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T08:41:15Z. **2974 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T13:59:02+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T14:52:19+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2866 |
+| baunotiz | 2876 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1824 |
-| baunotiz | bauverlauf.jsonl | 997 |
+| baunotiz | git-commit | 1828 |
+| baunotiz | bauverlauf.jsonl | 1003 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2964 · Gegenhypothese: 0 von 2964
+## Hypothese: 0 von 2974 · Gegenhypothese: 0 von 2974
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T13:59:02+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### research: expose Gen186 timeout mirage and anti-echo falsifiers
+
+`baunotiz-bauverlauf-c38c5e85564f93e7f0a6` · baunotiz · bauverlauf.jsonl · 2026-08-20T14:52:19+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: expose Gen186 timeout mirage and anti-echo falsifiers
+
+`baunotiz-git-ece8c89241eb2c9c974ab5d40ca7572fb34a967c` · baunotiz · git-commit · 2026-08-20T14:52:19+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: expose Gen186 timeout mirage and anti-echo falsifiers
+
+### claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
+
+`baunotiz-bauverlauf-ba25626d3668b60df4fc` · baunotiz · bauverlauf.jsonl · 2026-08-20T14:44:13+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
+
+`baunotiz-git-180307808bf32cb38ddb38a2f7d4f861511d52f0` · baunotiz · git-commit · 2026-08-20T14:44:13+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
 
 ### research: route Gen184 semantic shedding and overflow falsifiers
 
@@ -202,48 +234,4 @@ claycode supervisor: bind Gen171 out-of-order export race
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
-
-### research: bind Gen171 out-of-order export race
-
-`baunotiz-git-ce605ac89686e28d75683caf457852f48716d6d5` · baunotiz · git-commit · 2026-08-20T08:48:54+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen171 out-of-order export race
-
-### EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen
-
-`baunotiz-git-0e4f89d44a116f7f2d6d6e938e110bd066ad0dc8` · baunotiz · git-commit · 2026-08-20T07:59:00+00:00 · BACK agent
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen
-
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T07:58:59+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-
-### claycode supervisor: steer Gen169 failure-identity swap and DB contention
-
-`baunotiz-bauverlauf-0c7b7b6167a79958f610` · baunotiz · bauverlauf.jsonl · 2026-08-20T07:56:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer Gen169 failure-identity swap and DB contention
-
-`baunotiz-git-c03a4f35229809516dc8a27563bc6bdfa9c65b9b` · baunotiz · git-commit · 2026-08-20T07:56:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: steer Gen169 failure-identity swap and DB contention
 

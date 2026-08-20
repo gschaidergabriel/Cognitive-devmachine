@@ -378,6 +378,16 @@
     "executable_evidence": "test_credential_cannot_change_between_authorization_and_request",
     "counterhypothesis": "Reading the shared environment repeatedly is safe because request construction immediately follows routing; falsified locally when a deterministic post-authorization mutation replaced the credential that was actually sent."
   },
+  "response_context_cleanup_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A valid non-200 HTTP status is classified and its safety effects are committed before response-context cleanup; an Exception raised by adapter __exit__ cannot downgrade an already classified HTTP 402 or remove its payment latch.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required"
+    ],
+    "executable_evidence": "test_http_402_latch_survives_response_context_exit_failure",
+    "counterhypothesis": "The generic adapter Exception fallback is sufficient after any valid status; falsified locally because a context-manager __exit__ RuntimeError changed a received HTTP 402 into incomplete_provider_response and left the payment latch inactive."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -422,6 +432,7 @@
     "HTTPException failures before valid response headers, including BadStatusLine, emit an unreachable_provider receipt with null status and without EXECUTED.",
     "Transport OSError failures before response headers, including SSLError, emit an unreachable_provider receipt with null status and without EXECUTED; after response headers they preserve status and EXECUTED as incomplete_provider_response.",
     "A received non-200 status is classified directly from response metadata without consuming its body; in particular, HTTP 402 activates the payment hard stop even if its body would stall.",
+    "A valid non-200 status is classified before response-context cleanup; a normal Exception from adapter __exit__ cannot downgrade that received HTTP evidence or undo an HTTP 402 payment latch.",
     "For HTTP 200, body-read failures after response headers preserve that status and EXECUTED while classifying as incomplete_provider_response; they never reach VERIFIED or DONE.",
     "Transport and response-read failures for the Chat Completions POST are nonretryable without provider-supported idempotency or proof that the original request was never applied.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",

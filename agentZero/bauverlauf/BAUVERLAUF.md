@@ -1,12 +1,31 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T03:52:36Z. 918 Commits aus vier Repos, davon 294 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T04:11:13Z. 919 Commits aus vier Repos, davon 295 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### CSWT-Z: kausaler Pruefplan fuer Zeros Arbeitsraum
+
+`d5cf6d524cc5` · entityos · 04:05 UTC · EOS-Chronik
+
+```
+Gegen J-Space (arXiv:2607.15495), Butlin-Indikatoren (2308.08708) und die
+Ablationsarbeit 2512.19155 entworfen. Kernentscheidung: Zeros Arbeitsraum ist
+GEBAUT, nicht gewachsen -- deshalb zaehlt nur, was der Code nicht erzwingt, und
+vier von sieben Struktur-Indikatoren werden vor der Wertung gestrichen.
+
+Enthaelt den bereits gemessenen Nullbefund: die Ausstrahlung setzt sich NICHT
+gegen ein widersprechendes Spezialmodul durch (5/5). Dient als Positivkontrolle
+der Empfindlichkeit.
+
+⚠️ Kein rohes PCI -- es invertiert bei Arbeitsraum-Agenten (0,33 vs 0,84).
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
 
 ### EOS-Chronik 2026-08-20 03:13:02 +0000 — entityos: 1 Aenderungen
 
@@ -4375,13 +4394,5 @@ keine erfundene Gegenseite (nur reale artikel.art=gegenhypothese-Zeilen),
 gegenseite bleibt nie zuerst gekappt.
 
 Backup: udb/abruf/paket.py.vor-zweiseitig (lokal, nicht versioniert)
-```
-
-### B27 geprueft: F56 Zweiseitigkeit diagnostiziert + Gegenseite-Kantenhop-Symmetrie [B27-3]
-
-`6542e594f554` · clay · 15:05 UTC · ClayVerse
-
-```
-Diagnose zuerst (fixe, seeded 30-Fragen-Stichprobe /tmp/zweiseitig_30fragen.json, seed 20260815, aus 1588 hypothese/gegenhypothese-Titeln): 28/30 mit Material, 6/28 zweiseitig, 22/28 einseitig -- ALLE 22 fehlten auf der Gegenseite, nie auf der Hypothesenseite. Verteilung der 22: 13x kein gegenhypothese-Artikel im Umfeld (weder lexikalisch noch via 1-/2-Hop erreichbar) -- Material fehlt schlicht; 9x Artikel existiert IRGENDWO im 272-teiligen gegenhypothese-Bestand (lexikalischer Treffer), aber KEIN 1-Hop-Pfad ueber irgendeine Kantenart dorthin (2 davon erst bei 2 Hops erreichbar -- Invariante one-hop-never-two verbietet das). Fix [B27-3]: _hypothesen_hop() zu generischem _typed_hop(ziel_art) refaktoriert, _gegenseite_hop() als duenner Wrapper ergaenzt (CAP_GEGENSEITE_HOP=6, gleiche Gewichtstabellen) -- macht die Gegenseite jetzt ebenso kantentyp-agnostisch wie die Hypothesenseite es schon war (vorher: gegenseite nur ueber widerspricht/attacks/CHALLENGES/CONTRADICTS/SUPERSEDES, KEINE Zieltyp-Pruefung; hypothesen_hop nur ueber Zieltyp, JEDE Kantenart). Gemessen, dieselben 30 Fragen vorher/nachher: zweiseitig 6/28 -> 6/28 UNVERAENDERT -- der Fund war korrekt: 661 Hop-Kandidaten insgesamt gefunden, aber nur 2/661 vom Zieltyp gegenhypothese (0,3%). Cross-Check mit einem unabhaengigen, echt-zufaelligen n=30-Lauf (moeglichkeitsraum_mess.py ziel): 6/26 zweiseitig, deckt sich (~23%). Schatten eingehalten: Latenz-Median 337,4 -> 372,0 ms (Deckel 399,7 ms), Raum-Token median 242 / avg 325,9 (Ziel <=400/~350). Invarianten: AMBIGUOUS/resolve_entities nicht angefasst, ein Hop (nie zwei), keine erfundene Gegenseite (nur reale artikel.art=gegenhypothese-Zeilen), gegenseite weiterhin nie zuerst gekappt.
 ```
 

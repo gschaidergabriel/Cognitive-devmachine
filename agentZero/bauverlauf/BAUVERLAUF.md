@@ -1,12 +1,31 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T17:41:16Z. 981 Commits aus vier Repos, davon 337 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T18:11:16Z. 985 Commits aus vier Repos, davon 338 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 17:45:17 +0000 — entityos: 2 Aenderungen
+
+`b7c25fbe5e65` · entityos · 17:45 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_korrektur.py
+
+Zeit: 2026-08-20T17:45:17+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 17:35:44 +0000 — entityos: 2 Aenderungen
 
@@ -4581,13 +4600,5 @@ Variablenname (identity statt supplied) und Trimmen vor der Definition der
 Groessenfunktion. 109 bzw. 96 rote Tests, beide zurueck auf 479/13.
 
 Suite unveraendert 479/13 - der Anschluss kostet keine Regression.
-```
-
-### Merge pull request #718 from gschaidergabriel/fix/autonomy-atomic-source-turn-idempotency-20260818
-
-`27be6a07c3cd` · entityos · 03:55 UTC · Gabriel Gschaider
-
-```
-fix(clayverse): make goal source adoption atomic
 ```
 

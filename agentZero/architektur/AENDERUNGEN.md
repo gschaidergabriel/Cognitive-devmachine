@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T17:41:16Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T18:11:16Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -161,6 +161,7 @@ Automatisch erzeugt 2026-08-20T17:41:16Z aus drei Repos. 478 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T17:45 | entityos | `b7c25fbe5e65` | EOS-Chronik 2026-08-20 17:45:17 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:35 | entityos | `9e45b0c97f28` | EOS-Chronik 2026-08-20 17:35:44 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:28 | entityos | `3ca313a39d6e` | EOS-Chronik 2026-08-20 17:28:03 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:21 | entityos | `28bd6611775b` | EOS-Chronik 2026-08-20 17:21:42 +0000 — entityos: 1 Aenderungen |
@@ -220,5 +221,4 @@ Automatisch erzeugt 2026-08-20T17:41:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T01:40 | entityos | `f681ca215c9e` | Die systemd-Einheiten des Vorsatz-Pruefers mitsichern |
 | 2026-08-20T01:40 | entityos | `f9ed8898ba18` | Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises |
 | 2026-08-20T01:37 | entityos | `854944248021` | EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T01:30 | entityos | `36163a30b5fd` | EOS-Chronik 2026-08-20 01:30:22 +0000 — entityos: 2 Aenderungen |
 

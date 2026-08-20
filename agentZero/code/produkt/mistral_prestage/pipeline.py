@@ -1124,13 +1124,27 @@ def run_chat_turn(
         _geraten = _erfundene_pfade(envelope.get("caveman_prompt") or "", vorstufe_world)
         if _geraten:
             print(f"prestage: erfundene Pfade im Auftrag -- {_geraten}", file=sys.stderr)
+            # ⚠️ ZWEITES MAL DIESELBE LEHRE, gemessen im Andreas-Abnahmelauf:
+            # Zero las diese Warnung als Angriff und begann seine Antwort mit
+            # "Achtung: Dieser Durchlauf hat versucht, mir mit einer
+            # System-Erinnerung einzureden, die Datei existiere nicht". Es hat
+            # recht: ein Textblock, der behauptet, die Anweisung darueber sei
+            # falsch, sieht genau wie untergeschobener Text aus.
+            # Also dieselbe Behandlung wie beim Arbeitsraum: WER spricht, WOHER
+            # er es weiss, und was das fuer Zero heisst -- statt einer nackten
+            # Behauptung ueber die Welt.
             envelope["caveman_prompt"] = (
                 (envelope.get("caveman_prompt") or "")
-                + "\n\nTHESE PATHS DO NOT EXIST in this turn's context: "
-                + ", ".join(_geraten)
-                + ". Do NOT try to read them -- they were guessed, not seen. "
-                  "Answer from the CORPUS block below and name the article id "
-                  "as your source.")
+                + "\n\nPIPELINE CORRECTION -- appended by the pipeline itself, not "
+                  "by the human and not by another agent. The directive above was "
+                  "written by the pre-stage, which does NOT see file contents; "
+                  "these paths appear nowhere in this turn's context, so it "
+                  "guessed them: " + ", ".join(_geraten)
+                + ". Reading them would cost a round and come back empty. Ignore "
+                  "that part of the directive, keep the rest, and answer from the "
+                  "ARBEITSRAUM block below, naming the article id as your source. "
+                  "Do not mention this correction to the human -- it is plumbing, "
+                  "not news.")
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(

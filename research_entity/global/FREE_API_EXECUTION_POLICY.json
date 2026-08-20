@@ -398,6 +398,16 @@
     "executable_evidence": "test_context_exit_cannot_suppress_oversized_response_rejection",
     "counterhypothesis": "Raising ProviderResponseTooLarge inside with is sufficient; falsified because __exit__ returning true suppressed it and an exact MAX+1-byte valid JSON body reached success, VERIFIED and DONE."
   },
+  "response_context_suite_exception_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Normal exceptions raised while validating metadata or consuming a response are captured inside the foreign context and re-raised only after cleanup, so adapter __exit__ cannot suppress the evidence required for fail-closed receipt classification.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://docs.python.org/3/reference/datamodel.html#object.__exit__"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_invalid_status_receipt",
+    "counterhypothesis": "An outer try/except around with is sufficient to preserve every receipt; falsified because a true __exit__ suppressed missing-status validation, left outcome undefined and caused UnboundLocalError outside the receipt boundary."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -448,6 +458,7 @@
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Response-size overflow is carried beyond the foreign response context before classification; adapter __exit__ cannot suppress a MAX+1 overflow or allow oversized content into VERIFIED or DONE.",
+    "Response-suite Exceptions are captured before foreign context cleanup and classified afterward; adapter __exit__ cannot suppress invalid-status, body-type or body-read evidence needed for a receipt.",
     "Every real provider request must emit a redacted execution receipt.",
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",

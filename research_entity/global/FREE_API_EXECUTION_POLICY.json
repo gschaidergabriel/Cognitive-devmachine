@@ -43,6 +43,17 @@
     "executable_evidence": "test_oversized_request_is_rejected_before_json_materialization",
     "counterhypothesis": "Checking len(json.dumps(payload).encode()) is already a memory bound; falsified locally because the oversized-request path invoked json.dumps and materialized the complete document before it could reject the request."
   },
+  "request_pre_snapshot_cardinality_bound": {
+    "max_messages": 62500,
+    "checked_at": "2026-08-21",
+    "claim": "An exact built-in message list is rejected before snapshot allocation and before the process-wide execution lock when its cardinality exceeds 62500. Under the current closed text schema and default JSON representation, the smallest valid message occupies 32 bytes before array separators and the outer request envelope, so no larger valid conversation can fit the 2000000-byte transport envelope.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#len",
+      "https://docs.python.org/3/library/json.html#json.dumps"
+    ],
+    "executable_evidence": "test_structurally_oversized_request_is_rejected_before_snapshot",
+    "counterhypothesis": "Snapshotting before the serialized-size check is harmless because the final JSON limit still rejects the request; falsified locally because a 62501-message valid alternating conversation copied every message object before rejection."
+  },
   "output_token_budget": {
     "max_tokens": 4096,
     "checked_at": "2026-08-21",
@@ -594,6 +605,7 @@
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
     "Requests whose validated text and per-message structure already exceed the transport envelope are rejected before json.dumps can materialize the document; an exact serialized UTF-8 byte check remains in force afterward.",
+    "Exact built-in message lists above 62500 entries are rejected before caller-data snapshotting and before the process execution lock because no valid conversation of that cardinality can fit the 2000000-byte envelope.",
     "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",
     "Text-chat messages and message objects are exact built-in list and dict containers with exact built-in string field names; polymorphic container subclasses fail closed before iteration or mapping behavior can run.",
     "The text-chat request contains at least one message; empty conversations are rejected before routing, credential use or network access.",

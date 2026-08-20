@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.1",
+  "task_id": "task-GWT-20260820T134000Z-GLOBAL-CHANNEL-AUDIT",
+  "room_id": "gwt",
+  "title": "Close Hyperposition bypass and audit every GWT side channel",
+  "goal_clay": "record Goal {origin:CHATGPT;authority:PROPOSAL_ONLY;room:GWT;kind:CAUSAL_AUDIT;action:CLOSE_HYPERPOSITION_BYPASS_AND_CLASSIFY_ALL_INFORMATION_CHANNELS}",
+  "status": "OPEN",
+  "dependencies": [
+    "agentzeroforschung/analysen/2026-08-20T134000Z_GWT_GLOBALITAETS_AUDIT_HYPERPOSITION_BYPASS.md",
+    "agentZero/code/produkt/mistral_prestage/pipeline.py",
+    "agentZero/code/produkt/mistral_prestage/wettbewerb.py",
+    "agentZero/code/produkt/hyperposition.py",
+    "agentZero/code/produkt/mistral_prestage/prestage.py"
+  ],
+  "completion_test_clay": "record Completion {explicit_test:true;evidence_file_required:true;no_authority_semantic_drift:true;falsifier_stated:true;owner_decision_required:false}",
+  "created_by": "chatgpt-gpt-5.6-sol",
+  "stack_epoch": 24,
+  "created_at": "2026-08-20T13:40:00Z",
+  "completion_test_prose": "In wide-workspace mode build Hyperposition before the unified candidate list, use stable relation_id, and ensure Hyperposition payload reaches Zero only through winner materialization. Classify every other Prestager/Zero information channel as FRAME, CONTROL, CANDIDATE, TOOL or OUTCOME and prove no answer-bearing CANDIDATE payload bypasses broadcast. Run full, broadcast-lesion, sidechannel-lesion, all-content-lesion and winner-swap arms on held-out tasks. Preserve narrow-mode behavior as comparison control. Whole global-workspace credit remains blocked if any control/frame channel reconstructs answer-specific content under all-content lesion.",
+  "rationale_prose": "Current ordering builds _gw_kandidaten before hyperposition_readout exists, then injects Hyperposition separately into prestage. The code therefore contains a Hyperposition candidate adapter that the current wide path cannot actually use, while the same content remains visible outside the bottleneck. Rich current_user_profile is another unclassified content-capable side channel."
+}

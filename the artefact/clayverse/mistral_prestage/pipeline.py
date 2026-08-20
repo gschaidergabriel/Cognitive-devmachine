@@ -153,6 +153,71 @@ _VORSTUFE_OWN_RECENT_FELD_DECKEL = 800
 _VORSTUFE_DURABLE_MEMORY_FELD_DECKEL = 300
 
 
+# ── Der WIRKLICHE Deckel (CSWT-Z-Befund 2026-08-20) ──────────────────────
+# _VORSTUFE_MAX_CHARS oben deckelt nur `world`. Gemessen kam dabei ein
+# Gesamtkontext von 17.878 Zeichen heraus -- die Zahl 10.000 stand daneben und
+# regelte 53 % davon. Dieser Deckel gilt fuer das, was die Vorstufe WIRKLICH
+# sieht. Bewusst grosszuegig gesetzt: er soll den Wildwuchs stoppen, nicht den
+# Normalbetrieb beschneiden.
+_VORSTUFE_KONTEXT_MAX_CHARS = 14_000
+_BILANZ_MIN_JE_SEITE = 2
+
+
+def _bilanz_schlank(profil: dict[str, Any], stufe: int) -> dict[str, Any]:
+    """Die Bilanz kuerzen -- die einzige Stelle im Profil, die unbegrenzt waechst.
+
+    stufe 1: Belege raus (laengster Teil je Eintrag; DASS etwas geschah bleibt).
+    stufe 2: zusaetzlich aelteste Eintraege raus, symmetrisch, nie unter zwei
+             je Seite. Siehe Modul-Historie -- unter Platzmangel nur noch
+             Erfolge zu behalten waere eine Schoenung, kein Kuerzen.
+    """
+    if not isinstance(profil, dict):
+        return profil
+    bilanz = profil.get("bilanz")
+    if not isinstance(bilanz, dict):
+        return profil
+    neu_bilanz = dict(bilanz)
+    for seite in ("erfolge", "fehlschlaege"):
+        eintraege = neu_bilanz.get(seite)
+        if not isinstance(eintraege, list):
+            continue
+        gekuerzt = [{k: v for k, v in e.items() if k != "beleg"} if isinstance(e, dict) else e
+                    for e in eintraege]
+        if stufe >= 2:
+            behalten = max(_BILANZ_MIN_JE_SEITE, len(gekuerzt) // 2)
+            gekuerzt = gekuerzt[-behalten:]
+        neu_bilanz[seite] = gekuerzt
+    neu_bilanz["hinweis_kuerzung"] = (
+        "Belege entfernt" if stufe == 1 else
+        "Belege entfernt, aelteste Eintraege beidseitig gekuerzt")
+    p2 = dict(profil)
+    p2["bilanz"] = neu_bilanz
+    return p2
+
+
+def _kontext_im_budget(bauen, profil: dict[str, Any] | None) -> dict[str, Any] | None:
+    """Profil so weit kuerzen, dass der GESAMTE Kontext ins Budget passt.
+
+    `bauen(profil)` liefert den fertigen Kontexttext -- so wird gemessen, was
+    die Vorstufe wirklich sieht, statt eines Teils davon.
+    """
+    if profil is None:
+        return None
+    if len(bauen(profil)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+        return profil
+    for stufe in (1, 2):
+        kandidat = _bilanz_schlank(profil, stufe)
+        if len(bauen(kandidat)) <= _VORSTUFE_KONTEXT_MAX_CHARS:
+            return kandidat
+        profil_kandidat = kandidat
+    # Nicht still hinnehmen: ein ueberschrittenes Budget ist eine Aussage.
+    import sys as _sys
+    print(f"prestage: Kontext bleibt ueber Budget "
+          f"({len(bauen(profil_kandidat))} > {_VORSTUFE_KONTEXT_MAX_CHARS}) -- "
+          "die Bilanz war nicht der einzige Grund", file=_sys.stderr)
+    return profil_kandidat
+
+
 def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
     """Schlanke Kopie von world NUR fuer den Vorstufe-Aufruf (F1 Schritt B).
 
@@ -467,6 +532,17 @@ def run_chat_turn(
         # spaeter u.U. noch daraus, und andere Verbraucher der geteilten
         # WorldAssembler-Quelle sind davon so oder so nicht betroffen).
         vorstufe_world = _vorstufen_world(world)
+
+        # Der Gesamtdeckel greift NACH world -- gemessen wird der fertige
+        # Kontext, nicht ein Teil davon (CSWT-Z-Befund, siehe oben).
+        def _bauen(_p):
+            return prestage.build_context(
+                raw_prompt=message, world=vorstufe_world, connected_systems=None,
+                current_user=user_id, current_user_profile=_p,
+                moeglichkeitsraum=erwartungsfeld, recent_turns=[],
+                zero_suggestion=None, available_tools=[],
+                hyperposition=hyperposition_readout)
+        nutzerprofil = _kontext_im_budget(_bauen, nutzerprofil)
 
         # Phase 2b Schritt 3 (Rueckspeisung): das gelernte "was-ist-falsch"
         # als schlanker Text in den Vorstufe-Kontext, BEVOR Runde 1 laeuft --

@@ -1,12 +1,52 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T09:11:14Z. 939 Commits aus vier Repos, davon 307 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T09:41:14Z. 940 Commits aus vier Repos, davon 309 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen
+
+`32cf78a73248` · entityos · 09:27 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-20T09:27:00+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 09:18:31 +0000 — entityos: 5 Aenderungen
+
+`8dad66fecbca` · entityos · 09:18 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/cswt_mess.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T09:18:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen
 
@@ -4415,59 +4455,5 @@ Authorize and add a direct VPS KVM guest lab for destructive ClayVerse testing w
 
 ```
 Fuse the fresh-current Strict supplemental-group fence and focused regression. Exact source blobs were hash-bound and the fused 2-test source regression passed in the authorized isolated source-test container. Runtime enforcement remains an acceptance gate.
-```
-
-## 2026-08-15
-
-### Gate-System: Alle MCP-Server verbunden und aktiv
-
-`3731aca6de09` · clay · 20:57 UTC · ClayVerse
-
-```
-Erfolgreiche Integration:
-- 4 MCP-Server verbunden (lazyweb, zai-mcp-server, web-search-prime, zread)
-- 14 Tools verfügbar (Vision, Search, Reading, Product)
-- Gate 2 (MCP-Validierung) vollständig aktiv
-
-Gate-Architektur:
-- Gate 1 (F40): Inhaltliche Filterung
-- Gate 2 (MCP): Technische Validierung (VOLLSTÄNDIG)
-- Gate 3 (AP8): System-Level
-
-Z.AI MCP Integration:
-- Vision-MCP: 8 Tools (analyze_image, ui_to_artifact, etc.)
-- Search-MCP: 1 Tool (web search)
-- Reading-MCP: 1 Tool (document reading)
-
-Empfehlung: Parallele AP11-Architektur (Option B)
-- NVIDIA und Z.AI Vision als redundante Pfade
-- Schnellster Pfad gewinnt automatisch (F57-konform)
-- Konzept-Treue: Z.AI als Gehirn-Komponente
-
-Nächste Schritte:
-1. Z.AI Vision-Timing messen
-2. Parallele Vision-Stage implementieren
-3. Performance-Test: NVIDIA vs. Z.AI vs. Parallel
-
-Co-Authored-By: Claude <<adresse>>
-```
-
-### AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung
-
-`65bf88a664da` · clay · 20:43 UTC · ClayVerse
-
-```
-Gemessene Timings [M]:
-- Groq: 98.7ms (4.0x schneller als geschätzt)
-- NVIDIA: 196.9ms (9.4x schneller als geschätzt)
-- Fast Path: ~369ms statt ~3168ms (8.6x schneller!)
-
-Issues:
-- Gemini nicht verfügbar (alle Modelle 404/429)
-- Echte Vision-Tests noch ausstehend
-
-Empfehlung: Kaskade ohne Gemini deployen
-
-Co-Authored-By: Claude <<adresse>>
 ```
 

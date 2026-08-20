@@ -357,6 +357,14 @@ empty list is not a failure, it is a decision, and it means nothing from the cor
 broadcast this turn. Never write an id that is not in CONTEXT.world.corpus -- an id you did not \
 read there is not a selection, it is a guess (the same failure as the invented tool names \
 read_resource and search_wiki, both measured). \
+⭐ EVERY corpus entry ARRIVES ALREADY SCORED, and the list is sorted best-first: `gw_rang` is \
+its place, `gw_wert` its score, `gw_relevanz` how much of the QUESTION it covers, and \
+`gw_zugelassen` says whether it cleared the threshold at all. An entry with \
+gw_zugelassen=false CANNOT be broadcast -- naming it is discarded and logged, so do not name \
+it. The ranking is a MECHANICAL score -- word coverage of your question, weighted by how rare \
+each word is -- not the truth: it counts words, you read the `ausschnitt`. \ Departing from rank order is allowed and sometimes right -- picking rank 2 over rank 1 \
+because rank 2 actually answers the question is exactly the judgement you are here for. What \
+is NOT allowed is picking by rank alone without having read the excerpt. \
 ⭐⭐ memory_artefacts is the SELECTION FROM CONTEXT.world.durable_memory that actually bears on \
 THIS request: a list of {"wert": the remembered value verbatim, "subjekt": whom/what it is \
 about, "herkunft": where it came from -- who said it, in which turn}. Take them from \

@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T09:41:14Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (40)
+## reparatur (39)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -123,7 +123,6 @@ Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:17 | entityos | `1d8bec2a13a0` | fix(clayverse): re-enter autonomous goals without effect replay |
 | 2026-08-18T03:14 | entityos | `b4e98995b88e` | fix(clayverse): reject autonomy self-ack completion |
 | 2026-08-18T03:12 | entityos | `e97a47181e95` | fix(clayverse): separate effect budget and require later owner acknowledgement |
-| 2026-08-18T03:10 | entityos | `f5007745b0d6` | fix(clayverse): decouple reasoning from effect budget |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -133,7 +132,7 @@ Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (37)
+## pruefung (36)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -170,15 +169,16 @@ Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:21 | entityos | `2e7577660632` | Test: required_target nachgezogen + Regex-Tippfehler in Fehlermeldungs-Match korrigiert |
 | 2026-08-18T03:16 | entityos | `de1ffd0513f9` | Tests: verified_effect braucht jetzt required_target (Commit 8b7368efd) -- 5 Tests nachgezogen |
 | 2026-08-18T03:13 | entityos | `0e862557cf6d` | test(clayverse): fence autonomy effect budget and self-ack |
-| 2026-08-18T03:11 | entityos | `ca4ad90f452b` | test(clayverse): fence effect budget without blocking reasoning |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (259)
+## bau (261)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T09:27 | entityos | `32cf78a73248` | EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen |
+| 2026-08-20T09:18 | entityos | `8dad66fecbca` | EOS-Chronik 2026-08-20 09:18:31 +0000 — entityos: 5 Aenderungen |
 | 2026-08-20T09:01 | entityos | `43ddbd4b0464` | EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T08:46 | entityos | `093edbe9c7ed` | EOS-Chronik 2026-08-20 08:46:04 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T08:01 | entityos | `a61f1bd67095` | EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen |
@@ -237,6 +237,4 @@ Automatisch erzeugt 2026-08-20T09:11:14Z aus drei Repos. 478 Eintraege.
 | 2026-08-19T14:59 | unifieddb | `999c886bfec7` | EOS-Chronik 2026-08-19 14:59:31 +0000 — unifieddb: 16 Aenderungen |
 | 2026-08-19T14:29 | entityos | `faa947ce4c30` | Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben) |
 | 2026-08-19T14:29 | entityos | `1834b4bda6f7` | Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module |
-| 2026-08-18T15:17 | entityos | `1a09c75938d9` | Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden |
-| 2026-08-18T14:54 | entityos | `4bc81f8e52c3` | Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt |
 

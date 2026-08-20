@@ -5,6 +5,7 @@ import time
 from typing import Any
 
 from .. import identity  # coordinator-owned, imported not edited
+from . import wettbewerb
 from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
 from . import headless_zero, prestage, translator
 from . import reality_layer  # additive anti-confabulation check, default OFF -- see module docstring
@@ -38,7 +39,20 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
     from .. import retrieval  # coordinator-owned module, imported not edited
 
     assembler = retrieval.WorldAssembler(db)
-    return assembler.assemble(session_id, resource_refs=[], query=message or "")
+    world = assembler.assemble(session_id, resource_refs=[], query=message or "")
+    # Der Neuheits-Abschlag braucht die letzten Ausstrahlungen. Er wandert im
+    # world mit, weil _vorstufen_world keine Datenbank sieht (und keine sehen
+    # soll -- sie formt nur um).
+    try:
+        world["_gw_haeufigkeiten"] = wettbewerb.haeufigkeiten(db)
+    except Exception:
+        world["_gw_haeufigkeiten"] = {}
+    # Seltenheit der Fragewoerter -- ebenfalls hier, aus demselben Grund.
+    try:
+        world["_gw_idf"] = wettbewerb.idf_gewichte(db, message or "")
+    except Exception:
+        world["_gw_idf"] = {}
+    return world
 
 
 def _hyperposition_safe(world: dict[str, Any]) -> list[dict[str, Any]]:
@@ -301,17 +315,31 @@ def _gewaehlte_treffer(world: dict[str, Any], broadcast_ids) -> list:
     """
     treffer = [t for t in ((world or {}).get("corpus") or []) if isinstance(t, dict)]
     nach_id = {str(t.get("artikel_id") or ""): t for t in treffer}
-    gewaehlt, erfunden = [], []
-    for kennung in (broadcast_ids or [])[:3]:
+    gewaehlt, erfunden, gesperrt = [], [], []
+    for kennung in (broadcast_ids or [])[:wettbewerb.ANGEBOT_MAX]:
         k = str(kennung).strip()
-        if k in nach_id:
-            gewaehlt.append(nach_id[k])
-        elif k:
+        if not k:
+            continue
+        t = nach_id.get(k)
+        if t is None:
             erfunden.append(k)
-    if erfunden:
+        # ⭐ Das Tor ist GENAU die Menge, die auch gemeldet wird. Vorher pruefte
+        # es nur das Kennzeichen `gw_zugelassen`, waehrend `broadcast_angeboten`
+        # auf ANGEBOT_MAX deckelte -- in einem von acht Zuegen liess das Tor
+        # vier Stellen durch, waehrend die Zuendungsgroesse drei meldete. Eine
+        # gemeldete Zahl, die nicht die durchgesetzte ist, ist keine Messung.
+        elif "gw_zugelassen" in t and k not in set(zugelassene_ids(treffer)):
+            gesperrt.append(k)
+        else:
+            gewaehlt.append(t)
+    if erfunden or gesperrt:
         import sys as _sys
-        print("prestage: broadcast_ids nennt Kennungen, die nicht im Korpus dieses "
-              f"Zuges stehen -- verworfen: {erfunden}", file=_sys.stderr)
+        if erfunden:
+            print("prestage: broadcast_ids nennt Kennungen, die nicht im Korpus dieses "
+                  f"Zuges stehen -- verworfen: {erfunden}", file=_sys.stderr)
+        if gesperrt:
+            print("prestage: broadcast_ids nennt Stellen unter der Wettbewerbsschwelle "
+                  f"-- nicht ausgestrahlt: {gesperrt}", file=_sys.stderr)
     return gewaehlt
 
 
@@ -370,7 +398,7 @@ def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     return f"{caveman}\n\n{zeile}" if zeile else caveman
 
 
-def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
+def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     """Schlanke Kopie von world NUR fuer den Vorstufe-Aufruf (F1 Schritt B).
 
     _gather_world_safe/WorldAssembler.assemble bleiben UNVERAENDERT -- andere
@@ -406,11 +434,20 @@ def _vorstufen_world(world: dict[str, Any]) -> dict[str, Any]:
         if isinstance(m, dict)
     ]
 
+    # Auswahlstufe MIT ZAHL (siehe wettbewerb.py). Der Korpus geht bewertet und
+    # nach Wert sortiert in den Vorstufenkontext -- damit greift auch das
+    # Sicherheitsnetz weiter unten nach BEDEUTUNG statt nach Abrufreihenfolge:
+    # gekuerzt wird dann das Schwaechste, nicht das Letzte.
+    frage = str(frage or (world.get("retrieval_receipt") or {}).get("query") or "")
+    bewerteter_korpus = wettbewerb.bewerten(
+        list(world.get("corpus") or []), frage,
+        world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {})
+
     packed: dict[str, Any] = {
         "own_recent": own_recent,
         "durable_memory": durable_memory,
         "cross_session_collision": list(world.get("cross_session_collision") or []),
-        "corpus": list(world.get("corpus") or []),
+        "corpus": bewerteter_korpus,
     }
     if world.get("retrieval_receipt") is not None:
         packed["retrieval_receipt"] = world["retrieval_receipt"]
@@ -692,7 +729,7 @@ def run_chat_turn(
         # selbst bleibt unveraendert (record_via_turnlifecycle=True liest
         # spaeter u.U. noch daraus, und andere Verbraucher der geteilten
         # WorldAssembler-Quelle sind davon so oder so nicht betroffen).
-        vorstufe_world = _vorstufen_world(world)
+        vorstufe_world = _vorstufen_world(world, message)
 
         # Der Gesamtdeckel greift NACH world -- gemessen wird der fertige
         # Kontext, nicht ein Teil davon (CSWT-Z-Befund, siehe oben).
@@ -805,6 +842,15 @@ def run_chat_turn(
             # wird, wirkt die Anweisung an das Modell nicht.
             log_paketurteil(own_store, turn_id, session_id, paketurteil_entfernt)
 
+        # ⭐ Wettbewerbsbuch. NUR bei echter Aufzeichnung: eine Messreihe darf
+        # sich ihren eigenen Neuheits-Abschlag nicht selbst anfuettern, sonst
+        # misst der zweite Lauf die Spuren des ersten.
+        if record_via_turnlifecycle:
+            _raus = _gewaehlte_treffer(vorstufe_world, envelope.get("broadcast_ids"))
+            wettbewerb.buchen(own_store, session_id, turn_id,
+                              vorstufe_world.get("corpus") or [],
+                              [t.get("artikel_id") for t in _raus])
+
         t0 = time.perf_counter()
         german, roh_ausgeliefert = _uebersetzung_mit_rueckfall(
             own_store, turn_id, session_id, _sauber)
@@ -891,6 +937,11 @@ def run_chat_turn(
             "broadcast_ids": list(envelope.get("broadcast_ids") or []),
             "broadcast_n": len(_gewaehlte_treffer(vorstufe_world,
                                                   envelope.get("broadcast_ids"))),
+            # Wie viele Stellen der Wettbewerb ueberhaupt zugelassen hat. Ohne
+            # diese Zahl ist "nichts ausgestrahlt" nicht von "nichts zu
+            # senden gehabt" zu unterscheiden -- der Unterschied IST GWT-4.
+            "broadcast_angeboten": len(wettbewerb.zugelassene_ids(
+                vorstufe_world.get("corpus") or [])),
             "elapsed_ms": {
                 "prestage_ms": round(prestage_ms, 1),
                 "zero_ms": round(zero_ms, 1),

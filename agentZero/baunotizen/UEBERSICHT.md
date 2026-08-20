@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T09:11:15Z. **2977 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T09:41:15Z. **2988 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T14:52:19+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T16:00:25+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2879 |
+| baunotiz | 2890 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1830 |
-| baunotiz | bauverlauf.jsonl | 1004 |
+| baunotiz | git-commit | 1836 |
+| baunotiz | bauverlauf.jsonl | 1009 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 2977 · Gegenhypothese: 0 von 2977
+## Hypothese: 0 von 2988 · Gegenhypothese: 0 von 2988
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T14:52:19+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
+
+`baunotiz-bauverlauf-5ec07596ac102aeb5a47` · baunotiz · bauverlauf.jsonl · 2026-08-20T16:00:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
+
+`baunotiz-git-a39cf04ba5ad2e91ad4cee7a265f6e6083e87bc5` · baunotiz · git-commit · 2026-08-20T16:00:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
+
+### research: route Gen188 question-nearness and receipt split-brain impulse
+
+`baunotiz-bauverlauf-af07c7a431f7f210690c` · baunotiz · bauverlauf.jsonl · 2026-08-20T15:47:29+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: route Gen188 question-nearness and receipt split-brain impulse
+
+`baunotiz-git-86f1a61563b4a1b1232f33e294b557c4d31ed447` · baunotiz · git-commit · 2026-08-20T15:47:29+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: route Gen188 question-nearness and receipt split-brain impulse
 
 ### research: expose Gen186 timeout mirage and anti-echo falsifiers
 
@@ -198,38 +230,6 @@ research index: add Gen174 source binding and hierarchy threshold split
 ### research: bind Gen174 source prefix and hierarchy threshold split
 
 `baunotiz-bauverlauf-e7d2ae21f9f14082684d` · baunotiz · bauverlauf.jsonl · 2026-08-20T09:48:34+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind Gen174 source prefix and hierarchy threshold split
-
-`baunotiz-git-0352027b29da51a21d349a1cce109e64be5d2ee8` · baunotiz · git-commit · 2026-08-20T09:48:34+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen174 source prefix and hierarchy threshold split
-
-### claycode supervisor: bind Gen171 out-of-order export race
-
-`baunotiz-bauverlauf-81f415e89f1cf3cb7158` · baunotiz · bauverlauf.jsonl · 2026-08-20T08:52:47+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen171 out-of-order export race
-
-`baunotiz-git-2ec43d797819beef5b4ed969ca01a2f3ecbec0f3` · baunotiz · git-commit · 2026-08-20T08:52:47+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen171 out-of-order export race
-
-### research: bind Gen171 out-of-order export race
-
-`baunotiz-bauverlauf-92c4089505f2ebc7fb62` · baunotiz · bauverlauf.jsonl · 2026-08-20T08:48:54+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

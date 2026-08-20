@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T14:41:16Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (32)
+## reparatur (31)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -115,7 +115,6 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:45 | entityos | `040a9814dfe4` | fix(clayverse): fence cross-attempt autonomous effect replay |
 | 2026-08-18T03:42 | entityos | `6fb9872037ee` | fix(clayverse): reconcile human-preempted autonomy steps |
 | 2026-08-18T03:36 | entityos | `e225a40c884f` | fix(clayverse): gate autonomous effects before dispatch |
-| 2026-08-18T03:30 | entityos | `35cd12076a53` | fix(clayverse): make autonomy snapshot generation-atomic |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -125,7 +124,7 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (32)
+## pruefung (31)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -152,7 +151,6 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:33 | entityos | `5f93db80d59f` | test(clayverse): guard explicit canonical goal adoption |
 | 2026-08-18T03:33 | entityos | `b55d57bd410e` | Test: Vertrag sagt advisory/release review, nicht nur advisory review |
 | 2026-08-18T03:29 | entityos | `eae74c278bbf` | Test: entityos.exec nimmt seit 18041d730 keinen Caller-Lease mehr an |
-| 2026-08-18T03:29 | entityos | `40d5edd7e719` | test(clayverse): pin autonomy context generation privacy and runnable focus |
 | 2026-08-18T03:27 | entityos | `98c89e9c2de6` | Test: Prompt hatte keinen semantischen Bezug zu den erwarteten Erinnerungen |
 | 2026-08-18T03:25 | entityos | `543ad0c92eda` | Test: HEALTHCHECK ist bewusst liveness-only (/healthz), nicht /readyz |
 | 2026-08-18T03:24 | entityos | `cfe2f0cf2e99` | Test: fehlender sts-Claim ist laut Docstring ok, nicht abzulehnen |
@@ -162,10 +160,13 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (272)
+## bau (274)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T14:32 | entityos | `cd5593ee8770` | EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen |
+| 2026-08-20T14:21 | entityos | `314e64daed37` | EOS-Chronik 2026-08-20 14:21:56 +0000 — entityos: 4 Aenderungen |
+| 2026-08-20T14:11 | entityos | `f8936a821996` | EOS-Chronik 2026-08-20 14:11:29 +0000 — entityos: 3 Aenderungen |
 | 2026-08-20T13:53 | entityos | `3a943ce83eed` | EOS-Chronik 2026-08-20 13:53:04 +0000 — entityos: 3 Aenderungen |
 | 2026-08-20T13:21 | entityos | `c19df048225f` | EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen |
 | 2026-08-20T13:06 | entityos | `4637f10cd595` | EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen |
@@ -223,7 +224,4 @@ Automatisch erzeugt 2026-08-20T14:11:16Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T00:25 | entityos | `06329d636a51` | EOS-Chronik 2026-08-20 00:25:38 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:23 | entityos | `00580769dba2` | EOS-Chronik 2026-08-20 00:23:12 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:21 | entityos | `e912b2e4daaf` | EOS-Chronik 2026-08-20 00:21:11 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T00:18 | entityos | `e784e7f381a9` | EOS-Chronik 2026-08-20 00:18:27 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T00:15 | entityos | `e3d1727959ac` | EOS-Chronik 2026-08-20 00:15:09 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T00:12 | entityos | `74492ce84e90` | EOS-Chronik 2026-08-20 00:12:12 +0000 — entityos: 1 Aenderungen |
 

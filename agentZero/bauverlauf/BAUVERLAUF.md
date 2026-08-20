@@ -1,12 +1,73 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T14:11:16Z. 968 Commits aus vier Repos, davon 326 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T14:41:16Z. 969 Commits aus vier Repos, davon 329 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen
+
+`cd5593ee8770` · entityos · 14:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_buchfuehrung.py
+
+Zeit: 2026-08-20T14:32:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 14:21:56 +0000 — entityos: 4 Aenderungen
+
+`314e64daed37` · entityos · 14:21 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_gw_arbeitsraum.py
+  the artefact/tests/test_herkunft.py
+
+Zeit: 2026-08-20T14:21:56+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 14:11:29 +0000 — entityos: 3 Aenderungen
+
+`f8936a821996` · entityos · 14:11 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_umlaute.py
+
+Zeit: 2026-08-20T14:11:29+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 13:53:04 +0000 — entityos: 3 Aenderungen
 
@@ -4544,32 +4605,5 @@ diesen Schritt aus. request_effect() selbst konnte hier nicht verwendet
 werden (fuehrt den Effekt sofort aus, statt ihn PENDING zu lassen), also die
 Workspace-Auswahl separat repliziert: workspace.select_in_tx(...) +
 active_turns.workspace_selected=1, dann journal.begin() wie zuvor.
-```
-
-### Merge PR #713: adopt explicit goals from canonical hook turns
-
-`1ebb891e47d8` · entityos · 03:35 UTC · Gabriel Gschaider
-
-```
-Add explicit /goal adoption from exact live UserPromptSubmit turns onto hardened AutonomyContext/v2. Preserve canonical controller/lifecycle/effect paths. Sequential replay dedup only; no concurrent-idempotency or runtime PASS claim.
-```
-
-### Test: Vertrag sagt advisory/release review, nicht nur advisory review
-
-`b55d57bd410e` · entityos · 03:33 UTC · BACK agent
-
-```
-deployment/MICROVM_DEPLOYMENT_CONTRACT.md:96 verlangt bewusst beides
-zusammen (Advisory-Stand UND Release-Support-Status, passend zum
-Rolling-Release-Abschnitt direkt darueber). Der Test prüfte nur auf den
-Teilstring ohne /release und traf deshalb nie.
-```
-
-### Merge PR #712: harden fused autonomy context
-
-`441c2ca3d64d` · entityos · 03:31 UTC · Gabriel Gschaider
-
-```
-Filter autonomy context to live generation, make snapshot+generation atomic, preserve runnable-goal visibility, redact free-form blocked reasons, and pin the v2 projection contract. Source candidate only; no isolated runtime PASS claimed.
 ```
 

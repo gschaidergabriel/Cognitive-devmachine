@@ -406,9 +406,52 @@ _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_a
 # `canonical_identity` und `anwesender_mensch` sind nicht INHALT, sondern
 # RAHMEN -- wer spricht und mit wem. Ohne sie ist kein Zug deutbar, sie stehen
 # bei jeder Frage gleich, und sie konkurrieren deshalb um nichts.
+# ⭐⭐⭐ BUCHFUEHRUNG IST KEIN GEDAECHTNIS. Gemessen 2026-08-20 an einer echten
+# Kopie: von 152 Eintraegen in `durable_memory` sind **116 `compression_receipt`**
+# -- reine Pruefsummen ohne Inhalt, 76 %. Weil die Liste nach Zeit sortiert ist
+# und je Zug mehrere Quittungen anfallen, waren **10 der 12 juengsten Eintraege**
+# Hashes. Der Satz "Pruefrechner heisst quirlbaum-8", eine Minute alt, fiel aus
+# jedem Deckel heraus.
+# Folge, gemessen: bei "wie heisst mein Pruefrechner?" enthielt KEINER von 16
+# Bewerbern das Kennwort. Nicht die Bewertung war zu schwach -- die richtige
+# Stelle stand gar nicht zur Wahl.
+# Das trifft nicht nur den Arbeitsraum: dieselbe Liste geht (gedeckelt) auch in
+# den Kontext der Vorstufe. Drei Viertel des Gedaechtnisses, das die Anlage bei
+# jeder Frage mitschleppt, sind Hashes.
+_BUCHFUEHRUNG = ("compression_receipt", "checkpoint", "digest")
+_HASH = re.compile(r"^[0-9a-f]{24,}$")
+
+
+def _ist_buchfuehrung(m: dict) -> bool:
+    """Quittung statt Erinnerung -- kann keine Frage beantworten.
+
+    Zwei Kriterien, damit kuenftige Varianten nicht wieder durchrutschen: die
+    bekannte Art, UND eine Wertform, die nichts als eine Pruefsumme sein kann.
+    """
+    if str(m.get("kind") or "").strip().lower() in _BUCHFUEHRUNG:
+        return True
+    wert = " ".join(str(m.get("value") or "").split())
+    return bool(_HASH.match(wert.lower()))
+
+
 QUELLEN_DECKEL = {"korpus": 6, "gedaechtnis": 8, "verlauf": 3,
                   "kollision": 3, "lesart": 4, "selbstbild": 12}
 _KANDIDAT_TEXT_MAX = 600
+
+
+def _kennung(praefix: str, text: str) -> str:
+    """Stabile Kennung aus dem INHALT, nicht aus der Position.
+
+    ⚠️ Vorher hiessen die Bewerber `gedaechtnis:0`, `verlauf:1` und so fort --
+    nach ihrer Stelle in der Liste. Das hat zwei Folgen, und beide sind
+    schlimm: dieselbe Kennung meint in zwei Zuegen etwas anderes, und der
+    Lern-Rueckkanal sammelt seine Erfahrung deshalb an einer Nummer statt an
+    einem Inhalt. Was er ueber `gedaechtnis:2` lernt, trifft im naechsten Zug
+    einen fremden Eintrag. Eine Kennung, die wandert, ist keine Kennung.
+    """
+    import hashlib
+    kern = " ".join(str(text or "").split()).lower()[:400]
+    return f"{praefix}:{hashlib.sha1(kern.encode('utf-8')).hexdigest()[:8]}"
 
 
 def _kurzform(x: Any, n: int = _KANDIDAT_TEXT_MAX) -> str:
@@ -440,14 +483,16 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
             k["gw_quelle"] = "korpus"
             raus.append(k)
 
-    for i, m in enumerate((world.get("durable_memory") or [])[:QUELLEN_DECKEL["gedaechtnis"]]):
-        if not isinstance(m, dict):
-            continue
+    # Erst sieben, DANN deckeln -- sonst frisst die Buchfuehrung den Deckel auf,
+    # bevor die erste echte Erinnerung an die Reihe kommt.
+    _echt = [m for m in (world.get("durable_memory") or [])
+             if isinstance(m, dict) and not _ist_buchfuehrung(m)]
+    for i, m in enumerate(_echt[:QUELLEN_DECKEL["gedaechtnis"]]):
         wert = _kurzform(m.get("value"))
         if not wert:
             continue
         raus.append({
-            "artikel_id": f"gedaechtnis:{i}",
+            "artikel_id": _kennung("gedaechtnis", wert),
             "titel": f"{m.get('kind') or 'Notiz'} ueber {m.get('subject') or 'unbekannt'}",
             "ausschnitt": wert, "art": "gedaechtnis", "sphaere": "person",
             "gw_quelle": "gedaechtnis", "gw_roh": m})
@@ -457,7 +502,7 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
         if not text:
             continue
         raus.append({
-            "artikel_id": f"verlauf:{i}",
+            "artikel_id": _kennung("verlauf", text),
             "titel": "frueherer Zug in diesem Gespraech",
             "ausschnitt": text, "art": "verlauf", "sphaere": "gespraech",
             "gw_quelle": "verlauf"})
@@ -467,7 +512,7 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
         if not text:
             continue
         raus.append({
-            "artikel_id": f"kollision:{i}", "titel": "Kollision mit einer anderen Sitzung",
+            "artikel_id": _kennung("kollision", text), "titel": "Kollision mit einer anderen Sitzung",
             "ausschnitt": text, "art": "kollision", "sphaere": "gespraech",
             "gw_quelle": "kollision"})
 
@@ -476,7 +521,7 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
         if not text:
             continue
         raus.append({
-            "artikel_id": f"lesart:{i}", "titel": "gleichzeitig gueltige Lesarten",
+            "artikel_id": _kennung("lesart", text), "titel": "gleichzeitig gueltige Lesarten",
             "ausschnitt": text, "art": "lesart", "sphaere": "weltmodell",
             "gw_quelle": "lesart"})
 
@@ -532,7 +577,7 @@ def selbstbild_teilen(text: str, kern_zeichen: int = KERN_ZEICHEN):
             continue
         kopf = " ".join(a.split())[:70]
         bewerber.append({
-            "artikel_id": f"selbstbild:{i}",
+            "artikel_id": _kennung("selbstbild", a),
             "titel": f"Selbstbild: {kopf}",
             "ausschnitt": _kurzform(a, 900),
             "art": "selbstbild", "sphaere": "identitaet",

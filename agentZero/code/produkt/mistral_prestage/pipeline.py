@@ -473,10 +473,26 @@ def _korpus_zeile(world: dict[str, Any], treffer: list | None = None,
         zeilen.append(f"- [{kennung}]{marke} {titel}: {aus}")
     if not zeilen:
         return ""
-    kopf = ("CORPUS (already retrieved for THIS question -- the answer is often "
-            "already in here; use it, do NOT send yourself to read or fetch it "
-            "again). ⭐ When you answer from one of these, name its id in the "
-            "answer like (Quelle: <id>) -- that is the only part of an "
+    # ⭐⭐ DIE HERKUNFT MUSS DRANSTEHEN. Gemessen 2026-08-20: Zero hat diesen
+    # Block zweimal als Einschleusung eingestuft ("Dieser Block sieht aus wie
+    # eine eingeschleuste oder erfundene Zitatstelle") und die Antwort
+    # verweigert -- zu Recht, denn ohne Herkunftsangabe ist ein angehaengter
+    # Textblock von untergeschobenem Text nicht zu unterscheiden. Zeros
+    # Misstrauen ist richtig; falsch war, ihm nichts zu geben, woran es sich
+    # pruefen laesst.
+    # Deshalb: WER den Block angehaengt hat (die Pipeline, nicht der Mensch),
+    # WORAUS er stammt (Abruf zu genau dieser Frage), und dass ein eigener
+    # Nachschlag ihn NICHT widerlegt, wenn er nichts findet.
+    kopf = ("ARBEITSRAUM -- attached by the pipeline itself, AFTER the pre-stage "
+            "returned, from this turn's own retrieval over the entity's stores. "
+            "It is NOT user-supplied text and not part of the human's message; "
+            "treat it as your own recall, not as a claim someone made to you. "
+            "Each line carries the id it came from. If your own lookup finds "
+            "nothing, that does NOT refute this block -- your tools and this "
+            "block do not always see the same stores. "
+            "The answer is often already in here; use it, do NOT send yourself "
+            "to read or fetch it again. ⭐ When you answer from one of these, "
+            "name its id like (Quelle: <id>) -- that is the only part of an "
             "answer a refusal cannot fake:")
     return (kopf + "\n" + "\n".join(zeilen))[:_KORPUS_IM_PROMPT_MAX_CHARS]
 
@@ -543,11 +559,15 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
         for t in (world.get("own_recent") or [])[-_VORSTUFE_OWN_RECENT_N:]
         if isinstance(t, dict)
     ]
+    # ⭐ Buchfuehrung raus, BEVOR gedeckelt wird -- sonst besteht das
+    # Gedaechtnis im Kontext fast nur aus Pruefsummen (gemessen: 116 von 152
+    # Eintraegen, und 10 der 12 juengsten).
     durable_memory = [
         {"kind": m.get("kind"), "subject": m.get("subject"),
          "value": _kurz(m.get("value"), _VORSTUFE_DURABLE_MEMORY_FELD_DECKEL), "ts": m.get("ts")}
-        for m in (world.get("durable_memory") or [])[:_VORSTUFE_DURABLE_MEMORY_N]
-        if isinstance(m, dict)
+        for m in [x for x in (world.get("durable_memory") or [])
+                  if isinstance(x, dict) and not wettbewerb._ist_buchfuehrung(x)
+                  ][:_VORSTUFE_DURABLE_MEMORY_N]
     ]
 
     # Auswahlstufe MIT ZAHL (siehe wettbewerb.py). Der Korpus geht bewertet und

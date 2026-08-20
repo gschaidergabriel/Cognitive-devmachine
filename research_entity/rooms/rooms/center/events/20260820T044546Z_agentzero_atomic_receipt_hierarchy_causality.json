@@ -1,0 +1,184 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260820T044546Z_agentzero_atomic_receipt_hierarchy_causality",
+  "created_at": "2026-08-20T04:45:46Z",
+  "event_type": "evidence_state_transition_and_counterhypothesis",
+  "supersedes_status_only_from_event": "20260814T085046Z_receipt_finality_anchor_execution_delta",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_parent_commit": "bd58844979c09c4180a37cefd500fba82990f207",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main_before": "4e463f9495d304de4e833f6e9e8609baddaf79b2",
+    "target_main_now": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "retained_pr": 810,
+    "retained_pr_head": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS"
+  },
+  "state_transitions": [
+    {
+      "id": "T-AGENTZERO-EXPORT-182-001",
+      "current_export_commit": "bd58844979c09c4180a37cefd500fba82990f207",
+      "generation": 182,
+      "snapshot_captured_at": "2026-08-20T04:41:12Z",
+      "exported_files": 59,
+      "redacted_findings": 1,
+      "current_test_receipt": {
+        "path": "agentZero/tests/letzter-lauf.json",
+        "blob_sha": "3815181ffedaaf2eea9de275187faa29bef39d78",
+        "source_short": "d5cf6d524",
+        "green": 583,
+        "red": 1,
+        "red_test": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+      },
+      "credit": "CURRENT_EXPORT_OBSERVATION_ONLY",
+      "nonclaim": "The receipt has no full source commit/tree, immutable run ID, exit/timeout state, executor digest, result digest, or DB snapshot/WAL coordinate; it is not exact-source release evidence."
+    },
+    {
+      "id": "T-NULL-RECEIPT-FAIL-OPEN-001",
+      "historical_counterexample": {
+        "export_commits": [
+          "4f93d588cfdbb5f58596f1bbfe9f167eea7d365b",
+          "4e47d0b738374285f6f0c76536c59ef4ba879f3c"
+        ],
+        "test_counts": {"green": null, "red": null},
+        "rendered_goal_claim": "584_GREEN_0_RED_AND_FULFILLED"
+      },
+      "latest_transition": "RECOVERED_TO_583_GREEN_1_RED_BUT_ATOMIC_RECEIPT_STILL_MISSING",
+      "credit": "EXECUTED_NEGATIVE_METROLOGY_RESULT",
+      "nonclaim": "Recovery does not erase the fail-open counterexample and does not prove that future incomplete runs cannot again render green."
+    },
+    {
+      "id": "T-EXPORT-ORDER-RACE-001",
+      "newer_snapshot_commit": "0ac95fd51e9e4f5c1340bb85888f6e82626a31ab",
+      "newer_snapshot_time": "2026-08-20T01:41:12Z",
+      "later_git_child_with_older_snapshot": "3f9f66c3a0f597d18234021078085fb62a9f155d",
+      "older_snapshot_time": "2026-08-20T01:40:40Z",
+      "credit": "EXECUTED_EXPORT_ORDER_COUNTEREXAMPLE",
+      "nonclaim": "No EXPORT_SERIALIZATION_RECEIPT/v1 or adversarial overlap repair receipt is present."
+    },
+    {
+      "id": "T-HIERARCHY-METROLOGY-SPLIT-001",
+      "raw_receipt_path": "agentZero/abruf/wegehierarchie.json",
+      "raw_receipt_blob": "39b8e4c2affa1612d34e73e2180a5e5afe5bbc10",
+      "total_paths": 355,
+      "rank_counts": {"tunnel": 6, "autobahn": 246, "schnellstrasse": 40, "langsame_strasse": 63},
+      "top_decile_share": 0.135,
+      "equal_baseline": 0.099,
+      "raw_verdict": "GLEICHVERTEILT",
+      "goal_text_tunnel_count": -1,
+      "goal_text_interpretation": "HIERARCHIE_BILDET_SICH",
+      "credit": "CURRENT_CROSS_CONSUMER_INCONSISTENCY",
+      "nonclaim": "Observed concentration is not causal evidence that learned routing improves held-out task outcomes."
+    }
+  ],
+  "target_execution_boundary": {
+    "target_main_status": "VERCEL_FAILURE_BUILD_RATE_LIMIT",
+    "retained_pr_state": "OPEN_DRAFT_MERGEABLE",
+    "retained_pr_head_workflow_runs_observed": 14,
+    "representative_zero_step_failed_runs": [32060908392, 32060908322, 32060908315, 32060908423],
+    "runtime_credit": 0,
+    "whole_product_credit": 0,
+    "nonclaim": "Workflow failure labels with steps=[] are infrastructure/null results, not semantic failures and not execution receipts."
+  },
+  "primary_source_refresh": [
+    {
+      "title": "SLSA v1.2 Build Provenance",
+      "url": "https://slsa.dev/spec/v1.2/build-provenance",
+      "finding": "Provenance binds subject digests, resolved dependencies, builder identity and run metadata; this supports full source/tree and execution binding instead of short source prefixes."
+    },
+    {
+      "title": "JSON Schema null reference",
+      "url": "https://json-schema.org/understanding-json-schema/reference/null",
+      "finding": "JSON null is a distinct value and is not equivalent to absence or numeric zero; null test counts must not be promoted to a successful zero-failure result."
+    },
+    {
+      "title": "SQLite Isolation",
+      "url": "https://sqlite.org/isolation.html",
+      "finding": "WAL readers observe a stable historical snapshot while newer commits may exist; cross-consumer metrics require an explicit shared snapshot/WAL coordinate."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-ATOMIC-TEST-EXPORT-RECEIPT-001",
+      "claim": "A single COMPLETE|INCOMPLETE|ERROR receipt, atomically binding full source/tree, test run, result digests, executor, DB snapshot/WAL coordinate, export run and commit admission, prevents null counts and stale snapshots from rendering a green acceptance state.",
+      "test": "Inject timeout, killed process, null counts and overlapping exports A/B. Only COMPLETE B may update letzter-lauf, Verlauf and ZIELE; all other consumers must render UNMEASURED and archive or reject stale A.",
+      "falsifier": "Any incomplete or older receipt can still yield fulfilled/green in one consumer, or a complete current run is rejected without a declared invariant violation."
+    },
+    {
+      "id": "H-OBSERVER-TRAFFIC-HIERARCHY-CONFOUND-001",
+      "claim": "The current path concentration is substantially driven by repeated audit/export observation traffic rather than task-useful learned routing; therefore top-decile concentration alone overstates emergent retrieval utility.",
+      "test": "Freeze one DB snapshot, label edge origins, exclude export/audit/instrumentation accesses, and run a preregistered shadow A/B on held-out real queries comparing no-learning, current routing and counterfactually shuffled ranks. Measure exact answer/task success, latency and privacy errors.",
+      "falsifier": "The hierarchy remains stable after observer-traffic removal and current routing improves independently scored held-out outcomes over both controls without leakage."
+    },
+    {
+      "id": "H-METRIC-CONSUMER-QUORUM-001",
+      "claim": "A metric should receive semantic credit only when raw measurement, declared threshold, verdict and every promoted consumer share one immutable receipt ID and rendering function.",
+      "test": "Generate wegehierarchie.json, WEGEHIERARCHIE.md and ZIELE.md solely from one HIERARCHY_RECEIPT/v1, then mutate one consumer or threshold and require a fail-closed mismatch.",
+      "falsifier": "Independent consumer implementations remain semantically identical under randomized boundary and error cases without a common receipt or rule digest."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-LATEST-GIT-COMMIT-IS-LATEST-SNAPSHOT-001",
+      "status": "REFUTED",
+      "counterevidence": "Generation 171 produced a later Git child containing an older captured snapshot."
+    },
+    {
+      "id": "CH-EMPTY-FAILURE-LIST-MEANS-PASS-001",
+      "status": "REFUTED",
+      "counterevidence": "Two Generation 182 exports had null counts yet a downstream goal consumer rendered 584/0 fulfilled."
+    },
+    {
+      "id": "CH-PATH-CONCENTRATION-PROVES-USEFUL-EMERGENCE-001",
+      "status": "OPEN_BUT_UNSUPPORTED",
+      "attack": "The current top six tunnels are repeated C-AUDIT sibling edges, the top-decile share is 0.135 versus 0.099 baseline, the system's own raw verdict is GLEICHVERTEILT, and no held-out causal outcome is bound."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Null-Receipt Resurrection Hazard",
+      "definition": "A failed or incomplete measurement is silently resurrected as an earlier successful aggregate when a consumer falls back across runs."
+    },
+    {
+      "name": "Snapshot Authority Lattice",
+      "definition": "Temporal authority derived jointly from capture time, immutable run ID, DB/WAL coordinate, source tree and commit admission rather than Git child order alone."
+    },
+    {
+      "name": "Observer-Traffic Hierarchy Confounder",
+      "definition": "Instrumentation, export or audit access that strengthens graph paths and can masquerade as task-driven learned structure."
+    },
+    {
+      "name": "Metric Consumer Quorum",
+      "definition": "Agreement of raw measure, rule digest, verdict and all promoted renderers on one immutable receipt before semantic credit."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["agentzeroforschung", "clayresearch", "unifieddb", "claygraph", "gwt", "emergenz"],
+      "impulse": "Implement TEST_EXPORT_ATOMIC_RECEIPT/v1 plus EXPORT_SERIALIZATION_RECEIPT/v1 first; preserve null and stale runs as typed history, and run the controlled overlapping-export falsifier before accepting any suite total."
+    },
+    {
+      "targets": ["claygraph", "hyperposition", "gwt", "emergenz"],
+      "impulse": "Treat path hierarchy as a causal candidate only. Tag observer/audit traffic, freeze a shared DB snapshot, preregister a three-arm held-out shadow test, and require task outcome improvement rather than concentration alone."
+    },
+    {
+      "targets": ["claycode", "frank", "harness"],
+      "impulse": "Keep BASE NOT_PASS. Reproduce the remaining ClaudeCode adapter red on exact-source admitted Ubuntu only after atomic receipt closure. Do not mutate the productive Harness."
+    }
+  ],
+  "negative_and_null_results": [
+    "Current Generation 182 is 583/1, not 584/0 and not whole-suite pass.",
+    "The two null-count exports provide no fix credit despite an empty failure list.",
+    "Four representative exact PR810 workflow jobs failed with zero executed steps; they provide no semantic runtime evidence.",
+    "Target main Vercel status failed due build rate limit; no deployment or product promotion is inferred.",
+    "No independent provider replication, training, productive Harness mutation, canonical promotion or whole-product acceptance occurred."
+  ],
+  "deduplication": {
+    "policy": "Repeated Generation 182 exports are one same-host export lineage. The null-count counterexample, recovered 583/1 snapshot, export-order race and hierarchy split are distinct state transitions but not independent replications."
+  }
+}

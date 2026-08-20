@@ -59,6 +59,16 @@
     "executable_evidence": "test_busy_execution_lock_times_out_before_network",
     "counterhypothesis": "An unbounded lock wait is acceptable because the active transport has its own timeout; falsified locally because a held execution lock blocked a waiting call indefinitely outside the transport timeout boundary."
   },
+  "passive_attempt_nonce_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "An injected attempt nonce must be an exact built-in nonempty string before authenticated execution; string subclasses are rejected before formatting so receipt identity cannot fail after a provider request has already run.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#format",
+      "https://docs.python.org/3/reference/datamodel.html#object.__format__"
+    ],
+    "executable_evidence": "test_active_attempt_nonce_is_rejected_before_network",
+    "counterhypothesis": "Any isinstance(nonce, str) value is safe hash material; falsified locally because an accepted str subclass executed its overridden __format__ only after a successful provider response, leaked exception text and prevented the mandatory receipt."
+  },
   "receipt_clock_domains": {
     "checked_at": "2026-08-14",
     "claim": "Execution receipt duration uses a monotonic clock that cannot move backwards, while an absolute Retry-After HTTP-date is compared with the wall-clock UTC instant at response receipt.",
@@ -494,6 +504,7 @@
     "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",
+    "Attempt nonces are exact built-in nonempty strings before authenticated execution; polymorphic nonce formatting cannot run after the provider request or suppress its mandatory receipt.",
     "A response reaches VERIFIED only when choices is a non-empty list whose first message is an object with string content; malformed JSON shapes fail closed with a receipt.",
     "A choice explicitly finished because of length remains EXECUTED as provider_output_truncated, is nonretryable without a changed token budget, and cannot reach VERIFIED or DONE.",
     "A non-streaming text choice requires explicit finish_reason stop before VERIFIED or DONE; null, missing and unsupported finish reasons remain invalid_provider_response.",

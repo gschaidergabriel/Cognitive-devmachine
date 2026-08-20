@@ -733,11 +733,49 @@ def _moeglichkeitsraum_safe(text: str) -> dict | None:
     try:
         from udb.abruf.moeglichkeitsraum import moeglichkeitsraum as _mr
         r = _mr(text, budget=6)
-        return {"raum": r.get("raum"), "einseitig": r.get("einseitig"),
+        raum = _raum_zur_frage(r.get("raum"), text)
+        return {"raum": raum, "einseitig": r.get("einseitig"),
                 "quelle_hypothesen": r.get("quelle_hypothesen"),
-                "quelle_gegenseite": r.get("quelle_gegenseite")}
+                "quelle_gegenseite": r.get("quelle_gegenseite"),
+                # Wie viel weggefallen ist -- ein stilles Filter waere selbst
+                # wieder eine unsichtbare Stufe.
+                "gefiltert": max(0, len(r.get("raum") or []) - len(raum or []))}
     except Exception as e:
         return {"status": "NICHT_GEBAUT", "grund": f"{type(e).__name__}: {e}"[:200]}
+
+
+def _raum_zur_frage(raum, frage: str):
+    """Nur die Lesarten behalten, die etwas mit der FRAGE zu tun haben.
+
+    ⭐ GEMESSEN 2026-08-20: das Erwartungsfeld lieferte bei einer Frage nach
+    der Einwohnerzahl von Reykjavik und bei einer Frage nach Webserver-Wurzeln
+    dieselben Gegenhypothesen -- immer "Audit", "Policy Oracle", "Effect
+    Authority Gate", also ClayVerse ueber sich selbst. Kein Fehler, kein leerer
+    Rueckfall: der Bau lief durch und lieferte etwas, das zur Frage nicht passt.
+
+    Ein Erwartungsfeld, das bei jeder Frage dasselbe erwartet, ist kein
+    Erwartungsfeld. Es ist Kulisse -- und Kulisse im Kontext kostet genau den
+    Platz, den die frageabhaengigen Inhalte brauchen (gemessen: nur rund ein
+    Fuenftel des Kontexts haengt ueberhaupt an der Frage).
+
+    Gefiltert wird mit demselben Mass wie im Wettbewerb -- eine zweite,
+    abweichende Passungsrechnung waere eine zweite Wahrheit.
+    """
+    if not isinstance(raum, list) or not raum:
+        return raum
+    worte = wettbewerb._worte(frage)
+    # Unter MIN_GEDECKT Inhaltswoertern gibt es nichts, woran man messen
+    # koennte ("hallo", "danke"). Dann lieber unveraendert lassen als
+    # willkuerlich wegwerfen -- ein Filter ohne Grundlage ist Rauschen.
+    if len(worte) < wettbewerb.MIN_GEDECKT:
+        return raum
+    behalten = []
+    for eintrag in raum:
+        heu = json.dumps(eintrag, ensure_ascii=False, default=str).lower()
+        gedeckt = sum(1 for w in worte if wettbewerb._deckt(w, heu))
+        if gedeckt >= wettbewerb.MIN_GEDECKT:
+            behalten.append(eintrag)
+    return behalten
 
 
 def _profil_safe(db, user_id: str) -> dict | None:

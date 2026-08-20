@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T13:11:18Z. **3039 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T13:41:16Z. **3057 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T18:55:30+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T19:52:22+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2941 |
+| baunotiz | 2959 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1861 |
-| baunotiz | bauverlauf.jsonl | 1035 |
+| baunotiz | git-commit | 1870 |
+| baunotiz | bauverlauf.jsonl | 1044 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3039 · Gegenhypothese: 0 von 3039
+## Hypothese: 0 von 3057 · Gegenhypothese: 0 von 3057
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,70 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T18:55:30+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### research: route Gen197 feedback-channel path split
+
+`baunotiz-bauverlauf-1c2621ed76cb057d9a1e` · baunotiz · bauverlauf.jsonl · 2026-08-20T19:52:22+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: route Gen197 feedback-channel path split
+
+`baunotiz-git-3adcbb4297b8a9865f95c3e84222fecc7279d2a4` · baunotiz · git-commit · 2026-08-20T19:52:22+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: route Gen197 feedback-channel path split
+
+### claycode supervisor: bind Gen197 GWT feedback and 631/1 frontier
+
+`baunotiz-bauverlauf-6a231fcca6a067d0ee48` · baunotiz · bauverlauf.jsonl · 2026-08-20T19:50:04+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen197 GWT feedback and 631/1 frontier
+
+`baunotiz-git-0b8cf51f81f8203aef35f3093023442110ec4db8` · baunotiz · git-commit · 2026-08-20T19:50:04+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen197 GWT feedback and 631/1 frontier
+
+### research index: add Gen197 GWT feedback aliasing frontier
+
+`baunotiz-bauverlauf-5c93404633630de78b11` · baunotiz · bauverlauf.jsonl · 2026-08-20T19:49:19+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research index: add Gen197 GWT feedback aliasing frontier
+
+`baunotiz-git-49c402c796f7b8bc025809634c15103568af2db0` · baunotiz · git-commit · 2026-08-20T19:49:19+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research index: add Gen197 GWT feedback aliasing frontier
+
+### research: bind Gen197 GWT feedback identity-aliasing falsifier
+
+`baunotiz-bauverlauf-2e80b3aeaffaa5b04ed3` · baunotiz · bauverlauf.jsonl · 2026-08-20T19:48:40+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind Gen197 GWT feedback identity-aliasing falsifier
+
+`baunotiz-git-a429b4f91b7bd117343f6ef9ec976834887b1b74` · baunotiz · git-commit · 2026-08-20T19:48:40+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind Gen197 GWT feedback identity-aliasing falsifier
 
 ### research: route Gen195 PTY refresh and truth-fork falsifiers
 
@@ -166,70 +230,6 @@ research: route Gen188 question-nearness and receipt split-brain impulse
 ### research: expose Gen186 timeout mirage and anti-echo falsifiers
 
 `baunotiz-bauverlauf-c38c5e85564f93e7f0a6` · baunotiz · bauverlauf.jsonl · 2026-08-20T14:52:19+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: expose Gen186 timeout mirage and anti-echo falsifiers
-
-`baunotiz-git-ece8c89241eb2c9c974ab5d40ca7572fb34a967c` · baunotiz · git-commit · 2026-08-20T14:52:19+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: expose Gen186 timeout mirage and anti-echo falsifiers
-
-### claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
-
-`baunotiz-bauverlauf-ba25626d3668b60df4fc` · baunotiz · bauverlauf.jsonl · 2026-08-20T14:44:13+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
-
-`baunotiz-git-180307808bf32cb38ddb38a2f7d4f861511d52f0` · baunotiz · git-commit · 2026-08-20T14:44:13+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen186 anti-echo retrieval and prestage source mechanisms
-
-### research: route Gen184 semantic shedding and overflow falsifiers
-
-`baunotiz-bauverlauf-861f2f83e8872e966ec6` · baunotiz · bauverlauf.jsonl · 2026-08-20T13:59:02+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen184 semantic shedding and overflow falsifiers
-
-`baunotiz-git-ab21989a6ee973379d5f1cef8c2d5974763104c6` · baunotiz · git-commit · 2026-08-20T13:59:02+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen184 semantic shedding and overflow falsifiers
-
-### claycode supervisor: bind Gen184 CSWT-Z epistemic transport counterevidence
-
-`baunotiz-bauverlauf-2ecf2286c2930b570395` · baunotiz · bauverlauf.jsonl · 2026-08-20T13:44:57+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen184 CSWT-Z epistemic transport counterevidence
-
-`baunotiz-git-f3a55609bdeb97be677a4b0ef747795dbfbd25a9` · baunotiz · git-commit · 2026-08-20T13:44:57+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen184 CSWT-Z epistemic transport counterevidence
-
-### research: route Gen182 epistemic transport and budget falsifiers
-
-`baunotiz-bauverlauf-a13e458887adcd29fd8f` · baunotiz · bauverlauf.jsonl · 2026-08-20T12:59:23+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

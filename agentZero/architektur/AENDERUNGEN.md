@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T13:11:17Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T13:41:16Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -126,7 +126,7 @@ Automatisch erzeugt 2026-08-20T13:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (33)
+## pruefung (32)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -155,7 +155,6 @@ Automatisch erzeugt 2026-08-20T13:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:29 | entityos | `eae74c278bbf` | Test: entityos.exec nimmt seit 18041d730 keinen Caller-Lease mehr an |
 | 2026-08-18T03:29 | entityos | `40d5edd7e719` | test(clayverse): pin autonomy context generation privacy and runnable focus |
 | 2026-08-18T03:27 | entityos | `98c89e9c2de6` | Test: Prompt hatte keinen semantischen Bezug zu den erwarteten Erinnerungen |
-| 2026-08-18T03:27 | entityos | `cfaeb8d6fc86` | test(clayverse): preserve exact autonomous causal evidence across recovery |
 | 2026-08-18T03:25 | entityos | `543ad0c92eda` | Test: HEALTHCHECK ist bewusst liveness-only (/healthz), nicht /readyz |
 | 2026-08-18T03:24 | entityos | `cfe2f0cf2e99` | Test: fehlender sts-Claim ist laut Docstring ok, nicht abzulehnen |
 | 2026-08-18T03:21 | entityos | `2e7577660632` | Test: required_target nachgezogen + Regex-Tippfehler in Fehlermeldungs-Match korrigiert |
@@ -164,10 +163,11 @@ Automatisch erzeugt 2026-08-20T13:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (270)
+## bau (271)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T13:21 | entityos | `c19df048225f` | EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen |
 | 2026-08-20T13:06 | entityos | `4637f10cd595` | EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T13:04 | entityos | `1c5efc590eb5` | EOS-Chronik 2026-08-20 13:04:56 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T13:01 | entityos | `ac75d4b1a3f9` | EOS-Chronik 2026-08-20 13:01:57 +0000 — entityos: 1 Aenderungen |
@@ -227,5 +227,4 @@ Automatisch erzeugt 2026-08-20T13:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T00:15 | entityos | `e3d1727959ac` | EOS-Chronik 2026-08-20 00:15:09 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:12 | entityos | `74492ce84e90` | EOS-Chronik 2026-08-20 00:12:12 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T00:09 | entityos | `97b55ff5fa8c` | EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen |
-| 2026-08-20T00:00 | clay | `5221a340b570` | EOS-Chronik 2026-08-20 00:00:04 +0000 — clayverse: 1 Aenderungen |
 

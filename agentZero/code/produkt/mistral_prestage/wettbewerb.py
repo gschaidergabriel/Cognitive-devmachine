@@ -211,6 +211,8 @@ def _worte(text: str) -> list[str]:
 
 
 _KURZ = 4          # darunter zaehlt nur exakte Wortgleichheit
+_STAMM = 6         # ab hier wird auf den Wortstamm verglichen (Beugung)
+_INNEN = 5         # ab dieser Stammlaenge zaehlt auch ein Treffer MITTEN im Wort
 
 
 def _deckt(wort: str, heu: str) -> bool:
@@ -226,9 +228,26 @@ def _deckt(wort: str, heu: str) -> bool:
         Flexion und Komposition ("slug" in "LEIHMICH_SLUGS", "verzeichnis" in
         "Verzeichnisses"), ohne jedes Wort in jedem Wort zu finden.
     """
+    # Drei Stufen, und die Grenzen sind nicht gefuehlt, sondern gemessen.
     if len(wort) < _KURZ:
+        # "art", "ort", "lauf" -- solche Woerter stecken in jedem zweiten Satz
+        # (gemessen: "lauf" in 17 von 40 echten Korpuszeilen). Nur als ganzes
+        # Wort, sonst passt jede Stelle zu jeder Frage.
         return re.search(r"\b" + re.escape(wort) + r"\b", heu) is not None
-    return re.search(r"(?:\b|[a-z0-9]*[_-])" + re.escape(wort), heu) is not None
+    if len(wort) < _STAMM:
+        # Mittellang: Wortanfang genuegt, Beugung noch nicht abschneiden.
+        return re.search(r"(?:\b|[a-z0-9]*[_-])" + re.escape(wort), heu) is not None
+    # ⭐ Lange Woerter: Stamm statt Wort (deutsche Beugung -- die Frage steht im
+    # Plural, die Stelle im Singular) UND Treffer auch INNERHALB eines Wortes.
+    # Deutsch schreibt Zusammensetzungen ohne Trennzeichen: "wurzeln" muss
+    # "Domainwurzel" finden, und dort steht kein Wortanfang davor. Gemessen an
+    # genau diesem Paar -- die Frage nach den eigenen Webserver-Wurzeln fand
+    # ihre eigene Antwort nicht. Ab dieser Laenge ist zufaellige Enthaltung
+    # unwahrscheinlich; unterhalb bleibt es beim Wortanfang.
+    stamm = wort[:-2]
+    if len(stamm) < _INNEN:
+        return re.search(r"(?:\b|[a-z0-9]*[_-])" + re.escape(stamm), heu) is not None
+    return stamm in heu
 
 
 def relevanz(treffer: dict[str, Any], frage_worte: list[str],

@@ -1,12 +1,33 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T13:11:17Z. 957 Commits aus vier Repos, davon 324 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T13:41:16Z. 964 Commits aus vier Repos, davon 325 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen
+
+`c19df048225f` · entityos · 13:21 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_erwartungsfeld.py
+  the artefact/tests/test_gw_wettbewerb.py
+
+Zeit: 2026-08-20T13:21:08+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen
 
@@ -4543,13 +4564,5 @@ wirft jetzt ValueError statt geprueft zu werden. Getestet, dass state.noop
 denselben Recheck-Pfad (assert_lease vor pending/Ausfuehrung) noch exakt so
 durchlaeuft wie frueher entityos.exec -- Capability im Test umgestellt, die
 gepruefte Sicherheitseigenschaft bleibt identisch.
-```
-
-### Merge PR #693: bind autonomy completion to exact autonomous causal evidence
-
-`f63779ad5f53` · entityos · 03:29 UTC · Gabriel Gschaider
-
-```
-Fuse exact goal-step causal provenance, target/argv receipt binding, non-rewarding noop completion exclusion, and recovery-compatible tests into current main. Source candidate only; no isolated runtime, OCI, or microVM PASS claimed.
 ```
 

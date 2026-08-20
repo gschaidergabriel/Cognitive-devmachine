@@ -52,7 +52,7 @@ import re
 import sqlite3
 import sys
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -315,13 +315,65 @@ def candidates_from_paket_log(con, cluster_min: int, lookback_days: int) -> list
 # Kandidatenquelle 3: Zeros eigene Epistemik-Luecken, geclustert
 # ---------------------------------------------------------------------------
 
-def candidates_from_epistemik(con, cluster_min: int, lookback_days: int) -> list:
+def _wortmenge(text: str) -> set:
+    """Inhaltswoerter eines Kurzlabels -- dieselbe Stoppwortlage wie signature(),
+    aber ohne Kappung auf die staerksten sechs: bei zwei bis vier Woertern gibt
+    es nichts zu kappen."""
+    return set(signature(text, top_n=99))
+
+
+def _buendel(labels: list, deckel: float = 0.6) -> list:
+    """Union-Find ueber geteilte UNTERSCHEIDENDE Woerter.
+
+    Ein Wort, das in mehr als `deckel` aller Etiketten vorkommt, verbindet
+    nichts -- es wuerde nur alles mit allem verschmelzen (gemessen: "human"
+    steckt in fast jedem Etikett dieser Anlage). Rueckgabe: Liste von Listen
+    der urspruenglichen Indizes.
+    """
+    mengen = [_wortmenge(l) for l in labels]
+    n = len(labels)
+    if n == 0:
+        return []
+    df = Counter()
+    for m in mengen:
+        df.update(m)
+    grenze = max(1, int(deckel * n))
+    eltern = list(range(n))
+
+    def finde(i):
+        while eltern[i] != i:
+            eltern[i] = eltern[eltern[i]]
+            i = eltern[i]
+        return i
+
+    def eine(a, b):
+        ra, rb = finde(a), finde(b)
+        if ra != rb:
+            eltern[max(ra, rb)] = min(ra, rb)
+
+    nach_wort = defaultdict(list)
+    for i, m in enumerate(mengen):
+        for w in m:
+            if df[w] <= grenze:      # nur unterscheidende Woerter verbinden
+                nach_wort[w].append(i)
+    for _wort, idxs in nach_wort.items():
+        for j in idxs[1:]:
+            eine(idxs[0], j)
+
+    gruppen = defaultdict(list)
+    for i in range(n):
+        gruppen[finde(i)].append(i)
+    return list(gruppen.values())
+
+
+def candidates_from_epistemik(con, epistemik_min: int, lookback_days: int) -> list:
     """Wiederkehrendes bewusstes Nichtwissen aus mv_prestage_turns.
 
     Anders als Quelle 1+2 (eine Suche fand nichts) steht hier eine
     Selbstaussage der Vorstufe: diese Tatsache BRAUCHT die Frage und sie steht
-    in keiner Quelle. Vier Formulierungen desselben Nichtwissens ergeben ueber
-    die Signatur EINEN Kandidaten, nicht vier.
+    in keiner Quelle (Feld-gegen-Frage-Pruefung, prestage.py Regel H).
+    Buendelung und Schwelle sind eigens fuer diese Quelle gebaut -- siehe
+    _buendel() und die Modul-Historie 2026-08-20.
     """
     cutoff = time.time() - lookback_days * 86400
     try:
@@ -337,7 +389,7 @@ def candidates_from_epistemik(con, cluster_min: int, lookback_days: int) -> list
         LOG.info("Quelle 3 uebersprungen: mv_prestage_turns/epistemik nicht verfuegbar")
         return []
 
-    clusters = defaultdict(list)
+    eintraege = []
     for r in rows:
         try:
             unbekannt = (json.loads(r["epistemik_json"] or "{}") or {}).get("unbekannt") or []
@@ -346,43 +398,52 @@ def candidates_from_epistemik(con, cluster_min: int, lookback_days: int) -> list
         for label in unbekannt:
             if not isinstance(label, str) or not label.strip():
                 continue
-            sig = signature(label)
-            if not sig:
+            if not _wortmenge(label):
                 continue   # nur Stoppwoerter -- traegt kein Thema
-            clusters[sig].append({"prestage_id": r["prestage_id"],
-                                  "raw_prompt": r["raw_prompt"],
-                                  "label": label.strip(),
-                                  "created_at": r["created_at"]})
+            eintraege.append({"prestage_id": r["prestage_id"],
+                              "raw_prompt": r["raw_prompt"],
+                              "label": label.strip(),
+                              "created_at": r["created_at"]})
 
     out = []
-    for sig, members in clusters.items():
-        if len(members) < cluster_min:
+    for gruppe in _buendel([e["label"] for e in eintraege]):
+        if len(gruppe) < epistemik_min:
             continue
+        members = sorted((eintraege[i] for i in gruppe), key=lambda m: m["created_at"] or 0)
+        # Signatur des Buendels: die haeufigsten Inhaltswoerter darin -- das ist
+        # der Name, unter dem es wiedererkannt wird (Idempotenz).
+        zaehler = Counter()
+        for m in members:
+            zaehler.update(_wortmenge(m["label"]))
+        # NICHT most_common(3): das bricht Gleichstaende nach Einfuegereihenfolge
+        # und liefert damit ueber Laeufe hinweg wechselnde Signaturen -- siehe
+        # Modul-Historie 2026-08-20. Gleichstand alphabetisch brechen.
+        sig = tuple(sorted(w for w, _ in
+                           sorted(zaehler.items(), key=lambda kv: (-kv[1], kv[0]))[:3]))
         new_id = slug_id("eos-hyp-epistemik", sig)
         if already_exists(con, new_id):
             continue   # idempotent
 
-        members_sorted = sorted(members, key=lambda m: m["created_at"] or 0)
-        first, last = members_sorted[0], members_sorted[-1]
-        formulierungen = sorted({m["label"] for m in members_sorted})
-
+        first, last = members[0], members[-1]
+        formulierungen = sorted({m["label"] for m in members})
         aussage = (
             f"Wiederkehrendes bewusstes Nichtwissen: die Vorstufe hat {len(members)}x "
             f"festgestellt, dass eine Frage die Tatsache '{last['label'][:160]}' braucht "
             f"und sie in keiner Quelle steht (Formulierungen: "
             f"{'; '.join(f[:60] for f in formulierungen[:4])}). Kandidat: zu "
-            f"[{', '.join(sig)}] fehlt eine belegte Angabe -- entweder im Profil, im "
-            f"Korpus oder im dauerhaften Gedaechtnis. [MECHANISCH ERZEUGT -- UNGEPRUEFT, "
-            f"keine inhaltliche Aussage ueber {', '.join(sig)} selbst, Status offen]"
+            f"[{', '.join(sig)}] fehlt eine belegte Angabe -- im Profil, im Korpus oder "
+            f"im dauerhaften Gedaechtnis. [MECHANISCH ERZEUGT -- UNGEPRUEFT, keine "
+            f"inhaltliche Aussage ueber {', '.join(sig)} selbst, Status offen]"
         )
         begruendung = (
             f"Quelle: mv_prestage_turns.epistemik_json, Schluessel 'unbekannt', "
-            f"{len(members)} Eintraege mit uebereinstimmender Signatur zwischen "
-            f"{first['created_at']} und {last['created_at']}. Anders als die Nulltreffer-"
-            f"Quelle ist dies eine SELBSTAUSSAGE der Vorstufe (Feld-gegen-Frage-Pruefung, "
-            f"Regel H), kein fehlgeschlagener Suchlauf. Erzeugt von eos-hypothesen-generator "
-            f"(LLM-frei, regelbasiert: Stoppwort-Filterung + Signatur-Clustering, "
-            f"Schwelle CLUSTER_MIN={cluster_min})."
+            f"{len(members)} Eintraege in einem Buendel (geteilte unterscheidende "
+            f"Woerter) zwischen {first['created_at']} und {last['created_at']}. Anders "
+            f"als die Nulltreffer-Quelle ist dies eine SELBSTAUSSAGE der Vorstufe "
+            f"(Feld-gegen-Frage-Pruefung, prestage.py Regel H), kein fehlgeschlagener "
+            f"Suchlauf -- deshalb die eigene, niedrigere Schwelle "
+            f"EPISTEMIK_MIN={epistemik_min}. Erzeugt von eos-hypothesen-generator "
+            f"(LLM-frei, regelbasiert)."
         )
         out.append({
             "new_id": new_id,
@@ -391,8 +452,11 @@ def candidates_from_epistemik(con, cluster_min: int, lookback_days: int) -> list
             "begruendung": begruendung[:2000],
             "gilt_fuer": f"EntityOS · Selbstpruefung · {' '.join(sig)}"[:200],
             "suchtext": f"{last['label']}\n{aussage}\n{' '.join(sig)}",
-            "offene_fragen": [m["raw_prompt"] for m in members_sorted[-2:] if m["raw_prompt"]],
-            "belege": [("protokoll", m["prestage_id"]) for m in members_sorted[-3:]],
+            "offene_fragen": [m["raw_prompt"] for m in members[-2:] if m["raw_prompt"]],
+            # Entdoppelt: ein Zug kann mehrere Luecken tragen und stuende sonst
+            # mehrfach als Beleg derselben Folgerung (siehe Modul-Historie).
+            "belege": [("protokoll", pid) for pid in list(dict.fromkeys(
+                m["prestage_id"] for m in reversed(members)))[:3]],
             "quelle": "epistemik",
             "quelle_id": last["prestage_id"],
             "signature": sig,
@@ -478,19 +542,82 @@ def write_folgerung(cand: dict, artikel_id: str) -> int:
 # Hauptzyklus
 # ---------------------------------------------------------------------------
 
+def _reihum(cands: list, budget: int) -> list:
+    """Budget reihum ueber die Quellen verteilen statt nach reiner Haeufigkeit.
+
+    Die Quellen zaehlen Verschiedenes (Suchlaeufe vs. bewusste Selbstaussagen),
+    ihre n-Werte sind deshalb NICHT vergleichbar -- siehe Modul-Historie
+    2026-08-20. Innerhalb einer Quelle bleibt die n-Sortierung.
+    """
+    nach_quelle = defaultdict(list)
+    for c in cands:
+        nach_quelle[c["quelle"]].append(c)
+    for lst in nach_quelle.values():
+        lst.sort(key=lambda c: -c.get("n", 0))
+    # Stabile Reihenfolge der Quellen: die mit dem knappsten Angebot zuerst,
+    # damit eine seltene Quelle nicht dauerhaft hinter einer ergiebigen wartet.
+    reihen = sorted(nach_quelle.values(), key=len)
+    out = []
+    runde = 0
+    while len(out) < budget and any(len(r) > runde for r in reihen):
+        for r in reihen:
+            if len(out) >= budget:
+                break
+            if len(r) > runde:
+                out.append(r[runde])
+        runde += 1
+    return out
+
+
+def _artikel_zuruecknehmen(con, artikel_id: str) -> None:
+    """Einen gerade selbst erzeugten Hypothesen-Artikel wieder entfernen.
+
+    Bewusst eng: NUR Zeilen, die diese Datei in DIESEM Lauf angelegt hat
+    (zuletzt_von='eos-hypothesen-generator'), und nur dieser eine Schluessel.
+    Der FTS-Eintrag haengt an der rowid von artikel_suchtext, deshalb erst
+    lesen, dann beide loeschen.
+    """
+    try:
+        row = con.execute(
+            "SELECT s.rowid AS rid FROM artikel_suchtext s "
+            "JOIN artikel a ON a.id = s.artikel_id "
+            "WHERE s.artikel_id = ? AND a.zuletzt_von = 'eos-hypothesen-generator'",
+            (artikel_id,),
+        ).fetchone()
+        if row is not None:
+            con.execute("DELETE FROM fts_index_artikel WHERE rowid = ?", (row["rid"],))
+            con.execute("DELETE FROM artikel_suchtext WHERE rowid = ?", (row["rid"],))
+        con.execute(
+            "DELETE FROM artikel WHERE id = ? AND zuletzt_von = 'eos-hypothesen-generator'",
+            (artikel_id,),
+        )
+        con.commit()
+        LOG.info("Artikel %s zurueckgenommen", artikel_id)
+    except Exception as fehler:
+        con.rollback()
+        # Nicht verschweigen: eine misslungene Ruecknahme ist genau die
+        # Halbbuchung, die diese Funktion verhindern soll.
+        LOG.error("Ruecknahme von %s fehlgeschlagen: %s: %s", artikel_id,
+                  type(fehler).__name__, fehler)
+
+
 def run_cycle(cfg: dict, dry_run: bool = False) -> dict:
     con = connect_db()
     try:
         cluster_min = int(cfg.get("CLUSTER_MIN", "5"))
+        # Eigene, niedrigere Schwelle fuer Quelle 3 -- siehe Modul-Historie 2026-08-20.
+        epistemik_min = int(cfg.get("EPISTEMIK_MIN", 3))
         lookback = int(cfg.get("PAKET_LOG_LOOKBACK_DAYS", "30"))
         max_per_run = int(cfg.get("MAX_PER_RUN", "3"))
 
         cands = candidates_from_zero_luecke(con)
         cands += candidates_from_paket_log(con, cluster_min, lookback)
-        cands += candidates_from_epistemik(con, cluster_min, lookback)
+        cands += candidates_from_epistemik(con, epistemik_min, lookback)
 
         LOG.info("Kandidaten gefunden: %d (vor Budget-Kappung)", len(cands))
-        chosen = cands[:max_per_run]
+        chosen = _reihum(cands, max_per_run)
+        LOG.info("Budget %d verteilt auf Quellen: %s", max_per_run,
+                 dict(Counter(c["quelle"] for c in chosen)))
 
         created = []
         for cand in chosen:
@@ -500,7 +627,19 @@ def run_cycle(cfg: dict, dry_run: bool = False) -> dict:
                           cand["signature"])
                 continue
             artikel_id = write_artikel(con, cand)
-            fid = write_folgerung(cand, artikel_id)
+            try:
+                fid = write_folgerung(cand, artikel_id)
+            except Exception as fehler:
+                # Artikel + Folgerung sind EINE Buchung. Der Artikel ist schon
+                # committet (write_artikel committet selbst), also hier von Hand
+                # zuruecknehmen -- sonst bleibt eine Luecke im Wiki stehen, an
+                # der nie jemand arbeitet, und already_exists() verhindert jeden
+                # weiteren Versuch.
+                LOG.error("Folgerung fuer %s fehlgeschlagen (%s: %s) -- Artikel "
+                          "wird zurueckgenommen", artikel_id,
+                          type(fehler).__name__, fehler)
+                _artikel_zuruecknehmen(con, artikel_id)
+                continue
             LOG.info("Erzeugt: artikel=%s folgerung=#%d quelle=%s sig=%s",
                       artikel_id, fid, cand["quelle"], cand["signature"])
             created.append({"artikel_id": artikel_id, "folgerung_id": fid,

@@ -24,6 +24,44 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("do-not-leak", repr(rows))
         self.assertTrue(all(row["secret_exposed"] is False for row in rows))
 
+    def test_invalid_bearer_credential_is_blocked_before_network(self):
+        invalid_credentials = (
+            " secret",
+            "secret ",
+            "secret\r\nX-Injected: value",
+            "secrét",
+            "secret:colon",
+        )
+
+        for credential in invalid_credentials:
+            with self.subTest(credential=repr(credential)):
+                called = False
+
+                def opener(*args, **kwargs):
+                    nonlocal called
+                    called = True
+                    raise AssertionError("network must not be reached")
+
+                env = {
+                    "NVIDIA_API_KEY": credential,
+                    "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+                    "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+                }
+                self.assertIsNone(MOD.route(env)["selected"])
+                with self.assertRaisesRegex(
+                    RuntimeError, "no_configured_zero_cost_provider"
+                ):
+                    MOD.execute_chat(
+                        VALID_MESSAGES, model="mock", environ=env,
+                        opener=opener,
+                    )
+                self.assertFalse(called)
+
+        self.assertEqual(
+            MOD.route({"NVIDIA_API_KEY": "nvapi-valid_key~+/=="})["selected"],
+            "nvidia",
+        )
+
     def test_together_is_hard_denied_even_if_key_exists(self):
         env = {"TOGETHER_API_KEY": "must-not-be-touched"}
         self.assertIn("together", MOD.DENIED_PROVIDERS)

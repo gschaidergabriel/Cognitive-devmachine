@@ -312,6 +312,97 @@ def candidates_from_paket_log(con, cluster_min: int, lookback_days: int) -> list
 
 
 # ---------------------------------------------------------------------------
+# Kandidatenquelle 3: Zeros eigene Epistemik-Luecken, geclustert
+# ---------------------------------------------------------------------------
+
+def candidates_from_epistemik(con, cluster_min: int, lookback_days: int) -> list:
+    """Wiederkehrendes bewusstes Nichtwissen aus mv_prestage_turns.
+
+    Anders als Quelle 1+2 (eine Suche fand nichts) steht hier eine
+    Selbstaussage der Vorstufe: diese Tatsache BRAUCHT die Frage und sie steht
+    in keiner Quelle. Vier Formulierungen desselben Nichtwissens ergeben ueber
+    die Signatur EINEN Kandidaten, nicht vier.
+    """
+    cutoff = time.time() - lookback_days * 86400
+    try:
+        rows = con.execute(
+            "SELECT prestage_id, raw_prompt, epistemik_json, created_at "
+            "FROM mv_prestage_turns "
+            "WHERE epistemik_unbekannt_n > 0 AND created_at >= ?",
+            (cutoff,),
+        ).fetchall()
+    except sqlite3.Error:
+        # Tabelle/Spalte fehlt (aeltere Anlage) -- kein Grund, den ganzen
+        # Zyklus zu kippen; die anderen beiden Quellen laufen weiter.
+        LOG.info("Quelle 3 uebersprungen: mv_prestage_turns/epistemik nicht verfuegbar")
+        return []
+
+    clusters = defaultdict(list)
+    for r in rows:
+        try:
+            unbekannt = (json.loads(r["epistemik_json"] or "{}") or {}).get("unbekannt") or []
+        except (ValueError, TypeError):
+            continue
+        for label in unbekannt:
+            if not isinstance(label, str) or not label.strip():
+                continue
+            sig = signature(label)
+            if not sig:
+                continue   # nur Stoppwoerter -- traegt kein Thema
+            clusters[sig].append({"prestage_id": r["prestage_id"],
+                                  "raw_prompt": r["raw_prompt"],
+                                  "label": label.strip(),
+                                  "created_at": r["created_at"]})
+
+    out = []
+    for sig, members in clusters.items():
+        if len(members) < cluster_min:
+            continue
+        new_id = slug_id("eos-hyp-epistemik", sig)
+        if already_exists(con, new_id):
+            continue   # idempotent
+
+        members_sorted = sorted(members, key=lambda m: m["created_at"] or 0)
+        first, last = members_sorted[0], members_sorted[-1]
+        formulierungen = sorted({m["label"] for m in members_sorted})
+
+        aussage = (
+            f"Wiederkehrendes bewusstes Nichtwissen: die Vorstufe hat {len(members)}x "
+            f"festgestellt, dass eine Frage die Tatsache '{last['label'][:160]}' braucht "
+            f"und sie in keiner Quelle steht (Formulierungen: "
+            f"{'; '.join(f[:60] for f in formulierungen[:4])}). Kandidat: zu "
+            f"[{', '.join(sig)}] fehlt eine belegte Angabe -- entweder im Profil, im "
+            f"Korpus oder im dauerhaften Gedaechtnis. [MECHANISCH ERZEUGT -- UNGEPRUEFT, "
+            f"keine inhaltliche Aussage ueber {', '.join(sig)} selbst, Status offen]"
+        )
+        begruendung = (
+            f"Quelle: mv_prestage_turns.epistemik_json, Schluessel 'unbekannt', "
+            f"{len(members)} Eintraege mit uebereinstimmender Signatur zwischen "
+            f"{first['created_at']} und {last['created_at']}. Anders als die Nulltreffer-"
+            f"Quelle ist dies eine SELBSTAUSSAGE der Vorstufe (Feld-gegen-Frage-Pruefung, "
+            f"Regel H), kein fehlgeschlagener Suchlauf. Erzeugt von eos-hypothesen-generator "
+            f"(LLM-frei, regelbasiert: Stoppwort-Filterung + Signatur-Clustering, "
+            f"Schwelle CLUSTER_MIN={cluster_min})."
+        )
+        out.append({
+            "new_id": new_id,
+            "titel": f"Eigene Wissensluecke: {' '.join(sig)}"[:200],
+            "aussage": aussage[:1200],
+            "begruendung": begruendung[:2000],
+            "gilt_fuer": f"EntityOS · Selbstpruefung · {' '.join(sig)}"[:200],
+            "suchtext": f"{last['label']}\n{aussage}\n{' '.join(sig)}",
+            "offene_fragen": [m["raw_prompt"] for m in members_sorted[-2:] if m["raw_prompt"]],
+            "belege": [("protokoll", m["prestage_id"]) for m in members_sorted[-3:]],
+            "quelle": "epistemik",
+            "quelle_id": last["prestage_id"],
+            "signature": sig,
+            "n": len(members),
+        })
+    out.sort(key=lambda c: -c.get("n", 0))
+    return out
+
+
+# ---------------------------------------------------------------------------
 # Schreiben: artikel + artikel_suchtext + fts_index_artikel, dann folgerung
 # ---------------------------------------------------------------------------
 
@@ -396,6 +487,7 @@ def run_cycle(cfg: dict, dry_run: bool = False) -> dict:
 
         cands = candidates_from_zero_luecke(con)
         cands += candidates_from_paket_log(con, cluster_min, lookback)
+        cands += candidates_from_epistemik(con, cluster_min, lookback)
 
         LOG.info("Kandidaten gefunden: %d (vor Budget-Kappung)", len(cands))
         chosen = cands[:max_per_run]

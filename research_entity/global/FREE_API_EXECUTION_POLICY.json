@@ -90,6 +90,17 @@
     "executable_evidence": "test_active_monotonic_values_cannot_suppress_execution_receipt",
     "counterhypothesis": "Any float-like value returned by an injected monotonic clock is passive duration metadata; falsified locally because a float subclass reached authenticated execution and then ran overridden __format__ during attempt-ID construction, preventing the mandatory receipt."
   },
+  "passive_wall_clock_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "An injected wall clock used for absolute Retry-After arithmetic must return an exact built-in finite float or integer. Invalid and polymorphic values use the conservative 60-second fallback without executing arithmetic methods, reclassifying HTTP 429 or suppressing its receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/time.html#time.time",
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_active_wall_clock_preserves_rate_limit_receipt",
+    "counterhypothesis": "Any float-like wall-clock result is passive timestamp metadata for HTTP-date subtraction; falsified locally because a float subclass executed overridden __rsub__, downgraded the regular 429 path and escaped the HTTPError path without a receipt."
+  },
   "text_message_roles": {
     "allowed": ["system", "user", "assistant"],
     "checked_at": "2026-08-11",
@@ -583,6 +594,7 @@
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",
     "Receipt duration is measured on a monotonic clock, while absolute Retry-After HTTP-date cooldown uses the wall-clock UTC instant at response receipt.",
     "Injected monotonic-clock readings are exact built-in finite numbers before use; an invalid start fails before network and an invalid post-response reading falls back to zero duration without suppressing the receipt.",
+    "Injected wall-clock readings used for Retry-After HTTP-date arithmetic are exact built-in finite numbers; invalid or polymorphic readings use the 60-second fallback without executing arithmetic methods or losing the received 429 receipt.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
     "Failure to access Retry-After metadata uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
     "Retry-After values returned by transport adapters are exact built-in strings before parsing; polymorphic values use the 60-second fallback without executing methods or reclassifying an already received HTTP 429.",

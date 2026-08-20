@@ -1,0 +1,175 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T165030Z-gen206-availability-atomicity-telemetry",
+  "created_at": "2026-08-20T16:50:30Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipts": [
+      "8946d67b1320928ed8199adf5680da64a581b2d7",
+      "5507b05e1bfa2846e9cd329e9587be127e3d76ce"
+    ],
+    "export_commit": "1f4c1697aa32fb89858b339e2a9a0a15f414d316",
+    "previous_export_commit": "f30202220fcccdb7fefb5c48d15698e0faf3bb5a",
+    "agentzero_generation": 206,
+    "reported_source_short": "0f6526f69",
+    "test_receipt": {
+      "at": "2026-08-20T16:41:40Z",
+      "green": 672,
+      "red": 1,
+      "remaining_red": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    },
+    "primary_sources": [
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/1f4c1697aa32fb89858b339e2a9a0a15f414d316/agentZero/code/produkt/mistral_prestage/warm_zero.py"
+      },
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/1f4c1697aa32fb89858b339e2a9a0a15f414d316/agentZero/code/produkt/store.py"
+      },
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/1f4c1697aa32fb89858b339e2a9a0a15f414d316/agentZero/code/produkt/mistral_prestage/wettbewerb.py"
+      },
+      {
+        "kind": "runtime-schema",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/1f4c1697aa32fb89858b339e2a9a0a15f414d316/agentZero/unifieddb/schema.sql"
+      },
+      {
+        "kind": "upstream-documentation",
+        "url": "https://docs.python.org/3.14/library/sqlite3.html",
+        "supports": "executescript may implicitly commit a pending transaction; transaction control must be explicit"
+      },
+      {
+        "kind": "upstream-documentation",
+        "url": "https://docs.python.org/3.14/library/time.html#time.monotonic",
+        "supports": "monotonic clocks do not go backward and are not affected by system clock updates"
+      }
+    ],
+    "deduplication_rule": "The previously preserved Generation-204 lease-test flip is not counted again. Gen206 warm-process silence, UnifiedDB transaction closure and GWT telemetry are three different mechanisms; aggregate test growth is supporting context, not independent proof of each mechanism."
+  },
+  "substantive_delta": [
+    {
+      "id": "D206-WARM-SILENCE-FAILOVER",
+      "status": "FIX-IMPLEMENTED-NOT-CAUSALLY-CLOSED",
+      "evidence": [
+        "The old warm-process loop used blocking stdout.readline(), so its wall-clock deadline was only checked between lines.",
+        "Gen206 gates reads with select(), adds a 25-second first-event deadline, kills silent workers, and opens a 600-second circuit after three silent failures.",
+        "The repository narrative reports a 13-minute silent acceptance turn, but the export contains no per-run trace tying the new branch to a bounded browser response."
+      ],
+      "residual": "Both deadlines still use time.time() rather than a monotonic clock. A system-clock step can lengthen or shorten timeout behavior, and no clock-step test receipt is present."
+    },
+    {
+      "id": "D206-TX-GUARANTEE-DOWNGRADE",
+      "status": "AVAILABILITY-GAIN-ATOMICITY-UNPROVEN",
+      "evidence": [
+        "The store transaction context now checks Connection.in_transaction before COMMIT or ROLLBACK.",
+        "If an inner operation has already committed, successful exit logs and continues; exceptional exit re-raises without rollback because no transaction remains.",
+        "Python's sqlite3 documentation states that executescript can implicitly commit a pending transaction, matching the failure class named in the code comments.",
+        "The change prevents a completed answer from being discarded by a trailing 'no transaction is active' error, but it cannot restore the atomic boundary after an inner commit."
+      ],
+      "credit_boundary": "Grant bounded-availability credit only. Do not retain whole-turn or whole-admission atomicity credit for paths that can close the transaction internally until the commit source is removed or isolated and a partial-write falsifier passes."
+    },
+    {
+      "id": "D206-GWT-TELEMETRY-SUBSTRATE",
+      "status": "OBSERVABILITY-ADDED-NOT-GLOBALITY-PROVED",
+      "evidence": [
+        "UnifiedDB now exports gw_wettbewerb, gw_ausstrahlung and gw_lernen tables plus a broadcast-time index.",
+        "The code records candidates separately from emitted articles and stores a lexical/article boost updated from whether Zero's raw answer contains the article id.",
+        "Writes are fail-open (exceptions are swallowed), call commit directly and carry no run digest, outcome receipt or uniqueness constraint binding a turn/article observation."
+      ],
+      "credit_boundary": "This is a falsification and telemetry substrate, not evidence that all global channels compete or that the workspace causally improves outcomes. Keep the existing global-channel, stable-identity/outcome-credit and lexical/evidence-mass tasks OPEN."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H206-TX-INNER-COMMIT-PARTIAL-PERSISTENCE",
+      "claim": "If a function closes the UnifiedDB transaction and a later admission step raises, prefix writes remain durable although the turn is reported failed.",
+      "falsifier": "On an isolated database, inject a deterministic inner executescript/commit after the first admission write and then raise; verify that every turn, workspace, active-turn, memory and graph mutation is absent after failure."
+    },
+    {
+      "id": "H206-WARM-FAILOVER-BOUNDED",
+      "claim": "A silent warm worker now yields to the cold path within ERSTE_ZEILE_S plus bounded teardown overhead.",
+      "falsifier": "A fake worker that keeps stdout open and emits nothing causes answer() or the end-to-end browser turn to exceed the configured first-event deadline, or clock adjustment changes the bound materially."
+    },
+    {
+      "id": "H206-GWT-TRACE-ENABLES-CAUSAL-AUDIT",
+      "claim": "Separate candidate, emission and learning records make selection pressure and feedback measurable per turn.",
+      "falsifier": "Reconstructing a frozen turn cannot uniquely join candidates, emitted items, the exact answer, retrieval receipt and downstream outcome, or duplicate/retried writes change the inferred result."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH206-TX-ONLY-POSTCOMMIT-SIGNAL",
+      "claim": "All observed inner closures occur only after the complete intended write set, so continuing is an availability repair with no partial-state exposure.",
+      "falsifier": "A fault injected immediately after inner closure leaves any prefix state durable or an active turn orphaned."
+    },
+    {
+      "id": "CH206-WARM-PROCESS-STARTUP-ONLY",
+      "claim": "The 13-minute silence was an external process or environment failure fully handled by first-event detection, not a general timeout defect.",
+      "falsifier": "A worker that emits one event and then stalls still exceeds the overall deadline, or ordinary load triggers false silent-worker classification."
+    },
+    {
+      "id": "CH206-GWT-OBSERVABILITY-THEATER",
+      "claim": "The new tables record local lexical selection without reliable provenance or outcome linkage and therefore cannot adjudicate workspace globality or benefit.",
+      "falsifier": "A frozen replay receipt uniquely binds input, candidate identities, emissions, answer citation, channel inventory and an external outcome, and remains invariant under retries."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Post-Commit Transaction Shell",
+      "definition": "A context manager still syntactically surrounds work after an inner operation has already ended the transaction, so the remaining atomicity is representational rather than real."
+    },
+    {
+      "name": "Availability-Atomicity Exchange Rate",
+      "definition": "A repair preserves the user-visible answer by tolerating a broken transaction boundary; availability improves, but atomicity credit must be explicitly debited until independently restored."
+    },
+    {
+      "name": "Telemetry Without Adjudication",
+      "definition": "Candidate and emission logs exist, but absent unique provenance and outcome joins they describe activity without proving causal workspace value."
+    }
+  ],
+  "worker_impulses": [
+    {
+      "route": "unifieddb+claycode+frank",
+      "priority": "BLOCKING",
+      "task": "Run TX_INNER_COMMIT_FAULT_MATRIX/v1 on an isolated copy: inject executescript/commit after each admission mutation, then raise at every later boundary. Record before/after table hashes, in_transaction transitions, exact call site and orphaned active-turn count. Remove or isolate every inner transaction closer; do not treat the new log-and-continue branch as atomicity proof."
+    },
+    {
+      "route": "frank+claycode",
+      "priority": "HIGH",
+      "task": "Run WARM_SILENCE_BOUND/v1 with fake subprocesses: no bytes, partial JSON, one non-result event then silence, EOF, clock step forward/backward and repeated failures across both user pools. Use monotonic deadlines and record warm-to-cold handoff wall time. Preserve all timeouts and false trips."
+    },
+    {
+      "route": "gwt+hyperposition+emergenz+claygraph",
+      "priority": "BLOCKING",
+      "task": "Add a provenance-preserving GWT trace key binding run/turn, stable native candidate identity, source digest, channel, rank, emitted state, raw-answer citation and downstream outcome. Enforce retry idempotence. Re-run the full channel audit including hyperposition; do not close globality from the three new tables alone."
+    },
+    {
+      "route": "harness+clayresearch",
+      "priority": "GUARD",
+      "task": "Record Gen206 as 672/1 with a new source short and preserve the Gen204 red-green lease flip as a separate unresolved family. Award no training, promotion, whole-product PASS, atomicity closure or GWT-globality credit."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The persistent Claude-Code adapter isolation test remains red.",
+    "No exact-source atomic test receipt isolates the new transaction behavior.",
+    "No end-to-end warm-to-cold failover receipt or clock-step matrix is exported.",
+    "The GWT tables have no exported causal outcome receipt and do not close the hyperposition bypass.",
+    "The Generation-204 Clerk/PTy lease flip remains unresolved and is not counted as a Gen206 fix.",
+    "Canonical RAE/state, target main and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion or whole-product PASS occurred."
+  ],
+  "admission_rule": "Admit Gen206 as an availability improvement plus a new telemetry substrate. Debit atomicity and GWT-globality claims until fault-injection and provenance-complete causal receipts pass."
+}

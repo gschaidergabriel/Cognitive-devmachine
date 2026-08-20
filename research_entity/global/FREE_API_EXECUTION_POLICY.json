@@ -268,6 +268,17 @@
     "executable_evidence": "test_non_bytes_response_body_cannot_reach_verified_state",
     "counterhypothesis": "Successful json.loads parsing proves a valid HTTP body; falsified because json.loads intentionally accepts str and bytearray in addition to bytes."
   },
+  "passive_http_response_body_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A transport-provided HTTP response body must be an exact built-in bytes value before size measurement or UTF-8 decoding; bytes subclasses remain invalid_provider_response and no overridden length or decode method may execute.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://docs.python.org/3/reference/datamodel.html#special-method-lookup",
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read"
+    ],
+    "executable_evidence": "test_active_bytes_response_body_cannot_execute_methods",
+    "counterhypothesis": "isinstance(value, bytes) proves that an adapter body is passive immutable transport data; falsified locally because a bytes subclass executed its overridden __len__ after HTTP 200 and changed invalid adapter metadata into incomplete_provider_response."
+  },
   "network_json_encoding": {
     "checked_at": "2026-08-14",
     "claim": "Network-transmitted provider JSON is decoded strictly as UTF-8 before parsing; UTF-16 and UTF-32 response bodies cannot reach VERIFIED or DONE.",
@@ -537,7 +548,7 @@
     "Before body consumption or EXECUTED, adapter status must be an exact built-in integer in the RFC 9110 range 100 through 599; booleans, polymorphic integers and other invalid values remain null and invalid_provider_response without executing comparison operators.",
     "Failure while retrieving a transport adapter's status or code property emits invalid_provider_response with null status and without EXECUTED; it cannot escape the receipt path or invent an HTTP result.",
     "Unexpected Exception subclasses from custom transport adapters emit a fail-closed receipt based on whether valid response status was observed; BaseException control signals remain uncaught.",
-    "A received adapter body must be bytes before JSON parsing; text, bytearray and other body types remain EXECUTED with their valid status but cannot reach VERIFIED or DONE.",
+    "A received adapter body must be exact built-in bytes before size measurement or JSON parsing; text, bytearray, polymorphic bytes and other body types remain EXECUTED with their valid status but cannot execute body methods or reach VERIFIED/DONE.",
     "Network-transmitted provider JSON must decode strictly as UTF-8 before parsing; UTF-16, UTF-32 and malformed UTF-8 remain invalid_provider_response and cannot reach VERIFIED or DONE.",
     "Provider response JSON rejects every non-finite decoded number; NaN/Infinity literals and finite-syntax exponents that overflow the runtime float range remain invalid_provider_response and never reach VERIFIED or DONE.",
     "Every provider JSON object must have unique member names; duplicates remain invalid_provider_response and never reach VERIFIED or DONE.",

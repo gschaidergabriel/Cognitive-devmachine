@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T11:11:16Z. **3014 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T11:41:18Z. **3020 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T16:55:53+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T17:56:18+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2916 |
+| baunotiz | 2922 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1848 |
-| baunotiz | bauverlauf.jsonl | 1023 |
+| baunotiz | git-commit | 1851 |
+| baunotiz | bauverlauf.jsonl | 1026 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3014 · Gegenhypothese: 0 von 3014
+## Hypothese: 0 von 3020 · Gegenhypothese: 0 von 3020
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T16:55:53+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen195 GWT causal bottleneck frontier
+
+`baunotiz-bauverlauf-92b05caaa81a037c2b32` · baunotiz · bauverlauf.jsonl · 2026-08-20T17:56:18+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen195 GWT causal bottleneck frontier
+
+`baunotiz-git-ea39cfd7a193769cc4ed47dccd409dae61e56a73` · baunotiz · git-commit · 2026-08-20T17:56:18+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen195 GWT causal bottleneck frontier
+
+### research: route Gen195 GWT causal bottleneck falsifiers
+
+`baunotiz-bauverlauf-84cdcd92c128c8ce84c1` · baunotiz · bauverlauf.jsonl · 2026-08-20T17:45:02+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: route Gen195 GWT causal bottleneck falsifiers
+
+`baunotiz-git-8aaa9fc1b034ecfcbd119b59ab78e6860b622c4c` · baunotiz · git-commit · 2026-08-20T17:45:02+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: route Gen195 GWT causal bottleneck falsifiers
 
 ### claycode supervisor: steer Gen190 GWT competition and receipt split-brain
 
@@ -198,38 +230,6 @@ research: fuse Gen182 CSWT-Z pilot and post-pilot architecture delta
 ### research: bind AgentZero atomic receipt and hierarchy causality delta
 
 `baunotiz-bauverlauf-5c29fad39dc66be90ed9` · baunotiz · bauverlauf.jsonl · 2026-08-20T11:47:21+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind AgentZero atomic receipt and hierarchy causality delta
-
-`baunotiz-git-ab8198736ba105709989a2e5174a68531227de36` · baunotiz · git-commit · 2026-08-20T11:47:21+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind AgentZero atomic receipt and hierarchy causality delta
-
-### research: bind Gen182 test-metrology recovery and DB observer effect
-
-`baunotiz-bauverlauf-02bcc39e1bd5129e8758` · baunotiz · bauverlauf.jsonl · 2026-08-20T11:45:21+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind Gen182 test-metrology recovery and DB observer effect
-
-`baunotiz-git-39a132e56973c536f9beb67fcb85fb8a10693e30` · baunotiz · git-commit · 2026-08-20T11:45:21+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen182 test-metrology recovery and DB observer effect
-
-### claycode supervisor: fail closed on Gen182 null receipts
-
-`baunotiz-bauverlauf-e0fe6e16c80ed63d54e6` · baunotiz · bauverlauf.jsonl · 2026-08-20T10:47:40+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

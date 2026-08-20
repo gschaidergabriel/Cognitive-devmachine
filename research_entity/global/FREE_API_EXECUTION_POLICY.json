@@ -388,6 +388,16 @@
     "executable_evidence": "test_http_402_latch_survives_response_context_exit_failure",
     "counterhypothesis": "The generic adapter Exception fallback is sufficient after any valid status; falsified locally because a context-manager __exit__ RuntimeError changed a received HTTP 402 into incomplete_provider_response and left the payment latch inactive."
   },
+  "response_size_context_suppression_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "Response-size overflow is recorded as state inside the foreign response context and classified outside it; adapter __exit__ cannot suppress or downgrade a MAX+1 overflow.",
+    "sources": [
+      "https://docs.python.org/3/reference/compound_stmts.html#the-with-statement",
+      "https://docs.python.org/3/library/http.client.html#http.client.HTTPResponse.read"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_oversized_response_rejection",
+    "counterhypothesis": "Raising ProviderResponseTooLarge inside with is sufficient; falsified because __exit__ returning true suppressed it and an exact MAX+1-byte valid JSON body reached success, VERIFIED and DONE."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -437,6 +447,7 @@
     "Transport and response-read failures for the Chat Completions POST are nonretryable without provider-supported idempotency or proof that the original request was never applied.",
     "A truncated HTTP body raising IncompleteRead preserves the received status and EXECUTED, emits an incomplete_provider_response receipt, and never reaches VERIFIED or DONE.",
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
+    "Response-size overflow is carried beyond the foreign response context before classification; adapter __exit__ cannot suppress a MAX+1 overflow or allow oversized content into VERIFIED or DONE.",
     "Every real provider request must emit a redacted execution receipt.",
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",

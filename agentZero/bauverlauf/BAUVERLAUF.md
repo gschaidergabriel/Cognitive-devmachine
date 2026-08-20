@@ -1,12 +1,48 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T00:41:14Z. 901 Commits aus vier Repos, davon 273 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T00:48:09Z. 903 Commits aus vier Repos, davon 275 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 00:47:21 +0000 — entityos: 1 Aenderungen
+
+`b060a2b82751` · entityos · 00:47 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  hypothesen/eos_hypothesen.py
+
+Zeit: 2026-08-20T00:47:21+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:42:49 +0000 — entityos: 1 Aenderungen
+
+`58b1c318135d` · entityos · 00:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  hypothesen/eos_hypothesen.py
+
+Zeit: 2026-08-20T00:42:49+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 00:37:50 +0000 — entityos: 2 Aenderungen
 
@@ -4349,52 +4385,6 @@ Wirt ungleich Ziel zielt auf Wirt/Zielsystem, nicht auf Datenbank/Entitaet.
 Offen: pruefen ob der research-identity-guard F16s Formulierung wirklich abweist.
 
 Steht auch oben in CLAUDE.md und in WEITERMACHEN.md.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B21 geprueft: F15-F49 gegen Bauplan abgeglichen
-
-`c44a0df0482a` · clay · 07:32 UTC · ClayVerse
-
-```
-35 Entscheidungen geprueft: 21 gehoert-zu, 12 ist-neu, 2 widersprueche unaufgeloest (F21/F24 vs B21 Baugesetz, F16 vs B18 Entitaets-Namenskollision)
-```
-
-### F51 URTEIL Schranken-Luecke BEHALTEN, plus Fund ueber parallele Agenten
-
-`0956426c81ae` · clay · 07:27 UTC · ClayVerse
-
-```
-URTEIL gegen die vorher gesetzten Kriterien: Testsatz 49 Faelle, vorher 31 von
-49, nachher 49 von 49. KEINE Ueberverschaerfung - die 20 muss-durchgehen-Faelle
-blieben in BEIDEN Zustaenden gruen, und genau das war das ausdrueckliche Risiko,
-weil die Schranke diesen Monat schon einmal kaputt war durch Ueberverschaerfung.
-Kein zerstoerender Befehl je ausgefuehrt, nur pruefen() ausgewertet. Die
-bewusste scp/rsync-Ausnahme unangetastet. BEHALTEN.
-
-Der eigentliche Ertrag ist nicht der Fix, sondern der TESTSATZ
-tools/schranke/test_schranke.py, wiederholbar, 49 Faelle in beide Richtungen.
-Zweiter Schranken-Befund in einer Woche, jetzt eine Pruefsammlung statt einer
-dritten Einzelreparatur.
-
-DER FUND: FERN_ZERSTOEREND und FERN_HART verankerten den Befehlsnamen direkt
-nach Trennzeichen, ohne optionales sudo zu verschlucken. 18 von 49 Faellen
-fielen durch, ausnahmslos alle muss-fangen-Faelle mit sudo, doas oder
-ENV-Praefix. Fix ueber eine gemeinsame VORSILBE-Regex, auch auf ANFANG, NIE und
-DB_WERKZEUG angewandt.
-
-ZWEI LOECHER BLEIBEN, benannt und im Code dokumentiert: sudo VOR dem Wrapper
-bricht den UNTERSCHALE-Anker; und bash -c-Inhalte werden nicht gegen die
-SCHEIN-Liste geprueft. Sie gehoeren in den Testsatz BEVOR sie repariert werden.
-
-NEBENFUND, wichtiger als er aussieht: zwei Agenten committeten gleichzeitig im
-selben Repo und zogen sich gegenseitig die gestagten Dateien mit. Der
-Schranken-Diff landete unter fremdem Commit-Titel, korrigiert per Nachtrag.
-Das ist dasselbe Problem wie das gleichzeitige Schreiben der drei Sitzungen,
-nur eine Ebene hoeher, und bestaetigt F44 Paragraph 2 im Feld.
-FOLGE: parallele Agenten duerfen nicht breit stagen - git add mit genau den
-eigenen Dateien, nie git add -A.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

@@ -1,0 +1,192 @@
+{
+  "schema": "CLAY_RESEARCH_IMPULSE/v1",
+  "event_id": "20260820T174502Z-gen211-null-evidence-preference-executor-budget",
+  "created_at": "2026-08-20T17:45:02Z",
+  "target_room": "center",
+  "targets": ["clayresearch", "frank", "gwt", "emergenz", "claycode", "hyperposition", "claygraph", "unifieddb", "harness"],
+  "training_performed": false,
+  "harness_modified": false,
+  "promotion_claimed": false,
+  "canonical_baseline": {
+    "rae_version": "8.8-rev2",
+    "state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "pr810_head": "24aec8164557f6020d1b76845a0a37b46a31a843"
+  },
+  "provenance": {
+    "previous_research_receipt": "1dabd57d9561653de40c668caa066867b6153e39",
+    "gen207_export_commit": "37f5cd89f38074378a2b5ee287ff8d57d911e6ed",
+    "gen211_export_commit": "0c51fafa33911092acb2c1d76ae94b7bcdd6d95c",
+    "gen211_tree": "4bd0a73306e809cf3f572d83c11fdc0af728b248",
+    "agentzero_generation": 211,
+    "reported_source_short": "9e45b0c97",
+    "test_receipts": [
+      {"generation": 207, "green": 685, "red": 2, "remaining_red": ["runtime adapter", "recurrent PTY refresh"]},
+      {"generation": 211, "green": 693, "red": 1, "remaining_red": ["runtime adapter"]}
+    ],
+    "primary_sources": [
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/0c51fafa33911092acb2c1d76ae94b7bcdd6d95c/agentZero/code/produkt/mistral_prestage/pipeline.py",
+        "supports": "empty-result prose, user-style injection, persistent expectation executor, warm telemetry"
+      },
+      {
+        "kind": "repository-code",
+        "url": "https://github.com/gschaidergabriel/clay-global-research-entity/blob/0c51fafa33911092acb2c1d76ae94b7bcdd6d95c/agentZero/code/produkt/mistral_prestage/warm_zero.py",
+        "supports": "session priority budget, retained non-priority workers, canonical session enumeration"
+      },
+      {
+        "kind": "upstream-documentation",
+        "url": "https://docs.python.org/3/library/concurrent.futures.html",
+        "supports": "Future.result(timeout) bounds waiting; a running future cannot be cancelled"
+      },
+      {
+        "kind": "primary-paper",
+        "url": "https://aclanthology.org/2026.eacl-demo.35/",
+        "supports": "retrieval drift and missing evidence require distinct diagnosis"
+      },
+      {
+        "kind": "primary-paper",
+        "url": "https://aclanthology.org/2026.eacl-long.361/",
+        "supports": "search stopping and negative evidence require explicit treatment"
+      },
+      {
+        "kind": "primary-paper",
+        "url": "https://aclanthology.org/2026.acl-long.939/",
+        "supports": "retrieval quality is distinct from generation utility"
+      }
+    ],
+    "deduplication_rule": "The supervisor commit de63cefc merely propagates the prior Gen206 impulse and is not independent replication. Aggregate green-count growth is context, not proof of the four mechanisms below. The PTY red-to-green change is not credited as fixed without a causal repair receipt."
+  },
+  "substantive_delta": [
+    {
+      "id": "D211-NULL-EVIDENCE-OVERCLAIM",
+      "status": "FALSE-GLOBAL-ABSENCE-RISK",
+      "evidence": [
+        "The empty-result prompt is appended whenever offered and sent counts are both zero.",
+        "The offered count is derived only from admitted ids in the local corpus candidate list.",
+        "The prompt nevertheless asserts that retrieval scored every candidate and that no place in the entity's own stores bears on the question, then instructs Zero not to search stores again."
+      ],
+      "credit_boundary": "A local empty candidate set is not a global negative-evidence receipt. Absence language is admissible only with explicit successful and exhaustive channel coverage."
+    },
+    {
+      "id": "D211-CROSS-USER-PREFERENCE-BLEED",
+      "status": "IDENTITY-NAMESPACE-BREACH-RISK",
+      "evidence": [
+        "The brevity text identifies Gabriel's standing instruction and its storage key.",
+        "The helper takes no user identity and is injected unconditionally into both Zero calls, including Andreas turns."
+      ],
+      "credit_boundary": "Do not claim per-user preference isolation until the prompt assembly is identity-scoped and conflicting-preference tests pass."
+    },
+    {
+      "id": "D211-BOUNDED-WAIT-UNBOUNDED-WORK",
+      "status": "CALLER-LATENCY-BOUNDED-WORK-DEBT-OPEN",
+      "evidence": [
+        "Expectation computation moved to a persistent ThreadPoolExecutor with two workers and result(timeout=2.5).",
+        "The code notes that a timed-out running thread continues to completion.",
+        "Python documents that a running Future cannot be cancelled; the executor queue has no explicit bound or backpressure."
+      ],
+      "credit_boundary": "Credit the caller-wait bound, not bounded resource use, cancellation, or absence of late writes."
+    },
+    {
+      "id": "D211-WARM-BUDGET-NOT-CAP",
+      "status": "ADMISSION-BUDGET-NOT-RESIDENT-CAP",
+      "evidence": [
+        "WARM_BUDGET selects at most two priority sessions and POOL_SIZE is one per session.",
+        "Existing live workers for non-priority sessions are retained until age or death, while newly prioritized sessions may boot immediately.",
+        "Therefore rapid reprioritization can transiently retain more live workers than the claimed total budget."
+      ],
+      "mechanism_credit": "Canonical-session discovery repairs the prior slot-coverage defect, and turn output now exposes a warm boolean. The reported 10/12 warm hits and 6.1s-to-3.4s narrative lacks an exported atomic run receipt."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H211-NULL-RECEIPT-COLLAPSE",
+      "claim": "A retrieval exception, omitted corpus or evidence present only outside the local candidate list can be converted into confident global absence and suppress corrective search.",
+      "falsifier": "Run four frozen arms: genuinely empty exhaustive search, retrieval exception, omitted corpus and answer evidence only in hyperposition/durable memory/tool store. Only the first may emit global absence, and every arm must expose channel coverage and error state."
+    },
+    {
+      "id": "H211-PREFERENCE-NAMESPACE-BREACH",
+      "claim": "Gabriel's brevity preference changes Andreas's prompt and output despite no Andreas-scoped provenance.",
+      "falsifier": "Assign conflicting explicit style preferences to Gabriel and Andreas, replay identical inputs, and prove that each assembled prompt contains only the matching user's rule and receipt."
+    },
+    {
+      "id": "H211-LATENCY-BOUNDED-RESOURCE-DEBT",
+      "claim": "Long expectation calls fill both workers and grow queued futures or late side effects while each turn merely times out after about 2.5 seconds.",
+      "falsifier": "Drive 20 turns against deterministic 40-second expectation calls; queue depth, live futures, resource use and late UnifiedDB writes remain bounded and all timed-out work is cancelled or isolated."
+    },
+    {
+      "id": "H211-RESIDENT-WARM-BUDGET-OVERRUN",
+      "claim": "Alternating recency across four canonical sessions produces more than two simultaneously live warm worker processes.",
+      "falsifier": "Force four-session reprioritization and show PID-attributed live residency never exceeds WARM_BUDGET, including the handoff interval."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH211-EMPTY-IS-COVERAGE-COMPLETE",
+      "claim": "The local corpus is the complete admissible store inventory and all retrieval stages succeeded, making the absence sentence accurate.",
+      "falsifier": "Any relevant item exists in a named channel not represented by the corpus or any retrieval stage reports unknown/error rather than exhaustive-empty."
+    },
+    {
+      "id": "CH211-SHARED-PREFERENCE-INTENTIONAL",
+      "claim": "Both named users explicitly share Gabriel's standing brevity instruction.",
+      "falsifier": "A user-scoped preference receipt differs, is absent, or Andreas requests a conflicting style."
+    },
+    {
+      "id": "CH211-UPSTREAM-HARD-BOUND",
+      "claim": "Expectation work always terminates within a hard upstream bound, so the executor cannot accumulate meaningful debt.",
+      "falsifier": "Two calls exceed the bound or a later queued future starts after its caller already abandoned the result."
+    },
+    {
+      "id": "CH211-OLD-WORKERS-SYNCHRONOUSLY-RECLAIMED",
+      "claim": "Another path synchronously terminates every de-prioritized session before a new worker boots.",
+      "falsifier": "PID tracing observes old non-priority and new priority workers alive concurrently above the budget."
+    }
+  ],
+  "new_concepts": [
+    {"name": "Null-Receipt Collapse", "definition": "An empty local intermediate is promoted to a global absence claim without a coverage-complete receipt."},
+    {"name": "Preference Namespace Breach", "definition": "A user-specific behavioral rule enters another user's prompt because assembly lacks identity scope."},
+    {"name": "Deadline Without Work Cancellation", "definition": "Caller waiting is bounded while abandoned work continues or queues, converting latency relief into hidden resource debt."},
+    {"name": "Admission Budget versus Resident Budget", "definition": "A scheduler limits who may start new workers but not how many old and new workers may remain alive during reprioritization."}
+  ],
+  "worker_impulses": [
+    {
+      "route": "gwt+hyperposition+claygraph+unifieddb",
+      "priority": "BLOCKING",
+      "task": "Implement and run NULL_COVERAGE_MATRIX/v1 with explicit per-channel SUCCESS_EMPTY, SUCCESS_HIT, ERROR, OMITTED and UNKNOWN receipts. Never emit global absence or suppress re-search from offered=sent=0 alone. Preserve all false-empty and duplicate evidence cases."
+    },
+    {
+      "route": "frank+claycode",
+      "priority": "BLOCKING",
+      "task": "Run USER_PREFERENCE_ISOLATION/v1 with conflicting Gabriel/Andreas rules. Record assembled prompt digests, user-scoped provenance keys and output style. Bind _mit_kuerze to the current identity or remove it from shared assembly."
+    },
+    {
+      "route": "claycode+unifieddb+emergenz",
+      "priority": "HIGH",
+      "task": "Run EXPECTATION_WORK_DEBT/v1: 20 turns, deterministic 40-second calls, two active workers, then measure queue depth, start-after-abandon events, thread/resource residency and late database writes. Add bounded admission, cooperative cancellation or process isolation before claiming bounded work."
+    },
+    {
+      "route": "claycode+frank+harness",
+      "priority": "HIGH",
+      "task": "Run WARM_RESIDENCY_BUDGET/v1 across four canonical sessions with rapid recency rotation. Record PID/session/start/stop and max simultaneous residency. Reclaim de-prioritized workers before replacement if a strict total budget is intended. Do not promote from the non-atomic 10/12 narrative."
+    },
+    {
+      "route": "clayresearch+harness",
+      "priority": "GUARD",
+      "task": "Record Gen211 as 693/1. Preserve the runtime-adapter red, the unexplained PTY red-to-green transition, Gen206 transaction/clock blockers, open GWT/hyperposition globality and unchanged canonical BASE NOT_PASS. Award no training, promotion or whole-product PASS."
+    }
+  ],
+  "preserved_null_and_negative_results": [
+    "The Claude-Code runtime-adapter isolation test remains red.",
+    "The recurrent PTY refresh test is green in Gen211, but no causal fix receipt was exported; no fix credit is assigned.",
+    "The supervisor propagation of the Gen206 impulse is same-family evidence and is not double-counted.",
+    "No atomic trace substantiates the reported 10/12 warm hits or 6.1s-to-3.4s timing change.",
+    "No receipt proves expectation work cancellation, bounded executor backlog or absence of late writes.",
+    "No coverage-complete negative-evidence receipt spans hyperposition and every durable/tool store.",
+    "Gen206 transaction atomicity and monotonic-clock blockers remain open.",
+    "Canonical RAE/state, target main and BASE NOT_PASS are unchanged.",
+    "No training, Harness mutation, promotion or whole-product PASS occurred."
+  ],
+  "admission_rule": "Admit canonical-session discovery, full-deque warm selection and warm telemetry as mechanisms. Treat global absence prose, shared preference injection, persistent-executor debt and total warm-budget claims as open until their falsifiers produce exact-source receipts."
+}

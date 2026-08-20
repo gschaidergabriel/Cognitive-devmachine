@@ -1,12 +1,32 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T13:41:16Z. 964 Commits aus vier Repos, davon 325 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T14:11:16Z. 968 Commits aus vier Repos, davon 326 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 13:53:04 +0000 — entityos: 3 Aenderungen
+
+`3a943ce83eed` · entityos · 13:53 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_selbstbild.py
+
+Zeit: 2026-08-20T13:53:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen
 
@@ -4551,18 +4571,5 @@ Teilstring ohne /release und traf deshalb nie.
 
 ```
 Filter autonomy context to live generation, make snapshot+generation atomic, preserve runnable-goal visibility, redact free-form blocked reasons, and pin the v2 projection contract. Source candidate only; no isolated runtime PASS claimed.
-```
-
-### Test: entityos.exec nimmt seit 18041d730 keinen Caller-Lease mehr an
-
-`eae74c278bbf` · entityos · 03:29 UTC · BACK agent
-
-```
-security: forbid caller EntityOS lease bypass -- EffectGate least entityos.exec
-seitdem ausschliesslich intern (auto_lease), ein von aussen mitgegebener Lease
-wirft jetzt ValueError statt geprueft zu werden. Getestet, dass state.noop
-denselben Recheck-Pfad (assert_lease vor pending/Ausfuehrung) noch exakt so
-durchlaeuft wie frueher entityos.exec -- Capability im Test umgestellt, die
-gepruefte Sicherheitseigenschaft bleibt identisch.
 ```
 

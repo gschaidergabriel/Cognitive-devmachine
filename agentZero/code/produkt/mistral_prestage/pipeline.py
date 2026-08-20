@@ -65,7 +65,8 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
     # ungekuerzten world und werden erst NACH der Wahl materialisiert.
     try:
         world["_gw_kandidaten"] = wettbewerb.kandidaten(world)
-        world["_gw_volltexte"] = wettbewerb.volltexte(world["_gw_kandidaten"])
+        _sb_kern, _sb = wettbewerb.selbstbild_teilen(world.get("canonical_identity") or "")
+        world["_gw_volltexte"] = wettbewerb.volltexte(world["_gw_kandidaten"] + _sb)
     except Exception:
         world["_gw_kandidaten"], world["_gw_volltexte"] = [], {}
     # Der Rueckkanal, Leserichtung: was bei diesen Woertern schon getragen hat.
@@ -565,6 +566,25 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     _weit = os.environ.get("CLAYVERSE_ARBEITSRAUM", "korpus").strip().lower() == "alles"
     _roh = (list(world.get("_gw_kandidaten") or []) if _weit
             else list(world.get("corpus") or []))
+    # ⭐ Das Selbstbild: `voll` (Vorgabe) laesst es unangetastet im Kontext
+    # stehen, `kern` behaelt nur den Kern als Rahmen und schickt die uebrigen
+    # Absaetze in denselben Wettbewerb wie alles andere. Nur im weiten
+    # Arbeitsraum sinnvoll -- ohne ihn gaebe es keinen Wettbewerb, in den sie
+    # gehen koennten, und das Selbstbild waere schlicht gekuerzt.
+    _kern_modus = (_weit and os.environ.get("CLAYVERSE_RAHMEN", "voll")
+                   .strip().lower() == "kern")
+    _selbstbild_kern = None
+    if _kern_modus and isinstance(world.get("canonical_identity"), str):
+        # Der Kern ist regelbar, damit die Grenze gemessen und nicht geglaubt
+        # wird -- genau wie die Schwelle des Wettbewerbs.
+        try:
+            _kz = int(os.environ.get("CLAYVERSE_RAHMEN_ZEICHEN",
+                                     wettbewerb.KERN_ZEICHEN))
+        except ValueError:
+            _kz = wettbewerb.KERN_ZEICHEN
+        _selbstbild_kern, _sb = wettbewerb.selbstbild_teilen(
+            world["canonical_identity"], _kz)
+        _roh = _roh + _sb[:wettbewerb.QUELLEN_DECKEL.get("selbstbild", 12)]
     bewerteter_korpus = wettbewerb.bewerten(
         _roh, frage,
         world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {},
@@ -592,7 +612,8 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     # Nie gekuerzt: ohne canonical_identity weiss die Vorstufe nicht, was Zero
     # ist; ohne anwesender_mensch nicht, mit wem gesprochen wird.
     if world.get("canonical_identity") is not None:
-        packed["canonical_identity"] = world["canonical_identity"]
+        packed["canonical_identity"] = (_selbstbild_kern if _selbstbild_kern is not None
+                                        else world["canonical_identity"])
     if world.get("anwesender_mensch") is not None:
         packed["anwesender_mensch"] = world["anwesender_mensch"]
 
@@ -771,7 +792,7 @@ def _raum_zur_frage(raum, frage: str):
         return raum
     behalten = []
     for eintrag in raum:
-        heu = json.dumps(eintrag, ensure_ascii=False, default=str).lower()
+        heu = wettbewerb._flach(json.dumps(eintrag, ensure_ascii=False, default=str))
         gedeckt = sum(1 for w in worte if wettbewerb._deckt(w, heu))
         if gedeckt >= wettbewerb.MIN_GEDECKT:
             behalten.append(eintrag)

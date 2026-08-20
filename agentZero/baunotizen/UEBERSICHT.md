@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T13:41:16Z. **3057 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-20T14:11:16Z. **3073 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T19:52:22+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T20:37:11+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 2959 |
+| baunotiz | 2975 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1870 |
-| baunotiz | bauverlauf.jsonl | 1044 |
+| baunotiz | git-commit | 1878 |
+| baunotiz | bauverlauf.jsonl | 1052 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3057 · Gegenhypothese: 0 von 3057
+## Hypothese: 0 von 3073 · Gegenhypothese: 0 von 3073
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,102 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-20T19:52:22+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### gwt: open global channel audit and hyperposition-bypass task
+
+`baunotiz-bauverlauf-a68cd13a35706966f679` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:37:11+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### gwt: open global channel audit and hyperposition-bypass task
+
+`baunotiz-git-538a2ced95c60df6d63a3b404374cd54e326144c` · baunotiz · git-commit · 2026-08-20T20:37:11+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+gwt: open global channel audit and hyperposition-bypass task
+
+### research: expose hyperposition side-channel in wide GWT workspace
+
+`baunotiz-bauverlauf-bf21cce33bdad1168e5b` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:36:52+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: expose hyperposition side-channel in wide GWT workspace
+
+`baunotiz-git-7246d6c9fcc7226ddbb37dfb1635b17bbcd1c809` · baunotiz · git-commit · 2026-08-20T20:36:52+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: expose hyperposition side-channel in wide GWT workspace
+
+### gwt: open stable identity and outcome-credit remediation
+
+`baunotiz-bauverlauf-982b13a1863bb729778d` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:35:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### gwt: open stable identity and outcome-credit remediation
+
+`baunotiz-git-f84170d74bc0cd71c65078b2915ce096987d71bf` · baunotiz · git-commit · 2026-08-20T20:35:25+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+gwt: open stable identity and outcome-credit remediation
+
+### research: derive stable GWT identities and split uptake from outcome credit
+
+`baunotiz-bauverlauf-7807f8f5df0e7512819f` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:35:08+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: derive stable GWT identities and split uptake from outcome credit
+
+`baunotiz-git-46bff29fb32e0992dba64d5666483b835bdc213a` · baunotiz · git-commit · 2026-08-20T20:35:08+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: derive stable GWT identities and split uptake from outcome credit
+
+### gwt: open lexical-boundary and evidence-mass falsifier task
+
+`baunotiz-bauverlauf-cf33821bdfe94a53a55e` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:31:17+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### gwt: open lexical-boundary and evidence-mass falsifier task
+
+`baunotiz-git-7f5e42bcbc3acd36e6ebdc5e856e0bef9a6014b8` · baunotiz · git-commit · 2026-08-20T20:31:17+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+gwt: open lexical-boundary and evidence-mass falsifier task
+
+### research: bind GWT lexical-boundary falsifier and evidence-mass challenger
+
+`baunotiz-bauverlauf-c866c6bf9c9d09f56eea` · baunotiz · bauverlauf.jsonl · 2026-08-20T20:30:15+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind GWT lexical-boundary falsifier and evidence-mass challenger
+
+`baunotiz-git-20d221f94a7f928df80a89198fdb43955b8488bd` · baunotiz · git-commit · 2026-08-20T20:30:15+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind GWT lexical-boundary falsifier and evidence-mass challenger
 
 ### research: route Gen197 feedback-channel path split
 
@@ -134,102 +230,6 @@ claycode supervisor: bind Gen195 PTY recurrence and receipt drift
 ### claycode supervisor: bind Gen195 GWT causal bottleneck frontier
 
 `baunotiz-bauverlauf-92b05caaa81a037c2b32` · baunotiz · bauverlauf.jsonl · 2026-08-20T17:56:18+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen195 GWT causal bottleneck frontier
-
-`baunotiz-git-ea39cfd7a193769cc4ed47dccd409dae61e56a73` · baunotiz · git-commit · 2026-08-20T17:56:18+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen195 GWT causal bottleneck frontier
-
-### research: route Gen195 GWT causal bottleneck falsifiers
-
-`baunotiz-bauverlauf-84cdcd92c128c8ce84c1` · baunotiz · bauverlauf.jsonl · 2026-08-20T17:45:02+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen195 GWT causal bottleneck falsifiers
-
-`baunotiz-git-8aaa9fc1b034ecfcbd119b59ab78e6860b622c4c` · baunotiz · git-commit · 2026-08-20T17:45:02+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen195 GWT causal bottleneck falsifiers
-
-### claycode supervisor: steer Gen190 GWT competition and receipt split-brain
-
-`baunotiz-bauverlauf-d7b12eb4f7872df6209e` · baunotiz · bauverlauf.jsonl · 2026-08-20T16:55:53+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: steer Gen190 GWT competition and receipt split-brain
-
-`baunotiz-git-4477d1d4fec2a3bb9e1a92776d48404e9e0f8b76` · baunotiz · git-commit · 2026-08-20T16:55:53+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: steer Gen190 GWT competition and receipt split-brain
-
-### research: route Gen190 GWT competition falsifiers
-
-`baunotiz-bauverlauf-89fb42ef3a1485bf47fa` · baunotiz · bauverlauf.jsonl · 2026-08-20T16:47:32+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen190 GWT competition falsifiers
-
-`baunotiz-git-461fee36147f89304f9c11bef8cb74f72c48eda7` · baunotiz · git-commit · 2026-08-20T16:47:32+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen190 GWT competition falsifiers
-
-### claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
-
-`baunotiz-bauverlauf-5ec07596ac102aeb5a47` · baunotiz · bauverlauf.jsonl · 2026-08-20T16:00:25+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
-
-`baunotiz-git-a39cf04ba5ad2e91ad4cee7a265f6e6083e87bc5` · baunotiz · git-commit · 2026-08-20T16:00:25+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen188 receipt split-brain and question-nearness frontier
-
-### research: route Gen188 question-nearness and receipt split-brain impulse
-
-`baunotiz-bauverlauf-af07c7a431f7f210690c` · baunotiz · bauverlauf.jsonl · 2026-08-20T15:47:29+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen188 question-nearness and receipt split-brain impulse
-
-`baunotiz-git-86f1a61563b4a1b1232f33e294b557c4d31ed447` · baunotiz · git-commit · 2026-08-20T15:47:29+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen188 question-nearness and receipt split-brain impulse
-
-### research: expose Gen186 timeout mirage and anti-echo falsifiers
-
-`baunotiz-bauverlauf-c38c5e85564f93e7f0a6` · baunotiz · bauverlauf.jsonl · 2026-08-20T14:52:19+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

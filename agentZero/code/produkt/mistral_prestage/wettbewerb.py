@@ -193,6 +193,25 @@ werden wie wieder wir wird wo wurde wurden zu zum zur zwar
 
 _WORT = re.compile(r"[a-z0-9äöüß_-]{3,}")
 
+# ⭐ UMLAUTE VEREINHEITLICHEN -- gemessen 2026-08-20, und es hat eine ganze
+# Messreihe gekippt: das Gedaechtnis speicherte "Pruefrechner heisst
+# quirlbaum-1" als "Prüfrechner heißt quirlbaum-1" (die Extraktion schreibt
+# echte Umlaute), die Frage kam als "wie heisst mein Pruefrechner?" herein.
+# Kein einziges Wort traf, die Stelle wurde nicht ausgestrahlt, und Zero
+# antwortete aus dem Profil statt aus dem Gedaechtnis.
+# Beide Schreibweisen sind im Bestand echt und beide bleiben es -- Menschen
+# tippen mal so, mal so, und die Anlage schreibt selbst Umlaute. Also wird
+# verglichen, nicht umerzogen.
+_UMLAUTE = ((chr(228), "ae"), (chr(246), "oe"), (chr(252), "ue"), (chr(223), "ss"))
+
+
+def _flach(t: str) -> str:
+    """Umlautfreie Vergleichsform. Nur zum Vergleichen, nie zum Anzeigen."""
+    t = (t or "").lower()
+    for zeichen, ersatz in _UMLAUTE:
+        t = t.replace(zeichen, ersatz)
+    return t
+
 
 def _worte(text: str) -> list[str]:
     """Inhaltswoerter einer Frage, klein, ohne Allerweltswoerter.
@@ -202,7 +221,7 @@ def _worte(text: str) -> list[str]:
     "LEIHMICH_SLUGS" handelt -- gemessen genau dieser Fall.
     """
     raus, gesehen = [], set()
-    for w in _WORT.findall((text or "").lower()):
+    for w in _WORT.findall(_flach(text)):
         for teil in [w] + [t for t in re.split(r"[-_]", w) if len(t) >= 3]:
             if teil not in _STOPP and teil not in gesehen:
                 gesehen.add(teil)
@@ -261,7 +280,8 @@ def relevanz(treffer: dict[str, Any], frage_worte: list[str],
     """
     if not frage_worte:
         return 0.0
-    heu = " ".join(str(treffer.get(f) or "") for f in ("titel", "ausschnitt", "art", "sphaere")).lower()
+    heu = _flach(" ".join(str(treffer.get(f) or "")
+                          for f in ("titel", "ausschnitt", "art", "sphaere")))
     if not heu.strip():
         return 0.0
     g = gewichte or {}
@@ -387,7 +407,7 @@ _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_a
 # RAHMEN -- wer spricht und mit wem. Ohne sie ist kein Zug deutbar, sie stehen
 # bei jeder Frage gleich, und sie konkurrieren deshalb um nichts.
 QUELLEN_DECKEL = {"korpus": 6, "gedaechtnis": 8, "verlauf": 3,
-                  "kollision": 3, "lesart": 4}
+                  "kollision": 3, "lesart": 4, "selbstbild": 12}
 _KANDIDAT_TEXT_MAX = 600
 
 
@@ -461,6 +481,63 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
             "gw_quelle": "lesart"})
 
     return raus
+
+
+# ── Das Selbstbild als Bewerber ──────────────────────────────────────────
+# ⭐⭐ GEMESSEN 2026-08-20: `canonical_identity` belegt 5541 Zeichen von rund
+# 14.500 und steht bei JEDER Frage gleich da -- zusammen mit Profil (4308) und
+# anwesendem Menschen (1099) sind das rund vier Fuenftel des Kontexts, die
+# nichts mit der gestellten Frage zu tun haben. Der Korpus, das einzige
+# Frageabhaengige, bekommt 1864.
+#
+# Ein globaler Arbeitsraum ohne diese Zahl anzugehen waere Kosmetik: die
+# Kapazitaetsgrenze regelte dann weiter nur den kleinsten Posten.
+#
+# ABER: das Selbstbild ganz wegzunehmen waere falsch. Ein Teil davon IST
+# Rahmen -- wer bin ich, was darf ich, mit wem spreche ich. Ohne das ist kein
+# Zug deutbar. Deshalb wird geteilt statt gekuerzt:
+#   * der KERN (die ersten Absaetze bis KERN_ZEICHEN) bleibt unbedingt stehen,
+#   * jeder weitere Absatz wird ein Bewerber wie jeder andere und muss sich
+#     ueber Passung zur Frage qualifizieren.
+# Eine Frage nach Rechten holt den Absatz ueber Rechte; eine Frage nach einem
+# Dateipfad holt ihn nicht. Das ist derselbe Mechanismus wie beim Korpus, und
+# er braucht keine zweite Begruendung.
+KERN_ZEICHEN = 700
+_ABSATZ_MIN = 80          # kuerzere Stuecke sind Ueberschriften, keine Aussagen
+
+
+def selbstbild_teilen(text: str, kern_zeichen: int = KERN_ZEICHEN):
+    """(Kern, Bewerber) -- der Kern bleibt, der Rest konkurriert.
+
+    Getrennt wird an Absatzgrenzen, nie mitten im Satz: ein abgeschnittenes
+    Selbstbild ist schlimmer als ein kurzes (gemessen am Korpus, wo genau das
+    die Antwort verschluckt hat).
+    """
+    text = str(text or "")
+    if not text.strip():
+        return text, []
+    absaetze = [a.strip() for a in re.split(r"\n\s*\n", text) if a.strip()]
+    kern, rest, laenge = [], [], 0
+    for a in absaetze:
+        if not kern or (laenge + len(a) <= kern_zeichen and not rest):
+            kern.append(a); laenge += len(a)
+        else:
+            rest.append(a)
+    bewerber = []
+    for i, a in enumerate(rest):
+        if len(a) < _ABSATZ_MIN:
+            # zu kurz, um sich zu bewerben -- bleibt beim Kern, statt verloren
+            # zu gehen. Ein Bewerber, der nie gewinnen kann, ist kein Bewerber.
+            kern.append(a)
+            continue
+        kopf = " ".join(a.split())[:70]
+        bewerber.append({
+            "artikel_id": f"selbstbild:{i}",
+            "titel": f"Selbstbild: {kopf}",
+            "ausschnitt": _kurzform(a, 900),
+            "art": "selbstbild", "sphaere": "identitaet",
+            "gw_quelle": "selbstbild"})
+    return "\n\n".join(kern), bewerber
 
 
 def volltexte(kand: list) -> dict[str, str]:
@@ -662,7 +739,7 @@ def lernen(store, frage: str, idf: dict | None, gewaehlt: list, antwort: str) ->
         if not worte or not ids:
             return ergebnis
         ergebnis["worte"] = len(worte)
-        text = (antwort or "").lower()
+        text = _flach(antwort or "")
         jetzt = time.time()
         store.db.executescript(_LERN_TABELLE)
         # Verfall auf ALLES -- auch auf das, was heute nicht drankam. Sonst

@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-19T23:41:12Z aus drei Repos. 477 Eintraege.
+Automatisch erzeugt 2026-08-20T00:11:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -196,10 +196,15 @@ Automatisch erzeugt 2026-08-19T23:41:12Z aus drei Repos. 477 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (237)
+## bau (238)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T00:09 | entityos | `97b55ff5fa8c` | EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen |
+| 2026-08-20T00:00 | clay | `5221a340b570` | EOS-Chronik 2026-08-20 00:00:04 +0000 — clayverse: 1 Aenderungen |
+| 2026-08-19T23:58 | clay | `8c3fc4427f2f` | EOS-Chronik 2026-08-19 23:58:03 +0000 — clayverse: 1 Aenderungen |
+| 2026-08-19T23:56 | unifieddb | `9a7e102a07e2` | EOS-Chronik 2026-08-19 23:56:03 +0000 — unifieddb: 1 Aenderungen |
+| 2026-08-19T23:53 | entityos | `1754d631f038` | EOS-Chronik 2026-08-19 23:53:02 +0000 — entityos: 3 Aenderungen |
 | 2026-08-19T15:09 | entityos | `b1c7e038398b` | EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen |
 | 2026-08-19T15:09 | unifieddb | `dabe10f24aec` | EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen |
 | 2026-08-19T15:08 | unifieddb | `50e521e78d3f` | Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt) |
@@ -255,9 +260,4 @@ Automatisch erzeugt 2026-08-19T23:41:12Z aus drei Repos. 477 Eintraege.
 | 2026-08-18T05:09 | entityos | `d8eedd7f7dd0` | chat page: use the real ZeroAvatar component instead of a static SVG img |
 | 2026-08-18T04:40 | entityos | `27a5e9bffa0e` | eval_set.json: attach hand-authored-not-production disclosure to the data itself |
 | 2026-08-18T04:37 | entityos | `dcc0f97a4eb3` | Add Mistral pre-stage + caveman-German translator module (mv_* tables) |
-| 2026-08-18T04:27 | entityos | `9145cd9e9949` | receipt(go): bind autonomy pulse activation gate addendum |
-| 2026-08-18T04:27 | entityos | `242b0e6d78a0` | security(clayverse): fail closed autonomy pulse activation on split arbiter |
-| 2026-08-18T04:23 | entityos | `62f228f6f988` | receipt(go): bind autonomy supervisor loop source convergence |
-| 2026-08-18T04:22 | entityos | `2056309a90a4` | docs(clayverse): specify bounded autonomy supervisor activation gate |
-| 2026-08-18T04:21 | entityos | `7b2201d7e146` | feat(clayverse): add same-process autonomy pulse lifecycle |
 

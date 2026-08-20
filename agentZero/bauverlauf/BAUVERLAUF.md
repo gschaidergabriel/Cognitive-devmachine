@@ -1,12 +1,109 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-19T23:41:12Z. 894 Commits aus vier Repos, davon 260 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T00:11:13Z. 900 Commits aus vier Repos, davon 265 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
+## 2026-08-20
+
+### EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen
+
+`97b55ff5fa8c` · entityos · 00:09 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  eos-demo/eos-screenshot.sh
+  the artefact/compose.yaml
+  the artefact/runtime_CLAUDE.md
+  udb-backup/udb_backup.py
+
+Zeit: 2026-08-20T00:09:40+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 00:00:04 +0000 — clayverse: 1 Aenderungen
+
+`5221a340b570` · clay · 00:00 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  werkzeug/schluesselwacht.py
+
+Zeit: 2026-08-20T00:00:04+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 1
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
+
 ## 2026-08-19
+
+### EOS-Chronik 2026-08-19 23:58:03 +0000 — clayverse: 1 Aenderungen
+
+`8c3fc4427f2f` · clay · 23:58 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  werkzeug/schluesselwacht.py
+
+Zeit: 2026-08-19T23:58:03+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 1
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 23:56:03 +0000 — unifieddb: 1 Aenderungen
+
+`9a7e102a07e2` · unifieddb · 23:56 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  udb/abruf/paket.py
+
+Zeit: 2026-08-19T23:56:03+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 1
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-19 23:53:02 +0000 — entityos: 3 Aenderungen
+
+`1754d631f038` · entityos · 23:53 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/transport.py
+  udb-backup/udb_backup.py
+
+Zeit: 2026-08-19T23:53:02+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen
 
@@ -4364,149 +4461,6 @@ ungenutzt.
 PRUEFSATZ: nicht sind 50 Prozent verbraucht, sondern sind 50 Prozent verbraucht
 UND ist das Ergebnis gedeckt. Verbrauch ohne Deckung ist kein Fortschritt,
 sondern teurer Text.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### B26 fertig: Clerk-Zugangsdaten in freie-zugaenge.env aufgenommen
-
-`9062d6cc06e4` · clay · 07:17 UTC · ClayVerse
-
-```
-Quelle /opt/agentforge/.env auf seimensch-VPS: 29 Variablen, davon 4 CLERK_ (SECRET_KEY, PUBLISHABLE_KEY, JWKS_URL, WEBHOOK_SECRET). Ziel /etc/clayverse/freie-zugaenge.env vorher 12 Eintraege (nicht 21 wie im Briefing - 21-vs-12 damit als 12 aufgeloest), nachher 16. Kein bestehender CLERK_-Eintrag, kein Konflikt. Backup .vor-clerk angelegt, Modus 600 root:root nach Uebertragung per ls und grep geprueft, alle 4 Namen bestaetigt.
-```
-
-### F46 Arbeitsteilung der Modelle: GLM arbeitet, Claude denkt
-
-`039759205201` · clay · 07:17 UTC · ClayVerse
-
-```
-Eigner: das z.ai-Token ist die ALLGEMEINE ARBEITSINSTANZ von ClayVerse. Die
-20-Euro-Claude-Instanz macht nur die kognitiven Aufgaben innerhalb von
-ClayVerse - aber so, dass MINDESTENS 50 Prozent der Subscription draufgehen.
-
-DIE UNGEWOEHNLICHE RICHTUNG: eine UNTERGRENZE, keine Obergrenze. Es gibt zwei
-Verschwendungen, nicht eine. Uebernutzung: das teure Modell tut Mechanisches,
-das GLM oder Engineering koennte. Unternutzung: es liegt brach, waehrend
-kognitive Arbeit schlecht erledigt wird - ebenfalls Geld fuer nichts, nur
-unsichtbar. Sparsamkeit an der falschen Stelle ist auch Verschwendung, und das
-dreht den ueblichen Token-sparen-Reflex um.
-
-ZU CLAUDE: das Urteil (F31 nicht delegierbar), den Massstab setzen, Analysen
-die den Gesamtueberblick brauchen (F33-Ausnahme), Hyperposition, Weltmodell,
-Architektur, Systemlogik. ZU GLM: alles andere. ZU KEINEM: was Engineering
-loesen kann, verlaesst beide (F44 R3).
-
-REIHENFOLGE BLEIBT: erst Engineering, dann GLM, dann Claude. F46 verteilt nur,
-was nach F44 R3 uebrig bleibt. Wer die Reihenfolge umdreht, fuellt die 50
-Prozent mit Arbeit, die gar kein Modell haette tun duerfen.
-
-ES IST EINE SCHWELLE, ALSO GILT F42 - aber der Fall ist guenstig, das Messgeraet
-existiert schon: claude-limits mit Quelle claude-api und dem Feld geraten. Das
-Tor gehoert ins Kontingentbuch als eigene Bahn. NEUE RICHTUNG: dieses Tor warnt
-bei UNTERSCHREITUNG, alle anderen Schwellen hier deckeln nach oben.
-
-FALSIFIKATOR: werden die 50 Prozent erreicht OHNE dass mechanische Arbeit bei
-Claude landet, traegt die Aufteilung. Werden sie nur erreicht WEIL Claude Dinge
-tut die GLM koennte, ist die Quote erfuellt und der Zweck verfehlt. Die Quote
-allein ist kein Erfolgsmass.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### CLAUDE.md: kurz fragen statt lang erklaeren ist ab jetzt fix, in jeder Sitzung
-
-`9401b0857e38` · clay · 07:13 UTC · ClayVerse
-
-```
-Gabriels Anweisung: das muss ab jetzt fix sein, egal in welcher Session.
-Steht daher ganz oben in CLAUDE.md, wo jede Sitzung es zuerst liest -
-und ebenso in Gabriels lokaler Projektdatei.
-
-Zu wenig ist reparierbar, zu viel ist irreversibel. Er WUERDE oefter
-eingreifen, lange Texte halten ihn ab. Kein Stil, sondern ein
-Pruefmechanismus: eine kurze Frage ist billig zu pruefen, ein langer
-kohaerenter Text nicht - und genau das ist der oberste Fehler F43.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F45 Zu wenig ist reparierbar, zu viel ist IRREVERSIBEL
-
-`cbd6773b82fa` · clay · 07:13 UTC · ClayVerse
-
-```
-Eigner: wenn der User mehr wissen will kann man das immer liefern, aber zu viel
-ist irreversibel. Und: das bekommt man nur mittels Forschung, da es wie so oft
-in der theoretischen Systemphilosophie und Physik NICHT LOGISCH ist.
-
-DAS GESETZ: zu wenig ist reparierbar, der Empfaenger fragt nach, Kosten eine
-Runde. Zu viel ist irreversibel - gesagt ist gesagt, die Aufmerksamkeit ist
-verbraucht, das Eingreifen ist unterblieben. Daraus folgt die Richtung in die
-man irren soll: nach unten. Nicht weil weniger besser waere, sondern weil nur
-der eine Fehler einen Reparaturweg hat.
-
-WARUM ES NICHT LOGISCH IST: die naheliegende Logik sagt mehr Information gleich
-bessere Entscheidung, Vollstaendigkeit sei die sichere Seite. Falsch, und der
-Grund liegt nicht in der Information sondern im EMPFAENGER - seine
-Aufmerksamkeit ist endlich und verbraucht sich unwiederbringlich. Ein
-ueberforderter Empfaenger hoert nicht auf zu lesen, er hoert auf zu PRUEFEN.
-Und dann greift F43 ungebremst durch. Die Asymmetrie ist nur beobachtbar, nicht
-herleitbar - sie zeigt sich im Verhalten des Empfaengers, nicht in den
-Eigenschaften der Nachricht.
-
-ES IST DASSELBE GESETZ WIE VIER ANDERE BEFUNDE VON HEUTE, die ich als vier
-Themen behandelt hatte: F32 Verbotsliste auf hoechstens drei, F35 Paket plus 85
-Prozent mit Auflage unter 30, F38 1000 Wege ohne Vorauswahl, F40 Anzahl
-Moeglichkeiten je Entscheidung. Und Franks 60 Werkzeuge mit 45 nie benutzten
-ist derselbe Satz in klein. Ueberall: der Engpass ist nie das Angebot, sondern
-die Aufnahme, und die verbraucht sich.
-
-BAUREGEL: liefere die kleinste Menge die traegt, und sorge dafuer dass
-Nachfragen billig ist. Niemals umgekehrt. Der teure Teil ist der zweite Satz -
-eine kurze Antwort OHNE Hinweis auf das Vorhandene ist nicht sparsam, sondern
-lueckenhaft. Gilt NICHT fuer die Aufzeichnungen: lang gehoert ins Archiv, kurz
-in die Antwort.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F44 Vier Architekturentscheidungen: Binary/DB-Trennung, Ausleger, Engineering-Gesetz, historische Baseline
-
-`aa46a0d329fa` · clay · 07:12 UTC · ClayVerse
-
-```
-1 ENDGESTALT: API, DB, MODUL das in ein Binary gegossen wird. Unveraenderliches
-ins Binary (Schwellen, Tore, Invarianten), Veraenderliches in die DB. Damit ist
-F42 haerter beantwortet als mein Vorschlag - ein Tor im Binary kann nicht
-weggeredet und nicht nah dran gedeutet werden. Pruefsatz: ist diese Regel
-veraenderlich, dann DB, sonst Modul.
-
-2 SITZUNGEN: Koordination ueber eine TABELLE statt ueber Sperren, Schreiben
-VERSIONIERT statt ueberschreibend, je Sitzung eigene Kennung, aber im Prompt
-EINE Entitaet mit mehreren Auslegern die gleichzeitig interkonnektiv handeln.
-Loest das Schreibproblem anders als ich gefragt hatte und besser: gleichzeitige
-Schreiber kollidieren nicht, sie erzeugen Versionen. Unstimmigkeit nicht
-stillschweigend korrigiert: Eigner sagte alle 2 Sessions, F15 legt hoechstens 3
-fest, als Zahl gilt weiter 3.
-
-3 DAS ENGINEERING-GESETZ: jede kognitive Last, die Engineering loesen kann,
-verlaesst die API - auch wenn sie noch so gut ist. Allgemeiner als meine Frage
-nach der Stufenreihenfolge und ersetzt sie. Auch wenn sie noch so gut ist ist
-der Kern: ein besseres Modell ist KEIN Grund die Last dort zu lassen, nur ein
-teurerer Weg dasselbe zu tun. Direkte Antwort auf F38.
-
-4 FRANKS EVAL-BATTERIE IST NICHT UNSERE GRUNDLINIE. Sie misst ein System OHNE
-echte Zustaende, dem das Kompensationssystem fehlte, das es jetzt als UnifiedDB
-gibt. Wer gegen 63,68 antritt, tritt gegen die Krankheit an, nicht gegen den
-Stand. BERICHTIGUNG an meinem F41. Die mindestens 10 Punkte mehr sind [E] eine
-Einschaetzung, KEIN Lauf - wer sie als Zahl weiterreicht, macht meinen
-Tagesfehler zum sechsten Mal. Wertvoll bleibt sie als Abgleich: sie zeigt was
-ein System OHNE UnifiedDB erreichte, und ist damit die einzige Zahl, die wir
-fuer den Nutzen des Zustandssystems haben.
-
-DIE LERNINGS ALS REGELN R1 bis R4, und sie gehoeren nach F42 selbst ins Modul.
-Eine Regel, die nur im Text steht, ist noch nicht gebaut.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```

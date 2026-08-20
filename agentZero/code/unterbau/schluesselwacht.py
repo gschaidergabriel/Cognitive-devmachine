@@ -501,13 +501,28 @@ def rest_per_chat(sonde_name: str, schluessel: str) -> dict:
     req = urllib.request.Request(w["url"], data=daten, headers={
         "Authorization": f"Bearer {schluessel}", "Content-Type": "application/json",
         "User-Agent": ABSENDER}, method="POST")
+    # Rueckgabe traegt seit 2026-08-20 zusaetzlich den Status unter dem
+    # Sonderschluessel "_chat_http" (und den Fehlertext unter "_chat_text").
+    # Vorher wurde beides verschluckt -- ein Schluessel mit totem Abo sah an
+    # /models gruen aus und wurde taeglich als GESUND gemeldet, waehrend jeder
+    # Produktionsaufruf an /chat/completions 402 bekam. Der Sonderschluessel
+    # beginnt mit "_", damit ihn die Rest-Anzeige (_kurz_rest) nicht als
+    # Kontingentwert missversteht.
     try:
         with urllib.request.urlopen(req, timeout=40) as r:
-            return _rest_aus_kopf(dict(r.headers))
+            d = _rest_aus_kopf(dict(r.headers))
+            d["_chat_http"] = int(r.status)
+            return d
     except urllib.error.HTTPError as e:
-        return _rest_aus_kopf(dict(e.headers or {}))
-    except Exception:
-        return {}
+        d = _rest_aus_kopf(dict(e.headers or {}))
+        d["_chat_http"] = int(e.code)
+        try:
+            d["_chat_text"] = e.read(2000).decode("utf-8", "replace")
+        except Exception:
+            d["_chat_text"] = ""
+        return d
+    except Exception as e:
+        return {"_chat_http": 0, "_chat_text": f"{type(e).__name__}: {e}"[:300]}
 
 
 # ═══════════════════════════════════════════════════════════════════════
@@ -523,7 +538,13 @@ AUTH_WOERTER = (
 )
 ABO_WOERTER = ("upgrade to", "upgrade your", "does not have access",
                "not subscribed", "pro plan", "requires a paid",
-               "subscribe to", "plan to get access")
+               "subscribe to", "plan to get access",
+               # 2026-08-20 gemessen: Mistral antwortet auf einen lebenden
+               # Schluessel ohne aktives Abo mit 402 und GENAU diesem Satz --
+               # "check your subscription". Ohne das Wort landete der Fall in
+               # UNKLAR und kostete taeglich einen Modellaufruf, um dann doch
+               # "Abonnement nicht aktiv" zu sagen. Mechanisch statt geraten.
+               "check your subscription", "your subscription")
 KONTINGENT_WOERTER = ("rate limit", "rate_limit", "quota", "too many requests",
                       "resource_exhausted", "over capacity", "exceeded")
 MODELL_WOERTER = ("model", "modell", "unavailable for", "no endpoints",
@@ -883,8 +904,22 @@ def cmd_pruefen(a) -> None:
                              _rest_aus_koerper(sonde, r["leib"]).items() if y is not None})
             if (a.rest and SONDEN[sonde].get("rest") == "chat"
                     and klasse in LEBT and sonde in REST_CHAT):
-                rest.update(rest_per_chat(sonde, k))
+                _chat = rest_per_chat(sonde, k)
                 buchen(REST_CHAT[sonde]["zugang"], 1, "schluesselwacht-restzaehler")
+                # ── Der Chat-Endpunkt entscheidet, wenn er widerspricht ──
+                # Nur bei PRO-SCHLUESSEL-Lagen (401/402/403): das sind die
+                # Faelle, in denen DIESER Schluessel im Betrieb nicht traegt,
+                # obwohl /models ihn kennt. 429/5xx bleiben aussen vor -- ein
+                # voller Topf oder eine Anbieterstoerung sagt nichts ueber den
+                # Schluessel und wuerde ihn nur zu Unrecht anschwaerzen.
+                _chttp = int(_chat.pop("_chat_http", 0) or 0)
+                _ctext = _chat.pop("_chat_text", "")
+                rest.update(_chat)
+                if _chttp in (401, 402, 403):
+                    klasse, regel = einordnen(_chttp, _ctext)
+                    regel = (f"Chat-Endpunkt HTTP {_chttp} trotz gruener "
+                             f"/models-Sonde — {regel}")
+                    fehler = _ohne_schluessel(_ctext, u.values())[:300]
             kosten = SONDEN[sonde].get("kostet")
             if kosten and klasse in LEBT:
                 buchen(kosten[0], kosten[1], "schluesselwacht-sonde")

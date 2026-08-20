@@ -1979,8 +1979,11 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
     # Lift-Berechnung moeglich, nur additives Hochzaehlen bis zum Deckel.
     lernen(c, result, war_treffer=cache_hit)
     c.commit()
-    if own:
-        c.close()
+    # ACHTUNG: hier NICHT schliessen. Der F92b-Block unten braucht `c` noch.
+    # Bis 2026-08-20 stand hier `if own: c.close()`, acht Zeilen vor seinem
+    # eigenen Verbraucher -- jeder Aufruf ohne mitgegebene Verbindung (Zeros
+    # Pfad: MCP korpus_tief, Vorstufe) verlor damit still Erfolgsmarke UND
+    # Wegehierarchie. Geschlossen wird jetzt am Ende, in jedem Fall.
 
     # ── F92b: Marke setzen -- was hat getragen? ──────────────────────────
     #
@@ -2036,6 +2039,7 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
             except Exception:
                 _weg_schema(_h)          # Tabelle fehlt noch -> anlegen, dann erneut
                 _befahren(_h, _wege, sitzung=str(wirt or "unbekannt"))
+        c.commit()   # ungeschriebene Buchung ist keine Buchung
     except Exception as _fehler:
         # NICHT verschweigen. Ein stiller Buchfuehrungsfehler sieht aus wie
         # "es gab nichts zu buchen" -- genau so blieb diese Tabelle einen
@@ -2043,7 +2047,12 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
         import sys as _s
         print(f"paket: Erfolgsmarke nicht gesetzt ({type(_fehler).__name__}: {_fehler})",
               file=_s.stderr)
-
+    finally:
+        # Erst hier, und immer: die eigene Verbindung ueberlebt genau so lange
+        # wie ihr letzter Verbraucher. `finally` statt einer zweiten
+        # Schliess-Zeile, damit kein neuer Rueckgabepfad sie wieder verliert.
+        if own:
+            c.close()
 
     return result
 

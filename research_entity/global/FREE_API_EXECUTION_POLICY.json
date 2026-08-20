@@ -190,6 +190,16 @@
     "executable_evidence": "test_retry_after_header_access_failure_preserves_rate_limit_receipt",
     "counterhypothesis": "Header lookup is total once an adapter exposes a headers object; falsified by an injected mapping-compatible adapter whose get operation raises ValueError: the regular-response path changed 429 to invalid_provider_response and the HTTPError path escaped without a receipt."
   },
+  "passive_retry_after_value_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "A Retry-After value returned by a transport adapter must be an exact built-in string before parsing; polymorphic string subclasses use the conservative 60-second fallback without executing overridden methods, reclassifying the received HTTP 429 or suppressing its receipt.",
+    "sources": [
+      "https://docs.python.org/3/library/functions.html#isinstance",
+      "https://www.rfc-editor.org/rfc/rfc9110.html#section-10.2.3"
+    ],
+    "executable_evidence": "test_active_retry_after_value_preserves_rate_limit_receipt",
+    "counterhypothesis": "isinstance(value, str) proves that a transport-provided Retry-After value is passive text; falsified locally because a str subclass executed its overridden strip method, downgraded a regular 429 to incomplete_provider_response and escaped the HTTPError path without a receipt."
+  },
   "response_header_property_failure": {
     "checked_at": "2026-08-14",
     "claim": "The transport adapter's headers attribute is optional metadata behind a potentially executable descriptor. Failure while retrieving that property cannot suppress or reclassify an already received HTTP 429; both response forms use the 60-second fallback and retain EXECUTED.",
@@ -542,6 +552,7 @@
     "Receipt duration is measured on a monotonic clock, while absolute Retry-After HTTP-date cooldown uses the wall-clock UTC instant at response receipt.",
     "Oversized Retry-After decimal values that exceed runtime integer-conversion limits use the 60-second fallback and cannot escape or suppress the execution receipt.",
     "Failure to access Retry-After metadata uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
+    "Retry-After values returned by transport adapters are exact built-in strings before parsing; polymorphic values use the 60-second fallback without executing methods or reclassifying an already received HTTP 429.",
     "Failure while retrieving an adapter's headers property uses the 60-second fallback and cannot suppress or reclassify an already received HTTP 429 execution receipt.",
     "Retry-After receipt cooldown metadata is capped at 86400 seconds for both delay-seconds and HTTP-date forms; the request remains nonretryable and requires fresh evaluation after the bounded horizon.",
     "Rate limits and provider faults trigger bounded cooldown and rerouting, never retry storms."

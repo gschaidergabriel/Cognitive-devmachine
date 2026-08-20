@@ -540,10 +540,18 @@ def run_prestage(
             "caveman_prompt": "", "epistemik": {"bekannt": [], "unbekannt": []}}
     for k in _fehlend:
         payload[k] = _DEF.get(k, "")
-    if "memory_artefacts" in _fehlend:
-        # Siehe Modul-Historie: weggelassen heisst "nicht nachgesehen", nicht
-        # "nichts gefunden". Mechanisch nachreichen statt leer behaupten.
-        payload["memory_artefacts"] = _gedaechtnis_mechanisch(world, raw_prompt)
+    # Weggelassen ODER leer: beides ist eine unbelegte Behauptung ueber das
+    # Gedaechtnis. Der Wortabgleich unten laesst eine BERECHTIGTE leere Liste
+    # leer -- siehe Modul-Historie 2026-08-20.
+    if not payload.get("memory_artefacts"):
+        _nachgereicht = _gedaechtnis_mechanisch(world, raw_prompt)
+        if _nachgereicht:
+            payload["memory_artefacts"] = _nachgereicht
+            if "memory_artefacts" not in _fehlend:
+                import sys as _sys
+                print("prestage: memory_artefacts war leer, "
+                      f"{len(_nachgereicht)} Eintraege mechanisch nachgereicht",
+                      file=_sys.stderr)
     if not str(payload.get("caveman_prompt") or "").strip():
         payload["caveman_prompt"] = (
             "answer the human's request honestly and directly; if you do not have "

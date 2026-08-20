@@ -267,6 +267,19 @@ def _is_unicode_scalar_text(value) -> bool:
     )
 
 
+def _enforce_pre_serialization_request_bound(
+    messages: tuple[dict[str, str], ...], model: str
+) -> None:
+    """Reject requests whose JSON lower bound already exceeds the byte cap."""
+    lower_bound = len(model)
+    for message in messages:
+        # JSON contains at least both scalar lengths plus one object pair of
+        # delimiters. Escaping, field names and separators can only add bytes.
+        lower_bound += len(message["role"]) + len(message["content"]) + 2
+        if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
+            raise ValueError("provider_request_too_large")
+
+
 def _transport_metadata_or_none(response, attribute):
     """Treat transport-provided properties as untrusted metadata."""
     try:
@@ -569,6 +582,7 @@ def _execute_chat_locked(
 ) -> dict:
     """Execute one bounded chat request and return output plus a redacted receipt."""
     request_messages = _snapshot_text_chat_request(messages, model)
+    _enforce_pre_serialization_request_bound(request_messages, model)
     body = json.dumps(
         {
             "model": model,

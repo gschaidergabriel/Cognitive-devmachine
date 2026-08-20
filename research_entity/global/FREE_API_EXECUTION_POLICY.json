@@ -408,6 +408,16 @@
     "executable_evidence": "test_context_exit_cannot_suppress_invalid_status_receipt",
     "counterhypothesis": "An outer try/except around with is sufficient to preserve every receipt; falsified because a true __exit__ suppressed missing-status validation, left outcome undefined and caused UnboundLocalError outside the receipt boundary."
   },
+  "response_context_process_control_boundary": {
+    "checked_at": "2026-08-20",
+    "claim": "BaseException process-control signals raised in the foreign response suite are transported across cleanup and immediately re-raised unchanged; adapter __exit__ cannot suppress them and they are never converted into execution receipts.",
+    "sources": [
+      "https://docs.python.org/3/library/exceptions.html#BaseException",
+      "https://docs.python.org/3/reference/datamodel.html#object.__exit__"
+    ],
+    "executable_evidence": "test_context_exit_cannot_suppress_process_control_signal",
+    "counterhypothesis": "Catching only Exception inside the suite preserves deliberate BaseException propagation; falsified because a true __exit__ suppressed SystemExit and execution continued as a normal incomplete-provider receipt."
+  },
   "invariants": [
     "Never serialize, log, commit, echo or display API secret values.",
     "Never access Together, including discovery, probes, routing and fallback.",
@@ -459,6 +469,7 @@
     "Provider responses larger than 2000000 bytes are detected with a one-byte sentinel read, classified as provider_response_too_large, and never reach VERIFIED or DONE.",
     "Response-size overflow is carried beyond the foreign response context before classification; adapter __exit__ cannot suppress a MAX+1 overflow or allow oversized content into VERIFIED or DONE.",
     "Response-suite Exceptions are captured before foreign context cleanup and classified afterward; adapter __exit__ cannot suppress invalid-status, body-type or body-read evidence needed for a receipt.",
+    "Response-suite BaseException signals cross foreign cleanup only to be re-raised unchanged; they cannot be suppressed by adapter __exit__ or converted into receipts.",
     "Every real provider request must emit a redacted execution receipt.",
     "No received non-2xx status automatically authorizes replay of the Chat Completions POST; replay requires changed input, operator recovery, provider-supported idempotency or proof that the original request was not applied.",
     "A valid Retry-After field on HTTP 429 determines cooldown for a later request in either delay-seconds or HTTP-date form; absolute dates are measured from response receipt rather than request start, absent or invalid fields use the conservative 60-second fallback, and the same POST remains nonretryable.",

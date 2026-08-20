@@ -117,6 +117,32 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertIsNone(caught.exception.__cause__)
         self.assertFalse(called)
 
+    def test_text_request_rejects_active_string_subclasses(self):
+        leaked_text = "request-string-method-must-not-run"
+
+        for field, expected_error in (
+            ("model", "model_must_be_nonempty_string"),
+            ("role", "message_role_must_be_nonempty_string"),
+            ("content", "message_content_must_be_string"),
+        ):
+            with self.subTest(field=field):
+                method_calls = []
+
+                class ActiveString(str):
+                    def strip(self, *args, **kwargs):
+                        method_calls.append("strip")
+                        raise LookupError(leaked_text)
+
+                model = ActiveString("mock") if field == "model" else "mock"
+                messages = [{"role": "user", "content": "hello"}]
+                if field != "model":
+                    messages[0][field] = ActiveString(messages[0][field])
+
+                with self.assertRaisesRegex(ValueError, expected_error) as caught:
+                    MOD.execute_chat(messages, model=model, environ={})
+                self.assertEqual(method_calls, [])
+                self.assertNotIn(leaked_text, repr(caught.exception))
+
     def test_together_is_hard_denied_even_if_key_exists(self):
         env = {"TOGETHER_API_KEY": "must-not-be-touched"}
         self.assertIn("together", MOD.DENIED_PROVIDERS)

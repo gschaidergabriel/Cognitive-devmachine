@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-20T12:11:17Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-20T12:41:16Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 705 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2433 Artikel, 1404 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2434 Artikel, 1405 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -192,8 +192,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB U2 — External Evidence Ledger** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
 - **FUSION F6 -> UnifiedDB** — `KMP-FUS-F6-POSTWORKER-dup7` · begriff
 - **UnifiedDB — Authoritative Projection Outbox V1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
-- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB Emergence Lab v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Lease-Fenced Projection Worker V1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
 - **KMP — Android R1 -> UnifiedDB feedback** — `KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB` · begriff
@@ -201,7 +201,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB Segmented Pulse Maintenance S1 (SPM-S1)** — `runtime-UNIFIEDDB_SEGMENTED_PULSE_MAINTENANC` · bereich_runtime
 - **Clay G11 Evidence Ledger — MOSAIC / UnifiedDB / MRSC** — `trigger_runs-clay-clay-20260808T2033p0700-ch` · bereich_trigger_runs
 - **UnifiedDB — Deeper Delta Run, Target-Executed Extension** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
-- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **unifieddb_claygraph_assembly.py** — `harness-reference-unifieddb_claygraph_assemb` · bereich_harness
 - **unifieddb_emergent_cascade.py** — `harness-reference-unifieddb_emergent_cascade` · bereich_harness
 - **unifieddb_emergent_compact.py** — `harness-reference-unifieddb_emergent_compact` · bereich_harness
@@ -209,6 +208,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **unifieddb_emergent_preprocessor.py** — `harness-reference-unifieddb_emergent_preproc` · bereich_harness
 - **unifieddb_query_plane.py** — `harness-reference-unifieddb_query_plane.py` · bereich_harness
 - **RAE_UNIFIEDDB_SCHEMA.sql** — `runtime-RAE_UNIFIEDDB_SCHEMA.sql` · bereich_runtime
+- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **UnifiedDB Emergence Meter v0.3 — Adversarial Concordance Gate** — `trigger_runs-emergenz-20260809T204545p0700_u` · bereich_trigger_runs
 - **UnifiedDB — V4 Fixed-SQLite Process-Crash Composition** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
 - **unifieddb_claygraph_retrieval_candidate.py** — `experiments-unifieddb_claygraph_retrieval-un` · bereich_experiments
@@ -270,8 +270,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
 - **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB + ClayGraph Retrieval Fusion — 2026-08-10** — `experiments-unifieddb_claygraph_retrieval-FU` · bereich_experiments
-- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB + ClayGraph -> Possibility Preprocessor Fusion Handoff** — `20260810T0730p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB U11 — Proof-Carrying Associative Memory Fabric (PCAMF)** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **UnifiedDB / Database Pulse — Adaptive Preprocessor + Maintenance Fusion** — `20260810T0740p0700_UNIFIEDDB_DATABASE_PULSE_` · forschungsergebnis
 - **UnifiedDB Emergence Meter v0.2 Research Delta — OOD Robustness and Abstention** — `trigger_runs-emergenz-20260809T213500p0700_u` · bereich_trigger_runs
@@ -279,17 +279,17 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB Research Run U1 — Clay Unified Semantic Persistence Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T20` · bereich_trigger_runs
 - **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
-- **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **UnifiedDB / Database Pulse — V1→V4 Iterative Build, Falsification and Fusion** — `20260810T0745p0700_CHATGPT_UNIFIEDDB_DATABAS` · forschungsergebnis
-- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
+- **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **Linux and Android can share the same UnifiedDB semantics while using different physical placements a** — `H-U2-019` · hypothese
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
 - **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
 - **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
 - **Closed PF tree segment02a modified endpoint tail m062..m067 at immutable ref 0fd27f. 6/6 resolved, z** — `rooms-center_events-20260809T1434p0700_666_p` · bereich_rooms
-- **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
 - **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
-- **Truthful provenance-bound outcome re-entry causally improves downstream adaptive behavior; the causa** — `C-LOOPCORE-L0-001` · behauptung
+- **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
 - **UnifiedDB / Database Pulse — V5 lifecycle, model identity, integrity use-boundary delta** — `20260810T0750p0700_UNIFIEDDB_PULSE_V5_IDENTI` · forschungsergebnis
+- **Truthful provenance-bound outcome re-entry causally improves downstream adaptive behavior; the causa** — `C-LOOPCORE-L0-001` · behauptung
 - **Segment01 modified_paths m064..m095 closed exactly: 32/32 immutable-head Git blob identities, zero m** — `rooms-center_events-20260809T1417p0700_666_p` · bereich_rooms
 - **UnifiedDB U2: CORF should model placement as independent runtime axes** — `KMP-U2-CPPF-FRANK` · begriff
 - **UnifiedDB should initially be one typed logical query/transaction plane compiled onto specialized ph** — `F2-G11-004` · hypothese
@@ -298,8 +298,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Edge deployments may keep vector/graph indexes physically separate while exposing the same UnifiedDB** — `H-G11-062` · hypothese
 - **Zero-copy removes copies but not synchronization and coherence cost** — `KMP-HYP-ZEROCOPY-BOUNDARY-COST` · hypothese
 - **Capability issuer/gateway, secret stores and high-blast-radius external effects remain physically is** — `F2-G11-016` · hypothese
-- **Separating visual state into four lifetimes prevents state amplification and stale-feature errors wh** — `H-Q23-CACHE-LIFETIME-01` · hypothese
 - **FRANK should consume operation-specific identity capsules over logical UnifiedDB** — `KMP-G11-MOSAIC-FRANK` · begriff
+- **Separating visual state into four lifetimes prevents state amplification and stale-feature errors wh** — `H-Q23-CACHE-LIFETIME-01` · hypothese
 - **ClayGraph is a specialized derived memory view inside logical UnifiedDB** — `KMP-G11-UNIFIEDDB-ROUTING` · begriff
 - **UnifiedDB physical placement is multi-axis, not monolith-vs-polystore** — `KMP-U2-PLACEMENT-LATTICE` · begriff
 - **UnifiedDB Research Run U2 — Causal Polyglot Placement Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs

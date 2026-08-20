@@ -76,6 +76,7 @@ GRENZEN, ABSICHTLICH ENG GEZOGEN
 """
 from __future__ import annotations
 
+import json
 import re
 import time
 from typing import Any
@@ -287,7 +288,109 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
 # Arbeitsraum, nachdem gewaehlt wurde.
 _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
                    "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
-                   "gw_gelernt", "gw_zugelassen")
+                   "gw_gelernt", "gw_zugelassen", "gw_quelle")
+
+
+# ── EIN Arbeitsraum fuer alle Quellen ────────────────────────────────────
+# ⭐⭐ DER GROESSTE GEMESSENE MANGEL, und er stand von Anfang an in den Zahlen:
+# der Wettbewerb regelte NUR den Korpus. Gedaechtnis, Gespraechsverlauf,
+# Kollisionen und Lesarten gingen unbedingt in den Kontext, das Profil
+# (8480 Zeichen) und die Identitaet (5535) sogar an jeder Kappung vorbei.
+# Gemessen am 20.08.: der erklaerte Engpass von 10.000 Zeichen begrenzte einen
+# tatsaechlichen Kontext von 17.878 -- bei "Kappung 0" sah die Vorstufe immer
+# noch 8790 Zeichen. Eine Kapazitaetsgrenze, die vier Fuenftel des Inhalts
+# nicht anfasst, ist keine.
+#
+# Ein globaler Arbeitsraum heisst: ALLE Quellen bewerben sich um DIESELBEN
+# wenigen Plaetze, nach demselben Mass, an derselben Schwelle. Was gewinnt,
+# wird ausgestrahlt; was verliert, bleibt im praebewussten Vorrat abrufbar,
+# aber ungesendet.
+#
+# AUSGENOMMEN bleiben genau zwei Dinge, und aus einem angebbaren Grund:
+# `canonical_identity` und `anwesender_mensch` sind nicht INHALT, sondern
+# RAHMEN -- wer spricht und mit wem. Ohne sie ist kein Zug deutbar, sie stehen
+# bei jeder Frage gleich, und sie konkurrieren deshalb um nichts.
+QUELLEN_DECKEL = {"korpus": 6, "gedaechtnis": 8, "verlauf": 3,
+                  "kollision": 3, "lesart": 4}
+_KANDIDAT_TEXT_MAX = 600
+
+
+def _kurzform(x: Any, n: int = _KANDIDAT_TEXT_MAX) -> str:
+    t = x if isinstance(x, str) else json.dumps(x, ensure_ascii=False, default=str)
+    t = " ".join(str(t).split())
+    return t[:n]
+
+
+def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
+    """Alle Quellen in EINER Bewerberliste, in derselben Form.
+
+    Die Form ist die des Korpustreffers (`artikel_id`/`titel`/`ausschnitt`/
+    `art`/`sphaere`), damit `relevanz` ueberall dasselbe rechnet und kein
+    Bewerber wegen seiner Herkunft anders behandelt wird. `art` traegt die
+    Quelle -- so bleibt im Protokoll sichtbar, WER den Platz gewonnen hat.
+    """
+    raus: list[dict[str, Any]] = []
+
+    for t in (world.get("corpus") or [])[:QUELLEN_DECKEL["korpus"]]:
+        if isinstance(t, dict) and t.get("artikel_id"):
+            k = dict(t)
+            # Form vereinheitlichen: `relevanz` liest genau diese Felder, und
+            # ein Bewerber, dem eines fehlt, wuerde still schlechter bewertet
+            # als einer aus derselben Quelle, dem es nicht fehlt.
+            k.setdefault("titel", "")
+            k.setdefault("ausschnitt", "")
+            k.setdefault("art", "wissen")
+            k.setdefault("sphaere", "")
+            k["gw_quelle"] = "korpus"
+            raus.append(k)
+
+    for i, m in enumerate((world.get("durable_memory") or [])[:QUELLEN_DECKEL["gedaechtnis"]]):
+        if not isinstance(m, dict):
+            continue
+        wert = _kurzform(m.get("value"))
+        if not wert:
+            continue
+        raus.append({
+            "artikel_id": f"gedaechtnis:{i}",
+            "titel": f"{m.get('kind') or 'Notiz'} ueber {m.get('subject') or 'unbekannt'}",
+            "ausschnitt": wert, "art": "gedaechtnis", "sphaere": "person",
+            "gw_quelle": "gedaechtnis", "gw_roh": m})
+
+    for i, z in enumerate((world.get("own_recent") or [])[:QUELLEN_DECKEL["verlauf"]]):
+        text = _kurzform(z.get("content") if isinstance(z, dict) else z)
+        if not text:
+            continue
+        raus.append({
+            "artikel_id": f"verlauf:{i}",
+            "titel": "frueherer Zug in diesem Gespraech",
+            "ausschnitt": text, "art": "verlauf", "sphaere": "gespraech",
+            "gw_quelle": "verlauf"})
+
+    for i, c in enumerate((world.get("cross_session_collision") or [])[:QUELLEN_DECKEL["kollision"]]):
+        text = _kurzform(c)
+        if not text:
+            continue
+        raus.append({
+            "artikel_id": f"kollision:{i}", "titel": "Kollision mit einer anderen Sitzung",
+            "ausschnitt": text, "art": "kollision", "sphaere": "gespraech",
+            "gw_quelle": "kollision"})
+
+    for i, h in enumerate((world.get("hyperposition") or [])[:QUELLEN_DECKEL["lesart"]]):
+        text = _kurzform(h)
+        if not text:
+            continue
+        raus.append({
+            "artikel_id": f"lesart:{i}", "titel": "gleichzeitig gueltige Lesarten",
+            "ausschnitt": text, "art": "lesart", "sphaere": "weltmodell",
+            "gw_quelle": "lesart"})
+
+    return raus
+
+
+def volltexte(kand: list) -> dict[str, str]:
+    """Kennung -> Text, fuer die Materialisierung NACH der Wahl."""
+    return {str(k.get("artikel_id")): str(k.get("ausschnitt") or "")
+            for k in (kand or []) if isinstance(k, dict) and k.get("artikel_id")}
 
 
 def nur_kennung(bewertet: list) -> list[dict[str, Any]]:

@@ -1,12 +1,53 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T12:11:17Z. 951 Commits aus vier Repos, davon 318 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T12:41:16Z. 952 Commits aus vier Repos, davon 320 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### EOS-Chronik 2026-08-20 12:40:43 +0000 — entityos: 2 Aenderungen
+
+`6b9048c7ab2b` · entityos · 12:40 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-20T12:40:43+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-20 12:34:42 +0000 — entityos: 5 Aenderungen
+
+`ebc6ceac6208` · entityos · 12:34 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/BEFUND-5-6.md
+  forschung/cswt-z-pilot/cswt-rueck.jsonl
+  forschung/cswt-z-pilot/cswt_rueckkanal.py
+  forschung/cswt-z-pilot/rueck_aus.py
+  forschung/cswt-z-pilot/rueck_zerlegen.py
+
+Zeit: 2026-08-20T12:34:42+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-20 12:09:37 +0000 — entityos: 2 Aenderungen
 
@@ -4502,28 +4543,5 @@ Dockerfile-Kommentar direkt ueber der HEALTHCHECK-Zeile sagt es explizit:
 Image-Health ist liveness-only, die tiefere Laufzeitbereitschaft (Canonical
 State + tmux/Claude-Admission) haengt bewusst separat an /readyz, nicht am
 Container-Healthcheck. Der Test verlangte das Gegenteil.
-```
-
-### Test: fehlender sts-Claim ist laut Docstring ok, nicht abzulehnen
-
-`cfe2f0cf2e99` · entityos · 03:24 UTC · BACK agent
-
-```
-ClerkTokenVerifier.verify()s eigener Docstring sagt es direkt: sts ist fuer
-gewoehnliche authentifizierte Sessions optional, nur ein EXPLIZIT nicht-aktiver
-Status wird abgelehnt. Der Test verlangte Ablehnung bei fehlendem sts -- Code
-und Doku waren sich einig, nur der Test nicht. Assertion umgedreht: fehlendes
-sts wird jetzt als akzeptiert geprueft.
-```
-
-### Test: required_target nachgezogen + Regex-Tippfehler in Fehlermeldungs-Match korrigiert
-
-`2e7577660632` · entityos · 03:21 UTC · BACK agent
-
-```
-Gleiche Ursache wie de1ffd051: verified_effect braucht seit 8b7368efd ein
-required_target. Zusaetzlich matchte der zweite Test von Anfang an nie
-richtig -- die Meldung heisst "independently verifiable effect capability",
-nicht "independent capability"; der Test hat das wohl nie gruen gesehen.
 ```
 

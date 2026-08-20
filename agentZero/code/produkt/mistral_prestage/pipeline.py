@@ -61,6 +61,13 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
     # Treffer in den Vorstufenkontext mussten; seit die Vorstufe gar keinen
     # Text mehr sieht, ist das Budget frei. Ausgestrahlt werden hoechstens drei
     # Stellen -- die duerfen dafuer vollstaendig genug sein, um zu antworten.
+    # Alle Quellen als Bewerber, in einer Form -- die Volltexte bleiben hier im
+    # ungekuerzten world und werden erst NACH der Wahl materialisiert.
+    try:
+        world["_gw_kandidaten"] = wettbewerb.kandidaten(world)
+        world["_gw_volltexte"] = wettbewerb.volltexte(world["_gw_kandidaten"])
+    except Exception:
+        world["_gw_kandidaten"], world["_gw_volltexte"] = [], {}
     # Der Rueckkanal, Leserichtung: was bei diesen Woertern schon getragen hat.
     try:
         world["_gw_gelernte"] = wettbewerb.gelernte_boosts(
@@ -446,16 +453,23 @@ def _korpus_zeile(world: dict[str, Any], treffer: list | None = None,
     voll = {str(t.get("artikel_id") or ""): t
             for t in ((volltext or {}).get("corpus") or []) if isinstance(t, dict)}
     lang = (volltext or {}).get("_gw_lang") or {}
+    # Bewerber aus Gedaechtnis/Verlauf/Kollision stehen nicht in `corpus` --
+    # ihr Text liegt in der Volltextkarte, die beim Bau der Bewerberliste
+    # entstanden ist.
+    andere = (volltext or {}).get("_gw_volltexte") or {}
     zeilen = []
     for t in treffer[:_KORPUS_IM_PROMPT_N]:
         kennung = str(t.get("artikel_id") or "").strip()
         quelle = voll.get(kennung) or t
         titel = str(t.get("titel") or quelle.get("titel") or "").strip()
-        aus = " ".join(str(lang.get(kennung) or quelle.get("ausschnitt")
+        aus = " ".join(str(lang.get(kennung) or andere.get(kennung)
+                            or quelle.get("ausschnitt")
                             or t.get("ausschnitt") or "").split())
         if not aus:
             continue
-        zeilen.append(f"- [{kennung}] {titel}: {aus}")
+        woher = str(t.get("gw_quelle") or "korpus")
+        marke = "" if woher == "korpus" else f" ({woher})"
+        zeilen.append(f"- [{kennung}]{marke} {titel}: {aus}")
     if not zeilen:
         return ""
     kopf = ("CORPUS (already retrieved for THIS question -- the answer is often "
@@ -540,8 +554,19 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     # Sicherheitsnetz weiter unten nach BEDEUTUNG statt nach Abrufreihenfolge:
     # gekuerzt wird dann das Schwaechste, nicht das Letzte.
     frage = str(frage or (world.get("retrieval_receipt") or {}).get("query") or "")
+    # ⭐⭐ WIE WEIT REICHT DER ARBEITSRAUM?
+    #   korpus (Vorgabe) nur die Korpustreffer bewerben sich -- alles andere
+    #                    geht unbedingt in den Kontext. Der gemessene Zustand.
+    #   alles            Korpus, Gedaechtnis, Verlauf und Kollisionen bewerben
+    #                    sich um DIESELBEN wenigen Plaetze, an derselben
+    #                    Schwelle. Erst das ist ein GLOBALER Arbeitsraum.
+    # Als Schalter gebaut, damit der Unterschied gemessen und nicht behauptet
+    # wird -- der eine Arm ist die Kontrolle des anderen.
+    _weit = os.environ.get("CLAYVERSE_ARBEITSRAUM", "korpus").strip().lower() == "alles"
+    _roh = (list(world.get("_gw_kandidaten") or []) if _weit
+            else list(world.get("corpus") or []))
     bewerteter_korpus = wettbewerb.bewerten(
-        list(world.get("corpus") or []), frage,
+        _roh, frage,
         world.get("_gw_haeufigkeiten") or {}, world.get("_gw_idf") or {},
         world.get("_gw_gelernte") or {})
 
@@ -553,9 +578,13 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
         bewerteter_korpus = wettbewerb.nur_kennung(bewerteter_korpus)
 
     packed: dict[str, Any] = {
-        "own_recent": own_recent,
-        "durable_memory": durable_memory,
-        "cross_session_collision": list(world.get("cross_session_collision") or []),
+        # Im weiten Modus stehen Verlauf, Gedaechtnis und Kollisionen als
+        # BEWERBER in `corpus` -- sie hier zusaetzlich im Volltext zu zeigen
+        # waere genau der Bypass, den wir beim Korpus gerade geschlossen haben.
+        "own_recent": [] if _weit else own_recent,
+        "durable_memory": [] if _weit else durable_memory,
+        "cross_session_collision": ([] if _weit else
+                                    list(world.get("cross_session_collision") or [])),
         "corpus": bewerteter_korpus,
     }
     if world.get("retrieval_receipt") is not None:

@@ -222,6 +222,65 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertNotIn("never-serialize-this", repr(result))
         self.assertNotIn("together", captured["url"])
 
+    def test_oversized_serialized_request_is_blocked_before_environment(self):
+        environment_reads = []
+        opener_calls = []
+
+        class TrackingEnvironment(dict):
+            def get(self, name, default=None):
+                environment_reads.append(name)
+                return super().get(name, default)
+
+        def opener(*args, **kwargs):
+            opener_calls.append("open")
+            raise AssertionError("network must not be reached")
+
+        env = TrackingEnvironment({
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        })
+        oversized_messages = [{
+            "role": "user",
+            "content": "x" * 2_000_000,
+        }]
+        with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+            MOD.execute_chat(
+                oversized_messages, model="mock", environ=env, opener=opener,
+            )
+        self.assertEqual(environment_reads, [])
+        self.assertEqual(opener_calls, [])
+
+        class Response:
+            status = 200
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                return b'{"choices":[{"finish_reason":"stop","message":{"role":"assistant","content":"ok"}}]}'
+
+        empty_body_size = len(json.dumps({
+            "model": "mock",
+            "messages": [{"role": "user", "content": ""}],
+            "stream": False,
+        }).encode())
+        captured_sizes = []
+
+        def accepted_opener(request, timeout):
+            captured_sizes.append(len(request.data))
+            return Response()
+
+        at_limit = [{
+            "role": "user",
+            "content": "x" * (MOD.MAX_PROVIDER_REQUEST_BYTES - empty_body_size),
+        }]
+        result = MOD.execute_chat(
+            at_limit, model="mock", environ=dict(env),
+            opener=accepted_opener, now=iter((1.0, 1.01)).__next__,
+        )
+        self.assertEqual(result["receipt"]["outcome"], "success")
+        self.assertEqual(captured_sizes, [MOD.MAX_PROVIDER_REQUEST_BYTES])
+
     def test_active_monotonic_values_cannot_suppress_execution_receipt(self):
         method_calls = []
 

@@ -462,11 +462,9 @@ def _cost_policy_principal_id(
 
 
 def _is_valid_http_status(value: object) -> bool:
-    return (
-        isinstance(value, int)
-        and not isinstance(value, bool)
-        and 100 <= value <= 599
-    )
+    # Status metadata is supplied by a foreign transport adapter.  Reject int
+    # subclasses before comparison operators can execute adapter code.
+    return type(value) is int and 100 <= value <= 599
 
 
 def _reject_nonfinite_json_constant(value: str) -> None:

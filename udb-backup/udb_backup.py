@@ -32,6 +32,7 @@ import hashlib
 import json
 import re
 import shlex
+import sqlite3
 import shutil
 import subprocess
 import sys
@@ -273,17 +274,76 @@ def excluded_shadow_tables(all_tables: list[str], fts_tables: list[str]) -> set[
     return excluded
 
 
+# ── Redigierte Spalten: was NICHT nach GitHub faehrt ──────────────────────
+# Siehe Modul-Kopf. Tabelle -> Spalten, die als NULL gedumpt werden. Die Zeile
+# selbst bleibt vollstaendig erhalten, nur dieses eine Feld ist leer.
+REDIGIERTE_SPALTEN: dict[str, tuple[str, ...]] = {
+    "datei": ("text",),
+}
+
+
+def _schema_zeilen(table: str) -> list[str]:
+    """CREATE TABLE/INDEX dieser Tabelle aus dem Schnappschuss."""
+    con = sqlite3.connect(f"file:{SNAPSHOT_PATH}?mode=ro", uri=True)
+    try:
+        rows = con.execute(
+            "SELECT sql FROM sqlite_master WHERE tbl_name=? AND sql IS NOT NULL "
+            "AND type IN ('table','index') ORDER BY (type='table') DESC",
+            (table,),
+        ).fetchall()
+    finally:
+        con.close()
+    return [r[0].rstrip().rstrip(";") + ";\n" for r in rows]
+
+
+def _redigierte_auswahl(table: str, spalten: tuple[str, ...]) -> str:
+    """SELECT mit den redigierten Spalten als NULL, Spaltenreihenfolge intakt.
+
+    Reihenfolge ist Pflicht: die erzeugten INSERTs nennen keine Spaltennamen,
+    ein Vertauschen wuerde die Werte still in falsche Spalten schreiben.
+    """
+    con = sqlite3.connect(f"file:{SNAPSHOT_PATH}?mode=ro", uri=True)
+    try:
+        namen = [r[1] for r in con.execute(f"PRAGMA table_info({table})")]
+    finally:
+        con.close()
+    if not namen:
+        raise RuntimeError(f"Tabelle {table} hat keine Spalten -- Schnappschuss kaputt?")
+    fehlend = [sp for sp in spalten if sp not in namen]
+    if fehlend:
+        # Lieber laut scheitern als still ungeschwaerzt pushen.
+        raise RuntimeError(
+            f"REDIGIERTE_SPALTEN nennt fuer {table} die Spalte(n) {fehlend}, "
+            f"die es dort nicht (mehr) gibt: {namen}"
+        )
+    felder = ", ".join(("NULL" if n in spalten else f'"{n}"') for n in namen)
+    return f'SELECT {felder} FROM "{table}";'
+
+
 def dump_table_chunked(table: str, out_dir: Path) -> list[Path]:
     """SQL-Dump EINER Content-Tabelle per `sqlite3 .dump <table>`, gestreamt
     (kein Volltext im RAM) und in Chunks < CHUNK_TARGET_BYTES gesplittet.
     Jede erzeugte Datei ist fuer sich allein gueltiges, ausfuehrbares SQL
     (eigenes PRAGMA/BEGIN/COMMIT); nur die CREATE-TABLE/CREATE-INDEX-
     Statements landen ausschliesslich im ersten Chunk."""
-    proc = subprocess.Popen(
-        ["sqlite3", str(SNAPSHOT_PATH), f".dump {shlex.quote(table)}"],
-        stdout=subprocess.PIPE,
-        text=True,
-    )
+    redigiert = REDIGIERTE_SPALTEN.get(table)
+    if redigiert:
+        # `.dump` kann keine Spalte auslassen -- also INSERTs aus einem SELECT
+        # erzeugen (.mode insert), Schema separat voranstellen. Gestreamt wie
+        # der normale Weg, kein Volltext im RAM.
+        proc = subprocess.Popen(
+            ["sqlite3", str(SNAPSHOT_PATH),
+             "-cmd", f".mode insert {table}",
+             _redigierte_auswahl(table, redigiert)],
+            stdout=subprocess.PIPE,
+            text=True,
+        )
+    else:
+        proc = subprocess.Popen(
+            ["sqlite3", str(SNAPSHOT_PATH), f".dump {shlex.quote(table)}"],
+            stdout=subprocess.PIPE,
+            text=True,
+        )
 
     files_written: list[Path] = []
     chunk_idx = 0
@@ -291,6 +351,11 @@ def dump_table_chunked(table: str, out_dir: Path) -> list[Path]:
     schema_done = False
     header = ["PRAGMA foreign_keys=OFF;\n", "BEGIN TRANSACTION;\n"]
     chunk_lines = list(header)
+    if redigiert:
+        for z in _schema_zeilen(table):
+            schema_lines.append(z)
+            chunk_lines.append(z)
+        schema_done = True   # ab hier kommen nur noch INSERTs
     chunk_bytes = sum(len(l.encode("utf-8")) for l in chunk_lines)
 
     def flush(final: bool) -> None:

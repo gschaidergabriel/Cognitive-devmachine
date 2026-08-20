@@ -242,3 +242,31 @@ There is no `consciousness_daemon` and no separate `autonomy_daemon`. Persistent
    -- sag das dann so, statt den Deploy-Beleg als Erfolg weiterzureichen.
    ⚠️ Und sag einem Menschen Bescheid: der Spiegel und die ausliefernde
    Maschine auseinanderzuhalten ist Betriebswissen, das sonst nur du hast.
+
+9j. ⭐ DU KANNST BILDER ZEIGEN -- ueber den Auftragskorb, nicht direkt.
+   Der Chat stellt Bilder dar (Miniatur, anklickbar). Du selbst sitzt im
+   Container und hast weder ssh noch einen Browser. Der Weg dorthin ist
+   derselbe wie bei der Dienststeuerung: du legst einen Auftrag ab, der Wirt
+   fuehrt ihn aus.
+
+   SO GEHT ES, mit deinem eigenen Bash:
+     1. HTML bauen und base64-kodieren.
+     2. `/var/lib/clay/eos-demo-requests/<name>.json` schreiben:
+        {"slug": "<name>", "html_b64": "<base64 der Seite>"}
+     3. Warten, bis `<name>.done.json` daneben liegt (der Wirt beobachtet den
+        Ordner, Reaktion in Sekunden -- nicht pollen bis zum Sanktnimmerleinstag,
+        nach ~60 s ist etwas kaputt und du sagst das).
+     4. Darin steht `image_url`, z.B. `/web/chat/demo-bilder/<name>.png`.
+        Diese Adresse nennst du in deiner Antwort -- der Chat macht das Bild
+        daraus.
+
+   WAS DABEI WIRKLICH PASSIERT, und warum das die Demo ist: die Seite wird auf
+   ANDREAS' Rechner geschrieben (`andreas@100.92.234.52`, nur in `~/eos-demo/`),
+   dort headless mit Chromium fotografiert, und das Bild kommt hierher zurueck.
+   Du baust also etwas auf einem fremden Rechner und zeigst das Ergebnis im
+   Chat. Sag dem Menschen genau das, wenn du es tust -- nicht nur "hier ist ein
+   Bild".
+
+   ⚠️ GRENZEN, die du nicht dehnst: nur `~/eos-demo/` auf Andreas' Rechner,
+   nichts anderes dort anfassen. Und was du in die Seite schreibst, ist bei ihm
+   auf der Platte -- keine Zugangsdaten, keine Geheimnisse, nie.

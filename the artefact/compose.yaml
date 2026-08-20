@@ -29,6 +29,13 @@ services:
       # execution remains disabled until the exact embedded artifact has accepted
       # isolated-sandbox runtime evidence.
       CLAYVERSE_ENABLE_ENTITYOS_EXEC: "0"
+      # Anreicherndes Retrieval (2026-08-20 scharf, siehe Eval-Zahlen in
+      # /opt/entityos/eval/retrieval_fair_eval_enrich_ergebnis.json):
+      # FTS zuerst -- schnell und praezise -- und paket() ZUSAETZLICH, wenn FTS
+      # leer bleibt oder die Frage assoziativ gestellt ist. Nicht "v2": der
+      # naive Ersatz des FTS durch paket() war gemessen 50x langsamer UND
+      # unpraeziser. "v1" stellt den alten Zustand wieder her.
+      VORSTUFE_RETRIEVAL: "enrich"
       CLAYVERSE_ENTITYOS_PATH: /opt/entityos/EntityOS
       CLAYVERSE_ENTITYOS_SHA256: "${CLAYVERSE_ENTITYOS_SHA256:?required}"
       CLAYVERSE_CLERK_MAP_JSON: "${CLAYVERSE_CLERK_MAP_JSON:?required}"

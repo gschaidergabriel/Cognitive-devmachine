@@ -22,12 +22,13 @@
 #      landed, and can then hand image_url to the chat backend as
 #      payload.image = {url, alt, label} (see web/chat/index.html change).
 #
-# What is NOT wired yet, on purpose (flagged, not silently added): an
-# automatic watcher/cron that runs step 2 without a human invoking it. Adding
-# a persistent systemd timer here is a bigger footprint change than this demo
-# asked for; run this manually (or via Zero's own Bash issuing steps 4-9
-# below directly, once/if it is ever given host-level SSH reach). Today,
-# a human (or a host-side agent with andreas@100.92.234.52 access) runs this.
+# STAND 2026-08-20: der Beobachter EXISTIERT inzwischen. eos-demo-screenshot.path
+# horcht auf /var/lib/clay/eos-demo-requests und startet eos-demo-dispatch.sh,
+# das diesen Befehl fuer jeden noch offenen Auftrag ausfuehrt. Der Absatz, der
+# hier stand, sagte das Gegenteil -- ein veralteter Kommentar ueber eine
+# Sicherheitsgrenze ist gefaehrlicher als gar keiner, deshalb ersetzt statt
+# ergaenzt. Ein Mensch muss nichts mehr anstossen: Zero legt den Auftrag ab
+# (runtime_CLAUDE.md 9j), der Wirt fuehrt ihn aus.
 #
 # Usage: eos-screenshot.sh <request-id>
 set -euo pipefail

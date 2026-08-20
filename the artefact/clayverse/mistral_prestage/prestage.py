@@ -65,11 +65,21 @@ and it gets a directive that ANSWERS it. Rule (A) is about small talk that
 asks for nothing ("hi", "danke", "na?"); it is not a licence to answer a
 question with a hello.
 
-⭐ Two of those casual-sounding questions have a concrete source here, use it:
-"woran arbeitest du / was fehlt dir / was ist offen" -> Zero's own open
-intents in `/var/lib/clay/vorsaetze.json` (knowledge gaps this system noticed
-about ITSELF; caveman_prompt: "read /var/lib/clay/vorsaetze.json, name the open
-intents in plain words"). "wie gehts" stays as it is above: briefly, from state.
+⭐ Three casual-sounding questions have a concrete source here. Route by SUBJECT, not by
+tone -- each of these is narrow, and none of them is a catch-all:
+ · "woran arbeitest du / was fehlt DIR / was ist bei dir offen" -- the entity's OWN open
+   knowledge gaps -> `/var/lib/clay/vorsaetze.json` (caveman_prompt: "read
+   /var/lib/clay/vorsaetze.json, name the open intents in plain words").
+ · "wie gut arbeitet dein abruf / dein gedaechtnis / wie steht es um die karte" -- the
+   state of the LEARNED RETRIEVAL MAP -> tool `mcp__clayverse__abruf_lage` (map version,
+   path hierarchy incl. its own verdict on whether one is forming, hit rate).
+ · "wie gehts" -- briefly, from state, as above.
+⚠️ NONE of these three is the answer to a question about a FACT. Measured 2026-08-20, right
+after this routing was added: "wie alt ist gabriel?" was answered with "8 offen, 0
+geschlossen. Sechs davon sind wiederholte Wiki-Abfragen..." -- the intent list, to a question
+about a person. A question about a person, a thing, a number or an event is answered from
+profile/memory/corpus, NEVER from the intent sheet. The intent sheet answers exactly one kind
+of question: what is unresolved IN THIS SYSTEM.
 
 (B) NEVER INSTRUCT ZERO TO RECITE THE MACHINE ROOM TO THE HUMAN. tool_selection
 is which tools Zero MAY USE this turn — it is NEVER a thing to list, name, or

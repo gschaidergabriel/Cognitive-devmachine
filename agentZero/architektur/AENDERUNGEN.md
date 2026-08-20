@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-20T01:41:12Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-20T02:11:13Z aus drei Repos. 478 Eintraege.
 
 ## architektur (15)
 
@@ -139,7 +139,7 @@ Automatisch erzeugt 2026-08-20T01:41:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (44)
+## pruefung (43)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -183,15 +183,15 @@ Automatisch erzeugt 2026-08-20T01:41:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T02:24 | entityos | `1fa4e2d9c80f` | test(clayverse): execute UnifiedDB core inside disposable QEMU guest |
 | 2026-08-18T02:23 | entityos | `7dd0b519930a` | test(clayverse): execute canonical source inside disposable QEMU guest |
 | 2026-08-18T02:23 | entityos | `bc374186c1d9` | test(clayverse): execute exact PR686 compile inside QEMU guest |
-| 2026-08-18T02:14 | entityos | `99b78bb8f379` | test(clayverse): boot rootless disposable QEMU TCG guest |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (246)
+## bau (247)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-20T01:44 | entityos | `f05471d8447d` | Eichung: fehlendes Arbeitsverzeichnis nachgeruestet (Drop-in mitgesichert) |
 | 2026-08-20T01:40 | entityos | `f681ca215c9e` | Die systemd-Einheiten des Vorsatz-Pruefers mitsichern |
 | 2026-08-20T01:40 | entityos | `f9ed8898ba18` | Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises |
 | 2026-08-20T01:37 | entityos | `854944248021` | EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen |
@@ -251,5 +251,4 @@ Automatisch erzeugt 2026-08-20T01:41:12Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T09:00 | entityos | `70fe17a64cb5` | Die autonomen Takte versioniert - und der Riss, den sie hatten |
 | 2026-08-18T08:55 | entityos | `5f5df7cad329` | Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz |
 | 2026-08-18T08:44 | entityos | `be1359046d41` | Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging |
-| 2026-08-18T08:03 | entityos | `9de2b8a9e7a0` | Zero weiss jetzt, mit WEM es spricht - und wem was gehoert |
 

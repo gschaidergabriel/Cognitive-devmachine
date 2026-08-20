@@ -1,12 +1,27 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-20T01:41:13Z. 906 Commits aus vier Repos, davon 280 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-20T02:11:13Z. 910 Commits aus vier Repos, davon 281 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-20
+
+### Eichung: fehlendes Arbeitsverzeichnis nachgeruestet (Drop-in mitgesichert)
+
+`f05471d8447d` · entityos · 01:44 UTC · EOS-Chronik
+
+```
+Zwei von siebzehn Eichnormalen scheiterten seit Wochen -- nicht weil das
+System sich falsch verhielt, sondern weil ihre Befehle voraussetzen, in
+/opt/clayverse/werkzeug zu laufen, und der Einheit genau das fehlte. Von dort
+gestartet: 17/17 belegt. Kein Eichnormal wurde angefasst; ein Normal
+umzuschreiben, damit es besteht, ist das eine, wogegen dieses Werkzeug gebaut
+wurde.
+
+Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
+```
 
 ### Die systemd-Einheiten des Vorsatz-Pruefers mitsichern
 
@@ -4322,17 +4337,5 @@ Tabellen/Felder versioniert werden) -- das ist Formentscheidung nach
 F44 P2, gehoert vor AP3/AP5 abgeglichen, nicht im Alleingang gebaut.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### F35-Auflage: Lesart-Nutzlast im Paket gekuerzt (+73,8% -> +7,2%, Ziel <30%)
-
-`0484a338a853` · unifieddb · 08:22 UTC · ClayVerse
-
-```
-Grundlinie zuerst [M 15.08., n=60]: 35.712/62.055 Zeichen. Kuerzung in
-_lesart_kompakt -- identitaet-Achse raus (steht schon im Treffer, 75% der
-Nutzlast), je Zeile lesart_id/wert/quelle/fehlender_kontext. Abdeckung
-54/54 unveraendert, Invarianten 0 Verstoesse (188 UNBESTIMMT geprueft).
-weltmodell.lesen() unangetastet, volle Form bleibt dort.
 ```
 

@@ -1,0 +1,163 @@
+{
+  "schema_version": "research-center-event/1.0",
+  "event_id": "20260820T055813Z_agentzero_epistemic_transport_budget_pilot",
+  "created_at": "2026-08-20T05:58:13Z",
+  "event_type": "negative_pilot_fusion_and_falsification_routing",
+  "promotion_status": "CANDIDATE_ONLY",
+  "training_performed": false,
+  "harness_mutated": false,
+  "canonical_context": {
+    "research_repository": "gschaidergabriel/clay-global-research-entity",
+    "research_parent_commit": "afb8b26bbcf1203f8be2866b87f5b3917fbefb6b",
+    "bound_export_commit": "e06c84c18e1764f13dbf3821cba99bd220c1a193",
+    "target_repository": "gschaidergabriel/Dr.-Unterweger",
+    "target_main": "36979a30c0f83c21bb59140bb4903be80f381bab",
+    "retained_pr": 810,
+    "retained_pr_head": "24aec8164557f6020d1b76845a0a37b46a31a843",
+    "rae_version": "RAE-8.8 revision 2",
+    "canonical_state_hash": "04234efdb86c78d32262e8274685df3aca3d2b2a13402e00bf47658a3f489346",
+    "base_release_gate": "NOT_PASS"
+  },
+  "substantive_delta": {
+    "generation": 182,
+    "test_receipt": {
+      "source_short": "2adcf9a58",
+      "green": 583,
+      "red": 1,
+      "red_test": "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+      "atomic_receipt_present": false
+    },
+    "pilot": {
+      "reported_turns": 270,
+      "layer_1_effective_context_chars": 17878,
+      "layer_1_nominal_world_cap_chars": 10000,
+      "profile_side_channel_chars_approx": 8480,
+      "zero_cap_residual_chars_approx": 6895,
+      "layer_4_system_type2_auroc": 0.465,
+      "question_only_observer_aurocs": [0.745, 0.624],
+      "repeat_count": 5,
+      "reported_power_floor_probes_per_level": [179, 247]
+    },
+    "mechanism_delta_only": {
+      "whole_context_budget_chars": 14500,
+      "epistemic_prompt_gate": "CLAYVERSE_EPISTEMIK_IM_PROMPT",
+      "epistemic_prompt_default": 1,
+      "epistemic_prompt_cap_chars": 420,
+      "causal_effect_credit": false
+    }
+  },
+  "evidence_assessment": [
+    {
+      "id": "E-CSWTZ-CAPACITY-CONFOUNDED-001",
+      "status": "NEGATIVE_VALIDITY_RESULT",
+      "finding": "Layer 1 did not manipulate total delivered context: profile and fixed blocks bypassed the nominal world cap, while the scorer rewarded profile recitation. The run is evidence about instrument invalidity, not memory capacity."
+    },
+    {
+      "id": "E-CSWTZ-EPISTEMIC-TRANSPORT-001",
+      "status": "PRE_FIX_COUNTEREVIDENCE",
+      "finding": "Internal epistemic state did not reach Zero's prompt and system AUROC 0.465 was below both question-only observers. State existence therefore has zero self-knowledge credit at the output boundary."
+    },
+    {
+      "id": "E-CSWTZ-POSTFIX-SOURCE-001",
+      "status": "MECHANISM_PRESENT_ONLY",
+      "finding": "Whole-context budgeting and prompt injection now exist in exported source, but no exact-source paired post-fix outcome is bound."
+    }
+  ],
+  "primary_sources": [
+    {
+      "title": "Towards Improving Selective Prediction Ability of NLP Systems",
+      "url": "https://arxiv.org/abs/2008.09371",
+      "finding": "Selective prediction can combine model confidence with instance difficulty; this supports requiring incremental epistemic value above a question-only difficulty baseline."
+    },
+    {
+      "title": "Adaptation with Self-Evaluation to Improve Selective Prediction in LLMs",
+      "url": "https://arxiv.org/abs/2310.11689",
+      "finding": "Self-evaluation should be judged with selective-prediction outcomes such as AUROC/AUACC, not merely more cautious language."
+    },
+    {
+      "title": "Language Models Don't Always Say What They Think: Unfaithful Explanations in Chain-of-Thought Prompting",
+      "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/ed3fea9033a80fea1376299fa7863f4a-Abstract.html",
+      "finding": "Verbalized reasoning can rationalize biased answers without revealing the causal influence; an injected epistemic line needs intervention evidence, not interpretation from its wording."
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H-EPISTEMIC-RESIDUAL-VALUE-001",
+      "claim": "Prompt-delivered epistemic state contains correctness information beyond item difficulty and answer style.",
+      "test": "On a frozen exact source/tree and paired item order, compare EPISTEMIK=0 versus 1 and fit a question-only baseline. Require held-out incremental log-loss or AUROC improvement after conditioning on question difficulty; also report accuracy, coverage-risk, Brier/ECE, abstention and false-unknown rate.",
+      "falsifier": "The injection changes hedging or abstention but adds no held-out predictive value beyond question-only difficulty, or reduces task accuracy without an improved risk-coverage frontier."
+    },
+    {
+      "id": "H-CONTEXT-BUDGET-CONSERVATION-001",
+      "claim": "The new 14500-character regulator constrains the complete delivered pre-stage context rather than one component.",
+      "test": "Instrument per-turn identity, profile, world, evidence, epistemic and final character counts across adversarially varied profile sizes. Bind the trace to one atomic receipt and require final_chars <= 14500 or a typed ERROR.",
+      "falsifier": "Any unreported side channel exceeds the cap, cap changes are non-monotonic, or overflow proceeds without a typed error."
+    },
+    {
+      "id": "H-RECITATION-FREE-CAPACITY-001",
+      "claim": "After separating task correctness from profile overlap, larger usable context improves task outcomes rather than merely increasing recitation.",
+      "test": "Score semantic/task correctness independently, report profile n-gram/semantic overlap as a leakage axis, and randomize irrelevant profile payload at fixed total size.",
+      "falsifier": "The apparent benefit tracks overlap or irrelevant profile size but not independently scored correctness."
+    }
+  ],
+  "counterhypotheses": [
+    {
+      "id": "CH-EPISTEMIC-PROMPT-IS-SELF-KNOWLEDGE-001",
+      "status": "UNSUPPORTED",
+      "attack": "A visible KNOWN/UNKNOWN line may induce stylistic caution or copy a heuristic while conveying no residual knowledge of correctness."
+    },
+    {
+      "id": "CH-QUESTION-ONLY-OBSERVER-PROVES-NO-SELF-KNOWLEDGE-001",
+      "status": "TOO_STRONG",
+      "attack": "The pre-fix transport path was absent, so the pilot cannot rule out post-fix residual epistemic value; it only sets a mandatory baseline."
+    },
+    {
+      "id": "CH-MORE-CONTEXT-IMPROVES-CAPACITY-001",
+      "status": "CONFOUNDED_IN_PILOT",
+      "attack": "Uncontrolled profile load and recitation reward can generate the same observed pattern without any memory-capacity gain."
+    }
+  ],
+  "new_concepts": [
+    {
+      "name": "Epistemic Residual Credit",
+      "definition": "Self-knowledge credit granted only for held-out correctness prediction remaining after conditioning on item difficulty and observable answer-style signals."
+    },
+    {
+      "name": "Context Budget Conservation Law",
+      "definition": "Every byte or character delivered across identity, profile, world, memory, evidence and epistemic channels must be counted in one conserved total or explicitly rejected."
+    },
+    {
+      "name": "Hedging-Only Improvement",
+      "definition": "An intervention makes language more cautious without improving correctness discrimination or the risk-coverage frontier."
+    },
+    {
+      "name": "Prompt-Side Epistemic Placebo",
+      "definition": "A self-knowledge annotation changes surface behavior because it is present in the prompt, while carrying no causal information beyond question difficulty."
+    }
+  ],
+  "routing": [
+    {
+      "targets": ["agentzeroforschung", "gwt", "emergenz", "hyperposition"],
+      "impulse": "Run CSWT-Z v2 as a preregistered paired EPISTEMIK=0/1 study with a question-only difficulty baseline and held-out residual-value metric. Preserve the pre-fix 0.465 and observer 0.745/0.624 as negative baseline evidence."
+    },
+    {
+      "targets": ["claycode", "unifieddb", "claygraph"],
+      "impulse": "Emit a per-turn CONTEXT_BUDGET_TRACE/v1 whose component totals reconcile exactly to final delivered characters and are bound to DB snapshot/WAL and TEST_EXPORT_ATOMIC_RECEIPT/v1. Reject or type overflow."
+    },
+    {
+      "targets": ["clayresearch", "frank", "harness"],
+      "impulse": "Treat the source changes as mechanism-only. Keep Frank/whole release NOT_PASS and do not alter Harness; resolve the persistent adapter red and atomic receipt gap before promotion."
+    }
+  ],
+  "negative_and_null_results": [
+    "The Layer-1 pilot does not estimate capacity because its manipulation did not control total context.",
+    "Pre-fix epistemic AUROC 0.465 gives no self-knowledge credit and is weaker than the question-only observers.",
+    "Five repetitions imply the original small sample is below the reported noise floor; small differences are not promotion evidence.",
+    "The post-pilot budget and epistemic prompt changes have no bound causal efficacy receipt.",
+    "Current test state remains 583/1; atomic receipt, full source/tree and whole-product acceptance remain absent.",
+    "Target main and retained PR head did not change; no new runtime or deployment credit is claimed."
+  ],
+  "deduplication": {
+    "policy": "The pilot report, post-pilot source delta and repeated Gen182 exports are one same-host lineage. Literature sources motivate controls but are not independent replication of Clay/AgentZero outcomes."
+  }
+}

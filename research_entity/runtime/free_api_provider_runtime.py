@@ -259,7 +259,7 @@ def _safe_attempt_id(value: str) -> str:
 
 def _is_unicode_scalar_text(value) -> bool:
     """Reject lone UTF-16 surrogates that are not Unicode characters."""
-    return isinstance(value, str) and not any(
+    return type(value) is str and not any(
         0xD800 <= ord(character) <= 0xDFFF for character in value
     )
 
@@ -301,7 +301,7 @@ def _retry_after_seconds(headers, received_at: float, default: int = 60) -> int:
 
 
 def _validate_text_chat_request(messages, model) -> None:
-    if not isinstance(model, str) or not model.strip():
+    if type(model) is not str or not model.strip():
         raise ValueError("model_must_be_nonempty_string")
     if not _is_unicode_scalar_text(model):
         raise ValueError("model_must_be_unicode_scalar_string")
@@ -316,13 +316,13 @@ def _validate_text_chat_request(messages, model) -> None:
             raise ValueError("message_must_be_object")
         if set(message) != TEXT_CHAT_MESSAGE_FIELDS:
             raise ValueError("message_fields_not_supported_by_text_adapter")
-        if not isinstance(message.get("role"), str) or not message["role"].strip():
+        if type(message.get("role")) is not str or not message["role"].strip():
             raise ValueError("message_role_must_be_nonempty_string")
         if not _is_unicode_scalar_text(message["role"]):
             raise ValueError("message_role_must_be_unicode_scalar_string")
         if message["role"] not in TEXT_CHAT_ROLES:
             raise ValueError("message_role_not_supported_by_text_adapter")
-        if not isinstance(message.get("content"), str):
+        if type(message.get("content")) is not str:
             raise ValueError("message_content_must_be_string")
         if not _is_unicode_scalar_text(message["content"]):
             raise ValueError("message_content_must_be_unicode_scalar_string")

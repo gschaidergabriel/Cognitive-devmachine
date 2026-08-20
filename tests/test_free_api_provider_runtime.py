@@ -1481,6 +1481,61 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertNotIn("VERIFIED", receipt["lifecycle"])
                 self.assertNotIn("DONE", receipt["lifecycle"])
 
+    def test_active_http_status_value_emits_fail_closed_receipt(self):
+        comparison_calls = []
+
+        class ActiveStatus(int):
+            def __ge__(self, other):
+                comparison_calls.append("ge")
+                raise LookupError("status-comparison-must-not-run")
+
+            def __le__(self, other):
+                comparison_calls.append("le")
+                raise LookupError("status-comparison-must-not-run")
+
+            def __eq__(self, other):
+                comparison_calls.append("eq")
+                raise LookupError("status-comparison-must-not-run")
+
+        class Response:
+            status = ActiveStatus(429)
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("body must not be read without passive status")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                if transport == "response":
+                    opener = lambda *args, **kwargs: Response()
+                else:
+                    def opener(request, timeout):
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, ActiveStatus(429),
+                            "Too Many Requests", {}, None,
+                        )
+
+                result = MOD.execute_chat(
+                    VALID_MESSAGES, model="mock", environ=env,
+                    opener=opener,
+                    now=iter((102.0, 102.01)).__next__,
+                )
+                receipt = result["receipt"]
+                self.assertIsNone(receipt["status"])
+                self.assertEqual(
+                    receipt["outcome"], "invalid_provider_response"
+                )
+                self.assertNotIn("EXECUTED", receipt["lifecycle"])
+                self.assertNotIn("VERIFIED", receipt["lifecycle"])
+                self.assertNotIn("DONE", receipt["lifecycle"])
+        self.assertEqual(comparison_calls, [])
+
     def test_unexpected_transport_adapter_failures_emit_receipts(self):
         class Response:
             status = 200

@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T15:07:19Z. 1091 Commits aus vier Repos, davon 444 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T15:37:22Z. 1093 Commits aus vier Repos, davon 446 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -14,6 +14,60 @@ Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ```
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 15:32:51 +0000 — entityos: 17 Aenderungen
+
+`f1057215650c` · entityos · 15:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/__init__.py
+  the artefact/architekt/architekt.py
+  the artefact/architekt/config/architekt.conf
+  the artefact/architekt/glm.py
+  the artefact/architekt/hypothesen.py
+  the artefact/architekt/kanarie.py
+  the artefact/architekt/lauf.py
+  the artefact/architekt/quittungen.py
+  the artefact/architekt/schwarm.py
+  the artefact/architekt/tor.py
+  the artefact/tests/test_architekt_hypothesen.py
+  the artefact/tests/test_architekt_kanarie.py
+  the artefact/tests/test_architekt_lauf_gate.py
+  the artefact/tests/test_architekt_orchestrator.py
+  the artefact/tests/test_architekt_quittungen.py
+  the artefact/tests/test_architekt_schwarm.py
+  the artefact/tests/test_architekt_tor.py
+
+Zeit: 2026-08-21T15:32:51+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 17
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 15:16:48 +0000 — entityos: 3 Aenderungen
+
+`a2108710c4dc` · entityos · 15:16 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/bug_meldung.py
+  the artefact/clayverse/terminal_gateway.py
+  the artefact/tests/test_bug_meldung.py
+
+Zeit: 2026-08-21T15:16:48+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
 ```
 
 ### EOS-Chronik 2026-08-21 15:02:52 +0000 — entityos: 3 Aenderungen
@@ -2892,46 +2946,5 @@ Baum: entityos (/opt/entityos)
 Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 05:35:55 +0000 — entityos: 1 Aenderungen
-
-`2727aac03f16` · entityos · 05:35 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T05:35:55+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### CSWT-Z Pilotlauf: Schicht 1 und 4, 270 Zuege, Rohdaten und Befund
-
-`b6dca3a0169f` · entityos · 05:29 UTC · EOS-Chronik
-
-```
-Schicht 1 hat NICHT gemessen, was sie messen sollte -- und der Grund ist der
-wertvollste Befund: der Kapazitaetsregler hat einen Boden bei 6895 Zeichen
-(Identitaet und Anwesenheitsblock sind ausgenommen), und das Nutzerprofil mit
-8480 Zeichen laeuft komplett an ihm vorbei. Bei Kappung 0 steuert der Regler
-noch 3 % des Kontexts; der deklarierte 10k-Engpass begrenzt real 17.878 Zeichen.
-Dazu belohnte die Zeichenkettenbewertung Profil-Rezitation.
-
-Schicht 4 traegt: epistemik erreicht Zero architektonisch nicht (nur der
-caveman_prompt wird uebertragen), Typ-2-AUROC 0,465 auf Zufallsniveau, und ein
-externer Beobachter, der NUR die Frage sieht, sagt den Erfolg besser voraus als
-das System selbst (0,745/0,624 gegen 0,465).
-
-Rauschboden aus fuenf identischen Wiederholungen: noetig waeren 179-247 Sonden
-je Stufe statt 18.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

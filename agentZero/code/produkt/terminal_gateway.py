@@ -16,6 +16,7 @@ from pathlib import Path
 from fastapi import Request, WebSocket, WebSocketDisconnect
 
 from . import bewertung
+from . import bug_meldung
 from . import dateien
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
 from .identity import (
@@ -838,6 +839,85 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return JSONResponse({"error": "forbidden"}, status_code=403)
 
         return JSONResponse({"session_id": session_id, "votes": stimmen})
+
+    # ── Bug-Meldekanal: Mensch meldet einen Bug aus dem Chat ──────────────
+    # Siehe clayverse/bug_meldung.py fuer die Ablage (eos_bug_hypothesen) und
+    # die Begruendung. Dieselbe Anmeldepruefung wie /api/dateien und
+    # /api/bewertung -- ein unbewachter Schreibweg waere ein offener Kanal in
+    # die DB. Das ist der EINGANG einer von fuenf Hypothesen-Quellen des
+    # inneren Architekten (SELBSTFORSCHUNG.md Abschnitt 5+7); dieser Weg
+    # speichert nur die Meldung -- Reproduzieren/Ursache/Status macht der
+    # Architekt, nicht dieser Endpunkt (deshalb gibt es hier bewusst KEINEN
+    # Schreibweg fuer status/befund).
+    @app.post("/api/bug")
+    async def bug_melden(request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            body = await _bounded_body(request, 4_096)
+        except ValueError:
+            return JSONResponse({"error": "body too large"}, status_code=413)
+        try:
+            eingabe = _decode_json_object(body.decode("utf-8"), name="bug", max_chars=4_096)
+        except Exception:
+            return JSONResponse({"error": "invalid body"}, status_code=400)
+
+        beschreibung = eingabe.get("beschreibung")
+        if not isinstance(beschreibung, str):
+            return JSONResponse({"error": "beschreibung fehlt"}, status_code=400)
+        wo = eingabe.get("wo")
+        if wo is not None and not isinstance(wo, str):
+            return JSONResponse({"error": "wo muss Text sein"}, status_code=400)
+
+        try:
+            ergebnis = await asyncio.to_thread(
+                bug_meldung.melden, db, user_id=uid, beschreibung=beschreibung, wo=wo)
+        except bug_meldung.BugFehler as exc:
+            return JSONResponse({"error": str(exc)}, status_code=400)
+
+        return JSONResponse(ergebnis)
+
+    @app.get("/api/bug")
+    async def bug_liste(request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        meldungen = await asyncio.to_thread(bug_meldung.lesen_fuer_nutzer, db, user_id=uid)
+        return JSONResponse({"meldungen": meldungen})
+
+    @app.get("/api/bug/{bug_id}")
+    async def bug_eins(bug_id: str, request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            meldung = await asyncio.to_thread(
+                bug_meldung.lesen_eins, db, bug_id=bug_id, user_id=uid)
+        except bug_meldung.BugFehler:
+            return JSONResponse({"error": "not_found"}, status_code=404)
+        except PermissionError:
+            return JSONResponse({"error": "forbidden"}, status_code=403)
+
+        return JSONResponse(meldung)
 
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():

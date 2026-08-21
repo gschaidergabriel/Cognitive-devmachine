@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T15:07:19Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T15:37:23Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 

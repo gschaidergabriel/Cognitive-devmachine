@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T15:07:18Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T15:37:22Z aus drei Repos. 481 Eintraege.
 
 ## architektur (12)
 
@@ -111,6 +111,8 @@ Automatisch erzeugt 2026-08-21T15:07:18Z aus drei Repos. 481 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T15:32 | entityos | `f1057215650c` | EOS-Chronik 2026-08-21 15:32:51 +0000 — entityos: 17 Aenderungen |
+| 2026-08-21T15:16 | entityos | `a2108710c4dc` | EOS-Chronik 2026-08-21 15:16:48 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T15:02 | entityos | `c3e2032cab7a` | EOS-Chronik 2026-08-21 15:02:52 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T14:59 | entityos | `a70c955c50c6` | EOS-Chronik 2026-08-21 14:59:16 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T14:53 | entityos | `9b2bac27ed9c` | Handbuch: Forschungsentitaets-Funde als 5. Hypothesen-Quelle (sporadisch, gegen Live-DB pruefen) |
@@ -169,6 +171,4 @@ Automatisch erzeugt 2026-08-21T15:07:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T07:43 | entityos | `abdf357f66b6` | EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T07:05 | entityos | `f702cc24f95e` | EOS-Chronik 2026-08-21 07:05:54 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T06:55 | entityos | `51c3991bd1f4` | EOS-Chronik 2026-08-21 06:55:18 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T06:46 | entityos | `79c6e620d355` | EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T06:44 | entityos | `e10f2fe13dfc` | EOS-Chronik 2026-08-21 06:44:12 +0000 — entityos: 1 Aenderungen |
 

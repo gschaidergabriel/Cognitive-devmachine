@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T22:43:19Z. **3731 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T23:06:41Z. **3754 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T04:45:38+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T05:43:06+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3633 |
+| baunotiz | 3656 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2211 |
-| baunotiz | bauverlauf.jsonl | 1374 |
+| baunotiz | git-commit | 2219 |
+| baunotiz | bauverlauf.jsonl | 1389 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3731 · Gegenhypothese: 0 von 3731
+## Hypothese: 0 von 3754 · Gegenhypothese: 0 von 3754
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -31,9 +31,25 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T04:45:38+07:00`.
 
 ## Privatsphaere-Filter
 
-Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
+Von **400** gepruefte juengste Kandidaten wurden **1** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: Gen262 stale receipt and FREE_ONLY breach truth gate
+
+`baunotiz-bauverlauf-fadf84f08c1370b28469` · baunotiz · bauverlauf.jsonl · 2026-08-22T05:43:06+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: Gen262 stale receipt and FREE_ONLY breach truth gate
+
+`baunotiz-git-33709ae4f47150508c37673c191ab364a4a598ff` · baunotiz · git-commit · 2026-08-22T05:43:06+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: Gen262 stale receipt and FREE_ONLY breach truth gate
 
 ### claycode supervisor: Gen259 PTY recurrence and FREE_ONLY quarantine
 
@@ -211,45 +227,11 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: bind Gen247 bug hypothesis closure provenance
 
-### claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
+### agentZero-Export 2026-08-21T22:43:18Z (Generation 262, 60 Dateien, 1 geschwaerzt)
 
-`baunotiz-bauverlauf-edc9aa3fab8de00f9322` · baunotiz · bauverlauf.jsonl · 2026-08-21T22:44:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
-
-`baunotiz-git-042b95303dc1306a062714c61073d6c078f89665` · baunotiz · git-commit · 2026-08-21T22:44:48+07:00 · Gabriel Gschaider
+`baunotiz-git-f5bbef0759820a2edf08ffbdc1e1de093719adbd` · baunotiz · git-commit · 2026-08-21T22:45:00+00:00 · agentZero
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
-
-### EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen
-
-`baunotiz-git-9483c9954977e2470bb6c56d14a0d53727a784d8` · baunotiz · git-commit · 2026-08-21T22:28:53+00:00 · BACK agent
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen
-
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/architekt/bug_paket.py
-  the artefact/architekt/claude_verfuegbarkeit.py
-  the artefact/architekt/hypothesen.py
-  the artefact/architekt/nvidia_coder.py
-  the artefact/tests/test_architekt_bug_paket.py
-  the artefact/tests/test_architekt_claude_verfuegbarkeit.py
-  the artefact/tests/test_architekt_nvidia_coder.py
-
-Zeit: 2026-08-21T22:28:53+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 7
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
+agentZero-Export 2026-08-21T22:43:18Z (Generation 262, 60 Dateien, 1 geschwaerzt)
 

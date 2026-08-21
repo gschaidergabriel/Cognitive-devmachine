@@ -1,12 +1,35 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T22:43:18Z. 1110 Commits aus vier Repos, davon 479 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T23:06:41Z. 1110 Commits aus vier Repos, davon 480 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### secrets.py: Wurzelfix fuer den ModuleNotFoundError:dotenv-Blocker auf dem Wirt
+
+`81f70e3efb87` · entityos · 22:45 UTC · BACK agent
+
+```
+eos-architekt.service/architekt-schleife.sh/architekt/blog_lauf.py laufen
+mit nacktem /usr/bin/python3 (kein venv) -- ein unbedingter dotenv-Import
+liess JEDEN Aufrufpfad, der (auch transitiv, z.B. architekt/lauf.py ->
+clayverse.mistral_prestage.pipeline -> innenraum -> secrets) hier
+hindurchlief, mit ModuleNotFoundError abstuerzen. clayverse/architekt_blog.py
+wich dem deshalb komplett aus und duplizierte dieselbe Parse-Logik selbst.
+
+Fix: dotenv bleibt Erstweg, faellt aber graceful auf einen minimalen
+Hand-Parser zurueck (dieselbe Logik wie architekt_blog.py, jetzt an der
+Wurzel statt dupliziert). Live auf bare python3 reproduziert (Crash vorher,
+sauberer Import+Load danach) UND ein echter --run-Zyklus auf /opt/entityos
+lief danach durch (Urteil WIDERLEGT, kein Absturz, config/architekt.conf
+unveraendert, kein Live-Effekt). 1443 Tests gruen.
+
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+Claude-Session: https://claude.ai/code/session_0137VSQJf8XNew6TRfrpgYWb
+```
 
 ### architekt: letzte Testdatei fuer eingeschraenkten Modus/Bugwoche nachreichen
 
@@ -2928,25 +2951,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 16:30:03 +0000 — entityos: 2 Aenderungen
-
-`0f6526f6944c` · entityos · 16:30 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/store.py
-  the artefact/tests/test_tx.py
-
-Zeit: 2026-08-20T16:30:03+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

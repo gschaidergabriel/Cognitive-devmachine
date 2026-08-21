@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T22:43:18Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T23:06:41Z aus drei Repos. 481 Eintraege.
 
 ## architektur (18)
 
@@ -90,10 +90,11 @@ Automatisch erzeugt 2026-08-21T22:43:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (10)
+## reparatur (11)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T22:45 | entityos | `81f70e3efb87` | secrets.py: Wurzelfix fuer den ModuleNotFoundError:dotenv-Blocker auf dem Wirt |
 | 2026-08-21T19:32 | entityos | `ab5f15027228` | Verfassung: ClayCode-zuerst bei jedem Bugfix -- wenn robust/besser, sonst Ursprungssprache (Gabriel) |
 | 2026-08-21T14:49 | entityos | `de002e01d272` | Zeros Selbstforschungs-Handbuch: Doktrin, Messgeraete, sichere Selbst-Iteration, Bug-Hypothesen, Schwarm |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
@@ -113,7 +114,7 @@ Automatisch erzeugt 2026-08-21T22:43:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (324)
+## bau (323)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|

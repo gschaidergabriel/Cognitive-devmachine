@@ -2193,6 +2193,52 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
         self.assertFalse(receipt["payment_latch_active"])
         self.assertEqual(body_reads, [])
 
+    def test_active_payment_latch_container_is_rejected_before_execution(self):
+        leaked_text = "payment-latch-add-must-not-run"
+
+        class ActiveLatches(set):
+            def add(self, value):
+                raise LookupError(leaked_text)
+
+        class Response:
+            status = 402
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                opener_calls = []
+
+                def opener(request, timeout):
+                    opener_calls.append(transport)
+                    if transport == "http_error":
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 402, "Payment Required", {}, None,
+                        )
+                    return Response()
+
+                with self.assertRaisesRegex(
+                    ValueError, "payment_latches_must_be_set"
+                ) as caught:
+                    MOD.execute_chat(
+                        VALID_MESSAGES,
+                        model="mock",
+                        environ=env,
+                        opener=opener,
+                        now=iter((68.1, 68.11)).__next__,
+                        payment_latches=ActiveLatches(),
+                    )
+                self.assertEqual(opener_calls, [])
+                self.assertNotIn(leaked_text, repr(caught.exception))
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")

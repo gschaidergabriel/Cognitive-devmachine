@@ -181,7 +181,7 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
           art: str | None = None, projekt_id: str | None = None,
           seit: str | None = None, bis: str | None = None,
           hat_dateien: bool | None = None, hat_bilder: bool | None = None,
-          limit: int = 20, offset: int = 0) -> dict:
+          limit: int = 20, offset: int = 0, llm_umsortieren: bool = False) -> dict:
     worte = _worte(frage)
     if not worte:
         return {"frage": frage, "treffer": [], "gesamt": 0,
@@ -229,7 +229,8 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
             break
         sql = (
             "SELECT s.artikel_id, s.titel, s.text, a.art, a.projekt, a.status, "
-            "a.epistemic_class, a.erzeugt_am, a.konfidenz, bm25(fts_index_artikel) AS rang "
+            "a.epistemic_class, a.erzeugt_am, a.konfidenz, a.quelle, a.metadaten, "
+            "bm25(fts_index_artikel, 5.0, 1.0) AS rang "
             "FROM fts_index_artikel f JOIN artikel_suchtext s ON s.id = f.rowid "
             "JOIN artikel a ON a.id = s.artikel_id "
             f"WHERE fts_index_artikel MATCH ? {zusatz_where} "
@@ -249,10 +250,13 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
         return {"frage": frage, "treffer": [], "gesamt": 0, "worte": worte,
                 "hinweis": "nichts im Korpus gefunden -- nicht aus dem Titel geraten"}
 
-    # ⭐ Rangfolge = FTS-Rang (bm25, kleiner ist besser) UND Graph-Naehe (Grad
+    # ⭐ Rangfolge = FTS-Rang (bm25, Titel 5x staerker gewichtet als Text,
+    # siehe SQL oben) UND ein direkter Titel-Wortabgleich UND Graph-Naehe (Grad
     # in vp_weg, gewichtet mit guete). Ein Artikel, an dem die gelernte
     # Abrufkarte viel Verkehr traegt, ist erfahrungsgemaess der brauchbarere
-    # Treffer -- reines bm25 sieht diese gelernte Information gar nicht.
+    # Treffer -- reines bm25 sieht diese gelernte Information gar nicht, und
+    # ein Titel, der die Frage fast woertlich enthaelt, soll nicht hinter
+    # einem Zufallstreffer im JSON-Anteil der Indexzeile verschwinden.
     ids = [r["artikel_id"] for r in aus]
     platzhalter = ",".join("?" * len(ids))
     grad = {}
@@ -271,17 +275,46 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
     rang_werte = [r["rang"] for r in aus]
     r_min, r_max = min(rang_werte), max(rang_werte)
     g_max = max(grad.values()) if grad else 0.0
+    frage_l = str(frage or "").strip().lower()
 
-    def _score(r):
+    def _titel_norm(r) -> float:
+        titel_l = (r["titel"] or "").lower()
+        if not titel_l:
+            return 0.0
+        if frage_l and frage_l == titel_l:
+            return 1.0
+        if frage_l and frage_l in titel_l:
+            return 0.85
+        treffer = sum(1 for w in worte if w in titel_l)
+        return min(1.0, treffer / max(1, len(worte)))
+
+    def _score(r) -> float:
         # bm25 ist NEGATIV besser in sqlite fts5 je nach Build -- hier bereits
         # "kleiner=besser", also spiegeln wir auf 0..1 mit 1=bester Rang.
         spanne = (r_max - r_min) or 1.0
         rang_norm = 1.0 - ((r["rang"] - r_min) / spanne)
         graph_norm = (grad.get(r["artikel_id"], 0.0) / g_max) if g_max else 0.0
-        return 0.75 * rang_norm + 0.25 * graph_norm
+        titel_norm = _titel_norm(r)
+        return 0.5 * rang_norm + 0.3 * titel_norm + 0.2 * graph_norm
 
-    aus.sort(key=_score, reverse=True)
+    scores = {r["artikel_id"]: _score(r) for r in aus}
+    aus.sort(key=lambda r: scores[r["artikel_id"]], reverse=True)
     seite = aus[offset:offset + grenze]
+
+    # ⭐ Optionale Sprachmodell-Nachsortierung ueber die FREIEN Bahnen
+    # (bahnen.py, Faehigkeit "umsortieren_treffer") -- nur fuer mehrwortige,
+    # natuersprachliche Anfragen, nur auf der bereits eingegrenzten Seite (kein
+    # Wollknaeuel an Kandidaten), und NIE stillschweigend: `rang.llm` im
+    # Rueckgabewert zeigt, ob und mit welchem Modell umsortiert wurde. Bricht
+    # die Bahn ab (kein Schluessel, Deckel erreicht, Netzfehler) bleibt es
+    # bei der obigen deterministischen Reihenfolge -- Regel 3 aus bahnen.py,
+    # "erschoepft heisst Ablehnung, nicht Abstieg", gilt auch hier: kein
+    # stiller Rateversuch, einfach die bereits gute Rangfolge behalten.
+    llm_info = None
+    if llm_umsortieren and len(worte) >= 2 and len(seite) >= 2:
+        llm_info = _llm_umsortieren_treffer(db, frage, seite)
+        if llm_info and llm_info.get("neue_reihenfolge"):
+            seite = llm_info["neue_reihenfolge"]
 
     # Zugehoerigkeits-Chips fuer die sichtbaren Treffer -- eine Anfrage statt
     # N, damit eine Trefferseite kein N+1-Problem wird.
@@ -324,19 +357,30 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
     treffer = []
     for r in seite:
         aid = r["artikel_id"]
+        lesbar, herkunft = _lesbarer_text(
+            quelle=r.get("quelle"), metadaten=_metadaten_parsen(r.get("metadaten")),
+            titel=r["titel"], art=r["art"], roh_text=r["text"])
         treffer.append({
             "id": aid, "titel": r["titel"], "art": r["art"], "projekt": r["projekt"],
             "status": r["status"], "epistemic_class": r["epistemic_class"],
             "erzeugt_am": r["erzeugt_am"], "konfidenz": r["konfidenz"],
-            "ausriss": _ausriss(r["text"]),
+            "ausriss": _ausriss(lesbar), "text_herkunft": herkunft,
             "gehoert": gehoert_je.get(aid), "sphaeren": sphaeren_je.get(aid, []),
             "graph_gewicht": round(grad.get(aid, 0.0), 3),
+            "score": round(scores.get(aid, 0.0), 3),
         })
 
     return {
         "frage": frage, "worte": worte, "treffer": treffer,
         "gesamt": len(aus), "offset": offset, "limit": grenze,
-        "hinweis": "Ausschnitte aus dem echten Volltext, Rangfolge = bm25 + Graph-Naehe aus vp_weg.",
+        "rang": {
+            "methode": "bm25(Titel x5, Text) + Titel-Wortabgleich + Graph-Naehe aus vp_weg"
+                       + (" + Sprachmodell-Nachsortierung" if llm_info else ""),
+            "llm": ({"bahn": llm_info.get("bahn"), "modell": llm_info.get("modell")}
+                    if llm_info else None),
+        },
+        "hinweis": "Ausschnitte aus dem echten, lesbar aufbereiteten Inhalt (nicht der rohen "
+                   "Indexzeile), Rangfolge sichtbar in treffer[].score.",
     }
 
 
@@ -361,6 +405,203 @@ def bildpfad_falls_erlaubt(quelle: str | None) -> Path | None:
     if not any(str(p).startswith(w) for w in BILD_ERLAUBTE_WURZELN):
         return None
     return p
+
+
+def _parse_id_liste(text: str) -> list[str] | None:
+    """Nimmt der Modellantwort eine JSON-Liste von Artikel-Ids ab -- toleriert
+    Fliesstext drumherum (viele Modelle liefern trotz Anweisung ein paar
+    einleitende Worte), verweigert sich aber, wenn wirklich nichts Brauchbares
+    drinsteht, statt irgendetwas zu raten."""
+    text = (text or "").strip()
+    if not text:
+        return None
+    kandidaten = [text]
+    start, ende = text.find("["), text.rfind("]")
+    if start >= 0 and ende > start:
+        kandidaten.append(text[start:ende + 1])
+    for stueck in kandidaten:
+        try:
+            werte = json.loads(stueck)
+        except Exception:
+            continue
+        if isinstance(werte, list) and all(isinstance(x, str) for x in werte) and werte:
+            return werte
+    return None
+
+
+def _llm_umsortieren_treffer(db, frage: str, seite: list[dict]) -> dict | None:
+    """Faehigkeit 'umsortieren_treffer' ueber den Bahnrouter: dem Modell die
+    Frage plus die schon lesbar aufbereiteten Kandidaten geben (NICHT die
+    rohe Indexzeile -- echter Inhalt, wie oben verlangt), es um eine reine
+    Id-Reihenfolge bitten. Liefert None bei jedem Fehlschlag (kein Schluessel,
+    Deckel erreicht, kaputte Antwort) -- der Aufrufer faellt dann lautlos auf
+    die deterministische Rangfolge zurueck, meldet das aber im 'rang'-Feld."""
+    try:
+        from .bahnen import Bahnrouter, BahnErschoepft
+    except Exception:
+        return None
+    kandidaten = []
+    for r in seite[:12]:
+        lesbar, _ = _lesbarer_text(
+            quelle=r.get("quelle"), metadaten=_metadaten_parsen(r.get("metadaten")),
+            titel=r["titel"], art=r["art"], roh_text=r["text"])
+        kandidaten.append({"id": r["artikel_id"], "titel": r["titel"] or "",
+                            "ausschnitt": (lesbar or "")[:220]})
+    auftrag = (
+        f"Frage: {frage}\n\nKandidaten (id, titel, ausschnitt des echten Inhalts), als JSON:\n"
+        + json.dumps(kandidaten, ensure_ascii=False)
+        + "\n\nGib NUR eine JSON-Liste der id-Werte zurueck, beste Antwort auf die Frage "
+          "zuerst. Kein Fliesstext, keine Erklaerung -- nur die Liste."
+    )
+    try:
+        router = Bahnrouter(db)
+        antwort = router.rufe("umsortieren_treffer", auftrag, max_token=300, timeout=20)
+    except BahnErschoepft:
+        return None
+    except Exception:
+        return None
+    ids_neu = _parse_id_liste(antwort.get("text", ""))
+    if not ids_neu:
+        return None
+    nach_id = {r["artikel_id"]: r for r in seite}
+    geordnet = [nach_id[i] for i in ids_neu if i in nach_id]
+    if not geordnet:
+        return None
+    gesehen = {r["artikel_id"] for r in geordnet}
+    geordnet += [r for r in seite if r["artikel_id"] not in gesehen]
+    return {"neue_reihenfolge": geordnet, "bahn": antwort.get("bahn"), "modell": antwort.get("modell")}
+
+
+# ── Lesbarer Text statt roher Indexzeile ────────────────────────────────
+#
+# `artikel_suchtext.text` ist die INDEXZEILE (Titel + Art + Metadaten-JSON +
+# offene_fragen aneinandergehaengt) -- gebaut fuer den Volltextindex, nicht
+# zum Lesen. Wer sie ungefiltert anzeigt, sieht rohes JSON statt eines
+# Artikels. Diese drei Helfer bauen den besten WIRKLICH lesbaren Text:
+#   1) die echte Quelldatei, wenn ihr Pfad im Behaelter erreichbar ist,
+#   2) sonst die schon geparsten Metadaten als saubere Zeilen (kein JSON-
+#      Klumpen -- Feld: Wert, wie eine Infobox),
+#   3) sonst die Indexzeile MINUS das "Titel\nArt\n"-Praefix, und falls
+#      danach immer noch JSON uebrigbleibt, ebenfalls lesbar gerendert.
+# NO_INVENTION: jede Stufe zeigt nur, was wirklich in der Zeile/Datei steht --
+# keine Stufe erfindet Inhalt, sie waehlt nur die lesbarste ECHTE Quelle.
+
+# Breiter als BILD_ERLAUBTE_WURZELN (die ist nur fuer Bilder gedacht): jede
+# Wurzel, die laut compose.yaml tatsaechlich in den Behaelter gemountet ist
+# (siehe `docker inspect entityos --format '{{json .Mounts}}'`, gemessen
+# 2026-08-21). `/opt/clayverse/baeume/...` -- wo die meisten `quelle`-Pfade
+# HINZEIGEN -- ist NICHT gemountet; fuer diese Artikel bleibt Stufe 1 leer,
+# das ist der Normalfall, kein Fehler.
+TEXT_ERLAUBTE_WURZELN = (
+    "/var/lib/agentforge/projects", "/var/lib/clay", "/opt/unifieddb",
+    "/opt/clayverse/werkzeug", "/var/lib/entityos-dateien", "/workspace",
+)
+_TEXT_ENDUNGEN_VERBOTEN = _BILD_ENDUNGEN + (
+    ".db", ".sqlite", ".sqlite3", ".zip", ".tar", ".gz", ".pyc", ".pkl", ".bin")
+_TEXT_MAX_BYTES = 200_000  # ein Artikeltext, keine Datenbank
+
+
+def _quelltext_lesen(quelle: str | None) -> str | None:
+    """Die echte Quelldatei -- NUR wenn sie unter einer erlaubten, im
+    Behaelter gemounteten Wurzel liegt, existiert, klein genug und kein
+    Binaerformat ist. Sonst immer None, nie ein Rateversuch, nie ein 500er."""
+    if not quelle or str(quelle).lower().endswith(_TEXT_ENDUNGEN_VERBOTEN):
+        return None
+    try:
+        p = Path(str(quelle)).resolve()
+    except Exception:
+        return None
+    if not any(str(p).startswith(w) for w in TEXT_ERLAUBTE_WURZELN):
+        return None
+    try:
+        if not p.is_file() or p.stat().st_size > _TEXT_MAX_BYTES:
+            return None
+        roh = p.read_bytes()
+    except OSError:
+        return None
+    if b"\x00" in roh[:2000]:  # riecht nach Binaerdatei, kein Text
+        return None
+    try:
+        text = roh.decode("utf-8", errors="replace").strip()
+    except Exception:
+        return None
+    return text or None
+
+
+def _metadaten_parsen(roh: str | None) -> dict:
+    try:
+        werte = json.loads(roh or "{}")
+        return werte if isinstance(werte, dict) else {}
+    except Exception:
+        return {}
+
+
+def _metadaten_lesbar(metadaten: dict) -> str:
+    """Strukturierte Metadaten als lesbare "Feld: Wert"-Zeilen -- NIE als
+    rohes JSON. Deterministisch (gleiche Eingabe -> gleiche Ausgabe), nichts
+    wird dazuerfunden, nur anders geschrieben als es schon in der Spalte steht."""
+    zeilen = []
+    for k, v in (metadaten or {}).items():
+        if v is None or v == "" or v == [] or v == {}:
+            continue
+        if isinstance(v, (list, tuple)):
+            wert = "; ".join(str(x) for x in v if x not in (None, ""))
+        elif isinstance(v, dict):
+            wert = "; ".join(f"{ik}: {iv}" for ik, iv in v.items() if iv not in (None, ""))
+        else:
+            wert = str(v)
+        if wert:
+            zeilen.append(f"**{k}:** {wert}")
+    return "\n\n".join(zeilen)
+
+
+def _index_json_saubern(titel: str | None, art: str | None, roh_text: str | None) -> str:
+    """Letzter Rueckfall: schneidet das bekannte 'Titel\nArt\n{JSON}\n[...]'
+    -Praefix der Indexzeile weg, statt rohes JSON zu zeigen. Bleibt danach
+    trotzdem JSON uebrig, wird es genauso lesbar gerendert wie Stufe 2."""
+    text = roh_text or ""
+    praefix = f"{titel or ''}\n{art or ''}\n"
+    rest = text[len(praefix):] if text.startswith(praefix) else text
+    rest = re.sub(r"\n\[\]\s*$", "", rest)  # leere offene_fragen-Liste am Ende
+    rest = rest.strip()
+    if not rest:
+        return ""
+    if rest[:1] in "{[":
+        try:
+            werte = json.loads(rest)
+        except Exception:
+            werte = None
+        if isinstance(werte, dict):
+            lesbar = _metadaten_lesbar(werte)
+            if lesbar:
+                return lesbar
+        elif isinstance(werte, list) and werte:
+            return "\n".join(f"- {x}" for x in werte if x)
+    return rest
+
+
+def _lesbarer_text(*, quelle: str | None, metadaten: dict, titel: str | None,
+                    art: str | None, roh_text: str | None) -> tuple[str, str | None]:
+    """Der beste WIRKLICH lesbare Text zu einem Artikel -- nie die rohe
+    Indexzeile. Rueckgabe (text, herkunft); herkunft in
+    {'datei','metadaten','index',None} -- sichtbar, damit niemand ein
+    generiertes/umformatiertes Stueck fuer eine andere Quelle haelt."""
+    datei = _quelltext_lesen(quelle)
+    if datei:
+        return datei, "datei"
+    # Ein echtes Prosafeld in den Metadaten (selten, aber wenn vorhanden die
+    # beste Quelle nach der Datei) schlaegt die flache Feld:Wert-Liste.
+    prosa = (metadaten or {}).get("text") or (metadaten or {}).get("inhalt")
+    if isinstance(prosa, str) and prosa.strip():
+        return prosa.strip(), "metadaten"
+    if metadaten:
+        lesbar = _metadaten_lesbar(metadaten)
+        if lesbar:
+            return lesbar, "metadaten"
+    rest = _index_json_saubern(titel, art, roh_text)
+    if rest:
+        return rest, "index"
+    return "", None
 
 
 def _offene_fragen(roh: str | None) -> list[dict]:
@@ -409,14 +650,10 @@ def artikel_lesen(db, artikel_id: str) -> dict:
         return {"id": aid, "nicht_gefunden": True,
                 "hinweis": "kein Artikel mit dieser Kennung"}
 
-    try:
-        metadaten = json.loads(r["metadaten"] or "{}")
-        if not isinstance(metadaten, dict):
-            metadaten = {}
-    except Exception:
-        metadaten = {}
-
-    text = r["text"] or metadaten.get("text") or metadaten.get("inhalt") or ""
+    metadaten = _metadaten_parsen(r["metadaten"])
+    text, text_herkunft = _lesbarer_text(
+        quelle=r["quelle"], metadaten=metadaten, titel=r["titel"], art=r["art"],
+        roh_text=r["text"])
 
     sphaeren = [x["sphaere"] for x in db.db.execute(
         "SELECT sphaere FROM artikel_sphaere WHERE artikel_id=?", (aid,)).fetchall()]
@@ -489,8 +726,12 @@ def artikel_lesen(db, artikel_id: str) -> dict:
                   "url": f"/api/omnimind/bild/{aid}"} if bildpfad else None),
         "zusammenfassung": (dict(zsf) | {"generiert": True} if zsf else None),
         "skizze": (dict(skizze) if skizze else None),
+        "text_herkunft": text_herkunft,
         "hinweis": ("Der volle Artikeltext. Steht hier nichts, ist der Artikel ein reiner "
-                    "Zeiger -- z.B. auf eine Datei." if not text else None),
+                    "Zeiger -- z.B. auf eine Datei." if not text else
+                    (None if text_herkunft == "datei" else
+                     "Kein Quelltext im Behaelter erreichbar -- das ist der lesbar aufbereitete "
+                     "Metadaten-/Indexinhalt dieses Eintrags, nicht die Originaldatei.")),
     }
 
 
@@ -721,6 +962,11 @@ def registriere_omnimind_wege(app, *, db, pruefe_zugriff, antwort_auf_fehler) ->
             seit=q.get("seit") or None, bis=q.get("bis") or None,
             hat_dateien=(q.get("hat_dateien") == "1"), hat_bilder=(q.get("hat_bilder") == "1"),
             limit=int(q.get("limit", 20) or 20), offset=int(q.get("offset", 0) or 0),
+            # Nur echte Anfragen bekommen die Bahnen-Nachsortierung -- suche()
+            # gated selbst zusaetzlich auf >=2 Suchworte, hier nur der
+            # Default fuer den Live-Weg (Tests rufen suche() direkt auf und
+            # bekommen ohne explizites llm_umsortieren=True keinen Netzzugriff).
+            llm_umsortieren=(q.get("llm") != "0"),
         )
         return JSONResponse(ergebnis)
 

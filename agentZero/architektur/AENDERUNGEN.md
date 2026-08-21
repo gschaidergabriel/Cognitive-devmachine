@@ -1,15 +1,14 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T09:50:30Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T10:20:30Z aus drei Repos. 480 Eintraege.
 
-## architektur (14)
+## architektur (13)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
 | 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
 | 2026-08-18T03:39 | entityos | `e413f4f8adc3` | Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden |
-| 2026-08-18T03:25 | entityos | `6b46462b72f2` | Identitaet v3: Eigner-Spezifikation eingewoben, Verkoerperung ohne Erfindung |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
 | 2026-08-15T18:00 | unifieddb | `7f5e8b582f79` | F87 Auslieferungsform + Teil III der Zielarchitektur |
 | 2026-08-15T17:13 | clay | `2a6c2f4b6706` | F79 Endgueltige Bahnbelegung GLM/NVIDIA/Groq-Premium, GLM spricht als ClayVerse - Identitaet ist Oberflaeche,  |
@@ -86,12 +85,11 @@ Automatisch erzeugt 2026-08-21T09:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (13)
+## reparatur (12)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
-| 2026-08-18T10:29 | entityos | `7432769daa72` | Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root s |
 | 2026-08-18T05:27 | entityos | `2339aea31bf2` | prestage: upgrade governor model to mistral-medium, fix slot-2 session check |
 | 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
@@ -104,7 +102,7 @@ Automatisch erzeugt 2026-08-21T09:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (10)
+## pruefung (8)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -113,16 +111,18 @@ Automatisch erzeugt 2026-08-21T09:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
 | 2026-08-18T03:33 | entityos | `b55d57bd410e` | Test: Vertrag sagt advisory/release review, nicht nur advisory review |
-| 2026-08-18T03:29 | entityos | `eae74c278bbf` | Test: entityos.exec nimmt seit 18041d730 keinen Caller-Lease mehr an |
-| 2026-08-18T03:27 | entityos | `98c89e9c2de6` | Test: Prompt hatte keinen semantischen Bezug zu den erwarteten Erinnerungen |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (317)
+## bau (321)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T10:18 | entityos | `f895a5115ebf` | EOS-Chronik 2026-08-21 10:18:20 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T10:16 | entityos | `70b1e28b98b0` | EOS-Chronik 2026-08-21 10:16:05 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T10:07 | entityos | `f43d21ca1cf1` | EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T10:05 | entityos | `830caae196fb` | EOS-Chronik 2026-08-21 10:05:35 +0000 — entityos: 5 Aenderungen |
 | 2026-08-21T09:39 | entityos | `6580a52cd9be` | EOS-Chronik 2026-08-21 09:39:13 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T09:32 | entityos | `354ec8528b13` | EOS-Chronik 2026-08-21 09:32:19 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T09:30 | entityos | `4584d073b347` | EOS-Chronik 2026-08-21 09:30:19 +0000 — entityos: 3 Aenderungen |
@@ -179,8 +179,4 @@ Automatisch erzeugt 2026-08-21T09:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T03:06 | unifieddb | `0a93b02ad07c` | EOS-Chronik 2026-08-21 03:06:31 +0000 — unifieddb: 1 Aenderungen |
 | 2026-08-21T03:01 | entityos | `74d24056de0d` | EOS-Chronik 2026-08-21 03:01:15 +0000 — entityos: 6 Aenderungen |
 | 2026-08-21T03:01 | unifieddb | `5d2e5ea71986` | EOS-Chronik 2026-08-21 03:01:11 +0000 — unifieddb: 1 Aenderungen |
-| 2026-08-21T02:42 | entityos | `3733c6bf8588` | EOS-Chronik 2026-08-21 02:42:22 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T02:36 | entityos | `0e58337bc2ae` | EOS-Chronik 2026-08-21 02:36:51 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T02:27 | entityos | `ab34c0b56735` | EOS-Chronik 2026-08-21 02:27:45 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T02:25 | entityos | `2078ffe8c963` | EOS-Chronik 2026-08-21 02:25:44 +0000 — entityos: 2 Aenderungen |
 

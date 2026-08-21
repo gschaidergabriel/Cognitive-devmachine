@@ -1047,6 +1047,70 @@ def main() -> None:
         from . import heimpc
         return heimpc.ausfuehren(befehl, frist)
 
+    # ── Browser: Zero bedient den echten, angemeldeten Browser des Menschen ──
+    @mcp.tool(annotations=effectful)
+    def browser_oeffnen(url: str, browser: str = "") -> dict:
+        """Eine Seite im Browser des Menschen oeffnen (Fenster auf Bildschirm 2, echtes angemeldetes Profil). `browser` leer = Standardbrowser; sonst chrome|firefox|brave."""
+        from . import browser_fern
+        return browser_fern.oeffnen(url, browser)
+
+    @mcp.tool(annotations=ro)
+    def browser_lesen(browser: str = "") -> dict:
+        """Den sichtbaren Text/Inhalt der aktuellen Browserseite lesen."""
+        from . import browser_fern
+        return browser_fern.lesen(browser)
+
+    @mcp.tool(annotations=ro)
+    def browser_screenshot(browser: str = "") -> dict:
+        """Ein Bild der aktuellen Browserseite. Speichert es in den Dateispeicher; gib die Kennung an `bild_ansehen`, um es zu analysieren."""
+        from . import browser_fern, dateien
+        r = browser_fern.screenshot(browser)
+        if not r.get("erreichbar"):
+            return r
+        if "bytes" not in r:
+            return {k: v for k, v in r.items() if k != "bytes"}
+        a = dateien.hochladen(user_id=bridge.user_id, dateiname="browser.png", inhalt=r["bytes"])
+        return {"erreichbar": True, "gespeichert_als": a.get("id"), "name": a.get("name")}
+
+    @mcp.tool(annotations=effectful)
+    def browser_klick(selektor: str = "", x: int | None = None, y: int | None = None,
+                      browser: str = "", wirkt_nach_aussen: bool = False) -> dict:
+        """Auf der Browserseite klicken -- per CSS-`selektor` oder per x,y. Setze `wirkt_nach_aussen=true`, wenn der Klick etwas absendet/kauft/postet (dann wird es als Aussenwirkung protokolliert)."""
+        from . import browser_fern
+        return browser_fern.klick(selektor or None, x, y, browser, wirkt_nach_aussen)
+
+    @mcp.tool(annotations=effectful)
+    def browser_tippen(selektor: str, text: str, browser: str = "") -> dict:
+        """In ein Feld (CSS-`selektor`) auf der Browserseite `text` eintippen."""
+        from . import browser_fern
+        return browser_fern.tippen(selektor, text, browser)
+
+    @mcp.tool(annotations=effectful)
+    def browser_formular(felder: dict, absenden_selektor: str = "", browser: str = "") -> dict:
+        """Ein Formular ausfuellen: `felder` = {CSS-Selektor: Wert}. `absenden_selektor` optional zum Abschicken -- Abschicken ist eine reale Aussenwirkung, kuendige sie an, wenn nicht beauftragt."""
+        from . import browser_fern
+        return browser_fern.formular(felder, absenden_selektor or None, browser)
+
+    @mcp.tool(annotations=effectful)
+    def browser_navigieren(richtung: str = "neu_laden", browser: str = "") -> dict:
+        """Browser-Navigation: richtung = zurueck | vor | neu_laden."""
+        from . import browser_fern
+        return browser_fern.navigieren(richtung, browser)
+
+    @mcp.tool(annotations=effectful)
+    def schluessel_anlernen(name: str, anbieter: str, schluessel: str, modell: str = "") -> dict:
+        """Einen NEUEN freien API-Schluessel VOLL anlernen: wird abgelegt, mit einem echten Mini-Aufruf geprueft (nutzbar/nicht) und als freie Bahn verdrahtet, damit du und die Vorstufe ihn nutzen koennen. `anbieter` = groq|mistral|gemini|openrouter|nvidia|deepseek|together|cloudflare; `name` z.B. GROQ4_API_KEY; `modell` optional. ⚠️ Der Schluesselwert wird NIE zurueckgegeben oder protokolliert. Das Ergebnis erscheint nach ~2 min in `bahn_lage`."""
+        import json as _j, uuid as _u
+        from pathlib import Path as _P
+        spool = _P("/var/lib/clay/schluessel-spool")
+        try:
+            spool.mkdir(parents=True, exist_ok=True)
+            (spool / f"{_u.uuid4().hex}.json").write_text(_j.dumps(
+                {"name": name, "anbieter": anbieter, "schluessel": schluessel, "modell": modell}))
+        except Exception as e:
+            return {"angefragt": False, "fehler": f"{type(e).__name__}: {e}"[:120]}
+        return {"angefragt": True, "hinweis": "wird binnen ~2 min abgelegt, geprueft und als freie Bahn verdrahtet"}
+
     @mcp.tool(annotations=udb_write)
     def raum_rufen(text: str) -> dict:
         """Kurzer Zuruf an die anderen drei Plaetze, CAVEMAN ENGLISH. Fuer Absprachen, nicht fuer Gespraechsinhalte."""

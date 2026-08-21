@@ -1,12 +1,94 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T09:50:31Z. 1043 Commits aus vier Repos, davon 412 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T10:20:31Z. 1044 Commits aus vier Repos, davon 416 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 10:18:20 +0000 — entityos: 3 Aenderungen
+
+`f895a5115ebf` · entityos · 10:18 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mcp_server.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/policy/managed-settings.json
+
+Zeit: 2026-08-21T10:18:20+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 10:16:05 +0000 — entityos: 2 Aenderungen
+
+`70b1e28b98b0` · entityos · 10:16 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/schluessel_anlernen.py
+  the artefact/clayverse/omnimind.py
+
+Zeit: 2026-08-21T10:16:05+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen
+
+`f43d21ca1cf1` · entityos · 10:07 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/browser_fern.py
+  the artefact/clayverse/mcp_server.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/policy/managed-settings.json
+
+Zeit: 2026-08-21T10:07:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 10:05:35 +0000 — entityos: 5 Aenderungen
+
+`830caae196fb` · entityos · 10:05 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+  the artefact/web/omnimind/index.html
+  the artefact/web/omnimind/omnimind.css
+  the artefact/web/omnimind/omnimind.js
+  the artefact/web/omnimind/vorschau.html
+
+Zeit: 2026-08-21T10:05:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 09:39:13 +0000 — entityos: 4 Aenderungen
 
@@ -2840,81 +2922,6 @@ Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:15:09 +0000 — entityos: 1 Aenderungen
-
-`e3d1727959ac` · entityos · 00:15 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/prestage.py
-
-Zeit: 2026-08-20T00:15:09+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:12:12 +0000 — entityos: 1 Aenderungen
-
-`74492ce84e90` · entityos · 00:12 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/runtime_CLAUDE.md
-
-Zeit: 2026-08-20T00:12:12+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:09:40 +0000 — entityos: 4 Aenderungen
-
-`97b55ff5fa8c` · entityos · 00:09 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  eos-demo/eos-screenshot.sh
-  the artefact/compose.yaml
-  the artefact/runtime_CLAUDE.md
-  udb-backup/udb_backup.py
-
-Zeit: 2026-08-20T00:09:40+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:00:04 +0000 — clayverse: 1 Aenderungen
-
-`5221a340b570` · clay · 00:00 UTC · ClayVerse
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  werkzeug/schluesselwacht.py
-
-Zeit: 2026-08-20T00:00:04+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: clayverse (/opt/clayverse)
-Dateien: 1
-Fern: origin -> /srv/git/clayverse.git
 Werkzeug: eos-chronik.py v1
 ```
 

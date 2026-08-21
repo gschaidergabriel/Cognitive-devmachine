@@ -86,6 +86,14 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__pc_sehen",
     "mcp__clayverse__pc_eingabe",
     "mcp__clayverse__pc_ausfuehren",
+    "mcp__clayverse__browser_oeffnen",
+    "mcp__clayverse__browser_lesen",
+    "mcp__clayverse__browser_screenshot",
+    "mcp__clayverse__browser_klick",
+    "mcp__clayverse__browser_tippen",
+    "mcp__clayverse__browser_formular",
+    "mcp__clayverse__browser_navigieren",
+    "mcp__clayverse__schluessel_anlernen",
 )
 
 MAX_PROMPT_CHARS = 20_000

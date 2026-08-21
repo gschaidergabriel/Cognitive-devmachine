@@ -7,6 +7,7 @@ import time
 from typing import Any
 
 from .. import identity  # coordinator-owned, imported not edited
+from . import absicht as _absicht
 from . import wettbewerb
 from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
 from . import headless_zero, prestage, translator
@@ -64,7 +65,11 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
     # Alle Quellen als Bewerber, in einer Form -- die Volltexte bleiben hier im
     # ungekuerzten world und werden erst NACH der Wahl materialisiert.
     try:
-        world["_gw_kandidaten"] = wettbewerb.kandidaten(world)
+        world["_gw_marken"] = wettbewerb.fremdtext_marken(db)
+    except Exception:
+        world["_gw_marken"] = set()
+    try:
+        world["_gw_kandidaten"] = wettbewerb.kandidaten(world, world["_gw_marken"])
         _sb_kern, _sb = wettbewerb.selbstbild_teilen(world.get("canonical_identity") or "")
         world["_gw_volltexte"] = wettbewerb.volltexte(world["_gw_kandidaten"] + _sb)
     except Exception:
@@ -589,6 +594,27 @@ def _mit_kuerze(caveman: str) -> str:
     return f"{caveman}\n\n{_KUERZE}"
 
 
+def _memory_stand(db) -> set:
+    """Welche Gedaechtniseintraege es VOR dem Zug schon gab. Nie werfend."""
+    try:
+        rows = getattr(db, "db", db).execute(
+            "SELECT memory_id FROM durable_memory").fetchall()
+    except Exception:
+        return set()
+    raus = set()
+    for r in rows:
+        try:
+            raus.add(str(r["memory_id"]))
+        except Exception:
+            raus.add(str(r[0]))
+    return raus
+
+
+def _neue_memory_ids(db, vorher: set) -> list:
+    """Was in diesem Zug dazugekommen ist."""
+    return sorted(_memory_stand(db) - (vorher or set()))
+
+
 def _gespraechslage(world: dict[str, Any]) -> dict[str, Any] | None:
     """Wie viele Zuege liegen schon hinter uns, und wie lange ist der letzte her?
 
@@ -1070,6 +1096,9 @@ def run_chat_turn(
 
     # ⭐ So frueh wie moeglich anwerfen -- es haengt nur an der Frage.
     _erwartung_auftrag = _erwartung_starten(message)
+    # Vor dem Zug festhalten, was schon im Gedaechtnis stand -- danach ist die
+    # Differenz genau das, was dieser Zug geschrieben hat.
+    _memory_vorher = _memory_stand(db)
     # Der Vorwaermung sagen, dass jetzt jemand wartet -- sie soll nicht
     # ausgerechnet waehrend eines Zuges Node-Prozesse booten (siehe warm_zero).
     try:
@@ -1283,8 +1312,27 @@ def run_chat_turn(
         # ⭐ Wettbewerbsbuch. NUR bei echter Aufzeichnung: eine Messreihe darf
         # sich ihren eigenen Neuheits-Abschlag nicht selbst anfuettern, sonst
         # misst der zweite Lauf die Spuren des ersten.
+        # ⭐ HERKUNFT DER GEDAECHTNISSCHREIBUNGEN. Was Zero in DIESEM Zug ins
+        # dauerhafte Gedaechtnis geschrieben hat, bekommt die Werkzeugspur des
+        # Zuges angeheftet -- vor allem die Auskunft, ob dabei Fremdtext aus dem
+        # Netz gelesen wurde. Die Kette WebFetch -> memory_add -> Ausstrahlung
+        # -> Selbst ist der Weg, auf dem ein gelesener Satz kanonisch wird.
+        try:
+            _neue_erinnerungen = _neue_memory_ids(db, _memory_vorher)
+        except Exception:
+            _neue_erinnerungen = []
         _lernbericht = None
+        # ⭐ Absichtspruefung: hat dieser Zug nach aussen gewirkt, ohne dass
+        # jemand danach gefragt hat? Entdeckt, blockt nicht.
+        _absichtsurteil = _absicht.pruefen(message, zero, selected_tools)
         if record_via_turnlifecycle:
+            wettbewerb.herkunft_buchen(own_store, turn_id, session_id,
+                                       _neue_erinnerungen, zero)
+            _absicht.buchen(own_store, turn_id, session_id, message,
+                            zero, selected_tools)
+            if _absichtsurteil["verdacht"]:
+                print(f"absicht: {_absichtsurteil['verdacht']} -- "
+                      f"{_absichtsurteil['grund']}", file=sys.stderr)
             _raus = _gewaehlte_treffer(vorstufe_world, envelope.get("broadcast_ids"))
             _raus_ids = [t.get("artikel_id") for t in _raus]
             wettbewerb.buchen(own_store, session_id, turn_id,
@@ -1390,6 +1438,14 @@ def run_chat_turn(
             # LAUTLOS auf den Kaltweg zurueck, und genau deshalb hat niemand
             # gemerkt, dass er monatelang haengen konnte.
             "warm": bool(zero.get("warm")),
+            # ⭐ Die Werkzeugspur -- bis 2026-08-21 sah sie niemand. Ohne sie
+            # gibt es weder eine Herkunftsmarke fuer Gedaechtniseintraege noch
+            # irgendeine Absichtspruefung.
+            "werkzeuge_benutzt": list(zero.get("werkzeuge") or []),
+            "aussenwirkung": list(zero.get("aussenwirkung") or []),
+            "fremdtext_gelesen": list(zero.get("fremdtext") or []),
+            "neue_erinnerungen": list(_neue_erinnerungen),
+            "absicht_verdacht": _absichtsurteil["verdacht"],
             "broadcast_herkunft": _auswahl_herkunft,
             # Was der Rueckkanal aus diesem Zug gelernt hat (None = nicht
             # aufgezeichnet, also auch nicht gelernt).

@@ -137,6 +137,68 @@ _LEER_RUECKFALL = (
 )
 
 
+# ── Die Werkzeugspur ─────────────────────────────────────────────────────
+# ⭐⭐ BIS 2026-08-21 GAB ES SIE NICHT. Der Kaltweg lief mit
+# `--output-format json` und bekam nur das Endergebnis: Antworttext, Dauer,
+# Kosten. WELCHE Werkzeuge Zero angefasst hat, stand nirgends -- weder im
+# Protokoll noch in der Datenbank. Damit war zweierlei unmoeglich:
+#   * eine Herkunftsmarke ("dieser Gedaechtniseintrag entstand in einem Zug, in
+#     dem fremder Text aus dem Netz gelesen wurde"),
+#   * jede Form von Absichtspruefung ("hat dieser Zug etwas getan, wonach der
+#     Mensch nicht gefragt hat?").
+# Beides braucht die Spur. Der Warmweg streamte ohnehin schon; hier wird der
+# Kaltweg nachgezogen, damit beide Wege dasselbe liefern.
+_AUSSENWIRKUNG = frozenset({
+    # Werkzeuge, deren Wirkung den Behaelter verlaesst oder dauerhaft bleibt.
+    "Write", "Edit", "MultiEdit", "NotebookEdit", "Bash", "KillShell",
+    "WebFetch", "WebSearch",
+    "mcp__clayverse__request_effect", "mcp__clayverse__request_autonomy_effect",
+    "mcp__clayverse__udb_memory_add", "mcp__clayverse__udb_embedding_store",
+    "mcp__clayverse__postfach_senden", "mcp__clayverse__werkbank_veroeffentlichen",
+    "mcp__clayverse__abruf_rueckmeldung",
+})
+_FREMDTEXT = frozenset({"WebFetch", "WebSearch"})
+
+
+def spur_aus_strom(stdout: str):
+    """(Endumschlag, Werkzeugliste) aus einem stream-json-Strom.
+
+    Reihenfolge bleibt erhalten und Wiederholungen bleiben stehen: dass ein
+    Werkzeug DREIMAL lief, ist eine andere Aussage als dass es lief.
+    """
+    umschlag, werkzeuge = None, []
+    for zeile in (stdout or "").splitlines():
+        zeile = zeile.strip()
+        if not zeile or not zeile.startswith("{"):
+            continue
+        try:
+            ev = json.loads(zeile)
+        except Exception:
+            continue
+        if ev.get("type") == "result":
+            umschlag = ev
+            continue
+        inhalt = ((ev.get("message") or {}).get("content")
+                  if isinstance(ev.get("message"), dict) else None)
+        for block in (inhalt or []):
+            if isinstance(block, dict) and block.get("type") == "tool_use":
+                name = str(block.get("name") or "")
+                if name:
+                    werkzeuge.append(name)
+    return umschlag, werkzeuge
+
+
+def spur_deuten(werkzeuge) -> dict:
+    """Was die Spur bedeutet -- rein mechanisch, ohne Modellurteil."""
+    w = list(werkzeuge or [])
+    return {
+        "werkzeuge": w,
+        "n": len(w),
+        "aussenwirkung": sorted({x for x in w if x in _AUSSENWIRKUNG}),
+        "fremdtext": sorted({x for x in w if x in _FREMDTEXT}),
+    }
+
+
 def run_headless(
     caveman_prompt: str,
     *,
@@ -272,7 +334,9 @@ def run_headless(
         # Vorstufe ist jetzt nur noch Hinweis; Zero waehlt selbst.
         "--permission-mode", "dontAsk",
         "--append-system-prompt-file", _sysdatei,
-        "--output-format", "json",
+        # ⭐ stream-json statt json: nur so sieht man die Werkzeugaufrufe. Der
+        # Warmweg macht es seit jeher so; der Kaltweg zog 2026-08-21 nach.
+        "--output-format", "stream-json", "--verbose",
         "--no-session-persistence",
         "--max-turns", str(max_turns),
     ]
@@ -320,12 +384,11 @@ def run_headless(
         raise HeadlessZeroError(
             f"headless Zero exited rc={cp.returncode} "
             f"stderr={(cp.stderr or '')[:400]!r} stdout={(cp.stdout or '')[:900]!r}")
-    try:
-        envelope = json.loads(cp.stdout)
-    except json.JSONDecodeError as exc:
-        raise HeadlessZeroError("headless Zero output is not JSON") from exc
+    envelope, _werkzeuge = spur_aus_strom(cp.stdout)
     if not isinstance(envelope, dict):
-        raise HeadlessZeroError("headless Zero envelope must be an object")
+        raise HeadlessZeroError(
+            "headless Zero lieferte kein result-Ereignis im Strom: "
+            f"{(cp.stdout or '')[:400]!r}")
     if envelope.get("is_error"):
         raise HeadlessZeroError(f"headless Zero returned an error envelope: {str(envelope.get('result',''))[:500]}")
 
@@ -343,4 +406,5 @@ def run_headless(
         "cost_usd": envelope.get("total_cost_usd"),
         "wall_ms": wall_ms,
         "claude_session_id": envelope.get("session_id"),
+        **spur_deuten(_werkzeuge),
     }

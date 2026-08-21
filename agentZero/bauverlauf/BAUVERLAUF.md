@@ -1,12 +1,96 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T01:11:18Z. 1004 Commits aus vier Repos, davon 343 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T01:41:18Z. 1005 Commits aus vier Repos, davon 347 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 01:39:58 +0000 — entityos: 9 Aenderungen
+
+`dd90b24d4660` · entityos · 01:39 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/absicht.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_absicht.py
+  the artefact/tests/test_herkunftsmarke.py
+  the artefact/tests/test_werkzeugspur.py
+  zeuge/eos_zeuge.py
+
+Zeit: 2026-08-21T01:39:58+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 9
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 01:29:22 +0000 — entityos: 2 Aenderungen
+
+`1fe881b3caa9` · entityos · 01:29 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/fence_hook.py
+  the artefact/tests/test_zaun_schreiben.py
+
+Zeit: 2026-08-21T01:29:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 01:24:13 +0000 — entityos: 1 Aenderungen
+
+`81e2ffcdef81` · entityos · 01:24 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/eos_wal.py
+
+Zeit: 2026-08-21T01:24:13+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 01:16:52 +0000 — entityos: 4 Aenderungen
+
+`a7638950fc45` · entityos · 01:16 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_bootlast.py
+  zeuge/eos_zeuge.py
+  zeuge/test_zeuge.py
+
+Zeit: 2026-08-21T01:16:52+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen
 
@@ -4425,137 +4509,5 @@ Three earlier failed attempts (session-check bug, credential-permission
 bug, missing-keys bug) each began and cleanly ABORTED via
 lifecycle.abort() -- no dangling active_turns, confirms the atomicity
 path works under real failure, not just the happy path.
-```
-
-### Zeros Chat-Vorderseite, und die Zwillinge werden sichtbar
-
-`eb37ffde24ab` · entityos · 05:23 UTC · EntityOS
-
-```
-1) CHAT AUF /, TERMINAL AUF /terminal. Zero laeuft headless (Vorstufe -> claude -p
-   -> Uebersetzer), also muss die Oberflaeche kein Terminal mehr sein.
-   Das alte Terminal wird NICHT geloescht, sondern verschoben: es ist der einzige
-   heute bewiesene Weg zu Zero. Ihn wegzunehmen, bevor der neue einmal getragen
-   hat, waere ein Umbau ohne Vergleichsmoeglichkeit.
-   /ws/chat uebernimmt den Clerk-Handschlag unveraendert - die am besten
-   bewiesene Stelle im ganzen System wird nicht angefasst, nur wiederverwendet.
-   Der Chat bindet Platz 2, das Terminal behaelt Platz 1: so streiten die beiden
-   Oberflaechen nie um dieselbe active_turns-Zeile.
-   Rueckfassung und Uebersetzungsbeleg fahren im Antwortrahmen mit. Der Mensch
-   sieht nie, was Zero wirklich sagte - eine Uebersetzung, die niemand pruefen
-   kann, ist schlechter als keine.
-   Der Socket wird jetzt in finally geschlossen. Ein nach der Abweisung offener
-   Socket ist nicht nur ein Leck: er schenkt einen Wiederholungskanal ohne neuen
-   TLS-Handschlag.
-
-2) DIE ZWILLINGE WERDEN SICHTBAR. Neue Tabelle entityos_wirte plus
-   clayverse/wirte.py.
-   Befund davor: der Herzschlag beider Rechner kommt seit Tagen an (Generation
-   14.533 bzw. 14.451, alle 16 s ueber Tailscale) - und landete als EINE
-   JSON-Datei je Zwilling, die bei jedem Takt ueberschrieben wird. Keine Tabelle,
-   keine Historie. Was nicht in der UnifiedDB steht, existiert fuer die Entitaet
-   nicht: Zero konnte seine eigenen Zwillinge nicht sehen. Damit war auch die
-   Angabe connected_systems der Mistral-Vorstufe dauerhaft NOT_WIRED, obwohl die
-   Daten die ganze Zeit ankamen.
-   Zugehoerigkeit ist DEKLARIERT, nicht geraten: ein Wirt, den niemand zugeordnet
-   hat, steht als gehoert_zu = None in der Tabelle. Sichtbar unbekannt ist besser
-   als per Namensaehnlichkeit falsch zugewiesen - der Name eines Rechners ist kein
-   Eigentumsnachweis.
-   Und Zugehoerigkeit ist NICHT Arbeitsort. Steht so im Code: sie sagt, WEM ein
-   Rechner gehoert, nicht wo gearbeitet werden darf.
-   kognitive_module wird bewusst mitgeliefert und ist bei beiden LEER. Ein Wirt
-   kann online und gesund sein und trotzdem nichts koennen - diesen Unterschied
-   muss die Vorstufe sehen, sonst plant sie Arbeit auf einem Rechner, der nur winkt.
-
-3) HAKEN ERKENNT PIPELINE-GEFUEHRTE AUFRUFE. Bei CLAYVERSE_PIPELINE_MANAGED=1
-   kehrt _main() sofort zurueck, vor jedem Datenbankzugriff. claude -p loest die
-   Haken genauso aus wie eine Tastatureingabe; ohne diese Abfrage wuerde der
-   Caveman-Prompt ein zweites Mal als Menschenzug zugelassen. Zwei Aufnehmer auf
-   einer Sitzung ist genau die Bauart, aus der heute Nacht schon eine unbemerkte
-   Schatten-Datenbank entstanden ist.
-
-4) resolve() nimmt einen Platz entgegen, plaetze() liefert die Umschaltliste.
-   Ohne den Platz band resolve() alles an Platz 1 - die zweite Sitzung existierte
-   in der Datenbank, aber niemand kam hinein.
-
-5) ZWEIMAL DERSELBE FEHLER, BEIDE MEINE: ein fehlender Import (CANONICAL_USER_IDS)
-   liess die Bereitschaftspruefung still auf "nicht bereit" fallen, weil ein
-   blankes except Exception den NameError verschluckte. Das except faengt jetzt
-   weiterhin alles - Bereitschaft darf den Dienst nie reissen - sagt aber, was es
-   gefangen hat. Fangen ja, verschweigen nein.
-
-Suite 476 -> 479 gruen, 14 rot.
-```
-
-### memory.py: stop compact() from overwriting turns.content
-
-`2767390f9048` · entityos · 05:22 UTC · BACK agent
-
-```
-turns is an append-only causal ledger -- effects, causal episodes, and
-provenance chains point into it. compact() was running UPDATE turns SET
-content=... on every compression pass, silently destroying the only copy
-of the original the moment a turn aged past full_window. Nothing has
-compressed in prod yet (Gabriel: 10/20 turns), so this was caught in the
-one window where it was free to catch.
-
-Fix: compression is now additive only. Each pass appends a row to a new
-turn_compressions table (turn_id x level, naming its source turn id,
-source sha256, extractor, prompt_version, created_at) instead of
-mutating the original. turns.fidelity / turns.compression_generation
-still get updated as a live bookkeeping pointer (same mutability class
-as sessions.updated_at elsewhere in this schema) -- turns.content itself
-is never touched again after append_turn().
-
-Also fixes a receipt bug this uncovered: compression_receipt provenance
-carried lossless_source_retained: False under the old design -- but at
-the time that receipt was written the source was still present (compact
-had not rewritten it yet), so the receipt was false-in-fact and
-true-in-writing: a signed claim that would read as safe/checked to
-anyone auditing later, for exactly the property that was not actually
-true. That is the same shape of failure this build keeps finding
-elsewhere tonight. Now True, and it is true: the source lives
-permanently at turns.content.
-
-Ladder targets (80/40/20/8/2 words), the extract-before-compress gate,
-and the compression_clearance sha256-binding are untouched -- only
-where the result gets written changed, per instruction.
-
-Proven against /var/lib/clay-probe/wiki.db with a real turn read
-(read-only) from session:gabriel: content byte-identical before/after
-across two compact() calls, one new turn_compressions row created after
-semantic clearance, second call idempotent (no duplicate row, no
-content touch).
-```
-
-### chat page: session switcher wired to plaetze(), no hardcoded ids
-
-`76f70eccfb58` · entityos · 05:13 UTC · BACK agent
-
-```
-Renders from the plaetze list the ready frame will carry (server-owned,
-IdentityRouter.plaetze()) -- never hardcodes session ids/labels. Sends
-switch_platz on click, disabled while pending or already mid-switch so
-a switch cannot race an in-flight message. Composer and switcher share
-one enabled/disabled state.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### chat page: use the real ZeroAvatar component instead of a static SVG img
-
-`d8eedd7f7dd0` · entityos · 05:09 UTC · BACK agent
-
-```
-Wires web/avatare/zero-avatar.{css,js} (owner-built, committed in
-a07abaea1) into the chat page. Header avatar is static/inactive; each
-Zero message row gets its own ZeroAvatar instance, and
-ZeroAvatar.nurNeuesteAktiv() is called after every new one so only the
-newest glitches, per that module own rule. Reply/error outcomes feed
-setzeZustand() with a real, justified state (+1/-1, grund = the actual
-outcome or error text) -- never a fabricated confidence score; while
-pending, the avatar stays in its honest unknown/neutral look.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

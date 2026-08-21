@@ -49,6 +49,20 @@ POOL_SIZE = int(os.environ.get("CLAYVERSE_WARM_POOL", "1"))
 # gehen dorthin, wo zuletzt wirklich getippt wurde.
 WARM_BUDGET = int(os.environ.get("CLAYVERSE_WARM_BUDGET", "2"))
 
+# ⚠️⚠️ VERWORFEN NACH MESSUNG -- die Idee war naheliegend und falsch.
+# Ueberlegung war: nicht nachfuellen, waehrend ein Zug laeuft, damit der Boot
+# dem laufenden Zug keine CPU wegnimmt. Gemessen (11 Zuege gegen 12):
+#     mit Bremse   23,9 s gesamt, Rest 10,9 s, Warmtreffer 6/11
+#     ohne Bremse   7,8 s gesamt, Rest  1,5 s, Warmtreffer 10/12
+# Sie macht beides schlechter. Der Grund ist im Nachhinein klar: die Bremse
+# hungert den Pool aus (weniger Treffer -> mehr Kaltstarts), und was sie
+# waehrend des Zuges spart, faellt gebuendelt an, sobald der Zug endet --
+# also genau dann, wenn der naechste beginnt. Verschoben ist nicht gespart.
+# Die Zaehler bleiben stehen: sie kosten nichts, sind getestet, und die naechste
+# Idee dieser Art will vielleicht wissen, ob gerade jemand wartet. Der SCHALTER
+# aber ist aus -- eine Bremse, die nicht bremst, gehoert nicht in die Schleife.
+#
+# Urspruengliche Begruendung, weiterhin gueltig als BEFUND (nur nicht als Fix):
 # ⭐⭐ NICHT NACHFUELLEN, WAEHREND EIN ZUG LAEUFT.
 # Gemessen 2026-08-21 in vier Armen: mit Bootlast (2-3 Node-Prozessstarts je Zug)
 # riss der nebenher laufende Erwartungsfeld-Faden in 1 von 3 Zuegen seinen
@@ -255,9 +269,6 @@ class WarmPool:
 
     def _nachfuell_schleife(self) -> None:
         while True:
-            if _zug_blockiert_nachfuellen():
-                time.sleep(0.25)
-                continue
             vorrang = self._vorrang()
             for key in _KANONISCH:
                 if key not in vorrang:
@@ -340,6 +351,7 @@ class WarmPool:
             return None
 
         result_ev = None
+        werkzeuge = []
         frist = time.time() + timeout
         erste_frist = time.time() + ERSTE_ZEILE_S
         stumm = False
@@ -362,6 +374,16 @@ class WarmPool:
                     ev = json.loads(line)
                 except Exception:
                     continue
+                # Dieselbe Spur wie im Kaltweg -- beide Wege muessen dasselbe
+                # liefern, sonst haengt die Herkunftsmarke daran, welcher Weg
+                # zufaellig lief.
+                inhalt = ((ev.get("message") or {}).get("content")
+                          if isinstance(ev.get("message"), dict) else None)
+                for block in (inhalt or []):
+                    if isinstance(block, dict) and block.get("type") == "tool_use":
+                        name = str(block.get("name") or "")
+                        if name:
+                            werkzeuge.append(name)
                 if ev.get("type") == "result":
                     result_ev = ev
                     break
@@ -396,6 +418,7 @@ class WarmPool:
             "wall_ms": (time.perf_counter() - started) * 1000.0,
             "claude_session_id": result_ev.get("session_id"),
             "warm": True,
+            **hz.spur_deuten(werkzeuge),
         }
 
     def _toete(self, warm: _Warm) -> None:

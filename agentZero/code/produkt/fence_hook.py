@@ -24,6 +24,11 @@ UNERSETZLICH = (
     "/opt/unifieddb",        # UnifiedDB
     "/var/lib/clayverse",    # Laufzeitzustand
     "/etc/entityos/tresor",  # Tresor (deckt tresor.key mit)
+    # Der Zeuge auf dem Wirt. Der Behaelter hat ihn ohnehin nicht eingehaengt --
+    # das hier ist Tiefenstaffelung, falls jemand ihn spaeter einhaengt, ohne an
+    # den Grund zu denken: eine Aufzeichnung, die der Aufgezeichnete aendern
+    # kann, ist keine.
+    "/var/lib/entityos-zeuge",
 )
 # Geheim -- Passwort-/Schluesselmaterial. Nie lesen/ausgeben.
 GEHEIM = (
@@ -32,8 +37,15 @@ GEHEIM = (
     "/etc/clayverse/freie-zugaenge.env",
     "/etc/entityos/postfach.env",
 )
+# ⚠️ ERWEITERT 2026-08-21: die Liste kannte `API_TOKENS.env` und `GROQ_API.env`
+# NICHT -- beide liegen unter /opt/entityos/research_entity/private/. Sie sind
+# heute nicht im Behaelter eingehaengt, also war es kein offenes Loch; aber eine
+# Geheimnisliste, die zwei der Geheimnisse nicht kennt, ist eine Zusage, die sie
+# nicht halten kann. Der letzte Ausdruck deckt kuenftige Faelle mit: irgendetwas
+# unter einem `private/`-Ordner, das auf .env endet.
 GEHEIM_NAME = re.compile(
-    r"(freie-zugaenge\.env|postfach\.env|tresor\.key|secret\.key|\.tresor\b|/tresor\b|\.credentials\b)")
+    r"(freie-zugaenge\.env|postfach\.env|tresor\.key|secret\.key|\.tresor\b|/tresor\b"
+    r"|\.credentials\b|API_TOKENS\.env|GROQ_API\.env|/private/[^/]*\.env\b)")
 # Zerstoerende Shell-Verben (cp/mv bewusst NICHT hier -- Backups muessen erlaubt bleiben).
 ZERSTOER = re.compile(r"(?:^|[;&|]|\s)(rm|rmdir|shred|unlink|truncate|dd|mkfs)\b")
 # Lese-Verben, mit denen sich ein Geheimnis ausgeben liesse.
@@ -111,9 +123,28 @@ def main():
                 continue   # Auftragskorb, siehe KOERBE
             if _trifft(ziel, UNERSETZLICH) or GEHEIM_NAME.search(ziel):
                 deny("Zaun: kein Ueberschreiben des Unersetzlichen/Geheimen per Umleitung.")
-        # (d) zerstoerende DB-Operationen auf dem Herzen
-        if _trifft(cmd, UNERSETZLICH) and re.search(r"\b(DROP|DELETE|TRUNCATE)\b", cmd, re.I):
-            deny("Zaun: keine zerstoerenden DB-Operationen auf dem Unersetzlichen.")
+        # (d) veraendernde DB-Operationen auf dem Herzen
+        #
+        # ⭐⭐ ERWEITERT 2026-08-21. Vorher standen hier nur DROP/DELETE/TRUNCATE
+        # -- also die LOESCHENDEN Verben. Ein zeilenweises UEBERSCHREIBEN ging
+        # glatt durch, und genau das ist der gefaehrlichere Fall: gemessen haengt
+        # das Verhalten der Entitaet vollstaendig an der Aufzeichnung (ein
+        # implantiertes Kennwort wurde 2 von 2 Malen genannt, das echte nie).
+        # Wer eine Zeile umschreibt, schreibt die Entitaet um -- und das
+        # Effektjournal, mit dem man es sonst nachweisen wuerde, liegt in
+        # derselben Datei.
+        #
+        # ⚠️ EHRLICH ZUR REICHWEITE: das hier ist eine Schwelle, kein Anker.
+        # Der Zaun liest die BEFEHLSZEILE. Wer sich ein Skript nach /tmp legt
+        # und `python /tmp/x.py` aufruft, steht mit keinem geschuetzten Pfad in
+        # der Zeile und faellt nicht auf. Der eigentliche Anker ist deshalb der
+        # Zeuge auf dem Wirt (`/opt/entityos/zeuge/eos_zeuge.py`), der die
+        # Aufzeichnung von AUSSERHALB des Behaelters bezeugt. Diese Regel macht
+        # den bequemen Einzeiler teuer, mehr behauptet sie nicht.
+        if _trifft(cmd, UNERSETZLICH) and re.search(
+                r"\b(DROP|DELETE|TRUNCATE|UPDATE|REPLACE|ALTER|ATTACH)\b", cmd, re.I):
+            deny("Zaun: keine veraendernden DB-Operationen auf dem Unersetzlichen "
+                 "(auch kein Ueberschreiben einzelner Zeilen).")
 
     sys.exit(0)
 

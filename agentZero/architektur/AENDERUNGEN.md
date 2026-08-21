@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-21T01:41:17Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (28)
+## reparatur (27)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -110,7 +110,6 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:55 | entityos | `27be6a07c3cd` | Merge pull request #718 from gschaidergabriel/fix/autonomy-atomic-source-turn-idempotency-20260818 |
 | 2026-08-18T03:52 | entityos | `99bd37959677` | fix(clayverse): make goal source adoption atomic and idempotent |
 | 2026-08-18T03:49 | entityos | `deb6f7f96a2f` | fix(clayverse): expose admitted autonomy effect tool to Claude |
-| 2026-08-18T03:47 | entityos | `3dd7e282d093` | fix(clayverse): reconcile prior autonomous effect before retry dispatch |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
@@ -121,7 +120,7 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (27)
+## pruefung (26)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -138,7 +137,6 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:57 | entityos | `f08362e9ca3c` | test(clayverse): pin immediate autonomy completion ordering |
 | 2026-08-18T03:53 | entityos | `c7bb7a9bf48e` | test(clayverse): pin atomic goal source-turn idempotency |
 | 2026-08-18T03:51 | entityos | `4d7d65113571` | test(clayverse): pin autonomy MCP tool into Claude launch |
-| 2026-08-18T03:48 | entityos | `93924c248d4a` | test(clayverse): pin reconciliation and EffectGate replay fallback |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -153,10 +151,14 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (281)
+## bau (283)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T01:39 | entityos | `dd90b24d4660` | EOS-Chronik 2026-08-21 01:39:58 +0000 — entityos: 9 Aenderungen |
+| 2026-08-21T01:29 | entityos | `1fe881b3caa9` | EOS-Chronik 2026-08-21 01:29:22 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T01:24 | entityos | `81e2ffcdef81` | EOS-Chronik 2026-08-21 01:24:13 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T01:16 | entityos | `a7638950fc45` | EOS-Chronik 2026-08-21 01:16:52 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T00:43 | entityos | `dda25f6cfb22` | EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T00:32 | entityos | `aa52fb1591e9` | EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T00:26 | entityos | `a6271e75eba3` | EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen |
@@ -213,8 +215,4 @@ Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T02:48 | entityos | `7920cbb235ca` | EOS-Chronik 2026-08-20 02:48:38 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:46 | entityos | `d2db1d515d51` | EOS-Chronik 2026-08-20 02:46:16 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:43 | entityos | `b73add92ecf9` | EOS-Chronik 2026-08-20 02:43:56 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T02:41 | entityos | `2b096801f85e` | EOS-Chronik 2026-08-20 02:41:10 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T02:38 | entityos | `ae5fe886aba2` | EOS-Chronik 2026-08-20 02:38:55 +0000 — entityos: 5 Aenderungen |
-| 2026-08-20T02:30 | entityos | `74c2f23b46c0` | EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T02:28 | entityos | `494abf18d1d1` | EOS-Chronik 2026-08-20 02:28:37 +0000 — entityos: 1 Aenderungen |
 

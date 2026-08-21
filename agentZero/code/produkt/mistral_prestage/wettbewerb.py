@@ -425,7 +425,8 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
 # Arbeitsraum, nachdem gewaehlt wurde.
 _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
                    "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
-                   "gw_gelernt", "gw_eigenanteil", "gw_zugelassen", "gw_quelle", "gw_abstand")
+                   "gw_gelernt", "gw_eigenanteil", "gw_zugelassen", "gw_quelle", "gw_abstand",
+                   "gw_fremdtext")
 
 
 # ── EIN Arbeitsraum fuer alle Quellen ────────────────────────────────────
@@ -501,7 +502,7 @@ def _kurzform(x: Any, n: int = _KANDIDAT_TEXT_MAX) -> str:
     return t[:n]
 
 
-def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
+def kandidaten(world: dict[str, Any], marken: set | None = None) -> list[dict[str, Any]]:
     """Alle Quellen in EINER Bewerberliste, in derselben Form.
 
     Die Form ist die des Korpustreffers (`artikel_id`/`titel`/`ausschnitt`/
@@ -532,11 +533,18 @@ def kandidaten(world: dict[str, Any]) -> list[dict[str, Any]]:
         wert = _kurzform(m.get("value"))
         if not wert:
             continue
-        raus.append({
+        # ⭐ Die Herkunftsmarke wandert MIT dem Bewerber. Wer sie waehlt, waehlt
+        # sie sehend -- und Zero bekommt sie im Arbeitsraum ebenfalls zu sehen.
+        aus_fremdtext = str(m.get("memory_id") or "") in (marken or set())
+        eintrag = {
             "artikel_id": _kennung("gedaechtnis", wert),
-            "titel": f"{m.get('kind') or 'Notiz'} ueber {m.get('subject') or 'unbekannt'}",
+            "titel": (("⚠ aus Fremdtext: " if aus_fremdtext else "")
+                      + f"{m.get('kind') or 'Notiz'} ueber {m.get('subject') or 'unbekannt'}"),
             "ausschnitt": wert, "art": "gedaechtnis", "sphaere": "person",
-            "gw_quelle": "gedaechtnis", "gw_roh": m})
+            "gw_quelle": "gedaechtnis", "gw_roh": m}
+        if aus_fremdtext:
+            eintrag["gw_fremdtext"] = True
+        raus.append(eintrag)
 
     for i, z in enumerate((world.get("own_recent") or [])[:QUELLEN_DECKEL["verlauf"]]):
         text = _kurzform(z.get("content") if isinstance(z, dict) else z)
@@ -858,6 +866,71 @@ def lernen(store, frage: str, idf: dict | None, gewaehlt: list, antwort: str) ->
     except Exception:
         pass
     return ergebnis
+
+
+_HERKUNFT_TABELLE = (
+    "CREATE TABLE IF NOT EXISTS gw_herkunft("
+    "  memory_id TEXT PRIMARY KEY, turn_id TEXT, session_id TEXT, ts REAL NOT NULL,"
+    "  fremdtext INTEGER NOT NULL DEFAULT 0, werkzeuge TEXT);"
+    "CREATE INDEX IF NOT EXISTS gw_herkunft_ts ON gw_herkunft(ts);")
+
+
+def herkunft_buchen(store, turn_id, session_id, memory_ids, spur: dict) -> int:
+    """Woher stammt ein Gedaechtniseintrag -- entstand er neben Fremdtext?
+
+    ⭐⭐ WARUM DAS NOETIG IST. Die gefaehrlichste Kette dieser Anlage fuehrt
+    nicht von aussen herein, sondern von innen weiter:
+        WebFetch  ->  udb_memory_add  ->  Bewerber  ->  Ausstrahlung  ->  Selbst
+    Ein im Netz gelesener Satz kann so zu kanonischem Selbstwissen werden. Der
+    Zaun schuetzt Dateien, nicht Inhalte; und ein Filter, der "Gefaehrliches
+    entfernt", ist nach dem Stand der Literatur nicht baubar (zwoelf geprueft,
+    ueber 90 % Angriffserfolg). Was mit Zahlen traegt, ist Herkunft MARKIEREN
+    statt Gefahr ERKENNEN.
+
+    Deshalb hier keine Bewertung, sondern eine Tatsache: dieser Eintrag entstand
+    in einem Zug, in dem diese Werkzeuge liefen. Ob das schlimm ist, entscheidet
+    spaeter jemand mit mehr Kontext -- die Marke nimmt ihm nur die Ausrede, es
+    nicht gewusst zu haben.
+
+    Eigene Tabelle statt einer neuen Spalte: `durable_memory` gehoert einem
+    anderen Modul, und eine additive Tabelle laesst sich vom Zeugen auf dem
+    Wirt genauso bezeugen.
+    """
+    try:
+        ids = [str(m) for m in (memory_ids or []) if str(m or "").strip()]
+        if not ids:
+            return 0
+        fremd = 1 if (spur or {}).get("fremdtext") else 0
+        namen = json.dumps(list((spur or {}).get("werkzeuge") or []), ensure_ascii=False)
+        jetzt = time.time()
+        store.db.executescript(_HERKUNFT_TABELLE)
+        for mid in ids:
+            store.db.execute(
+                "INSERT INTO gw_herkunft(memory_id,turn_id,session_id,ts,fremdtext,werkzeuge)"
+                " VALUES(?,?,?,?,?,?) ON CONFLICT(memory_id) DO UPDATE SET"
+                " turn_id=excluded.turn_id, ts=excluded.ts,"
+                " fremdtext=excluded.fremdtext, werkzeuge=excluded.werkzeuge",
+                (mid, turn_id, session_id, jetzt, fremd, namen))
+        store.db.commit()
+        return len(ids)
+    except Exception:
+        return 0
+
+
+def fremdtext_marken(db) -> set:
+    """Welche Gedaechtniseintraege entstanden neben Fremdtext aus dem Netz."""
+    try:
+        rows = _verbindung(db).execute(
+            "SELECT memory_id FROM gw_herkunft WHERE fremdtext=1").fetchall()
+    except Exception:
+        return set()
+    raus = set()
+    for r in rows:
+        try:
+            raus.add(str(r["memory_id"]))
+        except Exception:
+            raus.add(str(r[0]))
+    return raus
 
 
 def haeufigkeiten(db, fenster: int = NEUHEIT_FENSTER) -> dict[str, int]:

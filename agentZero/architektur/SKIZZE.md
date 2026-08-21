@@ -1,6 +1,6 @@
 # EntityOS -- Architekturskizze
 
-**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T16:07:19Z aus dem gemessenen
+**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T16:37:20Z aus dem gemessenen
 Zustand auf `frank-api`. Eine handgepflegte Skizze weicht nach zwei Wochen vom Code
 ab und luegt dann still; diese kann das nicht, weil sie bei jedem Lauf neu aus Code,
 Datenbank und laufenden Diensten entsteht.
@@ -40,8 +40,8 @@ flowchart TD
 | Produktmodule | 69 Dateien, 23814 Zeilen |
 | Testdateien | 186 |
 | Tabellen in der UnifiedDB | 158 |
-| Artikel im Korpus | 18684 |
-| Kanten | 124113 |
+| Artikel im Korpus | 18690 |
+| Kanten | 124395 |
 | Lesarten | 22567 |
 | Zuege von Zero | 40 |
 | Wirkungen durch das Tor | 9 |

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T16:07:19Z. **3568 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T16:37:20Z. **3574 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T21:54:46+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T22:44:48+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3470 |
+| baunotiz | 3476 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2126 |
-| baunotiz | bauverlauf.jsonl | 1298 |
+| baunotiz | git-commit | 2129 |
+| baunotiz | bauverlauf.jsonl | 1301 |
 | baunotiz | github-ereignis | 41 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3568 · Gegenhypothese: 0 von 3568
+## Hypothese: 0 von 3574 · Gegenhypothese: 0 von 3574
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T21:54:46+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
+
+`baunotiz-bauverlauf-edc9aa3fab8de00f9322` · baunotiz · bauverlauf.jsonl · 2026-08-21T22:44:48+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
+
+`baunotiz-git-042b95303dc1306a062714c61073d6c078f89665` · baunotiz · git-commit · 2026-08-21T22:44:48+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
 
 ### research: fuse tmux autonomy transport fence into go reentry
 
@@ -216,22 +232,6 @@ research: bind Gen245 implicit feedback channel convergence
 ### research: derive revocable feedback credit semantics
 
 `baunotiz-bauverlauf-e6aab69c39c2f127a185` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:36:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: derive revocable feedback credit semantics
-
-`baunotiz-git-4e1f71981fcdd4c6a65beb5977e07bf93442afcb` · baunotiz · git-commit · 2026-08-21T21:36:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: derive revocable feedback credit semantics
-
-### research: isolate F94 concentration and shadow-prior discriminator
-
-`baunotiz-bauverlauf-048e92ee081388477f71` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:36:30+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

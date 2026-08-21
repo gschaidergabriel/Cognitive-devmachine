@@ -1172,6 +1172,128 @@ def zeilen(c, testlage: str = "") -> list[dict]:
        if bildweg else "🔧 Bildweg oder Anzeige fehlt"),
       bildweg)
 
+    # ══ Was am 21.08. dazukam ═════════════════════════════════════════════
+    # Wieder gilt: gemessen wird, was im Betrieb entscheidet -- das Modul/die
+    # Route ist da, das Werkzeug ist FREIGEGEBEN (Erlaubnisliste), der Zeitgeber
+    # laeuft. Was nur auf einem anderen Rechner lebt (Host-Dienst auf dem PC,
+    # Retina-VPS), wird ehrlich als "von hier nicht geprueft" benannt statt
+    # gruen behauptet -- sonst waere es genau die Statustabelle, die dieses
+    # Dokument nicht sein darf.
+    _pc_tools = [t for t in _erlaubt if "__pc_" in t]
+    _br_tools = [t for t in _erlaubt if "__browser_" in t]
+    _bild_tools = [t for t in _erlaubt if "__bild_" in t]
+
+    def _kurz(tl):
+        return ", ".join(sorted(t.split("__")[-1] for t in tl))
+
+    # -- Gedaechtnis: EIN Raum, kein Split-Brain
+    ein_raum = (_hat(A + "clayverse/retrieval.py", "recent_turns_alle(30)")
+                and _hat(A + "clayverse/store.py", "def recent_turns_alle"))
+    z("Gedächtnis", "Ein Raum, kein Split-Brain: jede Sitzung sieht ALLE Züge",
+      "die vier Sitzungen beider Menschen sind EINE Entität in EINEM Raum; jede Sitzung "
+      "liest den Verlauf aller, nicht nur den eigenen",
+      "Eigner / Befund 21.08.",
+      ("⚠️ Wurzelfix in retrieval.py: der Abruf las nur die eigenen letzten Züge — jede "
+       "Sitzung eine Blase (Split-Brain). Jetzt `own = recent_turns_alle(30)` aus "
+       f"`store.recent_turns_alle`, also der Verlauf ALLER {_raum if isinstance(_raum, int) else '—'} "
+       "Menschenplätze. Von Hand bewiesen (NICHT mechanisch nachgemessen): Gabriel nennt in SEINER "
+       "Sitzung „ANANAS-SIEBEN“, Andreas sieht es in seiner. Der Live-Raum `zero_raum` wacht über "
+       "Kollisionen, wenn zwei am selben Gegenstand arbeiten"
+       if ein_raum else "🔧 retrieval.py liest weiter nur die eigenen Züge"),
+      ein_raum)
+
+    # -- Betrieb: Zero steuert die PCs
+    pc_da = Path(A + "clayverse/heimpc.py").exists() and len(_pc_tools) >= 4
+    z("Betrieb", "Zero steuert die Rechner der Menschen",
+      "sehen, tippen/klicken, Befehle ausführen auf Gabriels/Andreas' PC — über den Wirt, "
+      "nicht direkt aus dem Container",
+      "Eigner 21.08.",
+      (f"{len(_pc_tools)} Werkzeuge frei ({_kurz(_pc_tools)}), Modul clayverse/heimpc.py. Der Weg: "
+       "lokaler Host-Dienst auf dem PC hinter Tailscale+Token, Schranke gegen Zerstörendes, lokaler "
+       "Zeuge; Bildschirm 1 bleibt unangetastet. ⚠️ Von hier geprüft ist die Freigabe + das Modul, "
+       "NICHT der laufende Host-Dienst auf dem PC"
+       if pc_da else "🔧 PC-Werkzeuge nicht freigegeben oder heimpc.py fehlt"),
+      pc_da)
+
+    # -- Betrieb: Zero steuert den Browser
+    br_da = Path(A + "clayverse/browser_fern.py").exists() and len(_br_tools) >= 7
+    z("Betrieb", "Zero steuert einen echten Browser",
+      "öffnen, lesen, Screenshot, klicken, tippen, Formular, navigieren — echtes Profil "
+      "(Chrome/Firefox/Brave), Fenster auf Bildschirm 2",
+      "Eigner 21.08.",
+      (f"{len(_br_tools)} Werkzeuge frei ({_kurz(_br_tools)}), Modul clayverse/browser_fern.py → "
+       "Browser-Dienst mit echtem Profil. ⚠️ Von hier geprüft ist die Freigabe + das Modul, nicht "
+       "der laufende Browser-Dienst"
+       if br_da else "🔧 Browser-Werkzeuge nicht freigegeben oder browser_fern.py fehlt"),
+      br_da)
+
+    # -- Weltmodell: Retina-Wahrnehmung, fuenf getrennte Ebenen
+    sicht_da = Path(A + "clayverse/sicht.py").exists() and len(_bild_tools) >= 2
+    z("Weltmodell", "Retina-Wahrnehmung: Evidenz, Schluss, Glaube getrennt",
+      "sehen mit fünf getrennten Ebenen (Evidenz unveränderlich, Schluss revidierbar, Glaube "
+      "datiert, Arbeitsraum, getragen); „nicht gesehen ≠ nicht da“ — Evidenz ist nie Wahrheit",
+      "Eigner 21.08.",
+      (f"clayverse/sicht.py (Sichtbarkeits-Lattice, fünf Ebenen), {len(_bild_tools)} Werkzeuge frei "
+       f"({_kurz(_bild_tools)}). ⚠️ Der Retina-Dienst (Port 8001) läuft auf dem separaten "
+       "digital-retina-Wirt und ist von hier NICHT geprüft; gemessen ist das Modul + die "
+       "Werkzeugfreigabe"
+       if sicht_da else "🔧 sicht.py fehlt oder Bild-Werkzeuge nicht freigegeben"),
+      sicht_da)
+
+    # -- Oberflaeche: OmniMind, menschliche Wiki-Sicht auf den Korpus
+    omni_da = (_hat(A + "clayverse/terminal_gateway.py", '@app.get("/omnimind"')
+               and Path(A + "clayverse/omnimind.py").exists())
+    z("Oberfläche", "OmniMind: menschliche Wiki-Sicht auf den ganzen Korpus",
+      "Suche (Rang bm25+Graph), Filter (Person/Zweig/Projekt), lesbare Artikel, Hypothesen + "
+      "Implikationen, ClayGraph-Netz, SeiMensch-Hierarchie",
+      "Eigner 21.08.",
+      ("Route /omnimind im terminal_gateway registriert, Modul clayverse/omnimind.py "
+       "(/api/omnimind/suche u. a.). Bei Andreas ausgeblendet (siehe „Bereiche je Nutzer ausgeblendet“)"
+       if omni_da else "🔧 /omnimind-Route oder omnimind.py fehlt"),
+      omni_da)
+
+    # -- Anbieter: schluessel_anlernen
+    _schl_timer = _timer_an("eos-schluessel.timer")
+    anlern = ("mcp__clayverse__schluessel_anlernen" in _erlaubt
+              and _hat(A + "clayverse/mcp_server.py", "schluessel-spool")
+              and _schl_timer)
+    z("Anbieter", "Zero lernt einen neuen freien Schlüssel selbst an",
+      "Gabriel gibt einen neuen freien API-Schlüssel; Zero legt ihn ab, prüft ihn mit echtem "
+      "Aufruf und verdrahtet die Bahn — sofort live",
+      "Eigner 21.08.",
+      ("schluessel_anlernen freigegeben; Weg: Spool /var/lib/clay/schluessel-spool → Host-Dienst "
+       f"(eos-schluessel.timer {'aktiv' if _schl_timer else 'INAKTIV'}, alle 2 min) → bahnen.json, "
+       "sofort in der Verdrahtung. Der Schlüssel wird beim Anlernen mit einem echten Aufruf geprüft"
+       if anlern else "🔧 schluessel_anlernen, Spool oder eos-schluessel.timer fehlt"),
+      anlern)
+
+    # -- Anbieter: freie Bahnen zum Token-Sparen
+    bahn = ("mcp__clayverse__bahn_faehigkeit" in _erlaubt
+            and _hat(A + "runtime_CLAUDE.md", "bahn_faehigkeit"))
+    z("Anbieter", "Fließbandarbeit geht an die freien Bahnen",
+      "Zeros Vertrag weist an, Massenarbeit an die freien Bahnen (Groq/Gemini/Mistral2-3/NVIDIA) "
+      "auszulagern, damit das bezahlte Kontingent weiter reicht",
+      "Eigner 21.08. / verdrahtung.py",
+      ("bahn_faehigkeit freigegeben; runtime_CLAUDE.md („Bezahlte Token schonen“) weist die "
+       "Auslagerung an; Bahnen in verdrahtung.py (Groq/Gemini/NVIDIA nachgewiesen). ⚠️ DASS Zero "
+       "im Betrieb tatsächlich auslagert, ist hier nicht mechanisch gemessen — geprüft ist "
+       "Freigabe + Anweisung + vorhandene Bahnen"
+       if bahn else "🔧 bahn_faehigkeit oder die Auslagerungs-Anweisung fehlt"),
+      bahn)
+
+    # -- Oberflaeche: Ausblenden je Nutzer
+    ausblenden = (_hat(A + "web/schale/schale.js", "EINGESCHRAENKT")
+                  and _hat(A + "web/schale/schale.js", "/api/me")
+                  and _hat(A + "web/schale/schale.js", "andreas"))
+    z("Oberfläche", "Bereiche je Nutzer ausgeblendet",
+      "Mailbox, Seiten und OmniMind sind bei Andreas ausgeblendet — Eignerentscheidung",
+      "Eigner 21.08.",
+      ("schale.js: EINGESCHRAENKT = [/postfach, /seiten, /omnimind], standardmäßig display:none; "
+       "erst wenn /api/me einen user_id ≠ „andreas“ meldet, werden sie eingeblendet — fällt /api/me "
+       "aus, bleibt es sicherheitshalber verdeckt"
+       if ausblenden else "🔧 Ausblend-Logik in schale.js fehlt"),
+      ausblenden)
+
     return Z
 
 

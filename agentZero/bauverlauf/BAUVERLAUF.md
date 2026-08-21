@@ -1,12 +1,49 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T05:20:29Z. 1024 Commits aus vier Repos, davon 372 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T05:50:34Z. 1027 Commits aus vier Repos, davon 374 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 05:42:33 +0000 — entityos: 1 Aenderungen
+
+`c3a40757a8e7` · entityos · 05:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_retrieval_zeitdeckel.py
+
+Zeit: 2026-08-21T05:42:33+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:40:31 +0000 — entityos: 2 Aenderungen
+
+`14ed8e5b893f` · entityos · 05:40 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/eos_theta.py
+  the artefact/clayverse/retrieval.py
+
+Zeit: 2026-08-21T05:40:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 05:11:50 +0000 — entityos: 1 Aenderungen
 
@@ -3792,95 +3829,5 @@ NICHT AUFGENOMMEN, und zwar mit Absicht:
 Beides genannt statt stillschweigend weggelassen.
 
 Suite unveraendert 552 gruen / 14 rot.
-```
-
-### 403 beim Verlauf: falscher Parametername - und der stille Fehler daneben
-
-`0010a0ef104d` · entityos · 10:52 UTC · EntityOS
-
-```
-FEHLER 1, laut: der Server liest query_params["session_id"], mein Frontend
-schickte ?session=. Also kam eine leere Kennung an, ist_kanonische_sitzung("")
-ist falsch, und die Antwort war korrekt 403. Die Sperre hat genau das getan,
-wofuer sie gebaut ist.
-
-⚠️ WIE ES DAZU KAM, und das ist der eigentliche Befund: ich habe das Frontend
-gegen betrieb/API-HISTORY.md geschrieben -- eine Anleitung, die ich selbst
-verfasst hatte und in der der Parameter faelschlich `session` heisst. Ich habe
-gegen meine eigene, falsche Dokumentation programmiert.
-
-Derselbe Mechanismus, den ich heute schon einmal als echten Defekt gemeldet
-habe: ein veralteter Docstring kostete einen Pruefer einen kompletten
-Fehlalarm. Dokumentation, die von der Umsetzung abweicht, ist kein
-Schoenheitsfehler -- sie erzeugt Fehler in allem, was sich auf sie stuetzt.
-Die Anleitung ist deshalb mitkorrigiert, nicht nur der Aufruf.
-
-FEHLER 2, still, beim Suchen gefunden: im Zweig `switch_platz` wurde `platz`
-gesetzt, die `session_id` aber NICHT neu aufgeloest. Nach dem Wechsel auf
-Sitzung 2 meldete der Server also Platz 2 mit der Kennung von Platz 1.
-
-Folge: der Verlauf laedt die Zuege der FALSCHEN Sitzung -- mit Status 200, also
-voellig unauffaellig, waehrend die Umschaltleiste Sitzung 2 als aktiv anzeigt.
-
-Ohne den lauten 403 waere das vermutlich lange unbemerkt geblieben: eine falsche
-Antwort sieht aus wie eine richtige. Der laute Fehler hat den stillen mit
-aufgedeckt -- das ist heute nicht das erste Mal.
-
-Geprueft: Parametername im ausgelieferten HTML, Seite im echten Browser
-(Desktop + Handy) ohne Konsolenfehler und ohne waagerechten Ueberlauf.
-```
-
-### Die Anmeldung: gezeichnetes entityOS-Feld, mittige Clerk-Box, Glitch
-
-`2b2f7219ab05` · entityos · 10:42 UTC · EntityOS
-
-```
-Nach Gabriels Vorlage (gruenes Textfeld aus entityOS in Latein und Japanisch,
-Bildroehren-Zeilen, Farbversatz).
-
-⭐ GEZEICHNET, NICHT ALS BILD EINGEBUNDEN. Drei Gruende, der dritte ist der
-eigentliche:
-  - ein Vollbild-JPEG kostet ueber ein Megabyte, das VOR der Anmeldung laedt
-  - eine feste Aufloesung sieht auf einem 4K-Schirm matschig aus
-  - ein Bild kann nicht glitchen. Das Glitchen ist hier aber die Aussage.
-
-⚠️⚠️ DIE DREI BREMSEN SIND PFLICHT, KEINE POLITUR
-
-Ein Anmeldebildschirm steht oft minutenlang unbeaufsichtigt offen -- genau dort
-faellt eine heisse Schleife niemandem auf. In diesem Projekt hat eine
-Dauer-Animation im Hintergrund schon einmal die CPU auf Vollast gefahren.
-Deshalb:
-  - feste ~18 Bilder/s statt so schnell wie moeglich
-  - Stillstand, sobald der Reiter in den Hintergrund geht (visibilitychange)
-  - nach der Anmeldung wird das Feld angehalten UND aus dem Baum entfernt --
-    ein Hintergrund, der hinter dem Chat weiterrechnet, ist reine Heizung
-  - bei prefers-reduced-motion wird EINMAL gezeichnet und nie wieder. Nicht
-    ausgeblendet: die Marke soll auch dann dastehen.
-
-EIGENE DATEIEN, web/anmeldung/{anmeldung.css,anmeldung.js}, eingehaengt mit drei
-Zeilen. Nicht in chat/index.html hineingeschrieben -- heute wurde diese Datei
-schon einmal von einer anderen Instanz ueberschrieben, und eine fertige, im
-Browser gepruefte Arbeit ging dabei verloren. Was in eigenen Dateien liegt,
-ueberlebt das naechste Neueinkleiden.
-
-KEIN ZWEITES FARBSYSTEM. Alle Farben kommen aus den Marken-Merkmalen der Schale
-(--signal, --geist-cyan, --geist-mag, --grund). Die Anmeldung ist dieselbe Marke
-wie alles dahinter, nur lauter.
-
-GLITCH MIT MASS: der Farbversatz der Wortmarke feuert bei 89-97 % des Zyklus,
-sonst ist er auf null. Ein Dauerglitch liest sich als kaputte Seite; ein
-seltener liest sich als Maschine, die kurz stolpert.
-
-⚠️ "Sign in to F.R.A.N.K." -- der Kopf der Clerk-Box trug den Namen der alten
-Anwendung. Der steht im Clerk-Konto und ist von hier aus nicht aenderbar; er war
-ausserdem doppelt, denn zwei Zeilen darueber steht bereits die Wortmarke mit
-"Zugang zur Entitaet Zero". Clerks eigener Kopf ist deshalb ausgeblendet -- das
-loest die Marke und raeumt die Dopplung auf.
-DER NAME GEHOERT TROTZDEM IM CLERK-KONTO BERICHTIGT: er erscheint sonst in Mails
-und auf Zwischenseiten, wo dieses CSS nicht hinreicht. Steht als Warnung im Code.
-
-Im echten Browser geprueft, Desktop 1440x900 und Handy 390x844:
-0 Konsolenfehler, 0 waagerechter Ueberlauf, Feld in 2x Aufloesung, Clerk-Box
-mittig und in unseren Farben.
 ```
 

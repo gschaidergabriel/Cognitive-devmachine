@@ -359,11 +359,35 @@ class WorldAssembler:
         Arbeitsfaden statt signal.alarm: der Wecker gilt nur im Hauptfaden,
         dieser Code laeuft aber auch in Dienst-Arbeitsfaeden. Der abgehaengte
         Faden laeuft im Hintergrund aus.
+
+        ⚠️⚠️ FIX 2026-08-21 (Deckel hielt nicht, gemessen 5,0s statt 2,5s bei
+        einer 8s-Testarbeit -- durch _fts_schwach oben feuert dieser Pfad seit
+        heute deutlich haeufiger, ein Ende-zu-Ende-Lauf ueber 6 Fragen lief
+        deshalb in den 10-Minuten-Deckel und lieferte GAR NICHTS). Ursache war
+        NICHT der Timeout selbst (der schlug korrekt nach 2.5s zu), sondern
+        `with ThreadPoolExecutor(...)`: __exit__ ruft intern shutdown(wait=True)
+        -- der with-Block blockiert also beim Verlassen trotzdem, bis der
+        laengst abgehaengte Arbeitsfaden fertig ist. Fix: kein `with`, sondern
+        `shutdown(wait=False, cancel_futures=True)` explizit auf beiden Wegen
+        (Timeout UND Erfolg) -- der Aufrufer wartet nie auf den Pool selbst,
+        nur auf sein eigenes .result(timeout=...). cancel_futures wirkt hier
+        zwar nicht auf den EINEN schon laufenden Auftrag (max_workers=1, er
+        laeuft bereits), ist aber der korrekte, seit 3.9 vorgesehene Ausdruck
+        von "nichts Neues mehr starten" und kostenlos mitzugeben.
+        Halbfertiges in der DB? Geprueft, nein: paket() schreibt (vp_lese_log,
+        vp_erfolgsmarke) ueber dieselbe UnifiedDB-Verbindung, die mit
+        isolation_level=None (Autocommit) UND check_same_thread=False laeuft
+        (store.py) -- jede einzelne execute() ist fuer sich atomar committet,
+        es gibt keine offene Transaktion, die der abgehaengte Faden mitten-
+        drin verlassen koennte. Der Faden laeuft im Hintergrund exakt so zu
+        Ende, wie er es vorher auch tat (das war schon immer die Absicht,
+        siehe Docstring oben) -- der einzige Unterschied ist, dass DIESER
+        Aufruf nicht mehr darauf wartet.
         """
         import concurrent.futures as _cf
+        pool = _cf.ThreadPoolExecutor(max_workers=1)
         try:
-            with _cf.ThreadPoolExecutor(max_workers=1) as pool:
-                return pool.submit(aufruf).result(timeout=self.ENRICH_ZEITBUDGET_S)
+            return pool.submit(aufruf).result(timeout=self.ENRICH_ZEITBUDGET_S)
         except _cf.TimeoutError:
             import sys as _sys
             print(f"retrieval: Anreicherung ueber {self.ENRICH_ZEITBUDGET_S}s abgebrochen, "
@@ -371,6 +395,11 @@ class WorldAssembler:
             return None
         except Exception:
             return None
+        finally:
+            # wait=False: NICHT wie bei `with` auf den (evtl. abgehaengten)
+            # Arbeitsfaden warten -- siehe Begruendung oben. cancel_futures
+            # kappt nur noch nicht gestartete Auftraege (hier keiner mehr).
+            pool.shutdown(wait=False, cancel_futures=True)
 
     # ⚠️⚠️ GEMESSEN 2026-08-21 (Abrufluecke Mensch/Entitaet, siehe
     # /opt/entityos/eval/): "fts_leer" oben meint woertlich NULL Treffer --

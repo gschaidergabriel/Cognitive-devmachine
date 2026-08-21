@@ -2239,6 +2239,65 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
                 self.assertEqual(opener_calls, [])
                 self.assertNotIn(leaked_text, repr(caught.exception))
 
+    def test_active_payment_latch_element_is_rejected_before_execution(self):
+        leaked_text = "payment-latch-element-equality-must-not-run"
+
+        class ActiveLatchKey(str):
+            __hash__ = str.__hash__
+
+            def __new__(cls, value):
+                instance = super().__new__(cls, value)
+                instance.comparisons = 0
+                return instance
+
+            def __eq__(self, other):
+                self.comparisons += 1
+                if self.comparisons <= 2:
+                    return False
+                raise LookupError(leaked_text)
+
+        class Response:
+            status = 402
+            headers = {}
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def read(self, limit):
+                raise AssertionError("HTTP 402 body must not be read")
+
+        env = {
+            "NVIDIA_API_KEY": "secret",
+            "FRANK_PROVIDER_BASE_URL": "http://localhost:8765/v1",
+            "FRANK_ALLOW_LOCAL_TEST_ENDPOINT": "1",
+        }
+        latch_key = MOD._payment_latch_key("nvidia", env)
+        for transport in ("response", "http_error"):
+            with self.subTest(transport=transport):
+                opener_calls = []
+                active_key = ActiveLatchKey(latch_key)
+
+                def opener(request, timeout):
+                    opener_calls.append(transport)
+                    if transport == "http_error":
+                        raise MOD.urllib.error.HTTPError(
+                            request.full_url, 402, "Payment Required", {}, None,
+                        )
+                    return Response()
+
+                with self.assertRaisesRegex(
+                    ValueError, "payment_latches_must_contain_strings"
+                ) as caught:
+                    MOD.execute_chat(
+                        VALID_MESSAGES,
+                        model="mock",
+                        environ=env,
+                        opener=opener,
+                        now=iter((68.2, 68.21)).__next__,
+                        payment_latches={active_key},
+                    )
+                self.assertEqual(opener_calls, [])
+                self.assertEqual(active_key.comparisons, 0)
+                self.assertNotIn(leaked_text, repr(caught.exception))
+
     def test_unreachable_provider_has_no_http_status_or_executed_state(self):
         def opener(request, timeout):
             raise MOD.urllib.error.URLError("connection refused")

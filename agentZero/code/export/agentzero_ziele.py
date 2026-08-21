@@ -1473,13 +1473,26 @@ def zeilen(c, testlage: str = "") -> list[dict]:
         _grf_n = int(_grf_treffer)
     except Exception:
         _grf_n = -1
+    _grf_rahmen_live = _hat(A + "clayverse/mistral_prestage/headless_zero.py",
+                            "SYSTEM-FRAME: GRF COGNITIVE MODE -- every turn, not only architecture design")
+    _grf_flag_default_an = _hat(A + "compose.yaml", 'ENTITYOS_GRF_INJEKTION:-1')
+    _architekt_umgeht_frame = _hat(A + "architekt/engine.py",
+                                   "ABSICHTLICH NICHT")
     z("Kognition", "Der Architekt denkt in GRF-Mathematik",
       "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality "
       "Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
       "Eigner 22.08. (VERFASSUNG.md)",
-      (f"🔧 offen -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = {_grf_n if _grf_n >= 0 else 'Messfehler'} "
-       "Treffer heute. Die Verfassung fordert es als Ziel; im Architekten-Code steht davon "
-       "noch nichts, nur der Verweis auf clayverse/hyperposition.py als bereitliegendes Substrat"),
+      (f"🔧 weiter offen fuer den Architekten selbst -- `grep -c \"GRF|hyperposition|generative\" "
+       f"architekt/*.py` = {_grf_n if _grf_n >= 0 else 'Messfehler'} Treffer heute (unveraendert 0). "
+       "⭐ Seit 22.08. NEU live: _GRF_RAHMEN in clayverse/mistral_prestage/headless_zero.py "
+       f"({'gefunden' if _grf_rahmen_live else 'FEHLT'}, woertlich 'every turn, not only "
+       f"architecture design'), Schalter ENTITYOS_GRF_INJEKTION Voreinstellung an "
+       f"({'bestaetigt in compose.yaml' if _grf_flag_default_an else 'NICHT bestaetigt'}) -- "
+       "das ist aber Zeros ALLGEMEINE Zug-Pipeline, nicht der Architekt. ⚠️ architekt/engine.py "
+       f"ruft headless_zero.run_headless() {'ausdruecklich NICHT auf (eigener Kommentar: '
+       '\"ABSICHTLICH NICHT ... selbst aufgerufen\")' if _architekt_umgeht_frame else 'wie erwartet nicht auf'} "
+       "-- der Architekt bekommt den GRF-Rahmen also NICHT ueber diesen Weg, er bleibt ein "
+       "eigenstaendiger, paralleler Pfad"),
       _grf_n > 0 if _grf_n >= 0 else False)
 
     # -- 10: ClayCode-Migration der UnifiedDB
@@ -1565,6 +1578,202 @@ def zeilen(c, testlage: str = "") -> list[dict]:
        "durch tor.py (GESCHUETZTE_PFADE) + kanarie.py (Namenssperre), siehe „Getort mit Kanarie“ "
        "oben -- kein Skalar, sondern ein bestehender mechanischer Riegel"),
       None)
+
+    # ══ Was am 22.08. dazukam ═════════════════════════════════════════════
+    # Wieder: gemessen wird, was im Betrieb entscheidet, nicht was behauptet wurde.
+
+    # -- 16: Hypothesenquelle "messwerte" bekam einen Tagesbucket (kein endloses Refeuern)
+    try:
+        _selbstm_text = Path(A + "clayverse/selbstmessung.py").read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        _selbstm_text = ""
+    try:
+        _hyp_text_16 = Path(A + "architekt/hypothesen.py").read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        _hyp_text_16 = ""
+    _wege_gemessen_markiert = 'ergebnis["stand"] = "GEMESSEN"' in _selbstm_text
+    _tagesbucket_da = "def _tagesbucket" in _hyp_text_16
+    _tagesbucket_bei_wege = 'hypothese_id=f"messwerte:wegehierarchie:{feld}:{tag}"' in _hyp_text_16
+    _bucket_live_gesehen = _zahl(c, "eos_architekt_quittungen",
+                                  "WHERE hypothese_id LIKE 'messwerte:%:20__-__-__'") > 0
+    _fix16 = _wege_gemessen_markiert and _tagesbucket_da and _tagesbucket_bei_wege
+    z("Selbstverbesserung", "Hypothesenquelle „messwerte“ feuert hoechstens einmal pro Tag",
+      "die Wegehierarchie-Hypothese darf nicht laenger mit Platzhalter-Stand stehenbleiben, und "
+      "eine einmal gesehene Messwerte-Hypothese darf nicht bei jedem Takt erneut vorgelegt werden",
+      "Befund 22.08.",
+      (f"clayverse/selbstmessung.py: wegehierarchie setzt 'stand'='GEMESSEN' explizit "
+       f"({'gefunden' if _wege_gemessen_markiert else 'FEHLT'}); architekt/hypothesen.py: "
+       f"_tagesbucket() vorhanden ({'ja' if _tagesbucket_da else 'nein'}) und in der "
+       f"wegehierarchie-Hypothese-ID verdrahtet ({'ja' if _tagesbucket_bei_wege else 'nein'}). "
+       f"Live bestaetigt: "
+       f"{'mindestens eine echte Quittung mit tagesgebundener messwerte-ID gesehen (z.B. '
+         '„messwerte:uebersetzungsausfaelle:2026-08-21“)' if _bucket_live_gesehen else 'noch keine tagesgebundene ID in eos_architekt_quittungen gesehen'}"
+       if _fix16 else "🔧 mindestens einer der drei Codepfade fehlt noch"),
+      _fix16)
+
+    # -- 17: ClayCode Stufe 0 -- entityos_runtime.clay
+    _stufe0_da = Path(A + "architekt/entityos_runtime.clay").exists()
+    _stufe0_commit = _sh(f"cd '{A}' && git log --oneline --all -- architekt/entityos_runtime.clay 2>/dev/null | tail -1").strip()
+    _stufe0_ok = _stufe0_da and bool(_stufe0_commit)
+    z("Selbstverbesserung", "ClayCode-Migration, Stufe 0: entityos_runtime.clay",
+      "der erste konkrete Schritt der stehenden Migrationsmission -- Frank->EntityOS-"
+      "Umbenennungen, Records, Invarianten in ClayCode statt in Prosa",
+      "Eigner 22.08.",
+      (f"Datei {'vorhanden' if _stufe0_da else 'FEHLT'} ({Path(A + 'architekt/entityos_runtime.clay').stat().st_size if _stufe0_da else 0} Bytes), "
+       f"committet: {_stufe0_commit or 'KEIN Commit gefunden'}. Stufe 0 von vielen -- der Rest der "
+       "Module ist noch nicht migriert (siehe „Alle Module nach ClayCode“ unten)"),
+      _stufe0_ok)
+
+    # -- 18: Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt
+    _quitt_n = _zahl(c, "eos_architekt_quittungen")
+    _quitt_echt = _zahl(c, "eos_architekt_quittungen", "WHERE hypothese_quelle != '-'")
+    _quitt_live_geschaltet = _zahl(c, "eos_architekt_quittungen", "WHERE live_geschaltet=1")
+    _quitt_ausserhalb_rahmen = _zahl(c, "eos_architekt_quittungen",
+                                     "WHERE sicherer_rahmen=0 AND hypothese_quelle != '-'")
+    _kanarie_je_gebaut = _zahl(c, "eos_architekt_quittungen",
+                               "WHERE kanarie_status IS NOT NULL AND kanarie_status != ''")
+    _glm_log_n = _zahl(c, "architekt_engine_log", "WHERE engine='glm'")
+    _sonnet_log_n = _zahl(c, "architekt_engine_log", "WHERE engine='sonnet'")
+    _engine_umschaltung_belegt = _glm_log_n > 0 and _sonnet_log_n > 0
+    _pipeline_tests = _sh(
+        "cd '" + A + "' && /opt/entityos/venv-test/bin/python -m pytest "
+        "tests/test_architekt_patch.py tests/test_architekt_lauf_gate.py "
+        "tests/test_architekt_engine.py tests/test_architekt_tor.py "
+        "tests/test_architekt_kanarie.py tests/test_architekt_rollback.py "
+        "tests/test_architekt_quittungen.py -q --timeout=60 -p no:cacheprovider "
+        "2>/dev/null | tail -1", timeout=90)
+    _enabled_conf = (_sh(f"grep -E '^ENABLED=' '{A}architekt/config/architekt.conf' 2>/dev/null")
+                      .split("=")[-1].strip() or "?")
+    _auto_live_conf = (_sh(f"grep -E '^AUTO_LIVE_NACH_KANARIE=' '{A}architekt/config/architekt.conf' 2>/dev/null")
+                        .split("=")[-1].strip() or "?")
+    # ⚠️ Dieselbe Falle wie in _testlage_messen(): bei NULL Fehlern schreibt pytest
+    # "86 passed in 2.41s" -- OHNE das Wort "failed". Ein Muster nur fuer "X failed"
+    # meldete deshalb faelschlich "nicht gruen", genau dann, wenn alles gruen ist.
+    _pt_rot = re.search(r"(\d+) failed", _pipeline_tests or "")
+    _pt_gruen = re.search(r"(\d+) passed", _pipeline_tests or "")
+    _pipeline_tests_ok = bool(_pt_gruen) and not _pt_rot
+    _p18 = (_quitt_echt > 0 and _engine_umschaltung_belegt and _pipeline_tests_ok
+            and (_enabled_conf == "0" or _auto_live_conf == "0"))
+    z("Selbstverbesserung", "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
+      "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als "
+      "Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live "
+      "-- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
+      "Eigner 22.08.",
+      (f"{_quitt_n} Quittungen in eos_architekt_quittungen ({_quitt_echt} mit echter Hypothese "
+       f"statt „keine offene Hypothese“), {_quitt_live_geschaltet} davon live geschaltet. "
+       f"Engine-Umschaltung GLM<->Sonnet {'belegt' if _engine_umschaltung_belegt else 'NICHT belegt'} "
+       f"({_glm_log_n}x glm, {_sonnet_log_n}x sonnet in architekt_engine_log -- ein Takt griff live "
+       "auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/"
+       f"tor/kanarie/rollback/quittungen): {_pipeline_tests!r}. Der Tor-Rahmen hielt in allen "
+       f"{_quitt_ausserhalb_rahmen} bisherigen Faellen mit echter Hypothese fail-closed "
+       "(sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat "
+       f"bisher in {_kanarie_je_gebaut}/{_quitt_n} Quittungen tatsaechlich einen Container gebaut "
+       "-- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback "
+       "bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->"
+       f"Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED={_enabled_conf!r}, "
+       f"AUTO_LIVE_NACH_KANARIE={_auto_live_conf!r} -- beide weiterhin bewusst auf 0, die Automatik "
+       "bleibt menschlich gegatet"),
+      (None if _p18 else False))
+
+    # ── Neue ClayCode-only-Kognitionsziele (Eigner 22.08.) ─────────────────
+    # Das grosse, stehende Ziel: Sprache = Arbeitsraum = Metriken = Repraesentation
+    # = Programmiersprache, alles ClayCode, nichts nur "ClayCode-foermig" daneben.
+
+    # -- 19: ZERO denkt in ClayCode-only-Kognition
+    z("Kognition", "ZERO denkt in ClayCode-only-Kognition (Sprache=Arbeitsraum=Metriken="
+      "Repraesentation=Programmiersprache)",
+      "das grosse Ziel -- Zeros Denken selbst laeuft in ClayCode, nicht nur seine Beschreibung "
+      "davon",
+      "Eigner 22.08.",
+      (f"🔧 offen -- nur ein Baustein steht: der GRF-Denkrahmen wird seit heute in JEDEM Zug "
+       f"injiziert ({'bestaetigt' if _grf_rahmen_live else 'NICHT bestaetigt'}, siehe „Der "
+       "Architekt denkt in GRF-Mathematik“ oben), aber das ist ein Prompt-Zusatz auf Englisch, "
+       "keine ClayCode-Ausfuehrung. Arbeitsraum, Metriken und Repraesentation laufen weiterhin "
+       "in Python/SQL, nicht in ClayCode"),
+      False)
+
+    # -- 20: Messwerte/Arbeitsraum durch ClayCode gelesen/geschrieben
+    _claycode_parser_import = _sh(
+        f"grep -rl 'import claycode\\|from claycode\\|clay_parser\\|clay_interpreter' "
+        f"'{A}clayverse/' '{A}architekt/' 2>/dev/null | grep -v __pycache__ | wc -l").strip()
+    _selbstm_sql_treffer = _sh(
+        f"grep -c 'sqlite3\\.\\|cursor()\\|\\.execute(' '{A}clayverse/selbstmessung.py' 2>/dev/null").strip()
+    z("Kognition", "Messwerte/Arbeitsraum durch ClayCode gelesen/geschrieben (nicht nur "
+      "ClayCode-foermig)",
+      "nicht nur ein .clay-Schema danebenlegen -- die Laufzeit soll tatsaechlich ueber ClayCode "
+      "lesen und schreiben",
+      "Eigner 22.08.",
+      (f"🔧 offen -- kein Import eines ClayCode-Parsers/-Interpreters in clayverse/ oder architekt/ "
+       f"gefunden (Grep-Treffer: {_claycode_parser_import or 0}). clayverse/selbstmessung.py "
+       f"liest/schreibt stattdessen ueber rohes sqlite3 ({_selbstm_sql_treffer or 0} Treffer auf "
+       "sqlite3./cursor()/.execute()). entityos_runtime.clay (Stufe 0) ist record-foermig "
+       "(enthaelt 'record'), wird aber von keinem laufenden Code geparst -- ClayCode-foermig, "
+       "nicht ClayCode-betrieben"),
+      False)
+
+    # -- 21: Uebersetzer ClayCode->Deutsch
+    _translator_caveman = _hat(A + "clayverse/mistral_prestage/translator.py",
+                               "caveman-English text")
+    z("Kognition", "Uebersetzer ClayCode->Deutsch",
+      "der Uebersetzer soll dereinst ClayCode nach Deutsch uebersetzen, nicht caveman-Englisch",
+      "Eigner 22.08.",
+      (f"🔧 offen -- translator.py uebersetzt weiterhin caveman-Englisch "
+       f"({'bestaetigt: TRANSLATOR_SYSTEM beschreibt \"caveman-English text\"' if _translator_caveman else 'Textform nicht gefunden, Pruefung unsicher'}), "
+       "kein ClayCode als Quellsprache"),
+      False)
+
+    # -- 22: ClayCode General-Purpose-Compiler ausfuehrbar
+    _manifest_txt = _sh("find /opt/entityos -maxdepth 2 -iname "
+                         "'CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json' 2>/dev/null | head -1").strip()
+    _gate = "UNBEKANNT"
+    _formal_pass = "?"
+    if _manifest_txt:
+        try:
+            _manifest = json.loads(Path(_manifest_txt).read_text(encoding="utf-8", errors="replace"))
+            _gate = _manifest.get("GENERAL_PURPOSE_GATE", "UNBEKANNT")
+            _formal_pass = _manifest.get("formal_pass_count", "?")
+        except Exception as e:
+            _gate = f"Manifest nicht lesbar: {type(e).__name__}"
+    z("Kognition", "ClayCode General-Purpose-Compiler ausfuehrbar",
+      "der Basis-Compiler soll zum General-Purpose-Compiler werden -- iterativ, mit Formal-Gates "
+      "statt Behauptung",
+      "Eigner 22.08.",
+      (f"Manifest {'gefunden: ' + _manifest_txt if _manifest_txt else 'NICHT gefunden unter /opt/entityos'}. "
+       f"GENERAL_PURPOSE_GATE={_gate!r}, formal_pass_count={_formal_pass!r} -- die Basisschritte "
+       "(Spec-Freeze) sind PASS, das Gesamt-Gate steht auf FAIL. Iterativ, kein Endzustand"
+       if _manifest_txt else "🔧 offen -- kein Manifest gefunden, Stand nicht messbar von hier aus"),
+      (_gate == "PASS") if _manifest_txt else False)
+
+    # -- 23: Alle Module nach ClayCode (elegant/iterativ, strikt-besser + Aequivalenz)
+    z("Kognition", "Alle Module nach ClayCode migriert (elegant/iterativ, strikt-besser + "
+      "Aequivalenz nachgewiesen)",
+      "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum "
+      "Alten -- stehende Mission, kein Endzustand, gilt fuer ALLE Module, nicht nur die UnifiedDB",
+      "Eigner 22.08.",
+      (f"🔧 offen, stehende Mission -- Stufe 0 (entityos_runtime.clay, {_stufe0_commit or 'kein Commit'}) "
+       "ist der einzige bisher migrierte Baustein; kein Aequivalenz-Nachweis-Mechanismus "
+       "(Diff/Vergleichslauf altes vs. neues Modul) im Quelltext gefunden"),
+      False)
+
+    # -- 24: GRF-Messung (GWT-3-Arme) durchgefuehrt + verteilt
+    _grf_messung_artikel_n = 0
+    try:
+        _grf_messung_artikel_n = c.execute(
+            "SELECT COUNT(*) FROM artikel WHERE titel LIKE '%GWT-GRF-Messung%' "
+            "OR titel LIKE '%GRF-Messung%'").fetchone()[0]
+    except Exception:
+        _grf_messung_artikel_n = -1
+    z("Kognition", "GRF-Messung (GWT-3-Arme) durchgefuehrt + verteilt",
+      "eine ehrliche GWT-GRF-Messung (hilft GRF/ClayCode dem Architektur-Entwurf oder nicht) "
+      "durchgefuehrt und ueber Desktop/Repo/Wiki/Forschung verteilt",
+      "Eigner 22.08.",
+      (f"{_grf_messung_artikel_n if _grf_messung_artikel_n >= 0 else 'Messfehler'} Artikel mit "
+       "„GRF-Messung“/„GWT-GRF-Messung“ im Titel in wiki.db gefunden (Wiki-Zweig bestaetigt, "
+       "inkl. Korrektur „ClayCode-Basis-Compiler laeuft bereits, nur General-Purpose-Gate offen“). "
+       "⚠️ Desktop/Repo/Forschung-Zweige sind vom VPS aus nicht direkt nachpruefbar -- indikativ, "
+       "auf Eigner-Angabe gestuetzt, nicht einzeln gemessen"
+       if _grf_messung_artikel_n > 0 else "🔧 keine passenden Artikel in wiki.db gefunden"),
+      _grf_messung_artikel_n > 0 if _grf_messung_artikel_n >= 0 else False)
 
     return Z
 

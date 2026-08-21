@@ -1,8 +1,8 @@
 {
-  "erzeugt": "2026-08-21T20:36:22Z",
-  "erfuellt": 84,
-  "offen": 15,
-  "zurueckgestellt": 4,
+  "erzeugt": "2026-08-21T20:38:28Z",
+  "erfuellt": 87,
+  "offen": 20,
+  "zurueckgestellt": 5,
   "zeilen": [
     {
       "bereich": "Identität",
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "71 Züge, 604 Kausalepisoden, 36 Arbeitsraum-Episoden",
+      "ist": "76 Züge, 607 Kausalepisoden, 38 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal",
       "quelle": "Eigner 18./19.08.",
-      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 36 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
+      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 38 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
       "erfuellt": false
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "415 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "417 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 41 minutes (healthy)",
+      "ist": "Up 43 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -297,7 +297,7 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "1319 gruen / 2 rot",
+      "ist": "1320 gruen / 1 rot",
       "erfuellt": false
     },
     {
@@ -337,7 +337,7 @@
       "faehigkeit": "Chat-Historie überlebt den Neuladen",
       "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
       "quelle": "Eigner 18.08.",
-      "ist": "71 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "ist": "76 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "81.5 % belegt, 35.5 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "81.6 % belegt, 35.4 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 157.1 GB, gezählt 127.9 GB, Lücke 29.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.2 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 157.2 GB, gezählt 127.9 GB, Lücke 29.3 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.3 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -465,7 +465,7 @@
       "faehigkeit": "Die Testsuite ist ehrlich grün",
       "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "1319 gruen / 2 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "ist": "1320 gruen / 1 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
       "erfuellt": false
     },
     {
@@ -561,7 +561,7 @@
       "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
       "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
       "quelle": "Befund 20.08.",
-      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1219 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1223 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
       "erfuellt": true
     },
     {
@@ -713,7 +713,7 @@
       "faehigkeit": "Der innere Architekt existiert",
       "soll": "ein permanenter Selbstverbesserungsprozess fuer Zero -- Hypothese waehlen, reproduzieren, fixen, testen, GETORT-mit-Kanarie live",
       "quelle": "Eigner 22.08.",
-      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1319 gruen / 2 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
+      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1320 gruen / 1 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
       "erfuellt": null
     },
     {
@@ -777,7 +777,7 @@
       "faehigkeit": "Der Architekt denkt in GRF-Mathematik",
       "soll": "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
       "quelle": "Eigner 22.08. (VERFASSUNG.md)",
-      "ist": "🔧 offen -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 0 Treffer heute. Die Verfassung fordert es als Ziel; im Architekten-Code steht davon noch nichts, nur der Verweis auf clayverse/hyperposition.py als bereitliegendes Substrat",
+      "ist": "🔧 weiter offen fuer den Architekten selbst -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 0 Treffer heute (unveraendert 0). ⭐ Seit 22.08. NEU live: _GRF_RAHMEN in clayverse/mistral_prestage/headless_zero.py (gefunden, woertlich 'every turn, not only architecture design'), Schalter ENTITYOS_GRF_INJEKTION Voreinstellung an (bestaetigt in compose.yaml) -- das ist aber Zeros ALLGEMEINE Zug-Pipeline, nicht der Architekt. ⚠️ architekt/engine.py ruft headless_zero.run_headless() ausdruecklich NICHT auf (eigener Kommentar: \"ABSICHTLICH NICHT ... selbst aufgerufen\") -- der Architekt bekommt den GRF-Rahmen also NICHT ueber diesen Weg, er bleibt ein eigenstaendiger, paralleler Pfad",
       "erfuellt": false
     },
     {
@@ -827,6 +827,78 @@
       "quelle": "Eigner 22.08. (VERFASSUNG.md)",
       "ist": "Latenz: gemessen 7,8 s Median/Zug (21.08., 12 Zuege) -- das ist der GESAMTE Zug, nicht das Architekten-Ziel „gegen 0“ isoliert, also nur ein Naeherungswert. Kognition maximal: UNBEKANNT -- kein Skalarmass definiert. Funktional bewusste AGI: UNBEKANNT -- keine Messgroesse, per Definition kein Schwellenwert. Alignment nie vergessen: operationalisiert durch tor.py (GESCHUETZTE_PFADE) + kanarie.py (Namenssperre), siehe „Getort mit Kanarie“ oben -- kein Skalar, sondern ein bestehender mechanischer Riegel",
       "erfuellt": null
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Hypothesenquelle „messwerte“ feuert hoechstens einmal pro Tag",
+      "soll": "die Wegehierarchie-Hypothese darf nicht laenger mit Platzhalter-Stand stehenbleiben, und eine einmal gesehene Messwerte-Hypothese darf nicht bei jedem Takt erneut vorgelegt werden",
+      "quelle": "Befund 22.08.",
+      "ist": "clayverse/selbstmessung.py: wegehierarchie setzt 'stand'='GEMESSEN' explizit (gefunden); architekt/hypothesen.py: _tagesbucket() vorhanden (ja) und in der wegehierarchie-Hypothese-ID verdrahtet (ja). Live bestaetigt: mindestens eine echte Quittung mit tagesgebundener messwerte-ID gesehen (z.B. „messwerte:uebersetzungsausfaelle:2026-08-21“)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "ClayCode-Migration, Stufe 0: entityos_runtime.clay",
+      "soll": "der erste konkrete Schritt der stehenden Migrationsmission -- Frank->EntityOS-Umbenennungen, Records, Invarianten in ClayCode statt in Prosa",
+      "quelle": "Eigner 22.08.",
+      "ist": "Datei vorhanden (31871 Bytes), committet: f64c54123 Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Invarianten) (Gabriel). Stufe 0 von vielen -- der Rest der Module ist noch nicht migriert (siehe „Alle Module nach ClayCode“ unten)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
+      "soll": "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live -- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
+      "quelle": "Eigner 22.08.",
+      "ist": "4 Quittungen in eos_architekt_quittungen (3 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '86 passed in 1.38s'. Der Tor-Rahmen hielt in allen 2 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 0/4 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "ZERO denkt in ClayCode-only-Kognition (Sprache=Arbeitsraum=Metriken=Repraesentation=Programmiersprache)",
+      "soll": "das grosse Ziel -- Zeros Denken selbst laeuft in ClayCode, nicht nur seine Beschreibung davon",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nur ein Baustein steht: der GRF-Denkrahmen wird seit heute in JEDEM Zug injiziert (bestaetigt, siehe „Der Architekt denkt in GRF-Mathematik“ oben), aber das ist ein Prompt-Zusatz auf Englisch, keine ClayCode-Ausfuehrung. Arbeitsraum, Metriken und Repraesentation laufen weiterhin in Python/SQL, nicht in ClayCode",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Messwerte/Arbeitsraum durch ClayCode gelesen/geschrieben (nicht nur ClayCode-foermig)",
+      "soll": "nicht nur ein .clay-Schema danebenlegen -- die Laufzeit soll tatsaechlich ueber ClayCode lesen und schreiben",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- kein Import eines ClayCode-Parsers/-Interpreters in clayverse/ oder architekt/ gefunden (Grep-Treffer: 0). clayverse/selbstmessung.py liest/schreibt stattdessen ueber rohes sqlite3 (21 Treffer auf sqlite3./cursor()/.execute()). entityos_runtime.clay (Stufe 0) ist record-foermig (enthaelt 'record'), wird aber von keinem laufenden Code geparst -- ClayCode-foermig, nicht ClayCode-betrieben",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Uebersetzer ClayCode->Deutsch",
+      "soll": "der Uebersetzer soll dereinst ClayCode nach Deutsch uebersetzen, nicht caveman-Englisch",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- translator.py uebersetzt weiterhin caveman-Englisch (bestaetigt: TRANSLATOR_SYSTEM beschreibt \"caveman-English text\"), kein ClayCode als Quellsprache",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "ClayCode General-Purpose-Compiler ausfuehrbar",
+      "soll": "der Basis-Compiler soll zum General-Purpose-Compiler werden -- iterativ, mit Formal-Gates statt Behauptung",
+      "quelle": "Eigner 22.08.",
+      "ist": "Manifest gefunden: /opt/entityos/CLAYCODE_GENERAL_PURPOSE_COMPILER_MANIFEST.json. GENERAL_PURPOSE_GATE='FAIL', formal_pass_count=1 -- die Basisschritte (Spec-Freeze) sind PASS, das Gesamt-Gate steht auf FAIL. Iterativ, kein Endzustand",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Alle Module nach ClayCode migriert (elegant/iterativ, strikt-besser + Aequivalenz nachgewiesen)",
+      "soll": "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum Alten -- stehende Mission, kein Endzustand, gilt fuer ALLE Module, nicht nur die UnifiedDB",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen, stehende Mission -- Stufe 0 (entityos_runtime.clay, f64c54123 Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Invarianten) (Gabriel)) ist der einzige bisher migrierte Baustein; kein Aequivalenz-Nachweis-Mechanismus (Diff/Vergleichslauf altes vs. neues Modul) im Quelltext gefunden",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "GRF-Messung (GWT-3-Arme) durchgefuehrt + verteilt",
+      "soll": "eine ehrliche GWT-GRF-Messung (hilft GRF/ClayCode dem Architektur-Entwurf oder nicht) durchgefuehrt und ueber Desktop/Repo/Wiki/Forschung verteilt",
+      "quelle": "Eigner 22.08.",
+      "ist": "7 Artikel mit „GRF-Messung“/„GWT-GRF-Messung“ im Titel in wiki.db gefunden (Wiki-Zweig bestaetigt, inkl. Korrektur „ClayCode-Basis-Compiler laeuft bereits, nur General-Purpose-Gate offen“). ⚠️ Desktop/Repo/Forschung-Zweige sind vom VPS aus nicht direkt nachpruefbar -- indikativ, auf Eigner-Angabe gestuetzt, nicht einzeln gemessen",
+      "erfuellt": true
     }
   ]
 }

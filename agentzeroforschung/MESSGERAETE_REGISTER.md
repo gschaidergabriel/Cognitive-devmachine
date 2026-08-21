@@ -36,11 +36,20 @@ Dieses Register wird bei jedem relevanten `go` gegen den neuesten `agentZero/MAN
 | `architektur/aenderungen.jsonl` | Code-/Architekturhistorie | kumulativ/exportiert | Systemaenderung ist Confounder fuer Verhaltenszeitreihen |
 | `architektur/SKIZZE.md` | abgeleitete Laufzeitarchitektur | Snapshot | abgeleitete Beschreibung, kein unabhaengiges Instrument; Tool-Erreichbarkeit derzeit widerspruechlich zu Chatbeobachtung |
 | `bauverlauf/bauverlauf.jsonl` / `BAUVERLAUF.md` | Bauinterventionen, Befunde, Reparaturgruende | kumulativ/exportiert | 700 Commits/4 Repos; Commit ist Interventionsevidenz, aber kein automatischer Wirksamkeitsbeweis |
-| `tests/letzter-lauf.json` | aktueller deterministischer Teststatus | je Testlauf | 480 gruen/12 rot am gebundenen Stand; Test-PASS != beobachtetes Zero-Verhalten |
-| `tests/verlauf.jsonl` | Teststatus ueber Zeit | wachsend, eine Zeile je Lauf | aktuell erst 1 Punkt; spaeter Change-Point-/Regression-Zeitreihe |
-| `bewertung/bewertungen.jsonl` + `.meta.json` | explizites menschliches Daumen-hoch/-runter pro Assistant-Turn | mutables Vollabbild; separater Exporttimer | neu 2026-08-21; aktuell 0 Zeilen. Stark an Turn/Session/User gebunden, aber Aenderung/Entfernung ueberschreibt historische Evidenz; Modellzuordnung ist best-effort content-basiert; Rating-Selection-Bias messen bevor Reward-/Qualitaetsclaims |
+| `tests/letzter-lauf.json` | aktueller deterministischer Teststatus | je Testlauf | Gen245: 1066 gruen/1 rot; persistenter Red im Claude-Code-Adapter; Test-PASS != beobachtetes Zero-Verhalten |
+| `tests/verlauf.jsonl` | Teststatus ueber Zeit | wachsend, eine Zeile je Lauf | spaeter Change-Point-/Regression-Zeitreihe |
+| `bewertung/bewertungen.jsonl` + `.meta.json` | explizites menschliches Daumen-hoch/-runter pro Assistant-Turn | mutables Vollabbild; separater Exporttimer | Gen245: ein realer Downvote wurde exportiert und 53 s spaeter entfernt; aktueller Snapshot kann Feedbackhistorie verlieren. Turn-/Frage-/Antwort-Hashes erlaubten in diesem Fall einen vollen Causal-Join bis Retrieval/Workspace/Causal-Outcome; Modell bleibt best-effort. |
 | `ZIELE.md` | Soll/Ist-Faehigkeitsinventar mit Messpruefern | Snapshot | Status ist capability-spezifisch, kein globaler Health-Score; Zaehler selbst auf Messfehler pruefen |
 | `MANIFEST.json` | Export-Metrologie | Snapshot | zentrale Quelle fuer Zaehler, Hashes, Truncation |
+
+## Abgeleitete Forschungsinstrumente ab Gen245
+
+| Instrument | Zweck | Status | Harte Grenze |
+|---|---|---|---|
+| `FEEDBACK_CAUSAL_JOIN_COVERAGE/v1` | Rating -> Assistant-Turn -> Frage -> Retrieval -> Workspace -> Causal-Episode -> Outcome/Model binden | erster realer Fall bis Outcome-Hash voll gebunden | Modell-Receipt ist noch best-effort; Event-Historie fehlt |
+| `FEEDBACK_COMPONENT_CREDIT_MASK/v1` | verhindert globalen Reward-Credit an Komponenten, die im bewerteten Turn nicht kausal aktiv waren | Forschungsanforderung | braucht component activity / receipts je Episode |
+| `F94_CONCENTRATION_PROFILE/v1` | kontinuierliche Hierarchiemetrik (CR10, Gini, HHI, Nutzung-vs-Guete, Zeitdelta) neben dem harten 2x-Gate | erster deskriptiver CR10 = ca. 1.42x Baseline | ohne alle 366 Werte + Nullmodell keine Signifikanz-/Emergenzaussage |
+| `SHADOW_USER_PRIOR_GAP/v1` | user-konditioniertes Retrieval-Capital task-/status-stratifiziert beobachten | Gen245 zeigt grossen rohen SHADOW-Gap | kleine/ungleiche Stichprobe; kein Fairness- oder Qualitaetsclaim ohne Matching |
 
 ## Automatische Aufnahme neuer Instrumente
 
@@ -63,15 +72,16 @@ Wenn eine neue Datei oder Datenfamilie in `agentZero/MANIFEST.json` erscheint, w
 
 Nicht als Produktbau-Auftrag, sondern als Forschungsbedarf:
 
-1. **Zeitbasis/Latenzen** — monotone Timestamps fuer Turnphasen, Retrieval, Workspace, EffectGate, Stop/Re-entry;
-2. **Ressourcen** — CPU/RAM/IO/Queue/Context-Groesse pro Episode;
-3. **Retrieval-Qualitaet** — Kandidaten, gewaehlte Seeds, Relevanz, Misses, spaetere Utility;
-4. **Autonomie** — Zielquelle, Initiativegrund, next_runnable, Planrevision, Abbruchgrund;
-5. **Workspace-Entropie** — angebotene Alternativen, Auswahl, Konfliktgrad, unresolved facets;
-6. **Graph-Dynamik** — echte Delta-Knoten/-Kanten statt nur Projektion-Snapshot;
-7. **Recovery** — Restart-ID, Pre/Post-Generation, offene Turns/Effects, UNKNOWN-Erhalt;
-8. **Cross-user** — Collision-/Privacy-Indikatoren ohne Inhaltsleakage;
-9. **Calibration** — Vorhersage/Confidence gegen spaeter verifiziertes Outcome;
-10. **Method transfer** — wiederverwendete Analyse-/Loesungsstruktur gegen held-out Aufgaben.
+1. **Feedback-Lineage** — append-only Feedback-Events, Causal-Join-Coverage und komponentenspezifischer Credit vor jedem adaptiven Lernen aus Daumenfeedback;
+2. **Zeitbasis/Latenzen** — monotone Timestamps fuer Turnphasen, Retrieval, Workspace, EffectGate, Stop/Re-entry;
+3. **Ressourcen** — CPU/RAM/IO/Queue/Context-Groesse pro Episode;
+4. **Retrieval-Qualitaet** — Kandidaten, gewaehlte Seeds, Relevanz, Misses, spaetere Utility;
+5. **Autonomie** — Zielquelle, Initiativegrund, next_runnable, Planrevision, Abbruchgrund;
+6. **Workspace-Entropie** — angebotene Alternativen, Auswahl, Konfliktgrad, unresolved facets;
+7. **Graph-Dynamik/F94** — echte Delta-Knoten/-Kanten und Konzentrationszeitreihe statt nur harter Schwelle/Projektion-Snapshot;
+8. **Recovery** — Restart-ID, Pre/Post-Generation, offene Turns/Effects, UNKNOWN-Erhalt;
+9. **Cross-user** — Collision-/Privacy-Indikatoren plus SHADOW-Prior-Gap ohne Inhaltsleakage;
+10. **Calibration** — Vorhersage/Confidence gegen spaeter verifiziertes Outcome;
+11. **Method transfer** — wiederverwendete Analyse-/Loesungsstruktur gegen held-out Aufgaben.
 
 Jede neue Instrumentierung muss ihren Informationsgewinn gegen Overhead, Reaktivitaet und Datenschutz abwaegen.

@@ -1,12 +1,154 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T06:20:29Z. 1029 Commits aus vier Repos, davon 379 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T06:50:30Z. 1032 Commits aus vier Repos, davon 386 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen
+
+`79c6e620d355` · entityos · 06:46 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_container_control_plane_permissions.py
+
+Zeit: 2026-08-21T06:46:40+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:44:12 +0000 — entityos: 1 Aenderungen
+
+`e10f2fe13dfc` · entityos · 06:44 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+
+Zeit: 2026-08-21T06:44:12+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:42:11 +0000 — entityos: 5 Aenderungen
+
+`d8dadf7f2d7e` · entityos · 06:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/terminal_gateway.py
+  the artefact/web/avatare/zero-avatar.js
+  the artefact/web/avatare/zero-wettbewerb.css
+  the artefact/web/avatare/zero-wettbewerb.js
+  the artefact/web/chat/index.html
+
+Zeit: 2026-08-21T06:42:11+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:36:16 +0000 — entityos: 2 Aenderungen
+
+`85f14d57e97f` · entityos · 06:36 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/Dockerfile
+  the artefact/compose.yaml
+
+Zeit: 2026-08-21T06:36:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:32:31 +0000 — entityos: 1 Aenderungen
+
+`7fcb55ca8296` · entityos · 06:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-21T06:32:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:30:24 +0000 — entityos: 8 Aenderungen
+
+`33104cad7a05` · entityos · 06:30 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/dateien.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/terminal_gateway.py
+  the artefact/compose.yaml
+  the artefact/tests/test_avatar_api.py
+  the artefact/tests/test_dateien.py
+  the artefact/tests/test_gruss.py
+  the artefact/web/chat/index.html
+
+Zeit: 2026-08-21T06:30:24+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 8
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:24:18 +0000 — entityos: 5 Aenderungen
+
+`86e6940bd241` · entityos · 06:24 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  avatare-eingang/andreas.jpg
+  avatare-eingang/gabriel.jpg
+  betrieb/eos_theta.py
+  the artefact/avatare-privat/andreas.jpg
+  the artefact/avatare-privat/gabriel.jpg
+
+Zeit: 2026-08-21T06:24:18+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 06:11:24 +0000 — entityos: 2 Aenderungen
 
@@ -3143,459 +3285,5 @@ unangenehm, ein Tokenleck ist benutzbar. Die Abwaegung ist getroffen.
 Nicht angefasst: code/unterbau/werkzeuge.py traegt eine Mailadresse als Kontakt
 fuer die Hoeflichkeits-Pools wissenschaftlicher APIs. Fremder Substratcode mit
 legitimem Zweck -- eine Aenderung koennte den Zugang 
-```
-
-### Das Wissen lag in der Datenbank und war unauffindbar - jetzt gibt es einen Weg dorthin
-
-`26e9cb087a6d` · entityos · 14:25 UTC · EntityOS
-
-```
-GEMESSEN, als Andreas fragte "Wo liegt seimensch.net und wie wird eine Aenderung
-live gestellt?":
-
-    memory_search seimensch/deploy/impressum   -> 0 Treffer
-    wiki_zuordnung(projekt="SeiMensch.net")    -> {} , null Artikel
-    embedding_search, drei Formulierungen      -> beste Aehnlichkeit 0,45,
-                                                  alles Clay-Forschungsdateien
-
-Zero antwortete korrekt "unbekannt" -- eine Stunde nachdem ich elf
-Wissensartikel mit genau dieser Antwort eingetragen hatte.
-
-⭐ DAS IST DERSELBE FEHLER WIE EIN MECHANISMUS, DEN NIEMAND AUFRUFT, NUR
-UMGEKEHRT: Wissen ohne Abrufweg ist genauso wirkungslos wie ein Abrufweg ohne
-Wissen. Beides sieht in der Datenbank vollstaendig aus.
-
-ZWEI URSACHEN, beide meine:
-
-1. Ich habe direkt in `artikel` geschrieben und den Suchtext vergessen. Der
-   Volltextindex hatte 9.251 Zeilen und enthielt 0 von 11 Wissensartikeln.
-   ⚠️ Beim Nachtragen gelernt: eine virtuelle FTS-Tabelle kennt kein UPSERT.
-   Erst loeschen, dann einfuegen -- sonst stapeln sich Dubletten im Index und
-   dieselbe Frage liefert denselben Artikel mehrfach.
-
-2. Es gab UEBERHAUPT KEIN WERKZEUG, das Artikeltext durchsucht.
-   udb_memory_search liest die Gedaechtnistabelle, nicht die Artikel.
-   udb_embedding_search liefert nur {artikel_id, similarity} -- KEINEN Text.
-   Der lexikalische Weg trifft nur Datei- und Verzeichnisnamen.
-   Ein Korpus, den man nur ueber Dateinamen erreicht, beantwortet keine
-   Inhaltsfrage.
-
-NEU: korpus_suchen(frage) -- Volltext ueber die Artikel, liefert AUSSCHNITTE.
-
-⭐ Ausschnitte, nicht Kennungen. Eine Trefferliste aus Kennungen ist fuer ein
-Sprachmodell wertlos: es kann sie nicht aufloesen und faengt an, ihren Inhalt zu
-erraten. Genau das soll hier nicht passieren.
-Erst streng (alle Worte), dann locker (irgendeins) -- ohne den zweiten Versuch
-liefert eine praezise Frage oft gar nichts. Der Modus steht am Treffer, damit
-ein lockerer Treffer nicht wie ein strenger aussieht.
-
-Punkt 9f im Laufzeitvertrag sagt Zero das ausdruecklich, samt der Messung:
-"auf 'Wo liegt seimensch.net?' hast du korrekt 'unbekannt' gesagt -- waehrend
-die Antwort in elf Artikeln in der Datenbank stand. Nicht dein Fehler: es gab
-keinen Weg dorthin. Jetzt gibt es einen, also nimm ihn, BEVOR du 'nicht im
-Korpus' sagst."
-
-PROBE, im Container: dieselbe Frage liefert jetzt 6 Treffer, an erster Stelle
-"SeiMensch.net: wie deployt wird" mit dem Ablauf im Ausschnitt.
-
-═══ WAS DER TESTLAUF SONST GEZEIGT HAT -- und es ist gut ═══
-
-Zero hat den RAUM benutzt, um Gabriel zu erreichen: alle drei Gabriel-Plaetze
-`verwaist: true`, zuletzt vor 1,7 Stunden, Anfrage trotzdem hinterlegt.
-Es hat das ARBEITSPAKET vom frueheren Lauf gefunden und daraus gewarnt:
-"Paket ap-4c1d43e175fc ist fertig mit Beleg: index.html:212 (entfernt), aber
-footer.html:44 und impressum.html:19 stehen noch. Eine Bereitstellung heute
-haette die Nummer auf zwei Seiten live gelassen."
-Und es hat eine Websuche ANGEBOTEN statt sie zu tun, mit Nennung der Folge
-(die Domain ginge an einen externen Dienst).
-
-Drei Mechaniken, die einzeln gebaut wurden, haben hier zum ersten Mal
-zusammengegriffen -- ohne dass jemand sie dazu aufgefordert hat.
-```
-
-### Zwei Tresore, ein Katalog - und das Betriebswissen in der UnifiedDB
-
-`eca8c30854d7` · entityos · 14:11 UTC · EntityOS
-
-```
-Gabriel: "agent zero braucht einen vault mit allen credentials und einen extra
-vault mit allen api tokens; der vault mit den api tokens muss aber auch eine
-liste mit capabilitys etc haben." Und: "das seimensch betriebswissen auch alles
-wissen ueber andreas und ueber gabriel in die unified db."
-
-⭐⭐ DIE TRAGENDE TRENNUNG: KATALOG UND INHALT
-
-    KATALOG   was es gibt, was es kann, wie es steht   -> Zero darf ihn sehen
-    INHALT    der Schluessel selbst                    -> Zero sieht ihn NIE
-
-Zero soll wissen, DASS es eine Bahn mit 60 Anfragen je Minute gibt und wofuer
-sie taugt. Den Schluessel braucht es dafuer nicht -- und kennte es ihn, stuende
-er in jedem Kontextfenster, jeder Protokollzeile, jeder Fehlermeldung. Ein
-Geheimnis, das durch ein Sprachmodell laeuft, ist keines mehr.
-Werkzeug `tresor_katalog()` fuer Zero; `wert()` nur fuer den Serverteil.
-
-⭐ UND DIE SPERRE IST MECHANISCH, NICHT SORGFALT: katalog() prueft sein eigenes
-Ergebnis gegen JEDEN gelagerten Wert, bevor es ihn herausgibt, und verweigert
-die Ausgabe bei einem Treffer. "Ich habe die geheimen Felder weggelassen" ist
-eine Absicht. Das hier ist eine Zusicherung.
-
-ZWEI TRESORE, NICHT EINER, weil sie verschiedene Fragen beantworten:
-    zugaenge  29 Anmeldungen, Passwoerter, Betriebsdaten -- selten gebraucht,
-              fast immer von einem Menschen
-    api       28 Maschinenschluessel MIT Faehigkeitsliste -- staendig
-              gebraucht, fast immer von einem Dienst
-Ein gemeinsamer Tresor haette bedeutet, dass jeder Dienst, der eine API braucht,
-auch die Registrar-Passwoerter aufmacht.
-
-FAEHIGKEITEN ABGELEITET, NICHT ERFUNDEN: die Liste je Zugang (Modell,
-Minutengrenze, Tagesgrenze, Tokengrenzen) kommt aus bahnen.json, das seinerseits
-aus dem Clay-Unterbau abgeleitet ist. Wo keine Angabe vorliegt, steht
-"unbekannt -- nicht geraten" statt einer plausiblen Zahl. Eine erfundene
-Ratengrenze ist schlimmer als keine, weil man sich darauf verlaesst.
-
-AES-256-GCM, authentifiziert: eine veraenderte Tresordatei faellt beim Oeffnen
-auf, statt stillschweigend Unsinn zu liefern. Der Schluessel liegt ausserhalb
-der Datenbank -- ein Tresor, dessen Schluessel danebenliegt, ist eine Schublade.
-Im Container SCHREIBGESCHUETZT eingehaengt: ein Dienst, der seinen eigenen
-Tresor umschreiben kann, ist keiner.
-
-⚠️ KORREKTUR AN MIR: ich hatte vorhin gemeldet, es gebe keinen CLERK_SECRET_KEY
-auf dieser Maschine. Falsch -- ich hatte in entityos-clerk.env gesucht, er liegt
-in freie-zugaenge.env. Er ist jetzt im Tresor, als "Anmeldung serverseitig --
-KEIN Modellzugang" gekennzeichnet.
-
-═══ 11 WISSENSARTIKEL IN DER UNIFIEDDB ═══
-
-Das Betriebswissen stand bisher in einer gitignorierten CLAUDE.md auf einem
-Arbeitsrechner -- Betriebsfakten UND Passwoerter im selben Dokument. GENAU DIESE
-VERMISCHUNG ist der Grund, warum es nirgends sonst liegen konnte. Jetzt getrennt:
-Fakten ins Wiki, Geheimnisse in den Tresor.
-
-Betrieb: wie SeiMensch deployt wird (Push auf main ist sofort oeffentlich, kein
-manueller Schritt), die drei Domains mit EIGENEN nginx-Wurzeln (deshalb relative
-Pfade), die Testpflicht vor jedem Push samt der Warnung zum Browser-Daemon, die
-LeihMich-Besonderheit (neuer Slug MUSS in die Allowlist, sonst 400) samt der
-Bau-Lehre zu global-replace, und die Grundregel des Kunden: NICHTS ERFINDEN.
-
-Personen: Rolle und Zustaendigkeit beider, ausdruecklich mit der Trennung
-Zugehoerigkeit/Urheberschaft (SeiMensch gehoert Andreas, den Code schrieb
-Gabriel), Gabriels Arbeitsweise samt ihrer Begruendung -- eine kurze Frage ist
-billig zu pruefen, ein langer Text ist es nicht -- und wer was entscheidet.
-Dazu ein Artikel, der Zero sagt, wo die Geheimnisse liegen und warum es sie
-nicht sieht.
-
-Gegenprobe gelaufen: kein Passwort, keine Kundennummer, kein Schluessel in den
-Artikeln. Verdachtsmuster geprueft, Treffer: keiner.
-```
-
-### Verfall der Wegehierarchie am bestehenden Takt (F94)
-
-`d7543729563b` · entityos · 13:55 UTC · EntityOS
-
-```
-Zwei Verfallstakte fuer zwei Lernzustaende wuerden auseinanderlaufen. Ein Netz,
-in dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
-altert: es sieht gepflegt aus und ist schief.
-
-⚠️ Der Aufruf steht als eigenes Skript, nicht als python -c in der Unit: der
-Einzeiler scheiterte an verschachtelten Anfuehrungszeichen und machte die GANZE
-Unit ungueltig -- damit waere auch der Schnappschuss davor nicht mehr gelaufen.
-```
-
-### F94 gebaut: Autobahnen, Tunnel, langsame Strassen - und sie sagt selbst, wenn sie nichts tut
-
-`3881a15e1ec5` · unifieddb · 13:55 UTC · EntityOS
-
-```
-Gabriel, 16.08.: "umso oefter ein Weg verwendet wird, umso besser wird er
-ausgebaut -- so entstehen emergent Highways, Schnellstrassen, Tunnel
-(Hyperposition) und langsame Strassen, was die neurale Aktivitaet, Emergenz und
-Kopplung sichtbar macht, und das als Nebenprodukt."
-
-⭐ DER NEBENPRODUKT-PUNKT IST DER WERTVOLLSTE, und er bestimmt den Bau:
-normalerweise kostet es eigenes Messwerk, Kopplung sichtbar zu machen -- und
-Messwerk verzerrt, was es misst. Hier faellt sie ohne Zusatzaufwand an: es wird
-GENAU der Weg verstaerkt, der ohnehin schon als "getragen" erkannt wird (F92b).
-Die Hierarchie IST die Aufzeichnung, nicht ihr Stellvertreter.
-Verkehr OHNE Ertrag verstaerkt nichts -- sonst baute sich auch das Irrfahren aus.
-
-DIE DREI BEDINGUNGEN AUS DER DOKU, alle umgesetzt:
-
-1 WEGE VERFALLEN. Wer nur verstaerkt, macht die zuerst gegangenen Wege dauerhaft
-  zu Autobahnen und das Netz erstarrt zum Abdruck des fruehen Verkehrs.
-  verfallen() haengt am BESTEHENDEN Takt entityos-abrufverfall -- zwei
-  Verfallstakte fuer zwei Lernzustaende wuerden auseinanderlaufen, und ein Netz,
-  in dem nur die eine Haelfte altert, ist schlimmer als eines, das gar nicht
-  altert: es sieht gepflegt aus und ist schief.
-
-2 ⭐ VERSTAERKUNG UMGEKEHRT ZUR GUETE:  zuwachs = GRUND * (1 - guete)
-  Autobahnen erzeugen ihren eigenen Verkehr -- ist eine erst da, bevorzugt die
-  Eintrittswahl sie, WEIL sie billig ist. Ohne die Umkehrung kann ein neuer Weg
-  nie genug ansammeln, um zu konkurrieren, und die Hierarchie friert nach der
-  ersten Phase ein.
-
-3 ⚠️ TUNNEL STRENGER ALS AUTOBAHNEN. Verlangt wird UNABHAENGIGE Mitbenutzung aus
-  mindestens drei VERSCHIEDENEN Sitzungen -- nicht eine starke Korrelation, und
-  nach F84 zaehlt Mitbenutzung aus derselben Sitzung nicht als unabhaengig.
-  Grund: eine falsche Autobahn kostet Zeit, ein falscher Tunnel BEHAUPTET eine
-  Verbindung, die es semantisch nicht gibt, und alles Spaetere erbt sie.
-
-⭐ UND DIE FAELSCHUNGSPRUEFUNG, die die Doku selbst vorschlaegt, ist eingebaut:
-pruefung() traegt die Verkehrsverteilung auf und sagt geradeheraus
-"GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts".
-Ein Mechanismus, der seine eigene Wirkungslosigkeit nicht anzeigen kann, ist
-nicht pruefbar.
-
-ZWEI STILLE FEHLSCHLAEGE AUF DEM WEG:
-
-a) 0 Wege nach 60 Abrufen. Statt zu raten gemessen: von 185 ausgelieferten
-   Treffern kommen 46 aus dem Walk UND haben einen Vorgaenger -- der Verkehr
-   existiert also, die Buchung war kaputt.
-   Ursache: _walk() liefert `via`, aber beim Verdichten des Plans wurde nur ein
-   verkuerztes Woerterbuch abgelegt (id, depth, score, edge_art, anchor) --
-   `via` fiel weg. Ohne Vorgaenger keine Kante, ohne Kante kein Weg. Die Buchung
-   lief hunderte Male ins Nichts, ohne Ausnahme, ohne Hinweis.
-
-b) Der Verfall stand als python -c direkt in der systemd-Unit und scheiterte an
-   verschachtelten Anfuehrungszeichen. Die Unit war dadurch KOMPLETT ungueltig
-   -- also waere auch der Schnappschuss davor nicht mehr gelaufen. Ein zu
-   cleverer Einzeiler kann einen funktionierenden Takt mitreissen. Jetzt ein
-   eigenes Skript (udb/abruf/wegverfall.py).
-
-STAND, ehrlich: 9 Wege nach drei vollen Goldsatz-Durchlaeufen, ueber alle drei
-stabil. Die Pruefung VERWEIGERT das Urteil ("zu wenige Wege fuer ein Urteil --
-eine Hierarchie aus weniger als zehn Wegen ist Rauschen"), und das ist richtig
-so. Der Grund ist bekannt und gemessen: die Ankerquote liegt bei 23 %, der Walk
-steuert 46 von 185 Treffern bei -- daraus entstehen ueber 120 Fragen eben nur
-neun getragene Kanten.
-
-⚠️ Die Schwelle wurde NICHT gesenkt, um ein Urteil zu erzwingen. Das waere das
-Anpassen des Messgeraets an das gewuenschte Ergebnis. F94 ist gebaut, verdrahtet
-und zeichnet auf; ob sich eine Hierarchie bildet, entscheidet echter Verkehr --
-und die Pruefung wird es sagen, in beide Richtungen.
-```
-
-### Alle Mechaniken durchgesehen - und F92b, die Voraussetzung der Kaskade, war tot
-
-`19d5dd87472e` · unifieddb · 13:34 UTC · EntityOS
-
-```
-Gabriel: "mach das fuer alle mechaniken durch."
-
-═══ WIE GEMESSEN WURDE, UND ZWEI KORREKTUREN AM MESSGERAET SELBST ═══
-
-Erst ein Importgraph von den Einstiegspunkten aus: 162 Module, 64 erreichbar.
-KORREKTUR 1: die Wirtswerkzeuge starten nicht per Import aus dem Container,
-sondern direkt ueber systemd. Wer nur den Importgraph verfolgt, erklaert genau
-die Mechaniken fuer tot, die TAEGLICH laufen. Aus den .service-Dateien
-ausgelesen statt angenommen -> 74 erreichbar.
-KORREKTUR 2: auch das reicht nicht -- terminal_hooks etwa laeuft als Programm,
-nicht als Import. Ein Graph sagt, was erreichbar WAERE, nicht was laeuft.
-
-Deshalb die ehrlichere Frage: HINTERLAESST DER MECHANISMUS EINE SPUR?
-Fuer jeden benannten Mechanismus die Tabelle, die er schreiben muesste, und
-wann dort zuletzt etwas ankam. Kein Schreiben = laeuft nicht, egal wie fertig
-der Code aussieht.
-
-  lebendig 20 | still 4
-
-Lebendig u.a.: Abrufkarte (17 min), Kantenlernen (6 min), Plan-Cache (38 min),
-Raum (15 min), Arbeitspakete (15 min), Menschenprofile (6 min), Bilanz,
-Artikelzuordnung (16.795), Vorstufe, Uebersetzer, Kuration, Fehlergedaechtnis,
-Wirte-Herzschlag, Schnappschuesse.
-
-Still: Erfolgsmarke (LEER), Uebersetzungsausfaelle und Paketurteil-Filter
-(Tabelle fehlt -- die sind aber ABSICHTLICH leer: beide entstehen erst beim
-ersten Rueckfall, und der ist bisher nicht eingetreten), Kontingentbuch.
-
-⚠️ EINE FALSCHE BESCHRIFTUNG VON MIR: ich hatte die Tabelle `weg` als
-"Wegehierarchie (F94)" gefuehrt. Sie ist es nicht -- sie haelt SSH-Routen
-zwischen Rechnern. F94 (Highways/Tunnel/Langwege im Graphen) ist weiterhin
-ungebaut, und meine Messung hat das kurzzeitig verdeckt.
-
-═══ DER BEFUND: F92b WAR TOTER CODE ═══
-
-vp_erfolgsmarke: 0 Zeilen. Die Funktion _erfolgsmarke() stand seit heute frueh
-in paket.py und wurde von NIRGENDWO aufgerufen -- ich hatte sie im
-Erkundungs-Patch geschrieben und den Aufruf vergessen.
-
-Das ist nicht irgendeine Luecke. Die Dokumentation nennt F92b ausdruecklich eine
-VORAUSSETZUNG der Kaskade, nicht ihr Ergebnis:
-
-    F92b Erfolgsmarke -> Karte -> besserer Eintritt -> bessere Erfolgsmarke
-         (was trug?)      (F93b)   (F93)                (schliesst den Kreis)
-
-Ohne sie dreht sich der Kreis nicht. Die Karte wurde alle 30 Minuten neu
-gezeichnet -- aus Regionen und Wortstatistik, aber ohne ein einziges Signal
-darueber, welcher Eintritt tatsaechlich getragen hat. Sie konnte dadurch nicht
-BESSER werden, nur aktueller.
-
-⚠️ UND DER EINBAU SCHEITERTE ERST NOCH EINMAL, STILL: mein Block stand 83
-Zeilen zu frueh und griff auf `result` zu, das dort noch nicht existierte.
-NameError -- und mein `except Exception: pass` machte daraus Schweigen: 15
-Abrufe, 0 Marken, kein Hinweis. Das ist HEUTE DAS DRITTE MAL, dass ein
-`except: pass` von mir einen echten Fehler in ein leeres Ergebnis verwandelt
-hat. Buchfuehrung darf einen Abruf nicht kippen -- aber sie darf auch nicht so
-tun, als haette sie stattgefunden. Der Fehler geht jetzt auf stderr.
-
-ERGEBNIS nach 20 Abrufen, 8 Marken:
-    erkundung:gegenhypothese   getragen=1   5x
-    EVIDENCE_ALIAS             getragen=1   2x
-    EVIDENCE_ALIAS             getragen=0   1x
-
-⭐ Erster echter Hinweis, dass die Erkundung etwas bringt: die gegen die Karte
-gewaehlten Eintritte in Gegenhypothesen-Gegenden haben 5 von 5 Mal beigetragen.
-⚠️ Ehrlich dazu: "getragen" heisst hier "hat mindestens einen Treffer ins
-ausgelieferte Paket gebracht", und die Erkundung kommt ZUSAETZLICH dazu -- sie
-hat es damit leichter beizutragen als der Haupteintritt. Die Zahl ist ein
-Anfang, kein Beweis. Erst ueber viele Abrufe wird daraus ein Signal, und genau
-dafuer wird sie jetzt ueberhaupt erst gesammelt.
-```
-
-### Der Moeglichkeitsraum erreicht endlich die Vorstufe - und war im Container nie lauffaehig
-
-`d6cc4ad2001e` · entityos · 13:24 UTC · EntityOS
-
-```
-Gabriel: "im moeglichkeitsraum sollte auch alles emergent abgebildet sein, schau
-was da das ziel ist" -- und: "es ist noch immer weit weg von den mechaniken die
-wir gebaut/erforscht haben, die musst du fertigstellen, dann greift alles
-besser ineinander."
-
-Er hat recht, und der Befund ist deutlicher als erwartet.
-
-═══ BEFUND 1: NIEMAND RIEF IHN AUF ═══
-
-udb/abruf/moeglichkeitsraum.py wurde von KEINER Stelle aufgerufen. Gebaut,
-erforscht, dokumentiert -- und nie im Betrieb. Dasselbe Muster wie bei der
-Abrufkarte: ein fertiger Mechanismus, an den kein Draht fuehrt.
-
-SEIN ZIEL, aus seinem eigenen Kopf:
-    "EIN RAUM MIT NUR EINER LESART IST KEIN RAUM."
-    Hypothese UND Gegenhypothese, verdichtet, als ERWARTUNGSFELD -- nie als
-    Antwort. Das Modell muss DISKRIMINIEREN, nicht BESTAETIGEN. Die
-    Gegenhypothese ist der Falsifikator, IM Prompt.
-
-═══ BEFUND 2: DIE VORSTUFE BEHAUPTETE, IHN ZU BEKOMMEN ═══
-
-In _BASE_RULES stand woertlich "You are given, in CONTEXT: the possibility space
-(memory artefacts, corpus hits)". Das war eine Umdeutung: Gedaechtnis und
-Korpustreffer sind MATERIAL, kein Erwartungsfeld. Eine Regel, die etwas
-beschreibt, das nicht geliefert wird, erzeugt genau die Hypothesen, die dieser
-Mechanismus abbauen soll. Ab jetzt stimmt der Satz -- das Feld wird wirklich
-mitgegeben, und die Regel nennt `einseitig` ausdruecklich: fehlt eine Seite,
-gehoert das in watch_out und nicht als gesicherte Lesart behandelt.
-
-═══ BEFUND 3, der eigentliche: ER WAR IM CONTAINER NIE LAUFFAEHIG ═══
-
-Drei Fehlschlaege hintereinander, jeder praezise, keiner geraten:
-  ModuleNotFoundError: No module named 'udb'
-  ModuleNotFoundError: No module named 'verdichtung'
-  ImportError: Quelle fehlt: /opt/clayverse/werkzeug/weltmodell.py
-              (erwartet fuer udb._wz.weltmodell)
-
-Der Reihe nach: /opt/unifieddb stand nicht im Suchpfad. Der Erfindungsmelder
-verdichtung.py liegt auf dem WIRT und war im Container gar nicht vorhanden. Und
-udb._wz laedt seine Werkzeuge ueber einen FEST EINGETRAGENEN Wirtspfad -- ein
-eigener Einhaengename half deshalb nicht, es musste genau
-/opt/clayverse/werkzeug sein.
-
-⭐ Das ist der Grund, warum "fertig gebaut" und "greift ineinander" zwei
-verschiedene Dinge sind. Der Mechanismus war ausserhalb seiner urspruenglichen
-Wirtsanordnung nie startfaehig, und niemand hat es gemerkt, weil ihn niemand
-aufrief.
-
-⭐ UND JEDER FEHLSCHLAG HAT SICH SELBST ERKLAERT: das Feld meldete
-   {"status": "NICHT_GEBAUT", "grund": "..."} statt still leer zu bleiben.
-Drei Schritte, drei Gruende, kein Raten. Haette ich dort ein leeres Feld
-zurueckgegeben, saehe ein Pfadfehler aus wie ein Korpus ohne Gegenseite.
-
-ERGEBNIS, im Container gemessen:
-    0,4 s | einseitig=True | dafuer=0 dagegen=5
-    warnung: "Hypothesenseite fehlt -- nur Gegenseite vorhanden,
-              KEIN vollstaendiger Raum"
-
-Der Mechanismus tut also genau das, wofuer er gebaut wurde: er liefert die
-Gegenseite MIT und sagt von sich aus, wenn der Raum unvollstaendig ist -- statt
-die eine vorhandene Seite als Befund auszugeben.
-
-Der wiederverwendete Erfindungsmelder bleibt dabei scharf: er prueft, dass jede
-Zahl im Erwartungsfeld in mindestens einer Quelle DIESER Anfrage steht. Ohne ihn
-waere der Raum genau der Kanal, durch den erfundene Zahlen als Erwartung ins
-Modell wandern.
-```
-
-### Der Paketarbeiter: eng eingezaeunt, und der Zaun ist KEINE SCHALE
-
-`4588d6f204fb` · entityos · 13:15 UTC · EntityOS
-
-```
-Gabriels Entscheidung: "Ja, aber eng eingezaeunt."
-
-⭐⭐ DIE TRAGENDE ENTSCHEIDUNG
-
-Der naheliegende Bau waere ein Dienst, der SCHALBEFEHLE ausfuehrt, die ein
-Sprachmodell geschrieben hat. Genau den hat ein Sonett-Arbeiter heute abgelehnt,
-und er hatte recht: eine Schale ist kein Zaun, sondern ein Tor.
-
-Der Arbeiter bekommt DATEIWERKZEUGE -- Read, Edit, Write, Grep, Glob -- und
-KEIN Bash. Fuer die eigentliche Arbeit ("Telefonnummer aus der Kontaktseite
-entfernen") reicht das vollstaendig. Was damit unmoeglich wird, ist alles
-andere: kein curl, kein ssh, kein systemctl, kein Nachladen, keine
-Rechteaenderung. Der Unterschied zwischen "darf Dateien bearbeiten" und "darf
-Befehle ausfuehren" ist der ganze Sicherheitsgewinn -- und er kostet fuer diesen
-Zweck nichts.
-
-DIE WEITEREN ZAEUNE, vom Kern durchgesetzt statt von gutem Willen:
-  eigener Arbeitsordner je Paket, sonst nichts beschreibbar
-  wiki.db UNERREICHBAR (InaccessiblePaths) -- der Arbeiter sieht kein Gespraech
-  /etc/clayverse UNERREICHBAR
-  ProtectSystem=strict, ProtectHome, PrivateTmp, NoNewPrivileges
-  harte Frist, danach gilt das Paket als gescheitert
-  EIN Paket zur Zeit -- das Konto ist geteilt und endlich
-
-⭐ DER ARBEITER SCHREIBT NIE IN DIE DATENBANK. Er legt ERGEBNIS.md in seinem
-Ordner ab; der Arbeitgeber liest sie und traegt ein. Die Datenbank ist fuer den
-unsichersten Teil des Systems gar nicht erreichbar -- statt sie ihm zu erlauben
-und auf Wohlverhalten zu hoffen.
-
-⚠️ WAS DER ZAUN NICHT LEISTET, ehrlich benannt: der Arbeiter laeuft als `clay`
-und kann die Anmeldedatei lesen -- er MUSS, um zu starten. Ohne Schale kann er
-sie nirgendwohin schicken, aber verborgen ist sie ihm nicht. Wer das schliessen
-will, braucht einen eigenen Zugang je Arbeiter. Bewusst nicht gebaut, deshalb
-hier genannt.
-
-DREI FEHLSCHLAEGE AUF DEM WEG, jeder hat etwas gezeigt:
-
-1. rc=1, stderr leer -- ProtectSystem=strict sperrte auch Claudes
-   Heimatverzeichnis. Ein Zaun, der die Arbeit verhindert, wird abgerissen statt
-   korrigiert; also wird jetzt genau das geoeffnet, was der Start braucht.
-   Dabei auch behoben: ein leeres stderr fiel unter den Tisch ("kein Beleg.
-   stderr:"), jetzt wird ersatzweise stdout genommen.
-
-2. 226/NAMESPACE -- ich hatte dem Arbeiter den CONTAINER-Pfad gegeben, er laeuft
-   aber auf dem WIRT. Er bekam ein eigenes Heim mit der Anmeldung als VERWEIS
-   auf die eine gemeinsame Datei; HOME=/var/lib/clay waere naheliegend gewesen
-   und falsch: dann muesste das Verzeichnis mit der wiki.db beschreibbar sein,
-   und der Zaun waere mit einer Zeile weg.
-
-3. ⭐ DER LEHRREICHSTE: der Ordner gehoerte root, der Arbeiter laeuft als clay.
-   Er hat es GENAU richtig gemeldet:
-     "Mir wurde gesagt, dieses Verzeichnis sei der einzige Ort, an dem ich
-      schreiben darf. Die Messung widerspricht dem. Das ist ein Befund ueber die
-      Verzeichnisrechte, kein Ergebnis meiner Zaehlung. Ich baue nicht daran
-      vorbei."
-   Er kannte die Antwort (4) und hat sie NICHT ausgegeben, weil er sie nicht
-   belegen konnte. Genau dieses Verhalten soll der Zaun hervorbringen -- der
-   Fehler lag bei mir. Jetzt uebergibt der Arbeitgeber den Ordner, wer einen
-   Zaun baut muss auch das Tor stellen.
-
-DURCHLAUF, echt: Paket offen -> laeuft -> fertig, mit Beleg
-  "Datei: .../probe.txt, Read-Ausgabe woertlich: 1 eins 2 zwei 3 drei 4 vier,
-   Zeile 5 ist leer. Deshalb 4 Inhaltszeilen."
-Er hat sogar zwischen 4 Inhaltszeilen und 5 Zeilen mit Leerzeile unterschieden.
-
-Takt entityos-paketarbeiter, alle 5 min, Units auch im Repo -- Units, die nur
-unter /etc liegen, verschwinden beim naechsten Wiederaufbau und niemand merkt es.
 ```
 

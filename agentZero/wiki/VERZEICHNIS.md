@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T06:20:29Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T06:50:30Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 695 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2733 Artikel, 1542 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2734 Artikel, 1541 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -79,8 +79,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
-- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
+- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
 - **docs(clayverse): refresh living state after EntityOS bridge component run** — `baunotiz-git-aabfc8a02ad8c3735bb5b7a8f3d7fc3` · baunotiz
@@ -99,8 +99,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **claycode control: sync EntityOS work selection to supervisor 8.9** — `baunotiz-git-68de25fddabe6502a39627d79921d8c` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
-- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `bau-entityos-372397141f5d` · bau
+- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `bau-entityos-f307559b870f` · bau
@@ -119,10 +119,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **README: Wortlaut auf ClayMachine als Projektname konsistent, Umbenennungshinweis (unifieddb-Repo -> ** — `baunotiz-bauverlauf-c4d985ce01476e7aaf82` · baunotiz
 - **receipt(go): record crash-safe Tier2 carrier donor and zero runtime credit** — `bau-entityos-078d72a33078` · bau
 - **README: Wortlaut auf ClayMachine als Projektname konsistent, Umbenennungshinweis (unifieddb-Repo -> ** — `bau-unifieddb-b96f4132143f` · bau
-- **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
-- **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
-- **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
-- **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
 - **docs(artefact): record reauth UnifiedDB fence cycle** — `baunotiz-git-02ac86856df0bea636ebaf034e70ee1` · baunotiz
 - **test: require fresh Claude session UnifiedDB rehydration** — `baunotiz-git-ca72ebaeb55bff44eef47a4a271df56` · baunotiz
 - **test: forbid Claude side-memory beside UnifiedDB** — `baunotiz-git-fa9471d39e3c96a8de9128b4a2c9b1d` · baunotiz
@@ -131,14 +127,19 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **security: make managed hooks and UnifiedDB memory exclusive** — `baunotiz-git-2569d111635da054fdd7b48cfd96ed7` · baunotiz
 - **security: make UnifiedDB the only durable cognition memory** — `baunotiz-git-fbdb52def52ef8ecd4caaf17a901f86` · baunotiz
 - **go: preserve parallel fusion and UnifiedDB falsifier evidence** — `baunotiz-git-76b244ebb79e8dea2f5c0182c15741a` · baunotiz
-- **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-bauverlauf-14e0eb96c071e274d484` · baunotiz
-- **test: fence EntityOS child environment** — `baunotiz-git-68f95cc99b1ba0e85bdd7e1aa0a2830` · baunotiz
+- **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
+- **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
+- **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
+- **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
 - **receipt(go): fence Clerk reauth on current UnifiedDB identity** — `baunotiz-git-aed28862db14a25bb6374fdcf00f075` · baunotiz
 - **artifact: persist MicroClay retrieval policy and receipts in UnifiedDB** — `baunotiz-git-4091e168006877d583fcc443c1e4edb` · baunotiz
 - **artifact: converge Claude hooks on one UnifiedDB causal lifecycle** — `baunotiz-git-df4bff6a50b6da7fd5cba641969683e` · baunotiz
 - **artifact: bind Claude lifecycle hooks directly to UnifiedDB turns** — `baunotiz-git-d0c15f39a7e98ffa1bc16979f0a6331` · baunotiz
 - **artifact: persist active turn lifecycle in UnifiedDB schema v4** — `baunotiz-git-dcc9d73d8765d4d4cc7cbb5fefe2aab` · baunotiz
 - **artifact: bind interactive Claude turns to UnifiedDB via hooks** — `baunotiz-git-5b1153aa7dad1b80f081c43924f42a2` · baunotiz
+- **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-bauverlauf-14e0eb96c071e274d484` · baunotiz
+- **test: fence EntityOS child environment** — `baunotiz-git-68f95cc99b1ba0e85bdd7e1aa0a2830` · baunotiz
+- **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
 - **go: fuse final EntityOS + microVM authority into Fast Boot** — `baunotiz-bauverlauf-dfab39ac1ff2df8fa3db` · baunotiz
 - **docs(artefact): record EntityOS staging falsifier** — `baunotiz-git-5b69dfe0fd735ae0c286af68d4d00a1` · baunotiz
 - **receipt: bind EntityOS execution environment fence** — `baunotiz-git-64e09960524160086668c8968d5e5b8` · baunotiz
@@ -157,7 +158,28 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test: lesion EntityOS path after verification** — `baunotiz-git-0ae1209a7cb9ae9ad4870e193663d40` · baunotiz
 - **test: lock EntityOS-only effect boundary** — `baunotiz-git-a918604f99da68e64228975639ad99f` · baunotiz
 - **artifact: enforce EntityOS-only effect boundary** — `baunotiz-git-af62fa851d80cefc43f8c5b3bce101e` · baunotiz
-- **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
+- **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
+- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
+- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
+- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c710c5747d46afa5672d9906254b186` · baunotiz
+- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-4ba71efd8e86a862483f` · baunotiz
+- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-7e89a22950fe01ac8121c91d259d65a` · baunotiz
+- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-89328a4db9346d95c681` · baunotiz
+- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c9387825c64461cf8d082195c39ac44` · baunotiz
+- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-94c09645610ea18ae79d` · baunotiz
+- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-dd57045d635dc17839b3c8fa35cc0c5` · baunotiz
+- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc66dba04c3fa8515045` · baunotiz
+- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-ed2da57901096a55a716400a51cef24` · baunotiz
+- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-5b2057e1a9c2f3a7e7c0` · baunotiz
+- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-5691ee2588d50fe21b3963b155e3422` · baunotiz
+- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-8d5baefc96fed2024c31` · baunotiz
+- **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-86d356687bd843594dd3715c7503968` · baunotiz
+- **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-090197f6c642f834f828` · baunotiz
+- **agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c4033395415e4cddae79839ca49f2e7` · baunotiz
+- **unifieddb: die Datenbank mit Wiki, Graph, Suche, Pflege, Karte und Abruf als ein Werkzeug** — `baunotiz-bauverlauf-be7e59e39ad3b1f4ec8c` · baunotiz
+- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `baunotiz-git-2c44f567c2354ac6009cca9d7c55c23` · baunotiz
+- **artifact: make UnifiedDB terminal identity match the two real tmux sessions** — `baunotiz-git-bde7f1162d7f301dd59e249890b9ed7` · baunotiz
+- **artifact: bind automatic hook spine and sole UnifiedDB memory in manifest** — `baunotiz-git-5802f5b82367b4405fbac0c7ce5c770` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-git-5de5f509e5425bb723ac153f9ee83b4` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-git-c6d8cc6de3bb6540a8eeb7d99b7a4c9` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-git-e612abc14cd5c6546f094537d8cd881` · baunotiz
@@ -182,28 +204,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test: specify fail-closed EntityOS boot binding** — `baunotiz-git-dd1ef850203471d13626c56c2a4ff4a` · baunotiz
 - **artifact: bind EntityOS boot provenance in manifest** — `baunotiz-git-e2984dfe7a362c935dc6e340c121ec9` · baunotiz
 - **artifact: execute EntityOS from sealed verified snapshot** — `baunotiz-git-cf10e11890c4a078fed2405b79e8a2f` · baunotiz
-- **artifact: reserve read-only EntityOS mount target** — `baunotiz-git-21f2720fa4afe198c9c92169fa59214` · baunotiz
-- **receipt: persist EntityOS-only effect fusion evidence** — `baunotiz-git-d60f1a3a64b2b81dcf314cabee918de` · baunotiz
-- **manifest: record fail-closed EntityOS effect boundary** — `baunotiz-git-d104225328030794d8b5b2afef0b7bb` · baunotiz
-- **artifact: bind verified EntityOS into service boot** — `baunotiz-git-70330fae35a82a27c445f5b4eb67115` · baunotiz
-- **artifact: add fail-closed EntityOS readiness verification** — `baunotiz-git-c20357729729d90547e4a09f29f7aba` · baunotiz
-- **artifact: expose pinned EntityOS bridge through engine** — `baunotiz-git-41c105733d7a72057833c827fdf738a` · baunotiz
-- **artifact: add pinned EntityOS open-object bridge** — `baunotiz-git-8d9afe8c9ab6c1ef3295b62600fb4cf` · baunotiz
-- **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
-- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
-- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
-- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c710c5747d46afa5672d9906254b186` · baunotiz
-- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-4ba71efd8e86a862483f` · baunotiz
-- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-7e89a22950fe01ac8121c91d259d65a` · baunotiz
-- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-89328a4db9346d95c681` · baunotiz
-- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c9387825c64461cf8d082195c39ac44` · baunotiz
-- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-94c09645610ea18ae79d` · baunotiz
-- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-dd57045d635dc17839b3c8fa35cc0c5` · baunotiz
-- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc66dba04c3fa8515045` · baunotiz
-- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-ed2da57901096a55a716400a51cef24` · baunotiz
-- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-5b2057e1a9c2f3a7e7c0` · baunotiz
-- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-5691ee2588d50fe21b3963b155e3422` · baunotiz
-- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-8d5baefc96fed2024c31` · baunotiz
 
 ## Kern / frank_v0_1 (6)
 

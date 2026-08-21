@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import html
 import json
 import math
@@ -8,11 +9,13 @@ import os
 import sqlite3
 import sys
 import time
+import urllib.parse
 import uuid
 from pathlib import Path
 
 from fastapi import Request, WebSocket, WebSocketDisconnect
 
+from . import dateien
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
 from .identity import (
     SITZUNGEN_JE_MENSCH, terminal_von, CANONICAL_TERMINAL_NAMES, CANONICAL_USER_IDS,
@@ -62,6 +65,16 @@ _HISTORY_MAX_LIMIT = 200
 # ohne Container gegen echte Dateien laufen kann -- der Vorgabewert ist
 # derselbe feste Pfad wie vorher, der Betrieb aendert sich dadurch nicht.
 _WEB_ROOT_DEFAULT = "/opt/clayverse/web"
+
+# Wo die zwei echten Profilfotos liegen. EIGENER Pfad, nicht unter
+# _WEB_ROOT_DEFAULT: alles unter web/ haengt am ungeschuetzten
+# StaticFiles("/web") (siehe _statik_immer_frisch) und waere damit
+# oeffentlich ohne Anmeldung erreichbar. Fotos gehen ausschliesslich
+# durch /api/avatar, hinter derselben Clerk-Pruefung wie /api/me.
+_AVATAR_DIR_DEFAULT = "/opt/clayverse/avatare-privat"
+
+def _avatar_dir() -> Path:
+    return Path(os.environ.get("ENTITYOS_AVATAR_DIR", "").strip() or _AVATAR_DIR_DEFAULT)
 
 # Die HTTP-Wege loesen den Menschen auf Platz 1 auf. Sie lesen und schreiben
 # Mail; sie sollen keinen zweiten Sitzungsplatz belegen, um den sich der Chat
@@ -173,6 +186,28 @@ def _bounded_pty_input(payload: bytes) -> bytes:
     if len(payload) > _PTY_INPUT_FRAME_MAX_BYTES:
         raise ValueError("PTY input frame exceeds bound")
     return payload
+
+
+async def _bounded_body(request: Request, max_bytes: int) -> bytes:
+    """Read an HTTP request body without ever buffering past `max_bytes`.
+
+    `await request.body()` reads the ENTIRE stream into memory first and only
+    lets you check the size afterwards -- for a file upload that is exactly
+    the unbounded-buffer risk this module guards against everywhere else
+    (see the size limits in `dateien.py` and the disk-incident history in
+    runtime_CLAUDE.md 9h). Stream chunk by chunk instead and abort the moment
+    the running total crosses the limit, so a client that lies about
+    Content-Length (or omits it) can never force more than `max_bytes` into
+    memory.
+    """
+    total = 0
+    stuecke: list[bytes] = []
+    async for stueck in request.stream():
+        total += len(stueck)
+        if total > max_bytes:
+            raise ValueError("request body exceeds bound")
+        stuecke.append(stueck)
+    return b"".join(stuecke)
 
 
 def _write_pty_all(fd: int, payload: bytes, auth_deadline: float) -> None:
@@ -340,7 +375,7 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
                         state_root: str | Path, publishable_key: str, frontend_api_url: str,
                         terminals: TerminalSessionManager | None = None):
     from fastapi import FastAPI
-    from fastapi.responses import HTMLResponse, JSONResponse
+    from fastapi.responses import HTMLResponse, JSONResponse, Response, FileResponse
     from fastapi.staticfiles import StaticFiles
 
     identity = IdentityRouter(db, clerk_map)
@@ -509,6 +544,54 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return JSONResponse({"error": "unauthorized"}, status_code=401)
         return JSONResponse({"user_id": uid})
 
+    # Feste Zuordnung Kennung -> Datei, einmal pro App-Erzeugung gebaut. Der
+    # Pfad wird NIE aus der Anfrage zusammengesetzt -- selbst ein boesartiges
+    # :wer-Segment landet nur als Schluessel in diesem Dict und findet dort
+    # nichts. Traversal-Schutz durch Konstruktion, nicht durch Filterung von
+    # ".." o.ae. (der Standardangriff bei Dateinamen aus der Anfrage).
+    _avatar_dateien = {uid: _avatar_dir() / f"{uid}.jpg" for uid in CANONICAL_USER_IDS}
+
+    @app.get("/api/avatar/{wer}")
+    async def avatar_api(wer: str, request: Request):
+        # Dieselbe Anmeldepruefung wie /api/me: ein Profilfoto ist kein
+        # Geheimnis, aber die Regel "nur die zwei kanonischen Konten sehen
+        # ueberhaupt etwas" gilt hier genauso wie ueberall sonst im Haus --
+        # sonst waere dieser eine Weg die Luecke in einer sonst geschlossenen
+        # Oberflaeche.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        if identity.clerk_map.get(str(claims.get("sub", ""))) not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        pfad = _avatar_dateien.get(wer)
+        if pfad is None:
+            # "wer" ist keine der zwei bekannten Kennungen -- 404, ohne je
+            # einen Pfad aus der Anfrage zu bauen oder eine Datei anzufassen.
+            return JSONResponse({"error": "unknown"}, status_code=404)
+        try:
+            daten = await asyncio.to_thread(pfad.read_bytes)
+        except OSError:
+            # Kennung bekannt, Foto (noch) nicht abgelegt -- die Oberflaeche
+            # faengt das mit dem stillen Rueckfall auf /web/avatare/user.svg
+            # ab, das ist hier bewusst kein 500.
+            return JSONResponse({"error": "not_found"}, status_code=404)
+
+        # Revalidieren statt blind cachen -- derselbe Grundsatz wie
+        # _statik_immer_frisch fuer /web/: "no-cache" heisst "vor Gebrauch
+        # pruefen", nicht "nie cachen". Der ETag ist der Inhalts-Hash, also
+        # merkt der Browser ein ausgetauschtes Foto beim naechsten Laden
+        # sofort von selbst -- ohne Cache-Busting-Parameter im Frontend, und
+        # ohne bei jedem Chat-Zug das ganze Bild neu ueber die Leitung zu
+        # schicken (ein unveraendertes Foto bekommt nur ein billiges 304).
+        etag = hashlib.sha256(daten).hexdigest()
+        header = {"Cache-Control": "no-cache", "ETag": etag}
+        if request.headers.get("if-none-match") == etag:
+            return Response(status_code=304, headers=header)
+        return Response(content=daten, media_type="image/jpeg", headers=header)
+
     @app.get("/api/systeme")
     async def systeme_api(request: Request):
         # Dieselbe Anmeldepruefung wie /api/seiten. Zeigt den Live-Zustand der
@@ -612,6 +695,83 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
             return JSONResponse({"error": "spool write failed"}, status_code=500)
 
         return JSONResponse({"ok": True, "angenommen": {"unit": unit, "aktion": aktion}})
+
+    # ── Dateien: Mensch -> Zero (hochladen) und Zero -> Mensch (herunterladen) ──
+    # Siehe clayverse/dateien.py fuer die Ablage selbst (Ordner, Grenzen, Verfall,
+    # Verzeichnisdurchstiegsschutz). Hier steht nur die HTTP-Aussenseite, mit
+    # derselben Anmeldepruefung wie jeder andere Endpunkt in diesem Haus.
+    @app.post("/api/dateien")
+    async def dateien_hochladen(request: Request):
+        # Roh-Koerper statt multipart/form-data: python-multipart ist nicht im
+        # Image (requirements.txt), und ein reiner Byte-Stream mit einem
+        # Namens-Header ist hier einfacher als eine neue Abhaengigkeit fuer
+        # genau eine Handvoll Byte Zusatzformat.
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        roh_name = request.headers.get("X-Dateiname", "")
+        try:
+            dateiname = urllib.parse.unquote(roh_name)
+        except Exception:
+            dateiname = roh_name
+
+        # Fruehe Absage ueber Content-Length, wenn der Client ihn ehrlich
+        # mitschickt -- spart das Lesen eines Koerpers, den wir ohnehin
+        # verwerfen wuerden. Ein falscher oder fehlender Header aendert an der
+        # Sicherheit nichts: _bounded_body zaehlt beim Streamen unabhaengig
+        # davon mit und bricht selbst ab.
+        try:
+            angegeben = int(request.headers.get("content-length", "0"))
+        except ValueError:
+            angegeben = 0
+        if angegeben > dateien.MAX_DATEI_BYTES:
+            return JSONResponse(
+                {"error": f"file exceeds {dateien.MAX_DATEI_BYTES} bytes"}, status_code=413)
+
+        try:
+            inhalt = await _bounded_body(request, dateien.MAX_DATEI_BYTES)
+        except ValueError:
+            return JSONResponse(
+                {"error": f"file exceeds {dateien.MAX_DATEI_BYTES} bytes"}, status_code=413)
+
+        try:
+            eintrag = await asyncio.to_thread(
+                dateien.hochladen, user_id=uid, dateiname=dateiname, inhalt=inhalt)
+        except dateien.DateiFehler as exc:
+            return JSONResponse({"error": str(exc)}, status_code=400)
+
+        return JSONResponse(eintrag)
+
+    @app.get("/api/dateien/ausgabe/{kennung:path}")
+    async def dateien_herunterladen(kennung: str, request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            pfad = await asyncio.to_thread(dateien.ausgabe_pfad, uid, kennung)
+        except dateien.DateiFehler:
+            # Verzeichnisdurchstieg und "gibt es nicht" bekommen ABSICHTLICH
+            # denselben Code: ein eigener Code nur fuer den Durchstiegsfall
+            # wuerde einem Client verraten, dass er nah dran war -- hier
+            # verraet keiner der beiden Faelle irgendetwas ueber die Platte.
+            return JSONResponse({"error": "not_found"}, status_code=404)
+
+        # filename= gibt dem Browser den sprechenden Namen zum Speichern statt
+        # der Kennung/UUID im Pfad -- Zero waehlt diesen Namen selbst beim
+        # Schreiben (siehe runtime_CLAUDE.md 9p), er ist also schon lesbar.
+        return FileResponse(pfad, filename=pfad.name, media_type="application/octet-stream")
 
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():
@@ -862,6 +1022,12 @@ window.addEventListener('load', async () => {{
                 _require_auth_lease_live(auth_expires_at)
                 busy = True
                 await send_json({"type": "pending"})
+                # Zeitstempel VOR dem Zug, nicht danach: eine Datei, die Zero
+                # waehrend dieses Zuges in seinen Ausgabeordner schreibt, muss
+                # als neu erkannt werden, auch wenn der Zug selbst mehrere
+                # Sekunden braucht. Ein Zeitstempel danach wuerde Dateien
+                # verpassen, die frueh im Zug entstanden.
+                zug_beginn = time.time()
                 try:
                     result = await asyncio.to_thread(
                         run_chat_turn, db=db, user_id=user_id, session_id=session_id,
@@ -871,6 +1037,16 @@ window.addEventListener('load', async () => {{
                     continue
                 finally:
                     busy = False
+
+                # Downloadbare Ausgabe: kein Textmuster in Zeros Antwort wird
+                # ausgewertet (siehe runtime_CLAUDE.md 9o) -- stattdessen zaehlt
+                # einzig, was Zero waehrend DIESES Zuges tatsaechlich in seinen
+                # eigenen (user-getrennten) Ausgabeordner geschrieben hat.
+                try:
+                    anhaenge = await asyncio.to_thread(
+                        dateien.anhaenge_seit, user_id, zug_beginn)
+                except Exception:
+                    anhaenge = []  # Anhangsuche darf eine sonst fertige Antwort nie zu Fall bringen
 
                 # KEINE Lease-Nachkontrolle hier: der Zug war bei Beginn
                 # autorisiert (Pruefung oben) UND ist via TurnLifecycle bereits
@@ -889,6 +1065,16 @@ window.addEventListener('load', async () => {{
                     "caveman": result.get("caveman"),
                     "turn_id": result.get("turn_id"),
                     "translator_receipt": result.get("translation_id"),
+                    "attachments": anhaenge,
+                    # Die Zuendungsgroesse fuers Nachdenk-Feld der Oberflaeche
+                    # (web/avatare/zero-wettbewerb.js): run_chat_turn berechnet
+                    # sie laengst (broadcast_n/rounds_used im Zugergebnis oben),
+                    # bis 2026-08-21 kam sie nur nie beim Client an -- die
+                    # Nachdenk-Animation konnte den echten Ausgang eines Zuges
+                    # nie zeigen, nur simulieren. Rein additiv, keine bestehende
+                    # Semantik dieser Nachricht geaendert.
+                    "broadcast_n": result.get("broadcast_n"),
+                    "rounds_used": result.get("rounds_used"),
                     "auth_expires_at": int(auth_expires_at),
                 })
 

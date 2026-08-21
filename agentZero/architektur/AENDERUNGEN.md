@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T06:20:29Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T06:50:30Z aus drei Repos. 480 Eintraege.
 
 ## architektur (16)
 
@@ -112,14 +112,13 @@ Automatisch erzeugt 2026-08-21T06:20:29Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (17)
+## pruefung (16)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T09:28 | entityos | `9532cd296428` | S6 prep: EntityOS naming also in legacy (test-only, unwired) api.py HTML strings |
 | 2026-08-18T08:50 | entityos | `26a6861b88b0` | Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt |
 | 2026-08-18T06:48 | entityos | `ac5224698ec5` | claycode supervisor: sync control boundary and bind latest Vercel guard evidence |
-| 2026-08-18T04:27 | entityos | `984da7ebe451` | test(clayverse): pin split-arbiter pulse activation denial |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -134,10 +133,17 @@ Automatisch erzeugt 2026-08-21T06:20:29Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (302)
+## bau (303)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T06:46 | entityos | `79c6e620d355` | EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T06:44 | entityos | `e10f2fe13dfc` | EOS-Chronik 2026-08-21 06:44:12 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T06:42 | entityos | `d8dadf7f2d7e` | EOS-Chronik 2026-08-21 06:42:11 +0000 — entityos: 5 Aenderungen |
+| 2026-08-21T06:36 | entityos | `85f14d57e97f` | EOS-Chronik 2026-08-21 06:36:16 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T06:32 | entityos | `7fcb55ca8296` | EOS-Chronik 2026-08-21 06:32:31 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T06:30 | entityos | `33104cad7a05` | EOS-Chronik 2026-08-21 06:30:24 +0000 — entityos: 8 Aenderungen |
+| 2026-08-21T06:24 | entityos | `86e6940bd241` | EOS-Chronik 2026-08-21 06:24:18 +0000 — entityos: 5 Aenderungen |
 | 2026-08-21T06:11 | entityos | `483cfbbf027f` | EOS-Chronik 2026-08-21 06:11:24 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T05:59 | entityos | `88936c115b74` | EOS-Chronik 2026-08-21 05:59:48 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T05:57 | entityos | `742c85ce0477` | EOS-Chronik 2026-08-21 05:57:35 +0000 — entityos: 1 Aenderungen |
@@ -191,11 +197,4 @@ Automatisch erzeugt 2026-08-21T06:20:29Z aus drei Repos. 480 Eintraege.
 | 2026-08-20T16:18 | entityos | `56a9fda0e581` | EOS-Chronik 2026-08-20 16:18:47 +0000 — entityos: 15 Aenderungen |
 | 2026-08-20T14:32 | entityos | `cd5593ee8770` | EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen |
 | 2026-08-20T14:21 | entityos | `314e64daed37` | EOS-Chronik 2026-08-20 14:21:56 +0000 — entityos: 4 Aenderungen |
-| 2026-08-20T14:11 | entityos | `f8936a821996` | EOS-Chronik 2026-08-20 14:11:29 +0000 — entityos: 3 Aenderungen |
-| 2026-08-20T13:53 | entityos | `3a943ce83eed` | EOS-Chronik 2026-08-20 13:53:04 +0000 — entityos: 3 Aenderungen |
-| 2026-08-20T13:21 | entityos | `c19df048225f` | EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen |
-| 2026-08-20T13:06 | entityos | `4637f10cd595` | EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T13:04 | entityos | `1c5efc590eb5` | EOS-Chronik 2026-08-20 13:04:56 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T13:01 | entityos | `ac75d4b1a3f9` | EOS-Chronik 2026-08-20 13:01:57 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T12:43 | entityos | `25f49c716952` | EOS-Chronik 2026-08-20 12:43:27 +0000 — entityos: 3 Aenderungen |
 

@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T06:20:30Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T06:50:31Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -8,7 +8,7 @@ Automatisch erzeugt 2026-08-21T06:20:30Z aus `udb/abruf/wegehierarchie.py`.
 
 Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.
 
-Wege gesamt: **361**
+Wege gesamt: **363**
 
 ## Verteilung nach Rang
 
@@ -17,26 +17,26 @@ Wege gesamt: **361**
 | tunnel | 6 |
 | autobahn | 237 |
 | langsame strasse | 70 |
-| schnellstrasse | 48 |
+| schnellstrasse | 50 |
 
-Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.1).
+Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
 
 ## Staerkste Wege
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 718 | 718 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 576 | 576 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 797 | 797 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.988 | 471 | 471 |
-| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.968 | 118 | 118 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 726 | 726 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 584 | 584 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 801 | 801 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.991 | 473 | 473 |
+| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.981 | 122 | 122 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.93 | 454 | 454 |
 | C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.93 | 88 | 88 |
+| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.908 | 50 | 50 |
 | C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 0.884 | 304 | 304 |
 | 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 0.884 | 249 | 249 |
 | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 0.884 | 140 | 140 |
 | andreas-claude-wissen-leihmich.md | andreas-claude-wissen-README.md | geschwister_verzeichnis | autobahn | 0.884 | 120 | 120 |
-| 20260810T2024p0700-chatgpt-secondary-grt-commutator | H1-ALIEN-SYMPLECTIC | None | autobahn | 0.884 | 96 | 96 |
 
 ## Warum das Verdikt so bleibt, wie es ist
 

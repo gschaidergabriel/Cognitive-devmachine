@@ -688,6 +688,78 @@ def _mit_gespraechslage(caveman: str, world: dict[str, Any]) -> str:
             f"and stop.")
 
 
+# Ein Auftrag, der nur zurueckgruessen laesst. Die Vorstufe formuliert ihn in
+# leichten Abwandlungen, deshalb ein Muster statt eines festen Satzes.
+_GRUSS_AUFTRAG = re.compile(
+    r"\bgreet (?:back|them|the human)\b|\bsay (?:hi|hello) back\b"
+    r"|\bgreeting back\b|\bzurueck(?:gruessen|grussen)\b", re.I)
+
+# Fragt die Nachricht ueberhaupt nach etwas? Fragezeichen ODER ein Fragewort am
+# Anfang. Bewusst schmal gehalten: es geht nicht darum, Fragen zu erkennen,
+# sondern einen WIDERSPRUCH zu belegen.
+_FRAGT = re.compile(
+    r"\?|^\s*(wie|was|wer|wo|wann|warum|wieso|weshalb|welche[rsn]?|wieviel|"
+    r"wie viele|how|what|who|where|when|why|which)\b", re.I)
+
+
+def _ohne_falschen_gruss(caveman: str, frage: str) -> str:
+    """Nimmt einen Gruss-Auftrag zurueck, wenn der Mensch etwas GEFRAGT hat.
+
+    ⭐ GEMESSEN 2026-08-21, vom Eigner im Chat bemerkt: auf "wie gehts?" und
+    "und wie gehts dir?" antwortete die Anlage beide Male nur "Hey Gabriel."
+    Nicht der Uebersetzer war schuld -- Zeros Rohantwort lautete woertlich
+    genauso. Im Auftrag stand `greet back short, warm, one line`.
+
+    Das Bemerkenswerte: die Vorstufe HAT die richtige Regel, woertlich in
+    prestage.py: `"wie gehts" / "how are you" -> say briefly how you are from
+    state, one or two lines`. Sie hat sie nur nicht angewandt. Und im selben
+    Prompt stand zwei Absaetze weiter bereits die Gespraechslage mit
+    "do not greet them as if they had just arrived" -- zwei einander
+    widersprechende Anweisungen, und der AUFTRAG gewinnt, weil er der Auftrag
+    ist. Eine dritte Ermahnung haette daran nichts geaendert.
+
+    Deshalb keine schaerfere Regel, sondern eine mechanische Gegenprobe: hat
+    die Nachricht ein Fragezeichen oder faengt sie mit einem Fragewort an,
+    dann kann "gruess zurueck" nicht der richtige Auftrag sein. Das ist
+    beweisbar, nicht geraten -- eine Frage verlangt eine Antwort.
+
+    ⚠️ Was hier NICHT angetastet wird: die Nachricht des Menschen. Korrigiert
+    wird ausschliesslich der ABGELEITETE Auftrag der Vorstufe. Ein frueherer
+    Versuch, Zero ganze Korrekturbloecke anzuhaengen, wurde von ihm zweimal
+    als Einschleusung eingestuft und wieder zurueckgenommen; deshalb wird hier
+    der vorhandene Satz ERSETZT statt ein weiterer danebengestellt.
+
+    Der Fall wird gemeldet, nicht stillschweigend geheilt: ohne die Meldung
+    waere nicht mehr zu sehen, wie oft die Vorstufe danebengreift.
+    """
+    if not caveman or not _GRUSS_AUFTRAG.search(caveman):
+        return caveman
+    if not _FRAGT.search(frage or ""):
+        return caveman          # blosser Gruss -> zurueckgruessen ist richtig
+    print("prestage: Gruss-Auftrag auf eine FRAGE zurueckgenommen -- "
+          f"{(frage or '')[:60]!r}", file=sys.stderr)
+    ersatz = ("ANSWER THE QUESTION the human actually asked -- it ends in a "
+              "question mark or opens with a question word, so a greeting is "
+              "not an answer to it. If it asks how you are, say briefly how you "
+              "are from your actual state, one or two lines.")
+    # ⚠️ Der GANZE Satz wird ersetzt, nicht nur die getroffene Wortgruppe.
+    # Ein erster Versuch tauschte nur "greet back" aus und liess den Rest
+    # stehen: "...do not greet back. short, warm, one line" -- ein Auftrag,
+    # der sich selbst widerspricht, also genau der Fehler, den diese Funktion
+    # beheben soll, nur eine Ebene tiefer. Ein Test hat es gefangen.
+    m = _GRUSS_AUFTRAG.search(caveman)
+    if not m:
+        return caveman
+    # Satzgrenzen um den Treffer suchen; ohne Satzzeichen gilt die ganze Zeile.
+    anfang = max((caveman.rfind(z, 0, m.start()) for z in ".!?\n"), default=-1)
+    anfang = 0 if anfang < 0 else anfang + 1
+    ende = min((e for e in (caveman.find(z, m.end()) for z in ".!?\n") if e >= 0),
+               default=-1)
+    ende = len(caveman) if ende < 0 else ende + 1
+    return (caveman[:anfang] + (" " if anfang else "") + ersatz
+            + caveman[ende:]).strip()
+
+
 def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
     import os as _os
@@ -1294,8 +1366,10 @@ def run_chat_turn(
             _mit_arbeitsraum(
                 _mit_kuerze(
                     _mit_gespraechslage(
-                        _mit_epistemik(envelope["caveman_prompt"],
-                                       envelope.get("epistemik")), world)),
+                        _ohne_falschen_gruss(
+                            _mit_epistemik(envelope["caveman_prompt"],
+                                           envelope.get("epistemik")),
+                            message), world)),
                 vorstufe_world, envelope.get("broadcast_ids"),
                 volltext_world=world),
             user_id=user_id, session_id=session_id,
@@ -1331,8 +1405,10 @@ def run_chat_turn(
                 _mit_arbeitsraum(
                     _mit_kuerze(
                         _mit_gespraechslage(
-                            _mit_epistemik(envelope2["caveman_prompt"],
-                                           envelope2.get("epistemik")), world)),
+                            _ohne_falschen_gruss(
+                                _mit_epistemik(envelope2["caveman_prompt"],
+                                               envelope2.get("epistemik")),
+                                message), world)),
                     vorstufe_world, envelope2.get("broadcast_ids"),
                     volltext_world=world),
                 user_id=user_id, session_id=session_id,

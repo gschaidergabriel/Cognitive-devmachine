@@ -26,7 +26,12 @@ class EffectGate:
     # (mcp_server.request_effect, inference_protocol.ALLOWED_INFERENCE_EFFECTS,
     # autonomy.EFFECT_CAPABILITIES) -- Mail ist ein Weg fuer den Menschen an
     # der Oberflaeche, nicht fuer Zero.
-    ALLOWED = {"entityos.exec", "process.exec", "state.noop", "postfach.senden"}
+    # "heim.bedienen" seit 2026-08-21: eine Eingabe oder ein Befehl auf dem
+    # Rechner eines Menschen ist eine Wirkung in der Welt -- sie gehoert ins
+    # Buch. Wie postfach.senden steht sie NICHT in den engeren Listen der
+    # Modellwege; sie laeuft ueber ein eigenes Tor mit eigenem Wirker.
+    ALLOWED = {"entityos.exec", "process.exec", "state.noop", "postfach.senden",
+               "heim.bedienen"}
     AUTO_LEASE_TTL = 300.0
     ENTITYOS_EFFECT_RESOURCE = "effect:entityos.exec"
     AUTONOMY_SOURCE = "clayverse-autonomy:goal-step"
@@ -37,6 +42,7 @@ class EffectGate:
         allow_process: bool = False,
         entityos_bridge: EntityOSBridge | None = None,
         postfach_sender=None,
+        heim_wirker=None,
     ):
         self.db = db
         self.allow_process = allow_process
@@ -45,6 +51,10 @@ class EffectGate:
         # angeschlossene Wirker fuehrt aus. Ohne Wirker gibt es kein Ergebnis,
         # sondern ein begruendetes DENIED.
         self.postfach_sender = postfach_sender
+        # Der Wirker fuer heim.bedienen: er ruft die Bruecke zum Host-Dienst
+        # des Menschen an. Steht keiner da, wird nichts getan und DENIED
+        # gebucht -- kein stilles Durchreichen am Buch vorbei.
+        self.heim_wirker = heim_wirker
         self.journal = EffectJournal(db)
 
     def available_capabilities(self):
@@ -238,6 +248,38 @@ class EffectGate:
                     self.journal.complete(
                         effect_id,
                         {"ok": False, "error": type(exc).__name__, "boundary": "Postfach"},
+                        "FAILED",
+                    )
+                    raise
+                self.journal.complete_verified(
+                    effect_id,
+                    outcome,
+                    req.session_id,
+                    req.user_id,
+                    generation,
+                    lease,
+                )
+                return effect_id, outcome
+            if req.capability == "heim.bedienen":
+                if self.heim_wirker is None:
+                    outcome = {
+                        "ok": False,
+                        "denied": True,
+                        "reason": "heim_wirker_unavailable",
+                        "target": req.target,
+                        "boundary": "Heim-PC",
+                    }
+                    self.journal.complete(effect_id, outcome, "DENIED")
+                    return effect_id, outcome
+                try:
+                    outcome = dict(self.heim_wirker(req))
+                    outcome["boundary"] = "Heim-PC"
+                except Exception as exc:
+                    # Nur der Ausnahmetyp: eine Antwort des Host-Dienstes kann
+                    # Bildschirminhalte oder Pfade tragen, und der Beleg bleibt.
+                    self.journal.complete(
+                        effect_id,
+                        {"ok": False, "error": type(exc).__name__, "boundary": "Heim-PC"},
                         "FAILED",
                     )
                     raise

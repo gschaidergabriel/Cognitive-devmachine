@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T12:07:16Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T12:37:17Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 678 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2646 Artikel, 1488 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 668 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2601 Artikel, 1465 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -52,7 +52,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `B0-2026-08-15T15-53-34-0000` · vorfall
 - **VLM-Artefakte + System-Vorlagen ins Repo (unifieddb)** — `B11-2026-08-15T15-52-56-0000` · vorfall
 
-## Kern / entityos (611)
+## Kern / entityos (610)
 
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-bauverlauf-07139bc84688bdc0a592` · baunotiz
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-git-0ff9ac9f66f7342ad53eab6b3726575` · baunotiz
@@ -72,9 +72,9 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz
+- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
-- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-git-3488f45d776e9c5b00c954b8e7cc7af` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-git-e12a81473a25f14b8772431dc17960e` · baunotiz
@@ -141,6 +141,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **artifact: make UnifiedDB terminal identity match the two real tmux sessions** — `baunotiz-git-bde7f1162d7f301dd59e249890b9ed7` · baunotiz
 - **artifact: bind automatic hook spine and sole UnifiedDB memory in manifest** — `baunotiz-git-5802f5b82367b4405fbac0c7ce5c770` · baunotiz
 - **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `baunotiz-bauverlauf-0fed3dc34a4061d6716d` · baunotiz
+- **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
 - **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
@@ -159,7 +160,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-86d356687bd843594dd3715c7503968` · baunotiz
 - **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-090197f6c642f834f828` · baunotiz
 - **agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c4033395415e4cddae79839ca49f2e7` · baunotiz
-- **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
 - **2026-08-18: vorgang -- Mehrere Baufehler behoben: Zero-Eigentumsabfrage, Graphen-Walk, Chat-Verlauf ** — `verdichtung-2026-08-18-vorgang` · verdichtung
 - **2026-08-17: infra(clayverse) -- Einführung eines unabhängigen, zerstörbaren VPS-KVM-Labors für ClayV** — `verdichtung-2026-08-17-infra-clayverse` · verdichtung
 - **ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15** — `baunotiz-bauverlauf-152ee73de12b068d21d3` · baunotiz
@@ -214,7 +214,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **neo_zero_buildings_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
 - **neo_zero_tiles_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
 
-## Kern / ohne Sphaere (145)
+## Kern / ohne Sphaere (146)
 
 - **SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay** — `global-SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AN` · bereich_global
 - **ClayCode protocol addendum — eight-branch mesh / UnifiedDB** — `triggers-CLAYCODE_EIGHT_BRANCH_UNIFIEDDB_ADD` · bereich_triggers
@@ -319,8 +319,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB + ClayGraph -> Possibility Preprocessor Fusion Handoff** — `20260810T0730p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **UnifiedDB U11 — Proof-Carrying Associative Memory Fabric (PCAMF)** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **UnifiedDB / Database Pulse — Adaptive Preprocessor + Maintenance Fusion** — `20260810T0740p0700_UNIFIEDDB_DATABASE_PULSE_` · forschungsergebnis
-- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB Emergence Meter v0.2 Research Delta — OOD Robustness and Abstention** — `trigger_runs-emergenz-20260809T213500p0700_u` · bereich_trigger_runs
+- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB — Effect/Re-entry/Terminal Continuity Run** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **UnifiedDB Research Run U1 — Clay Unified Semantic Persistence Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T20` · bereich_trigger_runs
@@ -333,14 +333,14 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
 - **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **GWT experiments require UnifiedDB/COVE snapshot identity so control and lesion arms share compatible** — `H-G11-043` · hypothese
-- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB results require explicit admissibility class** — `KMP-U2-RESULT-ADMISSIBILITY` · begriff
 - **Edge deployments may keep vector/graph indexes physically separate while exposing the same UnifiedDB** — `H-G11-062` · hypothese
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **Capability issuer/gateway, secret stores and high-blast-radius external effects remain physically is** — `F2-G11-016` · hypothese
 - **FRANK should consume operation-specific identity capsules over logical UnifiedDB** — `KMP-G11-MOSAIC-FRANK` · begriff
 - **ClayGraph is a specialized derived memory view inside logical UnifiedDB** — `KMP-G11-UNIFIEDDB-ROUTING` · begriff
-- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB physical placement is multi-axis, not monolith-vs-polystore** — `KMP-U2-PLACEMENT-LATTICE` · begriff
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB Research Run U2 — Causal Polyglot Placement Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
 - **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
 - **C7 keeps ClayGraph as specialized associative memory inside UnifiedDB** — `KMP-FRANK-C7-CLAYGRAPH-SPECIALIZED-ORGAN` · begriff
@@ -351,14 +351,15 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB should unify semantics and planning before physical storage** — `KMP-G11-LOGICAL-PHYSICAL` · begriff
 - **The UnifiedDB planner should choose graph traversal only when relation evidence is needed rather tha** — `H-G11-040` · hypothese
 - **unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
-- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
 - **GWT causal attribution should bind UnifiedDB/MOSAIC basis and reader handoff** — `KMP-G11-WORKSPACE-BASIS` · begriff
 - **FRANK C7 consumes UnifiedDB as logical fabric, not mandatory physical monolith** — `KMP-FRANK-C7-LOGICAL-FABRIC` · begriff
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
 - **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
 - **UnifiedDB U2: ClayGraph selection integrity and graph placement are separate from record truth** — `KMP-U2-SELECTION-PLACEMENT-CLAYGRAPH` · begriff
 - **Typed collection semantics can serve as a shared canonical contract across heterogeneous UnifiedDB b** — `H-CC12-012` · hypothese
 - **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
 - **Closed PF tree segment02a modified endpoint tail m062..m067 at immutable ref 0fd27f. 6/6 resolved, z** — `rooms-center_events-20260809T1434p0700_666_p` · bereich_rooms
 - **Fusion F5: UnifiedDB preserves collection algebra and canonical re-entry across adaptive placement** — `KMP-FUS-F5-C3F-UNIFIEDDB` · begriff
+- **FRANK_UNIFIEDDB_FEEDBACK.json** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
 

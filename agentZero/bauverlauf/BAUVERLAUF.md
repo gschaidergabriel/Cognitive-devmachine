@@ -1,12 +1,70 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T12:07:16Z. 1050 Commits aus vier Repos, davon 426 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T12:37:18Z. 1051 Commits aus vier Repos, davon 429 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 12:36:50 +0000 — entityos: 1 Aenderungen
+
+`bbfa4fbb4dc3` · entityos · 12:36 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_heimpc_wirt.py
+
+Zeit: 2026-08-21T12:36:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 12:32:49 +0000 — entityos: 5 Aenderungen
+
+`790a294bab91` · entityos · 12:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/browser_fern.py
+  the artefact/clayverse/heimpc.py
+  the artefact/clayverse/mcp_server.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/policy/managed-settings.json
+
+Zeit: 2026-08-21T12:32:49+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 12:14:08 +0000 — entityos: 1 Aenderungen
+
+`c07c21aa65ad` · entityos · 12:14 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/web/chat/index.html
+
+Zeit: 2026-08-21T12:14:08+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 11:55:38 +0000 — entityos: 1 Aenderungen
 
@@ -2875,59 +2933,5 @@ umzuschreiben, damit es besteht, ist das eine, wogegen dieses Werkzeug gebaut
 wurde.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### Die systemd-Einheiten des Vorsatz-Pruefers mitsichern
-
-`f681ca215c9e` · entityos · 01:40 UTC · EOS-Chronik
-
-```
-Sie lagen nur unter /etc/systemd/system und waren damit nirgends versioniert --
-bei einem Neuaufsetzen haette der Zeitgeber gefehlt und der Kreis waere still
-stehengeblieben, ohne dass etwas fehlerhaft ausgesehen haette.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises
-
-`f9ed8898ba18` · entityos · 01:40 UTC · EOS-Chronik
-
-```
-Hypothesen wurden erzeugt und nie nachgemessen -- 11 offene Folgerungen, kein
-Weg nach gestuetzt/widerlegt. eos_vorsatz.py misst jede offene Behauptung nach
-und trennt dabei die zwei Behauptungsarten: eine Wiki-Luecke ("es fehlt ein
-Artikel") ist durch einen gefundenen Artikel vollstaendig widerlegt; eine
-Selbstpruefung ("es fehlt eine belegte Angabe") wird NIE automatisch
-geschlossen, weil Wortueberlappung kein Wissen ist -- dort entstehen Kandidaten.
-gestuetzt wird nie vergeben: eine Suche ohne Treffer beweist nichts.
-
-Offene Vorsaetze stehen in /var/lib/clay/vorsaetze.json; runtime_CLAUDE.md 9l
-gibt Zero den Weg dorthin.
-
-UnifiedDB-Backup: Ziel ist der zweite VPS statt eines GitHub-Repos, das es nie
-gab. Feste Aenderungszeit + --checksum, sonst greift --link-dest nie
-(gemessen: 0 von 108 verlinkt); jetzt 103 von 108, ein Schnappschuss kostet
-13 MB statt 489 MB.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen
-
-`854944248021` · entityos · 01:37 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/prestage.py
-
-Zeit: 2026-08-20T01:37:58+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
 ```
 

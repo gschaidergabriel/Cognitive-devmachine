@@ -1009,93 +1009,130 @@ def main() -> None:
         """Was wurde an dieser Quelle bisher gesehen und was gilt gerade? Nimm es VOR bild_ansehen, wenn du wissen willst, was dort schon bekannt ist. ⚠️ `sichtbarkeit` ist keine Aussage ueber die Welt, ausser bei ABWESEND_EXPLIZIT_NEGATIV -- lies das Feld `lies_so`."""
         return bridge.bild_gedaechtnis(ort)
 
-    # ── PC-Steuerung: Zero bedient den Rechner des Menschen (heimpc-Bruecke) ──
-    # Der Host-Dienst laeuft auf dem PC hinter Tailscale und hat seine eigenen
-    # Tore (Token, Schranke, Zeuge). Diese Werkzeuge rufen ihn nur an.
-    @mcp.tool(annotations=ro)
-    def pc_bildschirme() -> dict:
-        """Welche Bildschirme hat der Rechner des Menschen, wo liegen sie? Bildschirm 2 ist der grosse -- dort darfst du arbeiten. Bildschirm 1 (primary) gehoert dem Menschen und bleibt unangetastet."""
-        from . import heimpc
-        return heimpc.bildschirme()
+    # ── PC-Steuerung: Zero bedient die Rechner der Menschen (heimpc-Bruecke) ──
+    # Der Host-Dienst laeuft auf dem jeweiligen PC hinter Tailscale und hat
+    # seine eigenen Tore (Token, Schranke, Zeuge). Diese Werkzeuge rufen ihn an.
+    #
+    # ⭐ `wirt` (2026-08-21): ohne Angabe ist der Rechner DESSEN gemeint, der
+    # gerade spricht. Vorher gab es genau eine hinterlegte Maschine -- Andreas'
+    # Befehle landeten damit still auf Gabriels PC. Wer keinen eigenen Rechner
+    # hat (headless Zero), MUSS den Wirt benennen; geraten wird nicht.
+    def _nutzer() -> str:
+        return getattr(bridge, "user_id", "") or ""
 
     @mcp.tool(annotations=ro)
-    def pc_sehen(bildschirm: str = "2") -> dict:
-        """Ein Bild vom Bildschirm des Menschen (Vorgabe: Bildschirm 2, seiner bleibt aussen vor). Speichert den Screenshot in den Dateispeicher und liefert seine Kennung -- gib die an `bild_ansehen` weiter, wenn du den Bildschirm analysieren lassen willst."""
+    def pc_lage(wirt: str = "") -> dict:
+        """Laeuft der Host-Dienst auf dem Rechner, welche Anzeigeschicht, steht die Schranke, sind die Augen wach? ⚠️ Auf Wayland-Rechnern (Andreas) sagt `augen: false`, dass es KEIN Bild geben wird, bis die Shell-Erweiterung nach einem Ab-/Anmelden aktiv ist -- lies das, bevor du `pc_sehen` versuchst."""
+        from . import heimpc
+        return heimpc.gesundheit(wirt=wirt or None, nutzer=_nutzer())
+
+    @mcp.tool(annotations=ro)
+    def pc_bildschirme(wirt: str = "") -> dict:
+        """Welche Bildschirme hat der Rechner des Menschen, wo liegen sie? `wirt` leer = der Rechner dessen, der gerade spricht; sonst gabriel-pc | andreas-maco. ⚠️ Auf Gabriels PC gilt: Bildschirm 2 ist deiner, Bildschirm 1 (primary) gehoert ihm und bleibt unangetastet. Fuer andreas-maco ist noch KEINE solche Aufteilung vereinbart -- frag ihn, statt eine zu erfinden."""
+        from . import heimpc
+        return heimpc.bildschirme(wirt=wirt or None, nutzer=_nutzer())
+
+    @mcp.tool(annotations=ro)
+    def pc_fenster(wirt: str = "") -> dict:
+        """Welche Fenster sind auf dem Rechner offen -- Titel, Programm, Bildschirm, Groesse, was den Fokus hat. Das ist der billige Weg, sich zu orientieren, BEVOR du ein Bild anforderst."""
+        from . import heimpc
+        return heimpc.fenster(wirt=wirt or None, nutzer=_nutzer())
+
+    @mcp.tool(annotations=ro)
+    def pc_sehen(bildschirm: str = "2", wirt: str = "") -> dict:
+        """Ein Bild vom Bildschirm des Menschen. Speichert den Screenshot in den Dateispeicher und liefert seine Kennung -- gib die an `bild_ansehen` weiter, wenn du den Bildschirm analysieren lassen willst."""
         from . import heimpc, dateien
-        r = heimpc.sehen(bildschirm)
+        r = heimpc.sehen(bildschirm, wirt=wirt or None, nutzer=_nutzer())
         if not r.get("erreichbar"):
             return r
         if "bytes" not in r:
             return {k: v for k, v in r.items() if k != "bytes"}
+        ziel = r.get("wirt", "pc")
         a = dateien.hochladen(user_id=bridge.user_id,
-                              dateiname=f"bildschirm-{bildschirm}.png", inhalt=r["bytes"])
-        return {"erreichbar": True, "gespeichert_als": a.get("id"), "name": a.get("name"),
+                              dateiname=f"bildschirm-{ziel}-{bildschirm}.png",
+                              inhalt=r["bytes"])
+        return {"erreichbar": True, "wirt": ziel, "gespeichert_als": a.get("id"),
+                "name": a.get("name"),
                 "hinweis": "nutze bild_ansehen mit dieser Kennung, um den Bildschirm zu analysieren"}
 
     @mcp.tool(annotations=effectful)
     def pc_eingabe(typ: str, text: str = "", taste: str = "",
-                   x: int | None = None, y: int | None = None) -> dict:
-        """Tastatur/Maus auf dem Rechner des Menschen. typ = tippen(text) | taste(taste, z.B. Return) | maus(x,y) | klick(x,y,taste). Echte Eingabe wie bei einem Menschen -- Sichtbares gehoert auf Bildschirm 2, Bildschirm 1 nie anfassen."""
+                   x: int | None = None, y: int | None = None,
+                   wirt: str = "") -> dict:
+        """Tastatur/Maus auf dem Rechner des Menschen. typ = tippen(text) | taste(taste, z.B. Return, ctrl+v) | maus(x,y) | klick(x,y,taste). Echte Eingabe wie bei einem Menschen. ⚠️ Das laeuft in SEINER angemeldeten Sitzung -- was du tippst, tippt scheinbar er."""
         from . import heimpc
         rest = {k: v for k, v in {"text": text, "taste": taste, "x": x, "y": y}.items()
                 if v not in ("", None)}
-        return heimpc.eingabe(typ, **rest)
+        return heimpc.eingabe(typ, wirt=wirt or None, nutzer=_nutzer(), **rest)
 
     @mcp.tool(annotations=effectful)
-    def pc_ausfuehren(befehl: str, frist: int = 120) -> dict:
-        """Einen Shell-Befehl auf dem Rechner des Menschen ausfuehren. ⚠️ Zerstoerendes weist die Schranke des Rechners ab und verlangt einen am Terminal getippten Schein -- das ist gewollt, umgeh es nicht."""
+    def pc_ausfuehren(befehl: str, frist: int = 120, wirt: str = "") -> dict:
+        """Einen Shell-Befehl auf dem Rechner des Menschen ausfuehren. ⚠️ Zerstoerendes weist die Schranke des Rechners ab und verlangt einen am echten Terminal getippten Schein -- das ist gewollt, umgeh es nicht. Pruef `wirt` in der Antwort: sie sagt dir, welche Maschine wirklich geantwortet hat."""
         from . import heimpc
-        return heimpc.ausfuehren(befehl, frist)
+        return heimpc.ausfuehren(befehl, frist, wirt=wirt or None, nutzer=_nutzer())
 
     # ── Browser: Zero bedient den echten, angemeldeten Browser des Menschen ──
+    # Auch hier `wirt`: der Browser traegt die Anmeldungen eines bestimmten
+    # Menschen -- den falschen zu bedienen waere schlimmer als gar keinen.
     @mcp.tool(annotations=effectful)
-    def browser_oeffnen(url: str, browser: str = "") -> dict:
-        """Eine Seite im Browser des Menschen oeffnen (Fenster auf Bildschirm 2, echtes angemeldetes Profil). `browser` leer = Standardbrowser; sonst chrome|firefox|brave."""
+    def browser_oeffnen(url: str, browser: str = "", wirt: str = "") -> dict:
+        """Eine Seite im Browser des Menschen oeffnen (echtes angemeldetes Profil). `browser` leer = Standardbrowser; sonst chrome|firefox|brave."""
         from . import browser_fern
-        return browser_fern.oeffnen(url, browser)
+        return browser_fern.oeffnen(url, browser, wirt=wirt or None, nutzer=_nutzer())
 
     @mcp.tool(annotations=ro)
-    def browser_lesen(browser: str = "") -> dict:
+    def browser_lesen(browser: str = "", wirt: str = "") -> dict:
         """Den sichtbaren Text/Inhalt der aktuellen Browserseite lesen."""
         from . import browser_fern
-        return browser_fern.lesen(browser)
+        return browser_fern.lesen(browser, wirt=wirt or None, nutzer=_nutzer())
 
     @mcp.tool(annotations=ro)
-    def browser_screenshot(browser: str = "") -> dict:
+    def browser_screenshot(browser: str = "", wirt: str = "") -> dict:
         """Ein Bild der aktuellen Browserseite. Speichert es in den Dateispeicher; gib die Kennung an `bild_ansehen`, um es zu analysieren."""
         from . import browser_fern, dateien
-        r = browser_fern.screenshot(browser)
+        r = browser_fern.screenshot(browser, wirt=wirt or None, nutzer=_nutzer())
         if not r.get("erreichbar"):
             return r
         if "bytes" not in r:
             return {k: v for k, v in r.items() if k != "bytes"}
-        a = dateien.hochladen(user_id=bridge.user_id, dateiname="browser.png", inhalt=r["bytes"])
-        return {"erreichbar": True, "gespeichert_als": a.get("id"), "name": a.get("name")}
+        ziel = r.get("wirt", "pc")
+        a = dateien.hochladen(user_id=bridge.user_id, dateiname=f"browser-{ziel}.png",
+                              inhalt=r["bytes"])
+        return {"erreichbar": True, "wirt": ziel, "gespeichert_als": a.get("id"),
+                "name": a.get("name")}
 
     @mcp.tool(annotations=effectful)
     def browser_klick(selektor: str = "", x: int | None = None, y: int | None = None,
-                      browser: str = "", wirkt_nach_aussen: bool = False) -> dict:
+                      browser: str = "", wirkt_nach_aussen: bool = False,
+                      wirt: str = "") -> dict:
         """Auf der Browserseite klicken -- per CSS-`selektor` oder per x,y. Setze `wirkt_nach_aussen=true`, wenn der Klick etwas absendet/kauft/postet (dann wird es als Aussenwirkung protokolliert)."""
         from . import browser_fern
-        return browser_fern.klick(selektor or None, x, y, browser, wirkt_nach_aussen)
+        return browser_fern.klick(selektor or None, x, y, browser, wirkt_nach_aussen,
+                                  wirt=wirt or None, nutzer=_nutzer())
 
     @mcp.tool(annotations=effectful)
-    def browser_tippen(selektor: str, text: str, browser: str = "") -> dict:
+    def browser_tippen(selektor: str, text: str, browser: str = "",
+                       wirt: str = "") -> dict:
         """In ein Feld (CSS-`selektor`) auf der Browserseite `text` eintippen."""
         from . import browser_fern
-        return browser_fern.tippen(selektor, text, browser)
+        return browser_fern.tippen(selektor, text, browser, wirt=wirt or None,
+                                   nutzer=_nutzer())
 
     @mcp.tool(annotations=effectful)
-    def browser_formular(felder: dict, absenden_selektor: str = "", browser: str = "") -> dict:
+    def browser_formular(felder: dict, absenden_selektor: str = "", browser: str = "",
+                         wirt: str = "") -> dict:
         """Ein Formular ausfuellen: `felder` = {CSS-Selektor: Wert}. `absenden_selektor` optional zum Abschicken -- Abschicken ist eine reale Aussenwirkung, kuendige sie an, wenn nicht beauftragt."""
         from . import browser_fern
-        return browser_fern.formular(felder, absenden_selektor or None, browser)
+        return browser_fern.formular(felder, absenden_selektor or None, browser,
+                                     wirt=wirt or None, nutzer=_nutzer())
 
     @mcp.tool(annotations=effectful)
-    def browser_navigieren(richtung: str = "neu_laden", browser: str = "") -> dict:
+    def browser_navigieren(richtung: str = "neu_laden", browser: str = "",
+                           wirt: str = "") -> dict:
         """Browser-Navigation: richtung = zurueck | vor | neu_laden."""
         from . import browser_fern
-        return browser_fern.navigieren(richtung, browser)
+        return browser_fern.navigieren(richtung, browser, wirt=wirt or None,
+                                       nutzer=_nutzer())
 
     @mcp.tool(annotations=effectful)
     def schluessel_anlernen(name: str, anbieter: str, schluessel: str, modell: str = "") -> dict:

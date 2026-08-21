@@ -20,6 +20,7 @@ Dieses Register wird bei jedem relevanten `go` gegen den neuesten `agentZero/MAN
 | `abruf/retrieval_feedback.jsonl` | Retrieval-Lernsignal | ereignisbasiert | initial 0; Reward-/Outcome-Bindung pruefen |
 | `abruf/retrieval_policy_state.jsonl` | Policy-Zustand | Snapshot | Drift ueber Generationen messen |
 | `abruf/durable_memory.jsonl` | persistierte Memories | Snapshot/Events | initial 0; Semantik und Admission pruefen |
+| `abruf/wegehierarchie.json` / `WEGEHIERARCHIE.md` | F94-Wegequalitaet, Rangverteilung und Tunnel-Unabhaengigkeit | Snapshot aus `vp_weg` | Gen245: 8 rohe Legacy-Tunnel, aber 0 bereinigte echte Tunnel; erst 2 kanonische Sessions global, daher Tunnelstatus `NOCH_ZU_WENIG_DATEN`; Top-Decile 0.139 bleibt ohne starke Hierarchie |
 | `zustand/users.json` | kanonische Nutzer | Snapshot | Rechte-/Identity-Drift pruefen |
 | `zustand/sessions.json` | Sessions/Generation | Snapshot | Fork-/Restart-/Stale-Writer-Indikator |
 | `zustand/meta.json` | Wurzelzustand/Identitaet | Snapshot | Prompt-/State-Autoritaet getrennt analysieren |
@@ -37,6 +38,7 @@ Dieses Register wird bei jedem relevanten `go` gegen den neuesten `agentZero/MAN
 | `bauverlauf/bauverlauf.jsonl` / `BAUVERLAUF.md` | Bauinterventionen, Befunde, Reparaturgruende | kumulativ/exportiert | 700 Commits/4 Repos; Commit ist Interventionsevidenz, aber kein automatischer Wirksamkeitsbeweis |
 | `tests/letzter-lauf.json` | aktueller deterministischer Teststatus | je Testlauf | 480 gruen/12 rot am gebundenen Stand; Test-PASS != beobachtetes Zero-Verhalten |
 | `tests/verlauf.jsonl` | Teststatus ueber Zeit | wachsend, eine Zeile je Lauf | aktuell erst 1 Punkt; spaeter Change-Point-/Regression-Zeitreihe |
+| `bewertung/bewertungen.jsonl` + `.meta.json` | explizites menschliches Daumen-hoch/-runter pro Assistant-Turn | mutables Vollabbild; separater Exporttimer | neu 2026-08-21; aktuell 0 Zeilen. Stark an Turn/Session/User gebunden, aber Aenderung/Entfernung ueberschreibt historische Evidenz; Modellzuordnung ist best-effort content-basiert; Rating-Selection-Bias messen bevor Reward-/Qualitaetsclaims |
 | `ZIELE.md` | Soll/Ist-Faehigkeitsinventar mit Messpruefern | Snapshot | Status ist capability-spezifisch, kein globaler Health-Score; Zaehler selbst auf Messfehler pruefen |
 | `MANIFEST.json` | Export-Metrologie | Snapshot | zentrale Quelle fuer Zaehler, Hashes, Truncation |
 

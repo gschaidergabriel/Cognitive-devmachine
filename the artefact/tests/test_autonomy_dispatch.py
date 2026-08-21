@@ -55,16 +55,16 @@ def test_one_shot_dispatch_consumes_exact_nonce_once(db):
     assert claimed.instruction == prepared["prompt"]
     assert claimed.generation == db.entity_generation()
 
-    replay = consume_dispatch_prompt(
-        db,
-        user_id="gabriel",
-        session_id="session:gabriel",
-        prompt=dispatch.terminal_prompt,
-    )
-    assert replay is None
+    with pytest.raises(AutonomyDispatchError, match="lease missing"):
+        consume_dispatch_prompt(
+            db,
+            user_id="gabriel",
+            session_id="session:gabriel",
+            prompt=dispatch.terminal_prompt,
+        )
 
 
-def test_wrong_nonce_or_human_text_does_not_consume_dispatch(db):
+def test_human_text_does_not_consume_dispatch_but_reserved_wrong_nonce_fails_closed(db):
     goal = _goal(db)
     prepared = AutonomyPlanner(db).prepare_next("gabriel")
     dispatch = reserve_dispatch(
@@ -81,12 +81,13 @@ def test_wrong_nonce_or_human_text_does_not_consume_dispatch(db):
         session_id="session:gabriel",
         prompt="ordinary human text",
     ) is None
-    assert consume_dispatch_prompt(
-        db,
-        user_id="gabriel",
-        session_id="session:gabriel",
-        prompt=f"{DISPATCH_PREFIX}{'0' * 32}",
-    ) is None
+    with pytest.raises(AutonomyDispatchError, match="nonce mismatch"):
+        consume_dispatch_prompt(
+            db,
+            user_id="gabriel",
+            session_id="session:gabriel",
+            prompt=f"{DISPATCH_PREFIX}{'0' * 32}",
+        )
 
     claimed = consume_dispatch_prompt(
         db,
@@ -95,6 +96,41 @@ def test_wrong_nonce_or_human_text_does_not_consume_dispatch(db):
         prompt=dispatch.terminal_prompt,
     )
     assert claimed is not None
+
+
+def test_malformed_reserved_dispatch_prompt_fails_closed(db):
+    with pytest.raises(AutonomyDispatchError, match="prompt malformed"):
+        consume_dispatch_prompt(
+            db,
+            user_id="gabriel",
+            session_id="session:gabriel",
+            prompt=f"{DISPATCH_PREFIX}not-a-valid-nonce",
+        )
+
+
+def test_expired_reserved_dispatch_prompt_fails_closed(db):
+    goal = _goal(db)
+    prepared = AutonomyPlanner(db).prepare_next("gabriel")
+    dispatch = reserve_dispatch(
+        db,
+        user_id="gabriel",
+        goal_id=goal["goal_id"],
+        step_id=prepared["step_id"],
+        instruction=prepared["prompt"],
+    )
+    with db.tx() as tx:
+        tx.execute(
+            "UPDATE leases SET expires_at=0 WHERE resource=?",
+            ("autonomy-dispatch:session:gabriel",),
+        )
+
+    with pytest.raises(AutonomyDispatchError, match="lease expired"):
+        consume_dispatch_prompt(
+            db,
+            user_id="gabriel",
+            session_id="session:gabriel",
+            prompt=dispatch.terminal_prompt,
+        )
 
 
 def test_second_live_dispatch_reservation_conflicts_even_for_same_step(db):

@@ -1,0 +1,91 @@
+{
+  "schema": "ClayVerseGoEvidenceAddendum/v1",
+  "date": "2026-08-21",
+  "trigger": "go",
+  "pr": 722,
+  "candidate_parent_rejoin": "c89af32407ee5ddee2e0404c1e93abd3f40dc887",
+  "candidate_dispatch_code_blob": "935ed3bec81a634e923fdcbae02667a0adbae9c8",
+  "candidate_terminal_transport_blob": "6eb2f2fa4ff209f07a1d5bf1bcadfd09064b55ed",
+  "integration_falsifier_blob": "3399c6177a3e5031d714c621af952c139d39a337",
+  "terminal_transport_test_blob": "c8e4d679730614e1fa713601a6792bd23ffad4ea",
+  "evidence": {
+    "github_actions": [
+      {
+        "run_id": 32493070380,
+        "job_id": 96805028454,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "PRE_STEP_RUNNER_OR_CONTROL_PLANE_FAILURE_ZERO_TEST_CREDIT"
+      },
+      {
+        "run_id": 32493928244,
+        "job_id": 96807778324,
+        "conclusion": "failure",
+        "steps": null,
+        "classification": "PRE_STEP_RUNNER_OR_CONTROL_PLANE_FAILURE_ZERO_TEST_CREDIT"
+      }
+    ],
+    "dispatch_consume_source_slice": {
+      "environment": "authorized isolated non-production container",
+      "git_hash_object_matched_candidate_blob": true,
+      "py_compile": "PASS",
+      "result": "5/5 PASS",
+      "cases": [
+        "ordinary non-prefixed text remains human-path eligible",
+        "malformed reserved marker fails closed",
+        "missing/replayed reserved lease fails closed",
+        "wrong nonce fails closed without consuming valid lease",
+        "expired matching nonce fails closed"
+      ],
+      "classification": "MECHANISM_SUPPORTED_EXACT_CODE_BLOB_SOURCE_SLICE"
+    },
+    "terminal_transport_source_slice": {
+      "environment": "authorized isolated non-production container",
+      "result": "7/7 PASS",
+      "cases": [
+        "exact prefix plus 32 lowercase hex accepted",
+        "ordinary printable text rejected before tmux",
+        "malformed reserved nonce rejected before tmux",
+        "uppercase 32-hex nonce rejected before tmux",
+        "31-char nonce rejected before tmux",
+        "33-char nonce rejected before tmux",
+        "embedded/non-leading prefix rejected before tmux"
+      ],
+      "classification": "MECHANISM_SUPPORTED_SOURCE_SLICE"
+    },
+    "integration_falsifier_source": {
+      "path": "the artefact/tests/test_autonomy_dispatch_reserved_namespace_integration.py",
+      "blob": "3399c6177a3e5031d714c621af952c139d39a337",
+      "py_compile": "PASS",
+      "required_invariant": "terminal_hooks.user_prompt rejects malformed/wrong/expired/replayed synthetic markers before any new turn/workspace/causal artifact and AutonomyPulse human-roundtrip attestation remains false",
+      "execution_credit": "SOURCE_SYNTAX_ONLY_NOT_FULL_CHECKOUT"
+    },
+    "terminal_transport_test_source": {
+      "path": "the artefact/tests/test_terminal_autonomy_transport.py",
+      "blob": "c8e4d679730614e1fa713601a6792bd23ffad4ea",
+      "required_invariant": "only an exact one-shot dispatch token can reach tmux send-keys through dispatch_autonomy_prompt",
+      "execution_credit": "SOURCE_TEST_CONTRACT_PLUS_BOUNDED_MECHANISM_SLICE"
+    },
+    "authorized_fallback_discovery": {
+      "daytona_plugin_search": "NO_INSTALLABLE_PLUGIN_FOUND",
+      "vps_or_production_used": false
+    }
+  },
+  "nonclaims": [
+    "No exact private full-checkout pytest PASS.",
+    "No executed terminal_hooks integration PASS.",
+    "No packaged Claude-hook transport PASS.",
+    "No exact OCI build/runtime or microVM credit.",
+    "No whole-product PASS."
+  ],
+  "hypofusion": {
+    "counterhypothesis": "Parser-level fail-closed handling is sufficient and transport validation only duplicates policy.",
+    "assessment": "Rejected as a defense-boundary argument: terminal_sessions is the final generic tmux send-keys surface for synthetic autonomy. Restricting it to the same one-shot token shape prevents another internal caller from turning the channel into generic synthetic text injection. The residual packaged-runtime hypothesis remains that Claude hook transport may transform the token before parser entry.",
+    "cheapest_next_falsifier": "Execute exact full-checkout dispatch + terminal transport + hook + pulse tests, then repeat through packaged managed Claude hook transport."
+  },
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "note": "Deterministic source-slice and syntax regressions are ordinary validation, not the globally limited unusual experiment."
+  }
+}

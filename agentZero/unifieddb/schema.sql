@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T15:37:22Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T16:07:19Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -157,6 +157,7 @@ CREATE TABLE entityos_wirte(
   quelle TEXT NOT NULL DEFAULT 'herzschlag'
 );
 CREATE TABLE eos_bewertungen(bewertung_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL,session_id TEXT NOT NULL,user_id TEXT NOT NULL,wert INTEGER NOT NULL CHECK(wert IN (-1,1)),frage_turn_id TEXT,frage_hash TEXT,frage_laenge INTEGER,antwort_hash TEXT NOT NULL,antwort_laenge INTEGER NOT NULL,modell TEXT,ts REAL NOT NULL,UNIQUE(turn_id, user_id));
+CREATE TABLE eos_bug_hypothesen(bug_id TEXT PRIMARY KEY,user_id TEXT NOT NULL,ts REAL NOT NULL,beschreibung TEXT NOT NULL,wo TEXT,status TEXT NOT NULL DEFAULT 'OFFEN' CHECK(status IN ('OFFEN','REPRODUZIERT','WIDERLEGT','BEHOBEN')),befund TEXT);
 CREATE TABLE fehler (
             id TEXT PRIMARY KEY,
             art TEXT NOT NULL CHECK (art IN ('sql', 'shell', 'python', 'daten', 'provenienz', 'methode')),
@@ -1075,6 +1076,8 @@ CREATE TABLE zero_raum_ruf (
   text TEXT NOT NULL
 );
 CREATE INDEX eos_bewertungen_session_idx ON eos_bewertungen(session_id, ts);
+CREATE INDEX eos_bug_hypothesen_status_idx ON eos_bug_hypothesen(status, ts);
+CREATE INDEX eos_bug_hypothesen_user_idx ON eos_bug_hypothesen(user_id, ts);
 CREATE INDEX gw_absicht_ts ON gw_absicht(ts);
 CREATE INDEX gw_ausstrahlung_ts ON gw_ausstrahlung(ts);
 CREATE INDEX gw_herkunft_ts ON gw_herkunft(ts);

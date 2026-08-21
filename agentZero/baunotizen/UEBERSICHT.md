@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-20T23:11:17Z. **3165 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T00:11:18Z. **3169 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T02:46:42+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T02:46:42+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3067 |
+| baunotiz | 3071 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1924 |
-| baunotiz | bauverlauf.jsonl | 1098 |
+| baunotiz | git-commit | 1926 |
+| baunotiz | bauverlauf.jsonl | 1100 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3165 · Gegenhypothese: 0 von 3165
+## Hypothese: 0 von 3169 · Gegenhypothese: 0 von 3169
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -163,6 +163,30 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: route Gen206 availability and atomicity falsifiers
 
+### agentZero-Export 2026-08-20T23:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-8ae6de127b3d1a04b8cdade3a83f3f60b33e411d` · baunotiz · git-commit · 2026-08-20T23:42:07+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-20T23:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-319cdb4b8e457e98de61763a3eadd58361279416` · baunotiz · git-commit · 2026-08-20T23:12:07+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+### agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-bauverlauf-eba5e530b20a1e33b99d` · baunotiz · bauverlauf.jsonl · 2026-08-20T23:12:07+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
 ### claycode supervisor: bind Gen204 candidate identity aliasing frontier
 
 `baunotiz-bauverlauf-11c30fe3183dc83380d9` · baunotiz · bauverlauf.jsonl · 2026-08-20T22:49:01+07:00 · Gabriel Gschaider
@@ -203,35 +227,11 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 agentZero-Export 2026-08-20T22:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
 
-### agentZero-Export 2026-08-20T22:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
+### agentZero-Export 2026-08-20T22:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
 
-`baunotiz-git-0340b7220f43e2da3d6dd394a452edd023e3c4c8` · baunotiz · git-commit · 2026-08-20T22:13:09+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-20T22:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-20T22:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-46996fcf3ba148f463b1` · baunotiz · bauverlauf.jsonl · 2026-08-20T22:13:09+00:00 · agentZero
+`baunotiz-bauverlauf-9e9fad053e71bcfa6397` · baunotiz · bauverlauf.jsonl · 2026-08-20T22:45:15+00:00 · agentZero
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
-
-### research: route Gen204 identity and provenance falsifiers
-
-`baunotiz-bauverlauf-693cf4e26304cf64f62e` · baunotiz · bauverlauf.jsonl · 2026-08-20T21:50:09+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen204 identity and provenance falsifiers
-
-`baunotiz-git-8946d67b1320928ed8199adf5680da64a581b2d7` · baunotiz · git-commit · 2026-08-20T21:50:09+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen204 identity and provenance falsifiers
 

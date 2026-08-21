@@ -99,7 +99,13 @@ def _sicherer_anzeigename(roh: str) -> str:
     kein Freifahrtschein fuer das, was ihn spaeter anzeigt.
     """
     name = (roh or "").strip().replace("\\", "/").split("/")[-1]
-    name = "".join(ch for ch in name if ch.isprintable() and ch not in '"\r\n')
+    # `<`/`>` seit 2026-08-21 mit dabei: eine Datei namens
+    # `<img src=x onerror=...>.jpg` wurde in der Chat-Anhangsliste als
+    # Auszeichnung ausgefuehrt statt als Name angezeigt. Die Oberflaeche baut
+    # dort inzwischen Knoten statt Text -- das hier ist der zweite Riegel,
+    # denn Anhaenge koennen aus dem Postfach kommen: dann bestimmt ein
+    # FREMDER den Namen.
+    name = "".join(ch for ch in name if ch.isprintable() and ch not in '"<>\r\n')
     name = name.strip()[:200]
     return name or "datei"
 

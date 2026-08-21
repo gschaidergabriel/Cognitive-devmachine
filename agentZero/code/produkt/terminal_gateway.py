@@ -15,6 +15,7 @@ from pathlib import Path
 
 from fastapi import Request, WebSocket, WebSocketDisconnect
 
+from . import bewertung
 from . import dateien
 from .clerk_auth import AuthenticationError, ClerkTokenVerifier
 from .identity import (
@@ -773,6 +774,70 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         # der Kennung/UUID im Pfad -- Zero waehlt diesen Namen selbst beim
         # Schreiben (siehe runtime_CLAUDE.md 9p), er ist also schon lesbar.
         return FileResponse(pfad, filename=pfad.name, media_type="application/octet-stream")
+
+    # ── Bewertung: Daumen hoch/runter je Zero-Antwort ──────────────────────
+    # Siehe clayverse/bewertung.py fuer die Ablage (eos_bewertungen in der
+    # UnifiedDB) und die Begruendung der Metadaten. Hier nur die HTTP-
+    # Aussenseite, dieselbe Anmeldepruefung wie /api/dateien und jeder andere
+    # /api/-Weg in diesem Haus -- ein unbewachter Schreibweg waere ein offener
+    # Kanal in die DB, egal wie harmlos "ein Daumen" klingt.
+    @app.post("/api/bewertung")
+    async def bewertung_setzen(request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        try:
+            body = await _bounded_body(request, 4_096)
+        except ValueError:
+            return JSONResponse({"error": "body too large"}, status_code=413)
+        try:
+            eingabe = _decode_json_object(body.decode("utf-8"), name="bewertung", max_chars=4_096)
+        except Exception:
+            return JSONResponse({"error": "invalid body"}, status_code=400)
+
+        turn_id = str(eingabe.get("turn_id", "")).strip()
+        if not turn_id:
+            return JSONResponse({"error": "turn_id fehlt"}, status_code=400)
+        try:
+            wert = int(eingabe.get("wert"))
+        except (TypeError, ValueError):
+            return JSONResponse({"error": "wert muss eine Zahl sein"}, status_code=400)
+
+        try:
+            ergebnis = await asyncio.to_thread(
+                bewertung.setzen, db, turn_id=turn_id, user_id=uid, wert=wert)
+        except bewertung.BewertungFehler as exc:
+            return JSONResponse({"error": str(exc)}, status_code=400)
+        except PermissionError:
+            return JSONResponse({"error": "forbidden"}, status_code=403)
+
+        return JSONResponse(ergebnis)
+
+    @app.get("/api/bewertung")
+    async def bewertung_lesen(request: Request):
+        try:
+            token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+            claims = await asyncio.to_thread(verifier.verify, token)
+        except AuthenticationError:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            return JSONResponse({"error": "unauthorized"}, status_code=401)
+
+        session_id = request.query_params.get("session_id", "")
+        try:
+            stimmen = await asyncio.to_thread(
+                bewertung.lesen_fuer_sitzung, db, session_id=session_id, user_id=uid)
+        except PermissionError:
+            return JSONResponse({"error": "forbidden"}, status_code=403)
+
+        return JSONResponse({"session_id": session_id, "votes": stimmen})
 
     @app.get("/seiten", response_class=HTMLResponse)
     async def seiten_index():

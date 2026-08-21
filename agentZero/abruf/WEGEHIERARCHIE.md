@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T13:37:19Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T14:07:19Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -15,9 +15,9 @@ Wege gesamt: **366**
 | Rang | Anzahl |
 |---|---|
 | tunnel | 8 |
-| autobahn | 239 |
+| autobahn | 237 |
 | langsame strasse | 73 |
-| schnellstrasse | 46 |
+| schnellstrasse | 48 |
 
 Oberes Zehntel haelt 0.139 der Gesamtguete (bei Gleichverteilung waeren es 0.098).
 
@@ -25,18 +25,18 @@ Oberes Zehntel haelt 0.139 der Gesamtguete (bei Gleichverteilung waeren es 0.098
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 754 | 754 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 612 | 612 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 813 | 813 |
-| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | tunnel | 0.997 | 138 | 138 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.997 | 481 | 481 |
-| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.967 | 58 | 58 |
-| gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | tunnel | 0.959 | 25 | 25 |
-| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.93 | 454 | 454 |
-| C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.93 | 88 | 88 |
-| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 0.884 | 304 | 304 |
-| 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 0.884 | 249 | 249 |
-| trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 0.884 | 140 | 140 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 0.94 | 754 | 754 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 0.94 | 612 | 612 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 0.94 | 813 | 813 |
+| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | tunnel | 0.938 | 138 | 138 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.937 | 481 | 481 |
+| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.909 | 58 | 58 |
+| gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | tunnel | 0.902 | 25 | 25 |
+| C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.874 | 454 | 454 |
+| C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.874 | 88 | 88 |
+| C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 0.831 | 304 | 304 |
+| 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 0.831 | 249 | 249 |
+| trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 0.831 | 140 | 140 |
 
 ## Warum das Verdikt so bleibt, wie es ist
 

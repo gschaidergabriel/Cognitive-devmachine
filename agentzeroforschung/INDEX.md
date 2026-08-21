@@ -108,6 +108,14 @@
    - zweiter Gegenbefund: Artikel-ID-Zitierung ist ein brauchbares lokales Proxy-Signal, aber kein unabhaengiger Outcome-Nachweis; falsche zitierte Evidenz kann sich selbst bestaetigen
    - vorgeschlagen: stabile provenance-/content-gebundene Kandidaten-IDs plus Falsifikatoren fuer Slot-Permutation und korrekter Beleg vs. plausibler Distraktor
 
+14. `analysen/2026-08-21T0848Z_GEN213_WERKZEUGSPUR_ABSICHTSONTOLOGIE.md`
+   - Generation 213 auf Export `b2f47c88f860ea888ff5a3803a54eb7abb106974`; Tests `747/1`
+   - erstmals reale Toolspur im Headless-Zero-Pfad; Memory-Herkunft und mechanische Absichtsabweichung koennen aus echten Tool-Uses statt nur Endtext abgeleitet werden
+   - harter neuer Gegenbefund `READ_EFFECT_CONFLATION`: `absicht.py` sagt reine Leser seien nie Verdacht, `_AUSSENWIRKUNG` klassifiziert aber WebSearch/WebFetch als Aussenwirkung
+   - zweiter Messfehler `SILENT_OBSERVER_FAILURE`: Absichts-Buchung kann mit `except Exception: pass` verschwinden und 0-Faelle von ungemessenen Faellen ununterscheidbar machen
+   - vorgeschlagen: orthogonale Tool-Ontologie (`READ_LOCAL`, `READ_EXTERNAL`, `WRITE_DURABLE`, `EFFECT_EXTERNAL`, `CONTROL`) plus `INTENT_TRACE_RECEIPT/v1`
+   - bekannter Warm-Session-Systemprompt-Alias bleibt im Gen-213-Source sichtbar
+
 ## Offene Forschungsfront
 
 - Generation 31 gegen Generation 32 auf Recovery-/Verhaltensdivergenz vergleichen;
@@ -119,6 +127,8 @@
 - vollen Commit+Tree hinter lokal gebundenem EntityOS-Prefix `6b9048c7ab2b...` exportieren;
 - GWT-Lernidentitaeten fuer Nicht-Korpus-Quellen stabilisieren: keine positionsabhaengigen IDs als persistente Lernschluessel;
 - GWT-Reward kausal testen: korrekter Beleg vs. plausibler zitierter Distraktor; Citation nur als Proxy, unabhaengiges Outcome-Signal bevorzugen;
+- `INTENT_TRACE_RECEIPT/v1` bauen und Fremdtext (`READ_EXTERNAL`) strikt von persistenter/externer Wirkung trennen; Beobachterfehler typisiert als `UNMEASURED/ERROR` statt fail-silent buchen;
+- Warm-Session-Systempromptpfad session- oder content-adressiert machen und mit Zwei-Session-Overlap-Falsifikator pruefen;
 - `EXPORT_RECEIPT/v1` ueber mindestens sechs regulaere Exporte binden, um I/O-/Lock-Jitter gegen einen datenabhaengigen Hotspot zu trennen;
 - Claude-Code-Runtime-Adapter-Test auf demselben isolierten Exact-Checkout mehrfach ausfuehren und Environment-Digest binden;
 - Pulsfehler (`database is locked`) ueber Vollzeitaggregate statt nur Rolling-Tail-Stichprobe messen;

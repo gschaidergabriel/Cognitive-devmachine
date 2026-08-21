@@ -73,6 +73,23 @@ Therefore schema appearance is runtime activation of pre-existing code, not code
 
 Unknown: which caller caused first materialization. This instrument exists to make that unknowable transition joinable next time.
 
+## Paired discriminator
+
+Use two GET/read paths against the same frozen disposable DB identity:
+
+A. `GET /readyz` / `_runtime_ready()` as the negative control. Current Gen247 source labels `_runtime_ready()` read-only and its UnifiedDB path consists of SELECTs; it should leave schema/data identity unchanged.
+
+B. `GET /api/bug` on a database where `eos_bug_hypothesen` has deliberately not been materialized. Current source reaches `lesen_fuer_nutzer() -> sicherstellen() -> CREATE TABLE/INDEX -> SELECT`.
+
+Record before/after schema hash, statement classes, SQLite write-transaction presence, lock wait and row delta.
+
+Expected discriminator if H-RSM1 is correct:
+
+- A: `declared=READ`, `observed=READ`, no schema delta.
+- B: `declared=READ`, `observed=MIXED/WRITE`, schema delta on first access only.
+
+Repeat B once after materialization. The second call should become observationally read-only if lazy initialization is the sole cause. This separates first-touch activation from a permanently mutating GET path.
+
 ## Preferred architecture
 
 Best: run explicit versioned migrations/startup schema creation before serving traffic, then use read-only/query-only connections for read surfaces.

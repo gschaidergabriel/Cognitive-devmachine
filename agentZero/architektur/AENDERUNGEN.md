@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T04:11:21Z aus drei Repos. 480 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (22)
+## reparatur (21)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -104,7 +104,6 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
 | 2026-08-18T04:11 | entityos | `759e0d25b399` | fix(clayverse): arbitrate browser attach against autonomy injection |
 | 2026-08-18T04:09 | entityos | `4e5da25db612` | Merge pull request #719 from gschaidergabriel/fix/autonomy-completion-target-bound-20260818 |
-| 2026-08-18T04:01 | entityos | `8b7368efdd20` | fix(clayverse): bind verified-effect completion to an explicit target |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
@@ -115,7 +114,7 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (23)
+## pruefung (21)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -127,8 +126,6 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T04:06 | entityos | `3c6f66c28466` | test(clayverse): prove intermediate effects cannot complete target-bound goals |
 | 2026-08-18T04:05 | entityos | `da20ed8df473` | test(clayverse): fence explicit goal ack and cancel ownership |
 | 2026-08-18T04:02 | entityos | `ce276a0f55d4` | test(clayverse): falsify leased autonomy hook dispatch and Stop reentry |
-| 2026-08-18T04:00 | entityos | `e3a26eb38f3f` | test(clayverse): falsify one-shot autonomy dispatch lease |
-| 2026-08-18T03:59 | entityos | `2120bd8faa8d` | test(clayverse): falsify typed autonomy plan-to-step compiler |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -143,10 +140,14 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (293)
+## bau (296)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T04:10 | entityos | `b6f8644e1d7e` | EOS-Chronik 2026-08-21 04:10:22 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T04:08 | entityos | `ca69c3848ff8` | EOS-Chronik 2026-08-21 04:08:21 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T03:58 | entityos | `f15196d19cd8` | EOS-Chronik 2026-08-21 03:58:44 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T03:48 | entityos | `e6f75c56ad1f` | EOS-Chronik 2026-08-21 03:48:29 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T03:35 | entityos | `58c1da25a70f` | EOS-Chronik 2026-08-21 03:35:30 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T03:10 | entityos | `56c34585ea58` | EOS-Chronik 2026-08-21 03:10:20 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T03:06 | unifieddb | `0a93b02ad07c` | EOS-Chronik 2026-08-21 03:06:31 +0000 — unifieddb: 1 Aenderungen |
@@ -203,8 +204,4 @@ Automatisch erzeugt 2026-08-21T03:41:20Z aus drei Repos. 480 Eintraege.
 | 2026-08-20T09:27 | entityos | `32cf78a73248` | EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T09:18 | entityos | `8dad66fecbca` | EOS-Chronik 2026-08-20 09:18:31 +0000 — entityos: 5 Aenderungen |
 | 2026-08-20T09:01 | entityos | `43ddbd4b0464` | EOS-Chronik 2026-08-20 09:01:21 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T08:46 | entityos | `093edbe9c7ed` | EOS-Chronik 2026-08-20 08:46:04 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T08:01 | entityos | `a61f1bd67095` | EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T07:59 | entityos | `0e4f89d44a11` | EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T07:51 | entityos | `53cea036ddd9` | CSWT-Z Teil 3: gueltiger Versuch -- der Engpass ist die Vorstufe, nicht der Arbeitsraum |
 

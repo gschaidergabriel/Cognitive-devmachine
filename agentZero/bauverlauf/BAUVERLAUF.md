@@ -1,12 +1,88 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T03:41:20Z. 1017 Commits aus vier Repos, davon 362 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T04:11:21Z. 1018 Commits aus vier Repos, davon 365 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 04:10:22 +0000 — entityos: 2 Aenderungen
+
+`b6f8644e1d7e` · entityos · 04:10 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/effect_journal.py
+  the artefact/clayverse/turn_lifecycle.py
+
+Zeit: 2026-08-21T04:10:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 04:08:21 +0000 — entityos: 1 Aenderungen
+
+`ca69c3848ff8` · entityos · 04:08 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/wake_signal.py
+
+Zeit: 2026-08-21T04:08:21+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 03:58:44 +0000 — entityos: 3 Aenderungen
+
+`f15196d19cd8` · entityos · 03:58 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/wake/schattenlauf.py
+  the artefact/clayverse/wake_condition.py
+  the artefact/tests/test_wake_niewerfen.py
+
+Zeit: 2026-08-21T03:58:44+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 03:48:29 +0000 — entityos: 2 Aenderungen
+
+`e6f75c56ad1f` · entityos · 03:48 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/wake_condition.py
+  the artefact/tests/test_wake_condition.py
+
+Zeit: 2026-08-21T03:48:29+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 03:35:30 +0000 — entityos: 3 Aenderungen
 
@@ -3956,204 +4032,5 @@ Richtungen kein Treffer. lagebild() nimmt KEIN Argument; Mensch und Sitzung
 kommen aus dem verifizierten Zustand, wie schon bei menschen_profil().
 
 Suite unveraendert 528 gruen / 14 rot.
-```
-
-### Erkundungsanteil gegen die eigene Karte - das Gegenmittel zum Echoproblem
-
-`830605735d81` · unifieddb · 10:06 UTC · EntityOS
-
-```
-Die Dokumentation nennt es die groesste Gefahr von allen Stellen:
-
-  "Eine selbstgeschriebene Karte ist die reinste Form des Echoproblems. Sie
-   wird aus dem gebaut, was vorher funktioniert hat. Also lenkt sie in
-   Gegenden, die schon einmal getragen haben -- und nicht in Gegenden, die nie
-   betreten wurden. Die werden dadurch nie betreten, erzeugen nie eine
-   Erfolgsmarke, und bestaetigen so ihre eigene Nutzlosigkeit.
-   Das System wird schneller -- auf einem SCHRUMPFENDEN Fragenkorridor."
-
-  Gegenmittel: "Ein FESTER ANTEIL der Eintritte wird GEGEN die Karte gewaehlt."
-
-Eingebaut: _ERKUNDUNGSANTEIL = 0.15. Gemessen 12 von 60 Fragen (20 %, bei n=60
-im Rauschen). Kosten auf Haelfte B: KEINE -- anker/genau/ausbeute/auffind
-identisch mit und ohne (23,3 / 85,7 / 20,0 / 23,3).
-
-DREI ENTSCHEIDUNGEN, DIE NICHT AUS DER DOKUMENTATION KOMMEN
-
-1. ⭐ FEST JE FRAGE, NICHT ZUFAELLIG JE AUFRUF.
-   Ein Wuerfel je Aufruf ist die naheliegende Lesart von "fester Anteil" -- und
-   hier falsch: dieselbe Frage bekaeme mal Erkundung, mal nicht. Damit ist der
-   Plan-Cache wertlos (jede Wiederholung ein anderer Weg) und jede Messung
-   verrauscht. Ein Hash der Frage gibt denselben Anteil ueber viele Fragen, aber
-   reproduzierbar je einzelner. Zufall und Reproduzierbarkeit schliessen sich
-   nicht aus -- man muss den Zufall nur an der Frage festmachen statt an der Uhr.
-
-2. ⭐ ZUSAETZLICH, NICHT ERSETZEND.
-   Streng gelesen muesste jeder siebte Eintritt den GUTEN Startpunkt wegwerfen.
-   Das kostet echte Antwortqualitaet. Der Lernwert entsteht aber schon, wenn der
-   ferne Eintritt DAZUKOMMT und die Erfolgsmarke festhaelt, WELCHER der beiden
-   getragen hat. Bewusste Abweichung von der striktesten Lesart, hier notiert,
-   damit man ihr widersprechen kann.
-
-3. ⭐ GERICHTET, NICHT BLIND.
-   Die Dokumentation sagt es selbst: der Anteil ist der Weg, auf dem sich die
-   6:1-Schieflage korrigieren laesst, "wenn die Erkundung gezielt auf
-   Gegenhypothesen-Gegenden gerichtet wird, statt zufaellig zu streuen". Also
-   zuerst eine Gegenhypothesen-Region, sonst die Region mit der schwaechsten
-   Wegweiserstaerke -- dorthin, wo die Karte gerade NICHT zeigt.
-
-Dazu vp_erfolgsmarke (F92b): welche Region, welcher Anker, aus Karte oder
-Erkundung, hat es getragen. Ohne diese Zeile ist Erkundung nur Mehrarbeit.
-
-⚠️ EIN AUSFALL, DER WIE EINE EINSTELLUNG AUSSAH
-
-Der Anteil soll in jeder Kartenversion stehen, damit man einer alten Version
-ansieht, ob sie mit Gegenmittel entstand. Meine erste Fassung las ihn per
-`from .paket import _ERKUNDUNGSANTEIL` und fing jeden Fehler mit `return 0.0`.
-Beim Direktstart des Skripts scheitert der relative Import -- und in die
-Kartenversion wurde 0.0 geschrieben, waehrend die Erkundung mit 0.15 lief.
-DIE VERSION LOG UEBER IHREN EIGENEN ZUSTAND.
-
-Zwei Korrekturen, die zweite ist die wichtigere:
-  - beide Importwege, und die Wurzel aus dem EIGENEN Dateipfad statt fest
-    eingetragen (der wahre Grund: paket.py liest auf Modulebene selbst aus
-    `udb`, also scheitert auch der scheinbar harmlose `import paket`)
-  - ⭐ "nicht lesbar" bekommt einen EIGENEN Wert: -1.0. Denn 0.0 heisst
-    "Erkundung bewusst abgeschaltet" und ist eine gueltige Einstellung. Beides
-    auf denselben Wert abzubilden macht genau den Unterschied unsichtbar, um
-    dessentwillen das Feld existiert. Ein Ausfall, der wie eine Einstellung
-    aussieht, ist schlimmer als ein Ausfall.
-  - und der Fehlschlag nennt jetzt seinen Grund auf stderr, statt ihn zu
-    verschlucken. Genau das hat die Ursache in einem Schritt geliefert, nachdem
-    ich vorher zweimal daneben geraten hatte.
-
-Die Versionsreihe zeigt die Reparatur an sich selbst:
-    v4  Erkundung= 0.0    (falsch -- Ausfall als Einstellung getarnt)
-    v6  Erkundung=-1.0    (Ausfall sichtbar)
-    v7  Erkundung= 0.15   (richtig)
-```
-
-### Credentials: symlink only .credentials.json (narrow, per owner decision A), wire authenticated_runtime_verified for real
-
-`3fa502e8f710` · entityos · 10:01 UTC · Video Launch Page
-
-```
-TerminalSessionManager._link_shared_credentials(): on every ensure(), symlinks
-{home}/.claude/.credentials.json -> /var/lib/clay/.claude/.credentials.json if
-the source exists and no real file already sits there. Only the one file --
-never the surrounding .claude dir -- so sessions/history/project state stay
-per-user; both gabriel and andreas share the one OAuth login, not each other's
-state. Missing source is a no-op, not a boot failure.
-
-readiness.py: authenticated_runtime_verified was a permanent False stub with a
-docstring saying so. Added _credentials_verified(path): local, non-networked,
-checks accessToken present + expiresAt (epoch ms) in the future. service.py
-passes TerminalSessionManager.CREDENTIALS_SOURCE so the boot-time flag now
-reflects the real shared credential, independent of per-user ensure() having
-run yet.
-
-Verified locally: symlink create/idempotent/no-clobber-real-file/missing-source
-all pass; _credentials_verified valid/expired/empty-token/missing/malformed all
-pass; claude_readiness wiring end-to-end passes. Full suite: same pre-existing
-failure set before and after (confirmed via git stash), zero new failures.
-```
-
-### Der Walk ging nur vorwaerts - ein Drittel des Graphen lag hinter ihm
-
-`e1bc60fa6773` · unifieddb · 10:00 UTC · EntityOS
-
-```
-GEFUNDEN BEIM VERSUCH, ETWAS ANDERES ZU BAUEN
-
-Ich wollte die Abrufkarte als Eintrittspunkt einhaengen und pruefte vorher, ob
-der Walk vom Kartenpunkt aus wenigstens IN DIE NAEHE kommt. Ergebnis:
-
-    27 Fragen bekamen einen Kartenanker
-      Ziel im begangenen Plan          0
-      Ziel EINE Kante vom Landepunkt   4
-      Ziel im Ergebnis                 1
-
-Vier Ziele lagen eine einzige Kante entfernt und der Walk fand kein einziges.
-Der Einzelfall zeigte warum: alle Kanten des Ankers zeigten AUF IHN ZU, und
-_walk traversiert `JOIN kante k ON k.von = w.node` -- ausschliesslich ausgehend.
-Der Walk lieferte 0 Knoten.
-
-KORPUSWEIT NACHGEMESSEN
-
-    Artikel im Graphen                                        13.713
-      nur EINGEHENDE Kanten -- vom Walk NIE erreichbar         4.075 = 29,7 %
-      nur ausgehende                                           4.338
-      beides                                                   5.300
-
-    Beidseitig gespeicherte Kanten, ueber ALLE 12 Arten:         0,0 %
-
-⭐ DIE HALBE WAHRHEIT IM DATENMODELL
-
-`geschwister_verzeichnis` heisst "liegt im selben Verzeichnis" -- wenn A neben B
-liegt, liegt B neben A. Gespeichert ist es 9.258 mal in eine Richtung und kein
-einziges Mal zurueck. Dasselbe bei `gleicher_inhalt` (1.759) und
-`geschwister_datei` (1.556). Rund 12.600 Kanten behaupten eine GEGENSEITIGE
-Beziehung und sind nur einseitig begehbar.
-
-REPARATUR: _walk begeht wechselseitige Kantenarten in beide Richtungen.
-
-NICHT durch Verdoppeln der Zeilen. Das haette 12.600 Kanten dupliziert, die
-Zaehler in vp_edge_lern mitverfaelscht (das Lernsignal wurde heute gerade erst
-repariert) und sich bei jedem Graph-Neuaufbau wiederholt. Die Symmetrie ist eine
-EIGENSCHAFT DER KANTENART, kein fehlender Datensatz -- also gehoert sie in die
-Abfrage, nicht in die Ablage.
-
-⚠️ NUR die Arten, die es wirklich sind: geschwister_verzeichnis,
-geschwister_datei, gleicher_inhalt, sprachpaar, widerspricht, attacks.
-AUSDRUECKLICH NICHT: nachfolge_version (loest ab), verdichtet_aus (78.052
-Kanten!), stuetzt, evidence, source_refs. Ihre Richtung IST die Aussage --
-rueckwaerts begangen wuerde aus "A stuetzt B" ein "B stuetzt A". Das waere kein
-Abrufgewinn, sondern eine Faelschung.
-
-⭐⭐ DAS MESSGERAET WAR DAS EIGENTLICHE HINDERNIS
-
-Auf dem Goldsatz zeigte die Reparatur exakt 0,0 Punkte Veraenderung. Genau wie
-die Kantengewichts-Reparatur vorher. ZWEI echte Walk-Fixes an einem Tag, beide
-"wirkungslos" -- das war kein Befund ueber die Fixes, sondern ueber das Geraet:
-der Goldsatz misst Frage -> Dokument und wird auf Tiefe 0 entschieden. Der
-richtige Artikel wird ueber den Namen gefunden oder gar nicht. Der Walk traegt
-zum Ergebnis nichts bei, also kann keine Walk-Reparatur dort sichtbar werden.
-
-NEU: udb/abruf/nachbarschaft.py misst den Walk direkt, ohne Umweg ueber eine
-Frage -- "steht B im Walk von A aus, wenn A und B eine Kante teilen?". Keine
-Formulierung, kein Modell, keine Mehrdeutigkeit. Eine Kante ist eine Kante.
-
-    OHNE Symmetrie   vorwaerts 100,0 %   rueckwaerts   2,5 %   66 leere Walks
-    MIT  Symmetrie   vorwaerts 100,0 %   rueckwaerts  80,8 %    0 leere Walks
-                                                      +78,3
-
-Latenz dabei nicht schlechter, sondern besser: Median 7,5 -> 0,8 ms.
-
-Lehre, die bleibt: wenn eine Aenderung mit guter Begruendung exakt 0,0 zeigt,
-ist die naechste Frage nicht "war die Aenderung falsch", sondern "sieht das
-Geraet ueberhaupt dorthin".
-
-KARTENANKER: EINGEBAUT, GEMESSEN, ZURUECKGEBAUT
-
-    ohne Karte   anker=23,3 %  genau=85,7 %  ausbeute=20,0 %  auffind=23,3 %
-    mit  Karte   anker=68,3 %  genau=29,3 %  ausbeute=20,0 %  auffind=23,3 %
-
-Die vorab festgelegte Regel lautete: eine Verbesserung muss BEIDE Zahlen heben.
-Hier verdreifacht sich die Ankerquote, die Genauigkeit bricht auf ein Drittel
-ein und der Ertrag bewegt sich um keinen Punkt. Lehrbuchfall einer Kennzahl, die
-man heben kann, ohne irgendetwas besser zu machen. Abgeschaltet.
-
-⚠️ Widerlegt ist damit nicht die Karte, sondern ihre Verw
-```
-
-### Security: publish the terminal port on loopback only
-
-`06771bdb1720` · entityos · 09:52 UTC · Video Launch Page
-
-```
-Docker's own iptables rules bypass ufw; <adresse>:3000 would have put the
-Clerk-gated terminal directly on the public internet, unauthenticated, next
-to the nginx front door that already reaches it correctly on <adresse>.
-nginx->tunnel-><adresse>:3000 is the only intended path in.
 ```
 

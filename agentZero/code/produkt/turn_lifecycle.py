@@ -16,6 +16,8 @@ from .memory import MemoryManager
 from .needle import NeedleRouter
 from .retrieval import WorldAssembler
 from .store import StaleGeneration, UnifiedDB
+from .wake_condition import KIND_RESOURCE_REVISION, RESOURCE_PREFIX_SESSION_TURN_COUNT
+from .wake_signal import WakeSignal
 from .workspace import Workspace
 
 _EXPLICIT_RESOURCE = re.compile(r"(?i)\b(repo|branch|deploy|machine|task|db|service|file|resource)\s*:\s*([^\s,;]+)")
@@ -44,6 +46,12 @@ class TurnLifecycle:
         self.db=db; self.user_id=user_id; self.session_id=session_id
         self.memory=MemoryManager(db); self.world=WorldAssembler(db); self.workspace=Workspace(db)
         self.effects=EffectGate(db,allow_process=False,entityos_bridge=entityos_bridge); self.graph=ClayGraphProjection(db)
+        # Ensure-Schema einmalig hier (Konstruktionszeit, keine offene Schreibklammer) --
+        # niemals innerhalb von begin_admission() anlegen, siehe deren Kommentar unten
+        # bei `_menschenzug` und store.py:tx(). Idempotent (CREATE TABLE IF NOT EXISTS),
+        # deshalb unbedenklich, dass EffectGate->EffectJournal dieselbe Tabelle bereits
+        # ueber eine eigene WakeSignal-Instanz angelegt hat.
+        self.wake=WakeSignal(db)
 
     def active(self): return self.db.db.execute("SELECT * FROM active_turns WHERE session_id=?",(self.session_id,)).fetchone()
 
@@ -192,6 +200,15 @@ class TurnLifecycle:
             db.execute("INSERT INTO active_turns(session_id,user_id,turn_id,episode_id,causal_id,generation,resource_refs,effect_id,outcome,workspace_selected,started_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)",(self.session_id,self.user_id,turn_id,episode_id,causal_id,generation,json.dumps(resource_refs),None,None,0,now))
             db.execute("UPDATE sessions SET updated_at=? WHERE session_id=?",(now,self.session_id))
             if autonomy_identity is None: self.memory.extract_explicit(turn_id,self.user_id,prompt)
+            if autonomy_identity is None:
+                # Ereignis-Haken: hier ist GENAU der mechanische Beleg fuer "ein Mensch
+                # hat etwas Neues gesagt" entstanden (role='user' oben; autonome
+                # Systemzuege loesen das bewusst NICHT aus -- die WakeCondition-Ressource
+                # `session_turn_count:<id>` zaehlt laut wake_condition.py nur role='user').
+                # `melden()` ist selbst fail-closed (siehe wake_signal.py), deshalb kein
+                # eigenes try/except hier -- ein Ausfall wird dort gezaehlt+gemeldet,
+                # niemals hier verschluckt oder hierhin durchgereicht.
+                self.wake.melden(KIND_RESOURCE_REVISION,RESOURCE_PREFIX_SESSION_TURN_COUNT+self.session_id,jetzt=now)
             self.memory.compact(self.session_id)
             if predecessor["aborted"]: self.graph.rebuild_in_tx()
             # ⚠️ HIER STAND FRUEHER DIE EXTRAKTION AUS DEM MENSCHENZUG -- also

@@ -9,6 +9,16 @@ class EffectJournal:
     NON_REWARDING_CAPABILITIES={'state.noop'}
     def __init__(self,db:UnifiedDB):
         self.db=db
+        # Verzoegerter (funktionslokaler statt Modul-oberer) Import: wake_condition.py
+        # importiert seinerseits `EffectJournal` (fuer EFFECT_TERMINAL_STATES), ein
+        # Import an der Modulspitze wuerde also effect_journal -> wake_signal ->
+        # wake_condition -> effect_journal ringschliessen, bevor die Klasse hier fertig
+        # definiert ist. Zur Konstruktionszeit (hier) sind alle drei Module bereits
+        # vollstaendig geladen, der Ring existiert dann nicht mehr. Einmalig hier
+        # gebaut -- nie im heissen Pfad (`_finish_tx` unten ruft nur noch `execute()`,
+        # kein `executescript()` mehr), siehe wake_signal.py-Docstring.
+        from .wake_signal import WakeSignal
+        self.wake=WakeSignal(db)
     @staticmethod
     def _payload(outcome): return json.dumps(outcome,sort_keys=True,separators=(',',':'))
     @classmethod
@@ -99,7 +109,15 @@ class EffectJournal:
         if row['status']!='PENDING': raise RuntimeError(f"effect is not pending: {row['status']}")
         audit_outcome=self._outcome_receipt(outcome)
         db.execute('UPDATE effects SET status=?,outcome=?,verified_at=? WHERE effect_id=?',(status,self._payload(audit_outcome),time.time(),effect_id))
-        return self._reenter_tx(db,effect_id,status,outcome)
+        cid=self._reenter_tx(db,effect_id,status,outcome)
+        # Ereignis-Haken: der Effekt hat GENAU HIER seinen Endzustand erreicht (status
+        # ist an dieser Stelle immer aus FINAL -- erzwungen durch die drei Aufrufer
+        # complete()/complete_verified()/recover_pending()). `melden()` ist fail-closed
+        # (siehe wake_signal.py) und darf diesen Zug nie kippen, deshalb kein try/except
+        # hier noetig -- die Absicherung sitzt bereits in `melden()` selbst.
+        from .wake_signal import KIND_EFFECT_TERMINAL
+        self.wake.melden(KIND_EFFECT_TERMINAL,effect_id,jetzt=time.time())
+        return cid
     def complete(self,effect_id,outcome,status):
         if status not in self.FINAL-{'VERIFIED'}: raise ValueError(status)
         with self.db.tx() as db: return self._finish_tx(db,effect_id,outcome,status)

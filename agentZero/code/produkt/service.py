@@ -22,6 +22,7 @@ from .baunotizen import sicherstellen as baunotizen_sicherstellen
 from .erfolge import grundstock as erfolge_grundstock
 from .raum import sicherstellen as raum_sicherstellen
 from .arbeitspaket import sicherstellen as arbeitspaket_sicherstellen
+from .sicht import sicherstellen as sicht_sicherstellen
 from .tresor import stand as tresor_stand
 from .store import UnifiedDB, resolve_db_path
 from .terminal_gateway import _PTY_INPUT_FRAME_MAX_BYTES, create_terminal_app
@@ -221,6 +222,11 @@ def main():
         # laufende Transaktion aufgerissen.
         raum_sicherstellen(db)
         arbeitspaket_sicherstellen(db)
+        # Die fuenf Ebenen der visuellen Wahrnehmung (clayverse/sicht.py).
+        # Auch hier gilt die Startregel: sicht.sicherstellen legt zehn
+        # Tabellen an und fuellt zwei Nachschlagewerke -- mitten in einem Zug
+        # waere das ein impliziter Commit auf einer offenen Transaktion.
+        sicht_sicherstellen(db)
     except Exception as exc:
         print(f"  Raum/Pakete: {type(exc).__name__}: {exc}")
     try:

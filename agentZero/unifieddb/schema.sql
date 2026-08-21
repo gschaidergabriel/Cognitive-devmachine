@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T07:50:35Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T08:20:31Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -494,6 +494,195 @@ CREATE TABLE schluessel_lauf (
         http INTEGER, ms REAL, einordnung TEXT, fehlertext TEXT
     , sonde TEXT, rest_kontingent TEXT);
 CREATE TABLE sessions(session_id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(user_id),created_at REAL NOT NULL,updated_at REAL NOT NULL,generation INTEGER NOT NULL DEFAULT 1,terminal_name TEXT NOT NULL UNIQUE);
+CREATE TABLE sicht_arbeitsraum (
+  eintrag_id    TEXT PRIMARY KEY,
+  aufnahme_id   TEXT NOT NULL,
+  kandidat_id   TEXT NOT NULL,
+  objekt_id     TEXT,
+  hypothese_id  TEXT,
+  turn_id       TEXT,
+  session_id    TEXT,
+  angemeldet_am REAL NOT NULL,
+  -- Die Zuendmerkmale aus der Architektur, Abschnitt „G": Neuheit,
+  -- Vorhersagefehler, Ungewissheit, Zielbezug, Risiko.
+  zuendungsgrund TEXT NOT NULL DEFAULT '{}',
+  zuendung      INTEGER NOT NULL DEFAULT 0,
+  broadcast_id  TEXT,
+  abgelehnt_grund TEXT,
+  entschieden_am REAL
+);
+CREATE TABLE sicht_aufnahme (
+  aufnahme_id   TEXT PRIMARY KEY,
+  datei_id      TEXT,
+  quelle_id     TEXT NOT NULL,
+  quelle_klasse TEXT NOT NULL,
+  bild_hash     TEXT,
+  breite        INTEGER,
+  hoehe         INTEGER,
+  user_id       TEXT,
+  turn_id       TEXT,
+  causal_id     TEXT,
+  session_id    TEXT,
+  stufe         TEXT NOT NULL,
+  stufe_version TEXT,
+  -- ⭐ Das ist die Rueckwaertsrichtung des Abrufs: was der Bestand VOR der
+  -- Analyse schon wusste und was deshalb in den Messauftrag ging. Ohne diese
+  -- Spalte laesst sich spaeter nicht mehr sagen, ob eine Erkennung aus dem
+  -- Bild kam oder aus der Erwartung (NR-RET-014, Prior-Dominanz).
+  abruf_kontext TEXT,
+  abruf_treffer INTEGER DEFAULT 0,
+  dauer_ms      REAL,
+  ergebnis      TEXT,
+  fehlergrund   TEXT,
+  begonnen_am   REAL NOT NULL,
+  beendet_am    REAL
+);
+CREATE TABLE sicht_evidenz (
+  evidenz_id        TEXT PRIMARY KEY,
+  aufnahme_id       TEXT NOT NULL,
+  quelle_id         TEXT NOT NULL,
+  quelle_epoche     INTEGER NOT NULL,
+  aufnahme_zeit     REAL,
+  eingang_zeit      REAL NOT NULL,
+  -- Nicht die Bildpunkte, nur ihr Fingerabdruck. Das Bild bleibt in der
+  -- Dateiablage; eine Datenbank ist der falsche Ort fuer Bilddaten, und ein
+  -- Hash reicht, um spaeter zu beweisen, dass es dasselbe Bild war.
+  rohbezug_hash     TEXT,
+  raum_bezug        TEXT,
+  transformation    TEXT NOT NULL,
+  transformation_version TEXT NOT NULL,
+  beobachtungsart   TEXT NOT NULL,
+  wert              TEXT NOT NULL,
+  bottom_up_praezision REAL,
+  -- ⚠️ NR-RET-012: YOLO-Konfidenz, CLIP-Kosinus und OCR-Guete sind NICHT
+  -- vergleichbar. Diese Spalte sagt, gegen welche Kalibrierung die Zahl
+  -- gelesen werden darf. Steht hier 'UNKALIBRIERT', ist die Zahl nur
+  -- innerhalb derselben Transformation ordnend, nicht ueber sie hinweg.
+  kalibrierung_ref  TEXT NOT NULL DEFAULT 'UNKALIBRIERT',
+  -- Konstant. Eine Spalte, die immer dasselbe sagt, ist hier Absicht: sie
+  -- steht in jeder Zeile, die jemand liest.
+  autoritaet        TEXT NOT NULL DEFAULT 'NUR_BEOBACHTUNG',
+  erzeugt_am        REAL NOT NULL
+);
+CREATE TABLE sicht_hypothese (
+  hypothese_id  TEXT PRIMARY KEY,
+  aufnahme_id   TEXT NOT NULL,
+  anker         TEXT NOT NULL,
+  art           TEXT NOT NULL,
+  -- ⭐⭐ F57, mechanisch: mengenwertige Lesarten
+  -- [{"lesart":..., "p":..., "aus":[evidenz_id,...]}, ...].
+  -- Eine Kaskadenstufe darf die Gewichte verschieben, aber keine Lesart
+  -- entfernen — siehe verengen(). In einer vierstufigen Kaskade ist ein
+  -- frueher Ausschluss an vier Stellen nicht mehr einholbar.
+  lesarten      TEXT NOT NULL,
+  lesarten_geschlossen INTEGER NOT NULL DEFAULT 0,
+  stuetzende_evidenz    TEXT NOT NULL DEFAULT '[]',
+  widersprechende_evidenz TEXT NOT NULL DEFAULT '[]',
+  bestand_stuetze       TEXT NOT NULL DEFAULT '[]',
+  sensor_praezision     REAL,
+  prior_praezision      REAL,
+  kontext_verstaerkung  REAL,
+  -- Anteil der Stuetzung, der aus dem Bestand statt aus dem Bild kommt.
+  -- NR-RET-014: ein starker Prior kann schwache Sensorik dominieren und die
+  -- Trefferquote heben, waehrend er falsche Vorannahmen mit durchwinkt.
+  -- Deshalb als Zahl gefuehrt und nicht als Gefuehl.
+  prior_dominanz        REAL,
+  zuversicht    REAL,
+  zustand       TEXT NOT NULL,
+  revision      INTEGER NOT NULL DEFAULT 1,
+  vorgaenger_id TEXT,
+  abgeloest_von TEXT,
+  erzeugt_am    REAL NOT NULL
+);
+CREATE TABLE sicht_kaskade_stufe (
+  stufe         TEXT PRIMARY KEY,
+  rang          INTEGER NOT NULL,
+  zweck         TEXT NOT NULL,
+  fehlerfall    TEXT NOT NULL,
+  aktiv         INTEGER NOT NULL DEFAULT 0,
+  gemessen_ms   REAL,
+  messgrundlage TEXT NOT NULL,
+  quelle        TEXT
+);
+CREATE TABLE sicht_merkmal (
+  merkmal_id   TEXT PRIMARY KEY,
+  aufnahme_id  TEXT NOT NULL,
+  anker        TEXT NOT NULL,
+  verfahren    TEXT NOT NULL,
+  dimension    INTEGER NOT NULL,
+  vektor       TEXT NOT NULL,
+  rahmen_hash  TEXT,
+  erzeugt_am   REAL NOT NULL
+);
+CREATE TABLE sicht_nutzung (
+  nutzung_id    TEXT PRIMARY KEY,
+  eintrag_id    TEXT,
+  objekt_id     TEXT,
+  evidenz_id    TEXT,
+  turn_id       TEXT,
+  causal_id     TEXT,
+  nutzungsart   TEXT NOT NULL,
+  beleg         TEXT,
+  -- ⭐ Wer das festgestellt hat. „MECHANISCH" heisst: eine Regel hat es
+  -- geprueft. Ein Modell, das behauptet, es habe etwas benutzt, ist kein
+  -- Beleg — genau davor warnt NR-RET-017.
+  festgestellt_von TEXT NOT NULL,
+  erzeugt_am    REAL NOT NULL
+);
+CREATE TABLE sicht_sichtbarkeit (
+  sichtbarkeit  TEXT PRIMARY KEY,
+  vorlage_en    TEXT NOT NULL,
+  messbar       INTEGER NOT NULL,
+  belegt_abwesenheit INTEGER NOT NULL,
+  zerfall       TEXT NOT NULL,
+  warum         TEXT NOT NULL
+);
+CREATE TABLE sicht_weltobjekt (
+  objekt_id     TEXT PRIMARY KEY,
+  quelle_id     TEXT NOT NULL,
+  semantische_identitaet TEXT,
+  erst_aufnahme_id TEXT NOT NULL,
+  erst_gesehen_am  REAL NOT NULL,
+  vorgaenger_id TEXT,
+  teilung_von   TEXT,
+  verschmelzung_von TEXT,
+  provenienz    TEXT NOT NULL DEFAULT '{}'
+);
+CREATE TABLE sicht_weltobjekt_stand (
+  stand_id      TEXT PRIMARY KEY,
+  objekt_id     TEXT NOT NULL,
+  gueltig_ab    REAL NOT NULL,
+  gueltig_bis   REAL,
+  sichtbarkeit  TEXT NOT NULL,
+  -- Nicht schmueckend: der Grund unterscheidet „VERDECKT, weil eine Kiste
+  -- davor steht" von „VERDECKT, weil wir es annehmen". Ohne Grund ist ein
+  -- Sichtbarkeitszustand eine Behauptung.
+  sichtbarkeit_grund TEXT,
+  raum_zustand  TEXT,
+  merkmale_mit_evidenz TEXT NOT NULL DEFAULT '[]',
+  beziehungen_mit_evidenz TEXT NOT NULL DEFAULT '[]',
+  letzte_positive_evidenz_epoche INTEGER,
+  letzte_explizit_negative_epoche INTEGER,
+  ungewissheit  REAL,
+  stuetzende_hypothese_id TEXT,
+  aufnahme_id   TEXT,
+  turn_id       TEXT,
+  causal_id     TEXT,
+  erzeugt_am    REAL NOT NULL
+);
+CREATE TABLE sicht_zuordnung (
+  zuordnung_id  TEXT PRIMARY KEY,
+  aufnahme_id   TEXT NOT NULL,
+  anker         TEXT NOT NULL,
+  objekt_id     TEXT,
+  entscheidung  TEXT NOT NULL,
+  begruendung   TEXT NOT NULL,
+  aehnlichkeit  REAL,
+  abstand_zum_zweiten REAL,
+  verfahren     TEXT NOT NULL,
+  verfahren_version TEXT,
+  erzeugt_am    REAL NOT NULL
+);
 CREATE TABLE speicher_rueckweg(pfad TEXT PRIMARY KEY, erfasst REAL NOT NULL, warum TEXT, modelle INTEGER, verzeichnis TEXT NOT NULL);
 CREATE TABLE speicherwacht_log(id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL, belegt_prozent REAL, frei_gb REAL, stufe TEXT, gehandelt INTEGER NOT NULL, befreit_gb REAL, bericht TEXT, df_gb REAL, gezaehlt_gb REAL, luecke_gb REAL, nicht_zaehlbar TEXT, bilanz_urteil TEXT);
 CREATE TABLE taetigkeit (
@@ -904,6 +1093,22 @@ CREATE INDEX mv_prestage_turns_routing_idx
     ON mv_prestage_turns(routing_key, epistemik_unbekannt_n);
 CREATE INDEX mv_prestage_turns_session_idx
     ON mv_prestage_turns(session_id, created_at);
+CREATE INDEX sicht_arbeitsraum_turn ON sicht_arbeitsraum(turn_id);
+CREATE INDEX sicht_aufnahme_quelle ON sicht_aufnahme(quelle_id);
+CREATE INDEX sicht_aufnahme_turn ON sicht_aufnahme(turn_id);
+CREATE INDEX sicht_evidenz_art ON sicht_evidenz(beobachtungsart);
+CREATE INDEX sicht_evidenz_aufnahme ON sicht_evidenz(aufnahme_id);
+CREATE INDEX sicht_hypothese_aufnahme ON sicht_hypothese(aufnahme_id);
+CREATE INDEX sicht_hypothese_offen
+  ON sicht_hypothese(abgeloest_von) WHERE abgeloest_von IS NULL;
+CREATE INDEX sicht_merkmal_aufnahme ON sicht_merkmal(aufnahme_id);
+CREATE INDEX sicht_merkmal_verfahren ON sicht_merkmal(verfahren);
+CREATE INDEX sicht_nutzung_turn ON sicht_nutzung(turn_id);
+CREATE INDEX sicht_stand_jetzt
+  ON sicht_weltobjekt_stand(objekt_id) WHERE gueltig_bis IS NULL;
+CREATE INDEX sicht_stand_objekt ON sicht_weltobjekt_stand(objekt_id);
+CREATE INDEX sicht_weltobjekt_quelle ON sicht_weltobjekt(quelle_id);
+CREATE INDEX sicht_zuordnung_aufnahme ON sicht_zuordnung(aufnahme_id);
 CREATE INDEX wm_guss_log_ix1 ON wm_guss_log(ergebnis, zeit);
 CREATE INDEX wm_lesart_ix1 ON wm_lesart(artikel_id, gueltig_bis);
 CREATE INDEX wm_lesart_ix2 ON wm_lesart(artikel_id, achse, gueltig_bis);
@@ -911,6 +1116,14 @@ CREATE INDEX wm_lesart_ix3 ON wm_lesart(achse, gueltig_bis);
 CREATE INDEX wm_topologie_ix1 ON wm_topologie(von, topologie, gueltig_bis);
 CREATE INDEX wm_topologie_ix2 ON wm_topologie(topologie);
 CREATE INDEX wm_topologie_ix3 ON wm_topologie(nach, topologie, gueltig_bis);
+CREATE TRIGGER sicht_evidenz_kein_aendern
+BEFORE UPDATE ON sicht_evidenz BEGIN
+  SELECT RAISE(ABORT, 'sicht_evidenz ist unveraenderlich: eine spaetere Deutung loest eine Hypothese ab, sie schreibt keine Beobachtung um');
+END;
+CREATE TRIGGER sicht_evidenz_kein_loeschen
+BEFORE DELETE ON sicht_evidenz BEGIN
+  SELECT RAISE(ABORT, 'sicht_evidenz ist unveraenderlich: was angekommen ist, bleibt');
+END;
 CREATE VIEW kondensat AS
 SELECT
     'messung'        AS kind,

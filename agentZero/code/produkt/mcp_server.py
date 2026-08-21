@@ -442,6 +442,62 @@ class ClayVerseEffectBridge:
         return _raum.sagen(self.db, session_id=self.session_id, mensch=self.user_id,
                            platz=self._mein_platz(), was=was, womit=womit, zustand=zustand)
 
+    def bild_ansehen(self, datei: str, frage: str = "",
+                      ort: str = "") -> dict:
+        """Ein Bild ansehen lassen und alle fuenf Wahrnehmungsebenen buchen.
+
+        `datei` ist die Kennung aus dem Eingang (das ist der Name in dem
+        Pfad, den die Oberflaeche an die Nachricht anhaengt) oder ein voller
+        Pfad. `ort` ist die Quelle -- zwei Fotos derselben Werkbank gehoeren
+        unter dieselbe Quelle, sonst kann nichts wiedererkannt werden.
+
+        ⭐ turn_id und causal_id werden HIER nachgeschlagen und nicht vom
+        Aufrufer erfragt. Ein Werkzeug laeuft in einem eigenen Prozess und hat
+        den Zugkontext nicht; active_turns ist die Registry, die ihn haelt.
+        Ohne diese Verknuepfung waere die fuenfte Frage -- was hat die Antwort
+        getragen -- nicht beantwortbar, weil die Aufnahme zu keinem Zug
+        gehoeren wuerde.
+        """
+        from . import sicht as _sicht
+        zug = self.db.db.execute(
+            "SELECT turn_id, causal_id FROM active_turns WHERE session_id=?",
+            (self.session_id,)).fetchone()
+        pfad = datei if datei.startswith("/") else None
+        return _sicht.sehen(
+            self.db, user_id=self.user_id,
+            datei_id=None if pfad else datei, pfad=pfad, frage=frage,
+            quelle_id=ort or None, session_id=self.session_id,
+            turn_id=zug["turn_id"] if zug else None,
+            causal_id=zug["causal_id"] if zug else None)
+
+    def bild_gedaechtnis(self, ort: str = "") -> dict:
+        """Was ist an dieser Quelle bisher gesehen worden, und was gilt jetzt?
+
+        ⚠️ Die Spalte `sichtbarkeit` ist NICHT als 'da' oder 'weg' zu lesen.
+        Nur ABWESEND_EXPLIZIT_NEGATIV belegt Abwesenheit; alles andere sagt
+        etwas ueber die Messung. Deshalb wird die Bedeutung mitgeliefert,
+        statt sie dem Leser zu ueberlassen.
+        """
+        from . import sicht as _sicht
+        quelle = ort or ("eingang:" + self.user_id)
+        zeilen = self.db.db.execute(
+            "SELECT o.objekt_id, o.semantische_identitaet, o.erst_gesehen_am, "
+            "       s.sichtbarkeit, s.sichtbarkeit_grund, s.ungewissheit, "
+            "       l.belegt_abwesenheit, l.messbar, l.warum "
+            "FROM sicht_weltobjekt o "
+            "LEFT JOIN sicht_weltobjekt_stand s "
+            "  ON s.objekt_id=o.objekt_id AND s.gueltig_bis IS NULL "
+            "LEFT JOIN sicht_sichtbarkeit l "
+            "  ON l.sichtbarkeit=s.sichtbarkeit "
+            "WHERE o.quelle_id=? ORDER BY o.erst_gesehen_am DESC LIMIT 50",
+            (quelle,)).fetchall()
+        return {"quelle": quelle,
+                "gegenstaende": [dict(z) for z in zeilen],
+                "lies_so": ("belegt_abwesenheit=1 heisst: jemand hat die "
+                            "Abwesenheit belegt. Bei 0 ist ueber Abwesenheit "
+                            "NICHTS gemessen worden -- auch dann nicht, wenn "
+                            "der Gegenstand zuletzt nicht auftauchte.")}
+
     def raum_rufen(self, text: str) -> dict:
         from . import raum as _raum
         return _raum.rufen(self.db, session_id=self.session_id, text=text)
@@ -942,6 +998,16 @@ def main() -> None:
     def raum_sagen(was: str, womit: str = "", zustand: str = "arbeitet") -> dict:
         """Sag den anderen drei Plaetzen in CAVEMAN ENGLISH, was du gerade tust. `womit` = die angefasste Sache (Datei, Tabelle, Dienst); meldet sofort zurueck, wenn ein anderer Platz sie schon haelt. zustand: arbeitet|wartet|frei."""
         return bridge.raum_sagen(was, womit, zustand)
+
+    @mcp.tool(annotations=udb_write)
+    def bild_ansehen(datei: str, frage: str = "", ort: str = "") -> dict:
+        """⭐ Ein Bild ansehen lassen. `datei` = Kennung oder Pfad aus dem Eingang, `frage` = wonach du suchst, `ort` = die Quelle (zwei Fotos derselben Werkbank: gleicher `ort`, sonst wird nichts wiedererkannt). Liefert Gegenstaende mit STABILEN Kennungen, keine Bildunterschrift. ⚠️ Was du zurueckbekommst, ist EVIDENZ und nie Wahrheit: CLIP und YOLO irren sich sichtbar oft. Und ein Gegenstand, der nicht auftaucht, ist NICHT weg -- er wurde nicht gefunden, das ist etwas anderes."""
+        return bridge.bild_ansehen(datei, frage, ort)
+
+    @mcp.tool(annotations=ro)
+    def bild_gedaechtnis(ort: str = "") -> dict:
+        """Was wurde an dieser Quelle bisher gesehen und was gilt gerade? Nimm es VOR bild_ansehen, wenn du wissen willst, was dort schon bekannt ist. ⚠️ `sichtbarkeit` ist keine Aussage ueber die Welt, ausser bei ABWESEND_EXPLIZIT_NEGATIV -- lies das Feld `lies_so`."""
+        return bridge.bild_gedaechtnis(ort)
 
     @mcp.tool(annotations=udb_write)
     def raum_rufen(text: str) -> dict:

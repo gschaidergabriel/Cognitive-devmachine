@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T07:50:35Z. **3331 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T08:20:31Z. **3345 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T13:47:48+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T14:50:01+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3233 |
+| baunotiz | 3247 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2008 |
-| baunotiz | bauverlauf.jsonl | 1180 |
+| baunotiz | git-commit | 2018 |
+| baunotiz | bauverlauf.jsonl | 1184 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3331 · Gegenhypothese: 0 von 3331
+## Hypothese: 0 von 3345 · Gegenhypothese: 0 von 3345
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T13:47:48+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### research: bind Gen232 file-session alias falsifier
+
+`baunotiz-bauverlauf-d00c776129ca9eb085a4` · baunotiz · bauverlauf.jsonl · 2026-08-21T14:50:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind Gen232 file-session alias falsifier
+
+`baunotiz-git-69dd03d4b06f196cdd074d31e0883521fc5c0e5b` · baunotiz · git-commit · 2026-08-21T14:50:01+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind Gen232 file-session alias falsifier
+
+### claycode supervisor: bind Gen232 service recovery and file-session alias
+
+`baunotiz-bauverlauf-6d348fbb8f72c68a92cb` · baunotiz · bauverlauf.jsonl · 2026-08-21T14:43:33+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen232 service recovery and file-session alias
+
+`baunotiz-git-cf493275d7976df1ea4e8a787ad9e21e6a0f45f1` · baunotiz · git-commit · 2026-08-21T14:43:33+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen232 service recovery and file-session alias
 
 ### research: analyze Gen227 verdichtung liveness regression
 
@@ -195,56 +227,27 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: bind Gen213 tool-trace intent ontology defect
 
-### claycode supervisor: bind Gen212 reauth red and warm-load guard
+### EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen
 
-`baunotiz-bauverlauf-c19fe595d6d03cc937f3` · baunotiz · bauverlauf.jsonl · 2026-08-21T07:53:00+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen212 reauth red and warm-load guard
-
-`baunotiz-git-80443246d14be324f744e2faaae60355ca921596` · baunotiz · git-commit · 2026-08-21T07:53:00+07:00 · Gabriel Gschaider
+`baunotiz-git-3b4cbc5c21c05cdee691137cb41bf5cf3a3fa43e` · baunotiz · git-commit · 2026-08-21T08:09:54+00:00 · BACK agent
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-claycode supervisor: bind Gen212 reauth red and warm-load guard
-
-### research: bind Gen212 warm-pool load guard and reauth red
-
-`baunotiz-bauverlauf-b6e80abaab0a6dde0b42` · baunotiz · bauverlauf.jsonl · 2026-08-21T07:48:20+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind Gen212 warm-pool load guard and reauth red
-
-`baunotiz-git-2d6f524f0b3db8de1640d3b0d1e5a097bd48e70e` · baunotiz · git-commit · 2026-08-21T07:48:20+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen212 warm-pool load guard and reauth red
-
-### EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen
-
-`baunotiz-git-abdf357f66b6f6603fba7a932fa1d73d36d4abd6` · baunotiz · git-commit · 2026-08-21T07:43:28+00:00 · BACK agent
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen
+EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen
 
 Anlass: Wache: Aenderung beobachtet
 
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/tests/test_verlauf.py
+  the artefact/clayverse/mcp_server.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/clayverse/service.py
+  the artefact/policy/managed-settings.json
+  the artefact/tests/test_sicht.py
 
-Zeit: 2026-08-21T07:43:28+00:00
+Zeit: 2026-08-21T08:09:54+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
-Dateien: 2
+Dateien: 5
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 

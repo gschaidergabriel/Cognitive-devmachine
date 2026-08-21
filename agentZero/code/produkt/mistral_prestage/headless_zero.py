@@ -38,6 +38,12 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__raum_sagen",
     "mcp__clayverse__raum_rufen",
     "mcp__clayverse__raum_frei",
+    # ⭐ Sehen. Ohne diese zwei kann Zero ein hochgeladenes Bild zwar mit Read
+    # oeffnen, aber nichts davon bleibt: kein Gegenstand mit stabiler Kennung,
+    # keine Evidenzspur, kein Wiedererkennen beim naechsten Foto. Der
+    # Unterschied ist der zwischen Anschauen und Gedaechtnis.
+    "mcp__clayverse__bild_ansehen",
+    "mcp__clayverse__bild_gedaechtnis",
     # (Arbeitspakete entfernt 19.08.: Zero handelt jetzt direkt mit nativen Tools.)
     # Faehigkeiten kennen, ohne Schluessel zu sehen.
     "mcp__clayverse__tresor_katalog",

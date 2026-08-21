@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T10:20:31Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T10:50:32Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -8,29 +8,29 @@ Automatisch erzeugt 2026-08-21T10:20:31Z aus `udb/abruf/wegehierarchie.py`.
 
 Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.
 
-Wege gesamt: **363**
+Wege gesamt: **365**
 
 ## Verteilung nach Rang
 
 | Rang | Anzahl |
 |---|---|
 | tunnel | 6 |
-| autobahn | 239 |
-| langsame strasse | 70 |
-| schnellstrasse | 48 |
+| autobahn | 240 |
+| langsame strasse | 72 |
+| schnellstrasse | 47 |
 
-Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
+Oberes Zehntel haelt 0.139 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
 
 ## Staerkste Wege
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 744 | 744 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 602 | 602 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 805 | 805 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 747 | 747 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 605 | 605 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 808 | 808 |
 | C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.997 | 136 | 136 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.994 | 476 | 476 |
-| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.963 | 57 | 57 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.995 | 478 | 478 |
+| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.967 | 58 | 58 |
 | gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | autobahn | 0.947 | 23 | 23 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.93 | 454 | 454 |
 | C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.93 | 88 | 88 |

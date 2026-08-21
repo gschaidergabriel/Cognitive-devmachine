@@ -1,12 +1,69 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T10:20:31Z. 1044 Commits aus vier Repos, davon 416 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T10:50:31Z. 1046 Commits aus vier Repos, davon 419 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 10:27:32 +0000 — entityos: 1 Aenderungen
+
+`0240478a7857` · entityos · 10:27 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_omnimind.py
+
+Zeit: 2026-08-21T10:27:32+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 10:25:32 +0000 — entityos: 1 Aenderungen
+
+`554961db1797` · entityos · 10:25 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/bahnen.json
+
+Zeit: 2026-08-21T10:25:32+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 10:23:31 +0000 — entityos: 4 Aenderungen
+
+`d1004dcf6f23` · entityos · 10:23 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/schluessel_anlernen.py
+  betrieb/schluessel_spool.py
+  the artefact/clayverse/bahnen.json
+  the artefact/clayverse/omnimind.py
+
+Zeit: 2026-08-21T10:23:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 10:18:20 +0000 — entityos: 3 Aenderungen
 
@@ -2862,61 +2919,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/clayverse/mistral_prestage/pipeline.py
 
 Zeit: 2026-08-20T00:25:38+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:23:12 +0000 — entityos: 1 Aenderungen
-
-`00580769dba2` · entityos · 00:23 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/prestage.py
-
-Zeit: 2026-08-20T00:23:12+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:21:11 +0000 — entityos: 2 Aenderungen
-
-`e912b2e4daaf` · entityos · 00:21 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/prestage.py
-  the artefact/web/chat/demo-bilder/welcome-andreas.png
-
-Zeit: 2026-08-20T00:21:11+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 00:18:27 +0000 — entityos: 1 Aenderungen
-
-`e784e7f381a9` · entityos · 00:18 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/fence_hook.py
-
-Zeit: 2026-08-20T00:18:27+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

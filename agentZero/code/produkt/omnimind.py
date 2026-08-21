@@ -177,15 +177,104 @@ def _projekt_nachkommen(db, projekt_id: str) -> list[str]:
     return ziel
 
 
+def _ausriss(text: str | None, worte: list[str], breite: int = 260) -> str:
+    """Ausschnitt um den ersten Wortfund, Fundstellen mit <mark> markiert.
+    Ohne Suchworte (Filter-Browse ohne Text, siehe _ohne_suchworte_filtern)
+    einfach der Textanfang -- KEIN leeres Regex-Muster, das sonst jedes
+    Zeichen "treffen" wuerde."""
+    text = text or ""
+    if not worte:
+        ausschnitt = text[:breite]
+        return ausschnitt + ("…" if len(text) > breite else "")
+    low = text.lower()
+    pos = -1
+    for w in worte:
+        pos = low.find(w)
+        if pos >= 0:
+            break
+    if pos < 0:
+        ausschnitt, start = text[:breite], 0
+    else:
+        start = max(0, pos - breite // 3)
+        ausschnitt = text[start:start + breite]
+    # Fundstellen markieren (Klartext-Marker <mark>, das Frontend rendert es).
+    def _mark(m):
+        return f"<mark>{m.group(0)}</mark>"
+    muster = re.compile("|".join(re.escape(w) for w in worte), re.IGNORECASE)
+    ausschnitt = muster.sub(_mark, ausschnitt)
+    praefix = "…" if start > 0 else ""
+    suffix = "…" if start + breite < len(text) else ""
+    return praefix + ausschnitt + suffix
+
+
+def _zugehoerigkeit_je(db, ids: list[str]) -> tuple[dict, dict]:
+    """Gehoert-/Sphaeren-Chips fuer eine Menge Artikel-Ids -- EINE Anfrage je
+    Tabelle statt N, gemeinsam genutzt von suche() und _ohne_suchworte_filtern."""
+    gehoert_je, sphaeren_je = {}, {}
+    if not ids:
+        return gehoert_je, sphaeren_je
+    ph = ",".join("?" * len(ids))
+    for row in db.db.execute(
+        f"SELECT artikel_id, gehoert, sicherheit FROM entityos_artikel_zuordnung "
+        f"WHERE artikel_id IN ({ph})", ids).fetchall():
+        gehoert_je[row["artikel_id"]] = {"wer": row["gehoert"], "sicherheit": row["sicherheit"]}
+    for row in db.db.execute(
+        f"SELECT artikel_id, sphaere FROM artikel_sphaere WHERE artikel_id IN ({ph})",
+        ids).fetchall():
+        sphaeren_je.setdefault(row["artikel_id"], []).append(row["sphaere"])
+    return gehoert_je, sphaeren_je
+
+
+def _ohne_suchworte_filtern(db, frage: str, zusatz_where: str, parameter: list,
+                             grenze: int, offset: int) -> dict:
+    """Browse-Zweig von suche(): kein Text zum Ranken, aber mindestens ein
+    Filter aktiv (Person/Zweig/Art/Projekt/Zeitraum/Dateien) -- vorher lief
+    das ins Leere, weil suche() ganz ohne Suchworte sofort abgelehnt hat und
+    JEDER Filter mangels folgender Abfrage nie bei der API ankam. Sortiert
+    nach Graph-Anbindung (mehr Kanten in vp_weg = zentraler) dann nach
+    Aktualitaet -- es gibt kein bm25 ohne Suchbegriff."""
+    where = zusatz_where[5:] if zusatz_where.startswith(" AND ") else "1=1"
+    gesamt = db.db.execute(f"SELECT COUNT(*) n FROM artikel a WHERE {where}", parameter).fetchone()["n"]
+    zeilen = db.db.execute(
+        "SELECT a.id AS artikel_id, a.titel, a.art, a.projekt, a.status, a.epistemic_class, "
+        "a.erzeugt_am, a.konfidenz, a.quelle, a.metadaten, "
+        "(SELECT s.text FROM artikel_suchtext s WHERE s.artikel_id = a.id) AS text "
+        f"FROM artikel a WHERE {where} "
+        "ORDER BY (SELECT COUNT(*) FROM vp_weg v WHERE v.von=a.id OR v.nach=a.id) DESC, "
+        "a.erzeugt_am DESC LIMIT ? OFFSET ?",
+        (*parameter, grenze, offset)).fetchall()
+    ids = [r["artikel_id"] for r in zeilen]
+    gehoert_je, sphaeren_je = _zugehoerigkeit_je(db, ids)
+    treffer = []
+    for r in zeilen:
+        aid = r["artikel_id"]
+        lesbar, herkunft = _lesbarer_text(
+            quelle=r["quelle"], metadaten=_metadaten_parsen(r["metadaten"]),
+            titel=r["titel"], art=r["art"], roh_text=r["text"])
+        treffer.append({
+            "id": aid, "titel": r["titel"], "art": r["art"], "projekt": r["projekt"],
+            "status": r["status"], "epistemic_class": r["epistemic_class"],
+            "erzeugt_am": r["erzeugt_am"], "konfidenz": r["konfidenz"],
+            "ausriss": _ausriss(lesbar, []), "text_herkunft": herkunft,
+            "gehoert": gehoert_je.get(aid), "sphaeren": sphaeren_je.get(aid, []),
+            "graph_gewicht": None, "score": None,
+        })
+    return {
+        "frage": frage, "worte": [], "treffer": treffer, "gesamt": gesamt,
+        "offset": offset, "limit": grenze, "modus": "filter_durchsuchen",
+        "rang": {"methode": "Filterliste ohne Suchworte -- Graph-Anbindung, dann neueste zuerst",
+                 "llm": None},
+        "hinweis": ("kein Suchtext -- gefilterte Liste" if gesamt else
+                     "kein Suchtext, und dieser Filter trifft nichts im Bestand"),
+    }
+
+
 def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = None,
           art: str | None = None, projekt_id: str | None = None,
           seit: str | None = None, bis: str | None = None,
           hat_dateien: bool | None = None, hat_bilder: bool | None = None,
           limit: int = 20, offset: int = 0, llm_umsortieren: bool = False) -> dict:
     worte = _worte(frage)
-    if not worte:
-        return {"frage": frage, "treffer": [], "gesamt": 0,
-                "hinweis": "keine brauchbaren Suchworte (zu kurz oder nur Fuellwoerter)"}
 
     bedingungen, parameter = [], []
     if gehoert:
@@ -219,6 +308,19 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
             "OR lower(a.quelle) LIKE '%.jpeg' OR lower(a.quelle) LIKE '%.svg' "
             "OR lower(a.quelle) LIKE '%.gif' OR lower(a.quelle) LIKE '%.webp')")
     zusatz_where = (" AND " + " AND ".join(bedingungen)) if bedingungen else ""
+
+    if not worte:
+        # ⭐ Ein Filter OHNE Suchworte (z.B. ein Klick in der Projekt-
+        # Hierarchie, oder eine Person-/Zweig-Chip ohne eingetippten Text)
+        # ist eine legitime BROWSE-Anfrage, kein Fehleingabe -- vorher brach
+        # das hier sofort mit "keine brauchbaren Suchworte" ab und liess
+        # jeden Filter ins Leere laufen, weil gar keine Abfrage mehr folgte.
+        # Ganz ohne Worte UND ohne Filter bleibt es die ehrliche Ablehnung.
+        if bedingungen:
+            return _ohne_suchworte_filtern(db, frage, zusatz_where, parameter,
+                                            max(1, min(int(limit), 60)), max(0, int(offset)))
+        return {"frage": frage, "treffer": [], "gesamt": 0,
+                "hinweis": "keine brauchbaren Suchworte (zu kurz oder nur Fuellwoerter)"}
 
     grenze = max(1, min(int(limit), 60))
     pool = grenze * 4 + offset  # groesserer Kandidatenpool, damit die Graph-Neusortierung etwas zu sortieren hat
@@ -319,40 +421,7 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
     # Zugehoerigkeits-Chips fuer die sichtbaren Treffer -- eine Anfrage statt
     # N, damit eine Trefferseite kein N+1-Problem wird.
     zeigen = [r["artikel_id"] for r in seite]
-    gehoert_je = {}
-    sphaeren_je = {}
-    if zeigen:
-        ph = ",".join("?" * len(zeigen))
-        for row in db.db.execute(
-            f"SELECT artikel_id, gehoert, sicherheit FROM entityos_artikel_zuordnung "
-            f"WHERE artikel_id IN ({ph})", zeigen).fetchall():
-            gehoert_je[row["artikel_id"]] = {"wer": row["gehoert"], "sicherheit": row["sicherheit"]}
-        for row in db.db.execute(
-            f"SELECT artikel_id, sphaere FROM artikel_sphaere WHERE artikel_id IN ({ph})",
-            zeigen).fetchall():
-            sphaeren_je.setdefault(row["artikel_id"], []).append(row["sphaere"])
-
-    def _ausriss(text, breite=260):
-        text = text or ""
-        low = text.lower()
-        pos = -1
-        for w in worte:
-            pos = low.find(w)
-            if pos >= 0:
-                break
-        if pos < 0:
-            ausschnitt, start = text[:breite], 0
-        else:
-            start = max(0, pos - breite // 3)
-            ausschnitt = text[start:start + breite]
-        # Fundstellen markieren (Klartext-Marker <mark>, das Frontend rendert es).
-        def _mark(m):
-            return f"<mark>{m.group(0)}</mark>"
-        muster = re.compile("|".join(re.escape(w) for w in worte), re.IGNORECASE)
-        ausschnitt = muster.sub(_mark, ausschnitt)
-        praefix = "…" if start > 0 else ""
-        suffix = "…" if start + breite < len(text) else ""
-        return praefix + ausschnitt + suffix
+    gehoert_je, sphaeren_je = _zugehoerigkeit_je(db, zeigen)
 
     treffer = []
     for r in seite:
@@ -364,7 +433,7 @@ def suche(db, frage: str, *, gehoert: str | None = None, sphaere: str | None = N
             "id": aid, "titel": r["titel"], "art": r["art"], "projekt": r["projekt"],
             "status": r["status"], "epistemic_class": r["epistemic_class"],
             "erzeugt_am": r["erzeugt_am"], "konfidenz": r["konfidenz"],
-            "ausriss": _ausriss(lesbar), "text_herkunft": herkunft,
+            "ausriss": _ausriss(lesbar, worte), "text_herkunft": herkunft,
             "gehoert": gehoert_je.get(aid), "sphaeren": sphaeren_je.get(aid, []),
             "graph_gewicht": round(grad.get(aid, 0.0), 3),
             "score": round(scores.get(aid, 0.0), 3),

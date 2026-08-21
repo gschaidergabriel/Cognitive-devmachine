@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T10:20:30Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T10:50:31Z aus drei Repos. 480 Eintraege.
 
 ## architektur (13)
 
@@ -102,23 +102,24 @@ Automatisch erzeugt 2026-08-21T10:20:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (8)
+## pruefung (6)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T08:50 | entityos | `26a6861b88b0` | Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
-| 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
-| 2026-08-18T03:33 | entityos | `b55d57bd410e` | Test: Vertrag sagt advisory/release review, nicht nur advisory review |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (321)
+## bau (323)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T10:27 | entityos | `0240478a7857` | EOS-Chronik 2026-08-21 10:27:32 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T10:25 | entityos | `554961db1797` | EOS-Chronik 2026-08-21 10:25:32 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T10:23 | entityos | `d1004dcf6f23` | EOS-Chronik 2026-08-21 10:23:31 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T10:18 | entityos | `f895a5115ebf` | EOS-Chronik 2026-08-21 10:18:20 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T10:16 | entityos | `70b1e28b98b0` | EOS-Chronik 2026-08-21 10:16:05 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T10:07 | entityos | `f43d21ca1cf1` | EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen |
@@ -176,7 +177,4 @@ Automatisch erzeugt 2026-08-21T10:20:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T03:48 | entityos | `e6f75c56ad1f` | EOS-Chronik 2026-08-21 03:48:29 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T03:35 | entityos | `58c1da25a70f` | EOS-Chronik 2026-08-21 03:35:30 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T03:10 | entityos | `56c34585ea58` | EOS-Chronik 2026-08-21 03:10:20 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T03:06 | unifieddb | `0a93b02ad07c` | EOS-Chronik 2026-08-21 03:06:31 +0000 — unifieddb: 1 Aenderungen |
-| 2026-08-21T03:01 | entityos | `74d24056de0d` | EOS-Chronik 2026-08-21 03:01:15 +0000 — entityos: 6 Aenderungen |
-| 2026-08-21T03:01 | unifieddb | `5d2e5ea71986` | EOS-Chronik 2026-08-21 03:01:11 +0000 — unifieddb: 1 Aenderungen |
 

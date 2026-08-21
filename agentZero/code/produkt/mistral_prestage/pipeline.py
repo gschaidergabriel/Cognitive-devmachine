@@ -725,7 +725,21 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     #                    Schwelle. Erst das ist ein GLOBALER Arbeitsraum.
     # Als Schalter gebaut, damit der Unterschied gemessen und nicht behauptet
     # wird -- der eine Arm ist die Kontrolle des anderen.
-    _weit = os.environ.get("CLAYVERSE_ARBEITSRAUM", "korpus").strip().lower() == "alles"
+    # ⭐⭐⭐ VORGABE SEIT 2026-08-21: `alles`. Bis dahin stand hier `korpus`,
+    # weil eine Messung "kein Unterschied" ergeben hatte. Diese Messung lief
+    # aber VOR drei Fixes, die genau die nicht-Korpus-Bewerber betrafen:
+    # der Umlautvergleich (das Gedaechtnis schreibt "Prüfrechner", die Frage
+    # sagt "Pruefrechner" -- kein einziges Wort traf), die Siebung der
+    # Buchfuehrung (76 % des Gedaechtnisses waren Pruefsummen) und die
+    # Echo-Sperre. Nachgemessen mit denselben Sonden:
+    #     alles   13/15 richtig, 10/15 MIT QUELLE, 10,9 s je Zug
+    #     korpus  11/16 richtig,  6/16 mit Quelle, 16,2 s je Zug
+    # gepaart 5 von 6 abweichenden Paaren fuer `alles`. Besser UND schneller.
+    # Damit ist auch der gemeldete Kanalmangel behoben: `memory_artefacts`
+    # hatte im engen Modus keinen mechanischen Weg zu Zero -- im weiten ist
+    # eine Gedaechtnisstelle ein Bewerber wie jeder andere und wird, wenn sie
+    # gewinnt, materialisiert.
+    _weit = os.environ.get("CLAYVERSE_ARBEITSRAUM", "alles").strip().lower() == "alles"
     _roh = (list(world.get("_gw_kandidaten") or []) if _weit
             else list(world.get("corpus") or []))
     # ⭐ Das Selbstbild: `voll` (Vorgabe) laesst es unangetastet im Kontext

@@ -1,12 +1,109 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T01:41:18Z. 1005 Commits aus vier Repos, davon 347 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T02:11:18Z. 1010 Commits aus vier Repos, davon 352 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 02:11:15 +0000 — entityos: 4 Aenderungen
+
+`c95366043e52` · entityos · 02:11 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/tests/test_buchfuehrung.py
+  the artefact/tests/test_gw_arbeitsraum.py
+
+Zeit: 2026-08-21T02:11:15+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:08:16 +0000 — clayverse: 1 Aenderungen
+
+`f712e0bb96d0` · clay · 02:08 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  werkzeug/vorprozessor.py
+
+Zeit: 2026-08-21T02:08:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 1
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:05:48 +0000 — entityos: 3 Aenderungen
+
+`791543802404` · entityos · 02:05 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/eos_wal.py
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_luecke.py
+
+Zeit: 2026-08-21T02:05:48+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 01:44:12 +0000 — entityos: 2 Aenderungen
+
+`87e91a1159ad` · entityos · 01:44 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+  the artefact/tests/test_geheimliste.py
+
+Zeit: 2026-08-21T01:44:12+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 01:42:12 +0000 — entityos: 2 Aenderungen
+
+`073ea0fae460` · entityos · 01:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/eos_chronikindex.py
+  the artefact/clayverse/fence_hook.py
+
+Zeit: 2026-08-21T01:42:12+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 01:39:58 +0000 — entityos: 9 Aenderungen
 
@@ -4305,209 +4402,5 @@ Suite 395/98 zurueck auf 479 gruen / 14 rot.
    ein Prompt es bittet. Die Erkennung muss das aushalten, nicht das Modell.
    Jetzt markdown-fest, an allen fuenf Belegen geprueft, und "NEED_BETTER_PACKAGE"
    mitten im Satz loest weiterhin NICHT aus.
-```
-
-### memory_tabelle trennt nach Mensch - Cross-user-Leck geschlossen
-
-`2e8fd4d1127a` · unifieddb · 07:49 UTC · EntityOS
-
-```
-Gemessen: Andreas bekam Gabriels private Eintraege woertlich. Der Tabelle fehlte
-die Spalte user_id, memory_suche filterte gar nicht. Suche, Schreiben und
-Loeschen nehmen user_id jetzt als Pflichtfeld, ohne Vorgabewert.
-```
-
-### Drei Fehler in der Gedaechtnisextraktion - alle heute gebaut, alle gemessen gefunden
-
-`df1585faf395` · entityos · 07:43 UTC · EntityOS
-
-```
-Die Extraktion lief seit dem Ausrollen: 8 erfolgreiche Bahnaufrufe, 0 Eintraege.
-Kein Fehler, keine Ausnahme, keine Logzeile. Genau die Fehlerform, gegen die der
-Fehlerjaeger angesetzt wurde - und er hat sie in meinem eigenen frischen Code
-gefunden, keine Stunde alt.
-
-1) FALSCHER SCHLUESSEL. complete() liefert `assistant_turn_id`, ich las
-   `turn_id`. Also ging bei JEDEM Aufruf turn_id="" hinein.
-   Was das gekostet haette, wenn es geblieben waere:
-     - jede Gedaechtniszeile mit leerem Fremdschluessel, kein Rueckweg zum Gespraech
-     - _add_memory_once entdoppelt auf (kind,value,source_turn_id,user_id) -- bei
-       konstant leerem source_turn_id waeren zwei voellig verschiedene Fakten aus
-       verschiedenen Zuegen faelschlich als derselbe behandelt worden
-     - retrieval, Verdichtungs-Freigabe und Hyperposition schlagen alle auf
-       source_turn_id nach und haetten still ins Leere gegriffen
-   Nichts davon haette je geworfen. Der Rueckgabewert eintraege=N haette wie ein
-   Lebenszeichen ausgesehen.
-
-2) NUR DIE ANTWORT, NIE DIE FRAGE. Extrahiert wurde ausschliesslich aus Zeros
-   eigener Antwort. Fakten stehen aber in dem, was der MENSCH sagt. Zusammen mit
-   der strengen Woertlichkeitspruefung heisst das: wiederholt Zero eine Angabe
-   nicht zeichengenau, wird nie etwas gefunden. Das erklaert die 8:0 exakt.
-   Jetzt laeuft die Extraktion ueber beide Seiten - die Frage bei der Aufnahme,
-   die Antwort beim Abschluss.
-
-3) VERWUERFE VERSCHWANDEN. `verworfen` wurde berechnet und an den Aufrufer
-   zurueckgegeben, der sie wegwarf. Genau diese Zahl ist das Qualitaetssignal:
-   sie zaehlt, wie oft der Extraktor etwas erfinden wollte und gestoppt wurde.
-   Ohne sie sieht ein halluzinierender Extraktor genauso aus wie ein ruhiger.
-   Neue Tabelle gedaechtnis_ausbeute haelt Zug, Rolle, Bahn, Modell, genommen,
-   verworfen und die Verwurfsgruende fest.
-
-Alle drei Zweige kippen den Zug nie: Gedaechtnis ist wertvoll, ein verlorener
-Zug waere teurer.
-
-Suite unveraendert 479 gruen / 14 rot.
-```
-
-### Das Gedaechtnis fuellt sich endlich - aus Gespraech, nicht aus Markersyntax
-
-`003602800f48` · entityos · 07:29 UTC · EntityOS
-
-```
-BEFUND, beziffert: 0 von 24 Zuegen enthalten einen Marker. Die vorhandene
-Extraktion greift nur, wenn jemand woertlich "FACT:" an einen Zeilenanfang
-schreibt. Kein Mensch tut das, Zero auch nicht.
-
-EINE URSACHE, FUENF STILLSTEHENDE SYSTEME:
-  durable_memory 0  ->  nichts abzurufen
-                    ->  alle 12 Abrufepisoden UNKNOWN
-                    ->  0 gelernte Eintrittspunkte
-                    ->  keine Wegehierarchie moeglich (F94)
-                    ->  Verdichtung kommt nie durch ihr Extraktionstor
-Das erklaert rueckwirkend jede Null, die heute Nacht in der Lernkette stand.
-
-GEBAUT: clayverse/gedaechtnis.py. Extraktion ueber den Bahnrouter, nicht ueber
-Zero selbst - wer den Zug geschrieben hat, soll nicht auch entscheiden, was davon
-erinnernswert ist.
-
-DIE GEFAHR UND DIE ABWEHR
-Ein Modell, das Fakten extrahiert, erfindet Fakten. Und ein erfundener Fakt im
-dauerhaften Gedaechtnis ist schlimmer als gar keiner: er wird spaeter abgerufen
-und dann geglaubt, mit Provenienz und allem.
-Deshalb lautet die Regel nicht "extrahiere gut", sondern WOERTLICHKEIT: jeder
-Eintrag muss eine Belegstelle mitliefern, und die muss zeichengenau im Quelltext
-vorkommen. Was das nicht erfuellt, wird verworfen - auch wenn es klug klingt.
-Die Verwuerfe werden gezaehlt; steigt die Zahl, ist das ein Befund ueber das
-Modell, nicht ueber den Text.
-
-BEWIESEN mit einem Extraktor, der absichtlich luegt:
-  drei Eintraege angeboten, einer davon woertlich belegt
-  -> 1 genommen, 2 verworfen ("Beleg steht nicht im Text")
-  -> "Kubernetes" und "12 Server" sind NICHT ins Gedaechtnis gelangt
-An echtem Text: 4 Eintraege, 0 verworfen, je mit Belegstelle
-  decision  Zero headless, Oberflaeche wird Chat
-  fact      Uebersetzer 0,98
-  fact      Andreas ist <adresse>
-  open_question  ob die Wegehierarchie Tunnel bekommt
-
-DAZU EIN ECHTER ROUTERFEHLER, gefunden weil die Extraktion nichts bekam:
-groq_gptoss_20b liefert HTTP 200, verbraucht 973 Token und gibt content="" --
-ein Reasoning-Modell, dessen Budget im Denkkanal aufgeht. Der Router buchte das
-als Erfolg und befragte die Ausweichbahn nie. Also: EINE LEERE ANTWORT IST EIN
-FEHLSCHLAG, DER WIE EIN ERFOLG AUSSIEHT. Wird jetzt wie jeder Ausfall behandelt -
-gebucht und weiter zur naechsten Bahn, mit der Ursache im Ergebnis unter
-verworfene_bahnen. Danach lief die Extraktion ueber mistral_small durch.
-
-VERDRAHTET an EINER Stelle: turn_lifecycle.complete(), nach der Transaktion
-(ein Netzaufruf gehoert nicht in eine offene Transaktion), Fehler kippen den Zug
-nie, Schalter CLAYVERSE_MEMORY_EXTRACT mit Vorgabe AUS - sonst telefonieren Tests
-ins Netz, und ein Testlauf, der Kontingent verbraucht, wird bald nicht mehr
-ausgefuehrt. In compose fuer die Produktion eingeschaltet.
-
-Suite unveraendert 479 gruen / 14 rot.
-```
-
-### Bahnrouter: Zero fragt nach einer Faehigkeit, nie nach einem Anbieter
-
-`23e9b61c6aae` · entityos · 06:06 UTC · EntityOS
-
-```
-Der Clay-Unterbau haelt eine durchdachte Verdrahtung - 22 Zugaenge, 11 kognitive
-Prozesse, je mit Erst-, Zweit- und Drittbahn und Anteilsdeckel. Sie war aber reine
-Dokumentation: nichts erzwang die Deckel, sie hatte genau einen Verbraucher, und
-Zeros Container erreichte keine einzige Bahn.
-
-WAS GEBAUT IST
-- bahnen.json wird aus verdrahtung.py AUSGELEITET, nicht abgeschrieben. Die
-  Wahrheit bleibt im Unterbau (/opt/clayverse ist fuer das Produkt nur lesbar),
-  der Export ist wiederholbar.
-- bahnen.py: Auswahl nach Verdrahtung, Tagesbuchfuehrung je Bahn und Prozess,
-  erzwungene Anteilsdeckel, Ablehnung statt stillem Abstieg.
-- MCP-Werkzeuge bahn_faehigkeit und bahn_lage, beide in permissions.allow. Zero
-  ruft eine FAEHIGKEIT ("kondensieren", "zweitmeinung"), nie einen Anbieter.
-  Sonst waehlt auf Dauer die Formulierung des Prompts den Anbieter, und niemand
-  kann sagen, warum eine Rechnung gestiegen ist.
-
-DREI REGELN, DIE DAS VON EINER ANBIETERLISTE UNTERSCHEIDEN
-1. Das Modell waehlt nicht. Code waehlt.
-2. Deckel werden gezaehlt, nicht erklaert. Ein Deckel, den niemand zaehlt, ist
-   ein Vorsatz. Bewiesen: kuenstlich auf 1 gesetzt, zweiter Aufruf abgelehnt.
-3. Erschoepft heisst Ablehnung. Kein heimliches Ausweichen auf etwas
-   Schlechteres - das liefert weiter Antworten, nur schlechtere, und faellt erst
-   auf, wenn niemand mehr weiss warum.
-
-GEMESSEN, NICHT ANGENOMMEN
-Jede Bahn einmal wirklich angerufen. Der Unterbau fuehrte Zustaende vom 15.08.;
-seither hat Groq zwei Modelle abgeschaltet:
-  groq_llama31_8b   llama-3.1-8b-instant     404, Modell entfallen
-  groq_llama33_70b  llama-3.3-70b-versatile  404, Modell entfallen
-  groq_gptoss_20b   200 in 260 ms
-  groq_gptoss_120b  200 in 261 ms
-  groq_qwen3_6_27b  200 in 217 ms
-  groq_compound     200 in 375 ms
-  mistral_small     200 in 325 ms
-  deepseek_chat     402 Insufficient Balance
-"Ein Modellname aus einer Liste ist keine Zusage" steht so im Entscheidungs-
-katalog des Hauses. Hier ist der Beleg dazu, drei Tage spaeter.
-
-AUSWEICHBAHN BEWIESEN, nicht behauptet:
-  kondensieren -> groq_llama31_8b (nicht_nutzbar) -> mistral_small, 555 ms, deutsch
-  zweitmeinung -> mistral_small, 1742 ms, deutsch
-
-EIN EIGENER IRRTUM, KORRIGIERT
-Ich hatte gemeldet, der Clerk-Geheimschluessel sei ungueltig. Falsch. HTTP 403
-mit "error code: 1010" ist Cloudflares Browser-Integritaetspruefung, die
-Python-urllib am User-Agent abweist - kein Anmeldeproblem. Mit eigenem
-User-Agent: Clerk 200 mit echten Daten, Groq antwortet im Klartext, dass das
-MODELL fehlt. Der Router setzt jetzt einen User-Agent, und der Grund steht als
-Kommentar daneben.
-Damit war endlich auch die Zuordnung gegen Clerk selbst pruefbar:
-  gabriel  user_3C1pnXkHAaS...  <adresse>
-  andreas  user_3C5R4TCSv9y...  <adresse>, Dr. Andreas Unterweger
-Beide bestaetigt.
-
-Suite unveraendert 479 gruen / 14 rot.
-```
-
-### prestage: upgrade governor model to mistral-medium, fix slot-2 session check
-
-`2339aea31bf2` · entityos · 05:27 UTC · BACK agent
-
-```
-Measured 2026-08-18 during the P5 live proof: mistral-small-latest collapsed
-the 8-key F74 envelope into one field and produced degenerate repetitive
-text under the combined round-1 negotiation + hypothesis-correlation
-instructions. F74s own economics argue for the opposite of the translator
-here -- the prestage is meant to be the one EXPENSIVE call. Moved
-PRESTAGE_MODEL to mistral-medium-latest and added an explicit
-"eight top-level keys, do not collapse them" instruction. Re-tested: all
-eight keys returned correctly. translator.py stays on mistral-small
-(proven 96-98% on the simpler caveman-to-German task, no change needed).
-
-headless_zero.py and pipeline.py both still had the pre-slot-2
-single-session check (session_id != f"session:{user_id}"), left over from
-before identity.ist_kanonische_sitzung()/platz existed. Both now import
-clayverse.identity (read-only) and use ist_kanonische_sitzung() instead,
-so session:andreas:2 / session:gabriel:2 are accepted like slot 1.
-
-Real P5 proof, session:andreas:2, record_via_turnlifecycle=True:
-German in -> German out, turn_id a990c14c.../5e01602e... (user/assistant),
-causal_id 0b677019..., workspace_episode 04b31f84... COMPLETED,
-mv_prestage_turns bd50e912..., mv_translation_log e2ed7d4c...
-elapsed_ms: prestage 4148 / zero 24275 / translate 2237 / total 30689.
-Three earlier failed attempts (session-check bug, credential-permission
-bug, missing-keys bug) each began and cleanly ABORTED via
-lifecycle.abort() -- no dangling active_turns, confirms the atomicity
-path works under real failure, not just the happy path.
 ```
 

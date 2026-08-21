@@ -476,6 +476,37 @@ def _ist_buchfuehrung(m: dict) -> bool:
     return bool(_HASH.match(wert.lower()))
 
 
+# ⭐⭐⭐ EINE AUFZEICHNUNG DES NICHTWISSENS IST KEIN BELEG.
+# Gemessen 2026-08-21: der Artikel `zero-luecke-43949efb3584` mit dem Titel
+# **"Wissensluecke: hallo"** stand ACHTMAL im Wettbewerb und wurde ACHTMAL
+# ausgestrahlt -- 8 von 66 Ausstrahlungen insgesamt. Die Anlage hat also einer
+# Begruessung eine Notiz beigelegt, in der steht, dass sie etwas nicht weiss.
+#
+# Der Abruf kennt diese Regel laengst (`retrieval.KEIN_WISSEN_ART`), aber nur
+# auf EINEM seiner Wege: die FTS-Abfrage filtert, die Anreicherung ueber
+# `paket()` nicht. Ein Filter, der nur einen von zwei Zufluessen abdeckt, ist
+# in einer Anlage mit zwei Zufluessen keiner.
+#
+# Deshalb steht die Regel jetzt AUCH hier, an der Grenze des Arbeitsraums --
+# der einzigen Stelle, die alle Zuflüsse sieht. Doppelt geprueft ist hier
+# richtig: es ist keine Geschmacksfrage, sondern eine Typfrage. Was eine
+# Luecke BESCHREIBT, kann sie nicht SCHLIESSEN.
+_KEIN_BELEG_ART = ("zero_luecke", "luecke", "gap")
+_KEIN_BELEG_KLASSE = ("MECHANICAL_GAP_HYPOTHESIS",)
+
+
+def _ist_luecke(t: dict) -> bool:
+    art = str(t.get("art") or "").strip().lower()
+    if art in _KEIN_BELEG_ART:
+        return True
+    klasse = str(t.get("epistemic_class") or "").strip().upper()
+    if klasse in _KEIN_BELEG_KLASSE:
+        return True
+    # Der Titel ist der letzte Rueckhalt: die Kennung traegt die Art nicht
+    # immer mit, der Titel dieser Notizen aber schon.
+    return str(t.get("titel") or "").strip().lower().startswith("wissensluecke")
+
+
 QUELLEN_DECKEL = {"korpus": 6, "gedaechtnis": 8, "verlauf": 3,
                   "kollision": 3, "lesart": 4, "selbstbild": 12}
 _KANDIDAT_TEXT_MAX = 600
@@ -512,7 +543,11 @@ def kandidaten(world: dict[str, Any], marken: set | None = None) -> list[dict[st
     """
     raus: list[dict[str, Any]] = []
 
-    for t in (world.get("corpus") or [])[:QUELLEN_DECKEL["korpus"]]:
+    # Erst sieben, dann deckeln -- sonst frisst eine Lueckennotiz einen der
+    # sechs Plaetze, ohne je etwas beitragen zu koennen.
+    _korpus = [t for t in (world.get("corpus") or [])
+               if isinstance(t, dict) and not _ist_luecke(t)]
+    for t in _korpus[:QUELLEN_DECKEL["korpus"]]:
         if isinstance(t, dict) and t.get("artikel_id"):
             k = dict(t)
             # Form vereinheitlichen: `relevanz` liest genau diese Felder, und

@@ -74,7 +74,9 @@ def _arbeitsraum_regel() -> str:
     anderes beschreibt als der Kontext zeigt, schlimmer ist als keine Regel.
     """
     import os as _os
-    if _os.environ.get("CLAYVERSE_ARBEITSRAUM", "korpus").strip().lower() == "alles":
+    # Vorgabe `alles` -- muss mit pipeline._vorstufen_world uebereinstimmen,
+    # sonst beschreibt die Regel etwas anderes als der Kontext zeigt.
+    if _os.environ.get("CLAYVERSE_ARBEITSRAUM", "alles").strip().lower() == "alles":
         return _WEITER_ARBEITSRAUM
     return ""
 

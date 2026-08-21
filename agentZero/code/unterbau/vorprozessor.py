@@ -1519,6 +1519,11 @@ def systeme(c: sqlite3.Connection, budget: int = CAP_SYSTEME) -> list[dict]:
 # Timer diese Funktion einfach alle 4s aufrufen kann, ohne dass hier vorab neu
 # gebaut werden muesste. `kuration.rowid` als Fortschrittsmarke: die Tabelle hat
 # keinen deklarierten Integer-PK, rowid ist der ehrlichste verfuegbare Zaehler.
+# Wie lange zwischen zwei Leermeldungen mindestens liegen muss. 900 s bei 4 s
+# Takt heisst: eine Zeile je ~225 Leertakte statt 225 Zeilen.
+LEER_BUENDEL_S = 900.0
+
+
 def puls(c: sqlite3.Connection) -> dict:
     _ensure_vp_tables(c)
     t0 = time.perf_counter()
@@ -1527,9 +1532,43 @@ def puls(c: sqlite3.Connection) -> dict:
     neu = c.execute("SELECT rowid,artikel_id,klasse,status FROM kuration WHERE rowid > ? ORDER BY rowid", (seit,)).fetchall()
     if not neu:
         us = (time.perf_counter() - t0) * 1e6
-        c.execute("INSERT INTO vp_ereignis(zeit,art,detail) VALUES (?,?,?)",
-                  (_now(), "puls_leer", json.dumps({"kosten_us": round(us, 1)})))
-        c.commit()
+        # ⭐⭐ LEERTAKTE WERDEN GEBUENDELT, NICHT EINZELN GESCHRIEBEN.
+        # Gemessen 2026-08-21: `vp_ereignis` hielt **128.109 Zeilen `puls_leer`
+        # gegen 195 `puls_arbeit`** -- 99,8 % der Eintraege sagen "nichts
+        # passiert". Bei 4 s Takt sind das ~20.000 Schreibvorgaenge mit Commit
+        # pro Tag, und zwar auf genau die Datei, deren WAL sich nicht
+        # zuruecksetzen laesst, solange ein Leser offen ist (und es ist immer
+        # einer offen). Ergebnis: der WAL wuchs auf 17,5 GB, die Platte lief auf
+        # 87 %, echte Zuege scheiterten an "database is locked", und der Puls
+        # verlor 48 % seiner eigenen Takte die Datenbank -- er hat sich das
+        # Problem selbst gebaut, indem er seine Untaetigkeit protokollierte.
+        #
+        # Der BELEG bleibt erhalten und ist sogar besser als vorher: die Zeile
+        # traegt jetzt, wie lange seit der letzten Leermeldung vergangen ist.
+        # Daraus ergibt sich die Zahl der Takte (Abstand / Taktdauer), ohne je
+        # Takt eine Zeile zu kosten. Aus 20.000 Schreibvorgaengen taeglich
+        # werden 96.
+        letzte = c.execute(
+            "SELECT zeit FROM vp_ereignis WHERE art='puls_leer' "
+            "ORDER BY rowid DESC LIMIT 1").fetchone()
+        # ⚠️ `_now()` liefert einen ISO-Zeitstempel als TEXT, keinen Unix-Wert.
+        # Erster Anlauf rechnete `float(_now())` -- das wirft, der Rueckfall
+        # setzte "unbekannt", und die Buendelung haette NIE gegriffen. Genau die
+        # Sorte stiller Nulleffekt, die wir heute schon dreimal hatten.
+        vergangen = None
+        if letzte and letzte[0]:
+            try:
+                from datetime import datetime as _dt
+                vorher = _dt.strptime(str(letzte[0]), "%Y-%m-%dT%H:%M:%S%z")
+                jetzt = _dt.strptime(_now(), "%Y-%m-%dT%H:%M:%S%z")
+                vergangen = round((jetzt - vorher).total_seconds(), 1)
+            except (TypeError, ValueError):
+                vergangen = None
+        if vergangen is None or vergangen >= LEER_BUENDEL_S:
+            c.execute("INSERT INTO vp_ereignis(zeit,art,detail) VALUES (?,?,?)",
+                      (_now(), "puls_leer", json.dumps(
+                          {"kosten_us": round(us, 1), "seit_letzter_s": vergangen})))
+            c.commit()
         return {"art": "leer", "delta": 0, "kosten_us": round(us, 1)}
 
     betroffene: Counter = Counter()

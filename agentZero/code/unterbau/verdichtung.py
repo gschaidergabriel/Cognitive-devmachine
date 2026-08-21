@@ -53,6 +53,33 @@ ABSENDER = "clayverse-verdichtung/1.0"
 # ⚠️ Mistral veroeffentlicht seine Freigrenzen NICHT (siehe
 # bau/ZUGAENGE-GEMESSEN.md). Es steht deshalb KEINE erfundene RPM in dieser
 # Datei. 429 wird abgefangen, zurueckgenommen und in vd_grenze gelernt.
+# ⭐ RUECKFALL, 2026-08-21 nachgebaut. Er war seit jeher VORGESEHEN --
+# `werkzeug/ratgeber.py` sagt es woertlich: "MISTRAL_API_KEY gehoert
+# verdichtung.py, MISTRAL2 ist dessen Rueckfall." Gebaut war er nie.
+#
+# Was das gekostet hat: der Chat-Endpunkt des ersten Kontos antwortet seit
+# dem 19.08. mit HTTP 402 ("Check your subscription"). Der Schluessel LEBT --
+# die /models-Sonde der Schluesselwacht ist gruen -- nur Chat-Vervollstaendi-
+# gungen verlangen dort ein Abo. Die Verdichtung lief deshalb alle 10 Minuten,
+# meldete "gearbeitet" und richtete nichts aus; der Rueckstau wuchs auf das
+# 7- bis 17-Fache der jeweiligen Schwelle. Zwei gesunde Mistral-Schluessel
+# lagen die ganze Zeit daneben (MISTRAL2 gemessen 50.000 Token/min).
+#
+# WARUM NICHT EINFACH UMHAENGEN: die Kontingent-Ordnung dieses Systems gibt
+# jedem Dienst einen EIGENEN Topf, damit sie sich nicht gegenseitig die
+# Grenze wegfressen (siehe wikiarbeit.py: "Ausschliesslich GROQ3_API_KEY").
+# MISTRAL3 gehoert dem Ratgeber und bleibt unangetastet. Der Rueckfall
+# greift deshalb NUR, wenn der eigene Schluessel nicht arbeiten kann --
+# nicht als zweiter Topf im Normalbetrieb.
+RUECKFALL_ENV = "MISTRAL2_API_KEY"
+
+# HTTP-Antworten, bei denen ein Wechsel ueberhaupt sinnvoll ist: das Konto
+# darf nicht (402 Abo, 401 ungueltig, 403 gesperrt). NICHT dabei: 429 --
+# eine Ratenbremse ist kein kaputtes Konto, die wird zurueckgenommen und in
+# vd_grenze gelernt, wie bisher. Wer bei 429 das Konto wechselt, verlagert
+# nur die Last und lernt nichts.
+WECHSEL_BEI = (401, 402, 403)
+
 BAHN = {
     "name": "mistral",
     "env": "MISTRAL_API_KEY",
@@ -710,6 +737,26 @@ def einen_ruf(c: sqlite3.Connection, strom: str, schluessel: str,
         return "fehler"
 
     res = rufen(schluessel, frage)
+    # ⭐ RUECKFALL -- siehe RUECKFALL_ENV oben. Er sitzt hier und nicht im
+    # Zyklus, weil nur hier der Ruf und seine Frage beisammen sind. Ein
+    # erster Versuch, ihn eine Ebene hoeher zu legen, waere ein NameError
+    # ausschliesslich auf dem FEHLERPFAD geworden -- also genau in dem
+    # Moment, in dem man ihn braucht, und bis dahin unsichtbar.
+    #
+    # Genau EIN Wechsel, dann ist Schluss: durchprobieren wuerde die Ursache
+    # verschleiern. `grenze_lernen` sieht bewusst das ERGEBNIS nach dem
+    # Wechsel, damit die 429-Kurve zum tatsaechlich benutzten Konto passt.
+    if (res.get("http") in WECHSEL_BEI) and not res.get("ok"):
+        rueckfall = umgebung().get(RUECKFALL_ENV)
+        if rueckfall and rueckfall != schluessel:
+            print("   RUECKFALL auf %s (eigenes Konto darf nicht: HTTP %s)"
+                  % (RUECKFALL_ENV, res.get("http")))
+            res2 = rufen(rueckfall, frage)
+            if res2.get("ok"):
+                print("   Rueckfall trug.")
+                res = res2
+            else:
+                print("   Rueckfall trug NICHT: HTTP %s" % res2.get("http"))
     grenze_lernen(c, res.get("http") or 0, res.get("warte"))
     buchen(1, "verdichtung/%s" % strom)
 

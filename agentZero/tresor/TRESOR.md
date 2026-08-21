@@ -1,6 +1,6 @@
 # Tresor-Kataloge
 
-Automatisch erzeugt 2026-08-21T04:50:29Z. Zwei AES-256-GCM-Tresore unter `/etc/entityos/tresor` -- `katalog()` zeigt WAS es gibt und WAS es KANN (Modell, Limits je Minute/Tag, Zweck), nie den Wert selbst. `oeffnen()`/`wert()` liefern den Klartext und werden von diesem Export nie aufgerufen.
+Automatisch erzeugt 2026-08-21T05:20:29Z. Zwei AES-256-GCM-Tresore unter `/etc/entityos/tresor` -- `katalog()` zeigt WAS es gibt und WAS es KANN (Modell, Limits je Minute/Tag, Zweck), nie den Wert selbst. `oeffnen()`/`wert()` liefern den Klartext und werden von diesem Export nie aufgerufen.
 
 ## api (28 Eintraege)
 

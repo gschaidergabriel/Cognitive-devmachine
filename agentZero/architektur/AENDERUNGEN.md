@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T04:50:28Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T05:20:28Z aus drei Repos. 480 Eintraege.
 
 ## architektur (16)
 
@@ -114,7 +114,7 @@ Automatisch erzeugt 2026-08-21T04:50:28Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (21)
+## pruefung (18)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -123,9 +123,6 @@ Automatisch erzeugt 2026-08-21T04:50:28Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T06:48 | entityos | `ac5224698ec5` | claycode supervisor: sync control boundary and bind latest Vercel guard evidence |
 | 2026-08-18T04:27 | entityos | `984da7ebe451` | test(clayverse): pin split-arbiter pulse activation denial |
 | 2026-08-18T04:20 | entityos | `80ef3ebf7a9a` | test(clayverse): falsify bounded in-process autonomy pulse |
-| 2026-08-18T04:06 | entityos | `3c6f66c28466` | test(clayverse): prove intermediate effects cannot complete target-bound goals |
-| 2026-08-18T04:05 | entityos | `da20ed8df473` | test(clayverse): fence explicit goal ack and cancel ownership |
-| 2026-08-18T04:02 | entityos | `ce276a0f55d4` | test(clayverse): falsify leased autonomy hook dispatch and Stop reentry |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -140,10 +137,16 @@ Automatisch erzeugt 2026-08-21T04:50:28Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (296)
+## bau (299)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T05:11 | entityos | `53082f39cf90` | EOS-Chronik 2026-08-21 05:11:50 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T05:09 | entityos | `bad70d45698a` | EOS-Chronik 2026-08-21 05:09:50 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T05:07 | entityos | `a9dcd89328c7` | EOS-Chronik 2026-08-21 05:07:54 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T05:07 | clay | `13f2f0d95a99` | EOS-Chronik 2026-08-21 05:07:50 +0000 — clayverse: 1 Aenderungen |
+| 2026-08-21T04:58 | entityos | `2278c47244d3` | EOS-Chronik 2026-08-21 04:58:43 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T04:56 | entityos | `b8af77281914` | EOS-Chronik 2026-08-21 04:56:43 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T04:12 | entityos | `6d16006a852d` | EOS-Chronik 2026-08-21 04:12:22 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T04:10 | entityos | `b6f8644e1d7e` | EOS-Chronik 2026-08-21 04:10:22 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T04:08 | entityos | `ca69c3848ff8` | EOS-Chronik 2026-08-21 04:08:21 +0000 — entityos: 1 Aenderungen |
@@ -198,10 +201,4 @@ Automatisch erzeugt 2026-08-21T04:50:28Z aus drei Repos. 480 Eintraege.
 | 2026-08-20T10:27 | entityos | `3ed9e1f291e1` | EOS-Chronik 2026-08-20 10:27:10 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T10:02 | entityos | `4694b4089d88` | EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen |
 | 2026-08-20T09:55 | entityos | `00ab2d848de2` | EOS-Chronik 2026-08-20 09:55:48 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T09:51 | entityos | `b957d1e8faaf` | EOS-Chronik 2026-08-20 09:51:15 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T09:49 | entityos | `e2b0bdcc3d6c` | EOS-Chronik 2026-08-20 09:49:14 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T09:44 | entityos | `e607cedf8e69` | EOS-Chronik 2026-08-20 09:44:29 +0000 — entityos: 2 Aenderungen |
-| 2026-08-20T09:42 | entityos | `4284660be863` | EOS-Chronik 2026-08-20 09:42:23 +0000 — entityos: 4 Aenderungen |
-| 2026-08-20T09:27 | entityos | `32cf78a73248` | EOS-Chronik 2026-08-20 09:27:00 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T09:18 | entityos | `8dad66fecbca` | EOS-Chronik 2026-08-20 09:18:31 +0000 — entityos: 5 Aenderungen |
 

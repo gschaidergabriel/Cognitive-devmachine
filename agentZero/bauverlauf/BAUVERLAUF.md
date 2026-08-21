@@ -1,12 +1,123 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T04:50:28Z. 1022 Commits aus vier Repos, davon 366 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T05:20:29Z. 1024 Commits aus vier Repos, davon 372 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 05:11:50 +0000 — entityos: 1 Aenderungen
+
+`53082f39cf90` · entityos · 05:11 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_retrieval_fts_schwach.py
+
+Zeit: 2026-08-21T05:11:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:09:50 +0000 — entityos: 1 Aenderungen
+
+`bad70d45698a` · entityos · 05:09 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_retrieval_fts_schwach.py
+
+Zeit: 2026-08-21T05:09:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:07:54 +0000 — entityos: 2 Aenderungen
+
+`a9dcd89328c7` · entityos · 05:07 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/wake/governor_vs_puls.py
+  the artefact/clayverse/retrieval.py
+
+Zeit: 2026-08-21T05:07:54+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:07:50 +0000 — clayverse: 1 Aenderungen
+
+`13f2f0d95a99` · clay · 05:07 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  werkzeug/verdichtung.py
+
+Zeit: 2026-08-21T05:07:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 1
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 04:58:43 +0000 — entityos: 1 Aenderungen
+
+`2278c47244d3` · entityos · 04:58 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_wake_governor.py
+
+Zeit: 2026-08-21T04:58:43+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 04:56:43 +0000 — entityos: 3 Aenderungen
+
+`b8af77281914` · entityos · 04:56 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/wege/verlauf.jsonl
+  forschung/wege/wegeschnappschuss.py
+  the artefact/clayverse/wake_governor.py
+
+Zeit: 2026-08-21T04:56:43+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 04:12:22 +0000 — entityos: 1 Aenderungen
 
@@ -3771,234 +3882,5 @@ und auf Zwischenseiten, wo dieses CSS nicht hinreicht. Steht als Warnung im Code
 Im echten Browser geprueft, Desktop 1440x900 und Handy 390x844:
 0 Konsolenfehler, 0 waagerechter Ueberlauf, Feld in 2x Aufloesung, Clerk-Box
 mittig und in unseren Farben.
-```
-
-### Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate
-
-`8e37f4a64a81` · entityos · 10:35 UTC · Video Launch Page
-
-```
-Owner decision: a CLI permission layer denying before the call reaches
-EffectGate does not make the system safer -- it makes the gate unreachable,
-and an unreachable gate is a decoration, not a boundary. EffectGate is the
-designed boundary (capability/target/argv/generation/evidence adjudication);
-letting calls arrive there is the point.
-
-allowManagedPermissionRulesOnly stays true, deny: [Bash, Artifact] unchanged.
-Only addition: permissions.allow with the three managed MCP tool names
-(session_state, request_effect, request_autonomy_effect) -- the same three
---allowedTools was already trying and failing to grant, since that CLI flag
-is ignored entirely under allowManagedPermissionRulesOnly.
-```
-
-### Der Verlauf haengt jetzt in der NEUEN Oberflaeche - und zwei Fallen, die den Dienst umlegten
-
-`a28d05094773` · entityos · 10:31 UTC · EntityOS
-
-```
-Der Endpunkt /api/history stand fertig und geprueft im Gateway. Die neue
-Chatseite entstand parallel und wusste nichts davon -- ihr Leerzustand sagte
-sogar ausdruecklich "Fruehere Nachrichten werden hier nicht nachgeladen -- was
-du siehst, ist dieser Besuch". Das war ehrlich, solange es stimmte. Jetzt
-stimmt es nicht mehr, also ist der Satz weg.
-
-EINGEHAENGT, mit den vier Punkten aus betrieb/API-HISTORY.md:
-
-1. NACH dem `ready`-Ereignis geladen, nicht beim Seitenstart. `ready` feuert
-   beim Verbinden UND beim Sitzungswechsel -- damit laedt jede Sitzung ihren
-   eigenen Verlauf ohne zweiten Ausloeser. Und es traegt die `session_id` mit
-   sich, die sonst im Frontend zusammengebaut werden muesste; der bestehende
-   Code warnt ausdruecklich davor.
-2. LEER IST EIN ZUSTAND: "Noch keine Nachrichten in dieser Sitzung." Sonst
-   sieht eine leere Sitzung exakt aus wie ein fehlgeschlagener Ladevorgang --
-   genau die Zweideutigkeit, wegen der der Endpunkt gebaut wurde.
-3. SICHTBARE TRENNLINIE "ab hier dieser Besuch" zwischen geladenem Verlauf und
-   dem Neuen. Ohne sie ist nicht unterscheidbar, was Zero gerade gesagt hat und
-   was von gestern stammt.
-4. LADEFEHLER WERDEN ANGEZEIGT, nicht verschluckt -- ein stiller Fehlschlag
-   saehe wieder aus wie eine leere Sitzung, der Fehler waere zurueck, nur eine
-   Ebene tiefer.
-
-Dazu: beim Sitzungswechsel wird das Fenster geleert, sonst mischen sich die
-Verlaeufe zweier Sitzungen zu einem Gespraech, das nie stattgefunden hat.
-Und der Blasenaufbau ist aus replaceWithReply herausgeloest, damit geladener
-Verlauf und Live-Antwort GENAU dieselbe Blase bauen -- zwei Darstellungswege
-fuer dieselbe Sache laufen unweigerlich auseinander, und dann sieht Geschichte
-anders aus als Gegenwart. Die Avatar-Regel bleibt unangetastet:
-ZeroAvatar.nurNeuesteAktiv() haelt einen langen Verlauf ruhig.
-
-⚠️ ZWEI FALLEN, DIE ICH MIT EINEM NEUBAU AUSGELOEST HABE (betrieb/BAUEN.md)
-
-Das Auftragsdokument nennt als Baubefehl:
-    set -a; . entityos-deploy.env; . entityos-clerk.env; set +a; docker compose up -d --build
-Damit lag der Dienst in einer Neustartschleife, alle Seiten tot. Zwei Gruende:
-
-1. DIE ANFUEHRUNGSZEICHEN VERSCHWINDEN. CLAYVERSE_CLERK_MAP_JSON enthaelt JSON.
-   Beim Einlesen mit `.` interpretiert bash die Zeile und entfernt die Quotes.
-   Im Container kam {user_...:gabriel,...} an statt {"user_...":"gabriel",...}.
-   -> RuntimeError: CLAYVERSE_CLERK_MAP_JSON is invalid JSON.
-   `--env-file` reicht den Wert unveraendert durch und hat das Problem nicht.
-
-2. DIE ZWEITE DATEI UEBERSCHREIBT DIE ERSTE -- und traegt eine ANDERE
-   Clerk-Kennung fuer Andreas:
-     entityos-deploy.env  ..."user_3C5R4TCSv9yow0b8GhBlQTRlHFm":"andreas"}  live
-     entityos-clerk.env   ..."user_3C6kpF9WdVfp5uL1NbUD3uDVsf7":"andreas"}  veraltet
-   Wer clerk.env zuletzt einliest, faehrt mit der veralteten Kennung. Das wirft
-   NICHTS -- es aendert nur, wer Andreas ist.
-   Die veraltete Datei wurde NICHT geloescht: sie ist Konfiguration, und ob sie
-   anderswo gelesen wird, ist ungeprueft. Gehoert aufgeraeumt, aber bewusst und
-   nicht nebenbei beim Debuggen.
-
-Wiederhergestellt mit --env-file; danach: alle Seiten 200, /api/history ohne
-Token 401 (faellt geschlossen), Verlaufscode im ausgelieferten HTML.
-
-Ausserdem berichtigt: der Kommentar in postfach.py nannte `<adresse>`
-als Andreas' Clerk-Konto. Eignerentscheid am 18.08.: `<adresse>`.
-Die Mechanik war nie betroffen -- die Zuordnung laeuft ueber die Clerk-Kennung,
-nicht ueber die Adresse. Genau dafuer ist sie so gebaut, und das steht jetzt
-auch dort.
-```
-
-### Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz)
-
-`f94e90ad841a` · entityos · 10:30 UTC · EntityOS
-
-```
-Nicht von mir gebaut. Eine zweite Instanz hat das nach eigenem Auftrag
-(AUFTRAG-OBERFLAECHE.md, 2026-08-18 09:36) umgesetzt und unversioniert im
-Arbeitsbaum liegen lassen -- rund 100 KB Frontend und drei neue Testdateien,
-alles nur auf der Platte. Auf Gabriels Bitte hier festgehalten, bevor es einem
-Neubau oder einem falschen Griff zum Opfer faellt.
-
-WAS DRIN IST
-
-  web/schale/          gemeinsame Kopfleiste ueber allen Seiten
-  web/postfach/        Mailbox-Oberflaeche (index.html + css + js)
-  web/chat/index.html  Chat im neuen Designsystem, Schale statt eigenem Header
-  clayverse/postfach.py  IMAP/SMTP-Schicht, Senden geht durch das EffectGate
-  clayverse/zustand.py   Zustandsanzeige
-  clayverse/effects.py   erweitert
-  compose.yaml           Zugangsdatei /etc/entityos/postfach.env eingehaengt
-  tests/test_postfach_{wege,wirkung,zuordnung}.py
-
-GEPRUEFT, NICHT NUR UEBERNOMMEN
-
-  Testlauf     552 gruen / 14 rot -- dieselben 14 Altlasten wie den ganzen Tag
-  Seiten       / /postfach /terminal /healthz alle 200
-  Syntax       postfach.py, zustand.py, effects.py sauber
-
-⭐ EINE ENTWURFSENTSCHEIDUNG, DIE SICH HEUTE BEZAHLT GEMACHT HAT
-
-Die Postfachzuordnung laeuft ueber clerk_subject -> clerk_map -> user_id ->
-Postfach, ausdruecklich NICHT ueber die Mailadresse. Am selben Tag war strittig,
-welche Gmail-Adresse Andreas' Clerk-Konto traegt (`<adresse>` im
-Auftragsdokument, `<adresse>` laut Eigner; Eignerentscheid: <adresse>).
-Weil die Zuordnung an der Clerk-Kennung haengt, war die Postfachvergabe davon zu
-KEINEM Zeitpunkt betroffen. Der Kommentar im Modul nannte die strittige Adresse
-als Tatsache -- das ist berichtigt, die Mechanik blieb unangetastet.
-```
-
-### Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root shadow DB, not the real heart
-
-`7432769daa72` · entityos · 10:29 UTC · Video Launch Page
-
-```
-Found by checking row counts before/after a real conversation through the
-fixed deny-shell: zero rows in /var/lib/clay/wiki.db, but turns=2,
-causal_episodes=1, workspace_episodes=1 in <state_root>/unified.db instead.
-Root cause: ensure()'s env_argv uses "env -i" (wipes environment entirely,
-keeps only what's explicitly listed) to launch the claude process, and
-CLAYVERSE_DB_PATH was never one of the listed vars -- so resolve_db_path()
-fell back to its <state_root>/unified.db default for every hook and for the
-stdio MCP server subprocess, invisibly disconnected from the real UnifiedDB
-the WS server itself opens.
-
-Passes CLAYVERSE_DB_PATH through when the service's own environment has it
-set (same override contract as resolve_db_path itself): added to _mcp_env()
-and threaded into env_argv. Verified with a real subprocess.run capture: the
-actual new-session launch argv now contains
-CLAYVERSE_DB_PATH=/var/lib/clay/wiki.db end to end. Same pre-existing 8/172
-failure set before and after -- zero new failures.
-```
-
-### Fix real S7-adjacent blocker: CLAUDE_CODE_SHELL_PREFIX was silently eating every hook AND the MCP server startup, not just the interactive ! escape -- turns/effects/causal_episodes were writing zero rows
-
-`3cca3460bbb1` · entityos · 10:19 UTC · Video Launch Page
-
-```
-Measured empirically before touching anything (per instruction): built a throwaway
-Docker container from this same image, bind-mounted a logging stand-in over
-CLAUDE_CODE_SHELL_PREFIX, drove a real tmux+claude session through the managed
-launch path, captured argv. Every substitution -- hooks AND the stdio MCP server
-start (clayverse.mcp_server) -- arrives here the same way: argc=1, one argument,
-the full original command as a single string, no -c flag, no argv split.
-
-Rewrote deny-shell from an unconditional refusal into an exact-match allowlist of
-the four managed dispatches this product actually wires (3 lifecycle hooks from
-managed-settings.json + the one MCP server start from managed-mcp.json). Plain
-literal  patterns, no globs/prefix/regex. On a match: exec OUR OWN fixed
-argv, never eval/sh -c the string we were handed. Everything else, including the
-interactive  escape (which has no entry here), keeps the unconditional refusal
-and exit 126 -- confirmed with an injection-shaped string
-('.../user_prompt; rm -rf /') and a two-arg call, both still refuse.
-
-Local behavioral test: all 4 canonical strings route into the exec branch, every
-other input (arbitrary command, injection-shaped string, wrong argc) refuses with
-the original message and exit 126.
-```
-
-### Dauerhafter Chatverlauf: /api/history - und die Kollision, die das Frontend gekostet hat
-
-`2e7c0a80f66b` · entityos · 10:14 UTC · EntityOS
-
-```
-Gabriel hat neu geladen und sein ganzer Chat war weg. Die Daten waren NIE
-verloren: turns hielt 56 Zeilen, korrekt nach Sitzung getrennt
-(session:gabriel:2 28, session:gabriel 14, session:andreas:2 10,
-session:andreas 4). Es gab nur keinen Weg zurueck ins Fenster -- eine
-Suche nach verlauf/history/historie in web/ und im Gateway ergab NULL Treffer.
-Ein Speicher, den niemand liest.
-
-GEBAUT: GET /api/history?session=&limit=&before= im terminal_gateway.
-Zuege aeltestes-zuerst, geblaettert, mit der deutschen Uebersetzung aus
-mv_translation_log (dieselbe, die live im Chat steht), Rohtext als Rueckfall.
-
-BERECHTIGUNG, mit echten Clerk-Tokens gegen den laufenden Container geprueft:
-  kein/falsches Token          401
-  gabriel -> eigene Sitzungen  200
-  gabriel -> session:andreas   403
-  gabriel -> session:andreas:2 403
-  gabriel -> session:andreas:99 403   (faellt auch bei Unsinn geschlossen)
-  andreas -> eigene Sitzung    200
-  andreas -> session:gabriel:2 403
-Die Sitzungs-ID aus der Adresszeile wird nie geglaubt; geprueft wird ueber
-identity.ist_kanonische_sitzung mit einer user_id, die ausschliesslich aus dem
-verifizierten Token stammt. Am 18.08. hat dieses System schon einmal einem
-Menschen die privaten Eintraege des anderen gezeigt, weil einer Tabelle die
-Nutzerspalte fehlte. Diese Tuer bleibt zu.
-
-⚠️ DAS FRONTEND IST WEG, UND ZWAR DURCH EINE KOLLISION, DIE ICH ZU SPAET SAH
-
-Eine zweite Instanz kleidet die Oberflaeche nach einem eigenen Auftrag neu ein
-(AUFTRAG-OBERFLAECHE.md, 09:36) -- auf DEMSELBEN Branch retina-deploy. Mein
-Agent hatte web/chat/index.html um die Verlaufsanzeige erweitert und im echten
-Browser mit echter Clerk-Anmeldung geprueft. Um 10:07:44 hat die andere Instanz
-die Datei ueberschrieben: 7 Verweise auf ihre neue Schale, 0 auf die Historie.
-Aus dem Container-Abbild nicht mehr zu retten (nur ein Abbild vorhanden,
-gebaut 10:12, ohne die Aenderung).
-
-Das Backend hat ueberlebt und ist vollstaendig. Damit die Arbeit nicht zweimal
-verloren geht, liegt in betrieb/API-HISTORY.md die Anleitung zum Einhaengen --
-samt der vier Punkte, die dabei nicht verlorengehen duerfen (nach dem ready-Ereignis
-laden statt beim DOM-Start; leer ist ein ZUSTAND und keine leere Seite; sichtbare
-Trennlinie zwischen geladenem Verlauf und Live; Ladefehler anzeigen statt
-verschlucken).
-
-Ab hier eigener Branch, auf Gabriels Entscheidung. Was schon auf retina-deploy
-liegt, bleibt dort.
-
-Nebenbefund, ungeprueft weitergegeben: /etc/clayverse/entityos-clerk.env
-enthaelt eine veraltete Clerk-Kennung fuer Andreas, die nicht zu
-CLAYVERSE_CLERK_MAP_JSON im laufenden Container passt.
 ```
 

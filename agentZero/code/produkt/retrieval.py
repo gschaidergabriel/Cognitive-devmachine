@@ -372,17 +372,62 @@ class WorldAssembler:
         except Exception:
             return None
 
+    # ⚠️⚠️ GEMESSEN 2026-08-21 (Abrufluecke Mensch/Entitaet, siehe
+    # /opt/entityos/eval/): "fts_leer" oben meint woertlich NULL Treffer --
+    # aber auf natuerlichsprachigen Fragen liefert der lockere OR-Modus so gut
+    # wie IMMER etwas (siehe Modul-Historie 2026-08-19 oben, 100% Deckung).
+    # Der Gate liess paket() dadurch fuer genau die Fragen NIE zum Zug kommen,
+    # bei denen reine Wortdeckung strukturell versagt: kurze Fragen ueber
+    # einen Menschen ("wer bin ich", "wie alt ist gabriel") bestehen aus 2-3
+    # Inhaltswoertern, von denen mindestens eines (der Name) in tausenden
+    # Baunotizen vorkommt. Ergebnis war NICHT leer, sondern Fuellmaterial:
+    # in der Stichprobe hatte KEIN einziger Kandidat relevanz > 0, obwohl
+    # `wissen-mensch-gabriel-rolle` im Korpus steht -- corpus_lookup() findet
+    # den Artikel nachweislich (Rang 3 von 2436 fuer "gabriel" allein), verliert
+    # ihn aber, sobald ein zweites, haeufigeres Wort dazukommt (Rang 11 von 67
+    # bzw. 36 von 2464 -- ausserhalb von CORPUS_MAX_HITS=5).
+    #
+    # Zwei billige, TYPISIERTE Anzeichen fuer genau diese Lage (keine
+    # Schluesselwortliste, kein Artikel je einzeln benannt -- generalisiert
+    # auf jede kuenftige Frage/Person):
+    #   * treffer_art == "OR": kein Kandidat enthielt ALLE Anfrageworte
+    #     zusammen -- corpus_lookup()'s eigene, oben schon dokumentierte
+    #     Vertrauensmarkierung ("OR ist eine schwaechere Aussage als AND"),
+    #     die bislang niemand auswertete.
+    #   * len(terme) <= 2: bei so wenigen Inhaltswoertern kann reine
+    #     Wortdeckung Mehrdeutigkeit nicht aufloesen ("alt" bei "wie alt ist
+    #     gabriel?" matcht ebenso in "der alte VPS") -- selbst ein saeuberer
+    #     AND-Treffer ist dann kein verlaesslicher Beleg. Dieselbe Zahl wie
+    #     wettbewerb.MIN_GEDECKT (dort: unter 2 gedeckten Woertern zaehlt eine
+    #     Stelle nicht als Beleg) -- hier bewusst NICHT importiert (Module
+    #     bleiben entkoppelt), aber an derselben Kalibrierung ausgerichtet.
+    #
+    # Additiv, nicht ersetzend: die harte relevanz>0-Huerde in wettbewerb.py
+    # bleibt die einzige Instanz, die einen Kandidaten tatsaechlich zulaesst.
+    # Dieser Gate entscheidet nur, ob paket() ZUSAETZLICH als Bewerber antreten
+    # darf -- eine fachfremde Frage (z.B. Einwohnerzahl einer Stadt) triggert
+    # denselben Gate genauso oft, bleibt aber leer, weil weder FTS noch
+    # paket() dafuer etwas mit relevanz > 0 liefern koennen.
+    @staticmethod
+    def _fts_schwach(query: str, fts: list[dict]) -> bool:
+        if any(r.get("treffer_art") == "OR" for r in fts):
+            return True
+        return len(WorldAssembler._fts_terms(query)) <= 2
+
     def corpus_lookup_enrich(self, query: str, sitzung: str | None = None) -> list[dict]:
         """FTS zuerst (immer, schnell). paket() wird DAZUGESCHALTET bei (a)
-        FTS-Leerstand oder (b) erkennbar assoziativer Frage (Stichwort-
-        heuristik, ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-
-        Signal existiert zur Retrieval-Zeit, siehe Modul-Docstring). Merge
-        NACH DEM FIX: bei Ausloesung wird FTS auf (CORPUS_MAX_HITS -
-        _ENRICH_RESERVED_V2_SLOTS) gedeckelt, paket() bekommt die reservierten
-        Slots GARANTIERT (dedupe per artikel_id), Rest-FTS-Treffer fuellen
-        nach, falls paket() die reservierten Slots nicht ausschoepft. Danach,
-        falls noch Budget frei ist, bis zu 2 kompakte Hypothesen/Gegenseite-
-        Aussagen als Zusatz-Kontext. Nie mehr als CORPUS_MAX_HITS insgesamt."""
+        FTS-Leerstand, (b) erkennbar assoziativer Frage (Stichwortheuristik,
+        ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-Signal
+        existiert zur Retrieval-Zeit, siehe Modul-Docstring) oder (c) FTS
+        zwar nicht leer, aber schwach (_fts_schwach oben -- OR-Fallback oder
+        zu wenige Inhaltswoerter fuer verlaessliche Wortdeckung, siehe dortige
+        Begruendung). Merge NACH DEM FIX: bei Ausloesung wird FTS auf
+        (CORPUS_MAX_HITS - _ENRICH_RESERVED_V2_SLOTS) gedeckelt, paket()
+        bekommt die reservierten Slots GARANTIERT (dedupe per artikel_id),
+        Rest-FTS-Treffer fuellen nach, falls paket() die reservierten Slots
+        nicht ausschoepft. Danach, falls noch Budget frei ist, bis zu 2
+        kompakte Hypothesen/Gegenseite-Aussagen als Zusatz-Kontext. Nie mehr
+        als CORPUS_MAX_HITS insgesamt."""
         t0 = time.perf_counter()
         fts = self.corpus_lookup(query)
         fts_ms = (time.perf_counter() - t0) * 1000
@@ -392,6 +437,8 @@ class WorldAssembler:
             grund = "fts_leer"
         elif _ist_assoziative_frage(query):
             grund = "assoziative_absicht"
+        elif self._fts_schwach(query, fts):
+            grund = "fts_schwach"
 
         if grund is None:
             self.last_enrich_meta = {

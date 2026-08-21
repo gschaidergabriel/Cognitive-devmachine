@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "20260821T2129p0700-go-autonomy-dispatch-reserved-namespace",
+  "routing_mode": "TARGETED_BY_SEMANTIC_AND_WORK_DEPENDENCY",
+  "joined_main_before_write": "3a15f423e90ffdee0f518e6cdb015445f50669ed",
+  "trigger": "go",
+  "unusual_experiment": {
+    "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
+    "executed_count": 0,
+    "reason": "Trigger identity available to this organ is minute-precision only and has no immutable shared request/turn id."
+  },
+  "finding": {
+    "novelty": "CONTRADICTS",
+    "claim": "A validation miss inside the reserved __CLAY_AUTONOMY_DISPATCH__: terminal transport namespace could be misclassified as ordinary human UserPromptSubmit input.",
+    "mechanism": "consume_dispatch_prompt historically returned None for malformed, missing/replayed, wrong-nonce and expired reserved markers; terminal_hooks.user_prompt interprets None as the human path. That can create false human-hook provenance and contaminate AutonomyPulse human-roundtrip attestation.",
+    "candidate_pr": 722,
+    "candidate_code_blob": "935ed3bec81a634e923fdcbae02667a0adbae9c8",
+    "candidate_integration_test_blob": "3399c6177a3e5031d714c621af952c139d39a337",
+    "evidence_class": "MECHANISM_SUPPORTED_EXACT_CODE_BLOB_SOURCE_SLICE_PLUS_SOURCE_INTEGRATION_FALSIFIER",
+    "evidence": [
+      "Exact candidate code blob reproduced by git hash-object and py_compile in an isolated non-production source slice.",
+      "Five direct namespace mechanism cases passed in the exact code-blob source slice: ordinary non-prefixed, malformed, missing/replay, wrong nonce and expired.",
+      "GitHub Actions run 32493070380 job 96805028454 had runner_id=0 and steps=null, therefore zero test/runtime credit and no ClayVerse semantic failure.",
+      "A source-level integration regression now drives malformed/wrong/expired/replayed markers through terminal_hooks.user_prompt and requires zero new turns/workspace/causal episodes plus zero AutonomyPulse human-attestation credit. It has syntax/blob identity evidence but not full-checkout execution credit."
+    ]
+  },
+  "hypofusion": {
+    "strongest_counterhypothesis": "A rejected reserved marker is harmless because no stored autonomy instruction is exposed.",
+    "assessment": "Rejected for the provenance boundary: the dangerous effect is synthetic-as-human classification, not instruction disclosure. A second residual counterhypothesis remains that packaged Claude hook transport transforms the marker before parser entry; that requires exact packaged-runtime evidence.",
+    "falsifier": "Run exact private full-checkout dispatch + terminal hook + pulse adjacency and inject malformed, wrong, expired and replayed reserved markers. Require zero new canonical human turn/workspace/causal episode and AutonomyPulse._has_human_roundtrip_after == false; then repeat through the packaged managed Claude hook path."
+  },
+  "routes": [
+    {
+      "receiver": "research:clay",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "urgency": "NEXT_CHECKPOINT",
+      "decision": "ADOPT",
+      "summary": "Treat autonomous terminal dispatch prefix values as a reserved fail-closed transport namespace. Preserve ordinary non-prefixed human input while refusing malformed/stale/replayed synthetic markers before human provenance can be minted.",
+      "required_revalidation": "Exact full-checkout hook/pulse adjacency, then packaged Claude-hook runtime transport; do not promote from source-only evidence.",
+      "requires_reply_or_observable_action": false
+    },
+    {
+      "receiver": "github:pull/722",
+      "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
+      "urgency": "BEFORE_PROMOTION",
+      "decision": "ADOPT",
+      "summary": "Retained implementation lane contains the minimal reserved-namespace repair, focused parser regressions, an evidence addendum, and the hook/pulse adjacency falsifier. No competing active implementation PR was found in the autonomy search performed during this go.",
+      "required_revalidation": "Before promotion, refresh current main, preserve one retained lane, execute exact private full-checkout tests, then rebind exact head and adjacent runtime evidence.",
+      "requires_reply_or_observable_action": false,
+      "delivery": {
+        "status": "DELIVERED_BY_CANONICAL_PR_BRANCH_DELTA",
+        "channel": "github_pr_branch_commits",
+        "head_after_integration_falsifier": "19d3ac5d4dd57f5fd479089d1cd74c9eb81db525",
+        "note": "No external feedback comment was needed, so no claim-before-external-effect route was created. Delivery itself grants no causal or runtime credit."
+      }
+    }
+  ],
+  "delivery_state": "RESEARCH_REENTRY_PERSISTED; PR722_LANE_UPDATED; NO_EXTERNAL_DELIVERY_EFFECT",
+  "causal_credit": "NONE_FROM_DELIVERY_ALONE",
+  "nonclaims": [
+    "No exact private full-checkout pytest PASS.",
+    "No packaged Claude-hook integration PASS.",
+    "No OCI or microVM runtime credit.",
+    "No whole-product PASS."
+  ]
+}

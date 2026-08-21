@@ -38,10 +38,13 @@
   },
   "request_pre_serialization_bound": {
     "checked_at": "2026-08-21",
-    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
+    "claim": "Validated request text and message structure are checked against an allocation-free lower bound before json.dumps materializes the JSON document. The bound counts the default ensure_ascii escape width of every Unicode scalar, including six-byte BMP escapes and twelve-byte non-BMP surrogate pairs. Requests that cannot fit the 2000000-byte envelope are rejected before serialization; the exact serialized UTF-8 byte check remains authoritative for requests that pass the preflight.",
     "source": "https://docs.python.org/3/library/json.html#json.dumps",
-    "executable_evidence": "test_oversized_request_is_rejected_before_json_materialization",
-    "counterhypothesis": "Checking len(json.dumps(payload).encode()) is already a memory bound; falsified locally because the oversized-request path invoked json.dumps and materialized the complete document before it could reject the request."
+    "executable_evidence": [
+      "test_oversized_request_is_rejected_before_json_materialization",
+      "test_escaped_unicode_overflow_is_rejected_before_json_materialization"
+    ],
+    "counterhypothesis": "Counting Python characters is a sufficient pre-serialization lower bound; falsified locally because 166667 non-BMP scalars passed the character count while default json.dumps escaped each to a twelve-byte surrogate pair and materialized a request above the cap."
   },
   "request_pre_snapshot_cardinality_bound": {
     "max_messages": 62500,
@@ -628,7 +631,7 @@
     "The text-chat adapter validates an exact nonblank model identifier plus object messages with nonempty string roles and nonblank scalar string content before network access; typed tool or multimodal requests require a separate adapter.",
     "The serialized UTF-8 text-chat JSON request is at most 2000000 bytes; oversized payloads fail before runtime-environment snapshot, credential lookup or network access, while the exact boundary remains accepted.",
     "Every Chat Completions request explicitly sets max_tokens to 4096, bounding the combined reasoning and visible generation budget; finish_reason length remains unverified and requires changed input or budget rather than blind replay.",
-    "Requests whose validated text and per-message structure already exceed the transport envelope are rejected before json.dumps can materialize the document; an exact serialized UTF-8 byte check remains in force afterward.",
+    "Requests whose validated text and per-message structure already exceed the transport envelope are rejected before json.dumps can materialize the document; the preflight counts default ensure_ascii escape widths for every Unicode scalar, and an exact serialized UTF-8 byte check remains in force afterward.",
     "Exact built-in message lists above 62500 entries are rejected before caller-data snapshotting and before the process execution lock because no valid conversation of that cardinality can fit the 2000000-byte envelope.",
     "The message-cardinality bound is rechecked at the snapshot boundary so mutation after early admission cannot turn a small caller-owned list into an oversized allocation under the execution lock.",
     "Text-chat model, role and content values are exact built-in strings; polymorphic string subclasses fail closed before their methods, credential lookup, JSON serialization or network access can run.",

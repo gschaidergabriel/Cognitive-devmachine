@@ -1,5 +1,5 @@
 {
-  "erzeugt": "2026-08-21T22:42:40Z",
+  "erzeugt": "2026-08-21T22:44:59Z",
   "erfuellt": 91,
   "offen": 16,
   "zurueckgestellt": 5,
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "427 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "429 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 23 minutes (healthy)",
+      "ist": "Up 26 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "82.0 % belegt, 34.6 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "81.9 % belegt, 34.8 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 158.1 GB, gezählt 155.9 GB, Lücke 2.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (2.2 GB Abweichung).",
+      "ist": "Bilanz nennt drei Zahlen: df 157.9 GB, gezählt 155.7 GB, Lücke 2.2 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: Rechnung geht auf (2.2 GB Abweichung).",
       "erfuellt": true
     },
     {
@@ -489,7 +489,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 5.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 5.0 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -849,7 +849,7 @@
       "faehigkeit": "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
       "soll": "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live -- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
       "quelle": "Eigner 22.08.",
-      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 1.78s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
+      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 1.57s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
       "erfuellt": null
     },
     {

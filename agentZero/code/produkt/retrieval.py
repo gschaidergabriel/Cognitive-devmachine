@@ -209,7 +209,7 @@ class WorldAssembler:
         return {r["artikel_id"]: {"titel": r["titel"], "ausschnitt": (r["ausschnitt"] or "").strip()}
                 for r in rows}
 
-    def corpus_lookup_v2(self, query: str) -> list[dict]:
+    def corpus_lookup_v2(self, query: str, sitzung: str | None = None) -> list[dict]:
         """Bounded, read-only, query-sensitive lookup -- ueber paket(), nicht
         ueber eigenes FTS. Diagnose-Metadaten (Latenz, cache_hit, Plan,
         Resolution-Klasse) landen in self.last_v2_meta, NICHT im Rueckgabewert
@@ -230,7 +230,16 @@ class WorldAssembler:
             return []
         t0 = time.perf_counter()
         try:
-            pkt = _paket(query, budget=self.CORPUS_MAX_HITS, conn=self.db.db)
+            # ⭐ Die Sitzung wird durchgereicht. Ohne sie schrieb die
+            # Wegehierarchie in `paket()` jeden Weg mit `sitzungen =
+            # ["unbekannt"]` fort -- und ihre Tunnelbedingung verlangt
+            # ausdruecklich wiederholte Mitbenutzung aus VERSCHIEDENEN
+            # Sitzungen. Gemessen: 361 Wege, kein einziger Tunnel, alle
+            # Sitzungen "unbekannt". Die interessantere Haelfte der Hierarchie
+            # -- neue Verbindungen statt verstaerkter alter -- war damit von
+            # Anfang an ausgeschlossen.
+            pkt = _paket(query, budget=self.CORPUS_MAX_HITS, conn=self.db.db,
+                         sitzung=sitzung)
         except Exception as e:
             self.last_v2_meta = {"status": "PAKET_FEHLGESCHLAGEN",
                                   "grund": f"{type(e).__name__}: {e}"[:200]}
@@ -363,7 +372,7 @@ class WorldAssembler:
         except Exception:
             return None
 
-    def corpus_lookup_enrich(self, query: str) -> list[dict]:
+    def corpus_lookup_enrich(self, query: str, sitzung: str | None = None) -> list[dict]:
         """FTS zuerst (immer, schnell). paket() wird DAZUGESCHALTET bei (a)
         FTS-Leerstand oder (b) erkennbar assoziativer Frage (Stichwort-
         heuristik, ASSOZIATIVE_BEGRIFFE oben -- kein vorgelagertes Intent-
@@ -400,7 +409,8 @@ class WorldAssembler:
         fts_rest = fts[fts_cap_n:]  # abgeschnitten, aber als Nachfueller aufgehoben
 
         t1 = time.perf_counter()
-        v2 = self._paket_mit_budget(lambda: self.corpus_lookup_v2(query)) or []
+        v2 = self._paket_mit_budget(
+            lambda: self.corpus_lookup_v2(query, sitzung=sitzung)) or []
         v2_ms = (time.perf_counter() - t1) * 1000
         v2_meta = dict(self.last_v2_meta or {})
 
@@ -479,7 +489,7 @@ class WorldAssembler:
             })
         return zusatz
 
-    def _corpus_lookup_routed(self, query: str) -> list[dict]:
+    def _corpus_lookup_routed(self, query: str, sitzung: str | None = None) -> list[dict]:
         """Einziger Umschaltpunkt: VORSTUFE_RETRIEVAL=v2|enrich env schaltet um.
         Default (unset oder jeder andere Wert) bleibt der alte corpus_lookup()
         -- NICHT ungetestet live, das entscheidet der Eigner nach den A/B-
@@ -489,14 +499,14 @@ class WorldAssembler:
         modus = os.environ.get("VORSTUFE_RETRIEVAL", "v1").strip().lower()
         if modus == "v2":
             try:
-                return self.corpus_lookup_v2(query)
+                return self.corpus_lookup_v2(query, sitzung=sitzung)
             except Exception as e:
                 self.last_v2_meta = {"status": "UNERWARTETER_FEHLER_FALLBACK_V1",
                                       "grund": f"{type(e).__name__}: {e}"[:200]}
                 return self.corpus_lookup(query)
         if modus == "enrich":
             try:
-                return self.corpus_lookup_enrich(query)
+                return self.corpus_lookup_enrich(query, sitzung=sitzung)
             except Exception as e:
                 self.last_enrich_meta = {"paket_aufgerufen": False,
                                           "status": "UNERWARTETER_FEHLER_FALLBACK_V1",
@@ -668,7 +678,8 @@ class WorldAssembler:
             # entity owns 14k articles and can see none of them. Routed:
             # VORSTUFE_RETRIEVAL=v2 env switches to the paket()-backed path
             # (corpus_lookup_v2), default stays the original FTS-only path.
-            "corpus": self._corpus_lookup_routed(str(supplied.get("query") or query or "")),
+            "corpus": self._corpus_lookup_routed(
+                str(supplied.get("query") or query or ""), sitzung=session_id),
             # Wer gerade da ist -- aus dem kanonischen Zustand, nicht aus dem Text.
             "anwesender_mensch": self._anwesender(session_id, user_id),
         }

@@ -43,6 +43,31 @@ def _gather_world_safe(db, session_id: str, message: str = "") -> dict[str, Any]
 
     assembler = retrieval.WorldAssembler(db)
     world = assembler.assemble(session_id, resource_refs=[], query=message or "")
+    return _gw_anbauten(db, world, message)
+
+
+def _gw_anbauten(db, world: dict[str, Any], message: str = "") -> dict[str, Any]:
+    """Haengt die GWT-Anbauten an eine FERTIG gebaute Welt.
+
+    HERAUSGELOEST 2026-08-21, und das war ein echter Befund: diese Anbauten
+    standen bis heute NUR in _gather_world_safe. Der Live-Chatweg baut seine
+    Welt aber ueber TurnLifecycle.begin() (record_via_turnlifecycle=True) --
+    und der bekam KEINEN einzigen `_gw_*`-Schluessel. Ohne sie gibt es keine
+    Bewerber, keinen Wettbewerb, keine Zuendung, keine gelernten Boosts und
+    keinen Langtext: der Arbeitsraum war auf dem Weg, den Gabriel tatsaechlich
+    benutzt, leer.
+
+    Gemessen an derselben Frage, identischer Korpus (5 Treffer) in beiden
+    Welten: ueber _gather_world_safe nannte die Entitaet die Quelle
+    (wissen-seimensch-domains) und antwortete richtig; ueber den Lifecycle-Weg
+    antwortete sie zweimal in Folge "kein Artikel deckt das ab". Dieselbe
+    Frage, dasselbe Wissen, nur ein anderer Weltbau.
+
+    Fuer die Messgeschichte: alle CSWT-Z-Batterien liefen mit
+    record_via_turnlifecycle=False. Sie sind damit nicht falsch, aber sie haben
+    bis heute den Pfad vermessen, den der Chat nicht nimmt. Ab hier nehmen
+    beide Wege dieselben Anbauten.
+    """
     # Der Neuheits-Abschlag braucht die letzten Ausstrahlungen. Er wandert im
     # world mit, weil _vorstufen_world keine Datenbank sieht (und keine sehen
     # soll -- sie formt nur um).
@@ -1146,7 +1171,10 @@ def run_chat_turn(
 
             lifecycle = turn_lifecycle.TurnLifecycle(db, user_id, session_id)
             admission = lifecycle.begin(message)
-            world = admission["context"]
+            # Siehe _gw_anbauten: der Lifecycle liefert die Welt OHNE die
+            # GWT-Anbauten. Ohne diese Zeile laeuft der Live-Chat ohne
+            # Arbeitsraum -- gemessen 2026-08-21.
+            world = _gw_anbauten(db, admission["context"], message)
             turn_id = admission["turn_id"]
             causal_id = admission["causal_id"]
         else:

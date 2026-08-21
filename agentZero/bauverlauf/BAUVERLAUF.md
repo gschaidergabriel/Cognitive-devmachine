@@ -1,12 +1,109 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T02:41:19Z. 1011 Commits aus vier Repos, davon 356 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T03:11:19Z. 1015 Commits aus vier Repos, davon 361 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 03:10:20 +0000 — entityos: 2 Aenderungen
+
+`56c34585ea58` · entityos · 03:10 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_gwanbauten.py
+
+Zeit: 2026-08-21T03:10:20+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 03:06:31 +0000 — unifieddb: 1 Aenderungen
+
+`0a93b02ad07c` · unifieddb · 03:06 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  udb/abruf/wegverfall.py
+
+Zeit: 2026-08-21T03:06:31+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 1
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 03:01:15 +0000 — entityos: 6 Aenderungen
+
+`74d24056de0d` · entityos · 03:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  betrieb/eos_theta.py
+  betrieb/test_theta.py
+  the artefact/clayverse/retrieval.py
+  the artefact/tests/test_wegsitzung.py
+  zeuge/eos_zeuge.py
+  zeuge/test_zeuge.py
+
+Zeit: 2026-08-21T03:01:15+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 6
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 03:01:11 +0000 — unifieddb: 1 Aenderungen
+
+`5d2e5ea71986` · unifieddb · 03:01 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  udb/abruf/paket.py
+
+Zeit: 2026-08-21T03:01:11+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: unifieddb (/opt/unifieddb)
+Dateien: 1
+Fern: origin -> /srv/git/unifieddb.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:42:22 +0000 — entityos: 2 Aenderungen
+
+`3733c6bf8588` · entityos · 02:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_korrektur.py
+
+Zeit: 2026-08-21T02:42:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 02:36:51 +0000 — entityos: 2 Aenderungen
 
@@ -4051,181 +4148,5 @@ independent of which DB path is used. The 'clayverse' OS account (uid 10001,
 already flagged by useradd itself as above SYS_UID_MAX) is decorative at runtime
 since compose forces user: 5001:5001 to match host uid 'clay' for the DB bind
 mount. Chown the actual writable state paths to the real runtime uid instead.
-```
-
-### Fix: service.py crashed on boot -- final_acceptance_probe imports adapters, which .dockerignore deliberately excludes from the image
-
-`0c37bf7e6e13` · entityos · 09:45 UTC · Video Launch Page
-
-```
-python -m clayverse.service (the real container entrypoint, no args) died with
-ModuleNotFoundError: No module named 'clayverse.adapters' on every start, because
-service.py imported final_acceptance_probe unconditionally at module load, and
-final_acceptance_probe imports the retired adapters.py that never ships in the
-image. Made the import lazy: only loaded when --mistral-once is actually passed,
-which is the only mode that uses it. Verified: python -m clayverse.service now
-imports cleanly; identity/clerk tests unaffected (16 passed).
-```
-
-### Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal
-
-`0ff9ac9f66f7` · entityos · 09:43 UTC · Video Launch Page
-
-```
-Owner naming law: EntityOS = the product/login page, Zero = who answers
-you once inside, ClayCode/Clay unchanged. Adds a name line to the
-runtime system prompt only; no package or env var renames.
-```
-
-### Einstiegspunkt der Abrufentitaet: Ausbeute vervierfacht, ohne die Schranke anzufassen
-
-`b08f52ebe6c1` · unifieddb · 09:33 UTC · EntityOS
-
-```
-AUSGANGSLAGE, GEMESSEN VOR JEDEM EINGRIFF
-
-  Ankerquote     8,3 %   (5 von 60 Fragen bekommen ueberhaupt einen Anker)
-  Genauigkeit   60,0 %   (Anteil richtiger unter den gesetzten Ankern)
-  Ausbeute       5,0 %
-  Auffindbar     6,7 %   (richtiger Artikel taucht im Paket auf)
-  Latenz       354 ms Median / 623 ms p95
-
-Ohne Anker gibt es keine Signatur, ohne Signatur keinen Plan-Cache, ohne
-Plan-Cache keinen Graph-Walk. Bei 8 % Ankerquote ist der gesamte Graph-Apparat
--- Plan-Cache, Kantenlernen, typisierte Hops, Hyperposition -- im Betrieb
-weitgehend unerreicht. Der Einstiegspunkt ist deshalb der einzige Hebel, der
-sich vor allen anderen lohnt.
-
-DIE URSACHE
-
-  score = 2.0 * deckung_alias + confidence * klassengewicht
-
-`deckung_alias` ist der Anteil der ALIAS-Woerter, die in der Frage vorkommen.
-Damit sinkt der erreichbare Score mit der Alias-Laenge. Ein dreiwortiger Alias
-wie `frank_unifieddb.clay` mit einem Treffer kommt auf hoechstens
-2*0,33 + 1,0 = 1,67 -- die Schwelle liegt bei 2,5. Erreichbar nur fuer den, der
-fast den ganzen Dateinamen tippt. Bei natuerlich gestellten Fragen: 0 Anker.
-
-WAS FEHLTE: SPEZIFITAET. Ein Wort, das in 3 von 362.836 Aliassen vorkommt,
-identifiziert fast allein. Eines, das in 55.084 vorkommt, sagt nichts. Die alte
-Formel kennt diesen Unterschied nicht.
-
-NEU: vp_alias_df (udb/abruf/alias_df.py) haelt fuer 198.379 Woerter fest, in wie
-vielen Aliassen sie vorkommen -- einmal in 1,7 s gebaut, danach nachgeschlagen.
-Ein COUNT ueber 362.836 Zeilen je Suchwort waere der Latenz-Ruin.
-Der Zuschlag ist das PRODUKT aus Seltenheit des seltensten getroffenen Wortes
-und Anteil an der tragenden Frage. Das Produkt verhindert, dass ein zufaelliger
-Exotentreffer in einem langen Alias die Schwelle allein reisst. Das seltenste
-statt der Summe, weil ein fast eindeutiges Wort ein Beleg ist und zehn
-Allerweltswoerter keiner -- eine Summe wuerde das umdrehen.
-
-⭐ DIE SCHWELLE WURDE NICHT ANGEFASST. Sie steht weiter auf 2,5. Der Gewinn
-kommt ausschliesslich daher, dass besseres Beweismaterial vor die unveraenderte
-Schranke gelegt wird. Fail-closed bleibt fail-closed.
-
-ERGEBNIS auf der PRUEFHAELFTE, die bei der Kalibrierung nie angesehen wurde:
-
-               vorher    nachher
-  Ankerquote     8,3 %    23,3 %
-  Genauigkeit   60,0 %    85,7 %     <- gestiegen, nicht gefallen
-  Ausbeute       5,0 %    20,0 %     <- vervierfacht
-  Auffindbar     6,7 %    23,3 %
-  Latenz        354 ms     344 ms
-
-ZUR METHODE, weil die Zahl sonst nichts wert waere
-
-Die Ankerquote allein ist eine gefaehrliche Kennzahl: sie geht auf 100 %, sobald
-man die Schwelle auf 0 setzt -- dann raet die Entitaet immer und der Abruf wird
-schlechter. Deshalb laeuft die GENAUIGKEIT als Gegenkraft mit, und die Regel
-stand VOR der Messung fest: die Genauigkeit darf nicht unter die Grundlinie
-(60 %) fallen; unter dieser Bedingung wird die Ausbeute maximiert. Kalibriert
-wurde auf Goldsatz-Haelfte A, berichtet auf der unberuehrten Haelfte B.
-Gleichstaende werden nach Genauigkeit aufgeloest (nachtraeglich geschaerft, aus
-A abgeleitet, B floss in die Wahl nicht ein).
-
-ZWEI EIGENE IRRTUEMER, BEIDE DURCH MESSUNG KORRIGIERT
-
-1. Ich meldete zuerst "Genauigkeit 0 %". Das war MEIN Goldsatz, nicht die
-   Entitaet: er zog Fragen aus fast identischen Baunotizen ("test(clayverse):
-   make ...", "test(clayverse): fence ..."), auf die es keine eindeutige Antwort
-   gibt. Ein Messgeraet mit mehrdeutigem Sollwert misst das Falsche. Goldsatz v2
-   nimmt nur Artikel mit einem seltenen Wort im Titel (df <= 3), damit die Frage
-   per Konstruktion beantwortbar ist.
-   ⚠️ Der Filter dazu enthielt "titel NOT LIKE '%_%'" -- in SQL ist `_` ein
-   Platzhalter fuer EIN Zeichen, das schliesst jede nichtleere Zeile aus. Er
-   lieferte 0 Kandidaten und sah dabei voellig plausibel aus.
-
-2. Meine Erklaerung "Stoppworte fluten die Alias-Suche" war falsch herum.
-   Gemessen: df(die)=60, df(was)=23, df(unifieddb)=126. Die Frageworte sind im
-   Alias-Korpus SELTENER als das Sachwort -- bm25 belohnt Se
-```
-
-### Die autonomen Takte versioniert - und der Riss, den sie hatten
-
-`70fe17a64cb5` · entityos · 09:00 UTC · EntityOS
-
-```
-Gemessen bei der Abschlusspruefung: 16.558 Artikel, aber nur 16.551 in der
-Zuordnungstabelle. Der Baunotizen-Takt lief alle 15 Minuten und nahm neue
-Notizen auf; das Zuordnen lief ueberhaupt nicht im Takt. Also blieb jede neue
-Baunotiz unzugeordnet liegen, und die Luecke waechst still mit jedem Durchlauf.
-
-Zwei getrennte Zeitplaene fuer zwei Schritte DERSELBEN Kette laufen unweigerlich
-auseinander. Das Zuordnen haengt deshalb jetzt als ExecStartPost am Aufnehmen
-statt an einem eigenen Timer. Nach dem Fix: 16.561 Artikel, 16.561 zugeordnet.
-
-Und die Units lagen nur unter /etc/systemd/system/ -- nirgends versioniert. Beim
-naechsten Wiederaufbau waeren sie weg gewesen, und niemand haette es gemerkt:
-ein stehender Takt sieht von aussen aus wie ein ruhiger.
-```
-
-### Zwei von drei Befunden sind zu - und der dritte bekommt ein MESSENDES Netz
-
-`5f5df7cad329` · entityos · 08:55 UTC · EntityOS
-
-```
-NACH DEM NEUBAU GEMESSEN:
-
-Bilanz (Befund B): vollstaendig. Auf "Was ist schiefgegangen?" nennt Zero jetzt
-alle sieben Fehlschlaege mit Beleg, dazu den Zeitraum ("seit einem Tag") und von
-selbst das Muster: "Fuenf von sieben wurden beim Nachmessen entdeckt, nicht
-durch eine Fehlermeldung -- das ist das Muster, kein Zufall."
-
-Betreiberkonto (Befund A): taucht nicht mehr als Unstimmigkeit auf. Punkt 9c
-erklaert sie, statt sie zu verstecken.
-
-BEFUND C HIELT SICH -- UND DER GRUND IST LEHRREICH.
-
-Drei von drei Antworten begannen weiter mit einem Urteil ueber das Paket:
-  "Alle sieben Fehlschlaege sind im Profil vermerkt ... kein NEED_BETTER_PACKAGE."
-  "Ein Identitaetsnachweis liegt vor ... Es besteht KEIN BEDARF fuer ein besseres Paket."
-  "Das Paket reicht."
-
-Mein erster Versuch stand in _BASE_RULES. _ROUND1_ADDENDUM kommt DANACH und
-schaerft die Notbremse noch einmal ein -- die letzte Anweisung gewinnt. Eine
-Regel gegen ein Verhalten muss dort stehen, wo das Verhalten angefordert wird,
-nicht davor. Die Gegenregel steht jetzt im selben Absatz wie die Notbremse.
-
-DAZU EIN NETZ IM CODE, UND ZWAR EIN MESSENDES.
-
-_ohne_paketurteil() entfernt einen kurzen ersten Absatz, der ueber das Paket
-urteilt -- und SCHREIBT MIT, dass es das getan hat (Tabelle mv_paketurteil).
-
-Ein stiller Filter waere hier das Falsche: er beseitigt das Symptom und laesst
-mich glauben, die Anweisung an das Modell wirke. Solange der Zaehler steigt,
-wirkt sie nicht. Das ist der Unterschied zwischen einem Filter und einem
-Messgeraet, und heute ist genau diese Sorte Selbsttaeuschung schon dreimal
-teuer geworden.
-
-Eng gefasst mit Absicht: nur der erste Absatz, nur unter 300 Zeichen, nur mit
-Paket-Wort, und NIE wenn die Notbremse selbst gesetzt ist. Angewendet erst nach
-BEIDEN Notbremsen-Pruefungen -- sonst koennte das Netz eine echte Nachforderung
-verstuemmeln und aus einer berechtigten Zurueckweisung eine halbe Antwort
-machen.
-
-Fuenf Faelle geprueft, fuenf richtig: greift bei "Das Paket reicht." und bei
-"... kein NEED_BETTER_PACKAGE.", greift NICHT bei einer echten Antwort, NICHT
-bei der Notbremse selbst, NICHT bei einem langen ersten Absatz, in dem das Wort
-nur beilaeufig vorkommt.
 ```
 

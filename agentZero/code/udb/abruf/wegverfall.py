@@ -19,9 +19,22 @@ class Gefaess:
         self.db = conn
 
     def tx(self):
+        # ⚠️ 2026-08-21: hier fehlte das commit(). Der Verfall lief seit dem
+        # 18.08. taeglich, meldete {"verfallen": true} -- und schrieb nichts:
+        # python-sqlite3 ist nicht autocommit, und close() verwirft die
+        # offene Transaktion stillschweigend. Messbare Folge: 65 Wege standen
+        # nach zwei Verfall-Laeufen noch exakt auf ihrer Anfangsguete 0.12.
+        # Ein Takt, der Erfolg meldet, ohne zu schreiben, ist schlimmer als
+        # ein fehlender Takt -- er macht die Pruefung blind.
         @contextlib.contextmanager
         def t():
-            yield self.db
+            try:
+                yield self.db
+            except Exception:
+                self.db.rollback()
+                raise
+            else:
+                self.db.commit()
         return t()
 
 

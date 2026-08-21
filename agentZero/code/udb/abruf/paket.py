@@ -1613,8 +1613,39 @@ def _hyperposition_readout(c: sqlite3.Connection, kand: list[str],
     return ro
 
 
+def _weg_sitzung(sitzung, wirt) -> str:
+    """Welche Kennung als "Sitzung" in die Wegehierarchie geht.
+
+    ⭐⭐ HIER LAG EIN KATEGORIENFEHLER, und er hat die halbe Idee stillgelegt.
+    Vorher stand an der Aufrufstelle `sitzung=str(wirt or "unbekannt")`. `wirt`
+    ist aber der RECHNER, nicht die Sitzung -- er dient dem Moeglichkeitsraum
+    ("was kann diese Maschine"). Zwei Folgen, beide gemessen:
+
+      * `wirt` wird von keinem Aufrufer gesetzt -> **alle 361 Wege trugen
+        `sitzungen = ["unbekannt"]`**;
+      * und selbst wenn er gesetzt waere, kaeme aller Verkehr dieser Anlage von
+        EINER Maschine -- es gaebe nie mehr als eine "Sitzung".
+
+    Bedingung 3 des Moduls verlangt aber ausdruecklich wiederholte,
+    **unabhaengige** Mitbenutzung und zaehlt dafuer die verschiedenen
+    Sitzungen. Mit einer einzigen Kennung fuer alles kann **kein Tunnel je
+    entstehen** -- die interessantere Haelfte der Hierarchie (neue Verbindungen
+    statt verstaerkter alter) war damit von Anfang an ausgeschlossen.
+
+    Deshalb jetzt getrennt: `sitzung` ist die Sitzung, `wirt` bleibt der
+    Rechner und dient nur noch als Rueckfall, damit alte Aufrufer nicht
+    schlechter dastehen als vorher.
+    """
+    for kandidat in (sitzung, wirt):
+        k = str(kandidat or "").strip()
+        if k and k.lower() != "none":
+            return k
+    return "unbekannt"
+
+
 def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = None,
-          conn: Optional[sqlite3.Connection] = None, lauf_id: Optional[str] = None) -> dict:
+          conn: Optional[sqlite3.Connection] = None, lauf_id: Optional[str] = None,
+          sitzung: Optional[str] = None) -> dict:
     """DIE eine Schnittstelle. Ein Aufruf rein, ein Paket raus."""
     budget = max(1, min(int(budget), CAP_RESULT_MAX))
     own = conn is None
@@ -2035,10 +2066,10 @@ def paket(text: str, *, budget: int = CAP_RESULT_DEFAULT, wirt: Optional[str] = 
                     return _t()
             _h = _H(c)
             try:
-                _befahren(_h, _wege, sitzung=str(wirt or "unbekannt"))
+                _befahren(_h, _wege, sitzung=_weg_sitzung(sitzung, wirt))
             except Exception:
                 _weg_schema(_h)          # Tabelle fehlt noch -> anlegen, dann erneut
-                _befahren(_h, _wege, sitzung=str(wirt or "unbekannt"))
+                _befahren(_h, _wege, sitzung=_weg_sitzung(sitzung, wirt))
         c.commit()   # ungeschriebene Buchung ist keine Buchung
     except Exception as _fehler:
         # NICHT verschweigen. Ein stiller Buchfuehrungsfehler sieht aus wie

@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T14:07:18Z. **3472 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T15:07:19Z. **3532 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T20:23:05+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T21:37:04+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3374 |
+| baunotiz | 3434 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2079 |
-| baunotiz | bauverlauf.jsonl | 1250 |
-| baunotiz | github-ereignis | 40 |
+| baunotiz | git-commit | 2109 |
+| baunotiz | bauverlauf.jsonl | 1279 |
+| baunotiz | github-ereignis | 41 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3472 · Gegenhypothese: 0 von 3472
+## Hypothese: 0 von 3532 · Gegenhypothese: 0 von 3532
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -35,228 +35,203 @@ Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im L
 
 ## Die 25 juengsten (gepruefte) Baunotizen
 
-### research: bind Gen244 evidence epoch boundary
+### research: bind Gen245 implicit feedback channel convergence
 
-`baunotiz-bauverlauf-17fbb788ea6f219ad547` · baunotiz · bauverlauf.jsonl · 2026-08-21T20:23:05+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind Gen244 evidence epoch boundary
-
-`baunotiz-git-91a27c499c751b2e6482004cd9e7d65f51138c34` · baunotiz · git-commit · 2026-08-21T20:23:05+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen244 evidence epoch boundary
-
-### claycode supervisor: bind Gen243 partial spine recovery and split effect authority
-
-`baunotiz-bauverlauf-6bcab65719b518f85bb0` · baunotiz · bauverlauf.jsonl · 2026-08-21T19:47:52+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-93085da7f13c5c7f4815` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:37:04+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### claycode supervisor: bind Gen243 partial spine recovery and split effect authority
+### research: bind Gen245 implicit feedback channel convergence
 
-`baunotiz-git-f338d9c5c4428b31ca65ce94caa7a53167cd2c23` · baunotiz · git-commit · 2026-08-21T19:47:52+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen243 partial spine recovery and split effect authority
-
-### claycode supervisor: bind Gen241 evidence-spine collapse
-
-`baunotiz-bauverlauf-6cb1eb03d2c5786ad179` · baunotiz · bauverlauf.jsonl · 2026-08-21T18:45:38+07:00 · Gabriel Gschaider
+`baunotiz-git-38e20c81acbc996ae20c230779b2fad50938b7e2` · baunotiz · git-commit · 2026-08-21T21:37:04+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+research: bind Gen245 implicit feedback channel convergence
 
-### claycode supervisor: bind Gen241 evidence-spine collapse
+### research: derive revocable feedback credit semantics
 
-`baunotiz-git-a0c3aad1f5e485671c7c95e1252d8e64703c4c33` · baunotiz · git-commit · 2026-08-21T18:45:38+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen241 evidence-spine collapse
-
-### claycode supervisor: bind Gen238 browser EffectGate boundary
-
-`baunotiz-bauverlauf-37efa5538440f30921e4` · baunotiz · bauverlauf.jsonl · 2026-08-21T17:50:24+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-e6aab69c39c2f127a185` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:36:36+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### claycode supervisor: bind Gen238 browser EffectGate boundary
+### research: derive revocable feedback credit semantics
 
-`baunotiz-git-6b90ba0836cb13095e6878e37876c31edfba99c5` · baunotiz · git-commit · 2026-08-21T17:50:24+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen238 browser EffectGate boundary
-
-### claycode supervisor: bind Gen238 OmniMind DB error collapse
-
-`baunotiz-bauverlauf-daee8a72ea515e178df8` · baunotiz · bauverlauf.jsonl · 2026-08-21T16:42:37+07:00 · Gabriel Gschaider
+`baunotiz-git-4e1f71981fcdd4c6a65beb5977e07bf93442afcb` · baunotiz · git-commit · 2026-08-21T21:36:36+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+research: derive revocable feedback credit semantics
 
-### claycode supervisor: bind Gen238 OmniMind DB error collapse
+### research: isolate F94 concentration and shadow-prior discriminator
 
-`baunotiz-git-65e8fc39706492fda8a1b45a01f2fc4eb2abad49` · baunotiz · git-commit · 2026-08-21T16:42:37+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen238 OmniMind DB error collapse
-
-### claycode supervisor: bind Gen234 Retina current-state race
-
-`baunotiz-bauverlauf-d623d3741e045b368acb` · baunotiz · bauverlauf.jsonl · 2026-08-21T15:49:00+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-048e92ee081388477f71` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:36:30+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### claycode supervisor: bind Gen234 Retina current-state race
+### research: isolate F94 concentration and shadow-prior discriminator
 
-`baunotiz-git-efba204bbac60a43e190509115e2351750b0ca19` · baunotiz · git-commit · 2026-08-21T15:49:00+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen234 Retina current-state race
-
-### research: bind Gen234 Retina current-state race frontier
-
-`baunotiz-bauverlauf-f905f9a0e65e2ee38fa5` · baunotiz · bauverlauf.jsonl · 2026-08-21T15:46:33+07:00 · Gabriel Gschaider
+`baunotiz-git-7f633e8422d04c10b9a4bc825ee4f5b19f2f573b` · baunotiz · git-commit · 2026-08-21T21:36:30+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+research: isolate F94 concentration and shadow-prior discriminator
 
-### research: bind Gen234 Retina current-state race frontier
+### research: split F94 discriminator from feedback analysis
 
-`baunotiz-git-6f7873d9dc12a0ad491a0f9a6406e8674e5066bd` · baunotiz · git-commit · 2026-08-21T15:46:33+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen234 Retina current-state race frontier
-
-### research: bind Gen232 file-session alias falsifier
-
-`baunotiz-bauverlauf-d00c776129ca9eb085a4` · baunotiz · bauverlauf.jsonl · 2026-08-21T14:50:01+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-0f6fcf062305f4f62452` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:35:43+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### research: bind Gen232 file-session alias falsifier
+### research: split F94 discriminator from feedback analysis
 
-`baunotiz-git-69dd03d4b06f196cdd074d31e0883521fc5c0e5b` · baunotiz · git-commit · 2026-08-21T14:50:01+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind Gen232 file-session alias falsifier
-
-### claycode supervisor: bind Gen232 service recovery and file-session alias
-
-`baunotiz-bauverlauf-6d348fbb8f72c68a92cb` · baunotiz · bauverlauf.jsonl · 2026-08-21T14:43:33+07:00 · Gabriel Gschaider
+`baunotiz-git-ba5f48323316ed08dd0fb84cbc793b81713fde8c` · baunotiz · git-commit · 2026-08-21T21:35:43+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-_(kein Text)_
+research: split F94 discriminator from feedback analysis
 
-### claycode supervisor: bind Gen232 service recovery and file-session alias
+### research: deduplicate Gen245 feedback erasure analysis
 
-`baunotiz-git-cf493275d7976df1ea4e8a787ad9e21e6a0f45f1` · baunotiz · git-commit · 2026-08-21T14:43:33+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen232 service recovery and file-session alias
-
-### EOS-Chronik 2026-08-21 13:49:12 +0000 — entityos: 2 Aenderungen
-
-`baunotiz-git-7d80dfe628df35c63e4ae8f1e897f8447bf07ed9` · baunotiz · git-commit · 2026-08-21T13:49:12+00:00 · BACK agent
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-EOS-Chronik 2026-08-21 13:49:12 +0000 — entityos: 2 Aenderungen
-
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/dateien.py
-  the artefact/web/chat/index.html
-
-Zeit: 2026-08-21T13:49:12+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-
-### research: analyze Gen227 verdichtung liveness regression
-
-`baunotiz-bauverlauf-7e0819744aeca0d0698e` · baunotiz · bauverlauf.jsonl · 2026-08-21T13:47:48+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-774cc4863487e7105541` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:35:38+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### research: analyze Gen227 verdichtung liveness regression
+### research: deduplicate Gen245 feedback erasure analysis
 
-`baunotiz-git-897d8825ef1260475359e8ab7c6e77ebec853d68` · baunotiz · git-commit · 2026-08-21T13:47:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: analyze Gen227 verdichtung liveness regression
-
-### EOS-Chronik 2026-08-21 13:44:20 +0000 — entityos: 1 Aenderungen
-
-`baunotiz-git-18b1560a6743da056303ecfc7be2381b1c82e5b5` · baunotiz · git-commit · 2026-08-21T13:44:20+00:00 · BACK agent
+`baunotiz-git-0547127fcf5615279e2340d44f8dc586e0874396` · baunotiz · git-commit · 2026-08-21T21:35:38+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-EOS-Chronik 2026-08-21 13:44:20 +0000 — entityos: 1 Aenderungen
+research: deduplicate Gen245 feedback erasure analysis
 
-Anlass: Wache: Aenderung beobachtet
+### research: fuse feedback race into component credit boundary
 
-  the artefact/web/chat/index.html
-
-Zeit: 2026-08-21T13:44:20+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-
-### claycode supervisor: bind Gen227 mandatory-service liveness regression
-
-`baunotiz-bauverlauf-65370eacb39f0b1f37b5` · baunotiz · bauverlauf.jsonl · 2026-08-21T13:42:14+07:00 · Gabriel Gschaider
+`baunotiz-bauverlauf-9d0edea03d25a8b9a2d9` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:35:29+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
 
-### claycode supervisor: bind Gen227 mandatory-service liveness regression
+### research: fuse feedback race into component credit boundary
 
-`baunotiz-git-98734f1da5456bb40b5a0a65efdcce6798dea00d` · baunotiz · git-commit · 2026-08-21T13:42:14+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen227 mandatory-service liveness regression
-
-### agentZero-Export 2026-08-21T13:37:17Z (Generation 245, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-a9922f9dcb261ec5ee7e215d19f426e65286d8d6` · baunotiz · git-commit · 2026-08-21T13:40:59+00:00 · agentZero
+`baunotiz-git-742eabf722eee1ff6fd30b350cf83bd404b4adcc` · baunotiz · git-commit · 2026-08-21T21:35:29+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-agentZero-Export 2026-08-21T13:37:17Z (Generation 245, 59 Dateien, 1 geschwaerzt)
+research: fuse feedback race into component credit boundary
+
+### research: separate F94 common-mode decay from hierarchy learning
+
+`baunotiz-bauverlauf-dd9b7cb7aae6c684aa70` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:35:13+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: separate F94 common-mode decay from hierarchy learning
+
+`baunotiz-git-6a8571cbee529d23196b6bfaca9e25038e227b82` · baunotiz · git-commit · 2026-08-21T21:35:13+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: separate F94 common-mode decay from hierarchy learning
+
+### research: register feedback causal join and F94 concentration instruments
+
+`baunotiz-bauverlauf-e5c32a3e7f45192a0c4b` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:34:26+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: register feedback causal join and F94 concentration instruments
+
+`baunotiz-git-66acef718d64062e362895d005997bc712424e4d` · baunotiz · git-commit · 2026-08-21T21:34:26+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: register feedback causal join and F94 concentration instruments
+
+### research: bind first feedback withdrawal and credit boundary
+
+`baunotiz-bauverlauf-ccf473f601ede0659b03` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:33:58+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind first feedback withdrawal and credit boundary
+
+`baunotiz-git-4928748d0b23bb1e4ee1d7f38cb0848e3518f9d6` · baunotiz · git-commit · 2026-08-21T21:33:58+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind first feedback withdrawal and credit boundary
+
+### research: bind first feedback reversal and snapshot aliasing
+
+`baunotiz-bauverlauf-f0f9be12c1d30a285f04` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:33:47+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind first feedback reversal and snapshot aliasing
+
+`baunotiz-git-d1ef23763f6d46e0e22b80296b09825c4d8ccc0b` · baunotiz · git-commit · 2026-08-21T21:33:47+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind first feedback reversal and snapshot aliasing
+
+### research: bind first feedback causal join and F94 concentration discriminator
+
+`baunotiz-bauverlauf-a44b296465a2b38bbf6a` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:33:46+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind first feedback causal join and F94 concentration discriminator
+
+`baunotiz-git-0e8c70bc82bbe6b93b564da90fa4e4133462d05b` · baunotiz · git-commit · 2026-08-21T21:33:46+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind first feedback causal join and F94 concentration discriminator
+
+### research: deduplicate concurrent Gen245 feedback analysis
+
+`baunotiz-bauverlauf-40eda68fa86fab26e18a` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:33:02+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: deduplicate concurrent Gen245 feedback analysis
+
+`baunotiz-git-697628567d84f9a39f7bc683047b832626f06335` · baunotiz · git-commit · 2026-08-21T21:33:02+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: deduplicate concurrent Gen245 feedback analysis
+
+### research: bind transient human-feedback state falsifier
+
+`baunotiz-bauverlauf-eb9c96a74e6b5f276903` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:32:36+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 

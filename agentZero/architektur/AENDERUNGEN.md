@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T14:07:18Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T15:07:18Z aus drei Repos. 481 Eintraege.
 
 ## architektur (12)
 
@@ -84,10 +84,11 @@ Automatisch erzeugt 2026-08-21T14:07:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (9)
+## reparatur (10)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T14:49 | entityos | `de002e01d272` | Zeros Selbstforschungs-Handbuch: Doktrin, Messgeraete, sichere Selbst-Iteration, Bug-Hypothesen, Schwarm |
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
@@ -98,11 +99,10 @@ Automatisch erzeugt 2026-08-21T14:07:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (4)
+## pruefung (3)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
-| 2026-08-18T08:50 | entityos | `26a6861b88b0` | Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
@@ -111,6 +111,10 @@ Automatisch erzeugt 2026-08-21T14:07:18Z aus drei Repos. 481 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T15:02 | entityos | `c3e2032cab7a` | EOS-Chronik 2026-08-21 15:02:52 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T14:59 | entityos | `a70c955c50c6` | EOS-Chronik 2026-08-21 14:59:16 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T14:53 | entityos | `9b2bac27ed9c` | Handbuch: Forschungsentitaets-Funde als 5. Hypothesen-Quelle (sporadisch, gegen Live-DB pruefen) |
+| 2026-08-21T14:08 | entityos | `b9468d47b34e` | EOS-Chronik 2026-08-21 14:08:30 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T14:02 | entityos | `ab185bcd1e87` | EOS-Chronik 2026-08-21 14:02:33 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T14:00 | entityos | `77d3ac7d57e8` | EOS-Chronik 2026-08-21 14:00:33 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T13:49 | entityos | `7d80dfe628df` | EOS-Chronik 2026-08-21 13:49:12 +0000 — entityos: 2 Aenderungen |
@@ -167,8 +171,4 @@ Automatisch erzeugt 2026-08-21T14:07:18Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T06:55 | entityos | `51c3991bd1f4` | EOS-Chronik 2026-08-21 06:55:18 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T06:46 | entityos | `79c6e620d355` | EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T06:44 | entityos | `e10f2fe13dfc` | EOS-Chronik 2026-08-21 06:44:12 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T06:42 | entityos | `d8dadf7f2d7e` | EOS-Chronik 2026-08-21 06:42:11 +0000 — entityos: 5 Aenderungen |
-| 2026-08-21T06:36 | entityos | `85f14d57e97f` | EOS-Chronik 2026-08-21 06:36:16 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T06:32 | entityos | `7fcb55ca8296` | EOS-Chronik 2026-08-21 06:32:31 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T06:30 | entityos | `33104cad7a05` | EOS-Chronik 2026-08-21 06:30:24 +0000 — entityos: 8 Aenderungen |
 

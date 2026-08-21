@@ -36,14 +36,21 @@ from pathlib import Path
 BAHNEN_JSON = Path(__file__).with_name("bahnen.json")
 ZUGAENGE_ENV = Path("/etc/clayverse/freie-zugaenge.env")
 
-# OpenAI-kompatible Endpunkte -- Groq, Mistral, NVIDIA, OpenRouter und DeepSeek
-# sprechen dasselbe Protokoll. Ein Aufrufer statt fuenf.
+# OpenAI-kompatible Endpunkte -- Groq, Mistral, NVIDIA, OpenRouter, DeepSeek und
+# GLM sprechen dasselbe Protokoll. Ein Aufrufer statt fuenf (jetzt sechs).
+#
+# GLM (glm_*) ist der Coding Plan (18 Euro/Monat, Lite-Stufe), vollstaendig
+# der Selbstverbesserung von EntityOS gewidmet -- siehe glm_* in bahnen.json.
+# ⚠️ Bewusst der /coding/-Endpunkt, NICHT https://api.z.ai/api/paas/v4/... --
+# das Abo-Kontingent haengt am Coding-Pfad, der allgemeine PAAS-Pfad rechnet
+# nach Pay-as-you-go ab und wuerde das Abo umgehen statt es zu nutzen.
 ENDPUNKTE = {
     "groq": ("https://api.groq.com/openai/v1/chat/completions", "GROQ_API_KEY"),
     "mistral": ("https://api.mistral.ai/v1/chat/completions", "MISTRAL_API_KEY"),
     "nvidia": ("https://integrate.api.nvidia.com/v1/chat/completions", "NVIDIA_NIM_API_KEY"),
     "openrouter": ("https://openrouter.ai/api/v1/chat/completions", "OPENROUTER_API_KEY"),
     "deepseek": ("https://api.deepseek.com/v1/chat/completions", "DEEPSEEK_API_KEY"),
+    "glm": ("https://api.z.ai/api/coding/paas/v4/chat/completions", "GLM_API_KEY"),
 }
 
 SCHEMA = """
@@ -185,6 +192,33 @@ class Bahnrouter:
             return None  # kein bekanntes Tageslimit -> nicht deckelbar, siehe unten
         return int(tag * float(p.get("hoechstanteil") or 1.0))
 
+    # ── Spitzenpreiszeit ─────────────────────────────────────────────────
+    # GLM (z.ai Coding Plan) rechnet glm-5.2 und glm-5-turbo waehrend
+    # 14-18 Uhr UTC+8 mit 3x statt 2x Kontingent ab (siehe Owner-Vorgabe
+    # 2026-08-21). Kein Ausschluss -- nur eine Nachrangigkeit: die Bahn bleibt
+    # waehlbar (Regel 3 im Kopf dieser Datei bleibt unberuehrt), rueckt aber
+    # in der Reihenfolge hinter alle Bahnen, die gerade nicht in ihrer
+    # eigenen Spitzenzeit stecken. Datengetrieben ueber das Feld
+    # 'spitzenfenster_utc8' in bahnen.json -- kein hartkodiertes Modell hier,
+    # damit ein neues Flaggschiff (z.B. glm-5.3) nur die JSON braucht.
+    def _in_spitzenzeit(self, bahn: str) -> bool:
+        z = self.zugaenge.get(bahn) or {}
+        fenster = z.get("spitzenfenster_utc8")
+        if not fenster:
+            return False
+        start, ende = fenster
+        stunde_utc8 = (datetime.now(timezone.utc).hour + 8) % 24
+        return start <= stunde_utc8 < ende
+
+    def _reihenfolge(self, bahnen: list[str]) -> list[str]:
+        """Bahnen aus bahnen.json in Auswahlreihenfolge -- unveraendert, ausser
+        eine Bahn steckt gerade in ihrer eigenen Spitzenpreiszeit. Dann wird
+        sie ans Ende geschoben (stabile Sortierung: alle anderen behalten ihre
+        relative Reihenfolge). Ausserhalb der Spitzenzeit oder ohne Markierung
+        aendert sich nichts -- deckungsgleich mit der bisherigen Liste.
+        """
+        return sorted(bahnen, key=lambda b: (self._in_spitzenzeit(b), bahnen.index(b)))
+
     # ── Auswahl ───────────────────────────────────────────────────────────
     def waehle(self, prozess: str, *, ueberspringen: set | None = None) -> dict:
         """Erste brauchbare Bahn samt Begruendung -- oder Ablehnung."""
@@ -193,7 +227,7 @@ class Bahnrouter:
             raise KeyError(f"unbekannter Prozess: {prozess}")
         ueberspringen = ueberspringen or set()
         abgelehnt = []
-        for bahn in p["bahnen"]:
+        for bahn in self._reihenfolge(p["bahnen"]):
             if bahn in ueberspringen:
                 abgelehnt.append((bahn, "in diesem Aufruf bereits ohne Ergebnis"))
                 continue

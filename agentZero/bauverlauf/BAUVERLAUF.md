@@ -1,12 +1,77 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T14:07:18Z. 1058 Commits aus vier Repos, davon 440 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T15:07:19Z. 1091 Commits aus vier Repos, davon 444 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### research: isolate Gen245 shopping-grounding failure mode
+
+`c89af32407ee` · agentzero-export · 21:47 UTC · Gabriel Gschaider
+
+```
+Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 15:02:52 +0000 — entityos: 3 Aenderungen
+
+`c3e2032cab7a` · entityos · 15:02 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/selbstmessung.py
+  the artefact/tests/test_bahnen_glm.py
+  the artefact/tests/test_selbstmessung.py
+
+Zeit: 2026-08-21T15:02:52+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 14:59:16 +0000 — entityos: 2 Aenderungen
+
+`a70c955c50c6` · entityos · 14:59 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/bahnen.json
+  the artefact/clayverse/bahnen.py
+
+Zeit: 2026-08-21T14:59:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 14:08:30 +0000 — entityos: 1 Aenderungen
+
+`b9468d47b34e` · entityos · 14:08 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/web/chat/index.html
+
+Zeit: 2026-08-21T14:08:30+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 14:02:33 +0000 — entityos: 1 Aenderungen
 
@@ -2868,79 +2933,5 @@ Rauschboden aus fuenf identischen Wiederholungen: noetig waeren 179-247 Sonden
 je Stufe statt 18.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### CSWT-Z: kausaler Pruefplan fuer Zeros Arbeitsraum
-
-`d5cf6d524cc5` · entityos · 04:05 UTC · EOS-Chronik
-
-```
-Gegen J-Space (arXiv:2607.15495), Butlin-Indikatoren (2308.08708) und die
-Ablationsarbeit 2512.19155 entworfen. Kernentscheidung: Zeros Arbeitsraum ist
-GEBAUT, nicht gewachsen -- deshalb zaehlt nur, was der Code nicht erzwingt, und
-vier von sieben Struktur-Indikatoren werden vor der Wertung gestrichen.
-
-Enthaelt den bereits gemessenen Nullbefund: die Ausstrahlung setzt sich NICHT
-gegen ein widersprechendes Spezialmodul durch (5/5). Dient als Positivkontrolle
-der Empfindlichkeit.
-
-⚠️ Kein rohes PCI -- es invertiert bei Arbeitsraum-Agenten (0,33 vs 0,84).
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### EOS-Chronik 2026-08-20 03:13:02 +0000 — entityos: 1 Aenderungen
-
-`abe15ede928b` · entityos · 03:13 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/runtime_CLAUDE.md
-
-Zeit: 2026-08-20T03:13:02+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 03:04:50 +0000 — entityos: 1 Aenderungen
-
-`ad4524a19c3b` · entityos · 03:04 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/translator.py
-
-Zeit: 2026-08-20T03:04:50+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 03:01:58 +0000 — entityos: 2 Aenderungen
-
-`7dc964ba8b1b` · entityos · 03:01 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/prestage.py
-  the artefact/runtime_CLAUDE.md
-
-Zeit: 2026-08-20T03:01:58+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
 ```
 

@@ -1,5 +1,5 @@
 {
-  "erzeugt": "2026-08-21T14:08:52Z",
+  "erzeugt": "2026-08-21T15:08:48Z",
   "erfuellt": 78,
   "offen": 8,
   "zurueckgestellt": 2,
@@ -49,7 +49,7 @@
       "faehigkeit": "wiki.db ist das Herz der Entität",
       "soll": "Datenbank, Wiki und ClayGraph sind das Herz – nicht Altlast, nicht daneben",
       "quelle": "Eigner 18.08.",
-      "ist": "156 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
+      "ist": "157 Tabellen in EINER Datei: Clay-Korpus + Laufzeit-Wirbelsäule, kollisionsfrei",
       "erfuellt": true
     },
     {
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "30 Züge, 583 Kausalepisoden, 15 Arbeitsraum-Episoden",
+      "ist": "40 Züge, 588 Kausalepisoden, 20 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -137,7 +137,7 @@
       "faehigkeit": "Kontinuität über Neustarts",
       "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "quelle": "Architektur",
-      "ist": "428 Prüfpunkte, Generation 245",
+      "ist": "430 Prüfpunkte, Generation 246",
       "erfuellt": true
     },
     {
@@ -145,7 +145,7 @@
       "faehigkeit": "Emergente Wegehierarchie (F94)",
       "soll": "haeufig gemeinsam benutzte Orte werden zu Autobahnen; neue Verbindungen zwischen graphfernen Orten zu Tunneln — beides muss ohne Zutun entstehen und wieder verfallen",
       "quelle": "Architektur / Messung 21.08.",
-      "ist": "366 Wege, 8 Tunnel. ⚠️ Bis 21.08. konnte sich KEINE Hierarchie bilden, aus zwei Gründen, die beide Erfolg meldeten: der tägliche Verfall committete nie (Signatur: 65 Wege standen nach zwei Läufen exakt auf ihrer Anfangsgüte 0,12), und `paket()` bekam als Sitzung den WIRT statt der Sitzung — die Tunnelbedingung verlangt aber Mitbenutzung aus VERSCHIEDENEN Sitzungen. Beides behoben; Median-Güte fiel danach 0,87→0,769, kein Weg mehr bei 0,12. Ob daraus eine Hierarchie wird, ist eine Frage von Tagen — ein täglicher Schnappschuss (eos-wegeschnappschuss.timer) zeichnet Gini und oberes Zehntel auf",
+      "ist": "366 Wege, 4 Tunnel. ⚠️ Bis 21.08. konnte sich KEINE Hierarchie bilden, aus zwei Gründen, die beide Erfolg meldeten: der tägliche Verfall committete nie (Signatur: 65 Wege standen nach zwei Läufen exakt auf ihrer Anfangsgüte 0,12), und `paket()` bekam als Sitzung den WIRT statt der Sitzung — die Tunnelbedingung verlangt aber Mitbenutzung aus VERSCHIEDENEN Sitzungen. Beides behoben; Median-Güte fiel danach 0,87→0,769, kein Weg mehr bei 0,12. Ob daraus eine Hierarchie wird, ist eine Frage von Tagen — ein täglicher Schnappschuss (eos-wegeschnappschuss.timer) zeichnet Gini und oberes Zehntel auf",
       "erfuellt": false
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal",
       "quelle": "Eigner 18./19.08.",
-      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 15 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
+      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 20 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
       "erfuellt": false
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "393 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "395 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 52 minutes (healthy)",
+      "ist": "Up 46 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -297,7 +297,7 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "1066 gruen / 1 rot",
+      "ist": "1082 gruen / 1 rot",
       "erfuellt": false
     },
     {
@@ -321,7 +321,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "18589 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "18652 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -337,7 +337,7 @@
       "faehigkeit": "Chat-Historie überlebt den Neuladen",
       "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
       "quelle": "Eigner 18.08.",
-      "ist": "30 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "ist": "40 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "81.1 % belegt, 36.3 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "81.5 % belegt, 35.6 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 156.4 GB, gezählt 127.3 GB, Lücke 29.1 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.1 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 157.1 GB, gezählt 127.8 GB, Lücke 29.3 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.3 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -465,7 +465,7 @@
       "faehigkeit": "Die Testsuite ist ehrlich grün",
       "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "1066 gruen / 1 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "ist": "1082 gruen / 1 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
       "erfuellt": false
     },
     {
@@ -489,7 +489,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 5.7 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 4.7 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -561,7 +561,7 @@
       "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
       "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
       "quelle": "Befund 20.08.",
-      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1193 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1204 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
       "erfuellt": true
     },
     {
@@ -585,7 +585,7 @@
       "faehigkeit": "Der Kreis schließt sich: Hypothese → Prüfung → Revision",
       "soll": "ein Kreis mit nur der ersten Hälfte ist keine Metakognition, sondern eine Liste",
       "quelle": "Eigner 20.08.",
-      "ist": "Vorher: Beobachten ✅, Hypothese ✅, PRUEFEN ❌, REVIDIEREN ❌ -- elf offene Folgerungen, keine je nachgemessen, kein Weg nach gestuetzt/widerlegt. Jetzt misst eos-vorsatz alle 6 h nach (Timer aktiv). Stand: {'abgeloest': 1, 'offen': 13, 'widerlegt': 3}. ⭐ Die zwei Behauptungsarten vertragen NICHT dieselbe Pruefung: eine Wiki-Luecke ('es fehlt ein ARTIKEL') widerlegt ein gefundener Artikel vollstaendig; eine Selbstpruefung ('es fehlt eine belegte ANGABE') wird NIE automatisch geschlossen, weil Wortueberlappung kein Wissen ist -- sonst haette ein Artikel ueber Gabriels Rolle die Luecke 'document root path' fuer erledigt erklaert. 'gestuetzt' wird nie vergeben: dass eine Suche nichts findet, beweist nicht, dass etwas fehlt",
+      "ist": "Vorher: Beobachten ✅, Hypothese ✅, PRUEFEN ❌, REVIDIEREN ❌ -- elf offene Folgerungen, keine je nachgemessen, kein Weg nach gestuetzt/widerlegt. Jetzt misst eos-vorsatz alle 6 h nach (Timer aktiv). Stand: {'abgeloest': 1, 'offen': 16, 'widerlegt': 3}. ⭐ Die zwei Behauptungsarten vertragen NICHT dieselbe Pruefung: eine Wiki-Luecke ('es fehlt ein ARTIKEL') widerlegt ein gefundener Artikel vollstaendig; eine Selbstpruefung ('es fehlt eine belegte ANGABE') wird NIE automatisch geschlossen, weil Wortueberlappung kein Wissen ist -- sonst haette ein Artikel ueber Gabriels Rolle die Luecke 'document root path' fuer erledigt erklaert. 'gestuetzt' wird nie vergeben: dass eine Suche nichts findet, beweist nicht, dass etwas fehlt",
       "erfuellt": true
     },
     {

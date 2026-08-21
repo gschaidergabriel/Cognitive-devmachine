@@ -211,6 +211,72 @@
    "zustand_gemessen": "HTTP 200 in 325 ms, gemessen 2026-08-18"
   },
   {
+   "zugang": "glm_45_air",
+   "anzeige": "GLM-4.5-Air (Coding Plan, guenstig)",
+   "modell": "glm-4.5-air",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GLM_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "noch nicht live geprueft: GLM_API_KEY ist laut Owner erst ab 2026-08-22 ca. 15 Uhr wieder gueltig (Kontingent-Reset). zustand bewusst auf nutzbar gesetzt, nicht ungeprueft -- LEBEND_SCHWELLE (bahnen.py) faengt echte 401/Fehlschlaege ab und sperrt live, statt dass eine statische Markierung die Bahn dauerhaft blockiert. guenstigstes GLM-Modell, fuer Fliessband-Faehigkeiten (kondensieren/schema_antwort/sphaere_einordnung/umsortieren_treffer) als Erstbahn vorgesehen."
+  },
+  {
+   "zugang": "glm_47",
+   "anzeige": "GLM-4.7 (Coding Plan, guenstig)",
+   "modell": "glm-4.7",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GLM_API_KEY",
+   "konten_anzahl": 1,
+   "zustand_gemessen": "noch nicht live geprueft, siehe glm_45_air -- gleicher Grund. Zweite guenstige GLM-Bahn: faellt glm-4.5-air aus (z.B. Modell abgeschaltet, wie es Groq am 15.-18.08. tat), greift diese statt sofort auf teurere Bahnen zurueckzufallen."
+  },
+  {
+   "zugang": "glm_5turbo",
+   "anzeige": "GLM-5-Turbo (Coding Plan, Spitzenpreis 14-18 Uhr UTC+8)",
+   "modell": "glm-5-turbo",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "ungeprueft",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GLM_API_KEY",
+   "konten_anzahl": 1,
+   "spitzenfenster_utc8": [14, 18],
+   "zustand_gemessen": "im Modell-Lineup vorhanden (Owner-Vorgabe 2026-08-21), aber in keinem Prozess verdrahtet -- glm-5.2 deckt den Fall 'staerkstes Modell noetig' bereits ab. Katalogeintrag fuer den naechsten Bauer. ⚠️ 3x Kontingent 14-18 Uhr UTC+8, 2x ausserhalb -- siehe spitzenfenster_utc8 und Bahnrouter._in_spitzenzeit in bahnen.py."
+  },
+  {
+   "zugang": "glm_52",
+   "anzeige": "GLM-5.2 Flaggschiff (Coding Plan, Spitzenpreis 14-18 Uhr UTC+8)",
+   "modell": "glm-5.2",
+   "einheit": "anfragen",
+   "minute_limit": null,
+   "tag_limit": null,
+   "token_minute_limit": null,
+   "token_tag_limit": null,
+   "zustand": "nutzbar",
+   "kann_embedding": 0,
+   "kann_schema": 1,
+   "schluessel_namen": "GLM_API_KEY",
+   "konten_anzahl": 1,
+   "spitzenfenster_utc8": [14, 18],
+   "zustand_gemessen": "noch nicht live geprueft, siehe glm_45_air -- gleicher Grund. Fuer 'zweitmeinung' als staerkstes GLM-Modell verdrahtet (echte Zweitmeinung soll nicht am billigsten Modell haengen). ⚠️ 3x Kontingent 14-18 Uhr UTC+8, 2x ausserhalb -- Bahnrouter._reihenfolge schiebt diese Bahn in dem Fenster hinter alle nicht-spitzenzeit-markierten Bahnen des Prozesses (nicht raus, nur zurueck), siehe spitzenfenster_utc8."
+  },
+  {
    "zugang": "openrouter_frei",
    "anzeige": "OpenRouter :free-Modelle",
    "modell": null,
@@ -379,6 +445,8 @@
   {
    "prozess": "umsortieren_treffer",
    "bahnen": [
+    "glm_45_air",
+    "glm_47",
     "cloudflare_workers_ai",
     "nvidia_nim",
     "claude_pro"
@@ -390,6 +458,8 @@
   {
    "prozess": "sphaere_einordnung",
    "bahnen": [
+    "glm_45_air",
+    "glm_47",
     "groq_llama31_8b",
     "gemini_flash_lite_latest",
     "claude_pro"
@@ -401,6 +471,8 @@
   {
    "prozess": "schema_antwort",
    "bahnen": [
+    "glm_45_air",
+    "glm_47",
     "groq_gptoss_20b",
     "mistral_small",
     "claude_pro"
@@ -412,6 +484,8 @@
   {
    "prozess": "kondensieren",
    "bahnen": [
+    "glm_45_air",
+    "glm_47",
     "groq_llama31_8b",
     "mistral_small",
     "claude_pro"
@@ -433,6 +507,7 @@
   {
    "prozess": "zweitmeinung",
    "bahnen": [
+    "glm_52",
     "mistral_small",
     "groq_gptoss_120b",
     "claude_pro"

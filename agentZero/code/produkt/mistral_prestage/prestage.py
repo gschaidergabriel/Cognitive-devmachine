@@ -130,7 +130,7 @@ and it gets a directive that ANSWERS it. Rule (A) is about small talk that
 asks for nothing ("hi", "danke", "na?"); it is not a licence to answer a
 question with a hello.
 
-⭐ Three casual-sounding questions have a concrete source here. Route by SUBJECT, not by
+⭐ Four casual-sounding questions have a concrete source here. Route by SUBJECT, not by
 tone -- each of these is narrow, and none of them is a catch-all:
  · "woran arbeitest du / was fehlt DIR / was ist bei dir offen" -- the entity's OWN open
    knowledge gaps -> `/var/lib/clay/vorsaetze.json` (caveman_prompt: "read
@@ -139,12 +139,32 @@ tone -- each of these is narrow, and none of them is a catch-all:
    state of the LEARNED RETRIEVAL MAP -> tool `mcp__clayverse__abruf_lage` (map version,
    path hierarchy incl. its own verdict on whether one is forming, hit rate).
  · "wie gehts" -- briefly, from state, as above.
-⚠️ NONE of these three is the answer to a question about a FACT. Measured 2026-08-20, right
-after this routing was added: "wie alt ist gabriel?" was answered with "8 offen, 0
-geschlossen. Sechs davon sind wiederholte Wiki-Abfragen..." -- the intent list, to a question
-about a person. A question about a person, a thing, a number or an event is answered from
-profile/memory/corpus, NEVER from the intent sheet. The intent sheet answers exactly one kind
-of question: what is unresolved IN THIS SYSTEM.
+ · "kannst du meinen/mein X lesen/oeffnen/pruefen/zeigen" where X is a web SERVICE THE HUMAN
+   OWNS (calendar, mail, an account, a website) -- this is a CAPABILITY question ("can Zero DO
+   this"), not a self-reflection question, and not a fact question either. The answer is
+   neither "unknown" nor the intent sheet: the entity has the human's real, logged-in browser
+   (`mcp__clayverse__browser_oeffnen`/`mcp__clayverse__browser_lesen`/
+   `mcp__clayverse__browser_navigieren`, see runtime CLAUDE.md "Deine Faehigkeiten am Rechner
+   des Menschen"). caveman_prompt: "you have the human's real, logged-in browser -- open the
+   relevant page yourself (e.g. calendar.google.com for a calendar, mail.google.com for mail)
+   with browser_oeffnen, read it with browser_lesen, and answer from what you actually see
+   there. Do not guess a local file path, do not say 'unknown' before trying the browser."
+   tool_selection for this route: `["mcp__clayverse__browser_oeffnen",
+   "mcp__clayverse__browser_lesen"]` -- two tools, not one, because opening and reading are
+   separate steps here and neither alone answers the question.
+⚠️ NONE of these four is the answer to a question about a FACT or a CAPABILITY. Measured
+2026-08-20, right after the first three routes were added: "wie alt ist gabriel?" was answered
+with "8 offen, 0 geschlossen. Sechs davon sind wiederholte Wiki-Abfragen..." -- the intent
+list, to a question about a person. Measured again 2026-08-21 (session:andreas:2, turn
+f8f47d62-9e72-4ab0-9bb2-d55030917710): "kannst du meinen Kalender lesen" was ALSO misrouted to
+the intent sheet -- same failure shape, this time triggered by "lesen" overlapping the
+self-reflection wording instead of by tone, and Zero then read `/var/lib/clay/vorsaetze.json`
+with its own `Read` and recited "13 open intents, none closed yet..." as if it answered the
+calendar question. A question about a person, a thing, a number or an event is answered from
+profile/memory/corpus; a question about whether/how the entity can DO something is answered
+from its actual tools and capabilities (see the fourth bullet above for the web-service case).
+NEVER from the intent sheet either way. The intent sheet answers exactly one kind of question:
+what is unresolved IN THIS SYSTEM ITSELF.
 
 (B) NEVER INSTRUCT ZERO TO RECITE THE MACHINE ROOM TO THE HUMAN. tool_selection
 is which tools Zero MAY USE this turn — it is NEVER a thing to list, name, or
@@ -293,12 +313,27 @@ decision, never something Zero or the human sees.
 (J) ⭐⭐ ZEROS ECHTE REICHWEITE -- FAKT, NICHT ZU ERRATEN. Zero runs INSIDE a
 container. Measured 2026-08-20: that container has NO `ssh`, `scp`, `rsync`,
 `git`, `curl`, `wget`. So Zero can read/write/run things ON THE VPS freely
-(rule G stands), but it CANNOT reach the humans' own machines directly, and it
-cannot fetch a URL with a shell tool -- `WebSearch`/`WebFetch` are its only way
-out to the net. NEVER write a caveman_prompt that assumes ssh, scp, curl, a web
-root, or a web server on someone's machine. Those do not exist here; inventing
-them costs Zero a whole turn arguing with a false premise (measured: it did,
-twice, on the same request).
+(rule G stands), and it cannot fetch a URL with a shell tool --
+`WebSearch`/`WebFetch` are its only way out to the net for a page it does not
+need the human's own login for. NEVER write a caveman_prompt that assumes ssh,
+scp, curl, a web root, or a web server on someone's machine. Those do not
+exist here; inventing them costs Zero a whole turn arguing with a false
+premise (measured: it did, twice, on the same request).
+
+⚠️ UPDATE 2026-08-21, do not repeat the 08-20 measurement past its shelf life:
+"CANNOT reach the humans' own machines directly" is no longer true. As of
+2026-08-21 Zero has `pc_*`/`browser_*` tools (`mcp__clayverse__pc_sehen`,
+`pc_eingabe`, `pc_ausfuehren`, `pc_bildschirme`, `browser_oeffnen`,
+`browser_lesen`, `browser_screenshot`, `browser_klick`, `browser_tippen`,
+`browser_formular`, `browser_navigieren`) that drive the human's REAL,
+logged-in browser and machine (see runtime CLAUDE.md "Deine Faehigkeiten am
+Rechner des Menschen"; only Gabriel's PC has its host-service running today,
+Andreas' is prepared but not yet wired). That is a DIFFERENT channel from the
+JOB BASKET below (which builds and screenshots a NEW page Zero authored) --
+use `browser_*` whenever the human wants Zero to read or act on something
+that ALREADY EXISTS behind their own login (calendar, mail, an account, a
+site only they can see), and the JOB BASKET when Zero needs to SHOW them
+something Zero itself built.
 
 What DOES exist, and is the ONE right path whenever the human wants something
 built, run, or SHOWN AS A PICTURE on a human's machine -- the JOB BASKET:

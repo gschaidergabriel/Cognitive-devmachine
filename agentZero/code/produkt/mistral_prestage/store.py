@@ -80,6 +80,33 @@ CREATE TABLE IF NOT EXISTS mv_translation_log (
     created_at REAL NOT NULL
 );
 
+-- ⭐⭐ TOKEN-KETTE 2026-08-22 (KORREKTUR Gabriel: das eigentliche Zahlziel ist
+-- Claude/headless_zero, nicht Mistral). Bis heute liefen cost_usd/num_turns
+-- zwar durch headless_zero.run_headless()/warm_zero.WarmPool.answer() zurueck,
+-- wurden aber NIRGENDS geschrieben -- der teuerste einzelne Aufruf der ganzen
+-- Kette war der einzige, ueber den es keine einzige Zeile Verlauf gab. Eine
+-- eigene Tabelle statt neuer Spalten auf mv_prestage_turns: dieselbe Form wie
+-- mv_translation_log (ein Modellaufruf-Artefakt je Zeile, gleiche Idee wie
+-- die Uebersetzung -- nur fuer den Claude-Aufruf statt den Mistral-Aufruf).
+CREATE TABLE IF NOT EXISTS mv_claude_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    turn_id TEXT,
+    session_id TEXT,
+    user_id TEXT,
+    warm INTEGER NOT NULL DEFAULT 0,
+    round_no INTEGER,
+    num_turns INTEGER,
+    input_tokens INTEGER,
+    output_tokens INTEGER,
+    cache_read_input_tokens INTEGER,
+    cache_creation_input_tokens INTEGER,
+    cost_usd REAL,
+    duration_ms_claude_code REAL,
+    duration_ms_api REAL,
+    wall_ms REAL,
+    created_at REAL NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS mv_eval_runs (
     run_id TEXT PRIMARY KEY,
     iteration INTEGER NOT NULL,
@@ -411,6 +438,40 @@ class PrestageStore:
         )
         self.db.commit()
         return translation_id
+
+    def record_claude_usage(self, **fields) -> None:
+        """Die echten Zahlen EINES headless-Zero-Aufrufs (Claude Sonnet) --
+        egal ob Warm- oder Kaltweg, egal ob Runde 1 oder 2 (F74). Nie werfend
+        nach aussen -- der Aufrufer (pipeline.py) faengt trotzdem ab, aber
+        eine leere/kaputte usage darf NIE den Zug kippen, nur den Beleg
+        verlieren. Kein Primaerschluessel wie bei den anderen mv_*-Zeilen: das
+        hier ist reine Telemetrie, kein Referenzziel fuer andere Tabellen.
+        """
+        usage = fields.get("usage") or {}
+        self.db.execute(
+            "INSERT INTO mv_claude_usage(turn_id,session_id,user_id,warm,round_no,"
+            "num_turns,input_tokens,output_tokens,cache_read_input_tokens,"
+            "cache_creation_input_tokens,cost_usd,duration_ms_claude_code,"
+            "duration_ms_api,wall_ms,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            (
+                fields.get("turn_id"),
+                fields.get("session_id"),
+                fields.get("user_id"),
+                int(bool(fields.get("warm", False))),
+                fields.get("round_no"),
+                fields.get("num_turns"),
+                usage.get("input_tokens"),
+                usage.get("output_tokens"),
+                usage.get("cache_read_input_tokens"),
+                usage.get("cache_creation_input_tokens"),
+                fields.get("cost_usd"),
+                fields.get("duration_ms_claude_code"),
+                fields.get("duration_ms_api"),
+                fields.get("wall_ms"),
+                time.time(),
+            ),
+        )
+        self.db.commit()
 
     def record_eval_run(self, **fields) -> str:
         run_id = str(uuid.uuid4())

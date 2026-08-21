@@ -1173,6 +1173,31 @@ def _log_uebersetzungsausfall(store, turn_id, session_id, fehler) -> None:
         pass  # Buchfuehrung darf einen Zug nie kippen
 
 
+def _claude_nutzung_buchen(store, *, turn_id, session_id, user_id, zero, round_no) -> None:
+    """Die echten Claude-Zahlen aus einem headless_zero-Ergebnis wegschreiben.
+
+    ⭐⭐ TOKEN-KETTE 2026-08-22 (KORREKTUR Gabriel 22.08.: Mistral ist kostenlos
+    -- Claude/headless_zero ist die bezahlte Stufe, und genau die hatte bis
+    heute KEINE Zeile Messung. `zero["usage"]`/"cost_usd"/"num_turns" liefen
+    schon lange aus headless_zero.run_headless() bzw. warm_zero.answer()
+    zurueck -- nur gelesen hat sie hier niemand. Mitschreiben, nie werfend:
+    ein Buchungsfehler darf nach Zeros Antwort nie den Zug kippen, siehe
+    _log_uebersetzungsausfall direkt darueber, gleiche Regel.
+    """
+    try:
+        store.record_claude_usage(
+            turn_id=turn_id, session_id=session_id, user_id=user_id,
+            warm=bool(zero.get("warm")), round_no=round_no,
+            num_turns=zero.get("num_turns"), usage=zero.get("usage") or {},
+            cost_usd=zero.get("cost_usd"),
+            duration_ms_claude_code=zero.get("duration_ms_claude_code"),
+            duration_ms_api=zero.get("duration_ms_api"),
+            wall_ms=zero.get("wall_ms"),
+        )
+    except Exception:
+        pass  # Buchfuehrung darf einen Zug nie kippen
+
+
 
 # ⭐⭐ DER TEUERSTE EINZELPOSTEN DES ZUGES, und er stand an der falschen Stelle.
 # Gemessen 2026-08-20: ein Zug brauchte 26,2 s ausserhalb der drei
@@ -1539,6 +1564,8 @@ def run_chat_turn(
             tool_selection=selected_tools,
         )
         zero_ms = (time.perf_counter() - t0) * 1000.0
+        _claude_nutzung_buchen(own_store, turn_id=turn_id, session_id=session_id,
+                               user_id=user_id, zero=zero, round_no=1)
         rounds_used = 1
         self_adapted = False
         paketurteil_entfernt = None
@@ -1582,6 +1609,8 @@ def run_chat_turn(
                 tool_selection=selected_tools,
             )
             zero_ms += (time.perf_counter() - t0) * 1000.0
+            _claude_nutzung_buchen(own_store, turn_id=turn_id, session_id=session_id,
+                                   user_id=user_id, zero=zero, round_no=2)
             rounds_used = MAX_ROUNDS
             self_adapted = True
             envelope = envelope2

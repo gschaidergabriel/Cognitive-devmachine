@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T18:32:32Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T19:02:30Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -393,6 +393,24 @@ CREATE TABLE messung_meta(
             value TEXT NOT NULL
         );
 CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
+CREATE TABLE mv_claude_usage (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    turn_id TEXT,
+    session_id TEXT,
+    user_id TEXT,
+    warm INTEGER NOT NULL DEFAULT 0,
+    round_no INTEGER,
+    num_turns INTEGER,
+    input_tokens INTEGER,
+    output_tokens INTEGER,
+    cache_read_input_tokens INTEGER,
+    cache_creation_input_tokens INTEGER,
+    cost_usd REAL,
+    duration_ms_claude_code REAL,
+    duration_ms_api REAL,
+    wall_ms REAL,
+    created_at REAL NOT NULL
+);
 CREATE TABLE mv_eval_runs (
     run_id TEXT PRIMARY KEY,
     iteration INTEGER NOT NULL,

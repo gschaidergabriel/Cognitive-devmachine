@@ -219,6 +219,17 @@ class WarmPool:
             "--tools", "Bash,BashOutput,KillShell,Read,Write,Edit,MultiEdit,NotebookEdit,Glob,Grep,WebSearch,WebFetch,TodoWrite,Task",
             "--permission-mode", "dontAsk",
             "--append-system-prompt-file", sysdatei,
+            # ⭐⭐ TOKEN-KETTE 2026-08-22: dieser Pool ist der PRIMAERE Weg (der
+            # Kaltweg in headless_zero.py ist nur der Rueckfall) -- also ist
+            # DAS hier die Stelle, an der die Mehrzahl aller echten Zuege
+            # Claude bezahlt. Siehe die ausfuehrliche Begruendung + Messung
+            # (92,4 % weniger Kosten auf einen Cache-Treffer, echte `claude -p`-
+            # Probe) im gleichnamigen Kommentar in headless_zero.py::run_headless.
+            # Gleiches Flag, gleicher Grund: nimmt Claude Codes eigene
+            # pro-Maschine-Systemprompt-Abschnitte aus dem Cache-Praefix heraus,
+            # damit sie den dahinter angehaengten (stabilen) RUNTIME_PROMPT
+            # nicht mitreissen, wenn sie zwischen zwei Zuegen wechseln.
+            "--exclude-dynamic-system-prompt-sections",
             "--input-format", "stream-json", "--output-format", "stream-json", "--verbose",
             "--no-session-persistence", "--max-turns", "8",
         ]
@@ -418,6 +429,10 @@ class WarmPool:
             "wall_ms": (time.perf_counter() - started) * 1000.0,
             "claude_session_id": result_ev.get("session_id"),
             "warm": True,
+            # ⭐⭐ TOKEN-KETTE 2026-08-22: siehe headless_zero.nutzung_aus_envelope
+            # -- dieselbe Form, hier gegen result_ev statt envelope (beide sind
+            # dasselbe `type:"result"`-Ereignis, nur je nach Weg anders benannt).
+            "usage": hz.nutzung_aus_envelope(result_ev),
             **hz.spur_deuten(werkzeuge),
         }
 

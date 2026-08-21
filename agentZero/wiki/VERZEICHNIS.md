@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T18:32:31Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T19:02:29Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2597 Artikel, 1455 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2597 Artikel, 1454 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -79,8 +79,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-git-3488f45d776e9c5b00c954b8e7cc7af` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-git-e12a81473a25f14b8772431dc17960e` · baunotiz
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-bauverlauf-234776776d865c5df3d2` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-bauverlauf-234776776d865c5df3d2` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f3` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-git-32bbd085ec583a6db14ce13499eed88` · baunotiz
@@ -168,11 +168,11 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `bau-clay-6ca42541fc47` · bau
 - **agentZero research: index inventory analysis** — `baunotiz-bauverlauf-0dca3efd97091314ecf7` · baunotiz
 - **agentZero research: initialize measurement registry** — `baunotiz-bauverlauf-a543fc1ae48be914167e` · baunotiz
+- **ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15** — `bau-unifieddb-6f5fd3c2ff00` · bau
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
-- **ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15** — `bau-unifieddb-6f5fd3c2ff00` · bau
 - **agentZero research: index token efficiency analysis** — `baunotiz-bauverlauf-5a6f6aa8fd02daac3929` · baunotiz
 - **agentZero research: assess token efficiency pipeline** — `baunotiz-bauverlauf-f14e4af775f04110490a` · baunotiz
 - **agentZero research: index latest completion update** — `baunotiz-bauverlauf-a02891bbc352f118d8cb` · baunotiz

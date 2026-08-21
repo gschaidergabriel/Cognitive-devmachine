@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T18:32:31Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T19:02:30Z aus drei Repos. 481 Eintraege.
 
-## architektur (11)
+## architektur (12)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T18:57 | entityos | `ed418d359abc` | GWT-GRF-Messung 2026-08-22: ehrliche Messung ob GRF/ClayCode den Architektur-Entwurf verbessern |
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
 | 2026-08-15T18:00 | unifieddb | `7f5e8b582f79` | F87 Auslieferungsform + Teil III der Zielarchitektur |
@@ -105,10 +106,17 @@ Automatisch erzeugt 2026-08-21T18:32:31Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (332)
+## bau (331)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:00 | entityos | `9baa79a25baf` | EOS-Chronik 2026-08-21 19:00:05 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T18:58 | entityos | `7601460eebdc` | GWT-GRF-Messung 2026-08-22: Korrektur ClayCode-Basis-Compiler laeuft bereits (nur General-Purpose-Gate offen) |
+| 2026-08-21T18:58 | entityos | `6c88a07fc85e` | EOS-Chronik 2026-08-21 18:58:04 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T18:56 | entityos | `7c090ab3c69f` | EOS-Chronik 2026-08-21 18:56:03 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T18:52 | entityos | `73c2ea3443e3` | EOS-Chronik 2026-08-21 18:52:18 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T18:48 | entityos | `3ae6aa9b4d41` | EOS-Chronik 2026-08-21 18:48:31 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T18:46 | entityos | `0a5dbd6f0525` | EOS-Chronik 2026-08-21 18:46:06 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T18:22 | entityos | `d01cfd43653d` | EOS-Chronik 2026-08-21 18:22:35 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T18:19 | entityos | `69dbcb5b7825` | EOS-Chronik 2026-08-21 18:19:35 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T18:15 | entityos | `02736ef686b1` | Digital Retina 2: grosse, gemessene Beschreibung von Zeros visuellem Modul |
@@ -162,11 +170,4 @@ Automatisch erzeugt 2026-08-21T18:32:31Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T08:56 | entityos | `500a96b144a9` | EOS-Chronik 2026-08-21 08:56:09 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:51 | entityos | `c81ed95301d2` | EOS-Chronik 2026-08-21 08:51:36 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:49 | entityos | `fbf38bfd684c` | EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen |
-| 2026-08-21T08:47 | entityos | `8bea7c38d374` | EOS-Chronik 2026-08-21 08:47:36 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:44 | entityos | `44158da9d77a` | EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:42 | entityos | `93c53d574395` | EOS-Chronik 2026-08-21 08:42:07 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:40 | entityos | `426fd9e3f83d` | EOS-Chronik 2026-08-21 08:40:07 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T08:27 | entityos | `e1de3d439726` | EOS-Chronik 2026-08-21 08:27:32 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T08:16 | entityos | `5c0ea8dcd01a` | EOS-Chronik 2026-08-21 08:16:45 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:09 | entityos | `3b4cbc5c21c0` | EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen |
 

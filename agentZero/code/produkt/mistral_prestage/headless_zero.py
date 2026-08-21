@@ -220,6 +220,30 @@ def spur_deuten(werkzeuge) -> dict:
     }
 
 
+def nutzung_aus_envelope(envelope: dict) -> dict:
+    """Die echten Claude-Token-/Kostenzahlen aus dem `result`-Ereignis lesen.
+
+    ⭐⭐ TOKEN-KETTE 2026-08-22: bis heute wurde `envelope["usage"]` an dieser
+    Stelle NIRGENDS gelesen -- cost_usd/num_turns liefen zwar schon durch,
+    aber genau die Felder, die einen Cache-Treffer BEWEISEN
+    (cache_read_input_tokens vs. cache_creation_input_tokens), gingen im
+    result-Dict unter. Ohne sie war jede Aussage ueber Ersparnis eine Behaup-
+    tung. Gemessen (echte `claude -p`-Antwort, --output-format json/
+    stream-json liefern dieselbe usage-Form): ein Cache-Treffer zeigt sich als
+    cache_read_input_tokens gross UND cache_creation_input_tokens klein: ein
+    Kaltschreiber zeigt genau das Gegenteil. .get()-Kette, nie werfend --
+    fehlt ein Feld (aeltere CLI-Version, anderer Provider), bleibt es None
+    statt den Zug zu kippen.
+    """
+    u = envelope.get("usage") or {}
+    return {
+        "input_tokens": u.get("input_tokens"),
+        "output_tokens": u.get("output_tokens"),
+        "cache_read_input_tokens": u.get("cache_read_input_tokens"),
+        "cache_creation_input_tokens": u.get("cache_creation_input_tokens"),
+    }
+
+
 def run_headless(
     caveman_prompt: str,
     *,
@@ -355,6 +379,27 @@ def run_headless(
         # Vorstufe ist jetzt nur noch Hinweis; Zero waehlt selbst.
         "--permission-mode", "dontAsk",
         "--append-system-prompt-file", _sysdatei,
+        # ⭐⭐ TOKEN-KETTE 2026-08-22 (KORREKTUR: das eigentliche Zahlziel ist
+        # dieser Claude-Aufruf, nicht die Mistral-Vorstufe -- Gabriel 22.08.).
+        # GEMESSEN gegen die echte CLI (zwei aufeinanderfolgende `claude -p
+        # --no-session-persistence`-Prozesse, identischer angehaengter
+        # Systemprompt ~18,6k Token): der ZWEITE Aufruf liest 21.418 von 21.650
+        # Token aus dem Cache statt sie neu zu bezahlen -- 92,4 % weniger Kosten
+        # fuer diesen Zug ($0,1132 -> $0,0086). Anthropic-Promptcaching lief also
+        # schon automatisch, OHNE dieses Flag, OHNE cache_control-Code hier --
+        # `claude -p` setzt die Cache-Haltepunkte selbst.
+        # Dieses Flag beseitigt den EINEN gemessenen Risikofaktor: Claude Codes
+        # EIGENER Standard-Systemprompt (der vor unserem angehaengten Text
+        # steht) traegt von sich aus pro-Maschine-Abschnitte (cwd, Env-Info,
+        # Speicherpfade, Git-Status). Aendert sich einer davon zwischen zwei
+        # Zuegen, bricht der Praefix VOR unserem Text ab -- und alles danach
+        # (der ganze angehaengte RUNTIME_PROMPT) kann dann nicht mehr treffen,
+        # egal wie stabil er selbst ist. Das Flag zieht genau diese Abschnitte
+        # in die erste User-Nachricht um (Dokumentation: "Improves cross-user
+        # prompt-cache reuse"). Gemessen wirkungslos auf die Antwort selbst
+        # (identischer Text in zwei Proben mit/ohne Flag), nur auf den
+        # Cache-Praefix. Reines Risiko-Wegnehmen, kein neuer Mechanismus.
+        "--exclude-dynamic-system-prompt-sections",
         # ⭐ stream-json statt json: nur so sieht man die Werkzeugaufrufe. Der
         # Warmweg macht es seit jeher so; der Kaltweg zog 2026-08-21 nach.
         "--output-format", "stream-json", "--verbose",
@@ -427,5 +472,7 @@ def run_headless(
         "cost_usd": envelope.get("total_cost_usd"),
         "wall_ms": wall_ms,
         "claude_session_id": envelope.get("session_id"),
+        "warm": False,
+        "usage": nutzung_aus_envelope(envelope),
         **spur_deuten(_werkzeuge),
     }

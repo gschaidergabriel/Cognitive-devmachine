@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T23:06:41Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T23:36:41Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 664 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2594 Artikel, 1446 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -197,12 +197,12 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: codify evidence and falsification model** — `baunotiz-bauverlauf-cd5680bbbef2dec58a77` · baunotiz
 - **agentZero research: establish post-implementation research program** — `baunotiz-bauverlauf-e3ca1480a4e5e5477b74` · baunotiz
 - **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `bau-entityos-2c44f567c235` · bau
-- **agentZero research: index inventory analysis** — `baunotiz-git-f073e85bbfdbd673d3ac2139491018a` · baunotiz
-- **agentZero research: initialize measurement registry** — `baunotiz-git-b43473f88ce4ac21ca60e858d8196ba` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
+- **agentZero research: index inventory analysis** — `baunotiz-git-f073e85bbfdbd673d3ac2139491018a` · baunotiz
+- **agentZero research: initialize measurement registry** — `baunotiz-git-b43473f88ce4ac21ca60e858d8196ba` · baunotiz
 - **agentZero research: index Claude-only token savings analysis** — `baunotiz-bauverlauf-dc5adb297ed215eaa610` · baunotiz
 
 ## Kern / frank_v0_1 (6)

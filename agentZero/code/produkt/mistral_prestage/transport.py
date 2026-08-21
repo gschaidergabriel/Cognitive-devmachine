@@ -2,11 +2,31 @@ from __future__ import annotations
 
 import hashlib
 import json
+import sys as _sys
+import time as _time
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 MAX_RESPONSE_BYTES = 2_000_000
+
+
+def _wartezeit(exc, versuch: int) -> float:
+    """Wie lange warten? Die Gegenseite darf es sagen -- gedeckelt.
+
+    `Retry-After` kommt als Sekundenzahl oder als HTTP-Datum. Nur die Zahl
+    wird ausgewertet; ein Datum zu parsen waere mehr Aufwand als Nutzen, und
+    der Rueckfall ist ohnehin sicher.
+    """
+    kopf = getattr(exc, "headers", None)
+    if kopf is not None:
+        try:
+            wert = float(str(kopf.get("Retry-After", "")).strip())
+            if wert > 0:
+                return min(wert, WARTE_DECKEL_S)
+        except (TypeError, ValueError):
+            pass
+    return min(WARTE_BASIS_S * (2 ** versuch), WARTE_DECKEL_S)
 
 
 class TransportError(RuntimeError):
@@ -27,6 +47,38 @@ class _NoRedirectHandler(HTTPRedirectHandler):
 
 def _urlopen(request, timeout):
     return build_opener(_NoRedirectHandler()).open(request, timeout=timeout)
+
+
+# ⭐⭐ WIEDERHOLBARE ANTWORTEN, 2026-08-21.
+#
+# Gemessen in einem 20-Zuege-Gespraech: 11 von 20 Zuegen brachen ab mit
+# `TransportError: Mistral HTTP failure status=429`. Der ausloesende Grund lag
+# bei mir (mehrere Laeufe parallel), aber der Befund darunter ist echt und
+# haette jeden Menschen genauso getroffen: eine RATENBREMSE toetete den ganzen
+# Zug. Der Mensch bekam keine Antwort, obwohl nichts kaputt war -- es war nur
+# zu schnell gefragt.
+#
+# 429 ist keine Stoerung, sondern eine Bitte um Geduld. Dieselbe Unterscheidung
+# trifft `verdichtung.py` bereits richtig: dort wird 429 zurueckgenommen und in
+# `vd_grenze` gelernt, waehrend 401/402/403 auf ein anderes Konto wechseln.
+# Der Chatweg kannte den Unterschied noch nicht.
+#
+# 502/503/504 sind aus demselben Grund dabei: voruebergehende Zustaende der
+# Gegenseite. NICHT dabei sind 400/401/402/403/404 -- ein falscher Schluessel
+# oder ein fehlendes Abo werden durch Warten nicht besser, und ein blindes
+# Wiederholen wuerde die Ursache verschleiern.
+WIEDERHOLBAR = frozenset({429, 502, 503, 504})
+
+# Zwei Wiederholungen, nicht mehr. Der Mensch wartet vor dem Bildschirm: ein
+# Zug, der nach drei Anlaeufen immer noch bremst, soll ehrlich scheitern statt
+# eine Minute lang stumm zu warten. Gemessen liegt ein normaler Zug bei 6-20 s;
+# 0,8 + 1,6 s Wartezeit bleiben darunter spuerbar, aber ertraeglich.
+WIEDERHOLUNGEN = 2
+WARTE_BASIS_S = 0.8
+# Deckel fuer ein `Retry-After` der Gegenseite: sie darf uns bitten, nicht
+# fesseln. Sagt sie "warte 300 Sekunden", warten wir trotzdem hoechstens so
+# lange -- und scheitern danach sichtbar.
+WARTE_DECKEL_S = 4.0
 
 
 def mistral_chat_json(
@@ -85,12 +137,28 @@ def mistral_chat_json(
     transport_failure = None
     raw = b""
     try:
-        with _urlopen(request, timeout=timeout) as response:
-            raw = response.read(MAX_RESPONSE_BYTES + 1)
-    except HTTPError as exc:
-        http_status = int(exc.code)
-    except (URLError, TimeoutError, OSError) as exc:
-        transport_failure = type(exc).__name__
+        for versuch in range(WIEDERHOLUNGEN + 1):
+            http_status = None
+            transport_failure = None
+            try:
+                with _urlopen(request, timeout=timeout) as response:
+                    raw = response.read(MAX_RESPONSE_BYTES + 1)
+                break
+            except HTTPError as exc:
+                http_status = int(exc.code)
+                warte = _wartezeit(exc, versuch)
+            except (URLError, TimeoutError, OSError) as exc:
+                transport_failure = type(exc).__name__
+                warte = WARTE_BASIS_S * (2 ** versuch)
+            if versuch >= WIEDERHOLUNGEN:
+                break
+            if http_status is not None and http_status not in WIEDERHOLBAR:
+                break          # dauerhafter Fehler -- Warten hilft nicht
+            print(f"prestage: Mistral antwortet "
+                  f"{http_status or transport_failure}, warte {warte:.1f}s "
+                  f"(Versuch {versuch + 1} von {WIEDERHOLUNGEN})",
+                  file=_sys.stderr)
+            _time.sleep(warte)
     finally:
         api_key = ""
         request = None

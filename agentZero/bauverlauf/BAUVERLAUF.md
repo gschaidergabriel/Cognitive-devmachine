@@ -1,12 +1,50 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T06:50:30Z. 1032 Commits aus vier Repos, davon 386 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T07:20:30Z. 1033 Commits aus vier Repos, davon 388 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 07:05:54 +0000 — entityos: 1 Aenderungen
+
+`f702cc24f95e` · entityos · 07:05 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/web/chat/demo-bilder/next-build-gabriel.png
+
+Zeit: 2026-08-21T07:05:54+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 06:55:18 +0000 — entityos: 3 Aenderungen
+
+`51c3991bd1f4` · entityos · 06:55 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/transport.py
+  the artefact/tests/test_429.py
+  the artefact/web/avatare/vorschau-nachdenken.html
+
+Zeit: 2026-08-21T06:55:18+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 06:46:40 +0000 — entityos: 1 Aenderungen
 
@@ -3137,153 +3175,5 @@ Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
 Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
 agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
 des Abrufs.
-```
-
-### Seitenuebersicht in EntityOS - uebernommen aus agentforge, nicht neu erfunden
-
-`1a09c75938d9` · entityos · 15:17 UTC · EntityOS
-
-```
-Gabriel: "schau dir in agentforge die unterseite hosting an ... die nimmst du
-und baust als unterpage in die entityos page ein ... ohne die anderen
-frank.ink features wie workspace etc, nur die features die sinn machen, jetzt
-nichts neu erfinden." Und: "es soll immer dabei stehen ob self hosted oder
-extern."
-
-⭐ UEBERNOMMEN, NICHT NACHGEBAUT. Die Kennzahlen sind exakt die der bestehenden
-Ansicht (agentforge/engine/project_engine.py): Besuche und Unikate in vier
-Fenstern, Funkenlinie ueber 30 Tage, Verweise, meistgerufene Pfade,
-Seitengewicht nach Art plus die groessten Dateien. Gleiche Quelle, gleiche
-Rechnung. Zwei leicht abweichende Zaehlungen waeren schlimmer als eine -- dann
-streiten zwei Anzeigen darueber, wie viele Besucher es gab.
-
-WEGGELASSEN: Workspace, Slug umbenennen, Offline nehmen, Werbung,
-Marketing-Assistenten. Das sind frank.ink-Funktionen. Hier geht es um: WAS gibt
-es, WIE laeuft es, WIE aendert man es.
-
-⭐ SELBST GEHOSTET ODER EXTERN steht an JEDER Zeile, als Merkmal das man nicht
-uebersieht. Keine Zierde: bei einer selbst gehosteten Seite koennen wir etwas
-aendern, bei einer externen nicht -- der Unterschied entscheidet, ob ein
-Arbeitspaket ueberhaupt sinnvoll ist. ABGELEITET (liegt ein site-Verzeichnis auf
-diesem Wirt?), nicht behauptet, und die Begruendung steht am Merkmal.
-
-24 Seiten, /seiten in der Schale neben Chat und Mailbox.
-
-⚠️⚠️ EINE NULL, DIE KEINE IST -- der wichtigste Fund dieser Ansicht.
-seimensch.net zeigte "0 Besuche in 30 Tagen". Die Seite hat Verkehr; sie laeuft
-nur ueber eine EIGENE nginx-Wurzel und nicht ueber die Plattform, also zaehlt
-agentforge sie gar nicht.
-Das ist der schlimmste Anzeigefehler ueberhaupt: nicht ein fehlender Wert,
-sondern ein FALSCHER, der plausibel aussieht -- man haelt die Seite fuer tot und
-entscheidet danach. Die Uebersicht sagt dort jetzt "nicht gezaehlt" und nennt
-den Grund.
-
-═══ UND EINE RICHTUNGSENTSCHEIDUNG, festgehalten in der UnifiedDB ═══
-
-Gabriel: "es gibt kein agentforge mehr, nur noch entityOS koennte man sagen;
-daher muessen wir nach und nach alle wichtigen dienste in entityOS und den
-server migrieren, aber alle nach und nach."
-
-Erster Schritt sofort erledigt: die Uebersicht liest die Plattformdatenbank
-DIREKT. Mein erster Bau lief ueber einen Schnappschuss alle 5 Minuten -- eine
-Vorsicht gegen das Anfassen FREMDER Rechte, die auf einer falschen Praemisse
-beruhte. Umweg entfernt: Takt, Skript, Abbild geloescht.
-
-⚠️ Und der Schnappschuss war ohnehin falsch dimensioniert: er kopierte die
-ganze Datenbank, 1,06 GB, alle fuenf Minuten -- rund 288 GB Schreiblast am Tag
-fuer 120 Projektzeilen und 14.365 Besuchszeilen. Das ist kein Schnappschuss,
-das ist Verschleiss. Selbst korrigiert auf 4,7 MB, bevor der Umweg ganz wegfiel.
-
-⚠️ setgid auf dem Datenbankverzeichnis gesetzt: ohne das bekommen NEUE
-WAL-Dateien beim naechsten Checkpoint wieder die alte Gruppe, und der Zugriff
-faellt STILL wieder aus -- die Sorte Fehler, die Wochen spaeter als "geht
-ploetzlich nicht mehr" auftaucht.
-
-⭐ Was mit dem Direktzugriff auch wegfaellt: die Frage "wie alt sind diese
-Zahlen". Ein Abbild braucht ein Alter, ein Direktzugriff nicht.
-
-SECHS TESTS GEBROCHEN UND WIEDER ZU: build_context() bekam einen
-Pflichtparameter, die Tests riefen ohne auf. Fuenf davon reine Signaturfolgen.
-⭐ Der sechste war INHALTLICH richtig: er prueft, dass der Kontext genau acht
-Schluessel traegt -- es sind jetzt neun. Der Test hat zu Recht angeschlagen, er
-bewacht die FORM des Kontexts. Statt nur die Zahl hochzusetzen fordert er jetzt
-den neuen Schluessel beim NAMEN: eine Zahl allein haette auch ein Umbenennen
-durchgelassen.
-Suite wieder 570 gruen / 9 rot.
-```
-
-### Alle selbst gehosteten Seiten - und retina.frank.ink ist kaputt
-
-`4bc81f8e52c3` · entityos · 14:54 UTC · EntityOS
-
-```
-Gabriel: "er muss generell alle pages die wir ja selbst hosten kennen und wissen
-wie er diese bearbeiten kann", dazu "retina und iar sind gleich wie alle anderen
-ueber frank.ink gehostet" und "da ist auch kosal.frank.ink und anderes".
-
-ALLES GEMESSEN, nichts angenommen: nginx-Konfiguration gelesen, agentforge.db
-abgefragt, jede Unterdomain live gegen die Plattform UND oeffentlich geprueft.
-
-WIE ES WIRKLICH LAEUFT
-Alle Unterdomains von frank.ink bedient die Plattform agentforge
-(*.frank.ink -> <adresse>:8000). Es gibt KEINE eigene nginx-Regel je Seite --
-die Plattform loest die Unterdomain auf einen Projekt-Slug auf, die Dateien
-liegen unter /var/lib/agentforge/projects/<konto>/<slug>/site/. Die Zuordnung
-steht in /var/lib/agentforge/db/agentforge.db, Tabelle `projects`.
-51 aktive Projekte, 12 mit echtem Verkehr -- iar (2683 Besuche), seimensch
-(1957), shadcntest (806), kosal (549), testagents (440) und weitere.
-
-SONDERFALL SEIMENSCH: seimensch.net hat eine EIGENE nginx-Regel mit derselben
-Wurzel als Docroot, statt ueber die Plattform zu laufen. herzrad.at und
-leihmich.org ebenso, mit Unterordnern derselben Wurzel als eigene Domainwurzel
--- deshalb dort relative Asset-Pfade und eigene Wurzeldateien.
-
-⚠️⚠️ EIN BEFUND, DER DER ANNAHME WIDERSPRICHT
-    retina.frank.ink   404 bei agentforge, oeffentlich 301 AUF SICH SELBST
-    daemonweave.frank.ink  404 bei agentforge
-retina ist damit nicht "wie die anderen gehostet", sondern KAPUTT: eine
-Weiterleitung auf sich selbst ist eine Schleife. In agentforge existiert kein
-Projekt `retina`, auch kein archiviertes -- nur alte Sicherungsordner
-projects/6/iar.bak-pre-retina-*.
-
-⭐ Haette ich die Annahme uebernommen, waere der Fehler zugedeckt worden und
-haette als "laeuft" im Wiki gestanden. Der Artikel fuehrt ihn als
-Gegenhypothese mit, damit sichtbar bleibt, dass hier Messung und Annahme
-auseinandergingen.
-
-⚠️ AUCH EINE ALTE NOTIZ WIDERLEGT: die Projektnotiz nennt <adresse> als
-Produktionsserver von SeiMensch. Die Seiten laufen auf DIESEM Wirt, und das
-zentrale Repo liegt hier unter /srv/git/seimensch.git mit post-receive-Hook.
-
-BEARBEITUNGSWEGE, so weit belegt:
-  seimensch/herzrad/leihmich  ueber den Git-Klon, commit, push origin main --
-                              der Hook macht Sicherung, Pruefung, Spiegelung.
-                              Die Live-Wurzel ist KEIN Arbeitsverzeichnis; eine
-                              Aenderung dort wird beim naechsten Push
-                              ueberschrieben.
-  entityos.frank.ink          Repo /opt/entityos/the artefact, danach
-                              docker compose --env-file ... (NICHT mit set -a,
-                              siehe betrieb/BAUEN.md)
-  uebrige agentforge-Projekte ⚠️ die Dateien unter projects/<konto>/<slug>/site/
-                              sind die ausgelieferten. OB ein Projekt aus einem
-                              Repo befuellt wird, wurde je Projekt NICHT
-                              geprueft -- nachsehen, bevor man dort editiert,
-                              sonst ist die Aenderung beim naechsten Lauf weg.
-
-Eine erfundene Bearbeitungsanleitung ist schlimmer als keine, weil ihr jemand
-folgt. Deshalb steht der ungepruefte Teil als ungeprueft da.
-
-═══ AUSSERDEM: GRENZE NEU GEZOGEN, auf Eignerentscheid ═══
-"es kann im chat ruhig adressen ausgeben ... auch tokens kann er ausgeben nur
-passwoerter nicht." Meine Schwaerzung war strenger als gewollt -- sie war MEINE
-Entscheidung, nicht seine. Zurueckgenommen: Adressen bleiben im Chatexport
-stehen, die Mailfelder sind wieder im Profil.
-⚠️ Eine Folge, einmal genannt: ein Token, das Zero im Chat ausgibt, steht danach
-dauerhaft in der Zugtabelle und im exportierten Verlauf. Ein Adressleck ist
-unangenehm, ein Tokenleck ist benutzbar. Die Abwaegung ist getroffen.
-
-Nicht angefasst: code/unterbau/werkzeuge.py traegt eine Mailadresse als Kontakt
-fuer die Hoeflichkeits-Pools wissenschaftlicher APIs. Fremder Substratcode mit
-legitimem Zweck -- eine Aenderung koennte den Zugang 
 ```
 

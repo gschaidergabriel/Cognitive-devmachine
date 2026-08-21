@@ -94,6 +94,16 @@
     "executable_evidence": "test_concurrent_attempt_waits_for_payment_hard_stop_result",
     "counterhypothesis": "Independent preflight checks are sufficient for concurrent attempts; falsified locally because a second attempt reached the network while the first payment response was pending, before the shared hard-stop latch could be published."
   },
+  "passive_payment_latch_container_boundary": {
+    "checked_at": "2026-08-21",
+    "claim": "Caller-supplied payment-latch storage must be an exact built-in set before capability inventory, routing or authenticated execution; set subclasses cannot execute overridden membership or mutation behavior around a received HTTP 402.",
+    "sources": [
+      "https://docs.python.org/3/library/stdtypes.html#set-types-set-frozenset",
+      "https://docs.python.org/3/library/functions.html#isinstance"
+    ],
+    "executable_evidence": "test_active_payment_latch_container_is_rejected_before_execution",
+    "counterhypothesis": "Any set-compatible container is passive shared state; falsified locally because an overridden add ran only after HTTP 402, downgraded the regular-response path and escaped the HTTPError path without a mandatory receipt."
+  },
   "execution_busy_timeout": {
     "checked_at": "2026-08-14",
     "claim": "A caller waiting for the single-instance execution lock fails closed as execution_busy after 35 seconds and cannot reach credential use or network access.",
@@ -622,6 +632,7 @@
     "Runtime-environment adapter failures collapse to one constant error outside the active handler; arbitrary adapter exception text is not displayed or retained, and no credential or network boundary is crossed.",
     "Recognized runtime-environment values are exact built-in strings; polymorphic string subclasses fail closed before their methods can execute in capability inventory, routing, attestation or credential handling.",
     "The v0.1 execution path is process-serialized from routing through receipt publication so a payment-required latch from one attempt is visible before another attempt can route or reach the network.",
+    "Caller-supplied payment-latch storage is an exact built-in set before capability inventory or routing; polymorphic membership and mutation behavior cannot suppress a received HTTP 402 hard stop or its mandatory receipt.",
     "Waiting for the v0.1 single-instance execution lock is bounded to 35 seconds; timeout raises execution_busy before routing, credential use or network access.",
     "Execution receipt request IDs bind provider, endpoint host and serialized request digest and remain stable across retries; attempt IDs are unique per execution attempt.",
     "Attempt IDs include a fresh high-entropy nonce so equal-time concurrent attempts cannot alias; raw nonces are never serialized.",

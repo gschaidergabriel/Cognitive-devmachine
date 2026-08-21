@@ -7,10 +7,11 @@
 - Quellen:
   - `agentZero/abruf/retrieval_feedback.jsonl` — 20 persistente Feedback-Receipts
   - `agentZero/abruf/retrieval_episodes.jsonl` — 15 aktuell sichtbare Retrieval-Episoden
-- Untersuchung: read-only ID-Join auf der GitHub-Exportoberflaeche
+  - `agentZero/kognition/causal_episodes.jsonl` — 583 aktuell sichtbare Causal-Episoden
+- Untersuchung: read-only ID-Joins auf der GitHub-Exportoberflaeche
 - keine Live-DB-Abfrage; keine Produktmutation; kein ungewöhnliches Experiment
 
-## 1. Messung
+## 1. Retrieval-Source-Messung
 
 Alle `retrieval_id` aus den 20 persistierenden Feedback-Receipts wurden gegen alle 15 im aktuellen Export sichtbaren `retrieval_id` verglichen.
 
@@ -37,21 +38,40 @@ Der direkte `retrieval_id`-Schnitt ist leer.
 
 Status: `OBSERVED_AT_EXACT_EXPORT_SURFACE`.
 
-## 2. Was jetzt staerker belegt ist
+## 2. Causal Counter-Join
 
-Gen244 hatte bereits aus Generationen und Zaehlern geschlossen, dass persistierendes Retrieval-Lernkapital seine alten sichtbaren Episoden ueberlebt.
+Dieselben 20 Feedback-Receipts enthalten jeweils eine `causal_id`. Alle 20 IDs wurden gegen den aktuellen `causal_episodes`-Export geprueft.
 
-Der neue Receipt ersetzt den reinen Zaehlervergleich durch einen direkten ID-Join:
+### Ergebnis
 
-> **Keines der 20 aktuell persistierenden Retrieval-Feedback-Receipts kann auf der aktuellen Exportoberflaeche direkt zu seiner `retrieval_id`-Quelle zurueckgejoint werden.**
+- `feedback_receipts_with_visible_causal_id = 20`
+- `feedback_receipts_without_visible_causal_id = 0`
+- `feedback_causal_surface_match_rate = 20 / 20 = 1.0`
+- `retrieval_vs_causal_visibility_gap = 1.0 - 0.0 = 1.0` bzw. **100 Prozentpunkte**
 
-Damit ist `VISIBLE_RETRIEVAL_FEEDBACK_SOURCE_LINEAGE_GAP` auf der aktuellen Exportoberflaeche nicht nur plausibel, sondern direkt gemessen.
+Damit gilt fuer exakt dieselbe persistierende Feedback-Menge:
 
-## 3. Was NICHT belegt ist
+`causal anchor visible = 20/20`
+
+`retrieval origin visible = 0/20`
+
+Status: `SELECTIVE_LINEAGE_RETENTION_REPLICATED_BY_DIRECT_ID_JOIN`.
+
+## 3. Was jetzt staerker belegt ist
+
+Gen244 hatte bereits aus Generationen und Zaehlern geschlossen, dass persistierendes Retrieval-Lernkapital seine alten sichtbaren Retrieval-Episoden ueberlebt, waehrend Causal-Historie erhalten bleibt.
+
+Der neue Receipt ersetzt den reinen Zaehlervergleich durch zwei direkte ID-Joins:
+
+> **Keines der 20 aktuell persistierenden Retrieval-Feedback-Receipts kann auf der aktuellen Exportoberflaeche direkt zu seiner `retrieval_id`-Quelle zurueckgejoint werden, aber alle 20 koennen weiterhin zu ihrem `causal_id`-Anker gejoint werden.**
+
+Damit wird ein globaler Totalverlust als triviale Erklaerung deutlich geschwaecht. Die sichtbare Epochengrenze ist selektiv nach Evidenzart.
+
+## 4. Was NICHT belegt ist
 
 Dieser Receipt darf nicht umgedeutet werden zu:
 
-- `20 Quellen sind physisch geloescht`;
+- `20 Retrieval-Quellen sind physisch geloescht`;
 - `Live-DB hat keine alten Retrieval-Episoden`;
 - `Compaction-/Archiv-Mapping existiert nicht`;
 - `adaptive Policy ist falsch`;
@@ -62,15 +82,18 @@ Die aktuelle Exportoberflaeche ist nur eine Beobachtungsschicht. Die staerkste G
 
 `OLD_RETRIEVAL_SOURCES_EXIST_IN_LIVE_DB_OR_ARCHIVE_AND_ARE_ONLY_EXPORT_HIDDEN`.
 
-## 4. Beziehung zu Adaptive Evidence Debt
+Der 20/20-Causal-Gegenjoin macht diese Gegenhypothese sogar praeziser: Falls eine Migration/Retention-Regel existiert, behandelt sie Retrieval- und Causal-Evidenz unterschiedlich.
+
+## 5. Beziehung zu Adaptive Evidence Debt
 
 Der Receipt definiert noch keinen numerischen AED/OACR, weil die 20 Feedback-Receipts keine vollstaendige Definition aller **aktiven adaptiven Units** sind.
 
-Er liefert aber einen harten Eingangswert fuer `ADAPTIVE_EVIDENCE_DEBT_RECEIPT/v1`:
+Er liefert aber harte Eingangswerte fuer `ADAPTIVE_EVIDENCE_DEBT_RECEIPT/v1`:
 
-`source_status_at_export_surface = MISSING` fuer 20/20 Retrieval-Feedback-Urspruenge.
+- `retrieval_source_status_at_export_surface = MISSING` fuer 20/20 Urspruenge;
+- `causal_anchor_status_at_export_surface = PRESENT` fuer 20/20 Receipts.
 
-Diese Klasse muss bei einer spaeteren Live-DB-/Archivsuche entweder hochgestuft werden zu:
+Die Retrieval-Klasse muss bei einer spaeteren Live-DB-/Archivsuche entweder hochgestuft werden zu:
 
 - `PRESENT_DIRECT`
 - `SOURCE_HIDDEN_BUT_MAPPED`
@@ -83,7 +106,7 @@ oder bestaetigt werden als:
 - `AMBIGUOUS`
 - `ERROR`.
 
-## 5. Staerkster naechster Falsifikator
+## 6. Staerkster naechster Falsifikator
 
 Fuer exakt diese 20 `retrieval_id` in der aktuellen Live-DB und allen expliziten Archiv-/Replacement-/Compaction-Strukturen suchen.
 
@@ -108,20 +131,24 @@ Der Test trennt unmittelbar:
 - **Export-Sichtbarkeitsproblem** von
 - **echter ungemappter Lernprovenienzschuld**.
 
-## 6. Promotionsstatus
+Zusaetzlich sollte die Retention-Regel selbst gesucht werden, weil die 20/20-vs-0/20-Asymmetrie eine evidenztyp-spezifische Grenze nahelegt.
+
+## 7. Promotionsstatus
 
 - Feedback-Receipts persistent: `OBSERVED`
 - aktuelle Retrieval-Episoden: `OBSERVED`
-- direkter ID-Join auf Exportoberflaeche 0/20: `OBSERVED_AT_EXACT_EXPORT_SURFACE`
-- sichtbare Source-Lineage-Gap-Rate 100% fuer diese 20 Receipts: `MEASURED_AT_EXPORT_SURFACE`
-- physische Loeschung der Ursprungs-Episoden: `NOT_PROVEN`
+- direkter Retrieval-ID-Join auf Exportoberflaeche 0/20: `OBSERVED_AT_EXACT_EXPORT_SURFACE`
+- direkter Causal-ID-Gegenjoin 20/20: `OBSERVED_AT_EXACT_EXPORT_SURFACE`
+- selektive Retrieval-vs-Causal-Lineage-Asymmetrie: `MECHANISM_SUPPORTED_AT_EXPORT_SURFACE`
+- sichtbare Retrieval-Source-Lineage-Gap-Rate 100% fuer diese 20 Receipts: `MEASURED_AT_EXPORT_SURFACE`
+- physische Loeschung der Retrieval-Ursprungs-Episoden: `NOT_PROVEN`
 - vorhandenes Archiv/Mapping: `UNRESOLVED`
 - numerischer AgentZero-AED/OACR: `NOT_YET_MEASURABLE`
 
-## 7. Fusion
+## 8. Fusion
 
 Der bisherige Gen244-Befund wird praezisiert:
 
-`learned/adaptive retrieval feedback persists while 20/20 referenced retrieval origins are not directly addressable on the current export surface`.
+`adaptive retrieval feedback persists; its 20/20 causal anchors remain directly visible, while 0/20 referenced retrieval origins are directly addressable on the current export surface`.
 
-Das ist nun ein konkreter, falsifizierbarer Receipt statt nur eine qualitative Provenienzwarnung. Der naechste Informationsgewinn liegt nicht in weiteren Snapshots, sondern im direkten Live-/Archiv-ID-Resolve derselben 20 Quellen.
+Das ist ein konkreter, falsifizierbarer Receipt fuer eine selektive Evidence-Epoch-Grenze. Der naechste Informationsgewinn liegt nicht in weiteren Snapshot-Gesamtzaehlern, sondern im direkten Live-/Archiv-ID-Resolve derselben 20 Retrieval-Quellen und der Suche nach der evidenztyp-spezifischen Retention-/Migration-Regel.

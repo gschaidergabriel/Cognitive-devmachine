@@ -226,9 +226,42 @@ def zeilen(c, testlage: str = "") -> list[dict]:
         for name in CLAY_TAKTDIENSTE:
             # Taktdienst: der Zeitgeber ist das Lebenszeichen, nicht der Lauf.
             lebt = _einheit_aktiv(f"clayverse-{name}.timer")
-            befund.append(f"{name} {'getaktet' if lebt else 'TOT (Zeitgeber steht still)'}")
             if not lebt:
+                befund.append(f"{name} TOT (Zeitgeber steht still)")
                 tot.append(name)
+                continue
+            # ⭐⭐ NACHGEZOGEN 2026-08-21. Bis hierher mass diese Zeile nur, ob
+            # der Zeitgeber STEHT -- nicht, ob der Dienst etwas AUSRICHTET.
+            # Gemessen an diesem Tag: verdichtung lief alle 10 min, meldete
+            # "gearbeitet", und JEDE gezuendete Bahn scheiterte an HTTP 402
+            # (Mistral-Abo abgelaufen). Der Rueckstau wuchs dabei auf das
+            # Sieben- bis Siebzehnfache der Schwelle. Die Zeile stand trotzdem
+            # auf gruen.
+            #
+            # Das ist dieselbe Fehlerklasse, die an diesem Tag noch zweimal
+            # auftrat: ein Takt, der Erfolg meldet, ohne zu wirken. Er ist
+            # SCHLIMMER als ein fehlender Takt, weil er die Pruefung blind
+            # macht. Und es ist genau das, was dieses Dokument laut seinem
+            # eigenen Vorspann nicht tun darf -- eine Statustabelle, die nach
+            # einer Woche auf gruen steht, weil niemand sie zuruecknimmt.
+            #
+            # Gemessen wird deshalb der letzte Lauf im Journal: zuendet eine
+            # Bahn und scheitert sie, ist der Dienst getaktet, aber wirkungslos.
+            log = _sh(f"journalctl -u clayverse-{name}.service -n 60 --no-pager "
+                      "2>/dev/null | tail -40")
+            zuendungen = log.count("ZUENDET")
+            fehler = log.count("Bahnfehler")
+            if zuendungen and fehler >= zuendungen:
+                befund.append(f"{name} getaktet, aber WIRKUNGSLOS "
+                              f"({fehler} von {zuendungen} gezündeten Bahnen scheiterten)")
+                tot.append(name)
+            elif zuendungen:
+                befund.append(f"{name} getaktet und wirksam "
+                              f"({zuendungen - fehler} von {zuendungen} Bahnen durch)")
+            else:
+                # Keine Zuendung heisst: die Schwelle war nicht ueberschritten.
+                # Das ist der vorgesehene Ruhezustand, kein Befund.
+                befund.append(f"{name} getaktet (Schwelle nicht überschritten)")
         # Laufende clayverse-Dienste ausserhalb der Pflicht: nennen, nicht werten.
         roh = _sh("systemctl list-units 'clayverse-*.service' --state=running "
                   "--no-legend --no-pager | awk '{print $1}'")

@@ -306,6 +306,31 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(serialization_calls, [])
 
+    def test_escaped_unicode_overflow_is_rejected_before_json_materialization(self):
+        serialization_calls = []
+        original_dumps = MOD.json.dumps
+
+        def tracking_dumps(*args, **kwargs):
+            serialization_calls.append("serialize")
+            return original_dumps(*args, **kwargs)
+
+        # With ensure_ascii=True, each non-BMP scalar becomes a pair of
+        # six-byte \uXXXX escapes. Character count alone therefore
+        # underestimates the serialized request by a factor of twelve.
+        escaped_overflow = "😀" * (MOD.MAX_PROVIDER_REQUEST_BYTES // 12 + 1)
+        MOD.json.dumps = tracking_dumps
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(
+                    [{"role": "user", "content": escaped_overflow}],
+                    model="mock",
+                    environ={},
+                )
+        finally:
+            MOD.json.dumps = original_dumps
+
+        self.assertEqual(serialization_calls, [])
+
     def test_structurally_oversized_request_is_rejected_before_snapshot(self):
         snapshot_calls = []
         original_snapshot = MOD._snapshot_text_chat_request

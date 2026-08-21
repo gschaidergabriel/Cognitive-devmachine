@@ -1100,11 +1100,25 @@ def main() -> None:
     # Auch hier `wirt`: der Browser traegt die Anmeldungen eines bestimmten
     # Menschen -- den falschen zu bedienen waere schlimmer als gar keinen.
     @mcp.tool(annotations=effectful)
-    def browser_oeffnen(url: str, browser: str = "", wirt: str = "") -> dict:
-        """Eine Seite im Browser des Menschen oeffnen (echtes angemeldetes Profil). `browser` leer = Standardbrowser; sonst chrome|firefox|brave."""
+    def browser_oeffnen(url: str, browser: str = "", bildschirm: str = "",
+                        neu: bool = False, wirt: str = "") -> dict:
+        """Eine Seite im Browser des Menschen oeffnen (echtes angemeldetes Profil). `browser` leer = Standardbrowser (Gabriel: Firefox, Andreas: Brave -- je Rechner fest hinterlegt, kein Raten); sonst chrome|firefox|brave. `bildschirm` waehlt GEZIELT, wo das Fenster landet -- ruf vorher `browser_bildschirme` fuer die verfuegbaren Namen/Indizes; leer = automatisch der grosse/nicht-primaere Bildschirm, NIE der kleine Arbeitsschirm des Menschen (der ist nur mit bildschirm='primary' erreichbar, und auch dann nur, wenn du das wirklich willst). `neu=true` schliesst eine schon laufende Sitzung dieses Browsers zuerst -- ohne das zieht `bildschirm` bei einem bereits offenen Fenster nicht (es wird nur navigiert, nicht verschoben)."""
         from . import browser_fern
         return _mit_buchung(wirt, "browser:oeffnen", url,
-                            lambda ziel: browser_fern.oeffnen(url, browser, wirt=ziel))
+                            lambda ziel: browser_fern.oeffnen(url, browser, bildschirm, neu, wirt=ziel))
+
+    @mcp.tool(annotations=ro)
+    def browser_bildschirme(wirt: str = "") -> dict:
+        """Welche Bildschirme der Rechner des Menschen hat -- Name/Connector, Geometrie, welcher der Mensch ist (nie Standardziel), welcher die Vorgabe fuer ein neues Fenster waere. Nutze das VOR einem gezielten `browser_oeffnen(..., bildschirm=...)`, um den richtigen Namen/Index zu kennen."""
+        from . import browser_fern
+        return browser_fern.bildschirme(wirt=wirt or None, nutzer=_nutzer())
+
+    @mcp.tool(annotations=effectful)
+    def browser_schliessen(browser: str = "", alle: bool = False, wirt: str = "") -> dict:
+        """Ein von dir geoeffnetes Browserfenster wieder schliessen -- das Gegenstueck zu `browser_oeffnen`. Gabriels Regel 2026-08-22: JEDES Oeffnen braucht ein Schliessen, lass dem Menschen keine Fenster auf dem Schreibtisch stehen. `browser` leer = Standardbrowser; `alle=true` schliesst ALLE gerade offenen Sitzungen auf diesem Rechner in einem Aufruf."""
+        from . import browser_fern
+        return _mit_buchung(wirt, "browser:schliessen", {"browser": browser, "alle": alle},
+                            lambda ziel: browser_fern.schliessen(browser, alle, wirt=ziel))
 
     @mcp.tool(annotations=ro)
     def browser_lesen(browser: str = "", wirt: str = "") -> dict:

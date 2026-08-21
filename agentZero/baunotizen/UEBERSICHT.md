@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T17:37:23Z. **3592 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T18:02:32Z. **3605 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T23:48:07+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T00:08:36+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3494 |
+| baunotiz | 3507 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2139 |
-| baunotiz | bauverlauf.jsonl | 1309 |
+| baunotiz | git-commit | 2146 |
+| baunotiz | bauverlauf.jsonl | 1315 |
 | baunotiz | github-ereignis | 41 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3592 · Gegenhypothese: 0 von 3592
+## Hypothese: 0 von 3605 · Gegenhypothese: 0 von 3605
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,54 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T23:48:07+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### instrument: add paired read-side-effect discriminator
+
+`baunotiz-bauverlauf-4644ac0dd7134ce67de4` · baunotiz · bauverlauf.jsonl · 2026-08-22T00:08:36+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### instrument: add paired read-side-effect discriminator
+
+`baunotiz-git-73ce06c03766f1895bef52897e5326a7ab11b4d7` · baunotiz · git-commit · 2026-08-22T00:08:36+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+instrument: add paired read-side-effect discriminator
+
+### instrument: add read-side-effect receipt contract
+
+`baunotiz-bauverlauf-cb8d0d41a24badf8c997` · baunotiz · bauverlauf.jsonl · 2026-08-22T00:07:59+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### instrument: add read-side-effect receipt contract
+
+`baunotiz-git-777c5457954cd06f194376e12f510165f2baf0e8` · baunotiz · git-commit · 2026-08-22T00:07:59+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+instrument: add read-side-effect receipt contract
+
+### research: isolate Gen247 read-side schema mutation
+
+`baunotiz-bauverlauf-a86bd94e288b8901b467` · baunotiz · bauverlauf.jsonl · 2026-08-22T00:07:18+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: isolate Gen247 read-side schema mutation
+
+`baunotiz-git-33c6b6c910e945b21b0fede6e64592adedfe4fe7` · baunotiz · git-commit · 2026-08-22T00:07:18+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: isolate Gen247 read-side schema mutation
 
 ### research: bind Gen247 generation advance causal neutrality
 
@@ -184,54 +232,6 @@ claycode supervisor: bind Gen245 feedback causal-credit boundary
 ### research: bind assistant-assertion fact admission gap
 
 `baunotiz-bauverlauf-556ee62e2a0867c0d139` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:39:45+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: bind assistant-assertion fact admission gap
-
-`baunotiz-git-be07d9d2b3d3ddfd9b33c98b9d718303c2132940` · baunotiz · git-commit · 2026-08-21T21:39:45+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: bind assistant-assertion fact admission gap
-
-### research: add adaptive evidence debt metric
-
-`baunotiz-bauverlauf-858b2c03e39855cde936` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:39:17+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: add adaptive evidence debt metric
-
-`baunotiz-git-11c29d3620d35c4b8d4113a7abed76ff274b14e0` · baunotiz · git-commit · 2026-08-21T21:39:17+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: add adaptive evidence debt metric
-
-### research: correct F94 go experiment accounting fail-closed
-
-`baunotiz-bauverlauf-f4d62462d74f58ac7ee5` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:39:00+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: correct F94 go experiment accounting fail-closed
-
-`baunotiz-git-e266b2b229b5c6339eb3ea34245a6ac8ea353928` · baunotiz · git-commit · 2026-08-21T21:39:00+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: correct F94 go experiment accounting fail-closed
-
-### research: classify persistent single-red receipt as underdetermined
-
-`baunotiz-bauverlauf-c23b162fac2e57335148` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:37:53+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

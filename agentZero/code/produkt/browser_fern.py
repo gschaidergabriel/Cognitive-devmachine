@@ -77,10 +77,46 @@ def _q(browser):
     return f"?browser={browser}" if browser else ""
 
 
-def oeffnen(url, browser="", wirt=None, nutzer=None):
-    return _ruf("/oeffnen", "POST",
-                {"url": url, **({"browser": browser} if browser else {})},
-                wirt=wirt, nutzer=nutzer)
+def oeffnen(url, browser="", bildschirm="", neu=False, wirt=None, nutzer=None):
+    """`bildschirm` (2026-08-22, Gabriels Auftrag "adaptive Bildschirmwahl"):
+    WELCHER Bildschirm das neue Fenster bekommt -- Connector-Name ("DP-2"),
+    Index (aus `bildschirme()`), oder 'primary'/'mensch' bzw. 'ziel'. Leer =
+    Vorgabe des Dienstes (NIE der Mensch-Bildschirm). `neu=True` schliesst
+    eine bereits laufende Sitzung dieses Browsers zuerst, damit `bildschirm`
+    auch bei einem schon offenen Fenster tatsaechlich zieht -- ohne `neu`
+    wird ein offenes Fenster nur navigiert, nicht verschoben (kein
+    ungefragtes Herumschieben bestehender Fenster)."""
+    b = {"url": url}
+    if browser:
+        b["browser"] = browser
+    if bildschirm:
+        b["bildschirm"] = bildschirm
+    if neu:
+        b["neu"] = True
+    return _ruf("/oeffnen", "POST", b, wirt=wirt, nutzer=nutzer)
+
+
+def bildschirme(wirt=None, nutzer=None):
+    """Bildschirm-Enumeration des Zielrechners: Anzahl, Geometrie je
+    Bildschirm, welcher der Mensch ist, welcher die Vorgabe fuer ein neues
+    Fenster waere -- bevor Zero mit `bildschirm=` in `oeffnen()` gezielt
+    einen davon anspricht."""
+    return _ruf("/bildschirme", "GET", wirt=wirt, nutzer=nutzer)
+
+
+def schliessen(browser="", alle=False, wirt=None, nutzer=None):
+    """Das Gegenstueck zu `oeffnen()` (Gabriels Nachtrag 2026-08-22): JEDES
+    `oeffnen` braucht einen erreichbaren Weg zurueck, Zero darf keine
+    Fenster auf dem Schreibtisch des Menschen liegen lassen. `browser` leer
+    = Standardbrowser. `alle=True` schliesst ALLE gerade offenen Sitzungen
+    (chrome/firefox/brave) in einem Aufruf -- zum Aufraeumen, ohne jeden
+    Schluessel einzeln zu kennen."""
+    b = {}
+    if browser:
+        b["browser"] = browser
+    if alle:
+        b["alle"] = True
+    return _ruf("/schliessen", "POST", b, wirt=wirt, nutzer=nutzer)
 
 
 def lesen(browser="", wirt=None, nutzer=None):

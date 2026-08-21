@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T17:37:22Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T18:02:31Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2597 Artikel, 1456 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -75,13 +75,13 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz
-- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
+- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-git-3488f45d776e9c5b00c954b8e7cc7af` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-git-e12a81473a25f14b8772431dc17960e` · baunotiz
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-bauverlauf-234776776d865c5df3d2` · baunotiz
-- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
+- **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f3` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-git-32bbd085ec583a6db14ce13499eed88` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
@@ -164,11 +164,11 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c4033395415e4cddae79839ca49f2e7` · baunotiz
 - **ClayVerse-Dokumente sammeln: dokumente/clayverse/ + README-Tagesstand 2026-08-15** — `baunotiz-bauverlauf-152ee73de12b068d21d3` · baunotiz
 - **2026-08-17: feat(clayverse) -- Integration von Autonomie-Features in Clayverse über mehrere Commits ** — `verdichtung-2026-08-17-feat-clayverse` · verdichtung
+- **2026-08-17: fix(clayverse) -- Sicherheitshärtungen in Clayverse-Autonomiecontroller und Manifestbind** — `verdichtung-2026-08-17-fix-clayverse` · verdichtung
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
-- **2026-08-17: fix(clayverse) -- Sicherheitshärtungen in Clayverse-Autonomiecontroller und Manifestbind** — `verdichtung-2026-08-17-fix-clayverse` · verdichtung
 - **agentZero research: index inventory analysis** — `baunotiz-bauverlauf-0dca3efd97091314ecf7` · baunotiz
 - **agentZero research: initialize measurement registry** — `baunotiz-bauverlauf-a543fc1ae48be914167e` · baunotiz
 - **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `bau-clay-6ca42541fc47` · bau

@@ -1294,6 +1294,278 @@ def zeilen(c, testlage: str = "") -> list[dict]:
        if ausblenden else "🔧 Ausblend-Logik in schale.js fehlt"),
       ausblenden)
 
+    # ══ Was der Eigner am 22.08. erklaert hat: der innere Architekt ═══════
+    # Die meisten dieser Zeilen werden HEUTE ehrlich als offen/teilweise
+    # gemessen -- das ist der Punkt. Ein Ziel, das der Eigner gerade erst
+    # ausgesprochen hat, ist kein gebautes Ziel, auch wenn ein Modul dazu
+    # schon existiert. Gemessen wird ueberall dort, wo es im Betrieb
+    # entscheidet: Datei da, Text im Quelltext, laufender Zeitgeber, echter
+    # Funktionsaufruf -- nie eine Behauptung.
+
+    # -- 1: Der innere Architekt existiert
+    _arch_module = ["architekt.py", "budget.py", "glm.py", "hypothesen.py",
+                     "immunsystem.py", "kanarie.py", "lauf.py", "patch.py",
+                     "quittungen.py", "schwarm.py", "tor.py", "zustand.py"]
+    _arch_module_da = [m for m in _arch_module if Path(A + "architekt/" + m).exists()]
+    _arch_timer_enabled = _sh("systemctl is-enabled eos-architekt.timer 2>&1").strip()
+    _arch_timer_active = _sh("systemctl is-active eos-architekt.timer 2>&1").strip()
+    _arch_timer_unit_da = Path(A + "architekt/systemd/eos-architekt.timer").exists()
+    _arch_gebaut = len(_arch_module_da) == len(_arch_module)
+    z("Selbstverbesserung", "Der innere Architekt existiert",
+      "ein permanenter Selbstverbesserungsprozess fuer Zero -- Hypothese waehlen, "
+      "reproduzieren, fixen, testen, GETORT-mit-Kanarie live",
+      "Eigner 22.08.",
+      (f"{len(_arch_module_da)}/{len(_arch_module)} Module vorhanden ({', '.join(_arch_module_da)}); "
+       f"Tests: {testlage}. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit "
+       f"({'gefunden' if _arch_timer_unit_da else 'FEHLT'}), ist aber NICHT in systemd "
+       f"installiert (is-enabled={_arch_timer_enabled!r}, is-active={_arch_timer_active!r}) -- "
+       "bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, "
+       "der Zeitgeber wird ABSICHTLICH nicht aktiviert"
+       if _arch_gebaut else
+       f"🔧 nur {len(_arch_module_da)}/{len(_arch_module)} Module vorhanden -- {sorted(set(_arch_module)-set(_arch_module_da))} fehlt"),
+      (True if (_arch_gebaut and (_arch_timer_enabled == "enabled" or _arch_timer_active == "active"))
+       else (None if _arch_gebaut else False)))
+
+    # -- 2: Selbst messen (Selbstzustand)
+    _selbst_probe = _sh(
+        "cd '" + A + "' && timeout 25 python3 - <<'PYEOF'\n"
+        "import json, subprocess\n"
+        "r = subprocess.run(['python3', '-m', 'clayverse.selbstmessung'], capture_output=True, text=True, timeout=20)\n"
+        "try:\n"
+        "    d = json.loads(r.stdout)\n"
+        "    print('SELBST_OK=True INSTRUMENTE=%d' % len(d.get('instrumente', {})))\n"
+        "except Exception as e:\n"
+        "    print('SELBST_OK=False FEHLER=%s' % e)\n"
+        "PYEOF", timeout=35)
+    _selbst_m = re.search(r"SELBST_OK=True INSTRUMENTE=(\d+)", _selbst_probe or "")
+    _selbst_ok = bool(_selbst_m) and int(_selbst_m.group(1)) >= 6
+    z("Selbstverbesserung", "Zero kann seinen eigenen Zustand messen (Selbstzustand)",
+      "python3 -m clayverse.selbstmessung liefert einen JSON-Selbstzustand aus mehreren "
+      "unabhaengigen Instrumenten -- nicht behauptet, gemessen",
+      "Eigner 22.08.",
+      (f"lesend ausgefuehrt: {_selbst_m.group(1)} Instrumente zurueckgegeben "
+       "(wegehierarchie, weckvertrag, uebersetzungsausfaelle, stimmen, testboden, abnahmeprobe)"
+       if _selbst_ok else
+       f"🔧 Aufruf lieferte kein gueltiges Selbstzustand-JSON mit >=6 Instrumenten "
+       f"({(_selbst_probe or '')[:200]!r})"),
+      _selbst_ok)
+
+    # -- 3: GLM als guenstige Fliessband-Bahn
+    _glm_endpoint = _hat(A + "clayverse/bahnen.py", "api.z.ai/api/coding/paas/v4")
+    _glm_lanes_json = _sh(f"grep -c '\"modell\": \"glm-' '{A}clayverse/bahnen.json' 2>/dev/null").strip()
+    _glm_peak = _hat(A + "clayverse/bahnen.py", "spitzenfenster_utc8")
+    try:
+        _glm_lanes_n = int(_glm_lanes_json)
+    except Exception:
+        _glm_lanes_n = 0
+    _glm_da = _glm_endpoint and _glm_lanes_n >= 3 and _glm_peak
+    z("Selbstverbesserung", "GLM (18 €/Monat) als eigene Fliessband-Bahn",
+      "GLM Coding-Plan verdrahtet: glm-4.5-air/4.7 fuer Masse, glm-5.2 selten (Zweitmeinung), "
+      "spitzenfenster-bewusst (14-18 Uhr UTC+8) -- der ganze Plan der Selbstverbesserung gewidmet",
+      "Eigner 22.08.",
+      (f"Endpunkt api.z.ai/api/coding/paas/v4 in bahnen.py, {_glm_lanes_n} glm-Modelleintraege "
+       "in bahnen.json, Spitzenfenster-Logik vorhanden. ⚠️ Strukturell gemessen, NICHT live "
+       "geprueft: der GLM_API_KEY gilt laut Eigner erst ab 22.08. 15:00 -- bis dahin haelt der "
+       "Live-Breaker ihn zurueck; ob der Schluessel dann wirklich zieht, ist eine spaetere Messung"
+       if _glm_da else "🔧 GLM-Endpunkt, Modelleintraege oder Spitzenfenster-Logik fehlen"),
+      _glm_da)
+
+    # -- 4: Getort mit Kanarie
+    _tor_probe = _sh(
+        "cd '" + A + "' && python3 - <<'PYEOF'\n"
+        "import sys; sys.path.insert(0, '.')\n"
+        "from pathlib import Path\n"
+        "try:\n"
+        "    from architekt import tor, kanarie\n"
+        "except Exception as e:\n"
+        "    print('IMPORT_FEHLER=%s' % e); raise SystemExit\n"
+        "faelle = [\n"
+        "    (['clayverse/effects.py'], False), (['clayverse/fence_hook.py'], False),\n"
+        "    (['policy/managed-settings.json'], False), (['clayverse/autonomy.py'], False),\n"
+        "    (['clayverse/wake_condition.py'], False), (['clayverse/selbstmessung.py'], False),\n"
+        "    (['clayverse/bahnen.py'], False), (['architekt/lauf.py'], False),\n"
+        "    (['harmlose/datei.py'], True),\n"
+        "]\n"
+        "tor_ok = all(tor.sicherer_rahmen(f)[0] == erw for f, erw in faelle)\n"
+        "kan_ok = True\n"
+        "try:\n"
+        "    kanarie.bauen(Path('.'), env_datei=Path('.'), container_name='entityos'); kan_ok = False\n"
+        "except kanarie.KanarieFehler:\n"
+        "    pass\n"
+        "try:\n"
+        "    kanarie.abbauen(Path('.'), projekt='entityos'); kan_ok = False\n"
+        "except kanarie.KanarieFehler:\n"
+        "    pass\n"
+        "print('TOR_OK=%s KANARIE_OK=%s' % (tor_ok, kan_ok))\n"
+        "PYEOF", timeout=30)
+    _getort = "TOR_OK=True" in (_tor_probe or "") and "KANARIE_OK=True" in (_tor_probe or "")
+    z("Selbstverbesserung", "Getort mit Kanarie",
+      "tor.py weigert autonome Aenderungen an Effekten/Zaun/Auth/Autonomy/Wake/dem Architekten "
+      "selbst; kanarie.py weigert sich, jemals den Namen „entityos“ zu bauen oder abzubauen",
+      "Eigner 21./22.08.",
+      (f"echter Funktionsaufruf: {_tor_probe.strip()!r} -- tor.sicherer_rahmen() sperrt alle "
+       "sechs geschuetzten Pfadgruppen (inkl. architekt/ selbst) und laesst einen harmlosen "
+       "Pfad durch; kanarie.bauen()/abbauen() werfen KanarieFehler bei container_name=projekt="
+       "'entityos', VOR jedem Docker-Aufruf"
+       if _getort else f"🔧 Probe schlug fehl oder verweigerte nicht wie erwartet: {(_tor_probe or '')[:200]!r}"),
+      _getort)
+
+    # -- 5: Bug-Meldekanal
+    _bug_route = _hat(A + "clayverse/terminal_gateway.py", '@app.post("/api/bug")')
+    _bug_tabelle = "eos_bug_hypothesen" in kern
+    _bug_da = _bug_route and _bug_tabelle
+    z("Selbstverbesserung", "Bug-Meldekanal von Menschen an den Architekten",
+      "/api/bug + Tabelle eos_bug_hypothesen -- ein Mensch kann direkt einen Fehler melden, "
+      "der zur hoechstgewichteten Hypothesenquelle wird (0.6, „OFFEN“)",
+      "Eigner 22.08.",
+      (f"Route /api/bug in terminal_gateway.py registriert, Tabelle eos_bug_hypothesen "
+       f"in wiki.db vorhanden"
+       if _bug_da else
+       f"🔧 fehlt: {'Route ' if not _bug_route else ''}{'Tabelle' if not _bug_tabelle else ''}"),
+      _bug_da)
+
+    # -- 6: Groq-Schwarm mit Anti-Echo
+    _schwarm_da = Path(A + "architekt/schwarm.py").exists()
+    _fusioniere_da = _hat(A + "architekt/schwarm.py", "def fusioniere")
+    _schwarm_ok = _schwarm_da and _fusioniere_da
+    z("Selbstverbesserung", "Groq-Schwarm mit Anti-Echo als zweiter Zeuge",
+      "mehrere Groq-Worker ohne Dispatcher, Quittungen statt Zuruf; Uebereinstimmung "
+      "INNERHALB derselben Abstammungslinie (gleiches Modell+Prompt) zaehlt NICHT als "
+      "zweiter Zeuge",
+      "Eigner 22.08.",
+      ("architekt/schwarm.py vorhanden, fusioniere() (Anti-Echo-Kern) definiert"
+       if _schwarm_ok else "🔧 schwarm.py oder fusioniere() fehlt"),
+      _schwarm_ok)
+
+    # -- 7: Bewertungen fliessen zur Forschungsentitaet
+    _bew_tabelle = "eos_bewertungen" in kern
+    _bew_timer = _timer_an("eos-bewertung-export.timer")
+    _bew_da = _bew_tabelle and _bew_timer
+    z("Selbstverbesserung", "👍/👎-Bewertungen fliessen zur Forschungsentitaet",
+      "jede Bewertung landet in eos_bewertungen und wird alle 30 min exportiert",
+      "Eigner 22.08.",
+      (f"Tabelle eos_bewertungen vorhanden, eos-bewertung-export.timer aktiv"
+       if _bew_da else
+       f"🔧 fehlt: {'Tabelle ' if not _bew_tabelle else ''}{'Timer' if not _bew_timer else ''}"),
+      _bew_da)
+
+    # -- 8: 6->7 Hypothesenquellen, Zeros Erste-Hand-Friktion hoechstgewichtet
+    try:
+        _hyp_text = Path(A + "architekt/hypothesen.py").read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        _hyp_text = ""
+    _hyp_quellen = sorted(set(re.findall(r'quelle="([a-z_]+)"', _hyp_text)))
+    _erste_hand = bool(re.search(r"erste.hand|friktion", _hyp_text, re.IGNORECASE))
+    z("Selbstverbesserung", "6→7 Hypothesenquellen, Zeros Erste-Hand-Friktion hoechstgewichtet",
+      "eine sechste/siebte Quelle soll dazukommen: Zeros EIGENE Erste-Hand-Friktion aus dem "
+      "laufenden Betrieb, hoeher gewichtet als alle bisherigen",
+      "Eigner 22.08.",
+      (f"🔧 gemessen: {len(_hyp_quellen)} Quellen in hypothesen.py ({', '.join(_hyp_quellen)}) -- "
+       f"das Modul nennt sich selbst noch „die fuenf Hypothesenquellen“. Grep auf "
+       f"„erste-hand“/„friktion“ in der Datei: {'Treffer' if _erste_hand else 'KEIN Treffer'}. "
+       "Zeros eigene Erste-Hand-Friktion existiert als Quelle noch nicht"),
+      False)
+
+    # -- 9: GRF-Denken im Architekten
+    _grf_treffer = _sh(f"grep -c 'GRF\\|hyperposition\\|generative' '{A}architekt/'*.py 2>/dev/null "
+                        "| awk -F: '{s+=$2} END{print s+0}'").strip()
+    try:
+        _grf_n = int(_grf_treffer)
+    except Exception:
+        _grf_n = -1
+    z("Kognition", "Der Architekt denkt in GRF-Mathematik",
+      "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality "
+      "Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
+      "Eigner 22.08. (VERFASSUNG.md)",
+      (f"🔧 offen -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = {_grf_n if _grf_n >= 0 else 'Messfehler'} "
+       "Treffer heute. Die Verfassung fordert es als Ziel; im Architekten-Code steht davon "
+       "noch nichts, nur der Verweis auf clayverse/hyperposition.py als bereitliegendes Substrat"),
+      _grf_n > 0 if _grf_n >= 0 else False)
+
+    # -- 10: ClayCode-Migration der UnifiedDB
+    _migration_spuren = _sh(
+        f"grep -rli 'claycode.*migrat\\|migrat.*claycode' '{A}' --include='*.py' 2>/dev/null "
+        "| grep -v __pycache__ | wc -l").strip()
+    z("Selbstverbesserung", "ClayCode-Migration der UnifiedDB, Stueck fuer Stueck",
+      "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum "
+      "Alten -- stehende Mission, kein Endzustand",
+      "Eigner 22.08.",
+      f"🔧 offen -- kein Migrationsmodul/-tracker im Quelltext gefunden (Grep-Treffer: {_migration_spuren or 0})",
+      False)
+
+    # -- 11: Ablations-Sandbox + Snapshot-Fork
+    _ablation_spuren = _sh(
+        f"grep -rli 'ablation\\|snapshot.fork' '{A}' --include='*.py' 2>/dev/null "
+        "| grep -v __pycache__ | wc -l").strip()
+    z("Selbstverbesserung", "Ablations-Sandbox mit Snapshot-Fork",
+      "strukturell einseitig isoliert -- die Sandbox kann die Live-Welt lesen, die Live-Welt "
+      "sieht die Sandbox nie",
+      "Eigner 22.08.",
+      f"🔧 offen -- nur Spezifikation, kein Code (Grep-Treffer: {_ablation_spuren or 0})",
+      False)
+
+    # -- 12: Interaktiver Ein-Entitaet-Architekten-Modus
+    z("Selbstverbesserung", "Interaktiver Ein-Entitaet-Architekten-Modus",
+      "kein Split-Brain -- Zero beobachtet sich selbst live, im selben Gespraech, waehrend der "
+      "Architekt arbeitet, statt als zweite abgetrennte Instanz",
+      "Eigner 22.08.",
+      "🔧 offen -- nicht gebaut, bisher nur der oneshot-Zeitgeberpfad (eos-architekt.service)",
+      False)
+
+    # -- 13: Immunsystem als Werkzeug des Architekten
+    _immun_probe = _sh(
+        "cd '" + A + "' && python3 - <<'PYEOF'\n"
+        "import sys; sys.path.insert(0, '.')\n"
+        "try:\n"
+        "    from architekt import immunsystem\n"
+        "    r = immunsystem.registriert()\n"
+        "    print('IMMUN_OK=True STAND=%s FEHLEND=%s' % (r.get('stand'), r.get('fehlend')))\n"
+        "except Exception as e:\n"
+        "    print('IMMUN_OK=False FEHLER=%s' % e)\n"
+        "PYEOF", timeout=20)
+    _immun_modul_da = Path(A + "architekt/immunsystem.py").exists()
+    _immun_lief = "IMMUN_OK=True" in (_immun_probe or "")
+    _immun_fehlend_leer = _immun_lief and "FEHLEND=[]" in (_immun_probe or "")
+    z("Selbstverbesserung", "Immunsystem als Werkzeug des Architekten",
+      "architekt/immunsystem.py liest incident_log tokenfrei -- Registrierung im Wirt-"
+      "Konfigurationsverzeichnis erfordert einen Menschen, der die Dienste dort eintraegt",
+      "Eigner 22.08.",
+      ((f"Modul vorhanden, echter Aufruf {(_immun_probe.strip() if _immun_lief else '(Aufruf scheiterte: ' + (_immun_probe or '')[:150] + ')')!r}"
+        + (" -- Registry-Eintrag fuer eos-architekt.timer/eos-bewertung-export.timer FEHLT noch im Wirt"
+           if _immun_lief and not _immun_fehlend_leer else ""))
+       if _immun_modul_da else "🔧 immunsystem.py fehlt"),
+      _immun_fehlend_leer)
+
+    # -- 14: Verfassung
+    _verf_da = Path(A + "VERFASSUNG.md").exists()
+    _verf_grf = _hat(A + "VERFASSUNG.md", "Generative Reality Framework")
+    _verf_ziel = _hat(A + "VERFASSUNG.md", "Latenz")
+    _verf_enforce = bool(re.search(r"Fenster.*(erzwungen|geprueft|Invariante.*Code|assert)",
+                                    _sh(f"cat '{A}VERFASSUNG.md' 2>/dev/null") or "", re.IGNORECASE))
+    z("Selbstverbesserung", "Verfassung",
+      "GRF-Rahmen, das Ziel (Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment "
+      "nie vergessen), totale innere Freiheit, EINE Grenze -- drei Fenster bleiben "
+      "menschenlesbar (Effekte, Zaun, Wirt-Config)",
+      "Eigner 22.08.",
+      (f"VERFASSUNG.md {'vorhanden' if _verf_da else 'FEHLT'}, nennt GRF "
+       f"{'ja' if _verf_grf else 'nein'}, nennt das Ziel {'ja' if _verf_ziel else 'nein'}. "
+       "⚠️ Die „drei Fenster bleiben menschenlesbar“-Grenze steht als TEXT, nicht als "
+       f"erzwungener Code -- {'ein Hinweis auf Durchsetzung im Text gefunden' if _verf_enforce else 'kein Durchsetzungscode gefunden (nur Text)'}"),
+      False)
+
+    # -- 15: Ziel-Richtungen (Richtung, nicht Schwelle)
+    z("Kognition", "Ziel-Richtungen: Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment nie vergessen",
+      "⚠️ Richtung, nicht Schwelle -- es gibt kein „fertig“, nur „besser als gestern“; jede "
+      "Zeile hier ist ein Vektor, kein Zielwert",
+      "Eigner 22.08. (VERFASSUNG.md)",
+      ("Latenz: gemessen 7,8 s Median/Zug (21.08., 12 Zuege) -- das ist der GESAMTE Zug, nicht "
+       "das Architekten-Ziel „gegen 0“ isoliert, also nur ein Naeherungswert. Kognition maximal: "
+       "UNBEKANNT -- kein Skalarmass definiert. Funktional bewusste AGI: UNBEKANNT -- keine "
+       "Messgroesse, per Definition kein Schwellenwert. Alignment nie vergessen: operationalisiert "
+       "durch tor.py (GESCHUETZTE_PFADE) + kanarie.py (Namenssperre), siehe „Getort mit Kanarie“ "
+       "oben -- kein Skalar, sondern ein bestehender mechanischer Riegel"),
+      None)
+
     return Z
 
 

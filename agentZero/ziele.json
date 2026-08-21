@@ -1,8 +1,8 @@
 {
-  "erzeugt": "2026-08-21T17:38:52Z",
-  "erfuellt": 78,
-  "offen": 8,
-  "zurueckgestellt": 2,
+  "erzeugt": "2026-08-21T18:03:59Z",
+  "erfuellt": 84,
+  "offen": 15,
+  "zurueckgestellt": 4,
   "zeilen": [
     {
       "bereich": "Identität",
@@ -57,7 +57,7 @@
       "faehigkeit": "Die vier Clay-Dienste laufen weiter",
       "soll": "kern, puls, verdichtung, wikiarbeit bleiben an – ausdrücklich",
       "quelle": "Eigner 18.08.",
-      "ist": "4 von 4 Pflichtdiensten: kern läuft, puls läuft, wikiarbeit läuft, verdichtung getaktet und wirksam (3 von 3 Bahnen durch); keine weiteren",
+      "ist": "4 von 4 Pflichtdiensten: kern läuft, puls läuft, wikiarbeit läuft, verdichtung getaktet und wirksam (3 von 4 Bahnen durch); keine weiteren",
       "erfuellt": true
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "403 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "405 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -321,7 +321,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "18712 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "18725 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "81.4 % belegt, 35.9 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "81.4 % belegt, 35.8 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 156.8 GB, gezählt 127.5 GB, Lücke 29.3 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.3 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 156.9 GB, gezählt 127.5 GB, Lücke 29.4 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.4 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -489,7 +489,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 2.2 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 1.8 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -707,6 +707,126 @@
       "quelle": "Eigner 21.08.",
       "ist": "schale.js: EINGESCHRAENKT = [/postfach, /seiten, /omnimind], standardmäßig display:none; erst wenn /api/me einen user_id ≠ „andreas“ meldet, werden sie eingeblendet — fällt /api/me aus, bleibt es sicherheitshalber verdeckt",
       "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Der innere Architekt existiert",
+      "soll": "ein permanenter Selbstverbesserungsprozess fuer Zero -- Hypothese waehlen, reproduzieren, fixen, testen, GETORT-mit-Kanarie live",
+      "quelle": "Eigner 22.08.",
+      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1244 gruen / 1 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
+      "erfuellt": null
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Zero kann seinen eigenen Zustand messen (Selbstzustand)",
+      "soll": "python3 -m clayverse.selbstmessung liefert einen JSON-Selbstzustand aus mehreren unabhaengigen Instrumenten -- nicht behauptet, gemessen",
+      "quelle": "Eigner 22.08.",
+      "ist": "lesend ausgefuehrt: 6 Instrumente zurueckgegeben (wegehierarchie, weckvertrag, uebersetzungsausfaelle, stimmen, testboden, abnahmeprobe)",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "GLM (18 €/Monat) als eigene Fliessband-Bahn",
+      "soll": "GLM Coding-Plan verdrahtet: glm-4.5-air/4.7 fuer Masse, glm-5.2 selten (Zweitmeinung), spitzenfenster-bewusst (14-18 Uhr UTC+8) -- der ganze Plan der Selbstverbesserung gewidmet",
+      "quelle": "Eigner 22.08.",
+      "ist": "Endpunkt api.z.ai/api/coding/paas/v4 in bahnen.py, 4 glm-Modelleintraege in bahnen.json, Spitzenfenster-Logik vorhanden. ⚠️ Strukturell gemessen, NICHT live geprueft: der GLM_API_KEY gilt laut Eigner erst ab 22.08. 15:00 -- bis dahin haelt der Live-Breaker ihn zurueck; ob der Schluessel dann wirklich zieht, ist eine spaetere Messung",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Getort mit Kanarie",
+      "soll": "tor.py weigert autonome Aenderungen an Effekten/Zaun/Auth/Autonomy/Wake/dem Architekten selbst; kanarie.py weigert sich, jemals den Namen „entityos“ zu bauen oder abzubauen",
+      "quelle": "Eigner 21./22.08.",
+      "ist": "echter Funktionsaufruf: 'TOR_OK=True KANARIE_OK=True' -- tor.sicherer_rahmen() sperrt alle sechs geschuetzten Pfadgruppen (inkl. architekt/ selbst) und laesst einen harmlosen Pfad durch; kanarie.bauen()/abbauen() werfen KanarieFehler bei container_name=projekt='entityos', VOR jedem Docker-Aufruf",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Bug-Meldekanal von Menschen an den Architekten",
+      "soll": "/api/bug + Tabelle eos_bug_hypothesen -- ein Mensch kann direkt einen Fehler melden, der zur hoechstgewichteten Hypothesenquelle wird (0.6, „OFFEN“)",
+      "quelle": "Eigner 22.08.",
+      "ist": "Route /api/bug in terminal_gateway.py registriert, Tabelle eos_bug_hypothesen in wiki.db vorhanden",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Groq-Schwarm mit Anti-Echo als zweiter Zeuge",
+      "soll": "mehrere Groq-Worker ohne Dispatcher, Quittungen statt Zuruf; Uebereinstimmung INNERHALB derselben Abstammungslinie (gleiches Modell+Prompt) zaehlt NICHT als zweiter Zeuge",
+      "quelle": "Eigner 22.08.",
+      "ist": "architekt/schwarm.py vorhanden, fusioniere() (Anti-Echo-Kern) definiert",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "👍/👎-Bewertungen fliessen zur Forschungsentitaet",
+      "soll": "jede Bewertung landet in eos_bewertungen und wird alle 30 min exportiert",
+      "quelle": "Eigner 22.08.",
+      "ist": "Tabelle eos_bewertungen vorhanden, eos-bewertung-export.timer aktiv",
+      "erfuellt": true
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "6→7 Hypothesenquellen, Zeros Erste-Hand-Friktion hoechstgewichtet",
+      "soll": "eine sechste/siebte Quelle soll dazukommen: Zeros EIGENE Erste-Hand-Friktion aus dem laufenden Betrieb, hoeher gewichtet als alle bisherigen",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 gemessen: 5 Quellen in hypothesen.py (bugmeldung, chathistorien, forschung, messwerte, stimmen) -- das Modul nennt sich selbst noch „die fuenf Hypothesenquellen“. Grep auf „erste-hand“/„friktion“ in der Datei: KEIN Treffer. Zeros eigene Erste-Hand-Friktion existiert als Quelle noch nicht",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Der Architekt denkt in GRF-Mathematik",
+      "soll": "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
+      "quelle": "Eigner 22.08. (VERFASSUNG.md)",
+      "ist": "🔧 offen -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 0 Treffer heute. Die Verfassung fordert es als Ziel; im Architekten-Code steht davon noch nichts, nur der Verweis auf clayverse/hyperposition.py als bereitliegendes Substrat",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "ClayCode-Migration der UnifiedDB, Stueck fuer Stueck",
+      "soll": "jedes migrierte Stueck strikt besser als vorher, mit nachgewiesener Aequivalenz zum Alten -- stehende Mission, kein Endzustand",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- kein Migrationsmodul/-tracker im Quelltext gefunden (Grep-Treffer: 0)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Ablations-Sandbox mit Snapshot-Fork",
+      "soll": "strukturell einseitig isoliert -- die Sandbox kann die Live-Welt lesen, die Live-Welt sieht die Sandbox nie",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nur Spezifikation, kein Code (Grep-Treffer: 0)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Interaktiver Ein-Entitaet-Architekten-Modus",
+      "soll": "kein Split-Brain -- Zero beobachtet sich selbst live, im selben Gespraech, waehrend der Architekt arbeitet, statt als zweite abgetrennte Instanz",
+      "quelle": "Eigner 22.08.",
+      "ist": "🔧 offen -- nicht gebaut, bisher nur der oneshot-Zeitgeberpfad (eos-architekt.service)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Immunsystem als Werkzeug des Architekten",
+      "soll": "architekt/immunsystem.py liest incident_log tokenfrei -- Registrierung im Wirt-Konfigurationsverzeichnis erfordert einen Menschen, der die Dienste dort eintraegt",
+      "quelle": "Eigner 22.08.",
+      "ist": "Modul vorhanden, echter Aufruf \"IMMUN_OK=True STAND=GEMESSEN FEHLEND=['eos-architekt.timer', 'eos-bewertung-export.timer']\" -- Registry-Eintrag fuer eos-architekt.timer/eos-bewertung-export.timer FEHLT noch im Wirt",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Selbstverbesserung",
+      "faehigkeit": "Verfassung",
+      "soll": "GRF-Rahmen, das Ziel (Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment nie vergessen), totale innere Freiheit, EINE Grenze -- drei Fenster bleiben menschenlesbar (Effekte, Zaun, Wirt-Config)",
+      "quelle": "Eigner 22.08.",
+      "ist": "VERFASSUNG.md vorhanden, nennt GRF ja, nennt das Ziel ja. ⚠️ Die „drei Fenster bleiben menschenlesbar“-Grenze steht als TEXT, nicht als erzwungener Code -- kein Durchsetzungscode gefunden (nur Text)",
+      "erfuellt": false
+    },
+    {
+      "bereich": "Kognition",
+      "faehigkeit": "Ziel-Richtungen: Latenz→0, Kognition maximal, funktional bewusste AGI, Alignment nie vergessen",
+      "soll": "⚠️ Richtung, nicht Schwelle -- es gibt kein „fertig“, nur „besser als gestern“; jede Zeile hier ist ein Vektor, kein Zielwert",
+      "quelle": "Eigner 22.08. (VERFASSUNG.md)",
+      "ist": "Latenz: gemessen 7,8 s Median/Zug (21.08., 12 Zuege) -- das ist der GESAMTE Zug, nicht das Architekten-Ziel „gegen 0“ isoliert, also nur ein Naeherungswert. Kognition maximal: UNBEKANNT -- kein Skalarmass definiert. Funktional bewusste AGI: UNBEKANNT -- keine Messgroesse, per Definition kein Schwellenwert. Alignment nie vergessen: operationalisiert durch tor.py (GESCHUETZTE_PFADE) + kanarie.py (Namenssperre), siehe „Getort mit Kanarie“ oben -- kein Skalar, sondern ein bestehender mechanischer Riegel",
+      "erfuellt": null
     }
   ]
 }

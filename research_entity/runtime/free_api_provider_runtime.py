@@ -284,15 +284,45 @@ def _is_unicode_scalar_text(value) -> bool:
     )
 
 
+def _ascii_json_string_payload_size(value: str, stop_after: int) -> int:
+    """Count default json.dumps string payload bytes without materializing."""
+    total = 0
+    for character in value:
+        codepoint = ord(character)
+        if character in '"\\\b\f\n\r\t':
+            total += 2
+        elif codepoint <= 0x1F:
+            total += 6
+        elif codepoint <= 0x7F:
+            total += 1
+        elif codepoint <= 0xFFFF:
+            total += 6
+        else:
+            total += 12
+        if total > stop_after:
+            return total
+    return total
+
+
 def _enforce_pre_serialization_request_bound(
     messages: tuple[dict[str, str], ...], model: str
 ) -> None:
     """Reject requests whose JSON lower bound already exceeds the byte cap."""
-    lower_bound = len(model)
+    lower_bound = _ascii_json_string_payload_size(
+        model, MAX_PROVIDER_REQUEST_BYTES
+    )
     for message in messages:
-        # JSON contains at least both scalar lengths plus one object pair of
-        # delimiters. Escaping, field names and separators can only add bytes.
-        lower_bound += len(message["role"]) + len(message["content"]) + 2
+        # json.dumps defaults to ensure_ascii=True. Count its exact scalar
+        # escape width, while retaining a conservative structural lower bound.
+        lower_bound += 2
+        lower_bound += _ascii_json_string_payload_size(
+            message["role"], MAX_PROVIDER_REQUEST_BYTES - lower_bound
+        )
+        if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
+            raise ValueError("provider_request_too_large")
+        lower_bound += _ascii_json_string_payload_size(
+            message["content"], MAX_PROVIDER_REQUEST_BYTES - lower_bound
+        )
         if lower_bound > MAX_PROVIDER_REQUEST_BYTES:
             raise ValueError("provider_request_too_large")
 
@@ -619,7 +649,8 @@ def _execute_chat_locked(
             "messages": request_messages,
             "stream": False,
             "max_tokens": MAX_PROVIDER_OUTPUT_TOKENS,
-        }
+        },
+        ensure_ascii=True,
     ).encode()
     if len(body) > MAX_PROVIDER_REQUEST_BYTES:
         raise ValueError("provider_request_too_large")

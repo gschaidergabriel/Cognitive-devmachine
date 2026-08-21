@@ -1,14 +1,13 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T10:50:31Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T11:20:31Z aus drei Repos. 480 Eintraege.
 
-## architektur (13)
+## architektur (12)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
 | 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
-| 2026-08-18T03:39 | entityos | `e413f4f8adc3` | Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
 | 2026-08-15T18:00 | unifieddb | `7f5e8b582f79` | F87 Auslieferungsform + Teil III der Zielarchitektur |
 | 2026-08-15T17:13 | clay | `2a6c2f4b6706` | F79 Endgueltige Bahnbelegung GLM/NVIDIA/Groq-Premium, GLM spricht als ClayVerse - Identitaet ist Oberflaeche,  |
@@ -85,14 +84,13 @@ Automatisch erzeugt 2026-08-21T10:50:31Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (12)
+## reparatur (11)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-18T05:27 | entityos | `2339aea31bf2` | prestage: upgrade governor model to mistral-medium, fix slot-2 session check |
 | 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
-| 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -102,21 +100,25 @@ Automatisch erzeugt 2026-08-21T10:50:31Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (6)
+## pruefung (4)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T08:50 | entityos | `26a6861b88b0` | Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt |
-| 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
-| 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (323)
+## bau (327)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T11:15 | entityos | `47fdb11bf643` | EOS-Chronik 2026-08-21 11:15:15 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T11:12 | entityos | `ffbe1c39980c` | EOS-Chronik 2026-08-21 11:12:21 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T11:10 | entityos | `c5733d9c25e7` | EOS-Chronik 2026-08-21 11:10:21 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T11:04 | entityos | `dde38229e139` | EOS-Chronik 2026-08-21 11:04:22 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T11:00 | entityos | `ea854a44fc98` | EOS-Chronik 2026-08-21 11:00:35 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T10:53 | entityos | `21be0e0947eb` | EOS-Chronik 2026-08-21 10:53:58 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T10:27 | entityos | `0240478a7857` | EOS-Chronik 2026-08-21 10:27:32 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T10:25 | entityos | `554961db1797` | EOS-Chronik 2026-08-21 10:25:32 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T10:23 | entityos | `d1004dcf6f23` | EOS-Chronik 2026-08-21 10:23:31 +0000 — entityos: 4 Aenderungen |
@@ -171,10 +173,4 @@ Automatisch erzeugt 2026-08-21T10:50:31Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T04:58 | entityos | `2278c47244d3` | EOS-Chronik 2026-08-21 04:58:43 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T04:56 | entityos | `b8af77281914` | EOS-Chronik 2026-08-21 04:56:43 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T04:12 | entityos | `6d16006a852d` | EOS-Chronik 2026-08-21 04:12:22 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T04:10 | entityos | `b6f8644e1d7e` | EOS-Chronik 2026-08-21 04:10:22 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T04:08 | entityos | `ca69c3848ff8` | EOS-Chronik 2026-08-21 04:08:21 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T03:58 | entityos | `f15196d19cd8` | EOS-Chronik 2026-08-21 03:58:44 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T03:48 | entityos | `e6f75c56ad1f` | EOS-Chronik 2026-08-21 03:48:29 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T03:35 | entityos | `58c1da25a70f` | EOS-Chronik 2026-08-21 03:35:30 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T03:10 | entityos | `56c34585ea58` | EOS-Chronik 2026-08-21 03:10:20 +0000 — entityos: 2 Aenderungen |
 

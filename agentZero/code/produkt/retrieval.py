@@ -662,7 +662,14 @@ class WorldAssembler:
         if not session:
             raise KeyError(session_id)
         user_id = session["user_id"]
-        own = [dict(r) for r in self.db.recent_turns(session_id, 20)]
+        # ⭐⭐ WURZEL, 2026-08-21: der Gespraechskontext ist NICHT mehr
+        # sitzungs-eng. Alle 4 Sitzungen (beide Menschen) sind EINE Entitaet in
+        # EINEM Raum -- own zieht die letzten Zuege ueber ALLE Sitzungen. Das
+        # behebt "was war meine erste Frage" strukturell und macht das Teilen
+        # sitzungsuebergreifend, wie der zero_raum es fuer die Taetigkeit schon
+        # tut. Der Block unten (cross_session_collision) bleibt: er ist eine
+        # ANDERE Sache (Perspektive bei Ressourcen-Kollision), kein Widerspruch.
+        own = [dict(r) for r in self.db.recent_turns_alle(30)]
 
         # Another permanent perspective is loaded only when an explicit shared resource
         # collides. MicroClay cannot broaden this privacy/attention boundary by learning.

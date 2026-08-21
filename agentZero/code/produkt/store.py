@@ -166,7 +166,7 @@ class UnifiedDB:
         self.path=Path(path); self.path.parent.mkdir(parents=True,exist_ok=True)
         self.db=sqlite3.connect(self.path,timeout=30,isolation_level=None,check_same_thread=False); self.db.row_factory=sqlite3.Row
         try:
-            self.db.execute("PRAGMA busy_timeout=30000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
+            self.db.execute("PRAGMA busy_timeout=60000"); self.db.executescript(SCHEMA); self._retire_hidden_raw_turn_ledger()
             self.db.execute("INSERT INTO meta(key,value) VALUES('schema_version','6') ON CONFLICT(key) DO UPDATE SET value='6'")
             self.db.execute("INSERT OR IGNORE INTO meta(key,value) VALUES('entity_generation','1')")
             # Authoritative, not a default: rewritten on every open so a running
@@ -282,6 +282,17 @@ class UnifiedDB:
         return tid
     def recent_turns(self,session_id,limit=20):
         rows=self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal DESC LIMIT ?",(session_id,limit)).fetchall(); return list(reversed(rows))
+    def recent_turns_alle(self,limit=30):
+        # ⭐⭐ Eignerentscheidung 2026-08-21: alle 4 Sitzungen (beide Menschen)
+        # sind EINE Entitaet in EINEM Raum. Jede Sitzung sieht den Verlauf ALLER
+        # -- user-uebergreifend, damit es nie Kollisionen gibt und die Entitaet
+        # weiss, was anderswo besprochen wurde. `ts` (nicht `ordinal`), weil
+        # `ordinal` nur je Sitzung eindeutig ist und sitzungsuebergreifend nicht
+        # sortiert. Nur echte Gespraechszuege, keine Abbruchmarker.
+        rows=self.db.execute("SELECT * FROM turns WHERE role IN ('user','assistant') "
+                             "AND content IS NOT NULL AND content NOT LIKE 'TURN_ABORTED%' "
+                             "ORDER BY ts DESC LIMIT ?",(limit,)).fetchall()
+        return list(reversed(rows))
     def all_turns(self,session_id): return self.db.execute("SELECT * FROM turns WHERE session_id=? ORDER BY ordinal",(session_id,)).fetchall()
     def add_memory(self,kind,subject,value,source_turn_id,user_id,provenance):
         mid=str(uuid.uuid4()); self.db.execute("INSERT INTO durable_memory VALUES(?,?,?,?,?,?,?,?)",(mid,kind,subject,value,source_turn_id,user_id,time.time(),json.dumps(provenance,sort_keys=True))); return mid

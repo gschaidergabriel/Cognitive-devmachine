@@ -769,6 +769,13 @@ def _ohne_falschen_gruss(caveman: str, frage: str) -> str:
 # im Satz ab).
 VERLAUF_ZUEGE = 6
 VERLAUF_ZEICHEN = 700
+# ⭐⭐ 2026-08-21, Eignerentscheidung: Zero ist EINE Entitaet ueber alle
+# Sitzungen (Gabriel UND Andreas). Jede Sitzung muss die Historie ALLER
+# Sitzungen kennen -- die alte Sitzungstrennung wird hier bewusst
+# aufgehoben. Gemessen als Bug: auf 'was war meine erste Frage' sah Zero
+# nur die letzten Zuege DIESER Sitzung. So viele Zuege wandern woertlich
+# mit; was aelter ist, holt der Abruf aus dem Korpus (Zuege sind indiziert).
+VERLAUF_ZUEGE_ALLE = 24
 
 
 def _mit_verlauf(caveman: str, world: dict[str, Any]) -> str:
@@ -794,13 +801,17 @@ def _mit_verlauf(caveman: str, world: dict[str, Any]) -> str:
     kanonischen Aufzeichnung derselben Sitzung, nicht aus der Nachricht des
     Menschen) und wozu sie da sind.
     """
-    zuege = [z for z in (world.get("own_recent") or []) if isinstance(z, dict)]
-    zuege = zuege[-VERLAUF_ZUEGE:]
+    # Quelle ist own_recent -- das wird sitzungsuebergreifend an der WURZEL
+    # (retrieval.assemble), nicht hier als Anbau.
+    zuege = [z for z in (world.get("own_recent") or []) if isinstance(z, dict)][-VERLAUF_ZUEGE_ALLE:]
     if not zuege:
         return caveman
     zeilen = []
     for z in zuege:
-        wer = "HUMAN" if str(z.get("role")) == "user" else "YOU"
+        if str(z.get("role")) == "user":
+            wer = str(z.get("user_id") or "HUMAN")
+        else:
+            wer = "YOU"
         text = " ".join(str(z.get("content") or "").split())
         if not text:
             continue
@@ -810,7 +821,9 @@ def _mit_verlauf(caveman: str, world: dict[str, Any]) -> str:
     if not zeilen:
         return caveman
     kopf = (
-        "GESPRAECHSVERLAUF -- the last turns of THIS session, verbatim from the "
+        "GESPRAECHSVERLAUF -- the recent turns across ALL sessions of this ONE "
+        "entity (you are one entity across Gabriel's and Andreas's sessions; "
+        "each [name] marks who spoke, [YOU] is you), verbatim from the "
         "entity's own canonical record. Attached by the pipeline, not by the "
         "human: these are not claims someone made to you, they are what was "
         "actually said here, and the lines marked YOU are your own earlier "
@@ -1382,7 +1395,9 @@ def run_chat_turn(
                 raw_prompt=message, world=vorstufe_world, connected_systems=None,
                 current_user=user_id, current_user_profile=_p,
                 moeglichkeitsraum=_r, recent_turns=[],
-                zero_suggestion=None, available_tools=[], hyperposition=_h)
+                zero_suggestion=None,
+                available_tools=list(headless_zero.DEFAULT_ALLOWED_TOOLS),
+                hyperposition=_h)
         nutzerprofil, hyperposition_readout, erwartungsfeld = _kontext_im_budget(
             _bauen, nutzerprofil, hyperposition_readout, erwartungsfeld)
 

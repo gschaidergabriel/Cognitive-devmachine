@@ -1020,6 +1020,22 @@ def main() -> None:
     def _nutzer() -> str:
         return getattr(bridge, "user_id", "") or ""
 
+    def _mit_buchung(wirt: str, aktion: str, nutzlast, tun):
+        """Handlung am fremden Rechner ausfuehren UND ins Effektbuch schreiben.
+
+        Zuerst wird der Rechner bestimmt: laesst er sich nicht bestimmen, ist
+        nichts geschehen -- dann gibt es auch nichts zu buchen, nur die
+        Rueckfrage. Danach faellt das Tor sein Urteil, fuehrt Buch und laesst
+        den Wirker die Sache tun (heim_wirkung.wirken).
+        """
+        from . import heimpc, heim_wirkung
+        try:
+            ziel = heimpc.wirt_waehlen(wirt or None, _nutzer())
+        except heimpc.KeinWirt as e:
+            return {"erreichbar": False, "grund": str(e)}
+        return heim_wirkung.wirken(bridge.db, bridge.user_id, bridge.session_id,
+                                   ziel, aktion, nutzlast, lambda: tun(ziel))
+
     @mcp.tool(annotations=ro)
     def pc_lage(wirt: str = "") -> dict:
         """Laeuft der Host-Dienst auf dem Rechner, welche Anzeigeschicht, steht die Schranke, sind die Augen wach? ⚠️ Auf Wayland-Rechnern (Andreas) sagt `augen: false`, dass es KEIN Bild geben wird, bis die Shell-Erweiterung nach einem Ab-/Anmelden aktiv ist -- lies das, bevor du `pc_sehen` versuchst."""
@@ -1063,13 +1079,15 @@ def main() -> None:
         from . import heimpc
         rest = {k: v for k, v in {"text": text, "taste": taste, "x": x, "y": y}.items()
                 if v not in ("", None)}
-        return heimpc.eingabe(typ, wirt=wirt or None, nutzer=_nutzer(), **rest)
+        return _mit_buchung(wirt, f"eingabe:{typ}", {"typ": typ, **rest},
+                            lambda ziel: heimpc.eingabe(typ, wirt=ziel, **rest))
 
     @mcp.tool(annotations=effectful)
     def pc_ausfuehren(befehl: str, frist: int = 120, wirt: str = "") -> dict:
         """Einen Shell-Befehl auf dem Rechner des Menschen ausfuehren. ⚠️ Zerstoerendes weist die Schranke des Rechners ab und verlangt einen am echten Terminal getippten Schein -- das ist gewollt, umgeh es nicht. Pruef `wirt` in der Antwort: sie sagt dir, welche Maschine wirklich geantwortet hat."""
         from . import heimpc
-        return heimpc.ausfuehren(befehl, frist, wirt=wirt or None, nutzer=_nutzer())
+        return _mit_buchung(wirt, "ausfuehren", befehl,
+                            lambda ziel: heimpc.ausfuehren(befehl, frist, wirt=ziel))
 
     # ── Browser: Zero bedient den echten, angemeldeten Browser des Menschen ──
     # Auch hier `wirt`: der Browser traegt die Anmeldungen eines bestimmten
@@ -1078,7 +1096,8 @@ def main() -> None:
     def browser_oeffnen(url: str, browser: str = "", wirt: str = "") -> dict:
         """Eine Seite im Browser des Menschen oeffnen (echtes angemeldetes Profil). `browser` leer = Standardbrowser; sonst chrome|firefox|brave."""
         from . import browser_fern
-        return browser_fern.oeffnen(url, browser, wirt=wirt or None, nutzer=_nutzer())
+        return _mit_buchung(wirt, "browser:oeffnen", url,
+                            lambda ziel: browser_fern.oeffnen(url, browser, wirt=ziel))
 
     @mcp.tool(annotations=ro)
     def browser_lesen(browser: str = "", wirt: str = "") -> dict:
@@ -1107,32 +1126,41 @@ def main() -> None:
                       wirt: str = "") -> dict:
         """Auf der Browserseite klicken -- per CSS-`selektor` oder per x,y. Setze `wirkt_nach_aussen=true`, wenn der Klick etwas absendet/kauft/postet (dann wird es als Aussenwirkung protokolliert)."""
         from . import browser_fern
-        return browser_fern.klick(selektor or None, x, y, browser, wirkt_nach_aussen,
-                                  wirt=wirt or None, nutzer=_nutzer())
+        aktion = "browser:klick:aussen" if wirkt_nach_aussen else "browser:klick"
+        return _mit_buchung(wirt, aktion, {"selektor": selektor, "x": x, "y": y},
+                            lambda ziel: browser_fern.klick(selektor or None, x, y,
+                                                            browser, wirkt_nach_aussen,
+                                                            wirt=ziel))
 
     @mcp.tool(annotations=effectful)
     def browser_tippen(selektor: str, text: str, browser: str = "",
                        wirt: str = "") -> dict:
         """In ein Feld (CSS-`selektor`) auf der Browserseite `text` eintippen."""
         from . import browser_fern
-        return browser_fern.tippen(selektor, text, browser, wirt=wirt or None,
-                                   nutzer=_nutzer())
+        return _mit_buchung(wirt, "browser:tippen", {"selektor": selektor, "text": text},
+                            lambda ziel: browser_fern.tippen(selektor, text, browser,
+                                                             wirt=ziel))
 
     @mcp.tool(annotations=effectful)
     def browser_formular(felder: dict, absenden_selektor: str = "", browser: str = "",
                          wirt: str = "") -> dict:
         """Ein Formular ausfuellen: `felder` = {CSS-Selektor: Wert}. `absenden_selektor` optional zum Abschicken -- Abschicken ist eine reale Aussenwirkung, kuendige sie an, wenn nicht beauftragt."""
         from . import browser_fern
-        return browser_fern.formular(felder, absenden_selektor or None, browser,
-                                     wirt=wirt or None, nutzer=_nutzer())
+        aktion = "browser:formular:absenden" if absenden_selektor else "browser:formular"
+        return _mit_buchung(wirt, aktion,
+                            {"felder": felder, "absenden": absenden_selektor},
+                            lambda ziel: browser_fern.formular(felder,
+                                                               absenden_selektor or None,
+                                                               browser, wirt=ziel))
 
     @mcp.tool(annotations=effectful)
     def browser_navigieren(richtung: str = "neu_laden", browser: str = "",
                            wirt: str = "") -> dict:
         """Browser-Navigation: richtung = zurueck | vor | neu_laden."""
         from . import browser_fern
-        return browser_fern.navigieren(richtung, browser, wirt=wirt or None,
-                                       nutzer=_nutzer())
+        return _mit_buchung(wirt, f"browser:{richtung}", richtung,
+                            lambda ziel: browser_fern.navigieren(richtung, browser,
+                                                                 wirt=ziel))
 
     @mcp.tool(annotations=effectful)
     def schluessel_anlernen(name: str, anbieter: str, schluessel: str, modell: str = "") -> dict:

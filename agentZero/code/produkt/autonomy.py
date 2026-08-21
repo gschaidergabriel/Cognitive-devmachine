@@ -5,7 +5,7 @@ import math
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Iterable
 
 from .effect_journal import EffectJournal
 from .identity import CANONICAL_USER_IDS, ist_kanonische_sitzung, sitzungen_von
@@ -56,6 +56,35 @@ class AutonomyController:
 
     def __init__(self, db: UnifiedDB):
         self.db = db
+        # ⚠️ ABSICHTLICH KEINE WakeSignal/WakeConditionStore-Konstruktion hier:
+        # AutonomyController wird an mind. zwei Stellen INNERHALB einer bereits
+        # offenen FREMDEN Transaktion konstruiert, um `_load(tx)` auf demselben
+        # Cursor mitzubenutzen (autonomy_context.py:_snapshot, wenn
+        # `db.db.in_transaction` schon True ist; autonomy_dispatch.py:170 unter
+        # `with db.tx() as tx:`) -- beide rufen dort NUR die lesende `_load()`
+        # auf, nie eine mutierende Methode (die wuerde mit ihrem eigenen
+        # `with self.db.tx()` sofort mit "cannot start a transaction within a
+        # transaction" abstuerzen, waere sie von dort erreichbar -- das ist also
+        # kein Zufall, sondern strukturell erzwungen). WakeSignal/WakeConditionStore
+        # legen ihre Tabellen aber per `executescript()` an (siehe dortige
+        # Docstrings), und `executescript()` committet eine offene Transaktion
+        # IMMER implizit zuerst (siehe store.py:tx()-Warnung "f-77") -- waere das
+        # hier in __init__ passiert, haette JEDE dieser Fremd-Transaktionen
+        # vorzeitig und stillschweigend committet. Siehe `_wake_signal()`/
+        # `propose_step()` unten fuer den sicheren Ort dieser Konstruktion.
+        pass
+
+    @staticmethod
+    def _wake_signal(db: UnifiedDB) -> "WakeSignal":  # noqa: F821 -- Typname nur fuer den Docstring/IDE
+        """Baut eine frische `WakeSignal` -- MUSS immer aufgerufen werden, BEVOR
+        die aufrufende Methode ihre eigene `with db.tx()` oeffnet (siehe
+        Kommentar in `__init__`: ihr `executescript()` wuerde eine bereits
+        offene Transaktion sonst stillschweigend committen). Jede mutierende
+        Methode unten oeffnet garantiert eine EIGENE, frische Transaktion --
+        ein Aufruf VOR dieser `with`-Klammer ist deshalb immer ausserhalb jeder
+        Transaktion und damit sicher."""
+        from .wake_signal import WakeSignal
+        return WakeSignal(db)
 
     @staticmethod
     def _loads(raw: str) -> dict[str, Any]:
@@ -202,13 +231,42 @@ class AutonomyController:
         self._validate(state)
         return state
 
-    def _save(self, db, state: dict[str, Any]) -> None:
+    def _save(self, db, state: dict[str, Any], *, wake: "WakeSignal", goal_ids: Iterable[str] = ()) -> None:  # noqa: F821
         self._validate(state)
         state["revision"] += 1
         db.execute(
             "INSERT INTO meta(key,value) VALUES(?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
             (STATE_KEY, self._dumps(state)),
         )
+        # Ereignis-Haken fuer GOAL_STATE-Weckbedingungen (siehe wake_condition.py):
+        # `_save()` ist der EINZIGE Schreibpunkt fuer den kompletten Autonomy-State
+        # -- jede der zehn mutierenden Methoden oben (propose_step, admit_step,
+        # record_step_failure, record_reason_success, record_effect_result,
+        # acknowledge_by_user, verify_completion, block_goal, cancel_goal,
+        # recover_generation) endet mit einem Aufruf hier. Das ist also der
+        # einzige Ort, an dem "der Ziel-Zustand hat sich geaendert" mechanisch
+        # wahr ist -- dieselbe Bauart wie effect_journal.py:_finish_tx (der
+        # einzige Terminal-Uebergang eines Effekts) und
+        # turn_lifecycle.py:begin_admission (der einzige Turn-Zulassungspunkt).
+        # Bewusst LIBERAL statt nur bei tatsaechlicher Statusaenderung: ein
+        # Aufrufer, der `goal_ids` uebergibt, meldet fuer JEDEN dieser Aufrufe,
+        # nicht nur wenn `status` sich nachweislich geaendert hat -- das kostet
+        # hier nur eine gebuendelte Zeile (siehe wake_signal.py: `melden()` haelt
+        # genau eine Zeile je goal_id) und verhindert die gefaehrlichere Richtung:
+        # eine zukuenftige Mutation, die vergisst zu melden, waere ein Wecker, der
+        # nie laeutet. `melden()` ist fail-closed (siehe wake_signal.py) und darf
+        # diesen Zug nie kippen, deshalb kein try/except hier noetig.
+        #
+        # `wake` ist ein PFLICHT-Parameter (kein Default, kein `self.wake`): das
+        # Objekt muss von der aufrufenden mutierenden Methode VOR deren `with
+        # self.db.tx()` frisch gebaut worden sein (siehe `_wake_signal()` oben)
+        # -- ein `self.wake`, in `__init__` gebaut, waere an den zwei Stellen
+        # falsch, an denen AutonomyController INNERHALB einer fremden, bereits
+        # offenen Transaktion konstruiert wird (siehe Kommentar in `__init__`).
+        from .wake_signal import KIND_GOAL_STATE
+        jetzt = time.time()
+        for goal_id in goal_ids:
+            wake.melden(KIND_GOAL_STATE, goal_id, jetzt=jetzt)
 
     def snapshot(self, *, user_id: str | None = None) -> dict[str, Any]:
         with self.db.tx() as db:
@@ -250,6 +308,7 @@ class AutonomyController:
             "max_retries_per_step": int(budget.max_retries_per_step),
             "max_effects": int(budget.max_effects),
         }
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             self.db.assert_live_generation(session_id, generation)
             row = db.execute("SELECT session_id,user_id,role,content FROM turns WHERE turn_id=?", (source_turn_id,)).fetchone()
@@ -292,7 +351,7 @@ class AutonomyController:
             state["goals"][goal_id] = goal
             state["queue"].append(goal_id)
             state["queue"].sort(key=lambda gid: (-state["goals"][gid]["priority"], state["goals"][gid]["created_at"], gid))
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return dict(goal)
 
     def _goal(self, db, goal_id: str, expected_generation: int | None = None):
@@ -409,7 +468,7 @@ class AutonomyController:
             raise PermissionError("effect receipt predates autonomous goal")
         return row
 
-    def propose_step(self, goal_id: str, kind: str, description: str, *, effect=None, expected_generation=None) -> dict[str, Any]:
+    def propose_step(self, goal_id: str, kind: str, description: str, *, effect=None, wake_condition=None, expected_generation=None) -> dict[str, Any]:
         if kind not in STEP_KINDS:
             raise ValueError("invalid step kind")
         description = str(description).strip()
@@ -419,6 +478,19 @@ class AutonomyController:
             effect = self._validated_effect(effect)
         elif effect is not None:
             raise ValueError("effect only allowed for effect step")
+        if kind != "wait" and wake_condition is not None:
+            raise ValueError("wake_condition only allowed for wait step")
+        # Beide Konstruktionen MUESSEN vor der eigenen `with self.db.tx()` unten
+        # passieren (siehe `_wake_signal()`-Docstring und `__init__`-Kommentar):
+        # ihre `executescript()`-Tabellenanlage wuerde eine offene Transaktion
+        # sonst stillschweigend committen. `wake_conditions` wird nur fuer
+        # kind=="wait" gebraucht, aber auch dann bereits HIER (nicht erst im
+        # `with`-Block) gebaut -- aus demselben Grund.
+        wake = self._wake_signal(self.db)
+        wake_conditions = None
+        if kind == "wait":
+            from .wake_governor import WakeConditionStore
+            wake_conditions = WakeConditionStore(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             if goal["status"] not in {"ACTIVE", "WAITING"}:
@@ -426,14 +498,59 @@ class AutonomyController:
             if goal["current_step"] and goal["current_step"]["status"] in {"PROPOSED", "ADMITTED"}:
                 raise AutonomyStateError("goal already has an unfinished step")
             self._budget(goal, needs_effect=kind == "effect")
-            step = {"step_id": str(uuid.uuid4()), "kind": kind, "description": description, "effect": effect, "attempts": 0, "status": "PROPOSED", "created_at": time.time()}
+            step_id = str(uuid.uuid4())
+            step = {"step_id": step_id, "kind": kind, "description": description, "effect": effect, "attempts": 0, "status": "PROPOSED", "created_at": time.time()}
+            if kind == "wait":
+                # ⚠️ FAIL-CLOSED (wake_condition.py-Modul-Docstring, zweite zentrale
+                # Entscheidung: UNBEKANNT/kein Beleg darf nie zu ERFUELLT/OFFEN
+                # aufgewertet werden -- hier dieselbe Haltung auf der ENTSTEHUNGS-
+                # Seite angewandt). STEP_KINDS kennt "wait" bereits seit jeher, aber
+                # bis zu diesem Fix erzwang propose_step() KEINE Bedingung dafuer:
+                # ein "wait"-Schritt ohne mechanisch pruefbaren Weckgrund haette das
+                # Ziel unwiderruflich in WAITING eingefroren, weil kein Governor je
+                # eine Bedingung faende, die ihn wieder aufweckt (siehe
+                # wake_governor.py: `faellige()` findet nur, was `naechste_pruefung()`
+                # oder `weckbar()` kennt -- eine nie registrierte Bedingung existiert
+                # fuer beide nicht). Deshalb hier -- am einzigen Ort, an dem ein
+                # wait-Schritt ueberhaupt entstehen kann -- die Bedingung erzwingen,
+                # BEVOR der Schritt (und der WAITING-Zustand) gespeichert wird.
+                #
+                # `wake_condition` traegt bewusst NUR die Inhaltsfelder (kind,
+                # subject_ref, expected_predicate, earliest_at, deadline, optional
+                # coalesce_key) -- schema/goal_id/step_id/generation kann der
+                # Aufrufer zum Zeitpunkt des Aufrufs gar nicht kennen (step_id
+                # entsteht erst zwei Zeilen darueber) und darf sie auch nicht
+                # vorgeben: sie werden hier autoritativ ueberschrieben, damit eine
+                # Bedingung niemals fuer einen falschen Schritt/eine falsche
+                # Generation registriert werden kann.
+                from .wake_condition import WAKE_CONDITION_SCHEMA, WakeCondition, neue_coalesce_key
+                if not isinstance(wake_condition, dict):
+                    raise AutonomyStateError("wait step requires a wake_condition")
+                payload = dict(wake_condition)
+                payload.setdefault("coalesce_key", neue_coalesce_key(goal_id, step_id))
+                payload.update({
+                    "schema": WAKE_CONDITION_SCHEMA,
+                    "goal_id": goal_id,
+                    "step_id": step_id,
+                    "generation": int(goal["generation"]),
+                })
+                try:
+                    bedingung = WakeCondition.aus_dict(payload)
+                except Exception as exc:
+                    raise AutonomyStateError(f"invalid wake_condition for wait step: {exc}") from exc
+                # `registrieren()` ist ein reines `execute()` (siehe wake_governor.py),
+                # also unbedenklich innerhalb dieser offenen `tx()`-Klammer -- die
+                # einmalige `executescript()` fuer die Tabelle lief bereits VOR
+                # dieser Klammer (siehe Konstruktion von `wake_conditions` oben).
+                wake_conditions.registrieren(bedingung)
             goal["current_step"] = step
             goal["status"] = "VERIFYING" if kind == "complete_candidate" else ("WAITING" if kind == "wait" else "ACTIVE")
             goal["updated_at"] = time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return dict(step)
 
     def admit_step(self, goal_id: str, step_id: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             step = goal["current_step"]
@@ -447,10 +564,11 @@ class AutonomyController:
             goal["counters"]["steps"] += 1
             goal["counters"]["effects"] += int(step["kind"] == "effect")
             goal["updated_at"] = time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return dict(step)
 
     def record_step_failure(self, goal_id: str, step_id: str, reason: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             step = goal["current_step"]
@@ -462,10 +580,11 @@ class AutonomyController:
             goal["status"] = "BLOCKED" if exhausted else "ACTIVE"
             goal["blocked_reason"] = "retry_budget_exhausted" if exhausted else (str(reason).strip()[:2000] or "step_failed")
             goal["updated_at"] = time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "status": goal["status"], "reason": goal["blocked_reason"]}
 
     def record_reason_success(self, goal_id: str, step_id: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             step = goal["current_step"]
@@ -474,10 +593,11 @@ class AutonomyController:
             step["status"], goal["status"], goal["blocked_reason"] = "SUCCEEDED", "ACTIVE", None
             goal["counters"]["consecutive_failures"] = 0
             goal["updated_at"] = time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "status": "ACTIVE", "step_id": step_id}
 
     def record_effect_result(self, goal_id: str, step_id: str, effect_id: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             step = goal["current_step"]
@@ -506,10 +626,11 @@ class AutonomyController:
             goal["status"] = "ACTIVE" if verified else "BLOCKED"
             goal["blocked_reason"] = None if verified else f"effect_{row['status'].lower()}"
             goal["updated_at"] = time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "effect_id": effect_id, "verified": verified, "status": goal["status"]}
 
     def acknowledge_by_user(self, goal_id: str, turn_id: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             row = db.execute("SELECT session_id,user_id,role,ts FROM turns WHERE turn_id=?", (turn_id,)).fetchone()
@@ -520,10 +641,11 @@ class AutonomyController:
             if turn_id == goal["source_turn_id"] or float(row["ts"]) <= float(goal["created_at"]):
                 raise PermissionError("acknowledgement must be an explicit later owner turn")
             goal["user_ack_turn_id"], goal["updated_at"] = turn_id, time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "user_ack_turn_id": turn_id}
 
     def verify_completion(self, goal_id: str, *, expected_generation=None) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id, expected_generation)
             contract, evidence = goal["completion_contract"], None
@@ -570,25 +692,27 @@ class AutonomyController:
             if not evidence:
                 raise CompletionNotVerified(goal_id)
             goal["status"], goal["blocked_reason"], goal["updated_at"] = "COMPLETED", None, time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "status": "COMPLETED", "evidence": evidence}
 
     def block_goal(self, goal_id: str, reason: str) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id)
             if goal["status"] in {"COMPLETED", "CANCELLED"}:
                 raise AutonomyStateError("terminal goal cannot be blocked")
             goal["status"], goal["blocked_reason"], goal["updated_at"] = "BLOCKED", (str(reason).strip()[:2000] or "blocked"), time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "status": "BLOCKED", "reason": goal["blocked_reason"]}
 
     def cancel_goal(self, goal_id: str) -> dict[str, Any]:
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state, goal = self._goal(db, goal_id)
             if goal["status"] == "COMPLETED":
                 raise AutonomyStateError("completed goal cannot be cancelled")
             goal["status"], goal["blocked_reason"], goal["updated_at"] = "CANCELLED", None, time.time()
-            self._save(db, state)
+            self._save(db, state, wake=wake, goal_ids=(goal_id,))
             return {"goal_id": goal_id, "status": "CANCELLED"}
 
     def recover_generation(self, *, expected_generation: int | None = None) -> dict[str, int]:
@@ -605,6 +729,8 @@ class AutonomyController:
             "terminal_preserved": 0,
         }
         changed = False
+        touched_goal_ids: list[str] = []
+        wake = self._wake_signal(self.db)
         with self.db.tx() as db:
             state = self._load(db)
             now = time.time()
@@ -644,9 +770,10 @@ class AutonomyController:
                     counts["rebound"] += 1
                 goal["updated_at"] = now
                 changed = True
+                touched_goal_ids.append(goal_id)
 
             if changed:
-                self._save(db, state)
+                self._save(db, state, wake=wake, goal_ids=touched_goal_ids)
         return counts
 
     def next_runnable(self, *, user_id: str | None = None) -> dict[str, Any] | None:

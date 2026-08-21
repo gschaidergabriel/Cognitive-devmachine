@@ -154,11 +154,21 @@ def fenster(wirt: str | None = None, nutzer: str | None = None) -> dict:
     return _ruf("/fenster", wirt=wirt, nutzer=nutzer)
 
 
-def sehen(bildschirm: str = "2", wirt: str | None = None,
+def sehen(bildschirm: str = "", wirt: str | None = None,
           nutzer: str | None = None) -> dict:
     """Ein Bild des Desktops. Liefert die Rohbytes des PNG -- der Aufrufer
     entscheidet, ob er sie speichert oder ueber `bild_ansehen` analysieren
-    laesst."""
+    laesst.
+
+    `bildschirm` leer = die Vorgabe DIESES Rechners: auf Gabriels PC sein
+    Schirm 2 (Schirm 1 gehoert ihm), sonst der ganze Schreibtisch. Sonst ein
+    Anschlussname ("DP-1"), "1"/"2" nach Gabriels Regel oder "alle".
+    """
+    if not bildschirm:
+        try:
+            bildschirm = "2" if wirt_waehlen(wirt, nutzer) == "gabriel-pc" else "alle"
+        except KeinWirt:
+            bildschirm = "alle"
     return _ruf(f"/bild?bildschirm={bildschirm}", roh=True, wirt=wirt, nutzer=nutzer)
 
 

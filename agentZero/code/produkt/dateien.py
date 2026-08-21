@@ -67,7 +67,7 @@ def ausgabe_ordner(user_id: str) -> Path:
 # Fehlgriff auf ein Zweitausendstel der freien Flaeche, statt auf
 # Gigabyte-Groesse wie der Zwischenfall, der runtime_CLAUDE.md 9h ausgeloest
 # hat.
-MAX_DATEI_BYTES = 20 * 1024 * 1024
+MAX_DATEI_BYTES = 40 * 1024 * 1024
 
 # ⭐ 300 MB insgesamt, eingang UND ausgabe zusammen. Genug fuer taeglichen
 # Gebrauch durch zwei Menschen, klein genug, dass eine vergessene Ablage nie

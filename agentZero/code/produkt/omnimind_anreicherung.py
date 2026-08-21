@@ -485,9 +485,201 @@ def skizzen_erzeugen(db, limit: int = 40) -> dict:
 
 # ── Der ganze Lauf ────────────────────────────────────────────────────
 
+
+# ── Kanonische Hierarchie: vom Eigner definiert, keine Vermutung ─────────
+#
+# Gabriel (21.08.): die rein autonome Clusterung findet manche Zugehoerigkeit
+# NICHT (gemessen: Project-Frankenstein 0 Kanten zu SeiMensch; iar.frank.ink
+# liegt als eigene sphaere, nicht als Unterknoten). Deshalb hier eine ZWEITE,
+# eigenstaendige Wahrheitsquelle: eine vom Eigner erklaerte Karte -- das ist
+# KEIN Verstoss gegen NO_INVENTION, weil der Eigner die Zugehoerigkeit
+# DEFINIERT, nicht raet. Autonome Funde ergaenzen das (art='feld'/'cluster',
+# eigene Konfidenz<1.0); diese Karte traegt IMMER Konfidenz 1.0 und
+# begruendung "vom Eigner definiert".
+#
+# SeiMensch ist das Dach ueber ZWEI Zweigen (Gabriel, 21.08., zweite Praezisierung):
+#   1. die gemeinnuetzige Webseite (Herzrad, LeihMich, iar.frank.ink, ...)
+#   2. der KI-/Forschungs-/Infrastrukturzweig (EntityOS, ClayVerse, Frank, ...)
+#
+# Erweiterbar: neue Zeilen unten anhaengen, `alias_projekt`/`alias_cluster`
+# reparentieren VORHANDENE autonome Knoten (ihre eigene Konfidenz/Herkunft
+# bleibt an der Stelle stehen -- nur die Elternbeziehung wird eigner-autoritativ),
+# `muster`/`kontext_muster` suchen zusaetzlich MECHANISCH nach echten Artikeln,
+# die noch unter keinem Feld/Cluster erfasst sind.
+KANON_BAUM = {
+    "kanon:seimensch": {
+        "name": "SeiMensch", "eltern": None, "muster": ["seimensch", "seimensch.net"],
+    },
+    "kanon:seimensch-web": {
+        "name": "Gemeinnützig / Web", "eltern": "kanon:seimensch", "muster": [],
+    },
+    "kanon:herzrad": {
+        "name": "Herzrad", "eltern": "kanon:seimensch-web",
+        "muster": ["herzrad", "herzrad.at"], "alias_cluster": [],
+    },
+    "kanon:leihmich": {
+        "name": "LeihMich", "eltern": "kanon:seimensch-web",
+        "muster": ["leihmich", "leihmich.org"],
+    },
+    "kanon:iar-frank-ink": {
+        "name": "iar.frank.ink (Institute for Agentic Research)", "eltern": "kanon:seimensch-web",
+        "muster": ["iar.frank.ink"], "alias_projekt": ["iar"],
+    },
+    "kanon:seimensch-projekte": {
+        "name": "SeiMensch-Projekte", "eltern": "kanon:seimensch-web",
+        "muster": ["/projekte/"], "kontext_muster": ["seimensch"],
+    },
+    "kanon:harte-baesse": {
+        "name": "Harte Bässe", "eltern": "kanon:seimensch-web",
+        "muster": ["harte-baesse", "harte bässe", "harte baesse"],
+    },
+    "kanon:workshop": {
+        "name": "Workshop", "eltern": "kanon:seimensch-web",
+        "muster": ["/workshop/", "resilienz-training"], "kontext_muster": ["seimensch"],
+    },
+    "kanon:unterstuetzer": {
+        "name": "Unterstützer", "eltern": "kanon:seimensch-web",
+        "muster": ["/unterstuetzer/"], "kontext_muster": ["seimensch"],
+    },
+    "kanon:seimensch-ki": {
+        "name": "KI / Forschung", "eltern": "kanon:seimensch", "muster": [],
+    },
+    "kanon:entityos": {
+        "name": "EntityOS", "eltern": "kanon:seimensch-ki", "alias_projekt": ["EntityOS"],
+    },
+    "kanon:clayverse": {
+        "name": "ClayVerse", "eltern": "kanon:seimensch-ki", "alias_cluster": ["titel:ClayVerse"],
+    },
+    "kanon:claycode": {
+        "name": "ClayCode", "eltern": "kanon:seimensch-ki", "alias_cluster": ["titel:ClayCode"],
+    },
+    "kanon:claygraph": {
+        "name": "ClayGraph", "eltern": "kanon:seimensch-ki", "alias_cluster": ["titel:ClayGraph"],
+    },
+    "kanon:unifieddb": {
+        "name": "UnifiedDB", "eltern": "kanon:seimensch-ki", "alias_projekt": ["unifieddb"],
+    },
+    "kanon:retina": {
+        "name": "Retina / Digital Retina", "eltern": "kanon:seimensch-ki",
+        "alias_projekt": ["digital-retina", "retina"],
+    },
+    "kanon:frank": {
+        "name": "Forschungsentität / Frank", "eltern": "kanon:seimensch-ki",
+        "alias_projekt": ["Project-Frankenstein", "frank-demo"],
+    },
+    "kanon:clay-institut": {
+        "name": "Clay-Forschungsentität (Institut)", "eltern": "kanon:seimensch-ki",
+        "alias_projekt": ["clay-global-research-entity", "clay", "clayverse-bau",
+                          "clayverse-strom", "kartographie", "daemonweave"],
+    },
+    "kanon:omnimind": {
+        "name": "OmniMind", "eltern": "kanon:seimensch-ki",
+        "muster": ["omnimind"],
+    },
+    "kanon:synteq": {
+        "name": "SynthEq (Synthetic Equilibrium)", "eltern": "kanon:seimensch-ki",
+        "muster": ["syntheq", "synthetic equilibrium", "synthetic-equilibrium"],
+    },
+    "kanon:tavern": {
+        "name": "tAvern", "eltern": "kanon:seimensch-ki",
+        "muster": ["tavern", "swarm-werkzeug"],
+    },
+}
+
+
+def _kanon_treffer_ids(db, muster: list, kontext_muster: list | None = None) -> set:
+    """Mechanische LIKE-Suche ueber titel/tags/quelle -- echte Artikel-IDs,
+    nichts geraten. `kontext_muster` ist ein UND-Zusatzfilter (z.B. "seimensch"),
+    damit generische Woerter ("workshop", "projekte") nicht querbeet im
+    18k-Artikel-Forschungskorpus zuschlagen."""
+    if not muster:
+        return set()
+    ids = set()
+    for m in muster:
+        bed = "(titel LIKE ? OR tags LIKE ? OR quelle LIKE ?)"
+        par = [f"%{m}%", f"%{m}%", f"%{m}%"]
+        if kontext_muster:
+            teil = " OR ".join(["titel LIKE ? OR tags LIKE ? OR quelle LIKE ?"] * len(kontext_muster))
+            for km in kontext_muster:
+                par += [f"%{km}%", f"%{km}%", f"%{km}%"]
+            bed = f"({bed}) AND ({teil})"
+        for r in db.db.execute(f"SELECT id FROM artikel WHERE {bed}", par).fetchall():
+            ids.add(r["id"])
+    return ids
+
+
+def kanon_anwenden(db) -> dict:
+    """Traegt KANON_BAUM in om_projekt ein -- IMMER NACH projekt_cluster()
+    aufgerufen (dessen eigenes Upsert wuerde eine vorherige Reparentierung
+    sonst wieder ueberschreiben). Reparentiert vorhandene feld:/titel:-Knoten
+    eigner-autoritativ und legt fuer Marken ohne eigenen Cluster einen neuen,
+    mechanisch befuellten Knoten an."""
+    import time as _t
+    t0 = _t.time()
+    jetzt = _jetzt_iso()
+    neue_knoten, reparentiert, eigene_mitglieder, umbenannt = 0, 0, 0, 0
+    begr = "vom Eigner definiert (Gabriel, 2026-08-21): Teil der SeiMensch-Gesamtkarte"
+    with db.tx() as sql:
+        for kid, spec in KANON_BAUM.items():
+            alias_ids = ([f"feld:{a}" for a in spec.get("alias_projekt") or []]
+                         + list(spec.get("alias_cluster") or []))
+            # ⭐ GENAU EIN Alias und kein eigenes Muster: ein Wrapper-Knoten
+            # daneben waere ein zweiter Knoten mit praktisch demselben Namen
+            # (z.B. "EntityOS" als Kanon-Huelle UEBER "feld:EntityOS") --
+            # genau der Haarball-Fehler, den Gabriel ausdruecklich nicht will.
+            # Stattdessen wird der EINE vorhandene Knoten direkt umbenannt
+            # und eigner-autoritativ reparentiert, kein zweiter Knoten.
+            if len(alias_ids) == 1 and not (spec.get("muster") or []):
+                alias_id = alias_ids[0]
+                getroffen = sql.execute(
+                    "UPDATE om_projekt SET name=?, eltern_id=?, konfidenz=1.0, "
+                    "begruendung=?, aktualisiert_am=? WHERE id=?",
+                    (spec["name"], spec["eltern"], begr, jetzt, alias_id)).rowcount
+                if getroffen:
+                    reparentiert += 1
+                    umbenannt += 1
+                continue
+
+            sql.execute(
+                "INSERT INTO om_projekt(id,name,art,eltern_id,konfidenz,begruendung,"
+                "anzahl_artikel,aktualisiert_am) VALUES(?,?,?,?,?,?,?,?) "
+                "ON CONFLICT(id) DO UPDATE SET name=excluded.name, eltern_id=excluded.eltern_id,"
+                " konfidenz=excluded.konfidenz, begruendung=excluded.begruendung,"
+                " aktualisiert_am=excluded.aktualisiert_am",
+                (kid, spec["name"], "eigner", spec["eltern"], 1.0, begr, 0, jetzt))
+            neue_knoten += 1
+            eigene_ids = _kanon_treffer_ids(db, spec.get("muster") or [], spec.get("kontext_muster"))
+            for aid in eigene_ids:
+                sql.execute(
+                    "INSERT INTO om_projekt_mitglied(artikel_id,projekt_id,konfidenz) VALUES(?,?,?) "
+                    "ON CONFLICT(artikel_id,projekt_id) DO UPDATE SET konfidenz=excluded.konfidenz",
+                    (aid, kid, 0.85 if spec.get("kontext_muster") else 0.92))
+                eigene_mitglieder += 1
+            for alias_id in alias_ids:
+                getroffen = sql.execute(
+                    "UPDATE om_projekt SET eltern_id=?, aktualisiert_am=? WHERE id=?",
+                    (kid, jetzt, alias_id)).rowcount
+                if getroffen:
+                    reparentiert += 1
+        # anzahl_artikel je Kanon-Knoten NACHTRAEGLICH aus om_projekt_mitglied
+        # zaehlen -- reparentierte Kinder zaehlen eigene Bestaende, keine
+        # Duplizierung noetig, das Frontend summiert die Kinder selbst.
+        for kid in KANON_BAUM:
+            n = sql.execute(
+                "SELECT COUNT(*) n FROM om_projekt_mitglied WHERE projekt_id=?", (kid,)).fetchone()[0]
+            sql.execute("UPDATE om_projekt SET anzahl_artikel=? WHERE id=?", (n, kid))
+    ergebnis = {"knoten": neue_knoten, "reparentiert": reparentiert, "eigene_mitglieder": eigene_mitglieder, "umbenannt": umbenannt}
+    _protokoll(db, "kanon_anwenden", True, neue_knoten, (_t.time() - t0) * 1000, str(ergebnis))
+    return ergebnis
+
+
 def lauf(db) -> dict:
     ergebnis = {}
+    # kanon_anwenden() IMMER direkt nach projekt_cluster(): dessen Upsert
+    # setzt eltern_id aus der autonomen Rechnung neu (auch NULL) und wuerde
+    # eine vorherige Reparentierung sonst bei jedem Lauf wieder loeschen.
     for name, fn in (("projekt_cluster", projekt_cluster),
+                      ("kanon_anwenden", kanon_anwenden),
                       ("implikationen", implikationen_ableiten),
                       ("zusammenfassungen", zusammenfassungen_erzeugen),
                       ("skizzen", skizzen_erzeugen)):
@@ -503,8 +695,9 @@ def lauf(db) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--db", default="/var/lib/clay/wiki.db")
-    ap.add_argument("--schritt", choices=["alle", "projekt_cluster", "implikationen",
-                                          "zusammenfassungen", "skizzen"], default="alle")
+    ap.add_argument("--schritt", choices=["alle", "projekt_cluster", "kanon_anwenden",
+                                          "implikationen", "zusammenfassungen", "skizzen"],
+                    default="alle")
     a = ap.parse_args()
 
     from clayverse.store import UnifiedDB
@@ -513,8 +706,10 @@ def main() -> None:
         if a.schritt == "alle":
             ergebnis = lauf(db)
         else:
-            funktion = {"projekt_cluster": projekt_cluster, "implikationen": implikationen_ableiten,
-                        "zusammenfassungen": zusammenfassungen_erzeugen, "skizzen": skizzen_erzeugen}[a.schritt]
+            funktion = {"projekt_cluster": projekt_cluster, "kanon_anwenden": kanon_anwenden,
+                        "implikationen": implikationen_ableiten,
+                        "zusammenfassungen": zusammenfassungen_erzeugen,
+                        "skizzen": skizzen_erzeugen}[a.schritt]
             ergebnis = {a.schritt: funktion(db)}
         print(json.dumps(ergebnis, ensure_ascii=False, indent=2))
     finally:

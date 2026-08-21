@@ -319,12 +319,17 @@ def zeilen(c, testlage: str = "") -> list[dict]:
       "ein Schritt darf eine Bedingung benennen und schlafen, statt alle 30 s nachzusehen; "
       "feste Arten, kein freies SQL, keine vom Modell formulierte Bedingung",
       "Architektur / Messung 21.08.",
-      (f"Vertrag steht: {_wc_arten} geschlossene Arten, 4 Zustände (ERFUELLT/OFFEN/"
-       "ZEITABLAUF/UNBEKANNT), fail-closed je Art, 39 Tests. ⚠️ `wait` bleibt in "
-       "DECISION_KINDS GESPERRT: es fehlt der Ereignis-Haken am Schreibpunkt. Ohne ihn "
-       "liefert `naechste_pruefung()` für jeden Effekt ohne Frist `None` — der Governor "
-       "würde für Effektabschluss und neue Nachricht nie wieder nachsehen und hinge weiter "
-       "am Puls, den er ersetzen soll. Schattenlauf 24 h: Governor 205 Weckvorgänge, "
+      (f"Zwei von drei Bausteinen stehen. (1) Der Vertrag: {_wc_arten} geschlossene "
+       "Arten, 4 Zustände (ERFUELLT/OFFEN/ZEITABLAUF/UNBEKANNT), typisierte Prädikate "
+       "statt Strings, fail-closed je Art. (2) Die Glocke `wake_signal.py`: Haken an "
+       "genau zwei Schreibpunkten (Effektabschluss, Menschenzug), gebündelt über "
+       "`coalesce_key`. Nachgemessen: 1000 gleichartige Meldungen ergeben EINE Zeile mit "
+       "count=1000; `naechste_pruefung()` liefert `None`, `weckbar()` findet dieselben "
+       "Bedingungen — genau der blinde Fleck, um dessentwillen die Glocke gebaut wurde, "
+       "ist zu. `begin_admission` dauert unverändert 83,6 ms (Median über 5 Züge; vorher "
+       "107 ms — keine messbare Verlängerung). ⚠️ `wait` bleibt in DECISION_KINDS "
+       "GESPERRT: es fehlt (3) der Governor, der Vertrag und Glocke zu Entscheidungen "
+       "verdrahtet. Schattenlauf 24 h zum Vergleich: Governor 205 Weckvorgänge, "
        "Puls 2880, davon 2769 leer (96,1 %)"
        if _wc_arten else "wake_condition.py nicht ladbar — nicht messbar"),
       False)

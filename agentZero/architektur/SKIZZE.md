@@ -1,6 +1,6 @@
 # EntityOS -- Architekturskizze
 
-**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T04:18:59Z aus dem gemessenen
+**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T04:23:09Z aus dem gemessenen
 Zustand auf `frank-api`. Eine handgepflegte Skizze weicht nach zwei Wochen vom Code
 ab und luegt dann still; diese kann das nicht, weil sie bei jedem Lauf neu aus Code,
 Datenbank und laufenden Diensten entsteht.
@@ -43,9 +43,9 @@ flowchart TD
 | Artikel im Korpus | 18370 |
 | Kanten | 117793 |
 | Lesarten | 22567 |
-| Zuege von Zero | 606 |
+| Zuege von Zero | 618 |
 | Wirkungen durch das Tor | 9 |
-| Abrufepisoden | 303 |
+| Abrufepisoden | 309 |
 | gelernte Eintrittspunkte | 27 |
 | Entitaetsgeneration | 223 |
 

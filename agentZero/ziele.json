@@ -1,5 +1,5 @@
 {
-  "erzeugt": "2026-08-21T04:19:49Z",
+  "erzeugt": "2026-08-21T04:23:56Z",
   "erfuellt": 71,
   "offen": 7,
   "zurueckgestellt": 2,
@@ -73,7 +73,7 @@
       "faehigkeit": "Jeder Zug wird aufgezeichnet",
       "soll": "Prompt und Antwort landen als Zeile in der UnifiedDB, mit Kausalkette",
       "quelle": "Architektur",
-      "ist": "606 Züge, 303 Kausalepisoden, 303 Arbeitsraum-Episoden",
+      "ist": "618 Züge, 309 Kausalepisoden, 309 Arbeitsraum-Episoden",
       "erfuellt": true
     },
     {
@@ -129,7 +129,7 @@
       "faehigkeit": "Warten statt Nachsehen: typisierter Weckvertrag",
       "soll": "ein Schritt darf eine Bedingung benennen und schlafen, statt alle 30 s nachzusehen; feste Arten, kein freies SQL, keine vom Modell formulierte Bedingung",
       "quelle": "Architektur / Messung 21.08.",
-      "ist": "Vertrag steht: 4 geschlossene Arten, 4 Zustände (ERFUELLT/OFFEN/ZEITABLAUF/UNBEKANNT), fail-closed je Art, 39 Tests. ⚠️ `wait` bleibt in DECISION_KINDS GESPERRT: es fehlt der Ereignis-Haken am Schreibpunkt. Ohne ihn liefert `naechste_pruefung()` für jeden Effekt ohne Frist `None` — der Governor würde für Effektabschluss und neue Nachricht nie wieder nachsehen und hinge weiter am Puls, den er ersetzen soll. Schattenlauf 24 h: Governor 205 Weckvorgänge, Puls 2880, davon 2769 leer (96,1 %)",
+      "ist": "Zwei von drei Bausteinen stehen. (1) Der Vertrag: 4 geschlossene Arten, 4 Zustände (ERFUELLT/OFFEN/ZEITABLAUF/UNBEKANNT), typisierte Prädikate statt Strings, fail-closed je Art. (2) Die Glocke `wake_signal.py`: Haken an genau zwei Schreibpunkten (Effektabschluss, Menschenzug), gebündelt über `coalesce_key`. Nachgemessen: 1000 gleichartige Meldungen ergeben EINE Zeile mit count=1000; `naechste_pruefung()` liefert `None`, `weckbar()` findet dieselben Bedingungen — genau der blinde Fleck, um dessentwillen die Glocke gebaut wurde, ist zu. `begin_admission` dauert unverändert 83,6 ms (Median über 5 Züge; vorher 107 ms — keine messbare Verlängerung). ⚠️ `wait` bleibt in DECISION_KINDS GESPERRT: es fehlt (3) der Governor, der Vertrag und Glocke zu Entscheidungen verdrahtet. Schattenlauf 24 h zum Vergleich: Governor 205 Weckvorgänge, Puls 2880, davon 2769 leer (96,1 %)",
       "erfuellt": false
     },
     {
@@ -161,7 +161,7 @@
       "faehigkeit": "Eintrittspunkte werden gelernt",
       "soll": "der Abruf verbessert seinen Eintrittspunkt selbst; SHADOW→ACTIVE mechanisch bei genug Lernsignal",
       "quelle": "Eigner 18./19.08.",
-      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 303 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
+      "ist": "27 gelernte Eintrittspunkte, Modus SHADOW, 309 Episoden; Beförderung via befoerderung_takt (15-min-Timer). Erst-Lernsignal per Bootstrap gesetzt (signal_class 'bootstrap:*'), verfeinert sich mit echter Nutzung",
       "erfuellt": false
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "351 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "353 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 7 minutes (healthy)",
+      "ist": "Up 12 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -337,7 +337,7 @@
       "faehigkeit": "Chat-Historie überlebt den Neuladen",
       "soll": "Verlauf pro Terminal-Sitzung, dauerhaft, nicht im Browser",
       "quelle": "Eigner 18.08.",
-      "ist": "606 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
+      "ist": "618 Züge über 4 Sitzungen in der UnifiedDB, ausgeliefert über /api/history. ⚠️ Ein Fehler dabei war lehrreich: der Server liest `session_id`, das Frontend schickte `session` — ich hatte gegen meine EIGENE falsche Dokumentation gebaut",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "78.8 % belegt, 40.9 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "78.8 % belegt, 40.8 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 151.8 GB, gezählt 124.8 GB, Lücke 27.0 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 27.0 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 151.9 GB, gezählt 124.8 GB, Lücke 27.1 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 27.1 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -561,7 +561,7 @@
       "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
       "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
       "quelle": "Befund 20.08.",
-      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 621 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 633 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
       "erfuellt": true
     },
     {

@@ -1,11 +1,11 @@
 {
-  "schema_version": "8.08",
-  "latest_cycle": "automation-20260821-agentzero-gen234-retina-current-state-race",
+  "schema_version": "8.09",
+  "latest_cycle": "automation-20260821-agentzero-gen238-omnimind-db-error-collapse",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "AGENTZERO_EXECUTABLE_TRUTH_SECURITY_AND_ACCEPTANCE_FRONTIER",
   "control_sync_required_before_research_spend": false,
-  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority. NEW durable Same-Family evidence is Generation 234 export head 6a04f667d30dff3ef4846985f2b1dd3e64ddfb1d, tree e36836ef6c4b8c2fdfce8e7e8af44b6926337406. Executable letzter-lauf.json at 2026-08-21T08:21:10Z reports 976 green / 1 red on unresolved source short 5c0ea8dcd; only tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated remains red. This is meaningful Same-Family coverage growth only; full 40-hex EntityOS source commit+tree+dirty-state+Ubuntu executor and TEST_EXPORT_ATOMIC_RECEIPT/v1 remain missing. NEW SUBSTANTIAL MECHANISM: Gen234 adds the Retina/sicht substrate inside UnifiedDB with immutable raw evidence, revisable hypotheses, dated world-object states, workspace ignition and actual answer-use provenance; it correctly separates NOT_SEEN from explicit negative absence. Grant mechanism credit only. NEW SOURCE-CONFIRMED CONCURRENCY INVARIANT GAP: sicht_weltobjekt_stand intends at most one current row per objekt_id where gueltig_bis IS NULL, but the schema has only a non-UNIQUE partial index and _stand_schreiben performs SELECT-current -> UPDATE-close -> INSERT-new without a visible atomic transaction/lock guard. Two writers can therefore race and materialize two simultaneous current truths for one object. FIRST run SIGHT_CURRENT_STATE_RACE_RECEIPT/v1 before patching: force two separate DB connections/workers to barrier immediately after the current-state SELECT, release both, then terminally assert COUNT(open state) in {0,1} and never >1, non-overlapping validity windows, preserved positive/negative evidence timestamps and both turn/causal IDs. If reproduced, preferred repair is a UNIQUE partial index on objekt_id WHERE gueltig_bis IS NULL plus a single UnifiedDB.tx()/BEGIN IMMEDIATE state transition; on uniqueness conflict re-read current state and emit a causal conflict/retry receipt rather than blind retry. SECOND keep FILE_ATTACHMENT_SESSION_ISOLATION_RECEIPT/v1 high priority because Retina reads images from user-scoped input paths while same-user session/turn provenance is only attached later; the Gen232 source-confirmed file attribution alias remains unresolved and must not contaminate visual provenance. THIRD preserve MANDATORY_SERVICE_LIVENESS_RECEIPT/v1 across Gen227 failure and Gen232/234 recovery; current 4/4 service health does not classify the earlier 6/6 verdichtung failure. FOURTH keep wake/governor disabled until WAKE_EVENT_CONSUMPTION_RECEIPT/v1 proves monotonic consumption/ack; 30s pulse remains fallback. FIFTH preserve LIVEPATH_GWT_EQUIVALENCE_RECEIPT/v1 and production TurnLifecycle reruns of GWT/CSWT-Z claims. Also preserve exact-Ubuntu decomposition of the persistent ClaudeCodeInference red, AUFTRAG_IMMUTABILITY_RECEIPT/v1, INTENT_TRACE_RECEIPT/v1, AUTH_SESSION_BINDING_TRACE/v1, PTY_LEASE_TRACE/v1, WARM_SESSION_PROMPT_IDENTITY_RECEIPT/v2, transaction atomicity, warm work-debt/residency, retrieval learning/hierarchy, root-escape post-fix, service-control security and provider-lane falsifiers. Same-family AgentZero exports, research and supervisor commits collapse under Goodman ancestry and are not independent replication. Preserve FREE_ONLY with no paid/Together fallback, executable evidence over model consensus, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, no canonical semantics promotion from same-family evidence, and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority. NEW durable Same-Family evidence is Generation 238 export head 809003f921639e9aabfa31fc8e68875dfa1d06cd, tree bc7a45c16dbca79437399b23e7ff5bf1fc3f270c. Executable letzter-lauf.json at 2026-08-21T09:21:17Z reports 1012 green / 1 red on unresolved source short faa750f61; only tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated remains red. This is meaningful Same-Family coverage growth only; full 40-hex EntityOS source commit+tree+dirty-state+Ubuntu executor and TEST_EXPORT_ATOMIC_RECEIPT/v1 remain missing. NEW SOURCE-CONFIRMED TRUTH/METROLOGY FAIL-OPEN: agentZero/code/produkt/omnimind.py helper _lesen_tolerant catches every sqlite3.OperationalError and returns []/None. The comment intends to tolerate optional missing tables, but the implementation also collapses database-is-locked, schema/column errors, I/O/operational faults and other SQLite OperationalError states into semantic EMPTY/ABSENT. Gen238 pulse evidence also contains real database-connection notlauf events, so a measurement/runtime failure can currently be represented downstream as no evidence. Under Goodman this is invalid: failed measurement must never become evidence of absence. FIRST run OMNIMIND_DB_ERROR_SEMANTICS_RECEIPT/v1 before broad patching: on identical Exact-Checkout Ubuntu and fixed DB snapshot, exercise (A) explicitly optional table absent, (B) valid table present with zero rows, (C) database locked/busy, (D) malformed schema/no-such-column, (E) injected I/O/operational failure where feasible, and (F) recovery after the failure. Bind query class, table/source, SQLite error code/name/message where available, DB/WAL revision, busy/lock telemetry, start/end monotonic timestamps, result count and terminal typed status. Required semantics: genuinely measured zero rows => EMPTY_MEASURED; explicitly optional missing table => ABSENT_OPTIONAL only when allowlisted/schema-introspected; lock/I/O/schema/unknown OperationalError => ERROR or UNMEASURED and must propagate through OmniMind aggregation. No downstream 'no project/no evidence/no relation' factual claim may be produced from ERROR/UNMEASURED. Preferred repair is narrow expected-absence handling (ideally schema introspection or exact error classification) plus typed read outcomes; never catch all OperationalError as empty. Do not weaken tests to accept empty-on-error. SECOND preserve SIGHT_CURRENT_STATE_RACE_RECEIPT/v1 from Gen234; Retina current-state atomicity remains source-confirmed and executable credit zero. THIRD keep FILE_ATTACHMENT_SESSION_ISOLATION_RECEIPT/v1 high priority because visual/file provenance remains same-user session-attribution sensitive. FOURTH preserve MANDATORY_SERVICE_LIVENESS_RECEIPT/v1 across Gen227 failure and later recovery; Gen238 transient DB notlauf does not by itself change FREE_ONLY provider policy. FIFTH keep wake/governor disabled until WAKE_EVENT_CONSUMPTION_RECEIPT/v1 proves monotonic consumption/ack; 30s pulse remains fallback. Also preserve LIVEPATH_GWT_EQUIVALENCE_RECEIPT/v1 and production TurnLifecycle reruns of GWT/CSWT-Z claims, exact-Ubuntu decomposition of the persistent ClaudeCodeInference red, AUFTRAG_IMMUTABILITY_RECEIPT/v1, INTENT_TRACE_RECEIPT/v1, AUTH_SESSION_BINDING_TRACE/v1, PTY_LEASE_TRACE/v1, WARM_SESSION_PROMPT_IDENTITY_RECEIPT/v2, transaction atomicity, warm work-debt/residency, retrieval learning/hierarchy, root-escape post-fix, service-control security and provider-lane falsifiers. Same-family AgentZero exports, research and supervisor commits collapse under Goodman ancestry and are not independent replication. Preserve FREE_ONLY with no paid/Together fallback, executable evidence over model consensus, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, no canonical semantics promotion from same-family evidence, and never modify Frank's Harness.",
   "verified_updates": {
     "supervisor_state_version": "9.9",
     "autonomous_control_version": "4.1+4.2-execution-boundary-addendum",
@@ -13,11 +13,11 @@
     "vercel_provider_order": "PRIMARY",
     "daytona_provider_order": "PREASSERTION_FALLBACK_ONLY",
     "daytona_live_runtime_credit": 0,
-    "agentzero_latest_export_generation": 234,
-    "agentzero_latest_export_head": "6a04f667d30dff3ef4846985f2b1dd3e64ddfb1d",
-    "agentzero_latest_export_tree": "e36836ef6c4b8c2fdfce8e7e8af44b6926337406",
-    "agentzero_latest_receipt_source_short": "5c0ea8dcd",
-    "agentzero_latest_tests_green_receipt": 976,
+    "agentzero_latest_export_generation": 238,
+    "agentzero_latest_export_head": "809003f921639e9aabfa31fc8e68875dfa1d06cd",
+    "agentzero_latest_export_tree": "bc7a45c16dbca79437399b23e7ff5bf1fc3f270c",
+    "agentzero_latest_receipt_source_short": "faa750f61",
+    "agentzero_latest_tests_green_receipt": 1012,
     "agentzero_latest_tests_red_receipt": 1,
     "agentzero_latest_red_tests": [
       "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
@@ -36,6 +36,8 @@
     "gen234_retina_current_state_race_source_confirmed": true,
     "gen234_retina_current_state_race_executable_credit": false,
     "gen234_whole_retina_worldmodel_credit": false,
+    "gen238_omnimind_operational_error_collapse_source_confirmed": true,
+    "gen238_omnimind_truth_metrology_credit": false,
     "gen220_livepath_gwt_causal_credit": false,
     "prior_safe_gather_gwt_production_credit": false,
     "prior_safe_gather_cswtz_production_credit": false,
@@ -55,9 +57,10 @@
     "frank_harness_modified": false
   },
   "remaining_red_frontier": {
-    "current_receipt_status": "SAME_FAMILY_976_1_PERSISTENT_ADAPTER_RED_PLUS_RETINA_CURRENT_STATE_RACE_SOURCE_BOUND",
+    "current_receipt_status": "SAME_FAMILY_1012_1_PERSISTENT_ADAPTER_RED_PLUS_OMNIMIND_TRUTH_FAIL_OPEN_SOURCE_BOUND",
     "current_red_total": 1,
     "runtime_adapter_fix_credit": 0,
+    "omnimind_db_error_semantics_credit": 0,
     "mandatory_service_liveness_credit": 0,
     "file_attachment_session_isolation_credit": 0,
     "retina_current_state_atomicity_credit": 0,
@@ -67,10 +70,11 @@
   },
   "receipt_gaps": {
     "agentzero_atomic_test_export_receipt": "BLOCKING_TEST_EXPORT_ATOMIC_RECEIPT_V1_MISSING",
-    "agentzero_exact_source_identity": "OPEN_SOURCE_5C0EA8DCD_FULL_COMMIT_TREE_DIRTY_STATE_EXECUTOR_MISSING",
+    "agentzero_exact_source_identity": "OPEN_SOURCE_FAA750F61_FULL_COMMIT_TREE_DIRTY_STATE_EXECUTOR_MISSING",
+    "gen238_omnimind_db_error_semantics_receipt_v1": "OPEN_SOURCE_CONFIRMED_ALL_SQLITE_OPERATIONALERROR_COLLAPSED_TO_EMPTY_REQUIRES_TYPED_ERROR_VS_EMPTY_EXACT_UBUNTU_FALSIFIER",
     "gen234_sight_current_state_race_receipt_v1": "OPEN_SOURCE_CONFIRMED_NONUNIQUE_CURRENT_STATE_RMW_REQUIRES_FORCED_TWO_WRITER_EXACT_UBUNTU_REPRODUCTION",
     "gen232_file_attachment_session_isolation_receipt_v1": "OPEN_SOURCE_CONFIRMED_USER_SCOPED_MTIME_WINDOW_CAN_ALIAS_SAME_USER_CONCURRENT_SESSION_ATTACHMENTS_REQUIRES_EXECUTABLE_TWO_SESSION_CONTROL",
-    "gen227_gen234_mandatory_service_liveness_receipt_v1": "OPEN_FAILURE_TO_RECOVERY_TRANSITION_REQUIRES_PER_LANE_FREE_ONLY_RUNTIME_CLASSIFICATION_AND_ROOT_CAUSE_BINDING",
+    "gen227_gen238_mandatory_service_liveness_receipt_v1": "OPEN_FAILURE_TO_RECOVERY_TRANSITION_AND_TRANSIENT_DB_NOTLAUF_REQUIRE_PER_LANE_RUNTIME_CLASSIFICATION_AND_ROOT_CAUSE_BINDING",
     "gen224_wake_event_consumption_receipt_v1": "OPEN_SOURCE_CONFIRMED_RETAINED_EVENT_REPLAY_REQUIRES_DURABLE_CURSOR_ACK_AND_EXACT_UBUNTU_REPRODUCTION",
     "gen220_livepath_gwt_equivalence_receipt_v1": "OPEN_PRODUCTION_TURNLIFECYCLE_VS_SAFE_GATHER_EQUIVALENCE_AND_NEGATIVE_CONTROL_REQUIRED",
     "gen218_auftrag_immutability_receipt_v1": "OPEN_TEST_ASSERTION_INTEGRITY_PLUS_BOUNDARY_TRACE_REQUIRED",
@@ -86,5 +90,5 @@
     "agentzero_provider_reachability": "MECHANISM_OBSERVED_INDEPENDENT_EXACT_REPRODUCTION_OPEN",
     "canonical_entityos_release_authority": "OPEN"
   },
-  "instruction": "Treat Gen234 as strong Same-Family mechanism progress (976/1) but NOT as Retina/world-model acceptance. Highest new information-gain target is SIGHT_CURRENT_STATE_RACE_RECEIPT/v1 for the source-confirmed non-unique current-state read-modify-write boundary. Do not patch from model consensus; force the two-writer interleaving first. If reproduced, enforce the invariant in SQLite with a UNIQUE partial index plus one atomic state-transition transaction and causal conflict/retry receipts. Keep the Gen232 file/session attribution alias coupled to Retina provenance: visual evidence must be turn/session-addressed before Whole-Retina credit. Preserve mandatory-service failure-to-recovery classification, wake replay gating, production-path GWT reruns, exact-source/atomic-receipt and adapter/security gates. Preserve FREE_ONLY, BASE NOT_PASS, Ubuntu-only Frank v0.1, Goodman ancestry collapse, no canonical promotion and never modify Frank's Harness."
+  "instruction": "Treat Gen238 as strong Same-Family coverage growth (1012/1) but do not let OmniMind convert failed measurement into semantic absence. Highest new information-gain target is OMNIMIND_DB_ERROR_SEMANTICS_RECEIPT/v1: distinguish optional absence, measured empty and operational failure under controlled Exact-Ubuntu faults before patching. Propagate ERROR/UNMEASURED through aggregation and forbid negative factual claims from failed reads. Keep SIGHT_CURRENT_STATE_RACE_RECEIPT/v1, file/session provenance, service-liveness classification, wake replay gating, production-path GWT reruns, exact-source/atomic-receipt and adapter/security gates. Preserve FREE_ONLY, BASE NOT_PASS, Ubuntu-only Frank v0.1, Goodman ancestry collapse, no canonical promotion and never modify Frank's Harness."
 }

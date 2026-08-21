@@ -1210,9 +1210,24 @@ window.addEventListener('load', async () => {{
                 # verpassen, die frueh im Zug entstanden.
                 zug_beginn = time.time()
                 try:
-                    result = await asyncio.to_thread(
-                        run_chat_turn, db=db, user_id=user_id, session_id=session_id,
-                        message=control["text"], record_via_turnlifecycle=True)
+                    # ── Testbatterie 1: Meta-Befehl, NEU 2026-08-22 ─────────
+                    # Minimal & klar markiert (mehrere Instanzen arbeiten am
+                    # selben Baum). testbatterie.integration ist reines
+                    # stdlib (kein websockets/playwright) -- sicher im
+                    # Behaelter importierbar, siehe dortiger Kopfkommentar
+                    # zur Wirt/Behaelter-Grenze. Alles andere (der eigentliche
+                    # 20-Zuege-Lauf) laeuft Wirt-seitig ueber testbatterie.wache,
+                    # ausgeloest durch die hier geschriebene DB-Zeile.
+                    from testbatterie.integration import (
+                        ist_testbatterie1_ausloeser, melde_ausloesung,
+                    )
+                    if ist_testbatterie1_ausloeser(control["text"]):
+                        result = await asyncio.to_thread(
+                            melde_ausloesung, db.db, user_id=user_id, session_id=session_id)
+                    else:
+                        result = await asyncio.to_thread(
+                            run_chat_turn, db=db, user_id=user_id, session_id=session_id,
+                            message=control["text"], record_via_turnlifecycle=True)
                 except Exception as exc:
                     await send_json({"type": "error", "message": str(exc)})
                     continue

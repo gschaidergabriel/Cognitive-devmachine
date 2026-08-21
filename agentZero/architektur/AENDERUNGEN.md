@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T20:36:38Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T21:06:40Z aus drei Repos. 481 Eintraege.
 
-## architektur (14)
+## architektur (15)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T20:37 | entityos | `bcc426dfd16f` | EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, Hyperpositi |
 | 2026-08-21T19:33 | entityos | `aad377a3dab7` | Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nicht der Cha |
 | 2026-08-21T19:14 | entityos | `2c209812e0b9` | GRF/ClayCode-Injektion: der empirisch bestaetigte Meta-Prompt fuer formale Kognitionsarchitektur (Gabriel 22.0 |
 | 2026-08-21T18:57 | entityos | `ed418d359abc` | GWT-GRF-Messung 2026-08-22: ehrliche Messung ob GRF/ClayCode den Architektur-Entwurf verbessern |
@@ -109,10 +110,11 @@ Automatisch erzeugt 2026-08-21T20:36:38Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (328)
+## bau (327)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T21:04 | entityos | `0bb7594ee04e` | EOS-Chronik 2026-08-21 21:04:31 +0000 — entityos: 18 Aenderungen |
 | 2026-08-21T20:08 | entityos | `f64c54123890` | Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Inva |
 | 2026-08-21T19:53 | entityos | `8eb9cbe04645` | EOS-Chronik 2026-08-21 19:53:14 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T19:51 | entityos | `ceb7f3311f32` | EOS-Chronik 2026-08-21 19:51:14 +0000 — entityos: 1 Aenderungen |
@@ -172,5 +174,4 @@ Automatisch erzeugt 2026-08-21T20:36:38Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T10:18 | entityos | `f895a5115ebf` | EOS-Chronik 2026-08-21 10:18:20 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T10:16 | entityos | `70b1e28b98b0` | EOS-Chronik 2026-08-21 10:16:05 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T10:07 | entityos | `f43d21ca1cf1` | EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen |
-| 2026-08-21T10:05 | entityos | `830caae196fb` | EOS-Chronik 2026-08-21 10:05:35 +0000 — entityos: 5 Aenderungen |
 

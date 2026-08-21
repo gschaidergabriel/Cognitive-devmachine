@@ -1,6 +1,6 @@
 # Bilanz -- Erfolge UND Fehlschlaege seit Zero
 
-Automatisch erzeugt 2026-08-21T20:36:39Z aus `entityos_erfolge`.
+Automatisch erzeugt 2026-08-21T21:06:40Z aus `entityos_erfolge`.
 
 > ⚠️ Zero ist seit 2026-08-18 in Benutzung -- einem Tag. Alles mit seit_zero=1 stammt aus diesem Tag. Das ist kein Makel, aber es zu verschweigen waere einer.
 

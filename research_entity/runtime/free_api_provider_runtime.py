@@ -171,13 +171,24 @@ def _payment_latch_key(provider_id: str, environ: dict[str, str]) -> str:
     ).hexdigest()
 
 
+def _passive_payment_latches(
+    payment_latches: set[str] | None,
+) -> set[str]:
+    """Return latch storage only when membership and mutation are passive."""
+    if payment_latches is None:
+        return PROCESS_PAYMENT_LATCHES
+    if type(payment_latches) is not set:
+        raise ValueError("payment_latches_must_be_set")
+    return payment_latches
+
+
 def inventory(
     environ: dict[str, str] | None = None,
     *,
     payment_latches: set[str] | None = None,
 ) -> list[dict]:
     env = _snapshot_runtime_environment(environ)
-    latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
+    latches = _passive_payment_latches(payment_latches)
     attested = _attested_zero_cost_providers(env)
     rows = []
     for spec in PROVIDERS:
@@ -611,7 +622,7 @@ def _execute_chat_locked(
     if len(body) > MAX_PROVIDER_REQUEST_BYTES:
         raise ValueError("provider_request_too_large")
     env = _snapshot_runtime_environment(environ)
-    latches = PROCESS_PAYMENT_LATCHES if payment_latches is None else payment_latches
+    latches = _passive_payment_latches(payment_latches)
     route_state = route(env, payment_latches=latches)
     selected = route_state["selected"]
     if not selected:

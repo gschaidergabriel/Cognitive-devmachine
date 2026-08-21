@@ -383,6 +383,10 @@ def _validate_text_chat_request(messages, model) -> None:
 
 def _snapshot_text_chat_request(messages, model) -> list[dict[str, str]]:
     """Copy mutable caller input once, then validate and use only that copy."""
+    # The caller can mutate an exact list after execute_chat's early admission
+    # check but before this use. Recheck at the snapshot boundary so that a
+    # TOCTOU growth cannot allocate an impossible full copy under the lock.
+    _enforce_pre_snapshot_message_bound(messages)
     if type(messages) is not list:
         _validate_text_chat_request(messages, model)
     snapshot_failed = False

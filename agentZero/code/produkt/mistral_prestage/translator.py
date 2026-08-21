@@ -460,6 +460,14 @@ def translate_to_german(
             user=f"{betriebston}CAVEMAN TEXT:\n{maskiert}{zusatz}",
             temperature=0.1,
             max_tokens=1200,
+            # ⭐⭐ TOKEN-KETTE 2026-08-22: TRANSLATOR_SYSTEM ist eine Modulkonstante,
+            # 7.014 Zeichen, bei JEDEM Uebersetzungszug byte-identisch -- der
+            # zweitgroesste feste Praefix der Kette nach der Vorstufe. Siehe die
+            # ausfuehrliche Begruendung in prestage.run_prestage(); dieselbe
+            # Mechanik (transport.mistral_chat_json, prompt_cache_key), hier nur
+            # ein eigener Eimer, damit Vorstufen- und Uebersetzer-Praefixe sich
+            # nicht gegenseitig aus dem Cache draengen.
+            prompt_cache_key="entityos-translator",
         )
         payload = result["payload"]
         if not isinstance(payload, dict) or not isinstance(payload.get("german"), str) or not payload["german"]:

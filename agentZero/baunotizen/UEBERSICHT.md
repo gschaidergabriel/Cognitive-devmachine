@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T18:02:32Z. **3605 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T18:32:32Z. **3619 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T00:08:36+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T00:48:03+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3507 |
+| baunotiz | 3521 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2146 |
-| baunotiz | bauverlauf.jsonl | 1315 |
-| baunotiz | github-ereignis | 41 |
+| baunotiz | git-commit | 2153 |
+| baunotiz | bauverlauf.jsonl | 1321 |
+| baunotiz | github-ereignis | 42 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3605 · Gegenhypothese: 0 von 3605
+## Hypothese: 0 von 3619 · Gegenhypothese: 0 von 3619
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,38 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T00:08:36+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: bind Gen247 read-side schema mutation boundary
+
+`baunotiz-bauverlauf-2f125324ee5a863b79b1` · baunotiz · bauverlauf.jsonl · 2026-08-22T00:48:03+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: bind Gen247 read-side schema mutation boundary
+
+`baunotiz-git-fd037c0e43a2d9004073d16041e84a24abdbfad6` · baunotiz · git-commit · 2026-08-22T00:48:03+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: bind Gen247 read-side schema mutation boundary
+
+### research: bind Gen247 test source to local EntityOS chronology
+
+`baunotiz-bauverlauf-94c2f1649d6e5cfd5068` · baunotiz · bauverlauf.jsonl · 2026-08-22T00:46:32+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### research: bind Gen247 test source to local EntityOS chronology
+
+`baunotiz-git-c2c6aed7404353b008b1d1f91b511fb574b6fc50` · baunotiz · git-commit · 2026-08-22T00:46:32+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+research: bind Gen247 test source to local EntityOS chronology
 
 ### instrument: add paired read-side-effect discriminator
 
@@ -200,38 +232,6 @@ research: add causal counter-join to lineage receipt
 ### research: measure retrieval feedback surface lineage gap
 
 `baunotiz-bauverlauf-6f742c3f616af007e0ae` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:41:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: measure retrieval feedback surface lineage gap
-
-`baunotiz-git-6a3d343578069bb070e4a3a3f6a74dac47be250a` · baunotiz · git-commit · 2026-08-21T21:41:08+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: measure retrieval feedback surface lineage gap
-
-### claycode supervisor: bind Gen245 feedback causal-credit boundary
-
-`baunotiz-bauverlauf-cba2a6860b27676769f4` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:40:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### claycode supervisor: bind Gen245 feedback causal-credit boundary
-
-`baunotiz-git-338ebd9a04d793394ac7b744b853fff04aaf4c5f` · baunotiz · git-commit · 2026-08-21T21:40:48+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-claycode supervisor: bind Gen245 feedback causal-credit boundary
-
-### research: bind assistant-assertion fact admission gap
-
-`baunotiz-bauverlauf-556ee62e2a0867c0d139` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:39:45+07:00 · Gabriel Gschaider
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 

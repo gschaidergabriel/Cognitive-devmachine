@@ -651,6 +651,20 @@ def run_prestage(
         user=f"CONTEXT:\n{context}",
         temperature=0.2,
         max_tokens=900,
+        # ⭐⭐ TOKEN-KETTE 2026-08-22: `system` hier ist _BASE_RULES (~30,5k
+        # Zeichen) + Zusatz + _arbeitsraum_regel() -- bei round_no=1 IST DAS
+        # BYTE-IDENTISCH bei jedem einzigen Zug (reine Modulkonstanten plus ein
+        # Env-Flag, das im Betrieb nicht wechselt). Gemessen 2026-08-22: 31.836
+        # Zeichen reiner, unveraenderter Praefix, JEDES Mal komplett neu bezahlt
+        # -- der mit Abstand groesste Einzelposten der ganzen Vorstufe (das
+        # variable CONTEXT darunter liegt im Mittel bei wenigen hundert bis ~10k
+        # Zeichen). Mistral cacht NICHT automatisch (anders als GLM) -- ohne
+        # diesen Schluessel bleibt der Praefix immer kalt. Je Runde ein eigener
+        # Eimer: bei round_no=2 traegt der Zusatztext zero_suggestion mitten im
+        # Block, der Praefix bis dahin (_BASE_RULES, der groesste Teil) bleibt
+        # trotzdem gleich und kann treffen. Kein Nutzerdatum im Schluessel
+        # (Doku-Warnung) -- reiner Prozessname.
+        prompt_cache_key=f"entityos-prestage-r{round_no}",
     )
     payload = result["payload"]
     if not isinstance(payload, dict):

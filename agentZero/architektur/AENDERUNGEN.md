@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T18:02:31Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T18:32:31Z aus drei Repos. 481 Eintraege.
 
 ## architektur (11)
 
@@ -83,12 +83,11 @@ Automatisch erzeugt 2026-08-21T18:02:31Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (10)
+## reparatur (9)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-21T14:49 | entityos | `de002e01d272` | Zeros Selbstforschungs-Handbuch: Doktrin, Messgeraete, sichere Selbst-Iteration, Bug-Hypothesen, Schwarm |
-| 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -106,10 +105,13 @@ Automatisch erzeugt 2026-08-21T18:02:31Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (331)
+## bau (332)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T18:22 | entityos | `d01cfd43653d` | EOS-Chronik 2026-08-21 18:22:35 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T18:19 | entityos | `69dbcb5b7825` | EOS-Chronik 2026-08-21 18:19:35 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T18:15 | entityos | `02736ef686b1` | Digital Retina 2: grosse, gemessene Beschreibung von Zeros visuellem Modul |
 | 2026-08-21T17:49 | entityos | `c18ba581f806` | EOS-Chronik 2026-08-21 17:49:31 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T17:42 | entityos | `8257907fb04f` | EOS-Chronik 2026-08-21 17:42:56 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T17:25 | entityos | `2b01ead42d0f` | EOS-Chronik 2026-08-21 17:25:48 +0000 — entityos: 6 Aenderungen |
@@ -167,7 +169,4 @@ Automatisch erzeugt 2026-08-21T18:02:31Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T08:27 | entityos | `e1de3d439726` | EOS-Chronik 2026-08-21 08:27:32 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T08:16 | entityos | `5c0ea8dcd01a` | EOS-Chronik 2026-08-21 08:16:45 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:09 | entityos | `3b4cbc5c21c0` | EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen |
-| 2026-08-21T08:07 | entityos | `6705c3c0ef10` | EOS-Chronik 2026-08-21 08:07:02 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T08:03 | entityos | `702e8de639d0` | EOS-Chronik 2026-08-21 08:03:40 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T07:58 | entityos | `2dd77fa7dfc9` | EOS-Chronik 2026-08-21 07:58:03 +0000 — entityos: 1 Aenderungen |
 

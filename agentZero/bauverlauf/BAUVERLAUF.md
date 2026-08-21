@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T18:02:32Z. 1110 Commits aus vier Repos, davon 451 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T18:32:31Z. 1110 Commits aus vier Repos, davon 454 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -14,6 +14,58 @@ Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ```
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 18:22:35 +0000 — entityos: 1 Aenderungen
+
+`d01cfd43653d` · entityos · 18:22 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_token_kette_caching.py
+
+Zeit: 2026-08-21T18:22:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 18:19:35 +0000 — entityos: 4 Aenderungen
+
+`69dbcb5b7825` · entityos · 18:19 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/bahnen.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/clayverse/mistral_prestage/translator.py
+  the artefact/clayverse/mistral_prestage/transport.py
+
+Zeit: 2026-08-21T18:19:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### Digital Retina 2: grosse, gemessene Beschreibung von Zeros visuellem Modul
+
+`02736ef686b1` · entityos · 18:15 UTC · BACK agent
+
+```
+Pipeline (frank_eye.py), Ausgabeschema, sicht.py-Integration (5 Ebenen,
+Sichtbarkeits-Lattice, Kaskadenstufe), Konzept-Abschnitt biologisches Sehen
+vs. gebaute Eskalationskaskade (nur RETINA_LOKAL aktiv, Gemini/NVIDIA-Stufen
+entworfen aber nicht verdrahtet), Doktrin Evidenz-nicht-Wahrheit, ehrliche
+Grenzen aus RETINA_NEGATIVE_RESULTS.md, Diensttopologie korrigiert (Port
+8001, kein 8000).
 ```
 
 ### EOS-Chronik 2026-08-21 17:49:31 +0000 — entityos: 2 Aenderungen
@@ -2881,74 +2933,5 @@ Baum: entityos (/opt/entityos)
 Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 08:01:00 +0000 — entityos: 1 Aenderungen
-
-`a61f1bd67095` · entityos · 08:01 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T08:01:00+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 07:58:59 +0000 — entityos: 1 Aenderungen
-
-`0e4f89d44a11` · entityos · 07:59 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T07:58:59+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### CSWT-Z Teil 3: gueltiger Versuch -- der Engpass ist die Vorstufe, nicht der Arbeitsraum
-
-`53cea036ddd9` · entityos · 07:51 UTC · EOS-Chronik
-
-```
-Privater Sondensatz gebaut und dreifach geprueft (im Korpus, nicht im Profil,
-nicht im Netz) -- und nachgemessen, dass der Arbeitsraum ihn traegt: 8/8.
-
-⭐⭐⭐ ZWISCHENMESSUNG, DIE ALLES ERKLAERT: Antwort im Arbeitsraum 7/8, Antwort im
-Auftrag an Zero 2/8. Die Vorstufe HAT den Text und benutzt ihn nicht -- sie
-schickt Zero auf erfundene Pfade (/var/lib/clay/ci/testpflicht.json existiert
-nicht). Regel gesetzt: Korpus im Kontext ist schon abgerufen, wird zitiert statt
-neu geholt, und nie einen Pfad erfinden. Durchreichquote 2/8 -> 4/8.
-
-BATTERIE (108 Zuege, Werkzeugweg gesperrt): Zombie-Zero, der den Arbeitsraum
-vollstaendig ignoriert, liegt GLEICHAUF mit der Grundlinie (50,0 % gegen 50,0 %,
-p=1,000). Das Eichungstor des Pruefplans ist damit ZU -- kein Punktwert wird
-ausgewiesen. Zusammen mit der Durchreichquote heisst das: der Arbeitsraum ist
-heute nicht tragend, weil die Vorstufe ihn nicht weiterreicht.
-
-ZWEI REGRESSIONEN unterwegs behoben:
-* Anreicherung 40,3 s in einem Abruf (enrich heute scharfgeschaltet) -> hartes
-  Zeitbudget 2,5 s mit FTS-Rueckfall, gemessen 40,3 s -> 556 ms.
-* WAL 5,9 GB groesser als die DB -> PASSIVE-Checkpoint, 1,47 Mio Seiten zurueck.
-  Nebenbefund: UnifiedDB.__init__ SCHREIBT, jedes Diagnosewerkzeug konkurriert
-  um das Schreibschloss der laufenden Entitaet.
-
-Apparatur fuer ALLE Schichten bereit (cswt_mess.py: kapazitaet/feld/fuellung/
-schein/tausch/zombie, Sandkasten-DB fuer Schicht 5+6).
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
 ```
 

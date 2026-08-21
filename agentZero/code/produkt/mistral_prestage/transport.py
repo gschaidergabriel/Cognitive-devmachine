@@ -90,6 +90,7 @@ def mistral_chat_json(
     timeout: int = 60,
     temperature: float = 0.2,
     max_tokens: int = 1024,
+    prompt_cache_key: str | None = None,
 ) -> dict[str, Any]:
     """One hardened, tool-less, JSON-mode Mistral chat completion.
 
@@ -98,13 +99,28 @@ def mistral_chat_json(
     locals in `finally` before any exception can retain it in a traceback
     frame) but does not depend on that class's text+effect decision schema,
     which this module has no use for.
+
+    ⭐⭐ TOKEN-KETTE 2026-08-22: `prompt_cache_key` schaltet Mistral-Promptcaching
+    ein (docs.mistral.ai/studio-api/conversations/advanced/prompt-caching,
+    /v1/chat/completions unterstuetzt es). NICHT automatisch wie bei GLM -- ohne
+    diesen Parameter cacht Mistral gar nichts. Getroffene Praefix-Tokens kosten
+    10 % des normalen Preises; Mindestgroesse 64 Token, Cachebloecke a 64 Token.
+    Der Aufrufer traegt einen STABILEN Schluessel bei (z.B. je Prozessname),
+    damit gleichartige Aufrufe im selben Cache-Eimer landen -- der Schluessel
+    selbst darf keine Geheimnisse/Nutzerdaten enthalten (Doku-Warnung).
+    ⚠️ GARANTIERT NICHTS: ein Treffer haengt am tatsaechlich gleichen Praefix.
+    Bei drei rotierenden Mistral-Konten (siehe mistral_chat_json_rotating) ist
+    der Cache mutmasslich je Konto getrennt -- die Rotation verteilt Anfragen
+    ueber die drei Konten und senkt die erreichbare Trefferquote entsprechend
+    (rechnerisch bestenfalls ~1/3 sofort warm, mehr sobald ein Konto oefter
+    dran ist). Das bleibt trotzdem ein reiner Gewinn: ein Fehltreffer kostet
+    genau den Normalpreis, kein Aufpreis.
     """
     if not api_key or api_key != api_key.strip() or "\x00" in api_key:
         raise TransportError("invalid Mistral API key")
     if not model or len(model) > 256:
         raise TransportError("invalid Mistral model id")
-    body = json.dumps(
-        {
+    koerper_dict = {
             "model": model,
             "messages": [
                 {"role": "system", "content": system},
@@ -117,7 +133,11 @@ def mistral_chat_json(
             "stream": False,
             "temperature": temperature,
             "max_tokens": max_tokens,
-        },
+    }
+    if prompt_cache_key:
+        koerper_dict["prompt_cache_key"] = prompt_cache_key
+    body = json.dumps(
+        koerper_dict,
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),
@@ -185,6 +205,14 @@ def mistral_chat_json(
         payload = json.loads(content)
     except json.JSONDecodeError as exc:
         raise TransportError("Mistral message content is not JSON") from exc
+    # ⭐ Token-Kette messbar machen (bisher NICHT erfasst -- Befund 2026-08-22:
+    # Mistral liefert usage in jeder Antwort mit, hier landete es bisher im
+    # Nichts). cached_tokens ist der Beleg, ob prompt_cache_key oben wirklich
+    # traf -- ohne dieses Feld waere jede Aussage ueber die Ersparnis eine
+    # Behauptung statt eine Messung. .get()-Kette, weil das Feld je nach
+    # Modell/Kontostand fehlen kann; nie werfend.
+    _usage = envelope.get("usage") or {}
+    _usage_details = _usage.get("prompt_tokens_details") or {}
     receipt = {
         "provider": "mistral",
         "model_requested": model,
@@ -192,6 +220,11 @@ def mistral_chat_json(
         "response_id": envelope.get("id"),
         "request_sha256": hashlib.sha256(body).hexdigest(),
         "response_sha256": hashlib.sha256(raw).hexdigest(),
+        "prompt_tokens": _usage.get("prompt_tokens"),
+        "completion_tokens": _usage.get("completion_tokens"),
+        "total_tokens": _usage.get("total_tokens"),
+        "cached_tokens": _usage_details.get("cached_tokens"),
+        "prompt_cache_key": prompt_cache_key,
     }
     return {"payload": payload, "receipt": receipt}
 

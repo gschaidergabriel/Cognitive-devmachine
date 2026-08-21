@@ -84,6 +84,15 @@ LEBEND_SCHWELLE = 3
 # Dauersperre -- das ist selbst ein Bug.
 LEBEND_ABKUEHLUNG_SEK = 300
 
+# ⭐ TOKEN-KETTE 2026-08-22: die vier "Fliessband"-Faehigkeiten, die bahnen.json
+# im glm_45_air-Eintrag selbst schon so nennt (Erstbahn GLM, billiges Modell).
+# Keine neue Entscheidung -- nur die dort bereits stehende Absicht in Code
+# gegossen, um reasoning_effort=low nur an diese vier zu haengen (siehe
+# Bahnrouter._ein_versuch). "zweitmeinung" bleibt aussen vor: eine echte
+# Zweitmeinung soll nicht am gedrosselten Modell haengen.
+_FLIESSBAND_PROZESSE = frozenset(
+    {"schema_antwort", "kondensieren", "sphaere_einordnung", "umsortieren_treffer"})
+
 
 class BahnErschoepft(RuntimeError):
     """Alle verdrahteten Bahnen eines Prozesses sind aufgebraucht."""
@@ -297,8 +306,37 @@ class Bahnrouter:
 
         nachrichten = ([{"role": "system", "content": system}] if system else []) + \
                       [{"role": "user", "content": auftrag}]
-        koerper = json.dumps({"model": wahl["modell"], "messages": nachrichten,
-                              "max_tokens": max_token}).encode()
+        koerper_dict = {"model": wahl["modell"], "messages": nachrichten,
+                        "max_tokens": max_token}
+        # ⭐⭐ TOKEN-KETTE 2026-08-22, zwei kleine Zusatzfelder, kein Umbau der
+        # Auswahl/Ausfall-Logik oben.
+        #
+        # 1) schema_pflicht (steht schon in bahnen.json, wurde bisher nur
+        #    DOKUMENTIERT, nie AN DEN AUFRUF weitergegeben): erzwingt gueltiges
+        #    JSON serverseitig statt es nur zu erhoffen. Befund: gedaechtnis.py
+        #    verwirft eine Antwort komplett, wenn json.loads() scheitert ("war
+        #    kein JSON") -- bezahlte Token, null Ertrag. response_format ist
+        #    OpenAI-kompatibles Standardfeld, alle vier hier erreichbaren
+        #    Familien (glm/groq/mistral/nvidia) verstehen es; lehnt eine Bahn es
+        #    doch ab, faengt die bestehende Fehlerbehandlung unten das wie jeden
+        #    anderen Ausfall dieser Bahn ab (naechste Bahn dran) -- kein neues
+        #    Risiko.
+        # 2) reasoning_effort=low NUR fuer GLM-Bahnen UND NUR fuer die vier
+        #    "Fliessband"-Faehigkeiten, die bahnen.json selbst schon so nennt
+        #    (glm_45_air-Eintrag: "fuer Fliessband-Faehigkeiten (kondensieren/
+        #    schema_antwort/sphaere_einordnung/umsortieren_treffer) als Erstbahn
+        #    vorgesehen") -- reines Ausfuehren dessen, was dort bereits als
+        #    Absicht steht, keine neue Entscheidung. Diese vier sind knappe
+        #    Extraktions-/Umsortierjobs, keine Denkaufgaben; volles Denken kostet
+        #    dort nur das GLM-Kontingent (Coding-Plan-Zeitfenster), das laut
+        #    Bahnrouter-Kopf der Selbstverbesserung vorbehalten bleiben soll.
+        #    "zweitmeinung" bleibt bewusst aussen vor -- eine echte Zweitmeinung
+        #    soll nicht am gedrosselten Modell haengen.
+        if self.prozesse.get(prozess, {}).get("schema_pflicht"):
+            koerper_dict["response_format"] = {"type": "json_object"}
+        if familie == "glm" and prozess in _FLIESSBAND_PROZESSE:
+            koerper_dict["reasoning_effort"] = "low"
+        koerper = json.dumps(koerper_dict).encode()
         # Ohne eigenen User-Agent weist Cloudflare mit "error code: 1010" ab --
         # das sieht wie ein ungueltiger Schluessel aus und ist keiner. Hat mich
         # heute einmal zu der falschen Aussage verleitet, ein Schluessel sei tot.
@@ -316,7 +354,13 @@ class Bahnrouter:
             self._buchen(bahn, prozess, fehler=True)
             raise _BahnLieferteNichts(bahn, f"{type(e).__name__}") from None
         ms = (time.time() - t) * 1000
-        token = int((d.get("usage") or {}).get("total_tokens") or 0)
+        _usage = d.get("usage") or {}
+        token = int(_usage.get("total_tokens") or 0)
+        # ⭐ TOKEN-KETTE 2026-08-22: GLM cacht automatisch (kein Parameter noetig,
+        # siehe _ein_versuch oben) -- ohne dieses Feld waere ein Treffer nie zu
+        # belegen. Nur mitgefuehrt, nirgends erzwungen: fehlt es (Groq/Mistral/
+        # NVIDIA melden es evtl. anders oder gar nicht), bleibt es None.
+        cached = (_usage.get("prompt_tokens_details") or {}).get("cached_tokens")
         inhalt = (d.get("choices") or [{}])[0].get("message", {}).get("content", "") or ""
         if not inhalt.strip():
             # 200, Token verbraucht, nichts gesagt. Reasoning-Modelle tun das,
@@ -330,7 +374,7 @@ class Bahnrouter:
         return {
             "prozess": prozess, "bahn": bahn, "modell": wahl["modell"],
             "text": inhalt,
-            "ms": round(ms, 1), "token": token,
+            "ms": round(ms, 1), "token": token, "cached_tokens": cached,
             "benutzt_heute": wahl["benutzt_heute"] + 1, "deckel": wahl["deckel"],
             "verworfene_bahnen": wahl["verworfen"] + list(bisher),
         }

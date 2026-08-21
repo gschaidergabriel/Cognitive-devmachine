@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T19:32:32Z. 1110 Commits aus vier Repos, davon 462 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T20:02:32Z. 1110 Commits aus vier Repos, davon 466 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -14,6 +14,81 @@ Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ```
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 19:53:14 +0000 — entityos: 1 Aenderungen
+
+`8eb9cbe04645` · entityos · 19:53 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/compose.yaml
+
+Zeit: 2026-08-21T19:53:14+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 19:51:14 +0000 — entityos: 1 Aenderungen
+
+`ceb7f3311f32` · entityos · 19:51 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_grf_injektion.py
+
+Zeit: 2026-08-21T19:51:14+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 19:48:53 +0000 — entityos: 1 Aenderungen
+
+`96573ddb6ccb` · entityos · 19:48 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+
+Zeit: 2026-08-21T19:48:53+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 19:38:28 +0000 — entityos: 4 Aenderungen
+
+`407155bfd78e` · entityos · 19:38 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/hypothesen.py
+  the artefact/clayverse/selbstmessung.py
+  the artefact/tests/test_architekt_hypothesen.py
+  the artefact/tests/test_selbstmessung.py
+
+Zeit: 2026-08-21T19:38:28+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
 ```
 
 ### EOS-Chronik 2026-08-21 19:14:46 +0000 — entityos: 3 Aenderungen
@@ -2834,101 +2909,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/tests/test_gw_wettbewerb.py
 
 Zeit: 2026-08-20T12:09:37+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 12:05:35 +0000 — entityos: 21 Aenderungen
-
-`99d529e3b1c1` · entityos · 12:05 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  forschung/cswt-z-pilot/BEFUND-5-6.md
-  forschung/cswt-z-pilot/cswt-arm-0.jsonl
-  forschung/cswt-z-pilot/cswt-arm-alle.jsonl
-  forschung/cswt-z-pilot/cswt-arm-auswahl.jsonl
-  forschung/cswt-z-pilot/cswt-arm-zombie.jsonl
-  forschung/cswt-z-pilot/cswt-kont.jsonl
-  forschung/cswt-z-pilot/cswt-wette2.jsonl
-  forschung/cswt-z-pilot/cswt-zwang3.jsonl
-  forschung/cswt-z-pilot/cswt_bewerter.py
-  forschung/cswt-z-pilot/cswt_exakt.py
-  forschung/cswt-z-pilot/cswt_kontinuitaet.py
-  forschung/cswt-z-pilot/cswt_tafel.py
-  forschung/cswt-z-pilot/cswt_wette.py
-  forschung/cswt-z-pilot/cswt_wette_aus.py
-  forschung/cswt-z-pilot/cswt_zwang.py
-  forschung/cswt-z-pilot/cswt_zwang_tafel.py
-  forschung/cswt-z-pilot/kont_aus.py
-  forschung/cswt-z-pilot/mk_leer.py
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_gw_wettbewerb.py
-
-Zeit: 2026-08-20T12:05:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 21
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 10:27:10 +0000 — entityos: 1 Aenderungen
-
-`3ed9e1f291e1` · entityos · 10:27 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T10:27:10+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 10:02:45 +0000 — entityos: 3 Aenderungen
-
-`4694b4089d88` · entityos · 10:02 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/tests/test_gw_sicherungen.py
-  the artefact/tests/test_gw_tor.py
-
-Zeit: 2026-08-20T10:02:45+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 09:55:48 +0000 — entityos: 2 Aenderungen
-
-`00ab2d848de2` · entityos · 09:55 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/prestage.py
-
-Zeit: 2026-08-20T09:55:48+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

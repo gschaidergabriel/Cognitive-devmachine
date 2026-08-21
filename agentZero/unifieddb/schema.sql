@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T19:32:32Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T20:02:33Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -248,6 +248,7 @@ CREATE TABLE gw_ausstrahlung(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT
 CREATE TABLE gw_herkunft(  memory_id TEXT PRIMARY KEY, turn_id TEXT, session_id TEXT, ts REAL NOT NULL,  fremdtext INTEGER NOT NULL DEFAULT 0, werkzeuge TEXT);
 CREATE TABLE gw_lernen(  merkmal TEXT NOT NULL, artikel_id TEXT NOT NULL,  boost REAL NOT NULL DEFAULT 0, n INTEGER NOT NULL DEFAULT 0,  belohnt INTEGER NOT NULL DEFAULT 0, ts REAL NOT NULL,  PRIMARY KEY(merkmal, artikel_id));
 CREATE TABLE gw_wettbewerb(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, session_id TEXT, artikel_id TEXT, rang INTEGER,  salienz REAL, relevanz REAL, neuheit REAL, wert REAL,  zugelassen INTEGER, gewaehlt INTEGER);
+CREATE TABLE heim_belege(beleg_id TEXT PRIMARY KEY, ts REAL NOT NULL, effect_id TEXT, causal_id TEXT,user_id TEXT NOT NULL, wirt TEXT NOT NULL, aktion TEXT NOT NULL,nutzlast_sha256 TEXT NOT NULL, urteil TEXT NOT NULL);
 CREATE TABLE kante (
             von TEXT NOT NULL,
             nach TEXT NOT NULL,

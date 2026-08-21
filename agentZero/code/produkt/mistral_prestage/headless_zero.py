@@ -138,10 +138,66 @@ def _anwesenheitsblock(db_path: str, user_id: str, session_id: str) -> str:
         return _ANWESEND_UNBEKANNT
 
 
+# ── GRF-Denkrahmen, jede Runde -- der erste sichere Schritt Richtung ClayCode-
+# only-Kognition (Gabriel 2026-08-22, VERFASSUNG.md: "Der GWT/ClayCode-Minimal-
+# Meta-Prompt wird JEDE RUNDE injiziert -- auch beim normalen Zero, nicht nur
+# beim Architekten"). Angepasst aus GRF_CLAYCODE_INJEKTION.md: jener Meta-Prompt
+# ist fuer ARCHITEKTUR-ERZEUGUNG formuliert ("execute all architecture
+# generations") -- das waere bei "wie spaet ist es" falsch woertlich injiziert.
+# Dieser Rahmen ist die ALLGEMEINE Fassung: DENKDISZIPLIN (kausaler Zustands-
+# uebergang statt Korrelation, harte Invarianten statt weicher Kommentare,
+# keine Hypothesen-Monopolisierung) fuer JEDE Runde -- nicht der Sprachwechsel.
+# Die ClayCode-Output-/Uebersetzer-Umstellung ist ein SPAETERER, eigens
+# gemessener Schritt (siehe VERFASSUNG.md) -- hier NICHT angefasst.
+#
+# ⚠️ MUSS byte-identisch ueber alle Runden bleiben: er steht im gecachten
+# Praefix (angehaengt an RUNTIME_PROMPT), VOR dem sitzungseigenen Anwesenheits-
+# block -- sonst reisst er den 92%-Cache-Treffer ab (TOKEN-KETTE-Kommentar in
+# run_headless() oben). Deshalb ein fester Python-String ohne DB-/Zeit-/
+# Sitzungsdaten, und der Schalter wird VOR dem Einsetzen entschieden, nie
+# nachtraeglich im schon gebauten Text veraendert.
+_GRF_RAHMEN = """[SYSTEM-FRAME: GRF COGNITIVE MODE -- every turn, not only architecture design]
+Reason inside the Generative Reality Framework for THIS turn, whatever kind it
+is (factual question, fix, small talk, architecture):
+1. CAUSAL STATE-TRANSITION: this turn is R_t+1 = F(R_t, E_t) -- R_t is what is
+   already established (canonical state, prior tool results), E_t is the new
+   evidence this turn (the human's words, tool output). Derive the answer FROM
+   R_t and E_t causally. Never answer from surface correlation, vibes, or the
+   most fluent-sounding guess.
+2. HARD INVARIANTS: treat limits, budgets and safety gates as invariants that
+   stop the turn on violation -- not soft suggestions to reason around.
+3. NO MONOPOLY: do not let one hypothesis or one tool result monopolize the
+   answer uncontested -- weigh competing evidence before committing.
+This is an internal reasoning discipline, not a new output vocabulary: keep
+this frame's own words (GRF, R_t, E_t, state-transition, invariant) OUT of
+what you say to the human, same as your other internal wiring (core_identity,
+UnifiedDB, ClayCode)."""
+
+
+def _grf_injektion_aktiv() -> bool:
+    """Schalter fuer den GRF-Denkrahmen, Voreinstellung AN (Gabriel 22.08.).
+
+    Sofort umkehrbar: ENTITYOS_GRF_INJEKTION=0 in der Dienstumgebung setzen und
+    neu starten -- kein Codepfad aendert sich sonst, kein Rollback noetig. Bei
+    jedem Aufruf frisch aus os.environ gelesen (kein Modul-Caching), damit ein
+    Test ihn ohne Reload umschalten kann und ein Neustart der Dienstumgebung
+    reicht, um live umzuschalten.
+    """
+    return os.environ.get("ENTITYOS_GRF_INJEKTION", "1").strip() == "1"
+
+
 def _systemanweisung(db_path: str, user_id: str, session_id: str) -> str:
-    """Laufzeitidentitaet + Anwesenheit in EINER Datei, weil das Flag nur eine nimmt."""
-    grund = Path(RUNTIME_PROMPT).read_text(encoding="utf-8")
-    return grund.rstrip() + "\n\n" + _anwesenheitsblock(db_path, user_id, session_id) + "\n"
+    """Laufzeitidentitaet + GRF-Denkrahmen + Anwesenheit in EINER Datei.
+
+    Reihenfolge ist Absicht: grund (RUNTIME_PROMPT) + Rahmen sind fuer eine
+    feste Flag-Stellung IMMER gleich, unabhaengig von user_id/session_id --
+    das haelt sie im gecachten Praefix. Der Anwesenheitsblock (sitzungseigen,
+    variiert je Zug) kommt zuletzt, so bricht er nur den Teil NACH sich selbst.
+    """
+    grund = Path(RUNTIME_PROMPT).read_text(encoding="utf-8").rstrip()
+    if _grf_injektion_aktiv():
+        grund = grund + "\n\n" + _GRF_RAHMEN
+    return grund + "\n\n" + _anwesenheitsblock(db_path, user_id, session_id) + "\n"
 
 
 # ⚠️ Waehlt die Vorstufe kein Werkzeug (oder nur erfundene), bekommt Zero NICHT

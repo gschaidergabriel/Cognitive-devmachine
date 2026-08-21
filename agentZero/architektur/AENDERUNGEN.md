@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T19:32:32Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T20:02:32Z aus drei Repos. 481 Eintraege.
 
-## architektur (13)
+## architektur (14)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:33 | entityos | `aad377a3dab7` | Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nicht der Cha |
 | 2026-08-21T19:14 | entityos | `2c209812e0b9` | GRF/ClayCode-Injektion: der empirisch bestaetigte Meta-Prompt fuer formale Kognitionsarchitektur (Gabriel 22.0 |
 | 2026-08-21T18:57 | entityos | `ed418d359abc` | GWT-GRF-Messung 2026-08-22: ehrliche Messung ob GRF/ClayCode den Architektur-Entwurf verbessern |
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
@@ -85,10 +86,11 @@ Automatisch erzeugt 2026-08-21T19:32:32Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (9)
+## reparatur (10)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:32 | entityos | `ab5f15027228` | Verfassung: ClayCode-zuerst bei jedem Bugfix -- wenn robust/besser, sonst Ursprungssprache (Gabriel) |
 | 2026-08-21T14:49 | entityos | `de002e01d272` | Zeros Selbstforschungs-Handbuch: Doktrin, Messgeraete, sichere Selbst-Iteration, Bug-Hypothesen, Schwarm |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
@@ -107,10 +109,15 @@ Automatisch erzeugt 2026-08-21T19:32:32Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (330)
+## bau (328)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:53 | entityos | `8eb9cbe04645` | EOS-Chronik 2026-08-21 19:53:14 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T19:51 | entityos | `ceb7f3311f32` | EOS-Chronik 2026-08-21 19:51:14 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T19:48 | entityos | `96573ddb6ccb` | EOS-Chronik 2026-08-21 19:48:53 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T19:38 | entityos | `407155bfd78e` | EOS-Chronik 2026-08-21 19:38:28 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T19:36 | entityos | `a8fa3c76ee3f` | Verfassung: ClayCode-only-Kognition fuer GANZ Zero (Uebersetzer ClayCode->Deutsch, Vorstufe in ClayCode, Meta- |
 | 2026-08-21T19:31 | entityos | `94e993e61e98` | Verfassung: Zero denkt+programmiert in ClayCode; alles nach ClayCode -- elegant/iterativ/interkonnektiv/robust |
 | 2026-08-21T19:17 | entityos | `01976a5bfb4a` | GRF-Injektion: praezise T_Omega-Tensorform ergaenzt (Gabriel) |
 | 2026-08-21T19:14 | entityos | `c3f155f7daba` | EOS-Chronik 2026-08-21 19:14:46 +0000 — entityos: 3 Aenderungen |
@@ -166,9 +173,4 @@ Automatisch erzeugt 2026-08-21T19:32:32Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T10:07 | entityos | `f43d21ca1cf1` | EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T10:05 | entityos | `830caae196fb` | EOS-Chronik 2026-08-21 10:05:35 +0000 — entityos: 5 Aenderungen |
 | 2026-08-21T09:39 | entityos | `6580a52cd9be` | EOS-Chronik 2026-08-21 09:39:13 +0000 — entityos: 4 Aenderungen |
-| 2026-08-21T09:32 | entityos | `354ec8528b13` | EOS-Chronik 2026-08-21 09:32:19 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T09:30 | entityos | `4584d073b347` | EOS-Chronik 2026-08-21 09:30:19 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T09:11 | entityos | `faa750f611fe` | EOS-Chronik 2026-08-21 09:11:26 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T09:08 | entityos | `8356b11c06df` | EOS-Chronik 2026-08-21 09:08:26 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T09:04 | entityos | `bafd64b8d7ce` | EOS-Chronik 2026-08-21 09:04:40 +0000 — entityos: 1 Aenderungen |
 

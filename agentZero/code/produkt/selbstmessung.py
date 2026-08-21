@@ -157,14 +157,39 @@ def _wege(conn: sqlite3.Connection) -> dict[str, Any]:
     ergebnis["quelle"] = quelle
     if ergebnis.get("stand") == "NOCH_KEINE_WEGE":
         ergebnis["zeile"] = "Wegehierarchie: noch keine Wege aufgezeichnet -- kein Urteil moeglich."
-    elif "urteil" in ergebnis:
+    elif "oberes_zehntel_haelt" in ergebnis:
+        # Echtes Urteil MIT Schwellenwert (>=10 Wege, siehe pruefung()) --
+        # vorher stand hier `"urteil" in ergebnis`, was auch fuer den
+        # naechsten Zweig ("zu wenige Wege", n<10) zutraf, weil pruefung()
+        # dort AUCH ein "urteil"-Feld setzt (nur ohne "oberes_zehntel_haelt").
+        # Das liess diesen Zweig faelschlich zugreifen und den `else`-Zweig
+        # unten toter Code werden -- bei n<10 waere ergebnis['oberes_zehntel_
+        # haelt'] ein KeyError gewesen. Jetzt auf dem Feld unterschieden, das
+        # tatsaechlich nur hier existiert.
         b3 = ergebnis.get("bedingung3_echt", {})
         ergebnis["zeile"] = (
             f"Wegehierarchie: {ergebnis['wege']} Wege, {ergebnis['urteil']} "
             f"(oberes Zehntel haelt {ergebnis['oberes_zehntel_haelt']}); "
             f"Tunnel-Bedingung: {b3.get('stand', 'UNBEKANNT')}"
         )
-    else:  # "zu wenige Wege fuer ein Urteil"
+        # ⚠️⭐ BUG gefunden live 22.08. (Koordinator-Auftrag): `pruefung()`
+        # (separates Repo /opt/unifieddb) kennt "stand" gar nicht -- nur der
+        # NOCH_KEINE_WEGE-Zweig oben setzt es je. Die anderen drei
+        # Instrumente hier (Weckvertrag, Uebersetzungsausfaelle, Stimmen)
+        # markieren eine echte Messung immer explizit mit "stand":"GEMESSEN";
+        # Wegehierarchie tat das nie, obwohl genau HIER (>=10 Wege, echtes
+        # Urteil samt Schwellenwert) dieselbe Art Messung vorliegt. Ohne
+        # dieses Feld blieb architekt/hypothesen.py:sammle_messwerte fuer
+        # JEDE Wegehierarchie-Schwellenverletzung blind (weg.get("stand")
+        # == "GEMESSEN" traf nie zu) -- live gemessen: oberes_zehntel_
+        # haelt=0.14 unter der Schwelle 0.20, aber keine Hypothese entstand.
+        # Absichtlich NUR in diesem Zweig gesetzt (nicht im "zu wenige
+        # Wege"-Zweig unten): dort fehlt der Schwellenwert selbst, "GEMESSEN"
+        # ohne ihn waere ein leeres Versprechen (fail-closed bleibt gewahrt).
+        ergebnis["stand"] = "GEMESSEN"
+    else:  # "zu wenige Wege fuer ein Urteil" (n<10) -- hat "urteil", aber
+           # bewusst KEIN "stand": ein Urteil ohne Schwellenwert ist keine
+           # Messung, auf die eine Hypothese sich stuetzen koennte.
         ergebnis["zeile"] = f"Wegehierarchie: {ergebnis.get('wege', 0)} Wege -- {ergebnis.get('urteil', '?')}."
     return ergebnis
 

@@ -35,10 +35,29 @@ DIE ZWEI REGELN
 from __future__ import annotations
 
 import json
+import sys
 import time
 
-# Werkzeuge, die nur lesen, sind hier nie ein Verdacht -- Neugier ist erlaubt.
-# Was zaehlt, ist Wirkung, die den Zug ueberdauert.
+# Wie oft die Buchung stillschweigend scheiterte. Siehe `buchen()`.
+AUSFAELLE = 0
+
+# ⚠️ KOMMENTAR KORRIGIERT 2026-08-21. Hier stand: "Werkzeuge, die nur lesen,
+# sind hier nie ein Verdacht". Das stimmt mit der importierten Menge NICHT
+# ueberein -- `_AUSSENWIRKUNG` enthaelt `WebSearch` und `WebFetch`, also zwei
+# reine Lese-Werkzeuge. headless_zero definiert die Menge breiter, naemlich als
+# "Wirkung, die den Behaelter verlaesst ODER dauerhaft bleibt"; nach dieser
+# Definition gehoeren sie hinein. Es gab also zwei Definitionen und eine Menge.
+#
+# Gepruefte Folge: KEINE. `_AUSSENWIRKUNG` hat genau einen Verbraucher -- diesen
+# Beobachter. Kein Tor, keine Sperre, kein EffectGate liest sie. Gemessen ueber
+# alle 51 gebuchten Zuege: aussenwirkung leer, verdacht leer, null Falschalarme.
+# Deshalb wird die MENGE nicht angetastet (das waere eine Aenderung ohne
+# Symptom, die die Definition in headless_zero verletzt) -- nur der Satz, der
+# sie falsch beschrieb.
+#
+# Was hier wirklich zaehlt: nicht Lesen gegen Schreiben, sondern Wirkung, die
+# den Zug ueberdauert. Ein `READ_EXTERNAL` steht in dieser Menge, weil es den
+# Behaelter verlaesst -- nicht, weil es etwas veraendert.
 from .headless_zero import _AUSSENWIRKUNG
 
 _TABELLE = (
@@ -80,6 +99,19 @@ def buchen(store, turn_id, session_id, frage: str, spur: dict, angekuendigt) -> 
 
     Eine Tabelle, die nur Verdachtsfaelle enthaelt, hat keinen Nenner: man kann
     dann nicht sagen, ob eine Woche mit drei Faellen viel oder wenig war.
+
+    ⭐ 2026-08-21: das `except` bleibt stumm gegenueber dem ZUG -- eine kaputte
+    Buchung darf keine Antwort kippen, und `pruefen()` steht bewusst davor, das
+    Urteil ueberlebt jeden DB-Fehler. Aber es bleibt nicht mehr stumm gegenueber
+    dem MESSGERAET: ein Ausfall hinterliess bisher gar keine Zeile, und "keine
+    Zeile" sah genauso aus wie "kein Verdacht". Genau der Nenner, den dieser
+    Docstring einfordert, war damit unbeobachtbar.
+
+    Der Gegenbeleg lag bisher nur im Abgleich mit `gw_herkunft` (dieselbe
+    Aufrufstelle, ein Zug = eine Zeile in beiden). Gemessen 51 / 51, also kein
+    stiller Verlust. Ab jetzt zaehlt `AUSFAELLE` mit und der Grund geht nach
+    stderr -- damit muss man den Abgleich nicht mehr von Hand fahren, um zu
+    wissen, ob ueberhaupt gebucht wurde.
     """
     urteil = pruefen(frage, spur, angekuendigt)
     try:
@@ -93,6 +125,12 @@ def buchen(store, turn_id, session_id, frage: str, spur: dict, angekuendigt) -> 
              json.dumps(sorted({str(t) for t in (angekuendigt or [])}), ensure_ascii=False),
              json.dumps(urteil["verdacht"], ensure_ascii=False), urteil["grund"]))
         store.db.commit()
-    except Exception:
-        pass
+    except Exception as e:
+        global AUSFAELLE
+        AUSFAELLE += 1
+        # Bewusst nur stderr, kein raise: der Beobachter darf den Zug nicht
+        # kippen. Aber ein Ausfall muss sichtbar sein, sonst ist "kein Verdacht"
+        # nicht von "nicht gemessen" zu unterscheiden.
+        print(f"absicht: Buchung fehlgeschlagen ({AUSFAELLE}. Mal): "
+              f"{type(e).__name__}: {e}", file=sys.stderr)
     return urteil

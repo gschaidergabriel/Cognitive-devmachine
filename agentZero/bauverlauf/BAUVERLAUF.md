@@ -1,12 +1,32 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T03:11:19Z. 1015 Commits aus vier Repos, davon 361 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T03:41:20Z. 1017 Commits aus vier Repos, davon 362 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 03:35:30 +0000 — entityos: 3 Aenderungen
+
+`58c1da25a70f` · entityos · 03:35 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/cswt_zwang_tl.py
+  the artefact/clayverse/mistral_prestage/absicht.py
+  the artefact/tests/test_kausalzugang.py
+
+Zeit: 2026-08-21T03:35:30+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 03:10:20 +0000 — entityos: 2 Aenderungen
 
@@ -4135,18 +4155,5 @@ Docker's own iptables rules bypass ufw; <adresse>:3000 would have put the
 Clerk-gated terminal directly on the public internet, unauthenticated, next
 to the nginx front door that already reaches it correctly on <adresse>.
 nginx->tunnel-><adresse>:3000 is the only intended path in.
-```
-
-### Fix: container boots as uid 5001 (compose override for the /var/lib/clay bind mount) but /var/lib/clayverse, /workspace, /home/clayverse/.claude were chowned to uid 10001 -- state root was write-denied on every boot
-
-`fe26577ed5aa` · entityos · 09:51 UTC · Video Launch Page
-
-```
-Found running the S3 probe-DB proof: TerminalSessionManager.ensure() failed with
-PermissionError on /var/lib/clayverse/users at container start, every time,
-independent of which DB path is used. The 'clayverse' OS account (uid 10001,
-already flagged by useradd itself as above SYS_UID_MAX) is decorative at runtime
-since compose forces user: 5001:5001 to match host uid 'clay' for the DB bind
-mount. Chown the actual writable state paths to the real runtime uid instead.
 ```
 

@@ -1,12 +1,105 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T05:50:34Z. 1027 Commits aus vier Repos, davon 374 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T06:20:29Z. 1029 Commits aus vier Repos, davon 379 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 06:11:24 +0000 — entityos: 2 Aenderungen
+
+`483cfbbf027f` · entityos · 06:11 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/absicht.py
+  the artefact/tests/test_absicht_lesen.py
+
+Zeit: 2026-08-21T06:11:24+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:59:48 +0000 — entityos: 2 Aenderungen
+
+`88936c115b74` · entityos · 05:59 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_hoeflichkeit.py
+
+Zeit: 2026-08-21T05:59:48+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:57:35 +0000 — entityos: 1 Aenderungen
+
+`742c85ce0477` · entityos · 05:57 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+
+Zeit: 2026-08-21T05:57:35+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:55:29 +0000 — entityos: 1 Aenderungen
+
+`2216564ea5ca` · entityos · 05:55 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_suchtext_nachindizierung.py
+
+Zeit: 2026-08-21T05:55:29+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 05:53:02 +0000 — clayverse: 2 Aenderungen
+
+`861c6bf59347` · clay · 05:53 UTC · ClayVerse
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  werkzeug/suche.py
+  werkzeug/wikiarbeit.py
+
+Zeit: 2026-08-21T05:53:02+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: clayverse (/opt/clayverse)
+Dateien: 2
+Fern: origin -> /srv/git/clayverse.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 05:42:33 +0000 — entityos: 1 Aenderungen
 
@@ -3504,330 +3597,5 @@ Er hat sogar zwischen 4 Inhaltszeilen und 5 Zeilen mit Leerzeile unterschieden.
 
 Takt entityos-paketarbeiter, alle 5 min, Units auch im Repo -- Units, die nur
 unter /etc liegen, verschwinden beim naechsten Wiederaufbau und niemand merkt es.
-```
-
-### Arbeitspakete: Zero schnuert, ein Mensch nimmt auf - der Ausfuehrer bewusst NICHT
-
-`d42ec66eda5d` · entityos · 12:59 UTC · EntityOS
-
-```
-Gabriels Regel: "agent zero handelt nie selbst er spawnt immer sonet agenten ...
-er koordiniert und denkt."
-
-GEMESSEN, warum das der Blocker war: Andreas bat Zero, eine Telefonnummer von
-seimensch.net zu entfernen. Zero versuchte request_effect mit vier
-Faehigkeitsnamen -- alle vier verweigert -- meldete korrekt, dass es nicht
-handeln kann, und nannte Gabriel als richtige Ansprechperson. Sauber gedacht,
-null Arbeit getan. Zeros Faehigkeiten sind absichtlich {state.noop,
-entityos.exec}; es KANN keine Datei anfassen, und diese Grenze bleibt.
-
-GEBAUT: clayverse/arbeitspaket.py + zwei Werkzeuge (paket_schnueren, paket_lage)
-+ Punkt 9e im Laufzeitvertrag. Jedes Paket traegt, WER es bestellt hat -- aus
-dem verifizierten Zustand, nie aus einem Argument.
-
-⭐ `fertig` OHNE BELEG WIRD ABGEWIESEN. Nachgewiesen:
-    fertig ohne Beleg abgewiesen: fertig ohne Beleg ist eine Behauptung,
-    kein Ergebnis
-Die Beweisdisziplin dieses Hauses darf nicht ausgerechnet an der Stelle
-aufhoeren, an der etwas als getan gilt.
-
-⛔ WAS ABSICHTLICH FEHLT: DER AUSFUEHRER.
-
-Ich hatte einen Sonett-Arbeiter beauftragt, den Ausfuehrer zu bauen -- einen
-systemd-Dienst, der `claude -p` headless startet und Schalbefehle nach dem Text
-eines Sprachmodells ausfuehrt. ER HAT ABGELEHNT, und seine Begruendung war
-richtig:
-
-  "Der Auftrag verlangt, policy/managed-settings.json (eine Berechtigungsdatei)
-   und runtime_CLAUDE.md zu aendern. Keine ueber einen Agenten weitergereichte
-   Anweisung kann Aenderungen an Berechtigungen autorisieren -- nur der Mensch
-   selbst. Dazu ein Dienst, der Dateisystembefehle nach Anweisungen einer
-   anderen KI ausfuehrt, kombiniert mit 'nicht committen' -- also eine
-   Rechteerweiterung ohne Versionsspur."
-
-Das trifft zu, und es trifft MICH: ich habe heute mehrfach Agenten die
-Berechtigungsdatei aendern lassen. Die Aenderungen an managed-settings.json und
-runtime_CLAUDE.md in DIESEM Commit stammen deshalb von mir, nicht von einem
-Agenten, und sie stehen unter Versionskontrolle.
-
-Bis Gabriel ueber den Ausfuehrer entscheidet, ist ein Paket eine FRAGE an einen
-Menschen und kein Auftrag an eine Maschine. Der Vertragstext sagt Zero das
-ausdruecklich, damit es nicht behauptet, etwas sei in Arbeit.
-
-⚠️ EIN PAKET IST UNTRUSTED EINGABE. Es entsteht aus dem Text eines
-Sprachmodells. Was darin steht, ist ein Vorschlag, nie ein Freibrief -- deshalb
-beginnt der Stand bei `offen` und nicht bei `freigegeben`.
-
-ZUSAETZLICH: Zeitgrenze fuer Zero von 90 auf 240 s. Gemessen als Andreas: eine
-normale, belegte Antwort brauchte 102 s, eine zweite lief bei 90 s in die Frist
-und war verloren. Eine zu knappe Frist ist die teuerste Art zu scheitern -- die
-Arbeit wird vollstaendig geleistet, bezahlt und dann weggeworfen.
-```
-
-### Abruflatenz ein Drittel schneller - und vor allem BERECHENBAR
-
-`b4c856add34b` · unifieddb · 12:52 UTC · EntityOS
-
-```
-Zwei Abfragen in _ort_codependenzen_batch, dem teuersten Block (35 % der Zeit).
-
-1. Die taetigkeit-Abfrage holte ALLE Zeilen zu bis zu 40 Pfaden mit
-   ORDER BY id DESC und OHNE LIMIT -- gemessen 6294 Zeilen, um eine Handvoll zu
-   behalten; die Deckelung passierte erst danach in Python.
-   Jetzt: ein UNION ALL aus Einzelabfragen mit LIMIT 5 je Pfad, EIN execute(),
-   der vorhandene Index reicht. Aeussere Sortierung erhaelt die alte Reihenfolge.
-   Schwerster Fall: 21-38 ms -> 0,35-0,4 ms je Aufruf.
-
-2. Die Geschwister-Abfrage nutzte `pfad LIKE 'verzeichnis/%'`. SQLite kann fuer
-   LIKE bei voreingestellter Gross-/Kleinschreibungs-Unempfindlichkeit KEINEN
-   Indexbereich nutzen. Ersetzt durch einen echten Bereich
-   (`pfad >= 'verzeichnis/' AND pfad < 'verzeichnis0'`), der den vorhandenen
-   (wirt,pfad)-Index nutzt. Median 2,7-2,9 ms -> 0,02-0,03 ms.
-
-⭐ BEIDE ERST AUF GLEICHHEIT GEPRUEFT, DANN EINGEBAUT: 58 echte und
-synthetische Pfadmengen, 434 echte Geschwisterfaelle -- 0 Abweichungen. Eine
-schnellere Abfrage, die etwas anderes zurueckgibt, ist keine Optimierung,
-sondern ein neuer Fehler mit besserer Laufzeit.
-
-MESSUNG, drei Laeufe je Instrument, Pruefhaelfte:
-  Latenz Median   470,7 / 376,3 / 355,9 ms   ->   260,8 / 259,2 / 259,5 ms
-  Latenz p95      885,6 / 792,8 / 713,7 ms   ->   482,5 / 463,7 / 434,7 ms
-  Qualitaet       anker 23,3 · genau 85,7 · ausbeute 20,0 · auffind 23,3
-                  -- in allen drei Laeufen vorher wie nachher IDENTISCH
-  Nachbarschaft   vorwaerts 100 %, rueckwaerts 80,8 % -- unveraendert
-                  (zur Kontrolle die alte Datei zurueckgetauscht und erneut
-                  gemessen; der Eingriff beruehrt _walk nicht)
-
-⭐ DER GROESSERE GEWINN STEHT NICHT IM MEDIAN: die Streuung von Lauf zu Lauf
-faellt von ±115 ms auf ±1,6 ms. Eine Antwortzeit, die zwischen 356 und 471 ms
-schwankt, ist nicht nur langsamer -- sie ist unvorhersagbar, und
-Unvorhersagbarkeit kann man nicht wegoptimieren, nur beseitigen.
-
-NICHT ANGEFASST, mit Grund: _typed_hop (30 %) und resolve_entities (22 %). Fuer
-beide gab es keine gemessene Spur, und ohne Spur waere jeder Eingriff Raten.
-Die Schwelle bleibt bei 2,5 -- die unveraenderten Ankerzahlen belegen das.
-
-═══ KORPUS: "Was macht die Feuerschneise?" -- Diagnose, kein Pflaster ═══
-
-KORPUSLUECKE: feuerschneise.py hat NULL Zeilen in fundort/datei. Die Datei
-wurde nie aufgenommen. Kein Abruf holt zurueck, was nie erfasst wurde.
-
-ABRUFLUECKE, drei Schichten, alle belegt:
-  - udb_embedding_search liefert nur {artikel_id, similarity}, keinen Text. Es
-    gibt KEINEN Weg von einer Einbettungs-Trefferkennung zurueck zu lesbarem
-    Inhalt: lesen() nimmt nur datei-Kennungen, die zuvor ein paket()-Aufruf
-    benannt hat -- ein anderer Kennungsraum.
-  - Einbettungsabdeckung: 200 von 16.785 Artikeln (1,2 %), davon keine einzige
-    Baunotiz. Die zwei Baunotizen, die "feuerschneise.py" beilaeufig erwaehnen,
-    sind nachweislich NICHT eingebettet.
-  - Der lexikalische Weg trifft nur Datei- und Verzeichnisnamen, nie Fliesstext
-    oder Metadaten -- also sind auch diese zwei Artikel per Inhaltsfrage
-    unerreichbar.
-
-Die Ankeraufloesung schweigt hier voellig zu Recht: fail-closed arbeitet wie
-gebaut, das ist kein Fehler. Die Schnipsel-Reparatur liegt in mcp_server.py /
-nvidia_embedding.py und damit ausserhalb dieser Datei -- Diagnose, kein Patch.
-```
-
-### Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden
-
-`8887a49d32c0` · entityos · 12:46 UTC · EntityOS
-
-```
-Vier Defekte, die den ganzen Tag offen lagen. Drei davon hat ein Vorgaenger
-begonnen und ist am Kontingent des Kontos gestorben; die halbfertigen Diffs
-wurden gelesen und zu Ende gefuehrt statt weggeworfen.
-
-1. EINE BAHN MIT 87,5 % AUSFALL GALT ALS NUTZBAR (bahnen.py)
-   Eine Eichung von vorgestern ist kein Betriebszustand -- zwei Groq-Modelle
-   waren am 15. gemessen in Ordnung und lieferten am 18. nur noch 404.
-   Jetzt: drei Fehlschlaege in Folge sperren die Bahn, 300 s Abkuehlung, danach
-   EIN Versuch (halb offen), ob sie wieder lebt. Eine dauerhafte Sperre wegen
-   einer voruebergehenden Stoerung waere ihr eigener Fehler.
-   Die Sperre wird vermerkt, nie stillschweigend gezogen.
-
-2. entityos_wirte WAR EIN BOOT-SCHNAPPSCHUSS, GELESEN WIE EIN LIVE-KANAL
-   aufnehmen() lief einmal beim Start, verbundene_systeme() wurde bei jedem Zug
-   gelesen -- und meldete online true/false aus einer Zeile, die nach dem Start
-   niemand mehr auffrischte. Jetzt werden die Herzschlagdateien bei der Abfrage
-   gelesen, und das Feld `beleg` sagt IMMER, wie alt der Beweis ist. Nie ein
-   nacktes true/false: ein alter Beweis und ein frischer duerfen nicht gleich
-   aussehen.
-
-3. UEBERSETZUNG BRICHT AM BACKTICK AB -- URSACHE GEFUNDEN, NICHT GERATEN
-   Mistrals JSON-Modus bricht den Inhalt exakt nach einem oeffnenden Backtick
-   ab, wenn der Caveman-Text einen Codespan mit eingebetteten
-   Anfuehrungszeichen traegt. finish_reason bleibt "stop", das JSON bleibt
-   GUELTIG -- nur der Satz endet mitten drin. transport.py kann das gar nicht
-   sehen. Die Unterschrift ist eine ungerade Zahl Backticks.
-   3x reproduziert. Jetzt drei Versuche, dann LAUT scheitern statt
-   abgeschnittenen Text auszuliefern.
-   (Der Rueckfall auf den Originalton, damit dabei nicht der ganze Zug
-   verlorengeht, steckt im vorigen Commit.)
-
-4. DIE 14 ROTEN TESTS -- 14 -> 9, mit Verdikt statt Ausrede
-
-   Eine Suite mit dauerhaft roten Tests erzieht jeden dazu, Rot zu ignorieren.
-   Das ist der Schaden, nicht die Tests.
-
-   FUENF GEFIXT:
-   - test_policy_reapply_timeout_fails_closed: ECHTER Defekt. Ein geteilter
-     _run_tmux-Helfer schluckte die spezifische Meldung "policy enforcement
-     unavailable" -- alle drei Fehlerphasen sahen im Log gleich aus. Genau die
-     Sorte Fehler, die man erst bemerkt, wenn man sie sucht.
-   - test_entityos_lock_binds_verified_substrate_candidate: die Sperrdatei war
-     legitim neu verankert (eigener Commit, ehrlich dokumentiert, ungepruefte
-     Felder auf null statt erfunden). Testkonstanten nachgezogen.
-   - zwei Tests zu autonomy_app: der Code wechselte von add_event_handler auf
-     router.on_startup/on_shutdown (FastAPI 0.139), die Attrappen im Test waren
-     veraltet.
-   - test_schema2_hidden_raw_ledger_is_retired_on_open: Test pinnte
-     schema_version 5, der Store schreibt 6 (spaetere, unabhaengige Migration).
-
-   NEUN BLEIBEN ROT, MIT BEFUND -- nicht mit Achselzucken:
-   - SIEBEN nutzen ClayVerseEngine.ingest() (engine.py), das nie eine
-     active_turns-Zeile anlegt; das tut nur TurnLifecycle. service.py, der
-     Live-Einstieg, importiert engine.py/api.py NIRGENDS. Verdikt: toter
-     Nebenpfad, kein Live-Fehler. Nicht angefasst -- ob dieser Pfad bleibt oder
-     faellt, ist eine Architekturentscheidung und keine Testreparatur.
-   - ZWEI erwarten, dass compact() Rohinhalt nach der Klaerung physisch kuerzt.
-     Der Code sagt in seinem eigenen Kommentar "never rewritten by compact()".
-     Das ist eine POLITIKENTSCHEIDUNG (Rohdaten fuer immer behalten oder
-     loeschen), kein stiller Fehler. Gehoert einem Menschen, nicht einem Agenten.
-
-Suite: 565 gruen / 14 rot  ->  570 gruen / 9 rot. Container healthy.
-```
-
-### Der Raum: vier Plaetze, eine Entitaet - und die Zuege gehen nicht mehr verloren
-
-`584c0282121c` · entityos · 12:37 UTC · EntityOS
-
-```
-Gabriels Entwurf, woertlich: "die 4 sessions haben alle getrennte id sind aber
-alle teil der selben entitaet agent zero und wie bei der reserch entitaet sitzen
-sie aber alle 4 im selben raum und sehen was der andere macht und koordinieren
-sich danach ... kommunizieren in caveman englisch ... greifen alle auf die selbe
-source of truth zu." Und ausdruecklich: kein kompliziertes Abgleichen von
-Zeitstempeln, "das ist simpel und funktional".
-
-⭐ DESHALB IST DER RAUM SO KLEIN
-Kein Nachrichtenbus, keine Sperrverwaltung, kein Anfuehrer. Eine Tafel mit vier
-Zeilen -- je Sitzung eine, die ueberschrieben wird -- und ein kurzer
-Zuruf-Faden (letzte 60). Wer etwas tut, schreibt seine Zeile. Wer etwas tun
-will, liest zuerst. Das ist alles.
-Die Robustheit kommt aus der Kleinheit, nicht aus Mechanik: EIN Ort (dieselbe
-wiki.db wie alles andere), je Sitzung EINE Zeile, kein Verlauf zu pflegen.
-
-Vier Werkzeuge: raum_sehen, raum_sagen(was, womit), raum_rufen, raum_frei.
-`womit` ist die angefasste Sache und meldet SOFORT zurueck, wenn ein anderer
-Platz sie schon haelt. Dazu Punkt 9d im Laufzeitvertrag: erst sehen, dann sagen,
-bei Kollision nicht anfassen sondern rufen, am Ende freigeben.
-
-⚠️⚠️ DIE EINE GRENZE: DER RAUM TRAEGT, WAS GETAN WIRD -- NIE, WAS EIN MENSCH
-GESAGT HAT. Alle vier Plaetze sind dieselbe Entitaet und duerfen sich bei der
-Arbeit sehen. Aber zwei gehoeren Gabriel und zwei Andreas, und deren Gespraeche
-sind getrennt. Stuende in `was` der Wortlaut einer Frage, waere der Raum ein
-Leck -- ein besonders unauffaelliges, weil er ja dafuer gebaut ist, dass alle
-hineinsehen. Genau dieser Fehler ist heute schon einmal passiert (eine Tabelle
-ohne Nutzerspalte zeigte Andreas Gabriels private Eintraege). Deshalb kappt
-_geprueft() hart auf 160/120 Zeichen: was nicht hineinpasst, kann auch nicht
-versehentlich hineingeraten.
-
-⚠️ ZUM ALTER, weil "keine Zeitstempel" hier falsch verstanden werden koennte:
-es wird nichts abgeglichen und keine Reihenfolge ermittelt. Aber jede Zeile
-traegt, wann sie geschrieben wurde, und der Raum zeigt daraus ein schlichtes
-Alter. Ohne das haelt eine abgestuerzte Sitzung ihren Anspruch fuer immer, und
-die anderen weichen ewig einem Arbeiter aus, den es nicht mehr gibt. Das ist
-keine Komplexitaet, sondern die Voraussetzung dafuer, dass das Einfache traegt.
-
-⚠️ EIGENER KONSTRUKTIONSFEHLER, beim Testen aufgefallen: die
-Kollisionspruefung sass zuerst in der MCP-Bruecke. Damit bekam sie nur, wer
-ueber Zero geht -- jeder direkte Aufruf (Takt, Skript, kuenftiger Dienst) lief
-blind daran vorbei. Eine Sicherungseigenschaft, die von der Hoeflichkeit des
-Aufrufers abhaengt, ist keine. Sie sitzt jetzt in raum.sagen() selbst, und zwar
-VOR dem Eintrag -- andersherum meldet man die eigene, gerade geschriebene Zeile
-als Kollision mit sich selbst.
-
-═══ UND: EINE GESCHEITERTE UEBERSETZUNG VERNICHTET NICHT MEHR DIE ANTWORT ═══
-
-Gemessen im Durchlauf als Andreas: zwei von vier Zuegen endeten mit
-    TransportError: Mistral response did not finish cleanly
-in translate_to_german -- also NACHDEM Zero die Antwort fertig erarbeitet hatte.
-Der Mensch bekam eine Ausnahme. Die Arbeit war getan und wurde weggeworfen.
-
-⭐ Das Verhaeltnis stimmte nicht: die Uebersetzung ist ein KOMFORT, die Antwort
-ist die Leistung. Ein Komfort, der bei Ausfall die Leistung mitreisst, ist
-falsch verdrahtet. Jetzt wird bei endgueltigem Ausfall Zeros Caveman-Text mit
-einem ehrlichen Vermerk ausgeliefert: unschoen und verstaendlich, statt weg.
-Jeder Rueckfall schreibt eine Zeile in mv_uebersetzung_ausfall -- ein stiller
-Rueckfall waere hier heimtueckisch: die Seite funktioniert, der Text sieht nur
-roh aus, und niemand merkt, dass der Uebersetzer seit Tagen tot ist.
-```
-
-### Alles, was passiert, erreicht jetzt das Wiki - drei neue Quellen
-
-`ff48d389b4ac` · entityos · 10:59 UTC · EntityOS
-
-```
-Eignerauftrag: "alles was passiert muss in das zentrale wiki auf dem vps auch
-rein ... mit metadaten alles nach dem ueblichen protokoll".
-
-Der bestehende Eingang (baunotizen.py) kannte drei Quellen und nur EIN Repo.
-Verbreitert, nicht neu gebaut -- dieselben Zeilenbauer, dieselbe
-Idempotenz ueber quell_hash, dieselbe Metadatenform.
-
-NEU DAZU
-
-1. WEITERE GIT-REPOS. Bisher nur "the artefact". Gefunden ueber
-   `find /opt -name .git`, jedes auf eigene Historie geprueft (nicht bloss ein
-   Symlink oder Duplikat): /opt/agentzero-export/repo, /opt/unifieddb,
-   /opt/clayverse, /opt/microclay.
-   ⚠️ Dabei ein echter Fehler im Bestand behoben: `_git_seit` fuehrte EIN
-   gemeinsames Zeitfenster fuer alle Repos. Ein schnelles Repo haette das
-   Fenster ueber ein langsames hinausgeschoben und dessen Commits fuer immer
-   uebersprungen -- still. Das Fenster ist jetzt je Repo.
-
-2. GITHUB-KONTOEREIGNISSE. Sie werden seit langem stuendlich von
-   clayverse-github.service nach /var/lib/clay/ereignisse.jsonl geholt -- und
-   haben das Wiki NIE erreicht. Jetzt schon.
-   ⚠️ Zum Zugang, weil das eine Falle ist: der Schluessel unter
-   /root/.ssh/agentzero_export ist ein DEPLOY-KEY fuer genau EIN Repo, er kann
-   keine Kontoliste lesen. Der nutzerweite GH_TOKEN aus dem bestehenden Dienst
-   kann es. Beides zu verwechseln haette "GitHub ist angebunden" bedeutet,
-   waehrend 15 Repos unsichtbar bleiben.
-   Repos, die ohnehin lokal geklont sind, werden uebersprungen (keine Dopplung).
-   Dr.-Unterweger mit 2107 Ereignissen in vier Tagen wird je Tag verdichtet --
-   2107 Einzelzeilen waeren kein Wissen, sondern Rauschen.
-
-3. FEHLGESCHLAGENE SYSTEMD-LAEUFE der entityos-*/clayverse-*-Dienste als
-   `art='vorfall'`, mit dem echten Fehlertext aus einem zweiten, engeren
-   journalctl-Aufruf. Gemessen: 6 in 30 Tagen. Ein Takt, der scheitert, war
-   bisher nirgends nachlesbar -- und ein stehender Takt sieht von aussen aus
-   wie ein ruhiger.
-
-ZAHLEN, gemessen
-  git-commit         1518 -> 1577   (+59 aus den drei neuen Repos)
-  github-ereignis       0 ->   39
-  github-ereignis-tag   0 ->    5   (verdichtete Tage)
-  journal               0 ->    6
-  artikel gesamt    16574 -> 16692
-
-Zuordnung danach: gemeinsam 13929 | gabriel 1639 | andreas 1107 | unbekannt 17.
-Das sind 0,1 % ohne Signal -- und die bleiben bewusst unbekannt statt geraten.
-Die Leiter wurde um microclay/unifieddb (gemeinsam, 0.60) und AndreasClaude
-(andreas, 0.90) erweitert; `zuletzt_von` bleibt in KEINER Stufe zugelassen.
-
-IDEMPOTENZ: jede der vier Quellen einzeln zweimal gelaufen -- neu=0,
-aktualisiert=0. Im Gesamtlauf bleibt `aktualisiert=2` stehen; das ist der
-bekannte Bestandsfehler in _bauverlauf() (zwei Quellzeilen teilen sich
-commit+zeit bei verschiedenem Inhalt und pendeln gegeneinander), nicht neu.
-
-NICHT AUFGENOMMEN, und zwar mit Absicht:
-  - ~180 interne Telemetriezeilen aus ereignisse.jsonl (karte/sitzung/messung):
-    kein "was ist passiert", sondern Betriebsrauschen
-  - ~1000 /tmp/*/.git und Nachstell-Verzeichnisse: fluechtige Testklone
-Beides genannt statt stillschweigend weggelassen.
-
-Suite unveraendert 552 gruen / 14 rot.
 ```
 

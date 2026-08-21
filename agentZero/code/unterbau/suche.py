@@ -43,7 +43,11 @@ Blasen-Filter (Vorgabe des Eigentuemers, 2026-08-15):
   Ein Inhalt, dessen Fundorte AUSSCHLIESSLICH fremder Blase gehoeren, taucht
   gar nicht erst in der Trefferliste auf.
 
-    suche.py index                               Neu indizieren (voller Rebuild)
+    suche.py index                               Neu indizieren (voller Rebuild, manuell)
+    suche.py nachindizieren                       Inkrementeller Nachtrag: nur fehlende Artikel
+                                                   (additiv, kein DROP -- per Timer, siehe unten)
+    suche.py luecke                               Waechter: wie viele Artikel fehlen noch?
+                                                   Exit-Code != 0 ab LUECKE_SCHWELLE
     suche.py suche <wort> [--blase B] [--wirt W] [--limit N] [--json]
     suche.py thema <artikel_id> [--json]          Kombinierte Themen-Abfrage
     suche.py stand                                Kennzahlen des aktuellen Index
@@ -313,6 +317,151 @@ def _index_artikel(con: sqlite3.Connection, fts5: bool) -> dict:
             puffer = 0
     _mit_retry(con.commit)
     return ergebnis
+
+
+# ⚠️⚠️ BEFUND 2026-08-21 (Abrufluecke, gemessen an /var/lib/clay/wiki.db):
+# 5670 von 18393 Artikeln (30,8%) hatten KEINE Zeile in artikel_suchtext --
+# fuer den Abruf schlicht unsichtbar, derselbe wiederkehrende Defekt wie
+# schon einmal bei 164 Wissensartikeln ("der schrieb, niemand konnte
+# lesen"). Ursache GEPRUEFT, nicht vermutet: `artikel_suchtext` hat KEINEN
+# Trigger auf `artikel` (SELECT sql FROM sqlite_master WHERE type='trigger'
+# liefert nichts) UND `_index_artikel` oben wird NUR von `cmd_index` erreicht,
+# das seinerseits `_eigenes_schema()` vorschaltet -- ein DROP+CREATE, der
+# NEBENBEI auch datei/fundort/fts_index_datei mit wegwirft und komplett neu
+# vom Dateisystem scannt. Genau DESHALB gibt es fuer `index` bewusst KEINEN
+# Timer (siehe Kommentar in _eigenes_schema: "Fasst artikel/kante/... nie
+# an" -- aber droppt die EIGENEN Tabellen unbedingt, auch datei/fundort).
+# `index` ist also ein seltener, manueller Vollrebuild -- die einzige
+# Schreibstelle fuer artikel_suchtext lief seit dem letzten Handlauf (Bulk
+# 2026-08-14, siehe artikel_suchtext.indiziert-Zeitstempel) schlicht NICHT
+# mehr automatisch. Die Luecke ist seither ungebremst gewachsen (5670 von
+# ~18,4k, Tendenz: jeder neue Artikel bleibt unsichtbar, bis wieder jemand
+# von Hand `index` aufruft).
+#
+# Fix (diese Funktion + `nachindizieren` unten): additiv statt Vollrebuild --
+# ANTI-JOIN gegen die vorhandene UNIQUE-Spalte artikel_suchtext.artikel_id
+# (die UNIQUE-Constraint traegt automatisch einen Index, der Anti-Join ist
+# also billig, kein Tabellenscan noetig) statt "SELECT * FROM artikel" wie
+# im Vollrebuild. Kein DROP, keine Beruehrung von datei/fundort. GEFAHRLOS
+# oft lauffaehig -- deshalb bekommt sie einen Timer (clayverse-suchtext-
+# nachindizierung.timer, alle 5 min), waehrend `index` bewusst manuell
+# bleibt.
+def _index_artikel_neu(con: sqlite3.Connection, fts5: bool) -> dict:
+    """Inkrementeller Nachtrag zu _index_artikel: fuegt NUR Artikel hinzu, die
+    noch KEINE Zeile in artikel_suchtext haben. Kein DROP, kein Vollrebuild --
+    siehe Modul-Befund oben fuer den Grund, warum das die eigentliche
+    Reparatur ist (nicht nur ein Workaround)."""
+    ergebnis = {"artikel_neu": 0}
+    zeilen = _mit_retry(lambda: con.execute(
+        "SELECT a.id, a.art, a.titel, a.metadaten, a.offene_fragen "
+        "FROM artikel a LEFT JOIN artikel_suchtext s ON s.artikel_id = a.id "
+        "WHERE s.artikel_id IS NULL"
+    ).fetchall())
+    puffer = 0
+    for aid, art_typ, titel, metadaten, offene_fragen in zeilen:
+        text_teile = [titel or "", art_typ or "", metadaten or "", offene_fragen or ""]
+        text = "\n".join(t for t in text_teile if t)
+
+        def _tun(aid=aid, titel=titel, text=text):
+            # OR IGNORE + rowcount-Pruefung statt blindem lastrowid: schuetzt
+            # gegen die (seltene, aber reale) Rennsituation, dass derselbe
+            # Artikel zwischen SELECT und INSERT von einem parallelen Lauf
+            # bereits eingetragen wurde (mehrere Werkzeuge schreiben gleich-
+            # zeitig in dieselbe wiki.db, siehe Modul-Docstring oben) -- ohne
+            # die Pruefung wuerde lastrowid dann die falsche (fremde) Zeile
+            # zurueckgeben und der FTS-Eintrag ginge auf die falsche rowid.
+            cur = con.execute(
+                "INSERT OR IGNORE INTO artikel_suchtext "
+                "(artikel_id, titel, text, blase, indiziert) VALUES (?,?,?,?,?)",
+                (aid, titel, text, None, _jetzt()),
+            )
+            if cur.rowcount == 0:
+                return False
+            rid = cur.lastrowid
+            if fts5:
+                con.execute(
+                    "INSERT INTO fts_index_artikel (rowid, titel, text) VALUES (?,?,?)",
+                    (rid, titel or "", text),
+                )
+            else:
+                con.execute(
+                    "INSERT INTO fts_index_artikel (id, titel, text) VALUES (?,?,?)",
+                    (rid, titel or "", text),
+                )
+            return True
+        if _mit_retry(_tun):
+            ergebnis["artikel_neu"] += 1
+        puffer += 1
+        # 500 wie im Vollrebuild oben (_index_artikel) -- dieselbe, bereits
+        # bewaehrte Stapelgroesse, damit eine einzelne Transaktion (und damit
+        # das WAL) klein bleibt. Bei diesem inkrementellen Lauf greift das in
+        # der Praxis kaum (die Luecke pro Timer-Takt ist klein), sichert aber
+        # den einmaligen Nachtrag eines groesseren Rueckstands ab.
+        if puffer >= 500:
+            _mit_retry(con.commit)
+            puffer = 0
+    _mit_retry(con.commit)
+    return ergebnis
+
+
+# Gemessene Schreibrate (2026-08-21, letzte 3h vor dem Fund, 15-Minuten-
+# Fenster): Spitze 26 Artikel/15min. Bei 5-Minuten-Timer-Takt (siehe .timer-
+# Datei) also im Normalfall < 10 neue Artikel zwischen zwei Laeufen. Schwelle
+# grosszuegig bei 200 (entspricht mehreren ausgefallenen Laeufen hintereinander,
+# nicht normalem Jitter) -- kein Fehlalarm im Alltag, aber ein echter Alarm,
+# falls `nachindizieren` selbst stehen bleibt (der Fall, den dieser Waechter
+# eigentlich fangen soll: Wiederholung des hier behobenen Defekts).
+LUECKE_SCHWELLE = 200
+
+
+def cmd_nachindizieren(_args: list[str]) -> int:
+    """Inkrementeller Nachtrag, siehe _index_artikel_neu oben. Meldet danach
+    zusaetzlich die verbleibende Luecke (cmd_luecke-Logik) -- ein Lauf, der
+    sowohl repariert als auch bestaetigt, dass die Reparatur griff."""
+    t0 = time.time()
+    con = _verbindung()
+    if not _tabelle_existiert(con, "artikel_suchtext"):
+        print("kein eigener Index vorhanden -- suche.py index zuerst ausfuehren")
+        con.close()
+        return 1
+    fts5 = _fts5_verfuegbar(con)
+    erg = _index_artikel_neu(con, fts5)
+    con.close()
+    dauer = time.time() - t0
+    print(f"artikel_neu_indiziert={erg['artikel_neu']}")
+    print(f"laufzeit_s={dauer:.2f}")
+    return 0
+
+
+def cmd_luecke(_args: list[str]) -> int:
+    """Waechter: misst, wie viele Artikel IMMER NOCH keine Zeile in
+    artikel_suchtext haben, und schlaegt per Exit-Code aus (wie wirte.py
+    pruefen), wenn das ueber LUECKE_SCHWELLE liegt -- clayverse-*.service
+    Namensmuster, damit wache.py (dynamischer Glob, siehe dessen Docstring)
+    diesen Lauf automatisch mitueberwacht, ohne dass wache.py selbst
+    angefasst werden muss."""
+    con = _verbindung()
+    if not _tabelle_existiert(con, "artikel_suchtext"):
+        print("kein eigener Index vorhanden -- suche.py index zuerst ausfuehren")
+        con.close()
+        return 1
+    fehlt = con.execute(
+        "SELECT COUNT(*) FROM artikel a "
+        "LEFT JOIN artikel_suchtext s ON s.artikel_id = a.id "
+        "WHERE s.artikel_id IS NULL"
+    ).fetchone()[0]
+    gesamt = con.execute("SELECT COUNT(*) FROM artikel").fetchone()[0]
+    con.close()
+    anteil = (fehlt / gesamt * 100) if gesamt else 0.0
+    print(f"artikel_gesamt={gesamt} ohne_suchtext={fehlt} anteil_pct={anteil:.1f} "
+          f"schwelle={LUECKE_SCHWELLE}")
+    if fehlt > LUECKE_SCHWELLE:
+        print(f"BEFUND: Luecke ueber Schwelle -- laeuft clayverse-suchtext-"
+              "nachindizierung.timer noch? (systemctl list-timers | grep suchtext)",
+              file=sys.stderr)
+        return 1
+    print("Luecke innerhalb der Schwelle.")
+    return 0
 
 
 def _index_dateien(con: sqlite3.Connection, fts5: bool) -> dict:
@@ -948,6 +1097,10 @@ def main() -> int:
     try:
         if befehl == "index":
             return cmd_index(rest)
+        if befehl == "nachindizieren":
+            return cmd_nachindizieren(rest)
+        if befehl == "luecke":
+            return cmd_luecke(rest)
         if befehl == "suche":
             return cmd_suche(rest)
         if befehl == "thema":

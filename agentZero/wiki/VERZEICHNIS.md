@@ -1,12 +1,50 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T05:50:34Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T06:20:29Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 705 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2434 Artikel, 1405 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 695 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2733 Artikel, 1542 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
+
+## Kern / andreas (35)
+
+- **Frank UnifiedDB Assembly Protocol** — `Dr.-Unterweger-unifieddb-ASSEMBLY_PROTOCOL.m` · quelldatei
+- **Andreas UnifiedDB — Personal Semantic Possibility Fabric** — `Dr.-Unterweger-unifieddb-SEMANTIC_FABRIC.md` · quelldatei
+- **frank_unifieddb.clay** — `Dr.-Unterweger-claycode-frank_unifieddb.clay` · quelldatei
+- **unifieddb_backup.py** — `Dr.-Unterweger-runtime-clay_vps_mcp_v02-clay` · quelldatei
+- **unifieddb-backup.service** — `Dr.-Unterweger-runtime-clay_vps_mcp_v02-depl` · quelldatei
+- **unifieddb-backup.timer** — `Dr.-Unterweger-runtime-clay_vps_mcp_v02-depl` · quelldatei
+- **UNIFIEDDB_SCHEMA.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_SCHEM` · quelldatei
+- **UNIFIEDDB_V6_MIGRATION.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V6_MI` · quelldatei
+- **UNIFIEDDB_V7_MIGRATION.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V7_MI` · quelldatei
+- **UNIFIEDDB_V10_INSTANCE_SYNC.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V10_I` · quelldatei
+- **UNIFIEDDB_V11_INTEGRITY_HARDENING.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V11_I` · quelldatei
+- **UNIFIEDDB_V12_SESSION_SKILLS.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V12_S` · quelldatei
+- **UNIFIEDDB_V14_EFFECT_LIFECYCLE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V14_E` · quelldatei
+- **UNIFIEDDB_V16_EXECUTION_CONTINUITY.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V16_E` · quelldatei
+- **UNIFIEDDB_V7_1_HARDENING.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V7_1_` · quelldatei
+- **UNIFIEDDB_V8_CHATGPT_DELEGATION.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V8_CH` · quelldatei
+- **UNIFIEDDB_V8_INSTANCE_BACKFLOW.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V8_IN` · quelldatei
+- **UNIFIEDDB_V9_EMERGENT_SUBSTRATE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V9_EM` · quelldatei
+- **frank_unifieddb_projection_outbox_v1.clay** — `Dr.-Unterweger-claycode-frank_unifieddb_proj` · quelldatei
+- **frank_unifieddb_projection_worker_v1.clay** — `Dr.-Unterweger-claycode-frank_unifieddb_proj` · quelldatei
+- **UNIFIEDDB_EFFECT_EXECUTION_FENCE_V1.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_EFFEC` · quelldatei
+- **UNIFIEDDB_PROVIDER_IDEMPOTENCY_CONTRACT_V1.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_PROVI` · quelldatei
+- **UNIFIEDDB_V10_DYNAMIC_WORK_REVISIONS.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V10_D` · quelldatei
+- **UNIFIEDDB_V13_BUG_RESEARCH_FEEDBACK.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V13_B` · quelldatei
+- **UNIFIEDDB_V15_SINGLE_INSTANCE_PRESENCE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V15_S` · quelldatei
+- **UNIFIEDDB_V17_PROJECTION_OUTBOX_CANDIDATE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V17_P` · quelldatei
+- **UNIFIEDDB_V9_DYNAMIC_WORK_FABRIC.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V9_DY` · quelldatei
+- **fixed_sqlite_unifieddb_pair_smoke.py** — `Dr.-Unterweger-tests-fixed_sqlite_unifieddb_` · quelldatei
+- **unifieddb_projection_outbox_v1_gate.py** — `Dr.-Unterweger-tests-unifieddb_projection_ou` · quelldatei
+- **unifieddb_projection_worker_v1_gate.py** — `Dr.-Unterweger-tests-unifieddb_projection_wo` · quelldatei
+- **UNIFIEDDB_V17_EFFECT_REENTRY_DONE_CANDIDATE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V17_E` · quelldatei
+- **UNIFIEDDB_V17_PROJECTION_WORKER_V1_CANDIDATE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V17_P` · quelldatei
+- **UNIFIEDDB_V17_PROVENANCE_BOUND_EFFECT_COMPLETION.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V17_P` · quelldatei
+- **UNIFIEDDB_V17_1_CAUSAL_ADMISSION_CLOSURE_CANDIDATE.sql** — `Dr.-Unterweger-runtime-state-UNIFIEDDB_V17_1` · quelldatei
+- **DU-FRANK-6.1 — UnifiedDB / ClayGraph Central Entity Fusion** — `Dr.-Unterweger-research-UNIFIEDDB_CLAYGRAPH_` · quelldatei
 
 ## Kern / clayverse (3)
 
@@ -14,7 +52,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `B0-2026-08-15T15-53-34-0000` · vorfall
 - **VLM-Artefakte + System-Vorlagen ins Repo (unifieddb)** — `B11-2026-08-15T15-52-56-0000` · vorfall
 
-## Kern / entityos (640)
+## Kern / entityos (614)
 
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-bauverlauf-07139bc84688bdc0a592` · baunotiz
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-git-0ff9ac9f66f7342ad53eab6b3726575` · baunotiz
@@ -28,6 +66,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **fix(clayverse): re-ingest inference before EffectGate** — `bau-entityos-4e9290696bba` · bau
 - **test(clayverse): pin reconciliation and EffectGate replay fallback** — `bau-entityos-93924c248d4a` · bau
 - **test(clayverse): prove inference re-ingest precedes EffectGate** — `bau-entityos-397d1340b013` · bau
+- **claycode inbox: bind PR787 dependency closure and zero-step blocker** — `baunotiz-git-14041fb6b046008b81d671c4cd2c789` · baunotiz
+- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
@@ -36,51 +76,69 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-bauverlauf-234776776d865c5df3d2` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
+- **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
+- **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
+- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
+- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
+- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
+- **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
+- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
+- **docs(clayverse): refresh living state after EntityOS bridge component run** — `baunotiz-git-aabfc8a02ad8c3735bb5b7a8f3d7fc3` · baunotiz
+- **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f3` · baunotiz
+- **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-git-32bbd085ec583a6db14ce13499eed88` · baunotiz
+- **artifact: test inference intent through canonical EffectGate** — `baunotiz-git-27677fd3a4d92ad22a80a58bc4bef82` · baunotiz
+- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
+- **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-bauverlauf-281c3bfdd4152f32e51b` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `bau-agentzero-export-3488f45d776e` · bau
 - **agentZero research: index EntityOS completion assessment** — `bau-agentzero-export-e12a81473a25` · bau
 - **agentZero research: EntityOS re-evaluation generation 32** — `bau-agentzero-export-4d6d0bada8a8` · bau
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
-- **claycode inbox: bind PR787 dependency closure and zero-step blocker** — `baunotiz-git-14041fb6b046008b81d671c4cd2c789` · baunotiz
-- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
-- **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
-- **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
-- **docs(clayverse): refresh living state after EntityOS bridge component run** — `baunotiz-git-aabfc8a02ad8c3735bb5b7a8f3d7fc3` · baunotiz
-- **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-bauverlauf-281c3bfdd4152f32e51b` · baunotiz
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `bau-entityos-ca5149c807cb` · bau
-- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
+- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `bau-entityos-1fa4e2d9c80f` · bau
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-git-ca5149c807cba55e36930d9e5630dbd` · baunotiz
-- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
-- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **claycode control: sync EntityOS work selection to supervisor 8.9** — `baunotiz-git-68de25fddabe6502a39627d79921d8c` · baunotiz
-- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau
+- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
-- **artifact: test inference intent through canonical EffectGate** — `baunotiz-git-27677fd3a4d92ad22a80a58bc4bef82` · baunotiz
-- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
-- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
-- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
-- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `bau-entityos-f307559b870f` · bau
-- **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `bau-entityos-1fa4e2d9c80f` · bau
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `bau-entityos-372397141f5d` · bau
-- **B7 geprueft: EffectGate als Wand, nicht als Bibliothek** — `baunotiz-bauverlauf-462835fb3706b7b7831e` · baunotiz
+- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-git-a896a05284b897f0f87fad5fd609888` · baunotiz
+- **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `bau-entityos-a896a05284b8` · bau
+- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `bau-entityos-f307559b870f` · bau
 - **Der Andreas-Test hat sieben Fehler gefunden -- Zero fand die meisten selbst** — `baunotiz-git-da8adac4f7b9970db192cba309bcbfe` · baunotiz
+- **B7 geprueft: EffectGate als Wand, nicht als Bibliothek** — `baunotiz-bauverlauf-462835fb3706b7b7831e` · baunotiz
 - **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `baunotiz-bauverlauf-2b9ce136f87d757f15d0` · baunotiz
 - **B7 geprueft: EffectGate als Wand, nicht als Bibliothek** — `bau-clay-032503afba2b` · bau
-- **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `baunotiz-git-8e37f4a64a8138840755970a93ba396` · baunotiz
-- **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `bau-entityos-8e37f4a64a81` · bau
 - **evidence(go): bind PR787 zero-skip pytest head** — `baunotiz-git-3c602564fd42405e812c2d825e5e466` · baunotiz
 - **receipt(go): record crash-safe Tier2 carrier donor and zero runtime credit** — `baunotiz-bauverlauf-621f632bbc168231221f` · baunotiz
 - **receipt: strengthen recovery zero-credit exact source-slice evidence** — `baunotiz-git-7ba2a384ac3710a568b6f3165e938b5` · baunotiz
 - **receipt: bind merged recovery zero-credit exact-blob execution** — `baunotiz-git-2c8bf61e89d22183cfdf80c4649c2c9` · baunotiz
 - **microclay: fence uncertain and zero-credit verified outcome learning** — `baunotiz-git-3fb27e0194366322311d7962ba2251b` · baunotiz
+- **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `baunotiz-git-8e37f4a64a8138840755970a93ba396` · baunotiz
+- **Permissions: allow the three managed MCP tools so request_effect actually reaches EffectGate** — `bau-entityos-8e37f4a64a81` · bau
 - **receipt(go): record crash-safe Tier2 carrier donor and zero runtime credit** — `baunotiz-git-078d72a330785916a240c084b961ff8` · baunotiz
+- **README: Wortlaut auf ClayMachine als Projektname konsistent, Umbenennungshinweis (unifieddb-Repo -> ** — `baunotiz-bauverlauf-c4d985ce01476e7aaf82` · baunotiz
 - **receipt(go): record crash-safe Tier2 carrier donor and zero runtime credit** — `bau-entityos-078d72a33078` · bau
+- **README: Wortlaut auf ClayMachine als Projektname konsistent, Umbenennungshinweis (unifieddb-Repo -> ** — `bau-unifieddb-b96f4132143f` · bau
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
+- **docs(artefact): record reauth UnifiedDB fence cycle** — `baunotiz-git-02ac86856df0bea636ebaf034e70ee1` · baunotiz
+- **test: require fresh Claude session UnifiedDB rehydration** — `baunotiz-git-ca72ebaeb55bff44eef47a4a271df56` · baunotiz
+- **test: forbid Claude side-memory beside UnifiedDB** — `baunotiz-git-fa9471d39e3c96a8de9128b4a2c9b1d` · baunotiz
+- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `baunotiz-bauverlauf-7d8e57e0e68f0db20fc9` · baunotiz
+- **test: use canonical UnifiedDB for terminal auth rejection** — `baunotiz-git-36ffa14945baa3030b36bcedbfdadb5` · baunotiz
+- **security: make managed hooks and UnifiedDB memory exclusive** — `baunotiz-git-2569d111635da054fdd7b48cfd96ed7` · baunotiz
+- **security: make UnifiedDB the only durable cognition memory** — `baunotiz-git-fbdb52def52ef8ecd4caaf17a901f86` · baunotiz
+- **go: preserve parallel fusion and UnifiedDB falsifier evidence** — `baunotiz-git-76b244ebb79e8dea2f5c0182c15741a` · baunotiz
 - **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-bauverlauf-14e0eb96c071e274d484` · baunotiz
 - **test: fence EntityOS child environment** — `baunotiz-git-68f95cc99b1ba0e85bdd7e1aa0a2830` · baunotiz
+- **receipt(go): fence Clerk reauth on current UnifiedDB identity** — `baunotiz-git-aed28862db14a25bb6374fdcf00f075` · baunotiz
+- **artifact: persist MicroClay retrieval policy and receipts in UnifiedDB** — `baunotiz-git-4091e168006877d583fcc443c1e4edb` · baunotiz
+- **artifact: converge Claude hooks on one UnifiedDB causal lifecycle** — `baunotiz-git-df4bff6a50b6da7fd5cba641969683e` · baunotiz
+- **artifact: bind Claude lifecycle hooks directly to UnifiedDB turns** — `baunotiz-git-d0c15f39a7e98ffa1bc16979f0a6331` · baunotiz
+- **artifact: persist active turn lifecycle in UnifiedDB schema v4** — `baunotiz-git-dcc9d73d8765d4d4cc7cbb5fefe2aab` · baunotiz
+- **artifact: bind interactive Claude turns to UnifiedDB via hooks** — `baunotiz-git-5b1153aa7dad1b80f081c43924f42a2` · baunotiz
 - **go: fuse final EntityOS + microVM authority into Fast Boot** — `baunotiz-bauverlauf-dfab39ac1ff2df8fa3db` · baunotiz
 - **docs(artefact): record EntityOS staging falsifier** — `baunotiz-git-5b69dfe0fd735ae0c286af68d4d00a1` · baunotiz
 - **receipt: bind EntityOS execution environment fence** — `baunotiz-git-64e09960524160086668c8968d5e5b8` · baunotiz
@@ -99,6 +157,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test: lesion EntityOS path after verification** — `baunotiz-git-0ae1209a7cb9ae9ad4870e193663d40` · baunotiz
 - **test: lock EntityOS-only effect boundary** — `baunotiz-git-a918604f99da68e64228975639ad99f` · baunotiz
 - **artifact: enforce EntityOS-only effect boundary** — `baunotiz-git-af62fa851d80cefc43f8c5b3bce101e` · baunotiz
+- **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-git-5de5f509e5425bb723ac153f9ee83b4` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-git-c6d8cc6de3bb6540a8eeb7d99b7a4c9` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-git-e612abc14cd5c6546f094537d8cd881` · baunotiz
@@ -130,44 +189,32 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **artifact: add fail-closed EntityOS readiness verification** — `baunotiz-git-c20357729729d90547e4a09f29f7aba` · baunotiz
 - **artifact: expose pinned EntityOS bridge through engine** — `baunotiz-git-41c105733d7a72057833c827fdf738a` · baunotiz
 - **artifact: add pinned EntityOS open-object bridge** — `baunotiz-git-8d9afe8c9ab6c1ef3295b62600fb4cf` · baunotiz
-- **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-git-3e34e5faeb06054651cc43ec4001c34` · baunotiz
-- **go: reenter mandatory EntityOS and microVM final boundary** — `baunotiz-git-29e7cf98698bc9f96d4d0a29e8abca6` · baunotiz
-- **receipt: preserve EntityOS unknown-outcome source-slice evidence** — `baunotiz-git-aa58c93d5483004015b8f9a407cfe9e` · baunotiz
-- **receipt: locked EntityOS transport retry rejected before Sandbox** — `baunotiz-git-18c834a10092fcb53e2be2771920351` · baunotiz
-- **evidence(go): record locked EntityOS transport retry blocker** — `baunotiz-git-d8f8cf0a9039d877abef14d0f0c6541` · baunotiz
-- **artifact: keep EntityOS execution behind explicit acceptance gate** — `baunotiz-git-3f7fb85b0b4e5606f5ff3b366d6bd17` · baunotiz
-- **ci: stage digest-bound EntityOS before OCI build** — `baunotiz-git-1037f17e43bf8a1de44b3732053226e` · baunotiz
-- **artifact: admit runtime policy and EntityOS lock inputs** — `baunotiz-git-101edc388415d0b9c9c14cf6a21efbf` · baunotiz
-- **receipt: persist denied-effect and EntityOS admission fusion** — `baunotiz-git-ca809956c34e34993d3342a138acd71` · baunotiz
-- **test: keep staged EntityOS non-executable until admission** — `baunotiz-git-3585b41bed07e7a1742ae114ccf1b5f` · baunotiz
-- **artifact: separate staged EntityOS verification from execution admission** — `baunotiz-git-32dddaa82ff0750d95efcbdfbfd3f31` · baunotiz
-- **manifest: align embedded EntityOS and build-context truth** — `baunotiz-git-e56456166ad6226a7f9a658afe724b8` · baunotiz
-- **test: route causal credit through admitted EntityOS effects** — `baunotiz-git-0d47a68de10773a9f566cf8066665aa` · baunotiz
-- **test: require journaled EntityOS effect fencing and recovery** — `baunotiz-git-f15243a3da89632072c3317516bda14` · baunotiz
-- **test: align EntityOS boundary with optional internal substrate** — `baunotiz-git-05a74acf8048a27963ceefb327db632` · baunotiz
-- **artifact: align image default with embedded EntityOS gate** — `baunotiz-git-8ffc8914e82a4c47742b3d9acc19563` · baunotiz
-- **artifact: keep staged EntityOS out of source history** — `baunotiz-git-0d944ee03a0c1b88d4bd94a3d3adb47` · baunotiz
-- **artifact: make internal EntityOS substrate optional by default** — `baunotiz-git-4c97835990884e14ee61105958e8467` · baunotiz
-- **manifest: require EntityOS image embedding not host mount** — `baunotiz-git-cb5e0d7c09666476af94b1ac66946c7` · baunotiz
-- **artifact: require pinned EntityOS bind mount in compose** — `baunotiz-git-576835a344ad98d410b5cb817702ef6` · baunotiz
-- **artifact: mark EntityOS transport candidate and remaining gate** — `baunotiz-git-431fed358058668013a90269de26078` · baunotiz
-- **test: lock stale-effect and EntityOS digest regressions** — `baunotiz-git-c470fbbe978bbfa78feb510c572ade9` · baunotiz
-- **artifact: fence effect completion and route pinned EntityOS** — `baunotiz-git-2567b7cc6d9349f4f50a59608b7892b` · baunotiz
-- **evidence(go): fuse canonical EntityOS wheel authority implementation** — `baunotiz-git-ce7e77b3502b3d4034bfd47966d8874` · baunotiz
-- **research(entityos): define package artifact-hash authority discriminator** — `baunotiz-git-5cca434e2159aa99cbc8167f66498f7` · baunotiz
-- **research(entityos): specify exact transitive version-lock candidate** — `baunotiz-git-defb2fb92027fbde392653fb9f03d01` · baunotiz
-- **research(entityos): bind transitive build dependency closure gap** — `baunotiz-git-55da00d97d6149e9fd010cadd038471` · baunotiz
-- **research(entityos): record attestation authority receipt binding gap** — `baunotiz-git-68685e808f9a0e4054cbf40b0e8f41d` · baunotiz
-- **clay go: bind EntityOS attested snapshot negative evidence** — `baunotiz-git-d2112702483a763e8e5b1e76b07d06b` · baunotiz
-- **README: Wortlaut auf ClayMachine als Projektname konsistent, Umbenennungshinweis (unifieddb-Repo -> ** — `baunotiz-bauverlauf-c4d985ce01476e7aaf82` · baunotiz
-- **go: fuse final EntityOS + microVM authority into Fast Boot** — `baunotiz-git-bd254c6e767eba208346a4dd7262cf1` · baunotiz
-- **docs(artefact): refresh go frontier after EntityOS source repair** — `baunotiz-git-116d00cfaa3d1d1aa0e66f693e590c8` · baunotiz
-- **receipt: bind stale EntityOS regression repair to current source** — `baunotiz-git-5970353679b4629611ad653436799c0` · baunotiz
-- **test: rejoin EntityOS boundary contract repair to current main** — `baunotiz-git-36bfc32e873b02296e5c438a29b5d3e` · baunotiz
-- **test: align EntityOS boundary regression with exec-disabled baseline** — `baunotiz-git-17b5f9fd1425b630ddd06f9481dd92d` · baunotiz
-- **artifact: stage EntityOS always but keep execution fail-closed** — `baunotiz-git-0c40b8599cebc05a4d2cffa2e0601b1` · baunotiz
+- **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
+- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
+- **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
+- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c710c5747d46afa5672d9906254b186` · baunotiz
+- **agentZero-Export 2026-08-18T16:41:05Z (Generation 105, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-4ba71efd8e86a862483f` · baunotiz
+- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-7e89a22950fe01ac8121c91d259d65a` · baunotiz
+- **agentZero-Export 2026-08-18T17:11:05Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-89328a4db9346d95c681` · baunotiz
+- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c9387825c64461cf8d082195c39ac44` · baunotiz
+- **agentZero-Export 2026-08-18T17:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-94c09645610ea18ae79d` · baunotiz
+- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-dd57045d635dc17839b3c8fa35cc0c5` · baunotiz
+- **agentZero-Export 2026-08-18T18:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc66dba04c3fa8515045` · baunotiz
+- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-ed2da57901096a55a716400a51cef24` · baunotiz
+- **agentZero-Export 2026-08-18T18:41:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-5b2057e1a9c2f3a7e7c0` · baunotiz
+- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-5691ee2588d50fe21b3963b155e3422` · baunotiz
+- **agentZero-Export 2026-08-18T19:11:06Z (Generation 106, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-8d5baefc96fed2024c31` · baunotiz
 
-## Kern / ohne Sphaere (157)
+## Kern / frank_v0_1 (6)
+
+- **neo_zero_characters.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+- **neo_zero_buildings.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+- **neo_zero_props.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+- **neo_zero_tiles.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+- **neo_zero_buildings_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+- **neo_zero_tiles_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
+
+## Kern / ohne Sphaere (142)
 
 - **SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay** — `global-SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AN` · bereich_global
 - **ClayCode protocol addendum — eight-branch mesh / UnifiedDB** — `triggers-CLAYCODE_EIGHT_BRANCH_UNIFIEDDB_ADD` · bereich_triggers
@@ -177,16 +224,13 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **NaN, infinities and signed zero require explicit ClayCode semantic and wire policies rather than acc** — `H-CC-F64SPECIAL-20260809-03` · hypothese
 - **Q23 fusion — scope-bound zero-copy, durable compact descriptor** — `trigger_runs-q23-q23-20260810T2242p0700-chat` · bereich_trigger_runs
 - **ZERO_COPY_PROXY_RESULTS.csv** — `trigger_runs-q23-q23-20260810T2242p0700-chat` · bereich_trigger_runs
+- **Atelier Zero** — `agentforge-skills_lib-design_systems-atelier` · quelldatei
+- **L.C.M.E. Quickstart: From Zero to Memory in 15 Minutes** — `lcme-docs-QUICKSTART.md` · quelldatei
 - **Hot Clay payloads should use typed shared-buffer/zero-copy carriers where target profiling proves be** — `F2-G11-010` · hypothese
-- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **Zero-copy/shared-buffer handles can remove a material serialization boundary on hot Clay paths.** — `H-G11-019` · hypothese
 - **Ownership/version synchronization costs dominate and erase zero-copy gains.** — `U1-H10` · hypothese
-- **Consistency should be operation-adaptive: critical exact reads can require zero lag while explorator** — `H-U2-F2-007` · hypothese
-- **A backend's disabled/armed state must be empirically classified; logging-off cannot be assumed zero-** — `H-SPAWN-EM-PROBE-04` · hypothese
-- **A truthful latent memory field can improve candidate availability without explicit retrieval if shuf** — `H-C7-016` · hypothese
-- **The current libmtmd encode-to-decode gap can host a synchronous zero-copy MVC/open-set gate that mat** — `H-Q23-ZC-001` · hypothese
-- **Selector/plan identity is a semantic dependency: a selector_hash/plan change must invalidate affecte** — `H-SPAWN-DELTA-005` · hypothese
 - **UnifiedDB Research Trigger Protocol** — `triggers-UNIFIED_DATABASE_RESEARCH_PROTOCOL.` · bereich_triggers
+- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **Grundlagen der UnifiedDB ausgewertet - die fehlende Voraussetzung gefunden** — `B27-2026-08-14T20-50-12-0000` · vorfall
 - **UnifiedDB Research Foundation — Unified Cognitive Database/Substrate** — `global-UNIFIED_DATABASE_RESEARCH_FOUNDATION.` · bereich_global
 - **UnifiedDB U2 — External Evidence Ledger** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
@@ -195,7 +239,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
 - **UnifiedDB Emergence Lab v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Lease-Fenced Projection Worker V1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
-- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
+- **Consistency should be operation-adaptive: critical exact reads can require zero lag while explorator** — `H-U2-F2-007` · hypothese
 - **KMP — Android R1 -> UnifiedDB feedback** — `KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB` · begriff
 - **KMP — Founding User Personal UnifiedDB** — `KMP-FOUNDING-USER-PERSONAL-UDB` · begriff
 - **UnifiedDB Segmented Pulse Maintenance S1 (SPM-S1)** — `runtime-UNIFIEDDB_SEGMENTED_PULSE_MAINTENANC` · bereich_runtime
@@ -210,7 +254,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **RAE_UNIFIEDDB_SCHEMA.sql** — `runtime-RAE_UNIFIEDDB_SCHEMA.sql` · bereich_runtime
 - **UnifiedDB Emergence Meter v0.3 — Adversarial Concordance Gate** — `trigger_runs-emergenz-20260809T204545p0700_u` · bereich_trigger_runs
 - **UnifiedDB — V4 Fixed-SQLite Process-Crash Composition** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
-- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **unifieddb_claygraph_retrieval_candidate.py** — `experiments-unifieddb_claygraph_retrieval-un` · bereich_experiments
 - **benchmark_unifieddb_claygraph_hotpaths.py** — `harness-reference-benchmark_unifieddb_claygr` · bereich_harness
 - **benchmark_unifieddb_compact_cache.py** — `harness-reference-benchmark_unifieddb_compac` · bereich_harness
@@ -262,47 +305,45 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB + ClayGraph hotpath iteration — 2026-08-10 07:11 +07:00** — `20260810T0711p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **UnifiedDB + ClayGraph deep fusion — 2026-08-10 07:50 +07:00** — `20260810T0750p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
 - **RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_ACCESS.sql** — `runtime-RAE_UNIFIEDDB_V13_CYCLE_PINNED_FLAT_` · bereich_runtime
+- **A backend's disabled/armed state must be empirically classified; logging-off cannot be assumed zero-** — `H-SPAWN-EM-PROBE-04` · hypothese
 - **UnifiedDB + ClayGraph Cross-Engine Benchmark Contract** — `unifieddb-UNIFIEDDB_CLAYGRAPH_CROSS_ENGINE_B` · bereich_unifieddb
 - **STORE ROLE MATRIX — deeper UnifiedDB delta run** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
 - **UnifiedDB + ClayGraph semantic-safety benchmark — 2026-08-10 07:18 +07:00** — `20260810T0718p0700_CHATGPT_UDB_GRAPH_SEMANTI` · forschungsergebnis
+- **A truthful latent memory field can improve candidate availability without explicit retrieval if shuf** — `H-C7-016` · hypothese
+- **The current libmtmd encode-to-decode gap can host a synchronous zero-copy MVC/open-set gate that mat** — `H-Q23-ZC-001` · hypothese
+- **Selector/plan identity is a semantic dependency: a selector_hash/plan change must invalidate affecte** — `H-SPAWN-DELTA-005` · hypothese
 - **Hyperposition — HyperMath Thin-Net / UnifiedDB Algebraic Preprocessor** — `trigger_runs-hyperposition-hyperposition-202` · bereich_trigger_runs
 - **UnifiedDB / Database Pulse — V3/V4 Swarm Delta** — `20260810T0745p0700_UNIFIEDDB_PULSE_V3_V4_SWA` · forschungsergebnis
+- **push: clay-unifieddb-backup** — `baunotiz-github-a2e8823cc950e806b70f` · baunotiz
 - **UnifiedDB + ClayGraph Retrieval Fusion — 2026-08-10** — `experiments-unifieddb_claygraph_retrieval-FU` · bereich_experiments
-- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
-- **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB + ClayGraph -> Possibility Preprocessor Fusion Handoff** — `20260810T0730p0700_CHATGPT_UNIFIEDDB_CLAYGRA` · forschungsergebnis
-- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB U11 — Proof-Carrying Associative Memory Fabric (PCAMF)** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
 - **UnifiedDB / Database Pulse — Adaptive Preprocessor + Maintenance Fusion** — `20260810T0740p0700_UNIFIEDDB_DATABASE_PULSE_` · forschungsergebnis
+- **A mechanism can be causally necessary in the pre-lesion state yet show near-zero chronic lesion effe** — `H-SPAWN-EM-02` · hypothese
 - **UnifiedDB Emergence Meter v0.2 Research Delta — OOD Robustness and Abstention** — `trigger_runs-emergenz-20260809T213500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Effect/Re-entry/Terminal Continuity Run** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
+- **A differential gate passing 200,576 requests with zero mismatches establishes that the evaluator imp** — `C-CLAYCODE-009` · gegenhypothese
 - **UnifiedDB Research Run U1 — Clay Unified Semantic Persistence Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T20` · bereich_trigger_runs
-- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB / Database Pulse — V1→V4 Iterative Build, Falsification and Fusion** — `20260810T0745p0700_CHATGPT_UNIFIEDDB_DATABAS` · forschungsergebnis
-- **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
-- **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **Linux and Android can share the same UnifiedDB semantics while using different physical placements a** — `H-U2-019` · hypothese
-- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
-- **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
-- **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
-- **Closed PF tree segment02a modified endpoint tail m062..m067 at immutable ref 0fd27f. 6/6 resolved, z** — `rooms-center_events-20260809T1434p0700_666_p` · bereich_rooms
 - **Emergenz × UnifiedDB Research Delta — Evidence-Preserving Mutation Meter v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
-- **Materialized exact head Git blob identities for PF tree segment02a modified paths m000..m031 at immu** — `rooms-center_events-20260809T1427p0700_666_p` · bereich_rooms
 - **UnifiedDB / Database Pulse — V5 lifecycle, model identity, integrity use-boundary delta** — `20260810T0750p0700_UNIFIEDDB_PULSE_V5_IDENTI` · forschungsergebnis
 - **UnifiedDB U2: CORF should model placement as independent runtime axes** — `KMP-U2-CPPF-FRANK` · begriff
-- **Truthful provenance-bound outcome re-entry causally improves downstream adaptive behavior; the causa** — `C-LOOPCORE-L0-001` · behauptung
-- **Segment01 modified_paths m064..m095 closed exactly: 32/32 immutable-head Git blob identities, zero m** — `rooms-center_events-20260809T1417p0700_666_p` · bereich_rooms
 - **UnifiedDB should initially be one typed logical query/transaction plane compiled onto specialized ph** — `F2-G11-004` · hypothese
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 0..31 at i** — `rooms-center_events-20260809T1402p0700_666_p` · bereich_rooms
+- **c6-groq-claylearn-zero-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **GWT experiments require UnifiedDB/COVE snapshot identity so control and lesion arms share compatible** — `H-G11-043` · hypothese
+- **c6-groq-claylearn-zero-correct-20260808T1750** — `runtime-tool_results-c6-groq-claylearn-zero-` · bereich_runtime
 - **UnifiedDB results require explicit admissibility class** — `KMP-U2-RESULT-ADMISSIBILITY` · begriff
 - **Edge deployments may keep vector/graph indexes physically separate while exposing the same UnifiedDB** — `H-G11-062` · hypothese
 - **Capability issuer/gateway, secret stores and high-blast-radius external effects remain physically is** — `F2-G11-016` · hypothese
-- **Zero-copy removes copies but not synchronization and coherence cost** — `KMP-HYP-ZEROCOPY-BOUNDARY-COST` · hypothese
 - **FRANK should consume operation-specific identity capsules over logical UnifiedDB** — `KMP-G11-MOSAIC-FRANK` · begriff
 - **ClayGraph is a specialized derived memory view inside logical UnifiedDB** — `KMP-G11-UNIFIEDDB-ROUTING` · begriff
-- **Separating visual state into four lifetimes prevents state amplification and stale-feature errors wh** — `H-Q23-CACHE-LIFETIME-01` · hypothese
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB physical placement is multi-axis, not monolith-vs-polystore** — `KMP-U2-PLACEMENT-LATTICE` · begriff
 - **UnifiedDB Research Run U2 — Causal Polyglot Placement Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
+- **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
+- **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **C7 keeps ClayGraph as specialized associative memory inside UnifiedDB** — `KMP-FRANK-C7-CLAYGRAPH-SPECIALIZED-ORGAN` · begriff
 - **Named-field lowering plus schema preflight reduces silent schema-drift corruption at evolving Unifie** — `H_CC_NAMED_20260809` · hypothese
 - **CACC utility adaptation should consume durable outcome/evaluation receipts through UnifiedDB but onl** — `H-U2-F2-008` · hypothese
@@ -310,13 +351,11 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB should unify semantics and planning before physical storage** — `KMP-G11-LOGICAL-PHYSICAL` · begriff
 - **The UnifiedDB planner should choose graph traversal only when relation evidence is needed rather tha** — `H-G11-040` · hypothese
 - **unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
+- **Titan-memory exact recursive structural denominator closed at 1969 files + 407 folders = 2376 units ** — `rooms-center_events-20260809T1242p0700_666_t` · bereich_rooms
 - **GWT causal attribution should bind UnifiedDB/MOSAIC basis and reader handoff** — `KMP-G11-WORKSPACE-BASIS` · begriff
 - **FRANK C7 consumes UnifiedDB as logical fabric, not mandatory physical monolith** — `KMP-FRANK-C7-LOGICAL-FABRIC` · begriff
 - **UnifiedDB U2: ClayGraph selection integrity and graph placement are separate from record truth** — `KMP-U2-SELECTION-PLACEMENT-CLAYGRAPH` · begriff
 - **Typed collection semantics can serve as a shared canonical contract across heterogeneous UnifiedDB b** — `H-CC12-012` · hypothese
-- **Fusion F5: UnifiedDB preserves collection algebra and canonical re-entry across adaptive placement** — `KMP-FUS-F5-C3F-UNIFIEDDB` · begriff
-- **FRANK_UNIFIEDDB_FEEDBACK.json** — `trigger_runs-unifieddb-unifieddb-20260810T23` · bereich_trigger_runs
-- **UnifiedDB default is canonical event spine plus replayable derived planes** — `KMP-UDB-U1-CANONICAL-SPINE` · begriff
-- **UnifiedDB should be a logical typed query/transaction fabric over specialized physical engines, not ** — `H-C7-011` · hypothese
-- **GWT experiments must independently pin or randomize UnifiedDB plan, ClayGraph activation, candidate ** — `H-C7-017` · hypothese
+- **Reconciled four newly assimilated PF lineages against current authoritative earned-work mappings. Dr** — `rooms-center_events-20260809T1250p0700_666_e` · bereich_rooms
 

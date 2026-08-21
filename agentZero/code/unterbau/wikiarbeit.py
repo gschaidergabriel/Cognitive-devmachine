@@ -142,6 +142,31 @@ def umgebung() -> dict:
     return d
 
 
+# ⭐⭐ 2026-08-21: WIE OFT DIE VERBINDUNG ERNEUERT WIRD -- und warum es das
+# ueberhaupt gibt.
+#
+# Gemessen an diesem Tag: der WAL der Herz-Datenbank stand bei **9,5 GB** neben
+# einer 4,8-GB-Datenbank, die Platte war auf 85 % und fiel weiter. Der
+# Rueckstell-Dienst lief alle 15 Minuten und meldete `"blockiert": 1` --
+# er kam nicht durch. Ein SQLite-WAL laesst sich nur zurueckschneiden, wenn
+# KEIN Leser mehr auf einem alten Schnappschuss sitzt.
+#
+# Der Leser war dieser Dienst: `cmd_lauf` oeffnete EINE Verbindung und lief
+# damit **1 Tag 18 Stunden** durch. Alles, was in dieser Zeit irgendwo sonst
+# geschrieben wurde, musste im WAL liegenbleiben. Beleg: im Moment des
+# Neustarts fiel der WAL von 9,5 GB auf 60 MB, die Platte von 85 % auf 80 %.
+#
+# Ein Neustart ist aber die Reparatur von Hand, nicht der Fix. Deshalb legt
+# der Dauerbetrieb seine Verbindung jetzt regelmaessig ab und neu an -- das
+# gibt den Schnappschuss frei, ohne die Arbeit zu unterbrechen.
+#
+# 300 s, weil der Rueckstell-Zeitgeber alle 15 Minuten laeuft: so liegen in
+# jedem seiner Fenster mindestens zwei Gelegenheiten, in denen dieser Dienst
+# keinen alten Schnappschuss haelt. Kuerzer waere Verschwendung (jedes
+# Oeffnen kostet), laenger liesse wieder eine Luecke.
+VERBINDUNG_ERNEUERN_S = 300.0
+
+
 def oeffne() -> sqlite3.Connection:
     c = sqlite3.connect(DB, timeout=60)
     c.row_factory = sqlite3.Row
@@ -734,7 +759,23 @@ def cmd_lauf(a) -> None:
           + ", ".join(f"{k}->{v}" for k, v in MODELL_JE_ART.items())
           + f". Heute schon {heute_verbraucht(c)} Anfragen.", flush=True)
 
+    letzte_verbindung = time.monotonic()
+
     while _laeuft and getan < grenze:
+        # Siehe VERBINDUNG_ERNEUERN_S: den Lese-Schnappschuss freigeben, damit
+        # der WAL zurueckgeschnitten werden kann. commit() zuerst -- eine offene
+        # Transaktion beim Schliessen zu verlieren waere ein stiller Datenverlust
+        # und damit schlimmer als der WAL, den wir hier verhindern.
+        if time.monotonic() - letzte_verbindung > VERBINDUNG_ERNEUERN_S:
+            try:
+                c.commit()
+                c.close()
+            except Exception as e:
+                print(f"wikiarbeit: Verbindung schliessen misslang: "
+                      f"{type(e).__name__}: {e}", flush=True)
+            c = oeffne()
+            letzte_verbindung = time.monotonic()
+
         arten = freie_arten(c)
         if not arten:
             v = heute_verbraucht(c)

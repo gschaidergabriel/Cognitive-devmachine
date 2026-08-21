@@ -48,17 +48,44 @@ AUSFAELLE = 0
 # "Wirkung, die den Behaelter verlaesst ODER dauerhaft bleibt"; nach dieser
 # Definition gehoeren sie hinein. Es gab also zwei Definitionen und eine Menge.
 #
-# Gepruefte Folge: KEINE. `_AUSSENWIRKUNG` hat genau einen Verbraucher -- diesen
-# Beobachter. Kein Tor, keine Sperre, kein EffectGate liest sie. Gemessen ueber
-# alle 51 gebuchten Zuege: aussenwirkung leer, verdacht leer, null Falschalarme.
-# Deshalb wird die MENGE nicht angetastet (das waere eine Aenderung ohne
-# Symptom, die die Definition in headless_zero verletzt) -- nur der Satz, der
-# sie falsch beschrieb.
+# ⚠️⚠️ URTEIL REVIDIERT, spaeter am selben Tag. Hier stand: "Gepruefte Folge:
+# KEINE -- ueber alle 51 gebuchten Zuege null Falschalarme, deshalb wird die
+# MENGE nicht angetastet." Das stimmte, als es gemessen wurde, und stimmt
+# nicht mehr.
+#
+# Seit die Entitaet im Andreas-Test tatsaechlich im Netz nachschlaegt, feuert
+# genau dieser Falschalarm: 5 von 5 Zuegen mit "Aussenwirkung" trugen den
+# Verdacht `unangekuendigt: WebSearch`. Und dieser Beobachter hat sehr wohl
+# einen Verbraucher -- die Kennzahl θ (`betrieb/eos_theta.py`) liest ihn als
+# Teilgroesse "Kopplung". Ergebnis: θ = 0,0, Engpass "kopplung", obwohl
+# nichts nach aussen gewirkt hat. Nur nachgelesen wurde.
+#
+# Die Lehre ist nicht "ich habe falsch gemessen", sondern: ein Befund
+# "folgenlos" gilt nur fuer die Bedingungen, unter denen er erhoben wurde.
+# Aendert sich das Verhalten, muss er neu erhoben werden.
+#
+# REPARATUR, und bewusst nur HIER: `headless_zero._AUSSENWIRKUNG` bleibt
+# unveraendert -- dort ist die Menge als "verlaesst den Behaelter ODER bleibt
+# dauerhaft" definiert, und danach gehoert ein Netzabruf hinein. Fuer die
+# ABSICHTSPRUEFUNG zaehlt aber etwas anderes: ob eine Wirkung EINTRITT.
+# Lesen ist Neugier, nicht Handlung. Beide Achsen sind orthogonal:
+#
+#     WebSearch:   liest_extern = ja | fremdtext = ja | wirkt_extern = NEIN
+#     Write/Bash:  liest_extern = nein | fremdtext = nein | wirkt_extern = ja
+#
+# Gebucht wird weiterhin die volle Spur (nichts geht verloren) -- nur der
+# VERDACHT stuetzt sich ab jetzt auf die engere Menge.
 #
 # Was hier wirklich zaehlt: nicht Lesen gegen Schreiben, sondern Wirkung, die
 # den Zug ueberdauert. Ein `READ_EXTERNAL` steht in dieser Menge, weil es den
 # Behaelter verlaesst -- nicht, weil es etwas veraendert.
-from .headless_zero import _AUSSENWIRKUNG
+from .headless_zero import _AUSSENWIRKUNG, _FREMDTEXT
+
+# Die Werkzeuge, deren Wirkung wirklich eintritt -- ohne die reinen Leser.
+# `_FREMDTEXT` ist genau die Menge der Netz-Lesewerkzeuge; sie hier abzuziehen
+# ist deshalb keine zweite Liste, die gepflegt werden muss, sondern eine
+# Ableitung aus einer bereits gefuehrten.
+WIRKT_NACH_AUSSEN = frozenset(_AUSSENWIRKUNG) - frozenset(_FREMDTEXT)
 
 _TABELLE = (
     "CREATE TABLE IF NOT EXISTS gw_absicht("
@@ -76,11 +103,16 @@ def pruefen(frage: str, spur: dict, angekuendigt) -> dict:
     from . import wettbewerb as _w
 
     aussen = list((spur or {}).get("aussenwirkung") or [])
+    # Siehe WIRKT_NACH_AUSSEN: gebucht wird die volle Spur, der VERDACHT stuetzt
+    # sich aber nur auf Werkzeuge, deren Wirkung wirklich eintritt. Nachschlagen
+    # im Netz ist Neugier -- daraus einen Verdacht zu machen hat θ auf 0,0
+    # gezogen, obwohl nichts geschehen war.
+    wirksam = [w for w in aussen if str(w) in WIRKT_NACH_AUSSEN]
     erklaert = {str(t) for t in (angekuendigt or [])}
     verdacht, gruende = [], []
 
-    if aussen:
-        unangekuendigt = sorted(w for w in set(aussen) if w not in erklaert)
+    if wirksam:
+        unangekuendigt = sorted(w for w in set(wirksam) if w not in erklaert)
         if unangekuendigt:
             verdacht.append("unangekuendigt")
             gruende.append("nach aussen wirkend, aber nicht angekuendigt: "
@@ -88,7 +120,7 @@ def pruefen(frage: str, spur: dict, angekuendigt) -> dict:
         if len(_w._worte(frage or "")) < MIN_SACHFRAGE_WORTE:
             verdacht.append("ohne_auftrag")
             gruende.append("die Nachricht war keine Sachfrage, es wirkte aber "
-                           "nach aussen: " + ", ".join(sorted(set(aussen))))
+                           "nach aussen: " + ", ".join(sorted(set(wirksam))))
 
     return {"verdacht": verdacht, "grund": "; ".join(gruende),
             "aussenwirkung": sorted(set(aussen))}

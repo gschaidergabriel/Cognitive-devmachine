@@ -398,7 +398,38 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
         # Kandidat fuer Kandidat entscheiden.
         # Drei absolute Huerden: Passung zur Frage, Mindestwert, und EIGENER
         # Beitrag. Die dritte schliesst das Echo aus.
-        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= BODEN and eig >= _EIGEN_MIN)
+        # ⭐⭐ VIERTE HUERDE, 2026-08-21: bei einer Frage mit weniger als
+        # MIN_GEDECKT Inhaltswoertern muss das eine Wort SELTEN sein.
+        #
+        # Die Deckungshuerde in `relevanz()` greift nur bei Fragen MIT
+        # mindestens MIN_GEDECKT Woertern -- eine Einwortfrage lief daran
+        # vorbei und kam auf relevanz 1,0. Gemessen: "hallo" strahlte
+        # `Project-Frankenstein-personality-t` aus, "ok, passt so." gleich
+        # drei Stellen. Blosse Hoeflichkeit zuendete den Arbeitsraum, obwohl
+        # derselbe Versuch frueher 3/3 OHNE Zuendung ergeben hatte.
+        #
+        # Einwortfragen ganz zu verbieten waere zu grob -- "wegehierarchie?"
+        # ist legitim. Der Unterschied ist nicht die ANZAHL, sondern die
+        # SELTENHEIT: genau die Groesse, die dieses Modul ohnehin fuehrt.
+        #
+        # ⚠️ Die Regel steht HIER und nicht in `relevanz()`. Ein erster Versuch
+        # dort brach vier Tests -- zu Recht: `relevanz` misst die WORTDECKUNG
+        # und wird genau dafuer geprueft. Eine Zuendbedingung in eine
+        # Messfunktion zu legen macht beide unpruefbar.
+        #
+        # IDF_LERN_MIN ist bewusst wiederverwendet: dieselbe Schwelle
+        # entscheidet schon, welche Woerter eine Lehre tragen duerfen. Zwei
+        # Begriffe von "selten" im selben Modul waeren einer zu viel.
+        #
+        # Ohne Seltenheitstabelle wird NICHT gezuendet -- fehlende Information
+        # ist kein Freibrief. Dieselbe Regel wie UNBEKANNT != ERFUELLT im
+        # Weckvertrag.
+        selten_genug = True
+        if len(fw) < MIN_GEDECKT:
+            selten_genug = bool(fw) and max(
+                (idf or {}).get(w, 0.0) for w in fw) >= IDF_LERN_MIN
+        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= BODEN
+                                  and eig >= _EIGEN_MIN and selten_genug)
         raus.append(k)
     # Bei Gleichstand entscheidet die Abrufreihenfolge -- als STICHENTSCHEID,
     # nicht als Anteil am Wert (siehe Kopf).

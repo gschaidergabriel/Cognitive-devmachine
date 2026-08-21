@@ -2,32 +2,40 @@
   "schema_version": "1.0",
   "run_id": "20260821T2129p0700-go-autonomy-dispatch-reserved-namespace",
   "routing_mode": "TARGETED_BY_SEMANTIC_AND_WORK_DEPENDENCY",
-  "joined_main_before_write": "3a15f423e90ffdee0f518e6cdb015445f50669ed",
+  "joined_main_before_write": "c89af32407ee5ddee2e0404c1e93abd3f40dc887",
   "trigger": "go",
   "unusual_experiment": {
     "state": "COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT",
     "executed_count": 0,
-    "reason": "Trigger identity available to this organ is minute-precision only and has no immutable shared request/turn id."
+    "reason": "Trigger identity available to this organ is minute-precision only and has no immutable shared request/turn id. Deterministic regressions below are ordinary validation, not the globally limited unusual experiment."
   },
   "finding": {
     "novelty": "CONTRADICTS",
-    "claim": "A validation miss inside the reserved __CLAY_AUTONOMY_DISPATCH__: terminal transport namespace could be misclassified as ordinary human UserPromptSubmit input.",
-    "mechanism": "consume_dispatch_prompt historically returned None for malformed, missing/replayed, wrong-nonce and expired reserved markers; terminal_hooks.user_prompt interprets None as the human path. That can create false human-hook provenance and contaminate AutonomyPulse human-roundtrip attestation.",
+    "claim": "The autonomous terminal dispatch namespace had two provenance/transport weaknesses: rejected reserved markers could fall through as human UserPromptSubmit, and the final tmux autonomy sender accepted arbitrary printable text instead of only the one-shot token it claimed to carry.",
+    "mechanism": "consume_dispatch_prompt historically returned None for malformed, missing/replayed, wrong-nonce and expired reserved markers; terminal_hooks.user_prompt interprets None as the human path. Separately, TerminalSessionManager.dispatch_autonomy_prompt accepted arbitrary printable ASCII up to 256 chars. Together these leave an avoidable path for synthetic input to be misclassified or injected outside the exact dispatch-token contract.",
     "candidate_pr": 722,
-    "candidate_code_blob": "935ed3bec81a634e923fdcbae02667a0adbae9c8",
+    "candidate_head": "b6711b360119dd4bd2e3f9a25bade7cb1c0a5b7b",
+    "candidate_dispatch_blob": "935ed3bec81a634e923fdcbae02667a0adbae9c8",
+    "candidate_terminal_transport_blob": "6eb2f2fa4ff209f07a1d5bf1bcadfd09064b55ed",
     "candidate_integration_test_blob": "3399c6177a3e5031d714c621af952c139d39a337",
-    "evidence_class": "MECHANISM_SUPPORTED_EXACT_CODE_BLOB_SOURCE_SLICE_PLUS_SOURCE_INTEGRATION_FALSIFIER",
+    "candidate_terminal_test_blob": "c8e4d679730614e1fa713601a6792bd23ffad4ea",
+    "evidence_class": "MECHANISM_SUPPORTED_BOUNDED_DETERMINISTIC_SOURCE_SLICES_PLUS_SOURCE_INTEGRATION_FALSIFIERS",
     "evidence": [
-      "Exact candidate code blob reproduced by git hash-object and py_compile in an isolated non-production source slice.",
-      "Five direct namespace mechanism cases passed in the exact code-blob source slice: ordinary non-prefixed, malformed, missing/replay, wrong nonce and expired.",
-      "GitHub Actions run 32493070380 job 96805028454 had runner_id=0 and steps=null, therefore zero test/runtime credit and no ClayVerse semantic failure.",
-      "A source-level integration regression now drives malformed/wrong/expired/replayed markers through terminal_hooks.user_prompt and requires zero new turns/workspace/causal episodes plus zero AutonomyPulse human-attestation credit. It has syntax/blob identity evidence but not full-checkout execution credit."
+      "Five direct consume-side namespace cases passed in an isolated source slice: ordinary non-prefixed, malformed, missing/replay, wrong nonce and expired.",
+      "Seven final-transport decision cases passed in an isolated source slice: one exact token admitted and six malformed/non-token forms rejected before tmux.",
+      "The hook/pulse source regression requires malformed/wrong/expired/replayed markers to create zero new canonical turn/workspace/causal artifacts and zero human-roundtrip attestation credit.",
+      "The terminal transport source regression requires only exact DISPATCH_PREFIX + 32 lowercase hex to reach tmux send-keys.",
+      "GitHub Actions runs 32493070380/96805028454 and 32493928244/96807778324 both ended before any visible step; zero pytest/runtime credit and no ClayVerse semantic failure.",
+      "Authorized Daytona plugin discovery in this interface returned no installable plugin; VPS/self-hosted/production testing was not used."
     ]
   },
   "hypofusion": {
-    "strongest_counterhypothesis": "A rejected reserved marker is harmless because no stored autonomy instruction is exposed.",
-    "assessment": "Rejected for the provenance boundary: the dangerous effect is synthetic-as-human classification, not instruction disclosure. A second residual counterhypothesis remains that packaged Claude hook transport transforms the marker before parser entry; that requires exact packaged-runtime evidence.",
-    "falsifier": "Run exact private full-checkout dispatch + terminal hook + pulse adjacency and inject malformed, wrong, expired and replayed reserved markers. Require zero new canonical human turn/workspace/causal episode and AutonomyPulse._has_human_roundtrip_after == false; then repeat through the packaged managed Claude hook path."
+    "strongest_counterhypotheses": [
+      "A rejected reserved marker is harmless because no stored autonomy instruction is exposed.",
+      "Consume-side fail-closed handling is sufficient, so constraining the tmux sender duplicates policy and adds no safety."
+    ],
+    "assessment": "Both are rejected at their respective boundaries. The first misses provenance poisoning: synthetic-as-human classification itself is the defect. The second misses defense-in-depth at the final synthetic-input surface: a method documented as one-shot-token transport should not be a generic printable-text injector. A residual packaged-runtime hypothesis remains that Claude hook transport may transform the token before parser entry.",
+    "falsifier": "Run exact private full-checkout dispatch + terminal transport + terminal hook + pulse adjacency. Inject malformed, wrong, expired and replayed markers; require zero canonical human artifacts/attestation. Exercise the final tmux sender with arbitrary printable text; require rejection before send-keys. Then repeat the accepted/rejected token path through the packaged managed Claude hook transport."
   },
   "routes": [
     {
@@ -35,8 +43,8 @@
       "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
       "urgency": "NEXT_CHECKPOINT",
       "decision": "ADOPT",
-      "summary": "Treat autonomous terminal dispatch prefix values as a reserved fail-closed transport namespace. Preserve ordinary non-prefixed human input while refusing malformed/stale/replayed synthetic markers before human provenance can be minted.",
-      "required_revalidation": "Exact full-checkout hook/pulse adjacency, then packaged Claude-hook runtime transport; do not promote from source-only evidence.",
+      "summary": "Reserve the autonomous terminal namespace end-to-end: only exact one-shot tokens may be injected by the tmux autonomy sender, and any reserved-marker validation failure must abort before human provenance is minted.",
+      "required_revalidation": "Exact full-checkout transport/hook/pulse adjacency, then packaged Claude-hook runtime transport; do not promote from bounded source-slice evidence.",
       "requires_reply_or_observable_action": false
     },
     {
@@ -44,14 +52,14 @@
       "message_kind": "MATERIAL_DELTA_PLUS_COUNTER_CHALLENGE",
       "urgency": "BEFORE_PROMOTION",
       "decision": "ADOPT",
-      "summary": "Retained implementation lane contains the minimal reserved-namespace repair, focused parser regressions, an evidence addendum, and the hook/pulse adjacency falsifier. No competing active implementation PR was found in the autonomy search performed during this go.",
-      "required_revalidation": "Before promotion, refresh current main, preserve one retained lane, execute exact private full-checkout tests, then rebind exact head and adjacent runtime evidence.",
+      "summary": "Retained implementation lane now contains consume-side fail-closed handling, final tmux token-shape enforcement, focused tests, hook/pulse integration falsifier, transport test contract, README delta and bounded receipts. No competing active autonomy implementation lane was found during this go.",
+      "required_revalidation": "Refresh current main, keep one retained lane, execute exact private full-checkout tests, then bind packaged runtime evidence before promotion.",
       "requires_reply_or_observable_action": false,
       "delivery": {
         "status": "DELIVERED_BY_CANONICAL_PR_BRANCH_DELTA",
         "channel": "github_pr_branch_commits",
-        "head_after_integration_falsifier": "19d3ac5d4dd57f5fd479089d1cd74c9eb81db525",
-        "note": "No external feedback comment was needed, so no claim-before-external-effect route was created. Delivery itself grants no causal or runtime credit."
+        "head_after_transport_fence": "b6711b360119dd4bd2e3f9a25bade7cb1c0a5b7b",
+        "note": "No external feedback comment was needed. Delivery itself grants no causal or runtime credit."
       }
     }
   ],
@@ -59,8 +67,8 @@
   "causal_credit": "NONE_FROM_DELIVERY_ALONE",
   "nonclaims": [
     "No exact private full-checkout pytest PASS.",
-    "No packaged Claude-hook integration PASS.",
-    "No OCI or microVM runtime credit.",
+    "No executed packaged Claude-hook integration PASS.",
+    "No exact OCI or microVM runtime credit.",
     "No whole-product PASS."
   ]
 }

@@ -1,6 +1,6 @@
 # EntityOS -- Architekturskizze
 
-**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T07:20:30Z aus dem gemessenen
+**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T07:50:33Z aus dem gemessenen
 Zustand auf `frank-api`. Eine handgepflegte Skizze weicht nach zwei Wochen vom Code
 ab und luegt dann still; diese kann das nicht, weil sie bei jedem Lauf neu aus Code,
 Datenbank und laufenden Diensten entsteht.
@@ -37,17 +37,17 @@ flowchart TD
 
 | | |
 |---|---|
-| Produktmodule | 60 Dateien, 18175 Zeilen |
-| Testdateien | 168 |
+| Produktmodule | 61 Dateien, 18680 Zeilen |
+| Testdateien | 169 |
 | Tabellen in der UnifiedDB | 138 |
-| Artikel im Korpus | 18437 |
-| Kanten | 119357 |
+| Artikel im Korpus | 18442 |
+| Kanten | 119739 |
 | Lesarten | 22567 |
-| Zuege von Zero | 1030 |
+| Zuege von Zero | 1078 |
 | Wirkungen durch das Tor | 9 |
-| Abrufepisoden | 515 |
+| Abrufepisoden | 539 |
 | gelernte Eintrittspunkte | 27 |
-| Entitaetsgeneration | 232 |
+| Entitaetsgeneration | 233 |
 
 ## Laufende Clay-Dienste
 

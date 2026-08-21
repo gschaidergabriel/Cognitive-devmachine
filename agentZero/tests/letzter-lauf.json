@@ -1,10 +1,11 @@
 {
-  "commit": "f702cc24f",
-  "erzeugt": "2026-08-21T07:21:09Z",
-  "gruen": 937,
+  "commit": "7d88fb7b5",
+  "erzeugt": "2026-08-21T07:52:28Z",
+  "gruen": 945,
   "hinweis": "Rote Tests werden NICHT durch Abschwaechen gruen gemacht. Wo ein Test auf etwas Echtes zeigt, bleibt er rot, bis die Sache behoben ist.",
-  "rot": 1,
+  "rot": 2,
   "rote_tests": [
-    "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"
+    "tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated",
+    "tests/test_terminal_ws_auth_lease_protocol.py::test_same_clerk_session_can_refresh_and_continue_pty_input"
   ]
 }

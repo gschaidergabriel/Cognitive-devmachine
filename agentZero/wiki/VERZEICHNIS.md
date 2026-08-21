@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T07:20:30Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T07:50:33Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 695 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2734 Artikel, 1539 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 693 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2728 Artikel, 1537 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -77,8 +77,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-bauverlauf-a769c7cb4251dd7fc691` · baunotiz
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-bauverlauf-149b5825ec3e9860e2a5` · baunotiz
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-bauverlauf-267962836d965966137a` · baunotiz
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
 - **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
@@ -92,8 +92,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: update EntityOS completion assessment** — `bau-agentzero-export-3488f45d776e` · bau
 - **agentZero research: index EntityOS completion assessment** — `bau-agentzero-export-e12a81473a25` · bau
 - **agentZero research: EntityOS re-evaluation generation 32** — `bau-agentzero-export-4d6d0bada8a8` · bau
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `bau-entityos-ca5149c807cb` · bau
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `bau-entityos-1fa4e2d9c80f` · bau
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-git-ca5149c807cba55e36930d9e5630dbd` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
@@ -133,14 +133,14 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **artifact: bind Claude lifecycle hooks directly to UnifiedDB turns** — `baunotiz-git-d0c15f39a7e98ffa1bc16979f0a6331` · baunotiz
 - **artifact: persist active turn lifecycle in UnifiedDB schema v4** — `baunotiz-git-dcc9d73d8765d4d4cc7cbb5fefe2aab` · baunotiz
 - **artifact: bind interactive Claude turns to UnifiedDB via hooks** — `baunotiz-git-5b1153aa7dad1b80f081c43924f42a2` · baunotiz
+- **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
-- **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
+- **unifieddb: die Datenbank mit Wiki, Graph, Suche, Pflege, Karte und Abruf als ein Werkzeug** — `baunotiz-bauverlauf-be7e59e39ad3b1f4ec8c` · baunotiz
 - **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-bauverlauf-14e0eb96c071e274d484` · baunotiz
 - **test: fence EntityOS child environment** — `baunotiz-git-68f95cc99b1ba0e85bdd7e1aa0a2830` · baunotiz
-- **unifieddb: die Datenbank mit Wiki, Graph, Suche, Pflege, Karte und Abruf als ein Werkzeug** — `baunotiz-bauverlauf-be7e59e39ad3b1f4ec8c` · baunotiz
 - **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
@@ -181,6 +181,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test: lock EntityOS-only effect boundary** — `baunotiz-git-a918604f99da68e64228975639ad99f` · baunotiz
 - **artifact: enforce EntityOS-only effect boundary** — `baunotiz-git-af62fa851d80cefc43f8c5b3bce101e` · baunotiz
 - **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `baunotiz-bauverlauf-0fed3dc34a4061d6716d` · baunotiz
+- **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-git-5de5f509e5425bb723ac153f9ee83b4` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-git-c6d8cc6de3bb6540a8eeb7d99b7a4c9` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-git-e612abc14cd5c6546f094537d8cd881` · baunotiz
@@ -203,7 +204,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **artifact: causally record unavailable EntityOS effect denials** — `baunotiz-git-865c3a1f52694f98e28465147351c9b` · baunotiz
 - **artifact: add digest-bound EntityOS image staging** — `baunotiz-git-ef5324eded2f80475caec8f6588f268` · baunotiz
 - **test: specify fail-closed EntityOS boot binding** — `baunotiz-git-dd1ef850203471d13626c56c2a4ff4a` · baunotiz
-- **artifact: bind EntityOS boot provenance in manifest** — `baunotiz-git-e2984dfe7a362c935dc6e340c121ec9` · baunotiz
 
 ## Kern / frank_v0_1 (6)
 

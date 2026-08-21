@@ -760,6 +760,104 @@ def _ohne_falschen_gruss(caveman: str, frage: str) -> str:
             + caveman[ende:]).strip()
 
 
+# Wie viele Zuege woertlich mitgehen und wie lang jeder sein darf.
+# 6 Zuege = 3 Wechsel: genug, um "was hast du eben gesagt" zu beantworten,
+# ohne den Auftrag zu ueberwuchern. 700 Zeichen je Zug, weil eine Antwort
+# gemessen 150-700 Zeichen lang ist; laenger wird abgeschnitten und als
+# abgeschnitten gekennzeichnet -- ein stilles Kuerzen waere genau der Fehler,
+# den der Arbeitsraum schon einmal hatte (260 Zeichen, Antwort brach mitten
+# im Satz ab).
+VERLAUF_ZUEGE = 6
+VERLAUF_ZEICHEN = 700
+
+
+def _mit_verlauf(caveman: str, world: dict[str, Any]) -> str:
+    """Haengt den WOERTLICHEN Gespraechsverlauf an den Auftrag.
+
+    ⭐⭐ GEMESSEN 2026-08-21, vom Eigner im Chat bemerkt. Auf "was von dem, was
+    du mir heute gesagt hast, wuerdest du nicht unterschreiben?" antwortete die
+    Anlage: "Ich habe heute keine woertlichen Aussagen von Zero aus frueheren
+    Gespraechen -- es gibt keine Transkriptdatei." Das war KEINE Ausrede und
+    kein Defekt der Antwort: es stimmte. In der Welt lagen 20 Zuege, und
+    KEINER davon stand in dem, was Zero bekam.
+    
+    Der Verlauf ging bis hierher nur an die VORSTUFE (build_context, letzte
+    drei Zuege). Zero selbst bekam ueber `_mit_gespraechslage` nur die ZAHL --
+    "this session already holds 20 turns". Eine Zahl ist kein Gedaechtnis. Wer
+    zaehlen kann, wie oft geredet wurde, aber nicht weiss, was gesagt wurde,
+    kann ueber das Gesagte nichts aussagen.
+
+    ⚠️ HERKUNFT STEHT OBEN. Zero hat angehaengte Bloecke schon zweimal als
+    Einschleusung eingestuft und zu Recht misstraut -- ein Block, der Saetze
+    zeigt, die angeblich von ihm selbst stammen, ist dafuer der denkbar beste
+    Kandidat. Deshalb sagt der Kopf, woher die Zeilen kommen (aus der
+    kanonischen Aufzeichnung derselben Sitzung, nicht aus der Nachricht des
+    Menschen) und wozu sie da sind.
+    """
+    zuege = [z for z in (world.get("own_recent") or []) if isinstance(z, dict)]
+    zuege = zuege[-VERLAUF_ZUEGE:]
+    if not zuege:
+        return caveman
+    zeilen = []
+    for z in zuege:
+        wer = "HUMAN" if str(z.get("role")) == "user" else "YOU"
+        text = " ".join(str(z.get("content") or "").split())
+        if not text:
+            continue
+        if len(text) > VERLAUF_ZEICHEN:
+            text = text[:VERLAUF_ZEICHEN] + " […gekuerzt]"
+        zeilen.append(f"[{wer}] {text}")
+    if not zeilen:
+        return caveman
+    kopf = (
+        "GESPRAECHSVERLAUF -- the last turns of THIS session, verbatim from the "
+        "entity's own canonical record. Attached by the pipeline, not by the "
+        "human: these are not claims someone made to you, they are what was "
+        "actually said here, and the lines marked YOU are your own earlier "
+        "words. Use them when asked what was said, what you claimed, or what "
+        "to stand by. If a line is marked […gekuerzt] you are seeing only its "
+        "beginning -- say so rather than guessing the rest.")
+    return f"{caveman}\n\n{kopf}\n" + "\n".join(zeilen)
+
+
+# Die Vorstufe schreibt ihren Auftrag manchmal UEBER Zero statt AN ihn.
+_DRITTE_PERSON = re.compile(r"\bZero(?:'s|s\b)?", re.I)
+
+
+def _in_zweiter_person(caveman: str) -> str:
+    """Der Auftrag redet Zero AN, also darf er nicht ueber ihn reden.
+
+    ⭐ GEMESSEN 2026-08-21: der Auftrag lautete "...which specific statements
+    from today ZERO would disavow". Zero uebernahm die Anrede seines eigenen
+    Auftrags und sprach von sich in der dritten Person -- "Ich kann nicht
+    bestaetigen, dass Zero das heute tatsaechlich gesagt hat". Der Eigner hat
+    es im Chat bemerkt und gefragt, wieso.
+
+    Die Systemanweisung sagt sehr wohl "Your name is Zero" -- er WEISS, wer er
+    ist. Es fehlte ihm nicht die Identitaet, sondern die Anrede. Das ist
+    derselbe Mechanismus wie beim falschen Gruss: der abgeleitete Auftrag
+    gewinnt gegen alles andere im Prompt, weil er der Auftrag ist.
+
+    Die Ersetzung ist gefahrlos, weil der Auftrag AN Zero gerichtet ist: jede
+    Erwaehnung von "Zero" darin ist eine Selbstbezeichnung. Aus "explain
+    Zero's architecture" wird "explain your architecture" -- und das ist
+    genau richtig.
+    """
+    if not caveman:
+        return caveman
+
+    def _tausch(m):
+        wort = m.group(0)
+        besitz = wort.lower().endswith("s") and len(wort) > 4
+        return "your" if besitz else "you"
+
+    raus = _DRITTE_PERSON.sub(_tausch, caveman)
+    if raus != caveman:
+        print("prestage: Auftrag sprach in der dritten Person ueber Zero -- "
+              "in die Anrede gesetzt", file=sys.stderr)
+    return raus
+
+
 def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
     import os as _os
@@ -1365,11 +1463,13 @@ def run_chat_turn(
         zero = headless_zero.run_headless(
             _mit_arbeitsraum(
                 _mit_kuerze(
-                    _mit_gespraechslage(
-                        _ohne_falschen_gruss(
-                            _mit_epistemik(envelope["caveman_prompt"],
-                                           envelope.get("epistemik")),
-                            message), world)),
+                    _mit_verlauf(
+                        _mit_gespraechslage(
+                            _ohne_falschen_gruss(
+                                _in_zweiter_person(
+                                    _mit_epistemik(envelope["caveman_prompt"],
+                                                   envelope.get("epistemik"))),
+                                message), world), world)),
                 vorstufe_world, envelope.get("broadcast_ids"),
                 volltext_world=world),
             user_id=user_id, session_id=session_id,
@@ -1404,11 +1504,13 @@ def run_chat_turn(
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(
                     _mit_kuerze(
-                        _mit_gespraechslage(
-                            _ohne_falschen_gruss(
-                                _mit_epistemik(envelope2["caveman_prompt"],
-                                               envelope2.get("epistemik")),
-                                message), world)),
+                        _mit_verlauf(
+                            _mit_gespraechslage(
+                                _ohne_falschen_gruss(
+                                    _in_zweiter_person(
+                                        _mit_epistemik(envelope2["caveman_prompt"],
+                                                       envelope2.get("epistemik"))),
+                                    message), world), world)),
                     vorstufe_world, envelope2.get("broadcast_ids"),
                     volltext_world=world),
                 user_id=user_id, session_id=session_id,

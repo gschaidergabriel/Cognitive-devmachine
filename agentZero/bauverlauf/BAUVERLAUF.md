@@ -1,12 +1,31 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T07:20:30Z. 1033 Commits aus vier Repos, davon 388 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T07:50:34Z. 1036 Commits aus vier Repos, davon 389 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen
+
+`abdf357f66b6` · entityos · 07:43 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_verlauf.py
+
+Zeit: 2026-08-21T07:43:28+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 07:05:54 +0000 — entityos: 1 Aenderungen
 
@@ -3149,31 +3168,5 @@ Ausserdem: Zeros erste eigene Veroeffentlichung ist live. Er fand auf der
 Startseite von seimensch.net den Platzhalter `ZVR ___`, prueft 61 Fundstellen,
 sortierte 51 Binaer-Fehltreffer aus, liess den Demo-Baustein bewusst stehen und
 aenderte genau eine Zeile. Commit 1bfe2e21.
-```
-
-### ZIELE: Fehlmessung repariert, 15 Ziele nachgetragen
-
-`5485c4ccfdd8` · agentzero-export · 15:34 UTC · EntityOS
-
-```
-Die Zeile "Werkzeuge nur ueber MCP" stand auf offen mit "0 Werkzeuge
-freigegeben". Gemessen wurde per grep nach Werkzeugnamen in Anfuehrungszeichen
-im Quelltext -- die Werkzeuge sind aber Python-Funktionen, ihre Namen stehen
-nackt hinter def. Der grep konnte gar nichts finden. Gemessen wird jetzt in
-policy/managed-settings.json, wo die Freigabe im Betrieb entschieden wird:
-27 erlaubt, Bash und Artifact verboten.
-
-Beim Nachtragen ist mir dieselbe Bauart noch dreimal unterlaufen -- zero_raum
-als entityos_raum, turns als chat_messages, *.tresor als *.json. Alle drei
-meldeten GEBAUTES als FEHLEND. Ursache war nicht der Tippfehler, sondern dass
-_n() jede Exception zu None machte: ein falscher Tabellenname sah exakt aus wie
-eine leere Tabelle. Ein Messgeraet, das "gibt es nicht" und "ist leer" nicht
-unterscheiden kann, ist keins. _n() trennt das jetzt.
-
-Nachgetragen: Werkbank (handlungsfaehig ohne Schale), Profile und
-Menschenzuordnung, der Raum mit vier Plaetzen, dauerhafte Chat-Historie,
-Wiki-Einspeisung, Tresore, Seitenuebersicht, Arbeitspakete,
-agentforge-Migration, Moeglichkeitsraum, Erkundungsanteil, Selbstmessung
-des Abrufs.
 ```
 

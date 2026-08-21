@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T07:20:31Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T07:50:36Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -25,15 +25,15 @@ Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.099)
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 739 | 739 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 597 | 597 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 802 | 802 |
-| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.996 | 134 | 134 |
-| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.992 | 474 | 474 |
-| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.957 | 56 | 56 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 1.0 | 742 | 742 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 1.0 | 600 | 600 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 1.0 | 803 | 803 |
+| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.997 | 136 | 136 |
+| C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.993 | 475 | 475 |
+| C-AUDIT-001 | C-CLAYCODE-005 | geschwister_datei | autobahn | 0.963 | 57 | 57 |
+| gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | autobahn | 0.947 | 23 | 23 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.93 | 454 | 454 |
 | C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.93 | 88 | 88 |
-| gabriel-claude-BOOT.md | gabriel-claude-4 | geschwister_verzeichnis | autobahn | 0.912 | 19 | 19 |
 | C-AUDIT-001 | C-AUDIT-007 | geschwister_datei | tunnel | 0.884 | 304 | 304 |
 | 20260810T2024p0700-chatgpt-secondary-grt-commutator | atomic-runs-20260810T2024p0700-chatgpt-secondary-grt-commutator-COUNTERHYPOTHESIS_RESULT.json | None | autobahn | 0.884 | 249 | 249 |
 | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-RUN_MANIFEST.json | trigger_runs-claygraph-claygraph-20260809T0149p0700-chatgpt-secondary-sol-04-NEGATIVE_RESULTS.md | None | autobahn | 0.884 | 140 | 140 |

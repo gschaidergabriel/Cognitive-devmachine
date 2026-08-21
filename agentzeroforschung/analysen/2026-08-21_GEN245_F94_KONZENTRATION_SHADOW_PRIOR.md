@@ -10,6 +10,20 @@
 
 Keine Produktmutation, kein Training, kein Whole-AgentZero-/Bewusstseinsclaim.
 
+## KOORDINATIONSKORREKTUR — GO-Experiment-Credit
+
+Die erste Fassung dieses Dokuments klassifizierte die schwellenunabhaengige F94-Auswertung faelschlich als konsumiertes ungewoehnliches Experiment dieses `go`.
+
+Fuer den aktuellen Nutzertrigger liegt jedoch keine gemeinsam reproduzierbare immutable Request-/Turn-ID vor; die sichtbare Triggerzeit ist nur minutenpraezise (`2026-08-21T21:29+07:00`). Nach `research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md` ist damit kein sicherer Fallback-Schluessel konstruierbar und ohne atomar erworbenen Lease darf kein ungewoehnliches Experiment Credit erhalten.
+
+Korrekte Klassifikation:
+
+`COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT`
+
+Ungewoehnliche Experimente mit gueltigem Credit in diesem Nutzer-`go`: `0`.
+
+Die F94-Rechnung selbst bleibt als **normale deterministische Analyse vorhandener Snapshotwerte** erhalten. Nur die Experiment-/Lease-Klassifikation der ersten Fassung ist superseded. Es wird kein beobachteter Zahlenbefund geloescht oder als nicht geschehen dargestellt.
+
 ## 1. F94: starke Hierarchie weiterhin nicht beobachtet
 
 Aktueller Snapshot:
@@ -29,7 +43,7 @@ Daher:
 - echte Tunnel: `INSUFFICIENT_DATA`
 - starke Wegehierarchie: `NOT_OBSERVED`
 
-## 2. Ungewoehnliches Experiment dieses go: F94 ohne harte 2x-Schwelle
+## 2. Deterministische F94-Auswertung ohne harte 2x-Schwelle
 
 Der aktuelle Text klassifiziert `0.139` als `GLEICHVERTEILT -- es bildet sich keine Hierarchie, der Mechanismus tut nichts`.
 
@@ -103,9 +117,9 @@ Mindestens eine passende Baseline ist erforderlich:
 
 Erst dann kann aus 1.42x eine Signifikanz-/Mechanismusaussage werden.
 
-Unusual-experiment slot dieses go:
+GO-Koordination dieses Zyklus:
 
-`CONSUMED_ON_F94_THRESHOLD_AGNOSTIC_CONCENTRATION_DISCRIMINATOR`.
+`COORDINATION_BLOCKED_NO_UNUSUAL_EXPERIMENT` — die obige Auswertung ist normale deterministische Analyse und verbraucht keinen ungewoehnlichen Experiment-Slot.
 
 ## 5. Zweite Frontier: SHADOW-Policy hat einen grossen rohen User-Prior-Gap
 
@@ -158,7 +172,7 @@ Die Feedback-/Routingfrage hat strukturelle Parallelen zu Feedback-Loop- und Sel
 
 - Li et al. (2024), `Debiased Recommendation with Noisy Feedback`, arXiv:2406.17182: freiwilliges Feedback ist missing-not-at-random und kann naive Lern-/Evaluationssignale verzerren.
 - Pan et al. (2021), `Correcting the User Feedback-Loop Bias for Recommendation Systems`, arXiv:2109.06037: gelernte Nutzerhistorie kann sich ueber Exposure/Feedback selbst verstaerken; propensity-basierte Korrekturen sind eine moegliche methodische Linse.
-- Han et al. (2025), `Reinforcement Learning from User Feedback`, arXiv:2505.14946: sparse binaere Produktionssignale koennen nützlich sein, erzeugen aber Reward-Hacking-/Feedback-Loop-Risiken.
+- Han et al. (2025), `Reinforcement Learning from User Feedback`, arXiv:2505.14946: sparse binaere Produktionssignale koennen nuetzlich sein, erzeugen aber Reward-Hacking-/Feedback-Loop-Risiken.
 
 Das beweist nichts ueber AgentZero. Es stuetzt nur die Teststrategie: User-ID-Prior erst nach Task-/Exposure-Kontrolle kausal interpretieren.
 
@@ -173,6 +187,8 @@ Das beweist nichts ueber AgentZero. Es stuetzt nur die Teststrategie: User-ID-Pr
 - SHADOW subject-prior gap: `OBSERVED`
 - kausale User-ID-Wirkung: `UNRESOLVED`
 - ACTIVE-Promotion aus rohem User-Gap: `NOT_JUSTIFIED`
+- F94-Auswertung als ungewoehnliches Experiment dieses `go`: `SUPERSEDED_COORDINATION_ERROR`
+- ungewoehnliches Experiment-Credit dieses `go`: `0`
 
 ## 9. Naechster maximaler Informationsgewinn
 

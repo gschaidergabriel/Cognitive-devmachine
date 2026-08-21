@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T21:06:40Z. **3694 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T21:36:41Z. **3704 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T02:53:16+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T03:43:23+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3596 |
+| baunotiz | 3606 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2190 |
-| baunotiz | bauverlauf.jsonl | 1359 |
+| baunotiz | git-commit | 2194 |
+| baunotiz | bauverlauf.jsonl | 1365 |
 | baunotiz | github-ereignis | 42 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3694 · Gegenhypothese: 0 von 3694
+## Hypothese: 0 von 3704 · Gegenhypothese: 0 von 3704
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T02:53:16+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: escalate Gen258 executed paid-provider breach
+
+`baunotiz-bauverlauf-61a3f4ddfb77581a7efb` · baunotiz · bauverlauf.jsonl · 2026-08-22T03:43:23+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: escalate Gen258 executed paid-provider breach
+
+`baunotiz-git-a470491f8db88fd6e352ae23879d8be705bbc898` · baunotiz · git-commit · 2026-08-22T03:43:23+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: escalate Gen258 executed paid-provider breach
 
 ### claycode supervisor: escalate Gen249 paid-lane FREE_ONLY control drift
 
@@ -218,22 +234,4 @@ research: fuse tmux autonomy transport fence into go reentry
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
-
-### research: isolate Gen245 shopping-grounding failure mode
-
-`baunotiz-git-c89af32407ee5ddee2e0404c1e93abd3f40dc887` · baunotiz · git-commit · 2026-08-21T21:47:12+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: isolate Gen245 shopping-grounding failure mode
-
-Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
-
-### research: route autonomy dispatch provenance counterexample
-
-`baunotiz-bauverlauf-5328fb4fbf2fab2ee8df` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:44:43+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

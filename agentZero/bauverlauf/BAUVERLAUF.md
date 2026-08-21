@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T21:06:40Z. 1110 Commits aus vier Repos, davon 467 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T21:36:41Z. 1110 Commits aus vier Repos, davon 468 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -14,6 +14,30 @@ Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ```
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 21:35:16 +0000 — entityos: 7 Aenderungen
+
+`32ca23e31f3e` · entityos · 21:35 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/architekt.py
+  the artefact/architekt/kanarie.py
+  the artefact/architekt/patch.py
+  the artefact/tests/test_architekt_kanarie.py
+  the artefact/tests/test_architekt_orchestrator.py
+  the artefact/tests/test_architekt_patch.py
+  the artefact/tests/test_architekt_rollback.py
+
+Zeit: 2026-08-21T21:35:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 7
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
 ```
 
 ### EOS-Chronik 2026-08-21 21:04:31 +0000 — entityos: 18 Aenderungen
@@ -2907,28 +2931,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 12:34:42 +0000 — entityos: 5 Aenderungen
-
-`ebc6ceac6208` · entityos · 12:34 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  forschung/cswt-z-pilot/BEFUND-5-6.md
-  forschung/cswt-z-pilot/cswt-rueck.jsonl
-  forschung/cswt-z-pilot/cswt_rueckkanal.py
-  forschung/cswt-z-pilot/rueck_aus.py
-  forschung/cswt-z-pilot/rueck_zerlegen.py
-
-Zeit: 2026-08-20T12:34:42+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 5
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

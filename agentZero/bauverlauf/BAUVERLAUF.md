@@ -1,10 +1,90 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T00:11:17Z. 1000 Commits aus vier Repos, davon 338 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T00:41:18Z. 1001 Commits aus vier Repos, davon 342 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
+
+## 2026-08-21
+
+### EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen
+
+`aa52fb1591e9` · entityos · 00:32 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_bootlast.py
+
+Zeit: 2026-08-21T00:32:41+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen
+
+`a6271e75eba3` · entityos · 00:26 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_echo.py
+  the artefact/tests/test_gw_wettbewerb.py
+  the artefact/tests/test_zuendung.py
+
+Zeit: 2026-08-21T00:26:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 00:24:45 +0000 — entityos: 2 Aenderungen
+
+`5bb16882ebb4` · entityos · 00:24 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_echo.py
+
+Zeit: 2026-08-21T00:24:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 00:20:33 +0000 — entityos: 2 Aenderungen
+
+`a1ef3ed0a236` · entityos · 00:20 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/cswt-z-pilot/cswt_bewerter.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-21T00:20:33+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ## 2026-08-20
 
@@ -4507,98 +4587,5 @@ Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
    Pflichtbegruendung - ein Leuchten ohne nennbaren Grund waere
    Stimmungstheater). Glitch und Pupille laufen nur bei der NEUESTEN Nachricht.
    Selbstenthaltend, kein CDN, respektiert prefers-reduced-motion.
-```
-
-### eval_set.json: attach hand-authored-not-production disclosure to the data itself
-
-`27a5e9bffa0e` · entityos · 04:40 UTC · BACK agent
-
-```
-Coordinator decision 2026-08-18: the 0.96/0.98 pass_rate numbers must not be
-readable later as measured against production Zero traffic. Wrapped
-eval_set.json as {note, items} instead of a bare array so the disclosure
-travels with the file itself, not just the commit message / report.
-load_eval_set() now enforces the note key is present -- fails closed if
-someone strips it back to a bare list.
-```
-
-### Add Mistral pre-stage + caveman-German translator module (mv_* tables)
-
-`dcc0f97a4eb3` · entityos · 04:37 UTC · BACK agent
-
-```
-- clayverse/mistral_prestage/: self-contained new package, does not touch
-  terminal_hooks.py, retrieval.py, turn_lifecycle.py, store.py, service.py,
-  terminal_sessions.py (coordinator-owned).
-- store.py: own sqlite3 connection to the shared wiki.db, 4 new tables only
-  (mv_prestage_state, mv_prestage_turns, mv_translation_log, mv_eval_runs),
-  proven first against /var/lib/clay-probe/wiki.db, then applied to the
-  real db (schema-only, no existing rows touched: artikel still 14284).
-- prestage.py: draft single-call Mistral governor per F17 brief. NOTE per
-  coordinator 2026-08-18: needs revision against F74/F67/F68 (GRF ground
-  rules + ClayCode manual + last-3-turn hypothesis correlation as inputs,
-  negotiation loop, engine-as-config-value) before wiring in. Not wired
-  into terminal_hooks.py -- that stays the coordinators call.
-- translator.py + judge.py + eval_harness.py: caveman-English -> German
-  translator (mistral-small-latest) with an independent judge
-  (gemini-3.5-flash-lite, different provider family) scoring faithfulness
-  + readability on a fixed 50-item eval set. Measured, real API calls:
-    iteration 1 (v3 prompt): pass_rate 0.92, avg_faithfulness 95.4
-    iteration 2 (v4 prompt): pass_rate 0.96, avg_faithfulness 99.1, 0 fabrications
-    iteration 3 (v4 repeat):  pass_rate 0.98, avg_faithfulness 99.6, 0 fabrications
-  Metric defined before optimising: pass = no fabrication AND faithfulness>=90
-  AND readability>=70. Target 0.95 met and held on repeat.
-  Caveman original is retained in mv_translation_log on every row (never
-  translation-only) so every translation stays checkable per the owners
-  worse-than-none rule.
-```
-
-### Merge pull request #719 from gschaidergabriel/fix/autonomy-completion-target-bound-20260818
-
-`4e5da25db612` · entityos · 04:09 UTC · Gabriel Gschaider
-
-```
-fix(clayverse): bind autonomous completion to an explicit target
-```
-
-### Zeros Abruf erreicht endlich das Herz
-
-`94218cedfb93` · entityos · 03:58 UTC · EntityOS
-
-```
-Befund: die Retrieval-Entitaet las ausschliesslich durable_memory, turns, sessions
-und active_turns - also nur ihr eigenes Gespraechsgedaechtnis. Die 87 Clay-Tabellen
-in DERSELBEN Datei (14.284 Artikel, 93.895 Kanten, 22.567 Lesarten) sah sie nie.
-Fuenf Abrufepisoden standen mit status UNKNOWN und chars_selected 0 da - der
-Mechanismus arbeitete ehrlich, aber ins Leere. "wiki.db ist das Herz der Entitaet"
-war damit nicht eingeloest: das Herz lag im selben Gefaess, der Abruf schaute nie
-hinein.
-
-Gebaut ist der billigste tragfaehige Weg: der Korpus hat bereits einen FTS5-Index
-(fts_index_artikel ueber artikel_suchtext). Kein Einbetten noetig, um ueberhaupt
-anzuschliessen; eine Vektorstufe kann die Rangfolge spaeter ersetzen.
-
-Zwei Fehler der ersten Fassung gemessen und behoben:
-  * Join ueber artikel.logical_id statt artikel.id - logical_id ist fast ueberall
-    NULL: 2.096 gegen 9.251 Treffer. Deshalb kam sphaere immer als None zurueck,
-    nicht weil sie fehlt, sondern weil die Zeile nie gefunden wurde.
-  * ODER ueber Fuellwoerter ertraenkte die Suche: "wie funktioniert die
-    hyperposition" wurde zu einem ODER inklusive wie/die. Jetzt Stoppwortliste,
-    UND zuerst, ODER nur als Auffangnetz - und das Ergebnis traegt treffer_art,
-    weil "per ODER gefunden" eine schwaechere Aussage ist als "per UND".
-
-Gemessen am echten Bestand: "was ist das EffectGate" -> UND, 5 ms, Volltreffer.
-"Was ist ClayVerse?" -> UND, 11 ms, Sphaere clayverse.
-
-Hart begrenzt (5 Treffer, 260 Zeichen), in der Haken-Huelle auf 3 gekuerzt, und
-als ERSTES trimmbar - ein Korpustreffer ist das einzige im Kontext, das man
-jederzeit neu holen kann. Nur lesend: der Korpus gehoert der Clay-Schicht.
-Fehlt der Index, liefert der Abruf nichts, statt den Zug scheitern zu lassen.
-
-Zwei eigene Patzer unterwegs, beide gemessen statt geraten: falscher
-Variablenname (identity statt supplied) und Trimmen vor der Definition der
-Groessenfunktion. 109 bzw. 96 rote Tests, beide zurueck auf 479/13.
-
-Suite unveraendert 479/13 - der Anschluss kostet keine Regression.
 ```
 

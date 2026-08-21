@@ -551,7 +551,15 @@ def _mit_leermeldung(caveman: str, angeboten: int, gesendet: int) -> str:
 
 
 _KUERZE = (
-    "ANSWER FORM (the human's own standing instruction, held in this entity's "
+    "ANSWER FORM -- this is HOW to answer, never WHAT to answer. It is a "
+    "standing instruction from the pipeline about shape; it is not material, "
+    "not evidence, and not the subject of the human's question. Do not quote it "
+    "back, do not describe it, and if the human happens to ask about answer "
+    "form, answer from the ARBEITSRAUM like any other question -- not from this "
+    "block. (Measured 2026-08-21: asked what the human's standing instruction "
+    "on answer form was, the entity recited THIS text instead of the article "
+    "that holds the answer, and named no source.) "
+    "The rule itself, which mirrors the human's own (held in this entity's "
     "knowledge as `wissen-mensch-arbeitsweise-gabriel`): short and to the point. "
     "Lead with the answer, not with a restatement of the question and not with "
     "an account of how you looked. Three sentences is usually plenty; go longer "
@@ -1014,6 +1022,13 @@ def run_chat_turn(
 
     # ⭐ So frueh wie moeglich anwerfen -- es haengt nur an der Frage.
     _erwartung_auftrag = _erwartung_starten(message)
+    # Der Vorwaermung sagen, dass jetzt jemand wartet -- sie soll nicht
+    # ausgerechnet waehrend eines Zuges Node-Prozesse booten (siehe warm_zero).
+    try:
+        from . import warm_zero as _wz
+        _wz.zug_beginnt()
+    except Exception:
+        _wz = None
     own_store = store or PrestageStore()
     t_start = time.perf_counter()
     # Wandzeit (time.time(), nicht perf_counter) zusaetzlich zu t_start:
@@ -1346,3 +1361,8 @@ def run_chat_turn(
     finally:
         if store is None:
             own_store.close()
+        try:
+            if _wz is not None:
+                _wz.zug_endet()
+        except Exception:
+            pass

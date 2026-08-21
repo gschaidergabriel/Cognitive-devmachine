@@ -49,6 +49,39 @@ POOL_SIZE = int(os.environ.get("CLAYVERSE_WARM_POOL", "1"))
 # gehen dorthin, wo zuletzt wirklich getippt wurde.
 WARM_BUDGET = int(os.environ.get("CLAYVERSE_WARM_BUDGET", "2"))
 
+# ⭐⭐ NICHT NACHFUELLEN, WAEHREND EIN ZUG LAEUFT.
+# Gemessen 2026-08-21 in vier Armen: mit Bootlast (2-3 Node-Prozessstarts je Zug)
+# riss der nebenher laufende Erwartungsfeld-Faden in 1 von 3 Zuegen seinen
+# vollen 2,5-s-Deckel; ohne Bootlast wartete er nie laenger als 0,4 s. Der Rest
+# eines Zuges stieg dadurch von 0,45 s auf 1,9 s -- und nach dem Deckel lief der
+# Faden als Zombie weiter und frass noch einmal ~1,1 s CPU.
+# Der Faden war also unschuldig: ein Boot ist ein ganzer Node-Prozess, und er
+# nimmt dem laufenden Zug CPU und GIL weg. Die Vorwaermung soll dann fuellen,
+# wenn ohnehin niemand wartet -- also NACH dem Zug, nicht waehrend.
+# ⚠️ Mit Notausgang: wartet der Pool laenger als NACHFUELL_GEDULD_S, wird
+# trotzdem gefuellt. Sonst koennte ein haengender Zug die Vorwaermung dauerhaft
+# aushungern, und der naechste Mensch zahlt den Kaltstart.
+NACHFUELL_GEDULD_S = 20.0
+_ZUG_LAEUFT = {"seit": 0.0, "n": 0}
+
+
+def zug_beginnt() -> None:
+    _ZUG_LAEUFT["n"] += 1
+    if _ZUG_LAEUFT["seit"] == 0.0:
+        _ZUG_LAEUFT["seit"] = time.time()
+
+
+def zug_endet() -> None:
+    _ZUG_LAEUFT["n"] = max(0, _ZUG_LAEUFT["n"] - 1)
+    if _ZUG_LAEUFT["n"] == 0:
+        _ZUG_LAEUFT["seit"] = 0.0
+
+
+def _zug_blockiert_nachfuellen() -> bool:
+    if _ZUG_LAEUFT["n"] <= 0:
+        return False
+    return (time.time() - _ZUG_LAEUFT["seit"]) < NACHFUELL_GEDULD_S
+
 # ⭐⭐⭐ GEMESSENER PRODUKTIONSAUSFALL, 2026-08-20. Die Antwortschleife unten
 # lautete:
 #     frist = time.time() + timeout
@@ -222,6 +255,9 @@ class WarmPool:
 
     def _nachfuell_schleife(self) -> None:
         while True:
+            if _zug_blockiert_nachfuellen():
+                time.sleep(0.25)
+                continue
             vorrang = self._vorrang()
             for key in _KANONISCH:
                 if key not in vorrang:

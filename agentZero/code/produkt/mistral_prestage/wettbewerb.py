@@ -34,6 +34,9 @@ Mass ausgeschlossen hat.
 
 DIE ZUENDUNG HAT DREI HUERDEN -- ZWEI ABSOLUTE, EINE RELATIVE
 -------------------------------------------------------------
+  0. eigenanteil >= _EIGEN_MIN -- der Bewerber muss etwas sagen, das die Frage
+     nicht schon sagt. Ohne diese Huerde gewinnt das Echo der Frage selbst
+     (gemessen: relevanz 1,0, und alle richtigen Antworten fielen darunter aus).
   1. relevanz > 0 und mindestens MIN_GEDECKT gedeckte Woerter -- eine Stelle,
      die nur ein Allerweltswort mit der Frage teilt, ist kein Beleg FUER diese
      Frage, egal wie hoch der Abruf sie rankt. Hier scheitern fachfremde
@@ -292,6 +295,40 @@ def relevanz(treffer: dict[str, Any], frage_worte: list[str],
     return sum(g.get(w, 1.0) for w in gedeckt) / float(summe)
 
 
+_EIGEN_MIN = 0.30
+
+
+def eigenanteil(treffer: dict[str, Any], frage_worte: list[str]) -> float:
+    """Wie viel sagt dieser Bewerber, das die FRAGE nicht schon sagt? 0..1.
+
+    ⭐⭐⭐ DER ECHO-FEHLER, gemessen 2026-08-21 und er haette jede wiederholte
+    Frage vergiftet: Sieger des Wettbewerbs war `verlauf:4648f281` mit
+    relevanz **1,0** -- die Frage SELBST, aufgezeichnet als frueherer Zug des
+    Gespraechs. Eine Frage deckt sich zu 100 %, schlaegt damit jede echte
+    Quelle, und setzt ueber die relative Schwelle zugleich die Latte so hoch,
+    dass die drei Stellen mit der richtigen Antwort (Raenge 2, 3, 4) alle
+    ausgeschlossen wurden. Die Anlage antwortete daraufhin falsch.
+
+    `relevanz` misst FRAGE -> Bewerber. Das genuegt nicht: ein Echo deckt die
+    Frage vollstaendig und traegt trotzdem nichts bei. Die fehlende Richtung
+    ist Bewerber -> Frage. Was ein Arbeitsraum ausstrahlt, muss etwas
+    HINZUFUEGEN; ein Inhalt, der vollstaendig in der Frage steht, ist keine
+    Nachricht.
+
+    ⚠️ Warum NICHT ueber die Rolle gefiltert wird (der naheliegende Weg): eine
+    Mitteilung des Menschen ist sehr wohl eine Quelle ("mein Pruefrechner heisst
+    quirlbaum-8"). Wer alle Nutzerzuege ausschliesst, zerstoert genau den
+    Gedaechtnisweg, der gemessen funktioniert. Das Mass muss am INHALT haengen,
+    nicht daran, wer geredet hat.
+    """
+    eigene = _worte(str(treffer.get("titel") or "") + " " + str(treffer.get("ausschnitt") or ""))
+    if not eigene:
+        return 0.0
+    gefragt = set(frage_worte or ())
+    neu_n = sum(1 for w in eigene if w not in gefragt)
+    return neu_n / float(len(eigene))
+
+
 def neuheit(artikel_id: Any, haeufigkeiten: dict) -> float:
     """basis / (1 + k * wie oft zuletzt ausgestrahlt) -- nach LIDA."""
     n = int((haeufigkeiten or {}).get(str(artikel_id or ""), 0))
@@ -347,17 +384,21 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
         rel = relevanz(t, fw, idf)
         neu = neuheit(t.get("artikel_id"), haeufigkeiten or {})
         ler = gelernt(t.get("artikel_id"), fw, gelernte)
+        eig = eigenanteil(t, fw)
         wert = GEWICHT_SALIENZ * sal + g_rel * rel + g_neu * neu + g_lern * ler
         k = dict(t)
         k["gw_salienz"] = round(sal, 3)
         k["gw_relevanz"] = round(rel, 3)
         k["gw_neuheit"] = round(neu, 3)
         k["gw_gelernt"] = round(ler, 3)
+        k["gw_eigenanteil"] = round(eig, 3)
         k["gw_wert"] = round(wert, 3)
         # Vorlaeufig: nur die absoluten Huerden. Die relative faellt erst,
         # wenn das ganze Feld bewertet ist -- eine Konkurrenz laesst sich nicht
         # Kandidat fuer Kandidat entscheiden.
-        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= BODEN)
+        # Drei absolute Huerden: Passung zur Frage, Mindestwert, und EIGENER
+        # Beitrag. Die dritte schliesst das Echo aus.
+        k["gw_zugelassen"] = bool(rel > 0.0 and wert >= BODEN and eig >= _EIGEN_MIN)
         raus.append(k)
     # Bei Gleichstand entscheidet die Abrufreihenfolge -- als STICHENTSCHEID,
     # nicht als Anteil am Wert (siehe Kopf).
@@ -384,7 +425,7 @@ def bewerten(korpus: list, frage: str, haeufigkeiten: dict | None = None,
 # Arbeitsraum, nachdem gewaehlt wurde.
 _KENNUNGSFELDER = ("artikel_id", "titel", "art", "sphaere", "quelle", "treffer_art",
                    "gw_rang", "gw_wert", "gw_relevanz", "gw_salienz", "gw_neuheit",
-                   "gw_gelernt", "gw_zugelassen", "gw_quelle", "gw_abstand")
+                   "gw_gelernt", "gw_eigenanteil", "gw_zugelassen", "gw_quelle", "gw_abstand")
 
 
 # ── EIN Arbeitsraum fuer alle Quellen ────────────────────────────────────

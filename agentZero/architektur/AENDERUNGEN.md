@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -88,7 +88,7 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (30)
+## reparatur (28)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -112,8 +112,6 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:49 | entityos | `deb6f7f96a2f` | fix(clayverse): expose admitted autonomy effect tool to Claude |
 | 2026-08-18T03:47 | entityos | `3dd7e282d093` | fix(clayverse): reconcile prior autonomous effect before retry dispatch |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
-| 2026-08-18T03:45 | entityos | `040a9814dfe4` | fix(clayverse): fence cross-attempt autonomous effect replay |
-| 2026-08-18T03:42 | entityos | `6fb9872037ee` | fix(clayverse): reconcile human-preempted autonomy steps |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -123,7 +121,7 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (29)
+## pruefung (28)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -142,7 +140,6 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:51 | entityos | `4d7d65113571` | test(clayverse): pin autonomy MCP tool into Claude launch |
 | 2026-08-18T03:48 | entityos | `93924c248d4a` | test(clayverse): pin reconciliation and EffectGate replay fallback |
 | 2026-08-18T03:45 | entityos | `ac9ed539713e` | test(clayverse): guard cross-attempt autonomy effect replay |
-| 2026-08-18T03:43 | entityos | `397a318c860b` | test(clayverse): guard human preemption autonomy reentry |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -157,10 +154,14 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (277)
+## bau (280)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T00:32 | entityos | `aa52fb1591e9` | EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T00:26 | entityos | `a6271e75eba3` | EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T00:24 | entityos | `5bb16882ebb4` | EOS-Chronik 2026-08-21 00:24:45 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T00:20 | entityos | `a1ef3ed0a236` | EOS-Chronik 2026-08-21 00:20:33 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:45 | entityos | `b7c25fbe5e65` | EOS-Chronik 2026-08-20 17:45:17 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:35 | entityos | `9e45b0c97f28` | EOS-Chronik 2026-08-20 17:35:44 +0000 — entityos: 2 Aenderungen |
 | 2026-08-20T17:28 | entityos | `3ca313a39d6e` | EOS-Chronik 2026-08-20 17:28:03 +0000 — entityos: 2 Aenderungen |
@@ -217,8 +218,4 @@ Automatisch erzeugt 2026-08-21T00:11:17Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T02:30 | entityos | `74c2f23b46c0` | EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:28 | entityos | `494abf18d1d1` | EOS-Chronik 2026-08-20 02:28:37 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:26 | entityos | `c7f66349c025` | EOS-Chronik 2026-08-20 02:26:33 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T01:44 | entityos | `f05471d8447d` | Eichung: fehlendes Arbeitsverzeichnis nachgeruestet (Drop-in mitgesichert) |
-| 2026-08-20T01:40 | entityos | `f681ca215c9e` | Die systemd-Einheiten des Vorsatz-Pruefers mitsichern |
-| 2026-08-20T01:40 | entityos | `f9ed8898ba18` | Vorsatz-Pruefer: die zweite Haelfte des metakognitiven Kreises |
-| 2026-08-20T01:37 | entityos | `854944248021` | EOS-Chronik 2026-08-20 01:37:58 +0000 — entityos: 1 Aenderungen |
 

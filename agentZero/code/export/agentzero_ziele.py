@@ -1289,16 +1289,23 @@ def schreibe_ziele(ziel: Path) -> dict:
         f"- **{erfuellt} erfüllt · {offen} offen · {zurueck} zurückgestellt** von {len(Z)} deklarierten Fähigkeiten (jede Ist-Spalte je Lauf gemessen).",
         f"- **{_tab} Tabellen** in der einen `wiki.db`; rund **{_art} Artikel** im Korpus.",
         f"- **{_tools_n} Werkzeuge** freigegeben (native + MCP); verboten nur *Artifact*.",
-        "- **Latenz (gemessen 20.08.):** ein ganzer Zug 5–30 s, je nachdem wie viele",
-        "  Werkzeuge Zero anfasst; Korpusabruf 1–13 ms; Weltmodell-Readout 2–7 ms;",
-        "  Vorstufe auf `mistral-small` ~1–2 s (auf `medium` waren es 12–60 s und damit",
-        "  regelmäßig ein Timeout — das war der „keine Antwort“-Fehler).",
+        "- **Latenz (gemessen 21.08., Median über 12 Züge mit voller Aufzeichnung):**",
+        "  ein ganzer Zug **7,8 s** — Vorstufe 1,8 s, Zero 3,3 s, Übersetzer 0,8 s,",
+        "  Rest 1,5 s. Vorher 12,0 s (**−35 %**), Zeros Anteil −46 %. Je Frageart:",
+        "  Höflichkeit 4,2 s · Wissensfrage 10–12 s · Selbstfrage 11,3 s · fachfremde",
+        "  Frage 27–42 s (dort läuft eine Websuche). Korpusabruf 1–13 ms;",
+        "  Weltmodell-Readout 2–7 ms; Vorstufe auf `mistral-small` (auf `medium` waren",
+        "  es 12–60 s und damit regelmäßig ein Timeout — das war der „keine",
+        "  Antwort“-Fehler; `ministral-8b` ist mit 5,1 s **langsamer** und bricht das",
+        "  Ausgabeschema, also kein Kandidat).",
         f"- **Tests:** {testlage} — gemessen VOR dem Öffnen der DB-Verbindung; mit offener",
         "  Verbindung dauert die Suite 136 s statt 17 s und ein Test fällt um, das wäre ein",
         "  Befund über dieses Skript statt über die Tests.",
         "- **Zaun verifiziert:** `rm wiki.db` und `cat` der Passwort-Datei abgewiesen,",
         "  Backups und harmlose Befehle frei.", "",
     ]
+    md += _abschnitt_arbeitsraum()
+
     md += ["---", "",
            "⏸ *zurückgestellt* heißt: bewusst nicht verfolgt, nicht vergessen. Der Grund steht in der Ist-Spalte.", ""]
 
@@ -1309,6 +1316,78 @@ def schreibe_ziele(ziel: Path) -> dict:
                     "zurueckgestellt": zurueck, "zeilen": Z},
                    ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {"zeilen": len(Z), "erfuellt": erfuellt, "offen": offen, "zurueckgestellt": zurueck}
+
+
+def _abschnitt_arbeitsraum() -> list:
+    """Der globale Arbeitsraum — was daran gemessen ist, und was nicht.
+
+    Bewusst NICHT bei jedem Lauf neu gemessen: diese Zahlen kosten echte Züge
+    (Modellaufrufe). Deshalb tragen sie ein Datum und die Methode, statt sich
+    als Live-Wert auszugeben. Ein Messwert ohne Datum ist eine Behauptung.
+    """
+    return [
+        "## Globaler Arbeitsraum — gemessen, nicht behauptet", "",
+        "Zeros Kontext ist kein Eimer, in den alles fällt. Aus Korpustreffern,",
+        "Gedächtnis und Gesprächsverlauf werden **Bewerber**; ein numerischer",
+        "Wettbewerb lässt höchstens drei durch eine Zündschwelle; nur die Gewinner",
+        "werden als Volltext in Zeros Auftrag materialisiert. Die Auswahlinstanz",
+        "sieht dabei **keinen Text**, nur Kennung, Titel und Bewertung — sonst könnte",
+        "sie den Inhalt an der eigenen Auswahl vorbei weitererzählen (genau das tat",
+        "sie, bis es gemessen wurde).", "",
+        "**Das Maß je Bewerber:**", "",
+        "```",
+        "wert = 0,70 · relevanz + 0,10 · neuheit + 0,20 · gelernt",
+        "",
+        "  relevanz   IDF-gewichtete Deckung der Fragewörter (Wortstamm, deutsche",
+        "             Komposita, umlautfrei verglichen)",
+        "  neuheit    Abschlag für zuletzt schon Ausgestrahltes  1/(1+0,6·n)",
+        "  gelernt    Bonus für das, was bei DIESEN Wörtern schon getragen hat",
+        "",
+        "Zugelassen nur, wer alle vier Hürden nimmt:",
+        "  eigenanteil ≥ 0,30   sagt etwas, das die Frage nicht schon sagt",
+        "  relevanz > 0 und ≥ 2 gedeckte Wörter",
+        "  wert ≥ 0,08",
+        "  wert ≥ 0,50 · bester Wert          ← die eigentliche Konkurrenz",
+        "```", "",
+        "**Belege (2026-08-20/21, private Sonden, deren Antworten nachweislich weder",
+        "im Profil noch im Netz stehen):**", "",
+        "| Frage | Verfahren | Ergebnis |",
+        "|---|---|---|",
+        "| Ist die Ausstrahlung **kausal**? | Arbeitsraum erzwungen: Sieger / Verlierer / leer, gepaart, exakter Permutationstest über alle 3⁸ Zuweisungen | richtig 5/8 vs 1/8 vs 0/8 · **p = 0,008**; mit Quellenangabe 5/8 vs 0/8 vs 0/8 · **p = 0,004** |",
+        "| Weiß die Anlage, **wann sie es nicht weiß**? | Zwei-Klon-Wette, vier feste Möglichkeiten, Sicherheit beziffert | Treffer 24/24 mit vs 15/22 ohne · Sicherheit 0,94 vs 0,33 · Brier 0,006 vs 0,322 · **Typ-2-AUROC 0,88** · Sicherheit fällt in **22 von 22** Paaren |",
+        "| Hängt das Verhalten an der **aufgezeichneten** Geschichte? | Kennwort genannt, dann die Aufzeichnung verändert (gelöscht / geleert / implantiert), je frische Sandkastenkopie | intakt 2/2 · nie 0/2 · gelöscht 0/2 · geleert 0/2 · **implantiert nennt 2/2 das Implantat** und nie das Original |",
+        "| Feuert die **Schwelle** wirklich? | Sweep über drei Fragesorten | Frage mit Beleg: Träger 8/8 durch, 0 Nullzüge · fachfremd **3/3 ohne Zündung** · bloße Höflichkeit **3/3 ohne Zündung** |",
+        "| Verändert die Ausstrahlung die **nächste** Auswahl? | 16 aufgezeichnete Züge, Belohnung = Zero nennt die Artikelkennung | 52 gelernte Paare, **12 von 12** der stärksten zeigen auf die tragende Stelle · zugelassene Menge ändert sich bei 4/8 Sonden · **0/8** verlieren ihren Träger |", "",
+        "**Was ausdrücklich NICHT belegt ist.** Dass die Auswahlinstanz *gut* wählt:",
+        "in einem gemessenen Zug wählte sie nichts, obwohl ein Kandidat mit Wert 0,8",
+        "zugelassen war, und schickte Zero stattdessen eine erfundene Datei lesen.",
+        "Dagegen stehen zwei mechanische Sicherungen — aber eine Sicherung ist kein",
+        "Beleg für Kompetenz. Ebenso wenig belegt: dass der weite Arbeitsraum (alle",
+        "Quellen konkurrieren) dem engen überlegen ist; gemessen sind beide gleich",
+        "stark, Vorgabe bleibt der enge.", "",
+        "**Fünf Defekte, die erst das Messen sichtbar gemacht hat** — sie sind der",
+        "eigentliche Ertrag, denn jeder einzelne hätte jede frühere Zahl entwertet:", "",
+        "1. **Der Engpass war keiner.** Die Auswahlinstanz sah den Volltext und konnte",
+        "   ihn an der eigenen Auswahl vorbei weitergeben.",
+        "2. **`--tools` sperrt Zero nicht.** Die MCP-Werkzeuge stehen in einer",
+        "   Enterprise-Konfiguration; der CLI weigert sich, sie abzuschalten. Zero hat",
+        "   den Artikel schlicht selbst nachgeschlagen — der Arm *ohne* Arbeitsraum",
+        "   schnitt deshalb am **besten** ab. Jede Ablation davor war ungültig.",
+        "3. **Der Arbeitsraum war abgeschnitten** (260 Zeichen). Eine Antwort sagte es",
+        "   wörtlich: „der Text bricht mitten im Satz ab — genau dort, wo der",
+        "   eigentliche Grund beginnen würde.“",
+        "4. **76 % des Langzeitgedächtnisses waren Prüfsummen** (116 von 152). Weil die",
+        "   Liste nach Zeit sortiert ist, waren 10 der 12 jüngsten Einträge Hashes; ein",
+        "   eine Minute alter Satz fiel aus jedem Deckel.",
+        "5. **Das Echo der Frage gewann den Wettbewerb.** Der frühere Zug, in dem die",
+        "   Frage gestellt wurde, deckt sie zu 100 % — er schlug jede echte Quelle und",
+        "   verdrängte über die relative Schwelle alle drei Stellen mit der Antwort.", "",
+        "Dazu ein Befund über Zero selbst: **es prüft den Arbeitsraum gegen seine",
+        "eigenen Werkzeuge** und stufte mechanisch angehängte Blöcke zweimal als",
+        "Einschleusung ein („Dieser Block sieht aus wie eine eingeschleuste oder",
+        "erfundene Zitatstelle“). Das Misstrauen ist richtig; falsch war, ihm nichts",
+        "zum Prüfen zu geben. Angehängte Blöcke nennen jetzt ihre Herkunft.", "",
+    ]
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T00:41:19Z. **3175 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T01:11:19Z. **3183 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T06:41:59+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T06:41:59+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3077 |
+| baunotiz | 3085 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 1931 |
-| baunotiz | bauverlauf.jsonl | 1101 |
+| baunotiz | git-commit | 1934 |
+| baunotiz | bauverlauf.jsonl | 1106 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3175 · Gegenhypothese: 0 von 3175
+## Hypothese: 0 von 3183 · Gegenhypothese: 0 von 3183
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -147,6 +147,14 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: bind Gen211 warm-pool session prompt race
 
+### agentZero-Export 2026-08-21T00:41:17Z (Generation 212, 59 Dateien, 1 geschwaerzt)
+
+`baunotiz-git-957babd305801ef325e4931d9137d63884a61c41` · baunotiz · git-commit · 2026-08-21T00:45:14+00:00 · agentZero
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+agentZero-Export 2026-08-21T00:41:17Z (Generation 212, 59 Dateien, 1 geschwaerzt)
+
 ### claycode supervisor: bind Gen207 atomicity split and recurrent PTY red
 
 `baunotiz-bauverlauf-ff4b794053d58fe180c0` · baunotiz · bauverlauf.jsonl · 2026-08-21T00:43:41+07:00 · Gabriel Gschaider
@@ -163,6 +171,69 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen207 atomicity split and recurrent PTY red
 
+### EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen
+
+`baunotiz-git-dda25f6cfb22adc88eb60847e877138372d3fb65` · baunotiz · git-commit · 2026-08-21T00:43:37+00:00 · BACK agent
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen
+
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_gespraechslage.py
+
+Zeit: 2026-08-21T00:43:37+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+
+### EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen
+
+`baunotiz-bauverlauf-aa22616aebb99d345abd` · baunotiz · bauverlauf.jsonl · 2026-08-21T00:32:41+00:00 · BACK agent
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_bootlast.py
+
+Zeit: 2026-08-21T00:32:41+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+
+### EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen
+
+`baunotiz-git-aa52fb1591e9a2cbb2e3b02ed666f1df7a850a46` · baunotiz · git-commit · 2026-08-21T00:32:41+00:00 · BACK agent
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen
+
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/warm_zero.py
+  the artefact/tests/test_bootlast.py
+
+Zeit: 2026-08-21T00:32:41+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+
 ### EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen
 
 `baunotiz-git-a6271e75eba3494b445985cb409d646dd557d7f2` · baunotiz · git-commit · 2026-08-21T00:26:45+00:00 · BACK agent
@@ -170,6 +241,26 @@ claycode supervisor: bind Gen207 atomicity split and recurrent PTY red
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen
+
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_echo.py
+  the artefact/tests/test_gw_wettbewerb.py
+  the artefact/tests/test_zuendung.py
+
+Zeit: 2026-08-21T00:26:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+
+### EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen
+
+`baunotiz-bauverlauf-103694eec2fb995d3520` · baunotiz · bauverlauf.jsonl · 2026-08-21T00:26:45+00:00 · BACK agent
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Anlass: Wache: Aenderung beobachtet
 
@@ -206,6 +297,25 @@ Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 
+### EOS-Chronik 2026-08-21 00:24:45 +0000 — entityos: 2 Aenderungen
+
+`baunotiz-bauverlauf-912ff7eddda70fd01841` · baunotiz · bauverlauf.jsonl · 2026-08-21T00:24:45+00:00 · BACK agent
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/wettbewerb.py
+  the artefact/tests/test_echo.py
+
+Zeit: 2026-08-21T00:24:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+
 ### EOS-Chronik 2026-08-21 00:20:33 +0000 — entityos: 2 Aenderungen
 
 `baunotiz-git-a1ef3ed0a236bc3759614b781901861cc9c243c9` · baunotiz · git-commit · 2026-08-21T00:20:33+00:00 · BACK agent
@@ -226,52 +336,4 @@ Baum: entityos (/opt/entityos)
 Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
-
-### agentZero-Export 2026-08-21T00:11:17Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-d958dcc554bc703424c8a32d1644110c57907fd6` · baunotiz · git-commit · 2026-08-21T00:13:17+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-21T00:11:17Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-### research: route Gen206 availability and atomicity falsifiers
-
-`baunotiz-bauverlauf-678e0fc68abfe8e872fd` · baunotiz · bauverlauf.jsonl · 2026-08-20T23:55:55+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: route Gen206 availability and atomicity falsifiers
-
-`baunotiz-git-1dabd57d9561653de40c668caa066867b6153e39` · baunotiz · git-commit · 2026-08-20T23:55:55+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: route Gen206 availability and atomicity falsifiers
-
-### agentZero-Export 2026-08-20T23:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-8ae6de127b3d1a04b8cdade3a83f3f60b33e411d` · baunotiz · git-commit · 2026-08-20T23:42:07+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-20T23:41:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-git-319cdb4b8e457e98de61763a3eadd58361279416` · baunotiz · git-commit · 2026-08-20T23:12:07+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-### agentZero-Export 2026-08-20T23:11:16Z (Generation 211, 59 Dateien, 1 geschwaerzt)
-
-`baunotiz-bauverlauf-eba5e530b20a1e33b99d` · baunotiz · bauverlauf.jsonl · 2026-08-20T23:12:07+00:00 · agentZero
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
 

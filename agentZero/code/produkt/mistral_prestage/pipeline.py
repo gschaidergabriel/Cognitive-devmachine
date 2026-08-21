@@ -589,6 +589,54 @@ def _mit_kuerze(caveman: str) -> str:
     return f"{caveman}\n\n{_KUERZE}"
 
 
+def _gespraechslage(world: dict[str, Any]) -> dict[str, Any] | None:
+    """Wie viele Zuege liegen schon hinter uns, und wie lange ist der letzte her?
+
+    Mechanisch abgelesen, nicht geschaetzt -- genau deshalb taugt es.
+    """
+    zuege = [z for z in (world.get("own_recent") or []) if isinstance(z, dict)]
+    if not zuege:
+        return None
+    stempel = [z.get("ts") for z in zuege if isinstance(z.get("ts"), (int, float))]
+    her = None
+    if stempel:
+        her = max(0.0, time.time() - max(stempel))
+    return {"zuege": len(zuege), "her_s": her}
+
+
+def _mit_gespraechslage(caveman: str, world: dict[str, Any]) -> str:
+    """Sagt dem Auftrag, dass hier schon geredet wird.
+
+    ⭐ GEMESSEN 2026-08-21, vom Eigner im Chat bemerkt: auf "danke, das war
+    hilfreich" antwortete die Anlage "Hey Gabriel, schoen, dass du wieder da
+    bist." Die Vorstufe hatte die Nachricht als `simple greeting from Gabriel`
+    eingestuft und den Auftrag "greet back short, warm, one line" geschrieben.
+
+    Das ist nicht bloss unpassend, es ist eine **falsche Behauptung ueber das
+    Gespraech**: der Mensch war nie weg. Genau solche Saetze zersetzen das
+    Vertrauen in alles andere, was die Anlage sagt -- wer beim Nachpruefbaren
+    danebenliegt, wird beim Nichtnachpruefbaren nicht geglaubt.
+
+    Die Regel dagegen zu schaerfen waere der schwaechere Weg (die Vorstufe HAT
+    eine Regel fuer "danke", sie hat sie nur nicht angewandt). Der starke Weg
+    ist die TATSACHE: wie viele Zuege diese Sitzung schon hat. Ist sie neu,
+    steht hier nichts -- dann ist eine Begruessung ja richtig.
+    """
+    lage = _gespraechslage(world)
+    if not lage:
+        return caveman
+    her = ""
+    if lage["her_s"] is not None:
+        her = (f", the last one {int(lage['her_s'] // 60)} minutes ago"
+               if lage["her_s"] >= 60 else ", moments ago")
+    return (f"{caveman}\n\nGESPRAECHSLAGE (counted, not guessed): this session "
+            f"already holds {lage['zuege']} turns{her}. The human did not just "
+            f"arrive, so do not greet them as if they had -- no 'good to see you "
+            f"again', no welcome. A thank-you, an acknowledgement or a farewell "
+            f"is not a greeting: answer the thing that was actually said, briefly, "
+            f"and stop.")
+
+
 def _mit_epistemik(caveman: str, epistemik: Any) -> str:
     """Selbstwissen an den Auftrag haengen, wenn der Schalter es erlaubt."""
     import os as _os
@@ -1165,7 +1213,9 @@ def run_chat_turn(
         zero = headless_zero.run_headless(
             _mit_arbeitsraum(
                 _mit_kuerze(
-                    _mit_epistemik(envelope["caveman_prompt"], envelope.get("epistemik"))),
+                    _mit_gespraechslage(
+                        _mit_epistemik(envelope["caveman_prompt"],
+                                       envelope.get("epistemik")), world)),
                 vorstufe_world, envelope.get("broadcast_ids"),
                 volltext_world=world),
             user_id=user_id, session_id=session_id,
@@ -1200,7 +1250,9 @@ def run_chat_turn(
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(
                     _mit_kuerze(
-                        _mit_epistemik(envelope2["caveman_prompt"], envelope2.get("epistemik"))),
+                        _mit_gespraechslage(
+                            _mit_epistemik(envelope2["caveman_prompt"],
+                                           envelope2.get("epistemik")), world)),
                     vorstufe_world, envelope2.get("broadcast_ids"),
                     volltext_world=world),
                 user_id=user_id, session_id=session_id,

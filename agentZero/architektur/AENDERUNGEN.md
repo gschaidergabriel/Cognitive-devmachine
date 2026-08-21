@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
+Automatisch erzeugt 2026-08-21T01:11:18Z aus drei Repos. 478 Eintraege.
 
 ## architektur (16)
 
@@ -121,7 +121,7 @@ Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (28)
+## pruefung (27)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -139,7 +139,6 @@ Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-18T03:53 | entityos | `c7bb7a9bf48e` | test(clayverse): pin atomic goal source-turn idempotency |
 | 2026-08-18T03:51 | entityos | `4d7d65113571` | test(clayverse): pin autonomy MCP tool into Claude launch |
 | 2026-08-18T03:48 | entityos | `93924c248d4a` | test(clayverse): pin reconciliation and EffectGate replay fallback |
-| 2026-08-18T03:45 | entityos | `ac9ed539713e` | test(clayverse): guard cross-attempt autonomy effect replay |
 | 2026-08-18T03:37 | entityos | `6d44f9e389cb` | Test: close_attach ist Instanzmethode, nicht static -- Test rief sie ungebunden |
 | 2026-08-18T03:36 | entityos | `bab29349c659` | Test: pruefte Quelltext gegen einen zur Laufzeit interpolierten Wert |
 | 2026-08-18T03:35 | entityos | `b01b3b6d4a38` | Test: journal.begin() direkt aufgerufen ohne vorherige workspace_selected-Erklaerung |
@@ -154,10 +153,11 @@ Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (280)
+## bau (281)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T00:43 | entityos | `dda25f6cfb22` | EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T00:32 | entityos | `aa52fb1591e9` | EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T00:26 | entityos | `a6271e75eba3` | EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T00:24 | entityos | `5bb16882ebb4` | EOS-Chronik 2026-08-21 00:24:45 +0000 — entityos: 2 Aenderungen |
@@ -217,5 +217,4 @@ Automatisch erzeugt 2026-08-21T00:41:18Z aus drei Repos. 478 Eintraege.
 | 2026-08-20T02:38 | entityos | `ae5fe886aba2` | EOS-Chronik 2026-08-20 02:38:55 +0000 — entityos: 5 Aenderungen |
 | 2026-08-20T02:30 | entityos | `74c2f23b46c0` | EOS-Chronik 2026-08-20 02:30:58 +0000 — entityos: 1 Aenderungen |
 | 2026-08-20T02:28 | entityos | `494abf18d1d1` | EOS-Chronik 2026-08-20 02:28:37 +0000 — entityos: 1 Aenderungen |
-| 2026-08-20T02:26 | entityos | `c7f66349c025` | EOS-Chronik 2026-08-20 02:26:33 +0000 — entityos: 1 Aenderungen |
 

@@ -1,12 +1,31 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T00:41:18Z. 1001 Commits aus vier Repos, davon 342 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T01:11:18Z. 1004 Commits aus vier Repos, davon 343 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen
+
+`dda25f6cfb22` · entityos · 00:43 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_gespraechslage.py
+
+Zeit: 2026-08-21T00:43:37+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen
 
@@ -4538,54 +4557,5 @@ outcome or error text) -- never a fabricated confidence score; while
 pending, the avatar stays in its honest unknown/neutral look.
 
 Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare
-
-`a07abaea17cc` · entityos · 05:07 UTC · EntityOS
-
-```
-1) ZWEI GLEICHZEITIGE SITZUNGEN je Mensch, umschaltbar (Eigner 18.08.).
-   Die eigentliche Arbeit war nicht "zwei statt eins": die Regel stand ACHTMAL
-   im Code, jedes Mal als derselbe Stringvergleich auf session:<user>, verteilt
-   ueber autonomy, autonomy_context, autonomy_dispatch, turn_lifecycle. Deshalb
-   war sie nicht aenderbar. Jetzt steht sie an EINER Stelle
-   (identity.sitzungen_von / ist_kanonische_sitzung / SITZUNGEN_JE_MENSCH).
-   Wer drei will, aendert eine Zahl, statt acht Vergleiche zu suchen.
-   Wanderung ohne Datenverlust: Platz 1 BEHAELT die alte Kennung session:<user>,
-   weil daran Zuege, Episoden und Kausalketten haengen. Umbenennen haette vier
-   Fremdschluesseltabellen nachgezogen, fuer nichts.
-
-2) BEREITSCHAFT zaehlte falsch: eine Abbildung user_id -> row faltete beide
-   Sitzungen zu einer zusammen, die zuletzt gelesene gewann, ihr Terminalname
-   passte nicht zum erwarteten -> dauerhaft not_ready, obwohl alles lief.
-
-3) DIE HUELLE SPERRTE DEN MENSCHEN AUS. Gabriels gewachsener Kontext sprengte
-   die 9000 Zeichen, der Haken warf, und es kam KEIN Prompt mehr durch. Andreas'
-   kleinere Sitzung lief weiter, was den Fehler wie einen Zufall aussehen liess.
-   Fail-closed war fuer den richtigen Fall gedacht - nie etwas Unbegrenztes
-   ausliefern. Der falsche Schluss daraus ist "dann gar nichts". Zwischen
-   unbegrenzt und gar nicht liegt WENIGER, UND ES STEHT DABEI.
-   Sechs Stufen: Korpus, Ressourcenverweise, Hyperpositionen, Fremdkollisionen,
-   Gedaechtnis, Verlauf auf drei - dann eine Notfassung aus Identitaet,
-   Kausalitaet und Wirkgesetz. Jede Stufe traegt sich in gekuerzt ein, und das
-   steht IM Kontext: Zero erfaehrt, dass es weniger sieht, und was fehlt.
-   Stille Kuerzung waere schlimmer als die Sperre - dann arbeitet das Modell
-   mit einem Loch, von dem es nichts weiss. Hart abgebrochen wird nur noch,
-   wenn selbst die Notfassung nicht passt: dann ist die Grenze falsch gesetzt,
-   nicht der Inhalt zu gross.
-   Nebenbefund: resources war an KEINER Stelle begrenzt - ein einzelner langer
-   Verweis konnte die Huelle allein sprengen.
-
-4) Der Test test_uncompactable_context prueft jetzt die EIGENSCHAFT (nichts
-   wird in eine Datei ausgelagert, jede Kuerzung ist benannt) statt den
-   MECHANISMUS (harter Abbruch). Der harte Abbruch bleibt als eigener Test fuer
-   den Fall, dass die Grenze selbst falsch gesetzt ist.
-
-5) Avatare: Zero rund schwarz mit glitchender Null, Licht von HINTER der
-   Scheibe, das nur am Rand hervortritt (Zustand gruen bis rot, mit
-   Pflichtbegruendung - ein Leuchten ohne nennbaren Grund waere
-   Stimmungstheater). Glitch und Pupille laufen nur bei der NEUESTEN Nachricht.
-   Selbstenthaltend, kein CDN, respektiert prefers-reduced-motion.
 ```
 

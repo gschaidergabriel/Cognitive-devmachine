@@ -1,13 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T16:37:19Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T17:37:22Z aus drei Repos. 481 Eintraege.
 
-## architektur (12)
+## architektur (11)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
-| 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
 | 2026-08-15T18:00 | unifieddb | `7f5e8b582f79` | F87 Auslieferungsform + Teil III der Zielarchitektur |
 | 2026-08-15T17:13 | clay | `2a6c2f4b6706` | F79 Endgueltige Bahnbelegung GLM/NVIDIA/Groq-Premium, GLM spricht als ClayVerse - Identitaet ist Oberflaeche,  |
@@ -107,10 +106,14 @@ Automatisch erzeugt 2026-08-21T16:37:19Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (330)
+## bau (331)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T17:25 | entityos | `2b01ead42d0f` | EOS-Chronik 2026-08-21 17:25:48 +0000 — entityos: 6 Aenderungen |
+| 2026-08-21T17:15 | entityos | `0cbeedea0906` | EOS-Chronik 2026-08-21 17:15:58 +0000 — entityos: 8 Aenderungen |
+| 2026-08-21T17:03 | entityos | `cb0ec9c81d52` | EOS-Chronik 2026-08-21 17:03:36 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T17:02 | entityos | `23376dd0279c` | Zeros Verfassung: GRF-Rahmen, Ziel (Latenz->0, funktional bewusste AGI), totale innere Freiheit, EINE Grenze ( |
 | 2026-08-21T15:32 | entityos | `f1057215650c` | EOS-Chronik 2026-08-21 15:32:51 +0000 — entityos: 17 Aenderungen |
 | 2026-08-21T15:16 | entityos | `a2108710c4dc` | EOS-Chronik 2026-08-21 15:16:48 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T15:02 | entityos | `c3e2032cab7a` | EOS-Chronik 2026-08-21 15:02:52 +0000 — entityos: 3 Aenderungen |
@@ -167,8 +170,4 @@ Automatisch erzeugt 2026-08-21T16:37:19Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T07:58 | entityos | `2dd77fa7dfc9` | EOS-Chronik 2026-08-21 07:58:03 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T07:56 | entityos | `f6af2f8650ed` | EOS-Chronik 2026-08-21 07:56:02 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T07:53 | entityos | `bf3ebea672ee` | EOS-Chronik 2026-08-21 07:53:38 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T07:50 | entityos | `7d88fb7b528c` | EOS-Chronik 2026-08-21 07:50:38 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T07:43 | entityos | `abdf357f66b6` | EOS-Chronik 2026-08-21 07:43:28 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T07:05 | entityos | `f702cc24f95e` | EOS-Chronik 2026-08-21 07:05:54 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T06:55 | entityos | `51c3991bd1f4` | EOS-Chronik 2026-08-21 06:55:18 +0000 — entityos: 3 Aenderungen |
 

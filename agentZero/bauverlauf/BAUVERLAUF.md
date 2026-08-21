@@ -1,6 +1,6 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T16:37:20Z. 1098 Commits aus vier Repos, davon 446 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T17:37:23Z. 1106 Commits aus vier Repos, davon 449 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
@@ -14,6 +14,73 @@ Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ```
 Bind the first Gen245 negative-rated shopping turn to same-session correction, first-party catalog grounding, causal/retrieval receipts, and the terminal frontend export-gap discriminator. Research-only; agentZero product bytes unchanged.
+```
+
+### EOS-Chronik 2026-08-21 17:25:48 +0000 — entityos: 6 Aenderungen
+
+`2b01ead42d0f` · entityos · 17:25 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/budget.py
+  the artefact/architekt/immunsystem.py
+  the artefact/architekt/zustand.py
+  the artefact/tests/test_architekt_budget.py
+  the artefact/tests/test_architekt_immunsystem.py
+  the artefact/tests/test_architekt_zustand.py
+
+Zeit: 2026-08-21T17:25:48+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 6
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 17:15:58 +0000 — entityos: 8 Aenderungen
+
+`0cbeedea0906` · entityos · 17:15 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/architekt.py
+  the artefact/architekt/config/architekt.conf
+  the artefact/architekt/lauf.py
+  the artefact/architekt/patch.py
+  the artefact/architekt/schwarm.py
+  the artefact/tests/test_architekt_orchestrator.py
+  the artefact/tests/test_architekt_patch.py
+  the artefact/tests/test_architekt_schwarm.py
+
+Zeit: 2026-08-21T17:15:58+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 8
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 17:03:36 +0000 — entityos: 2 Aenderungen
+
+`cb0ec9c81d52` · entityos · 17:03 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/systemd/eos-architekt.service
+  the artefact/architekt/systemd/eos-architekt.timer
+
+Zeit: 2026-08-21T17:03:36+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
 ```
 
 ### EOS-Chronik 2026-08-21 15:32:51 +0000 — entityos: 17 Aenderungen
@@ -2875,71 +2942,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/clayverse/retrieval.py
 
 Zeit: 2026-08-20T07:18:04+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren
-
-`368c1159c40c` · entityos · 06:29 UTC · EOS-Chronik
-
-```
-REPARIERT und live:
-* Der Deckel gilt jetzt fuer den GESAMTEN Vorstufenkontext (14_500), nicht nur
-  fuer world. Fuenf Kuerzungsstufen; Bilanz symmetrisch (Erfolge und
-  Fehlschlaege verlieren gleich viel). Gemessen 18.112 -> 14.112 Zeichen.
-* epistemik erreicht Zero: kompakte KNOWN/UNKNOWN-Zeile am Auftrag, Schalter
-  CLAYVERSE_EPISTEMIK_IM_PROMPT.
-
-KAUSALTEST, vor der Reparatur unmoeglich: falsche bekannte Fakten eingespeist,
-Kontrolle ueber den abgeschalteten Kanal. Uebertragung bestaetigt (5/8 gegen
-0/8), Uebernahme NULL -- Zero prueft jede Einspeisung an den eigenen Quellen und
-weist sie zurueck, einmal woertlich als eingeschleuster Text. Die Ausstrahlung
-wird gehoert, regiert aber nicht. GWT-3-Mangel und Sicherheitsmerkmal zugleich.
-
-⚠️ Meine erste Auswertung zaehlte Erwaehnen als Folgen und war falsch herum --
-erst die Volltexte kippten sie.
-
-Korrigierte Schicht 1 (Gesamtkontext geregelt, Werkzeuge gesperrt): weiter kein
-Effekt, p=1,000. Grund gefunden: --tools gilt NICHT fuer WebFetch/WebSearch
-(Server-Werkzeuge), und der Warmpool reicht alte Prozesse wieder. Die Antworten
-kamen durchgehend von iar.frank.ink.
-
-Co-Authored-By: Claude Opus 5 (1M context) <<adresse>>
-```
-
-### EOS-Chronik 2026-08-20 06:22:04 +0000 — entityos: 1 Aenderungen
-
-`d8074a08fdfa` · entityos · 06:22 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T06:22:04+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 05:38:37 +0000 — entityos: 1 Aenderungen
-
-`2adcf9a58b0b` · entityos · 05:38 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-20T05:38:37+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

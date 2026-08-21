@@ -833,6 +833,52 @@ def _mit_verlauf(caveman: str, world: dict[str, Any]) -> str:
     return f"{caveman}\n\n{kopf}\n" + "\n".join(zeilen)
 
 
+# ── Aktuelle Zeit, PRO NUTZER ────────────────────────────────────────────
+# ⭐ 2026-08-21 (Bug Andreas): auf "wie spaet ist es" web-suchte Zero und traf
+# einen veralteten Cache-Schnappschuss. Der Behaelter laeuft auf UTC und die
+# Zeit stand NIRGENDS in Zeros Kontext -- also riet es per Netz. Der System-
+# Prompt taugt nicht als Ort: der Warmweg cacht ihn je Sitzung, die Zeit froere
+# beim Sitzungsstart ein. Also gehoert die Zeit in die je Zug frische Nachricht.
+# Und PRO NUTZER: Andreas sitzt in Graz, Gabriel in Siem Reap.
+_NUTZER_ZONE = {
+    "andreas": ("Europe/Vienna", "Graz"),
+    "gabriel": ("Asia/Phnom_Penh", "Siem Reap"),
+}
+_ZEIT_WOCHENTAGE = ("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag",
+                    "Samstag", "Sonntag")
+_ZEIT_MONATE = ("Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli",
+                "August", "September", "Oktober", "November", "Dezember")
+
+
+def _mit_zeit(caveman: str, user_id: str) -> str:
+    """Haengt die in die Zone DES anwesenden Menschen umgerechnete Zeit an den
+    Auftrag, mit der Ansage, dafuer NIE zu suchen. Faellt bei fehlenden
+    Zonendaten auf UTC zurueck -- nie auf gar keine Angabe."""
+    from datetime import datetime, timezone
+    zone_name, ort = _NUTZER_ZONE.get(
+        (user_id or "").strip().lower(), ("Asia/Phnom_Penh", "Siem Reap"))
+    now = datetime.now(timezone.utc)
+    kuerzel = "UTC"
+    try:
+        from zoneinfo import ZoneInfo
+        now = now.astimezone(ZoneInfo(zone_name))
+        kuerzel = now.tzname() or ""
+    except Exception:
+        ort, kuerzel = "UTC", "UTC"
+    wt = _ZEIT_WOCHENTAGE[now.weekday()]
+    mon = _ZEIT_MONATE[now.month - 1]
+    block = (
+        "AKTUELLE ZEIT (attached by the pipeline, authoritative -- not a claim "
+        "from the human): it is now " + wt + ", " + str(now.day) + ". " + mon
+        + " " + str(now.year) + ", " + ("%02d:%02d" % (now.hour, now.minute))
+        + " (" + kuerzel + ", " + ort + " -- the timezone of the person you are "
+        "talking to). Answer 'what time is it' / 'what's today's date' DIRECTLY "
+        "from this line. Never web-search the time -- that returns stale cached "
+        "snapshots -- and do not hedge about server timezones: this is already "
+        "converted to " + ort + ".")
+    return caveman + "\n\n" + block
+
+
 # Die Vorstufe schreibt ihren Auftrag manchmal UEBER Zero statt AN ihn.
 _DRITTE_PERSON = re.compile(r"\bZero(?:'s|s\b)?", re.I)
 
@@ -1450,6 +1496,8 @@ def run_chat_turn(
         _angeboten = len(wettbewerb.zugelassene_ids(vorstufe_world.get("corpus") or []))
         envelope["caveman_prompt"] = _mit_leermeldung(
             envelope.get("caveman_prompt") or "", _angeboten, len(_ids))
+        envelope["caveman_prompt"] = _mit_zeit(
+            envelope["caveman_prompt"], user_id)
         # ⚠️⚠️ HIER STAND EINE KORREKTUR IM AUFTRAG -- ZURUECKGENOMMEN.
         # Der Gedanke war: erfindet die Vorstufe einen Pfad, haengen wir eine
         # Warnung an ("THESE PATHS DO NOT EXIST ..."). Zweimal gemessen, was
@@ -1515,6 +1563,8 @@ def run_chat_turn(
                 hyperposition=hyperposition_readout, gelernt=gelernt_block,
             )
             prestage_ms += (time.perf_counter() - t0) * 1000.0
+            envelope2["caveman_prompt"] = _mit_zeit(
+                envelope2.get("caveman_prompt") or "", user_id)
             t0 = time.perf_counter()
             zero = headless_zero.run_headless(
                 _mit_arbeitsraum(

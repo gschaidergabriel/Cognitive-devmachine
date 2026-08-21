@@ -1,12 +1,30 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T11:37:16Z. 1048 Commits aus vier Repos, davon 425 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T12:07:16Z. 1050 Commits aus vier Repos, davon 426 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 11:55:38 +0000 — entityos: 1 Aenderungen
+
+`0fa7cbf98c4f` · entityos · 11:55 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+
+Zeit: 2026-08-21T11:55:38+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 11:15:15 +0000 — entityos: 3 Aenderungen
 
@@ -2909,25 +2927,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 01:30:22 +0000 — entityos: 2 Aenderungen
-
-`36163a30b5fd` · entityos · 01:30 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/runtime_CLAUDE.md
-  vorsatz/eos_vorsatz.py
-
-Zeit: 2026-08-20T01:30:22+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

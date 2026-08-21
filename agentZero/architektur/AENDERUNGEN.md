@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T11:37:16Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T12:07:16Z aus drei Repos. 480 Eintraege.
 
 ## architektur (12)
 
@@ -113,6 +113,7 @@ Automatisch erzeugt 2026-08-21T11:37:16Z aus drei Repos. 480 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T11:55 | entityos | `0fa7cbf98c4f` | EOS-Chronik 2026-08-21 11:55:38 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T11:15 | entityos | `47fdb11bf643` | EOS-Chronik 2026-08-21 11:15:15 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T11:12 | entityos | `ffbe1c39980c` | EOS-Chronik 2026-08-21 11:12:21 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T11:10 | entityos | `c5733d9c25e7` | EOS-Chronik 2026-08-21 11:10:21 +0000 — entityos: 1 Aenderungen |
@@ -172,5 +173,4 @@ Automatisch erzeugt 2026-08-21T11:37:16Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T05:07 | clay | `13f2f0d95a99` | EOS-Chronik 2026-08-21 05:07:50 +0000 — clayverse: 1 Aenderungen |
 | 2026-08-21T04:58 | entityos | `2278c47244d3` | EOS-Chronik 2026-08-21 04:58:43 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T04:56 | entityos | `b8af77281914` | EOS-Chronik 2026-08-21 04:56:43 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T04:12 | entityos | `6d16006a852d` | EOS-Chronik 2026-08-21 04:12:22 +0000 — entityos: 1 Aenderungen |
 

@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T11:37:16Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T12:07:17Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -8,7 +8,7 @@ Automatisch erzeugt 2026-08-21T11:37:16Z aus `udb/abruf/wegehierarchie.py`.
 
 Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: wenige Autobahnen, viele langsame Strassen -- die erwartete Form.
 
-Wege gesamt: **365**
+Wege gesamt: **366**
 
 ## Verteilung nach Rang
 
@@ -16,10 +16,10 @@ Wege gesamt: **365**
 |---|---|
 | tunnel | 7 |
 | autobahn | 239 |
-| langsame strasse | 72 |
+| langsame strasse | 73 |
 | schnellstrasse | 47 |
 
-Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.099).
+Oberes Zehntel haelt 0.139 der Gesamtguete (bei Gleichverteilung waeren es 0.098).
 
 ## Staerkste Wege
 

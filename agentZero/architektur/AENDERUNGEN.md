@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T20:02:32Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T20:32:32Z aus drei Repos. 481 Eintraege.
 
 ## architektur (14)
 
@@ -113,6 +113,7 @@ Automatisch erzeugt 2026-08-21T20:02:32Z aus drei Repos. 481 Eintraege.
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T20:08 | entityos | `f64c54123890` | Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Records, Inva |
 | 2026-08-21T19:53 | entityos | `8eb9cbe04645` | EOS-Chronik 2026-08-21 19:53:14 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T19:51 | entityos | `ceb7f3311f32` | EOS-Chronik 2026-08-21 19:51:14 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T19:48 | entityos | `96573ddb6ccb` | EOS-Chronik 2026-08-21 19:48:53 +0000 — entityos: 1 Aenderungen |
@@ -172,5 +173,4 @@ Automatisch erzeugt 2026-08-21T20:02:32Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T10:16 | entityos | `70b1e28b98b0` | EOS-Chronik 2026-08-21 10:16:05 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T10:07 | entityos | `f43d21ca1cf1` | EOS-Chronik 2026-08-21 10:07:35 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T10:05 | entityos | `830caae196fb` | EOS-Chronik 2026-08-21 10:05:35 +0000 — entityos: 5 Aenderungen |
-| 2026-08-21T09:39 | entityos | `6580a52cd9be` | EOS-Chronik 2026-08-21 09:39:13 +0000 — entityos: 4 Aenderungen |
 

@@ -1,12 +1,88 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T02:11:18Z. 1010 Commits aus vier Repos, davon 352 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T02:41:19Z. 1011 Commits aus vier Repos, davon 356 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 02:36:51 +0000 — entityos: 2 Aenderungen
+
+`0e58337bc2ae` · entityos · 02:36 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/tests/test_selbstbild.py
+
+Zeit: 2026-08-21T02:36:51+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:27:45 +0000 — entityos: 2 Aenderungen
+
+`ab34c0b56735` · entityos · 02:27 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/hyperposition.py
+  the artefact/tests/test_hyperposition_rueckfall.py
+
+Zeit: 2026-08-21T02:27:45+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:25:44 +0000 — entityos: 2 Aenderungen
+
+`2078ffe8c963` · entityos · 02:25 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/hyperposition.py
+  the artefact/tests/test_hyperposition_rueckfall.py
+
+Zeit: 2026-08-21T02:25:44+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 02:20:16 +0000 — entityos: 2 Aenderungen
+
+`084464d0ba44` · entityos · 02:20 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/microclay_retrieval.py
+  the artefact/tests/test_befoerderung.py
+
+Zeit: 2026-08-21T02:20:16+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 02:11:15 +0000 — entityos: 4 Aenderungen
 
@@ -4151,256 +4227,5 @@ Fuenf Faelle geprueft, fuenf richtig: greift bei "Das Paket reicht." und bei
 "... kein NEED_BETTER_PACKAGE.", greift NICHT bei einer echten Antwort, NICHT
 bei der Notbremse selbst, NICHT bei einem langen ersten Absatz, in dem das Wort
 nur beilaeufig vorkommt.
-```
-
-### Drei Befunde aus dem Live-Test - alle drei hat Zero selbst aufgedeckt
-
-`26a6861b88b0` · entityos · 08:50 UTC · EntityOS
-
-```
-Nach dem Neubau nennt Zero den anwesenden Menschen aus dem kanonischen Zustand:
-28 s statt 68 s, EINE Runde statt zwei mit Selbstanpassung. Auf "Hat Gabriel
-Code fuer Projekte geschrieben, die mir gehoeren?" liefert es zwei UNABHAENGIGE
-Belege (Projekttabelle + Wiki-Zuordnung) und weist die Belastbarkeit jedes
-einzelnen getrennt aus: Projektzeile aus Eignerangabe, Wiki-Zahl gemessen, deren
-Zuordnungsgrund aber nur Sicherheit 0,6 -- "stuetzt den Fakt, begruendet ihn
-aber nicht allein". Das ist das Zielverhalten.
-
-Drei Dinge stimmten trotzdem nicht. Bemerkenswert: Zero hat alle drei selbst
-gemeldet, keines davon ist durch eine Fehlermeldung aufgefallen.
-
-A: EINE FREMDE MAILADRESSE IN ANDREAS' SITZUNG
-
-Zero, woertlich, in Andreas' Sitzung:
-  Die eingespeiste Umgebungsangabe nennt als E-Mail-Adresse
-  <adresse>, dein Profilfeld mail gibt
-  <adresse> an. Fuer die Sitzungsidentitaet ist der vom Clerk
-  bestaetigte Zustand massgeblich, und der lautet: andreas.
-
-Es hat richtig entschieden und trotzdem Arbeit an eine Unstimmigkeit gehaengt,
-die es nicht aufloesen konnte. Gefunden: .oauthAccount.emailAddress steht in
-BEIDEN Benutzerverzeichnissen -- das Anthropic-Konto, mit dem Claude Code auf
-diesem Server angemeldet ist. Es gibt genau EINE Anmeldung.
-
-Kein Leck aus der Profilschicht, sondern eine wahre Angabe ueber den BETREIBER.
-Loeschen waere falsch (es ist die Anmeldung). Verstecken waere schlimmer: Zero
-saehe die Abweichung trotzdem und haette dann keine Erklaerung. Also wird sie
-BENANNT -- Punkt 9c im Vertrag. Aus einer unaufloesbaren Unstimmigkeit wird eine
-bekannte Tatsache.
-
-B: DIE BILANZ WAR DA, DAS WERKZEUG WAR NICHT AUSGEWAEHLT
-
-Auf "Was ist schiefgegangen? Nenne die Fehlschlaege" suchte Zero in
-udb_memory_search und udb_embedding_search, fand nichts und forderte
-sauber begruendet ein besseres Paket an -- obwohl die Antwort in
-menschen_profil()["bilanz"] stand. Die Vorstufe waehlt die Werkzeuge, und fuer
-diese Frage hatte sie menschen_profil nicht gewaehlt.
-
-Werkzeuge, die sagen WER da ist und WEM was gehoert, duerfen nicht von der
-Auswahl eines freien Modells abhaengen. Sie sind lesend, billig und genau bei
-den Fragen zustaendig, bei denen Raten am teuersten ist. Sie werden jetzt IMMER
-mitgegeben, egal was die Vorstufe waehlt. Dazu Punkt 9b: die Bilanz hat zwei
-Haelften, und der Zeitraum (ein Tag) gehoert dazugesagt.
-
-C: VERHANDLUNGSGEPLAUDER IM SICHTBAREN TEXT
-
-Antworten begannen mit "Ausreichend fuer die Identitaetsfrage" und "Fakt
-vorhanden -- kein NEED_BETTER_PACKAGE." Das ist Zeros Antwort an die VORSTUFE.
-Die Verhandlung ist ein Kanal zwischen zwei Maschinen; sie gehoert nicht in den
-Text, den ein Mensch liest. Entweder Zero antwortet, oder es setzt die nackte
-Notbremse -- nie beides, nie als Vorspann.
-```
-
-### Zero kann jetzt nachschlagen, wem was gehoert - und was schiefging
-
-`be1359046d41` · entityos · 08:44 UTC · EntityOS
-
-```
-Zero antwortete im Testlauf auf "Wem gehoert der Rechner andreas-MACO, und wem
-gehoert SeiMensch.net?" woertlich:
-
-  UNBEKANNT -- fuer beide. Keiner der beiden Namen existiert in meinem
-  aktuellen Zustand. Ich treffe keine Vermutung.
-
-Und es hatte in jedem Punkt recht. Es suchte in udb_memory_search und
-udb_embedding_search, fand nichts und weigerte sich zu raten. Die Antwort stand
-in Tabellen, zu denen es keinen Weg gab. DIE WEIGERUNG WAR KORREKT, DIE
-BLINDHEIT WAR DER BAUFEHLER. Zwei Ursachen, beide hier behoben.
-
-URSACHE 1: DER ANWESENHEITSBLOCK ERREICHTE MISTRAL, ABER NIE ZERO.
-
-Im Pipeline-Pfad setzt headless_zero CLAYVERSE_PIPELINE_MANAGED=1, und
-terminal_hooks steigt daraufhin sofort aus -- absichtlich, damit nicht zwei
-Stellen denselben Zug aufnehmen. Damit faellt aber der GESAMTE Hook-Kontext weg,
-in dem `anwesender_mensch` als ungekuerztes Feld verankert war. Zero sieht dort
-genau zwei Dinge: die Systemanweisung und den Caveman-Prompt.
-
-Der Block haengt jetzt DETERMINISTISCH an der Systemanweisung (headless_zero
-_systemanweisung/_anwesenheitsblock, Wegwerfdatei je Aufruf, im finally
-geloescht). Nicht ueber Mistral: dann haenge die Identitaet eines Menschen an
-der Formulierungslaune eines freien Modells, und laesst es den Satz weg, weiss
-Zero wieder nichts, ohne dass es jemand merkt. Die Regel dafuer stammt vom
-Eigner: nicht dem Modell sagen, es sei etwas -- dem System die Eigenschaft geben
-und CODE entscheiden lassen, was wirklich passiert ist.
-Fehlt der Block, steht dort ausdruecklich status="NICHT_ERMITTELBAR". Ein
-fehlendes und ein leeres Feld sehen sonst gleich aus -- nur beim zweiten weiss
-Zero, dass nachgesehen wurde.
-
-URSACHE 2: KEIN WERKZEUG FUEHRTE ZU DEN ANGABEN.
-
-Neu: menschen_profil() und wiki_zuordnung(projekt). Beide nehmen KEIN
-user_id-Argument -- der Mensch ist kein Parameter. Ein Argument waere ein Feld,
-das das Modell fuellt, und die Trennung der beiden Menschen waere eine Bitte an
-ein Sprachmodell statt einer Eigenschaft des Systems. Genau dieser Unterschied
-hat heute schon einmal Andreas Gabriels private Eintraege sehen lassen.
-
-Dazu Punkt 9a im Laufzeitvertrag. Punkt 9 schliesst session_state als
-Wahrheitsquelle aus -- richtig, und Zero hat sich daran gehalten. Nur stand
-nirgends, WO die Wahrheit dann steht. Ein Vertrag, der jede falsche Quelle
-ausschliesst und keine richtige nennt, erzeugt genau diese Antwort.
-
-ARTIKELZUORDNUNG: 16.551 Artikel, aus den Metadaten.
-  gemeinsam 13.810 | gabriel 1.633 | andreas 1.092 | unbekannt 16
-
-Die Falle war das naheliegendste Feld. Gemessen:
-  8880 Artikel  zuletzt_von="Gabriel Gschaider"  projekt=clay-global-research-entity
-   501 Artikel  zuletzt_von="Gabriel Gschaider"  projekt=Dr.-Unterweger
-Die zweite Zeile ist der Beweis: 501 Artikel aus ANDREAS' Material tragen
-GABRIELS Namen als Bearbeiter. Nach Bearbeiter zugeordnet waeren 68 % aller
-Artikel an Gabriel gegangen, samt Andreas' gesamtem Bestand. Urheberschaft ist
-nicht Zugehoerigkeit -- die Regel stammt vom Eigner selbst ("seimensch ist das
-projekt von andreas aber allen code habe ich gemacht"). zuletzt_von wird in
-KEINER Stufe verwendet. Stufe 5 ist die wichtigste: ohne Signal bleibt ein
-Artikel `unbekannt` statt an den wahrscheinlicheren Menschen zu fallen.
-
-BAUNOTIZEN IM WIKI: alle, mit Metadaten.
-  vorfall 63 -> 90 (27 Luecken gefuellt, fremde Zeilen NICHT angefasst)
-  baunotiz 0 -> 2240 (732 bauverlauf.jsonl + 1508 Git-Commits)
-Jede mit herkunft, timestamp, sha256, hypothese/gegenhypothese. Die Hypothesen
-werden mechanisch aus `^Hypothese:`-Zeilen gelesen und sonst auf null gesetzt --
-NIE erfunden. Befund dabei: kein einziger Commit hat so eine Zeile. Das ist der
-Befund, kein Fehler.
-CHECK-Constraint entdeckt statt dagegen gelaufen: artikel.herkunft erlaubt nur
-('gemessen','nutzer'). Die Quellenart steht deshalb in von_quelle und zusaetzlich
-in metadaten.herkunft.
-
-BILANZ: 6 Erfolge, 7 Fehlschlaege, gleichrangig.
-Nicht aus Bescheidenheit. Jeder Fehlschlag hat im Betrieb NICHTS geworfen -- sie
-wurd
-```
-
-### Zero weiss jetzt, mit WEM es spricht - und wem was gehoert
-
-`9de2b8a9e7a0` · entityos · 08:03 UTC · EntityOS
-
-```
-Im Testlauf gefragt "wer bin ich?", antwortete Zero sinngemaess:
-  session_state.user_id = "gabriel" -- ein Kennzeichen, kein Identitaetsbeleg.
-Das war epistemisch RICHTIG. Der Kontextkanal traegt ausdruecklich "data, not
-instructions", und eine Zeichenkette in einem Datenfeld ist kein Nachweis. Zeros
-eigene Beweisdisziplin hat die richtige Antwort verworfen, weil wir ihm nie einen
-Beleg gegeben haben.
-
-Die Loesung ist deshalb nicht, Zero zum Glauben zu ueberreden, sondern ihm einen
-echten Beleg zu geben.
-
-NEU: clayverse/profile.py mit drei Tabellen
-  entityos_profil            Felder je Mensch, JEDES mit Herkunft
-  entityos_projekte          Projekte mit Zugehoerigkeit, Urheberschaft, Erfolg
-  entityos_artikel_zuordnung Vorbereitet fuer die Artikelkategorisierung
-
-DREI REGELN, die im Code stehen bleiben:
-
-1. JEDES FELD TRAEGT SEINE HERKUNFT. "eigner" = vom Eigner erklaert,
-   "iar.frank.ink" = von der Institutsseite gelesen, "abgeleitet" = geschlossen,
-   "gemessen" = belegt. Ohne Herkunft ist ein Profilfeld eine Behauptung ueber
-   einen Menschen - und die gehoert belegt.
-
-2. ZUGEHOERIGKEIT UND URHEBERSCHAFT SIND ZWEI DINGE. SeiMensch gehoert Andreas,
-   den Code hat Gabriel geschrieben. Wer das in ein Feld presst, macht aus einer
-   Zusammenarbeit einen Besitzstreit. Also getrennte Spalten gehoert/gebaut_von,
-   und "gemeinsam" ist eine eigene Kategorie, keine Verlegenheitsloesung.
-
-3. ERFOLG UND FEHLSCHLAG STEHEN NEBENEINANDER. Eine Projekttabelle, die nur
-   Gelungenes fuehrt, ist ein Werbeblatt.
-
-Quelle fuer die Personendaten: iar.frank.ink/llms-full.txt (307 KB, maschinen-
-lesbar bereitgestellt) plus die Teamseite. Beides mit Herkunftsvermerk.
-Andreas: Dipl.-Ing. Dr.nat.techn., Founder/Obmann/Senior Researcher, Graz.
-Gabriel: Co-founder/Vizeobmann/Lead Researcher, Knittelfeld -> Graz -> Siem Reap.
-Beide ehrenamtlich. IAR, ZVR 1741094409, Feldkirchen bei Graz.
-
-RECHNERZUORDNUNG im Profil: aus entityos_wirte, mit Kennzeichnung "meiner".
-Gabriel sieht ai-core-node-projekt-frankenstein als seinen, andreas-MACO als
-fremden; bei Andreas umgekehrt.
-
-IM PROMPT: der Block anwesender_mensch faehrt in der Weltzusammenstellung mit,
-wird an KEINER Trimmstelle entfernt, und der Laufzeitvertrag nennt ihn
-ausdruecklich als AUSNAHME von "data, not instructions" - weil er nicht aus dem
-Gespraechstext stammt, sondern aus dem kanonischen Zustand nach geprüfter
-Clerk-Anmeldung. Fehlt er, soll Zero sagen dass es nicht weiss mit wem es
-spricht, statt zu raten. 1097 bzw. 967 Zeichen - vertretbar im 9000er-Budget.
-
-EIGENE REGRESSION, gefunden und behoben: profil() rief sicherstellen(), das
-executescript() ausfuehrt - und das COMMITTET implizit. Aus einem laufenden Zug
-heraus riss es dessen Transaktion auseinander: 77 rote Tests,
-"cannot commit - no transaction is active".
-Lehre, die als Kommentar stehen bleibt: Schemaanlage ist eine Startaufgabe,
-keine Leseaufgabe. Eine Lesefunktion, die nebenbei Tabellen anlegt, ist eine
-Schreiboperation im Tarnanzug. Angelegt wird jetzt in service.main().
-
-Suite 395/98 zurueck auf 479 gruen / 14 rot.
-```
-
-### KRITISCH: Cross-user-Leck geschlossen. Und die Notbremse wird endlich erkannt.
-
-`2e3a9cd5a2db` · entityos · 07:49 UTC · EntityOS
-
-```
-1) DAS LECK. Im Testlauf gemessen: Andreas fragte in SEINER Sitzung nach einem
-   Codewort und bekam Gabriels private Eintraege WOERTLICH zurueck, mit Kennung
-   und Zeitstempel - in der deutschen Antwort und im Caveman-Original.
-
-   Die Ursache war keine Verwechslung im Code, sondern eine fehlende Spalte:
-   memory_tabelle hatte weder user_id noch session_id. Sie KONNTE strukturell
-   nicht trennen. memory_suche() lautete schlicht
-       SELECT * FROM memory_tabelle WHERE memory_text LIKE ?
-   Jede Suche sah alles. In einem System, dessen Architektur Cross-user-Leakage
-   ausdruecklich verbietet und dessen zwei Menschen sich Rechte teilen, ist das
-   der schwerste Fehler dieser Nacht.
-
-   Behoben in drei Teilen:
-   - Spalte user_id ergaenzt, Index dazu. Die zwei vorhandenen Zeilen wurden
-     ZUGEORDNET, nicht geraten: beide stammen belegbar aus Gabriels Testlauf.
-     Waere die Herkunft unklar gewesen, haette die Zeile geloescht statt geraten
-     werden muessen.
-   - memory_suche, memory_hinzufuegen und memory_loeschen nehmen user_id als
-     PFLICHTFELD, ohne Vorgabewert. Ein Vorgabewert waere dasselbe Loch mit
-     Spalte. Auch das Loeschen: eine blosse id waere sonst ein Loeschrecht auf
-     fremde Erinnerungen, wenn man die Nummer erraet.
-   - Die MCP-Werkzeuge reichen self.user_id aus dem VERIFIZIERTEN Clerk-Zustand
-     durch, nicht aus einem Feld, das das Modell fuellen koennte. Sonst waere die
-     Trennung eine Bitte.
-
-   Bewiesen in beide Richtungen:
-       gabriel   Werkzeug 1  Stichsaege 0
-       andreas   Werkzeug 0  Stichsaege 1
-
-2) DIE NOTBREMSE WURDE FUENFMAL UEBERSEHEN. Alle fuenf echten Beispiele aus dem
-   Testlauf kamen fett gesetzt:
-       **NEED_BETTER_PACKAGE: MISSING DIRECT DB ACCESS OR LIVE COUNT**
-       **NEED_BETTER_PACKAGE: MISSING CODE IN CONTEXT**
-       **NEED_BETTER_PACKAGE: MISSING DB READ CAPABILITY**
-       **NEED_BETTER_PACKAGE: MISSING IDENTITY PROOF**
-       **NEED_BETTER_PACKAGE: MISSING COSMOLOGY DATA**
-   startswith() prueft Position 0 und traf nie. Die Zuege liefen als Runde 1
-   durch, obwohl sie semantisch Zurueckweisungen waren - der Zaehler der
-   Verhandlungsschleife war also falsch. F74 warnt genau davor: ein
-   Rueckfrage-Kreis ohne verlaesslichen Zaehler ist Restart=always in
-   Gespraechsform.
-   Ein Modell, das Markdown spricht, legt seine Auszeichnung nicht ab, nur weil
-   ein Prompt es bittet. Die Erkennung muss das aushalten, nicht das Modell.
-   Jetzt markdown-fest, an allen fuenf Belegen geprueft, und "NEED_BETTER_PACKAGE"
-   mitten im Satz loest weiterhin NICHT aus.
 ```
 

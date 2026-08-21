@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 import json
 from dataclasses import dataclass, asdict
 from typing import Any
@@ -64,6 +65,51 @@ class HyperpositionProjector:
             return decoded if isinstance(decoded, dict) else {}
         return {}
 
+    # ⭐⭐ WARUM ES HIER EINEN RUECKFALL BRAUCHT.
+    # Gemessen 2026-08-21: dieser Projektor lieferte an fuenf von fuenf echten
+    # Fragen **eine leere Liste** -- seit dem Bau. Der Grund steht direkt
+    # darunter: er verlangt einen `relation_key` oder ein `predicate` aus der
+    # Provenienz, und die Gedaechtnis-Extraktion schreibt beides **nie**. Ein
+    # Bauteil, dessen Vorbedingung niemand erfuellt, ist kein Bauteil.
+    #
+    # ⚠️ DER NAHELIEGENDE RUECKFALL WAERE FALSCH. `subject::kind` als Schluessel
+    # zu nehmen sieht bequem aus und ist Unsinn: dann gehoerten ALLE `fact`-
+    # Eintraege ueber Gabriel in eine Gruppe, und je zwei verschiedene Tatsachen
+    # ueber ihn -- der Pfad der Arbeitskopie und der Name seines Rechners --
+    # erschienen als "gleichzeitig gueltige Lesarten" desselben Sachverhalts.
+    # Das ist keine Mehrdeutigkeit, das ist ein Kategorienfehler, und er wuerde
+    # den Kontext mit erfundenen Widerspruechen fluten.
+    #
+    # Der Rueckfall haengt deshalb am GEGENSTAND: zwei Eintraege gehoeren
+    # zusammen, wenn sie von derselben Sache handeln. Als Naeherung dafuer die
+    # zwei laengsten Inhaltswoerter des Werts -- lange Woerter sind im Deutschen
+    # die spezifischen ("Pruefrechner", "Arbeitskopie"), kurze die allgemeinen.
+    # Umlautfrei verglichen, weil derselbe Gegenstand mal so und mal so
+    # geschrieben wird (gemessen: "Prüfrechner" gegen "Pruefrechner").
+    _UMLAUT = ((chr(228), "ae"), (chr(246), "oe"), (chr(252), "ue"), (chr(223), "ss"))
+    _ALLERWELT = frozenset((
+        "dass", "diese", "dieser", "dieses", "einem", "einen", "einer", "eines",
+        "haben", "heisst", "immer", "nicht", "oder", "seine", "sich", "sind",
+        "ueber", "unter", "wenn", "werden", "wird", "wurde", "seinem", "ihrem",
+    ))
+
+    # Ab dieser Laenge gilt ein Wort als spezifisch genug, um zwei Aussagen
+    # ueberhaupt auf denselben Gegenstand zu beziehen.
+    _GEGENSTAND_MIN = 8
+    # Ein Wort, das in zu vielen Eintraegen vorkommt, ist ein THEMA, kein
+    # Gegenstand ("seimensch" steht in dreissig Notizen). Solche Woerter
+    # gruppieren nichts, sie fluten nur.
+    _GEGENSTAND_MAX_EINTRAEGE = 3
+
+    @classmethod
+    def _worte(cls, wert: str) -> set:
+        """Spezifische Inhaltswoerter eines Werts, umlautfrei."""
+        t = str(wert or "").lower()
+        for zeichen, ersatz in cls._UMLAUT:
+            t = t.replace(zeichen, ersatz)
+        return {w for w in re.findall(r"[a-z0-9_-]{%d,}" % cls._GEGENSTAND_MIN, t)
+                if w not in cls._ALLERWELT}
+
     @classmethod
     def _relation_key(cls, memory: dict[str, Any]) -> str | None:
         provenance = cls._provenance(memory.get("provenance"))
@@ -77,16 +123,62 @@ class HyperpositionProjector:
         return None
 
     @classmethod
+    def _gegenstands_gruppen(cls, memories: list) -> dict:
+        """Ohne ausdrueckliche Provenienz: gruppiere ueber GETEILTE Woerter.
+
+        ⚠️ Zweiter Anlauf. Der erste bildete einen Schluessel aus den laengsten
+        Woertern JEDES Eintrags -- und nahm damit ausgerechnet das
+        unterscheidende Wort mit auf ("pruefrechner+quirlbaum-8" gegen
+        "faltbogen-3+pruefrechner"). Jeder Wert bekam seine eigene Gruppe, und
+        gruppiert wurde nie. Ein Schluessel, der den Unterschied enthaelt, kann
+        nichts zusammenfuehren.
+
+        Richtig ist die andere Richtung: nicht je Eintrag einen Schluessel
+        rechnen, sondern die Eintraege ueber das vergleichen, was sie TEILEN.
+        Zwei Aussagen gehoeren zusammen, wenn sie ein spezifisches Wort
+        gemeinsam haben -- und sie sind erst dann mehrdeutig, wenn ihre Werte
+        sich unterscheiden.
+
+        Zwei Sperren gegen Flutung: das Wort muss lang genug sein
+        (`_GEGENSTAND_MIN`), und es darf nicht in zu vielen Eintraegen stehen
+        (`_GEGENSTAND_MAX_EINTRAEGE`) -- sonst ist es ein Thema und kein
+        Gegenstand.
+        """
+        vorkommen: dict[str, list] = {}
+        for m in memories:
+            for w in cls._worte(m.get("value")):
+                vorkommen.setdefault(w, []).append(m)
+        raus: dict[str, list] = {}
+        for wort, eintraege in vorkommen.items():
+            if not (2 <= len(eintraege) <= cls._GEGENSTAND_MAX_EINTRAEGE):
+                continue
+            if len({str(m.get("value")) for m in eintraege}) < 2:
+                continue
+            raus[wort] = eintraege
+        return raus
+
+    @classmethod
     def from_world(cls, world: dict, *, max_relations: int = 32, max_facets: int = 8) -> list[dict]:
         groups: dict[tuple[str, str, str], list[Facet]] = {}
-        for memory in world.get("durable_memory", []):
-            if not isinstance(memory, dict):
-                continue
+        # Eintraege ohne ausdrueckliche Provenienz bekommen ihren Schluessel aus
+        # dem, was sie mit anderen TEILEN (siehe _gegenstands_gruppen). Ohne
+        # diesen Rueckfall lieferte der Projektor seit dem Bau immer [] -- die
+        # Extraktion schreibt naemlich nie einen `relation_key`.
+        brauchbar = [m for m in world.get("durable_memory", [])
+                     if isinstance(m, dict) and str(m.get("value", ""))
+                     and str(m.get("kind", "memory")) not in {"compression_receipt",
+                                                              "source_archive"}]
+        geteilt = {}
+        for wort, eintraege in cls._gegenstands_gruppen(
+                [m for m in brauchbar if cls._relation_key(m) is None]).items():
+            for m in eintraege:
+                geteilt.setdefault(id(m), f"gegenstand::{wort}")
+        for memory in brauchbar:
             kind = str(memory.get("kind", "memory"))
             subject = str(memory.get("subject", "shared"))
             value = str(memory.get("value", ""))
-            relation_key = cls._relation_key(memory)
-            if not value or relation_key is None or kind in {"compression_receipt", "source_archive"}:
+            relation_key = cls._relation_key(memory) or geteilt.get(id(memory))
+            if relation_key is None:
                 continue
             facet = Facet(
                 value=value,

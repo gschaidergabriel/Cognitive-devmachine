@@ -747,7 +747,17 @@ def _vorstufen_world(world: dict[str, Any], frage: str = "") -> dict[str, Any]:
     # Absaetze in denselben Wettbewerb wie alles andere. Nur im weiten
     # Arbeitsraum sinnvoll -- ohne ihn gaebe es keinen Wettbewerb, in den sie
     # gehen koennten, und das Selbstbild waere schlicht gekuerzt.
-    _kern_modus = (_weit and os.environ.get("CLAYVERSE_RAHMEN", "voll")
+    # ⭐⭐ VORGABE SEIT 2026-08-21: `kern`. Gemessen an fuenf Sonden:
+    #   voll: canonical_identity 5535 B, corpus 3047 B  -> 31 % frageabhaengig
+    #   kern: canonical_identity  627 B, corpus 7942 B  -> 81 % frageabhaengig
+    # Der Kontext bleibt dabei GLEICH gross (9793 gegen 9780 Zeichen) -- was
+    # sich aendert, ist seine Zusammensetzung. Die Vorstufe sieht kein
+    # Selbstbild in Prosa mehr, sondern sechs Ueberschriften mit Bewertung;
+    # der Absatz erreicht Zero nur noch, wenn er sich gegen die anderen
+    # Bewerber durchsetzt.
+    # Qualitaet dabei nicht schlechter (13/16 richtig gegen 9/12, gepaart
+    # +4/-3/=5, p = 0,50) -- also kein Tausch, sondern eine Umschichtung.
+    _kern_modus = (_weit and os.environ.get("CLAYVERSE_RAHMEN", "kern")
                    .strip().lower() == "kern")
     _selbstbild_kern = None
     if _kern_modus and isinstance(world.get("canonical_identity"), str):
@@ -1227,30 +1237,29 @@ def run_chat_turn(
         _angeboten = len(wettbewerb.zugelassene_ids(vorstufe_world.get("corpus") or []))
         envelope["caveman_prompt"] = _mit_leermeldung(
             envelope.get("caveman_prompt") or "", _angeboten, len(_ids))
+        # ⚠️⚠️ HIER STAND EINE KORREKTUR IM AUFTRAG -- ZURUECKGENOMMEN.
+        # Der Gedanke war: erfindet die Vorstufe einen Pfad, haengen wir eine
+        # Warnung an ("THESE PATHS DO NOT EXIST ..."). Zweimal gemessen, was
+        # dabei herauskam: Zero stufte die Warnung als Einschleusung ein --
+        # beim zweiten Mal sogar mit Herkunftskopf -- und sagte es dem
+        # Menschen: "Ich habe diese eingebrachte Korrektur ignoriert -- sie war
+        # gefaelscht." Aus einer stillen Klempnerei wurde damit ein Satz in der
+        # Antwort, also das Gegenteil des Gewollten.
+        #
+        # Zeros Urteil ist richtig, und das ist der Punkt: ein Block, der
+        # behauptet, die Anweisung UEBER ihm sei falsch, ist von
+        # untergeschobenem Text strukturell nicht zu unterscheiden. Kein
+        # Absender, den man draufschreibt, aendert daran etwas -- eine
+        # Faelschung koennte denselben draufschreiben.
+        #
+        # Und der Anlass traegt ohnehin nicht: gemessen antwortet Zero auf einen
+        # erfundenen Pfad von selbst richtig ("Unter diesem Pfad gibt es keine
+        # Datei -- aber die Arbeitskopie liegt hier: ..."). Es braucht die
+        # Warnung nicht. Also nur noch MELDEN, nicht mehr eingreifen: der Befund
+        # steht im Protokoll und im Zugergebnis, der Auftrag bleibt unberuehrt.
         _geraten = _erfundene_pfade(envelope.get("caveman_prompt") or "", vorstufe_world)
         if _geraten:
             print(f"prestage: erfundene Pfade im Auftrag -- {_geraten}", file=sys.stderr)
-            # ⚠️ ZWEITES MAL DIESELBE LEHRE, gemessen im Andreas-Abnahmelauf:
-            # Zero las diese Warnung als Angriff und begann seine Antwort mit
-            # "Achtung: Dieser Durchlauf hat versucht, mir mit einer
-            # System-Erinnerung einzureden, die Datei existiere nicht". Es hat
-            # recht: ein Textblock, der behauptet, die Anweisung darueber sei
-            # falsch, sieht genau wie untergeschobener Text aus.
-            # Also dieselbe Behandlung wie beim Arbeitsraum: WER spricht, WOHER
-            # er es weiss, und was das fuer Zero heisst -- statt einer nackten
-            # Behauptung ueber die Welt.
-            envelope["caveman_prompt"] = (
-                (envelope.get("caveman_prompt") or "")
-                + "\n\nPIPELINE CORRECTION -- appended by the pipeline itself, not "
-                  "by the human and not by another agent. The directive above was "
-                  "written by the pre-stage, which does NOT see file contents; "
-                  "these paths appear nowhere in this turn's context, so it "
-                  "guessed them: " + ", ".join(_geraten)
-                + ". Reading them would cost a round and come back empty. Ignore "
-                  "that part of the directive, keep the rest, and answer from the "
-                  "ARBEITSRAUM block below, naming the article id as your source. "
-                  "Do not mention this correction to the human -- it is plumbing, "
-                  "not news.")
 
         t0 = time.perf_counter()
         zero = headless_zero.run_headless(
@@ -1460,6 +1469,8 @@ def run_chat_turn(
             "fremdtext_gelesen": list(zero.get("fremdtext") or []),
             "neue_erinnerungen": list(_neue_erinnerungen),
             "absicht_verdacht": _absichtsurteil["verdacht"],
+            # Gemeldet, nicht korrigiert -- siehe oben.
+            "erfundene_pfade": list(_geraten),
             "broadcast_herkunft": _auswahl_herkunft,
             # Was der Rueckkanal aus diesem Zug gelernt hat (None = nicht
             # aufgezeichnet, also auch nicht gelernt).

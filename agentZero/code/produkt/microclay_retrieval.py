@@ -309,6 +309,19 @@ class MicroClayRetrieval:
 
     MIN_SCHLUESSEL_FUER_AKTIV = 3
     MIN_QUITTUNGEN_FUER_AKTIV = 2
+    # ⭐⭐⭐ WELCHE QUITTUNGEN NICHT ZAEHLEN.
+    # Gemessen 2026-08-21: `retrieval_policy_state` stand auf **ACTIVE**,
+    # befoerdert von **20 Zeilen, die ausnahmslos `bootstrap:geholfen` und
+    # `bootstrap:daneben` waren** -- Setzlinge aus dem Bau, kein einziges
+    # unabhaengiges Signal. Die Zaehlung darueber verspricht im Kommentar
+    # ausdruecklich "validiertes Lernsignal" und zaehlte in Wahrheit alles.
+    #
+    # Das ist genau der Kurzschluss, gegen den der SHADOW-Modus gebaut wurde:
+    # ein System, das sich selbst befoerdert, weil es sich selbst beim Lernen
+    # zugesehen hat. Eine Quittung zaehlt nur, wenn sie von AUSSEN kommt --
+    # aus einem verifizierten Effekt, einer Menschenkorrektur oder einem
+    # unabhaengig festgestellten Fehlgriff.
+    QUITTUNG_ZAEHLT_NICHT = ("bootstrap:", "selftest:", "probe:", "seed:")
 
     def befoerderung_pruefen(self) -> dict[str, Any]:
         """Prueft das validierte Lernsignal und hebt SHADOW auf ACTIVE, wenn genug da ist.
@@ -322,7 +335,15 @@ class MicroClayRetrieval:
                 "SELECT COUNT(*) FROM retrieval_entrypoint_policy WHERE pulls>=1"
             ).fetchone()[0]
         )
+        _wo = " OR ".join(["signal_class LIKE ?"] * len(self.QUITTUNG_ZAEHLT_NICHT))
+        _args = [f"{k}%" for k in self.QUITTUNG_ZAEHLT_NICHT]
         quittungen = int(
+            self.db.db.execute(
+                "SELECT COUNT(DISTINCT receipt_id) FROM retrieval_feedback "
+                f"WHERE signal_class IS NOT NULL AND NOT ({_wo})", _args
+            ).fetchone()[0]
+        )
+        alle_quittungen = int(
             self.db.db.execute(
                 "SELECT COUNT(DISTINCT receipt_id) FROM retrieval_feedback"
             ).fetchone()[0]
@@ -333,11 +354,30 @@ class MicroClayRetrieval:
             "schwelle_schluessel": self.MIN_SCHLUESSEL_FUER_AKTIV,
             "quittungen": quittungen,
             "schwelle_quittungen": self.MIN_QUITTUNGEN_FUER_AKTIV,
+            "quittungen_gesamt": alle_quittungen,
         }
         if vorher == "ACTIVE":
+            # ⭐ Auch ein bestehendes ACTIVE wird gegen die BERICHTIGTE Regel
+            # geprueft. Sonst haelt ein einmal falsch erteilter Freibrief
+            # ewig -- und genau so einer war da: 20 Setzlinge, sonst nichts.
+            # Zurueck nach SHADOW ist die vorsichtige Richtung: dort
+            # entscheidet weiterhin die deterministische Politik, die lernende
+            # rechnet daneben mit. Kommt echtes Signal, befoerdert sie sich
+            # von selbst wieder.
+            if quittungen < self.MIN_QUITTUNGEN_FUER_AKTIV:
+                self.db.db.execute(
+                    "UPDATE retrieval_policy_state SET mode='SHADOW', "
+                    "updated_at=? WHERE singleton=1", (time.time(),))
+                ergebnis["befoerdert"] = False
+                ergebnis["zurueckgenommen"] = True
+                ergebnis["modus_nachher"] = "SHADOW"
+                ergebnis["grund"] = (
+                    f"zurueckgenommen: {alle_quittungen} Quittungen insgesamt, "
+                    f"davon {quittungen} unabhaengig -- der Rest sind Setzlinge")
+                return ergebnis
             ergebnis["befoerdert"] = False
             ergebnis["modus_nachher"] = "ACTIVE"
-            ergebnis["grund"] = "bereits ACTIVE"
+            ergebnis["grund"] = "bereits ACTIVE, unabhaengiges Signal genuegt"
             return ergebnis
         if schluessel < self.MIN_SCHLUESSEL_FUER_AKTIV or quittungen < self.MIN_QUITTUNGEN_FUER_AKTIV:
             ergebnis["befoerdert"] = False

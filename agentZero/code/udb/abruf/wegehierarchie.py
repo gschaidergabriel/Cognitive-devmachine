@@ -53,6 +53,7 @@ seine eigene Wirkungslosigkeit nicht anzeigen kann, ist nicht pruefbar.
 """
 from __future__ import annotations
 
+import re
 import time
 
 SCHEMA = """
@@ -79,6 +80,43 @@ SCHWELLE_AUTOBAHN = 0.65
 TUNNEL_MIN_SITZUNGEN = 3         # strenger als Autobahn: UNABHAENGIGE Mitbenutzung
 TUNNEL_MIN_GUETE = 0.45
 MAX_SITZUNGEN_GEMERKT = 12
+
+# ⭐⭐ GEMESSEN am 21.08. an /var/lib/clay/wiki.db (366 Wege, produktiv): der
+# `sitzung`-Fix (Wirt -> echte Sitzung durchreichen) behebt nur, DASS echte
+# Sitzungen ankommen -- er filtert nicht, WAS als "Sitzung" zaehlt. Ergebnis:
+# 304 Wege trugen weiterhin die alte Wirt-Kennung "unbekannt", 76 eine von
+# drei Diagnose-Labels ("breite-befahrung"/"diag"/"latenzmessung" aus
+# Messlaeufen) oder ein "pruefung-<Datum>"-Label aus einem manuellen
+# pruefung()-Aufruf -- und ACHT Wege erreichten damit `tunnel=1`
+# (>=3 "verschiedene Sitzungen"), OBWOHL keine einzige davon eine unabhaengige
+# menschliche Wiederverwendung belegt: "unbekannt" + zwei Diagnoselabels sind
+# drei verschiedene STRINGS, aber eine einzige, nicht-unabhaengige Quelle.
+# Das ist derselbe Fehler wie eine UNBEKANNT-Bedingung, die als ERFUELLT
+# durchgeht (siehe clayverse/wake_condition.py) -- hier auf der
+# Sitzungsachse statt der Zeitachse.
+#
+# SESSION_MUSTER ist bewusst eine ALLOWLIST, keine wachsende Verbotsliste von
+# Labelnamen: jede kanonische Sitzung im System hat die Form `session:<user>`
+# oder `session:<user>:<platz>` (siehe clayverse/identity.py,
+# SITZUNGEN_JE_MENSCH -- diese Datei liegt in einem separaten Repo
+# (/opt/unifieddb) und importiert clayverse bewusst NICHT, um die Kopplung
+# nicht zu erzwingen; das Muster ist stabil genug, um hier unabhaengig
+# dupliziert zu werden). Ein neues Diagnose-Skript mit einem neuen Labelnamen
+# faellt automatisch durch, ohne dass diese Datei je wieder angefasst werden
+# muss -- eine Verbotsliste haette das Leck bei jedem neuen Labelnamen wieder
+# geoeffnet.
+SESSION_MUSTER = re.compile(r"^session:[a-z][a-z0-9_-]*(?::\d+)?$")
+
+
+def ist_echte_sitzung(sitzung) -> bool:
+    """Zaehlt `sitzung` als unabhaengige menschliche Sitzung fuer Bedingung 3?
+
+    Diagnose-/Testlabels und die alte "unbekannt"-Kennung liefern False --
+    sie duerfen weiterhin AUFGEZEICHNET werden (nutzung/guete kennen keine
+    Sitzungsunterscheidung), aber nicht als Beleg fuer unabhaengige
+    Mitbenutzung zaehlen.
+    """
+    return isinstance(sitzung, str) and bool(SESSION_MUSTER.match(sitzung))
 
 
 def sicherstellen(db) -> None:
@@ -142,7 +180,16 @@ def befahren(db, wege, *, sitzung: str) -> dict:
             # Sitzungen -- eine starke Korrelation aus EINER Sitzung reicht
             # nicht. Ein falscher Tunnel behauptet eine Verbindung, die es
             # semantisch nicht gibt, und alles Spaetere erbt sie.
-            ist_tunnel = int(len(sitzungen) >= TUNNEL_MIN_SITZUNGEN and guete >= TUNNEL_MIN_GUETE)
+            #
+            # ⚠️ GEZAEHLT WIRD NUR `ist_echte_sitzung()` (siehe dortiger
+            # Kommentar, gemessen 21.08.): "unbekannt" und Diagnose-/Test-
+            # labels bleiben in `sitzungen` (fuer die Anzeige/Nachvollzug
+            # erhalten), zaehlen aber NICHT mehr zum Tunnel-Schwellwert --
+            # sonst reicht ein einziger mehrfach wiederholter Diagnoselauf,
+            # um eine "unabhaengige" Mitbenutzung vorzutaeuschen, die es nie
+            # gab.
+            echte_sitzungen = {s for s in sitzungen if ist_echte_sitzung(s)}
+            ist_tunnel = int(len(echte_sitzungen) >= TUNNEL_MIN_SITZUNGEN and guete >= TUNNEL_MIN_GUETE)
             if ist_tunnel and not r["tunnel"]:
                 tunnel_neu += 1
             sql.execute(
@@ -195,6 +242,53 @@ def pruefung(db) -> dict:
     for z in zeilen:
         r = rang(z["guete"], z["tunnel"])
         raenge[r] = raenge.get(r, 0) + 1
+
+    # ⚠️⚠️ BEDINGUNG-3-EHRLICHKEIT (gebaut 21.08., siehe SESSION_MUSTER-
+    # Kommentar oben): "kein Tunnel bildet sich" und "es gab noch nicht genug
+    # unabhaengige Sitzungen, um ueberhaupt einen zu erreichen" sehen in
+    # `raenge["tunnel"]` GLEICH aus (beides: eine kleine oder Null-Zahl).
+    # Das ist derselbe Fehler wie eine UNBEKANNT-Bedingung, die als "nicht
+    # eingetreten" durchgeht (siehe clayverse/wake_condition.py) -- hier
+    # getrennt ausgewiesen, statt in einer Zahl vermischt. `tunnel_roh` liest
+    # das gespeicherte `tunnel`-Flag (kann kontaminierte Alt-Daten enthalten,
+    # die vor dem 21.08. mit Diagnose-/Testlabels statt echten Sitzungen
+    # entstanden sind -- heilt sich erst, wenn die jeweilige Kante das
+    # naechste Mal befahren wird); `tunnel_bereinigt` rechnet live neu, nur
+    # mit `ist_echte_sitzung()`-gefilterten Sitzungen.
+    import json
+    alle_echten_sitzungen: set[str] = set()
+    wege_mit_echter_sitzung = 0
+    tunnel_bereinigt = 0
+    for z in zeilen:
+        try:
+            sitzungen = json.loads(z["sitzungen"] or "[]")
+        except Exception:
+            sitzungen = []
+        echte = {s for s in sitzungen if ist_echte_sitzung(s)}
+        alle_echten_sitzungen |= echte
+        if echte:
+            wege_mit_echter_sitzung += 1
+        if len(echte) >= TUNNEL_MIN_SITZUNGEN and float(z["guete"]) >= TUNNEL_MIN_GUETE:
+            tunnel_bereinigt += 1
+    verschiedene_echte = len(alle_echten_sitzungen)
+    if verschiedene_echte < TUNNEL_MIN_SITZUNGEN:
+        bedingung3_stand = "NOCH_ZU_WENIG_DATEN"
+        bedingung3_hinweis = (
+            f"Erst {verschiedene_echte} verschiedene echte Sitzung(en) je im gesamten "
+            f"Graphen gesehen -- ein Tunnel braucht mindestens {TUNNEL_MIN_SITZUNGEN} auf "
+            "DERSELBEN Kante. Rechnerisch kann noch kein einziger echter Tunnel "
+            "entstanden sein; 0 ist hier Datenmangel, kein Negativbefund."
+        )
+    elif tunnel_bereinigt == 0:
+        bedingung3_stand = "BEDINGUNG3_ERFUELLBAR_ABER_KEIN_TUNNEL"
+        bedingung3_hinweis = (
+            f"{verschiedene_echte} verschiedene echte Sitzungen insgesamt vorhanden -- "
+            "genug, um rechnerisch einen Tunnel zu bilden -- aber noch keine Kante mit "
+            f">= {TUNNEL_MIN_SITZUNGEN} davon UND Guete >= {TUNNEL_MIN_GUETE}."
+        )
+    else:
+        bedingung3_stand = "TUNNEL_BILDEN_SICH_ECHT"
+        bedingung3_hinweis = f"{tunnel_bereinigt} Kante(n) erfuellen Bedingung 3 mit echten Sitzungen."
     return {
         "wege": n,
         "raenge": raenge,
@@ -206,6 +300,14 @@ def pruefung(db) -> dict:
         "hinweis": ("Das obere Zehntel der Wege haelt diesen Anteil der Gesamtguete. "
                     "Bei Gleichverteilung waeren es genau 10 %. Deutlich mehr heisst: "
                     "wenige Autobahnen, viele langsame Strassen -- die erwartete Form."),
+        "bedingung3_echt": {
+            "verschiedene_echte_sitzungen_insgesamt": verschiedene_echte,
+            "wege_mit_mind_einer_echten_sitzung": wege_mit_echter_sitzung,
+            "tunnel_roh_gespeichert": raenge.get("tunnel", 0),
+            "tunnel_bereinigt": tunnel_bereinigt,
+            "stand": bedingung3_stand,
+            "hinweis": bedingung3_hinweis,
+        },
     }
 
 

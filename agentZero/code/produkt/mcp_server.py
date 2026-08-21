@@ -1072,6 +1072,13 @@ def main() -> None:
                 "hinweis": "nutze bild_ansehen mit dieser Kennung, um den Bildschirm zu analysieren"}
 
     @mcp.tool(annotations=effectful)
+    def pc_fenster_holen(nummer: int, wirt: str = "") -> dict:
+        """Ein Fenster nach vorn holen -- `nummer` aus `pc_fenster`. ⚠️ Tu das VOR jedem Klick oder Tastendruck, der ein bestimmtes Fenster meint: ein Klick trifft immer das OBERSTE Fenster an der Stelle, nicht das, das du meinst. Auf einem vollen Schreibtisch ist das der haeufigste Grund, warum eine Eingabe scheinbar ins Leere geht."""
+        from . import heimpc
+        return _mit_buchung(wirt, "fenster_holen", nummer,
+                            lambda ziel: heimpc.fenster_holen(nummer, wirt=ziel))
+
+    @mcp.tool(annotations=effectful)
     def pc_eingabe(typ: str, text: str = "", taste: str = "",
                    x: int | None = None, y: int | None = None,
                    wirt: str = "") -> dict:

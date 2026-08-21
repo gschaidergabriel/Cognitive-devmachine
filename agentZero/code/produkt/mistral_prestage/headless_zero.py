@@ -85,6 +85,7 @@ DEFAULT_ALLOWED_TOOLS = (
     "mcp__clayverse__pc_lage",
     "mcp__clayverse__pc_bildschirme",
     "mcp__clayverse__pc_fenster",
+    "mcp__clayverse__pc_fenster_holen",
     "mcp__clayverse__pc_sehen",
     "mcp__clayverse__pc_eingabe",
     "mcp__clayverse__pc_ausfuehren",

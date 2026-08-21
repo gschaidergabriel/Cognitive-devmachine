@@ -154,6 +154,14 @@ def fenster(wirt: str | None = None, nutzer: str | None = None) -> dict:
     return _ruf("/fenster", wirt=wirt, nutzer=nutzer)
 
 
+def fenster_holen(nummer: int, wirt: str | None = None,
+                  nutzer: str | None = None) -> dict:
+    """Ein Fenster nach vorn holen (Nummer aus `fenster()`). Aendert nichts am
+    Inhalt -- es entscheidet nur, wer die naechste Eingabe bekommt."""
+    return _ruf("/aktivieren", "POST", {"nummer": int(nummer)},
+                wirt=wirt, nutzer=nutzer)
+
+
 def sehen(bildschirm: str = "", wirt: str | None = None,
           nutzer: str | None = None) -> dict:
     """Ein Bild des Desktops. Liefert die Rohbytes des PNG -- der Aufrufer

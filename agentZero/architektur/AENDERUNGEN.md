@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T13:07:18Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T13:37:18Z aus drei Repos. 481 Eintraege.
 
 ## architektur (12)
 
@@ -84,12 +84,11 @@ Automatisch erzeugt 2026-08-21T13:07:18Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (10)
+## reparatur (9)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
-| 2026-08-18T05:27 | entityos | `2339aea31bf2` | prestage: upgrade governor model to mistral-medium, fix slot-2 session check |
 | 2026-08-15T14:22 | clay | `211e65ef2b73` | F63 Urteil Ankerfix: BEHALTEN aber Ziel nicht erreicht, Hypothesen fehlen weiter |
 | 2026-08-15T14:20 | clay | `bd4a7c53909b` | B27 fertig: paket(): hypothesen/gegenseite-Vorbedingung repariert |
 | 2026-08-15T08:00 | clay | `0d9d13642681` | F55 Harness-Frage entschieden, Startzeit repariert, Banane auf glm-5.2 |
@@ -108,10 +107,12 @@ Automatisch erzeugt 2026-08-21T13:07:18Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (328)
+## bau (330)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T13:15 | entityos | `fcd25d55a81e` | EOS-Chronik 2026-08-21 13:15:46 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T13:13 | unifieddb | `087f835a99bf` | EOS-Chronik 2026-08-21 13:13:42 +0000 — unifieddb: 1 Aenderungen |
 | 2026-08-21T13:05 | entityos | `99ff33ecfdf0` | EOS-Chronik 2026-08-21 13:05:03 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T13:03 | entityos | `67315d771d65` | EOS-Chronik 2026-08-21 13:03:02 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T12:47 | entityos | `aabe57ef6a95` | EOS-Chronik 2026-08-21 12:47:16 +0000 — entityos: 1 Aenderungen |
@@ -170,6 +171,4 @@ Automatisch erzeugt 2026-08-21T13:07:18Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T06:11 | entityos | `483cfbbf027f` | EOS-Chronik 2026-08-21 06:11:24 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T05:59 | entityos | `88936c115b74` | EOS-Chronik 2026-08-21 05:59:48 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T05:57 | entityos | `742c85ce0477` | EOS-Chronik 2026-08-21 05:57:35 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T05:55 | entityos | `2216564ea5ca` | EOS-Chronik 2026-08-21 05:55:29 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T05:53 | clay | `861c6bf59347` | EOS-Chronik 2026-08-21 05:53:02 +0000 — clayverse: 2 Aenderungen |
 

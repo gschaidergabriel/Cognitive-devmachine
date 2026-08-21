@@ -329,6 +329,43 @@ class FreeApiProviderRuntimeTests(unittest.TestCase):
 
         self.assertEqual(snapshot_calls, [])
 
+    def test_message_count_mutation_is_rechecked_before_snapshot(self):
+        snapshot_completed = []
+        original_lock = MOD.PROCESS_EXECUTION_LOCK
+        original_snapshot = MOD._snapshot_text_chat_request
+
+        user = {"role": "user", "content": "x"}
+        assistant = {"role": "assistant", "content": "x"}
+        messages = [user]
+        growth = [assistant, user] * (
+            MOD.MAX_PROVIDER_REQUEST_BYTES // 32 // 2
+        )
+
+        class MutatingLock:
+            def acquire(self, timeout):
+                messages.extend(growth)
+                return True
+
+            def release(self):
+                pass
+
+        def tracking_snapshot(*args, **kwargs):
+            snapshot = original_snapshot(*args, **kwargs)
+            snapshot_completed.append("snapshot")
+            return snapshot
+
+        MOD.PROCESS_EXECUTION_LOCK = MutatingLock()
+        MOD._snapshot_text_chat_request = tracking_snapshot
+        try:
+            with self.assertRaisesRegex(ValueError, "provider_request_too_large"):
+                MOD.execute_chat(messages, model="mock", environ={})
+        finally:
+            MOD.PROCESS_EXECUTION_LOCK = original_lock
+            MOD._snapshot_text_chat_request = original_snapshot
+
+        self.assertEqual(len(messages), 62_501)
+        self.assertEqual(snapshot_completed, [])
+
     def test_active_monotonic_values_cannot_suppress_execution_receipt(self):
         method_calls = []
 

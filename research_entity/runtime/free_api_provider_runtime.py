@@ -179,6 +179,8 @@ def _passive_payment_latches(
         return PROCESS_PAYMENT_LATCHES
     if type(payment_latches) is not set:
         raise ValueError("payment_latches_must_be_set")
+    if any(type(latch) is not str for latch in payment_latches):
+        raise ValueError("payment_latches_must_contain_strings")
     return payment_latches
 
 

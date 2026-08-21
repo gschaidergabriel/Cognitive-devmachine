@@ -1,11 +1,11 @@
 {
-  "schema_version": "8.05",
-  "latest_cycle": "automation-20260821-agentzero-gen224-wake-governor-replay-boundary",
+  "schema_version": "8.06",
+  "latest_cycle": "automation-20260821-agentzero-gen227-mandatory-service-liveness-regression",
   "needs_review": true,
   "active_program": "CLAYVERSE_CLAY_MACHINE_ONLY",
   "component_target": "AGENTZERO_EXECUTABLE_TRUTH_SECURITY_AND_ACCEPTANCE_FRONTIER",
   "control_sync_required_before_research_spend": false,
-  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority. NEW durable Same-Family evidence is Generation 224 export head d3b05b307a09f795c39ef2159758e7475072f0d4, tree 89c0d32a822d1571c7c98f1244939ff08d59a24c. Executable letzter-lauf.json at 2026-08-21T05:20:56Z reports 878 green / 1 red on source short 53082f39c; only tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated remains red. Coverage growth is meaningful but Same-Family only and full 40-hex EntityOS source commit+tree+dirty-state+Ubuntu executor plus TEST_EXPORT_ATOMIC_RECEIPT/v1 remain missing. NEW SOURCE-CONFIRMED AUTONOMY COUNTEREXAMPLE: Gen224 adds wake_governor.py. Its faellige() reads WakeSignal.seit(0.0) on every governor evaluation. wake_signal.py retains matching wake_events for RETENTION_SECONDS=3600 and weckbar() matches solely by (kind, subject_ref), with no consumer cursor, acknowledged generation, consumed-event token, or last-seen timestamp. Therefore one retained EFFECT_TERMINAL or RESOURCE_REVISION event can remain event_faellig on every later governor tick for up to one hour and repeatedly drive the same WakeCondition into pruefen()/entscheiden(). Anti-Zeno can limit frequency but does not establish exactly-once or at-most-once event consumption; a terminal condition can therefore be re-observed/re-woken from one stale event. This is source/executable-logic counterevidence not caught by the current 878/1 suite. Grant ZERO wake-governor activation credit and keep wait disabled. FIRST run WAKE_EVENT_CONSUMPTION_RECEIPT/v1 on exact Ubuntu before any activation: one event then repeated governor calls over >MINDESTABSTAND must produce at most one event-triggered transition unless a genuinely newer event revision is emitted; bind event row/coalesce_key, ts/count, condition identity, governor cursor/ack identity, decision sequence, last_wake, restart and retention boundaries. Include restart-after-consume, duplicate coalesced updates, two distinct revisions on same subject, cross-session subject collision, event older than condition creation, and UNBEKANNT retry controls. Preferred repair class is a durable monotonic consumer watermark/revision per condition/governor or equivalent acknowledged event identity; do NOT solve by shrinking retention or relying only on Anti-Zeno. Preserve 30s pulse fallback until missed-wake, replay and restart safety pass. SECOND priority remains LIVEPATH_GWT_EQUIVALENCE_RECEIPT/v1 and production TurnLifecycle reruns of GWT/CSWT-Z claims; prior safe-gather production credit remains zero. THIRD preserve TEST_EXPORT_ATOMIC_RECEIPT/v1 and full source identity. FOURTH preserve exact-Ubuntu decomposition of the persistent ClaudeCodeInference red. Preserve AUFTRAG_IMMUTABILITY_RECEIPT/v1 assertion-integrity check, INTENT_TRACE_RECEIPT/v1, AUTH_SESSION_BINDING_TRACE/v1, PTY_LEASE_TRACE/v1, WARM_SESSION_PROMPT_IDENTITY_RECEIPT/v2, transaction atomicity, warm work-debt/residency, retrieval learning/hierarchy, root-escape post-fix, service-control security and provider-lane falsifiers. Same-family AgentZero exports/research/supervisor commits collapse under Goodman ancestry and are not independent replication. Preserve FREE_ONLY with no paid/Together fallback, executable evidence over model consensus, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, no canonical semantics promotion from same-family evidence, and never modify Frank's Harness.",
+  "next_focus": "Supervisor State 9.9 with Control 4.1 + 4.2 remains policy authority. NEW durable Same-Family evidence is Generation 227 export head f11a9386f12122c7dbe1055efd3ce217df24ba64, tree 6da2b1913d8f05331c9cf3d9aa8497826df74f79. Executable letzter-lauf.json at 2026-08-21T06:21:03Z reports 896 green / 1 red on source short 483cfbbf0; only tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated remains red. This is meaningful coverage growth but remains Same-Family and full 40-hex EntityOS source commit+tree+dirty-state+Ubuntu executor plus TEST_EXPORT_ATOMIC_RECEIPT/v1 remain missing. NEW EXECUTABLE OPERATIONAL COUNTEREXAMPLE: between the immediately prior Gen224 export d0a9710cf80c48a3ff7d7e2c4f3b455826c7b171 and Gen227, ZIELE changed the mandatory Clay-service probe from 4/4 healthy with verdichtung 3/3 effective lanes to only 3/4, explicitly 'TOT: verdichtung' with 6/6 fired lanes failing. Therefore 896/1 unit/integration coverage does NOT imply the required running system is healthy. Grant ZERO service-liveness acceptance credit until the failure is classified from executable per-lane evidence. FIRST run MANDATORY_SERVICE_LIVENESS_RECEIPT/v1 on the accepted Ubuntu runtime: bind exact source/tree/dirty-state, service/unit identity, scheduler tick, each of the six attempted lanes, selected provider/model/family, FREE_ONLY admission decision, request start/end, HTTP/transport status, timeout/rate-limit/auth/network classification, input/output digests, fallback transitions, quota/budget state, DB write/result state and recovery attempt. Include a control request from the same container/network to at least one known-reachable FREE_ONLY lane and distinguish provider capability change from local credential/config/queue/input/runtime regression. Do NOT introduce paid fallback and do NOT mark the provider family unavailable from model consensus or a single transient failure. SECOND: keep Gen224 wake-governor activation credit at zero. The source-confirmed retained-event replay boundary remains unresolved; WAKE_EVENT_CONSUMPTION_RECEIPT/v1 with durable monotonic cursor/ack semantics is still required and the 30s pulse remains fallback. Also note a measurement-staleness inconsistency: current Gen227 ZIELE still says the governor is the missing third wake component even though Gen224 source/research already bound wake_governor.py as present; treat that row as stale/measurement-invalid until the capability probe is generated from live source/runtime state. THIRD priority remains LIVEPATH_GWT_EQUIVALENCE_RECEIPT/v1 and production TurnLifecycle reruns of GWT/CSWT-Z claims; prior safe-gather production credit remains zero. FOURTH preserve TEST_EXPORT_ATOMIC_RECEIPT/v1 and full source identity. FIFTH preserve exact-Ubuntu decomposition of the persistent ClaudeCodeInference red. Preserve AUFTRAG_IMMUTABILITY_RECEIPT/v1 assertion-integrity check, INTENT_TRACE_RECEIPT/v1, AUTH_SESSION_BINDING_TRACE/v1, PTY_LEASE_TRACE/v1, WARM_SESSION_PROMPT_IDENTITY_RECEIPT/v2, transaction atomicity, warm work-debt/residency, retrieval learning/hierarchy, root-escape post-fix, service-control security and provider-lane falsifiers. Same-family AgentZero exports/research/supervisor commits collapse under Goodman ancestry and are not independent replication. Preserve FREE_ONLY with no paid/Together fallback, executable evidence over model consensus, Vercel primary, Daytona pre-assertion FREE_ONLY fallback only, Ubuntu-only Frank v0.1 final acceptance, BASE NOT_PASS, WP01/WP02 existing credit only, no canonical semantics promotion from same-family evidence, and never modify Frank's Harness.",
   "verified_updates": {
     "supervisor_state_version": "9.9",
     "autonomous_control_version": "4.1+4.2-execution-boundary-addendum",
@@ -13,15 +13,21 @@
     "vercel_provider_order": "PRIMARY",
     "daytona_provider_order": "PREASSERTION_FALLBACK_ONLY",
     "daytona_live_runtime_credit": 0,
-    "agentzero_latest_export_generation": 224,
-    "agentzero_latest_export_head": "d3b05b307a09f795c39ef2159758e7475072f0d4",
-    "agentzero_latest_export_tree": "89c0d32a822d1571c7c98f1244939ff08d59a24c",
-    "agentzero_latest_receipt_source_short": "53082f39c",
-    "agentzero_latest_tests_green_receipt": 878,
+    "agentzero_latest_export_generation": 227,
+    "agentzero_latest_export_head": "f11a9386f12122c7dbe1055efd3ce217df24ba64",
+    "agentzero_latest_export_tree": "6da2b1913d8f05331c9cf3d9aa8497826df74f79",
+    "agentzero_latest_receipt_source_short": "483cfbbf0",
+    "agentzero_latest_tests_green_receipt": 896,
     "agentzero_latest_tests_red_receipt": 1,
     "agentzero_latest_red_tests": ["tests/test_runtime_adapters.py::test_claude_code_adapter_is_toolless_ephemeral_structured_and_env_isolated"],
     "agentzero_test_export_atomic_receipt_v1_present": false,
     "agentzero_exact_source_credit": false,
+    "agentzero_mandatory_services_healthy": false,
+    "agentzero_mandatory_services_healthy_count": 3,
+    "agentzero_mandatory_services_required_count": 4,
+    "agentzero_verdichtung_effective": false,
+    "agentzero_verdichtung_failed_fired_lanes": 6,
+    "agentzero_verdichtung_total_fired_lanes": 6,
     "gen220_livepath_gwt_causal_credit": false,
     "prior_safe_gather_gwt_production_credit": false,
     "prior_safe_gather_cswtz_production_credit": false,
@@ -31,6 +37,7 @@
     "gen224_wake_event_replay_source_confirmed": true,
     "gen224_wait_enabled": false,
     "gen224_wake_governor_acceptance_credit": false,
+    "gen227_wake_goal_probe_stale": true,
     "agentzero_retrieval_learning_credit": false,
     "agentzero_provider_independent_reproduction_credit": false,
     "agentzero_security_postfix_independent_reproduction_credit": false,
@@ -41,16 +48,19 @@
     "frank_harness_modified": false
   },
   "remaining_red_frontier": {
-    "current_receipt_status": "SAME_FAMILY_878_1_PERSISTENT_ADAPTER_RED_PLUS_SOURCE_CONFIRMED_WAKE_REPLAY_BOUNDARY",
+    "current_receipt_status": "SAME_FAMILY_896_1_PERSISTENT_ADAPTER_RED_PLUS_MANDATORY_VERDICHTUNG_RUNTIME_FAILURE",
     "current_red_total": 1,
     "runtime_adapter_fix_credit": 0,
+    "mandatory_service_liveness_credit": 0,
     "whole_gwt_production_credit": 0,
     "wake_governor_activation_credit": 0
   },
   "receipt_gaps": {
     "agentzero_atomic_test_export_receipt": "BLOCKING_TEST_EXPORT_ATOMIC_RECEIPT_V1_MISSING",
-    "agentzero_exact_source_identity": "OPEN_SOURCE_53082F39C_FULL_COMMIT_TREE_DIRTY_STATE_EXECUTOR_MISSING",
+    "agentzero_exact_source_identity": "OPEN_SOURCE_483CFBBF0_FULL_COMMIT_TREE_DIRTY_STATE_EXECUTOR_MISSING",
+    "gen227_mandatory_service_liveness_receipt_v1": "OPEN_4_TO_3_REQUIRED_SERVICE_REGRESSION_WITH_VERDICHTUNG_6_OF_6_LANES_FAILED_REQUIRES_PER_LANE_FREE_ONLY_RUNTIME_CLASSIFICATION",
     "gen224_wake_event_consumption_receipt_v1": "OPEN_SOURCE_CONFIRMED_RETAINED_EVENT_REPLAY_REQUIRES_DURABLE_CURSOR_ACK_AND_EXACT_UBUNTU_REPRODUCTION",
+    "gen227_wake_goal_probe": "STALE_PROBE_REPORTS_GOVERNOR_MISSING_DESPITE_BOUND_SOURCE_MECHANISM_REQUIRES_LIVE_CAPABILITY_MEASUREMENT",
     "gen220_livepath_gwt_equivalence_receipt_v1": "OPEN_PRODUCTION_TURNLIFECYCLE_VS_SAFE_GATHER_EQUIVALENCE_AND_NEGATIVE_CONTROL_REQUIRED",
     "gen218_auftrag_immutability_receipt_v1": "OPEN_TEST_ASSERTION_INTEGRITY_PLUS_BOUNDARY_TRACE_REQUIRED",
     "agentzero_claude_code_adapter_exact_ubuntu_reproduction": "OPEN",
@@ -65,5 +75,5 @@
     "agentzero_provider_reachability": "MECHANISM_OBSERVED_INDEPENDENT_EXACT_REPRODUCTION_OPEN",
     "canonical_entityos_release_authority": "OPEN"
   },
-  "instruction": "Treat Gen224 as meaningful Same-Family coverage growth (878/1) but also as a source-confirmed wake-governor replay boundary. Keep wait/governor disabled. Build WAKE_EVENT_CONSUMPTION_RECEIPT/v1 and require durable monotonic event consumption/ack semantics before activation; retention plus Anti-Zeno is not a substitute. Do not let autonomy work displace unresolved production-path GWT, exact-source/atomic-receipt, adapter, security or Goodman gates. Preserve FREE_ONLY/BASE NOT_PASS/Ubuntu-only constraints and never modify Frank's Harness."
+  "instruction": "Treat Gen227 as meaningful Same-Family coverage growth (896/1) AND as a stronger operational counterexample: a required runtime service regressed from 4/4 healthy to 3/4 with verdichtung 6/6 fired lanes failing while the test frontier stayed nearly green. Prioritize MANDATORY_SERVICE_LIVENESS_RECEIPT/v1 and classify every failed FREE_ONLY lane before any provider/config/code change. Do not add paid fallback. Keep wait/governor disabled; the retained-event replay boundary remains unresolved and the current wake ZIELE row is stale relative to bound source evidence. Do not let service recovery displace production-path GWT, exact-source/atomic-receipt, adapter, security or Goodman gates. Preserve BASE NOT_PASS, Ubuntu-only Frank v0.1 and never modify Frank's Harness."
 }

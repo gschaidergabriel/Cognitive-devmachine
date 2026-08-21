@@ -1,11 +1,12 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T19:02:30Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T19:32:32Z aus drei Repos. 481 Eintraege.
 
-## architektur (12)
+## architektur (13)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:14 | entityos | `2c209812e0b9` | GRF/ClayCode-Injektion: der empirisch bestaetigte Meta-Prompt fuer formale Kognitionsarchitektur (Gabriel 22.0 |
 | 2026-08-21T18:57 | entityos | `ed418d359abc` | GWT-GRF-Messung 2026-08-22: ehrliche Messung ob GRF/ClayCode den Architektur-Entwurf verbessern |
 | 2026-08-20T06:29 | entityos | `368c1159c40c` | CSWT-Z Teil 2: drei Architekturbefunde repariert, Kausaltest gefahren |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
@@ -106,10 +107,14 @@ Automatisch erzeugt 2026-08-21T19:02:30Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (331)
+## bau (330)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T19:31 | entityos | `94e993e61e98` | Verfassung: Zero denkt+programmiert in ClayCode; alles nach ClayCode -- elegant/iterativ/interkonnektiv/robust |
+| 2026-08-21T19:17 | entityos | `01976a5bfb4a` | GRF-Injektion: praezise T_Omega-Tensorform ergaenzt (Gabriel) |
+| 2026-08-21T19:14 | entityos | `c3f155f7daba` | EOS-Chronik 2026-08-21 19:14:46 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T19:11 | entityos | `378b7100482c` | EOS-Chronik 2026-08-21 19:11:34 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T19:00 | entityos | `9baa79a25baf` | EOS-Chronik 2026-08-21 19:00:05 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T18:58 | entityos | `7601460eebdc` | GWT-GRF-Messung 2026-08-22: Korrektur ClayCode-Basis-Compiler laeuft bereits (nur General-Purpose-Gate offen) |
 | 2026-08-21T18:58 | entityos | `6c88a07fc85e` | EOS-Chronik 2026-08-21 18:58:04 +0000 — entityos: 2 Aenderungen |
@@ -166,8 +171,4 @@ Automatisch erzeugt 2026-08-21T19:02:30Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T09:11 | entityos | `faa750f611fe` | EOS-Chronik 2026-08-21 09:11:26 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T09:08 | entityos | `8356b11c06df` | EOS-Chronik 2026-08-21 09:08:26 +0000 — entityos: 3 Aenderungen |
 | 2026-08-21T09:04 | entityos | `bafd64b8d7ce` | EOS-Chronik 2026-08-21 09:04:40 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T09:01 | entityos | `0cad76e17e13` | EOS-Chronik 2026-08-21 09:01:20 +0000 — entityos: 4 Aenderungen |
-| 2026-08-21T08:56 | entityos | `500a96b144a9` | EOS-Chronik 2026-08-21 08:56:09 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:51 | entityos | `c81ed95301d2` | EOS-Chronik 2026-08-21 08:51:36 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T08:49 | entityos | `fbf38bfd684c` | EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen |
 

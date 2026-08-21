@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T19:02:30Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T19:32:32Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -16,6 +16,8 @@ CREATE TABLE anreicherung (
             geholt_am    TEXT,
             hash         TEXT
         );
+CREATE TABLE architekt_engine_log(log_id TEXT PRIMARY KEY,ts REAL NOT NULL,prozess TEXT NOT NULL,engine TEXT NOT NULL,bahn TEXT,modell TEXT,glm_fehlgeschlagen_grund TEXT,dauer_ms REAL);
+CREATE TABLE architekt_engine_zustand(id INTEGER PRIMARY KEY CHECK(id=1),glm_bestaetigt INTEGER NOT NULL DEFAULT 0,serie_fehler INTEGER NOT NULL DEFAULT 0,zuletzt_aktualisiert REAL);
 CREATE TABLE artikel (
             id TEXT PRIMARY KEY,
             art TEXT NOT NULL,
@@ -1094,6 +1096,7 @@ CREATE TABLE zero_raum_ruf (
   von TEXT NOT NULL,
   text TEXT NOT NULL
 );
+CREATE INDEX architekt_engine_log_ts_idx ON architekt_engine_log(ts);
 CREATE INDEX eos_architekt_quittungen_hyp_idx ON eos_architekt_quittungen(hypothese_id, ts);
 CREATE INDEX eos_bewertungen_session_idx ON eos_bewertungen(session_id, ts);
 CREATE INDEX eos_bug_hypothesen_status_idx ON eos_bug_hypothesen(status, ts);

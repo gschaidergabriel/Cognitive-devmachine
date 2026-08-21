@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T19:02:30Z. **3637 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T19:32:32Z. **3654 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T01:44:07+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T01:44:07+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3539 |
+| baunotiz | 3556 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2166 |
-| baunotiz | bauverlauf.jsonl | 1326 |
+| baunotiz | git-commit | 2171 |
+| baunotiz | bauverlauf.jsonl | 1338 |
 | baunotiz | github-ereignis | 42 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3637 · Gegenhypothese: 0 von 3637
+## Hypothese: 0 von 3654 · Gegenhypothese: 0 von 3654
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -42,6 +42,14 @@ Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im L
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: quarantine paid GLM lanes under FREE_ONLY
+
+### claycode supervisor: quarantine paid GLM lanes under FREE_ONLY
+
+`baunotiz-bauverlauf-7e379414323ce16ea508` · baunotiz · bauverlauf.jsonl · 2026-08-22T01:44:07+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
 
 ### claycode supervisor: bind Gen247 read-side schema mutation boundary
 
@@ -228,12 +236,4 @@ research: route autonomy dispatch provenance counterexample
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 _(kein Text)_
-
-### research: add causal counter-join to lineage receipt
-
-`baunotiz-git-3a15f423e90ffdee0f518e6cdb015445f50669ed` · baunotiz · git-commit · 2026-08-21T21:42:36+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: add causal counter-join to lineage receipt
 

@@ -1,6 +1,6 @@
 # Messwerk
 
-Automatisch erzeugt 2026-08-21T21:39:31Z.
+Automatisch erzeugt 2026-08-21T22:08:27Z.
 
 Die Forschungsentität hat rund 55 Messwerte vorgeschlagen. Der Filter, nach dem hier
 gebaut wurde, ist ihr eigener Schlusssatz:
@@ -187,7 +187,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Braucht:** ein Vergleichslauf: identischer Zustand vor und nach Neustart, gleiche Eingabe, Antworten gegenueberstellen. Es gibt heute keinen Wiederholungsmechanismus.
 
-Generationen im Umlauf: [259]. Prueffpunkte: 447.
+Generationen im Umlauf: [261]. Prueffpunkte: 451.
 
 ### Prediction + Calibration Ledger  ·  _Selbstwissen_
 

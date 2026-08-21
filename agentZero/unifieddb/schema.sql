@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T21:36:41Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T22:06:41Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -158,6 +158,9 @@ CREATE TABLE entityos_wirte(
   module TEXT NOT NULL DEFAULT '{}',
   quelle TEXT NOT NULL DEFAULT 'herzschlag'
 );
+CREATE TABLE eos_architekt_blog(post_id TEXT PRIMARY KEY,ts REAL NOT NULL,zeitraum_von REAL,zeitraum_bis REAL NOT NULL,ueberschrift TEXT NOT NULL,einleitung TEXT NOT NULL,text TEXT NOT NULL,hatte_aktivitaet INTEGER NOT NULL,quellen_anzahl INTEGER NOT NULL,modell TEXT NOT NULL);
+CREATE TABLE eos_architekt_blog_entitaet(singleton INTEGER PRIMARY KEY CHECK(singleton=1),letzte_post_id TEXT,erzaehlfaden TEXT NOT NULL DEFAULT '',gespiegelte_hypothesen TEXT NOT NULL DEFAULT '',log_byte_cursor INTEGER NOT NULL DEFAULT 0,aktualisiert_am REAL NOT NULL);
+CREATE TABLE eos_architekt_blog_pakete(paket_id TEXT PRIMARY KEY,ts REAL NOT NULL,post_id TEXT NOT NULL,von REAL,bis REAL NOT NULL,quittung_ids TEXT NOT NULL,bug_ids TEXT NOT NULL,log_zeilen INTEGER NOT NULL DEFAULT 0,quellen_anzahl INTEGER NOT NULL,quellen_hash TEXT NOT NULL);
 CREATE TABLE eos_architekt_quittungen(quittung_id TEXT PRIMARY KEY,ts REAL NOT NULL,hypothese_id TEXT NOT NULL,hypothese_quelle TEXT NOT NULL,hypothese_text TEXT NOT NULL,zweig TEXT,reproduziert INTEGER NOT NULL,befund TEXT,sicherer_rahmen INTEGER,rahmen_grund TEXT,testboden_vorher TEXT,testboden_nachher TEXT,nicht_schlechter INTEGER,nicht_schlechter_grund TEXT,bericht_vorher_hash TEXT,bericht_nachher_hash TEXT,kanarie_status TEXT,urteil TEXT NOT NULL,live_geschaltet INTEGER NOT NULL DEFAULT 0,hinweis TEXT);
 CREATE TABLE eos_bewertungen(bewertung_id TEXT PRIMARY KEY,turn_id TEXT NOT NULL,session_id TEXT NOT NULL,user_id TEXT NOT NULL,wert INTEGER NOT NULL CHECK(wert IN (-1,1)),frage_turn_id TEXT,frage_hash TEXT,frage_laenge INTEGER,antwort_hash TEXT NOT NULL,antwort_laenge INTEGER NOT NULL,modell TEXT,ts REAL NOT NULL,UNIQUE(turn_id, user_id));
 CREATE TABLE eos_bug_hypothesen(bug_id TEXT PRIMARY KEY,user_id TEXT NOT NULL,ts REAL NOT NULL,beschreibung TEXT NOT NULL,wo TEXT,status TEXT NOT NULL DEFAULT 'OFFEN' CHECK(status IN ('OFFEN','REPRODUZIERT','WIDERLEGT','BEHOBEN')),befund TEXT);
@@ -1098,6 +1101,7 @@ CREATE TABLE zero_raum_ruf (
   text TEXT NOT NULL
 );
 CREATE INDEX architekt_engine_log_ts_idx ON architekt_engine_log(ts);
+CREATE INDEX eos_architekt_blog_ts_idx ON eos_architekt_blog(ts DESC);
 CREATE INDEX eos_architekt_quittungen_hyp_idx ON eos_architekt_quittungen(hypothese_id, ts);
 CREATE INDEX eos_bewertungen_session_idx ON eos_bewertungen(session_id, ts);
 CREATE INDEX eos_bug_hypothesen_status_idx ON eos_bug_hypothesen(status, ts);

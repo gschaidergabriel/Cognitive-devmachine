@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T08:20:31Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T08:50:31Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -444,6 +444,61 @@ CREATE TABLE mv_translation_log (
     created_at REAL NOT NULL
 );
 CREATE TABLE mv_uebersetzung_ausfall(  id INTEGER PRIMARY KEY AUTOINCREMENT, ts REAL NOT NULL,  turn_id TEXT, session_id TEXT, fehler TEXT);
+CREATE TABLE om_hypothese_implikation(
+    id INTEGER PRIMARY KEY,
+    artikel_id TEXT NOT NULL,
+    hypothese_id TEXT,
+    hypothese_text TEXT NOT NULL,
+    text TEXT NOT NULL,
+    konfidenz REAL NOT NULL,
+    modell TEXT NOT NULL,
+    erzeugt_am TEXT NOT NULL
+);
+CREATE TABLE om_lauf(
+    id INTEGER PRIMARY KEY,
+    zeit TEXT NOT NULL,
+    schritt TEXT NOT NULL,
+    ok INTEGER NOT NULL,
+    anzahl INTEGER NOT NULL DEFAULT 0,
+    ms INTEGER NOT NULL DEFAULT 0,
+    hinweis TEXT
+);
+CREATE TABLE om_projekt(
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL,
+    art TEXT NOT NULL,              -- 'feld' (aus artikel.projekt) | 'cluster' (Ko-Vorkommen/Graph)
+    eltern_id TEXT,                 -- NULL = keine Elternbeziehung belegt
+    konfidenz REAL NOT NULL,
+    begruendung TEXT NOT NULL,
+    anzahl_artikel INTEGER NOT NULL DEFAULT 0,
+    aktualisiert_am TEXT NOT NULL
+);
+CREATE TABLE om_projekt_kante(
+    a_id TEXT NOT NULL,
+    b_id TEXT NOT NULL,
+    staerke REAL NOT NULL,
+    beleg TEXT NOT NULL,
+    aktualisiert_am TEXT NOT NULL,
+    PRIMARY KEY(a_id, b_id)
+);
+CREATE TABLE om_projekt_mitglied(
+    artikel_id TEXT NOT NULL,
+    projekt_id TEXT NOT NULL,
+    konfidenz REAL NOT NULL,
+    PRIMARY KEY(artikel_id, projekt_id)
+);
+CREATE TABLE om_skizze(
+    artikel_id TEXT PRIMARY KEY,
+    mermaid TEXT NOT NULL,
+    quelle TEXT NOT NULL,           -- 'mechanisch:<feld>' oder 'modell:<name>'
+    erzeugt_am TEXT NOT NULL
+);
+CREATE TABLE om_zusammenfassung(
+    artikel_id TEXT PRIMARY KEY,
+    text TEXT NOT NULL,
+    modell TEXT NOT NULL,
+    erzeugt_am TEXT NOT NULL
+);
 CREATE TABLE problem (
             id TEXT PRIMARY KEY,
             bauteil TEXT,
@@ -1062,6 +1117,9 @@ CREATE INDEX idx_memory_user ON memory_tabelle(user_id);
 CREATE INDEX idx_messung_bauteil ON messung(bauteil);
 CREATE INDEX idx_messung_einheit ON messung(einheit);
 CREATE INDEX idx_messung_zeile ON messung(zeile_hash);
+CREATE INDEX idx_om_implikation_artikel ON om_hypothese_implikation(artikel_id);
+CREATE INDEX idx_om_mitglied_artikel ON om_projekt_mitglied(artikel_id);
+CREATE INDEX idx_om_mitglied_projekt ON om_projekt_mitglied(projekt_id);
 CREATE INDEX idx_problem_bauteil ON problem(bauteil);
 CREATE INDEX idx_problem_status ON problem(status);
 CREATE INDEX idx_problem_zeile_hash ON problem(zeile_hash);

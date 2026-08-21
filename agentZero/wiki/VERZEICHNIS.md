@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T08:20:30Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T08:50:30Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 694 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2728 Artikel, 1536 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **umfeld** (2728 Artikel, 1535 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -96,8 +96,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `bau-entityos-1fa4e2d9c80f` · bau
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-git-ca5149c807cba55e36930d9e5630dbd` · baunotiz
-- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `bau-entityos-372397141f5d` · bau
+- **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **claycode control: sync EntityOS work selection to supervisor 8.9** — `baunotiz-git-68de25fddabe6502a39627d79921d8c` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
@@ -134,11 +134,10 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **artifact: persist active turn lifecycle in UnifiedDB schema v4** — `baunotiz-git-dcc9d73d8765d4d4cc7cbb5fefe2aab` · baunotiz
 - **artifact: bind interactive Claude turns to UnifiedDB via hooks** — `baunotiz-git-5b1153aa7dad1b80f081c43924f42a2` · baunotiz
 - **F7: Abrufvertrag - vier Quellen ein Aufruf, Hypothesen UND Gegenhypothesen, UnifiedDB kanonisch / Cl** — `baunotiz-bauverlauf-c5f973f544600e498105` · baunotiz
-- **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
-- **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
-- **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
-- **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
 - **unifieddb: die Datenbank mit Wiki, Graph, Suche, Pflege, Karte und Abruf als ein Werkzeug** — `baunotiz-bauverlauf-be7e59e39ad3b1f4ec8c` · baunotiz
+- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `baunotiz-git-2c44f567c2354ac6009cca9d7c55c23` · baunotiz
+- **artifact: make UnifiedDB terminal identity match the two real tmux sessions** — `baunotiz-git-bde7f1162d7f301dd59e249890b9ed7` · baunotiz
+- **artifact: bind automatic hook spine and sole UnifiedDB memory in manifest** — `baunotiz-git-5802f5b82367b4405fbac0c7ce5c770` · baunotiz
 - **agentZero-Export 2026-08-18T15:41:03Z (Generation 100, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-bc16f4dacafb77548697` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-b3caf4337fcee8c154f39bec1e0b770` · baunotiz
 - **agentZero-Export 2026-08-18T16:11:04Z (Generation 104, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-75fc27e9a5adde4689b9` · baunotiz
@@ -157,12 +156,15 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-86d356687bd843594dd3715c7503968` · baunotiz
 - **agentZero-Export 2026-08-18T19:41:06Z (Generation 107, 59 Dateien, 1 geschwaerzt)** — `baunotiz-bauverlauf-090197f6c642f834f828` · baunotiz
 - **agentZero-Export 2026-08-18T20:11:06Z (Generation 111, 59 Dateien, 1 geschwaerzt)** — `baunotiz-git-c4033395415e4cddae79839ca49f2e7` · baunotiz
-- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `baunotiz-git-2c44f567c2354ac6009cca9d7c55c23` · baunotiz
-- **artifact: make UnifiedDB terminal identity match the two real tmux sessions** — `baunotiz-git-bde7f1162d7f301dd59e249890b9ed7` · baunotiz
-- **artifact: bind automatic hook spine and sole UnifiedDB memory in manifest** — `baunotiz-git-5802f5b82367b4405fbac0c7ce5c770` · baunotiz
+- **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
+- **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
+- **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
+- **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
+- **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `baunotiz-bauverlauf-0fed3dc34a4061d6716d` · baunotiz
+- **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
 - **test(deploy): fence EntityOS digest env override semantically** — `baunotiz-bauverlauf-14e0eb96c071e274d484` · baunotiz
 - **test: fence EntityOS child environment** — `baunotiz-git-68f95cc99b1ba0e85bdd7e1aa0a2830` · baunotiz
-- **B0 fertig: README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `baunotiz-bauverlauf-0fed3dc34a4061d6716d` · baunotiz
+- **2026-08-18: vorgang -- Mehrere Baufehler behoben: Zero-Eigentumsabfrage, Graphen-Walk, Chat-Verlauf ** — `verdichtung-2026-08-18-vorgang` · verdichtung
 - **go: fuse final EntityOS + microVM authority into Fast Boot** — `baunotiz-bauverlauf-dfab39ac1ff2df8fa3db` · baunotiz
 - **docs(artefact): record EntityOS staging falsifier** — `baunotiz-git-5b69dfe0fd735ae0c286af68d4d00a1` · baunotiz
 - **receipt: bind EntityOS execution environment fence** — `baunotiz-git-64e09960524160086668c8968d5e5b8` · baunotiz
@@ -181,8 +183,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test: lesion EntityOS path after verification** — `baunotiz-git-0ae1209a7cb9ae9ad4870e193663d40` · baunotiz
 - **test: lock EntityOS-only effect boundary** — `baunotiz-git-a918604f99da68e64228975639ad99f` · baunotiz
 - **artifact: enforce EntityOS-only effect boundary** — `baunotiz-git-af62fa851d80cefc43f8c5b3bce101e` · baunotiz
-- **F80 Trennung: GLM autonom, Claude Code ist der Menschenkanal - beide teilen die UnifiedDB, sonst zwe** — `baunotiz-bauverlauf-4809ae08ae285f67c844` · baunotiz
-- **2026-08-18: vorgang -- Mehrere Baufehler behoben: Zero-Eigentumsabfrage, Graphen-Walk, Chat-Verlauf ** — `verdichtung-2026-08-18-vorgang` · verdichtung
+- **2026-08-17: infra(clayverse) -- Einführung eines unabhängigen, zerstörbaren VPS-KVM-Labors für ClayV** — `verdichtung-2026-08-17-infra-clayverse` · verdichtung
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-git-5de5f509e5425bb723ac153f9ee83b4` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-git-c6d8cc6de3bb6540a8eeb7d99b7a4c9` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-git-e612abc14cd5c6546f094537d8cd881` · baunotiz
@@ -203,7 +204,6 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **receipt: persist EntityOS sealed embedding GO evidence** — `baunotiz-git-cf6de793640b0fa9d263988397f9ff4` · baunotiz
 - **artifact: bind EntityOS digest into image build** — `baunotiz-git-8f0e40b04c82e52f11076727bea8a41` · baunotiz
 - **artifact: causally record unavailable EntityOS effect denials** — `baunotiz-git-865c3a1f52694f98e28465147351c9b` · baunotiz
-- **artifact: add digest-bound EntityOS image staging** — `baunotiz-git-ef5324eded2f80475caec8f6588f268` · baunotiz
 
 ## Kern / frank_v0_1 (6)
 
@@ -239,12 +239,12 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
 - **UnifiedDB Emergence Lab v0.1** — `trigger_runs-emergenz-20260809T204500p0700_u` · bereich_trigger_runs
 - **UnifiedDB — Lease-Fenced Projection Worker V1** — `trigger_runs-unifieddb-unifieddb-20260811-ch` · bereich_trigger_runs
-- **Consistency should be operation-adaptive: critical exact reads can require zero lag while explorator** — `H-U2-F2-007` · hypothese
 - **KMP — Android R1 -> UnifiedDB feedback** — `KMP-ANDROID-R1-FEEDBACK-UNIFIEDDB` · begriff
 - **KMP — Founding User Personal UnifiedDB** — `KMP-FOUNDING-USER-PERSONAL-UDB` · begriff
 - **UnifiedDB Segmented Pulse Maintenance S1 (SPM-S1)** — `runtime-UNIFIEDDB_SEGMENTED_PULSE_MAINTENANC` · bereich_runtime
 - **Clay G11 Evidence Ledger — MOSAIC / UnifiedDB / MRSC** — `trigger_runs-clay-clay-20260808T2033p0700-ch` · bereich_trigger_runs
 - **UnifiedDB — Deeper Delta Run, Target-Executed Extension** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
+- **Consistency should be operation-adaptive: critical exact reads can require zero lag while explorator** — `H-U2-F2-007` · hypothese
 - **unifieddb_claygraph_assembly.py** — `harness-reference-unifieddb_claygraph_assemb` · bereich_harness
 - **unifieddb_emergent_cascade.py** — `harness-reference-unifieddb_emergent_cascade` · bereich_harness
 - **unifieddb_emergent_compact.py** — `harness-reference-unifieddb_emergent_compact` · bereich_harness

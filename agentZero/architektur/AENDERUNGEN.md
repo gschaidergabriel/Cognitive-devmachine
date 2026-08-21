@@ -1,6 +1,6 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T08:20:30Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 
 ## architektur (15)
 
@@ -87,16 +87,13 @@ Automatisch erzeugt 2026-08-21T08:20:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (17)
+## reparatur (14)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-18T10:29 | entityos | `7432769daa72` | Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root s |
 | 2026-08-18T10:19 | entityos | `3cca3460bbb1` | Fix real S7-adjacent blocker: CLAUDE_CODE_SHELL_PREFIX was silently eating every hook AND the MCP server start |
-| 2026-08-18T09:58 | entityos | `8e3d5fb7a313` | Update 3 tests to match deliberate behavior/config changes: source-file -q argv (my tmux fix), Dockerfile chow |
-| 2026-08-18T09:52 | entityos | `c15694006ce9` | Fix real S7 boot blocker: tmux unbind-key is not idempotent, source-file reapply crashed every first ensure(). |
-| 2026-08-18T09:51 | entityos | `fe26577ed5aa` | Fix: container boots as uid 5001 (compose override for the /var/lib/clay bind mount) but /var/lib/clayverse, / |
 | 2026-08-18T05:27 | entityos | `2339aea31bf2` | prestage: upgrade governor model to mistral-medium, fix slot-2 session check |
 | 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
@@ -128,10 +125,16 @@ Automatisch erzeugt 2026-08-21T08:20:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (308)
+## bau (311)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T08:49 | entityos | `fbf38bfd684c` | EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen |
+| 2026-08-21T08:47 | entityos | `8bea7c38d374` | EOS-Chronik 2026-08-21 08:47:36 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T08:44 | entityos | `44158da9d77a` | EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T08:42 | entityos | `93c53d574395` | EOS-Chronik 2026-08-21 08:42:07 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T08:40 | entityos | `426fd9e3f83d` | EOS-Chronik 2026-08-21 08:40:07 +0000 — entityos: 2 Aenderungen |
+| 2026-08-21T08:27 | entityos | `e1de3d439726` | EOS-Chronik 2026-08-21 08:27:32 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T08:16 | entityos | `5c0ea8dcd01a` | EOS-Chronik 2026-08-21 08:16:45 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:09 | entityos | `3b4cbc5c21c0` | EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen |
 | 2026-08-21T08:07 | entityos | `6705c3c0ef10` | EOS-Chronik 2026-08-21 08:07:02 +0000 — entityos: 2 Aenderungen |
@@ -186,10 +189,4 @@ Automatisch erzeugt 2026-08-21T08:20:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T01:39 | entityos | `dd90b24d4660` | EOS-Chronik 2026-08-21 01:39:58 +0000 — entityos: 9 Aenderungen |
 | 2026-08-21T01:29 | entityos | `1fe881b3caa9` | EOS-Chronik 2026-08-21 01:29:22 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T01:24 | entityos | `81e2ffcdef81` | EOS-Chronik 2026-08-21 01:24:13 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T01:16 | entityos | `a7638950fc45` | EOS-Chronik 2026-08-21 01:16:52 +0000 — entityos: 4 Aenderungen |
-| 2026-08-21T00:43 | entityos | `dda25f6cfb22` | EOS-Chronik 2026-08-21 00:43:37 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T00:32 | entityos | `aa52fb1591e9` | EOS-Chronik 2026-08-21 00:32:41 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T00:26 | entityos | `a6271e75eba3` | EOS-Chronik 2026-08-21 00:26:45 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T00:24 | entityos | `5bb16882ebb4` | EOS-Chronik 2026-08-21 00:24:45 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T00:20 | entityos | `a1ef3ed0a236` | EOS-Chronik 2026-08-21 00:20:33 +0000 — entityos: 2 Aenderungen |
 

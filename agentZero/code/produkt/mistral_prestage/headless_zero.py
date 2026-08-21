@@ -82,6 +82,10 @@ DEFAULT_ALLOWED_TOOLS = (
     # Lernen des Abrufs -- die Belohnungsfunktion haette dann nur eine Quelle
     # (verifizierte Wirkungen), und die springt fast nie an.
     "mcp__clayverse__abruf_rueckmeldung",
+    "mcp__clayverse__pc_bildschirme",
+    "mcp__clayverse__pc_sehen",
+    "mcp__clayverse__pc_eingabe",
+    "mcp__clayverse__pc_ausfuehren",
 )
 
 MAX_PROMPT_CHARS = 20_000

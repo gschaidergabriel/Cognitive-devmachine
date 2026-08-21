@@ -1,6 +1,6 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T08:20:31Z. **3345 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T08:50:31Z. **3360 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
 Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T14:50:01+07:00`.
 
@@ -8,22 +8,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-21T14:50:01+07:00`.
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3247 |
+| baunotiz | 3262 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2018 |
-| baunotiz | bauverlauf.jsonl | 1184 |
+| baunotiz | git-commit | 2024 |
+| baunotiz | bauverlauf.jsonl | 1193 |
 | baunotiz | github-ereignis | 40 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3345 · Gegenhypothese: 0 von 3345
+## Hypothese: 0 von 3360 · Gegenhypothese: 0 von 3360
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -227,27 +227,23 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 research: bind Gen213 tool-trace intent ontology defect
 
-### EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen
+### EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen
 
-`baunotiz-git-3b4cbc5c21c05cdee691137cb41bf5cf3a3fa43e` · baunotiz · git-commit · 2026-08-21T08:09:54+00:00 · BACK agent
+`baunotiz-git-44158da9d77a0004957217b5f3a598c1a7307179` · baunotiz · git-commit · 2026-08-21T08:44:08+00:00 · BACK agent
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-EOS-Chronik 2026-08-21 08:09:54 +0000 — entityos: 5 Aenderungen
+EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen
 
 Anlass: Wache: Aenderung beobachtet
 
-  the artefact/clayverse/mcp_server.py
-  the artefact/clayverse/mistral_prestage/headless_zero.py
-  the artefact/clayverse/service.py
-  the artefact/policy/managed-settings.json
-  the artefact/tests/test_sicht.py
+  the artefact/clayverse/omnimind_anreicherung.py
 
-Zeit: 2026-08-21T08:09:54+00:00
+Zeit: 2026-08-21T08:44:08+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
-Dateien: 5
+Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 

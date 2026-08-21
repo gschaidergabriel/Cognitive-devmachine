@@ -1,12 +1,126 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T08:20:31Z. 1037 Commits aus vier Repos, davon 397 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T08:50:30Z. 1040 Commits aus vier Repos, davon 403 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen
+
+`fbf38bfd684c` · entityos · 08:49 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/mcp_server.py
+  the artefact/clayverse/mistral_prestage/headless_zero.py
+  the artefact/clayverse/terminal_gateway.py
+  the artefact/policy/managed-settings.json
+  the artefact/web/schale/schale.js
+
+Zeit: 2026-08-21T08:49:36+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 5
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:47:36 +0000 — entityos: 1 Aenderungen
+
+`8bea7c38d374` · entityos · 08:47 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/heimpc.py
+
+Zeit: 2026-08-21T08:47:36+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen
+
+`44158da9d77a` · entityos · 08:44 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/omnimind_anreicherung.py
+
+Zeit: 2026-08-21T08:44:08+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:42:07 +0000 — entityos: 1 Aenderungen
+
+`93c53d574395` · entityos · 08:42 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/omnimind_anreicherung.py
+
+Zeit: 2026-08-21T08:42:07+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:40:07 +0000 — entityos: 2 Aenderungen
+
+`426fd9e3f83d` · entityos · 08:40 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/omnimind.py
+  the artefact/clayverse/omnimind_anreicherung.py
+
+Zeit: 2026-08-21T08:40:07+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:27:32 +0000 — entityos: 2 Aenderungen
+
+`e1de3d439726` · entityos · 08:27 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/sicht.py
+  the artefact/compose.yaml
+
+Zeit: 2026-08-21T08:27:32+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 08:16:45 +0000 — entityos: 1 Aenderungen
 
@@ -2767,133 +2881,5 @@ Baum: entityos (/opt/entityos)
 Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 15:01:53 +0000 — unifieddb: 1 Aenderungen
-
-`6e92b7a1c079` · unifieddb · 15:01 UTC · ClayVerse
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  _eos_chronik_test.md
-
-Zeit: 2026-08-19T15:01:53+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: unifieddb (/opt/unifieddb)
-Dateien: 1
-Fern: origin -> /srv/git/unifieddb.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 14:59:39 +0000 — entityos: 12 Aenderungen
-
-`9da3ae0a3874` · entityos · 14:59 UTC · BACK agent
-
-```
-Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
-
-  .gitignore
-  eos-demo/eos-demo-dispatch.sh
-  eos-demo/eos-screenshot.sh
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/reality_layer.py
-  the artefact/clayverse/retrieval.py
-  the artefact/web/chat/demo-bilder/andreas-test.png
-  the artefact/web/chat/demo-bilder/eos-demo-out.png
-  the artefact/web/chat/demo-bilder/zero-trigger-test.png
-  the artefact/web/chat/index.html
-  udb-backup/config/udb_backup.conf
-  udb-backup/udb_backup.py
-
-Zeit: 2026-08-19T14:59:39+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 12
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 14:59:35 +0000 — clayverse: 4 Aenderungen
-
-`d0ea59aabbaa` · clay · 14:59 UTC · ClayVerse
-
-```
-Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
-
-  .gitignore
-  runtime/CLAUDE.md
-  runtime/deny-shell
-  werkzeug/vorprozessor.py
-
-Zeit: 2026-08-19T14:59:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: clayverse (/opt/clayverse)
-Dateien: 4
-Fern: origin -> /srv/git/clayverse.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 14:59:31 +0000 — unifieddb: 16 Aenderungen
-
-`999c886bfec7` · unifieddb · 14:59 UTC · ClayVerse
-
-```
-Anlass: Erstlauf: ZERO-Baeume unter mechanische Versionierung stellen (eos-chronik)
-
-  .gitignore
-  _zulauf-2026-08-16/ABCHLUSSBERICHT_2026-08-16.md
-  _zulauf-2026-08-16/LUECKE_6_FIXES_2026-08-16.md
-  _zulauf-2026-08-16/NEUROPEDIA_INTEGRATION.md
-  _zulauf-2026-08-16/NVIDIA_EMBEDDING_PLAN.md
-  _zulauf-2026-08-16/SESSION_2026-08-16_2ND_PART.md
-  _zulauf-2026-08-16/goldsatz_halb_B_mine.json
-  _zulauf-2026-08-16/udb/abruf/feuerschneise.py
-  _zulauf-2026-08-16/udb/abruf/memory_entitaet.py
-  _zulauf-2026-08-16/udb/abruf/neuropedia.py
-  _zulauf-2026-08-16/udb/abruf/nvidia_embedding.py
-  _zulauf-2026-08-16/udb/cli.py
-  udb/abruf/_bau_gold_uebersetzer.py
-  udb/abruf/uebersetzer_gold.json
-  udb/abruf/uebersetzer_messen.py
-  udb/abruf/uebersetzer_messung.json
-
-Zeit: 2026-08-19T14:59:31+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: unifieddb (/opt/unifieddb)
-Dateien: 16
-Fern: origin -> /srv/git/unifieddb.git
-Werkzeug: eos-chronik.py v1
-```
-
-### Laufzeit-Logs/State aus Versionierung nehmen (nur Quelle+Config bleiben)
-
-`faa947ce4c30` · entityos · 14:29 UTC · BACK agent
-
-```
-Co-Authored-By: Claude Opus 4.8 <<adresse>>
-```
-
-### Session 19.08.: Retrieval-Entität, Zero-Handlungsfähigkeit, Mobile, Betrieb + Frank-Module
-
-`1834b4bda6f7` · entityos · 14:29 UTC · BACK agent
-
-```
-Kohärente Arbeitsstränge dieser Session (additiv, mit Fallbacks, Tests mitgezogen):
-- Retrieval-enrich: corpus_lookup_v2/_enrich über udb/paket() hinter Flag VORSTUFE_RETRIEVAL (Default alt); Privacy-Fix (Rohtext-Leak sitzungsübergreifend)
-- Vorstufe/Lernschleife: prestage small-Modell (Latenz 12-60s→~1s), Epistemik-Feld, Envelope-Robustheit, Key-Rotation, store-Lernbild, Übersetzer-Menschlichkeit/Betriebston
-- Zero handlungsfähig: werkbank.py (Pfad-Zaun), fence_hook.py (dünner Zaun, Eigner-Entscheidung), native Tools, warm_zero-Pool, mcp_server-Werkzeuge
-- Systeme/Dienste-Bubble + Mobile-Redesign (web/, live via web-Bind-Mount) + terminal_gateway /api/me,/api/systeme,/api/dienst-steuern (Clerk-Allowlist)
-- Frank-Module: eos-invariants (dry-run), eos-dream (an paket()-Fehltreffer), eos-hypothesen (LLM-freie Hypothesen aus Nulltreffern)
-- Betrieb: Clobber-Fix vp_edge_lern (UPSERT), Deploy-Env, web-Bind-Mount in compose
-
-Messwerkzeuge: eval/ (fair + NL Retrieval-Eval, read-only).
-Nicht committet: venvs, Laufzeit-DBs, Key-Pool-Zustand, Backups (jetzt in .gitignore).
-
-Co-Authored-By: Claude Opus 4.8 <<adresse>>
 ```
 

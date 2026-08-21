@@ -563,6 +563,61 @@ def bildart(pfad: Path) -> str | None:
 
 # ── Die Kaskadenstufe als austauschbares Glied ──────────────────────
 
+def _standard_tor() -> str | None:
+    """Die Adresse des Wirts, aus der Sicht dieses Prozesses.
+
+    In einem Docker-Behaelter mit Bruecken-Netz IST das Standard-Tor der
+    Wirt. /proc/net/route ist die einzige Quelle dafuer, die immer stimmt:
+    sie steht nicht in einer Konfigurationsdatei, sondern ist der Zustand,
+    nach dem das Betriebssystem selbst leitet.
+
+    WARUM NICHT extra_hosts / host-gateway, obwohl es genau dafuer da ist:
+    gemessen 2026-08-21 loest Docker `host-gateway` auf 172.16.0.1 auf --
+    die docker0-Bruecke. Die ist auf dieser Maschine NO-CARRIER/DOWN, der
+    Aufruf lief in einen Zeitablauf. Der Name loeste auf, die Strecke gab
+    es nicht. Das Standard-Tor dagegen kann per Definition nicht tot sein,
+    sonst haette der Behaelter ueberhaupt kein Netz.
+
+    Gibt None zurueck, wenn es kein Standard-Tor gibt oder die Datei fehlt
+    (etwa auf dem Wirt in einem Netzwerk-Namensraum ohne Route).
+    """
+    try:
+        with open('/proc/net/route', encoding='ascii') as fh:
+            for zeile in fh.readlines()[1:]:
+                teile = zeile.split()
+                if len(teile) < 3 or teile[1] != '00000000':
+                    continue
+                roh = int(teile[2], 16)
+                # Die Datei schreibt die Adresse in der Bytefolge des
+                # Rechners (little-endian), nicht in Lesereihenfolge.
+                return '.'.join(str((roh >> (8 * i)) & 0xFF)
+                                for i in range(4))
+    except (OSError, ValueError):
+        return None
+    return None
+
+
+def _retina_grund() -> str:
+    """Wohin die Retina-Anfragen gehen.
+
+    SICHT_RETINA_URL='auto' heisst: frag das Standard-Tor. So steht es in
+    compose.yaml, und so bleibt die Verdrahtung richtig, wenn Docker dem
+    Netz beim naechsten Neuaufbau eine andere Adresse gibt. Die Gegenseite
+    (/opt/retina-lokal/start.sh) fragt dieselbe Bruecke ab -- eine
+    gemeinsame lebende Quelle statt zweier gepflegter Zahlen.
+
+    Ohne die Variable bleibt es bei 127.0.0.1: auf dem Wirt ist das
+    richtig, und ein Behaelter ohne gesetzte Variable soll eine klare
+    Absage bekommen und nicht heimlich irgendwohin greifen.
+    """
+    gesetzt = (os.environ.get('SICHT_RETINA_URL') or '').strip()
+    if gesetzt.lower() == 'auto':
+        tor = _standard_tor()
+        if tor:
+            return 'http://' + tor + ':8001'
+        return 'http://127.0.0.1:8001'
+    return gesetzt or 'http://127.0.0.1:8001'
+
 class Stufe(Protocol):
     """Was eine Kaskadenstufe koennen muss.
 
@@ -602,8 +657,7 @@ class RetinaStufe:
         # /etc/systemd/system/retina-lokal.service). Die Adresse ist
         # umstellbar, damit Tests einen Doppelgaenger vorschieben koennen,
         # ohne Modelle zu laden.
-        self.grund = (grund or os.environ.get("SICHT_RETINA_URL")
-                      or "http://127.0.0.1:8001").rstrip("/")
+        self.grund = (grund or _retina_grund()).rstrip("/")
         self.zeitgrenze = zeitgrenze
 
     def _post(self, weg: str, nutzlast: dict) -> dict:

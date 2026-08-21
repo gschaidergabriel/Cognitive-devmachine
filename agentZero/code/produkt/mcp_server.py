@@ -1009,6 +1009,44 @@ def main() -> None:
         """Was wurde an dieser Quelle bisher gesehen und was gilt gerade? Nimm es VOR bild_ansehen, wenn du wissen willst, was dort schon bekannt ist. ⚠️ `sichtbarkeit` ist keine Aussage ueber die Welt, ausser bei ABWESEND_EXPLIZIT_NEGATIV -- lies das Feld `lies_so`."""
         return bridge.bild_gedaechtnis(ort)
 
+    # ── PC-Steuerung: Zero bedient den Rechner des Menschen (heimpc-Bruecke) ──
+    # Der Host-Dienst laeuft auf dem PC hinter Tailscale und hat seine eigenen
+    # Tore (Token, Schranke, Zeuge). Diese Werkzeuge rufen ihn nur an.
+    @mcp.tool(annotations=ro)
+    def pc_bildschirme() -> dict:
+        """Welche Bildschirme hat der Rechner des Menschen, wo liegen sie? Bildschirm 2 ist der grosse -- dort darfst du arbeiten. Bildschirm 1 (primary) gehoert dem Menschen und bleibt unangetastet."""
+        from . import heimpc
+        return heimpc.bildschirme()
+
+    @mcp.tool(annotations=ro)
+    def pc_sehen(bildschirm: str = "2") -> dict:
+        """Ein Bild vom Bildschirm des Menschen (Vorgabe: Bildschirm 2, seiner bleibt aussen vor). Speichert den Screenshot in den Dateispeicher und liefert seine Kennung -- gib die an `bild_ansehen` weiter, wenn du den Bildschirm analysieren lassen willst."""
+        from . import heimpc, dateien
+        r = heimpc.sehen(bildschirm)
+        if not r.get("erreichbar"):
+            return r
+        if "bytes" not in r:
+            return {k: v for k, v in r.items() if k != "bytes"}
+        a = dateien.hochladen(user_id=bridge.user_id,
+                              dateiname=f"bildschirm-{bildschirm}.png", inhalt=r["bytes"])
+        return {"erreichbar": True, "gespeichert_als": a.get("id"), "name": a.get("name"),
+                "hinweis": "nutze bild_ansehen mit dieser Kennung, um den Bildschirm zu analysieren"}
+
+    @mcp.tool(annotations=effectful)
+    def pc_eingabe(typ: str, text: str = "", taste: str = "",
+                   x: int | None = None, y: int | None = None) -> dict:
+        """Tastatur/Maus auf dem Rechner des Menschen. typ = tippen(text) | taste(taste, z.B. Return) | maus(x,y) | klick(x,y,taste). Echte Eingabe wie bei einem Menschen -- Sichtbares gehoert auf Bildschirm 2, Bildschirm 1 nie anfassen."""
+        from . import heimpc
+        rest = {k: v for k, v in {"text": text, "taste": taste, "x": x, "y": y}.items()
+                if v not in ("", None)}
+        return heimpc.eingabe(typ, **rest)
+
+    @mcp.tool(annotations=effectful)
+    def pc_ausfuehren(befehl: str, frist: int = 120) -> dict:
+        """Einen Shell-Befehl auf dem Rechner des Menschen ausfuehren. ⚠️ Zerstoerendes weist die Schranke des Rechners ab und verlangt einen am Terminal getippten Schein -- das ist gewollt, umgeh es nicht."""
+        from . import heimpc
+        return heimpc.ausfuehren(befehl, frist)
+
     @mcp.tool(annotations=udb_write)
     def raum_rufen(text: str) -> dict:
         """Kurzer Zuruf an die anderen drei Plaetze, CAVEMAN ENGLISH. Fuer Absprachen, nicht fuer Gespraechsinhalte."""

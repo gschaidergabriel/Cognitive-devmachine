@@ -29,6 +29,7 @@ from .postfach import (
     registriere_postfach_wege,
 )
 from .postfach import zugaenge_laden as postfach_zugaenge_laden
+from .omnimind import registriere_omnimind_wege
 from .store import UnifiedDB
 from .zustand import zustand as zustand_lesen
 
@@ -784,6 +785,21 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         page = _SEITEN_PAGE.read_text(encoding="utf-8")
         return HTMLResponse(page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key))
 
+    _OMNIMIND_PAGE = Path("/opt/clayverse/web/omnimind/index.html")
+
+    @app.get("/omnimind", response_class=HTMLResponse)
+    async def omnimind_index():
+        # Gleicher Bauplan wie /seiten: Seite ausliefern, Clerk-Platzhalter
+        # ersetzen, kein stiller Rueckfall, wenn die Oberflaeche fehlt.
+        key = html.escape(publishable_key, quote=True)
+        api = html.escape(frontend_api_url, quote=True)
+        if not key or not api:
+            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        if not _OMNIMIND_PAGE.is_file():
+            return HTMLResponse("omnimind surface missing from image", status_code=503)
+        page = _OMNIMIND_PAGE.read_text(encoding="utf-8")
+        return HTMLResponse(page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key))
+
     @app.get("/postfach", response_class=HTMLResponse)
     async def postfach_index():
         key = html.escape(publishable_key, quote=True)
@@ -870,6 +886,26 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
 
     registriere_postfach_wege(
         app, db=db, mensch_aufloesen=_angemeldeter_mensch,
+        antwort_auf_fehler=_antwort_auf_fehler,
+    )
+
+    async def _omnimind_zugriff(request) -> str:
+        # Gleiche Anmeldepruefung wie /api/seiten und /api/systeme -- OHNE
+        # identity.resolve()/platz, weil OmniMind keine Sitzung braucht und
+        # sonst unnoetig einen der zwei Terminal-Plaetze belegen wuerde.
+        token = ClerkTokenVerifier.bearer(request.headers.get("Authorization"))
+        claims = await asyncio.to_thread(verifier.verify, token)
+        uid = identity.clerk_map.get(str(claims.get("sub", "")))
+        if uid not in CANONICAL_USER_IDS:
+            # AuthenticationError, nicht PermissionError: _antwort_auf_fehler
+            # bildet das auf 401 ab, exakt wie /api/me und /api/seiten fuer
+            # ein fremdes, aber gueltig angemeldetes Konto -- ein 403 haette
+            # hier eine andere Bedeutung vorgetaeuscht als im Rest des Hauses.
+            raise AuthenticationError("unauthorized")
+        return uid
+
+    registriere_omnimind_wege(
+        app, db=db, pruefe_zugriff=_omnimind_zugriff,
         antwort_auf_fehler=_antwort_auf_fehler,
     )
 

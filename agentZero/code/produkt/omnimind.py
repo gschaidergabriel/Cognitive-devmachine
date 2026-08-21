@@ -23,11 +23,30 @@ wildes Ueberschreiben von `artikel` waere falscher.
 """
 from __future__ import annotations
 
+import asyncio
 import json
 import re
 import time
 from pathlib import Path
 from typing import Any
+
+# ⚠️ MODULKOPF, nicht lokal in registriere_omnimind_wege(): diese Datei
+# traegt `from __future__ import annotations`, also sind alle Annotationen
+# Zeichenketten -- FastAPI loest `request: Request` ueber die MODULglobalen
+# auf. Als lokaler Import in der Wegefunktion bliebe der Name unaufgeloest
+# und jeder Weg antwortete mit 422 ("request" als Abfrageparameter erwartet)
+# statt zu arbeiten -- exakt der Fehler, den postfach.py an derselben Stelle
+# schon einmal gemessen und dort ebenfalls an den Modulkopf gezogen hat.
+#
+# ⚠️ TROTZDEM try/except: dieses Modul wird auch von omnimind_anreicherung.py
+# importiert, das auf dem WIRT laeuft (systemd, nacktes python3, kein
+# fastapi) -- siehe dortiger Modulkopf. Dort wird registriere_omnimind_wege()
+# nie aufgerufen, also duerfen die drei Namen dort ruhig None bleiben.
+try:
+    from fastapi import Request
+    from fastapi.responses import JSONResponse, Response
+except ImportError:  # pragma: no cover -- greift nur auf dem Wirt ohne fastapi
+    Request = Response = JSONResponse = None  # type: ignore[assignment,misc]
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS om_projekt(
@@ -104,6 +123,26 @@ def _jetzt() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime())
 
 
+# ⚠️ Die om_*-Tabellen legt der Anreicherungsdienst an (om.sicherstellen()
+# laeuft dort bei jedem Lauf) -- in Produktion existieren sie also laengst,
+# wenn eine Anfrage hier ankommt. Trotzdem lesen alle Stellen unten, die
+# om_projekt/om_hypothese_implikation/om_zusammenfassung/om_skizze anfassen,
+# ueber DIESEN Helfer statt direkt: ein frischer Container VOR dem ersten
+# Anreicherungslauf (oder ein Test mit einer nackten DB) soll eine leere
+# Antwort liefern, keinen 500er wegen "no such table". Import lokal, damit
+# dieses Modul bei einem `db`-Platzhalter ohne .db (siehe Terminal-Auth-
+# Tests, die create_terminal_app mit db=object() aufrufen) nicht schon beim
+# Registrieren der Wege stolpert -- diese Funktion wird nur innerhalb einer
+# echten Anfrage aufgerufen, nie beim App-Aufbau.
+def _lesen_tolerant(db, sql: str, params=(), *, viele: bool = True):
+    import sqlite3
+    try:
+        cur = db.db.execute(sql, params)
+        return cur.fetchall() if viele else cur.fetchone()
+    except sqlite3.OperationalError:
+        return [] if viele else None
+
+
 # ── Volltextsuche mit Filtern ───────────────────────────────────────────
 #
 # Zweistufig wie mcp_server.korpus_suchen: erst alle Suchworte (praezise),
@@ -126,7 +165,7 @@ def _projekt_nachkommen(db, projekt_id: str) -> list[str]:
     """id + alle Kinder/Enkel in om_projekt -- rekursiv, aber flach in Python
     (die Tabelle ist klein, hunderte Zeilen, kein Grund fuer eine WITH RECURSIVE)."""
     alle = {r["id"]: r["eltern_id"] for r in
-            db.db.execute("SELECT id, eltern_id FROM om_projekt")}
+            _lesen_tolerant(db, "SELECT id, eltern_id FROM om_projekt")}
     ziel = [projekt_id]
     wachsend = True
     while wachsend:
@@ -384,9 +423,9 @@ def artikel_lesen(db, artikel_id: str) -> dict:
     zuordnung = db.db.execute(
         "SELECT gehoert, grund, sicherheit FROM entityos_artikel_zuordnung WHERE artikel_id=?",
         (aid,)).fetchone()
-    projekte = db.db.execute(
-        "SELECT p.id, p.name, p.art, p.eltern_id, m.konfidenz FROM om_projekt_mitglied m "
-        "JOIN om_projekt p ON p.id = m.projekt_id WHERE m.artikel_id=?", (aid,)).fetchall()
+    projekte = _lesen_tolerant(
+        db, "SELECT p.id, p.name, p.art, p.eltern_id, m.konfidenz FROM om_projekt_mitglied m "
+        "JOIN om_projekt p ON p.id = m.projekt_id WHERE m.artikel_id=?", (aid,))
 
     # ── Hypothesen-Box ──────────────────────────────────────────────────
     # 1) ist der Artikel SELBST eine Hypothese/Gegenhypothese -> ihre eigene
@@ -406,14 +445,14 @@ def artikel_lesen(db, artikel_id: str) -> dict:
         "ORDER BY guete DESC LIMIT 8", (aid, aid)).fetchall()
     hat_hypothesen = bool(eigene_hyp) or bool(verwandte_hyp)
 
-    implikationen = db.db.execute(
-        "SELECT hypothese_id, hypothese_text, text, konfidenz, modell, erzeugt_am "
-        "FROM om_hypothese_implikation WHERE artikel_id=? ORDER BY konfidenz DESC", (aid,)).fetchall()
+    implikationen = _lesen_tolerant(
+        db, "SELECT hypothese_id, hypothese_text, text, konfidenz, modell, erzeugt_am "
+        "FROM om_hypothese_implikation WHERE artikel_id=? ORDER BY konfidenz DESC", (aid,))
 
-    zsf = db.db.execute(
-        "SELECT text, modell, erzeugt_am FROM om_zusammenfassung WHERE artikel_id=?", (aid,)).fetchone()
-    skizze = db.db.execute(
-        "SELECT mermaid, quelle, erzeugt_am FROM om_skizze WHERE artikel_id=?", (aid,)).fetchone()
+    zsf = _lesen_tolerant(
+        db, "SELECT text, modell, erzeugt_am FROM om_zusammenfassung WHERE artikel_id=?", (aid,), viele=False)
+    skizze = _lesen_tolerant(
+        db, "SELECT mermaid, quelle, erzeugt_am FROM om_skizze WHERE artikel_id=?", (aid,), viele=False)
 
     bildpfad = bildpfad_falls_erlaubt(r["quelle"])
 
@@ -617,9 +656,9 @@ def netz(db, *, gehoert: str | None = None, sphaere: str | None = None,
 # ── Projekt-Hierarchie -- lesend, gefuellt vom Anreicherungsdienst ─────
 
 def projekt_hierarchie(db) -> dict:
-    zeilen = db.db.execute(
-        "SELECT id, name, art, eltern_id, konfidenz, begruendung, anzahl_artikel, aktualisiert_am "
-        "FROM om_projekt ORDER BY anzahl_artikel DESC").fetchall()
+    zeilen = _lesen_tolerant(
+        db, "SELECT id, name, art, eltern_id, konfidenz, begruendung, anzahl_artikel, aktualisiert_am "
+        "FROM om_projekt ORDER BY anzahl_artikel DESC")
     knoten = {r["id"]: dict(r) | {"kinder": []} for r in zeilen}
     wurzeln = []
     for r in knoten.values():
@@ -628,8 +667,8 @@ def projekt_hierarchie(db) -> dict:
             knoten[eltern]["kinder"].append(r)
         else:
             wurzeln.append(r)
-    kanten = [dict(r) for r in db.db.execute(
-        "SELECT a_id, b_id, staerke, beleg FROM om_projekt_kante ORDER BY staerke DESC").fetchall()]
+    kanten = [dict(r) for r in _lesen_tolerant(
+        db, "SELECT a_id, b_id, staerke, beleg FROM om_projekt_kante ORDER BY staerke DESC")]
     return {"projekte": wurzeln, "anzahl": len(knoten), "querverbindungen": kanten,
             "hinweis": ("leer, solange der Anreicherungsdienst noch nicht gelaufen ist"
                         if not knoten else None)}
@@ -657,11 +696,13 @@ def filter_werte(db) -> dict:
 # eingehaengt, nichts hier fasst die bestehenden Wege an.
 
 def registriere_omnimind_wege(app, *, db, pruefe_zugriff, antwort_auf_fehler) -> None:
-    from fastapi import Request
-    from fastapi.responses import JSONResponse, Response
-    import asyncio
-
-    sicherstellen(db)
+    # ⚠️ BEWUSST KEIN sicherstellen(db) hier: registriere_omnimind_wege laeuft
+    # waehrend create_terminal_app() -- also fuer JEDEN Test, der eine App
+    # baut, auch fuer einen Platzhalter wie db=object() (siehe
+    # test_terminal_ws_auth_*.py, die mit Terminal-Auth nichts mit OmniMind
+    # zu tun haben). db.db waere dort nicht vorhanden. Die om_*-Tabellen legt
+    # der Anreicherungsdienst an; alle Lesezugriffe unten gehen ueber
+    # _lesen_tolerant() und vertragen eine DB ganz ohne diese Tabellen.
 
     async def _sperre(request: Request) -> None:
         await pruefe_zugriff(request)

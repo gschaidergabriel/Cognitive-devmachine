@@ -1,8 +1,8 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
+Automatisch erzeugt 2026-08-21T09:20:31Z aus drei Repos. 480 Eintraege.
 
-## architektur (15)
+## architektur (14)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -10,7 +10,6 @@ Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T10:30 | entityos | `f94e90ad841a` | Oberflaechenumbau: Schale, Postfach, neuer Chat (Arbeit der Oberflaechen-Instanz) |
 | 2026-08-18T03:39 | entityos | `e413f4f8adc3` | Initiative verdrahtet: der Autonomie-Puls lief nie, aus ZWEI gestapelten Gruenden |
 | 2026-08-18T03:25 | entityos | `6b46462b72f2` | Identitaet v3: Eigner-Spezifikation eingewoben, Verkoerperung ohne Erfindung |
-| 2026-08-18T03:20 | entityos | `76ced08c5bb0` | Zeros Identitaet wird kanonischer Zustand statt Bau-Artefakt |
 | 2026-08-15T19:02 | clay | `6a76e8171131` | F91 Endgestalt Standalone-Binary mit Modellen daneben: Betrieb lokal, GLM als abschaltbare Verstaerkung, Speic |
 | 2026-08-15T18:00 | unifieddb | `7f5e8b582f79` | F87 Auslieferungsform + Teil III der Zielarchitektur |
 | 2026-08-15T17:13 | clay | `2a6c2f4b6706` | F79 Endgueltige Bahnbelegung GLM/NVIDIA/Groq-Premium, GLM spricht als ClayVerse - Identitaet ist Oberflaeche,  |
@@ -87,13 +86,12 @@ Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T16:47 | unifieddb | `b17a5dd69586` | F73 aufgenommen |
 | 2026-08-15T16:47 | clay | `1ae31bd0ffb2` | F73 Paketform als Abschirmung gegen Prompt Injection - und die Stelle, an der man den Schutz wieder verliert |
 
-## reparatur (14)
+## reparatur (13)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
 | 2026-08-18T12:46 | entityos | `8887a49d32c0` | Rote Tests 14 -> 9, Bahnensperre, Live-Herzschlag, Backtick-Ursache gefunden |
 | 2026-08-18T10:29 | entityos | `7432769daa72` | Fix: CLAYVERSE_DB_PATH never reached the claude subprocess, so every hook/MCP write landed in the state-root s |
-| 2026-08-18T10:19 | entityos | `3cca3460bbb1` | Fix real S7-adjacent blocker: CLAUDE_CODE_SHELL_PREFIX was silently eating every hook AND the MCP server start |
 | 2026-08-18T05:27 | entityos | `2339aea31bf2` | prestage: upgrade governor model to mistral-medium, fix slot-2 session check |
 | 2026-08-18T05:07 | entityos | `a07abaea17cc` | Zwei Sitzungen je Mensch, Huelle kuerzt statt zu sperren, Avatare |
 | 2026-08-18T03:45 | entityos | `b3b2a0e36b0a` | Totalsperre behoben (selbst verursacht) + Zug-Aufnahme wird atomar |
@@ -106,7 +104,7 @@ Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-15T05:45 | clay | `5d87d90a593d` | F20 Die 15 Prozent sind erzwungen und gemessen, die Wartesperre ist entschieden |
 | 2026-08-14T20:37 | clay | `a16d027e6d27` | B13 geprueft: Schwerer Fehler behoben und bewiesen - plus Zwillingsfehler |
 
-## pruefung (14)
+## pruefung (13)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
@@ -120,15 +118,20 @@ Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-18T03:25 | entityos | `543ad0c92eda` | Test: HEALTHCHECK ist bewusst liveness-only (/healthz), nicht /readyz |
 | 2026-08-18T03:24 | entityos | `cfe2f0cf2e99` | Test: fehlender sts-Claim ist laut Docstring ok, nicht abzulehnen |
 | 2026-08-18T03:21 | entityos | `2e7577660632` | Test: required_target nachgezogen + Regex-Tippfehler in Fehlermeldungs-Match korrigiert |
-| 2026-08-18T03:16 | entityos | `de1ffd0513f9` | Tests: verified_effect braucht jetzt required_target (Commit 8b7368efd) -- 5 Tests nachgezogen |
 | 2026-08-15T20:43 | clay | `65bf88a664da` | AP11: Test-Ergebnisse — massive Geschwindigkeitsverbesserung |
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (311)
+## bau (314)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T09:11 | entityos | `faa750f611fe` | EOS-Chronik 2026-08-21 09:11:26 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T09:08 | entityos | `8356b11c06df` | EOS-Chronik 2026-08-21 09:08:26 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T09:04 | entityos | `bafd64b8d7ce` | EOS-Chronik 2026-08-21 09:04:40 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T09:01 | entityos | `0cad76e17e13` | EOS-Chronik 2026-08-21 09:01:20 +0000 — entityos: 4 Aenderungen |
+| 2026-08-21T08:56 | entityos | `500a96b144a9` | EOS-Chronik 2026-08-21 08:56:09 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T08:51 | entityos | `c81ed95301d2` | EOS-Chronik 2026-08-21 08:51:36 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:49 | entityos | `fbf38bfd684c` | EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen |
 | 2026-08-21T08:47 | entityos | `8bea7c38d374` | EOS-Chronik 2026-08-21 08:47:36 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T08:44 | entityos | `44158da9d77a` | EOS-Chronik 2026-08-21 08:44:08 +0000 — entityos: 1 Aenderungen |
@@ -183,10 +186,4 @@ Automatisch erzeugt 2026-08-21T08:50:30Z aus drei Repos. 480 Eintraege.
 | 2026-08-21T02:20 | entityos | `084464d0ba44` | EOS-Chronik 2026-08-21 02:20:16 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T02:11 | entityos | `c95366043e52` | EOS-Chronik 2026-08-21 02:11:15 +0000 — entityos: 4 Aenderungen |
 | 2026-08-21T02:08 | clay | `f712e0bb96d0` | EOS-Chronik 2026-08-21 02:08:16 +0000 — clayverse: 1 Aenderungen |
-| 2026-08-21T02:05 | entityos | `791543802404` | EOS-Chronik 2026-08-21 02:05:48 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T01:44 | entityos | `87e91a1159ad` | EOS-Chronik 2026-08-21 01:44:12 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T01:42 | entityos | `073ea0fae460` | EOS-Chronik 2026-08-21 01:42:12 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T01:39 | entityos | `dd90b24d4660` | EOS-Chronik 2026-08-21 01:39:58 +0000 — entityos: 9 Aenderungen |
-| 2026-08-21T01:29 | entityos | `1fe881b3caa9` | EOS-Chronik 2026-08-21 01:29:22 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T01:24 | entityos | `81e2ffcdef81` | EOS-Chronik 2026-08-21 01:24:13 +0000 — entityos: 1 Aenderungen |
 

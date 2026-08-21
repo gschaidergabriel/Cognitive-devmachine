@@ -1,12 +1,125 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T08:50:30Z. 1040 Commits aus vier Repos, davon 403 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T09:20:31Z. 1041 Commits aus vier Repos, davon 409 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 09:11:26 +0000 — entityos: 1 Aenderungen
+
+`faa750f611fe` · entityos · 09:11 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/omnimind.py
+
+Zeit: 2026-08-21T09:11:26+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 09:08:26 +0000 — entityos: 3 Aenderungen
+
+`8356b11c06df` · entityos · 09:08 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/betrieb/systemd/entityos-omnimind-anreicherung.service
+  the artefact/betrieb/systemd/entityos-omnimind-anreicherung.timer
+  the artefact/tests/test_omnimind_anreicherung.py
+
+Zeit: 2026-08-21T09:08:26+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 3
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 09:04:40 +0000 — entityos: 1 Aenderungen
+
+`bafd64b8d7ce` · entityos · 09:04 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_omnimind.py
+
+Zeit: 2026-08-21T09:04:40+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 09:01:20 +0000 — entityos: 4 Aenderungen
+
+`0cad76e17e13` · entityos · 09:01 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/web/omnimind/index.html
+  the artefact/web/omnimind/omnimind.css
+  the artefact/web/omnimind/omnimind.js
+  the artefact/web/omnimind/vorschau.html
+
+Zeit: 2026-08-21T09:01:20+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 4
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:56:09 +0000 — entityos: 1 Aenderungen
+
+`500a96b144a9` · entityos · 08:56 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/clayverse/omnimind.py
+
+Zeit: 2026-08-21T08:56:09+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 08:51:36 +0000 — entityos: 1 Aenderungen
+
+`c81ed95301d2` · entityos · 08:51 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/runtime_CLAUDE.md
+
+Zeit: 2026-08-21T08:51:36+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 08:49:36 +0000 — entityos: 5 Aenderungen
 
@@ -2800,85 +2913,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 15:09:39 +0000 — entityos: 2 Aenderungen
-
-`b1c7e038398b` · entityos · 15:09 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  eval/retrieval_nl_eval_ergebnis.json
-  udb-backup/udb_backup.py
-
-Zeit: 2026-08-19T15:09:39+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-19 15:09:35 +0000 — unifieddb: 1 Aenderungen
-
-`dabe10f24aec` · unifieddb · 15:09 UTC · ClayVerse
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  system/frank-api-vps/etc/clayverse/freie-zugaenge.env.vorlage
-
-Zeit: 2026-08-19T15:09:35+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: unifieddb (/opt/unifieddb)
-Dateien: 1
-Fern: origin -> /srv/git/unifieddb.git
-Werkzeug: eos-chronik.py v1
-```
-
-### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
-
-`50e521e78d3f` · unifieddb · 15:08 UTC · ClayVerse
-
-```
-Co-Authored-By: Claude Opus 4.8 <<adresse>>
-```
-
-### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
-
-`280c628447ed` · entityos · 15:08 UTC · BACK agent
-
-```
-Co-Authored-By: Claude Opus 4.8 <<adresse>>
-```
-
-### Token-Stores aus Versionierung nehmen (Arbeitskopie bleibt)
-
-`7edb9faf4713` · clay · 15:08 UTC · ClayVerse
-
-```
-Co-Authored-By: Claude Opus 4.8 <<adresse>>
-```
-
-### EOS-Chronik 2026-08-19 15:01:57 +0000 — entityos: 1 Aenderungen
-
-`cb8987d383d5` · entityos · 15:01 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  eval/retrieval_fair_eval_enrich.py
-
-Zeit: 2026-08-19T15:01:57+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

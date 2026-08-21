@@ -1,6 +1,6 @@
 # Messwerk
 
-Automatisch erzeugt 2026-08-21T04:14:16Z.
+Automatisch erzeugt 2026-08-21T04:19:49Z.
 
 Die Forschungsentität hat rund 55 Messwerte vorgeschlagen. Der Filter, nach dem hier
 gebaut wurde, ist ihr eigener Schlusssatz:
@@ -27,33 +27,33 @@ Datengrundlage, der trotzdem eine Zahl zeigt, ist eine Lüge mit Nachkommastelle
 
 **Unterscheidet:** Sagt das System 'weiss ich nicht', oder rät es? Trennt Zurueckhaltung von Erfindung.
 
-**Wert:** `0.366`
+**Wert:** `0.36`
 
-108 von 295 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort.
+109 von 303 Abrufen bleiben UNKNOWN. Hoch ist hier NICHT schlecht: bei leerem Gedaechtnis IST UNKNOWN die richtige Antwort.
 
 ### Context Utilization  ·  _Abruf_
 
 **Unterscheidet:** Wird der gelieferte Kontext genutzt oder verschwendet? Trennt zu viel Kontext von zu wenig.
 
-**Wert:** `0.0331`
+**Wert:** `0.0326`
 
-Anteil des Budgets, der belegt wurde. 295 Episoden.
+Anteil des Budgets, der belegt wurde. 303 Episoden.
 
 ### Effect Verification Latency  ·  _Handlung_
 
 **Unterscheidet:** Wie lange von Absicht bis belegtem Ergebnis? Trennt schnelle Wirkung von haengender.
 
-**Wert:** `0.002`
+**Wert:** `0.001`
 
-Sekunden, Mittel ueber 3 verifizierte Wirkungen.
+Sekunden, Mittel ueber 9 verifizierte Wirkungen.
 
 ### Causal Credit Horizon  ·  _Kausalitaet_
 
 **Unterscheidet:** Wie viele Schritte zwischen Handlung und messbarer Wirkung? Trennt kurze von langen Wirkketten.
 
-**Wert:** `295`
+**Wert:** `303`
 
-**Braucht:** mindestens 10 Kausalepisoden mit Wirkung, aktuell 295
+**Braucht:** mindestens 10 Kausalepisoden mit Wirkung, aktuell 303
 
 Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziele.
 
@@ -61,9 +61,9 @@ Zaehlt heute nur Wiedereintritte -- die Kettenlaenge braucht mehrschrittige Ziel
 
 **Unterscheidet:** Waechst der Zustand pro nuetzlichem Fakt oder pro Muell? Trennt Wissen von Ablagerung.
 
-**Wert:** `5032529920`
+**Wert:** `5041954816`
 
-5.03 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts.
+5.04 GB. Die Ableitung ueber Zeit entsteht aus den Kartenaufnahmen in agentZero/karten -- ein einzelner Wert sagt dazu nichts.
 
 ### Queue Pressure  ·  _Haushalt_
 
@@ -95,17 +95,17 @@ Ein angebotenes, nicht freigegebenes Werkzeug sieht im Modell aus wie ein vorhan
 
 **Unterscheidet:** Wie viele zugelassene Wirkungen enden belegt? Trennt Tor-funktioniert von Wirkung-wirkt.
 
-**Wert:** `0.667`
+**Wert:** `0.889`
 
-**Braucht:** mindestens 10 Wirkungen, aktuell 3
+**Braucht:** mindestens 10 Wirkungen, aktuell 9
 
-2 von 3 verifiziert.
+8 von 9 verifiziert.
 
 ### Decision Entropy  ·  _Entscheidung_
 
 **Unterscheidet:** Konkurrieren mehrere Optionen echt, oder ist die Wahl trivial? Trennt Entscheidungspunkte von Ablauf.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -113,7 +113,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Aendert Zero Annahmen bei neuer Evidenz? Trennt epistemische Flexibilitaet von Sturheit.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -121,7 +121,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Weicht das Ergebnis von der Erwartung ab? Grundlage jeder Anpassung.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -129,7 +129,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Gab es Passendes, das nicht geholt wurde? Trennt schlechten Abruf von leerem Bestand.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -137,7 +137,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Waren autonom gestartete Schritte sinnvoll? Trennt Initiative von Betriebsamkeit.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -145,7 +145,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** War Nichtstun die richtige Wahl? Trennt Ruhe von Versaeumnis -- Autonomie heisst nicht dauernd handeln.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -153,7 +153,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Tritt derselbe mechanistische Fehler wieder auf? Der haerteste Lernindikator, den es gibt.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -161,7 +161,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Hat eine Erinnerung das Ergebnis verbessert? Trennt 'wurde erinnert' von 'war nuetzlich'.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -169,7 +169,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Wie lange bleibt Gespeichertes nuetzlich? Grundlage fuer automatischen Verfall.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 
@@ -177,7 +177,7 @@ Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungsl
 
 **Unterscheidet:** Wird ein wiederholt gegangener Weg wirklich schneller? Der Test der geplanten Autobahnen.
 
-**Braucht:** Bestand zu duenn: 590 Zuege, 3 Wirkungen, 602 Gedaechtniseinheiten, 295 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
+**Braucht:** Bestand zu duenn: 606 Zuege, 9 Wirkungen, 621 Gedaechtniseinheiten, 303 Abrufe. Richtwert: 30 Zuege und 10 Wirkungen.
 
 Der Sensor waere heute rechenbar -- die Zahl waere echt und trotzdem bedeutungslos.
 

@@ -1,5 +1,5 @@
 -- UnifiedDB: vollstaendiges Schema, KEINE Daten.
--- Erzeugt 2026-08-21T04:11:22Z aus /var/lib/clay/wiki.db.
+-- Erzeugt 2026-08-21T04:18:59Z aus /var/lib/clay/wiki.db.
 -- Wer diese Datei hat, kann EntityOS neu aufbauen, ohne einen einzigen
 -- Datensatz zu besitzen. Die echte Datenbank ist 3,8 GB und gehoert
 -- nicht in ein Repo -- ihre Struktur schon.
@@ -710,6 +710,14 @@ CREATE TABLE wa_snapshot (
         zeit TEXT, rchar INTEGER, wchar INTEGER, cpu_ticks INTEGER,
         active_enter TEXT, active_state TEXT
     );
+CREATE TABLE wake_events(
+    coalesce_key TEXT PRIMARY KEY,
+    kind TEXT NOT NULL,
+    subject_ref TEXT,
+    ts REAL NOT NULL,
+    first_ts REAL NOT NULL,
+    count INTEGER NOT NULL DEFAULT 1
+);
 CREATE TABLE weg(
             id TEXT PRIMARY KEY,
             ursprung TEXT NOT NULL,
@@ -877,6 +885,7 @@ CREATE INDEX idx_vd_aufnahme_strom ON vd_aufnahme(strom, zeit);
 CREATE INDEX idx_vd_lauf_strom ON vd_lauf(strom, zeit);
 CREATE INDEX idx_vp_alias_df_df ON vp_alias_df(df);
 CREATE INDEX idx_vp_weg_guete ON vp_weg(guete DESC);
+CREATE INDEX idx_wake_events_ts ON wake_events(ts);
 CREATE INDEX idx_weg_ursprung_ziel ON weg(ursprung, ziel_wirt);
 CREATE INDEX idx_weg_ziel ON weg(ziel_wirt);
 CREATE INDEX idx_wk_aufgabe_art ON wk_aufgabe(art, zustand);

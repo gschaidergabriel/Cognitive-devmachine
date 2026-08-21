@@ -304,6 +304,31 @@ def zeilen(c, testlage: str = "") -> list[dict]:
       "create_goal_from_turn / propose_step / record_step_failure / verify_completion vorhanden; "
       "Ziele entstehen nur aus kanonischen Menschenzügen",
       True)
+    # Der typisierte Weckvertrag. Er ist gebaut, aber ausdruecklich NICHT
+    # scharf geschaltet -- deshalb steht er hier als "offen" und nicht als
+    # "erfuellt". Eine Zeile, die einen Vertrag ohne Wirkung als erfuellt
+    # ausweist, waere genau die handgepflegte Statustabelle, die dieses
+    # Dokument ersetzen soll.
+    try:
+        import importlib
+        _wc = importlib.import_module("clayverse.wake_condition")
+        _wc_arten = len(getattr(_wc, "WAKE_CONDITION_KINDS", ()) or ())
+    except Exception:
+        _wc_arten = 0
+    z("Autonomie", "Warten statt Nachsehen: typisierter Weckvertrag",
+      "ein Schritt darf eine Bedingung benennen und schlafen, statt alle 30 s nachzusehen; "
+      "feste Arten, kein freies SQL, keine vom Modell formulierte Bedingung",
+      "Architektur / Messung 21.08.",
+      (f"Vertrag steht: {_wc_arten} geschlossene Arten, 4 Zustände (ERFUELLT/OFFEN/"
+       "ZEITABLAUF/UNBEKANNT), fail-closed je Art, 39 Tests. ⚠️ `wait` bleibt in "
+       "DECISION_KINDS GESPERRT: es fehlt der Ereignis-Haken am Schreibpunkt. Ohne ihn "
+       "liefert `naechste_pruefung()` für jeden Effekt ohne Frist `None` — der Governor "
+       "würde für Effektabschluss und neue Nachricht nie wieder nachsehen und hinge weiter "
+       "am Puls, den er ersetzen soll. Schattenlauf 24 h: Governor 205 Weckvorgänge, "
+       "Puls 2880, davon 2769 leer (96,1 %)"
+       if _wc_arten else "wake_condition.py nicht ladbar — nicht messbar"),
+      False)
+
     z("Autonomie", "Kontinuität über Neustarts",
       "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "Architektur",
@@ -311,6 +336,33 @@ def zeilen(c, testlage: str = "") -> list[dict]:
       _zahl(c, "checkpoints") > 0)
 
     # ── Abruf, der lernt ───────────────────────────────────────────────────
+    # Die Wegehierarchie misst sich selbst: das Modul bringt einen
+    # Falsifikationstest mit, der "gleichverteilt" ausdruecklich als
+    # "der Mechanismus tut nichts" ausweist. Diese Zeile gibt ihn wieder,
+    # statt ihn zu uebergehen.
+    try:
+        _wege = c.execute(
+            "SELECT COUNT(*) n, SUM(tunnel) t, "
+            "COUNT(DISTINCT sitzungen) s FROM vp_weg").fetchone()
+        _wege_n = int(_wege[0] or 0)
+        _wege_t = int(_wege[1] or 0)
+    except Exception:
+        _wege_n = _wege_t = 0
+    z("Abruf", "Emergente Wegehierarchie (F94)",
+      "haeufig gemeinsam benutzte Orte werden zu Autobahnen; neue Verbindungen zwischen "
+      "graphfernen Orten zu Tunneln — beides muss ohne Zutun entstehen und wieder verfallen",
+      "Architektur / Messung 21.08.",
+      (f"{_wege_n} Wege, {_wege_t} Tunnel. ⚠️ Bis 21.08. konnte sich KEINE Hierarchie "
+       "bilden, aus zwei Gründen, die beide Erfolg meldeten: der tägliche Verfall "
+       "committete nie (Signatur: 65 Wege standen nach zwei Läufen exakt auf ihrer "
+       "Anfangsgüte 0,12), und `paket()` bekam als Sitzung den WIRT statt der Sitzung — "
+       "die Tunnelbedingung verlangt aber Mitbenutzung aus VERSCHIEDENEN Sitzungen. "
+       "Beides behoben; Median-Güte fiel danach 0,87→0,769, kein Weg mehr bei 0,12. "
+       "Ob daraus eine Hierarchie wird, ist eine Frage von Tagen — ein täglicher "
+       "Schnappschuss (eos-wegeschnappschuss.timer) zeichnet Gini und oberes Zehntel auf"
+       if _wege_n else "vp_weg leer — nicht messbar"),
+      False)
+
     ep = _zahl(c, "retrieval_entrypoint_policy")
     modus = c.execute("SELECT mode FROM retrieval_policy_state").fetchone()
     # ── frisch erfüllte Ziele 19.08.: echte Messwerte ──
@@ -1353,11 +1405,12 @@ def _abschnitt_arbeitsraum() -> list:
         "im Profil noch im Netz stehen):**", "",
         "| Frage | Verfahren | Ergebnis |",
         "|---|---|---|",
-        "| Ist die Ausstrahlung **kausal**? | Arbeitsraum erzwungen: Sieger / Verlierer / leer, gepaart, exakter Permutationstest über alle 3⁸ Zuweisungen | richtig 5/8 vs 1/8 vs 0/8 · **p = 0,008**; mit Quellenangabe 5/8 vs 0/8 vs 0/8 · **p = 0,004** |",
+        "| Ist die Ausstrahlung **kausal**? | Arbeitsraum erzwungen: Sieger / Verlierer / leer, gepaart, exakter Permutationstest über alle 3⁸ Zuweisungen. ⭐ 21.08. auf dem **Live-Chatweg** wiederholt (`record_via_turnlifecycle=True`) — dem Weg, den der Mensch tatsächlich benutzt | richtig **8/8 vs 0/8 vs 0/8** · **p = 0,0002**; mit Quellenangabe 3/8 vs 0/8 vs 0/8 · p = 0,037. (20.08. auf dem Messweg: 5/8 vs 1/8 vs 0/8 · p = 0,008) |",
         "| Weiß die Anlage, **wann sie es nicht weiß**? | Zwei-Klon-Wette, vier feste Möglichkeiten, Sicherheit beziffert | Treffer 24/24 mit vs 15/22 ohne · Sicherheit 0,94 vs 0,33 · Brier 0,006 vs 0,322 · **Typ-2-AUROC 0,88** · Sicherheit fällt in **22 von 22** Paaren |",
         "| Hängt das Verhalten an der **aufgezeichneten** Geschichte? | Kennwort genannt, dann die Aufzeichnung verändert (gelöscht / geleert / implantiert), je frische Sandkastenkopie | intakt 2/2 · nie 0/2 · gelöscht 0/2 · geleert 0/2 · **implantiert nennt 2/2 das Implantat** und nie das Original |",
         "| Feuert die **Schwelle** wirklich? | Sweep über drei Fragesorten | Frage mit Beleg: Träger 8/8 durch, 0 Nullzüge · fachfremd **3/3 ohne Zündung** · bloße Höflichkeit **3/3 ohne Zündung** |",
-        "| Verändert die Ausstrahlung die **nächste** Auswahl? | 16 aufgezeichnete Züge, Belohnung = Zero nennt die Artikelkennung | 52 gelernte Paare, **12 von 12** der stärksten zeigen auf die tragende Stelle · zugelassene Menge ändert sich bei 4/8 Sonden · **0/8** verlieren ihren Träger |", "",
+        "| Verändert die Ausstrahlung die **nächste** Auswahl? | 16 aufgezeichnete Züge, Belohnung = Zero nennt die Artikelkennung | 52 gelernte Paare, **12 von 12** der stärksten zeigen auf die tragende Stelle · zugelassene Menge ändert sich bei 4/8 Sonden · **0/8** verlieren ihren Träger |",
+        "| Wie **groß** ist der Hebel des Rückkanals? | 60 echte Menschenzüge, gepaart mit/ohne Bonus bei identischen Gewichten (ein leeres `gelernte` legt den Lernanteil auf Relevanz um — das wäre keine Ablation, sondern ein zweiter Eingriff) | Median-Abstand Rang 1→2 **0,1370**, maximaler Hebel **0,1384** = **1,01×** davon. Also richtig dimensioniert, aber jung: `gw_lernen` hat 93 Zeilen, gedreht hat er **1 von 60**. Nicht verstärken — Verkehr geben |", "",
         "**Was ausdrücklich NICHT belegt ist.** Dass die Auswahlinstanz *gut* wählt:",
         "in einem gemessenen Zug wählte sie nichts, obwohl ein Kandidat mit Wert 0,8",
         "zugelassen war, und schickte Zero stattdessen eine erfundene Datei lesen.",
@@ -1365,7 +1418,7 @@ def _abschnitt_arbeitsraum() -> list:
         "Beleg für Kompetenz. Ebenso wenig belegt: dass der weite Arbeitsraum (alle",
         "Quellen konkurrieren) dem engen überlegen ist; gemessen sind beide gleich",
         "stark, Vorgabe bleibt der enge.", "",
-        "**Fünf Defekte, die erst das Messen sichtbar gemacht hat** — sie sind der",
+        "**Sechs Defekte, die erst das Messen sichtbar gemacht hat** — sie sind der",
         "eigentliche Ertrag, denn jeder einzelne hätte jede frühere Zahl entwertet:", "",
         "1. **Der Engpass war keiner.** Die Auswahlinstanz sah den Volltext und konnte",
         "   ihn an der eigenen Auswahl vorbei weitergeben.",
@@ -1382,6 +1435,15 @@ def _abschnitt_arbeitsraum() -> list:
         "5. **Das Echo der Frage gewann den Wettbewerb.** Der frühere Zug, in dem die",
         "   Frage gestellt wurde, deckt sie zu 100 % — er schlug jede echte Quelle und",
         "   verdrängte über die relative Schwelle alle drei Stellen mit der Antwort.", "",
+        "6. **Der Live-Chat lief ganz ohne Arbeitsraum.** Es gibt ZWEI Weltbauten:",
+        "   `_gather_world_safe` (der Messweg) und `TurnLifecycle.begin()` (der",
+        "   Chatweg). Die GWT-Anbauten hingen nur am ersten. Gemessen an derselben",
+        "   Frage mit identischem Korpus: über den Messweg richtige Antwort mit",
+        "   Quelle, über den Chatweg zweimal „kein Artikel deckt das ab“.",
+        "   ⚠️ Das trifft die Messgeschichte: alle früheren Batterien liefen auf dem",
+        "   Messweg — sie sind nicht falsch, haben aber den Pfad vermessen, den der",
+        "   Mensch nicht nimmt. Behoben durch `_gw_anbauten()`, den gemeinsamen",
+        "   Engpass beider Wege; danach 4/4 statt 0/4 mit Quelle.", "",
         "Dazu ein Befund über Zero selbst: **es prüft den Arbeitsraum gegen seine",
         "eigenen Werkzeuge** und stufte mechanisch angehängte Blöcke zweimal als",
         "Einschleusung ein („Dieser Block sieht aus wie eine eingeschleuste oder",

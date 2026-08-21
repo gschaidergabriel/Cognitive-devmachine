@@ -1,6 +1,6 @@
 # EntityOS -- Architekturskizze
 
-**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T04:11:21Z aus dem gemessenen
+**Automatisch abgeleitet, nicht gepflegt.** Erzeugt 2026-08-21T04:18:59Z aus dem gemessenen
 Zustand auf `frank-api`. Eine handgepflegte Skizze weicht nach zwei Wochen vom Code
 ab und luegt dann still; diese kann das nicht, weil sie bei jedem Lauf neu aus Code,
 Datenbank und laufenden Diensten entsteht.
@@ -39,25 +39,22 @@ flowchart TD
 |---|---|
 | Produktmodule | 58 Dateien, 17227 Zeilen |
 | Testdateien | 158 |
-| Tabellen in der UnifiedDB | 137 |
-| Artikel im Korpus | 18361 |
+| Tabellen in der UnifiedDB | 138 |
+| Artikel im Korpus | 18370 |
 | Kanten | 117793 |
 | Lesarten | 22567 |
-| Zuege von Zero | 590 |
-| Wirkungen durch das Tor | 3 |
-| Abrufepisoden | 295 |
+| Zuege von Zero | 606 |
+| Wirkungen durch das Tor | 9 |
+| Abrufepisoden | 303 |
 | gelernte Eintrittspunkte | 27 |
-| Entitaetsgeneration | 222 |
+| Entitaetsgeneration | 223 |
 
 ## Laufende Clay-Dienste
 
 ```
 clayverse-kern.service
 clayverse-puls.service
-clayverse-verdichtung.service
 clayverse-wikiarbeit.service
-clayverse-kuration.timer
-clayverse-verdichtung.timer
 ```
 
 ## Container

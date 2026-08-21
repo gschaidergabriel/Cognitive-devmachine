@@ -1,6 +1,6 @@
 # Wegehierarchie (F94)
 
-Automatisch erzeugt 2026-08-21T04:11:22Z aus `udb/abruf/wegehierarchie.py`.
+Automatisch erzeugt 2026-08-21T04:18:59Z aus `udb/abruf/wegehierarchie.py`.
 
 ## Verdikt
 
@@ -25,10 +25,10 @@ Oberes Zehntel haelt 0.14 der Gesamtguete (bei Gleichverteilung waeren es 0.1).
 
 | von | nach | Art | Rang | Guete | Nutzung | getragen |
 |---|---|---|---|---|---|---|
-| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 0.992 | 689 | 689 |
-| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 0.992 | 547 | 547 |
-| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 0.99 | 769 | 769 |
-| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.958 | 116 | 116 |
+| C-AUDIT-001 | C-AUDIT-003 | geschwister_datei | tunnel | 0.994 | 691 | 691 |
+| C-AUDIT-001 | C-AUDIT-004 | geschwister_datei | tunnel | 0.994 | 549 | 549 |
+| C-AUDIT-001 | C-AUDIT-002 | geschwister_datei | tunnel | 0.991 | 770 | 770 |
+| C-AUDIT-001 | C-CLAYCODE-003 | geschwister_datei | autobahn | 0.963 | 117 | 117 |
 | C-AUDIT-001 | C-AUDIT-005 | geschwister_datei | tunnel | 0.93 | 457 | 457 |
 | C-AUDIT-001 | ledgers-NEGATIVE_RESULTS.jsonl | geschwister_verzeichnis | tunnel | 0.921 | 453 | 453 |
 | C-AUDIT-001 | C-CLAYCODE-008 | geschwister_datei | autobahn | 0.921 | 87 | 87 |

@@ -1,12 +1,30 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T04:11:21Z. 1018 Commits aus vier Repos, davon 365 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T04:18:59Z. 1019 Commits aus vier Repos, davon 366 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### EOS-Chronik 2026-08-21 04:12:22 +0000 — entityos: 1 Aenderungen
+
+`6d16006a852d` · entityos · 04:12 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/tests/test_wake_signal.py
+
+Zeit: 2026-08-21T04:12:22+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ### EOS-Chronik 2026-08-21 04:10:22 +0000 — entityos: 2 Aenderungen
 
@@ -3982,55 +4000,5 @@ liegt, bleibt dort.
 Nebenbefund, ungeprueft weitergegeben: /etc/clayverse/entityos-clerk.env
 enthaelt eine veraltete Clerk-Kennung fuer Andreas, die nicht zu
 CLAYVERSE_CLERK_MAP_JSON im laufenden Container passt.
-```
-
-### Zero sieht jetzt sein eigenes Haus - und Stillstand sieht nicht mehr wie Ruhe aus
-
-`12dbe95c5521` · entityos · 10:07 UTC · EntityOS
-
-```
-Eignerauftrag: "agent zero der im hintergrund alles im auge hat".
-
-Bisher war Zero reines Frage-Antwort: ein claude -p je Nachricht, kein eigenes
-Gedaechtnis, UnifiedDB als einzige Kontinuitaet. Es sah den Prompt und was es
-selbst abrief. Es hatte KEINEN Weg zu bemerken, dass ein Takt ausgefallen ist,
-dass der Korpus gewachsen ist, dass seine andere Sitzung etwas getan hat oder
-dass ein Anbieter gestorben ist.
-
-NEU: clayverse/lagebild.py + Werkzeug lagebild(). Ein billiger Lesezugriff auf
-die Frage "was ist passiert, waehrend ich nicht hingesehen habe":
-eigene andere Sitzung, Zustand der sieben Takte, Korpuszuwachs nach Art,
-Frische der Abrufkarte, letzte Fehlschlaege, Gedaechtnis-Ausbeute. 2,1 KB.
-
-⭐ DIE REGEL, DIE DAS DING BRAUCHBAR MACHT: STILLE IST NICHT GESUNDHEIT.
-
-Ein stehender Takt sieht von aussen aus wie ein ruhiger. Das hat dieses Projekt
-heute ZWEIMAL gekostet: verfall() hatte ueberhaupt keinen Zeitplan, und die
-Abrufkarte hatte gar keinen Takt. Beide Male sah alles friedlich aus.
-Deshalb meldet lagebild nicht "letzter Lauf", sondern rechnet gegen das
-erwartete Intervall und wird bei Ueberschreitung laut (`ueberfaellig: true`).
-Nachgewiesen: mit einem kuenstlich auf 1 s gesetzten Intervall kippt das Feld
-sofort.
-
-⭐ UND: KEINE ERFUNDENE ENTWARNUNG.
-
-Wo kein Nachweisweg existiert, steht das da -- nicht eine Null, die wie Ruhe
-aussieht. Zwei echte Faelle, beide vom Agenten durch Nachsehen ermittelt statt
-geraten:
-  agentzero-export  schreibt nicht in wiki.db, /opt/agentzero-export ist nicht
-                    in den Container gemountet
-  clayverse-puls    ist GAR KEIN periodischer Takt, sondern ein Dauerdienst
-                    (nur .service, keine .timer -- geprueft mit
-                    systemctl list-unit-files)
-Ein systemctl gibt es im Container nicht; die Nachweise kommen deshalb aus der
-Datenbank und dem Dateisystem, und woher jeweils, steht als `quelle` dabei.
-
-GRENZE, unabhaengig nachgeprueft: die zwei Sitzungen EINES Menschen gehoeren
-diesem Menschen, dahin darf Zero sehen. Die Sitzung des anderen Menschen taucht
-nirgends auf -- fuer gabriel wie fuer andreas gegengeprueft, in beiden
-Richtungen kein Treffer. lagebild() nimmt KEIN Argument; Mensch und Sitzung
-kommen aus dem verifizierten Zustand, wie schon bei menschen_profil().
-
-Suite unveraendert 528 gruen / 14 rot.
 ```
 

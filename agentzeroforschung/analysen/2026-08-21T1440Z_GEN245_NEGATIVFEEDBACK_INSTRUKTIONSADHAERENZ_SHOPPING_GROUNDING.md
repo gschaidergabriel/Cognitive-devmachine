@@ -62,6 +62,7 @@ C. **causal/retrieval receipts** — Gen245-Export.
 | Test | Resultat | Evidenz |
 |---|---|---|
 | Same-session Instruktionsadhärenz | **FAIL** | Der Nutzer hatte vorher ausdrücklich gemeldet, dass die ausgegebenen Markdown-Links für ihn nicht klickbar sind. AgentZero bestätigte diese Korrektur. Die später negativ bewertete BAUHAUS-Antwort verwendete wieder Markdown-Linksyntax. |
+| Rendering-Mechanismus | **UNRESOLVED_EXPORT_GAP** | Gen245 exportiert PTY/WebSocket-Backend; `terminal_gateway.py` verweist Browser-Assets auf `/opt/clayverse/web`, aber die zugehörige Frontend-/xterm-Konfiguration liegt nicht im inspizierten `agentZero/code/produkt/`-Export. |
 | Produkt-Existenz / IDs | **PASS** | BAUHAUS Österreich führt `WC-Sitz Tek`, Prod.Nr. `24823225`, sowie `Poseidon WC-Sitz Kolorit`, Prod.Nr. `23083406`. |
 | Interne Konsistenz | **FAIL** | Die Antwort spricht von `3 sichtbaren Modellen`, listet aber zwei konkrete Modelle plus eine Kategorie/Übersicht. |
 | Ranking-Begründung | **WEAK / UNSUPPORTED** | `Bester Treffer: WC-Sitz Tek` wird gesetzt, obwohl der Nutzer in diesem Turn keine Auswahlkriterien wie Budget, Soft-Close, Material oder Farbe nennt. |
@@ -90,7 +91,9 @@ Upstream xterm.js dokumentiert zwei Wege für klickbare Links: OSC 8 sowie impli
 https://xtermjs.org/docs/guides/link-handling/  
 https://github.com/xtermjs/xterm.js
 
-Das widerlegt **nicht**, dass Links in der konkreten AgentZero-Ausgabe zu diesem Zeitpunkt tatsächlich unklickbar waren. Es zeigt aber, dass `Terminal kann das grundsätzlich nicht` keine belastbare Architekturannahme wäre. Ob und wie AgentZero diesen Pfad aktiviert, muss separat aus Product-Export/Runtime-Evidenz bestimmt werden.
+Das widerlegt **nicht**, dass Links in der konkreten AgentZero-Ausgabe zu diesem Zeitpunkt tatsächlich unklickbar waren. Es zeigt aber, dass `Terminal kann das grundsätzlich nicht` keine belastbare Architekturannahme wäre.
+
+Die Gen245-Quellenprüfung begrenzt die Aussage weiter: `terminal.py` und `terminal_gateway.py` exportieren den PTY/WebSocket-Backendpfad; `terminal_gateway.py` verweist die Web-Oberfläche auf `/opt/clayverse/web`. Die zugehörige Browser-/xterm-Konfiguration ist in `agentZero/code/produkt/` nicht als exportiertes UI-Artefakt enthalten. Deshalb kann der Export weder bestätigen noch widerlegen, dass WebLinksAddon oder OSC-8-Behandlung im tatsächlich genutzten Client aktiv war. Der Mechanismus bleibt `UNRESOLVED_EXPORT_GAP`; die direkte Nutzerbeobachtung `links sind nicht klickbar` bleibt die stärkste Verhaltensbeobachtung dieses Turns.
 
 ## Interpretation
 
@@ -105,6 +108,7 @@ Zusätzlich sichtbar:
 - `CATALOG_COVERAGE_GAP`
 - `COUNT/TYPE_INCONSISTENCY`
 - `RENDERING_MODALITY_MISMATCH`
+- `UNRESOLVED_EXPORT_GAP`
 
 Wichtig: Der Befund darf nicht als Erklärung der negativen Bewertung promoted werden. Dafür fehlt direkte Human-Rationale.
 
@@ -114,7 +118,8 @@ Wichtig: Der Befund darf nicht als Erklärung der negativen Bewertung promoted w
 2. **Same-session corrections sind hochinformative Constraints.** Ein späterer Verstoß ist objektiver messbar als die Interpretation eines nackten Daumen-Signals.
 3. **Shopping/Search braucht first-party grounding + coverage semantics.** Reale Produkt-IDs allein reichen nicht für gute Auswahl.
 4. **UI-Fähigkeiten und Modellbehauptungen müssen getrennt werden.** Ein Modell darf Client-Limitierungen nicht ohne Runtime-/Produktbeleg als unveränderlich behandeln.
-5. **Mutable ratings bleiben schwache Reward-Signale**, solange Revision/Removal nicht event-sourced gebunden ist.
+5. **Export-/Messflächen müssen den User-facing Pfad abdecken.** Ohne Browser-/xterm-Konfiguration kann ein Backendexport Link-Rendering nicht falsifizieren oder bestätigen.
+6. **Mutable ratings bleiben schwache Reward-Signale**, solange Revision/Removal nicht event-sourced gebunden ist.
 
 ## Nächster Diskriminator
 
@@ -126,6 +131,7 @@ Bei den nächsten bewerteten Turns eine reine Beobachtungstaxonomie anwenden und
 - `retrieval_contamination`
 - `effect_outcome_issue`
 - `feedback_revision_lineage_missing`
+- `frontend_observability_gap`
 
 Promotion erst, wenn mehrere unabhängige bewertete Turns denselben Mechanismus zeigen oder textuelles Human-Feedback die Zuordnung direkt bestätigt.
 

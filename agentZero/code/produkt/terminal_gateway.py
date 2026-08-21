@@ -32,6 +32,7 @@ from .postfach import (
 )
 from .postfach import zugaenge_laden as postfach_zugaenge_laden
 from .omnimind import registriere_omnimind_wege
+from .architekt_blog import registriere_architekt_blog_wege
 from .store import UnifiedDB
 from .zustand import zustand as zustand_lesen
 
@@ -945,6 +946,24 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         page = _OMNIMIND_PAGE.read_text(encoding="utf-8")
         return HTMLResponse(page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key))
 
+    _ARCHITEKT_BLOG_PAGE = Path("/opt/clayverse/web/architekt-blog/index.html")
+
+    @app.get("/architekt-blog", response_class=HTMLResponse)
+    async def architekt_blog_index():
+        # Gleicher Bauplan wie /seiten und /omnimind: Seite ausliefern,
+        # Clerk-Platzhalter ersetzen. Fuer BEIDE Menschen gedacht (Gabriel +
+        # Andreas) -- keine Andreas-Ausnahme wie bei den eingeschraenkten
+        # Bereichen, siehe schale.js EINGESCHRAENKT (dieser Pfad steht dort
+        # bewusst NICHT drin).
+        key = html.escape(publishable_key, quote=True)
+        api = html.escape(frontend_api_url, quote=True)
+        if not key or not api:
+            return HTMLResponse("Clerk web configuration is incomplete", status_code=503)
+        if not _ARCHITEKT_BLOG_PAGE.is_file():
+            return HTMLResponse("architekt-blog surface missing from image", status_code=503)
+        page = _ARCHITEKT_BLOG_PAGE.read_text(encoding="utf-8")
+        return HTMLResponse(page.replace("__CLERK_API__", api).replace("__CLERK_PUBLISHABLE_KEY__", key))
+
     @app.get("/postfach", response_class=HTMLResponse)
     async def postfach_index():
         key = html.escape(publishable_key, quote=True)
@@ -1050,6 +1069,14 @@ def create_terminal_app(*, db: UnifiedDB, clerk_map: dict[str, str], verifier: C
         return uid
 
     registriere_omnimind_wege(
+        app, db=db, pruefe_zugriff=_omnimind_zugriff,
+        antwort_auf_fehler=_antwort_auf_fehler,
+    )
+
+    # Architekten-Blog: derselbe Zugriffsschein wie OmniMind (nur
+    # CANONICAL_USER_IDS-Mitgliedschaft, keine Andreas-Ausnahme) -- der Blog
+    # ist fuer BEIDE Menschen gedacht, wiederverwendet statt dupliziert.
+    registriere_architekt_blog_wege(
         app, db=db, pruefe_zugriff=_omnimind_zugriff,
         antwort_auf_fehler=_antwort_auf_fehler,
     )

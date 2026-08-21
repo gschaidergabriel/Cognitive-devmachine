@@ -1,11 +1,14 @@
 # Aenderungshistorie EntityOS
 
-Automatisch erzeugt 2026-08-21T22:06:40Z aus drei Repos. 481 Eintraege.
+Automatisch erzeugt 2026-08-21T22:40:57Z aus drei Repos. 481 Eintraege.
 
-## architektur (15)
+## architektur (18)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T22:32 | entityos | `c61cb68e5506` | architekt: letzte Testdatei fuer eingeschraenkten Modus/Bugwoche nachreichen |
+| 2026-08-21T22:16 | entityos | `98d4679958c0` | Merge branch 'wip-architekt-blog' into abruf-und-historie |
+| 2026-08-21T22:10 | entityos | `c31fc4438fee` | Architekten-Blog: Zero schreibt 2x/Tag selbst, fuer Gabriel + Andreas |
 | 2026-08-21T20:37 | entityos | `bcc426dfd16f` | EntityOS-Architektur-Skizze 2026-08-22: praezise, live-verifizierte Referenz (Architekt, ClayCode, Hyperpositi |
 | 2026-08-21T19:33 | entityos | `aad377a3dab7` | Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nicht der Cha |
 | 2026-08-21T19:14 | entityos | `2c209812e0b9` | GRF/ClayCode-Injektion: der empirisch bestaetigte Meta-Prompt fuer formale Kognitionsarchitektur (Gabriel 22.0 |
@@ -110,12 +113,19 @@ Automatisch erzeugt 2026-08-21T22:06:40Z aus drei Repos. 481 Eintraege.
 | 2026-08-15T16:27 | clay | `b47b44c11189` | B27 geprueft: Cognitive Governor (F67) testweise mit Mistral gebaut + gemessen |
 | 2026-08-15T15:52 | clay | `1311f18b6a2f` | Rettung: ap11-test.jpg aus /tmp (war noch da) in messungen/ |
 
-## bau (327)
+## bau (324)
 
 | Zeit | Repo | Commit | Betreff |
 |---|---|---|---|
+| 2026-08-21T22:31 | entityos | `7746504161fa` | EOS-Chronik 2026-08-21 22:31:17 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T22:28 | entityos | `9483c9954977` | EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen |
+| 2026-08-21T22:26 | entityos | `3ca31e397310` | EOS-Chronik 2026-08-21 22:26:53 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T22:23 | entityos | `bbb6a871eabb` | EOS-Chronik 2026-08-21 22:23:29 +0000 — entityos: 1 Aenderungen |
+| 2026-08-21T22:16 | entityos | `9efa1c36fc55` | Merge branch 'wip-vorstufe-innen' into abruf-und-historie |
+| 2026-08-21T22:12 | entityos | `e843ebbe8dd2` | EOS-Chronik 2026-08-21 22:12:50 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T22:04 | entityos | `2c0bc36ee50f` | EOS-Chronik 2026-08-21 22:04:46 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T21:59 | entityos | `eb11915c6cbc` | EOS-Chronik 2026-08-21 21:59:30 +0000 — entityos: 3 Aenderungen |
+| 2026-08-21T21:50 | entityos | `837af3e47cf7` | Vorstufe nach innen: ClayCode-only Denkraum fuer jeden autonomen Zug |
 | 2026-08-21T21:41 | entityos | `6f010e4b4c62` | EOS-Chronik 2026-08-21 21:41:54 +0000 — entityos: 2 Aenderungen |
 | 2026-08-21T21:35 | entityos | `32ca23e31f3e` | EOS-Chronik 2026-08-21 21:35:16 +0000 — entityos: 7 Aenderungen |
 | 2026-08-21T21:04 | entityos | `0bb7594ee04e` | EOS-Chronik 2026-08-21 21:04:31 +0000 — entityos: 18 Aenderungen |
@@ -167,11 +177,4 @@ Automatisch erzeugt 2026-08-21T22:06:40Z aus drei Repos. 481 Eintraege.
 | 2026-08-21T12:14 | entityos | `c07c21aa65ad` | EOS-Chronik 2026-08-21 12:14:08 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T11:55 | entityos | `0fa7cbf98c4f` | EOS-Chronik 2026-08-21 11:55:38 +0000 — entityos: 1 Aenderungen |
 | 2026-08-21T11:15 | entityos | `47fdb11bf643` | EOS-Chronik 2026-08-21 11:15:15 +0000 — entityos: 3 Aenderungen |
-| 2026-08-21T11:12 | entityos | `ffbe1c39980c` | EOS-Chronik 2026-08-21 11:12:21 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T11:10 | entityos | `c5733d9c25e7` | EOS-Chronik 2026-08-21 11:10:21 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T11:04 | entityos | `dde38229e139` | EOS-Chronik 2026-08-21 11:04:22 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T11:00 | entityos | `ea854a44fc98` | EOS-Chronik 2026-08-21 11:00:35 +0000 — entityos: 2 Aenderungen |
-| 2026-08-21T10:53 | entityos | `21be0e0947eb` | EOS-Chronik 2026-08-21 10:53:58 +0000 — entityos: 4 Aenderungen |
-| 2026-08-21T10:27 | entityos | `0240478a7857` | EOS-Chronik 2026-08-21 10:27:32 +0000 — entityos: 1 Aenderungen |
-| 2026-08-21T10:25 | entityos | `554961db1797` | EOS-Chronik 2026-08-21 10:25:32 +0000 — entityos: 1 Aenderungen |
 

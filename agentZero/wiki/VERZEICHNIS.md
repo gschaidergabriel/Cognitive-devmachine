@@ -1,9 +1,9 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T22:06:40Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-21T22:40:56Z aus dem Clay-Korpus.
 
-- **kern** (800 Artikel, 666 KB): der Systemname steht im Titel. Volltext.
-- **umfeld** (2594 Artikel, 1448 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
+- **kern** (800 Artikel, 664 KB): der Systemname steht im Titel. Volltext.
+- **umfeld** (2592 Artikel, 1445 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
 
 Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 4.202 Artikel mit 13,1 MB -- das ist das Forschungsarchiv, nicht Zeros Umfeld.
@@ -52,7 +52,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **README: ClayMachine=Projekt konsistent, unifieddb bleibt Modul** — `B0-2026-08-15T15-53-34-0000` · vorfall
 - **VLM-Artefakte + System-Vorlagen ins Repo (unifieddb)** — `B11-2026-08-15T15-52-56-0000` · vorfall
 
-## Kern / entityos (615)
+## Kern / entityos (616)
 
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-bauverlauf-07139bc84688bdc0a592` · baunotiz
 - **Frontend identity: entity self-identifies as Zero (Agent Zero) inside the terminal** — `baunotiz-git-0ff9ac9f66f7342ad53eab6b3726575` · baunotiz
@@ -91,8 +91,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: block Gen130 null test receipt and bind warm-zero evidence** — `baunotiz-git-32bbd085ec583a6db14ce13499eed88` · baunotiz
 - **artifact: test inference intent through canonical EffectGate** — `baunotiz-git-27677fd3a4d92ad22a80a58bc4bef82` · baunotiz
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
-- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
 - **Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nic** — `baunotiz-bauverlauf-395bf7c228e475101774` · baunotiz
+- **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
 - **clayverse/mcp_server: 5 UnifiedDB-Werkzeuge fuer Zero erreichbar gemacht (udb_embedding_search/store** — `baunotiz-bauverlauf-281c3bfdd4152f32e51b` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
 - **Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Rec** — `baunotiz-bauverlauf-226b587737b32f292f48` · baunotiz
@@ -196,12 +196,12 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: index generation 32 re-evaluation** — `baunotiz-bauverlauf-31d9b7a1333cc82778e5` · baunotiz
 - **agentZero research: codify evidence and falsification model** — `baunotiz-bauverlauf-cd5680bbbef2dec58a77` · baunotiz
 - **agentZero research: establish post-implementation research program** — `baunotiz-bauverlauf-e3ca1480a4e5e5477b74` · baunotiz
+- **agentZero research: index inventory analysis** — `baunotiz-git-f073e85bbfdbd673d3ac2139491018a` · baunotiz
+- **agentZero research: initialize measurement registry** — `baunotiz-git-b43473f88ce4ac21ca60e858d8196ba` · baunotiz
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
 - **security(microvm): keep EntityOS digest image-authoritative** — `baunotiz-bauverlauf-47114cf5bca5f9866d8d` · baunotiz
-- **agentZero research: index inventory analysis** — `baunotiz-git-f073e85bbfdbd673d3ac2139491018a` · baunotiz
-- **agentZero research: initialize measurement registry** — `baunotiz-git-b43473f88ce4ac21ca60e858d8196ba` · baunotiz
 - **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `bau-entityos-2c44f567c235` · bau
 - **agentZero research: index Claude-only token savings analysis** — `baunotiz-bauverlauf-dc5adb297ed215eaa610` · baunotiz
 
@@ -214,7 +214,7 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **neo_zero_buildings_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
 - **neo_zero_tiles_1024.png** — `Project-Frankenstein-services-room_content-e` · quelldatei
 
-## Kern / ohne Sphaere (141)
+## Kern / ohne Sphaere (140)
 
 - **SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AND_ZERO_RETRIEVAL_CONTEXT_DIRECTIVE.clay** — `global-SELF_ROOT_CLAYCODE_NATIVE_IDENTITY_AN` · bereich_global
 - **ClayCode protocol addendum — eight-branch mesh / UnifiedDB** — `triggers-CLAYCODE_EIGHT_BRANCH_UNIFIEDDB_ADD` · bereich_triggers
@@ -231,9 +231,9 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB Research Trigger Protocol** — `triggers-UNIFIED_DATABASE_RESEARCH_PROTOCOL.` · bereich_triggers
 - **Ownership/version synchronization costs dominate and erase zero-copy gains.** — `U1-H10` · hypothese
 - **Grundlagen der UnifiedDB ausgewertet - die fehlende Voraussetzung gefunden** — `B27-2026-08-14T20-50-12-0000` · vorfall
-- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **UnifiedDB Research Foundation — Unified Cognitive Database/Substrate** — `global-UNIFIED_DATABASE_RESEARCH_FOUNDATION.` · bereich_global
 - **UnifiedDB U2 — External Evidence Ledger** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
+- **Groq 8B proxy rejects zero-shot compact ClayCode as a trusted small-model interface** — `KMP-GROQ8B-CLAYCODE-ZEROSHOT` · begriff
 - **FUSION F6 -> UnifiedDB** — `KMP-FUS-F6-POSTWORKER-dup7` · begriff
 - **UnifiedDB — Authoritative Projection Outbox V1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
 - **UnifiedDB — State Continuity + SQLite WAL Safety** — `trigger_runs-unifieddb-unifieddb-20260811T04` · bereich_trigger_runs
@@ -343,18 +343,17 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **UnifiedDB Research Run U2 — Causal Polyglot Placement Fabric** — `trigger_runs-unifieddb-unifieddb-20260808T22` · bereich_trigger_runs
 - **C7 keeps ClayGraph as specialized associative memory inside UnifiedDB** — `KMP-FRANK-C7-CLAYGRAPH-SPECIALIZED-ORGAN` · begriff
 - **Named-field lowering plus schema preflight reduces silent schema-drift corruption at evolving Unifie** — `H_CC_NAMED_20260809` · hypothese
-- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **CACC utility adaptation should consume durable outcome/evaluation receipts through UnifiedDB but onl** — `H-U2-F2-008` · hypothese
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB U2: TCQS query IR needs admission and physical-plan receipts** — `KMP-U2-QUERY-ADMISSION-CLAYCODE` · begriff
 - **UnifiedDB should unify semantics and planning before physical storage** — `KMP-G11-LOGICAL-PHYSICAL` · begriff
 - **The UnifiedDB planner should choose graph traversal only when relation evidence is needed rather tha** — `H-G11-040` · hypothese
-- **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
 - **unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
+- **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
 - **Normalize every ordinal task/lease to [min(k),max(k)] before overlap checks. Reversed textual ranges** — `rooms-center_events-20260809T1350p0700_666_o` · bereich_rooms
 - **GWT causal attribution should bind UnifiedDB/MOSAIC basis and reader handoff** — `KMP-G11-WORKSPACE-BASIS` · begriff
 - **FRANK C7 consumes UnifiedDB as logical fabric, not mandatory physical monolith** — `KMP-FRANK-C7-LOGICAL-FABRIC` · begriff
 - **UnifiedDB U2: ClayGraph selection integrity and graph placement are separate from record truth** — `KMP-U2-SELECTION-PLACEMENT-CLAYGRAPH` · begriff
 - **Typed collection semantics can serve as a shared canonical contract across heterogeneous UnifiedDB b** — `H-CC12-012` · hypothese
 - **Fusion F5: UnifiedDB preserves collection algebra and canonical re-entry across adaptive placement** — `KMP-FUS-F5-C3F-UNIFIEDDB` · begriff
-- **Materialized exact endpoint Git blob identities for PF tree segment01 added_paths indices 64..95 at ** — `rooms-center_events-20260809T1412p0700_666_p` · bereich_rooms
 

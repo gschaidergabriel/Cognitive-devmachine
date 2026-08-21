@@ -417,6 +417,87 @@ def analysen(manifest: dict) -> None:
     manifest["dateien"].append({"datei": "agentZero/analysen/INDEX.md", "eintraege": len(vorhanden)})
 
 
+def architekt_log(manifest: dict) -> None:
+    """`agentZero/architekt-log.jsonl` -- EIN append-only Protokoll JEDER
+    Architekt-Aktion (Hypothese -> Quittung, mit Motor/Schwarm/Kanarie-
+    Hinweis im `hinweis`-Feld -- siehe `architekt/architekt.py:_schreiben`,
+    das den Motor-Hinweis dort schon anhaengt, BEVOR die Quittung
+    geschrieben wird). WIEDERVERWENDET diese bestehende Export-Pipeline
+    (30-Minuten-Timer, committet+pusht schon nach GitHub) -- KEIN zweiter
+    Pusher (Leitsatz "Umstellen statt anbauen", Gabriels Vorgabe 2026-08-22).
+
+    IDEMPOTENT: `main()` macht VOR diesem Aufruf `git reset --hard
+    origin/main` -- die hier gelesene Datei ist deshalb immer der zuletzt
+    GEPUSHTE Stand, nie ein halb geschriebener. Neue Zeilen werden nur fuer
+    `quittung_id`s angehaengt, die dort noch nicht stehen -- ein zweiter
+    Lauf ohne neue Quittungen haengt NICHTS an (0 neue Zeilen, kein Diff,
+    kein leerer Commit).
+
+    Jede Zeile: utc_zeitstempel, generation, aktionstyp, hypothese_id,
+    hypothese_quelle, urteil, zweig, kanarie_status, live_geschaltet,
+    testboden_vorher/nachher (die gemessenen Zahlen -- redigierte
+    Ein-Zeiler, siehe quittungen.py-Kopf), hinweis (traegt den Motor-
+    Hinweis: GLM/Sonnet/NVIDIA, siehe oben), git_commit. Laeuft durch
+    DIESELBE Schwaerzung (`schwaerzen()`) wie jede andere Ablage hier --
+    kein zweiter Geheimnis-Filter."""
+    ziel = ZIEL / "architekt-log.jsonl"
+    ziel.parent.mkdir(parents=True, exist_ok=True)
+
+    bereits: set[str] = set()
+    if ziel.is_file():
+        for zeile in ziel.read_text(encoding="utf-8", errors="replace").splitlines():
+            if not zeile.strip():
+                continue
+            try:
+                eintrag = json.loads(zeile)
+            except json.JSONDecodeError:
+                continue
+            qid = eintrag.get("quittung_id")
+            if qid:
+                bereits.add(qid)
+
+    try:
+        c = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=60)
+        c.row_factory = sqlite3.Row
+        zeilen = [dict(r) for r in c.execute(
+            "SELECT * FROM eos_architekt_quittungen ORDER BY ts ASC")]
+        c.close()
+    except sqlite3.OperationalError:
+        zeilen = []  # Tabelle existiert (noch) nicht -- kein Architekt-Lauf bisher, kein Fehler
+
+    git_commit = git("rev-parse", "HEAD").stdout.strip() or None
+    neu = 0
+    with ziel.open("a", encoding="utf-8") as f:
+        for z in zeilen:
+            qid = z.get("quittung_id")
+            if not qid or qid in bereits:
+                continue
+            eintrag = {
+                "quittung_id": qid,
+                "utc_zeitstempel": datetime.fromtimestamp(float(z["ts"]), tz=timezone.utc).isoformat(),
+                "generation": manifest.get("entity_generation"),
+                "aktionstyp": "architekt_quittung",
+                "hypothese_id": z.get("hypothese_id"),
+                "hypothese_quelle": z.get("hypothese_quelle"),
+                "urteil": z.get("urteil"),
+                "zweig": z.get("zweig"),
+                "kanarie_status": z.get("kanarie_status"),
+                "live_geschaltet": bool(z.get("live_geschaltet")),
+                "testboden_vorher": z.get("testboden_vorher"),
+                "testboden_nachher": z.get("testboden_nachher"),
+                "hinweis": (z.get("hinweis") or "")[:500],
+                "git_commit": git_commit,
+            }
+            eintrag = schwaerzen(eintrag)
+            f.write(json.dumps(eintrag, ensure_ascii=False, sort_keys=True) + "\n")
+            bereits.add(qid)
+            neu += 1
+
+    manifest["dateien"].append({
+        "datei": "agentZero/architekt-log.jsonl", "neue_zeilen": neu, "gesamt_bekannt": len(bereits),
+    })
+
+
 def testlaeufe(manifest: dict) -> None:
     """Ergebnisse der Testsuite, mit Metadaten -- nicht nur die Zahl.
 
@@ -1703,6 +1784,7 @@ def main() -> int:
     ziele_tabelle(manifest)
     messwerk(manifest)
     analysen(manifest)
+    architekt_log(manifest)
 
     manifest["geschwaerzte_fundstellen"] = _geschwaerzt
     manifest["dauer_sekunden"] = round(time.time() - t0, 2)
@@ -1731,6 +1813,7 @@ Automatisch exportiert aus der UnifiedDB auf `frank-api`, zuletzt {manifest['erz
 | `wiki/` | alle Korpusartikel, die direkt mit Zero/EntityOS zu tun haben, plus lesbares Verzeichnis |
 | `architektur/` | Aenderungshistorie aller drei Repos, kategorisiert, und die abgeleitete Skizze |
 | `analysen/` | Auswertungen, die beim Bauen anfallen, mit selbstgeschriebenem Index |
+| `architekt-log.jsonl` | **append-only Protokoll JEDER Architekt-Aktion** (Hypothese/Quittung, mit Motor-/Schwarm-/Kanarie-Hinweis, Testboden-Zahlen, Git-Commit) -- idempotent, waechst nur |
 | `messwerk/` | **jeder Sensor mit der Hypothese, die er unterscheidet** — gemessen, oder ehrlich warum nicht |
 | `ZIELE.md` | **was Zero koennen soll und was davon gemessen steht** -- Soll deklariert, Ist gemessen |
 | `code/` | **aller ausfuehrbare Code** rund um EntityOS: Produkt, Clay-Unterbau, udb, der Export selbst |

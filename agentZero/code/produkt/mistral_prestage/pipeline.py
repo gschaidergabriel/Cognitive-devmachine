@@ -10,7 +10,7 @@ from .. import identity  # coordinator-owned, imported not edited
 from . import absicht as _absicht
 from . import wettbewerb
 from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
-from . import headless_zero, prestage, translator
+from . import headless_zero, innenraum, prestage, translator
 from . import reality_layer  # additive anti-confabulation check, default OFF -- see module docstring
 import re
 
@@ -1799,3 +1799,68 @@ def run_chat_turn(
                 _wz.zug_endet()
         except Exception:
             pass
+
+
+# ── Der INNERE Weg -- fuer JEDEN Aufrufer, der NICHT run_chat_turn ist ─────
+#
+# Die Weiche zwischen Vorstufe-AUSSEN (oben, run_chat_turn) und Vorstufe-
+# INNEN (hier) ist der EINTRITTSPUNKT, keine Laufzeit-Erkennung ("ist ein
+# Mensch da?"): der Chat-Weg/die Chat-Gateway ruft run_chat_turn, das ist die
+# EINZIGE Tuer zur aeusseren Vorstufe. Jeder andere Aufrufer -- der Architekt
+# JETZT, ein spaeterer Governor/wake-getriebene Ziele oder sonstige
+# Hintergrundarbeit SPAETER -- ruft stattdessen run_autonomous_turn. Kein
+# Aufrufer muss raten, ob ein Mensch mitliest; er weiss es, weil er selbst
+# entweder die Chat-Gateway ist oder es nicht ist. Siehe innenraum.py-Kopf
+# fuer die volle Begruendung.
+def run_autonomous_turn(
+    *,
+    db,
+    session_id: str,
+    gedanke: str,
+    ziel_kontext: dict[str, Any] | None = None,
+    available_tools: list[str] | None = None,
+    gelernt: str | None = None,
+) -> dict[str, Any]:
+    """Ein autonomer Zug: EIN roher ClayCode-Gedanke des Aufrufers hinein,
+    ein Vorstufen-Paket (ebenfalls ClayCode) zurueck -- kein Mensch, keine
+    Uebersetzung, keine Verhandlungsrunde (siehe innenraum.run_innere_
+    vorstufe-Docstring).
+
+    Gedaechtnis-Abruf LAEUFT hier genauso wie im Chat-Weg (Gabriel explizit
+    2026-08-22: "memory-retrieval MUST run in autonomous processes too") --
+    dieselbe read-only Weltmontage (_gather_world_safe/_gw_anbauten), OHNE
+    Zug-Admission, OHNE TurnLifecycle: ein autonomer Zug ist kein
+    Gespraechszug und darf nicht als einer in turns/active_turns auftauchen
+    (dieselbe Begruendung wie architekt/engine.py-Kopf fuer dessen eigenen
+    claude-CLI-Aufruf -- "Zeros Koerper ist Code, sein Gedaechtnis eine
+    Datenbank, keine zwei Wahrheiten, keine erfundenen Zuege").
+
+    Persistiert bewusst NICHT in mv_prestage_turns/mv_translation_log -- jene
+    Tabellen sind an einen echten turn_id aus TurnLifecycle gebunden, den es
+    hier nicht gibt. Quittierung ist Sache des Aufrufers (der Architekt
+    schreibt bereits in architekt_engine_log, siehe architekt/engine.py).
+    """
+    if not isinstance(gedanke, str) or not gedanke.strip():
+        raise PipelineError("empty gedanke")
+
+    t_start = time.perf_counter()
+    world = _gather_world_safe(db, session_id, gedanke)
+    # Dieselbe Reihenfolge wie run_chat_turn: Hyperposition auf dem VOLLEN
+    # world, BEVOR _vorstufen_world kuerzt (siehe dortiger Kommentar --
+    # sonst verliert das Weltmodell Belege).
+    hyperposition_readout = _hyperposition_safe(world) + _weltmodell_safe(world)
+    vorstufe_world = _vorstufen_world(world, gedanke)
+
+    envelope = innenraum.run_innere_vorstufe(
+        gedanke=gedanke, world=vorstufe_world, ziel_kontext=ziel_kontext,
+        available_tools=available_tools, hyperposition=hyperposition_readout,
+        gelernt=gelernt,
+    )
+    # Dieselbe mechanische Sicherung wie im Chat-Weg: ein zugelassener
+    # Kandidat, den das Modell nicht gewaehlt hat, wird nachgezogen statt
+    # stillschweigend verworfen (siehe _auswahl_nachziehen-Docstring).
+    _ids, _auswahl_herkunft = _auswahl_nachziehen(envelope.get("broadcast_ids"), vorstufe_world)
+    envelope["broadcast_ids"] = _ids
+    envelope["broadcast_herkunft"] = _auswahl_herkunft
+    envelope["elapsed_ms"] = round((time.perf_counter() - t_start) * 1000.0, 1)
+    return envelope

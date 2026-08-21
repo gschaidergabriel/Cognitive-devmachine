@@ -1,7 +1,7 @@
 {
-  "erzeugt": "2026-08-21T22:08:27Z",
-  "erfuellt": 87,
-  "offen": 20,
+  "erzeugt": "2026-08-21T22:41:42Z",
+  "erfuellt": 88,
+  "offen": 19,
   "zurueckgestellt": 5,
   "zeilen": [
     {
@@ -137,7 +137,7 @@
       "faehigkeit": "Kontinuität über Neustarts",
       "soll": "Generation, Prüfpunkte, Wiederherstellung ohne blindes Wiederholen von Wirkungen",
       "quelle": "Architektur",
-      "ist": "451 Prüfpunkte, Generation 260",
+      "ist": "453 Prüfpunkte, Generation 262",
       "erfuellt": true
     },
     {
@@ -177,7 +177,7 @@
       "faehigkeit": "Karten als Zeitstrahl",
       "soll": "die Karte wird wiederholt weggeschrieben, damit man die Veränderung ansehen kann",
       "quelle": "Eigner 18.08.",
-      "ist": "423 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
+      "ist": "427 Momentaufnahme(n) in agentZero/karten, alle 30 min eine neue",
       "erfuellt": true
     },
     {
@@ -273,7 +273,7 @@
       "faehigkeit": "Läuft im Container auf dem eigenen Server",
       "soll": "ohne Anruf beim Anbieter, ohne verschachtelte Virtualisierung",
       "quelle": "Eigner 18.08.",
-      "ist": "Up 24 minutes (healthy)",
+      "ist": "Up 22 minutes (healthy)",
       "erfuellt": true
     },
     {
@@ -297,7 +297,7 @@
       "faehigkeit": "Die Testsuite trägt",
       "soll": "kein grüner Wert, der durch Abschwächen erkauft wurde",
       "quelle": "Arbeitsregel",
-      "ist": "1383 gruen / 1 rot",
+      "ist": "1441 gruen / 2 rot",
       "erfuellt": false
     },
     {
@@ -321,7 +321,7 @@
       "faehigkeit": "Wissen ist nach Menschen zugeordnet",
       "soll": "jeder Artikel gehört jemandem oder ausdrücklich beiden",
       "quelle": "Eigner 18.08.",
-      "ist": "18834 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
+      "ist": "18853 Artikel zugeordnet über eine 5-stufige Leiter. ⚠️ Der Committer wurde bewusst NICHT verwendet: 501 Artikel über Dr. Unterweger tragen Gabriel als Committer — danach hätte Gabriel 68 % aller Artikel bekommen",
       "erfuellt": true
     },
     {
@@ -425,7 +425,7 @@
       "faehigkeit": "Zero hält selbst Platz auf dem Wirt",
       "soll": "das Speicher-Management des VPS übernimmt Zero autonom",
       "quelle": "Eigner 18.08.",
-      "ist": "81.9 % belegt, 34.8 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
+      "ist": "82.1 % belegt, 34.4 GB frei. Wacht alle 30 min, vier Werkzeuge für Zero, Stufen nach Druck (bei 85 % nur berichten). ⚠️ Anlass: die Platte lief zweimal auf 100 %. Ursache war NICHT fehlendes Aufräumen, sondern ein Zeitgeber eines ABGESCHAFFTEN Systems, der alle 15 Minuten weiterlief — 6.606 Wegwerfordner, 41 GB. Insgesamt 77 GB befreit, 173 → 96 GB",
       "erfuellt": true
     },
     {
@@ -433,7 +433,7 @@
       "faehigkeit": "Das Messgerät kann melden, dass es nichts messen konnte",
       "soll": "eine Rechnung, die nicht aufgeht, muss das SAGEN",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Bilanz nennt drei Zahlen: df 157.9 GB, gezählt 128.1 GB, Lücke 29.8 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 29.8 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
+      "ist": "Bilanz nennt drei Zahlen: df 158.2 GB, gezählt 128.1 GB, Lücke 30.1 GB. ⚠️ Genau das fehlte: `du -xsh /tmp` lief bei 15.236 Einträgen in die Zeitgrenze und gab NICHTS aus — ein leeres Ergebnis liest sich wie „da ist nichts\". So standen 77 GB Summe neben 173 GB Verbrauch, und die Lücke fiel niemandem als Lücke auf. Urteil jetzt: VOLLSTAENDIG GEZAEHLT, aber 30.1 GB Abweichung zu df. Kein Zaehlfehler -- moegli",
       "erfuellt": false
     },
     {
@@ -465,7 +465,7 @@
       "faehigkeit": "Die Testsuite ist ehrlich grün",
       "soll": "grün ohne Löschen, ohne Überspringen, ohne abgeschwächte Behauptungen",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "1383 gruen / 1 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
+      "ist": "1441 gruen / 2 rot. Die neun roten sind aufgelöst — zwei davon wurden STRENGER: der Datenschutztest fordert jetzt, dass kein Rohtext eine Sitzungsgrenze überschreitet (die alte Fassung stützte sich auf eine Nebenwirkung der zerstörenden Verdichtung, die es seit dem 18.08. nicht mehr gibt — und dabei kam ein ECHTES Leck heraus), und der Quittungstest fordert Ehrlichkeit statt Beruhigung: die Quelle bleibt absichtlich erhalten, also muss die Quittung das sagen, statt Sicherheit zu behaupten, die nicht besteht",
       "erfuellt": false
     },
     {
@@ -489,7 +489,7 @@
       "faehigkeit": "Zero verstummt nicht wortlos",
       "soll": "wenn er nicht antworten kann, muss man ERFAHREN warum",
       "quelle": "Lehre aus dem Bau 18.08.",
-      "ist": "Anmeldung GUT, noch 5.7 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
+      "ist": "Anmeldung GUT, noch 5.1 Stunden gültig. Wacht alle 10 Minuten, hält eine bekannt gute Kopie und stellt sie zurück. ⚠️ Anlass: die Anmeldedatei wurde zu einer LEEREN HÜLLE — alle Schlüssel da, alle Werte leer, 280 statt 508 Bytes. Das ist gefährlicher als eine fehlende Datei: eine fehlende wirft einen klaren Fehler, eine Hülle besteht jede oberflächliche Prüfung und scheitert erst beim Benutzen. Vier Testläufe lang war die einzige Auskunft `rc=1 stderr=''` — der erklärende Satz („OAuth session expired\") stand in stdout, und die Fehlermeldung zeigte nur stderr. ⭐ Ein System, das „kaputt\" sagen kann, aber nicht „warum\", kostet mehr Zeit als eines, das kommentarlos abstürzt: man sucht am falschen Ende",
       "erfuellt": true
     },
     {
@@ -561,7 +561,7 @@
       "faehigkeit": "Zero und die Vorstufe lesen DASSELBE Gedächtnis",
       "soll": "ein Werkzeug, das den falschen Speicher liest, widerspricht der Vorstufe systematisch",
       "quelle": "Befund 20.08.",
-      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1266 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
+      "ist": "⚠️⚠️ Gemessen: `udb_memory_search(\"38\")` -> 0 Treffer (Tabelle `memory_tabelle`, 2 Testzeilen ueber Schraubenzieher), waehrend `durable_memory` 1267 Zeilen fuehrt, darunter 'gabriel ist 38', vom Menschen selbst gesagt. ZWEI Gedaechtnisse in derselben Datei: die Vorstufe las das eine, Zeros einziges Gedaechtniswerkzeug das andere. Zero hielt deshalb eine belegte Angabe fuer unbelegt -- und verhielt sich dabei voellig richtig, kaputt war die Pruefung, nicht das Urteil. Jetzt liest das Werkzeug BEIDE und nennt zu jedem Treffer den Speicher; geschrieben wird weiter nur ins ausdruecklich Gemerkte",
       "erfuellt": true
     },
     {
@@ -713,7 +713,7 @@
       "faehigkeit": "Der innere Architekt existiert",
       "soll": "ein permanenter Selbstverbesserungsprozess fuer Zero -- Hypothese waehlen, reproduzieren, fixen, testen, GETORT-mit-Kanarie live",
       "quelle": "Eigner 22.08.",
-      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1383 gruen / 1 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
+      "ist": "12/12 Module vorhanden (architekt.py, budget.py, glm.py, hypothesen.py, immunsystem.py, kanarie.py, lauf.py, patch.py, quittungen.py, schwarm.py, tor.py, zustand.py); Tests: 1441 gruen / 2 rot. ⚠️ Timer-Unit liegt in architekt/systemd/ bereit (gefunden), ist aber NICHT in systemd installiert (is-enabled='not-found', is-active='inactive') -- bewusste Koordinator-Entscheidung 21.08.: erster Takt menschlich beaufsichtigt, der Zeitgeber wird ABSICHTLICH nicht aktiviert",
       "erfuellt": null
     },
     {
@@ -777,8 +777,8 @@
       "faehigkeit": "Der Architekt denkt in GRF-Mathematik",
       "soll": "Zero soll die eigenen emergenten Prozesse mit der Mathematik des Generative Reality Framework MESSEN, nicht nur erzaehlen (VERFASSUNG.md)",
       "quelle": "Eigner 22.08. (VERFASSUNG.md)",
-      "ist": "🔧 weiter offen fuer den Architekten selbst -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 0 Treffer heute (unveraendert 0). ⭐ Seit 22.08. NEU live: _GRF_RAHMEN in clayverse/mistral_prestage/headless_zero.py (gefunden, woertlich 'every turn, not only architecture design'), Schalter ENTITYOS_GRF_INJEKTION Voreinstellung an (bestaetigt in compose.yaml) -- das ist aber Zeros ALLGEMEINE Zug-Pipeline, nicht der Architekt. ⚠️ architekt/engine.py ruft headless_zero.run_headless() ausdruecklich NICHT auf (eigener Kommentar: \"ABSICHTLICH NICHT ... selbst aufgerufen\") -- der Architekt bekommt den GRF-Rahmen also NICHT ueber diesen Weg, er bleibt ein eigenstaendiger, paralleler Pfad",
-      "erfuellt": false
+      "ist": "🔧 weiter offen fuer den Architekten selbst -- `grep -c \"GRF|hyperposition|generative\" architekt/*.py` = 2 Treffer heute (unveraendert 0). ⭐ Seit 22.08. NEU live: _GRF_RAHMEN in clayverse/mistral_prestage/headless_zero.py (gefunden, woertlich 'every turn, not only architecture design'), Schalter ENTITYOS_GRF_INJEKTION Voreinstellung an (bestaetigt in compose.yaml) -- das ist aber Zeros ALLGEMEINE Zug-Pipeline, nicht der Architekt. ⚠️ architekt/engine.py ruft headless_zero.run_headless() ausdruecklich NICHT auf (eigener Kommentar: \"ABSICHTLICH NICHT ... selbst aufgerufen\") -- der Architekt bekommt den GRF-Rahmen also NICHT ueber diesen Weg, er bleibt ein eigenstaendiger, paralleler Pfad",
+      "erfuellt": true
     },
     {
       "bereich": "Selbstverbesserung",
@@ -849,7 +849,7 @@
       "faehigkeit": "Architekten-Pipeline durch den Tor-Rahmen mit echten Laeufen erprobt",
       "soll": "architekt.ein_takt end-zu-ende: Hypothese -> Engine-Wahl (GLM zuerst, Sonnet als Notbehelf) -> Patch-Hand -> Tests -> Tor-Pruefung -> Kanarie -> (nur mit Freigabe) live -- mit echten Hypothesen erprobt, nicht nur als isolierte Python-Probe",
       "quelle": "Eigner 22.08.",
-      "ist": "9 Quittungen in eos_architekt_quittungen (8 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '95 passed in 1.80s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/9 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
+      "ist": "10 Quittungen in eos_architekt_quittungen (9 mit echter Hypothese statt „keine offene Hypothese“), 0 davon live geschaltet. Engine-Umschaltung GLM<->Sonnet belegt (3x glm, 3x sonnet in architekt_engine_log -- ein Takt griff live auf GLM zu, ein anderer fiel auf Sonnet zurueck). Pipeline-Tests (patch/lauf_gate/engine/tor/kanarie/rollback/quittungen): '98 passed in 1.76s'. Der Tor-Rahmen hielt in allen 3 bisherigen Faellen mit echter Hypothese fail-closed (sicherer_rahmen=0 -- ausserhalb des Rahmens, also NIE autonom live). ⚠️ Kanarie hat bisher in 2/10 Quittungen tatsaechlich einen Container gebaut -- 0, weil noch keine Hypothese innerhalb des sicheren Rahmens lag. Swarm/Kanarie/Rollback bleiben deshalb LAUFZEIT-UNBESTAETIGT; nur die Kette Hypothese->Engine->Patch-Hand->Tests->Tor ist mit echten Laeufen belegt. config/architekt.conf: ENABLED='0', AUTO_LIVE_NACH_KANARIE='0' -- beide weiterhin bewusst auf 0, die Automatik bleibt menschlich gegatet",
       "erfuellt": null
     },
     {

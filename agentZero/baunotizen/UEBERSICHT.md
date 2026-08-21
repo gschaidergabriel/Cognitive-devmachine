@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-21T22:06:41Z. **3712 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-21T22:40:57Z. **3731 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T03:43:23+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T04:45:38+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 3614 |
+| baunotiz | 3633 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2199 |
-| baunotiz | bauverlauf.jsonl | 1368 |
-| baunotiz | github-ereignis | 42 |
+| baunotiz | git-commit | 2211 |
+| baunotiz | bauverlauf.jsonl | 1374 |
+| baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 3712 · Gegenhypothese: 0 von 3712
+## Hypothese: 0 von 3731 · Gegenhypothese: 0 von 3731
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T03:43:23+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: Gen259 PTY recurrence and FREE_ONLY quarantine
+
+`baunotiz-bauverlauf-027a91cf998bb2ee0430` · baunotiz · bauverlauf.jsonl · 2026-08-22T04:45:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: Gen259 PTY recurrence and FREE_ONLY quarantine
+
+`baunotiz-git-a3bfe22ce512c98defbd30e989c86bc3945d14c8` · baunotiz · git-commit · 2026-08-22T04:45:38+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: Gen259 PTY recurrence and FREE_ONLY quarantine
 
 ### claycode supervisor: escalate Gen258 executed paid-provider breach
 
@@ -211,41 +227,29 @@ Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 claycode supervisor: bind Gen246 autonomy dispatch provenance boundary
 
-### EOS-Chronik 2026-08-21 21:59:30 +0000 — entityos: 3 Aenderungen
+### EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen
 
-`baunotiz-git-eb11915c6cbcb79f5cda9f47dea21ee0f8835b55` · baunotiz · git-commit · 2026-08-21T21:59:30+00:00 · BACK agent
+`baunotiz-git-9483c9954977e2470bb6c56d14a0d53727a784d8` · baunotiz · git-commit · 2026-08-21T22:28:53+00:00 · BACK agent
 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
-EOS-Chronik 2026-08-21 21:59:30 +0000 — entityos: 3 Aenderungen
+EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen
 
 Anlass: Wache: Aenderung beobachtet
 
-  the artefact/SELBSTFORSCHUNG.md
-  the artefact/VERFASSUNG.md
-  the artefact/architekt/patch.py
+  the artefact/architekt/bug_paket.py
+  the artefact/architekt/claude_verfuegbarkeit.py
+  the artefact/architekt/hypothesen.py
+  the artefact/architekt/nvidia_coder.py
+  the artefact/tests/test_architekt_bug_paket.py
+  the artefact/tests/test_architekt_claude_verfuegbarkeit.py
+  the artefact/tests/test_architekt_nvidia_coder.py
 
-Zeit: 2026-08-21T21:59:30+00:00
+Zeit: 2026-08-21T22:28:53+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
-Dateien: 3
+Dateien: 7
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
-
-### research: fuse tmux autonomy transport fence into go reentry
-
-`baunotiz-bauverlauf-04af697292137f44245a` · baunotiz · bauverlauf.jsonl · 2026-08-21T21:54:46+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-_(kein Text)_
-
-### research: fuse tmux autonomy transport fence into go reentry
-
-`baunotiz-git-8ae4b8ac00be123d4c887c72b646f93d0f26a36a` · baunotiz · git-commit · 2026-08-21T21:54:46+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-research: fuse tmux autonomy transport fence into go reentry
 

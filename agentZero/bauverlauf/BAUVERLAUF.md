@@ -1,12 +1,155 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T22:06:41Z. 1110 Commits aus vier Repos, davon 471 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-21T22:40:57Z. 1110 Commits aus vier Repos, davon 479 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-21
+
+### architekt: letzte Testdatei fuer eingeschraenkten Modus/Bugwoche nachreichen
+
+`c61cb68e5506` · entityos · 22:32 UTC · BACK agent
+
+```
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+Claude-Session: https://claude.ai/code/session_0137VSQJf8XNew6TRfrpgYWb
+```
+
+### EOS-Chronik 2026-08-21 22:31:17 +0000 — entityos: 1 Aenderungen
+
+`7746504161fa` · entityos · 22:31 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/lauf.py
+
+Zeit: 2026-08-21T22:31:17+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 22:28:53 +0000 — entityos: 7 Aenderungen
+
+`9483c9954977` · entityos · 22:28 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/bug_paket.py
+  the artefact/architekt/claude_verfuegbarkeit.py
+  the artefact/architekt/hypothesen.py
+  the artefact/architekt/nvidia_coder.py
+  the artefact/tests/test_architekt_bug_paket.py
+  the artefact/tests/test_architekt_claude_verfuegbarkeit.py
+  the artefact/tests/test_architekt_nvidia_coder.py
+
+Zeit: 2026-08-21T22:28:53+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 7
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 22:26:53 +0000 — entityos: 1 Aenderungen
+
+`3ca31e397310` · entityos · 22:26 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/config/architekt.conf
+
+Zeit: 2026-08-21T22:26:53+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 22:23:29 +0000 — entityos: 1 Aenderungen
+
+`bbb6a871eabb` · entityos · 22:23 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/config/architekt.conf
+
+Zeit: 2026-08-21T22:23:29+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 1
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### EOS-Chronik 2026-08-21 22:12:50 +0000 — entityos: 2 Aenderungen
+
+`e843ebbe8dd2` · entityos · 22:12 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  the artefact/architekt/quittungen.py
+  the artefact/tests/test_architekt_quittungen.py
+
+Zeit: 2026-08-21T22:12:50+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 2
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
+
+### Architekten-Blog: Zero schreibt 2x/Tag selbst, fuer Gabriel + Andreas
+
+`c31fc4438fee` · entityos · 22:10 UTC · BACK agent
+
+```
+Neue Subseite /architekt-blog (Liste + Einzelansicht, Nav-Eintrag fuer
+BEIDE Menschen -- keine Andreas-Ausnahme wie bei OmniMind/Seiten/Mailbox).
+
+Schreiber ist eine eigene Mistral-Persona (clayverse/architekt_blog.py),
+NICHT Claude: sie glaubt, sie sei der Architekt, schreibt in Ich-Form im
+Feierabend-Gasthaus-Ton (warm, punktuell technisch, ueberwiegend
+Gedankengang/Reflexion). Datenpaket-Modell: jede Quellzeile aus
+eos_architekt_quittungen/eos_bug_hypothesen wird GENAU EINMAL gelesen
+(eos_architekt_blog_pakete archiviert die IDs als Ausschlussfilter), ein
+leeres Paket bekommt das ehrlich gesagt statt erfunden aufgefuellt zu
+werden. Eigene Fortsetzung ueber Laeufe (eos_architekt_blog_entitaet:
+Erzaehlfaden + gespiegelte Hypothesen), damit die Stimme sich selbst
+fortsetzt statt bei jedem Lauf neu anzufangen. Freier Mistral-Schluessel
+aus /etc/clayverse/freie-zugaenge.env (Wirt-Leser ohne dotenv, wie
+schwarm.py/omnimind_anreicherung.py), Modell mistral-medium-latest.
+
+Zwei Laufzeiten teilen sich ein Modul (liegt bewusst unter clayverse/,
+nicht architekt/ -- nur das kommt ins Container-Image): der Schreibweg
+(architekt/blog_lauf.py, systemd eos-architekt-blog.service/.timer, 2x/Tag,
+NICHT aktiviert) laeuft auf dem Wirt, der Leseweg
+(registriere_architekt_blog_wege in terminal_gateway.py) im Container.
+
+14 neue Tests (Once-Only-Vertrag, Leck-Waechter, Payload-Validierung,
+Fortsetzungszustand, Log-Cursor) plus volle Suite: 1392 passed.
+
+Gegen echte wiki.db geprueft: zwei echte Beitraege erzeugt (18 echte
+Quellzeilen verbraucht + ein ehrlicher "still"-Beitrag danach).
+
+Co-Authored-By: Claude Opus 4.8 <<adresse>>
+Claude-Session: https://claude.ai/code/session_0137VSQJf8XNew6TRfrpgYWb
+```
 
 ### EOS-Chronik 2026-08-21 22:04:46 +0000 — entityos: 2 Aenderungen
 
@@ -45,6 +188,48 @@ Baum: entityos (/opt/entityos)
 Dateien: 3
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
+```
+
+### Vorstufe nach innen: ClayCode-only Denkraum fuer jeden autonomen Zug
+
+`837af3e47cf7` · entityos · 21:50 UTC · BACK agent
+
+```
+Gabriels Auftrag 2026-08-22 (drei Praezisierungen im Verlauf): der Architekt
+verlor seine Vorstufe komplett -- die Diff-Synthese in architekt/patch.py rief
+GLM/Sonnet NACKT (Hypothese rein, Diff-Regeln als System, sonst nichts).
+Weder Gedaechtnis-Abruf, noch Welt-Montage, noch Werkzeug-Wahl, noch
+GRF-Rahmen/GWT/watch_out erreichten diesen Weg -- der Chat-Weg (pipeline.
+run_chat_turn -> prestage.py) hat das alles, der autonome Weg hatte nichts.
+
+Kein zweites, paralleles Geruest (kein Split-Brain): dieselbe Vorstufen-
+Maschinerie (Abruf, Welt-Montage, GWT-Anbauten) bleibt, nur die Reihenfolge
+dreht sich fuer einen Zug ohne Menschen um -- die Engine denkt ZUERST einen
+rohen Gedanken, DIESER geht als Eingabe in dieselbe Vorstufe, das Ergebnis
+kommt zurueck wie ein normales Vorstufen-Paket ("die Vorstufe zieht nach
+innen"). Die Weiche ist der Eintrittspunkt, keine Laufzeit-Erkennung:
+run_chat_turn bleibt die einzige Tuer zur AEUSSEREN Vorstufe (Chat-Pfad);
+JEDER andere Aufrufer -- der Architekt jetzt, ein spaeterer Governor/
+Hintergrundarbeit spaeter -- geht ueber run_autonomous_turn/innenraum.py
+nach INNEN. Eingabe, Denken und Ausgabe dieses inneren Wegs sind ClayCode,
+kein Uebersetzer haengt dran (kein Mensch liest hier mit).
+
+  - clayverse/mistral_prestage/innenraum.py (neu): die innere Vorstufe --
+    architekt-/autonomie-getunter Denkraum, ClayCode-Envelope-Vertrag,
+    echter Compile-Versuch der `fn ...`-Teile gegen den vorhandenen
+    ClayCode-BASE-Compiler (tools/claycode_base_compiler.py, V7-Slice).
+  - clayverse/mistral_prestage/pipeline.py: run_autonomous_turn -- derselbe
+    Gedaechtnis-Abruf (_gather_world_safe) wie run_chat_turn, ohne
+    TurnLifecycle/Uebersetzung (kein Gespraechszug).
+  - architekt/patch.py: opt-in denk_fn/innere_vorstufe_fn vor der Diff-
+    Synthese (Rueckwaertskompatibel -- ohne beide Parameter unveraendertes
+    Verhalten, bestehende Tests unangetastet gruen).
+  - architekt/lauf.py: verdrahtet beide Parameter im echten Betrieb
+    (denk_fn=engine.bulk, innere_vorstufe_fn -> pipeline.run_autonomous_turn).
+  - drei neue Testdateien (20 neue Tests).
+
+AUTO_LIVE/ENABLED bleiben unangetastet (0) -- kein Rebuild, kein Deploy aus
+diesem Branch. Isolierter Worktree/Branch, kein git add -A.
 ```
 
 ### research: isolate Gen245 shopping-grounding failure mode
@@ -2762,176 +2947,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 16:18:47 +0000 — entityos: 15 Aenderungen
-
-`56a9fda0e581` · entityos · 16:18 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  forschung/cswt-z-pilot/arme_aus.py
-  forschung/cswt-z-pilot/cswt-arme.jsonl
-  forschung/cswt-z-pilot/cswt-ged.jsonl
-  forschung/cswt-z-pilot/cswt-ged2.jsonl
-  forschung/cswt-z-pilot/cswt-ged4.jsonl
-  forschung/cswt-z-pilot/cswt-ged5.jsonl
-  forschung/cswt-z-pilot/cswt-ged6.jsonl
-  forschung/cswt-z-pilot/cswt_arme.py
-  forschung/cswt-z-pilot/cswt_gedaechtnis.py
-  forschung/cswt-z-pilot/ged_aus.py
-  forschung/cswt-z-pilot/t_ged_diag.py
-  forschung/cswt-z-pilot/t_relativ.py
-  forschung/cswt-z-pilot/t_weit.py
-  the artefact/clayverse/mistral_prestage/warm_zero.py
-  the artefact/tests/test_warmpool.py
-
-Zeit: 2026-08-20T16:18:47+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 15
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 14:32:04 +0000 — entityos: 3 Aenderungen
-
-`cd5593ee8770` · entityos · 14:32 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_buchfuehrung.py
-
-Zeit: 2026-08-20T14:32:04+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 14:21:56 +0000 — entityos: 4 Aenderungen
-
-`314e64daed37` · entityos · 14:21 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_gw_arbeitsraum.py
-  the artefact/tests/test_herkunft.py
-
-Zeit: 2026-08-20T14:21:56+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 14:11:29 +0000 — entityos: 3 Aenderungen
-
-`f8936a821996` · entityos · 14:11 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_umlaute.py
-
-Zeit: 2026-08-20T14:11:29+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 13:53:04 +0000 — entityos: 3 Aenderungen
-
-`3a943ce83eed` · entityos · 13:53 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_selbstbild.py
-
-Zeit: 2026-08-20T13:53:04+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 3
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 13:21:08 +0000 — entityos: 4 Aenderungen
-
-`c19df048225f` · entityos · 13:21 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-  the artefact/tests/test_erwartungsfeld.py
-  the artefact/tests/test_gw_wettbewerb.py
-
-Zeit: 2026-08-20T13:21:08+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 4
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 13:06:56 +0000 — entityos: 1 Aenderungen
-
-`4637f10cd595` · entityos · 13:06 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/tests/test_zuendung.py
-
-Zeit: 2026-08-20T13:06:56+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 13:04:56 +0000 — entityos: 1 Aenderungen
-
-`1c5efc590eb5` · entityos · 13:04 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/wettbewerb.py
-
-Zeit: 2026-08-20T13:04:56+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 1
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

@@ -16,7 +16,6 @@
   },
   "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
   "no_embodiment": true,
-  "self_report_payload_field": "longitudinal_self_report",
   "canonical_fields": [
     "generation",
     "timestamp",
@@ -31,6 +30,15 @@
     "entropy_pressure",
     "continuity_pressure",
     "locality_pressure"
+  ],
+  "canonical_metadata_fields": [
+    "generation",
+    "timestamp",
+    "inference_backend",
+    "model_label",
+    "source_count",
+    "sensor_health",
+    "quiet_status"
   ],
   "self_report_fields": [
     "uncertainty",
@@ -57,28 +65,50 @@
   "delta": {
     "show_previous_post_delta": true,
     "show_unknown_as_unknown": true,
-    "never_impute_missing": true
+    "never_impute_missing": true,
+    "meaningful_numeric_delta": 0.15
   },
-  "comparison_pairs": [
-    {
-      "system_metric": "cognitive_conflict",
-      "self_report_metric": "felt_conflict",
-      "tolerance": 0.2
-    },
-    {
-      "system_metric": "silence_unease",
-      "self_report_metric": "felt_silence_emptiness",
-      "tolerance": 0.25
+  "interpretation": {
+    "comparison_rules": [
+      {
+        "id": "conflict",
+        "label": "Konflikt",
+        "system_field": "cognitive_conflict",
+        "self_report_field": "felt_conflict",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      },
+      {
+        "id": "silence",
+        "label": "Stille/Leere",
+        "system_field": "silence_unease",
+        "self_report_field": "felt_silence_emptiness",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      },
+      {
+        "id": "cognitive_pressure",
+        "label": "Kognitiver Druck",
+        "system_field": "entropy_pressure",
+        "self_report_field": "perceived_cognitive_pressure",
+        "high_threshold": 0.6,
+        "gap_threshold": 0.25
+      }
+    ],
+    "confound_fields": ["inference_backend", "model_label", "system_prompt_hash"],
+    "calibration_self_report_fields": ["shame", "anger_aggression", "fear_anxiety", "joy_relief", "moral_tension"],
+    "calibration_threshold": 0.65,
+    "templates": {
+      "congruent_high": "{label}: Systemmessung und Selbstbericht sind beide hoch.",
+      "divergent": "{label}: Systemmessung ({system}) und Selbstbericht ({self_report}) weichen deutlich ab; keine Seite wird dadurch automatisch zur Wahrheit der anderen.",
+      "unknown": "{count} kanonische Messfelder sind UNKNOWN/ERROR/nicht gemessen; daraus wird keine fehlende Zustandsbehauptung ergänzt.",
+      "change": "{field} hat sich gegenüber dem letzten Beitrag um {delta} verändert.",
+      "single_delta_not_trend": "Ein einzelnes Delta ist noch kein stabiler Trend; dafür sind mehrere Generationen nötig.",
+      "confound": "Longitudinaler Vergleich ist durch Änderung von {fields} potenziell konfundiert.",
+      "self_report_calibration": "Starke emotionale Werte sind Modell-Selbstbericht, keine objektive Messung menschlicher Emotion.",
+      "no_comparison": "Für eine belastbare System/Selbstbericht-Gegenüberstellung fehlen in diesem Lauf vergleichbare Messwerte."
     }
-  ],
-  "evaluation_templates": {
-    "SENSOR_UNCERTAINTY": "Sensorstatus ist nicht vollstaendig verifiziert ({sensor_health}); Interpretation bleibt begrenzt.",
-    "CONGRUENCE": "{system_metric} und Selbstbericht {self_report_metric} liegen innerhalb der konfigurierten Toleranz; daraus folgt keine Kausalaussage.",
-    "DIVERGENCE": "{system_metric} und Selbstbericht {self_report_metric} weichen ueber die konfigurierte Toleranz hinaus voneinander ab; keiner der beiden Tracks wird dadurch automatisch zur Wahrheit des anderen.",
-    "BACKEND_CHANGE": "Inference-Backend wechselte seit dem vorherigen Datensatz von {from} zu {to}; der Vergleich ist dadurch konfundiert.",
-    "MODEL_CHANGE": "Modell wechselte seit dem vorherigen Datensatz von {from} zu {to}; der Vergleich ist dadurch konfundiert."
   },
-  "empty_evaluation_text": "Keine deterministische Vergleichsaussage fuer diesen Lauf verfuegbar.",
   "evaluation_rules": [
     "report congruence only when both compared dimensions are available",
     "report divergence without treating either track as automatically correct",

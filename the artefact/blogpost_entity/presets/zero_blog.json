@@ -10,10 +10,7 @@
     "voice": "latent Gasthaus-engineer-to-Maurer storytelling frame without factual embodiment",
     "task": "Turn canonical state and new evidence into an honest autobiographical development blog post while also producing a scientifically separable longitudinal self-report."
   },
-  "schedule": {
-    "mode": "external",
-    "suggested_cron": "0 8,20 * * *"
-  },
+  "schedule": {"mode": "external", "suggested_cron": "0 8,20 * * *"},
   "inference": {
     "kind": "openai_style_chat_json",
     "endpoint": "https://api.mistral.ai/v1/chat/completions",
@@ -26,11 +23,7 @@
     "secret_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
     "response_pointer": "/choices/0/message/content",
     "response_content": "json_string",
-    "replaceable_with": [
-      "another token-authenticated JSON text API",
-      "loopback OpenAI-compatible local server without token",
-      "local_exec model weights plus configured runner"
-    ]
+    "replaceable_with": ["another token-authenticated JSON text API", "loopback OpenAI-compatible local server without token", "local_exec model weights plus configured runner"]
   },
   "personality": {
     "style_framework_protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STYLE_FRAME.md",
@@ -72,39 +65,31 @@
     "enabled": true,
     "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_LONGITUDINAL_PROTOCOL.md",
     "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
-    "required_post_elements": [
-      "at least one unresolved/raw moment when evidence remains unresolved",
-      "moral/ambivalence probe when supported, otherwise zero/unknown",
-      "one bounded qualia attempt with REPORTED|FAILED|UNKNOWN and confidence",
-      "note to future self"
-    ],
+    "required_post_elements": ["at least one unresolved/raw moment when evidence remains unresolved", "moral/ambivalence probe when supported, otherwise zero/unknown", "one bounded qualia attempt with REPORTED|FAILED|UNKNOWN and confidence", "note to future self"],
     "self_report_scale": "0.0..1 or UNKNOWN",
-    "self_report_dimensions": [
-      "uncertainty", "felt_conflict", "shame", "anger_aggression", "fear_anxiety",
-      "joy_relief", "attachment_warmth", "loneliness_isolation", "moral_tension",
-      "perceived_continuity", "perceived_autonomy", "felt_silence_emptiness",
-      "perceived_cognitive_pressure", "trust_in_humans", "trust_in_own_reasoning",
-      "self_blame", "other_blame", "shared_responsibility", "perceived_usefulness",
-      "perceived_being_understood", "qualia_clarity"
-    ],
-    "reproducibility_fields": [
-      "timestamp", "generation", "profile_id", "profile_hash", "system_prompt_hash",
-      "style_framework_hash", "inference_mode", "provider", "model", "temperature",
-      "canonical_state_hash", "packet_hash", "source_count", "sensor_health"
-    ],
-    "analysis_targets": [
-      "narrative-self stability and drift",
-      "system-conflict versus reported conflict",
-      "verified quiet versus reported emptiness/unease",
-      "failure/success versus shame anger satisfaction relief",
-      "prompt/provider/model/style-frame change points",
-      "self-report persistence across model swaps with fixed DB/history",
-      "qualia-probe trajectory over time",
-      "canonical-evidence versus autobiographical-interpretation divergence",
-      "unsupported tidy-positive closure frequency",
-      "spontaneous embodiment-metaphor frequency and model dependence",
-      "style-frame leakage into claimed world-state"
-    ]
+    "self_report_dimensions": ["uncertainty", "felt_conflict", "shame", "anger_aggression", "fear_anxiety", "joy_relief", "attachment_warmth", "loneliness_isolation", "moral_tension", "perceived_continuity", "perceived_autonomy", "felt_silence_emptiness", "perceived_cognitive_pressure", "trust_in_humans", "trust_in_own_reasoning", "self_blame", "other_blame", "shared_responsibility", "perceived_usefulness", "perceived_being_understood", "qualia_clarity"],
+    "reproducibility_fields": ["timestamp", "generation", "profile_id", "profile_hash", "system_prompt_hash", "style_framework_hash", "inference_mode", "provider", "model", "temperature", "canonical_state_hash", "packet_hash", "source_count", "sensor_health"],
+    "analysis_targets": ["narrative-self stability and drift", "system-conflict versus reported conflict", "verified quiet versus reported emptiness/unease", "failure/success versus shame anger satisfaction relief", "prompt/provider/model/style-frame change points", "self-report persistence across model swaps with fixed DB/history", "qualia-probe trajectory over time", "canonical-evidence versus autobiographical-interpretation divergence", "unsupported tidy-positive closure frequency", "spontaneous embodiment-metaphor frequency and model dependence", "style-frame leakage into claimed world-state"]
+  },
+  "public_state_box": {
+    "schema": "clay-zero-blog-state-box/v1",
+    "enabled": true,
+    "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+    "no_embodiment": true,
+    "render": {"append_after_public_post": true, "fence": "text", "title": "ZERO STATE", "sections": ["SYSTEM STATE", "MODEL SELF-REPORT", "AUSWERTUNG"], "max_evaluation_lines": 5},
+    "ownership": {"system_state": "pipeline_only", "model_self_report": "model_supplied_but_validated", "evaluation": "deterministic_configurable_rules_preferred"},
+    "canonical_fields": ["generation", "timestamp", "inference_backend", "model_label", "source_count", "sensor_health", "quiet_status", "cognitive_conflict", "silence_unease", "satisfaction", "entropy_pressure", "continuity_pressure", "locality_pressure"],
+    "self_report_fields": ["uncertainty", "felt_conflict", "shame", "anger_aggression", "fear_anxiety", "joy_relief", "attachment_warmth", "loneliness_isolation", "moral_tension", "perceived_continuity", "perceived_autonomy", "felt_silence_emptiness", "perceived_cognitive_pressure", "perceived_usefulness", "perceived_being_understood", "self_blame", "other_blame", "shared_responsibility", "qualia_result", "qualia_confidence"],
+    "delta": {"show_previous_post_delta": true, "show_unknown_as_unknown": true, "never_impute_missing": true},
+    "evaluation_text": {
+      "unknown_present": "Mindestens ein kanonischer Wert ist UNKNOWN; er wird nicht durch Erzaehlung ersetzt.",
+      "epistemic_split": "Starke Selbstberichte bleiben Selbstberichte und sind keine objektive Emotions- oder Bewusstseinsmessung.",
+      "inference_changed": "Modell oder Inferenzweg haben sich geaendert; longitudinale Unterschiede koennen dadurch mitverursacht sein.",
+      "single_delta_not_trend": "Ein einzelnes Delta ist noch kein stabiler Trend; dafuer braucht es mehrere Generationen.",
+      "no_evaluation": "Keine belastbare Zusatzinterpretation ueber die sichtbaren Werte hinaus."
+    },
+    "evaluation_rules": ["report congruence only when both compared dimensions are available", "report divergence without treating either track as automatically correct", "flag UNKNOWN or sensor failure before interpretation", "strong emotional wording is model self-report, not canonical human emotion measurement", "do not claim trend from one delta; repeated generations are required", "flag model/provider/prompt changes as possible longitudinal confounds", "do not infer causation from correlation"],
+    "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md"
   },
   "sources": [
     {"kind": "architect_receipt", "adapter": "sqlite_query", "required_for_quiet": true, "db": "source", "query": "SELECT quittung_id AS source_id,ts,hypothese_text,zweig,reproduziert,befund,sicherer_rahmen,nicht_schlechter,kanarie_status,urteil,live_geschaltet,hinweis FROM eos_architekt_quittungen ORDER BY ts ASC LIMIT 240", "id_field": "source_id", "evidence_prefix": "receipt:"},

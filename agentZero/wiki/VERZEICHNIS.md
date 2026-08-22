@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T15:36:46Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T16:06:44Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2508 Artikel, 1426 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -73,8 +73,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **test(clayverse): execute UnifiedDB core inside disposable QEMU guest** — `baunotiz-git-1fa4e2d9c80f5f455b1002171324e65` · baunotiz
 - **Verfassung: Zero denkt+programmiert in ClayCode; alles nach ClayCode -- elegant/iterativ/interkonnek** — `baunotiz-bauverlauf-cb869bdc23b6c977008e` · baunotiz
 - **claycode inbox: bind PR787 dependency closure and zero-step blocker** — `baunotiz-git-14041fb6b046008b81d671c4cd2c789` · baunotiz
-- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
 - **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
+- **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz

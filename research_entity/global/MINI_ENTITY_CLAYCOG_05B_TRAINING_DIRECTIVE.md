@@ -2,8 +2,11 @@
 
 Status: CURRENT
 Owner direction date: 2026-08-22
+Base product directive: `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
 
-This directive extends, rather than forks, the application-neutral Mini Entity program.
+This directive extends, rather than forks, the application-neutral Mini Entity program. All laws in the base product directive remain binding unless this newer owner directive explicitly changes them.
+
+**Precedence rule:** the base directive's blanket `Together API remains forbidden` clause is superseded only for the bounded 0.5B training campaign defined below. Together is not made product identity, truth authority, effect authority, persistent state authority or a required inference provider.
 
 ## Required result
 Build and empirically test one reusable 0.5B cognition checkpoint that can be attached as a local inference module

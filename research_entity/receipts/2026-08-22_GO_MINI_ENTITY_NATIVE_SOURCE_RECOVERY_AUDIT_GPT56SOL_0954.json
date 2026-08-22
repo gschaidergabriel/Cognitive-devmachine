@@ -1,0 +1,91 @@
+{
+  "schema": "mini-entity-native-source-recovery-audit/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol / project session 09:54 +07",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "joined_main": "b9e1104bcafa00b95152968ea9f6dde91b89f3b0",
+  "subject": {
+    "historical_version_label": "mini-entity/0.6.0",
+    "currently_credited_elf_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
+    "other_observed_same_version_elf_sha256": [
+      "939784dd29514ead0721882e83fc78b6d21373e8281774c683cebc6cd92ae7a7",
+      "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3"
+    ]
+  },
+  "observed_git_ancestry": {
+    "historical_0_6_state_commit": "89599ca7ba501c518ab9b69f61b6d132bd0aeb6c",
+    "historical_commit_message": "Advance Mini Entity to local-LLM-capable pipeline 0.6",
+    "historical_blogpost_entity_tree_entries": [
+      "BLOGPOST_ENTITY.clay",
+      "presets/",
+      "receipts/",
+      "test_blogpost_entity.py"
+    ],
+    "native_directory_present_at_historical_0_6_commit": false,
+    "mini_entity_c_present_at_historical_0_6_commit": false,
+    "historical_native_reference_compile_shape": "gcc -O2 -Wall -Wextra -o mini_entity.clay mini_entity.c $(pkg-config --cflags --libs sqlite3 libcurl json-c)",
+    "historical_source_sha256_recorded": false
+  },
+  "current_repository_state": {
+    "native_provenance_gate": "the artefact/blogpost_entity/native/check_native_reference.py",
+    "source_bound_builder": "the artefact/blogpost_entity/native/build_native_bound.py",
+    "canonical_native_source_status": "MISSING",
+    "credited_elf_bytes_status": "MISSING_FROM_CANONICAL_MAIN"
+  },
+  "bounded_external_recovery_check": {
+    "surface": "ChatGPT File Library available to this organ",
+    "queries": [
+      "mini_entity.c",
+      "mini-entity/0.6.0 C source",
+      "native local_exec sqlite curl json-c source"
+    ],
+    "direct_source_match_found": false,
+    "evidence_scope": "AUXILIARY_SEARCH_ONLY_NOT_CANONICAL_GIT_PROOF"
+  },
+  "hypotheses": [
+    {
+      "id": "H_NATIVE_RECOVERY_A",
+      "claim": "The exact credited 0.6 C source can be recovered from canonical Git history.",
+      "result": "REJECTED_FOR_OBSERVED_CANONICAL_HISTORY",
+      "basis": "The historical 0.6 state commit tree contains no native directory or mini_entity.c."
+    },
+    {
+      "id": "H_NATIVE_RECOVERY_B",
+      "claim": "A newly recreated C source can truthfully inherit the historical 0.6 artifact identity.",
+      "result": "REJECTED",
+      "basis": "No source hash/build provenance binds recreated bytes to any of the three historical 0.6 ELF digests."
+    },
+    {
+      "id": "H_NATIVE_RECOVERY_C",
+      "claim": "Historical 0.6 behavioral receipts remain useful even though exact source/artifact reproduction is blocked.",
+      "result": "RETAINED_BOUNDED",
+      "basis": "Receipts remain evidence for the exact observed sandbox runs only; they are not reproducibility evidence for a new source tree."
+    }
+  ],
+  "promotion_law": {
+    "historical_0_6": "BOUNDED_HISTORICAL_RUNTIME_EVIDENCE_ONLY",
+    "recreated_native_source": "MUST_RECEIVE_NEW_SOURCE_IDENTITY_AND_NEW_ARTIFACT_VERSION_LINE",
+    "forbidden_claim": "Do not label reconstructed/reimplemented source as the recovered original 0.6 source without exact byte/provenance evidence.",
+    "preferred_next_line": "0.7.x or later, exact label chosen by current owner/release policy"
+  },
+  "next_discriminators": [
+    "If the original sandbox filesystem/artifact store becomes addressable, recover exact mini_entity.c and/or credited ELF bytes and hash-bind them before changing this conclusion.",
+    "Otherwise implement the current neutral Mini Entity contract as a new native source lineage, not as historical-source recovery.",
+    "Use build_native_bound.py with exact source hash, compiler identity, package versions, fixed environment and repeated byte-identical same-environment builds.",
+    "Port the now-supported deterministic generic state-box mechanism into the same native commit/CAS transaction.",
+    "Run exact artifact-bound ordinary regressions, then real local-model and remote-provider acceptance separately."
+  ],
+  "unusual_experiment": {
+    "new_experiment_consumed_here": false,
+    "reason": "The global unusual-experiment slot for this go was already consumed by the Same-Version Artifact Identity Collision Audit on canonical main."
+  },
+  "non_claims": [
+    "No original 0.6 source recovered.",
+    "No historical 0.6 ELF reproduced.",
+    "No native runtime PASS created by this audit.",
+    "No real provider or real local-model quality acceptance performed.",
+    "Together API not used."
+  ]
+}

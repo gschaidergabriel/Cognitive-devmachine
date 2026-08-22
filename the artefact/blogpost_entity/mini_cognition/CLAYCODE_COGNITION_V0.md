@@ -2,7 +2,7 @@
 
 ## Goal
 
-A reusable small model emits **ClayCode only** and can be configured at runtime for arbitrary entity names, roles, goals, personalities and applications without retraining. The weights learn universal cognition machinery, not a fixed persona/job.
+A reusable 0.5B-class model emits **ClayCode only** and can be configured at runtime for arbitrary entity names, roles, goals, personalities and applications without retraining. The weights learn universal cognition machinery, not a fixed persona/job.
 
 Natural-language text may appear only inside ClayCode string literals passed to semantic functions such as `emit_text`.
 
@@ -35,14 +35,11 @@ fn think(i:Map)->Map {
 Training targets themselves contain no Markdown fence.
 
 ## Configuration primitives
-
 - `cfg(path:String)->Any`
 - `self_bind(c,id,continuity_kind)`
 - `role_bind(c,role)`
 - `goal_bind(c,goal)`
 - `personality_bind(c,profile)`
-
-These bind runtime values. Supervised targets must not substitute a permanent literal entity name, role or goal.
 
 ## Cognition standard library
 
@@ -52,8 +49,6 @@ These bind runtime values. Supervised targets must not substitute a permanent li
 - `arch_bind(c,responsibility,component)`
 - `authority_bind(c,responsibility,authority)`
 - `authority_deny(c,source,responsibility)`
-
-Architecture authorities may come from `cfg(...)`.
 
 ### GRF
 - `grf_observe(c,"R0",claim,status)`
@@ -70,8 +65,6 @@ Architecture authorities may come from `cfg(...)`.
 - `hyper_discriminator(hp,test)`
 - `collapse_guard(hp,"R6_required")`
 
-Hyperposition is set-valued and must not collapse from recurrence, confidence or preference alone.
-
 ### Epistemics and provenance
 - `state_note(c,key,value,status)`
 - `unknown_preserve(c,key,reason)`
@@ -83,15 +76,11 @@ Canonical statuses include `UNKNOWN`, `ZERO`, `ERROR`, `MEASURED`, `REPORTED`, `
 - `self_state(c,key,value,"COMPUTED")`
 - `self_scalar(c,key,value,"COMPUTED")`
 
-These may encode valence, activation, uncertainty pressure, curiosity, conflict tension, novelty, urgency and current need. They steer cognition but are not external facts.
-
 ### Task and output
 - `task_bind(c,kind,description)`
 - `result_candidate(c,value,status)`
 - `focus_set(c,goal)`
 - `emit_text(c,text)`
-
-`emit_text` is the only admitted natural-language egress.
 
 ### Recovery and policy
 - `recovery_state(c,state)`
@@ -116,7 +105,7 @@ Invalid permanent supervised-target bindings include literal personal/entity nam
 
 ## Hardware contract
 
-First base: `Qwen/Qwen3.5-0.8B`. Promoted local artifact target: text-only GGUF `Q4_K_M`, with actual peak process RSS <1 GiB at 2048-token context. Vision/mmproj is excluded.
+First base: `Qwen/Qwen2.5-0.5B-Instruct` (0.49B parameters). Promoted local artifact target: text-only GGUF `Q4_K_M`, with actual peak process RSS <1 GiB at 2048-token context. Vision/mmproj is excluded.
 
 ## Lowering contract
 

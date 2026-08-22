@@ -67,3 +67,7 @@ jobs:
           assert len(families)==6, families
           print({'cases':len(rows),'unique_ids':320,'families':sorted(families),'role':'evaluation_only'})
           PY
+      - name: Run real-call OOD semantic regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_call_semantics_v2.py'

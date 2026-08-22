@@ -13,9 +13,10 @@
     "repository": "gschaidergabriel/clay-global-research-entity",
     "initial_main_sha": "ff9e86b02fce611f19a36934b46887ada8ba6590",
     "rejoined_main_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+    "latest_observed_main_after_pr": "74df26466781dedc73367cf66de87b964fc9bb61",
     "branch": "chatgpt/go-ood-depth-rejoin-20260822-1845",
     "pre_receipt_head": "ea42d13c98d57c0f86d458387ec291039a84a2ab",
-    "concurrent_main_change": "BOOTSTRAP_MINIMAL approx1B re-entry landed on main; duplicate bootstrap delta was discarded rather than overwritten."
+    "concurrent_main_change": "BOOTSTRAP_MINIMAL approx1B re-entry landed on main; duplicate bootstrap delta was discarded rather than overwritten. Later main movement touched non-overlapping native evidence."
   },
   "authority": {
     "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
@@ -26,7 +27,9 @@
   "coordination": {
     "program_state": "Current main PROGRAM_STATE remains stale at 0.5B; existing PR #879 carries the non-duplicate approx1B state re-entry.",
     "stale_parallel_pr": "PR #866 would reintroduce a second parser implementation even though current main already centralizes brace-depth semantics in claycode_syntax_v1.",
-    "canonical_parser": "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py"
+    "canonical_parser": "the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py",
+    "rejoined_pr": 908,
+    "superseded_stale_pr": 893
   },
   "delta": {
     "test": "the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py",
@@ -58,8 +61,30 @@
   },
   "execution_admission": {
     "vercel_sandbox_start_exec_exposed_by_connected_surface": false,
-    "github_exact_pr_runner": "NOT_YET_OBSERVED_FOR_REJOIN_BRANCH",
-    "classification": "NO_FULL_BRANCH_RUNTIME_CREDIT"
+    "github_pr_head": "3b66467faab64743d893e5b676a4871154b96a6a",
+    "claycog_validator": {
+      "run_id": 32571200786,
+      "job_id": 97026790244,
+      "workflow_conclusion": "failure",
+      "job_conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_PRE_STEP_ADMISSION_FAILURE_NOT_TEST_FAILURE"
+    },
+    "qwen35_direct_admission": {
+      "run_id": 32571200798,
+      "job_id": 97026790574,
+      "workflow_conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_PRE_STEP_ADMISSION_FAILURE_NO_PROVIDER_PREFLIGHT_CREDIT"
+    },
+    "mini_cognition_qwen35_pr": {
+      "run_id": 32571200781,
+      "job_id": 97026790162,
+      "workflow_conclusion": "failure",
+      "steps": null,
+      "classification": "RUNNER_PRE_STEP_ADMISSION_FAILURE_NOT_MODEL_GATE_FAILURE"
+    },
+    "full_branch_runtime_credit": "ZERO"
   },
   "claims_not_made": [
     "Together authenticated preflight",

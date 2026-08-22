@@ -1,36 +1,45 @@
 {
-  "schema_version": "6.4",
+  "schema_version": "6.5",
   "entity_display_name": "Clay",
-  "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
-  "active_stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "active_program": "CLAY_COGNITIVE_MULTITOOL",
+  "active_stage": "COGNITIVE_MULTITOOL_0_5B_BUILD",
   "sole_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "cognitive_multitool_directive": "research_entity/global/CLAY_COGNITIVE_MULTITOOL_DIRECTIVE.md",
   "local_inference_requirement": "research_entity/global/LOCAL_INFERENCE_REQUIREMENT.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "portable_release_shape": ["application-neutral/inference-neutral .clay executable", "SQLite MiniUnifiedDB preconfigurable with zero_blog", "optional replaceable local model attachment when local inference is selected"],
-  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog/personality and inference backend are fully editable runtime configuration.",
+  "mission": "Build and empirically prove an application-neutral Cognitive Multitool for EntityOS. The same cognitive contract supports hot-swappable system prompts, databases, identities, tasks and tools, and can run through an optional resident ClayCog 0.5B neural kernel, the original dual-Mistral path, or other configured backends.",
+  "core_contract": {
+    "hal": "EntityOS calls one Cognitive Multitool contract rather than a model-specific interface",
+    "modes": ["GWT", "PULSE", "PRESTAGE", "HYPERPOSITION", "ROUTER", "CRITIC", "POSTGATE", "SELF", "ESCALATE"],
+    "capsule_hot_swap": ["system_prompt", "entity_id", "role", "goal", "persona", "db_binding", "memory_namespace", "tool_policy", "workspace_state", "grf_state", "hyperposition_state"],
+    "sequential_multitasking": "required via bind/infer/unbind",
+    "concurrent_slots": "optional when independent sequence/KV state exists; hard capsule/DB isolation required",
+    "backend_modes": ["local_0_5b", "mistral_dual", "auto"],
+    "fallback": "0.5B may be disabled and two Mistrals substituted without changing the Cognitive Multitool result contract"
+  },
+  "portable_release_shape": [
+    "application-neutral Cognitive Multitool runtime/module",
+    "SQLite/UnifiedDB-compatible hot-swappable binding",
+    "optional Qwen2.5-0.5B-Instruct ClayCog Q4_K_M attachment",
+    "replaceable dual-Mistral or other inference backend"
+  ],
   "hard_split": {
-    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured inference backend -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
-    "database": "profile/personality/system prompt/application blob/API and local-inference settings plus default zero_blog preset",
-    "regression": "never hard-code replaceable Zero/blog/personality/provider/model semantics into executable identity"
+    "runtime": "cognitive scheduling, capsule binding, backend routing, deterministic gates and canonical persistence",
+    "database": "profile/personality/system prompt/application/memory/inference configuration and continuity",
+    "weights": "universal ClayCog/GRF/Hyperposition cognition only; never fixed identity/job/persona/application",
+    "regression": "never hard-code replaceable entity/personality/provider/model semantics into the cognitive kernel contract"
   },
-  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical state authority",
+  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; neural output is never canonical state/effect authority",
   "inference_law": {
-    "remote_api": "runtime-configurable remote text generation",
-    "local_server": "localhost/OpenAI-compatible text generation without token when configured",
-    "local_model": "direct replaceable local model attachment through local_exec runner; no API token required",
-    "reference_local_format": "GGUF via llama.cpp-compatible or other configured runner",
-    "identity": "switching inference backend or model must not reset MiniUnifiedDB state/history"
+    "local_0_5b": "resident Qwen2.5-0.5B-Instruct ClayCog kernel when enabled",
+    "mistral_dual": "two-Mistral replacement path implementing the same cognitive contract",
+    "auto": "cheap/local cognition with escalation to stronger configured backend",
+    "identity": "switching backend, system prompt or DB binding must not reset or cross-contaminate canonical state"
   },
-  "sandbox_local_backend": {
-    "version": "mini-entity/0.6.0",
-    "status": "CONTRACT_TESTED",
-    "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
-    "real_model_quality": "NOT_YET_CREDITED_FIXTURE_ONLY"
-  },
-  "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
-  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
-  "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
-  "together_api": "FORBIDDEN"
+  "go": "Every exact go must make measurable progress in BOTH lanes: TRAINING (generate/expand/validate/evaluate ClayCog training data or fine-tune readiness/checkpoint behavior) and MODULE (implement/test Cognitive Multitool runtime, hot-swap capsule/DB, backend router, scheduler/slots, isolation, deterministic gates or integration). Analysis-only go is insufficient unless a newly proven blocker is persisted with evidence.",
+  "go_progression": "refresh -> corpus/trajectory expansion -> strict validation -> module implementation -> prompt/DB hot-swap + isolation -> 0.5B-off dual-Mistral substitution -> Together admission/price/job -> base-vs-tuned eval -> hidden-state probes -> Q4_K_M -> <1GiB RSS -> EntityOS integration -> persist",
+  "swarm_product_rule": "swarm is research/build orchestration only; runtime may multiplex many cognitive tasks through one shared model or use multiple configured backends",
+  "legacy_scope": "Previous Mini Entity/ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work remains donor evidence and compatibility surface; the current build target is the Cognitive Multitool and its optional 0.5B accelerator.",
+  "together_api": "OWNER_AUTHORIZED_BOUNDED_FOR_CLAYCOG_0_5B_TRAINING_ONLY; campaign maximum EUR 20 equivalent; no billed create before exact admission and price preflight"
 }

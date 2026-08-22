@@ -1,0 +1,98 @@
+{
+  "schema": "mini-entity-native-current-main-runtime-falsifiers/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_main_observed_before_write": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "source_identity": {
+    "native_version": "mini-entity/0.7.0-dev1",
+    "main_at_execution_reconstruction": "62b292a8097c5b53731ef6804704cf9938872616",
+    "main_after_parallel_training_footer_merges": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+    "native_files_unchanged_between_those_heads": true,
+    "git_blobs": {
+      "mini_entity.c": "a52ab03c16bf0a97cc29a026b45b9401056f0b31",
+      "mini_entity_part00.inc": "d0ab1506745845e9cfe739c6a46bf65d89137454",
+      "mini_entity_part01.inc": "856af5c0126a3a86ed51872ffe9078a4c1fab8e1",
+      "mini_entity_part02.inc": "39124dcdaf460e1bb2bad6867a2633e246dbff02",
+      "mini_entity_part03.inc": "44260895edce1609d63725c6366d72319c972fe5",
+      "mini_entity_part04.inc": "9f653931f63f5cf44e27e4b7f3ce32330307616a"
+    },
+    "local_git_hash_object_match_all_six": true
+  },
+  "execution_surface": {
+    "class": "current-chat isolated container tool",
+    "not_vps": true,
+    "not_self_hosted_runner": true,
+    "not_production_host": true,
+    "canonical_build_native_bound_wrapper_used": false,
+    "scope_warning": "This binds executable behavior to the exact reconstructed current native blobs and the recorded compiler/dependency environment. It is not the repository's canonical source-bound-builder receipt and does not by itself close the exact-checkout release provenance gate."
+  },
+  "build": {
+    "compiler": "cc (Debian 14.2.0-19) 14.2.0",
+    "sqlite3_pkg": "3.46.1",
+    "json_c_pkg": "0.18",
+    "libcurl_pkg": "8.10.1",
+    "flags": "-std=c11 -O2 -Wall -Wextra",
+    "independent_builds": 2,
+    "byte_identical": true,
+    "elf_sha256": "15da285d5b6be87bf7ec0d973980ef8cc8e908ad43f3f2b1ca6bcac62ee54a59",
+    "elf_size_bytes": 889648
+  },
+  "ordinary_runtime_regressions": {
+    "fresh_neutral_db": "PASS",
+    "event_success_then_verified_empty_cycle": "PASS",
+    "inference_failure_consumes_nothing": "PASS",
+    "source_sensor_unknown_consumes_nothing": "PASS",
+    "output_insert_fault_atomic_rollback": "PASS",
+    "study_insert_fault_atomic_rollback": "PASS",
+    "source_event_update_fault_atomic_rollback": "PASS",
+    "concurrent_generation_cas_exactly_one_commit": "PASS"
+  },
+  "current_main_falsifiers": {
+    "binary_application_language_neutrality": {
+      "status": "FAIL",
+      "evidence": [
+        "SYSTEM STATE present in ELF strings",
+        "MODEL SELF-REPORT present in ELF strings",
+        "AUSWERTUNG present in ELF strings",
+        "German UNKNOWN/evaluation prose present in ELF strings"
+      ],
+      "related_open_pr": 756
+    },
+    "local_exec_parent_environment_secret_isolation": {
+      "status": "FAIL",
+      "method": "Launch local_exec with four synthetic secret sentinels in parent environment and make the fixture runner report only inherited environment values.",
+      "observed": "TOGETHER_API_KEY, MISTRAL_API_KEY, OPENAI_API_KEY and an unrelated secret sentinel were all visible to the local runner and were persisted verbatim as model_output.",
+      "security_boundary": "The API-path contains_secret guard does not bind local_exec inherited environment values.",
+      "related_open_pr": 764
+    },
+    "canonical_profile_v2_semantic_admission": {
+      "status": "FAIL_OPEN",
+      "method": "Apply a clay-pipeline-profile/v2 test profile containing required output fields and a forbidden marker, then use local_exec to emit only MALFORMED_PLAINTEXT_WITHOUT_REQUIRED_FIELDS.",
+      "observed": "Current native 0.7 accepted and persisted the malformed output as generation 1.",
+      "reference_contract": "BLOGPOST_ENTITY.clay requires pipeline_gate before pipeline_commit.",
+      "related_open_pr": 769
+    }
+  },
+  "coordination": {
+    "unusual_experiment_performed_by_this_organ": false,
+    "reason": "Existing same-go cognition work already recorded the global unusual-experiment slot; these are direct ordinary regressions/falsifiers of explicit current contracts.",
+    "parallel_training_hardening": "PR 772 merged during this run, adding deterministic Together campaign fingerprinting and duplicate-create protection.",
+    "training_job_started_by_this_organ": false,
+    "together_api_called_by_this_organ": false
+  },
+  "classification": {
+    "positive_native_scope": "EXACT_CURRENT_NATIVE_BLOBS_EXECUTED_IN_ISOLATED_CONTAINER_WITH_DIRECT_REPRO_BUILD",
+    "whole_native_0_7_acceptance": "FAIL_BLOCKED_BY_CONFIRMED_SEMANTIC_AND_SECRET_BOUNDARY_DEFECTS",
+    "whole_product": "IN_PROGRESS",
+    "cognition_training": "NOT_STARTED_BY_THIS_ORGAN"
+  },
+  "next_discriminators": [
+    "Rebase/fuse the non-duplicate fixes for PR 764 parent-environment isolation and PR 756 state-box language neutrality onto current main, then rerun the same exact falsifiers.",
+    "Admit PR 769's fail-closed v2 guard only after exact candidate execution, or implement full canonical v2 compile+pipeline_gate parity before allowing v2 runtime.",
+    "Repeat through build_native_bound.py on an exact current checkout to close repository provenance, then execute the full 0.7 fault matrix.",
+    "For cognition, resolve PR 771 BYOM size/template fence and perform one credentialed Together preflight; create at most one job only if exact API admission and server price stay within the USD 18 gate."
+  ]
+}

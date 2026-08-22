@@ -32,6 +32,7 @@ class NativeReferenceCheckerTests(unittest.TestCase):
             stderr=subprocess.PIPE,
             text=True,
         )
+        self.assertTrue(proc.stdout, proc.stderr)
         report = json.loads(proc.stdout)
         self.assertEqual(proc.returncode, 2)
         self.assertFalse(report["pass"])
@@ -40,13 +41,53 @@ class NativeReferenceCheckerTests(unittest.TestCase):
             "CURRENT_SOURCE_IS_DIFFERENT_VERSION_NOT_CREDITED_REBUILD",
         )
         self.assertEqual(report["source_build_binding"], "NOT_PROVEN_BY_THIS_CHECKER")
-        self.assertIn(report["program_state_identity_schema"], {"legacy_generic", "historical_explicit"})
+        self.assertIn(
+            report["program_state_identity_schema"],
+            {"legacy_generic", "historical_explicit", "UNRESOLVED"},
+        )
         self.assertTrue(
             any(
                 item.startswith("CANONICAL_SOURCE_VERSION_DIFFERS_FROM_CREDITED_ARTIFACT")
                 for item in report["errors"]
             )
         )
+        if report["program_state_identity_schema"] == "UNRESOLVED":
+            self.assertIn(
+                "PROGRAM_STATE_CREDITED_0_6_IDENTITY_UNBOUND_IN_CURRENT_SCHEMA:native_0_7",
+                report["errors"],
+            )
+
+    def test_current_schema_does_not_substitute_other_historical_elf(self):
+        state = {
+            "native_0_7": {
+                "historical_source_bound_evidence": {
+                    "elf_sha256": "different-pre-fix-artifact",
+                    "status": "BOUNDED_HISTORICAL_PRE_FIX_HEAD_ONLY",
+                }
+            }
+        }
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "PROGRAM_STATE_CREDITED_0_6_IDENTITY_UNBOUND_IN_CURRENT_SCHEMA",
+        ):
+            checker.credited_state_record(state)
+
+    def test_current_schema_explicit_0_6_identity_is_admissible(self):
+        state = {
+            "native_0_7": {
+                "historical_source_bound_evidence": {
+                    "historical_credited_version": "mini-entity/0.6.0",
+                    "historical_binary_sha256": "historical-digest",
+                    "elf_sha256": "different-pre-fix-artifact",
+                }
+            }
+        }
+        record, path = checker.credited_state_record(state)
+        self.assertEqual(path, "native_0_7.historical_source_bound_evidence")
+        version, digest, schema = checker.credited_state_identity(record)
+        self.assertEqual(version, "mini-entity/0.6.0")
+        self.assertEqual(digest, "historical-digest")
+        self.assertEqual(schema, "historical_explicit")
 
     def test_program_state_71_explicit_historical_identity_is_preferred(self):
         version, digest, schema = checker.credited_state_identity(

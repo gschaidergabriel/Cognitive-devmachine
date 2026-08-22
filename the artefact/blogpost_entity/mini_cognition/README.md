@@ -42,40 +42,70 @@ A separate OOD generator emits **200** promotion probes and is not a random spli
 ## Fast path
 
 ```bash
-pip install -U together
+pip install -U 'together>=2'
 export TOGETHER_API_KEY=...
 bash train_together_v1.sh
 ```
 
-The shell script stops after **preflight**. It regenerates and validates the corpus, asks Together to validate the
-files/template, and prints the server price estimate. It does not create a billed job.
+The shell script stops after **preflight**. It regenerates and validates the corpus, validates/uploads the files,
+checks current full-training limits for the requested base/template, and prints the server price estimate. It does
+not create a billed job.
 
-Only after preflight:
+Only after a clean preflight:
 
 ```bash
 python3 launch_together_v1.py --create
 ```
 
-### Together 0.5B caveat
+`--create` is intentionally a separate, exactly-once transition. Persist the returned job id and retrieve that job;
+do not blindly repeat creation after a timeout or ambiguous client failure.
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+### Together 0.5B BYOM gate — corrected SDK-v2 path
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+Together's current SDK and fine-tuning documentation expose a BYOM path through `from_hf_model`. The SDK documents
+that the Together `model` argument used as the training base/template should be as close as possible to the
+Hugging Face checkpoint in **architecture and size**. Therefore the launcher no longer guesses a 7B Qwen2.5 model
+for a 0.5B checkpoint.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+Default pairing is now exact and fail-closed:
 
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
-corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
-but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
-response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
+- BYOM checkpoint: `Qwen/Qwen2.5-0.5B`;
+- Together base/template candidate: `Qwen/Qwen2.5-0.5B` itself;
+- instruct ablation: exact `Qwen/Qwen2.5-0.5B-Instruct` / same-model pairing.
+
+If Together's live `fine-tunes/models/limits` endpoint does not admit that exact model for full training, preflight
+stops. A different candidate may be supplied explicitly through `--template` or `CLAYCOG_TOGETHER_TEMPLATE`, but
+there is no automatic larger-model fallback. An explicit override remains a hypothesis until Together accepts it.
+
+The launcher is locked to the current Together Python SDK v2 contract:
+- `client.fine_tuning.get_model_limits(model=...)`;
+- full training iff `limits.full_training` is present;
+- file readiness through current `FileResponse.processed` (legacy status is fallback only);
+- `estimate_price(..., training_type="full", training_method="sft")`;
+- BYOM creation through `model=...` + `from_hf_model=...`, `lora=False`.
+
+**Important evidence boundary:** preflight can prove local corpus validity, Together file processing, current template
+limits and price/budget admission. It cannot prove that Together will accept the particular BYOM checkpoint. That
+compatibility gate is only crossed when the single billed `create` request is accepted. A rejected create is a
+useful falsification and must not trigger an automatic retry or a silent model-size change.
+
+Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`, with a documented
+**$4.00 minimum charge per fine-tuning job**. The current corpus is ~2.30 MB train + 0.25 MB validation; a rough
+character/4 estimate is ~0.64M tokens before epochs. At 3 train epochs + 2 validation evaluations, raw token
+arithmetic is roughly **1.85M processed tokens / ~$1.00**, so the minimum charge is likely to dominate. The Together
+server estimate remains authoritative, and the launcher hard-aborts above the configured `$18` single-job ceiling.
+
+## No-network launcher regression
+
+Run before any paid preflight:
+
+```bash
+python3 test_launch_together_v2_contract.py
+```
+
+This uses a v2-only fake client and no secret/network. It rejects regressions to the old `model_limits`,
+`supports_full_training`, dict estimate arguments or `processing_status`-only surface. Its bounded API-surface
+collision falsifier also proves the preflight helpers never call `create` implicitly.
 
 ## 0.5B RAM gate
 

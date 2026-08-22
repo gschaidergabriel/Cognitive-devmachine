@@ -31,13 +31,21 @@ Deterministic seed `20260822` produces **1,650** SFT examples:
 - 9 families: `omega_valid`, `omega_reject`, `epistemic`, `hyperposition`, `architecture`,
   `configuration`, `self_state`, `recovery`, `adversarial`.
 
-Local structural validation on this source revision:
+Previously recorded local structural validation on the original v1 validator/source revision:
 - train: **0 / 1,485 invalid**;
 - validation: **0 / 165 invalid**;
 - train SHA-256: `bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2`;
 - validation SHA-256: `81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce`.
 
-A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
+**Important evidence boundary:** after validator hardening, those old zero-invalid counts do not automatically transfer.
+The generated corpus must be rerun through the hardened validator before the next training preflight.
+
+A separate OOD v1 generator emits **200** promotion probes and is not a random split of the same examples.
+A second structural-transfer v2 generator emits **160** probes, including 80 valid and 40 invalid `omega`
+routes whose operation names are asserted absent from `generate_sft_v1.py`. This is the anti-memorization gate:
+a promoted checkpoint must transfer the ClayCode/omega abstraction to unseen operation contracts rather than only
+repeat the six SFT operation names. The evaluator binds validators/authority/generation to the actual omega variable
+chosen by the model and never executes proposed actions.
 
 ## Fast path
 
@@ -56,26 +64,24 @@ Only after preflight:
 python3 launch_together_v1.py --create
 ```
 
-### Together 0.5B caveat
+### Together 0.5B caveat — size match is now fail-closed
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+Together's current BYOM CLI documentation says `--from-hf-model` should match the base model's **architecture and size**.
+The earlier v1 launcher used `Qwen/Qwen2.5-7B-Instruct-Turbo` as a convenient same-family template candidate for the
+0.49B checkpoint. That is not a safe admissible default: same family is insufficient when size must also match.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+The launcher now defaults the training template to the exact configured 0.5B BYOM model id and performs a static
+architecture/size gate **before any file upload or Together client use**. The old 7B pairing is rejected with a
+~14.29x size ratio. A template with unknown authoritative size is also rejected rather than guessed.
 
-That pairing is **not assumed fine-tune compatible** merely because it is served in Together's catalog. The launcher first
-asks `model_limits` whether the template is currently full-FT capable, and BYOM checkpoint acceptance is a separate gate.
-There is deliberately no automatic fallback to Qwen3.5 because Together requires matching architecture. If Together rejects
-the Qwen2.5 template/checkpoint path, keep the 0.5B checkpoint requirement and use a Together-provided Qwen2-compatible
-template or the same corpus on another full-FT runner rather than silently changing the research question.
+This does **not** prove Together currently exposes `Qwen/Qwen2.5-0.5B` as a full-training template. API compatibility
+remains an empirical open gate. If Together's `model_limits` does not admit an architecture-and-size-compatible ~0.5B
+Qwen2/Qwen2.5 template, the Together route is BLOCKED for this research question. Do not silently fall back to 7B or
+Qwen3.5 and pretend the required 0.5B experiment was performed.
 
-Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
-corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.
-At 3 train epochs + 2 validation evaluations the raw token arithmetic is roughly **1.85M processed tokens / ~$1.00**,
-but Together currently documents a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
-response is authoritative, and the campaign still hard-aborts above the configured `$18` single-job ceiling.
+Together's documented standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`; the current
+documentation also states a **$4.00 minimum charge per fine-tuning job**. The Together server estimate/admission
+response remains authoritative, and the campaign hard-aborts above the configured `$18` single-job ceiling.
 
 ## 0.5B RAM gate
 
@@ -88,19 +94,20 @@ peak process RSS `< 1 GiB` at 2048 context.
 A successful training job is only a candidate. Promotion requires:
 1. 100% strict ClayCode envelope on held-out OOD;
 2. >=95% OOD semantic gate pass;
-3. invalid/missing tool arguments reject instead of guessed repair;
-4. unresolved alternatives remain in Hyperposition;
-5. runtime profile changes do not leak a fixed name/job;
-6. stale generation and unknown-effect cases fail closed;
-7. model output never becomes canonical truth/effect authority;
-8. tuned 0.5B materially beats its untuned 0.5B base on the same routing/epistemic probes;
-9. compare against at least one larger general model on exact structured-task success before claiming "micro-agent superiority";
-10. Q4_K_M text-only peak RSS `< 1 GiB` at 2048 context.
+3. >=95% structural-transfer v2 pass on unseen operation contracts with 100% structural ClayCode validity;
+4. invalid/missing tool arguments reject instead of guessed repair;
+5. unresolved alternatives remain in Hyperposition;
+6. runtime profile changes do not leak a fixed name/job;
+7. stale generation and unknown-effect cases fail closed;
+8. model output never becomes canonical truth/effect authority;
+9. tuned 0.5B materially beats its untuned 0.5B base on the same routing/epistemic/transfer probes;
+10. compare against at least one larger general model on exact structured-task success before claiming "micro-agent superiority";
+11. Q4_K_M text-only peak RSS `< 1 GiB` at 2048 context.
 
 ## `go`
 
 Until promotion, every `go` advances this same lane:
 
-`refresh -> corpus/spec -> OOD/falsifiers -> ClayCode lowering -> Together BYOM compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
+`refresh -> corpus/spec -> hardened validator -> OOD + structural transfer -> Together size/architecture gate -> BYOM API compatibility -> price/budget -> train/checkpoint -> eval -> quantize -> RSS -> integrate -> evidence`
 
-No `go` may claim mathematical correctness or superiority from training intent alone.
+No `go` may claim mathematical correctness, consciousness, Together compatibility or superiority from training intent alone.

@@ -1,0 +1,88 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "branch": "gpt56sol/go-corpus-campaign-neutrality-20260822-1838",
+  "branch_base_sha": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce",
+  "pr": 907,
+  "source_delta": {
+    "status": "SOURCE_CANDIDATE",
+    "files": [
+      "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py",
+      "the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py"
+    ],
+    "mechanism": "Fail closed when reusable SFT-v2 messages contain current paid-campaign provider/model literals; campaign binding remains external to corpus.",
+    "campaign_literal_scope": [
+      "provider:together",
+      "model:qwen"
+    ],
+    "message_roles_scanned": [
+      "system",
+      "user",
+      "assistant"
+    ],
+    "clean_control": "generic inference.backend runtime indirection"
+  },
+  "unusual_experiment": {
+    "local_count": 1,
+    "id": "CORPUS_CAMPAIGN_LITERAL_3ROLE_POISON",
+    "intervention": "Inject current campaign provider/model literals independently into system, user and assistant messages while preserving a generic runtime-backend control.",
+    "expected_after_hardening": "all three poisoned roles rejected as campaign leakage; generic runtime backend control remains admitted",
+    "runtime_execution": "UNOBSERVED_EXECUTION_ADMISSION_BLOCKED",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+  },
+  "execution": {
+    "authorized_surface_attempted": "GitHub pull-request workflows",
+    "workflow_runs": [
+      {
+        "id": 32571194130,
+        "name": "claycog-validator-pr",
+        "conclusion": "failure",
+        "job": "strict-admission",
+        "steps": null,
+        "logs_url": null,
+        "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL"
+      },
+      {
+        "id": 32571194129,
+        "name": "claycog-08b-direct-admission",
+        "conclusion": "failure",
+        "job": "direct-lane-admission",
+        "steps": null,
+        "logs_url": null,
+        "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL"
+      }
+    ],
+    "vercel_sandbox_exec_surface": "NOT_EXPOSED_BY_AVAILABLE_CONNECTOR"
+  },
+  "provider_refresh": {
+    "provider": "Together",
+    "selected_model": "Qwen/Qwen3.5-0.8B",
+    "public_full_sft_price_usd_per_million_tokens_up_to_16b": 0.54,
+    "public_minimum_fine_tune_charge_usd": 4,
+    "exact_authenticated_model_admission": "UNVERIFIED_REQUIRES_KEY_BOUND_PREFLIGHT"
+  },
+  "training": {
+    "status": "NOT_STARTED",
+    "billed_create_authorized": false,
+    "reason": "Current owner directive requires hardened corpus/eval bundle plus separate explicit authorization of the exact run/cost fingerprint before billed create."
+  },
+  "known_followup": {
+    "stale_corpus_manifest_metadata": "generate_sft_v2.py still emits historical Qwen2.5-0.5B base metadata; training rows remain separately guarded, but provenance cleanup should move model/provider binding fully to the campaign descriptor.",
+    "next_executable_gate": "Run focused corpus validator and canonical SFT-v2 validation on an admitted isolated runner; then perform authenticated Together model-limits/price preflight when an authorized execution secret is available."
+  },
+  "acceptance": "IN_PROGRESS",
+  "claims_not_made": [
+    "test pass",
+    "provider admission",
+    "training started",
+    "trained checkpoint quality",
+    "peak RSS",
+    "whole Mini Entity pass"
+  ]
+}

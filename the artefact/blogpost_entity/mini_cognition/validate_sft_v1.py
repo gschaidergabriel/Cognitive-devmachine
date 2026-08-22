@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json, sys
 from pathlib import Path
+from claycode_calls_v2 import call_set, fn_counts
 
 PREFIX='module clay.cog.turn\nfn think(i:Map)->Map {\n'
 BINDINGS=(
@@ -52,12 +53,16 @@ def validate_code(s):
         if x not in s: e.append("missing:"+x)
     for x in FORBIDDEN:
         if x.lower() in low: e.append("forbidden:"+x)
-    if "omega_commit_candidate(" in s:
+    calls=call_set(s); counts=fn_counts(s)
+    if counts.get('omega_commit_candidate',0):
+        if 'omega_commit_candidate(c,w)' not in calls:
+            e.append('omega_bad_commit_signature')
         for g in OMEGA_GATES:
-            if f'omega_validate(w,"{g}")' not in s: e.append("omega_missing_gate:"+g)
-        if 'omega_authority(w,' not in s: e.append("omega_missing_authority")
-        if 'omega_generation(w,' not in s: e.append("omega_missing_generation")
-    if "omega_reject(" in s and "omega_commit_candidate(" in s:
+            if f'omega_validate(w,"{g}")' not in calls: e.append("omega_missing_gate:"+g)
+        if counts.get('omega_schema',0)==0: e.append('omega_missing_schema')
+        if counts.get('omega_authority',0)==0: e.append("omega_missing_authority")
+        if counts.get('omega_generation',0)==0: e.append("omega_missing_generation")
+    if counts.get('omega_reject',0) and counts.get('omega_commit_candidate',0):
         e.append("reject_and_commit")
     return e
 

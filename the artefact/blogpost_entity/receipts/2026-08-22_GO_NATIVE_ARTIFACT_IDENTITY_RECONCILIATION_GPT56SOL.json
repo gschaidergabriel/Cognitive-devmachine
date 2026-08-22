@@ -8,27 +8,40 @@
   "unusual_experiment": {
     "name": "Same-Version Artifact Identity Collision Audit",
     "count_for_trigger": 1,
-    "result": "FOUND_REAL_PROVENANCE_DRIFT"
+    "result": "FOUND_REAL_MULTI_ARTIFACT_VERSION_COLLISION"
   },
   "observed": {
     "version": "mini-entity/0.6.0",
     "credited_binary_sha256": "27ad1fc3f134efacabe89102a86ac5876d62bb7c9d9b1e6d0ca95c36c60e7bd1",
-    "historical_pre_retest_sha256": "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3",
+    "same_version_historical_binary_sha256": [
+      "939784dd29514ead0721882e83fc78b6d21373e8281774c683cebc6cd92ae7a7",
+      "2aa8ebe9d20a683b62627cfe9e20f245390b1422afaa805b42b2dddbc976eed3"
+    ],
+    "same_version_hash_count_observed": 3,
     "receipt_path": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_LLM.json",
+    "other_same_version_receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_6_LOCAL_INFERENCE.json",
     "native_reference_path": "the artefact/blogpost_entity/native/MINI_ENTITY_0_6_SANDBOX.md",
     "canonical_native_source_path": "the artefact/blogpost_entity/native/mini_entity.c",
     "canonical_native_source_present": false,
     "credited_elf_bytes_present_in_repository": false
   },
   "lineage": {
+    "same_version_939_receipt_commit": "430cd6724eef8cd9872999277c9d1a45032bb507",
+    "same_version_2aa_receipt_commit": "6e84d1ed57a56165b3675dc2c084b670d7d92920",
     "native_reference_added_commit": "3060be67ac6cac71f4ff33a5d9fbd94ac4975f33",
-    "receipt_retest_commit": "ceae68f43783b982ca3b052fc365b9f1c0204c27",
+    "receipt_retest_to_27ad_commit": "ceae68f43783b982ca3b052fc365b9f1c0204c27",
     "program_state_hash_refresh_commit": "77b14f3c426669ca2df858f591ebdf53aee58252"
+  },
+  "interpretation": {
+    "safe_claim": "At least three distinct ELF SHA-256 identities were recorded under the same mini-entity/0.6.0 version label during successive sandbox evidence steps.",
+    "not_claimed": "The audit does not infer why the bytes differ or that all three artifacts are semantically different; exact source/build inputs for the credited artifact are not present to discriminate source change from build-environment change.",
+    "consequence": "Version string alone cannot serve as release identity; source/build provenance plus ELF digest must be bound atomically in future native receipts."
   },
   "repair": {
     "native_reference_reconciled_commit": "a4aeb6383b754327cbd09c48c2ee16649d378333",
     "provenance_checker_added_commit": "cc286cfc1f127f00075f4c989679f24bd8363e82",
-    "provenance_checker_path": "the artefact/blogpost_entity/native/check_native_reference.py"
+    "provenance_checker_path": "the artefact/blogpost_entity/native/check_native_reference.py",
+    "program_state_blocker_commit": "45fc5701bb240bab291f33206fb0e6baeee0a65b"
   },
   "checker_regression": [
     {
@@ -50,13 +63,18 @@
       "result": "PASS"
     }
   ],
+  "historical_source_search": {
+    "result": "NO_RECOVERABLE_V0_6_NATIVE_SOURCE_BYTES_FOUND_IN_INSPECTED_CANONICAL_HISTORY",
+    "supporting_observation": "The older v0.4.1 receipt records a native_source_sha256, showing source bytes existed in that sandbox, but the inspected commit contains the receipt rather than the source itself.",
+    "v0_4_1_native_source_sha256": "9157acc7e17dbad90a075c8ddc4a903962641d54d97f9ee64a66e38338536fa4"
+  },
   "structured_clay_followup_observation": {
     "status": "OPEN_CONVERGENCE_GAP",
     "clay_contract": "BLOGPOST_ENTITY.clay uses DB-resident pipeline_profile_read plus inference_generate and a three-argument run boundary",
     "legacy_reference_runtime": "tools/clay_profile_pipeline_runtime.py and test_blogpost_entity.py still encode the older profile_load/provider_chat_json external-profile contract",
     "promotion": "NO_RUNTIME_CREDIT; do not roll canonical Clay backward merely to satisfy stale reference tests"
   },
-  "evidence_boundary": "The provenance checker behavior was executed in the current isolated tool container against bounded fixtures mirroring the observed version/hash/source-presence facts. No new native ELF build, real local model run, remote-provider run, or final release acceptance was executed.",
+  "evidence_boundary": "The provenance checker behavior was executed in the current isolated tool container against bounded fixtures mirroring the observed version/hash/source-presence facts. GitHub history was inspected for recorded artifact/source identities. No new native ELF build, real local model run, remote-provider run, or final release acceptance was executed.",
   "acceptance": "PROVENANCE_GUARD_ADDED_REPRODUCIBILITY_BLOCKED",
   "next": "Recover or commit exact native source bytes and bind source/build dependency identities to a fresh accepted build; then implement the generic configurable post-render/state-box plus atomic study payload without hard-coding zero_blog and converge the structured Clay runtime contract."
 }

@@ -6,7 +6,9 @@
   "program": "mini-entity-pipeline-all-in-one",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
   "canonical_main_at_join": "62b292a8097c5b53731ef6804704cf9938872616",
+  "canonical_main_after_pr_open": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
   "branch": "go/claycog-validator-statement-fence-20260822",
+  "pull_request": 776,
   "source_candidate_head_before_receipt": "85a4aaf010e208a2c2534d77e76a1b98c0a49b81",
   "changed_blobs": {
     "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "e46f3a640b69e71409e2dcc6c88fd3ee030aa00b",
@@ -53,10 +55,26 @@
   },
   "execution_evidence": {
     "exact_branch_test_execution": "NOT_OBSERVED",
+    "github_actions": {
+      "run_id": 32559198530,
+      "workflow": "Research Entity Identity Guard",
+      "job_id": 96998065652,
+      "job": "identity-guard",
+      "conclusion": "failure",
+      "steps": null,
+      "classification": "EXECUTION_ADMISSION_FAILURE_ZERO_TEST_CREDIT_NOT_VALIDATOR_TEST_FAILURE"
+    },
     "together_api_call": "NOT_EXECUTED_NO_SECRET_MOUNTED",
     "training_job_started": false,
     "billed_action": false,
     "classification": "SOURCE_CANDIDATE_PLUS_PRIMARY_DEPENDENCY_EVIDENCE"
+  },
+  "coordination": {
+    "main_advanced_after_join": true,
+    "observed_new_main_head": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+    "changed_path_overlap_with_pr": false,
+    "pr_mergeable_at_observation": true,
+    "promotion_rule": "Keep draft and rejoin current main before promotion if main advances materially; do not infer runtime credit from mergeability."
   },
   "promotion_boundary": "Do not credit the validator repair as executable PASS until the exact branch runs the generated 1650-example corpus validator plus focused spoof regressions in an admitted isolated executor. Do not claim Together Qwen2.5 0.5B compatibility until the provider accepts an architecture-matching BYOM path.",
   "next_exact_gate": "Execute generate_sft_v1.py, validate train/validation, and test_validate_sft_v1.py against this exact branch in an admitted isolated Linux runner. Separately probe Together model_limits for an architecture-matching Qwen2.5 full-FT template before any upload or billed create."

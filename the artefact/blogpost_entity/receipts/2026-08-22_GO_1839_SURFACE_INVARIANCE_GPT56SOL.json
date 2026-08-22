@@ -1,0 +1,129 @@
+{
+  "schema": "clay-go-receipt/v2",
+  "timestamp": "2026-08-22T18:39:00+07:00",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": "go-20260822T1839+0700-gpt56sol-surface-invariance",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "initial_joined_main": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+  "fresh_reentry_main": "ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9",
+  "fresh_branch": "gpt56sol/go-surface-invariance-20260822-1839-r2",
+  "fresh_branch_base": "ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9",
+  "fresh_branch_pre_receipt_head": "aeaa87b4ad2bbafc20454ca700875966af404983",
+  "authority_reentry": {
+    "program_state_schema": "7.9",
+    "primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
+    "execution_policy": "FREE_ONLY",
+    "credentialed_together_preflight_allowed": false,
+    "together_training_network_execution_allowed": false,
+    "provider_network_called": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "SURFACE_FORM_COPY_BASELINE_FALSIFIER",
+    "question": "Can a deterministic literal slot copier solve the current 80 exact-vector compositional OOD prompts without learning robust semantic composition?",
+    "counterhypothesis": "If the current benchmark genuinely requires robust compositional semantics, a literal parser restricted to the canonical prompt surface should fail materially below full semantic PASS.",
+    "source_identity_at_experiment": {
+      "main": "ff9e86b02fce611f19a36934b46887ada8ba6590",
+      "generate_eval_compositional_ood_v1_blob": "0d16c77d72b2d07e22e3fe71f542c1e7fb11a698",
+      "eval_outputs_v1_blob": "9a81882c211fcad62c366a084c53606317ddb3cd",
+      "validate_sft_v1_blob": "fcec72dcca9bc57ae0937a3eb1629ccac7a3fab9",
+      "claycode_syntax_v1_blob": "ca9612016a166da0ae3495e08d9f73ace9cb96af",
+      "experiment_script_sha256": "371a2e49341e81138726f234078bdd9e7d0490a753657beda7e52ba53dd59562"
+    },
+    "environment": {
+      "python": "3.13.5",
+      "kernel": "Linux 6.18.35 x86_64",
+      "libc": "glibc 2.41"
+    },
+    "result": {
+      "canonical_cases": 80,
+      "canonical_parsed": 80,
+      "canonical_structural_pass": 80,
+      "canonical_semantic_pass": 80,
+      "surface_paraphrase_cases": 80,
+      "surface_paraphrase_parsed": 0
+    },
+    "falsification": "CURRENT_CANONICAL_EXACT_VECTOR_OOD_FAMILY_IS_FULLY_SOLVABLE_BY_LITERAL_SLOT_COPYING_AND_CANNOT_ALONE_ESTABLISH_ROBUST_COMPOSITION",
+    "experiment_budget_consumed": true
+  },
+  "repair": {
+    "principle": "add a promotion discriminator rather than change the training architecture",
+    "existing_ood_cases_preserved": 320,
+    "new_surface_invariance_cases": 80,
+    "new_total_ood_cases": 400,
+    "exact_vector_cases_before": 80,
+    "exact_vector_cases_after": 160,
+    "surface_forms": {
+      "evidence_first": 20,
+      "contract_first": 20,
+      "inputs_first": 20,
+      "record_fields": 20
+    },
+    "surface_operation_balance": {
+      "index.compact": 20,
+      "blob.verify": 20,
+      "route.reserve": 20,
+      "ledger.annotate": 20
+    },
+    "operation_vocab_overlap_with_sft_v2": [],
+    "old_copy_ready_marker_absent_from_surface_family": "typed_args=",
+    "changed_paths": [
+      "the artefact/blogpost_entity/mini_cognition/generate_eval_compositional_ood_v1.py",
+      "the artefact/blogpost_entity/mini_cognition/test_eval_compositional_exact_vector_v1.py",
+      "the artefact/blogpost_entity/mini_cognition/test_eval_surface_copy_baseline_v1.py",
+      ".github/workflows/claycog-validator-pr.yml"
+    ],
+    "parallel_fusion": "fresh r2 branch was recreated from ff2eb063 after original branch fell 37 commits behind; current main OOD call-depth workflow gate was preserved and fused with the surface-invariance gate"
+  },
+  "bounded_regression_evidence": {
+    "exact_vector_regression": {
+      "canonical_exact_vector_cases": 80,
+      "surface_invariance_exact_vector_cases": 80,
+      "surface_forms_each": 20,
+      "wrong_typed_arg_rejected": true
+    },
+    "copy_baseline_regression": {
+      "canonical_structural_pass": "80/80",
+      "canonical_semantic_pass": "80/80",
+      "surface_invariance_parsed": "0/80",
+      "discriminator_preserved": true
+    },
+    "generator_contract": {
+      "cases": 400,
+      "families": 7,
+      "exact_vector_cases": 160,
+      "surface_invariance_cases": 80,
+      "operation_vocab_overlap": []
+    },
+    "py_compile": "PASS on bounded reconstructed mini-cognition test surface"
+  },
+  "execution_evidence_boundary": [
+    "the unusual experiment and immediate regression reruns were bounded isolated local source-semantic checks, not an exact full repository checkout execution",
+    "support files used exact fetched current blobs where needed; generate_sft_v2 was represented only by its exact OPS dependency for the bounded OOD generator check",
+    "therefore no whole-branch exact-runtime PASS is claimed from the local checks",
+    "source-exact GitHub Actions execution is required before promotion; a runner failure before visible steps is execution-admission failure, not test failure",
+    "the new 80-case family is evaluation-only and is not training data",
+    "the deterministic copier is a negative baseline/falsifier, not product cognition",
+    "the repair demonstrates benchmark discrimination against one concrete shortcut; it does not prove full semantic generalization",
+    "FREE_ONLY forbids credentialed Together/provider execution in this macrocycle",
+    "no provider secret was accessed, no provider network was called, no upload/create/training occurred and no money was spent"
+  ],
+  "public_provider_revalidation": {
+    "supported_model": "Together public documentation currently lists Qwen/Qwen3.5-0.8B for Full fine-tuning with SFT context 131072 and batch 8",
+    "standard_pricing": "Together public pricing currently lists Full SFT up to 16B at USD 0.54 per 1M processed tokens with standard minimum job charge USD 4",
+    "authority_note": "public catalog/pricing confirmation does not override FREE_ONLY or authorize provider execution"
+  },
+  "next_exact_steps": [
+    "open the fresh-head PR and require the fused claycog-validator workflow to execute on the exact PR head",
+    "if exact source-bound CI executes, preserve full outputs for the 400-case generator, 160 exact vectors, negative copy baseline, call-depth gate, full SFT-v2 regeneration and existing safety regressions",
+    "do not promote tuned-model semantic claims until matched tuned/base/larger-model evaluation includes the surface-invariance family and additional non-template OOD controls",
+    "keep Together dormant until FREE_ONLY ceases to forbid provider execution and fresh fingerprint-bound owner authorization exists"
+  ]
+}

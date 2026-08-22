@@ -55,7 +55,7 @@ class NativeRuntimeGuardTests(unittest.TestCase):
             env=env,
         )
 
-    def test_local_runner_gets_no_parent_secrets_and_verified_empty_cycle_is_quiet(self) -> None:
+    def test_local_runner_gets_no_parent_secrets_and_verified_empty_cycle_still_runs_pipeline(self) -> None:
         entity = self.tmp / "guard-entity.db"
         source = self.tmp / "guard-source.db"
         profile = self.tmp / "guard-profile.json"
@@ -110,8 +110,9 @@ class NativeRuntimeGuardTests(unittest.TestCase):
             "cm=re.search(r'\\\"CANONICAL_STATE_HASH\\\"\\s*:\\s*\\\"([0-9a-f]{64})\\\"',prompt)\n"
             "pm=re.search(r'\\\"PACKET_HASH\\\"\\s*:\\s*\\\"([0-9a-f]{64})\\\"',prompt)\n"
             "if not cm or not pm: raise SystemExit(42)\n"
+            "ref='quiet:verified' if 'quiet:verified' in prompt else 'evidence:event-1'\n"
             "with pathlib.Path(sys.argv[2]).open('a', encoding='utf-8') as fh: fh.write('run\\n')\n"
-            "print(json.dumps({'canonical_state_hash_seen':cm.group(1),'packet_hash_seen':pm.group(1),'title':'fixture','intro':'fixture','sections':[{'text':'bounded evidence','evidence_refs':['evidence:event-1'],'state_claims':{}}],'continuity':'fixture','hypotheses':[],'self_report':{}}, sort_keys=True))\n",
+            "print(json.dumps({'canonical_state_hash_seen':cm.group(1),'packet_hash_seen':pm.group(1),'title':'fixture','intro':'fixture','sections':[{'text':'bounded evidence','evidence_refs':[ref],'state_claims':{}}],'continuity':'fixture','hypotheses':[],'self_report':{}}, sort_keys=True))\n",
             encoding="utf-8",
         )
         model.write_bytes(b"fixture-model-bytes\n")
@@ -142,14 +143,15 @@ class NativeRuntimeGuardTests(unittest.TestCase):
         quiet_cycle = json.loads(self.command("run", str(entity), str(source), env=parent_env).stdout)
         self.assertTrue(quiet_cycle["ok"])
         self.assertTrue(quiet_cycle["quiet"])
-        self.assertEqual(quiet_cycle["generation"], 1)
+        self.assertEqual(quiet_cycle["generation"], 2)
         self.assertEqual(quiet_cycle["source_count"], 0)
-        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run"])
+        self.assertEqual(quiet_cycle["inference_kind"], "local_exec")
+        self.assertEqual(marker.read_text(encoding="utf-8").splitlines(), ["run", "run"])
 
         with sqlite3.connect(entity) as db:
-            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 1)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 1)
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 1)
+            self.assertEqual(db.execute("SELECT generation FROM entity_state WHERE id=1").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM outputs").fetchone()[0], 2)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM study_rows").fetchone()[0], 2)
             for (stored,) in db.execute("SELECT model_output FROM outputs ORDER BY generation"):
                 for value in sentinels.values():
                     self.assertNotIn(value, stored)

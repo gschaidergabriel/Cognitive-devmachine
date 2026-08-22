@@ -39,6 +39,7 @@ def poisoned_payload():
             "felt_conflict": 0.81,
             "anger_aggression": 0.67,
             "felt_silence_emptiness": 0.09,
+            "perceived_cognitive_pressure": 0.28,
             "cognitive_conflict": 1.0,
             "secret": "SHOULD_NOT_RENDER",
             "body_location": "Gasthaus",
@@ -49,7 +50,7 @@ def poisoned_payload():
 
 def build(**kw):
     return build_study_record(
-        config=CONFIG,
+        config=kw.get("config", CONFIG),
         contract=CONTRACT,
         compiled=kw.get("compiled", compiled()),
         generated=kw.get("generated", {"provider_kind": "local_exec", "model": "qwen1b"}),
@@ -57,6 +58,7 @@ def build(**kw):
         previous_record=kw.get("previous_record"),
         generation=kw.get("generation", 12),
         ts=kw.get("ts", 1234.5),
+        context=kw.get("context", {"system_prompt_hash": "prompt-a"}),
     )
 
 
@@ -65,58 +67,78 @@ def test_self_report_cannot_overwrite_canonical_or_leak_unselected_fields():
     assert record["system_state"]["cognitive_conflict"] == {"status": "VERIFIED", "value": 0.72}
     assert record["system_state"]["continuity_pressure"] == {"status": "UNKNOWN", "value": None}
     assert record["self_report"]["felt_conflict"] == 0.81
-    assert any(item["code"] == "CONGRUENCE" for item in record["evaluation"])
+    assert any(item["code"] == "CONGRUENT_HIGH" for item in record["evaluation"])
     visible = record["rendered_text"]
     assert "SHOULD_NOT_RENDER" not in visible
     assert "Gasthaus" not in visible
     assert "cognitive_conflict      = VERIFIED 1." not in visible
-    assert "Kausalaussage" in visible
+    assert "Systemmessung und Selbstbericht sind beide hoch" in visible
     assert visible.count("```text") == 1
     assert visible.count("```") == 2
+    assert len(record["record_hash"]) == 64
 
 
 def test_unknown_and_failed_sensor_semantics_fail_closed():
     record = build(compiled=compiled(sensors_ok=False, source_count=0))
     assert record["system_state"]["sensor_health"] == "ERROR"
     assert record["system_state"]["quiet_status"] == "UNKNOWN"
-    assert record["system_state"]["continuity_pressure"]["status"] == "UNKNOWN"
-    assert record["system_state"]["continuity_pressure"]["value"] is None
+    assert record["system_state"]["continuity_pressure"] == {"status": "UNKNOWN", "value": None}
     assert "VERIFIED_QUIET" not in record["rendered_text"]
-    assert any(item["code"] == "SENSOR_UNCERTAINTY" for item in record["evaluation"])
+    assert any(item["code"] == "UNKNOWN_SYSTEM_FIELDS" for item in record["evaluation"])
+    assert "UNKNOWN/ERROR/nicht gemessen" in record["rendered_text"]
 
 
-def test_delta_and_backend_confound_are_longitudinal_not_causal():
+def test_delta_and_backend_model_confound_are_longitudinal_not_causal():
     previous = {
         "system_state": {
             "cognitive_conflict": {"status": "VERIFIED", "value": 0.40},
             "silence_unease": {"status": "VERIFIED", "value": 0.20},
             "continuity_pressure": {"status": "UNKNOWN", "value": None},
+        },
+        "context": {
             "inference_backend": "remote_api",
             "model_label": "old-model",
-        }
+            "system_prompt_hash": "prompt-a",
+        },
     }
     record = build(previous_record=previous, generation=13)
     assert record["deltas"]["cognitive_conflict"] == pytest.approx(0.32)
     assert record["deltas"]["silence_unease"] == pytest.approx(-0.12)
     assert "continuity_pressure" not in record["deltas"]
-    assert any(item["code"] == "BACKEND_CHANGE" for item in record["evaluation"])
-    assert "konfundiert" in record["rendered_text"]
+    confound = next(item for item in record["evaluation"] if item["code"] == "CONFOUND")
+    assert "inference_backend" in confound["fields"] and "model_label" in confound["fields"]
+    assert "potenziell konfundiert" in record["rendered_text"]
+    assert any(item["code"] == "SINGLE_DELTA_NOT_TREND" for item in record["evaluation"])
+
+
+def test_system_prompt_hash_is_a_longitudinal_confound_when_context_is_supplied():
+    previous = {
+        "system_state": {},
+        "context": {"inference_backend": "local_exec", "model_label": "qwen1b", "system_prompt_hash": "prompt-old"},
+    }
+    record = build(previous_record=previous, context={"system_prompt_hash": "prompt-new"})
+    confound = next(item for item in record["evaluation"] if item["code"] == "CONFOUND")
+    assert "system_prompt_hash" in confound["fields"]
+
+
+def test_current_nested_interpretation_contract_is_actively_consumed():
+    cfg = json.loads(json.dumps(CONFIG))
+    cfg["interpretation"]["templates"]["congruent_high"] = "NESTED_TEMPLATE_ACTIVE::{label}"
+    record = build(config=cfg)
+    assert "NESTED_TEMPLATE_ACTIVE::Konflikt" in record["rendered_text"]
+
+    no_rules = json.loads(json.dumps(CONFIG))
+    no_rules["interpretation"]["comparison_rules"] = []
+    no_rules["interpretation"]["templates"]["no_comparison"] = "NO_COMPARISON_ACTIVE"
+    record = build(config=no_rules)
+    assert "NO_COMPARISON_ACTIVE" in record["rendered_text"]
 
 
 def test_bad_epistemic_law_is_rejected():
     bad = dict(CONFIG)
     bad["epistemic_law"] = "SELF_REPORT_IS_TRUTH"
     with pytest.raises(StudyFault, match="BAD_EPISTEMIC_LAW"):
-        build_study_record(
-            config=bad,
-            contract=CONTRACT,
-            compiled=compiled(),
-            generated={"provider_kind": "local_exec", "model": "qwen1b"},
-            payload=poisoned_payload(),
-            previous_record=None,
-            generation=1,
-            ts=1.0,
-        )
+        build(config=bad)
 
 
 def test_out_of_range_or_invalid_qualia_self_report_is_rejected_not_clamped():

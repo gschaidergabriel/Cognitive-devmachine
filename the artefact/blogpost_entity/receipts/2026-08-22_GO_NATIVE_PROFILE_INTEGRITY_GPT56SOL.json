@@ -37,20 +37,32 @@
       "direct profile_json drift rejected with PROFILE_HASH_MISMATCH and generation unchanged",
       "malformed stored digest metadata rejected with PROFILE_HASH_METADATA_INVALID"
     ],
-    "execution_status": "PENDING_ADMITTED_RUNNER"
+    "execution_status": "BLOCKED_PRE_STEP_RUNNER_ADMISSION"
   },
-  "runner_observation": {
-    "workflow": "Research Entity Identity Guard",
-    "run_id": 32556704655,
-    "head": "4e61849d288e1e3046d27f8808bf7424d1fa178e",
-    "conclusion": "failure",
-    "job": "identity-guard",
-    "steps": null,
-    "credit": "ZERO_TEST_CREDIT_PRE_STEP_ADMISSION_FAILURE"
-  },
+  "runner_observations": [
+    {
+      "workflow": "Research Entity Identity Guard",
+      "run_id": 32556704655,
+      "head": "4e61849d288e1e3046d27f8808bf7424d1fa178e",
+      "conclusion": "failure",
+      "job": "identity-guard",
+      "steps": null,
+      "credit": "ZERO_TEST_CREDIT_PRE_STEP_ADMISSION_FAILURE"
+    },
+    {
+      "workflow": "Mini Entity native 0.7 exact repro",
+      "run_id": 32556777587,
+      "head": "01894ba0d54e78e52d420b54b63576c86ea5e1f0",
+      "conclusion": "failure",
+      "job": "source-bound-native-repro",
+      "steps": null,
+      "credit": "ZERO_TEST_CREDIT_PRE_STEP_ADMISSION_FAILURE"
+    }
+  ],
   "current_main_advanced_during_cycle": "e261757fa21538ea24a6ff174b7b55d9929fcb94",
-  "new_main_gate": ".github/workflows/mini-entity-native-0-7-repro.yml",
-  "next_discriminator": "A pull_request synchronize after e261757 should invoke the canonical native 0.7 repro workflow; if a runner actually starts, require this PR's profile-integrity runtime falsifier to be executed as an additional native gate before merge/promotion.",
+  "canonical_native_gate": ".github/workflows/mini-entity-native-0-7-repro.yml",
+  "canonical_gate_scope": "repeat source-bound build, six-file source closure assertion, ELF digest/string audit, neutral DB, local_exec zero-key/network fixture, generation/output/study/event rollback fault matrix, second clean rebuild identity, bounded machine receipt",
+  "next_discriminator": "Obtain any admitted runner start for the canonical native 0.7 repro workflow. Once execution admission exists, execute the dedicated profile-integrity runtime falsifier on the same exact head before merge/promotion. Do not infer a native failure from the current pre-step admission failures.",
   "together_api": "FORBIDDEN_NOT_USED",
   "vps_testing": "NOT_USED",
   "acceptance": "IN_PROGRESS"

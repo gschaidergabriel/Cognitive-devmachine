@@ -52,12 +52,16 @@ not a claim of semantic generalization; OOD and matched base-model evaluation re
 ```bash
 pip install -U together
 export TOGETHER_API_KEY=...
+# Required. Set only after current Together verification identifies a Qwen2-compatible
+# Full-FT training template. There is deliberately no implicit template default.
+export CLAYCOG_TOGETHER_TEMPLATE=...
 bash train_together_v1.sh
 ```
 
 The historical launcher filename is retained, but it now regenerates and validates **SFT v2 only**. The shell stops
-after **preflight**. It checks the Together training template, validates/uploads files only after that gate, prints the
-server price estimate, and prints a deterministic `campaign_fingerprint`. It does not create a billed job.
+after **preflight**. Before any file upload, the launcher requires an explicit template, rejects a Qwen3-family
+substitution, and asks Together `model_limits` whether the supplied template supports Full fine-tuning. It then prints
+the server price estimate and a deterministic `campaign_fingerprint`. It does not create a billed job.
 
 The fingerprint binds the exact v2 training/validation file digests plus `from_hf_model`, **`hf_model_revision`**,
 template, epochs, evaluations, training method/type, learning rate, warmup ratio and checkpoint count. A create must be
@@ -91,13 +95,15 @@ therefore produces a different paid-campaign identity. A custom `CLAYCOG_HF_MODE
 
 Together's current documented **Full fine-tuning** table lists Qwen3.5 27B/9B/4B/2B/0.8B and Qwen3.6 27B, but no
 Qwen2/Qwen2.5 Full-FT template. Together BYOM separately requires a Together base/training template whose architecture
-matches the Hugging Face checkpoint.
+matches the Hugging Face checkpoint; its guidance says to choose the closest available compatible size/context, not to
+force exact parameter-count equality.
 
-The owner-required weights remain `Qwen/Qwen2.5-0.5B`. The default
-`Qwen/Qwen2.5-7B-Instruct-Turbo` value is therefore only a **live API probe**, not an assumed compatible training
-template. `model_limits` is checked before file upload; if it does not report Full-FT support, the campaign stops.
-`model_limits` and price estimation still do not prove `from_hf_model` compatibility: that remains OPEN until Together's
-create path accepts the exact checkpoint/revision/template tuple and the job actually reaches training.
+The owner-required weights remain `Qwen/Qwen2.5-0.5B`. `Qwen/Qwen2.5-7B-Instruct-Turbo` is currently documented as a
+serverless inference model, which is **not** evidence that it is admitted by the fine-tuning API. It is therefore no
+longer an implicit launcher probe/default. A Qwen2-compatible candidate must be supplied explicitly after current
+verification, and `model_limits` must accept Full fine-tuning before any dataset upload. Even then, `model_limits` and
+price estimation still do not prove `from_hf_model` compatibility: that remains OPEN until Together's create path
+accepts the exact checkpoint/revision/template tuple and the job actually reaches training.
 
 Do not silently fall back to Qwen3.5-0.8B. The current Qwen2.5-0.5B configuration is `Qwen2ForCausalLM` / `qwen2`,
 whereas Qwen3.5-0.8B is `Qwen3_5ForConditionalGeneration` / `qwen3_5`; an automatic fallback changes the architecture

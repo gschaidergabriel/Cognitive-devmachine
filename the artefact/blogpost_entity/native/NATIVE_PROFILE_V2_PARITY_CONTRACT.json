@@ -1,5 +1,5 @@
 {
-  "schema": "mini-entity-native-profile-v2-parity-contract/v3",
+  "schema": "mini-entity-native-profile-v2-parity-contract/v4",
   "canonical_profile_schema": "clay-pipeline-profile/v2",
   "canonical_pipeline": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
   "canonical_reference_runtime": "tools/clay_profile_pipeline_runtime.py",
@@ -77,6 +77,88 @@
     ],
     "promotion_requires": "The canonical reference runtime must expose the current effect names and implement their current state/payload responsibilities. Name-only aliases or shims do not establish parity. Missing current effects, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
   },
+  "reference_runtime_fresh_main_fusion": {
+    "status": "NARROW_FRESH_MAIN_EXTRACTION_REQUIRED",
+    "donor_policy": "Mechanisms may be extracted only onto freshly rebound current main. No stale donor branch is a whole-runtime promotion candidate.",
+    "donors": [
+      {
+        "pull_request": 727,
+        "role": "PREFERRED_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "reusable_mechanisms": [
+          "db_resident_profile_read_with_integrity_check",
+          "generic_inference_generate",
+          "rfc6901_or_dotted_response_pointer_decoder",
+          "embedded_profile_secret_rejection",
+          "read_only_evidence_queries",
+          "local_exec_parent_environment_isolation"
+        ]
+      },
+      {
+        "pull_request": 728,
+        "role": "SECONDARY_MECHANISM_DONOR_ONLY",
+        "whole_branch_merge": "FORBIDDEN_STALE_DIVERGED",
+        "reusable_mechanisms": [
+          "db_resident_profile_shape",
+          "generic_inference_dispatch_shape"
+        ],
+        "do_not_copy_verbatim": [
+          "local_exec subprocess without an explicit child env",
+          "any response-pointer decoder that does not satisfy shipped /choices/0/message/content semantics"
+        ]
+      }
+    ],
+    "preservation_matrix": [
+      {
+        "invariant": "neutral_db_init_before_profile_read",
+        "bound_source": "the artefact/blogpost_entity/test_clay_boot_order.py"
+      },
+      {
+        "invariant": "syntax_bound_effect_surface_admission",
+        "bound_source": "the artefact/blogpost_entity/check_structured_contract_sync.py"
+      },
+      {
+        "invariant": "effect_responsibility_semantics",
+        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+      },
+      {
+        "invariant": "rfc6901_response_pointer_semantics",
+        "bound_source": "the artefact/blogpost_entity/presets/zero_blog.json#inference.response_pointer"
+      },
+      {
+        "invariant": "shipped_derived_expression_inputs_and_recursive_value_only_leak_gate",
+        "bound_source": "the artefact/blogpost_entity/test_reference_convergence_invariants.py"
+      },
+      {
+        "invariant": "local_exec_parent_environment_isolation",
+        "bound_source": "the artefact/blogpost_entity/test_reference_local_exec_security_invariant.py"
+      },
+      {
+        "invariant": "profile_integrity_and_active_secret_rejection",
+        "bound_source": "the artefact/blogpost_entity/native/NATIVE_PROFILE_V2_PARITY_CONTRACT.json#required_reference_effect_semantics"
+      },
+      {
+        "invariant": "exactly_once_generation_cas_atomic_commit",
+        "bound_source": "tools/clay_profile_pipeline_runtime.py"
+      },
+      {
+        "invariant": "single_canonical_runtime_no_v2_or_legacy_side_module",
+        "bound_source": "the artefact/blogpost_entity/test_reference_convergence_invariants.py"
+      },
+      {
+        "invariant": "fail_closed_native_v2_until_exact_runtime_receipt",
+        "bound_source": "the artefact/blogpost_entity/native/test_native_v2_parity_contract.py"
+      }
+    ],
+    "must_not_introduce": [
+      "second_profile_state_authority",
+      "external_profile_file_as_mandatory_runtime_state",
+      "provider_or_application_identity_in_executable",
+      "generic_host_shell_effect_path",
+      "study_or_presentation_side_path_required_for_reference_convergence"
+    ],
+    "promotion_requires": "Implement only the missing current responsibilities on freshly rebound current main, preserve every bound invariant, align the structured regression adapter to the three-argument DB-resident profile boundary, and obtain exact-source authorized isolated execution before reference/native parity promotion."
+  },
   "required_source_adapters_from_shipped_v2": [
     "json_snapshot",
     "jsonl_cursor",
@@ -134,6 +216,7 @@
     "runtime_receipt": null,
     "promotion_requires": [
       "canonical_reference_runtime_effect_names_and_semantics_match_current_pipeline_before_reference-equivalent claims",
+      "fresh-main reference convergence preserves the reference_runtime_fresh_main_fusion preservation_matrix",
       "all_required_contracts_implemented_on_one_native_path",
       "exact_source_bound_build_of_candidate",
       "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",

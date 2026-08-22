@@ -13,6 +13,9 @@ class Client:
 class TogetherCtor:
     last=None
     def __init__(self,**kw):type(self).last=kw
+class ProviderModel:
+    def __init__(self,value):self.value=value
+    def model_dump(self):return self.value
 class Tests(unittest.TestCase):
     def setUp(self):
         self.c=os.environ.pop(m.CREATE_CONFIRM_ENV,None);self.l=os.environ.get(m.CREATE_LEDGER_DIR_ENV);self.t=tempfile.TemporaryDirectory();r=Path(self.t.name);self.ot,self.ov=m.TRAIN,m.VALID;m.TRAIN=r/"t.jsonl";m.VALID=r/"v.jsonl";m.TRAIN.write_text('{"messages":[]}\n');m.VALID.write_text('{"messages":[]}\n')
@@ -45,9 +48,14 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             os.environ[m.CREATE_LEDGER_DIR_ENV]=td;fp=m.campaign_fingerprint();p=m.arm_create_intent(fp,m.campaign_suffix(fp));self.assertEqual(stat.S_IMODE(p.stat().st_mode),0o600);self.assertEqual(m.read_create_ledger(fp)["campaign"]["training_type"],{"type":"Full"})
     def test_created_job_identity_mismatch_detection(self):
-        expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"random_seed":3407}
+        expected={"training_file":"t","validation_file":"v","model":m.MODEL,"n_epochs":3,"n_evals":2,"n_checkpoints":1,"random_seed":3407,"learning_rate":1e-5,"warmup_ratio":.03,"training_method":m.training_method(),"training_type":m.training_type()}
         good=types.SimpleNamespace(**expected);self.assertEqual(m.created_job_identity_mismatches(good,expected),{})
-        bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
+        for field,bad_value in (("random_seed",9),("learning_rate",2e-5),("warmup_ratio",.2),("training_type",{"type":"LoRA"}),("training_method",{"method":"sft","train_on_inputs":"false"}),("n_checkpoints",2)):
+            meta=types.SimpleNamespace(**{**expected,field:bad_value});mm=m.created_job_identity_mismatches(meta,expected);self.assertIn(field,mm)
+    def test_created_job_identity_normalizes_provider_models(self):
+        expected={"training_method":m.training_method(),"training_type":m.training_type()}
+        meta=types.SimpleNamespace(training_method=ProviderModel(m.training_method()),training_type=ProviderModel(m.training_type()))
+        self.assertEqual(m.created_job_identity_mismatches(meta,expected),{})
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
 if __name__=="__main__":unittest.main()

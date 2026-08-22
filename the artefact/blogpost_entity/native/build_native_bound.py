@@ -24,6 +24,7 @@ from typing import Any
 
 DEFAULT_PACKAGES = ("sqlite3", "libcurl", "json-c")
 LOCAL_INCLUDE_RE = re.compile(rb'^\s*#\s*include\s*"([^"\r\n]+)"', re.MULTILINE)
+INCLUDE_DIRECTIVE_RE = re.compile(rb'^\s*#\s*include\s+([^\r\n]+)', re.MULTILINE)
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -68,6 +69,11 @@ def discover_source_closure(source: Path) -> dict[str, Any]:
 
         data = path.read_bytes()
         relative = path.relative_to(root).as_posix()
+        for raw_target in INCLUDE_DIRECTIVE_RE.findall(data):
+            target = raw_target.lstrip()
+            if target.startswith(b"\"") or target.startswith(b"<"):
+                continue
+            raise RuntimeError("DYNAMIC_INCLUDE_FORBIDDEN:" + relative)
         members.append(
             {
                 "path": relative,

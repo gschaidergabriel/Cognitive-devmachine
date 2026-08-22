@@ -4,12 +4,15 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
+CONTROL_PATH=HERE.parents[2]/"research_entity"/"claycode"/"CLAYCODE_AUTONOMOUS_RESEARCH_CONTROL_4_2_EXECUTION_BOUNDARY.json"
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=int(os.environ.get("CLAYCOG_FILE_WAIT_SECONDS","600"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
+CONTROL_MODE_FREE_ONLY="FREE_ONLY"; CONTROL_MODE_PAID_ALLOWED="PAID_ALLOWED"
+COST_FREE="FREE"; COST_PAID="PAID"; COST_SUBSCRIPTION="SUBSCRIPTION"; COST_UNKNOWN="UNKNOWN"; TOGETHER_COST_CLASS=COST_PAID
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def validate_static_contract():
@@ -17,6 +20,27 @@ def validate_static_contract():
     if not 1<=EPOCHS<=20 or not 0<=EVALS<=20: raise SystemExit("TRAINING_COUNT_OUT_OF_RANGE")
     if RANDOM_SEED<0 or not 0<LEARNING_RATE<=1 or not 0<=WARMUP_RATIO<=1: raise SystemExit("HYPERPARAMETER_OUT_OF_RANGE")
     if not 0<MAX_USD<=18: raise SystemExit("BUDGET_GATE_OUT_OF_RANGE")
+
+def load_provider_execution_control(path=None):
+    p=Path(path or CONTROL_PATH)
+    try: control=json.loads(p.read_text(encoding="utf-8"))
+    except Exception as e: raise SystemExit(f"PROVIDER_EXECUTION_CONTROL_UNREADABLE {p}: {type(e).__name__}") from e
+    if control.get("status")!="ACTIVE": raise SystemExit("PROVIDER_EXECUTION_CONTROL_NOT_ACTIVE")
+    if not isinstance(control.get("mode"),str) or not isinstance(control.get("preserved_hard_rules"),dict): raise SystemExit("PROVIDER_EXECUTION_CONTROL_MALFORMED")
+    return control
+
+def provider_cost_admitted(cost_class,control):
+    cost=str(cost_class).strip().upper(); mode=str(control.get("mode","")).strip().upper(); rules=control.get("preserved_hard_rules") or {}
+    if cost not in {COST_FREE,COST_PAID,COST_SUBSCRIPTION,COST_UNKNOWN}: cost=COST_UNKNOWN
+    if rules.get("together_forbidden") is True: return False
+    if mode==CONTROL_MODE_FREE_ONLY or rules.get("free_only") is True: return cost==COST_FREE
+    if mode==CONTROL_MODE_PAID_ALLOWED and rules.get("free_only") is False: return cost in {COST_FREE,COST_PAID,COST_SUBSCRIPTION}
+    return False
+
+def require_provider_admission(cost_class=TOGETHER_COST_CLASS):
+    control=load_provider_execution_control(); mode=str(control.get("mode","")).strip().upper(); rules=control.get("preserved_hard_rules") or {}; cost=str(cost_class).strip().upper()
+    if not provider_cost_admitted(cost,control): raise SystemExit(f"PROVIDER_ADMISSION_BLOCK mode={mode} cost_class={cost} free_only={rules.get('free_only')!r} together_forbidden={rules.get('together_forbidden')!r}")
+    return {"mode":mode,"cost_class":cost}
 
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
@@ -117,7 +141,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();require_provider_admission();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

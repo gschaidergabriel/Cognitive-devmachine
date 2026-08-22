@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T16:36:44Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T17:06:44Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 665 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2508 Artikel, 1426 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -76,9 +76,9 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **claycode supervisor: bind PR787 dependency-closure candidate and zero-step head** — `baunotiz-git-d41bcabab36ddb113e3d4bf639ba3be` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-bauverlauf-5ea4e51e61f07c0dc41d` · baunotiz
 - **S4: make UnifiedDB path configurable via CLAYVERSE_DB_PATH, wire all 5 call sites** — `baunotiz-git-372397141f5d2058aa7a42e076fbb63` · baunotiz
+- **Verfassung: ClayCode-only-Kognition fuer GANZ Zero (Uebersetzer ClayCode->Deutsch, Vorstufe in ClayC** — `baunotiz-git-a8fa3c76ee3f7a31dd6b6efdbce5e30` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-bauverlauf-53da5ecc5a3716ab4c18` · baunotiz
 - **agentZero research: index EntityOS completion assessment** — `baunotiz-bauverlauf-621fea6c736f0e907d7d` · baunotiz
-- **Verfassung: ClayCode-only-Kognition fuer GANZ Zero (Uebersetzer ClayCode->Deutsch, Vorstufe in ClayC** — `baunotiz-git-a8fa3c76ee3f7a31dd6b6efdbce5e30` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-bauverlauf-c9d3054b18ad2b737c61` · baunotiz
 - **artifact: test inference intent through canonical EffectGate** — `baunotiz-git-27677fd3a4d92ad22a80a58bc4bef82` · baunotiz
 - **agentZero research: update EntityOS completion assessment** — `baunotiz-git-3488f45d776e9c5b00c954b8e7cc7af` · baunotiz

@@ -1,0 +1,55 @@
+{
+  "schema": "claycog-validator-fusion/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "source_main": "263c14f9858d820dec54a8d4da1454cf08e5be40",
+  "branch": "gpt56sol/fix-claycog-v2-validator-fusion-20260822",
+  "problem": "SFT v2 introduced its own copied ClayCode structural validator at the same time that #774 hardened validate_sft_v1.py against duplicate fixed identity/role/goal/personality bindings, structural-binding text hidden inside strings, and unterminated strings. The copied v2 validator therefore risked becoming a weaker second semantic admission authority.",
+  "architecture_decision": "validate_sft_v1.py remains the single canonical ClayCode structural/runtime-binding admission implementation. validate_corpus_v2.py delegates validate_code directly to it and owns only corpus-level count, uniqueness, hash, and cross-split leakage invariants.",
+  "isolated_regression": {
+    "surface": "conversation isolated Python sandbox",
+    "v2_corpus": {
+      "train_lines": 1485,
+      "validation_lines": 165,
+      "train_invalid": 0,
+      "validation_invalid": 0,
+      "train_unique": 1485,
+      "validation_unique": 165,
+      "exact_cross_split_overlap": 0,
+      "prompt_cross_split_overlap": 0,
+      "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62"
+    },
+    "canonical_binding_case": {
+      "errors": [],
+      "result": "PASS"
+    },
+    "second_fixed_identity_case": {
+      "observed": ["binding_call_count:self_bind:2"],
+      "result": "REJECTED_AS_REQUIRED"
+    },
+    "quoted_structural_spoof_case": {
+      "observed": [
+        "binding_call_count:self_bind:0",
+        "binding_not_exact_runtime_cfg:self_bind:0",
+        "missing:self_bind(c,cfg(\"entity.id\"),cfg(\"entity.continuity\"))"
+      ],
+      "result": "REJECTED_AS_REQUIRED"
+    }
+  },
+  "regression_guard": {
+    "test": "the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py",
+    "assertions": [
+      "v2 validate_code object is exactly CORE.validate_code",
+      "canonical runtime cfg bindings pass",
+      "second hardcoded identity binding rejects",
+      "quoted structural binding spoof rejects"
+    ],
+    "workflow": ".github/workflows/claycog-validator-pr.yml",
+    "workflow_delta": "Run both v1 and v2 validator regressions, then regenerate and validate exact SFT v2 on every relevant PR."
+  },
+  "claim_boundary": "This establishes validator-authority fusion and bounded deterministic corpus admission only. It does not establish Together BYOM compatibility, paid training, model quality, OOD promotion, quantized RSS, native 0.7 acceptance, consciousness, mathematical correctness, or whole Mini Entity PASS.",
+  "result": "MECHANISM_SUPPORTED_IN_ISOLATED_EXECUTION",
+  "next": "PR-run the fused v2 gate. If GitHub again reports failure with zero visible steps, classify as runner admission failure rather than code failure; if steps execute, use their exact result."
+}

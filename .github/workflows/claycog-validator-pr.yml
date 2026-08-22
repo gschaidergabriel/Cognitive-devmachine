@@ -27,7 +27,14 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regression
+      - name: Run strict ClayCode admission regressions
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
+      - name: Regenerate and validate exact SFT v2 corpus
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl

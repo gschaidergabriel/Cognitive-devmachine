@@ -23,8 +23,8 @@ import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
-TRAIN=HERE/"train_v1.jsonl"
-VALID=HERE/"validation_v1.jsonl"
+TRAIN=HERE/"train_v2.jsonl"
+VALID=HERE/"validation_v2.jsonl"
 HF_MODEL=os.environ.get("CLAYCOG_HF_MODEL","Qwen/Qwen2.5-0.5B")
 TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","Qwen/Qwen2.5-7B-Instruct-Turbo")
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
@@ -35,9 +35,8 @@ CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def run_local_checks():
-    subprocess.run([sys.executable,str(HERE/"generate_sft_v1.py")],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(TRAIN)],check=True)
-    subprocess.run([sys.executable,str(HERE/"validate_sft_v1.py"),str(VALID)],check=True)
+    subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
+    subprocess.run([sys.executable,str(HERE/"validate_corpus_v2.py"),str(TRAIN),str(VALID)],check=True)
 
 def wait_file(client,file_id):
     while True:

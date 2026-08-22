@@ -1,0 +1,111 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "initial_main": "62b292a8097c5b53731ef6804704cf9938872616",
+  "fusion_base_main": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "fusion_base_note": "Main advanced during this go through #772 (idempotent Together create fingerprint/duplicate guard) and #773 (0.5B status footer). The final branch was rebuilt from that newer main rather than overwriting concurrent safety work.",
+  "branch": "gpt56sol/go-claycog-05b-corpus-v2-fused-20260822",
+  "finding": {
+    "class": "PRE_PAID_TRAINING_DATA_VALIDITY_BLOCKER",
+    "v1_rows": 1650,
+    "v1_distinct_generated_scenario_upper_bound": 71,
+    "derivation": {
+      "omega_valid": 6,
+      "omega_reject": 6,
+      "epistemic": 9,
+      "hyperposition": 6,
+      "architecture": 1,
+      "configuration": 6,
+      "self_state": 25,
+      "recovery": 5,
+      "adversarial": 7
+    },
+    "conclusion": "V1 structural validity did not establish a meaningful held-in 1485/165 validation split because rows were sampled with replacement from a small finite scenario support before random splitting. V1 is retained as historical evidence but rejected as paid-training input."
+  },
+  "counterhypothesis": {
+    "claim": "1650 structurally valid v1 rows imply enough scenario diversity for the held-in validation split",
+    "test": "Bound finite source support and require exact uniqueness plus zero cross-split message/prompt overlap",
+    "outcome": "REJECTED_FOR_V1"
+  },
+  "implementation": {
+    "generator": "the artefact/blogpost_entity/mini_cognition/generate_sft_v2.py",
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py",
+    "manifest": "the artefact/blogpost_entity/mini_cognition/corpus_manifest_v2.json",
+    "launcher": "Existing #772 fingerprint/idempotency launcher retained; only corpus source/local validation changed from v1 to v2.",
+    "shell": "Safe Together path regenerates/validates v2 and preserves exact campaign-fingerprint create authorization.",
+    "readme": "V2 canonical for paid training; v1 explicitly historical/not-for-upload."
+  },
+  "bounded_isolated_execution": {
+    "status": "PASS_AT_CORPUS_MECHANISM_SCOPE",
+    "executor": "conversation isolated Python sandbox",
+    "train_lines": 1485,
+    "validation_lines": 165,
+    "train_structural_invalid": 0,
+    "validation_structural_invalid": 0,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "exact_cross_split_overlap": 0,
+    "prompt_cross_split_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "credit_scope": "Deterministic corpus generation, ClayCode structural validity, exact uniqueness and exact split non-overlap only. This is not model-quality evidence."
+  },
+  "current_external_primary_evidence": {
+    "together_supported_models": {
+      "url": "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "observed": "Current documented Full Fine-Tuning Qwen entries include Qwen3.5 27B/9B/4B/2B/0.8B and Qwen3.6 27B; no Qwen2/Qwen2.5 Full-FT template is documented."
+    },
+    "together_byom": {
+      "url": "https://docs.together.ai/docs/fine-tuning/byom",
+      "observed": "BYOM requires a Together base/training template whose architecture matches the custom Hugging Face checkpoint, plus CausalLM/size/weights/framework constraints."
+    },
+    "together_pricing": {
+      "url": "https://www.together.ai/pricing",
+      "observed": "Standard SFT Full Fine-Tuning up to 16B is $0.54 per 1M processed tokens; standard jobs have a current $4.00 minimum charge."
+    }
+  },
+  "together_execution": {
+    "api_secret_mounted": false,
+    "server_model_limits_executed": false,
+    "dataset_uploaded": false,
+    "server_price_estimate": false,
+    "create_executed": false,
+    "job_started": false,
+    "money_spent_by_this_go_usd": 0,
+    "byom_compatibility": "OPEN_BLOCKED",
+    "blocker": "No currently documented Qwen2/Qwen2.5 Full-FT Together template for the owner-required Qwen2.5-0.5B BYOM checkpoint. The live model_limits API remains the final template admission check once an environment-only key is available."
+  },
+  "budget_reasoning": {
+    "v2_train_bytes": 2509599,
+    "v2_validation_bytes": 284876,
+    "rough_character_over_4_processed_tokens_millions_at_3_epochs_2_evals": 2.2383,
+    "rough_rate_cost_before_minimum_usd": 1.21,
+    "current_standard_minimum_job_charge_usd": 4.0,
+    "single_job_hard_gate_usd": 18.0,
+    "server_estimate_authoritative": true
+  },
+  "promotion_boundary": {
+    "checkpoint_trained": false,
+    "ood_evaluated": false,
+    "base_comparison": false,
+    "larger_model_comparison": false,
+    "q4_k_m_quantized": false,
+    "peak_rss_under_1gib_measured": false,
+    "local_exec_integrated": false,
+    "consciousness_claim": false,
+    "mathematical_correctness_claim": false,
+    "superiority_claim": false
+  },
+  "native_0_7_lane": {
+    "status": "NOT_DUPLICATED_THIS_GO",
+    "reason": "Existing overlapping native semantic/provenance PRs were already active. The highest-information nonduplicate delta discovered here was the pre-paid cognition corpus validity failure."
+  },
+  "next_high_information_step": "Mount TOGETHER_API_KEY only in an authorized isolated execution and run preflight without --create. If model_limits rejects the Qwen2.5 template, perform no upload/create and select an owner-admitted Qwen2-compatible Full-FT runner for the same v2 corpus. If a compatible Together template exists, obtain server file validation and price estimate below USD18, then authorize exactly one fingerprint-bound create.",
+  "acceptance": "IN_PROGRESS",
+  "evidence_boundary": "No paid training, BYOM compatibility, trained checkpoint quality, OOD promotion, quantized RSS, local inference promotion or whole Mini Entity PASS is claimed."
+}

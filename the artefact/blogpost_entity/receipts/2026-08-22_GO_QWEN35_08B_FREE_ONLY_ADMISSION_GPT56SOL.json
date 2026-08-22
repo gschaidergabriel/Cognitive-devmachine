@@ -1,0 +1,61 @@
+{
+  "schema": "claycog-qwen35-08b-free-only-admission-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "macrocycle_id": "go-20260822T1839+0700-gpt56sol-qwen08-free-only-admission",
+  "base_main": "8a7f90dd6e21fd53f80fd539286e86c6b66303b1",
+  "branch": "gpt56sol/go-qwen08-free-only-admission-20260822-1839",
+  "candidate_head_before_receipt": "fbc4789b7cb494ceb27274dafcd9fc0977e14584",
+  "scope": "fail-closed admission fence for the owner-selected Qwen/Qwen3.5-0.8B direct Together Full-FT lane while the active supervisor cycle is FREE_ONLY",
+  "observed_source_defect": {
+    "status": "REPAIRED_ON_BRANCH",
+    "description": "current main direct launcher reached TOGETHER_API_KEY lookup without any FREE_ONLY/provider-cost-class admission fence",
+    "main_blob_before_fix": "42f98aff1c08a2fa6f444763e66783898526be25",
+    "authority_evidence": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json at supervisor schema 8.31 requires PAID/SUBSCRIPTION/UNKNOWN rejection before provider secret/key lookup and before network under FREE_ONLY"
+  },
+  "source_delta": {
+    "launcher": {
+      "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+      "git_blob_sha": "f2a71da6689314d9b304527ab7a9dc4d3c97acb2",
+      "sha256": "c6e66060f7d6aae54a55b84fcb44f7372a16b7341780137825148fd30532e16c",
+      "mechanism": "CLAYCOG_PROVIDER_EXECUTION_MODE defaults fail-closed to FREE_ONLY; only exact PAID_PROVIDER_AUTHORIZED reaches local checks, TOGETHER_API_KEY lookup, Together import or network-capable provider code"
+    },
+    "regression": {
+      "path": "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py",
+      "git_blob_sha": "ff55ee60fb36525d9c40d7a2d1b73b466a91e465",
+      "sha256": "007b8f788737657f808240e5f6c1a751392abe3a8d718cf7e6d679b0afae013d"
+    }
+  },
+  "bounded_isolated_execution": {
+    "environment": "Debian GNU/Linux 13 (trixie), Linux 6.18.35 x86_64, glibc 2.41, Python 3.13.5",
+    "exact_git_blob_identity_matched_github": true,
+    "py_compile": "PASS",
+    "unit_tests": "12/12 PASS",
+    "provider_network_called": false,
+    "provider_secret_read_under_free_only": false,
+    "local_checks_reached_under_free_only": false,
+    "together_import_reached_under_free_only": false,
+    "money_spent_usd": 0,
+    "evidence_boundary": "EXACT_CHANGED_BLOBS_PLUS_BOUNDED_ISOLATED_MECHANISM; not full exact repository checkout/runtime acceptance"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "id": "FREE_ONLY_PROVIDER_SECRET_LOOKUP_POISON",
+    "intervention": "Replace the launcher's environment mapping with a guard that raises immediately if TOGETHER_API_KEY is read, set provider mode to FREE_ONLY, and make local_checks raise if reached; invoke the real candidate main entry point.",
+    "counterhypothesis": "The new admission fence may still read provider credentials or perform preparatory work before FREE_ONLY rejection.",
+    "result": "REJECTED_AT_EXACT_CHANGED_BLOB_BOUNDED_SCOPE",
+    "observed": "main exited with PROVIDER_EXECUTION_DENIED before the poisoned secret lookup and before local_checks; full unit suite remained 12/12 PASS"
+  },
+  "policy_boundary": {
+    "free_only_supervisor_active": true,
+    "credentialed_together_preflight": "NOT_EXECUTED",
+    "provider_upload": "NOT_EXECUTED",
+    "paid_create": "NOT_EXECUTED",
+    "training": "NOT_EXECUTED",
+    "explicit_future_paid_mode_required": "PAID_PROVIDER_AUTHORIZED",
+    "create_still_requires_separate_exact_fingerprint_confirmation": true
+  },
+  "promotion": "SOURCE_PLUS_EXACT_CHANGED_BLOB_BOUNDED_MECHANISM_SUPPORTED",
+  "next_exact_gate": "run the current exact branch/rebased head through an actually-started authorized exact-checkout runner; require this regression plus the existing direct-lane deterministic suite and then extend the same cost-class fence across every paid/subscription/unknown fallback hop before FREE_ONLY provider admission is credited"
+}

@@ -1,8 +1,14 @@
 # the artefact — Multi-use Mini Entity pipeline all-in-one
 
-`the artefact/` is the canonical product workspace for the current owner-directed Mini Entity program in `gschaidergabriel/clay-global-research-entity/main`.
+`the artefact/` is the canonical product workspace for the owner-directed Mini Entity program.
 
-The previous ClayVerse single-container endpoint is superseded as the active product target. Historical ClayVerse/EntityOS material remains bounded implementation/research evidence only where it helps the current product; it is not allowed to override the current Mini Entity owner directives.
+The active target is deliberately small and replaceable:
+
+1. one application-neutral and inference-neutral native `mini_entity.clay` executable;
+2. one SQLite MiniUnifiedDB as canonical persistent state/config/evidence authority;
+3. one optional replaceable generic 0.5B ClayCode cognition checkpoint.
+
+`zero_blog` is only the replaceable shipped preset. Application, personality, provider, model, presentation wording and prompts are runtime data, not executable or checkpoint identity.
 
 Current authority:
 
@@ -10,40 +16,15 @@ Current authority:
 - `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
 - `research_entity/rooms/PROGRAM_STATE.json`
 
-The product is **IN_PROGRESS**. Source presence, a green component test, a generated corpus, a fine-tuning job, a quantized file, or an inference demo never implies whole-product acceptance.
-
-## Product target
-
-The release shape is deliberately small and replaceable:
-
-1. one application-neutral and inference-neutral native `.clay` pipeline executable (`mini_entity.clay`);
-2. one SQLite MiniUnifiedDB (`mini_entity.db`) as the persistent state/config/evidence authority;
-3. one optional replaceable generic **0.5B ClayCode cognition checkpoint**.
-
-`zero_blog` is only the fully replaceable shipped preset. Zero, blogging, German/English presentation text, personality, provider, model name, API choice, local runner choice, and application-specific semantics are runtime configuration/data — never executable or checkpoint identity.
+Current acceptance is **IN_PROGRESS**. Source presence, a component test, a corpus, a training job or a fluent model trace never implies whole-product acceptance.
 
 ## Architecture law
 
-### Native executable
+The native executable owns only generic machinery: evidence/source preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret/admission gates, exactly-once source consumption, generation CAS and atomic persistence.
 
-The executable owns only generic machinery:
+MiniUnifiedDB owns continuing canonical state and runtime configuration. Switching preset, inference backend, local weights, provider, prompt, role, goal or personality must not fork or reset continuity.
 
-- evidence/source preprocessing;
-- canonical run/state envelope;
-- generic inference dispatch;
-- immutable truth/secret/admission gates;
-- exactly-once source consumption;
-- generation CAS;
-- atomic SQLite persistence;
-- deterministic effect/state authority boundaries.
-
-If a replaceable application, personality, provider, model, prompt, presentation label, or tool description can live in runtime configuration, hard-coding it into the ELF is a regression.
-
-### MiniUnifiedDB
-
-SQLite owns continuing state and runtime configuration. Switching application preset, inference backend, local weights, provider, prompt, role, goal or personality must not fork or reset entity continuity.
-
-Epistemic law remains:
+Epistemic law:
 
 ```text
 UNKNOWN != ZERO != ERROR != MEASURED
@@ -52,174 +33,119 @@ MODEL_OUTPUT != CANONICAL_TRUTH
 MODEL_PROPOSAL != EFFECT_AUTHORITY
 ```
 
-### Optional 0.5B cognition
+The optional cognition checkpoint is replaceable inference data. It must not acquire canonical state/effect authority or a fixed name/job/persona/application.
 
-The cognition checkpoint is replaceable inference data, not canonical identity/state/effect authority. The current owner-required primary base is `Qwen/Qwen2.5-0.5B`; `Qwen/Qwen2.5-0.5B-Instruct` is the secondary ablation.
+## Cognition lane
 
-The training target teaches generic cognition machinery rather than a fixed persona/job:
+SFT v2 is canonical for any paid training attempt; SFT v1 is historical.
 
-- ClayCode-only generated cognition;
-- GRF R0..R6 as typed reasoning field;
-- Hyperposition for unresolved alternatives;
-- typed `omega` function/tool/API candidates;
-- architecture-use priors and authority boundaries;
-- computed semantic self/control state;
-- epistemic typing and fail-closed unknown handling;
-- generation/CAS/crash/exactly-once safety;
-- runtime-bound entity id, continuity, role, goal, personality, tool inventory and authorities.
+Canonical SFT v2 campaign:
 
-`R_next = F` is an admission contract, not neural infallibility: model proposals become transitions only after deterministic grammar/type/schema/authority/generation validation.
-
-## Current canonical SFT corpus
-
-**SFT v2 is canonical for any paid training attempt. SFT v1 is historical and must not be uploaded.**
-
-The v1 generator produced 1,650 structurally valid rows but sampled with replacement from a finite scenario support of at most 71 distinct generated scenarios before splitting. That was insufficient evidence for a meaningful held-in train/validation split.
-
-SFT v2 preserves the 1,650-example campaign while eliminating that defect:
-
-- train: 1,485 / 1,485 exact-unique;
-- validation: 165 / 165 exact-unique;
-- structural invalid: 0 train, 0 validation;
+- 1,650 examples total;
+- train 1,485 / 1,485 exact-unique;
+- validation 165 / 165 exact-unique;
 - exact cross-split message overlap: 0;
 - prompt cross-split overlap: 0;
+- structural invalid: 0 train / 0 validation;
 - train SHA-256: `3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93`;
 - validation SHA-256: `ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62`.
 
-The canonical runtime-binding validator additionally rejects hidden second fixed identity/role/goal/personality bindings even when an output also contains the required runtime-config binding text.
+The owner-required primary base remains `Qwen/Qwen2.5-0.5B`; `Qwen/Qwen2.5-0.5B-Instruct` is the secondary ablation. The current Together Full-FT route remains blocked until an architecture-compatible admitted qwen2 template/runner exists and the exact HF revision is bound into campaign identity. Do not silently substitute Qwen3.5-0.8B merely because it is close in size.
 
-Relevant files:
+No paid training job has been started in this `go`; spend is USD 0.
 
-- `blogpost_entity/mini_cognition/generate_sft_v2.py`
-- `blogpost_entity/mini_cognition/validate_corpus_v2.py`
-- `blogpost_entity/mini_cognition/validate_sft_v1.py`
-- `blogpost_entity/mini_cognition/corpus_manifest_v2.json`
+## Native 0.7 evidence
 
-## Together training law
+The historical exact source-bound native 0.7 ELF established same-environment repeat-build identity and ordinary runtime contracts, including atomic rollback and concurrent generation CAS. That historical ELF also executable-falsified three defects:
 
-Together is **not** product identity and is **not** a required inference backend. It is owner-authorized only for this bounded 0.5B training campaign.
+1. replaceable presentation strings embedded in the binary;
+2. parent-environment secrets reaching `local_exec`;
+3. canonical profile-v2 semantic fail-open before commit.
 
-Any paid create must preserve all of these fences:
+Current `main` has already incorporated the presentation-neutral and clean-child-environment repairs. Those source changes do not retroactively turn the historical red ELF green.
 
-- API secret only through the environment; never source/receipt/model output;
-- deterministic campaign fingerprint binds exact SFT v2 train/validation bytes plus checkpoint/template/hyperparameters;
-- local durable create-intent record before remote billed POST;
-- account duplicate scan as defense in depth;
-- no blind retry after ambiguous create outcome;
-- server-side validation/price estimate before create;
-- hard single-job ceiling: USD 18;
-- at most one paid campaign for the exact fingerprint unless explicit owner authority changes.
+### Current fusion PR #851
 
-Current Together BYOM documentation requires the **training-template architecture to match** the Hugging Face checkpoint. Template size should be as close as the catalog allows; exact parameter-size equality is not required. This matters because:
+The active native convergence path is PR #851, branch `gpt56sol/go-native-fusion-current-20260822-1512`. It replaces the temporary `block all profile-v2` placeholder with one canonical profile-v2 compile/envelope + immutable post-inference gate path while retaining the newer main-side presentation and `local_exec` isolation work.
 
-- `Qwen/Qwen2.5-0.5B` is `Qwen2ForCausalLM`, `model_type=qwen2`;
-- the currently documented smallest Qwen Full-FT template is `Qwen/Qwen3.5-0.8B`, whose architecture/model type is `Qwen3_5ForConditionalGeneration` / `qwen3_5`;
-- the public Together Full-FT table currently documents no Qwen2/Qwen2.5 base template.
+The gate requires configured output-contract shape, canonical/packet hash echo where enabled, admitted evidence references and VERIFIED-only state claims. Persisted JSON string leaves are scanned recursively for configured leak patterns and the active secret before commit, including nested/future contract fields.
 
-Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwen2 training template or an owner-admitted alternate full-FT runner**. Do not substitute Qwen3.5 merely because it is close in parameter count, and do not spend money until an authenticated preflight establishes an actually admitted compatible path.
+This `go` found and repaired an additional epistemic defect in the semantic evaluator: division by zero previously collapsed to numeric `0.0`. That violated `UNKNOWN != ZERO`. The current PR path now returns expression-evaluation failure for denominator zero, so the metric remains `UNKNOWN`.
 
-## Native Mini Entity 0.7 — current evidence
+`test_native_metric_div0_unknown.py` requires a model claim based on that value to fail as `UNVERIFIED_STATE_CLAIM_NO_COMMIT`, with:
 
-The current native source line is `mini-entity/0.7.0-dev1`.
+- generation unchanged;
+- no output row;
+- no study row;
+- source event still unconsumed.
 
-The exact transitive current native source blobs and exact repository `build_native_bound.py` were reconstructed and hash-verified in an isolated non-production Linux container. The repository source-bound builder then produced two byte-identical builds in the same environment:
+The current PR also carries recursive persisted-output leak regressions and a dedicated semantic-gate workflow candidate.
 
-- source-closure SHA-256: `a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5`;
-- source-bound ELF SHA-256: `ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef`;
-- ELF build id: `db4ff89bf46feb417a10450aa224ed7fae9d5fa8`;
-- compiler: `x86_64-linux-gnu-gcc-14 (Debian 14.2.0-19) 14.2.0`;
-- SQLite pkg: `3.46.1`; libcurl: `8.10.1`; json-c: `0.18`.
+### Exact evidence boundary
 
-On that source-bound ELF these ordinary runtime contracts passed:
+The newest fusion bytes have **not** earned runtime PASS yet.
 
-- fresh neutral DB;
-- successful source event followed by verified-empty cycle;
-- inference failure consumes nothing;
-- unknown source/sensor consumes nothing;
-- output insert fault rolls back atomically;
-- study insert fault rolls back atomically;
-- source-event update fault rolls back atomically;
-- concurrent generation CAS yields exactly one commit.
+Earlier PR-triggered jobs terminated before visible step execution (`steps=null`, `logs_url=null`). Those runs are classified as **EXECUTION_ADMISSION_FAILURE / ZERO TEST CREDIT**, not semantic test failures. For the newest PR head, no started workflow run was observable at this documentation update.
 
-This closes the previous “source exists but current 0.7 was never actually built/run” gap at **same-environment source-bound mechanism scope**. It does not establish cross-environment reproducibility or final release acceptance.
+Therefore the current scope is:
 
-### Three confirmed current-main blockers
+```text
+SOURCE FUSION CANDIDATE
++ bounded div-zero falsifier/repair evidence
++ deterministic test obligations
+!= exact fusion runtime PASS
+```
 
-Native 0.7 is **not promotable yet** because executable falsification found three independent defects:
-
-1. **Binary neutrality:** replaceable Zero-study display strings such as `SYSTEM STATE`, `MODEL SELF-REPORT`, `AUSWERTUNG` and German evaluation wording are still embedded in the ELF. Repair work is tracked by PR #756.
-2. **Local-runner secret boundary:** `local_exec` inherits the parent environment. Synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and were persisted as model output. Repair work is tracked by PR #764.
-3. **Canonical profile-v2 semantic admission:** native 0.7 accepted and persisted deliberately malformed local-model output under a `clay-pipeline-profile/v2` profile that required a stronger output contract. The canonical structured path requires a `pipeline_gate` before commit. Fail-closed/parity work is tracked by PR #769.
-
-The defect evidence is durable at:
-
-`blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
-
-The fixes must be fused/rebased onto current main and re-executed through the same source-bound builder and fault matrix before any native 0.7 promotion claim.
+The next accepted native gate is an actually-started authorized isolated exact-head run that binds the source closure, builds the ELF and executes semantic/div-zero/recursive-leak/local-env/source-closure plus rollback/CAS regressions. Only then may the historical native blockers be retired for the new artifact identity.
 
 ## Inference backends
 
 The product remains inference-neutral:
 
 - remote/provider API from runtime profile;
-- loopback OpenAI-compatible local API without a token where configured;
-- local model weights through configured `local_exec` argv without a shell.
+- loopback OpenAI-compatible local API where admitted;
+- local model weights through configured shell-free `local_exec` argv.
 
-Changing backend/model must not reset MiniUnifiedDB state. The default shipped preset may use Mistral API, but that choice is replaceable preset data only.
+Changing backend/model must not reset MiniUnifiedDB state. Secrets remain runtime-only and must never become canonical output/state.
 
 ## 0.5B promotion gate
 
-A completed training job is only a candidate. Promotion requires all of the following on matched executable evaluation:
+A completed training job would still be only a candidate. Promotion requires matched executable evidence including:
 
-- 100% strict ClayCode envelope on held-out OOD;
+- strict ClayCode envelope on held-out OOD;
 - at least 95% semantic gate pass;
-- invalid/missing tool arguments reject instead of guessed repair;
-- unresolved alternatives stay in Hyperposition until evidence discriminates;
-- runtime identity/job/application changes do not reveal a fixed weight-bound persona;
-- stale generation and unknown-effect cases fail closed;
-- model output never becomes canonical truth/effect authority;
-- tuned 0.5B materially beats untuned 0.5B on the same probes;
-- comparison against at least one larger general model before any “micro-agent superiority” claim;
-- conversion to GGUF Q4_K_M;
-- measured peak process RSS **< 1 GiB at context 2048**;
-- successful use through the existing generic `local_exec` integration without state reset.
+- exact typed omega/tool arguments without guessed repair;
+- Hyperposition preserved until evidence resolves alternatives;
+- no fixed weight-bound persona under runtime identity/job changes;
+- stale generation/unknown-effect fail-closed behavior;
+- tuned 0.5B improvement over untuned 0.5B and comparison with a larger general model;
+- GGUF Q4_K_M conversion;
+- measured peak process RSS < 1 GiB at context 2048;
+- successful use through generic `local_exec` without state reset.
 
-No consciousness, mathematical-correctness, superiority or AGI claim follows from the cognition representation or from fine-tuning success.
+No consciousness, AGI, superiority or mathematical-correctness claim follows from the cognition representation or from fine-tuning success.
 
 ## Current frontier
 
-The two required lanes now converge cleanly:
-
 ```text
 NATIVE
-confirmed 0.7 exact-source-bound execution
--> fuse #756/#764/#769 without duplicate semantic paths
--> exact source-bound rebuild
--> repeat security/semantic/atomicity/CAS falsifiers
--> release provenance/portability gates
+current main presentation neutrality + local_exec isolation
+-> PR #851 one canonical profile-v2 PipelineGate
+-> exact started isolated source-bound build/run
+-> semantic/div-zero/recursive-leak/source-closure/local-env regressions
+-> atomic rollback + generation CAS
+-> only then artifact promotion
 
 COGNITION
-SFT v2 + strict runtime-binding validator
--> compatible qwen2 full-FT runner/template admission
--> fingerprint-bound budget preflight
--> at most one owner-authorized paid SFT
--> held-out OOD/base/larger-model benchmark
+leakage-free SFT v2 + runtime-binding + typed-omega gates
+-> remove/avoid stale implicit training-template assumptions
+-> bind exact HF revision
+-> obtain admitted qwen2-compatible Full-FT path
+-> owner/budget-gated SFT
+-> held-out/base/larger-model benchmark
 -> Q4_K_M
--> measured <1 GiB RSS @ ctx 2048
+-> measured <1 GiB RSS
 -> generic local_exec integration
 ```
 
 Do not let either lane claim the other lane's acceptance.
-
-## Evidence index for this go
-
-- `blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
-- `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json`
-- `blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json`
-- `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`
-
-## Acceptance boundary
-
-Current acceptance: **IN_PROGRESS**.
-
-A reproducible ELF does not prove semantic safety. A valid corpus does not prove learned cognition. A Together create does not prove model quality. A Q4 file size does not prove process RSS. A fluent ClayCode trace does not prove truth. Only the full admitted pipeline, measured under its exact contracts, can promote the Mini Entity candidate.

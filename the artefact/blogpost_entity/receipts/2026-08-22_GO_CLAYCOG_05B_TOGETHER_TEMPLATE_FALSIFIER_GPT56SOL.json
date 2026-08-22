@@ -41,16 +41,38 @@
     "reason": "BYOM architecture matching is a hard contract; parameter-count proximity does not override architecture mismatch. Silent Qwen3.5 substitution would change the research question rather than unblock the 0.5B campaign."
   },
   "source_delta": {
-    "launcher_commit": "23db7bfc31a16feb699186647aeca04f836f88f0",
+    "launcher_initial_gate_commit": "23db7bfc31a16feb699186647aeca04f836f88f0",
+    "launcher_offline_testability_commit": "1ea4a6db7558c7dcfc6be9466f50bc1e3975ae1f",
     "readme_commit": "01996530e860f58d1a465931bfaa61b450951fa2",
+    "offline_regression_test_commit": "0afdd51a056ef9b3a366467f6a7de164e18c21f7",
+    "status_protocol_commit": "4c1a9f8edff8ba4ab1406b2bab8c1c6a9c4d5095",
     "launcher_changes": [
       "remove implicit Together template default",
       "require explicit currently verified Qwen2-compatible template",
       "reject qwen3 template substitution",
       "pin primary and ablation Hugging Face revisions",
       "pass hf_model_revision to Together create",
-      "classify estimate-price as budget/data/template evidence only"
+      "classify estimate-price as budget/data/template evidence only",
+      "defer Together SDK import until after deterministic local admission gates so fail-closed logic is independently testable"
     ]
+  },
+  "offline_regression": {
+    "environment": "isolated built-in Python sandbox; not Together and not a product acceptance runner",
+    "test": "test_launch_together_gate_v1.py",
+    "test_exit_code": 0,
+    "test_stdout": "PASS test_launch_together_gate_v1",
+    "py_compile_exit_code": 0,
+    "covered": [
+      "missing implicit template rejects",
+      "Qwen3.5 template shortcut rejects",
+      "explicit Qwen2-family candidate reaches only the later API gate",
+      "primary and instruct Hugging Face revisions are pinned",
+      "unknown replacement model requires an explicit immutable revision",
+      "create request carries hf_model_revision",
+      "price-estimate compatibility status remains explicitly unproven"
+    ],
+    "stderr_note": "The sandbox emitted an unrelated artifact_tool spreadsheet-runtime warmup error on Python startup while both test and py_compile returned exit code 0; this stderr is not credited as ClayCog evidence.",
+    "classification": "BOUNDED_LOCAL_DETERMINISTIC_REGRESSION_PASS"
   },
   "execution": {
     "authenticated_together_api_called": false,
@@ -58,9 +80,9 @@
     "paid_job_created": false,
     "estimated_spend_usd_in_this_go": 0.0,
     "runtime_acceptance_claim": false,
-    "classification": "CURRENT_PRIMARY_SOURCE_AND_SDK_FALSIFIER; AUTHENTICATED_TOGETHER_API_UNEXECUTED"
+    "classification": "CURRENT_PRIMARY_SOURCE_AND_SDK_FALSIFIER_PLUS_BOUNDED_LOCAL_REGRESSION; AUTHENTICATED_TOGETHER_API_UNEXECUTED"
   },
   "current_blocker": "No currently documented Qwen2/Qwen2.5 Together full-fine-tuning template is available. Compatibility remains blocked until an authenticated model_limits/create admission proves a Qwen2-compatible Together template, or the same 0.5B campaign is moved to another owner-admitted full-FT runner without changing the target model.",
   "next_discriminator": "With an execution-environment Together secret and a currently verified Qwen2-compatible template name, run the non-billed launcher preflight first. Do not create or retry a billed job blindly. If no Qwen2-compatible Together template exists, retain Qwen2.5-0.5B and change only the training runner, not the research target.",
-  "epistemic_status": "SOURCE_MECHANISM_SUPPORTED_NOT_RUNTIME_VERIFIED"
+  "epistemic_status": "SOURCE_MECHANISM_SUPPORTED_AND_LOCAL_GATE_REGRESSION_PASS_NOT_TOGETHER_RUNTIME_VERIFIED"
 }

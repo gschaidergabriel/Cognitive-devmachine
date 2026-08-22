@@ -54,27 +54,11 @@
     }
   },
   "reference_runtime_effect_surface": {
-    "status": "FAIL_CLOSED_MISMATCH",
-    "missing_current_effects": [
-      "pipeline_profile_read",
-      "inference_generate"
-    ],
-    "stale_current_effects": [
-      "profile_load",
-      "provider_chat_json"
-    ],
-    "missing_semantic_requirements": {
-      "pipeline_profile_read": [
-        "missing_method:_pipeline_profile_read"
-      ],
-      "inference_generate": [
-        "missing_method:_inference_generate"
-      ]
-    },
-    "stale_legacy_methods": [
-      "_profile_load",
-      "_provider_chat_json"
-    ],
+    "status": "PARITY",
+    "missing_current_effects": [],
+    "stale_current_effects": [],
+    "missing_semantic_requirements": {},
+    "stale_legacy_methods": [],
     "promotion_requires": "The canonical reference runtime must expose the current effect names and implement their current state/payload responsibilities. Name-only aliases or shims do not establish parity. Missing current effects, missing required method-body semantics, retained legacy alternate methods, or stale legacy effects keep admission fail-closed."
   },
   "required_source_adapters_from_shipped_v2": [
@@ -134,7 +118,7 @@
     "runtime_receipt": null,
     "promotion_requires": [
       "canonical_reference_runtime_effect_names_and_semantics_match_current_pipeline_before_reference-equivalent claims",
-      "all_required_contracts_implemented_on_one_native_path",
+      "all_required_contracts_implemented_on_one_native path",
       "exact_source_bound_build_of_candidate",
       "shipped_v2_profile_executes_with_reference-equivalent_compile_and_gate_semantics",
       "adversarial_hash_evidence_claim_leak_secret_and_atomicity_matrix_passes",

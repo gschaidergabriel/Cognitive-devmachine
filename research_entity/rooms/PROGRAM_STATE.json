@@ -1,5 +1,5 @@
 {
-  "schema_version": "6.1",
+  "schema_version": "6.2",
   "program_id": "blogpost-entity-all-in-one",
   "status": "ACTIVE",
   "stage": "BLOGPOST_ENTITY_CLAY",
@@ -10,31 +10,38 @@
   "sandbox_evidence": {
     "date": "2026-08-22",
     "native_reference": {
+      "version": "mini-entity/0.2.0",
       "platform": "linux-x86_64",
-      "form": "ELF executable named blogpost_entity.clay + SQLite DB",
+      "form": "ELF executable named blogpost_entity.clay + SQLite MiniUnifiedDB",
       "binary_sha256": "18bb19fe3aa6028afa04a1f76a3eb1fb559bda83458511cc7c31335de72cd2ff",
       "fresh_db_sha256": "db9d633ea96518d24e379bce12a7720b53fbd089a1b7e40919b93ba064777b22",
+      "receipt": "the artefact/blogpost_entity/receipts/2026-08-22_NATIVE_MINI_ENTITY_V0_2_SANDBOX.json",
       "tested_behaviors": [
         "fresh DB initialization",
-        "evidence ingest",
-        "missing-token failure leaves events unconsumed",
-        "successful provider-mock run atomically consumes events",
-        "verified-empty second run produces quiet output",
-        "generation continuity increments only on success",
-        "provider endpoint/model/token are runtime configuration",
-        "system prompt is runtime replaceable",
-        "secret values are redacted from status/config output"
+        "evidence ingest and persistent generation continuity",
+        "runtime-editable system/personality prompt beneath immutable architecture guard",
+        "provider endpoint/model/token/request-template/response-pointer runtime configuration",
+        "two distinct provider contracts without identity/state reset",
+        "API token stdin entry and config/status redaction",
+        "provider failure preserves unconsumed events and generation",
+        "successful output atomically persists state and consumes events exactly once",
+        "verified-empty second run is quiet without invented activity",
+        "secret output leak rejected without consumption",
+        "unsupported self-claim rejected while relevant state is UNKNOWN",
+        "non-loopback plaintext HTTP rejected before bearer-token transmission",
+        "concurrent same-generation runs fenced by generation/event CAS with exactly one success",
+        "SQLite integrity_check PASS"
       ],
-      "mock_limit": "sandbox loopback/network listener was unavailable; provider success path was therefore exercised with an in-process mock provider; real HTTP transport remains uncredited"
+      "loopback_http_transport": "PASS"
     },
     "real_provider_call": "BLOCKED_IN_CURRENT_CHAT_SANDBOX_NO_API_SECRET_MOUNTED"
   },
   "canonical_clay_state": {
     "source_present": true,
-    "current_gap": "canonical Clay source still has Mistral-specific request naming/model and hard-coded personality_system_prompt; must be generalized to runtime provider config + editable prompt while keeping immutable architecture guard"
+    "current_gap": "canonical structured Clay source still has Mistral-specific request naming/model and hard-coded personality_system_prompt; next go must fuse provider-neutral native reference semantics into the canonical Clay source/effect runtime without weakening the claim gate"
   },
-  "current_frontier": "Fuse the tested provider-agnostic native reference semantics into canonical BLOGPOST_ENTITY.clay and generic effect runtime, then run structured ClayCode tests and a real authorized text-provider call when a secret is mounted.",
-  "go_contract": "Every go uses swarm fan-out plus fusion/hypofusion and must advance this single mini entity or record a precise executable blocker.",
+  "current_frontier": "Converge canonical BLOGPOST_ENTITY.clay with the tested provider-agnostic native 0.2 semantics, then exercise one real authorized external text provider when a secret is actually mounted; no other product frontier is active.",
+  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> isolated sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist, on this single mini entity only.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
   "together_api": "FORBIDDEN"
 }

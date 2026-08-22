@@ -22,7 +22,7 @@ class SafetyTests(unittest.TestCase):
         os.environ[mod.CREATE_LEDGER_DIR_ENV]=str(p/"ledger"); self.hf=mod.PRIMARY_HF_MODEL; self.rev=mod.PRIMARY_HF_REVISION
     def tearDown(self):
         mod.TRAIN,mod.VALID=self.old; self.tmp.cleanup()
-        for name in (mod.CREATE_CONFIRM_ENV,mod.CREATE_LEDGER_DIR_ENV,"CLAYCOG_HF_MODEL","CLAYCOG_HF_REVISION","CLAYCOG_INSTRUCT_HF_MODEL","CLAYCOG_INSTRUCT_HF_REVISION"): os.environ.pop(name,None)
+        for name in (mod.CREATE_CONFIRM_ENV,mod.CREATE_LEDGER_DIR_ENV,"CLAYCOG_HF_MODEL","CLAYCOG_HF_REVISION","CLAYCOG_INSTRUCT_HF_MODEL","CLAYCOG_INSTRUCT_HF_REVISION",mod.TEMPLATE_HF_MODEL_ENV,mod.TEMPLATE_HF_REVISION_ENV): os.environ.pop(name,None)
         ConstructorFake.calls.clear()
     def test_fingerprint_binds_dataset_training_config_hf_revision_and_seed(self):
         a=mod.campaign_fingerprint(self.hf,self.rev); self.assertEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[2]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,self.rev)); mod.VALID.write_text('{"messages":[1]}\n'); self.assertNotEqual(a,mod.campaign_fingerprint(self.hf,"1"*40))
@@ -35,6 +35,19 @@ class SafetyTests(unittest.TestCase):
         os.environ["CLAYCOG_HF_REVISION"]="abc"
         with self.assertRaises(SystemExit): mod.resolve_hf_source(False)
         os.environ["CLAYCOG_HF_REVISION"]="2"*40; self.assertEqual(("example/custom-qwen2","2"*40),mod.resolve_hf_source(False))
+    def test_template_hf_identity_requires_exact_revision(self):
+        with self.assertRaises(SystemExit): mod.resolve_template_hf_identity("Qwen/Qwen2.5-14B")
+        os.environ[mod.TEMPLATE_HF_REVISION_ENV]="abc"
+        with self.assertRaises(SystemExit): mod.resolve_template_hf_identity("Qwen/Qwen2.5-14B")
+        os.environ[mod.TEMPLATE_HF_MODEL_ENV]="Qwen/Qwen2.5-14B"; os.environ[mod.TEMPLATE_HF_REVISION_ENV]="a"*40
+        self.assertEqual(("Qwen/Qwen2.5-14B","a"*40),mod.resolve_template_hf_identity("provider/template"))
+    def test_architecture_identity_is_fingerprint_and_ledger_bound(self):
+        result={"compatible":True,"custom":{"architecture":"Qwen2ForCausalLM","model_type":"qwen2"},"template":{"architecture":"Qwen2ForCausalLM","model_type":"qwen2"},"exact_hf_provenance":{"custom":{"model":self.hf,"revision":self.rev,"config_sha256":"1"*64},"template":{"model":"Qwen/Qwen2.5-14B","revision":"2"*40,"config_sha256":"3"*64}}}
+        identity=mod.architecture_identity_from_result(result); plain=mod.campaign_fingerprint(self.hf,self.rev); bound=mod.campaign_fingerprint(self.hf,self.rev,identity); self.assertNotEqual(plain,bound)
+        suffix=mod.campaign_suffix(bound); path=mod.arm_create_intent(bound,self.hf,self.rev,suffix,identity); payload=json.loads(path.read_text()); self.assertEqual("claycog-together-create-intent/v3",payload["schema"]); self.assertEqual(identity,payload["campaign"]["byom_architecture"])
+    def test_incompatible_or_unproven_architecture_identity_fails_closed(self):
+        with self.assertRaises(SystemExit): mod.architecture_identity_from_result({"compatible":False,"reasons":["MODEL_TYPE_MISMATCH"]})
+        with self.assertRaises(SystemExit): mod.architecture_identity_from_result({"compatible":True,"custom":{"architecture":"Qwen2ForCausalLM","model_type":"qwen2"},"template":{"architecture":"Qwen2ForCausalLM","model_type":"qwen2"}})
     def test_create_confirmation_requires_full_exact_fingerprint(self):
         fp=mod.campaign_fingerprint(self.hf,self.rev)
         with self.assertRaises(SystemExit): mod.require_create_confirmation(fp)
@@ -52,7 +65,7 @@ class SafetyTests(unittest.TestCase):
     def test_create_intent_is_atomic_exclusive_secret_free_revision_and_seed_bound(self):
         fp=mod.campaign_fingerprint(self.hf,self.rev); suffix=mod.campaign_suffix(fp); os.environ["TOGETHER_API_KEY"]="SHOULD_NOT_ENTER_LEDGER"
         try:
-            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual("claycog-together-create-intent/v2",payload["schema"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertEqual(mod.RANDOM_SEED,payload["campaign"]["random_seed"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
+            path=mod.arm_create_intent(fp,self.hf,self.rev,suffix); data=path.read_text(); payload=json.loads(data); self.assertEqual("CREATE_ARMED",payload["status"]); self.assertEqual("claycog-together-create-intent/v3",payload["schema"]); self.assertEqual(self.rev,payload["campaign"]["hf_model_revision"]); self.assertEqual(mod.RANDOM_SEED,payload["campaign"]["random_seed"]); self.assertNotIn("SHOULD_NOT_ENTER_LEDGER",data); self.assertEqual(0o600,path.stat().st_mode & 0o777)
             with self.assertRaises(SystemExit): mod.arm_create_intent(fp,self.hf,self.rev,suffix)
         finally: os.environ.pop("TOGETHER_API_KEY",None)
     def test_billed_create_client_disables_sdk_retries(self): mod.new_zero_retry_create_client(ConstructorFake); self.assertEqual([{"max_retries":0}],ConstructorFake.calls)

@@ -1,5 +1,5 @@
 // Generic persistent text-entity processing pipeline.
-// Application identity, sources, prompts, metrics, inference backend and output schema are DB/profile data.
+// Application identity, sources, prompts, metrics, inference backend, post-render studies and output schema are DB/profile data.
 // The compiled binary owns only orchestration and invariant enforcement.
 module clay.entity_pipeline
 
@@ -20,8 +20,8 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
 }
 
 fn run(entity_db:String, source_db:String, secret_file:String)->Map {
-  // Active application/personality/inference profile is persistent DB state.
-  // External preset JSON is only an import/configuration surface, never a mandatory runtime file.
+  // Active application/personality/inference/post-render profile is persistent DB state.
+  // External JSON remains only an import/configuration surface, never a mandatory runtime file.
   let profile_req = payload("entity_db",entity_db)
   let loaded = effect("pipeline_profile_read",profile_req)
   require loaded.ok
@@ -59,11 +59,24 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   let gated = phase("pipeline_gate",entity_db,source_db,profile,previous,gate_data)
   require gated.ok
 
+  // Generic post-render happens only after immutable output validation. Application-specific
+  // study/state-box semantics remain profile data; the pipeline owns ordering and atomicity only.
+  let render_data = map_new()
+  map_set(render_data,"gated",gated)
+  map_set(render_data,"compiled",compiled)
+  map_set(render_data,"collected",collected)
+  map_set(render_data,"generated",generated)
+  let rendered = phase("pipeline_post_render",entity_db,source_db,profile,previous,render_data)
+  require rendered.ok
+
+  // Output, optional machine-readable study payload, event consumption, continuity and
+  // generation CAS are one commit boundary. A post-render failure therefore consumes nothing.
   let commit_data = map_new()
   map_set(commit_data,"gated",gated)
   map_set(commit_data,"compiled",compiled)
   map_set(commit_data,"collected",collected)
   map_set(commit_data,"generated",generated)
+  map_set(commit_data,"post_render",rendered)
   let committed = phase("pipeline_commit",entity_db,source_db,profile,previous,commit_data)
   require committed.ok
 
@@ -76,5 +89,7 @@ fn run(entity_db:String, source_db:String, secret_file:String)->Map {
   map_set(result,"inference_kind",profile.inference.kind)
   map_set(result,"canonical_state_hash",compiled.canonical_state_hash)
   map_set(result,"packet_hash",compiled.packet_hash)
+  map_set(result,"public_append_text",committed.public_append_text)
+  map_set(result,"study_enabled",committed.study_enabled)
   return result
 }

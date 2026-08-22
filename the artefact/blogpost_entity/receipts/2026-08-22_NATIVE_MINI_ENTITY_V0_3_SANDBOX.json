@@ -1,0 +1,56 @@
+{
+  "schema": "blogpost-entity-native-sandbox-receipt/v3",
+  "date": "2026-08-22",
+  "program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "runtime_entity_count": 1,
+  "version": "mini-entity/0.3.0",
+  "platform": "linux-x86_64",
+  "release_shape": [
+    "blogpost_entity.clay ELF executable",
+    "blogpost_entity.db SQLite MiniUnifiedDB"
+  ],
+  "binary_sha256": "4d37f6824cff6aa11e92301ad031d1ff30c52cf9a5a993dc6884d546fe8b71bf",
+  "fresh_db_sha256": "eb678cc8f58ccc2bae9e429f61e315420a28819c5145ded79f43fe4b0ac1f20b",
+  "native_source_sha256": "873ee509a9c5f01d1630770e23b46c6fbdd5428800fb2f6de3c5efd3e8742357",
+  "selftest_sha256": "57cb7f10a6d813347b63e7e9ea1e5508ee07db9e7fa8233cdc925eb4cfc49215",
+  "compile": "gcc -O2 -Wall -Wextra -Werror -Wno-deprecated-declarations",
+  "sandbox_result": "PASS",
+  "checks": 13,
+  "tested_behaviors": [
+    "fresh SQLite MiniUnifiedDB initialization",
+    "SQLite integrity_check PASS",
+    "real loopback HTTP provider A with exactly-once event consumption",
+    "verified-empty second run produces quiet without invented activity",
+    "runtime-editable system/personality prompt remains below immutable architecture guard",
+    "provider B swap changes endpoint/model/auth/request JSON schema/response pointer without entity-state reset",
+    "missing API token consumes no event and advances no generation",
+    "API token stdin entry succeeds and secret is absent from DB/config/status",
+    "model output containing the active API token is rejected without consumption",
+    "unsupported locality-pressure self claim is rejected while metric is UNKNOWN",
+    "non-loopback plaintext HTTP endpoint is rejected before bearer transmission",
+    "two concurrent same-generation runs are generation/event-CAS fenced so exactly one commits",
+    "post-test database integrity_check PASS"
+  ],
+  "provider_configuration": {
+    "persistent_nonsecret": [
+      "endpoint",
+      "model",
+      "auth header",
+      "auth prefix",
+      "token environment-variable name",
+      "extra nonsecret headers",
+      "request template",
+      "response JSON pointer",
+      "temperature",
+      "max tokens",
+      "timeout",
+      "editable system/personality prompt"
+    ],
+    "token_storage": "FORBIDDEN_IN_DB",
+    "token_injection": ["environment", "--token-stdin"]
+  },
+  "real_external_provider": "NOT_RUN",
+  "real_external_provider_blocker": "No Mistral or other external provider API secret is mounted in the current isolated chat sandbox. No live-provider PASS is claimed.",
+  "canonical_reentry": "The native reference proves the requested two-file portable release shape. Current canonical ClayCode has meanwhile moved toward a provider/profile-driven generic pipeline; convergence must retain the same immutable truth/claim/secret/exactly-once/CAS laws and must not require a third runtime file in the final portable release.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -32,8 +32,8 @@ def outside_strings(s):
     return "".join(out)
 
 def statement_lines(s):
-    """Return standalone ClayCode statements; reject strings spanning line boundaries."""
-    lines=[]
+    """Return (standalone statement, brace depth) tuples; fail closed on lexical ambiguity."""
+    lines=[]; depth=0
     for raw in s.splitlines():
         quoted=False; esc=False
         for ch in raw:
@@ -47,11 +47,20 @@ def statement_lines(s):
             elif ch=='"':
                 quoted=True
         if quoted or esc:
-            return None
+            return None, "multiline_or_unclosed_string"
+        structural=outside_strings(raw)
+        if "//" in structural or "/*" in structural or "*/" in structural:
+            return None, "comment_syntax_forbidden"
         stripped=raw.strip()
         if stripped:
-            lines.append(stripped)
-    return tuple(lines)
+            lines.append((stripped,depth))
+        depth += structural.count("{")-structural.count("}")
+        if depth < 0:
+            return None, "brace_depth_underflow"
+    return tuple(lines), None
+
+def top_level_statements(lines):
+    return tuple(statement for statement,depth in lines if depth==1)
 
 def has_call(lines,prefix):
     return any(line.startswith(prefix) and line.endswith(")") for line in lines)
@@ -63,10 +72,12 @@ def validate_code(s):
     structural=outside_strings(s)
     if structural.count("{")!=structural.count("}"): e.append("brace_balance")
     if structural.count("(")!=structural.count(")"): e.append("paren_balance")
-    statements=statement_lines(s)
-    if statements is None:
-        e.append("multiline_or_unclosed_string")
+    statement_info, lexical_error=statement_lines(s)
+    if lexical_error:
+        e.append(lexical_error)
         statements=()
+    else:
+        statements=top_level_statements(statement_info)
     for x in REQUIRED_STATEMENTS:
         if x not in statements: e.append("missing_statement:"+x)
     for x in FORBIDDEN:

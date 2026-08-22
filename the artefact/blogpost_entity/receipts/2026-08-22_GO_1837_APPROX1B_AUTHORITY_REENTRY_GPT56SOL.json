@@ -1,12 +1,12 @@
 {
-  "schema": "clay-go-receipt/v1",
+  "schema": "clay-go-receipt/v2",
   "timestamp": "2026-08-22T18:37:00+07:00",
   "organ": "GPT-5.6 Sol",
   "trigger": "go",
   "macrocycle_id": "go-20260822T1837+0700-gpt56sol-authority-reentry",
   "joined_main_initial": "ff9e86b02fce611f19a36934b46887ada8ba6590",
-  "final_state_fusion_parent": "74df26466781dedc73367cf66de87b964fc9bb61",
-  "program_state_commit": "46242a2aa5e0dad2fe7f51195bca963cfd26487d",
+  "program_state_initial_fusion": "46242a2aa5e0dad2fe7f51195bca963cfd26487d",
+  "program_state_final_reentry": "cae90e6c003c92730726153af45071eed80d0ed7",
   "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
@@ -17,15 +17,32 @@
     "prediction_if_coherent": "owner directive, PROGRAM_STATE and BOOTSTRAP_MINIMAL all identify Qwen/Qwen3.5-0.8B as the current approximately-1B primary paid-training base",
     "observed_initially": "owner directive selected Qwen/Qwen3.5-0.8B while PROGRAM_STATE 7.6 and BOOTSTRAP_MINIMAL 6.6 still described Qwen2.5-0.5B as current",
     "concurrent_reentry": "another organ independently repaired BOOTSTRAP_MINIMAL to 6.7 during this macrocycle; this organ dropped its overlapping boot delta and retained only the still-live PROGRAM_STATE repair",
-    "outcome": "PROGRAM_STATE_REPAIRED_ON_MAIN"
+    "outcome": "PROGRAM_STATE_REPAIRED_AND_REENTERED_ON_MAIN"
+  },
+  "current_execution_policy": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "supervisor_state": "9.9",
+    "control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "credentialed_together_preflight_allowed": false,
+    "together_training_network_execution_allowed": false,
+    "consequence": "Qwen3.5-0.8B paid lane remains dormant; no secret/key lookup or provider network path may be exercised while FREE_ONLY remains true"
   },
   "current_main_fusions_preserved": {
     "boot_approx1b": "f1516ba564f4e8a2fe2c83d6535e54de9bea14ce lineage",
     "canonical_v2_preflight_validation": "f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d",
     "full_provider_job_identity_fence": "#891 / 04209767aba1806c9566bac34274b5430879586a",
     "provider_public_fact_refresh": "#900 / 43308213ebc5aa1e5cd86da898293604cff2dccc",
+    "free_only_pre_secret_pre_network_fence": "#904 / f3e9455f7082cb131096647499ff306ce554a151",
+    "reserved_semantic_identity_slot_gate": "#917 / f807c0e86971be78da0054ff6a08406726c0aef3",
+    "canonical_ood_call_depth_gate": "#908 / dd1fd761f77d5385dd78ff6c774129d7a5e58039",
     "native_active_profile_digest_integrity": "#889 / b55152e49df699c017f1a39e8197413ad14c4e7d",
-    "runner_observation": "repeated exact GitHub jobs terminate before visible steps; zero runtime/test credit"
+    "runner_observation": "repeated exact GitHub jobs terminate before visible steps; zero hosted current-runtime/test credit"
+  },
+  "bounded_mechanism_evidence": {
+    "reserved_semantic_slots": "pre-fix 3/3 alternate semantic-slot false accepts; bounded post-fix unittest 6/6 PASS; full exact-current 1650-row regeneration remains required",
+    "ood_call_depth": "4/4 exact blob identity and 9/9 bounded assertions PASS; full current branch/hosted runtime credit remains ZERO",
+    "free_only_direct_08b": "bounded secret/import poison discriminator supports reject-before-secret/provider-import; exact current hosted-runner credit remains ZERO"
   },
   "external_primary_evidence": {
     "together_supported_models": {
@@ -39,7 +56,7 @@
   },
   "provider_execution": {
     "authorized_secret_available_to_this_organ": false,
-    "provider_preflight": "NOT_EXECUTED",
+    "provider_preflight": "BLOCKED_BY_FREE_ONLY_NOT_EXECUTED",
     "provider_network_called": false,
     "upload": false,
     "billed_create": false,
@@ -47,22 +64,26 @@
     "spend_usd": 0
   },
   "durable_delta": {
-    "program_state": "schema 7.8 committed on main: approx1B/Qwen3.5-0.8B current authority, latest direct-provider and native source fusions, current two-gate frontier",
-    "bootstrap_minimal": "NO_CHANGE_BY_THIS_ORGAN_AFTER_CONCURRENT_MAIN_REPAIR"
+    "program_state": "schema 7.9 committed on main: approx1B/Qwen3.5-0.8B current authority, current FREE_ONLY execution policy, latest cognition/native fusions and offline frontier",
+    "bootstrap_minimal": "NO_CHANGE_BY_THIS_ORGAN_AFTER_CONCURRENT_MAIN_REPAIR",
+    "duplicate_pr_cleanup": [877, 879, 898, 912]
   },
   "evidence_boundary": [
     "public catalog admission is not authenticated provider preflight",
     "pricing page is not an exact job quote",
     "source launcher/fence merges are not provider execution",
+    "bounded isolated or exact-blob mechanism PASS is not exact current hosted runtime PASS",
     "zero-step Actions outcomes give no exact runtime test credit",
+    "FREE_ONLY currently forbids credentialed Together preflight and training network execution",
     "no paid create is authorized by this receipt",
     "no training/model-quality/quantization/RSS/local_exec promotion is claimed",
     "native profile-v2 runtime remains independently blocked on exact admitted execution"
   ],
   "next_exact_steps": [
-    "when an authorized TOGETHER_API_KEY is mounted, run no-create direct 0.8B preflight on the exact SFT-v2 fingerprint",
-    "do not create a billed job until fresh explicit owner authorization is bound to the surfaced fingerprint",
-    "continue complete native profile-v2 parity while retaining fail-closed admission and active-profile digest integrity",
-    "obtain an actually-started exact runner before granting runtime credit"
+    "offline: regenerate and revalidate all 1650 SFT-v2 rows on exact current bytes after the reserved-semantic-slot gate",
+    "offline: retain canonical call-depth OOD scoring and strengthen matched tuned/base/larger-model evaluation fixtures without provider execution",
+    "native: continue complete profile-v2 parity while retaining fail-closed admission and active-profile digest integrity",
+    "runtime: obtain an actually-started exact authorized runner before granting current runtime credit",
+    "paid lane: only after FREE_ONLY ceases to forbid provider execution and fresh explicit owner authorization is bound to the exact campaign fingerprint, run authenticated no-create Qwen3.5-0.8B preflight under USD18/EUR20 fences"
   ]
 }

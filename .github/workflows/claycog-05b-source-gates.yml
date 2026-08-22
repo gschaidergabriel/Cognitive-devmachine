@@ -40,6 +40,8 @@ jobs:
               assert all(op in row['must_not_contain'] for op in seen)
               assert not any(op in joined for op in seen)
               assert 'omega_schema(w,' in joined
+              assert joined.count('omega_arg(w,') >= 2
+              assert 'typed_args=' in row['prompt']
           launcher=(root/'launch_together_v1.py').read_text()
           assert 'TEMPLATE=os.environ.get("CLAYCOG_TOGETHER_TEMPLATE","").strip()' in launcher
           assert 'Qwen/Qwen2.5-7B-Instruct-Turbo' not in launcher
@@ -48,7 +50,7 @@ jobs:
           assert call_marker in launcher
           assert upload_marker in launcher
           assert launcher.index(call_marker) < launcher.index(upload_marker)
-          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'forbidden_7b_default':False,'guard_call_precedes_upload':True}))
+          print(json.dumps({'ood_cases':len(rows),'amputation_cases':len(amp),'sft_seen_overlap':0,'typed_arg_gate':True,'forbidden_7b_default':False,'guard_call_precedes_upload':True}))
           PY
       - name: Compile Python sources
         run: |

@@ -1,5 +1,5 @@
 {
-  "schema_version": "7.5",
+  "schema_version": "7.6",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
@@ -124,6 +124,17 @@
         "missing_extra_or_duplicate_vector_fields": "REJECT",
         "duplicate_or_unknown_output_ids": "REJECT"
       },
+      "compositional_eval_only": {
+        "status": "MERGED_SOURCE_CANDIDATE_NO_MODEL_QUALITY_CREDIT",
+        "merge": "292edfd547d49cb512de7a4bed2c290c71e05674",
+        "declared_cases": 320,
+        "families": 6,
+        "training_operation_vocabulary": ["artifact.write", "calendar.create", "db.lookup", "http.get", "mail.send", "queue.publish"],
+        "held_out_operation_vocabulary": ["blob.verify", "index.compact", "ledger.annotate", "route.reserve"],
+        "operation_vocab_overlap": 0,
+        "training_use": "FORBIDDEN_EVALUATION_ONLY",
+        "next_evidence": "run matched untuned/tuned/larger-model outputs through canonical evaluators after a checkpoint exists"
+      },
       "structural_tool_vocabulary_amputation_candidate": "PR_771_OPEN_NOT_CANONICAL"
     },
     "together": {
@@ -138,8 +149,8 @@
       "single_job_budget_usd": 18.0,
       "campaign_ceiling_eur": 20.0,
       "create_safety": "deterministic campaign fingerprint + account duplicate guard + atomic local create-intent ledger + zero-retry billed create; ambiguous outcome remains UNKNOWN and blocks blind retry",
-      "launcher_paid_use_gate": "OPEN_SOURCE_REPAIR: current canonical launcher still carries a stale implicit Qwen/Qwen2.5-7B-Instruct-Turbo template default and does not bind hf_model_revision into campaign identity/provider create; do not run paid create until both are fixed on current main",
-      "hf_revision_policy": "exact intentionally selected 40-hex Hugging Face commit must be bound into campaign fingerprint, local intent and Together hf_model_revision before paid create; repository name alone is not artifact identity",
+      "launcher_paid_use_gate": "SOURCE_FIXED_MERGED_734f234eaf65f2d8cbfb8453e8db8c7176264afb: no guessed template default; explicit architecture-compatible Full-FT base required; exact HF revision bound into fingerprint/local intent/Together create; authenticated provider admission remains open",
+      "hf_revision_policy": "exact intentionally selected 40-hex Hugging Face commit is bound into campaign fingerprint, local intent and Together hf_model_revision before paid create",
       "price_estimate_scope": "dataset/template budget gate only; not proof that Together accepts the custom checkpoint/revision",
       "secret_mounted_in_this_chat": false,
       "job_started": false,
@@ -178,15 +189,15 @@
     "inference_contract": "generic inference dispatch; model output is proposal only",
     "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label alone",
     "current_native_gap": "fuse #756/#764/#769 without duplicate semantic paths, exact source-bound rebuild, rerun confirmed falsifiers plus atomicity/CAS matrix, then close cross-environment release provenance",
-    "current_cognition_gap": "keep canonical leakage-free SFT v2 and exact typed-omega OOD promotion gate; repair the paid launcher so there is no implicit unverified template and the exact HF commit is campaign-bound; then obtain an actually admitted qwen2-compatible full-FT runner/template without changing the 0.5B research question; only after that preflight/create, held-out evaluation, Q4_K_M and measured RSS gate"
+    "current_cognition_gap": "canonical leakage-free SFT v2, runtime-binding validator, exact typed-omega OOD gate, explicit-template/exact-HF-revision paid launcher and eval-only compositional OOD source are merged; next obtain an actually admitted qwen2-compatible Full-FT runner/template without changing the 0.5B research question, then budget-gated SFT -> matched OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration"
   },
-  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) repair three confirmed source-bound native 0.7 current-main defects (#756 presentation neutrality, #764 local_exec environment secret isolation, #769 profile-v2 semantic fail-open) and rerun exact build/fault matrix; (B) cognition data/promotion mechanism is now leakage-free SFT v2 + one canonical runtime-binding validator + exact typed-omega OOD gate, but paid Together training remains blocked until the canonical launcher removes its stale implicit 7B template default, binds an exact HF revision, and a current qwen2-compatible Full-FT path is actually admitted; then budget-gated SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration.",
+  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) repair three confirmed source-bound native 0.7 current-main defects (#756 presentation neutrality, #764 local_exec environment secret isolation, #769 profile-v2 semantic fail-open) and rerun exact build/fault matrix; (B) cognition data/promotion/launcher mechanisms are source-ready and fail-closed, but paid training remains blocked on an actually admitted qwen2-compatible Full-FT Together base or owner-admitted alternate full-FT runner; after authenticated admission and budget preflight: exactly one create -> matched OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration.",
   "go_contract": "Every go refreshes current main/owner authority, chooses the highest-information nonduplicate frontier, falsifies before promotion, persists bounded evidence/delta, and advances this same neutral Mini Entity + optional 0.5B cognition product until promoted or falsified.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
     "inference_requirement": "NONE",
-    "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED_BUT_CURRENTLY_BLOCKED_BY_LAUNCHER_PROVENANCE_AND_PROVIDER_ADMISSION",
+    "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED_BLOCKED_ON_PROVIDER_ADMISSION",
     "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
     "job_started": false
   }

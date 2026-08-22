@@ -20,15 +20,17 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
 }
 
 fn run(entity_db:String, source_db:String, secret_file:String)->Map {
+  // Neutral MiniUnifiedDB schema comes first. A fresh DB must fail closed as
+  // NO_ACTIVE_PROFILE after initialization rather than depend on an external preset file.
+  let initialized = phase("pipeline_init",entity_db,source_db,map_new(),map_new(),map_new())
+  require initialized.ok
+
   // Active application/personality/inference profile is persistent DB state.
   // External preset JSON is only an import/configuration surface, never a mandatory runtime file.
   let profile_req = payload("entity_db",entity_db)
   let loaded = effect("pipeline_profile_read",profile_req)
   require loaded.ok
   let profile = loaded.profile
-
-  let initialized = phase("pipeline_init",entity_db,source_db,profile,map_new(),map_new())
-  require initialized.ok
 
   let previous = phase("pipeline_state_read",entity_db,source_db,profile,map_new(),map_new())
   require previous.ok

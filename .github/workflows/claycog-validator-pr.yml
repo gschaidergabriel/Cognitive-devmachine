@@ -27,14 +27,24 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
-      - name: Run strict ClayCode admission regressions
+      - name: Preserve canonical v2 regressions
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py'
-      - name: Regenerate and validate exact SFT v2 corpus
-        run: |
-          set -euo pipefail
           cd 'the artefact/blogpost_entity/mini_cognition'
           python3 generate_sft_v2.py
           python3 validate_corpus_v2.py train_v2.jsonl validation_v2.jsonl
+      - name: Preserve Together create safety and HF revision binding
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'
+      - name: Run critical-family Goodhart falsifier
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_critical_family_promotion_v2.py'
+      - name: Regenerate and admit exact SFT v3 plus OOD v2
+        run: |
+          set -euo pipefail
+          unset TOGETHER_API_KEY || true
+          python3 'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' --local-only

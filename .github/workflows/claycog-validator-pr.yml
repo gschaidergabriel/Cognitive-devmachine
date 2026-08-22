@@ -37,7 +37,8 @@ jobs:
             'the artefact/blogpost_entity/mini_cognition/audit_together_byom_template_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_audit_together_byom_template_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
-            'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py'
+            'the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py'
       - name: Run strict ClayCode and paid-create safety regressions
         run: |
           set -euo pipefail
@@ -58,6 +59,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+      - name: Run OOD call-depth falsifier
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_eval_call_depth_v1.py'
       - name: Materialize evaluation-only compositional OOD lesion
         run: |
           set -euo pipefail

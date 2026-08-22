@@ -1,29 +1,29 @@
 # Baunotizen -- Aggregat und Stichprobe
 
-Automatisch erzeugt 2026-08-22T14:06:44Z. **4480 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
+Automatisch erzeugt 2026-08-22T15:06:44Z. **4490 Zeilen** insgesamt in `artikel` (art baunotiz/vorfall) -- hier NICHT als Volldump, sondern Aggregat plus die juengsten, lesbar aufbereitet und einzeln lecksuche-geprueft.
 
-Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T20:13:27+07:00`.
+Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T20:39:39+07:00`.
 
 ## Nach Art
 
 | Art | Anzahl |
 |---|---|
-| baunotiz | 4382 |
+| baunotiz | 4392 |
 | vorfall | 98 |
 
 ## Nach Quelle (`von_quelle`)
 
 | Art | von_quelle | Anzahl |
 |---|---|---|
-| baunotiz | git-commit | 2584 |
-| baunotiz | bauverlauf.jsonl | 1750 |
+| baunotiz | git-commit | 2589 |
+| baunotiz | bauverlauf.jsonl | 1755 |
 | baunotiz | github-ereignis | 43 |
 | baunotiz | github-ereignis-tag | 5 |
 | vorfall | strom | 90 |
 | vorfall | journal | 6 |
 | vorfall | vorfall-aufzeichnung | 2 |
 
-## Hypothese: 0 von 4480 · Gegenhypothese: 0 von 4480
+## Hypothese: 0 von 4490 · Gegenhypothese: 0 von 4490
 
 > ⚠️ **Kein einziger Commit seit dem Stichtag traegt eine `Hypothese:`-Zeile.** `hypothese`/`gegenhypothese` werden NUR aus einer Zeile im Muster `^Hypothese:` bzw. `^Gegenhypothese:` mechanisch extrahiert -- nie erfunden. Die Zahlen oben sind deshalb praktisch immer 0. Das ist der Befund ueber den Bestand, kein Fehler im Export.
 
@@ -34,6 +34,22 @@ Zeitraum: `2026-08-14T00:00:00+00:00` bis `2026-08-22T20:13:27+07:00`.
 Von **400** gepruefte juengste Kandidaten wurden **0** verworfen -- Treffer im Lecksuche-Muster (Mailadresse, IP-aehnliches Muster, Zugangsdaten-Schluesselwort, Rechnername einer der zwei privaten Maschinen). Verworfen heisst: die GANZE Zeile fehlt in der Stichprobe unten, nicht nur das betroffene Feld. Das Repo ist OEFFENTLICH.
 
 ## Die 25 juengsten (gepruefte) Baunotizen
+
+### claycode supervisor: stop source-only guard accumulation and force exact runtime
+
+`baunotiz-bauverlauf-de310a928cf5d3e44d3e` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:39:39+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+_(kein Text)_
+
+### claycode supervisor: stop source-only guard accumulation and force exact runtime
+
+`baunotiz-git-ac881de36adc6b1bd9381adc43857654d92f5136` · baunotiz · git-commit · 2026-08-22T20:39:39+07:00 · Gabriel Gschaider
+
+Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
+
+claycode supervisor: stop source-only guard accumulation and force exact runtime
 
 ### Merge PR #975: bind one generation/CAS authority invariant
 
@@ -230,22 +246,4 @@ Fail closed on a second active-profile authority and on local_exec subprocesses 
 Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
 
 Fuse the deterministic native-profile-authority guard and joined macrocycle receipt onto fresh main. No runtime PASS; no additional unusual experiment.
-
-### contract(reference): bind single profile authority gate
-
-`baunotiz-git-9f825c9f5c09be484ea59fe87fba46e0a2f443c9` · baunotiz · git-commit · 2026-08-22T20:05:56+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-contract(reference): bind single profile authority gate
-
-Fuse the deterministic native-profile-authority guard and joined macrocycle receipt onto fresh main. No runtime PASS; no additional unusual experiment.
-
-### contract(native): bind donor extraction preservation matrix
-
-`baunotiz-bauverlauf-0c04e66f1e60b5b1ff28` · baunotiz · bauverlauf.jsonl · 2026-08-22T20:05:03+07:00 · Gabriel Gschaider
-
-Hypothese: _(keine -- s.o.)_ · Gegenhypothese: _(keine -- s.o.)_
-
-Fuse the non-duplicate fresh-main donor-only preservation matrix on top of #957/#959 and reference responsibility semantics. Keep native v2 fail closed; no runtime PASS or provider execution claimed.
 

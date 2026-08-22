@@ -1,0 +1,63 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "canonical_main_at_join": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "go/claycog-validator-statement-fence-20260822",
+  "source_candidate_head_before_receipt": "85a4aaf010e208a2c2534d77e76a1b98c0a49b81",
+  "changed_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py": "e46f3a640b69e71409e2dcc6c88fd3ee030aa00b",
+    "the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py": "370f503ea3adb4d639b100c472ca63b8e7cd965f"
+  },
+  "finding": {
+    "class": "PROMOTION_METRIC_GOODHART_GAP",
+    "observed_source_behavior": "The previous strict ClayCode validator accepted mandatory bindings and omega validation gates by raw substring occurrence. Required text could therefore be placed inside string literals, and the validator did not establish that required calls were top-level executable statements.",
+    "risk": "A completion could receive structural/OOD credit without expressing the required runtime binding or deterministic omega admission sequence as actual ClayCode statements.",
+    "repair": "Count mandatory bindings, return, omega commit, omega gates, authority and generation only as standalone brace-depth-1 statements. Reject multiline/unclosed strings and comment syntax at this strict promotion boundary.",
+    "regressions_added": [
+      "minimal real bindings accepted",
+      "required binding inside string rejected",
+      "required binding nested under control flow rejected",
+      "comment-wrapped contract rejected",
+      "valid omega top-level gate sequence accepted",
+      "omega gate inside string rejected",
+      "omega gate nested under control flow rejected",
+      "multiline/unclosed string rejected",
+      "reject plus commit remains rejected"
+    ]
+  },
+  "together_dependency_observation": {
+    "checked": "2026-08-22",
+    "current_full_ft_catalog_smallest_qwen": "Qwen/Qwen3.5-0.8B",
+    "owner_locked_primary_checkpoint": "Qwen/Qwen2.5-0.5B",
+    "byom_rule": "template architecture must match custom checkpoint architecture",
+    "qwen2_5_config": "Qwen2ForCausalLM / model_type=qwen2",
+    "qwen3_5_0_8b_config": "Qwen3_5ForConditionalGeneration / model_type=qwen3_5",
+    "conclusion": "Qwen3.5-0.8B is not a valid silent BYOM template substitution for the owner-locked Qwen2.5-0.5B checkpoint. The configured Qwen2.5 template candidate remains an external compatibility/admission blocker until Together exposes/accepts an architecture-matching path.",
+    "sources": [
+      "https://docs.together.ai/docs/fine-tuning/supported-models",
+      "https://docs.together.ai/docs/fine-tuning/byom",
+      "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct/raw/main/config.json",
+      "https://huggingface.co/Qwen/Qwen3.5-0.8B/raw/main/config.json"
+    ]
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "architecture_substitution_falsifier",
+    "question": "Can the currently supported Qwen3.5-0.8B full-FT catalog entry safely substitute as the BYOM template for Qwen2.5-0.5B?",
+    "result": "REJECT",
+    "reason": "Primary configs expose different model architectures/model_type families, while Together BYOM requires architecture match."
+  },
+  "execution_evidence": {
+    "exact_branch_test_execution": "NOT_OBSERVED",
+    "together_api_call": "NOT_EXECUTED_NO_SECRET_MOUNTED",
+    "training_job_started": false,
+    "billed_action": false,
+    "classification": "SOURCE_CANDIDATE_PLUS_PRIMARY_DEPENDENCY_EVIDENCE"
+  },
+  "promotion_boundary": "Do not credit the validator repair as executable PASS until the exact branch runs the generated 1650-example corpus validator plus focused spoof regressions in an admitted isolated executor. Do not claim Together Qwen2.5 0.5B compatibility until the provider accepts an architecture-matching BYOM path.",
+  "next_exact_gate": "Execute generate_sft_v1.py, validate train/validation, and test_validate_sft_v1.py against this exact branch in an admitted isolated Linux runner. Separately probe Together model_limits for an architecture-matching Qwen2.5 full-FT template before any upload or billed create."
+}

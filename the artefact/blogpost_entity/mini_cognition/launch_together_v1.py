@@ -11,6 +11,13 @@ Qwen/Qwen2.5-0.5B and a configurable Qwen2.5-family catalog-template candidate.
 Template model_limits and price estimation do NOT prove BYOM compatibility because they
 do not validate from_hf_model. BYOM compatibility remains open until Together accepts
 (and subsequently starts) the requested HF checkpoint under the selected template.
+
+Billed-create safety is deliberately stricter than ordinary API use. The CREATE call is
+made through a zero-retry SDK client and is preceded by an atomic local campaign intent
+record. If the remote outcome is ambiguous, the local record becomes
+UNKNOWN_REMOTE_CREATE and subsequent --create attempts fail closed until an operator
+reconciles the exact campaign against the provider account. Account-list duplicate
+checks remain defense in depth; they are not treated as an exactly-once authority.
 """
 import argparse, hashlib, json, os, subprocess, sys, time
 from pathlib import Path
@@ -24,6 +31,7 @@ EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3"))
 EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00"))
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"
+CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT_STATUSES={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
 def run_local_checks():
@@ -126,6 +134,98 @@ def require_create_confirmation(fingerprint):
             f"CREATE_CONFIRMATION_REQUIRED set {CREATE_CONFIRM_ENV} to the exact preflight fingerprint {fingerprint}"
         )
 
+def create_ledger_dir():
+    configured=os.environ.get(CREATE_LEDGER_DIR_ENV)
+    if configured:
+        return Path(configured).expanduser()
+    return Path.home()/".local"/"state"/"claycog"/"training"
+
+def create_ledger_path(fingerprint):
+    return create_ledger_dir()/(fingerprint+".json")
+
+def read_create_ledger(fingerprint):
+    path=create_ledger_path(fingerprint)
+    if not path.exists(): return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        raise SystemExit(f"CREATE_LEDGER_UNREADABLE {path}: {exc}")
+
+def assert_no_local_create_intent(fingerprint):
+    existing=read_create_ledger(fingerprint)
+    if existing is None: return
+    status=str(existing.get("status","UNKNOWN"))
+    job_id=existing.get("job_id")
+    suffix=f" job_id={job_id}" if job_id else ""
+    raise SystemExit(
+        f"LOCAL_CREATE_INTENT_ABORT fingerprint={fingerprint} status={status}{suffix}; "
+        "reconcile exact provider state before any new billed create"
+    )
+
+def _fsync_dir(path):
+    fd=os.open(str(path),os.O_RDONLY)
+    try: os.fsync(fd)
+    finally: os.close(fd)
+
+def arm_create_intent(fingerprint,hf_model,suffix):
+    """Atomically reserve this exact paid campaign locally before the remote POST.
+
+    O_EXCL makes concurrent local launchers mutually exclusive. The record intentionally
+    contains no API key/token. A process crash after this point therefore fails closed:
+    the next invocation sees CREATE_ARMED rather than guessing that no remote effect ran.
+    """
+    directory=create_ledger_dir()
+    directory.mkdir(parents=True,exist_ok=True,mode=0o700)
+    try: os.chmod(directory,0o700)
+    except OSError: pass
+    path=create_ledger_path(fingerprint)
+    payload={
+        "schema":"claycog-together-create-intent/v1",
+        "fingerprint":fingerprint,
+        "campaign_suffix":suffix,
+        "status":"CREATE_ARMED",
+        "campaign":campaign_descriptor(hf_model),
+        "created_unix":int(time.time()),
+    }
+    data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
+    try:
+        fd=os.open(str(path),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    except FileExistsError:
+        assert_no_local_create_intent(fingerprint)
+        raise
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:
+            f.write(data); f.flush(); os.fsync(f.fileno())
+        _fsync_dir(directory)
+    except BaseException:
+        try: os.unlink(path)
+        except OSError: pass
+        raise
+    return path
+
+def update_create_intent(path,status,job_id=None,error_class=None):
+    """Durably advance the local intent without ever erasing ambiguity."""
+    payload=json.loads(Path(path).read_text(encoding="utf-8"))
+    payload["status"]=status
+    payload["updated_unix"]=int(time.time())
+    if job_id is not None: payload["job_id"]=str(job_id)
+    if error_class is not None: payload["error_class"]=str(error_class)
+    tmp=Path(str(path)+f".tmp.{os.getpid()}")
+    data=(json.dumps(payload,sort_keys=True,indent=2)+"\n").encode("utf-8")
+    fd=os.open(str(tmp),os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
+    try:
+        with os.fdopen(fd,"wb",closefd=True) as f:
+            f.write(data); f.flush(); os.fsync(f.fileno())
+        os.replace(tmp,path)
+        _fsync_dir(Path(path).parent)
+    finally:
+        try: tmp.unlink()
+        except OSError: pass
+
+def new_zero_retry_create_client(together_cls):
+    """A billed non-idempotent CREATE must not inherit SDK automatic retries."""
+    return together_cls(max_retries=0)
+
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--create",action="store_true",help="create billed fine-tuning job after exact-fingerprint preflight")
@@ -148,9 +248,10 @@ def main():
         raise SystemExit(f"Template is not full-FT capable: {TEMPLATE}")
 
     # On create, bind human/operator intent to exact deterministic bytes before remote
-    # uploads, then check the account ledger before allocating new remote file objects.
+    # uploads, then check both local and account ledgers before allocating remote files.
     if args.create:
         require_create_confirmation(fingerprint)
+        assert_no_local_create_intent(fingerprint)
         assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
 
     train_file=client.files.upload(file=str(TRAIN),purpose="fine-tune",check=True)
@@ -190,24 +291,34 @@ def main():
         print(f"PREFLIGHT_ONLY: no billed job created; bind {CREATE_CONFIRM_ENV}={fingerprint} for the exact create")
         return
 
-    # Close the check/use window: another process may have created this exact campaign
-    # while files were being validated or price estimation was running.
+    # Close the check/use window, then reserve the exact paid campaign locally immediately
+    # before the non-idempotent remote POST. Any crash/timeout after arming stays unknown.
+    assert_no_local_create_intent(fingerprint)
     assert_no_duplicate_campaign(client,hf_model,TEMPLATE,suffix)
-
-    job=client.fine_tuning.create(
-        training_file=train_file.id,
-        validation_file=valid_file.id,
-        model=TEMPLATE,
-        from_hf_model=hf_model,
-        n_epochs=EPOCHS,
-        n_evals=EVALS,
-        n_checkpoints=1,
-        learning_rate=1e-5,
-        warmup_ratio=0.03,
-        train_on_inputs="auto",
-        lora=False,
-        suffix=suffix,
-    )
+    intent_path=arm_create_intent(fingerprint,hf_model,suffix)
+    create_client=new_zero_retry_create_client(Together)
+    try:
+        job=create_client.fine_tuning.create(
+            training_file=train_file.id,
+            validation_file=valid_file.id,
+            model=TEMPLATE,
+            from_hf_model=hf_model,
+            n_epochs=EPOCHS,
+            n_evals=EVALS,
+            n_checkpoints=1,
+            learning_rate=1e-5,
+            warmup_ratio=0.03,
+            train_on_inputs="auto",
+            lora=False,
+            suffix=suffix,
+        )
+    except Exception as exc:
+        update_create_intent(intent_path,"UNKNOWN_REMOTE_CREATE",error_class=type(exc).__name__)
+        raise SystemExit(
+            "CREATE_OUTCOME_UNKNOWN local intent retained; do not retry create until exact provider reconciliation: "
+            +type(exc).__name__
+        ) from exc
+    update_create_intent(intent_path,"JOB_KNOWN",job_id=job.id)
     print(json.dumps({
         "job_id":job.id,
         "campaign_fingerprint":fingerprint,
@@ -216,6 +327,7 @@ def main():
         "template_model":TEMPLATE,
         "full_fine_tune":True,
         "estimated_usd":price,
+        "local_create_intent":str(intent_path),
         "byom_compatibility_status":"CREATE_ACCEPTED_TRAINING_START_STILL_REQUIRED_FOR_PROMOTION",
         "next":"retrieve this exact job; never blind-retry create after an ambiguous transport outcome",
     },indent=2))

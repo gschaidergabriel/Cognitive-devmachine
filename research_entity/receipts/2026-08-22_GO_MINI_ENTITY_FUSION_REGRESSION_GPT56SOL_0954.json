@@ -1,0 +1,100 @@
+{
+  "schema": "clay-go-research-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "canonical_main_observed": "830238fdf5b3ef93c0b510f2e2160ecf43b7b1b9",
+  "fusion_pr": 727,
+  "fusion_branch": "gpt56sol/go-mini-entity-db-profile-statebox-20260822",
+  "branch_head_observed_before_receipt": "c78d34d49e2a827684dd4b610a89957fee34a7f1",
+  "authority_refresh": {
+    "older_clayverse_bootstrap": "SUPERSEDED_CACHE_FOR_CURRENT_PRODUCT_GOAL",
+    "current_target": "one application-neutral and inference-neutral .clay pipeline executable plus one SQLite MiniUnifiedDB",
+    "zero_blog": "replaceable DB preset/study application, not executable identity"
+  },
+  "source_findings": {
+    "main_structured_runtime_gap": "At canonical main, BLOGPOST_ENTITY.clay already used DB-resident pipeline_profile_read plus inference_generate while tools/clay_profile_pipeline_runtime.py remained the older external-profile/provider_chat_json runtime.",
+    "native_reproducibility": "Canonical main separately records at least three ELF identities under mini-entity/0.6.0 while exact native source/build bytes for the credited artifact remain unavailable; this is a reproducibility blocker, not a runtime-test failure.",
+    "fusion_branch_state": {
+      "db_resident_profile": "SOURCE_SUPPORTED",
+      "generic_inference_generate": "SOURCE_SUPPORTED",
+      "local_exec_shell_false": "SOURCE_SUPPORTED",
+      "jsonl_bounded_cursor_no_skip": "SOURCE_SUPPORTED_AND_REGRESSION_ADDED",
+      "recursive_full_payload_leak_scan": "SOURCE_SUPPORTED_AND_REGRESSION_ADDED",
+      "study_surface_db_resident_config": "SOURCE_SUPPORTED",
+      "study_insert_same_transaction_as_output_consumption_packet_generation_cas": "SOURCE_SUPPORTED_AND_FAULT_INJECTION_REGRESSION_ADDED"
+    }
+  },
+  "durable_deltas_this_organ": [
+    {
+      "commit": "2c25420505544e43e49a2b9a589e0396e92b1533",
+      "delta": "added test_runtime_fusion_regressions.py"
+    },
+    {
+      "commit": "51f02898ce6e12323156a93c552403d929331110",
+      "delta": "included fusion regressions in Mini Entity structured sandbox workflow"
+    },
+    {
+      "commit": "c78d34d49e2a827684dd4b610a89957fee34a7f1",
+      "delta": "aligned study regressions with canonical eos_pipeline_studies transaction and added forced-study-insert rollback invariant"
+    }
+  ],
+  "authoring_sandbox_replication": {
+    "classification": "MECHANISM_ONLY_NOT_EXACT_BRANCH_RUNTIME_PASS",
+    "result": "12/12 focused tests passed on an independently constructed v0.2 runtime candidate with the same target contracts",
+    "covered": [
+      "DB-resident profile persistence and profile replacement without history reset",
+      "pipeline-generated study/state surface",
+      "invalid self-report no consume/no generation advance",
+      "recursive leak scan",
+      "bounded JSONL cursor without skipped unprocessed lines",
+      "profile component merge",
+      "separate qualia field extraction",
+      "replay-safe schema migration",
+      "shell-free local_exec and prompt-file cleanup",
+      "stale-generation CAS exclusion",
+      "forced study insert rollback across output/consumption/study/generation"
+    ],
+    "candidate_runtime_sha256": "04a1af1229579f96367faa5f017f55cf2745167d14a0c393e5f6765c47ef78d1",
+    "candidate_state_box_sha256": "9a523282f62742562d94dfa29b99149cb7e42e96d441b21f0e01fa0bca0dac83",
+    "non_claim": "These hashes identify the independent authoring-sandbox candidate, not PR 727 branch bytes."
+  },
+  "exact_branch_execution": {
+    "head": "c78d34d49e2a827684dd4b610a89957fee34a7f1",
+    "workflow": "Mini Entity structured sandbox",
+    "run_id": 32548182385,
+    "conclusion": "failure",
+    "job": "structured-mini-entity",
+    "job_steps": 0,
+    "classification": "RUNNER_OR_CONTROL_PLANE_PRE_STEP_FAILURE_NOT_TEST_FAILURE",
+    "runtime_claim": "UNOBSERVED"
+  },
+  "unusual_experiment_coordination": {
+    "credited_global_slot": "Same-Version Artifact Identity Collision Audit on canonical main",
+    "this_organ_credit": "NONE",
+    "note": "The forged-state-box probe performed in the authoring sandbox is classified only as an ordinary adversarial regression because the global unusual-experiment slot was already consumed."
+  },
+  "ordinary_regression_gates_added": [
+    "JSONL limit cannot advance cursor past unprocessed complete lines",
+    "leak patterns are rejected even when hidden in continuity/non-section model fields",
+    "study table remains inside the canonical MiniUnifiedDB",
+    "forced study-row insert failure rolls back output, packet, event consumption and generation"
+  ],
+  "open_acceptance_blockers": [
+    "actually-started exact-head isolated execution for PR 727",
+    "native source/build provenance and reproducible ELF binding",
+    "real authorized remote-provider acceptance",
+    "real supported local-model quality acceptance"
+  ],
+  "non_claims": [
+    "No exact PR 727 test PASS is claimed.",
+    "No native reproducibility PASS is claimed.",
+    "No real remote provider PASS is claimed.",
+    "No real local model quality PASS is claimed.",
+    "No whole Mini Entity acceptance PASS is claimed."
+  ],
+  "acceptance": "SOURCE_MECHANISMS_CONVERGED_EXACT_EXECUTION_BLOCKED"
+}

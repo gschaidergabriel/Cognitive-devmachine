@@ -1,4 +1,4 @@
-# Mandatory Clay Visible Status Footer — Blogpost / Mini Entity
+# Mandatory Clay Visible Status Footer — Multi-use Mini Entity
 
 Status: CURRENT
 Owner directive: `research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md`
@@ -15,16 +15,17 @@ Canonical: <current main SHA>
 Organ: <worker/provenance>
 Trigger: <none|go|other>
 Research write: COMMITTED|NO_RESEARCH_DELTA|SYNC_PENDING|NOT_ATTEMPTED
-Program: Blogpost / Mini Entity all-in-one
+Program: Multi-use Mini Entity all-in-one
 Stage: BLOGPOST_ENTITY_CLAY
-Goal: one portable persistent mini entity — one `.clay` executable + one SQLite MiniUnifiedDB; default Zero blog personality, runtime-configurable provider/token/system prompt
-Provider: Mistral default profile only; provider/model/token/request/response adapter replaceable without forking state; secrets never exposed
-Prompt law: editable personality/system prompt below immutable architecture truth guard
-Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical state
-Swarm: research/build orchestration only — architecture · ClayCode/runtime · state/evidence · personality/claim-gate · provider · adversarial · tests · fusion/hypofusion
+Goal: one application-neutral `.clay` pipeline executable + one SQLite MiniUnifiedDB; shipped DB preconfigured as fully replaceable zero_blog application
+Binary law: no replaceable Zero/blog/personality semantics in executable; application/personality belongs to SQLite configuration
+Provider: Mistral default profile only; provider/model/token/request/response adapter replaceable without forking or resetting state; secrets never exposed
+Prompt law: full application/personality/system prompt runtime-editable below immutable generic architecture truth/secret gate
+Truth law: UNKNOWN != ZERO != ERROR != MEASURED; narrative model cannot mint canonical evidence/state
+Swarm: research/build orchestration only — generic pipeline · runtime · MiniUnifiedDB · application config · provider · gates · adversarial · tests · fusion/hypofusion
 Together API: FORBIDDEN
 Current frontier: <dynamic>
 Acceptance: IN_PROGRESS|PASS|BLOCKED|UNRESOLVED
 Evidence note: local/component/mock PASS does not imply real-provider final PASS
-Short commands: go · fusion · hypofusion · claycode · gwt · unifieddb · atomic · dump
+Short commands: go · fusion · hypofusion · claycode · unifieddb · atomic · dump
 ```

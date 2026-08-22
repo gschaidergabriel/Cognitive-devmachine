@@ -7,7 +7,10 @@
   "source_binding": {
     "main_sha_at_branch": "702440d7cd701e42d996cf8b9221d5d515a26e7d",
     "program_state_blob": "45d5ca2600a1aaca05b0d70a7ccd2c8021732e25",
-    "together_launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750"
+    "together_launcher_blob": "2216e62b592dec4da55a922daa22dd2387470750",
+    "structured_pipeline_runtime_blob": "69e88bb4a86093d9f11e4fa95114f454c741bfb1",
+    "native_pr_764_head": "ff905f030f2b057504d53d3cc80434969866a0d5",
+    "native_gate_blob_at_pr_764_head": "25eef63b800ae4ada265c13cb0fd341258421716"
   },
   "authority": {
     "active_program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
@@ -22,7 +25,8 @@
       "profile_v2_full_parity": "OPEN",
       "presentation_neutrality": "REPAIR_FUSED_INTO_OPEN_PR_764_VIA_PR_756_NOT_YET_MAIN_RUNTIME_VERIFIED",
       "local_exec_parent_secret_isolation": "OPEN_PR_764_NOT_YET_MAIN_RUNTIME_VERIFIED",
-      "pr_764_head_observed": "ff905f030f2b057504d53d3cc80434969866a0d5"
+      "pr_764_head_observed": "ff905f030f2b057504d53d3cc80434969866a0d5",
+      "pr_764_divergence_at_observation": "20 commits ahead of merge base and 36 commits behind main 702440d7cd701e42d996cf8b9221d5d515a26e7d"
     },
     "cognition": {
       "training_status": "NOT_STARTED",
@@ -33,6 +37,14 @@
       "public_provider_evidence_boundary": "Together currently advertises broad Hugging Face Hub fine-tuning support, while its Hugging Face integration is described as experimental/best-effort; this does not prove exact Qwen/Qwen2.5-0.5B Full-FT BYOM acceptance",
       "paid_create": "NOT_ATTEMPTED",
       "money_spent_usd": 0
+    },
+    "persisted_output_gate_falsifier": {
+      "issue": 857,
+      "status": "SOURCE_SUPPORTED_NOT_RUNTIME_EXECUTED",
+      "structured_reference": "gate scans title, intro and section text for configured leak patterns and active provider secrets, but persists the full payload and separately persists continuity plus autobiographical hypotheses; unscanned output string fields can therefore carry leak patterns and, on the structured remote-provider path, active secrets",
+      "native_pr_764": "native gate scans leak patterns only in title, intro and section text; cmd_run separately scans the whole raw output for the active provider secret, so active-secret coverage is broader, but configured leak patterns can still pass through other persisted output string fields",
+      "strong_test": "valid hashes and sections with a configured leak sentinel only in continuity, autobiographical hypotheses or another persisted self-report field must fail NO_COMMIT with generation unchanged and event unconsumed",
+      "preferred_repair": "one generic recursive string-leaf scan over the complete persisted payload, applying leak regexes and active secrets where applicable; keep schema/evidence/state-claim checks separate"
     }
   },
   "execution": {
@@ -44,16 +56,24 @@
     "provider_call_made": false,
     "secret_used": false
   },
+  "coordination": {
+    "program_state_drift_issue": 846,
+    "persisted_output_gate_issue": 857,
+    "receipt_pr": 848,
+    "pr_764_review_comment_added": true
+  },
   "falsifiers_and_boundaries": [
     "Do not infer native runtime PASS from PR source or merge state.",
     "Do not infer Together Qwen2.5-0.5B compatibility from generic Hugging Face support language.",
     "Do not retain launcher-provenance as a current blocker when exact current launcher bytes already close that source defect.",
-    "Do not merge PR 764 blindly across a moving main; rebase/fuse and rerun exact source-bound tests first."
+    "Do not merge PR 764 blindly across a moving main; rebase/fuse and rerun exact source-bound tests first.",
+    "All string values that will be persisted must survive the same generic leak/secret policy; selected-display-field scanning is insufficient."
   ],
   "next_high_information_steps": [
     "Synchronize PROGRAM_STATE so cognition frontier names provider admission, not the already-fixed launcher provenance defect.",
     "Rebase/fuse PR 764 onto current main, preserving PR 769 fail-closed profile-v2 admission and avoiding duplicate semantic paths.",
-    "When an authorized executable sandbox is available, run exact source-bound native build plus presentation string audit, parent-secret isolation falsifier, profile-v2 admission/parity checks, atomicity and generation-CAS matrix.",
+    "Repair the persisted-output scan gap in both structured semantics and the native fusion, then add exact no-commit leak/secret falsifiers for continuity, autobiographical hypotheses and another additional output string field.",
+    "When an authorized executable sandbox is available, run exact source-bound native build plus presentation string audit, parent-secret isolation falsifier, profile-v2 admission/parity checks, persisted-output leak tests, atomicity and generation-CAS matrix.",
     "For the 0.5B lane, perform authenticated preflight only after an explicit architecture-compatible Full-FT template/runner is available; keep billed create gated by exact fingerprint, budget and zero-retry/ambiguity protections."
   ],
   "acceptance": "IN_PROGRESS",

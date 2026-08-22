@@ -1,0 +1,56 @@
+{
+  "schema": "claycog-together-seed-job-identity/v1",
+  "date": "2026-08-22",
+  "trigger": "go extra lang",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "source_main": "4b052109729329e5b81040b406cf7c07d4c38f93",
+  "branch": "gpt56sol/claycog-seed-job-identity-20260822",
+  "coordination": {
+    "superseded_pr": 817,
+    "reason": "Main independently merged #800 with exact HF revision binding. The broader branch was closed unmerged to avoid replacing newer canonical launcher work; this branch carries only the non-duplicate remainder."
+  },
+  "delta": [
+    "Campaign fingerprint schema advances to v2 and binds the explicit effective random_seed in addition to the already-canonical exact HF revision, dataset digests and training configuration.",
+    "Effective learning_rate and warmup_ratio are named configuration values and are used consistently by fingerprint and billed create.",
+    "Atomic create-intent ledger schema advances to v2 and stores the seed-bound campaign descriptor.",
+    "Billed Together create passes explicit random_seed while preserving hf_model_revision, max_retries=0, duplicate-account guard and UNKNOWN_REMOTE_CREATE semantics.",
+    "After create returns a job id, JOB_KNOWN is durably written before any verification read. The provider-visible job is then compared against exact training/validation file ids, template, from_hf_model, hf_model_revision, epochs, evals and random_seed.",
+    "Post-create retrieve failure or identity mismatch never authorizes a replacement create; the known job id remains the recovery anchor."
+  ],
+  "exact_blobs": {
+    "launcher": "f76e7434649cbfd4d58e61fe444ffbc0ba5af6ad",
+    "safety_test": "1ece490b55d38fd78d8ec712b806f663913d26a4"
+  },
+  "isolated_regression": {
+    "surface": "authorized isolated local Linux execution reconstructed from exact Git blobs",
+    "blob_hashes_match_git": true,
+    "py_compile": "PASS",
+    "tests": 10,
+    "passed": 10,
+    "failed": 0,
+    "preserved_guards": [
+      "exact HF revision",
+      "full fingerprint confirmation",
+      "account duplicate campaign suffix",
+      "atomic exclusive create intent",
+      "secret-free 0600 ledger",
+      "UNKNOWN_REMOTE_CREATE retry block",
+      "zero-retry billed create client",
+      "JOB_KNOWN durable binding"
+    ],
+    "new_checks": [
+      "fingerprint changes when random_seed changes",
+      "create ledger carries random_seed",
+      "effective learning rate/warmup/random seed are campaign-bound",
+      "provider-visible job identity mismatch is explicit fail-closed data"
+    ],
+    "together_network_calls": 0,
+    "billed_create_calls": 0,
+    "money_spent_usd": 0
+  },
+  "claim_boundary": "This establishes the seed/job-identity safety mechanism only. It does not establish a qwen2-compatible Together Full-FT template, authenticated service admission, paid training, model quality, OOD promotion, quantized RSS, native 0.7 acceptance, consciousness or whole Mini Entity PASS.",
+  "result": "MECHANISM_SUPPORTED_EXACT_BLOB_EXECUTION",
+  "next": "Merge only if current main has not introduced overlapping launcher semantics. The remaining external blocker is authenticated discovery/admission of a qwen2-compatible Together Full-FT template before upload or spend."
+}

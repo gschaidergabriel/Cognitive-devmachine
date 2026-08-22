@@ -118,6 +118,10 @@ Current Together BYOM documentation requires the **training-template architectur
 
 Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwen2 training template or an owner-admitted alternate full-FT runner**. Do not substitute Qwen3.5 merely because it is close in parameter count, and do not spend money until an authenticated preflight establishes an actually admitted compatible path.
 
+Public pricing refreshed on 2026-08-22 lists standard Full SFT up to 16B at **USD 0.54 / 1M processed tokens** with a **USD 4 minimum job charge**. Those numbers remain provider facts, not a quote for this exact custom checkpoint. Under the owner USD 18 single-job gate, price is therefore not the current blocker; **architecture-compatible provider admission is**.
+
+The current exact PR admission workflow also compiles the canonical launcher/create-safety/provider-contract boundary and runs both no-network create-safety and SDK-v2 provider-contract regressions. The first exact candidate run for this fused gate, plus one explicit rerun, both failed before any visible GitHub Actions step (`steps=null`). This is replicated **runner admission failure with zero test credit**, not a ClayCog test failure and not PASS.
+
 ## Native Mini Entity 0.7 — current evidence
 
 The current native source line is `mini-entity/0.7.0-dev1`.
@@ -143,19 +147,23 @@ On that source-bound ELF these ordinary runtime contracts passed:
 
 This closes the previous “source exists but current 0.7 was never actually built/run” gap at **same-environment source-bound mechanism scope**. It does not establish cross-environment reproducibility or final release acceptance.
 
-### Three confirmed current-main blockers
+### Current native blocker fusion status
 
-Native 0.7 is **not promotable yet** because executable falsification found three independent defects:
+Native 0.7 is **not promotable yet**. The three previously confirmed current-main defects now have different states:
 
-1. **Binary neutrality:** replaceable Zero-study display strings such as `SYSTEM STATE`, `MODEL SELF-REPORT`, `AUSWERTUNG` and German evaluation wording are still embedded in the ELF. Repair work is tracked by PR #756.
-2. **Local-runner secret boundary:** `local_exec` inherits the parent environment. Synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and were persisted as model output. Repair work is tracked by PR #764.
-3. **Canonical profile-v2 semantic admission:** native 0.7 accepted and persisted deliberately malformed local-model output under a `clay-pipeline-profile/v2` profile that required a stronger output contract. The canonical structured path requires a `pipeline_gate` before commit. Fail-closed/parity work is tracked by PR #769.
+1. **Binary neutrality — SOURCE FIX FUSED:** the state-box presentation repair was fused on current main via PR #830 / merge `b2d49a8e0e88b01927e9673a38dab9fbeb175b97`. Replaceable headings and interpretation prose now come from runtime configuration rather than executable presentation identity. Exact source-bound rebuild/runtime falsification of the fused head is still required before runtime credit.
+2. **Local-runner secret boundary — CONFIRMED FAIL / OPEN:** `local_exec` inherited the parent environment; synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and persisted in model output. PR #764 is the active repair line. It must be fused from fresh main without overwriting the newer admission/neutrality work, then rerun against the exact source-bound secret falsifier.
+3. **Canonical profile-v2 semantic admission — FAIL-CLOSED GUARD FUSED:** PR #769 / merge `659cc2471b73bcefebb6a57694e6737cc2107cc5` now rejects canonical v2 profiles before inference/commit until native v2 parity exists. This closes the prior fail-open persistence path at source level; it does **not** implement the required full profile-driven compile envelope and post-inference `pipeline_gate`. The guard must remain until coherent parity is implemented and exactly executed.
 
-The defect evidence is durable at:
+The original defect evidence is durable at:
 
 `blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
 
-The fixes must be fused/rebased onto current main and re-executed through the same source-bound builder and fault matrix before any native 0.7 promotion claim.
+The current fusion/re-entry evidence is durable at:
+
+`blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
+
+The next native promotion attempt must use the exact current fused source, source-bound rebuild it, rerun the secret/semantic/atomicity/CAS matrix, and then separately close full native profile-v2 compile+`pipeline_gate` parity. Do not remove the fail-closed v2 guard merely to obtain a green runtime path.
 
 ## Inference backends
 
@@ -192,15 +200,18 @@ The two required lanes now converge cleanly:
 
 ```text
 NATIVE
-confirmed 0.7 exact-source-bound execution
--> fuse #756/#764/#769 without duplicate semantic paths
+#769 fail-closed v2 admission guard + #830 presentation-neutrality source repair fused
+-> fresh-main nonduplicate fusion of #764 local_exec parent-secret isolation
 -> exact source-bound rebuild
--> repeat security/semantic/atomicity/CAS falsifiers
+-> repeat secret/semantic/atomicity/CAS falsifiers
+-> implement coherent canonical profile-v2 compile envelope + post-inference pipeline_gate parity
+-> remove v2 fail-closed guard only after exact parity evidence
 -> release provenance/portability gates
 
 COGNITION
-SFT v2 + strict runtime-binding validator
--> compatible qwen2 full-FT runner/template admission
+SFT v2 + strict runtime-binding/omega/OOD gates + #829 provider-contract CI convergence
+-> exact GitHub runner admission remains blocked after two pre-step attempts; zero test credit
+-> compatible qwen2 Full-FT runner/template admission
 -> fingerprint-bound budget preflight
 -> at most one owner-authorized paid SFT
 -> held-out OOD/base/larger-model benchmark
@@ -217,9 +228,10 @@ Do not let either lane claim the other lane's acceptance.
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json`
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_MAIN_REENTRY_NATIVE_COGNITION_GPT56SOL.json`
 
 ## Acceptance boundary
 
 Current acceptance: **IN_PROGRESS**.
 
-A reproducible ELF does not prove semantic safety. A valid corpus does not prove learned cognition. A Together create does not prove model quality. A Q4 file size does not prove process RSS. A fluent ClayCode trace does not prove truth. Only the full admitted pipeline, measured under its exact contracts, can promote the Mini Entity candidate.
+A reproducible ELF does not prove semantic safety. A valid corpus does not prove learned cognition. A Together create does not prove model quality. A Q4 file size does not prove process RSS. A fluent ClayCode trace does not prove truth. A source-level fail-closed guard does not prove full semantic parity. Only the full admitted pipeline, measured under its exact contracts, can promote the Mini Entity candidate.

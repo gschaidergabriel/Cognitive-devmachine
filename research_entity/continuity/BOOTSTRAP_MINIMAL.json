@@ -1,101 +1,22 @@
 {
-  "schema_version": "5.6",
-  "purpose": "Minimal current boot index for the active ClayVerse single-container product program.",
-  "entity_id": "frank-project-global-research-entity",
+  "schema_version": "6.0",
   "entity_display_name": "Clay",
-  "active_program": "CLAYVERSE_SINGLE_CONTAINER",
-  "active_stage": "CLAYVERSE_ARTIFACT",
-  "research_endpoint": "ClayVerse",
-  "research_endpoint_definition": "ONE_PERSISTENT_CENTRAL_ENTITY_IN_ONE_OCI_CONTAINER_IMAGE",
-  "release_artifact": "ClayVerse OCI image built from the artefact/",
-  "release_form": "ONE_OCI_DOCKER_COMPATIBLE_CONTAINER_IMAGE",
-  "canonical_artifact_workspace": "the artefact/",
-  "research_repository": "gschaidergabriel/clay-global-research-entity",
+  "active_program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "active_stage": "BLOGPOST_ENTITY_CLAY",
+  "sole_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "fast_bootstrap_source": "research_entity/continuity/CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT.md",
-  "owner_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
-  "product_boundary_directive": "research_entity/global/CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE.md",
-  "microvm_outer_envelope_directive": "research_entity/global/CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE.md",
-  "live_fusion_hypofusion_worker_reentry_directive": "research_entity/global/LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE.md",
-  "execution_policy_directive": "research_entity/global/SANDBOX_ONLY_TEST_EXECUTION_DIRECTIVE.md",
-  "vercel_batch_directive": "research_entity/global/VERCEL_SANDBOX_FULL_TOOLING_BATCH_DIRECTIVE.md",
-  "vercel_sandbox_execution_path_notice": "research_entity/continuity/VERCEL_SANDBOX_EXECUTION_PATH_CURRENT.md",
-  "daytona_fallback_directive": "research_entity/global/DAYTONA_SANDBOX_FALLBACK_DIRECTIVE.md",
-  "daytona_sandbox_execution_path_notice": "research_entity/continuity/DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT.md",
-  "go_experiment_protocol": "research_entity/continuity/GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL.md",
-  "program_state": "research_entity/rooms/PROGRAM_STATE.json",
-  "artifact_manifest": "the artefact/manifest.json",
-  "mission": "Build the final ClayVerse architecture as one OCI/Docker-compatible container: one persistent central entity shared by authenticated users/machines, UnifiedDB as canonical state/world/data/wiki authority, ClayGraph as rebuildable projection, Clerk web authentication, Claude Code runtime cognition and explicit secure/recoverable effect boundaries. The final accepted image MUST contain the complete accepted EntityOS internal substrate and the same accepted OCI digest MUST execute behind the required independent VM/microVM guest-kernel boundary; EntityOS is not the top-level product endpoint and the outer VM/microVM is not a second ClayVerse entity or artifact.",
-  "truth_model": {
-    "policy_and_product_authority": "NEWEST_EXPLICIT_OWNER_DIRECTIVE",
-    "executable_empirical_truth": "ACTUALLY_OBSERVED_AUTHORIZED_ISOLATED_EXECUTION_AT_EXACT_SOURCE_ARTIFACT_IDENTITY",
-    "canonical_source_and_durable_ledger": "CURRENT_VERIFIED_GITHUB_SOURCE_HISTORY_AND_RECEIPTS",
-    "runtime_claim_rule": "SOURCE_INSPECTION_CI_CONFIGURATION_RECEIPTS_OR_DEPLOYMENT_READY_DO_NOT_SUBSTITUTE_FOR_ACTUAL_EXECUTION"
+  "canonical_artifact": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
+  "generic_runtime": "tools/clay_effect_runtime.py",
+  "tests": "the artefact/blogpost_entity/test_blogpost_entity.py",
+  "mission": "Finish and empirically prove one persistent all-in-one Zero/EntityOS Blogpost Entity ClayCode module.",
+  "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical self-state authority",
+  "mistral": {
+    "model": "mistral-medium-latest",
+    "free_key_names": ["MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY"],
+    "secret_rule": "never expose or commit token values"
   },
-  "identity": {
-    "research_entity": "Clay is the persistent research entity; the current model/session is a temporary worker.",
-    "project_owner": "Gabriel Gschaider",
-    "worker_is_not_product": true
-  },
-  "boot_sequence": [
-    "verify current research main",
-    "load CLAYVERSE_SINGLE_CONTAINER_PRODUCT_DIRECTIVE and CLAYVERSE_MICROVM_OUTER_ENVELOPE_DIRECTIVE plus CLAYVERSE_FAST_BOOTSTRAP_SOURCE_CURRENT; the newer MicroVM directive supersedes older text that makes final guest-kernel isolation optional",
-    "load LIVE_FUSION_HYPOFUSION_WORKER_REENTRY_DIRECTIVE before material work so new evidence, contradictions, blockers and worker outcomes re-enter affected research/worker lanes without creating a second authority",
-    "load PROGRAM_STATE and the artefact/manifest.json; if their cached/dynamic role text conflicts with a newer explicit owner directive, follow the owner directive and flag the stale field rather than downgrading final acceptance law",
-    "load VERCEL_SANDBOX_EXECUTION_PATH_CURRENT before declaring Vercel execution unavailable",
-    "load DAYTONA_SANDBOX_FALLBACK_DIRECTIVE and DAYTONA_SANDBOX_EXECUTION_PATH_CURRENT before treating a Vercel admission/runtime blocker as a global execution blocker",
-    "load GO_EXPERIMENT_ATOMIC_LEASE_PROTOCOL before any exact-go unusual experiment",
-    "refresh task-relevant current artifact code, receipts and parallel work",
-    "avoid duplicate canonical implementations and stale writes",
-    "after each material outcome classify NEW|REFINES|CONFIRMS|CONTRADICTS|SUPERSEDES|NO_CHANGE|DUPLICATE, perform targeted live fusion, open live hypofusion when required by the directive, and route affected workers for ADOPT|CHALLENGE|DEFER|NO_CHANGE before their next material effect",
-    "treat delivery, reconstruction, plan revalidation, use, local effect and causal credit as distinct states; delivery alone never proves use or causality",
-    "for exact go, use only the protocol's single canonical trigger_key encoding; create-only lock paths with alternate timestamp/hash formatting are invalid",
-    "if no immutable request/turn id is shared and the exact user-message timestamp lacks whole-second precision or reproducible uniqueness, set COORDINATION_BLOCKED and execute no unusual experiment",
-    "after any canonical claim, fence legacy/noncanonical semantic duplicate claims for the same user turn before executing; any duplicate means EXPERIMENT_BUDGET_RACE_VIOLATION and closes the slot",
-    "execute build/test/runtime validation only in authorized isolated environments; use Vercel when admitted and runtime-capable, otherwise use Daytona as the standard isolated fallback when admitted",
-    "do not equate absence of direct ChatGPT Vercel MCP Sandbox lifecycle actions with Sandbox unavailability; the confirmed Dr.-Unterweger Git-preview + @vercel/sandbox/OIDC bridge may orchestrate actual isolated Sandbox execution, subject to current Vercel admission/rate limits",
-    "do not equate an orchestration-network failure before Daytona provider contact with Daytona Sandbox unavailability; refresh the Daytona execution-path notice and use approved secret/environment injection only",
-    "never use VPS/self-hosted/production hosts as current test evidence",
-    "continue go until the useful unblocked single-container ClayVerse frontier is exhausted"
-  ],
-  "source_of_truth_order": [
-    "newest explicit owner directive for policy/product authority",
-    "actually observed exact-identity authorized isolated execution for executable truth",
-    "verified current GitHub source/history/receipts",
-    "current program state and artifact manifest",
-    "validated bounded historical/internal-substrate evidence",
-    "older bootstrap/history",
-    "chat/model memory"
-  ],
-  "architecture": {
-    "central_entity": "ONE",
-    "users": [
-      "gabriel",
-      "andreas"
-    ],
-    "unifieddb": "CANONICAL_STATE_WORLD_MEMORY_DATA_WIKI_AUTHORITY",
-    "claygraph": "DERIVED_REBUILDABLE_PROJECTION_ONLY",
-    "claude_code": "RUNTIME_INFERENCE_ENGINE_NOT_CANONICAL_MEMORY",
-    "clerk": "WEB_AUTH_BOUNDARY",
-    "consciousness_daemon": "EXCLUDED",
-    "entityos": "MANDATORY_IN_FINAL_ACCEPTED_IMAGE_INTERNAL_SUBSTRATE_NOT_PRODUCT_ENDPOINT",
-    "outer_isolation": "MANDATORY_FOR_FINAL_PASS_SAME_EXACT_ACCEPTED_OCI_DIGEST_BEHIND_INDEPENDENT_VM_MICROVM_GUEST_KERNEL"
-  },
-  "authority_rules": {
-    "together_api": "FORBIDDEN",
-    "final_paid_training": "OWNER_AUTHORIZATION_REQUIRED",
-    "unknown_semantics": "FAIL_CLOSED",
-    "unknown_data_format": "OPAQUE_TYPED_BYTES_OR_FAIL_CLOSED_NOT_GUESS"
-  },
-  "execution_authorization": {
-    "vercel_sandbox": "AUTHORIZED_AND_PREFERRED_WHEN_ADMITTED_AND_RUNTIME_CAPABLE",
-    "vercel_sandbox_bridge": "CONFIRMED_VIA_DR_UNTERWEGER_GIT_PREVIEW_ORCHESTRATION_PLUS_AT_VERCEL_SANDBOX_OIDC; DIRECT_CHATGPT_MCP_LIFECYCLE_ACTIONS_NOT_REQUIRED; CHECK_CURRENT_PREVIEW_ADMISSION",
-    "daytona_sandbox": "AUTHORIZED_STANDARD_FALLBACK_WHEN_VERCEL_IS_ADMISSION_BLOCKED_UNAVAILABLE_TO_THE_WORKER_OR_RUNTIME_INCAPABLE_BEFORE_PRODUCT_ASSERTIONS",
-    "daytona_credentials": "SECRET_ENVIRONMENT_OR_APPROVED_SECRET_STORE_ONLY_NEVER_COMMIT_OR_ECHO",
-    "other_isolated_tools": "AUTHORIZED_WHEN_NEEDED_AND_NON_PRODUCTION",
-    "vps_testing": "FORBIDDEN",
-    "self_hosted_vps_test_runners": "FORBIDDEN",
-    "production_host_testing": "FORBIDDEN"
-  },
-  "go": "Maximum useful multi-pass ClayVerse single-container research-build-test-fuse cycle with continuous material-delta live fusion/hypofusion re-entry and exactly one bounded unusual experiment per user-triggered macro-cycle. The unusual-experiment slot is a shared atomic create-once lease at one canonical byte-identical path; if shared trigger identity is not uniquely reproducible, or semantic duplicate claims exist, fail closed and run no unusual experiment. Provider order is Vercel when admitted and capable, then Daytona fallback, then explicit blocker. End with concrete the artefact/ improvement/evidence or the precise blocker and next isolated executable step."
+  "go": "Maximal swarm cycle on BLOGPOST_ENTITY.clay only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
+  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances the blogpost entity.",
+  "together_api": "FORBIDDEN"
 }

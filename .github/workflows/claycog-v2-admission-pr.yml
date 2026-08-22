@@ -36,8 +36,9 @@ jobs:
           python3 validate_sft_v2.py train_v2.jsonl --against validation_v2.jsonl
           python3 validate_sft_v2.py validation_v2.jsonl --against train_v2.jsonl
           python3 test_validate_sft_v2.py
+          python3 test_launch_together_safety_v2.py
           python3 generate_eval_ood_v2.py
-          python3 -m py_compile generate_sft_v2.py validate_sft_v2.py generate_eval_ood_v2.py eval_outputs_v2.py launch_together_v2.py audit_corpus_v1_leakage.py test_validate_sft_v2.py
+          python3 -m py_compile generate_sft_v2.py validate_sft_v2.py generate_eval_ood_v2.py eval_outputs_v2.py launch_together_v2.py audit_corpus_v1_leakage.py test_validate_sft_v2.py test_launch_together_safety_v2.py
       - name: Require v1 leakage audit to falsify independence
         run: |
           set -euo pipefail

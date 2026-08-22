@@ -36,9 +36,20 @@ def sha256_file(path: Path) -> str:
     return h.hexdigest()
 
 
-def _regular_nosymlink(path: Path) -> os.stat_result:
-    if path.is_symlink():
-        raise RuntimeError("SOURCE_SYMLINK_FORBIDDEN:" + str(path))
+def _assert_no_symlink_components(path: Path, root: Path) -> None:
+    try:
+        relative = path.relative_to(root)
+    except ValueError as exc:
+        raise RuntimeError("SOURCE_INCLUDE_ESCAPES_ROOT:" + str(path)) from exc
+    current = root
+    for part in relative.parts:
+        current = current / part
+        if current.is_symlink():
+            raise RuntimeError("SOURCE_SYMLINK_FORBIDDEN:" + str(current))
+
+
+def _regular_nosymlink(path: Path, root: Path) -> os.stat_result:
+    _assert_no_symlink_components(path, root)
     st = path.stat()
     if not stat.S_ISREG(st.st_mode):
         raise RuntimeError("SOURCE_NOT_REGULAR:" + str(path))
@@ -56,20 +67,17 @@ def source_closure(source: Path) -> tuple[list[dict[str, Any]], str]:
     """
     source = source.absolute()
     root = source.parent.absolute()
+    if root.is_symlink():
+        raise RuntimeError("SOURCE_ROOT_SYMLINK_FORBIDDEN:" + str(root))
     pending = [source]
     visited: set[Path] = set()
     records: list[tuple[str, bytes]] = []
 
     while pending:
-        path = pending.pop()
-        path = path.absolute()
+        path = pending.pop().absolute()
         if path in visited:
             continue
-        try:
-            path.relative_to(root)
-        except ValueError as exc:
-            raise RuntimeError("SOURCE_INCLUDE_ESCAPES_ROOT:" + str(path)) from exc
-        _regular_nosymlink(path)
+        _regular_nosymlink(path, root)
         data = path.read_bytes()
         rel = path.relative_to(root).as_posix()
         records.append((rel, data))
@@ -80,15 +88,15 @@ def source_closure(source: Path) -> tuple[list[dict[str, Any]], str]:
         except UnicodeDecodeError as exc:
             raise RuntimeError("SOURCE_NOT_UTF8:" + rel) from exc
         for include in LOCAL_INCLUDE_RE.findall(text):
-            candidate = path.parent / include
-            normalized = Path(os.path.normpath(str(candidate))).absolute()
+            candidate = Path(os.path.normpath(str(path.parent / include))).absolute()
             try:
-                normalized.relative_to(root)
+                candidate.relative_to(root)
             except ValueError as exc:
                 raise RuntimeError("SOURCE_INCLUDE_ESCAPES_ROOT:" + include) from exc
-            if not normalized.exists():
+            _assert_no_symlink_components(candidate, root)
+            if not candidate.exists():
                 raise RuntimeError("SOURCE_INCLUDE_MISSING:" + include)
-            pending.append(normalized)
+            pending.append(candidate)
 
     records.sort(key=lambda item: item[0])
     closure = hashlib.sha256()

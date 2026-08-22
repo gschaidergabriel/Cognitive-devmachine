@@ -1,5 +1,5 @@
 {
-  "schema_version": "7.8",
+  "schema_version": "7.9",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
@@ -18,6 +18,16 @@
     "database": "all application/personality/prompt/inference/presentation configuration plus continuing canonical state; zero_blog is only the replaceable shipped preset",
     "cognition_weights": "replaceable generic cognition machinery only; no fixed entity name/job/persona/application; ClayCode/GRF/Hyperposition/omega target",
     "regression_rule": "if application/personality/inference/presentation choice can live in runtime configuration, binding it to executable or checkpoint identity is a regression"
+  },
+  "execution_policy": {
+    "source": "research_entity/claycode/autonomous/SUPERVISOR_INBOX.json",
+    "observed_supervisor_state": "9.9",
+    "observed_control": "4.1+4.2-execution-boundary-addendum",
+    "free_only": true,
+    "control_sync_required_before_research_spend": true,
+    "together_credentialed_preflight_allowed_under_free_only": false,
+    "together_training_network_execution_allowed_under_free_only": false,
+    "provider_execution_rule": "while FREE_ONLY=true, reject non-free provider lanes before secret/key lookup and before network I/O; repository owner-selected/budget wording does not itself authorize execution"
   },
   "native_0_7": {
     "version": "mini-entity/0.7.0-dev1",
@@ -54,7 +64,7 @@
     "exact_pr_runtime": "UNOBSERVED_RUNNER_FAILED_BEFORE_STEPS"
   },
   "cognition_module_campaign": {
-    "status": "APPROX1B_DIRECT_LANE_SOURCE_READY_TRAINING_NOT_STARTED",
+    "status": "APPROX1B_DIRECT_LANE_SOURCE_READY_TRAINING_NOT_STARTED_FREE_ONLY_DORMANT",
     "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
     "primary_paid_training_base": "Qwen/Qwen3.5-0.8B",
     "prior_05b_research_base": "Qwen/Qwen2.5-0.5B",
@@ -75,11 +85,14 @@
       "exact_cross_split_overlap": 0,
       "prompt_cross_split_overlap": 0,
       "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
-      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62"
+      "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+      "full_exact_current_regeneration_after_latest_semantic_slot_gate": "NOT_YET_CREDITED"
     },
     "admission_and_eval": {
       "exact_top_level_omega_validator": "MERGED via #862 / 2f9fda0a70d5fc483b73782733d3680a093ef470",
       "comment_string_safe_ood_call_extraction": "MERGED via #838 / e073e3577334d4dce723ffca378e61528bf0ed24",
+      "canonical_call_depth_credit": "MERGED via #908 / dd1fd761f77d5385dd78ff6c774129d7a5e58039; 9/9 bounded exact-blob assertions PASS; full current-runner credit ZERO",
+      "reserved_semantic_identity_slots": "MERGED via #917 / f807c0e86971be78da0054ff6a08406726c0aef3; pre-fix falsifier 3/3 false accepts; bounded post-fix unittest 6/6 PASS; full 1650-row exact-current regeneration still required",
       "seed_and_created_job_identity_prior_lane": "MERGED via #859 / 67af94be952c3352533662036b0325e9fe54df9b",
       "exact_byom_attestation_prior_lane": "MERGED via #865 / d696e40f02148555f15f51dd8cb9d01cfbccb230"
     },
@@ -88,12 +101,13 @@
       "source_lane": "MERGED via #869",
       "canonical_v2_preflight_validation": "MERGED at f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d; repeated GitHub jobs failed before visible steps and give ZERO exact runtime credit",
       "full_created_job_identity_fence": "MERGED via #891 / 04209767aba1806c9566bac34274b5430879586a; verifies files, model, suffix, epochs/evals/checkpoints, seed, learning rate, warmup, SFT method and Full type; exact runtime credit ZERO",
+      "free_only_pre_secret_pre_network_fence": "MERGED via #904 / f3e9455f7082cb131096647499ff306ce554a151; bounded source-mechanism discriminator supports zero secret lookup/provider import under FREE_ONLY; exact current hosted-runner credit ZERO",
       "public_provider_refresh": "MERGED evidence via #900 / 43308213ebc5aa1e5cd86da898293604cff2dccc",
       "training_type": "Full",
       "public_catalog_full_ft": "CONFIRMED_2026-08-22",
       "public_model_limits": "SFT context 131072; max batch 8; min batch 8",
       "public_standard_pricing": "USD 0.54 per 1M processed tokens for Full SFT up to 16B; standard minimum charge USD 4",
-      "provider_preflight": "NOT_EXECUTED_NO_AUTHORIZED_SECRET_IN_THIS_ORGAN",
+      "provider_preflight": "BLOCKED_BY_CURRENT_FREE_ONLY_POLICY",
       "provider_call": false,
       "billed_create": false,
       "job_started": false,
@@ -102,10 +116,10 @@
       "campaign_ceiling_eur": 20.0
     },
     "promotion": "TRAINING_NOT_STARTED",
-    "promotion_requires": "authenticated provider preflight and fingerprint-bound owner-authorized billed create -> exact trained artifact -> matched tuned/base/larger OOD evaluation -> GGUF Q4_K_M -> measured peak RSS <1 GiB at context 2048 -> generic local_exec integration without state reset"
+    "promotion_requires": "current FREE_ONLY policy must first cease to forbid provider execution and fresh fingerprint-bound owner authorization must exist; then authenticated provider preflight -> authorized billed create -> exact trained artifact -> matched tuned/base/larger OOD evaluation -> GGUF Q4_K_M -> measured peak RSS <1 GiB at context 2048 -> generic local_exec integration without state reset"
   },
   "inference_backends": {
-    "api": "runtime-selectable remote or loopback local API; inference authority only",
+    "api": "runtime-selectable remote or loopback local API; inference authority only and subject to execution policy",
     "local_exec": "source-isolated from arbitrary parent environment, no shell; exact current runtime still requires admitted execution",
     "state_rule": "switching backend/model never resets MiniUnifiedDB continuity"
   },
@@ -119,14 +133,15 @@
     "cross_organ_unusual_experiment_rule": "compare slot claims only under exact shared macrocycle_id; no-ID receipts are unresolved for cross-run adjudication",
     "merge": "#875 / 64f73d9407e35dccb7810e87e7fe0875d5884c59"
   },
-  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) implement the complete #874 native clay-pipeline-profile/v2 parity surface on one path while keeping #769 fail-closed and #889 digest integrity, then obtain exact-current source-bound runtime/fault/CAS evidence on an actually-started authorized runner; (B) Qwen/Qwen3.5-0.8B is publicly confirmed as a direct Together Full-FT base and the current launcher has canonical-v2 preflight validation plus a full post-CREATE job-identity fence, so the next cognition gate is authenticated no-create preflight on the exact SFT-v2 fingerprint under USD 18/EUR 20 fences; only after fresh explicit owner authorization may a billed create occur, followed by trained-artifact OOD/base/larger-model evaluation -> Q4_K_M -> measured <1 GiB RSS at context 2048 -> generic local_exec integration. Whole product remains IN_PROGRESS.",
-  "go_contract": "Every go refreshes current main/newest owner authority, chooses the highest-information nonduplicate frontier, falsifies before promotion, performs at most one unusual experiment within one explicit macrocycle identity, persists bounded evidence/delta, and advances this same neutral Mini Entity + replaceable cognition product until promoted or falsified.",
+  "current_frontier": "CURRENT EXECUTION POLICY IS FREE_ONLY. Therefore no credentialed Together preflight/upload/create/training may execute now. Highest product-convergent offline gates are: (A) complete #874 native clay-pipeline-profile/v2 parity while retaining #769 fail-closed admission and #889 active-profile digest integrity, then obtain exact-current source-bound runtime/fault/CAS evidence on an actually-started authorized runner; (B) regenerate/revalidate the complete 1650-row SFT-v2 corpus on exact current bytes after #917 reserved semantic-slot admission, retain #908 canonical call-depth scoring and the #904 FREE_ONLY pre-secret/pre-network fence, and continue matched OOD/eval preparation offline. When FREE_ONLY no longer forbids provider execution and fresh owner authorization is bound to the exact fingerprint, the next paid-lane step is authenticated no-create Qwen/Qwen3.5-0.8B preflight under USD18/EUR20 fences. Whole product remains IN_PROGRESS.",
+  "go_contract": "Every go refreshes current main/newest owner authority and current execution policy, chooses the highest-information nonduplicate frontier, falsifies before promotion, performs at most one unusual experiment within one explicit macrocycle identity, persists bounded evidence/delta, and advances this same neutral Mini Entity + replaceable cognition product until promoted or falsified.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
     "inference_requirement": "NONE",
-    "training_campaign_approx1b": "OWNER_AUTHORIZED_BUDGET_GATED",
+    "training_campaign_approx1b": "OWNER_SELECTED_BUT_EXECUTION_CURRENTLY_FREE_ONLY_BLOCKED",
     "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
+    "credentialed_preflight_allowed_now": false,
     "job_started": false
   }
 }

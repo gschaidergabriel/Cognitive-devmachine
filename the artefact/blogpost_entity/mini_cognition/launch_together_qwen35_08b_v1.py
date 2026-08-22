@@ -5,6 +5,7 @@ from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
+PROVIDER_EXECUTION_POLICY=HERE.parents[2]/"research_entity"/"claycode"/"autonomous"/"PROVIDER_EXECUTABLE_POOL.json"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
@@ -17,6 +18,25 @@ def validate_static_contract():
     if not 1<=EPOCHS<=20 or not 0<=EVALS<=20: raise SystemExit("TRAINING_COUNT_OUT_OF_RANGE")
     if RANDOM_SEED<0 or not 0<LEARNING_RATE<=1 or not 0<=WARMUP_RATIO<=1: raise SystemExit("HYPERPARAMETER_OUT_OF_RANGE")
     if not 0<MAX_USD<=18: raise SystemExit("BUDGET_GATE_OUT_OF_RANGE")
+
+def provider_execution_mode(policy_path=None):
+    path=Path(policy_path) if policy_path is not None else PROVIDER_EXECUTION_POLICY
+    try:
+        payload=json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise SystemExit(f"PROVIDER_EXECUTION_POLICY_UNREADABLE {path}: {type(e).__name__}") from None
+    if type(payload) is not dict or type(payload.get("mode")) is not str:
+        raise SystemExit("PROVIDER_EXECUTION_MODE_UNRESOLVED")
+    mode=payload["mode"].strip().upper()
+    if mode not in {"FREE_ONLY","PAID_ALLOWED"}:
+        raise SystemExit(f"PROVIDER_EXECUTION_MODE_UNRECOGNIZED {mode!r}")
+    return mode
+
+def require_paid_provider_admission(policy_path=None):
+    mode=provider_execution_mode(policy_path)
+    if mode=="FREE_ONLY":
+        raise SystemExit("FREE_ONLY_PROVIDER_REJECTED provider=Together cost_class=PAID before subprocess/secret/network")
+    return mode
 
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
@@ -117,7 +137,7 @@ def created_job_identity_mismatches(meta,expected):
     return out
 
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();require_paid_provider_admission();local_checks()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

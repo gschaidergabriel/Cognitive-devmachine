@@ -1,0 +1,101 @@
+name: mini-entity-native-0.7-contract-falsifier
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-native-0-7-contract-gates-20260822-1311
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  falsify-current-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends build-essential libsqlite3-dev libjson-c-dev libcurl4-openssl-dev sqlite3
+      - name: Build exact branch source
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcc -O2 -Wall -Wextra -std=c11 \
+            -o /tmp/mini_entity.clay \
+            "the artefact/blogpost_entity/native/mini_entity.c" \
+            -lsqlite3 -ljson-c -lcurl
+          /tmp/mini_entity.clay --version
+          sha256sum /tmp/mini_entity.clay
+      - name: Reproduce missing output-contract gate and missing profile-hash read gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >/tmp/profile.json <<'JSON'
+          {
+            "schema":"clay-pipeline-profile/v2",
+            "profile_id":"contract_probe",
+            "identity":{"task":"Return strict JSON only","language":"en"},
+            "personality":{
+              "system_prompt":"Return strict JSON only.",
+              "output_contract":{"title_field":"title","longitudinal_self_report_field":"longitudinal_self_report"}
+            },
+            "inference":{"kind":"local_exec","max_tokens":32,"temperature":0.0}
+          }
+          JSON
+          printf 'fixture-model\n' >/tmp/model.gguf
+          cat >/tmp/runner <<'PY'
+          #!/usr/bin/env python3
+          print("THIS_IS_NOT_JSON")
+          PY
+          chmod 0755 /tmp/runner
+
+          /tmp/mini_entity.clay init /tmp/entity.db
+          /tmp/mini_entity.clay source-init /tmp/source.db
+          /tmp/mini_entity.clay preset-apply /tmp/entity.db /tmp/profile.json
+          /tmp/mini_entity.clay set-local-model /tmp/entity.db /tmp/model.gguf
+          /tmp/mini_entity.clay set-local-runner-json /tmp/entity.db '["/tmp/runner","{{PROMPT_FILE}}"]'
+          /tmp/mini_entity.clay source-add /tmp/source.db observation ev-1 '{"measured":1}'
+
+          # Current-source falsifier A: output violates configured JSON contract yet commits.
+          /tmp/mini_entity.clay run /tmp/entity.db /tmp/source.db | tee /tmp/run1.json
+          python3 - <<'PY'
+          import sqlite3
+          db=sqlite3.connect('/tmp/entity.db')
+          out=db.execute('select model_output from outputs where generation=1').fetchone()[0]
+          gen=db.execute('select generation from entity_state where id=1').fetchone()[0]
+          consumed=sqlite3.connect('/tmp/source.db').execute("select consumed_generation from mini_entity_events where source_id='ev-1'").fetchone()[0]
+          assert out.strip() == 'THIS_IS_NOT_JSON', out
+          assert gen == 1, gen
+          assert consumed == 1, consumed
+          print('DEFECT_REPRODUCED: invalid non-JSON output passed configured output_contract and was atomically committed')
+          PY
+
+          # Current-source falsifier B: tamper DB-resident profile bytes without updating stored hash.
+          /tmp/mini_entity.clay source-add /tmp/source.db observation ev-2 '{"measured":2}'
+          python3 - <<'PY'
+          import sqlite3
+          p='/tmp/entity.db'
+          db=sqlite3.connect(p)
+          row=db.execute("select profile_json,profile_sha256 from profiles where profile_id='contract_probe'").fetchone()
+          tampered=row[0].replace('Return strict JSON only','TAMPERED PROFILE BYTES',1)
+          assert tampered != row[0]
+          db.execute("update profiles set profile_json=? where profile_id='contract_probe'",(tampered,))
+          db.commit()
+          print('stored_hash_left_unchanged=', row[1])
+          PY
+          /tmp/mini_entity.clay run /tmp/entity.db /tmp/source.db | tee /tmp/run2.json
+          python3 - <<'PY'
+          import hashlib, sqlite3
+          db=sqlite3.connect('/tmp/entity.db')
+          raw,stored=db.execute("select profile_json,profile_sha256 from profiles where profile_id='contract_probe'").fetchone()
+          actual=hashlib.sha256(raw.encode()).hexdigest()
+          gen=db.execute('select generation from entity_state where id=1').fetchone()[0]
+          assert actual != stored, (actual, stored)
+          assert gen == 2, gen
+          print('DEFECT_REPRODUCED: profile hash mismatch was not rejected on read; run committed generation 2')
+          PY

@@ -1,5 +1,5 @@
 {
-  "schema_version": "7.5",
+  "schema_version": "7.6",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
@@ -138,8 +138,9 @@
       "single_job_budget_usd": 18.0,
       "campaign_ceiling_eur": 20.0,
       "create_safety": "deterministic campaign fingerprint + account duplicate guard + atomic local create-intent ledger + zero-retry billed create; ambiguous outcome remains UNKNOWN and blocks blind retry",
-      "launcher_paid_use_gate": "OPEN_SOURCE_REPAIR: current canonical launcher still carries a stale implicit Qwen/Qwen2.5-7B-Instruct-Turbo template default and does not bind hf_model_revision into campaign identity/provider create; do not run paid create until both are fixed on current main",
-      "hf_revision_policy": "exact intentionally selected 40-hex Hugging Face commit must be bound into campaign fingerprint, local intent and Together hf_model_revision before paid create; repository name alone is not artifact identity",
+      "launcher_paid_use_gate": "SOURCE_SATISFIED_CURRENT_BYTES: no implicit Together template default; an explicit current architecture-compatible template is required before file upload; exact hf_model_revision is bound into campaign fingerprint, local create-intent ledger, preflight evidence and provider create",
+      "launcher_git_blob": "2216e62b592dec4da55a922daa22dd2387470750",
+      "hf_revision_policy": "exact intentionally selected 40-hex Hugging Face commit is bound into campaign fingerprint, local intent and Together hf_model_revision; repository name alone is not artifact identity",
       "price_estimate_scope": "dataset/template budget gate only; not proof that Together accepts the custom checkpoint/revision",
       "secret_mounted_in_this_chat": false,
       "job_started": false,
@@ -178,15 +179,15 @@
     "inference_contract": "generic inference dispatch; model output is proposal only",
     "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label alone",
     "current_native_gap": "fuse #756/#764/#769 without duplicate semantic paths, exact source-bound rebuild, rerun confirmed falsifiers plus atomicity/CAS matrix, then close cross-environment release provenance",
-    "current_cognition_gap": "keep canonical leakage-free SFT v2 and exact typed-omega OOD promotion gate; repair the paid launcher so there is no implicit unverified template and the exact HF commit is campaign-bound; then obtain an actually admitted qwen2-compatible full-FT runner/template without changing the 0.5B research question; only after that preflight/create, held-out evaluation, Q4_K_M and measured RSS gate"
+    "current_cognition_gap": "keep canonical leakage-free SFT v2, runtime-binding validator and exact typed-omega OOD gate; current launcher provenance/template-default/HF-revision source gates are satisfied; remaining training admission is an actually admitted qwen2-compatible Full-FT template/runner plus environment-only credential without changing the 0.5B research question; only then run fingerprint-bound preflight/create, held-out evaluation, Q4_K_M and measured RSS gate"
   },
-  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) repair three confirmed source-bound native 0.7 current-main defects (#756 presentation neutrality, #764 local_exec environment secret isolation, #769 profile-v2 semantic fail-open) and rerun exact build/fault matrix; (B) cognition data/promotion mechanism is now leakage-free SFT v2 + one canonical runtime-binding validator + exact typed-omega OOD gate, but paid Together training remains blocked until the canonical launcher removes its stale implicit 7B template default, binds an exact HF revision, and a current qwen2-compatible Full-FT path is actually admitted; then budget-gated SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration.",
+  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) repair three confirmed source-bound native 0.7 current-main defects (#756 presentation neutrality, #764 local_exec environment secret isolation, #769 profile-v2 semantic fail-open) and rerun exact build/fault matrix; (B) cognition data/promotion/launcher mechanisms are now leakage-free SFT v2 + one canonical runtime-binding validator + exact typed-omega OOD gate + explicit-template/exact-HF-revision paid-campaign identity, but training remains blocked until a current qwen2-compatible Full-FT path is actually admitted with an environment-only credential; then budget-gated SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1 GiB RSS -> generic local_exec integration.",
   "go_contract": "Every go refreshes current main/owner authority, chooses the highest-information nonduplicate frontier, falsifies before promotion, persists bounded evidence/delta, and advances this same neutral Mini Entity + optional 0.5B cognition product until promoted or falsified.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one entity",
   "together_api": {
     "product_identity": "FORBIDDEN",
     "inference_requirement": "NONE",
-    "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED_BUT_CURRENTLY_BLOCKED_BY_LAUNCHER_PROVENANCE_AND_PROVIDER_ADMISSION",
+    "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED_BUT_CURRENTLY_BLOCKED_BY_PROVIDER_ADMISSION",
     "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
     "job_started": false
   }

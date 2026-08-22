@@ -3,8 +3,8 @@
 
 This tool does not make a build globally reproducible by declaration. It fails closed
 unless repeated builds inside the same admitted environment produce identical ELF bytes,
-and it records the source/compiler/dependency/artifact identities needed to replicate or
-compare the build elsewhere.
+and it records the complete local C source closure, compiler/dependency identities and
+artifact identities needed to replicate or compare the build elsewhere.
 """
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ from typing import Any
 
 
 DEFAULT_PACKAGES = ("sqlite3", "libcurl", "json-c")
+LOCAL_INCLUDE_RE = re.compile(r'^\s*#\s*include\s*"([^"\n]+)"', re.MULTILINE)
 
 
 def sha256_file(path: Path) -> str:
@@ -31,6 +32,74 @@ def sha256_file(path: Path) -> str:
         for chunk in iter(lambda: fh.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _inside_root(path: Path, root: Path) -> Path:
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(root)
+    except ValueError as exc:
+        raise RuntimeError(f"LOCAL_INCLUDE_ESCAPES_SOURCE_ROOT:{resolved}") from exc
+
+
+def local_source_closure(source: Path) -> dict[str, Any]:
+    """Return a deterministic digest of the entry unit and all quoted local includes.
+
+    System headers are intentionally dependency/toolchain evidence rather than repository
+    source bytes. Quoted includes are part of the effective native program and must be
+    bound transitively; otherwise changing an ``.inc`` file would leave the source identity
+    unchanged while producing different executable bytes.
+    """
+
+    entry = source.resolve()
+    root = entry.parent.resolve()
+    if not entry.is_file() or entry.is_symlink():
+        raise RuntimeError(f"SOURCE_INVALID:{entry}")
+
+    seen: dict[str, dict[str, Any]] = {}
+    active: set[str] = set()
+
+    def visit(path: Path) -> None:
+        rel = _inside_root(path, root).as_posix()
+        resolved = path.resolve()
+        if rel in seen:
+            return
+        if rel in active:
+            raise RuntimeError(f"LOCAL_INCLUDE_CYCLE:{rel}")
+        if not resolved.is_file() or resolved.is_symlink():
+            raise RuntimeError(f"LOCAL_INCLUDE_INVALID:{resolved}")
+
+        active.add(rel)
+        raw = resolved.read_bytes()
+        try:
+            text = raw.decode("utf-8")
+        except UnicodeDecodeError as exc:
+            raise RuntimeError(f"LOCAL_SOURCE_NOT_UTF8:{rel}") from exc
+        digest = hashlib.sha256(raw).hexdigest()
+        includes: list[str] = []
+        for match in LOCAL_INCLUDE_RE.finditer(text):
+            child = (resolved.parent / match.group(1)).resolve()
+            child_rel = _inside_root(child, root).as_posix()
+            includes.append(child_rel)
+            visit(child)
+        active.remove(rel)
+        seen[rel] = {
+            "path": rel,
+            "sha256": digest,
+            "size": len(raw),
+            "quoted_includes": sorted(set(includes)),
+        }
+
+    visit(entry)
+    files = [seen[key] for key in sorted(seen)]
+    canonical = json.dumps(files, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return {
+        "root": str(root),
+        "entry": entry.name,
+        "files": files,
+        "sha256": hashlib.sha256(canonical).hexdigest(),
+        "canonical_manifest_sha256": hashlib.sha256(canonical).hexdigest(),
+    }
 
 
 def run(argv: list[str], *, env: dict[str, str] | None = None) -> str:
@@ -107,7 +176,7 @@ def compile_once(
     *,
     compiler_path: str,
     source: Path,
-    source_sha: str,
+    source_closure_sha: str,
     flags: list[str],
     env: dict[str, str],
     workdir: Path,
@@ -121,7 +190,7 @@ def compile_once(
         "-Wextra",
         "-Werror",
         "-Wno-deprecated-declarations",
-        f"-frandom-seed={source_sha}",
+        f"-frandom-seed={source_closure_sha}",
         f"-ffile-prefix-map={root}=/clay/native",
         f"-fdebug-prefix-map={root}=/clay/native",
         "-Wl,--build-id=sha1",
@@ -153,6 +222,7 @@ def main() -> int:
     if args.repeat < 2:
         raise SystemExit("REPEAT_MUST_BE_AT_LEAST_2")
 
+    closure = local_source_closure(source)
     source_sha = sha256_file(source)
     compiler = compiler_identity(args.compiler)
     flags, package_versions = pkg_config(DEFAULT_PACKAGES)
@@ -176,7 +246,7 @@ def main() -> int:
             binary = compile_once(
                 compiler_path=compiler["path"],
                 source=source,
-                source_sha=source_sha,
+                source_closure_sha=closure["sha256"],
                 flags=flags,
                 env=env,
                 workdir=workdir,
@@ -200,7 +270,7 @@ def main() -> int:
         raise SystemExit("PUBLISHED_BINARY_HASH_MISMATCH")
 
     provenance = {
-        "schema": "mini-entity-native-build-provenance/v1",
+        "schema": "mini-entity-native-build-provenance/v2",
         "version_label": args.version_label,
         "subject": {
             "path": str(output),
@@ -209,6 +279,7 @@ def main() -> int:
         },
         "build_definition": {
             "source": {"path": str(source), "sha256": source_sha},
+            "source_closure": closure,
             "compiler": compiler,
             "pkg_config_packages": package_versions,
             "pkg_config_flags": flags,
@@ -218,7 +289,7 @@ def main() -> int:
             "repeat_byte_identity": len(set(hashes)) == 1,
             "fixed_environment": {"LC_ALL": "C", "LANG": "C", "TZ": "UTC"},
             "determinism_flags": [
-                f"-frandom-seed={source_sha}",
+                f"-frandom-seed={closure['sha256']}",
                 f"-ffile-prefix-map={source.parent.resolve()}=/clay/native",
                 f"-fdebug-prefix-map={source.parent.resolve()}=/clay/native",
                 "-Wl,--build-id=sha1",
@@ -226,12 +297,12 @@ def main() -> int:
         },
         "resolved_runtime_dependencies": linked_libraries(output),
         "generated_at_unix": time.time(),
-        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_PROVENANCE_BINDING_ONLY",
+        "acceptance_scope": "SAME_ENV_REPEAT_BUILD_AND_FULL_LOCAL_SOURCE_CLOSURE_PROVENANCE_BINDING_ONLY",
         "not_claimed": [
             "cross-environment reproducibility until independently rebuilt from the same recorded inputs",
             "model quality",
             "application acceptance",
-            "whole Mini Entity final acceptance"
+            "whole Mini Entity final acceptance",
         ],
     }
     receipt = args.receipt.resolve()

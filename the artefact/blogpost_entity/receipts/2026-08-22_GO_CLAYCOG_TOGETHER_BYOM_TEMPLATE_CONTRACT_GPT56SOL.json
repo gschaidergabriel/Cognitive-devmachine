@@ -1,0 +1,60 @@
+{
+  "schema": "claycog-together-byom-template-contract/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "main_observed_before_write": "3edb31e824404eb7c42f8cb721af27cc83c98794",
+  "owner_checkpoint": "Qwen/Qwen2.5-0.5B",
+  "current_public_contract": {
+    "together_byom_url": "https://docs.together.ai/docs/fine-tuning/byom",
+    "architecture_rule": "Base training template architecture must match the custom checkpoint.",
+    "size_rule": "Choose size as close as the catalog allows; if every compatible option is larger, choose the smallest. Exact parameter-size equality is not required by the current dedicated BYOM documentation.",
+    "context_rule": "The base template max sequence length must be compatible with what the checkpoint supports; current docs say the Together base max_seq_length must be no larger than checkpoint support and the selection section additionally advises matching context closely.",
+    "authenticated_admission": "Actual Together API/template acceptance remains the final executable gate."
+  },
+  "checkpoint_architecture_evidence": {
+    "qwen2_5_0_5b_config": "https://huggingface.co/Qwen/Qwen2.5-0.5B/blob/main/config.json",
+    "qwen2_5_architectures": ["Qwen2ForCausalLM"],
+    "qwen2_5_model_type": "qwen2",
+    "qwen2_5_max_position_embeddings": 32768,
+    "qwen3_5_0_8b_config": "https://huggingface.co/Qwen/Qwen3.5-0.8B/blob/main/config.json",
+    "qwen3_5_architectures": ["Qwen3_5ForConditionalGeneration"],
+    "qwen3_5_model_type": "qwen3_5",
+    "architecture_match": false
+  },
+  "current_together_catalog_evidence": {
+    "supported_models_url": "https://docs.together.ai/docs/fine-tuning/supported-models",
+    "page_contract": "Together states that the tables list every model available through the fine-tuning API.",
+    "full_ft_qwen_rows_observed": [
+      "Qwen/Qwen3.5-27B",
+      "Qwen/Qwen3.5-9B",
+      "Qwen/Qwen3.5-4B",
+      "Qwen/Qwen3.5-2B",
+      "Qwen/Qwen3.5-0.8B",
+      "Qwen/Qwen3.6-27B"
+    ],
+    "documented_qwen2_or_qwen2_5_full_ft_template": false,
+    "smallest_documented_qwen_full_ft": "Qwen/Qwen3.5-0.8B",
+    "smallest_documented_qwen_full_ft_is_compatible_evidence_for_qwen2_5": false
+  },
+  "adjudication": {
+    "rejected_claim": "Together BYOM requires the training template to have exactly the same parameter size as the custom checkpoint.",
+    "replacement_claim": "Together BYOM requires architecture compatibility, with the closest available size/context subject to actual service admission.",
+    "pr_771_comment_id": 5379002287,
+    "pr_771_coordination": "Posted current-doc correction: preserve fail-closed behavior but key it to architecture/context/live admission rather than exact 0.5B template-size equality.",
+    "practical_current_blocker": "No publicly documented qwen2/qwen2.5 Full-FT Together base template is present. The documented Qwen3.5-0.8B option is a different Hugging Face architecture."
+  },
+  "execution_boundary": {
+    "together_api_secret_mounted": false,
+    "authenticated_model_limits_or_preflight_executed": false,
+    "dataset_uploaded": false,
+    "billed_create_executed": false,
+    "training_job_started": false,
+    "money_spent_usd": 0,
+    "classification": "CURRENT_PUBLIC_PRIMARY_CONTRACT_SUPPORTED_BLOCKER; AUTHENTICATED_SERVICE_ADMISSION_OPEN"
+  },
+  "next_exact_step": "With TOGETHER_API_KEY mounted only in an authorized isolated execution, enumerate/validate a currently admitted qwen2-compatible full-FT training template before any dataset upload. If none exists, do not create a paid job; use an owner-admitted alternative full-FT runner for the same canonical SFT v2 corpus or request Together model support. If a compatible template is admitted, run the fingerprint-bound preflight and enforce the USD 18 single-job ceiling before exactly one create.",
+  "evidence_boundary": "This receipt corrects public BYOM contract interpretation and identifies the current documented architecture blocker. It does not establish live API behavior, BYOM acceptance, training quality, OOD promotion, quantized RSS or whole Mini Entity acceptance."
+}

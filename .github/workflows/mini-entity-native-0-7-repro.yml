@@ -1,0 +1,244 @@
+name: Mini Entity native 0.7 reproducibility gate
+
+on:
+  push:
+    branches:
+      - 'gpt56sol/go-mini-native-source-bundle-*'
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/native/**'
+      - '.github/workflows/mini-entity-native-0-7-repro.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-0-7-repro:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install native build and trace dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y build-essential pkg-config libsqlite3-dev libcurl4-openssl-dev libjson-c-dev binutils sqlite3 strace
+
+      - name: Run source-provenance falsifiers
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/native/test_native_repro_contract.py'
+
+      - name: Repeat clean source-bound builds
+        run: |
+          set -euo pipefail
+          NATIVE="$GITHUB_WORKSPACE/the artefact/blogpost_entity/native"
+          OUT="$RUNNER_TEMP/mini-entity-0-7"
+          mkdir -p "$OUT/a" "$OUT/b"
+          EPOCH="$(git show -s --format=%ct HEAD)"
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output "$OUT/a/mini_entity.clay" \
+            --receipt "$OUT/a/native_build_provenance.json" \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch "$EPOCH" \
+            --repeat 2
+          python3 "$NATIVE/build_native_bound.py" \
+            --source "$NATIVE/mini_entity.c" \
+            --output "$OUT/b/mini_entity.clay" \
+            --receipt "$OUT/b/native_build_provenance.json" \
+            --version-label mini-entity/0.7.0-dev1 \
+            --source-date-epoch "$EPOCH" \
+            --repeat 2
+          cmp "$OUT/a/mini_entity.clay" "$OUT/b/mini_entity.clay"
+          python3 - "$OUT/a/native_build_provenance.json" "$OUT/b/native_build_provenance.json" <<'PY'
+          import json, sys
+          a=json.load(open(sys.argv[1], encoding='utf-8'))
+          b=json.load(open(sys.argv[2], encoding='utf-8'))
+          assert a['schema']=='mini-entity-native-build-provenance/v2'
+          assert a['build_definition']['repeat_byte_identity'] is True
+          assert b['build_definition']['repeat_byte_identity'] is True
+          assert a['subject']['sha256']==b['subject']['sha256']
+          assert a['build_definition']['source_bundle']['sha256']==b['build_definition']['source_bundle']['sha256']
+          paths=[x['path'] for x in a['build_definition']['source_bundle']['inputs']]
+          assert paths==['mini_entity.c','mini_entity_part00.inc','mini_entity_part01.inc','mini_entity_part02.inc','mini_entity_part03.inc','mini_entity_part04.inc'], paths
+          PY
+          "$OUT/a/mini_entity.clay" --version | grep -Fx 'mini-entity/0.7.0-dev1'
+
+      - name: Exercise local fixture, quiet follow-up, secret isolation and rollback
+        env:
+          CLAY_TEST_SECRET: SENTINEL_CLAY_TEST_SECRET_0_7
+          OPENAI_API_KEY: SENTINEL_OPENAI_0_7
+          MISTRAL_API_KEY: SENTINEL_MISTRAL_0_7
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/mini-entity-0-7"
+          BIN="$OUT/a/mini_entity.clay"
+          ENTITY="$OUT/entity.db"
+          SOURCE="$OUT/source.db"
+          PROFILE="$OUT/profile.json"
+          MODEL="$OUT/model.gguf"
+          RUNNER="$OUT/fixture_runner.py"
+          MARKER="$OUT/runner_invocations.txt"
+          TRACE="$OUT/local-network.trace"
+
+          cat > "$PROFILE" <<'JSON'
+          {
+            "profile_id": "ci-neutral-local",
+            "identity": {"task": "process bounded fixture evidence", "language": "en"},
+            "personality": {"system_prompt": "Return only the fixture output.", "public_style": "plain", "output_contract": {}},
+            "inference": {
+              "kind": "local_exec",
+              "max_tokens": 32,
+              "temperature": 0.0,
+              "secret_names": ["CLAY_TEST_SECRET", "OPENAI_API_KEY", "MISTRAL_API_KEY"]
+            }
+          }
+          JSON
+          cat > "$RUNNER" <<'PY'
+          import os, pathlib, sys
+          forbidden=('CLAY_TEST_SECRET','OPENAI_API_KEY','MISTRAL_API_KEY')
+          if any(os.environ.get(name) for name in forbidden):
+              raise SystemExit(41)
+          prompt=pathlib.Path(sys.argv[1]).read_text(encoding='utf-8')
+          if 'event-1' not in prompt and 'event-2' not in prompt:
+              raise SystemExit(42)
+          marker=pathlib.Path(sys.argv[2])
+          with marker.open('a', encoding='utf-8') as fh:
+              fh.write('run\n')
+          print('fixture-local-output')
+          PY
+          : > "$MODEL"
+
+          "$BIN" init "$ENTITY"
+          "$BIN" source-init "$SOURCE"
+          "$BIN" source-add "$SOURCE" fixture event-1 '{"value":1}'
+          "$BIN" preset-apply "$ENTITY" "$PROFILE"
+          "$BIN" set-local-model "$ENTITY" "$MODEL"
+          RUNNER_JSON="$(python3 - "$RUNNER" "$MARKER" <<'PY'
+          import json,sys
+          print(json.dumps(['python3',sys.argv[1],'{{PROMPT_FILE}}',sys.argv[2]]))
+          PY
+          )"
+          "$BIN" set-local-runner-json "$ENTITY" "$RUNNER_JSON"
+
+          strace -f -qq -e trace=network -o "$TRACE" "$BIN" run "$ENTITY" "$SOURCE" > "$OUT/first.json"
+          "$BIN" run "$ENTITY" "$SOURCE" > "$OUT/quiet.json"
+
+          python3 - "$OUT/first.json" "$OUT/quiet.json" "$MARKER" <<'PY'
+          import json, pathlib, sys
+          first=json.load(open(sys.argv[1], encoding='utf-8'))
+          quiet=json.load(open(sys.argv[2], encoding='utf-8'))
+          marker=pathlib.Path(sys.argv[3]).read_text(encoding='utf-8').splitlines()
+          assert first['ok'] is True and first['quiet'] is False
+          assert first['generation']==1 and first['source_count']==1 and first['inference_kind']=='local_exec'
+          assert quiet['ok'] is True and quiet['quiet'] is True
+          assert quiet['generation']==1 and quiet['source_count']==0
+          assert 'output_id' not in quiet
+          assert marker==['run'], marker
+          PY
+
+          if grep -Eq 'socket\(|connect\(|sendto\(|recvfrom\(|sendmsg\(|recvmsg\(|accept\(|accept4\(|bind\(|listen\(|getsockname\(|getpeername\(|socketpair\(|setsockopt\(|getsockopt\(' "$TRACE"; then
+            echo 'unexpected network syscall in local inference path' >&2
+            cat "$TRACE" >&2
+            exit 1
+          fi
+          test "$(sqlite3 "$ENTITY" 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from study_rows;')" = '1'
+          test "$(sqlite3 "$SOURCE" 'select count(*) from mini_entity_events where consumed_generation is null;')" = '0'
+          test "$(sqlite3 "$ENTITY" 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 "$SOURCE" 'pragma integrity_check;')" = 'ok'
+
+          "$BIN" source-add "$SOURCE" fixture event-2 '{"value":2}'
+          sqlite3 "$ENTITY" "CREATE TRIGGER injected_study_failure BEFORE INSERT ON study_rows BEGIN SELECT RAISE(ABORT,'injected-study-fault'); END;"
+          set +e
+          "$BIN" run "$ENTITY" "$SOURCE" > "$OUT/fault.stdout" 2> "$OUT/fault.stderr"
+          FAULT_RC=$?
+          set -e
+          test "$FAULT_RC" -ne 0
+          test "$(sqlite3 "$ENTITY" 'select generation from entity_state where id=1;')" = '1'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from outputs;')" = '1'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from study_rows;')" = '1'
+          test "$(sqlite3 "$SOURCE" 'select count(*) from mini_entity_events where consumed_generation is null;')" = '1'
+          sqlite3 "$ENTITY" 'DROP TRIGGER injected_study_failure;'
+          "$BIN" run "$ENTITY" "$SOURCE" > "$OUT/recovery.json"
+          python3 - "$OUT/recovery.json" <<'PY'
+          import json,sys
+          row=json.load(open(sys.argv[1], encoding='utf-8'))
+          assert row['ok'] is True and row['quiet'] is False and row['generation']==2 and row['source_count']==1
+          PY
+          test "$(sqlite3 "$ENTITY" 'select generation from entity_state where id=1;')" = '2'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from outputs;')" = '2'
+          test "$(sqlite3 "$ENTITY" 'select count(*) from study_rows;')" = '2'
+          test "$(sqlite3 "$SOURCE" 'select count(*) from mini_entity_events where consumed_generation is null;')" = '0'
+          test "$(sqlite3 "$ENTITY" 'pragma integrity_check;')" = 'ok'
+          test "$(sqlite3 "$SOURCE" 'pragma integrity_check;')" = 'ok'
+
+      - name: Emit bounded reproduction receipt
+        run: |
+          set -euo pipefail
+          OUT="$RUNNER_TEMP/mini-entity-0-7"
+          python3 - "$OUT" <<'PY'
+          import hashlib, json, os, pathlib, platform, subprocess, sys
+          out=pathlib.Path(sys.argv[1])
+          prov=json.load(open(out/'a/native_build_provenance.json', encoding='utf-8'))
+          def q(sql, db):
+              return subprocess.check_output(['sqlite3',str(db),sql], text=True).strip()
+          receipt={
+            'schema':'MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1',
+            'source_commit':subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
+            'source_tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'], text=True).strip(),
+            'runner':{'os':platform.platform(),'machine':platform.machine()},
+            'build':{
+              'binary_sha256':prov['subject']['sha256'],
+              'elf_build_id':prov['subject']['elf_build_id'],
+              'source_bundle_sha256':prov['build_definition']['source_bundle']['sha256'],
+              'source_inputs':prov['build_definition']['source_bundle']['inputs'],
+              'same_invocation_repeat_byte_identity':prov['build_definition']['repeat_byte_identity'],
+              'second_clean_build_same_binary': hashlib.sha256((out/'b/mini_entity.clay').read_bytes()).hexdigest()==prov['subject']['sha256'],
+            },
+            'local_fixture':{
+              'parent_secret_sentinels_present':3,
+              'runner_secret_sentinels_visible':0,
+              'inference_network_syscalls':0,
+              'first_generation':1,
+              'verified_empty_followup_quiet':True,
+              'quiet_generation_unchanged':True,
+              'runner_invocation_count_after_quiet':1,
+            },
+            'rollback_fault':{
+              'injected':'study_rows BEFORE INSERT RAISE(ABORT)',
+              'generation_unchanged':True,
+              'output_count_unchanged':True,
+              'study_count_unchanged':True,
+              'event_remained_pending':True,
+              'recovery_generation':int(q('select generation from entity_state where id=1;', out/'entity.db')),
+            },
+            'integrity':{
+              'entity_db':q('pragma integrity_check;', out/'entity.db'),
+              'source_db':q('pragma integrity_check;', out/'source.db'),
+            },
+            'scope':'EXACT_WORKFLOW_HEAD_UBUNTU_SOURCE_BOUND_LOCAL_FIXTURE_AND_ROLLBACK_ONLY',
+            'not_claimed':['real GGUF/llama.cpp model quality','real external provider acceptance','cross-environment reproducibility','whole Mini Entity final acceptance'],
+          }
+          path=out/'MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT.json'
+          path.write_text(json.dumps(receipt, indent=2, sort_keys=True)+'\n', encoding='utf-8')
+          print('REPRO_RECEIPT_BEGIN')
+          print(path.read_text(encoding='utf-8'), end='')
+          print('REPRO_RECEIPT_END')
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mini-entity-native-0-7-repro
+          path: |
+            ${{ runner.temp }}/mini-entity-0-7/MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT.json
+            ${{ runner.temp }}/mini-entity-0-7/a/native_build_provenance.json
+            ${{ runner.temp }}/mini-entity-0-7/b/native_build_provenance.json
+            ${{ runner.temp }}/mini-entity-0-7/first.json
+            ${{ runner.temp }}/mini-entity-0-7/quiet.json
+            ${{ runner.temp }}/mini-entity-0-7/recovery.json
+            ${{ runner.temp }}/mini-entity-0-7/fault.stderr

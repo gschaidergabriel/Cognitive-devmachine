@@ -27,7 +27,18 @@ jobs:
           printf 'sha=%s\n' "$GITHUB_SHA"
           git rev-parse HEAD
           git status --short
+      - name: Compile ClayCog training boundary
+        run: |
+          set -euo pipefail
+          python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
       - name: Run strict ClayCode admission regression
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Run Together launcher safety regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py'

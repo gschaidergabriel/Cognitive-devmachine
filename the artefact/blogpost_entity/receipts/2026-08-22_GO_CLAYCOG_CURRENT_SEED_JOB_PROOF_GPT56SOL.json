@@ -1,0 +1,64 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "canonical_main_at_final_join": "7d80d7bdab921be02d82f36fc6a8dc91b6da578a",
+  "candidate_pr": 831,
+  "candidate_code_commit": "403597db46920b5476c3f0d1e5d66c80f0d196b1",
+  "candidate_branch": "gpt56sol/claycog-current-seed-job-proof-20260822",
+  "changed_blobs": {
+    "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py": "44971f84c000077b58521781e3f4f164f418d92f",
+    "the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py": "e955e3d1438495dc1bda1ffb554a998df255c13b"
+  },
+  "coordination": {
+    "stale_donor_pr": 826,
+    "stale_donor_final_state": "CLOSED_UNMERGED_SUPERSEDED_BY_831",
+    "reason": "older donor carried an implicit Qwen/Qwen2.5-7B-Instruct-Turbo template default; current main already removed it and strengthened SDK-v2 admission"
+  },
+  "delta": [
+    "campaign fingerprint schema v2 binds dataset hashes, exact HF revision, learning rate, warmup ratio and random seed",
+    "create-intent schema v2 persists the same campaign descriptor",
+    "billed create passes exact seed and effective hyperparameters",
+    "JOB_KNOWN plus job id is durably persisted before follow-up verification",
+    "create response identity is compared against the authorized campaign",
+    "fresh retrieve rechecks stable provider-visible identity; only missing random_seed is tolerated on retrieve",
+    "identity mismatch or retrieve failure preserves the known job and blocks blind replacement"
+  ],
+  "unusual_experiment": {
+    "name": "PROVIDER_JOB_METADATA_SUBSTITUTION",
+    "count_for_macro_cycle": 1,
+    "intervention": "hold returned job id constant while substituting provider-visible hf_model_revision and random_seed",
+    "isolated_mechanism_observation": {
+      "status": "PASS",
+      "rejected_fields": ["hf_model_revision", "random_seed"],
+      "scope": "isolated mechanism reproduction only; not exact current PR runtime"
+    }
+  },
+  "provider_contract_refresh": {
+    "create": "Together current create contract documents random_seed, from_hf_model, hf_model_revision, learning_rate and warmup_ratio",
+    "retrieve": "current retrieve contract exposes stable campaign identity fields but random_seed is not consistently exposed",
+    "policy": "require seed on create response; allow only seed omission on retrieve"
+  },
+  "execution_evidence": {
+    "same_changed_blobs_prior_commit": "845f137faaf1cb789e3ef2524081bcbd4236b191",
+    "claycog_validator_run": 32561849141,
+    "claycog_validator_job": 97004530307,
+    "claycog_validator_steps": null,
+    "identity_guard_run": 32561849142,
+    "identity_guard_job": 97004530149,
+    "identity_guard_steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT_NOT_CODE_TEST_FAILURE",
+    "current_rebased_code_commit": "403597db46920b5476c3f0d1e5d66c80f0d196b1",
+    "current_exact_runtime_status": "UNOBSERVED"
+  },
+  "evidence_class": "SOURCE_CANDIDATE_PLUS_ISOLATED_MECHANISM_SUPPORTED_CURRENT_EXACT_PR_RUNTIME_UNOBSERVED",
+  "money_spent_usd": 0,
+  "together_secret_used": false,
+  "provider_network_create": false,
+  "training_started": false,
+  "next_gate": "actually-started exact PR py_compile/provider/safety regressions on current candidate, then use current BYOM architecture audit to seek a qwen2-compatible Full-FT path without changing the owner-locked 0.5B research question"
+}

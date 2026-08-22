@@ -1,0 +1,64 @@
+{
+  "schema": "mini-entity-reference-mechanism-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "gpt-5.6-sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "mechanism": "configurable_deterministic_public_state_box",
+  "epistemic_law": "SYSTEM_MEASUREMENT != MODEL_SELF_REPORT",
+  "artifacts": {
+    "protocol": "the artefact/blogpost_entity/presets/ZERO_BLOG_STATE_BOX_PROTOCOL.md",
+    "config": "the artefact/blogpost_entity/presets/zero_blog_state_box.json",
+    "reference_algorithm": "the artefact/blogpost_entity/state_box_reference.py",
+    "tests": "the artefact/blogpost_entity/test_state_box_reference.py"
+  },
+  "commits": {
+    "machine_executable_config_initial": "f2cb2ad5cde5d3d4d301aa1d91a5f2264d78b5fc",
+    "duplicate_key_fix": "45c750ab1340782a50e106209c0047dc4091484a",
+    "reference_algorithm": "cc0256984ae12deb1f1dbef462179b1784a0a5c8",
+    "repo_falsifiers": "2526ca946937ff2df9425c68c408e487a8bca437"
+  },
+  "reference_contract": {
+    "canonical_system_fields": "allowlisted and pipeline-owned",
+    "non_metadata_system_measurement": "requires explicit status=VERIFIED; bare/missing/non-VERIFIED values remain UNKNOWN/ERROR",
+    "model_self_report": "separate allowlisted track; numeric values fail closed outside 0..1",
+    "delta": "computed only when current and previous values are both available in the same track",
+    "interpretation": "deterministic config-driven comparison/confound/calibration rules",
+    "public_render": "one fenced text box produced from public-safe allowlists",
+    "study_payload": "machine-readable system/self-report/delta/evaluation tracks with deterministic payload hash",
+    "persistence": "NOT_PERFORMED_BY_REFERENCE; native canonical commit remains sole persistence authority"
+  },
+  "isolated_fixture_regression": {
+    "execution_surface": "current isolated tool container",
+    "scope": "mirrored core reference logic fixture regression, not an exact mounted-repository test run",
+    "result": "PASS",
+    "checks": [
+      "verified system conflict 0.35 -> 0.78 produced system delta +0.43",
+      "reported conflict 0.40 -> 0.84 stayed a separate self-report delta +0.44",
+      "high verified conflict plus high reported conflict produced configured congruence text",
+      "model label change was flagged as longitudinal confound",
+      "canonical continuity_pressure UNKNOWN remained UNKNOWN",
+      "bare scalar non-metadata system measurements were rejected to UNKNOWN rather than promoted",
+      "self-report value above 1.0 failed closed with SELF_REPORT_NUMBER_OUT_OF_RANGE",
+      "rendered output used exactly separated SYSTEM STATE / MODEL SELF-REPORT / AUSWERTUNG tracks"
+    ]
+  },
+  "repo_tests_added": [
+    "duplicate JSON key rejection for state-box configuration",
+    "untyped system metric never becomes measurement",
+    "system/self-report deltas remain separate",
+    "model change is a confound rather than an explanation",
+    "UNKNOWN comparison is not imputed",
+    "out-of-range self-report fails closed",
+    "payload hash and rendered state box are deterministic for identical inputs",
+    "unlisted extra/private fields do not enter rendered output"
+  ],
+  "not_credited": [
+    "native C state-box implementation",
+    "atomic study-row persistence in MiniUnifiedDB",
+    "append-after-validated-prose in the credited ELF",
+    "exact repo pytest execution on an authorized mounted current-main sandbox",
+    "real provider/model quality"
+  ],
+  "acceptance": "MECHANISM_SUPPORTED_REFERENCE_ONLY_NATIVE_ATOMIC_INTEGRATION_OPEN",
+  "next": "Port the generic algorithm into the source-bound native pipeline as configurable DB-resident post-render/study logic and persist its payload in the same transaction as output, event consumption and generation CAS."
+}

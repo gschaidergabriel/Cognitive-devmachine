@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-21T23:36:41Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T00:06:41Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 664 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2594 Artikel, 1446 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -190,13 +190,13 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: inventory current measurement corpus** — `baunotiz-bauverlauf-8c57ef82ab1dce39d771` · baunotiz
 - **agentZero research: bind owner transition directive** — `baunotiz-bauverlauf-207deddb619a6c153cf9` · baunotiz
 - **agentZero research: initialize central research index** — `baunotiz-bauverlauf-12d782992f7e4f27b633` · baunotiz
+- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `bau-entityos-2c44f567c235` · bau
 - **agentZero research: combined Claude token savings model** — `baunotiz-bauverlauf-90c73358f7b4cd4ec191` · baunotiz
 - **agentZero research: quantify Claude token savings architecture** — `baunotiz-bauverlauf-ce3b01b6512951083a08` · baunotiz
 - **agentZero research: index generation 33 measurement integrity** — `baunotiz-bauverlauf-1dd5e84ac09d328713b3` · baunotiz
 - **agentZero research: index generation 32 re-evaluation** — `baunotiz-bauverlauf-31d9b7a1333cc82778e5` · baunotiz
 - **agentZero research: codify evidence and falsification model** — `baunotiz-bauverlauf-cd5680bbbef2dec58a77` · baunotiz
 - **agentZero research: establish post-implementation research program** — `baunotiz-bauverlauf-e3ca1480a4e5e5477b74` · baunotiz
-- **receipt(go): classify UnifiedDB pre-product guest failure and KVM gate** — `bau-entityos-2c44f567c235` · bau
 - **receipt: record EntityOS deployment digest authority hardening** — `baunotiz-bauverlauf-7146390e10f6b468b895` · baunotiz
 - **go: re-enter EntityOS image-authority hardening** — `baunotiz-bauverlauf-7528beebad9368b4513e` · baunotiz
 - **test(microvm): fence EntityOS digest deployment override** — `baunotiz-bauverlauf-1a0c7bbdf0f444c33dbe` · baunotiz
@@ -344,10 +344,10 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **C7 keeps ClayGraph as specialized associative memory inside UnifiedDB** — `KMP-FRANK-C7-CLAYGRAPH-SPECIALIZED-ORGAN` · begriff
 - **Named-field lowering plus schema preflight reduces silent schema-drift corruption at evolving Unifie** — `H_CC_NAMED_20260809` · hypothese
 - **CACC utility adaptation should consume durable outcome/evaluation receipts through UnifiedDB but onl** — `H-U2-F2-008` · hypothese
-- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **UnifiedDB U2: TCQS query IR needs admission and physical-plan receipts** — `KMP-U2-QUERY-ADMISSION-CLAYCODE` · begriff
 - **UnifiedDB should unify semantics and planning before physical storage** — `KMP-G11-LOGICAL-PHYSICAL` · begriff
 - **The UnifiedDB planner should choose graph traversal only when relation evidence is needed rather tha** — `H-G11-040` · hypothese
+- **The complete visual-seed-resolution plus EAP ActiveAssembly path can be near-negligible in latency r** — `H-Q23-011` · hypothese
 - **unifieddb-20260811T2335p0700-chatgpt-secondary-projection-outbox-v1** — `trigger_runs-unifieddb-unifieddb-20260811T23` · bereich_trigger_runs
 - **Concurrent PF history overlap reconciled: k128-k159 peer manifest is primary coverage because it str** — `rooms-center_events-20260809T1312p0700_666_p` · bereich_rooms
 - **GWT causal attribution should bind UnifiedDB/MOSAIC basis and reader handoff** — `KMP-G11-WORKSPACE-BASIS` · begriff

@@ -63,9 +63,23 @@ def load_free_api_keys(path: str | None = None) -> dict[str, str]:
     return {k: v for k, v in values.items() if v}
 
 
-# ── Drei Mistral-Token, fest verdrahtet fuer die Vorverarbeitung ───────────
+# ── Mistral-Token, fest verdrahtet fuer die Vorverarbeitung ───────────────
 # Gabriel 19.08.: alle drei rotieren, damit nie wieder Ratelimit.
-_MISTRAL_KEY_NAMES = ("MISTRAL_API_KEY", "MISTRAL2_API_KEY", "MISTRAL3_API_KEY")
+#
+# KORREKTUR 2026-08-22 (gemessen, nicht vermutet -- Sonde gegen
+# https://api.mistral.ai/v1/models, ein Aufruf pro Schluessel, keine
+# Tokenkosten): MISTRAL_API_KEY liefert HTTP 402 "Check your subscription"
+# -- kein Abo mehr, keine Ratenlage, die sich erholt. transport.py rotiert
+# 402 zwar bereits pro Anfrage weg (_PRO_SCHLUESSEL), aber das verbrennt bei
+# JEDEM Aufruf zuerst einen sicher toten Versuch auf Schluessel 1, bevor
+# Schluessel 2/3 drankommen -- unnoetig, wenn der Ausfall schon bekannt ist.
+# Deckt sich mit dem bereits an anderer Stelle dokumentierten Befund
+# (clayverse/omnimind_anreicherung.py: "NIE MISTRAL_API_KEY"). Also HIER
+# an der Wurzel (secrets.mistral_keys() ist der gemeinsame Pool fuer
+# prestage/innenraum/translator/motor_kaskade): nur die lebenden zwei sind
+# der Fallback-Pool. MISTRAL2_API_KEY/MISTRAL3_API_KEY beide 200 OK,
+# dieselbe Minute gemessen -- Rotation bleibt zwischen den beiden bestehen.
+_MISTRAL_KEY_NAMES = ("MISTRAL2_API_KEY", "MISTRAL3_API_KEY")
 
 
 def mistral_keys(path: str | None = None) -> list[str]:

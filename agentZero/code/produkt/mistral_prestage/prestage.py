@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from . import secrets, transport
+from . import motor_kaskade, secrets, transport
 
 # MEASURED 2026-08-18: mistral-small-latest collapsed the 8-key envelope into
 # a single field, dumping everything (watch_out, hypotheses, the negotiation
@@ -679,28 +679,44 @@ def run_prestage(
         hyperposition=hyperposition,
         gelernt=gelernt,
     )
-    result = transport.mistral_chat_json_rotating(
-        keys=keys,
-        model=model,
-        system=system,
-        user=f"CONTEXT:\n{context}",
-        temperature=0.2,
-        max_tokens=900,
-        # ⭐⭐ TOKEN-KETTE 2026-08-22: `system` hier ist _BASE_RULES (~30,5k
-        # Zeichen) + Zusatz + _arbeitsraum_regel() -- bei round_no=1 IST DAS
-        # BYTE-IDENTISCH bei jedem einzigen Zug (reine Modulkonstanten plus ein
-        # Env-Flag, das im Betrieb nicht wechselt). Gemessen 2026-08-22: 31.836
-        # Zeichen reiner, unveraenderter Praefix, JEDES Mal komplett neu bezahlt
-        # -- der mit Abstand groesste Einzelposten der ganzen Vorstufe (das
-        # variable CONTEXT darunter liegt im Mittel bei wenigen hundert bis ~10k
-        # Zeichen). Mistral cacht NICHT automatisch (anders als GLM) -- ohne
-        # diesen Schluessel bleibt der Praefix immer kalt. Je Runde ein eigener
-        # Eimer: bei round_no=2 traegt der Zusatztext zero_suggestion mitten im
-        # Block, der Praefix bis dahin (_BASE_RULES, der groesste Teil) bleibt
-        # trotzdem gleich und kann treffen. Kein Nutzerdatum im Schluessel
-        # (Doku-Warnung) -- reiner Prozessname.
-        prompt_cache_key=f"entityos-prestage-r{round_no}",
-    )
+    _user_text = f"CONTEXT:\n{context}"
+    try:
+        result = transport.mistral_chat_json_rotating(
+            keys=keys,
+            model=model,
+            system=system,
+            user=_user_text,
+            temperature=0.2,
+            max_tokens=900,
+            # ⭐⭐ TOKEN-KETTE 2026-08-22: `system` hier ist _BASE_RULES (~30,5k
+            # Zeichen) + Zusatz + _arbeitsraum_regel() -- bei round_no=1 IST DAS
+            # BYTE-IDENTISCH bei jedem einzigen Zug (reine Modulkonstanten plus ein
+            # Env-Flag, das im Betrieb nicht wechselt). Gemessen 2026-08-22: 31.836
+            # Zeichen reiner, unveraenderter Praefix, JEDES Mal komplett neu bezahlt
+            # -- der mit Abstand groesste Einzelposten der ganzen Vorstufe (das
+            # variable CONTEXT darunter liegt im Mittel bei wenigen hundert bis ~10k
+            # Zeichen). Mistral cacht NICHT automatisch (anders als GLM) -- ohne
+            # diesen Schluessel bleibt der Praefix immer kalt. Je Runde ein eigener
+            # Eimer: bei round_no=2 traegt der Zusatztext zero_suggestion mitten im
+            # Block, der Praefix bis dahin (_BASE_RULES, der groesste Teil) bleibt
+            # trotzdem gleich und kann treffen. Kein Nutzerdatum im Schluessel
+            # (Doku-Warnung) -- reiner Prozessname.
+            prompt_cache_key=f"entityos-prestage-r{round_no}",
+        )
+        result = dict(result)
+        result["receipt"] = dict(result["receipt"])
+        result["receipt"]["motor"] = "mistral"
+    except Exception:
+        # ⭐⭐⭐ 2026-08-22: Mistral (alle rotierenden Schluessel) ist hart
+        # ausgefallen -- der Notweg (motor_kaskade.vorstufe_notweg: stehender
+        # warmer Claude-Prozess, danach der Bahnrouter-Pool) IST fuer diesen
+        # Zug die Vorstufe. Derselbe system/user-Text, derselbe Envelope-
+        # Vertrag -- alles unten (Default-Fuellung, DB-Schreibung ueber
+        # pipeline.py) bleibt unveraendert. Wirft nur weiter, wenn AUCH der
+        # ganze Notweg ausfaellt (KaskadeErschoepft) -- dann gibt es diesen
+        # Zug wirklich nicht.
+        result = motor_kaskade.vorstufe_notweg(
+            system=system, user=_user_text, modus="aussen", max_tokens=900)
     payload = result["payload"]
     if not isinstance(payload, dict):
         payload = {}
@@ -738,6 +754,14 @@ def run_prestage(
         print("prestage: unvollstaendiger Envelope, Defaults gefuellt: " + str(sorted(_fehlend)),
               file=_sys.stderr)
     payload["round_no"] = round_no
-    payload["prestage_model"] = model
+    # ⭐ Telemetrie-Spur: welcher Motor hat WIRKLICH geliefert (Mistral oder
+    # ein Notweg)? "model" ist immer der ANGEFRAGTE Mistral-Modellname --
+    # bei einem Notweg-Treffer waere das falsch (behauptet Mistral, obwohl
+    # z.B. der Bahnrouter-Pool geliefert hat). receipt["motor"]/["modell"]
+    # tragen die WAHRE Herkunft, siehe motor_kaskade.py.
+    _motor = result["receipt"].get("motor", "mistral")
+    payload["prestage_model"] = model if _motor == "mistral" else (
+        f"{_motor}:{result['receipt'].get('modell', '')}".rstrip(":"))
+    payload["engine"] = _motor
     payload["prestage_receipt"] = result["receipt"]
     return payload

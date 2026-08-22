@@ -10,7 +10,7 @@ from .. import identity  # coordinator-owned, imported not edited
 from . import absicht as _absicht
 from . import wettbewerb
 from .. import hyperposition  # coordinator-owned, imported not edited (read-only projector)
-from . import headless_zero, innenraum, prestage, translator
+from . import headless_zero, innenraum, motor_kaskade, prestage, translator
 from . import reality_layer  # additive anti-confabulation check, default OFF -- see module docstring
 import re
 
@@ -1547,22 +1547,36 @@ def run_chat_turn(
         if _geraten:
             print(f"prestage: erfundene Pfade im Auftrag -- {_geraten}", file=sys.stderr)
 
+        # ⭐⭐⭐ 2026-08-22: Zeros Haupt-Antwort ("Hauptgehirn") faellt auf
+        # MISTRAL zurueck, wenn Claude Code HART erschoepft ist (Kredit/
+        # Kontingent, nicht ein voruebergehendes Ratenlimit -- siehe
+        # motor_kaskade.py-Kopf fuer die ehrliche Grenze: OHNE
+        # Werkzeuge, Text-Antwort statt Agentenschleife). Die GEGENRICHTUNG
+        # zu warm_claude_prestage.py (dort uebernimmt Claude, wenn Mistral
+        # ausfaellt -- hier uebernimmt Mistral, wenn Claude ausfaellt).
+        _endgueltiger_auftrag_r1 = _mit_arbeitsraum(
+            _mit_kuerze(
+                _mit_verlauf(
+                    _mit_gespraechslage(
+                        _ohne_falschen_gruss(
+                            _in_zweiter_person(
+                                _mit_epistemik(envelope["caveman_prompt"],
+                                               envelope.get("epistemik"))),
+                            message), world), world)),
+            vorstufe_world, envelope.get("broadcast_ids"),
+            volltext_world=world)
         t0 = time.perf_counter()
-        zero = headless_zero.run_headless(
-            _mit_arbeitsraum(
-                _mit_kuerze(
-                    _mit_verlauf(
-                        _mit_gespraechslage(
-                            _ohne_falschen_gruss(
-                                _in_zweiter_person(
-                                    _mit_epistemik(envelope["caveman_prompt"],
-                                                   envelope.get("epistemik"))),
-                                message), world), world)),
-                vorstufe_world, envelope.get("broadcast_ids"),
-                volltext_world=world),
-            user_id=user_id, session_id=session_id,
-            tool_selection=selected_tools,
-        )
+        try:
+            zero = headless_zero.run_headless(
+                _endgueltiger_auftrag_r1,
+                user_id=user_id, session_id=session_id,
+                tool_selection=selected_tools,
+            )
+        except headless_zero.HeadlessZeroError as _claude_fehler_r1:
+            if not motor_kaskade.ist_hart_erschoepft(str(_claude_fehler_r1)):
+                raise  # voruebergehend (Ratenlimit/Timeout/...) -- kein Motorwechsel
+            zero = motor_kaskade.hauptgehirn_kaskade(
+                _endgueltiger_auftrag_r1, claude_fehler=_claude_fehler_r1)
         zero_ms = (time.perf_counter() - t0) * 1000.0
         _claude_nutzung_buchen(own_store, turn_id=turn_id, session_id=session_id,
                                user_id=user_id, zero=zero, round_no=1)
@@ -1592,22 +1606,29 @@ def run_chat_turn(
             prestage_ms += (time.perf_counter() - t0) * 1000.0
             envelope2["caveman_prompt"] = _mit_zeit(
                 envelope2.get("caveman_prompt") or "", user_id)
+            _endgueltiger_auftrag_r2 = _mit_arbeitsraum(
+                _mit_kuerze(
+                    _mit_verlauf(
+                        _mit_gespraechslage(
+                            _ohne_falschen_gruss(
+                                _in_zweiter_person(
+                                    _mit_epistemik(envelope2["caveman_prompt"],
+                                                   envelope2.get("epistemik"))),
+                                message), world), world)),
+                vorstufe_world, envelope2.get("broadcast_ids"),
+                volltext_world=world)
             t0 = time.perf_counter()
-            zero = headless_zero.run_headless(
-                _mit_arbeitsraum(
-                    _mit_kuerze(
-                        _mit_verlauf(
-                            _mit_gespraechslage(
-                                _ohne_falschen_gruss(
-                                    _in_zweiter_person(
-                                        _mit_epistemik(envelope2["caveman_prompt"],
-                                                       envelope2.get("epistemik"))),
-                                    message), world), world)),
-                    vorstufe_world, envelope2.get("broadcast_ids"),
-                    volltext_world=world),
-                user_id=user_id, session_id=session_id,
-                tool_selection=selected_tools,
-            )
+            try:
+                zero = headless_zero.run_headless(
+                    _endgueltiger_auftrag_r2,
+                    user_id=user_id, session_id=session_id,
+                    tool_selection=selected_tools,
+                )
+            except headless_zero.HeadlessZeroError as _claude_fehler_r2:
+                if not motor_kaskade.ist_hart_erschoepft(str(_claude_fehler_r2)):
+                    raise
+                zero = motor_kaskade.hauptgehirn_kaskade(
+                    _endgueltiger_auftrag_r2, claude_fehler=_claude_fehler_r2)
             zero_ms += (time.perf_counter() - t0) * 1000.0
             _claude_nutzung_buchen(own_store, turn_id=turn_id, session_id=session_id,
                                    user_id=user_id, zero=zero, round_no=2)

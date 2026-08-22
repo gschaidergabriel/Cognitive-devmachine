@@ -256,7 +256,10 @@
    "kann_schema": 1,
    "schluessel_namen": "GLM_API_KEY",
    "konten_anzahl": 1,
-   "spitzenfenster_utc8": [14, 18],
+   "spitzenfenster_utc8": [
+    14,
+    18
+   ],
    "zustand_gemessen": "im Modell-Lineup vorhanden (Owner-Vorgabe 2026-08-21), aber in keinem Prozess verdrahtet -- glm-5.2 deckt den Fall 'staerkstes Modell noetig' bereits ab. Katalogeintrag fuer den naechsten Bauer. ⚠️ 3x Kontingent 14-18 Uhr UTC+8, 2x ausserhalb -- siehe spitzenfenster_utc8 und Bahnrouter._in_spitzenzeit in bahnen.py."
   },
   {
@@ -273,7 +276,10 @@
    "kann_schema": 1,
    "schluessel_namen": "GLM_API_KEY",
    "konten_anzahl": 1,
-   "spitzenfenster_utc8": [14, 18],
+   "spitzenfenster_utc8": [
+    14,
+    18
+   ],
    "zustand_gemessen": "noch nicht live geprueft, siehe glm_45_air -- gleicher Grund. Fuer 'zweitmeinung' als staerkstes GLM-Modell verdrahtet (echte Zweitmeinung soll nicht am billigsten Modell haengen). ⚠️ 3x Kontingent 14-18 Uhr UTC+8, 2x ausserhalb -- Bahnrouter._reihenfolge schiebt diese Bahn in dem Fenster hinter alle nicht-spitzenzeit-markierten Bahnen des Prozesses (nicht raus, nur zurueck), siehe spitzenfenster_utc8."
   },
   {
@@ -543,6 +549,30 @@
    "hoechstanteil": 0.99,
    "max_je_lauf": 10,
    "schema_pflicht": 0
+  },
+  {
+   "prozess": "vorstufe_notweg",
+   "bahnen": [
+    "nvidia_nim",
+    "groq_gptoss_120b",
+    "glm_52",
+    "groq_gptoss_20b"
+   ],
+   "hoechstanteil": 0.15,
+   "max_je_lauf": 50,
+   "schema_pflicht": 1
+  },
+  {
+   "prozess": "hauptgehirn_notweg",
+   "bahnen": [
+    "nvidia_nim",
+    "groq_gptoss_120b",
+    "glm_52",
+    "groq_gptoss_20b"
+   ],
+   "hoechstanteil": 0.15,
+   "max_je_lauf": 50,
+   "schema_pflicht": 1
   }
  ],
  "gemessen_am": "2026-08-18",

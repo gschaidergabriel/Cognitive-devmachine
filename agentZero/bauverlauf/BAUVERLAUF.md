@@ -1,10 +1,40 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-21T23:36:41Z. 1110 Commits aus vier Repos, davon 480 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T00:06:41Z. 1110 Commits aus vier Repos, davon 482 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
+
+## 2026-08-22
+
+### EOS-Chronik 2026-08-22 00:04:18 +0000 — entityos: 11 Aenderungen
+
+`6809e26ef810` · entityos · 00:04 UTC · BACK agent
+
+```
+Anlass: Wache: Aenderung beobachtet
+
+  forschung/wege/verlauf.jsonl
+  the artefact/clayverse/bahnen.json
+  the artefact/clayverse/mistral_prestage/innenraum.py
+  the artefact/clayverse/mistral_prestage/motor_kaskade.py
+  the artefact/clayverse/mistral_prestage/pipeline.py
+  the artefact/clayverse/mistral_prestage/prestage.py
+  the artefact/clayverse/mistral_prestage/warm_claude_prestage.py
+  the artefact/tests/test_kaskade_db_kontinuitaet.py
+  the artefact/tests/test_motor_kaskade.py
+  the artefact/tests/test_pipeline_hauptgehirn_kaskade.py
+  the artefact/tests/test_warm_claude_prestage.py
+
+Zeit: 2026-08-22T00:04:18+00:00
+Wirt: frank-api
+Instanz: zero
+Baum: entityos (/opt/entityos)
+Dateien: 11
+Fern: lokal -> /srv/git/entityos.git
+Werkzeug: eos-chronik.py v1
+```
 
 ## 2026-08-21
 
@@ -38,6 +68,68 @@ Claude-Session: https://claude.ai/code/session_0137VSQJf8XNew6TRfrpgYWb
 ```
 Co-Authored-By: Claude Opus 4.8 <<adresse>>
 Claude-Session: https://claude.ai/code/session_0137VSQJf8XNew6TRfrpgYWb
+```
+
+### Motor-Kaskade: EIN Notweg-Router ueber den ganzen Schluesselpool
+
+`4ee9e3465d66` · entityos · 22:32 UTC · BACK agent
+
+```
+Gabriels Auftrag 2026-08-22 (mehrere Praezisierungen im Verlauf): Vorstufe
+und Zeros Hauptgehirn sollen nie beide gleichzeitig stillstehen, egal
+welcher einzelne Motor gerade ausfaellt. Generalisiert zwei anfangs separat
+gedachte Fallbacks zu EINER Kaskade -- "Umstellen statt anbauen": kein
+neuer Anbieter-Client, nur vorhandene Transporte in Reihenfolge geschaltet.
+
+ZWEI Rollen, GEGENLAEUFIGE Primaermotoren, JE eine dreistufige Kaskade:
+
+  VORSTUFE     Mistral (primaer) -> stehender warmer Claude-Sonnet-Notweg
+               -> Bahnrouter-Pool (Groq/NVIDIA/GLM).
+  HAUPTGEHIRN  Claude (primaer, mit vollen Werkzeugen) -> bei HARTEM Ausfall
+               (Kredit/Kontingent, NICHT ein Ratenlimit) Mistral-
+               Direktantwort -> Bahnrouter-Pool.
+
+Jede Stufe liefert denselben Vertrag wie die Stufe davor -- pipeline.py/
+prestage.py/innenraum.py laufen bei einem Notweg-Treffer UNVERAENDERT
+weiter (Envelope-Defaultfuellung, DB-Schreibung), nur receipt["motor"]/
+zero["engine"] tragen die Herkunft (landet unveraendert in mv_prestage_
+turns.prestage_model bzw. im Zugergebnis selbst).
+
+  - clayverse/mistral_prestage/warm_claude_prestage.py (neu): EIN stehender
+    `claude -p --input-format stream-json`-Prozess je Vorstufen-Modus, stdin
+    bleibt ueber mehrere Zuege offen (anders als warm_zero.WarmPool, das
+    Zeros Zustandslosigkeitsgesetz absichtlich erzwingt), Selbst-
+    Rezyklierung bei 350.000 Kontexttoken, --append-system-prompt-file +
+    --exclude-dynamic-system-prompt-sections fuer Cache-Stabilitaet
+    (wiederverwendet aus warm_zero.WarmPool, nicht neu gemessen).
+  - clayverse/mistral_prestage/motor_kaskade.py (neu): ist_hart_erschoepft()
+    (Kredit-/Kontingent-Muster vs. Ratenlimit/Timeout), vorstufe_notweg()
+    (Claude-warm -> Pool), hauptgehirn_kaskade() (Mistral-Direktantwort ->
+    Pool, IMMER ohne Werkzeuge -- ehrliche, dokumentierte Grenze).
+  - clayverse/bahnen.json: zwei neue Prozesse ("vorstufe_notweg"/
+    "hauptgehirn_notweg", schema_pflicht=1) ueber vier gemessen nutzbare
+    Bahnen (nvidia_nim/groq_gptoss_120b/glm_52/groq_gptoss_20b) --
+    Bahnrouter traegt Tagesdeckel + Erschoepfungsgedaechtnis bereits
+    (bahn_nutzung-Tabelle, LEBEND_SCHWELLE/-ABKUEHLUNG), hier nur verdrahtet.
+  - prestage.py/innenraum.py: eigener Mistral-Versuch bleibt (eigener,
+    stabiler prompt_cache_key), except-Zweig ruft motor_kaskade.
+    vorstufe_notweg (keine doppelte Mistral-Anfrage).
+  - pipeline.py: beide headless_zero.run_headless-Aufrufstellen (Runde 1+2)
+    pruefen bei HeadlessZeroError erst ist_hart_erschoepft(), rufen nur DANN
+    motor_kaskade.hauptgehirn_kaskade -- ein Ratenlimit bleibt ein normaler,
+    durchgereichter Fehler.
+  - 41 neue Tests (Kaskaden-Logik, stehender Prozess, Verdrahtung, sowie ein
+    DB-Kontinuitaetsbeweis: ein Notweg-Envelope schreibt dieselben mv_
+    prestage_turns/mv_translation_log-Zeilen wie ein normaler Zug).
+
+⚠️ bahnen.json traegt den Hinweis "Ausgeleitet, nicht abgeschrieben -- die
+Wahrheit bleibt im Clay-Unterbau (/opt/clayverse/werkzeug/verdrahtung.py)".
+Die zwei neuen Prozesse sind NUR in der Repo-Kopie ergaenzt; ob sie in den
+Clay-Unterbau nachgezogen werden muessen, damit eine kuenftige Ableitung sie
+nicht verliert, ist eine Betriebsfrage ausserhalb dieses Branches.
+
+AUTO_LIVE/ENABLED bleiben unangetastet (0) -- kein Rebuild, kein Deploy aus
+diesem Branch.
 ```
 
 ### EOS-Chronik 2026-08-21 22:31:17 +0000 — entityos: 1 Aenderungen
@@ -2911,46 +3003,6 @@ Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)
 Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 16:56:22 +0000 — entityos: 2 Aenderungen
-
-`8ad2197766c0` · entityos · 16:56 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/tests/test_erwartung_budget.py
-
-Zeit: 2026-08-20T16:56:22+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-20 16:43:33 +0000 — entityos: 4 Aenderungen
-
-`af7c6da83c07` · entityos · 16:43 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  the artefact/clayverse/mistral_prestage/pipeline.py
-  the artefact/clayverse/mistral_prestage/warm_zero.py
-  the artefact/tests/test_leermeldung.py
-  the artefact/tests/test_warmpool.py
-
-Zeit: 2026-08-20T16:43:33+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 4
 Fern: lokal -> /srv/git/entityos.git
 Werkzeug: eos-chronik.py v1
 ```

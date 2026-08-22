@@ -73,7 +73,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from . import secrets, transport
+from . import motor_kaskade, secrets, transport
 
 # ── Der echte ClayCode-BASE-Compiler, per Pfad geladen (kein Paket-Import --
 # tools/ liegt ausserhalb von clayverse/, siehe claycode_base_compiler_
@@ -287,14 +287,26 @@ def run_innere_vorstufe(
         gedanke=gedanke, world=world, ziel_kontext=ziel_kontext,
         available_tools=available_tools, hyperposition=hyperposition, gelernt=gelernt,
     )
-    ergebnis = transport.mistral_chat_json_rotating(
-        keys=keys, model=model, system=_INNEN_DENKRAUM,
-        user=f"CONTEXT:\n{context}", temperature=0.2, max_tokens=900,
-        # ⭐ Eigener Cache-Eimer, getrennt vom Chat-Weg (prestage.py nutzt
-        # entityos-prestage-r1/r2) -- derselbe fixe System-Praefix bei jedem
-        # inneren Zug, damit Mistral ihn treffen KANN.
-        prompt_cache_key="entityos-innere-vorstufe",
-    )
+    _user_text = f"CONTEXT:\n{context}"
+    try:
+        ergebnis = transport.mistral_chat_json_rotating(
+            keys=keys, model=model, system=_INNEN_DENKRAUM,
+            user=_user_text, temperature=0.2, max_tokens=900,
+            # ⭐ Eigener Cache-Eimer, getrennt vom Chat-Weg (prestage.py nutzt
+            # entityos-prestage-r1/r2) -- derselbe fixe System-Praefix bei jedem
+            # inneren Zug, damit Mistral ihn treffen KANN.
+            prompt_cache_key="entityos-innere-vorstufe",
+        )
+        ergebnis = dict(ergebnis)
+        ergebnis["receipt"] = dict(ergebnis["receipt"])
+        ergebnis["receipt"]["motor"] = "mistral"
+    except Exception:
+        # ⭐⭐⭐ 2026-08-22: derselbe Notweg wie prestage.py (motor_kaskade.
+        # vorstufe_notweg, modus="innen" -- eigener stehender Claude-Prozess,
+        # eigener Bahnrouter-Prozess). Wirft nur weiter, wenn AUCH der ganze
+        # Notweg ausfaellt.
+        ergebnis = motor_kaskade.vorstufe_notweg(
+            system=_INNEN_DENKRAUM, user=_user_text, modus="innen", max_tokens=900)
     payload = ergebnis["payload"]
     if not isinstance(payload, dict):
         payload = {}
@@ -311,6 +323,11 @@ def run_innere_vorstufe(
         print("innenraum: unvollstaendiger Envelope, Defaults gefuellt: " + str(sorted(fehlend)),
               file=sys.stderr)
     payload["claycode_kompiliert"] = claycode_compile_probe(payload["claycode_direktive"])
-    payload["innen_model"] = model
+    # ⭐ Telemetrie-Spur: siehe prestage.py -- "model" ist der ANGEFRAGTE
+    # Mistral-Modellname, bei einem Notweg-Treffer waere das falsch.
+    _motor = ergebnis["receipt"].get("motor", "mistral")
+    payload["innen_model"] = model if _motor == "mistral" else (
+        f"{_motor}:{ergebnis['receipt'].get('modell', '')}".rstrip(":"))
+    payload["engine"] = _motor
     payload["innen_receipt"] = ergebnis["receipt"]
     return payload

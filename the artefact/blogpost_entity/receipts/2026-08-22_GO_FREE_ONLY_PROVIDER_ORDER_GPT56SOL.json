@@ -1,0 +1,78 @@
+{
+  "schema": "FREE_ONLY_PROVIDER_ORDER_RECEIPT/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol temporary Clay research organ",
+  "trigger": "go",
+  "canonical_main_at_clean_fork": "3303585bf7822cde92caf99e2cf2dd37ea3c158b",
+  "branch": "go-20260822-free-only-order-gpt56sol-v2",
+  "authority": {
+    "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+    "supervisor_control_commit": "594d97a80aa27fe9300f51788449ec66ce8434ac",
+    "cycle_mode": "FREE_ONLY"
+  },
+  "parallel_fusion": {
+    "observed": "Concurrent main introduced the canonical assert_provider_execution_allowed() supervisor-policy gate before this clean branch was created.",
+    "decision": "Abandon separate provider-admission module/path and strengthen the existing canonical gate only.",
+    "superseded_draft_pr": 922
+  },
+  "problem": "The canonical FREE_ONLY gate was placed after validate_static_contract() and local_checks(), so a paid-provider-disabled launch could still regenerate/validate local corpus state before policy rejection.",
+  "delta": "Move assert_provider_execution_allowed() to the first post-argument executable boundary, before static validation and local_checks; strengthen the existing FREE_ONLY regression to prove local_checks is not reached.",
+  "changed_files": [
+    {
+      "path": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
+      "base_git_blob_sha1": "5f37ed8150c1bc34a005359024c045a40f8826b4",
+      "candidate_git_blob_sha1": "040cf5b3fb560a15d635d4c3dde2beb72ee226a2",
+      "candidate_sha256": "8c0fc97c006b1e41bd7fa17b1b7018189c839b5b47bb33ce3dd9c76d355ab108"
+    },
+    {
+      "path": "the artefact/blogpost_entity/mini_cognition/test_launch_together_qwen35_08b_v1.py",
+      "base_git_blob_sha1": "c810656e867f54d5c03ec704f2ecd9d26c86537a",
+      "candidate_git_blob_sha1": "c7d4aec91b138b5dab289b22d2ff4404445549c2",
+      "candidate_sha256": "e915b7e70f1f690c045c4ae971df9c2c85ea5ecf7131ab95b8829a8f2c1b93fa"
+    }
+  ],
+  "red_green": {
+    "pre_fix": {
+      "launcher_blob": "5f37ed8150c1bc34a005359024c045a40f8826b4",
+      "strengthened_test_blob": "c7d4aec91b138b5dab289b22d2ff4404445549c2",
+      "focused_result": "EXPECTED_FAIL",
+      "failure": "local_check_calls == [true], expected []",
+      "exit_code": 1
+    },
+    "post_fix": {
+      "launcher_blob": "040cf5b3fb560a15d635d4c3dde2beb72ee226a2",
+      "test_blob": "c7d4aec91b138b5dab289b22d2ff4404445549c2",
+      "compile": "PASS",
+      "command": "python -m unittest -v test_launch_together_qwen35_08b_v1.py",
+      "passed": 13,
+      "failed": 0,
+      "elapsed_seconds_reported": 0.132
+    }
+  },
+  "isolated_execution": {
+    "surface": "OpenAI isolated task container",
+    "python": "3.13.5",
+    "platform": "Linux-6.18.35-x86_64-with-glibc2.41",
+    "byte_binding": "PASS: reconstructed base blobs matched GitHub; candidate blob hashes match branch update results."
+  },
+  "unusual_experiment": {
+    "id": "FREE_ONLY_POISON_CREDENTIAL_LOOKUP_SENTINEL",
+    "count_for_this_go": 1,
+    "status": "CONSUMED_EARLIER_IN_SAME_GO_AND_REUSED_ONLY_AS_REGRESSION",
+    "result": "FREE_ONLY rejects before provider secret lookup/import; the strengthened canonical test additionally proves local_checks is not reached."
+  },
+  "provider_actions": {
+    "credentialed_preflight": 0,
+    "model_limits": 0,
+    "file_upload": 0,
+    "server_validation": 0,
+    "price_estimate": 0,
+    "create": 0,
+    "training": 0,
+    "inference": 0,
+    "spend_usd": 0
+  },
+  "evidence_class": "EXACT_CHANGED_FILE_RUNTIME_MECHANISM_SUPPORTED",
+  "claim_boundary": "This validates FREE_ONLY ordering in the launcher. It does not validate Together preflight/training, model quality, Q4_K_M, RSS <1 GiB, or whole Mini Entity acceptance.",
+  "next": "Integrate this minimal ordering delta on current main if still non-duplicate, then continue the ~1B lane through exact admitted runner/provider gates under the then-current supervisor mode."
+}

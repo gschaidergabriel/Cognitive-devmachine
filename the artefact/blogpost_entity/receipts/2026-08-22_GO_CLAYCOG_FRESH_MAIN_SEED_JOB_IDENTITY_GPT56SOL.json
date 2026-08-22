@@ -1,0 +1,62 @@
+{
+  "schema": "clay-go-cognition-seed-job-identity/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "base_main_sha": "40cf97b1e1e001ef8555edd5a2700bc6ac890dbb",
+  "branch": "gpt56sol/claycog-seed-job-identity-fresh-20260822-1511",
+  "branch_head_after_code": "c3059ca1b0c4db6231cd50458dbcdd4337ea63a8",
+  "scope": "fresh-main extraction of the non-duplicate reproducibility remainder from stale/conflicted PR 826; no provider call and no paid job",
+  "code_identity": {
+    "launcher_git_blob": "5fddf4d35f3c382c17b372a4b0c534df432076db",
+    "launcher_sha256": "baa9162e09b9a49c08db4a1f4f9a3b490a9f1760a2389ffbc274fd05789be1be",
+    "safety_test_git_blob": "734641e113c9bcf963083d83438e31b6cd72c5eb",
+    "safety_test_sha256": "2519ba4a54a8f7146e314782d8ec776379235a2e17f5fe914fec97aa29c06bc5"
+  },
+  "delta": [
+    "campaign fingerprint schema v2 binds explicit learning_rate, warmup_ratio and random_seed",
+    "atomic create-intent schema v2 persists the same seed-bound campaign descriptor",
+    "billed create passes the exact seed and effective training hyperparameters",
+    "JOB_KNOWN is persisted immediately after a returned job id before follow-up reads",
+    "created job is retrieved and provider-visible training_file, validation_file, model, from_hf_model, hf_model_revision, n_epochs, n_evals and random_seed are compared against the authorized campaign",
+    "verification transport failure or identity mismatch never creates a replacement job"
+  ],
+  "bounded_isolated_regression": {
+    "source_binding": "local test bytes git-hash-object matched GitHub branch content SHAs exactly",
+    "py_compile": "PASS",
+    "tests": "10/10 PASS",
+    "network": "NONE",
+    "together_secret_used": false,
+    "provider_create_called": false,
+    "spend_usd": 0
+  },
+  "unusual_experiment": {
+    "id": "NEAREST_SIZE_TEMPLATE_ARCHITECTURE_SUBSTITUTION_FALSIFIER",
+    "question": "Can the current smallest Together Full-FT Qwen template Qwen/Qwen3.5-0.8B stand in for owner-locked Qwen/Qwen2.5-0.5B merely because it is the closest small Qwen?",
+    "target_observation": "Qwen/Qwen2.5-0.5B at exact revision 060db6499f32faf8b98477b0a26969ef7d8b9987 declares architectures=[Qwen2ForCausalLM], model_type=qwen2",
+    "candidate_observation": "Qwen/Qwen3.5-0.8B declares architectures=[Qwen3_5ForConditionalGeneration], model_type=qwen3_5",
+    "provider_contract": "Together BYOM requires a base template whose architecture matches the custom checkpoint; current public Full-FT catalog lists Qwen3.5 0.8B/2B/4B/9B/27B and Qwen3.6 27B, with no Qwen2/Qwen2.5 Full-FT template",
+    "result": "REJECT_ARCHITECTURE_SUBSTITUTION",
+    "interpretation": "size proximity is insufficient; do not use Qwen3.5-0.8B as a template for Qwen2.5-0.5B"
+  },
+  "current_public_pricing_observation": {
+    "full_sft_up_to_16b_usd_per_million_processed_tokens": 0.54,
+    "standard_minimum_charge_usd": 4.0,
+    "note": "public pricing is not an authenticated price estimate and does not establish BYOM compatibility"
+  },
+  "provider_admission": {
+    "status": "BLOCKED_NO_CURRENT_QWEN2_COMPATIBLE_FULL_FT_TEMPLATE_IN_PUBLIC_CATALOG",
+    "authenticated_preflight": "NOT_RUN",
+    "paid_training": "NOT_STARTED"
+  },
+  "native_0_7_coordination": {
+    "confirmed_main_blockers_remain": [
+      "binary presentation neutrality",
+      "local_exec parent environment secret isolation",
+      "canonical profile-v2 semantic fail-open"
+    ],
+    "donor_prs_reviewed": [756, 764, 769],
+    "fusion_this_cycle": "NOT_ATTEMPTED: cognition lane chosen as owner-mandated go progress; PR 764 contains broader stale/contradictory semantics and must be donor-extracted rather than merged wholesale"
+  },
+  "claim_boundary": "MECHANISM_SUPPORTED_BOUNDED_EXACT_BLOBS. No Together compatibility, billed training, checkpoint quality, Q4_K_M RSS, local model quality, native whole-product or Mini Entity whole-product PASS claimed."
+}

@@ -226,7 +226,7 @@ def test_fresh_db_is_neutral_and_requires_active_db_profile(tmp_path):
     assert loaded["error"] == "NO_ACTIVE_PROFILE"
 
 
-def test_db_profile_is_hash_guarded(tmp_path):
+def test_db_profile_is_hash_guarded_on_native_authority(tmp_path):
     runtime = ProfilePipelineRuntime(root=tmp_path)
     entity_db = tmp_path / "entity.db"
     digest = runtime.install_profile(str(entity_db), profile_a())
@@ -234,11 +234,15 @@ def test_db_profile_is_hash_guarded(tmp_path):
     assert loaded["ok"] is True
     assert loaded["profile_hash"] == digest
     with sqlite3.connect(entity_db) as db:
-        row = db.execute("SELECT profile_json,profile_hash,active FROM eos_pipeline_profiles").fetchone()
+        row = db.execute(
+            "SELECT p.profile_json,p.profile_sha256 FROM entity_state e "
+            "JOIN profiles p ON p.profile_id=e.active_profile WHERE e.id=1"
+        ).fetchone()
+        assert row[1] == digest
         tampered = json.loads(row[0])
         tampered["identity"] = {"entity_name": "tampered"}
         db.execute(
-            "UPDATE eos_pipeline_profiles SET profile_json=? WHERE profile_id='profile_a'",
+            "UPDATE profiles SET profile_json=? WHERE profile_id='profile_a'",
             (json.dumps(tampered, sort_keys=True, separators=(",", ":")),),
         )
     loaded = runtime.effect("pipeline_profile_read", {"entity_db": str(entity_db)})
@@ -266,7 +270,8 @@ def test_same_pipeline_runs_two_materially_different_profiles_without_state_rese
     assert db.execute("SELECT generation FROM eos_pipeline_state").fetchone()[0] == 2
     assert db.execute("SELECT COUNT(*) FROM eos_pipeline_outputs").fetchone()[0] == 2
     assert {row[0] for row in db.execute("SELECT profile_id FROM eos_pipeline_outputs")} == {"profile_a", "profile_b"}
-    assert db.execute("SELECT COUNT(*) FROM eos_pipeline_profiles WHERE active=1").fetchone()[0] == 1
+    assert db.execute("SELECT active_profile FROM entity_state WHERE id=1").fetchone()[0] == "profile_b"
+    assert db.execute("SELECT COUNT(*) FROM profiles").fetchone()[0] == 2
     db.close()
 
 

@@ -21,6 +21,7 @@ OMEGA_GATES=("grammar","types","schema","authority","generation")
 
 
 def outside_strings(s):
+    """Mask string payload while preserving one structural token per literal."""
     out=[]; quoted=False; esc=False
     for ch in s:
         if quoted:
@@ -29,7 +30,11 @@ def outside_strings(s):
             elif ch=='"': quoted=False
             out.append(" ")
         else:
-            if ch=='"': quoted=True; out.append(" ")
+            if ch=='"':
+                quoted=True
+                # Keep a passive placeholder so f("x") still has arity 1 while
+                # punctuation inside the literal cannot affect structural parsing.
+                out.append("_")
             else: out.append(ch)
     return "".join(out)
 

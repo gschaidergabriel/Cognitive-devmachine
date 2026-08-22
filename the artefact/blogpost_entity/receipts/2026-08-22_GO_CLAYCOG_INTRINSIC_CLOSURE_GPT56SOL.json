@@ -1,0 +1,58 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "base_main_sha": "62b292a8097c5b53731ef6804704cf9938872616",
+  "branch": "gpt56sol/claycog-intrinsic-closure-go-20260822",
+  "finding": {
+    "id": "CLAYCOG_INTRINSIC_VOCABULARY_UNCLOSED",
+    "severity": "PRE_TRAINING_BLOCKER",
+    "mechanism": "The SFT generator emits cognition intrinsics including state_note, focus_set, self_kind, policy_select, recovery_state and provenance while the original cognition spec did not define a closed intrinsic vocabulary. The structural validator checked punctuation/envelope/omega gates but did not reject unknown intrinsics or wrong arity. Therefore corpus validation and OOD promotion could credit outputs that contradict the spec invariant that unknown intrinsics fail closed.",
+    "counterhypothesis": "The extra calls are harmless descriptive pseudo-code and do not need formal admission semantics.",
+    "counterhypothesis_result": "REJECTED_FOR_TRAINING_CONTRACT: the owner target is ClayCode-only cognition with deterministic grammar/type/schema/authority/generation admission, so undefined calls cannot be treated as valid training targets without creating a weight/runtime semantic split."
+  },
+  "delta": [
+    "added intrinsics_v1.py as one machine-readable v1 cognition vocabulary with arity",
+    "validator now rejects unknown intrinsic and wrong arity",
+    "string literal payload is masked while preserving one passive argument token",
+    "spec now explicitly closes the v1 vocabulary and states promotion gets zero credit outside it",
+    "added deterministic audit_intrinsic_closure_v1.py over the full generated SFT corpus",
+    "Together launcher now requires intrinsic closure before any file upload or training preflight",
+    "status-footer candidate aligned to the newer 0.5B owner directive"
+  ],
+  "unusual_experiment": {
+    "count": 1,
+    "id": "INTRINSIC_VOCABULARY_CLOSURE_PARSER_FALSIFIER",
+    "scope": "bounded synthetic mechanism check only",
+    "result": "The first parser revision falsely counted cfg(\"entity.id\") as arity zero because string payload masking erased the literal token. The parser was repaired to preserve a passive literal placeholder; representative valid calls then matched expected arity, while an injected unknown intrinsic and a wrong-arity focus_set were rejected.",
+    "credit": "MECHANISM_FALSIFIER_ONLY_NOT_EXACT_BRANCH_RUNTIME"
+  },
+  "external_current_checks": {
+    "together_sdk": "Current together-py source still exposes fine_tuning.model_limits, estimate_price and create(from_hf_model=...). from_hf_model is documented to be as close as possible to the selected base/template model in architecture and size.",
+    "byom_gate": "Qwen/Qwen2.5-0.5B with Qwen/Qwen2.5-7B-Instruct-Turbo remains an empirical server-side compatibility gate; no compatibility credit is claimed.",
+    "qwen_base": "Qwen/Qwen2.5-0.5B is a 0.49B CausalLM; visible Hugging Face main commit at audit time is 060db64.",
+    "together_secret_available_to_this_organ": false
+  },
+  "training": {
+    "job_started": false,
+    "paid_create_called": false,
+    "together_preflight_called": false,
+    "reason": "No Together API secret is mounted in the current execution interface, and exact intrinsic-closure execution is still required before paid training."
+  },
+  "evidence_class": "SOURCE_CANDIDATE_PLUS_BOUNDED_SYNTHETIC_MECHANISM_FALSIFIER",
+  "not_claimed": [
+    "exact branch corpus closure PASS",
+    "Together BYOM compatibility",
+    "fine-tune completion or quality",
+    "OOD promotion",
+    "Q4_K_M quantization",
+    "peak RSS under 1 GiB",
+    "native Mini Entity 0.7 runtime acceptance",
+    "whole product acceptance"
+  ],
+  "next_exact_gate": "Run the exact branch in an authorized isolated Linux executor: generate SFT -> validate train+validation -> audit intrinsic closure. If exact closure passes, perform Together server preflight with an environment-only key and no --create; only after BYOM acceptance and a server price <= USD18 may the owner-authorized billed create be considered."
+}

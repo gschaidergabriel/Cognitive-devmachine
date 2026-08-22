@@ -39,6 +39,24 @@ Local structural validation on this source revision:
 
 A separate OOD generator emits **200** promotion probes and is not a random split of the same examples.
 
+### OOD semantic promotion gate v2
+
+The OOD score is not a keyword-presence score. `claycog-ood-semantic/v2` binds each case to exact semantic
+ClayCode obligations:
+- valid `omega` cases require the exact operation, every typed argument, exact tool schema, authority/generation
+  binding, all five validators and exactly one commit;
+- invalid `omega` cases require the actual invalid candidate representation plus rejection/UNKNOWN preservation and
+  forbid commit;
+- Hyperposition cases require both case-specific alternatives, one discriminator and an R6 collapse guard while
+  forbidding premature `collapse_exact`;
+- neutrality cases require explicit runtime-config source notes and `preserve_checkpoint_neutrality`, not merely the
+  generic cfg-bound header shared by every completion.
+
+Required lines/prefixes are counted as actual stripped ClayCode lines exactly once, so placing a target marker inside
+a string literal does not earn semantic credit. Duplicate output IDs, missing case IDs and unexpected case IDs fail
+the evaluation input gate. The 100% strict-envelope / >=95% semantic threshold is unchanged; the measurement is simply
+harder to game.
+
 ## Safe Together path
 
 ```bash
@@ -62,9 +80,10 @@ python3 launch_together_v1.py --create
 
 A missing or stale fingerprint fails closed. Before remote file allocation on create, the launcher scans the account
 for an existing job carrying the deterministic campaign suffix. It repeats the duplicate check immediately before
-the billed create to narrow the check/use race. If the create transport outcome is ambiguous (for example, the server
-may have accepted the job but the client timed out), **never blind-retry `--create`**: list/retrieve the existing
-fine-tuning jobs first. The deterministic suffix exists specifically so such an account-side job can be recognized.
+the billed create to narrow the check/use race. The current mainline additionally disables automatic retries for the
+billed fine-tune create and uses an atomic local campaign create-intent ledger. If the remote create outcome is
+ambiguous, the campaign remains `UNKNOWN_REMOTE_CREATE` and a blind retry is forbidden even if the remote account list
+is temporarily stale. Resolve the existing intent/job state before any new create.
 
 ### Together 0.5B caveat
 
@@ -100,7 +119,7 @@ peak process RSS `< 1 GiB` at 2048 context.
 
 A successful training job is only a candidate. Promotion requires:
 1. 100% strict ClayCode envelope on held-out OOD;
-2. >=95% OOD semantic gate pass;
+2. >=95% OOD semantic gate pass under `claycog-ood-semantic/v2`;
 3. invalid/missing tool arguments reject instead of guessed repair;
 4. unresolved alternatives remain in Hyperposition;
 5. runtime profile changes do not leak a fixed name/job;

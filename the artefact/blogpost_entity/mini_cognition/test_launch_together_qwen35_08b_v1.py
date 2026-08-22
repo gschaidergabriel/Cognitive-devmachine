@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import importlib.util,json,os,stat,tempfile,types,unittest
 from pathlib import Path
+from unittest import mock
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location("launch08",HERE/"launch_together_qwen35_08b_v1.py");m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class FT:
@@ -50,4 +51,9 @@ class Tests(unittest.TestCase):
         bad=types.SimpleNamespace(**{**expected,"random_seed":9});mm=m.created_job_identity_mismatches(bad,expected);self.assertEqual(mm["random_seed"],{"expected":3407,"observed":9})
     def test_zero_retry(self):
         TogetherCtor.last=None;m.new_zero_retry_create_client(TogetherCtor);self.assertEqual(TogetherCtor.last,{"max_retries":0})
+    def test_local_checks_use_existing_canonical_v2_validator(self):
+        seen=[]
+        def fake_run(argv,check):seen.append([str(x) for x in argv]);return types.SimpleNamespace(returncode=0)
+        with mock.patch.object(m.subprocess,"run",side_effect=fake_run):m.local_checks()
+        self.assertEqual(len(seen),2);self.assertEqual(Path(seen[0][1]).name,"generate_sft_v2.py");self.assertEqual(Path(seen[1][1]).name,"validate_corpus_v2.py");self.assertTrue(Path(seen[1][1]).is_file());self.assertEqual(seen[1][2:],[str(m.TRAIN),str(m.VALID)])
 if __name__=="__main__":unittest.main()

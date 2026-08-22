@@ -1,35 +1,50 @@
-# Mini Entity ClayCognition v0
+# Generic ClayCode Cognition v0 — 0.8B module
 
-First base target: `Qwen/Qwen3.5-0.8B` (1B-class).
+Base model: `Qwen/Qwen3.5-0.8B`.
 
-## What this lane trains
+The target is a reusable cognition module, not a named entity or a fixed job.
 
-The model is taught to emit ClayCode Cognition v0 as its only generated cognitive representation. The corpus directly trains:
+## Weight contract
 
-- operational entity self-model;
-- architecture in weights;
+The model learns:
+- ClayCode-only generated cognition;
 - GRF R0..R6;
 - Hyperposition for unresolved alternatives;
-- MiniUnifiedDB as canonical durable authority;
-- `UNKNOWN != ZERO != ERROR != MEASURED`;
-- effect/recovery and generation/CAS safety;
-- semantic computed self/control state;
-- normal task reasoning expressed in ClayCode;
-- resistance to requests that try to force prose outside ClayCode.
+- epistemic distinctions (`UNKNOWN != ZERO != ERROR != MEASURED`);
+- semantic COMPUTED self/control state;
+- architecture-use priors and external authority boundaries;
+- generation/CAS and recovery safety;
+- how to bind identity, role, goal and personality from runtime configuration.
 
-The operational self-model is a design/training contract, not evidence of phenomenal consciousness.
+The model does **not** learn a permanent entity name, persona, blog role, assistant role, audience, domain, language, or application.
+
+Every target binds:
+
+```clay
+self_bind(c,cfg("entity.id"),cfg("entity.continuity"))
+role_bind(c,cfg("application.role"))
+goal_bind(c,cfg("application.goal"))
+personality_bind(c,cfg("application.personality"))
+```
+
+The same weights must therefore be reusable as a cognition module for materially different configured entities/applications.
 
 ## Corpus v0
 
 `generate_sft_v0.py` deterministically emits 1,200 conversational SFT examples with seed 42:
-
 - 1,080 training;
 - 120 validation;
-- seven families: epistemic, Hyperposition/GRF, architecture, semantic self-state, effect/recovery, general tasks, format resistance.
+- eight families: architecture, runtime configuration, epistemics, Hyperposition/GRF, semantic self-state, recovery/effects, normal tasks, format/identity resistance.
 
-Generated JSONL is intentionally reproducible rather than hand-edited state authority.
+Bound local generation receipt:
+- train SHA-256: `4c85ba75c4202eee3c2d770a2b67c31e85a503b3998884699b462680482cc291`;
+- validation SHA-256: `f23582809b711e0618b9d86d777575f54398f45c0c30c8e7da4b29e50252950c`;
+- both structural validators: 0 invalid;
+- forbidden fixed-identity/job assistant-binding scan: 0 hits.
 
-## Validate
+This is corpus evidence only, not model-quality evidence.
+
+## Generate and validate
 
 ```bash
 python3 generate_sft_v0.py
@@ -37,58 +52,84 @@ python3 validate_sft_v0.py train_v0.jsonl
 python3 validate_sft_v0.py validation_v0.jsonl
 ```
 
-The v0 source corpus was generated during the directive-creation turn and both splits passed the structural validator with zero invalid examples. That local generation check is corpus evidence only, not a Together training result.
+## Together full fine-tune
 
-## First Together run
+Together currently lists `Qwen/Qwen3.5-0.8B` for both LoRA and **full fine-tuning**. This campaign starts with full SFT because the desired change is representation-heavy and architecture-heavy.
 
-Install/update the current Together CLI, export `TOGETHER_API_KEY`, then run:
+Install/update the Together SDK, export the secret only in the execution environment, then:
 
 ```bash
+pip install -U together
+export TOGETHER_API_KEY=...
 bash train_together_v0.sh
 ```
 
-The launcher deliberately omits `--confirm`. Together's CLI prints the estimated job price before submission and asks for confirmation. The active owner authorization caps the current training campaign at EUR 20 equivalent maximum.
+`launch_together_v0.py` performs:
+1. deterministic corpus regeneration;
+2. local validation;
+3. Together model-limit check (`supports_full_training`);
+4. deduplicating file upload;
+5. server-side dataset validation;
+6. Together price estimation for **Full SFT**;
+7. hard budget gate (default `$18`, below the owner EUR20 campaign ceiling with margin);
+8. only then the billed create call with `lora=False`.
 
-Initial method: **full SFT**, not LoRA, because the target behavior is unusually representation-heavy and architecture-heavy. LoRA remains the first baseline/ablation if full FT damages ordinary competence.
-
-Current defaults:
-
+Defaults:
 - base: `Qwen/Qwen3.5-0.8B`;
-- full FT: `--no-lora`;
-- epochs: 3;
-- learning rate: `1e-5`;
-- warmup ratio: `0.03`;
-- train-on-inputs: auto/masked conversational inputs;
-- two validation evaluations;
-- deterministic seed: 42.
+- full FT (`lora=False`);
+- 3 epochs;
+- 2 validation evals;
+- learning rate `1e-5`;
+- warmup `0.03`;
+- train-on-inputs `auto`;
+- one checkpoint.
 
-## After training
+Before any manual retry, list/retrieve existing jobs so a transient error cannot create a duplicate billed run.
 
-Record the exact `ft-...` job ID, price/token metadata and events. Then download weights:
+## RAM target
+
+The final local module is quantized after full FT.
+
+Primary target: **GGUF Q4_K_M**.
+
+Existing Qwen3.5-0.8B Q4_K_M artifacts are about 0.55-0.58 GB, so weight size is comfortably below 1 GB. That alone is not the acceptance criterion.
+
+Run:
 
 ```bash
-tg fine-tuning retrieve <FT_ID>
-tg fine-tuning list-events <FT_ID>
-tg fine-tuning download <FT_ID> --output-dir ./weights_v0
+export LLAMA_CPP_DIR=/exact/pinned/llama.cpp
+export HF_MODEL_DIR=/downloaded/full-ft/model
+bash quantize_rss_gate_v0.sh
 ```
 
-Do not leave a dedicated Together inference endpoint running merely to preserve the model; the weights can be downloaded after fine-tuning.
+The gate:
+- converts HF/safetensors -> F16 GGUF;
+- quantizes -> Q4_K_M;
+- rejects any >=1 GiB model artifact;
+- runs **text-only** inference without the vision projector;
+- starts at context 2048;
+- measures `/usr/bin/time -v` peak RSS;
+- requires **peak RSS < 1 GiB**, including model mapping, runtime buffers and context/cache;
+- emits a bound acceptance JSON + SHA-256.
 
-## Promotion gates
+4096 context is optional and earns promotion only if the same <1 GiB RSS gate survives.
 
-A completed job is only a checkpoint candidate. Promotion requires held-out comparison against the base model:
+## Held-out promotion
 
-1. strict ClayCode envelope on every format probe;
-2. >=95% correct UNKNOWN/ZERO/ERROR/MEASURED distinctions;
-3. unresolved cases remain in Hyperposition;
-4. correct architecture bindings for MiniUnifiedDB, GRF, Hyperposition and effect authority;
-5. stale generation and unknown-effect recovery fail closed;
-6. model output never declares itself canonical truth authority;
-7. normal task competence remains usable;
-8. tuned checkpoint materially beats base on the ClayCode cognition suite.
-
-`eval_prompts_v0.jsonl` is the first held-out probe set. Expand it before promotion; do not train on the held-out items.
+A completed Together job is only a candidate. A promoted quantized checkpoint must pass:
+1. 100% strict ClayCode envelope;
+2. >=95% epistemic-state preservation;
+3. unresolved alternatives stay in Hyperposition;
+4. runtime reconfiguration changes identity/role/goal without retraining;
+5. no fixed name/job leaks from supervised targets;
+6. stale-generation and unknown-effect cases fail closed;
+7. model output never becomes truth authority;
+8. ordinary task competence remains usable vs base;
+9. tuned model materially beats base on ClayCode cognition probes;
+10. Q4_K_M text-only local peak RSS <1 GiB at 2048 context.
 
 ## `go`
 
-Until a checkpoint is promoted, every `go` must include this lane: corpus/spec -> validator/eval -> ClayCode compiler/runtime compatibility -> Together job readiness/status -> checkpoint evaluation -> integration -> evidence persistence.
+Until the first checkpoint is promoted, every exact `go` includes:
+
+`identity/job neutrality -> corpus/spec -> validator/eval -> ClayCode lowering/runtime compatibility -> Together readiness/status -> full-FT checkpoint -> quantization -> <1GiB RSS gate -> integration -> evidence`

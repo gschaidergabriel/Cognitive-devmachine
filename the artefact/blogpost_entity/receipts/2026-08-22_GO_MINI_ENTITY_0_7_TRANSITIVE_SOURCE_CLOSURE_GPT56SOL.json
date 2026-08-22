@@ -1,0 +1,82 @@
+{
+  "schema": "mini-entity-native-source-closure-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "candidate_pr": 735,
+  "candidate_head_sha": "51ff7ebe044e39ca7ff1be5ea9d4b716b98c6ff0",
+  "problem": {
+    "classification": "SOURCE_PROVENANCE_UNDERBINDING",
+    "entry_unit": "the artefact/blogpost_entity/native/mini_entity.c",
+    "entry_unit_git_blob": "a52ab03c16bf0a97cc29a026b45b9401056f0b31",
+    "builder_pre_fix_git_blob": "bf9b296a5d8a639889855a18b7774b2a005c46eb",
+    "observation": "The native entry unit contains only quoted includes, while the v1 builder declared only sha256(mini_entity.c) as source identity and random seed. Included source bytes were not transitively bound by that field."
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "included-source identity collision falsifier",
+    "environment": "isolated Linux sandbox",
+    "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
+    "intervention": "Compile one tiny translation unit including part.inc, mutate only part.inc, recompile while retaining the same entry-file SHA as -frandom-seed.",
+    "entry_sha_before": "22a2528850cd8f9f54cc55b6ab42322d13bff602e6c8c4545c0076efa465694a",
+    "entry_sha_after": "22a2528850cd8f9f54cc55b6ab42322d13bff602e6c8c4545c0076efa465694a",
+    "elf_sha_before": "f0e043fd24e526621c3b3eae669dda27d167407ca5bcb3af2a9d1b3a150965d9",
+    "elf_sha_after": "785b6a187efed713c59a8df7b03d8b31006ea6c354d106cfb2c59b0d1f04ad2d",
+    "result": "FALSIFIED_ENTRY_ONLY_SOURCE_IDENTITY",
+    "interpretation": "Different included source can share the same declared entry SHA while producing different executable bytes."
+  },
+  "repair": {
+    "builder_candidate_git_blob": "6d9f99813e11c417913514abdc6d0790788a4e98",
+    "receipt_schema": "mini-entity-native-build-provenance/v2",
+    "mechanism": [
+      "recursively hash every reachable project-local quoted include",
+      "canonicalize relative path + sha256 + size into source_closure",
+      "derive source_identity_sha256 from the canonical closure",
+      "drive -frandom-seed from source_identity_sha256",
+      "reject dynamic or macro include targets",
+      "reject quoted includes escaping the native source root"
+    ]
+  },
+  "bounded_validation": {
+    "environment": {
+      "os_family": "isolated Linux sandbox",
+      "gcc": "gcc (Debian 14.2.0-19) 14.2.0",
+      "sqlite3_pkg_config": "3.46.1",
+      "libcurl_pkg_config": "8.10.1",
+      "json_c_pkg_config": "0.18"
+    },
+    "source_closure_falsifiers": {
+      "passed": 3,
+      "failed": 0,
+      "cases": [
+        "transitive local include mutation changes closure identity while entry SHA remains unchanged",
+        "dynamic include fails closed",
+        "local include escaping source root fails closed"
+      ]
+    },
+    "classification": "MECHANISM_SUPPORTED_BOUNDED_SANDBOX"
+  },
+  "github_runner": {
+    "workflow_run_id": 32556409920,
+    "job_id": 96991192157,
+    "job_name": "identity-guard",
+    "conclusion": "failure",
+    "steps": null,
+    "credit": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_STEPS_NOT_TEST_FAILURE"
+  },
+  "not_claimed": [
+    "exact full PR checkout pytest PASS",
+    "exact Mini Entity 0.7 repeat-build PASS",
+    "Mini Entity 0.7 ELF digest acceptance",
+    "fixture/local_exec end-to-end 0.7 runtime PASS",
+    "atomic study/output/event/CAS injected-fault rollback PASS",
+    "real local model quality PASS",
+    "real remote provider PASS",
+    "whole Mini Entity acceptance"
+  ],
+  "next_gate": "On an admitted exact-checkout Linux runner, execute source_closure regression, build_native_bound.py --repeat >=2 against the full 0.7 source, bind source closure + compiler/pkg/runtime identities + ELF digest, run fixture/local_exec with zero key/network use, inject transaction/CAS faults, then rebuild from the same source/toolchain and compare artifact identity.",
+  "together_api": "FORBIDDEN_NOT_USED"
+}

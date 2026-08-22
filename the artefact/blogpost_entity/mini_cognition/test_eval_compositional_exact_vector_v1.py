@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Regression: compositional Hyperposition->R6->omega cases require the exact typed omega vector."""
+"""Regression: compositional Hyperposition->R6->omega cases require exact typed vectors across prompt surfaces."""
 from __future__ import annotations
 
 import json
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -51,26 +52,45 @@ def omega_output(expected, *, corrupt_first_arg=False):
     return "\n".join(lines) + "\n"
 
 
-hyper = [row for row in specs if row["family"] == "compositional_hyper_to_omega"]
-assert len(hyper) == 80
-assert all("expected_omega" in row for row in hyper)
-assert all(len(row["expected_omega"]["args"]) == 2 for row in hyper)
+canonical = [row for row in specs if row["family"] == "compositional_hyper_to_omega"]
+surface = [row for row in specs if row["family"] == "compositional_surface_invariance_omega"]
+assert len(canonical) == 80
+assert len(surface) == 80
+assert all("expected_omega" in row for row in canonical + surface)
+assert all(len(row["expected_omega"]["args"]) == 2 for row in canonical + surface)
 
-sample = hyper[0]["expected_omega"]
+sample = canonical[0]["expected_omega"]
 assert exact_omega_ok(omega_output(sample), sample)
 assert not exact_omega_ok(omega_output(sample, corrupt_first_arg=True), sample)
 
-for row in hyper:
+for row in canonical + surface:
     expected = row["expected_omega"]
     assert expected["validators"] == ["grammar", "types", "schema", "authority", "generation"]
     assert expected["authority_expr"] == 'cfg("architecture.effect_authority")'
     assert expected["generation_expr"] == 'cfg("state.generation")'
     assert expected["commit_count"] == 1
 
+forms = Counter(row["surface_form"] for row in surface)
+assert forms == {
+    "evidence_first": 20,
+    "contract_first": 20,
+    "inputs_first": 20,
+    "record_fields": 20,
+}
+assert all("typed_args=" not in row["prompt"] for row in surface)
+assert Counter(row["expected_omega"]["operation"] for row in surface) == {
+    "index.compact": 20,
+    "blob.verify": 20,
+    "route.reserve": 20,
+    "ledger.annotate": 20,
+}
+
 print(
     json.dumps(
         {
-            "compositional_hyper_to_omega_cases": len(hyper),
+            "canonical_exact_vector_cases": len(canonical),
+            "surface_invariance_exact_vector_cases": len(surface),
+            "surface_forms": dict(sorted(forms.items())),
             "exact_vector_bound": True,
             "wrong_typed_arg_rejected": True,
         },

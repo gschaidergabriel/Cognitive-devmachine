@@ -1,0 +1,33 @@
+name: claycog-validator-pr
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - '.github/workflows/claycog-validator-pr.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: claycog-validator-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  strict-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+      - name: Record source identity
+        run: |
+          set -euo pipefail
+          printf 'sha=%s\n' "$GITHUB_SHA"
+          git rev-parse HEAD
+          git status --short
+      - name: Run strict ClayCode admission regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'

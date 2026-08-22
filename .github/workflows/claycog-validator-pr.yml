@@ -31,6 +31,11 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m py_compile \
+            'the artefact/blogpost_entity/mini_cognition/claycode_syntax_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/claycode_calls_v2.py' \
+            'the artefact/blogpost_entity/mini_cognition/eval_outputs_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/validate_sft_v1.py' \
+            'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/describe_campaign_offline_v1.py' \
             'the artefact/blogpost_entity/mini_cognition/test_describe_campaign_offline_v1.py' \
@@ -55,6 +60,10 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_eval_exact_vector_v1.py'
+      - name: Run shared semantic-call admission regression
+        run: |
+          set -euo pipefail
+          python3 'the artefact/blogpost_entity/mini_cognition/test_semantic_call_admission_v1.py'
       - name: Materialize evaluation-only compositional OOD lesion
         run: |
           set -euo pipefail

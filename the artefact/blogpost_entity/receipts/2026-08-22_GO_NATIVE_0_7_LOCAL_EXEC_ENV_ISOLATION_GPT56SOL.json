@@ -1,0 +1,63 @@
+{
+  "schema": "mini-entity-go-security-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "canonical_base_sha": "456e3e4d6853ff5b3a85300bdbe2367818e15052",
+  "candidate_branch": "gpt56sol/go-mini-native-env-isolation-20260822-1310",
+  "candidate_code_head_before_receipt": "8c185ab19db2971dfe64e566ea91e76e015a6a00",
+  "finding": {
+    "id": "LOCAL_EXEC_AMBIENT_SECRET_INHERITANCE",
+    "severity": "HIGH",
+    "source_anchor": "the artefact/blogpost_entity/native/mini_entity_part02.inc::run_local_exec",
+    "observed_source_mechanism": "fork child calls execvp(argv[0], argv) without clearing or replacing the parent environment",
+    "violated_contract": "a configured local inference runner is inference-only and must not gain ambient API/cloud secret authority merely by backend selection"
+  },
+  "unusual_experiment": {
+    "name": "Ambient Secret Canary",
+    "count_for_this_go": 1,
+    "scope": "isolated mechanism discriminator, not full Mini Entity binary acceptance",
+    "counterhypothesis": "fork()+execvp does not expose unrelated parent environment variables unless explicitly forwarded",
+    "result": {
+      "baseline_execvp_secret_canary_inherited": true,
+      "clearenv_minimal_environment_secret_canary_inherited": false
+    },
+    "classification": "MECHANISM_SUPPORTED"
+  },
+  "repair": {
+    "helper_path": "the artefact/blogpost_entity/native/mini_entity_child_env.inc",
+    "helper_git_blob": "181c0de78724936fa900458ea4c1990ca955ed3f",
+    "entry_path": "the artefact/blogpost_entity/native/mini_entity.c",
+    "entry_git_blob": "553c7858b6937c2528983789e9f30c04103dc557",
+    "behavior": "wrap the local inference part's execvp call with mini_entity_execvp_isolated; child calls clearenv then restores only PATH, LANG=C, LC_ALL=C and TZ=UTC before execvp",
+    "state_authority_change": false,
+    "application_identity_change": false,
+    "inference_backend_identity_change": false
+  },
+  "exact_source_slice_execution": {
+    "runtime": "isolated OpenAI Linux container",
+    "helper_git_blob_recomputed": "181c0de78724936fa900458ea4c1990ca955ed3f",
+    "test_git_blob_recomputed": "9f642c6848f2dbd8ae955650e5858b645faf38a7",
+    "blob_identity_match": true,
+    "test": "test_child_env_isolation.py::test_exact_helper_does_not_forward_ambient_secret_canaries",
+    "result": "PASS",
+    "pytest": "1 passed in 0.13s",
+    "claim_scope": "exact committed helper + regression source slice only"
+  },
+  "counter_reality": {
+    "strongest_remaining_counterhypothesis": "environment sanitization may break a legitimate local runner that relies on non-PATH ambient runtime variables",
+    "required_discriminator": "full source-bound 0.7 build plus fixture/local_exec execution using an admitted runner, while secret canaries are present and key/network counters remain zero"
+  },
+  "additional_adversarial_frontier": [
+    "token_from_profile currently permits replaceable profile secret_names to select ambient environment variables; verify an immutable operator-owned maximum secret-reference boundary before real remote-provider acceptance",
+    "full 0.7 native build/repeat-build artifact identity remains uncredited for this candidate",
+    "real supported local model quality run remains uncredited"
+  ],
+  "evidence_class": "MECHANISM_SUPPORTED_EXACT_SOURCE_SLICE_PASS_FULL_NATIVE_0_7_RUNTIME_UNCREDITED",
+  "acceptance": "IN_PROGRESS",
+  "together_api": "FORBIDDEN_NOT_USED",
+  "real_provider_call": "NOT_PERFORMED",
+  "real_local_model_call": "NOT_PERFORMED"
+}

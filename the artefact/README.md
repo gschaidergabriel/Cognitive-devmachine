@@ -113,16 +113,16 @@ Any paid create must preserve all of these fences:
 Current Together BYOM documentation requires the **training-template architecture to match** the Hugging Face checkpoint. Template size should be as close as the catalog allows; exact parameter-size equality is not required. This matters because:
 
 - `Qwen/Qwen2.5-0.5B` is `Qwen2ForCausalLM`, `model_type=qwen2`;
-- the currently documented smallest Qwen Full-FT template is `Qwen/Qwen3.5-0.8B`, whose architecture/model type is `Qwen3_5ForConditionalGeneration` / `qwen3_5`;
+- the currently documented smallest direct Qwen Full-FT template is `Qwen/Qwen3.5-0.8B`, whose architecture/model type is `Qwen3_5ForConditionalGeneration` / `qwen3_5`;
 - the public Together Full-FT table currently documents no Qwen2/Qwen2.5 base template.
 
-Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwen2 training template or an owner-admitted alternate full-FT runner**. Do not substitute Qwen3.5 merely because it is close in parameter count, and do not spend money until an authenticated preflight establishes an actually admitted compatible path.
+Current `main` now also carries a fail-closed static discriminator for this exact Qwen2.5-0.5B versus Qwen3.5-0.8B architecture mismatch. Therefore BYOM compatibility remains **OPEN/BLOCKED on a compatible admitted qwen2 training template or an owner-admitted alternate full-FT runner**. Do not substitute Qwen3.5 merely because it is close in parameter count, and do not spend money until the owner-gated path is admitted.
 
 ## Native Mini Entity 0.7 — current evidence
 
 The current native source line is `mini-entity/0.7.0-dev1`.
 
-The exact transitive current native source blobs and exact repository `build_native_bound.py` were reconstructed and hash-verified in an isolated non-production Linux container. The repository source-bound builder then produced two byte-identical builds in the same environment:
+An earlier exact transitive native source closure was reconstructed and hash-verified in an isolated non-production Linux container. The repository source-bound builder produced two byte-identical builds in that same environment:
 
 - source-closure SHA-256: `a6500de97cb2cecc1b1778ee87e5af2c2f2cb7fde1d95f9220d0fa9dcf3f67a5`;
 - source-bound ELF SHA-256: `ae3d13c206666df4bdf814665e78ffd30311021c22bd88dbcc7b704598927fef`;
@@ -141,21 +141,27 @@ On that source-bound ELF these ordinary runtime contracts passed:
 - source-event update fault rolls back atomically;
 - concurrent generation CAS yields exactly one commit.
 
-This closes the previous “source exists but current 0.7 was never actually built/run” gap at **same-environment source-bound mechanism scope**. It does not establish cross-environment reproducibility or final release acceptance.
+That receipt also executable-falsified three defects on those exact bytes: embedded presentation/application wording, parent-environment leakage into `local_exec`, and profile-v2 semantic fail-open. Those historical red observations remain valid for the old ELF; they are not automatically red or green for changed source.
 
-### Three confirmed current-main blockers
+### Fresh-main fusion candidate — 2026-08-22 `go`
 
-Native 0.7 is **not promotable yet** because executable falsification found three independent defects:
+Current base `main` at `bfd318c6f35a0b8b32b60c7cbaa404801f22c997` already contains the presentation-neutral `mini_entity_part03.inc` and its binary-neutrality test **byte-identically** to the retained donor. This `go` therefore did not duplicate that fix.
 
-1. **Binary neutrality:** replaceable Zero-study display strings such as `SYSTEM STATE`, `MODEL SELF-REPORT`, `AUSWERTUNG` and German evaluation wording are still embedded in the ELF. Repair work is tracked by PR #756.
-2. **Local-runner secret boundary:** `local_exec` inherits the parent environment. Synthetic `TOGETHER_API_KEY`, `MISTRAL_API_KEY`, `OPENAI_API_KEY` and unrelated-secret sentinels reached the local runner and were persisted as model output. Repair work is tracked by PR #764.
-3. **Canonical profile-v2 semantic admission:** native 0.7 accepted and persisted deliberately malformed local-model output under a `clay-pipeline-profile/v2` profile that required a stronger output contract. The canonical structured path requires a `pipeline_gate` before commit. Fail-closed/parity work is tracked by PR #769.
+A new fresh-main fusion commit `960fb80152bc89b97d870fdfb3f2c642d890e394` was constructed directly on that base instead of merging the stale/diverged donor PR. It integrates one coherent path for:
 
-The defect evidence is durable at:
+- shell-free `local_exec` with a clean allowlisted child environment rather than inherited parent secrets;
+- canonical profile-v2 compile/envelope + mandatory post-inference `native_gate` before commit;
+- source-closure binding of the new gate include;
+- semantic-gate, secret-boundary and source-bound build regressions;
+- removal of the obsolete temporary source test that simply rejected all profile-v2 execution.
 
-`blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
+The unusual falsifier for this macro-cycle found an additional epistemic defect in the candidate gate evaluator: division by zero returned a successful numeric `0.0`. That violates `UNKNOWN != ZERO`. The fusion now makes division by zero evaluation fail closed, and `test_native_metric_div0_unknown.py` requires the resulting metric to remain unverified and the claim to produce **no commit, no generation advance and no source consumption**.
 
-The fixes must be fused/rebased onto current main and re-executed through the same source-bound builder and fault matrix before any native 0.7 promotion claim.
+Durable receipt:
+
+`blogpost_entity/receipts/2026-08-22_GO_NATIVE_FRESH_MAIN_FUSION_DIV0_GPT56SOL.json`
+
+**Evidence scope:** source candidate + bounded isolated div-zero mechanism falsifier only. The available isolated tool container could not resolve GitHub for an exact private branch checkout, so the fresh fusion has **not** yet earned a source-bound build/runtime PASS. No historical ELF hash is reused as evidence for the new bytes.
 
 ## Inference backends
 
@@ -192,16 +198,19 @@ The two required lanes now converge cleanly:
 
 ```text
 NATIVE
-confirmed 0.7 exact-source-bound execution
--> fuse #756/#764/#769 without duplicate semantic paths
--> exact source-bound rebuild
--> repeat security/semantic/atomicity/CAS falsifiers
--> release provenance/portability gates
+historical source-bound ELF exposes three measured defects
+-> presentation-neutral source fix already on main
+-> fresh-main secret-isolation + real profile-v2 PipelineGate fusion candidate
+-> exact source-bound rebuild of the fusion bytes
+-> secret / semantic / div-zero / neutrality / rollback / CAS matrix
+-> only then promote repaired native 0.7 evidence
+-> release provenance / portability gates
 
 COGNITION
-SFT v2 + strict runtime-binding validator
--> compatible qwen2 full-FT runner/template admission
--> fingerprint-bound budget preflight
+SFT v2 + strict runtime-binding validator + exact omega OOD gate
+-> fail-closed Qwen2.5-0.5B versus Qwen3.5-0.8B template architecture discriminator now on main
+-> obtain an admitted qwen2-compatible full-FT path without silently changing the owner research question
+-> fingerprint-bound owner/budget preflight when policy and credentials admit it
 -> at most one owner-authorized paid SFT
 -> held-out OOD/base/larger-model benchmark
 -> Q4_K_M
@@ -214,6 +223,7 @@ Do not let either lane claim the other lane's acceptance.
 ## Evidence index for this go
 
 - `blogpost_entity/receipts/2026-08-22_GO_NATIVE_0_7_CURRENT_MAIN_RUNTIME_FALSIFIERS_GPT56SOL.json`
+- `blogpost_entity/receipts/2026-08-22_GO_NATIVE_FRESH_MAIN_FUSION_DIV0_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_05B_SFT_V2_FUSION_GPT56SOL.json`
 - `blogpost_entity/receipts/2026-08-22_CLAYCOG_RUNTIME_BINDING_GATE.json`
 - `blogpost_entity/receipts/2026-08-22_GO_CLAYCOG_TOGETHER_BYOM_TEMPLATE_CONTRACT_GPT56SOL.json`

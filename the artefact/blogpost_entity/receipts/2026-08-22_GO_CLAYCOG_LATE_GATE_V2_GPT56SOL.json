@@ -1,0 +1,96 @@
+{
+  "schema": "claycog-go-late-gate-v2/v2",
+  "date": "2026-08-22",
+  "executor": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "canonical_base": "1f9f3d0455c87b2ea67b0665a3131871d0c3b69c",
+  "branch": "go/2026-08-22-claycog-late-gate-fusion-r3",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "problem": {
+    "v1_training_gap": "full gate-chain commits are strongly represented, while explicit authority-denied and stale-generation omega rejects are not separate late-gate negative families",
+    "v1_ood_gap": "no dedicated authority-denied or stale-generation OOD families",
+    "offline_gate_gap": "local corpus validation was blocked by an API-key check although it requires no network"
+  },
+  "parallel_fusion": {
+    "preserved_main_changes": [
+      "#772 deterministic campaign fingerprint and provider-account duplicate guard",
+      "#773 current 0.5B owner-law status footer",
+      "#778 exact PR admission workflow",
+      "#780 zero-retry billed create plus atomic local create-intent ledger and UNKNOWN_REMOTE_CREATE"
+    ],
+    "superseded_pr": 783,
+    "superseded_reason": "main advanced during the same go; PR closed instead of regressing newer safety contracts"
+  },
+  "changes": {
+    "sft_v2_commit": "516e654bdb80be21af79d45114c40c34efbce778",
+    "ood_v2_commit": "e5bce1f281dc6190b421be8849ceb93ff5329ad3",
+    "coverage_validator_commit": "9369e60394fe1f7b37f0121ea41378ef84472041",
+    "launcher_fusion_commit": "53ab43607fad98476642570d5fd301d6c253cc32",
+    "exact_pr_ci_extension_commit": "faadf68102eaed974be9fd67bc804b84fab583ec",
+    "expected_sft_examples": 1970,
+    "expected_train": 1773,
+    "expected_validation": 197,
+    "new_sft_families": {
+      "omega_authority_reject": 80,
+      "omega_generation_reject": 80,
+      "omega_missing_cfg_reject": 80,
+      "recovery_unknown_no_replay": 80
+    },
+    "expected_ood_cases": 300,
+    "new_ood_cases": 100
+  },
+  "launcher_invariants": {
+    "single_canonical_launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "local_only_requires_api_key": false,
+    "local_only_contacts_together": false,
+    "campaign_fingerprint_retained": true,
+    "provider_duplicate_guard_retained": true,
+    "atomic_local_create_intent_retained": true,
+    "zero_retry_billed_create_retained": true,
+    "ambiguous_create_becomes_UNKNOWN_REMOTE_CREATE": true,
+    "single_job_budget_usd": 18.0
+  },
+  "execution_evidence": {
+    "bounded_interface_compatible_smoke": {
+      "status": "PASS_MECHANISM_ONLY",
+      "generated_total": 1970,
+      "generated_train": 1773,
+      "generated_validation": 197,
+      "new_family_counts": [80,80,80,80],
+      "structural_invalid_train": 0,
+      "structural_invalid_validation": 0,
+      "ood_cases": 300,
+      "credit_boundary": "used an interface-compatible v1 fixture, not an exact repository checkout"
+    },
+    "exact_pr_checkout": {
+      "workflow": ".github/workflows/claycog-validator-pr.yml",
+      "command": "python3 the artefact/blogpost_entity/mini_cognition/launch_together_v1.py --local-only",
+      "status": "PENDING_PR_RUN"
+    }
+  },
+  "external_current_evidence": {
+    "together_native_05b": "not listed in current full fine-tuning table",
+    "smallest_displayed_qwen_full_ft": "Qwen/Qwen3.5-0.8B",
+    "byom": "supported for compatible Hugging Face CausalLM checkpoints under documented constraints with a matching Together training template",
+    "standard_full_sft_up_to_16b_usd_per_million_processed_tokens": 0.54,
+    "documented_job_minimum_usd": 4.0,
+    "qwen25_05b_byom_compatibility": "OPEN_UNTIL_EXACT_CREATE_ACCEPTANCE_AND_TRAINING_START"
+  },
+  "together_execution": {
+    "network_preflight": false,
+    "server_dataset_validation": false,
+    "server_price_estimate": false,
+    "paid_job_started": false
+  },
+  "promotion_boundaries": {
+    "trained_checkpoint": false,
+    "consciousness_claim": false,
+    "mathematical_correctness_claim": false,
+    "superiority_claim": false,
+    "under_1gib_rss_claim": false
+  },
+  "unusual_experiment_count": 0,
+  "next_gate": "exact PR checkout local-only admission; then credentialed Together preflight without create when an authorized environment secret is available",
+  "acceptance": "IN_PROGRESS"
+}

@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 import claycode_structured_backend as clay
 
-VERSION = "clay-profile-pipeline-runtime/0.3"
+VERSION = "clay-profile-pipeline-runtime/0.4"
 PROFILE_SCHEMA = "clay-pipeline-profile/v2"
 
 IMMUTABLE_GUARD = """IMMUTABLE PIPELINE GUARD:
@@ -141,13 +141,15 @@ class ProfilePipelineRuntime(clay.Runtime):
               canonical_hash TEXT NOT NULL);
 
             CREATE TABLE IF NOT EXISTS eos_pipeline_packets(
-              packet_hash TEXT PRIMARY KEY,
-              output_id TEXT NOT NULL,
+              output_id TEXT PRIMARY KEY,
+              packet_hash TEXT NOT NULL,
               ts REAL NOT NULL,
               generation INTEGER NOT NULL,
               profile_id TEXT NOT NULL,
               source_count INTEGER NOT NULL,
               canonical_hash TEXT NOT NULL);
+            CREATE INDEX IF NOT EXISTS eos_pipeline_packets_hash
+              ON eos_pipeline_packets(packet_hash);
 
             CREATE TABLE IF NOT EXISTS eos_pipeline_study_records(
               output_id TEXT PRIMARY KEY,
@@ -161,6 +163,48 @@ class ProfilePipelineRuntime(clay.Runtime):
               rendered_append_text TEXT NOT NULL);
             CREATE INDEX IF NOT EXISTS eos_pipeline_study_profile_generation
               ON eos_pipeline_study_records(profile_id,generation);
+            """
+        )
+        self._migrate_packet_ledger(db)
+
+    @staticmethod
+    def _migrate_packet_ledger(db: sqlite3.Connection) -> None:
+        """Migrate the old content-hash-primary-key ledger without losing rows.
+
+        A packet hash is content identity, not row identity: two quiet generations can
+        legitimately have the same hash. output_id is therefore the ledger primary key.
+        """
+        info = db.execute("PRAGMA table_info(eos_pipeline_packets)").fetchall()
+        if not info:
+            raise PipelineFault("PACKET_LEDGER_SCHEMA_MISSING")
+        names = {str(row[1]) for row in info}
+        required = {"output_id", "packet_hash", "ts", "generation", "profile_id", "source_count", "canonical_hash"}
+        if not required.issubset(names):
+            raise PipelineFault("PACKET_LEDGER_SCHEMA_UNEXPECTED")
+        pk_columns = [str(row[1]) for row in info if int(row[5]) > 0]
+        if pk_columns == ["output_id"]:
+            db.execute("CREATE INDEX IF NOT EXISTS eos_pipeline_packets_hash ON eos_pipeline_packets(packet_hash)")
+            return
+        if pk_columns != ["packet_hash"]:
+            raise PipelineFault("PACKET_LEDGER_PRIMARY_KEY_UNEXPECTED")
+        db.executescript(
+            """
+            DROP TABLE IF EXISTS eos_pipeline_packets_v2;
+            CREATE TABLE eos_pipeline_packets_v2(
+              output_id TEXT PRIMARY KEY,
+              packet_hash TEXT NOT NULL,
+              ts REAL NOT NULL,
+              generation INTEGER NOT NULL,
+              profile_id TEXT NOT NULL,
+              source_count INTEGER NOT NULL,
+              canonical_hash TEXT NOT NULL);
+            INSERT INTO eos_pipeline_packets_v2(
+              output_id,packet_hash,ts,generation,profile_id,source_count,canonical_hash)
+            SELECT output_id,packet_hash,ts,generation,profile_id,source_count,canonical_hash
+              FROM eos_pipeline_packets;
+            DROP TABLE eos_pipeline_packets;
+            ALTER TABLE eos_pipeline_packets_v2 RENAME TO eos_pipeline_packets;
+            CREATE INDEX eos_pipeline_packets_hash ON eos_pipeline_packets(packet_hash);
             """
         )
 
@@ -206,8 +250,8 @@ class ProfilePipelineRuntime(clay.Runtime):
         now = time.time()
         db = self._db(entity_db)
         try:
-            db.execute("BEGIN IMMEDIATE")
             self._create_schema(db)
+            db.execute("BEGIN IMMEDIATE")
             if activate:
                 db.execute("UPDATE eos_pipeline_profiles SET active=0 WHERE active=1")
             db.execute(
@@ -249,8 +293,8 @@ class ProfilePipelineRuntime(clay.Runtime):
         digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
         db = self._db(entity_db)
         try:
-            db.execute("BEGIN IMMEDIATE")
             self._create_schema(db)
+            db.execute("BEGIN IMMEDIATE")
             if db.execute("SELECT 1 FROM eos_pipeline_profiles WHERE profile_id=?", (profile_id,)).fetchone() is None:
                 raise PipelineFault("COMPONENT_PROFILE_MISSING")
             db.execute(
@@ -370,9 +414,34 @@ class ProfilePipelineRuntime(clay.Runtime):
                 (kind, str(source_id)),
             ).fetchone() is not None
 
+    def _consumed_ids(self, entity_db: str, kind: str) -> set[str]:
+        with self._db(entity_db) as db:
+            return {
+                str(row[0])
+                for row in db.execute(
+                    "SELECT source_id FROM eos_pipeline_consumed WHERE source_kind=?",
+                    (kind,),
+                ).fetchall()
+            }
+
     def _query(self, db_path: str, sql: str) -> list[dict[str, Any]]:
         with self._db(db_path) as db:
             return [dict(row) for row in db.execute(sql).fetchall()]
+
+    @staticmethod
+    def _delivery_query(sql: str) -> tuple[str, int | None]:
+        """Treat a simple terminal integer LIMIT as a post-dedupe delivery budget.
+
+        This prevents already-consumed head rows from pinning later events forever while
+        leaving non-terminal/complex SQL untouched rather than guessing its semantics.
+        """
+        match = re.search(r"(?is)\s+LIMIT\s+(\d+)\s*;?\s*$", str(sql))
+        if not match:
+            return str(sql), None
+        base = str(sql)[: match.start()].rstrip()
+        if not base:
+            raise PipelineFault("SQLITE_QUERY_EMPTY_AFTER_LIMIT")
+        return base, int(match.group(1))
 
     def _catalog(self, db_path: str, max_tables: int) -> list[dict[str, Any]]:
         with self._db(db_path) as db:
@@ -411,15 +480,21 @@ class ProfilePipelineRuntime(clay.Runtime):
                 value: Any = None
                 if adapter == "sqlite_query":
                     db_path = source_db if spec.get("db") == "source" else entity_db
-                    raw = self._query(db_path, str(spec["query"]))
+                    query, delivery_limit = self._delivery_query(str(spec["query"]))
+                    raw = self._query(db_path, query)
                     id_field = str(spec.get("id_field", "source_id"))
+                    consumed = self._consumed_ids(entity_db, kind)
                     for row in raw:
                         source_id = row.get(id_field)
                         if source_id is None:
                             continue
-                        if not self._already_consumed(entity_db, kind, source_id):
-                            rows.append(row)
-                            consume.append({"kind": kind, "id": str(source_id)})
+                        source_key = str(source_id)
+                        if source_key in consumed:
+                            continue
+                        rows.append(row)
+                        consume.append({"kind": kind, "id": source_key})
+                        if delivery_limit is not None and len(rows) >= delivery_limit:
+                            break
                     source_count += len(rows)
                 elif adapter == "json_snapshot":
                     path = self._resolve(str(spec["path"]))
@@ -432,11 +507,16 @@ class ProfilePipelineRuntime(clay.Runtime):
                         raise PipelineFault("JSONL_MISSING:" + str(path))
                     cursor = int(cursors.get(kind, 0))
                     raw = path.read_bytes()[cursor:]
-                    parts = raw.split(b"\n")
-                    tail = parts.pop() if raw and not raw.endswith(b"\n") else b""
-                    consumed_bytes = len(raw) - len(tail)
-                    for line in parts[: int(spec.get("limit", 60))]:
-                        line = line.strip()
+                    limit = max(0, int(spec.get("limit", 60)))
+                    advanced = 0
+                    emitted = 0
+                    for chunk in raw.splitlines(keepends=True):
+                        if emitted >= limit:
+                            break
+                        if not (chunk.endswith(b"\n") or chunk.endswith(b"\r")):
+                            break
+                        advanced += len(chunk)
+                        line = chunk.strip()
                         if not line:
                             continue
                         try:
@@ -444,7 +524,8 @@ class ProfilePipelineRuntime(clay.Runtime):
                         except Exception:
                             continue
                         rows.append(decoded if isinstance(decoded, dict) else {"text": str(decoded)})
-                    cursors[kind] = cursor + consumed_bytes
+                        emitted += 1
+                    cursors[kind] = cursor + advanced
                     source_count += len(rows)
                 else:
                     raise PipelineFault("UNKNOWN_SOURCE_ADAPTER:" + adapter)
@@ -494,7 +575,7 @@ class ProfilePipelineRuntime(clay.Runtime):
                 }
 
         required = [kind for kind, src in sources.items() if src.get("required_for_quiet")]
-        quiet_sensors_ok = all(sensors[kind]["ok"] for kind in required)
+        quiet_sensors_ok = bool(required) and all(sensors[kind]["ok"] for kind in required)
         return {
             "ok": True,
             "sources": sources,
@@ -916,11 +997,11 @@ class ProfilePipelineRuntime(clay.Runtime):
 
     @staticmethod
     def _quiet_status(collected: dict[str, Any]) -> str:
+        if int(collected.get("source_count", 0)) > 0:
+            return "ACTIVITY_PRESENT"
         if not collected.get("quiet_sensors_ok"):
             return "UNKNOWN_SENSOR_INCOMPLETE"
-        if int(collected.get("source_count", 0)) == 0:
-            return "VERIFIED_QUIET"
-        return "ACTIVITY_PRESENT"
+        return "VERIFIED_QUIET"
 
     def _build_state_box(
         self,
@@ -1005,8 +1086,10 @@ class ProfilePipelineRuntime(clay.Runtime):
         }
         db = self._db(entity_db)
         try:
-            db.execute("BEGIN IMMEDIATE")
+            # Schema checks/migrations occur before the atomic data transaction. Python's
+            # sqlite3 executescript may otherwise implicitly commit an open transaction.
             self._create_schema(db)
+            db.execute("BEGIN IMMEDIATE")
             state_box = self._build_state_box(
                 db,
                 profile=profile,
@@ -1045,10 +1128,12 @@ class ProfilePipelineRuntime(clay.Runtime):
                 ),
             )
             db.execute(
-                "INSERT INTO eos_pipeline_packets VALUES(?,?,?,?,?,?,?)",
+                """INSERT INTO eos_pipeline_packets(
+                   output_id,packet_hash,ts,generation,profile_id,source_count,canonical_hash)
+                   VALUES(?,?,?,?,?,?,?)""",
                 (
-                    compiled["packet_hash"],
                     output_id,
+                    compiled["packet_hash"],
                     now,
                     generation,
                     profile["profile_id"],

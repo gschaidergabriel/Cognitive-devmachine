@@ -1,7 +1,5 @@
 {
   "assistant_target_representation": "ClayCode_only",
-  "base_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
-  "base_primary": "Qwen/Qwen2.5-0.5B",
   "exact_cross_split_overlap": 0,
   "examples": 1650,
   "families": [
@@ -38,7 +36,9 @@
     "self_state": 13
   },
   "identity_job_policy": "runtime_config_only",
+  "model_binding_policy": "campaign_external_not_corpus_identity",
   "prompt_cross_split_overlap": 0,
+  "provider_binding_policy": "campaign_external_not_corpus_identity",
   "schema": "claycog-sft/v2",
   "seed": 20260822,
   "train": 1485,

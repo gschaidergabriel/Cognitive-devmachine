@@ -96,15 +96,17 @@ def wait_file(client, file_id, timeout_seconds=FILE_WAIT_SECONDS):
 
 
 def estimate_price(client, train_file_id, valid_file_id):
+    """Use only fields admitted by Together's current estimate-price schema.
+
+    Exact seed/LR/warmup still remain campaign identity and create-request fields, but the
+    price endpoint currently accepts the cost-relevant subset only.
+    """
     return client.fine_tuning.estimate_price(
         training_file=train_file_id,
         validation_file=valid_file_id,
         model=BASE_MODEL,
         n_epochs=EPOCHS,
         n_evals=EVALS,
-        random_seed=RANDOM_SEED,
-        learning_rate=LEARNING_RATE,
-        warmup_ratio=WARMUP_RATIO,
         training_method={"method": "sft", "train_on_inputs": "auto"},
         training_type={"type": "Full"},
     )
@@ -273,6 +275,8 @@ def main():
         "epochs": EPOCHS,
         "evals": EVALS,
         "random_seed": RANDOM_SEED,
+        "learning_rate": LEARNING_RATE,
+        "warmup_ratio": WARMUP_RATIO,
         "estimated_usd": price,
         "allowed_to_proceed": bool(estimate.allowed_to_proceed),
         "provider_admission": "DIRECT_MODEL_LIMITS_FULL_FT_ACCEPTED",

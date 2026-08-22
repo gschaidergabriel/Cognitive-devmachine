@@ -1,0 +1,60 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base": "dc96c985ceccf44d93de09246181e866dfc687ed",
+  "branch": "gpt56sol/go-08b-preintent-payload-fence-r3-20260822-1901",
+  "model": "Qwen/Qwen3.5-0.8B",
+  "coordination": {
+    "core_high_level_sdk_shape_fix_on_main": true,
+    "main_sdk_contract_presence_gate_on_main": true,
+    "duplicate_changes_rejected": true,
+    "remaining_gap": "Main checks required SDK parameter names but does not bind the exact create payload before durable create-intent arming; its second generic contract check is after intent. Main campaign v3 binds create_contract but not launcher bytes."
+  },
+  "delta": [
+    "Bind the exact create payload with inspect.signature(create).bind(**payload) before arm_create_intent().",
+    "Move the zero-retry create client and generic SDK contract check before arm_create_intent().",
+    "Bind launcher_sha256 into campaign identity.",
+    "Use v4 campaign/preflight/create-intent/suffix namespace so v3 confirmation or ledger identity cannot cross this semantic boundary.",
+    "Install together==2.31.0 in PR admission and exercise the actual installed SDK payload binding without a provider secret or provider call."
+  ],
+  "one_unusual_experiment": {
+    "count": 1,
+    "name": "SDK_CREATE_SCHEMA_SPLIT_FALSIFIER",
+    "status": "ALREADY_CONSUMED_EARLIER_IN_THIS_SAME_GO",
+    "additional_unusual_experiments": 0,
+    "r3_classification": "DETERMINISTIC_REGRESSION_AND_EFFECT_IDENTITY_FENCE"
+  },
+  "upstream": {
+    "package": "together",
+    "version": "2.31.0",
+    "official_source_revision": "0b51221b9c841064c736fcd50da1279a6fed65bf",
+    "observed_create_contract": "FineTuningResource.create exposes lora, train_on_inputs and training_method and no training_type keyword."
+  },
+  "preserved": [
+    "repository and supervisor FREE_ONLY gates before paid-provider secret/network access",
+    "canonical SFT-v2 local validation",
+    "duplicate campaign guard",
+    "exclusive durable create intent",
+    "zero-retry create",
+    "UNKNOWN_REMOTE_CREATE for every exception after intent arming",
+    "create-response random_seed fence",
+    "post-create provider identity verification"
+  ],
+  "execution": {
+    "chat_exact_branch": "UNOBSERVED_DNS_ADMISSION_FAILURE",
+    "provider_runtime": "PROHIBITED_BY_CURRENT_FREE_ONLY_CONTROLS",
+    "pr_runner": "PENDING",
+    "secret_used": false,
+    "provider_call": false,
+    "upload": false,
+    "price_request": false,
+    "billed_create": false,
+    "training": false,
+    "spend_usd": 0
+  },
+  "next_gate": "Observe an actually-started exact-head PR runner. If hosted jobs again expose no visible steps, classify as runner admission failure with zero test credit. Paid Together preflight/create remains forbidden while FREE_ONLY controls are active."
+}

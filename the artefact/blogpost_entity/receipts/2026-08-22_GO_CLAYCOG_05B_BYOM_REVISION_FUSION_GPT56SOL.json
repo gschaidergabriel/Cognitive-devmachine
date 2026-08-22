@@ -1,0 +1,104 @@
+{
+  "schema": "CLAYCOG_05B_BYOM_REVISION_FUSION/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "base_main_sha": "f231b2d93893eccf8a91850ba0512908456995f9",
+  "branch": "gpt56sol/go-claycog-05b-revision-fusion-20260822-1420",
+  "scope": "fuse exact Hugging Face BYOM revision identity into the already-merged Together create-idempotency path",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "coordination": {
+    "parallel_merge_observed": "PR #772 / f231b2d93893eccf8a91850ba0512908456995f9",
+    "parallel_delta": "deterministic campaign fingerprint plus duplicate-paid-create guard",
+    "fusion_rule": "retain #772 canonical safety path; port only non-duplicate exact HF revision provenance; extend existing safety test instead of creating a second canonical test path"
+  },
+  "defect": {
+    "before": "The canonical campaign fingerprint bound from_hf_model but not an exact Hugging Face revision, and the billed Together create omitted hf_model_revision.",
+    "risk": "A moving Hugging Face repository revision could change checkpoint bytes while preserving the same campaign fingerprint/create authorization identity.",
+    "required_invariant": "dataset bytes + training configuration + HF model + exact HF revision must jointly determine the paid campaign identity"
+  },
+  "external_evidence": {
+    "together_byom": {
+      "source": "https://docs.together.ai/docs/fine-tuning-byom",
+      "observed_contract": "BYOM exposes hf_model_revision; custom checkpoint architecture must match the selected Together training template."
+    },
+    "together_finetune_models": {
+      "source": "https://docs.together.ai/docs/fine-tuning-models",
+      "observed_contract": "Current fine-tuning table does not list Qwen2.5; Qwen3.5-0.8B is the smallest listed Qwen Full Fine-Tune template."
+    },
+    "primary_hf_source": {
+      "model": "Qwen/Qwen2.5-0.5B",
+      "revision": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+      "architecture": "Qwen2ForCausalLM",
+      "model_type": "qwen2"
+    },
+    "instruct_hf_source": {
+      "model": "Qwen/Qwen2.5-0.5B-Instruct",
+      "revision": "7ae557604adf67be50417f59c2c2f167def9a775"
+    },
+    "qwen35_config_discriminator": {
+      "model": "Qwen/Qwen3.5-0.8B",
+      "architecture": "Qwen3_5ForConditionalGeneration",
+      "model_type": "qwen3_5"
+    }
+  },
+  "unusual_experiment": {
+    "count_for_this_user_go": 1,
+    "name": "qwen25_to_qwen35_template_architecture_discriminator",
+    "hypothesis": "The smallest currently listed Qwen Full Fine-Tune template Qwen3.5-0.8B could serve as an automatic BYOM fallback for owner-required Qwen2.5-0.5B.",
+    "counterhypothesis": "The apparent family similarity hides a distinct architecture family, making automatic fallback invalid under Together's architecture-match requirement.",
+    "observation": "Qwen2.5-0.5B is Qwen2ForCausalLM/qwen2; Qwen3.5-0.8B is Qwen3_5ForConditionalGeneration/qwen3_5.",
+    "outcome": "REJECT_AUTOMATIC_QWEN35_FALLBACK",
+    "cost_or_effect": "NONE"
+  },
+  "implemented_delta": {
+    "primary_revision_pin": "060db6499f32faf8b98477b0a26969ef7d8b9987",
+    "instruct_revision_pin": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "custom_model_rule": "requires explicit 40-hex revision",
+    "campaign_fingerprint_binds_hf_revision": true,
+    "together_create_passes_hf_model_revision": true,
+    "preflight_and_create_evidence_emit_hf_model_revision": true,
+    "automatic_qwen35_fallback": false,
+    "canonical_test_extended": "the artefact/blogpost_entity/mini_cognition/test_launch_together_safety_v1.py"
+  },
+  "bounded_isolated_validation": {
+    "environment": "current isolated Linux execution container; no TOGETHER_API_KEY; no provider call",
+    "py_compile": "PASS",
+    "canonical_safety_tests": {
+      "passed": 5,
+      "failed": 0,
+      "new_revision_falsifiers": [
+        "same model+dataset+revision is deterministic",
+        "dataset byte mutation changes fingerprint",
+        "HF revision-only mutation changes fingerprint",
+        "default primary/instruct revisions resolve to exact pins",
+        "custom model without revision rejects",
+        "malformed non-40-hex revision rejects"
+      ],
+      "retained_regressions": [
+        "full exact create confirmation required",
+        "account duplicate guard matches campaign suffix",
+        "PR #772 ambiguous-create timeout retry remains blocked"
+      ]
+    },
+    "staged_launcher_sha256": "d61fc1743be1bd4dec166fb8b12bddf492007d41ee65e9ef24dd37418c252b5b",
+    "staged_test_sha256": "5caf78419e59bf87ddba6e3b415461e1004f1fe9e0f734601d1f3bf07cbbe0ce",
+    "credit_scope": "SOURCE_AND_MECHANISM_SUPPORTED; not real Together API or training evidence"
+  },
+  "gate_after_delta": {
+    "paid_campaign_identity": "SOURCE_MECHANISM_HARDENED",
+    "together_qwen25_template_compatibility": "OPEN_API_GATE_NO_SECRET",
+    "training_job_started": false,
+    "cost_incurred_by_this_go_usd": 0,
+    "next_exact_discriminator": "In an authorized isolated environment with TOGETHER_API_KEY, run model_limits on the configured Qwen2.5 template candidate and the preflight upload/validation/estimate path. If admission and <=USD18 gate pass, bind the exact printed fingerprint and create at most one job; then retrieve that exact job."
+  },
+  "claims_not_made": [
+    "Together accepts Qwen2.5-0.5B BYOM",
+    "training started or completed",
+    "trained checkpoint passes held-out OOD",
+    "Q4_K_M runtime peak RSS is below 1 GiB",
+    "micro-agent superiority",
+    "consciousness or mathematical correctness",
+    "native Mini Entity 0.7 runtime acceptance"
+  ]
+}

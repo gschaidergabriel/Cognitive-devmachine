@@ -3,16 +3,19 @@
   "observed_at": "2026-08-22T07:16:24Z",
   "trigger": "go",
   "organ": "GPT-5.6 Sol temporary Clay research organ",
-  "canonical_main_at_final_rebase": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "canonical_main_at_final_source_rebase": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
+  "latest_main_observed_after_test": "cb46a34dff51d309e25fb909758a129f379c7497",
   "work_branch": "gpt56sol/go-claycog-binding-gate-20260822",
-  "branch_source_head_before_receipt": "ab73e4737df878807c1e5b5fe069f8d03cc6cce5",
+  "branch_source_head_before_receipt_refresh": "53deee7b874990e51bbb47af5754a1311d467aaf",
   "main_refresh": {
     "initial_join": "62b292a8097c5b53731ef6804704cf9938872616",
+    "source_rebase_main": "6a831bc975bd9c126c1ac891b649f2c27d87bc8f",
     "new_commits_observed_during_go": [
       "f231b2d93893eccf8a91850ba0512908456995f9 cognition: make 0.5B Together create idempotent (#772)",
-      "6a831bc975bd9c126c1ac891b649f2c27d87bc8f docs(status): align footer with 0.5B owner law (#773)"
+      "6a831bc975bd9c126c1ac891b649f2c27d87bc8f docs(status): align footer with 0.5B owner law (#773)",
+      "cb46a34dff51d309e25fb909758a129f379c7497 ci(cognition): add exact PR admission runner (#778)"
     ],
-    "overlap_adjudication": "The new main changed Together launcher/safety tests/README/footer, not validate_sft_v1.py or the new binding test path. The branch was force-reset to current main and the exact tested binding delta was re-applied."
+    "overlap_adjudication": "#772/#773 did not modify validate_sft_v1.py; the branch was force-reset to 6a831bc and the exact tested binding delta was re-applied. #778 later added only .github/workflows/claycog-validator-pr.yml, so it has no semantic/source overlap with the validator/test/receipt delta and does not invalidate the exact source-bound test evidence."
   },
   "scope": "Harden the existing ClayCode SFT structural admission gate against hidden second fixed identity/role/goal/personality bindings without changing corpus bytes.",
   "hypothesis": "Requiring the canonical runtime cfg binding text somewhere in an output is insufficient: a target may also contain a second hard-coded binding and still pass the previous validator.",
@@ -46,6 +49,15 @@
       "byte_identity_matches_canonical_manifest": true
     }
   },
+  "github_runner_followup": {
+    "pre_778_identity_guard_run": "FAILURE_BEFORE_VISIBLE_STEPS",
+    "pre_778_job_steps": 0,
+    "pre_778_job_log": "UNAVAILABLE_BLOB_NOT_FOUND",
+    "classification": "EXECUTION_ADMISSION_FAILURE_NOT_CODE_TEST_FAILURE",
+    "new_exact_pr_workflow_on_main": ".github/workflows/claycog-validator-pr.yml",
+    "new_workflow_added_by": "cb46a34dff51d309e25fb909758a129f379c7497",
+    "post_refresh_run": "PENDING_RECHECK_AFTER_SYNCHRONIZE"
+  },
   "unusual_experiment": {
     "count_for_this_macrocycle": 1,
     "intervention": "Place the exact required self_bind cfg text inside a quoted state_note string while omitting the real structural self_bind call.",
@@ -57,7 +69,8 @@
   "result": "MECHANISM_SUPPORTED_IN_EXACT_ISOLATED_SOURCE_BOUND_TEST",
   "product_claim_boundary": "This does not prove tuned-model quality, Together BYOM compatibility, native Mini Entity 0.7 runtime acceptance, quantized RSS, or whole Mini Entity acceptance.",
   "next": [
-    "Use the newly merged idempotent Together create guard on main for any future credentialed preflight/create path.",
+    "Observe the exact PR admission workflow after this synchronize event; distinguish no-step admission failure from an executed test failure.",
+    "Use the merged idempotent Together create guard for any future credentialed preflight/create path.",
     "Keep Qwen/Qwen2.5-0.5B to the current Together Qwen2.5 training template pairing OPEN until actual API admission accepts it.",
     "Evaluate any tuned checkpoint with this hardened validator and the held-out 200-case OOD suite before promotion.",
     "Independently close MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1 on an admitted Linux runner."

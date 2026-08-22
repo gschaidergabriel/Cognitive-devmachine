@@ -1,25 +1,31 @@
 {
-  "schema_version": "6.1",
+  "schema_version": "6.2",
   "entity_display_name": "Clay",
   "active_program": "BLOGPOST_ENTITY_ALL_IN_ONE",
   "active_stage": "BLOGPOST_ENTITY_CLAY",
   "sole_owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
   "canonical_repository": "gschaidergabriel/clay-global-research-entity",
   "canonical_branch": "main",
-  "canonical_artifact": "the artefact/blogpost_entity/BLOGPOST_ENTITY.clay",
-  "portable_release_shape": ["BLOGPOST_ENTITY.clay executable", "blogpost_entity.db SQLite MiniUnifiedDB"],
-  "mission": "Finish and empirically prove one persistent portable all-in-one Blogpost/Mini Entity; default Zero blog personality, provider and editable system prompt runtime-configurable.",
+  "portable_release_shape": ["application-neutral .clay executable", "SQLite MiniUnifiedDB preconfigured with zero_blog"],
+  "mission": "Finish and empirically prove one persistent portable multi-use mini entity: executable contains only the generic processing pipeline; Zero blog is fully editable SQLite application configuration.",
+  "hard_split": {
+    "binary": "evidence -> generic preprocessor -> canonical envelope -> configured API -> generic gates -> exactly-once/CAS -> atomic SQLite persistence",
+    "database": "profile/personality/system prompt/application blob/provider settings and default zero_blog preset",
+    "regression": "never hard-code replaceable Zero/blog/personality semantics into the executable"
+  },
   "truth_law": "UNKNOWN != ZERO != ERROR != MEASURED; model narrative is never canonical state authority",
   "provider_law": {
     "default": "Mistral chat-completions",
     "identity": "provider is replaceable inference only",
     "runtime_config": ["endpoint", "model", "api_token", "auth_header", "auth_prefix", "request_template", "response_pointer"],
     "system_prompt": "runtime-editable",
-    "architecture_guard": "immutable and higher priority than editable prompt",
+    "application_profile": "fully runtime-editable",
+    "architecture_guard": "immutable generic pipeline law above editable application",
     "secret_rule": "never expose, print or commit token values"
   },
-  "go": "Maximal swarm cycle on the single Blogpost/Mini Entity only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
+  "default_application": "the artefact/blogpost_entity/presets/zero_blog.json",
+  "go": "Maximal swarm cycle on this one neutral pipeline + configurable DB only: refresh, fan-out, hypotheses, counterhypotheses, implement, sandbox-test, falsify, fuse/hypofuse, fix, retest, persist.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime is exactly one entity",
-  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances the mini entity.",
+  "legacy_scope": "All previous ClayVerse/EntityOS/Frank/UCM/GWT/ClayCode work is donor evidence only unless it advances this mini entity.",
   "together_api": "FORBIDDEN"
 }

@@ -8,6 +8,9 @@ on:
     paths:
       - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
       - 'the artefact/blogpost_entity/test_blogpost_entity.py'
+      - 'the artefact/blogpost_entity/test_state_box_atomic.py'
+      - 'the artefact/blogpost_entity/state_box_reference.py'
+      - 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - 'tools/clay_profile_pipeline_runtime.py'
       - 'tools/claycode_structured_backend.py'
       - '.github/workflows/mini-entity-structured-convergence.yml'
@@ -26,7 +29,18 @@ jobs:
           python-version: '3.12'
       - name: Install bounded test dependencies
         run: python -m pip install --disable-pip-version-check pytest lark
-      - name: Compile Python reference runtime
-        run: python -m py_compile tools/clay_profile_pipeline_runtime.py tools/claycode_structured_backend.py
+      - name: Compile structured reference surfaces
+        run: >-
+          python -m py_compile
+          tools/clay_profile_pipeline_runtime.py
+          tools/claycode_structured_backend.py
+          'the artefact/blogpost_entity/state_box_reference.py'
+          'the artefact/blogpost_entity/check_structured_contract_sync.py'
+      - name: Enforce Clay reference-contract convergence
+        run: python 'the artefact/blogpost_entity/check_structured_contract_sync.py'
       - name: Run structured Mini Entity convergence tests
-        run: python -m pytest 'the artefact/blogpost_entity/test_blogpost_entity.py' -q
+        run: >-
+          python -m pytest
+          'the artefact/blogpost_entity/test_blogpost_entity.py'
+          'the artefact/blogpost_entity/test_state_box_atomic.py'
+          -q

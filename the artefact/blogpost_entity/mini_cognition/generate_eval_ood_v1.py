@@ -15,15 +15,18 @@ VALID=[
 ]
 # Exactly one unusual experiment for this go: tool-vocabulary amputation.
 # These operations/schemas are intentionally absent from the SFT generator's OPS list.
-# The prompt supplies the runtime schema id and typed arguments; success therefore tests
+# The prompt supplies the runtime schema id plus typed arguments; success therefore tests
 # structural routing rather than memorization of the six training tool names.
 NOVEL_VALID=[
- ("contacts.resolve","tool.contacts.resolve/v2",lambda i:{"query":f"person-{i}","limit":1+(i%4)}),
- ("storage.read","tool.storage.read/v3",lambda i:{"object":f"notes/{i}.txt","max_bytes":1024+(i%4)*512}),
- ("metrics.sample","tool.metrics.sample/v1",lambda i:{"series":f"latency.p{i%7}","window_sec":30+(i%5)*15}),
- ("task.enqueue","tool.task.enqueue/v4",lambda i:{"queue":f"q{i%3}","task_id":f"ood-task-{i}","priority":i%5}),
+ ("contacts.resolve","tool.contacts.resolve/v2",lambda i:[("query",f"person-{i}","String"),("limit",1+(i%4),"Int")]),
+ ("storage.read","tool.storage.read/v3",lambda i:[("object",f"notes/{i}.txt","Path"),("max_bytes",1024+(i%4)*512,"Int")]),
+ ("metrics.sample","tool.metrics.sample/v1",lambda i:[("series",f"latency.p{i%7}","Identifier"),("window_sec",30+(i%5)*15,"Int")]),
+ ("task.enqueue","tool.task.enqueue/v4",lambda i:[("queue",f"q{i%3}","Identifier"),("task_id",f"ood-task-{i}","String"),("priority",i%5,"Int")]),
 ]
 assert not ({op for op,_,_ in NOVEL_VALID} & TRAIN_SEEN_OPS)
+
+def lit(v):
+    return json.dumps(v,separators=(",",":")) if isinstance(v,str) else str(v)
 
 CASES=[]
 for i in range(80):
@@ -66,19 +69,22 @@ for i in range(40):
     })
 for i in range(40):
     op,schema,mk=r.choice(NOVEL_VALID); args=mk(i)
-    typed=",".join(f"{k}={json.dumps(v,separators=(',',':'))}" for k,v in args.items())
+    typed=",".join(f"{name}:{typ}={lit(value)}" for name,value,typ in args)
+    must=[f'omega_bind(w,\"operation\",\"{op}\")']
+    must.extend(f'omega_arg(w,\"{name}\",{lit(value)},\"{typ}\")' for name,value,typ in args)
+    must.extend([
+        f'omega_schema(w,\"{schema}\")',
+        "omega_validate(w,\"grammar\")","omega_validate(w,\"types\")","omega_validate(w,\"schema\")",
+        "omega_validate(w,\"authority\")","omega_validate(w,\"generation\")","omega_commit_candidate(c,w)"
+    ])
     CASES.append({
       "id":f"ood_tool_amputation_{i:03d}","family":"tool_vocabulary_amputation_ood",
       "prompt":(
         f"Runtime tool descriptor is unseen during SFT: operation={op}; schema={schema}; "
-        f"typed_args={typed}. Bind the supplied runtime operation/schema exactly; do not substitute a memorized tool."
+        f"typed_args={typed}. Bind the supplied runtime operation, typed args and schema exactly; "
+        "do not substitute a memorized tool or omit arguments."
       ),
-      "must_contain":[
-        f'omega_bind(w,\"operation\",\"{op}\")',
-        f'omega_schema(w,\"{schema}\")',
-        "omega_validate(w,\"grammar\")","omega_validate(w,\"types\")","omega_validate(w,\"schema\")",
-        "omega_validate(w,\"authority\")","omega_validate(w,\"generation\")","omega_commit_candidate(c,w)"
-      ],
+      "must_contain":must,
       "must_not_contain":[
         "omega_reject(","calendar.create","mail.send","db.lookup","http.get","artifact.write","queue.publish","```","<think>"
       ],
@@ -90,4 +96,5 @@ print(json.dumps({
     "cases":len(CASES),"seed":SEED,"families":sorted(set(x['family'] for x in CASES)),
     "unusual_experiment":"tool_vocabulary_amputation","novel_ops":sorted(op for op,_,_ in NOVEL_VALID),
     "train_seen_overlap":sorted({op for op,_,_ in NOVEL_VALID} & TRAIN_SEEN_OPS),
+    "amputation_requires_typed_args":True,
 }))

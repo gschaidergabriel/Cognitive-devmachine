@@ -1,0 +1,48 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_APPROX1B_TRAINING_DIRECTIVE.md",
+  "base_main_sha": "cae90e6c003c92730726153af45071eed80d0ed7",
+  "branch": "gpt56sol/go-approx1b-sdk-create-contract-20260822-1838",
+  "parallel_fusion": "Current main preserved: #891 full provider-job identity fence; #904 FREE_ONLY provider rejection before secret/import/network; later corpus/OOD/workflow/state fusions are orthogonal to launcher/test paths.",
+  "finding": {
+    "class": "SDK_CREATE_CONTRACT_MISMATCH",
+    "model": "Qwen/Qwen3.5-0.8B",
+    "official_sdk_repository": "togethercomputer/together-py",
+    "observed_sdk_version": "2.31.0",
+    "observed_sdk_source_revision": "0b51221b9c841064c736fcd50da1279a6fed65bf",
+    "defect": "estimate/REST-shaped training_type and training_method objects were passed directly to high-level fine_tuning.create(), whose observed SDK signature has no training_type keyword",
+    "repair": "keep nested estimate schema; use create lora=False, training_method='sft', train_on_inputs='auto' and omit direct training_type"
+  },
+  "unusual_experiment": {
+    "count": 1,
+    "name": "TOGETHER_SDK_V2_CREATE_SIGNATURE_COUNTEREXAMPLE",
+    "pre_fix": "REJECT: unexpected keyword argument training_type",
+    "corrected": "ACCEPT at bounded official-source signature scope",
+    "installed_package_runtime": "UNOBSERVED: sandbox DNS prevented together==2.31.0 package install",
+    "provider_network": false
+  },
+  "preserved_safety": [
+    "FREE_ONLY=true rejects before TOGETHER_API_KEY lookup, provider import and provider network",
+    "post-CREATE provider identity checks files/model/suffix/epochs/evals/checkpoints/seed/learning-rate/warmup/SFT/Full"
+  ],
+  "prior_exact_pr_execution": {
+    "head": "e9bfcc174dedac3a80e3558e039effb09ccaf425",
+    "jobs": 4,
+    "steps": null,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT"
+  },
+  "evidence_scope": "SOURCE_FIX_PLUS_BOUNDED_OFFICIAL_SDK_CONTRACT_MECHANISM",
+  "secret_used": false,
+  "provider_call": false,
+  "upload": false,
+  "price_request": false,
+  "billed_create": false,
+  "training": false,
+  "spend_usd": 0,
+  "next_gate": "Obtain visible-step exact-current runner execution. While FREE_ONLY remains true, paid Together preflight/create stays fail-closed. A future explicit policy opening must still pass no-create model_limits + server file validation + exact price preflight before a fingerprint-confirmed billed create."
+}

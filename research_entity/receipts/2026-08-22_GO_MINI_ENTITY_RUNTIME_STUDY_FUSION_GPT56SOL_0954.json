@@ -30,8 +30,15 @@
         "UNKNOWN metrics may still carry numeric 0.0 internally; typed absence is required",
         "state-box and machine-readable study row are not yet inside the canonical atomic commit",
         "canonical Clay source should converge on pipeline_init before pipeline_profile_read",
-        "workflow run 32547822177 job 96969405151 had zero steps, therefore execution-admission failure only"
-      ]
+        "observed Mini Entity structured workflow jobs on earlier PR heads had zero steps, therefore execution-admission failure only"
+      ],
+      "red_guard_added": {
+        "test_path": "the artefact/blogpost_entity/test_epistemic_unknown_not_zero.py",
+        "test_commit": "dd6f0a69533e8c198e0e34b88c491737372ab965",
+        "workflow_commit": "a4c1d5d3bbea5c42c056330c15788fa3805b771b",
+        "required_behavior": "status UNKNOWN implies value null/None, never numeric 0.0",
+        "execution_credit": "NO_WORKFLOW_RUN_OBSERVED_FOR_A4C1_HEAD_AT_RECEIPT_UPDATE"
+      }
     },
     "pr_726": {
       "status": "RETAIN_AS_STATE_BOX_MECHANISM_DONOR",
@@ -66,8 +73,8 @@
       "id": "H2",
       "claim": "UNKNOWN must be represented as typed absence, not status UNKNOWN with numeric zero payload.",
       "counterhypothesis": "Status tagging alone is enough because downstream gates ignore the numeric value.",
-      "falsifier": "any downstream/export/study consumer can observe or aggregate the numeric zero despite UNKNOWN status.",
-      "status": "RETAIN_STRONG"
+      "falsifier": "the committed RED guard fails against any runtime that emits status UNKNOWN with a numeric value.",
+      "status": "RED_GUARD_COMMITTED_SOURCE_NOT_EXECUTED"
     }
   ],
   "bounded_fault_analysis": {
@@ -96,10 +103,12 @@
   },
   "durable_actions": [
     "GitHub review 4998760406 on PR 727 records epistemic, atomicity, source-order and execution-evidence blockers",
-    "GitHub review 4998760646 on PR 726 records fusion and atomic integration requirements"
+    "GitHub review 4998760646 on PR 726 records fusion and atomic integration requirements",
+    "PR 727 red guard commit dd6f0a69533e8c198e0e34b88c491737372ab965 pins UNKNOWN not numeric zero",
+    "PR 727 workflow commit a4c1d5d3bbea5c42c056330c15788fa3805b771b adds the RED guard to focused ordinary regressions while excluding Preset-Amputation this go"
   ],
   "next_discriminators": [
-    "change UNKNOWN metrics to typed absence and regress all consumers",
+    "make the structured runtime satisfy the committed UNKNOWN typed-absence RED guard",
     "fuse the generic study builder into pipeline_commit without a second persistence authority",
     "persist exactly one machine-readable study row keyed to output/generation inside the same SQLite transaction",
     "append exactly one public fenced state box from that same committed record",

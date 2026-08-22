@@ -1,0 +1,109 @@
+name: ClayCog 0.5B source gate
+
+on:
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/mini_cognition/**'
+      - '.github/workflows/claycog-05b-source-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compositional-source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact PR bytes
+        uses: actions/checkout@v4
+
+      - name: Bind source identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "GITHUB_SHA=${GITHUB_SHA}"
+          git rev-parse HEAD
+          git status --porcelain
+
+      - name: Compile Python sources
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 -m py_compile \
+            generate_sft_v1.py \
+            generate_sft_v2.py \
+            validate_sft_v1.py \
+            generate_eval_ood_v1.py \
+            generate_eval_ood_v2.py \
+            eval_outputs_v1.py \
+            launch_together_v1.py
+
+      - name: Generate and validate compositional SFT v2
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_sft_v2.py
+          python3 validate_sft_v1.py train_v2.jsonl
+          python3 validate_sft_v1.py validation_v2.jsonl
+          test "$(wc -l < train_v2.jsonl)" -eq 2025
+          test "$(wc -l < validation_v2.jsonl)" -eq 225
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          from generate_sft_v2 import build
+          rows = build()
+          assert len(rows) == 2250
+          counts = Counter(x['family'] for x in rows)
+          required = {
+              'composition_hyper_to_omega': 100,
+              'composition_epistemic_action': 80,
+              'composition_authority_lesion': 80,
+              'composition_generation_lesion': 80,
+              'composition_novel_schema': 100,
+              'composition_identity_swap': 70,
+              'composition_self_control': 50,
+              'composition_recovery': 40,
+          }
+          for family, n in required.items():
+              assert counts[family] == n, (family, counts[family], n)
+          manifest = json.load(open('corpus_manifest_v2.json'))
+          assert manifest['examples'] == 2250
+          assert manifest['train'] == 2025
+          assert manifest['validation'] == 225
+          print(json.dumps({'examples': len(rows), 'composition': required}, sort_keys=True))
+          PY
+
+      - name: Generate compositional held-out discriminator
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd 'the artefact/blogpost_entity/mini_cognition'
+          python3 generate_eval_ood_v2.py
+          test "$(wc -l < eval_ood_v2.jsonl)" -eq 320
+          python3 - <<'PY'
+          import json
+          from collections import Counter
+          rows = [json.loads(x) for x in open('eval_ood_v2.jsonl') if x.strip()]
+          assert len(rows) == 320
+          assert len({x['id'] for x in rows}) == 320
+          counts = Counter(x['family'] for x in rows)
+          assert counts == {
+              'composition_hyper_to_omega_ood': 80,
+              'composition_authority_lesion_ood': 60,
+              'composition_generation_lesion_ood': 60,
+              'composition_epistemic_ood': 40,
+              'composition_identity_swap_ood': 40,
+              'composition_recovery_ood': 40,
+          }, counts
+          print(json.dumps({'cases': len(rows), 'families': counts}, default=dict, sort_keys=True))
+          PY
+
+      - name: Assert no training/network side effect
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -z "${TOGETHER_API_KEY:-}"
+          echo 'SOURCE_GATE_ONLY: no Together secret, upload, preflight, or billed training job executed.'

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-import importlib.util,json,os,stat,tempfile,types,unittest
+import importlib.util,json,os,stat,sys,tempfile,types,unittest
 from pathlib import Path
+from unittest.mock import patch
 HERE=Path(__file__).resolve().parent
 spec=importlib.util.spec_from_file_location("launch08",HERE/"launch_together_qwen35_08b_v1.py");m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class FT:
@@ -24,6 +25,10 @@ class Tests(unittest.TestCase):
         else:os.environ[m.CREATE_LEDGER_DIR_ENV]=self.l
     def test_model_and_direct_campaign(self):
         self.assertEqual(m.MODEL,"Qwen/Qwen3.5-0.8B");m.validate_static_contract();d=m.campaign_descriptor();self.assertEqual(d["training_type"],{"type":"Full"});self.assertEqual(d["random_seed"],3407);raw=json.dumps(d);self.assertNotIn("from_hf_model",raw);self.assertNotIn("template_model",raw)
+    def test_local_checks_use_canonical_v2_corpus_gate(self):
+        self.assertTrue((HERE/"validate_corpus_v2.py").is_file());self.assertFalse((HERE/"validate_sft_v2.py").exists())
+        with patch.object(m.subprocess,"run") as run:m.local_checks()
+        self.assertEqual(run.call_count,2);self.assertEqual(run.call_args_list[0].args[0],[sys.executable,str(HERE/"generate_sft_v2.py")]);self.assertTrue(run.call_args_list[0].kwargs["check"]);self.assertEqual(run.call_args_list[1].args[0],[sys.executable,str(HERE/"validate_corpus_v2.py"),str(m.TRAIN),str(m.VALID)]);self.assertTrue(run.call_args_list[1].kwargs["check"])
     def test_sdk_v2_model_limits(self):
         c=Client();m.get_full_training_limits(c);self.assertEqual(c.fine_tuning.limits_kwargs,{"model_name":m.EXPECTED_MODEL})
         with self.assertRaises(SystemExit):m.get_full_training_limits(Client(full=False))

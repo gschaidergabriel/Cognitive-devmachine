@@ -31,3 +31,8 @@ jobs:
         run: |
           set -euo pipefail
           python3 'the artefact/blogpost_entity/mini_cognition/test_validate_sft_v1.py'
+      - name: Run v2 late-gate local admission
+        run: |
+          set -euo pipefail
+          unset TOGETHER_API_KEY || true
+          python3 'the artefact/blogpost_entity/mini_cognition/launch_together_v1.py' --local-only

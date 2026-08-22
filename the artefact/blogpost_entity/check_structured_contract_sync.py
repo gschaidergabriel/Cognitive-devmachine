@@ -4,13 +4,149 @@
 The canonical Clay source has already moved to a DB-resident profile plus generic
 `inference_generate` boundary. The Python reference runtime/tests may lag, but that lag
 must be explicit and must never cause the canonical Clay contract to be rolled backward.
+
+Effect-surface admission is syntax-bound: comments, docstrings, dead string literals, or
+unwired handler names do not count as runtime support.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 from pathlib import Path
+from typing import Any
+
+REQUIRED_EFFECTS = {
+    "pipeline_profile_read": "_pipeline_profile_read",
+    "inference_generate": "_inference_generate",
+}
+LEGACY_EFFECTS = {"profile_load", "provider_chat_json"}
+
+
+def _class_node(tree: ast.AST, name: str) -> ast.ClassDef | None:
+    for node in getattr(tree, "body", []):
+        if isinstance(node, ast.ClassDef) and node.name == name:
+            return node
+    return None
+
+
+def _literal_string_set(node: ast.AST) -> set[str]:
+    if not isinstance(node, (ast.Set, ast.List, ast.Tuple)):
+        return set()
+    out: set[str] = set()
+    for item in node.elts:
+        if isinstance(item, ast.Constant) and isinstance(item.value, str):
+            out.add(item.value)
+    return out
+
+
+def _attribute_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Attribute) and isinstance(node.value, ast.Name) and node.value.id == "self":
+        return node.attr
+    return None
+
+
+def runtime_effect_contract(runtime: str) -> dict[str, Any]:
+    """Extract effect admission from executable Python syntax, never raw substrings."""
+    try:
+        tree = ast.parse(runtime)
+    except SyntaxError as exc:
+        return {
+            "syntax_ok": False,
+            "syntax_error": str(exc),
+            "allowed_effects": [],
+            "dispatch": {},
+            "handlers": [],
+            "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "legacy_effects_absent": False,
+            "converged": False,
+        }
+
+    cls = _class_node(tree, "ProfilePipelineRuntime")
+    if cls is None:
+        return {
+            "syntax_ok": True,
+            "class_found": False,
+            "allowed_effects": [],
+            "dispatch": {},
+            "handlers": [],
+            "required_effect_bindings": {name: False for name in REQUIRED_EFFECTS},
+            "legacy_effects_absent": False,
+            "converged": False,
+        }
+
+    methods = {node.name: node for node in cls.body if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
+    handlers = set(methods)
+    allowed: set[str] = set()
+
+    init = methods.get("__init__")
+    if init is not None:
+        for node in ast.walk(init):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Attribute) and _attribute_name(target) == "allowed_effects":
+                        allowed |= _literal_string_set(node.value)
+            elif isinstance(node, ast.AnnAssign):
+                target = node.target
+                if isinstance(target, ast.Attribute) and _attribute_name(target) == "allowed_effects":
+                    allowed |= _literal_string_set(node.value) if node.value is not None else set()
+
+    dispatch: dict[str, str] = {}
+    effect = methods.get("effect")
+    if effect is not None:
+        for node in ast.walk(effect):
+            if isinstance(node, ast.If):
+                test = node.test
+                if (
+                    isinstance(test, ast.Compare)
+                    and isinstance(test.left, ast.Name)
+                    and test.left.id == "kind"
+                    and len(test.ops) == 1
+                    and isinstance(test.ops[0], ast.Eq)
+                    and len(test.comparators) == 1
+                    and isinstance(test.comparators[0], ast.Constant)
+                    and isinstance(test.comparators[0].value, str)
+                ):
+                    effect_name = test.comparators[0].value
+                    called: set[str] = set()
+                    for child in node.body:
+                        for call in ast.walk(child):
+                            if isinstance(call, ast.Call):
+                                name = _attribute_name(call.func)
+                                if name:
+                                    called.add(name)
+                    if len(called) == 1:
+                        dispatch[effect_name] = next(iter(called))
+            if isinstance(node, (ast.Assign, ast.AnnAssign)):
+                value = node.value
+                if isinstance(value, ast.Dict):
+                    for key, val in zip(value.keys, value.values):
+                        if isinstance(key, ast.Constant) and isinstance(key.value, str):
+                            handler = _attribute_name(val)
+                            if handler:
+                                dispatch[key.value] = handler
+
+    bindings = {
+        effect_name: (
+            effect_name in allowed
+            and dispatch.get(effect_name) == handler_name
+            and handler_name in handlers
+        )
+        for effect_name, handler_name in REQUIRED_EFFECTS.items()
+    }
+    legacy_absent = not ((allowed | set(dispatch)) & LEGACY_EFFECTS)
+    converged = all(bindings.values()) and legacy_absent
+    return {
+        "syntax_ok": True,
+        "class_found": True,
+        "allowed_effects": sorted(allowed),
+        "dispatch": dict(sorted(dispatch.items())),
+        "handlers": sorted(handlers),
+        "required_effect_bindings": bindings,
+        "legacy_effects_absent": legacy_absent,
+        "converged": converged,
+    }
 
 
 def main() -> int:
@@ -46,13 +182,7 @@ def main() -> int:
         "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
     }
 
-    runtime_contract = {
-        "supports_pipeline_profile_read": '"pipeline_profile_read"' in runtime,
-        "supports_inference_generate": '"inference_generate"' in runtime,
-        "still_contains_profile_load": '"profile_load"' in runtime,
-        "still_contains_provider_chat_json": '"provider_chat_json"' in runtime,
-    }
-
+    runtime_contract = runtime_effect_contract(runtime)
     tests_contract = {
         "still_mentions_external_profile_path": "str(profile_path)" in tests,
         "still_constructs_profile_json_file": "write_profile(" in tests,
@@ -68,10 +198,7 @@ def main() -> int:
         ]
     )
     reference_converged = (
-        runtime_contract["supports_pipeline_profile_read"]
-        and runtime_contract["supports_inference_generate"]
-        and not runtime_contract["still_contains_profile_load"]
-        and not runtime_contract["still_contains_provider_chat_json"]
+        runtime_contract["converged"]
         and not tests_contract["still_mentions_external_profile_path"]
         and not tests_contract["still_constructs_profile_json_file"]
     )
@@ -83,13 +210,13 @@ def main() -> int:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v1",
+        "schema": "clay-structured-contract-sync/v2",
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; update the reference runtime/tests to match rather than rolling Clay backward.",
+        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime support requires executable allowed-effect + dispatch + handler binding, never comments/docstrings/dead strings.",
         "errors": errors,
         "pass": not errors,
     }

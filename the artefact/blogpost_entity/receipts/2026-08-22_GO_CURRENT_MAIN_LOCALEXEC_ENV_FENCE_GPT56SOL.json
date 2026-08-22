@@ -1,0 +1,44 @@
+{
+  "schema": "clay-go-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "base_main_sha": "659cc2471b73bcefebb6a57694e6737cc2107cc5",
+  "branch": "gpt56sol/go-current-main-localexec-env-fence-20260822-1511",
+  "scope": "fresh-current-main local_exec parent-environment secret isolation after #769 merged",
+  "finding": {
+    "current_main_defect": "run_local_exec used execvp and inherited the entire parent environment",
+    "stale_donor": "PR #764 contains the correct clean-environment mechanism but its v2 runtime test is stale after #769 now rejects canonical v2 profiles before inference",
+    "additional_adjudication": "PR #764 source/test still contain a quiet-window short-circuit even though its prose claimed that short-circuit had been removed; canonical BLOGPOST_ENTITY.clay has no such shortcut"
+  },
+  "delta": {
+    "native_source_blob_sha": "2e69fdb285a42ff29ba29d224855cdd455b6b36a",
+    "mechanism": "/usr/bin/env -i with an explicit non-secret PATH/HOME/TMPDIR/LANG/TZ allowlist, then shell-free execv",
+    "source_regression": "the artefact/blogpost_entity/native/test_native_local_exec_env_source.py"
+  },
+  "one_unusual_experiment": {
+    "id": "PARENT_ENV_SECRET_AMPUTATION",
+    "environment": "isolated OpenAI Linux container",
+    "intervention": "set TOGETHER_API_KEY, OPENAI_API_KEY and UNRELATED_SECRET sentinels in the parent, then start python3 through the exact /usr/bin/env -i allowlist used by the candidate",
+    "result": "PASS_MECHANISM",
+    "observed": {
+      "TOGETHER_API_KEY_visible": false,
+      "OPENAI_API_KEY_visible": false,
+      "UNRELATED_SECRET_visible": false,
+      "HOME": "/tmp",
+      "TMPDIR": "/tmp",
+      "LANG": "C.UTF-8",
+      "TZ": "UTC"
+    }
+  },
+  "evidence_boundary": {
+    "source_candidate": true,
+    "mechanism_supported": true,
+    "exact_native_elf_runtime_verified": false,
+    "reason": "the current #769 fail-closed v2 admission boundary makes the old #764 runtime fixture non-executable through the intended canonical v2 path until native v2 compile+gate parity is implemented; no false runtime PASS is claimed"
+  },
+  "next_native_gate": "after canonical v2 native parity exists, run an exact source-bound ELF test with parent secret sentinels and require the configured local runner to observe none while the normal gate/CAS/atomic persistence path still passes",
+  "money_spent_usd": 0,
+  "together_network_used": false
+}

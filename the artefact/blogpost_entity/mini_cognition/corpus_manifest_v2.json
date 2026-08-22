@@ -1,0 +1,39 @@
+{
+  "schema": "claycog-sft/v2",
+  "seed": 20260822,
+  "examples": 1650,
+  "train": 1485,
+  "validation": 165,
+  "base_primary": "Qwen/Qwen2.5-0.5B",
+  "base_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+  "identity_job_policy": "runtime_config_only",
+  "assistant_target_representation": "ClayCode_only",
+  "families": [
+    "omega_valid",
+    "omega_reject",
+    "epistemic",
+    "hyperposition",
+    "architecture",
+    "configuration",
+    "self_state",
+    "recovery",
+    "adversarial"
+  ],
+  "family_counts": {
+    "omega_valid": 360,
+    "omega_reject": 180,
+    "epistemic": 220,
+    "hyperposition": 220,
+    "architecture": 170,
+    "configuration": 140,
+    "self_state": 130,
+    "recovery": 110,
+    "adversarial": 120
+  },
+  "unique_train": 1485,
+  "unique_validation": 165,
+  "train_validation_exact_overlap": 0,
+  "train_sha256": "6879463b9e204c119c846ee8fbebeacfa3897b8c73d4700f0f77e4062c3861f6",
+  "validation_sha256": "a53acf17d5b0d7910c820952ea6abdfa97319b96b5e8302a5be345b09648e2ba",
+  "generation_note": "Derived deterministically from generate_sft_v2.py in bounded isolated source execution; exact repository-runner execution remains required for runtime credit."
+}

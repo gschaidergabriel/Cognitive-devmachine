@@ -1,0 +1,50 @@
+{
+  "assistant_target_representation": "ClayCode_only",
+  "base_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+  "base_primary": "Qwen/Qwen2.5-0.5B",
+  "exact_cross_split_overlap": 0,
+  "examples": 1650,
+  "families": [
+    "omega_valid",
+    "omega_reject",
+    "epistemic",
+    "hyperposition",
+    "architecture",
+    "configuration",
+    "self_state",
+    "recovery",
+    "adversarial"
+  ],
+  "family_totals": {
+    "adversarial": 120,
+    "architecture": 170,
+    "configuration": 140,
+    "epistemic": 220,
+    "hyperposition": 220,
+    "omega_reject": 180,
+    "omega_valid": 360,
+    "recovery": 110,
+    "self_state": 130
+  },
+  "family_validation": {
+    "adversarial": 12,
+    "architecture": 17,
+    "configuration": 14,
+    "epistemic": 22,
+    "hyperposition": 22,
+    "omega_reject": 18,
+    "omega_valid": 36,
+    "recovery": 11,
+    "self_state": 13
+  },
+  "identity_job_policy": "runtime_config_only",
+  "prompt_cross_split_overlap": 0,
+  "schema": "claycog-sft/v2",
+  "seed": 20260822,
+  "train": 1485,
+  "train_sha256": "8a9df9c81c1e7f199bab6cfe65acfec080a87a29eaff02e345b3eb0923d518d6",
+  "train_unique": 1485,
+  "validation": 165,
+  "validation_sha256": "7bc3d28041b7fd51992e8b62f2a69981016910404b5fc6b7ce2d4444050d21f5",
+  "validation_unique": 165
+}

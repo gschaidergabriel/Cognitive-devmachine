@@ -244,3 +244,96 @@ def test_no_real_key_is_reported_not_faked(tmp_path):
     out = rt.effect("mistral_chat_json", p)
     if not any(os.environ.get(k) for k in p["secret_names"]):
         assert out["ok"] is False and out["error_kind"] == "NO_MISTRAL_KEY"
+
+
+def test_stale_generation_loses_atomically(tmp_path):
+    db = tmp_path / "wiki.db"
+    make_db(db)
+    (tmp_path / "vorsaetze.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "architekt-log.jsonl").write_text("", encoding="utf-8")
+
+    def race(req):
+        c = sqlite3.connect(db)
+        c.execute("UPDATE eos_blogpost_entity_state SET generation=1 WHERE singleton=1")
+        c.commit()
+        c.close()
+        return responder(req)
+
+    rt = EffectRuntime(root=tmp_path, mistral_override=race)
+    with pytest.raises(clay.StructuredFault):
+        execute_source(
+            SRC,
+            "run",
+            [str(db), "", str(tmp_path / "architekt-log.jsonl"), str(tmp_path / "vorsaetze.json")],
+            rt,
+        )
+    c = sqlite3.connect(db)
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_posts").fetchone()[0] == 0
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_consumed").fetchone()[0] == 0
+    assert c.execute("SELECT generation FROM eos_blogpost_entity_state").fetchone()[0] == 1
+    c.close()
+
+
+def test_public_internal_identifier_leak_is_rejected(tmp_path):
+    db = tmp_path / "wiki.db"
+    make_db(db)
+    (tmp_path / "vorsaetze.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "architekt-log.jsonl").write_text("", encoding="utf-8")
+
+    def leak(req):
+        d = json.loads(req["user"])
+        refs = d["ALLOWED_EVIDENCE_REFS"]
+        ev = [r for r in refs if r.startswith("receipt:")][:1] or ["canonical:catalog"]
+        return {
+            "canonical_state_hash_seen": d["CANONICAL_STATE_HASH"],
+            "packet_hash_seen": d["PACKET_HASH"],
+            "ueberschrift": "Ein Tag",
+            "einleitung": "Ein ehrlicher Blick.",
+            "abschnitte": [
+                {
+                    "text": "Ich habe heute direkt in wiki.db nachgesehen.",
+                    "evidence_refs": ev,
+                    "state_claims": {},
+                }
+            ],
+            "neuer_erzaehlfaden": "Weiter.",
+            "neue_gespiegelte_hypothesen": "Weiter.",
+        }
+
+    rt = EffectRuntime(root=tmp_path, mistral_override=leak)
+    with pytest.raises(clay.StructuredFault):
+        execute_source(
+            SRC,
+            "run",
+            [str(db), "", str(tmp_path / "architekt-log.jsonl"), str(tmp_path / "vorsaetze.json")],
+            rt,
+        )
+    c = sqlite3.connect(db)
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_posts").fetchone()[0] == 0
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_consumed").fetchone()[0] == 0
+    c.close()
+
+
+def test_hash_mismatch_is_rejected_before_commit(tmp_path):
+    db = tmp_path / "wiki.db"
+    make_db(db)
+    (tmp_path / "vorsaetze.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "architekt-log.jsonl").write_text("", encoding="utf-8")
+
+    def stale(req):
+        out = responder(req)
+        out["canonical_state_hash_seen"] = "stale-state"
+        return out
+
+    rt = EffectRuntime(root=tmp_path, mistral_override=stale)
+    with pytest.raises(clay.StructuredFault):
+        execute_source(
+            SRC,
+            "run",
+            [str(db), "", str(tmp_path / "architekt-log.jsonl"), str(tmp_path / "vorsaetze.json")],
+            rt,
+        )
+    c = sqlite3.connect(db)
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_posts").fetchone()[0] == 0
+    assert c.execute("SELECT COUNT(*) FROM eos_blogpost_entity_consumed").fetchone()[0] == 0
+    c.close()

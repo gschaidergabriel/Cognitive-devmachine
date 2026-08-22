@@ -1,5 +1,5 @@
 {
-  "schema_version": "7.9",
+  "schema_version": "7.10",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
@@ -86,22 +86,24 @@
       "prompt_cross_split_overlap": 0,
       "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
       "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
-      "full_exact_current_regeneration_after_latest_semantic_slot_gate": "NOT_YET_CREDITED"
+      "model_binding_policy": "campaign_external_not_corpus_identity",
+      "provider_binding_policy": "campaign_external_not_corpus_identity",
+      "full_exact_current_regeneration_after_latest_semantic_slot_gate": "CREDITED via merged #929 plus exact-blob regeneration evidence at 2c1a62e399906285232c1140f97dc85b1a40b3ff; complete 1485 train + 165 validation corpus regenerated and canonical validator PASS with unchanged hashes"
     },
     "admission_and_eval": {
       "exact_top_level_omega_validator": "MERGED via #862 / 2f9fda0a70d5fc483b73782733d3680a093ef470",
       "comment_string_safe_ood_call_extraction": "MERGED via #838 / e073e3577334d4dce723ffca378e61528bf0ed24",
       "canonical_call_depth_credit": "MERGED via #908 / dd1fd761f77d5385dd78ff6c774129d7a5e58039; 9/9 bounded exact-blob assertions PASS; full current-runner credit ZERO",
-      "reserved_semantic_identity_slots": "MERGED via #917 / f807c0e86971be78da0054ff6a08406726c0aef3; pre-fix falsifier 3/3 false accepts; bounded post-fix unittest 6/6 PASS; full 1650-row exact-current regeneration still required",
+      "reserved_semantic_identity_slots": "MERGED via #917 / f807c0e86971be78da0054ff6a08406726c0aef3; pre-fix falsifier 3/3 false accepts; bounded post-fix unittest 6/6 PASS; full 1650-row exact-blob regeneration/validation subsequently CREDITED at 2c1a62e399906285232c1140f97dc85b1a40b3ff",
       "seed_and_created_job_identity_prior_lane": "MERGED via #859 / 67af94be952c3352533662036b0325e9fe54df9b",
       "exact_byom_attestation_prior_lane": "MERGED via #865 / d696e40f02148555f15f51dd8cb9d01cfbccb230"
     },
     "together_direct_08b": {
       "launcher": "the artefact/blogpost_entity/mini_cognition/launch_together_qwen35_08b_v1.py",
       "source_lane": "MERGED via #869",
-      "canonical_v2_preflight_validation": "MERGED at f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d; repeated GitHub jobs failed before visible steps and give ZERO exact runtime credit",
-      "full_created_job_identity_fence": "MERGED via #891 / 04209767aba1806c9566bac34274b5430879586a; verifies files, model, suffix, epochs/evals/checkpoints, seed, learning rate, warmup, SFT method and Full type; exact runtime credit ZERO",
-      "free_only_pre_secret_pre_network_fence": "MERGED via #904 / f3e9455f7082cb131096647499ff306ce554a151; bounded source-mechanism discriminator supports zero secret lookup/provider import under FREE_ONLY; exact current hosted-runner credit ZERO",
+      "canonical_v2_preflight_validation": "MERGED source repair at f4b1a8c1f7da7ea220e06a5aeed6c142aa2c8d1d; exact local Git-blob runtime re-entry merged via #932 / ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9 with launcher suite 13/13 PASS and real generate_sft_v2 -> validate_corpus_v2 PASS; hosted GitHub jobs that stop before visible steps still receive ZERO hosted-runner credit",
+      "full_created_job_identity_fence": "MERGED via #891 / 04209767aba1806c9566bac34274b5430879586a; verifies files, model, suffix, epochs/evals/checkpoints, seed, learning rate, warmup, SFT method and Full type; exact provider runtime credit ZERO",
+      "free_only_pre_secret_pre_network_fence": "MERGED via #904 / f3e9455f7082cb131096647499ff306ce554a151; exact launcher local execution with machine-readable FREE_ONLY=true additionally observed pre-secret/pre-network rejection in #932 / ff2eb063284c9e41dd399c13be1e4b73ae7bf0c9; no provider call credit",
       "public_provider_refresh": "MERGED evidence via #900 / 43308213ebc5aa1e5cd86da898293604cff2dccc",
       "training_type": "Full",
       "public_catalog_full_ft": "CONFIRMED_2026-08-22",
@@ -133,7 +135,7 @@
     "cross_organ_unusual_experiment_rule": "compare slot claims only under exact shared macrocycle_id; no-ID receipts are unresolved for cross-run adjudication",
     "merge": "#875 / 64f73d9407e35dccb7810e87e7fe0875d5884c59"
   },
-  "current_frontier": "CURRENT EXECUTION POLICY IS FREE_ONLY. Therefore no credentialed Together preflight/upload/create/training may execute now. Highest product-convergent offline gates are: (A) complete #874 native clay-pipeline-profile/v2 parity while retaining #769 fail-closed admission and #889 active-profile digest integrity, then obtain exact-current source-bound runtime/fault/CAS evidence on an actually-started authorized runner; (B) regenerate/revalidate the complete 1650-row SFT-v2 corpus on exact current bytes after #917 reserved semantic-slot admission, retain #908 canonical call-depth scoring and the #904 FREE_ONLY pre-secret/pre-network fence, and continue matched OOD/eval preparation offline. When FREE_ONLY no longer forbids provider execution and fresh owner authorization is bound to the exact fingerprint, the next paid-lane step is authenticated no-create Qwen/Qwen3.5-0.8B preflight under USD18/EUR20 fences. Whole product remains IN_PROGRESS.",
+  "current_frontier": "CURRENT EXECUTION POLICY IS FREE_ONLY. Therefore no credentialed Together preflight/upload/create/training may execute now. Highest product-convergent offline gates are: (A) complete #874 native clay-pipeline-profile/v2 parity while retaining #769 fail-closed admission and #889 active-profile digest integrity, then obtain exact-current source-bound runtime/fault/CAS evidence on an actually-started authorized runner; (B) continue matched OOD/evaluation preparation offline on the now exact-regenerated, model/provider-neutral 1650-row SFT-v2 curriculum while retaining #908 canonical call-depth scoring, #917 reserved semantic-slot rejection and the #904/#932 FREE_ONLY pre-secret/pre-network fence. When FREE_ONLY no longer forbids provider execution and fresh owner authorization is bound to the exact fingerprint, the next paid-lane step is authenticated no-create Qwen/Qwen3.5-0.8B preflight under USD18/EUR20 fences. Whole product remains IN_PROGRESS.",
   "go_contract": "Every go refreshes current main/newest owner authority and current execution policy, chooses the highest-information nonduplicate frontier, falsifies before promotion, performs at most one unusual experiment within one explicit macrocycle identity, persists bounded evidence/delta, and advances this same neutral Mini Entity + replaceable cognition product until promoted or falsified.",
   "swarm_product_rule": "swarm is research/build orchestration only; product runtime remains exactly one entity",
   "together_api": {

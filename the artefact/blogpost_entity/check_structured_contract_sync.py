@@ -4,13 +4,76 @@
 The canonical Clay source has already moved to a DB-resident profile plus generic
 `inference_generate` boundary. The Python reference runtime/tests may lag, but that lag
 must be explicit and must never cause the canonical Clay contract to be rolled backward.
+
+This gate intentionally parses the Python runtime's *executable effect registry and
+dispatch comparisons*. Merely mentioning a required effect in a comment, docstring or
+dead string must never satisfy parity.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 from pathlib import Path
+
+
+def _literal_string_set(node: ast.AST) -> set[str] | None:
+    if not isinstance(node, (ast.Set, ast.List, ast.Tuple)):
+        return None
+    values: set[str] = set()
+    for item in node.elts:
+        if not isinstance(item, ast.Constant) or not isinstance(item.value, str):
+            return None
+        values.add(item.value)
+    return values
+
+
+def extract_runtime_effect_contract(runtime: str) -> tuple[set[str], set[str]]:
+    """Return literal allowed effects and effects actually dispatched by effect()."""
+    tree = ast.parse(runtime)
+    allowed: set[str] = set()
+    dispatched: set[str] = set()
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if (
+                    isinstance(target, ast.Attribute)
+                    and isinstance(target.value, ast.Name)
+                    and target.value.id == "self"
+                    and target.attr == "allowed_effects"
+                ):
+                    values = _literal_string_set(node.value)
+                    if values is not None:
+                        allowed = values
+
+    effect_fn = next(
+        (
+            node
+            for node in ast.walk(tree)
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)) and node.name == "effect"
+        ),
+        None,
+    )
+    if effect_fn is not None:
+        for node in ast.walk(effect_fn):
+            if not isinstance(node, ast.Compare) or len(node.ops) != 1 or len(node.comparators) != 1:
+                continue
+            if not isinstance(node.ops[0], ast.Eq):
+                continue
+            if not isinstance(node.left, ast.Name) or node.left.id != "kind":
+                continue
+            other = node.comparators[0]
+            if isinstance(other, ast.Constant) and isinstance(other.value, str):
+                dispatched.add(other.value)
+
+    return allowed, dispatched
+
+
+def extract_clay_effect_surface(clay: str) -> set[str]:
+    """Extract literal phase/effect responsibility names used by canonical Clay."""
+    return set(re.findall(r'\b(?:effect|phase)\(\s*"([^"]+)"', clay))
 
 
 def main() -> int:
@@ -27,10 +90,17 @@ def main() -> int:
     clay_path = here.with_name("BLOGPOST_ENTITY.clay")
     runtime_path = root / "tools" / "clay_profile_pipeline_runtime.py"
     tests_path = here.with_name("test_blogpost_entity.py")
+    parity_path = here.parent / "native" / "NATIVE_PROFILE_V2_PARITY_CONTRACT.json"
 
     clay = clay_path.read_text(encoding="utf-8")
     runtime = runtime_path.read_text(encoding="utf-8")
     tests = tests_path.read_text(encoding="utf-8")
+    parity = json.loads(parity_path.read_text(encoding="utf-8"))
+
+    required_effects = set(parity["required_reference_effect_surface"])
+    legacy_effects = set(parity["legacy_reference_effects_to_deauthorize"])
+    clay_effects = extract_clay_effect_surface(clay)
+    runtime_allowed, runtime_dispatched = extract_runtime_effect_contract(runtime)
 
     signature = re.search(r"fn\s+run\((.*?)\)\s*->\s*Map", clay, re.S)
     run_args = []
@@ -40,17 +110,20 @@ def main() -> int:
     clay_contract = {
         "run_args": run_args,
         "three_argument_runtime_boundary": run_args == ["entity_db", "source_db", "secret_file"],
-        "db_resident_profile_effect": 'effect("pipeline_profile_read"' in clay,
-        "generic_inference_effect": 'effect("inference_generate"' in clay,
-        "old_profile_load_absent": 'effect("profile_load"' not in clay,
-        "old_provider_chat_absent": 'effect("provider_chat_json"' not in clay,
+        "effect_surface": sorted(clay_effects),
+        "effect_surface_matches_parity_contract": clay_effects == required_effects,
+        "legacy_effects_absent": not bool(clay_effects & legacy_effects),
     }
 
     runtime_contract = {
-        "supports_pipeline_profile_read": '"pipeline_profile_read"' in runtime,
-        "supports_inference_generate": '"inference_generate"' in runtime,
-        "still_contains_profile_load": '"profile_load"' in runtime,
-        "still_contains_provider_chat_json": '"provider_chat_json"' in runtime,
+        "allowed_effects": sorted(runtime_allowed),
+        "dispatched_effects": sorted(runtime_dispatched),
+        "required_effects": sorted(required_effects),
+        "legacy_effects": sorted(legacy_effects),
+        "allowed_surface_exact": runtime_allowed == required_effects,
+        "dispatch_surface_exact": runtime_dispatched == required_effects,
+        "legacy_allowed_absent": not bool(runtime_allowed & legacy_effects),
+        "legacy_dispatch_absent": not bool(runtime_dispatched & legacy_effects),
     }
 
     tests_contract = {
@@ -61,17 +134,15 @@ def main() -> int:
     canonical_current = all(
         [
             clay_contract["three_argument_runtime_boundary"],
-            clay_contract["db_resident_profile_effect"],
-            clay_contract["generic_inference_effect"],
-            clay_contract["old_profile_load_absent"],
-            clay_contract["old_provider_chat_absent"],
+            clay_contract["effect_surface_matches_parity_contract"],
+            clay_contract["legacy_effects_absent"],
         ]
     )
     reference_converged = (
-        runtime_contract["supports_pipeline_profile_read"]
-        and runtime_contract["supports_inference_generate"]
-        and not runtime_contract["still_contains_profile_load"]
-        and not runtime_contract["still_contains_provider_chat_json"]
+        runtime_contract["allowed_surface_exact"]
+        and runtime_contract["dispatch_surface_exact"]
+        and runtime_contract["legacy_allowed_absent"]
+        and runtime_contract["legacy_dispatch_absent"]
         and not tests_contract["still_mentions_external_profile_path"]
         and not tests_contract["still_constructs_profile_json_file"]
     )
@@ -79,17 +150,22 @@ def main() -> int:
     errors: list[str] = []
     if not canonical_current:
         errors.append("CANONICAL_CLAY_CONTRACT_UNEXPECTED")
+    if not runtime_allowed:
+        errors.append("REFERENCE_ALLOWED_EFFECTS_NOT_LITERAL_OR_MISSING")
+    if not runtime_dispatched:
+        errors.append("REFERENCE_EFFECT_DISPATCH_NOT_DETECTED")
     if not reference_converged:
         errors.append("REFERENCE_RUNTIME_NOT_CONVERGED")
 
     report = {
-        "schema": "clay-structured-contract-sync/v1",
+        "schema": "clay-structured-contract-sync/v2",
+        "parity_contract": str(parity_path.relative_to(root)),
         "canonical_clay": clay_contract,
         "python_reference_runtime": runtime_contract,
         "python_reference_tests": tests_contract,
         "canonical_current_contract_detected": canonical_current,
         "reference_converged": reference_converged,
-        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; update the reference runtime/tests to match rather than rolling Clay backward.",
+        "policy": "Canonical Clay DB-resident profile + inference_generate semantics are forward authority; runtime parity requires executable registry+dispatch equality, not textual name presence.",
         "errors": errors,
         "pass": not errors,
     }

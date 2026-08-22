@@ -1,6 +1,6 @@
 # Wiki-Eintraege zu Zero und EntityOS
 
-Automatisch erzeugt 2026-08-22T06:36:42Z aus dem Clay-Korpus.
+Automatisch erzeugt 2026-08-22T07:06:42Z aus dem Clay-Korpus.
 
 - **kern** (800 Artikel, 663 KB): der Systemname steht im Titel. Volltext.
 - **umfeld** (2584 Artikel, 1446 KB): Begriff kommt nur im Text vor. Nur Nachweis, kein Text -- der steht im Korpus.
@@ -88,8 +88,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-bauverlauf-234776776d865c5df3d2` · baunotiz
 - **artifact: test inference intent through canonical EffectGate** — `baunotiz-git-27677fd3a4d92ad22a80a58bc4bef82` · baunotiz
 - **agentZero research: EntityOS re-evaluation generation 32** — `baunotiz-git-4d6d0bada8a8f421b2dda317b829340` · baunotiz
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **artifact: regress ClayVerse startup without EntityOS sidecar** — `baunotiz-git-4493d676edb96ab696f2ecc70b0221b` · baunotiz
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `baunotiz-git-5156d2bb95bd5f4d10828e1530ca917` · baunotiz
 - **artifact: embed digest-pinned EntityOS in ClayVerse image** — `baunotiz-git-6fa8fa63610470e25bd2a78d59529e2` · baunotiz
 - **Stufe 0: entityos_runtime.clay -- ClayCode an EntityOS angepasst (Frank->EntityOS Umbenennungen, Rec** — `baunotiz-bauverlauf-226b587737b32f292f48` · baunotiz
 - **claycode supervisor: bind Gen111 transient zero-red and Andreas E2E truth failures** — `baunotiz-git-a591e40e29d9ddb9f4d35dcfe3691f3` · baunotiz
@@ -105,8 +105,8 @@ Die Trennung ist keine Bequemlichkeit: eine Suche ueber den blossen Text trifft
 - **agentZero research: update EntityOS completion assessment** — `bau-agentzero-export-3488f45d776e` · bau
 - **agentZero research: index EntityOS completion assessment** — `bau-agentzero-export-e12a81473a25` · bau
 - **agentZero research: EntityOS re-evaluation generation 32** — `bau-agentzero-export-4d6d0bada8a8` · bau
-- **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **Verfassung praezisiert: ClayCode-Denken/-Programmieren gilt dem ARCHITEKTEN (Zero in Bau-Rolle), nic** — `baunotiz-git-aad377a3dab74f112f850abefc3ed3e` · baunotiz
+- **agentZero research: assess EntityOS completion at 04:48:54Z** — `bau-agentzero-export-5156d2bb95bd` · bau
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-bauverlauf-0253c9f92ad90d8df989` · baunotiz
 - **S6 prep: EntityOS naming on user-facing surface (title/error-prefix/MCP name/OCI label), compose wir** — `baunotiz-git-f307559b870f48a5793f4a3a3301d00` · baunotiz
 - **EntityOS-Bindung: CLAYVERSE_REQUIRE_ENTITYOS wurde nie ausgewertet** — `baunotiz-bauverlauf-d9064836cab1d919abbf` · baunotiz

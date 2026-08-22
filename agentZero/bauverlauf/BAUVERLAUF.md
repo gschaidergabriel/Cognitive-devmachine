@@ -1,12 +1,20 @@
 # Bauverlauf
 
-Automatisch erzeugt 2026-08-22T06:36:42Z. 1110 Commits aus vier Repos, davon 477 mit ausgeschriebener Begruendung.
+Automatisch erzeugt 2026-08-22T07:06:42Z. 1110 Commits aus vier Repos, davon 478 mit ausgeschriebener Begruendung.
 
 Der Verlauf wird nicht nebenher gepflegt -- er entsteht beim Bauen. Jeder Eintrag
 unten ist der Commit-Text selbst: Befund, Messung, Grund. Ein handgefuehrtes
 Bautagebuch waere eine zweite Wahrheit, die irgendwann von der ersten abweicht.
 
 ## 2026-08-22
+
+### feat(cognition): pivot generic ClayCode core to 0.5B BYOM
+
+`77ae9f09d127` · agentzero-export · 13:57 UTC · Gabriel Gschaider
+
+```
+Canonicalize the owner-required generic 0.5B ClayCode cognition lane, deterministic omega admission model, corpus/OOD gates, Together BYOM preflight/budget gate, quantization/RSS promotion path, and go/bootstrap integration. No Together job is started by this merge.
+```
 
 ### fix(native): keep historical provenance checker fail-closed
 
@@ -2970,25 +2978,6 @@ Anlass: Wache: Aenderung beobachtet
   the artefact/tests/test_echo.py
 
 Zeit: 2026-08-21T00:24:45+00:00
-Wirt: frank-api
-Instanz: zero
-Baum: entityos (/opt/entityos)
-Dateien: 2
-Fern: lokal -> /srv/git/entityos.git
-Werkzeug: eos-chronik.py v1
-```
-
-### EOS-Chronik 2026-08-21 00:20:33 +0000 — entityos: 2 Aenderungen
-
-`a1ef3ed0a236` · entityos · 00:20 UTC · BACK agent
-
-```
-Anlass: Wache: Aenderung beobachtet
-
-  forschung/cswt-z-pilot/cswt_bewerter.py
-  the artefact/clayverse/mistral_prestage/pipeline.py
-
-Zeit: 2026-08-21T00:20:33+00:00
 Wirt: frank-api
 Instanz: zero
 Baum: entityos (/opt/entityos)

@@ -5,6 +5,7 @@ from pathlib import Path
 
 HERE=Path(__file__).resolve().parent
 TRAIN=HERE/"train_v2.jsonl"; VALID=HERE/"validation_v2.jsonl"; V2_VALIDATOR=HERE/"validate_corpus_v2.py"
+PROVIDER_EXECUTION_POLICY=HERE.parents[2]/"research_entity"/"claycode"/"autonomous"/"PROVIDER_EXECUTABLE_POOL.json"
 EXPECTED_MODEL="Qwen/Qwen3.5-0.8B"; MODEL=os.environ.get("CLAYCOG_08B_MODEL",EXPECTED_MODEL)
 EPOCHS=int(os.environ.get("CLAYCOG_EPOCHS","3")); EVALS=int(os.environ.get("CLAYCOG_EVALS","2"))
 RANDOM_SEED=int(os.environ.get("CLAYCOG_RANDOM_SEED","3407")); LEARNING_RATE=float(os.environ.get("CLAYCOG_LEARNING_RATE","1e-5")); WARMUP_RATIO=float(os.environ.get("CLAYCOG_WARMUP_RATIO","0.03"))
@@ -12,15 +13,39 @@ MAX_USD=float(os.environ.get("CLAYCOG_MAX_JOB_USD","18.00")); FILE_WAIT_SECONDS=
 CREATE_CONFIRM_ENV="CLAYCOG_CREATE_FINGERPRINT"; CREATE_LEDGER_DIR_ENV="CLAYCOG_CREATE_LEDGER_DIR"
 ACTIVE_OR_SPENT={"pending","queued","running","compressing","uploading","cancel_requested","cancelled","error","completed"}
 
+
 def validate_static_contract():
     if MODEL!=EXPECTED_MODEL: raise SystemExit(f"MODEL_OVERRIDE_REJECTED expected {EXPECTED_MODEL!r}, got {MODEL!r}")
     if not 1<=EPOCHS<=20 or not 0<=EVALS<=20: raise SystemExit("TRAINING_COUNT_OUT_OF_RANGE")
     if RANDOM_SEED<0 or not 0<LEARNING_RATE<=1 or not 0<=WARMUP_RATIO<=1: raise SystemExit("HYPERPARAMETER_OUT_OF_RANGE")
     if not 0<MAX_USD<=18: raise SystemExit("BUDGET_GATE_OUT_OF_RANGE")
 
+
 def local_checks():
     subprocess.run([sys.executable,str(HERE/"generate_sft_v2.py")],check=True)
     subprocess.run([sys.executable,str(V2_VALIDATOR),str(TRAIN),str(VALID)],check=True)
+
+
+def provider_execution_mode(policy_path=None):
+    path=Path(policy_path) if policy_path is not None else PROVIDER_EXECUTION_POLICY
+    try:
+        payload=json.loads(path.read_text(encoding="utf-8"))
+    except Exception as e:
+        raise SystemExit(f"PROVIDER_EXECUTION_POLICY_UNREADABLE {path}: {type(e).__name__}") from None
+    if type(payload) is not dict or type(payload.get("mode")) is not str:
+        raise SystemExit("PROVIDER_EXECUTION_MODE_UNRESOLVED")
+    mode=payload["mode"].strip().upper()
+    if mode not in {"FREE_ONLY","PAID_ALLOWED"}:
+        raise SystemExit(f"PROVIDER_EXECUTION_MODE_UNRECOGNIZED {mode!r}")
+    return mode
+
+
+def require_paid_provider_admission(policy_path=None):
+    mode=provider_execution_mode(policy_path)
+    if mode=="FREE_ONLY":
+        raise SystemExit("FREE_ONLY_PROVIDER_REJECTED provider=Together cost_class=PAID before secret lookup/network")
+    return mode
+
 
 def sha256_file(p):
     h=hashlib.sha256()
@@ -35,10 +60,12 @@ def campaign_suffix(fp): return "claycog08b-v2-"+fp[:24]
 def objdict(x): return x.model_dump() if hasattr(x,"model_dump") else x.dict() if hasattr(x,"dict") else x if isinstance(x,dict) else str(x)
 def _field(x,n,d=None): return x.get(n,d) if isinstance(x,dict) else getattr(x,n,d)
 
+
 def get_full_training_limits(client):
     limits=client.fine_tuning.model_limits(model_name=MODEL)
     if not getattr(limits,"supports_full_training",False) or getattr(limits,"full_training",None) is None: raise SystemExit(f"MODEL_LIMITS_REJECT full fine-tuning not supported for {MODEL}")
     return limits
+
 
 def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
     deadline=time.monotonic()+timeout_seconds
@@ -51,6 +78,7 @@ def wait_file(client,file_id,timeout_seconds=FILE_WAIT_SECONDS):
         time.sleep(5)
 def estimate_price(client,train_id,valid_id): return client.fine_tuning.estimate_price(training_file=train_id,validation_file=valid_id,model=MODEL,n_epochs=EPOCHS,n_evals=EVALS,training_method=training_method(),training_type=training_type())
 def create_payload(train_id,valid_id,suffix): return {"training_file":train_id,"validation_file":valid_id,"model":MODEL,"n_epochs":EPOCHS,"n_evals":EVALS,"n_checkpoints":1,"random_seed":RANDOM_SEED,"learning_rate":LEARNING_RATE,"warmup_ratio":WARMUP_RATIO,"suffix":suffix,"training_method":training_method(),"training_type":training_type()}
+
 
 def _items(x):
     if x is None:return []
@@ -112,8 +140,9 @@ def created_job_identity_mismatches(meta,expected):
         if got!=want:out[key]={"expected":want,"observed":got}
     return out
 
+
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks()
+    ap=argparse.ArgumentParser();ap.add_argument("--create",action="store_true");args=ap.parse_args();validate_static_contract();local_checks();require_paid_provider_admission()
     if not os.environ.get("TOGETHER_API_KEY"):raise SystemExit("TOGETHER_API_KEY must exist only in the execution environment")
     from together import Together
     client=Together();get_full_training_limits(client);fp=campaign_fingerprint();suffix=campaign_suffix(fp)

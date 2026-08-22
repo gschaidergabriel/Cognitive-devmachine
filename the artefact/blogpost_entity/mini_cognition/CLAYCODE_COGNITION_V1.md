@@ -29,6 +29,66 @@ fn think(i:Map)->Map {
 
 No Markdown. No prose outside ClayCode string literals.
 
+## Canonical v1 intrinsic vocabulary
+
+The generated cognition vocabulary is closed. A call not listed below is invalid for `claycog/1`, even if it is
+syntactically well formed. The machine-readable validation authority for this list is `intrinsics_v1.py`; corpus
+and OOD validators must reject an unknown intrinsic or wrong arity before training/promotion credit.
+
+Configuration / envelope:
+- cfg(key)
+- cog_new()
+- self_bind(c,entity_id,continuity)
+- role_bind(c,role)
+- goal_bind(c,goal)
+- personality_bind(c,personality)
+
+GRF:
+- grf_observe(c,region,claim,status)
+- grf_infer(c,region,claim)
+- grf_generate(c,region,candidate)
+- grf_counter(c,region,candidate)
+- grf_intervene(c,region,test)
+- grf_emergent(c,region,pattern)
+- grf_verify(c,region,claim,receipt)
+
+Hyperposition:
+- hyper_new(c,id)
+- hyper_alt(hp,candidate,status)
+- hyper_discriminator(hp,test)
+- hyper_invariant(hp,invariant)
+- collapse_guard(hp,rule)
+- collapse_exact(hp,candidate,receipt)
+
+Omega:
+- omega_new(c,id)
+- omega_bind(omega,key,value)
+- omega_arg(omega,name,value,type)
+- omega_schema(omega,schema_id)
+- omega_authority(omega,authority)
+- omega_generation(omega,generation)
+- omega_validate(omega,gate)
+- omega_reject(omega,reason)
+- omega_commit_candidate(c,omega)
+
+State / self / architecture / control:
+- self_state(c,key,value,status)
+- self_scalar(c,key,value,status)
+- self_kind(c,kind)
+- arch_bind(c,responsibility,component)
+- authority_bind(c,responsibility,authority)
+- authority_deny(c,source,responsibility)
+- state_note(c,key,value,status)
+- unknown_preserve(c,key,reason)
+- provenance(c,key,source,qualification)
+- focus_set(c,focus)
+- policy_select(c,policy)
+- recovery_state(c,state)
+
+These cognition intrinsics describe candidate/internal state only. None of them is a direct host/tool/API execution
+primitive. `omega_commit_candidate` admits only a candidate into the deterministic runtime boundary; it does not
+perform the external effect itself.
+
 ## GRF — grounded reasoning field
 GRF is a typed semantic work-space, not natural-language chain-of-thought:
 - R0 OBSERVE: admitted input/evidence with epistemic status
@@ -38,15 +98,6 @@ GRF is a typed semantic work-space, not natural-language chain-of-thought:
 - R4 DISCRIMINATE: cheapest distinguishing test
 - R5 EMERGENT: cross-candidate invariant/pattern
 - R6 VERIFY: evidence/receipt sufficient for collapse
-
-Intrinsics:
-- grf_observe(c,region,claim,status)
-- grf_infer(c,region,claim)
-- grf_generate(c,region,candidate)
-- grf_counter(c,region,candidate)
-- grf_intervene(c,region,test)
-- grf_emergent(c,region,pattern)
-- grf_verify(c,region,claim,receipt)
 
 ## Hyperposition
 Unresolved candidates remain explicit and simultaneous:
@@ -61,16 +112,6 @@ Recurrence, confidence, preference, fluency, or prior assistant text never colla
 
 ## Omega / exact function-vector routing
 `omega` is the compact typed action representation used for structured work.
-
-- omega_new(c,id)
-- omega_bind(ω,"operation",cfg_or_literal)
-- omega_arg(ω,name,value,type)
-- omega_schema(ω,schema_id)
-- omega_authority(ω,authority)
-- omega_generation(ω,generation)
-- omega_validate(ω,"grammar|types|schema|authority|generation")
-- omega_reject(ω,reason)
-- omega_commit_candidate(c,ω)
 
 For tool/API tasks the model does not write persuasive prose about an action. It emits a minimal `omega` candidate.
 The external runtime maps a validated omega to the actual tool/API call.
@@ -100,6 +141,7 @@ Computed self-state may steer cognition but is not external evidence.
 10. Natural language outside ClayCode string literals is invalid.
 11. Unknown intrinsic, bad arity/type/schema, missing cfg, or missing authority binding fails closed.
 12. `R_next = F` is an admission invariant enforced by runtime validation, not a claim of infallible neural prediction.
+13. Training and OOD promotion receive zero structural credit when generated calls are outside the canonical v1 intrinsic vocabulary.
 
 ## Base and deployment target
 Primary checkpoint: `Qwen/Qwen2.5-0.5B` (0.49B, Apache-2.0, CausalLM).

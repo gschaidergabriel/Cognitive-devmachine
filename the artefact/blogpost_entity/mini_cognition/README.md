@@ -51,9 +51,9 @@ The shell script stops after **preflight**. It regenerates and validates the cor
 files/template, prints the server price estimate, and prints a deterministic `campaign_fingerprint`. It does not
 create a billed job.
 
-The fingerprint binds the exact training/validation file digests plus `from_hf_model`, template, epochs, evaluations,
-training method/type, learning rate, warmup ratio and checkpoint count. A create must be authorized against exactly
-that preflight identity:
+The fingerprint binds the exact training/validation file digests plus `from_hf_model`, **`hf_model_revision`**,
+template, epochs, evaluations, training method/type, learning rate, warmup ratio and checkpoint count. A create must
+be authorized against exactly that preflight identity:
 
 ```bash
 export CLAYCOG_CREATE_FINGERPRINT=<exact campaign_fingerprint from the same preflight>
@@ -66,23 +66,41 @@ the billed create to narrow the check/use race. If the create transport outcome 
 may have accepted the job but the client timed out), **never blind-retry `--create`**: list/retrieve the existing
 fine-tuning jobs first. The deterministic suffix exists specifically so such an account-side job can be recognized.
 
+### Exact Hugging Face source identity
+
+The default BYOM sources are pinned to exact observed Hugging Face commits rather than a moving repository `main`:
+
+- `Qwen/Qwen2.5-0.5B` -> `060db6499f32faf8b98477b0a26969ef7d8b9987`;
+- `Qwen/Qwen2.5-0.5B-Instruct` -> `7ae557604adf67be50417f59c2c2f167def9a775`.
+
+The billed Together request passes the selected revision as `hf_model_revision`, and that same revision participates
+in the campaign fingerprint. Therefore changing only the source checkpoint revision necessarily changes the campaign
+identity and create authorization value.
+
+A custom `CLAYCOG_HF_MODEL` must provide an exact 40-hex `CLAYCOG_HF_REVISION`; the instruct-ablation equivalents are
+`CLAYCOG_INSTRUCT_HF_MODEL` and `CLAYCOG_INSTRUCT_HF_REVISION`. A custom model without an exact revision fails closed.
+
 ### Together 0.5B caveat
 
-As of 2026-08-22, Together's regular supported-model table lists Qwen3.5 **0.8B** as the smallest Qwen fine-tune,
-not a native 0.5B entry. Together's BYOM path supports external Hugging Face CausalLM checkpoints under 100B when
-a compatible Together training template exists. This script therefore pairs:
+As of 2026-08-22, Together's current fine-tuning supported-model table does **not** list Qwen2.5; the smallest listed
+Qwen Full Fine-Tune template is Qwen3.5 **0.8B**. Together's BYOM path supports external Hugging Face CausalLM
+checkpoints under 100B when a compatible Together training template exists.
 
-- BYOM weights: `Qwen/Qwen2.5-0.5B`;
-- default same-family template candidate: `Qwen/Qwen2.5-7B-Instruct-Turbo`.
+`Qwen/Qwen2.5-7B-Instruct-Turbo` remains a Together inference/serverless model ID, but serverless availability does not
+establish fine-tuning-template admission. The launcher therefore treats that ID only as the configurable Qwen2.5-family
+template candidate. `model_limits` can establish current full-FT support for the selected template, and
+`estimate_price` can establish pricing/admission for the uploaded corpus; neither call proves that Together accepts the
+exact `from_hf_model` + `hf_model_revision` BYOM pair. Compatibility therefore remains **OPEN** until the create path
+accepts that exact pair and the resulting job actually reaches a training state.
 
-That pairing is **not assumed fine-tune compatible** merely because the template is served in Together's catalog.
-`model_limits` can establish that the selected template currently supports full fine-tuning, and `estimate_price`
-can establish pricing/admission for the uploaded corpus under that template; neither call validates the
-`from_hf_model` pair. BYOM compatibility therefore remains **OPEN** until Together's create path accepts the exact
-Qwen2.5-0.5B checkpoint/template pair and the resulting job actually reaches a training state. There is deliberately
-no automatic fallback to Qwen3.5 because the BYOM architecture/size relationship is part of the empirical gate.
-If Together rejects this Qwen2.5 path, keep the 0.5B checkpoint requirement and use a Together-provided compatible
-Qwen2 template or the same corpus on another admitted full-FT runner rather than silently changing the experiment.
+There is deliberately no automatic fallback to Qwen3.5. The current Qwen2.5-0.5B config identifies
+`Qwen2ForCausalLM` / `qwen2`, while the current Qwen3.5-0.8B config identifies
+`Qwen3_5ForConditionalGeneration` / `qwen3_5`. Together's BYOM guidance requires matching architecture, so silently
+substituting Qwen3.5 would change the experiment rather than solve the compatibility gate.
+
+If Together rejects this Qwen2.5 path, keep the owner-required 0.5B checkpoint requirement explicit: use a
+Together-provided compatible Qwen2 template if one is admitted, or use the same corpus on another admitted full-FT
+runner rather than silently changing the model family or research question.
 
 Together's current standard full-SFT rate for models up to 16B is `$0.54 / 1M processed tokens`. The current
 corpus is ~2.30 MB train + 0.25 MB validation; a rough character/4 estimate is ~0.64M tokens before epochs.

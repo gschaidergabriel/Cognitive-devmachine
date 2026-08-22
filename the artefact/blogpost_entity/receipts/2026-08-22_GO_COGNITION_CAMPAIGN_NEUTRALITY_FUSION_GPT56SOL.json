@@ -1,0 +1,56 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "macrocycle_id": null,
+  "macrocycle_identity_status": "UNRESOLVED_NO_UPSTREAM_ID",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
+  "base_main_sha": "f577e826ed9532a323fa89af459de1d3de90e8c4",
+  "donor": {
+    "pull_request": 907,
+    "reuse": "campaign-literal corpus gate plus focused regression cases only",
+    "stale_followup_rejected": "The donor receipt's old claim that generate_sft_v2.py still emits Qwen2.5-0.5B manifest metadata is no longer true on current main; the current generator emits campaign_external_not_corpus_identity policies and no fixed Qwen model metadata."
+  },
+  "source_delta": {
+    "pull_request": 968,
+    "validator": "the artefact/blogpost_entity/mini_cognition/validate_corpus_v2.py",
+    "test": "the artefact/blogpost_entity/mini_cognition/test_validate_corpus_v2.py",
+    "mechanism": "Scan all system/user/assistant messages for current campaign provider/model literals and fail canonical SFT-v2 corpus admission while preserving the current #917 semantic-slot gate and generic inference.backend indirection.",
+    "campaign_binding_layer": "external_campaign_descriptor",
+    "checkpoint_identity": "provider/model neutral"
+  },
+  "experiment_accounting": {
+    "new_unusual_experiment_in_this_fusion": false,
+    "reason": "This user-triggered go already consumed its one local unusual slot on REFERENCE_EFFECT_NAME_ONLY_SHIM_FALSIFIER. PR #907 poison cases are reused only as ordinary donor regressions.",
+    "global_uniqueness": "UNRESOLVED_NO_UPSTREAM_ID"
+  },
+  "execution": {
+    "workflow_run": 32574663152,
+    "workflow": "claycog-validator-pr",
+    "job_id": 97035117194,
+    "job": "strict-admission",
+    "conclusion": "failure",
+    "steps": null,
+    "logs_url": null,
+    "classification": "EXECUTION_ADMISSION_BLOCKED_NOT_TEST_FAIL",
+    "exact_branch_test_credit": "ZERO"
+  },
+  "execution_policy": {
+    "control": "FREE_ONLY",
+    "provider_secret_lookup": false,
+    "provider_network_call": false,
+    "together_preflight": false,
+    "upload": false,
+    "billed_create": false,
+    "training_started": false,
+    "spend_usd": 0
+  },
+  "evidence_boundary": {
+    "campaign_neutrality_gate": "SOURCE_CANDIDATE",
+    "exact_runner_regression": "UNOBSERVED_STEPS_NULL",
+    "training": "NOT_STARTED",
+    "whole_product": "IN_PROGRESS"
+  }
+}

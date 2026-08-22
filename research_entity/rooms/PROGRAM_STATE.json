@@ -1,13 +1,15 @@
 {
-  "schema_version": "7.1",
+  "schema_version": "7.2",
   "program_id": "mini-entity-pipeline-all-in-one",
   "status": "ACTIVE",
-  "stage": "MINI_ENTITY_PIPELINE_CLAY",
-  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
-  "sole_target": "one application-neutral and inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "owner_directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+  "base_product_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "sole_target": "one application-neutral and inference-neutral .clay pipeline executable + one SQLite MiniUnifiedDB + one optional replaceable generic 0.5B ClayCode cognition checkpoint",
   "portable_release_shape": [
     "mini_entity.clay application-neutral/inference-neutral ELF",
-    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog"
+    "mini_entity.db SQLite MiniUnifiedDB preconfigurable as zero_blog",
+    "optional replaceable quantized 0.5B ClayCode cognition attachment"
   ],
   "optional_inference_inputs": [
     "remote/API token and provider config",
@@ -18,7 +20,51 @@
   "architecture_split": {
     "binary": "generic evidence preprocessing, canonical run/state envelope, inference dispatch, immutable truth/secret gate engine, exactly-once consumption, generation CAS and atomic persistence",
     "database": "all application/personality/inference configuration; shipped default preset is zero_blog",
-    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable identity is a regression"
+    "cognition_weights": "replaceable generic cognition machinery only; no fixed entity name/job/persona/application; ClayCode/GRF/Hyperposition/omega behavior target",
+    "regression_rule": "if application/personality/inference choice can live in runtime configuration, binding it to executable or checkpoint identity is a regression"
+  },
+  "cognition_module_campaign": {
+    "status": "SOURCE_AND_CORPUS_READY_TRAINING_NOT_STARTED",
+    "directive": "research_entity/global/MINI_ENTITY_CLAYCOG_05B_TRAINING_DIRECTIVE.md",
+    "spec": "the artefact/blogpost_entity/mini_cognition/CLAYCODE_COGNITION_V1.md",
+    "primary_base": "Qwen/Qwen2.5-0.5B",
+    "secondary_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+    "weight_identity": "generic_configurable_cognition_no_fixed_name_or_job",
+    "generated_representation": "ClayCode only",
+    "reasoning_field": "GRF R0..R6",
+    "alternative_representation": "Hyperposition",
+    "structured_action_representation": "typed omega function vector",
+    "transition_law": "R_next=F means deterministic runtime admission after grammar/type/schema/authority/generation validation; not neural infallibility",
+    "corpus": {
+      "schema": "claycog-sft/v1",
+      "examples": 1650,
+      "train": 1485,
+      "validation": 165,
+      "families": 9,
+      "train_invalid": 0,
+      "validation_invalid": 0,
+      "train_sha256": "bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2",
+      "validation_sha256": "81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce"
+    },
+    "ood": {
+      "cases": 200,
+      "promotion_strict_claycode_rate": 1.0,
+      "promotion_semantic_gate_rate": 0.95
+    },
+    "together": {
+      "training_use": "OWNER_AUTHORIZED_BOUNDED_CAMPAIGN",
+      "native_0_5b_catalog_entry": false,
+      "path": "BYOM",
+      "template_candidate": "Qwen/Qwen2.5-7B-Instruct-Turbo",
+      "compatibility": "OPEN_API_GATE",
+      "single_job_budget_usd": 18.0,
+      "campaign_ceiling_eur": 20.0,
+      "secret_mounted_in_this_chat": false,
+      "job_started": false
+    },
+    "quantization_target": "GGUF Q4_K_M",
+    "ram_promotion_gate": "actual peak process RSS < 1 GiB at context 2048",
+    "superiority_claim_gate": "matched executable benchmark vs untuned 0.5B and at least one larger general model"
   },
   "inference_backends": {
     "api": {
@@ -131,10 +177,16 @@
     "native_release_identity_law": "exact transitive source closure + compiler/dependency/build provenance + exact ELF digest, never version label or entry-unit hash alone",
     "structured_runtime_convergence": "OPEN: BLOGPOST_ENTITY.clay already names pipeline_profile_read + inference_generate with DB-resident profile semantics, while overlapping Python-reference convergence PRs remain under adjudication; do not create a second structured runtime.",
     "state_box_convergence": "SOURCE MECHANISM PRESENT IN NATIVE 0.7; exact native executable append + same-transaction study persistence remains uncredited until source-bound runtime execution.",
-    "current_gap": "Execute the exact canonical Mini Entity 0.7 source closure on an admitted Linux runner: repeat build, capture ELF/compiler/pkg/runtime identities, run fixture/local_exec with zero key/network use, inject output/study/event/generation CAS rollback faults, and rebuild identically. Only after that gate may real GGUF/local-model acceptance inherit the 0.7 path. Then fuse one structured Clay/Python reference convergence lane and run real-provider/local-model acceptance as separately authorized."
+    "current_gap": "Execute the exact canonical Mini Entity 0.7 source closure on an admitted Linux runner: repeat build, capture ELF/compiler/pkg/runtime identities, run fixture/local_exec with zero key/network use, inject output/study/event/generation CAS rollback faults, and rebuild identically. In parallel, advance the owner-required generic 0.5B ClayCode cognition campaign through BYOM compatibility, full-SFT, held-out evaluation, Q4_K_M quantization, measured <1GiB RSS, and the existing local_exec adapter. Neither lane may claim the other's acceptance."
   },
-  "current_frontier": "MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1: exact transitive-source-bound 0.7 repeat build -> ELF digest -> fixture/local_exec -> atomic study/output/event/generation-CAS fault injection -> second clean rebuild identity. GitHub runner admission before steps currently supplies zero test credit; bounded source-closure mechanism evidence is committed.",
-  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB only.",
+  "current_frontier": "TWO CONVERGENT REQUIRED GATES: (A) MINI_ENTITY_NATIVE_0_7_REPRO_RECEIPT/v1 exact transitive-source-bound 0.7 repeat build/runtime/fault matrix; (B) CLAYCOG_05B_TRAINING/v1 Together BYOM compatibility -> budget-gated full SFT -> OOD/base/larger-model benchmark -> Q4_K_M -> measured <1GiB RSS -> generic local_exec integration.",
+  "go_contract": "Every go executes refresh -> swarm fan-out -> hypotheses/counterhypotheses -> implementation -> sandbox tests/falsification -> fusion/hypofusion -> fix -> retest -> persist on this same neutral pipeline + configurable DB, and must advance the 0.5B ClayCode cognition lane until it is promoted or falsified.",
   "swarm_product_rule": "one runtime entity only; swarm is research/build orchestration",
-  "together_api": "FORBIDDEN"
+  "together_api": {
+    "product_identity": "FORBIDDEN",
+    "inference_requirement": "NONE",
+    "training_campaign_05b": "OWNER_AUTHORIZED_BUDGET_GATED",
+    "secret_policy": "ENVIRONMENT_ONLY_NEVER_COMMIT",
+    "job_started": false
+  }
 }

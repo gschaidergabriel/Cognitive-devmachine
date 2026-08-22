@@ -1,0 +1,24 @@
+{
+  "schema": "claycog-sft/v1",
+  "seed": 20260822,
+  "examples": 1650,
+  "train": 1485,
+  "validation": 165,
+  "base_primary": "Qwen/Qwen2.5-0.5B",
+  "base_ablation": "Qwen/Qwen2.5-0.5B-Instruct",
+  "identity_job_policy": "runtime_config_only",
+  "assistant_target_representation": "ClayCode_only",
+  "families": [
+    "adversarial",
+    "architecture",
+    "configuration",
+    "epistemic",
+    "hyperposition",
+    "omega_reject",
+    "omega_valid",
+    "recovery",
+    "self_state"
+  ],
+  "train_sha256": "bc1753771ed0f818865a3118f754ac5b10d67bc3ae885f668201f66566028eb2",
+  "validation_sha256": "81a6bb9fc0a210affffa84590c27ad2fc76c93fa24c4112e6573552227e512ce"
+}

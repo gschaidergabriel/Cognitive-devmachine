@@ -1,0 +1,77 @@
+{
+  "schema": "mini-entity-native-version-lineage-go-receipt/v1",
+  "date": "2026-08-22",
+  "trigger": "go",
+  "organ": "GPT-5.6 Sol",
+  "program": "MINI_ENTITY_PIPELINE_ALL_IN_ONE",
+  "canonical_base_main_sha": "c7219e8fa7929d5e5a4fcd756aa07e815a32db75",
+  "owner_directive": "research_entity/global/BLOGPOST_ENTITY_CANONICAL_DIRECTIVE.md",
+  "parallel_fusion": {
+    "canonical_source_closure_commit": "915723c0961a495be72f8a8075b4577a036f47f2",
+    "duplicate_pr_closed": 743,
+    "retained_nonduplicate_pr": 748,
+    "rule": "Do not duplicate the transitive source-closure implementation already present on main."
+  },
+  "observed_gap": {
+    "current_source_version": "mini-entity/0.7.0-dev1",
+    "historical_credited_version": "mini-entity/0.6.0",
+    "builder_gap": "Current main source-bound builder binds the transitive local source closure but does not compare --version-label with MINI_VERSION inside that closure.",
+    "historical_checker_gap": "Current main historical checker still reads superseded PROGRAM_STATE version/binary_sha256 fields and treats mere source presence as reproducibility credit even though PROGRAM_STATE 7.1 separates historical 0.6 credit from current 0.7 source."
+  },
+  "candidate": {
+    "branch": "gpt56sol/go-native-lineage-fence-20260822-1320",
+    "pr": 748,
+    "builder_blob": "0481ce3d055ee57b630a841b0b25e30ba65a94d6",
+    "historical_checker_blob": "ceb0a0d34667db6355a58ae6fef9df53de8bc899",
+    "test_blob": "b280f2949709f81e7bd023b569a5926d58f13f24",
+    "mechanisms": [
+      "extract exactly one MINI_VERSION from the already-bound source closure",
+      "reject missing, ambiguous or non-UTF8 source version identity",
+      "reject requested build version labels that differ from source MINI_VERSION before compiler execution",
+      "record source_version_label in provenance v2",
+      "read PROGRAM_STATE 7.1 historical_credited_version and historical_binary_sha256",
+      "classify current 0.7 source against historical 0.6 credit as BLOCKED_HISTORICAL_SOURCE_LINEAGE_MISMATCH"
+    ]
+  },
+  "deterministic_falsifier_contract": [
+    "canonical source closure contains six bound project-local source files",
+    "canonical source version is mini-entity/0.7.0-dev1",
+    "attempted build receipt under mini-entity/0.6.0 is rejected before output or receipt creation",
+    "historical 0.6 checker rejects current 0.7 source lineage",
+    "multiple MINI_VERSION values in one source closure fail closed"
+  ],
+  "execution": {
+    "github_actions_run": 32556714972,
+    "job": 96991969910,
+    "job_name": "native-version-lineage",
+    "status": "completed",
+    "conclusion": "failure",
+    "steps": null,
+    "classification": "RUNNER_CONTROL_PLANE_ADMISSION_FAILURE_BEFORE_STEPS",
+    "test_credit": 0,
+    "runtime_credit": 0,
+    "semantic_test_failure": false
+  },
+  "unusual_experiment": {
+    "count_this_candidate": 0,
+    "global_go_slot": "ALREADY_CONSUMED_BY_CANONICAL_SOURCE_CLOSURE_WORK_ON_MAIN",
+    "note": "Only deterministic regression/falsifier definitions were added in this candidate."
+  },
+  "evidence_class": "SOURCE_CANDIDATE_WITH_STATIC_MECHANISM_SUPPORT_EXECUTION_UNOBSERVED",
+  "next_gate": "Obtain an actually-started authorized exact PR-head regression. If admitted, merge/fuse the lineage fence, then execute the canonical 0.7 source-bound repeat build under mini-entity/0.7.0-dev1 and run the PROGRAM_STATE 7.1 fixture/local_exec plus atomic study/output/event/generation-CAS fault matrix.",
+  "not_claimed": [
+    "pytest PASS on PR 748",
+    "exact 0.7 repeat-build PASS",
+    "0.7 ELF digest acceptance",
+    "real local LLM quality acceptance",
+    "real remote provider acceptance",
+    "whole Mini Entity final acceptance"
+  ],
+  "safety": {
+    "vps_or_self_hosted_testing": false,
+    "together_api": false,
+    "external_provider_call": false,
+    "secret_used": false,
+    "paid_or_final_model_training": false
+  }
+}

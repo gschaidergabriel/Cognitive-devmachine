@@ -1,0 +1,46 @@
+{
+  "schema": "mini-entity-sandbox-receipt/v4",
+  "date": "2026-08-22",
+  "program": "BLOGPOST_ENTITY_ALL_IN_ONE",
+  "runtime_entity_count": 1,
+  "version": "mini-entity/0.4.1",
+  "platform": "linux-x86_64",
+  "release_shape": [
+    "blogpost_entity.clay application-neutral ELF executable",
+    "blogpost_entity.db SQLite MiniUnifiedDB shipped with zero_blog preset"
+  ],
+  "binary_sha256": "d0733d10f50f8524196a84338f9c9700dfeb8816841b5a555f26e07eddde8b79",
+  "shipped_db_sha256": "8bb21d7b6ea63b584a9c6384c3339d5b331a48d4c9c1241f21c2f8649c1a7155",
+  "native_source_sha256": "9157acc7e17dbad90a075c8ddc4a903962641d54d97f9ee64a66e38338536fa4",
+  "selftest_sha256": "dead88846b0c4d223172265bce870f2519b4e2458e8ee9caa36f10ceac5b40a5",
+  "compile": "gcc -O2 -Wall -Wextra -Werror -Wno-deprecated-declarations",
+  "sandbox_result": "PASS",
+  "checks": 15,
+  "tested_behaviors": [
+    "fresh database is application-neutral",
+    "ELF application-string audit contains no zero_blog/Gasthaus/Bare-Metal/T_OMEGA/application-specific metric names",
+    "shipped zero_blog application exists in SQLite configuration only",
+    "zero_blog end-to-end loopback provider run with exactly-once persistence",
+    "verified-empty second run is quiet",
+    "same ELF and same continuing DB changed from Zero blog to materially different Mara English lab-report persona without rebuild/reset",
+    "provider endpoint/model/auth/request JSON schema/response pointer swapped without state reset",
+    "missing token leaves generation and unconsumed evidence unchanged",
+    "token via stdin succeeds and token is absent from SQLite/config status",
+    "provider output containing the active secret is rejected without consumption",
+    "configured UNKNOWN locality-pressure claim is rejected without consumption",
+    "UNKNOWN sensor health does not create verified quiet",
+    "non-loopback plaintext HTTP endpoint is rejected",
+    "concurrent same-generation runs are CAS fenced so exactly one commits",
+    "final SQLite integrity_check PASS"
+  ],
+  "generic_metric_rule_modes": ["static", "quiet_active", "kind_count_scaled", "source_count_scaled"],
+  "secret_law": "API token is runtime-only through configured environment variable or --token-stdin; it is never stored in MiniUnifiedDB",
+  "default_provider": {
+    "endpoint": "https://api.mistral.ai/v1/chat/completions",
+    "model": "mistral-medium-latest",
+    "token_env": "MISTRAL_API_KEY"
+  },
+  "real_external_provider": "NOT_RUN",
+  "real_external_provider_blocker": "No authorized external API secret is mounted in the current isolated chat sandbox; no live-provider PASS is claimed.",
+  "acceptance": "IN_PROGRESS"
+}

@@ -7,6 +7,7 @@
   "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_APPROX1B_COGNITION",
   "base": "dc96c985ceccf44d93de09246181e866dfc687ed",
   "branch": "gpt56sol/go-08b-preintent-payload-fence-r3-20260822-1901",
+  "pull_request": 947,
   "model": "Qwen/Qwen3.5-0.8B",
   "coordination": {
     "core_high_level_sdk_shape_fix_on_main": true,
@@ -47,7 +48,13 @@
   "execution": {
     "chat_exact_branch": "UNOBSERVED_DNS_ADMISSION_FAILURE",
     "provider_runtime": "PROHIBITED_BY_CURRENT_FREE_ONLY_CONTROLS",
-    "pr_runner": "PENDING",
+    "pr_head_observed": "f7d90fd3f03909fce107f3aa8a0e015025bc4a22",
+    "direct_admission_run_id": 32571892772,
+    "direct_admission_run_status": "completed",
+    "direct_admission_run_conclusion": "failure",
+    "direct_admission_job_id": 97028382248,
+    "visible_steps": 0,
+    "classification": "EXECUTION_ADMISSION_FAILURE_BEFORE_VISIBLE_STEPS_ZERO_TEST_CREDIT",
     "secret_used": false,
     "provider_call": false,
     "upload": false,
@@ -56,5 +63,5 @@
     "training": false,
     "spend_usd": 0
   },
-  "next_gate": "Observe an actually-started exact-head PR runner. If hosted jobs again expose no visible steps, classify as runner admission failure with zero test credit. Paid Together preflight/create remains forbidden while FREE_ONLY controls are active."
+  "next_gate": "Obtain an exact-current runner execution with visible steps. The observed PR-head run failed before any visible step, so it supplies no code-test credit. Paid Together preflight/create remains forbidden while FREE_ONLY controls are active."
 }

@@ -1,0 +1,137 @@
+{
+  "schema": "clay-go-source-receipt/v1",
+  "date": "2026-08-22",
+  "organ": "GPT-5.6 Sol",
+  "trigger": "go extra lang",
+  "program": "mini-entity-pipeline-all-in-one",
+  "stage": "MINI_ENTITY_PIPELINE_CLAY_PLUS_05B_COGNITION",
+  "classification": "SFT_V2_READY_SOURCE_TOGETHER_QWEN2_PROVIDER_CATALOG_BLOCKED",
+  "canonical_main_at_fresh_branch": "196115125d6fde4f78bdbcf4af6604517a86292e",
+  "canonical_main_refreshed_during_go": "6a0eb97661133cc688ba321b2e4d23003c5eada7",
+  "branch": "gpt56sol/go-claycog-together-catalog-fence-v2-20260822",
+  "owner_target": {
+    "primary_checkpoint": "Qwen/Qwen2.5-0.5B",
+    "ablation_checkpoint": "Qwen/Qwen2.5-0.5B-Instruct",
+    "campaign_ceiling_eur": 20,
+    "single_job_ceiling_usd": 18
+  },
+  "canonical_training_input": {
+    "schema": "claycog-sft/v2",
+    "train_rows": 1485,
+    "validation_rows": 165,
+    "train_unique": 1485,
+    "validation_unique": 165,
+    "cross_split_message_overlap": 0,
+    "cross_split_user_prompt_overlap": 0,
+    "train_sha256": "3c715588d1b040494be48228f165208e2f10202b3f125616741116b90cd21b93",
+    "validation_sha256": "ca284585ba66c532e7e19232edd7f6b5dc1c0969d15cbb9d5ce1cbc202e86f62",
+    "v1_status": "HISTORICAL_DUPLICATE_HEAVY_NOT_PAID_TRAINING_INPUT"
+  },
+  "provider_observations": [
+    {
+      "kind": "Together BYOM contract",
+      "status": "OBSERVED_CURRENT_PRIMARY_DOCS",
+      "claim": "from_hf_model is paired with a Together fine-tuning catalog base; base architecture must match the custom checkpoint and size should be as close as the catalog allows."
+    },
+    {
+      "kind": "Together full-FT catalog",
+      "status": "OBSERVED_CURRENT_PRIMARY_DOCS",
+      "claim": "No Qwen2/Qwen2.5 Full fine-tuning base is publicly listed; the smallest listed Qwen full-FT base is Qwen/Qwen3.5-0.8B."
+    },
+    {
+      "kind": "architecture discriminator",
+      "status": "OBSERVED_UPSTREAM_CONFIGS",
+      "claim": "Qwen/Qwen2.5-0.5B is Qwen2ForCausalLM/model_type=qwen2; Qwen/Qwen3.5-0.8B is Qwen3_5ForConditionalGeneration/model_type=qwen3_5, so Qwen3.5 is not admitted as a silent substitute."
+    },
+    {
+      "kind": "historical template candidate",
+      "status": "REJECT_AS_CURRENT_DEFAULT",
+      "claim": "Qwen/Qwen2.5-7B-Instruct-Turbo is not in the current documented full-fine-tuning table; inference availability is not training-template admission."
+    },
+    {
+      "kind": "Together Python SDK v2",
+      "status": "OBSERVED_UPSTREAM_SOURCE",
+      "claim": "Current SDK main exposes fine_tuning.get_model_limits(model=...), limits.full_training and FileResponse.processed; price estimation accepts training_method='sft' and training_type='full'.",
+      "upstream_head": "cc9f25369987e73bcd037be955833c37ac8a9109"
+    }
+  ],
+  "implementation_delta": {
+    "launcher_path": "the artefact/blogpost_entity/mini_cognition/launch_together_v1.py",
+    "launcher_blob": "95e6307b467dbfa5bd34d0e1dc47246cc0b8d972",
+    "provider_test_path": "the artefact/blogpost_entity/mini_cognition/test_together_provider_contract_v2.py",
+    "provider_test_blob": "e3e73b3c7a1d001243fcd4eeaaf17c0d725a9c90",
+    "readme_path": "the artefact/blogpost_entity/mini_cognition/README.md",
+    "readme_blob": "340f241edfd15c1c158095cce1710b1bd17072b2",
+    "preserved_from_main": [
+      "SFT v2 train/validation inputs",
+      "exact deterministic campaign fingerprint",
+      "full-fingerprint create confirmation",
+      "account duplicate-create scan",
+      "atomic 0600 local CREATE_ARMED ledger",
+      "UNKNOWN_REMOTE_CREATE fail-closed crash ambiguity",
+      "zero-retry billed CREATE client",
+      "USD18 hard single-job budget gate"
+    ],
+    "added_or_corrected": [
+      "remove guessed Together template default",
+      "require explicit current architecture-compatible template before provider operations",
+      "current SDK-v2 get_model_limits/full_training capability gate",
+      "current FileResponse.processed completion path with legacy read fallback",
+      "current string SFT/full price-estimation client contract",
+      "document current provider/catalog blocker without changing the owner-locked checkpoint"
+    ]
+  },
+  "bounded_isolated_regression": {
+    "environment": "isolated OpenAI Linux container; locally reconstructed relevant source slice; no network/provider call",
+    "python_compile": "PASS",
+    "existing_create_safety_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "new_provider_contract_tests": {
+      "passed": 8,
+      "failed": 0
+    },
+    "combined": {
+      "passed": 16,
+      "failed": 0,
+      "duration_seconds": 0.010
+    },
+    "scope": "BOUNDED_MECHANISM_REGRESSION_PASS_NOT_PROVIDER_ACCEPTANCE"
+  },
+  "coordination": {
+    "stale_pr": 789,
+    "stale_pr_action": "SUPERSEDE_AFTER_MAIN_ADVANCED",
+    "parallel_pr_776": "complementary strict ClayCode promotion-validator hardening",
+    "parallel_pr_799": "closed/superseded after over-constrained template-size interpretation; non-provider OOD work to be fused separately",
+    "main_advanced_during_work": true,
+    "latest_observed_main_change": "evidence(cognition): correct Together BYOM template contract",
+    "latest_observed_launcher_still_stale": true
+  },
+  "unusual_experiment": {
+    "count_added_by_this_fusion": 0,
+    "global_macro_cycle_experiment_already_consumed": true,
+    "source": "parallel PR #776 architecture_substitution_falsifier",
+    "result": "REJECT_QWEN3_5_0_8B_AS_SILENT_QWEN2_5_0_5B_TEMPLATE",
+    "provider_fake_tests": "REGRESSION_ONLY"
+  },
+  "provider_execution": {
+    "TOGETHER_API_KEY_observed": false,
+    "provider_preflight_executed": false,
+    "files_uploaded": false,
+    "billed_create_executed": false,
+    "training_started": false,
+    "cost_usd": 0
+  },
+  "evidence_boundary": {
+    "SFT_v2_source_candidate": true,
+    "Together_Qwen2_5_0_5B_compatibility": false,
+    "tuned_checkpoint": false,
+    "OOD_model_quality_pass": false,
+    "Q4_K_M_quantization_pass": false,
+    "measured_RSS_below_1GiB": false,
+    "micro_agent_superiority": false,
+    "whole_mini_entity_pass": false
+  },
+  "next_exact_gate": "Merge the fail-closed launcher correction without regressing SFT-v2/create safety. Then refresh Together's full-FT catalog. Only if an architecture-compatible Qwen2/Qwen2.5 base is publicly or authentically admitted: run no-bill preflight, enforce the USD18 estimate gate, bind the exact fingerprint, and perform one exactly-once create. Otherwise Together remains blocked and any alternate paid full-FT runner needs separate explicit owner/provider/budget admission."
+}

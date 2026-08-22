@@ -1,0 +1,32 @@
+name: mini-entity-structured-convergence
+
+on:
+  push:
+    branches:
+      - gpt56sol/go-structured-mini-convergence-20260822
+  pull_request:
+    paths:
+      - 'the artefact/blogpost_entity/BLOGPOST_ENTITY.clay'
+      - 'the artefact/blogpost_entity/test_blogpost_entity.py'
+      - 'tools/clay_profile_pipeline_runtime.py'
+      - 'tools/claycode_structured_backend.py'
+      - '.github/workflows/mini-entity-structured-convergence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  structured-mini-entity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bounded test dependencies
+        run: python -m pip install --disable-pip-version-check pytest lark
+      - name: Compile Python reference runtime
+        run: python -m py_compile tools/clay_profile_pipeline_runtime.py tools/claycode_structured_backend.py
+      - name: Run structured Mini Entity convergence tests
+        run: python -m pytest 'the artefact/blogpost_entity/test_blogpost_entity.py' -q

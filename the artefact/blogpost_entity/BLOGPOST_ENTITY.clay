@@ -20,15 +20,19 @@ fn phase(kind:String, entity_db:String, source_db:String, profile:Map, previous:
 }
 
 fn run(entity_db:String, source_db:String, secret_file:String)->Map {
+  // Bootstrap the neutral DB schema before asking it for an active profile.
+  // This is the only ordering that lets a fresh database fail closed as
+  // NO_ACTIVE_PROFILE instead of depending on an external runtime profile file.
+  let init_req = payload("entity_db",entity_db)
+  let initialized = effect("pipeline_init",init_req)
+  require initialized.ok
+
   // Active application/personality/inference profile is persistent DB state.
   // External preset JSON is only an import/configuration surface, never a mandatory runtime file.
   let profile_req = payload("entity_db",entity_db)
   let loaded = effect("pipeline_profile_read",profile_req)
   require loaded.ok
   let profile = loaded.profile
-
-  let initialized = phase("pipeline_init",entity_db,source_db,profile,map_new(),map_new())
-  require initialized.ok
 
   let previous = phase("pipeline_state_read",entity_db,source_db,profile,map_new(),map_new())
   require previous.ok
